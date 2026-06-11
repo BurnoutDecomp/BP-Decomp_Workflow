@@ -83,12 +83,33 @@ function Invoke-Worker {
     return [Diagnostics.Process]::Start($psi)
 }
 
+function Wait-Workers {
+    # Block until all workers exit, printing a live progress line so the run is
+    # never a black box. The true signal of progress is JSON files appearing in
+    # the shared output dir (every worker writes there).
+    param([Diagnostics.Process[]]$Procs, [string]$OutDir, [Diagnostics.Stopwatch]$Stopwatch)
+    $last = 0
+    while ($true) {
+        $alive = @($Procs | Where-Object { -not $_.HasExited }).Count
+        $done = if (Test-Path $OutDir) { (Get-ChildItem $OutDir -Filter *.json -ErrorAction SilentlyContinue).Count } else { 0 }
+        $el = $Stopwatch.Elapsed
+        $rate = if ($el.TotalMinutes -ge 0.1) { [Math]::Round($done / $el.TotalMinutes) } else { 0 }
+        Write-Host ("[{0:hh\:mm\:ss}] workers {1}/{2} alive | {3} json files (+{4} | ~{5}/min)" `
+            -f $el, $alive, $Procs.Count, $done, ($done - $last), $rate)
+        $last = $done
+        if ($alive -eq 0) { break }
+        Start-Sleep -Seconds 15
+    }
+}
+
+$outDir = Join-Path $ProjectRoot ".ida-exports\$RealDbName"
+
 if ($Jobs -eq 1) {
     # Single worker: open the original DB directly, no copy needed.
     Write-Host "Running single IDA process on the original database..."
     $log = Join-Path $ProjectRoot "tools\export_$RealDbName.log"
     $p = Invoke-Worker -ShardIndex 0 -ShardCount 1 -DbPath $DbFile -LogPath $log
-    $p.WaitForExit()
+    Wait-Workers -Procs @($p) -OutDir $outDir -Stopwatch $sw
     Write-Host "Worker exit code: $($p.ExitCode)  (log: $log)"
 }
 else {
@@ -111,8 +132,8 @@ else {
         $procs += Invoke-Worker -ShardIndex $i -ShardCount $Jobs -DbPath $dbCopy -LogPath $log
     }
 
-    Write-Host "All $Jobs workers launched. Waiting for completion..."
-    foreach ($p in $procs) { $p.WaitForExit() }
+    Write-Host "All $Jobs workers launched. Progress (updates every 15s):"
+    Wait-Workers -Procs $procs -OutDir $outDir -Stopwatch $sw
 
     $codes = $procs | ForEach-Object { $_.ExitCode }
     Write-Host "Worker exit codes: $($codes -join ', ')"
@@ -125,7 +146,6 @@ else {
 }
 
 $sw.Stop()
-$outDir = Join-Path $ProjectRoot ".ida-exports\$RealDbName"
 $count = 0
 if (Test-Path $outDir) { $count = (Get-ChildItem $outDir -Filter *.json).Count }
 Write-Host "===================================================="
