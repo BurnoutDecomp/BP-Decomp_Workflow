@@ -4,6 +4,10 @@
    "status": "reviewed",
    "verify_tier": 2
   },
+  "CgsContainers::CgsHash12::CalculateHash": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
   "CgsContainers::CgsHash::CalculateHash": {
    "status": "reviewed",
    "verify_tier": 2
@@ -37,6 +41,11 @@
   },
   "GameShared/GameClasses/Containers/CgsHash.cpp": {
    "notes": "Fresh-eyes review: reflected CRC-32 (init 0xFFFFFFFF, no final inversion) faithfully reconstructed; signed-char extsb mirrored. Table regenerated from standard poly 0xEDB88320 (binary table at VA 0x82F310C0 not extractable from exports - flagged for later binary diff). Index masked to keep in-range; original's unmasked OOB on bytes>=0x80 is unreachable for ASCII keys.",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Containers/CgsHash12.cpp": {
+   "notes": "Verification agent approved: exact logic match, array indexing matches byte offset scaling, handles early exit",
    "owner": "agent",
    "status": "done"
   },
