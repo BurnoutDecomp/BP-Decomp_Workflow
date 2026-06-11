@@ -4,10 +4,10 @@
     "_comment": "Declare only the agentic systems you actually have (have:true). For each, list the models the reverser may pick and, per model, the allowed thinking range. 'invoke' tells the agent HOW to run that provider once it chooses it.",
     "claude-code": {
       "have": true,
-      "invoke": "cli",
-      "command": "claude -m {model} {thinking_flag} --dangerously-skip-permissions --append-system-prompt \"Use sub-agents in the session when you can.\" -p \"{prompt}\"",
+      "invoke": "in-session-subagent",
+      "command": "claude -m {model} {thinking_flag} --dangerously-skip-permissions -p --append-system-prompt \"Use sub-agents in the session when you can.\" \"Read and review the packet at: {packet_path}\"",
       "thinking_flag": "--effort {thinking}",
-      "_invoke_note": "When the reverser picks claude-code it runs this through its shell/Bash tool, substituting {model}/{thinking_flag}/{prompt}. Point {prompt} at the review packet's contents or path. Edit the command to match your installed claude-code CLI.",
+      "_invoke_note": "If invoke is 'in-session-subagent', the reverser spawns the chosen model as a fresh-eyes sub-agent in-session (Agent/Task tool, model = picked id). No shell command. If invoke is changed to 'cli', the command template is run through the shell tool, substituting {model}/{thinking_flag}/{packet_path}. Verify command details on your install.",
       "thinking_ladder": [
         "low",
         "medium",
@@ -33,9 +33,9 @@
     "codex": {
       "have": true,
       "invoke": "cli",
-      "command": "codex exec --model {model} {thinking_flag} --skip-git-repo-check \"{prompt}\"",
+      "command": "codex exec --model {model} {thinking_flag} --skip-git-repo-check \"{packet_path}\"",
       "thinking_flag": "-c model_reasoning_effort={thinking}",
-      "_invoke_note": "When the reverser picks codex it runs this through its shell/Bash tool, substituting {model}/{thinking_flag}/{prompt}. Point {prompt} at the review packet's contents or path. Edit the command to match your installed codex CLI.",
+      "_invoke_note": "When the reverser picks codex it runs this through its shell tool, substituting {model}/{thinking_flag}/{packet_path}. Point to the review packet file path rather than inlining body. Verify command details on your install.",
       "thinking_ladder": [
         "low",
         "medium",
@@ -60,9 +60,9 @@
     "antigravity": {
       "have": true,
       "invoke": "cli",
-      "command": "agy --model {model} {thinking_flag} --dangerously-skip-permissions -p \"{prompt}\"",
+      "command": "agy --model {model} {thinking_flag} --dangerously-skip-permissions -p \"{packet_path}\"",
       "thinking_flag": "",
-      "_invoke_note": "Antigravity CLI (agy), run via the shell/Bash tool. {thinking_flag} has no default flag — add one here if your build exposes it. Edit to match your install.",
+      "_invoke_note": "Antigravity CLI (agy), run via the shell tool, passing the packet path via -p or positional argument. {thinking_flag} has no default flag — add one here if your build exposes it. Verify command details on your install.",
       "thinking_ladder": [
         "off"
       ],
@@ -90,7 +90,7 @@
       ]
     }
   },
-  "_thinking_note": "Generic ordered levels are mapped dynamically to the provider's local thinking_ladder. Each model's 'thinking' is a boolean value indicating whether it supports reasoning effort. If a model has 'thinking': false, then {thinking_flag} in the provider command is substituted with an empty string. If 'thinking': true, {thinking_flag} is populated with the provider's thinking_flag template using the chosen level (e.g. --effort high).",
+  "_thinking_note": "Generic ordered levels are mapped dynamically to the provider's local thinking_ladder. Each model's 'thinking' is a boolean value indicating whether it supports reasoning effort. If a model has 'thinking': false, then {thinking_flag} in the provider command is substituted with an empty string. If 'thinking': true, {thinking_flag} is populated with the provider's thinking_flag template using the chosen level (e.g. --effort high). {packet_path} is substituted with the path to the review packet (e.g. progress/reviews/<tu>.md), never inlining the packet body directly to prevent escaping and command-injection bugs.",
   "review": {
     "enabled": true,
     "_enabled_note": "Master switch. false => never review; compile-gate + the reverser's self-check is the only gate and the reverser records the pass itself.",
