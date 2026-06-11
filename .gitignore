@@ -1,21 +1,42 @@
-# IDA Pro
+# --- IDA / disassembly exports (regenerated, huge) ---
 .ida-exports/*
 
-# Build files
+# --- Build trees ---
 build/*
 
-# Too big files
+# --- Oversized generated reference data (regenerated, not committed) ---
 **/DecFIGS_Burnout_Internal_PS3.ELF.lineinfo.json
 **/decfigs_inlining.json
 IDA Files/Burnout_External_PS3.ELF.i64
 IDA Files/BurnoutPR.exe.i64
 
-
-# Too many files
+# --- Bulk extracted reference source (too many files) ---
 references/Feb-2007/BrnEntityModuleUnity/*
 
-# VS Code
-.vscode/*
+# --- Ledger (local working store, rebuildable via `work seed --deps`) ---
+progress/ledger.sqlite
+progress/ledger.sqlite-wal
+progress/ledger.sqlite-shm
 
-# Generated reconstruction skeletons (regenerated on demand from tu_index.json)
+# --- Generated reconstruction skeletons (regenerate from tu_index.json) ---
 progress/skeletons/*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+
+# --- Tool run logs ---
+tools/*.log
+
+# --- Editor / OS cruft ---
+.vscode/*
+.idea/
+*.swp
+Thumbs.db
+Desktop.ini
+.DS_Store

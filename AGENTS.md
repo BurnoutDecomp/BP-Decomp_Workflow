@@ -19,7 +19,7 @@ at a time, landing recovered code in [`b5-decomp/src`](b5-decomp/src/). Target i
 **semantic parity, not byte-matching**. A unit is done when: reconstructed → the
 TU compiles → a reviewer pass approves.
 
-## The work loop (once Phase 1 lands)
+## The work loop
 
 ```
 work next            # claim the next dependency-ready translation unit
@@ -29,9 +29,10 @@ work submit <tu>     # runs the compile gate, then the reviewer pass
 work block <tu> "…"  # mark blocked + reason so it is not reclaimed
 ```
 
-The `work` CLI ([`tools/work/`](tools/work/)) is the only interface you must learn.
-It is identical for every agent. Until it exists, use the Phase 0 artifacts
-directly (`progress/identity.json`, `progress/tu_index.json`).
+The `work` CLI ([`tools/work/work.py`](tools/work/work.py), via the repo-root
+`work.cmd` shim) is the only interface you must learn. It is identical for every
+agent. If the ledger is missing, build it once with `work seed --deps` (it is
+rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
 
 ## Conventions
 
