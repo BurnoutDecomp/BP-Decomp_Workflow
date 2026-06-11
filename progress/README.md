@@ -38,7 +38,8 @@ work show <tu>            # concise overview: functions, signatures, dependency 
 work show <tu> --full     # the full reconstruction dossier (pseudocode, locals,
                           #   Feb-2007 original source, callee sigs; --asm, -o file)
 work start <tu>           # claim (todo -> in_progress)
-work submit <tu>          # mark reconstructed (compile/review gates: Phase 3)
+work submit <tu>          # compile gate (cl /c); on pass, emit a reviewer packet
+work review <tu> --verdict pass|fail [--notes "…"]   # record the reviewer verdict
 work block <tu> "reason"  # / work unblock <tu>
 ```
 
@@ -54,6 +55,20 @@ path" status), caller context, the **original Feb-2007 source file** when the TU
 `primary_file` exists in the leak (483 TUs touch it), and a type-header pointer.
 `--asm` adds disassembly; `-o <file>` writes it out.
 
-## Not yet built (Phase 3)
+## Phase 3 — verification (live)
 
-- **Phase 3** — `work submit` runs the per-TU compile gate + reviewer sub-agent.
+`work submit` runs the per-TU **compile gate** (`cl /c`, no link;
+[`tools/work/verify.py`](../tools/work/verify.py), configured by
+[`verify.config.json`](verify.config.json)). On a compile failure it prints the
+MSVC diagnostics and returns the TU to `in_progress`. On pass it writes a fresh-eyes
+**reviewer packet** to `reviews/<tu>.md` (produced code + dossier). After a reviewer
+sub-agent judges it, `work review <tu> --verdict pass|fail` records the verdict — a
+pass marks the TU `done`. See [`../AGENTS.md`](../AGENTS.md) for the reviewer protocol.
+
+Prereq for non-trivial TUs: check out the EA submodules
+(`git -C b5-decomp submodule update --init`) so EASTL/EABase headers resolve.
+
+| File | Built by | What it is |
+|------|----------|------------|
+| `verify.config.json` | committed | Compile-gate config: vcvars path, compiler, flags, include dirs. |
+| `reviews/` | `work submit` | *Generated, git-ignored.* Per-TU reviewer packets. |

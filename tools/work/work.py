@@ -22,7 +22,7 @@ Commands:
 
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
-import argparse, json, os, sqlite3, sys, time
+import argparse, json, os, sqlite3, subprocess, sys, time
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 
@@ -35,7 +35,7 @@ TU_INDEX = os.path.join(ROOT, "progress", "tu_index.json")
 DB = os.path.join(ROOT, "progress", "ledger.sqlite")
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 
-TU_STATUS = ("todo", "in_progress", "done", "blocked")
+TU_STATUS = ("todo", "in_progress", "compiled", "done", "blocked")
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS tu(
   id TEXT PRIMARY KEY, source TEXT, status TEXT DEFAULT 'todo',
@@ -276,12 +276,85 @@ def cmd_start(args):
     cmd_show(args)
 
 
+def resolve_files(con, tu, explicit):
+    """The .cpp file(s) to compile for this TU: explicit > dest_path > git-detected."""
+    if explicit:
+        return explicit
+    files = []
+    row = con.execute("SELECT dest_path FROM tu WHERE id=?", (tu,)).fetchone()
+    if row and row["dest_path"] and os.path.exists(os.path.join(ROOT, row["dest_path"])):
+        files.append(row["dest_path"])
+    if not files:
+        # fall back to modified/untracked .cpp in the b5-decomp submodule
+        try:
+            out = subprocess.run(["git", "-C", os.path.join(ROOT, "b5-decomp"),
+                                  "status", "--porcelain", "--", "src"],
+                                 capture_output=True, text=True).stdout
+            for ln in out.splitlines():
+                p = ln[3:].strip()
+                if p.endswith(".cpp"):
+                    files.append("b5-decomp/" + p)
+        except Exception:
+            pass
+    return files
+
+
 def cmd_submit(args):
+    import verify
     con = connect()
+    funcs = con.execute("SELECT * FROM func WHERE tu_id=? ORDER BY name", (args.tu,)).fetchall()
+    if not funcs:
+        sys.exit(f"unknown TU: {args.tu!r}")
+    files = resolve_files(con, args.tu, args.files)
     con.execute("UPDATE func SET status='recovered', updated_at=? WHERE tu_id=? AND status='todo'", (now(), args.tu))
-    set_tu(con, args.tu, "done", notes=args.note)
-    print(f"submitted {args.tu} -> done (functions marked recovered)")
-    print("note: compile gate + reviewer pass land in Phase 3; this is a state transition only.")
+    con.commit()
+
+    status, glog = verify.compile_gate(files)
+    print(f"compile gate: {status.upper()}  (files: {', '.join(files) or 'none'})")
+    if status == "fail":
+        con.execute("UPDATE func SET attempts=attempts+1 WHERE tu_id=?", (args.tu,))
+        set_tu(con, args.tu, "in_progress", notes=args.note)
+        log(con, "compile_fail", tu_id=args.tu, detail=glog[:2000])
+        con.commit()
+        print("\n--- compiler output (fix and re-submit) ---")
+        print(glog[-3000:])
+        return
+
+    tier = 1 if status == "pass" else 0
+    con.execute("UPDATE func SET status='compiles', verify_tier=?, updated_at=? WHERE tu_id=?", (tier, now(), args.tu))
+    set_tu(con, args.tu, "compiled", notes=args.note)
+    if status == "skip":
+        print(f"  (gate skipped: {glog.strip()})")
+    packet = verify.reviewer_packet(con, dict_row(con, "tu", args.tu), funcs, files)
+    con.commit()
+    print(f"\nreviewer packet -> {os.path.relpath(packet, ROOT)}")
+    print("Next: spawn a FRESH-EYES reviewer sub-agent with that packet (it should not see")
+    print("your reconstruction reasoning), then record the verdict:")
+    print(f"  work review \"{args.tu}\" --verdict pass   # or: --verdict fail --notes \"...\"")
+
+
+def dict_row(con, table, tu):
+    return con.execute(f"SELECT * FROM {table} WHERE id=?", (tu,)).fetchone()
+
+
+def cmd_review(args):
+    con = connect()
+    t = dict_row(con, "tu", args.tu)
+    if not t:
+        sys.exit(f"unknown TU: {args.tu!r}")
+    if args.verdict == "pass":
+        con.execute("UPDATE func SET status='reviewed', verify_tier=2, updated_at=? WHERE tu_id=?", (now(), args.tu))
+        set_tu(con, args.tu, "done", notes=args.notes)
+        log(con, "review_pass", tu_id=args.tu, detail=args.notes)
+        con.commit()
+        print(f"review PASS -> {args.tu} done")
+    else:
+        set_tu(con, args.tu, "in_progress", notes=args.notes)
+        log(con, "review_fail", tu_id=args.tu, detail=args.notes)
+        con.commit()
+        print(f"review FAIL -> {args.tu} back to in_progress")
+        if args.notes:
+            print(f"  notes: {args.notes}")
 
 
 def cmd_block(args):
@@ -315,7 +388,12 @@ def main():
     sh.add_argument("-o", "--out", help="write dossier to a file instead of stdout")
     sh.set_defaults(fn=cmd_show)
     st = sub.add_parser("start"); st.add_argument("tu"); st.set_defaults(fn=cmd_start)
-    su = sub.add_parser("submit"); su.add_argument("tu"); su.add_argument("--note"); su.set_defaults(fn=cmd_submit)
+    su = sub.add_parser("submit"); su.add_argument("tu"); su.add_argument("--note")
+    su.add_argument("--files", nargs="*", help="explicit .cpp paths to compile (else dest_path / git-detected)")
+    su.set_defaults(fn=cmd_submit)
+    rv = sub.add_parser("review"); rv.add_argument("tu")
+    rv.add_argument("--verdict", required=True, choices=["pass", "fail"])
+    rv.add_argument("--notes"); rv.set_defaults(fn=cmd_review)
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
     se = sub.add_parser("set"); se.add_argument("tu"); se.add_argument("--status", required=True); se.add_argument("--note"); se.set_defaults(fn=cmd_set)

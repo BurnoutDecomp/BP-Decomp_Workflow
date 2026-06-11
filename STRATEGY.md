@@ -131,8 +131,11 @@ per-TU asm-matching for if/when a PPC toolchain is wired up. Not built now.
 - **Phase 2 — Dossier assembler** *(done)*: `work show <tu> --full`
   (`tools/work/dossier.py`) joins per-function pseudocode/locals/asm +
   callee signatures + Feb-2007 original source into one brief.
-- **Phase 3 — Compile gate + reviewer sub-agent** *(next)*: wired into `submit`,
-  which is currently a state transition only.
+- **Phase 3 — Compile gate + reviewer sub-agent** *(done)*: `work submit` runs the
+  per-TU compile gate (`cl /c` under MSVC, `tools/work/verify.py`,
+  `progress/verify.config.json`) and, on pass, emits a fresh-eyes reviewer packet;
+  `work review --verdict pass|fail` records the verdict. This completes the
+  self-verifying loop — Phase 3 is the last infrastructure phase.
 
 Day-one mode is **assisted single-agent**: one agent at a time, you in the loop.
 The atomic-claim and per-build match seams exist from the start so scaling to a

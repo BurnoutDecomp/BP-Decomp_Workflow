@@ -28,9 +28,26 @@ work show <tu> --full # the full dossier: pseudocode, locals, Feb-2007 original
                       #   source, callee signatures (--asm for disasm, -o to a file)
 work start <tu>       # claim it (todo -> in_progress)
   …reconstruct the C++ into b5-decomp/src/<mirrored path>…
-work submit <tu>      # mark reconstructed (compile gate + reviewer pass: Phase 3)
+work submit <tu>      # run the compile gate; on pass, emit a reviewer packet
+  …spawn a fresh-eyes reviewer sub-agent on the packet (see Verification)…
+work review <tu> --verdict pass|fail [--notes "…"]   # record the verdict
 work block <tu> "…"   # mark blocked + reason so it is not reclaimed
 ```
+
+## Verification (what `submit` / `review` expect)
+
+1. **Compile gate.** `work submit` compiles the TU's `.cpp` (`cl /c`, no link) against
+   current headers. On **fail** it prints the diagnostics and returns the TU to
+   `in_progress` — fix and re-submit. On **pass** the TU goes `compiled` and a reviewer
+   packet is written to `progress/reviews/<tu>.md`. (If MSVC isn't configured the gate
+   reports `skip` and still proceeds — see `progress/verify.config.json`. The EA
+   submodules must be checked out — `git -C b5-decomp submodule update --init` — for
+   anything that includes EASTL/EABase to compile.)
+2. **Reviewer pass.** Spawn a **separate, fresh-eyes** sub-agent (e.g. the Task tool)
+   given **only** `progress/reviews/<tu>.md` — not your reconstruction reasoning. It
+   compares the produced C++ against the dossier (pseudocode / Feb-2007 source) and
+   returns `VERDICT: pass|fail` + findings. Record it with `work review`. A pass marks
+   the TU `done`; a fail returns it to `in_progress` with the notes.
 
 The `work` CLI ([`tools/work/work.py`](tools/work/work.py), via the repo-root
 `work.cmd` shim) is the only interface you must learn. It is identical for every

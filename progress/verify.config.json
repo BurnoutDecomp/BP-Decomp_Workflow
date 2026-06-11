@@ -1,0 +1,13 @@
+{
+  "_comment": "Config for the Phase 3 compile gate (tools/work/verify.py). Paths are relative to the repo root unless absolute. The gate runs `cl /c` (compile-only, no link) under vcvars, matching STRATEGY.md's per-TU gate. If vcvars is missing the gate reports 'skip' so the loop still works.",
+  "vcvars": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvars64.bat",
+  "compiler": "cl",
+  "flags": ["/nologo", "/c", "/EHsc", "/std:c++17", "/permissive-", "/DWIN32", "/D_WINDOWS"],
+  "include_dirs": [
+    "b5-decomp/src",
+    "b5-decomp/vendor/EABase/include/Common",
+    "b5-decomp/vendor/EASTL/include",
+    "b5-decomp/vendor/EAThread/include",
+    "b5-decomp/vendor/renderware/include"
+  ]
+}
