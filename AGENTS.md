@@ -5,6 +5,14 @@ Antigravity, or a future API/LiteLLM loop. This file is intentionally tool-
 agnostic. Coordination happens through files and a small CLI, never through any
 one tool's private memory.
 
+## Resuming ("continue")
+
+If told only to "continue", do this: if `progress/ledger.sqlite` is missing (fresh
+clone), run `work bootstrap` once — it inits submodules and rebuilds the ledger from
+the committed `progress/status.json` + `progress/tu_deps.json`, restoring exactly
+where the last commit left off. Then `work next` → pick up the next TU. No other
+context is needed.
+
 ## Read first, in order
 
 1. [`README.md`](README.md) — what this repo is (orchestration, not the decomp).
