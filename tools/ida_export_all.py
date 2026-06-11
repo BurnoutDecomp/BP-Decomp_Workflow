@@ -35,15 +35,28 @@ if not has_hexrays:
 DB_PATH = idc.get_idb_path()
 DB_NAME = os.path.splitext(os.path.basename(DB_PATH))[0]
 
-# Determine output directory
+# Determine output directory.
+# When sharded, workers open per-worker DB copies named "<shard>/<real_db>.i64",
+# so DB_NAME stays correct. Pass EXPORT_DB_NAME to override explicitly if needed.
+DB_NAME = os.environ.get("EXPORT_DB_NAME") or DB_NAME
 OUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".ida-exports", DB_NAME)
-if not os.path.exists(OUT_DIR):
-    os.makedirs(OUT_DIR)
+# exist_ok=True: multiple shard processes may create this concurrently.
+os.makedirs(OUT_DIR, exist_ok=True)
 
 print(f"[IDA-EXPORT] Output directory: {OUT_DIR}")
 
 # Optional limits from environment
 EXPORT_MAX = int(os.environ.get("EXPORT_MAX", "0") or "0")
+
+# Sharding: each parallel idat process handles functions where
+# (function_index % SHARD_COUNT) == SHARD_INDEX. Output files are keyed by
+# address, so shards never collide on writes.
+SHARD_INDEX = int(os.environ.get("EXPORT_SHARD_INDEX", "0") or "0")
+SHARD_COUNT = int(os.environ.get("EXPORT_SHARD_COUNT", "1") or "1")
+if SHARD_COUNT < 1:
+    SHARD_COUNT = 1
+if not (0 <= SHARD_INDEX < SHARD_COUNT):
+    SHARD_INDEX = 0
 
 def get_callees(func):
     """Get list of function addresses called by this function."""
@@ -77,10 +90,12 @@ def get_lvars(cfunc):
     try:
         for lvar in cfunc.get_lvars():
             type_str = str(lvar.type())
+            # IDA renamed lvar_t.is_reg() -> is_reg_var() in 9.x; support both.
+            is_reg = getattr(lvar, "is_reg_var", None) or getattr(lvar, "is_reg", None)
             lvars.append({
                 "name": lvar.name,
                 "type": type_str,
-                "is_reg": lvar.is_reg(),
+                "is_reg": bool(is_reg()) if callable(is_reg) else None,
                 "size": lvar.width
             })
     except Exception as exc:
@@ -173,16 +188,24 @@ def main():
     print("[IDA-EXPORT] Beginning function export...")
     functions = list(idautils.Functions())
     total = len(functions)
-    print(f"[IDA-EXPORT] Found {total} functions to export.")
+    if SHARD_COUNT > 1:
+        print(f"[IDA-EXPORT] Shard {SHARD_INDEX + 1}/{SHARD_COUNT}: "
+              f"processing every {SHARD_COUNT}th of {total} functions.")
+    else:
+        print(f"[IDA-EXPORT] Found {total} functions to export.")
 
     exported_count = 0
     for idx, fva in enumerate(functions):
+        # Skip functions that belong to another shard.
+        if SHARD_COUNT > 1 and (idx % SHARD_COUNT) != SHARD_INDEX:
+            continue
+
         if EXPORT_MAX and exported_count >= EXPORT_MAX:
             print(f"[IDA-EXPORT] Reached EXPORT_MAX limit of {EXPORT_MAX}.")
             break
 
         if idx % 1000 == 0 and idx > 0:
-            print(f"[IDA-EXPORT] Progress: {idx}/{total} functions processed...")
+            print(f"[IDA-EXPORT] Progress: {idx}/{total} functions scanned...")
 
         try:
             if export_function(fva):
