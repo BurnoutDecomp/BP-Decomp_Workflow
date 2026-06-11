@@ -451,14 +451,18 @@ def cmd_bootstrap(args):
     print("== work bootstrap ==")
     # 1) submodules — two controlled levels, NOT --recursive (the EA libs carry
     #    deeply self-referential test-package submodules that blow past Windows
-    #    MAX_PATH; we only want EABase/EASTL/EAThread/renderware).
+    #    MAX_PATH). Only init what is NOT already populated, so we never run a
+    #    checkout that could clobber uncommitted reconstruction work.
     print("[1/3] git submodules ...", flush=True)
-    r = subprocess.run(["git", "submodule", "update", "--init"], cwd=ROOT)
     b5 = os.path.join(ROOT, "b5-decomp")
-    if os.path.isdir(os.path.join(b5, ".git")) or os.path.exists(os.path.join(b5, ".git")):
-        r2 = subprocess.run(["git", "submodule", "update", "--init"], cwd=b5)
-        if r.returncode or r2.returncode:
-            print("  warning: some submodules failed to init; check your git state")
+    if not os.path.exists(os.path.join(b5, "CMakeLists.txt")):
+        subprocess.run(["git", "submodule", "update", "--init"], cwd=ROOT)
+    else:
+        print("  b5-decomp already populated — skipping (won't touch local changes)")
+    for name, marker in (("EABase", "include/Common"), ("EASTL", "include"),
+                         ("EAThread", "include"), ("renderware", "include")):
+        if not os.path.isdir(os.path.join(b5, "vendor", name, marker)):
+            subprocess.run(["git", "submodule", "update", "--init", "--", f"vendor/{name}"], cwd=b5)
 
     # 2) the committed structure must be present (identity/tu_index are in git)
     print("[2/3] checking committed artifacts ...", flush=True)
