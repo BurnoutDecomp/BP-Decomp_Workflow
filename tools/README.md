@@ -25,6 +25,7 @@ shell). The IDAPython ones can't be run directly — they need IDA's embedded in
 | `work/work.py` | Python | **Phase 1.** The `work` ledger CLI (`seed`/`status`/`next`/`show`/`start`/`submit`/`block`) over `../progress/ledger.sqlite`. The interface the in-chat agent drives the decomp loop with. Run via the repo-root `work.cmd` shim. See [`../progress/README.md`](../progress/README.md). |
 | `work/dossier.py` | Python | **Phase 2.** Assembles the full per-TU reconstruction brief behind `work show <tu> --full`: per-function signature/locals/pseudocode/asm, callee signatures with recovered status, caller context, and the original Feb-2007 source overlay. |
 | `work/verify.py` | Python | **Phase 3.** The verification tier behind `work submit`/`work review`: a per-TU compile gate (`cl /c` under MSVC, configured by `../progress/verify.config.json`) and the fresh-eyes reviewer-packet builder (produced code + dossier → `../progress/reviews/`). |
+| `work/gen_stubs.py` | Python | The demand-driven stub generator behind `work stubs <tu>`: emits trap-stub definitions for a TU's not-yet-reconstructed callees so a non-self-contained TU can compile/link (Hex-Rays types normalized, PPC runtime helpers filtered). |
 | `export_<db>.log` | Output | Headless run logs from `export_db.ps1` (e.g. memory report, function count, errors). Diagnostics only. |
 
 ## Why it's useful for the decomp

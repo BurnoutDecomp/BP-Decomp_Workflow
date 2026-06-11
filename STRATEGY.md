@@ -96,8 +96,12 @@ of functions are **methods on classes**. You cannot stub `int A::B::foo()` witho
 class `A::B` declared. Therefore:
 
 - There is **no global "30k trap stubs that link empty"** target. Stubs are
-  **demand-driven per TU**: when a TU references `A::B::foo`, we emit a forward
-  declaration for `A::B` (if absent) and a stub for `foo`.
+  **demand-driven per TU** (`work stubs <tu>` / `tools/work/gen_stubs.py`): it finds
+  the TU's not-yet-reconstructed callees and emits a trap-stub definition for each
+  (Hex-Rays types normalized to `types.hpp`, PPC runtime helpers filtered). A stub for
+  `A::B::foo` still needs class `A::B` declared — declaring it is type recovery.
+- Leaf-first ordering means most callees are already real when you reach a caller, so
+  stubs are the exception, not a prerequisite for every TU.
 - The compile gate is therefore **per-TU**: "this TU compiles against the current
   global headers," not "the whole game links and runs." Full-link is a later phase.
 - This couples stub generation to **type recovery**: discovering that a param is

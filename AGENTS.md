@@ -27,6 +27,8 @@ work show <tu>        # concise overview (functions, signatures, dependency TUs)
 work show <tu> --full # the full dossier: pseudocode, locals, Feb-2007 original
                       #   source, callee signatures (--asm for disasm, -o to a file)
 work start <tu>       # claim it (todo -> in_progress)
+work stubs <tu>       # trap-stub the callees this TU needs that aren't done yet
+                      #   (leaf-first usually means few/none; --list to preview)
   …reconstruct the C++ into b5-decomp/src/<mirrored path>…
 work submit <tu>      # run the compile gate; on pass, emit a reviewer packet
   …spawn a fresh-eyes reviewer sub-agent on the packet (see Verification)…
@@ -65,8 +67,10 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   (SIMD, GPU/D3D, codecs) where the PC shape differs from the console. They are not
   in the ledger; do not "decompile" them.
 - **Stubs over guesses.** A call to a not-yet-reconstructed function gets a forward
-  declaration + trap stub, not an invented body. See STRATEGY.md's stub caveat —
-  the compile gate is per-TU, not whole-program.
+  declaration + trap stub (`work stubs <tu>`), not an invented body. Because we work
+  leaf-first, most callees are already real by the time you reach a caller, so stubs
+  are the exception. A generated stub for a class method only compiles once that
+  class is declared — declaring it is the type-recovery part you still do.
 - **Types live in headers** and are shared global state. Extend them; let the
   compile gate surface conflicts. Don't redefine a type locally to dodge an error.
 - **Update the ledger, not your own memory.** Progress that isn't in `progress/` did
