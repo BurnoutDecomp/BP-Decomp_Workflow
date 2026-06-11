@@ -75,10 +75,24 @@ def log(con, action, tu_id=None, func=None, detail=None):
                 (now(), tu_id, func, action, detail))
 
 
+def normalize_path(p):
+    """Resolve `GameSource/Unity/../World/X.cpp` -> `GameSource/World/X.cpp`."""
+    parts = []
+    for seg in p.replace("\\", "/").split("/"):
+        if seg in ("", "."):
+            continue
+        if seg == "..":
+            if parts:
+                parts.pop()
+        else:
+            parts.append(seg)
+    return "/".join(parts)
+
+
 def dest_for(tu_id, source):
     """Mirror a DecFIGS primary_file under b5-decomp/src/; class TUs decide later."""
     if source == "decfigs":
-        return "b5-decomp/src/" + tu_id.lstrip("./")
+        return "b5-decomp/src/" + normalize_path(tu_id)
     return None
 
 
@@ -203,6 +217,20 @@ def cmd_show(args):
     t = con.execute("SELECT * FROM tu WHERE id=?", (args.tu,)).fetchone()
     if not t:
         sys.exit(f"unknown TU: {args.tu!r}")
+
+    # --full: the Phase 2 dossier (everything needed to reconstruct)
+    if getattr(args, "full", False):
+        import dossier
+        funcs = con.execute("SELECT * FROM func WHERE tu_id=? ORDER BY name", (args.tu,)).fetchall()
+        text = dossier.assemble(con, t, funcs, with_asm=args.asm)
+        if args.out:
+            os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
+            open(args.out, "w", encoding="utf-8").write(text)
+            print(f"wrote dossier ({len(funcs)} functions) -> {args.out}")
+        else:
+            print(text)
+        return
+
     print(f"TU      : {t['id']}")
     print(f"source  : {t['source']}    status: {t['status']}    funcs: {t['n_funcs']}")
     print(f"dest    : {t['dest_path'] or '(class TU — choose a path)'}")
@@ -224,8 +252,8 @@ def cmd_show(args):
         print(f"  [{f['status']:9s}] {f['x360_addr']}  {f['name']}")
         if sig:
             print(f"             {sig[:110]}")
-    print("\n(Phase 2 will enrich this with full pseudocode/asm, LegacySrc source, "
-          "and recovered sibling signatures. For now: `gen_skeleton.py` for bodies.)")
+    print("\n(`work show <tu> --full` for the complete dossier: pseudocode, locals, "
+          "LegacySrc original source, callee signatures, asm with --asm.)")
 
 
 # ---------------------------------------------------------------- transitions
@@ -281,7 +309,11 @@ def main():
     s = sub.add_parser("seed"); s.add_argument("--deps", action="store_true"); s.add_argument("--reset", action="store_true"); s.set_defaults(fn=cmd_seed)
     sub.add_parser("status").set_defaults(fn=cmd_status)
     n = sub.add_parser("next"); n.add_argument("-n", type=int, default=1); n.set_defaults(fn=cmd_next)
-    sh = sub.add_parser("show"); sh.add_argument("tu"); sh.set_defaults(fn=cmd_show)
+    sh = sub.add_parser("show"); sh.add_argument("tu")
+    sh.add_argument("--full", action="store_true", help="emit the full reconstruction dossier")
+    sh.add_argument("--asm", action="store_true", help="include assembly in --full output")
+    sh.add_argument("-o", "--out", help="write dossier to a file instead of stdout")
+    sh.set_defaults(fn=cmd_show)
     st = sub.add_parser("start"); st.add_argument("tu"); st.set_defaults(fn=cmd_start)
     su = sub.add_parser("submit"); su.add_argument("tu"); su.add_argument("--note"); su.set_defaults(fn=cmd_submit)
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)

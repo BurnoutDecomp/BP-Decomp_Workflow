@@ -23,6 +23,7 @@ shell). The IDAPython ones can't be run directly — they need IDA's embedded in
 | `work/build_tu_index.py` | Python | **Phase 0.** Groups every X360 function into a translation unit (DecFIGS file, else class fallback) → `../progress/tu_index.json`, the work-unit list. |
 | `work/gen_skeleton.py` | Python | **Phase 0.** Emits a per-TU reconstruction skeleton (signatures parsed from pseudocode + trap stubs + guiding comments). Seed for reconstruction, not guaranteed-compiling. |
 | `work/work.py` | Python | **Phase 1.** The `work` ledger CLI (`seed`/`status`/`next`/`show`/`start`/`submit`/`block`) over `../progress/ledger.sqlite`. The interface the in-chat agent drives the decomp loop with. Run via the repo-root `work.cmd` shim. See [`../progress/README.md`](../progress/README.md). |
+| `work/dossier.py` | Python | **Phase 2.** Assembles the full per-TU reconstruction brief behind `work show <tu> --full`: per-function signature/locals/pseudocode/asm, callee signatures with recovered status, caller context, and the original LegacySrc source overlay. |
 | `export_<db>.log` | Output | Headless run logs from `export_db.ps1` (e.g. memory report, function count, errors). Diagnostics only. |
 
 ## Why it's useful for the decomp

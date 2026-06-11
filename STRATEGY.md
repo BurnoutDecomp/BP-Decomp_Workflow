@@ -121,15 +121,18 @@ per-TU asm-matching for if/when a PPC toolchain is wired up. Not built now.
 
 ## Phase plan
 
-- **Phase 0 — Identity + scaffold** *(building now)*: name-join the three symbolized
+- **Phase 0 — Identity + scaffold** *(done)*: name-join the three symbolized
   builds into `progress/identity.json`; group by `primary_file` into
-  `progress/tu_index.json` (the work-unit list); per-TU demand-driven stub/decl
-  generator.
-- **Phase 1 — The `work` CLI + ledger**: `next` / `show` / `submit` / `block` over
-  an SQLite ledger seeded from the identity table.
-- **Phase 2 — Dossier assembler** (`work show`): join per-function exports +
-  DecFIGS attribution + LegacySrc source + sibling/callee signatures into one brief.
-- **Phase 3 — Compile gate + reviewer sub-agent** wired into `submit`.
+  `progress/tu_index.json` (the work-unit list); per-TU skeleton generator
+  (`tools/work/gen_skeleton.py`).
+- **Phase 1 — The `work` CLI + ledger** *(done)*: `seed`/`status`/`next`/`show`/
+  `start`/`submit`/`block` over the SQLite ledger seeded from the identity table;
+  `next` is leaf-first via a TU dependency graph built from xrefs.
+- **Phase 2 — Dossier assembler** *(done)*: `work show <tu> --full`
+  (`tools/work/dossier.py`) joins per-function pseudocode/locals/asm +
+  callee signatures + LegacySrc original source into one brief.
+- **Phase 3 — Compile gate + reviewer sub-agent** *(next)*: wired into `submit`,
+  which is currently a state transition only.
 
 Day-one mode is **assisted single-agent**: one agent at a time, you in the loop.
 The atomic-claim and per-build match seams exist from the start so scaling to a

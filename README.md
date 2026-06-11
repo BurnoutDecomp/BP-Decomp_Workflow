@@ -47,7 +47,8 @@ a single chat. The plan, conventions, and operating guide live in three files â€
    ```powershell
    work status            # where things stand
    work next -n 5         # next leaf-first ready translation units
-   work show <tu>         # the dossier for one unit
+   work show <tu>         # concise overview of one unit
+   work show <tu> --full  # the full reconstruction dossier for it
    work start <tu>        # claim it, reconstruct into b5-decomp, then:
    work submit <tu>       # mark it done
    ```

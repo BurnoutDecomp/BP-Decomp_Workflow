@@ -34,7 +34,9 @@ python tools/work/gen_skeleton.py "<TU key>"   # -> a skeleton on stdout / -o fi
 work seed --deps          # build ledger.sqlite from the JSONs + the dep graph
 work status               # counts by status, % done
 work next -n 5            # next leaf-first ready TUs (fewest unresolved deps first)
-work show <tu>            # TU dossier: functions, signatures, dependency TUs
+work show <tu>            # concise overview: functions, signatures, dependency TUs
+work show <tu> --full     # the full reconstruction dossier (pseudocode, locals,
+                          #   LegacySrc original source, callee sigs; --asm, -o file)
 work start <tu>           # claim (todo -> in_progress)
 work submit <tu>          # mark reconstructed (compile/review gates: Phase 3)
 work block <tu> "reason"  # / work unblock <tu>
@@ -43,8 +45,15 @@ work block <tu> "reason"  # / work unblock <tu>
 `work` (the `work.cmd` shim) is what the in-chat agent shells out to — it is not an
 agent launcher. The ledger is its durable memory *between* sessions and tools.
 
-## Not yet built (Phase 2+)
+## Phase 2 — the dossier (live)
 
-- **Phase 2** — richer `work show`: full pseudocode/asm, LegacySrc source overlay,
-  recovered sibling/callee signatures.
+`work show <tu> --full` ([`tools/work/dossier.py`](../tools/work/dossier.py))
+assembles the full reconstruction brief for a TU: per-function clean signature,
+decompiler locals, full pseudocode, callee signatures (with "already recovered ->
+path" status), caller context, the **original LegacySrc source file** when the TU's
+`primary_file` exists in the legacy reference (483 TUs touch it), and a type-header pointer.
+`--asm` adds disassembly; `-o <file>` writes it out.
+
+## Not yet built (Phase 3)
+
 - **Phase 3** — `work submit` runs the per-TU compile gate + reviewer sub-agent.

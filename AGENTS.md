@@ -22,11 +22,14 @@ TU compiles → a reviewer pass approves.
 ## The work loop
 
 ```
-work next            # claim the next dependency-ready translation unit
-work show <tu>       # print the full dossier for it (everything you need)
+work next             # claim the next dependency-ready translation unit
+work show <tu>        # concise overview (functions, signatures, dependency TUs)
+work show <tu> --full # the full dossier: pseudocode, locals, LegacySrc original
+                      #   source, callee signatures (--asm for disasm, -o to a file)
+work start <tu>       # claim it (todo -> in_progress)
   …reconstruct the C++ into b5-decomp/src/<mirrored path>…
-work submit <tu>     # runs the compile gate, then the reviewer pass
-work block <tu> "…"  # mark blocked + reason so it is not reclaimed
+work submit <tu>      # mark reconstructed (compile gate + reviewer pass: Phase 3)
+work block <tu> "…"   # mark blocked + reason so it is not reclaimed
 ```
 
 The `work` CLI ([`tools/work/work.py`](tools/work/work.py), via the repo-root
