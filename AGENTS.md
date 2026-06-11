@@ -73,13 +73,13 @@ The default count lives in `progress/review.config.json` (`batch.default_tus_per
      guessed offsets, inferred data tables). **You make the call**; deviate with a noted
      reason when a TU warrants it.
     - **Invoke your choice yourself:**
-      - **In-Session Sub-agent Flow:** If using `claude-code` and `"invoke": "in-session-subagent"` is configured (default), spawn the chosen model as a **fresh-eyes sub-agent** (using your Agent/Task tool) given **only** the path to the review packet `progress/reviews/<tu>.md` — do not share your reconstruction reasoning.
-      - **CLI Command Flow:** If using a CLI-based invoke (`codex`, `antigravity`, or if `claude-code` is configured to `cli`), run the provider's `command` template via your shell/Bash tool, substituting `{model}`, `{thinking_flag}`, and `{packet_path}`.
+      - **In-Session Sub-agent Flow:** If you have native tool capabilities to spawn sub-agents directly in your session (e.g., an `invoke_subagent` or task-spawning tool), and the model it spawns is appropriate for the selected task tier (without being an unnecessary resource or quota drain compared to a smaller CLI-accessible model), you should prefer to spawn the chosen model as a **fresh-eyes sub-agent** directly, giving it **only** the path to the review packet `progress/reviews/<tu>.md` — do not share your reconstruction reasoning. Use this flow whenever you have the tools to do so, regardless of the default configuration.
+      - **CLI Command Flow:** If you do not have in-session sub-agent tools, if the in-session sub-agent would use a model that is excessively large/expensive for the task (e.g., a complex model for a simple task), or if you specifically need a smaller model that is only accessible via a CLI tool command on the host (like `codex`, `antigravity`, etc.), run the provider's `command` template via your shell/Bash tool, substituting `{model}`, `{thinking_flag}`, and `{packet_path}`.
         - Note: If the model has `"thinking": false`, substitute `{thinking_flag}` with `""`. Otherwise, substitute `{thinking_flag}` using the provider's `thinking_flag` template (replacing `{thinking}` with the chosen level).
         - `{packet_path}` must be substituted as the path to the packet file (`progress/reviews/<tu>.md`). Never inline the packet contents directly as a shell argument, as this can break escaping and present a command-injection risk.
       - **Capture the Verdict:** Extract the verdict from the reviewer's response. The reviewer must output a line of the format `VERDICT: pass` or `VERDICT: fail`. Treat the absence of an explicit verdict line as a `fail` (needs human review). Record it: `work review <tu> --verdict pass|fail [--notes "..."]`. A pass marks the TU `done`; a fail returns it to `in_progress` with the reviewer's notes.
    If the config is missing, default to: review every non-trivial TU with the cheapest
-   Claude model you can spawn.
+   Claude/Gemini model you can spawn.
 
 The `work` CLI ([`tools/work/work.py`](tools/work/work.py), via the repo-root
 `work.cmd` shim) is the only interface you must learn. It is identical for every

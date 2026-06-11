@@ -7,7 +7,7 @@
       "invoke": "in-session-subagent",
       "command": "claude -m {model} {thinking_flag} --dangerously-skip-permissions -p --append-system-prompt \"Use sub-agents in the session when you can.\" \"Read and review the packet at: {packet_path}\"",
       "thinking_flag": "--effort {thinking}",
-      "_invoke_note": "If invoke is 'in-session-subagent', the reverser spawns the chosen model as a fresh-eyes sub-agent in-session (Agent/Task tool, model = picked id). No shell command. If invoke is changed to 'cli', the command template is run through the shell tool, substituting {model}/{thinking_flag}/{packet_path}. Verify command details on your install.",
+      "_invoke_note": "If the agent has tool capabilities to spawn sub-agents directly in-session (Agent/Task tools like invoke_subagent), it should choose to do so. Otherwise, or if invoke is changed to 'cli', the command template is run through the shell tool, substituting {model}/{thinking_flag}/{packet_path}. Verify command details on your install.",
       "thinking_ladder": [
         "low",
         "medium",
