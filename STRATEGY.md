@@ -1,0 +1,136 @@
+# Decompilation Strategy
+
+The shared, agent-agnostic plan for reconstructing Burnout 5 / Paradise as
+compilable PC C++. Every agent (Claude Code, Codex, Antigravity, future LiteLLM
+loops) reads this file and [`AGENTS.md`](AGENTS.md) before doing any work. This is
+the source of truth for *what we are doing and why*; the ledger under
+[`progress/`](progress/) is the source of truth for *what is done*.
+
+## Goal
+
+**Semantic parity with the X360 build, expressed as PC C++.** Not a byte-matching
+decomp — there is no asm-diff gate. A function is "done" when it is reconstructed
+in [`b5-decomp`](b5-decomp/), the project compiles, and a reviewer pass confirms
+the C++ does what the source build's pseudocode/asm does.
+
+## The builds and their roles
+
+Two tiers, decided by how richly each is symbolized (measured, not assumed):
+
+| Build | Named | Role |
+|-------|-------|------|
+| `BURNOUT_X360_ARTIST.XEX` | ~91% | **Spine / target.** Identity, names, file structure, and the pseudocode we reconstruct from. |
+| `Burnout_External_PS3.ELF` | ~94% | Naming/pseudocode corroboration (second opinion). |
+| `DecFIGS_Burnout_Internal_PS3.ELF` | ~90% | **File/line attribution** (DWARF) — tells us which original `.cpp` each function belongs to. |
+| `BurnoutPR.exe` (BPR) | ~0% | PC reference, **stripped**. Consulted per-function for platform layers only. Partially hand-RE'd. |
+| `TUB_Burnout_PC_External.exe` | ~6% | PC reference, **stripped**. Same opportunistic role as BPR. |
+| `rwtypes_master.obj` | 100% | RenderWare type ground truth. |
+
+The three **symbolized console builds join by name**. The two **stripped PC builds
+are never the spine** — they are a lookup tool the agent reaches for mid-
+reconstruction when it wants the PC-shaped version of a platform function.
+
+## Cross-build identity: join on the normalized name, never structural matching
+
+Addresses are per-build and meaningless across builds. The canonical identity of a
+function is its **normalized qualified name** — `Namespace::Class::method`, with
+parameters, return type, and calling convention stripped.
+
+- X360 names are already demangled (MSVC-style): `BrnReplays::Serialiser::GetPl`.
+- DecFIGS / PS3 names are Itanium-mangled with `.`-prefixed PPC descriptors
+  (`._ZN6Attrib8TypeDesc6LookupEy`). We strip the leading `.` and demangle with
+  `c++filt`, then strip the `(params)` to get the qualified path.
+- The identity table is a **left-join anchored on X360**: for each X360 function,
+  attach the DecFIGS `primary_file` and any PS3 corroboration that shares the
+  normalized name. Functions that exist in only one build are fine — they just
+  carry fewer evidence sources.
+
+**We do not do global structural (Diaphora/BinDiff) matching.** It is reserved for
+two optional, per-function cases: (1) the ~9% of X360 functions without a real
+name, and (2) pulling a BPR/TUB PC reference for a specific platform function —
+anchored by string literals (survive stripping) and named `rw::`/neighbor calls.
+
+Known risks, to be measured by the identity build rather than assumed:
+- MSVC-demangled vs Itanium-demangled spelling of the *qualified path* should agree
+  for ordinary names; templates/operators may differ.
+- Overloads collapse to the same normalized key (same path, different params) — the
+  identity table records all addresses under that key and flags the collision.
+- Some X360 names appear truncated in the IDB (`GetPl`). The match-rate report tells
+  us empirically how much this costs.
+
+## Unit of work: the translation unit
+
+The natural work unit is a **translation unit** — a `.cpp` and the functions that
+compose it — not a loose function. An agent claims a TU, reconstructs its functions
+together, and lands them under the mirrored path in [`b5-decomp/src`](b5-decomp/src/).
+Internally the ledger still tracks per-function status.
+
+**TU grouping has two sources (measured):**
+
+- **DecFIGS file attribution — ~43% of X360 functions (11,357 / 27,549).** DecFIGS
+  gives these a real `primary_file` (their original `.cpp`). Ground truth.
+- **Class-derived grouping — the other ~57%.** Verified empirically: the unmatched
+  functions are *genuinely absent* from the DecFIGS build (different build/inlining),
+  not a name-spelling mismatch (only 1% were spelling diffs; 5% MSVC-mangled, 4%
+  truncated at 119 chars — all minor). These still carry their `Namespace::Class`
+  path in the X360 demangled name, so they group by class, which ≈ file for C++.
+
+The TU index marks each unit's `source` (`decfigs` vs `class`) so confidence is
+explicit. A `class`-sourced TU may later be re-partitioned if file evidence appears.
+
+**Ordering:** leaf-first (callees before callers) is the *quality* preference — a
+caller reconstructed after its callees sees real signatures and recovered types.
+It is **not** a correctness requirement (see stubs below), so any ready TU may be
+taken; `work next` simply prefers dependency-unblocked ones.
+
+## The stub scaffold — and its honest C++ caveat
+
+To break the "nothing compiles until everything is decompiled" deadlock, every
+referenced-but-not-yet-reconstructed function is satisfied by a **declaration plus
+a trap-body stub** (`__builtin_trap();` / `CGS_ASSERT(false)`). Reconstructing a
+function = replacing its stub body with the real one. Declarations are always
+present, so call sites never break on a missing symbol.
+
+Caveat that the C++ nature of this codebase forces (unlike a flat C decomp): ~90%
+of functions are **methods on classes**. You cannot stub `int A::B::foo()` without
+class `A::B` declared. Therefore:
+
+- There is **no global "30k trap stubs that link empty"** target. Stubs are
+  **demand-driven per TU**: when a TU references `A::B::foo`, we emit a forward
+  declaration for `A::B` (if absent) and a stub for `foo`.
+- The compile gate is therefore **per-TU**: "this TU compiles against the current
+  global headers," not "the whole game links and runs." Full-link is a later phase.
+- This couples stub generation to **type recovery**: discovering that a param is
+  `BrnEntity*` edits a shared header, which may break callers — and that compiler
+  error is the desired signal, not drift.
+
+Types live in headers (`vendor/renderware/` for `rw::`, plus recovered game type
+headers). Agents extend them; the per-TU compile gate catches conflicts.
+
+## Verification (reconstruction target — two tiers, both local)
+
+1. **Compile gate** — the affected TU compiles against current headers (CMake).
+   Cheap, mandatory.
+2. **Reviewer pass** — a *separate* agent/sub-agent gets only the dossier + the
+   produced diff (not the reconstruction reasoning) and answers: does this C++ match
+   the pseudocode/asm semantics? Verdict is written to the ledger. `/code-review` is
+   the manual equivalent.
+
+A dormant third tier (`match_required` flag in the ledger, default off) reserves
+per-TU asm-matching for if/when a PPC toolchain is wired up. Not built now.
+
+## Phase plan
+
+- **Phase 0 — Identity + scaffold** *(building now)*: name-join the three symbolized
+  builds into `progress/identity.json`; group by `primary_file` into
+  `progress/tu_index.json` (the work-unit list); per-TU demand-driven stub/decl
+  generator.
+- **Phase 1 — The `work` CLI + ledger**: `next` / `show` / `submit` / `block` over
+  an SQLite ledger seeded from the identity table.
+- **Phase 2 — Dossier assembler** (`work show`): join per-function exports +
+  DecFIGS attribution + LegacySrc source + sibling/callee signatures into one brief.
+- **Phase 3 — Compile gate + reviewer sub-agent** wired into `submit`.
+
+Day-one mode is **assisted single-agent**: one agent at a time, you in the loop.
+The atomic-claim and per-build match seams exist from the start so scaling to a
+parallel fleet, or adding asm-matching, is a config flip, not a rewrite.
