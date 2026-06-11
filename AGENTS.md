@@ -39,10 +39,15 @@ work stubs <tu>       # trap-stub the callees this TU needs that aren't done yet
                       #   (leaf-first usually means few/none; --list to preview)
   …reconstruct the C++ into b5-decomp/src/<mirrored path>…
 work submit <tu>      # run the compile gate; on pass, emit a reviewer packet
-  …spawn a fresh-eyes reviewer sub-agent on the packet (see Verification)…
+  …review per policy (see Verification) — tiered, may be skipped or delegated…
 work review <tu> --verdict pass|fail [--notes "…"]   # record the verdict
 work block <tu> "…"   # mark blocked + reason so it is not reclaimed
 ```
+
+**Batching.** Reconstruct one TU per pass by default. If the user names a count
+("do 5"), claim that many dependency-ready TUs, reconstruct them in one pass, submit
+each, then do a single combined review pass over the batch — it amortizes fixed cost.
+The default count lives in `progress/review.config.json` (`batch.default_tus_per_pass`).
 
 ## Verification (what `submit` / `review` expect)
 
@@ -53,11 +58,31 @@ work block <tu> "…"   # mark blocked + reason so it is not reclaimed
    reports `skip` and still proceeds — see `progress/verify.config.json`. The EA
    submodules must be checked out — `git -C b5-decomp submodule update --init` — for
    anything that includes EASTL/EABase to compile.)
-2. **Reviewer pass.** Spawn a **separate, fresh-eyes** sub-agent (e.g. the Task tool)
-   given **only** `progress/reviews/<tu>.md` — not your reconstruction reasoning. It
-   compares the produced C++ against the dossier (pseudocode / LegacySrc source) and
-   returns `VERDICT: pass|fail` + findings. Record it with `work review`. A pass marks
-   the TU `done`; a fail returns it to `in_progress` with the notes.
+2. **Reviewer pass — YOU choose, per `progress/review.config.json`.** Not every TU
+   needs a separate full review; an always-on Opus review per TU is the main quota sink.
+   The config is a **menu + policy, not an auto-router**: you (the reverser agent) read
+   it and decide, per TU, whether to review and with what. After a clean compile gate:
+   - **Classify** the TU as `trivial | standard | complex` (`review.classify_hints`).
+   - If `review.enabled` is false, or the class is `trivial` (per `selection_guidance`):
+     **skip** the pass — the compile gate + your own self-check is the gate. Record it
+     yourself: `work review … --verdict pass --notes "trivial; gate-only"`.
+   - Otherwise **choose** a provider+model from `providers` (only those with `have:true`)
+     and a thinking level inside that model's allowed range, following `selection_guidance`
+     (cheapest capable for `standard`; stronger + more thinking for `complex`; bump a notch
+     via `escalate_when_unsure` when you doubt your own work — FP precision, signedness,
+     guessed offsets, inferred data tables). **You make the call**; deviate with a noted
+     reason when a TU warrants it.
+   - **Invoke your choice yourself:**
+     - Run the chosen provider's (`claude-code`, `codex`, or `antigravity`) `command` template
+       via your shell/Bash tool (substitute `{model}`, `{thinking_flag}`, and `{prompt}`).
+       - Note: If the model has `"thinking": false`, substitute `{thinking_flag}` with an empty string `""`.
+         Otherwise, substitute `{thinking_flag}` using the provider's `thinking_flag` template (replacing `{thinking}` with the chosen level).
+       Feed the review packet's contents or path as `{prompt}`. Capture its `VERDICT`.
+   - The reviewer compares the produced C++ against the dossier and returns
+     `VERDICT: pass|fail` + findings. Record it with `work review`. A pass marks the TU
+     `done`; a fail returns it to `in_progress` with the notes.
+   If the config is missing, default to: review every non-trivial TU with the cheapest
+   Claude model you can spawn.
 
 The `work` CLI ([`tools/work/work.py`](tools/work/work.py), via the repo-root
 `work.cmd` shim) is the only interface you must learn. It is identical for every

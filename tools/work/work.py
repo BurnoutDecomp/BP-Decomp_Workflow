@@ -393,8 +393,7 @@ def cmd_submit(args):
     packet = verify.reviewer_packet(con, dict_row(con, "tu", args.tu), funcs, files)
     con.commit()
     print(f"\nreviewer packet -> {os.path.relpath(packet, ROOT)}")
-    print("Next: spawn a FRESH-EYES reviewer sub-agent with that packet (it should not see")
-    print("your reconstruction reasoning), then record the verdict:")
+    print("Next: choose a reviewer per progress/review.config.json policy, run the review, then record the verdict:")
     print(f"  work review \"{args.tu}\" --verdict pass   # or: --verdict fail --notes \"...\"")
 
 
