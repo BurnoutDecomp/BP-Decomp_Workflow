@@ -375,6 +375,12 @@ def cmd_set(args):
     print(f"{args.tu} -> {args.status}")
 
 
+def cmd_stubs(args):
+    import gen_stubs
+    sys.argv = ["gen_stubs", args.tu] + (["--list"] if args.list else [])
+    gen_stubs.main()
+
+
 def main():
     ap = argparse.ArgumentParser(prog="work")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -394,6 +400,8 @@ def main():
     rv = sub.add_parser("review"); rv.add_argument("tu")
     rv.add_argument("--verdict", required=True, choices=["pass", "fail"])
     rv.add_argument("--notes"); rv.set_defaults(fn=cmd_review)
+    sb = sub.add_parser("stubs"); sb.add_argument("tu"); sb.add_argument("--list", action="store_true")
+    sb.set_defaults(fn=cmd_stubs)
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
     se = sub.add_parser("set"); se.add_argument("tu"); se.add_argument("--status", required=True); se.add_argument("--note"); se.set_defaults(fn=cmd_set)
