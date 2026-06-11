@@ -1,5 +1,13 @@
 {
  "func": {
+  "BrnNetwork::NetworkRounder::RoundFloatToAccuracy": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "CgsContainers::CgsHash::CalculateHash": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
   "CgsFsm::Fsm::Update": {
    "status": "reviewed",
    "verify_tier": 2
@@ -22,6 +30,16 @@
   }
  },
  "tu": {
+  "C:/WINDOWS/TEMP/DBSWORK/a/C:/usr/local/cell//target/ppu/include/ppu_intrinsics_gcc.h": {
+   "notes": "Fresh-eyes review: floor(x+0.5)*step PPC fsel idiom faithfully reconstructed; single/double precision preserved per op. Landed at corrected path GameSource/Network/Utilities/BrnNetworkRounder.cpp (X360 line-info had misattributed to ppu_intrinsics_gcc.h).",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Containers/CgsHash.cpp": {
+   "notes": "Fresh-eyes review: reflected CRC-32 (init 0xFFFFFFFF, no final inversion) faithfully reconstructed; signed-char extsb mirrored. Table regenerated from standard poly 0xEDB88320 (binary table at VA 0x82F310C0 not extractable from exports - flagged for later binary diff). Index masked to keep in-range; original's unmasked OOB on bytes>=0x80 is unreachable for ASCII keys.",
+   "owner": "agent",
+   "status": "done"
+  },
   "GameShared/GameClasses/Fsm/CgsFsm.cpp": {
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
    "owner": "agent",
