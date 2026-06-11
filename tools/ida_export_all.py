@@ -6,7 +6,7 @@ For each function, exports:
 - Prototype Signature
 - Local Variables (Decompiler)
 - Pseudocode (Hex-Rays)
-- Assembly instructions (with raw bytes and comments)
+- Assembly listing (single string: one "<ea>  <disasm>  ; <comment>" line per instruction)
 - Callers (xrefs to) and Callees (xrefs from)
 """
 import json
@@ -101,7 +101,7 @@ def export_function(fva):
         "prototype": None,
         "variables": [],
         "pseudocode": None,
-        "assembly": [],
+        "assembly": "",
         "xrefs_to": [],
         "xrefs_from": []
     }
@@ -124,28 +124,26 @@ def export_function(fva):
         except Exception as exc:
             pass
 
-    # 2. Extract Assembly
+    # 2. Extract Assembly as a single listing string: "<ea>  <disasm>  ; <comment>".
+    # One line per instruction keeps the address (for branch-target / xref lookup)
+    # and any IDA comment inline, without the per-instruction JSON-object overhead.
+    asm_lines = []
     for ea in idautils.Heads(func.start_ea, func.end_ea):
         disasm = idc.generate_disasm_line(ea, 0)
         # Strip IDA HTML-like tags or extra color markers if present
         disasm = ida_lines.tag_remove(disasm)
-        
-        # Get raw bytes
-        sz = ida_bytes.get_item_size(ea)
-        raw_bytes = ida_bytes.get_bytes(ea, sz)
-        bytes_str = " ".join(f"{b:02X}" for b in raw_bytes) if raw_bytes else ""
-        
-        # Get comments
+
+        # Get comments (regular, else repeatable)
         cmt = ida_bytes.get_cmt(ea, False) or ""
         rcmt = ida_bytes.get_cmt(ea, True) or ""
         comment = cmt if cmt else rcmt
-        
-        fdata["assembly"].append({
-            "ea": f"0x{ea:X}",
-            "bytes": bytes_str,
-            "disasm": disasm,
-            "comment": comment
-        })
+
+        line = f"0x{ea:X}  {disasm}"
+        if comment:
+            line += f"  ; {comment}"
+        asm_lines.append(line)
+
+    fdata["assembly"] = "\n".join(asm_lines)
 
     # 3. Extract Xrefs
     try:
