@@ -33,6 +33,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 IDENTITY = os.path.join(ROOT, "progress", "identity.json")
 TU_INDEX = os.path.join(ROOT, "progress", "tu_index.json")
 DB = os.path.join(ROOT, "progress", "ledger.sqlite")
+# Committed mirrors so a fresh clone can rebuild the (git-ignored) ledger with
+# full status + dependency graph, without needing IDA or the .ida-exports.
+STATUS_JSON = os.path.join(ROOT, "progress", "status.json")
+TU_DEPS_JSON = os.path.join(ROOT, "progress", "tu_deps.json")
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 
 TU_STATUS = ("todo", "in_progress", "compiled", "done", "blocked")
@@ -128,9 +132,67 @@ def cmd_seed(args):
     n_fn = con.execute("SELECT COUNT(*) FROM func").fetchone()[0]
     print(f"seeded {n_tu} TUs, {n_fn} functions")
 
-    if args.deps:
+    # restore committed progress (status) so a fresh clone resumes where we left off
+    n_restored = restore_status(con)
+    if n_restored:
+        print(f"restored status for {n_restored} TUs from {os.path.basename(STATUS_JSON)}")
+
+    # dependency graph: rebuild from exports (--deps) or load the committed mirror
+    if args.deps and os.path.isdir(X360_EXPORTS):
         build_deps(con, identity)
+    else:
+        n_edges = load_deps_from_json(con)
+        if n_edges:
+            print(f"loaded {n_edges} dependency edges from {os.path.basename(TU_DEPS_JSON)}")
+        elif args.deps:
+            print("  (--deps requested but no .ida-exports/ and no tu_deps.json — `next` will be heuristic)")
+    con.commit()
+    sync_status(con)
     con.close()
+
+
+# ---------------------------------------------------------------- committed mirrors
+def sync_status(con):
+    """Write the mutable progress (non-default rows only) to the committed status.json."""
+    tu = {}
+    for r in con.execute("SELECT id,status,owner,notes FROM tu WHERE status!='todo'"):
+        tu[r["id"]] = {k: r[k] for k in ("status", "owner", "notes") if r[k]}
+    fn = {}
+    for r in con.execute("SELECT name,status,verify_tier,attempts FROM func "
+                         "WHERE status!='todo' OR verify_tier!=0 OR attempts!=0"):
+        d = {"status": r["status"]}
+        if r["verify_tier"]:
+            d["verify_tier"] = r["verify_tier"]
+        if r["attempts"]:
+            d["attempts"] = r["attempts"]
+        fn[r["name"]] = d
+    os.makedirs(os.path.dirname(STATUS_JSON), exist_ok=True)
+    json.dump({"tu": tu, "func": fn}, open(STATUS_JSON, "w", encoding="utf-8"),
+              indent=1, sort_keys=True)
+
+
+def restore_status(con):
+    if not os.path.exists(STATUS_JSON):
+        return 0
+    st = json.load(open(STATUS_JSON, encoding="utf-8"))
+    for tid, d in st.get("tu", {}).items():
+        con.execute("UPDATE tu SET status=?, owner=?, notes=? WHERE id=?",
+                    (d.get("status", "todo"), d.get("owner"), d.get("notes"), tid))
+    for nm, d in st.get("func", {}).items():
+        con.execute("UPDATE func SET status=?, verify_tier=?, attempts=? WHERE name=?",
+                    (d.get("status", "todo"), d.get("verify_tier", 0), d.get("attempts", 0), nm))
+    con.commit()
+    return len(st.get("tu", {}))
+
+
+def load_deps_from_json(con):
+    if not os.path.exists(TU_DEPS_JSON):
+        return 0
+    edges = json.load(open(TU_DEPS_JSON, encoding="utf-8"))
+    con.execute("DELETE FROM tu_dep")
+    con.executemany("INSERT INTO tu_dep(tu_id,dep_id,weight) VALUES(?,?,?)", edges)
+    con.commit()
+    return len(edges)
 
 
 def build_deps(con, identity):
@@ -161,11 +223,13 @@ def build_deps(con, identity):
                 dtu = name2tu.get(callee)
                 if dtu and dtu != ctu:
                     edges[(ctu, dtu)] += 1
+    edge_rows = [[t, d, w] for (t, d), w in edges.items()]
     con.execute("DELETE FROM tu_dep")
-    con.executemany("INSERT INTO tu_dep(tu_id,dep_id,weight) VALUES(?,?,?)",
-                    [(t, d, w) for (t, d), w in edges.items()])
+    con.executemany("INSERT INTO tu_dep(tu_id,dep_id,weight) VALUES(?,?,?)", edge_rows)
     con.commit()
-    print(f"  {len(edges)} TU->TU dependency edges")
+    # persist the committed mirror so a clone gets leaf-first `next` without IDA
+    json.dump(edge_rows, open(TU_DEPS_JSON, "w", encoding="utf-8"))
+    print(f"  {len(edges)} TU->TU dependency edges (mirrored to {os.path.basename(TU_DEPS_JSON)})")
 
 
 # ---------------------------------------------------------------- status
@@ -267,6 +331,7 @@ def set_tu(con, tu, status, owner=None, notes=None):
                 (status, owner, notes, now(), tu))
     log(con, status, tu_id=tu, detail=notes)
     con.commit()
+    sync_status(con)  # keep the committed status.json in step with the ledger
 
 
 def cmd_start(args):
@@ -381,10 +446,48 @@ def cmd_stubs(args):
     gen_stubs.main()
 
 
+def cmd_bootstrap(args):
+    """One command to make a fresh clone workable and resume where we left off."""
+    print("== work bootstrap ==")
+    # 1) submodules — two controlled levels, NOT --recursive (the EA libs carry
+    #    deeply self-referential test-package submodules that blow past Windows
+    #    MAX_PATH; we only want EABase/EASTL/EAThread/renderware).
+    print("[1/3] git submodules ...", flush=True)
+    r = subprocess.run(["git", "submodule", "update", "--init"], cwd=ROOT)
+    b5 = os.path.join(ROOT, "b5-decomp")
+    if os.path.isdir(os.path.join(b5, ".git")) or os.path.exists(os.path.join(b5, ".git")):
+        r2 = subprocess.run(["git", "submodule", "update", "--init"], cwd=b5)
+        if r.returncode or r2.returncode:
+            print("  warning: some submodules failed to init; check your git state")
+
+    # 2) the committed structure must be present (identity/tu_index are in git)
+    print("[2/3] checking committed artifacts ...", flush=True)
+    missing = [p for p in (IDENTITY, TU_INDEX) if not os.path.exists(p)]
+    if missing:
+        print(f"  MISSING {', '.join(os.path.basename(m) for m in missing)} — these are committed;"
+              " regenerate with build_identity.py / build_tu_index.py (needs .ida-exports).")
+    have_exports = os.path.isdir(X360_EXPORTS)
+    if not have_exports:
+        print("  note: .ida-exports/ absent (git-ignored). The ledger still rebuilds from the")
+        print("        committed mirrors, but reconstructing NEW functions (dossier/stubs) needs")
+        print("        them — regenerate with: tools/export_db.ps1 -DbName BURNOUT_X360_ARTIST.XEX")
+
+    # 3) (re)build the ledger from committed identity/tu_index + status + dep mirrors
+    print("[3/3] building ledger ...", flush=True)
+    seed_args = argparse.Namespace(deps=have_exports, reset=False)
+    cmd_seed(seed_args)
+
+    print("\n== ready ==  resume with:")
+    print("  work status      # what's done")
+    print("  work next        # the next leaf-first TU to reconstruct")
+    cmd_status(argparse.Namespace())
+
+
 def main():
     ap = argparse.ArgumentParser(prog="work")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
+    sub.add_parser("bootstrap").set_defaults(fn=cmd_bootstrap)
     s = sub.add_parser("seed"); s.add_argument("--deps", action="store_true"); s.add_argument("--reset", action="store_true"); s.set_defaults(fn=cmd_seed)
     sub.add_parser("status").set_defaults(fn=cmd_status)
     n = sub.add_parser("next"); n.add_argument("-n", type=int, default=1); n.set_defaults(fn=cmd_next)

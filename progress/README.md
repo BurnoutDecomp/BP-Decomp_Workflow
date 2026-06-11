@@ -12,7 +12,9 @@ for the plan and [`../AGENTS.md`](../AGENTS.md) for how to work against it.
 | `identity.json` | `tools/work/build_identity.py` | Cross-build identity table. One entry per X360 function, keyed by **normalized qualified name**, with its X360 address(es), DecFIGS `primary_file` (if any), and PS3 corroboration. The canonical map between builds. |
 | `tu_index.json` | `tools/work/build_tu_index.py` | The work-unit list: every function grouped into a translation unit, `source` = `decfigs` (real file, ~43%) or `class` (fallback, ~57%). Each TU has a `status` (todo/in_progress/done/blocked). |
 | `skeletons/` | `tools/work/gen_skeleton.py` | *Generated, git-ignored.* Per-TU reconstruction seeds (signatures + pseudocode + trap stubs). Regenerate on demand. |
-| `ledger.sqlite` | `tools/work/work.py seed` | **The ledger** — live store for per-TU/per-function status, owners, blockers, the TU dependency graph, and an event log. *Git-ignored* (local working store): it persists on disk between sessions and is fully rebuildable from the committed `identity.json` + `tu_index.json` via `work seed --deps`. |
+| `ledger.sqlite` | `tools/work/work.py seed` | **The ledger** — live store for per-TU/per-function status, owners, blockers, the TU dependency graph, and an event log. *Git-ignored* (local working store): rebuilt from the committed files below. |
+| `status.json` | committed, auto-written | The mutable progress (which TUs/funcs are done, owners, blockers) — only non-default rows. Committed so a fresh clone resumes where the last commit left off. |
+| `tu_deps.json` | committed, `work seed --deps` | The TU→TU dependency graph (21,548 edges) mirrored from the xref analysis, so leaf-first `next` works after a clone **without** `.ida-exports/` or IDA. |
 
 ## Current state (Phase 0)
 
@@ -31,6 +33,7 @@ python tools/work/gen_skeleton.py "<TU key>"   # -> a skeleton on stdout / -o fi
 ## The `work` CLI (Phase 1 — live)
 
 ```powershell
+work bootstrap            # fresh clone: submodules + rebuild ledger from committed state
 work seed --deps          # build ledger.sqlite from the JSONs + the dep graph
 work status               # counts by status, % done
 work next -n 5            # next leaf-first ready TUs (fewest unresolved deps first)

@@ -42,7 +42,21 @@ a single chat. The plan, conventions, and operating guide live in three files �
 1. [`AGENTS.md`](AGENTS.md) — operating guide every agent reads first (tool-agnostic).
 2. [`STRATEGY.md`](STRATEGY.md) — the plan: build roles, the name-join identity
    model, translation-unit work units, the stub scaffold, verification, phases.
-3. [`progress/`](progress/) — the live ledger, driven by the `work` CLI:
+3. [`progress/`](progress/) — the live ledger, driven by the `work` CLI.
+
+### Fresh clone — one command, then "continue"
+
+```powershell
+work bootstrap   # init submodules + rebuild the ledger from committed state
+```
+
+`bootstrap` makes a freshly-cloned repo workable and **resumes exactly where the
+last commit left off** — progress (which TUs are done) and the leaf-first
+dependency graph are committed as `progress/status.json` + `progress/tu_deps.json`,
+so the ledger rebuilds with no IDA and no `.ida-exports/` needed. After it, an agent
+can just be told **"continue"**: it reads [`AGENTS.md`](AGENTS.md), runs `work next`,
+and picks up the next translation unit. (Reconstructing *new* functions still needs
+`.ida-exports/`, which are regenerated from the IDBs with `tools/export_db.ps1`.)
 
    ```powershell
    work status            # where things stand
