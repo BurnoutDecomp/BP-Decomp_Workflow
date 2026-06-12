@@ -52,6 +52,17 @@ work review <tu> --verdict pass|fail [--notes "…"]   # record the verdict
 work block <tu> "…"   # mark blocked + reason so it is not reclaimed
 ```
 
+**Deterministic auto-draft (NO-LLM, optional sweep).** `work auto --scan` reports the
+TUs that are *fully mechanical* — every function is a pure forwarder (`return
+Other::Fn(args);`) or a compiler thunk (deleting destructors, which are dropped, not
+written). `work auto --run [-n N]` drafts those, runs them through the normal compile
+gate, and records the ones that pass+parity-GREEN as done gate-only; the rest revert to
+the agent. It never overwrites an existing file and skips header-keyed TUs. The payoff is
+small and *latent* — most mechanical functions live in mixed TUs, and a cold draft only
+compiles once its class/callees are type-recovered — so treat it as an opportunistic
+sweep to re-run as headers fill in, not a substitute for reconstruction. Implemented in
+[`tools/work/auto_draft.py`](tools/work/auto_draft.py).
+
 **Batching.** Reconstruct one TU per pass by default. If the user names a count
 ("do 5"), claim that many dependency-ready TUs, reconstruct them in one pass, submit
 each, then do a single combined review pass over the batch — it amortizes fixed cost.
@@ -137,7 +148,16 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
 - **Types live in headers** and are shared global state. Extend them; let the
   compile gate surface conflicts. Don't redefine a type locally to dodge an error.
 - **Update the ledger, not your own memory.** Progress that isn't in `progress/` did
-  not happen as far as the next agent is concerned.
+  not happen as far as the next agent is concerned. The git-ignored `ledger.sqlite` is
+  a cache: ground truth for "done" is the reconstructed **file committed in b5-decomp**.
+  If the ledger ever disagrees with the files (it has — `work submit`'s file-detection
+  can mark a TU done with no source), re-anchor it with
+  [`tools/work/reconcile_from_files.py`](tools/work/reconcile_from_files.py) (`--apply`):
+  a TU is `done` only if its committed file is real **and complete** (no `TODO`/`FIXME`/
+  `guessed`/`placeholder` markers — those land `in_progress`), else `todo`; `blocked`
+  preserved. It verifies both directions and round-trips through `work seed`. **A
+  committed file is not "done" if it still carries author TODOs** — don't mark partials
+  done. ("done" = complete reconstructed file, not necessarily LLM-reviewed.)
 - **Mirror original paths.** A function whose `primary_file` is
   `GameSource/Replays/Foo.cpp` lands at `b5-decomp/src/GameSource/Replays/Foo.cpp`.
 
