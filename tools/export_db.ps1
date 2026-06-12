@@ -11,6 +11,7 @@ param(
     [string]$DbName = "BURNOUT_X360_ARTIST.XEX",  # Name of the database in "IDA Files/" (without .i64 extension)
     [int]$ExportMax = 0,                          # Max functions PER WORKER (0 = all; useful for testing)
     [int]$Jobs = 0,                               # Parallel IDA processes (0 = auto: min(cores, 12))
+    [string]$IdaPath = "",                        # Custom path to idat.exe (overrides default/env)
     [switch]$KeepTemp                             # Keep per-worker DB copies/logs after run (for debugging)
 )
 
@@ -18,12 +19,55 @@ $ErrorActionPreference = "Stop"
 
 # Paths
 $ProjectRoot = Resolve-Path "$PSScriptRoot/.."
-$IdaBin = "C:\Program Files\IDA Professional 9.3\idat.exe"
-$ScriptFile = Join-Path $ProjectRoot "tools\ida_export_all.py"
+
+# Resolve IDA path: parameter, then environment variables, then default installation paths, then PATH
+if (-not $IdaPath) {
+    if ($env:IDA_PATH) {
+        $IdaPath = $env:IDA_PATH
+    } elseif ($env:IDA_BIN) {
+        $IdaPath = $env:IDA_BIN
+    }
+}
+
+$DefaultIdaPaths = @(
+    "C:\Program Files\IDA Professional 9.3\idat.exe",
+    "C:\Program Files\IDA Professional 9.0\idat.exe",
+    "C:\Program Files\IDA Pro 9.0\idat.exe",
+    "C:\Program Files\IDA Pro 9.3\idat.exe",
+    "C:\Program Files\IDA Professional 9.2\idat.exe",
+    "C:\Program Files\IDA Professional 9.1\idat.exe",
+    "C:\Program Files\IDA Pro 9.2\idat.exe",
+    "C:\Program Files\IDA Pro 9.1\idat.exe"
+)
+
+if (-not $IdaPath) {
+    foreach ($path in $DefaultIdaPaths) {
+        if (Test-Path $path) {
+            $IdaPath = $path
+            break
+        }
+    }
+}
+
+if (-not $IdaPath) {
+    $FromPath = Get-Command idat.exe -ErrorAction SilentlyContinue
+    if ($FromPath) {
+        $IdaPath = $FromPath.Source
+    }
+}
+
+# Default fallback for final validation
+if (-not $IdaPath) {
+    $IdaPath = "C:\Program Files\IDA Professional 9.3\idat.exe"
+}
+
+$IdaBin = $IdaPath
 
 if (-not (Test-Path $IdaBin)) {
-    Write-Error "IDA Pro executable not found at: $IdaBin"
+    Write-Error "IDA Pro executable (idat.exe) not found. Please add idat.exe to your PATH, set the IDA_PATH environment variable, or pass -IdaPath <path> to the script. Tried: $IdaBin"
 }
+
+$ScriptFile = Join-Path $ProjectRoot "tools\ida_export_all.py"
 
 # Resolve the database file (accept name with or without .i64)
 $DbFile = Join-Path $ProjectRoot "IDA Files\$DbName.i64"

@@ -44,6 +44,17 @@ a single chat. The plan, conventions, and operating guide live in three files �
    model, translation-unit work units, the stub scaffold, verification, phases.
 3. [`progress/`](progress/) — the live ledger, driven by the `work` CLI.
 
+### Environment & Prerequisites
+
+Before starting the workflow, ensure you have the following prerequisites installed and configured:
+
+1. **Python 3** and **Git** must be installed and available on your system `PATH` (used by the `work` CLI and submodules).
+2. **MSVC Compiler (Visual Studio):** Required for the compile-only gate (`work submit`).
+   * Configured in [`progress/verify.config.json`](progress/verify.config.json).
+   * **Important:** If your Visual Studio install path differs from the default (`C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvars64.bat`), you **must** edit that file to point to your actual `vcvars64.bat`. Otherwise, the compile gate will be skipped.
+3. **IDA Pro (Hex-Rays):** Optional for running against the committed ledger, but **required** to reconstruct new functions or regenerate `.ida-exports/` (using `tools/export_db.ps1`).
+   * The exporter script automatically resolves the path to `idat.exe` by checking the `-IdaPath` parameter, the `IDA_PATH` or `IDA_BIN` environment variables, default installation paths, or your system `PATH`.
+
 ### Fresh clone — one command, then "continue"
 
 ```powershell

@@ -39,28 +39,39 @@ shell). The IDAPython ones can't be run directly — they need IDA's embedded in
 
 ## Running
 
-Full per-function export (auto-parallel):
+### Full per-function export (auto-parallel):
 
 ```powershell
+# Automatic lookup (searches parameter, environment, default locations, and PATH):
 tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX"
+
+# Or explicitly pass the path to your IDA Pro executable:
+tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX" -IdaPath "C:\Program Files\IDA Professional 9.0\idat.exe"
 ```
 
-Source-attribution pipeline (DecFIGS build):
+### Source-attribution pipeline (DecFIGS build):
+
+To extract raw line info from the DecFIGS database, run `idat.exe` headlessly with the `ida_export_lineinfo.py` script:
 
 ```powershell
-# 1) extract raw line info from the IDB (headless IDA)
+# Using default install path (adjust the path to idat.exe if yours differs, or use it from PATH):
 & "C:\Program Files\IDA Professional 9.3\idat.exe" -A `
     -S"tools/ida_export_lineinfo.py" "IDA Files/DecFIGS_Burnout_Internal_PS3.ELF.i64"
+
 # 2) compact into the decfigs_* artifacts
 python tools/build_source_tree.py
 ```
 
-Regenerate RenderWare type headers:
+### Regenerate RenderWare type headers:
 
 ```powershell
 python tools/gen_rwcore_headers.py
 ```
 
-> Paths assume IDA Professional 9.3 at the default install location; adjust `$IdaBin`
-> in `export_db.ps1` if yours differs. Outputs under `../.ida-exports/` and the large
-> DecFIGS JSONs are git-ignored — they are regenerated, not committed.
+> **IDA Pro Configuration:** By default, the tools assume IDA Professional at a default installation location. For `export_db.ps1`, the script will automatically check:
+> 1. The `-IdaPath` parameter.
+> 2. The `IDA_PATH` or `IDA_BIN` environment variables.
+> 3. A list of default installation paths (v9.0 to v9.3).
+> 4. `idat.exe` on your system `PATH`.
+>
+> Outputs under `../.ida-exports/` and the large DecFIGS JSONs are git-ignored — they are regenerated, not committed.
