@@ -109,6 +109,9 @@ def assemble(con, tu_row, funcs, with_asm=False):
     w(f"===== DOSSIER: {tu} =====")
     w(f"source: {tu_row['source']}   status: {tu_row['status']}   functions: {tu_row['n_funcs']}")
     w(f"dest  : {tu_row['dest_path'] or '(class TU — pick a path under b5-decomp/src)'}")
+    w("naming: all new owned code follows references/CXX_NAMING_CONVENTIONS.md "
+      "(scope+type prefixes mpX/lfX, KI_/KU_/KF_ constants, E_ enums, PascalCase types). "
+      "Convention wins over Hex-Rays names, except for external/generated/platform APIs.")
 
     # original source overlay
     src = None

@@ -118,6 +118,14 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   leaf-first, most callees are already real by the time you reach a caller, so stubs
   are the exception. A generated stub for a class method only compiles once that
   class is declared — declaring it is the type-recovery part you still do.
+- **Follow the project naming conventions.** All new owned C/C++ — types,
+  functions, variables (scope+type prefixes like `mpBoostStrategy`, `lfTimeStep`),
+  constants (`KI_`/`KU_`/`KF_`), enums (`E_` upper snake), files, namespaces — follows
+  [`references/CXX_NAMING_CONVENTIONS.md`](references/CXX_NAMING_CONVENTIONS.md), which
+  is derived from the project's own code and is the single source of truth for style.
+  When the Hex-Rays pseudocode or a recovered name disagrees with it, the convention
+  wins (except where you are matching an external/generated/platform API). Reviewers
+  check reconstructions against it too.
 - **Types live in headers** and are shared global state. Extend them; let the
   compile gate surface conflicts. Don't redefine a type locally to dodge an error.
 - **Update the ledger, not your own memory.** Progress that isn't in `progress/` did

@@ -13,6 +13,10 @@ decomp — there is no asm-diff gate. A function is "done" when it is reconstruc
 in [`b5-decomp`](b5-decomp/), the project compiles, and a reviewer pass confirms
 the C++ does what the source build's pseudocode/asm does.
 
+New owned C/C++ follows the project naming convention in
+[`references/CXX_NAMING_CONVENTIONS.md`](references/CXX_NAMING_CONVENTIONS.md) — the
+single source of truth for style, derived from the project's own code.
+
 ## The builds and their roles
 
 Two tiers, decided by how richly each is symbolized (measured, not assumed):
