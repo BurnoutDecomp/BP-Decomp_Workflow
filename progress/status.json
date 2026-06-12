@@ -44,11 +44,55 @@
    "status": "reviewed",
    "verify_tier": 2
   },
+  "BrnGui::CrashNavOkCancelOverlayState::FillInPopupType": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::CrashNavOkOverlayState::FillInPopupType": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::CrashNavOnlineOkCancelOverlayState::FillInPopupType": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::CrashNavOnlineOkOverlayState::FillInPopupType": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::CrashNavOnlineWaitOverlayState::FillInPopupType": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::CrashNavWaitOverlayState::FillInPopupType": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::CrashedStuntHudState::GetResourcesToLoad": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::FBurnMainHudState::GetResourcesToLoad": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::InGameOkCancelOverlayState::FillInPopupType": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::InGameOkOverlayState::FillInPopupType": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
   "BrnGui::MainMapRenderer::SetRenderEnabled": {
    "status": "reviewed",
    "verify_tier": 2
   },
   "BrnGui::ProfileHost::HandleProfileTaskResult": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnGui::RaceMainHudState::GetResourcesToLoad": {
    "status": "reviewed",
    "verify_tier": 2
   },
@@ -715,6 +759,61 @@
   },
   "GameSource/Gui/Flow/HUD/States/BrnBootProfile.h": {
    "notes": "sonnet review: resource table+count out-stores faithful; void return artifact documented",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/HUD/States/BrnCrashedStuntHudState.h": {
+   "notes": "trivial; gate-only (GetResourcesToLoad idiom, same as reviewed batch)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/HUD/States/BrnFBurnMainHudState.h": {
+   "notes": "trivial; gate-only (GetResourcesToLoad idiom, same as reviewed batch)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.h": {
+   "notes": "trivial; gate-only (GetResourcesToLoad idiom, same as reviewed batch)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnCrashNavOkCancelOverlayState.cpp": {
+   "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnCrashNavOkOverlayState.cpp": {
+   "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnCrashNavOnlineOkCancelOverlayState.cpp": {
+   "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnCrashNavOnlineOkOverlayState.cpp": {
+   "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnCrashNavOnlineWaitOverlayState.cpp": {
+   "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnCrashNavWaitOverlayState.cpp": {
+   "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnInGameOkCancelOverlayState.cpp": {
+   "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnInGameOkOverlayState.cpp": {
+   "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
    "owner": "agent",
    "status": "done"
   }
