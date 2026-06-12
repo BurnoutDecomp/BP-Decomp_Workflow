@@ -479,6 +479,67 @@ def cmd_stubs(args):
     gen_stubs.main()
 
 
+def cmd_auto(args):
+    """Deterministic NO-LLM drafting of the provably-mechanical TUs (forwarders +
+    compiler thunks). The per-TU compile gate is the judge: a draft that compiles
+    and parity-checks GREEN is recorded done gate-only; anything else is reverted
+    and left for the agent. See tools/work/auto_draft.py and STRATEGY.md."""
+    import auto_draft as ad
+    import verify, parity
+    identity = json.load(open(IDENTITY, encoding="utf-8"))
+    index = json.load(open(TU_INDEX, encoding="utf-8"))
+
+    if args.scan or not args.run:
+        sys.argv = ["auto_draft", "--scan"]
+        ad.main()
+        if not args.run:
+            print("\nrun the safe ones end-to-end (draft -> gate -> done) with:  work auto --run [-n N]")
+        return
+
+    con = connect()
+    # fully-auto decfigs TUs that are still todo (decfigs => we know the dest path)
+    todo = {r["id"] for r in con.execute("SELECT id FROM tu WHERE status='todo' AND source='decfigs'")}
+    landed = reverted = 0
+    for tu_key, t in index.items():
+        if landed >= args.n:
+            break
+        if tu_key not in todo:
+            continue
+        kinds = ad.func_kinds(t["functions"], identity)
+        ks = [k for _, _, k, _ in kinds]
+        if not ks or not all(k in ("thunk", "forwarder") for k in ks):
+            continue
+        dest = ad.dest_for(tu_key, "decfigs")  # None for header-keyed TUs (defs belong in .cpp)
+        if not dest:
+            continue
+        full = os.path.join(ROOT, dest)
+        if os.path.exists(full):  # never clobber existing reconstruction work
+            print(f"  skip  (dest exists) {tu_key}")
+            continue
+        os.makedirs(os.path.dirname(full), exist_ok=True)
+        open(full, "w", encoding="utf-8").write(ad.emit_tu(tu_key, kinds))
+        status, _glog = verify.compile_gate([dest])
+        if status != "pass":
+            os.remove(full)
+            reverted += 1
+            print(f"  skip  ({status}) {tu_key}")
+            continue
+        funcs = con.execute("SELECT * FROM func WHERE tu_id=? ORDER BY name", (tu_key,)).fetchall()
+        pres = parity.check_tu(funcs, [dest]) if parity.load_config().get("automated_check", {}).get("enabled") else {"verdict": "SKIP"}
+        if pres["verdict"] in ("RED",):
+            print(f"  hold  (compiled, parity {pres['verdict']} — leaving for review) {tu_key}")
+            con.execute("UPDATE func SET status='compiles', verify_tier=1 WHERE tu_id=?", (tu_key,))
+            set_tu(con, tu_key, "compiled", notes="auto-drafted; parity not green — needs review")
+            continue
+        con.execute("UPDATE func SET status='reviewed', verify_tier=2, updated_at=? WHERE tu_id=?", (now(), tu_key))
+        set_tu(con, tu_key, "done", notes="auto-drafted (deterministic forwarder/thunk); gate-only")
+        log(con, "auto_done", tu_id=tu_key, detail=f"parity={pres['verdict']}")
+        con.commit()
+        landed += 1
+        print(f"  DONE  {tu_key}")
+    print(f"\nauto: {landed} landed (gate-passed, recorded done), {reverted} reverted to agent")
+
+
 def cmd_bootstrap(args):
     """One command to make a fresh clone workable and resume where we left off."""
     print("== work bootstrap ==")
@@ -545,6 +606,10 @@ def main():
     pa.set_defaults(fn=cmd_parity)
     sb = sub.add_parser("stubs"); sb.add_argument("tu"); sb.add_argument("--list", action="store_true")
     sb.set_defaults(fn=cmd_stubs)
+    au = sub.add_parser("auto"); au.add_argument("--scan", action="store_true", help="census of fully-mechanical TUs")
+    au.add_argument("--run", action="store_true", help="draft+gate+land the safe ones")
+    au.add_argument("-n", type=int, default=25, help="max TUs to land in a --run sweep")
+    au.set_defaults(fn=cmd_auto)
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
     se = sub.add_parser("set"); se.add_argument("tu"); se.add_argument("--status", required=True); se.add_argument("--note"); se.set_defaults(fn=cmd_set)
