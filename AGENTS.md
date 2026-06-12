@@ -45,7 +45,8 @@ work start <tu>       # claim it (todo -> in_progress)
 work stubs <tu>       # trap-stub the callees this TU needs that aren't done yet
                       #   (leaf-first usually means few/none; --list to preview)
   …reconstruct the C++ into b5-decomp/src/<mirrored path>…
-work submit <tu>      # run the compile gate; on pass, emit a reviewer packet
+work submit <tu>      # run the compile gate; on pass, run the parity check + emit a reviewer packet
+work parity <tu>      # standalone NO-LLM structural parity check (no status change)
   …review per policy (see Verification) — tiered, may be skipped or delegated…
 work review <tu> --verdict pass|fail [--notes "…"]   # record the verdict
 work block <tu> "…"   # mark blocked + reason so it is not reclaimed
@@ -65,7 +66,16 @@ The default count lives in `progress/review.config.json` (`batch.default_tus_per
    reports `skip` and still proceeds — see `progress/verify.config.json`. The EA
    submodules must be checked out — `git -C b5-decomp submodule update --init` — for
    anything that includes EASTL/EABase to compile.)
-2. **Reviewer pass — YOU choose, per `progress/review.config.json`.** Not every TU
+2. **Automated parity (NO-LLM, advisory).** When `automated_check.enabled`, `work submit`
+   prints a cheap deterministic structural fingerprint comparison after a clean compile
+   gate (call/branch/loop/return counts of the X360 pseudocode vs the reconstructed C++,
+   within `automated_check.tolerances`). `GREEN` = structurally consistent (a trivial/
+   standard TU may skip the LLM review); `YELLOW` = mild drift (prefer a review); `RED` =
+   gross divergence (review, and look hard at the flagged signal). It is **advisory only**
+   — it never auto-fails a compiled TU, because semantic-parity reconstruction legitimately
+   refactors. Run it any time on its own with `work parity <tu>`. Implemented in
+   [`tools/work/parity.py`](tools/work/parity.py).
+3. **Reviewer pass — YOU choose, per `progress/review.config.json`.** Not every TU
    needs a separate full review; an always-on Opus review per TU is the main quota sink.
    The config is a **menu + policy, not an auto-router**: you (the reverser agent) read
    it and decide, per TU, whether to review and with what. After a clean compile gate:

@@ -111,11 +111,13 @@
   },
   "automated_check": {
     "enabled": true,
-    "_comment": "Optional cheap deterministic pre-review gate (NO LLM): compare structural signals (call count, branch/loop count, return paths) between the original pseudocode and the reconstructed C++ within tolerance. A green result can let a standard TU skip the LLM review. NOT BUILT YET — enabling is a no-op until implemented.",
+    "_comment": "Cheap deterministic pre-review gate (NO LLM): compare structural signals (call count, branch/loop count, return paths) between the original pseudocode and the reconstructed C++ within tolerance. GREEN can let a trivial/standard TU skip the LLM review; YELLOW prefers a review; RED flags gross divergence. Runs inside `work submit` after the compile gate, and standalone via `work parity <tu>`. Implemented in tools/work/parity.py. A signal whose delta exceeds its tolerance is 'mild'; beyond 2x tolerance is 'gross'. Verdict is advisory — it never auto-fails a compiled TU.",
     "kind": "pseudocode-structural",
     "tolerances": {
       "call_count": 3,
-      "branch_count": 2
+      "branch_count": 2,
+      "loop_count": 1,
+      "return_count": 2
     }
   },
   "batch": {

@@ -390,6 +390,24 @@ def cmd_submit(args):
     set_tu(con, args.tu, "compiled", notes=args.note)
     if status == "skip":
         print(f"  (gate skipped: {glog.strip()})")
+
+    # cheap deterministic pre-review gate (NO LLM): structural parity signals.
+    import parity
+    if parity.load_config().get("automated_check", {}).get("enabled"):
+        res = parity.check_tu(funcs, files)
+        if res["verdict"] == "SKIP":
+            print(f"\nautomated parity: SKIP ({res.get('reason')})")
+        else:
+            print("\n" + parity.format_report(res))
+            log(con, "parity", tu_id=args.tu, detail=res["verdict"])
+            con.commit()
+            if res["verdict"] == "GREEN":
+                print("  -> structurally consistent; a trivial/standard TU may skip the LLM review.")
+            elif res["verdict"] == "YELLOW":
+                print("  -> mild drift; prefer an LLM review.")
+            else:
+                print("  -> gross divergence; review and look hard at the flagged signal(s).")
+
     packet = verify.reviewer_packet(con, dict_row(con, "tu", args.tu), funcs, files)
     con.commit()
     print(f"\nreviewer packet -> {os.path.relpath(packet, ROOT)}")
@@ -437,6 +455,22 @@ def cmd_set(args):
     con = connect()
     set_tu(con, args.tu, args.status, notes=args.note)
     print(f"{args.tu} -> {args.status}")
+
+
+def cmd_parity(args):
+    """Standalone structural parity check (no LLM, no status change)."""
+    import parity
+    con = connect()
+    funcs = con.execute("SELECT * FROM func WHERE tu_id=? ORDER BY name", (args.tu,)).fetchall()
+    if not funcs:
+        sys.exit(f"unknown TU: {args.tu!r}")
+    files = resolve_files(con, args.tu, args.files)
+    res = parity.check_tu(funcs, files)
+    if res["verdict"] == "SKIP":
+        print(f"automated parity: SKIP ({res.get('reason')})")
+        return
+    print(parity.format_report(res))
+    sys.exit(0 if res["verdict"] == "GREEN" else 1)
 
 
 def cmd_stubs(args):
@@ -506,6 +540,9 @@ def main():
     rv = sub.add_parser("review"); rv.add_argument("tu")
     rv.add_argument("--verdict", required=True, choices=["pass", "fail"])
     rv.add_argument("--notes"); rv.set_defaults(fn=cmd_review)
+    pa = sub.add_parser("parity"); pa.add_argument("tu")
+    pa.add_argument("--files", nargs="*", help="explicit .cpp paths (else dest_path / git-detected)")
+    pa.set_defaults(fn=cmd_parity)
     sb = sub.add_parser("stubs"); sb.add_argument("tu"); sb.add_argument("--list", action="store_true")
     sb.set_defaults(fn=cmd_stubs)
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
