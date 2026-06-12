@@ -13,6 +13,13 @@ the committed `progress/status.json` + `progress/tu_deps.json`, restoring exactl
 where the last commit left off. Then `work next` → pick up the next TU. No other
 context is needed.
 
+### Environment Checklist (Verify Before Reconstructing)
+
+Before compiling code or exporting functions, verify these settings:
+1. **Visual Studio / MSVC Path:** Check [`progress/verify.config.json`](progress/verify.config.json). Ensure the `"vcvars"` path points to a valid `vcvars64.bat` on the host. If the path does not exist, the compile gate will skip compilation checks, meaning errors won't be caught.
+2. **IDA Pro Path:** If you need to generate stubs/skeletons for new functions or run the parallel exporter, make sure `idat.exe` is available. You can pass the path explicitly via the `-IdaPath` parameter to `tools/export_db.ps1`, or set the `IDA_PATH` environment variable.
+3. **Submodules:** The `b5-decomp` EA vendor submodules must be initialized. `work bootstrap` does this, but you can verify them under `b5-decomp/vendor/`.
+
 ## Read first, in order
 
 1. [`README.md`](README.md) — what this repo is (orchestration, not the decomp).
