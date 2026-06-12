@@ -54,7 +54,7 @@ Before starting the workflow, ensure you have the following prerequisites instal
    * **Important:** If your Visual Studio install path differs from the default (`C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvars64.bat`), you **must** edit that file to point to your actual `vcvars64.bat`. Otherwise, the compile gate will be skipped.
 3. **IDA Pro (Hex-Rays):** Optional for running against the committed ledger, but **required** to reconstruct new functions or regenerate `.ida-exports/` (using `tools/export_db.ps1`).
    * The exporter script automatically resolves the path to `idat.exe` by checking the `-IdaPath` parameter, the `IDA_PATH` or `IDA_BIN` environment variables, default installation paths, or your system `PATH`.
-4. **Manually Supplied Reference Files (Git-ignored):** Due to size limits and/or licensing, several critical files must be manually copied into the workspace:
+4. **Manually Supplied Reference Files (Git-ignored):** Due to size limits and/or licensing, several critical files must be manually copied into the workspace. Place the required local files at the paths below:
    * **Legacy Source Reference:** Place the reference tree inside [`references/LegacySrc/BrnEntityModuleUnity/`](references/LegacySrc/BrnEntityModuleUnity/). This provides code overlays for the dossier generator.
    * **Oversized IDA Databases:** Place `Burnout_External_PS3.ELF.i64` and `BurnoutPR.exe.i64` inside the [`IDA Files/`](IDA%20Files/) folder.
 
