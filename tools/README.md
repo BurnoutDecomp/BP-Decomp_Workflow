@@ -42,7 +42,10 @@ shell). The IDAPython ones can't be run directly — they need IDA's embedded in
 ### Full per-function export (auto-parallel):
 
 ```powershell
-# Automatic lookup (searches parameter, environment, default locations, and PATH):
+# Export all databases in "IDA Files/" sequentially:
+tools/export_db.ps1
+
+# Export a single specific database:
 tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX"
 
 # Or explicitly pass the path to your IDA Pro executable:

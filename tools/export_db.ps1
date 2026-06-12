@@ -8,7 +8,7 @@
 # workers never collide on writes.
 
 param(
-    [string]$DbName = "BURNOUT_X360_ARTIST.XEX",  # Name of the database in "IDA Files/" (without .i64 extension)
+    [string]$DbName = "",                         # Name of the database in "IDA Files/" (without .i64 extension). Leave empty to export all databases.
     [int]$ExportMax = 0,                          # Max functions PER WORKER (0 = all; useful for testing)
     [int]$Jobs = 0,                               # Parallel IDA processes (0 = auto: min(cores, 12))
     [string]$IdaPath = "",                        # Custom path to idat.exe (overrides default/env)
@@ -19,6 +19,29 @@ $ErrorActionPreference = "Stop"
 
 # Paths
 $ProjectRoot = Resolve-Path "$PSScriptRoot/.."
+
+# If no DB name is specified, run on all .i64 files in "IDA Files"
+if (-not $DbName) {
+    $DbDir = Join-Path $ProjectRoot "IDA Files"
+    $IdaFiles = Get-ChildItem -Path $DbDir -Filter "*.i64"
+    if ($IdaFiles.Count -eq 0) {
+        Write-Error "No IDA database (.i64) files found in '$DbDir'."
+    }
+    Write-Host "No database specified. Exporting all databases sequentially..."
+    foreach ($File in $IdaFiles) {
+        $Name = $File.BaseName
+        Write-Host ">>> Exporting database: $Name"
+        $params = @{
+            DbName = $Name
+            ExportMax = $ExportMax
+            Jobs = $Jobs
+            IdaPath = $IdaPath
+            KeepTemp = $KeepTemp
+        }
+        & $MyInvocation.MyCommand.Path @params
+    }
+    return
+}
 
 # Resolve IDA path: parameter, then environment variables, then default installation paths, then PATH
 if (-not $IdaPath) {
@@ -112,11 +135,8 @@ function Invoke-Worker {
     $psi.WorkingDirectory = $ProjectRoot.Path
 
     # IDA flags: -A autonomous (no dialogs), -L log file, -S run script.
-    # ArgumentList handles quoting; -S<path>/-L<path> must be single tokens.
-    $psi.ArgumentList.Add("-A")
-    $psi.ArgumentList.Add("-L$LogPath")
-    $psi.ArgumentList.Add("-S$ScriptFile")
-    $psi.ArgumentList.Add($DbPath)
+    # PS 5.1 (Windows PowerShell) doesn't expose ArgumentList; use Arguments string instead.
+    $psi.Arguments = "-A `"-L$LogPath`" `"-S$ScriptFile`" `"$DbPath`""
 
     # Per-process environment (no mutation of the parent's env).
     $psi.EnvironmentVariables["EXPORT_SHARD_INDEX"] = "$ShardIndex"
