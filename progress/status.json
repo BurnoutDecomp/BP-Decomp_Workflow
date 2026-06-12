@@ -16,7 +16,31 @@
    "status": "reviewed",
    "verify_tier": 2
   },
+  "CgsDev::DebugComponentPerfMonCpu::GetName": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "CgsDev::DebugManager::SetGamePad": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "CgsDev::Internal::DebugInternal::GetUI": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "CgsDev::Log::LogChannelOutput::Append": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "CgsDev::Log::LogOutput::Append": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
   "CgsFsm::Fsm::Update": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "CgsFsm::ScriptedState::Construct": {
    "status": "reviewed",
    "verify_tier": 2
   },
@@ -24,7 +48,23 @@
    "status": "reviewed",
    "verify_tier": 2
   },
+  "CgsGeometric::Triangle4::AOSTriangle::IsValid": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
   "CgsGraphics::InstanceList::FixDown": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "CgsGui::GuiHudMessageResource::FixUp": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "CgsResource::LuaCodeResourceType::GetTypeID": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "RenderableMesh::GetResourceDescriptor": {
    "status": "reviewed",
    "verify_tier": 2
   },
@@ -58,13 +98,58 @@
    "owner": "agent",
    "status": "done"
   },
+  "GameShared/GameClasses/Development/DebugSystem/Controller/CgsDebugController.h": {
+   "notes": "trivial setter; GREEN parity; gate-only. Offset 0xB8 derived directly from gapA5[19].",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Development/DebugSystem/Core/Internal/CgsDebugInternal.cpp": {
+   "notes": "trivial singleton accessor (offset 0x50); GREEN; gate-only.",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Development/Log/CgsLogChannelOutput.h": {
+   "notes": "trivial channel-prefixed printf; GREEN; gate-only.",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Development/Log/CgsLogOutput.h": {
+   "notes": "trivial OutputDebugStringA wrapper; GREEN; gate-only. Return-value divergence noted (Win32 import is void).",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.h": {
+   "notes": "trivial const string accessor; confirmed by LegacySrc ground truth; gate-only.",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/FSM/Resources/CgsLuaCodeResource.h": {
+   "notes": "trivial constant return (34); GREEN; gate-only.",
+   "owner": "agent",
+   "status": "done"
+  },
   "GameShared/GameClasses/Fsm/CgsFsm.cpp": {
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
    "owner": "agent",
    "status": "done"
   },
+  "GameShared/GameClasses/Fsm/CgsScriptedState.cpp": {
+   "notes": "Fresh-eyes sonnet review. PASS: HIDWORD ABI artifact correctly interpreted, offsets +8/+16 correct, returns this; +8 self-ref uncertainty flagged in-code.",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Geometric/Primitives/CgsTriangle4.h": {
+   "notes": "Fresh-eyes opus review (RED parity expected: SIMD->scalar lowering). PASS: scalar ranges byte-exact, NaN finiteness + unit-length semantics faithful; only inferred element is the documented epsilon.",
+   "owner": "agent",
+   "status": "done"
+  },
   "GameShared/GameClasses/Geometric/Primitives/PolygonSoup/CgsPolygonSoupList.cpp": {
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/Dispatch/alignptr.h": {
+   "notes": "Re-reconstructed from PPC disassembly (Hex-Rays pseudocode mislabelled the zero stores and hid the 64-bit std). Verified against asm @0x827F7A10: entry0={aligned,16}, entries1-4={0,1}, return result. YELLOW parity is vs the misleading pseudocode only; asm is authoritative.",
    "owner": "agent",
    "status": "done"
   },
@@ -80,6 +165,11 @@
   },
   "GameShared/GameClasses/Graphics/Instances/CgsInstance.cpp": {
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Gui/Model/Resources/CgsGuiHudMessage.cpp": {
+   "notes": "standard pointer-relocation loop; GREEN, faithful to pseudocode; gate-only.",
    "owner": "agent",
    "status": "done"
   }

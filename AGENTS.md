@@ -56,6 +56,9 @@ work block <tu> "…"   # mark blocked + reason so it is not reclaimed
 ("do 5"), claim that many dependency-ready TUs, reconstruct them in one pass, submit
 each, then do a single combined review pass over the batch — it amortizes fixed cost.
 The default count lives in `progress/review.config.json` (`batch.default_tus_per_pass`).
+**CRITICAL:** When running a combined review pass, you must spawn **exactly ONE** subagent
+total for the entire batch (or run the review CLI sequentially in a single command), passing
+all review packets to it, rather than spawning one subagent per translation unit or per function.
 
 ## Verification (what `submit` / `review` expect)
 
@@ -91,6 +94,11 @@ The default count lives in `progress/review.config.json` (`batch.default_tus_per
      reason when a TU warrants it.
     - **Invoke your choice yourself:**
       - **In-Session Sub-agent Flow:** If you have native tool capabilities to spawn sub-agents directly in your session (e.g., an `invoke_subagent` or task-spawning tool), and the model it spawns is appropriate for the selected task tier (without being an unnecessary resource or quota drain compared to a smaller CLI-accessible model), you should prefer to spawn the chosen model as a **fresh-eyes sub-agent** directly, giving it **only** the path to the review packet `progress/reviews/<tu>.md` — do not share your reconstruction reasoning. Use this flow whenever you have the tools to do so, regardless of the default configuration.
+        > [!IMPORTANT]
+        > **Subagent & Quota Constraints:** Spawning subagents is resource-heavy and expensive.
+        > 1. **Never** spawn multiple subagents concurrently or spawn a subagent per function (reviews are per translation unit, not per function).
+        > 2. **Never** spawn more than **ONE** subagent at a time.
+        > 3. If you have multiple packets/TUs to review (e.g., in a batch), spawn **exactly one** subagent and instruct it to review all packets in that single session, or run them sequentially in the main session.
       - **CLI Command Flow:** If you do not have in-session sub-agent tools, if the in-session sub-agent would use a model that is excessively large/expensive for the task (e.g., a complex model for a simple task), or if you specifically need a smaller model that is only accessible via a CLI tool command on the host (like `codex`, `antigravity`, etc.), run the provider's `command` template via your shell/Bash tool, substituting `{model}`, `{thinking_flag}`, and `{packet_path}`.
         - Note: If the model has `"thinking": false`, substitute `{thinking_flag}` with `""`. Otherwise, substitute `{thinking_flag}` using the provider's `thinking_flag` template (replacing `{thinking}` with the chosen level).
         - `{packet_path}` must be substituted as the path to the packet file (`progress/reviews/<tu>.md`). Never inline the packet contents directly as a shell argument, as this can break escaping and present a command-injection risk.
