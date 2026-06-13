@@ -215,6 +215,11 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   - **NO RAW OFFSET POINTER HACKS:** You must NEVER access member variables using raw offset casting (e.g., `*reinterpret_cast<Type*>(lThis + offset)` or `*(int*)(this + offset)`) or offset helper lambdas (like `Word(offset)`).
   - **LAYOUT RECOVERY WITH PADDING:** Infer class and struct member variables based on the offsets accessed. If the preceding variables are unknown, use explicit padding buffers (e.g. `u8 mPad0[1812];`) to preserve member alignment. Access all member variables by name.
   - **USE THE LEGACY SOURCE REFERENCE:** Always check the `references/LegacySrc/` legacy reference source files. If the TU or its types are represented there, match the original structures and names exactly.
+  - **UNDO COMPILER OPTIMIZATIONS (DE-OPTIMIZATION):** Reconstruct the logical, human-written C++ source rather than retaining compiler-level optimizations visible in the decompiler output. This includes:
+    - **Re-rolling unrolled loops:** Turn sequential duplicated blocks of code acting on array indices back into standard `for`/`while` loops.
+    - **Inlining reversal:** Extract compiler-inlined functions (such as utility/helper methods) back to their separate declarations and function calls.
+    - **Strength reduction reversal:** Convert division/multiplication hacks (like bitwise shifts, masking, or magic multiplication constants used to optimize math) back into standard arithmetic operators (e.g., division `/` or modulo `%`).
+    - **Tail-call and branch restoration:** Re-structure compiler-optimized jumps, merged conditions, and tail-calls back to logical `if`/`else` structures, returns, or recursion.
   - **REVIEWER ENFORCEMENT:** Reviewers must FAIL any translation unit that uses offset-based cast hacks instead of clean member declarations and OOD structure.
 - **Types live in headers** and are shared global state. Extend them; let the
   compile gate surface conflicts. Don't redefine a type locally to dodge an error.
