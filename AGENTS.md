@@ -43,7 +43,8 @@ work show <tu> --full # the full dossier: pseudocode, locals, Feb-2007 original
                       #   source, callee signatures (--asm for disasm, -o to a file)
 work start <tu>       # claim it (todo -> in_progress)
 work stubs <tu>       # trap-stub the callees this TU needs that aren't done yet
-                      #   (leaf-first usually means few/none; --list to preview)
+                      #   (--list shows what must be declared — the part that matters
+                      #   under the compile-only gate; defs are for the future link)
   …reconstruct the C++ into b5-decomp/src/<mirrored path>…
 work submit <tu>      # run the compile gate; on pass, run the parity check + emit a reviewer packet
 work parity <tu>      # standalone NO-LLM structural parity check (no status change)
@@ -55,8 +56,11 @@ work block <tu> "…"   # mark blocked + reason so it is not reclaimed
 **Goal scoping (optional, milestone-driven ordering).** By default `work next` is
 whole-program leaf-first. To drive toward a concrete milestone (e.g. "boot to the main
 menu", "reach the loading screen") instead, set an **active goal** — `work next` then
-ranks **only** the TUs in that goal's scope, keeping leaf-first order within it. Full
-reference (schema, the Xenia-trace reproduction, the binary format):
+ranks **only** the TUs in that goal's scope, keeping leaf-first order within it
+(dependency counts are computed against in-scope TUs only: out-of-scope callees stay
+`todo` for the whole goal and get trap-stubbed regardless of order, so counting them
+would permanently distort the ordering). Full reference (schema, the Xenia-trace
+reproduction, the binary format):
 [`references/GOAL_SCOPING.md`](references/GOAL_SCOPING.md).
 
 A goal is a **membership selector**, not a call-graph closure: the X360 TU call graph is
@@ -98,6 +102,14 @@ don't map to game names, are dropped). A 30 s boot-to-attract capture yields ~92
 (21%) vs. the 75% static closure — and it's *real*, only the code that executed. Re-import
 after pushing the milestone further (window → menu → in-race) to grow the scope. Traces
 are large/binary and git-ignored (`.trace/`); the derived TU list lives in `goals.json`.
+
+Mind the **TU granularity caveat**: one executed function pulls in its whole TU, so the
+TU count understates the work (the boot trace's 925 TUs hold ~13.4k functions vs ~1.9k
+executed). The import also stores the executed **function** list (`executed_funcs`) —
+`work goal show` reports that coverage and flags mostly-unexecuted mega-TUs (e.g.
+`class:<global>`, 5,186 functions pulled in by a handful that ran); carve those out via
+the goal's `exclude_tus` list, which survives re-imports. The dossier marks each function
+in an in-scope TU as executed / not executed in the active goal's trace.
 
 **Deterministic auto-draft (NO-LLM, optional sweep).** `work auto --scan` reports the
 TUs that are *fully mechanical* — every function is a pure forwarder (`return
@@ -197,8 +209,9 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
 - **Update the ledger, not your own memory.** Progress that isn't in `progress/` did
   not happen as far as the next agent is concerned. The git-ignored `ledger.sqlite` is
   a cache: ground truth for "done" is the reconstructed **file committed in b5-decomp**.
-  If the ledger ever disagrees with the files (it has — `work submit`'s file-detection
-  can mark a TU done with no source), re-anchor it with
+  If the ledger ever disagrees with the files (it has — an older `work submit` guessed
+  the file from `git status` and marked TUs done with no source; `submit` now requires
+  a recorded `dest_path` or explicit `--files`), re-anchor it with
   [`tools/work/reconcile_from_files.py`](tools/work/reconcile_from_files.py) (`--apply`):
   a TU is `done` only if its committed file is real **and complete** (no `TODO`/`FIXME`/
   `guessed`/`placeholder` markers — those land `in_progress`), else `todo`; `blocked`

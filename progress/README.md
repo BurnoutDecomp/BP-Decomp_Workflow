@@ -41,7 +41,9 @@ work show <tu>            # concise overview: functions, signatures, dependency 
 work show <tu> --full     # the full reconstruction dossier (pseudocode, locals,
                           #   Feb-2007 original source, callee sigs; --asm, -o file)
 work start <tu>           # claim (todo -> in_progress)
-work stubs <tu> [--list]  # trap-stub the TU's not-yet-done callees (so it links)
+work stubs <tu> [--list]  # trap-stub defs for the TU's not-yet-done callees; --list
+                          #   shows what must be declared (the gate is compile-only,
+                          #   so the emitted .cpp matters at the future link phase)
 work submit <tu>          # compile gate (cl /c); on pass, emit a reviewer packet
 work review <tu> --verdict pass|fail [--notes "…"]   # record the reviewer verdict
 work block <tu> "reason"  # / work unblock <tu>

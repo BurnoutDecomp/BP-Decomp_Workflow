@@ -50,7 +50,9 @@ Goal *names* are unique across buckets; `active_goal` names one of them.
         "source": "trace",            // set by `work goal import-trace`
         "captured": "<timestamp>",
         "trace_stats": { },           // executed/mapped/tu counts
-        "include_tus": ["GameSource/Gui/Foo.cpp", "class:BrnGui::Bar"]   // exact ids
+        "include_tus": ["GameSource/Gui/Foo.cpp", "class:BrnGui::Bar"],  // exact ids
+        "executed_funcs": ["BrnGui::Bar::Update", "..."],  // the function-level truth
+        "exclude_tus": ["class:<global>"]  // hand-curated carve-outs; survive re-import
       }
     },
     "pattern_slices": {               // hand-authored glob scopes (subsystem slices)
@@ -68,14 +70,19 @@ The CLI is bucket-agnostic (it flattens by name), so a goal can live in any buck
 carry any of the fields — `include_tus` and/or `include`/`exclude` — regardless of which
 bucket it sits in. The buckets are organisation, not semantics.
 
-**A goal's scope = `include_tus`  ∪  (TUs matching any `include` glob, minus any `exclude` glob).**
+**A goal's scope = ( `include_tus` ∪ (TUs matching any `include` glob, minus any `exclude` glob) ) minus `exclude_tus`.**
 
-Two equal ways to express membership — use either or both in the same goal:
+The membership fields — use any combination in the same goal:
 
 | Field | Membership by | Produced by | Matches against |
 |-------|---------------|-------------|-----------------|
 | `include` / `exclude` | **pattern** (glob, `*` = any chars) | hand-authoring | the TU id **and** every function name the TU contains |
 | `include_tus` | **explicit list** of TU ids | `work goal import-trace` (a measured set) | exact TU id |
+| `exclude_tus` | **explicit carve-out** of TU ids | hand-authoring | exact TU id; removes from the *final* scope — the only way to drop a TU that `include_tus` pulled in, and it survives re-imports (editing `include_tus` by hand does not) |
+
+`executed_funcs` is not a membership field: it records which **functions** the trace
+actually ran (set by `import-trace`). `work goal show` uses it for the coverage report
+and the dossier uses it to mark, per function, whether the milestone exercised it.
 
 So `include_tus` is not special to one goal — it's the "enumerated" half of the model.
 A trace produces a concrete list, so it lands in `include_tus`; a human writing intent uses
@@ -94,20 +101,38 @@ globs. You can give one goal both (e.g. a trace scope widened with `"include": [
 Because `include` globs match function *names* too, `BrnGui::*` scopes both class-keyed TUs
 (`class:BrnGui::…`) and decfigs file-path TUs whose functions live in that namespace.
 
+**The TU-granularity caveat (why `executed_funcs` and `exclude_tus` exist).** Membership is
+per **TU**, but a trace executes **functions** — and one executed function pulls in its whole
+TU. Measured on the boot trace: 1,880 executed functions map to 925 TUs that hold **13,414
+functions (7.1× inflation, ~49% of the program)**, including `class:<global>` (5,186
+functions) and `CgsStrStream.h` (953) pulled in by a handful that ran. So the TU count
+*understates* the work a goal implies. `import-trace` and `work goal show` print the
+function-level coverage and flag such mostly-unexecuted mega-TUs; list the ones you don't
+want in `exclude_tus` (it survives re-imports). For the mixed TUs you keep, the dossier
+marks each function `[EXECUTED in goal trace]` / `[not executed in goal trace]` so an agent
+knows what the milestone actually exercised. (Function-level info is advisory: the work
+unit — and "done" — remains the whole TU.)
+
 ---
 
 ## 3. The `work goal` command
 
 ```
 work goal                       # list defined goals + the active one, with TU/done counts
-work goal show <name>           # scope size, % done, status breakdown, and the BOUNDARY report
+work goal show <name>           # scope size, % done, status breakdown, trace coverage
+                                #   (+ mostly-unexecuted flags), and the BOUNDARY report
 work goal set <name>            # make <name> active (scopes `work next`)
 work goal clear                 # back to whole-program leaf-first
 work goal import-trace <name> [--trace-dir DIR]   # build a goal from a Xenia trace (§4)
 ```
 
 `work next` prints a `[goal: <name>] N TUs in scope, M done` banner when a goal is active,
-and only proposes in-scope TUs (still leaf-first by unresolved-dependency count).
+and only proposes in-scope TUs — still leaf-first, with the unresolved-dependency count
+computed **within the scope** (shown as `unresolved-deps(in-scope)`). Out-of-scope callees
+stay `todo` for the whole goal and get trap-stubbed regardless of order, so counting them
+would permanently distort leaf-first inside the scope (measured on the boot-trace goal:
+~26% of picks would have claimed a TU with unreconstructed in-scope callees while a truly
+ready one was available).
 
 **The boundary report** (in `work goal show`) is the tuning tool: it lists out-of-scope TUs
 that in-scope code calls — i.e. what will be **trap-stubbed** until you widen scope or reach
@@ -166,13 +191,20 @@ then includes RaceCar/Traffic/Collision, confirming gameplay code ran).
 ### 4.4 Import
 ```
 work goal import-trace boot-trace          # reads .trace/funcdata by default
-work goal show boot-trace                  # inspect scope + boundary
+work goal show boot-trace                  # inspect scope + coverage + boundary
 work goal set boot-trace                   # start working it
 ```
 
 `import-trace` prints e.g. `5516 executed funcs, 1880 mapped, 925 TUs`. The ~34% mapping
 rate is expected: the unmapped ~66% are kernel import/export thunks (almost all in the
 `0x82Cxxxxx` region; the export table is at `0x82C76DFC`), which are not game functions.
+
+The import stores the mapped names as the goal's `executed_funcs` and prints the
+function-level coverage plus the mostly-unexecuted mega-TU flags (§2's granularity
+caveat) — review them and add carve-outs to `exclude_tus` before `goal set`. Re-importing
+preserves a hand-written `description` and `exclude_tus`. (Goals imported before
+`executed_funcs` existed lack the field; re-capture + re-import to populate it — the
+trace itself is git-ignored and usually deleted after import.)
 
 ### 4.5 Restore the emulator
 Set the three `trace_*` flags back to `false` (or restore your `.bak`) so normal runs aren't

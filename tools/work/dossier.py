@@ -91,14 +91,32 @@ def callee_brief(addr, name, con):
     if exp:
         sig = sig_of(exp.get("pseudocode"))
     row = con.execute("SELECT status, tu_id, dest_path FROM func WHERE name=?", (name,)).fetchone()
-    if row and row["status"] in ("recovered", "compiles", "reviewed"):
+    if row and row["status"] in ("compiles", "reviewed"):
         loc = row["dest_path"] or row["tu_id"]
         status = f"RECOVERED -> {loc}"
+    elif row and row["status"] == "recovered":
+        # drafted but never passed the compile gate — don't trust its signature blindly
+        loc = row["dest_path"] or row["tu_id"]
+        status = f"DRAFTED (not yet compiled) -> {loc}"
     elif row:
         status = row["status"]
     else:
         status = "external/unknown"
     return sig or name, status
+
+
+# ---------------------------------------------------------------- goal-trace overlay
+def _active_goal_executed():
+    """(goal_name, executed-function-name set) for the active goal's execution trace.
+    Empty set when no goal is active or the goal has no `executed_funcs` (glob goals,
+    imports made before the field existed)."""
+    import work  # lazy, same-dir; work.py imports this module lazily too
+    goals = work.load_goals()
+    name = goals.get("active_goal")
+    if not name:
+        return None, set()
+    _, g = work.find_goal(goals, name)
+    return name, set((g or {}).get("executed_funcs") or [])
 
 
 # ---------------------------------------------------------------- assembly
@@ -112,6 +130,13 @@ def assemble(con, tu_row, funcs, with_asm=False):
     w("naming: all new owned code follows references/CXX_NAMING_CONVENTIONS.md "
       "(scope+type prefixes mpX/lfX, KI_/KU_/KF_ constants, E_ enums, PascalCase types). "
       "Convention wins over Hex-Rays names, except for external/generated/platform APIs.")
+
+    # which of this TU's functions the active goal's milestone actually exercised
+    gname, executed = _active_goal_executed()
+    if executed:
+        ran = sum(1 for f in funcs if f["name"] in executed)
+        w(f"goal  : [{gname}] the milestone trace executed {ran}/{len(funcs)} of this TU's "
+          f"functions (marked per function below; unmarked ones did not run before the milestone)")
 
     # original source overlay
     src = None
@@ -139,7 +164,11 @@ def assemble(con, tu_row, funcs, with_asm=False):
     for f in funcs:
         addr = f["x360_addr"]
         exp = load_export(addr) if addr else None
-        w(f"\n================ {f['name']}  @ {addr}  [{f['status']}] ================")
+        tag = ""
+        if executed:
+            tag = "  [EXECUTED in goal trace]" if f["name"] in executed \
+                  else "  [not executed in goal trace]"
+        w(f"\n================ {f['name']}  @ {addr}  [{f['status']}]{tag} ================")
         if not exp:
             w("  (no export found)")
             continue
