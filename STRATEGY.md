@@ -116,6 +116,16 @@ class `A::B` declared. Therefore:
 Types live in headers (`vendor/renderware/` for `rw::`, plus recovered game type
 headers). Agents extend them; the per-TU compile gate catches conflicts.
 
+### Middleware and SDKs (RenderWare, EATech, etc.)
+
+RenderWare and other vendor SDKs are **black-box middleware**, but we only have pre-compiled
+PC binaries for *some* of them (e.g., `rwtypes.lib`). Additionally, for `EABase`, `EASTL`, and
+`EAThread`, we compile them directly from the original open-source code in `vendor/`.
+If `work next` or the user assigns an agent a TU belonging to a vendor SDK, the agent must
+first run `python tools/work/check_vendor_lib.py <tu_name>`.
+- If the script outputs **PRESENT**: The agent must skip it and block it in the ledger (`work block <tu> "Vendor code; exists in PC lib or vendor source."`).
+- If the script outputs **MISSING**: The agent must decompile it from the console builds, as no PC equivalent exists.
+
 ## Verification (reconstruction target — two tiers, both local)
 
 1. **Compile gate** — the affected TU compiles against current headers (CMake).

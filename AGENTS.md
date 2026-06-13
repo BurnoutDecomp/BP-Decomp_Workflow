@@ -191,6 +191,13 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
 - **BPR/TUB are reference-only**, consulted per-function for *platform* layers
   (SIMD, GPU/D3D, codecs) where the PC shape differs from the console. They are not
   in the ledger; do not "decompile" them.
+- **RenderWare & Vendor SDKs (EATech, rwcore, etc.): Test before decompiling.**
+  We have native PC binaries for *some* middleware (e.g., `rwtypes.lib`), but not all
+  (e.g., `rwcollision`). Additionally, for `EABase`, `EASTL`, and `EAThread`, we have the original
+  open-source code in `vendor/` so their bodies do not need to be decompiled. If `work next` assigns you a vendor SDK TU, you MUST run
+  `python tools/work/check_vendor_lib.py <tu_name>` to verify if it exists in the PC binaries or open-source folders.
+  - If the script says **PRESENT**: Skip and block it (`work block <tu> "Vendor code; exists in PC lib or vendor source."`).
+  - If the script says **MISSING**: You MUST decompile it from the console build like normal.
 - **Stubs over guesses.** A call to a not-yet-reconstructed function gets a forward
   declaration + trap stub (`work stubs <tu>`), not an invented body. Because we work
   leaf-first, most callees are already real by the time you reach a caller, so stubs
