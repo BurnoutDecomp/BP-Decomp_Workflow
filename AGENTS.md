@@ -260,6 +260,8 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   symbolized builds; structural matching is an optional per-function last resort.
 - Don't chase a whole-program link early. Per-TU compilation is the gate.
 - Don't invent function bodies to make something compile — stub and move on.
+- Don't spawn a subagent to perform the reverse-engineering or C++ reconstruction. Spawning a subagent for this phase causes it to lose your active context (such as open files, cursor position, and chat history). Spawning is strictly reserved for the reviewer pass.
+- Don't write or create an implementation plan for standard Translation Unit (TU) reconstructions. The TU reconstruction loop is a routine, pre-approved workflow, so you should bypass any planning/implementation-plan steps and proceed directly to coding.
 
 ## Tool-specific notes
 
