@@ -82,6 +82,25 @@ and picks up the next translation unit. (Reconstructing *new* functions still ne
    work submit <tu>       # mark it done
    ```
 
+### Milestone goals (decompile toward "boot to the main menu")
+
+By default the loop is whole-program leaf-first. To instead drive toward a concrete
+milestone, scope the work to a **goal** — `work next` then only proposes the TUs that
+milestone needs. Because the X360 call graph is one ~75%-of-the-program
+strongly-connected component, goals are **membership selectors** (glob patterns and/or an
+explicit TU list), not call-graph closures; the accurate scope comes from a **Xenia
+execution trace** of the real build run up to the milestone. Full guide — schema, the
+trace capture/repro, the binary format — in
+[`references/GOAL_SCOPING.md`](references/GOAL_SCOPING.md).
+
+```powershell
+work goal import-trace boot   # build a goal from a Xenia funcdata trace (.trace/funcdata)
+work goal set boot            # scope the loop to it
+work goal show boot           # scope size, % done, and what it will trap-stub (boundary)
+work next -n 5                # the next leaf-first TUs within the goal (always current)
+work goal clear               # back to whole-program
+```
+
 ## Typical workflow
 
 1. Analyze a build in IDA Pro → `IDA Files/<build>.i64`.
