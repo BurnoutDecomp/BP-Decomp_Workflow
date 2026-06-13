@@ -24,7 +24,13 @@ Kernel import/export thunks (mostly 0x82Cxxxxx) don't map to game names and are 
 
 CLI:  python tools/work/trace_import.py <trace_dir> [--json out.json]
       (prints the executed-function / mapped-name / TU counts; --json dumps the TU list)
-Library:  executed_addrs(dir) -> set[int];  addrs_to_tus(con, addrs) -> (tus, stats)
+Library:  executed_addrs(dir) -> set[int]
+          addrs_to_tus(con, addrs) -> (tus, names, stats)
+          load_for_goal(con, dir) -> (sorted tus, sorted executed names, stats)
+
+The executed NAME list matters as much as the TU list: TU membership alone
+overstates a milestone (one executed function pulls in its whole TU), so the goal
+stores `executed_funcs` and the dossier/`goal show` use it to mark what actually ran.
 """
 import glob, json, os, struct, sys
 
@@ -73,20 +79,21 @@ def _addr2name():
 
 def addrs_to_tus(con, addrs):
     """Map executed guest addrs -> identity names -> ledger TU ids.
-    Returns (set[tu_id], stats dict). Unmapped addrs (kernel thunks) are dropped."""
+    Returns (set[tu_id], set[func_name], stats dict). Unmapped addrs (kernel
+    thunks) are dropped."""
     a2n = _addr2name()
     name2tu = {r["name"]: r["tu_id"] for r in con.execute("SELECT name, tu_id FROM func")}
     names = {a2n[a] for a in addrs if a in a2n}
     tus = {name2tu[nm] for nm in names if nm in name2tu}
     stats = {"executed_addrs": len(addrs), "mapped_funcs": len(names), "tus": len(tus)}
-    return tus, stats
+    return tus, names, stats
 
 
 def load_for_goal(con, trace_dir):
-    """Convenience: trace_dir -> (sorted tu list, stats) for writing into a goal."""
+    """Convenience: trace_dir -> (sorted tu list, sorted executed-name list, stats)."""
     addrs = executed_addrs(trace_dir)
-    tus, stats = addrs_to_tus(con, addrs)
-    return sorted(tus), stats
+    tus, names, stats = addrs_to_tus(con, addrs)
+    return sorted(tus), sorted(names), stats
 
 
 def main():
@@ -100,7 +107,7 @@ def main():
     db = os.path.join(ROOT, "progress", "ledger.sqlite")
     con = sqlite3.connect(db)
     con.row_factory = sqlite3.Row
-    tus, stats = load_for_goal(con, args.trace_dir)
+    tus, _names, stats = load_for_goal(con, args.trace_dir)
     print(f"executed functions : {stats['executed_addrs']}")
     print(f"mapped to game names: {stats['mapped_funcs']}")
     print(f"distinct TUs        : {stats['tus']}")

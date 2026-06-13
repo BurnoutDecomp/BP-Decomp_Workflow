@@ -15,7 +15,7 @@ Commands:
     work status               overview: counts by status, % done
     work goal [list|set <name>|clear|show <name>]
                               scope `next` to a membership goal (progress/goals.json)
-    work next [-n N] [--any]  the next leaf-first ready TU(s) to work on
+    work next [-n N]          the next leaf-first ready TU(s) to work on
                               (restricted to the active goal's TUs, if one is set)
     work show <tu>            dossier for a TU (functions, signatures, deps)
     work start <tu>           claim a TU (todo -> in_progress)
@@ -262,8 +262,8 @@ def load_goals():
 # "pattern_slices") so like kinds sit together. A goal object carries any of these fields;
 # a category bucket is a dict of {goal_name: goal_object}. Goal names are unique across
 # buckets. These helpers flatten that so the rest of the CLI is category-agnostic.
-GOAL_FIELDS = ("description", "include", "exclude", "include_tus", "source",
-               "trace_stats", "captured")
+GOAL_FIELDS = ("description", "include", "exclude", "include_tus", "exclude_tus",
+               "executed_funcs", "source", "trace_stats", "captured")
 
 
 def goal_index(goals):
@@ -318,13 +318,18 @@ def tu_match_targets(con):
 def resolve_goal_tus(con, goal):
     """Resolve a goal to its set of in-scope TU ids. Scope is the union of:
       - `include_tus`: an explicit list of TU ids (e.g. an execution-trace import), and
-      - `include`/`exclude` globs matched against each TU's id or any function it holds.
+      - `include`/`exclude` globs matched against each TU's id or any function it holds,
+    minus `exclude_tus`: explicit TU ids carved out of the final scope — the knob for
+    dropping a mega-bucket TU (e.g. `class:<global>`) that a trace pulled in via one
+    executed function. It survives re-imports, unlike editing `include_tus` by hand.
     A glob-matched TU is excluded by any `exclude` glob; explicit `include_tus` are kept
-    regardless. Returns None only if the goal selects nothing at all."""
+    regardless of globs. Returns None only if the goal selects nothing at all."""
     explicit = set(goal.get("include_tus", []))
+    carved = set(goal.get("exclude_tus", []))
     inc = [_glob_re(g) for g in goal.get("include", [])]
     if not inc:
-        return explicit if explicit else None
+        sel = explicit - carved
+        return sel if sel else None
     exc = [_glob_re(g) for g in goal.get("exclude", [])]
     targets = tu_match_targets(con)
     sel = set(explicit)
@@ -332,7 +337,8 @@ def resolve_goal_tus(con, goal):
         if any(rx.match(s) for rx in inc for s in strs) and \
            not any(rx.match(s) for rx in exc for s in strs):
             sel.add(tid)
-    return sel
+    sel -= carved
+    return sel if sel else None
 
 
 def active_goal_set(con, goals=None):
@@ -390,9 +396,9 @@ def cmd_goal(args):
             sys.exit(f"trace dir not found: {trace_dir}\n  capture one with Xenia trace_function_data "
                      f"(see tools/work/trace_import.py header), or pass --trace-dir.")
         con = connect()
-        tus, stats = trace_import.load_for_goal(con, trace_dir)
+        tus, names, stats = trace_import.load_for_goal(con, trace_dir)
         existing = find_goal(goals, args.name)[1] or {}
-        put_goal(goals, args.name, {
+        goal = {
             # trace imports are milestones; keep a hand-written description across re-imports
             "description": existing.get("description")
                 or f"MILESTONE (execution-derived, {stats['tus']} TUs) from a Xenia trace.",
@@ -400,10 +406,18 @@ def cmd_goal(args):
             "captured": now(),
             "trace_stats": stats,
             "include_tus": tus,
-        }, category="milestones")
+            # the function-level truth. TU membership alone can't say what ran (one
+            # executed function pulls in its whole TU); `goal show` and the dossier
+            # use this to mark what the milestone actually exercised.
+            "executed_funcs": names,
+        }
+        if existing.get("exclude_tus"):  # hand-curated carve-outs survive re-imports
+            goal["exclude_tus"] = existing["exclude_tus"]
+        put_goal(goals, args.name, goal, category="milestones")
         save_goals(goals)
         print(f"imported trace -> milestone {args.name!r}: {stats['executed_addrs']} executed funcs, "
               f"{stats['mapped_funcs']} mapped, {len(tus)} TUs")
+        report_trace_coverage(con, goal)
         print(f"  activate with: work goal set {args.name}")
         return
 
@@ -432,6 +446,8 @@ def cmd_goal(args):
             print(f"  {g['description']}")
         print(f"  include: {g.get('include', [])}")
         print(f"  exclude: {g.get('exclude', [])}")
+        if g.get("exclude_tus"):
+            print(f"  exclude_tus (explicit carve-outs, survive re-import): {g['exclude_tus']}")
         # status breakdown within scope
         counts = Counter()
         for r in con.execute("SELECT id,status FROM tu"):
@@ -442,6 +458,7 @@ def cmd_goal(args):
         for s in TU_STATUS:
             if counts[s]:
                 print(f"    {s:12s} {counts[s]}")
+        report_trace_coverage(con, g)
         # advisory boundary report: in-scope TUs that call OUT of scope -> will be stubbed
         ext = Counter()
         st = {r["id"]: r["status"] for r in con.execute("SELECT id,status FROM tu")}
@@ -462,15 +479,47 @@ def cmd_goal(args):
 def resolve_goal_tus_cached(goal, targets):
     """resolve_goal_tus against a prebuilt targets map (avoids re-querying per goal)."""
     explicit = set(goal.get("include_tus", []))
+    carved = set(goal.get("exclude_tus", []))
     inc = [_glob_re(g) for g in goal.get("include", [])]
     if not inc:
-        return explicit if explicit else None
+        sel = explicit - carved
+        return sel if sel else None
     exc = [_glob_re(g) for g in goal.get("exclude", [])]
     sel = set(explicit)
     sel.update(tid for tid, strs in targets.items()
                if any(rx.match(s) for rx in inc for s in strs)
                and not any(rx.match(s) for rx in exc for s in strs))
-    return sel
+    sel -= carved
+    return sel if sel else None
+
+
+def report_trace_coverage(con, goal, top=8):
+    """For a trace goal, report how much of the in-scope FUNCTION count the trace
+    actually executed, and flag mega-bucket TUs that a single executed function
+    pulled in nearly whole-unexecuted — the candidates for `exclude_tus`.
+    Silent for goals without `executed_funcs` (glob goals, pre-upgrade imports)."""
+    executed = set(goal.get("executed_funcs") or [])
+    if not executed:
+        return
+    sel = resolve_goal_tus(con, goal) or set()
+    nf = {r["id"]: r["n_funcs"] for r in con.execute("SELECT id, n_funcs FROM tu")}
+    ran_in_tu = Counter()
+    for r in con.execute("SELECT name, tu_id FROM func"):
+        if r["name"] in executed and r["tu_id"] in sel:
+            ran_in_tu[r["tu_id"]] += 1
+    total = sum(nf.get(t, 0) for t in sel)
+    ran = sum(ran_in_tu.values())
+    print(f"  function coverage: the trace executed {ran} of the {total} functions these "
+          f"{len(sel)} TUs hold ({100*ran//max(total,1)}%) — TU granularity pulls in whole units.")
+    flags = sorted(((nf.get(t, 0) - ran_in_tu[t], ran_in_tu[t], nf.get(t, 0), t)
+                    for t in sel if nf.get(t, 0) >= 20 and ran_in_tu[t] * 3 < nf.get(t, 0)),
+                   reverse=True)
+    if flags:
+        print("  mostly-unexecuted TUs in scope (candidates for the goal's `exclude_tus`):")
+        for _unex, r, n, t in flags[:top]:
+            print(f"    {r:4d}/{n:<5d} executed  {t[:62]}")
+        if len(flags) > top:
+            print(f"    ... +{len(flags)-top} more")
 
 
 def save_goals(goals):
@@ -499,19 +548,33 @@ def cmd_next(args):
     # that subset. Filter in Python so we never hit SQL parameter limits on big sets.
     ranked = con.execute(q).fetchall()
     if gset is not None:
-        n_done = sum(1 for r in con.execute("SELECT id,status FROM tu")
-                     if r["id"] in gset and r["status"] == "done")
+        status = {r["id"]: r["status"] for r in con.execute("SELECT id,status FROM tu")}
+        n_done = sum(1 for t in gset if status.get(t) == "done")
         print(f"[goal: {gname}]  {len(gset)} TUs in scope, {n_done} done  "
               f"(clear with `work goal clear`; details: `work goal show {gname}`)")
         ranked = [r for r in ranked if r["id"] in gset]
+        if has_deps:
+            # Re-rank counting unresolved deps over IN-SCOPE TUs only. Out-of-scope
+            # callees stay todo for the whole goal and get trap-stubbed regardless of
+            # order, so counting them would permanently distort leaf-first within the
+            # scope (measured: ~26% of picks inverted on the boot-trace goal).
+            deps = defaultdict(set)
+            for d in con.execute("SELECT tu_id, dep_id FROM tu_dep"):
+                deps[d["tu_id"]].add(d["dep_id"])
+            ranked = [dict(r) for r in ranked]
+            for r in ranked:
+                r["unresolved"] = sum(1 for x in deps.get(r["id"], ())
+                                      if x in gset and status.get(x) != "done")
+            ranked.sort(key=lambda r: (r["unresolved"], r["source"] != "decfigs", r["n_funcs"]))
     rows = ranked[:args.n]
     if not rows:
         msg = "no todo TUs in this goal — switch/clear the goal or run `work status`" if gset is not None \
               else "no todo TUs — run `work status`"
         print(msg)
         return
+    dep_label = "unresolved-deps(in-scope)" if gset is not None and has_deps else "unresolved-deps"
     for r in rows:
-        dep = "" if r["unresolved"] is None else f"  unresolved-deps={r['unresolved']}"
+        dep = "" if r["unresolved"] is None else f"  {dep_label}={r['unresolved']}"
         print(f"[{r['source']:7s}] {r['n_funcs']:4d} fn{dep}  {r['id']}")
     if not has_deps:
         print("\n(ordering is heuristic — run `work seed --deps` for true leaf-first)")
@@ -584,26 +647,31 @@ def cmd_start(args):
 
 
 def resolve_files(con, tu, explicit):
-    """The .cpp file(s) to compile for this TU: explicit > dest_path > git-detected."""
+    """The .cpp file(s) to compile for this TU: explicit --files, else the recorded
+    dest_path. No git-status guessing — compiling "whatever changed" has attributed
+    the wrong file to a TU before (see reconcile_from_files.py); fail fast instead,
+    listing the modified .cpp files as candidates the caller can pass explicitly."""
     if explicit:
         return explicit
-    files = []
     row = con.execute("SELECT dest_path FROM tu WHERE id=?", (tu,)).fetchone()
     if row and row["dest_path"] and os.path.exists(os.path.join(ROOT, row["dest_path"])):
-        files.append(row["dest_path"])
-    if not files:
-        # fall back to modified/untracked .cpp in the b5-decomp submodule
-        try:
-            out = subprocess.run(["git", "-C", os.path.join(ROOT, "b5-decomp"),
-                                  "status", "--porcelain", "--", "src"],
-                                 capture_output=True, text=True).stdout
-            for ln in out.splitlines():
-                p = ln[3:].strip()
-                if p.endswith(".cpp"):
-                    files.append("b5-decomp/" + p)
-        except Exception:
-            pass
-    return files
+        return [row["dest_path"]]
+    hints = []
+    try:
+        out = subprocess.run(["git", "-C", os.path.join(ROOT, "b5-decomp"),
+                              "status", "--porcelain", "--", "src"],
+                             capture_output=True, text=True).stdout
+        hints = ["b5-decomp/" + ln[3:].strip() for ln in out.splitlines()
+                 if ln[3:].strip().endswith(".cpp")]
+    except Exception:
+        pass
+    msg = [f"{tu}: no dest_path recorded and no --files given — name the TU's .cpp explicitly:",
+           f"  work submit \"{tu}\" --files <b5-decomp/src/...cpp>",
+           "(a single explicit file is then recorded as the TU's dest_path)"]
+    if hints:
+        msg.append("modified/untracked .cpp in b5-decomp/src, if one of these is it:")
+        msg += [f"  {h}" for h in hints[:10]]
+    sys.exit("\n".join(msg))
 
 
 def cmd_submit(args):
@@ -613,6 +681,10 @@ def cmd_submit(args):
     if not funcs:
         sys.exit(f"unknown TU: {args.tu!r}")
     files = resolve_files(con, args.tu, args.files)
+    row = con.execute("SELECT dest_path FROM tu WHERE id=?", (args.tu,)).fetchone()
+    if args.files and len(files) == 1 and row and not row["dest_path"]:
+        # remember the explicit choice so re-submit/parity/reconcile find the file
+        con.execute("UPDATE tu SET dest_path=? WHERE id=?", (files[0], args.tu))
     con.execute("UPDATE func SET status='recovered', updated_at=? WHERE tu_id=? AND status='todo'", (now(), args.tu))
     con.commit()
 
@@ -632,6 +704,7 @@ def cmd_submit(args):
     set_tu(con, args.tu, "compiled", notes=args.note)
     if status == "skip":
         print(f"  (gate skipped: {glog.strip()})")
+        log(con, "compile_skip", tu_id=args.tu, detail=glog[:200])
 
     # cheap deterministic pre-review gate (NO LLM): structural parity signals.
     import parity
@@ -773,7 +846,9 @@ def cmd_auto(args):
             con.execute("UPDATE func SET status='compiles', verify_tier=1 WHERE tu_id=?", (tu_key,))
             set_tu(con, tu_key, "compiled", notes="auto-drafted; parity not green — needs review")
             continue
-        con.execute("UPDATE func SET status='reviewed', verify_tier=2, updated_at=? WHERE tu_id=?", (now(), tu_key))
+        # gate-only landing: tier 1 (compiled), NOT tier 2 — no reviewer saw this.
+        # The TU is still 'done' by policy (mechanical shapes; the gate is the judge).
+        con.execute("UPDATE func SET status='compiles', verify_tier=1, updated_at=? WHERE tu_id=?", (now(), tu_key))
         set_tu(con, tu_key, "done", notes="auto-drafted (deterministic forwarder/thunk); gate-only")
         log(con, "auto_done", tu_id=tu_key, detail=f"parity={pres['verdict']}")
         con.commit()
@@ -844,13 +919,13 @@ def main():
     sh.set_defaults(fn=cmd_show)
     st = sub.add_parser("start"); st.add_argument("tu"); st.set_defaults(fn=cmd_start)
     su = sub.add_parser("submit"); su.add_argument("tu"); su.add_argument("--note")
-    su.add_argument("--files", nargs="*", help="explicit .cpp paths to compile (else dest_path / git-detected)")
+    su.add_argument("--files", nargs="*", help="explicit .cpp paths to compile (else the TU's recorded dest_path)")
     su.set_defaults(fn=cmd_submit)
     rv = sub.add_parser("review"); rv.add_argument("tu")
     rv.add_argument("--verdict", required=True, choices=["pass", "fail"])
     rv.add_argument("--notes"); rv.set_defaults(fn=cmd_review)
     pa = sub.add_parser("parity"); pa.add_argument("tu")
-    pa.add_argument("--files", nargs="*", help="explicit .cpp paths (else dest_path / git-detected)")
+    pa.add_argument("--files", nargs="*", help="explicit .cpp paths (else the TU's recorded dest_path)")
     pa.set_defaults(fn=cmd_parity)
     sb = sub.add_parser("stubs"); sb.add_argument("tu"); sb.add_argument("--list", action="store_true")
     sb.set_defaults(fn=cmd_stubs)

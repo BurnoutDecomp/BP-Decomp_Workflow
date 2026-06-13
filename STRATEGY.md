@@ -91,7 +91,8 @@ taken; `work next` simply prefers dependency-unblocked ones.
 
 To break the "nothing compiles until everything is decompiled" deadlock, every
 referenced-but-not-yet-reconstructed function is satisfied by a **declaration plus
-a trap-body stub** (`__builtin_trap();` / `CGS_ASSERT(false)`). Reconstructing a
+a trap-body stub** (`__debugbreak();` — the MSVC trap the generators emit;
+`__builtin_trap()` / `CGS_ASSERT(false)` are accepted equivalents). Reconstructing a
 function = replacing its stub body with the real one. Declarations are always
 present, so call sites never break on a missing symbol.
 
