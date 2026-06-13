@@ -13,7 +13,10 @@ preserved across re-seeds.
 Commands:
     work seed [--deps]        build/update the ledger from the Phase 0 JSONs
     work status               overview: counts by status, % done
+    work goal [list|set <name>|clear|show <name>]
+                              scope `next` to a membership goal (progress/goals.json)
     work next [-n N] [--any]  the next leaf-first ready TU(s) to work on
+                              (restricted to the active goal's TUs, if one is set)
     work show <tu>            dossier for a TU (functions, signatures, deps)
     work start <tu>           claim a TU (todo -> in_progress)
     work submit <tu>          mark a TU reconstructed (compile/review gates: Phase 3)
@@ -22,8 +25,8 @@ Commands:
 
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
-import argparse, json, os, sqlite3, subprocess, sys, time
-from collections import Counter
+import argparse, json, os, re, sqlite3, subprocess, sys, time
+from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -37,6 +40,7 @@ DB = os.path.join(ROOT, "progress", "ledger.sqlite")
 # full status + dependency graph, without needing IDA or the .ida-exports.
 STATUS_JSON = os.path.join(ROOT, "progress", "status.json")
 TU_DEPS_JSON = os.path.join(ROOT, "progress", "tu_deps.json")
+GOALS_JSON = os.path.join(ROOT, "progress", "goals.json")
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 
 TU_STATUS = ("todo", "in_progress", "compiled", "done", "blocked")
@@ -246,10 +250,238 @@ def cmd_status(args):
         print(f"  {r['status']:12s} {r['c']}")
 
 
+# ---------------------------------------------------------------- goals (membership scoping)
+def load_goals():
+    """The goal selector config. Missing file => no goals (whole-program ordering)."""
+    if not os.path.exists(GOALS_JSON):
+        return {"active_goal": None, "goals": {}}
+    return json.load(open(GOALS_JSON, encoding="utf-8"))
+
+
+# goals.json groups goals into named category buckets under `goals` (e.g. "milestones",
+# "pattern_slices") so like kinds sit together. A goal object carries any of these fields;
+# a category bucket is a dict of {goal_name: goal_object}. Goal names are unique across
+# buckets. These helpers flatten that so the rest of the CLI is category-agnostic.
+GOAL_FIELDS = ("description", "include", "exclude", "include_tus", "source",
+               "trace_stats", "captured")
+
+
+def goal_index(goals):
+    """Flatten the category buckets into an ordered {name: (category, goal)} map.
+    Tolerates a legacy flat layout (a goal object placed directly under `goals`)."""
+    out = {}
+    for key, val in goals.get("goals", {}).items():
+        if not isinstance(val, dict):
+            continue
+        if any(k in val for k in GOAL_FIELDS):      # a goal object sitting at top level
+            out[key] = (None, val)
+        else:                                        # a category bucket of goals
+            for name, goal in val.items():
+                if isinstance(goal, dict):
+                    out[name] = (key, goal)
+    return out
+
+
+def find_goal(goals, name):
+    """(category, goal) for a goal by name, or (None, None) if undefined."""
+    return goal_index(goals).get(name, (None, None))
+
+
+def put_goal(goals, name, goal, category):
+    """Insert/replace a goal under `category`, removing any prior copy in other buckets."""
+    buckets = goals.setdefault("goals", {})
+    for members in buckets.values():
+        if isinstance(members, dict):
+            members.pop(name, None)
+    buckets.setdefault(category, {})[name] = goal
+
+
+def _glob_re(g):
+    """Tiny glob: `*` matches any run of chars, everything else is literal."""
+    return re.compile("^" + ".*".join(re.escape(p) for p in g.split("*")) + "$")
+
+
+def tu_match_targets(con):
+    """Per-TU strings a selector may match: the TU id, the function names it holds,
+    and (for class-keyed TUs) the bare `Namespace::Class`."""
+    targets = defaultdict(list)
+    for r in con.execute("SELECT id FROM tu"):
+        tid = r["id"]
+        targets[tid].append(tid)
+        if tid.startswith("class:"):
+            targets[tid].append(tid[len("class:"):])
+    for r in con.execute("SELECT name, tu_id FROM func"):
+        targets[r["tu_id"]].append(r["name"])
+    return targets
+
+
+def resolve_goal_tus(con, goal):
+    """Resolve a goal to its set of in-scope TU ids. Scope is the union of:
+      - `include_tus`: an explicit list of TU ids (e.g. an execution-trace import), and
+      - `include`/`exclude` globs matched against each TU's id or any function it holds.
+    A glob-matched TU is excluded by any `exclude` glob; explicit `include_tus` are kept
+    regardless. Returns None only if the goal selects nothing at all."""
+    explicit = set(goal.get("include_tus", []))
+    inc = [_glob_re(g) for g in goal.get("include", [])]
+    if not inc:
+        return explicit if explicit else None
+    exc = [_glob_re(g) for g in goal.get("exclude", [])]
+    targets = tu_match_targets(con)
+    sel = set(explicit)
+    for tid, strs in targets.items():
+        if any(rx.match(s) for rx in inc for s in strs) and \
+           not any(rx.match(s) for rx in exc for s in strs):
+            sel.add(tid)
+    return sel
+
+
+def active_goal_set(con, goals=None):
+    """(name, tu_id_set) for the active goal, or (None, None) if whole-program."""
+    goals = goals if goals is not None else load_goals()
+    name = goals.get("active_goal")
+    if not name:
+        return None, None
+    _, g = find_goal(goals, name)
+    if g is None:
+        sys.exit(f"active_goal {name!r} is not defined in {os.path.basename(GOALS_JSON)}")
+    return name, resolve_goal_tus(con, g)
+
+
+# ---------------------------------------------------------------- goal command
+def cmd_goal(args):
+    goals = load_goals()
+    index = goal_index(goals)
+    action = getattr(args, "action", "list") or "list"
+
+    if action == "list":
+        active = goals.get("active_goal")
+        print(f"active goal: {active or '(none — whole-program leaf-first)'}")
+        if not index:
+            print(f"no goals defined in {os.path.basename(GOALS_JSON)}")
+            return
+        con = connect()
+        targets = tu_match_targets(con)
+        status = {r["id"]: r["status"] for r in con.execute("SELECT id,status FROM tu")}
+        # group the flattened index back by category, preserving JSON bucket order
+        by_cat = {}
+        for name, (cat, g) in index.items():
+            by_cat.setdefault(cat, []).append((name, g))
+        for cat, members in by_cat.items():
+            print(f"\n{cat or '(uncategorised)'}:")
+            for name, g in members:
+                sel = resolve_goal_tus_cached(g, targets) or set()
+                done = sum(1 for t in sel if status.get(t) == "done")
+                mark = "*" if name == active else " "
+                print(f" {mark} {name:22s} {len(sel):4d} TUs, {done:4d} done   {g.get('description','')[:58]}")
+        return
+
+    if action == "clear":
+        goals["active_goal"] = None
+        save_goals(goals)
+        print("active goal cleared — `work next` is whole-program leaf-first again")
+        return
+
+    if action == "import-trace":
+        if not args.name:
+            sys.exit("usage: work goal import-trace <name> [--trace-dir DIR]")
+        import trace_import
+        trace_dir = args.trace_dir or os.path.join(ROOT, ".trace", "funcdata")
+        if not os.path.isdir(trace_dir):
+            sys.exit(f"trace dir not found: {trace_dir}\n  capture one with Xenia trace_function_data "
+                     f"(see tools/work/trace_import.py header), or pass --trace-dir.")
+        con = connect()
+        tus, stats = trace_import.load_for_goal(con, trace_dir)
+        existing = find_goal(goals, args.name)[1] or {}
+        put_goal(goals, args.name, {
+            # trace imports are milestones; keep a hand-written description across re-imports
+            "description": existing.get("description")
+                or f"MILESTONE (execution-derived, {stats['tus']} TUs) from a Xenia trace.",
+            "source": "trace",
+            "captured": now(),
+            "trace_stats": stats,
+            "include_tus": tus,
+        }, category="milestones")
+        save_goals(goals)
+        print(f"imported trace -> milestone {args.name!r}: {stats['executed_addrs']} executed funcs, "
+              f"{stats['mapped_funcs']} mapped, {len(tus)} TUs")
+        print(f"  activate with: work goal set {args.name}")
+        return
+
+    if action == "set":
+        if not args.name:
+            sys.exit("usage: work goal set <name>")
+        if args.name not in index:
+            sys.exit(f"unknown goal {args.name!r}. defined: {', '.join(index) or '(none)'}")
+        goals["active_goal"] = args.name
+        save_goals(goals)
+        print(f"active goal -> {args.name}")
+        cmd_goal(argparse.Namespace(action="show", name=args.name))
+        return
+
+    if action == "show":
+        name = args.name or goals.get("active_goal")
+        if not name:
+            sys.exit("usage: work goal show <name> (or set an active_goal)")
+        cat, g = find_goal(goals, name)
+        if g is None:
+            sys.exit(f"unknown goal {name!r}")
+        con = connect()
+        sel = resolve_goal_tus(con, g) or set()
+        print(f"goal: {name}   [{cat or 'uncategorised'}]")
+        if g.get("description"):
+            print(f"  {g['description']}")
+        print(f"  include: {g.get('include', [])}")
+        print(f"  exclude: {g.get('exclude', [])}")
+        # status breakdown within scope
+        counts = Counter()
+        for r in con.execute("SELECT id,status FROM tu"):
+            if r["id"] in sel:
+                counts[r["status"]] += 1
+        total = sum(counts.values())
+        print(f"\n  {total} TUs in scope  ({100*counts['done']//max(total,1)}% done)")
+        for s in TU_STATUS:
+            if counts[s]:
+                print(f"    {s:12s} {counts[s]}")
+        # advisory boundary report: in-scope TUs that call OUT of scope -> will be stubbed
+        ext = Counter()
+        st = {r["id"]: r["status"] for r in con.execute("SELECT id,status FROM tu")}
+        for r in con.execute("SELECT tu_id,dep_id,weight FROM tu_dep"):
+            if r["tu_id"] in sel and r["dep_id"] not in sel and st.get(r["dep_id"]) != "done":
+                ext[r["dep_id"]] += r["weight"]
+        print(f"\n  boundary: {len(ext)} out-of-scope TUs are called from in-scope code "
+              f"(trap-stubbed until you widen the globs or reach them).")
+        for tu, w in ext.most_common(12):
+            print(f"    x{w:<4d} {tu[:66]}")
+        if len(ext) > 12:
+            print(f"    ... +{len(ext)-12} more")
+        return
+
+    sys.exit(f"unknown goal action {action!r} (use: list | set <name> | clear | show [name])")
+
+
+def resolve_goal_tus_cached(goal, targets):
+    """resolve_goal_tus against a prebuilt targets map (avoids re-querying per goal)."""
+    explicit = set(goal.get("include_tus", []))
+    inc = [_glob_re(g) for g in goal.get("include", [])]
+    if not inc:
+        return explicit if explicit else None
+    exc = [_glob_re(g) for g in goal.get("exclude", [])]
+    sel = set(explicit)
+    sel.update(tid for tid, strs in targets.items()
+               if any(rx.match(s) for rx in inc for s in strs)
+               and not any(rx.match(s) for rx in exc for s in strs))
+    return sel
+
+
+def save_goals(goals):
+    json.dump(goals, open(GOALS_JSON, "w", encoding="utf-8"), indent=1)
+
+
 # ---------------------------------------------------------------- next
 def cmd_next(args):
     con = connect()
     has_deps = con.execute("SELECT COUNT(*) FROM tu_dep").fetchone()[0] > 0
+    gname, gset = active_goal_set(con)
     # rank todo TUs by (# dependency TUs not yet done) asc -> leaves first,
     # then decfigs-sourced first, then smallest first.
     if has_deps:
@@ -258,15 +490,25 @@ def cmd_next(args):
           (SELECT COUNT(*) FROM tu_dep d JOIN tu dt ON dt.id=d.dep_id
             WHERE d.tu_id=t.id AND dt.status NOT IN ('done')) AS unresolved
         FROM tu t WHERE t.status='todo'
-        ORDER BY unresolved ASC, (t.source='decfigs') DESC, t.n_funcs ASC
-        LIMIT ?"""
+        ORDER BY unresolved ASC, (t.source='decfigs') DESC, t.n_funcs ASC"""
     else:
         q = """SELECT t.id,t.source,t.n_funcs,t.dest_path, NULL AS unresolved
         FROM tu t WHERE t.status='todo'
-        ORDER BY (t.source='decfigs') DESC, t.n_funcs ASC LIMIT ?"""
-    rows = con.execute(q, (args.n,)).fetchall()
+        ORDER BY (t.source='decfigs') DESC, t.n_funcs ASC"""
+    # A goal scopes `next` to its in-scope TUs, keeping the leaf-first order within
+    # that subset. Filter in Python so we never hit SQL parameter limits on big sets.
+    ranked = con.execute(q).fetchall()
+    if gset is not None:
+        n_done = sum(1 for r in con.execute("SELECT id,status FROM tu")
+                     if r["id"] in gset and r["status"] == "done")
+        print(f"[goal: {gname}]  {len(gset)} TUs in scope, {n_done} done  "
+              f"(clear with `work goal clear`; details: `work goal show {gname}`)")
+        ranked = [r for r in ranked if r["id"] in gset]
+    rows = ranked[:args.n]
     if not rows:
-        print("no todo TUs — run `work status`")
+        msg = "no todo TUs in this goal — switch/clear the goal or run `work status`" if gset is not None \
+              else "no todo TUs — run `work status`"
+        print(msg)
         return
     for r in rows:
         dep = "" if r["unresolved"] is None else f"  unresolved-deps={r['unresolved']}"
@@ -588,6 +830,12 @@ def main():
     sub.add_parser("bootstrap").set_defaults(fn=cmd_bootstrap)
     s = sub.add_parser("seed"); s.add_argument("--deps", action="store_true"); s.add_argument("--reset", action="store_true"); s.set_defaults(fn=cmd_seed)
     sub.add_parser("status").set_defaults(fn=cmd_status)
+    g = sub.add_parser("goal", help="scope `next` to a membership goal (see progress/goals.json)")
+    g.add_argument("action", nargs="?", default="list",
+                   choices=["list", "set", "clear", "show", "import-trace"])
+    g.add_argument("name", nargs="?")
+    g.add_argument("--trace-dir", help="Xenia funcdata dir for import-trace (default .trace/funcdata)")
+    g.set_defaults(fn=cmd_goal)
     n = sub.add_parser("next"); n.add_argument("-n", type=int, default=1); n.set_defaults(fn=cmd_next)
     sh = sub.add_parser("show"); sh.add_argument("tu")
     sh.add_argument("--full", action="store_true", help="emit the full reconstruction dossier")

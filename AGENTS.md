@@ -52,6 +52,53 @@ work review <tu> --verdict pass|fail [--notes "…"]   # record the verdict
 work block <tu> "…"   # mark blocked + reason so it is not reclaimed
 ```
 
+**Goal scoping (optional, milestone-driven ordering).** By default `work next` is
+whole-program leaf-first. To drive toward a concrete milestone (e.g. "boot to the main
+menu", "reach the loading screen") instead, set an **active goal** — `work next` then
+ranks **only** the TUs in that goal's scope, keeping leaf-first order within it. Full
+reference (schema, the Xenia-trace reproduction, the binary format):
+[`references/GOAL_SCOPING.md`](references/GOAL_SCOPING.md).
+
+A goal is a **membership selector**, not a call-graph closure: the X360 TU call graph is
+a single ~75%-of-the-program strongly-connected component, so reachability/closure cannot
+carve out a milestone (any boot seed's closure is 75% of the game). Each goal is therefore
+defined in [`progress/goals.json`](progress/goals.json) by `include`/`exclude` glob lists
+(`*` = any chars) matched against each TU's id **and** the function names it contains —
+so `GameSource/Gui/**` matches by path, `BrnGui::*` by namespace, `*Director*` by either.
+
+```
+work goal                     # list defined goals + the active one (with TU/done counts)
+work goal set <name>          # make <name> active (scopes `work next`)
+work goal show <name>         # scope size, % done, and the BOUNDARY report:
+                              #   which out-of-scope TUs in-scope code calls (→ trap-stubbed)
+work goal clear               # back to whole-program leaf-first
+```
+
+Use `work goal show` to tune the globs: the boundary report tells you exactly what a
+scope will stub vs. pull in, so you can widen/narrow it deliberately.
+
+**Division of labor:** glob goals are for **subsystem slices** ("all GUI", "all replay
+serialisers") where a pattern *is* the intent. For **milestones** ("boots to the main
+menu"), use an execution-derived trace goal — only a real run knows what a milestone
+needs. The glob goals shipped in `goals.json` are approximate pattern slices, not
+runnable-milestone scopes.
+
+**Execution-derived goals (best scoping — what actually ran).** Globs approximate; an
+*execution trace* gives the exact set a milestone needs. Run the real X360 build in Xenia
+with `trace_functions`/`trace_function_data` enabled (see header of
+[`tools/work/trace_import.py`](tools/work/trace_import.py)) up to the milestone, then:
+
+```
+work goal import-trace <name> [--trace-dir DIR]   # default DIR = .trace/funcdata
+```
+
+It parses Xenia's funcdata chunks → executed guest addresses → `identity.json` names →
+TUs, and writes a goal whose `include_tus` is that exact set (kernel import thunks, which
+don't map to game names, are dropped). A 30 s boot-to-attract capture yields ~925 TUs
+(21%) vs. the 75% static closure — and it's *real*, only the code that executed. Re-import
+after pushing the milestone further (window → menu → in-race) to grow the scope. Traces
+are large/binary and git-ignored (`.trace/`); the derived TU list lives in `goals.json`.
+
 **Deterministic auto-draft (NO-LLM, optional sweep).** `work auto --scan` reports the
 TUs that are *fully mechanical* — every function is a pure forwarder (`return
 Other::Fn(args);`) or a compiler thunk (deleting destructors, which are dropped, not
