@@ -864,7 +864,7 @@ def cmd_bootstrap(args):
     #    deeply self-referential test-package submodules that blow past Windows
     #    MAX_PATH). Only init what is NOT already populated, so we never run a
     #    checkout that could clobber uncommitted reconstruction work.
-    print("[1/3] git submodules ...", flush=True)
+    print("[1/4] git submodules ...", flush=True)
     b5 = os.path.join(ROOT, "b5-decomp")
     if not os.path.exists(os.path.join(b5, "CMakeLists.txt")):
         subprocess.run(["git", "submodule", "update", "--init"], cwd=ROOT)
@@ -876,7 +876,7 @@ def cmd_bootstrap(args):
             subprocess.run(["git", "submodule", "update", "--init", "--", f"vendor/{name}"], cwd=b5)
 
     # 2) the committed structure must be present (identity/tu_index are in git)
-    print("[2/3] checking committed artifacts ...", flush=True)
+    print("[2/4] checking committed artifacts ...", flush=True)
     missing = [p for p in (IDENTITY, TU_INDEX) if not os.path.exists(p)]
     if missing:
         print(f"  MISSING {', '.join(os.path.basename(m) for m in missing)} — these are committed;"
@@ -888,9 +888,24 @@ def cmd_bootstrap(args):
         print("        them — regenerate with: tools/export_db.ps1 -DbName BURNOUT_X360_ARTIST.XEX")
 
     # 3) (re)build the ledger from committed identity/tu_index + status + dep mirrors
-    print("[3/3] building ledger ...", flush=True)
+    print("[3/4] building ledger ...", flush=True)
     seed_args = argparse.Namespace(deps=have_exports, reset=False)
     cmd_seed(seed_args)
+
+    # 4) refresh the burnout.wiki type index if the committed cache is stale vs. the
+    #    newest dump (the dossier reads references/Wiki/types.json; committed so it
+    #    works without Python, rebuilt here so a newer dump takes effect on resume)
+    print("[4/4] wiki type index ...", flush=True)
+    try:
+        import wiki_index
+        if wiki_index.needs_rebuild():
+            wiki_index.build_index()
+        elif wiki_index.newest_dump():
+            print("  types.json up to date with newest dump — skipping")
+        else:
+            print("  no burnoutwiki-*.xml dump present — using committed types.json (if any)")
+    except Exception as e:
+        print(f"  skipped (wiki index unavailable: {e})")
 
     print("\n== ready ==  resume with:")
     print("  work status      # what's done")
