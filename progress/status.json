@@ -664,6 +664,10 @@
    "status": "reviewed",
    "verify_tier": 2
   },
+  "BrnNetwork::BrnServerInterfaceBase::BrnServerInterfaceBase": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
   "BrnNetwork::NetworkRounder::RoundDistanceToNetworkAccuracy": {
    "status": "reviewed",
    "verify_tier": 2
@@ -673,6 +677,26 @@
    "verify_tier": 2
   },
   "BrnNetwork::NetworkRounder::RoundTimeToNetworkAccuracy": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnPhysics::ContactSpy::ContactSpyInterface::Construct": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnReplays::DirectorBridgeSerialiser::Construct": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnReplays::GameModuleSerialiser::Construct": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnReplays::RaceCarEntitySerialiser::Construct": {
+   "status": "reviewed",
+   "verify_tier": 2
+  },
+  "BrnResource::DebugComponent::GetName": {
    "status": "reviewed",
    "verify_tier": 2
   },
@@ -2053,13 +2077,43 @@
    "owner": "agent",
    "status": "done"
   },
+  "GameSource/Network/BrnServerInterfaceBase.h": {
+   "notes": "Review passed successfully: exact match to original source structure and correct inline constructor.",
+   "owner": "agent",
+   "status": "done"
+  },
   "GameSource/Network/Utilities/BrnNetworkRounder.cpp": {
+   "status": "done"
+  },
+  "GameSource/Replays/Serialisers/BrnReplayDirectorBridgeSerialiser.cpp": {
+   "notes": "trivial; gate-only. Pure forwarder to BaseSerialiser::Construct; YELLOW parity is the qualified-name false-positive (callee present).",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Replays/Serialisers/BrnReplayGameModuleSerialiser.cpp": {
+   "notes": "trivial; gate-only. Pure forwarder to BaseSerialiser::Construct.",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Replays/Serialisers/BrnReplayRaceCarEntitySerialiser.cpp": {
+   "notes": "trivial; gate-only. Forwarder + clears field at exact pseudocode offset 0x5C.",
+   "owner": "agent",
+   "status": "done"
+  },
+  "GameSource/Resource/BrnResourceDebugComponent.h": {
+   "notes": "trivial; gate-only. Constant-string accessor, GREEN parity.",
+   "owner": "agent",
    "status": "done"
   },
   "GameSource/Unity/../Game/BrnGameModule.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../Graphics/BrnRendererModuleDebugComponent.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../Physics/ContactSpies/BrnContactSpyInterface.cpp": {
+   "notes": "trivial; gate-only. In-place zero-init constructor, GREEN parity.",
+   "owner": "agent",
    "status": "done"
   }
  }
