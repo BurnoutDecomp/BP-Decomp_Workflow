@@ -22,6 +22,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 FEB2007 = os.path.join(ROOT, "references", "LegacySrc", "BrnEntityModuleUnity")
 RW_INCLUDE = "b5-decomp/vendor/renderware/include"
+WIKI_TYPES = os.path.join(ROOT, "references", "Wiki", "types.json")
 
 import gen_skeleton  # same dir; provides load_export + signature_from_pseudocode
 load_export = gen_skeleton.load_export
@@ -29,6 +30,8 @@ sig_of = gen_skeleton.signature_from_pseudocode
 
 MAX_SRC_LINES = 500
 MAX_CALLEES = 24
+MAX_WIKI_TYPES = 12
+MAX_WIKI_FIELDS = 40
 
 
 # ---------------------------------------------------------------- LegacySrc overlay
@@ -84,6 +87,56 @@ def find_feb2007_source(primary_file: str):
 
 
 # ---------------------------------------------------------------- callee signatures
+# ---------------------------------------------------------------- Wiki type overlay
+@lru_cache(maxsize=1)
+def wiki_types():
+    """type-name -> [records] from the burnout.wiki struct/enum index (may be absent)."""
+    if not os.path.isfile(WIKI_TYPES):
+        return {}
+    try:
+        return json.load(open(WIKI_TYPES, encoding="utf-8")).get("types", {})
+    except Exception:
+        return {}
+
+
+_TYPE_TOK = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+# wiki section titles too generic to be a confident type match
+_WIKI_STOP = {"Data", "Count", "Entry", "Header", "Value", "Size", "Name", "Type",
+              "Colour", "Color", "Graph", "Instance", "Index", "Flags", "Info",
+              "Table", "List", "Block", "Field", "Offset", "Id"}
+
+
+def wiki_matches(funcs):
+    """Collect type tokens used as decompiler local-variable *types* in this TU
+    that the wiki documents. Local-var types are the high-precision signal (the
+    concrete data types the function manipulates) — pseudocode/callee tokens are
+    deliberately NOT scanned because they share words with generic format structs
+    (every CgsFont fn would spuriously hit the `Font` format). Returns an ordered,
+    de-duplicated list of (token, record), preferring the primary (Paradise-era)
+    record per type."""
+    idx = wiki_types()
+    if not idx:
+        return []
+    tokens = set()
+    for f in funcs:
+        addr = f["x360_addr"]
+        exp = load_export(addr) if addr else None
+        if not exp:
+            continue
+        for v in (exp.get("variables") or []):
+            tokens.update(_TYPE_TOK.findall(v.get("type") or ""))
+    matched = []
+    for tok in sorted(tokens):
+        # require a C++-type shape (drops Hex-Rays temps v4/a1 and snake_case save
+        # fields) and skip over-generic section titles
+        if len(tok) < 3 or tok in _WIKI_STOP or not any(c.isupper() for c in tok):
+            continue
+        recs = idx.get(tok)
+        if recs:
+            matched.append((tok, recs[0]))   # recs[0] = primary-first sorted
+    return matched
+
+
 def callee_brief(addr, name, con):
     """Signature of a callee (from its X360 pseudocode) + recovered status."""
     sig = None
@@ -159,6 +212,35 @@ def assemble(con, tu_row, funcs, with_asm=False):
     ns = sorted({f["name"].rsplit("::", 1)[0] for f in funcs if "::" in f["name"]})
     if ns:
         w(f"    namespaces in this TU: {', '.join(ns[:8])}{' ...' if len(ns) > 8 else ''}")
+
+    # burnout.wiki field-name overlay (names/types AUTHORITATIVE; offsets advisory)
+    wm = wiki_matches(funcs)
+    if wm:
+        w("\n--- WIKI TYPES (burnout.wiki) ---")
+        w("    Field NAMES/TYPES/semantics are AUTHORITATIVE -- adopt these member names "
+          "(they already follow CXX_NAMING_CONVENTIONS). OFFSETS/SIZES are per the tagged")
+        w("    build and may differ from our X360 spine: VERIFY layout against the "
+          "pseudocode/asm below; do NOT trust wiki offsets for member placement.")
+        for tok, rec in wm[:MAX_WIKI_TYPES]:
+            tag = f"build={rec['build']}, primary (name-authoritative)" if rec["primary"] \
+                  else f"build={rec['build']}, NOT confirmed our build"
+            w(f"\n  {rec['type']} ({rec['kind']}; {tag}; page: {rec['page']})")
+            for fld in rec["fields"][:MAX_WIKI_FIELDS]:
+                if rec["kind"] == "struct":
+                    line = f"    {fld['offset']:>6} {fld['size']:>5}  {fld['type']:22} {fld['name']}"
+                    if fld["desc"]:
+                        line += f"   ; {fld['desc']}"
+                else:
+                    line = f"    {fld['id']:>5}  {fld['name']}"
+                    if fld["alt"]:
+                        line += f"   (alt: {fld['alt']})"
+                w(line)
+            if len(rec["fields"]) > MAX_WIKI_FIELDS:
+                w(f"    ... +{len(rec['fields'])-MAX_WIKI_FIELDS} more "
+                  f"(python tools/work/wiki_index.py --lookup {rec['type']})")
+        if len(wm) > MAX_WIKI_TYPES:
+            extra = ", ".join(t for t, _ in wm[MAX_WIKI_TYPES:])
+            w(f"\n  +{len(wm)-MAX_WIKI_TYPES} more documented types: {extra}")
 
     # per-function brief
     for f in funcs:

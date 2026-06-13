@@ -221,6 +221,22 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
     - **Strength reduction reversal:** Convert division/multiplication hacks (like bitwise shifts, masking, or magic multiplication constants used to optimize math) back into standard arithmetic operators (e.g., division `/` or modulo `%`).
     - **Tail-call and branch restoration:** Re-structure compiler-optimized jumps, merged conditions, and tail-calls back to logical `if`/`else` structures, returns, or recursion.
   - **REVIEWER ENFORCEMENT:** Reviewers must FAIL any translation unit that uses offset-based cast hacks instead of clean member declarations and OOD structure.
+- **burnout.wiki is authoritative for field NAMES/TYPES/semantics, never for
+  OFFSETS.** The community format docs ([`references/Wiki/`](references/Wiki/),
+  indexed into `references/Wiki/types.json` by
+  [`tools/work/wiki_index.py`](tools/work/wiki_index.py)) already use this project's
+  Hungarian convention (`mfLuminance`, `mv4Scale`, `miNodeCount`), so adopt their
+  member names and types directly. But each page was authored against some build
+  (B1 → Paradise; entries are build-tagged, **Paradise/PS3 marked `primary`** —
+  PS3 is the same Paradise-era game as our X360 spine and the wiki tables are partly
+  derived from PS3 symbols, so they are name-authoritative where the X360 export is
+  missing) whose layout may differ from our X360 2007-02 spine — so the
+  **pseudocode/asm is the only
+  source of truth for offsets and member placement** (same rule as the x64 gate:
+  semantic parity by named members, not byte offsets). The dossier auto-surfaces
+  matching struct/enum tables under `--- WIKI TYPES ---`; look anything else up with
+  `python tools/work/wiki_index.py --lookup <Type>`. Rebuild the index if the dump
+  changes. Reviewers: a wiki offset trusted over the pseudocode is a fail.
 - **Types live in headers** and are shared global state. Extend them; let the
   compile gate surface conflicts. Don't redefine a type locally to dodge an error.
 - **Update the ledger, not your own memory.** Progress that isn't in `progress/` did
