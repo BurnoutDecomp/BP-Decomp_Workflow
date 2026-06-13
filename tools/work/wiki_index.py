@@ -15,12 +15,29 @@ Usage:
     python tools/work/wiki_index.py            # rebuild references/Wiki/types.json
     python tools/work/wiki_index.py --lookup CGtRGB   # print what we have for a type
 """
-import os, re, json, html, sys
+import os, re, json, html, sys, glob
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 WIKI_DIR = os.path.join(ROOT, "references", "Wiki")
-DUMP = os.path.join(WIKI_DIR, "burnoutwiki-20260602.xml")
 OUT = os.path.join(WIKI_DIR, "types.json")
+
+
+def newest_dump():
+    """Path to the most recent burnoutwiki-*.xml dump, or None if absent. The
+    export filename is date-stamped, so dropping a newer one is all that's needed
+    — we always index the latest."""
+    dumps = sorted(glob.glob(os.path.join(WIKI_DIR, "burnoutwiki-*.xml")))
+    return dumps[-1] if dumps else None
+
+
+def needs_rebuild():
+    """True if types.json is missing or older than the newest dump."""
+    dump = newest_dump()
+    if not dump:
+        return False                      # nothing to build from
+    if not os.path.isfile(OUT):
+        return True
+    return os.path.getmtime(OUT) < os.path.getmtime(dump)
 
 SKIP_NS = ("File", "User", "Template", "MediaWiki", "Category", "Help", "Module")
 
@@ -186,7 +203,11 @@ def normalize(section, title, cols, rows):
 
 
 def build_index():
-    data = open(DUMP, encoding="utf-8").read()
+    dump = newest_dump()
+    if not dump:
+        print(f"no burnoutwiki-*.xml dump in {WIKI_DIR} — nothing to index")
+        return
+    data = open(dump, encoding="utf-8").read()
     pages = re.findall(r"<title>(.*?)</title>.*?<text[^>]*>(.*?)</text>", data, re.S)
     types: dict[str, list] = {}
     n_pages = n_tables = 0
@@ -217,11 +238,11 @@ def build_index():
         types[key] = uniq
 
     out = {
-        "generated_from": os.path.basename(DUMP),
+        "generated_from": os.path.basename(dump),
         "note": ("Field NAMES/TYPES/semantics are authoritative; OFFSETS/SIZES "
                  "are per the tagged build and may differ from the X360 spine — "
                  "verify layout against pseudocode/asm. 'primary':true == "
-                 "Paradise/X360-era page."),
+                 "Paradise/PS3/X360-era page."),
         "n_types": len(types),
         "types": types,
     }
