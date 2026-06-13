@@ -211,6 +211,11 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   When the Hex-Rays pseudocode or a recovered name disagrees with it, the convention
   wins (except where you are matching an external/generated/platform API). Reviewers
   check reconstructions against it too.
+- **Reconstruction Quality & Type Recovery (CRITICAL):** The goal is to reconstruct what the original C++ source code **looked like**, not to translate raw decompiler outputs literally.
+  - **NO RAW OFFSET POINTER HACKS:** You must NEVER access member variables using raw offset casting (e.g., `*reinterpret_cast<Type*>(lThis + offset)` or `*(int*)(this + offset)`) or offset helper lambdas (like `Word(offset)`).
+  - **LAYOUT RECOVERY WITH PADDING:** Infer class and struct member variables based on the offsets accessed. If the preceding variables are unknown, use explicit padding buffers (e.g. `u8 mPad0[1812];`) to preserve member alignment. Access all member variables by name.
+  - **USE REFERENCE LEAKS:** Always check the `references/Feb-2007/` PS3 leaked source files. If the TU or its types are represented there, match the original structures and names exactly.
+  - **REVIEWER ENFORCEMENT:** Reviewers must FAIL any translation unit that uses offset-based cast hacks instead of clean member declarations and OOD structure.
 - **Types live in headers** and are shared global state. Extend them; let the
   compile gate surface conflicts. Don't redefine a type locally to dodge an error.
 - **Update the ledger, not your own memory.** Progress that isn't in `progress/` did
