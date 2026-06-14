@@ -185,9 +185,11 @@ per-TU asm-matching for if/when a PPC toolchain is wired up. Not built now.
   builds into `progress/identity.json`; group by `primary_file` into
   `progress/tu_index.json` (the work-unit list); per-TU skeleton generator
   (`tools/work/gen_skeleton.py`).
-- **Phase 1 — The `work` CLI + ledger** *(done)*: `seed`/`status`/`next`/`show`/
-  `start`/`submit`/`block` over the SQLite ledger seeded from the identity table;
-  `next` is leaf-first via a TU dependency graph built from xrefs.
+- **Phase 1 — The `work` CLI + ledger** *(done)*: `bootstrap`/`seed`/`status`/
+  `next`/`claim`/`show`/`start`/`submit`/`review`/`parity`/`stubs`/`goal`/`auto`/
+  `block`/`unblock` plus optional server/worker commands over the SQLite ledger
+  seeded from the identity table; `next` is leaf-first via a TU dependency graph
+  built from xrefs and type-dependency hints.
 - **Phase 2 — Dossier assembler** *(done)*: `work show <tu> --full`
   (`tools/work/dossier.py`) joins per-function pseudocode/locals/asm +
   callee signatures + DecFIGS dwarfdump declaration/type hints + Feb-2007

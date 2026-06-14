@@ -14,6 +14,18 @@ down *where modules live* in the PC build's memory.
 
 ## Contents
 
+The complete script inventory is in [`../tools/README.md`](../tools/README.md). The
+reference-specific tool map is:
+
+| Reference area | Tools that produce or query it |
+| --- | --- |
+| DecFIGS source attribution | `tools/ida_export_lineinfo.py`, `tools/build_source_tree.py` |
+| DecFIGS dossiers | `tools/work/dossier.py` via `work show <tu> --full` |
+| Execution-derived goals | `tools/work/trace_import.py` via `work goal import-trace` |
+| Wiki type index | `tools/work/wiki_index.py --lookup <Type>` |
+| RenderWare `rw::` headers | `tools/gen_rwcore_headers.py` |
+| Ledger identity and TU grouping | `tools/work/build_identity.py`, `tools/work/build_tu_index.py`, `tools/work/build_type_deps.py` |
+
 | Folder | What it gives the decomp |
 |--------|--------------------------|
 | [`Feb-2007/`](Feb-2007/) | A real slice of original Burnout 5 source (the `BrnEntityModuleUnity` translation unit) leaked from a 2007-02-21 PS3 build. Ground truth for class layouts, naming, and code style. |

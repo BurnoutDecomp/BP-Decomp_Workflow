@@ -1,116 +1,238 @@
-# Burnout Paradise Decompilation workflow
+# Burnout Paradise Decompilation Workflow
 
-The orchestration workspace for reverse-engineering and decompiling Burnout 5 /
-Burnout Paradise. This repository is **not** the decomp itself — it is the
-scaffolding around it: the disassembly databases, the reference material recovered
-from various builds, and the tooling that turns those databases into structured
-data the decomp can consume. The actual recovered C++ lives in the
-[`b5-decomp`](b5-decomp/) submodule.
+This repository is the orchestration workspace for reverse-engineering Burnout 5 /
+Burnout Paradise. It is not the decompilation source tree itself. It holds the
+analysis databases, reference material, work ledger, and automation that let agents
+reconstruct the Xbox 360 build as compilable PC C++.
 
-## Why several builds?
+Recovered C++ lives in the [`b5-decomp`](https://github.com/Adriwin06/b5-decomp) submodule. This repo answers:
 
-No single binary gives everything. The decomp triangulates between builds, each
-contributing a different kind of ground truth:
+- which functions exist in the X360 target build;
+- which translation unit owns each function;
+- what reference evidence is available for each unit;
+- which units are todo, in progress, compiled, reviewed, blocked, or done;
+- how to claim, reconstruct, verify, review, and coordinate work.
 
-- **Symbols & function names** come from the binaries with the richest symbol
-  tables (PS3 ELFs).
-- **Original source file/line/inlining attribution and DWARF-derived declaration/type
-  hints** come from the DecFIGS PS3 build, which still carries DWARF line info —
-  see [`references/DecFIGS`](references/DecFIGS/).
-- **A genuine slice of original source** (one translation unit) comes from the
-  Feb-2007 PS3 leak — see [`references/Feb-2007`](references/Feb-2007/).
-- **High-fidelity Renderware type layouts** come from the shipped `rwcore` PDB.
-- **Module/offset maps** for the PC build come from [`references/BPR`](references/BPR/).
+## Read First
 
-## Layout
+For reconstruction work, read these in order:
+
+1. [`AGENTS.md`](AGENTS.md) - the operating guide for every agent and maintainer.
+2. [`STRATEGY.md`](STRATEGY.md) - the technical plan and rules of evidence.
+3. [`progress/README.md`](progress/README.md) - the ledger and `work` CLI reference.
+
+`CLAUDE.md` exists only as a redirect for Claude Code. The canonical instructions are
+shared in `AGENTS.md` so all agents follow the same process.
+
+## Why Several Builds Are Used
+
+No single binary contains enough information. The workflow triangulates:
+
+| Build or artifact | Role |
+| --- | --- |
+| `BURNOUT_X360_ARTIST.XEX` | Target/spine. Its symbols, pseudocode, asm, and xrefs define what is reconstructed. |
+| `Burnout_External_PS3.ELF` | Symbol-rich PS3 corroboration for names and behavior. |
+| `DecFIGS_Burnout_Internal_PS3.ELF` | DWARF source/file attribution plus declaration, type, enum, global, signature, and local-variable hints. |
+| `BurnoutPR.exe` and `TUB_Burnout_PC_External.exe` | Stripped PC references, consulted selectively for platform-specific code paths. |
+| `rwcore.lib` / `rwcore.pdb` / `rwcore_master.obj` | RenderWare core type and layout evidence. |
+| `references/Feb-2007/` | A real source-code slice used as the highest-fidelity template where it overlaps. |
+| `references/Wiki/` | burnout.wiki-derived type tables. Use names/types/semantics, never offsets. |
+
+The canonical identity is a normalized qualified function name, not an address.
+Addresses are build-local and must not be treated as stable across binaries.
+
+## Repository Layout
 
 | Path | What it is |
-|------|------------|
-| [`IDA Files/`](IDA%20Files/) | The IDA Pro databases (`.i64`) for every analyzed build, plus the `rwcore.lib`/`.pdb` used for Renderware types. The primary disassembly source. |
-| [`.ida-exports/`](.ida-exports/) | Generated: one JSON per function (pseudocode, prototype, locals, asm, xrefs), exported from the IDBs by the tools below. The machine-readable form of the disassembly. |
-| [`references/`](references/) | Recovered ground-truth material that is *not* a disassembly: leaked source, DWARF-derived source trees/type hints, module offset maps. See its README. |
-| [`tools/`](tools/) | IDAPython exporters and post-processors that produce `.ida-exports/` and the DecFIGS artifacts, plus the [`work`](tools/work/) ledger CLI. |
-| [`progress/`](progress/) | The agent-agnostic ledger: the cross-build identity table, the translation-unit work list, and the status ledger that drives the reconstruction loop. See its README. |
-| [`b5-decomp/`](b5-decomp/) | Submodule: the actual decompilation project (recovered C++, vendored EA libraries, Renderware type headers, CMake build). |
-| [`build/`](build/) | Local CMake build tree for `b5-decomp` (not the source of truth). |
+| --- | --- |
+| [`AGENTS.md`](AGENTS.md) | Tool-agnostic operating guide: resume behavior, work loop, server coordination, reconstruction rules, review policy, and "don't" rules. |
+| [`STRATEGY.md`](STRATEGY.md) | Design document for the workflow: target, build roles, identity model, TU model, stubs, verification, goals, and phase status. |
+| [`IDA Files/`](IDA%20Files/) | IDA Pro databases and RenderWare library/PDB inputs. Some large `.i64` files are intentionally git-ignored and must be supplied locally. |
+| [`.ida-exports/`](.ida-exports/) | Generated per-function JSON exports from IDA: names, prototypes, locals, pseudocode, asm, callers, and callees. Git-ignored. |
+| [`references/`](references/) | Non-disassembly evidence: Feb-2007 source slice, DecFIGS DWARF artifacts, BPR module map, wiki index, and naming conventions. |
+| [`tools/`](tools/) | IDAPython exporters, post-processors, RenderWare header generation, and the `tools/work/` ledger/reconstruction helpers. |
+| [`progress/`](progress/) | Shared ledger inputs and outputs: identity, TU index, dependencies, status mirror, goals, verification/review configs, and generated review packets. |
+| [`b5-decomp/`](https://github.com/Adriwin06/b5-decomp) | Submodule containing recovered C++, vendor libraries, RenderWare headers, and CMake project files. |
+| [`build/`](build/) | Local build tree for `b5-decomp`; not source of truth. |
+| [`.env.example`](.env.example) | Optional work-server configuration template. Copy to `.env` only if a maintainer gives you a worker id. |
 
-## Agentic workflow
+Generated review packets under `progress/reviews/` and vendor Markdown under
+`b5-decomp/vendor/` are artifacts/upstream documentation, not primary workflow docs.
 
-This repo is set up so AI agents (Claude Code, Codex, …) can drive the decomp from
-a single chat. The plan, conventions, and operating guide live in three files —
-**read them in this order**:
+## Prerequisites
 
-1. [`AGENTS.md`](AGENTS.md) — operating guide every agent reads first (tool-agnostic).
-2. [`STRATEGY.md`](STRATEGY.md) — the plan: build roles, the name-join identity
-   model, translation-unit work units, the stub scaffold, verification, phases.
-3. [`progress/`](progress/) — the live ledger, driven by the `work` CLI.
+Required for normal ledger work:
 
-### Environment & Prerequisites
+- Python 3
+- Git
+- PowerShell on Windows
+- initialized submodules under `b5-decomp/vendor/`
 
-Before starting the workflow, ensure you have the following prerequisites installed and configured:
+Required for the compile gate:
 
-1. **Python 3** and **Git** must be installed and available on your system `PATH` (used by the `work` CLI and submodules).
-2. **MSVC Compiler (Visual Studio):** Required for the compile-only gate (`work submit`).
-   * Configured in [`progress/verify.config.json`](progress/verify.config.json).
-   * **Important:** If your Visual Studio install path differs from the default (`C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvars64.bat`), you **must** edit that file to point to your actual `vcvars64.bat`. Otherwise, the compile gate will be skipped.
-3. **IDA Pro (Hex-Rays):** Optional for running against the committed ledger, but **required** to reconstruct new functions or regenerate `.ida-exports/` (using `tools/export_db.ps1`).
-   * The exporter script automatically resolves the path to `idat.exe` by checking the `-IdaPath` parameter, the `IDA_PATH` or `IDA_BIN` environment variables, default installation paths, or your system `PATH`.
-4. **Manually Supplied Reference Files (Git-ignored):** Due to size limits and/or licensing, several critical files must be manually copied into the workspace. You can download these necessary files from [this Google Drive zip](https://drive.google.com/file/d/13pGgBSWAuOwPHVNh-GsKv2J7T8FcIdlH/view?usp=sharing) and extract them directly at the root of the repository:
-   * **Leaked Feb-2007 Source Code:** Place the extracted source tree inside [`references/Feb-2007/BrnEntityModuleUnity/`](references/Feb-2007/BrnEntityModuleUnity/). This provides original code overlays for the dossier generator.
-   * **Oversized IDA Databases:** Place `Burnout_External_PS3.ELF.i64` and `BurnoutPR.exe.i64` inside the [`IDA Files/`](IDA%20Files/) folder.
+- Visual Studio/MSVC
+- `progress/verify.config.json` pointing at a real `vcvars64.bat`
 
+If `vcvars` is missing, `work submit` reports a skipped compile gate and continues;
+that is useful for bookkeeping but does not catch compiler errors.
 
-### Fresh clone — one command, then "continue"
+Required only for regenerating analysis exports or generating new skeletons from IDA:
 
-```powershell
-work bootstrap   # init submodules + rebuild the ledger from committed state
-```
+- IDA Pro with Hex-Rays (`idat.exe`)
+- The relevant `.i64` databases under `IDA Files/`
+- Generated `.ida-exports/` for the target databases. If they are missing or stale,
+  run the IDA export script before doing reconstruction work:
 
-`bootstrap` makes a freshly-cloned repo workable and **resumes exactly where the
-last commit left off** — progress (which TUs are done) and the leaf-first
-dependency graph are committed as `progress/status.json` + `progress/tu_deps.json`,
-so the ledger rebuilds with no IDA and no `.ida-exports/` needed. After it, an agent
-can just be told **"continue"**: it reads [`AGENTS.md`](AGENTS.md), runs `work next`,
-and picks up the next translation unit. (Reconstructing *new* functions still needs
-`.ida-exports/`, which are regenerated from the IDBs with `tools/export_db.ps1`.)
+  ```powershell
+  tools/export_db.ps1
+  ```
 
-   ```powershell
-   work status            # where things stand
-   work next -n 5         # next leaf-first ready translation units
-   work show <tu>         # concise overview of one unit
-   work show <tu> --full  # the full reconstruction dossier for it
-                           # includes DecFIGS dwarfdump declaration/type hints
-   work start <tu>        # claim it, reconstruct into b5-decomp, then:
-   work submit <tu>       # mark it done
-   ```
+Large or licensed local inputs are intentionally not all committed. At minimum, local
+work that regenerates exports may need the git-ignored PS3/PC IDBs and the Feb-2007
+source tree documented in the reference READMEs.
 
-### Milestone goals (decompile toward "boot to the main menu")
+## Fresh Clone / Resume
 
-By default the loop is whole-program leaf-first. To instead drive toward a concrete
-milestone, scope the work to a **goal** — `work next` then only proposes the TUs that
-milestone needs. Because the X360 call graph is one ~75%-of-the-program
-strongly-connected component, goals are **membership selectors** (glob patterns and/or an
-explicit TU list), not call-graph closures; the accurate scope comes from a **Xenia
-execution trace** of the real build run up to the milestone. Full guide — schema, the
-trace capture/repro, the binary format — in
-[`references/GOAL_SCOPING.md`](references/GOAL_SCOPING.md).
+From the repo root:
 
 ```powershell
-work goal import-trace boot   # build a goal from a Xenia funcdata trace (.trace/funcdata)
-work goal set boot            # scope the loop to it
-work goal show boot           # scope size, % done, and what it will trap-stub (boundary)
-work next -n 5                # the next leaf-first TUs within the goal (always current)
-work goal clear               # back to whole-program
+work bootstrap
 ```
 
-## Typical workflow
+`bootstrap` initializes submodules and rebuilds `progress/ledger.sqlite` from the
+committed state: `progress/status.json`, `progress/tu_deps.json`,
+`progress/identity.json`, and `progress/tu_index.json`.
 
-1. Analyze a build in IDA Pro → `IDA Files/<build>.i64`.
-2. Run the exporters in [`tools/`](tools/) to dump per-function JSON into
-   `.ida-exports/` and the DWARF line-attribution artifacts into
-   `references/DecFIGS/`.
-3. Cross-reference those exports against the leaked source
-   ([`references/Feb-2007`](references/Feb-2007/)) and the recovered DecFIGS
-   source-tree skeleton plus `dwarfdump/` declaration/type/local-variable hints to
-   rebuild each translation unit.
-4. Commit the recovered, compiling C++ to the [`b5-decomp`](b5-decomp/) submodule.
+That is enough to resume the queue and status ledger. It does not regenerate the
+git-ignored IDA export cache. If `.ida-exports/` is absent or no longer matches the
+local IDA databases, generate it before reconstructing TUs:
+
+```powershell
+tools/export_db.ps1                          # all configured IDA databases
+tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX"
+```
+
+After that, the short instruction "continue" means:
+
+```powershell
+work claim
+work show <claimed-tu> --full
+```
+
+Then reconstruct the TU into `b5-decomp/src/<mirrored path>`, compile/submit it, and
+record the review verdict.
+
+## Core Work Loop
+
+```powershell
+work status                         # ledger counts and active goal
+work next -n 5                      # preview ready work; reserves nothing
+work claim [-n N]                   # claim next ready TU(s)
+work claim <tu> [<tu> ...]          # claim specific TU(s)
+work show <tu> --full [--asm]       # reconstruction dossier
+work stubs <tu> --list              # unresolved callees and owning headers
+work submit <tu> [--files path ...] # compile gate, parity, reviewer packet
+work parity <tu>                    # standalone deterministic parity check
+work review <tu> --verdict pass     # mark done after review/self-check
+work review <tu> --verdict fail     # return to in_progress with notes
+work block <tu> "reason"            # stop it being reclaimed
+```
+
+The compile gate is per translation unit (`cl /c`, no link). The target is semantic
+parity with the X360 build expressed as source-like PC C++, not byte matching.
+
+## Tool Inventory
+
+The authoritative inventory of repo tools is [`tools/README.md`](tools/README.md).
+At a glance:
+
+| Tool area | Entry points |
+| --- | --- |
+| Day-to-day ledger work | `work bootstrap`, `work status`, `work next`, `work claim`, `work show`, `work submit`, `work parity`, `work review`, `work block` |
+| Goal scoping and traces | `work goal ...`, `work goal import-trace`, `tools/work/trace_import.py` |
+| IDA export pipeline | `tools/export_db.ps1`, `tools/ida_export_all.py`, `tools/ida_export_lineinfo.py`, `tools/ida_decompile.py` |
+| Derived ledger builders | `tools/work/build_identity.py`, `tools/work/build_tu_index.py`, `tools/work/build_type_deps.py`, `work seed --deps` |
+| Reconstruction helpers | `tools/work/dossier.py`, `tools/work/gen_stubs.py`, `tools/work/gen_skeleton.py`, `tools/work/auto_draft.py` |
+| Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `progress/verify.config.json`, `progress/review.config.json` |
+| Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/gen_rwcore_headers.py` |
+| Optional server coordination | `work server-sync`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
+
+## Goals And Execution Traces
+
+By default `work next` ranks the whole program leaf-first. A goal scopes the queue to a
+membership set, either hand-authored globs or an execution-derived Xenia trace:
+
+```powershell
+work goal
+work goal show boot-trace
+work goal set boot-trace
+work goal clear
+work goal import-trace <name> [--trace-dir .trace/funcdata]
+```
+
+Goals live in [`progress/goals.json`](progress/goals.json). The full schema and Xenia
+trace procedure are documented in [`references/GOAL_SCOPING.md`](references/GOAL_SCOPING.md).
+
+## Optional Coordination Server
+
+The default mode is local: the ledger and git are the only state. If a maintainer gives
+you a server URL and worker id, copy `.env.example` to `.env` and set:
+
+```text
+WORK_SERVER=https://...
+WORK_AGENT=<server-issued-worker-id>
+WORK_LEASE_SECONDS=7200
+```
+
+With a server configured, `work claim` is atomic across agents and live claims live on
+the server. Durable states tied to committed code (`done`, `blocked`) still sync through
+`progress/status.json`.
+
+Maintainer commands:
+
+```powershell
+work server-sync [--branch <branch>]      # preserve live claims/events
+work server-reset [--to <ref>]            # local reset + server reseed
+work worker-add "Name" [--admin]
+work worker-list
+work worker-revoke <worker-id>
+```
+
+## Automated Helpers
+
+These helpers are optional. They do not replace manual reconstruction:
+
+```powershell
+work auto --scan              # find fully mechanical TUs
+work auto --run [-n N]        # draft/gate safe forwarder/thunk-only TUs
+python tools/work/reconcile_from_files.py [--apply]
+python tools/work/find_local_redefs.py [--summary]
+python tools/work/wiki_index.py [--lookup <Type>]
+python tools/work/check_vendor_lib.py <tu>
+```
+
+Vendor SDK TUs must be checked with `check_vendor_lib.py` before decompiling. If the
+script prints `PRESENT`, block the TU as vendor code already covered by a PC library or
+open-source vendor source. If it prints `MISSING`, reconstruct it normally.
+
+## Regeneration Pipeline
+
+Most agents do not need to regenerate exports if `.ida-exports/` is already present
+and current. On a fresh machine without that cache, or whenever IDA analysis changes,
+run the IDA database export first:
+
+```powershell
+tools/export_db.ps1                          # generate .ida-exports/ from IDA Files/*.i64
+tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX"
+```
+
+Then rebuild derived DecFIGS/ledger artifacts as needed:
+
+```powershell
+python tools/build_source_tree.py
+python tools/work/build_identity.py
+python tools/work/build_tu_index.py
+work seed --deps --reset
+```
+
+Use `tools/README.md` for the full script inventory and command details.
