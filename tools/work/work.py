@@ -23,6 +23,8 @@ Commands:
     work submit <tu>          mark a TU reconstructed (compile/review gates: Phase 3)
     work block <tu> "reason"  mark blocked; work unblock <tu> to clear
     work set <tu> --status S  manual status override
+    work server-sync [--branch BRANCH]
+                              refresh server checkout/import without clearing live state
     work server-reset [--to REF]
                               full revert: git reset + drop ledger cache + reseed server
     work worker-add <name> | worker-list | worker-revoke <id>   (maintainer) manage ids
@@ -1039,6 +1041,24 @@ def cmd_set(args):
     print(f"{args.tu} -> {args.status}")
 
 
+def cmd_server_sync(args):
+    """Refresh the server's persistent workflow checkout and re-import committed
+    artifacts without resetting the work DB. This preserves live claims, workers,
+    and event history while bringing tu_index/status/deps/goals up to the selected
+    branch tip."""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set - point it at your server first")
+    payload = {"reset": False}
+    if args.branch:
+        payload["branch"] = args.branch
+    print("== syncing work server (reset=false: preserves live claims + event log) ==")
+    res = server_request("POST", "/admin/sync", payload) or {}
+    print(f"server synced: {res.get('commit')} ({res.get('branch')})")
+    print(f"  workflow_root: {res.get('workflow_root')}")
+    print(f"  TUs: {res.get('tus')}  funcs: {res.get('funcs')}  deps: {res.get('deps')}")
+    print(f"  goals: {res.get('goals')}  status_rows: {res.get('status_rows')}")
+
+
 def cmd_server_reset(args):
     """Full revert across the new two-store world: optionally git-reset the workflow
     repo + b5-decomp to a known-good ref, drop the local ledger cache, then re-seed the
@@ -1358,6 +1378,9 @@ def main():
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
     se = sub.add_parser("set"); se.add_argument("tu"); se.add_argument("--status", required=True); se.add_argument("--note"); se.set_defaults(fn=cmd_set)
+    ss = sub.add_parser("server-sync", help="refresh server checkout/import without clearing live claims/events")
+    ss.add_argument("--branch", help="workflow branch to sync (default: server BP_WORKFLOW_BRANCH)")
+    ss.set_defaults(fn=cmd_server_sync)
     srv = sub.add_parser("server-reset", help="full revert: git reset + drop ledger cache + reseed work server")
     srv.add_argument("--to", help="git ref to hard-reset the workflow repo + b5-decomp to (omit to keep current tree)")
     srv.set_defaults(fn=cmd_server_reset)
