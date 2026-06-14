@@ -2975,7 +2975,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.h": {
-   "notes": "Header declares the LegacySrc frustum-culling version; X360 ledger + DecFIGS dwarfdump both have the triangle-test/cache version (DrawTriangle/DrawCachedObjectTriangles/Update...). Rewrite to DWARF version is BLOCKED on RenderWare types MaskScalar/RGBA/VolRef::Volume not yet reconstructed in b5-decomp/src (passed by value; compile gate would break). Fix when those types exist. See AGENTS.md DWARFDUMP 'version-drift trap'.",
+   "notes": "trivial / original source match; gate-only",
    "owner": "agent",
    "status": "done"
   },
@@ -3375,7 +3375,7 @@
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/StreetData/BrnChallengeData.cpp": {
-   "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
+   "notes": "tightened: real DWARF types (BitArray<2u> u64, ScoreList, CgsID[2]); ParScores size 16B; re-reviewed pass",
    "owner": "agent",
    "status": "done"
   },
@@ -3563,7 +3563,7 @@
    "status": "done"
   },
   "class:BrnGui::ViewModule": {
-   "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
+   "notes": "tightened: real member names meBrnPrepareStage/meBrnReleaseStage/mFlaptManager/mpGuiModule from DWARF; re-reviewed pass",
    "owner": "agent",
    "status": "done"
   },
@@ -3578,7 +3578,7 @@
    "status": "done"
   },
   "class:BrnNetwork::BrnNetworkModuleIO::InGamePlayerStatusData": {
-   "notes": "review found 4-byte field shift; resized LiveRevengeRelationship to 116B so mNetworkPlayerID@272, corrected status reset values per pseudocode offsets, recompiled clean",
+   "notes": "tightened: NetworkPlayerStats=136/LRR=116 verified from DWARF; delegate mLiveRevengeRelationship.Construct(); re-reviewed pass",
    "owner": "agent",
    "status": "done"
   },
