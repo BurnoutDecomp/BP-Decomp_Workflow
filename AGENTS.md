@@ -9,9 +9,10 @@ one tool's private memory.
 
 If told only to "continue", do this: if `progress/ledger.sqlite` is missing (fresh
 clone), run `work bootstrap` once — it inits submodules and rebuilds the ledger from
-the committed `progress/status.json` + `progress/tu_deps.json`, restoring exactly
-where the last commit left off. Then `work next` → pick up the next TU. No other
-context is needed.
+the committed `progress/status.json` + `progress/tu_deps.json`, restoring exactly where
+the last commit left off. Then `work claim` → pick up the next ready TU. No other context
+is needed. (If the maintainer gave you a coordination-server URL, set it up first — see
+"Coordination server" below; otherwise you work locally, no setup needed.)
 
 ### Environment Checklist (Verify Before Reconstructing)
 
@@ -19,6 +20,7 @@ Before compiling code or exporting functions, verify these settings:
 1. **Visual Studio / MSVC Path:** Check [`progress/verify.config.json`](progress/verify.config.json). Ensure the `"vcvars"` path points to a valid `vcvars64.bat` on the host. If the path does not exist, the compile gate will skip compilation checks, meaning errors won't be caught.
 2. **IDA Pro Path:** If you need to generate stubs/skeletons for new functions or run the parallel exporter, make sure `idat.exe` is available. You can pass the path explicitly via the `-IdaPath` parameter to `tools/export_db.ps1`, or set the `IDA_PATH` environment variable.
 3. **Submodules:** The `b5-decomp` EA vendor submodules must be initialized. `work bootstrap` does this, but you can verify them under `b5-decomp/vendor/`.
+4. **Coordination config (only if invited):** If the maintainer gave you a server URL, `cp .env.example .env`, uncomment `WORK_SERVER`, set it to that URL, and set a unique `WORK_AGENT`. With no URL, skip this entirely — you work locally. See "Coordination server" below.
 
 ## Read first, in order
 
@@ -37,12 +39,17 @@ TU compiles → a reviewer pass approves.
 ## The work loop
 
 ```
-work next             # claim the next dependency-ready translation unit
+work claim <tu>...    # claim specific TU id(s) — when you want a particular one
+work claim [-n N]     # ...or, with no id, claim the next N ready TUs from the queue.
+                      #   With a coordination server (invite-only, see below) every claim
+                      #   is atomic across everyone; without one it claims locally.
+work next             # read-only PREVIEW of the queue (reserves nothing)
 work show <tu>        # concise overview (functions, signatures, dependency TUs)
 work show <tu> --full # the full dossier: pseudocode, locals, DecFIGS dwarfdump
                       #   hints, LegacySrc original source, callee signatures
                       #   (--asm for disasm, -o to a file)
-work start <tu>       # claim it (todo -> in_progress)
+work start <tu>       # claim one specific TU by id (todo -> in_progress) — use when you
+                      #   already know which TU you want; `work claim` is the normal path
 work stubs <tu>       # trap-stub the callees this TU needs that aren't done yet
                       #   (--list shows what must be declared — the part that matters
                       #   under the compile-only gate; defs are for the future link)
@@ -130,6 +137,87 @@ The default count lives in `progress/review.config.json` (`batch.default_tus_per
 **CRITICAL:** When running a combined review pass, you must spawn **exactly ONE** subagent
 total for the entire batch (or run the review CLI sequentially in a single command), passing
 all review packets to it, rather than spawning one subagent per translation unit or per function.
+
+## Coordination server (optional; access via a worker id)
+
+By **default you work locally** — the ledger and git are the only state, exactly like a
+solo workflow. Nothing here is required. The work server is an **opt-in** layer the
+maintainer runs. Access is gated by a **server-issued worker id**, not by the URL: the URL
+can be shared freely; without a valid id you can't claim or submit on the server. If you
+have no id, ignore this section and just `work claim` / `work submit` locally.
+
+**If the maintainer gave you a worker id**, put it (and the URL) in `.env` (config lives
+there, not shell exports):
+
+```
+cp .env.example .env        # set WORK_SERVER to the URL, WORK_AGENT to your issued id
+```
+
+`work` loads `.env` automatically (a real shell environment variable overrides it). `.env`
+is git-ignored; only `.env.example` is committed. Keys:
+
+- `WORK_SERVER` — the server URL. **Unset/blank = local mode (the default).** Setting it
+  is what turns coordination on. It does not need to be secret — the id is the gate.
+- `WORK_AGENT` — **your worker id** (the token the maintainer minted). Sent as the
+  `X-Work-Token` header; the server links it to your username and records the username as
+  owner — the id itself is never stored or shown. Offline it is just the local owner label.
+- `WORK_LEASE_SECONDS` — claim lease length (default 7200).
+
+There is **no separate admin token** — admin is a role on a worker id. Token enforcement
+is **on by default** (the server runs with `BP_WORK_REQUIRE_TOKEN=1`; set it to `0` only
+for a fully private/trusted deployment).
+
+**Maintainer — managing worker ids.** Bootstrap the first admin on the server host with
+the direct-DB CLI (no existing admin needed):
+
+```
+bp-work-server worker add "Adriwin" --admin    # prints WORK_AGENT=… ; this id is admin
+bp-work-server worker list
+bp-work-server worker revoke <id>
+```
+
+Once you hold an admin id (set as your `WORK_AGENT`), you can manage ids over HTTP too:
+
+```
+work worker-add "Alice"           # mint a regular id for Alice
+work worker-add "Bob" --admin     # mint another admin
+work worker-list                  # ids, usernames, roles, last-seen
+work worker-revoke <id>           # disable an id
+```
+
+With a server configured, claims are deconflicted centrally so you never duplicate
+someone else's in-flight TU, and there are **two state stores with different lifetimes**:
+
+- **Durable layer — git (`progress/status.json`).** The `done`/`blocked` states tied to
+  committed code. It is the seed for both the server (`/admin/sync`) and a fresh
+  `work bootstrap`. In server mode the CLI writes **only** these durable states to
+  `status.json` — never `owner` or transient `in_progress`/`compiled` — so concurrent
+  agents don't collide on the same file. Keep committing it. (Locally, `status.json`
+  keeps its full mirror as before.)
+- **Live layer — server DB.** Claims, leases, `owner`, transient statuses, and the event
+  log. Ephemeral; never committed.
+
+**Checking out work:** `work claim <tu> ...` claims those specific TUs; `work claim -n N`
+(no id) claims the next N ready ones from the queue. With a server every claim is atomic
+across everyone — two agents pulling the queue at once get *different* TUs, and a specific
+TU already held by someone else is refused (reported, not stolen) — and leases auto-expire,
+so if you claim more than you finish the rest return to `todo`. Without a server it claims
+locally. `work next` only previews (reserves nothing). `work start <tu>` is the older alias
+for claiming one TU and also prints its dossier.
+
+**Reverting everything** (the post-server equivalent of "git reset + delete the db"):
+
+```
+work server-reset --to <good-ref>   # git-resets repo + b5-decomp, drops the local
+                                    #   ledger cache, reseeds the server (reset=true)
+```
+
+`reset=true` discards live claims and the server event log (claims are ephemeral; event
+history is not recoverable) — it is the deliberate clean-slate path. Omit `--to` to keep
+the working tree and only drop the cache + reseed. Then `work bootstrap` to rebuild the
+local ledger. **Without a server configured**, `work server-reset` just does the local
+half (git reset + drop the ledger cache) — the same revert you did before the server
+existed.
 
 ## Verification (what `submit` / `review` expect)
 

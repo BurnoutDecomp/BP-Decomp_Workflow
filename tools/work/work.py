@@ -19,13 +19,27 @@ Commands:
                               (restricted to the active goal's TUs, if one is set)
     work show <tu>            dossier for a TU (functions, signatures, deps)
     work start <tu>           claim a TU (todo -> in_progress)
+    work claim [<tu>...|-n N]  claim specific TU id(s), or the next N ready ones if none
     work submit <tu>          mark a TU reconstructed (compile/review gates: Phase 3)
     work block <tu> "reason"  mark blocked; work unblock <tu> to clear
     work set <tu> --status S  manual status override
+    work server-reset [--to REF]
+                              full revert: git reset + drop ledger cache + reseed server
+    work worker-add <name> | worker-list | worker-revoke <id>   (maintainer) manage ids
+
+Coordination is OPTIONAL. By default `work` runs fully locally (ledger + git). To use the
+server, put config in a repo-root `.env` (copy `.env.example`, auto-loaded here): set
+WORK_SERVER + WORK_AGENT. WORK_AGENT is a server-issued worker id (the maintainer mints it
+with `work worker-add`); it is sent as the X-Work-Token header and the server records the
+linked username as owner. Access is gated by the id, so the URL need not be secret. With a
+server set, it owns the live-claim layer (claims/leases/owner) so concurrent agents never
+duplicate work, and `status.json` records only the durable done/blocked states; unset,
+everything behaves exactly as the pre-server local workflow. Pick up work with `work claim`.
 
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
 import argparse, json, os, re, sqlite3, subprocess, sys, time
+import ssl
 import urllib.error, urllib.parse, urllib.request
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -45,6 +59,27 @@ GOALS_JSON = os.path.join(ROOT, "progress", "goals.json")
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 
 TU_STATUS = ("todo", "in_progress", "compiled", "done", "blocked")
+
+
+def load_dotenv(path=None):
+    """Load repo-root `.env` into the environment so coordination config
+    (WORK_SERVER / WORK_AGENT / WORK_LEASE_SECONDS) lives in a file, not shell exports.
+    A real environment variable always wins over `.env`."""
+    path = path or os.path.join(ROOT, ".env")
+    if not os.path.exists(path):
+        return
+    for raw in open(path, encoding="utf-8"):
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        if key:
+            os.environ.setdefault(key, val)
+
+
+load_dotenv()
 WORK_SERVER = os.environ.get("WORK_SERVER")
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS tu(
@@ -96,12 +131,25 @@ def server_request(method, path, payload=None, query=None):
         path += "?" + urllib.parse.urlencode(query)
     data = None
     headers = {"Accept": "application/json"}
+    token = os.environ.get("WORK_AGENT")
+    if token:
+        # WORK_AGENT carries the server-issued worker id; the server resolves it to a
+        # username and records that as owner (the id itself is never stored/logged).
+        # Admin endpoints additionally require the id to carry the admin role server-side.
+        headers["X-Work-Token"] = token
     if payload is not None:
         data = json.dumps(payload).encode("utf-8")
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(base + path, data=data, headers=headers, method=method)
+    context = None
+    if base.startswith("https://"):
+        try:
+            import certifi  # type: ignore
+            context = ssl.create_default_context(cafile=certifi.where())
+        except Exception:
+            context = None
     try:
-        with urllib.request.urlopen(req, timeout=30) as res:
+        with urllib.request.urlopen(req, timeout=30, context=context) as res:
             body = res.read()
             return json.loads(body.decode("utf-8")) if body else None
     except urllib.error.HTTPError as e:
@@ -194,10 +242,20 @@ def cmd_seed(args):
 
 # ---------------------------------------------------------------- committed mirrors
 def sync_status(con):
-    """Write the mutable progress (non-default rows only) to the committed status.json."""
+    """Write the mutable progress (non-default rows only) to the committed status.json.
+
+    In server mode the live-claim layer (in_progress/compiled + owner) belongs to the
+    work server, not git — so we persist only the DURABLE statuses (done/blocked, the
+    ones tied to committed code and used as the server/bootstrap seed) and never the
+    transient owner. This keeps status.json low-churn and merge-friendly when several
+    agents work concurrently. Off-server it stays the full mirror as before."""
+    durable = server_enabled()
     tu = {}
     for r in con.execute("SELECT id,status,owner,notes FROM tu WHERE status!='todo'"):
-        tu[r["id"]] = {k: r[k] for k in ("status", "owner", "notes") if r[k]}
+        if durable and r["status"] not in ("done", "blocked"):
+            continue
+        keys = ("status", "notes") if durable else ("status", "owner", "notes")
+        tu[r["id"]] = {k: r[k] for k in keys if r[k]}
     fn = {}
     for r in con.execute("SELECT name,status,verify_tier,attempts FROM func "
                          "WHERE status!='todo' OR verify_tier!=0 OR attempts!=0"):
@@ -289,6 +347,31 @@ def build_deps(con, identity):
 
 # ---------------------------------------------------------------- status
 def cmd_status(args):
+    if server_enabled():
+        data = server_request("GET", "/dashboard/state") or {}
+        counts = data.get("counts") or {}
+        totals = data.get("totals") or {}
+        print("translation units:")
+        for status_name in TU_STATUS:
+            count = int(counts.get(status_name) or 0)
+            if count:
+                print(f"  {status_name:12s} {count}")
+        total = int(totals.get("tus") or sum(int(counts.get(s) or 0) for s in TU_STATUS))
+        done = int(totals.get("done_tus") or counts.get("done") or 0)
+        print(f"  {'TOTAL':12s} {total}   ({100*done//max(total,1)}% done)")
+        print("functions:")
+        funcs = int(totals.get("funcs") or 0)
+        done_funcs = int(totals.get("done_funcs") or 0)
+        if funcs:
+            print(f"  done-in-done-TUs {done_funcs}")
+            print(f"  TOTAL        {funcs}   ({100*done_funcs//max(funcs,1)}% done)")
+        else:
+            print("  unavailable from server")
+        active_goal = data.get("active_goal")
+        if active_goal:
+            print(f"active goal: {active_goal}")
+        return
+
     con = connect()
     print("translation units:")
     for r in con.execute("SELECT status,COUNT(*) c FROM tu GROUP BY status ORDER BY c DESC"):
@@ -577,6 +660,38 @@ def save_goals(goals):
     json.dump(goals, open(GOALS_JSON, "w", encoding="utf-8"), indent=1)
 
 
+def ranked_todo(con, n=None):
+    """Leaf-first ranked `todo` TUs, scoped to the active goal if one is set.
+    Returns dicts with id/source/n_funcs/unresolved. Mirrors `work next`'s offline
+    ranking; used by `work claim` when the work server is not configured."""
+    has_deps = con.execute("SELECT COUNT(*) FROM tu_dep").fetchone()[0] > 0
+    _gname, gset = active_goal_set(con)
+    if has_deps:
+        q = """
+        SELECT t.id, t.source, t.n_funcs, t.dest_path,
+          (SELECT COUNT(*) FROM tu_dep d JOIN tu dt ON dt.id=d.dep_id
+            WHERE d.tu_id=t.id AND dt.status NOT IN ('done')) AS unresolved
+        FROM tu t WHERE t.status='todo'
+        ORDER BY unresolved ASC, (t.source='decfigs') DESC, t.n_funcs ASC"""
+    else:
+        q = """SELECT t.id,t.source,t.n_funcs,t.dest_path, NULL AS unresolved
+        FROM tu t WHERE t.status='todo'
+        ORDER BY (t.source='decfigs') DESC, t.n_funcs ASC"""
+    ranked = [dict(r) for r in con.execute(q).fetchall()]
+    if gset is not None:
+        status = {r["id"]: r["status"] for r in con.execute("SELECT id,status FROM tu")}
+        ranked = [r for r in ranked if r["id"] in gset]
+        if has_deps:
+            deps = defaultdict(set)
+            for d in con.execute("SELECT tu_id, dep_id FROM tu_dep"):
+                deps[d["tu_id"]].add(d["dep_id"])
+            for r in ranked:
+                r["unresolved"] = sum(1 for x in deps.get(r["id"], ())
+                                      if x in gset and status.get(x) != "done")
+            ranked.sort(key=lambda r: (r["unresolved"], r["source"] != "decfigs", r["n_funcs"]))
+    return ranked[:n] if n else ranked
+
+
 # ---------------------------------------------------------------- next
 def cmd_next(args):
     if server_enabled():
@@ -720,6 +835,69 @@ def cmd_start(args):
     set_tu(con, args.tu, "in_progress", owner=agent)
     print(f"started {args.tu}")
     cmd_show(args)
+
+
+def cmd_claim(args):
+    """Claim work and pick it up. Give one or more TU ids to claim those specific TUs;
+    give none to claim the next N ready ones from the ranked queue. In server mode each
+    claim is atomic on the work server (a specific TU that someone else holds is rejected;
+    the next-N path hands concurrent agents distinct work). Leases auto-expire, so
+    over-claiming self-heals. Offline it claims in the local ledger."""
+    con = connect()
+    agent = server_agent()
+    lease = int(os.environ.get("WORK_LEASE_SECONDS", "7200"))
+
+    # explicit TU id(s): claim exactly those
+    if args.tu:
+        claimed = []
+        for tu in args.tu:
+            if not con.execute("SELECT 1 FROM tu WHERE id=?", (tu,)).fetchone():
+                sys.exit(f"unknown TU: {tu!r}")
+            if server_enabled():
+                res = server_request("POST", "/claims", {
+                    "tu": tu, "agent": agent, "lease_seconds": lease,
+                }) or {}
+                if not res.get("claimed"):
+                    print(f"  SKIP {tu}: server did not claim it "
+                          f"(status={res.get('status')}, owner={res.get('owner')})")
+                    continue
+            set_tu(con, tu, "in_progress", owner=agent)
+            claimed.append(tu)
+        if not claimed:
+            sys.exit("claimed nothing — all requested TUs were unavailable")
+        print(f"claimed {len(claimed)} TU(s):")
+        for tu in claimed:
+            print(f"  {tu}")
+        return
+
+    # no id: claim the next N from the queue
+    if server_enabled():
+        res = server_request("POST", "/claims/next", {
+            "agent": agent, "n": args.n, "lease_seconds": lease,
+        }) or {}
+        claimed = res.get("claimed") or []
+        if not claimed:
+            print("no todo TUs available to claim on the work server")
+            return
+        gname = res.get("active_goal")
+        if gname:
+            print(f"[server goal: {gname}]")
+        for c in claimed:
+            set_tu(con, c["tu"], "in_progress", owner=agent)
+        print(f"claimed {len(claimed)} TU(s):")
+        for c in claimed:
+            print(f"  {c['tu']}")
+        return
+    # offline: rank like `work next`, then claim in the local ledger
+    rows = ranked_todo(con, args.n)
+    if not rows:
+        print("no todo TUs to claim — run `work status`")
+        return
+    for r in rows:
+        set_tu(con, r["id"], "in_progress", owner=agent)
+    print(f"claimed {len(rows)} TU(s) locally:")
+    for r in rows:
+        print(f"  {r['id']}")
 
 
 def resolve_files(con, tu, explicit):
@@ -873,6 +1051,79 @@ def cmd_set(args):
     con = connect()
     set_tu(con, args.tu, args.status, notes=args.note)
     print(f"{args.tu} -> {args.status}")
+
+
+def cmd_server_reset(args):
+    """Full revert across the new two-store world: optionally git-reset the workflow
+    repo + b5-decomp to a known-good ref, drop the local ledger cache, then re-seed the
+    work server from the (reverted) committed status.json. This is the post-server
+    equivalent of the old "git reset + delete the db" flow.
+
+    Note: the server reseed uses reset=true, which discards live claims AND the server
+    event log. Live claims are ephemeral by design (leases auto-expire); event history
+    is not recoverable, so this is the clean-slate path."""
+    if args.to:
+        print(f"== git reset --hard {args.to} (workflow repo) ==")
+        subprocess.run(["git", "reset", "--hard", args.to], cwd=ROOT, check=True)
+        print("== resetting b5-decomp submodule to the recorded commit ==")
+        subprocess.run(["git", "submodule", "update", "--init", "--", "b5-decomp"], cwd=ROOT)
+    # drop the git-ignored local ledger cache; rebuilt by `work bootstrap`/`work seed`
+    removed = False
+    for p in (DB, DB + "-wal", DB + "-shm"):
+        if os.path.exists(p):
+            os.remove(p)
+            removed = True
+    if removed:
+        print(f"removed local ledger cache ({os.path.basename(DB)} + WAL)")
+    if not server_enabled():
+        print("WORK_SERVER not set — local revert only; skipped server reseed.")
+        print("rebuild the local ledger with: work bootstrap")
+        return
+    print("== re-seeding work server (reset=true: discards live claims + event log) ==")
+    res = server_request("POST", "/admin/sync", {"reset": True})
+    print(f"server reseeded from git: {res}")
+    print("rebuild the local ledger with: work bootstrap")
+
+
+def cmd_worker_add(args):
+    """(Admin) Mint a server-side worker id bound to a username. Requires WORK_SERVER and
+    your own WORK_AGENT to be an *admin* id. Use --admin to grant the new id the admin
+    role too. The printed id is what the user puts in their `.env` as WORK_AGENT.
+    (Bootstrap the very first admin with `bp-work-server worker add <name> --admin` on the
+    server host — that path talks to the DB directly and needs no existing admin.)"""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set — point it at your server first")
+    res = server_request("POST", "/admin/workers",
+                         {"username": args.username, "is_admin": bool(args.admin)}) or {}
+    role = "admin" if res.get("is_admin") else "user"
+    print(f"created {role} worker for {res.get('username')!r}:")
+    print(f"  WORK_AGENT={res.get('token')}")
+    print("\ngive this id to the user privately; they set it as WORK_AGENT in their .env.")
+    print("the server links the id to the username and records the username as owner.")
+
+
+def cmd_worker_list(args):
+    """(Maintainer) List server workers (ids, usernames, last-seen)."""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set")
+    res = server_request("GET", "/admin/workers") or {}
+    workers = res.get("workers") or []
+    if not workers:
+        print("no workers registered")
+        return
+    for w in workers:
+        state = "active " if w.get("active") else "revoked"
+        role = "admin" if w.get("is_admin") else "user "
+        print(f"  [{state}|{role}] {(w.get('username') or ''):24s} {w.get('token')}  "
+              f"last_seen={w.get('last_seen')}")
+
+
+def cmd_worker_revoke(args):
+    """(Maintainer) Revoke a worker id so it can no longer claim/submit."""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set")
+    server_request("DELETE", f"/admin/workers/{urllib.parse.quote(args.token, safe='')}")
+    print(f"revoked {args.token}")
 
 
 def cmd_parity(args):
@@ -1099,6 +1350,10 @@ def main():
     sh.add_argument("-o", "--out", help="write dossier to a file instead of stdout")
     sh.set_defaults(fn=cmd_show)
     st = sub.add_parser("start"); st.add_argument("tu"); st.set_defaults(fn=cmd_start)
+    cl = sub.add_parser("claim", help="claim specific TU id(s), or the next N ready ones if none given")
+    cl.add_argument("tu", nargs="*", help="TU id(s) to claim; omit to claim the next N from the queue")
+    cl.add_argument("-n", type=int, default=1, help="how many to claim when no TU id is given")
+    cl.set_defaults(fn=cmd_claim)
     su = sub.add_parser("submit"); su.add_argument("tu"); su.add_argument("--note")
     su.add_argument("--files", nargs="*", help="explicit .cpp paths to compile (else the TU's recorded dest_path)")
     su.set_defaults(fn=cmd_submit)
@@ -1117,6 +1372,16 @@ def main():
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
     se = sub.add_parser("set"); se.add_argument("tu"); se.add_argument("--status", required=True); se.add_argument("--note"); se.set_defaults(fn=cmd_set)
+    srv = sub.add_parser("server-reset", help="full revert: git reset + drop ledger cache + reseed work server")
+    srv.add_argument("--to", help="git ref to hard-reset the workflow repo + b5-decomp to (omit to keep current tree)")
+    srv.set_defaults(fn=cmd_server_reset)
+    wadd = sub.add_parser("worker-add", help="(admin) mint a server worker id for a username")
+    wadd.add_argument("username"); wadd.add_argument("--admin", action="store_true", help="grant admin role")
+    wadd.set_defaults(fn=cmd_worker_add)
+    wls = sub.add_parser("worker-list", help="(maintainer) list server worker ids")
+    wls.set_defaults(fn=cmd_worker_list)
+    wrev = sub.add_parser("worker-revoke", help="(maintainer) revoke a server worker id")
+    wrev.add_argument("token"); wrev.set_defaults(fn=cmd_worker_revoke)
 
     args = ap.parse_args()
     args.fn(args)
