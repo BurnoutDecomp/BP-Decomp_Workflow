@@ -39,6 +39,7 @@ everything behaves exactly as the pre-server local workflow. Pick up work with `
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
 import argparse, json, os, re, sqlite3, subprocess, sys, time
+import ssl
 import urllib.error, urllib.parse, urllib.request
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -140,8 +141,15 @@ def server_request(method, path, payload=None, query=None):
         data = json.dumps(payload).encode("utf-8")
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(base + path, data=data, headers=headers, method=method)
+    context = None
+    if base.startswith("https://"):
+        try:
+            import certifi  # type: ignore
+            context = ssl.create_default_context(cafile=certifi.where())
+        except Exception:
+            context = None
     try:
-        with urllib.request.urlopen(req, timeout=30) as res:
+        with urllib.request.urlopen(req, timeout=30, context=context) as res:
             body = res.read()
             return json.loads(body.decode("utf-8")) if body else None
     except urllib.error.HTTPError as e:
@@ -325,6 +333,31 @@ def build_deps(con, identity):
 
 # ---------------------------------------------------------------- status
 def cmd_status(args):
+    if server_enabled():
+        data = server_request("GET", "/dashboard/state") or {}
+        counts = data.get("counts") or {}
+        totals = data.get("totals") or {}
+        print("translation units:")
+        for status_name in TU_STATUS:
+            count = int(counts.get(status_name) or 0)
+            if count:
+                print(f"  {status_name:12s} {count}")
+        total = int(totals.get("tus") or sum(int(counts.get(s) or 0) for s in TU_STATUS))
+        done = int(totals.get("done_tus") or counts.get("done") or 0)
+        print(f"  {'TOTAL':12s} {total}   ({100*done//max(total,1)}% done)")
+        print("functions:")
+        funcs = int(totals.get("funcs") or 0)
+        done_funcs = int(totals.get("done_funcs") or 0)
+        if funcs:
+            print(f"  done-in-done-TUs {done_funcs}")
+            print(f"  TOTAL        {funcs}   ({100*done_funcs//max(funcs,1)}% done)")
+        else:
+            print("  unavailable from server")
+        active_goal = data.get("active_goal")
+        if active_goal:
+            print(f"active goal: {active_goal}")
+        return
+
     con = connect()
     print("translation units:")
     for r in con.execute("SELECT status,COUNT(*) c FROM tu GROUP BY status ORDER BY c DESC"):
