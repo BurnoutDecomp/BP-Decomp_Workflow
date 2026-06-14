@@ -56,6 +56,74 @@ PRIM = {
 
 ARR = re.compile(r"^(.*?)\s*\[(\d+)\]$")
 
+# The PDB exposes the resource family only as template instantiations
+# (rw::BaseResources<4>, rw::BaseResourceDescriptors<4>) whose '<4>' is not a legal
+# identifier chain, so the data-driven emitter skipped them and fell back to opaque
+# 32-byte blobs. Emit a faithful, hand-maintained prelude (the templates + the
+# concrete Resource/ResourceDescriptor + the shared BaseResourceDescriptor) at the
+# top of the rw namespace instead, and skip the emitter's opaque bodies for them.
+# Keeping the bases as templates lets the X360 build's 5-entry serialised descriptor
+# be spelled rw::BaseResourceDescriptors<5> from the same vocabulary (see
+# CgsResource::ResourceDescriptor in CgsResourceType.h).
+RESOURCE_FAMILY_PRELUDE = """\
+// --- Resource family (hand-maintained; see gen_rwcore_headers.py) ----------
+// The PDB exposes these as template instantiations the data-driven emitter
+// cannot name. Layout-faithful to rwcore.pdb (x64):
+//   rw::BaseResourceDescriptor        sizeof =  8  { uint m_size; uint m_alignment; }
+//   rw::BaseResources<4>              sizeof = 32  { void* m_baseResources[4]; }
+//   rw::BaseResourceDescriptors<4>    sizeof = 32  { BaseResourceDescriptor[4]; }
+//   rw::Resource           : BaseResources<4>
+//   rw::ResourceDescriptor : BaseResourceDescriptors<4>
+// CROSS-BUILD DRIFT: the X360 game build instantiates the *serialised* resource
+// descriptor with FIVE entries (rw::BaseResourceDescriptors<5>, 40B); PC rwcore
+// uses <4> (32B). The X360 form is spelled rw::BaseResourceDescriptors<5> (see
+// CgsResource::ResourceDescriptor in CgsResourceType.h).
+struct BaseResourceDescriptor {  // sizeof = 8 (rwcore.pdb, x64)
+    uint32_t m_size;       // +0
+    uint32_t m_alignment;  // +4
+};
+RW_SIZE_ASSERT(rw::BaseResourceDescriptor, 8);
+
+template <uint32_t Count>
+struct BaseResources {
+    void* m_baseResources[Count];
+};
+
+template <uint32_t Count>
+struct BaseResourceDescriptors {
+    BaseResourceDescriptor m_baseResourceDescriptors[Count];
+
+    // RenderWare accumulates each sub-allocation's requirement: round this entry's
+    // running size up to the other's alignment, widen to the larger alignment, then
+    // add the other's size. (Real caller lives in rwcore.lib's allocators.)
+    BaseResourceDescriptors& operator+=(const BaseResourceDescriptors& lOther)
+    {
+        for (uint32_t luIndex = 0; luIndex < Count; ++luIndex)
+        {
+            BaseResourceDescriptor& lDescriptor = m_baseResourceDescriptors[luIndex];
+            const BaseResourceDescriptor& lOtherDescriptor = lOther.m_baseResourceDescriptors[luIndex];
+            if (lOtherDescriptor.m_alignment > 1)
+                lDescriptor.m_size = (lOtherDescriptor.m_alignment - 1 + lDescriptor.m_size) & ~(lOtherDescriptor.m_alignment - 1);
+            if (lDescriptor.m_alignment < lOtherDescriptor.m_alignment)
+                lDescriptor.m_alignment = lOtherDescriptor.m_alignment;
+            lDescriptor.m_size += lOtherDescriptor.m_size;
+        }
+        return *this;
+    }
+};
+
+struct Resource : public BaseResources<4> {};
+RW_SIZE_ASSERT(rw::Resource, 32);
+
+struct ResourceDescriptor : public BaseResourceDescriptors<4> {};
+RW_SIZE_ASSERT(rw::ResourceDescriptor, 32);
+// --------------------------------------------------------------------------""".splitlines()
+
+# Names provided by RESOURCE_FAMILY_PRELUDE: keep them in `emitted` (so by-value
+# references such as LinearResourceAllocator::m_heapResource / m_heapCapacity still
+# resolve) but skip the emitter's opaque-blob bodies for them.
+SKIP_EMIT_BODY = {"rw::Resource", "rw::ResourceDescriptor", "rw::BaseResourceDescriptor"}
+
 
 def load():
     structs = json.loads((EXPORT / "_structs.json").read_text())
@@ -260,11 +328,20 @@ def gen_structs(structs, vtable_for):
          "#endif",
          ""]
     prev = ""
+    prelude_done = False
     for name in order:
         open_ns(prev, name, L)
+        prev = name
+        # Inject the hand-maintained resource family at the top of the first
+        # top-level `rw` block (before any struct that embeds rw::Resource).
+        if not prelude_done and name.startswith("rw::") and name.count("::") == 1:
+            L.append("")
+            L.extend(RESOURCE_FAMILY_PRELUDE)
+            prelude_done = True
+        if name in SKIP_EMIT_BODY:
+            continue
         L.append("")
         L.extend(emit_struct(name, structs[name], emitted, vtable_for))
-        prev = name
     open_ns(prev, "", L)
     L.append("")
     L.append("#undef RW_SIZE_ASSERT")
