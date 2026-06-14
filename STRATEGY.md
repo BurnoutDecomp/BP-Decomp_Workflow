@@ -28,7 +28,7 @@ Two tiers, decided by how richly each is symbolized (measured, not assumed):
 | `DecFIGS_Burnout_Internal_PS3.ELF` | ~90% | **File/line attribution plus declaration/type hints** (DWARF) — tells us which original `.cpp` each function belongs to and provides C++-shaped declarations, enums, member names, globals, and locals for reconstruction. |
 | `BurnoutPR.exe` (BPR) | ~0% | PC reference, **stripped**. Consulted per-function for platform layers only. Partially hand-RE'd. |
 | `TUB_Burnout_PC_External.exe` | ~6% | PC reference, **stripped**. Same opportunistic role as BPR. |
-| `rwcore_master.obj` | 100% | RenderWare type ground truth. |
+| `rwcore_master.obj` + `rwcore.pdb` | 100% | RenderWare type ground truth. PDB → `rw::` vocab via [`tools/gen_rwcore_headers.py`](tools/gen_rwcore_headers.py); extract layouts with `llvm-pdbutil`. |
 
 The three **symbolized console builds join by name**. The two **stripped PC builds
 are never the spine** — they are a lookup tool the agent reaches for mid-
@@ -92,7 +92,15 @@ and member placement, and Feb-2007 leaked source wins where it overlaps.
 **Ordering:** leaf-first (callees before callers) is the *quality* preference — a
 caller reconstructed after its callees sees real signatures and recovered types.
 It is **not** a correctness requirement (see stubs below), so any ready TU may be
-taken; `work next` simply prefers dependency-unblocked ones.
+taken; `work next` simply prefers dependency-unblocked ones. **Caveat:** the dependency
+graph is built from xrefs (calls/data refs), so it does **not** reliably capture C++
+*inheritance* (`B : A`) or *by-value containment* (`struct B { A a; }`) — both of which
+need the other type's complete header first (the base's virtuals are the override
+signatures). Reconstruct a **base/contained type before the classes that use it**.
+Inheritance edges are now built from the DecFIGS dwarfdump by
+[`tools/work/build_type_deps.py`](tools/work/build_type_deps.py) (folded into
+`work seed --deps`), so the base ranks first; by-value-containment edges remain a future
+addition.
 
 ## The stub scaffold — and its honest C++ caveat
 
@@ -151,6 +159,14 @@ If `work next` or the user assigns an agent a TU belonging to a vendor SDK, the 
 first run `python tools/work/check_vendor_lib.py <tu_name>`.
 - If the script outputs **PRESENT**: The agent must skip it and block it in the ledger (`work block <tu> "Vendor code; exists in PC lib or vendor source."`).
 - If the script outputs **MISSING**: The agent must decompile it from the console builds, as no PC equivalent exists.
+
+**Types vs bodies.** "PRESENT → skip" applies to an SDK's **function bodies** (we link the
+PC lib). Its **types** are still recovered on demand: the `rw::` vocabulary in
+[`b5-decomp/vendor/renderware/`](b5-decomp/vendor/renderware/) is generated from
+`rwcore.pdb` (x64) by [`tools/gen_rwcore_headers.py`](tools/gen_rwcore_headers.py), and
+handlers use those real types instead of opaque blobs / offset-pokes. The PDB is the x64
+PC build, so it is the right layout for our compile; X360 differences are modelled as
+explicit deltas on that baseline (see AGENTS.md, "`rw::` types come from `rwcore.pdb`").
 
 ## Verification (reconstruction target — two tiers, both local)
 
