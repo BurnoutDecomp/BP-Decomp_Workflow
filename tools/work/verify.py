@@ -12,7 +12,7 @@ Two tiers, per STRATEGY.md (reconstruction target):
 The gate is configured by progress/verify.config.json. If the MSVC environment is
 absent it returns ('skip', reason) so the loop still works.
 """
-import json, os, shutil, subprocess, tempfile
+import json, os, re, shutil, subprocess, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 CONFIG = os.path.join(ROOT, "progress", "verify.config.json")
@@ -78,6 +78,7 @@ def reviewer_packet(con, tu_row, funcs, files):
     os.makedirs(REVIEWS, exist_ok=True)
     tu = tu_row["id"]
     safe = tu.replace("/", "__").replace(":", "_").replace("\\", "__")
+    safe = re.sub(r'[<>:"/\\|?*]', "_", safe)
     path = os.path.join(REVIEWS, safe + ".md")
 
     body = dossier.assemble(con, tu_row, funcs, with_asm=False)
