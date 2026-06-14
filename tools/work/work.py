@@ -25,14 +25,16 @@ Commands:
     work set <tu> --status S  manual status override
     work server-reset [--to REF]
                               full revert: git reset + drop ledger cache + reseed server
+    work worker-add <name> | worker-list | worker-revoke <id>   (maintainer) manage ids
 
-Coordination is OPTIONAL and invite-only. By default `work` runs fully locally (ledger +
-git). If the maintainer gave you a server URL, put it in a repo-root `.env` (copy
-`.env.example`, auto-loaded here): set WORK_SERVER + WORK_AGENT (+ optional
-WORK_ADMIN_TOKEN). With a server set, it owns the live-claim layer (claims/leases/owner)
-so concurrent agents never duplicate work, and `status.json` records only the durable
-done/blocked states; unset, everything behaves exactly as the pre-server local workflow.
-Pick up work with `work claim`.
+Coordination is OPTIONAL. By default `work` runs fully locally (ledger + git). To use the
+server, put config in a repo-root `.env` (copy `.env.example`, auto-loaded here): set
+WORK_SERVER + WORK_AGENT. WORK_AGENT is a server-issued worker id (the maintainer mints it
+with `work worker-add`); it is sent as the X-Work-Token header and the server records the
+linked username as owner. Access is gated by the id, so the URL need not be secret. With a
+server set, it owns the live-claim layer (claims/leases/owner) so concurrent agents never
+duplicate work, and `status.json` records only the durable done/blocked states; unset,
+everything behaves exactly as the pre-server local workflow. Pick up work with `work claim`.
 
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
@@ -60,8 +62,8 @@ TU_STATUS = ("todo", "in_progress", "compiled", "done", "blocked")
 
 def load_dotenv(path=None):
     """Load repo-root `.env` into the environment so coordination config
-    (WORK_SERVER / WORK_AGENT / WORK_ADMIN_TOKEN / WORK_LEASE_SECONDS) lives in a
-    file, not shell exports. A real environment variable always wins over `.env`."""
+    (WORK_SERVER / WORK_AGENT / WORK_LEASE_SECONDS) lives in a file, not shell exports.
+    A real environment variable always wins over `.env`."""
     path = path or os.path.join(ROOT, ".env")
     if not os.path.exists(path):
         return
@@ -128,9 +130,12 @@ def server_request(method, path, payload=None, query=None):
         path += "?" + urllib.parse.urlencode(query)
     data = None
     headers = {"Accept": "application/json"}
-    admin = os.environ.get("WORK_ADMIN_TOKEN")
-    if admin:
-        headers["X-BP-Admin-Token"] = admin
+    token = os.environ.get("WORK_AGENT")
+    if token:
+        # WORK_AGENT carries the server-issued worker id; the server resolves it to a
+        # username and records that as owner (the id itself is never stored/logged).
+        # Admin endpoints additionally require the id to carry the admin role server-side.
+        headers["X-Work-Token"] = token
     if payload is not None:
         data = json.dumps(payload).encode("utf-8")
         headers["Content-Type"] = "application/json"
@@ -1033,6 +1038,47 @@ def cmd_server_reset(args):
     print("rebuild the local ledger with: work bootstrap")
 
 
+def cmd_worker_add(args):
+    """(Admin) Mint a server-side worker id bound to a username. Requires WORK_SERVER and
+    your own WORK_AGENT to be an *admin* id. Use --admin to grant the new id the admin
+    role too. The printed id is what the user puts in their `.env` as WORK_AGENT.
+    (Bootstrap the very first admin with `bp-work-server worker add <name> --admin` on the
+    server host — that path talks to the DB directly and needs no existing admin.)"""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set — point it at your server first")
+    res = server_request("POST", "/admin/workers",
+                         {"username": args.username, "is_admin": bool(args.admin)}) or {}
+    role = "admin" if res.get("is_admin") else "user"
+    print(f"created {role} worker for {res.get('username')!r}:")
+    print(f"  WORK_AGENT={res.get('token')}")
+    print("\ngive this id to the user privately; they set it as WORK_AGENT in their .env.")
+    print("the server links the id to the username and records the username as owner.")
+
+
+def cmd_worker_list(args):
+    """(Maintainer) List server workers (ids, usernames, last-seen)."""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set")
+    res = server_request("GET", "/admin/workers") or {}
+    workers = res.get("workers") or []
+    if not workers:
+        print("no workers registered")
+        return
+    for w in workers:
+        state = "active " if w.get("active") else "revoked"
+        role = "admin" if w.get("is_admin") else "user "
+        print(f"  [{state}|{role}] {(w.get('username') or ''):24s} {w.get('token')}  "
+              f"last_seen={w.get('last_seen')}")
+
+
+def cmd_worker_revoke(args):
+    """(Maintainer) Revoke a worker id so it can no longer claim/submit."""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set")
+    server_request("DELETE", f"/admin/workers/{urllib.parse.quote(args.token, safe='')}")
+    print(f"revoked {args.token}")
+
+
 def cmd_parity(args):
     """Standalone structural parity check (no LLM, no status change)."""
     import parity
@@ -1282,6 +1328,13 @@ def main():
     srv = sub.add_parser("server-reset", help="full revert: git reset + drop ledger cache + reseed work server")
     srv.add_argument("--to", help="git ref to hard-reset the workflow repo + b5-decomp to (omit to keep current tree)")
     srv.set_defaults(fn=cmd_server_reset)
+    wadd = sub.add_parser("worker-add", help="(admin) mint a server worker id for a username")
+    wadd.add_argument("username"); wadd.add_argument("--admin", action="store_true", help="grant admin role")
+    wadd.set_defaults(fn=cmd_worker_add)
+    wls = sub.add_parser("worker-list", help="(maintainer) list server worker ids")
+    wls.set_defaults(fn=cmd_worker_list)
+    wrev = sub.add_parser("worker-revoke", help="(maintainer) revoke a server worker id")
+    wrev.add_argument("token"); wrev.set_defaults(fn=cmd_worker_revoke)
 
     args = ap.parse_args()
     args.fn(args)

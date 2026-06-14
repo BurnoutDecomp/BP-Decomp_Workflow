@@ -138,29 +138,52 @@ The default count lives in `progress/review.config.json` (`batch.default_tus_per
 total for the entire batch (or run the review CLI sequentially in a single command), passing
 all review packets to it, rather than spawning one subagent per translation unit or per function.
 
-## Coordination server (optional, invite-only)
+## Coordination server (optional; access via a worker id)
 
 By **default you work locally** — the ledger and git are the only state, exactly like a
 solo workflow. Nothing here is required. The work server is an **opt-in** layer the
-maintainer runs and shares privately: only people given the URL coordinate through it. If
-you weren't given a URL, ignore this whole section and just `work claim` / `work submit`
-as normal.
+maintainer runs. Access is gated by a **server-issued worker id**, not by the URL: the URL
+can be shared freely; without a valid id you can't claim or submit on the server. If you
+have no id, ignore this section and just `work claim` / `work submit` locally.
 
-**If you were given a server URL**, put it in `.env` (config lives there, not shell
-exports):
+**If the maintainer gave you a worker id**, put it (and the URL) in `.env` (config lives
+there, not shell exports):
 
 ```
-cp .env.example .env        # then uncomment WORK_SERVER + set it, and set a unique WORK_AGENT
+cp .env.example .env        # set WORK_SERVER to the URL, WORK_AGENT to your issued id
 ```
 
 `work` loads `.env` automatically (a real shell environment variable overrides it). `.env`
 is git-ignored; only `.env.example` is committed. Keys:
 
 - `WORK_SERVER` — the server URL. **Unset/blank = local mode (the default).** Setting it
-  is what turns coordination on.
-- `WORK_AGENT` — your unique id, so the server can attribute claims (only used in server mode).
+  is what turns coordination on. It does not need to be secret — the id is the gate.
+- `WORK_AGENT` — **your worker id** (the token the maintainer minted). Sent as the
+  `X-Work-Token` header; the server links it to your username and records the username as
+  owner — the id itself is never stored or shown. Offline it is just the local owner label.
 - `WORK_LEASE_SECONDS` — claim lease length (default 7200).
-- `WORK_ADMIN_TOKEN` — only for admin ops (`work server-reset`); usually blank.
+
+There is **no separate admin token** — admin is a role on a worker id. Token enforcement
+is **on by default** (the server runs with `BP_WORK_REQUIRE_TOKEN=1`; set it to `0` only
+for a fully private/trusted deployment).
+
+**Maintainer — managing worker ids.** Bootstrap the first admin on the server host with
+the direct-DB CLI (no existing admin needed):
+
+```
+bp-work-server worker add "Adriwin" --admin    # prints WORK_AGENT=… ; this id is admin
+bp-work-server worker list
+bp-work-server worker revoke <id>
+```
+
+Once you hold an admin id (set as your `WORK_AGENT`), you can manage ids over HTTP too:
+
+```
+work worker-add "Alice"           # mint a regular id for Alice
+work worker-add "Bob" --admin     # mint another admin
+work worker-list                  # ids, usernames, roles, last-seen
+work worker-revoke <id>           # disable an id
+```
 
 With a server configured, claims are deconflicted centrally so you never duplicate
 someone else's in-flight TU, and there are **two state stores with different lifetimes**:
