@@ -65,11 +65,10 @@ To extract raw line info from the DecFIGS database, run `idat.exe` headlessly wi
 python tools/build_source_tree.py
 ```
 
-The optional/local `references/DecFIGS/dwarfdump/` tree is the companion
-DWARF-derived declaration/type hint dump. It is consumed by `work/dossier.py` and
-included in `work show <tu> --full` / reviewer packets for matching DecFIGS-backed
-TUs when present. Keep it in sync with the same DecFIGS ELF/IDB when regenerating
-DecFIGS artifacts.
+The `references/DecFIGS/dwarfdump/` tree is the companion DWARF-derived
+declaration/type hint dump. It is consumed by `work/dossier.py` and included in
+`work show <tu> --full` / reviewer packets for matching DecFIGS-backed TUs. Keep
+it in sync with the same DecFIGS ELF/IDB when regenerating DecFIGS artifacts.
 
 ### Regenerate RenderWare type headers:
 

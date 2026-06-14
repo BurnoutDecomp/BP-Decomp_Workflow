@@ -83,12 +83,11 @@ The TU index marks each unit's `source` (`decfigs` vs `class`) so confidence is
 explicit. A `class`-sourced TU may later be re-partitioned if file evidence appears.
 
 For DecFIGS-backed TUs, `references/DecFIGS/dwarfdump/` is also part of the
-reconstruction dossier when that local tree is present. It is DWARF-derived,
-C++-shaped reference material: use it for declaration structure, enum values,
-member names/types, globals, function signatures, and local-variable hints. It is
-not complete implementation source and not offset authority; X360 pseudocode/asm
-remains the source of truth for behavior and member placement, and LegacySrc reference
-source wins where it overlaps.
+reconstruction dossier. It is DWARF-derived, C++-shaped reference material: use it
+for declaration structure, enum values, member names/types, globals, function
+signatures, and local-variable hints. It is not complete implementation source and
+not offset authority; X360 pseudocode/asm remains the source of truth for behavior
+and member placement, and the LegacySrc reference wins where it overlaps.
 
 **Ordering:** leaf-first (callees before callers) is the *quality* preference — a
 caller reconstructed after its callees sees real signatures and recovered types.
