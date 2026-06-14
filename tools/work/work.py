@@ -26,6 +26,7 @@ Commands:
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
 import argparse, json, os, re, sqlite3, subprocess, sys, time
+import urllib.error, urllib.parse, urllib.request
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
@@ -44,6 +45,7 @@ GOALS_JSON = os.path.join(ROOT, "progress", "goals.json")
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 
 TU_STATUS = ("todo", "in_progress", "compiled", "done", "blocked")
+WORK_SERVER = os.environ.get("WORK_SERVER")
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS tu(
   id TEXT PRIMARY KEY, source TEXT, status TEXT DEFAULT 'todo',
@@ -76,6 +78,41 @@ def connect():
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA journal_mode=WAL")
     return con
+
+
+def server_enabled():
+    return bool(WORK_SERVER)
+
+
+def server_agent():
+    return os.environ.get("WORK_AGENT", "agent")
+
+
+def server_request(method, path, payload=None, query=None):
+    if not WORK_SERVER:
+        raise RuntimeError("WORK_SERVER is not set")
+    base = WORK_SERVER.rstrip("/")
+    if query:
+        path += "?" + urllib.parse.urlencode(query)
+    data = None
+    headers = {"Accept": "application/json"}
+    if payload is not None:
+        data = json.dumps(payload).encode("utf-8")
+        headers["Content-Type"] = "application/json"
+    req = urllib.request.Request(base + path, data=data, headers=headers, method=method)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as res:
+            body = res.read()
+            return json.loads(body.decode("utf-8")) if body else None
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", errors="replace")
+        sys.exit(f"work server rejected {method} {path}: HTTP {e.code}\n{detail}")
+    except urllib.error.URLError as e:
+        sys.exit(f"work server unavailable ({WORK_SERVER}): {e.reason}")
+
+
+def server_tu_path(tu):
+    return urllib.parse.quote(tu, safe="")
 
 
 def log(con, action, tu_id=None, func=None, detail=None):
@@ -528,6 +565,22 @@ def save_goals(goals):
 
 # ---------------------------------------------------------------- next
 def cmd_next(args):
+    if server_enabled():
+        data = server_request("GET", "/next", query={"n": args.n})
+        gname = data.get("active_goal")
+        if gname:
+            print(f"[server goal: {gname}]")
+        rows = data.get("items") or []
+        if not rows:
+            print("no todo TUs available on the work server")
+            return
+        for r in rows:
+            dep = "" if r.get("unresolved_deps") is None else \
+                f"  unresolved-deps={r.get('unresolved_deps')}"
+            print(f"[{(r.get('source') or 'unknown')[:7]:7s}] "
+                  f"{int(r.get('n_funcs') or 0):4d} fn{dep}  {r.get('id')}")
+        return
+
     con = connect()
     has_deps = con.execute("SELECT COUNT(*) FROM tu_dep").fetchone()[0] > 0
     gname, gset = active_goal_set(con)
@@ -641,7 +694,16 @@ def set_tu(con, tu, status, owner=None, notes=None):
 
 def cmd_start(args):
     con = connect()
-    set_tu(con, args.tu, "in_progress", owner=os.environ.get("WORK_AGENT", "agent"))
+    agent = server_agent()
+    if server_enabled():
+        res = server_request("POST", "/claims", {
+            "tu": args.tu,
+            "agent": agent,
+            "lease_seconds": int(os.environ.get("WORK_LEASE_SECONDS", "7200")),
+        })
+        if not res.get("claimed"):
+            sys.exit(f"server did not claim {args.tu}: {res}")
+    set_tu(con, args.tu, "in_progress", owner=agent)
     print(f"started {args.tu}")
     cmd_show(args)
 
@@ -702,6 +764,12 @@ def cmd_submit(args):
     tier = 1 if status == "pass" else 0
     con.execute("UPDATE func SET status='compiles', verify_tier=?, updated_at=? WHERE tu_id=?", (tier, now(), args.tu))
     set_tu(con, args.tu, "compiled", notes=args.note)
+    if server_enabled():
+        server_request("POST", f"/tu/{server_tu_path(args.tu)}/compiled", {
+            "agent": server_agent(),
+            "notes": args.note,
+            "files": files,
+        })
     if status == "skip":
         print(f"  (gate skipped: {glog.strip()})")
         log(con, "compile_skip", tu_id=args.tu, detail=glog[:200])
@@ -742,11 +810,23 @@ def cmd_review(args):
     if args.verdict == "pass":
         con.execute("UPDATE func SET status='reviewed', verify_tier=2, updated_at=? WHERE tu_id=?", (now(), args.tu))
         set_tu(con, args.tu, "done", notes=args.notes)
+        if server_enabled():
+            server_request("POST", f"/tu/{server_tu_path(args.tu)}/review", {
+                "agent": server_agent(),
+                "verdict": "pass",
+                "notes": args.notes,
+            })
         log(con, "review_pass", tu_id=args.tu, detail=args.notes)
         con.commit()
         print(f"review PASS -> {args.tu} done")
     else:
         set_tu(con, args.tu, "in_progress", notes=args.notes)
+        if server_enabled():
+            server_request("POST", f"/tu/{server_tu_path(args.tu)}/review", {
+                "agent": server_agent(),
+                "verdict": "fail",
+                "notes": args.notes,
+            })
         log(con, "review_fail", tu_id=args.tu, detail=args.notes)
         con.commit()
         print(f"review FAIL -> {args.tu} back to in_progress")
@@ -757,12 +837,21 @@ def cmd_review(args):
 def cmd_block(args):
     con = connect()
     set_tu(con, args.tu, "blocked", notes=args.reason)
+    if server_enabled():
+        server_request("POST", f"/tu/{server_tu_path(args.tu)}/block", {
+            "agent": server_agent(),
+            "reason": args.reason,
+        })
     print(f"blocked {args.tu}: {args.reason}")
 
 
 def cmd_unblock(args):
     con = connect()
     set_tu(con, args.tu, "todo")
+    if server_enabled():
+        server_request("POST", f"/tu/{server_tu_path(args.tu)}/unblock", {
+            "agent": server_agent(),
+        })
     print(f"unblocked {args.tu}")
 
 
