@@ -265,12 +265,26 @@ def build_deps(con, identity):
                 if dtu and dtu != ctu:
                     edges[(ctu, dtu)] += 1
     edge_rows = [[t, d, w] for (t, d), w in edges.items()]
+    # Augment with C++ inheritance edges (base before derived): the call graph
+    # alone misses them, so `next` could schedule a leaf before its shared base.
+    # See tools/work/build_type_deps.py.
+    n_inh = 0
+    try:
+        import build_type_deps
+        index = json.load(open(os.path.join(ROOT, "progress", "tu_index.json"), encoding="utf-8"))
+        inh, _, _ = build_type_deps.compute_inheritance_edges(index)
+        for d, b in inh:
+            if (d, b) not in edges:
+                edge_rows.append([d, b, 1])
+                n_inh += 1
+    except Exception as e:
+        print(f"  (inheritance edges skipped: {e})")
     con.execute("DELETE FROM tu_dep")
     con.executemany("INSERT INTO tu_dep(tu_id,dep_id,weight) VALUES(?,?,?)", edge_rows)
     con.commit()
     # persist the committed mirror so a clone gets leaf-first `next` without IDA
     json.dump(edge_rows, open(TU_DEPS_JSON, "w", encoding="utf-8"))
-    print(f"  {len(edges)} TU->TU dependency edges (mirrored to {os.path.basename(TU_DEPS_JSON)})")
+    print(f"  {len(edges)} call + {n_inh} inheritance TU->TU edges (mirrored to {os.path.basename(TU_DEPS_JSON)})")
 
 
 # ---------------------------------------------------------------- status
