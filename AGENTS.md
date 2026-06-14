@@ -388,10 +388,10 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   **not calls**, so `work next` (call-graph leaf-first) won't reliably schedule the base
   first — reconstruct it first yourself. (Prevents the trap of building many leaf handlers
   as standalone classes, then retrofitting a shared base like `CgsResource::Type` and
-  re-deriving them all.) Inheritance edges *are* now built from the DecFIGS dwarfdump by
+  re-deriving them all.) Both inheritance **and** by-value containment (`struct B { A a; }`)
+  edges are built from the DecFIGS dwarfdump by
   [`tools/work/build_type_deps.py`](tools/work/build_type_deps.py) and folded into
-  `work seed --deps`, so the base ranks ahead of its derived TUs; by-value-containment
-  edges (`struct B { A a; }`) remain a future addition.
+  `work seed --deps`, so a TU ranks after its base classes and the types it embeds by value.
 - **Port bodies when the reference has them.** When you reconstruct a header and the
   original function **bodies** are available (chiefly `references/Feb-2007/`), port them
   too rather than leaving trap stubs — then **update the ledger** for the functions/TU you
