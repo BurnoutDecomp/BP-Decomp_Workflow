@@ -123,6 +123,25 @@ class `A::B` declared. Therefore:
 Types live in headers (`vendor/renderware/` for `rw::`, plus recovered game type
 headers). Agents extend them; the per-TU compile gate catches conflicts.
 
+**Precedence: reconstruct the real header, don't fake the type.** The trap-stub
+scaffold above is for **function bodies** (link time). It is **not** a licence to
+satisfy a missing *type* with a local stub. When a TU needs a type/function from
+another file, the default is to **reconstruct that file's header at its mirrored
+`b5-decomp/src/…` path and `#include` it** (recovered from `references/Feb-2007/`
+where in scope, else the `references/DecFIGS/DWARFDump/` outlines, X360-gated) —
+never a local re-declaration, redefinition, or padding-fork of a type that has a real
+home. When that reference also carries the function **bodies** (chiefly Feb-2007),
+port them and update the ledger for the TU you thereby complete, rather than leaving a
+trap stub. A **local forward declaration** is the documented exception, used only to
+break a genuine include cycle, to avoid a heavy transitive header cascade for a
+pointer/reference-only use, or where no reference exists (truly opaque/platform). This
+does **not** change the gate or the ordering: per-TU `cl /c` is still the gate
+(declarations suffice — no eager whole-program link), leaf-first is still only a
+preference, and reference availability + the forward-decl escape hatch keep header
+reconstruction bounded rather than cascading into the whole program. See AGENTS.md
+("Reconstruct includes; don't fake them") for the operating rule; `work stubs` names
+the owning header for each unresolved callee.
+
 ### Middleware and SDKs (RenderWare, EATech, etc.)
 
 RenderWare and other vendor SDKs are **black-box middleware**, but we only have pre-compiled

@@ -200,11 +200,14 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   `python tools/work/check_vendor_lib.py <tu_name>` to verify if it exists in the PC binaries or open-source folders.
   - If the script says **PRESENT**: Skip and block it (`work block <tu> "Vendor code; exists in PC lib or vendor source."`).
   - If the script says **MISSING**: You MUST decompile it from the console build like normal.
-- **Stubs over guesses.** A call to a not-yet-reconstructed function gets a forward
-  declaration + trap stub (`work stubs <tu>`), not an invented body. Because we work
-  leaf-first, most callees are already real by the time you reach a caller, so stubs
-  are the exception. A generated stub for a class method only compiles once that
-  class is declared — declaring it is the type-recovery part you still do.
+- **Stubs over guesses — for function BODIES, not types.** A call to a
+  not-yet-reconstructed function gets a trap-stub *body* (`work stubs <tu>`), not an
+  invented one. This scaffold satisfies **missing bodies at link time**; it is **not** a
+  way to satisfy a missing *type*. Never fake a type with a local stub — reconstruct its
+  header and `#include` it (see "Reconstruct includes" below). Because we work leaf-first,
+  most callees are already real by the time you reach a caller, so even body stubs are the
+  exception. Under the per-TU `cl /c` gate a callee's *declaration* (from its reconstructed
+  header) is all you need to compile — a trap body matters only for the eventual link.
 - **Follow the project naming conventions.** All new owned C/C++ — types,
   functions, variables (scope+type prefixes like `mpBoostStrategy`, `lfTimeStep`),
   constants (`KI_`/`KU_`/`KF_`), enums (`E_` upper snake), files, namespaces — follows
@@ -245,8 +248,28 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   matching struct/enum tables under `--- WIKI TYPES ---`; look anything else up with
   `python tools/work/wiki_index.py --lookup <Type>`. Rebuild the index if the dump
   changes. Reviewers: a wiki offset trusted over the pseudocode is a fail.
-- **Types live in headers** and are shared global state. Extend them; let the
-  compile gate surface conflicts. Don't redefine a type locally to dodge an error.
+- **Reconstruct includes; don't fake them (types live in real headers).** When a TU
+  needs a type or function from another file, reconstruct that file's **header** at its
+  mirrored path under `b5-decomp/src/…` and `#include` it — extend it if it already
+  exists. Do **not** locally re-declare, redefine, or padding-fork a type that has a real
+  home. Shared headers are global state; the compile gate surfaces conflicts and that
+  error is the desired signal — extend the header, don't re-fork it. Recover the layout
+  from `references/Feb-2007/` (full original headers, where in scope) or
+  `references/DecFIGS/DWARFDump/` (project-wide class/struct/enum outlines, gated on the
+  X360 ledger). The per-TU gate is `cl /c`, so the header's *declarations* are enough to
+  compile against — you do not need callee bodies to pass it. `work stubs <tu>` reports
+  the owning header for each unresolved callee and whether it already exists in `b5-decomp/src`.
+- **Port bodies when the reference has them.** When you reconstruct a header and the
+  original function **bodies** are available (chiefly `references/Feb-2007/`), port them
+  too rather than leaving trap stubs — then **update the ledger** for the functions/TU you
+  thereby complete (run their compile gate, record status; never complete work off-ledger).
+  Where bodies aren't available, the callee keeps a `work stubs` trap body as its own TU.
+  Never invent a body.
+- **Forward-declaration is the exception.** Use a local forward declaration (and document
+  the reason inline) **only** when: (a) it breaks a genuine include cycle (A ↔ B); (b) a
+  pointer/reference-only use would otherwise force a large transitive header cascade and an
+  incomplete type suffices; or (c) no reference exists to reconstruct the type (truly
+  opaque / platform). Otherwise rebuild the header and `#include` it.
 - **Update the ledger, not your own memory.** Progress that isn't in `progress/` did
   not happen as far as the next agent is concerned. The git-ignored `ledger.sqlite` is
   a cache: ground truth for "done" is the reconstructed **file committed in b5-decomp**.
@@ -267,7 +290,11 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
 - Don't run global structural matching (Diaphora) as a prerequisite. Names join the
   symbolized builds; structural matching is an optional per-function last resort.
 - Don't chase a whole-program link early. Per-TU compilation is the gate.
-- Don't invent function bodies to make something compile — stub and move on.
+- Don't invent function bodies to make something compile — stub the body and move on.
+- Don't locally redefine, re-declare, or padding-fork a type that has a reconstructable
+  home header — rebuild the header (from Feb-2007 / DecFIGS DWARF) and `#include` it.
+  Local forward-declaration is allowed only for the documented exceptions (cycles,
+  pointer-only cascade-avoidance, no reference).
 - Don't spawn a subagent to perform the reverse-engineering or C++ reconstruction. Spawning a subagent for this phase causes it to lose your active context (such as open files, cursor position, and chat history). Spawning is strictly reserved for the reviewer pass.
 - Don't write or create an implementation plan for standard Translation Unit (TU) reconstructions. The TU reconstruction loop is a routine, pre-approved workflow, so you should bypass any planning/implementation-plan steps and proceed directly to coding.
 
