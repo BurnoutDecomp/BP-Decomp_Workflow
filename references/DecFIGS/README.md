@@ -36,6 +36,14 @@ input for source-like type recovery.
   Use it to write source-like C++ instead of raw Hex-Rays temporaries or offset casts.
   Treat it as a hint layer only: X360 pseudocode/asm remains authoritative for
   behavior and member placement, and it wins aginst Feb-2007 leaked source where it overlaps (since the source code is older).
+  - **Conformance caveat — gate on X360 attestation.** This is the *PS3* build, so it
+    drifts in version from the X360 spine. DWARF supplies **names/types/signatures**; the
+    **X360 ledger** (`progress/status.json` → `func`) decides **what exists**. Add a DWARF
+    member/method to a recon only if that `Class::Fn` is attested in the X360 ledger —
+    DWARF-only symbols are PS3-only and stay out. Whole classes can be the *wrong version*
+    in the recon (intersect the X360 function set with recon vs DWARF to tell which is
+    right). See AGENTS.md → "USE DECFIGS DWARFDUMP HINTS" for the full rule and the
+    version-drift trap.
 - **Naming:** function names are demangled symbols (e.g.
   `._ZN6Attrib8TypeDesc6LookupEy` → `Attrib::TypeDesc::Lookup`).
 
