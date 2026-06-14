@@ -864,7 +864,7 @@ def cmd_bootstrap(args):
     #    deeply self-referential test-package submodules that blow past Windows
     #    MAX_PATH). Only init what is NOT already populated, so we never run a
     #    checkout that could clobber uncommitted reconstruction work.
-    print("[1/4] git submodules ...", flush=True)
+    print("[1/5] git submodules ...", flush=True)
     b5 = os.path.join(ROOT, "b5-decomp")
     if not os.path.exists(os.path.join(b5, "CMakeLists.txt")):
         subprocess.run(["git", "submodule", "update", "--init"], cwd=ROOT)
@@ -876,7 +876,7 @@ def cmd_bootstrap(args):
             subprocess.run(["git", "submodule", "update", "--init", "--", f"vendor/{name}"], cwd=b5)
 
     # 2) the committed structure must be present (identity/tu_index are in git)
-    print("[2/4] checking committed artifacts ...", flush=True)
+    print("[2/5] checking committed artifacts ...", flush=True)
     missing = [p for p in (IDENTITY, TU_INDEX) if not os.path.exists(p)]
     if missing:
         print(f"  MISSING {', '.join(os.path.basename(m) for m in missing)} — these are committed;"
@@ -887,15 +887,77 @@ def cmd_bootstrap(args):
         print("        committed mirrors, but reconstructing NEW functions (dossier/stubs) needs")
         print("        them — regenerate with: tools/export_db.ps1 -DbName BURNOUT_X360_ARTIST.XEX")
 
-    # 3) (re)build the ledger from committed identity/tu_index + status + dep mirrors
-    print("[3/4] building ledger ...", flush=True)
+    # 3) DWARF inlining info (decfigs_inlining.json)
+    print("[3/5] DWARF inlining info ...", flush=True)
+    inlining_json = os.path.join(ROOT, "references", "DecFIGS", "decfigs_inlining.json")
+    if os.path.exists(inlining_json):
+        print("  decfigs_inlining.json already exists — skipping")
+    else:
+        raw_json = os.path.join(ROOT, "IDA Files", "DecFIGS_Burnout_Internal_PS3.ELF.lineinfo.json")
+        if not os.path.exists(raw_json):
+            print("  decfigs_inlining.json is missing. Attempting to generate raw lineinfo from IDB...")
+            db_path = os.path.join(ROOT, "IDA Files", "DecFIGS_Burnout_Internal_PS3.ELF.i64")
+            if not os.path.exists(db_path):
+                print(f"  error: {os.path.basename(db_path)} is missing from IDA Files.")
+            else:
+                ida_path = os.environ.get("IDA_PATH")
+                if not ida_path:
+                    for path in [
+                        "C:\\Program Files\\IDA Professional 9.3",
+                        "C:\\Program Files\\IDA Professional 9.0",
+                        "C:\\Program Files\\IDA Pro 7.7",
+                        "C:\\Program Files\\IDA Pro 8.3",
+                    ]:
+                        if os.path.isdir(path):
+                            ida_path = path
+                            break
+                if not ida_path:
+                    print("  warning: IDA Pro path not found (set IDA_PATH environment variable).")
+                    print("           Cannot generate decfigs_inlining.json without IDA.")
+                else:
+                    ida_exe = os.path.join(ida_path, "ida.exe")
+                    if not os.path.exists(ida_exe):
+                        ida_exe = os.path.join(ida_path, "idat.exe")
+                    if not os.path.exists(ida_exe):
+                        print(f"  warning: executable not found in {ida_path}")
+                    else:
+                        print(f"  found IDA at: {ida_exe}")
+                        script_path = os.path.join(ROOT, "tools", "ida_export_lineinfo.py")
+                        print("  running IDA Pro to export lineinfo (this may take a few minutes)...", flush=True)
+                        try:
+                            res = subprocess.run([
+                                ida_exe, "-A",
+                                f"-S{os.path.abspath(script_path)}",
+                                os.path.abspath(db_path)
+                            ], cwd=ida_path, capture_output=True, text=True)
+                            if res.returncode != 0:
+                                print(f"  warning: IDA exited with code {res.returncode}")
+                                if res.stderr:
+                                    print(f"  stderr: {res.stderr}")
+                        except Exception as e:
+                            print(f"  warning: failed to launch IDA: {e}")
+        if os.path.exists(raw_json):
+            print("  generating decfigs_inlining.json from raw lineinfo...", flush=True)
+            try:
+                res = subprocess.run(["python", os.path.join(ROOT, "tools", "build_source_tree.py")], cwd=ROOT)
+                if res.returncode == 0:
+                    print("  successfully generated decfigs_inlining.json!")
+                else:
+                    print(f"  warning: build_source_tree.py exited with code {res.returncode}")
+            except Exception as e:
+                print(f"  warning: failed to run build_source_tree.py: {e}")
+        else:
+            print("  warning: raw lineinfo JSON was not generated; decfigs_inlining.json remains missing.")
+
+    # 4) (re)build the ledger from committed identity/tu_index + status + dep mirrors
+    print("[4/5] building ledger ...", flush=True)
     seed_args = argparse.Namespace(deps=have_exports, reset=False)
     cmd_seed(seed_args)
 
     # 4) refresh the burnout.wiki type index if the committed cache is stale vs. the
     #    newest dump (the dossier reads references/Wiki/types.json; committed so it
     #    works without Python, rebuilt here so a newer dump takes effect on resume)
-    print("[4/4] wiki type index ...", flush=True)
+    print("[5/5] wiki type index ...", flush=True)
     try:
         import wiki_index
         if wiki_index.needs_rebuild():

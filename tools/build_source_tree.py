@@ -107,12 +107,12 @@ def main() -> None:
         }
         inlining[faddr] = spans
 
-    out_dir = ROOT / ".ghidra-exports" / "decfigs"
+    out_dir = ROOT / "references" / "DecFIGS"
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "decfigs_func_files.json").write_text(
         json.dumps(func_files, indent=0), encoding="utf-8")
     (out_dir / "decfigs_inlining.json").write_text(
-        json.dumps(inlining), encoding="utf-8")
+        json.dumps(inlining, indent=2), encoding="utf-8")
     tree = sorted(all_files)
     (out_dir / "decfigs_source_tree.txt").write_text(
         "\n".join(tree) + "\n", encoding="utf-8")
