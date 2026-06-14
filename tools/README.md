@@ -23,7 +23,7 @@ shell). The IDAPython ones can't be run directly — they need IDA's embedded in
 | `work/build_tu_index.py` | Python | **Phase 0.** Groups every X360 function into a translation unit (DecFIGS file, else class fallback) → `../progress/tu_index.json`, the work-unit list. |
 | `work/gen_skeleton.py` | Python | **Phase 0.** Emits a per-TU reconstruction skeleton (signatures parsed from pseudocode + trap stubs + guiding comments). Seed for reconstruction, not guaranteed-compiling. |
 | `work/work.py` | Python | **Phase 1.** The `work` ledger CLI (`seed`/`status`/`next`/`show`/`start`/`submit`/`block`) over `../progress/ledger.sqlite`. The interface the in-chat agent drives the decomp loop with. Run via the repo-root `work.cmd` shim. See [`../progress/README.md`](../progress/README.md). |
-| `work/dossier.py` | Python | **Phase 2.** Assembles the full per-TU reconstruction brief behind `work show <tu> --full`: per-function signature/locals/pseudocode/asm, callee signatures with recovered status, caller context, and the original LegacySrc source overlay. |
+| `work/dossier.py` | Python | **Phase 2.** Assembles the full per-TU reconstruction brief behind `work show <tu> --full`: per-function signature/locals/pseudocode/asm, DecFIGS dwarfdump declaration/type/local-variable hints, callee signatures with recovered status, caller context, and the original LegacySrc source overlay. |
 | `work/verify.py` | Python | **Phase 3.** The verification tier behind `work submit`/`work review`: a per-TU compile gate (`cl /c` under MSVC, configured by `../progress/verify.config.json`) and the fresh-eyes reviewer-packet builder (produced code + dossier → `../progress/reviews/`). |
 | `work/gen_stubs.py` | Python | The demand-driven stub generator behind `work stubs <tu>`: emits trap-stub definitions for a TU's not-yet-reconstructed callees (Hex-Rays types normalized, PPC runtime helpers filtered). `--list` shows what must be *declared* — the part that matters under the compile-only gate; the emitted `.cpp` is consumed at the future link phase. |
 | `export_<db>.log` | Output | Headless run logs from `export_db.ps1` (e.g. memory report, function count, errors). Diagnostics only. |
@@ -64,6 +64,12 @@ To extract raw line info from the DecFIGS database, run `idat.exe` headlessly wi
 # 2) compact into the decfigs_* artifacts
 python tools/build_source_tree.py
 ```
+
+The optional/local `references/DecFIGS/dwarfdump/` tree is the companion
+DWARF-derived declaration/type hint dump. It is consumed by `work/dossier.py` and
+included in `work show <tu> --full` / reviewer packets for matching DecFIGS-backed
+TUs when present. Keep it in sync with the same DecFIGS ELF/IDB when regenerating
+DecFIGS artifacts.
 
 ### Regenerate RenderWare type headers:
 

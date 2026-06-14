@@ -14,8 +14,9 @@ contributing a different kind of ground truth:
 
 - **Symbols & function names** come from the binaries with the richest symbol
   tables (PS3 ELFs).
-- **Original source file/line/inlining attribution** comes from the DecFIGS PS3
-  build, which still carries DWARF line info — see [`references/DecFIGS`](references/DecFIGS/).
+- **Original source file/line/inlining attribution and DWARF-derived declaration/type
+  hints** come from the DecFIGS PS3 build, which still carries DWARF line info —
+  see [`references/DecFIGS`](references/DecFIGS/).
 - **A genuine slice of original source** (one translation unit) comes from the
   the LegacySrc reference — see [`references/LegacySrc`](references/LegacySrc/).
 - **High-fidelity Renderware type layouts** come from the shipped `rwcore` PDB.
@@ -27,7 +28,7 @@ contributing a different kind of ground truth:
 |------|------------|
 | [`IDA Files/`](IDA%20Files/) | The IDA Pro databases (`.i64`) for every analyzed build, plus the `rwtypes.lib`/`.pdb` used for Renderware types. The primary disassembly source. |
 | [`.ida-exports/`](.ida-exports/) | Generated: one JSON per function (pseudocode, prototype, locals, asm, xrefs), exported from the IDBs by the tools below. The machine-readable form of the disassembly. |
-| [`references/`](references/) | Recovered ground-truth material that is *not* a disassembly: legacy reference source, DWARF-derived source trees, module offset maps. See its README. |
+| [`references/`](references/) | Recovered ground-truth material that is *not* a disassembly: legacy reference source, DWARF-derived source trees/type hints, module offset maps. See its README. |
 | [`tools/`](tools/) | IDAPython exporters and post-processors that produce `.ida-exports/` and the DecFIGS artifacts, plus the [`work`](tools/work/) ledger CLI. |
 | [`progress/`](progress/) | The agent-agnostic ledger: the cross-build identity table, the translation-unit work list, and the status ledger that drives the reconstruction loop. See its README. |
 | [`b5-decomp/`](b5-decomp/) | Submodule: the actual decompilation project (recovered C++, vendored EA libraries, Renderware type headers, CMake build). |
@@ -56,6 +57,7 @@ Before starting the workflow, ensure you have the following prerequisites instal
    * The exporter script automatically resolves the path to `idat.exe` by checking the `-IdaPath` parameter, the `IDA_PATH` or `IDA_BIN` environment variables, default installation paths, or your system `PATH`.
 4. **Manually Supplied Reference Files (Git-ignored):** Due to size limits and/or licensing, several critical files must be manually copied into the workspace. Place the required local files at the paths below:
    * **Legacy Source Reference:** Place the reference tree inside [`references/LegacySrc/BrnEntityModuleUnity/`](references/LegacySrc/BrnEntityModuleUnity/). This provides code overlays for the dossier generator.
+   * **DecFIGS DWARF Declaration Hints:** If you have the `dwarfdump/` tree, place it at [`references/DecFIGS/dwarfdump/`](references/DecFIGS/dwarfdump/). This provides declaration/type/local-variable hint overlays for the dossier generator.
    * **Oversized IDA Databases:** Place `Burnout_External_PS3.ELF.i64` and `BurnoutPR.exe.i64` inside the [`IDA Files/`](IDA%20Files/) folder.
 
 
@@ -78,6 +80,7 @@ and picks up the next translation unit. (Reconstructing *new* functions still ne
    work next -n 5         # next leaf-first ready translation units
    work show <tu>         # concise overview of one unit
    work show <tu> --full  # the full reconstruction dossier for it
+                           # includes DecFIGS dwarfdump declaration/type hints where available
    work start <tu>        # claim it, reconstruct into b5-decomp, then:
    work submit <tu>       # mark it done
    ```
@@ -108,6 +111,7 @@ work goal clear               # back to whole-program
    `.ida-exports/` and the DWARF line-attribution artifacts into
    `references/DecFIGS/`.
 3. Cross-reference those exports against the legacy reference source
-   ([`references/LegacySrc`](references/LegacySrc/)) and the recovered source-tree
-   skeleton (DecFIGS) to rebuild each translation unit.
+   ([`references/LegacySrc`](references/LegacySrc/)) and the recovered DecFIGS
+   source-tree skeleton plus `dwarfdump/` declaration/type/local-variable hints to
+   rebuild each translation unit.
 4. Commit the recovered, compiling C++ to the [`b5-decomp`](b5-decomp/) submodule.

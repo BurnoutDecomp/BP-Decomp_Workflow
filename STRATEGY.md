@@ -25,7 +25,7 @@ Two tiers, decided by how richly each is symbolized (measured, not assumed):
 |-------|-------|------|
 | `BURNOUT_X360_ARTIST.XEX` | ~91% | **Spine / target.** Identity, names, file structure, and the pseudocode we reconstruct from. |
 | `Burnout_External_PS3.ELF` | ~94% | Naming/pseudocode corroboration (second opinion). |
-| `DecFIGS_Burnout_Internal_PS3.ELF` | ~90% | **File/line attribution** (DWARF) — tells us which original `.cpp` each function belongs to. |
+| `DecFIGS_Burnout_Internal_PS3.ELF` | ~90% | **File/line attribution plus declaration/type hints** (DWARF) — tells us which original `.cpp` each function belongs to and provides C++-shaped declarations, enums, member names, globals, and locals for reconstruction. |
 | `BurnoutPR.exe` (BPR) | ~0% | PC reference, **stripped**. Consulted per-function for platform layers only. Partially hand-RE'd. |
 | `TUB_Burnout_PC_External.exe` | ~6% | PC reference, **stripped**. Same opportunistic role as BPR. |
 | `rwtypes_master.obj` | 100% | RenderWare type ground truth. |
@@ -81,6 +81,14 @@ Internally the ledger still tracks per-function status.
 
 The TU index marks each unit's `source` (`decfigs` vs `class`) so confidence is
 explicit. A `class`-sourced TU may later be re-partitioned if file evidence appears.
+
+For DecFIGS-backed TUs, `references/DecFIGS/dwarfdump/` is also part of the
+reconstruction dossier when that local tree is present. It is DWARF-derived,
+C++-shaped reference material: use it for declaration structure, enum values,
+member names/types, globals, function signatures, and local-variable hints. It is
+not complete implementation source and not offset authority; X360 pseudocode/asm
+remains the source of truth for behavior and member placement, and LegacySrc reference
+source wins where it overlaps.
 
 **Ordering:** leaf-first (callees before callers) is the *quality* preference — a
 caller reconstructed after its callees sees real signatures and recovered types.
@@ -149,7 +157,8 @@ per-TU asm-matching for if/when a PPC toolchain is wired up. Not built now.
   `next` is leaf-first via a TU dependency graph built from xrefs.
 - **Phase 2 — Dossier assembler** *(done)*: `work show <tu> --full`
   (`tools/work/dossier.py`) joins per-function pseudocode/locals/asm +
-  callee signatures + LegacySrc original source into one brief.
+  callee signatures + DecFIGS dwarfdump declaration/type hints + LegacySrc
+  original source into one brief.
 - **Phase 3 — Compile gate + reviewer sub-agent** *(done)*: `work submit` runs the
   per-TU compile gate (`cl /c` under MSVC, `tools/work/verify.py`,
   `progress/verify.config.json`) and, on pass, emits a fresh-eyes reviewer packet;

@@ -39,7 +39,8 @@ work status               # counts by status, % done
 work next -n 5            # next leaf-first ready TUs (fewest unresolved deps first)
 work show <tu>            # concise overview: functions, signatures, dependency TUs
 work show <tu> --full     # the full reconstruction dossier (pseudocode, locals,
-                          #   LegacySrc original source, callee sigs; --asm, -o file)
+                          #   DecFIGS dwarfdump hints, LegacySrc original source,
+                          #   callee sigs; --asm, -o file)
 work start <tu>           # claim (todo -> in_progress)
 work stubs <tu> [--list]  # trap-stub defs for the TU's not-yet-done callees; --list
                           #   shows what must be declared (the gate is compile-only,
@@ -57,8 +58,10 @@ agent launcher. The ledger is its durable memory *between* sessions and tools.
 `work show <tu> --full` ([`tools/work/dossier.py`](../tools/work/dossier.py))
 assembles the full reconstruction brief for a TU: per-function clean signature,
 decompiler locals, full pseudocode, callee signatures (with "already recovered ->
-path" status), caller context, the **original LegacySrc source file** when the TU's
-`primary_file` exists in the legacy reference (483 TUs touch it), and a type-header pointer.
+path" status), caller context, matching **DecFIGS dwarfdump declaration/type/local
+variable hints** for DecFIGS-backed source paths, the **original LegacySrc source
+file** when the TU's `primary_file` exists in the legacy reference (483 TUs touch it), and a
+type-header pointer.
 `--asm` adds disassembly; `-o <file>` writes it out.
 
 ## Phase 3 — verification (live)
@@ -67,9 +70,11 @@ path" status), caller context, the **original LegacySrc source file** when the T
 [`tools/work/verify.py`](../tools/work/verify.py), configured by
 [`verify.config.json`](verify.config.json)). On a compile failure it prints the
 MSVC diagnostics and returns the TU to `in_progress`. On pass it writes a fresh-eyes
-**reviewer packet** to `reviews/<tu>.md` (produced code + dossier). After a reviewer
-sub-agent judges it, `work review <tu> --verdict pass|fail` records the verdict — a
-pass marks the TU `done`. See [`../AGENTS.md`](../AGENTS.md) for the reviewer protocol.
+**reviewer packet** to `reviews/<tu>.md` (produced code + dossier, including
+DecFIGS dwarfdump hints when the TU has a matching source path). After a reviewer
+sub-agent judges it, `work review <tu> --verdict pass|fail` records the verdict —
+a pass marks the TU `done`. See [`../AGENTS.md`](../AGENTS.md) for the reviewer
+protocol.
 
 Prereq for non-trivial TUs: check out the EA submodules
 (`git -C b5-decomp submodule update --init`) so EASTL/EABase headers resolve.

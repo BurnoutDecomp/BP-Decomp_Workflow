@@ -10,6 +10,7 @@ an agent needs into a single document so it never has to hunt through
   - callee signatures + whether each callee is already recovered (and where)
   - caller context
   - the ORIGINAL LegacySrc source file, when the TU's primary_file exists in the legacy reference
+  - DecFIGS dwarfdump declaration/type/local-variable hints for the TU/source file
   - a pointer to relevant type headers
 
 Used by `work show <tu> --full`. Kept separate from work.py so the assembly logic
@@ -21,6 +22,7 @@ from functools import lru_cache
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 FEB2007 = os.path.join(ROOT, "references", "LegacySrc", "BrnEntityModuleUnity")
+DECFIGS_DWARFDUMP = os.path.join(ROOT, "references", "DecFIGS", "dwarfdump")
 RW_INCLUDE = "b5-decomp/vendor/renderware/include"
 WIKI_TYPES = os.path.join(ROOT, "references", "Wiki", "types.json")
 
@@ -29,6 +31,8 @@ load_export = gen_skeleton.load_export
 sig_of = gen_skeleton.signature_from_pseudocode
 
 MAX_SRC_LINES = 500
+MAX_DWARF_FILES = 6
+MAX_DWARF_LINES = 220
 MAX_CALLEES = 24
 MAX_WIKI_TYPES = 12
 MAX_WIKI_FIELDS = 40
@@ -84,6 +88,75 @@ def find_feb2007_source(primary_file: str):
         if rel.endswith("/" + base) or rel == base:
             return rel, full
     return None
+
+
+# ---------------------------------------------------------------- DecFIGS dwarfdump overlay
+@lru_cache(maxsize=1)
+def decfigs_dwarfdump_index():
+    """Map normalized DecFIGS source paths -> absolute dwarfdump hint files."""
+    idx = {}
+    if not os.path.isdir(DECFIGS_DWARFDUMP):
+        return idx
+    for dp, _, fs in os.walk(DECFIGS_DWARFDUMP):
+        for f in fs:
+            if f.endswith((".cpp", ".h", ".hpp", ".inl", ".c")):
+                full = os.path.join(dp, f)
+                rel = os.path.relpath(full, DECFIGS_DWARFDUMP).replace("\\", "/")
+                idx[rel] = full
+    return idx
+
+
+def _add_dwarfdump_candidate(out, idx, rel):
+    if rel and rel in idx and rel not in {r for r, _ in out}:
+        out.append((rel, idx[rel]))
+
+
+def find_decfigs_dwarfdump_sources(primary_file: str):
+    """Return DWARF-derived declaration/type hint files relevant to a DecFIGS TU."""
+    norm = normalize_primary_file(primary_file)
+    if not norm:
+        return []
+    idx = decfigs_dwarfdump_index()
+    if not idx:
+        return []
+
+    found = []
+    stem, ext = os.path.splitext(norm)
+    if ext.lower() in (".cpp", ".c"):
+        for alt in (".h", ".hpp", ".inl"):
+            _add_dwarfdump_candidate(found, idx, stem + alt)
+        _add_dwarfdump_candidate(found, idx, norm)
+    elif ext.lower() in (".h", ".hpp", ".inl"):
+        _add_dwarfdump_candidate(found, idx, norm)
+        for alt in (".cpp", ".c"):
+            _add_dwarfdump_candidate(found, idx, stem + alt)
+    else:
+        _add_dwarfdump_candidate(found, idx, norm)
+
+    if found:
+        return found[:MAX_DWARF_FILES]
+
+    # Fallback for path-normalization drift: require a filename match plus nearby
+    # parent directories, then add the sibling header/source around that match.
+    tail = "/".join(norm.split("/")[-3:])
+    base = norm.split("/")[-1]
+    for rel, full in idx.items():
+        if rel.endswith(tail) or rel.endswith("/" + base) or rel == base:
+            _add_dwarfdump_candidate(found, idx, rel)
+            stem, ext = os.path.splitext(rel)
+            if ext.lower() in (".cpp", ".c"):
+                found = []
+                for alt in (".h", ".hpp", ".inl"):
+                    _add_dwarfdump_candidate(found, idx, stem + alt)
+                _add_dwarfdump_candidate(found, idx, rel)
+            elif ext.lower() in (".h", ".hpp", ".inl"):
+                found = []
+                _add_dwarfdump_candidate(found, idx, rel)
+                for alt in (".cpp", ".c"):
+                    _add_dwarfdump_candidate(found, idx, stem + alt)
+            break
+
+    return found[:MAX_DWARF_FILES]
 
 
 # ---------------------------------------------------------------- callee signatures
@@ -205,6 +278,27 @@ def assemble(con, tu_row, funcs, with_asm=False):
             w(f"    ... [{len(lines)-MAX_SRC_LINES} more lines — open {src[1]}]")
     else:
         w("\n--- ORIGINAL SOURCE: none in the LegacySrc reference for this TU ---")
+
+    # DWARF-derived declaration/type/local-variable hints from DecFIGS.
+    if tu_row["source"] == "decfigs":
+        dwarf_sources = find_decfigs_dwarfdump_sources(tu)
+    else:
+        dwarf_sources = []
+    if dwarf_sources:
+        w("\n--- DECFIGS DWARFDUMP HINTS ---")
+        w("    DWARF-derived C++-shaped declarations and local-variable hints for this source path.")
+        w("    Use names, enums, logical types, member lists, globals, signatures, and locals as")
+        w("    reconstruction hints. This is NOT complete implementation source and NOT offset")
+        w("    authority; verify behavior and member placement against the X360 pseudocode/asm.")
+        for rel, full in dwarf_sources:
+            w(f"\n  --- {rel} ---")
+            lines = open(full, encoding="utf-8", errors="replace").read().splitlines()
+            for ln in lines[:MAX_DWARF_LINES]:
+                w("    " + ln)
+            if len(lines) > MAX_DWARF_LINES:
+                w(f"    ... [{len(lines)-MAX_DWARF_LINES} more lines - open {full}]")
+    else:
+        w("\n--- DECFIGS DWARFDUMP HINTS: none found for this TU/source path ---")
 
     # type pointers
     w("\n--- TYPES ---")

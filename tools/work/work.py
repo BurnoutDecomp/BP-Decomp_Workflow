@@ -622,7 +622,7 @@ def cmd_show(args):
         if sig:
             print(f"             {sig[:110]}")
     print("\n(`work show <tu> --full` for the complete dossier: pseudocode, locals, "
-          "LegacySrc original source, callee signatures, asm with --asm.)")
+          "DecFIGS dwarfdump hints, LegacySrc original source, callee signatures, asm with --asm.)")
 
 
 # ---------------------------------------------------------------- transitions
@@ -990,7 +990,8 @@ def main():
     g.set_defaults(fn=cmd_goal)
     n = sub.add_parser("next"); n.add_argument("-n", type=int, default=1); n.set_defaults(fn=cmd_next)
     sh = sub.add_parser("show"); sh.add_argument("tu")
-    sh.add_argument("--full", action="store_true", help="emit the full reconstruction dossier")
+    sh.add_argument("--full", action="store_true",
+                    help="emit the full reconstruction dossier, including DecFIGS dwarfdump hints")
     sh.add_argument("--asm", action="store_true", help="include assembly in --full output")
     sh.add_argument("-o", "--out", help="write dossier to a file instead of stdout")
     sh.set_defaults(fn=cmd_show)
