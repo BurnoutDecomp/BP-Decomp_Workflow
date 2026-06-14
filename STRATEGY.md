@@ -97,10 +97,9 @@ graph is built from xrefs (calls/data refs), so it does **not** reliably capture
 *inheritance* (`B : A`) or *by-value containment* (`struct B { A a; }`) — both of which
 need the other type's complete header first (the base's virtuals are the override
 signatures). Reconstruct a **base/contained type before the classes that use it**.
-Inheritance edges are now built from the DecFIGS dwarfdump by
+Both inheritance and by-value containment edges are built from the DecFIGS dwarfdump by
 [`tools/work/build_type_deps.py`](tools/work/build_type_deps.py) (folded into
-`work seed --deps`), so the base ranks first; by-value-containment edges remain a future
-addition.
+`work seed --deps`), so a TU ranks after its base classes and the types it embeds by value.
 
 ## The stub scaffold — and its honest C++ caveat
 
