@@ -4,25 +4,23 @@ name: Reconcile status + submodule pointer
 # with the coordination server, automatically — so the people doing the decompilation
 # only ever push to b5-decomp and never need write access to this workflow repo.
 #
-# What it does on each run:
-#   1. advance the b5-decomp submodule pointer to the current dev tip (or the SHA from
-#      the repository_dispatch payload),
-#   2. regenerate progress/status.json from the server (GET /export/status) — the server
+# What it does on each run (one per b5-decomp commit):
+#   1. regenerate progress/status.json from the server (GET /export/status) — the server
 #      is the only full authority: a files-only reconcile recovers `done` but not
 #      `blocked` (a blocked TU leaves no file),
+#   2. advance the b5-decomp submodule pointer to the commit that triggered the run (the
+#      repository_dispatch payload SHA), or the current dev tip for a manual run,
 #   3. cross-check the server's `done` set against the committed b5-decomp files
 #      (non-blocking integrity alarm),
-#   4. commit + push any change with the bot token.
+#   4. commit + push the regenerated status.json and the bumped pointer with the bot token.
 #
-# Triggers: the nightly + manual runs make it self-sufficient with zero changes to
-# b5-decomp. The repository_dispatch trigger is the event-driven path — wire it up with
-# the optional notifier workflow in b5-decomp (.github/workflows/notify-workflow.yml).
+# Triggered on every b5-decomp commit: the notifier workflow in b5-decomp
+# (.github/workflows/notify-workflow.yml) fires a repository_dispatch carrying the new
+# commit SHA. workflow_dispatch is kept for manual runs / backfills.
 
 on:
   repository_dispatch:
     types: [b5-decomp-push]
-  schedule:
-    - cron: "17 * * * *"   # hourly, off the top of the hour to dodge load spikes
   workflow_dispatch:
     inputs:
       b5_sha:
@@ -70,22 +68,22 @@ jobs:
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
           echo "Target b5-decomp commit: $SHA"
 
+      - name: Regenerate status.json from the server
+        run: python tools/work/fetch_server_status.py --server "$WORK_SERVER"
+
       - name: Advance b5-decomp submodule pointer
         run: |
           set -euo pipefail
           SHA="${{ steps.target.outputs.sha }}"
-          # Materialise the submodule at the pinned commit over HTTPS (its .gitmodules URL
-          # is SSH; we don't touch it, so no stray diff). A fresh clone is more robust than
-          # `submodule update` when the recorded pointer isn't fetchable at depth 1. The
-          # contents are needed for the cross-check; `git add` records the new gitlink.
+          # Materialise the submodule at the triggering commit over HTTPS (its .gitmodules
+          # URL is SSH; we don't touch it, so no stray diff). A fresh clone is more robust
+          # than `submodule update` when the recorded pointer isn't fetchable at depth 1.
+          # The contents are needed for the cross-check; `git add` records the new gitlink.
           rm -rf b5-decomp
           git clone --depth 1 --branch "$B5_BRANCH" "$B5_REPO" b5-decomp
           git -C b5-decomp fetch --depth 1 origin "$SHA"
           git -C b5-decomp checkout -q "$SHA"
           git add b5-decomp
-
-      - name: Regenerate status.json from the server
-        run: python tools/work/fetch_server_status.py --server "$WORK_SERVER"
 
       - name: Cross-check server `done` against committed files (non-blocking)
         continue-on-error: true
@@ -115,6 +113,6 @@ jobs:
           SHA="${{ steps.target.outputs.sha }}"
           git commit -m "chore: reconcile status.json + b5-decomp pointer to ${SHA:0:12}
 
-          Automated: regenerated from the coordination server and b5-decomp dev tip.
-          No manual status.json push required."
+          Automated on a b5-decomp commit: status.json regenerated from the
+          coordination server, submodule pointer bumped. No manual push required."
           git push

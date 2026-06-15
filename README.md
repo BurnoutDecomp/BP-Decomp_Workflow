@@ -233,26 +233,27 @@ independent source. A GitHub Action keeps git in step with the server automatica
 **the people doing the decompilation only ever push to `b5-decomp` — they need no write
 access to this workflow repo and never hand-edit `status.json`.**
 
-[`.github/workflows/reconcile-status.yml`](.github/workflows/reconcile-status.yml) runs
-hourly (and on demand), and on each run it:
+It runs **once per b5-decomp commit**. The notifier workflow
+[`b5-decomp/.github/workflows/notify-workflow.yml`](b5-decomp/.github/workflows/notify-workflow.yml)
+fires on every push to b5-decomp's `dev` branch and sends a `repository_dispatch` (carrying
+the new commit SHA) to [`.github/workflows/reconcile-status.yml`](.github/workflows/reconcile-status.yml)
+in this repo, which then:
 
-1. advances the `b5-decomp` submodule pointer to the current `dev` tip (or the commit from
-   the trigger payload);
-2. regenerates `progress/status.json` from the server's `GET /export/status`. The server
+1. regenerates `progress/status.json` from the server's `GET /export/status`. The server
    is the **only full authority**: a files-only reconcile can recover `done` (its file
    exists) but not `blocked` (a blocked TU leaves no file), so the durable set is pulled
    straight from the server;
+2. advances the `b5-decomp` submodule pointer to the commit that triggered the run;
 3. cross-checks the server's `done` set against the committed b5-decomp files with
    `reconcile_from_files.py` (non-blocking — it only emits a warning if the server marks a
    TU `done` whose committed file is missing or still a trap-stub/partial);
-4. commits and pushes any change under a bot identity.
+4. commits and pushes the regenerated `status.json` + bumped pointer under a bot identity.
 
-For an **immediate** reconcile on every b5-decomp push (instead of waiting for the hourly
-run), add the optional notifier
-[`b5-decomp/.github/workflows/notify-workflow.yml`](b5-decomp/.github/workflows/notify-workflow.yml)
-to the b5-decomp repo and give it a `WORKFLOW_DISPATCH_TOKEN` secret (a token that can
-send `repository_dispatch` to this repo). Without the secret it no-ops, and the hourly
-schedule still covers everything.
+**Setup (one-time):** the notifier needs a `WORKFLOW_DISPATCH_TOKEN` secret on the
+b5-decomp repo — a token that can send `repository_dispatch` to this repo. Without it the
+notifier no-ops (so nothing breaks), but the automatic reconcile won't fire. The reconcile
+Action also has a manual `workflow_dispatch` trigger (optionally pin a specific
+`b5_sha`) for backfills.
 
 You can refresh the committed mirror manually too:
 
