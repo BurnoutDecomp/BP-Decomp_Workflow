@@ -205,6 +205,11 @@ so if you claim more than you finish the rest return to `todo`. Without a server
 locally. `work next` only previews (reserves nothing). `work start <tu>` is the older alias
 for claiming one TU and also prints its dossier.
 
+**If the server is unreachable, keep working — don't stop.** A `[work] server unreachable`
+warning is not an error: the CLI transparently falls back to the local ledger, and your
+claims/submits/reviews are queued and synced automatically when it reconnects. Finished
+work is never lost. You don't manage this; just carry on.
+
 **Reverting everything** (the post-server equivalent of "git reset + delete the db"):
 
 ```

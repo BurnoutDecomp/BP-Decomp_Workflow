@@ -155,7 +155,7 @@ At a glance:
 | Reconstruction helpers | `tools/work/dossier.py`, `tools/work/gen_stubs.py`, `tools/work/gen_skeleton.py`, `tools/work/auto_draft.py` |
 | Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `progress/verify.config.json`, `progress/review.config.json` |
 | Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/gen_rwtypes_headers.py` |
-| Optional server coordination | `work server-sync`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
+| Optional server coordination | `work sync`, `work server-sync`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
 
 ## Goals And Execution Traces
 
@@ -187,6 +187,33 @@ WORK_LEASE_SECONDS=7200
 With a server configured, `work claim` is atomic across agents and live claims live on
 the server. Durable states tied to committed code (`done`, `blocked`) still sync through
 `progress/status.json`.
+
+### Resilience to an unreachable server
+
+A configured server that is *down* does not break the work loop — the CLI degrades
+gracefully and self-heals on reconnect, so agents never have to manage outages.
+
+- **Connection failure vs. rejection.** A server that *can't be reached* is treated as a
+  recoverable outage; a server that *answers with an error* (HTTP) is a real decision.
+  Only a genuine **auth rejection** (missing/invalid `WORK_AGENT`) still stops a command —
+  that's a config error, not an outage.
+- **Degrade locally.** While the server is unreachable, reads (`work next`, `work status`)
+  fall back to the local leaf-first ranking and counts; writes (`work claim`,
+  `work submit` → compiled, `work review`, `work block`/`unblock`) apply to the local
+  ledger and are recorded in an **offline outbox** (a `pending_op` table in the git-ignored
+  ledger cache).
+- **Self-heal on reconnect.** The outbox **replays automatically** before the next
+  server-mode command, or on demand with `work sync`. `work status` shows the queued-op
+  count and whether it is reporting the server or the local ledger.
+- **Nothing finished is ever lost.** `done`/`blocked` are durable in git
+  (`progress/status.json`), so even after a long outage they reconcile into the server via
+  `work server-sync`. Only the *ephemeral* claim layer can drift offline (a lease may lapse
+  on the server, or an offline claim may collide with another agent). Such conflicts are
+  **reported** during sync — never silently dropped, never overwriting local state.
+
+```powershell
+work sync                                 # flush queued offline ops (auto-runs otherwise)
+```
 
 Maintainer commands:
 

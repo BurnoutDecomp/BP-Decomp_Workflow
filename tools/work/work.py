@@ -23,6 +23,7 @@ Commands:
     work submit <tu>          mark a TU reconstructed (compile/review gates: Phase 3)
     work block <tu> "reason"  mark blocked; work unblock <tu> to clear
     work set <tu> --status S  manual status override
+    work sync                 flush queued offline ops to the server (auto-runs first otherwise)
     work server-sync [--branch BRANCH]
                               refresh server checkout/import without clearing live state
     work server-reset [--to REF]
@@ -37,6 +38,14 @@ linked username as owner. Access is gated by the id, so the URL need not be secr
 server set, it owns the live-claim layer (claims/leases/owner) so concurrent agents never
 duplicate work, and `status.json` records only the durable done/blocked states; unset,
 everything behaves exactly as the pre-server local workflow. Pick up work with `work claim`.
+
+RESILIENT TO AN UNREACHABLE SERVER. If the server is down, commands don't fail — they fall
+back to the local ledger and QUEUE the change in an offline outbox. The queue replays
+automatically before the next server-mode command (or run `work sync` explicitly), so a
+reconnect self-heals. Durable done/blocked also reconcile from committed status.json via
+`work server-sync`, so finished work is never lost; only the ephemeral claim layer can drift
+(a lease may lapse, or an offline claim may collide), and such conflicts are reported on
+sync. Genuine auth rejections (bad WORK_AGENT) still stop immediately.
 
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
@@ -99,6 +108,9 @@ CREATE TABLE IF NOT EXISTS tu_dep(
 CREATE TABLE IF NOT EXISTS event(
   id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT,
   tu_id TEXT, func TEXT, action TEXT, detail TEXT);
+CREATE TABLE IF NOT EXISTS pending_op(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT,
+  method TEXT, path TEXT, payload TEXT, kind TEXT, tu_id TEXT);
 CREATE INDEX IF NOT EXISTS ix_func_tu ON func(tu_id);
 CREATE INDEX IF NOT EXISTS ix_dep_tu ON tu_dep(tu_id);
 """
@@ -114,6 +126,10 @@ def connect():
     con = sqlite3.connect(DB)
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA journal_mode=WAL")
+    # The offline outbox is a recent addition; ensure it exists on ledgers seeded before it.
+    con.execute("CREATE TABLE IF NOT EXISTS pending_op("
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT, method TEXT, path TEXT, "
+                "payload TEXT, kind TEXT, tu_id TEXT)")
     return con
 
 
@@ -125,7 +141,37 @@ def server_agent():
     return os.environ.get("WORK_AGENT", "agent")
 
 
-def server_request(method, path, payload=None, query=None):
+class ServerOffline(Exception):
+    """The work server could not be reached (connection-level failure). Recoverable:
+    we degrade to the local ledger and queue the mutation for replay on reconnect."""
+
+
+class ServerError(Exception):
+    """The server responded but rejected the request (HTTP 4xx/5xx) — a real server-side
+    decision (bad/again token, claim conflict, lapsed lease). `body` is the parsed JSON
+    payload when the server returned one (e.g. the ClaimResponse on a 409)."""
+
+    def __init__(self, code, detail):
+        super().__init__(f"HTTP {code}: {detail}")
+        self.code = code
+        self.detail = detail
+        try:
+            self.body = json.loads(detail)
+        except Exception:
+            self.body = {}
+
+
+# Per-process server state. Once a call fails connection-level we mark the server offline
+# so the rest of this invocation degrades immediately instead of eating a timeout per call.
+_SERVER = {"offline": False, "warned": False, "probed": False, "reachable": None,
+           "flushed": False}
+
+
+def server_request(method, path, payload=None, query=None, timeout=30):
+    """Low-level call. Returns parsed JSON (or None) on 2xx; raises ServerOffline when the
+    server is unreachable and ServerError when it responds with an error status. Callers
+    decide how to react — see server_mutate/server_claim_one (graceful) and
+    server_request_strict (fail-fast, for admin commands with no local fallback)."""
     if not WORK_SERVER:
         raise RuntimeError("WORK_SERVER is not set")
     base = WORK_SERVER.rstrip("/")
@@ -151,14 +197,165 @@ def server_request(method, path, payload=None, query=None):
         except Exception:
             context = None
     try:
-        with urllib.request.urlopen(req, timeout=30, context=context) as res:
+        with urllib.request.urlopen(req, timeout=timeout, context=context) as res:
             body = res.read()
             return json.loads(body.decode("utf-8")) if body else None
     except urllib.error.HTTPError as e:
-        detail = e.read().decode("utf-8", errors="replace")
-        sys.exit(f"work server rejected {method} {path}: HTTP {e.code}\n{detail}")
+        raise ServerError(e.code, e.read().decode("utf-8", errors="replace"))
     except urllib.error.URLError as e:
-        sys.exit(f"work server unavailable ({WORK_SERVER}): {e.reason}")
+        _SERVER["offline"] = True
+        raise ServerOffline(str(e.reason))
+
+
+def server_request_strict(method, path, payload=None, query=None):
+    """server_request for commands that genuinely need the server and have no local
+    fallback (admin: sync/reset/worker-*). Preserves the original fail-fast behavior."""
+    try:
+        return server_request(method, path, payload, query)
+    except ServerOffline as e:
+        sys.exit(f"work server unavailable ({WORK_SERVER}): {e}")
+    except ServerError as e:
+        sys.exit(f"work server rejected {method} {path}: {e}")
+
+
+def server_probe(timeout=4):
+    """Best-effort reachability check, memoized per process. A reachable-but-erroring
+    server (e.g. unauthenticated /health quirk) still counts as reachable."""
+    if _SERVER["probed"]:
+        return _SERVER["reachable"]
+    _SERVER["probed"] = True
+    try:
+        server_request("GET", "/health", timeout=timeout)
+        _SERVER["reachable"] = True
+    except ServerOffline:
+        _SERVER["reachable"] = False
+    except ServerError:
+        _SERVER["reachable"] = True
+    _SERVER["offline"] = not _SERVER["reachable"]
+    return _SERVER["reachable"]
+
+
+def warn_offline():
+    if not _SERVER["warned"]:
+        sys.stderr.write(
+            f"[work] server unreachable ({WORK_SERVER}); continuing on the local ledger. "
+            "Changes are queued and will sync on reconnect (`work sync`).\n")
+        _SERVER["warned"] = True
+
+
+def enqueue_op(con, kind, method, path, payload, tu_id=None):
+    """Record a server mutation we could not deliver, to be replayed on reconnect."""
+    con.execute(
+        "INSERT INTO pending_op(ts,method,path,payload,kind,tu_id) VALUES(?,?,?,?,?,?)",
+        (now(), method, path, json.dumps(payload) if payload is not None else None,
+         kind, tu_id))
+    con.commit()
+
+
+def pending_count(con):
+    return con.execute("SELECT COUNT(*) FROM pending_op").fetchone()[0]
+
+
+def server_mutate(con, kind, method, path, payload, tu_id=None):
+    """Deliver a state-changing call, or queue it if the server is offline. The local
+    ledger is already updated by the caller, so queuing makes the local state the source
+    of truth and the server eventually-consistent. Genuine auth rejections still abort;
+    other HTTP rejections (e.g. a lapsed lease) are reported but never lose local state
+    (durable done/blocked reconcile from committed status.json via `work server-sync`)."""
+    if not server_enabled():
+        return None
+    if _SERVER["offline"]:
+        enqueue_op(con, kind, method, path, payload, tu_id)
+        return None
+    try:
+        return server_request(method, path, payload)
+    except ServerOffline:
+        warn_offline()
+        enqueue_op(con, kind, method, path, payload, tu_id)
+        return None
+    except ServerError as e:
+        if e.code in (401, 403):
+            sys.exit(f"work server rejected {kind}: {e}\n(check WORK_AGENT in your .env)")
+        sys.stderr.write(f"[work] server rejected {kind} {tu_id or ''}: {e} — kept locally\n")
+        return None
+
+
+def server_claim_one(con, tu, agent, lease):
+    """Claim one TU on the server. Returns 'claimed', 'taken' (held by someone else /
+    not claimable), or 'offline' (queued for replay). Offline claims are best-effort: the
+    queued op re-asserts the claim on reconnect and surfaces any collision."""
+    payload = {"tu": tu, "agent": agent, "lease_seconds": lease}
+    if _SERVER["offline"]:
+        enqueue_op(con, "claim", "POST", "/claims", payload, tu)
+        return "offline"
+    try:
+        res = server_request("POST", "/claims", payload) or {}
+    except ServerOffline:
+        warn_offline()
+        enqueue_op(con, "claim", "POST", "/claims", payload, tu)
+        return "offline"
+    except ServerError as e:
+        if e.code in (401, 403):
+            sys.exit(f"work server rejected claim: {e}\n(check WORK_AGENT in your .env)")
+        if e.code == 409:  # held by someone else; body carries owner/status
+            print(f"  SKIP {tu}: server did not claim it "
+                  f"(status={e.body.get('status')}, owner={e.body.get('owner')})")
+            return "taken"
+        sys.stderr.write(f"[work] server error on claim {tu}: {e}\n")
+        return "taken"
+    if not res.get("claimed"):
+        print(f"  SKIP {tu}: server did not claim it "
+              f"(status={res.get('status')}, owner={res.get('owner')})")
+        return "taken"
+    return "claimed"
+
+
+def flush_pending(con, quiet=True):
+    """Replay queued offline ops against the server, oldest first. Called lazily before
+    server-mode commands so a reconnect self-heals; runs at most once per invocation.
+    Stops cleanly if the server is still down; reports (but tolerates) conflicts."""
+    if not server_enabled() or _SERVER["flushed"]:
+        return
+    _SERVER["flushed"] = True
+    reachable = server_probe()
+    ops = con.execute("SELECT * FROM pending_op ORDER BY id").fetchall()
+    if not reachable:
+        if ops and not quiet:
+            print(f"{len(ops)} op(s) still queued — server unreachable ({WORK_SERVER})")
+        return
+    if not ops:
+        return
+    synced = conflicts = 0
+    for op in ops:
+        payload = json.loads(op["payload"]) if op["payload"] else None
+        try:
+            res = server_request(op["method"], op["path"], payload)
+        except ServerOffline:
+            remaining = len(ops) - synced - conflicts
+            print(f"sync interrupted — server went away; {remaining} op(s) still queued")
+            return
+        except ServerError as e:
+            conflicts += 1
+            note = (" (durable state reconciles via `work server-sync`)"
+                    if op["kind"] in ("review_pass", "block", "unblock") else "")
+            sys.stderr.write(
+                f"[work] sync conflict on {op['kind']} {op['tu_id'] or ''}: {e}{note}\n")
+            con.execute("DELETE FROM pending_op WHERE id=?", (op["id"],))
+            con.commit()
+            continue
+        if op["kind"] == "claim" and isinstance(res, dict) and not res.get("claimed"):
+            conflicts += 1
+            sys.stderr.write(
+                f"[work] claim made offline for {op['tu_id']} is now held by "
+                f"{res.get('owner')} (status={res.get('status')}) — resolve before submitting\n")
+        con.execute("DELETE FROM pending_op WHERE id=?", (op["id"],))
+        con.commit()
+        synced += 1
+    if (synced or conflicts) and (not quiet or conflicts):
+        msg = f"synced {synced} queued op(s) to the server"
+        if conflicts:
+            msg += f", {conflicts} conflict(s) — see warnings above"
+        print(msg)
 
 
 def server_tu_path(tu):
@@ -350,32 +547,43 @@ def build_deps(con, identity):
 
 # ---------------------------------------------------------------- status
 def cmd_status(args):
-    if server_enabled():
-        data = server_request("GET", "/dashboard/state") or {}
-        counts = data.get("counts") or {}
-        totals = data.get("totals") or {}
-        print("translation units:")
-        for status_name in TU_STATUS:
-            count = int(counts.get(status_name) or 0)
-            if count:
-                print(f"  {status_name:12s} {count}")
-        total = int(totals.get("tus") or sum(int(counts.get(s) or 0) for s in TU_STATUS))
-        done = int(totals.get("done_tus") or counts.get("done") or 0)
-        print(f"  {'TOTAL':12s} {total}   ({100*done//max(total,1)}% done)")
-        print("functions:")
-        funcs = int(totals.get("funcs") or 0)
-        done_funcs = int(totals.get("done_funcs") or 0)
-        if funcs:
-            print(f"  done-in-done-TUs {done_funcs}")
-            print(f"  TOTAL        {funcs}   ({100*done_funcs//max(funcs,1)}% done)")
-        else:
-            print("  unavailable from server")
-        active_goal = data.get("active_goal")
-        if active_goal:
-            print(f"active goal: {active_goal}")
-        return
-
     con = connect()
+    queued = 0
+    if server_enabled():
+        flush_pending(con)
+        queued = pending_count(con)
+    if server_enabled() and not _SERVER["offline"]:
+        try:
+            data = server_request("GET", "/dashboard/state") or {}
+            counts = data.get("counts") or {}
+            totals = data.get("totals") or {}
+            print("translation units:")
+            for status_name in TU_STATUS:
+                count = int(counts.get(status_name) or 0)
+                if count:
+                    print(f"  {status_name:12s} {count}")
+            total = int(totals.get("tus") or sum(int(counts.get(s) or 0) for s in TU_STATUS))
+            done = int(totals.get("done_tus") or counts.get("done") or 0)
+            print(f"  {'TOTAL':12s} {total}   ({100*done//max(total,1)}% done)")
+            print("functions:")
+            funcs = int(totals.get("funcs") or 0)
+            done_funcs = int(totals.get("done_funcs") or 0)
+            if funcs:
+                print(f"  done-in-done-TUs {done_funcs}")
+                print(f"  TOTAL        {funcs}   ({100*done_funcs//max(funcs,1)}% done)")
+            else:
+                print("  unavailable from server")
+            active_goal = data.get("active_goal")
+            if active_goal:
+                print(f"active goal: {active_goal}")
+            if queued:
+                print(f"queued offline op(s): {queued}  (run `work sync`)")
+            return
+        except ServerOffline:
+            warn_offline()  # fall through to the local ledger view
+        except ServerError as e:
+            sys.stderr.write(f"[work] server error on status: {e} — showing local ledger\n")
+
     print("translation units:")
     for r in con.execute("SELECT status,COUNT(*) c FROM tu GROUP BY status ORDER BY c DESC"):
         print(f"  {r['status']:12s} {r['c']}")
@@ -385,6 +593,11 @@ def cmd_status(args):
     print("functions:")
     for r in con.execute("SELECT status,COUNT(*) c FROM func GROUP BY status ORDER BY c DESC"):
         print(f"  {r['status']:12s} {r['c']}")
+    if server_enabled():
+        where = "server unreachable" if _SERVER["offline"] else "local ledger"
+        print(f"(showing {where})")
+        if queued:
+            print(f"queued offline op(s): {queued}  (run `work sync` when the server is back)")
 
 
 # ---------------------------------------------------------------- goals (membership scoping)
@@ -697,23 +910,30 @@ def ranked_todo(con, n=None):
 
 # ---------------------------------------------------------------- next
 def cmd_next(args):
-    if server_enabled():
-        data = server_request("GET", "/next", query={"n": args.n})
-        gname = data.get("active_goal")
-        if gname:
-            print(f"[server goal: {gname}]")
-        rows = data.get("items") or []
-        if not rows:
-            print("no todo TUs available on the work server")
-            return
-        for r in rows:
-            dep = "" if r.get("unresolved_deps") is None else \
-                f"  unresolved-deps={r.get('unresolved_deps')}"
-            print(f"[{(r.get('source') or 'unknown')[:7]:7s}] "
-                  f"{int(r.get('n_funcs') or 0):4d} fn{dep}  {r.get('id')}")
-        return
-
     con = connect()
+    if server_enabled():
+        flush_pending(con)
+    if server_enabled() and not _SERVER["offline"]:
+        try:
+            data = server_request("GET", "/next", query={"n": args.n})
+            gname = data.get("active_goal")
+            if gname:
+                print(f"[server goal: {gname}]")
+            rows = data.get("items") or []
+            if not rows:
+                print("no todo TUs available on the work server")
+                return
+            for r in rows:
+                dep = "" if r.get("unresolved_deps") is None else \
+                    f"  unresolved-deps={r.get('unresolved_deps')}"
+                print(f"[{(r.get('source') or 'unknown')[:7]:7s}] "
+                      f"{int(r.get('n_funcs') or 0):4d} fn{dep}  {r.get('id')}")
+            return
+        except ServerOffline:
+            warn_offline()  # fall through to the local leaf-first ranking
+        except ServerError as e:
+            sys.stderr.write(f"[work] server error on next: {e} — showing local ranking\n")
+
     has_deps = con.execute("SELECT COUNT(*) FROM tu_dep").fetchone()[0] > 0
     gname, gset = active_goal_set(con)
     # rank todo TUs by (# dependency TUs not yet done) asc -> leaves first,
@@ -827,14 +1047,16 @@ def set_tu(con, tu, status, owner=None, notes=None):
 def cmd_start(args):
     con = connect()
     agent = server_agent()
+    lease = int(os.environ.get("WORK_LEASE_SECONDS", "7200"))
     if server_enabled():
-        res = server_request("POST", "/claims", {
-            "tu": args.tu,
-            "agent": agent,
-            "lease_seconds": int(os.environ.get("WORK_LEASE_SECONDS", "7200")),
-        })
-        if not res.get("claimed"):
-            sys.exit(f"server did not claim {args.tu}: {res}")
+        flush_pending(con)
+        if not con.execute("SELECT 1 FROM tu WHERE id=?", (args.tu,)).fetchone():
+            sys.exit(f"unknown TU: {args.tu!r}")
+        outcome = server_claim_one(con, args.tu, agent, lease)
+        if outcome == "taken":
+            sys.exit(f"server did not claim {args.tu} (held by someone else)")
+        if outcome == "offline":
+            print(f"(server offline — claimed {args.tu} locally; queued for sync)")
     set_tu(con, args.tu, "in_progress", owner=agent)
     print(f"started {args.tu}")
     cmd_show(args)
@@ -845,60 +1067,74 @@ def cmd_claim(args):
     give none to claim the next N ready ones from the ranked queue. In server mode each
     claim is atomic on the work server (a specific TU that someone else holds is rejected;
     the next-N path hands concurrent agents distinct work). Leases auto-expire, so
-    over-claiming self-heals. Offline it claims in the local ledger."""
+    over-claiming self-heals. Offline (no server, or server unreachable) it claims in the
+    local ledger and queues the claim to re-assert on the server when it returns."""
     con = connect()
     agent = server_agent()
     lease = int(os.environ.get("WORK_LEASE_SECONDS", "7200"))
+    if server_enabled():
+        flush_pending(con)
 
     # explicit TU id(s): claim exactly those
     if args.tu:
-        claimed = []
+        claimed, offline = [], False
         for tu in args.tu:
             if not con.execute("SELECT 1 FROM tu WHERE id=?", (tu,)).fetchone():
                 sys.exit(f"unknown TU: {tu!r}")
             if server_enabled():
-                res = server_request("POST", "/claims", {
-                    "tu": tu, "agent": agent, "lease_seconds": lease,
-                }) or {}
-                if not res.get("claimed"):
-                    print(f"  SKIP {tu}: server did not claim it "
-                          f"(status={res.get('status')}, owner={res.get('owner')})")
+                outcome = server_claim_one(con, tu, agent, lease)
+                if outcome == "taken":
                     continue
+                offline = offline or outcome == "offline"
             set_tu(con, tu, "in_progress", owner=agent)
             claimed.append(tu)
         if not claimed:
             sys.exit("claimed nothing — all requested TUs were unavailable")
-        print(f"claimed {len(claimed)} TU(s):")
+        print(f"claimed {len(claimed)} TU(s){' (server offline; queued)' if offline else ''}:")
         for tu in claimed:
             print(f"  {tu}")
         return
 
-    # no id: claim the next N from the queue
-    if server_enabled():
-        res = server_request("POST", "/claims/next", {
-            "agent": agent, "n": args.n, "lease_seconds": lease,
-        }) or {}
-        claimed = res.get("claimed") or []
-        if not claimed:
-            print("no todo TUs available to claim on the work server")
+    # no id: claim the next N from the queue (atomic on the server when reachable)
+    if server_enabled() and not _SERVER["offline"]:
+        res = None
+        try:
+            res = server_request("POST", "/claims/next", {
+                "agent": agent, "n": args.n, "lease_seconds": lease,
+            }) or {}
+        except ServerOffline:
+            warn_offline()  # fall through to local ranking + queue below
+        except ServerError as e:
+            if e.code in (401, 403):
+                sys.exit(f"work server rejected claim: {e}\n(check WORK_AGENT in your .env)")
+            sys.stderr.write(f"[work] server error on claim-next: {e}\n")
+        if res is not None:
+            claimed = res.get("claimed") or []
+            if not claimed:
+                print("no todo TUs available to claim on the work server")
+                return
+            gname = res.get("active_goal")
+            if gname:
+                print(f"[server goal: {gname}]")
+            for c in claimed:
+                set_tu(con, c["tu"], "in_progress", owner=agent)
+            print(f"claimed {len(claimed)} TU(s):")
+            for c in claimed:
+                print(f"  {c['tu']}")
             return
-        gname = res.get("active_goal")
-        if gname:
-            print(f"[server goal: {gname}]")
-        for c in claimed:
-            set_tu(con, c["tu"], "in_progress", owner=agent)
-        print(f"claimed {len(claimed)} TU(s):")
-        for c in claimed:
-            print(f"  {c['tu']}")
-        return
-    # offline: rank like `work next`, then claim in the local ledger
+
+    # offline OR no server: rank like `work next`, claim locally; queue for the server.
     rows = ranked_todo(con, args.n)
     if not rows:
         print("no todo TUs to claim — run `work status`")
         return
     for r in rows:
+        if server_enabled():
+            enqueue_op(con, "claim", "POST", "/claims",
+                       {"tu": r["id"], "agent": agent, "lease_seconds": lease}, r["id"])
         set_tu(con, r["id"], "in_progress", owner=agent)
-    print(f"claimed {len(rows)} TU(s) locally:")
+    tag = " locally (queued for the server)" if server_enabled() else " locally"
+    print(f"claimed {len(rows)} TU(s){tag}:")
     for r in rows:
         print(f"  {r['id']}")
 
@@ -960,11 +1196,12 @@ def cmd_submit(args):
     con.execute("UPDATE func SET status='compiles', verify_tier=?, updated_at=? WHERE tu_id=?", (tier, now(), args.tu))
     set_tu(con, args.tu, "compiled", notes=args.note)
     if server_enabled():
-        server_request("POST", f"/tu/{server_tu_path(args.tu)}/compiled", {
+        flush_pending(con)
+        server_mutate(con, "compiled", "POST", f"/tu/{server_tu_path(args.tu)}/compiled", {
             "agent": server_agent(),
             "notes": args.note,
             "files": files,
-        })
+        }, args.tu)
     if status == "skip":
         print(f"  (gate skipped: {glog.strip()})")
         log(con, "compile_skip", tu_id=args.tu, detail=glog[:200])
@@ -1002,26 +1239,28 @@ def cmd_review(args):
     t = dict_row(con, "tu", args.tu)
     if not t:
         sys.exit(f"unknown TU: {args.tu!r}")
+    if server_enabled():
+        flush_pending(con)
     if args.verdict == "pass":
         con.execute("UPDATE func SET status='reviewed', verify_tier=2, updated_at=? WHERE tu_id=?", (now(), args.tu))
         set_tu(con, args.tu, "done", notes=args.notes)
         if server_enabled():
-            server_request("POST", f"/tu/{server_tu_path(args.tu)}/review", {
+            server_mutate(con, "review_pass", "POST", f"/tu/{server_tu_path(args.tu)}/review", {
                 "agent": server_agent(),
                 "verdict": "pass",
                 "notes": args.notes,
-            })
+            }, args.tu)
         log(con, "review_pass", tu_id=args.tu, detail=args.notes)
         con.commit()
         print(f"review PASS -> {args.tu} done")
     else:
         set_tu(con, args.tu, "in_progress", notes=args.notes)
         if server_enabled():
-            server_request("POST", f"/tu/{server_tu_path(args.tu)}/review", {
+            server_mutate(con, "review_fail", "POST", f"/tu/{server_tu_path(args.tu)}/review", {
                 "agent": server_agent(),
                 "verdict": "fail",
                 "notes": args.notes,
-            })
+            }, args.tu)
         log(con, "review_fail", tu_id=args.tu, detail=args.notes)
         con.commit()
         print(f"review FAIL -> {args.tu} back to in_progress")
@@ -1033,10 +1272,11 @@ def cmd_block(args):
     con = connect()
     set_tu(con, args.tu, "blocked", notes=args.reason)
     if server_enabled():
-        server_request("POST", f"/tu/{server_tu_path(args.tu)}/block", {
+        flush_pending(con)
+        server_mutate(con, "block", "POST", f"/tu/{server_tu_path(args.tu)}/block", {
             "agent": server_agent(),
             "reason": args.reason,
-        })
+        }, args.tu)
     print(f"blocked {args.tu}: {args.reason}")
 
 
@@ -1044,9 +1284,10 @@ def cmd_unblock(args):
     con = connect()
     set_tu(con, args.tu, "todo")
     if server_enabled():
-        server_request("POST", f"/tu/{server_tu_path(args.tu)}/unblock", {
+        flush_pending(con)
+        server_mutate(con, "unblock", "POST", f"/tu/{server_tu_path(args.tu)}/unblock", {
             "agent": server_agent(),
-        })
+        }, args.tu)
     print(f"unblocked {args.tu}")
 
 
@@ -1067,7 +1308,7 @@ def cmd_server_sync(args):
     if args.branch:
         payload["branch"] = args.branch
     print("== syncing work server (reset=false: preserves live claims + event log) ==")
-    res = server_request("POST", "/admin/sync", payload) or {}
+    res = server_request_strict("POST", "/admin/sync", payload) or {}
     print(f"server synced: {res.get('commit')} ({res.get('branch')})")
     print(f"  workflow_root: {res.get('workflow_root')}")
     print(f"  TUs: {res.get('tus')}  funcs: {res.get('funcs')}  deps: {res.get('deps')}")
@@ -1101,7 +1342,7 @@ def cmd_server_reset(args):
         print("rebuild the local ledger with: work bootstrap")
         return
     print("== re-seeding work server (reset=true: discards live claims + event log) ==")
-    res = server_request("POST", "/admin/sync", {"reset": True})
+    res = server_request_strict("POST", "/admin/sync", {"reset": True})
     print(f"server reseeded from git: {res}")
     print("rebuild the local ledger with: work bootstrap")
 
@@ -1114,7 +1355,7 @@ def cmd_worker_add(args):
     server host — that path talks to the DB directly and needs no existing admin.)"""
     if not server_enabled():
         sys.exit("WORK_SERVER not set — point it at your server first")
-    res = server_request("POST", "/admin/workers",
+    res = server_request_strict("POST", "/admin/workers",
                          {"username": args.username, "is_admin": bool(args.admin)}) or {}
     role = "admin" if res.get("is_admin") else "user"
     print(f"created {role} worker for {res.get('username')!r}:")
@@ -1127,7 +1368,7 @@ def cmd_worker_list(args):
     """(Maintainer) List server workers (ids, usernames, last-seen)."""
     if not server_enabled():
         sys.exit("WORK_SERVER not set")
-    res = server_request("GET", "/admin/workers") or {}
+    res = server_request_strict("GET", "/admin/workers") or {}
     workers = res.get("workers") or []
     if not workers:
         print("no workers registered")
@@ -1143,8 +1384,34 @@ def cmd_worker_revoke(args):
     """(Maintainer) Revoke a worker id so it can no longer claim/submit."""
     if not server_enabled():
         sys.exit("WORK_SERVER not set")
-    server_request("DELETE", f"/admin/workers/{urllib.parse.quote(args.token, safe='')}")
+    server_request_strict("DELETE", f"/admin/workers/{urllib.parse.quote(args.token, safe='')}")
     print(f"revoked {args.token}")
+
+
+def cmd_sync(args):
+    """Flush queued offline operations to the work server and report what's left.
+
+    When the server is unreachable, claims and status updates are applied to the local
+    ledger and queued (see the offline outbox). This drains that queue once the server is
+    back. It runs automatically before every server-mode command too; this is the explicit,
+    verbose entry point. Durable done/blocked also reconcile from committed status.json via
+    `work server-sync`, so finished work is never lost even if a queued op conflicts."""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set — you're in local mode; nothing to sync.")
+    con = connect()
+    n = pending_count(con)
+    if n == 0:
+        reachable = server_probe()
+        print("nothing queued; server reachable" if reachable
+              else f"nothing queued; server unreachable ({WORK_SERVER})")
+        return
+    print(f"{n} queued op(s); attempting sync to {WORK_SERVER} ...")
+    flush_pending(con, quiet=False)
+    left = pending_count(con)
+    if left:
+        print(f"{left} op(s) still queued — server unreachable; retry later with `work sync`")
+    else:
+        print("all queued ops delivered.")
 
 
 def cmd_parity(args):
@@ -1393,6 +1660,7 @@ def main():
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
     se = sub.add_parser("set"); se.add_argument("tu"); se.add_argument("--status", required=True); se.add_argument("--note"); se.set_defaults(fn=cmd_set)
+    sub.add_parser("sync", help="flush queued offline ops to the server (auto-runs before server commands)").set_defaults(fn=cmd_sync)
     ss = sub.add_parser("server-sync", help="refresh server checkout/import without clearing live claims/events")
     ss.add_argument("--branch", help="workflow branch to sync (default: server BP_WORKFLOW_BRANCH)")
     ss.set_defaults(fn=cmd_server_sync)
