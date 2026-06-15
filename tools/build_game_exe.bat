@@ -17,8 +17,18 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareInitPC.cpp" ^
   "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp" ^
   "%SRC%\GameShared\GameClasses\Core\CgsStringUtils.cpp" ^
+  "%SRC%\GameShared\GameClasses\Core\CgsAssert.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\AssertSystem\CgsAssertManager.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\CgsStrStream.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\Log\CgsLog.cpp" ^
   "%SRC%\GameSource\Game\BrnGameModule.cpp" ^
+  "%SRC%\GameSource\Game\BrnGlobalCpuMonitors.cpp" ^
   "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowStates.cpp" ^
+  "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowController.cpp" ^
+  "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameRate.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\PerfMon\Cpu\CgsPerfMonCpu.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugManager.cpp" ^
+  "%SRC%\GameShared\GameClasses\Module\CgsIOBufferStack.cpp" ^
   "%SRC%\GameSource\Graphics\BrnRendererModule.cpp" ^
   "%SRC%\GameSource\Graphics\BrnShaderConstantsFrame.cpp" ^
   "%SRC%\GameSource\Game\BrnLoadingScreenRenderer.cpp" ^
