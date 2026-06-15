@@ -282,6 +282,9 @@
   "BrnGameState::FlybyManager::RivalRating::SortRivalsCallback": {
    "status": "reviewed"
   },
+  "BrnGameState::GameMode::HasCountdownDisplayChanged": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateModuleIO::CompletedFburnChallengesData,7>::Cons": {
    "status": "reviewed"
   },
@@ -1105,6 +1108,12 @@
    "status": "reviewed"
   },
   "CGSSTRNLOWER": {
+   "status": "reviewed"
+  },
+  "CgsAttribSys::StreamedVaultAllocator::GetSlotMemory": {
+   "status": "reviewed"
+  },
+  "CgsAttribSys::StreamedVaultAllocator::ReleaseSlot": {
    "status": "reviewed"
   },
   "CgsAttribSys::VaultArray::Construct": {
@@ -2913,6 +2922,10 @@
    "notes": "trivial; gate-only (sets id=-1)",
    "status": "done"
   },
+  "class:BrnGameState::GameMode": {
+   "notes": "Fresh-eyes review PASS; HasCountdownDisplayChanged faithful, ledger-gated GameMode base, RED parity = benign inlined-assert-formatter. Committed dev ccda5be.",
+   "status": "done"
+  },
   "class:BrnGameState::GameStateModuleIO::CompletedFburnChallengesData,7>": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
    "status": "done"
@@ -3159,6 +3172,10 @@
   },
   "class:CDXVAWMV": {
    "notes": "trivial; gate-only (sets state=1)",
+   "status": "done"
+  },
+  "class:CgsAttribSys::StreamedVaultAllocator": {
+   "notes": "Fresh-eyes review PASS; GetSlotMemory/ReleaseSlot faithful (strength-reduction reversed, void per DWARF), BitArray bit-ops, CgsPriorityQueue correctly deferred (assert formatter only). Committed dev 13055bf.",
    "status": "done"
   },
   "class:CgsAttribSys::VaultArray": {
