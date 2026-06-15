@@ -197,6 +197,10 @@ someone else's in-flight TU, and there are **two state stores with different lif
 - **Live layer — server DB.** Claims, leases, `owner`, transient statuses, and the event
   log. Ephemeral; never committed.
 
+When a server is configured you **don't have to push `status.json` or bump the submodule**:
+a GitHub Action reconciles both from the server automatically, so contributors push only
+to `b5-decomp`.
+
 **Checking out work:** `work claim <tu> ...` claims those specific TUs; `work claim -n N`
 (no id) claims the next N ready ones from the queue. With a server every claim is atomic
 across everyone — two agents pulling the queue at once get *different* TUs, and a specific

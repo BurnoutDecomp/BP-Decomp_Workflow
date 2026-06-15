@@ -225,6 +225,51 @@ work worker-list
 work worker-revoke <worker-id>
 ```
 
+### Automated status reconcile
+
+Because every claim/submit/review is mirrored to the server, the committed
+`progress/status.json` is a *derived* view of the server's durable state, not an
+independent source. A GitHub Action keeps git in step with the server automatically, so
+**the people doing the decompilation only ever push to `b5-decomp` — they need no write
+access to this workflow repo and never hand-edit `status.json`.**
+
+[`.github/workflows/reconcile-status.yml`](.github/workflows/reconcile-status.yml) runs
+hourly (and on demand), and on each run it:
+
+1. advances the `b5-decomp` submodule pointer to the current `dev` tip (or the commit from
+   the trigger payload);
+2. regenerates `progress/status.json` from the server's `GET /export/status`. The server
+   is the **only full authority**: a files-only reconcile can recover `done` (its file
+   exists) but not `blocked` (a blocked TU leaves no file), so the durable set is pulled
+   straight from the server;
+3. cross-checks the server's `done` set against the committed b5-decomp files with
+   `reconcile_from_files.py` (non-blocking — it only emits a warning if the server marks a
+   TU `done` whose committed file is missing or still a trap-stub/partial);
+4. commits and pushes any change under a bot identity.
+
+For an **immediate** reconcile on every b5-decomp push (instead of waiting for the hourly
+run), add the optional notifier
+[`b5-decomp/.github/workflows/notify-workflow.yml`](b5-decomp/.github/workflows/notify-workflow.yml)
+to the b5-decomp repo and give it a `WORKFLOW_DISPATCH_TOKEN` secret (a token that can
+send `repository_dispatch` to this repo). Without the secret it no-ops, and the hourly
+schedule still covers everything.
+
+You can refresh the committed mirror manually too:
+
+```powershell
+python tools/work/fetch_server_status.py            # rewrite status.json from the server
+python tools/work/fetch_server_status.py --check    # report drift, write nothing (exit 1 if stale)
+```
+
+Two operational notes:
+
+- **The server is now a durable store for `blocked`.** `done` is always recoverable from
+  the committed files, but a blocked TU's state and reason live only on the server — so
+  back up its DB (`/var/lib/bp-work-server`). The bot-committed `status.json` doubles as a
+  backup of the `done`/`blocked` set.
+- **The Action pushes to the default branch.** If it is protected against direct pushes,
+  point the Action at a side branch with an auto-PR instead of allowing the bot to push.
+
 ## Automated Helpers
 
 These helpers are optional. They do not replace manual reconstruction:

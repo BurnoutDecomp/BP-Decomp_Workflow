@@ -1,0 +1,120 @@
+name: Reconcile status + submodule pointer
+
+# Keep the committed progress/status.json and the b5-decomp submodule pointer in step
+# with the coordination server, automatically — so the people doing the decompilation
+# only ever push to b5-decomp and never need write access to this workflow repo.
+#
+# What it does on each run:
+#   1. advance the b5-decomp submodule pointer to the current dev tip (or the SHA from
+#      the repository_dispatch payload),
+#   2. regenerate progress/status.json from the server (GET /export/status) — the server
+#      is the only full authority: a files-only reconcile recovers `done` but not
+#      `blocked` (a blocked TU leaves no file),
+#   3. cross-check the server's `done` set against the committed b5-decomp files
+#      (non-blocking integrity alarm),
+#   4. commit + push any change with the bot token.
+#
+# Triggers: the nightly + manual runs make it self-sufficient with zero changes to
+# b5-decomp. The repository_dispatch trigger is the event-driven path — wire it up with
+# the optional notifier workflow in b5-decomp (.github/workflows/notify-workflow.yml).
+
+on:
+  repository_dispatch:
+    types: [b5-decomp-push]
+  schedule:
+    - cron: "17 * * * *"   # hourly, off the top of the hour to dodge load spikes
+  workflow_dispatch:
+    inputs:
+      b5_sha:
+        description: "b5-decomp commit to pin (default: current dev tip)"
+        required: false
+
+# Never let two reconciles race on a push to main.
+concurrency:
+  group: reconcile-status
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  WORK_SERVER: ${{ vars.WORK_SERVER || 'https://decomp.adriwin.fr/' }}
+  B5_REPO: https://github.com/Adriwin06/b5-decomp.git
+  B5_BRANCH: dev
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout workflow repo
+        uses: actions/checkout@v4
+        with:
+          submodules: false   # we manage the b5-decomp pointer explicitly below
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Resolve target b5-decomp commit
+        id: target
+        run: |
+          set -euo pipefail
+          SHA="${{ github.event.client_payload.sha || github.event.inputs.b5_sha || '' }}"
+          if [ -z "$SHA" ]; then
+            SHA="$(git ls-remote "$B5_REPO" "refs/heads/$B5_BRANCH" | cut -f1)"
+          fi
+          if [ -z "$SHA" ]; then
+            echo "could not resolve a b5-decomp commit"; exit 1
+          fi
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "Target b5-decomp commit: $SHA"
+
+      - name: Advance b5-decomp submodule pointer
+        run: |
+          set -euo pipefail
+          SHA="${{ steps.target.outputs.sha }}"
+          # Materialise the submodule at the pinned commit over HTTPS (its .gitmodules URL
+          # is SSH; we don't touch it, so no stray diff). A fresh clone is more robust than
+          # `submodule update` when the recorded pointer isn't fetchable at depth 1. The
+          # contents are needed for the cross-check; `git add` records the new gitlink.
+          rm -rf b5-decomp
+          git clone --depth 1 --branch "$B5_BRANCH" "$B5_REPO" b5-decomp
+          git -C b5-decomp fetch --depth 1 origin "$SHA"
+          git -C b5-decomp checkout -q "$SHA"
+          git add b5-decomp
+
+      - name: Regenerate status.json from the server
+        run: python tools/work/fetch_server_status.py --server "$WORK_SERVER"
+
+      - name: Cross-check server `done` against committed files (non-blocking)
+        continue-on-error: true
+        run: |
+          set -uo pipefail
+          # Seed the ledger from the just-fetched status.json (no IDA needed) and let
+          # reconcile_from_files report any TU the server calls `done` whose committed
+          # file is missing or still a trap-stub/partial. Advisory only.
+          python tools/work/work.py seed
+          echo "=== reconcile (server status.json vs b5-decomp files) ==="
+          OUT="$(python tools/work/reconcile_from_files.py)"
+          echo "$OUT"
+          if echo "$OUT" | grep -qE 'done +-> +(todo|in_progress)'; then
+            echo "::warning title=status drift::Server marks TUs done that lack a complete committed file — see the reconcile table above."
+          fi
+
+      - name: Commit + push if anything changed
+        run: |
+          set -euo pipefail
+          git config user.name  "bp-reconcile-bot"
+          git config user.email "bp-reconcile-bot@users.noreply.github.com"
+          git add progress/status.json b5-decomp
+          if git diff --cached --quiet; then
+            echo "nothing to reconcile — status.json and submodule pointer already current."
+            exit 0
+          fi
+          SHA="${{ steps.target.outputs.sha }}"
+          git commit -m "chore: reconcile status.json + b5-decomp pointer to ${SHA:0:12}
+
+          Automated: regenerated from the coordination server and b5-decomp dev tip.
+          No manual status.json push required."
+          git push
