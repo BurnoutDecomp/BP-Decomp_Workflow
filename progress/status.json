@@ -816,6 +816,15 @@
   "BrnPhysics::Deformation::DeactivateDeformationModelEvent,28>::Construc": {
    "status": "reviewed"
   },
+  "BrnPhysics::Deformation::DeformationInputInterface::AddDeformationModel": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationInputInterface::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationOutputInterface::Construct": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Deformation::DetachedPartCurrentPositionEvent,50>::Constru": {
    "status": "reviewed"
   },
@@ -1089,6 +1098,9 @@
   "BrnWorld::PVSModule::Prepare": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModuleIO::AudioCarDataLoadedEvent,16>::Construc": {
+   "status": "reviewed"
+  },
   "BrnWorld::TriggerEntityModule::TriggerEntityModule": {
    "status": "reviewed"
   },
@@ -1267,6 +1279,12 @@
    "status": "reviewed"
   },
   "CgsGui::EventInterpreterModule::sMapEntry>::HashTableElement": {
+   "status": "reviewed"
+  },
+  "CgsGui::EventObserver::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGui::EventObserver::Prepare": {
    "status": "reviewed"
   },
   "CgsGui::GuiHudMessageListResource::FixUp": {
@@ -2311,6 +2329,10 @@
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
    "status": "done"
   },
+  "GameShared/GameClasses/Gui/Model/CgsEventObserver.cpp": {
+   "notes": "Fresh-eyes review (claude): faithful; delegates to StateInterface Construct/SetEventObserver/Prepare with correct offset->member mapping.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Gui/Model/Resources/CgsAptDataHeaderType.cpp": {
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
    "status": "done"
@@ -3018,6 +3040,14 @@
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
    "status": "done"
   },
+  "class:BrnPhysics::Deformation::DeformationInputInterface": {
+   "notes": "Fresh-eyes review (claude): faithful; Construct builds 6 queues + clears mbResetPlayerScratches; AddDeformationModel maps event by name, returns GetLength()-1; RED parity is the member-call artifact.",
+   "status": "done"
+  },
+  "class:BrnPhysics::Deformation::DeformationOutputInterface": {
+   "notes": "Fresh-eyes review (claude): faithful; 5 queue constructs in order + both flags cleared; YELLOW parity is the member-call artifact.",
+   "status": "done"
+  },
   "class:BrnPhysics::Deformation::DetachedPartCurrentPositionEvent,50>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - matches the established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF (member names/types) into its mirrored header, 16B-aligned so sizeof is correct for the inline maEvents[N] buffer. Parity flags the template body's assert/setup callees as absent since they live in the template header, not the one-line instantiation - expected for explicit instantiations.",
    "status": "done"
@@ -3166,6 +3196,10 @@
    "notes": "fresh-eyes review: 6 vec copies + 12 scalars + qword/A0/A4 correct",
    "status": "done"
   },
+  "class:BrnWorld::RaceCarEntityModuleIO::AudioCarDataLoadedEvent,16>": {
+   "notes": "Fresh-eyes review (claude): faithful; explicit template instantiation of EventQueue<...,16>::Construct, matches buffer/maxlen/count + null assert.",
+   "status": "done"
+  },
   "class:BrnWorld::TriggerEntityModule": {
    "notes": "fresh-eyes review: dispatch install faithful; mutexes via member ctor",
    "status": "done"
@@ -3181,6 +3215,10 @@
   "class:CgsAttribSys::VaultArray": {
    "notes": "Fresh-eyes review (opus) PASS after DWARF-faithful redo: real layout (mpaSlots/mpGarbageCollector/StreamedVaultAllocator/miNumSlots/mbPrepared), void Construct(IGarbageCollector*), inlining-reversal of StreamedVaultAllocator::Construct, BitArray<24u> cascade. No offset hacks.",
    "status": "done"
+  },
+  "class:CgsDev::DebugUI::LogWindow": {
+   "notes": "Trivial ctor (mLog.mpWindow=this) but compiling it needs the full DebugUI base-layout cascade reconstructed first: CgsDev::Internal::DebugInternal (empty base), DebugUI::Window, DebugUI::MenuItem/CustomWindowMenuItem, DebugUI::CustomWindow, CgsDev::StrStreamBase + LogWindowStrStream (Feb-2007 headers exist: CgsLogWindow.h/CgsCustomWindow.h/CgsWindow.h/CgsMenuItem.h/CgsStrStream.h/CgsDebugInternal.h). X360 ctor sets primary vtable @+0, embedded CustomWindowMenuItem vtable @+36, LogWindowStrStream @+56 (mpWindow=this @+64). Unblock + port the 6 headers (X360-gated) when doing the DebugUI window subsystem.",
+   "status": "blocked"
   },
   "class:CgsGui::EventInterpreterModule::sMapEntry>": {
    "notes": "trivial; gate-only (10-bucket sentinel loop, re-rolled). Packet skipped: '>' invalid in Win filename.",
