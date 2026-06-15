@@ -5649,17 +5649,10 @@
    "notes": "sonnet review: +0x0C clear, return this; faithful",
    "status": "done"
   },
-  "GameSource/GameFlowController/TopLevel/BrnGameMainFlowStates.h": {
-   "status": "done"
-  },
   "GameSource/GameState/BrnGameStateSharedIO.h": {
    "status": "done"
   },
   "GameSource/GameState/ModeManager/GameModes/BrnGameMode.h": {
-   "status": "done"
-  },
-  "GameSource/Graphics/BrnRendererModule.h": {
-   "notes": "batch review pass",
    "status": "done"
   },
   "GameSource/Graphics/BrnShaderConstantsFrame.h": {
@@ -5876,9 +5869,6 @@
    "notes": "perf monitor registration table; compile gate and parity GREEN",
    "status": "done"
   },
-  "GameSource/Unity/../Game/BrnGameModule.cpp": {
-   "status": "done"
-  },
   "GameSource/Unity/../Game/BrnLoadingScreenRenderer.cpp": {
    "notes": "Complex/interpretive. Built the CgsGraphics Im2d render subsystem (ImRendererBase/ImRenderer<V>/Im2dBase<V>/Im2d + Im2dTransform + Basic2dColouredTexturedVertex) and a minimal renderengine::Texture/Texture2D API, then reconstructed all 5 funcs. FAITHFUL: AddCommand (command->state switch), RenderBackground/RenderForeground (timestep + visibility logic), and the black-overlay fade-in/out control flow + Im2d draw sequence (Begin/SetTransform/SetState/SetTexture/Render/End). INTERPRETIVE (documented inline): RenderBlackOverlay's quad geometry/transform was hand-written PPC VMX that Hex-Rays failed to lift ('local variable allocation has failed') -> rewritten as the equivalent clean logical full-screen quad (per the gate's 'rewrite SIMD to logical C++' rule); SetupLoadingScreenTexture's platform descriptor int-copy loops -> clean struct assignment + create/lock/memcpy/unlock; member offsets reconciled vs pseudocode (muLastTime@24, mbRenderInBackground@48, mfBlackOverlayFade@52, mfTimeStep@88). Gate PASS. Parity RED is (a) member-call false positives: all 8 Im2d methods ARE called via lpIm2d->X() but the qualified-name matcher misses member syntax; (b) the 2 descriptor loops correctly abstracted away; (c) __fastcall void-return artifacts. .rdata floats (fade rates, UVs) + the overlay blend state declared extern (link-time).",
    "status": "done"
@@ -5989,10 +5979,6 @@
   },
   "SDKs/RenderEngineClub/MAIN/components/include/coronas/rwgcoronabuffer.h": {
    "notes": "focused reviewer pass after adding leaked CoronaBuffer inline API, padding fixes, and vtable symbol",
-   "status": "done"
-  },
-  "SharedClasses/Graphics/BrnEffectsData.h": {
-   "notes": "batch re-review pass after explicit constructor defaults",
    "status": "done"
   },
   "SharedClasses/Gui/SatNav/Resources/BrnSatNavTileResourceType.cpp": {
