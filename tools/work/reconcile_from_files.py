@@ -33,10 +33,13 @@ TRAP = ("__debugbreak", "__builtin_trap", "CGS_ASSERT(false)", "CGS_ASSERT( fals
 # CgsCore::StrCpy", "All function implementations are guessed").
 # Deliberately NARROW: excludes "stub"/"placeholder"/"not yet recovered", which
 # legitimately describe extern references to OTHER not-yet-reconstructed symbols
-# (the STRATEGY.md stub scaffold) in otherwise-complete files.
+# (the STRATEGY.md stub scaffold) in otherwise-complete files. Also excludes "HACK":
+# it matches deliberate, complete landmark code that mirrors original symbol names
+# (e.g. `KF_HACK_MIN_LANDMARK_HEIGHT`) and "no-op/documented placeholder" prose, both
+# of which are finished work, not WIP — flagging them wrongly demotes done TUs.
 INCOMPLETE = re.compile(
-    r"\b(TODO|FIXME|XXX|HACK|guessed|not implemented|unimplemented|incomplete|WIP|"
-    r"placeholder|not yet recovered)\b", re.I)
+    r"\b(TODO|FIXME|guessed|not implemented|unimplemented|incomplete|WIP|"
+    r"not yet recovered)\b", re.I)
 
 
 def committed_files():
@@ -44,6 +47,42 @@ def committed_files():
     out = subprocess.run(["git", "-C", B5, "ls-tree", "-r", "--name-only", "HEAD"],
                          capture_output=True, text=True).stdout
     return {"b5-decomp/" + ln.strip() for ln in out.splitlines() if ln.strip()}
+
+
+def _stem(path_rel_root):
+    """Extension-stripped, `..`-collapsed, lower-cased key for fuzzy matching.
+    `b5-decomp/src/GameShared/.../CgsLuaCodeResource.cpp` and the TU id
+    `GameShared/.../FSM/Resources/CgsLuaCodeResource.h` both reduce to the same key,
+    so case (FSM/Fsm) and extension (.h/.cpp) differences no longer hide a real file."""
+    p = work.normalize_path(path_rel_root)
+    p = os.path.splitext(p)[0]
+    return p.lower()
+
+
+def build_index(tracked):
+    """Map every committed file to its fuzzy stem so a TU id resolves to ALL its
+    companion files (the `.h` and the `.cpp`), regardless of case/extension drift."""
+    idx = {}
+    for f in tracked:
+        idx.setdefault(_stem(f), []).append(f)
+    return idx
+
+
+def function_defined(funcs):
+    """True if any of the TU's functions has a DEFINITION committed in b5-decomp HEAD,
+    found by symbol regardless of file path. The safety net for file-TUs whose path was
+    misattributed: the reconstruction lives under a different name (e.g. CgsPlayerName's
+    `CgsNetwork::PlayerName::Construct` lives in BrnCgsPlayerName.cpp). Demoting such a
+    TU to todo would delete present, reviewed work — so we confirm absence by symbol
+    before ever demoting a curated-done TU."""
+    for fn in funcs or []:
+        tail = "::".join(fn.split("::")[-2:]) if "::" in fn else fn   # Class::Method
+        pat = re.escape(tail) + r"\s*\("
+        out = subprocess.run(["git", "-C", B5, "grep", "-lIE", pat, "HEAD"],
+                             capture_output=True, text=True).stdout
+        if out.strip():
+            return True
+    return False
 
 
 def blob(path_rel_root):
@@ -67,43 +106,83 @@ def is_real_reconstruction(text):
     return False
 
 
-def candidates(tu_id, source, dest_path):
-    c = []
+def resolve_files(tu_id, source, dest_path, index):
+    """The committed b5-decomp files that belong to a TU, found via fuzzy stem so
+    case/extension drift never hides a real reconstruction. Tries the stored dest_path
+    first (handles corrected/misattributed paths), then the mirrored src/<tu> path."""
+    stems = []
     if dest_path:
-        c.append(dest_path)
-    if source == "decfigs":
-        c.append("b5-decomp/src/" + work.normalize_path(tu_id))
-    return list(dict.fromkeys(c))  # dedupe, keep order
+        stems.append(_stem(dest_path))
+    stems.append(_stem("b5-decomp/src/" + tu_id))
+    files = []
+    for s in dict.fromkeys(stems):
+        files.extend(index.get(s, []))
+    return list(dict.fromkeys(files))
 
 
-def classify_file(text):
-    """'done' (real & complete) | 'partial' (real but has TODO/placeholder) |
-    'skeleton' (trap-stub only / no substantive code)."""
+def classify_files(files):
+    """Classify a TU from ALL its committed companion files:
+    'done' (some real code, none flagged unfinished) | 'partial' (real but a file
+    carries TODO/placeholder) | 'skeleton' (files present but only trap stubs)."""
+    texts = [blob(f) for f in files]
+    if not any(is_real_reconstruction(t) for t in texts):
+        return "skeleton"
+    return "partial" if any(INCOMPLETE.search(t) for t in texts) else "done"
+
+
+def classify_file(text):  # kept for verify()'s single-file checks
     if not is_real_reconstruction(text):
         return "skeleton"
     return "partial" if INCOMPLETE.search(text) else "done"
 
 
 def reconcile(con, tracked, apply):
+    index = build_index(tracked)
+    tu_index = json.load(open(TU_INDEX, encoding="utf-8"))
     rows = con.execute("SELECT id, source, status, dest_path FROM tu").fetchall()
-    flips, done_ids, partial, skeleton_flag = [], set(), [], []
+    flips, done_ids, partial, skeleton_flag, preserved = [], set(), [], [], []
+    demoted_phantom, misattributed = [], []
     for r in rows:
         tid, src, cur, dp = r["id"], r["source"], r["status"], r["dest_path"]
-        hit = next((c for c in candidates(tid, src, dp) if c in tracked), None)
-        kind = classify_file(blob(hit)) if hit else "none"
+        files = resolve_files(tid, src, dp, index)
+        kind = classify_files(files) if files else "none"
         if kind == "done":
             target = "done"; done_ids.add(tid)
         elif kind == "partial":
-            target = "in_progress"; partial.append((tid, hit))   # committed but unfinished
-        else:  # skeleton-only file, or no file at all
+            if cur == "done":
+                # already curated done AND still backed by real committed code — a stray
+                # TODO/guessed comment must not silently delete reviewed work. Keep done.
+                target = "done"; done_ids.add(tid)
+            else:
+                target = "in_progress"; partial.append((tid, files[0]))  # committed but unfinished
+        elif kind == "skeleton":
             target = "blocked" if cur == "blocked" else "todo"
-            if kind == "skeleton":
-                skeleton_flag.append((tid, hit))
+            skeleton_flag.append((tid, files[0]))
+        else:  # no committed file resolves to this TU
+            if src == "class":
+                # A class/nested-template TU owns no file of its own — its code is folded
+                # into a parent file, so file-existence can't judge it. PRESERVE the
+                # curated status instead of wiping real progress to todo.
+                target = cur
+                if cur not in ("todo", "blocked"):
+                    preserved.append(tid)
+            elif cur == "done" and function_defined(tu_index.get(tid, {}).get("functions")):
+                # Path didn't resolve, but the TU's function IS defined in committed
+                # code under a misattributed path — present work, keep it done.
+                target = "done"; done_ids.add(tid); misattributed.append(tid)
+            else:
+                # A file-TU that should have a committed file but doesn't = phantom done.
+                target = "blocked" if cur == "blocked" else "todo"
+                if cur == "done":
+                    demoted_phantom.append(tid)
         if target != cur:
             flips.append((tid, cur, target))
 
     print(f"TUs: {len(rows)}   done (real & complete file): {len(done_ids)}   "
           f"in_progress (committed but TODO/placeholder): {len(partial)}")
+    print(f"class TUs preserved (no file to verify): {len(preserved)}   "
+          f"misattributed-but-present (kept done by symbol): {len(misattributed)}   "
+          f"phantom file-TUs demoted (done, fn truly absent): {len(demoted_phantom)}")
     print(f"status flips needed: {len(flips)}")
     for tid, a, b in sorted(flips, key=lambda x: (x[1], x[2]))[:60]:
         print(f"  {a:11s} -> {b:11s}  {tid[:74]}")
@@ -117,6 +196,10 @@ def reconcile(con, tracked, apply):
         print(f"\nfiles present but trap-stub-only (left NOT done): {len(skeleton_flag)}")
         for tid, p in skeleton_flag[:10]:
             print(f"  {p}")
+    if demoted_phantom:
+        print(f"\ndone but NO committed file (demoted to todo): {len(demoted_phantom)}")
+        for tid in demoted_phantom[:10]:
+            print(f"  {tid}")
 
     if not apply:
         print("\n(dry run — re-run with --apply to write)")
@@ -124,6 +207,7 @@ def reconcile(con, tracked, apply):
 
     ts = work.now()
     partial_ids = {t for t, _ in partial}
+    flip_ids = {t for t, _, _ in flips}
     for r in rows:
         tid, cur = r["id"], r["status"]
         if tid in done_ids:
@@ -132,36 +216,41 @@ def reconcile(con, tracked, apply):
         elif tid in partial_ids:
             con.execute("UPDATE tu SET status='in_progress', notes='committed file is partial (TODO/placeholder) — needs finishing', updated_at=? WHERE id=?", (ts, tid))
             con.execute("UPDATE func SET status='recovered', verify_tier=0, updated_at=? WHERE tu_id=?", (ts, tid))
-        elif cur != "blocked":
+        elif tid in flip_ids and cur != "blocked":
+            # only TUs we actually decided to demote (phantom file-TUs / skeletons);
+            # class TUs with no file keep their status and are NOT in flip_ids here.
             con.execute("UPDATE tu SET status='todo', updated_at=? WHERE id=?", (ts, tid))
             con.execute("UPDATE func SET status='todo', verify_tier=0, updated_at=? WHERE tu_id=?", (ts, tid))
     con.execute("INSERT INTO event(ts,tu_id,action,detail) VALUES(?,?,?,?)",
-                (ts, None, "reconcile_from_files", f"done={len(done_ids)} partial={len(partial)} flips={len(flips)}"))
+                (ts, None, "reconcile_from_files",
+                 f"done={len(done_ids)} partial={len(partial)} preserved={len(preserved)} flips={len(flips)}"))
     con.commit()
     work.sync_status(con)
-    print(f"\napplied. done={len(done_ids)}  in_progress(partial)={len(partial)}")
+    print(f"\napplied. done={len(done_ids)}  in_progress(partial)={len(partial)}  "
+          f"class-preserved={len(preserved)}")
 
 
 def verify(con, tracked):
-    """Post-conditions: every done has a real file; every real committed file is done."""
-    index = json.load(open(TU_INDEX, encoding="utf-8"))
+    """Post-conditions: every done FILE-TU has a real file; every real committed file
+    is done/in_progress. Class TUs own no file, so they are exempt from the file check."""
+    index = build_index(tracked)
+    # forward: a done decfigs file-TU must resolve to a committed file (class TUs exempt)
     done = con.execute("SELECT id, source, dest_path FROM tu WHERE status='done'").fetchall()
-    bad_done = [r["id"] for r in done
-                if not any(c in tracked for c in candidates(r["id"], r["source"], r["dest_path"]))]
-    # reverse: committed decfigs src files whose owning TU is not done
+    bad_done = [r["id"] for r in done if r["source"] == "decfigs"
+                and not resolve_files(r["id"], r["source"], r["dest_path"], index)]
+    # reverse: which committed file does each TU own, and what is that TU's status
     owned = {}
     for r in con.execute("SELECT id, source, dest_path, status FROM tu"):
-        for c in candidates(r["id"], r["source"], r["dest_path"]):
-            owned[c] = r["status"]
+        for f in resolve_files(r["id"], r["source"], r["dest_path"], index):
+            owned[f] = r["status"]
     src_files = [p for p in tracked if p.startswith("b5-decomp/src/") and p.endswith((".cpp", ".h", ".hpp"))]
     unowned = [p for p in src_files if p not in owned]
-    # a real committed file is OK if its TU is done, OR in_progress because the file
-    # itself is a known partial (TODO/placeholder) — that's the intended classification.
+    # a real committed file is OK if its TU is done, OR in_progress (known partial).
     leaked = [p for p in src_files
               if owned.get(p) not in (None, "done", "in_progress")
               and classify_file(blob(p)) == "done"]
     print("\n=== verification ===")
-    print(f"  done TUs without a committed file: {len(bad_done)}  {'OK' if not bad_done else bad_done[:5]}")
+    print(f"  done file-TUs without a committed file: {len(bad_done)}  {'OK' if not bad_done else bad_done[:5]}")
     print(f"  committed src files not mapped to any TU (class/misattributed): {len(unowned)}")
     print(f"  complete committed files left as todo (should be 0): {len(leaked)}  {'OK' if not leaked else leaked[:5]}")
 
