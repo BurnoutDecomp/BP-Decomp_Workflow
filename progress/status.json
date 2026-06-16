@@ -438,10 +438,22 @@
   "BrnGameState::GameStateModuleIO::CarCheckpointData::SetupCheckpoints": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>::Ge": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>::QSort": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateModuleIO::ChangeNetworkCarEvent::SetNetworkPlayerID": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::CompletedFburnChallengesData,7>::Cons": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::CompletedFburnChallengesData>::Ad": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::CompletedFburnChallengesData>::Ap": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::FburnChallengeEveryPlayerStatusData::AddCompletionStatus": {
@@ -451,6 +463,15 @@
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::FlybyDat": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::FlybyData::AddCar": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::FlybyData::AddMessage": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::FlybyData::Prepare": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::GameStats::Construct": {
@@ -589,6 +610,9 @@
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::PrepareForModeAction::SetPlayerDisconnected": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::RaceCarRaceDistanceInterface::Clear": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::RankInfoResponseAction::SetProgressionRankEventWins": {
@@ -735,6 +759,15 @@
   "BrnGameState::ModeManagerDebugComponent::OnActivate": {
    "status": "reviewed"
   },
+  "BrnGameState::NetworkRoundManager::NetworkGameStarted": {
+   "status": "reviewed"
+  },
+  "BrnGameState::NetworkRoundManager::NetworkRoundStarted": {
+   "status": "reviewed"
+  },
+  "BrnGameState::NetworkRoundManager::OnRoundStart": {
+   "status": "reviewed"
+  },
   "BrnGameState::OfflineFlybyManager::Cal": {
    "status": "reviewed"
   },
@@ -834,6 +867,27 @@
   "BrnGameState::RoadRageMode::GetName": {
    "status": "reviewed"
   },
+  "BrnGameState::StartGameModeParams::AddCheckpoint": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StartGameModeParams::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StartGameModeParams::GetTrafficLightTriggerId": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StartGameModeParams::SetPlayerVehicleGamePlayData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StartGameModeParams::SetProgressionRankAsRatio": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StartGameModeParams::SetProgressionRankData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StartGameModeParams::SetTrafficLightTriggerId": {
+   "status": "reviewed"
+  },
   "BrnGameState::StartLocation,8>::Append": {
    "status": "reviewed"
   },
@@ -850,6 +904,9 @@
    "status": "reviewed"
   },
   "BrnGameState::StuntAttackMode::ShouldCountdownEnd": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntManagerDebugComponent::StuntManagerDebugComponent": {
    "status": "reviewed"
   },
   "BrnGameState::StuntModeScoringOnline::CarLeapingData,7,int>::Alloc": {
@@ -3446,7 +3503,14 @@
    "notes": "Complex/interpretive. Built the CgsGraphics Im2d render subsystem (ImRendererBase/ImRenderer<V>/Im2dBase<V>/Im2d + Im2dTransform + Basic2dColouredTexturedVertex) and a minimal renderengine::Texture/Texture2D API, then reconstructed all 5 funcs. FAITHFUL: AddCommand (command->state switch), RenderBackground/RenderForeground (timestep + visibility logic), and the black-overlay fade-in/out control flow + Im2d draw sequence (Begin/SetTransform/SetState/SetTexture/Render/End). INTERPRETIVE (documented inline): RenderBlackOverlay's quad geometry/transform was hand-written PPC VMX that Hex-Rays failed to lift ('local variable allocation has failed') -> rewritten as the equivalent clean logical full-screen quad (per the gate's 'rewrite SIMD to logical C++' rule); SetupLoadingScreenTexture's platform descriptor int-copy loops -> clean struct assignment + create/lock/memcpy/unlock; member offsets reconciled vs pseudocode (muLastTime@24, mbRenderInBackground@48, mfBlackOverlayFade@52, mfTimeStep@88). Gate PASS. Parity RED is (a) member-call false positives: all 8 Im2d methods ARE called via lpIm2d->X() but the qualified-name matcher misses member syntax; (b) the 2 descriptor loops correctly abstracted away; (c) __fastcall void-return artifacts. .rdata floats (fade rates, UVs) + the overlay blend state declared extern (link-time).",
    "status": "done"
   },
+  "GameSource/Unity/../GameState/AchievementManager/PS3/BrnGameStateAchievementManagerPS3.cpp": {
+   "notes": "OnFreeburnChallengeComplete (0x8235B2D8) depends on the data table at X360 0x82CDBDC4 (array of {EAchievement, u32 threshold}, count at 0x82CDBDDC) whose CONTENTS are not recoverable from any material in this repo (not in the dossier, dwarfdump, or the IDA exports). The other 7 handlers are reconstructed and faithful, but the TU cannot be completed without that table. Also a PS3-path unit (AchievementManagerBase methods). Unblock once the table bytes are available.",
+   "status": "blocked"
+  },
   "GameSource/Unity/../GameState/BrnGameStateModule.h": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/BrnGameStateSharedIO.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../GameState/FlybyManager/BrnGameStateFlybyManager.cpp": {
@@ -3532,6 +3596,9 @@
    "status": "done"
   },
   "GameSource/Unity/../GameState/ModeManager/GameModes/BrnSurvivor.h": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/NetworkRoundManager/BrnNetworkRoundManager.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../GameState/TakedownManager/BrnTakedownManagerDebugComponent.cpp": {
@@ -3672,11 +3739,17 @@
   "class:BrnGameState::GameStateModuleIO::CarCheckpointData": {
    "status": "done"
   },
+  "class:BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>": {
+   "status": "done"
+  },
   "class:BrnGameState::GameStateModuleIO::ChangeNetworkCarEvent": {
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::CompletedFburnChallengesData,7>": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
+   "status": "done"
+  },
+  "class:BrnGameState::GameStateModuleIO::CompletedFburnChallengesData>": {
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::FburnChallengeEveryPlayerStatusData": {
@@ -3823,7 +3896,13 @@
   "class:BrnGameState::OpponentData,7>": {
    "status": "done"
   },
+  "class:BrnGameState::StartGameModeParams": {
+   "status": "done"
+  },
   "class:BrnGameState::StartLocation,8>": {
+   "status": "done"
+  },
+  "class:BrnGameState::StuntManagerDebugComponent": {
    "status": "done"
   },
   "class:BrnGameState::StuntModeScoringOnline::CarLeapingData,7,int>": {
