@@ -28,6 +28,19 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameRate.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\PerfMon\Cpu\CgsPerfMonCpu.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugManager.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugComponent.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\Internal\CgsDebugInternal.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CgsTypes.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CgsDebugUI.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Menu\CgsMenuItem.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Menu\CgsMenu.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Menu\CgsMenuManager.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Variables\CgsVariable.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Variables\CgsVariableManager.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Variables\CgsMenuItemVariable.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Functions\CgsFunction.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Functions\CgsFunctionManager.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Functions\CgsMenuItemFunction.cpp" ^
   "%SRC%\GameShared\GameClasses\Module\CgsIOBufferStack.cpp" ^
   "%SRC%\GameShared\GameClasses\Module\CgsModule.cpp" ^
   "%SRC%\GameShared\GameClasses\Module\CgsModuleSingleBuffered.cpp" ^
