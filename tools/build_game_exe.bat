@@ -29,6 +29,17 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   "%SRC%\GameShared\GameClasses\Development\PerfMon\Cpu\CgsPerfMonCpu.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugManager.cpp" ^
   "%SRC%\GameShared\GameClasses\Module\CgsIOBufferStack.cpp" ^
+  "%SRC%\GameShared\GameClasses\Module\CgsModule.cpp" ^
+  "%SRC%\GameShared\GameClasses\Module\CgsModuleSingleBuffered.cpp" ^
+  "%SRC%\GameShared\GameClasses\Module\CgsDataBuffer.cpp" ^
+  "%SRC%\GameShared\GameClasses\Module\CgsDataStructure.cpp" ^
+  "%VEN%\EAThread\source\eathread_rwmutex.cpp" ^
+  "%VEN%\EAThread\source\eathread.cpp" ^
+  "%VEN%\EAThread\source\eathread_mutex.cpp" ^
+  "%VEN%\EAThread\source\eathread_condition.cpp" ^
+  "%VEN%\EAThread\source\pc\eathread_thread_pc.cpp" ^
+  "%VEN%\EAThread\source\pc\eathread_semaphore_pc.cpp" ^
+  "%VEN%\EAThread\source\pc\eathread_callstack_win64.cpp" ^
   "%SRC%\GameSource\Graphics\BrnRendererModule.cpp" ^
   "%SRC%\GameSource\Graphics\BrnShaderConstantsFrame.cpp" ^
   "%SRC%\GameSource\Game\BrnLoadingScreenRenderer.cpp" ^
