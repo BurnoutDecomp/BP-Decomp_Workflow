@@ -276,16 +276,64 @@
   "BrnGameState::CheckpointData::CheckpointData": {
    "status": "reviewed"
   },
+  "BrnGameState::CountdownState::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CountdownState::Update": {
+   "status": "reviewed"
+  },
   "BrnGameState::FlybyManager::Construct": {
    "status": "reviewed"
   },
   "BrnGameState::FlybyManager::RivalRating::SortRivalsCallback": {
    "status": "reviewed"
   },
+  "BrnGameState::GameMode::CalculateMaxPlayerWrecks": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameMode::GetIntroDurationSeconds": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameMode::HasCountdownDisplayChanged": {
    "status": "reviewed"
   },
+  "BrnGameState::GameMode::Initialise": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameMode::PreWorldUpdate": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameMode::SendEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameMode::ShouldExit": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameModeParams::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameModeParams::GetCheckpointCount": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameModeParams::GetFlag": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameModeParams::GetStartDirection": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameModeParams::GetStartLocationCount": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameModeParams::GetStartPosition": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateModuleIO::CompletedFburnChallengesData,7>::Cons": {
+   "status": "reviewed"
+  },
+  "BrnGameState::IntroState::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGameState::IntroState::Update": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManagerDebugComponent::FinshMode": {
@@ -297,13 +345,31 @@
   "BrnGameState::ModeManagerDebugComponent::OnActivate": {
    "status": "reviewed"
   },
+  "BrnGameState::OfflineGameMode::Construct": {
+   "status": "compiles"
+  },
+  "BrnGameState::OfflineGameMode::SelectRandomDestinations": {
+   "status": "compiles"
+  },
   "BrnGameState::OnlineGameMode::Construct": {
    "status": "reviewed"
   },
   "BrnGameState::OnlineGameMode::SendEvent": {
    "status": "reviewed"
   },
+  "BrnGameState::OutroState::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OutroState::Update": {
+   "status": "reviewed"
+  },
   "BrnGameState::PursuitMode::GetName": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RaceMode::GetName": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RaceMode::GetOutroTimeout": {
    "status": "reviewed"
   },
   "BrnGameState::TakedownEvent,8>::Construct": {
@@ -2845,12 +2911,32 @@
    "notes": "focused reviewer pass after named mode-manager layout and direct member callback",
    "status": "done"
   },
+  "GameSource/Unity/../GameState/ModeManager/GameModeStates/BrnCountdownState.cpp": {
+   "notes": "Reconstructed in GameMode-foundation workflow + fix pass; committed to dev (commits 1bff83b..c065fbd); fresh-eyes reviewed.",
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/GameModeStates/BrnIntroState.cpp": {
+   "notes": "Reconstructed in GameMode-foundation workflow + fix pass; committed to dev (commits 1bff83b..c065fbd); fresh-eyes reviewed.",
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/GameModeStates/BrnOutroState.cpp": {
+   "notes": "Reconstructed in GameMode-foundation workflow + fix pass; committed to dev (commits 1bff83b..c065fbd); fresh-eyes reviewed.",
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/GameModes/BrnGameMode.cpp": {
+   "notes": "Reconstructed in GameMode-foundation workflow + fix pass; committed to dev (commits 1bff83b..c065fbd); fresh-eyes reviewed.",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/ModeManager/GameModes/BrnOnlineGameMode.cpp": {
    "notes": "batch reviewer pass; state/event control flow and member offsets match",
    "status": "done"
   },
   "GameSource/Unity/../GameState/ModeManager/GameModes/BrnPursuitMode.h": {
    "notes": "Compliance fix: GameMode/OfflineGameMode split into own owning headers (BrnGameMode.h, BrnOfflineGameMode.h), BrnPursuitMode.h now #includes them instead of forking. Gate re-passed; trivial getter, gate-only.",
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/GameModes/BrnRaceMode.h": {
+   "notes": "RaceMode GetName/GetOutroTimeout reconstructed + committed (dev c065fbd); fresh-eyes reviewed. (RaceMode::Start lives in the CgsStrStream.h catch-all TU and is NOT marked here.)",
    "status": "done"
   },
   "GameSource/Unity/../GameState/TakedownManager/BrnTakedownManagerDebugComponent.cpp": {
@@ -2946,6 +3032,10 @@
   },
   "class:BrnGameState::GameMode": {
    "notes": "Fresh-eyes review PASS; HasCountdownDisplayChanged faithful, ledger-gated GameMode base, RED parity = benign inlined-assert-formatter. Committed dev ccda5be.",
+   "status": "done"
+  },
+  "class:BrnGameState::GameModeParams": {
+   "notes": "Reconstructed in GameMode-foundation workflow + fix pass; committed to dev (commits 1bff83b..c065fbd); fresh-eyes reviewed.",
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::CompletedFburnChallengesData,7>": {
