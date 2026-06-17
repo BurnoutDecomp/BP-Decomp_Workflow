@@ -18,6 +18,9 @@
   "Attrib::Attrib_RefSpec_TypeHandler::Retain": {
    "status": "reviewed"
   },
+  "Attrib::Database::Get": {
+   "status": "reviewed"
+  },
   "Attrib::DefaultDataArea": {
    "status": "reviewed"
   },
@@ -2518,6 +2521,21 @@
    "status": "reviewed"
   },
   "BrnGameState::RoadRageModeScoring::IncrementPlayerNumTakedowns": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesDebugComponent::AddCrashScoreCallback": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesDebugComponent::DecreaseCurrentStuntTimeCallback": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesDebugComponent::DecreaseCurrentTimeCallback": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesDebugComponent::RenderHUD": {
    "status": "reviewed"
   },
   "BrnGameState::RoadRulesManager::Construct": {
@@ -7536,6 +7554,36 @@
   "CgsContainers::Array<int,8>::GetItem": {
    "status": "reviewed"
   },
+  "CgsContainers::BaseLinkedList::CountElements": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalAddBefore": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalAddHead": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalAddTail": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalGetHead": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalGetNodeIndex": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalGetTail": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalInit": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalRemoveHead": {
+   "status": "reviewed"
+  },
+  "CgsContainers::BaseLinkedList::InternalRemoveNode": {
+   "status": "reviewed"
+  },
   "CgsContainers::BasePriorityQueue::AddEntry": {
    "status": "reviewed"
   },
@@ -10806,6 +10854,21 @@
   "D3DXShader::Instruction::Instruction": {
    "status": "reviewed"
   },
+  "DOGMA_PoolManager::Allocate": {
+   "status": "reviewed"
+  },
+  "DOGMA_PoolManager::DOGMA_PoolManager": {
+   "status": "reviewed"
+  },
+  "DOGMA_PoolManager::Deallocate": {
+   "status": "reviewed"
+  },
+  "DOGMA_PoolManager::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "DOGMA_PoolManager::~DOGMA_PoolManager": {
+   "status": "reviewed"
+  },
   "EA::Allocator::GeneralAllocator::PPMAutoMutex::PPMAutoMutex": {
    "status": "reviewed"
   },
@@ -11067,6 +11130,15 @@
   "WorldModule::UpdateForBootUpVideo": {
    "status": "reviewed"
   },
+  "_AptValueGC_MemItem::GetSize": {
+   "status": "reviewed"
+  },
+  "_AptValueGC_MemItem::IsAllocated": {
+   "status": "reviewed"
+  },
+  "_AptValueGC_MemItem::SetIsAllocated": {
+   "status": "reviewed"
+  },
   "_FillInObjectToMeshJobData": {
    "status": "reviewed"
   },
@@ -11317,6 +11389,10 @@
    "status": "done"
   },
   "GameShared/GameClasses/Containers/CgsIndexedLinkList.h": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Containers/CgsLinkedList.cpp": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
   "GameShared/GameClasses/Containers/CgsObjectPool.h": {
@@ -12485,6 +12561,10 @@
   "GameSource/Unity/../GameState/Progression/BrnProgressionManager.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../GameState/RoadRules/BrnRoadRulesDebugComponent.cpp": {
+   "notes": "Compile-gate GREEN; grew BrnRoadRulesManager (accessors+mfTime+maiChallengeRoadIndex), fixed +36 guard + 64-row loop; ODR fix (file-local StreetManager -> BrnGameStateStreetManager.h); consumers regate green.",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/RoadRules/BrnRoadRulesManager.cpp": {
    "status": "done"
   },
@@ -12606,6 +12686,10 @@
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribinstance.cpp": {
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
+   "status": "done"
+  },
+  "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/attribsys.h": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
   "SDKs/Packages/Lion/Final/eauk_common/Common/ElfHash.h": {
@@ -13424,6 +13508,10 @@
    "notes": "trivial; gate-only",
    "status": "done"
   },
+  "class:DOGMA_PoolManager": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
   "class:EA::Allocator::GeneralAllocator::PPMAutoMutex": {
    "notes": "Satisfied by committed vendor EA source (the same library the X360 linked; PC platform impl already present). Compile-gate GREEN.",
    "status": "done"
@@ -13472,6 +13560,10 @@
    "status": "done"
   },
   "class:TextMembersIndex": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
+  "class:_AptValueGC_MemItem": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
