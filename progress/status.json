@@ -1,5 +1,8 @@
 {
  "func": {
+  "AptPseudoData_t::AptPseudoData_t": {
+   "status": "reviewed"
+  },
   "Attrib::Attrib_RefSpec_TypeHandler::Release": {
    "status": "reviewed"
   },
@@ -10746,6 +10749,12 @@
   "EA::Jobs::EntryPoint::SetName": {
    "status": "reviewed"
   },
+  "EA::Thread::DynamicThreadArray::AddDynamicThreadHandle": {
+   "status": "reviewed"
+  },
+  "EA::Thread::DynamicThreadArray::CheckDynamicThreadArray": {
+   "status": "reviewed"
+  },
   "EActiveRaceCarIndex,7>::FindFirstInstanceOf": {
    "status": "reviewed"
   },
@@ -10794,6 +10803,9 @@
   "MainGameFlowStateCheckDiskSpace::OnEnter": {
    "status": "reviewed"
   },
+  "ObjectIndex::in_word_set": {
+   "status": "reviewed"
+  },
   "RenderableMesh::GetResourceDescriptor": {
    "status": "reviewed"
   },
@@ -10801,6 +10813,9 @@
    "status": "reviewed"
   },
   "Shader::ParameterSemanticBlock::GetResourceDescriptor": {
+   "status": "reviewed"
+  },
+  "StringMembersIndex::in_word_set": {
    "status": "reviewed"
   },
   "WorldModule::BridgeAIModuleToOutput": {
@@ -12534,6 +12549,10 @@
   "SharedClasses/World/BrnWorldRegion.h": {
    "status": "done"
   },
+  "class:AptPseudoData_t": {
+   "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
+   "status": "done"
+  },
   "class:Attrib::Gen::debrisparams": {
    "notes": "Gate-only (self-reviewed). Compile PASS. Parity YELLOW is the same false-positive as surfacelist: the 5 'absent' callees (Instance base-ctor, GetClass x2, GetCollection, AssertOnClassCheck, DefaultDataArea) are present as member/namespace-relative calls; counts within tolerance. Ctor verified vs X360 pseudocode @0x8227E9A0 (Instance chain; class-check guard KI=651697503; DefaultDataArea(0xE0) when mpAttributeData null). Minimal X360-faithful generated-attrib recon (X360 inlines the accessor/using API); derives from the reconstructed Attrib::Instance base.",
    "status": "done"
@@ -13294,6 +13313,10 @@
    "notes": "combined fresh-eyes review pass",
    "status": "done"
   },
+  "class:EA::Thread::DynamicThreadArray": {
+   "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
+   "status": "done"
+  },
   "class:EA::Thread::ThreadParameters": {
    "notes": "Vendor code; exists in PC lib or vendor source.",
    "status": "blocked"
@@ -13307,6 +13330,14 @@
   },
   "class:ICE::ICECameraMover": {
    "notes": "trivial; gate-only",
+   "status": "done"
+  },
+  "class:ObjectIndex": {
+   "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
+   "status": "done"
+  },
+  "class:StringMembersIndex": {
+   "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
    "status": "done"
   },
   "class:char,50>": {
