@@ -1475,11 +1475,18 @@ def cmd_reconcile_from_files(args):
 
 
 def cmd_jebobs(args):
-    """Private helper: add/promote from files, then refresh the work server."""
-    print("== Alright this one is for you since your changes are never pushed to the server idk why: it reconcile files, then server-sync ==")
-    cmd_reconcile_from_files(argparse.Namespace(apply=True, no_demote=True))
-    print("\n== server-sync ==")
-    cmd_server_sync(argparse.Namespace(branch=None))
+    """Private helper for JeBobs' out-of-band progress sync."""
+    mode = "apply" if args.apply else "dry run"
+    print(f"== JeBobs progress broom ({mode}) ==")
+    print("== reconcile-from-files --no-demote ==")
+    cmd_reconcile_from_files(argparse.Namespace(apply=args.apply, no_demote=True))
+    print("\n== server-reconcile-events --actor JeBobs ==")
+    cmd_server_reconcile_events(argparse.Namespace(actor=["JeBobs"], apply=args.apply))
+    if args.apply:
+        print("\n== server-sync ==")
+        cmd_server_sync(argparse.Namespace(branch=None))
+    else:
+        print("\n(dry run only - re-run `work jebobs --apply` to write and sync)")
 
 
 def cmd_parity(args):
@@ -1688,9 +1695,12 @@ def cmd_bootstrap(args):
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "jebobs":
         if any(a in ("-h", "--help") for a in sys.argv[2:]):
-            print("usage: work jebobs")
+            print("usage: work jebobs [--apply]")
             return
-        cmd_jebobs(argparse.Namespace())
+        unknown = [a for a in sys.argv[2:] if a != "--apply"]
+        if unknown:
+            sys.exit(f"unknown jebobs option(s): {' '.join(unknown)}")
+        cmd_jebobs(argparse.Namespace(apply="--apply" in sys.argv[2:]))
         return
 
     ap = argparse.ArgumentParser(prog="work")
