@@ -4782,10 +4782,22 @@
   "BrnNetwork::RoadRulesDownloadEvent,40>::Construct": {
    "status": "reviewed"
   },
+  "BrnNetwork::RoadRulesDownloadEvent>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesDownloadEvent>::Append": {
+   "status": "reviewed"
+  },
   "BrnNetwork::RoadRulesMessage::PrepareForSend": {
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesMessageData,40>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesMessageData>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesMessageData>::Append": {
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesPersonalBestMessage::PrepareForSend": {
@@ -4795,6 +4807,12 @@
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesRecvData,14>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesRecvData>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesRecvData>::Append": {
    "status": "reviewed"
   },
   "BrnNetwork::ScoreboardDebugComponent::PrintScoreboard": {
@@ -12873,12 +12891,24 @@
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
    "status": "done"
   },
+  "class:BrnNetwork::RoadRulesDownloadEvent>": {
+   "notes": "Compile-gate GREEN; element-home fixed (PlayerName=16 -> RoadRulesDownloadEvent=56/RecvData=264); thin explicit instantiations, generic inline in CgsBaseEventQueue.h; all 7 BrnNetworkSharedIO.h consumers regate green.",
+   "status": "done"
+  },
   "class:BrnNetwork::RoadRulesMessageData,40>": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
    "status": "done"
   },
+  "class:BrnNetwork::RoadRulesMessageData>": {
+   "notes": "Compile-gate GREEN; element-home fixed (PlayerName=16 -> RoadRulesDownloadEvent=56/RecvData=264); thin explicit instantiations, generic inline in CgsBaseEventQueue.h; all 7 BrnNetworkSharedIO.h consumers regate green.",
+   "status": "done"
+  },
   "class:BrnNetwork::RoadRulesRecvData,14>": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
+   "status": "done"
+  },
+  "class:BrnNetwork::RoadRulesRecvData>": {
+   "notes": "Compile-gate GREEN; element-home fixed (PlayerName=16 -> RoadRulesDownloadEvent=56/RecvData=264); thin explicit instantiations, generic inline in CgsBaseEventQueue.h; all 7 BrnNetworkSharedIO.h consumers regate green.",
    "status": "done"
   },
   "class:BrnPhysics::ContactSpy::ContactSpyRunData,100>": {
