@@ -155,7 +155,7 @@ At a glance:
 | Reconstruction helpers | `tools/work/dossier.py`, `tools/work/gen_stubs.py`, `tools/work/gen_skeleton.py`, `tools/work/auto_draft.py` |
 | Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `progress/verify.config.json`, `progress/review.config.json` |
 | Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/gen_rwcore_headers.py` |
-| Optional server coordination | `work sync`, `work server-sync`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
+| Optional server coordination | `work sync`, `work server-sync`, `work server-reconcile-events`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
 
 ## Goals And Execution Traces
 
@@ -219,6 +219,8 @@ Maintainer commands:
 
 ```powershell
 work server-sync [--branch <branch>]      # preserve live claims/events
+work server-reconcile-events --actor JeBobs [--apply]
+                                           # reconstruct missing review_pass events from b5-decomp commits
 work server-reset [--to <ref>]            # local reset + server reseed
 work worker-add "Name" [--admin]
 work worker-list
@@ -261,6 +263,19 @@ You can refresh the committed mirror manually too:
 python tools/work/fetch_server_status.py            # rewrite status.json from the server
 python tools/work/fetch_server_status.py --check    # report drift, write nothing (exit 1 if stale)
 ```
+
+If commits reached `b5-decomp` without the workflow reporting its normal review event to
+the server, an admin can backfill only those missing live events from the committed git
+history:
+
+```powershell
+work server-reconcile-events --actor JeBobs          # dry run
+work server-reconcile-events --actor JeBobs --apply  # append missing reconstructed events
+```
+
+The backfill adds `review_pass` events marked as reconstructed from `b5-decomp`; it skips
+real workflow events that are already present, so it should not duplicate normal claims,
+compiled events, or reviews.
 
 Two operational notes:
 
