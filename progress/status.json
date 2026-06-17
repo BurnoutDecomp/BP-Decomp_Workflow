@@ -1521,6 +1521,18 @@
   "BrnGameState::GameStateModuleIO::CarCheckpointData::SetupCheckpoints": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateModuleIO::CarScoreData::CarScoreData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::CarScoreData::ClearData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::CarScoreData::GetChainableStuntMultipliers": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::CarScoreData::op": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>::Ge": {
    "status": "reviewed"
   },
@@ -12732,6 +12744,10 @@
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
    "status": "done"
   },
+  "class:ArrayMembersIndex": {
+   "notes": "Needs a rodata-dump tool, not reconstructable from the function exports. The gperf asso_values[256] (byte_82F72BB0) + wordlist {name,miData} (off_82F799D0) tables + the miData dispatch indices (from AptArray::objectMemberLookup @0x82AFDA50 jump table) are file-static .rdata the per-function .ida-exports JSONs do NOT contain; two rework agents either fabricated them (verifier-caught) or correctly produced nothing (blocker_resolved=false). Sibling Apt gperf TUs (ObjectIndex/StringMembers/TextMembers/TextFormat/Sprite) landed because their tables WERE present in the exports; this one's are not. Next: dump the X360 .rdata at those 3 addresses (e.g. extend the IDA export to include referenced data symbols), then it's a thin in_word_set + 2 file-static tables like the landed siblings.",
+   "status": "blocked"
+  },
   "class:Attrib::Gen::debrisparams": {
    "notes": "Gate-only (self-reviewed). Compile PASS. Parity YELLOW is the same false-positive as surfacelist: the 5 'absent' callees (Instance base-ctor, GetClass x2, GetCollection, AssertOnClassCheck, DefaultDataArea) are present as member/namespace-relative calls; counts within tolerance. Ctor verified vs X360 pseudocode @0x8227E9A0 (Instance chain; class-check guard KI=651697503; DefaultDataArea(0xE0) when mpAttributeData null). Minimal X360-faithful generated-attrib recon (X360 inlines the accessor/using API); derives from the reconstructed Attrib::Instance base.",
    "status": "done"
@@ -12803,6 +12819,10 @@
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::CarCheckpointData": {
+   "status": "done"
+  },
+  "class:BrnGameState::GameStateModuleIO::CarScoreData": {
+   "notes": "Compile-gate GREEN; 296B X360 layout, memset/memcpy idiom + named meaningful fields; grew Array::AddNew; 24 consumers regate green.",
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>": {
