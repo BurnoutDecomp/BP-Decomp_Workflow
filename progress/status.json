@@ -1,5 +1,14 @@
 {
  "func": {
+  "AptCXForm::AptCXForm": {
+   "status": "reviewed"
+  },
+  "AptCXForm::AptFloatArrayCXFormCopy": {
+   "status": "reviewed"
+  },
+  "AptCXForm::AptUint32CXFormCopy": {
+   "status": "reviewed"
+  },
   "AptPseudoData_t::AptPseudoData_t": {
    "status": "reviewed"
   },
@@ -1150,6 +1159,21 @@
    "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::RecentCrash,64>::IsFull": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CrashScoreDebugComponent::DisplayScores": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CrashScoreDebugComponent::GetName": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CrashScoreDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CrashScoreDebugComponent::RenderHUD": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CrashScoreDebugComponent::Update": {
    "status": "reviewed"
   },
   "BrnGameState::DeveloperChallengeManager::CollectedBillboard,5>::Append": {
@@ -10782,6 +10806,9 @@
   "D3DXShader::Instruction::Instruction": {
    "status": "reviewed"
   },
+  "EA::Allocator::GeneralAllocator::PPMAutoMutex::PPMAutoMutex": {
+   "status": "reviewed"
+  },
   "EA::Jobs::EntryPoint::SetAffinity": {
    "status": "reviewed"
   },
@@ -10792,6 +10819,15 @@
    "status": "reviewed"
   },
   "EA::Thread::DynamicThreadArray::CheckDynamicThreadArray": {
+   "status": "reviewed"
+  },
+  "EA::Thread::Mutex::Init": {
+   "status": "reviewed"
+  },
+  "EA::Thread::Mutex::Lock": {
+   "status": "reviewed"
+  },
+  "EA::Thread::Mutex::Unlock": {
    "status": "reviewed"
   },
   "EActiveRaceCarIndex,7>::FindFirstInstanceOf": {
@@ -10854,7 +10890,19 @@
   "Shader::ParameterSemanticBlock::GetResourceDescriptor": {
    "status": "reviewed"
   },
+  "SpriteMembersIndex::hash": {
+   "status": "reviewed"
+  },
+  "SpriteMembersIndex::in_word_set": {
+   "status": "reviewed"
+  },
   "StringMembersIndex::in_word_set": {
+   "status": "reviewed"
+  },
+  "TextFormatMembersIndex::in_word_set": {
+   "status": "reviewed"
+  },
+  "TextMembersIndex::in_word_set": {
    "status": "reviewed"
   },
   "WorldModule::BridgeAIModuleToOutput": {
@@ -12304,6 +12352,10 @@
   "GameSource/Unity/../GameState/ModeManager/BrnModeManager.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../GameState/ModeManager/Debug/BrnCrashScoreDebugComponent.cpp": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/ModeManager/Debug/BrnModeManagerDebugComponent.cpp": {
    "notes": "focused reviewer pass after named mode-manager layout and direct member callback",
    "status": "done"
@@ -12586,6 +12638,10 @@
    "status": "done"
   },
   "SharedClasses/World/BrnWorldRegion.h": {
+   "status": "done"
+  },
+  "class:AptCXForm": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
   "class:AptPseudoData_t": {
@@ -13368,12 +13424,20 @@
    "notes": "trivial; gate-only",
    "status": "done"
   },
+  "class:EA::Allocator::GeneralAllocator::PPMAutoMutex": {
+   "notes": "Satisfied by committed vendor EA source (the same library the X360 linked; PC platform impl already present). Compile-gate GREEN.",
+   "status": "done"
+  },
   "class:EA::Jobs::EntryPoint": {
    "notes": "combined fresh-eyes review pass",
    "status": "done"
   },
   "class:EA::Thread::DynamicThreadArray": {
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
+   "status": "done"
+  },
+  "class:EA::Thread::Mutex": {
+   "notes": "Satisfied by committed vendor EA source (the same library the X360 linked; PC platform impl already present). Compile-gate GREEN.",
    "status": "done"
   },
   "class:EA::Thread::ThreadParameters": {
@@ -13395,8 +13459,20 @@
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
    "status": "done"
   },
+  "class:SpriteMembersIndex": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
   "class:StringMembersIndex": {
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
+   "status": "done"
+  },
+  "class:TextFormatMembersIndex": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
+  "class:TextMembersIndex": {
+   "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
   "class:char,50>": {
