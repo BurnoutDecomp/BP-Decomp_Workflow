@@ -1,15 +1,17 @@
 @echo off
 rem Build the real-chain game exe: BrnMain -> CgsHardwareInit -> BrnGameModule ->
-rem BrnRendererModule -> LoadingScreenRenderer (Option B loading-screen boot). Replaces the
-rem throwaway BrnLoadingScreenHost + pc/WinMain with the reconstructed boot/render chain.
+rem BrnRendererModule -> LoadingScreenRenderer (Option B loading-screen boot).
 setlocal
 set ROOT=%~dp0..
 set SRC=%ROOT%\b5-decomp\src
 set VEN=%ROOT%\b5-decomp\vendor
+set RES=%ROOT%\b5-decomp\res
 set OUT=%ROOT%\build
 
 call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
 if not exist "%OUT%\obj" mkdir "%OUT%\obj"
+
+rc /fo"%OUT%\\obj\\burnout.res" "%RES%\burnout.rc"
 
 cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" ^
@@ -20,6 +22,9 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   "%SRC%\GameShared\GameClasses\Core\CgsAssert.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\AssertSystem\CgsAssertManager.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\StackUnpick\CgsStackUnpick.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\MapFile\CgsMapFile.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\MapFile\Reader\CgsMapFileReader.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\MapFile\Reader\CgsMapFileReaderMinimalMemory.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\CgsStrStream.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\Log\CgsLog.cpp" ^
   "%SRC%\GameSource\Game\BrnGameModule.cpp" ^
@@ -67,8 +72,11 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   "%SRC%\pc\gcm\renderengine\texture.cpp" ^
   "%SRC%\GameShared\GameClasses\Memory\CgsLinearMalloc.cpp" ^
   "%SRC%\GameShared\GameClasses\System\Timer\CgsTimeUtils.cpp" ^
-  /Fo"%OUT%\obj\\" /Fe"%OUT%\BrnGame.exe" ^
-  /link /SUBSYSTEM:WINDOWS d3d9.lib user32.lib gdi32.lib kernel32.lib winmm.lib shell32.lib ole32.lib
+  /Fo"%OUT%\obj\\" /Fe"%OUT%\Burnout_PC.exe" ^
+  /link /SUBSYSTEM:WINDOWS /MAP "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib winmm.lib shell32.lib ole32.lib
 
-endlocal
-exit /b %ERRORLEVEL%
+set "BUILD_ERR=%ERRORLEVEL%"
+rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
+if "%BUILD_ERR%"=="0" if exist "%OUT%\Burnout_PC.map" py "%ROOT%\tools\_make_cgsmap.py" "%OUT%\Burnout_PC.map" "%OUT%\Burnout_PC.cgsmap"
+
+endlocal & exit /b %BUILD_ERR%
