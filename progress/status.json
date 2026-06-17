@@ -1554,6 +1554,21 @@
   "BrnGameState::GameStateModuleIO::OnlineGameR": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateModuleIO::OnlineGameResults::Clear": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::OnlineGameResults::GetRaceResults": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::OnlineGameResults::GetStuntResults": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::OnlineGameResults::SetRaceResults": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::OnlineGameResults::SetStuntResults": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateModuleIO::OnlinePlayerAddedAction::SetPlayerScoringIndex": {
    "status": "reviewed"
   },
@@ -12673,6 +12688,10 @@
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::HitOverheadSignEvent>": {
+   "status": "done"
+  },
+  "class:BrnGameState::GameStateModuleIO::OnlineGameResults": {
+   "notes": "Compile-gate GREEN; re-homed provisional blob -> typed struct in DWARF home BrnGameActions.h; SETUP_NETWORK_CAR placeholder corrected to 5 (frees GAME_RESULT=221); IsOnlineStuntRun inlined; 8 consumers regate green.",
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::OnlinePlayerAddedAction": {
