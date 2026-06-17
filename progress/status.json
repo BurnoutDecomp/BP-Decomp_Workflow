@@ -2625,6 +2625,9 @@
   "BrnGameState::StuntAttackMode::Start": {
    "status": "reviewed"
   },
+  "BrnGameState::StuntManager::FindTriggersCounty": {
+   "status": "reviewed"
+  },
   "BrnGameState::StuntManager::ProcessStuntElement": {
    "status": "reviewed"
   },
@@ -4705,6 +4708,9 @@
    "status": "reviewed"
   },
   "BrnNetwork::NetworkInviteManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStats::operator=": {
    "status": "reviewed"
   },
   "BrnNetwork::NetworkPlayerStatsManager::CopyNextValidEventOutOfQueue": {
@@ -7146,10 +7152,49 @@
   "BrnWorld::RaceCarEntityModule::UpdateActiveToAICarLookup": {
    "status": "recovered"
   },
+  "BrnWorld::RaceCarEntityModuleIO::": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCarEntityModuleIO::AudioCarDataLoadedEvent,16>::Construc": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModuleIO::CreateRivalInTrafficSystemEvent>:": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::In": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::Inpu": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::Input": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputB": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_Gene": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateD": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatch": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_P": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_Po": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPh": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::Construct": {
@@ -7188,19 +7233,73 @@
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetTimerStatusInterface": {
    "status": "recovered"
   },
+  "BrnWorld::RaceCarEntityModuleIO::Out": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::Output": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputB": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBu": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuff": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_P": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_Pos": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_Post": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostPh": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostPhysic": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostPhysics::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostS": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostScene::Construct": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PrePhy": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PrePhysics::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PreSc": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PreSce": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PreScene::Construct": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_Prepare::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntit": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarO": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface::IsPlayerCarActive": {
@@ -7210,6 +7309,12 @@
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::GetCarModelId": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RemoveRivalFromTrafficSystemEvent": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RemoveRivalFromTrafficSystemEvent,34>": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarStreamer::AppendGameDataRequests": {
@@ -12674,6 +12779,10 @@
   "class:BrnGameState::StartLocation,8>": {
    "status": "done"
   },
+  "class:BrnGameState::StuntManager": {
+   "notes": "Compile-gate GREEN; per-TU recon+verify pass. Minimal-slice owning header (declared-only siblings).",
+   "status": "done"
+  },
   "class:BrnGameState::StuntManagerDebugComponent": {
    "status": "done"
   },
@@ -12735,6 +12844,10 @@
   },
   "class:BrnNetwork::MatchMakingManager": {
    "notes": "fresh-eyes review: 3x7 dispatch installs + extra/status/timer correct",
+   "status": "done"
+  },
+  "class:BrnNetwork::NetworkPlayerStats": {
+   "notes": "Compile-gate GREEN; per-TU recon+verify pass. Minimal-slice owning header (declared-only siblings).",
    "status": "done"
   },
   "class:BrnNetwork::RoadRulesDownloadEvent,40>": {
