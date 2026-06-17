@@ -12208,6 +12208,10 @@
    "notes": "fresh-eyes review: 6 vec copies + 12 scalars + qword/A0/A4 correct",
    "status": "done"
   },
+  "class:BrnWorld::RaceCarEntityModuleIO": {
+   "notes": "33-func IO TU blocked on the sub-interface cascade: the 10 IOBuffer structs embed ~27 sub-interface payloads BY VALUE (VehicleInputInterface/SceneInputInterface/RaceCarAIInterface/CrashInterface/ScoringInterface/DeformationOutputInterface/ContactSpyInterface/AIRaceCarInterface/the queues/etc.), none reconstructed -> incomplete-type. Prereqs DONE (RaceCarState+RwRGBAReal+EGlobalRaceCarIndex+BrnWorld::EBoostType) and OutputInterface home grown with real types by value (commit 27477e8). Ground truth: 0x8279E310 = non-const GetSceneInputInterface (+29856), NOT GetContactSpyInterface. Next: reconstruct/stub the buffer sub-interface subsystem, then the 33 accessor bodies (already recon'd in .wf/gm-rw3/byfile) compile.",
+   "status": "blocked"
+  },
   "class:BrnWorld::RaceCarEntityModuleIO::AudioCarDataLoadedEvent,16>": {
    "notes": "Fresh-eyes review (claude): faithful; explicit template instantiation of EventQueue<...,16>::Construct, matches buffer/maxlen/count + null assert.",
    "status": "done"
