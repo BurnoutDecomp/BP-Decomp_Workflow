@@ -24,6 +24,8 @@ Commands:
     work block <tu> "reason"  mark blocked; work unblock <tu> to clear
     work set <tu> --status S  manual status override
     work sync                 flush queued offline ops to the server (auto-runs first otherwise)
+    work reconcile-from-files [--apply]
+                              re-anchor local ledger/status.json from committed b5-decomp files
     work server-sync [--branch BRANCH]
                               refresh server checkout/import without clearing live state
     work server-reconcile-events --actor NAME [--apply]
@@ -1452,6 +1454,26 @@ def cmd_sync(args):
         print("all queued ops delivered.")
 
 
+def cmd_reconcile_from_files(args):
+    """Re-anchor local status to committed b5-decomp files.
+
+    This delegates to tools/work/reconcile_from_files.py so the direct maintenance
+    script and the `work` subcommand share exactly one implementation.
+    """
+    sys.modules.setdefault("work", sys.modules[__name__])
+    import reconcile_from_files
+
+    con = sqlite3.connect(DB)
+    con.row_factory = sqlite3.Row
+    try:
+        tracked = reconcile_from_files.committed_files()
+        reconcile_from_files.reconcile(con, tracked, args.apply)
+        if args.apply:
+            reconcile_from_files.verify(con, tracked)
+    finally:
+        con.close()
+
+
 def cmd_parity(args):
     """Standalone structural parity check (no LLM, no status change)."""
     import parity
@@ -1699,6 +1721,12 @@ def main():
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
     se = sub.add_parser("set"); se.add_argument("tu"); se.add_argument("--status", required=True); se.add_argument("--note"); se.set_defaults(fn=cmd_set)
     sub.add_parser("sync", help="flush queued offline ops to the server (auto-runs before server commands)").set_defaults(fn=cmd_sync)
+    rf = sub.add_parser(
+        "reconcile-from-files",
+        help="re-anchor local ledger/status.json from committed b5-decomp HEAD files",
+    )
+    rf.add_argument("--apply", action="store_true", help="write ledger.sqlite and status.json; default is dry run")
+    rf.set_defaults(fn=cmd_reconcile_from_files)
     ss = sub.add_parser("server-sync", help="refresh server checkout/import without clearing live claims/events")
     ss.add_argument("--branch", help="workflow branch to sync (default: server BP_WORKFLOW_BRANCH)")
     ss.set_defaults(fn=cmd_server_sync)
