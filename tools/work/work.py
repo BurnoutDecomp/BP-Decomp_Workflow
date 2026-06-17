@@ -26,6 +26,8 @@ Commands:
     work sync                 flush queued offline ops to the server (auto-runs first otherwise)
     work server-sync [--branch BRANCH]
                               refresh server checkout/import without clearing live state
+    work server-reconcile-events --actor NAME [--apply]
+                              reconstruct missing review_pass events from b5-decomp commits
     work server-reset [--to REF]
                               full revert: git reset + drop ledger cache + reseed server
     work worker-add <name> | worker-list | worker-revoke <id>   (maintainer) manage ids
@@ -1358,6 +1360,31 @@ def cmd_server_reset(args):
     print("rebuild the local ledger with: work bootstrap")
 
 
+def cmd_server_reconcile_events(args):
+    """(Admin) Ask the work server to reconstruct missing review_pass events from
+    its local b5-decomp clone. Dry-run by default; pass --apply to write. This is
+    intended for users whose work landed in b5-decomp but never hit the server
+    workflow endpoints."""
+    if not server_enabled():
+        sys.exit("WORK_SERVER not set")
+    payload = {"actors": args.actor or [], "apply": bool(args.apply)}
+    res = server_request_strict("POST", "/admin/reconcile-events", payload) or {}
+    mode = "applied" if res.get("applied") else "dry run"
+    print(f"server reconcile-events {mode}")
+    print(f"  scanned TUs: {res.get('scanned_tus')}")
+    print(f"  scanned commits: {res.get('scanned_commits')}")
+    print(f"  reconstructed review_pass events: {res.get('inserted')}")
+    print(f"  skipped existing real workflow events: {res.get('skipped_existing_real')}")
+    print(
+        "  skipped existing reconstructed events: "
+        f"{res.get('skipped_existing_reconstructed')}"
+    )
+    print(f"  skipped actor filter: {res.get('skipped_actor_filter')}")
+    print(f"  skipped unresolved actor: {res.get('skipped_unresolved_actor')}")
+    if not res.get("applied"):
+        print("  re-run with --apply to write")
+
+
 def cmd_worker_add(args):
     """(Admin) Mint a server-side worker id bound to a username. Requires WORK_SERVER and
     your own WORK_AGENT to be an *admin* id. Use --admin to grant the new id the admin
@@ -1675,6 +1702,14 @@ def main():
     ss = sub.add_parser("server-sync", help="refresh server checkout/import without clearing live claims/events")
     ss.add_argument("--branch", help="workflow branch to sync (default: server BP_WORKFLOW_BRANCH)")
     ss.set_defaults(fn=cmd_server_sync)
+    sre = sub.add_parser(
+        "server-reconcile-events",
+        help="(admin) reconstruct missing review_pass events from b5-decomp commits",
+    )
+    sre.add_argument("--actor", action="append", required=True,
+                     help="canonical actor to reconcile, e.g. JeBobs. Repeatable.")
+    sre.add_argument("--apply", action="store_true", help="write reconstructed events")
+    sre.set_defaults(fn=cmd_server_reconcile_events)
     srv = sub.add_parser("server-reset", help="full revert: git reset + drop ledger cache + reseed work server")
     srv.add_argument("--to", help="git ref to hard-reset the workflow repo + b5-decomp to (omit to keep current tree)")
     srv.set_defaults(fn=cmd_server_reset)
