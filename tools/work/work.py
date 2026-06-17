@@ -1474,6 +1474,14 @@ def cmd_reconcile_from_files(args):
         con.close()
 
 
+def cmd_jebobs(args):
+    """Private helper: add/promote from files, then refresh the work server."""
+    print("== Alright this one is for you since your changes are never pushed to the server idk why: it reconcile files, then server-sync ==")
+    cmd_reconcile_from_files(argparse.Namespace(apply=True, no_demote=True))
+    print("\n== server-sync ==")
+    cmd_server_sync(argparse.Namespace(branch=None))
+
+
 def cmd_parity(args):
     """Standalone structural parity check (no LLM, no status change)."""
     import parity
@@ -1678,6 +1686,13 @@ def cmd_bootstrap(args):
 
 
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == "jebobs":
+        if any(a in ("-h", "--help") for a in sys.argv[2:]):
+            print("usage: work jebobs")
+            return
+        cmd_jebobs(argparse.Namespace())
+        return
+
     ap = argparse.ArgumentParser(prog="work")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
