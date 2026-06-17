@@ -221,7 +221,8 @@ Maintainer commands:
 work server-sync [--branch <branch>]      # preserve live claims/events
 work server-reconcile-events --actor JeBobs [--apply]
                                            # reconstruct missing review_pass events from b5-decomp commits
-work reconcile-from-files [--apply]       # re-anchor local ledger/status.json from committed b5-decomp files
+work reconcile-from-files [--apply] [--no-demote]
+                                          # re-anchor local ledger/status.json from committed b5-decomp files
 work server-reset [--to <ref>]            # local reset + server reseed
 work worker-add "Name" [--admin]
 work worker-list
@@ -294,7 +295,7 @@ These helpers are optional. They do not replace manual reconstruction:
 ```powershell
 work auto --scan              # find fully mechanical TUs
 work auto --run [-n N]        # draft/gate safe forwarder/thunk-only TUs
-work reconcile-from-files [--apply]
+work reconcile-from-files [--apply] [--no-demote]
 python tools/work/find_local_redefs.py [--summary]
 python tools/work/wiki_index.py [--lookup <Type>]
 python tools/work/check_vendor_lib.py <tu>
