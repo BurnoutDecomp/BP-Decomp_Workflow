@@ -2682,7 +2682,16 @@
   "BrnGameState::TrainingManager::Update": {
    "status": "reviewed"
   },
+  "BrnGameState::TriggerQueryManager::AddLandmarkIndexForGameMode": {
+   "status": "reviewed"
+  },
   "BrnGameState::TriggerQueryManager::CheckSoundActions": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TriggerQueryManager::ClearLandmarkIndexesForGameMode": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TriggerQueryManager::GetPlayerCurrentTrafficLightId": {
    "status": "reviewed"
   },
   "BrnGameState::TriggerQueryManager::IsSoundActionPresent": {
@@ -4722,6 +4731,9 @@
   "BrnPhysics::ContactSpy::ContactSpyRunData,8>::Construct": {
    "status": "reviewed"
   },
+  "BrnPhysics::ContactSpy::ContactSpyRunList<8>::G": {
+   "status": "reviewed"
+  },
   "BrnPhysics::ContactSpy::DiscardedContact,20>::Construct": {
    "status": "reviewed"
   },
@@ -5082,6 +5094,12 @@
   "BrnPhysics::Vehicle::RaceCarCrashEvent,8>::Construct": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::RaceCarState::Clear": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::RaceCarState::RaceCarState": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::RemoveRaceCarEvent,8>::Construct": {
    "status": "reviewed"
   },
@@ -5293,6 +5311,18 @@
    "status": "reviewed"
   },
   "BrnProgression::DerivedCarArray::DEBUG_PrintArray": {
+   "status": "reviewed"
+  },
+  "BrnProgression::MugshotInfo,20>::Append": {
+   "status": "reviewed"
+  },
+  "BrnProgression::MugshotInfo,20>::Erase": {
+   "status": "reviewed"
+  },
+  "BrnProgression::MugshotInfo,20>::GetItem": {
+   "status": "reviewed"
+  },
+  "BrnProgression::MugshotInfo,20>::IsFull": {
    "status": "reviewed"
   },
   "BrnProgression::Profile::AddCar": {
@@ -6879,6 +6909,15 @@
   "CgsAttribSys::VaultSlot::RegisterVault": {
    "status": "reviewed"
   },
+  "CgsContainers::Array<int,8>::Append": {
+   "status": "reviewed"
+  },
+  "CgsContainers::Array<int,8>::FindFirstInstanceOf": {
+   "status": "reviewed"
+  },
+  "CgsContainers::Array<int,8>::GetItem": {
+   "status": "reviewed"
+  },
   "CgsContainers::BasePriorityQueue::AddEntry": {
    "status": "reviewed"
   },
@@ -7920,6 +7959,12 @@
   "CgsInput::InputIO::PlayJoltEffectEvent,4>::Construct": {
    "status": "reviewed"
   },
+  "CgsInput::InputIO::PlayJoltEffectEvent>::AddEvent": {
+   "status": "reviewed"
+  },
+  "CgsInput::InputIO::PlayJoltEffectEvent>::AddEventSafe": {
+   "status": "reviewed"
+  },
   "CgsInput::InputIO::PlayRumbleEffectEvent,4>::Construct": {
    "status": "reviewed"
   },
@@ -7978,6 +8023,12 @@
    "status": "reviewed"
   },
   "CgsInput::InputIO::UnBindResult,8>::Construct": {
+   "status": "reviewed"
+  },
+  "CgsInput::InputIO::UnBindResult>::AddEvent": {
+   "status": "reviewed"
+  },
+  "CgsInput::InputIO::UnBindResult>::Append": {
    "status": "reviewed"
   },
   "CgsInput::InputModule::Construct": {
@@ -9778,6 +9829,12 @@
    "status": "reviewed"
   },
   "CgsSound::Utils::Slope::Slope": {
+   "status": "reviewed"
+  },
+  "CgsSystem::CgsXOverlapped::Construct": {
+   "status": "reviewed"
+  },
+  "CgsSystem::CgsXOverlapped::GetResultString": {
    "status": "reviewed"
   },
   "CgsSystem::FrameRateManager::Prepare": {
@@ -11850,6 +11907,9 @@
   "class:BrnGameState::TakedownManager::RaceCarData": {
    "status": "done"
   },
+  "class:BrnGameState::TriggerQueryManager": {
+   "status": "done"
+  },
   "class:BrnGui::CrashNavIconRenderer": {
    "notes": "fresh-eyes review: clean members, loop count correct; offset-hack version replaced",
    "status": "done"
@@ -11914,6 +11974,9 @@
   },
   "class:BrnPhysics::ContactSpy::ContactSpyRunData,8>": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
+   "status": "done"
+  },
+  "class:BrnPhysics::ContactSpy::ContactSpyRunList<8>": {
    "status": "done"
   },
   "class:BrnPhysics::ContactSpy::DiscardedContact,20>": {
@@ -12008,6 +12071,10 @@
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
    "status": "done"
   },
+  "class:BrnPhysics::Vehicle::RaceCarState": {
+   "notes": "Compile-gate GREEN. Parity heuristic RED is benign de-SIMD/defaulted-ctor shape: Clear() reproduces memset(0,1120)+identity affines (X360 inline VMX stores -> Matrix44Affine::SetIdentity, fewer 'calls'/'loops'); copy ctor is the X360 1120-byte bitwise copy expressed as =default (memberwise, no explicit loop); void returns vs X360 register-result artifacts. Layout DWARF-verbatim (offsets sum to 1120). mfSpeedMPH clear-default (dword_82CDB5A0) flagged 0.0f placeholder.",
+   "status": "done"
+  },
   "class:BrnPhysics::Vehicle::RemoveRaceCarEvent,8>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
    "status": "done"
@@ -12061,6 +12128,9 @@
    "status": "done"
   },
   "class:BrnProgression": {
+   "status": "done"
+  },
+  "class:BrnProgression::MugshotInfo,20>": {
    "status": "done"
   },
   "class:BrnProgression::ProgressionData": {
@@ -12164,6 +12234,9 @@
    "notes": "Fresh-eyes review (opus) PASS after DWARF-faithful redo: real layout (mpaSlots/mpGarbageCollector/StreamedVaultAllocator/miNumSlots/mbPrepared), void Construct(IGarbageCollector*), inlining-reversal of StreamedVaultAllocator::Construct, BitArray<24u> cascade. No offset hacks.",
    "status": "done"
   },
+  "class:CgsContainers::Array<int,8>": {
+   "status": "done"
+  },
   "class:CgsContainers::FifoQueue<float,10>": {
    "status": "done"
   },
@@ -12214,6 +12287,9 @@
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
    "status": "done"
   },
+  "class:CgsInput::InputIO::PlayJoltEffectEvent>": {
+   "status": "done"
+  },
   "class:CgsInput::InputIO::PlayRumbleEffectEvent,4>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
    "status": "done"
@@ -12230,6 +12306,9 @@
   },
   "class:CgsInput::InputIO::UnBindResult,8>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "status": "done"
+  },
+  "class:CgsInput::InputIO::UnBindResult>": {
    "status": "done"
   },
   "class:CgsInput::InputModule": {
@@ -12290,6 +12369,9 @@
   },
   "class:CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,2000>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "status": "done"
+  },
+  "class:CgsSystem::CgsXOverlapped": {
    "status": "done"
   },
   "class:CgsSystem::Time": {
