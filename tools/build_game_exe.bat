@@ -19,6 +19,7 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   "%SRC%\GameShared\GameClasses\Core\CgsStringUtils.cpp" ^
   "%SRC%\GameShared\GameClasses\Core\CgsAssert.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\AssertSystem\CgsAssertManager.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\StackUnpick\CgsStackUnpick.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\CgsStrStream.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\Log\CgsLog.cpp" ^
   "%SRC%\GameSource\Game\BrnGameModule.cpp" ^
@@ -27,7 +28,9 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowController.cpp" ^
   "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameRate.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\PerfMon\Cpu\CgsPerfMonCpu.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\PerfMon\DebugComponent\CgsDebugComponentPerfMonCpu.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugManager.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugCollections.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugComponent.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\Internal\CgsDebugInternal.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CgsTypes.cpp" ^
@@ -41,6 +44,9 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Functions\CgsFunction.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Functions\CgsFunctionManager.cpp" ^
   "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Functions\CgsMenuItemFunction.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Render\CgsDebug2DImmediateRender.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\DebugSystem\Render\CgsDebugRender.cpp" ^
+  "%SRC%\GameShared\GameClasses\Development\VectorFont\CgsVectorFont.cpp" ^
   "%SRC%\GameShared\GameClasses\Module\CgsIOBufferStack.cpp" ^
   "%SRC%\GameShared\GameClasses\Module\CgsModule.cpp" ^
   "%SRC%\GameShared\GameClasses\Module\CgsModuleSingleBuffered.cpp" ^
