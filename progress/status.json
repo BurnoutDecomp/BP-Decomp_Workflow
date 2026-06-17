@@ -153,6 +153,9 @@
   "BrnAI::AIModule::SortTrafficIntoAICars": {
    "status": "reviewed"
   },
+  "BrnAI::AIModule::StoreDrivenCarData": {
+   "status": "reviewed"
+  },
   "BrnAI::AIModule::Update": {
    "status": "reviewed"
   },
@@ -175,6 +178,12 @@
    "status": "reviewed"
   },
   "BrnAI::AIModuleIO::OutputBuffer::Construct": {
+   "status": "reviewed"
+  },
+  "BrnAI::AIModuleIO::RaceCarAIInterface::GetActiveRaceCarSpeed": {
+   "status": "reviewed"
+  },
+  "BrnAI::AIModuleIO::RaceCarAIInterface::GetActiveRaceCarVelocity": {
    "status": "reviewed"
   },
   "BrnAI::AIModuleIO::RaceCarAIInterface::UpdateActiveRaceCarData": {
@@ -369,6 +378,12 @@
   "BrnDirector::Camera::BehaviourManager::UnlockBehaviourForInterpolation": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Camera::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Camera::ValidateTransformWithDebugInfo": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::CameraEffects::Interpolate": {
    "status": "reviewed"
   },
@@ -382,6 +397,9 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::FrustrumCollisionResolver::ResolveVehicleCollisions": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::IsLookingAtTarget": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::MotionBlurData::Construct": {
@@ -906,6 +924,9 @@
   "BrnGameState::BaseOnlineModeScoring::_FastestLapCompare": {
    "status": "reviewed"
   },
+  "BrnGameState::BaseOnlineModeScoring::_GiveFastestLapAward": {
+   "status": "reviewed"
+  },
   "BrnGameState::BaseOnlineModeScoring::_GiveLongestDistanceAward": {
    "status": "reviewed"
   },
@@ -915,6 +936,9 @@
   "BrnGameState::BaseOnlineModeScoring::_GiveMostCrashesAward": {
    "status": "reviewed"
   },
+  "BrnGameState::BaseOnlineModeScoring::_GiveMostTimeBoostingAward": {
+   "status": "reviewed"
+  },
   "BrnGameState::BaseOnlineModeScoring::_GiveRaceWinnerAward": {
    "status": "reviewed"
   },
@@ -922,6 +946,12 @@
    "status": "reviewed"
   },
   "BrnGameState::BaseOnlineModeScoring::_GiveTakedownsForAward": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BaseOnlineModeScoring::_GiveTimeInFirstPlaceAward": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BaseOnlineModeScoring::_GiveTimeInLastPlaceAward": {
    "status": "reviewed"
   },
   "BrnGameState::BaseOnlineModeScoring::_LongestDistanceLapCompare": {
@@ -1803,6 +1833,9 @@
   "BrnGameState::HUDMessageLogic::GenerateFinisherMessage": {
    "status": "reviewed"
   },
+  "BrnGameState::HUDMessageLogic::GenerateFirstOrLastMessage": {
+   "status": "reviewed"
+  },
   "BrnGameState::HUDMessageLogic::GenerateLeaderMessages": {
    "status": "reviewed"
   },
@@ -2322,6 +2355,15 @@
   "BrnGameState::PaybackDebugComponent::OnActivate": {
    "status": "reviewed"
   },
+  "BrnGameState::PaybackManager::ChangeState": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::Destruct": {
+   "status": "reviewed"
+  },
   "BrnGameState::PaybackManager::HandleActivePayback": {
    "status": "reviewed"
   },
@@ -2331,13 +2373,40 @@
   "BrnGameState::PaybackManager::HandleCrashDueToPayback": {
    "status": "reviewed"
   },
+  "BrnGameState::PaybackManager::HandleHavingPayback": {
+   "status": "reviewed"
+  },
   "BrnGameState::PaybackManager::HandleReceivingPayback": {
    "status": "reviewed"
   },
   "BrnGameState::PaybackManager::HandleSurvivingPayback": {
    "status": "reviewed"
   },
+  "BrnGameState::PaybackManager::HandleTriggeringPayback": {
+   "status": "reviewed"
+  },
   "BrnGameState::PaybackManager::HandleWaitingToAwardPayback": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::OnRoundEnd": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::ProcessDirtyTrickEventQueue": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::ProcessPaybackTriggerableEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::ProcessTakedownEvents": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::SendNetworkDirtyTrickMessage": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::UpdateCountdown": {
    "status": "reviewed"
   },
   "BrnGameState::PursuitMode::GetName": {
@@ -2400,10 +2469,67 @@
   "BrnGameState::RoadRageMode::UpdateMaxActiveCars": {
    "status": "reviewed"
   },
+  "BrnGameState::RoadRageModeScoring::IncrementPlayerNumTakedowns": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::Construct": {
+   "status": "reviewed"
+  },
   "BrnGameState::RoadRulesManager::GetCurrentRoadID": {
    "status": "reviewed"
   },
   "BrnGameState::RoadRulesManager::IsRoadLimitRegionValid": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnEndRule": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnEnterRoad": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnLeaveRoad": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnRoadLimit": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnRoadRulesDataRequest": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnScoreCompleted": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnShowtimeStart": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnStartRule": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::OnUpdateActiveRoadScores": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::QuitAnyActiveRules": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::SendActiveRuleState": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::SetActiveRoadRule": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::SetRoadRulesMode": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::UpdateActiveRoadRule": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::UpdateSwitchingRoadRulesOnOrOff": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RoadRulesManager::UpdateTimeRule": {
    "status": "reviewed"
   },
   "BrnGameState::RumbleManager::BridgeRumbleToInput": {
@@ -2415,6 +2541,9 @@
   "BrnGameState::RumbleManager::PlayJolt": {
    "status": "reviewed"
   },
+  "BrnGameState::ScoringSystem::GetRaceCarTotalTime": {
+   "status": "reviewed"
+  },
   "BrnGameState::ScoringSystem::StoreCarIds": {
    "status": "reviewed"
   },
@@ -2422,6 +2551,9 @@
    "status": "reviewed"
   },
   "BrnGameState::ScoringSystem::UpdatePaybackTakedowns": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::UpdateTeamStats": {
    "status": "reviewed"
   },
   "BrnGameState::StartGameModeParams::AddCheckpoint": {
@@ -2691,6 +2823,9 @@
   "BrnGameState::TriggerQueryManager::ClearLandmarkIndexesForGameMode": {
    "status": "reviewed"
   },
+  "BrnGameState::TriggerQueryManager::Construct": {
+   "status": "reviewed"
+  },
   "BrnGameState::TriggerQueryManager::GetPlayerCurrentTrafficLightId": {
    "status": "reviewed"
   },
@@ -2706,7 +2841,13 @@
   "BrnGameState::TriggerQueryManager::Prepare": {
    "status": "reviewed"
   },
+  "BrnGameState::TriggerQueryManager::ProcessPlayerTriggers": {
+   "status": "reviewed"
+  },
   "BrnGameState::TriggerQueryManager::SubmitTriggerQueries": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TriggerQueryManager::UpdateTriggers": {
    "status": "reviewed"
   },
   "BrnGraphics::DebugComponent::Construct": {
@@ -4218,6 +4359,18 @@
   "BrnNetwork::BrnNetworkManager::Construct": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkManager::OnGameFinish": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkManager::OnGameStart": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkManager::OnRoundFinish": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkManager::OnRoundStart": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkManager::OutputGameParameters": {
    "status": "reviewed"
   },
@@ -4264,6 +4417,9 @@
    "status": "reviewed"
   },
   "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PreSimulationInputBuffer::Construct": {
    "status": "reviewed"
   },
   "BrnNetwork::BrnNetworkModuleIO::TelemetryData::AddParameter": {
@@ -4401,13 +4557,46 @@
   "BrnNetwork::LiveRevengeProfile::ValidateProfile": {
    "status": "reviewed"
   },
+  "BrnNetwork::LiveRevengeRelationship::AddTakedownByLocalPlayer": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::AddTakedownByRival": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::DEBUGClearRelationship": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::DEBUGResetTimeStamp": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::DEBUGSetTimeStampOld": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::FlipPointOfView": {
+   "status": "reviewed"
+  },
   "BrnNetwork::LiveRevengeRelationship::GetTotalTakedowns": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::Merge": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeRelationship::Release": {
    "status": "reviewed"
   },
   "BrnNetwork::LiveRevengeRelationship::Validate": {
    "status": "reviewed"
   },
   "BrnNetwork::LiveRevengeRelationship::ValidateStat": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeSyncMessage::GetPackedMessageSize": {
    "status": "reviewed"
   },
   "BrnNetwork::MarkedManManager::_MarkedManMessageDeliveredCallback": {
@@ -4518,6 +4707,12 @@
   "BrnNetwork::NetworkInviteManager::Update": {
    "status": "reviewed"
   },
+  "BrnNetwork::NetworkPlayerStatsManager::CopyNextValidEventOutOfQueue": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStatsManager::Disconnected": {
+   "status": "reviewed"
+  },
   "BrnNetwork::NetworkPlayerStatsManager::ProcessAfterSimulation": {
    "status": "reviewed"
   },
@@ -4597,6 +4792,9 @@
    "status": "reviewed"
   },
   "BrnNetwork::ScoreboardManager::AddNumberBeforeAndAfter": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::ScoreboardManager::HandleScoreboardEvent": {
    "status": "reviewed"
   },
   "BrnNetwork::ScoreboardManager::ProcessBeforeSimulation": {
@@ -5118,6 +5316,42 @@
   "BrnPhysics::Vehicle::SetTrafficCrashingEvent,25>::Construct": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::AddTractionPoint": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::CalculateNewWheelPlane": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::ClearCrashing": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::GetSimpleVehicleBox": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::Reset": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::SetAboveGroundTestResult": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::SetAttributes": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::SetCrashing": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SimpleVehiclePhysics::SwitchAttribs": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::TrafficRemovedEvent,25>::Construct": {
    "status": "reviewed"
   },
@@ -5146,6 +5380,12 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleInputInterface::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehicleInputInterface::CreateArticulatedTraffic": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehicleInputInterface::CreatePhysicalTraffic": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::AddPlayerStuckInCollisionLineTests": {
@@ -5268,22 +5508,196 @@
   "BrnPhysics::Vehicle::VehicleManagerOutputInterface::Construct": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehicleOutputInterface::UpdateRaceCarState": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::AddAirRam": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::AddShunt": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::AddSlam": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyBoostKickForce": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyCrashedContactImpulse": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyDriftForces": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyDriftLatForce": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyEngineForces": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyNormalBoostForce": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyShowtimeContactImpulse": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplySuspensionForces": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyWallContactImpulse": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ApplyWheelWeight": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehiclePhysics::CalculateBodyVelocityAtWheelContact": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::CalculateWeightTransfer": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetDownForce": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetShowtimeDeformationScale": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetSteeringAngle": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetSurfaceGrip": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetSurfaceLinearDrag": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetSurfaceRoughness": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::HackedResetAndFlyAround": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::HandleWheelFrictionCrashing": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehiclePhysics::HandleWheelPairFriction": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehiclePhysics::IsCounterSteeringAtLowSpeed": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::LimitDifferential": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehiclePhysics::MaintainDriftSpeed": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::ModifyControlsForDrift": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::SetAttributes": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::SetCrashing": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::SetTransformFromPositionOnRoad": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehiclePhysics::SetWheelVelocities": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehiclePhysics::SetupSuspension": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::SwitchAIDonuttingAttribs": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateAirRam": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateBoost": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateBurnout": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateCrashing": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateDownForce": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateDriftScale": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateDriftState": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateDriving": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateFreezing": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateHandBrake": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateInWaterBehaviour": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateRoadNoise": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateShunt": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateSlam": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateSpeedMatch": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehiclePhysics::UpdateSpinEffects": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateSuspension": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateSuspensionPostSimulation": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehiclePhysics::UpdateSuspensionSprings": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateWheelInertia": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateWheels": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::Wheel::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::Wheel::SetRoadContact": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::Wheel::SwitchAttribs": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::Wheel::TireAttribs::PrepareFrontTireForDonutAI": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::Wheel::TireAttribs::PrepareRearTireForDonutAI": {
    "status": "reviewed"
   },
   "BrnPostFxShader::BrnPostFxShader": {
@@ -6717,11 +7131,20 @@
   "BrnWorld::RaceCarEntityModule::HandleSetPlayerOpponentsAction": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModule::RemoveRaceCar": {
+   "status": "recovered"
+  },
   "BrnWorld::RaceCarEntityModule::SendResetOnTrackRequests": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModule::SetPaddingForResetRaceCars": {
    "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModule::StorePlayerRoutePortalPositions": {
+   "status": "recovered"
+  },
+  "BrnWorld::RaceCarEntityModule::UpdateActiveToAICarLookup": {
+   "status": "recovered"
   },
   "BrnWorld::RaceCarEntityModuleIO::AudioCarDataLoadedEvent,16>::Construc": {
    "status": "reviewed"
@@ -6732,14 +7155,38 @@
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::Construct": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostScene::Construct": {
+   "status": "recovered"
+  },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::Construct": {
    "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetControllerActive": {
+   "status": "recovered"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetInHardStopCamera": {
+   "status": "recovered"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetOnlineScoringInterface": {
+   "status": "recovered"
   },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetTakedownEventQueue": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::Construct": {
    "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetActivePaybackAggressor": {
+   "status": "recovered"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetActivePaybackType": {
+   "status": "recovered"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetCameraInput": {
+   "status": "recovered"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetTimerStatusInterface": {
+   "status": "recovered"
   },
   "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostPhysics::Construct": {
    "status": "reviewed"
@@ -6990,6 +7437,69 @@
   "CgsDev::Assert::PrintStringed": {
    "status": "reviewed"
   },
+  "CgsDev::Debug2DImmediateRender::AddLine": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::AddTriangle": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::Begin": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::CalcTextExtent": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::CalcTextWidth": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::Construct": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawAlignedText": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawBox": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawCircle": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawFrame": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawHorizontalBar": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawLine": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawSolidConvexPolygon": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawText": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawTextInBox": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawTextWithBackground": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawValue": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::DrawWirePolygon": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::End": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::Is2DLineOnScreen": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::Is2DPolygonOnScreen": {
+   "status": "reviewed"
+  },
   "CgsDev::DebugComponent::AddMenuItem": {
    "status": "reviewed"
   },
@@ -7203,10 +7713,16 @@
   "CgsDev::DebugRender::Dispatch2D": {
    "status": "reviewed"
   },
+  "CgsDev::DebugRender::Draw2DArrowHead": {
+   "status": "reviewed"
+  },
   "CgsDev::DebugRender::Draw2DBox": {
    "status": "reviewed"
   },
   "CgsDev::DebugRender::Draw2DText": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugRender::Draw2DTextJustified": {
    "status": "reviewed"
   },
   "CgsDev::DebugRender::DrawArrow": {
@@ -7219,6 +7735,9 @@
    "status": "reviewed"
   },
   "CgsDev::DebugRender::DrawCircle": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugRender::DrawCross": {
    "status": "reviewed"
   },
   "CgsDev::DebugRender::DrawLine": {
@@ -7539,6 +8058,18 @@
   "CgsDev::Log::LogOutput::Append": {
    "status": "reviewed"
   },
+  "CgsDev::MapFile::MinimalMemoryReader::GetStackEntryName": {
+   "status": "reviewed"
+  },
+  "CgsDev::MapFile::MinimalMemoryReader::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsDev::MapFile::MinimalMemoryReader::ReadRecords": {
+   "status": "reviewed"
+  },
+  "CgsDev::MapFile::MinimalMemoryReader::Update": {
+   "status": "reviewed"
+  },
   "CgsDev::PerfMonCpu::AddMonitor": {
    "status": "reviewed"
   },
@@ -7552,6 +8083,12 @@
    "status": "reviewed"
   },
   "CgsDev::SimpleStrStream::Reset": {
+   "status": "reviewed"
+  },
+  "CgsDev::StackUnpickBase::GetStackAddress": {
+   "status": "reviewed"
+  },
+  "CgsDev::StackUnpickBase::RemoveFirstItemInStack": {
    "status": "reviewed"
   },
   "CgsDev::StrStream::Append": {
@@ -7570,6 +8107,18 @@
    "status": "reviewed"
   },
   "CgsDev::StrStreamBase::operator<<": {
+   "status": "reviewed"
+  },
+  "CgsDev::VectorFont::ComputeTextExtent": {
+   "status": "reviewed"
+  },
+  "CgsDev::VectorFont::DrawLine": {
+   "status": "reviewed"
+  },
+  "CgsDev::VectorFont::Print": {
+   "status": "reviewed"
+  },
+  "CgsDev::VectorFont::PrintComplex": {
    "status": "reviewed"
   },
   "CgsFileSystem::DeviceManager::SetDefaultPath": {
@@ -8844,10 +9393,25 @@
   "CgsNetwork::StartTimeManager::AreAllPlayersReadyTo": {
    "status": "reviewed"
   },
+  "CgsNetwork::StartTimeManager::Construct": {
+   "status": "reviewed"
+  },
   "CgsNetwork::StartTimeManager::StartTimeManager": {
    "status": "reviewed"
   },
   "CgsNetwork::StartTimeManager::Update": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::StartTimeManager::UpdateClientSyncTime": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::StartTimeManager::UpdateClientWaitStartTimeArrive": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::StartTimeManager::UpdateHostWaitForClientsReady": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::StartTimeManager::UpdateWaitForStartTime": {
    "status": "reviewed"
   },
   "CgsNetwork::StartTimeMessage::GetName": {
@@ -9147,6 +9711,42 @@
   "CgsResource::GuiPopupResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "CgsResource::Heap::ExecuteBatchAddressedAllocation": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::ExecuteBatchAllocation": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::Free": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::GenerateLinearHeap": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::GetFragmentationLevel": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::GetLargestFreeBlock": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::GetNodeUsageStatistics": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::Malloc": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::Release": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::RemoveNode": {
+   "status": "reviewed"
+  },
+  "CgsResource::Heap::Reprepare": {
+   "status": "reviewed"
+  },
   "CgsResource::HudMessageListResourceType::FixDown": {
    "status": "reviewed"
   },
@@ -9261,16 +9861,79 @@
   "CgsResource::PolygonSoupListResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "CgsResource::Pool::AddResourceToScratchPool": {
+   "status": "reviewed"
+  },
   "CgsResource::Pool::AddResourcesToScratchPool": {
    "status": "reviewed"
   },
   "CgsResource::Pool::AllocateMemoryForResource": {
    "status": "reviewed"
   },
+  "CgsResource::Pool::AllocateResourceEntry": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::BeginDefragNextSetOfRelocations": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::BeginDefragmentation": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::BeginEmergencyDefragmentation": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::Construct": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::CreateBatchEntrySlots": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::CreateEntry": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::CreateEntryInSlot": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::DebugReport": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::DeleteMemoryForEntry": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::ExecuteBatchAllocation": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::ExecuteBatchAllocations": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::FindResource": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::FindResourceIndex": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::FindResourceWithDependencies": {
+   "status": "reviewed"
+  },
   "CgsResource::Pool::FreeMemoryForResource": {
    "status": "reviewed"
   },
+  "CgsResource::Pool::GetResource": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::InitManagementData": {
+   "status": "reviewed"
+  },
   "CgsResource::Pool::InitPool": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::MergeBatchAllocations": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::ReAllocateMemoryForEntry": {
    "status": "reviewed"
   },
   "CgsResource::Pool::RebaseResourceToScratchPool": {
@@ -9282,7 +9945,31 @@
   "CgsResource::Pool::RebaseResourcesToScratchPool": {
    "status": "reviewed"
   },
+  "CgsResource::Pool::Release": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::ResetPool": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::ResolveAllDestScratchResources": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::ResolveAllResources": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::ResolveAllTempScratchResources": {
+   "status": "reviewed"
+  },
   "CgsResource::Pool::ResolveImportForEntry": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::Update": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::UpdateEmergencyDefrag": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::Validate": {
    "status": "reviewed"
   },
   "CgsResource::PoolModule::AllocateResourceList": {
@@ -9310,6 +9997,9 @@
    "status": "reviewed"
   },
   "CgsResource::PoolModule::DoValidatePoolRequest": {
+   "status": "reviewed"
+  },
+  "CgsResource::PoolModule::GetRequiredResourceDescriptor": {
    "status": "reviewed"
   },
   "CgsResource::PoolModule::ProcessReceiverQueue": {
@@ -9468,6 +10158,9 @@
   "CgsSceneManager::FineIntersectionTestModule::ComputeVolumeTestFine": {
    "status": "reviewed"
   },
+  "CgsSceneManager::LooseOctree::MergeSubTreeRecursive": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::OverlapCullingIO::InputBuffer::Construct": {
    "status": "reviewed"
   },
@@ -9532,6 +10225,12 @@
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerDebugComponent::Update": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddForCollision": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddVolumeInstance": {
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::Append": {
@@ -9879,7 +10578,13 @@
   "CgsSystem::ThreadLayout::ThreadLayout": {
    "status": "reviewed"
   },
+  "CgsSystem::Time::SetFloatVal": {
+   "status": "reviewed"
+  },
   "CgsSystem::Time::SetFraction": {
+   "status": "reviewed"
+  },
+  "CgsSystem::Time::Time": {
    "status": "reviewed"
   },
   "CgsSystem::Time::operator+": {
@@ -9910,6 +10615,9 @@
    "status": "reviewed"
   },
   "CgsSystem::TimerStatusInterface::IsSimTimerFrequency50Hz": {
+   "status": "reviewed"
+  },
+  "CgsSystem::TimerStatusInterface::StoreTimers": {
    "status": "reviewed"
   },
   "CgsUnicode::IsValidUtf8Character": {
@@ -10382,6 +11090,9 @@
   "GameShared/GameClasses/Containers/CgsBitArray.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/Containers/CgsFifoQueue.h": {
+   "status": "done"
+  },
   "GameShared/GameClasses/Containers/CgsFlagSet.h": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
    "status": "done"
@@ -10396,6 +11107,9 @@
   },
   "GameShared/GameClasses/Containers/CgsHash16.cpp": {
    "notes": "trivial; gate-only",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Containers/CgsIndexedLinkList.h": {
    "status": "done"
   },
   "GameShared/GameClasses/Containers/CgsObjectPool.h": {
@@ -10484,6 +11198,12 @@
   "GameShared/GameClasses/Development/DebugSystem/Interface/CgsDebugInterface.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug2DImmediateRender.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Development/DebugSystem/Render/CgsDebugRender.cpp": {
+   "status": "done"
+  },
   "GameShared/GameClasses/Development/Log/CgsLogChannelOutput.h": {
    "notes": "trivial / original source match; gate-only",
    "status": "done"
@@ -10494,6 +11214,9 @@
   },
   "GameShared/GameClasses/Development/Log/CgsLogOutput.h": {
    "notes": "trivial / original source match; gate-only",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Development/MapFile/Reader/CgsMapFileReaderMinimalMemory.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/Development/PerfMon/Cpu/CgsPerfMonCpu.cpp": {
@@ -10511,6 +11234,12 @@
   },
   "GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonGpu.h": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Development/StackUnpick/CgsStackUnpick.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Development/VectorFont/CgsVectorFont.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/FSM/Resources/CgsLuaCodeResource.h": {
@@ -10794,6 +11523,9 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.h": {
+   "status": "done"
+  },
   "GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeperDebugComponent.h": {
    "notes": "trivial / original source match; gate-only",
    "status": "done"
@@ -10950,6 +11682,9 @@
   "GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp": {
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Resource/CgsResourceID.cpp": {
    "notes": "CRC-style lowercase hash loop; compile gate and parity GREEN",
    "status": "done"
@@ -10959,6 +11694,9 @@
   },
   "GameShared/GameClasses/System/Resource/CgsResourceModuleIO.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
+   "status": "done"
+  },
+  "GameShared/GameClasses/System/Resource/CgsResourcePool.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp": {
@@ -10973,6 +11711,9 @@
   "GameShared/GameClasses/System/Resource/CgsResourceType.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/System/Resource/CgsSmallResourcePS3.h": {
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Resource/CgsTextFileResource.cpp": {
    "notes": "descriptor builder VERIFIED against asm (entry0={*res+5,4}, rest {0,1}); gate-only",
    "status": "done"
@@ -10983,12 +11724,18 @@
   "GameShared/GameClasses/System/Timer/CgsFrameRate.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/System/Timer/CgsTime.h": {
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Timer/CgsTimeUtils.cpp": {
    "notes": "trivial; gate-only self-review",
    "status": "done"
   },
   "GameShared/GameClasses/System/Timer/CgsTimer.cpp": {
    "notes": "override of sonnet fail: +4 is an INT field (Prepare stores literal 0, not 0.0), so '*(result+4) += v10' truncates identically to += (int)v10 = a6; reconstruction is faithful",
+   "status": "done"
+  },
+  "GameShared/GameClasses/System/Timer/CgsTimerStatusInterface.h": {
    "status": "done"
   },
   "GameShared/GameClasses/World/CgsWorldMap2D.cpp": {
@@ -11021,6 +11768,12 @@
    "status": "done"
   },
   "GameSource/Director/Camera/BrnCameraEffects.cpp": {
+   "status": "done"
+  },
+  "GameSource/Director/Camera/Camera.cpp": {
+   "status": "done"
+  },
+  "GameSource/Director/Camera/Camera.h": {
    "status": "done"
   },
   "GameSource/Director/DirectorModule/BrnDirectorModuleIO.cpp": {
@@ -11212,6 +11965,12 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameSource/Network/Managers/BrnNetworkLiveRevengeRelationship.cpp": {
+   "status": "done"
+  },
+  "GameSource/Network/Managers/BrnNetworkLiveRevengeRelationship.h": {
+   "status": "done"
+  },
   "GameSource/Network/Managers/BrnNetworkMatchMakingManager.cpp": {
    "status": "done"
   },
@@ -11226,6 +11985,12 @@
    "status": "done"
   },
   "GameSource/Physics/ContactSpies/BrnContactSpyEvents.h": {
+   "status": "done"
+  },
+  "GameSource/Physics/VehicleManager/SharedIO/BrnVehicleInputInterface.h": {
+   "status": "done"
+  },
+  "GameSource/Physics/VehicleManager/VehiclePhysics/VehiclePhysics.h": {
    "status": "done"
   },
   "GameSource/Replays/Serialisers/BrnReplayDirectorBridgeSerialiser.cpp": {
@@ -11500,10 +12265,16 @@
   "GameSource/Unity/../GameState/Offences/BrnStuntManagerDebugComponent.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../GameState/PaybackManager/BrnPaybackManager.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/Progression/BrnProfile.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../GameState/Progression/BrnProgressionManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/RoadRules/BrnRoadRulesManager.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../GameState/TakedownManager/BrnTakedownManager.cpp": {
@@ -11511,6 +12282,9 @@
   },
   "GameSource/Unity/../GameState/TakedownManager/BrnTakedownManagerDebugComponent.cpp": {
    "notes": "Review passed: ForceTakedownCallback and OnActivate registration callbacks are correct.",
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/TriggerQueryManager/BrnTriggerQueryManager.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../Graphics/BrnEffectsArbitrator.cpp": {
@@ -11536,12 +12310,24 @@
    "notes": "trivial; gate-only. In-place zero-init constructor, GREEN parity.",
    "status": "done"
   },
+  "GameSource/Unity/../Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/BrnArticulatedJointPool.cpp": {
    "notes": "batch reviewer pass; joint array loop and scalar defaults match offsets",
    "status": "done"
   },
+  "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/BrnSimpleVehiclePhysics.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/VehicleAttribs.cpp": {
    "notes": "batch review pass",
+   "status": "done"
+  },
+  "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/VehiclePhysics.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/Wheel.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../Sound/BrnDebugComponent.cpp": {
@@ -11557,6 +12343,9 @@
    "status": "done"
   },
   "GameSource/Unity/../World/AI/Route/BrnRouteMapModule.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../World/AI/SharedIO/BrnRaceCarAIInterfaces.h": {
    "status": "done"
   },
   "GameSource/Unity/../World/DebugComponents/BrnCollisionDebugComponent.cpp": {
