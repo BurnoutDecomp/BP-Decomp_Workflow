@@ -440,6 +440,14 @@ def cmd_seed(args):
 
 
 # ---------------------------------------------------------------- committed mirrors
+def implied_tier(status):
+    """The verify_tier a func status already entails — used to drop a redundant field
+    from status.json. `reviewed` always means tier 2 (reviewer-verified), so serializing
+    it adds nothing. `compiles` legitimately spans tier 1 (gate passed) and tier 0 (gate
+    skipped), so its tier stays explicit; everything else is tier 0."""
+    return 2 if status == "reviewed" else 0
+
+
 def sync_status(con):
     """Write the mutable progress (non-default rows only) to the committed status.json.
 
@@ -459,7 +467,9 @@ def sync_status(con):
     for r in con.execute("SELECT name,status,verify_tier,attempts FROM func "
                          "WHERE status!='todo' OR verify_tier!=0 OR attempts!=0"):
         d = {"status": r["status"]}
-        if r["verify_tier"]:
+        # `reviewed` pins tier 2 by definition, so the field is redundant there; only
+        # `compiles` carries a meaningful non-zero tier (1 == gate passed) worth recording.
+        if r["verify_tier"] and r["status"] != "reviewed":
             d["verify_tier"] = r["verify_tier"]
         if r["attempts"]:
             d["attempts"] = r["attempts"]
@@ -477,8 +487,9 @@ def restore_status(con):
         con.execute("UPDATE tu SET status=?, owner=?, notes=? WHERE id=?",
                     (d.get("status", "todo"), d.get("owner"), d.get("notes"), tid))
     for nm, d in st.get("func", {}).items():
+        s = d.get("status", "todo")
         con.execute("UPDATE func SET status=?, verify_tier=?, attempts=? WHERE name=?",
-                    (d.get("status", "todo"), d.get("verify_tier", 0), d.get("attempts", 0), nm))
+                    (s, d.get("verify_tier", implied_tier(s)), d.get("attempts", 0), nm))
     con.commit()
     return len(st.get("tu", {}))
 
