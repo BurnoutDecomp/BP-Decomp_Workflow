@@ -138,6 +138,7 @@ def classify_file(text):  # kept for verify()'s single-file checks
 
 
 STATUS_RANK = {"todo": 0, "in_progress": 1, "compiled": 2, "done": 3, "blocked": 3}
+FUNC_STATUS_RANK = {"todo": 0, "recovered": 1, "compiles": 2, "reviewed": 3}
 
 
 def would_demote(cur, target):
@@ -146,9 +147,69 @@ def would_demote(cur, target):
     return STATUS_RANK.get(target, 0) < STATUS_RANK.get(cur, 0)
 
 
+def _status_json_snapshot():
+    if not os.path.exists(work.STATUS_JSON):
+        return {"tu": {}, "func": {}}
+    return json.load(open(work.STATUS_JSON, encoding="utf-8"))
+
+
+def _merge_no_demote_status_json(previous):
+    """Preserve existing status.json entries that the DB mirror removed or lowered."""
+    current = _status_json_snapshot()
+    changed = False
+
+    for section, ranks in (("tu", STATUS_RANK), ("func", FUNC_STATUS_RANK)):
+        merged = current.setdefault(section, {})
+        for key, old_entry in previous.get(section, {}).items():
+            new_entry = merged.get(key)
+            if new_entry is None:
+                merged[key] = old_entry
+                changed = True
+                continue
+            old_rank = ranks.get(old_entry.get("status", "todo"), 0)
+            new_rank = ranks.get(new_entry.get("status", "todo"), 0)
+            if new_rank < old_rank:
+                merged[key] = old_entry
+                changed = True
+
+    if changed:
+        json.dump(current, open(work.STATUS_JSON, "w", encoding="utf-8"),
+                  indent=1, sort_keys=True)
+    return changed
+
+
+def _merge_no_demote_db(con, previous):
+    """Restore DB rows from the pre-run status mirror when reconcile lowered them."""
+    restored = 0
+    for tid, old_entry in previous.get("tu", {}).items():
+        row = con.execute("SELECT status FROM tu WHERE id=?", (tid,)).fetchone()
+        if not row:
+            continue
+        old_status = old_entry.get("status", "todo")
+        if STATUS_RANK.get(row["status"], 0) < STATUS_RANK.get(old_status, 0):
+            con.execute("UPDATE tu SET status=?, owner=?, notes=? WHERE id=?",
+                        (old_status, old_entry.get("owner"), old_entry.get("notes"), tid))
+            restored += 1
+
+    for name, old_entry in previous.get("func", {}).items():
+        row = con.execute("SELECT status FROM func WHERE name=?", (name,)).fetchone()
+        if not row:
+            continue
+        old_status = old_entry.get("status", "todo")
+        if FUNC_STATUS_RANK.get(row["status"], 0) < FUNC_STATUS_RANK.get(old_status, 0):
+            con.execute("UPDATE func SET status=?, verify_tier=?, attempts=? WHERE name=?",
+                        (old_status,
+                         old_entry.get("verify_tier", work.implied_tier(old_status)),
+                         old_entry.get("attempts", 0),
+                         name))
+            restored += 1
+    return restored
+
+
 def reconcile(con, tracked, apply, no_demote=False):
     index = build_index(tracked)
     tu_index = json.load(open(TU_INDEX, encoding="utf-8"))
+    previous_status = _status_json_snapshot() if no_demote and apply else None
     rows = con.execute("SELECT id, source, status, dest_path FROM tu").fetchall()
     flips, done_ids, partial, skeleton_flag, preserved = [], set(), [], [], []
     demoted_phantom, misattributed, protected_demotions = [], [], []
@@ -236,7 +297,10 @@ def reconcile(con, tracked, apply, no_demote=False):
             con.execute("UPDATE func SET status='reviewed', verify_tier=2, updated_at=? WHERE tu_id=?", (ts, tid))
         elif target == "in_progress" and tid in partial_ids:
             con.execute("UPDATE tu SET status='in_progress', notes='committed file is partial (TODO/placeholder) — needs finishing', updated_at=? WHERE id=?", (ts, tid))
-            con.execute("UPDATE func SET status='recovered', verify_tier=0, updated_at=? WHERE tu_id=?", (ts, tid))
+            if no_demote:
+                con.execute("UPDATE func SET status='recovered', verify_tier=0, updated_at=? WHERE tu_id=? AND status='todo'", (ts, tid))
+            else:
+                con.execute("UPDATE func SET status='recovered', verify_tier=0, updated_at=? WHERE tu_id=?", (ts, tid))
         elif target == "todo" and cur != "todo" and cur != "blocked":
             # only TUs we actually decided to demote (phantom file-TUs / skeletons);
             # class TUs with no file keep their status and are NOT in flip_ids here.
@@ -247,8 +311,14 @@ def reconcile(con, tracked, apply, no_demote=False):
                  f"done={len(done_ids)} partial={len(partial)} preserved={len(preserved)} "
                  f"flips={len(flips)} no_demote={int(no_demote)} "
                  f"suppressed={len(protected_demotions)}"))
+    if previous_status is not None:
+        restored = _merge_no_demote_db(con, previous_status)
+        if restored:
+            print(f"no-demote mode: restored {restored} DB row(s) lowered by reconcile")
     con.commit()
     work.sync_status(con)
+    if previous_status is not None and _merge_no_demote_status_json(previous_status):
+        print("no-demote mode: restored status.json entries removed or lowered by DB sync")
     print(f"\napplied. done={len(done_ids)}  in_progress(partial)={len(partial)}  "
           f"class-preserved={len(preserved)}")
 
@@ -282,7 +352,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--no-demote", action="store_true",
-                    help="only add/promote statuses; never lower existing progress")
+                    help="only add/promote statuses; preserve existing status.json entries")
     args = ap.parse_args()
     con = sqlite3.connect(work.DB); con.row_factory = sqlite3.Row
     tracked = committed_files()

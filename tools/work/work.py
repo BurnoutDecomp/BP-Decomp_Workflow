@@ -1727,7 +1727,7 @@ def main():
     )
     rf.add_argument("--apply", action="store_true", help="write ledger.sqlite and status.json; default is dry run")
     rf.add_argument("--no-demote", action="store_true",
-                    help="only add/promote statuses; never lower existing progress")
+                    help="only add/promote statuses; preserve existing status.json entries")
     rf.set_defaults(fn=cmd_reconcile_from_files)
     ss = sub.add_parser("server-sync", help="refresh server checkout/import without clearing live claims/events")
     ss.add_argument("--branch", help="workflow branch to sync (default: server BP_WORKFLOW_BRANCH)")
