@@ -2250,6 +2250,15 @@
   "BrnGameState::OnlineBurningHomeRunMode::SwitchBurningHomeRunRunner": {
    "status": "reviewed"
   },
+  "BrnGameState::OnlineBurningHomeRunModeScoring::UpdatePlayerPoints": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineBurningHomeRunModeScoring::WriteDataToOutput": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineBurningHomeRunModeScoring::_BurningHomeRunPlayerFinishTimesCompare": {
+   "status": "reviewed"
+  },
   "BrnGameState::OnlineCarSelectManager::Construct": {
    "status": "reviewed"
   },
@@ -2383,16 +2392,16 @@
    "status": "reviewed"
   },
   "BrnGameState::OnlineRaceModeScoring::ClearData": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::OnlineRaceModeScoring::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::OnlineRaceModeScoring::UpdatePlayerPoints": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::OnlineRaceModeScoring::_PlayerFinishTimesCompare": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::OnlineRoadRageMode::GetName": {
    "status": "reviewed"
@@ -4494,10 +4503,52 @@
   "BrnNetwork::BrnNetworkModuleIO::DirtyTrickEvent>::Append": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModuleIO::Gam": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::In": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::InG": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::InGamePl": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkModuleIO::InGamePlayerStatusData::Clear": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModuleIO::Net": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>:": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkModuleIO::NetworkToGameStateInterface::Append": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::Ou": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::Out": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::Outp": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::OutputB": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::OutputBu": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::OutputBuf": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::OutputBuff": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::OutputBuffer:": {
    "status": "reviewed"
   },
   "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::Construct": {
@@ -4506,10 +4557,40 @@
   "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::Destruct": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModuleIO::P": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PlayerRe": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::Pos": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostS": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSim": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulatio": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationI": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBu": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::Construct": {
    "status": "reviewed"
   },
   "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PreSimulationInputBuffer:": {
    "status": "reviewed"
   },
   "BrnNetwork::BrnNetworkModuleIO::PreSimulationInputBuffer::Construct": {
@@ -12567,6 +12648,14 @@
   "GameSource/Unity/../GameState/ModeManager/Scoring/BrnBaseOnlineModeScoring.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../GameState/ModeManager/Scoring/BrnOnlineBurningHomeRunModeScoring.cpp": {
+   "notes": "Verifier flagged comparator dropping worse-tier returns; FIXED to hard-return 1 on P1-disconnected/timed-out vs P2, matching the proven sibling Race comparator. Gate PASS, 0 regressions.",
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/Scoring/BrnOnlineRaceModeScoring.cpp": {
+   "notes": "Verifier PASS/none; offsets X360-proven; routes ScoringSystem::GetCarData->CarData->CarScoreData getters; gate PASS, 0 regressions. Parity-heuristic divergence is the CGS_ASSERT triad (soft signal).",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/NetworkRoundManager/BrnNetworkRoundManager.cpp": {
    "status": "done"
   },
@@ -13064,6 +13153,10 @@
   },
   "class:BrnHW": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
+   "status": "done"
+  },
+  "class:BrnNetwork::BrnNetworkModuleIO": {
+   "notes": "Verifier PASS/minor (independently gated all 3 .cpp EXITCODE=0); InGamePlayerStatusData ODR fix + 120B mLiveRevengeRelationship@+136/mPlayerName@+256 layout proven from 0x823628C8. Gate PASS, 0 regressions.",
    "status": "done"
   },
   "class:BrnNetwork::BrnNetworkModuleIO::DirtyTrickEvent,28>": {
