@@ -1467,7 +1467,7 @@ def cmd_reconcile_from_files(args):
     con.row_factory = sqlite3.Row
     try:
         tracked = reconcile_from_files.committed_files()
-        reconcile_from_files.reconcile(con, tracked, args.apply)
+        reconcile_from_files.reconcile(con, tracked, args.apply, args.no_demote)
         if args.apply:
             reconcile_from_files.verify(con, tracked)
     finally:
@@ -1726,6 +1726,8 @@ def main():
         help="re-anchor local ledger/status.json from committed b5-decomp HEAD files",
     )
     rf.add_argument("--apply", action="store_true", help="write ledger.sqlite and status.json; default is dry run")
+    rf.add_argument("--no-demote", action="store_true",
+                    help="only add/promote statuses; never lower existing progress")
     rf.set_defaults(fn=cmd_reconcile_from_files)
     ss = sub.add_parser("server-sync", help="refresh server checkout/import without clearing live claims/events")
     ss.add_argument("--branch", help="workflow branch to sync (default: server BP_WORKFLOW_BRANCH)")

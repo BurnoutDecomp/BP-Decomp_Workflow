@@ -15,8 +15,9 @@ paths) OR, for decfigs TUs, the mirrored path b5-decomp/src/<tu>. A file counts 
 "real" unless every code line is a trap stub (__debugbreak/__builtin_trap/CGS_ASSERT
 (false)) — i.e. an unreconstructed skeleton.
 
-    python tools/work/reconcile_from_files.py            # dry run: the full flip table
-    python tools/work/reconcile_from_files.py --apply    # write it (DB + status.json)
+    python tools/work/reconcile_from_files.py                       # dry run: the full flip table
+    python tools/work/reconcile_from_files.py --apply               # write it (DB + status.json)
+    python tools/work/reconcile_from_files.py --no-demote --apply   # add/promote only
 """
 import argparse, json, os, re, sqlite3, subprocess, sys
 
@@ -136,12 +137,22 @@ def classify_file(text):  # kept for verify()'s single-file checks
     return "partial" if INCOMPLETE.search(text) else "done"
 
 
-def reconcile(con, tracked, apply):
+STATUS_RANK = {"todo": 0, "in_progress": 1, "compiled": 2, "done": 3, "blocked": 3}
+
+
+def would_demote(cur, target):
+    if cur == target or cur == "blocked" or target == "blocked":
+        return False
+    return STATUS_RANK.get(target, 0) < STATUS_RANK.get(cur, 0)
+
+
+def reconcile(con, tracked, apply, no_demote=False):
     index = build_index(tracked)
     tu_index = json.load(open(TU_INDEX, encoding="utf-8"))
     rows = con.execute("SELECT id, source, status, dest_path FROM tu").fetchall()
     flips, done_ids, partial, skeleton_flag, preserved = [], set(), [], [], []
-    demoted_phantom, misattributed = [], []
+    demoted_phantom, misattributed, protected_demotions = [], [], []
+    targets = {}
     for r in rows:
         tid, src, cur, dp = r["id"], r["source"], r["status"], r["dest_path"]
         files = resolve_files(tid, src, dp, index)
@@ -175,6 +186,10 @@ def reconcile(con, tracked, apply):
                 target = "blocked" if cur == "blocked" else "todo"
                 if cur == "done":
                     demoted_phantom.append(tid)
+        if no_demote and would_demote(cur, target):
+            protected_demotions.append((tid, cur, target))
+            target = cur
+        targets[tid] = target
         if target != cur:
             flips.append((tid, cur, target))
 
@@ -183,6 +198,8 @@ def reconcile(con, tracked, apply):
     print(f"class TUs preserved (no file to verify): {len(preserved)}   "
           f"misattributed-but-present (kept done by symbol): {len(misattributed)}   "
           f"phantom file-TUs demoted (done, fn truly absent): {len(demoted_phantom)}")
+    if no_demote:
+        print(f"no-demote mode: suppressed demotions: {len(protected_demotions)}")
     print(f"status flips needed: {len(flips)}")
     for tid, a, b in sorted(flips, key=lambda x: (x[1], x[2]))[:60]:
         print(f"  {a:11s} -> {b:11s}  {tid[:74]}")
@@ -200,6 +217,10 @@ def reconcile(con, tracked, apply):
         print(f"\ndone but NO committed file (demoted to todo): {len(demoted_phantom)}")
         for tid in demoted_phantom[:10]:
             print(f"  {tid}")
+    if protected_demotions:
+        print(f"\ndemotions suppressed by --no-demote: {len(protected_demotions)}")
+        for tid, a, b in protected_demotions[:10]:
+            print(f"  {a:11s} -/-> {b:11s}  {tid[:74]}")
 
     if not apply:
         print("\n(dry run — re-run with --apply to write)")
@@ -207,23 +228,25 @@ def reconcile(con, tracked, apply):
 
     ts = work.now()
     partial_ids = {t for t, _ in partial}
-    flip_ids = {t for t, _, _ in flips}
     for r in rows:
         tid, cur = r["id"], r["status"]
-        if tid in done_ids:
+        target = targets[tid]
+        if target == "done":
             con.execute("UPDATE tu SET status='done', updated_at=? WHERE id=?", (ts, tid))
             con.execute("UPDATE func SET status='reviewed', verify_tier=2, updated_at=? WHERE tu_id=?", (ts, tid))
-        elif tid in partial_ids:
+        elif target == "in_progress" and tid in partial_ids:
             con.execute("UPDATE tu SET status='in_progress', notes='committed file is partial (TODO/placeholder) — needs finishing', updated_at=? WHERE id=?", (ts, tid))
             con.execute("UPDATE func SET status='recovered', verify_tier=0, updated_at=? WHERE tu_id=?", (ts, tid))
-        elif tid in flip_ids and cur != "blocked":
+        elif target == "todo" and cur != "todo" and cur != "blocked":
             # only TUs we actually decided to demote (phantom file-TUs / skeletons);
             # class TUs with no file keep their status and are NOT in flip_ids here.
             con.execute("UPDATE tu SET status='todo', updated_at=? WHERE id=?", (ts, tid))
             con.execute("UPDATE func SET status='todo', verify_tier=0, updated_at=? WHERE tu_id=?", (ts, tid))
     con.execute("INSERT INTO event(ts,tu_id,action,detail) VALUES(?,?,?,?)",
                 (ts, None, "reconcile_from_files",
-                 f"done={len(done_ids)} partial={len(partial)} preserved={len(preserved)} flips={len(flips)}"))
+                 f"done={len(done_ids)} partial={len(partial)} preserved={len(preserved)} "
+                 f"flips={len(flips)} no_demote={int(no_demote)} "
+                 f"suppressed={len(protected_demotions)}"))
     con.commit()
     work.sync_status(con)
     print(f"\napplied. done={len(done_ids)}  in_progress(partial)={len(partial)}  "
@@ -258,10 +281,12 @@ def verify(con, tracked):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--no-demote", action="store_true",
+                    help="only add/promote statuses; never lower existing progress")
     args = ap.parse_args()
     con = sqlite3.connect(work.DB); con.row_factory = sqlite3.Row
     tracked = committed_files()
-    reconcile(con, tracked, args.apply)
+    reconcile(con, tracked, args.apply, args.no_demote)
     if args.apply:
         verify(con, tracked)
     con.close()

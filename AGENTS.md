@@ -418,7 +418,7 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
   If the ledger ever disagrees with the files (it has — an older `work submit` guessed
   the file from `git status` and marked TUs done with no source; `submit` now requires
   a recorded `dest_path` or explicit `--files`), re-anchor it with
-  `work reconcile-from-files --apply` (wrapper for
+  `work reconcile-from-files --apply` (or `--no-demote --apply` to add/promote only; wrapper for
   [`tools/work/reconcile_from_files.py`](tools/work/reconcile_from_files.py)):
   a TU is `done` only if its committed file is real **and complete** (no `TODO`/`FIXME`/
   `guessed`/`placeholder` markers — those land `in_progress`), else `todo`; `blocked`
