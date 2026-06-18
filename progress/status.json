@@ -565,7 +565,7 @@
    "status": "reviewed"
   },
   "BrnDirector::VehicleTracker::Construct": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnEffects::BloomData::Construct": {
    "status": "reviewed"
@@ -691,7 +691,7 @@
    "status": "recovered"
   },
   "BrnGame::BrnGameModule::BridgeGameStateToDirector": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeGameStateToSound": {
    "status": "reviewed"
@@ -713,6 +713,9 @@
   },
   "BrnGame::BrnGameModule::BridgeInputToGame": {
    "status": "reviewed"
+  },
+  "BrnGame::BrnGameModule::BridgeNetworkToGameState": {
+   "status": "recovered"
   },
   "BrnGame::BrnGameModule::BridgeNetworkToWorld": {
    "status": "reviewed"
@@ -1015,6 +1018,9 @@
    "status": "reviewed"
   },
   "BrnGameState::BurningRouteMode::Start": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzData::GetBurnoutSkill": {
    "status": "reviewed"
   },
   "BrnGameState::CarSelectManager::Construct": {
@@ -1389,7 +1395,13 @@
   "BrnGameState::GameStateModule::GameStateModule": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateModule::GetActiveRaceCarIndex": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateModule::GetListOfPlayerSelectableVehicles": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModule::GetNetworkPlayerID": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateModule::GetPlayerActiveRaceCarIndex": {
@@ -1887,10 +1899,16 @@
   "BrnGameState::HUDMessageLogic::DetectOnlineCrashes": {
    "status": "reviewed"
   },
+  "BrnGameState::HUDMessageLogic::GenerateBurningHomeRunCheckpointMessage": {
+   "status": "reviewed"
+  },
   "BrnGameState::HUDMessageLogic::GenerateBurningHomeRunMessages": {
    "status": "reviewed"
   },
   "BrnGameState::HUDMessageLogic::GenerateCriticalDamageMessage": {
+   "status": "reviewed"
+  },
+  "BrnGameState::HUDMessageLogic::GenerateDistanceToFinishMessage": {
    "status": "reviewed"
   },
   "BrnGameState::HUDMessageLogic::GenerateFinisherMessage": {
@@ -1915,6 +1933,9 @@
    "status": "reviewed"
   },
   "BrnGameState::HUDMessageLogic::GenerateRaceModeMessages": {
+   "status": "reviewed"
+  },
+  "BrnGameState::HUDMessageLogic::GenerateRivalCheckpointMessage": {
    "status": "reviewed"
   },
   "BrnGameState::HUDMessageLogic::GenerateStuntMessage": {
@@ -1978,7 +1999,7 @@
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::FillInRaceDistanceInterface": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnGameState::ModeManager::FinishCurrentMode": {
    "status": "reviewed"
@@ -2029,6 +2050,9 @@
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::HandleOnlineEndFreeburnChallengeMessage": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::HandleOnlineTeamCheckForModeFinished": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::HandleOnlineTeamModes": {
@@ -2116,6 +2140,9 @@
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::ResultsAccept": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::SendFinishedModeAction": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::SendGameResultsToNetwork": {
@@ -2325,6 +2352,9 @@
   "BrnGameState::OnlineFlybyManager::AddOngoingRivalryMessage": {
    "status": "reviewed"
   },
+  "BrnGameState::OnlineFlybyManager::CalculateDisconnectRating": {
+   "status": "reviewed"
+  },
   "BrnGameState::OnlineFlybyManager::ENewRivalryCompare,4>::Append": {
    "status": "reviewed"
   },
@@ -2407,6 +2437,45 @@
    "status": "reviewed"
   },
   "BrnGameState::OnlineRoadRageMode::Start": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::CalculateBlueTeamFinishTypes": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::CalculatePositionsInResultsTable": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::CalculateRedTeamEliminations": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::CheckForRedTeamWin": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::ClearData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::InitialisePlayerArrayData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::UpdatePlayerPoints": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::WriteDataToOutput": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::_BlueTeamPlayerCompare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::_CompareForTablePosition": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRoadRageModeScoring::_RedTeamPlayerCompare": {
    "status": "reviewed"
   },
   "BrnGameState::OnlineShowtimeMode::GetIntroDurationSeconds": {
@@ -2640,19 +2709,130 @@
   "BrnGameState::RumbleManager::PlayJolt": {
    "status": "reviewed"
   },
+  "BrnGameState::ScoringSystem::CheckRoadRageMedalAwarded": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::ClearCumulativeData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::ClearData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::CompareRaceCarDistances": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::DetectPlayerDrivingWrongWay": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::DetectPlayerStationary": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetCarData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetHighestLobbyRoadRuleScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetNextTeamMember": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetNumberOfNonDisconnectedPlayers": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetPlayerDisconnected": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetPlayerTeam": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetPointsLeader": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetRaceCarFastestLapTime": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::GetRaceCarStandingsPosition": {
+   "status": "reviewed"
+  },
   "BrnGameState::ScoringSystem::GetRaceCarTotalTime": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::IsBlueTeamEliminated": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::OnModeStart": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::OnPlayerDoesATakedown": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::OnRoadRagePlayerCrashed": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::ProcessFinishDistances": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::RegisterFinishForCar": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::Release": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::SaveNetworkRoundData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::SetPlayerTeam": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::SetTimeLimitPerKm": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::StartOnlineGameModeScoring": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::StopModeTimer": {
    "status": "reviewed"
   },
   "BrnGameState::ScoringSystem::StoreCarIds": {
    "status": "reviewed"
   },
+  "BrnGameState::ScoringSystem::UpdateCrashes": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::UpdateCumulativeResults": {
+   "status": "reviewed"
+  },
   "BrnGameState::ScoringSystem::UpdateDistanceToPlayer": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::UpdateGeneralStats": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::UpdateNetworkPlayerResults": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::UpdateNumberOfCarsInMode": {
    "status": "reviewed"
   },
   "BrnGameState::ScoringSystem::UpdatePaybackTakedowns": {
    "status": "reviewed"
   },
+  "BrnGameState::ScoringSystem::UpdateRacePositions": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::UpdateTakedowns": {
+   "status": "reviewed"
+  },
   "BrnGameState::ScoringSystem::UpdateTeamStats": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystem::WriteDataToOutput": {
    "status": "reviewed"
   },
   "BrnGameState::StartGameModeParams::AddCheckpoint": {
@@ -2682,13 +2862,61 @@
   "BrnGameState::StartLocation,8>::Ge": {
    "status": "reviewed"
   },
+  "BrnGameState::StreetManager::AreRoadsAFollowOnPair": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::CalculateDistanceToTurning": {
+   "status": "reviewed"
+  },
   "BrnGameState::StreetManager::CheckForNewHighScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ClearAllChallengeData": {
    "status": "reviewed"
   },
   "BrnGameState::StreetManager::ClearAllChallengeDataForBuddy": {
    "status": "reviewed"
   },
+  "BrnGameState::StreetManager::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::CopyUserChallengeData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::FillInRoadRulesQuery": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::FindRivalsByDistrict": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::FindUpcomingStreetsByRecursiveWalking": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::FindUpcomingStreetsFromRoute": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::GetChallengeFriendHighScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::GetChallengeParScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::GetChallengeUserScore": {
+   "status": "reviewed"
+  },
   "BrnGameState::StreetManager::GetHighScoreEntry": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::GetNumberOfCompleteRoadsRuledByLocalPlayer": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::GetNumberOfParShowTimeRoadsRuledByLocalPlayer": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::GetNumberOfParTimeTrialRoadsRuledByLocalPlayer": {
    "status": "reviewed"
   },
   "BrnGameState::StreetManager::GetNumberOfRoadsRulesByLocalPlayer": {
@@ -2700,7 +2928,67 @@
   "BrnGameState::StreetManager::HasPlayerBeatenParScore": {
    "status": "reviewed"
   },
+  "BrnGameState::StreetManager::LoadAIData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::LoadDistrictMap": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::OnProfileLoaded": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ProcessBuddyRemoved": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ProcessConnectedOnlineEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ProcessDownloadEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ProcessNetworkHighScoreEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ProcessNewRoadScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ProcessOnlineGameLaunchedEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ProcessScoreRequestEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::ProcessUploadEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::SendUpcomingRoadMessage": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::SetChallengeUserScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::SetupParRivals": {
+   "status": "reviewed"
+  },
   "BrnGameState::StreetManager::UpdateBufferedHighScores": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::UpdateFriendHighScores": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::UpdateTrophyUnlockOnRoadRuleWin": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::UpdateUpcomingStreets": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::UpdateUserScoresFromServerRecords": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StreetManager::WalkAISection": {
    "status": "reviewed"
   },
   "BrnGameState::StuntAttackMode::GetIntroDurationSeconds": {
@@ -2724,10 +3012,34 @@
   "BrnGameState::StuntAttackMode::Start": {
    "status": "reviewed"
   },
+  "BrnGameState::StuntManager::CheckForTrophyUnlocks": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntManager::Construct": {
+   "status": "reviewed"
+  },
   "BrnGameState::StuntManager::FindTriggersCounty": {
    "status": "reviewed"
   },
+  "BrnGameState::StuntManager::LoadDistrictMap": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntManager::OnPropHit": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntManager::Prepare": {
+   "status": "reviewed"
+  },
   "BrnGameState::StuntManager::ProcessStuntElement": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntManager::StuntElementTriggered": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntManager::UpdateJumps": {
    "status": "reviewed"
   },
   "BrnGameState::StuntManagerDebugComponent::CompleteAllBillboardsButOneCallback": {
@@ -2770,6 +3082,81 @@
    "status": "reviewed"
   },
   "BrnGameState::StuntManagerDebugComponent::StuntManagerDebugComponent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::Activate": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::BeginCombo": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::ClearData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::DealWithHitProp": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::DealWithPowerPark": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::EndCombo": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::HasStuntModeEnded": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::IsComboInProgress": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::OutputStuntsToDisplay": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::RegisterStunt": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::ShouldBankScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::Update": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateAirStunts": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateBoostStunts": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateBufferedScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateCombo": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateDriftStunts": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateDrivingStunts": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateStuntRating": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateStuntRepetition": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::WasComboRecentlyPerformed": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::WasStuntRecentlyPerformed": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::WasTimeRecentlyUp": {
    "status": "reviewed"
   },
   "BrnGameState::StuntModeScoringOnline::CarLeapingData,7,int>::Alloc": {
@@ -4068,6 +4455,9 @@
   "BrnGui::OnlinePlay::CheckForCompletedLoads": {
    "status": "reviewed"
   },
+  "BrnGui::OnlinePlay::HandlePlayerStatsEvent": {
+   "status": "reviewed"
+  },
   "BrnGui::OnlinePlay::ShowFriendsMenu": {
    "status": "reviewed"
   },
@@ -4491,6 +4881,9 @@
   "BrnNetwork::BrnNetworkModule::Prepare": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModule::ProcessBeforeSimulation": {
+   "status": "recovered"
+  },
   "BrnNetwork::BrnNetworkModule::Release": {
    "status": "reviewed"
   },
@@ -4596,6 +4989,9 @@
   "BrnNetwork::BrnNetworkModuleIO::PreSimulationInputBuffer::Construct": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModuleIO::PreSimulationInputBuffer::Destruct": {
+   "status": "recovered"
+  },
   "BrnNetwork::BrnNetworkModuleIO::TelemetryData::AddParameter": {
    "status": "reviewed"
   },
@@ -4645,6 +5041,9 @@
    "status": "reviewed"
   },
   "BrnNetwork::BuddyManagerDebugComponent::Release": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BurnoutSkillzMessage::Construct": {
    "status": "reviewed"
   },
   "BrnNetwork::BurnoutSkillzMessage::PackOrUnpack": {
@@ -4881,16 +5280,43 @@
   "BrnNetwork::NetworkInviteManager::Update": {
    "status": "reviewed"
   },
+  "BrnNetwork::NetworkPlayerStats::Clear": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStats::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStats::GetStatAsInt": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStats::GetStatAsString": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStats::GetStatType": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStats::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStats::SetStat": {
+   "status": "reviewed"
+  },
   "BrnNetwork::NetworkPlayerStats::operator=": {
    "status": "reviewed"
   },
   "BrnNetwork::NetworkPlayerStatsManager::CopyNextValidEventOutOfQueue": {
    "status": "reviewed"
   },
+  "BrnNetwork::NetworkPlayerStatsManager::CopyResultsToOutputBuffer": {
+   "status": "reviewed"
+  },
   "BrnNetwork::NetworkPlayerStatsManager::Disconnected": {
    "status": "reviewed"
   },
   "BrnNetwork::NetworkPlayerStatsManager::ProcessAfterSimulation": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStatsResults::InsertPlayerStats": {
    "status": "reviewed"
   },
   "BrnNetwork::NetworkRoadRulesManager::GetRoadRulesDataToSend": {
@@ -5236,6 +5662,18 @@
    "status": "reviewed"
   },
   "BrnPhysics::Deformation::DeformationOutputInterface::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationSensor::AddContactsToPenetrationSolver": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationSensor::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationSensor::RecievePassedOnImpulse": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationSensor::ValidateAndAddContact": {
    "status": "reviewed"
   },
   "BrnPhysics::Deformation::DetachedPartCurrentPositionEvent,50>::Constru": {
@@ -6582,6 +7020,9 @@
   "BrnSound::Logic::ResourceRegistrar::Update": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::ResourceRegistrar::UpdateQueued": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::ResourceRegistrar::UpdateRequests": {
    "status": "reviewed"
   },
@@ -6631,6 +7072,9 @@
    "status": "reviewed"
   },
   "BrnSound::Module::SoundLogicModule::ProcessStreamFreedQueue": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::SoundLogicModule::SoundLogicModule": {
    "status": "reviewed"
   },
   "BrnSound::Vehicles::AIVehicleStateManager::UpdateVehicleLoading": {
@@ -7512,6 +7956,15 @@
   "BrnWorld::RaceCarStreamer::AppendGameDataRequests": {
    "status": "reviewed"
   },
+  "BrnWorld::ShadowMap::ObjectCSMSelect": {
+   "status": "recovered"
+  },
+  "BrnWorld::ShadowMap::SetConstants": {
+   "status": "recovered"
+  },
+  "BrnWorld::ShadowMap::SetConstantsForEnvmap": {
+   "status": "recovered"
+  },
   "BrnWorld::TriggerEntityModule::PostSceneUpdate": {
    "status": "reviewed"
   },
@@ -7825,6 +8278,87 @@
    "status": "reviewed"
   },
   "CgsDev::Debug2DImmediateRender::Is2DPolygonOnScreen": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::AddLine": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::AddQuad": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::AddVertex": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::Begin": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::BuildSphereIndices": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::Construct": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::CreateDebugRenderStates": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::Draw2DLineForVectorFont": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawArrow": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawAxis": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawBox": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawCapsule": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawCylinder": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawHollowTriangle": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawLine": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawPoint": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawQuad": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawSolidArrow": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawSolidBox": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawSolidQuad": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawSolidSphere": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawSolidTriangle": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawSphere": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawText": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::DrawTriangle": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::End": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::GetSphereVertices": {
    "status": "reviewed"
   },
   "CgsDev::DebugComponent::AddMenuItem": {
@@ -8550,6 +9084,9 @@
   "CgsGraphics::InstanceList::FixUp": {
    "status": "reviewed"
   },
+  "CgsGraphics::Model::SetupShaderConstantsForInstancing": {
+   "status": "recovered"
+  },
   "CgsGraphics::MoviePlayer::StartDecodes": {
    "status": "reviewed"
   },
@@ -8563,6 +9100,42 @@
    "status": "reviewed"
   },
   "CgsGraphics::ShaderConstantHashTable::GetName": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextObject::CalculateAutosizing": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextObject::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextObject::GetNumLinesAndStartLine": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::RenderBackground": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::RenderBorder": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::RenderBufferRenderEnd": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::RenderBufferRenderStart": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::RenderDropShadow": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::RenderString": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::RenderStringFadingY": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::TextRenderer::RenderStringInternal": {
    "status": "reviewed"
   },
   "CgsGui::AnimData::AddAnimationChannel": {
@@ -8938,6 +9511,9 @@
    "status": "reviewed"
   },
   "CgsLanguage::LanguageManager::AddStringPointer": {
+   "status": "reviewed"
+  },
+  "CgsLanguage::LanguageManager::Construct": {
    "status": "reviewed"
   },
   "CgsLanguage::LanguageManager::FindStringByHash": {
@@ -10011,6 +10587,12 @@
   "CgsResource::Events::UnloadBundleResponse,256>::Construct": {
    "status": "reviewed"
   },
+  "CgsResource::Font::CreateTextureState": {
+   "status": "reviewed"
+  },
+  "CgsResource::Font::GetFontChar": {
+   "status": "reviewed"
+  },
   "CgsResource::Font::GetStringStartAndEnd": {
    "status": "reviewed"
   },
@@ -10020,7 +10602,19 @@
   "CgsResource::Font::GetStringWidthIgnoringNewlines": {
    "status": "reviewed"
   },
+  "CgsResource::FontResourceType::FixDown": {
+   "status": "reviewed"
+  },
   "CgsResource::FontResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "CgsResource::FontResourceType::GetImportPointer": {
+   "status": "reviewed"
+  },
+  "CgsResource::FontResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
+  "CgsResource::FontResourceType::Serialise": {
    "status": "reviewed"
   },
   "CgsResource::GenericRwacReverbIRContentResourceType::GetTypeID": {
@@ -10953,10 +11547,40 @@
   "CgsSystem::TimerStatusInterface::StoreTimers": {
    "status": "reviewed"
   },
+  "CgsUnicode::ByteLength": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::ConvertUtf8ToUtf16": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::Copy": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::CopyN": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::FloatToString": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::IntToString": {
+   "status": "reviewed"
+  },
   "CgsUnicode::IsValidUtf8Character": {
    "status": "reviewed"
   },
   "CgsUnicode::IsValidUtf8String": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::SafelyTerminate": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::StringLength": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::ToUpperN": {
+   "status": "reviewed"
+  },
+  "CgsUnicode::_Print": {
    "status": "reviewed"
   },
   "CgsWorld::WorldMap2D::Construct": {
@@ -11070,8 +11694,17 @@
   "ShaderConstantTable::AddDirtyConstantsToDispatchBin": {
    "status": "reviewed"
   },
+  "ShaderConstantTable::AddShaderConstant": {
+   "status": "recovered"
+  },
   "ShaderConstantTable::BeginFrame": {
    "status": "reviewed"
+  },
+  "ShaderConstantTable::SetShaderConstantData": {
+   "status": "recovered"
+  },
+  "ShaderConstantTable::ShaderConstantTable": {
+   "status": "recovered"
   },
   "ShaderConstantsExternal::FixUp": {
    "status": "reviewed"
@@ -11252,6 +11885,9 @@
   },
   "WorldModule::PrepareWorldCollision": {
    "status": "reviewed"
+  },
+  "WorldModule::SetupShaderConstantsBeforeRendering": {
+   "status": "recovered"
   },
   "WorldModule::Update": {
    "status": "reviewed"
@@ -11524,6 +12160,9 @@
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
+  "GameShared/GameClasses/Containers/CgsLinkedList.h": {
+   "status": "done"
+  },
   "GameShared/GameClasses/Containers/CgsObjectPool.h": {
    "status": "done"
   },
@@ -11613,6 +12252,9 @@
   "GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug2DImmediateRender.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug3DImmediateRender.cpp": {
+   "status": "done"
+  },
   "GameShared/GameClasses/Development/DebugSystem/Render/CgsDebugRender.cpp": {
    "status": "done"
   },
@@ -11658,6 +12300,18 @@
    "notes": "trivial; gate-only (constant GetTypeID, GREEN parity)",
    "status": "done"
   },
+  "GameShared/GameClasses/Fonts/CgsFont.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Fonts/CgsFont.h": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Fonts/CgsUnicode.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Fonts/Resources/CgsFontResourceType.cpp": {
+   "status": "done"
+  },
   "GameShared/GameClasses/Fsm/CgsScriptedState.cpp": {
    "notes": "Fresh-eyes sonnet review. PASS: HIDWORD ABI artifact correctly interpreted, offsets +8/+16 correct, returns this; +8 self-ref uncertainty flagged in-code.",
    "status": "done"
@@ -11694,6 +12348,9 @@
   },
   "GameShared/GameClasses/Graphics/Dispatch/parametersemantic.cpp": {
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/Font/CgsFontRenderer.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dTransform.h": {
@@ -12227,6 +12884,10 @@
   "GameSource/GameState/BrnGameStateModule.h": {
    "status": "done"
   },
+  "GameSource/GameState/BrnGameStateSharedIO.h": {
+   "notes": "committed file is partial (TODO/placeholder) \u2014 needs finishing",
+   "status": "done"
+  },
   "GameSource/GameState/ModeManager/GameModes/BrnGameMode.h": {
    "status": "done"
   },
@@ -12236,6 +12897,9 @@
   "GameSource/GameState/ModeManager/GameModes/BrnOnlineShowtimeMode.h": {
    "status": "done"
   },
+  "GameSource/GameState/ModeManager/Scoring/BrnBurnoutSkillzData.h": {
+   "status": "done"
+  },
   "GameSource/GameState/Progression/BrnProfile.h": {
    "status": "done"
   },
@@ -12243,6 +12907,9 @@
    "status": "done"
   },
   "GameSource/GameState/StreetData/BrnChallengeHighScoreEntry.h": {
+   "status": "done"
+  },
+  "GameSource/Gamestate/StreetData/BrnGameStateStreetManager.cpp": {
    "status": "done"
   },
   "GameSource/Graphics/BrnRendererModule.h": {
@@ -12392,6 +13059,12 @@
    "status": "done"
   },
   "GameSource/Network/Managers/BrnNetworkMatchMakingManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Network/Managers/BrnNetworkPlayerStats.cpp": {
+   "status": "done"
+  },
+  "GameSource/Network/Managers/BrnNetworkPlayerStats.h": {
    "status": "done"
   },
   "GameSource/Network/Messages/BrnCameraStatusMessage.cpp": {
@@ -12688,10 +13361,25 @@
    "notes": "Verifier PASS/none; offsets X360-proven; routes ScoringSystem::GetCarData->CarData->CarScoreData getters; gate PASS, 0 regressions. Parity-heuristic divergence is the CGS_ASSERT triad (soft signal).",
    "status": "done"
   },
+  "GameSource/Unity/../GameState/ModeManager/Scoring/BrnOnlineRoadRageModeScoring.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/Scoring/BrnScoringSystem.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/Scoring/BrnScoringSystem.h": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/Scoring/BrnStuntModeScoring.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/NetworkRoundManager/BrnNetworkRoundManager.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../GameState/Offences/BrnDriveThruManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/Offences/BrnStuntManager.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../GameState/Offences/BrnStuntManagerDebugComponent.cpp": {
@@ -12744,6 +13432,9 @@
   },
   "GameSource/Unity/../Physics/ContactSpies/BrnContactSpyInterface.cpp": {
    "notes": "trivial; gate-only. In-place zero-init constructor, GREEN parity.",
+   "status": "done"
+  },
+  "GameSource/Unity/../Physics/DeformationManager/DeformationPhysics/BrnDeformationSensor.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.cpp": {
