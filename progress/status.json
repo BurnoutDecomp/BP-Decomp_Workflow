@@ -4878,6 +4878,15 @@
   "BrnNetwork::BrnNetworkModule::Destruct": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModule::GetGameEventQueue": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModule::GetNetworkManager": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModule::GetOutputGuiEventQueue": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkModule::Prepare": {
    "status": "reviewed"
   },
@@ -7293,6 +7302,12 @@
   "BrnTraffic::FuzzyEnvelopeSet4::SetEnvelope": {
    "status": "reviewed"
   },
+  "BrnTraffic::GraphicsStubResourceType::GetImportPointer": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::GraphicsStubResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
   "BrnTraffic::HullRuntime::Construct": {
    "status": "reviewed"
   },
@@ -7621,6 +7636,24 @@
    "status": "reviewed"
   },
   "BrnWorld::CrashModule::TickCrashes": {
+   "status": "reviewed"
+  },
+  "BrnWorld::CrashPlayDebugComponent::GetName": {
+   "status": "reviewed"
+  },
+  "BrnWorld::CrashPlayDebugComponent::GetPath": {
+   "status": "reviewed"
+  },
+  "BrnWorld::CrashPlayDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
+  "BrnWorld::CrashPlayDebugComponent::RenderHUD": {
+   "status": "reviewed"
+  },
+  "BrnWorld::CrashPlayDebugComponent::RenderWorld": {
+   "status": "reviewed"
+  },
+  "BrnWorld::CrashPlayDebugComponent::Update": {
    "status": "reviewed"
   },
   "BrnWorld::EnvironmentSettings::CloudsData::Construct": {
@@ -11436,6 +11469,12 @@
   "CgsSound::Playback::Module::Module::Destruct": {
    "status": "reviewed"
   },
+  "CgsSound::Playback::Name::HashTable::Store": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::Name::MakeHash": {
+   "status": "reviewed"
+  },
   "CgsSound::Playback::Plugins::GainArray::CreateInstance": {
    "status": "reviewed"
   },
@@ -12666,6 +12705,10 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameShared/GameClasses/Sound/Playback/CgsCommon.cpp": {
+   "notes": "source-shape cleanup after batch review; compile gate pass; preserves reviewed hash semantics",
+   "status": "done"
+  },
   "GameShared/GameClasses/Sound/Playback/CgsContent.h": {
    "status": "done"
   },
@@ -12873,6 +12916,10 @@
    "status": "done"
   },
   "GameSource/Director/Utils/BrnVehicleRef.h": {
+   "status": "done"
+  },
+  "GameSource/Game/../Network/BrnNetworkModule.h": {
+   "notes": "batch review pass: Claude sonnet medium; parity RED due assert abstraction reviewed",
    "status": "done"
   },
   "GameSource/GameFlowController/TopLevel/BrnGameMainFlowStates.h": {
@@ -13173,6 +13220,10 @@
   },
   "GameSource/Unity/../../SharedClasses/Traffic/BrnTrafficDataResourceType.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/Traffic/BrnTrafficGraphicsStubResourceType.cpp": {
+   "notes": "batch review pass: Claude sonnet medium; YELLOW parity reviewed",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/Trigger/BrnTriggerData.cpp": {
@@ -13479,6 +13530,10 @@
    "status": "done"
   },
   "GameSource/Unity/../World/DebugComponents/BrnPVSDebugComponent.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/CrashPlay/BrnCrashPlayDebugComponent.cpp": {
+   "notes": "batch review pass: Claude sonnet medium; parity RED due assert abstraction and X360-vs-Feb2007 drift reviewed",
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficHullRuntime.cpp": {
