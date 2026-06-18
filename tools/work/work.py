@@ -1480,12 +1480,36 @@ def cmd_jebobs(args):
     print(f"== JeBobs progress broom ({mode}) ==")
     print("== reconcile-from-files --no-demote ==")
     cmd_reconcile_from_files(argparse.Namespace(apply=args.apply, no_demote=True))
-    print("\n== server-reconcile-events --actor JeBobs ==")
-    cmd_server_reconcile_events(argparse.Namespace(actor=["JeBobs"], apply=args.apply))
     if args.apply:
+        status_rel = os.path.join("progress", "status.json")
+        changed = subprocess.run(
+            ["git", "diff", "--quiet", "HEAD", "--", status_rel],
+            cwd=ROOT,
+        ).returncode != 0
+        if changed:
+            print("\n== commit progress/status.json ==")
+            subprocess.run(
+                [
+                    "git", "commit", "--only",
+                    "-m", "chore: reconcile status",
+                    "--", status_rel,
+                ],
+                cwd=ROOT,
+                check=True,
+            )
+            print("\n== push workflow branch ==")
+            subprocess.run(["git", "push"], cwd=ROOT, check=True)
+        else:
+            print("\n== commit progress/status.json ==")
+            print("no status.json changes to commit")
+
         print("\n== server-sync ==")
         cmd_server_sync(argparse.Namespace(branch=None))
+        print("\n== server-reconcile-events --actor JeBobs ==")
+        cmd_server_reconcile_events(argparse.Namespace(actor=["JeBobs"], apply=True))
     else:
+        print("\n== server-reconcile-events --actor JeBobs ==")
+        cmd_server_reconcile_events(argparse.Namespace(actor=["JeBobs"], apply=False))
         print("\n(dry run only - re-run `work jebobs --apply` to write and sync)")
 
 

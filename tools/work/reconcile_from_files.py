@@ -181,6 +181,9 @@ def _merge_no_demote_status_json(previous):
             if new_rank < old_rank:
                 merged[key] = old_entry
                 changed = True
+            elif section == "tu" and old_entry.get("notes") and not new_entry.get("notes"):
+                new_entry["notes"] = old_entry["notes"]
+                changed = True
 
     if changed:
         json.dump(current, open(work.STATUS_JSON, "w", encoding="utf-8"),
@@ -192,13 +195,16 @@ def _merge_no_demote_db(con, previous):
     """Restore DB rows from the pre-run status mirror when reconcile lowered them."""
     restored = 0
     for tid, old_entry in previous.get("tu", {}).items():
-        row = con.execute("SELECT status FROM tu WHERE id=?", (tid,)).fetchone()
+        row = con.execute("SELECT status, notes FROM tu WHERE id=?", (tid,)).fetchone()
         if not row:
             continue
         old_status = old_entry.get("status", "todo")
         if STATUS_RANK.get(row["status"], 0) < STATUS_RANK.get(old_status, 0):
             con.execute("UPDATE tu SET status=?, owner=?, notes=? WHERE id=?",
                         (old_status, old_entry.get("owner"), old_entry.get("notes"), tid))
+            restored += 1
+        elif old_entry.get("notes") and not row["notes"]:
+            con.execute("UPDATE tu SET notes=? WHERE id=?", (old_entry["notes"], tid))
             restored += 1
 
     for name, old_entry in previous.get("func", {}).items():
