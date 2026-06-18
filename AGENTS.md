@@ -59,6 +59,7 @@ work parity <tu>      # standalone NO-LLM structural parity check (no status cha
   …review per policy (see Verification) — tiered, may be skipped or delegated…
 work review <tu> --verdict pass|fail [--notes "…"]   # record the verdict
 work block <tu> "…"   # mark blocked + reason so it is not reclaimed
+work reset-tu <tu>    # delete produced files + return TU/functions to todo locally and server-side
 ```
 
 **Goal scoping (optional, milestone-driven ordering).** By default `work next` is
