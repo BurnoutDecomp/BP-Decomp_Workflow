@@ -5301,6 +5301,9 @@
   "BrnPhysics::Deformation::SetModelCullingGroupEvent,28>::Construct": {
    "status": "reviewed"
   },
+  "BrnPhysics::Deformation::TagPoint::Construct": {
+   "status": "reviewed"
+  },
   "BrnPhysics::PhysicsModule::BridgeContactsToSimulation": {
    "status": "reviewed"
   },
@@ -13311,6 +13314,10 @@
   },
   "class:BrnPhysics::Deformation::SetModelCullingGroupEvent,28>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "status": "done"
+  },
+  "class:BrnPhysics::Deformation::TagPoint": {
+   "notes": "2-bone deformation-sensor skin blend; de-SIMD'd (verifier confirmed math faithful). Fixed DeformationSensor to real DWARF names (mpLocalSpaceSphere/mpWorldSpaceSphere Sphere* + mfScratchAmount@420); blend reads local sphere centre. Parity YELLOW = CGS_ASSERT collapse of 4 assert branches (benign). Gate green.",
    "status": "done"
   },
   "class:BrnPhysics::Props::UpdatePropEvent,15>": {
