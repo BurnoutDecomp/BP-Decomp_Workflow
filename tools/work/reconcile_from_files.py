@@ -43,10 +43,20 @@ INCOMPLETE = re.compile(
     r"not yet recovered)\b", re.I)
 
 
+def _git_text(args):
+    """Run git and return decoded text without depending on the Windows ANSI codepage."""
+    return subprocess.run(
+        ["git", "-C", B5] + args,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    ).stdout or ""
+
+
 def committed_files():
     """Set of paths (relative to repo root) tracked in b5-decomp HEAD."""
-    out = subprocess.run(["git", "-C", B5, "ls-tree", "-r", "--name-only", "HEAD"],
-                         capture_output=True, text=True).stdout
+    out = _git_text(["ls-tree", "-r", "--name-only", "HEAD"])
     return {"b5-decomp/" + ln.strip() for ln in out.splitlines() if ln.strip()}
 
 
@@ -79,8 +89,7 @@ def function_defined(funcs):
     for fn in funcs or []:
         tail = "::".join(fn.split("::")[-2:]) if "::" in fn else fn   # Class::Method
         pat = re.escape(tail) + r"\s*\("
-        out = subprocess.run(["git", "-C", B5, "grep", "-lIE", pat, "HEAD"],
-                             capture_output=True, text=True).stdout
+        out = _git_text(["grep", "-lIE", pat, "HEAD"])
         if out.strip():
             return True
     return False
@@ -89,12 +98,13 @@ def function_defined(funcs):
 def blob(path_rel_root):
     """Committed contents of a b5-decomp file (path relative to repo root)."""
     sub = path_rel_root[len("b5-decomp/"):]
-    return subprocess.run(["git", "-C", B5, "show", "HEAD:" + sub],
-                          capture_output=True, text=True).stdout
+    return _git_text(["show", "HEAD:" + sub])
 
 
 def is_real_reconstruction(text):
     """True unless the file has no substantive code beyond trap stubs / boilerplate."""
+    if not text:
+        return False
     for raw in text.splitlines():
         l = raw.strip()
         if not l or l.startswith("//") or l.startswith("/*") or l.startswith("*"):
