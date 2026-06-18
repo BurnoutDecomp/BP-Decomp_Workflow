@@ -8556,6 +8556,12 @@
   "CgsGraphics::MoviePlayerCoreAllocator::Free": {
    "status": "reviewed"
   },
+  "CgsGraphics::ShaderConstantHashTable::FixUp": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ShaderConstantHashTable::GetName": {
+   "status": "reviewed"
+  },
   "CgsGui::AnimData::AddAnimationChannel": {
    "status": "reviewed"
   },
@@ -11058,6 +11064,21 @@
   "Shader::ParameterSemanticBlock::GetResourceDescriptor": {
    "status": "reviewed"
   },
+  "ShaderConstantTable::AddDirtyConstantsToDispatchBin": {
+   "status": "reviewed"
+  },
+  "ShaderConstantTable::BeginFrame": {
+   "status": "reviewed"
+  },
+  "ShaderConstantsExternal::FixUp": {
+   "status": "reviewed"
+  },
+  "ShaderConstantsExternal::HasShaderConstant": {
+   "status": "reviewed"
+  },
+  "ShaderConstantsInternal::FixUp": {
+   "status": "reviewed"
+  },
   "SpriteMembersIndex::hash": {
    "status": "reviewed"
   },
@@ -11651,6 +11672,14 @@
   },
   "GameShared/GameClasses/Graphics/CgsRasterizerStateFactory.cpp": {
    "notes": "focused reviewer pass after restoring handle copy, static Initialize wrapper, and assert return semantics",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/CgsShaderConstantHashTable.cpp": {
+   "notes": "Adversarial fidelity verifier PASS (binary+linear GetName, FixUp relocation match pseudocode); fixed header-inline FixDown ordering (walk names before de-relocating mppcNames). Gate green /W4.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/CgsShaderConstants.cpp": {
+   "notes": "Adversarial verifier issues resolved: uintptr_t relocation (no C4311/C4312), Internal::Dispatch* now const ShaderConstantHandle* per DWARF. 5 funcs faithful to pseudocode; gate green /W4.",
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Dispatch/alignptr.h": {
