@@ -43,10 +43,20 @@ INCOMPLETE = re.compile(
     r"not yet recovered)\b", re.I)
 
 
+def _git_text(args):
+    """Run git and return decoded text without depending on the Windows ANSI codepage."""
+    return subprocess.run(
+        ["git", "-C", B5] + args,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    ).stdout or ""
+
+
 def committed_files():
     """Set of paths (relative to repo root) tracked in b5-decomp HEAD."""
-    out = subprocess.run(["git", "-C", B5, "ls-tree", "-r", "--name-only", "HEAD"],
-                         capture_output=True, text=True).stdout
+    out = _git_text(["ls-tree", "-r", "--name-only", "HEAD"])
     return {"b5-decomp/" + ln.strip() for ln in out.splitlines() if ln.strip()}
 
 
@@ -79,8 +89,7 @@ def function_defined(funcs):
     for fn in funcs or []:
         tail = "::".join(fn.split("::")[-2:]) if "::" in fn else fn   # Class::Method
         pat = re.escape(tail) + r"\s*\("
-        out = subprocess.run(["git", "-C", B5, "grep", "-lIE", pat, "HEAD"],
-                             capture_output=True, text=True).stdout
+        out = _git_text(["grep", "-lIE", pat, "HEAD"])
         if out.strip():
             return True
     return False
@@ -89,12 +98,13 @@ def function_defined(funcs):
 def blob(path_rel_root):
     """Committed contents of a b5-decomp file (path relative to repo root)."""
     sub = path_rel_root[len("b5-decomp/"):]
-    return subprocess.run(["git", "-C", B5, "show", "HEAD:" + sub],
-                          capture_output=True, text=True).stdout
+    return _git_text(["show", "HEAD:" + sub])
 
 
 def is_real_reconstruction(text):
     """True unless the file has no substantive code beyond trap stubs / boilerplate."""
+    if not text:
+        return False
     for raw in text.splitlines():
         l = raw.strip()
         if not l or l.startswith("//") or l.startswith("/*") or l.startswith("*"):
@@ -171,6 +181,9 @@ def _merge_no_demote_status_json(previous):
             if new_rank < old_rank:
                 merged[key] = old_entry
                 changed = True
+            elif section == "tu" and old_entry.get("notes") and not new_entry.get("notes"):
+                new_entry["notes"] = old_entry["notes"]
+                changed = True
 
     if changed:
         json.dump(current, open(work.STATUS_JSON, "w", encoding="utf-8"),
@@ -182,13 +195,16 @@ def _merge_no_demote_db(con, previous):
     """Restore DB rows from the pre-run status mirror when reconcile lowered them."""
     restored = 0
     for tid, old_entry in previous.get("tu", {}).items():
-        row = con.execute("SELECT status FROM tu WHERE id=?", (tid,)).fetchone()
+        row = con.execute("SELECT status, notes FROM tu WHERE id=?", (tid,)).fetchone()
         if not row:
             continue
         old_status = old_entry.get("status", "todo")
         if STATUS_RANK.get(row["status"], 0) < STATUS_RANK.get(old_status, 0):
             con.execute("UPDATE tu SET status=?, owner=?, notes=? WHERE id=?",
                         (old_status, old_entry.get("owner"), old_entry.get("notes"), tid))
+            restored += 1
+        elif old_entry.get("notes") and not row["notes"]:
+            con.execute("UPDATE tu SET notes=? WHERE id=?", (old_entry["notes"], tid))
             restored += 1
 
     for name, old_entry in previous.get("func", {}).items():

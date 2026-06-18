@@ -93,34 +93,43 @@ source tree documented in the reference READMEs.
 
 ## Fresh Clone / Resume
 
-From the repo root:
+For a new local workspace:
 
-```powershell
-work bootstrap
+1. Clone this repository without submodules:
+
+   ```powershell
+   git clone --no-recurse-submodules https://github.com/Adriwin06/BP-Decomp_Workflow
+   cd BP-Decomp_Workflow
+   ```
+
+2. Supply the local inputs described in [BUILD.md](BUILD.md) and the reference READMEs.
+
+3. Bootstrap the workspace:
+
+   ```powershell
+   work bootstrap
+   ```
+
+4. Generate the IDA export cache:
+
+   ```powershell
+   tools/export_db.ps1
+   ```
+
+After that, open an AI coding agent such as Codex or Claude Code in the repository and
+give it a normal work instruction, for example:
+
+```text
+Continue with the next 5 [or any number you want]
 ```
 
-`bootstrap` initializes submodules and rebuilds `progress/ledger.sqlite` from the
-committed state: `progress/status.json`, `progress/tu_deps.json`,
-`progress/identity.json`, and `progress/tu_index.json`.
+The agent will read `AGENTS.md`, claim the next ready translation units, reconstruct the
+code under `b5-decomp/src/<mirrored path>`, run the compile/parity gates, and record the
+review verdicts.
 
-That is enough to resume the queue and status ledger. It does not regenerate the
-git-ignored IDA export cache. If `.ida-exports/` is absent or no longer matches the
-local IDA databases, generate it before reconstructing TUs:
-
-```powershell
-tools/export_db.ps1                          # all configured IDA databases
-tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX"
-```
-
-After that, the short instruction "continue" means:
-
-```powershell
-work claim
-work show <claimed-tu> --full
-```
-
-Then reconstruct the TU into `b5-decomp/src/<mirrored path>`, compile/submit it, and
-record the review verdict.
+Server coordination is optional. If you want your claims and completed work to be sent
+to the shared work server, ask a maintainer for a worker id, then copy `.env.example` to
+`.env` and set `WORK_AGENT`. Without that token setup, the workflow still works locally.
 
 ## Core Work Loop
 
