@@ -11931,6 +11931,9 @@
   "ICE::Cubic1D::Update": {
    "status": "reviewed"
   },
+  "ICE::ICECamera::SetCameraMatrix": {
+   "status": "reviewed"
+  },
   "ICE::ICECameraMover::ICECameraMover": {
    "status": "reviewed"
   },
@@ -12898,6 +12901,10 @@
    "notes": "3 verify loops (loop1 caught __LINE__ vs baked-43: committed StrStream-triad convention = relative baked path + literal X360 line; fixed; loop3 sign-off PASS). Gate clean. Parity CLEAN: branch_count exact 8/8 (7 reloc ifs + version if), call within tol; only absent callee BasePriorityQueue::Clear (assert-buffer init folded into the StrStream idiom). FixUp: version StrStream-triad assert + 7-ptr GetLoadBase relocation (null-stays-null). New home CgsMemoryMap.h DWARF-faithful. Minor: GetRootBank decl deferred to its own TU.",
    "status": "done"
   },
+  "GameShared/GameClasses/Memory/PS3/CgsScatterStreamPS3.cpp": {
+   "notes": "CgsMemory::ScatterStream : public ScatterStreamBase. Construct @0x82868680 (zero 9 dwords) is trivial, but Update @0x828686B0 delegates to ScatterStreamBase::UpdateStream(this) after asserting the distribution list (*(this+4)) is non-NULL ('No distribution list') and 128-byte aligned ('Distribution list not 128 byte aligned') when the status flag (*(this+32)&1) is set. BLOCKER: the ScatterStreamBase base is UNCOMMITTED and its layout is NOT in the DWARF for this TU (only the derived CgsScatterStreamPS3.h members are: mbRunningSPUStream + mJobData[ScatterStreamData] + mJobStatus[ScatterStreamStatus], themselves uncommitted) -- so the distribution-list@+4 / status@+32 base fields can't be faithfully named/placed, and ScatterStreamBase::UpdateStream (the real scatter/DMA work) is its own unreconstructed TU. BLOCK until the ScatterStreamBase base subsystem (+ UpdateStream + ScatterStreamData/ScatterStreamStatus) lands. Non-polymorphic base (no vtable), so once ScatterStreamBase is committed this derived TU is straightforward.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Module/CgsBaseEventQueue.h": {
    "status": "done"
   },
@@ -13319,6 +13326,10 @@
   "GameSource/BurnoutConstants.h": {
    "status": "done"
   },
+  "GameSource/Director/Arbitrator/States/BrnArbStateAttractMode.cpp": {
+   "notes": "BrnDirector::ArbStateAttractMode : public BrnDirector::ArbitratorState is a POLYMORPHIC Director-arbitrator FSM state (virtual Construct/Prepare/Update/Release/Destruct/GetName; Update is a vtable-driven EState machine). BLOCKER: the ArbitratorState base is UNCOMMITTED (no committed home to derive from \u2014 a polymorphic derived class needs its full vtable+member layout), PLUS the member BehaviourHandle<BrnDirector::Camera::BehaviourRoadRunner> (uncommitted template + uncommitted BehaviourRoadRunner camera-behaviour), the method param type BrnDirector::ArbStateSharedInfo (uncommitted), and BrnDirector::Camera::BehaviourManager (UnSetBehaviourUsedByHandle / CheckNoBehavioursAreAllocatedByState \u2014 uncommitted), and an unidentified sub_821FDC58 in Update. GetName ('ArbStateAttractMode') is trivial + Construct (BehaviourHandle camera Construct + field zeroing) is simple but they share the TU. BLOCK until the Director Arbitrator state subsystem (ArbitratorState base + ArbStateSharedInfo + BehaviourHandle/BehaviourManager/BehaviourRoadRunner camera-behaviour family) is reconstructed. The sibling BrnArbStateDriveThru/RenderMetrics TUs share this exact dependency.",
+   "status": "blocked"
+  },
   "GameSource/Director/BrnDirectorResourceManager.cpp": {
    "status": "done"
   },
@@ -13660,6 +13671,10 @@
   },
   "GameSource/Unity/../../SharedClasses/Physics/Deformation/Resources/StreamedDeformationSpecResourceType.cpp": {
    "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/Physics/Props/BrnPropGraphicsListResourceType.cpp": {
+   "notes": "PropGraphicsListResourceType : public CgsResource::Type is a thin wrapper (GetTypeID=65552/0x10010, GetImportCount, GetImportPointer, FixUp, FixDown) but its two substantive ops delegate ENTIRELY to the uncommitted BrnPhysics::Props::PropGraphicsList class: FixUp -> PropGraphicsList::FixUp(resource,rsrc), FixDown -> PropGraphicsList::FixDown(resource,rsrc), and GetImportPointer -> PropGraphicsList::GetPartGraphics(resource,idx). PropGraphicsList has NO committed home in b5-decomp (grep: zero hits) \u2014 reconstructing this wrapper would require fabricating the whole PropGraphicsList class header (on-disk 0x10010 resource: PropGraphics[]+PropPartGraphics[]+import table) with guessed static/instance method signatures, a fork against the eventual real PropGraphicsList TU. Server confirms unresolved-deps(in-scope)=2. BLOCK until PropGraphicsList (FixUp/FixDown/GetPartGraphics + class layout) is reconstructed; this wrapper is then ~10 lines (GetImportCount/GetImportPointer use raw-offset access a2[2]/a2[3]/a2[4]+12*idx).",
+   "status": "blocked"
   },
   "GameSource/Unity/../../SharedClasses/Physics/Props/BrnPropInstanceDataResourceType.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
@@ -14075,6 +14090,9 @@
   },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/attribsys.h": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
+  "SDKs/Packages/ICE/ICECamera.cpp": {
    "status": "done"
   },
   "SDKs/Packages/ICE/ICECameraSpaceHandler.cpp": {
