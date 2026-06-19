@@ -9240,6 +9240,15 @@
   "CgsGraphics::InstanceList::FixUp": {
    "status": "reviewed"
   },
+  "CgsGraphics::InstanceListResourceType::FixDown": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::InstanceListResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::InstanceListResourceType::PostFixUp": {
+   "status": "reviewed"
+  },
   "CgsGraphics::Model::SetupShaderConstantsForInstancing": {
    "status": "recovered"
   },
@@ -11814,6 +11823,9 @@
   "ELFHASH::BuildHash": {
    "status": "reviewed"
   },
+  "ICE::Angle::SetFromVecFloat": {
+   "status": "reviewed"
+  },
   "ICE::CameraSpaceHandler::GetTransformToWorld": {
    "status": "reviewed"
   },
@@ -11866,6 +11878,9 @@
    "status": "reviewed"
   },
   "ICE::ICEMath::ATan": {
+   "status": "reviewed"
+  },
+  "ICE::ICEMath::Angles::DegToAng": {
    "status": "reviewed"
   },
   "ICE::ICEMath::Identity": {
@@ -12674,6 +12689,10 @@
   },
   "GameShared/GameClasses/Graphics/Instances/CgsInstance.cpp": {
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/Instances/CgsInstanceListResourceType.cpp": {
+   "notes": "3 verify loops (loop1: verifierB PASS GetTypeID/FixDown/mirror/class; verifierA FAIL on layout-fidelity -> FIXED; loop2 re-verify PASS; loop3 sign-off PASS). Gate compiles clean (MSVC) incl. 4 static_asserts locking the X360 layout. Parity RED explained: absent Assert::Begin/Fire/End = CGS_ASSERT macro; absent CgsGraphics::InstanceList::FixDown is PRESENT as the ->FixDown() member call (regex misses qualified free-name); cpp call_count HIGHER (25 vs 20) from the PointerFromU32/GetModel/GetNumLods/GetLodRadius accessor wrappers + static_assert/offsetof expansions; loop 1=1. GetTypeID=35(0x23); FixDown delegates to committed InstanceList::FixDown(GetLoadBase) void; PostFixUp walks muArraySize instances (stride 80), per-instance 3 model-validation CGS_ASSERTs (lpModel/GetNumLods>0/Invalid LOD index, no baked lines) + mfLodRadiusSquared(+12)=GetLodRadius(numLods-1)^2. LAYOUT-FIDELITY FIX: on-disk pointers modelled u32+PointerFromU32 (VehicleList/CgsInstance convention), static_asserts lock sizeof(Instance)==80 + mfLodRadiusSquared@+12 + model muLodRadii@+0x20 + muNumLods@+0x48. InstanceList TU-local mirror byte-identical to committed CgsInstance.cpp (FixDown links). Minimal-slice Instance/CgsModel FLAGged; FixUp + other virtuals deferred (non-pure base concrete).",
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Resources/CgsVideoDataResource.cpp": {
@@ -14805,6 +14824,9 @@
    "notes": "trivial; gate-only",
    "status": "done"
   },
+  "class:ICE::Angle": {
+   "status": "done"
+  },
   "class:ICE::ICECameraMover": {
    "notes": "trivial; gate-only",
    "status": "done"
@@ -14816,6 +14838,9 @@
    "status": "done"
   },
   "class:ICE::ICEMath": {
+   "status": "done"
+  },
+  "class:ICE::ICEMath::Angles": {
    "status": "done"
   },
   "class:ICE::ICEParameter": {
