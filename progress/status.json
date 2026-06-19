@@ -9792,7 +9792,16 @@
   "CgsMemory::DataStreamCommandPoster::End": {
    "status": "reviewed"
   },
+  "CgsMemory::DataStreamResultReader::Begin": {
+   "status": "reviewed"
+  },
+  "CgsMemory::DataStreamResultReader::Construct": {
+   "status": "reviewed"
+  },
   "CgsMemory::DataStreamResultReader::End": {
+   "status": "reviewed"
+  },
+  "CgsMemory::DataStreamResultReader::ReadResult": {
    "status": "reviewed"
   },
   "CgsMemory::HeapMallocCoreAllocator::Alloc": {
@@ -12780,6 +12789,10 @@
    "status": "done"
   },
   "GameShared/GameClasses/Memory/CgsLinearMalloc.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Memory/DataStream/CgsDataStreamResultReader.cpp": {
+   "notes": "3 verify loops PASS (parallel A=Construct/Begin, B=ReadResult+layout+Futex-typedef, C=sign-off). Gate compiles clean (MSVC). Parity RED fully explained: the 5 absent callees (BasePriorityQueue::Clear, Assert::Begin/Fire/End, StrStreamBase::operator<<) are the 7 asserts' StrStream machinery collapsed into CGS_ASSERT (call 45->14, branch 12->4); loop_count 0-vs-3 = the DE-ATOMIC convention (the X360 ldarx/stdcx CAS retry loops -> single SetValue/SetValueConditional, dropping the lwarx/stdcx memory-ordering machinery, like the de-SIMD convention); return delta 1 = EndAssert paths. Construct @0x8286A0D0 (5 byte-exact 128-alignment asserts + field init + miMaxResults divide/0x8FFFFFFF-sentinel + status=0); Begin @0x828681D8 (assert !streaming + cursor reset + status reset); ReadResult @0x82868418 (assert !streaming + cursor>=count->E_READ_FINISHED(2) + guarded memcpy + ++miNextResult success-only + E_READ_SUCCESS(0)). Layout DWARF-verified (this[n] offsets). Futex::AtomicUint64 = typedef EA::Thread::AtomicInt<std::uint64_t> (committed vendor type, NO fork; gate-proven the EAThread 64-bit atomic compiles). XMemCpy->std::memcpy. Destruct/End/Encode/DecodeStatus/GetResultSize deferred. KU_ mask-vs-max DWARF inconsistency transcribed-as-attested + FLAGged.",
    "status": "done"
   },
   "GameShared/GameClasses/Memory/MemoryMap/CgsMemoryMap.cpp": {
