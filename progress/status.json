@@ -10917,6 +10917,18 @@
   "CgsResource::KdTreeResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "CgsResource::LanguageResourceType::FixDown": {
+   "status": "reviewed"
+  },
+  "CgsResource::LanguageResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "CgsResource::LanguageResourceType::GetSerialisedResourceDescriptor": {
+   "status": "reviewed"
+  },
+  "CgsResource::LanguageResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
   "CgsResource::LuaCodeResourceType::GetTypeID": {
    "status": "reviewed"
   },
@@ -11857,6 +11869,18 @@
    "status": "reviewed"
   },
   "ELFHASH::BuildHash": {
+   "status": "reviewed"
+  },
+  "ICE::ActionRef,20>::IsFull": {
+   "status": "reviewed"
+  },
+  "ICE::ActionRef,20>::Peek": {
+   "status": "reviewed"
+  },
+  "ICE::ActionRef,20>::Pop": {
+   "status": "reviewed"
+  },
+  "ICE::ActionRef,20>::Push": {
    "status": "reviewed"
   },
   "ICE::Angle::SetFromVecFloat": {
@@ -12820,6 +12844,10 @@
    "status": "done"
   },
   "GameShared/GameClasses/Language/CgsLanguageManager.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Language/Resources/CgsLanguageResourceType.cpp": {
+   "notes": "3 verify loops PASS (parallel A=GetTypeID/FixUp/FixDown asm fidelity, B=GetSerialisedResourceDescriptor+layout+scope, C=sign-off). Gate compiles clean (MSVC); committed CgsUnicode.cpp still compiles after the additive ByteLength-decl grow. Parity RED explained: the 3 absent Assert::Begin/Fire/End are the 4 asserts' StrStream machinery collapsed into CGS_ASSERT (call 22->11, branch 6->3); loop_count 4-vs-3 = my re-rolled descriptor block-fill (X360 unrolled the 5 blocks); return delta = EndAssert paths. CONDUCTOR CLEANUP: removed the recon's fabricated ctor + RegisterLanguageResourceType()/TypeRegistry::Register (NOT in the TU's 4 functions) \u2014 grep-confirmed gone. GetTypeID=39(0x27); FixUp rebase mpEntries(+8)-then-per-entry-mpString(+4) +=; FixDown inverse -= (entries then mpEntries-after-loop); per-entry assert tests the DELTA not the entry (no baked lines); GetSerialisedResourceDescriptor = null-assert + size 12+Sum(CgsUnicode::ByteLength(string)+9), BaseResourceDescriptors<5> block0={size,1} blocks1-4={0,1} (CgsFontResourceType precedent). CgsUnicode::ByteLength grown into CgsUnicode.h (canonical home, decl-only, body=own TU). Minimal-slice LanguageResource/Entry (DWARF/inferred names) FLAGged. Rest of base virtuals deferred.",
    "status": "done"
   },
   "GameShared/GameClasses/Memory/CgsLinearMalloc.cpp": {
@@ -14920,6 +14948,9 @@
   },
   "class:ELFHASH": {
    "notes": "trivial; gate-only",
+   "status": "done"
+  },
+  "class:ICE::ActionRef,20>": {
    "status": "done"
   },
   "class:ICE::Angle": {
