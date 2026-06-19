@@ -9696,6 +9696,12 @@
   "CgsMemory::MemoryIO::InputBuffer::Destruct": {
    "status": "reviewed"
   },
+  "CgsMemory::MemoryIO::InputBuffer::GetMemoryReques": {
+   "status": "reviewed"
+  },
+  "CgsMemory::MemoryIO::InputBuffer::GetMemoryRequestQueue": {
+   "status": "reviewed"
+  },
   "CgsMemory::MemoryIO::OutputBuffer::Construct": {
    "status": "reviewed"
   },
@@ -14353,6 +14359,10 @@
   },
   "class:CgsInput::InputModule": {
    "notes": "fresh-eyes review: 4 stride-113 dispatch installs correct",
+   "status": "done"
+  },
+  "class:CgsMemory::MemoryIO::InputBuffer": {
+   "notes": "3 verify loops PASS (fidelity, adversarial w/ compiled probe proving mMemoryRequestQueue@+4 & alignof(VEQ)=4, final sign-off). Gate clean. Parity 'gross' is benign: the 4 absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT x2 (one per getter). const=read-lock(bit4), non-const=write-lock(bit3); MemoryRequestQueue=committed VariableEventQueue<13312,16>.",
    "status": "done"
   },
   "class:CgsModule::BaseEventReceiverQueue": {
