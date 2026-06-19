@@ -7593,6 +7593,12 @@
   "BrnTrigger::TriggerResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "BrnWheel::GraphicsSpecResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "BrnWheel::GraphicsSpecResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
   "BrnWorld::ActiveRaceCar::RemoveFromCollision": {
    "status": "reviewed"
   },
@@ -7753,6 +7759,12 @@
    "status": "reviewed"
   },
   "BrnWorld::EnvironmentSettings::EnvironmentManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::KeyframeResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::KeyframeResourceType::GetTypeID": {
    "status": "reviewed"
   },
   "BrnWorld::EnvironmentSettings::LightingData::Construct": {
@@ -11760,6 +11772,9 @@
   "ICE::ICECameraMover::ICECameraMover": {
    "status": "reviewed"
   },
+  "ICE::ICEParameter::SetValue": {
+   "status": "reviewed"
+  },
   "LionPerfMon::Construct": {
    "status": "reviewed"
   },
@@ -13332,6 +13347,14 @@
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
    "status": "done"
   },
+  "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentKeyframeResourceType.cpp": {
+   "notes": "3 verify loops PASS (fidelity: GetTypeID=0x10012, FixUp version-check polarity/verbatim-msg/+128-offset/unconditional-clear; pattern/scope: mirrors committed ChallengeListResourceType, concrete CgsResource::Type subclass, rw::Resource fwd-decl via base; final sign-off). Gate clean. Parity MILD benign: absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT. Minimal flagged KeyframeResource slice; FixDown/GetSerialisedResourceDescriptor deferred. Path-scoped commit (shared-index race).",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/World/BrnWheelGraphicsSpecResourceType.cpp": {
+   "notes": "3 verify loops PASS (fidelity incl. byte-exact assert msg + version-check-only polarity; pattern/scope/ODR; final sign-off). Gate clean. Parity benign (assert machinery folded into CGS_ASSERT). FixDown/GetSerialisedResourceDescriptor + full GraphicsSpec layout (DWARF muVersion/u32 + 2 Model*) deferred. Path-scoped commit (shared-index race).",
+   "status": "done"
+  },
   "GameSource/Unity/../../SharedClasses/World/BrnWorldRegion.cpp": {
    "notes": "batch reviewer pass; bounds checks, switch, and string tables match",
    "status": "done"
@@ -14571,6 +14594,9 @@
   },
   "class:ICE::ICECameraMover": {
    "notes": "trivial; gate-only",
+   "status": "done"
+  },
+  "class:ICE::ICEParameter": {
    "status": "done"
   },
   "class:ObjectIndex": {
