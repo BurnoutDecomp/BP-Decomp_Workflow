@@ -11760,6 +11760,12 @@
   "ShaderConstantTable::ShaderConstantTable": {
    "status": "recovered"
   },
+  "ShaderConstantTableElement::SetNumEntries": {
+   "status": "reviewed"
+  },
+  "ShaderConstantTableElement::SetSize": {
+   "status": "reviewed"
+  },
   "ShaderConstantsExternal::FixUp": {
    "status": "reviewed"
   },
@@ -14475,6 +14481,10 @@
   },
   "class:ObjectIndex": {
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
+   "status": "done"
+  },
+  "class:ShaderConstantTableElement": {
+   "notes": "3 verify loops PASS (fidelity, adversarial w/ exhaustive 65536-input codegen probe = 0 mismatches vs X360, final sign-off). Gate clean. Parity RED is an artifact: --files is the whole CgsShaderConstants.cpp (7 fns incl. loop-heavy AddDirtyConstantsToDispatchBin) vs this TU's 2-fn pseudocode, so branch/loop counts inflate on the cpp side; absent callees = assert machinery folded into CGS_ASSERT. SetSize/SetNumEntries byte-faithful (signed /16 qw idiom).",
    "status": "done"
   },
   "class:SpriteMembersIndex": {
