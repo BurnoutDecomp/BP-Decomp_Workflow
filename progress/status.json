@@ -12823,6 +12823,10 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameShared/GameClasses/Sound/Playback/CgsCommon.cpp": {
+   "notes": "3 verify loops PASS (parallel A=MakeHash asm-fidelity, B=Store+data-model vs DWARF, C=final sign-off resolving the overflow-string tail byte-exact). Gate compiles clean (MSVC). Parity RED is macro/mangling abstraction only: Assert::Begin/Fire/End hide inside the CGS_ASSERT macro; StrStreamBase::operator__ IS present as the << operators (mangled-name mismatch); loop_count matches 3=3. MakeHash: 32-bit u32 rolling hash (mullw low-32) seed 0x9B66E03/mult 0x9B66C41/xor 0x1DE13C89, signed-char fold, force-odd ^0x80000001, widen on return, CGS_ASSERT(lHash&1). Store(void): cap 2048, bucket (hash>>1)&0x1F over HashNode*[32]/saNodes[2048], BST mpLess/mpMore, unsigned-char strcmp + CGS_ASSERT(HASH COLLISION), inlined Clear, once-only gpDebugPrint overflow warn. Both STATIC. Minimal home; rest of Name/HashTable/Playback deferred.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Sound/Playback/CgsContent.h": {
    "status": "done"
   },
