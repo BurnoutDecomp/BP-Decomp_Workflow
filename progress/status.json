@@ -12147,6 +12147,9 @@
   "ICE::ICEWidgetLogo::Render": {
    "status": "reviewed"
   },
+  "ICE::ICEWidgetTargetBox::Render": {
+   "status": "reviewed"
+  },
   "ICE::InitICEDescriptions": {
    "status": "reviewed"
   },
@@ -12977,6 +12980,10 @@
    "notes": "3 verify loops PASS (parallel A=GetTypeID/FixUp/FixDown asm fidelity, B=GetSerialisedResourceDescriptor+layout+scope, C=sign-off). Gate compiles clean (MSVC); committed CgsUnicode.cpp still compiles after the additive ByteLength-decl grow. Parity RED explained: the 3 absent Assert::Begin/Fire/End are the 4 asserts' StrStream machinery collapsed into CGS_ASSERT (call 22->11, branch 6->3); loop_count 4-vs-3 = my re-rolled descriptor block-fill (X360 unrolled the 5 blocks); return delta = EndAssert paths. CONDUCTOR CLEANUP: removed the recon's fabricated ctor + RegisterLanguageResourceType()/TypeRegistry::Register (NOT in the TU's 4 functions) \u2014 grep-confirmed gone. GetTypeID=39(0x27); FixUp rebase mpEntries(+8)-then-per-entry-mpString(+4) +=; FixDown inverse -= (entries then mpEntries-after-loop); per-entry assert tests the DELTA not the entry (no baked lines); GetSerialisedResourceDescriptor = null-assert + size 12+Sum(CgsUnicode::ByteLength(string)+9), BaseResourceDescriptors<5> block0={size,1} blocks1-4={0,1} (CgsFontResourceType precedent). CgsUnicode::ByteLength grown into CgsUnicode.h (canonical home, decl-only, body=own TU). Minimal-slice LanguageResource/Entry (DWARF/inferred names) FLAGged. Rest of base virtuals deferred.",
    "status": "done"
   },
+  "GameShared/GameClasses/Memory/CgsHeapMalloc.cpp": {
+   "notes": "CgsMemory::HeapMalloc wraps an embedded EA::Allocator::GeneralAllocator (committed vendor type) -- Malloc/Free/Calloc/Realloc map cleanly to MallocAligned/Free/Calloc/Realloc. BLOCKERS: (1) Construct calls GeneralAllocator::Init(buffer,size,0,0,0,0) (core-init overload) + SetOption(3,0), and PrintAllocations calls TraceAllocatedMemory(callback,0,0,0) -- all THREE are ABSENT from the committed partial GeneralAllocator reconstruction (it has only 0-arg Init()/Shutdown/Malloc/MallocAligned/Calloc/Realloc/Free). These have substantial allocator-logic bodies that belong to the GeneralAllocator/PPMalloc reconstruction (wrong dependency order to bolt them on undefined from this wrapper). (2) PrintAllocations' trace callback sub_828667B8 is unidentified. (3) HeapMallocCoreAllocator (2nd class in the TU) has no DWARF class shape; its Construct does HeapMalloc::Construct(this+1dword,...) implying a vtable/ICoreAllocator base of unknown layout. BLOCK until GeneralAllocator gains Init(pInitialCore,nSize,bShouldFree,bShouldTrace,pCoreAddFn,pCtx) + SetOption + TraceAllocatedMemory (with bodies) and the ICoreAllocator/HeapMallocCoreAllocator shape is known; HeapMalloc is then a thin wrapper.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Memory/CgsLinearMalloc.cpp": {
    "status": "done"
   },
@@ -13089,6 +13096,10 @@
   },
   "GameShared/GameClasses/Network/Players/CgsPlayersConnectionManager.cpp": {
    "status": "done"
+  },
+  "GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceBroadcastMessages.cpp": {
+   "notes": "CgsNetwork::ServerInterfaceBroadcastMessages : public CgsNetwork::ServerInterfaceComponent (polymorphic base + purecall dispatch in Update). Depends on the uncommitted EA DirtySock SDK API: ChatCallback -> TagFieldFind/TagFieldGetString/TagFieldGetNumber/TagFieldGetBinary; OnEvent/Prepare/Release -> LobbyApiSetCallback/LobbyApiClearCallback. The DirtySock TagField* + LobbyApi* SDK + the ServerInterfaceComponent base must be reconstructed first. BLOCK until the DirtySock SDK + ServerInterfaceComponent base land.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceComponent.cpp": {
    "notes": "Review passed: ConvertError fourcc-table lookup and fallback table comparison logic are correct.",
@@ -13407,6 +13418,10 @@
   "GameShared/GameClasses/System/Timer/CgsTimerStatusInterface.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/System/Timer/PS3/CgsDateAndTimePS3.cpp": {
+   "notes": "CgsSystem::DateAndTime (14 fns: Get/Set Day/Month/Year/Hour/Minute/Second + GetRawTimeValue/GetDifferenceInSeconds/Update). Wraps a Win32-style time platform layer that is NOT committed: GetLocalTime/GetSystemTime/SystemTimeToFileTime/FileTimeToSystemTime over SYSTEMTIME/FILETIME (grep: zero hits for any of these or the structs; project has no win32 platform header). No DateAndTime class home exists (would need creating with the SYSTEMTIME/FILETIME structs + the time-API shim decls). Plus GetDifferenceInSeconds calls an unidentified sub_828E0518. BLOCK until the Win32 time-API shim (SYSTEMTIME/FILETIME + GetLocalTime/GetSystemTime/SystemTimeToFileTime/FileTimeToSystemTime) + DateAndTime class home land.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/World/CgsWorldMap2D.cpp": {
    "status": "done"
   },
@@ -13555,6 +13570,10 @@
   },
   "GameSource/Gui/CustomRenderer/Renderers/BrnCrashNavIconRenderer.h": {
    "status": "done"
+  },
+  "GameSource/Gui/CustomRenderer/Renderers/BrnCreditsTextRenderer.cpp": {
+   "notes": "BrnGui::CreditsTextRenderer : public CgsGui::CustomRenderComponentInterface (polymorphic base). RecalculateParagraphs + RenderComponent are register-mangled ('output may be wrong') and depend on the uncommitted Text/Graphics rendering subsystem: CgsGraphics::TextObject (Construct/CalculateAutosizing/GetNumLinesAndStartLine), CgsGraphics::TextRenderer::RenderStringFadingY, CgsGraphics::Im2dRenderBuffer, + CgsLanguage::LanguageManager::FindString (LanguageManager is already blocked) + multiple unidentified sub_ callees (sub_824587B0/sub_82458EC0/sub_82458898/sub_821F0E50). BLOCK until the Text/Graphics renderer subsystem + LanguageManager + the CustomRenderComponentInterface base land.",
+   "status": "blocked"
   },
   "GameSource/Gui/Flapt/BrnFlaptMovieClipInstance.cpp": {
    "status": "done"
@@ -14161,6 +14180,10 @@
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficHullRuntime.h": {
    "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficLightManager.cpp": {
+   "notes": "BrnTraffic::TrafficLightManager: depends on UNCOMMITTED BrnTraffic runtime types -- RenderAllLightsToBeInStateForHull -> BrnTraffic::TrafficLightCollection::RenderCoronasForInstance, UpdateHull -> BrnTraffic::TrafficLightRuntimeState::Update (grep-confirmed uncommitted BrnTraffic runtime subsystem). The TrafficLightCollection + TrafficLightRuntimeState types (which the manager holds and drives) must land first. BLOCK until the BrnTraffic runtime types land.",
+   "status": "blocked"
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficLogger.cpp": {
    "notes": "HashState @0x8275DFB8 hashes the traffic-entity runtime state and depends on multiple UNCOMMITTED BrnTraffic runtime types with truncated/unrecovered names: PurgatoryInfo_400_::GetI + PurgatoryInfo_199_::GetI (IDA-truncated class names, uncommitted), HullRuntime::IsStoplineRed (uncommitted), plus an unidentified helper sub_82752E38(a1,a2), AND the function carries the IDA 'local variable allocation has failed, the output may be wrong!' warning (unreliable pseudocode -> needs asm-level reconstruction). Faithful reconstruction requires those BrnTraffic runtime types (PurgatoryInfo arrays + HullRuntime) reconstructed first + sub_82752E38 identified. Construct @0x82751AE0 is trivial (*this=1 + store the gpLogger global singleton dword_8300D010) but shares the TU. BLOCK until the BrnTraffic PurgatoryInfo/HullRuntime runtime types land + sub_82752E38 is resolved.",
@@ -15182,6 +15205,9 @@
    "status": "done"
   },
   "class:ICE::ICEWidgetLogo": {
+   "status": "done"
+  },
+  "class:ICE::ICEWidgetTargetBox": {
    "status": "done"
   },
   "class:ObjectIndex": {
