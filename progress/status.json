@@ -7209,6 +7209,12 @@
   "BrnSound::Vehicles::VehicleStateManager::RemoveEntry": {
    "status": "reviewed"
   },
+  "BrnSound::World::StaticSoundMapResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "BrnSound::World::StaticSoundMapResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
   "BrnStreetData::ChallengeData::Construct": {
    "status": "reviewed"
   },
@@ -13328,6 +13334,10 @@
   },
   "GameSource/Unity/../../SharedClasses/Sound/Engines/BrnSoundLoopModelResourceType.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/Sound/World/BrnStaticSoundMapResourceType.cpp": {
+   "notes": "3 verify loops PASS (2 parallel: FixUp relocation fidelity + DWARF data-type conformance; 1 sign-off). Gate compiles clean. Parity RED is the CGS_ASSERT macro abstraction: BeginAssert/FireAssert/EndAssert + their condition branches live inside the macro expansion, not source tokens. GetTypeID=65558(0x10016); FixUp relocates mpSubRegions+mpEntities via GetLoadBase (named-member semantic parity vs X360 a2[9]/a2[12]) + per-entity validation loop, asserts verbatim. New data home BrnStaticSoundMap.h (DWARF shape, eRootType DWARF-attested) + friend grant. Element types + data methods + remaining overrides deferred to own TUs.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/StreetData/BrnChallengeData.cpp": {
