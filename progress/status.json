@@ -699,6 +699,9 @@
   "BrnGame::BrnCpuMonitors::Construct": {
    "status": "reviewed"
   },
+  "BrnGame::BrnG": {
+   "status": "reviewed"
+  },
   "BrnGame::BrnGameModule::BindInputToPort": {
    "status": "reviewed"
   },
@@ -888,6 +891,9 @@
   "BrnGame::BrnGameModule::UpdateThread": {
    "status": "reviewed"
   },
+  "BrnGame::DispatchThreadInputBuffer": {
+   "status": "reviewed"
+  },
   "BrnGame::DispatchThreadInputBuffer::Construct": {
    "status": "reviewed"
   },
@@ -910,6 +916,9 @@
    "status": "reviewed"
   },
   "BrnGame::LoadingScreenRenderer::SetupLoadingScreenTexture": {
+   "status": "reviewed"
+  },
+  "BrnGame::operator++": {
    "status": "reviewed"
   },
   "BrnGameMainFlowController::GameMainFlowController::Construct": {
@@ -13804,6 +13813,10 @@
    "notes": "3 verify loops PASS (per-body fidelity incl. assert polarity/De-Morgan-dual + read-+472-before-clear-+480 order; no-DWARF inference soundness w/ all guessed names flagged; final sign-off). Gate clean. Parity RED benign: the 7 pseudocode branches are assert if-checks folded into CGS_ASSERT (cpp 0 branches); absent callees = assert machinery + the declare-only SelectBestMomentWithExclusion delegate (called in-code, unresolved by matcher); return_count diff = the 3 void funcs have no return. No DWARF -> semantic-parity model, names from assert strings; expected reconciliations flagged (MomentHandle/capacity/SelectBestMomentWithExclusion body).",
    "status": "done"
   },
+  "class:BrnGame": {
+   "notes": "Catch-all (3 fns, 3 homes). 3 verify loops PASS (parallel A=BrnG+operator++ asm fidelity, B=GetParticleData asm+DWARF incl +16 offset math, C=sign-off). Gate compiles clean (MSVC). Parity RED is a measurement artifact: submitted the whole committed BrnGameModule.cpp (large file, dozens of fns) because the catch-all only ADDED operator++ to it -> tool sums all 129 calls there vs the 3 catch-all fns' 13-call pseudocode. Absent callees all expected: BaseCollisionGenerator::Destruct present as .Destruct() (qualified-name grep miss); Assert::Begin/Fire/End inside CGS_ASSERT macro; BasePriorityQueue::Clear is the deliberately-omitted X360 StrStream-assert machinery (benign committed convention). #1 BrnG @0x827E3090 dtor-thunk (destruct embedded BaseCollisionGenerator, return &member; opaque owner minimal+FLAGged; ad-hoc BaseCollisionGenerator mirrors VehicleList). #2 GetParticleData() const @0x8227F4F0 (read-lock CGS_ASSERT + return &mParticleData=this+16; DWARF h:97 proves identity vs truncated symbol; minimal slice + ad-hoc opaque DispatchThreadUpdateData). #3 operator++(EReleaseStage&,int) @0x823A8AD8 post-increment returns old + assert<=E_RELEASESTAGE_DONE(7); grows BrnGameModule no-regression. Rest of each home deferred.",
+   "status": "done"
+  },
   "class:BrnGameState::BaseOnlineModeScoring": {
    "status": "done"
   },
@@ -14512,6 +14525,10 @@
   "class:CgsInput::InputModule": {
    "notes": "fresh-eyes review: 4 stride-113 dispatch installs correct",
    "status": "done"
+  },
+  "class:CgsLanguage::LanguageManager": {
+   "notes": "ctor @0x827DF9C8 builds a ~24920B object embedding 4 uncommitted SHARED types that must be reconstructed in their own homes first (ODR risk to model ad-hoc here): (1) CgsContainers::HashTable<K,V,13u> 3-param fixed-size table (committed LinearHashTable<K,V> is a different 2-param open-addressing type), (2) LinkedListHelper<T,1024u> (only BaseLinkedList base is committed), (3) HashTableElement<u32,const CgsUtf8*>, (4) LanguageManagerDebugComponent (embedded, own vtable off_820CE2C0 @+24916, has its own CgsLanguageManagerDebugComponent.{h,cpp} TU). Committed CgsLanguageManager.h is only a 2-method metric-units stub; full layout grow blocked until the container templates + debug component land. GetDefaultFont @0x824434C0 (returns mpcDefaultFontName @+4, null-assert) is trivial but shares the TU. Revisit after the HashTable<,,N>/LinkedListHelper<,N> template families are reconstructed.",
+   "status": "blocked"
   },
   "class:CgsMemory::MemoryIO::InputBuffer": {
    "notes": "3 verify loops PASS (fidelity, adversarial w/ compiled probe proving mMemoryRequestQueue@+4 & alignof(VEQ)=4, final sign-off). Gate clean. Parity 'gross' is benign: the 4 absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT x2 (one per getter). const=read-lock(bit4), non-const=write-lock(bit3); MemoryRequestQueue=committed VariableEventQueue<13312,16>.",
