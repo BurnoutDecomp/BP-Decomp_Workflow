@@ -4188,6 +4188,9 @@
   "BrnGui::GuiOverlaysDirector::BridgeOutEvents": {
    "status": "reviewed"
   },
+  "BrnGui::GuiPerfmons::Initialise": {
+   "status": "reviewed"
+  },
   "BrnGui::HudMessageAnalyzer::HandleBurningHomeRunCheckpointReached": {
    "status": "reviewed"
   },
@@ -13064,6 +13067,10 @@
    "status": "done"
   },
   "GameSource/Gui/BrnGuiModule.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/BrnGuiPerfmons.cpp": {
+   "notes": "3 verify loops (loop1 transcription PASS - all 33 calls/names/budgets/flags/aliases exact; loop1 caught class-vs-namespace ODR fork of PerfMonCpu -> FIXED by growing the committed CgsPerfMonCpu.h namespace with the X360 6-param AddMonitor overload (additive, regate-clean), .cpp includes the real home; loop3 sign-off PASS). Gate clean. Parity MILD: call delta 4 = PPC prologue/epilogue artifacts (_savefpr/_restfpr/_savegprlr/_restgprlr) dropped; void return. Parent tree indentation-inferred (flagged). Note: committed via a separate fix commit on top of the concurrent ICE commit (orig GuiPerfmons was 8ee4c3b).",
    "status": "done"
   },
   "GameSource/Gui/CustomRenderer/Renderers/BrnBlackBarRenderer.cpp": {
