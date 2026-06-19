@@ -6904,10 +6904,10 @@
    "status": "reviewed"
   },
   "BrnResource::ChallengeList::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnResource::ChallengeList::Destruct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnResource::ChallengeListEntry::GetAction": {
    "status": "reviewed"
@@ -9061,6 +9061,9 @@
    "status": "reviewed"
   },
   "CgsFileSystem::DeviceManager::SetDefaultPath": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::FileLog::FileLog": {
    "status": "reviewed"
   },
   "CgsFileSystem::FileSystem::Release": {
@@ -12838,6 +12841,10 @@
   "GameShared/GameClasses/System/AttribSys/CgsAttribSysVaultSlot.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/System/FileSystem/CgsFileLog.cpp": {
+   "notes": "3 verify loops PASS (fidelity, adversarial w/ compiled+run probe proving 1st-ctor-registers + 2nd-ctor-asserts w/ exact message, final sign-off). Gate clean. Parity MILD benign: absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT; return diff = void ctor (X360 'return a1' is the fastcall this-artifact). New home CgsFileLog.h DWARF-exact; rw::IResourceAllocator fwd-decl matched to vendor struct tag.",
+   "status": "done"
+  },
   "GameShared/GameClasses/System/FileSystem/Devices/CgsRemapDevice.cpp": {
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
    "status": "done"
@@ -13227,6 +13234,10 @@
   },
   "GameSource/Unity/../../SharedClasses/AI/AISectionsResourceType.cpp": {
    "notes": "fresh-eyes (sonnet): descriptor split-write equiv on big-endian; forwarders fine",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/DataLists/ChallengeList.cpp": {
+   "notes": "3 verify loops PASS (body fidelity + operator=/CreateFromHandle faithfulness; DWARF layout conformance back-anchored by a1[3256]/[3257]=miCount/miListCount; final sign-off independently re-derived the layout). Gate clean. Parity MILD: loop_count matches 3/3; the lone absent callee CreateFromHandle is deliberately the public operator=(ResourceHandle) per the DWARF (CreateFromHandle is protected, uncallable) - DWARF shows ResourcePtr::operator= as the pre-inline op; return_count diff = void funcs (X360 int return is fastcall artifact). Flags: ChallengeListResource fwd-decl + sentinel value + operator= body equivalence deferred to CgsResourcePtr TU.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/DataLists/ChallengeListResourceType.cpp": {
