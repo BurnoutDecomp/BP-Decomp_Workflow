@@ -5142,6 +5142,21 @@
   "BrnNetwork::HullSyncMessage::PackOrUnpack": {
    "status": "reviewed"
   },
+  "BrnNetwork::ImageManagerDebugComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::ImageManagerDebugComponent::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::ImageManagerDebugComponent::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::ImageManagerDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::ImageManagerDebugComponent::Release": {
+   "status": "reviewed"
+  },
   "BrnNetwork::ImageMessage::Construct": {
    "status": "reviewed"
   },
@@ -5440,6 +5455,21 @@
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesDownloadEvent>::Append": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesManagerDebugComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesManagerDebugComponent::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesManagerDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesManagerDebugComponent::RequestRoadRulesHighScores": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesManagerDebugComponent::TriggerPersonalBest": {
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesMessage::PrepareForSend": {
@@ -9837,6 +9867,18 @@
   "CgsLanguage::LanguageManager::UnloadStringTable": {
    "status": "reviewed"
   },
+  "CgsLanguage::LanguageManagerDebugComponent::Construct": {
+   "status": "reviewed"
+  },
+  "CgsLanguage::LanguageManagerDebugComponent::DrawText": {
+   "status": "reviewed"
+  },
+  "CgsLanguage::LanguageManagerDebugComponent::GetName": {
+   "status": "reviewed"
+  },
+  "CgsLanguage::LanguageManagerDebugComponent::RenderHUD": {
+   "status": "reviewed"
+  },
   "CgsMemory::DataStreamCommandPoster::End": {
    "status": "reviewed"
   },
@@ -12975,6 +13017,10 @@
   "GameShared/GameClasses/Language/CgsLanguageManager.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Language/CgsLanguageManagerDebugComponent.cpp": {
+   "notes": "complex; fresh-eyes opus review. All offsets asm-verified; DrawText/RenderHUD faithful; Format API + CalcTextWidth header extensions + inferred GetDistanceDisplayScale + FLAGGED star/threshold constants honestly documented.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Language/CgsSku.cpp": {
    "notes": "CgsLanguage::Sku: 4 fns clean (Construct=field init+assert; SetLanguage/SetSku=field setters; FindLanguage/FindSku delegate to committed CgsSystem::HardwareSku). BLOCKER: Update @0x828662B8 depends on the UNCOMMITTED CgsGui module-IO subsystem -- CgsGui::ModelIO::InputBuffer::AddResourceRequests + CgsGui::CgsGuiModuleIO::OutputBuffer::AddGuiOutEvent<CgsGui::GuiEventSetSku> + AddGuiOutEvent<CgsGui::GuiEventSetLanguageNotification> (grep: zero hits for AddResourceRequests/AddGuiOutEvent/those event types) -- AND un-valued rodata tables byte_820E5DD0 (32B-stride language-name strings) + unk_820E5AD0 (32B-stride resource descriptors) whose VALUES drive the AddResourceRequests/HashString calls. All 6 fns share one .cpp, so Update blocks the TU. BLOCK until CgsGui ModelIO::InputBuffer + CgsGuiModuleIO::OutputBuffer::AddGuiOutEvent<> + the GuiEvent types + the two rodata tables land.",
    "status": "blocked"
@@ -13455,6 +13501,10 @@
    "notes": "BrnDirector::ArbStateDriveThru (an arbitrator state). Deeply entangled with UNCOMMITTED subsystems (grep: zero hits for ArbState base / BehaviourManager / ArbUtils::ChangeToState): Construct->Camera::Camera::Construct; Prepare->Camera::BehaviourManager::NewBehaviour + Attrib::Gen::shotgroup::Num_ShotList + sub_821F0E50(unknown); Release->BehaviourManager::UnSetBehaviourUsedByHandle + CheckNoBehavioursAreAllocatedByState; Update->ArbUtils::ChangeToState<ArbStateDriveThru::EState> + Camera::EnsureEffectIsPlaying + sub_821FCE10/sub_821FCDA8(unknown). The Director Camera/BehaviourManager + ArbUtils state-machine + the ArbState polymorphic base must be reconstructed first. BLOCK until those Director subsystems land.",
    "status": "blocked"
   },
+  "GameSource/Director/Arbitrator/States/BrnArbStateRenderMetrics.cpp": {
+   "notes": "Blocked on the Director camera-behaviour framework (none reconstructed): base BrnDirector::ArbitratorState (virtual Construct/Prepare/Update/Release/Destruct/GetName vtable + ~368B layout), BehaviourHandle<T>, BehaviourManager (NewBehaviour<T>/UnSetBehaviourUsedByHandle/CheckNoBehavioursAreAllocatedByState), ArbStateSharedInfo, BehaviourRenderMetrics. Update() does vtable dispatch (slots Prepare@+4/Release@+12) plus opaque Camera state math (sub_821FE010 + Camera::operator_). Reconstruct that framework leaf-first before this state TU.",
+   "status": "blocked"
+  },
   "GameSource/Director/BrnDirectorResourceManager.cpp": {
    "status": "done"
   },
@@ -13686,6 +13736,14 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameSource/Network/Debug Components/BrnNetworkImageManagerDebugComponent.cpp": {
+   "notes": "standard; fresh-eyes opus review. NetworkTexture by-value (opaque 28B header), EncodeMugshotAtSelectedQuality callback identity sound; ctor/dtor order faithful.",
+   "status": "done"
+  },
+  "GameSource/Network/Debug Components/BrnNetworkRoadRulesManagerDebugComponent.cpp": {
+   "notes": "complex/standard; fresh-eyes opus review. Construct=base init+back-ptr+Register; TriggerPersonalBest bit-sets+SetScore faithful; named members, no offset hacks.",
+   "status": "done"
+  },
   "GameSource/Network/Managers/BrnNetworkLiveRevengeRelationship.cpp": {
    "status": "done"
   },
@@ -13707,6 +13765,10 @@
   },
   "GameSource/Network/Messages/BrnCameraStatusMessage.h": {
    "status": "done"
+  },
+  "GameSource/Network/Messages/BrnMarkedManMessage.cpp": {
+   "notes": "Blocked on the CgsNetwork message-serialisation base framework (none reconstructed as shared headers; existing message TUs fork minimally): CgsNetwork::Message base (Construct, +25 reliable flag, GetPackedMessageSize, the PackOrUnpackInt/Bool serialise helpers = sub_82881370 / sub_8288DDA0), CgsNetwork::ReliableMessage base layout (>=40B: id@28, +32/+36 fields, PackOrUnpack/PrepareForSend), and the PackOrUnpackResult return enum. Reconstruct the Message/ReliableMessage base hierarchy first; then MarkedManMessage (mMarkedMan s32 @+40, mbFinalAnswer bool @+44) is straightforward.",
+   "status": "blocked"
   },
   "GameSource/Network/Messages/BrnRoadRulesPersonalBestMessage.cpp": {
    "notes": "RoadRulesPersonalBestMessage : public CgsNetwork::ReliableMessage is a POLYMORPHIC derived network message (virtual GetPackedMessageSize @0x8257B998 + PackOrUnpack @0x8257BA28; Construct @0x8257B988 calls Message::Construct, GetPackedMessageSize calls TestConnectionMessage::GetPackedMessageSize, PackOrUnpack calls ReliableMessage::PackOrUnpack). BLOCKER: the CgsNetwork message base hierarchy (Message / ReliableMessage / TestConnectionMessage) has committed .cpp BODIES (CgsReliableMessage.cpp / CgsTestConnectionMessage.cpp) but NO committed HEADERS to derive from -- a polymorphic derived class needs the full base vtable+member layout (can't fork it ad-hoc without an ODR/vtable mismatch vs the committed bodies). Also sub_82881370 (the ranged bit-stream pack/unpack helper used for maiScores[2]/mChallengeIndex/miStreetDataVersion with the dword_820A764C/dword_820A7654 per-score-type min/max range tables) is UNIDENTIFIED (no recovered name; likely SmartBitStream::PackOrUnpackRangedInt), and the score-range tables' values are external. Construct is trivial (maiScores=-1 + base Construct) but shares the TU. BLOCK until the CgsNetwork message base-class hierarchy is reconstructed as headers (Message/ReliableMessage/TestConnectionMessage) + sub_82881370/the range tables are resolved.",
@@ -13826,7 +13888,7 @@
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/StreetData/BrnChallengeData.cpp": {
-   "notes": "tightened: real DWARF types (BitArray<2u> u64, ScoreList, CgsID[2]); ParScores size 16B; re-reviewed pass",
+   "notes": "unchanged body; re-gated PASS after promoting ChallengePlayerScoreEntry to shared header.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/StreetData/BrnStreetData.cpp": {
