@@ -10170,6 +10170,15 @@
   "CgsModule::VariableEventQueue<256,16>::Release": {
    "status": "reviewed"
   },
+  "CgsNetwork::BitStream::AddBits": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BitStream::GetBits": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BitStream::Prepare": {
+   "status": "reviewed"
+  },
   "CgsNetwork::BuddyManagerBase::GetBuddyName": {
    "status": "reviewed"
   },
@@ -12965,6 +12974,10 @@
   },
   "GameShared/GameClasses/Network/Debug Components/CgsNetworkHostMigrationDebugComponent.h": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Network/Packeting/BitStream/CgsBitStream.cpp": {
+   "notes": "3 fresh-eyes verify loops all PASS: (A) AddBits/GetBits proven exact bitwise inverses analytically + 106M-case empirical round-trip incl. adjacent-field non-corruption; (B) Prepare/layout/asserts byte-exact vs DWARF, no fabrication (only 3 of 7 methods defined, rest header-declared); (C) shift-UB proven absent (spanning shifts in [1,63], 1<<64 guarded), odr-safe, clean failure path. Gate cl /c exit 0.",
    "status": "done"
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsHeadsetStatusMessage.cpp": {
