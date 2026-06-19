@@ -22,6 +22,7 @@ Commands:
     work claim [<tu>...|-n N]  claim specific TU id(s), or the next N ready ones if none
     work submit <tu>          mark a TU reconstructed (compile/review gates: Phase 3)
     work block <tu> "reason"  mark blocked; work unblock <tu> to clear
+    work reset-tu <tu>        delete produced files + return TU/functions to todo locally and server-side
     work set <tu> --status S  manual status override
     work sync                 flush queued offline ops to the server (auto-runs first otherwise)
     work reconcile-from-files [--apply]
@@ -341,7 +342,7 @@ def flush_pending(con, quiet=True):
         except ServerError as e:
             conflicts += 1
             note = (" (durable state reconciles via `work server-sync`)"
-                    if op["kind"] in ("review_pass", "block", "unblock") else "")
+                    if op["kind"] in ("review_pass", "block", "unblock", "reset_tu") else "")
             sys.stderr.write(
                 f"[work] sync conflict on {op['kind']} {op['tu_id'] or ''}: {e}{note}\n")
             con.execute("DELETE FROM pending_op WHERE id=?", (op["id"],))
@@ -1059,6 +1060,116 @@ def set_tu(con, tu, status, owner=None, notes=None):
     sync_status(con)  # keep the committed status.json in step with the ledger
 
 
+def _existing_reset_files(tu_row, include_sidecars=True):
+    """Files that belong to a TU reset.
+
+    The ledger's dest_path is the primary output. Agents often create the sibling
+    header for a .cpp TU (or sibling .cpp for a header-keyed TU), so include the
+    sidecar when it exists. Paths are kept under the repo root.
+    """
+    files = []
+    dest = tu_row["dest_path"]
+    if dest:
+        files.append(os.path.join(ROOT, normalize_path(dest)))
+
+    if include_sidecars and dest:
+        base, ext = os.path.splitext(normalize_path(dest))
+        if ext.lower() == ".cpp":
+            files.append(os.path.join(ROOT, base + ".h"))
+        elif ext.lower() == ".h":
+            files.append(os.path.join(ROOT, base + ".cpp"))
+
+    seen, existing = set(), []
+    root_abs = os.path.abspath(ROOT)
+    for path in files:
+        abs_path = os.path.abspath(path)
+        if abs_path in seen:
+            continue
+        seen.add(abs_path)
+        if not abs_path.startswith(root_abs + os.sep):
+            sys.exit(f"refusing to delete path outside repo root: {abs_path}")
+        if os.path.exists(abs_path):
+            existing.append(abs_path)
+    return existing
+
+
+def _unstage_added_file_if_needed(abs_path):
+    """If a deleted file was staged as a brand-new add, remove it from the index.
+
+    This keeps `work reset-tu` from leaving confusing AD entries after deleting
+    uncommitted newly-created files. Already-committed/tracked files are left as a
+    normal unstaged deletion.
+    """
+    b5_root = os.path.join(ROOT, "b5-decomp")
+    try:
+        rel = os.path.relpath(abs_path, b5_root)
+    except ValueError:
+        return
+    if rel.startswith(".."):
+        return
+    rel = rel.replace("\\", "/")
+    try:
+        res = subprocess.run(
+            ["git", "diff", "--cached", "--name-only", "--diff-filter=A", "--", rel],
+            cwd=b5_root, text=True, capture_output=True, check=False)
+        if rel in {line.strip() for line in res.stdout.splitlines()}:
+            subprocess.run(["git", "rm", "--cached", "--ignore-unmatch", "--", rel],
+                           cwd=b5_root, check=False, stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL)
+    except Exception:
+        # Index cleanup is best-effort; the file/status reset itself is the important part.
+        return
+
+
+def cmd_reset_tu(args):
+    con = connect()
+    r = con.execute("SELECT * FROM tu WHERE id=?", (args.tu,)).fetchone()
+    if not r:
+        sys.exit(f"unknown TU: {args.tu!r}")
+
+    files = [] if args.keep_files else _existing_reset_files(r, include_sidecars=not args.no_sidecars)
+    note = args.note or "reset-tu: returned to queue for rework"
+
+    if args.dry_run:
+        print(f"would reset {args.tu} -> todo")
+        print("would reset functions:")
+        for f in con.execute("SELECT name,status FROM func WHERE tu_id=? ORDER BY name", (args.tu,)):
+            print(f"  [{f['status']}] {f['name']}")
+        if args.keep_files:
+            print("would keep produced files")
+        elif files:
+            print("would delete:")
+            for path in files:
+                print(f"  {os.path.relpath(path, ROOT)}")
+        else:
+            print("no produced files found to delete")
+        if server_enabled():
+            print("would call server reset endpoint")
+        return
+
+    for path in files:
+        os.remove(path)
+        _unstage_added_file_if_needed(path)
+        print(f"deleted {os.path.relpath(path, ROOT)}")
+
+    con.execute("UPDATE tu SET status='todo', owner=NULL, notes=?, updated_at=? WHERE id=?",
+                (note, now(), args.tu))
+    con.execute("UPDATE func SET status='todo', verify_tier=0, attempts=0, blocker=NULL, updated_at=? "
+                "WHERE tu_id=?", (now(), args.tu))
+    log(con, "reset_tu", tu_id=args.tu, detail=note)
+    con.commit()
+    sync_status(con)
+
+    if server_enabled():
+        flush_pending(con)
+        server_mutate(con, "reset_tu", "POST", f"/tu/{server_tu_path(args.tu)}/reset", {
+            "agent": server_agent(),
+            "notes": note,
+        }, args.tu)
+
+    print(f"reset {args.tu} -> todo")
+
+
 def cmd_start(args):
     con = connect()
     agent = server_agent()
@@ -1768,6 +1879,13 @@ def main():
     au.set_defaults(fn=cmd_auto)
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
+    rt = sub.add_parser("reset-tu", help="delete produced files and return a TU/functions to todo locally and server-side")
+    rt.add_argument("tu")
+    rt.add_argument("--keep-files", action="store_true", help="only reset ledger/server state; do not delete produced files")
+    rt.add_argument("--no-sidecars", action="store_true", help="delete only the ledger dest_path, not sibling .h/.cpp")
+    rt.add_argument("--note", help="note to leave on the TU")
+    rt.add_argument("--dry-run", action="store_true", help="print what would change")
+    rt.set_defaults(fn=cmd_reset_tu)
     se = sub.add_parser("set"); se.add_argument("tu"); se.add_argument("--status", required=True); se.add_argument("--note"); se.set_defaults(fn=cmd_set)
     sub.add_parser("sync", help="flush queued offline ops to the server (auto-runs before server commands)").set_defaults(fn=cmd_sync)
     rf = sub.add_parser(

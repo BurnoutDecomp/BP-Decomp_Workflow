@@ -147,6 +147,7 @@ work parity <tu>                    # standalone deterministic parity check
 work review <tu> --verdict pass     # mark done after review/self-check
 work review <tu> --verdict fail     # return to in_progress with notes
 work block <tu> "reason"            # stop it being reclaimed
+work reset-tu <tu>                  # delete produced files and return TU/functions to todo locally and server-side
 ```
 
 The compile gate is per translation unit (`cl /c`, no link). The target is semantic
@@ -159,7 +160,7 @@ At a glance:
 
 | Tool area | Entry points |
 | --- | --- |
-| Day-to-day ledger work | `work bootstrap`, `work status`, `work next`, `work claim`, `work show`, `work submit`, `work parity`, `work review`, `work block` |
+| Day-to-day ledger work | `work bootstrap`, `work status`, `work next`, `work claim`, `work show`, `work submit`, `work parity`, `work review`, `work block`, `work reset-tu` |
 | Goal scoping and traces | `work goal ...`, `work goal import-trace`, `tools/work/trace_import.py` |
 | IDA export pipeline | `tools/export_db.ps1`, `tools/ida_export_all.py`, `tools/ida_export_lineinfo.py`, `tools/ida_decompile.py` |
 | Derived ledger builders | `tools/work/build_identity.py`, `tools/work/build_tu_index.py`, `tools/work/build_type_deps.py`, `work seed --deps` |
