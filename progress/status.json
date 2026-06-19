@@ -12275,6 +12275,9 @@
   },
   "short,256>::GetLength": {
    "status": "reviewed"
+  },
+  "static initializer for BrnSound::ParameterIndexes::AEMS_Class::gaAEMS_ClassParameterNames": {
+   "status": "reviewed"
   }
  },
  "tu": {
@@ -14765,6 +14768,10 @@
    "status": "done"
   },
   "class:short,256>": {
+   "status": "done"
+  },
+  "class:static initializer for BrnSound::ParameterIndexes::AEMS_Class": {
+   "notes": "3 verify loops PASS (parallel A=12-string byte-exact transcription + array structure/scope + 14 header counts vs DWARF; B=Name(const char*) ctor grow correctness + no-regression + static-init safety; C=sign-off). Gate compiles clean (MSVC). Parity YELLOW: call_count 12 vs 13 (delta 1 < tol 3); MakeHash 'absent' because it is reached via the inlined Name(const char*) ctor (12 Name(\"AEMS_...\") constructions -> 12 MakeHash); the other 'absent' callee is the initializer's own self-symbol. Defines BrnSound::ParameterIndexes::AEMS_Class::gaAEMS_ClassParameterNames[12] (Name) from the 12 AEMS param strings in order; auto-gen home BrnAutoGenAemsParameterIndexes.{h,cpp} declares all 14 sibling arrays (extern) but defines ONLY AEMS_Class (the other 13 are their own static-init TUs). Grew CgsCommon Name home with the public inlined-only Name(const char*) ctor (mHash=MakeHash; DWARF CgsCommon.h:126). HashTable pool zero/constant-init before dynamic init -> static-init-order safe.",
    "status": "done"
   }
  }
