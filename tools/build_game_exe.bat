@@ -10,6 +10,8 @@ set ROOT=%~dp0..
 set SRC=%ROOT%\b5-decomp\src
 set VEN=%ROOT%\b5-decomp\vendor
 set RES=%ROOT%\b5-decomp\res
+rem FFmpeg (movie player VP6/MP4 decode) - built by tools\build_ffmpeg.bat into vendor\ffmpeg-build\.
+set FFM=%ROOT%\b5-decomp\vendor\ffmpeg-build
 rem Game build output lives under build\game\ (build\tools\ holds the tool binaries; see build_tools.ps1).
 set OUT=%ROOT%\build\game
 set RSP=%OUT%\obj\build.rsp
@@ -22,7 +24,7 @@ rc /fo"%OUT%\\obj\\burnout.res" "%RES%\burnout.rc"
 rem ---- build the cl response file ----
 > "%RSP%" (
   echo /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS
-  echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include"
+  echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%FFM%\include"
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareInitPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp"
@@ -79,6 +81,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\pc\gcm\renderengine\device.cpp"
   echo "%SRC%\pc\gcm\renderengine\texture.cpp"
   echo "%SRC%\pc\gcm\renderengine\texturestate.cpp"
+  echo "%SRC%\pc\gcm\movie\MoviePlayer.cpp"
   echo "%SRC%\GameShared\GameClasses\Fonts\CgsFont.cpp"
   echo "%SRC%\GameShared\GameClasses\Fonts\CgsUnicode.cpp"
   echo "%SRC%\GameShared\GameClasses\Fonts\Resources\CgsFontResourceType.cpp"
@@ -89,6 +92,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\RenderWare\CgsRwTextureStateResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\CgsMaterialStateResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceTypeRegistration.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\Resources\CgsVideoDataResource.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceTypeRegistry.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceBundleLoader.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourcePool.cpp"
@@ -101,10 +105,12 @@ rem ---- build the cl response file ----
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
-cl /nologo @"%RSP%" /link /SUBSYSTEM:WINDOWS /MAP "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib winmm.lib shell32.lib ole32.lib
+cl /nologo @"%RSP%" /link /SUBSYSTEM:WINDOWS /MAP /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
 if "%BUILD_ERR%"=="0" if exist "%OUT%\Burnout_PC.map" py "%ROOT%\tools\_make_cgsmap.py" "%OUT%\Burnout_PC.map" "%OUT%\Burnout_PC.cgsmap"
+rem Stage the FFmpeg runtime DLLs next to the exe so the movie player loads at runtime.
+if "%BUILD_ERR%"=="0" copy /Y "%FFM%\bin\*.dll" "%OUT%\" >nul
 
 endlocal & exit /b %BUILD_ERR%
