@@ -7632,6 +7632,15 @@
   "BrnTrigger::TriggerResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "BrnVehicle::GraphicsSpecResourceType::FixDown": {
+   "status": "reviewed"
+  },
+  "BrnVehicle::GraphicsSpecResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "BrnVehicle::GraphicsSpecResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
   "BrnWheel::GraphicsSpecResourceType::FixUp": {
    "status": "reviewed"
   },
@@ -12588,6 +12597,10 @@
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
    "status": "done"
   },
+  "GameShared/GameClasses/Graphics/CgsDepthStencilStateFactory.cpp": {
+   "notes": "Construct @0x827EBBA0 builds saDepthStencilStates[5] by calling renderengine::DepthStencilState::Initialize(descriptor) 5x \u2014 an UNRECONSTRUCTED prerequisite (work flags unresolved-deps=1; the callee is [external/unknown]). The committed PC/GCM backend renderengine::DepthStencilState (pc/gcm/renderengine/renderstates.h:20-23 + DepthStencilState.cpp) only has GetResourceDescriptor (RECOVERED); it has NO Initialize. Construct cannot compile faithfully without it. Adding Initialize here would be an UNFAITHFUL stub in committed render-engine code (the X360 depth-stencil GPU-state creation doesn't map to the PC backend; cf. sibling RasterizerState/TextureState which have their own PC Initialize TUs). BLOCK until renderengine::DepthStencilState::Initialize is reconstructed as its own TU; then Construct (GetResourceDescriptor + 5x Initialize into the static saDepthStencilStates[5], with the per-state CGS_ASSERT(state != null) guards) is straightforward. Prior session already recognized this exact stub issue.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Graphics/CgsRasterizerStateFactory.cpp": {
    "notes": "focused reviewer pass after restoring handle copy, static Initialize wrapper, and assert return semantics",
    "status": "done"
@@ -13120,6 +13133,10 @@
   "GameSource/Director/Camera/BrnCameraEffects.cpp": {
    "status": "done"
   },
+  "GameSource/Director/Camera/BrnCameraValidityAccount.cpp": {
+   "notes": "SetupFailFlagMask @0x82221118 validates + logs the KAAC_FLAG_NAMES[32] flag-name rodata STRING TABLE (extern const char*[32]), but only 1/32 entries is recoverable (the lone strcmp assert KAAC_FLAG_NAMES[CONSISTENCY_TEST]==\"CONSISTENCY TEST\"); the other 31 strings are un-valued rodata in the exports (work flags unresolved-deps=1). The fn reads/iterates the table for runtime StrStream/Log output (off_82F31944/off_82F31940 + AppendFormat) so its behavior is intrinsically tied to the table contents \u2014 cannot reconstruct faithfully without inventing 31 flag-name strings. BLOCK until the KAAC_FLAG_NAMES[32] table is reconstructed as its own data TU (+ the eAccountAssertControl enum); then SetupFailFlagMask (consistency CGS_ASSERT + the per-flag log + byte_82FAA5EC done-flag) is straightforward. Prior session already recognized this exact rodata-table dependency.",
+   "status": "blocked"
+  },
   "GameSource/Director/Camera/Camera.cpp": {
    "status": "done"
   },
@@ -13480,6 +13497,10 @@
   },
   "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentKeyframeResourceType.cpp": {
    "notes": "3 verify loops PASS (fidelity: GetTypeID=0x10012, FixUp version-check polarity/verbatim-msg/+128-offset/unconditional-clear; pattern/scope: mirrors committed ChallengeListResourceType, concrete CgsResource::Type subclass, rw::Resource fwd-decl via base; final sign-off). Gate clean. Parity MILD benign: absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT. Minimal flagged KeyframeResource slice; FixDown/GetSerialisedResourceDescriptor deferred. Path-scoped commit (shared-index race).",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/World/BrnVehicleGraphicsSpecResourceType.cpp": {
+   "notes": "3 verify loops PASS (parallel A=FixUp/FixDown rebase fidelity vs asm, B=GetTypeID+layout+class structure, C=sign-off). Gate compiles clean (MSVC). Parity YELLOW within tolerance (call 9vs7 d2<=3, branch 4vs3 d1<=2, loop 2=2, return 3vs2 d1<=2); the absent BasePriorityQueue::Clear + Assert::Begin/Fire/End are the StrStream version-check-assert machinery collapsed into the simple CGS_ASSERT (committed convention; assert-StrStream parity is benign). Clean resource-type sibling of BrnWheelGraphicsSpecResourceType. GetTypeID=65542(0x10006); FixUp version-check(==3, byte-exact msg, no baked line 374)+rebase {+8,+16,+20,+28,+32,array,+24-last} via += GetLoadBase; FixDown the inverse -= (mpField6 first, +28/mpField7 per-entry guard verbatim, mpArray deref-before-unrebase); +0/+12 untouched; void returns. Minimal-slice GraphicsSpec (inferred names, only relocation layout) FLAGged; PointerFromU32 mirrors VehicleList. GetSerialisedResourceDescriptor + true field semantics deferred.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/World/BrnWheelGraphicsSpecResourceType.cpp": {
