@@ -11913,6 +11913,12 @@
   "ICE::ICEMath::StringPrintf": {
    "status": "reviewed"
   },
+  "ICE::ICEMemory::Construct": {
+   "status": "reviewed"
+  },
+  "ICE::ICEMemory::GetMemory": {
+   "status": "reviewed"
+  },
   "ICE::ICEParameter::SetValue": {
    "status": "reviewed"
   },
@@ -13436,6 +13442,10 @@
   "GameSource/Network/Messages/BrnCameraStatusMessage.h": {
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnRoadRulesPersonalBestMessage.cpp": {
+   "notes": "RoadRulesPersonalBestMessage : public CgsNetwork::ReliableMessage is a POLYMORPHIC derived network message (virtual GetPackedMessageSize @0x8257B998 + PackOrUnpack @0x8257BA28; Construct @0x8257B988 calls Message::Construct, GetPackedMessageSize calls TestConnectionMessage::GetPackedMessageSize, PackOrUnpack calls ReliableMessage::PackOrUnpack). BLOCKER: the CgsNetwork message base hierarchy (Message / ReliableMessage / TestConnectionMessage) has committed .cpp BODIES (CgsReliableMessage.cpp / CgsTestConnectionMessage.cpp) but NO committed HEADERS to derive from -- a polymorphic derived class needs the full base vtable+member layout (can't fork it ad-hoc without an ODR/vtable mismatch vs the committed bodies). Also sub_82881370 (the ranged bit-stream pack/unpack helper used for maiScores[2]/mChallengeIndex/miStreetDataVersion with the dword_820A764C/dword_820A7654 per-score-type min/max range tables) is UNIDENTIFIED (no recovered name; likely SmartBitStream::PackOrUnpackRangedInt), and the score-range tables' values are external. Construct is trivial (maiScores=-1 + base Construct) but shares the TU. BLOCK until the CgsNetwork message base-class hierarchy is reconstructed as headers (Message/ReliableMessage/TestConnectionMessage) + sub_82881370/the range tables are resolved.",
+   "status": "blocked"
+  },
   "GameSource/Network/Utilities/BrnNetworkRounder.cpp": {
    "status": "done"
   },
@@ -13492,6 +13502,10 @@
   },
   "GameSource/Unity/../../SharedClasses/DataLists/ICEList.cpp": {
    "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/DataLists/VehicleList.cpp": {
+   "notes": "Construct @0x82677850 is the prior-recognized large SKU vehicle table builder: a CgsSystem::HardwareSku::GetSku() switch where each SKU case marks per-vehicle availability in the EXTERNAL global table byte_82FFB298 (12 entries x 16 bytes) by CgsIDCompress'ing hardcoded vehicle-name strings (PSPBEST/PSPCIR/PSPGAS/PSPMETL/PSPWAL/PSPBZ/... recoverable) and setting the matching entry's flag. BLOCKER: byte_82FFB298's vehicle-ID ENTRIES are NOT defined in this TU (the loop only reads entry.mId and sets entry.mbAvailable) -- the 12 vehicle CgsIDs come from an external global/rodata table not in the repo exports; plus Hex-Rays byte*-type-confusion on the 16-byte entry layout (*(v9-1) compares a byte to a u32 CgsID) obscures the exact struct. Reconstructing Construct faithfully needs byte_82FFB298's owning data table reconstructed first (+ its entry type). Destruct @0x82677CC0 (32 ResourcePtr resets, the clean ChallengeList/WheelList pattern) is trivial but shares the TU. Prior session already recognized + avoided this exact VehicleList SKU table. Revisit after the byte_82FFB298 vehicle-availability table TU lands.",
+   "status": "blocked"
   },
   "GameSource/Unity/../../SharedClasses/DataLists/VehicleListResourceType.cpp": {
    "status": "done"
@@ -13929,6 +13943,9 @@
    "status": "done"
   },
   "SDKs/Packages/ICE/ICEMath.cpp": {
+   "status": "done"
+  },
+  "SDKs/Packages/ICE/ICEMemory.cpp": {
    "status": "done"
   },
   "SDKs/Packages/ICE/ICEPoint.cpp": {
