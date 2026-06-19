@@ -9756,6 +9756,9 @@
   "CgsMemory::MemoryIO::OutputBuffer::Destruct": {
    "status": "reviewed"
   },
+  "CgsMemory::MemoryMap::FixUp": {
+   "status": "reviewed"
+  },
   "CgsMemory::MemoryModule::AllocateIntoBank": {
    "status": "reviewed"
   },
@@ -12538,6 +12541,10 @@
    "status": "done"
   },
   "GameShared/GameClasses/Memory/CgsLinearMalloc.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Memory/MemoryMap/CgsMemoryMap.cpp": {
+   "notes": "3 verify loops (loop1 caught __LINE__ vs baked-43: committed StrStream-triad convention = relative baked path + literal X360 line; fixed; loop3 sign-off PASS). Gate clean. Parity CLEAN: branch_count exact 8/8 (7 reloc ifs + version if), call within tol; only absent callee BasePriorityQueue::Clear (assert-buffer init folded into the StrStream idiom). FixUp: version StrStream-triad assert + 7-ptr GetLoadBase relocation (null-stays-null). New home CgsMemoryMap.h DWARF-faithful. Minor: GetRootBank decl deferred to its own TU.",
    "status": "done"
   },
   "GameShared/GameClasses/Module/CgsBaseEventQueue.h": {
