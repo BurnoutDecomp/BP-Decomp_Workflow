@@ -3444,6 +3444,15 @@
   "BrnGui::BlackBarRenderer::RecvEvent": {
    "status": "reviewed"
   },
+  "BrnGui::BoostBarRenderer::BoostBarRenderer": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostBarRenderer::GetInnerBoostBarColour": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostBarRenderer::GetOuterBoostBarColour": {
+   "status": "reviewed"
+  },
   "BrnGui::BoostBarRenderer::RenderBillboardBar": {
    "status": "reviewed"
   },
@@ -14079,6 +14088,10 @@
    "status": "done"
   },
   "class:BrnGameState::TriggerQueryManager": {
+   "status": "done"
+  },
+  "class:BrnGui::BoostBarRenderer": {
+   "notes": "4 verify loops (loop1A getters+pattern PASS, loop1B ctor FAIL on phantom default-ptr gap writes -> FIXED to 4x5 gap-aware groups, loop2 re-verify PASS, loop3 sign-off PASS). Gate compiles clean (MSVC, no warnings). CrashNavIcon-style minimal-slice reconstruction of a ~53KB renderer (named members, no base, ~15 uncommitted member types FLAG-omitted). Parity RED explained: call_count/branch_count deltas = the Assert Begin/Fire/End triad hidden in the CGS_ASSERT macro (2 getter asserts); loop_count 7-vs-1 = DELIBERATE re-rolling of the compiler-unrolled float/pointer/zero writes into clean loops (the established sibling-renderer pattern, e.g. BrnCrashNavIconRenderer); ctor returns void vs X360 result. ctor @0x827DF4F0: 11x -FLT_MAX/1x +FLT_MAX/3x 0.0f sentinels, vtable, 4x5 default-ptr groups (back_chain@+1560=0, gaps skipped), 9x5 zero band, 6x billboard clear, trailing -1; colour arrays/boostType faithfully left uninit. getters @0x824EC750/0x824EC7D0 (non-const per DWARF h:843/846): CGS_ASSERT boostType valid + return indexed Vector3 (inner +5 / outer +2 arrays). Rest of class deferred (grow-in-place later).",
    "status": "done"
   },
   "class:BrnGui::CrashNavIconRenderer": {
