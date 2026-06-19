@@ -11904,6 +11904,9 @@
   "ICE::CameraSpaceHandler::GetTransformToWorld": {
    "status": "reviewed"
   },
+  "ICE::CameraSpaceHandler::TransformToWorld": {
+   "status": "reviewed"
+  },
   "ICE::CameraSpaceHandler::operator=": {
    "status": "reviewed"
   },
@@ -12800,6 +12803,10 @@
   "GameShared/GameClasses/Graphics/Instances/CgsInstanceListResourceType.cpp": {
    "notes": "3 verify loops (loop1: verifierB PASS GetTypeID/FixDown/mirror/class; verifierA FAIL on layout-fidelity -> FIXED; loop2 re-verify PASS; loop3 sign-off PASS). Gate compiles clean (MSVC) incl. 4 static_asserts locking the X360 layout. Parity RED explained: absent Assert::Begin/Fire/End = CGS_ASSERT macro; absent CgsGraphics::InstanceList::FixDown is PRESENT as the ->FixDown() member call (regex misses qualified free-name); cpp call_count HIGHER (25 vs 20) from the PointerFromU32/GetModel/GetNumLods/GetLodRadius accessor wrappers + static_assert/offsetof expansions; loop 1=1. GetTypeID=35(0x23); FixDown delegates to committed InstanceList::FixDown(GetLoadBase) void; PostFixUp walks muArraySize instances (stride 80), per-instance 3 model-validation CGS_ASSERTs (lpModel/GetNumLods>0/Invalid LOD index, no baked lines) + mfLodRadiusSquared(+12)=GetLodRadius(numLods-1)^2. LAYOUT-FIDELITY FIX: on-disk pointers modelled u32+PointerFromU32 (VehicleList/CgsInstance convention), static_asserts lock sizeof(Instance)==80 + mfLodRadiusSquared@+12 + model muLodRadii@+0x20 + muNumLods@+0x48. InstanceList TU-local mirror byte-identical to committed CgsInstance.cpp (FixDown links). Minimal-slice Instance/CgsModel FLAGged; FixUp + other virtuals deferred (non-pure base concrete).",
    "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/Resources/CgsShaderTechniqueResourceType.cpp": {
+   "notes": "PostFixUp @0x827EEBF0 BLOCKS the TU: it parses the shader-technique name string (a2[37]) against an UN-VALUED 8-entry rodata string table off_82F30F78 (the shader-profile names) via strstr in a stride-2 loop, then writes a code from the parallel table dword_82F30F7C (*a2[37] = code+48) -- neither off_82F30F78's 8 strings nor dword_82F30F7C's codes are in the repo exports (un-recoverable rodata) -- AND it calls an UNIDENTIFIED helper sub_827ED8D0(u32*, int) 4x (at a2+7/+11/+20/+24, semantics unknown), plus a block of char-flag logic over a2[7]/a2[8]. GetTypeID @0x827E9C28 (=50/0x32) is trivial and FixUp @0x827EEB30 delegates to the committed ShaderConstantsInternal/External::FixUp + ShaderConstantHashTable::FixUp (CgsShaderConstants.cpp/CgsShaderConstantHashTable.cpp) + rebases the +140/+144/+148 hash array -- BUT the X360 Internal::FixUp(a2+8,*a3) 2-arg form may not match the committed overloads (Internal::FixUp(ProgramBuffer*, ShaderConstantHashTable*)), needs reconciliation. GetImportPointer @0x827E9D00 also shares the TU. BLOCK until off_82F30F78/dword_82F30F7C (shader-profile name+code tables) + sub_827ED8D0 are resolved and the ShaderConstants FixUp overload signatures reconciled.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Graphics/Resources/CgsVideoDataResource.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
@@ -14052,6 +14059,9 @@
   },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/attribsys.h": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
+  "SDKs/Packages/ICE/ICECameraSpaceHandler.cpp": {
    "status": "done"
   },
   "SDKs/Packages/ICE/ICEData.cpp": {
