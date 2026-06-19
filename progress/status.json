@@ -4884,6 +4884,21 @@
   "BrnHW::operator++": {
    "status": "reviewed"
   },
+  "BrnMath::Flatten": {
+   "status": "reviewed"
+  },
+  "BrnMath::IsNormal": {
+   "status": "reviewed"
+  },
+  "BrnMath::Magnitude2D": {
+   "status": "reviewed"
+  },
+  "BrnMath::MagnitudeSquared2D": {
+   "status": "reviewed"
+  },
+  "BrnMath::RoundWithNumSignificantFigures": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkManager::Construct": {
    "status": "reviewed"
   },
@@ -14187,6 +14202,10 @@
   },
   "class:BrnHW": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
+   "status": "done"
+  },
+  "class:BrnMath": {
+   "notes": "3 verify loops PASS (parallel A=4 vector fns math-correctness, B=RoundWith+overall, C=sign-off). Gate compiles clean (MSVC). Parity near-exact: call_count 17=17, loop_count 1=1, return_count 5=5; branch_count 10-vs-2 = the inlined 3-lane vspltw/vcmpeqfp IsValid NaN cascade (3 nested branches x 3 fns) collapsed into single CGS_ASSERT(rw::math::vpu::IsValid()) calls; absent Assert::Begin/Fire/End are inside the CGS_ASSERT macro. Semantic-parity VMX->portable (SIMD artifacts dropped, BrnTrafficLightTrigger precedent). Flatten=Vector2{x,z} (XZ flatten), IsNormal=fabs(Magnitude-1)<=0.01 (EXECUTED; correct sense, magnitude not mag2), Magnitude2D=sqrt(x2+z2), MagnitudeSquared2D=x2+z2 (lanes X,Z verified), RoundWith=round-to-N-sig-figs with sub_82C09970 CONFIRMED libm pow (disassembly: _decomp/_powhlp/exp-range) -> pow(10,numFigs) threshold + scale-loop + round-half + sign(value==0->0), s32(f32,f32) per DWARF. Inferred rodata constants (Flatten lane mask, IsNormal eps, RoundWith floats) FLAGged. IsNormal(Vector2) overload deferred (own TU).",
    "status": "done"
   },
   "class:BrnNetwork::BrnNetworkModuleIO": {
