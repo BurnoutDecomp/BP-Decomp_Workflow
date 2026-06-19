@@ -11223,6 +11223,18 @@
   "CgsResource::RwShaderParameterResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "CgsResource::RwTextureStateResourceType::DebugValidate": {
+   "status": "reviewed"
+  },
+  "CgsResource::RwTextureStateResourceType::FixDown": {
+   "status": "reviewed"
+  },
+  "CgsResource::RwTextureStateResourceType::GetImportPointer": {
+   "status": "reviewed"
+  },
+  "CgsResource::RwTextureStateResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
   "CgsResource::RwVertexDescResourceType::FixUp": {
    "status": "reviewed"
   },
@@ -13029,6 +13041,10 @@
   },
   "GameShared/GameClasses/RenderWare/PS3/materialstates/CgsRwShaderParameterResourceTypePS3.cpp": {
    "notes": "Review passed: FixDown/FixUp relocations and byte offset arithmetic are correct.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/RenderWare/PS3/materialstates/CgsRwTextureStateResourceTypePS3.cpp": {
+   "notes": "3 verify loops PASS (parallel A=DebugValidate+GetImportPointer asm fidelity, B=GetTypeID+FixDown+class structure, C=sign-off). Gate compiles clean (MSVC, no warnings). Parity near-exact: branch 1=1, loop 0=0, return 3=3; call 11->5 = the single DebugValidate assert's BasePriorityQueue::Clear + Assert::Begin/Fire/End collapsed into CGS_ASSERT (the 4 absent callees). Sibling of committed CgsRwShaderParameterResourceTypePS3 (PS3 materialstates family). GetTypeID=14(0x0E); FixDown=empty no-op (X360 STUB, texture state has no relocatable pointers); GetImportPointer reports the 1 texture import (*lpuOffset=32, *lppValue=*(lpResource+32)); DebugValidate asserts the +32 texture handle != -1 (0xFFFFFFFF, 'Texture state has invalid texture value', byte-exact, no baked line) returning bool. Raw-offset uintptr_t-widened; +32 read consistent across GetImportPointer+DebugValidate. Overrides only the 4; rest inherited from non-pure base. No fabricated ctor/Register.",
    "status": "done"
   },
   "GameShared/GameClasses/RenderWare/cross/CgsClusteredMeshResourceType.cpp": {
