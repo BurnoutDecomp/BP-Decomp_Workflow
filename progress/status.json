@@ -11199,7 +11199,19 @@
   "CgsResource::RwMaterialCRC32ResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "CgsResource::RwRenderableResourceType::DebugValidate": {
+   "status": "reviewed"
+  },
+  "CgsResource::RwRenderableResourceType::FixDown": {
+   "status": "reviewed"
+  },
   "CgsResource::RwRenderableResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "CgsResource::RwRenderableResourceType::GetImportPointer": {
+   "status": "reviewed"
+  },
+  "CgsResource::RwRenderableResourceType::GetTypeID": {
    "status": "reviewed"
   },
   "CgsResource::RwShaderParameterResourceType::FixDown": {
@@ -13026,6 +13038,10 @@
   },
   "GameShared/GameClasses/RenderWare/cross/CgsModelResourceType.cpp": {
    "notes": "Review passed: FixDown/GetImportCount/GetImportPointer 16-bit counts, GetSerialisedResourceDescriptor descriptor size calculations are correct.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/RenderWare/cross/CgsRwRenderableResourceType.cpp": {
+   "notes": "3 verify loops PASS (parallel A=DebugValidate asm fidelity, B=GetTypeID+stubs+class structure, C=sign-off). Gate compiles clean (MSVC, no warnings after the uintptr_t C4312 fix). Parity RED explained: loop 1=1 exact, branch/return within +-1; call 18->8 = the 4 asserts' Begin/Fire/End StrStream machinery collapsed into CGS_ASSERT (the 3 absent callees). Sibling of committed CgsClusteredMeshResourceType (raw-offset rw-serialised-blob style). GetTypeID=12(0x0C); FixDown=CGS_ASSERT(false,'Dont call this function at runtime'); GetImportPointer (4-arg base sig)=CGS_ASSERT(false,'Should not be called at runtime'); DebugValidate=raw-offset mesh/material-assembly walk (numMeshes@+72, meshArray@+80, mesh+32 assembly, assembly+8 empty->'Mesh material assembly is empty', **assembly NULL->'Material assembly contains a NULL material', all-pass->true) \u2014 offsets/derefs/control-flow asm-verified, break-then-assert flattened equivalently, byte-exact messages no baked lines. Overrides only the 4; rest inherited from non-pure base. No fabricated ctor/Register.",
    "status": "done"
   },
   "GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp": {
