@@ -6819,6 +6819,18 @@
   "BrnReplays::DiskReadStream::OnRead": {
    "status": "reviewed"
   },
+  "BrnReplays::EffectsSerialiser::Construct": {
+   "status": "reviewed"
+  },
+  "BrnReplays::EffectsSerialiser::GetStaticLayout": {
+   "status": "reviewed"
+  },
+  "BrnReplays::EffectsSerialiser::Read": {
+   "status": "reviewed"
+  },
+  "BrnReplays::EffectsSerialiser::Write": {
+   "status": "reviewed"
+  },
   "BrnReplays::GameModuleSerialiser::Construct": {
    "status": "reviewed"
   },
@@ -14178,6 +14190,10 @@
    "status": "done"
   },
   "class:BrnProgression::ProgressionData": {
+   "status": "done"
+  },
+  "class:BrnReplays::EffectsSerialiser": {
+   "notes": "3 verify loops PASS (9-EMode-value mode-cascade truth table proving cascade==switch, fidelity/precedent-consistency, final sign-off). Gate clean. Parity 'gross' is benign: absent callees = (a) assert machinery folded into CGS_ASSERT, (b) BaseSerialiser::Construct/Lock/Unlock/Read/Write which ARE called in-code but are declare-only (defined in BaseSerialiser's own TU) so the matcher doesn't resolve them. Mirrors committed sibling serialiser precedent; reconcile the local BaseSerialiser slice when its TU lands.",
    "status": "done"
   },
   "class:BrnReplays::GuiModuleAboveCarObjectLayout": {
