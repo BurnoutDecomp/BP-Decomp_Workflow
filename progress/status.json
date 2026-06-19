@@ -12126,6 +12126,9 @@
   "ICE::ICETakeData>::iterator::oper": {
    "status": "reviewed"
   },
+  "ICE::ICEWidgetIcon::Render": {
+   "status": "reviewed"
+  },
   "ICE::InitICEDescriptions": {
    "status": "reviewed"
   },
@@ -13016,6 +13019,10 @@
   "GameShared/GameClasses/Network/Packeting/Messages/CgsHostKeepAliveMessage.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/Network/Packeting/Messages/CgsMessage.cpp": {
+   "notes": "3 of 4 fns are clean (Construct=trivial field init; PackOrUnpackBuffer=SmartBitStream::AddRawData/GetRawData, now committed; GetVectorFromAngles=sin/cos+VMX math). BLOCKER: PackOrUnpack @0x82880F50 delegates its substance to the UNCOMMITTED CgsNetwork::IntQuantiser subsystem -- pack path calls IntQuantiser::Pack(value,min,max,out,&bits) then BitStream::AddBits; unpack path calls sub_828800F0(this+8,...) which is the symmetric quantised-int UNPACK (unnamed in the XEX, identity uncertain -- likely IntQuantiser::Unpack). IntQuantiser has no committed home; reconstructing PackOrUnpack would require fabricating the IntQuantiser Pack/Unpack signatures + guessing sub_828800F0's identity (unfaithful-stub risk). BLOCK until CgsIntQuantiser (Pack/Unpack) lands; this TU then only needs extern decls. Note GetVectorFromAngles is also register-mangled (sin/cos+lvx128/vmulfp128) and will need the angle->vector formula recovered.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsNewHostMessage.cpp": {
    "status": "done"
   },
@@ -13145,6 +13152,10 @@
   },
   "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.h": {
    "status": "done"
+  },
+  "GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeper.cpp": {
+   "notes": "Clear=memset (clean), but the other 3 fns delegate to the UNCOMMITTED CgsSceneManager::IntervalList subsystem: Prepare->IntervalList::Prepare; SortLists->std::_Sort<Interval*> + IntervalList::AddSentinelInterval + IntervalList::RepairMappings; SweepLists->IntervalList::SweepIntervals + IntervalList::SweepAgainstList. IntervalList has NO committed home (grep: zero hits) and the SceneSweeper holds IntervalList members it sorts/sweeps. BLOCK until the IntervalList class (Prepare/AddSentinelInterval/RepairMappings/SweepIntervals/SweepAgainstList + Interval layout) lands.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeperDebugComponent.h": {
    "notes": "trivial / original source match; gate-only",
@@ -15123,6 +15134,9 @@
    "status": "done"
   },
   "class:ICE::ICETakeData>::iterator": {
+   "status": "done"
+  },
+  "class:ICE::ICEWidgetIcon": {
    "status": "done"
   },
   "class:ObjectIndex": {
