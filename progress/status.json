@@ -5592,6 +5592,21 @@
   "BrnParticle::TextureNameMapResourceType::Serialise": {
    "status": "reviewed"
   },
+  "BrnParticle::VFXPropCollectionResourceType::DeSerialise": {
+   "status": "reviewed"
+  },
+  "BrnParticle::VFXPropCollectionResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "BrnParticle::VFXPropCollectionResourceType::GetImportPointer": {
+   "status": "reviewed"
+  },
+  "BrnParticle::VFXPropCollectionResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
+  "BrnParticle::VFXPropCollectionResourceType::Serialise": {
+   "status": "reviewed"
+  },
   "BrnPhysics::ContactSpy::ContactSpyData::Construct": {
    "status": "reviewed"
   },
@@ -13663,6 +13678,10 @@
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/Graphics/TextureNameMapResourceType.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/Graphics/VFXPropsResourceType.cpp": {
+   "notes": "Behavioral parity verified line-by-line against X360 pseudocode (FixUp strides/offsets/bounds/order/sentinels all match); compile gate clean (cl /c exit 0, zero warnings, uintptr_t-clean); no fabrication (exactly the 5 dossier fns); DoOnPostLoad fold handled per precedent with internal linkage to avoid LNK2005.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/Massive/Resources/MassiveLookupTableResourceType.cpp": {
