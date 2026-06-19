@@ -12144,6 +12144,9 @@
   "ICE::ICEWidgetIcon::Render": {
    "status": "reviewed"
   },
+  "ICE::ICEWidgetLogo::Render": {
+   "status": "reviewed"
+  },
   "ICE::InitICEDescriptions": {
    "status": "reviewed"
   },
@@ -12875,6 +12878,10 @@
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
    "status": "done"
   },
+  "GameShared/GameClasses/Graphics/Dispatch/shadowingdevice.cpp": {
+   "notes": "shadow::Device : public renderengine::Device. Initialize delegates to renderengine::Device::Initialize (uncommitted base) and GetVertexProgramState calls renderengine::VertexProgramState::InitializeNoBindX360 (UNCOMMITTED -- grep: zero hits for VertexProgramState/InitializeNoBindX360). The renderengine Device + VertexProgramState rendering-backend subsystem has no committed home; shadow::Device can't be declared/compiled without its base + the VertexProgramState type. BLOCK until the renderengine::Device base + VertexProgramState land.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Graphics/Font/CgsFontRenderer.cpp": {
    "status": "done"
   },
@@ -12961,6 +12968,10 @@
   },
   "GameShared/GameClasses/Language/CgsLanguageManager.cpp": {
    "status": "done"
+  },
+  "GameShared/GameClasses/Language/CgsSku.cpp": {
+   "notes": "CgsLanguage::Sku: 4 fns clean (Construct=field init+assert; SetLanguage/SetSku=field setters; FindLanguage/FindSku delegate to committed CgsSystem::HardwareSku). BLOCKER: Update @0x828662B8 depends on the UNCOMMITTED CgsGui module-IO subsystem -- CgsGui::ModelIO::InputBuffer::AddResourceRequests + CgsGui::CgsGuiModuleIO::OutputBuffer::AddGuiOutEvent<CgsGui::GuiEventSetSku> + AddGuiOutEvent<CgsGui::GuiEventSetLanguageNotification> (grep: zero hits for AddResourceRequests/AddGuiOutEvent/those event types) -- AND un-valued rodata tables byte_820E5DD0 (32B-stride language-name strings) + unk_820E5AD0 (32B-stride resource descriptors) whose VALUES drive the AddResourceRequests/HashString calls. All 6 fns share one .cpp, so Update blocks the TU. BLOCK until CgsGui ModelIO::InputBuffer + CgsGuiModuleIO::OutputBuffer::AddGuiOutEvent<> + the GuiEvent types + the two rodata tables land.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Language/Resources/CgsLanguageResourceType.cpp": {
    "notes": "3 verify loops PASS (parallel A=GetTypeID/FixUp/FixDown asm fidelity, B=GetSerialisedResourceDescriptor+layout+scope, C=sign-off). Gate compiles clean (MSVC); committed CgsUnicode.cpp still compiles after the additive ByteLength-decl grow. Parity RED explained: the 3 absent Assert::Begin/Fire/End are the 4 asserts' StrStream machinery collapsed into CGS_ASSERT (call 22->11, branch 6->3); loop_count 4-vs-3 = my re-rolled descriptor block-fill (X360 unrolled the 5 blocks); return delta = EndAssert paths. CONDUCTOR CLEANUP: removed the recon's fabricated ctor + RegisterLanguageResourceType()/TypeRegistry::Register (NOT in the TU's 4 functions) \u2014 grep-confirmed gone. GetTypeID=39(0x27); FixUp rebase mpEntries(+8)-then-per-entry-mpString(+4) +=; FixDown inverse -= (entries then mpEntries-after-loop); per-entry assert tests the DELTA not the entry (no baked lines); GetSerialisedResourceDescriptor = null-assert + size 12+Sum(CgsUnicode::ByteLength(string)+9), BaseResourceDescriptors<5> block0={size,1} blocks1-4={0,1} (CgsFontResourceType precedent). CgsUnicode::ByteLength grown into CgsUnicode.h (canonical home, decl-only, body=own TU). Minimal-slice LanguageResource/Entry (DWARF/inferred names) FLAGged. Rest of base virtuals deferred.",
@@ -13420,6 +13431,10 @@
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateAttractMode.cpp": {
    "notes": "BrnDirector::ArbStateAttractMode : public BrnDirector::ArbitratorState is a POLYMORPHIC Director-arbitrator FSM state (virtual Construct/Prepare/Update/Release/Destruct/GetName; Update is a vtable-driven EState machine). BLOCKER: the ArbitratorState base is UNCOMMITTED (no committed home to derive from \u2014 a polymorphic derived class needs its full vtable+member layout), PLUS the member BehaviourHandle<BrnDirector::Camera::BehaviourRoadRunner> (uncommitted template + uncommitted BehaviourRoadRunner camera-behaviour), the method param type BrnDirector::ArbStateSharedInfo (uncommitted), and BrnDirector::Camera::BehaviourManager (UnSetBehaviourUsedByHandle / CheckNoBehavioursAreAllocatedByState \u2014 uncommitted), and an unidentified sub_821FDC58 in Update. GetName ('ArbStateAttractMode') is trivial + Construct (BehaviourHandle camera Construct + field zeroing) is simple but they share the TU. BLOCK until the Director Arbitrator state subsystem (ArbitratorState base + ArbStateSharedInfo + BehaviourHandle/BehaviourManager/BehaviourRoadRunner camera-behaviour family) is reconstructed. The sibling BrnArbStateDriveThru/RenderMetrics TUs share this exact dependency.",
+   "status": "blocked"
+  },
+  "GameSource/Director/Arbitrator/States/BrnArbStateDriveThru.cpp": {
+   "notes": "BrnDirector::ArbStateDriveThru (an arbitrator state). Deeply entangled with UNCOMMITTED subsystems (grep: zero hits for ArbState base / BehaviourManager / ArbUtils::ChangeToState): Construct->Camera::Camera::Construct; Prepare->Camera::BehaviourManager::NewBehaviour + Attrib::Gen::shotgroup::Num_ShotList + sub_821F0E50(unknown); Release->BehaviourManager::UnSetBehaviourUsedByHandle + CheckNoBehavioursAreAllocatedByState; Update->ArbUtils::ChangeToState<ArbStateDriveThru::EState> + Camera::EnsureEffectIsPlaying + sub_821FCE10/sub_821FCDA8(unknown). The Director Camera/BehaviourManager + ArbUtils state-machine + the ArbState polymorphic base must be reconstructed first. BLOCK until those Director subsystems land.",
    "status": "blocked"
   },
   "GameSource/Director/BrnDirectorResourceManager.cpp": {
@@ -14133,6 +14148,10 @@
   "GameSource/Unity/../World/DebugComponents/BrnPVSDebugComponent.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarBaseComponentStreamer.cpp": {
+   "notes": "BrnWorld::RaceCarBaseComponentStreamer : public InternalBaseStreamer (UNCOMMITTED base -- grep: zero hits for InternalBaseStreamer/BaseComponentStreamer). Construct delegates to InternalBaseStreamer::Construct; OnLoadComplete/OnUnloadBegin are register-mangled ('local variable allocation has failed, the output may be wrong!') AND call unidentified sub_821F0EC8 / sub_821F0E50 (external/unknown) + purecall (pure-virtual dispatch through the uncommitted base vtable). The InternalBaseStreamer polymorphic base + the two sub_ callees must be reconstructed first. BLOCK until InternalBaseStreamer (vtable + Construct + the load/unload callees) lands.",
+   "status": "blocked"
+  },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/CrashPlay/BrnCrashPlayDebugComponent.cpp": {
    "notes": "batch review pass: Claude sonnet medium; parity RED due assert abstraction and X360-vs-Feb2007 drift reviewed",
    "status": "done"
@@ -14233,6 +14252,10 @@
   "SharedClasses/Graphics/BrnEffectsData.h": {
    "notes": "batch re-review pass after explicit constructor defaults",
    "status": "done"
+  },
+  "SharedClasses/Gui/Flapt/BrnFlaptFileResourceType.cpp": {
+   "notes": "BrnFlapt::FlaptFileResourceType : public CgsResource::Type (type id 65568/0x10020). 4 fns self-contained (GetTypeID=65568; GetImportCount=a2[5]-a2[18]; GetImportPointer=raw-offset import walk; GetSerialisedResourceDescriptor). BLOCKER: FixUp @0x82471618 -> BrnFlapt::FlaptFile::FixUp(resource) and FixDown @0x82471610 -> BrnFlapt::FlaptFile::FixDown(resource) delegate to the UNCOMMITTED BrnFlapt::FlaptFile class (grep: zero hits for class FlaptFile / FlaptFile::FixUp/FixDown -- only BrnFlapt::FileRef, a handle, is committed). Same shape as the blocked BrnPropGraphicsListResourceType: reconstructing the wrapper would require fabricating the FlaptFile class (the on-disk 0x10020 movie file) header + FixUp/FixDown signatures, a fork against the real FlaptFile TU. BLOCK until BrnFlapt::FlaptFile (FixUp/FixDown + layout) lands; the wrapper is then ~12 lines.",
+   "status": "blocked"
   },
   "SharedClasses/Gui/SatNav/Resources/BrnSatNavTileResourceType.cpp": {
    "notes": "trivial; compile-gate-only per review.config selection_guidance (constant/forwarder/relocation/accessor patterns, self-checked)",
@@ -15156,6 +15179,9 @@
    "status": "done"
   },
   "class:ICE::ICEWidgetIcon": {
+   "status": "done"
+  },
+  "class:ICE::ICEWidgetLogo": {
    "status": "done"
   },
   "class:ObjectIndex": {
