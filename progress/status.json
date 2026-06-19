@@ -7038,6 +7038,15 @@
   "BrnResource::VehicleListResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "BrnResource::WheelList::AddListResource": {
+   "status": "reviewed"
+  },
+  "BrnResource::WheelList::Construct": {
+   "status": "reviewed"
+  },
+  "BrnResource::WheelList::Destruct": {
+   "status": "reviewed"
+  },
   "BrnResource::WheelListResourceType::FixUp": {
    "status": "reviewed"
   },
@@ -13485,6 +13494,10 @@
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/DataLists/VehicleListResourceType.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/DataLists/WheelList.cpp": {
+   "notes": "3 verify loops PASS (parallel A=Construct/Destruct vs ChallengeList+asm, B=AddListResource detailed asm-offset analysis, C=sign-off). Gate compiles clean (MSVC). Parity RED fully explained: loop_count 4=4 exact; the 5 absent callees are the two assert StrStream triads (BasePriorityQueue::Clear + Assert::Begin/Fire/End collapsed into CGS_ASSERT) and BaseResourcePtr::CreateFromHandle (restored as the public ResourcePtr operator=, the committed ChallengeList convention); call/branch/return deltas trace to that macro collapse + the inlined-CreateFromHandle-as-operator= + void returns (X360 result = fastcall artifact). Direct ChallengeList sibling: Construct @0x82677DB8 (32 ResourcePtr resets + 256 WheelSlot inits {mbBought=0,miListIndex=-1,miEntryIndex=-1} + miCount/miListCount=0; KI_MAX_WHEELS=256 not 1000); Destruct @0x82677E30 (32 resets); AddListResource @0x8267BFC0 (assert miListCount<32 'No space for more wheel lists' + numWheels+miCount<=256 'Not enough space for that many more wheels', byte-exact no baked lines 63/64; store maStaticDataLists[miListCount]=lrResource; wheel loop ordinal->miEntryIndex@+8, miListCount->miListIndex@+4 asm-verified, mbBought untouched; ++miCount/++miListCount). Layout DWARF-confirmed; skInvalidHandle + WheelListResource minimal-slice GetNumWheels (inferred name) FLAGged; rest of accessors + real WheelListResource deferred.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/DataLists/WheelListResourceType.cpp": {
