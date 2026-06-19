@@ -7830,6 +7830,15 @@
   "BrnWorld::EnvironmentSettings::ScatteringData::Construct": {
    "status": "reviewed"
   },
+  "BrnWorld::EnvironmentSettings::TimeLineResourceType::FixDown": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::TimeLineResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::TimeLineResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
   "BrnWorld::InternalBaseStreamer::Construct": {
    "status": "reviewed"
   },
@@ -12570,6 +12579,10 @@
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsWindow.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Development/DebugSystem/Core/UI/Console/CgsConsole.cpp": {
+   "notes": "CgsDev::DebugUI::Console : public LogWindow is a POLYMORPHIC derived debug-UI class (virtual Update). BLOCKER: the LogWindow base is UNCOMMITTED (no header/.cpp to derive from) -- Construct @0x8282E6B0 touches base-layout fields the DWARF doesn't cleanly name (char48/dword44/byte49-5E/float4C-50 etc., almost all in the LogWindow base, accessed by raw offset) so the derived class can't be laid out faithfully without LogWindow; same missing-polymorphic-base-header class as the RoadRules message block. ALSO Update @0x8282FC68 carries the IDA 'local variable allocation has failed, the output may be wrong!' warning (unreliable pseudocode -> asm-level reconstruction needed) and is a large debug-UI render/input function reading the mpInstance DebugManager singleton + font metrics. Construct (executed; sets visibility/scroll fields + the gpConsole-ish state) + ToggleShow @0x828292A0 are simpler but share the TU. BLOCK until the LogWindow base class (+ the debug-UI text/render base subsystem) is reconstructed; then Console derives cleanly + Update reconstructs from asm. Debug-only UI, not gameplay-critical.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/Functions/CgsFunctionManager.cpp": {
    "status": "done"
   },
@@ -13600,6 +13613,10 @@
    "notes": "3 verify loops PASS (fidelity: GetTypeID=0x10012, FixUp version-check polarity/verbatim-msg/+128-offset/unconditional-clear; pattern/scope: mirrors committed ChallengeListResourceType, concrete CgsResource::Type subclass, rw::Resource fwd-decl via base; final sign-off). Gate clean. Parity MILD benign: absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT. Minimal flagged KeyframeResource slice; FixDown/GetSerialisedResourceDescriptor deferred. Path-scoped commit (shared-index race).",
    "status": "done"
   },
+  "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentTimeLineResourceType.cpp": {
+   "notes": "3 verify loops PASS (parallel A=FixUp/FixDown asm fidelity, B=GetTypeID+layout, C=sign-off). Gate compiles clean (MSVC). Parity YELLOW within tolerance (call 9vs7 d2<=3, branch 4vs3 d1<=2, loop 3=3 EXACT, return 3vs2 d1<=2); the 4 absent callees (BasePriorityQueue::Clear + Assert::Begin/Fire/End) are the version-check StrStream assert machinery collapsed into the simple CGS_ASSERT (committed convention, benign). Clean resource-type sibling of BrnVehicleGraphicsSpecResourceType. GetTypeID=65555(0x1000B); FixUp version-check(==1, byte-exact msg, no baked line 307) + rebase mpEntries then per-entry mpElements/mpField4 (+= GetLoadBase) + zero each entry's miElementCount-u32 sub-array; FixDown inverse -= (2 entry pointers, no sub-array touch) + mpEntries after the loop. Pointers load-relative u32 + PointerFromU32 keep TimeLineEntry at the X360 12-byte stride. Minimal-slice TimeLine/TimeLineEntry (inferred names) FLAGged; GetSerialisedResourceDescriptor + rest deferred (non-pure base concrete).",
+   "status": "done"
+  },
   "GameSource/Unity/../../SharedClasses/World/BrnVehicleGraphicsSpecResourceType.cpp": {
    "notes": "3 verify loops PASS (parallel A=FixUp/FixDown rebase fidelity vs asm, B=GetTypeID+layout+class structure, C=sign-off). Gate compiles clean (MSVC). Parity YELLOW within tolerance (call 9vs7 d2<=3, branch 4vs3 d1<=2, loop 2=2, return 3vs2 d1<=2); the absent BasePriorityQueue::Clear + Assert::Begin/Fire/End are the StrStream version-check-assert machinery collapsed into the simple CGS_ASSERT (committed convention; assert-StrStream parity is benign). Clean resource-type sibling of BrnWheelGraphicsSpecResourceType. GetTypeID=65542(0x10006); FixUp version-check(==3, byte-exact msg, no baked line 374)+rebase {+8,+16,+20,+28,+32,array,+24-last} via += GetLoadBase; FixDown the inverse -= (mpField6 first, +28/mpField7 per-entry guard verbatim, mpArray deref-before-unrebase); +0/+12 untouched; void returns. Minimal-slice GraphicsSpec (inferred names, only relocation layout) FLAGged; PointerFromU32 mirrors VehicleList. GetSerialisedResourceDescriptor + true field semantics deferred.",
    "status": "done"
@@ -13916,6 +13933,10 @@
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficHullRuntime.h": {
    "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficLogger.cpp": {
+   "notes": "HashState @0x8275DFB8 hashes the traffic-entity runtime state and depends on multiple UNCOMMITTED BrnTraffic runtime types with truncated/unrecovered names: PurgatoryInfo_400_::GetI + PurgatoryInfo_199_::GetI (IDA-truncated class names, uncommitted), HullRuntime::IsStoplineRed (uncommitted), plus an unidentified helper sub_82752E38(a1,a2), AND the function carries the IDA 'local variable allocation has failed, the output may be wrong!' warning (unreliable pseudocode -> needs asm-level reconstruction). Faithful reconstruction requires those BrnTraffic runtime types (PurgatoryInfo arrays + HullRuntime) reconstructed first + sub_82752E38 identified. Construct @0x82751AE0 is trivial (*this=1 + store the gpLogger global singleton dword_8300D010) but shares the TU. BLOCK until the BrnTraffic PurgatoryInfo/HullRuntime runtime types land + sub_82752E38 is resolved.",
+   "status": "blocked"
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficStaticParam.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
