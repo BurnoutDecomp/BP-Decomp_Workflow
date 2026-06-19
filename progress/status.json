@@ -6837,6 +6837,18 @@
   "BrnReplays::GuiModuleAboveCarObjectLayout::Clear": {
    "status": "reviewed"
   },
+  "BrnReplays::GuiModuleSerialiser::Construct": {
+   "status": "reviewed"
+  },
+  "BrnReplays::GuiModuleSerialiser::GetStaticLayout": {
+   "status": "reviewed"
+  },
+  "BrnReplays::GuiModuleSerialiser::Read": {
+   "status": "reviewed"
+  },
+  "BrnReplays::GuiModuleSerialiser::Write": {
+   "status": "reviewed"
+  },
   "BrnReplays::RaceCarEntitySerialiser::Construct": {
    "status": "reviewed"
   },
@@ -14198,6 +14210,10 @@
   },
   "class:BrnReplays::GuiModuleAboveCarObjectLayout": {
    "notes": "trivial; gate-only (Clear zeroes vec+2 words)",
+   "status": "done"
+  },
+  "class:BrnReplays::GuiModuleSerialiser": {
+   "notes": "3 verify loops PASS (dual 9-mode cascade truth tables: Read=PLAYING-only{5}, Write=RECORDING-family{1,2,3}, incl. the trap cases 4/6 correctly excluded; fidelity/precedent; final sign-off). Gate clean. Parity 'gross' benign: absent callees = assert machinery folded into CGS_ASSERT + BaseSerialiser/GuiModuleStaticLayout calls that ARE in-code but declare-only (their own TUs). First-call Reset order + double GetStaticLayout fetch preserved. Mirrors committed EffectsSerialiser.",
    "status": "done"
   },
   "class:BrnResource::ChallengeListEntry": {
