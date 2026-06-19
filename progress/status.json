@@ -9021,6 +9021,9 @@
   "CgsFileSystem::FileSystem::Release": {
    "status": "reviewed"
   },
+  "CgsFileSystem::GetDeviceManager": {
+   "status": "reviewed"
+  },
   "CgsFileSystem::RemapDevice::Close": {
    "status": "reviewed"
   },
@@ -14272,6 +14275,10 @@
    "status": "blocked"
   },
   "class:CgsDev::StrStreamBase": {
+   "status": "done"
+  },
+  "class:CgsFileSystem": {
+   "notes": "3 verify loops: round1 FAIL caught the dossier DWARF-gap (CgsDeviceManager.h dwarfdump exists); round2+3 PASS (Opus, incl. adversarial). Gate clean. Parity YELLOW is benign: the 4 absent callees are the assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) collapsed into the CGS_ASSERT macro. Singleton=DeviceManager::mpDeviceManager (DWARF:153), minimal-slice home.",
    "status": "done"
   },
   "class:CgsGui::EventInterpreterModule::sMapEntry>": {
