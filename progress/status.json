@@ -10983,6 +10983,9 @@
   "CgsResource::ResourceIO::FileSystemStatusInterface::Construct": {
    "status": "reviewed"
   },
+  "CgsResource::ResourceIO::InputBuffer": {
+   "status": "reviewed"
+  },
   "CgsResource::ResourceIO::InputBuffer::AppendResourceQueue": {
    "status": "reviewed"
   },
@@ -10990,6 +10993,9 @@
    "status": "reviewed"
   },
   "CgsResource::ResourceIO::InputBuffer::Destruct": {
+   "status": "reviewed"
+  },
+  "CgsResource::ResourceIO::OutputBuffer:": {
    "status": "reviewed"
   },
   "CgsResource::ResourceIO::OutputBuffer::Construct": {
@@ -14391,6 +14397,10 @@
   },
   "class:CgsResource::Events::UnloadBundleResponse,256>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "status": "done"
+  },
+  "class:CgsResource::ResourceIO": {
+   "notes": "3 verify loops all PASS (loop1 strict, loop2 X360-asm byte-check of the Construct reconciliation @0x82676600/@0x828EC978, loop3 adversarial w/ compiled runtime offset probe proving mResourceQueue@+4 + mFileSystemStatusInterface@+1). Gate clean. Parity YELLOW benign: absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT + the OutputBuffer_ IDA alias. Built on committed IOBuffer/VariableEventQueue; reconciled drifted provisional structs (byte-faithful).",
    "status": "done"
   },
   "class:CgsSceneManager::OverlapGenerationModule": {
