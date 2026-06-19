@@ -7779,6 +7779,15 @@
   "BrnWorld::EnvironmentSettings::CloudsData::Construct": {
    "status": "reviewed"
   },
+  "BrnWorld::EnvironmentSettings::DictionaryResourceType::FixDown": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::DictionaryResourceType::FixUp": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::DictionaryResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
   "BrnWorld::EnvironmentSettings::EnvironmentManager::Construct": {
    "status": "reviewed"
   },
@@ -13616,6 +13625,10 @@
   },
   "GameSource/Unity/../../SharedClasses/Trigger/BrnTriggerResourceType.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentDictionaryResourceType.cpp": {
+   "notes": "3 verify loops PASS (parallel A=FixUp/FixDown asm fidelity, B=GetTypeID+layout+wiki-id cross-check, C=conductor-consolidated). Gate compiles clean (MSVC). Simplest resource-type sibling of EnvironmentTimeLine/VehicleGraphicsSpec. GetTypeID=65556 (0x10014 = EnvironmentDictionary, wiki types.json-confirmed; an earlier 0x1000C hex comment was an arithmetic slip -> FIXED, the decimal 65556 was always correct). FixUp version-check(==2, byte-exact msg 'Incorrect version for Environment Settings Dictionary...', no baked line) + rebase exactly the 2 load-relative u32 pointers mpField8(+8 +=) and mpField16(+16, read-before then = old+delta); FixDown inverse -= (+16 then +8, read-before). No array/loop. void. Minimal-slice Dictionary {muVersion@0, field4@4, mpField8@8, field12@12, mpField16@16} (inferred names, +4/+12 untouched padding) FLAGged. Rest of base virtuals deferred (non-pure base concrete).",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentKeyframeResourceType.cpp": {
