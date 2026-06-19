@@ -10533,6 +10533,12 @@
   "CgsNetwork::SignalMessage::PackOrUnpack": {
    "status": "reviewed"
   },
+  "CgsNetwork::SmartBitStream::AddRawData": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::SmartBitStream::GetRawData": {
+   "status": "reviewed"
+  },
   "CgsNetwork::StartTimeManager::AreAllPlayersReadyTo": {
    "status": "reviewed"
   },
@@ -12990,6 +12996,10 @@
   },
   "GameShared/GameClasses/Network/Packeting/BitStream/CgsBitStream.cpp": {
    "notes": "3 fresh-eyes verify loops all PASS: (A) AddBits/GetBits proven exact bitwise inverses analytically + 106M-case empirical round-trip incl. adjacent-field non-corruption; (B) Prepare/layout/asserts byte-exact vs DWARF, no fabrication (only 3 of 7 methods defined, rest header-declared); (C) shift-UB proven absent (spanning shifts in [1,63], 1<<64 guarded), odr-safe, clean failure path. Gate cl /c exit 0.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Network/Packeting/BitStream/CgsSmartBitStream.cpp": {
+   "notes": "3 fresh-eyes verify loops all PASS: (A) AddRawData/GetRawData parity vs X360 pseudocode (head/bulk/tail split, asserts, return-false propagation, final assert); (B) empirical round-trip 328 cases x all 8 alignments 0 fail + bug-injection negative control, helpers=AddBits(8)/AddBits(64), no fabrication (2 fns defined, helpers inline, Quantised declared-only); (C) type/UB safe incl. misaligned-but-unused u64* (formed not dereferenced) + odr-safe constants. Gate cl /c exit 0.",
    "status": "done"
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsHeadsetStatusMessage.cpp": {
