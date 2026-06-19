@@ -9228,7 +9228,22 @@
   "CgsGeometric::PolygonSoupList::FixUp": {
    "status": "reviewed"
   },
+  "CgsGeometric::PolygonSoupListSpatialMap::AddList": {
+   "status": "reviewed"
+  },
   "CgsGeometric::PolygonSoupListSpatialMap::BuildSpacialPartition": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::PolygonSoupListSpatialMap::Clear": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::PolygonSoupListSpatialMap::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::PolygonSoupListSpatialMap::GetPolySoupList": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::PolygonSoupListSpatialMap::Prepare": {
    "status": "reviewed"
   },
   "CgsGeometric::PolygonSoupListSpatialMap::RunQuery": {
@@ -12827,6 +12842,10 @@
   },
   "GameShared/GameClasses/Geometric/Primitives/PolygonSoup/CgsPolygonSoupListResourceType.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Geometric/Primitives/PolygonSoup/CgsPolygonSoupListSpatialMap.cpp": {
+   "notes": "3 fresh-eyes verify loops PASS: (A) all 5 fns faithful to X360 pseudocode incl. exact Clear write-set + 2-level GetPolySoupList deref + array-index stride; (B) struct layout vs DWARF, forward-decls (struct tag), no fabrication (5 fns only), const-correct; (C) both judgment calls HIGH confidence (zero invalid-handle, 2-level GetMemoryResource deref) + one cosmetic comment fixed. Gate cl /c exit 0.",
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/CgsDepthStencilStateFactory.cpp": {
