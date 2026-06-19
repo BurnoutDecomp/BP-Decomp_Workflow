@@ -519,6 +519,9 @@
   "BrnDirector::MomentSelector::AddMoment": {
    "status": "reviewed"
   },
+  "BrnDirector::MomentSelector::CancelSelection": {
+   "status": "reviewed"
+  },
   "BrnDirector::MomentSelector::GetSelectedMoment": {
    "status": "reviewed"
   },
@@ -534,7 +537,19 @@
   "BrnDirector::MomentSelector::SelectBestLRUMomentWithExclusion": {
    "status": "reviewed"
   },
+  "BrnDirector::MomentSelector::SelectBestMoment": {
+   "status": "reviewed"
+  },
   "BrnDirector::MomentSelector::SelectBestRandomMomentWithExclusion": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentSelector::SelectNewBestMoment": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentSelector::SetMaxActiveMoments": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentSelector::SetRecencyFactor": {
    "status": "reviewed"
   },
   "BrnDirector::MomentSelector::SnoopNumValidMoments": {
@@ -13688,6 +13703,10 @@
   },
   "class:BrnAI::RouteRequestManager": {
    "notes": "fresh-eyes review: 16-iter loop + weight table correct",
+   "status": "done"
+  },
+  "class:BrnDirector::MomentSelector": {
+   "notes": "3 verify loops PASS (per-body fidelity incl. assert polarity/De-Morgan-dual + read-+472-before-clear-+480 order; no-DWARF inference soundness w/ all guessed names flagged; final sign-off). Gate clean. Parity RED benign: the 7 pseudocode branches are assert if-checks folded into CGS_ASSERT (cpp 0 branches); absent callees = assert machinery + the declare-only SelectBestMomentWithExclusion delegate (called in-code, unresolved by matcher); return_count diff = the 3 void funcs have no return. No DWARF -> semantic-parity model, names from assert strings; expected reconciliations flagged (MomentHandle/capacity/SelectBestMomentWithExclusion body).",
    "status": "done"
   },
   "class:BrnGameState::BaseOnlineModeScoring": {
