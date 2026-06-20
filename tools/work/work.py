@@ -54,7 +54,7 @@ sync. Genuine auth rejections (bad WORK_AGENT) still stop immediately.
 
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
-import argparse, json, os, re, sqlite3, subprocess, sys, time
+import argparse, hashlib, json, os, re, sqlite3, subprocess, sys, time
 import ssl
 import urllib.error, urllib.parse, urllib.request
 from collections import Counter, defaultdict
@@ -116,6 +116,7 @@ CREATE TABLE IF NOT EXISTS event(
 CREATE TABLE IF NOT EXISTS pending_op(
   id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT,
   method TEXT, path TEXT, payload TEXT, kind TEXT, tu_id TEXT);
+CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT);
 CREATE INDEX IF NOT EXISTS ix_func_tu ON func(tu_id);
 CREATE INDEX IF NOT EXISTS ix_dep_tu ON tu_dep(tu_id);
 """
@@ -123,6 +124,57 @@ CREATE INDEX IF NOT EXISTS ix_dep_tu ON tu_dep(tu_id);
 
 def now():
     return time.strftime("%Y-%m-%dT%H:%M:%S")
+
+
+# ---------------------------------------------------------------- cache coherence
+# status.json (committed, reconciled from the work server by a GitHub Action) is the
+# DURABLE source of truth; ledger.sqlite is only a local cache. We track the signature of
+# the status.json we last synced the cache to, so we can tell when the file has moved ahead
+# of the cache (a reconcile commit, a pull, a manual edit) and re-import it before trusting
+# the cache to rewrite the file.
+STATUS_SIG_KEY = "status_json_sig"
+
+
+def _status_file_sig():
+    """Content hash of the committed status.json, or None if it doesn't exist yet."""
+    try:
+        with open(STATUS_JSON, "rb") as f:
+            return hashlib.sha1(f.read()).hexdigest()
+    except FileNotFoundError:
+        return None
+
+
+def _meta_get(con, key):
+    row = con.execute("SELECT value FROM meta WHERE key=?", (key,)).fetchone()
+    return row["value"] if row else None
+
+
+def _meta_set(con, key, value):
+    con.execute("CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT)")
+    con.execute("INSERT INTO meta(key,value) VALUES(?,?) "
+                "ON CONFLICT(key) DO UPDATE SET value=excluded.value", (key, value))
+
+
+def reconcile_cache_if_stale(con):
+    """If the committed status.json has changed since the cache last synced to it,
+    re-import its durable state into the ledger now. This makes the local cache self-
+    healing: it can never be silently behind git, so the next sync_status can't drop the
+    committed done/blocked/reviewed entries the cache hadn't caught up to. restore_status
+    only touches entries present in the file (it never demotes live, uncommitted in-progress
+    work, which the server-mode file doesn't carry), so this is safe to run on every
+    connect; it does real work only when the file actually moved."""
+    sig = _status_file_sig()
+    if sig is None or _meta_get(con, STATUS_SIG_KEY) == sig:
+        return
+    # seed/bootstrap own the initial population; skip the empty-ledger case.
+    if not con.execute("SELECT 1 FROM func LIMIT 1").fetchone():
+        return
+    n = restore_status(con)
+    _meta_set(con, STATUS_SIG_KEY, sig)
+    con.commit()
+    sys.stderr.write(
+        f"[work] local cache was behind {os.path.basename(STATUS_JSON)} -- re-imported "
+        f"committed state for {n} TUs (status.json changed out of band)\n")
 
 
 def connect():
@@ -135,6 +187,13 @@ def connect():
     con.execute("CREATE TABLE IF NOT EXISTS pending_op("
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT, method TEXT, path TEXT, "
                 "payload TEXT, kind TEXT, tu_id TEXT)")
+    con.execute("CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT)")
+    # Self-heal a stale cache BEFORE any command reads or writes: if the committed
+    # status.json changed out of band since we last synced to it, re-import its durable
+    # state now (see reconcile_cache_if_stale). Without this, a cache that is behind git
+    # (e.g. after a reconcile commit or a pull) would let the next sync_status silently
+    # drop the committed done/blocked/reviewed entries it doesn't know about.
+    reconcile_cache_if_stale(con)
     return con
 
 
@@ -482,6 +541,10 @@ def sync_status(con):
     os.makedirs(os.path.dirname(STATUS_JSON), exist_ok=True)
     json.dump({"tu": tu, "func": fn}, open(STATUS_JSON, "w", encoding="utf-8"),
               indent=1, sort_keys=True)
+    # Record the signature of what we just wrote so reconcile_cache_if_stale recognises this
+    # as our own write (and only re-imports when the file later moves out from under us).
+    _meta_set(con, STATUS_SIG_KEY, _status_file_sig())
+    con.commit()
 
 
 def restore_status(con):
