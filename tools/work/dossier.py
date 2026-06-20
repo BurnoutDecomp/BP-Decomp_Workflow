@@ -9,7 +9,7 @@ an agent needs into a single document so it never has to hunt through
   - per-function: clean signature, decompiler locals, full pseudocode, (opt) asm
   - callee signatures + whether each callee is already recovered (and where)
   - caller context
-  - the ORIGINAL LegacySrc source file, when the TU's primary_file exists in the legacy reference
+  - the ORIGINAL LegacySrc source file, when the TU's primary_file exists in the LegacySrc partial source
   - DecFIGS dwarfdump declaration/type/local-variable hints for the TU/source file
   - a pointer to relevant type headers
 
@@ -41,7 +41,7 @@ MAX_WIKI_FIELDS = 40
 # ---------------------------------------------------------------- LegacySrc overlay
 @lru_cache(maxsize=1)
 def feb2007_index():
-    """Map normalized path-suffix -> absolute path for every source file in the legacy reference."""
+    """Map normalized path-suffix -> absolute path for every source file in the LegacySrc partial source."""
     idx = {}
     if not os.path.isdir(FEB2007):
         return idx
@@ -71,7 +71,7 @@ def normalize_primary_file(primary_file: str) -> str | None:
 
 
 def find_feb2007_source(primary_file: str):
-    """Return (rel_path, abspath) if the original source file is in the legacy reference."""
+    """Return (rel_path, abspath) if the original source file is in the LegacySrc partial source."""
     norm = normalize_primary_file(primary_file)
     if not norm:
         return None
@@ -269,15 +269,18 @@ def assemble(con, tu_row, funcs, with_asm=False):
     if tu_row["source"] == "decfigs":
         src = find_feb2007_source(tu)
     if src:
-        w(f"\n--- ORIGINAL SOURCE (LegacySrc reference): {src[0]} ---")
-        w("    GROUND TRUTH. Prefer this over reconstructing from pseudocode where it covers the function.")
+        w(f"\n--- LEGACYSRC PARTIAL SOURCE (STYLING / INLINING REFERENCE ONLY): {src[0]} ---")
+        w("    NOT a blueprint and NOT offset/logic authority — heavy version drift from the")
+        w("    X360 ARTIST/\"Breaker\" + DecFIGS spine. Use ONLY for (a) code style/idiom and")
+        w("    (b) recovering the shape/names of inlined helpers. Authority for behavior+layout")
+        w("    is the X360 pseudocode+asm; authority for declaration shape is the DecFIGS DWARF.")
         lines = open(src[1], encoding="utf-8", errors="replace").read().splitlines()
         for ln in lines[:MAX_SRC_LINES]:
             w("    " + ln)
         if len(lines) > MAX_SRC_LINES:
             w(f"    ... [{len(lines)-MAX_SRC_LINES} more lines — open {src[1]}]")
     else:
-        w("\n--- ORIGINAL SOURCE: none in the LegacySrc reference for this TU ---")
+        w("\n--- ORIGINAL SOURCE: none in the LegacySrc partial source for this TU ---")
 
     # DWARF-derived declaration/type/local-variable hints from DecFIGS.
     if tu_row["source"] == "decfigs":

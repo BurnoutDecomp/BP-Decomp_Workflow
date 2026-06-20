@@ -1109,6 +1109,52 @@ def cmd_show(args):
           "DecFIGS dwarfdump hints, LegacySrc original source, callee signatures, asm with --asm.)")
 
 
+POSTMORTEM_CHECKLIST = """\
+================ POSTMORTEM SELF-REVIEW: {tu} ================
+Walk your reconstruction against the source-of-truth ladder, IN ORDER. A lower rung never
+overrides a higher one. (Full procedure: AGENTS.md -> "Postmortem".)
+
+[1] ARTIST (X360) - ACCURACY (pseudocode + ASSEMBLY above)
+    [ ] Signature / calling convention taken from the ASM, not the pseudocode:
+        param count/order, register-vs-stack passing, implicit `this`, return type,
+        signedness, value width. (Hex-Rays gets these wrong constantly on PPC.)
+    [ ] Every side effect / store / early-out / branch in the asm has a counterpart;
+        you added NO behavior the binary doesn't have.
+    [ ] Control flow matches semantically (de-goto / re-roll / de-optimize is fine).
+[2] DecFIGS - DECLARATION SHAPE (DWARF hints above)
+    [ ] virtual / const, vtable order, return & param TYPES, member names/types confirmed.
+    [ ] Only X360-attested members included (no PS3-only members imported from DWARF).
+[3] LegacySrc - STYLE / INLINING ONLY
+    [ ] Used only for idiom + recovering inlined-helper shape; did NOT override rungs 1-2.
+
+Fix anything that fails a rung, then proceed to `work submit` / the reviewer pass.
+============================================================="""
+
+
+def cmd_postmortem(args):
+    """Self-review packet: the full dossier WITH X360 asm, plus the postmortem checklist.
+
+    This is the agent's OWN accuracy pass (verify vs ARTIST asm/pseudocode, then DecFIGS
+    DWARF) before submit/review — see AGENTS.md "Postmortem". Distinct from the fresh-eyes
+    reviewer packet that `work submit` writes.
+    """
+    import dossier
+    con = connect()
+    t = con.execute("SELECT * FROM tu WHERE id=?", (args.tu,)).fetchone()
+    if not t:
+        sys.exit(f"unknown TU: {args.tu!r}")
+    funcs = con.execute("SELECT * FROM func WHERE tu_id=? ORDER BY name", (args.tu,)).fetchall()
+    # asm is always on for the postmortem — calling conventions are verified against it.
+    text = dossier.assemble(con, t, funcs, with_asm=True)
+    text += "\n\n" + POSTMORTEM_CHECKLIST.format(tu=t["id"])
+    if args.out:
+        os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
+        open(args.out, "w", encoding="utf-8").write(text)
+        print(f"wrote postmortem packet ({len(funcs)} functions, with asm) -> {args.out}")
+    else:
+        print(text)
+
+
 # ---------------------------------------------------------------- transitions
 def set_tu(con, tu, status, owner=None, notes=None):
     if status not in TU_STATUS:
@@ -1920,6 +1966,11 @@ def main():
     sh.add_argument("--asm", action="store_true", help="include assembly in --full output")
     sh.add_argument("-o", "--out", help="write dossier to a file instead of stdout")
     sh.set_defaults(fn=cmd_show)
+    pm = sub.add_parser("postmortem", help="self-review packet: full dossier WITH asm + the "
+                        "verify-vs-ARTIST-then-DecFIGS checklist (run before submit/review)")
+    pm.add_argument("tu")
+    pm.add_argument("-o", "--out", help="write the postmortem packet to a file instead of stdout")
+    pm.set_defaults(fn=cmd_postmortem)
     st = sub.add_parser("start"); st.add_argument("tu"); st.set_defaults(fn=cmd_start)
     cl = sub.add_parser("claim", help="claim specific TU id(s), or the next N ready ones if none given")
     cl.add_argument("tu", nargs="*", help="TU id(s) to claim; omit to claim the next N from the queue")

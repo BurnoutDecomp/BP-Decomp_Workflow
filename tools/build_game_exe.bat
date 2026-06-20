@@ -110,6 +110,8 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsSmallResource.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceTypeBase.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsLinearMalloc.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\CgsMemoryModule.cpp"
+  echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataAllocatorList.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimeUtils.cpp"
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )

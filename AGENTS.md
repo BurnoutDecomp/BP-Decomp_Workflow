@@ -56,6 +56,9 @@ work stubs <tu>       # trap-stub the callees this TU needs that aren't done yet
   …reconstruct the C++ into b5-decomp/src/<mirrored path>…
 work submit <tu>      # run the compile gate; on pass, run the parity check + emit a reviewer packet
 work parity <tu>      # standalone NO-LLM structural parity check (no status change)
+work postmortem <tu>  # SELF-REVIEW packet: full dossier WITH X360 asm + a checklist to
+                      #   re-verify your reconstruction against ARTIST (pseudocode+asm), then
+                      #   DecFIGS (DWARF), before you submit/review (see "Postmortem" below)
   …review per policy (see Verification) — tiered, may be skipped or delegated…
 work review <tu> --verdict pass|fail [--notes "…"]   # record the verdict
 work block <tu> "…"   # mark blocked + reason so it is not reclaimed
@@ -280,14 +283,62 @@ The `work` CLI ([`tools/work/work.py`](tools/work/work.py), via the repo-root
 agent. If the ledger is missing, build it once with `work seed --deps` (it is
 rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
 
+## Postmortem (self-review before you submit/review)
+
+After you finish reconstructing a TU — and **before** `work submit` / the reviewer pass — run
+a postmortem on your own work. This is the cheap step that catches the parity bugs the compile
+gate cannot see (wrong calling convention, a dropped side effect, an inverted branch, a guessed
+offset). It is **mandatory for `complex` TUs** and recommended whenever you doubt your own work.
+
+```
+work postmortem <tu>          # full dossier WITH X360 asm + the checklist below (-o to a file)
+```
+
+Walk your reconstruction against the **source-of-truth ladder, in order** — a lower rung never
+overrides a higher one:
+
+1. **ARTIST (X360) — accuracy.** Read your C++ against the X360 **pseudocode and assembly**:
+   - **Signature / calling convention** comes from the **asm**, not the pseudocode — parameter
+     count/order, register-vs-stack passing, the implicit `this`, return type, signedness,
+     value width. (Hex-Rays gets these wrong constantly on PPC.)
+   - **Every** side effect, store, early-out, and branch in the asm has a counterpart in your
+     code; you added no behavior the binary doesn't have.
+   - Control flow matches semantically (you may de-`goto`/re-roll/de-optimize, but the meaning
+     is identical).
+2. **DecFIGS — declaration shape.** Confirm against the DWARF: `virtual`/`const`, vtable order,
+   return/param **types**, and member names/types. DWARF names the shape; the X360 ledger
+   decides what exists (don't import PS3-only members).
+3. **LegacySrc — style/inlining only.** Use it solely to sanity-check idiom and to confirm an
+   inlined helper's shape. Never let it override rungs 1–2 (it has drifted heavily).
+
+Fix anything that fails a rung, then proceed to `work submit` / the reviewer pass. The reviewer
+packet still goes to a fresh-eyes reviewer per the Verification policy; the postmortem is **your
+own** pass first, so you don't ship a known-divergent TU into review.
+
 ## Conventions
 
 - **Identity is the normalized qualified name** (`Namespace::Class::method`), not an
   address. See STRATEGY.md. Never assume an address means the same thing in two
   builds.
-- **Reconstruct from the X360 spine.** Use PS3/DecFIGS for a second opinion, file
-  attribution, and DWARF-derived declaration/type/local-variable hints. Use
-  LegacySrc real source when the TU overlaps it.
+- **Source-of-truth ladder (in priority order).**
+  1. **X360 ARTIST ("Breaker") is the spine** — its pseudocode **and assembly** are
+     authoritative for what each function does and how it is called.
+  2. **DecFIGS** (Internal PS3, DWARF) is the authority for declaration *shape* — signatures,
+     types, `virtual`/`const`, vtable order, member names — gated on X360 attestation.
+  3. **LegacySrc** partial source is a **styling / inlining reference only** (see "LEGACYSRC PARTIAL SOURCE"
+     below); heavy version drift makes its layouts and logic non-authoritative.
+
+  Also use PS3/DecFIGS for file attribution and local-variable hints. Never let a lower rung
+  override a higher one.
+- **Verify calling conventions against the ASSEMBLY, not the pseudocode.** Hex-Rays
+  regularly gets the *signature* wrong — parameter count/order, register-vs-stack passing,
+  the implicit `this`, return type, signedness, and value width — especially on PowerPC
+  (X360 **and** PS3). The per-function **`assembly`** listing is dumped for **every** build
+  (`.ida-exports/<build>/0x<addr>.json`) and is surfaced by `work show <tu> --full --asm`
+  (and always by `work postmortem`). When a parameter list, return type, or a by-ref vs.
+  by-value choice is load-bearing, confirm it from the prologue / register usage in the asm
+  before trusting the decompiler. When the X360 asm is ambiguous, cross-check the same
+  function's asm (and DWARF) in the DecFIGS / external-PS3 exports.
 - **BPR/TUB are reference-only**, consulted per-function for *platform* layers
   (SIMD, GPU/D3D, codecs) where the PC shape differs from the console. They are not
   in the ledger; do not "decompile" them.
@@ -343,10 +394,20 @@ rebuilt from the committed `progress/identity.json` + `progress/tu_index.json`).
       (e.g. `rw::Resource`) still get named members — recover the type (see "`rw::` types
       come from `rwtypes.pdb`").
   - **LAYOUT RECOVERY WITH PADDING:** Infer class and struct member variables based on the offsets accessed. If the preceding variables are unknown, use explicit padding buffers (e.g. `u8 mPad0[1812];`) to preserve member alignment. Access all member variables by name.
-  - **USE THE LEGACY SOURCE REFERENCE:** Always check the `references/LegacySrc/` legacy reference source files. If the TU or its types are represented there, treat them as the primary template. Match the original class layout, structure, function boundaries, and variable names exactly, using the X360 pseudocode only to verify semantic parity and check for minor version drift.
-  - **USE DECFIGS DWARFDUMP HINTS:** For DecFIGS-backed TUs, consult `references/DecFIGS/dwarfdump/` (auto-surfaced by `work show --full`) for C++-shaped DWARF declarations: class/struct outlines, enum values, member names/types, globals, function signatures, and local-variable names/types. Treat this as reconstruction guidance, not complete source code. It is not offset authority; verify member placement and behavior against X360 pseudocode/asm, and prefer the LegacySrc reference where it overlaps.
+  - **LEGACYSRC PARTIAL SOURCE = STYLING & INLINING REFERENCE ONLY (NOT THE BLUEPRINT):** The
+    `references/LegacySrc/` PS3 Feb partial source predates the X360 ARTIST/"Breaker" + DecFIGS
+    spine by a long way — **a great deal changed between LegacySrc and DecFIGS/Breaker**
+    (class layouts, member sets, function boundaries, and logic all drift). So do **not**
+    treat it as the primary template and do **not** copy its structure/layout wholesale.
+    Use it for two things: (a) **code style / idiom** — how the original was written (naming
+    feel, helper patterns, comment style), and (b) **outlining inlined functions** —
+    recovering the shape and names of helpers the X360 compiler folded inline, which the
+    pseudocode shows only as flattened code. Authority stays with the X360 pseudocode+asm
+    (*what the code does and its layout*) and DecFIGS DWARF (*declaration shape*); where
+    LegacySrc overlaps, reconcile it **to** those — never the reverse.
+  - **USE DECFIGS DWARFDUMP HINTS:** For DecFIGS-backed TUs, consult `references/DecFIGS/dwarfdump/` (auto-surfaced by `work show --full`) for C++-shaped DWARF declarations: class/struct outlines, enum values, member names/types, globals, function signatures, and local-variable names/types. Treat this as reconstruction guidance, not complete source code. It is not offset authority; verify member placement and behavior against X360 pseudocode/asm, and prefer LegacySrc source where it overlaps.
     - **DWARF SUPPLIES NAMES/TYPES; THE X360 LEDGER DECIDES WHAT EXISTS.** DecFIGS is the *Internal PS3* build, a **different build** from the X360 2007-02 ARTIST spine, so whole classes drift in version. Never bulk-import every DWARF member/method into a recon header. **Gate each DWARF declaration on X360 attestation:** add/correct it only if that `Class::Fn` appears in the X360 ledger (`progress/status.json` → `func`), using the DWARF signature for names/types. If a DWARF method is *absent* from the X360 ledger it is PS3-only — leave it out (a minimal/identity-only recon is then correct, e.g. a class the X360 build exposes only via `GetName`/`GetPath`).
-    - **DWARF/reference declaration is authoritative for a method's *shape*, not just its name.**
+    - **DWARF/Feb declaration is authoritative for a method's *shape*, not just its name.**
       For a method the X360 ledger attests, take its declaration shape — `virtual`, trailing
       `const`, return type, parameter types, and **vtable order** — from the DWARF (or a
       LegacySrc header), not from Hex-Rays. Pseudocode shows the *body's behavior* and
