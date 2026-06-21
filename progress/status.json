@@ -27,6 +27,9 @@
   "Attrib::Gen::debrisparams::debrisparams": {
    "status": "reviewed"
   },
+  "Attrib::Gen::iceanim::iceanim": {
+   "status": "reviewed"
+  },
   "Attrib::Gen::surfacelist::surfacelist": {
    "status": "reviewed"
   },
@@ -14813,6 +14816,10 @@
   },
   "class:Attrib::Gen::debrisparams": {
    "notes": "Gate-only (self-reviewed). Compile PASS. Parity YELLOW is the same false-positive as surfacelist: the 5 'absent' callees (Instance base-ctor, GetClass x2, GetCollection, AssertOnClassCheck, DefaultDataArea) are present as member/namespace-relative calls; counts within tolerance. Ctor verified vs X360 pseudocode @0x8227E9A0 (Instance chain; class-check guard KI=651697503; DefaultDataArea(0xE0) when mpAttributeData null). Minimal X360-faithful generated-attrib recon (X360 inlines the accessor/using API); derives from the reconstructed Attrib::Instance base.",
+   "status": "done"
+  },
+  "class:Attrib::Gen::iceanim": {
+   "notes": "Generated AttribSys class ctor; exact clone of committed debrisparams.h pattern (class key -1449672210, DefaultDataArea 0x10); compiles via includer TU; 3 verify loops pass (fidelity/pattern/access). Callee-absent note is the vacuous-header parity artifact.",
    "status": "done"
   },
   "class:BrnAI::AIModule": {
