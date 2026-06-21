@@ -531,6 +531,15 @@
   "BrnDirector::ICEMoviePlaylist::DebugMenuNewMovie": {
    "status": "reviewed"
   },
+  "BrnDirector::ICEMoviePlaylist::DebugMenuRemoveData,20,int>::Alloca": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlaylist::DebugMenuRemoveData,20,int>::FindOb": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlaylist::DebugMenuRemoveData,20,int>::FreeO": {
+   "status": "reviewed"
+  },
   "BrnDirector::ICEMoviePlaylist::DebugMenuRemoveMovie": {
    "status": "reviewed"
   },
@@ -556,6 +565,15 @@
    "status": "reviewed"
   },
   "BrnDirector::ICEWrapper::ReconstructCameraMover": {
+   "status": "reviewed"
+  },
+  "BrnDirector::IceMovie,20,int>::AllocateObject": {
+   "status": "reviewed"
+  },
+  "BrnDirector::IceMovie,20,int>::FreeObject": {
+   "status": "reviewed"
+  },
+  "BrnDirector::IceMovie,20,int>::operator[]": {
    "status": "reviewed"
   },
   "BrnDirector::IceMovie::GetCgsID": {
@@ -14972,8 +14990,16 @@
    "notes": "Movie-player family reconstructed; gate green; fidelity verified vs --asm (seed table 36 rows corrected, PlayMovie reconciled to DWARF sig, Play mbIsLooping clear); camera-Behaviour layer minimal-sliced (flagged)",
    "status": "done"
   },
+  "class:BrnDirector::ICEMoviePlaylist::DebugMenuRemoveData,20,int>": {
+   "notes": "ObjectPool<DebugMenuRemoveData,20,int> AllocateObject/FindObject/FreeObject; added generic ObjectPool::FindObject (asm-mapped: scan allocated bits + operator==, return index/-1); gate green",
+   "status": "done"
+  },
   "class:BrnDirector::ICEWrapper": {
    "notes": "4 funcs: ctor (member-constructs heaps/ICEManager/mover, miReconstructFrame=S32_MAX) + EditorOn/EditorOff (debug-handle + console toggle + editor drive) + ReconstructCameraMover. New BrnDirectorICEWrapper.h/.cpp home + decl-only grows (ICEManager accessors, ICEController/ICECameraMover/CgsDebugInterface callee stubs, flagged). asm-verified fidelity; style scrubbed; gate green.",
+   "status": "done"
+  },
+  "class:BrnDirector::IceMovie,20,int>": {
+   "notes": "ObjectPool<IceMovie,20,int> AllocateObject/FreeObject explicit instantiation (methods inline in CgsObjectPool.h); gate green",
    "status": "done"
   },
   "class:BrnDirector::MomentSelector": {
