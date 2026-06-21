@@ -1077,6 +1077,9 @@
   "BrnGameMainFlowController::GameMainFlowController::SendEvent": {
    "status": "reviewed"
   },
+  "BrnGameState::": {
+   "status": "reviewed"
+  },
   "BrnGameState::AchievementManagerBase::Construct": {
    "status": "reviewed"
   },
@@ -1219,6 +1222,9 @@
    "status": "reviewed"
   },
   "BrnGameState::BaseOnlineModeScoring::_TimeInLastPlaceCompare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BufferedNewHighScor": {
    "status": "reviewed"
   },
   "BrnGameState::BufferedNewHighScore,5>::Append": {
@@ -1377,6 +1383,9 @@
   "BrnGameState::ChallengeManager::StoredLeapingData,7,int>::IsObjec": {
    "status": "reviewed"
   },
+  "BrnGameState::CheckpointData,16>:": {
+   "status": "reviewed"
+  },
   "BrnGameState::CheckpointData,16>::Append": {
    "status": "reviewed"
   },
@@ -1393,6 +1402,9 @@
    "status": "reviewed"
   },
   "BrnGameState::CountdownState::Update": {
+   "status": "reviewed"
+  },
+  "BrnGameState::Cras": {
    "status": "reviewed"
   },
   "BrnGameState::CrashMode::SendEvent": {
@@ -1485,6 +1497,15 @@
   "BrnGameState::FlybyManager::RivalRating::SortRivalsCallback": {
    "status": "reviewed"
   },
+  "BrnGameState::G": {
+   "status": "reviewed"
+  },
+  "BrnGameState::Ga": {
+   "status": "reviewed"
+  },
+  "BrnGameState::Game": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameMode::CalculateMaxPlayerWrecks": {
    "status": "reviewed"
   },
@@ -1531,6 +1552,12 @@
    "status": "reviewed"
   },
   "BrnGameState::GameModeParams::GetStartPosition": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameS": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameSta": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateDebugComponent::ClearTrainingFlagsCallback": {
@@ -1591,6 +1618,15 @@
    "status": "reviewed"
   },
   "BrnGameState::GameStateInviteManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateM": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModu": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModule": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateModule::BridgeRumbleToInput": {
@@ -1762,6 +1798,15 @@
    "status": "reviewed"
   },
   "BrnGameState::GameStateModule::WaitForStreaming": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleI": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO:": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::": {
@@ -2149,6 +2194,9 @@
    "status": "reviewed"
   },
   "BrnGameState::GameStateToGuiTriggeredDirtyTrick>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GridPositionAnd": {
    "status": "reviewed"
   },
   "BrnGameState::GridPositionAndScoreData,8>::Append": {
@@ -2556,6 +2604,9 @@
   "BrnGameState::OfflineGameMode::SelectRandomDestinations": {
    "status": "reviewed"
   },
+  "BrnGameState::Onl": {
+   "status": "reviewed"
+  },
   "BrnGameState::OnlineBurningHomeRunMode::GetName": {
    "status": "reviewed"
   },
@@ -2910,6 +2961,9 @@
   "BrnGameState::ResultsState::OnEnter": {
    "status": "reviewed"
   },
+  "BrnGameState::RichPresenceManagerBase:": {
+   "status": "reviewed"
+  },
   "BrnGameState::RichPresenceManagerBase::Construct": {
    "status": "reviewed"
   },
@@ -3046,6 +3100,9 @@
    "status": "reviewed"
   },
   "BrnGameState::RumbleManager::PlayJolt": {
+   "status": "reviewed"
+  },
+  "BrnGameState::S": {
    "status": "reviewed"
   },
   "BrnGameState::ScoringSystem::AddPlayer": {
@@ -3739,6 +3796,9 @@
    "status": "reviewed"
   },
   "BrnGameState::TakedownEvent,8>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TakedownEvent>:": {
    "status": "reviewed"
   },
   "BrnGameState::TakedownEvent>::AddEvent": {
@@ -15738,8 +15798,8 @@
    "status": "done"
   },
   "class:BrnGameState": {
-   "notes": "11/20 bodied (commit b8f734c: container instances Array<CheckpointData/RecentCrash/GridPos/BufferedNewHighScore/TargetEventScore/MultiplierData/ENewRivalryCompare>, BaseEventQueue<TakedownEvent>::GetEvent, ObjectPool<StoredLeapingData>::op[], RichPresence::EGameModeTypeToERichPresenceState, OutputBuffer::GetGameStateToGuiInterface). REMAINING 9 declare-only, blocked on UN-HOMED types: 7 GameStateModuleIO lock-guarded &member accessors (0x8231D170/0x82362A30/0x823B9AE0/0x823B9450/0x8231CED0/0x8231D758/0x82362D78 @ +0x10/+0x7B0/+0x6E34/+0x9050/+0x43AC...) on unmodeled GameStateModuleIO buffer-member types + Array<32B-trigger-query-record,16>::op[] (0x8235FBE0) + BaseEventQueue<12B-GUI-event>::GetEvent (0x823AC338). Unblocks when those buffer/element types are homed in BrnGameStateModuleIO.h.",
-   "status": "blocked"
+   "notes": "All 20 catch-all funcs bodied + adversarially verified across 2 rounds (container instances store-for-store; the 7 buffer accessors byte-exact offsets + correct read/write lock bits vs asm; RichPresence/GetGameStateToGuiInterface parity). All home grows additive (carved from opaque storage, committed offsets + 8 static_asserts preserved, gates clean). 5 interface member types modeled named-opaque (accessors faithfully return &member; DWARF identities noted for their own TUs). No fabrication (un-attested fields left opaque). Member-by-name throughout.",
+   "status": "done"
   },
   "class:BrnGameState::BaseOnlineModeScoring": {
    "status": "done"
