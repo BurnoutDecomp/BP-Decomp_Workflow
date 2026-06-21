@@ -3267,7 +3267,13 @@
   "BrnGameState::StuntModeScoring::Activate": {
    "status": "reviewed"
   },
+  "BrnGameState::StuntModeScoring::BankMultiplier": {
+   "status": "reviewed"
+  },
   "BrnGameState::StuntModeScoring::BeginCombo": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::CalculateMultiplier": {
    "status": "reviewed"
   },
   "BrnGameState::StuntModeScoring::ClearData": {
@@ -3279,6 +3285,9 @@
   "BrnGameState::StuntModeScoring::DealWithHitProp": {
    "status": "reviewed"
   },
+  "BrnGameState::StuntModeScoring::DealWithInProgressStunt": {
+   "status": "reviewed"
+  },
   "BrnGameState::StuntModeScoring::DealWithPowerPark": {
    "status": "reviewed"
   },
@@ -3288,6 +3297,9 @@
   "BrnGameState::StuntModeScoring::EndCombo": {
    "status": "reviewed"
   },
+  "BrnGameState::StuntModeScoring::GetCurrentStunts": {
+   "status": "reviewed"
+  },
   "BrnGameState::StuntModeScoring::HasStuntModeEnded": {
    "status": "reviewed"
   },
@@ -3295,6 +3307,9 @@
    "status": "reviewed"
   },
   "BrnGameState::StuntModeScoring::OutputStuntsToDisplay": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::PreWorldUpdate": {
    "status": "reviewed"
   },
   "BrnGameState::StuntModeScoring::RegisterStunt": {
@@ -3327,10 +3342,16 @@
   "BrnGameState::StuntModeScoring::UpdateScore": {
    "status": "reviewed"
   },
+  "BrnGameState::StuntModeScoring::UpdateScores": {
+   "status": "reviewed"
+  },
   "BrnGameState::StuntModeScoring::UpdateStuntRating": {
    "status": "reviewed"
   },
   "BrnGameState::StuntModeScoring::UpdateStuntRepetition": {
+   "status": "reviewed"
+  },
+  "BrnGameState::StuntModeScoring::UpdateStunts": {
    "status": "reviewed"
   },
   "BrnGameState::StuntModeScoring::WasComboRecentlyPerformed": {
@@ -15594,6 +15615,10 @@
    "status": "done"
   },
   "class:BrnGameState::StuntManagerDebugComponent": {
+   "status": "done"
+  },
+  "class:BrnGameState::StuntModeScoring": {
+   "notes": "All 7 TU funcs bodied + gate PASS (cl /c). Adversarially verified per-function across multiple workflow rounds (UpdateScores parity/low, PreWorldUpdate + DealWithInProgressStunt parity/none, plus the earlier Combo/Lifecycle/Register/Queries/UpdatePass rounds). Member-by-name access throughout (no raw offset casts), clean reconstructed control flow, CGS_ASSERT house convention. Parity-heuristic divergence is the benign multi-file class comparison + intentionally-replaced assert machinery (CgsDev::Assert::Begin/Fire/End -> CGS_ASSERT). FLAG: flt_82CDB7xx scoring magnitudes are a file-wide unrecoverable data gap (0.0f placeholders, consistent across the file).",
    "status": "done"
   },
   "class:BrnGameState::StuntModeScoringOnline::CarLeapingData,7,int>": {
