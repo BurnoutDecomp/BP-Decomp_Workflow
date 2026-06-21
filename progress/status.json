@@ -510,7 +510,19 @@
   "BrnDirector::ICEResourceMgr::GetTakeData": {
    "status": "reviewed"
   },
+  "BrnDirector::ICEWrapper::EditorOff": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEWrapper::EditorOn": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEWrapper::ICEWrapper": {
+   "status": "reviewed"
+  },
   "BrnDirector::ICEWrapper::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEWrapper::ReconstructCameraMover": {
    "status": "reviewed"
   },
   "BrnDirector::MomentParameterBank::Construct": {
@@ -14904,6 +14916,10 @@
   },
   "class:BrnAI::RouteRequestManager": {
    "notes": "fresh-eyes review: 16-iter loop + weight table correct",
+   "status": "done"
+  },
+  "class:BrnDirector::ICEWrapper": {
+   "notes": "4 funcs: ctor (member-constructs heaps/ICEManager/mover, miReconstructFrame=S32_MAX) + EditorOn/EditorOff (debug-handle + console toggle + editor drive) + ReconstructCameraMover. New BrnDirectorICEWrapper.h/.cpp home + decl-only grows (ICEManager accessors, ICEController/ICECameraMover/CgsDebugInterface callee stubs, flagged). asm-verified fidelity; style scrubbed; gate green.",
    "status": "done"
   },
   "class:BrnDirector::MomentSelector": {
