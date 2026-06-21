@@ -10411,34 +10411,34 @@
    "status": "reviewed"
   },
   "CgsMemory::HeapMalloc::CAlloc": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMalloc::Construct": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMalloc::Destruct": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMalloc::Free": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMalloc::Malloc": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMalloc::Prepare": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMalloc::PrintAllocations": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMalloc::ReAlloc": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMallocCoreAllocator::Alloc": {
    "status": "reviewed"
   },
   "CgsMemory::HeapMallocCoreAllocator::Construct": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsMemory::HeapMallocCoreAllocator::Free": {
    "status": "reviewed"
@@ -13945,8 +13945,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/Memory/CgsHeapMalloc.cpp": {
-   "notes": "CgsMemory::HeapMalloc wraps an embedded EA::Allocator::GeneralAllocator (committed vendor type) -- Malloc/Free/Calloc/Realloc map cleanly to MallocAligned/Free/Calloc/Realloc. BLOCKERS: (1) Construct calls GeneralAllocator::Init(buffer,size,0,0,0,0) (core-init overload) + SetOption(3,0), and PrintAllocations calls TraceAllocatedMemory(callback,0,0,0) -- all THREE are ABSENT from the committed partial GeneralAllocator reconstruction (it has only 0-arg Init()/Shutdown/Malloc/MallocAligned/Calloc/Realloc/Free). These have substantial allocator-logic bodies that belong to the GeneralAllocator/PPMalloc reconstruction (wrong dependency order to bolt them on undefined from this wrapper). (2) PrintAllocations' trace callback sub_828667B8 is unidentified. (3) HeapMallocCoreAllocator (2nd class in the TU) has no DWARF class shape; its Construct does HeapMalloc::Construct(this+1dword,...) implying a vtable/ICoreAllocator base of unknown layout. BLOCK until GeneralAllocator gains Init(pInitialCore,nSize,bShouldFree,bShouldTrace,pCoreAddFn,pCtx) + SetOption + TraceAllocatedMemory (with bodies) and the ICoreAllocator/HeapMallocCoreAllocator shape is known; HeapMalloc is then a thin wrapper.",
-   "status": "blocked"
+   "notes": "Gate PASS + adversarially verified: all 9 funcs parity store-for-store (Construct Init(buf,size,0,0,0,0)+SetOption(3,0), Malloc/Free/CAlloc/ReAlloc->GeneralAllocator, Destruct=Shutdown, Prepare=Shutdown+Construct, PrintAllocations=TraceAllocatedMemory, embedded mAllocator @+4/+8 offsets confirmed); HeapMallocCoreAllocator correctly derives ICoreAllocator + forwards to embedded HeapMalloc; ICoreAllocator vtable matches DWARF. minor_drift/low: invented EA-contract AllocFlags enum (unused, documented) + GetAllocator() omitted (no caller, no asm body). FLAG: trace callback sub_828667B8 = best-effort no-op stub (not in exports, not fabricated).",
+   "status": "done"
   },
   "GameShared/GameClasses/Memory/CgsLinearMalloc.cpp": {
    "status": "done"
