@@ -1941,6 +1941,21 @@
   "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::Destruct": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::Get": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::SetButtonPressed": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::SetNetworkPlayerResultsInterface": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::SetPlayerStatusInterface": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::SetTimerStatusInterface": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateModuleIO::PrepareForModeAction::Construct": {
    "status": "reviewed"
   },
@@ -2665,6 +2680,24 @@
    "status": "reviewed"
   },
   "BrnGameState::OnlineShowtimeMode::Start": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineStuntRunModeScoring::Compare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineStuntRunModeScoring::CompareTeams": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineStuntRunModeScoring::GetNumPlayersOnTeam": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineStuntRunModeScoring::GetTeamScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineStuntRunModeScoring::GetWinnerTea": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineStuntRunModeScoring::UpdatePlayerPoints": {
    "status": "reviewed"
   },
   "BrnGameState::OpponentData,7>::Append": {
@@ -15487,6 +15520,10 @@
   "class:BrnGameState::GameStateModuleIO::PostWorldInputBuffer": {
    "status": "done"
   },
+  "class:BrnGameState::GameStateModuleIO::PreWorldInputBuffer": {
+   "notes": "Gate PASS + adversarially verified parity/none: all 21 SetButtonPressed stores asm-confirmed (followed asm over phantom pseudocode stores), lock idioms (read bit4/write bit3) correct, embed-by-value offsets locked by static_asserts, no fabrication/overreach. Parity-heuristic divergence is the benign multi-func-in-one-file comparison.",
+   "status": "done"
+  },
   "class:BrnGameState::GameStateModuleIO::PrepareForModeAction": {
    "status": "done"
   },
@@ -15593,6 +15630,14 @@
    "status": "done"
   },
   "class:BrnGameState::OnlineFlybyManager::EOngoingRivalryCompare,6>": {
+   "status": "done"
+  },
+  "class:BrnGameState::OnlineStuntRunMode": {
+   "notes": "Keystone-adjacent, NOT a clean leaf (scan hard_unmet=0 missed real deps). Needs: (1) GameMode base vtable to DECLARE ShouldFinish + HasLoadingScreen (X360 Start calls HasLoadingScreen via base slot +0x68; committed BrnGameMode.h + done siblings Showtime/RaceMode declare neither) -- a base-vtable grow affecting ALL GameMode subtypes, must not shift committed slots; (2) TrafficData Hull subsystem homed for GetBestStartGridID (BrnTrafficData is a stub; Hull only in DWARF); (3) a committed CgsNumeric::Random home reconciled with FlybyManager.cpp's LOCAL duplicate def; (4) Start fugitive-flag gate must read lpStartGameModeParams->GetGameModeType() (+0x2D0), not the event. Decoded draft preserved at .wf/online-stunt-run-mode-draft/ (CgsRandom.h + the 6 bodies + 2 grow diffs).",
+   "status": "blocked"
+  },
+  "class:BrnGameState::OnlineStuntRunModeScoring": {
+   "notes": "Gate PASS + adversarially verified parity/low: Compare/CompareTeams tie-break sense confirmed, GetTeamScore/GetNumPlayersOnTeam loops over the right per-car arrays, UpdatePlayerPoints confirmed vtable SLOT 6 override (the +0x04 slot-confusion bug was checked, correct), CarScoreData offsets +0xD4/+0x69/+0x58/+0x5C match asm, no fabrication/overreach.",
    "status": "done"
   },
   "class:BrnGameState::OpponentData,7>": {
