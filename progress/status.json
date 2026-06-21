@@ -672,6 +672,9 @@
   "BrnDirector::SharedPlaylists::Construct": {
    "status": "reviewed"
   },
+  "BrnDirector::SimpleIceTakedownPlayer::SetIceAnim": {
+   "status": "reviewed"
+  },
   "BrnDirector::VehicleRef::Construct": {
    "status": "reviewed"
   },
@@ -15029,6 +15032,10 @@
   },
   "class:BrnDirector::MomentSelector": {
    "notes": "3 verify loops PASS (per-body fidelity incl. assert polarity/De-Morgan-dual + read-+472-before-clear-+480 order; no-DWARF inference soundness w/ all guessed names flagged; final sign-off). Gate clean. Parity RED benign: the 7 pseudocode branches are assert if-checks folded into CGS_ASSERT (cpp 0 branches); absent callees = assert machinery + the declare-only SelectBestMomentWithExclusion delegate (called in-code, unresolved by matcher); return_count diff = the 3 void funcs have no return. No DWARF -> semantic-parity model, names from assert strings; expected reconciliations flagged (MomentHandle/capacity/SelectBestMomentWithExclusion body).",
+   "status": "done"
+  },
+  "class:BrnDirector::SimpleIceTakedownPlayer": {
+   "notes": "SetIceAnim: assert lpIceAnim leading 8-byte classkey == iceanim::ClassKey() (0x4644E379A997C1EE, asm-exact) then bind @+0x18; minimal SimpleIceTakedownPlayer home + iceanim.h ClassKey() grow; gate green, direct asm mapping",
    "status": "done"
   },
   "class:BrnGame": {
