@@ -12480,7 +12480,40 @@
   "ICE::ICECamera::SetCameraMatrix": {
    "status": "reviewed"
   },
+  "ICE::ICECameraMover::Construct": {
+   "status": "reviewed"
+  },
   "ICE::ICECameraMover::ICECameraMover": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateBloom": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateFade": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateFocus": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateForwardVector": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateFrameEnd": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateHardCuts": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateLens": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateOverlay": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateSimTime": {
+   "status": "reviewed"
+  },
+  "ICE::ICECameraMover::UpdateTransformationMatrix": {
    "status": "reviewed"
   },
   "ICE::ICEChannel::EnforceSpacing": {
@@ -12733,6 +12766,27 @@
    "status": "reviewed"
   },
   "ICE::ICEWidgetLogo::Render": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetMenu::ClearMenuContent": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetMenu::Construct": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetMenu::GetNumNonEmptyItems": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetMenu::GetWidth": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetMenu::MoveDown": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetMenu::MoveUp": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetMenu::Render": {
    "status": "reviewed"
   },
   "ICE::ICEWidgetMenuItem::Prepare": {
@@ -14896,6 +14950,10 @@
   "SDKs/Packages/ICE/ICECamera.cpp": {
    "status": "done"
   },
+  "SDKs/Packages/ICE/ICECameraMover.cpp": {
+   "notes": "Reviewer flagged Construct's bungee init (mBungeeCarFwd) as a defect, but that is a misattribution of the UpdateHardCuts pattern. Verified against the Construct disasm: it loads TWO distinct vectors -- mpCar+0x20 (zAxis=forward) into one reg and mpCar+0x30 (wAxis=position) into another -- and stores position->mBungeeCarPos(+0x160), forward->mBungeeCarFwd(+0x170). So mBungeeCarPos=GetGeometryPosition()/mBungeeCarFwd=GetForwardVector() is correct. UpdateHardCuts (separately) loads ONLY mpCar+0x30 (position) and stores it to BOTH slots, which the code also does correctly. All 11 funcs semantic-parity verified against asm; compile gate PASS; RED structural parity is the mandated de-optimization (inlined value-type reads -> named GetValueFloat/Int accessors, re-rolled cubic loops). Style clean (no @0x8/X360 in authored comments).",
+   "status": "done"
+  },
   "SDKs/Packages/ICE/ICECameraSpaceHandler.cpp": {
    "status": "done"
   },
@@ -15928,6 +15986,10 @@
    "status": "done"
   },
   "class:ICE::ICEWidgetLogo": {
+   "status": "done"
+  },
+  "class:ICE::ICEWidgetMenu": {
+   "notes": "Gate green (cl /c). 3 adversarial verifiers; final fidelity pass confirmed all 7 bodies faithful after removing a fabricated +2.0f on the selection-highlight bottom (asm = rowTop+rowHeight; the +2 belongs to the scrollbar block). Per-style geometry tables + empty-cell sentinel are flagged placeholders. Style clean (no addr/X360 leakage).",
    "status": "done"
   },
   "class:ICE::ICEWidgetMenuItem": {
