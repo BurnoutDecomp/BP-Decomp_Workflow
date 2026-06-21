@@ -12498,10 +12498,43 @@
   "ICE::ICERender::ScrShadowPrintf": {
    "status": "reviewed"
   },
+  "ICE::ICETake::ChangeSize": {
+   "status": "reviewed"
+  },
   "ICE::ICETake::Construct": {
    "status": "reviewed"
   },
+  "ICE::ICETake::CopyElement": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::CopyKeyElement": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::DataChanged": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::Delete": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::DeleteAssemblySoftKeys": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::DeleteLeftSideKey": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::DiscardUndo": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::FlushUndo": {
+   "status": "reviewed"
+  },
   "ICE::ICETake::FreeEditBuffer": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::GetIntervalBracket": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::GetIntervalKey": {
    "status": "reviewed"
   },
   "ICE::ICETake::GetSlope": {
@@ -12516,7 +12549,31 @@
   "ICE::ICETake::GetValueInt": {
    "status": "reviewed"
   },
+  "ICE::ICETake::Harden": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::ICETake": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::Insert": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::MarkChannelFromSubTake": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::MoveParameter": {
+   "status": "reviewed"
+  },
   "ICE::ICETake::NewEditBuffer": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::PasteElement": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::PopUndo": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::PushUndo": {
    "status": "reviewed"
   },
   "ICE::ICETake::SetDataPointers": {
@@ -12525,10 +12582,16 @@
   "ICE::ICETake::SetParameter": {
    "status": "reviewed"
   },
+  "ICE::ICETake::SetSize": {
+   "status": "reviewed"
+  },
   "ICE::ICETake::SetSubTake": {
    "status": "reviewed"
   },
   "ICE::ICETake::SetValue": {
+   "status": "reviewed"
+  },
+  "ICE::ICETake::Soften": {
    "status": "reviewed"
   },
   "ICE::ICETakeData::ComputeActualSize": {
@@ -15707,6 +15770,10 @@
    "status": "done"
   },
   "class:ICE::ICEParameter": {
+   "status": "done"
+  },
+  "class:ICE::ICETake": {
+   "notes": "All 21 editor methods reconstructed across 4 rounds (R1 queries, R2 undo+element, R3 ChangeSize+SetSize, R4 the 8 edit ops); asm-verified incl. Delete branch-table + ChangeSize clamps/gap-fill; gate green; many verifier loops, 3 real bugs caught+fixed (gap-fill source, clamp ceilings, Delete IsHardCut/keyAt)",
    "status": "done"
   },
   "class:ICE::ICETakeData": {
