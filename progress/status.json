@@ -498,10 +498,43 @@
   "BrnDirector::EffectInterface::HookExists": {
    "status": "reviewed"
   },
+  "BrnDirector::ICEMoviePlayer::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlayer::CutToInterpolateOut": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlayer::GetCamera": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlayer::InterpolateFrom": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlayer::Loop": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlayer::Play": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlayer::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlayer::Stop": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlayer::Update": {
+   "status": "reviewed"
+  },
   "BrnDirector::ICEMoviePlaylist::Construct": {
    "status": "reviewed"
   },
+  "BrnDirector::ICEMoviePlaylist::DebugMenuNewMovie": {
+   "status": "reviewed"
+  },
   "BrnDirector::ICEMoviePlaylist::DebugMenuRemoveMovie": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEMoviePlaylist::GetMovieCount": {
    "status": "reviewed"
   },
   "BrnDirector::ICEMoviePlaylist::InsertMovieBefore": {
@@ -523,6 +556,12 @@
    "status": "reviewed"
   },
   "BrnDirector::ICEWrapper::ReconstructCameraMover": {
+   "status": "reviewed"
+  },
+  "BrnDirector::IceMovie::GetCgsID": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MakeCGSId": {
    "status": "reviewed"
   },
   "BrnDirector::MomentParameterBank::Construct": {
@@ -589,6 +628,9 @@
    "status": "reviewed"
   },
   "BrnDirector::SceneQueryInterface::LineTestNearest": {
+   "status": "reviewed"
+  },
+  "BrnDirector::SharedPlaylists::Construct": {
    "status": "reviewed"
   },
   "BrnDirector::VehicleRef::Construct": {
@@ -14025,6 +14067,10 @@
   "GameSource/Director/MomentController/BrnMomentSelector.cpp": {
    "status": "done"
   },
+  "GameSource/Director/Utils/BrnICEMoviePlayer.cpp": {
+   "notes": "Movie-player family reconstructed; gate green; fidelity verified vs --asm (seed table 36 rows corrected, PlayMovie reconciled to DWARF sig, Play mbIsLooping clear); camera-Behaviour layer minimal-sliced (flagged)",
+   "status": "done"
+  },
   "GameSource/Director/Utils/BrnSceneQueryInterface.cpp": {
    "notes": "sonnet review: slot null-guards, offsets, sub-call result forwarding faithful",
    "status": "done"
@@ -14916,6 +14962,14 @@
   },
   "class:BrnAI::RouteRequestManager": {
    "notes": "fresh-eyes review: 16-iter loop + weight table correct",
+   "status": "done"
+  },
+  "class:BrnDirector::ICEMoviePlayer": {
+   "notes": "Movie-player family reconstructed; gate green; fidelity verified vs --asm (seed table 36 rows corrected, PlayMovie reconciled to DWARF sig, Play mbIsLooping clear); camera-Behaviour layer minimal-sliced (flagged)",
+   "status": "done"
+  },
+  "class:BrnDirector::ICEMoviePlaylist": {
+   "notes": "Movie-player family reconstructed; gate green; fidelity verified vs --asm (seed table 36 rows corrected, PlayMovie reconciled to DWARF sig, Play mbIsLooping clear); camera-Behaviour layer minimal-sliced (flagged)",
    "status": "done"
   },
   "class:BrnDirector::ICEWrapper": {
