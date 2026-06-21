@@ -552,19 +552,40 @@
   "BrnDirector::ICEResourceMgr::GetTakeData": {
    "status": "reviewed"
   },
+  "BrnDirector::ICEWrapper::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEWrapper::Destruct": {
+   "status": "reviewed"
+  },
   "BrnDirector::ICEWrapper::EditorOff": {
    "status": "reviewed"
   },
   "BrnDirector::ICEWrapper::EditorOn": {
    "status": "reviewed"
   },
+  "BrnDirector::ICEWrapper::GetCurrentMovie": {
+   "status": "reviewed"
+  },
   "BrnDirector::ICEWrapper::ICEWrapper": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEWrapper::IsPlayingMovie": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEWrapper::PlayMovie": {
    "status": "reviewed"
   },
   "BrnDirector::ICEWrapper::Prepare": {
    "status": "reviewed"
   },
   "BrnDirector::ICEWrapper::ReconstructCameraMover": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEWrapper::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ICEWrapper::UpdateAction": {
    "status": "reviewed"
   },
   "BrnDirector::IceMovie,20,int>::AllocateObject": {
@@ -14903,6 +14924,10 @@
    "status": "done"
   },
   "SDKs/Packages/ICE/ICERender.cpp": {
+   "status": "done"
+  },
+  "SDKs/Packages/ICE/ICEWrapper.cpp": {
+   "notes": "7 BrnDirector::ICEWrapper methods; reconciled the ICEWrapper layout (HeapMalloc base + real members, retired placeholders) re-derived ctor+ReconstructCameraMover; asm-verified (2 defects caught+fixed: ReconstructCameraMover arg order, Construct fabrications + the +0x120E4/E8 zero-inits + Update timescale product); gate green, regressions green",
    "status": "done"
   },
   "SDKs/Packages/Lion/Final/eauk_common/Common/ElfHash.h": {
