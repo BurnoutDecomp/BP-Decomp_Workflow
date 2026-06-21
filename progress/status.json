@@ -12699,6 +12699,75 @@
   "ICE::ICEChannel::SetParameter": {
    "status": "reviewed"
   },
+  "ICE::ICEController::BarFlipping": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::ChangeKeyElementValue": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::ChangeKeyElementValues": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::Construct": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::ConstructMenus": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::DestructMenus": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::FromBubble": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::IsMarked": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::IsShakeEditing": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::JoyHandler": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::MoveCursor": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::RefreshInfoList": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::RefreshIntervalMenu": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::RefreshMenu": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::Render": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::RenderBars": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::RenderMenus": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::RenderTargetBox": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::SetCurrentIntervalValue": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::SetJoyVelocities": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::SetZoomRange": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::ToBubble": {
+   "status": "reviewed"
+  },
+  "ICE::ICEController::Update": {
+   "status": "reviewed"
+  },
   "ICE::ICEElementDescription::Decode": {
    "status": "reviewed"
   },
@@ -16136,6 +16205,10 @@
    "status": "done"
   },
   "class:ICE::ICEChannel": {
+   "status": "done"
+  },
+  "class:ICE::ICEController": {
+   "notes": "23 funcs, layout-first across 7 files (controller is-a ICEAuthor; author methods via the shared this). 3 adversarial verifiers (one per group); 5 real defects caught + fixed + re-verified: mTargetBox @0x7170 (+ separate logo/widescreen-marker widgets), mpMenuB timestep single-deref, ConstructMenus style/size/time-bar-flag, ToBubble yaw atan2(D.x,D.z), JoyHandler EXIT_CONFIRM reset-take row. A 4th verifier's MoveParameter-arity 'defect' was a false positive (it read the Hex-Rays pseudocode which dropped the r5 arg; the asm sets r5 before the bl and the body reads it \u2014 2-arg signature is correct). All 6 .cpp gate green, style clean. Dev-UI colours/menu-strings/action-ids are flagged placeholders.",
    "status": "done"
   },
   "class:ICE::ICEElementDescription": {
