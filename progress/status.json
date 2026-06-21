@@ -1413,10 +1413,16 @@
   "BrnGameState::CrashMode::Start": {
    "status": "reviewed"
   },
+  "BrnGameState::CrashModeScoring::": {
+   "status": "reviewed"
+  },
   "BrnGameState::CrashModeScoring::DealWithRemovedTraffic": {
    "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithShowtimeStunt": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CrashModeScoring::GetRecentCra": {
    "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::RecentCrash,64>::Append": {
@@ -15829,6 +15835,10 @@
    "status": "done"
   },
   "class:BrnGameState::CheckpointData,16>": {
+   "status": "done"
+  },
+  "class:BrnGameState::CrashModeScoring": {
+   "notes": "Gate PASS + adversarially verified parity/low: GetRecentCrash (0x8232BEF8) store-for-store (count word +0x200, u16 muTrafficCarIndex compare, &element via bounds-checked op[] else nullptr). Additive home grow (maRecentCrashes @+0x7C asm-anchored, opaque reserve re-partitioned 0x320-preserved, no committed member reorder/retype). One isolated provenance-comment mislabel (0x8231ADB0 vs 0x8231AEB8) -- no code impact.",
    "status": "done"
   },
   "class:BrnGameState::CrashModeScoring::RecentCrash,64>": {
