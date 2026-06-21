@@ -1197,6 +1197,21 @@
   "BrnGameState::BurnoutSkillzData::GetBurnoutSkill": {
    "status": "reviewed"
   },
+  "BrnGameState::CarData::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CarData::GetRoadRulesScores": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CarData::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CarData::ResetRoadRulesScores": {
+   "status": "reviewed"
+  },
+  "BrnGameState::CarData::SetRoadRulesScores": {
+   "status": "reviewed"
+  },
   "BrnGameState::CarSelectManager::Construct": {
    "status": "reviewed"
   },
@@ -15412,6 +15427,10 @@
    "status": "done"
   },
   "class:BrnGameState::BufferedNewHighScore,5>": {
+   "status": "done"
+  },
+  "class:BrnGameState::CarData": {
+   "notes": "Gate PASS + adversarially verified parity/low, no layout regression: Construct's 9 named stores + ClearData, Prepare's ValidateHeap+Malloc(3584,4)+ResetRoadRulesScores, Get/Set Copy direction confirmed from asm this/arg setup, ResetRoadRulesScores 64-entry Construct loop. Members by name, no raw casts, no fabrication. BrnScoringSystem.h untouched (CarData fully modeled). GetAllocator accessor added additively to CgsHeapMalloc.h (enabler).",
    "status": "done"
   },
   "class:BrnGameState::CarSelectManager": {
