@@ -12510,6 +12510,135 @@
   "ICE::Cubic1D::Update": {
    "status": "reviewed"
   },
+  "ICE::ICEAuthor::AdjustZoomRange": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::AdvanceAnimation": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::AdvanceAssemblyAnimation": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::ChangeAssemTakeLength": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::ClearEditTake": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::CommitCurrentAssembly": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::CommitCurrentTake": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::Construct": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::CopyKeyElements": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::CreateNewTake": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::DeleteTakeSegment": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::EditAssembly": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::EditorOn": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::FindEditedTakeFromGuid": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetCurrentSubtakeGuid": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetElementIndexByTag": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetIntervalBracket": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetIntervalEnd": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetIntervalKey": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetIntervalStart": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetShuttleSpeed": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetStateName": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetSubAssemRatio": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetValueFloat": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::GetWorldTransformationMatrix": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::InsertTakeSegment": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::IsEndKeyState": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::JumpToNextKey": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::JumpToPreviousKey": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::LoadCurrentAssembly": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::LoadCurrentTake": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::MoveParameter": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::PasteKeyElements": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::SaveTake": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::SetAssemblySourceTake": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::SetKeyElementValue": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::SetKeyElementValueChange": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::SetParameterChange": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::SetState": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::SwitchEyeSpace": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::SwitchLookSpace": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::ToggleKey": {
+   "status": "reviewed"
+  },
+  "ICE::ICEAuthor::TransformSpace": {
+   "status": "reviewed"
+  },
   "ICE::ICECamera::SetCameraMatrix": {
    "status": "reviewed"
   },
@@ -15996,6 +16125,10 @@
    "status": "done"
   },
   "class:ICE::CameraSpaceHandler": {
+   "status": "done"
+  },
+  "class:ICE::ICEAuthor": {
+   "notes": "43 funcs, layout-first across 7 files. Full ICEAuthor layout derived from all bodies (corrected a phantom 0x300 gap: scalar block/list/enable bytes are contiguous after maiElementWidget at 0xF14, cross-checked vs a1[979]==0xF4C). 6 adversarial verifiers (one per group); 5 real defects caught + fixed + re-verified: SetKeyElementValueChange mMin/mMax clamp, LoadCurrentTake @0x20 mode-flag clear, InsertTakeSegment 2-arg signature, TransformSpace row3 translation; GetElementIndexByTag ruled already-correct (off_82F291F4 is a +4-shifted base). All 6 .cpp gate green, style clean.",
    "status": "done"
   },
   "class:ICE::ICECameraMover": {
