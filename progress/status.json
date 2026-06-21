@@ -1077,6 +1077,51 @@
   "BrnGameMainFlowController::GameMainFlowController::SendEvent": {
    "status": "reviewed"
   },
+  "BrnGameState::AchievementManagerBase::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnBarrelRoll": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnBodyShop": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnCollectAllStunts": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnCollectStunt": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnEventWin": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnFindAllCarParks": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnFindAllDriveThrus": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnFlatSpin": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnGameCompletion": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnLicenseUpgrade": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnPowerParking": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnSetAllRoadRules": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnSetRoadRule": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnTakedown": {
+   "status": "reviewed"
+  },
   "BrnGameState::BaseOnlineModeScoring::AwardNetworkRatings": {
    "status": "reviewed"
   },
@@ -2655,6 +2700,12 @@
   "BrnGameState::OnlineRaceMode::GetName": {
    "status": "reviewed"
   },
+  "BrnGameState::OnlineRaceMode::GetOutroTimeout": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineRaceMode::PreWorldUpdate": {
+   "status": "reviewed"
+  },
   "BrnGameState::OnlineRaceMode::Start": {
    "status": "reviewed"
   },
@@ -2842,6 +2893,24 @@
    "status": "reviewed"
   },
   "BrnGameState::ResultsState::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RichPresenceManagerBase::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RichPresenceManagerBase::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RichPresenceManagerBase::SetGameTypeParameters": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RichPresenceManagerBase::SetPositionParameter": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RichPresenceManagerBase::SetRankedParameter": {
+   "status": "reviewed"
+  },
+  "BrnGameState::RichPresenceManagerBase::SetRoundParameter": {
    "status": "reviewed"
   },
   "BrnGameState::RichPresenceManagerBase::Update": {
@@ -9027,6 +9096,24 @@
   "CgsAttribSys::VaultSlot::RegisterVault": {
    "status": "reviewed"
   },
+  "CgsContainers::": {
+   "status": "reviewed"
+  },
+  "CgsContainers::A": {
+   "status": "reviewed"
+  },
+  "CgsContainers::Arr": {
+   "status": "reviewed"
+  },
+  "CgsContainers::Array<": {
+   "status": "reviewed"
+  },
+  "CgsContainers::Array<c": {
+   "status": "reviewed"
+  },
+  "CgsContainers::Array<cla": {
+   "status": "reviewed"
+  },
   "CgsContainers::Array<int,8>::Append": {
    "status": "reviewed"
   },
@@ -9094,6 +9181,9 @@
    "status": "reviewed"
   },
   "CgsContainers::FifoQueue<float,10>::Push": {
+   "status": "reviewed"
+  },
+  "CgsContainers::Linke": {
    "status": "reviewed"
   },
   "CgsCore::SPrintf": {
@@ -15120,6 +15210,10 @@
   "GameSource/Unity/../GameFlowController/TopLevel/BrnGameMainFlowController.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../GameState/AchievementManager/BrnGameStateAchievementManagerBase.cpp": {
+   "notes": "Gate PASS + adversarially verified (RichPresence bugs fixed at consolidation). 15 funcs over ScoringSystem/ProgressionManager; verified parity/none; additive declare-only accessors flagged. Commit fa95a79.",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/AchievementManager/PS3/BrnGameStateAchievementManagerPS3.cpp": {
    "notes": "OnFreeburnChallengeComplete (0x8235B2D8) depends on the data table at X360 0x82CDBDC4 (array of {EAchievement, u32 threshold}, count at 0x82CDBDDC) whose CONTENTS are not recoverable from any material in this repo (not in the dossier, dwarfdump, or the IDA exports). The other 7 handlers are reconstructed and faithful, but the TU cannot be completed without that table. Also a PS3-path unit (AchievementManagerBase methods). Unblock once the table bytes are available.",
    "status": "blocked"
@@ -15306,6 +15400,10 @@
    "status": "done"
   },
   "GameSource/Unity/../GameState/Progression/BrnProgressionManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/RichPresenceManager/BrnGameStateRichPresenceManagerBase.cpp": {
+   "notes": "Gate PASS + adversarially verified (RichPresence bugs fixed at consolidation). 6 funcs; verifier caught 2 wrong-value/field bugs (ranked=2 not 0, Prepare +0x18 not +0x14) -> FIXED at consolidation (E_GAME_RANKED_UNKNOWN, meOldRichPresenceStatus); re-gated PASS. Commit fa95a79.",
    "status": "done"
   },
   "GameSource/Unity/../GameState/RoadRules/BrnRoadRulesDebugComponent.cpp": {
@@ -15838,6 +15936,10 @@
   "class:BrnGameState::GridPositionAndScoreData,8>": {
    "status": "done"
   },
+  "class:BrnGameState::HUDMessageLogic": {
+   "notes": "Gate PASS + adversarially verified (RichPresence bugs fixed at consolidation). 7 funcs over ScoringSystem; DWARF-silent layout reconstructed; verified parity/low. Commit fa95a79.",
+   "status": "done"
+  },
   "class:BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>": {
    "status": "done"
   },
@@ -15854,6 +15956,10 @@
    "status": "done"
   },
   "class:BrnGameState::OnlineFlybyManager::EOngoingRivalryCompare,6>": {
+   "status": "done"
+  },
+  "class:BrnGameState::OnlineRaceMode": {
+   "notes": "Gate PASS + adversarially verified (RichPresence bugs fixed at consolidation). 2 funcs (PreWorldUpdate winner-scan + GetOutroTimeout), GameMode base-slot overrides; verified minor_drift/low. 2 unresolved .data outro floats estimated+FLAGged. Commit fa95a79.",
    "status": "done"
   },
   "class:BrnGameState::OnlineStuntRunMode": {
@@ -16282,6 +16388,10 @@
   },
   "class:CgsAttribSys::VaultArray": {
    "notes": "Fresh-eyes review (opus) PASS after DWARF-faithful redo: real layout (mpaSlots/mpGarbageCollector/StreamedVaultAllocator/miNumSlots/mbPrepared), void Construct(IGarbageCollector*), inlining-reversal of StreamedVaultAllocator::Construct, BitArray<24u> cascade. No offset hacks.",
+   "status": "done"
+  },
+  "class:CgsContainers": {
+   "notes": "Gate PASS + adversarially verified parity/none: all 6 Array op[] addrs confirmed store-for-store (sizeof(T) scale 24/116/44/48 + count offset N*sizeof; generic body covers all), LinkedListHelper::AddTail (free@+0xC4/live@+0xD0/mData@+8) store-for-store. Members by name, additive (no reorder/retype), existing instantiations compile. FLAG: LinkedList sublist offsets inferred (low).",
    "status": "done"
   },
   "class:CgsContainers::Array<int,8>": {
