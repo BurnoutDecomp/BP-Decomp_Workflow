@@ -2064,6 +2064,12 @@
   "BrnGameState::GameStateModuleIO::SetUpAllDriveThrusAction::DriveThruIn": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateModuleIO::SetUpAllEventStartsInterface::AddEventStart": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::SetUpAllEventStartsInterface::EventSta": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateModuleIO::SetupNetworkCarAction::Construct": {
    "status": "reviewed"
   },
@@ -2071,6 +2077,15 @@
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::SoundTriggerAction::IsEmpty": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::SpecificGameModeEventInterface::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::SpecificGameModeEventInterface::Even": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateModuleIO::SpecificGameModeEventInterface::Event,": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateModuleIO::SpecificGameModeEventInterface::Event::Construct": {
@@ -15867,6 +15882,10 @@
   "class:BrnGameState::GameStateModuleIO::SetUpAllDriveThrusAction": {
    "status": "done"
   },
+  "class:BrnGameState::GameStateModuleIO::SetUpAllEventStartsInterface": {
+   "notes": "Gate PASS + adversarially verified: EventStart 48B layout + the scan/append control flow store-for-store; the only drift is the append return value (we return the new element consistent with the found path; asm's base-ptr is an inlined-void-Append artifact) -- documented inline FLAG, not a bug. Members by name, additive home grow.",
+   "status": "done"
+  },
   "class:BrnGameState::GameStateModuleIO::SetupNetworkCarAction": {
    "status": "done"
   },
@@ -15874,6 +15893,10 @@
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::SoundTriggerAction,16>": {
+   "status": "done"
+  },
+  "class:BrnGameState::GameStateModuleIO::SpecificGameModeEventInterface": {
+   "notes": "Gate PASS + adversarially verified parity/none: AddEvent scan-by-GetEventID + capacity-asserted append, Event::GetLandmark/GetNumLandmarks/GetEventID store-for-store. Members by name, additive home grow (no reorder/retype; combined gate clean with the co-built SetUpAllEventStarts).",
    "status": "done"
   },
   "class:BrnGameState::GameStateModuleIO::SpecificGameModeEventInterface::Event": {
