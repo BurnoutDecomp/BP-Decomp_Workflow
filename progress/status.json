@@ -15633,7 +15633,7 @@
    "status": "done"
   },
   "class:BrnGameState::OnlineStuntRunMode": {
-   "notes": "Keystone-adjacent, NOT a clean leaf (scan hard_unmet=0 missed real deps). Needs: (1) GameMode base vtable to DECLARE ShouldFinish + HasLoadingScreen (X360 Start calls HasLoadingScreen via base slot +0x68; committed BrnGameMode.h + done siblings Showtime/RaceMode declare neither) -- a base-vtable grow affecting ALL GameMode subtypes, must not shift committed slots; (2) TrafficData Hull subsystem homed for GetBestStartGridID (BrnTrafficData is a stub; Hull only in DWARF); (3) a committed CgsNumeric::Random home reconciled with FlybyManager.cpp's LOCAL duplicate def; (4) Start fugitive-flag gate must read lpStartGameModeParams->GetGameModeType() (+0x2D0), not the event. Decoded draft preserved at .wf/online-stunt-run-mode-draft/ (CgsRandom.h + the 6 bodies + 2 grow diffs).",
+   "notes": "Prereqs #1+#3 DONE (96c2b2e GameMode base-vtable ShouldFinish/HasLoadingScreen; f57a3c5 CgsNumeric::Random home). REMAINING: (2) GetBestStartGridID (0x82331708) is a 201-line VMX-vectorized hull-geometry fn (TrafficData_::GetMemoryStructure -> hull -> light-trigger arrays, XMVectorACos min-angle selection) needing the TrafficData Hull SUBSYSTEM (BrnTrafficData is a stub; Hull only in DWARF) -- a substantial separate sub-project, low-leverage to do just for this; (4) on rebuild, Start's fugitive-flag gate must read lpStartGameModeParams->GetGameModeType()(+0x2D0) not the event. Draft .wf/online-stunt-run-mode-draft/. Unblocks when TrafficData Hull lands; the other 5 funcs are draft-ready.",
    "status": "blocked"
   },
   "class:BrnGameState::OnlineStuntRunModeScoring": {
