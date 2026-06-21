@@ -1194,7 +1194,16 @@
   "BrnGameState::BurningRouteMode::Start": {
    "status": "reviewed"
   },
+  "BrnGameState::BurnoutSkillzData::Clear": {
+   "status": "reviewed"
+  },
   "BrnGameState::BurnoutSkillzData::GetBurnoutSkill": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzData::GetSkillAccuracy": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzData::SetBurnoutSkill": {
    "status": "reviewed"
   },
   "BrnGameState::CarData::Construct": {
@@ -15427,6 +15436,10 @@
    "status": "done"
   },
   "class:BrnGameState::BufferedNewHighScore,5>": {
+   "status": "done"
+  },
+  "class:BrnGameState::BurnoutSkillzData": {
+   "notes": "Gate PASS + adversarially verified parity/none: Clear's 14 zero-stores + enum loop, GetSkillAccuracy's 2 range asserts + 0.0049999999f return (no libm), SetBurnoutSkill's GetSkillAccuracy+RoundFloatToAccuracy+store with dropped Hex-Rays garbage args. Members by name, no fabrication. [12]->[14] grow is the correct X360 count (flagged); shift is benign (semantic-parity by-name; embedder partials all gate clean; no offset asserts in BrnScoringSystem.h).",
    "status": "done"
   },
   "class:BrnGameState::CarData": {
