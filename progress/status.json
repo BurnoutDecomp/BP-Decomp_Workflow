@@ -375,6 +375,39 @@
   "BrnDirector::Camera::BehaviourGameplayExternal::CalcSpringCoeffs": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::BehaviourIceAnim::BehaviourIceAnim": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::ChangeMovie": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::GetCollisio": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::GetTimeRemaining": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::HasFinishedOrFailed": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::SetParameters": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::SetupTweaker": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourIceAnim::Update": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::BehaviourManager::Construct": {
    "status": "reviewed"
   },
@@ -12795,6 +12828,18 @@
   "ICE::ICEWidgetTargetBox::Render": {
    "status": "reviewed"
   },
+  "ICE::ICEWidgetTimeBar::Construct": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetTimeBar::Render": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetTimeBar::Reset": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetTimeBar::SetTimeInfo": {
+   "status": "reviewed"
+  },
   "ICE::ICEWidgetWideScrMarker::Render": {
    "status": "reviewed"
   },
@@ -14136,6 +14181,10 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameSource/Director/Camera/Behaviours/BrnBehaviourIceAnim.cpp": {
+   "notes": "7 funcs. Adversarial verify found 3 defects (CopyTransformFrom args, see-through inner gate, ChangeMovie reset block) + 1 soft (tautological class-key assert); all fixed and re-verified PASS. Gate green, style clean.",
+   "status": "done"
+  },
   "GameSource/Director/Camera/BrnCameraEffects.cpp": {
    "status": "done"
   },
@@ -14961,6 +15010,7 @@
    "status": "done"
   },
   "SDKs/Packages/ICE/ICEDataEnums.hpp": {
+   "notes": "ICEChannel::GetIntervalParameter body in ICEData.cpp: boundary cases + mpParameters[i-1] x 1/65535, no off-by-one. Verifier PASS, gate green.",
    "status": "done"
   },
   "SDKs/Packages/ICE/ICEFile.cpp": {
@@ -14973,6 +15023,7 @@
    "status": "done"
   },
   "SDKs/Packages/ICE/ICEMath.hpp": {
+   "notes": "Bodies in ICEData.cpp. Adversarial fidelity verifier PASS: GetValueFloat/GetValueInt, SetParameter (binary-search direction + bracket out-params verified store-for-store), Encode (exact inverse of Decode). Gate green.",
    "status": "done"
   },
   "SDKs/Packages/ICE/ICEMemory.cpp": {
@@ -15066,6 +15117,10 @@
   },
   "class:BrnAI::RouteRequestManager": {
    "notes": "fresh-eyes review: 16-iter loop + weight table correct",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::BehaviourIceAnim": {
+   "notes": "ctor + GetCollisionPolicy/GetTimeRemaining/HasFinishedOrFailed. Layout pinned. Verified PASS after fixes. Gate green.",
    "status": "done"
   },
   "class:BrnDirector::ICEMoviePlayer": {
@@ -15997,6 +16052,10 @@
    "status": "done"
   },
   "class:ICE::ICEWidgetTargetBox": {
+   "status": "done"
+  },
+  "class:ICE::ICEWidgetTimeBar": {
+   "notes": "4 funcs. 150-marker layout + affine constants confirmed. Adversarial verify found 3 defects (keyframe offset +0x40, Construct arg order, Reset loop-marker clobber); all fixed and re-verified PASS. Gate green, style clean.",
    "status": "done"
   },
   "class:ICE::ICEWidgetWideScrMarker": {
