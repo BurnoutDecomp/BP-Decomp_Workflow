@@ -12447,6 +12447,9 @@
   "ICE::ICEManager::GetCameraTake": {
    "status": "reviewed"
   },
+  "ICE::ICEManager::ICEManager": {
+   "status": "reviewed"
+  },
   "ICE::ICEManager::Update": {
    "status": "reviewed"
   },
@@ -15761,6 +15764,10 @@
    "status": "done"
   },
   "class:ICE::ICEElementDescription": {
+   "status": "done"
+  },
+  "class:ICE::ICEManager": {
+   "notes": "ICEManager ctor: trivial member-construction of the embedded takes; X360 inlines the controller ctor (its 2nd take + 2 state flags at controller+0x7260/0x7262 belong to the ICEController TU). Enabled by making ICETake default-constructible. Gate green.",
    "status": "done"
   },
   "class:ICE::ICEMath": {
