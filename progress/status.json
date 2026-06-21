@@ -12561,6 +12561,12 @@
   "ICE::ICEWidgetIcon::Render": {
    "status": "reviewed"
   },
+  "ICE::ICEWidgetInfoList::AddFormattedItem": {
+   "status": "reviewed"
+  },
+  "ICE::ICEWidgetInfoList::Render": {
+   "status": "reviewed"
+  },
   "ICE::ICEWidgetLogo::Render": {
    "status": "reviewed"
   },
@@ -15699,6 +15705,10 @@
    "status": "done"
   },
   "class:ICE::ICEWidgetIcon": {
+   "status": "done"
+  },
+  "class:ICE::ICEWidgetInfoList": {
+   "notes": "AddFormattedItem (Vsnprintf into this+count*40, guard <=15) + Render (rows via ScrShadowPrintf, fmt=row text in r7 per Logo precedent, stepped Y inert vararg); gate green; 3 verify loops, ScrShadowPrintf mapping settled by Logo asm",
    "status": "done"
   },
   "class:ICE::ICEWidgetLogo": {
