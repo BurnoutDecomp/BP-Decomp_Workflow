@@ -2343,7 +2343,13 @@
   "BrnGameState::ModeManager::Construct": {
    "status": "reviewed"
   },
+  "BrnGameState::ModeManager::CountCheckpointsRemaining": {
+   "status": "reviewed"
+  },
   "BrnGameState::ModeManager::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::EndStuntChallenge": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::ExitCurrentMode": {
@@ -2364,10 +2370,16 @@
   "BrnGameState::ModeManager::FinishedSplashScreen": {
    "status": "reviewed"
   },
+  "BrnGameState::ModeManager::GetCheckpointPosition": {
+   "status": "reviewed"
+  },
   "BrnGameState::ModeManager::GetCountdownTimeForMode": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::GetCurrentFreeburnChallengeID": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::GetNextLandmarkIndex": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::GetNumberOfCarsInFlyby": {
@@ -2424,7 +2436,22 @@
   "BrnGameState::ModeManager::HandleWorldStunt": {
    "status": "reviewed"
   },
+  "BrnGameState::ModeManager::HasPlayerWon": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::HasRaceCarHitValidCheckpoint": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::IsInPostEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::IsOnlineGameMode": {
+   "status": "reviewed"
+  },
   "BrnGameState::ModeManager::LocalPlayerDisconnected": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::MarkCarHittingCheckpoint": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::MarkedManLoaded": {
@@ -2487,6 +2514,9 @@
   "BrnGameState::ModeManager::RemoteRaceCarHitsCheckpoint": {
    "status": "reviewed"
   },
+  "BrnGameState::ModeManager::ResetCheckpointDataForNextLap": {
+   "status": "reviewed"
+  },
   "BrnGameState::ModeManager::ResetNextLandmarks": {
    "status": "reviewed"
   },
@@ -2499,7 +2529,13 @@
   "BrnGameState::ModeManager::SendGameResultsToNetwork": {
    "status": "reviewed"
   },
+  "BrnGameState::ModeManager::SendModeResults": {
+   "status": "reviewed"
+  },
   "BrnGameState::ModeManager::SendModeStopMessages": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::SetNetworkStuntScore": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::SetOnlineLandmarks": {
@@ -2535,6 +2571,9 @@
   "BrnGameState::ModeManager::SetupPathfinding": {
    "status": "reviewed"
   },
+  "BrnGameState::ModeManager::SetupStuntChallenge": {
+   "status": "reviewed"
+  },
   "BrnGameState::ModeManager::ShowModeResults": {
    "status": "reviewed"
   },
@@ -2548,6 +2587,9 @@
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::StopModeIntro": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::TellGuiToShowOnlineFinalStandings": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::TransmitAndIncrementCheckPointsReached": {
@@ -2569,6 +2611,9 @@
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::UserCancelCurrentMode": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ModeManager::WriteDataToOutput": {
    "status": "reviewed"
   },
   "BrnGameState::ModeManagerDebugComponent::FinshMode": {
@@ -14184,6 +14229,15 @@
   "short,256>::GetLength": {
    "status": "reviewed"
   },
+  "short>::AddEvent": {
+   "status": "reviewed"
+  },
+  "short>::GetEvent": {
+   "status": "reviewed"
+  },
+  "short>::Push": {
+   "status": "reviewed"
+  },
   "static initializer for BrnSound::ParameterIndexes::AEMS_Class::gaAEMS_ClassParameterNames": {
    "status": "reviewed"
   }
@@ -16261,6 +16315,10 @@
   "class:BrnGameState::LandmarkIndex,16>": {
    "status": "done"
   },
+  "class:BrnGameState::ModeManager": {
+   "notes": "Gate PASS + adversarially verified across 3 groups (checkpoints parity/low, mode-state minor_drift/low, output-results parity/low; no fabricated offsets). 9 funcs full store-for-store; 6 bodied with cross-object sub-details de-inlined to clearly-FLAGGED declared-only helpers (GameStateModule/race-car-interface/CarScoreData/mode-results-record/StuntModeScoring-vtable) -- faithful-by-name, bodies land with those TUs. Home layout grow additive (no reorder/retype; embedder BrnGameStateModule re-gated).",
+   "status": "done"
+  },
   "class:BrnGameState::OfflineFlybyManager": {
    "status": "done"
   },
@@ -17143,6 +17201,10 @@
    "status": "done"
   },
   "class:short,256>": {
+   "status": "done"
+  },
+  "class:short>": {
+   "notes": "Gate PASS + adversarially verified parity/low: all 3 funcs forced; correctly split across the two u16 generics (BaseEventQueue<unsigned short> AddEvent/GetEvent + RingBuffer<u16>::Push, the latter NOT a BaseEventQueue method per CgsRingBuffer.h:137 + the CrashModeScoring::DealWithHitProp xref); generic bodies pre-existed (no header growth/reorder), no fabrication, no overreach.",
    "status": "done"
   },
   "class:static initializer for BrnSound::ParameterIndexes::AEMS_Class": {
