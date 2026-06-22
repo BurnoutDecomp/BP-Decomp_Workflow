@@ -2931,7 +2931,37 @@
   "BrnGameState::OnlineFlybyManager::AddOngoingRivalryMessage": {
    "status": "reviewed"
   },
+  "BrnGameState::OnlineFlybyManager::Calc": {
+   "status": "reviewed"
+  },
   "BrnGameState::OnlineFlybyManager::CalculateDisconnectRating": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CalculateMarkedManRivalryRating": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CalculateNewOrOngoingRivalryRating": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CalculateNumberOfCarsInFlyby": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CalculateOnlineRivals": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CalculatePointsLeaderRating": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CalculateRivalryRating": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CalculateTeamRating": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CountAvailableNewRivalryMessages": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::CountAvailableOngoingRivalryMessages": {
    "status": "reviewed"
   },
   "BrnGameState::OnlineFlybyManager::ENewRivalryCompare,4>::Append": {
@@ -2940,7 +2970,25 @@
   "BrnGameState::OnlineFlybyManager::EOngoingRivalryCompare,6>::Append": {
    "status": "reviewed"
   },
+  "BrnGameState::OnlineFlybyManager::GetLiveRevengeRela": {
+   "status": "reviewed"
+  },
   "BrnGameState::OnlineFlybyManager::GetLocalPlayerNetworkID": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::GetNewRivalryStat": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::GetNoRivalryStat": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::GetOngoingStat": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::GetRivalName": {
+   "status": "reviewed"
+  },
+  "BrnGameState::OnlineFlybyManager::SetRandomNetworkGameSeed": {
    "status": "reviewed"
   },
   "BrnGameState::OnlineFreeBurnLobbyMode::BufferNewRoadScore": {
@@ -15795,6 +15843,10 @@
   "GameSource/Unity/../GameState/FlybyManager/BrnGameStateFlybyManager.h": {
    "status": "done"
   },
+  "GameSource/Unity/../GameState/FlybyManager/BrnGameStateOnlineFlybyManager.cpp": {
+   "notes": "12 funcs bodied store-for-store. Workflow adversarial verifier hit a transient API 529, so I verified all 12 myself against the X360 asm: CalculateNumberOfCarsInFlyby/GetRivalName/CalculatePointsLeaderRating(+50)/CalculateMarkedManRivalryRating(+40/+30 via mMarkedManTargetID@+288)/CalculateNewOrOngoingRivalryRating(+9/+8 on miNetTakedownDelta@+112,+3 if <300s)/GetOngoingStat(6 cases [1][4][2][3][7][8]-[7])/GetNewRivalryStat(per-side +36)/GetNoRivalryStat(idx map 4,5,8,0,11)/CalculateOnlineRivals(qsort 8x12, takedown thresholds 5/10) = store-for-store EXACT. Fixed 2 real builder bugs before commit: (1) CalculateRivalryRating no-relationship LCG was fabricated (32-bit prev*prev+1) -> corrected to the asm 64-bit LCG at mRandom+0x20 (newState=oldState*0x5851F42D4C957F2D+1, jitter=(oldState>>32)&7, asm 0x8236DBF0-DC28); (2) extern KA_*_RIVALRY_MESSAGES innermost stride 12/8 -> 10 (asm indexes base[20*statType+10*style]). Layout asm-pinned (record stride 312, relationship offsets static_asserted). Cross-TU callees + KA_* tables are declare-only/extern shims (cl /c). Gate pass.",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/InviteManager/BrnGameStateInviteManager.cpp": {
    "notes": "All 6 funcs bodied store-for-store; adversarial verifier = parity/low (no bogus_claims, no out_of_scope_edits). Combined compile gate pass. Two trivial drifts only: (1) RenderDebugText releases the debug manager unconditionally, matching the house DebugInterface idiom across ICERender/ICEWidgetTargetBox/ScoringSystemDebugComponent; (2) case2 stack-local field-init order, unobservable. submit-parity 'gross' is noise: absent DebugInterface/GetRender/Draw2DText/AddEvent/GetEvent ARE present (heuristic callee-matcher misses qualified/templated/inlined names). New home pinned to asm offsets; additive InviteOrJoinParams homed in BrnNetworkSharedIO.h. FLAG: KU_INVITE_MANAGER_TEXT_COLOUR (dword_82CDBA34) opaque-white placeholder, dev-only text colour.",
    "status": "done"
@@ -16546,6 +16598,10 @@
    "status": "done"
   },
   "class:BrnGameState::OnlineCarSelectManager": {
+   "status": "done"
+  },
+  "class:BrnGameState::OnlineFlybyManager": {
+   "notes": "Same code as BrnGameStateOnlineFlybyManager.cpp (class + file ledger views of one TU). 12 funcs bodied store-for-store. Workflow adversarial verifier hit a transient API 529, so I verified all 12 myself against the X360 asm: CalculateNumberOfCarsInFlyby/GetRivalName/CalculatePointsLeaderRating(+50)/CalculateMarkedManRivalryRating(+40/+30 via mMarkedManTargetID@+288)/CalculateNewOrOngoingRivalryRating(+9/+8 on miNetTakedownDelta@+112,+3 if <300s)/GetOngoingStat(6 cases [1][4][2][3][7][8]-[7])/GetNewRivalryStat(per-side +36)/GetNoRivalryStat(idx map 4,5,8,0,11)/CalculateOnlineRivals(qsort 8x12, takedown thresholds 5/10) = store-for-store EXACT. Fixed 2 real builder bugs before commit: (1) CalculateRivalryRating no-relationship LCG was fabricated (32-bit prev*prev+1) -> corrected to the asm 64-bit LCG at mRandom+0x20 (newState=oldState*0x5851F42D4C957F2D+1, jitter=(oldState>>32)&7, asm 0x8236DBF0-DC28); (2) extern KA_*_RIVALRY_MESSAGES innermost stride 12/8 -> 10 (asm indexes base[20*statType+10*style]). Layout asm-pinned (record stride 312, relationship offsets static_asserted). Cross-TU callees + KA_* tables are declare-only/extern shims (cl /c). Gate pass.",
    "status": "done"
   },
   "class:BrnGameState::OnlineFlybyManager::ENewRivalryCompare,4>": {
