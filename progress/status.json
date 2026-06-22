@@ -9684,10 +9684,106 @@
   "BrnWorld::WorldRegion::DistrictToString": {
    "status": "reviewed"
   },
+  "BrnWorldIO::UpdateInputBuffer::AppendGameActionQueue": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::AppendTakedownEventQueue": {
+   "status": "reviewed"
+  },
   "BrnWorldIO::UpdateInputBuffer::AppendTriggerManagementInputInterface": {
    "status": "reviewed"
   },
+  "BrnWorldIO::UpdateInputBuffer::AppendTriggerQueryInputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::AppendVehicleDriverInputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::AppendVehicleInputInterface": {
+   "status": "reviewed"
+  },
   "BrnWorldIO::UpdateInputBuffer::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::Ge": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::Get": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetControllerActive": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetCrashNetworkIn": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetDebugContro": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetDebugController": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetG": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetReplayStatusInter": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetVehicl": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetWorldEntityRe": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::GetWorldEntityRequestI": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetActivePaybackAggressor": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetActivePaybackType": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetCarSelectStatus": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetControllerActive": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetCrashNetworkInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetLostContact": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetOnlineScoringInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetPlayerVehicleControls": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetRaceCarColourIndex": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetRaceCarPaintFinishIndex": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetRaceCarRaceDistanceInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetRegainedContact": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetReplayStatusInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetScoringInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetTimerStatusInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateInputBuffer::SetTrafficNetworkInterface": {
    "status": "reviewed"
   },
   "BrnWorldIO::UpdateOutputBuffer::Construct": {
@@ -17191,6 +17287,10 @@
    "status": "done"
   },
   "class:BrnWorld::WorldRegion": {
+   "status": "done"
+  },
+  "class:BrnWorldIO::UpdateInputBuffer": {
+   "notes": "All 32 funcs bodied 1:1 (10 IDA-truncated names resolved by asm offset+lock+DWARF). Layout frozen from DWARF, static_assert-pinned (leading per-race-car arrays + queue/interface members). Per-func lock parity VERIFIED correct by the adversarial verifier (read-bit4 getters vs write-bit3 handles/Append/Set; store-only setters no lock) -- the wave-B read/write mixup is absent. memcpy widths match asm (2736/164/60). Verifier minor_drift/low. Fixed: 2 assert-message strings (non-existent E_..._FIRST -> '>= 0'); SetTrafficNetworkInterface comment now flags the X360 selective 3-op update abstracted to the placeholder Set(). Un-homed payload interfaces = nominal HONEST placeholders. Gate pass.",
    "status": "done"
   },
   "class:CDXVAWMV": {
