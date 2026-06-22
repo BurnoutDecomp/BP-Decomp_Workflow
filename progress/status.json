@@ -1089,6 +1089,9 @@
   "BrnGameState::AchievementManagerBase::OnBodyShop": {
    "status": "reviewed"
   },
+  "BrnGameState::AchievementManagerBase::OnCaughtFever": {
+   "status": "reviewed"
+  },
   "BrnGameState::AchievementManagerBase::OnCollectAllStunts": {
    "status": "reviewed"
   },
@@ -1107,13 +1110,34 @@
   "BrnGameState::AchievementManagerBase::OnFlatSpin": {
    "status": "reviewed"
   },
+  "BrnGameState::AchievementManagerBase::OnFreeburnChallengeBlockComplete": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnFreeburnChallengeComplete": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnFreeburnSkillzTotalChange": {
+   "status": "reviewed"
+  },
   "BrnGameState::AchievementManagerBase::OnGameCompletion": {
    "status": "reviewed"
   },
   "BrnGameState::AchievementManagerBase::OnLicenseUpgrade": {
    "status": "reviewed"
   },
+  "BrnGameState::AchievementManagerBase::OnMugshotAdded": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnMugshotSent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnOnlineRaceComplete": {
+   "status": "reviewed"
+  },
   "BrnGameState::AchievementManagerBase::OnPowerParking": {
+   "status": "reviewed"
+  },
+  "BrnGameState::AchievementManagerBase::OnRivalAdded": {
    "status": "reviewed"
   },
   "BrnGameState::AchievementManagerBase::OnSetAllRoadRules": {
@@ -1270,6 +1294,9 @@
    "status": "reviewed"
   },
   "BrnGameState::BurnoutSkillzManager::OnEnterRoad": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::PostWorldUpdate": {
    "status": "reviewed"
   },
   "BrnGameState::BurnoutSkillzManager::PreWorldUpdate": {
@@ -1707,10 +1734,28 @@
   "BrnGameState::GameStateImageManagerBase::UpdateImagesToRender": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateInviteManager::CheckPreparedForInvite": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateInviteManager::ProcessBindResults": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateInviteManager::ProcessGameStateActions": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateInviteManager::ProcessUnbindResults": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateInviteManager::RenderDebugText": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateInviteManager::SetModulePreparedForInvite": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateInviteManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateInviteManager::UpdatePrepareForInvite": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateM": {
@@ -15680,8 +15725,8 @@
    "status": "done"
   },
   "GameSource/Unity/../GameState/AchievementManager/PS3/BrnGameStateAchievementManagerPS3.cpp": {
-   "notes": "OnFreeburnChallengeComplete (0x8235B2D8) depends on the data table at X360 0x82CDBDC4 (array of {EAchievement, u32 threshold}, count at 0x82CDBDDC) whose CONTENTS are not recoverable from any material in this repo (not in the dossier, dwarfdump, or the IDA exports). The other 7 handlers are reconstructed and faithful, but the TU cannot be completed without that table. Also a PS3-path unit (AchievementManagerBase methods). Unblock once the table bytes are available.",
-   "status": "blocked"
+   "notes": "DONE-WITH-DOCUMENTED-FLOOR. 8 base hooks bodied store-for-store; adversarial verifier = full PARITY/none (every achievement id, threshold, comparison signedness, and IsAchievementEarnt[slot+4]-before-AchievementEarnt[slot0] order asm-cited per func). Additive base-home grow (7 decls appended; verified zero deletions/retypes via git diff). OnFreeburnSkillzTotalChange signature reconcile: NO change needed (call-site BrnBurnoutSkillzManager.cpp:964-965 matches). FLOOR: OnFreeburnChallengeComplete iterates the {EAchievement,u32 threshold} table at X360 unk_82CDBDC4 (count dword_82CDBDDC) whose rows+count are UNRECOVERABLE rodata (absent from dossier/dwarfdump/IDA data exports) -- loop logic faithful (unsigned compare), table = honest null-ptr+count-0 placeholder, NO rows fabricated; populate when bytes surface. submit-parity 'gross' return_count 12-vs-1 is noise: IDA's tail-call 'return (**this)(this,id)' idiom vs clean void event-hooks. Compile gate pass.",
+   "status": "done"
   },
   "GameSource/Unity/../GameState/BrnGameStateDebugComponent.cpp": {
    "status": "done"
@@ -15706,6 +15751,10 @@
    "status": "done"
   },
   "GameSource/Unity/../GameState/FlybyManager/BrnGameStateFlybyManager.h": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/InviteManager/BrnGameStateInviteManager.cpp": {
+   "notes": "All 6 funcs bodied store-for-store; adversarial verifier = parity/low (no bogus_claims, no out_of_scope_edits). Combined compile gate pass. Two trivial drifts only: (1) RenderDebugText releases the debug manager unconditionally, matching the house DebugInterface idiom across ICERender/ICEWidgetTargetBox/ScoringSystemDebugComponent; (2) case2 stack-local field-init order, unobservable. submit-parity 'gross' is noise: absent DebugInterface/GetRender/Draw2DText/AddEvent/GetEvent ARE present (heuristic callee-matcher misses qualified/templated/inlined names). New home pinned to asm offsets; additive InviteOrJoinParams homed in BrnNetworkSharedIO.h. FLAG: KU_INVITE_MANAGER_TEXT_COLOUR (dword_82CDBA34) opaque-white placeholder, dev-only text colour.",
    "status": "done"
   },
   "GameSource/Unity/../GameState/ModeManager/BrnModeManager.cpp": {
@@ -16215,6 +16264,10 @@
   },
   "class:BrnGameState::BurnoutSkillzData": {
    "notes": "Gate PASS + adversarially verified parity/none: Clear's 14 zero-stores + enum loop, GetSkillAccuracy's 2 range asserts + 0.0049999999f return (no libm), SetBurnoutSkill's GetSkillAccuracy+RoundFloatToAccuracy+store with dropped Hex-Rays garbage args. Members by name, no fabrication. [12]->[14] grow is the correct X360 count (flagged); shift is benign (semantic-parity by-name; embedder partials all gate clean; no offset asserts in BrnScoringSystem.h).",
+   "status": "done"
+  },
+  "class:BrnGameState::BurnoutSkillzManager": {
+   "notes": "PostWorldUpdate (0x8233A560) bodied store-for-store; adversarial verifier = minor_drift/low (body faithful, no fabrication). Combined compile gate pass. submit-parity 'gross' is noise: absent CgsDev::Assert::Begin/Fire/End = benign assert-machinery (CGS_ASSERT macro); ProcessGameEventInputQueuePostWorld/SetNewSkillIfGreater ARE present in the .cpp (the included embedder harness pollutes callee extraction); return_count 7-vs-8 = Hex-Rays early-return folded into structured C++. Additive PostWorldInputBuffer +0x7250 grow + BrnScoringSystem.h comment fix.",
    "status": "done"
   },
   "class:BrnGameState::CarData": {
