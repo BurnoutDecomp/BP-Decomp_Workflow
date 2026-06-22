@@ -4512,6 +4512,9 @@
   "BrnGui::CarSelectVehicle::SetupStatsComponent": {
    "status": "reviewed"
   },
+  "BrnGui::ChallengeListComponent::GetChalle": {
+   "status": "reviewed"
+  },
   "BrnGui::ChallengeListComponent::ShowDescriptionInTicker": {
    "status": "reviewed"
   },
@@ -4756,6 +4759,9 @@
    "status": "reviewed"
   },
   "BrnGui::CustomRendererManager::Render": {
+   "status": "reviewed"
+  },
+  "BrnGui::CustomRendererManager::SetReplaySerialiser": {
    "status": "reviewed"
   },
   "BrnGui::EATraxMenuComponent::HandleInput": {
@@ -6259,6 +6265,9 @@
    "status": "reviewed"
   },
   "BrnNetwork::BrnServerInterfaceBase::BrnServerInterfaceBase": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnServerInterfaceDownloadableConfig::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "BrnNetwork::BuddyManagerBase::PopulateServerBuddyList": {
@@ -13884,10 +13893,16 @@
   "CgsNetwork::ServerInterfacePlayerParamsBase::SerialiseToString": {
    "status": "reviewed"
   },
+  "CgsNetwork::ServerInterfacePrepareParams::Construct": {
+   "status": "reviewed"
+  },
   "CgsNetwork::ServerInterfaceQuickJoinParamsBase::Prepare": {
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceQuickJoinParamsBase::SerialiseToString": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceRankings::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceServerInfo::Construct": {
@@ -13918,6 +13933,9 @@
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceServerInfo::Release": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceServerInfo::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceStructureInterface::`vector deleting destructor'": {
@@ -16990,6 +17008,51 @@
    "status": "reviewed"
   },
   "operator++": {
+   "status": "reviewed"
+  },
+  "princeton_digital::allpass_t<float,128>::preprocess": {
+   "status": "reviewed"
+  },
+  "princeton_digital::allpass_t<float,256>::preprocess": {
+   "status": "reviewed"
+  },
+  "princeton_digital::allpass_t<float,512>::preprocess": {
+   "status": "reviewed"
+  },
+  "princeton_digital::delay_t<float,1024>::reset": {
+   "status": "reviewed"
+  },
+  "princeton_digital::delay_t<float,128>::reset": {
+   "status": "reviewed"
+  },
+  "princeton_digital::delay_t<float,16384>::reset": {
+   "status": "reviewed"
+  },
+  "princeton_digital::delay_t<float,2048>::reset": {
+   "status": "reviewed"
+  },
+  "princeton_digital::delay_t<float,256>::reset": {
+   "status": "reviewed"
+  },
+  "princeton_digital::delay_t<float,4096>::reset": {
+   "status": "reviewed"
+  },
+  "princeton_digital::delay_t<float,512>::reset": {
+   "status": "reviewed"
+  },
+  "princeton_digital::nearest_prime": {
+   "status": "reviewed"
+  },
+  "princeton_digital::occlusion_t<float,2>::preprocess": {
+   "status": "reviewed"
+  },
+  "princeton_digital::stereo_room_t<float>::properties_t::properties_t": {
+   "status": "reviewed"
+  },
+  "princeton_digital::threetap_t<float,2048>::preprocess3": {
+   "status": "reviewed"
+  },
+  "princeton_digital::threetap_t<float,512>::preprocess3": {
    "status": "reviewed"
   },
   "renderengine::BlendState::GetParameters": {
@@ -20267,8 +20330,20 @@
    "notes": "4 verify loops (loop1A getters+pattern PASS, loop1B ctor FAIL on phantom default-ptr gap writes -> FIXED to 4x5 gap-aware groups, loop2 re-verify PASS, loop3 sign-off PASS). Gate compiles clean (MSVC, no warnings). CrashNavIcon-style minimal-slice reconstruction of a ~53KB renderer (named members, no base, ~15 uncommitted member types FLAG-omitted). Parity RED explained: call_count/branch_count deltas = the Assert Begin/Fire/End triad hidden in the CGS_ASSERT macro (2 getter asserts); loop_count 7-vs-1 = DELIBERATE re-rolling of the compiler-unrolled float/pointer/zero writes into clean loops (the established sibling-renderer pattern, e.g. BrnCrashNavIconRenderer); ctor returns void vs X360 result. ctor @0x827DF4F0: 11x -FLT_MAX/1x +FLT_MAX/3x 0.0f sentinels, vtable, 4x5 default-ptr groups (back_chain@+1560=0, gaps skipped), 9x5 zero band, 6x billboard clear, trailing -1; colour arrays/boostType faithfully left uninit. getters @0x824EC750/0x824EC7D0 (non-const per DWARF h:843/846): CGS_ASSERT boostType valid + return indexed Vector3 (inner +5 / outer +2 arrays). Rest of class deferred (grow-in-place later).",
    "status": "done"
   },
+  "class:BrnGui::ChallengeListComponent": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:BrnGui::ColourMenuToggle": {
+   "notes": "ColourMenuToggle ctor @0x82500B88 array-constructs 5 nested menu sub-objects each embedding ColourSelectionItem[100] via the vector-ctor-iterator calling BrnGui::ColourSelectionItem::ColourSelectionItem @0x824F2130 (uncommitted separate TU) + writes ~6 unrecoverable-rodata vtable/typeinfo ptrs. Home class:BrnGui::ColourSelectionItem (+ BrnSelectable.h base) first, then revisit as a layout-first keystone.",
+   "status": "blocked"
+  },
   "class:BrnGui::CrashNavIconRenderer": {
    "notes": "fresh-eyes review: clean members, loop count correct; offset-hack version replaced",
+   "status": "done"
+  },
+  "class:BrnGui::CustomRendererManager": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
    "status": "done"
   },
   "class:BrnGui::EffectsArbitrator": {
@@ -20324,6 +20399,18 @@
   },
   "class:BrnNetwork::BrnNetworkModuleIO::InGamePlayerStatusData": {
    "notes": "tightened: NetworkPlayerStats=136/LRR=116 verified from DWARF; delegate mLiveRevengeRelationship.Construct(); re-reviewed pass",
+   "status": "done"
+  },
+  "class:BrnNetwork::BrnServerInterface": {
+   "notes": "~BrnServerInterface @0x827E4090: same 11-component aggregate as BrnServerInterfaceBase plus one extra embedded-component vtable; blocked on the same un-homed component/base headers AND on BrnServerInterfaceBase itself.",
+   "status": "blocked"
+  },
+  "class:BrnNetwork::BrnServerInterfaceBase": {
+   "notes": "~BrnServerInterfaceBase @0x827E1710 restores 11 embedded-component vtables at hard subobject offsets (0xC0..0xBA8) + the primary vtable; needs the real aggregate layout (CgsNetwork::ServerInterface base + 9 component members) which is blocked on ~8 un-homed dep headers (CgsServerInterface/Connection/PlayerInfo/BroadcastMessages/Rankings, BrnServerInterfaceTelemetry/CustomCommands, DebugComponent) + network_defines.h. Synthesising it would fabricate; held.",
+   "status": "blocked"
+  },
+  "class:BrnNetwork::BrnServerInterfaceDownloadableConfig": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
    "status": "done"
   },
   "class:BrnNetwork::LiveRevengeRelationship": {
@@ -21204,6 +21291,18 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 reference .cpp:line citations scrubbed); combined wave-12 gate PASS.",
    "status": "done"
   },
+  "class:CgsNetwork::ServerInterfacePrepareParams": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:CgsNetwork::ServerInterfaceRankings": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:CgsNetwork::ServerInterfaceServerInfo": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
   "class:CgsNetwork::ServerInterfaceStructureInterface": {
    "notes": "1 func (server-interface struct accessor); verifier parity/none; gate pass.",
    "status": "done"
@@ -21612,6 +21711,74 @@
   "class:char,50>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
    "status": "done"
+  },
+  "class:princeton_digital": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::allpass_t<float,128>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::allpass_t<float,256>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::allpass_t<float,512>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::delay_t<float,1024>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::delay_t<float,128>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::delay_t<float,16384>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::delay_t<float,2048>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::delay_t<float,256>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::delay_t<float,4096>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::delay_t<float,512>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::occlusion_t<float,2>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::stereo_room_t<float>::properties_t": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::threetap_t<float,2048>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::threetap_t<float,512>": {
+   "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:princeton_digital::vardelay_t<float,16384>": {
+   "notes": "Same vardelay_t::preprocess @0x8295FA78 dual-path/tap-rotation VMX keystone as <256>.",
+   "status": "blocked"
+  },
+  "class:princeton_digital::vardelay_t<float,256>": {
+   "notes": "vardelay_t::preprocess @0x82960B08: 4-wide-VMX DUAL code-path (branch on round(mMix*10000)>>1>=0x100) + mix up/down ramp (+/-0.0002) + tap-rotation state machine (mTapTarget@+16->mTapNew@+8->mTapNew2@+12, mMix reset 0/1) not faithfully reconstructed; only the single-tap up-crossfade is modeled (behaviour-divergent). Needs the full VMX dual-path + tap-rotation reconstruction.",
+   "status": "blocked"
   },
   "class:renderengine": {
    "notes": "renderengine facade (TextureS/VertexFormatGetStride); parity/none; wave6; verifier reviewed; gate pass.",
