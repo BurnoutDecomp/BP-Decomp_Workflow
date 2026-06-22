@@ -417,6 +417,9 @@
   "BrnAI::StepTo": {
    "status": "reviewed"
   },
+  "BrnBlobbyShadowManager::BrnBlobbyShadowBuffer::AddShadow": {
+   "status": "reviewed"
+  },
   "BrnCoronaManager::Construct": {
    "status": "reviewed"
   },
@@ -7437,6 +7440,12 @@
   "BrnPhysics::Vehicle::Engine::Update": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::GripCurveDebugGraph::GetOrigin": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::GripCurveDebugGraph::GetPointOnGraph": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::ImpactEvent,16>::Construct": {
    "status": "reviewed"
   },
@@ -7551,7 +7560,19 @@
   "BrnPhysics::Vehicle::SetRaceCarCollisionEvent,10>::Construct": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::SetRaceCarCollisionEvent>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SetRaceCarCollisionEvent>::Append": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::SetRaceCarCullingGroupEvent,10>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SetRaceCarCullingGroupEvent>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::SetRaceCarCullingGroupEvent>::Append": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::SetTrafficCrashingEvent,25>::Construct": {
@@ -7603,6 +7624,12 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::TrafficRemovedEvent,25>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::TrafficSlammedEvent>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::TrafficSlammedEvent>::Append": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::UpdateNetworkTrafficEvent,20>::Construct": {
@@ -8922,6 +8949,12 @@
   "BrnSound::Module::Io::RootPreUpdateOutputBuffer::Construct": {
    "status": "reviewed"
   },
+  "BrnSound::Module::Io::RootPreUpdateOutputBuffer::Ge": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootPreUpdateOutputBuffer::SetPreUpdateOutput": {
+   "status": "reviewed"
+  },
   "BrnSound::Module::Io::SoundWorldLoadEvent>::AddEvent": {
    "status": "reviewed"
   },
@@ -8932,6 +8965,9 @@
    "status": "reviewed"
   },
   "BrnSound::Module::SoundLogicModule::G": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::SoundLogicModule::GetBrnInputStructure": {
    "status": "reviewed"
   },
   "BrnSound::Module::SoundLogicModule::GetResourceRegis": {
@@ -9429,6 +9465,9 @@
   "BrnTraffic::TrafficEntityModule::UpdateTrailers_UpdatePurgatory": {
    "status": "reviewed"
   },
+  "BrnTraffic::TrafficLightManager::GetLightState": {
+   "status": "reviewed"
+  },
   "BrnTraffic::Vehicle::DetachArticulation": {
    "status": "reviewed"
   },
@@ -9790,6 +9829,9 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityID::SetPartIndex": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityID::operator class CgsSceneManager::EntityId": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::InputBuffer_Dispatch::Construct": {
@@ -11566,6 +11608,9 @@
    "status": "reviewed"
   },
   "CgsGraphics::MoviePlayerCoreAllocator::Free": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::PackedOobb::ToMatrix": {
    "status": "reviewed"
   },
   "CgsGraphics::ShaderConstantHashTable::FixUp": {
@@ -13587,6 +13632,9 @@
   "CgsResource::Font::GetStringWidthIgnoringNewlines": {
    "status": "reviewed"
   },
+  "CgsResource::Font>::operator->": {
+   "status": "reviewed"
+  },
   "CgsResource::FontResourceType::FixDown": {
    "status": "reviewed"
   },
@@ -14200,6 +14248,9 @@
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerDebugComponent::Update": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InEventAddForCollision,1536>::Constru": {
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddForCollision": {
@@ -15612,6 +15663,12 @@
   "ObjectIndex::in_word_set": {
    "status": "reviewed"
   },
+  "RealmcCore::Locale::GetString": {
+   "status": "reviewed"
+  },
+  "RealmcCore::Locale::SetLocaleGetStrCallback": {
+   "status": "reviewed"
+  },
   "RealmcCore::Message::Apply": {
    "status": "reviewed"
   },
@@ -16080,6 +16137,12 @@
   "renderengine::VertexFormatGetStride": {
    "status": "reviewed"
   },
+  "renderengine::VertexProgramState::GetD3DVertexShader": {
+   "status": "reviewed"
+  },
+  "renderengine::VertexProgramState::InitializeNoBindX360": {
+   "status": "reviewed"
+  },
   "rw::BaseResourceDescriptors<5>::operator+=": {
    "status": "reviewed"
   },
@@ -16177,6 +16240,12 @@
    "status": "reviewed"
   },
   "rw::audio::core::TimerHandle::TimerHandle": {
+   "status": "reviewed"
+  },
+  "rw::collision::FeatureEdge::FeatureEdge": {
+   "status": "reviewed"
+  },
+  "rw::collision::FeatureEdge::constrain_point": {
    "status": "reviewed"
   },
   "rw::collision::Volume::InitializeVTable": {
@@ -17520,6 +17589,10 @@
    "notes": "effect-object header inline accessors; gate pass.",
    "status": "done"
   },
+  "GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.h": {
+   "notes": "SoundLogicModule.h accessor; parity/none; wave9; verifier parity; gate pass.",
+   "status": "done"
+  },
   "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/coronas/rwgcoronabuffer.cpp": {
    "notes": "Vendor code; use native PC libs instead.",
    "status": "done"
@@ -17913,6 +17986,10 @@
   "GameSource/Unity/../GameState/TriggerQueryManager/BrnTriggerQueryManager.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../Graphics/BrnBlobbyShadowManager.cpp": {
+   "notes": "BrnBlobbyShadowManager; parity/none; wave9; verifier parity; gate pass.",
+   "status": "done"
+  },
   "GameSource/Unity/../Graphics/BrnEffectsArbitrator.cpp": {
    "status": "done"
   },
@@ -18046,6 +18123,10 @@
   },
   "SDKs/EATech/include/Apt/AptValue/AptValue.h": {
    "notes": "AptValue.h inline accessors; gate pass.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/rw/math/vpu/detail/matrix44_operation_inline.h": {
+   "notes": "rw::math::vpu Matrix44 inline op; parity/low; wave9; verifier parity; gate pass.",
    "status": "done"
   },
   "SDKs/EATech/include/rw/math/vpu/detail/matrix44_type_inline.h": {
@@ -18869,6 +18950,10 @@
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
    "status": "done"
   },
+  "class:BrnPhysics::Vehicle::GripCurveDebugGraph": {
+   "notes": "GripCurveDebugGraph (VMX->scalar); verifier parity/low; gate pass.",
+   "status": "done"
+  },
   "class:BrnPhysics::Vehicle::ImpactEvent,16>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
    "status": "done"
@@ -18917,8 +19002,16 @@
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
    "status": "done"
   },
+  "class:BrnPhysics::Vehicle::SetRaceCarCollisionEvent>": {
+   "notes": "BaseEventQueue<SetRaceCarCollisionEvent> (8B); parity/low; wave9; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:BrnPhysics::Vehicle::SetRaceCarCullingGroupEvent,10>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
+   "status": "done"
+  },
+  "class:BrnPhysics::Vehicle::SetRaceCarCullingGroupEvent>": {
+   "notes": "BaseEventQueue<SetRaceCarCullingGroupEvent> (8B); parity/low; wave9; verifier parity; gate pass.",
    "status": "done"
   },
   "class:BrnPhysics::Vehicle::SetTrafficCrashingEvent,25>": {
@@ -18931,6 +19024,10 @@
   },
   "class:BrnPhysics::Vehicle::TrafficRemovedEvent,25>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
+   "status": "done"
+  },
+  "class:BrnPhysics::Vehicle::TrafficSlammedEvent>": {
+   "notes": "BaseEventQueue<TrafficSlammedEvent> (20B; elem+enum homed); parity/low; wave9; verifier parity; gate pass.",
    "status": "done"
   },
   "class:BrnPhysics::Vehicle::UpdateNetworkTrafficEvent,20>": {
@@ -19029,6 +19126,10 @@
    "notes": "BrnSound::Module (2); verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:BrnSound::Module::Io::RootPreUpdateOutputBuffer": {
+   "notes": "RootPreUpdateOutputBuffer getter; parity/none; wave9; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:BrnSound::Module::Io::SoundWorldLoadEvent>": {
    "notes": "AddEvent 0x822C9B88 / Append 0x823C4238 explicit instantiation over committed BaseEventQueue<T>; 8B element (meEvent+mu16Zone) asm-confirmed; verifier parity/none; gate pass.",
    "status": "done"
@@ -19085,6 +19186,10 @@
   "class:BrnTraffic::TrafficData>": {
    "status": "done"
   },
+  "class:BrnTraffic::TrafficLightManager": {
+   "notes": "TrafficLightManager; parity/none; wave9; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:BrnTraffic::VehicleSoaData": {
    "notes": "trivial; gate-only (zeroes 80 qwords, re-rolled)",
    "status": "done"
@@ -19124,6 +19229,10 @@
   },
   "class:BrnWorld::PropEntityID": {
    "notes": "prop entity-id wrapper; verifier parity/none; gate pass.",
+   "status": "done"
+  },
+  "class:BrnWorld::PropEntityID::operator class CgsSceneManager": {
+   "notes": "PropEntityID->VolumeId conversion op; parity/none; wave9; verifier parity; gate pass.",
    "status": "done"
   },
   "class:BrnWorld::PropEntityIO::OutputBuffer_PreScene": {
@@ -19461,6 +19570,10 @@
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
    "status": "done"
   },
+  "class:CgsResource::Font>": {
+   "notes": "ResourcePtr<Font>::operator-> DOUBLE-deref (verifier WRONG -> FIXED to explicit specialization returning *mpResourceMemory; Font is Font**); gate pass.",
+   "status": "done"
+  },
   "class:CgsResource::PoolIO::OutputBuffer": {
    "notes": "PoolIO OutputBuffer; parity/none; wave7; verifier parity; gate pass.",
    "status": "done"
@@ -19479,6 +19592,10 @@
   },
   "class:CgsSceneManager::OverlappingIntervalPair,131072>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "status": "done"
+  },
+  "class:CgsSceneManager::SceneManagerIO::InEventAddForCollision,1536>": {
+   "notes": "InEventAddForCollision<1536> queue; verifier parity/none; gate pass.",
    "status": "done"
   },
   "class:CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,2000>": {
@@ -19714,6 +19831,10 @@
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
    "status": "done"
   },
+  "class:RealmcCore::Locale": {
+   "notes": "RealmcCore Locale; parity/low; wave9; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:RealmcCore::Message": {
    "notes": "Realmc message; verifier minor_drift/low; gate pass.",
    "status": "done"
@@ -19822,6 +19943,10 @@
    "notes": "trivial; gate-only",
    "status": "done"
   },
+  "class:renderengine::VertexProgramState": {
+   "notes": "VertexProgramState; verifier parity/none; gate pass.",
+   "status": "done"
+  },
   "class:rw::BaseResourceDescriptor": {
    "notes": "Vendor code; exists in PC lib or vendor source.",
    "status": "blocked"
@@ -19852,6 +19977,10 @@
   },
   "class:rw::audio::core::TimerHandle": {
    "notes": "rw audio TimerHandle; parity/low; wave6; verifier reviewed; gate pass.",
+   "status": "done"
+  },
+  "class:rw::collision::FeatureEdge": {
+   "notes": "rw collision FeatureEdge; parity/low; wave9; verifier parity; gate pass.",
    "status": "done"
   },
   "class:rw::collision::Volume": {
