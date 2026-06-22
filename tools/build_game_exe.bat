@@ -24,7 +24,7 @@ rc /fo"%OUT%\\obj\\burnout.res" "%RES%\burnout.rc"
 rem ---- build the cl response file ----
 > "%RSP%" (
   echo /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS
-  echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%FFM%\include"
+  echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%FFM%\include"
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareInitPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp"
@@ -47,6 +47,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugManager.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugCollections.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\CgsDebugComponent.cpp"
+  echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Interface\CgsDebugInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\Internal\CgsDebugInternal.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CgsTypes.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CgsDebugUI.cpp"
@@ -122,6 +123,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Memory\CgsLinearMalloc.cpp"
   echo "%VEN%\PPMalloc\src\EAGeneralAllocator.cpp"
   echo "%VEN%\renderware\src\rwcore_alloc.cpp"
+  echo "%VEN%\renderware\src\rw\core\debug\DebugCriticalSection.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsDistributionStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsScatterStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsGatherStream.cpp"
