@@ -1257,6 +1257,54 @@
   "BrnGameState::BurnoutSkillzData::SetBurnoutSkill": {
    "status": "reviewed"
   },
+  "BrnGameState::BurnoutSkillzManager::ClearAllBurnoutSkillzData": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::GetActiveRaceCarIndex": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::GetRoadRuleHighScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::OnEnterRoad": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::PreWorldUpdate": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::ProcessGameEventInputQueuePostWorld": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::ProcessGameEventInputQueuePreWorld": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::ProcessNetworkRoadRulePB": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::ProcessNewRoadScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::SendUpdatePlayerSkillsEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::SetNewSkillIfGreater": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::SetRoadRuleHighScore": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::UpdateBoostChains": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::UpdateBurnoutSkillzTotals": {
+   "status": "reviewed"
+  },
+  "BrnGameState::BurnoutSkillzManager::UpdateLobbyRoadRulesScores": {
+   "status": "reviewed"
+  },
   "BrnGameState::CarData::Construct": {
    "status": "reviewed"
   },
@@ -9669,6 +9717,9 @@
   "CgsDev::Debug2DImmediateRender::Is2DPolygonOnScreen": {
    "status": "reviewed"
   },
+  "CgsDev::Debug2DImmediateRender::SetDebugFont": {
+   "status": "reviewed"
+  },
   "CgsDev::Debug3DImmediateRender::AddLine": {
    "status": "reviewed"
   },
@@ -9748,6 +9799,9 @@
    "status": "reviewed"
   },
   "CgsDev::Debug3DImmediateRender::GetSphereVertices": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug3DImmediateRender::SetDebugFont": {
    "status": "reviewed"
   },
   "CgsDev::DebugComponent::AddMenuItem": {
@@ -9876,6 +9930,9 @@
   "CgsDev::DebugController::UpdatePad": {
    "status": "reviewed"
   },
+  "CgsDev::DebugInterface::DebugInterface": {
+   "status": "reviewed"
+  },
   "CgsDev::DebugInterface::DisableConsole": {
    "status": "reviewed"
   },
@@ -9883,6 +9940,9 @@
    "status": "reviewed"
   },
   "CgsDev::DebugInterface::Get2dRender": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugInterface::GetDebugManager": {
    "status": "reviewed"
   },
   "CgsDev::DebugInterface::GetUI": {
@@ -14190,6 +14250,15 @@
   "rw::collision::VolumeLineQuery::Initialize": {
    "status": "reviewed"
   },
+  "rw::core::debug::detail::DebugCriticalSection::Create": {
+   "status": "reviewed"
+  },
+  "rw::core::debug::detail::DebugCriticalSection::Enter": {
+   "status": "reviewed"
+  },
+  "rw::core::debug::detail::DebugCriticalSection::Leave": {
+   "status": "reviewed"
+  },
   "rw::core::filesys::DeviceDriver::DeviceDriver": {
    "status": "reviewed"
   },
@@ -15656,6 +15725,10 @@
   "GameSource/Unity/../GameState/ModeManager/GameModes/BrnBurningRoute.h": {
    "status": "done"
   },
+  "GameSource/Unity/../GameState/ModeManager/GameModes/BrnBurnoutSkillzManager.cpp": {
+   "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/ModeManager/GameModes/BrnCrashMode.cpp": {
    "status": "done"
   },
@@ -16828,6 +16901,18 @@
   "class:CgsContainers::FifoQueue<float,10>": {
    "status": "done"
   },
+  "class:CgsDev::Debug2DImmediateRender": {
+   "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
+   "status": "done"
+  },
+  "class:CgsDev::Debug3DImmediateRender": {
+   "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
+   "status": "done"
+  },
+  "class:CgsDev::DebugInterface": {
+   "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
+   "status": "done"
+  },
   "class:CgsDev::DebugUI::LogWindow": {
    "notes": "Trivial ctor (mLog.mpWindow=this) but compiling it needs the full DebugUI base-layout cascade reconstructed first: CgsDev::Internal::DebugInternal (empty base), DebugUI::Window, DebugUI::MenuItem/CustomWindowMenuItem, DebugUI::CustomWindow, CgsDev::StrStreamBase + LogWindowStrStream (LegacySrc headers exist: CgsLogWindow.h/CgsCustomWindow.h/CgsWindow.h/CgsMenuItem.h/CgsStrStream.h/CgsDebugInternal.h). X360 ctor sets primary vtable @+0, embedded CustomWindowMenuItem vtable @+36, LogWindowStrStream @+56 (mpWindow=this @+64). Unblock + port the 6 headers (X360-gated) when doing the DebugUI window subsystem.",
    "status": "blocked"
@@ -17182,6 +17267,10 @@
   },
   "class:rw::collision::VolumeLineQuery": {
    "notes": "focused reviewer pass after adding offset-256 reset and typed ref-array layout",
+   "status": "done"
+  },
+  "class:rw::core::debug::detail::DebugCriticalSection": {
+   "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
    "status": "done"
   },
   "class:rw::core::filesys::DeviceDriver": {
