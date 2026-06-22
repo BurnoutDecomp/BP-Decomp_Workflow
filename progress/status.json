@@ -81,6 +81,9 @@
   "Attrib::Gen::surfacelist::surfacelist": {
    "status": "reviewed"
   },
+  "Attrib::HashMapTablePolicy::Free": {
+   "status": "reviewed"
+  },
   "Attrib::Instance::Change": {
    "status": "reviewed"
   },
@@ -6906,6 +6909,9 @@
   "BrnNetwork::TrafficManager::_RestartTrafficMessageDeliveredCallback": {
    "status": "reviewed"
   },
+  "BrnNetwork::UpdateData::operator=": {
+   "status": "reviewed"
+  },
   "BrnNetwork::UpdateMessage::Release": {
    "status": "reviewed"
   },
@@ -7369,6 +7375,12 @@
    "status": "reviewed"
   },
   "BrnPhysics::Props::PropPhysicsDataHeader::GetType": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Props::PropUpdateNotification::GetEntityId": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Props::PropUpdateNotification>::Append": {
    "status": "reviewed"
   },
   "BrnPhysics::Props::PropZoneData::GetCellId": {
@@ -9204,6 +9216,9 @@
   "BrnTraffic::HullRuntime::SetStoplineRed": {
    "status": "reviewed"
   },
+  "BrnTraffic::LaneRung::GetRightVector": {
+   "status": "reviewed"
+  },
   "BrnTraffic::LightTriggerStartData::GetStartDirection": {
    "status": "reviewed"
   },
@@ -9534,6 +9549,9 @@
   "BrnWorld::CollisionDebugComponent::OnActivate": {
    "status": "reviewed"
   },
+  "BrnWorld::CollisionTag::GetTrafficInfo": {
+   "status": "reviewed"
+  },
   "BrnWorld::CrashIO::CrashingTrafficUpdateEvent,24>::Construct": {
    "status": "reviewed"
   },
@@ -9816,6 +9834,9 @@
   "BrnWorld::PropEntityIO::OutputBuffer_Prepare::Construct": {
    "status": "reviewed"
   },
+  "BrnWorld::PropEntityIO::PropBecamePhysicalEvent>::Append": {
+   "status": "reviewed"
+  },
   "BrnWorld::PropEntityIO::PropVFXLocatorEvent,10>::Construct": {
    "status": "reviewed"
   },
@@ -9829,6 +9850,9 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityModule::UpdateInstanceStreaming": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropVolumeID::Set": {
    "status": "reviewed"
   },
   "BrnWorld::PropVolumeInstanceID::GetEntityIndex": {
@@ -10213,6 +10237,9 @@
    "status": "reviewed"
   },
   "BrnWorld::WorldEntityIO::OutputBuffer_PreScene::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::": {
    "status": "reviewed"
   },
   "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::Construct": {
@@ -10980,6 +11007,9 @@
   "CgsDev::DebugUI::DebugUI::FindWindowNearPosition": {
    "status": "reviewed"
   },
+  "CgsDev::DebugUI::DebugUI::Get2DRenderer": {
+   "status": "reviewed"
+  },
   "CgsDev::DebugUI::DebugUI::GetNextActiveWindow": {
    "status": "reviewed"
   },
@@ -11412,6 +11442,9 @@
   "CgsGeometric::Box::Set": {
    "status": "reviewed"
   },
+  "CgsGeometric::Line::IsValid": {
+   "status": "reviewed"
+  },
   "CgsGeometric::PolygonSoupList::FixUp": {
    "status": "reviewed"
   },
@@ -11500,6 +11533,9 @@
    "status": "reviewed"
   },
   "CgsGraphics::InstanceList::FixUp": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::InstanceList>::GetMemoryR": {
    "status": "reviewed"
   },
   "CgsGraphics::InstanceListResourceType::FixDown": {
@@ -13392,10 +13428,19 @@
   "CgsResource::AttribSysSchemaResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "CgsResource::BaseDefragPoolModuleState::Begin": {
+   "status": "reviewed"
+  },
   "CgsResource::BaseDefragPoolModuleState::BeginDefragment": {
    "status": "reviewed"
   },
+  "CgsResource::BaseDefragPoolModuleState::BuildFinalRelocationData": {
+   "status": "reviewed"
+  },
   "CgsResource::BaseDefragPoolModuleState::DoFinalAllocations": {
+   "status": "reviewed"
+  },
+  "CgsResource::BaseDefragPoolModuleState::FindNextFreeNode": {
    "status": "reviewed"
   },
   "CgsResource::BaseResourcePtr::AddToNewList": {
@@ -13926,6 +13971,9 @@
   "CgsResource::ResourceIO::InputBuffer::Destruct": {
    "status": "reviewed"
   },
+  "CgsResource::ResourceIO::InputBuffer::GetR": {
+   "status": "reviewed"
+  },
   "CgsResource::ResourceIO::OutputBuffer:": {
    "status": "reviewed"
   },
@@ -14280,6 +14328,9 @@
   "CgsSceneManager::TriangleCacheManager::EndUpdateTriangleCaches": {
    "status": "reviewed"
   },
+  "CgsSceneManager::TriangleCacheManager::Prepare": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::TriangleCacheManager::ProcessAddToCacheEvents": {
    "status": "reviewed"
   },
@@ -14449,6 +14500,9 @@
    "status": "reviewed"
   },
   "CgsSound::Playback::GenericRwacWaveContent::DoUnload": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::IEntityFixer::GetFixer": {
    "status": "reviewed"
   },
   "CgsSound::Playback::Module::Module::Construct": {
@@ -15912,6 +15966,9 @@
   "cParticleBehaviour::Serialise": {
    "status": "reviewed"
   },
+  "cParticleBucket::AllocateParticle": {
+   "status": "reviewed"
+  },
   "char,50>::Construct": {
    "status": "reviewed"
   },
@@ -16838,6 +16895,10 @@
    "notes": "3 verify loops PASS (parallel A=DebugValidate asm fidelity, B=GetTypeID+stubs+class structure, C=sign-off). Gate compiles clean (MSVC, no warnings after the uintptr_t C4312 fix). Parity RED explained: loop 1=1 exact, branch/return within +-1; call 18->8 = the 4 asserts' Begin/Fire/End StrStream machinery collapsed into CGS_ASSERT (the 3 absent callees). Sibling of committed CgsClusteredMeshResourceType (raw-offset rw-serialised-blob style). GetTypeID=12(0x0C); FixDown=CGS_ASSERT(false,'Dont call this function at runtime'); GetImportPointer (4-arg base sig)=CGS_ASSERT(false,'Should not be called at runtime'); DebugValidate=raw-offset mesh/material-assembly walk (numMeshes@+72, meshArray@+80, mesh+32 assembly, assembly+8 empty->'Mesh material assembly is empty', **assembly NULL->'Material assembly contains a NULL material', all-pass->true) \u2014 offsets/derefs/control-flow asm-verified, break-then-assert flattened equivalently, byte-exact messages no baked lines. Overrides only the 4; rest inherited from non-pure base. No fabricated ctor/Register.",
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/CacheManager/CgsTriangleCacheManager.cpp": {
+   "notes": "TriangleCacheManager; verifier parity/none; gate pass.",
+   "status": "done"
+  },
   "GameShared/GameClasses/SceneManager/CgsEntityId.h": {
    "notes": "CgsEntityId.h; verifier parity/none; gate pass.",
    "status": "done"
@@ -17057,6 +17118,10 @@
   },
   "GameShared/GameClasses/System/Resource/CgsTextFileResource.cpp": {
    "notes": "descriptor builder VERIFIED against asm (entry0={*res+5,4}, rest {0,1}); gate-only",
+   "status": "done"
+  },
+  "GameShared/GameClasses/System/Resource/PoolModuleStates/CgsBaseDefragPoolModuleState.cpp": {
+   "notes": "BaseDefragPoolModuleState; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
   },
   "GameShared/GameClasses/System/Threads/CgsThreadLayout.cpp": {
@@ -17557,6 +17622,10 @@
   },
   "GameSource/Unity/../../SharedClasses/Trigger/BrnTriggerResourceType.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/World/BrnCollisionTag.cpp": {
+   "notes": "CollisionTag::GetTrafficInfo; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentDictionaryResourceType.cpp": {
@@ -18149,6 +18218,10 @@
    "notes": "Generated AttribSys class ctor; exact clone of committed debrisparams.h pattern (class key -1449672210, DefaultDataArea 0x10); compiles via includer TU; 3 verify loops pass (fidelity/pattern/access). Callee-absent note is the vacuous-header parity artifact.",
    "status": "done"
   },
+  "class:Attrib::HashMapTablePolicy": {
+   "notes": "AttribSys HashMapTablePolicy; parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:BrnAI::AIModule": {
    "notes": "batch reviewed via Claude CLI; pass",
    "status": "done"
@@ -18645,6 +18718,10 @@
    "notes": "Compile-gate GREEN; element-home fixed (PlayerName=16 -> RoadRulesDownloadEvent=56/RecvData=264); thin explicit instantiations, generic inline in CgsBaseEventQueue.h; all 7 BrnNetworkSharedIO.h consumers regate green.",
    "status": "done"
   },
+  "class:BrnNetwork::UpdateData": {
+   "notes": "BrnNetwork UpdateData; parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:BrnParticle": {
    "notes": "BrnParticle facade (6); parity/none; wave7; verifier parity; gate pass.",
    "status": "done"
@@ -18758,6 +18835,14 @@
   },
   "class:BrnPhysics::Props": {
    "notes": "props physics facade; verifier parity/none; gate pass.",
+   "status": "done"
+  },
+  "class:BrnPhysics::Props::PropUpdateNotification": {
+   "notes": "GetEntityId 0x826944E0 (AssertIsProp owner==3, return mEntityId); self-verified vs asm (lbz +0x30 ==3, lwz +0x30 return); gate pass.",
+   "status": "done"
+  },
+  "class:BrnPhysics::Props::PropUpdateNotification>": {
+   "notes": "BaseEventQueue<PropUpdateNotification> Append (verifier-confirmed store-for-store; the WRONG flag was a misattribution to the no-> element TU); gate pass.",
    "status": "done"
   },
   "class:BrnPhysics::Props::PropZoneData": {
@@ -18982,6 +19067,10 @@
   "class:BrnTraffic::BrnTrafficIO::TrafficTypeResponse>": {
    "status": "done"
   },
+  "class:BrnTraffic::LaneRung": {
+   "notes": "LaneRung::GetRightVector; parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:BrnTraffic::LightTriggerStartData": {
    "status": "done"
   },
@@ -19041,12 +19130,20 @@
    "notes": "PropEntity pre-scene OutputBuffer; parity/none; wave7; verifier parity; gate pass.",
    "status": "done"
   },
+  "class:BrnWorld::PropEntityIO::PropBecamePhysicalEvent>": {
+   "notes": "BaseEventQueue<PropBecamePhysicalEvent> Append (16B elem); parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:BrnWorld::PropEntityIO::PropVFXLocatorEvent,10>": {
    "notes": "PropVFXLocatorEvent queue; parity/none; wave6; verifier reviewed; gate pass.",
    "status": "done"
   },
   "class:BrnWorld::PropEntityIO::PropVFXLocatorEvent>": {
    "notes": "AddEventSafe 0x822C9970 (bounds-gated) / Append 0x823C4058 explicit instantiation over committed BaseEventQueue<T>; 80B element (Matrix44Affine+muTypeId+meEventType) asm-confirmed; verifier parity/none; gate pass.",
+   "status": "done"
+  },
+  "class:BrnWorld::PropVolumeID": {
+   "notes": "PropVolumeID::Set entity-id bit-pack; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
   },
   "class:BrnWorld::PropVolumeInstanceID": {
@@ -19082,6 +19179,10 @@
    "status": "done"
   },
   "class:BrnWorld::TriggerEntityModuleIO::InRemoveTriggerEvent>": {
+   "status": "done"
+  },
+  "class:BrnWorld::WorldEntityIO::OutputBuffer_Prepare": {
+   "notes": "WorldEntityIO OutputBuffer_Prepare getter; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
   },
   "class:BrnWorld::WorldRegion": {
@@ -19133,6 +19234,10 @@
    "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
    "status": "done"
   },
+  "class:CgsDev::DebugUI::DebugUI": {
+   "notes": "CgsDev DebugUI; parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:CgsDev::DebugUI::LogWindow": {
    "notes": "Trivial ctor (mLog.mpWindow=this) but compiling it needs the full DebugUI base-layout cascade reconstructed first: CgsDev::Internal::DebugInternal (empty base), DebugUI::Window, DebugUI::MenuItem/CustomWindowMenuItem, DebugUI::CustomWindow, CgsDev::StrStreamBase + LogWindowStrStream (Feb-2007 headers exist: CgsLogWindow.h/CgsCustomWindow.h/CgsWindow.h/CgsMenuItem.h/CgsStrStream.h/CgsDebugInternal.h). X360 ctor sets primary vtable @+0, embedded CustomWindowMenuItem vtable @+36, LogWindowStrStream @+56 (mpWindow=this @+64). Unblock + port the 6 headers (X360-gated) when doing the DebugUI window subsystem.",
    "status": "blocked"
@@ -19148,8 +19253,16 @@
    "notes": "3 verify loops: round1 FAIL caught the dossier DWARF-gap (CgsDeviceManager.h dwarfdump exists); round2+3 PASS (Opus, incl. adversarial). Gate clean. Parity YELLOW is benign: the 4 absent callees are the assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) collapsed into the CGS_ASSERT macro. Singleton=DeviceManager::mpDeviceManager (DWARF:153), minimal-slice home.",
    "status": "done"
   },
+  "class:CgsGeometric::Line": {
+   "notes": "CgsGeometric::Line; parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:CgsGraphics::DispatchBin": {
    "notes": "5 funcs (render dispatch bin); verifier minor_drift/low; gate pass.",
+   "status": "done"
+  },
+  "class:CgsGraphics::InstanceList>": {
+   "notes": "CgsGraphics::InstanceList (ResourcePtr instance); parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
   },
   "class:CgsGraphics::Model": {
@@ -19356,6 +19469,10 @@
    "notes": "3 verify loops all PASS (loop1 strict, loop2 X360-asm byte-check of the Construct reconciliation @0x82676600/@0x828EC978, loop3 adversarial w/ compiled runtime offset probe proving mResourceQueue@+4 + mFileSystemStatusInterface@+1). Gate clean. Parity YELLOW benign: absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT + the OutputBuffer_ IDA alias. Built on committed IOBuffer/VariableEventQueue; reconciled drifted provisional structs (byte-faithful).",
    "status": "done"
   },
+  "class:CgsResource::ResourceIO::InputBuffer": {
+   "notes": "ResourceIO::InputBuffer getter; parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
   "class:CgsSceneManager::OverlapGenerationModule": {
    "notes": "batch reviewed via Claude CLI; pass",
    "status": "done"
@@ -19382,6 +19499,10 @@
   },
   "class:CgsSound::Playback::Factory>": {
    "notes": "CgsSound Playback Factory; parity/low; wave7; verifier parity; gate pass.",
+   "status": "done"
+  },
+  "class:CgsSound::Playback::IEntityFixer": {
+   "notes": "CgsSound IEntityFixer; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
   },
   "class:CgsSound::Playback::Object": {
@@ -19639,6 +19760,10 @@
   },
   "class:_AptValueGC_MemItem": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
+  "class:cParticleBucket": {
+   "notes": "cParticleBucket; verifier parity/none; gate pass.",
    "status": "done"
   },
   "class:char,50>": {
