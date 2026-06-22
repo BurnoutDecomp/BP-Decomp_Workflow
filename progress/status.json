@@ -5748,7 +5748,13 @@
   "BrnGui::OptionsDataProfile::ValidateProfile": {
    "status": "reviewed"
   },
+  "BrnGui::OptionsDataProfileDLC1::ValidateProfile": {
+   "status": "reviewed"
+  },
   "BrnGui::PFXHook::FixDown": {
+   "status": "reviewed"
+  },
+  "BrnGui::PFXHookNodeBlender::IsActive": {
    "status": "reviewed"
   },
   "BrnGui::PauseScreen::OnEnter": {
@@ -13356,7 +13362,13 @@
   "CgsNetwork::DefaultPlayerInfoData::Prepare": {
    "status": "reviewed"
   },
+  "CgsNetwork::DefaultPlayerInfoData::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "CgsNetwork::DefaultPlayerParameters::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::DefaultPlayerParameters::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "CgsNetwork::FloatQuantiser::Pack": {
@@ -13692,6 +13704,9 @@
   "CgsNetwork::ReliableMessageManager::UpdateReliableMessagesReceived": {
    "status": "reviewed"
   },
+  "CgsNetwork::ServerInterfaceBroadcastMessages::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "CgsNetwork::ServerInterfaceComponent::ClearLastError": {
    "status": "reviewed"
   },
@@ -13845,6 +13860,9 @@
   "CgsNetwork::ServerInterfaceGameSearchParamsX360": {
    "status": "reviewed"
   },
+  "CgsNetwork::ServerInterfaceGameSearchParamsX360::Prepare": {
+   "status": "reviewed"
+  },
   "CgsNetwork::ServerInterfaceGames::ConnApiCallback": {
    "status": "reviewed"
   },
@@ -13902,6 +13920,12 @@
   "CgsNetwork::ServerInterfaceQuickJoinParamsBase::SerialiseToString": {
    "status": "reviewed"
   },
+  "CgsNetwork::ServerInterfaceQuickJoinParamsBase::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceQuickJoinParamsX360::Prepare": {
+   "status": "reviewed"
+  },
   "CgsNetwork::ServerInterfaceRankings::`scalar deleting destructor'": {
    "status": "reviewed"
   },
@@ -13939,6 +13963,12 @@
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceStructureInterface::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceTelemetry::EnableTemetry": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceUsersets::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "CgsNetwork::SignalMessage::GetName": {
@@ -14038,6 +14068,9 @@
    "status": "reviewed"
   },
   "CgsNetwork::UInt16IsLargerWrapped": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::VoIPClient::operator=": {
    "status": "reviewed"
   },
   "CgsNetwork::VoIPManager::Prepare": {
@@ -15516,6 +15549,9 @@
   "CgsSound::Playback::Voice::operator new": {
    "status": "reviewed"
   },
+  "CgsSound::Playback::VoiceProfilingData<16>::SubmitNewTime": {
+   "status": "reviewed"
+  },
   "CgsSound::Playback::VoiceSchema::GetFeatureSchema": {
    "status": "reviewed"
   },
@@ -15523,6 +15559,24 @@
    "status": "reviewed"
   },
   "CgsSound::Playback::VoiceSchema::VoiceSchema": {
+   "status": "reviewed"
+  },
+  "CgsSound::Utils::Average<10,float>::Record": {
+   "status": "reviewed"
+  },
+  "CgsSound::Utils::Average<25,float>::Record": {
+   "status": "reviewed"
+  },
+  "CgsSound::Utils::Average<3,float>::Record": {
+   "status": "reviewed"
+  },
+  "CgsSound::Utils::Average<4,float>::Record": {
+   "status": "reviewed"
+  },
+  "CgsSound::Utils::Average<5,float>::Record": {
+   "status": "reviewed"
+  },
+  "CgsSound::Utils::Average<9,float>::Record": {
    "status": "reviewed"
   },
   "CgsSound::Utils::Curve::GetOutput": {
@@ -20362,8 +20416,20 @@
    "notes": "4 accessors (county/district/ARCI/team; lbz-vs-extsb signedness pinned); verifier parity store-for-store; gate pass.",
    "status": "done"
   },
+  "class:BrnGui::Intro": {
+   "notes": "Intro ctor @0x824FFF58 is ~20 vtable-pointer stores planted into embedded GUI subobjects across a ~4168-byte object at raw byte offsets (0x00..0x1044), no base-ctor delegation; faithful reconstruction needs ~20 un-homed embedded GUI base/widget types + the full subobject layout, and the X360 body is only expressible via raw-offset casts (forbidden). Defer until the embedded GUI subobject family is homed.",
+   "status": "blocked"
+  },
   "class:BrnGui::MapTransform": {
    "notes": "6 fns (2D map coord math); VMX128 semantic reconstruction over placeholder statics; SetZoomedViewportRect inverse-vs-multiply FLAGGED as VMX/init floor; verifier minor_drift/low; gate pass.",
+   "status": "done"
+  },
+  "class:BrnGui::OptionsDataProfileDLC1": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:BrnGui::PFXHookNodeBlender": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
    "status": "done"
   },
   "class:BrnGui::StateLoadingHelper": {
@@ -21251,6 +21317,14 @@
    "notes": "7 funcs (ranked-contexts/connection-lookup/wrapped-u16/GameSearchParams); verifier parity; gate pass.",
    "status": "done"
   },
+  "class:CgsNetwork::DefaultPlayerInfoData": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsNetwork::DefaultPlayerParameters": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
   "class:CgsNetwork::Message": {
    "notes": "7 funcs; Pack/UnPack param-order FIXED (mask first arg liA per asm); other 5 parity; gate pass.",
    "status": "done"
@@ -21265,6 +21339,10 @@
   },
   "class:CgsNetwork::PlayersConnectionManager": {
    "notes": "trivial; gate-only",
+   "status": "done"
+  },
+  "class:CgsNetwork::ServerInterfaceBroadcastMessages": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
    "status": "done"
   },
   "class:CgsNetwork::ServerInterfaceComponent": {
@@ -21287,12 +21365,24 @@
    "notes": "ServerInterfaceGameParamsBase; verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:CgsNetwork::ServerInterfaceGameSearchParamsX360": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
   "class:CgsNetwork::ServerInterfaceHttp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 leaked .cpp:line citations scrubbed); combined wave-12 gate PASS.",
    "status": "done"
   },
   "class:CgsNetwork::ServerInterfacePrepareParams": {
    "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
+   "status": "done"
+  },
+  "class:CgsNetwork::ServerInterfaceQuickJoinParamsBase": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsNetwork::ServerInterfaceQuickJoinParamsX360": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
    "status": "done"
   },
   "class:CgsNetwork::ServerInterfaceRankings": {
@@ -21307,12 +21397,24 @@
    "notes": "1 func (server-interface struct accessor); verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:CgsNetwork::ServerInterfaceTelemetry": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsNetwork::ServerInterfaceUsersets": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
   "class:CgsNetwork::StartTimeManager": {
    "notes": "batch re-review pass after removing unsupported constructor stores",
    "status": "done"
   },
   "class:CgsNetwork::SyncTimeMessageManager": {
    "notes": "trivial; gate-only",
+   "status": "done"
+  },
+  "class:CgsNetwork::VoIPClient": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
    "status": "done"
   },
   "class:CgsResource::AttribSysVaultResourceType": {
@@ -21439,8 +21541,36 @@
    "notes": "sound playback registry; verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:CgsSound::Playback::VoiceProfilingData<16>": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
   "class:CgsSound::Playback::VoiceSchema": {
    "notes": "Adversarial verify PASS (parity): store-for-store vs X360 ARTIST spine; ledger funcs reconciled; minimal/owning homes, additive grows preserve layouts; gate PASS (combined wave-10 build).",
+   "status": "done"
+  },
+  "class:CgsSound::Utils::Average<10,float>": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsSound::Utils::Average<25,float>": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsSound::Utils::Average<3,float>": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsSound::Utils::Average<4,float>": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsSound::Utils::Average<5,float>": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsSound::Utils::Average<9,float>": {
+   "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
    "status": "done"
   },
   "class:CgsSystem::CgsXOverlapped": {
