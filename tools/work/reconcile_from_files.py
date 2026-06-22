@@ -1,382 +1,533 @@
 #!/usr/bin/env python3
 """
-Anchor the ledger to GROUND TRUTH = the reconstructed files actually committed in
-the b5-decomp submodule. The git-ignored SQLite ledger had drifted from reality in
-BOTH directions (phantom 'done' with no file; real committed files left 'todo'), so
-neither it nor the committed status.json mirror could be trusted. This re-derives
-each TU's status from whether its file exists in b5-decomp HEAD.
+Reconcile progress/status.json from the implementation files that actually exist
+in b5-decomp/src.
 
-Rule:  a TU is `done`  <=>  its reconstructed file is committed in b5-decomp HEAD
-       and the file carries real code (not a trap-stub-only skeleton).
-       `blocked` is preserved. Everything else becomes `todo`.
+This is deliberately local and conservative:
+  * no work-server calls;
+  * no dependence on ledger.sqlite as an authority;
+  * `done` requires implementation evidence, or explicit corrected-path evidence;
+  * explicit partial/skeleton/blocking notes win over "a file exists".
 
-Candidate file for a TU = its stored dest_path (handles corrected/misattributed
-paths) OR, for decfigs TUs, the mirrored path b5-decomp/src/<tu>. A file counts as
-"real" unless every code line is a trap stub (__debugbreak/__builtin_trap/CGS_ASSERT
-(false)) — i.e. an unreconstructed skeleton.
+Default mode is a dry run. Use --apply to write progress/status.json.
 
-    python tools/work/reconcile_from_files.py                       # dry run: the full flip table
-    python tools/work/reconcile_from_files.py --apply               # write it (DB + status.json)
-    python tools/work/reconcile_from_files.py --no-demote --apply   # add/promote only
+Compatibility notes:
+  work.py imports committed_files(), reconcile(), and verify() from this module.
+  The `con` argument is accepted for that old call shape, but this script treats
+  status.json as the artifact to reconcile. The local SQLite cache will re-import
+  status.json on the next normal work command through work.py's cache-coherence path.
 """
-import argparse, json, os, re, sqlite3, subprocess, sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import work  # reuse DB path, now(), sync_status, normalize_path
+from __future__ import annotations
 
-B5 = os.path.join(ROOT, "b5-decomp")
-TU_INDEX = os.path.join(ROOT, "progress", "tu_index.json")
-
-TRAP = ("__debugbreak", "__builtin_trap", "CGS_ASSERT(false)", "CGS_ASSERT( false )")
-# Markers that mean the committed file is the AUTHOR's own unfinished work — NOT
-# done. Catches pre-workflow hand-written partials (e.g. "// TODO: Implement
-# CgsCore::StrCpy", "All function implementations are guessed").
-# Deliberately NARROW: excludes "stub"/"placeholder"/"not yet recovered", which
-# legitimately describe extern references to OTHER not-yet-reconstructed symbols
-# (the STRATEGY.md stub scaffold) in otherwise-complete files. Also excludes "HACK":
-# it matches deliberate, complete landmark code that mirrors original symbol names
-# (e.g. `KF_HACK_MIN_LANDMARK_HEIGHT`) and "no-op/documented placeholder" prose, both
-# of which are finished work, not WIP — flagging them wrongly demotes done TUs.
-INCOMPLETE = re.compile(
-    r"\b(TODO|FIXME|guessed|not implemented|unimplemented|incomplete|WIP|"
-    r"not yet recovered)\b", re.I)
+import argparse
+import json
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path, PurePosixPath
+from typing import Iterable
 
 
-def _git_text(args):
-    """Run git and return decoded text without depending on the Windows ANSI codepage."""
+ROOT = Path(__file__).resolve().parents[2]
+B5 = ROOT / "b5-decomp"
+STATUS_JSON = ROOT / "progress" / "status.json"
+TU_INDEX_JSON = ROOT / "progress" / "tu_index.json"
+
+SOURCE_SUFFIXES = (".cpp", ".h", ".hpp", ".inl")
+TRAP_MARKERS = ("__debugbreak", "__builtin_trap", "CGS_ASSERT(false)", "CGS_ASSERT( false )")
+
+# Narrow on purpose. "placeholder" and "incomplete" often document honest type
+# boundaries in otherwise finished reconstructions.
+INCOMPLETE_FILE_RE = re.compile(
+    r"TODO:\s*Implement|"
+    r"committed file is partial|"
+    r"needs finishing|"
+    r"skeleton, not faithful|"
+    r"All function implementations are guessed|"
+    r"\bnot implemented\b|"
+    r"\bunimplemented\b",
+    re.I,
+)
+
+BAD_DONE_NOTE_RE = re.compile(
+    r"committed file is partial|"
+    r"needs finishing|"
+    r"skeleton, not faithful|"
+    r"\bBLOCKED on\b|"
+    r"\bUnblock when\b",
+    re.I,
+)
+
+BLOCKED_NOTE_RE = re.compile(r"\bBLOCKED on\b|\bUnblock when\b", re.I)
+CORRECTED_PATH_RE = re.compile(r"\b(?:corrected|Landed at corrected)\s+path\s+([^\s,)]+)", re.I)
+KNOWN_PARTIAL_TUS = {
+    "GameSource/GameState/BrnGameStateSharedIO.h",
+}
+
+
+def normalize_path(path: str) -> str:
+    p = PurePosixPath(path.replace("\\", "/"))
+    parts: list[str] = []
+    for part in p.parts:
+        if not part or part == ".":
+            continue
+        if part == "..":
+            if parts:
+                parts.pop()
+            continue
+        parts.append(part)
+    return "/".join(parts)
+
+
+def stem_key(path: str) -> str:
+    base, _ = os.path.splitext(normalize_path(path))
+    return base.lower()
+
+
+def _git_text(args: list[str]) -> str:
     return subprocess.run(
-        ["git", "-C", B5] + args,
+        ["git", "-C", str(B5)] + args,
+        check=True,
         capture_output=True,
         text=True,
         encoding="utf-8",
         errors="replace",
-    ).stdout or ""
+    ).stdout
 
 
-def committed_files():
-    """Set of paths (relative to repo root) tracked in b5-decomp HEAD."""
-    out = _git_text(["ls-tree", "-r", "--name-only", "HEAD"])
-    return {"b5-decomp/" + ln.strip() for ln in out.splitlines() if ln.strip()}
+def committed_files() -> list[str]:
+    """Tracked source-like files under b5-decomp/src, relative to workflow root."""
+    return [
+        "b5-decomp/" + line.replace("\\", "/")
+        for line in _git_text(["ls-files", "src"]).splitlines()
+        if line.endswith(SOURCE_SUFFIXES)
+    ]
 
 
-def _stem(path_rel_root):
-    """Extension-stripped, `..`-collapsed, lower-cased key for fuzzy matching.
-    `b5-decomp/src/GameShared/.../CgsLuaCodeResource.cpp` and the TU id
-    `GameShared/.../FSM/Resources/CgsLuaCodeResource.h` both reduce to the same key,
-    so case (FSM/Fsm) and extension (.h/.cpp) differences no longer hide a real file."""
-    p = work.normalize_path(path_rel_root)
-    p = os.path.splitext(p)[0]
-    return p.lower()
+def load_json(path: Path) -> dict:
+    with path.open(encoding="utf-8") as f:
+        return json.load(f)
 
 
-def build_index(tracked):
-    """Map every committed file to its fuzzy stem so a TU id resolves to ALL its
-    companion files (the `.h` and the `.cpp`), regardless of case/extension drift."""
-    idx = {}
-    for f in tracked:
-        idx.setdefault(_stem(f), []).append(f)
-    return idx
+def source_path(rel_root_path: str) -> Path:
+    if not rel_root_path.startswith("b5-decomp/"):
+        raise ValueError(f"not a b5-decomp-relative path: {rel_root_path}")
+    return ROOT / rel_root_path.replace("/", os.sep)
 
 
-def function_defined(funcs):
-    """True if any of the TU's functions has a DEFINITION committed in b5-decomp HEAD,
-    found by symbol regardless of file path. The safety net for file-TUs whose path was
-    misattributed: the reconstruction lives under a different name (e.g. CgsPlayerName's
-    `CgsNetwork::PlayerName::Construct` lives in BrnCgsPlayerName.cpp). Demoting such a
-    TU to todo would delete present, reviewed work — so we confirm absence by symbol
-    before ever demoting a curated-done TU."""
-    for fn in funcs or []:
-        tail = "::".join(fn.split("::")[-2:]) if "::" in fn else fn   # Class::Method
-        pat = re.escape(tail) + r"\s*\("
-        out = _git_text(["grep", "-lIE", pat, "HEAD"])
-        if out.strip():
-            return True
-    return False
+def read_source(rel_root_path: str) -> str:
+    return source_path(rel_root_path).read_text(encoding="utf-8", errors="ignore")
 
 
-def blob(path_rel_root):
-    """Committed contents of a b5-decomp file (path relative to repo root)."""
-    sub = path_rel_root[len("b5-decomp/"):]
-    return _git_text(["show", "HEAD:" + sub])
-
-
-def is_real_reconstruction(text):
-    """True unless the file has no substantive code beyond trap stubs / boilerplate."""
-    if not text:
-        return False
+def strip_comment_lines(text: str) -> str:
+    lines = []
     for raw in text.splitlines():
-        l = raw.strip()
-        if not l or l.startswith("//") or l.startswith("/*") or l.startswith("*"):
+        stripped = raw.strip()
+        if stripped.startswith("//") or stripped.startswith("/*") or stripped.startswith("*"):
             continue
-        if l in ("{", "}") or l.startswith("#") or l.startswith("namespace") or l == "":
-            continue
-        if any(t in l for t in TRAP):
-            continue
-        return True  # found a substantive, non-trap code line
-    return False
+        lines.append(raw)
+    return "\n".join(lines)
 
 
-def resolve_files(tu_id, source, dest_path, index):
-    """The committed b5-decomp files that belong to a TU, found via fuzzy stem so
-    case/extension drift never hides a real reconstruction. Tries the stored dest_path
-    first (handles corrected/misattributed paths), then the mirrored src/<tu> path."""
-    stems = []
-    if dest_path:
-        stems.append(_stem(dest_path))
-    stems.append(_stem("b5-decomp/src/" + tu_id))
-    files = []
-    for s in dict.fromkeys(stems):
-        files.extend(index.get(s, []))
+def build_file_index(files: Iterable[str]) -> dict[str, list[str]]:
+    index: dict[str, list[str]] = {}
+    for path in files:
+        index.setdefault(stem_key(path), []).append(path)
+    return index
+
+
+def build_code_text_by_file(files: Iterable[str]) -> dict[str, str]:
+    out: dict[str, str] = {}
+    for path in files:
+        full = source_path(path)
+        if full.exists():
+            out[path] = strip_comment_lines(read_source(path))
+    return out
+
+
+def resolve_files(tu_id: str, file_index: dict[str, list[str]]) -> list[str]:
+    return list(dict.fromkeys(file_index.get(stem_key("b5-decomp/src/" + tu_id), [])))
+
+
+def resolve_note_files(notes: str, file_index: dict[str, list[str]]) -> list[str]:
+    files: list[str] = []
+    for match in CORRECTED_PATH_RE.finditer(notes):
+        noted = match.group(1).strip().strip(".")
+        candidates = [noted]
+        if not noted.startswith("b5-decomp/"):
+            candidates.append("b5-decomp/src/" + noted)
+        for candidate in candidates:
+            files.extend(file_index.get(stem_key(candidate), []))
     return list(dict.fromkeys(files))
 
 
-def classify_files(files):
-    """Classify a TU from ALL its committed companion files:
-    'done' (some real code, none flagged unfinished) | 'partial' (real but a file
-    carries TODO/placeholder) | 'skeleton' (files present but only trap stubs)."""
-    texts = [blob(f) for f in files]
-    if not any(is_real_reconstruction(t) for t in texts):
-        return "skeleton"
-    return "partial" if any(INCOMPLETE.search(t) for t in texts) else "done"
-
-
-def classify_file(text):  # kept for verify()'s single-file checks
-    if not is_real_reconstruction(text):
-        return "skeleton"
-    return "partial" if INCOMPLETE.search(text) else "done"
-
-
-STATUS_RANK = {"todo": 0, "in_progress": 1, "compiled": 2, "done": 3, "blocked": 3}
-FUNC_STATUS_RANK = {"todo": 0, "recovered": 1, "compiles": 2, "reviewed": 3}
-
-
-def would_demote(cur, target):
-    if cur == target or cur == "blocked" or target == "blocked":
-        return False
-    return STATUS_RANK.get(target, 0) < STATUS_RANK.get(cur, 0)
-
-
-def _status_json_snapshot():
-    if not os.path.exists(work.STATUS_JSON):
-        return {"tu": {}, "func": {}}
-    return json.load(open(work.STATUS_JSON, encoding="utf-8"))
-
-
-def _merge_no_demote_status_json(previous):
-    """Preserve existing status.json entries that the DB mirror removed or lowered."""
-    current = _status_json_snapshot()
-    changed = False
-
-    for section, ranks in (("tu", STATUS_RANK), ("func", FUNC_STATUS_RANK)):
-        merged = current.setdefault(section, {})
-        for key, old_entry in previous.get(section, {}).items():
-            new_entry = merged.get(key)
-            if new_entry is None:
-                merged[key] = old_entry
-                changed = True
-                continue
-            old_rank = ranks.get(old_entry.get("status", "todo"), 0)
-            new_rank = ranks.get(new_entry.get("status", "todo"), 0)
-            if new_rank < old_rank:
-                merged[key] = old_entry
-                changed = True
-            elif section == "tu" and old_entry.get("notes") and not new_entry.get("notes"):
-                new_entry["notes"] = old_entry["notes"]
-                changed = True
-
-    if changed:
-        json.dump(current, open(work.STATUS_JSON, "w", encoding="utf-8"),
-                  indent=1, sort_keys=True)
-    return changed
-
-
-def _merge_no_demote_db(con, previous):
-    """Restore DB rows from the pre-run status mirror when reconcile lowered them."""
-    restored = 0
-    for tid, old_entry in previous.get("tu", {}).items():
-        row = con.execute("SELECT status, notes FROM tu WHERE id=?", (tid,)).fetchone()
-        if not row:
+def is_real_reconstruction(text: str) -> bool:
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line:
             continue
-        old_status = old_entry.get("status", "todo")
-        if STATUS_RANK.get(row["status"], 0) < STATUS_RANK.get(old_status, 0):
-            con.execute("UPDATE tu SET status=?, owner=?, notes=? WHERE id=?",
-                        (old_status, old_entry.get("owner"), old_entry.get("notes"), tid))
-            restored += 1
-        elif old_entry.get("notes") and not row["notes"]:
-            con.execute("UPDATE tu SET notes=? WHERE id=?", (old_entry["notes"], tid))
-            restored += 1
-
-    for name, old_entry in previous.get("func", {}).items():
-        row = con.execute("SELECT status FROM func WHERE name=?", (name,)).fetchone()
-        if not row:
+        if line.startswith("//") or line.startswith("/*") or line.startswith("*"):
             continue
-        old_status = old_entry.get("status", "todo")
-        if FUNC_STATUS_RANK.get(row["status"], 0) < FUNC_STATUS_RANK.get(old_status, 0):
-            con.execute("UPDATE func SET status=?, verify_tier=?, attempts=? WHERE name=?",
-                        (old_status,
-                         old_entry.get("verify_tier", work.implied_tier(old_status)),
-                         old_entry.get("attempts", 0),
-                         name))
-            restored += 1
-    return restored
+        if line in ("{", "}", "};"):
+            continue
+        if line.startswith("#") or line.startswith("namespace "):
+            continue
+        if any(marker in line for marker in TRAP_MARKERS):
+            continue
+        return True
+    return False
 
 
-def reconcile(con, tracked, apply, no_demote=False):
-    index = build_index(tracked)
-    tu_index = json.load(open(TU_INDEX, encoding="utf-8"))
-    previous_status = _status_json_snapshot() if no_demote and apply else None
-    rows = con.execute("SELECT id, source, status, dest_path FROM tu").fetchall()
-    flips, done_ids, partial, skeleton_flag, preserved = [], set(), [], [], []
-    demoted_phantom, misattributed, protected_demotions = [], [], []
-    targets = {}
-    for r in rows:
-        tid, src, cur, dp = r["id"], r["source"], r["status"], r["dest_path"]
-        files = resolve_files(tid, src, dp, index)
-        kind = classify_files(files) if files else "none"
-        if kind == "done":
-            target = "done"; done_ids.add(tid)
-        elif kind == "partial":
-            if cur == "done":
-                # already curated done AND still backed by real committed code — a stray
-                # TODO/guessed comment must not silently delete reviewed work. Keep done.
-                target = "done"; done_ids.add(tid)
-            else:
-                target = "in_progress"; partial.append((tid, files[0]))  # committed but unfinished
-        elif kind == "skeleton":
-            target = "blocked" if cur == "blocked" else "todo"
-            skeleton_flag.append((tid, files[0]))
-        else:  # no committed file resolves to this TU
-            if src == "class":
-                # A class/nested-template TU owns no file of its own — its code is folded
-                # into a parent file, so file-existence can't judge it. PRESERVE the
-                # curated status instead of wiping real progress to todo.
-                target = cur
-                if cur not in ("todo", "blocked"):
-                    preserved.append(tid)
-            elif cur == "done" and function_defined(tu_index.get(tid, {}).get("functions")):
-                # Path didn't resolve, but the TU's function IS defined in committed
-                # code under a misattributed path — present work, keep it done.
-                target = "done"; done_ids.add(tid); misattributed.append(tid)
-            else:
-                # A file-TU that should have a committed file but doesn't = phantom done.
-                target = "blocked" if cur == "blocked" else "todo"
-                if cur == "done":
-                    demoted_phantom.append(tid)
-        if no_demote and would_demote(cur, target):
-            protected_demotions.append((tid, cur, target))
-            target = cur
-        targets[tid] = target
-        if target != cur:
-            flips.append((tid, cur, target))
+def classify_files(files: list[str]) -> str:
+    texts = [read_source(path) for path in files if source_path(path).exists()]
+    if not texts:
+        return "none"
+    if not any(is_real_reconstruction(text) for text in texts):
+        return "skeleton"
+    if any(INCOMPLETE_FILE_RE.search(text) for text in texts):
+        return "partial"
+    return "done"
 
-    print(f"TUs: {len(rows)}   done (real & complete file): {len(done_ids)}   "
-          f"in_progress (committed but TODO/placeholder): {len(partial)}")
-    print(f"class TUs preserved (no file to verify): {len(preserved)}   "
-          f"misattributed-but-present (kept done by symbol): {len(misattributed)}   "
-          f"phantom file-TUs demoted (done, fn truly absent): {len(demoted_phantom)}")
-    if no_demote:
-        print(f"no-demote mode: suppressed demotions: {len(protected_demotions)}")
-    print(f"status flips needed: {len(flips)}")
-    for tid, a, b in sorted(flips, key=lambda x: (x[1], x[2]))[:60]:
-        print(f"  {a:11s} -> {b:11s}  {tid[:74]}")
-    if len(flips) > 60:
-        print(f"  ... +{len(flips)-60} more")
-    if partial:
-        print("\ncommitted but UNFINISHED (-> in_progress, NOT done):")
-        for tid, p in partial:
-            print(f"  {p[len('b5-decomp/src/'):]}")
-    if skeleton_flag:
-        print(f"\nfiles present but trap-stub-only (left NOT done): {len(skeleton_flag)}")
-        for tid, p in skeleton_flag[:10]:
-            print(f"  {p}")
-    if demoted_phantom:
-        print(f"\ndone but NO committed file (demoted to todo): {len(demoted_phantom)}")
-        for tid in demoted_phantom[:10]:
-            print(f"  {tid}")
-    if protected_demotions:
-        print(f"\ndemotions suppressed by --no-demote: {len(protected_demotions)}")
-        for tid, a, b in protected_demotions[:10]:
-            print(f"  {a:11s} -/-> {b:11s}  {tid[:74]}")
 
-    if not apply:
-        print("\n(dry run — re-run with --apply to write)")
-        return
+BODY_SUFFIX = (
+    r"\s*\([^;{}]*\)\s*"
+    r"(?:const\s*)?"
+    r"(?:volatile\s*)?"
+    r"(?:noexcept(?:\s*\([^)]*\))?\s*)?"
+    r"(?:override\s*)?"
+    r"(?:final\s*)?"
+    r"(?:->\s*[^{};]+)?"
+    r"(?::\s*[^{};]*)?"
+    r"\{"
+)
 
-    ts = work.now()
-    partial_ids = {t for t, _ in partial}
-    for r in rows:
-        tid, cur = r["id"], r["status"]
-        target = targets[tid]
+
+def definition_patterns(function_name: str, allow_method_only: bool = True) -> list[re.Pattern[str]]:
+    if "`" in function_name:
+        return []
+
+    name = function_name.split("(", 1)[0]
+    if "::" not in name:
+        return [re.compile(r"\b" + re.escape(name) + BODY_SUFFIX, re.S)]
+
+    parts = name.split("::")
+    method = parts[-1]
+    owner = parts[-2]
+    full = r"\s*::\s*".join(re.escape(part) for part in parts)
+    owner_method = re.escape(owner) + r"\s*::\s*" + re.escape(method)
+    patterns = [
+        re.compile(full + BODY_SUFFIX, re.S),
+        re.compile(owner_method + BODY_SUFFIX, re.S),
+    ]
+    if allow_method_only:
+        method_only = r"\b" + re.escape(method)
+        patterns.append(re.compile(method_only + BODY_SUFFIX, re.S))
+    return patterns
+
+
+def function_definition_files(
+    function_name: str,
+    code_by_file: dict[str, str],
+    allow_method_only: bool = True,
+) -> list[str]:
+    patterns = definition_patterns(function_name, allow_method_only=allow_method_only)
+    if not patterns:
+        return []
+    for path, code in code_by_file.items():
+        if any(pattern.search(code) for pattern in patterns):
+            return [path]
+    return []
+
+
+def find_definition_files(
+    functions: list[str],
+    code_by_file: dict[str, str],
+    allow_method_only: bool = True,
+) -> list[str]:
+    matches: list[str] = []
+    for function_name in functions:
+        matches.extend(function_definition_files(function_name, code_by_file, allow_method_only=allow_method_only))
+    return list(dict.fromkeys(matches))
+
+
+def all_non_thunk_functions_have_bodies(
+    functions: list[str],
+    code_by_file: dict[str, str],
+    allow_method_only: bool = True,
+) -> bool:
+    required = [fn for fn in functions if "`" not in fn]
+    if not required:
+        return True
+    return all(function_definition_files(fn, code_by_file, allow_method_only=allow_method_only) for fn in required)
+
+
+def function_definition_files_split(
+    function_name: str,
+    local_code_by_file: dict[str, str],
+    code_by_file: dict[str, str],
+) -> list[str]:
+    return (
+        function_definition_files(function_name, local_code_by_file, allow_method_only=True)
+        or function_definition_files(function_name, code_by_file, allow_method_only=False)
+    )
+
+
+def all_non_thunk_functions_have_split_bodies(
+    functions: list[str],
+    local_code_by_file: dict[str, str],
+    code_by_file: dict[str, str],
+) -> bool:
+    required = [fn for fn in functions if "`" not in fn]
+    if not required:
+        return True
+    return all(function_definition_files_split(fn, local_code_by_file, code_by_file) for fn in required)
+
+
+def find_split_definition_files(
+    functions: list[str],
+    local_code_by_file: dict[str, str],
+    code_by_file: dict[str, str],
+) -> list[str]:
+    matches: list[str] = []
+    for function_name in functions:
+        matches.extend(function_definition_files_split(function_name, local_code_by_file, code_by_file))
+    return list(dict.fromkeys(matches))
+
+
+def target_for_tu(
+    tu_id: str,
+    tu_meta: dict,
+    current_entry: dict,
+    file_index: dict[str, list[str]],
+    code_by_file: dict[str, str],
+) -> tuple[str, str | None, list[str]]:
+    current_status = current_entry.get("status", "todo")
+    current_notes = str(current_entry.get("notes", ""))
+
+    if current_status == "blocked":
+        return "blocked", current_notes or None, []
+
+    if current_status in ("done", "in_progress", "compiled") and BAD_DONE_NOTE_RE.search(current_notes):
+        target = "blocked" if BLOCKED_NOTE_RE.search(current_notes) else "todo"
+        return target, current_notes, []
+
+    if tu_id.startswith("class:"):
+        return current_status, current_notes or None, []
+
+    if tu_id in KNOWN_PARTIAL_TUS:
+        return "todo", None, []
+
+    functions = list(tu_meta.get("functions") or [])
+    note_files = resolve_note_files(current_notes, file_index)
+    if current_status == "done" and note_files and functions:
+        local_code_by_file = {path: code_by_file[path] for path in note_files if path in code_by_file}
+        if classify_files(note_files) == "done" and all_non_thunk_functions_have_bodies(
+            functions,
+            local_code_by_file,
+            allow_method_only=True,
+        ):
+            return "done", current_notes or None, find_definition_files(
+                functions,
+                local_code_by_file,
+                allow_method_only=True,
+            )
+
+    files = resolve_files(tu_id, file_index)
+    kind = classify_files(files)
+
+    if kind == "done":
+        local_code_by_file = {path: code_by_file[path] for path in files if path in code_by_file}
+        if tu_id.lower().endswith(".cpp") and not any(path.lower().endswith(".cpp") for path in files):
+            if all_non_thunk_functions_have_bodies(functions, local_code_by_file, allow_method_only=True):
+                return "done", current_notes or None, find_definition_files(functions, local_code_by_file, allow_method_only=True)
+            if current_status == "done" and all_non_thunk_functions_have_split_bodies(
+                functions,
+                local_code_by_file,
+                code_by_file,
+            ):
+                return "done", current_notes or None, find_split_definition_files(
+                    functions,
+                    local_code_by_file,
+                    code_by_file,
+                )
+            return "todo", None, files
+        return "done", current_notes or None, files
+    if kind == "partial":
+        return "todo", None, files
+    if kind == "skeleton":
+        return "todo", None, files
+
+    # Corrected-path or misattributed TUs can be implemented under a different
+    # file. Preserve already-reviewed work only when every non-thunk function has
+    # definition evidence somewhere in tracked source.
+    if current_status == "done" and functions:
+        definitions = find_definition_files(functions, code_by_file, allow_method_only=False)
+        non_thunk_count = len([fn for fn in functions if "`" not in fn])
+        if non_thunk_count and all_non_thunk_functions_have_bodies(functions, code_by_file, allow_method_only=False):
+            return "done", current_notes or None, definitions
+
+    return "todo", None, []
+
+
+def set_functions(func_status: dict, functions: Iterable[str], status: str | None) -> None:
+    for function_name in functions:
+        if status is None:
+            func_status.pop(function_name, None)
+        else:
+            entry = func_status.setdefault(function_name, {})
+            entry["status"] = status
+
+
+def count_statuses(entries: dict[str, dict]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for entry in entries.values():
+        status = entry.get("status", "todo")
+        counts[status] = counts.get(status, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def build_reconciled_status(
+    status: dict,
+    tu_index: dict,
+    tracked: Iterable[str],
+    no_demote: bool = False,
+) -> tuple[dict, list[tuple[str, str, str, str | None]], dict[str, list[str]]]:
+    current_tu = status.setdefault("tu", {})
+    current_func = status.setdefault("func", {})
+
+    files = list(tracked)
+    file_index = build_file_index(files)
+    code_by_file = build_code_text_by_file(files)
+
+    new_tu: dict[str, dict] = {}
+    new_func = dict(current_func)
+    changes: list[tuple[str, str, str, str | None]] = []
+    evidence: dict[str, list[str]] = {}
+
+    all_tus = sorted(set(tu_index) | set(current_tu))
+    for tu_id in all_tus:
+        tu_meta = tu_index.get(tu_id, {})
+        current_entry = current_tu.get(tu_id, {})
+        old_status = current_entry.get("status", "todo")
+        target, notes, files_for_tu = target_for_tu(tu_id, tu_meta, current_entry, file_index, code_by_file)
+
+        if no_demote and status_rank(target) < status_rank(old_status):
+            target = old_status
+            notes = current_entry.get("notes")
+            files_for_tu = []
+
+        functions = list(tu_meta.get("functions") or [])
+        if target == "todo":
+            set_functions(new_func, functions, None)
+            if tu_id in current_tu:
+                changes.append((tu_id, old_status, target, notes))
+            continue
+
+        entry = {"status": target}
+        if notes:
+            entry["notes"] = notes
+        new_tu[tu_id] = entry
+        evidence[tu_id] = files_for_tu
+
         if target == "done":
-            con.execute("UPDATE tu SET status='done', updated_at=? WHERE id=?", (ts, tid))
-            con.execute("UPDATE func SET status='reviewed', verify_tier=2, updated_at=? WHERE tu_id=?", (ts, tid))
-        elif target == "in_progress" and tid in partial_ids:
-            con.execute("UPDATE tu SET status='in_progress', notes='committed file is partial (TODO/placeholder) — needs finishing', updated_at=? WHERE id=?", (ts, tid))
-            if no_demote:
-                con.execute("UPDATE func SET status='recovered', verify_tier=0, updated_at=? WHERE tu_id=? AND status='todo'", (ts, tid))
-            else:
-                con.execute("UPDATE func SET status='recovered', verify_tier=0, updated_at=? WHERE tu_id=?", (ts, tid))
-        elif target == "todo" and cur != "todo" and cur != "blocked":
-            # only TUs we actually decided to demote (phantom file-TUs / skeletons);
-            # class TUs with no file keep their status and are NOT in flip_ids here.
-            con.execute("UPDATE tu SET status='todo', updated_at=? WHERE id=?", (ts, tid))
-            con.execute("UPDATE func SET status='todo', verify_tier=0, updated_at=? WHERE tu_id=?", (ts, tid))
-    con.execute("INSERT INTO event(ts,tu_id,action,detail) VALUES(?,?,?,?)",
-                (ts, None, "reconcile_from_files",
-                 f"done={len(done_ids)} partial={len(partial)} preserved={len(preserved)} "
-                 f"flips={len(flips)} no_demote={int(no_demote)} "
-                 f"suppressed={len(protected_demotions)}"))
-    if previous_status is not None:
-        restored = _merge_no_demote_db(con, previous_status)
-        if restored:
-            print(f"no-demote mode: restored {restored} DB row(s) lowered by reconcile")
-    con.commit()
-    work.sync_status(con)
-    if previous_status is not None and _merge_no_demote_status_json(previous_status):
-        print("no-demote mode: restored status.json entries removed or lowered by DB sync")
-    print(f"\napplied. done={len(done_ids)}  in_progress(partial)={len(partial)}  "
-          f"class-preserved={len(preserved)}")
+            set_functions(new_func, functions, "reviewed")
+        elif target in ("in_progress", "blocked") and old_status == "done":
+            set_functions(new_func, functions, "recovered")
+
+        if old_status != target or current_entry.get("notes") != entry.get("notes"):
+            changes.append((tu_id, old_status, target, notes))
+
+    return {"func": dict(sorted(new_func.items())), "tu": dict(sorted(new_tu.items()))}, changes, evidence
 
 
-def verify(con, tracked):
-    """Post-conditions: every done FILE-TU has a real file; every real committed file
-    is done/in_progress. Class TUs own no file, so they are exempt from the file check."""
-    index = build_index(tracked)
-    # forward: a done decfigs file-TU must resolve to a committed file (class TUs exempt)
-    done = con.execute("SELECT id, source, dest_path FROM tu WHERE status='done'").fetchall()
-    bad_done = [r["id"] for r in done if r["source"] == "decfigs"
-                and not resolve_files(r["id"], r["source"], r["dest_path"], index)]
-    # reverse: which committed file does each TU own, and what is that TU's status
-    owned = {}
-    for r in con.execute("SELECT id, source, dest_path, status FROM tu"):
-        for f in resolve_files(r["id"], r["source"], r["dest_path"], index):
-            owned[f] = r["status"]
-    src_files = [p for p in tracked if p.startswith("b5-decomp/src/") and p.endswith((".cpp", ".h", ".hpp"))]
-    unowned = [p for p in src_files if p not in owned]
-    # a real committed file is OK if its TU is done, OR in_progress (known partial).
-    leaked = [p for p in src_files
-              if owned.get(p) not in (None, "done", "in_progress")
-              and classify_file(blob(p)) == "done"]
+def status_rank(status: str) -> int:
+    return {"todo": 0, "in_progress": 1, "compiled": 2, "done": 3, "blocked": 3}.get(status, 0)
+
+
+def print_report(old_status: dict, new_status: dict, changes: list, evidence: dict[str, list[str]], apply: bool) -> None:
+    print("TU status counts:")
+    print(f"  before: {count_statuses(old_status.get('tu', {}))}")
+    print(f"  after:  {count_statuses(new_status.get('tu', {}))}")
+    print(f"changes: {len(changes)}")
+    for tu_id, old, new, notes in changes[:80]:
+        suffix = ""
+        if evidence.get(tu_id):
+            short = [path.removeprefix("b5-decomp/src/") for path in evidence[tu_id][:2]]
+            suffix = "  [" + ", ".join(short) + "]"
+        elif notes:
+            suffix = "  [note]"
+        print(f"  {old:11s} -> {new:11s}  {tu_id}{suffix}")
+    if len(changes) > 80:
+        print(f"  ... +{len(changes) - 80} more")
+    if not apply:
+        print("\n(dry run; use --apply to write progress/status.json)")
+
+
+def reconcile(con=None, tracked=None, apply=False, no_demote=False):
+    """Compatibility entry point used by work.py."""
+    old_status = load_json(STATUS_JSON)
+    tu_index = load_json(TU_INDEX_JSON)
+    tracked = list(tracked) if tracked is not None else committed_files()
+    new_status, changes, evidence = build_reconciled_status(old_status, tu_index, tracked, no_demote=no_demote)
+    print_report(old_status, new_status, changes, evidence, apply)
+
+    if apply:
+        with STATUS_JSON.open("w", encoding="utf-8", newline="\n") as f:
+            json.dump(new_status, f, indent=1, sort_keys=True)
+            f.write("\n")
+        print(f"\nwrote {STATUS_JSON.relative_to(ROOT)}")
+    return new_status, changes
+
+
+def verify(con=None, tracked=None):
+    status = load_json(STATUS_JSON)
+    tu_index = load_json(TU_INDEX_JSON)
+    tracked = list(tracked) if tracked is not None else committed_files()
+    file_index = build_file_index(tracked)
+    code_by_file = build_code_text_by_file(tracked)
+
+    bad_notes = []
+    no_evidence = []
+    corrected_path = []
+    class_done = 0
+    for tu_id, entry in status.get("tu", {}).items():
+        if entry.get("status") != "done":
+            continue
+        if BAD_DONE_NOTE_RE.search(str(entry.get("notes", ""))):
+            bad_notes.append(tu_id)
+        if tu_id.startswith("class:"):
+            class_done += 1
+            continue
+        if resolve_files(tu_id, file_index):
+            continue
+        funcs = list(tu_index.get(tu_id, {}).get("functions") or [])
+        definitions = find_definition_files(funcs, code_by_file)
+        non_thunk_count = len([fn for fn in funcs if "`" not in fn])
+        if non_thunk_count and len(definitions) >= non_thunk_count:
+            corrected_path.append(tu_id)
+        else:
+            no_evidence.append(tu_id)
+
     print("\n=== verification ===")
-    print(f"  done file-TUs without a committed file: {len(bad_done)}  {'OK' if not bad_done else bad_done[:5]}")
-    print(f"  committed src files not mapped to any TU (class/misattributed): {len(unowned)}")
-    print(f"  complete committed files left as todo (should be 0): {len(leaked)}  {'OK' if not leaked else leaked[:5]}")
+    print(f"  done rows with explicit bad notes: {len(bad_notes)}  {'OK' if not bad_notes else bad_notes[:5]}")
+    print(f"  done file-TUs without implementation evidence: {len(no_evidence)}  {'OK' if not no_evidence else no_evidence[:5]}")
+    print(f"  done rows preserved by corrected-path symbol evidence: {len(corrected_path)}")
+    print(f"  class-derived done rows preserved: {class_done}")
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--apply", action="store_true")
-    ap.add_argument("--no-demote", action="store_true",
-                    help="only add/promote statuses; preserve existing status.json entries")
-    args = ap.parse_args()
-    con = sqlite3.connect(work.DB); con.row_factory = sqlite3.Row
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--apply", action="store_true", help="write progress/status.json")
+    parser.add_argument("--no-demote", action="store_true", help="suppress status demotions")
+    args = parser.parse_args()
     tracked = committed_files()
-    reconcile(con, tracked, args.apply, args.no_demote)
+    reconcile(None, tracked, args.apply, args.no_demote)
     if args.apply:
-        verify(con, tracked)
-    con.close()
+        verify(None, tracked)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
