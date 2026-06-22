@@ -13152,6 +13152,48 @@
   "CgsSystem::CgsXOverlapped::GetResultString": {
    "status": "reviewed"
   },
+  "CgsSystem::DateAndTime::GetDay": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::GetDifferenceInSeconds": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::GetHour": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::GetMinute": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::GetRawTimeValue": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::GetSecond": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::GetYear": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::SetDay": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::SetHour": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::SetMinute": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::SetMonth": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::SetSecond": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::SetYear": {
+   "status": "reviewed"
+  },
+  "CgsSystem::DateAndTime::Update": {
+   "status": "reviewed"
+  },
   "CgsSystem::FrameRateManager::Prepare": {
    "status": "reviewed"
   },
@@ -15205,8 +15247,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/System/Timer/PS3/CgsDateAndTimePS3.cpp": {
-   "notes": "CgsSystem::DateAndTime (14 fns: Get/Set Day/Month/Year/Hour/Minute/Second + GetRawTimeValue/GetDifferenceInSeconds/Update). Wraps a Win32-style time platform layer that is NOT committed: GetLocalTime/GetSystemTime/SystemTimeToFileTime/FileTimeToSystemTime over SYSTEMTIME/FILETIME (grep: zero hits for any of these or the structs; project has no win32 platform header). No DateAndTime class home exists (would need creating with the SYSTEMTIME/FILETIME structs + the time-API shim decls). Plus GetDifferenceInSeconds calls an unidentified sub_828E0518. BLOCK until the Win32 time-API shim (SYSTEMTIME/FILETIME + GetLocalTime/GetSystemTime/SystemTimeToFileTime/FileTimeToSystemTime) + DateAndTime class home land.",
-   "status": "blocked"
+   "notes": "14-fn CgsSystem::DateAndTime bodied store-for-store via the host Win32 time API (X360 ARTIST build; assert path CgsDateAndTimeX360.cpp). Layout asm-pinned: mbIsLocal@+0 (Update branch GetLocalTime/GetSystemTime), FILETIME@+4. SYSTEMTIME field offsets, setter bounds, the 10,000,000 divisor + 0x7FFFFFFF overflow, and the debug-only sub_828E0518 omission all VERIFIED CORRECT by the adversarial verifier. The verifier's one 'wrong/med' finding -- GetRawTimeValue composed high/low swapped vs the asm -- was FIXED: now returns (muLowDateTime<<32)+muHighDateTime to match the X360 storage-order load ((*(this+4)<<32)+*(this+8)); GetDifferenceInSeconds + comparison operators delegate to it so they inherit the fix. Re-gated: pass. submit-parity 'gross' (absent CgsDev::Assert::FireAssert etc.) = benign assert-machinery (CGS_ASSERT macro). FLAG: PS3-libc tm*/time_t DWARF flavour not reconstructed (X360 asm authoritative -> FILETIME layout); default ctor added for value-type linkage. Unblocks the FlybyManager chain.",
+   "status": "done"
   },
   "GameShared/GameClasses/World/CgsWorldMap2D.cpp": {
    "status": "done"
