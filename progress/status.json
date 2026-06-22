@@ -4887,6 +4887,9 @@
   "BrnGui::ChallengeListComponent::ShowDescriptionInTicker": {
    "status": "reviewed"
   },
+  "BrnGui::CompletedGame::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
   "BrnGui::CrashNavAccountManagement::Update": {
    "status": "reviewed"
   },
@@ -5688,6 +5691,9 @@
   "BrnGui::InGameOkOverlayState::FillInPopupType": {
    "status": "reviewed"
   },
+  "BrnGui::InstantResultsState::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
   "BrnGui::InstantResultsState::HandleControllerInput": {
    "status": "reviewed"
   },
@@ -5787,7 +5793,13 @@
   "BrnGui::MovieManager::Update": {
    "status": "reviewed"
   },
+  "BrnGui::OfflineRivalShutdown::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
   "BrnGui::OfflineRivalShutdown::HandleControllerInputPressed": {
+   "status": "reviewed"
+  },
+  "BrnGui::OfflineTrophyCarUnlock::GetResourcesToLoad": {
    "status": "reviewed"
   },
   "BrnGui::OfflineTrophyCarUnlock::HandleControllerInputPressed": {
@@ -5908,6 +5920,9 @@
    "status": "reviewed"
   },
   "BrnGui::OnlineInstantResultsState::FillOutTicker": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineInstantResultsState::GetResourcesToLoad": {
    "status": "reviewed"
   },
   "BrnGui::OnlineInstantResultsState::OnLeave": {
@@ -6055,6 +6070,9 @@
    "status": "reviewed"
   },
   "BrnGui::PostTitleScreenLoad::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::PreloadOverlayState::GetResourcesToLoad": {
    "status": "reviewed"
   },
   "BrnGui::PreloadOverlayState::Update": {
@@ -6702,6 +6720,12 @@
   "BrnNetwork::CollectableMessage::Retrieve": {
    "status": "reviewed"
   },
+  "BrnNetwork::CrashingTrafficMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::DirtyTrickMessage::GetName": {
+   "status": "reviewed"
+  },
   "BrnNetwork::FreeburnChallengeMessage::Construct": {
    "status": "reviewed"
   },
@@ -6757,6 +6781,9 @@
    "status": "reviewed"
   },
   "BrnNetwork::ImageMessage::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::ImageMessage::GetName": {
    "status": "reviewed"
   },
   "BrnNetwork::ImageMessage::PrepareForSend": {
@@ -6846,10 +6873,16 @@
   "BrnNetwork::LiveRevengeRelationship::ValidateStat": {
    "status": "reviewed"
   },
+  "BrnNetwork::LiveRevengeSyncMessage::GetName": {
+   "status": "reviewed"
+  },
   "BrnNetwork::LiveRevengeSyncMessage::GetPackedMessageSize": {
    "status": "reviewed"
   },
   "BrnNetwork::MarkedManManager::_MarkedManMessageDeliveredCallback": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::MarkedManMessage::GetName": {
    "status": "reviewed"
   },
   "BrnNetwork::MatchMakingManager::ActionCreateGame": {
@@ -7135,6 +7168,9 @@
    "status": "reviewed"
   },
   "BrnNetwork::NetworkRounder::RoundTimeToNetworkAccuracy": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::PlayerFinishedRoundMessage::GetName": {
    "status": "reviewed"
   },
   "BrnNetwork::PlayerParamsBase::GetData": {
@@ -14910,6 +14946,12 @@
   "CgsNetwork::NewHostMessage::Retrieve": {
    "status": "reviewed"
   },
+  "CgsNetwork::PingMessage::GetName": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::PingReplyMessage::GetName": {
+   "status": "reviewed"
+  },
   "CgsNetwork::PlayerManager::AckNeedsSending": {
    "status": "reviewed"
   },
@@ -19305,6 +19347,10 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); reference-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
    "status": "done"
   },
+  "GameShared/GameClasses/Network/Packeting/Messages/CgsPingMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsReliableMessage.cpp": {
    "notes": "refactored to canonical Message->MessageWithPlayerIDs->ReliableMessage hierarchy; PackOrUnpack reads/writes inherited mu16Frame reliable id via shared PackOrUnpackU16; compile gate PASS; covered by message-cluster batch review",
    "status": "done"
@@ -19313,12 +19359,14 @@
    "status": "done"
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsSignalMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
    "status": "done"
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsTestConnectionMessage.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsTestConnectionMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
    "status": "done"
   },
   "GameShared/GameClasses/Network/Players/CgsConnectionStatusMessage.cpp": {
@@ -20091,6 +20139,30 @@
    "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Overlay/States/BrnPreloadOverlayState.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/PostEvent/States/Offline/BrnOfflineInstantResults.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/PostEvent/States/Offline/BrnOfflineRivalShutdown.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/PostEvent/States/Offline/BrnOfflineTrophyCarUnlock.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/PostEvent/States/Online/BrnOnlineInstantResults.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnScreenLoading.cpp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); reference .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
@@ -20201,6 +20273,14 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); reference-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnCrashingTrafficMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Network/Messages/BrnDirtyTrickMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
   "GameSource/Network/Messages/BrnFreeburnChallengeMessage.cpp": {
    "notes": "fresh-eyes batch review: semantically faithful to X360 pseudocode, named-member access, no offset hacks; standard serialiser TU",
    "status": "done"
@@ -20209,9 +20289,25 @@
    "notes": "fresh-eyes batch review: semantically faithful to X360 pseudocode, named-member access, no offset hacks; standard serialiser TU",
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnImageMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Network/Messages/BrnLiveRevengeSyncMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
   "GameSource/Network/Messages/BrnMarkedManMessage.cpp": {
    "notes": "Blocked on the CgsNetwork message-serialisation base framework (none reconstructed as shared headers; existing message TUs fork minimally): CgsNetwork::Message base (Construct, +25 reliable flag, GetPackedMessageSize, the PackOrUnpackInt/Bool serialise helpers = sub_82881370 / sub_8288DDA0), CgsNetwork::ReliableMessage base layout (>=40B: id@28, +32/+36 fields, PackOrUnpack/PrepareForSend), and the PackOrUnpackResult return enum. Reconstruct the Message/ReliableMessage base hierarchy first; then MarkedManMessage (mMarkedMan s32 @+40, mbFinalAnswer bool @+44) is straightforward.",
    "status": "blocked"
+  },
+  "GameSource/Network/Messages/BrnMarkedManMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Network/Messages/BrnPlayerFinishedRoundMessage.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
   },
   "GameSource/Network/Messages/BrnRoadRulesPersonalBestMessage.cpp": {
    "notes": "RoadRulesPersonalBestMessage : public CgsNetwork::ReliableMessage is a POLYMORPHIC derived network message (virtual GetPackedMessageSize @0x8257B998 + PackOrUnpack @0x8257BA28; Construct @0x8257B988 calls Message::Construct, GetPackedMessageSize calls TestConnectionMessage::GetPackedMessageSize, PackOrUnpack calls ReliableMessage::PackOrUnpack). BLOCKER: the CgsNetwork message base hierarchy (Message / ReliableMessage / TestConnectionMessage) has committed .cpp BODIES (CgsReliableMessage.cpp / CgsTestConnectionMessage.cpp) but NO committed HEADERS to derive from -- a polymorphic derived class needs the full base vtable+member layout (can't fork it ad-hoc without an ODR/vtable mismatch vs the committed bodies). Also sub_82881370 (the ranged bit-stream pack/unpack helper used for maiScores[2]/mChallengeIndex/miStreetDataVersion with the dword_820A764C/dword_820A7654 per-score-type min/max range tables) is UNIDENTIFIED (no recovered name; likely SmartBitStream::PackOrUnpackRangedInt), and the score-range tables' values are external. Construct is trivial (maiScores=-1 + base Construct) but shares the TU. BLOCK until the CgsNetwork message base-class hierarchy is reconstructed as headers (Message/ReliableMessage/TestConnectionMessage) + sub_82881370/the range tables are resolved.",
