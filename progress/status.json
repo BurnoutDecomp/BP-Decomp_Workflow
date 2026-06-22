@@ -15617,6 +15617,10 @@
   "GameSource/GameState/BrnGameStateModule.h": {
    "status": "done"
   },
+  "GameSource/GameState/BrnGameStateModuleIO.h": {
+   "notes": "BridgeControllerToGameState (0x823CD738) committed (f00ad2b) with input-side bind/unbind result queues read BY NAME, but its CORE is UN-HOMED: the result-queue MERGE targets GameStateModule+0x2BE8 (sub_823B8EC0) -- a write-locked sub-buffer NOT the homed PreWorldInputBuffer, and GameStateModule itself is an empty placeholder (cone-1393 engine TU). Merge + the trailing resolved-port store(+0xD8) are commented; SetButtonPressed pressed-bit dropped (committed 1-arg arity). LESSON: the cone-9 dep metric UNDERCOUNTED -- this TU bottoms out on un-homed data-globals/sub-buffers not in tu_deps.json. Unblock when GameStateModule's +0x2BE8 result sub-buffer is homed.",
+   "status": "blocked"
+  },
   "GameSource/GameState/BrnGameStateSharedIO.h": {
    "notes": "committed file is partial (TODO/placeholder) \u2014 needs finishing",
    "status": "done"
@@ -16025,6 +16029,10 @@
   "GameSource/Unity/../Game/BrnLoadingScreenRenderer.cpp": {
    "notes": "Complex/interpretive. Built the CgsGraphics Im2d render subsystem (ImRendererBase/ImRenderer<V>/Im2dBase<V>/Im2d + Im2dTransform + Basic2dColouredTexturedVertex) and a minimal renderengine::Texture/Texture2D API, then reconstructed all 5 funcs. FAITHFUL: AddCommand (command->state switch), RenderBackground/RenderForeground (timestep + visibility logic), and the black-overlay fade-in/out control flow + Im2d draw sequence (Begin/SetTransform/SetState/SetTexture/Render/End). INTERPRETIVE (documented inline): RenderBlackOverlay's quad geometry/transform was hand-written PPC VMX that Hex-Rays failed to lift ('local variable allocation has failed') -> rewritten as the equivalent clean logical full-screen quad (per the gate's 'rewrite SIMD to logical C++' rule); SetupLoadingScreenTexture's platform descriptor int-copy loops -> clean struct assignment + create/lock/memcpy/unlock; member offsets reconciled vs pseudocode (muLastTime@24, mbRenderInBackground@48, mfBlackOverlayFade@52, mfTimeStep@88). Gate PASS. Parity RED is (a) member-call false positives: all 8 Im2d methods ARE called via lpIm2d->X() but the qualified-name matcher misses member syntax; (b) the 2 descriptor loops correctly abstracted away; (c) __fastcall void-return artifacts. .rdata floats (fade rates, UVs) + the overlay blend state declared extern (link-time).",
    "status": "done"
+  },
+  "GameSource/Unity/../Game/GameBridgeControllerToX.cpp": {
+   "notes": "4 of 5 funcs faithful + committed (f00ad2b): GetPadInfoForPlayer0 + MapActionInfoToDebugController fully store-for-store; BridgeControllerToDirector + BridgeControllerToWorld faithful with only the VMX steering-curve + world-entity(+0x3C8) as small flagged floors. BLOCKED on BridgeControllerToGui: the CgsGui::GuiModule + its 8 event payload types + the GUI event queue are UN-HOMED (AddGuiEvent is a by-name no-store sink) and the action-index global tables (unk_820352F0 etc.) are unrecovered placeholders -- so the GUI bridge is a skeleton, not faithful. Unblock when the CgsGui module + its event queue land. Grew CgsInputModuleIO.h PadOutputInformation to a fielded record (additive, offsets static_asserted).",
+   "status": "blocked"
   },
   "GameSource/Unity/../GameFlowController/TopLevel/BrnGameMainFlowController.cpp": {
    "status": "done"
