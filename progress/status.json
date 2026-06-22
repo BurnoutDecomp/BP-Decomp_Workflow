@@ -69,6 +69,12 @@
   "Attrib::Attrib_RefSpec_TypeHandler::Retain": {
    "status": "reviewed"
   },
+  "Attrib::Attribute::Attribute": {
+   "status": "reviewed"
+  },
+  "Attrib::Attribute::IsInherited": {
+   "status": "reviewed"
+  },
   "Attrib::ClassExportPolicy::Initialize": {
    "status": "reviewed"
   },
@@ -6024,6 +6030,9 @@
   "BrnGui::OptionsDataProfile::ValidateProfile": {
    "status": "reviewed"
   },
+  "BrnGui::PFXHook::FixDown": {
+   "status": "reviewed"
+  },
   "BrnGui::PauseScreen::OnEnter": {
    "status": "reviewed"
   },
@@ -9903,6 +9912,9 @@
   "BrnSound::Logic::Collision::MapPositionToOrientationUsingBox": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::GlobalState::GetTypeName": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::GlobalStateManager::Prepare": {
    "status": "reviewed"
   },
@@ -10170,6 +10182,12 @@
   "BrnSound::Vehicles::Engines::LoopModelData::DebugDumpContentsToTty": {
    "status": "reviewed"
   },
+  "BrnSound::Vehicles::Engines::LoopModelData::FixDown": {
+   "status": "reviewed"
+  },
+  "BrnSound::Vehicles::Engines::LoopModelData::FixUp": {
+   "status": "reviewed"
+  },
   "BrnSound::Vehicles::Engines::LoopModelResourceType::FixDown": {
    "status": "reviewed"
   },
@@ -10177,6 +10195,21 @@
    "status": "reviewed"
   },
   "BrnSound::Vehicles::Engines::LoopModelResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
+  "BrnSound::Vehicles::Engines::Partial::FixDown": {
+   "status": "reviewed"
+  },
+  "BrnSound::Vehicles::Engines::Partial::FixUp": {
+   "status": "reviewed"
+  },
+  "BrnSound::Vehicles::Engines::SingleGinsuEffect::AttachController": {
+   "status": "reviewed"
+  },
+  "BrnSound::Vehicles::Engines::SingleGinsuEffect::GetController": {
+   "status": "reviewed"
+  },
+  "BrnSound::Vehicles::Engines::SingleGinsuEffect::GetTypeName": {
    "status": "reviewed"
   },
   "BrnSound::Vehicles::Environment::AmbienceEffect::UpdateVoiceParams": {
@@ -15372,6 +15405,12 @@
   "CgsNumeric::PerlinNoise::Noise": {
    "status": "reviewed"
   },
+  "CgsPhysics::CollisionMeshData::FixDown": {
+   "status": "reviewed"
+  },
+  "CgsPhysics::CollisionMeshData::FixUp": {
+   "status": "reviewed"
+  },
   "CgsPhysics::InstanceCollisionListResourceType::FixDown": {
    "status": "reviewed"
   },
@@ -15451,6 +15490,9 @@
    "status": "reviewed"
   },
   "CgsResource::AttribSysSchemaResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
+  "CgsResource::AttribSysVaultResourceType::GetSerialisedResourceDesc": {
    "status": "reviewed"
   },
   "CgsResource::BaseDefragPoolModuleState::Begin": {
@@ -15747,6 +15789,9 @@
   "CgsResource::MassiveLookupTableResourceType::FixUp": {
    "status": "reviewed"
   },
+  "CgsResource::MassiveLookupTableResourceType::GetSerialisedResource": {
+   "status": "reviewed"
+  },
   "CgsResource::MassiveLookupTableResourceType::GetTypeID": {
    "status": "reviewed"
   },
@@ -15772,6 +15817,9 @@
    "status": "reviewed"
   },
   "CgsResource::MaterialTechniqueResourceType::GetImportPointer": {
+   "status": "reviewed"
+  },
+  "CgsResource::MaterialTechniqueResourceType::GetSerialisedResourceD": {
    "status": "reviewed"
   },
   "CgsResource::MaterialTechniqueResourceType::GetTypeID": {
@@ -16611,13 +16659,22 @@
   "CgsSound::Playback::GenericRwacFactory::DoCreateContent": {
    "status": "reviewed"
   },
+  "CgsSound::Playback::GenericRwacReverbIRContent::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "CgsSound::Playback::GenericRwacVoice::CreateVoiceInstance": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::GenericRwacVoiceConfig::operator new": {
    "status": "reviewed"
   },
   "CgsSound::Playback::GenericRwacWaveContent::DoGetData": {
    "status": "reviewed"
   },
   "CgsSound::Playback::GenericRwacWaveContent::DoUnload": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::GenericRwacWaveContent::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "CgsSound::Playback::IEntityFixer::GetFixer": {
@@ -17839,6 +17896,12 @@
    "status": "reviewed"
   },
   "RenderableMesh::GetResourceDescriptor": {
+   "status": "reviewed"
+  },
+  "RendererIO::InputBuffer::Construct": {
+   "status": "reviewed"
+  },
+  "RendererIO::OutputBuffer::Construct": {
    "status": "reviewed"
   },
   "Shader::ParameterBlock::GetResourceDescriptor": {
@@ -19135,6 +19198,10 @@
    "notes": "trivial; gate-only self-review",
    "status": "done"
   },
+  "GameShared/GameClasses/Physics/CgsCollisionMeshData.cpp": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Physics/CgsInstanceCollisionListResourceType.cpp": {
    "notes": "fresh-eyes (sonnet): FixUp/FixDown + Destruct(a2+2) inference accepted",
    "status": "done"
@@ -19311,6 +19378,10 @@
   "GameShared/GameClasses/Sound/Playback/Plugins/Ginsu/CgsGinsuWaveContentResourceType.h": {
    "notes": "trivial / original source match; gate-only",
    "status": "done"
+  },
+  "GameShared/GameClasses/Sound/Playback/Plugins/Ginsu/GinsuPlayer.cpp": {
+   "notes": "rw::audio::core::GinsuPlayer derives un-homed RenderWare rw::audio::core::PlugIn; CreateInstance/PlayHandler/GinsuSynthData::BindToData write ~30 raw offsets over the un-homed PlugIn+Attribute_t[5]+GinsuSynthData layout + call the un-bodied endian-swap helper sub_8268B1D0 (AdjustEndianness). Needs PlugIn base + AdjustEndianness homed first.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Sound/Playback/Plugins/Streaming/internal/sndplayer1.cpp": {
    "status": "done"
@@ -19770,10 +19841,14 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnScreenLoading.cpp": {
-   "notes": "State-only leaf. OnLeave unregisters the 2 observed events via mpStateInterface; full member layout reconstructed from DWARF. Gate PASS; parity YELLOW false positive (call counts 2=2).",
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
   },
   "GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/PFX/BrnGuiPFXHooks.cpp": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
   },
   "GameSource/Gui/PFX/Resource/BrnGuiPFXHooksResource.cpp": {
@@ -19973,6 +20048,7 @@
    "status": "done"
   },
   "GameSource/Resource/SharedIO/BrnGameDataAllocatorList.cpp": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
   },
   "GameSource/Resource/SharedIO/BrnGameDataAllocatorList.h": {
@@ -20081,6 +20157,10 @@
   },
   "GameSource/Unity/../../SharedClasses/Progression/BrnRaceEventData.cpp": {
    "notes": "script auto-generated from original source",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/Sound/Engines/BrnSoundLoopModelData.cpp": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/Sound/Engines/BrnSoundLoopModelResourceType.cpp": {
@@ -20432,6 +20512,10 @@
   "GameSource/Unity/../Graphics/BrnRendererModuleDebugComponent.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../Graphics/BrnRendererModuleIO.cpp": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
+   "status": "done"
+  },
   "GameSource/Unity/../Graphics/PostFx/BrnPostFxShader.cpp": {
    "status": "done"
   },
@@ -20516,6 +20600,10 @@
   "GameSource/Unity/../Sound/Global/BrnCameraControl.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../Sound/Global/BrnGlobalState.cpp": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
+   "status": "done"
+  },
   "GameSource/Unity/../Sound/Module/LogicModule/BrnEffectControl.cpp": {
    "status": "done"
   },
@@ -20538,6 +20626,10 @@
    "status": "done"
   },
   "GameSource/Unity/../Sound/Passby/BrnPassbyStateManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../Sound/Vehicles/Engines/BrnSingleGinsuEffect.cpp": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
   },
   "GameSource/Unity/../Sound/Vehicles/Traffic/BrnTrafficControl.cpp": {
@@ -20694,6 +20786,10 @@
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribinstance.cpp": {
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
+   "status": "done"
+  },
+  "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribute.cpp": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/attribsys.h": {
@@ -22188,6 +22284,10 @@
    "notes": "trivial; gate-only",
    "status": "done"
   },
+  "class:CgsResource::AttribSysVaultResourceType": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
+   "status": "done"
+  },
   "class:CgsResource::BaseResourcePtr": {
    "notes": "4 funcs (base resource smart-ptr); verifier parity/low; gate pass.",
    "status": "done"
@@ -22224,8 +22324,16 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 leaked .cpp:line citations scrubbed); combined wave-12 gate PASS.",
    "status": "done"
   },
+  "class:CgsResource::MassiveLookupTableResourceType": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
+   "status": "done"
+  },
   "class:CgsResource::MaterialStateResourceType": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 leaked .cpp:line citations scrubbed); combined wave-12 gate PASS.",
+   "status": "done"
+  },
+  "class:CgsResource::MaterialTechniqueResourceType": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
   },
   "class:CgsResource::PoolIO::OutputBuffer": {
@@ -22274,6 +22382,18 @@
   },
   "class:CgsSound::Playback::Factory>": {
    "notes": "CgsSound Playback Factory; parity/low; wave7; verifier parity; gate pass.",
+   "status": "done"
+  },
+  "class:CgsSound::Playback::GenericRwacReverbIRContent": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
+   "status": "done"
+  },
+  "class:CgsSound::Playback::GenericRwacVoiceConfig": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
+   "status": "done"
+  },
+  "class:CgsSound::Playback::GenericRwacWaveContent": {
+   "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
   },
   "class:CgsSound::Playback::IEntityFixer": {
