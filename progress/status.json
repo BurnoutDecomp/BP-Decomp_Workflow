@@ -3996,10 +3996,37 @@
   "BrnGameState::TakedownManagerDebugComponent::RenderWorld": {
    "status": "reviewed"
   },
+  "BrnGameState::TrainingManager::DEBUG_ClearTrainingFlags": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TrainingManager::DoesTrainingPauseGame": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TrainingManager::ForceUnpause": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TrainingManager::IsTipAllowedInGameMode": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TrainingManager::OnEnableTrainingTips": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TrainingManager::OnTogglePictureParadise": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TrainingManager::OnVoiceoverFinished": {
+   "status": "reviewed"
+  },
   "BrnGameState::TrainingManager::PlayNewAtomikaFreeburnVO": {
    "status": "reviewed"
   },
+  "BrnGameState::TrainingManager::RequestTraining": {
+   "status": "reviewed"
+  },
   "BrnGameState::TrainingManager::SendTrainingTickerMessage": {
+   "status": "reviewed"
+  },
+  "BrnGameState::TrainingManager::TriggerAnyFollowOnTrainingTips": {
    "status": "reviewed"
   },
   "BrnGameState::TrainingManager::Update": {
@@ -9171,7 +9198,34 @@
   "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface::SetRaceCarState": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::Clear": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::GetActi": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::GetCarModelId": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::GetGlob": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::IsInRange": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::IsNetwork": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::IsPlayer": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::IsRivalAI": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::SetPlayerGlobalRaceCarIndex": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::SetRaceCarData": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::RemoveRivalFromTrafficSystemEvent": {
@@ -15661,6 +15715,10 @@
    "notes": "Review passed: ForceTakedownCallback and OnActivate registration callbacks are correct.",
    "status": "done"
   },
+  "GameSource/Unity/../GameState/TrainingManager/BrnTrainingManager.cpp": {
+   "notes": "Gate PASS + adversarially verified parity/low: 7 funcs store-for-store (DoesTrainingPauseGame jump table, TriggerAnyFollowOnTrainingTips chain, DEBUG_ClearTrainingFlags via GetProfile, etc.). Additive declare-only grows (no reorder/retype). DOCUMENTED FLOORS: RequestTraining/IsTipAllowedInGameMode left declared-only -- read un-homed GameStateModule/RaceCar internal members (raw offsets, unrecoverable names) -> land when those TUs home the members; not fabricated.",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/TriggerQueryManager/BrnTriggerQueryManager.cpp": {
    "status": "done"
   },
@@ -16631,6 +16689,10 @@
   },
   "class:BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface": {
    "notes": "Gate PASS + adversarially verified (getters-B parity/none, setters parity/low, getters-A med-defects-FIXED): copy ctor store-for-store; all getters/setters by-name at asm offsets; Clear's 2 verifier-caught bugs fixed (fabricated mbCanDriveAwayFromCrash store dropped; maCarsInTheRace count reset added). Additive home grow. DOCUMENTED FLOOR: AddCarToRace bodied as a compilable store-shape stub -- its BrnWorld::RaceCar reads (GetPosition/Velocity/index/type) need wiring once BrnRaceCar is homed (forward-declared only; not fabricated).",
+   "status": "done"
+  },
+  "class:BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface": {
+   "notes": "Gate PASS + adversarially verified parity/low: all 9 funcs store-for-store, offsets locked, members by name. Benign: one assert-string text diff + intentionally-omitted inline CgsBitArray range asserts (house convention). No grow, no fabrication.",
    "status": "done"
   },
   "class:BrnWorld::TriggerEntityModule": {
