@@ -62,6 +62,9 @@ BAD_DONE_NOTE_RE = re.compile(
 
 BLOCKED_NOTE_RE = re.compile(r"\bBLOCKED on\b|\bUnblock when\b", re.I)
 CORRECTED_PATH_RE = re.compile(r"\b(?:corrected|Landed at corrected)\s+path\s+([^\s,)]+)", re.I)
+KNOWN_PARTIAL_TUS = {
+    "GameSource/GameState/BrnGameStateSharedIO.h",
+}
 
 
 def normalize_path(path: str) -> str:
@@ -307,11 +310,14 @@ def target_for_tu(
         return "blocked", current_notes or None, []
 
     if current_status in ("done", "in_progress", "compiled") and BAD_DONE_NOTE_RE.search(current_notes):
-        target = "blocked" if BLOCKED_NOTE_RE.search(current_notes) else "in_progress"
+        target = "blocked" if BLOCKED_NOTE_RE.search(current_notes) else "todo"
         return target, current_notes, []
 
     if tu_id.startswith("class:"):
         return current_status, current_notes or None, []
+
+    if tu_id in KNOWN_PARTIAL_TUS:
+        return "todo", None, []
 
     functions = list(tu_meta.get("functions") or [])
     note_files = resolve_note_files(current_notes, file_index)
@@ -332,8 +338,8 @@ def target_for_tu(
     kind = classify_files(files)
 
     if kind == "done":
+        local_code_by_file = {path: code_by_file[path] for path in files if path in code_by_file}
         if tu_id.lower().endswith(".cpp") and not any(path.lower().endswith(".cpp") for path in files):
-            local_code_by_file = {path: code_by_file[path] for path in files if path in code_by_file}
             if all_non_thunk_functions_have_bodies(functions, local_code_by_file, allow_method_only=True):
                 return "done", current_notes or None, find_definition_files(functions, local_code_by_file, allow_method_only=True)
             if current_status == "done" and all_non_thunk_functions_have_split_bodies(
@@ -349,7 +355,7 @@ def target_for_tu(
             return "todo", None, files
         return "done", current_notes or None, files
     if kind == "partial":
-        return "in_progress", current_notes or "local implementation reconcile: file is partial/incomplete; not done", files
+        return "todo", None, files
     if kind == "skeleton":
         return "todo", None, files
 
