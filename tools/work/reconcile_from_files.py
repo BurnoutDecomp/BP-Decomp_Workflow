@@ -61,6 +61,7 @@ BAD_DONE_NOTE_RE = re.compile(
 )
 
 BLOCKED_NOTE_RE = re.compile(r"\bBLOCKED on\b|\bUnblock when\b", re.I)
+CORRECTED_PATH_RE = re.compile(r"\b(?:corrected|Landed at corrected)\s+path\s+([^\s,)]+)", re.I)
 
 
 def normalize_path(path: str) -> str:
@@ -147,6 +148,18 @@ def resolve_files(tu_id: str, file_index: dict[str, list[str]]) -> list[str]:
     return list(dict.fromkeys(file_index.get(stem_key("b5-decomp/src/" + tu_id), [])))
 
 
+def resolve_note_files(notes: str, file_index: dict[str, list[str]]) -> list[str]:
+    files: list[str] = []
+    for match in CORRECTED_PATH_RE.finditer(notes):
+        noted = match.group(1).strip().strip(".")
+        candidates = [noted]
+        if not noted.startswith("b5-decomp/"):
+            candidates.append("b5-decomp/src/" + noted)
+        for candidate in candidates:
+            files.extend(file_index.get(stem_key(candidate), []))
+    return list(dict.fromkeys(files))
+
+
 def is_real_reconstruction(text: str) -> bool:
     for raw in text.splitlines():
         line = raw.strip()
@@ -175,35 +188,108 @@ def classify_files(files: list[str]) -> str:
     return "done"
 
 
-def definition_patterns(function_name: str) -> list[re.Pattern[str]]:
+BODY_SUFFIX = (
+    r"\s*\([^;{}]*\)\s*"
+    r"(?:const\s*)?"
+    r"(?:volatile\s*)?"
+    r"(?:noexcept(?:\s*\([^)]*\))?\s*)?"
+    r"(?:override\s*)?"
+    r"(?:final\s*)?"
+    r"(?:->\s*[^{};]+)?"
+    r"(?::\s*[^{};]*)?"
+    r"\{"
+)
+
+
+def definition_patterns(function_name: str, allow_method_only: bool = True) -> list[re.Pattern[str]]:
     if "`" in function_name:
         return []
 
     name = function_name.split("(", 1)[0]
     if "::" not in name:
-        return [re.compile(r"\b" + re.escape(name) + r"\s*\(")]
+        return [re.compile(r"\b" + re.escape(name) + BODY_SUFFIX, re.S)]
 
     parts = name.split("::")
     method = parts[-1]
     owner = parts[-2]
     full = r"\s*::\s*".join(re.escape(part) for part in parts)
     owner_method = re.escape(owner) + r"\s*::\s*" + re.escape(method)
-    return [
-        re.compile(full + r"\s*\("),
-        re.compile(owner_method + r"\s*\("),
+    patterns = [
+        re.compile(full + BODY_SUFFIX, re.S),
+        re.compile(owner_method + BODY_SUFFIX, re.S),
     ]
+    if allow_method_only:
+        method_only = r"\b" + re.escape(method)
+        patterns.append(re.compile(method_only + BODY_SUFFIX, re.S))
+    return patterns
 
 
-def find_definition_files(functions: list[str], code_by_file: dict[str, str]) -> list[str]:
+def function_definition_files(
+    function_name: str,
+    code_by_file: dict[str, str],
+    allow_method_only: bool = True,
+) -> list[str]:
+    patterns = definition_patterns(function_name, allow_method_only=allow_method_only)
+    if not patterns:
+        return []
+    for path, code in code_by_file.items():
+        if any(pattern.search(code) for pattern in patterns):
+            return [path]
+    return []
+
+
+def find_definition_files(
+    functions: list[str],
+    code_by_file: dict[str, str],
+    allow_method_only: bool = True,
+) -> list[str]:
     matches: list[str] = []
     for function_name in functions:
-        patterns = definition_patterns(function_name)
-        if not patterns:
-            continue
-        for path, code in code_by_file.items():
-            if any(pattern.search(code) for pattern in patterns):
-                matches.append(path)
-                break
+        matches.extend(function_definition_files(function_name, code_by_file, allow_method_only=allow_method_only))
+    return list(dict.fromkeys(matches))
+
+
+def all_non_thunk_functions_have_bodies(
+    functions: list[str],
+    code_by_file: dict[str, str],
+    allow_method_only: bool = True,
+) -> bool:
+    required = [fn for fn in functions if "`" not in fn]
+    if not required:
+        return True
+    return all(function_definition_files(fn, code_by_file, allow_method_only=allow_method_only) for fn in required)
+
+
+def function_definition_files_split(
+    function_name: str,
+    local_code_by_file: dict[str, str],
+    code_by_file: dict[str, str],
+) -> list[str]:
+    return (
+        function_definition_files(function_name, local_code_by_file, allow_method_only=True)
+        or function_definition_files(function_name, code_by_file, allow_method_only=False)
+    )
+
+
+def all_non_thunk_functions_have_split_bodies(
+    functions: list[str],
+    local_code_by_file: dict[str, str],
+    code_by_file: dict[str, str],
+) -> bool:
+    required = [fn for fn in functions if "`" not in fn]
+    if not required:
+        return True
+    return all(function_definition_files_split(fn, local_code_by_file, code_by_file) for fn in required)
+
+
+def find_split_definition_files(
+    functions: list[str],
+    local_code_by_file: dict[str, str],
+    code_by_file: dict[str, str],
+) -> list[str]:
+    matches: list[str] = []
+    for function_name in functions:
+        matches.extend(function_definition_files_split(function_name, local_code_by_file, code_by_file))
     return list(dict.fromkeys(matches))
 
 
@@ -227,10 +313,40 @@ def target_for_tu(
     if tu_id.startswith("class:"):
         return current_status, current_notes or None, []
 
+    functions = list(tu_meta.get("functions") or [])
+    note_files = resolve_note_files(current_notes, file_index)
+    if current_status == "done" and note_files and functions:
+        local_code_by_file = {path: code_by_file[path] for path in note_files if path in code_by_file}
+        if classify_files(note_files) == "done" and all_non_thunk_functions_have_bodies(
+            functions,
+            local_code_by_file,
+            allow_method_only=True,
+        ):
+            return "done", current_notes or None, find_definition_files(
+                functions,
+                local_code_by_file,
+                allow_method_only=True,
+            )
+
     files = resolve_files(tu_id, file_index)
     kind = classify_files(files)
 
     if kind == "done":
+        if tu_id.lower().endswith(".cpp") and not any(path.lower().endswith(".cpp") for path in files):
+            local_code_by_file = {path: code_by_file[path] for path in files if path in code_by_file}
+            if all_non_thunk_functions_have_bodies(functions, local_code_by_file, allow_method_only=True):
+                return "done", current_notes or None, find_definition_files(functions, local_code_by_file, allow_method_only=True)
+            if current_status == "done" and all_non_thunk_functions_have_split_bodies(
+                functions,
+                local_code_by_file,
+                code_by_file,
+            ):
+                return "done", current_notes or None, find_split_definition_files(
+                    functions,
+                    local_code_by_file,
+                    code_by_file,
+                )
+            return "todo", None, files
         return "done", current_notes or None, files
     if kind == "partial":
         return "in_progress", current_notes or "local implementation reconcile: file is partial/incomplete; not done", files
@@ -240,11 +356,10 @@ def target_for_tu(
     # Corrected-path or misattributed TUs can be implemented under a different
     # file. Preserve already-reviewed work only when every non-thunk function has
     # definition evidence somewhere in tracked source.
-    functions = list(tu_meta.get("functions") or [])
     if current_status == "done" and functions:
-        definitions = find_definition_files(functions, code_by_file)
+        definitions = find_definition_files(functions, code_by_file, allow_method_only=False)
         non_thunk_count = len([fn for fn in functions if "`" not in fn])
-        if non_thunk_count and len(definitions) >= non_thunk_count:
+        if non_thunk_count and all_non_thunk_functions_have_bodies(functions, code_by_file, allow_method_only=False):
             return "done", current_notes or None, definitions
 
     return "todo", None, []
