@@ -1417,49 +1417,49 @@
    "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::ClearData": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithComboItem": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithCrashbreakerRequest": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithHitOverheadSign": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithHitProp": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithHitTrafficCar": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithPickup": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithRemovedTraffic": {
    "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithScoreForVehicleClass": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithShowtimeStunt": {
    "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::DealWithVehicleLeaping": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::GetRecentCra": {
    "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::GetVehicleScoreData": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::HasCrashModeEnded": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::IsActiveCrash": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::RecentCrash,64>::Append": {
    "status": "reviewed"
@@ -1471,7 +1471,7 @@
    "status": "reviewed"
   },
   "BrnGameState::CrashModeScoring::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CrashScoreDebugComponent::DisplayScores": {
    "status": "reviewed"
@@ -15743,6 +15743,10 @@
    "status": "done"
   },
   "GameSource/Unity/../GameState/ModeManager/Scoring/BrnBaseOnlineModeScoring.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/ModeManager/Scoring/BrnCrashModeScoring.cpp": {
+   "notes": "Gate PASS + adversarially verified (deal-A parity/none, lifecycle low; deal-B's missing DealWithCrashbreakerRequest body FIXED at consolidation + re-gated). 13 funcs store-for-store member-by-name; home grow additive (carved from opaque reserve, anchor+count preserved, embedders ScoringSystem/CrashScoreDebugComponent re-gate clean). DOCUMENTED FLOORS (un-homed/unexported, flagged not fabricated): Update RaceCarState/PhysicalTraffic/VMX branches, GetVehicleScoreData rodata columns, forward-declared event-field reads.",
    "status": "done"
   },
   "GameSource/Unity/../GameState/ModeManager/Scoring/BrnOnlineBurningHomeRunModeScoring.cpp": {
