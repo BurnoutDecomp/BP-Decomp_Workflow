@@ -5304,6 +5304,9 @@
   "BrnGui::HudMessageDirector::Update": {
    "status": "reviewed"
   },
+  "BrnGui::IdleHudState::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
   "BrnGui::IdleHudState::OnLeave": {
    "status": "reviewed"
   },
@@ -5709,10 +5712,16 @@
   "BrnGui::OnlineStats::UpdateSetupComponents": {
    "status": "reviewed"
   },
+  "BrnGui::OnlineViewChallenges::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
   "BrnGui::OnlineViewChallenges::OnLeave": {
    "status": "reviewed"
   },
   "BrnGui::OnlineViewChallenges::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineYouWin::GetResourcesToLoad": {
    "status": "reviewed"
   },
   "BrnGui::OnlineYouWin::Update": {
@@ -6022,6 +6031,9 @@
    "status": "reviewed"
   },
   "BrnGui::TextField::SetText": {
+   "status": "reviewed"
+  },
+  "BrnGui::Video::GetResourcesToLoad": {
    "status": "reviewed"
   },
   "BrnGui::Video::OnEnter": {
@@ -8967,13 +8979,34 @@
   "BrnSound::Logic::Collision::CollisionEffect::~CollisionEffect": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Collision::HingeStateCache::Update": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::Collision::MapPositionToOrientationUsingBox": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::FrameInformation::IsPaused": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::FrameInformation::UpdateFatalityFlag": {
    "status": "reviewed"
   },
   "BrnSound::Logic::GlobalState::GetTypeName": {
    "status": "reviewed"
   },
   "BrnSound::Logic::GlobalStateManager::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::HUDEffect::GameModeData::GameModeData": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::HUDEffect::GameModeData::Reset": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::MixerControl::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::MixerControl::`vector deleting destructor'`adjustor{4}'": {
    "status": "reviewed"
   },
   "BrnSound::Logic::MusicEffect::EaTraxData::SelectSong": {
@@ -8986,6 +9019,9 @@
    "status": "reviewed"
   },
   "BrnSound::Logic::MusicEffect::UpdateSongs": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::Passby::": {
    "status": "reviewed"
   },
   "BrnSound::Logic::Passby::Passby3DControl::GetTypeName": {
@@ -9024,6 +9060,9 @@
   "BrnSound::Logic::Passby::PassbyEffect::~PassbyEffect": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Passby::PassbyStateManager::DynamicPropByCache::Update": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::Passby::PassbyStateManager::PostPassby": {
    "status": "reviewed"
   },
@@ -9058,6 +9097,9 @@
    "status": "reviewed"
   },
   "BrnSound::Logic::SubmixesEffect::ProcessUpdate": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::Traffic::Traffic3DControl::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "BrnSound::Logic::Traffic::TrafficControl::Attach": {
@@ -17070,7 +17112,31 @@
   "rw::RGBA::RGBA": {
    "status": "reviewed"
   },
+  "rw::audio::core::BitGetter::GetBits": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Bit_Reserve::hget1bit": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Bit_Reserve::rewindNbits": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaLayer31Dec::CreateInstanceEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaLayer32Block::GetUsableSamples": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaLayer32Block::Read": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaLayer32PcmDec::CreateInstanceEvent": {
+   "status": "reviewed"
+  },
   "rw::audio::core::Iir2::Filter": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::Speaker::Set": {
    "status": "reviewed"
   },
   "rw::audio::core::PlugIn::CreateInstance": {
@@ -18683,8 +18749,24 @@
   "GameSource/Gui/Flow/Screen/States/BrnOnlineStats.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlineViewChallenges.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnScreenLoading.cpp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnVideo.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/OnlineYouWin.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/hud/States/BrnIdleHudState.h": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
   },
   "GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp": {
@@ -20630,8 +20712,40 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 leaked .cpp:line citations scrubbed); combined wave-12 gate PASS.",
    "status": "done"
   },
+  "class:BrnSound::Logic::Collision::HingeStateCache": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:BrnSound::Logic::FrameInformation": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:BrnSound::Logic::HUDEffect::GameModeData": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:BrnSound::Logic::MixerControl": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:BrnSound::Logic::Passby": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
   "class:BrnSound::Logic::Passby::Passby3DControl": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 leaked .cpp:line citations scrubbed); combined wave-12 gate PASS.",
+   "status": "done"
+  },
+  "class:BrnSound::Logic::Passby::PassbyStateManager::DynamicPropByCache": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:BrnSound::Logic::ResourceRegistrar::RequestedResource,124>": {
+   "notes": "LinkedListHelper<RequestedResource,124u> pool ctor @0x827E17B0 writes miNumNodes at object +0 (=124), but the committed CgsContainers::LinkedListHelper<T,N> (GameShared/GameClasses/Containers/CgsLinkedList.h) OMITS the leading miNumNodes field and orders maNodePool before the two lists -> body cannot be expressed by-name without a NON-ADDITIVE retype/reorder of that committed shared container + rewriting its AddTail. Needs a committed-type retype decision (maintainer); flagged not applied.",
+   "status": "blocked"
+  },
+  "class:BrnSound::Logic::Traffic::Traffic3DControl": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
   },
   "class:BrnSound::Logic::Traffic::TrafficControl": {
@@ -21567,8 +21681,32 @@
    "notes": "trivial; gate-only; rwcore.lib has no RGBA constructor symbol",
    "status": "done"
   },
+  "class:rw::audio::core::BitGetter": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:rw::audio::core::Bit_Reserve": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:rw::audio::core::EaLayer31Dec": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:rw::audio::core::EaLayer32Block": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "class:rw::audio::core::EaLayer32PcmDec": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
   "class:rw::audio::core::Iir2": {
    "notes": "1 func (2nd-order IIR filter); gate pass.",
+   "status": "done"
+  },
+  "class:rw::audio::core::Pan2D1::Speaker": {
+   "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
   },
   "class:rw::audio::core::PlugIn": {
