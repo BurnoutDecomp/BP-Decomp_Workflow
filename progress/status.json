@@ -930,7 +930,13 @@
   "BrnEffects::BloomData::Construct": {
    "status": "reviewed"
   },
+  "BrnEffects::BloomData::SetToBlend": {
+   "status": "reviewed"
+  },
   "BrnEffects::BlurData::Construct": {
+   "status": "reviewed"
+  },
+  "BrnEffects::BlurData::SetToBlend": {
    "status": "reviewed"
   },
   "BrnEffects::BrnCrashTriangleCache::AddTriangles": {
@@ -940,6 +946,9 @@
    "status": "reviewed"
   },
   "BrnEffects::BrnCrashTriangleCache::Construct": {
+   "status": "reviewed"
+  },
+  "BrnEffects::Curves::SmoothStep::Evaluate": {
    "status": "reviewed"
   },
   "BrnEffects::DepthOfFieldData::Construct": {
@@ -967,6 +976,12 @@
    "status": "reviewed"
   },
   "BrnEffects::TintData2d::Construct": {
+   "status": "reviewed"
+  },
+  "BrnEffects::Utils::Vector3Randomiser::RandomiseXYZ": {
+   "status": "reviewed"
+  },
+  "BrnEffects::Utils::Vector4Randomiser::RandomiseXYZW": {
    "status": "reviewed"
   },
   "BrnEffects::VignetteData::Construct": {
@@ -4488,6 +4503,9 @@
   "BrnGui::CarSelectOnlinePlayerList::Show": {
    "status": "reviewed"
   },
+  "BrnGui::CarSelectOnlinePlayerListItem::Show": {
+   "status": "reviewed"
+  },
   "BrnGui::CarSelectUnlock::PlayMovie": {
    "status": "reviewed"
   },
@@ -4762,6 +4780,9 @@
    "status": "reviewed"
   },
   "BrnGui::CustomRendererManager::SetReplaySerialiser": {
+   "status": "reviewed"
+  },
+  "BrnGui::DistrictMarkerComponent::SetHideCountyIcon": {
    "status": "reviewed"
   },
   "BrnGui::EATraxMenuComponent::HandleInput": {
@@ -5095,6 +5116,12 @@
    "status": "reviewed"
   },
   "BrnGui::GuiDebugComponent::TriggerPostEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::GuiEventNetworkGameParams::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::GuiEventNetworkPlayerStats::operator=": {
    "status": "reviewed"
   },
   "BrnGui::GuiEventPreRaceMessages::AddMessage": {
@@ -5899,6 +5926,9 @@
    "status": "reviewed"
   },
   "BrnGui::RoadRuleComponent::UpdateCurrentTime": {
+   "status": "reviewed"
+  },
+  "BrnGui::RoadSignIconManager::SetSignsVisible": {
    "status": "reviewed"
   },
   "BrnGui::RoadSignList::Construct": {
@@ -7533,6 +7563,9 @@
   "BrnPhysics::Vehicle::ArticulatedJointPool::SendCreateRemoveJointEvents": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::BrnPlayerDriverControls::GetAftertouchValues": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::CreateArticulatedTrafficEvent,10>::Construct": {
    "status": "reviewed"
   },
@@ -7540,6 +7573,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::CreateRaceCarEvent,8>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::CreateRaceCarEvent::operator=": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::Engine::Construct": {
@@ -7828,6 +7864,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::SetTrafficCrashingEvent,25>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::ShuntEffect::IsActive": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::SimpleVehiclePhysics::AddTractionPoint": {
@@ -8473,6 +8512,15 @@
    "status": "reviewed"
   },
   "BrnReplays::ReplayModule::WaitForOpenReplayFiles": {
+   "status": "reviewed"
+  },
+  "BrnReplays::SoundSerialiserFrame::operator=": {
+   "status": "reviewed"
+  },
+  "BrnReplays::StreamHeader::ChopOffTailFrames": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficSerialiserFrame::Clear": {
    "status": "reviewed"
   },
   "BrnReplays::WriteStream::InvalidateFrunksAhead": {
@@ -20040,6 +20088,26 @@
    "notes": "SetIceAnim: assert lpIceAnim leading 8-byte classkey == iceanim::ClassKey() (0x4644E379A997C1EE, asm-exact) then bind @+0x18; minimal SimpleIceTakedownPlayer home + iceanim.h ClassKey() grow; gate green, direct asm mapping",
    "status": "done"
   },
+  "class:BrnEffects::BloomData": {
+   "notes": "Adversarially verified vs X360 asm; data-block layout/defaults parity.",
+   "status": "done"
+  },
+  "class:BrnEffects::BlurData": {
+   "notes": "Adversarially verified vs X360 asm; data-block layout/defaults parity.",
+   "status": "done"
+  },
+  "class:BrnEffects::Curves::SmoothStep": {
+   "notes": "Smoothstep remap asm-verified store-for-store (four branches, 0.5 span split); out-of-line .cpp home.",
+   "status": "done"
+  },
+  "class:BrnEffects::Utils::Vector3Randomiser": {
+   "notes": "LCG-ring draw asm-verified (1-deep pipeline, slot select, bit-pack); out-of-line .cpp home.",
+   "status": "done"
+  },
+  "class:BrnEffects::Utils::Vector4Randomiser": {
+   "notes": "LCG-ring draw asm-verified (3-step pack, ring-half swap); out-of-line .cpp home.",
+   "status": "done"
+  },
   "class:BrnGame": {
    "notes": "Catch-all (3 fns, 3 homes). 3 verify loops PASS (parallel A=BrnG+operator++ asm fidelity, B=GetParticleData asm+DWARF incl +16 offset math, C=sign-off). Gate compiles clean (MSVC). Parity RED is a measurement artifact: submitted the whole committed BrnGameModule.cpp (large file, dozens of fns) because the catch-all only ADDED operator++ to it -> tool sums all 129 calls there vs the 3 catch-all fns' 13-call pseudocode. Absent callees all expected: BaseCollisionGenerator::Destruct present as .Destruct() (qualified-name grep miss); Assert::Begin/Fire/End inside CGS_ASSERT macro; BasePriorityQueue::Clear is the deliberately-omitted X360 StrStream-assert machinery (benign committed convention). #1 BrnG @0x827E3090 dtor-thunk (destruct embedded BaseCollisionGenerator, return &member; opaque owner minimal+FLAGged; ad-hoc BaseCollisionGenerator mirrors VehicleList). #2 GetParticleData() const @0x8227F4F0 (read-lock CGS_ASSERT + return &mParticleData=this+16; DWARF h:97 proves identity vs truncated symbol; minimal slice + ad-hoc opaque DispatchThreadUpdateData). #3 operator++(EReleaseStage&,int) @0x823A8AD8 post-increment returns old + assert<=E_RELEASESTAGE_DONE(7); grows BrnGameModule no-regression. Rest of each home deferred.",
    "status": "done"
@@ -20384,6 +20452,10 @@
    "notes": "4 verify loops (loop1A getters+pattern PASS, loop1B ctor FAIL on phantom default-ptr gap writes -> FIXED to 4x5 gap-aware groups, loop2 re-verify PASS, loop3 sign-off PASS). Gate compiles clean (MSVC, no warnings). CrashNavIcon-style minimal-slice reconstruction of a ~53KB renderer (named members, no base, ~15 uncommitted member types FLAG-omitted). Parity RED explained: call_count/branch_count deltas = the Assert Begin/Fire/End triad hidden in the CGS_ASSERT macro (2 getter asserts); loop_count 7-vs-1 = DELIBERATE re-rolling of the compiler-unrolled float/pointer/zero writes into clean loops (the established sibling-renderer pattern, e.g. BrnCrashNavIconRenderer); ctor returns void vs X360 result. ctor @0x827DF4F0: 11x -FLT_MAX/1x +FLT_MAX/3x 0.0f sentinels, vtable, 4x5 default-ptr groups (back_chain@+1560=0, gaps skipped), 9x5 zero band, 6x billboard clear, trailing -1; colour arrays/boostType faithfully left uninit. getters @0x824EC750/0x824EC7D0 (non-const per DWARF h:843/846): CGS_ASSERT boostType valid + return indexed Vector3 (inner +5 / outer +2 arrays). Rest of class deferred (grow-in-place later).",
    "status": "done"
   },
+  "class:BrnGui::CarSelectOnlinePlayerListItem": {
+   "notes": "apt view-state both branches asm-verified.",
+   "status": "done"
+  },
   "class:BrnGui::ChallengeListComponent": {
    "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
    "status": "done"
@@ -20400,12 +20472,24 @@
    "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
    "status": "done"
   },
+  "class:BrnGui::DistrictMarkerComponent": {
+   "notes": "Fixed per asm: apt target is an embedded-by-value subobject (vcall this=outer+0xC), not a pointer; verified.",
+   "status": "done"
+  },
   "class:BrnGui::EffectsArbitrator": {
    "notes": "fresh-eyes review: 6-slot loop + anchor correct",
    "status": "done"
   },
   "class:BrnGui::FreeburnChallengeManager": {
    "notes": "5 accessors (word offsets X360-verified); verifier parity; gate pass.",
+   "status": "done"
+  },
+  "class:BrnGui::GuiEventNetworkGameParams": {
+   "notes": "Fixed per asm: OptionRecord field order (selected/flags/value) from Construct anchor; verified.",
+   "status": "done"
+  },
+  "class:BrnGui::GuiEventNetworkPlayerStats": {
+   "notes": "operator= verified; base op= subsumes the +0x84 (mbIsCalulated) tail word.",
    "status": "done"
   },
   "class:BrnGui::GuiEventUpdateSatNav": {
@@ -20432,9 +20516,17 @@
    "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
    "status": "done"
   },
+  "class:BrnGui::RoadSignIconManager": {
+   "notes": "Verified vs X360 asm.",
+   "status": "done"
+  },
   "class:BrnGui::StateLoadingHelper": {
    "notes": "Complex: reconstructed the full StateLoadingHelper layout (EResourceState, ResourceInfo, ComponentsToWatch, maResources[228], etc.) + GuiCache subsystem header (grind sub-base 2) from DecFIGS DWARF. Inc/DecrementUnloadPending faithfully adjust muPendingUnloadCount then run the debug consistency check (count resources in LOAD_CANCELLED/UNLOAD_REQUESTED/UNLOADING and assert it equals the count). Gate PASS. Parity RED is the CGS_ASSERT no-op (CgsAssert.h): all 41 absent calls are Begin/Fire/EndAssert + assert-message building (BasePriorityQueue::Clear, StrStreamBase::AppendFormat); branch delta = assert guards. The shared consistency loop was factored into a file-local helper (source duplicated it in both fns) -> loop_count 1 vs 2, semantically identical. Iterates KU_MAX_RESOURCES_TO_WATCH (228, the array bound) vs the X360's literal 237 (Hex-Rays artifact / would overrun).",
    "status": "done"
+  },
+  "class:BrnGui::TextSelection": {
+   "notes": "Polymorphic-aggregate keystone: ctor @0x824F9A48 installs three distinct vtables (object +0x00, +0x18, +0xB98) and inline-constructs a 100-element array of 24-byte polymorphic sub-items (stride 6 dwords from +0x238). Faithful by-name reconstruction needs class:BrnGui::TextSelectionItem and the owning base interfaces homed first; deferring until those layouts land.",
+   "status": "blocked"
   },
   "class:BrnGui::ViewModule": {
    "notes": "tightened: real member names meBrnPrepareStage/meBrnReleaseStage/mFlaptManager/mpGuiModule from DWARF; re-reviewed pass",
@@ -20661,12 +20753,20 @@
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - matches the established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF (member names/types) into its mirrored header, 16B-aligned so sizeof is correct for the inline maEvents[N] buffer. Parity flags the template body's assert/setup callees as absent since they live in the template header, not the one-line instantiation - expected for explicit instantiations.",
    "status": "done"
   },
+  "class:BrnPhysics::Vehicle::BrnPlayerDriverControls": {
+   "notes": "Verified vs X360 asm; parity.",
+   "status": "done"
+  },
   "class:BrnPhysics::Vehicle::CreateArticulatedTrafficEvent,10>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
    "status": "done"
   },
   "class:BrnPhysics::Vehicle::CreatePhysicalTrafficEvent,25>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
+   "status": "done"
+  },
+  "class:BrnPhysics::Vehicle::CreateRaceCarEvent": {
+   "notes": "Verified vs X360 asm; parity.",
    "status": "done"
   },
   "class:BrnPhysics::Vehicle::CreateRaceCarEvent,8>": {
@@ -20739,6 +20839,10 @@
   },
   "class:BrnPhysics::Vehicle::SetTrafficCrashingEvent,25>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
+   "status": "done"
+  },
+  "class:BrnPhysics::Vehicle::ShuntEffect": {
+   "notes": "Verified vs X360 asm; parity.",
    "status": "done"
   },
   "class:BrnPhysics::Vehicle::SimpleVehiclePhysics": {
@@ -20820,6 +20924,18 @@
   },
   "class:BrnReplays::ReplayIO::StatusInterface": {
    "notes": "GetReel 0x824EB0B8 / SetReel 0x8264B010 / operator= 0x823A6488 store-for-store. Replay-status interface accessors. Verifier parity/none. Gate pass.",
+   "status": "done"
+  },
+  "class:BrnReplays::SoundSerialiserFrame": {
+   "notes": "Fixed per asm: full-object copy extent 0x230 (last store stfs@0x22C); verified.",
+   "status": "done"
+  },
+  "class:BrnReplays::StreamHeader": {
+   "notes": "StreamOffset 24-byte X360 stride (overrides PS3 layout) asm-verified.",
+   "status": "done"
+  },
+  "class:BrnReplays::TrafficSerialiserFrame": {
+   "notes": "Fixed per asm: Clear zeroes whole slots (std r11=0), active-count is s16 (sth@0x94); verified.",
    "status": "done"
   },
   "class:BrnResource": {
