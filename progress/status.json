@@ -3588,6 +3588,18 @@
   "BrnGameState::ScoringSystem::WriteDataToOutput": {
    "status": "reviewed"
   },
+  "BrnGameState::ScoringSystemDebugComponent::DebugRenderChainableStunts": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystemDebugComponent::GetChainableTableEntry": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystemDebugComponent::GetName": {
+   "status": "reviewed"
+  },
+  "BrnGameState::ScoringSystemDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
   "BrnGameState::StartGameModeParams::AddCheckpoint": {
    "status": "reviewed"
   },
@@ -16470,6 +16482,10 @@
   },
   "class:BrnGameState::ScoringSystem": {
    "notes": "All 57 ledger funcs bodied (or inline-in-.h / aliased): the closure rounds bodied the 10 that were declare-only pending deps + the ctor, all adversarially verified parity store-for-store (team-queries, stunt/network setters, DealWithStunt, the chainable expire/gather + PreWorldUpdate drain, the one-line member-init ctor). GetPlayerScoring=GetPlayerScoringIndex (ledger mis-attribution, no dup). Deps StuntModeScoring/CarData/BurnoutSkillzData all done+reviewed. All 8 partials gate clean (cl /c). Parity-heuristic divergence is the benign multi-partial-class comparison + intentionally-replaced assert machinery. Member-by-name throughout, no raw offset casts.",
+   "status": "done"
+  },
+  "class:BrnGameState::ScoringSystemDebugComponent": {
+   "notes": "Gate PASS + adversarially verified: GetName/OnActivate exact; DRCS + GetChainableTableEntry signatures FIXED to the asm ABI (sigs_fixed) + re-verified; the chainable-band timer math + bit test store-for-store. FLOORS honestly flagged (not fabricated): dword_82020F54 row-bit table + dword_82CDB878/87C/880 colours unrecovered placeholders, x2..x7 headers best-effort, RaceCarState proximity-cull omitted (no homed layout).",
    "status": "done"
   },
   "class:BrnGameState::StartGameModeParams": {
