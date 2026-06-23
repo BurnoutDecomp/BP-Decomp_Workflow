@@ -507,6 +507,9 @@
   "BrnCoronaManager::Construct": {
    "status": "reviewed"
   },
+  "BrnDirector::AbstractPoolVoidHandle::Prepare": {
+   "status": "reviewed"
+  },
   "BrnDirector::AllVehicleData::GetNearestRaceCarIndexToPlayer": {
    "status": "reviewed"
   },
@@ -529,6 +532,9 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourGameplayExternal::CalcSpringCoeffs": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourGyroCam::SetParameters": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourHeliCam::Construct": {
@@ -565,6 +571,9 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourIceAnim::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourInterpolate::Setup": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourManager::Construct": {
@@ -975,6 +984,9 @@
   "BrnDirector::SimpleIceTakedownPlayer::SetIceAnim": {
    "status": "reviewed"
   },
+  "BrnDirector::Timestep::Get": {
+   "status": "reviewed"
+  },
   "BrnDirector::VehicleRef::Construct": {
    "status": "reviewed"
   },
@@ -985,6 +997,12 @@
    "status": "reviewed"
   },
   "BrnDirector::VehicleRef::SetToRaceCar": {
+   "status": "reviewed"
+  },
+  "BrnDirector::VehicleTracker::GetImplicitVelocity": {
+   "status": "reviewed"
+  },
+  "BrnDirector::VehicleTracker::Update": {
    "status": "reviewed"
   },
   "BrnEffects::BloomData::Construct": {
@@ -12552,6 +12570,9 @@
   "CgsGui::CgsGuiModuleIO::OutputBuffer::GetOutEventQueu": {
    "status": "reviewed"
   },
+  "CgsGui::CgsGuiModuleIO::OutputBuffer::SetGuiResourceRequestQueue": {
+   "status": "reviewed"
+  },
   "CgsGui::CustomRenderComponentInterface::Construct": {
    "status": "reviewed"
   },
@@ -12586,6 +12607,9 @@
    "status": "reviewed"
   },
   "CgsGui::EventInterpreterModule::sMapEntry>::HashTableElement": {
+   "status": "reviewed"
+  },
+  "CgsGui::EventInterpreterModuleIO::InputBuffer::AddGuiEvents": {
    "status": "reviewed"
   },
   "CgsGui::EventObserver::Construct": {
@@ -12706,6 +12730,9 @@
    "status": "reviewed"
   },
   "CgsGui::StateInterface::UnRegisterForEvents": {
+   "status": "reviewed"
+  },
+  "CgsGui::StateMachine::GetState": {
    "status": "reviewed"
   },
   "CgsGui::ViewIO::InputBuffer::Construct": {
@@ -13806,6 +13833,9 @@
   "CgsNetwork::HostMigrationManager::IsHostAlive": {
    "status": "reviewed"
   },
+  "CgsNetwork::IPAddressIntToString": {
+   "status": "reviewed"
+  },
   "CgsNetwork::IntQuantiser::UnPack": {
    "status": "reviewed"
   },
@@ -14616,6 +14646,9 @@
   "CgsResource::BaseResourcePtr::IsEqual": {
    "status": "reviewed"
   },
+  "CgsResource::BaseResourcePtr::Propogate": {
+   "status": "reviewed"
+  },
   "CgsResource::BaseResourcePtr::~BaseResourcePtr": {
    "status": "reviewed"
   },
@@ -15181,6 +15214,9 @@
    "status": "reviewed"
   },
   "CgsResource::RegistryResourceType::GetTypeID": {
+   "status": "reviewed"
+  },
+  "CgsResource::ResourceHandle::GetResourceId": {
    "status": "reviewed"
   },
   "CgsResource::ResourceIO::FileSystemStatusInterface::Construct": {
@@ -15819,6 +15855,9 @@
   "CgsSound::Logic::Voice::Connect": {
    "status": "reviewed"
   },
+  "CgsSound::Logic::VoiceHierarchyNode::FixUp": {
+   "status": "reviewed"
+  },
   "CgsSound::Logic::VoicePoolBase::IsPlaying": {
    "status": "reviewed"
   },
@@ -16012,6 +16051,9 @@
    "status": "reviewed"
   },
   "CgsSound::Playback::SplicerFactory::DoCreateVoice": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::SplicerFactory::SplicerAssertFunc": {
    "status": "reviewed"
   },
   "CgsSound::Playback::SplicerFactory::SplicerFactory": {
@@ -18737,7 +18779,15 @@
   "GameShared/GameClasses/Gui/CgsGuiEvent.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/Gui/CgsGuiModuleIO.cpp": {
+   "notes": "SetGuiResourceRequestQueue verified: null+write-lock asserts, Append over VariableEventQueue<2048,16>.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Gui/CgsGuiModuleIO.h": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Gui/Model/CgsEventInterpreterModuleIO.cpp": {
+   "notes": "AddGuiEvents verified: write-lock assert + Append over VariableEventQueue<32768,16>.",
    "status": "done"
   },
   "GameShared/GameClasses/Gui/Model/CgsEventObserver.cpp": {
@@ -18782,6 +18832,10 @@
    "status": "done"
   },
   "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Gui/Model/State/CgsGuiStateMachine.h": {
+   "notes": "GetState (signed bounds + 4*(i+6) slot) + SetStates (clamp 128, per-elem SetStateInterface, clamped count store) verified.",
    "status": "done"
   },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptAnimData.cpp": {
@@ -18888,6 +18942,10 @@
   "GameShared/GameClasses/Network/CgsNetworkManager.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Network/CgsNetworkUtils.h": {
+   "notes": "IPAddressIntToString verified: 4 byte extracts + 8 range asserts + SPrintf.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Network/Debug Components/CgsNetworkHostMigrationDebugComponent.h": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
    "status": "done"
@@ -18957,6 +19015,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Network/Players/CgsConnectionStatusMessage.h": {
+   "notes": "GetName verified = 'Connection Status Message'.",
    "status": "done"
   },
   "GameShared/GameClasses/Network/Players/CgsPlayerManager.cpp": {
@@ -19019,12 +19078,14 @@
    "status": "done"
   },
   "GameShared/GameClasses/Network/Time/CgsStartTimeMessage.h": {
+   "notes": "GetName verified = 'Start Time Message'.",
    "status": "done"
   },
   "GameShared/GameClasses/Network/Time/CgsSyncTimeMessage.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/Network/Time/CgsSyncTimeMessage.h": {
+   "notes": "GetName verified = 'Sync Time Message'.",
    "status": "done"
   },
   "GameShared/GameClasses/Numeric/CgsBranchlessOperations.h": {
@@ -19189,11 +19250,16 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); reference-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
    "status": "done"
   },
+  "GameShared/GameClasses/Sound/Logic/CgsVoiceHierarchy.cpp": {
+   "notes": "verified vs asm; parity.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Sound/Logic/CgsVoiceHierarchyResourceType.cpp": {
    "notes": "trivial GetTypeID constant; gate-only",
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Logic/CgsVoicePool.h": {
+   "notes": "verified vs asm; parity.",
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Playback/AEMS/CgsAemsBankResourceType.h": {
@@ -19296,6 +19362,10 @@
    "notes": "trivial; gate-only (constant GetTypeID, GREEN parity)",
    "status": "done"
   },
+  "GameShared/GameClasses/Sound/Playback/Splicer/CgsSplicerFactory.cpp": {
+   "notes": "verified vs asm; parity (scrubbed pre-existing .cpp:line cite).",
+   "status": "done"
+  },
   "GameShared/GameClasses/Sound/Playback/Splicer/CgsSplicerResourceType.h": {
    "notes": "trivial / original source match; gate-only",
    "status": "done"
@@ -19353,6 +19423,10 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp": {
+   "notes": "GetResourceId verified: ld/std 64-bit mID from mpSourceEntry; mpSourceEntry!=NULL assert.",
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp": {
    "status": "done"
   },
@@ -19379,7 +19453,12 @@
   "GameShared/GameClasses/System/Resource/CgsResourcePool.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp": {
+   "notes": "Propogate verified: ring walk, per-node identity triplet + threadId copies (stw 32-bit).",
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Resource/CgsResourcePtr.h": {
+   "notes": "CreateFromHandle verified: handle->mpThis/muThreadId, RemoveFromCurrentList + self-ring + AddToNewList(Entry+0x28).",
    "status": "done"
   },
   "GameShared/GameClasses/System/Resource/CgsResourceScratchPool.cpp": {
@@ -19443,6 +19522,7 @@
    "status": "done"
   },
   "GameSource/BurnoutConstants.h": {
+   "notes": "verified vs asm; parity.",
    "status": "done"
   },
   "GameSource/Director/Arbitrator/BrnDirectorArbitratorStateContainer.cpp": {
@@ -19476,8 +19556,16 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bug fixed inline (ParticleWaveForm NoiseTableBuild luRand&0xFFFF); 11 reference .cpp:line citations scrubbed; 5 non-leaf keystones blocked-with-reason; combined wave-13 gate PASS.",
    "status": "done"
   },
+  "GameSource/Director/Camera/Behaviours/BrnBehaviourGyroCam.h": {
+   "notes": "SetParameters verified+fixed: type assert + mpParameters@+0x14 AND cached miParamWord1@+0x10 (both stores).",
+   "status": "done"
+  },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourIceAnim.cpp": {
    "notes": "7 funcs. Adversarial verify found 3 defects (CopyTransformFrom args, see-through inner gate, ChangeMovie reset block) + 1 soft (tautological class-key assert); all fixed and re-verified PASS. Gate green, style clean.",
+   "status": "done"
+  },
+  "GameSource/Director/Camera/Behaviours/BrnBehaviourInterpolate.h": {
+   "notes": "verified vs asm; parity.",
    "status": "done"
   },
   "GameSource/Director/Camera/BrnCameraEffects.cpp": {
@@ -19516,9 +19604,25 @@
   "GameSource/Director/MomentController/BrnMomentSelector.cpp": {
    "status": "done"
   },
+  "GameSource/Director/Utils/BrnAbstractPool.cpp": {
+   "notes": "AbstractPoolVoidHandle::Prepare verified: arg-register mapping r4->+4/r5->+0/r6->+8/r7->+0xC, 4 guards.",
+   "status": "done"
+  },
   "GameSource/Director/Utils/BrnAbstractPool.h": {
    "notes": "Keystone: NewMoment is an un-recovered allocation/pool-slot path; honest stub. Deferred (the sibling BrnAbstractPool.cpp::Prepare is bodied + done).",
    "status": "blocked"
+  },
+  "GameSource/Director/Utils/BrnDirectorTimestep.h": {
+   "notes": "verified vs asm; parity.",
+   "status": "done"
+  },
+  "GameSource/Director/Utils/BrnDirectorVehicleTracker.cpp": {
+   "notes": "verified store-for-store; parity.",
+   "status": "done"
+  },
+  "GameSource/Director/Utils/BrnDirectorVehicleTracker.h": {
+   "notes": "GetImplicitVelocity verified vs asm; parity.",
+   "status": "done"
   },
   "GameSource/Director/Utils/BrnICEMoviePlayer.cpp": {
    "notes": "Movie-player family reconstructed; gate green; fidelity verified vs --asm (seed table 36 rows corrected, PlayMovie reconciled to DWARF sig, Play mbIsLooping clear); camera-Behaviour layer minimal-sliced (flagged)",
