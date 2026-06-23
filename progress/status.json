@@ -183,6 +183,9 @@
   "BrnAI::AIAggression::Construct": {
    "status": "reviewed"
   },
+  "BrnAI::AIAggression::GetTargetPos": {
+   "status": "reviewed"
+  },
   "BrnAI::AICar::ComputeDistanceToCheckpoint": {
    "status": "reviewed"
   },
@@ -318,6 +321,9 @@
   "BrnAI::AIModuleIO::OutputBuffer::Construct": {
    "status": "reviewed"
   },
+  "BrnAI::AIModuleIO::PlaceOnTrackRequest,128>::Construct": {
+   "status": "reviewed"
+  },
   "BrnAI::AIModuleIO::RaceCarAIInterface::GetActiveRaceCarSpeed": {
    "status": "reviewed"
   },
@@ -325,6 +331,15 @@
    "status": "reviewed"
   },
   "BrnAI::AIModuleIO::RaceCarAIInterface::UpdateActiveRaceCarData": {
+   "status": "reviewed"
+  },
+  "BrnAI::AIModuleIO::ResetOnTrackRequest,128>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnAI::AIModuleIO::ResetOnTrackRequest::Construct": {
+   "status": "reviewed"
+  },
+  "BrnAI::AIModuleIO::ResetOnTrackResult,128>::Construct": {
    "status": "reviewed"
   },
   "BrnAI::AISection::GetMiddle": {
@@ -5217,10 +5232,16 @@
   "BrnGui::GuiCursor::SetPosition": {
    "status": "reviewed"
   },
+  "BrnGui::GuiCursor::Update": {
+   "status": "reviewed"
+  },
   "BrnGui::GuiCursor::UpdateToSnapLocations": {
    "status": "reviewed"
   },
   "BrnGui::GuiCustRendererDebugComponent::UpdateBoostColours": {
+   "status": "reviewed"
+  },
+  "BrnGui::GuiDebugComponent::GetSingletonPtr": {
    "status": "reviewed"
   },
   "BrnGui::GuiDebugComponent::TriggerPFX": {
@@ -5250,6 +5271,9 @@
   "BrnGui::GuiEventRankProgressResponse::Construct": {
    "status": "reviewed"
   },
+  "BrnGui::GuiEventRankProgressResponse::GetPlayerRank": {
+   "status": "reviewed"
+  },
   "BrnGui::GuiEventRoadRuleData::Construct": {
    "status": "reviewed"
   },
@@ -5260,6 +5284,9 @@
    "status": "reviewed"
   },
   "BrnGui::GuiEventRoadRuleUpcomingRoads::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::GuiEventRoadRuleUpcomingRoads::ConvertG": {
    "status": "reviewed"
   },
   "BrnGui::GuiEventRoadRuleUpcomingRoads::FindRoadRuler": {
@@ -5290,6 +5317,9 @@
    "status": "reviewed"
   },
   "BrnGui::GuiEventUpdateSatNav::SatNavIconInfo::GetPlay": {
+   "status": "reviewed"
+  },
+  "BrnGui::GuiFsmController::IsTransitionPending": {
    "status": "reviewed"
   },
   "BrnGui::GuiHudMessage::AddParam": {
@@ -9891,6 +9921,12 @@
   "BrnTraffic::BrnTrafficIO::InputBuffer_PreScene::Construct": {
    "status": "reviewed"
   },
+  "BrnTraffic::BrnTrafficIO::NearMissData,16>::Append": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::OutputBuffer_PostScene::": {
+   "status": "reviewed"
+  },
   "BrnTraffic::BrnTrafficIO::OutputBuffer_PostScene::Construct": {
    "status": "reviewed"
   },
@@ -9907,6 +9943,12 @@
    "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::OutputBuffer_Prepare::Construct": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::RivalInTrafficUpdateEvent,34>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::TrafficNetworkInputInterface::ActivateHull": {
    "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::TrafficTypeResponse,32>::Construct": {
@@ -12591,6 +12633,9 @@
   "CgsGui::AptCommunicator::Initialize": {
    "status": "reviewed"
   },
+  "CgsGui::CgsAptString::GetText": {
+   "status": "reviewed"
+  },
   "CgsGui::CgsGuiModuleIO::InputBuffer::Construct": {
    "status": "reviewed"
   },
@@ -12651,6 +12696,9 @@
   "CgsGui::EventInterpreterModule::Update": {
    "status": "reviewed"
   },
+  "CgsGui::EventInterpreterModule::sMapEntry::sMapEntry": {
+   "status": "reviewed"
+  },
   "CgsGui::EventInterpreterModule::sMapEntry>::HashTableElement": {
    "status": "reviewed"
   },
@@ -12663,10 +12711,19 @@
   "CgsGui::EventObserver::Prepare": {
    "status": "reviewed"
   },
+  "CgsGui::GuiAccessPointers::GetGuiCache": {
+   "status": "reviewed"
+  },
+  "CgsGui::GuiComponent::SetStateInterface": {
+   "status": "reviewed"
+  },
   "CgsGui::GuiEventLocalisedTextPointerRemoved::IsThisTheRemovedString": {
    "status": "reviewed"
   },
   "CgsGui::GuiEventLocalisedTextPointerRemoved::SetStringRemoved": {
+   "status": "reviewed"
+  },
+  "CgsGui::GuiEventTimeInfo::GetTime": {
    "status": "reviewed"
   },
   "CgsGui::GuiHudMessageListResource::FixUp": {
@@ -12868,6 +12925,12 @@
    "status": "reviewed"
   },
   "CgsInput::InputIO::OutputBuffer::GetPadInfo": {
+   "status": "reviewed"
+  },
+  "CgsInput::InputIO::PadMapping,4>::Construct": {
+   "status": "reviewed"
+  },
+  "CgsInput::InputIO::PadMapping>::AddEvent": {
    "status": "reviewed"
   },
   "CgsInput::InputIO::PlayJ": {
@@ -14826,6 +14889,9 @@
   "CgsResource::DebugComponent::UpdateWindows": {
    "status": "reviewed"
   },
+  "CgsResource::DebugPoolTypeList::DebugPoolTypeList": {
+   "status": "reviewed"
+  },
   "CgsResource::Decompressor::BeginDecompressingFirstEntry": {
    "status": "reviewed"
   },
@@ -14844,6 +14910,9 @@
   "CgsResource::EntryListResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "CgsResource::Events::AddPatchRequest::Construct": {
+   "status": "reviewed"
+  },
   "CgsResource::Events::AllocateResourceListRequest,4>::Pop": {
    "status": "reviewed"
   },
@@ -14859,7 +14928,13 @@
   "CgsResource::Events::CreatePoolRequest,128>::Push": {
    "status": "reviewed"
   },
+  "CgsResource::Events::LoadBundleRequest,128>::Push": {
+   "status": "reviewed"
+  },
   "CgsResource::Events::LoadBundleRequest,256>::Construct": {
+   "status": "reviewed"
+  },
+  "CgsResource::Events::LoadBundleRequest>::AddEvent": {
    "status": "reviewed"
   },
   "CgsResource::Events::LoadBundleResponse,256>::Construct": {
@@ -21203,8 +21278,28 @@
    "notes": "AttribSys HashMapTablePolicy; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
   },
+  "class:BrnAI::AIAggression": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
   "class:BrnAI::AIModule": {
    "notes": "batch reviewed via Claude CLI; pass",
+   "status": "done"
+  },
+  "class:BrnAI::AIModuleIO::PlaceOnTrackRequest,128>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnAI::AIModuleIO::ResetOnTrackRequest": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnAI::AIModuleIO::ResetOnTrackRequest,128>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnAI::AIModuleIO::ResetOnTrackResult,128>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:BrnAI::AISectionsData": {
@@ -21721,6 +21816,14 @@
    "notes": "5 accessors (word offsets X360-verified); verifier parity; gate pass.",
    "status": "done"
   },
+  "class:BrnGui::GuiCursor": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnGui::GuiDebugComponent": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
   "class:BrnGui::GuiEventNetworkCreateGame": {
    "notes": "Construct (10-rec loop stride 0x2C, scalar tail) + SetFromGameParams (Event::Construct arg order confirmed) verified.",
    "status": "done"
@@ -21733,12 +21836,24 @@
    "notes": "operator= verified; base op= subsumes the +0x84 (mbIsCalulated) tail word.",
    "status": "done"
   },
+  "class:BrnGui::GuiEventRankProgressResponse": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnGui::GuiEventRoadRuleUpcomingRoads": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
   "class:BrnGui::GuiEventUpdateSatNav": {
    "notes": "GuiEventUpdateSatNav outer event; parity/none; wave6; verifier reviewed; gate pass.",
    "status": "done"
   },
   "class:BrnGui::GuiEventUpdateSatNav::SatNavIconInfo": {
    "notes": "4 accessors (county/district/ARCI/team; lbz-vs-extsb signedness pinned); verifier parity store-for-store; gate pass.",
+   "status": "done"
+  },
+  "class:BrnGui::GuiFsmController": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:BrnGui::Intro": {
@@ -22434,11 +22549,27 @@
    "status": "done"
   },
   "class:BrnTraffic::BrnTrafficIO::ActivateHullEvent,8>": {
-   "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF into its mirrored header; supporting types (VolumeInstanceId/ResourceHandle/Attribute::Key/CgsID/CullingGroup/Vector4 + ERaceCarType/EImpactType/ETrafficType/ETakedownType/VehicleClass/EActiveRaceCarIndex) reconstructed in their mirrored homes. x64 gate so sizes differ from the 32-bit X360 layout (pointer width) - structural/named parity, not byte-match. Parity flags the template body's calls as absent (they live in the template header) - expected for explicit instantiations.",
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:BrnTraffic::BrnTrafficIO::ActivateHullEvent>": {
    "notes": "AddEvent 0x8271A128 / AddEventSafe 0x82558358 / Append 0x823C3E88 explicit instantiations over committed CgsBaseEventQueue.h. Traffic-IO ActivateHull event record+queue (NOT the TrafficData Hull geometry subsystem). Verifier parity/none. Gate pass.",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::NearMissData,16>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::OutputBuffer_PostScene": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::RivalInTrafficUpdateEvent,34>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::TrafficNetworkInputInterface": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:BrnTraffic::BrnTrafficIO::TrafficTypeResponse,32>": {
@@ -22734,16 +22865,36 @@
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:CgsGui::CgsAptString": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
   "class:CgsGui::CgsGuiModuleIO::OutputBuffer": {
    "notes": "GUI module-IO OutputBuffer; parity/none; wave7; verifier parity; gate pass.",
+   "status": "done"
+  },
+  "class:CgsGui::EventInterpreterModule::sMapEntry": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:CgsGui::EventInterpreterModule::sMapEntry>": {
    "notes": "trivial; gate-only (10-bucket sentinel loop, re-rolled). Packet skipped: '>' invalid in Win filename.",
    "status": "done"
   },
+  "class:CgsGui::GuiAccessPointers": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:CgsGui::GuiComponent": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
   "class:CgsGui::GuiEventLocalisedTextPointerRemoved": {
    "notes": "verified vs asm; parity.",
+   "status": "done"
+  },
+  "class:CgsGui::GuiEventTimeInfo": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:CgsGui::ParticleSystem2d": {
@@ -22758,21 +22909,21 @@
    "status": "done"
   },
   "class:CgsInput::InputIO::BaseInputEvent,8>": {
-   "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:CgsInput::InputIO::BaseInputEvent>": {
    "status": "done"
   },
   "class:CgsInput::InputIO::BindResult,8>": {
-   "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:CgsInput::InputIO::BindResult>": {
    "status": "done"
   },
   "class:CgsInput::InputIO::ChangeVolumeRumbleEffectEvent,4>": {
-   "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:CgsInput::InputIO::ChangeVolumeRumbleEffectEvent>": {
@@ -22780,6 +22931,14 @@
   },
   "class:CgsInput::InputIO::OutputBuffer": {
    "notes": "GetPadInfo (0x823B1230) store-for-store: IOBuffer read-lock bit4 assert + port bounds + return &maPadOutputInformation[port] (stride 0x3A4, base +296). Verifier parity/none. FLAG: PadOutputInformation width-only placeholder (u8[932]). Gate pass.",
+   "status": "done"
+  },
+  "class:CgsInput::InputIO::PadMapping,4>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:CgsInput::InputIO::PadMapping>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:CgsInput::InputIO::PlayJoltEffectEvent,4>": {
@@ -23034,8 +23193,16 @@
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:CgsResource::DebugPoolTypeList": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
   "class:CgsResource::Decompressor": {
    "notes": "zlib inflate driver verified; error-report fixed to != Z_OK && != Z_STREAM_END (asm equality compares, not the Hex-Rays unsigned >=2 misread).",
+   "status": "done"
+  },
+  "class:CgsResource::Events::AddPatchRequest": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:CgsResource::Events::AllocateResourceListRequest,4>": {
@@ -23050,8 +23217,16 @@
    "notes": "FifoQueue Pop/Push verified (stride 172).",
    "status": "done"
   },
+  "class:CgsResource::Events::LoadBundleRequest,128>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
   "class:CgsResource::Events::LoadBundleRequest,256>": {
-   "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:CgsResource::Events::LoadBundleRequest>": {
+   "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
   "class:CgsResource::Events::LoadBundleResponse,256>": {
