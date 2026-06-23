@@ -390,6 +390,9 @@
   "BrnAI::ResetOnTrackManager::UpdateResetOnTrackSectionUsingRoute": {
    "status": "reviewed"
   },
+  "BrnAI::Route::AddNode": {
+   "status": "reviewed"
+  },
   "BrnAI::RouteMapDebugComponent::DrawAISectionInfo": {
    "status": "reviewed"
   },
@@ -948,6 +951,9 @@
   "BrnEffects::BrnCrashTriangleCache::Construct": {
    "status": "reviewed"
   },
+  "BrnEffects::BrnCrashTriangleCache::InsertTriangleIntoCache": {
+   "status": "reviewed"
+  },
   "BrnEffects::Curves::SmoothStep::Evaluate": {
    "status": "reviewed"
   },
@@ -976,6 +982,12 @@
    "status": "reviewed"
   },
   "BrnEffects::TintData2d::Construct": {
+   "status": "reviewed"
+  },
+  "BrnEffects::Utils::BuildUVData::SetupFromMaterial": {
+   "status": "reviewed"
+  },
+  "BrnEffects::Utils::DebrisColourRandomiser::Randomise": {
    "status": "reviewed"
   },
   "BrnEffects::Utils::Vector3Randomiser::RandomiseXYZ": {
@@ -7975,6 +7987,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleAttribs::SetupAttribsForDonutAI": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehicleAttribs::operator=": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleDriverInputInterface::Append": {
@@ -15672,6 +15687,9 @@
   "CgsSound::Utils::Slope::Slope": {
    "status": "reviewed"
   },
+  "CgsSound::Utils::SqaureWave::Update": {
+   "status": "reviewed"
+  },
   "CgsSystem::CgsXOverlapped::Construct": {
    "status": "reviewed"
   },
@@ -20067,6 +20085,10 @@
   "class:BrnAI::AISectionsData>": {
    "status": "done"
   },
+  "class:BrnAI::Route": {
+   "notes": "Verified vs X360 asm; parity.",
+   "status": "done"
+  },
   "class:BrnAI::RouteMapModule": {
    "notes": "fresh-eyes review (sonnet): all member writes faithful; vtable implicit",
    "status": "done"
@@ -20123,8 +20145,20 @@
    "notes": "Adversarially verified vs X360 asm; data-block layout/defaults parity.",
    "status": "done"
   },
+  "class:BrnEffects::BrnCrashTriangleCache": {
+   "notes": "Verified vs X360 asm; parity.",
+   "status": "done"
+  },
   "class:BrnEffects::Curves::SmoothStep": {
    "notes": "Smoothstep remap asm-verified store-for-store (four branches, 0.5 span split); out-of-line .cpp home.",
+   "status": "done"
+  },
+  "class:BrnEffects::Utils::BuildUVData": {
+   "notes": "Fixed per asm: maTexels source = material+0x34 (signed word), muFlags = material+0x24 (were inverted); 4 VMX broadcasts + 3 scalars verified.",
+   "status": "done"
+  },
+  "class:BrnEffects::Utils::DebrisColourRandomiser": {
+   "notes": "PRNG draw asm-verified (CgsRandom.h friend grant, additive).",
    "status": "done"
   },
   "class:BrnEffects::Utils::Vector3Randomiser": {
@@ -20956,6 +20990,10 @@
    "notes": "Adversarial verify PASS (parity): store-for-store vs X360 ARTIST spine; ledger funcs reconciled; minimal/owning homes, additive grows preserve layouts; gate PASS (combined wave-10 build).",
    "status": "done"
   },
+  "class:BrnPhysics::Vehicle::VehicleAttribs": {
+   "notes": "Fixed per asm: added trailing word@0x350 + qword@0x358 copies + mbIsValid@0x360=1; full-object copy verified.",
+   "status": "done"
+  },
   "class:BrnPhysics::Vehicle::Wheel": {
    "notes": "complex method (SetPosition), not an event-queue instantiation; separate reconstruction",
    "status": "blocked"
@@ -21770,6 +21808,10 @@
   },
   "class:CgsSound::Utils::Average<9,float>": {
    "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:CgsSound::Utils::SqaureWave": {
+   "notes": "Update @0x82691598 per-sample math asm-verified (rodata 0.0f/1.0f confirmed).",
    "status": "done"
   },
   "class:CgsSystem::CgsXOverlapped": {
