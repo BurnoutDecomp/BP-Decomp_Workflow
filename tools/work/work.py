@@ -27,10 +27,10 @@ Commands:
     work sync                 flush queued offline ops to the server (auto-runs first otherwise)
     work reconcile-from-files [--apply]
                               re-anchor local ledger/status.json from committed b5-decomp files
+    work resolve-class-homes [--apply]
+                              map class TUs to real home files (progress/class_homes.json)
     work server-sync [--branch BRANCH]
                               refresh server checkout/import without clearing live state
-    work server-reconcile-events --actor NAME [--apply]
-                              reconstruct missing review_pass events from b5-decomp commits
     work server-reset [--to REF]
                               full revert: git reset + drop ledger cache + reseed server
     work worker-add <name> | worker-list | worker-revoke <id>   (maintainer) manage ids
@@ -1582,29 +1582,6 @@ def cmd_server_reset(args):
     print("rebuild the local ledger with: work bootstrap")
 
 
-def cmd_server_reconcile_events(args):
-    """(Admin) Ask the work server to reconstruct missing review_pass events from
-    its local b5-decomp clone. Dry-run by default; pass --apply to write. This is
-    intended for users whose work landed in b5-decomp but never hit the server
-    workflow endpoints."""
-    if not server_enabled():
-        sys.exit("WORK_SERVER not set")
-    payload = {"actors": args.actor or [], "apply": bool(args.apply)}
-    res = server_request_strict("POST", "/admin/reconcile-events", payload) or {}
-    mode = "applied" if res.get("applied") else "dry run"
-    print(f"server reconcile-events {mode}")
-    print(f"  scanned TUs: {res.get('scanned_tus')}")
-    print(f"  scanned commits: {res.get('scanned_commits')}")
-    print(f"  reconstructed review_pass events: {res.get('inserted')}")
-    print(f"  skipped existing real workflow events: {res.get('skipped_existing_real')}")
-    print(
-        "  skipped existing reconstructed events: "
-        f"{res.get('skipped_existing_reconstructed')}"
-    )
-    print(f"  skipped actor filter: {res.get('skipped_actor_filter')}")
-    print(f"  skipped unresolved actor: {res.get('skipped_unresolved_actor')}")
-    if not res.get("applied"):
-        print("  re-run with --apply to write")
 
 
 def cmd_worker_add(args):
@@ -1694,25 +1671,45 @@ def cmd_reconcile_from_files(args):
         con.close()
 
 
+def cmd_resolve_class_homes(args):
+    """Map class TUs to their real committed home files (progress/class_homes.json).
+
+    Delegates to tools/work/resolve_class_homes.py so the script and the `work`
+    subcommand share one implementation. The work server reads class_homes.json on
+    import to attribute class work to its authors instead of a synthetic
+    src/classes/<Class>.cpp path. Dry-run unless --apply; only the map is written,
+    never any status, so it cannot override correct progress data.
+    """
+    sys.modules.setdefault("work", sys.modules[__name__])
+    import resolve_class_homes
+
+    resolve_class_homes.run(args.apply)
+
+
 def cmd_jebobs(args):
     """Private helper for JeBobs' out-of-band progress sync."""
     mode = "apply" if args.apply else "dry run"
     print(f"== JeBobs progress broom ({mode}) ==")
     print("== reconcile-from-files --no-demote ==")
     cmd_reconcile_from_files(argparse.Namespace(apply=args.apply, no_demote=True))
+    print("\n== resolve-class-homes ==")
+    cmd_resolve_class_homes(argparse.Namespace(apply=args.apply))
     if args.apply:
-        status_rel = os.path.join("progress", "status.json")
+        progress_paths = [
+            os.path.join("progress", "status.json"),
+            os.path.join("progress", "class_homes.json"),
+        ]
         changed = subprocess.run(
-            ["git", "diff", "--quiet", "HEAD", "--", status_rel],
+            ["git", "diff", "--quiet", "HEAD", "--", *progress_paths],
             cwd=ROOT,
         ).returncode != 0
         if changed:
-            print("\n== commit progress/status.json ==")
+            print("\n== commit progress ==")
             subprocess.run(
                 [
                     "git", "commit", "--only",
-                    "-m", "chore: reconcile status",
-                    "--", status_rel,
+                    "-m", "chore: reconcile status + class homes",
+                    "--", *progress_paths,
                 ],
                 cwd=ROOT,
                 check=True,
@@ -1720,16 +1717,12 @@ def cmd_jebobs(args):
             print("\n== push workflow branch ==")
             subprocess.run(["git", "push"], cwd=ROOT, check=True)
         else:
-            print("\n== commit progress/status.json ==")
-            print("no status.json changes to commit")
+            print("\n== commit progress ==")
+            print("no progress changes to commit")
 
         print("\n== server-sync ==")
         cmd_server_sync(argparse.Namespace(branch=None))
-        print("\n== server-reconcile-events --actor JeBobs ==")
-        cmd_server_reconcile_events(argparse.Namespace(actor=["JeBobs"], apply=True))
     else:
-        print("\n== server-reconcile-events --actor JeBobs ==")
-        cmd_server_reconcile_events(argparse.Namespace(actor=["JeBobs"], apply=False))
         print("\n(dry run only - re-run `work jebobs --apply` to write and sync)")
 
 
@@ -2010,17 +2003,15 @@ def main():
     rf.add_argument("--no-demote", action="store_true",
                     help="only add/promote statuses; preserve existing status.json entries")
     rf.set_defaults(fn=cmd_reconcile_from_files)
+    rch = sub.add_parser(
+        "resolve-class-homes",
+        help="map class TUs to their real committed home files (progress/class_homes.json)",
+    )
+    rch.add_argument("--apply", action="store_true", help="write progress/class_homes.json; default is dry run")
+    rch.set_defaults(fn=cmd_resolve_class_homes)
     ss = sub.add_parser("server-sync", help="refresh server checkout/import without clearing live claims/events")
     ss.add_argument("--branch", help="workflow branch to sync (default: server BP_WORKFLOW_BRANCH)")
     ss.set_defaults(fn=cmd_server_sync)
-    sre = sub.add_parser(
-        "server-reconcile-events",
-        help="(admin) reconstruct missing review_pass events from b5-decomp commits",
-    )
-    sre.add_argument("--actor", action="append", required=True,
-                     help="canonical actor to reconcile, e.g. JeBobs. Repeatable.")
-    sre.add_argument("--apply", action="store_true", help="write reconstructed events")
-    sre.set_defaults(fn=cmd_server_reconcile_events)
     srv = sub.add_parser("server-reset", help="full revert: git reset + drop ledger cache + reseed work server")
     srv.add_argument("--to", help="git ref to hard-reset the workflow repo + b5-decomp to (omit to keep current tree)")
     srv.set_defaults(fn=cmd_server_reset)

@@ -111,22 +111,32 @@ def build_class_homes() -> tuple[dict[str, str], dict[str, int]]:
     return dict(sorted(homes.items())), stats
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--apply", action="store_true", help="write progress/class_homes.json")
-    args = ap.parse_args()
+def run(apply: bool) -> dict[str, int]:
+    """Resolve class homes, print a summary, and (if apply) write class_homes.json.
 
+    Shared by the CLI and the ``work resolve-class-homes`` subcommand. Writing is
+    additive/derived: it recomputes the whole map from the current committed files,
+    so it never loses correct status data (it touches no status, only the map).
+    """
     homes, stats = build_class_homes()
     print(f"class TUs scanned : {stats['class_tus']}")
     print(f"  resolved to home: {stats['resolved']}  ({100 * stats['resolved'] // max(stats['class_tus'], 1)}%)")
     print(f"  left unresolved : {stats['unresolved']}")
     for tu_id, home in list(homes.items())[:8]:
         print(f"    {tu_id} -> {home}")
-    if args.apply:
+    if apply:
         CLASS_HOMES_JSON.write_text(json.dumps(homes, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {CLASS_HOMES_JSON} ({len(homes)} entries)")
     else:
         print("dry run; pass --apply to write progress/class_homes.json")
+    return stats
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--apply", action="store_true", help="write progress/class_homes.json")
+    args = ap.parse_args()
+    run(args.apply)
     return 0
 
 
