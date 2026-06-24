@@ -136,6 +136,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourcePoolModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsPoolModuleIO_OutputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceBundleLoaderModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceIOEvents.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileSystem.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModuleIO.cpp"
