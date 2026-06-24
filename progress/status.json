@@ -10713,6 +10713,9 @@
   "BrnSound::Vehicles::Engines::SingleGinsuEffect::GetTypeName": {
    "status": "reviewed"
   },
+  "BrnSound::Vehicles::Engines::SingleGinsuEffect::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "BrnSound::Vehicles::Engines::TurboEffect::ProcessUpdate": {
    "status": "reviewed"
   },
@@ -10729,6 +10732,9 @@
    "status": "reviewed"
   },
   "BrnSound::Vehicles::Environment::ReverbEffect::ProcessUpdate": {
+   "status": "reviewed"
+  },
+  "BrnSound::Vehicles::Environment::SpeedStreamControl::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "BrnSound::Vehicles::Environment::SpeedStreamEffect::UpdateVoiceParams": {
@@ -20223,6 +20229,39 @@
   "WorldModule::UpdateForBootUpVideo": {
    "status": "reviewed"
   },
+  "XAUDIO::CBatchAllocatedObject::AbsoluteRelease": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CBatchAllocatedObject::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CCriticalSection::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffect::GetContext": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffect::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CMasterVoiceList::~CMasterVoiceList": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CObjectRefCount::AbsoluteRelease": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CObjectRefCount::AddRef": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CObjectRefCount::Release": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CObjectRefCount::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CPacketList::~CPacketList": {
+   "status": "reviewed"
+  },
   "XAUDIO::CPacketQueue::CPacketQueue": {
    "status": "reviewed"
   },
@@ -20242,6 +20281,12 @@
    "status": "reviewed"
   },
   "XCAM::CObjectRefCount::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::Block::Append": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::Block::Insert": {
    "status": "reviewed"
   },
   "XGRAPHICS::DListNode::InsertAfter": {
@@ -21204,7 +21249,7 @@
  },
  "tu": {
   "C:/WINDOWS/TEMP/DBSWORK/a/C:/usr/local/cell//target/ppu/include/ppu_intrinsics_gcc.h": {
-   "notes": "Fresh-eyes review: floor(x+0.5)*step PPC fsel idiom faithfully reconstructed; single/double precision preserved per op. Landed at corrected path GameSource/Network/Utilities/BrnNetworkRounder.cpp (X360 line-info had misattributed to ppu_intrinsics_gcc.h).",
+   "notes": "Wave 54: header-inline body pre-existing+committed, ledger catch-up; verified vs X360 asm. Committed ea9939a.",
    "status": "done"
   },
   "GameShared/GameClasses/Containers/./CgsBitArray.h": {
@@ -21477,6 +21522,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Dispatch/alignptr.h": {
+   "notes": "Wave 54: header-inline body pre-existing+committed, ledger catch-up; verified vs X360 asm. Committed ea9939a.",
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Dispatch/parameter.cpp": {
@@ -22120,7 +22166,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Playback/Plugins/GainArray/CgsGainArrayPlugin.h": {
-   "status": "done"
+   "notes": "Genuine overlap/covered block, NOT a lazy block. The TU's one function GetSize @0x82689E08 (asm: `li r3,0x70; blr` => return 112) is ALREADY DEFINED on disk in b5-decomp/src/.../GainArray/CgsGainArrayPlugin.cpp as GainArray::GetSize() returning KI_GAIN_ARRAY_INSTANCE_SIZE=112 (verified correct vs as",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Sound/Playback/Plugins/Ginsu/CgsGinsuWaveContentResourceType.h": {
    "notes": "trivial / original source match; gate-only",
@@ -22134,7 +22181,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Playback/Plugins/Streaming/internal/sndplayer1.h": {
-   "status": "done"
+   "notes": "Genuine overlap/covered block. The TU's one function GetPpuTicksEvent @0x8268FE88 (asm: `lwz r3,0x50(r3); blr` => 32-bit load of field at byte offset 0x50) is ALREADY DEFINED on disk in b5-decomp/src/.../Streaming/internal/sndplayer1.cpp as SndPlayer1_CgsStreamMod::GetPpuTicksEvent() const returning",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Sound/Playback/Plugins/Streaming/internal/sndplayer1shared.cpp": {
    "notes": "Fresh-eyes sonnet review: PASS. ROL4(n,5)==n*32 for small request index; wrap logic, +344/+348 clears, conditional cache all faithful.",
@@ -22287,6 +22335,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/System/Resource/CgsResourceType.h": {
+   "notes": "Wave 54: header-inline body pre-existing+committed, ledger catch-up; verified vs X360 asm. Committed ea9939a.",
    "status": "done"
   },
   "GameShared/GameClasses/System/Resource/CgsSmallResourcePS3.h": {
@@ -22510,6 +22559,7 @@
    "status": "done"
   },
   "GameSource/Graphics/BrnRendererModuleDebugComponent.h": {
+   "notes": "Wave 54: header-inline body pre-existing+committed, ledger catch-up; verified vs X360 asm. Committed ea9939a.",
    "status": "done"
   },
   "GameSource/Graphics/BrnShaderConstantsFrame.h": {
@@ -22543,6 +22593,7 @@
    "status": "done"
   },
   "GameSource/Gui/BrnGuiModule.h": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
   },
   "GameSource/Gui/BrnGuiMovieManager.cpp": {
@@ -22567,6 +22618,7 @@
    "status": "done"
   },
   "GameSource/Gui/CustomRenderer/Renderers/BrnCrashNavIconRenderer.h": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
   },
   "GameSource/Gui/CustomRenderer/Renderers/BrnCreditsTextRenderer.cpp": {
@@ -22577,6 +22629,7 @@
    "status": "done"
   },
   "GameSource/Gui/Flapt/BrnFlaptMovieClipInstance.h": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
   },
   "GameSource/Gui/Flow/BrnBaseFlow.h": {
@@ -23731,7 +23784,8 @@
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp": {
-   "status": "done"
+   "notes": "InputBuffer_PostScene::Construct @0x822EA5E8 genuinely unbodied: asm zero-fills this+0xC0..+0xF8 (li r9,0; std r9 loop) then writes deep offsets into the nested mCrashInterface (RaceCarOutputInterface -- no struct def found) and mTrafficToRaceCarInterface_PreScene which is a maReserved[256] placeholder (BrnRaceCarEntityModuleIO.h:114). Cannot body member-by-name until those interface layouts are grown by their own TUs.",
+   "status": "blocked"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.h": {
    "status": "done"
@@ -23928,6 +23982,10 @@
   "SDKs/Packages/Lion/Final/eauk_common/Common/KeyTable.cpp": {
    "notes": "trivial key-table hash loop; compile gate and parity GREEN",
    "status": "done"
+  },
+  "SDKs/Packages/Lion/Final/eauk_common/Maths/C/quat_c.inl": {
+   "notes": "cParticleLocator::Update @0x829098D0 is BLOCKED: (1) MIS-BUCKETED foreign class -- TU id quat_c.inl houses a cParticleLocator fn but ALL DWARF hints+the cQuat callee home are cQuat (CgsQuat.cpp); cParticleLocator is only forward-declared (LionBindings.h:16, owned by the Lion particle subsystem). (2) VMX/SIMD: asm uses lvx128 v0,r4,0x30 + stvx128 v0,r11,r31 (128-bit VMX vector load/store, rendered __asm{} in pseudocode). (3) UN-HOMED opaque aggregate: cParticleLocator has no class definition/layout -- strided 16*(idx+N) arrays at +0x40/+0x9C/+0xA0 cannot be member-by-name accessed and there is no home to grow additively.",
+   "status": "blocked"
   },
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionBindings.cpp": {
    "notes": "Lion bindings; gate pass.",
@@ -26079,9 +26137,17 @@
    "notes": "Wave 44: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnSound::Vehicles::Engines::SingleGinsuEffect": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
+   "status": "done"
+  },
   "class:BrnSound::Vehicles::Environment": {
    "notes": "Block is GENUINE. Single func Environment::Cra @0x82584D40 body=addi r3,r3,4;blr (return a1+4). Confirmed @0x82584D38 immediately prior is BrnNetwork::EventScoreUploadData::GetDataSize - so Cra sits in the BrnNetwork region, ~1.4MB from genuine BrnSound::Vehicles::Environment funcs (0x8268xxxx-0x826",
    "status": "blocked"
+  },
+  "class:BrnSound::Vehicles::Environment::SpeedStreamControl": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
+   "status": "done"
   },
   "class:BrnSound::Vehicles::Exhaust3dControl": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
@@ -28536,6 +28602,34 @@
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
+  "class:XAUDIO::CBatchAllocatedObject": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
+   "status": "done"
+  },
+  "class:XAUDIO::CBatchAllocator": {
+   "notes": "BLOCK IS LEGITIMATE AND DECISIVE. Verified against asm: ~CBatchAllocator @0x82C312E0 writes TWO vptrs -- `stw off_821B5694,0(r31)` (primary +0) and `stw off_821B5680,4(r31)` then later `stw off_82108FF4,4(r31)` (secondary base subobject @+4) -- a two-vptr MI layout. AddRef`adjustor{4}` @0x82963068 =",
+   "status": "blocked"
+  },
+  "class:XAUDIO::CCriticalSection": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
+   "status": "done"
+  },
+  "class:XAUDIO::CEffect": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
+   "status": "done"
+  },
+  "class:XAUDIO::CMasterVoiceList": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
+   "status": "done"
+  },
+  "class:XAUDIO::CObjectRefCount": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
+   "status": "done"
+  },
+  "class:XAUDIO::CPacketList": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
+   "status": "done"
+  },
   "class:XAUDIO::CPacketQueue": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -28550,6 +28644,10 @@
   },
   "class:XCAM::CObjectRefCount": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::Block": {
+   "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
   },
   "class:XGRAPHICS::DListNode": {
