@@ -1926,7 +1926,7 @@ def cmd_bootstrap(args):
                         print(f"  warning: executable not found in {ida_path}")
                     else:
                         print(f"  found IDA at: {ida_exe}")
-                        script_path = os.path.join(ROOT, "tools", "ida_export_lineinfo.py")
+                        script_path = os.path.join(ROOT, "tools", "ida", "export_lineinfo.py")
                         print("  running IDA Pro to export lineinfo (this may take a few minutes)...", flush=True)
                         try:
                             res = subprocess.run([
@@ -1943,7 +1943,10 @@ def cmd_bootstrap(args):
         if os.path.exists(raw_json):
             print("  generating decfigs_inlining.json from raw lineinfo...", flush=True)
             try:
-                res = subprocess.run(["python", os.path.join(ROOT, "tools", "build_source_tree.py")], cwd=ROOT)
+                res = subprocess.run(
+                    ["python", os.path.join(ROOT, "tools", "ida", "build_source_tree.py")],
+                    cwd=ROOT,
+                )
                 if res.returncode == 0:
                     print("  successfully generated decfigs_inlining.json!")
                 else:

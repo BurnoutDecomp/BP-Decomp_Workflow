@@ -1,4 +1,4 @@
-"""IDAPython script to decompile a function headlessly in IDA Pro.
+"""IDAPython script to decompile one function headlessly in IDA Pro.
 
 Reads function address from environment variable `IDA_DECOMPILE_ADDR`
 and writes the pseudocode output to `IDA_DECOMPILE_OUT`.

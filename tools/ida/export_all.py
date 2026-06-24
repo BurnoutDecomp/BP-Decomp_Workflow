@@ -39,7 +39,11 @@ DB_NAME = os.path.splitext(os.path.basename(DB_PATH))[0]
 # When sharded, workers open per-worker DB copies named "<shard>/<real_db>.i64",
 # so DB_NAME stays correct. Pass EXPORT_DB_NAME to override explicitly if needed.
 DB_NAME = os.environ.get("EXPORT_DB_NAME") or DB_NAME
-OUT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".ida-exports", DB_NAME)
+OUT_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    ".ida-exports",
+    DB_NAME,
+)
 # exist_ok=True: multiple shard processes may create this concurrently.
 os.makedirs(OUT_DIR, exist_ok=True)
 

@@ -12,7 +12,7 @@ origin info — so we learn the real storage form in one headless launch instead
 of guessing. When origin info is found, it writes the full map to JSON.
 
 Run headless:
-    idat.exe -A -S"tools/ida_export_lineinfo.py" "IDA Files/DecFIGS_..._PS3.ELF.i64"
+    idat.exe -A -S"tools/ida/export_lineinfo.py" "IDA Files/DecFIGS_..._PS3.ELF.i64"
 Output (next to the .i64, or LINEINFO_OUT):
     <db>.lineinfo.json     full map: function -> [{ea, file, line, raw, src}]
     <db>.lineinfo.txt      probe/summary report

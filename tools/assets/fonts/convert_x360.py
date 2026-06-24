@@ -16,7 +16,7 @@ this script prints the old->new mapping so you can update your .imports.yaml bef
 the converted resource into your bundle, set the bundle platform to 4, fix the import offsets, repack.
 
 Usage:
-    py tools/x360_font_to_ours.py <x360_font.dat> <out_ours.dat>
+    py tools/assets/fonts/convert_x360.py <x360_font.dat> <out_ours.dat>
 """
 
 import struct

@@ -1,85 +1,112 @@
 # Tools
 
-The extraction and post-processing pipeline that turns the IDA databases in
-[`../IDA Files`](../IDA%20Files/) into the structured data the decomp consumes
-(`../.ida-exports/`, `../references/DecFIGS/`, and the `rw::` headers in
-`../b5-decomp/vendor/renderware/`).
+Repository automation is grouped by domain. Run commands from the repository
+root unless a section says otherwise.
 
-Two kinds of scripts live here: **IDAPython scripts** (`ida_*.py`, run *inside* IDA via
-`idat.exe -S`) and **driver/post-processors** (`.ps1` / plain `.py`, run from the normal
-shell). The IDAPython ones can't be run directly — they need IDA's embedded interpreter.
+## Layout
 
-## Contents
+| Path | Purpose |
+| --- | --- |
+| [`work/`](work/) | Ledger, TU claiming, dossiers, reconstruction helpers, parity, compile verification, review packets, goals, and maintenance. The repo-root `work.cmd` is the normal entry point. |
+| [`ida/`](ida/) | IDAPython exporters, the parallel export driver, and DecFIGS source-attribution post-processing. |
+| [`build/`](build/) | Game, FFmpeg, and standalone-tool build drivers plus linker-map conversion. |
+| [`assets/memory_map/`](assets/memory_map/) | Extract, export, and generate the X360 memory-map data used by the PC build. |
+| [`assets/textures/`](assets/textures/) | Loading-screen texture extraction and conversion experiments. |
+| [`assets/fonts/`](assets/fonts/) | X360 font conversion, vector-font carving, and layout inspection. |
+| [`renderware/`](renderware/) | RenderWare type-header generation from the offline `rwcore` symbol export. |
+| [`diagnostics/`](diagnostics/) | Small inspection utilities that do not belong to a production pipeline. |
+| [`volatility/`](volatility/) | Resource-tooling submodule. |
+| [`yap/`](yap/) | Bundle-tooling submodule. |
 
-| File | Kind | What it does |
-|------|------|--------------|
-| `ida_export_all.py` | IDAPython | Exports **every function** in an IDB to one JSON per function under `../.ida-exports/<db>/<addr>.json`: name, prototype, decompiler locals, Hex-Rays pseudocode, assembly listing, and caller/callee xrefs. The machine-readable form of the disassembly. |
-| `export_db.ps1` | PowerShell driver | Runs `ida_export_all.py` **headlessly and in parallel** across multiple `idat.exe` processes (Hex-Rays is single-threaded, so parallelism = many processes, each with its own DB copy, sharded by `index % Jobs`). Main entry point for a full export. |
-| `ida_export_lineinfo.py` | IDAPython | Reads the **DWARF source file/line attribution** out of the DecFIGS Internal PS3 IDB (origin file+line for every instruction, including inlined code). Diagnostic-first: probes where IDA stored the line table, then dumps `<db>.lineinfo.json` + a `.txt` report. |
-| `build_source_tree.py` | Python | Compacts the huge raw `lineinfo.json` into the shippable `decfigs_*` artifacts in [`../references/DecFIGS`](../references/DecFIGS/): `decfigs_func_files.json`, `decfigs_inlining.json`, `decfigs_source_tree.txt`. |
-| `ida_decompile.py` | IDAPython | Decompiles a **single** function (address via `IDA_DECOMPILE_ADDR`, output via `IDA_DECOMPILE_OUT`). Lightweight one-off vs. the full `ida_export_all.py` run. |
-| `gen_rwtypes_headers.py` | Python | Generates the layout-faithful `rw::` type headers in `../b5-decomp/vendor/renderware/` from the offline Ghidra export of `rwtypes_master.obj`. The "one-time type pass". |
-| `work/build_identity.py` | Python | **Phase 0.** Cross-build identity table: name-joins the X360 spine with DecFIGS (and optionally PS3-External) on the normalized qualified name → `../progress/identity.json`. Needs `c++filt` on PATH. |
-| `work/build_tu_index.py` | Python | **Phase 0.** Groups every X360 function into a translation unit (DecFIGS file, else class fallback) → `../progress/tu_index.json`, the work-unit list. |
-| `work/gen_skeleton.py` | Python | **Phase 0.** Emits a per-TU reconstruction skeleton (signatures parsed from pseudocode + trap stubs + guiding comments). Seed for reconstruction, not guaranteed-compiling. |
-| `work/work.py` | Python | **Phase 1.** The `work` ledger CLI (`seed`/`status`/`next`/`show`/`start`/`submit`/`block`) over `../progress/ledger.sqlite`. The interface the in-chat agent drives the decomp loop with. Run via the repo-root `work.cmd` shim. See [`../progress/README.md`](../progress/README.md). |
-| `work/dossier.py` | Python | **Phase 2.** Assembles the full per-TU reconstruction brief behind `work show <tu> --full`: per-function signature/locals/pseudocode/asm, DecFIGS dwarfdump declaration/type/local-variable hints, callee signatures with recovered status, caller context, and the original LegacySrc source overlay. |
-| `work/verify.py` | Python | **Phase 3.** The verification tier behind `work submit`/`work review`: a per-TU compile gate (`cl /c` under MSVC, configured by `../progress/verify.config.json`) and the fresh-eyes reviewer-packet builder (produced code + dossier → `../progress/reviews/`). |
-| `work/gen_stubs.py` | Python | The demand-driven stub generator behind `work stubs <tu>`: emits trap-stub definitions for a TU's not-yet-reconstructed callees (Hex-Rays types normalized, PPC runtime helpers filtered). `--list` shows what must be *declared* — the part that matters under the compile-only gate; the emitted `.cpp` is consumed at the future link phase. |
-| `export_<db>.log` | Output | Headless run logs from `export_db.ps1` (e.g. memory report, function count, errors). Diagnostics only. |
+The root-level `export_db.ps1`, `build_tools.ps1`, `build_game_exe.bat`, and
+`build_ffmpeg.bat` files are compatibility entry points. Their implementations
+live in the domain folders above.
 
-## Why it's useful for the decomp
+## IDA and DecFIGS
 
-- It is the **only bridge from IDA to everything downstream**: no export run, no
-  per-function JSON, no source-attribution maps, no `rw::` headers.
-- The exporters encode the project's hard-won IDA quirks (parallel DB sharding,
-  where DWARF line info hides, address-keyed outputs so parallel workers never
-  collide) — so re-deriving any artifact is a documented, repeatable command rather
-  than manual IDA clicking.
+The scripts under `ida/` are either IDAPython scripts, which run inside IDA, or
+normal shell-side drivers and post-processors:
 
-## Running
+| Tool | What it does |
+| --- | --- |
+| `ida/export_all.py` | Exports each function to `.ida-exports/<db>/<addr>.json`, including names, prototypes, locals, pseudocode, assembly, callers, and callees. |
+| `ida/export_db.ps1` | Runs `export_all.py` headlessly across parallel IDA processes. |
+| `ida/export_lineinfo.py` | Extracts DecFIGS DWARF source file/line attribution from the IDB. |
+| `ida/build_source_tree.py` | Compacts raw line information into the committed `references/DecFIGS/decfigs_*` artifacts. |
+| `ida/decompile.py` | Decompiles one function selected through environment variables. |
 
-### Full per-function export (auto-parallel):
+Full export:
 
 ```powershell
-# Export all databases in "IDA Files/" sequentially:
 tools/export_db.ps1
-
-# Export a single specific database:
 tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX"
-
-# Or explicitly pass the path to your IDA Pro executable:
 tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX" -IdaPath "C:\Program Files\IDA Professional 9.0\idat.exe"
 ```
 
-### Source-attribution pipeline (DecFIGS build):
-
-To extract raw line info from the DecFIGS database, run `idat.exe` headlessly with the `ida_export_lineinfo.py` script:
+DecFIGS source attribution:
 
 ```powershell
-# Using default install path (adjust the path to idat.exe if yours differs, or use it from PATH):
 & "C:\Program Files\IDA Professional 9.3\idat.exe" -A `
-    -S"tools/ida_export_lineinfo.py" "IDA Files/DecFIGS_Burnout_Internal_PS3.ELF.i64"
+    -S"tools/ida/export_lineinfo.py" "IDA Files/DecFIGS_Burnout_Internal_PS3.ELF.i64"
 
-# 2) compact into the decfigs_* artifacts
-python tools/build_source_tree.py
+python tools/ida/build_source_tree.py
 ```
 
-The `references/DecFIGS/dwarfdump/` tree is the companion DWARF-derived
-declaration/type hint dump. It is consumed by `work/dossier.py` and included in
-`work show <tu> --full` / reviewer packets for matching DecFIGS-backed TUs. Keep
-it in sync with the same DecFIGS ELF/IDB when regenerating DecFIGS artifacts.
-
-### Regenerate RenderWare type headers:
+## Build drivers
 
 ```powershell
-python tools/gen_rwtypes_headers.py
+tools/build_game_exe.bat
+tools/build_ffmpeg.bat
+pwsh tools/build_tools.ps1
 ```
 
-> **IDA Pro Configuration:** By default, the tools assume IDA Professional at a default installation location. For `export_db.ps1`, the script will automatically check:
-> 1. The `-IdaPath` parameter.
-> 2. The `IDA_PATH` or `IDA_BIN` environment variables.
-> 3. A list of default installation paths (v9.0 to v9.3).
-> 4. `idat.exe` on your system `PATH`.
->
-> Outputs under `../.ida-exports/` and the large DecFIGS JSONs are git-ignored — they are regenerated, not committed.
+The implementations are under `tools/build/`. Build products go under
+`build/game/` and `build/tools/`; generated FFmpeg binaries go under
+`b5-decomp/vendor/ffmpeg-build/`.
+
+## Asset pipelines
+
+Memory map:
+
+```powershell
+python tools/assets/memory_map/extract.py
+python tools/assets/memory_map/export_yaml.py
+python tools/assets/memory_map/generate_header.py
+```
+
+Fonts and textures:
+
+```powershell
+python tools/assets/fonts/convert_x360.py <x360_font.dat> <out_ours.dat>
+python tools/assets/fonts/carve_vectorfont.py
+python tools/assets/textures/extract_xex.py
+```
+
+`assets/textures/extract_loadscreens.py` is an IDAPython script. The font
+`dump_offsets.cpp` utility must be compiled manually with the include paths
+listed in its header comment.
+
+## RenderWare
+
+Regenerate the `rw::` vocabulary after refreshing the offline Ghidra export:
+
+```powershell
+python tools/renderware/generate_headers.py
+```
+
+The generator consumes `.ghidra-exports/rwtypes/` and writes the RenderWare
+headers under `b5-decomp/vendor/renderware/include/`.
+
+## Work subsystem
+
+Use `work.cmd` rather than invoking `tools/work/work.py` directly:
+
+```powershell
+work status
+work claim
+work show <tu> --full
+work submit <tu>
+```
+
+See [`../progress/README.md`](../progress/README.md) and
+[`../AGENTS.md`](../AGENTS.md) for the complete reconstruction workflow.

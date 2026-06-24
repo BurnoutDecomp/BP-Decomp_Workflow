@@ -28,7 +28,7 @@ Two tiers, decided by how richly each is symbolized (measured, not assumed):
 | `DecFIGS_Burnout_Internal_PS3.ELF` | ~90% | **File/line attribution plus declaration/type hints** (DWARF) — tells us which original `.cpp` each function belongs to and provides C++-shaped declarations, enums, member names, globals, and locals for reconstruction. |
 | `BurnoutPR.exe` (BPR) | ~0% | PC reference, **stripped**. Consulted per-function for platform layers only. Partially hand-RE'd. |
 | `TUB_Burnout_PC_External.exe` | ~6% | PC reference, **stripped**. Same opportunistic role as BPR. |
-| `rwtypes_master.obj` + `rwtypes.pdb` | 100% | RenderWare type ground truth. PDB → `rw::` vocab via [`tools/gen_rwtypes_headers.py`](tools/gen_rwtypes_headers.py); extract layouts with `llvm-pdbutil`. |
+| `rwtypes_master.obj` + `rwtypes.pdb` | 100% | RenderWare type ground truth. PDB → `rw::` vocab via [`tools/renderware/generate_headers.py`](tools/renderware/generate_headers.py); extract layouts with `llvm-pdbutil`. |
 
 The three **symbolized console builds join by name**. The two **stripped PC builds
 are never the spine** — they are a lookup tool the agent reaches for mid-
@@ -162,7 +162,7 @@ first run `python tools/work/check_vendor_lib.py <tu_name>`.
 **Types vs bodies.** "PRESENT → skip" applies to an SDK's **function bodies** (we link the
 PC lib). Its **types** are still recovered on demand: the `rw::` vocabulary in
 [`b5-decomp/vendor/renderware/`](b5-decomp/vendor/renderware/) is generated from
-`rwtypes.pdb` (x64) by [`tools/gen_rwtypes_headers.py`](tools/gen_rwtypes_headers.py), and
+`rwtypes.pdb` (x64) by [`tools/renderware/generate_headers.py`](tools/renderware/generate_headers.py), and
 handlers use those real types instead of opaque blobs / offset-pokes. The PDB is the x64
 PC build, so it is the right layout for our compile; X360 differences are modelled as
 explicit deltas on that baseline (see AGENTS.md, "`rw::` types come from `rwtypes.pdb`").

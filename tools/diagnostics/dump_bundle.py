@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Dump a platform-4 BundleV2's header + per-resource entries (id / type id / pool sizes).
+# Dump a platform-4 BundleV2 header and per-resource entries.
 # Diagnostic for the font bring-up: shows whether the atlas raster's type id is one the
 # runtime registers (RwRaster=0 / RwTextureState=0xE / MaterialState=0xF / Font=0x21).
 import struct, sys

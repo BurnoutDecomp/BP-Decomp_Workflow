@@ -6,7 +6,7 @@
 // (progress/verify.config.json -> include_dirs), e.g. under an MSVC dev shell:
 //   cl /nologo /EHsc /std:c++17 /I b5-decomp/src ^
 //      /I b5-decomp/vendor/EABase/include/Common /I b5-decomp/vendor/renderware/include ^
-//      tools/_dump_font_offsets.cpp && _dump_font_offsets.exe
+//      tools/assets/fonts/dump_offsets.cpp && dump_offsets.exe
 #include <cstddef>
 #include <cstdio>
 

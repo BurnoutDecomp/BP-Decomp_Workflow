@@ -7,7 +7,7 @@
 # 7 counts, 7 array offsets) followed by the contiguous bank/pool/raw/linear/heap/rwlinear/rwgeneral arrays.
 # All fields are 32-bit BIG-ENDIAN (X360); name fields are inline char[32] (NOT pointers).
 #
-# Usage: py tools/extract_memory_map.py
+# Usage: py tools/assets/memory_map/extract.py
 # Output: progress/scratch_dossiers/memory_map_artist_x360.bin  (raw blob, big-endian, as in the XEX)
 #         + a structure dump to stdout.
 #
@@ -17,8 +17,9 @@
 # field accesses).
 import struct, os, sys
 
-XEX = os.path.join(os.path.dirname(__file__), '..', 'IDA Files', 'BURNOUT_X360_ARTIST_Decrypted_Uncompressed.xex')
-OUT = os.path.join(os.path.dirname(__file__), '..', 'progress', 'scratch_dossiers', 'memory_map_artist_x360.bin')
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+XEX = os.path.join(ROOT, 'IDA Files', 'BURNOUT_X360_ARTIST_Decrypted_Uncompressed.xex')
+OUT = os.path.join(ROOT, 'progress', 'scratch_dossiers', 'memory_map_artist_x360.bin')
 MAP_VA = 0x82F2A788   # unk_82F2A788
 
 def main():

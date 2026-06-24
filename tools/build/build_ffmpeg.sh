@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build a minimal SHARED FFmpeg with the MSVC toolchain for the movie player.
 # Components: VP6 (vp6/vp6a/vp6f) + MP4 (h264/aac) + common EA movie audio, mov/ea demuxers.
-# Invoked by build_ffmpeg.bat, which puts cl/link (vcvars), nasm (Strawberry) and MSYS2 make/bash
+# Invoked by tools/build/build_ffmpeg.bat, which puts cl/link (vcvars), nasm (Strawberry) and MSYS2 make/bash
 # on PATH. $1 = repo root (Windows path; converted with cygpath). Installs to vendor/ffmpeg-build/.
 set -e
 

@@ -16,7 +16,7 @@ Header layout (matches CgsDev::MapFile::MapFileHeader on disk, 16 bytes):
     uint32   mBaseAddress        (= 0; records are RVAs, so the reader's rebase target base is 0)
     uint32   meVersion           (= 1, E_VERSION_CURRENT)
 
-Usage: py _make_cgsmap.py <in.map> <out.cgsmap>
+Usage: py tools/build/make_cgsmap.py <in.map> <out.cgsmap>
 """
 
 import ctypes
@@ -120,7 +120,7 @@ def write_cgsmap(path, records):
 
 def main():
     if len(sys.argv) != 3:
-        print("usage: _make_cgsmap.py <in.map> <out.cgsmap>")
+        print("usage: tools/build/make_cgsmap.py <in.map> <out.cgsmap>")
         return 1
     in_path, out_path = sys.argv[1], sys.argv[2]
     try:

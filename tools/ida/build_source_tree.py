@@ -1,6 +1,6 @@
 """Compact the raw DecFIGS lineinfo dump into usable source-structure artifacts.
 
-Input:  <db>.lineinfo.json  (from tools/ida_export_lineinfo.py) -- per-instruction
+Input:  <db>.lineinfo.json  (from tools/ida/export_lineinfo.py) -- per-instruction
         {func -> {name, rows:[{ea,file,line,src}]}}, ~hundreds of MB.
 
 Outputs (next to the input, prefixed `decfigs_`):
@@ -13,7 +13,7 @@ Outputs (next to the input, prefixed `decfigs_`):
                               inlined}]  -- inlined==True where the span's file
                             differs from the function's primary (home) file
 
-Run:  python tools/build_source_tree.py ["IDA Files/DecFIGS_..._PS3.ELF.lineinfo.json"]
+Run:  python tools/ida/build_source_tree.py ["IDA Files/DecFIGS_..._PS3.ELF.lineinfo.json"]
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_IN = ROOT / "IDA Files" / "DecFIGS_Burnout_Internal_PS3.ELF.lineinfo.json"
 
 # Build-machine prefixes to strip so paths become repo-relative. The real tree

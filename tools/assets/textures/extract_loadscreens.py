@@ -1,7 +1,7 @@
 """IDAPython script: chisel the loading-screen texture blobs out of the X360 .rdata.
 
 Run inside IDA on BURNOUT_X360_ARTIST.XEX.i64 (File > Script file...), or headless:
-    ida64 -A -S"tools/extract_loadscreen_textures.py" "IDA Files/BURNOUT_X360_ARTIST.XEX.i64"
+    ida64 -A -S"tools/assets/textures/extract_loadscreens.py" "IDA Files/BURNOUT_X360_ARTIST.XEX.i64"
 
 Writes one .bin per texture under build/loadingscreen/, each as:
     u32 width, u32 height (little-endian), then width*height*4 bytes of pixel data.
@@ -16,7 +16,8 @@ import os
 import struct
 import ida_bytes
 
-OUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "build", "loadingscreen")
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+OUT_DIR = os.path.join(ROOT, "build", "loadingscreen")
 
 # (name, .rdata VA, byte size, assumed width, assumed height)
 # size/4 == width*height for a 32-bit surface; the dims are best-guess pending the real

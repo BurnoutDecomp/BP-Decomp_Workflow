@@ -1,4 +1,4 @@
-"""Extract + decode the loading-screen textures from references/artist.xex into the
+"""Extract and decode loading-screen textures from references/artist.xex into the
 A8R8G8B8 .dds files the PC build loads (build/loadingscreen/*.dds).
 
 The XEX2 is unencrypted + 'basic' compressed, so the loaded image is rebuilt without

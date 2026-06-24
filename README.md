@@ -50,7 +50,7 @@ Addresses are build-local and must not be treated as stable across binaries.
 | [`IDA Files/`](IDA%20Files/) | IDA Pro databases and RenderWare library/PDB inputs. Some large `.i64` files are intentionally git-ignored and must be supplied locally. |
 | [`.ida-exports/`](.ida-exports/) | Generated per-function JSON exports from IDA: names, prototypes, locals, pseudocode, asm, callers, and callees. Git-ignored. |
 | [`references/`](references/) | Non-disassembly evidence: LegacySrc source slice, DecFIGS DWARF artifacts, BPR module map, wiki index, and naming conventions. |
-| [`tools/`](tools/) | IDAPython exporters, post-processors, RenderWare header generation, and the `tools/work/` ledger/reconstruction helpers. |
+| [`tools/`](tools/) | Domain-organized IDA, build, asset, RenderWare, diagnostic, and `tools/work/` ledger/reconstruction tooling. |
 | [`progress/`](progress/) | Shared ledger inputs and outputs: identity, TU index, dependencies, status mirror, goals, verification/review configs, and generated review packets. |
 | [`b5-decomp/`](https://github.com/Adriwin06/b5-decomp) | Submodule containing recovered C++, vendor libraries, RenderWare headers, and CMake project files. |
 | [`build/`](build/) | Local build tree for `b5-decomp`; not source of truth. |
@@ -160,11 +160,11 @@ At a glance:
 | --- | --- |
 | Day-to-day ledger work | `work bootstrap`, `work status`, `work next`, `work claim`, `work show`, `work submit`, `work parity`, `work review`, `work block`, `work reset-tu` |
 | Goal scoping and traces | `work goal ...`, `work goal import-trace`, `tools/work/trace_import.py` |
-| IDA export pipeline | `tools/export_db.ps1`, `tools/ida_export_all.py`, `tools/ida_export_lineinfo.py`, `tools/ida_decompile.py` |
+| IDA export pipeline | `tools/export_db.ps1`, `tools/ida/export_all.py`, `tools/ida/export_lineinfo.py`, `tools/ida/decompile.py` |
 | Derived ledger builders | `tools/work/build_identity.py`, `tools/work/build_tu_index.py`, `tools/work/build_type_deps.py`, `work seed --deps` |
 | Reconstruction helpers | `tools/work/dossier.py`, `tools/work/gen_stubs.py`, `tools/work/gen_skeleton.py`, `tools/work/auto_draft.py` |
 | Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `progress/verify.config.json`, `progress/review.config.json` |
-| Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/gen_rwtypes_headers.py` |
+| Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/renderware/generate_headers.py` |
 | Optional server coordination | `work sync`, `work server-sync`, `work server-update`, `work resolve-class-homes`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
 
 ## Goals And Execution Traces
@@ -339,7 +339,7 @@ tools/export_db.ps1 -DbName "BURNOUT_X360_ARTIST.XEX"
 Then rebuild derived DecFIGS/ledger artifacts as needed:
 
 ```powershell
-python tools/build_source_tree.py
+python tools/ida/build_source_tree.py
 python tools/work/build_identity.py
 python tools/work/build_tu_index.py
 work seed --deps --reset
