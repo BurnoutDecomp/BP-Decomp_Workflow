@@ -16,7 +16,29 @@ rem Game build output lives under build\game\ (build\tools\ holds tool binaries;
 set OUT=%ROOT%\build\game
 set RSP=%OUT%\obj\build.rsp
 
-call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1
+where cl >nul 2>&1
+if not errorlevel 1 goto toolchain_ready
+
+set "VCVARS="
+if defined VCVARS64 if exist "%VCVARS64%" set "VCVARS=%VCVARS64%"
+for %%P in (
+  "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+  "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+  "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\Build\vcvars64.bat"
+  "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+) do if not defined VCVARS if exist "%%~P" set "VCVARS=%%~P"
+
+if not defined VCVARS (
+  echo ERROR: Visual Studio 2022 vcvars64.bat not found. Set VCVARS64 to its full path.
+  exit /b 1
+)
+call "%VCVARS%" >nul 2>&1
+if errorlevel 1 (
+  echo ERROR: Failed to initialize the MSVC toolchain from "%VCVARS%".
+  exit /b 1
+)
+
+:toolchain_ready
 if not exist "%OUT%\obj" mkdir "%OUT%\obj"
 
 rc /fo"%OUT%\\obj\\burnout.res" "%RES%\burnout.rc"
@@ -86,6 +108,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\pc\gcm\renderengine\texture.cpp"
   echo "%SRC%\pc\gcm\renderengine\texturestate.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\MoviePlayer\CgsMoviePlayer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\MoviePlayer\CgsMoviePlayerCtor.cpp"
   echo "%SRC%\GameShared\GameClasses\Fonts\CgsFont.cpp"
   echo "%SRC%\GameShared\GameClasses\Fonts\CgsUnicode.cpp"
   echo "%SRC%\GameShared\GameClasses\Fonts\Resources\CgsFontResourceType.cpp"
@@ -111,9 +134,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourcePool.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceScratchPool.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourcePoolModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\CgsPoolModuleIO_OutputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceBundleLoaderModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileSystem.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModuleIO.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModuleIO_InputBuffer_GetResourceQueue.cpp"
   echo "%SRC%\GameSource\Resource\BrnGameDataModule.cpp"
   echo "%SRC%\GameSource\Resource\BrnResourceAllocator.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceHeap.cpp"

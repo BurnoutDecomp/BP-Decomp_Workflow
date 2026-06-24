@@ -27,6 +27,11 @@ if [ ! -f ffbuild/config.mak ]; then
         --enable-protocol=file
 fi
 
+# GNU Make 4.4 consumes one escaping layer in FFmpeg's generated MSVC
+# showIncludes-to-dependency awk recipe. Preserve the regex that matches Windows
+# path separators; without this, awk receives the invalid expression /\/.
+sed -i 's@gsub(/\\\\/, "/")@gsub(/\\\\\\\\/, "/")@g' ffbuild/config.mak
+
 echo "==== building FFmpeg ===="
 make -j"$(nproc)"
 
