@@ -120,7 +120,13 @@
   "Attrib::ClassExportPolicy::Initialize": {
    "status": "reviewed"
   },
+  "Attrib::ClassExportPolicy::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "Attrib::CollectionExportPolicy::Initialize": {
+   "status": "reviewed"
+  },
+  "Attrib::CollectionExportPolicy::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "Attrib::Database::Get": {
@@ -129,13 +135,22 @@
   "Attrib::Database::GetExportPolicies": {
    "status": "reviewed"
   },
+  "Attrib::Database::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "Attrib::DatabaseExportPolicy::Initialize": {
+   "status": "reviewed"
+  },
+  "Attrib::DatabaseExportPolicy::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "Attrib::DatabasePrivate::~DatabasePrivate": {
    "status": "reviewed"
   },
   "Attrib::DefaultDataArea": {
+   "status": "reviewed"
+  },
+  "Attrib::EditTable::operator new": {
    "status": "reviewed"
   },
   "Attrib::Gen::debrisparams::debrisparams": {
@@ -612,10 +627,16 @@
   "BrnDirector::Camera::BehaviourGameplayExternal::CalcSpringCoeffs": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::BehaviourGameplayExternal::Parameters::Set": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::BehaviourGyroCam::SetParameters": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourHeliCam::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourHeliCam::SetParameters": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourIceAnim::BehaviourIceAnim": {
@@ -673,6 +694,15 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourManager::UnlockBehaviourForInterpolation": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourPassengerCam::SetParameters": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourRig::SetParameters": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourRotateAboutVehicle::": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourSpirallingDeathcam::Prepare": {
@@ -4842,6 +4872,9 @@
   "BrnGui::CrashNavMap::SetFilterFromPanel": {
    "status": "reviewed"
   },
+  "BrnGui::CrashNavMapIcon::Construct`adjustor{144}'": {
+   "status": "compiles"
+  },
   "BrnGui::CrashNavMapIcon::SetAlpha": {
    "status": "reviewed"
   },
@@ -4853,6 +4886,9 @@
   },
   "BrnGui::CrashNavMapIcon::SetState": {
    "status": "reviewed"
+  },
+  "BrnGui::CrashNavMapIcon::operator=": {
+   "status": "compiles"
   },
   "BrnGui::CrashNavMapMain::OnEnter": {
    "status": "reviewed"
@@ -5193,6 +5229,12 @@
   "BrnGui::FriendsListComponent::SelectPrevious": {
    "status": "reviewed"
   },
+  "BrnGui::FriendsListComponent::SetDirty": {
+   "status": "compiles"
+  },
+  "BrnGui::FriendsListComponent::SetGuiCachePointer": {
+   "status": "compiles"
+  },
   "BrnGui::FriendsListComponent::ShowFriendsListBranch": {
    "status": "reviewed"
   },
@@ -5330,6 +5372,12 @@
   },
   "BrnGui::GuiDebugComponent::TriggerPostEvent": {
    "status": "reviewed"
+  },
+  "BrnGui::GuiEventDrawEventIcons::Construct": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiEventDrawEventIcons::GetIgnoreIcons": {
+   "status": "compiles"
   },
   "BrnGui::GuiEventNetworkCreateGame::Construct": {
    "status": "reviewed"
@@ -5630,6 +5678,12 @@
   },
   "BrnGui::KeyboardHost::KeyboardClosed": {
    "status": "reviewed"
+  },
+  "BrnGui::KeyboardHost::Prepare": {
+   "status": "compiles"
+  },
+  "BrnGui::KeyboardHost::Release": {
+   "status": "compiles"
   },
   "BrnGui::LeaderboardTableComponent::GetHighlightedGamertag": {
    "status": "reviewed"
@@ -8970,6 +9024,18 @@
   "BrnReplays::GuiModuleSerialiser::Write": {
    "status": "reviewed"
   },
+  "BrnReplays::GuiModuleStaticLayout::EndMessage": {
+   "status": "reviewed"
+  },
+  "BrnReplays::GuiModuleStaticLayout::Reset": {
+   "status": "reviewed"
+  },
+  "BrnReplays::GuiModuleStaticLayout::SetupStartOfFrame": {
+   "status": "reviewed"
+  },
+  "BrnReplays::GuiModuleStaticLayout::StartMessage": {
+   "status": "reviewed"
+  },
   "BrnReplays::QuantisedVector4Compression::QuantisedVector4Compression": {
    "status": "reviewed"
   },
@@ -8982,10 +9048,31 @@
   "BrnReplays::ReadStream::ReadCurrentFrunk": {
    "status": "reviewed"
   },
+  "BrnReplays::ReplayIO::InputBuffer_PostSim::AppendRequestInterface": {
+   "status": "reviewed"
+  },
   "BrnReplays::ReplayIO::InputBuffer_PostSim::Construct": {
    "status": "reviewed"
   },
+  "BrnReplays::ReplayIO::InputBuffer_PostSim::GetGuiEvent": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::InputBuffer_PostSim::GetGuiEventQueue": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::InputBuffer_PostSim::GetRequestInt": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::InputBuffer_PreSim::AppendGameActionQueue": {
+   "status": "reviewed"
+  },
   "BrnReplays::ReplayIO::InputBuffer_PreSim::Construct": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::InputBuffer_PreSim::GetTimerStatusI": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::InputBuffer_PreSim::SetTimerStatusInterface": {
    "status": "reviewed"
   },
   "BrnReplays::ReplayIO::OutputBuffer_PostSi": {
@@ -8998,6 +9085,18 @@
    "status": "reviewed"
   },
   "BrnReplays::ReplayIO::OutputBuffer_PreSim": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetG": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetGuiEvent": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatu": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatusInter": {
    "status": "reviewed"
   },
   "BrnReplays::ReplayIO::RequestInterface::Append": {
@@ -12759,6 +12858,12 @@
   "CgsGeometric::Triangle4::GetAOSTriangle": {
    "status": "reviewed"
   },
+  "CgsGraphics::ChunkBuffer::GetChunkData": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ChunkBuffer::GetChunkDef": {
+   "status": "reviewed"
+  },
   "CgsGraphics::DispatchBin::AllocateCommand": {
    "status": "reviewed"
   },
@@ -12834,16 +12939,25 @@
   "CgsGraphics::InstanceList::FixUp": {
    "status": "reviewed"
   },
+  "CgsGraphics::InstanceList::GetInstance": {
+   "status": "reviewed"
+  },
   "CgsGraphics::InstanceList>::GetMemoryR": {
    "status": "reviewed"
   },
   "CgsGraphics::InstanceListResourceType::FixDown": {
    "status": "reviewed"
   },
+  "CgsGraphics::InstanceListResourceType::GetSerialisedResourceDescr": {
+   "status": "reviewed"
+  },
   "CgsGraphics::InstanceListResourceType::GetTypeID": {
    "status": "reviewed"
   },
   "CgsGraphics::InstanceListResourceType::PostFixUp": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::MaterialAssembly::GetMaterial": {
    "status": "reviewed"
   },
   "CgsGraphics::Model::DoesStateExist": {
@@ -12925,6 +13039,9 @@
    "status": "reviewed"
   },
   "CgsGraphics::MoviePlayerCoreAllocator::Free": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::MoviePlayerCoreAllocator::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "CgsGraphics::PackedOobb::MultiplyByMatrix": {
@@ -13611,6 +13728,12 @@
   "CgsMemory::DataStreamCommandPoster::End": {
    "status": "reviewed"
   },
+  "CgsMemory::DataStreamCommandPoster::GetEncodedStatus": {
+   "status": "reviewed"
+  },
+  "CgsMemory::DataStreamCommandReader::ReadCom": {
+   "status": "reviewed"
+  },
   "CgsMemory::DataStreamResultPoster::AddResults": {
    "status": "reviewed"
   },
@@ -13693,6 +13816,9 @@
    "status": "reviewed"
   },
   "CgsMemory::LinearMalloc::StopRWAllocation": {
+   "status": "reviewed"
+  },
+  "CgsMemory::MemoryIO::CreateBankRequest::Construct": {
    "status": "reviewed"
   },
   "CgsMemory::MemoryIO::InputBuffer::Destruct": {
@@ -13783,6 +13909,9 @@
    "status": "reviewed"
   },
   "CgsMemory::SimpleDataStreamProducer::Construct": {
+   "status": "reviewed"
+  },
+  "CgsMemory::SimpleDataStreamProducer::GetRequiredBufferSizes": {
    "status": "reviewed"
   },
   "CgsModule::BaseEventReceiverQueue::Clear": {
@@ -16146,6 +16275,18 @@
   "CgsSceneManager::CgsCollision::CollisionResultList::SetNumResults": {
    "status": "reviewed"
   },
+  "CgsSceneManager::CgsCollision::PrimitiveListWithTriangleListJobDesc::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairListJobDesc::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::SphereListWithSphereListJobDesc::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::SphereListWithTriangleListJobDesc::Prepare": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::CgsCollision::TriangleList::CheckAlignment": {
    "status": "reviewed"
   },
@@ -16180,6 +16321,9 @@
    "status": "reviewed"
   },
   "CgsSceneManager::ErrorEvent,128>::Construct": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::FineIntersectionTestIO::OutputBuffe": {
    "status": "reviewed"
   },
   "CgsSceneManager::FineIntersectionTestModule::ComputeLineTestNearest": {
@@ -17123,6 +17267,9 @@
   },
   "EA::Allocator::GeneralAllocator::PPMAutoMutex::PPMAutoMutex": {
    "status": "reviewed"
+  },
+  "EA::Allocator::IAllocator::`vector deleting destructor'": {
+   "status": "compiles"
   },
   "EA::GameTalk::Alloc": {
    "status": "reviewed"
@@ -19976,6 +20123,22 @@
   "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsPrimitiveListWithTriangleListJobDesc.cpp": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsPrimitivePairListJobDesc.cpp": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsSphereListWithSphereListJobDesc.cpp": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsSphereListWithTriangleListJobDesc.cpp": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
   "GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeper.cpp": {
    "notes": "Clear=memset (clean), but the other 3 fns delegate to the UNCOMMITTED CgsSceneManager::IntervalList subsystem: Prepare->IntervalList::Prepare; SortLists->std::_Sort<Interval*> + IntervalList::AddSentinelInterval + IntervalList::RepairMappings; SweepLists->IntervalList::SweepIntervals + IntervalList::SweepAgainstList. IntervalList has NO committed home (grep: zero hits) and the SceneSweeper holds IntervalList members it sorts/sweeps. BLOCK until the IntervalList class (Prepare/AddSentinelInterval/RepairMappings/SweepIntervals/SweepAgainstList + Interval layout) lands.",
    "status": "blocked"
@@ -21893,6 +22056,26 @@
    "notes": "Needs a rodata-dump tool, not reconstructable from the function exports. The gperf asso_values[256] (byte_82F72BB0) + wordlist {name,miData} (off_82F799D0) tables + the miData dispatch indices (from AptArray::objectMemberLookup @0x82AFDA50 jump table) are file-static .rdata the per-function .ida-exports JSONs do NOT contain; two rework agents either fabricated them (verifier-caught) or correctly produced nothing (blocker_resolved=false). Sibling Apt gperf TUs (ObjectIndex/StringMembers/TextMembers/TextFormat/Sprite) landed because their tables WERE present in the exports; this one's are not. Next: dump the X360 .rdata at those 3 addresses (e.g. extend the IDA export to include referenced data symbols), then it's a thin in_word_set + 2 file-static tables like the landed siblings.",
    "status": "blocked"
   },
+  "class:Attrib::ClassExportPolicy": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:Attrib::CollectionExportPolicy": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:Attrib::Database": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:Attrib::DatabaseExportPolicy": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:Attrib::EditTable": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
   "class:Attrib::Gen::debrisparams": {
    "notes": "Gate-only (self-reviewed). Compile PASS. Parity YELLOW is the same false-positive as surfacelist: the 5 'absent' callees (Instance base-ctor, GetClass x2, GetCollection, AssertOnClassCheck, DefaultDataArea) are present as member/namespace-relative calls; counts within tolerance. Ctor verified vs X360 pseudocode @0x8227E9A0 (Instance chain; class-check guard KI=651697503; DefaultDataArea(0xE0) when mpAttributeData null). Minimal X360-faithful generated-attrib recon (X360 inlines the accessor/using API); derives from the reconstructed Attrib::Instance base.",
    "status": "done"
@@ -22015,8 +22198,28 @@
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::BehaviourGameplayExternal::Parameters": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::BehaviourHeliCam": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
   "class:BrnDirector::Camera::BehaviourIceAnim": {
    "notes": "ctor + GetCollisionPolicy/GetTimeRemaining/HasFinishedOrFailed. Layout pinned. Verified PASS after fixes. Gate green.",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::BehaviourPassengerCam": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::BehaviourRig": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::BehaviourRotateAboutVehicle": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
   "class:BrnDirector::Camera::VehicleInfo": {
@@ -22070,6 +22273,10 @@
   "class:BrnEffects::BlurData": {
    "notes": "Adversarially verified vs X360 asm; data-block layout/defaults parity.",
    "status": "done"
+  },
+  "class:BrnEffects::BlurData>": {
+   "notes": "Incomplete: ledger lists Add @0x824F6B70 (bodied, correct) AND Construct @0x824F6AD0 (NOT yet bodied \u2014 scalar inits @0..0x10, four VMX Vector2-const loads @0x20/0x30/0x40/0x50 from rodata unk_82FF*, 0.0f to mfWeight@0x60+mfCount@0x64). Recoverable, deferred \u2014 do not mark done until Construct is bodied.",
+   "status": "blocked"
   },
   "class:BrnEffects::BrnCrashTriangleCache": {
    "notes": "Verified vs X360 asm; parity.",
@@ -22558,6 +22765,10 @@
   "class:BrnGui::GuiFsmController": {
    "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
+  },
+  "class:BrnGui::GuiRaceCarInfoEvent": {
+   "notes": "DoWorstCase @0x823A6BB8 is heavy VMX effects-math (per-entry vmaddfp128 FMA position transform, cross-lane vspltw splats, per-lane weight consts {0,0.1,0.25,0} via lvx128, stvx128 out). Construct sibling is bodied but the TU is gated by this VMX fn. Deferred to a VMX pass.",
+   "status": "blocked"
   },
   "class:BrnGui::InGameMessageRenderer": {
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
@@ -23209,6 +23420,10 @@
    "notes": "3 verify loops PASS (dual 9-mode cascade truth tables: Read=PLAYING-only{5}, Write=RECORDING-family{1,2,3}, incl. the trap cases 4/6 correctly excluded; fidelity/precedent; final sign-off). Gate clean. Parity 'gross' benign: absent callees = assert machinery folded into CGS_ASSERT + BaseSerialiser/GuiModuleStaticLayout calls that ARE in-code but declare-only (their own TUs). First-call Reset order + double GetStaticLayout fetch preserved. Mirrors committed EffectsSerialiser.",
    "status": "done"
   },
+  "class:BrnReplays::GuiModuleStaticLayout": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
   "class:BrnReplays::QuantisedVector4Compression": {
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -23217,8 +23432,20 @@
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnReplays::ReplayIO::InputBuffer_PostSim": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnReplays::ReplayIO::InputBuffer_PreSim": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
   "class:BrnReplays::ReplayIO::OutputBuffer_PostSim": {
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnReplays::ReplayIO::OutputBuffer_PreSim": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
   "class:BrnReplays::ReplayIO::RequestInterface": {
@@ -23876,12 +24103,32 @@
    "notes": "Verified vs asm; normal-tolerance epsilon flagged inferred.",
    "status": "done"
   },
+  "class:CgsGraphics::ChunkBuffer": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
   "class:CgsGraphics::DispatchBin": {
    "notes": "5 funcs (render dispatch bin); verifier minor_drift/low; gate pass.",
    "status": "done"
   },
+  "class:CgsGraphics::Im2dTransform": {
+   "notes": "TransformByAspectRatio @0x823DB448 is a VMX Matrix33 aspect-ratio fold (rw::math Mult + lvx128/stvx128 writes back to mOriginXYZ@+0x00 and mRightUp@+0x10) with real side-effects; the PC CgsIm2d backend maps coords directly so its path is a deliberate no-op, NOT a faithful X360 repro. Deferred to a VMX pass.",
+   "status": "blocked"
+  },
+  "class:CgsGraphics::InstanceList": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
   "class:CgsGraphics::InstanceList>": {
    "notes": "CgsGraphics::InstanceList (ResourcePtr instance); parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
+  "class:CgsGraphics::InstanceListResourceType": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsGraphics::MaterialAssembly": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
   "class:CgsGraphics::Model": {
@@ -23890,6 +24137,10 @@
   },
   "class:CgsGraphics::MoviePlayer": {
    "notes": "ctor verified (Futex lock init + vtable + Construct() field-zeroing); documented FFmpeg PC decode substitution.",
+   "status": "done"
+  },
+  "class:CgsGraphics::MoviePlayerCoreAllocator": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
   "class:CgsGraphics::PackedOobb": {
@@ -24092,8 +24343,24 @@
    "notes": "ctor @0x827DF9C8 builds a ~24920B object embedding 4 uncommitted SHARED types that must be reconstructed in their own homes first (ODR risk to model ad-hoc here): (1) CgsContainers::HashTable<K,V,13u> 3-param fixed-size table (committed LinearHashTable<K,V> is a different 2-param open-addressing type), (2) LinkedListHelper<T,1024u> (only BaseLinkedList base is committed), (3) HashTableElement<u32,const CgsUtf8*>, (4) LanguageManagerDebugComponent (embedded, own vtable off_820CE2C0 @+24916, has its own CgsLanguageManagerDebugComponent.{h,cpp} TU). Committed CgsLanguageManager.h is only a 2-method metric-units stub; full layout grow blocked until the container templates + debug component land. GetDefaultFont @0x824434C0 (returns mpcDefaultFontName @+4, null-assert) is trivial but shares the TU. Revisit after the HashTable<,,N>/LinkedListHelper<,N> template families are reconstructed.",
    "status": "blocked"
   },
+  "class:CgsMemory::DataStreamCommandPoster": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsMemory::DataStreamCommandReader": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsMemory::MemoryIO::CreateBankRequest": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
   "class:CgsMemory::MemoryIO::InputBuffer": {
    "notes": "3 verify loops PASS (fidelity, adversarial w/ compiled probe proving mMemoryRequestQueue@+4 & alignof(VEQ)=4, final sign-off). Gate clean. Parity 'gross' is benign: the 4 absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT x2 (one per getter). const=read-lock(bit4), non-const=write-lock(bit3); MemoryRequestQueue=committed VariableEventQueue<13312,16>.",
+   "status": "done"
+  },
+  "class:CgsMemory::SimpleDataStreamProducer": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
   "class:CgsModule::BaseEventReceiverQueue": {
@@ -24550,6 +24817,10 @@
   },
   "class:CgsSceneManager::ErrorEvent,128>": {
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:CgsSceneManager::FineIntersectionTestIO": {
+   "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
   "class:CgsSceneManager::OverlapGenerationModule": {
