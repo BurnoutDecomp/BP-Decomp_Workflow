@@ -31,6 +31,8 @@ Commands:
                               map class TUs to real home files (progress/class_homes.json)
     work server-sync [--branch BRANCH]
                               refresh server checkout/import without clearing live state
+    work server-update [--reconcile] [--no-push]
+                              one-shot: refresh class homes (+status), push, re-import on the server
     work server-reset [--to REF]
                               full revert: git reset + drop ledger cache + reseed server
     work worker-add <name> | worker-list | worker-revoke <id>   (maintainer) manage ids
@@ -1550,6 +1552,54 @@ def cmd_server_sync(args):
     print(f"  goals: {res.get('goals')}  status_rows: {res.get('status_rows')}")
 
 
+def cmd_server_update(args):
+    """Update the work server with the latest committed progress + attribution.
+
+    One command for "make the server show current data": refreshes
+    progress/class_homes.json (real home files for class TUs) and, with
+    --reconcile, status.json from committed files in promote-only mode (adds newly
+    finished work, never demotes). It commits + pushes any changed progress files
+    so the server's checkout can pull them, then asks the server to pull and
+    re-import with reset=false -- live claims and the event log are preserved, and
+    the server re-warms Git attribution on the next dashboard view.
+    """
+    if args.reconcile:
+        print("== reconcile-from-files --no-demote ==")
+        cmd_reconcile_from_files(argparse.Namespace(apply=True, no_demote=True))
+    print("\n== resolve-class-homes --apply ==")
+    cmd_resolve_class_homes(argparse.Namespace(apply=True))
+
+    progress_paths = [os.path.join("progress", "class_homes.json")]
+    if args.reconcile:
+        progress_paths.append(os.path.join("progress", "status.json"))
+    changed = subprocess.run(
+        ["git", "diff", "--quiet", "HEAD", "--", *progress_paths], cwd=ROOT
+    ).returncode != 0
+    if changed:
+        msg = "chore: refresh server inputs (class_homes" + (" + status" if args.reconcile else "") + ")"
+        print("\n== commit progress ==")
+        subprocess.run(["git", "commit", "--only", "-m", msg, "--", *progress_paths], cwd=ROOT, check=True)
+        if args.no_push:
+            print("  committed locally (--no-push); the server cannot pull it until you push the workflow branch")
+        else:
+            print("== push workflow branch ==")
+            try:
+                subprocess.run(["git", "push"], cwd=ROOT, check=True)
+            except subprocess.CalledProcessError:
+                sys.exit("git push failed (diverged?). Pull/resolve, push, then re-run `work server-sync`.")
+    else:
+        print("\nno progress changes to commit")
+
+    if not server_enabled():
+        print("\nWORK_SERVER not set - refreshed + committed locally only.")
+        print("Set WORK_SERVER in .env and re-run to update a remote server,")
+        print("or run `.\\sync.ps1` in the server repo to refresh a local one.")
+        return
+    print()
+    cmd_server_sync(argparse.Namespace(branch=args.branch))
+    print("\nserver updated. Contribution/attribution numbers re-warm on the next dashboard load.")
+
+
 def cmd_server_reset(args):
     """Full revert across the new two-store world: optionally git-reset the workflow
     repo + b5-decomp to a known-good ref, drop the local ledger cache, then re-seed the
@@ -2012,6 +2062,14 @@ def main():
     ss = sub.add_parser("server-sync", help="refresh server checkout/import without clearing live claims/events")
     ss.add_argument("--branch", help="workflow branch to sync (default: server BP_WORKFLOW_BRANCH)")
     ss.set_defaults(fn=cmd_server_sync)
+    svu = sub.add_parser(
+        "server-update",
+        help="one-shot: refresh class homes (+status with --reconcile), push, and re-import on the server (preserves live data)",
+    )
+    svu.add_argument("--reconcile", action="store_true", help="also reconcile status.json from committed files (promote-only)")
+    svu.add_argument("--no-push", action="store_true", help="commit progress locally but do not push")
+    svu.add_argument("--branch", help="server workflow branch to sync")
+    svu.set_defaults(fn=cmd_server_update)
     srv = sub.add_parser("server-reset", help="full revert: git reset + drop ledger cache + reseed work server")
     srv.add_argument("--to", help="git ref to hard-reset the workflow repo + b5-decomp to (omit to keep current tree)")
     srv.set_defaults(fn=cmd_server_reset)
