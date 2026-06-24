@@ -289,6 +289,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\Devices\CgsDeviceAsyncOp.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\Devices\CgsDeviceMemFileSystem.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\Devices\CgsRemapDevice.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\Devices\CgsDevicePhysicalPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModuleIO_InputBuffer_GetResourceQueue.cpp"
