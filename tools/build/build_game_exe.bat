@@ -41,6 +41,8 @@ if errorlevel 1 (
 :toolchain_ready
 if not exist "%OUT%\obj" mkdir "%OUT%\obj"
 
+echo Using environment: %VCVARS%
+
 rc /fo"%OUT%\\obj\\burnout.res" "%RES%\burnout.rc"
 
 rem ---- build the cl response file ----
@@ -100,6 +102,7 @@ rem ---- build the cl response file ----
   echo "%VEN%\EAThread\source\pc\eathread_thread_pc.cpp"
   echo "%VEN%\EAThread\source\pc\eathread_semaphore_pc.cpp"
   echo "%VEN%\EAThread\source\pc\eathread_callstack_win64.cpp"
+  echo "%VEN%\EAThread\source\pc\eathread_x360align.cpp"
   echo "%SRC%\GameSource\Graphics\BrnRendererModule.cpp"
   echo "%SRC%\GameSource\Graphics\BrnShaderConstantsFrame.cpp"
   echo "%SRC%\GameSource\Game\BrnLoadingScreenRenderer.cpp"
@@ -278,6 +281,14 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceBundleLoaderModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceIOEvents.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileSystem.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsDeviceManager.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsDeviceOperationPool.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileLog.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFile_embed_check.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\Devices\CgsDevice.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\Devices\CgsDeviceAsyncOp.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\Devices\CgsDeviceMemFileSystem.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\Devices\CgsRemapDevice.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceModuleIO_InputBuffer_GetResourceQueue.cpp"
@@ -302,7 +313,7 @@ rem ---- build the cl response file ----
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
-cl /nologo @"%RSP%" /link /SUBSYSTEM:WINDOWS /MAP /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib
+cl /nologo @"%RSP%" /link /SUBSYSTEM:WINDOWS /MAP /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
