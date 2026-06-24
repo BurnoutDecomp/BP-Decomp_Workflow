@@ -167,7 +167,7 @@ At a glance:
 | Reconstruction helpers | `tools/work/dossier.py`, `tools/work/gen_stubs.py`, `tools/work/gen_skeleton.py`, `tools/work/auto_draft.py` |
 | Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `progress/verify.config.json`, `progress/review.config.json` |
 | Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/gen_rwcore_headers.py` |
-| Optional server coordination | `work sync`, `work server-sync`, `work server-reconcile-events`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
+| Optional server coordination | `work sync`, `work server-sync`, `work server-update`, `work resolve-class-homes`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
 
 ## Goals And Execution Traces
 
@@ -230,9 +230,10 @@ work sync                                 # flush queued offline ops (auto-runs 
 Maintainer commands:
 
 ```powershell
-work server-sync [--branch <branch>]      # preserve live claims/events
-work server-reconcile-events --actor JeBobs [--apply]
-                                           # reconstruct missing review_pass events from b5-decomp commits
+work server-sync [--branch <branch>]      # tell the server to pull + re-import (preserves live claims/events)
+work server-update [--reconcile] [--no-push]
+                                          # one-shot: refresh class homes (+status), push, re-import on the server
+work resolve-class-homes [--apply]        # map class TUs to their real committed home files (progress/class_homes.json)
 work reconcile-from-files [--apply] [--no-demote]
                                           # re-anchor local ledger/status.json from committed b5-decomp files
 work server-reset [--to <ref>]            # local reset + server reseed
@@ -278,18 +279,27 @@ python tools/work/fetch_server_status.py            # rewrite status.json from t
 python tools/work/fetch_server_status.py --check    # report drift, write nothing (exit 1 if stale)
 ```
 
-If commits reached `b5-decomp` without the workflow reporting its normal review event to
-the server, an admin can backfill only those missing live events from the committed git
-history:
+If commits reached `b5-decomp` without going through the server's normal claim/submit
+flow, update the server so its dashboard reflects the committed state:
 
 ```powershell
-work server-reconcile-events --actor JeBobs          # dry run
-work server-reconcile-events --actor JeBobs --apply  # append missing reconstructed events
+work server-update                 # refresh class homes, push, re-import on the server
+work server-update --reconcile     # also reconcile status.json from committed files (promote-only)
 ```
 
-The backfill adds `review_pass` events marked as reconstructed from `b5-decomp`; it skips
-real workflow events that are already present, so it should not duplicate normal claims,
-compiled events, or reviews.
+This is the supported path. There is **no event-reconstruction command**: the old
+`server-reconcile-events` synthesised `review_pass` events from git history with
+commit-date timestamps — fabricated activity — and has been removed. Per-contributor
+credit on the dashboard is now derived purely from **Git attribution** (surviving-line
+authorship of each TU's committed files):
+
+- `class:` TUs carry no source path, so [`tools/work/resolve_class_homes.py`](tools/work/resolve_class_homes.py)
+  maps each to its real committed home file and writes [`progress/class_homes.json`](progress/class_homes.json),
+  which the server reads on import. `work server-update` refreshes it for you; run it
+  standalone with `work resolve-class-homes [--apply]`.
+- A class whose home cannot be identified unambiguously is **left unmapped** (shown as
+  unattributed) rather than guessed — the map only ever points at a real file that
+  contains the class.
 
 Two operational notes:
 

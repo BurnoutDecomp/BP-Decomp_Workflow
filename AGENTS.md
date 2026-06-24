@@ -232,6 +232,19 @@ local ledger. **Without a server configured**, `work server-reset` just does the
 half (git reset + drop the ledger cache) — the same revert you did before the server
 existed.
 
+**Updating the server's dashboard.** When committed work outpaces the server (the
+reconcile bot ran, or commits landed outside the claim/submit flow), run
+`work server-update` — it refreshes `progress/class_homes.json`, pushes, and asks the
+server to pull + re-import (`reset=false`: live claims + event log preserved); the
+dashboard re-warms attribution on its next view. Per-contributor credit is **git-derived**
+(surviving-line authorship of each TU's committed files), shown as "contributed to" (any
+author) and "primary on" (dominant author). `class:` TUs carry no source path, so they are
+attributed via `progress/class_homes.json` (`work resolve-class-homes` maps each to its
+real committed home file; ambiguous ones are left unmapped, never guessed). There is **no
+event-reconstruction tool** — the removed `server-reconcile-events` fabricated `review_pass`
+events from git history and is gone; any such rows are hidden by default
+(`BP_HIDE_RECONSTRUCTED`).
+
 ## Verification (what `submit` / `review` expect)
 
 1. **Compile gate.** `work submit` compiles the TU's `.cpp` (`cl /c`, no link) against
