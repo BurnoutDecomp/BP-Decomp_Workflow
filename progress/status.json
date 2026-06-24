@@ -1551,16 +1551,7 @@
   "BrnGame::BrnGameModule::BindInputToPort": {
    "status": "reviewed"
   },
-  "BrnGame::BrnGameModule::BridgeControllerToDirector": {
-   "status": "recovered"
-  },
   "BrnGame::BrnGameModule::BridgeControllerToGameState": {
-   "status": "recovered"
-  },
-  "BrnGame::BrnGameModule::BridgeControllerToGui": {
-   "status": "recovered"
-  },
-  "BrnGame::BrnGameModule::BridgeControllerToWorld": {
    "status": "recovered"
   },
   "BrnGame::BrnGameModule::BridgeGameStateToSound": {
@@ -1686,9 +1677,6 @@
   "BrnGame::BrnGameModule::GameRelease": {
    "status": "reviewed"
   },
-  "BrnGame::BrnGameModule::GetPadInfoForPlayer0": {
-   "status": "recovered"
-  },
   "BrnGame::BrnGameModule::HandleInputBindResult": {
    "status": "reviewed"
   },
@@ -1697,9 +1685,6 @@
   },
   "BrnGame::BrnGameModule::IsEventInGuiQueue": {
    "status": "reviewed"
-  },
-  "BrnGame::BrnGameModule::MapActionInfoToDebugController": {
-   "status": "recovered"
   },
   "BrnGame::BrnGameModule::MapStuntEnumsFromGameplayToGui": {
    "status": "reviewed"
@@ -15759,25 +15744,13 @@
   "CgsNetwork::IntQuantiser::UnPack": {
    "status": "reviewed"
   },
-  "CgsNetwork::Message::Construct": {
-   "status": "reviewed"
-  },
   "CgsNetwork::Message::GetGameID": {
    "status": "reviewed"
   },
   "CgsNetwork::Message::GetPackedMessageSize": {
    "status": "reviewed"
   },
-  "CgsNetwork::Message::GetVectorFromAngles": {
-   "status": "reviewed"
-  },
   "CgsNetwork::Message::Pack": {
-   "status": "reviewed"
-  },
-  "CgsNetwork::Message::PackOrUnpack": {
-   "status": "reviewed"
-  },
-  "CgsNetwork::Message::PackOrUnpackBuffer": {
    "status": "reviewed"
   },
   "CgsNetwork::Message::PrepareAck": {
@@ -21533,10 +21506,6 @@
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
    "status": "done"
   },
-  "GameShared/GameClasses/Graphics/Dispatch/shadowingdevice.cpp": {
-   "notes": "shadow::Device : public renderengine::Device. Initialize delegates to renderengine::Device::Initialize (uncommitted base) and GetVertexProgramState calls renderengine::VertexProgramState::InitializeNoBindX360 (UNCOMMITTED -- grep: zero hits for VertexProgramState/InitializeNoBindX360). The renderengine Device + VertexProgramState rendering-backend subsystem has no committed home; shadow::Device can't be declared/compiled without its base + the VertexProgramState type. BLOCK until the renderengine::Device base + VertexProgramState land.",
-   "status": "blocked"
-  },
   "GameShared/GameClasses/Graphics/Font/CgsFontRenderer.cpp": {
    "status": "done"
   },
@@ -21785,10 +21754,6 @@
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsHostKeepAliveMessage.h": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); leaked-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
-   "status": "done"
-  },
-  "GameShared/GameClasses/Network/Packeting/Messages/CgsMessage.cpp": {
-   "notes": "3 of 4 fns are clean (Construct=trivial field init; PackOrUnpackBuffer=SmartBitStream::AddRawData/GetRawData, now committed; GetVectorFromAngles=sin/cos+VMX math). BLOCKER: PackOrUnpack @0x82880F50 delegates its substance to the UNCOMMITTED CgsNetwork::IntQuantiser subsystem -- pack path calls IntQuantiser::Pack(value,min,max,out,&bits) then BitStream::AddBits; unpack path calls sub_828800F0(this+8,...) which is the symmetric quantised-int UNPACK (unnamed in the XEX, identity uncertain -- likely IntQuantiser::Unpack). IntQuantiser has no committed home; reconstructing PackOrUnpack would require fabricating the IntQuantiser Pack/Unpack signatures + guessing sub_828800F0's identity (unfaithful-stub risk). BLOCK until CgsIntQuantiser (Pack/Unpack) lands; this TU then only needs extern decls. Note GetVectorFromAngles is also register-mangled (sin/cos+lvx128/vmulfp128) and will need the angle->vector formula recovered.",
    "status": "done"
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsMessage.h": {
@@ -22457,10 +22422,6 @@
   "GameSource/Director/Camera/Utils/BrnDebugController.cpp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bug fixed inline (ParticleWaveForm NoiseTableBuild luRand&0xFFFF); 11 leaked .cpp:line citations scrubbed; 5 non-leaf keystones blocked-with-reason; combined wave-13 gate PASS.",
    "status": "done"
-  },
-  "GameSource/Director/Camera/Utils/BrnPositionLag.cpp": {
-   "notes": "VMX keystone: PositionLag::Update @0x821F8F08 is a multi-stage VMX128 matrix-inverse/transform pipeline (vmr/vmaddfp/vsubfp cascade over the carried last-offset/last-position state). The mbConstructed assert + first-frame latch (byte +0x20/+0x21) are recovered, but the per-lane matrix math has no faithful scalar lowering; honest floor. Deferred to a dedicated VMX pass.",
-   "status": "blocked"
   },
   "GameSource/Director/DirectorModule/BrnDirectorModuleIO.cpp": {
    "notes": "sonnet review: four offset clears + base destruct chain faithful",
@@ -23356,10 +23317,6 @@
   "GameSource/Unity/../Game/BrnLoadingScreenRenderer.cpp": {
    "notes": "Complex/interpretive. Built the CgsGraphics Im2d render subsystem (ImRendererBase/ImRenderer<V>/Im2dBase<V>/Im2d + Im2dTransform + Basic2dColouredTexturedVertex) and a minimal renderengine::Texture/Texture2D API, then reconstructed all 5 funcs. FAITHFUL: AddCommand (command->state switch), RenderBackground/RenderForeground (timestep + visibility logic), and the black-overlay fade-in/out control flow + Im2d draw sequence (Begin/SetTransform/SetState/SetTexture/Render/End). INTERPRETIVE (documented inline): RenderBlackOverlay's quad geometry/transform was hand-written PPC VMX that Hex-Rays failed to lift ('local variable allocation has failed') -> rewritten as the equivalent clean logical full-screen quad (per the gate's 'rewrite SIMD to logical C++' rule); SetupLoadingScreenTexture's platform descriptor int-copy loops -> clean struct assignment + create/lock/memcpy/unlock; member offsets reconciled vs pseudocode (muLastTime@24, mbRenderInBackground@48, mfBlackOverlayFade@52, mfTimeStep@88). Gate PASS. Parity RED is (a) member-call false positives: all 8 Im2d methods ARE called via lpIm2d->X() but the qualified-name matcher misses member syntax; (b) the 2 descriptor loops correctly abstracted away; (c) __fastcall void-return artifacts. .rdata floats (fade rates, UVs) + the overlay blend state declared extern (link-time).",
    "status": "done"
-  },
-  "GameSource/Unity/../Game/GameBridgeControllerToX.cpp": {
-   "notes": "4 of 5 funcs faithful + committed (f00ad2b): GetPadInfoForPlayer0 + MapActionInfoToDebugController fully store-for-store; BridgeControllerToDirector + BridgeControllerToWorld faithful with only the VMX steering-curve + world-entity(+0x3C8) as small flagged floors. BLOCKED on BridgeControllerToGui: the CgsGui::GuiModule + its 8 event payload types + the GUI event queue are UN-HOMED (AddGuiEvent is a by-name no-store sink) and the action-index global tables (unk_820352F0 etc.) are unrecovered placeholders -- so the GUI bridge is a skeleton, not faithful. Unblock when the CgsGui module + its event queue land. Grew CgsInputModuleIO.h PadOutputInformation to a fielded record (additive, offsets static_asserted).",
-   "status": "blocked"
   },
   "GameSource/Unity/../Game/GameBridgeReplayToX.cpp": {
    "notes": "BridgeReplayToGui @0x823E7210 needs fabricating X360 facts: GuiReplayStatusEvent type-id + on-queue record size NOT dossier-attested; CgsGui::GuiModule::AddGuiEvent<T> is a decl-only skeleton; sub_8284F238 is an un-homed accessor on an undefined CgsGui input-buffer type (VEQ<32768,16> not the committed 18432). Cannot body without fabrication. Deferred.",
@@ -26897,10 +26854,6 @@
    "notes": "5 funcs (render dispatch bin); verifier minor_drift/low; gate pass.",
    "status": "done"
   },
-  "class:CgsGraphics::Im2dTransform": {
-   "notes": "TransformByAspectRatio @0x823DB448 is a VMX Matrix33 aspect-ratio fold (rw::math Mult + lvx128/stvx128 writes back to mOriginXYZ@+0x00 and mRightUp@+0x10) with real side-effects; the PC CgsIm2d backend maps coords directly so its path is a deliberate no-op, NOT a faithful X360 repro. Deferred to a VMX pass.",
-   "status": "blocked"
-  },
   "class:CgsGraphics::Im2dTransform,33>": {
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -28286,10 +28239,6 @@
    "notes": "4 funcs verified: TlsAlloc/TlsFree/TlsGetValue/TlsSetValue (recovered dropped SetValue arg).",
    "status": "done"
   },
-  "class:EA::Thread::ThreadParameters": {
-   "notes": "Vendor code; exists in PC lib or vendor source.",
-   "status": "blocked"
-  },
   "class:EABarrierData": {
    "notes": "Genuinely blocked. ctor @0x82B43A50 is the PPU interrupt-masked atomic-init idiom (mfmsr/mtmsree r13/lwarx/stwcx.) zeroing the lock word at +0, stw r11=0 ->+4, then a second lwarx/stwcx. loop on r9=r31+8 zeroing +8, then two embedded EA::Thread::Semaphore ctors at +0xC and +0x1C. No homed EABarrierD",
    "status": "blocked"
@@ -29227,10 +29176,6 @@
   },
   "class:rw::physics::JointJacobian": {
    "notes": "VMX keystone: Build is hand-vectorised AltiVec with permute-immediate lane routing + missing rodata; not faithfully reconstructible by the fast builder. Deferred to a dedicated VMX pass.",
-   "status": "blocked"
-  },
-  "class:rw::physics::RigidBody": {
-   "notes": "Keystone: DynamicUpdate @0x82BC2B78 reaches undecoded .rdata permutation masks (unk_82CDA3D0/410/450, rw::math::vpu::detail::gSqrt2s) and reads this+0x1C/+0x4C as POINTERS, conflicting with the committed float-lane members mVel.w/mUp.w (a committed-type change; do not apply). operator= @0x825E3410 is bodied + committed; DynamicUpdate left declared-only in rigidbody.h. Flag, not fabricate.",
    "status": "blocked"
   },
   "class:rw::physics::SimulationWorkspace": {
