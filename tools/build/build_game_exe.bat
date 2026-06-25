@@ -70,6 +70,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Sound\Module\LogicModule\BrnSoundLogicModuleIo.cpp"
   echo "%SRC%\GameSource\Sound\BrnDebugComponent.cpp"
   echo "%SRC%\GameSource\Sound\Debug\BrnSoundDebugStatistics.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsVoice.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CgsWindow.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Windows\CgsCustomWindow.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Windows\CgsLogWindow.cpp"
