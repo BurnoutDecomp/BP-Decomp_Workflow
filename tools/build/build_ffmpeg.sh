@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Build a minimal SHARED FFmpeg with the MSVC toolchain for the movie player.
-# Components: VP6 (vp6/vp6a/vp6f) + MP4 (h264/aac) + common EA movie audio, mov/ea demuxers.
+# Build a minimal SHARED Xenia FFmpeg fork with the MSVC toolchain for the movie player.
+# Components: VP6 (vp6/vp6a/vp6f) + MP4 (h264/aac) + common EA movie audio,
+# XMA/XMA2/Xenia raw-frame decoding, and mov/ea demuxers.
 # Invoked by tools/build/build_ffmpeg.bat, which puts cl/link (vcvars), nasm (Strawberry) and MSYS2 make/bash
 # on PATH. $1 = repo root (Windows path; converted with cygpath). Installs to vendor/ffmpeg-build/.
 set -e
@@ -20,9 +21,9 @@ if [ ! -f ffbuild/config.mak ]; then
         --enable-shared --disable-static \
         --disable-programs --disable-doc --disable-network --disable-autodetect --disable-debug \
         --disable-everything \
-        --enable-decoder=vp6,vp6a,vp6f,h264,aac,aac_latm,mp3,mp3float,pcm_s16le,pcm_s16be,adpcm_ea,adpcm_ea_r1,adpcm_ea_r2,adpcm_ea_r3,adpcm_ea_xas,adpcm_ea_maxis_xa \
+        --enable-decoder=vp6,vp6a,vp6f,h264,aac,aac_latm,mp3,mp3float,pcm_s16le,pcm_s16be,adpcm_ea,adpcm_ea_r1,adpcm_ea_r2,adpcm_ea_r3,adpcm_ea_xas,adpcm_ea_maxis_xa,wmapro,xma1,xma2,xmaframes \
         --enable-demuxer=mov,ea,ea_cdata,avi,h264,aac,mp3,wav \
-        --enable-parser=vp6,h264,aac,mpegaudio \
+        --enable-parser=vp6,h264,aac,mpegaudio,xma \
         --enable-bsf=h264_mp4toannexb,aac_adtstoasc,extract_extradata \
         --enable-protocol=file
 fi
