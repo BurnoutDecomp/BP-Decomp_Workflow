@@ -37,7 +37,7 @@ permissions:
 
 env:
   WORK_SERVER: ${{ vars.WORK_SERVER || 'https://decomp.adriwin.fr/' }}
-  B5_REPO: https://github.com/Adriwin06/b5-decomp.git
+  B5_REPO: https://github.com/${{ github.repository_owner }}/b5-decomp.git
   B5_BRANCH: dev
 
 jobs:
