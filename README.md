@@ -5,7 +5,7 @@ Burnout Paradise. It is not the decompilation source tree itself. It holds the
 analysis databases, reference material, work ledger, and automation that let agents
 reconstruct the Xbox 360 build as compilable PC C++.
 
-Recovered C++ lives in the [`b5-decomp`](https://github.com/Adriwin06/b5-decomp) submodule. This repo answers:
+Recovered C++ lives in the [`b5-decomp`](https://github.com/BurnoutDecomp/b5-decomp) submodule. This repo answers:
 
 - which functions exist in the X360 target build;
 - which translation unit owns each function;
@@ -52,7 +52,7 @@ Addresses are build-local and must not be treated as stable across binaries.
 | [`references/`](references/) | Non-disassembly evidence: Feb-2007 source slice, DecFIGS DWARF artifacts, BPR module map, wiki index, and naming conventions. |
 | [`tools/`](tools/) | Domain-organized IDA, build, asset, RenderWare, diagnostic, and `tools/work/` ledger/reconstruction tooling. |
 | [`progress/`](progress/) | Shared ledger inputs and outputs: identity, TU index, dependencies, status mirror, goals, verification/review configs, and generated review packets. |
-| [`b5-decomp/`](https://github.com/Adriwin06/b5-decomp) | Submodule containing recovered C++, vendor libraries, RenderWare headers, and CMake project files. |
+| [`b5-decomp/`](https://github.com/BurnoutDecomp/b5-decomp) | Submodule containing recovered C++, vendor libraries, RenderWare headers, and CMake project files. |
 | [`build/`](build/) | Local build tree for `b5-decomp`; not source of truth. |
 | [`.env.example`](.env.example) | Optional work-server configuration template. Copy to `.env` only if a maintainer gives you a worker id. |
 
@@ -98,7 +98,7 @@ For a new local workspace:
 1. Clone this repository without submodules:
 
    ```powershell
-   git clone --no-recurse-submodules https://github.com/Adriwin06/BP-Decomp_Workflow
+   git clone --no-recurse-submodules https://github.com/BurnoutDecomp/BP-Decomp_Workflow
    cd BP-Decomp_Workflow
    ```
 
@@ -267,10 +267,14 @@ in this repo, which then:
 4. commits and pushes the regenerated `status.json` + bumped pointer under a bot identity.
 
 **Setup (one-time):** the notifier needs a `WORKFLOW_DISPATCH_TOKEN` secret on the
-b5-decomp repo — a token that can send `repository_dispatch` to this repo. Without it the
-notifier no-ops (so nothing breaks), but the automatic reconcile won't fire. The reconcile
-Action also has a manual `workflow_dispatch` trigger (optionally pin a specific
-`b5_sha`) for backfills.
+b5-decomp repo — a token that can send `repository_dispatch` to
+`BurnoutDecomp/BP-Decomp_Workflow`. For a fine-grained PAT, select the
+`BurnoutDecomp` organization as its resource owner, grant access to
+`BP-Decomp_Workflow`, and grant repository Contents write permission. A classic PAT
+needs `repo` scope and any organization authorization required by GitHub. Without the
+secret the notifier no-ops (so nothing breaks), but the automatic reconcile won't fire.
+The reconcile Action also has a manual `workflow_dispatch` trigger (optionally pin a
+specific `b5_sha`) for backfills.
 
 You can refresh the committed mirror manually too:
 
