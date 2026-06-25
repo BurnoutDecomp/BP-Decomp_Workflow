@@ -95,6 +95,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Module\CgsModuleSingleBuffered.cpp"
   echo "%SRC%\GameShared\GameClasses\Module\CgsBaseEventReceiverQueue.cpp"
   echo "%SRC%\GameShared\GameClasses\Containers\CgsPriorityQueue.cpp"
+  echo "%SRC%\GameShared\GameClasses\Containers\CgsLinkedList.cpp"
   echo "%SRC%\GameShared\GameClasses\Module\CgsDataBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Module\CgsDataStructure.cpp"
   echo "%VEN%\EAThread\source\eathread_rwmutex.cpp"
