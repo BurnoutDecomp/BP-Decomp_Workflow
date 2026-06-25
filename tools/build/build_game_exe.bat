@@ -65,6 +65,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Game\BrnGlobalCpuMonitors.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowStates.cpp"
   echo "%SRC%\GameSource\Sound\Module\BrnRootSoundModule.cpp"
+  echo "%SRC%\GameSource\Sound\BrnResourceRegistrar.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowController.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameRate.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\PerfMon\Cpu\CgsPerfMonCpu.cpp"
