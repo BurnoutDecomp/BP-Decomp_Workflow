@@ -24360,6 +24360,12 @@
   "rw::graphics::postfx::DepthOfField::SetState": {
    "status": "reviewed"
   },
+  "rw::graphics::postfx::Tint::Initialize": {
+   "status": "reviewed"
+  },
+  "rw::graphics::postfx::Tint::InitializePixelProgram": {
+   "status": "reviewed"
+  },
   "rw::graphics::postfx::Vignette::Parameters::Parameters": {
    "status": "reviewed"
   },
@@ -26717,6 +26723,10 @@
   },
   "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxdof.cpp": {
    "notes": "Fresh-eyes (general-purpose subagent): SetState clamp/linearisation verified vs asm + DWARF math::vpu::Clamp; ctor offset-for-offset; quality rules OK. Shared infra added: programbuffer.h (extracted), rwgpfxhelper.h.",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxtint.cpp": {
+   "notes": "Fresh-eyes (general-purpose subagent, cross-checked raw asm): layout/values verified (miFormat=4, m_colourLookupOffset all-zero, mpTexture@+0x48, sampler vals); allocator->DoAllocate + struct-copy de-opt legitimate (RED loop_count benign); shared-header extensions justified + consumers compile.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/AI/AISectionsResourceType.cpp": {
