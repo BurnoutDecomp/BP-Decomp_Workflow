@@ -16,9 +16,12 @@ rem Game build output lives under build\game\ (build\tools\ holds tool binaries;
 set OUT=%ROOT%\build\game
 set RSP=%OUT%\obj\build.rsp
 
-where cl >nul 2>&1
-if not errorlevel 1 goto toolchain_ready
-
+rem Always initialize the VS 2022 x64 toolchain -- do NOT trust a stray cl already on PATH.
+rem On a machine with the Xbox 360 SDK installed, ITS cl.exe is on PATH (and lacks the
+rem standard/Windows headers), so a "where cl" shortcut picks the wrong compiler and the
+rem build fails on <cstdint>/<Windows.h>. vcvars64 is idempotent + prepends the VS 2022
+rem bin, so cl always resolves to VS 2022's cl, never the 360 SDK's. (Set VCVARS64 to
+rem override which vcvars64.bat is used.)
 set "VCVARS="
 if defined VCVARS64 if exist "%VCVARS64%" set "VCVARS=%VCVARS64%"
 for %%P in (
@@ -68,6 +71,16 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Sound\BrnResourceRegistrar.cpp"
   echo "%SRC%\GameSource\Sound\Module\LogicModule\BrnSoundLogicModule.cpp"
   echo "%SRC%\GameSource\Sound\Module\LogicModule\BrnSoundLogicModuleIo.cpp"
+  echo "%SRC%\GameSource\Sound\Module\LogicModule\BrnStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Module\LogicModule\BrnEmitterStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Passby\BrnPassbyStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Vehicles\BrnVehicleStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Vehicles\BrnAIVehicleStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Vehicles\BrnPlayerVehicleStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Traffic\BrnTrafficStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Streaming\BrnStreamingStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Collision\BrnCollisionStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Global\BrnGlobalStateManager.cpp"
   echo "%SRC%\GameSource\Sound\BrnDebugComponent.cpp"
   echo "%SRC%\GameSource\Sound\Debug\BrnSoundDebugStatistics.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsVoice.cpp"
