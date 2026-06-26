@@ -1809,7 +1809,10 @@
   "BrnEffects::BlurData::Construct": {
    "status": "reviewed"
   },
-  "BrnEffects::BlurData::SetToBlend": {
+  "BrnEffects::BlurData>::Add": {
+   "status": "reviewed"
+  },
+  "BrnEffects::BlurData>::Construct": {
    "status": "reviewed"
   },
   "BrnEffects::BrnCrashTriangleCache::AddTriangles": {
@@ -11088,7 +11091,13 @@
   "BrnPhysics::Vehicle::VehiclePhysics::Destruct": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetCarGroundDistanceCheck": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehiclePhysics::GetDownForce": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetNumberOfWheelsOnTheGround": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehiclePhysics::GetShowtimeDeformationScale": {
@@ -11106,6 +11115,9 @@
   "BrnPhysics::Vehicle::VehiclePhysics::GetSurfaceRoughness": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehiclePhysics::GetTransformDelta": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehiclePhysics::HackedResetAndFlyAround": {
    "status": "reviewed"
   },
@@ -11113,6 +11125,12 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehiclePhysics::HandleWheelPairFriction": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::IsBeingSlamedOrShunted": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::IsBeingSlamedOrShuntedByRaceCar": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehiclePhysics::IsCounterSteeringAtLowSpeed": {
@@ -11179,6 +11197,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehiclePhysics::UpdateInWaterBehaviour": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehiclePhysics::UpdateLinearVelocityMagnitude": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehiclePhysics::UpdateRoadNoise": {
@@ -24072,6 +24093,24 @@
   "rw::audio::core::EaLayer32PcmDec::CreateInstanceEvent": {
    "status": "reviewed"
   },
+  "rw::audio::core::Fir64::ClearBuffer": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Fir64::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Fir64::Filter": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Fir64::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Fir64::HammingWindow": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Fir64::MultiplyAccumulate": {
+   "status": "reviewed"
+  },
   "rw::audio::core::HighShelfIir2::CalculateFilterCoefficients": {
    "status": "reviewed"
   },
@@ -24433,6 +24472,12 @@
    "status": "reviewed"
   },
   "rw::core::filesys::Handle::~Handle": {
+   "status": "reviewed"
+  },
+  "rw::graphics::postfx::B4Blur::State::SetBlendSharpness": {
+   "status": "reviewed"
+  },
+  "rw::graphics::postfx::B4Blur::State::State": {
    "status": "reviewed"
   },
   "rw::graphics::postfx::ColourCube::GetResourceDescriptor": {
@@ -25082,7 +25127,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Language/CgsSku.cpp": {
-   "notes": "CgsLanguage::Sku: 4 fns clean (Construct=field init+assert; SetLanguage/SetSku=field setters; FindLanguage/FindSku delegate to committed CgsSystem::HardwareSku). BLOCKER: Update @0x828662B8 depends on the UNCOMMITTED CgsGui module-IO subsystem -- CgsGui::ModelIO::InputBuffer::AddResourceRequests + CgsGui::CgsGuiModuleIO::OutputBuffer::AddGuiOutEvent<CgsGui::GuiEventSetSku> + AddGuiOutEvent<CgsGui::GuiEventSetLanguageNotification> (grep: zero hits for AddResourceRequests/AddGuiOutEvent/those event types) -- AND un-valued rodata tables byte_820E5DD0 (32B-stride language-name strings) + unk_820E5AD0 (32B-stride resource descriptors) whose VALUES drive the AddResourceRequests/HashString calls. All 6 fns share one .cpp, so Update blocks the TU. BLOCK until CgsGui ModelIO::InputBuffer + CgsGuiModuleIO::OutputBuffer::AddGuiOutEvent<> + the GuiEvent types + the two rodata tables land.",
+   "notes": "CgsLanguage::Sku 5/6 bodied+committed (Construct/SetLanguage/SetSku/FindLanguage/FindSku store-for-store). Update @0x828662B8 blocked: needs uncommitted single-event AddGuiOutEvent<GuiEventSetSku>/<GuiEventSetLanguageNotification> template instances + event types (zero hits) AND indexes undecoded .rdata language-filename/resource string tables (unk_820E5DD0/820E5AD0, char[24][32], no hits). Cannot body without fabricating rdata + an un-homed GUI event template.",
    "status": "blocked"
   },
   "GameShared/GameClasses/Language/Resources/CgsLanguageResourceType.cpp": {
@@ -27010,7 +27055,7 @@
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentUtil.cpp": {
-   "notes": "ComputeIrradianceRigFromSky @0x8267C948 / ComputeSkyColour @0x8267C5C0 / ComputeKeyLightDirection @0x82678AB0 are dense hand-written Xenon VMX (lvx128/vmsum3fp128/vrsqrtefp __asm) over un-homed Keyframe/ScatteringData/LightingData layouts + unk_82CDA450 rodata permute + external sub_82C09970; not parity-reconstructible without fabricating the irradiance/sky math.",
+   "notes": "ComputeSkyColour @0x8267C5C0 / ComputeIrradianceRigFromSky @0x8267C948 / ComputeKeyLightDirection: sky-scattering math driven by an UNDECODED .rdata vperm permute mask (unk_82CDA450, also flagged un-valued in BrnMathUtils.cpp:23-25) that reorders the input vector lanes feeding the entire rsqrt-normalize + pow + lerp pipeline; mask VALUES unrecoverable without fabrication. 0 bodied.",
    "status": "blocked"
   },
   "GameSource/Unity/../../SharedClasses/World/BrnVehicleGraphicsSpecResourceType.cpp": {
@@ -28352,13 +28397,9 @@
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
-  "class:BrnEffects::BlurData": {
-   "notes": "Adversarially verified vs X360 asm; data-block layout/defaults parity.",
-   "status": "done"
-  },
   "class:BrnEffects::BlurData>": {
-   "notes": "Incomplete: ledger lists Add @0x824F6B70 (bodied, correct) AND Construct @0x824F6AD0 (NOT yet bodied \u2014 scalar inits @0..0x10, four VMX Vector2-const loads @0x20/0x30/0x40/0x50 from rodata unk_82FF*, 0.0f to mfWeight@0x60+mfCount@0x64). Recoverable, deferred \u2014 do not mark done until Construct is bodied.",
-   "status": "blocked"
+   "notes": "Keystone campaign R3: partial-completion + faithful VMX->scalar lowering, adversarially verified vs X360 asm. Committed 2c0bc47.",
+   "status": "done"
   },
   "class:BrnEffects::BrnCrashTriangleCache": {
    "notes": "Verified vs X360 asm; parity.",
@@ -29642,8 +29683,8 @@
    "status": "done"
   },
   "class:BrnPhysics::Vehicle::VehiclePhysics": {
-   "notes": "Correctly BLOCKED as INCOMPLETE 3/6 multi-func TU; the 3 committed scalar bodies all verify store-for-store both directions vs asm. (1) GetNumberOfWheelsOnTheGround @0x825B2FE0: asm reads lbz r10 at +0x158/+0x238/+0x318/+0x3F8 (byte loads) and counts nonzero (v1=first!=0, ++ per subsequent, last via",
-   "status": "blocked"
+   "notes": "Keystone campaign R3: partial-completion + faithful VMX->scalar lowering, adversarially verified vs X360 asm. Committed 2c0bc47.",
+   "status": "done"
   },
   "class:BrnPhysics::Vehicle::Wheel": {
    "notes": "complex method (SetPosition), not an event-queue instantiation; separate reconstruction",
@@ -32771,8 +32812,8 @@
    "status": "blocked"
   },
   "class:rw::audio::core::Fir64": {
-   "notes": "Audio FIR filter (explicitly named block target). MultiplyAccumulate @0x82B69828 (polyphase FIR convolution), Filter @0x82B6D6E0 (polyphase resample driver), HammingWindow @0x82B69758 (cos-window coeffs). Deferred.",
-   "status": "blocked"
+   "notes": "Keystone campaign R3: partial-completion + faithful VMX->scalar lowering, adversarially verified vs X360 asm. Committed 2c0bc47.",
+   "status": "done"
   },
   "class:rw::audio::core::GinsuPlayer::GinsuSynthData": {
    "notes": "Ginsu audio codec DSP: DecodeBlock @0x8268B588 (ADPCM-style predictor/filter over float coeff tables), GetSamples @0x8268BED8 (16.16 fractional resampler), CyclePeriod @0x8268BA20 + FrequencyToSample @0x8268B7B8 (pitch-period FP table interpolation). Audio codec + DSP per hard-rule block list. Deferred.",
@@ -32971,8 +33012,8 @@
    "status": "blocked"
   },
   "class:rw::graphics::postfx::B4Blur::State": {
-   "notes": "SetBlendSharpness forwards 8 opaque args to an unresolved helper (sub_82C09970) and derives field values from a value (v11) whose source is ambiguous; State ctor loads 4 vectors from lost stack constants. Needs the helper signature + constants before a faithful reconstruction.",
-   "status": "blocked"
+   "notes": "Keystone campaign R3: partial-completion + faithful VMX->scalar lowering, adversarially verified vs X360 asm. Committed 2c0bc47.",
+   "status": "done"
   },
   "class:rw::graphics::postfx::Vignette::Parameters": {
    "notes": "trivial; gate-only",
