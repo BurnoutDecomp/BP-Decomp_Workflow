@@ -2058,17 +2058,8 @@
   "BrnGame::BrnGameModule::BindInputToPort": {
    "status": "reviewed"
   },
-  "BrnGame::BrnGameModule::BridgeControllerToDirector": {
-   "status": "reviewed"
-  },
   "BrnGame::BrnGameModule::BridgeControllerToGameState": {
    "status": "recovered"
-  },
-  "BrnGame::BrnGameModule::BridgeControllerToGui": {
-   "status": "reviewed"
-  },
-  "BrnGame::BrnGameModule::BridgeControllerToWorld": {
-   "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeDirectorToGui": {
    "status": "reviewed"
@@ -2196,9 +2187,6 @@
   "BrnGame::BrnGameModule::GameRelease": {
    "status": "reviewed"
   },
-  "BrnGame::BrnGameModule::GetPadInfoForPlayer0": {
-   "status": "reviewed"
-  },
   "BrnGame::BrnGameModule::HandleInputBindResult": {
    "status": "reviewed"
   },
@@ -2206,9 +2194,6 @@
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::IsEventInGuiQueue": {
-   "status": "reviewed"
-  },
-  "BrnGame::BrnGameModule::MapActionInfoToDebugController": {
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::MapStuntEnumsFromGameplayToGui": {
@@ -16698,6 +16683,9 @@
   "CgsGraphics::Im2dTransform::SetAspectCorrectionMatrix": {
    "status": "reviewed"
   },
+  "CgsGraphics::Im2dTransform::TransformByAspectRatio": {
+   "status": "reviewed"
+  },
   "CgsGraphics::Im2dUntex::Construct": {
    "status": "reviewed"
   },
@@ -22293,6 +22281,9 @@
   "EA::Thread::ThreadLocalStorage::~ThreadLocalStorage": {
    "status": "reviewed"
   },
+  "EA::Thread::ThreadParameters::ThreadParameters": {
+   "status": "reviewed"
+  },
   "EA::Thread::ThreadSleep": {
    "status": "reviewed"
   },
@@ -24342,6 +24333,12 @@
   "rw::collision::KdTreeBBoxQuery::KdTreeBBoxQuery": {
    "status": "reviewed"
   },
+  "rw::collision::KdTreeLineQuery::ClipEnd": {
+   "status": "reviewed"
+  },
+  "rw::collision::KdTreeLineQuery::KdTreeLineQuery": {
+   "status": "reviewed"
+  },
   "rw::collision::TriangleKDTreeProcedural::BBoxOverlapQueryThis": {
    "status": "reviewed"
   },
@@ -24919,7 +24916,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Dispatch/shadowingdevice.cpp": {
-   "notes": "Re-review after fix: static slot (dword_83011118) modelled as mapVertexProgramStateSlot[5]={&mVertexProgramState,0..}; GetVertexProgramState passes the slot to InitializeNoBindX360 (which derefs it); matches X360. Clean by-name members.",
+   "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Font/CgsFontRenderer.cpp": {
@@ -25206,6 +25203,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsMessage.cpp": {
+   "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
    "status": "done"
   },
   "GameShared/GameClasses/Network/Packeting/Messages/CgsMessage.h": {
@@ -25434,7 +25432,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/SceneManager/CgsEntityManager.h": {
-   "notes": "GetVolumeInstanceIndexByID @0x828CD4B8 reads mVolumeInstanceIdToIndex at this+0x123B20, an offset controlled by un-homed VolumeInstance/IndexedHashTable/VolumeManager + SceneManagerConstants capacities; by-name bodying needs fabricating the offset/layout. Deferred.",
+   "notes": "GetVolumeInstanceIndexByID @0x828CD4B8 reads mVolumeInstanceIdToIndex @ this+0x123B20, an offset controlled by un-homed VolumeInstance/IndexedHashTable/VolumeManager + SceneManagerConstants capacities; by-name bodying needs those container layouts homed first. Cannot fabricate the +0x123B20 offset.",
    "status": "blocked"
   },
   "GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp": {
@@ -25961,6 +25959,7 @@
    "status": "done"
   },
   "GameSource/Director/Camera/Utils/BrnPositionLag.cpp": {
+   "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
    "status": "done"
   },
   "GameSource/Director/DirectorModule/BrnDirectorModuleIO.cpp": {
@@ -27061,7 +27060,8 @@
    "status": "done"
   },
   "GameSource/Unity/../Game/GameBridgeControllerToX.cpp": {
-   "status": "done"
+   "notes": "BridgeControllerToWorld @0x823CD890 steering curve = copysign(pow(fabs(stickLX), exp), stickLX) where exp @0x82035228 is UNDECODED .rdata (EARenderWare pow via vlogefp/vexptefp + coeff tables unk_82014AC0..AF0); the exponent value cannot be recovered without fabrication. Other 4 funcs upstream-committed + correct. Blocked on the undecoded steering exponent.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Game/GameBridgeReplayToX.cpp": {
    "notes": "BridgeReplayToGui @0x823E7210 needs fabricating X360 facts: GuiReplayStatusEvent type-id + on-queue record size NOT dossier-attested; CgsGui::GuiModule::AddGuiEvent<T> is a decl-only skeleton; sub_8284F238 is an un-homed accessor on an undefined CgsGui input-buffer type (VEQ<32768,16> not the committed 18432). Cannot body without fabrication. Deferred.",
@@ -28909,7 +28909,7 @@
    "status": "done"
   },
   "class:BrnGui::HelpBar": {
-   "notes": "INCOMPLETE: GetItemNameHash @0x824E2280 + GetAnimator @0x824E2330 ARE bodied+correct (committed), but the 3rd ledger func, ctor HelpBar::HelpBar @0x82515328, is a heavy embedded-aggregate ctor (own vtable off_8207710C + 21 head sub-vtables + 7-item loop x2 vector_constructor_iterator AnimChannel<6>/AnimData<2> passes + per-item vtables + -1 sentinels) with 5 unidentified polymorphic vtable symbols. Bodying needs fabricating those identities. TU blocked until the ctor is recoverable; accessors committed.",
+   "notes": "GetItemNameHash+GetAnimator bodied+committed; ctor @0x82515328 is a heavy embedded-aggregate (own vtable off_8207710C + 21 head sub-vtables + 2x AnimChannel<6> vector_constructor_iterator loops). Needs AnimChannel<6> + head sub-objects homed first; multi-func TU incomplete.",
    "status": "blocked"
   },
   "class:BrnGui::HudMessageDirector": {
@@ -28941,7 +28941,7 @@
    "status": "done"
   },
   "class:BrnGui::MenuComponent": {
-   "notes": "GetSelectable @0x8240FE20 (signed 0<=idx<16 + base delegate) and SetId @0x82488FC0 (null-check + flag|=0x10 @+0xC + u64 id std @+0x10) bodied + gate-pass; ctor @0x824FFEF8 is vtable-init-only over an un-homed multiply-inheriting hierarchy (4 un-homed vtables + 0xE8-stride sub-object). Multi-func TU incomplete.",
+   "notes": "GetSelectable+SetId bodied+committed; ctor @0x824FFEF8 is vtable-init over an un-homed multiply-inheriting hierarchy (4 un-homed vtables + 0xE8-stride sub-object class). Needs those bases/sub-object homed first; multi-func TU incomplete.",
    "status": "blocked"
   },
   "class:BrnGui::MenuToggle": {
@@ -30745,6 +30745,10 @@
    "notes": "5 funcs (render dispatch bin); verifier minor_drift/low; gate pass.",
    "status": "done"
   },
+  "class:CgsGraphics::Im2dTransform": {
+   "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
+   "status": "done"
+  },
   "class:CgsGraphics::Im2dTransform,33>": {
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -32131,8 +32135,8 @@
    "status": "done"
   },
   "class:EA::Thread::ThreadParameters": {
-   "notes": "Vendor code; exists in PC lib or vendor source (EAThread).",
-   "status": "blocked"
+   "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
+   "status": "done"
   },
   "class:EABarrierData": {
    "notes": "Genuinely blocked. ctor @0x82B43A50 is the PPU interrupt-masked atomic-init idiom (mfmsr/mtmsree r13/lwarx/stwcx.) zeroing the lock word at +0, stw r11=0 ->+4, then a second lwarx/stwcx. loop on r9=r31+8 zeroing +8, then two embedded EA::Thread::Semaphore ctors at +0xC and +0x1C. No homed EABarrierD",
@@ -32703,7 +32707,7 @@
    "status": "done"
   },
   "class:rw::LinearResourceAllocator": {
-   "notes": "X360 5-pool virtual form (vtable, BaseResourceDescriptors<5>, m_numAllocations@+0x90, ctor+vector-deleting-dtor) needs a non-additive retype of the committed 4-pool 144-byte struct (rwcore_structs.h:190-211) AND would ODR-redefine GetResourceDescriptor/Initialize/Alloc/Free already in rwcore_alloc.cpp. FLAGGED.",
+   "notes": "X360 5-pool virtual form (vtable, BaseResourceDescriptors<5>, m_numAllocations@+0x90, ctor+vector-deleting-dtor) needs a non-additive retype of the committed 4-pool 144B struct (rwcore_structs.h:190-211, still 4-pool on synced tree) AND would ODR-redefine GetResourceDescriptor/Initialize/Alloc/Free in rwcore_alloc.cpp. FLAGGED.",
    "status": "blocked"
   },
   "class:rw::RGBA": {
@@ -32895,8 +32899,8 @@
    "status": "done"
   },
   "class:rw::collision::KdTreeLineQuery": {
-   "notes": "VMX keystone: ctor @0x828AEE80 slab-clip is a VMX vminfp/vmaxfp + fsel horizontal-reduce pipeline over kd-tree AABB rows x splatted clip-pad (NOT a read-back of the clipper's stored fields); a faithful store-for-store reconstruction needs the full VMX pipeline. Deferred to a dedicated VMX pass.",
-   "status": "blocked"
+   "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
+   "status": "done"
   },
   "class:rw::collision::TriangleKDTreeProcedural": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
@@ -33071,6 +33075,10 @@
   },
   "class:rw::physics::JointJacobian": {
    "notes": "VMX keystone: Build is hand-vectorised AltiVec with permute-immediate lane routing + missing rodata; not faithfully reconstructible by the fast builder. Deferred to a dedicated VMX pass.",
+   "status": "blocked"
+  },
+  "class:rw::physics::RigidBody": {
+   "notes": "DynamicUpdate @0x82BC2B78 reads this+0x1C/+0x4C/+0x5C as POINTERS (load bases @0x82BC2B8C/B80/D3C) conflicting with committed float-lane members mCom.w/mRi.w/mUp.w (NON-ADDITIVE committed-type change -> flagged, not applied) + reaches undecoded .rdata masks (unk_82CDA3D0/410/450, gSqrt2s). operator= committed; DynamicUpdate declared-only.",
    "status": "blocked"
   },
   "class:rw::physics::SimulationWorkspace": {
