@@ -34,6 +34,17 @@ The three **symbolized console builds join by name**. The two **stripped PC buil
 are never the spine** — they are a lookup tool the agent reaches for mid-
 reconstruction when it wants the PC-shaped version of a platform function.
 
+**Build lineage (provenance):** `LegacySrc` b5_main source → `Dec-2007`
+`DecFIGS` (branch B5_FIGS) → **FIGS merged into `main` before ARTIST compiled** →
+`Jan-2008` `ARTIST` (X360 `main`, the target). So ARTIST *contains* the FIGS
+lineage: **DecFIGS is a high-confidence near-ancestor** (its names/types/shape/RTTI
+ids are largely what got merged in — trust it, with ARTIST asm arbitrating the small
+merge-window delta), while the **LegacySrc source is pre-merge old main** and thus the
+*stalest* reference for any FIGS-touched code (style/idiom only). The PS3 builds also
+uniquely expose, via DWARF + `__static_initialization_and_destruction_*`, the RTTI
+`ObjectID`/`typeName` literals the X360 leaves in stripped data. See AGENTS.md
+"BUILD LINEAGE".
+
 ## Cross-build identity: join on the normalized name, never structural matching
 
 Addresses are per-build and meaningless across builds. The canonical identity of a

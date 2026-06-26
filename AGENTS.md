@@ -252,6 +252,26 @@ own** pass first, so you don't ship a known-divergent TU into review.
 
   Also use PS3/DecFIGS for file attribution and local-variable hints. Never let a lower rung
   override a higher one.
+- **BUILD LINEAGE (provenance — confirmed 2026-06-25).**
+  `LegacySrc` b5_main source → `Dec-2007` **DecFIGS** (PS3, branch B5_FIGS) → **FIGS was merged
+  into `main` BEFORE ARTIST compiled** → `Jan-2008` **ARTIST/"Breaker"** (X360, `main`, the TARGET).
+  Consequences for the ladder:
+  - Because FIGS merged into main before ARTIST, **ARTIST carries the FIGS lineage**, so
+    **DecFIGS is a high-confidence NEAR-ANCESTOR of ARTIST** (not a far-drifting cousin): its
+    names/types/shape/RTTI-ids are largely *what got merged in*. Trust rung 2 accordingly.
+    Divergence is only a small **merge-window delta** — late-2007 FIGS work that missed the
+    merge cut, plus ~1 month of post-merge main-only changes — which is exactly why rung 1
+    (ARTIST asm) still arbitrates and every DWARF declaration is gated on X360 attestation.
+  - **LegacySrc is PRE-merge OLD main** — it *lacks* the FIGS changes ARTIST has, so for any
+    FIGS-touched code it is the *stalest* source. Same-branch-but-pre-merge is worse than
+    off-fork-but-post-fork; keep it at rung 3 (style/idiom only), never above DecFIGS for shape.
+  - **WHAT THE PS3 ASM/DWARF UNIQUELY GIVES (the X360 stripped to data):** (a) **RTTI / class
+    `ObjectID`s + typeNames** — the DecFIGS `__static_initialization_and_destruction_*` funcs
+    construct each `Class::sTypeInfo` with its literal `ObjectID` + `typeName` (e.g. sound
+    StateManager ids Global=0..Emitter=7, effect ids 16/32/48/…, the `0x10000`-stepped State
+    ids). Pin any "arbitrary"/placeholder class id from these. (b) Member/enum **names** +
+    signatures (DWARF). (c) **Inlined / ICF-folded bodies** the X360 dropped — decompile from
+    PS3, then confirm the entity (offset/value/role) in the ARTIST asm before attaching a name.
 - **Verify calling conventions against the ASSEMBLY, not the pseudocode.** Hex-Rays
   regularly gets the *signature* wrong — parameter count/order, register-vs-stack passing,
   the implicit `this`, return type, signedness, and value width — especially on PowerPC
@@ -327,8 +347,8 @@ own** pass first, so you don't ship a known-divergent TU into review.
     pseudocode shows only as flattened code. Authority stays with the X360 pseudocode+asm
     (*what the code does and its layout*) and DecFIGS DWARF (*declaration shape*); where
     LegacySrc overlaps, reconcile it **to** those — never the reverse.
-  - **USE DECFIGS DWARFDUMP HINTS:** For DecFIGS-backed TUs, consult `references/DecFIGS/dwarfdump/` (auto-surfaced by `work show --full`) for C++-shaped DWARF declarations: class/struct outlines, enum values, member names/types, globals, function signatures, and local-variable names/types. Treat this as reconstruction guidance, not complete source code. It is not offset authority; verify member placement and behavior against X360 pseudocode/asm, and prefer LegacySrc source where it overlaps.
-    - **DWARF SUPPLIES NAMES/TYPES; THE X360 LEDGER DECIDES WHAT EXISTS.** DecFIGS is the *Internal PS3* build, a **different build** from the X360 2007-02 ARTIST spine, so whole classes drift in version. Never bulk-import every DWARF member/method into a recon header. **Gate each DWARF declaration on X360 attestation:** add/correct it only if that `Class::Fn` appears in the X360 ledger (`progress/status.json` → `func`), using the DWARF signature for names/types. If a DWARF method is *absent* from the X360 ledger it is PS3-only — leave it out (a minimal/identity-only recon is then correct, e.g. a class the X360 build exposes only via `GetName`/`GetPath`).
+  - **USE DECFIGS DWARFDUMP HINTS:** For DecFIGS-backed TUs, consult `references/DecFIGS/dwarfdump/` (auto-surfaced by `work show --full`) for C++-shaped DWARF declarations: class/struct outlines, enum values, member names/types, globals, function signatures, and local-variable names/types. Treat this as reconstruction guidance, not complete source code. It is not offset authority; verify member placement and behavior against X360 pseudocode/asm, and treat LegacySrc as a style/idiom cross-check only (it is pre-FIGS-merge -> stalest for shape/layout; DecFIGS, the near-ancestor, wins where they differ -- see BUILD LINEAGE).
+    - **DWARF SUPPLIES NAMES/TYPES; THE X360 LEDGER DECIDES WHAT EXISTS.** DecFIGS is the *Internal PS3* (Dec-2007) build; ARTIST is the later (Jan-2008) X360 `main` build that the FIGS branch was merged INTO (see **BUILD LINEAGE**), so DecFIGS is a **near-ancestor** — high-confidence for names/types/shape — but the merge-window delta means a few PS3 things aren't in ARTIST (and vice-versa). Never bulk-import every DWARF member/method into a recon header. **Gate each DWARF declaration on X360 attestation:** add/correct it only if that `Class::Fn` appears in the X360 ledger (`progress/status.json` → `func`), using the DWARF signature for names/types. If a DWARF method is *absent* from the X360 ledger it is PS3-only — leave it out (a minimal/identity-only recon is then correct, e.g. a class the X360 build exposes only via `GetName`/`GetPath`).
     - **DWARF/Feb declaration is authoritative for a method's *shape*, not just its name.**
       For a method the X360 ledger attests, take its declaration shape — `virtual`, trailing
       `const`, return type, parameter types, and **vtable order** — from the DWARF (or a
