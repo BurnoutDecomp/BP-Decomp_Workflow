@@ -371,11 +371,22 @@ def target_for_tu(
     return "todo", None, []
 
 
-def set_functions(func_status: dict, functions: Iterable[str], status: str | None) -> None:
+def set_functions(
+    func_status: dict,
+    functions: Iterable[str],
+    status: str | None,
+    no_demote: bool = False,
+) -> None:
     for function_name in functions:
+        old_entry = func_status.get(function_name)
+        old_status = old_entry.get("status", "todo") if isinstance(old_entry, dict) else "todo"
         if status is None:
+            if no_demote and old_entry is not None and old_status != "todo":
+                continue
             func_status.pop(function_name, None)
         else:
+            if no_demote and status_rank(status) < status_rank(old_status):
+                continue
             entry = func_status.setdefault(function_name, {})
             entry["status"] = status
 
@@ -420,7 +431,7 @@ def build_reconciled_status(
 
         functions = list(tu_meta.get("functions") or [])
         if target == "todo":
-            set_functions(new_func, functions, None)
+            set_functions(new_func, functions, None, no_demote=no_demote)
             if tu_id in current_tu:
                 changes.append((tu_id, old_status, target, notes))
             continue
@@ -432,9 +443,9 @@ def build_reconciled_status(
         evidence[tu_id] = files_for_tu
 
         if target == "done":
-            set_functions(new_func, functions, "reviewed")
+            set_functions(new_func, functions, "reviewed", no_demote=no_demote)
         elif target in ("in_progress", "blocked") and old_status == "done":
-            set_functions(new_func, functions, "recovered")
+            set_functions(new_func, functions, "recovered", no_demote=no_demote)
 
         if old_status != target or current_entry.get("notes") != entry.get("notes"):
             changes.append((tu_id, old_status, target, notes))
@@ -443,7 +454,16 @@ def build_reconciled_status(
 
 
 def status_rank(status: str) -> int:
-    return {"todo": 0, "in_progress": 1, "compiled": 2, "done": 3, "blocked": 3}.get(status, 0)
+    return {
+        "todo": 0,
+        "in_progress": 1,
+        "recovered": 1,
+        "compiled": 2,
+        "compiles": 2,
+        "done": 3,
+        "reviewed": 3,
+        "blocked": 3,
+    }.get(status, 0)
 
 
 def print_report(old_status: dict, new_status: dict, changes: list, evidence: dict[str, list[str]], apply: bool) -> None:
