@@ -9253,19 +9253,19 @@
    "status": "reviewed"
   },
   "BrnNetwork::ServerInterfaceDebugComponent::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::ServerInterfaceDebugComponent::Disconnect": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::ServerInterfaceDebugComponent::GetName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::ServerInterfaceDebugComponent::OnActivate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::ServerInterfaceDebugComponent::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::ShowtimeSwitchMessage::Construct": {
    "status": "reviewed"
@@ -15685,19 +15685,19 @@
    "status": "reviewed"
   },
   "BrnWorld::TriggerEntityModuleDebugComponent::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::TriggerEntityModuleDebugComponent::GetName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::TriggerEntityModuleDebugComponent::RenderHUD": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::TriggerEntityModuleDebugComponent::RenderWorld": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::TriggerEntityModuleIO::": {
    "status": "reviewed"
@@ -17115,7 +17115,25 @@
   "CgsDev::VectorFont::PrintComplex": {
    "status": "reviewed"
   },
+  "CgsFileSystem::AsyncOp::AsyncOp": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::AsyncOp::Close": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::AsyncOp::CompletionCallback": {
+   "status": "reviewed"
+  },
   "CgsFileSystem::AsyncOp::GetLastOperationResult": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::AsyncOp::Open": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::AsyncOp::Read": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::AsyncOp::Wait": {
    "status": "reviewed"
   },
   "CgsFileSystem::BaseFile::GetStatus": {
@@ -26495,6 +26513,10 @@
   "GameShared/GameClasses/System/AttribSys/CgsAttribSysVaultArray.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/System/FileSystem/CgsDeviceAsyncOp.cpp": {
+   "notes": "Fresh-eyes in-session review: ctor/Open/Read/Close/Wait/CompletionCallback match X360; members assigned by name; Post(1)+mbOperating gating correct; parity RED is assert-macro/inlined-machinery artifact.",
+   "status": "done"
+  },
   "GameShared/GameClasses/System/FileSystem/CgsDeviceManager.cpp": {
    "status": "done"
   },
@@ -27329,6 +27351,10 @@
   },
   "GameSource/Network/Debug Components/BrnNetworkRoadRulesManagerDebugComponent.cpp": {
    "notes": "complex/standard; fresh-eyes opus review. Construct=base init+back-ptr+Register; TriggerPersonalBest bit-sets+SetScore faithful; named members, no offset hacks.",
+   "status": "done"
+  },
+  "GameSource/Network/Debug Components/BrnNetworkServerInterfaceDebugComponent.cpp": {
+   "notes": "Fresh-eyes in-session review: matches X360; reinterpret_cast on int members is API glue; parity RED is de-inlining artifact.",
    "status": "done"
   },
   "GameSource/Network/Managers/BrnNetworkDirtyTrickManager.cpp": {
@@ -28495,6 +28521,10 @@
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.cpp": {
    "notes": "Fresh-eyes batch review: verified vs X360 (not drift-warned Feb-2007); Construct/OnPhysical/UpdateRearAxle/TryIntersect faithful; de-optimized.",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp": {
+   "notes": "Fresh-eyes review: initial RenderHUD reproduced drifted Feb-2007 source; rewritten to the X360 build (total line + -1..COUNT live per-type rescan + name table w/ Unknown/<NULLSTRING> fallbacks at 50,type*16+120). Reviewer re-verified RenderWorld/Construct/OnActivate + corrected RenderHUD all match X360 @0x822C4368.",
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO.cpp": {
