@@ -147,6 +147,18 @@
   "AptCXForm::AptUint32CXFormCopy": {
    "status": "reviewed"
   },
+  "AptCharacterAnimationInst::PreDestroy": {
+   "status": "reviewed"
+  },
+  "AptCharacterAnimationInst::~AptCharacterAnimationInst": {
+   "status": "reviewed"
+  },
+  "AptCharacterHelper::CreateTextCharacterInst": {
+   "status": "reviewed"
+  },
+  "AptCharacterHelper::Shutdown": {
+   "status": "reviewed"
+  },
   "AptCharacterLevelInst::`vector deleting destructor'": {
    "status": "reviewed"
   },
@@ -154,6 +166,9 @@
    "status": "reviewed"
   },
   "AptCharacterShapeInst::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInst::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "AptCharacterSpriteInstBase::AptCharacterSpriteInstBase": {
@@ -30547,6 +30562,10 @@
    "notes": "Gate PASS. Parity RED explained: branch_count 27->9 = the deep frame-stack scope-chain set (AptFrameStack::SetWhereExistsInScopeChain), frame-context fallback, type-12/37 CIH paths + the _global __proto__ reset are deferred to FLAG'd helpers (AptInterp_SetInScopeChain/SetVariableFallback) -- they need Adriwin's in-progress class:AptFrameStack + the interpreter frame-context (deliberate division of labor). return_count = early-returns vs goto-single-return. AptNativeHash::Set/Lookup ARE called (method syntax). The CORE write paths (getContext resolve -> objectMemberSet [vtbl 7] -> context native-hash Set + UpdateObjectMethods, clear-on-absent retarget) are faithful to X360 0x82B03048. b5-decomp 6c631722.",
    "status": "done"
   },
+  "SDKs/EATech/include/Apt/AptActionInterpreterSpecialOps.cpp": {
+   "notes": "Faithful decompile of 7 small opcodes (PushThis 0x56/PushGlobal 0x58/PushThisVariable 0x70/PushGlobalVariable 0x71/GetTimer 0x34/StoreRegister 0x87/Return 0x3E); compile gate PASS, all wired into sGlobalTable. Parity: call_count PERFECT 19/19, branch 0/0. RED is ONLY return_count 7->0 = the void-handler-vs-int-typed-pseudo ABI artifact (handlers are void per the dispatch table sig; IDA typed them int) -- affects every handler TU. Absent callees are false-positives: getVariable (method-call p->getVariable in PushThisVariable), EAStringC::operator= (IDA operator_, used in PushThis/PushGlobal). Opcodes reverse-mapped from sGlobalTable@0x82F73068; standard SWF verified (GetTime 0x34/Return 0x3E/StoreRegister 0x87). Return target = ctx->mbStop (r4+0x14, asm-verified). Rode a latent-bug fix: StringPool namespace->class in AptNativeHash.h (AptString.h friends it); MemberOps + AptNativeHash regression-gated clean.",
+   "status": "done"
+  },
   "SDKs/EATech/include/Apt/AptActionInterpreterStackOps.cpp": {
    "status": "done"
   },
@@ -30800,6 +30819,14 @@
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
+  "class:AptCharacterAnimationInst": {
+   "notes": "apt-100 wave D2: character-instance family completed, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate. Committed b5-decomp dev bc3f27c.",
+   "status": "done"
+  },
+  "class:AptCharacterHelper": {
+   "notes": "apt-100 wave D2: character-instance family completed, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate. Committed b5-decomp dev bc3f27c.",
+   "status": "done"
+  },
   "class:AptCharacterLevelInst": {
    "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
    "status": "done"
@@ -30810,6 +30837,10 @@
   },
   "class:AptCharacterShapeInst": {
    "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
+   "status": "done"
+  },
+  "class:AptCharacterSpriteInst": {
+   "notes": "apt-100 wave D2: character-instance family completed, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate. Committed b5-decomp dev bc3f27c.",
    "status": "done"
   },
   "class:AptCharacterSpriteInstBase": {
