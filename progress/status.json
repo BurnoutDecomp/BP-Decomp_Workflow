@@ -22,7 +22,7 @@
    "status": "reviewed"
   },
   "AptActionInterpreter::getVariable": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptActionInterpreter::stackPop(int)": {
    "status": "reviewed"
@@ -8412,7 +8412,16 @@
   "BrnGui::PreRaceFlyByState::GetResourcesToLoad": {
    "status": "reviewed"
   },
+  "BrnGui::PreloadOverlayState::GetCache": {
+   "status": "reviewed"
+  },
   "BrnGui::PreloadOverlayState::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::PreloadOverlayState::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::PreloadOverlayState::OnLeave": {
    "status": "reviewed"
   },
   "BrnGui::PreloadOverlayState::Update": {
@@ -14683,16 +14692,16 @@
    "status": "reviewed"
   },
   "BrnStreetData::ChallengeHighScoreEntry::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnStreetData::ChallengeHighScoreEntry::Copy": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnStreetData::ChallengeHighScoreEntry::GetScore": {
    "status": "reviewed"
   },
   "BrnStreetData::ChallengeHighScoreEntry::IsWholeChallengeOwnedBySamePlayer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnStreetData::ChallengeHighScoreEntry::SetScore": {
    "status": "reviewed"
@@ -27852,6 +27861,10 @@
   "GameSource/GameState/Progression/BrnProfile.h": {
    "status": "done"
   },
+  "GameSource/GameState/StreetData/BrnChallengeHighScoreEntry.cpp": {
+   "notes": "batch review (sonnet) PASS. Construct/Copy/IsWhole vs asm verified; do-while->for + goto-removal are clean de-opts; LobbyNameCmp fwd-declared (no home yet). parity RED benign (assert macros).",
+   "status": "done"
+  },
   "GameSource/GameState/StreetData/BrnChallengeHighScoreEntry.h": {
    "status": "done"
   },
@@ -27921,6 +27934,10 @@
   "GameSource/Gui/BrnGuiPerfmons.cpp": {
    "notes": "3 verify loops (loop1 transcription PASS - all 33 calls/names/budgets/flags/aliases exact; loop1 caught class-vs-namespace ODR fork of PerfMonCpu -> FIXED by growing the committed CgsPerfMonCpu.h namespace with the X360 6-param AddMonitor overload (additive, regate-clean), .cpp includes the real home; loop3 sign-off PASS). Gate clean. Parity MILD: call delta 4 = PPC prologue/epilogue artifacts (_savefpr/_restfpr/_savegprlr/_restgprlr) dropped; void return. Parent tree indentation-inferred (flagged). Note: committed via a separate fix commit on top of the concurrent ICE commit (orig GuiPerfmons was 8ee4c3b).",
    "status": "done"
+  },
+  "GameSource/Gui/CustomRenderer/BrnCustomRenderer.cpp": {
+   "notes": "9 of 16 fns (Construct/Destruct/Prepare/Release/Update/RecvEvent/EndOfFrame/SetTextRenderer/SetLanguageManager) deref un-homed types: the DWARF base CgsGui::CustomRendererManager has NO class home in b5-decomp/src (owns the embedded CgsModule::VariableEventQueue<4096,16> + two rw::IResource tables), plus 10 embedded concrete renderer types are un-homed. The 8 table/flag accessors are reconstructable but can't compile without the base. NOTE: BrnGui::CustomRendererManager has a committed minimal-slice home at GameSource/Gui/BrnCustomRendererManager.cpp (Niaz) -- coordinate; do NOT move the canonical home. Unblocks once CgsGui::CustomRendererManager base + the 10 renderers are homed.",
+   "status": "blocked"
   },
   "GameSource/Gui/CustomRenderer/Renderers/BrnBlackBarRenderer.cpp": {
    "notes": "fresh-eyes (sonnet): Construct/GetID/RecvEvent faithful",
@@ -28106,6 +28123,10 @@
   },
   "GameSource/Gui/Flow/Overlay/States/BrnInGameOkOverlayState.cpp": {
    "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnPreloadOverlayState.cpp": {
+   "notes": "batch review (sonnet) PASS. OnEnter/OnLeave/GetCache vs asm verified; members meInternalState@0x38/mpGuiCache@0x3C named; opaque InputBuffer::GuiEventQueue* cast to real VariableEventQueue<18432,16> (X360-proven). parity RED benign (assert macros).",
    "status": "done"
   },
   "GameSource/Gui/Flow/Overlay/States/BrnPreloadOverlayState.h": {
@@ -29694,6 +29715,10 @@
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterUnary.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterVariable.cpp": {
+   "notes": "Gate PASS. Parity RED is explained, not a fidelity gap: (1) return_count 6 vs 1 = early-returns vs the console's goto-single-return -- equivalent; the local EAStringC's RAII dtor does the v29 DecreaseInternalRefCount cleanup on every path. (2) call_count +4 = named accessors (getIsDefined/GetBuffer/GetInternalString/IsEmpty) vs inlined field reads. (3) 'absent callees' are false-positives or intentional: findChild IS called (method syntax), operator= IS used (*GetInternalString()=*pName), DecreaseInternalRefCount is the EAStringC dtor (RAII); AptFrameStack::GetInScopeChain + AptNativeHash::Lookup are encapsulated in the FLAG'd AptInterp_LookupScopeChain/LookupGlobalFallback helpers (deep frame-stack/global leaves deferred). Orchestration matches X360 0x82B03430. Follow-on TUs: getContext, AptValue::findChild, the scope-chain/global helpers.",
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionRun.cpp": {
