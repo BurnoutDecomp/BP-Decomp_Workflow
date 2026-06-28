@@ -15,11 +15,17 @@
   "AptActionInterpreter::_FunctionAptActionBitAnd": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::_FunctionAptActionGetMember": {
+   "status": "compiles"
+  },
   "AptActionInterpreter::_FunctionAptActionGetVariable": {
    "status": "compiles"
   },
   "AptActionInterpreter::_FunctionAptActionPushUndefined": {
    "status": "reviewed"
+  },
+  "AptActionInterpreter::_FunctionAptActionSetMember": {
+   "status": "compiles"
   },
   "AptActionInterpreter::_FunctionAptActionSetVariable": {
    "status": "compiles"
@@ -655,6 +661,21 @@
    "status": "reviewed"
   },
   "AptValue_toInteger": {
+   "status": "reviewed"
+  },
+  "AptXml::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptXmlNode::AptXmlNode": {
+   "status": "reviewed"
+  },
+  "AptXmlNode::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptXmlNode::operator delete": {
+   "status": "reviewed"
+  },
+  "AptXmlNode::operator new": {
    "status": "reviewed"
   },
   "Attrib::Attrib_RefSpec_TypeHandler::Clone": {
@@ -30589,6 +30610,14 @@
   },
   "class:AptValueGC_PoolManager": {
    "notes": "AptValue GC pool manager (6 funcs); verifier MED -> FIXED item-walk byte-stride (AdvanceItem helper, 3 sites); re-gate pass.",
+   "status": "done"
+  },
+  "class:AptXml": {
+   "notes": "apt-100 wave C: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev ed85819.",
+   "status": "done"
+  },
+  "class:AptXmlNode": {
+   "notes": "apt-100 wave C: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev ed85819.",
    "status": "done"
   },
   "class:ArrayMembersIndex": {
