@@ -8334,6 +8334,9 @@
   "BrnGui::OverlayComponent::Prepare": {
    "status": "reviewed"
   },
+  "BrnGui::OverlayComponent::TransitionCompleteCallback": {
+   "status": "reviewed"
+  },
   "BrnGui::PFXHook::FixDown": {
    "status": "reviewed"
   },
@@ -27990,6 +27993,10 @@
   },
   "GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.h": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 reference .cpp:line citations scrubbed); combined wave-12 gate PASS.",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/Components/BrnOverlayComponent.cpp": {
+   "notes": "trivial; gate-only. Static callback (r3=user-data per asm, msg 'NULL != lpUserData') asserts non-null then sets mbTransitionComplete via named inline setter (X360 inlined to stb 1,0x14). Layout: base BrnFlaptComponent 0xC + MovieClipRef 8B => flag @0x14 matches the store; compile-verified vs committed headers. parity YELLOW benign (assert calls live inside CGS_ASSERT macro).",
    "status": "done"
   },
   "GameSource/Gui/Flow/Overlay/States/BrnCrashNavOkCancelOverlayState.cpp": {
