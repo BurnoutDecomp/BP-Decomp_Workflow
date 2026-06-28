@@ -729,6 +729,33 @@
   "AptRenderingContext::pushColourTransform": {
    "status": "reviewed"
   },
+  "AptScriptColour::AptScriptColour": {
+   "status": "reviewed"
+  },
+  "AptScriptColour::CleanNativeFunctions": {
+   "status": "reviewed"
+  },
+  "AptScriptColour::DestroyGCPointers": {
+   "status": "reviewed"
+  },
+  "AptScriptColour::RegisterReferences": {
+   "status": "reviewed"
+  },
+  "AptScriptColour::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptScriptColour::objectMemberLookup": {
+   "status": "reviewed"
+  },
+  "AptScriptColour::sMethod_getRGB": {
+   "status": "reviewed"
+  },
+  "AptScriptColour::sMethod_getTransform": {
+   "status": "reviewed"
+  },
+  "AptScriptColour::sMethod_setTransform": {
+   "status": "reviewed"
+  },
   "AptScriptFunction1::AptScriptFunction1": {
    "status": "reviewed"
   },
@@ -30981,6 +31008,10 @@
   },
   "class:AptRenderingContext": {
    "notes": "wave3: 8 funcs, 0x448 layout (vertex/colour stacks); verify PASS; compile PASS",
+   "status": "done"
+  },
+  "class:AptScriptColour": {
+   "notes": "apt-100: AS Color object, 9 fns by named members vs X360 ARTIST; fresh-eyes semantic verify + cl /c gate (::new fix + AptObject GC-new additive). Committed b5-decomp dev 59cb525.",
    "status": "done"
   },
   "class:AptScriptFunction1": {
