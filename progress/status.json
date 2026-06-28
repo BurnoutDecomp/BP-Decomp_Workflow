@@ -126,6 +126,33 @@
   "AptCXForm::AptUint32CXFormCopy": {
    "status": "reviewed"
   },
+  "AptCharacterShapeInst::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInstBase::AptCharacterSpriteInstBase": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInstBase::HasClipAction": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInstBase::PreDestroy": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInstBase::RemoveClipAction": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInstBase::SetClipAction": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInstBase::SetCreatedDynamic": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInstBase::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptCharacterSpriteInstBase::~AptCharacterSpriteInstBase": {
+   "status": "reviewed"
+  },
   "AptColorHelper::`vector deleting destructor'": {
    "status": "reviewed"
   },
@@ -16299,11 +16326,29 @@
   "BrnWorld::NearMissData<4,7>::VehicleTimePair,7>::Erase": {
    "status": "reviewed"
   },
+  "BrnWorld::PVSDebugComponent::Construct": {
+   "status": "compiles"
+  },
   "BrnWorld::PVSDebugComponent::GetName": {
    "status": "reviewed"
   },
   "BrnWorld::PVSDebugComponent::IsSimple": {
    "status": "reviewed"
+  },
+  "BrnWorld::PVSDebugComponent::OnActivate": {
+   "status": "compiles"
+  },
+  "BrnWorld::PVSDebugComponent::RenderCollisionZones": {
+   "status": "compiles"
+  },
+  "BrnWorld::PVSDebugComponent::RenderHUD": {
+   "status": "compiles"
+  },
+  "BrnWorld::PVSDebugComponent::RenderPVS": {
+   "status": "compiles"
+  },
+  "BrnWorld::PVSDebugComponent::RenderPvsCentrePosition": {
+   "status": "compiles"
   },
   "BrnWorld::PVSIO::GetZoneRequest,8>::Construct": {
    "status": "reviewed"
@@ -16574,6 +16619,30 @@
   },
   "BrnWorld::PropZoneManager::UpdateAnimation": {
    "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::AddToWorld": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCar::AssignActiveRaceCar": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCar::Construct": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCar::Prepare": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCar::RemoveActiveRaceCar": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCar::RemoveFromWorld": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCar::RequestResetOnTrack": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCar::UpdatePositioningData": {
+   "status": "compiles"
   },
   "BrnWorld::RaceCarAudioStreamer::RemoveEntry": {
    "status": "reviewed"
@@ -17730,6 +17799,27 @@
   "CgsDev::DebugComponent::UnregisterVariable": {
    "status": "reviewed"
   },
+  "CgsDev::DebugComponentMessageFilter::Construct": {
+   "status": "compiles"
+  },
+  "CgsDev::DebugComponentMessageFilter::FilterEnableChangeCallback": {
+   "status": "compiles"
+  },
+  "CgsDev::DebugComponentMessageFilter::FilterTypeChangeCallback": {
+   "status": "compiles"
+  },
+  "CgsDev::DebugComponentMessageFilter::GetName": {
+   "status": "compiles"
+  },
+  "CgsDev::DebugComponentMessageFilter::GetPath": {
+   "status": "compiles"
+  },
+  "CgsDev::DebugComponentMessageFilter::OnActivate": {
+   "status": "compiles"
+  },
+  "CgsDev::DebugComponentMessageFilter::SetFilterName": {
+   "status": "compiles"
+  },
   "CgsDev::DebugComponentPerfMonCpu::DebugCallbackDumpLogFile": {
    "status": "reviewed"
   },
@@ -18668,6 +18758,27 @@
   },
   "CgsGeometric::Triangle4::GetAOSTriangle": {
    "status": "reviewed"
+  },
+  "CgsGraphics::BufferedDispatchFrame::Construct": {
+   "status": "compiles"
+  },
+  "CgsGraphics::BufferedDispatchFrame::Destruct": {
+   "status": "compiles"
+  },
+  "CgsGraphics::BufferedDispatchFrame::GetDispatchBinForWrite": {
+   "status": "compiles"
+  },
+  "CgsGraphics::BufferedDispatchFrame::GetDispatchFrameForRead": {
+   "status": "compiles"
+  },
+  "CgsGraphics::BufferedDispatchFrame::GetDispatchFrameForWrite": {
+   "status": "compiles"
+  },
+  "CgsGraphics::BufferedDispatchFrame::GetDispatchListForWrite": {
+   "status": "compiles"
+  },
+  "CgsGraphics::BufferedDispatchFrame::Swap": {
+   "status": "compiles"
   },
   "CgsGraphics::ChunkBuffer::GetChunkData": {
    "status": "reviewed"
@@ -30215,6 +30326,10 @@
   "SDKs/EATech/include/Apt/AptActionInterpreterLogic.cpp": {
    "status": "done"
   },
+  "SDKs/EATech/include/Apt/AptActionInterpreterMemberOps.cpp": {
+   "notes": "Faithful decompile of GetMember(0x82B04200)/SetMember(0x82B043C8); compile gate PASS, wired live into sGlobalTable[0x4E/0x4F]. Parity RED is REPRESENTATIONAL, not a fidelity gap -- verified ALL paths present: GetMember {array-numeric get, extern, generic getVariable, undefined-push}; SetMember {array-numeric set, object setVariable + __proto__/SetHasClass, extern, pop3+drain}. call_count +19 = I use the codebase's named AptValue accessors (getVtblIndex/getIsDefined/ContainsNativeHashVirtual/SetHasClass/toInteger/Get_ToString) where the X360 pseudo inlines raw bitfield ops ((x<<25)>>25 / (x>>27)&1) as ZERO calls; branch_count -20 = IDA decomposes each &&/|| into vN=1;if()vN=0 (31 branches) vs my compound boolean expressions (11). Absent callees are method-call-vs-Class::method (getVariable/setVariable/AptArray::set/toInteger/toString=Get_ToString/AptValue_::PopAndPush=stackPopAndPush), EAStringC RAII dtor (DecreaseInternalRefCount), or documented FLAG (AptValueVector::ReleaseValues=AptApt_FlushDeferredReleases). FLAG'd: type-11 Extern host hooks (dword_8324E858/E854) since AptExtern is not reconstructed. vtbl[3]=ContainsNativeHashVirtual/vtbl[5]=SetHasClass per AptValue decl order; __proto__ key=StringPool::saConstant.",
+   "status": "done"
+  },
   "SDKs/EATech/include/Apt/AptActionInterpreterSetVariable.cpp": {
    "notes": "Gate PASS. Parity RED explained: branch_count 27->9 = the deep frame-stack scope-chain set (AptFrameStack::SetWhereExistsInScopeChain), frame-context fallback, type-12/37 CIH paths + the _global __proto__ reset are deferred to FLAG'd helpers (AptInterp_SetInScopeChain/SetVariableFallback) -- they need Adriwin's in-progress class:AptFrameStack + the interpreter frame-context (deliberate division of labor). return_count = early-returns vs goto-single-return. AptNativeHash::Set/Lookup ARE called (method syntax). The CORE write paths (getContext resolve -> objectMemberSet [vtbl 7] -> context native-hash Set + UpdateObjectMethods, clear-on-absent retarget) are faithful to X360 0x82B03048. b5-decomp 6c631722.",
    "status": "done"
@@ -30470,6 +30585,14 @@
   },
   "class:AptCXForm": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
+  "class:AptCharacterShapeInst": {
+   "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
+   "status": "done"
+  },
+  "class:AptCharacterSpriteInstBase": {
+   "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
    "status": "done"
   },
   "class:AptColorHelper": {
