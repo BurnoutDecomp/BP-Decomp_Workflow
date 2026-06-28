@@ -1236,6 +1236,12 @@
   "BrnAI::AISection::GetPortal": {
    "status": "reviewed"
   },
+  "BrnAI::AISection::IsInside": {
+   "status": "reviewed"
+  },
+  "BrnAI::AISection::IsUnsuitableForResetOnTrackLink": {
+   "status": "reviewed"
+  },
   "BrnAI::AISection::PassesThrough": {
    "status": "reviewed"
   },
@@ -1411,6 +1417,18 @@
    "status": "reviewed"
   },
   "BrnAI::RaceBalancingRoute::GetAISectionSpeed": {
+   "status": "reviewed"
+  },
+  "BrnAI::RaceBalancingRoute::GetTime": {
+   "status": "reviewed"
+  },
+  "BrnAI::RaceBalancingRoute::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnAI::RaceBalancingRoute::Recalculate": {
+   "status": "reviewed"
+  },
+  "BrnAI::RacingLine::ClearSectionCache": {
    "status": "reviewed"
   },
   "BrnAI::RacingLineGenerator::ExtrapolateRouteBackwards": {
@@ -8309,6 +8327,18 @@
   },
   "BrnGui::OnlineCreateFreeburn::GetResourcesToLoad": {
    "status": "reviewed"
+  },
+  "BrnGui::OnlineCreateFreeburn::HandleControllerInput": {
+   "status": "compiles"
+  },
+  "BrnGui::OnlineCreateFreeburn::HandleGuiCacheEvent": {
+   "status": "compiles"
+  },
+  "BrnGui::OnlineCreateFreeburn::HandleInGameEvent": {
+   "status": "compiles"
+  },
+  "BrnGui::OnlineCreateFreeburn::HandleInGameFailedEvent": {
+   "status": "compiles"
   },
   "BrnGui::OnlineCreateFreeburn::OnEnter": {
    "status": "reviewed"
@@ -22938,6 +22968,18 @@
   "CgsSceneManager::CgsCollision::PrimitiveListWithTriangleListJobDesc::Prepare": {
    "status": "reviewed"
   },
+  "CgsSceneManager::CgsCollision::PrimitivePairList::Itterator::GetPrimativeA": {
+   "status": "compiles"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairList::Itterator::GetPrimativeB": {
+   "status": "compiles"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairList::Itterator::MoveToNextHeader": {
+   "status": "compiles"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairList::Itterator::Prepare": {
+   "status": "compiles"
+  },
   "CgsSceneManager::CgsCollision::PrimitivePairListJobDesc::Prepare": {
    "status": "reviewed"
   },
@@ -24024,11 +24066,23 @@
   "CgsSystem::HardwareSku::FindLanguage": {
    "status": "reviewed"
   },
+  "CgsSystem::ThreadLayout::Begin": {
+   "status": "compiles"
+  },
   "CgsSystem::ThreadLayout::DispatchThread": {
    "status": "reviewed"
   },
+  "CgsSystem::ThreadLayout::GlobalThreadBeginWrapper": {
+   "status": "compiles"
+  },
   "CgsSystem::ThreadLayout::InitThreads": {
    "status": "reviewed"
+  },
+  "CgsSystem::ThreadLayout::InteruptThreadForAssert": {
+   "status": "compiles"
+  },
+  "CgsSystem::ThreadLayout::ThreadLayout": {
+   "status": "compiles"
   },
   "CgsSystem::Time::SetFloatVal": {
    "status": "reviewed"
@@ -30132,6 +30186,10 @@
   "SDKs/EATech/include/Apt/AptActionInterpreterUnary.cpp": {
    "status": "done"
   },
+  "SDKs/EATech/include/Apt/AptActionInterpreterVarOps.cpp": {
+   "notes": "Faithful decompile of GetVariable(0x82B038A0)/SetVariable(0x82B03970)/Get_ToString(0x82AD8558); compile gate PASS, wired live into sGlobalTable[0x1C/0x1D]. Parity YELLOW = false-positives only: getVariable/setVariable/toString/AptValue_::Pop appear as method calls (p->getVariable) not Class::method; EAStringC::DecreaseInternalRefCount is the EAStringC scratch RAII dtor; AptValueVector::ReleaseValues is the documented FLAG'd AptGC encapsulation (AptApt_FlushDeferredReleases). return/branch deltas = early-return structuring, within tol. LocalContextT offsets +4/+8 verified vs X360 runStream @0x82ADD440.",
+   "status": "done"
+  },
   "SDKs/EATech/include/Apt/AptActionInterpreterVariable.cpp": {
    "notes": "Gate PASS. Parity RED is explained, not a fidelity gap: (1) return_count 6 vs 1 = early-returns vs the console's goto-single-return -- equivalent; the local EAStringC's RAII dtor does the v29 DecreaseInternalRefCount cleanup on every path. (2) call_count +4 = named accessors (getIsDefined/GetBuffer/GetInternalString/IsEmpty) vs inlined field reads. (3) 'absent callees' are false-positives or intentional: findChild IS called (method syntax), operator= IS used (*GetInternalString()=*pName), DecreaseInternalRefCount is the EAStringC dtor (RAII); AptFrameStack::GetInScopeChain + AptNativeHash::Lookup are encapsulated in the FLAG'd AptInterp_LookupScopeChain/LookupGlobalFallback helpers (deep frame-stack/global leaves deferred). Orchestration matches X360 0x82B03430. Follow-on TUs: getContext, AptValue::findChild, the scope-chain/global helpers.",
    "status": "done"
@@ -30596,8 +30654,8 @@
    "status": "done"
   },
   "class:BrnAI::AISection": {
-   "notes": "IsInside @0x82677058 is heavy VMX point-in-polygon (lvlx/vspltw128/vsubfp128/vmulfp128/vcmpgtfp) over corners @+8 - unrecoverable scalar lowering. Scalar sibling IsUnsuitableForResetOnTrackLink @0x8276AC18 (mx8Flags@+23 bits 0x01/0x40) bodied + header grown additively (decl-only). Multi-func TU incomplete.",
-   "status": "blocked"
+   "notes": "IsInside (verifier-faithful scalar point-in-polygon) + IsUnsuitableForResetOnTrackLink bodied; gate-green; pushed 30c1a48. Parity divergence = CGS_ASSERT macro-fold + de-inlined member-call false positives.",
+   "status": "done"
   },
   "class:BrnAI::AISectionsData": {
    "status": "done"
@@ -30625,8 +30683,16 @@
    "notes": "Wave 39: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnAI::RaceBalancingRoute": {
+   "notes": "GetTime/Prepare/Recalculate bodied+verified, gate-green, pushed 1cc7cb6. Parity 'absent CgsDev::Assert::*' = CGS_ASSERT macro-fold false positive (the asserts ARE present via the macro).",
+   "status": "done"
+  },
   "class:BrnAI::RaceBalancingRoute,7>": {
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:BrnAI::RacingLine": {
+   "notes": "ClearSectionCache bodied, gate-green; parity flags benign (CGS_ASSERT macro-fold)",
    "status": "done"
   },
   "class:BrnAI::ResetOnTrackDebugComponent::HngTestEntry>": {
