@@ -8808,6 +8808,9 @@
   "BrnGui::Table::Update": {
    "status": "reviewed"
   },
+  "BrnGui::TableCell::Construct": {
+   "status": "reviewed"
+  },
   "BrnGui::TableCell::SetLocalisedText": {
    "status": "reviewed"
   },
@@ -18528,6 +18531,24 @@
   "CgsGui::AnimData::GetChannelData": {
    "status": "reviewed"
   },
+  "CgsGui::Animator::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGui::Animator::Destruct": {
+   "status": "reviewed"
+  },
+  "CgsGui::Animator::SetAnimation": {
+   "status": "reviewed"
+  },
+  "CgsGui::Animator::SetAnimationChannel": {
+   "status": "reviewed"
+  },
+  "CgsGui::Animator::SetAptValues": {
+   "status": "reviewed"
+  },
+  "CgsGui::Animator::Update": {
+   "status": "reviewed"
+  },
   "CgsGui::AptCallbackMemory::Alloc": {
    "status": "reviewed"
   },
@@ -18955,6 +18976,30 @@
    "status": "reviewed"
   },
   "CgsGui::ModelModule::Release": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::AttachController": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::GetName": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::GetObjectValue": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::GetPos": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::Register": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::SetObjectVariableBoolean": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::UnRegister": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::~ObjectController": {
    "status": "reviewed"
   },
   "CgsGui::State::Construct": {
@@ -26740,6 +26785,10 @@
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptAnimData.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Gui/View/AptInterface/CgsAptAnimator.cpp": {
+   "notes": "Wave 8: compile-gate PASS + fresh-eyes adversarial verify PASS. CgsGui::ObjectController (AptExtObject-derived) + CgsGui::Animator reconstructed by named members; created the AptExtObject base home (LegacySrc shape). RED auto-parity is the expected de-optimization signal (inlined EAStringC/StrStream/assert folds + member-call name resolution), all asm calls/branches present.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptCommunicator.h": {
    "status": "done"
   },
@@ -26751,6 +26800,14 @@
   },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptInterpolator.h": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); reference-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Gui/View/AptInterface/CgsAptObjectController.cpp": {
+   "notes": "Wave 8: compile-gate PASS + fresh-eyes adversarial verify PASS. CgsGui::ObjectController (AptExtObject-derived) + CgsGui::Animator reconstructed by named members; created the AptExtObject base home (LegacySrc shape). RED auto-parity is the expected de-optimization signal (inlined EAStringC/StrStream/assert folds + member-call name resolution), all asm calls/branches present.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Gui/View/AptInterface/CgsAptObjectController.h": {
+   "notes": "Wave 8: compile-gate PASS + fresh-eyes adversarial verify PASS. CgsGui::ObjectController (AptExtObject-derived) + CgsGui::Animator reconstructed by named members; created the AptExtObject base home (LegacySrc shape). RED auto-parity is the expected de-optimization signal (inlined EAStringC/StrStream/assert folds + member-call name resolution), all asm calls/branches present.",
    "status": "done"
   },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptString.cpp": {
@@ -28233,6 +28290,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnTable.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/Components/BrnTableCell.cpp": {
+   "notes": "standard; fresh-eyes (sonnet) PASS w/ asm verification. 4 CGS_ASSERT (state-iface/name/component != null, type<3, X360 order) + 2 stores (meComponentType@4, mpComponent@8). parity RED benign: all 19 pseudocode calls are assert-macro internals; only real side effects are the 2 stores, both present. 6-param sig matches header; trailing parent-name/apt-id unused by this symbol per asm.",
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnTableCell.h": {
