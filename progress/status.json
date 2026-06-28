@@ -81,11 +81,17 @@
   "AptActionInterpreter::_FunctionAptActionStringLength": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::_FunctionAptActionSubString": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionSubtract": {
    "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionThrow": {
    "status": "compiles"
+  },
+  "AptActionInterpreter::_FunctionAptActionToNumber": {
+   "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionToString": {
    "status": "compiles"
@@ -11646,6 +11652,48 @@
   "BrnPhysics::Deformation::DeformableObject::UpdateWheels": {
    "status": "reviewed"
   },
+  "BrnPhysics::Deformation::DeformationAxisAlignedBox::GetExtent": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::CompressSelectedRig_MaxDrivetime": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::DetachPart": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::DrawDetachedWheels": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::OnCompressionChange": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::OnCompressionPresetChange": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::OnPointPositionChange": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::OnSelectedPointChange": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::OnSelectedRigChange": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::OnSelectedSensorChange": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::RenderWorld": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::Update": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Deformation::DeformationInputInterface::AddDeformationModel": {
    "status": "reviewed"
   },
@@ -16989,6 +17037,9 @@
   "BrnWorld::PropEntityModule::UpdateInstanceStreaming": {
    "status": "reviewed"
   },
+  "BrnWorld::PropGraphicsManager::Register": {
+   "status": "compiles"
+  },
   "BrnWorld::PropVolumeID::Set": {
    "status": "reviewed"
   },
@@ -17010,14 +17061,44 @@
   "BrnWorld::PropVolumeInstanceID::SetPropEntityId": {
    "status": "reviewed"
   },
+  "BrnWorld::PropZoneManager::AddPropPartsToScene": {
+   "status": "compiles"
+  },
+  "BrnWorld::PropZoneManager::Construct": {
+   "status": "compiles"
+  },
+  "BrnWorld::PropZoneManager::DeallocatePartInstancesBlock": {
+   "status": "compiles"
+  },
+  "BrnWorld::PropZoneManager::DeallocatePropInstancesBlock": {
+   "status": "compiles"
+  },
   "BrnWorld::PropZoneManager::GetZone": {
    "status": "reviewed"
+  },
+  "BrnWorld::PropZoneManager::LoadZone": {
+   "status": "compiles"
   },
   "BrnWorld::PropZoneManager::RemoveAllPropsAndParts": {
    "status": "reviewed"
   },
+  "BrnWorld::PropZoneManager::RemovePropFromScene": {
+   "status": "compiles"
+  },
+  "BrnWorld::PropZoneManager::RemovePropFromSim": {
+   "status": "compiles"
+  },
+  "BrnWorld::PropZoneManager::RemovePropPartsFromScene": {
+   "status": "compiles"
+  },
+  "BrnWorld::PropZoneManager::UnloadZone": {
+   "status": "compiles"
+  },
   "BrnWorld::PropZoneManager::UpdateAnimation": {
    "status": "reviewed"
+  },
+  "BrnWorld::PropZoneManager::UpdateInstance": {
+   "status": "compiles"
   },
   "BrnWorld::RaceCar::AddToWorld": {
    "status": "compiles"
@@ -21384,8 +21465,47 @@
   "CgsNetwork::NetworkManagerPrepareParams::VersionDisplayPrepareParams::Construct": {
    "status": "reviewed"
   },
+  "CgsNetwork::NetworkPlayer::CheckForPlayerDisconnectTimeout": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::Construct": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::GetRegisteredRecvMessage": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::GetRegisteredSendMessage": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::IsMessageTypeRegistered": {
+   "status": "compiles"
+  },
   "CgsNetwork::NetworkPlayer::OnMessageUnpackedCallback": {
    "status": "reviewed"
+  },
+  "CgsNetwork::NetworkPlayer::Prepare": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::RegisterMessageType": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::Release": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::ResetAllMessages": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::SendMessages": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::UnRegisterMessageType": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::UnregisterAllMessages": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkPlayer::Update": {
+   "status": "compiles"
   },
   "CgsNetwork::NetworkPlayer::UpdateMessagesReceived": {
    "status": "reviewed"
@@ -21524,6 +21644,9 @@
   },
   "CgsNetwork::PlayerManager::Update": {
    "status": "reviewed"
+  },
+  "CgsNetwork::PlayerMenuData::Clear": {
+   "status": "compiles"
   },
   "CgsNetwork::PlayerName::Construct": {
    "status": "reviewed"
@@ -29182,6 +29305,9 @@
    "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Permanent/Components/BrnEATraxInGameComponent.cpp": {
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp": {
    "status": "done"
   },
@@ -30329,6 +30455,10 @@
    "notes": "trivial; gate-only. In-place zero-init constructor, GREEN parity.",
    "status": "done"
   },
+  "GameSource/Unity/../Physics/DeformationManager/BrnDeformationDebugComponent.cpp": {
+   "notes": "complex; compile gate PASS. Self-review (postmortem) walked all 14 fns vs ARTIST asm: GetExtent jump-table->switch (default=mMin.x), Construct member-init order + values, OnSelectedRigChange both branches (true: bind &mpaModels[i], enable compress, kbAllowDeformationDebug=1, refresh sensor; false: 12 SetReadOnly incl the asm's duplicate mfSensorX), OnSelectedSensorChange (idx+15 bias, spec num-sensor bound), OnSelected/PointPositionChange (tag vs driven split at miNumTagPoints), OnCompression(Preset)Change, Update, DetachPart all verified faithful via named members. Parity RED is the documented artifact: CGS_ASSERT folds Begin/Fire/End(+StrStream) and member-call name-matching misses RegisterVariable/SetRange/Draw* (all present). FLAGGED for scrutiny: RenderWorld + DrawDetachedWheels reconstructed structurally -- the deep VMX part-membership filter (giDebugOnlyRenderThisCarPart joint-window address walk) and assert-message StrStream formatting are simplified to a part-level GetMeshId() filter (documented in-body); the driven-point IK connection/offset draw endpoints are placeholders (the X360 derives them from the two driving tag points). Added debug accessors to BrnDeformableObject.h / BrnDeformationManager.h / BrnDeformationSensor.h / BrnStreamedDeformationSpec.h and extended Debug3DImmediateRender.h draw API (declare-only).",
+   "status": "done"
+  },
   "GameSource/Unity/../Physics/DeformationManager/DeformationPhysics/BrnDeformableObject.cpp": {
    "status": "done"
   },
@@ -30807,6 +30937,10 @@
   "SDKs/EATech/include/Apt/AptActionInterpreterStackOps.cpp": {
    "status": "done"
   },
+  "SDKs/EATech/include/Apt/AptActionInterpreterStringOps2.cpp": {
+   "notes": "Faithful SubString(0x15)/ToNumber(0x4A); gate PASS, wired. SubString uses EAStringC::UTF8_Mid (the console sub_82AE8ED8 = UTF8_Mid(start,len)); ToNumber parses via Get_ToString + UTF8_Find('.'). Only FLAG: isNaN (value NaN test). UTF8_Mid/UTF8_Find are the committed declared text suite. gpUndefinedValue/AptGetSwfVersion established in arith/compare TUs. SWF SubString 0x15/ToNumber 0x4A match. Parity deltas = void-return + method-call/RAII false-positives.",
+   "status": "done"
+  },
   "SDKs/EATech/include/Apt/AptActionInterpreterUnary.cpp": {
    "status": "done"
   },
@@ -31141,6 +31275,10 @@
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
   },
+  "class:AptGC": {
+   "notes": "CleanAll @0x82AE4A40 needs the un-homed Apt GC deferred-release vector gpValuesToRelease (off_8324E51C) + its ReleaseValues() -- a layout distinct from the operand-stack AptValueVector, no header/DWARF/LegacySrc. [adri1 apt-100]",
+   "status": "blocked"
+  },
   "class:AptGlobal": {
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
@@ -31152,6 +31290,10 @@
   "class:AptIntervalTimer": {
    "notes": "fresh-eyes sonnet review PASS (13-point); ctor/CleanParams/GenerateId(static atomic id)/dtor faithful; vec-deleting-dtor dropped (thunk); mParams=AptValueVector cap6; x64 named-member layout; field names domain-inferred (no DWARF). compile PASS",
    "status": "done"
+  },
+  "class:AptLinker": {
+   "notes": "Update @0x82B0CC68 has 3 wrong-field/dropped-side-effect bugs (conflates the +0x0C resolved-flag with the +0x00 refcount; passes AptFile.mnField12 instead of mpData to the AnimInst ctor); the other 5 fns are faithful. Also needs the asm-grounded AptLinkerThingy layout correction (rewrites a committed home -- coordinate w/ JeBobs). Reconstructed in scratchpad/rework. [adri1 apt-100]",
+   "status": "blocked"
   },
   "class:AptLinkerThingy": {
    "notes": "verified vs X360 asm; parity.",
@@ -31205,8 +31347,24 @@
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
   },
+  "class:AptRenderItemCustomControl": {
+   "notes": "Blocked on the same AptRenderItem virtual-Clone base-vtable slot (14 fns); also the wave-C recon was cut short by a session limit. Needs the base Clone slot settled first. [adri1 apt-100]",
+   "status": "blocked"
+  },
+  "class:AptRenderItemDynamicText": {
+   "notes": "Minimal home committed (AptRenderItemDynamicText.h, for AptCharacterTextInst). Full 6-fn TU blocked on the AptRenderItem virtual-Clone base-vtable slot (Clone override). [adri1 apt-100]",
+   "status": "blocked"
+  },
   "class:AptRenderItemLevel": {
    "notes": "Clone @0x82AEC7B0 genuinely blocked. Pool-allocates 0x34 (52B) then delegates ALL copy-init to sub_82AEB9A0 -- [external/unknown], called only from this site, no class recovery, no recoverable body. The +0x18 bitfield (insrwi r10,r9=0xF,6,8 -> & 0xFF03FFFF | 0x3C0000) and the vtable store off_821458",
+   "status": "blocked"
+  },
+  "class:AptRenderItemMorph": {
+   "notes": "Blocked on AptRenderItem base-vtable: the subtype overrides Clone (X360 vtable slot 0) but committed AptRenderItem declares NO virtual Clone (only ~dtor/Render/Push/PopRenderData); adding it is a JeBobs-core render-item vtable-slot decision affecting all committed siblings. 4 fns (GetRatio/Render/Clone/dtor) reconstructed+staged in scratchpad/rework. [adri1 apt-100]",
+   "status": "blocked"
+  },
+  "class:AptRenderItemStaticText": {
+   "notes": "Blocked (same deps as AptRenderItemLevel): the un-homed AptCharacterStaticText text/paragraph/glyph layout + sub_82AEB9A0 (the shared render-item copy-ctor helper, no recoverable body). [adri1 apt-100]",
    "status": "blocked"
   },
   "class:AptRenderManagerItem": {
@@ -31224,6 +31382,10 @@
   "class:AptRenderingContext": {
    "notes": "wave3: 8 funcs, 0x448 layout (vertex/colour stacks); verify PASS; compile PASS",
    "status": "done"
+  },
+  "class:AptSavedInputCheckpoints": {
+   "notes": "Needs an AptFileSavedInputState.h layout change (the committed home documents an unattested +4 pad as a placeholder; the recon found a meState field + E_APT_SAVED_INPUT_* enum) -- a corrective rewrite of a committed home; coordinate before landing. Reconstructed in scratchpad/rework. [adri1 apt-100]",
+   "status": "blocked"
   },
   "class:AptScriptColour": {
    "notes": "apt-100: AS Color object, 9 fns by named members vs X360 ARTIST; fresh-eyes semantic verify + cl /c gate (::new fix + AptObject GC-new additive). Committed b5-decomp dev 59cb525.",
