@@ -2226,10 +2226,25 @@
   "BrnFlapt::FlaptManager::SetSoundTriggerHandler": {
    "status": "reviewed"
   },
+  "BrnFlapt::FlaptRenderer::Construct": {
+   "status": "reviewed"
+  },
   "BrnFlapt::FlaptRenderer::PopMask": {
    "status": "reviewed"
   },
+  "BrnFlapt::FlaptRenderer::RenderMask": {
+   "status": "reviewed"
+  },
+  "BrnFlapt::FlaptRenderer::RenderMesh": {
+   "status": "reviewed"
+  },
+  "BrnFlapt::FlaptRenderer::RenderTextField": {
+   "status": "reviewed"
+  },
   "BrnFlapt::FlaptRenderer::SetShader": {
+   "status": "reviewed"
+  },
+  "BrnFlapt::FlaptRenderer::SetSpecialTextureShaderProgram": {
    "status": "reviewed"
   },
   "BrnFlapt::FlaptRenderer::StartDrawingMask": {
@@ -2314,7 +2329,7 @@
    "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::GetPosition": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::GetTriggerParameters": {
    "status": "reviewed"
@@ -2326,25 +2341,25 @@
    "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetColour": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetColourScale": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetFrameTriggerCallback": {
    "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetPosition": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetPositionY": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetRotation": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetSizeScale": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetVisible": {
    "status": "reviewed"
@@ -27647,6 +27662,10 @@
   "GameSource/Gui/Flapt/BrnFlaptMovieClipRef.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flapt/BrnFlaptRenderer.cpp": {
+   "notes": "wave5 UNBLOCK: Construct (screen->NDC Im2dTransform) + RenderMask (corner transform) now bodied via named Vector4 math; completes the 5-fn renderer. verify PASS (lane mapping triangulated); compile PASS",
+   "status": "done"
+  },
   "GameSource/Gui/Flapt/BrnFlaptTextFieldInstance.cpp": {
    "notes": "wave2: cpp PASS (faithful, 24 stores verified); compile PASS. CgsAptString.h carries a pre-existing TextObject-as-bytes fork = separate tech debt",
    "status": "done"
@@ -30037,6 +30056,10 @@
   },
   "class:BrnFlapt::MovieClip": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnFlapt::MovieClipRef": {
+   "notes": "wave5 UNBLOCK: 7 transform accessors de-optimise VMX (vperm/vrlimi/vrsqrtefp/cos-sin) into named Im2dTransform Vector4 component math (Im2dTransform DID have a home; prior block was false). verify PASS; compile PASS (float32_t->f32)",
    "status": "done"
   },
   "class:BrnFlapt::TextFieldRef": {
