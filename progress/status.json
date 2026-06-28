@@ -58,22 +58,22 @@
    "status": "reviewed"
   },
   "AptFileSavedInputState::`vector deleting destructor'": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptIntervalTimer::AptIntervalTimer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptIntervalTimer::CleanParams": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptIntervalTimer::GenerateId": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptIntervalTimer::`vector deleting destructor'": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptIntervalTimer::~AptIntervalTimer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptLinkerThingy::`scalar deleting destructor'": {
    "status": "reviewed"
@@ -121,28 +121,28 @@
    "status": "reviewed"
   },
   "AptRenderingContext::AptRenderingContext": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptRenderingContext::`scalar deleting destructor'": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptRenderingContext::appendColourTransform": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptRenderingContext::appendVertexMatrix": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptRenderingContext::multMatrix": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptRenderingContext::popColourTransform": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptRenderingContext::popVertexMatrix": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptRenderingContext::pushColourTransform": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptSingleListPolicy>::Erase": {
    "status": "reviewed"
@@ -6295,7 +6295,7 @@
    "status": "reviewed"
   },
   "BrnGui::FlaptButtonIconComponent::Setup": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::FlaptTimerFieldComponent::IsTimeDangerous": {
    "status": "reviewed"
@@ -27266,6 +27266,10 @@
   "GameSource/Gui/Flapt/BrnFlaptMovieClipRef.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flapt/BrnFlaptRenderer.cpp": {
+   "notes": "3 of 5 funcs done+committed (SetSpecialTextureShaderProgram/RenderMesh/RenderTextField, + SetShader). Construct @0x82472270 + RenderMask @0x8246F900 BLOCKED on rw::math::vpu vector operators + CgsGraphics::Im2dTransform (no reconstructed home; would force faking vpu SIMD). Unblock when the rw vector-math vocab + Im2dTransform land.",
+   "status": "blocked"
+  },
   "GameSource/Gui/Flapt/BrnFlaptTextFieldInstance.cpp": {
    "notes": "wave2: cpp PASS (faithful, 24 stores verified); compile PASS. CgsAptString.h carries a pre-existing TextObject-as-bytes fork = separate tech debt",
    "status": "done"
@@ -27579,6 +27583,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnTextSelection.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/FlaptComponents/BrnFlaptButtonIcon.cpp": {
+   "notes": "wave3: flapt button icon; verify PASS; compile PASS",
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptComponentUtils.cpp": {
@@ -29118,6 +29126,14 @@
    "notes": "AptSharedPtr<AptFile> (Dispose/operator=/vector-deleting-dtor); refcount lwarx/stwcx host-mapped; verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:AptFileSavedInputState": {
+   "notes": "wave3: vector deleting destructor (compiler thunk) + EAStringC element; verify PASS; compile PASS",
+   "status": "done"
+  },
+  "class:AptIntervalTimer": {
+   "notes": "fresh-eyes sonnet review PASS (13-point); ctor/CleanParams/GenerateId(static atomic id)/dtor faithful; vec-deleting-dtor dropped (thunk); mParams=AptValueVector cap6; x64 named-member layout; field names domain-inferred (no DWARF). compile PASS",
+   "status": "done"
+  },
   "class:AptLinkerThingy": {
    "notes": "verified vs X360 asm; parity.",
    "status": "done"
@@ -29141,6 +29157,10 @@
   "class:AptRenderItemLevel": {
    "notes": "Clone @0x82AEC7B0 genuinely blocked. Pool-allocates 0x34 (52B) then delegates ALL copy-init to sub_82AEB9A0 -- [external/unknown], called only from this site, no class recovery, no recoverable body. The +0x18 bitfield (insrwi r10,r9=0xF,6,8 -> & 0xFF03FFFF | 0x3C0000) and the vtable store off_821458",
    "status": "blocked"
+  },
+  "class:AptRenderingContext": {
+   "notes": "wave3: 8 funcs, 0x448 layout (vertex/colour stacks); verify PASS; compile PASS",
+   "status": "done"
   },
   "class:AptSingleListPolicy>": {
    "notes": "verified store-for-store; parity.",
