@@ -693,7 +693,13 @@
   "BrnAI::RaceBalancingGraph::ComputeSpeedRatio": {
    "status": "reviewed"
   },
+  "BrnAI::RaceBalancingManager::CalculateScheduleOffset": {
+   "status": "reviewed"
+  },
   "BrnAI::RaceBalancingManager::ComputeParSpeed": {
+   "status": "reviewed"
+  },
+  "BrnAI::RaceBalancingManager::ComputeTargetSpeed": {
    "status": "reviewed"
   },
   "BrnAI::RaceBalancingManager::OnOpponentReachedCheckpoint": {
@@ -1903,6 +1909,12 @@
    "status": "reviewed"
   },
   "BrnEffectsFrame::Construct": {
+   "status": "reviewed"
+  },
+  "BrnFlapt::FileRef::FindComponent": {
+   "status": "reviewed"
+  },
+  "BrnFlapt::FileRef::GetRootMovieClip": {
    "status": "reviewed"
   },
   "BrnFlapt::FlaptFile::FixDown": {
@@ -27077,6 +27089,10 @@
   "GameSource/Gui/Flapt/BrnFlaptFileInstance.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flapt/BrnFlaptFileRef.cpp": {
+   "notes": "standard forwarder; fresh-eyes sonnet review pass; RED parity benign (CGS_ASSERT macro-fold + method-call syntax); asm-derived sigs, compile gate PASS",
+   "status": "done"
+  },
   "GameSource/Gui/Flapt/BrnFlaptManager.cpp": {
    "status": "done"
   },
@@ -28514,6 +28530,10 @@
    "status": "blocked"
   },
   "GameSource/Unity/../World/AI/BrnRouteRequestManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../World/AI/RaceBalancing/BrnRaceBalancingManager.cpp": {
+   "notes": "gate-green; verified; pushed 1cc7cb6; parity flags are de-inlined member/operator calls (false positives)",
    "status": "done"
   },
   "GameSource/Unity/../World/AI/RaceBalancing/BrnRaceBalancingRoute.cpp": {
