@@ -26789,6 +26789,10 @@
    "notes": "Wave 8: compile-gate PASS + fresh-eyes adversarial verify PASS. CgsGui::ObjectController (AptExtObject-derived) + CgsGui::Animator reconstructed by named members; created the AptExtObject base home (LegacySrc shape). RED auto-parity is the expected de-optimization signal (inlined EAStringC/StrStream/assert folds + member-call name resolution), all asm calls/branches present.",
    "status": "done"
   },
+  "GameShared/GameClasses/Gui/View/AptInterface/CgsAptCommunicator.cpp": {
+   "notes": "~6 of 11 fns need EATech-runtime pieces not yet committed (JeBobs lane): AptValue::toString (AptValue.h states it is the not-yet-done follow-on; only toInteger/toFloat/toBool exist) used by UpdateComponentReserved/GetComponentData/SendAptEvent/SendAptSoundEvent + UpdateComponent debug-log; AptValueFactory::CreateArray + AptCallFunctionOpti (UpdateAllComponents); AptIsDeferredVectorFull (UpdateComponentReserved). The 5 self-contained fns (GetName, FindAptComponent, sMethod_GetPlatformString, sMethod_GetCircleButtonAsSelect, sMethod_SetCommunicationObject) are reconstructable now (AptExtObject base landed in wave 8) -- retry once AptValue::toString/AptValueFactory land.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptCommunicator.h": {
    "status": "done"
   },
@@ -26809,6 +26813,10 @@
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptObjectController.h": {
    "notes": "Wave 8: compile-gate PASS + fresh-eyes adversarial verify PASS. CgsGui::ObjectController (AptExtObject-derived) + CgsGui::Animator reconstructed by named members; created the AptExtObject base home (LegacySrc shape). RED auto-parity is the expected de-optimization signal (inlined EAStringC/StrStream/assert folds + member-call name resolution), all asm calls/branches present.",
    "status": "done"
+  },
+  "GameShared/GameClasses/Gui/View/AptInterface/CgsAptRender.cpp": {
+   "notes": "12 of 14 fns deref un-homed runtime render types: renderengine::TextureState + CgsContainers::HashTable<u32,TextureState*,25> (wrap/clamp tables in AptRenderHandler::Construct), CgsGraphics::Im2dRenderBuffer + Basic2dColouredTexturedVertex (Render/DrawRenderingUnit), the runtime GuiGeometryFile->GuiGeometryMesh vertex/texture graph (committed CgsGuiGeometryObjects.h models only the serialised blob, not the runtime mesh), AptMatrix/AptCXForm (SetVertexMatrix), and the CgsGui::AptAux module-static off_8305A6C8 every AptCallbackRender reaches state through. The 2 self-contained fns (GetUnusedAptString, _FindGeometryFile) are reconstructed+verified, staged for re-do when these types are homed. Unblocks once the render-engine types + AptAux land.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptString.cpp": {
    "status": "done"
