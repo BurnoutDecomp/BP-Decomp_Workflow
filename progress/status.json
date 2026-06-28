@@ -10533,6 +10533,57 @@
   "BrnPhysics::Spring1D::Update": {
    "status": "reviewed"
   },
+  "BrnPhysics::StuntOffencesManager::CheckForCleanLanding": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::CheckForConvoy": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::CheckForDrift": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::CheckForHandBreakTurns": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::CheckForRollsAndSpins": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::CheckForSuccessfulLanding": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::CheckForTakenOffLanding": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::GetTailgateeIndex": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::GetTailgaterIndex": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::IsWithinTailgatingCone": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::OutputStuntsCompleted": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::OutputStuntsInProgress": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::ResetCompleteOutputValues": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::SetCurrentCarInAirStatus": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::StuntOffencesManager::UpdateInAirRotations": {
+   "status": "reviewed"
+  },
   "BrnPhysics::SuspensionSpring::Prepare": {
    "status": "reviewed"
   },
@@ -15690,6 +15741,12 @@
   "BrnWorld::TrafficCrash::Construct": {
    "status": "reviewed"
   },
+  "BrnWorld::TriggerEntityModule::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::TriggerEntityModule::Destruct": {
+   "status": "reviewed"
+  },
   "BrnWorld::TriggerEntityModule::PostSceneUpdate": {
    "status": "reviewed"
   },
@@ -15699,7 +15756,25 @@
   "BrnWorld::TriggerEntityModule::PreSceneUpdate": {
    "status": "reviewed"
   },
+  "BrnWorld::TriggerEntityModule::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnWorld::TriggerEntityModule::ProcessAddTriggerEvents": {
+   "status": "reviewed"
+  },
+  "BrnWorld::TriggerEntityModule::ProcessLineTestFineResult": {
+   "status": "reviewed"
+  },
   "BrnWorld::TriggerEntityModule::ProcessRemoveTriggerEvents": {
+   "status": "reviewed"
+  },
+  "BrnWorld::TriggerEntityModule::ProcessSceneQueryResults": {
+   "status": "reviewed"
+  },
+  "BrnWorld::TriggerEntityModule::ProcessTriggerQueryEvents": {
+   "status": "reviewed"
+  },
+  "BrnWorld::TriggerEntityModule::Release": {
    "status": "reviewed"
   },
   "BrnWorld::TriggerEntityModule::TriggerEntityModule": {
@@ -28266,6 +28341,10 @@
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManager.h": {
    "status": "done"
   },
+  "GameSource/Unity/../Physics/VehicleManager/StuntOffences/BrnStuntOffencesManager.cpp": {
+   "notes": "Adversarially verified line-by-line vs X360 asm; MSVC /permissive- gate green; committed consumers regate green.",
+   "status": "done"
+  },
   "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/B5PhysicsHandlingDebugComponent.cpp": {
    "status": "done"
   },
@@ -28548,6 +28627,10 @@
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.cpp": {
    "notes": "Fresh-eyes batch review: verified vs X360 (not drift-warned Feb-2007); Construct/OnPhysical/UpdateRearAxle/TryIntersect faithful; de-optimized.",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/TriggerEntityModule/BrnTriggerEntityModule.cpp": {
+   "notes": "Adversarially verified line-by-line vs X360 asm; MSVC /permissive- gate green; committed consumers regate green.",
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp": {
@@ -30404,6 +30487,10 @@
   },
   "class:BrnPhysics::Props::UpdatePropEvent,200>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h, already reconstructed) - matches the established EventQueue_*_N.cpp pattern. Event struct reconstructed from DecFIGS DWARF (member names/types) into its mirrored header, 16B-aligned so sizeof is correct for the inline maEvents[N] buffer. Parity flags the template body's assert/setup callees as absent since they live in the template header, not the one-line instantiation - expected for explicit instantiations.",
+   "status": "done"
+  },
+  "class:BrnPhysics::StuntOffencesManager": {
+   "notes": "Adversarially verified line-by-line vs X360 asm; MSVC /permissive- gate green; committed consumers regate green.",
    "status": "done"
   },
   "class:BrnPhysics::Vehicle::BrnNetworkDriverControls": {
