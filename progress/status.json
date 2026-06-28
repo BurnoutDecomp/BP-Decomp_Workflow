@@ -21,6 +21,9 @@
   "AptActionInterpreter::_FunctionAptActionDelete2": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::_FunctionAptActionExtends": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionGetMember": {
    "status": "compiles"
   },
@@ -29,6 +32,9 @@
   },
   "AptActionInterpreter::_FunctionAptActionGetVariable": {
    "status": "compiles"
+  },
+  "AptActionInterpreter::_FunctionAptActionImplementsOp": {
+   "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionInitArray": {
    "status": "reviewed"
@@ -724,6 +730,21 @@
    "status": "reviewed"
   },
   "AptRegister::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptRenderManagerItem::Clean": {
+   "status": "reviewed"
+  },
+  "AptRenderManagerItem::SetNext": {
+   "status": "reviewed"
+  },
+  "AptRenderManagerQueue::Add": {
+   "status": "reviewed"
+  },
+  "AptRenderManagerQueue::Clean": {
+   "status": "reviewed"
+  },
+  "AptRenderManagerQueue::IsEmpty": {
    "status": "reviewed"
   },
   "AptRenderTreeManager::_AptRenderItemRootList::Get": {
@@ -10716,8 +10737,38 @@
   "BrnNetwork::ScoreboardColumn::Prepare": {
    "status": "reviewed"
   },
+  "BrnNetwork::ScoreboardDebugComponent::Construct": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::GetIndexes": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::GetName": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::GetScoreboard": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::GetVariations": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::HandleScoreboardEvent": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::HandleScoreboardHeadingEvent": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::OnActivate": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::Prepare": {
+   "status": "compiles"
+  },
   "BrnNetwork::ScoreboardDebugComponent::PrintScoreboard": {
    "status": "reviewed"
+  },
+  "BrnNetwork::ScoreboardDebugComponent::Release": {
+   "status": "compiles"
   },
   "BrnNetwork::ScoreboardManager::AddNumberBeforeAndAfter": {
    "status": "reviewed"
@@ -30657,6 +30708,10 @@
    "notes": "Faithful decompile of GetMember(0x82B04200)/SetMember(0x82B043C8); compile gate PASS, wired live into sGlobalTable[0x4E/0x4F]. Parity RED is REPRESENTATIONAL, not a fidelity gap -- verified ALL paths present: GetMember {array-numeric get, extern, generic getVariable, undefined-push}; SetMember {array-numeric set, object setVariable + __proto__/SetHasClass, extern, pop3+drain}. call_count +19 = I use the codebase's named AptValue accessors (getVtblIndex/getIsDefined/ContainsNativeHashVirtual/SetHasClass/toInteger/Get_ToString) where the X360 pseudo inlines raw bitfield ops ((x<<25)>>25 / (x>>27)&1) as ZERO calls; branch_count -20 = IDA decomposes each &&/|| into vN=1;if()vN=0 (31 branches) vs my compound boolean expressions (11). Absent callees are method-call-vs-Class::method (getVariable/setVariable/AptArray::set/toInteger/toString=Get_ToString/AptValue_::PopAndPush=stackPopAndPush), EAStringC RAII dtor (DecreaseInternalRefCount), or documented FLAG (AptValueVector::ReleaseValues=AptApt_FlushDeferredReleases). FLAG'd: type-11 Extern host hooks (dword_8324E858/E854) since AptExtern is not reconstructed. vtbl[3]=ContainsNativeHashVirtual/vtbl[5]=SetHasClass per AptValue decl order; __proto__ key=StringPool::saConstant.",
    "status": "done"
   },
+  "SDKs/EATech/include/Apt/AptActionInterpreterProtoOps.cpp": {
+   "notes": "Faithful Extends(0x69)/ImplementsOp(0x2C); gate PASS, wired. Prototype-chain setup using landed AptNativeHash Get/SetPrototype/Set__Proto__ + AptPrototype + SetSuperConstructor + AptArray (all public). Only FLAG: AptObject_SetImplementedObjects (console AptObject::SetImplementedObjects, not yet on reconstructed AptObject -- free-helper encapsulation). Parity deltas = void-return + method-call/IDA-&&-decomposition false-positives.",
+   "status": "done"
+  },
   "SDKs/EATech/include/Apt/AptActionInterpreterSetVariable.cpp": {
    "notes": "Gate PASS. Parity RED explained: branch_count 27->9 = the deep frame-stack scope-chain set (AptFrameStack::SetWhereExistsInScopeChain), frame-context fallback, type-12/37 CIH paths + the _global __proto__ reset are deferred to FLAG'd helpers (AptInterp_SetInScopeChain/SetVariableFallback) -- they need Adriwin's in-progress class:AptFrameStack + the interpreter frame-context (deliberate division of labor). return_count = early-returns vs goto-single-return. AptNativeHash::Set/Lookup ARE called (method syntax). The CORE write paths (getContext resolve -> objectMemberSet [vtbl 7] -> context native-hash Set + UpdateObjectMethods, clear-on-absent retarget) are faithful to X360 0x82B03048. b5-decomp 6c631722.",
    "status": "done"
@@ -31061,6 +31116,14 @@
   "class:AptRenderItemLevel": {
    "notes": "Clone @0x82AEC7B0 genuinely blocked. Pool-allocates 0x34 (52B) then delegates ALL copy-init to sub_82AEB9A0 -- [external/unknown], called only from this site, no class recovery, no recoverable body. The +0x18 bitfield (insrwi r10,r9=0xF,6,8 -> & 0xFF03FFFF | 0x3C0000) and the vtable store off_821458",
    "status": "blocked"
+  },
+  "class:AptRenderManagerItem": {
+   "notes": "apt-100: render-manager queue cluster, named members vs X360 ARTIST, fresh-eyes verified (Get prune predicate fixed to flag-only) + cl /c gate. Committed b5-decomp dev a54964e.",
+   "status": "done"
+  },
+  "class:AptRenderManagerQueue": {
+   "notes": "apt-100: render-manager queue cluster, named members vs X360 ARTIST, fresh-eyes verified (Get prune predicate fixed to flag-only) + cl /c gate. Committed b5-decomp dev a54964e.",
+   "status": "done"
   },
   "class:AptRenderTreeManager::_AptRenderItemRootList": {
    "notes": "apt-100: render-manager queue cluster, named members vs X360 ARTIST, fresh-eyes verified (Get prune predicate fixed to flag-only) + cl /c gate. Committed b5-decomp dev a54964e.",
