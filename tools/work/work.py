@@ -271,6 +271,12 @@ def server_request(method, path, payload=None, query=None, timeout=30):
     except urllib.error.URLError as e:
         _SERVER["offline"] = True
         raise ServerOffline(str(e.reason))
+    except (TimeoutError, ssl.SSLError, OSError) as e:
+        # A read/connect timeout (slow cold-start) or socket error surfaces here as a
+        # bare TimeoutError/OSError, NOT a URLError — treat it as offline so the
+        # invocation degrades to the local queue instead of crashing with a traceback.
+        _SERVER["offline"] = True
+        raise ServerOffline(str(e))
 
 
 def server_request_strict(method, path, payload=None, query=None):
