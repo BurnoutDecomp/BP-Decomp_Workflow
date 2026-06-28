@@ -5395,7 +5395,7 @@
    "status": "reviewed"
   },
   "BrnGui::AttachToTextFieldComponent": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::BankingScore,6>::Append": {
    "status": "reviewed"
@@ -5632,7 +5632,7 @@
    "status": "reviewed"
   },
   "BrnGui::BrnFlaptComponent::Prepare": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::BrnGuiKeyboard::Prepare": {
    "status": "reviewed"
@@ -8308,7 +8308,7 @@
    "status": "reviewed"
   },
   "BrnGui::TryFindTextFieldFromMovieClip": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::Video::GetResourcesToLoad": {
    "status": "reviewed"
@@ -17926,31 +17926,31 @@
    "status": "reviewed"
   },
   "CgsGui::AptComponentList::GetAptValue": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptComponentList::GetKeyValue": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptComponentList::GetUsedData": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptComponentList::MoveComponent": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptComponentList::SetAptValue": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptComponentList::SetHashedName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptComponentList::SetHashedReferenceName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptComponentList::SetKeyValue": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptComponentList::SetUsedData": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::AptDataHandler::AddAptData": {
    "status": "reviewed"
@@ -27581,6 +27581,10 @@
   "GameSource/Gui/Flow/Shared/Components/BrnTextSelection.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptComponentUtils.cpp": {
+   "notes": "wave3: flapt component utils; verify PASS; compile PASS",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/hud/States/BrnIdleHudState.h": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; reference-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
@@ -29944,6 +29948,10 @@
    "notes": "Wave 37: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnGui::BrnFlaptComponent": {
+   "notes": "wave3: BrnFlaptComponent base recovered + Prepare; verify PASS; compile PASS",
+   "status": "done"
+  },
   "class:BrnGui::BrnGuiKeyboard": {
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -32003,6 +32011,10 @@
   },
   "class:CgsGui::AnimData::AnimatorChannel,6>": {
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:CgsGui::AptComponentList": {
+   "notes": "wave3 REWORK: forked s32 tables replaced with KeyValue*[256][32]/AptValue*[256] (DWARF names), new CgsAptCommunicator.h home for KeyValue; fresh-eyes verify PASS; compile PASS",
    "status": "done"
   },
   "class:CgsGui::AptDataHandler": {
