@@ -6624,6 +6624,36 @@
   "BrnGui::FlaptIconComponent::SetState": {
    "status": "reviewed"
   },
+  "BrnGui::FlaptInterpolatorComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptInterpolatorComponent::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptInterpolatorComponent::SetInterpValues": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptInterpolatorComponent::SetProportion": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptRoadSignIconComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptRoadSignIconComponent::DisplayRoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptRoadSignIconComponent::DisplayRoadFromCgsID": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptRoadSignIconComponent::FindRoadFromName": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptRoadSignIconComponent::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::FlaptRoadSignIconComponent::SetColour": {
+   "status": "reviewed"
+  },
   "BrnGui::FlaptTimerFieldComponent::CalculateColour": {
    "status": "reviewed"
   },
@@ -6854,6 +6884,9 @@
   },
   "BrnGui::FriendsListComponent::WithdrawBranches": {
    "status": "reviewed"
+  },
+  "BrnGui::GenericForwardState::Update": {
+   "status": "compiles"
   },
   "BrnGui::GuiAudioTriggerEvent::Construct": {
    "status": "reviewed"
@@ -28056,6 +28089,14 @@
   },
   "GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptIconComponent.cpp": {
    "notes": "wave4: FlaptIcon/AnimatorComponent (8 fns); verify PASS; compile PASS",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptInterpolatorComponent.cpp": {
+   "notes": "wave7 (single-TU retry): tween component, VMX lerp de-opt to named Vector4/Vector2 component math; verify PASS; compile PASS",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptRoadSignIconComponent.cpp": {
+   "notes": "wave7: road-sign component (Construct/Prepare/DisplayRoad/FindRoadFromName/SetColour); verify FAIL was only an unqualified nested-enum (E_SIGN_COLOUR_COUNT) - FIXED; all asm/signature/assert checks verified PASS; compile PASS",
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptTimerFieldComponent.cpp": {
