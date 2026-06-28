@@ -5811,6 +5811,21 @@
   "BrnGui::AboveCarRenderer::UpdateCachedInfoForRival": {
    "status": "reviewed"
   },
+  "BrnGui::AlwaysAvailableComponentsManager::Construct": {
+   "status": "compiles"
+  },
+  "BrnGui::AlwaysAvailableComponentsManager::Prepare": {
+   "status": "compiles"
+  },
+  "BrnGui::AlwaysAvailableComponentsManager::PrepareFlapt": {
+   "status": "compiles"
+  },
+  "BrnGui::AlwaysAvailableComponentsManager::SetInEventQueue": {
+   "status": "compiles"
+  },
+  "BrnGui::AlwaysAvailableComponentsManager::Update": {
+   "status": "compiles"
+  },
   "BrnGui::Animator::AddAnimationChannelToLibrary": {
    "status": "reviewed"
   },
@@ -27878,6 +27893,10 @@
   },
   "GameSource/Graphics/BrnShaderConstantsFrame.h": {
    "status": "done"
+  },
+  "GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp": {
+   "notes": "4 of 5 fns reconstructed+committed+compile-gate-PASS (Construct/Prepare/PrepareFlapt/SetInEventQueue). Update@0x82509338 (the per-frame event pump) is a documented trap stub: needs un-homed GUI event-payload types (~15 event records), GuiCache +0x12BC0 active-track slot, BrnGui::OptionsDataProfile far member (cache +0xB878, profile +0x7344), and BrnSound::Module::Io::EaTraxHelper Artist/Song/Album accessors -- none reconstructable here. Unblocks once those event-payload + cache/profile/EaTraxHelper homes land; then finish Update.",
+   "status": "blocked"
   },
   "GameSource/Gui/BrnGuiCache.cpp": {
    "status": "done"
