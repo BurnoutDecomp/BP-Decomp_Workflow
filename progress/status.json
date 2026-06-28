@@ -28886,10 +28886,6 @@
   "SharedClasses/Gui/Flapt/BrnFlaptFile.cpp": {
    "status": "done"
   },
-  "SharedClasses/Gui/Flapt/BrnFlaptFileResourceType.cpp": {
-   "notes": "BrnFlapt::FlaptFileResourceType : public CgsResource::Type (type id 65568/0x10020). 4 fns self-contained (GetTypeID=65568; GetImportCount=a2[5]-a2[18]; GetImportPointer=raw-offset import walk; GetSerialisedResourceDescriptor). BLOCKER: FixUp @0x82471618 -> BrnFlapt::FlaptFile::FixUp(resource) and FixDown @0x82471610 -> BrnFlapt::FlaptFile::FixDown(resource) delegate to the UNCOMMITTED BrnFlapt::FlaptFile class (grep: zero hits for class FlaptFile / FlaptFile::FixUp/FixDown -- only BrnFlapt::FileRef, a handle, is committed). Same shape as the blocked BrnPropGraphicsListResourceType: reconstructing the wrapper would require fabricating the FlaptFile class (the on-disk 0x10020 movie file) header + FixUp/FixDown signatures, a fork against the real FlaptFile TU. BLOCK until BrnFlapt::FlaptFile (FixUp/FixDown + layout) lands; the wrapper is then ~12 lines.",
-   "status": "blocked"
-  },
   "SharedClasses/Gui/SatNav/Resources/BrnSatNavTileResourceType.cpp": {
    "notes": "trivial; compile-gate-only per review.config selection_guidance (constant/forwarder/relocation/accessor patterns, self-checked)",
    "status": "done"
