@@ -30831,6 +30831,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:AptCIHNativeFunctionHelper": {
+   "notes": "23 AS MovieClip native-method handlers blocked: needs un-homed AptTextFormat/TextFormat types (no header/DWARF/LegacySrc) + the unbuilt AptCIH behavioural family (InsertChild/_gotoAndX/jumpToFrame/SetMask/getName) + AptActionInterpreter (_doCloneSprite/valueToObject/loadVariables) + AptDisplayListState find/depth ops. Re-claim after those land. No files (avoids fork/poke). [adri1 apt-100 waveE]",
+   "status": "blocked"
+  },
   "class:AptCIHNone": {
    "notes": "apt-100 wave C: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev ed85819.",
    "status": "done"
@@ -30890,6 +30894,10 @@
   "class:AptDate": {
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
+  },
+  "class:AptDisplayList": {
+   "notes": "PARTIAL: 6/16 fns (teardown/removal core: ctor/dtor/PreDestroy/clear/removeObject/removeClonedObject) reconstructed+verified+committed (b5-decomp dev 3d04b46). 10 heavy behavioural fns (tick/placeObject/instantiateCharacter/mergeState/GetBoundingRect/AddToDisplayList/ReplaceDisplyListItem/placeObjectNCXForm/_addToSetCaches) blocked on un-homed AptCharacter frame/clip-event layout + module-static dispatch arrays (off_8324E544/E548/E574). [adri1 apt-100 waveE]",
+   "status": "blocked"
   },
   "class:AptFile>": {
    "notes": "AptSharedPtr<AptFile> (Dispose/operator=/vector-deleting-dtor); refcount lwarx/stwcx host-mapped; verifier parity/none; gate pass.",
