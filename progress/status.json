@@ -27,6 +27,9 @@
   "AptActionInterpreter::_FunctionAptActionGetVariable": {
    "status": "compiles"
   },
+  "AptActionInterpreter::_FunctionAptActionInitArray": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionPushGlobal": {
    "status": "compiles"
   },
@@ -42,6 +45,12 @@
   "AptActionInterpreter::_FunctionAptActionPushUndefined": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::_FunctionAptActionPushZeroSetVar": {
+   "status": "reviewed"
+  },
+  "AptActionInterpreter::_FunctionAptActionRandom": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionReturn": {
    "status": "compiles"
   },
@@ -53,6 +62,12 @@
   },
   "AptActionInterpreter::_FunctionAptActionStoreRegister": {
    "status": "compiles"
+  },
+  "AptActionInterpreter::_FunctionAptActionStringAdd": {
+   "status": "reviewed"
+  },
+  "AptActionInterpreter::_FunctionAptActionStringLength": {
+   "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionSubtract": {
    "status": "reviewed"
@@ -30617,6 +30632,10 @@
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterUnary.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterValueOps.cpp": {
+   "notes": "Faithful decompile of 5 self-contained opcodes (PushZeroSetVar 0x72/StringLength 0x14/StringAdd 0x21/Random 0x30/InitArray 0x42); gate PASS, all wired. Reuse done deps (Get_ToString/setVariable/stack prims/AptInteger/AptString/AptArray). FLAG: AptRand (host RNG), Append_ToString (declared renderer). Random: PC-guards modulus<=0 (console traps). Parity deltas = void-handler return + method-call/RAII false-positives. SWF opcodes verified.",
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterVarOps.cpp": {
