@@ -334,7 +334,7 @@
    "status": "reviewed"
   },
   "AptValue::findChild": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptValue>::PopAndPush": {
    "status": "reviewed"
@@ -7702,7 +7702,7 @@
    "status": "reviewed"
   },
   "BrnGui::IdleHudState::OnEnter": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::IdleHudState::OnLeave": {
    "status": "reviewed"
@@ -8190,8 +8190,17 @@
   "BrnGui::OnlineNews::Update": {
    "status": "reviewed"
   },
+  "BrnGui::OnlinePause::CheckForCompletedLoads": {
+   "status": "compiles"
+  },
   "BrnGui::OnlinePause::GetResourcesToLoad": {
    "status": "reviewed"
+  },
+  "BrnGui::OnlinePause::HandleControllerInput": {
+   "status": "compiles"
+  },
+  "BrnGui::OnlinePause::HandleOverlayComplete": {
+   "status": "compiles"
   },
   "BrnGui::OnlinePause::OnEnter": {
    "status": "reviewed"
@@ -10954,7 +10963,7 @@
    "status": "reviewed"
   },
   "BrnPhysics::Deformation::PhysicalBodyPart::UpdateRW": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnPhysics::Deformation::PhysicalBodyPartPool::AddPartsToScene": {
    "status": "reviewed"
@@ -16015,7 +16024,7 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::InputBuffer_PostPhysics::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::InputBuffer_PostScene::Construct": {
    "status": "reviewed"
@@ -28425,6 +28434,10 @@
    "notes": "wave4: timer component Construct/Prepare/SetTime/CalculateColour (de-opt VMX lerp); verify PASS; compile PASS",
    "status": "done"
   },
+  "GameSource/Gui/Flow/hud/States/BrnIdleHudState.cpp": {
+   "notes": "decomp-wave: agent-reconstructed, fresh-eyes verify PASS (high conf); re-gated PASS.",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/hud/States/BrnIdleHudState.h": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; reference-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
@@ -28661,6 +28674,10 @@
    "status": "done"
   },
   "GameSource/Physics/DeformationManager/DeformationPhysics/BrnDeformableObject.h": {
+   "status": "done"
+  },
+  "GameSource/Physics/DeformationManager/DeformationPhysics/BrnPhysicalBodyPart.h": {
+   "notes": "decomp-wave: agent-reconstructed, fresh-eyes verify PASS (high conf); re-gated PASS.",
    "status": "done"
   },
   "GameSource/Physics/VehicleManager/SharedIO/BrnVehicleInputInterface.h": {
@@ -29598,6 +29615,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityModuleIO.cpp": {
+   "notes": "decomp-wave: InputBuffer_PostPhysics::Construct, fresh-eyes verify PASS (high conf); re-gated PASS.",
+   "status": "done"
+  },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/AirTime/BrnAirTimeManager.cpp": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -29779,6 +29800,10 @@
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptValue/AptValueConvert.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptValue/AptValueFindChild.cpp": {
+   "notes": "Gate PASS. Parity RED explained: the GENERIC path (native hash via GetNativeHashVirtual -> __proto__ chain -> global-extension/global objects) is faithful; the 358-line body's 11 inline special-name cases (this/_root/_parent/_level<N>/_global/Math/Mouse/Stage/Key/String/extern/super) are collapsed into ONE delegated call to AptApt_ResolveSpecialName (FLAG'd follow-on -- they navigate the interpreter target-state + global-object singletons, not reconstructed). call_count/return_count deltas = that delegation + named accessors + early-return vs goto-single-return. AptNativeHash::Lookup IS called (method syntax + the LookupInObject helper). KEY: the jump table (word_821453C0) + ObjectIndex name->id wordlist (off_82F79C20) were XEX-extracted (documented in-file; unblocks filling ObjectIndex's data tables). findChild's dispatch + generic resolution match X360 0x82B01298; the special-name navigation is the documented follow-on. b5-decomp 5ec789c2.",
    "status": "done"
   },
   "SDKs/EATech/include/eathread/powerpc/eathread_atomic_powerpc.h": {
