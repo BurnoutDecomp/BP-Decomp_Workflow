@@ -402,6 +402,39 @@
   "AptDate::~AptDate": {
    "status": "reviewed"
   },
+  "AptError::CleanNativeFunctions": {
+   "status": "reviewed"
+  },
+  "AptError::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptError::objectMemberLookup": {
+   "status": "reviewed"
+  },
+  "AptError::objectMemberSet": {
+   "status": "reviewed"
+  },
+  "AptError::operator delete": {
+   "status": "reviewed"
+  },
+  "AptError::operator new": {
+   "status": "reviewed"
+  },
+  "AptError::sMethod_toString": {
+   "status": "reviewed"
+  },
+  "AptError::~AptError": {
+   "status": "reviewed"
+  },
+  "AptExtern::AptExtern": {
+   "status": "reviewed"
+  },
+  "AptExtern::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptExtern::objectMemberSet": {
+   "status": "reviewed"
+  },
   "AptFile>::Dispose": {
    "status": "reviewed"
   },
@@ -19146,6 +19179,9 @@
   "CgsGraphics::BufferedDispatchFrame::Swap": {
    "status": "compiles"
   },
+  "CgsGraphics::CallbackFn::Interpret": {
+   "status": "compiles"
+  },
   "CgsGraphics::ChunkBuffer::GetChunkData": {
    "status": "reviewed"
   },
@@ -19176,11 +19212,20 @@
   "CgsGraphics::DispatchFrame::Construct": {
    "status": "reviewed"
   },
+  "CgsGraphics::DispatchFrame::ConstructWithSharedBinMemory": {
+   "status": "compiles"
+  },
+  "CgsGraphics::DispatchFrame::FlushBlockToSharedMemory": {
+   "status": "compiles"
+  },
   "CgsGraphics::DispatchFrame::GetList": {
    "status": "reviewed"
   },
   "CgsGraphics::DispatchFrame::Release": {
    "status": "reviewed"
+  },
+  "CgsGraphics::DispatchFrame::RelocateForMainMemory": {
+   "status": "compiles"
   },
   "CgsGraphics::DispatchFrame::Reset": {
    "status": "reviewed"
@@ -19190,6 +19235,9 @@
   },
   "CgsGraphics::DispatchList::DispatchAllMeshOcclusionQueries": {
    "status": "reviewed"
+  },
+  "CgsGraphics::DispatchList::DispatchAllMeshes": {
+   "status": "compiles"
   },
   "CgsGraphics::DispatchList::DispatchAllMeshesZOnly": {
    "status": "reviewed"
@@ -19202,6 +19250,30 @@
   },
   "CgsGraphics::DispatchList::ReconnectChainBlocks": {
    "status": "reviewed"
+  },
+  "CgsGraphics::DispatchObjectContext::ResetShadowing": {
+   "status": "compiles"
+  },
+  "CgsGraphics::DispatchPacketInterpreter::DispatchPacketInterpreter": {
+   "status": "compiles"
+  },
+  "CgsGraphics::DrawRenderable::AddToBin": {
+   "status": "compiles"
+  },
+  "CgsGraphics::DrawRenderable::Interpret": {
+   "status": "compiles"
+  },
+  "CgsGraphics::DrawRenderableMesh::AddToBin": {
+   "status": "compiles"
+  },
+  "CgsGraphics::DrawRenderableMesh::InterpretOcclusionQuery": {
+   "status": "compiles"
+  },
+  "CgsGraphics::DrawRenderableMeshZOnly::AddToBin": {
+   "status": "compiles"
+  },
+  "CgsGraphics::DrawRenderableMeshZOnly::Interpret": {
+   "status": "compiles"
   },
   "CgsGraphics::Im2d::Construct": {
    "status": "reviewed"
@@ -19385,6 +19457,9 @@
   },
   "CgsGraphics::PackedOobb::ToMatrix": {
    "status": "reviewed"
+  },
+  "CgsGraphics::SetupBuiltinInterpreters": {
+   "status": "compiles"
   },
   "CgsGraphics::ShaderConstantHashTable::FixUp": {
    "status": "reviewed"
@@ -25797,6 +25872,12 @@
   "ObjectToMeshJob::Execute": {
    "status": "reviewed"
   },
+  "ObjectToMeshJob::ExecuteImplementation": {
+   "status": "compiles"
+  },
+  "ObjectToMeshJob::SharedMemoryChangeCallback": {
+   "status": "compiles"
+  },
   "RealmcCore::Locale::GetString": {
    "status": "reviewed"
   },
@@ -25991,6 +26072,9 @@
   },
   "ShaderConstantTableElement::SetSize": {
    "status": "reviewed"
+  },
+  "ShaderConstantsExternal::AddToDispatchBinFromStatePointers": {
+   "status": "compiles"
   },
   "ShaderConstantsExternal::FixUp": {
    "status": "reviewed"
@@ -31036,6 +31120,14 @@
   "class:AptDisplayList": {
    "notes": "PARTIAL: 6/16 fns (teardown/removal core: ctor/dtor/PreDestroy/clear/removeObject/removeClonedObject) reconstructed+verified+committed (b5-decomp dev 3d04b46). 10 heavy behavioural fns (tick/placeObject/instantiateCharacter/mergeState/GetBoundingRect/AddToDisplayList/ReplaceDisplyListItem/placeObjectNCXForm/_addToSetCaches) blocked on un-homed AptCharacter frame/clip-event layout + module-static dispatch arrays (off_8324E544/E548/E574). [adri1 apt-100 waveE]",
    "status": "blocked"
+  },
+  "class:AptError": {
+   "notes": "apt-100: toString-layer value type, named members vs X360 ARTIST, fresh-eyes semantic verify + cl /c gate (toString now committed; urlEncodeCustomRender decl). Committed b5-decomp dev 12dd61c.",
+   "status": "done"
+  },
+  "class:AptExtern": {
+   "notes": "apt-100: toString-layer value type, named members vs X360 ARTIST, fresh-eyes semantic verify + cl /c gate (toString now committed; urlEncodeCustomRender decl). Committed b5-decomp dev 12dd61c.",
+   "status": "done"
   },
   "class:AptFile>": {
    "notes": "AptSharedPtr<AptFile> (Dispose/operator=/vector-deleting-dtor); refcount lwarx/stwcx host-mapped; verifier parity/none; gate pass.",
