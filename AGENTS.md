@@ -310,6 +310,23 @@ own** pass first, so you don't ship a known-divergent TU into review.
   `RW_VERIFY_LAYOUT`. Caveat: the generator's input (`.ghidra-exports/rwtypes/`) is **not
   checked in**, so it can't be regenerated here — template-instantiation types live in its
   hand-maintained prelude and the emitted header is hand-synced to match it.
+- **`rw::audio::core::` types come from `IDA Files/ProStreet08Milestone.pdb`.** `rwtypes.pdb`
+  covers only `rw::core` (the renderer/resource core), **not** the audio middleware. The EA
+  Black Box **`rwaudiocore`** runtime (the layer Burnout's `CgsSound::Playback` sits on —
+  `System`/`Mixer`/`SubMix`/`Voice`/`Dac`/`SndPlayer1`/`Decoder`/`PlugIn`/`Send`/`Route`/
+  `GainFader`/`StreamPool`, etc.) has full type ground truth in the **NFS ProStreet 08
+  reference**: an **Xbox 360** build (Oct-2007, same PPC platform/era as ARTIST)
+  with a complete 62 MB PDB + 121 K-line MAP. Extract layouts the same way:
+  `llvm-pdbutil pretty -classes -class-definitions=layout -include-types="rw::audio::core::<regex>" "IDA Files/ProStreet08Milestone.pdb"`.
+  Symbol→address catalog (for cross-referencing a body in the ARTIST asm): grep the demangled
+  forms in `IDA Files/ProStreet08Milestone.map` (mangled tail `@core@audio@rw@@`). **Width
+  caveat:** unlike the x64 `rwtypes.pdb`, this PDB is **X360 (32-bit pointers, big-endian)** —
+  so it gives authoritative field *order/names/types* on the same platform as ARTIST, but
+  model the PC layout with **x64 widths** (widen pointers; same rule as every recon). ProStreet
+  is a *different game* (NFS, EA Black Box) — use it **only** for the shared `rwaudiocore`
+  vocabulary, never for Burnout-specific `CgsSound`/`BrnSound` shape (that stays ARTIST+DecFIGS).
+  The existing `vendor/renderware/include/rw/audio/core/` headers predate this PDB and are
+  hand-guessed — treat the PDB as ground truth to verify/correct them.
 - **Stubs over guesses — for function BODIES, not types.** A call to a
   not-yet-reconstructed function gets a trap-stub *body* (`work stubs <tu>`), not an
   invented one. This scaffold satisfies **missing bodies at link time**; it is **not** a

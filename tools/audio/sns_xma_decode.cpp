@@ -30,6 +30,7 @@
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavutil/avutil.h>
+#include <libavutil/channel_layout.h>
 #include <libavutil/error.h>
 #include <libavutil/frame.h>
 }
@@ -39,7 +40,30 @@ namespace {
 constexpr std::size_t kPacketBytes = 2048;
 constexpr std::size_t kPacketBits = kPacketBytes * 8;
 constexpr std::size_t kPacketHeaderBits = 32;
-constexpr int kSampleRate = 48000;
+// Default; overridden by the SNR header (e.g. the video logos are 48 kHz but the
+// in-game streams are 44.1 kHz). The XMA frame decode is rate-agnostic, but the
+// decoder context and the output WAV header must carry the stream's real rate.
+int g_sample_rate = 48000;
+
+// EA "GenericRwacWaveContent" stream header (the SNR resource that pairs with a
+// streamed .SNS). It carries the authoritative channel count, sample rate, total
+// sample count, and -- crucially -- a *prefetched* leading chunk of XMA stored
+// inline (the first ~0.3 s of audio, i.e. the attack), with the remainder
+// streamed from the .SNS. Layout:
+//   [0x00] 16-byte resource wrapper ([u32 payload_size][u32 header_size=0x10]..)
+//   [0x10] EAAC header: u32 (version:4 codec:4 channels:6 sample_rate:18),
+//                       u32 (type:2 loop:1 num_samples:29)
+//   [0x18] extended: u32 prefetch_samples, u32 prefetch_size, ...
+//   [0x28] prefetched XMA bytes (prefetch_size of them)
+// See burnout.wiki + Xenia xma; codec 3 == EA-XMA.
+struct SnrHeader {
+  int channels = 0;
+  int sample_rate = 0;
+  std::uint32_t num_samples = 0;
+  std::uint32_t prefetch_samples = 0;
+  std::vector<std::uint8_t> prefetch;  // raw embedded XMA bytes (un-padded)
+  bool valid = false;
+};
 
 std::uint32_t ReadBe24(const std::uint8_t* p) {
   return (static_cast<std::uint32_t>(p[0]) << 16) |
@@ -133,6 +157,53 @@ std::vector<std::uint8_t> RestorePackets(
   return packets;
 }
 
+// Parse the SNR (GenericRwacWaveContent) resource. Returns the authoritative
+// channels/sample_rate/num_samples and the inline prefetched XMA bytes.
+SnrHeader ParseSnr(const std::vector<std::uint8_t>& d) {
+  SnrHeader h;
+  constexpr std::size_t kBase = 0x10;       // skip the 16-byte resource wrapper
+  constexpr std::size_t kDataOffset = 0x28;  // wrapper + EAAC(8) + extended(16)
+  if (d.size() < kDataOffset) {
+    throw std::runtime_error("SNR too small / not a GenericRwacWaveContent");
+  }
+  const std::uint32_t h1 = ReadBe32(&d[kBase]);
+  const std::uint32_t h2 = ReadBe32(&d[kBase + 4]);
+  const int codec = static_cast<int>((h1 >> 24) & 0xF);
+  h.channels = static_cast<int>((h1 >> 18) & 0x3F) + 1;
+  h.sample_rate = static_cast<int>(h1 & 0x3FFFF);
+  h.num_samples = h2 & 0x1FFFFFFF;
+  if (codec != 3) {  // 3 == EA-XMA
+    throw std::runtime_error("SNR codec is not EA-XMA (" +
+                             std::to_string(codec) + ")");
+  }
+  h.prefetch_samples = ReadBe32(&d[kBase + 8]);            // 0x18
+  const std::uint32_t prefetch_size = ReadBe32(&d[kBase + 12]);  // 0x1c
+  const std::size_t available = d.size() - kDataOffset;
+  // prefetch_size is occasionally rounded a few bytes long; clamp to what's
+  // actually present.
+  const std::size_t bytes = std::min<std::size_t>(prefetch_size, available);
+  h.prefetch.assign(d.begin() + kDataOffset, d.begin() + kDataOffset + bytes);
+  h.valid = true;
+  return h;
+}
+
+// Pad the inline prefetch XMA to a packet boundary and prepend it to the
+// .SNS-restored packets, yielding one continuous XMA packet stream covering the
+// whole sound (prefetched attack + streamed body).
+std::vector<std::uint8_t> CombinePackets(const SnrHeader& snr,
+                                         const std::vector<std::uint8_t>& sns) {
+  std::vector<std::uint8_t> combined;
+  if (snr.valid && !snr.prefetch.empty()) {
+    combined = snr.prefetch;
+    const std::size_t padded =
+        (combined.size() + kPacketBytes - 1) / kPacketBytes * kPacketBytes;
+    combined.resize(padded, 0xFF);
+  }
+  const std::vector<std::uint8_t> body = RestorePackets(sns);
+  combined.insert(combined.end(), body.begin(), body.end());
+  return combined;
+}
+
 std::uint32_t ReadBits(const std::uint8_t* data, std::size_t bit_offset,
                        unsigned bit_count) {
   std::uint32_t value = 0;
@@ -161,6 +232,14 @@ struct FrameBits {
   std::vector<std::uint8_t> bits;
 };
 
+std::size_t ReadFrameLength(const std::vector<std::uint8_t>& bits) {
+  std::size_t frame_bits = 0;
+  for (unsigned i = 0; i < 15; ++i) {
+    frame_bits = (frame_bits << 1) | bits[i];
+  }
+  return frame_bits;
+}
+
 std::vector<FrameBits> ExtractFrames(
     const std::vector<std::uint8_t>& packets) {
   std::vector<FrameBits> frames;
@@ -187,20 +266,39 @@ std::vector<FrameBits> ExtractFrames(
       // packet.
       const std::size_t available = kPacketBits - bit_offset;
       const bool continuation_only = continuation_bits >= available;
-      std::size_t copied = std::min(continuation_bits, available);
-      if (expected_partial_bits != 0) {
-        copied =
-            std::min(copied, expected_partial_bits - partial.size());
-      }
-      AppendBits(partial, packet, bit_offset, copied);
-      bit_offset += copied;
-      if (expected_partial_bits == 0 && partial.size() >= 15) {
-        expected_partial_bits = 0;
-        for (unsigned i = 0; i < 15; ++i) {
-          expected_partial_bits =
-              (expected_partial_bits << 1) | partial[i];
+      const std::size_t continuation_payload =
+          std::min(continuation_bits, available);
+      std::size_t copied = 0;
+
+      if (expected_partial_bits == 0 && partial.size() < 15) {
+        const std::size_t needed = 15 - partial.size();
+        const std::size_t chunk =
+            std::min(needed, continuation_payload);
+        AppendBits(partial, packet, bit_offset, chunk);
+        bit_offset += chunk;
+        copied += chunk;
+
+        if (partial.size() == 15) {
+          expected_partial_bits = ReadFrameLength(partial);
         }
       }
+
+      if (expected_partial_bits != 0) {
+        if (partial.size() > expected_partial_bits) {
+          throw std::runtime_error(
+              "split XMA frame length mismatch at packet " +
+              std::to_string(packet_offset / kPacketBytes));
+        }
+
+        const std::size_t needed =
+            expected_partial_bits - partial.size();
+        const std::size_t chunk =
+            std::min(needed, continuation_payload - copied);
+        AppendBits(partial, packet, bit_offset, chunk);
+        bit_offset += chunk;
+        copied += chunk;
+      }
+
       if (expected_partial_bits == 0 ||
           partial.size() > expected_partial_bits) {
         throw std::runtime_error(
@@ -212,6 +310,11 @@ std::vector<FrameBits> ExtractFrames(
       }
       if (partial.size() < expected_partial_bits) {
         continue;
+      }
+      if (!continuation_only && copied != continuation_payload) {
+        throw std::runtime_error(
+            "XMA continuation overran completed frame at packet " +
+            std::to_string(packet_offset / kPacketBytes));
       }
       frames.push_back({std::move(partial)});
       partial.clear();
@@ -242,6 +345,14 @@ std::vector<FrameBits> ExtractFrames(
       frames.push_back(std::move(frame));
       bit_offset += frame_bits;
       if (!more_frames) {
+        break;
+      }
+      if (bit_offset + 15 > kPacketBits) {
+        const std::size_t remaining = kPacketBits - bit_offset;
+        if (remaining != 0) {
+          AppendBits(partial, packet, bit_offset, remaining);
+          expected_partial_bits = 0;
+        }
         break;
       }
     }
@@ -275,8 +386,10 @@ std::vector<std::int16_t> DecodeFrames(
     throw std::runtime_error("FFmpeg allocation failed");
   }
 
-  context->sample_rate = kSampleRate;
-  context->channels = source_channels;
+  context->sample_rate = g_sample_rate;
+  // AVCodecContext::channels was removed in the FFmpeg fork's libavcodec major
+  // bump; the channel count now travels through ch_layout.
+  av_channel_layout_default(&context->ch_layout, source_channels);
   int result = avcodec_open2(context, codec, nullptr);
   if (result < 0) {
     throw std::runtime_error("avcodec_open2: " + AvError(result));
@@ -342,8 +455,11 @@ std::vector<std::int16_t> DecodeFrames(
 
   std::fprintf(stderr, "decoded frames: %zu, rejected frames: %zu\n",
                frames.size() - failed_frames, failed_frames);
-  if (failed_frames != 0) {
-    throw std::runtime_error("one or more XMA frames failed to decode");
+  // The XMA hardware decoder consumes a priming/partial frame at the stream
+  // tail that libavcodec cannot complete on its own; tolerate a couple of
+  // trailing rejects rather than discarding an otherwise complete decode.
+  if (failed_frames > 2) {
+    throw std::runtime_error("too many XMA frames failed to decode");
   }
   const std::size_t wanted_values = exact_samples * 2;
   if (pcm.size() < wanted_values) {
@@ -370,8 +486,8 @@ void WriteWav(const char* path, const std::vector<std::int16_t>& pcm) {
   WriteLe32(out, 16);
   WriteLe16(out, 1);
   WriteLe16(out, 2);
-  WriteLe32(out, kSampleRate);
-  WriteLe32(out, kSampleRate * 2 * sizeof(std::int16_t));
+  WriteLe32(out, g_sample_rate);
+  WriteLe32(out, g_sample_rate * 2 * sizeof(std::int16_t));
   WriteLe16(out, 2 * sizeof(std::int16_t));
   WriteLe16(out, 16);
   out.write("data", 4);
@@ -381,39 +497,69 @@ void WriteWav(const char* path, const std::vector<std::int16_t>& pcm) {
 
 }  // namespace
 
+// Detect whether arg looks like a path to an existing SNR file (vs a number).
+bool FileExists(const char* path) {
+  std::ifstream f(path, std::ios::binary);
+  return static_cast<bool>(f);
+}
+
 int main(int argc, char** argv) {
+  // Preferred:  sns_xma_decode input.SNS output.wav stream.snr
+  //   The SNR (GenericRwacWaveContent) supplies channels, sample rate, total
+  //   sample count, and the prefetched leading XMA (the attack) that is NOT in
+  //   the .SNS -- without it the first ~0.3 s is lost.
+  // Legacy:     sns_xma_decode input.SNS output.wav exact_sample_count [channels]
   if (argc != 4 && argc != 5) {
     std::fprintf(stderr,
-                 "usage: %s input.SNS output.wav exact_sample_count "
-                 "[source_channels]\n",
-                 argv[0]);
+                 "usage: %s input.SNS output.wav stream.snr\n"
+                 "   or: %s input.SNS output.wav exact_sample_count [channels]\n",
+                 argv[0], argv[0]);
     return EXIT_FAILURE;
   }
 
   try {
-    const unsigned long long parsed = std::strtoull(argv[3], nullptr, 10);
-    if (parsed == 0 ||
-        parsed > std::numeric_limits<std::uint32_t>::max()) {
-      throw std::runtime_error("invalid sample count");
+    const auto sns = ReadFile(argv[1]);
+
+    const bool snr_mode = (argc == 4) && FileExists(argv[3]) &&
+                          std::strtoull(argv[3], nullptr, 10) == 0;
+
+    std::vector<std::uint8_t> packets;
+    std::size_t exact_samples = 0;
+    int source_channels = 2;
+
+    if (snr_mode) {
+      const SnrHeader snr = ParseSnr(ReadFile(argv[3]));
+      g_sample_rate = snr.sample_rate;
+      source_channels = snr.channels;
+      exact_samples = snr.num_samples;
+      packets = CombinePackets(snr, sns);
+      std::fprintf(stderr,
+                   "SNR: ch=%d rate=%d num_samples=%u prefetch=%u samples "
+                   "(%zu bytes)\n",
+                   snr.channels, snr.sample_rate, snr.num_samples,
+                   snr.prefetch_samples, snr.prefetch.size());
+    } else {
+      // Legacy: caller supplies the (block-sum) sample count and channels.
+      const unsigned long long parsed = std::strtoull(argv[3], nullptr, 10);
+      if (parsed == 0 || parsed > std::numeric_limits<std::uint32_t>::max()) {
+        throw std::runtime_error("invalid sample count");
+      }
+      exact_samples = static_cast<std::size_t>(parsed);
+      source_channels = argc == 5 ? std::atoi(argv[4]) : 2;
+      packets = RestorePackets(sns);
     }
 
-    // These two boot streams are logically mono, but their XMA frame syntax is
-    // the two-channel mode. The decoded channels are retained as stereo.
-    const int source_channels = argc == 5 ? std::atoi(argv[4]) : 2;
     if (source_channels != 1 && source_channels != 2) {
       throw std::runtime_error("source channels must be 1 or 2");
     }
 
-    const auto sns = ReadFile(argv[1]);
-    const auto packets = RestorePackets(sns);
     const auto frames = ExtractFrames(packets);
-    const auto pcm = DecodeFrames(frames, static_cast<std::size_t>(parsed),
-                                  source_channels);
+    const auto pcm = DecodeFrames(frames, exact_samples, source_channels);
     WriteWav(argv[2], pcm);
 
-    std::printf("decoded %zu XMA frames, wrote %llu samples (%.3f s)\n",
-                frames.size(), parsed,
-                static_cast<double>(parsed) / kSampleRate);
+    std::printf("decoded %zu XMA frames, wrote %zu samples (%.3f s)\n",
+                frames.size(), exact_samples,
+                static_cast<double>(exact_samples) / g_sample_rate);
     return EXIT_SUCCESS;
   } catch (const std::exception& error) {
     std::fprintf(stderr, "sns_xma_decode: %s\n", error.what());

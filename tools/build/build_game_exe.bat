@@ -51,10 +51,12 @@ rc /fo"%OUT%\\obj\\burnout.res" "%RES%\burnout.rc"
 rem ---- build the cl response file ----
 > "%RSP%" (
   echo /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS
-  echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%FFM%\include"
+  echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%FFM%\include" /I"%VEN%\lua\src"
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareInitPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsAudioOutputPC.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsMovieAudioPC.cpp"
   echo "%SRC%\GameShared\GameClasses\Core\CgsStringUtils.cpp"
   echo "%SRC%\GameShared\GameClasses\Core\CgsAssert.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\AssertSystem\CgsAssertManager.cpp"
@@ -164,6 +166,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Development\Log\CgsLogFileBuffered.cpp"
   echo "%SRC%\GameShared\GameClasses\Fsm\CgsFsm.cpp"
   echo "%SRC%\GameShared\GameClasses\Fsm\CgsScriptedState.cpp"
+  echo "%SRC%\GameShared\GameClasses\Fsm\CgsLuaState.cpp"
+  echo "%SRC%\GameShared\GameClasses\Fsm\CgsScriptedFsm.cpp"
+  echo "%SRC%\GameShared\GameClasses\Fsm\CgsEvent.cpp"
+  echo "%SRC%\GameShared\GameClasses\Fsm\Resources\CgsLuaCodeResource.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\CgsBinaryFileResource.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateMachine.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupList.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap.cpp"
@@ -189,6 +197,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamResultReader.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\MemoryMap\CgsMemoryMap.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Packeting\BitStream\CgsBitStream.cpp"
+  echo "%SRC%\GameShared\GameClasses\Network\Packeting\BitStream\CgsIntQuantiser.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Packeting\BitStream\CgsSmartBitStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Packeting\Messages\CgsMessage.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Packeting\Messages\CgsNewHostMessage.cpp"
@@ -293,6 +302,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\BrnGuiMovieManager.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiModule.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootVideos.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLoading.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiState.cpp"
   echo "%SRC%\GameShared\GameClasses\Fsm\CgsState.cpp"
@@ -340,7 +350,7 @@ rem ---- build the cl response file ----
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
-cl /nologo @"%RSP%" /link /SUBSYSTEM:WINDOWS /MAP /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib
+cl /nologo @"%RSP%" /link /SUBSYSTEM:WINDOWS /MAP /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.

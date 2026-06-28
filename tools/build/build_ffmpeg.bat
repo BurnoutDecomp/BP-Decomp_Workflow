@@ -8,7 +8,12 @@ rem   - make/bash: MSYS2 (C:\msys64\usr\bin), appended so MSVC's link.exe wins o
 setlocal
 set ROOT=%~dp0..\..
 
-where cl >nul 2>&1
+rem Accept an already-configured toolchain ONLY if cl is a modern MSVC (19.x).
+rem A plain "where cl" is not enough: the Xbox 360 SDK puts an ancient cl (14.x)
+rem on PATH that wins the lookup, and FFmpeg's configure rejects it
+rem ("Unsupported MSVC version"). Run vcvars in that case so VS2022's cl is
+rem prepended and wins.
+cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
 if not errorlevel 1 goto toolchain_ready
 
 set "VCVARS="
