@@ -105,6 +105,12 @@
   "AptAction_TryCatchFinallyBlock::putCaughtObjectInRegister": {
    "status": "reviewed"
   },
+  "AptCIHNone::AptCIHNone": {
+   "status": "reviewed"
+  },
+  "AptCIHNone::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "AptCXForm::AptCXForm": {
    "status": "reviewed"
   },
@@ -259,6 +265,18 @@
    "status": "reviewed"
   },
   "AptMathObj::~AptMathObj": {
+   "status": "reviewed"
+  },
+  "AptMovieClip::AptMovieClip": {
+   "status": "reviewed"
+  },
+  "AptMovieClip::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptMovieClip::operator new": {
+   "status": "reviewed"
+  },
+  "AptMovieClip::~AptMovieClip": {
    "status": "reviewed"
   },
   "AptNativeFunction::AptNativeFunction": {
@@ -30425,6 +30443,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:AptCIHNone": {
+   "notes": "apt-100 wave C: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev ed85819.",
+   "status": "done"
+  },
   "class:AptCXForm": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
@@ -30483,6 +30505,10 @@
   },
   "class:AptMathObj": {
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
+   "status": "done"
+  },
+  "class:AptMovieClip": {
+   "notes": "apt-100 wave C: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev ed85819.",
    "status": "done"
   },
   "class:AptNativeFunction": {
