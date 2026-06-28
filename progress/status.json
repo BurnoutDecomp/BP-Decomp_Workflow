@@ -15,6 +15,9 @@
   "AptActionInterpreter::_FunctionAptActionBitAnd": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::_FunctionAptActionDelete2": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionGetMember": {
    "status": "compiles"
   },
@@ -30558,6 +30561,14 @@
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterContext.cpp": {
    "notes": "Gate PASS. Parity YELLOW explained: loop_count 2 vs 4 = the EAStringC leaf-name assignment replaces the console's two raw char-copy do-loops; return_count = early-returns vs goto-single-return (within tol). 'Absent callees' are present/false-positives: findChild IS called (method syntax), InitFromBuffer IS used (via the EAStringC(const char*) ctor), DecreaseInternalRefCount is the temp EAStringC dtor (RAII). The path-parser logic (/ absolute, . descend, .. parent, : context:leaf, plain leaf; target consumed per segment) matches X360 0x82B01830. findChild is the declared follow-on TU; AptApt_GetRootContext encapsulates the root global. b5-decomp 44b060b6.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterControlOps.cpp": {
+   "notes": "Faithful decompile of Trace(0x26)/Throw(0x2A)/ToString(0x4B); compile gate PASS, wired into sGlobalTable. Parity YELLOW within/at tol: call_count +3 (named accessors getVtblIndex/getIsDefined/GetBuffer vs inlined bitfield ops), return_count 3->1 (void-handler-vs-int ABI artifact). Absent callees = false-positives: Append_ToString (method-call p->Append_ToString in ToString, declared on AptValue, body deferred=toString sibling renderer), AptValue_::Pop (=stackPop), EAStringC::DecreaseInternalRefCount (Trace scratch RAII dtor). FLAG: AptHook_Trace (host debug sink dword_8324E82C), Append_ToString renderer. Rode an x64-required refinement: abort slot int mnAbortValue -> AptValue* mpAbortValue (+0x60 holds the thrown AptValue*); runStream 2 checks regression-gated. Opcodes table-verified; SWF Trace 0x26/Throw 0x2A match.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterDelete.cpp": {
+   "notes": "Faithful decompile of Delete2 (0x3B @0x82B03DF0); gate PASS, wired sGlobalTable[0x3B]. No FLAGs -- Get_ToString + setVariable(null=clear) + push AptInteger(1). Parity YELLOW = void-handler-vs-int return + method-call-syntax false-positives (getVariable/setVariable, AptValue_::Pop=stackPop, DecreaseInternalRefCount=EAStringC dtor).",
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterLogic.cpp": {
