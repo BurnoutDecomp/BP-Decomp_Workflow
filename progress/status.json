@@ -726,6 +726,15 @@
   "AptRegister::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "AptRenderTreeManager::_AptRenderItemRootList::Get": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::_AptRenderItemRootList::InsertNewRoot": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::_AptRenderItemRootList::Shutdown": {
+   "status": "reviewed"
+  },
   "AptRenderingContext::AptRenderingContext": {
    "status": "reviewed"
   },
@@ -7283,6 +7292,24 @@
   },
   "BrnGui::DriveThruMapPanel::SetDriveThruData": {
    "status": "reviewed"
+  },
+  "BrnGui::EATraxInGameComponent::Construct": {
+   "status": "compiles"
+  },
+  "BrnGui::EATraxInGameComponent::DisplayNewTrackNotification": {
+   "status": "compiles"
+  },
+  "BrnGui::EATraxInGameComponent::Initialize": {
+   "status": "compiles"
+  },
+  "BrnGui::EATraxInGameComponent::Prepare": {
+   "status": "compiles"
+  },
+  "BrnGui::EATraxInGameComponent::SetTime": {
+   "status": "compiles"
+  },
+  "BrnGui::EATraxInGameComponent::Update": {
+   "status": "compiles"
   },
   "BrnGui::EATraxMenuComponent::BuildStringIDs": {
    "status": "reviewed"
@@ -31034,6 +31061,10 @@
   "class:AptRenderItemLevel": {
    "notes": "Clone @0x82AEC7B0 genuinely blocked. Pool-allocates 0x34 (52B) then delegates ALL copy-init to sub_82AEB9A0 -- [external/unknown], called only from this site, no class recovery, no recoverable body. The +0x18 bitfield (insrwi r10,r9=0xF,6,8 -> & 0xFF03FFFF | 0x3C0000) and the vtable store off_821458",
    "status": "blocked"
+  },
+  "class:AptRenderTreeManager::_AptRenderItemRootList": {
+   "notes": "apt-100: render-manager queue cluster, named members vs X360 ARTIST, fresh-eyes verified (Get prune predicate fixed to flag-only) + cl /c gate. Committed b5-decomp dev a54964e.",
+   "status": "done"
   },
   "class:AptRenderingContext": {
    "notes": "wave3: 8 funcs, 0x448 layout (vertex/colour stacks); verify PASS; compile PASS",
