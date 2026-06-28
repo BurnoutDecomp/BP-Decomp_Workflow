@@ -451,6 +451,15 @@ own** pass first, so you don't ship a known-divergent TU into review.
 
 ## Don't
 
+- **Don't commit or push the parent/superproject repo (`BP-Decomp_Workflow`) — only the
+  `b5-decomp` submodule.** Land reconstructed code with `git -C b5-decomp add/commit` then
+  `git -C b5-decomp push origin dev` (fetch → rebase → push; **retry on non-fast-forward**,
+  since other agents push to `dev` too and the remote moves under you). The parent's mutable
+  state — `progress/status.json` and the `b5-decomp` submodule pointer — is reconciled and
+  committed **automatically by a GitHub Action**, so an agent committing the parent
+  races/duplicates that work. Leave the parent's ` M b5-decomp` pointer change and any
+  `progress/` ledger churn uncommitted. (Deliberately editing a parent doc like this file when
+  asked is fine — leave it uncommitted for the maintainer to commit.)
 - Don't run global structural matching (Diaphora) as a prerequisite. Names join the
   symbolized builds; structural matching is an optional per-function last resort.
 - Don't chase a whole-program link early. Per-TU compilation is the gate.
