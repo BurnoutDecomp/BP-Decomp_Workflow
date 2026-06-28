@@ -12,6 +12,9 @@
   "AptActionInterpreter::InitDispatchTable": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::_FunctionAptActionAdd2": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionBitAnd": {
    "status": "reviewed"
   },
@@ -64,6 +67,9 @@
    "status": "compiles"
   },
   "AptActionInterpreter::_FunctionAptActionStringAdd": {
+   "status": "reviewed"
+  },
+  "AptActionInterpreter::_FunctionAptActionStringEquals": {
    "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionStringLength": {
@@ -30611,6 +30617,10 @@
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterDelete.cpp": {
    "notes": "Faithful decompile of Delete2 (0x3B @0x82B03DF0); gate PASS, wired sGlobalTable[0x3B]. No FLAGs -- Get_ToString + setVariable(null=clear) + push AptInteger(1). Parity YELLOW = void-handler-vs-int return + method-call-syntax false-positives (getVariable/setVariable, AptValue_::Pop=stackPop, DecreaseInternalRefCount=EAStringC dtor).",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterEcmaOps.cpp": {
+   "notes": "Faithful StringEquals(0x13)/Add2(0x47); gate PASS, wired. StringEquals=AptBoolean(string-eq) + v7 undefined rule; Add2=concat-or-numeric ECMA add + v7 guard. Reuse Get_ToString/toFloat/toInteger/AptBoolean/Float/Integer::Create + EAStringC::==. FLAG: Append_ToString renderer, gpUndefinedValue/AptGetSwfVersion (established in arith/compare TUs). Parity deltas = void-return + method-call/RAII false-positives + the IDA &&-decomposition vs compound bools.",
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterLogic.cpp": {
