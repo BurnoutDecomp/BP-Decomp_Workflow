@@ -24687,6 +24687,9 @@
   "RealmcIface::TitleInfo::TitleInfo": {
    "status": "reviewed"
   },
+  "Renderable::UsesTexture": {
+   "status": "reviewed"
+  },
   "RenderableMesh::GetResourceDescriptor": {
    "status": "reviewed"
   },
@@ -26368,6 +26371,10 @@
   },
   "GameShared/GameClasses/Graphics/Dispatch/parametersemantic.cpp": {
    "notes": "inferred struct layout; behaviour-faithful, semantic (not byte) parity; self-reviewed inline",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/Dispatch/renderable.cpp": {
+   "notes": "Fresh-eyes review verified vs X360 asm @0x827E9A68: all loads map to named members (mpObjectScopeTextureInfo/mu16NumTextures/mppTextures@+8, mu16NumMeshes/mppMeshes, RenderableMesh::mpMaterialAssembly@+0x20), control flow/returns/call target faithful, no offset hacks, goto-web+strength-reduction de-optimized. YELLOW parity benign (de-opt + scanner false-flag on ->UsesTexture). Added missing MaterialAssembly::UsesTexture decl; recovered Renderable/RenderableMesh layouts.",
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Dispatch/shadowingdevice.cpp": {
