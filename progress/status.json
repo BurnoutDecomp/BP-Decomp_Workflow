@@ -22,7 +22,7 @@
    "status": "reviewed"
   },
   "AptActionInterpreter::getContext": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptActionInterpreter::getVariable": {
    "status": "reviewed"
@@ -7689,6 +7689,9 @@
   "BrnGui::IdleHudState::GetResourcesToLoad": {
    "status": "reviewed"
   },
+  "BrnGui::IdleHudState::OnEnter": {
+   "status": "compiles"
+  },
   "BrnGui::IdleHudState::OnLeave": {
    "status": "reviewed"
   },
@@ -10938,6 +10941,9 @@
   "BrnPhysics::Deformation::PhysicalBodyPart::AddToSim": {
    "status": "reviewed"
   },
+  "BrnPhysics::Deformation::PhysicalBodyPart::UpdateRW": {
+   "status": "compiles"
+  },
   "BrnPhysics::Deformation::PhysicalBodyPartPool::AddPartsToScene": {
    "status": "reviewed"
   },
@@ -10946,6 +10952,9 @@
   },
   "BrnPhysics::Deformation::PhysicalBodyPartPool::RemovePart": {
    "status": "reviewed"
+  },
+  "BrnPhysics::Deformation::PhysicalBodyPartPool::UpdateJoinedParts": {
+   "status": "compiles"
   },
   "BrnPhysics::Deformation::PhysicalBodyPartPool::UpdatePart": {
    "status": "reviewed"
@@ -15992,6 +16001,9 @@
   },
   "BrnWorld::PropEntityIO::InputBuffer_Dispatch::SetShadowMap": {
    "status": "reviewed"
+  },
+  "BrnWorld::PropEntityIO::InputBuffer_PostPhysics::Construct": {
+   "status": "compiles"
   },
   "BrnWorld::PropEntityIO::InputBuffer_PostScene::Construct": {
    "status": "reviewed"
@@ -29728,6 +29740,10 @@
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterCompare.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterContext.cpp": {
+   "notes": "Gate PASS. Parity YELLOW explained: loop_count 2 vs 4 = the EAStringC leaf-name assignment replaces the console's two raw char-copy do-loops; return_count = early-returns vs goto-single-return (within tol). 'Absent callees' are present/false-positives: findChild IS called (method syntax), InitFromBuffer IS used (via the EAStringC(const char*) ctor), DecreaseInternalRefCount is the temp EAStringC dtor (RAII). The path-parser logic (/ absolute, . descend, .. parent, : context:leaf, plain leaf; target consumed per segment) matches X360 0x82B01830. findChild is the declared follow-on TU; AptApt_GetRootContext encapsulates the root global. b5-decomp 44b060b6.",
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterLogic.cpp": {
