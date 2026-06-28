@@ -28,7 +28,7 @@
    "status": "reviewed"
   },
   "AptActionInterpreter::setVariable": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptActionInterpreter::stackPop(int)": {
    "status": "reviewed"
@@ -9480,8 +9480,17 @@
   "BrnNetwork::ImageMessage::GetName": {
    "status": "reviewed"
   },
+  "BrnNetwork::ImageMessage::GetPackedMessageSize": {
+   "status": "compiles"
+  },
+  "BrnNetwork::ImageMessage::PackOrUnpack": {
+   "status": "compiles"
+  },
   "BrnNetwork::ImageMessage::PrepareForSend": {
    "status": "reviewed"
+  },
+  "BrnNetwork::ImageMessage::Retrieve": {
+   "status": "compiles"
   },
   "BrnNetwork::LaunchManager::Stop": {
    "status": "reviewed"
@@ -29801,6 +29810,10 @@
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterLogic.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterSetVariable.cpp": {
+   "notes": "Gate PASS. Parity RED explained: branch_count 27->9 = the deep frame-stack scope-chain set (AptFrameStack::SetWhereExistsInScopeChain), frame-context fallback, type-12/37 CIH paths + the _global __proto__ reset are deferred to FLAG'd helpers (AptInterp_SetInScopeChain/SetVariableFallback) -- they need Adriwin's in-progress class:AptFrameStack + the interpreter frame-context (deliberate division of labor). return_count = early-returns vs goto-single-return. AptNativeHash::Set/Lookup ARE called (method syntax). The CORE write paths (getContext resolve -> objectMemberSet [vtbl 7] -> context native-hash Set + UpdateObjectMethods, clear-on-absent retarget) are faithful to X360 0x82B03048. b5-decomp 6c631722.",
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterStackOps.cpp": {
