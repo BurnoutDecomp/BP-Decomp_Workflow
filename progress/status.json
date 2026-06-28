@@ -2485,7 +2485,7 @@
    "status": "reviewed"
   },
   "BrnDirector::VehicleTracker::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::VehicleTracker::GetImplicitAcceleration": {
    "status": "reviewed"
@@ -2881,7 +2881,7 @@
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeGameStateToDirector": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeGameStateToSound": {
    "status": "reviewed"
@@ -4537,7 +4537,7 @@
    "status": "reviewed"
   },
   "BrnGameState::ModeManager::FillInRaceDistanceInterface": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::ModeManager::FinishCurrentMode": {
    "status": "reviewed"
@@ -28223,6 +28223,10 @@
   "GameSource/GameState/BrnGameStateModuleIO.h": {
    "notes": "BridgeControllerToGameState (0x823CD738) committed (f00ad2b) with input-side bind/unbind result queues read BY NAME, but its CORE is UN-HOMED: the result-queue MERGE targets GameStateModule+0x2BE8 (sub_823B8EC0) -- a write-locked sub-buffer NOT the homed PreWorldInputBuffer, and GameStateModule itself is an empty placeholder (cone-1393 engine TU). Merge + the trailing resolved-port store(+0xD8) are commented; SetButtonPressed pressed-bit dropped (committed 1-arg arity). LESSON: the cone-9 dep metric UNDERCOUNTED -- this TU bottoms out on un-homed data-globals/sub-buffers not in tu_deps.json. Unblock when GameStateModule's +0x2BE8 result sub-buffer is homed.",
    "status": "blocked"
+  },
+  "GameSource/GameState/BrnGameStateSharedIO.h": {
+   "notes": "decomp-wave2: header data structures + FillInRaceDistanceInterface (real home BrnModeManager.cpp); fresh-eyes verify PASS high; re-gated PASS.",
+   "status": "done"
   },
   "GameSource/GameState/ModeManager/GameModes/BrnGameMode.h": {
    "status": "done"
