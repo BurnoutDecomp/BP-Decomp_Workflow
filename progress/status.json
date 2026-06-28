@@ -29018,10 +29018,6 @@
    "notes": "AptSharedPtr<AptFile> (Dispose/operator=/vector-deleting-dtor); refcount lwarx/stwcx host-mapped; verifier parity/none; gate pass.",
    "status": "done"
   },
-  "class:AptIntervalTimer": {
-   "notes": "Keystone: 2 defects in fiddly low-level code -- VectorDeletingDestructor @0x82AEAA68 frees with size *(this-8)+4 read from the allocator block-cookie (not count*4+4 recomputed), and Insert @0x82AEE4D0 has FindInst out-params inverted (asm: r5=arg3=splice-pred var_20, r6=arg4=eviction var_1C, Remove(FindInst-return)). Deferred to a careful dedicated pass; the other 3 Apt TUs (PseudoDisplayList/SingleListPolicy/Job*-dependents-bucket) are done.",
-   "status": "blocked"
-  },
   "class:AptLinkerThingy": {
    "notes": "verified vs X360 asm; parity.",
    "status": "done"
