@@ -1945,22 +1945,22 @@
    "status": "reviewed"
   },
   "BrnFlapt::FlaptFileResourceType::FixDown": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::FlaptFileResourceType::FixUp": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::FlaptFileResourceType::GetImportCount": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::FlaptFileResourceType::GetImportPointer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::FlaptFileResourceType::GetSerialisedResourceDescriptor": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::FlaptFileResourceType::GetTypeID": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::FlaptManager::Construct": {
    "status": "reviewed"
@@ -1987,7 +1987,7 @@
    "status": "reviewed"
   },
   "BrnFlapt::FlaptRenderer::SetShader": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::FlaptRenderer::StartDrawingMask": {
    "status": "reviewed"
@@ -2059,40 +2059,40 @@
    "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::FindChildMovieClip": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::FindChildMovieClipOnFrame": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::FindChildTextField": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::GetParent": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::GetTriggerParameters": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::GotoAndPlayLabel": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::GotoAndStopLabel": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetFrameTriggerCallback": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::SetVisible": {
    "status": "reviewed"
   },
   "BrnFlapt::MovieClipRef::TryFindChildComponentRecursively": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::TextFieldInstance::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::TextFieldInstance::SetUpAptStringParams": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnFlapt::TextFieldRef::ClearText": {
    "status": "reviewed"
@@ -6232,10 +6232,10 @@
    "status": "reviewed"
   },
   "BrnGui::FlaptTimerFieldComponent::IsTimeDangerous": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::FlaptTimerFieldComponent::IsTimeSafe": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::FlaptTimerFieldComponent::SetBoundaries": {
    "status": "reviewed"
@@ -27163,7 +27163,15 @@
    "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
   },
+  "GameSource/Gui/Flapt/BrnFlaptMovieClipRef.cpp": {
+   "notes": "wave2 workflow: recon+fresh-eyes verify PASS; 9 MovieClipRef forwarders onto MovieClipInstance; compile gate PASS",
+   "status": "done"
+  },
   "GameSource/Gui/Flapt/BrnFlaptMovieClipRef.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flapt/BrnFlaptTextFieldInstance.cpp": {
+   "notes": "wave2: cpp PASS (faithful, 24 stores verified); compile PASS. CgsAptString.h carries a pre-existing TextObject-as-bytes fork = separate tech debt",
    "status": "done"
   },
   "GameSource/Gui/Flapt/BrnFlaptTextFieldRef.cpp": {
@@ -28946,6 +28954,10 @@
   "SharedClasses/Gui/Flapt/BrnFlaptFile.cpp": {
    "status": "done"
   },
+  "SharedClasses/Gui/Flapt/BrnFlaptFileResourceType.cpp": {
+   "notes": "fresh-eyes sonnet review PASS; descriptor<5> matches asm; serialised-blob raw-offset documented exception; compile PASS",
+   "status": "done"
+  },
   "SharedClasses/Gui/SatNav/Resources/BrnSatNavTileResourceType.cpp": {
    "notes": "trivial; compile-gate-only per review.config selection_guidance (constant/forwarder/relocation/accessor patterns, self-checked)",
    "status": "done"
@@ -29476,6 +29488,10 @@
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnFlapt::FlaptRenderer": {
+   "notes": "wave2: SetShader @0x82470718; recon+verify PASS; compile PASS",
+   "status": "done"
+  },
   "class:BrnFlapt::MovieClip": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -29907,6 +29923,10 @@
   "class:BrnGui::FBurnMainHudState": {
    "notes": "Un-homed-aggregate keystone: FBurnMainHudState ctor @0x82508388 installs the primary vtable (off_820753B8) plus ~50 sub-object vtable/sentinel stores spanning byte offsets up to ~0x5350 (five repeated 5-store substate blocks + a -1 sentinel @word 655). Committed header has only the CgsGui::State base + virtuals + inline GetResourcesToLoad, no fields; no DWARF layout; dozens of un-homed component vtable owners. Cannot reconstruct by name without inventing layout -> flagged.",
    "status": "blocked"
+  },
+  "class:BrnGui::FlaptTimerFieldComponent": {
+   "notes": "wave2: IsTimeSafe/IsTimeDangerous; recon+verify PASS; compile PASS",
+   "status": "done"
   },
   "class:BrnGui::FreeburnChallengeManager": {
    "notes": "5 accessors (word offsets X360-verified); verifier parity; gate pass.",
