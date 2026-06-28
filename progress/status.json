@@ -126,6 +126,12 @@
   "AptCXForm::AptUint32CXFormCopy": {
    "status": "reviewed"
   },
+  "AptCharacterLevelInst::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptCharacterMorphInst::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "AptCharacterShapeInst::`vector deleting destructor'": {
    "status": "reviewed"
   },
@@ -151,6 +157,159 @@
    "status": "reviewed"
   },
   "AptCharacterSpriteInstBase::~AptCharacterSpriteInstBase": {
+   "status": "reviewed"
+  },
+  "AptCharacterStaticTextInst::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::ClearStateFlags": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetAlignment": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetBackgroundColor": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetBorderColor": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetBoundsConst": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetBoundsWritable": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetCreatedDynamic": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetDrawsBackground": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetDrawsBorder": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetFontID": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetFontSize": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetLength": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetMouseWheelEnabled": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetMultiline": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetScroll": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetTextColor": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetTextFormatConst": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetTextFormatWritable": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetTextHeight": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetTextValueConst": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetTextValueWritable": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetTextWidth": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetVarValueConst": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetVarValueWritable": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetWordWrap": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::GetZID": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetAlignment": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetBackgroundColor": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetBorderColor": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetBounds": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetBoxAlignment": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetDrawsBackground": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetDrawsBorder": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetFontSize": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetLength": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetMaxScroll": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetMouseWheelEnabled": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetMultiline": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetScroll": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetStateFlags": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetText": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetTextFormat": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetTextHeight": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetTextValue": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetTextWidth": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetVarValue": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetWordWrap": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::SetZID": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::UpdateText": {
+   "status": "reviewed"
+  },
+  "AptCharacterTextInst::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "AptColorHelper::`vector deleting destructor'": {
@@ -30587,12 +30746,28 @@
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
+  "class:AptCharacterLevelInst": {
+   "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
+   "status": "done"
+  },
+  "class:AptCharacterMorphInst": {
+   "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
+   "status": "done"
+  },
   "class:AptCharacterShapeInst": {
    "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
    "status": "done"
   },
   "class:AptCharacterSpriteInstBase": {
    "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
+   "status": "done"
+  },
+  "class:AptCharacterStaticTextInst": {
+   "notes": "apt-100 wave D1: AptCharacterInst-family leaf/base, named members vs X360 ARTIST, fresh-eyes verified + cl /c gate (non-virtual to match base manual-vtable). Committed b5-decomp dev 013c688.",
+   "status": "done"
+  },
+  "class:AptCharacterTextInst": {
+   "notes": "apt-100 wave D: 49/50 fns by named members vs X360 ARTIST (thunk dropped); fresh-eyes verified + cl /c gate. Committed b5-decomp dev 3ed95d2.",
    "status": "done"
   },
   "class:AptColorHelper": {
