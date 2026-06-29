@@ -28895,7 +28895,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Resources/CgsShaderTechniqueResourceType.cpp": {
-   "notes": "PostFixUp @0x827EEBF0 BLOCKS the TU: it parses the shader-technique name string (a2[37]) against an UN-VALUED 8-entry rodata string table off_82F30F78 (the shader-profile names) via strstr in a stride-2 loop, then writes a code from the parallel table dword_82F30F7C (*a2[37] = code+48) -- neither off_82F30F78's 8 strings nor dword_82F30F7C's codes are in the repo exports (un-recoverable rodata) -- AND it calls an UNIDENTIFIED helper sub_827ED8D0(u32*, int) 4x (at a2+7/+11/+20/+24, semantics unknown), plus a block of char-flag logic over a2[7]/a2[8]. GetTypeID @0x827E9C28 (=50/0x32) is trivial and FixUp @0x827EEB30 delegates to the committed ShaderConstantsInternal/External::FixUp + ShaderConstantHashTable::FixUp (CgsShaderConstants.cpp/CgsShaderConstantHashTable.cpp) + rebases the +140/+144/+148 hash array -- BUT the X360 Internal::FixUp(a2+8,*a3) 2-arg form may not match the committed overloads (Internal::FixUp(ProgramBuffer*, ShaderConstantHashTable*)), needs reconciliation. GetImportPointer @0x827E9D00 also shares the TU. BLOCK until off_82F30F78/dword_82F30F7C (shader-profile name+code tables) + sub_827ED8D0 are resolved and the ShaderConstants FixUp overload signatures reconciled.",
+   "notes": "3/4 done + pushed (b5-decomp dev 97c4423): GetTypeID(=50)/GetImportPointer/FixUp + header (derives CgsResource::Type). PostFixUp @0x827EEBF0 deferred: rodata profile tables off_82F30F78/dword_82F30F7C absent from IDA exports (never-fabricate).",
    "status": "blocked"
   },
   "GameShared/GameClasses/Graphics/Resources/CgsVideoDataResource.cpp": {
@@ -34815,6 +34815,10 @@
   "class:BrnWheel::GraphicsSpecResourceType": {
    "notes": "Wave 44: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
+  },
+  "class:BrnWorld::ActiveRaceCar::RenderParams": {
+   "notes": "12/13 done + pushed (b5-decomp dev 2651c62): all accessors + recovered layout (offsetof-pinned). DEBUG_OverrideScratchAmount @0x822A21B0 is a 1280-line unrolled-VMX broadcast, deferred to a VMX pass (same tier as RaceCarRenderParams::operator=).",
+   "status": "blocked"
   },
   "class:BrnWorld::BoostManager": {
    "notes": "Keystone: of its 3 funcs only SetBoostEarningEnabled @0x822A33B0 has a recoverable manager-side store (stb mbBoostEarningEnabled@+0); SetWrecking @0x822B8E40 + the third reach an un-homed RaceCar entity-module (@+0x450, vtable+0xA8) dispatch with no recoverable manager-side state. Honest stubs shipped; deferred until the entity module is homed.",
