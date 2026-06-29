@@ -35971,6 +35971,10 @@
    "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
    "status": "done"
   },
+  "class:BrnGui::ProfileManager": {
+   "notes": "6/7 funcs faithful+gate-clean (AttachMessageDisplay/DetachMessageDisplay/HandleMessageChoice/SetProgressionProfile/CopyImageToBuffer + LoadProfileUpgradeData). Ctor@0x827E0CD0 BLOCKED: the X360 ctor writes vtable ptrs @+0/4/8/12, self-refs the embedded event-queue list (+32/36/40=this+20), installs SLS/metadata vtables @+4200/4204/4596, and stamps -1 into 8 deep per-segment user-index fields (base this+0x12C0); reproducing these faithfully needs the homed BrnGuiProfile.h layout (named queue + sentinel members) + the unhomed vtables. Fabricated member writes have been REMOVED; ctor left de-fabricated rather than shipping guessed deep-offset stores. Migrate to the real layout when homed.",
+   "status": "blocked"
+  },
   "class:BrnGui::RaceMainHudState": {
    "notes": "Wave 43: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
