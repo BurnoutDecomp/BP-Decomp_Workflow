@@ -2781,7 +2781,16 @@
   "BrnDirector::DebugLog::LogString,20,int>::FreeObject": {
    "status": "reviewed"
   },
+  "BrnDirector::DebugLog::Print": {
+   "status": "reviewed"
+  },
   "BrnDirector::DebugLog::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::DebugPrinter::ActualPrint": {
+   "status": "reviewed"
+  },
+  "BrnDirector::DebugPrinter::Construct": {
    "status": "reviewed"
   },
   "BrnDirector::DirectorDevTools::Construct": {
@@ -4289,6 +4298,15 @@
   },
   "BrnGameState::ChallengeManager::StoredLeapingData,7,int>::IsObjec": {
    "status": "reviewed"
+  },
+  "BrnGameState::ChallengeManagerDebugComponent::CompleteAllChallenges": {
+   "status": "compiles"
+  },
+  "BrnGameState::ChallengeManagerDebugComponent::GetName": {
+   "status": "compiles"
+  },
+  "BrnGameState::ChallengeManagerDebugComponent::OnActivate": {
+   "status": "compiles"
   },
   "BrnGameState::CheckpointData,16>:": {
    "status": "reviewed"
@@ -23712,6 +23730,18 @@
   "CgsNetwork::NetworkAdapterPrepareParams::Construct": {
    "status": "reviewed"
   },
+  "CgsNetwork::NetworkImageConverter::ConvertAndResize": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkImageConverter::ConvertAndResizeX8R8G8B8ToA1R5G5B5": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkImageConverter::SetupPerfmons": {
+   "status": "compiles"
+  },
+  "CgsNetwork::NetworkImageConverter::UnpackFromNetworkTexture": {
+   "status": "compiles"
+  },
   "CgsNetwork::NetworkManager::Construct": {
    "status": "reviewed"
   },
@@ -31796,6 +31826,10 @@
   },
   "GameSource/Director/Camera/Utils/BrnPositionLag.cpp": {
    "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
+   "status": "done"
+  },
+  "GameSource/Director/DirectorModule/BrnDirectorModuleDebugPrinter.cpp": {
+   "notes": "Fresh-eyes Opus high review: all member offsets, packed-colour constants (0xFFFFFFFF/0xFF00FF00/0xFF0000FF), float multipliers (0.25/0.1), Justification enum (E_JUSTIFY_LEFT=0), and DebugLog::Print loop verified store-for-store vs ARTIST asm; DWARF-shaped decls; no offset hacks; headers reconstructed not forked. compile gate PASS; parity RED is inlined-assert/accessor noise (advisory).",
    "status": "done"
   },
   "GameSource/Director/DirectorModule/BrnDirectorModuleIO.cpp": {
