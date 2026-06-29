@@ -12807,7 +12807,37 @@
   "BrnNetwork::ShowtimeUpdateMessage::Retrieve": {
    "status": "reviewed"
   },
+  "BrnNetwork::StandingsManager::AddPlayer": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::ClearStandingsData": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::Disconnected": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::GetStandingsDataEntry": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::HandlePlayerFinishedMode": {
+   "status": "reviewed"
+  },
   "BrnNetwork::StandingsManager::OnRoundStart": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::RemovePlayer": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::SendPlayerFinishedRoundMessage": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StandingsManager::_RoundFinishedMessageArrivedCallback": {
    "status": "reviewed"
   },
   "BrnNetwork::StandingsManager::_RoundFinishedMessageDeliveredCallback": {
@@ -15612,19 +15642,67 @@
   "BrnProgression::MugshotInfo,20>::IsFull": {
    "status": "reviewed"
   },
+  "BrnProgression::Profile::AddCar": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::AddMugshot": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::AddRival": {
+   "status": "reviewed"
+  },
   "BrnProgression::Profile::CompleteFreeburnChallenge": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::Construct": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::DEBUG_ClearMedals": {
    "status": "reviewed"
   },
   "BrnProgression::Profile::DeleteMugshot": {
    "status": "reviewed"
   },
+  "BrnProgression::Profile::FindCar": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::FindRival": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::Get100PercentCompletedDate": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::GetChosenLiveryDataForBaseCar": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::GetChosenLiveryIdForBaseCar": {
+   "status": "reviewed"
+  },
   "BrnProgression::Profile::GetGameModeTypeCompletedAmountSinceTheStart": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::GetLicenceIssuedDate": {
    "status": "reviewed"
   },
   "BrnProgression::Profile::GetMugshotInfo": {
    "status": "reviewed"
   },
+  "BrnProgression::Profile::GetNumAllMugshots": {
+   "status": "reviewed"
+  },
   "BrnProgression::Profile::GetNumDriveThrusDiscovered": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::GetNumMugshots": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::GetSeen100PercentCompletionSequence": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::GetSeenEliteCompletionSequence": {
    "status": "reviewed"
   },
   "BrnProgression::Profile::HasPlayerCompletedFreeburnChallenge": {
@@ -15637,6 +15715,27 @@
    "status": "reviewed"
   },
   "BrnProgression::Profile::LockOrUnlockMugshot": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::SetBestStuntStats": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::SetCarUnlockAlreadyShown": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::SetChosenLiveryIdForBaseCar": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::SetLicenceIssuedDateAsNow": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::SetPlayerLicencePicture": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::SetSeen100PercentCompletionSequence": {
+   "status": "reviewed"
+  },
+  "BrnProgression::Profile::SetSeenEliteCompletionSequence": {
    "status": "reviewed"
   },
   "BrnProgression::ProfileEvent,175>": {
@@ -33962,6 +34061,10 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows preserve layouts; 2 caught bugs fixed inline (StrStream::Append count, SelectedRoutesManager NetworkPlayerID->committed s32); RaceCarPhysics::GetHeightAboveRoad is a documented shape-faithful floor pending full Wheel layout; combined wave-11 gate PASS.",
    "status": "done"
   },
+  "GameSource/Network/Managers/BrnNetworkStandingsManager.cpp": {
+   "notes": "Verify PASS (minor); 10 funcs walked store-by-store (8-slot standings relay, RegisterMessageType 7-arg, Retrieve/PrepareForSend, SetHasWonRound). Additive header grows. KF_BAD_DISTANCE_SENTINEL is a flagged dev-only-assert placeholder (rodata flt_82F29918 unresolved).",
+   "status": "done"
+  },
   "GameSource/Network/Managers/BrnNetworkStateManager.cpp": {
    "status": "done"
   },
@@ -34730,6 +34833,10 @@
    "status": "done"
   },
   "GameSource/Unity/../GameState/PaybackManager/BrnPaybackManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../GameState/Progression/BrnProfile.cpp": {
+   "notes": "Verify caught: FindRival matched mCarId not mRivalId (asm ld 0(this+0x6280)=+0) -> fixed to search mRivalId; Construct missing mDateLicenceIssued/mDate100PercentCompleted init -> added Clear()+SetLocal(true) (mbIsLocal=1, time=0). AddMugshot flagged INCOMPLETE (Append paths blocked on opaque MugshotInfo +0x30/+0x32 layout).",
    "status": "done"
   },
   "GameSource/Unity/../GameState/RichPresenceManager/BrnGameStateRichPresenceManagerBase.cpp": {
