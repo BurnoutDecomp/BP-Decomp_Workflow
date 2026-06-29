@@ -2452,19 +2452,19 @@
    "status": "compiles"
   },
   "BrnDirector::ArbStateRankUp::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateRankUp::GetName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateRankUp::Prepare": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateRankUp::Release": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateRankUp::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateRoaming::Construct": {
    "status": "compiles"
@@ -8981,6 +8981,36 @@
   },
   "BrnGui::GuiCursor::UpdateToSnapLocations": {
    "status": "reviewed"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::Construct": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::Destruct": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::GetName": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::OnActivate": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::RenderHUD": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::SetBoostColourAggressionCallback": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::SetBoostColourDangerCallback": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::SetBoostColourStuntsCallback": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::SetBoostColourToCustomCallback": {
+   "status": "compiles"
+  },
+  "BrnGui::GuiCustRendererDebugComponent::ToggleBoostBarDebugScreenCallback": {
+   "status": "compiles"
   },
   "BrnGui::GuiCustRendererDebugComponent::UpdateBoostColours": {
    "status": "reviewed"
@@ -27081,6 +27111,57 @@
   "CgsResource::DebugComponent::UpdateWindows": {
    "status": "reviewed"
   },
+  "CgsResource::DebugPoolTextures::AllocateDebugMemory": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::CountInstancesThatUseTexture": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::CountModelsThatUseTexture": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::RegisterTexture": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::Render": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::RenderTexture": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::RenderTextureActualSize": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::RenderTextureDisplay": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::RenderTextureStretched": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::RenderThumbnails": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::SortByAreaCallback": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::SortByDataSizeCallback": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::SortByHeightCallback": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::SortByInstanceUsageCallback": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::SortByModelUsageCallback": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::SortByWidthCallback": {
+   "status": "reviewed"
+  },
+  "CgsResource::DebugPoolTextures::Update": {
+   "status": "reviewed"
+  },
   "CgsResource::DebugPoolTypeList::DebugPoolTypeList": {
    "status": "reviewed"
   },
@@ -29088,6 +29169,21 @@
   "CgsSystem::GetSystemTimerFrequency": {
    "status": "reviewed"
   },
+  "CgsSystem::HardwareInit::GetAutoScriptToRun": {
+   "status": "reviewed"
+  },
+  "CgsSystem::HardwareInit::GetFOPENDirectory": {
+   "status": "reviewed"
+  },
+  "CgsSystem::HardwareInit::HasDetectedAutomatedTestingFile": {
+   "status": "reviewed"
+  },
+  "CgsSystem::HardwareInit::InitializeHardware": {
+   "status": "reviewed"
+  },
+  "CgsSystem::HardwareInit::IsHardDiskAvailable": {
+   "status": "reviewed"
+  },
   "CgsSystem::HardwareLanguage::GetHardwareLanguage": {
    "status": "reviewed"
   },
@@ -29095,22 +29191,22 @@
    "status": "reviewed"
   },
   "CgsSystem::ThreadLayout::Begin": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsSystem::ThreadLayout::DispatchThread": {
    "status": "reviewed"
   },
   "CgsSystem::ThreadLayout::GlobalThreadBeginWrapper": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsSystem::ThreadLayout::InitThreads": {
    "status": "reviewed"
   },
   "CgsSystem::ThreadLayout::InteruptThreadForAssert": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsSystem::ThreadLayout::ThreadLayout": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsSystem::Time::SetFloatVal": {
    "status": "reviewed"
@@ -33054,6 +33150,10 @@
   "GameShared/GameClasses/SceneManager/Contactgen/CgsSceneSweeperDebugComponent.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/FineIntersectionTestModule/CgsFineIntersectionTestModule.cpp": {
+   "notes": "4/8 functions reconstructed + verified faithful (Construct/Prepare/Release/Destruct: the START->MANAGER->DONE stage handshakes + VolumeVolumeQuery/VolumeLineQuery scratch sizing 0x49000/0x10800, layout pinned by offsetof _AssertLayout). The 4 core narrow-phase Compute* methods (ComputeLineTestFine @0x828C7D70 / ComputeLineTestNearest / ComputeVolumeTestDeepest / ComputeVolumeTestFine) are committed as empty dep-blocked stubs -- huge VMX128 loops needing the unreconstructed EntityManager/VolumeManager/VolumeInstance/SceneManagerEntity classes + the rw::collision query/ClusteredMesh/KdTreeLineQuery runtime + the InEvent*/OutEvent*/OutputBuffer payload structs (3 of 4 have no pseudocode). Unblock when those dependency types land; also tighten the void* OutputBuffer params then.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionDebugComponent.cpp": {
    "status": "done"
   },
@@ -33321,12 +33421,20 @@
    "notes": "Verify PASS (none); 11 funcs walked store-by-store (jolt/rumble ADSR tables, wheel-FF dispatch, motor clamps), full byte-pinned layout via _AssertLayout offsetof, constants asm-grounded (-1 ints not NAN). gbForceRumbleOnDisconnectedPad flagged BSS-home.",
    "status": "done"
   },
+  "GameShared/GameClasses/System/PS3/CgsHardwareInitPS3.cpp": {
+   "notes": "Verify PASS (none); asm-grounded, gate clean.",
+   "status": "done"
+  },
   "GameShared/GameClasses/System/PS3/CgsHardwareLanguagePS3.cpp": {
    "notes": "straight switch mapping for XTL language/region; RED parity only from early returns vs single result variable",
    "status": "done"
   },
   "GameShared/GameClasses/System/PS3/CgsHardwareSkuPS3.cpp": {
    "notes": "batch review pass",
+   "status": "done"
+  },
+  "GameShared/GameClasses/System/Resource/CgsDebugPoolTextures.cpp": {
+   "notes": "Compile-gate PASS. 17 ASM-attested functions reconstructed with named members. Parity RED is the expected SIMD-collapse (vrefp/vmaddfp Newton reciprocals de-optimized to float divides; _savegprlr_/_restgprlr_ thunks counted as calls). 4 'absent callees' are false positives.",
    "status": "done"
   },
   "GameShared/GameClasses/System/Resource/CgsEntryListResource.cpp": {
@@ -33407,6 +33515,10 @@
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "GameShared/GameClasses/System/Threads/CgsThreadLayout.cpp": {
+   "notes": "Verify PASS (minor, no change needed); 4 funcs asm-grounded. Ctor scalar zero-init is defensive (asm leaves them for Begin(); no behavioral impact); the +0x7C double atomic-store is an AtomicPointer(NULL) inline artifact.",
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Timer/CgsFrameRate.cpp": {
    "status": "done"
   },
@@ -33465,6 +33577,10 @@
   "GameSource/Director/Arbitrator/States/BrnArbStateDriveThru.cpp": {
    "notes": "BrnDirector::ArbStateDriveThru (an arbitrator state). Deeply entangled with UNCOMMITTED subsystems (grep: zero hits for ArbState base / BehaviourManager / ArbUtils::ChangeToState): Construct->Camera::Camera::Construct; Prepare->Camera::BehaviourManager::NewBehaviour + Attrib::Gen::shotgroup::Num_ShotList + sub_821F0E50(unknown); Release->BehaviourManager::UnSetBehaviourUsedByHandle + CheckNoBehavioursAreAllocatedByState; Update->ArbUtils::ChangeToState<ArbStateDriveThru::EState> + Camera::EnsureEffectIsPlaying + sub_821FCE10/sub_821FCDA8(unknown). The Director Camera/BehaviourManager + ArbUtils state-machine + the ArbState polymorphic base must be reconstructed first. BLOCK until those Director subsystems land.",
    "status": "blocked"
+  },
+  "GameSource/Director/Arbitrator/States/BrnArbStateRankUp.cpp": {
+   "notes": "Fresh-eyes Sonnet (high effort) review: all 5 functions match ARTIST asm (Construct/Prepare/Update/Release/GetName); inverted Prepare return (!IsBehaviourWaitingToPrepare), case-1->2 fallthrough, miRival%shotcount take swap, Checkpoint effect gate + roaming hand-off all verified; offset-blob reads encapsulated as named GameState accessors (no consumer offset hack). Compile gate PASS; parity RED is the advisory call-count artifact of de-inlining into named accessors.",
+   "status": "done"
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateRenderMetrics.cpp": {
    "notes": "Blocked on the Director camera-behaviour framework (none reconstructed): base BrnDirector::ArbitratorState (virtual Construct/Prepare/Update/Release/Destruct/GetName vtable + ~368B layout), BehaviourHandle<T>, BehaviourManager (NewBehaviour<T>/UnSetBehaviourUsedByHandle/CheckNoBehavioursAreAllocatedByState), ArbStateSharedInfo, BehaviourRenderMetrics. Update() does vtable dispatch (slots Prepare@+4/Release@+12) plus opaque Camera state math (sub_821FE010 + Camera::operator_). Reconstruct that framework leaf-first before this state TU.",
