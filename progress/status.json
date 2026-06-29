@@ -31725,6 +31725,9 @@
   "XCAM::CObjectRefCount::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "XConfigUserSettings::GetVideoFlags": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::Block::Append": {
    "status": "reviewed"
   },
@@ -32029,6 +32032,12 @@
    "status": "reviewed"
   },
   "renderengine::SamplerState::Initialize": {
+   "status": "reviewed"
+  },
+  "renderengine::StateHelper::Initialize": {
+   "status": "reviewed"
+  },
+  "renderengine::StateHelper::ResizeDefaultScissorRectAndViewportParameters": {
    "status": "reviewed"
   },
   "renderengine::Texture>::operator class renderengine::Texture *": {
@@ -32569,6 +32578,15 @@
    "status": "reviewed"
   },
   "rw::core::atom::UnfixRefixAtoms::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "rw::core::debug::IFormatter::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "rw::core::debug::IFormatter::operator new": {
+   "status": "reviewed"
+  },
+  "rw::core::debug::Manager::CreateInstance": {
    "status": "reviewed"
   },
   "rw::core::debug::detail::DebugCriticalSection::Create": {
@@ -41985,6 +42003,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XConfigUserSettings": {
+   "notes": "XConfigUserSettings (X360 system user-settings reader) verified first-pass PASS.",
+   "status": "done"
+  },
   "class:XGRAPHICS::Block": {
    "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
@@ -42139,6 +42161,10 @@
   },
   "class:renderengine::SamplerState": {
    "notes": "final re-review pass after packed state/static ABI fix",
+   "status": "done"
+  },
+  "class:renderengine::StateHelper": {
+   "notes": "renderengine StateHelper::Initialize. Verify caught two byte-reversed blend-factor constants; FIXED gpDefaultBlendState1 0x01010706->0x07060101 and State2 0x01090706->0x07060109 (asm insrwi rA,0x101/0x109,16,16 into low half of 0x07060706; Hex-Rays v32[0]=117833985). Re-gated clean.",
    "status": "done"
   },
   "class:renderengine::Texture>::operator class renderengine": {
@@ -42431,6 +42457,14 @@
   },
   "class:rw::core::atom::UnfixRefixAtoms": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
+  "class:rw::core::debug::IFormatter": {
+   "notes": "IFormatter operator new/delete. Verify caught an INVENTED null-guard (if(!lpAllocator) return nullptr) the asm (0x82BBCC40 unconditional off_8327F044 deref) lacks; FIXED to carve unconditionally. Re-gated clean.",
+   "status": "done"
+  },
+  "class:rw::core::debug::Manager": {
+   "notes": "RenderWare core debug Manager verified vs asm first-pass PASS; carves through the subsystem resource allocator. Vendor home vendor/renderware/src/rw/core/debug/.",
    "status": "done"
   },
   "class:rw::core::debug::detail::DebugCriticalSection": {
