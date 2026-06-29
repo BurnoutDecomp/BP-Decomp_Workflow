@@ -13732,58 +13732,58 @@
    "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::AcquireTexture": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::BeginRendering": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::EndRendering": {
    "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::FindTexture": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::GetCameraMatrix": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::GetMaterialHandle": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::GetVertexStride": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::HashMaterial": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::LionParticleRender": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::Render": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::RenderGroupBegin": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::RenderGroupBeginLite": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::RenderGroupEnd": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::RenderGroupEndLite": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::SetCameraData": {
    "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::SetMaterial": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::Setup": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::TextureRegister": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::Native::BrnDebris,32>::": {
    "status": "compiles"
@@ -35946,6 +35946,10 @@
    "status": "done"
   },
   "GameSource/Unity/../Effects/BrnCrashTriangleCache.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../Effects/Particles/LionParticleRender.cpp": {
+   "notes": "complex TU; fresh-eyes Claude sonnet review (high effort). All 16 X360-attested functions semantically faithful (FNV-1a hash, depth-index flag bits, render-mode switch 0/1/3-4, depth-stencil Setup loop, texture/material tables). Quality gate clean: named members throughout (cParticleMaterial/owning header/LionBlendRenderer/emitter/descriptor reconstructed), no raw offset hacks, loops re-rolled, no gotos. Fixed 2 review findings: BeginRendering's two post-begin SetState calls restored; D3DDevice_SetTexture corrected to 4-arg (device,sampler,texture,flags). EndRendering body not X360-attested in dossier -> PS3-DWARF shadow::Device calls intentionally omitted per ladder (documented). Automated parity RED is expected (CGS_ASSERT macro encapsulates assert call-triples; renderer calls route through mpRenderer).",
    "status": "done"
   },
   "GameSource/Unity/../Effects/Particles/LionPerfMon.cpp": {
