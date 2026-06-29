@@ -2064,6 +2064,24 @@
   "BrnAI::Portal::GetBoundaryLine": {
    "status": "reviewed"
   },
+  "BrnAI::RaceBalancingDebugComponent::DrawGraphFrame": {
+   "status": "compiles"
+  },
+  "BrnAI::RaceBalancingDebugComponent::FindAICar": {
+   "status": "compiles"
+  },
+  "BrnAI::RaceBalancingDebugComponent::GetName": {
+   "status": "compiles"
+  },
+  "BrnAI::RaceBalancingDebugComponent::OnActivate": {
+   "status": "compiles"
+  },
+  "BrnAI::RaceBalancingDebugComponent::RenderHUD": {
+   "status": "compiles"
+  },
+  "BrnAI::RaceBalancingDebugComponent::RenderWorld": {
+   "status": "compiles"
+  },
   "BrnAI::RaceBalancingGraph::ComputeSpeedRatio": {
    "status": "reviewed"
   },
@@ -2336,6 +2354,21 @@
   },
   "BrnDirector::AllVehicleData::Update": {
    "status": "reviewed"
+  },
+  "BrnDirector::ArbStateCrashMode::Construct": {
+   "status": "compiles"
+  },
+  "BrnDirector::ArbStateCrashMode::DoCloseup": {
+   "status": "compiles"
+  },
+  "BrnDirector::ArbStateCrashMode::GetName": {
+   "status": "compiles"
+  },
+  "BrnDirector::ArbStateCrashMode::Release": {
+   "status": "compiles"
+  },
+  "BrnDirector::ArbStateCrashMode::Update": {
+   "status": "compiles"
   },
   "BrnDirector::ArbStateCrashing::ApplySlomoAndShake": {
    "status": "reviewed"
@@ -10665,6 +10698,27 @@
   "BrnGui::Video::Update": {
    "status": "reviewed"
   },
+  "BrnGui::ViewModule::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::ViewModule::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnGui::ViewModule::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::ViewModule::ProcessIncomingLoadNotification": {
+   "status": "reviewed"
+  },
+  "BrnGui::ViewModule::Release": {
+   "status": "reviewed"
+  },
+  "BrnGui::ViewModule::RenderInternal": {
+   "status": "reviewed"
+  },
+  "BrnGui::ViewModule::Update": {
+   "status": "reviewed"
+  },
   "BrnGui::ViewModule::ViewModule": {
    "status": "reviewed"
   },
@@ -12010,22 +12064,22 @@
    "status": "reviewed"
   },
   "BrnNetwork::PlayerFinishedRoundMessage::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::PlayerFinishedRoundMessage::GetName": {
    "status": "reviewed"
   },
   "BrnNetwork::PlayerFinishedRoundMessage::GetPackedMessageSize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::PlayerFinishedRoundMessage::PackOrUnpack": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::PlayerFinishedRoundMessage::PrepareForSend": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::PlayerFinishedRoundMessage::Retrieve": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::PlayerInfoData::Prepare": {
    "status": "reviewed"
@@ -15512,6 +15566,12 @@
   },
   "BrnRendererMemory::BlitDepth": {
    "status": "reviewed"
+  },
+  "BrnRendererMemory::Construct": {
+   "status": "compiles"
+  },
+  "BrnRendererMemory::CreateBackBuffer": {
+   "status": "compiles"
   },
   "BrnRendererModule::BeginQuarterResBuffer": {
    "status": "reviewed"
@@ -19602,8 +19662,32 @@
   "BrnWorld::RaceCar::UpdatePositioningData": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarAudioStreamer::AddEntry": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCarAudioStreamer::Construct": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCarAudioStreamer::IsVehicleAssetLoaded": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCarAudioStreamer::OnLoadComplete": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCarAudioStreamer::OnUnloadComplete": {
+   "status": "compiles"
+  },
   "BrnWorld::RaceCarAudioStreamer::RemoveEntry": {
    "status": "reviewed"
+  },
+  "BrnWorld::RaceCarAudioStreamer::SendLoadRequest": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCarAudioStreamer::SendUnLoadRequest": {
+   "status": "compiles"
+  },
+  "BrnWorld::RaceCarAudioStreamer::Update": {
+   "status": "compiles"
   },
   "BrnWorld::RaceCarBaseComponentStreamer::Construct": {
    "status": "reviewed"
@@ -23052,7 +23136,25 @@
   "CgsGui::ViewModule::GetMovieNameByLevel": {
    "status": "reviewed"
   },
+  "CgsGui::ViewModule::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsGui::ViewModule::ProcessIncomingAptEvent": {
+   "status": "reviewed"
+  },
+  "CgsGui::ViewModule::ProcessIncomingLanguageEvent": {
+   "status": "reviewed"
+  },
+  "CgsGui::ViewModule::ProcessIncomingLoadNotification": {
+   "status": "reviewed"
+  },
+  "CgsGui::ViewModule::ProcessIncomingUnloadRequestNotification": {
+   "status": "reviewed"
+  },
   "CgsGui::ViewModule::ProcessIncomingViewEvents": {
+   "status": "reviewed"
+  },
+  "CgsGui::ViewModule::Release": {
    "status": "reviewed"
   },
   "CgsGui::ViewModule::Render": {
@@ -31645,6 +31747,10 @@
    "notes": "FindFont KA_FONT_MAP[2] {original,replacement} font-remap rodata pairs are not fully recoverable from the export (only entry[0].mpOriginal \"machinestd-bold\" surfaced); the replacement strings + 2nd pair are absent. Bodying would fabricate X360 facts. Deferred.",
    "status": "blocked"
   },
+  "GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp": {
+   "notes": "Unchanged body; header extended additively (lifecycle virtuals + sub-object accessors) for BrnGui::ViewModule. Re-confirmed compile.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Gui/View/CgsGuiViewModuleIO.h": {
    "status": "done"
   },
@@ -32794,6 +32900,10 @@
    "notes": "3 verify loops (loop1 transcription PASS - all 33 calls/names/budgets/flags/aliases exact; loop1 caught class-vs-namespace ODR fork of PerfMonCpu -> FIXED by growing the committed CgsPerfMonCpu.h namespace with the X360 6-param AddMonitor overload (additive, regate-clean), .cpp includes the real home; loop3 sign-off PASS). Gate clean. Parity MILD: call delta 4 = PPC prologue/epilogue artifacts (_savefpr/_restfpr/_savegprlr/_restgprlr) dropped; void return. Parent tree indentation-inferred (flagged). Note: committed via a separate fix commit on top of the concurrent ICE commit (orig GuiPerfmons was 8ee4c3b).",
    "status": "done"
   },
+  "GameSource/Gui/BrnGuiViewModule.cpp": {
+   "notes": "Fresh-eyes review (claude sonnet-4-5): semantic parity confirmed for all 7 functions vs ARTIST asm; named-member access throughout; state-machine fall-through, store offsets, and load-notification offsets verified. Uncertainties: FLAPT request-type literal 10 (PS3 enum drift), GuiEventLoadNotification empty-GuiEvent-base layout, GuiModule AAC far-offset 0x17D670.",
+   "status": "done"
+  },
   "GameSource/Gui/CustomRenderer/BrnCustomRenderer.cpp": {
    "notes": "Reconstructed from asm/dossier, adversarially verified, gate PASS, pushed to dev.",
    "status": "done"
@@ -33476,6 +33586,9 @@
   },
   "GameSource/Network/Messages/BrnMarkedManMessage.h": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
+   "status": "done"
+  },
+  "GameSource/Network/Messages/BrnPlayerFinishedRoundMessage.cpp": {
    "status": "done"
   },
   "GameSource/Network/Messages/BrnPlayerFinishedRoundMessage.h": {
