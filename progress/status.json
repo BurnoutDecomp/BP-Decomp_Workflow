@@ -31444,6 +31444,10 @@
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
   },
+  "class:AptScriptFunctionBase": {
+   "notes": "Faithful decompile of all 15 AptScriptFunctionBase funcs; compile gate PASS + regression-gated AptScriptFunction2/SpecialOps clean. KEYSTONE frame/register funcs are EXACT (CreateFrameStack/SetupBeforeExecution/CleanupAfterExecution/GetInScopeChain/SetWhereExistsInScopeChain/SetInLocalScope/ExistsInLocalScope/SetRegisterValue/CreatingNestedFunction/Init/ShutdownStaticData -- verified delegations to the landed AptFrameStack + the process-wide statics spFrameStack/spRegisters/snRegisterCount/snRegisterCapacity). ctor/RegisterReferences/DestroyGCPointers/dtor reconstructed with documented FLAGs for the CIH/GC leaf couplings only (AptApt_PrepareCallContextScope, AptApt_DeriveFunctionAnimation->AptGetAnimationAtLevel, AptApt_Animation*CharacterRef +0x0C twiddle+zombie, gpAptFunctionPrototypeRoot, sReferenceRegistrationCb) + the opaque CleanupAfterExecution +0x2C store noted. Parity RED = the 15-func AGGREGATE of the standard representational deltas: named AptValue/hash accessors vs inlined vtbl/bitfield ops (+call), IDA &&-decomposition vs compound conditions (-branch), void methods vs int-typed pseudo (return 19->4). UNBLOCKS callFunction + the scope-chain de-FLAG + Define*. Header: InitializeStaticData(int32) + snRegisterCapacity added.",
+   "status": "done"
+  },
   "class:AptScriptFunctionByteCodeBlock": {
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
