@@ -2931,6 +2931,18 @@
   "BrnDirector::Camera::Utils::DebugController::GetJustReleased": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Utils::Looker::Parameters::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::Looker::Track": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::Looker::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::Looker::Zoom": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::Utils::PositionLag::Update": {
    "status": "reviewed"
   },
@@ -33665,6 +33677,10 @@
   },
   "GameSource/Director/Camera/Utils/BrnDebugController.cpp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bug fixed inline (ParticleWaveForm NoiseTableBuild luRand&0xFFFF); 11 reference .cpp:line citations scrubbed; 5 non-leaf keystones blocked-with-reason; combined wave-13 gate PASS.",
+   "status": "done"
+  },
+  "GameSource/Director/Camera/Utils/BrnLooker.cpp": {
+   "notes": "Camera Looker (Zoom/Track). Verify caught 6 divergences incl. a FABRICATED depth-of-field section + an inverted FOV-follow loop. Fix+re-verify PASS: running FOV=camera+0x58; first-frame velocity=clamp(Abs(newTarget-camFOV)*factor); overshoot gated on mbForceZoomTargetUpdate(+0x1F); DOF = the real inline camera+0x134 blur write (rate*delta+blur, branch-selected FLAGGED rates) + static path via SetStaticParams; Track tests mbInitialiseToLookingAtTarget(+0x5D); unhandled-type assert only for >=3.",
    "status": "done"
   },
   "GameSource/Director/Camera/Utils/BrnPositionLag.cpp": {
