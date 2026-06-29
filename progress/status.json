@@ -550,13 +550,13 @@
    "status": "reviewed"
   },
   "AptFile::FindExport": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptFile::isFileImported": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptFile::~AptFile": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "AptFile>::Dispose": {
    "status": "reviewed"
@@ -4809,7 +4809,31 @@
   "BrnGameState::GameStateDebugComponent::ToggleShowtimeCallback": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateImageManagerBase::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::HandleImageFilesLoadedEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::HandleImageFilesSavedEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::HandleImageGalleryCountRequest": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateImageManagerBase::HandleImageGalleryDataRequest": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::HandleImageGalleryRequest": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::HandleImageSaveEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::HandleWorldRegionChangeEvent": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateImageManagerBase::ImageLoadRequest,3>::Append": {
@@ -4818,10 +4842,43 @@
   "BrnGameState::GameStateImageManagerBase::ImageLoadRequest,3>::Erase": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateImageManagerBase::PreWorldUpdate": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::ProcessAskDeleteRequest": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::ProcessDeleteRequest": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::ProcessLockRequest": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateImageManagerBase::ProcessNewImageRequest": {
    "status": "reviewed"
   },
+  "BrnGameState::GameStateImageManagerBase::ProcessScrollImagesEvent": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::ProcessShowGamerCardRequest": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::Release": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::RequestImageSave": {
+   "status": "reviewed"
+  },
   "BrnGameState::GameStateImageManagerBase::UpdateImagesToRender": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::UpdateNewImageRequests": {
+   "status": "reviewed"
+  },
+  "BrnGameState::GameStateImageManagerBase::UpdateTakedownEvents": {
    "status": "reviewed"
   },
   "BrnGameState::GameStateInviteManager::CheckPreparedForInvite": {
@@ -28440,6 +28497,9 @@
   "CgsSound::Logic::Module::GetUniqueId": {
    "status": "reviewed"
   },
+  "CgsSound::Logic::Module::Module": {
+   "status": "reviewed"
+  },
   "CgsSound::Logic::Module::Prepare": {
    "status": "reviewed"
   },
@@ -34841,6 +34901,10 @@
    "notes": "12 funcs bodied store-for-store. Workflow adversarial verifier hit a transient API 529, so I verified all 12 myself against the X360 asm: CalculateNumberOfCarsInFlyby/GetRivalName/CalculatePointsLeaderRating(+50)/CalculateMarkedManRivalryRating(+40/+30 via mMarkedManTargetID@+288)/CalculateNewOrOngoingRivalryRating(+9/+8 on miNetTakedownDelta@+112,+3 if <300s)/GetOngoingStat(6 cases [1][4][2][3][7][8]-[7])/GetNewRivalryStat(per-side +36)/GetNoRivalryStat(idx map 4,5,8,0,11)/CalculateOnlineRivals(qsort 8x12, takedown thresholds 5/10) = store-for-store EXACT. Fixed 2 real builder bugs before commit: (1) CalculateRivalryRating no-relationship LCG was fabricated (32-bit prev*prev+1) -> corrected to the asm 64-bit LCG at mRandom+0x20 (newState=oldState*0x5851F42D4C957F2D+1, jitter=(oldState>>32)&7, asm 0x8236DBF0-DC28); (2) extern KA_*_RIVALRY_MESSAGES innermost stride 12/8 -> 10 (asm indexes base[20*statType+10*style]). Layout asm-pinned (record stride 312, relationship offsets static_asserted). Cross-TU callees + KA_* tables are declare-only/extern shims (cl /c). Gate pass.",
    "status": "done"
   },
+  "GameSource/Unity/../GameState/ImageManager/BrnGameStateImageManagerBase.cpp": {
+   "notes": "19-fn image/mugshot gallery manager. Verify caught fabricated GUI-event payload record layouts (critical); fix round + re-verify caught the field-order fix still mis-aligned (MSVC pad before the unaligned u64). Final: #pragma pack(1) on the type-290 records + explicit flag padding + offsetof _AssertLayout pinning date@0xC/word2C@0x14/slot@0x18/uniqueId@0x1C/locked@0x2C/county@0xC/district@0x10/flagB@0x2C/sizeof==0x30 (compile-time oracle, gate-PASS). LoadCompleteEvent bits@0x8, gamercard posts MugshotInfo+0x10, RequestImageSave +0x0C unwritten -- all re-verify-confirmed.",
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/InviteManager/BrnGameStateInviteManager.cpp": {
    "notes": "All 6 funcs bodied store-for-store; adversarial verifier = parity/low (no bogus_claims, no out_of_scope_edits). Combined compile gate pass. Two trivial drifts only: (1) RenderDebugText releases the debug manager unconditionally, matching the house DebugInterface idiom across ICERender/ICEWidgetTargetBox/ScoringSystemDebugComponent; (2) case2 stack-local field-init order, unobservable. submit-parity 'gross' is noise: absent DebugInterface/GetRender/Draw2DText/AddEvent/GetEvent ARE present (heuristic callee-matcher misses qualified/templated/inlined names). New home pinned to asm offsets; additive InviteOrJoinParams homed in BrnNetworkSharedIO.h. FLAG: KU_INVITE_MANAGER_TEXT_COLOUR (dword_82CDBA34) opaque-white placeholder, dev-only text colour.",
    "status": "done"
@@ -36003,6 +36067,10 @@
   },
   "class:AptExtern": {
    "notes": "apt-100: toString-layer value type, named members vs X360 ARTIST, fresh-eyes semantic verify + cl /c gate (toString now committed; urlEncodeCustomRender decl). Committed b5-decomp dev 12dd61c.",
+   "status": "done"
+  },
+  "class:AptFile": {
+   "notes": "Independent adversarial verifier traced all 3 fns instruction-by-instruction vs X360 ARTIST asm -> faithful (strcmp edges, index arith, disposal on all paths incl importCount<=0, EAStringC temp bracket, offset map). Automated parity RED is fully explained by faithful-x64 abstractions, NOT dropped logic: InitFromBuffer/DecreaseInternalRefCount are implicit via the EAStringC ctor/dtor; Dispose=AptSharedPtr<AptFile>::Dispose; Invalidate=pLoader->Invalidate; GetValue x3=GetTarget() (TLS-invariant); Unresolve via the AptFile_UnresolveAnimation hook; mnState 4x== folded to >=3&&<=6 (same set). Gate-clean, pushed a23272ad.",
    "status": "done"
   },
   "class:AptFile>": {
@@ -40294,6 +40362,10 @@
   },
   "class:CgsSound::Logic::MicrophoneSystem::Microphone": {
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:CgsSound::Logic::Module": {
+   "notes": "Verify PASS (none); asm-grounded, gate clean.",
    "status": "done"
   },
   "class:CgsSound::Logic::State>": {
