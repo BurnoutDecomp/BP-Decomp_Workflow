@@ -18,6 +18,12 @@
   "AptActionInterpreter::_FunctionAptActionBitAnd": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::_FunctionAptActionDefineLocal": {
+   "status": "reviewed"
+  },
+  "AptActionInterpreter::_FunctionAptActionDefineLocal2": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionDelete2": {
    "status": "reviewed"
   },
@@ -31206,6 +31212,10 @@
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterControlOps.cpp": {
    "notes": "Faithful decompile of Trace(0x26)/Throw(0x2A)/ToString(0x4B); compile gate PASS, wired into sGlobalTable. Parity YELLOW within/at tol: call_count +3 (named accessors getVtblIndex/getIsDefined/GetBuffer vs inlined bitfield ops), return_count 3->1 (void-handler-vs-int ABI artifact). Absent callees = false-positives: Append_ToString (method-call p->Append_ToString in ToString, declared on AptValue, body deferred=toString sibling renderer), AptValue_::Pop (=stackPop), EAStringC::DecreaseInternalRefCount (Trace scratch RAII dtor). FLAG: AptHook_Trace (host debug sink dword_8324E82C), Append_ToString renderer. Rode an x64-required refinement: abort slot int mnAbortValue -> AptValue* mpAbortValue (+0x60 holds the thrown AptValue*); runStream 2 checks regression-gated. Opcodes table-verified; SWF Trace 0x26/Throw 0x2A match.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterDefineLocal.cpp": {
+   "notes": "Faithful DefineLocal(0x3C)/DefineLocal2(0x41); gate PASS, wired. First consumers of the AptScriptFunctionBase keystone: mpCurrentFunction->SetInLocalScope/ExistsInLocalScope (public; the console's  IS SetInLocalScope) + setVariable/getVariable fallback at top level. Added interp mpCurrentFunction@+0x3C (a1[15]). Name key via Get_ToString (console direct type-1/33 string extraction). Parity deltas = void-return + method-call (SetInLocalScope/setVariable/AptValue_::Pop) + RAII false-positives. Opcodes SWF-verified.",
    "status": "done"
   },
   "SDKs/EATech/include/Apt/AptActionInterpreterDelete.cpp": {
