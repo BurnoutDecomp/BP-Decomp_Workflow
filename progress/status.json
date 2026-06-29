@@ -2259,8 +2259,17 @@
   "BrnBlobbyShadowManager::BrnBlobbyShadowBuffer::AddShadow": {
    "status": "reviewed"
   },
+  "BrnCoronaManager::BrnSubmissionInterface::AddCorona": {
+   "status": "compiles"
+  },
+  "BrnCoronaManager::BrnSubmissionInterface::AddPropCorona": {
+   "status": "compiles"
+  },
   "BrnCoronaManager::Construct": {
    "status": "reviewed"
+  },
+  "BrnCoronaManager::SetTextureAtlas": {
+   "status": "compiles"
   },
   "BrnDirector::AbstractPoolVoidHandle::Prepare": {
    "status": "reviewed"
@@ -3625,6 +3634,9 @@
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeRendererToWorld": {
+   "status": "reviewed"
+  },
+  "BrnGame::BrnGameModule::BridgeReplayToGui": {
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeSoundToWorld": {
@@ -7944,6 +7956,9 @@
   "BrnGui::FreeburnChallengeManager::GetCurrentContributionForARCI": {
    "status": "reviewed"
   },
+  "BrnGui::FreeburnChallengeManager::GetCurrentContributionOverall": {
+   "status": "reviewed"
+  },
   "BrnGui::FreeburnChallengeManager::HandleNewData": {
    "status": "reviewed"
   },
@@ -8868,6 +8883,9 @@
   "BrnGui::InstantResultsState::UpdateSubstate": {
    "status": "reviewed"
   },
+  "BrnGui::Interpolator<float>::GetCurrentValue": {
+   "status": "reviewed"
+  },
   "BrnGui::Intro::HandleTransitionFromWelcomeText": {
    "status": "reviewed"
   },
@@ -9421,6 +9439,9 @@
    "status": "reviewed"
   },
   "BrnGui::OnlineViewChallenges::OnLeave": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineViewChallenges::OnlineViewChallenges": {
    "status": "reviewed"
   },
   "BrnGui::OnlineViewChallenges::Update": {
@@ -10674,7 +10695,22 @@
   "BrnNetwork::MarkedManManager::_MarkedManMessageDeliveredCallback": {
    "status": "reviewed"
   },
+  "BrnNetwork::MarkedManMessage::Construct": {
+   "status": "reviewed"
+  },
   "BrnNetwork::MarkedManMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::MarkedManMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::MarkedManMessage::PackOrUnpack": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::MarkedManMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::MarkedManMessage::Retrieve": {
    "status": "reviewed"
   },
   "BrnNetwork::MatchMakingManager::ActionCreateGame": {
@@ -11037,7 +11073,16 @@
   "BrnNetwork::RoadRulesMessageData>::Append": {
    "status": "reviewed"
   },
+  "BrnNetwork::RoadRulesPersonalBestMessage::Construct": {
+   "status": "reviewed"
+  },
   "BrnNetwork::RoadRulesPersonalBestMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesPersonalBestMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RoadRulesPersonalBestMessage::PackOrUnpack": {
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesPersonalBestMessage::PrepareForSend": {
@@ -15519,6 +15564,9 @@
   "BrnSound::Logic::ResourceRegistrar::RemoveRequests": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::ResourceRegistrar::RequestedResource,124>::Link": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::ResourceRegistrar::RequestedResource::ClearReferencesToResource": {
    "status": "reviewed"
   },
@@ -15595,6 +15643,12 @@
    "status": "reviewed"
   },
   "BrnSound::Logic::SubmixesEffect::ProcessUpdate": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::SubmixesEffect::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::SubmixesEffect::`vector deleting destructor'`adjustor{4}'": {
    "status": "reviewed"
   },
   "BrnSound::Logic::Traffic::Traffic3DControl::GetTypeName": {
@@ -19998,6 +20052,12 @@
   "CgsFsm::ScriptedState::Construct": {
    "status": "reviewed"
   },
+  "CgsGeometric::AxisAlignedBox::ContainsPoint": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::AxisAlignedBox::Set": {
+   "status": "reviewed"
+  },
   "CgsGeometric::Box::Set": {
    "status": "reviewed"
   },
@@ -22615,6 +22675,27 @@
    "status": "reviewed"
   },
   "CgsNetwork::ReliableMessageManager::UpdateReliableMessagesReceived": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceBroadcastMessages::ChatCallback": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceBroadcastMessages::Construct": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceBroadcastMessages::Destruct": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceBroadcastMessages::OnEvent": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceBroadcastMessages::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceBroadcastMessages::Release": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceBroadcastMessages::Update": {
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceBroadcastMessages::`scalar deleting destructor'": {
@@ -26694,6 +26775,9 @@
   "LoadingScriptedState::RenderGUI": {
    "status": "reviewed"
   },
+  "MainGameFlowStateCheckDiskSpace::OnEnter": {
+   "status": "reviewed"
+  },
   "MassiveAdClient3::CAddressIndexPair::CAddressIndexPair": {
    "status": "reviewed"
   },
@@ -27039,6 +27123,9 @@
   "RealmcIface::LoadEntryInfo::operator=": {
    "status": "reviewed"
   },
+  "RealmcIface::MessageShowAutosaveIcon::Apply": {
+   "status": "reviewed"
+  },
   "RealmcIface::SaveReq::SaveReq": {
    "status": "reviewed"
   },
@@ -27246,7 +27333,25 @@
   "Snd::CSign16IntDecS16::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "Snd::CSign24IntDecS16::Decode": {
+   "status": "reviewed"
+  },
+  "Snd::CSign24IntDecS16::Feed": {
+   "status": "reviewed"
+  },
+  "Snd::CSign24IntDecS16::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "Snd::CSign24bIntDecS16::Decode": {
+   "status": "reviewed"
+  },
+  "Snd::CSign8IntDecS16::Decode": {
+   "status": "reviewed"
+  },
+  "Snd::CSign8IntDecS16::SetState": {
+   "status": "reviewed"
+  },
+  "Snd::CSign8IntDecS16::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "Snd::CUnSign8IntDecS16::Decode": {
@@ -27864,6 +27969,9 @@
   "renderengine::VertexProgramState::InitializeNoBindX360": {
    "status": "reviewed"
   },
+  "rw::BaseResourceDescriptor::BaseResourceDescriptor": {
+   "status": "reviewed"
+  },
   "rw::BaseResourceDescriptors<3>::operator+=": {
    "status": "reviewed"
   },
@@ -28033,6 +28141,15 @@
    "status": "reviewed"
   },
   "rw::audio::core::LowShelfIir2::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::PackedColumnReader::GetNextValue": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::PackedColumnReader::ReadRunInfo": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::PackedColumnReader::ReadSymbol": {
    "status": "reviewed"
   },
   "rw::audio::core::Pan2D1::Speaker::Set": {
@@ -28314,6 +28431,9 @@
   "rw::core::atom::StaticAtomTable::Register": {
    "status": "reviewed"
   },
+  "rw::core::atom::UnfixRefixAtoms::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::core::debug::detail::DebugCriticalSection::Create": {
    "status": "reviewed"
   },
@@ -28405,6 +28525,9 @@
    "status": "reviewed"
   },
   "rw::math::vpu::Inverse": {
+   "status": "reviewed"
+  },
+  "rw::math::vpu::MaskScalar::GetBool": {
    "status": "reviewed"
   },
   "rw::math::vpu::QueryRotateDegenerateUnitAxis": {
@@ -29243,8 +29366,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceBroadcastMessages.cpp": {
-   "notes": "CgsNetwork::ServerInterfaceBroadcastMessages : public CgsNetwork::ServerInterfaceComponent (polymorphic base + purecall dispatch in Update). Depends on the uncommitted EA DirtySock SDK API: ChatCallback -> TagFieldFind/TagFieldGetString/TagFieldGetNumber/TagFieldGetBinary; OnEvent/Prepare/Release -> LobbyApiSetCallback/LobbyApiClearCallback. The DirtySock TagField* + LobbyApi* SDK + the ServerInterfaceComponent base must be reconstructed first. BLOCK until the DirtySock SDK + ServerInterfaceComponent base land.",
-   "status": "blocked"
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
   },
   "GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceComponent.cpp": {
    "notes": "Review passed: ConvertError fourcc-table lookup and fallback table comparison logic are correct.",
@@ -30037,6 +30160,10 @@
    "notes": "batch review pass: Claude sonnet medium; parity RED due assert abstraction reviewed",
    "status": "done"
   },
+  "GameSource/GameFlowController/TopLevel/BrnGameMainFlowStates.h": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
   "GameSource/GameState/BrnGameActions.h": {
    "status": "done"
   },
@@ -30109,6 +30236,10 @@
   "GameSource/Gui/BrnGuiFreeburnChallengeManager.cpp": {
    "notes": "Keystone (reverted, not shipped): StartChallenge/TriggerChallenge are un-recovered, AND HandleNewData @0x824F3FC8 had a GuiChallengeUpdateEvent store-mapping drift (asm copies this+0x68(f32)<-event+0x08 and this+0x28(s32)<-event+0x50; the modelled event offsets were wrong). Needs a careful dedicated freeburn-challenge pass; reverted to avoid shipping the drift.",
    "status": "blocked"
+  },
+  "GameSource/Gui/BrnGuiFreeburnChallengeManager.h": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
   },
   "GameSource/Gui/BrnGuiFsmController.cpp": {
    "status": "done"
@@ -30767,6 +30898,10 @@
    "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no leaked provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnMarkedManMessage.cpp": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
   "GameSource/Network/Messages/BrnMarkedManMessage.h": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no leaked provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
    "status": "done"
@@ -30785,15 +30920,11 @@
    "status": "done"
   },
   "GameSource/Network/Messages/BrnRoadRulesPersonalBestMessage.cpp": {
-   "notes": "RoadRulesPersonalBestMessage : public CgsNetwork::ReliableMessage is a POLYMORPHIC derived network message (virtual GetPackedMessageSize @0x8257B998 + PackOrUnpack @0x8257BA28; Construct @0x8257B988 calls Message::Construct, GetPackedMessageSize calls TestConnectionMessage::GetPackedMessageSize, PackOrUnpack calls ReliableMessage::PackOrUnpack). BLOCKER: the CgsNetwork message base hierarchy (Message / ReliableMessage / TestConnectionMessage) has committed .cpp BODIES (CgsReliableMessage.cpp / CgsTestConnectionMessage.cpp) but NO committed HEADERS to derive from -- a polymorphic derived class needs the full base vtable+member layout (can't fork it ad-hoc without an ODR/vtable mismatch vs the committed bodies). Also sub_82881370 (the ranged bit-stream pack/unpack helper used for maiScores[2]/mChallengeIndex/miStreetDataVersion with the dword_820A764C/dword_820A7654 per-score-type min/max range tables) is UNIDENTIFIED (no recovered name; likely SmartBitStream::PackOrUnpackRangedInt), and the score-range tables' values are external. Construct is trivial (maiScores=-1 + base Construct) but shares the TU. BLOCK until the CgsNetwork message base-class hierarchy is reconstructed as headers (Message/ReliableMessage/TestConnectionMessage) + sub_82881370/the range tables are resolved.",
-   "status": "blocked"
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
   },
   "GameSource/Network/Messages/BrnRoadRulesPersonalBestMessage.h": {
    "status": "done"
-  },
-  "GameSource/Network/Messages/BrnSelectedRoutesMessage.cpp": {
-   "notes": "PackOrUnpack needs SpecificGameModeEventInterface::Event layout (landmark id array, hull, light-trigger index, round-number bit-packing) + the byte/u16 field serialisers; not yet reconstructed in b5-decomp. Construct/Retrieve are trivial but the TU is gated on that type recovery -- revisit when BrnGameStateModuleIO Event lands.",
-   "status": "blocked"
   },
   "GameSource/Network/Messages/BrnSelectedRoutesMessage.h": {
    "status": "done"
@@ -31215,6 +31346,10 @@
    "notes": "BridgeControllerToWorld @0x823CD890 steering curve = copysign(pow(fabs(stickLX), exp), stickLX) where exp @0x82035228 is UNDECODED .rdata (EARenderWare pow via vlogefp/vexptefp + coeff tables unk_82014AC0..AF0); the exponent value cannot be recovered without fabrication. Other 4 funcs upstream-committed + correct. Blocked on the undecoded steering exponent.",
    "status": "blocked"
   },
+  "GameSource/Unity/../Game/GameBridgeReplayToX.cpp": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
   "GameSource/Unity/../GameFlowController/TopLevel/BrnGameMainFlowController.cpp": {
    "status": "done"
   },
@@ -31443,6 +31578,10 @@
   "GameSource/Unity/../Graphics/BrnBlobbyShadowManager.cpp": {
    "notes": "BrnBlobbyShadowManager; parity/none; wave9; verifier parity; gate pass.",
    "status": "done"
+  },
+  "GameSource/Unity/../Graphics/BrnCoronaManager.cpp": {
+   "notes": "DEFERRED (RE complete, decomp staged but not committed). BrnCoronaManager is a struct w/ nested BrnSubmissionInterface (DWARF), but committed BrnRendererModuleIO.h/BrnRaceCarEntityModuleIO.h forward-declare it as a NAMESPACE and BrnRendererModule.h as an empty struct -> committing the real class needs a cross-tree namespace->class reconciliation (include BrnCoronaManager.h in those 3 headers + fix rwgcoronabuffer.h class->struct) + re-gating ~7 TUs, and the bodies must call real renderengine CoronaBuffer::Iterator::Write/TextureState::Initialize (not stand-ins). Corona type enum (race-car head/rear/brake/indicator/reversing/blues-twos lights), AddCorona SmoothStep distance-falloff + back-face cull, layout all RE'd. Staged: scratchpad/wave4/.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Graphics/BrnEffectsArbitrator.cpp": {
    "notes": "Construct (per-slot BrnEffectsFrame), EndOfFrame (internal/external flip), EvalTint (tint-weight reweight, residual=1-sum) verified.",
@@ -31756,10 +31895,6 @@
    "notes": "BrnAIUtils (2); parity/low; wave6; verifier reviewed; gate pass.",
    "status": "done"
   },
-  "GameSource/Unity/../World/AI/BrnHNGTest.cpp": {
-   "notes": "LineTestSectionHNG @0x8277A650 is a heavy VMX/SIMD line-segment-vs-no-go-line collision intersection test (packed-float Vector2 lane ops, vcmpgtfp/vcmpgefp predicate chains, reciprocal refinement); no scalar portion. Deferred to a VMX pass.",
-   "status": "blocked"
-  },
   "GameSource/Unity/../World/AI/BrnRouteRequestManager.cpp": {
    "status": "done"
   },
@@ -31948,10 +32083,6 @@
   },
   "GameSource/World/EntityModules/PropEntityModule/BrnPropEntityInstance.h": {
    "status": "done"
-  },
-  "GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule.h": {
-   "notes": "PropEntityDebugComponent::ResetProps @0x822A9758 needs the full ~864KB PropEntityModule layout (PropZoneManager/PropStreamer/PropGraphicsManager/BitArray<500>/ResourcePtr[500]) un-homed; reaching meStreamingMode by name requires it.",
-   "status": "blocked"
   },
   "GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO.h": {
    "status": "done"
@@ -32455,10 +32586,6 @@
   "class:AptRenderItemCustomControl": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/SDKs/EATech/include/Apt/AptRenderItemCustomControl.cpp. Reconciled.",
    "status": "done"
-  },
-  "class:AptRenderItemDynamicText": {
-   "notes": "Minimal home committed (AptRenderItemDynamicText.h, for AptCharacterTextInst). Full 6-fn TU blocked on the AptRenderItem virtual-Clone base-vtable slot (Clone override). [adri1 apt-100]",
-   "status": "blocked"
   },
   "class:AptRenderItemLevel": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/SDKs/EATech/include/Apt/AptRenderItemLevel.cpp. Reconciled.",
@@ -33494,10 +33621,6 @@
    "notes": "Wave 52: reconstructed store-for-store from X360 ARTIST asm and adversarially verified (full store set both directions, exact assert operands, BE-qword field order, byte-index/stride). Committed a2da36a.",
    "status": "done"
   },
-  "class:BrnGui::GuiRaceCarInfoEvent": {
-   "notes": "DoWorstCase @0x823A6BB8 is heavy VMX effects-math (per-entry vmaddfp128 FMA position transform, cross-lane vspltw splats, per-lane weight consts {0,0.1,0.25,0} via lvx128, stvx128 out). Construct sibling is bodied but the TU is gated by this VMX fn. Deferred to a VMX pass.",
-   "status": "blocked"
-  },
   "class:BrnGui::GuiTracker": {
    "notes": "Wave 51: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -33514,9 +33637,9 @@
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
-  "class:BrnGui::Intro": {
-   "notes": "Intro ctor @0x824FFF58 is ~20 vtable-pointer stores planted into embedded GUI subobjects across a ~4168-byte object at raw byte offsets (0x00..0x1044), no base-ctor delegation; faithful reconstruction needs ~20 un-homed embedded GUI base/widget types + the full subobject layout, and the X360 body is only expressible via raw-offset casts (forbidden). Defer until the embedded GUI subobject family is homed.",
-   "status": "blocked"
+  "class:BrnGui::Interpolator<float>": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
   },
   "class:BrnGui::KeyboardHost": {
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
@@ -33552,6 +33675,10 @@
   },
   "class:BrnGui::OnlineTimeoutComponent": {
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:BrnGui::OnlineViewChallenges": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
    "status": "done"
   },
   "class:BrnGui::OptionsDataProfileDLC1": {
@@ -33675,10 +33802,6 @@
   },
   "class:BrnNetwork::BrnServerInterface": {
    "notes": "~BrnServerInterface @0x827E4090: same 11-component aggregate as BrnServerInterfaceBase plus one extra embedded-component vtable; blocked on the same un-homed component/base headers AND on BrnServerInterfaceBase itself.",
-   "status": "blocked"
-  },
-  "class:BrnNetwork::BrnServerInterfaceBase": {
-   "notes": "~BrnServerInterfaceBase @0x827E1710 restores 11 embedded-component vtables at hard subobject offsets (0xC0..0xBA8) + the primary vtable; needs the real aggregate layout (CgsNetwork::ServerInterface base + 9 component members) which is blocked on ~8 un-homed dep headers (CgsServerInterface/Connection/PlayerInfo/BroadcastMessages/Rankings, BrnServerInterfaceTelemetry/CustomCommands, DebugComponent) + network_defines.h. Synthesising it would fabricate; held.",
    "status": "blocked"
   },
   "class:BrnNetwork::BrnServerInterfaceDownloadableConfig": {
@@ -34523,8 +34646,16 @@
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/GameSource/Sound/BrnResourceRegistrar.cpp. Reconciled.",
    "status": "done"
   },
+  "class:BrnSound::Logic::ResourceRegistrar::RequestedResource,124>": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
   "class:BrnSound::Logic::Streaming": {
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnSound::Logic::SubmixesEffect": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
    "status": "done"
   },
   "class:BrnSound::Logic::Traffic::Traffic3DControl": {
@@ -35325,6 +35456,10 @@
   },
   "class:CgsFileSystem::RemapDevice": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsGeometric::AxisAlignedBox": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
    "status": "done"
   },
   "class:CgsGeometric::AxisAlignedBox4": {
@@ -36768,10 +36903,6 @@
    "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
    "status": "done"
   },
-  "class:EABarrierData": {
-   "notes": "Genuinely blocked. ctor @0x82B43A50 is the PPU interrupt-masked atomic-init idiom (mfmsr/mtmsree r13/lwarx/stwcx.) zeroing the lock word at +0, stw r11=0 ->+4, then a second lwarx/stwcx. loop on r9=r31+8 zeroing +8, then two embedded EA::Thread::Semaphore ctors at +0xC and +0x1C. No homed EABarrierD",
-   "status": "blocked"
-  },
   "class:EAConditionData": {
    "notes": "Genuinely blocked. ctor @0x82B43B38: PPU interrupt-masked atomic-init (mfmsr/mtmsree r13/lwarx/stwcx.) zeroing +0, then stw r11=0 ->+4 and ->+8, then two embedded EA::Thread::Semaphore ctors at +0xC/+0x1C, then EA::Thread::Mutex::Mutex at +0x30 which is [external/unknown] (NOT recovered). No homed E",
    "status": "blocked"
@@ -37004,6 +37135,10 @@
    "notes": "Realmc LoadEntryInfo; parity/none; wave6; verifier reviewed; gate pass.",
    "status": "done"
   },
+  "class:RealmcIface::MessageShowAutosaveIcon": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
   "class:RealmcIface::SaveReq": {
    "notes": "ctor (params-copy +0x20, fields +0x158/15C/160, memcpy 0x20, stb 0 @+0x1F) verified; arg mapping correct.",
    "status": "done"
@@ -37052,8 +37187,16 @@
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:Snd::CSign24IntDecS16": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
   "class:Snd::CSign24bIntDecS16": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:Snd::CSign8IntDecS16": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
    "status": "done"
   },
   "class:Snd::CUnSign8IntDecS16": {
@@ -37079,10 +37222,6 @@
   "class:XAUDIO::CBatchAllocatedObject": {
    "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
-  },
-  "class:XAUDIO::CBatchAllocator": {
-   "notes": "BLOCK IS LEGITIMATE AND DECISIVE. Verified against asm: ~CBatchAllocator @0x82C312E0 writes TWO vptrs -- `stw off_821B5694,0(r31)` (primary +0) and `stw off_821B5680,4(r31)` then later `stw off_82108FF4,4(r31)` (secondary base subobject @+4) -- a two-vptr MI layout. AddRef`adjustor{4}` @0x82963068 =",
-   "status": "blocked"
   },
   "class:XAUDIO::CCriticalSection": {
    "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
@@ -37228,10 +37367,6 @@
    "notes": "Same vardelay_t::preprocess @0x8295FA78 dual-path/tap-rotation VMX keystone as <256>.",
    "status": "blocked"
   },
-  "class:princeton_digital::vardelay_t<float,256>": {
-   "notes": "vardelay_t::preprocess @0x82960B08: 4-wide-VMX DUAL code-path (branch on round(mMix*10000)>>1>=0x100) + mix up/down ramp (+/-0.0002) + tap-rotation state machine (mTapTarget@+16->mTapNew@+8->mTapNew2@+12, mMix reset 0/1) not faithfully reconstructed; only the single-tap up-crossfade is modeled (behaviour-divergent). Needs the full VMX dual-path + tap-rotation reconstruction.",
-   "status": "blocked"
-  },
   "class:renderengine": {
    "notes": "renderengine facade (TextureS/VertexFormatGetStride); parity/none; wave6; verifier reviewed; gate pass.",
    "status": "done"
@@ -37310,6 +37445,10 @@
   },
   "class:rw": {
    "notes": "Wave 47: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:rw::BaseResourceDescriptor": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
    "status": "done"
   },
   "class:rw::BaseResourceDescriptors<3>": {
@@ -37416,6 +37555,10 @@
    "notes": "Coeffs @0x82B97E80 RBJ shelf algebra verified.",
    "status": "done"
   },
+  "class:rw::audio::core::PackedColumnReader": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
   "class:rw::audio::core::Pan2D1::Speaker": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
@@ -37483,10 +37626,6 @@
   "class:rw::collision::ClusteredMeshCluster": {
    "notes": "Verified vs X360 asm; parity.",
    "status": "done"
-  },
-  "class:rw::collision::Feature": {
-   "notes": "BuildEdgePlanes @0x82BB9D68 is a dense per-element VMX128 loop (lvx128+vpermwi128 swizzle, vmulfp128/vnmsubfp cross-product, vmsum3fp128 dot, vrsqrtefp+Newton-Raphson rsqrt normalize, vsel degenerate-guard, vxor sign-mask) over an un-homed plane-record array (+0x30 base/+0x40 stride, count @this+0x230) with an unvalued rdata epsilon (unk_8327EFD0). Faithful repro needs fabricating layout+constant. Deferred to a VMX pass.",
-   "status": "blocked"
   },
   "class:rw::collision::FeatureEdge": {
    "notes": "rw collision FeatureEdge; parity/low; wave9; verifier parity; gate pass.",
@@ -37556,6 +37695,10 @@
    "notes": "Wave 51: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:rw::core::atom::UnfixRefixAtoms": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
   "class:rw::core::debug::detail::DebugCriticalSection": {
    "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
    "status": "done"
@@ -37617,6 +37760,10 @@
    "status": "done"
   },
   "class:rw::math::vpu": {
+   "status": "done"
+  },
+  "class:rw::math::vpu::MaskScalar": {
+   "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
    "status": "done"
   },
   "class:rw::math::vpu::VecFloat": {
