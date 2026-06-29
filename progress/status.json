@@ -10416,6 +10416,18 @@
   "BrnGuiSaveLoad::ProfileDLC1::ValidateProfile": {
    "status": "reviewed"
   },
+  "BrnHW::System360HW::HasGameBeenRebootedDueToInvite": {
+   "status": "reviewed"
+  },
+  "BrnHW::System360HW::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnHW::System360HW::PrepareMassiveMemory": {
+   "status": "reviewed"
+  },
+  "BrnHW::System360HW::Release": {
+   "status": "reviewed"
+  },
   "BrnHW::operator++": {
    "status": "reviewed"
   },
@@ -12517,6 +12529,9 @@
    "status": "reviewed"
   },
   "BrnParticle::Pa": {
+   "status": "reviewed"
+  },
+  "BrnParticle::ParticleCpuMonitors::Construct": {
    "status": "reviewed"
   },
   "BrnParticle::ParticleDescription::HashString": {
@@ -16293,6 +16308,9 @@
   "BrnSound::Logic::PresentationEffect::UpdateVoiceParams": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::ResourceRegistrar::AddNodeToRemoveResourceCandidateList": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::ResourceRegistrar::AddRequest": {
    "status": "reviewed"
   },
@@ -16303,6 +16321,9 @@
    "status": "reviewed"
   },
   "BrnSound::Logic::ResourceRegistrar::GetResource": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::ResourceRegistrar::QueuedR": {
    "status": "reviewed"
   },
   "BrnSound::Logic::ResourceRegistrar::QueuedResource::Prepare": {
@@ -16323,6 +16344,9 @@
   "BrnSound::Logic::ResourceRegistrar::RemoveRequests": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::ResourceRegistrar::Requ": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::ResourceRegistrar::RequestedResource,124>::Link": {
    "status": "reviewed"
   },
@@ -16330,6 +16354,9 @@
    "status": "reviewed"
   },
   "BrnSound::Logic::ResourceRegistrar::RequestedResource::RequestedResource": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::ResourceRegistrar::ResourceRegistrar": {
    "status": "reviewed"
   },
   "BrnSound::Logic::ResourceRegistrar::SearchQueued": {
@@ -18388,6 +18415,18 @@
    "status": "reviewed"
   },
   "BrnWorld::PVSIO::OutputBuffer::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PVSModule::GetGameDataRequestInt": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PVSModule::GetInputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PVSModule::GetOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PVSModule::PVSModule": {
    "status": "reviewed"
   },
   "BrnWorld::PVSModule::Prepare": {
@@ -22453,6 +22492,12 @@
    "status": "reviewed"
   },
   "CgsMemory::MemoryMap::FixUp": {
+   "status": "reviewed"
+  },
+  "CgsMemory::MemoryMap::GetBank": {
+   "status": "reviewed"
+  },
+  "CgsMemory::MemoryMap::GetPool": {
    "status": "reviewed"
   },
   "CgsMemory::MemoryModule::AllocateBlocks": {
@@ -35187,6 +35232,10 @@
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
    "status": "done"
   },
+  "class:BrnHW::System360HW": {
+   "notes": "Verify PASS (4 funcs asm-grounded, _controlfp/XGetLaunchData/invite-check); replaced the fork with a proper X360 platform header. operator++ assert inferred (low-pri).",
+   "status": "done"
+  },
   "class:BrnMath": {
    "notes": "3 verify loops PASS (parallel A=4 vector fns math-correctness, B=RoundWith+overall, C=sign-off). Gate compiles clean (MSVC). Parity near-exact: call_count 17=17, loop_count 1=1, return_count 5=5; branch_count 10-vs-2 = the inlined 3-lane vspltw/vcmpeqfp IsValid NaN cascade (3 nested branches x 3 fns) collapsed into single CGS_ASSERT(rw::math::vpu::IsValid()) calls; absent Assert::Begin/Fire/End are inside the CGS_ASSERT macro. Semantic-parity VMX->portable (SIMD artifacts dropped, BrnTrafficLightTrigger precedent). Flatten=Vector2{x,z} (XZ flatten), IsNormal=fabs(Magnitude-1)<=0.01 (EXECUTED; correct sense, magnitude not mag2), Magnitude2D=sqrt(x2+z2), MagnitudeSquared2D=x2+z2 (lanes X,Z verified), RoundWith=round-to-N-sig-figs with sub_82C09970 CONFIRMED libm pow (disassembly: _decomp/_powhlp/exp-range) -> pow(10,numFigs) threshold + scale-loop + round-half + sign(value==0->0), s32(f32,f32) per DWARF. Inferred rodata constants (Flatten lane mask, IsNormal eps, RoundWith floats) FLAGged. IsNormal(Vector2) overload deferred (own TU).",
    "status": "done"
@@ -35420,6 +35469,10 @@
   "class:BrnParticle::Native::ShadedRotatingRenderMethod": {
    "notes": "VMX keystone: BuildQuad @0x8291E150 is a multi-stage hand-vectorised VMX/AltiVec quad-build pipeline; no faithful scalar lowering. Honest CGS_ASSERT floor shipped. Deferred to a dedicated VMX pass.",
    "status": "blocked"
+  },
+  "class:BrnParticle::ParticleCpuMonitors": {
+   "notes": "Verify PASS (none); gate clean.",
+   "status": "done"
   },
   "class:BrnParticle::ParticleDescription": {
    "notes": "HashString verified: case-insensitive FNV-1a (basis 0x811C9DC5, prime 0x01000193).",
@@ -36096,6 +36149,10 @@
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnSound::Logic::ResourceRegistrar": {
+   "notes": "RECONCILE: already fully reconstructed+gate-clean in a prior wave (BrnResourceRegistrar.cpp); verify confirmed complete vs asm. Copy-ctor self-rebind is a documented dead-path.",
+   "status": "done"
+  },
   "class:BrnSound::Logic::ResourceRegistrar::RequestedResource": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/GameSource/Sound/BrnResourceRegistrar.cpp. Reconciled.",
    "status": "done"
@@ -36563,6 +36620,10 @@
   },
   "class:BrnWorld::PVSIO::GetZoneResponse>": {
    "notes": "Wave 36: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnWorld::PVSModule": {
+   "notes": "Verify caught 3 interface getters dropping the inlined SafeGet* 'lpBuffer != NULL' tripwire; fixed by calling SafeGetInput/OutputStructure() then the PVS-level assert (two assert sequences per asm).",
    "status": "done"
   },
   "class:BrnWorld::PlaceOnTrackManager": {
@@ -37270,6 +37331,10 @@
   },
   "class:CgsMemory::MemoryIO::InputBuffer": {
    "notes": "3 verify loops PASS (fidelity, adversarial w/ compiled probe proving mMemoryRequestQueue@+4 & alignof(VEQ)=4, final sign-off). Gate clean. Parity 'gross' is benign: the 4 absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT x2 (one per getter). const=read-lock(bit4), non-const=write-lock(bit3); MemoryRequestQueue=committed VariableEventQueue<13312,16>.",
+   "status": "done"
+  },
+  "class:CgsMemory::MemoryMap": {
+   "notes": "Verify PASS (none); gate clean.",
    "status": "done"
   },
   "class:CgsMemory::SimpleDataStreamConsumer": {
