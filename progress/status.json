@@ -3588,6 +3588,9 @@
   "BrnFlapt::TextFieldRef::SetText": {
    "status": "reviewed"
   },
+  "BrnGame::AutoTestManager::AutoTestManager": {
+   "status": "reviewed"
+  },
   "BrnGame::AutoTestManager::DumpGameState": {
    "status": "reviewed"
   },
@@ -11439,6 +11442,15 @@
   "BrnNetwork::NetworkPlayerStatsManager::Disconnected": {
    "status": "reviewed"
   },
+  "BrnNetwork::NetworkPlayerStatsManager::GetPlayerStatsByNam": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStatsManager::HandleOfflineProgressionEvent": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStatsManager::NetworkPlayerStatsManager": {
+   "status": "reviewed"
+  },
   "BrnNetwork::NetworkPlayerStatsManager::ProcessAfterSimulation": {
    "status": "reviewed"
   },
@@ -15327,6 +15339,15 @@
   "BrnResource::DLCBeatTheTeamGame::SetEnabledState": {
    "status": "reviewed"
   },
+  "BrnResource::DLCFeatureAvailability::Construct": {
+   "status": "reviewed"
+  },
+  "BrnResource::DLCFeatureAvailability::GetPackMask": {
+   "status": "reviewed"
+  },
+  "BrnResource::DLCFeatureAvailability::SetPackAvailabilityState": {
+   "status": "reviewed"
+  },
   "BrnResource::DLCManager::Construct": {
    "status": "reviewed"
   },
@@ -17487,10 +17508,19 @@
   "BrnTraffic::StopLine::ConvertToFixed": {
    "status": "reviewed"
   },
+  "BrnTraffic::TrafficCarStreamer::AreAllAssetsLoaded": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::TrafficCarStreamer::GetBonusAssets": {
+   "status": "reviewed"
+  },
   "BrnTraffic::TrafficCarStreamer::GetGraphicsSpec": {
    "status": "reviewed"
   },
   "BrnTraffic::TrafficCarStreamer::GetWheelGraphicsSpec": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::TrafficCarStreamer::IsTrafficAssetLoaded": {
    "status": "reviewed"
   },
   "BrnTraffic::TrafficCarStreamer::OnLoadBegin": {
@@ -17506,6 +17536,9 @@
    "status": "reviewed"
   },
   "BrnTraffic::TrafficCarStreamer::SetAssetList": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::TrafficCarStreamer::TrafficCarStreamer": {
    "status": "reviewed"
   },
   "BrnTraffic::TrafficCrashInfo,160>::Erase": {
@@ -18102,6 +18135,12 @@
   "BrnWorld::CrashModule::ClearUpRecycledTraffic": {
    "status": "reviewed"
   },
+  "BrnWorld::CrashModule::CrashModule": {
+   "status": "reviewed"
+  },
+  "BrnWorld::CrashModule::FindCrashForRaceCar": {
+   "status": "reviewed"
+  },
   "BrnWorld::CrashModule::FindCrashForTrafficVehicle": {
    "status": "reviewed"
   },
@@ -18139,6 +18178,9 @@
    "status": "reviewed"
   },
   "BrnWorld::CrashModule::TickCrashes": {
+   "status": "reviewed"
+  },
+  "BrnWorld::CrashModule::WillTrafficVehicleBeRecycledNextFrame": {
    "status": "reviewed"
   },
   "BrnWorld::CrashPlayDebugComponent::GetName": {
@@ -32486,6 +32528,10 @@
    "notes": "Fresh-eyes (general-purpose subagent): SetState clamp/linearisation verified vs asm + DWARF math::vpu::Clamp; ctor offset-for-offset; quality rules OK. Shared infra added: programbuffer.h (extracted), rwgpfxhelper.h.",
    "status": "done"
   },
+  "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxhelper.cpp": {
+   "notes": "5/7 funcs reconstructed+gate-clean (CreateProgram/CreateStates/3x InitWeights, asm-verified); ctor@0x82408348 + Release@0x82402E58 blocked on un-recoverable embedded shader microcode blobs (function-only exports, no bytes) + unreconstructed renderengine vendor types (VertexDescriptor/MeshHelper/VertexBuffer/DepthStencilState param structs).",
+   "status": "blocked"
+  },
   "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxrendertargetdebugger.cpp": {
    "notes": "Fresh-eyes batch review: descriptor alloc/init + CreateProgram sizes match; real recovered shader data; members by name.",
    "status": "done"
@@ -34517,6 +34563,10 @@
    "notes": "Catch-all (3 fns, 3 homes). 3 verify loops PASS (parallel A=BrnG+operator++ asm fidelity, B=GetParticleData asm+DWARF incl +16 offset math, C=sign-off). Gate compiles clean (MSVC). Parity RED is a measurement artifact: submitted the whole committed BrnGameModule.cpp (large file, dozens of fns) because the catch-all only ADDED operator++ to it -> tool sums all 129 calls there vs the 3 catch-all fns' 13-call pseudocode. Absent callees all expected: BaseCollisionGenerator::Destruct present as .Destruct() (qualified-name grep miss); Assert::Begin/Fire/End inside CGS_ASSERT macro; BasePriorityQueue::Clear is the deliberately-omitted X360 StrStream-assert machinery (benign committed convention). #1 BrnG @0x827E3090 dtor-thunk (destruct embedded BaseCollisionGenerator, return &member; opaque owner minimal+FLAGged; ad-hoc BaseCollisionGenerator mirrors VehicleList). #2 GetParticleData() const @0x8227F4F0 (read-lock CGS_ASSERT + return &mParticleData=this+16; DWARF h:97 proves identity vs truncated symbol; minimal slice + ad-hoc opaque DispatchThreadUpdateData). #3 operator++(EReleaseStage&,int) @0x823A8AD8 post-increment returns old + assert<=E_RELEASESTAGE_DONE(7); grows BrnGameModule no-regression. Rest of each home deferred.",
    "status": "done"
   },
+  "class:BrnGame::AutoTestManager": {
+   "notes": "Verify PASS (none); class-keyed TU reconstructed to its home + reconstructed CgsLog* logging deps. Gate clean.",
+   "status": "done"
+  },
   "class:BrnGameState": {
    "notes": "All 20 catch-all funcs bodied + adversarially verified across 2 rounds (container instances store-for-store; the 7 buffer accessors byte-exact offsets + correct read/write lock bits vs asm; RichPresence/GetGameStateToGuiInterface parity). All home grows additive (carved from opaque storage, committed offsets + 8 static_asserts preserved, gates clean). 5 interface member types modeled named-opaque (accessors faithfully return &member; DWARF identities noted for their own TUs). No fabrication (un-attested fields left opaque). Member-by-name throughout.",
    "status": "done"
@@ -35243,6 +35293,10 @@
    "notes": "Wave 39: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnNetwork::NetworkPlayerStatsManager": {
+   "notes": "Verify PASS (none); asm-grounded. Gate clean.",
+   "status": "done"
+  },
   "class:BrnNetwork::NetworkServers": {
    "notes": "Fresh-eyes batch review: IP/port accessors, SetIPAndPort DEV->JUICE redirect, SetServerType all match; real recovered IP constants.",
    "status": "done"
@@ -35914,6 +35968,10 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnResource::DLCFeatureAvailability": {
+   "notes": "Verify PASS (none); parity YELLOW benign. Gate clean.",
+   "status": "done"
+  },
   "class:BrnResource::DebugComponent": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -36295,6 +36353,10 @@
    "notes": "Wave 46: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnTraffic::TrafficCarStreamer": {
+   "notes": "Verify PASS (minor); 4 funcs asm-grounded. void* list-heads are x64-widened per project convention (offset comments are X360-relative).",
+   "status": "done"
+  },
   "class:BrnTraffic::TrafficCrashInfo,160>": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -36425,6 +36487,10 @@
   },
   "class:BrnWorld::CrashIO::TrafficInputInterface": {
    "notes": "Wave 44: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnWorld::CrashModule": {
+   "notes": "Verify PASS (none); reconstructed base/contained headers first. Gate clean.",
    "status": "done"
   },
   "class:BrnWorld::DetachedPartRenderEvent,20>": {
