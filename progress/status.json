@@ -33066,6 +33066,33 @@
   "rw::core::filesys::AsyncOp>::Remove": {
    "status": "reviewed"
   },
+  "rw::core::filesys::Device::ChangeOpPriority": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Device::CheckForOptimalReadOp": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Device::Device": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Device::GetInstance": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Device::InsertOp": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Device::Start": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Device::ThreadEntry": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Device::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Device::~Device": {
+   "status": "reviewed"
+  },
   "rw::core::filesys::DeviceDriver::DeviceDriver": {
    "status": "reviewed"
   },
@@ -33079,6 +33106,57 @@
    "status": "reviewed"
   },
   "rw::core::filesys::Handle::~Handle": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::ConvertI64ToA": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::ConvertIToA": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::ConvertXToA": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::MemClear": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::MemCompare": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::MemCopy": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::MemFill32": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::MemFill8": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::Snprintf": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::StringCat": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::StringCompare": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::StringLength": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::StringNoCaseCompare": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::StringToUpperCase": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::StringnCopy": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::Vsnprintf": {
+   "status": "reviewed"
+  },
+  "rw::core::stdc::Vsprintf": {
    "status": "reviewed"
   },
   "rw::graphics::postfx::B4Blur::B4Blur": {
@@ -42976,6 +43054,10 @@
    "notes": "AsyncOpList InsertAfter/Remove (intrusive list, predecessor-cursor) verified store-for-store.",
    "status": "done"
   },
+  "class:rw::core::filesys::Device": {
+   "notes": "RenderWare filesys Device (9 fn) verified PASS vs asm (XNotify/threaded async-op device). Minor accepted: Start/ChangeOpPriority return 0 (host void Unlock \u2014 all callers discard); kTimeoutNone=0xFFFFFFFF from EAThread convention; a pre-existing asyncop.h Allocator vtable slot note (out of scope, called by name).",
+   "status": "done"
+  },
   "class:rw::core::filesys::DeviceDriver": {
    "notes": "batch reviewer pass; constructor source restored, deleting destructor omitted as compiler thunk",
    "status": "done"
@@ -42987,6 +43069,10 @@
   "class:rw::core::filesys::NullFileDriver": {
    "notes": "MISATTRIBUTED (triage 2026-06-29, high-conf): NOT a reconstruction target -- demangler/DecFIGS mis-bucket. Re-partition: drop the fabricated rw::core::filesys::NullFileDriver class. The @0x82BBD5E8 address belongs to the already-homed DeviceMemFileSystem vtable family (CgsDeviceMemFileSystem.cpp); either fold it there as the matching deleting-destructor slot or close it as a duplicate. Do NOT reconstruct a new class (would ODR-collide on off_8209FEA8).",
    "status": "blocked"
+  },
+  "class:rw::core::stdc": {
+   "notes": "RenderWare core stdc shims (17 fn) verified PASS vs asm. Minor accepted (cosmetic/deopt): MemFill32 byte-tail uses rotate vs the asm plain shift (same result); Mem* declared void vs asm returning the advanced/orig pointer (all call sites discard).",
+   "status": "done"
   },
   "class:rw::graphics::postfx::B4Blur::State": {
    "notes": "Keystone campaign R3: partial-completion + faithful VMX->scalar lowering, adversarially verified vs X360 asm. Committed 2c0bc47.",
