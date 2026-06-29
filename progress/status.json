@@ -9,6 +9,12 @@
   "*,6>::operator[]": {
    "status": "reviewed"
   },
+  "*,7>::GetItem": {
+   "status": "reviewed"
+  },
+  "*,8>::GetI": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::InitDispatchTable": {
    "status": "reviewed"
   },
@@ -32583,6 +32589,12 @@
   "_FillInObjectToMeshJobData": {
    "status": "reviewed"
   },
+  "`anonymous namespace'::GetFFDeviceContext": {
+   "status": "reviewed"
+  },
+  "`anonymous namespace'::Xbox2SetTextureHeader": {
+   "status": "reviewed"
+  },
   "`private: bool __cdecl rw::audio::core::SeekTableParser::ParseChunkSection0": {
    "status": "reviewed"
   },
@@ -37796,6 +37808,14 @@
   },
   "class:*,6>": {
    "notes": "BucketListNode<Job*,6> (Job-dependents) Add/ListSize/operator[] verified; eajobs home grown additively.",
+   "status": "done"
+  },
+  "class:*,7>": {
+   "notes": "trivial explicit-instantiation file; compile gate PASS. Parity RED is a known false positive: the method bodies (GetItem / operator[] / all Array<T,N> methods) live entirely in CgsArray.h and are not visible to the parity checker in this .cpp. CgsArray.h:49-50 implements GetItem inline, matching the X360 pseudocode body 1:1.",
+   "status": "done"
+  },
+  "class:*,8>": {
+   "notes": "trivial explicit-instantiation file; compile gate PASS. Parity RED is a known false positive: method bodies live in CgsArray.h, not in this .cpp. Same pattern as every other CgsArray<T,N>.cpp in the project.",
    "status": "done"
   },
   "class:AptActionQueueC": {
@@ -43072,6 +43092,10 @@
   },
   "class:_DOGMA_MemPool": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:`anonymous namespace'": {
+   "notes": "standard; self-reviewed. Compile gate PASS. Parity YELLOW (13 vs 12 calls, delta=1): the 'absent callees' are the two function names themselves (GetFFDeviceContext, Xbox2SetTextureHeader) appearing in the dossier pseudocode headers, not actual missing calls in the reconstructed bodies. Branch counts match exactly (12/12). GetFFDeviceContext: faithful XInputGetCapabilities + FFB capability check + function-pointer dispatch; exact branch topology. Xbox2SetTextureHeader: exact 5-case switch dispatch to XGSet*TextureHeader + header field post-processing (fence clear + tiling-word preservation) + lpPitch/lpTiling outputs. Both bodies track the pseudocode 1:1.",
    "status": "done"
   },
   "class:`private: bool __cdecl rw::audio::core::SeekTableParser": {
