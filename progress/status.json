@@ -15906,6 +15906,60 @@
   "BrnReplays::StreamHeader::ChopOffTailFrames": {
    "status": "reviewed"
   },
+  "BrnReplays::TrafficEntitySerialiser::CheckStaticLayoutCleared": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::Construct": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::GetPhysicsInfo": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::GetStaticLayout": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::GetVehicleData": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::GetVehicleTransform": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::Read": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::ReadAsQuatPos": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::ReadFrame": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::SetActiveHullsForLocalPlayer": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::SetBonusAssets": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::SetPhysicsData": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::SetVehicleData": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::SetVehicleTransforms": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::Write": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::WriteAsQuatPos": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::WriteFrame": {
+   "status": "reviewed"
+  },
+  "BrnReplays::TrafficEntitySerialiser::WritePhysicsInfo": {
+   "status": "reviewed"
+  },
   "BrnReplays::TrafficSerialiserFrame::Clear": {
    "status": "reviewed"
   },
@@ -37134,6 +37188,10 @@
   },
   "class:BrnReplays::StreamHeader": {
    "notes": "StreamOffset 24-byte X360 stride (overrides PS3 layout) asm-verified.",
+   "status": "done"
+  },
+  "class:BrnReplays::TrafficEntitySerialiser": {
+   "notes": "Fix-round: added the 600-entry slot-table block + mode-5-only cascade + 4 alignment asserts + ReadByte primitive (findings 1/2/4/5, re-verify confirmed). Re-verify caught the original verifier's finding-3 as WRONG (WriteFrame scalars are NOT asymmetric); corrected WriteFrame to write the same +148080/+148084 as read, reverted mInfoValid to a u64 + dropped the bogus write-side members/constants.",
    "status": "done"
   },
   "class:BrnReplays::TrafficSerialiserFrame": {
