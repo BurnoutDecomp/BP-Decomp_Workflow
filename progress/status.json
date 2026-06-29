@@ -25734,6 +25734,69 @@
   "CgsNetwork::BuddyManagerBase::_PresenceChangedCallback": {
    "status": "reviewed"
   },
+  "CgsNetwork::BuddyManagerX360::AcceptInvite": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::AreAnyInvitesOpen": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::CancelInvites": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::CancelPictureDownload": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::Construct": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::Destruct": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::DownloadNextPicture": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::GetBuddyXUID": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::GetMessage": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::GetNextUnreadMessage": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::GetTitle": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::HaveIInvitedMyBuddy": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::IsConnectedToNetworkService": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::JoinBuddy": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::Release": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::RequestNextProfilePictures": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::SendInvite": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::ShowProfile": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::StartDownloadingPictures": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::BuddyManagerX360::Update": {
+   "status": "reviewed"
+  },
   "CgsNetwork::CompressionAndEncryptionUtils::ExtractSendingPlayerID": {
    "status": "reviewed"
   },
@@ -30198,10 +30261,52 @@
   "EA::Jobs::Event::Run": {
    "status": "reviewed"
   },
+  "EA::Jobs::Job::Clear": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::Depende": {
+   "status": "reviewed"
+  },
   "EA::Jobs::Job::Dependency,10>::Add": {
    "status": "reviewed"
   },
   "EA::Jobs::Job::Dependency,10>::ListSize": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::DependsOn": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::GetDependency": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::GetDependent": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::GetNumDependents": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::INTERNAL_AddNotReady": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::INTERNAL_SubmitEventsAndDeps": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::IsDone": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::Job": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::SetData": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::SleepOn": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::WaitOn": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::Job::~Job": {
    "status": "reviewed"
   },
   "EA::Jobs::JobInstanceHandle::AddBarrier": {
@@ -40741,6 +40846,10 @@
    "notes": "7 funcs (ranked-contexts/connection-lookup/wrapped-u16/GameSearchParams); verifier parity; gate pass.",
    "status": "done"
   },
+  "class:CgsNetwork::BuddyManagerX360": {
+   "notes": "CgsNetwork::BuddyManagerX360 (21 funcs) \u2014 3 asm-grounded fixes applied + re-verified PASS: (1) DownloadNextPicture reads the gamer-pic key base from mpProfileSettings(+0x2C, the XDK profile-read results), not mpGamerPicKeys(+0x20, stored-but-unused per asm); (2) Update post-flight assert string corrected to \"XOverlapped operation failed:\"+result (:161), keeping DidOperationCompleteSuccessfully only on the sync path (:188); (3) Prepare now zeroes the base mBuddiesChangedCallback(+0x18) via a new protected _ClearBuddiesChangedCallback() base hook \u2014 all 5 asm stores reproduced.",
+   "status": "done"
+  },
   "class:CgsNetwork::CompressionAndEncryptionUtils": {
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -41740,6 +41849,10 @@
   },
   "class:EA::Jobs::Event,16>": {
    "notes": "EA::Jobs::Event,16> instance; gate pass.",
+   "status": "done"
+  },
+  "class:EA::Jobs::Job": {
+   "notes": "EA::Jobs::Job (14 funcs) re-decompiled FRESH on canonical upstream (prior WIP diverged from upstream job.h, discarded). job.h/job_types.h grown ADDITIVELY (3 SchedulerBackend pure virtuals at +0x28/+0x34/+0x3C around existing +0x30/+0x38). Re-verify PASS, all 4 prior pitfalls honored: SleepOn routes backend +0x3C (not IsJobComplete +0x30); SubmitEvent dispatches unconditional; dep-total adds mSize once; DependsOn(JIH,When)/GetData/GetDataSize NOT fabricated (decl-only). All dependent siblings compile. Minor noted: MakeDefaultEntryPoint sets priority/affinity/codeRecycle 128/63/1 (asm-grounded) via offset writes into a scalar-only region (host layout matches X360) \u2014 verifier-approved, documented.",
    "status": "done"
   },
   "class:EA::Jobs::Job::Dependency,10>": {
