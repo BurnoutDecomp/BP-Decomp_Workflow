@@ -11004,7 +11004,25 @@
   "BrnNetwork::BrnNetworkModuleIO::TelemetryData::AddParameter": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkPlayer::BrnNetworkPlayer": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkPlayer::CheckForPlayerPausedTimeout": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkPlayer::ProcessReceivedStuntMultiplier": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkPlayer::SendStuntMultiplierMessage": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkPlayer::SendStuntScoreUpdatedMessage": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkPlayer::_StuntMultiplierMessageArrivedCallback": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkPlayer::_StuntScoreUpdatedMessageArrivedCallback": {
    "status": "reviewed"
   },
   "BrnNetwork::BrnServerInterface::`scalar deleting destructor'": {
@@ -19551,13 +19569,28 @@
   "BrnWorld::RaceCarCrash::Tick": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModule::ClearActiveRaceCarToPlayerScoringMapping": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModule::ClearAllActiveRaceCarToPlayerScoringMappings": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModule::CopyActiveRaceCarToPlayerScoringMappingToOutput": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCarEntityModule::GenerateSceneUpdateEvents": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModule::GetActiveRaceCar": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModule::GetGameModeFlag": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCarEntityModule::GetGlobalRaceCar": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModule::GetPlayerRaceCar": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModule::HandleCarStatsUpdate": {
@@ -19578,10 +19611,16 @@
   "BrnWorld::RaceCarEntityModule::PlaceRaceCarOnLoad": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCarEntityModule::RaceCarEntityModule": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCarEntityModule::RemoveRaceCar": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModule::SendResetOnTrackRequests": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModule::SetActiveRaceCarForPlayerScoringIndex": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModule::SetPaddingForResetRaceCars": {
@@ -19600,6 +19639,9 @@
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModule::UpdateOutputBoostInfo": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCarEntityModule::UpdateRaceCarCollisionTagging": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleDebugComponent::RenderTailgateCones": {
@@ -20851,6 +20893,15 @@
    "status": "reviewed"
   },
   "CgsDev::DebugController::UpdatePad": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugGameTalkInterface::Construct": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugGameTalkInterface::GameTalkMsgHandler": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugGameTalkInterface::Prepare": {
    "status": "reviewed"
   },
   "CgsDev::DebugInterface::DebugInterface": {
@@ -26890,6 +26941,9 @@
    "status": "reviewed"
   },
   "CgsResource::SmallResource::CreateFromRWResource": {
+   "status": "reviewed"
+  },
+  "CgsResource::SmallResourceDescriptor::CreateFromRWDescriptor": {
    "status": "reviewed"
   },
   "CgsResource::SnapshotDataResourceType::GetTypeID": {
@@ -36343,6 +36397,10 @@
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnNetwork::BrnNetworkPlayer": {
+   "notes": "Verify PASS (none); 6 funcs asm-grounded; additive grows to BrnNetworkManager.h (GetLocalConsoleFrameRate) + message headers.",
+   "status": "done"
+  },
   "class:BrnNetwork::BrnServerInterface": {
    "notes": "Reconstructed from asm/dossier, adversarially verified, gate PASS, pushed to dev.",
    "status": "done"
@@ -37830,6 +37888,10 @@
    "notes": "Wave 47: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnWorld::RaceCarEntityModule": {
+   "notes": "Verify PASS (none); scoring-mapping funcs asm-grounded.",
+   "status": "done"
+  },
   "class:BrnWorld::RaceCarEntityModuleIO": {
    "notes": "Already committed (38 bodies in BrnRaceCarEntityModuleIO.cpp + _PreSceneAccessors.cpp); sub-interface cascade resolved by-value; gate PASS post ODR fix. Reconciled.",
    "status": "done"
@@ -38012,6 +38074,10 @@
   },
   "class:CgsDev::Debug3DImmediateRender": {
    "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
+   "status": "done"
+  },
+  "class:CgsDev::DebugGameTalkInterface": {
+   "notes": "Verify PASS (none); 3 funcs asm-grounded (Construct assert+store, Prepare stage machine, GameTalkMsgHandler ExecuteScript dispatch).",
    "status": "done"
   },
   "class:CgsDev::DebugInterface": {
@@ -38999,6 +39065,10 @@
   },
   "class:CgsResource::SmallResource": {
    "notes": "Verify caught CreateFromRWResource missing the index-4 assert + an invented small[2]=0 store. Widened the param to the X360 5-slot serialised form rw::BaseResources<5> (mirrors ResourceDescriptor=<5>); reinstated all 3 asserts (slots 3,4,1 asm order); removed the invented store (binary does only 2 stores).",
+   "status": "done"
+  },
+  "class:CgsResource::SmallResourceDescriptor": {
+   "notes": "Verify caught the 3 guard asserts using m_size<=1u only; the asm tests BOTH words per entry (fire if m_size!=0 OR m_alignment>1). Fixed to (m_size==0 && m_alignment<=1) in asm order 3/4/1.",
    "status": "done"
   },
   "class:CgsResource::Type": {
