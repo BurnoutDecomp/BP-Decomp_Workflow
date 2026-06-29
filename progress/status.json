@@ -2643,6 +2643,12 @@
   "BrnDirector::Camera::BehaviourSpirallingDeathcam::Start": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Camera::Construct": {
+   "status": "compiles"
+  },
+  "BrnDirector::Camera::Camera::ValidateTransformWithDebugInfo": {
+   "status": "compiles"
+  },
   "BrnDirector::Camera::CameraEffects::Interpolate": {
    "status": "reviewed"
   },
@@ -9429,6 +9435,12 @@
   "BrnGui::MovieManager::HandleStopVideoEvent": {
    "status": "reviewed"
   },
+  "BrnGui::MovieManager::MovieManager": {
+   "status": "reviewed"
+  },
+  "BrnGui::MovieManager::PendingVideoDataResourceRequest": {
+   "status": "reviewed"
+  },
   "BrnGui::MovieManager::Prepare": {
    "status": "reviewed"
   },
@@ -9436,6 +9448,21 @@
    "status": "reviewed"
   },
   "BrnGui::MovieManager::RecvEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::MovieManager::RequestInvalidationOfCarPool": {
+   "status": "reviewed"
+  },
+  "BrnGui::MovieManager::RequestInvalidationOfCollisionWorld": {
+   "status": "reviewed"
+  },
+  "BrnGui::MovieManager::RequestValidationOfCarPool": {
+   "status": "reviewed"
+  },
+  "BrnGui::MovieManager::RequestValidationOfCollisionWorldState": {
+   "status": "reviewed"
+  },
+  "BrnGui::MovieManager::SetCarPoolValid": {
    "status": "reviewed"
   },
   "BrnGui::MovieManager::Update": {
@@ -21135,6 +21162,27 @@
   "CgsFileSystem::OperationPool::ReadOperation": {
    "status": "reviewed"
   },
+  "CgsFileSystem::PatchManager::AddFileToCurrentPatch": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PatchManager::AddPatch": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PatchManager::Construct": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PatchManager::DirSearchThreadProc": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PatchManager::GetPhysicalPath": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PatchManager::RemapFilename": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PatchManager::SearchFolder": {
+   "status": "reviewed"
+  },
   "CgsFileSystem::RemapDevice::Close": {
    "status": "reviewed"
   },
@@ -21436,6 +21484,27 @@
    "status": "reviewed"
   },
   "CgsGraphics::Im3dZOnly::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ImRendererBase::ConstructDefaultTextureSt": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ImRendererBase::ConstructDepthStenci": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ImRendererBase::ConstructNoAlphaTestBlendSt": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ImRendererBase::ConstructNoBlendNoAlphaTest": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ImRendererBase::ConstructRasteriserSta": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ImRendererBase::SetState": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::ImRendererBase::SetTexture": {
    "status": "reviewed"
   },
   "CgsGraphics::InstanceList::FixDown": {
@@ -22378,6 +22447,27 @@
    "status": "reviewed"
   },
   "CgsIDUnCompress": {
+   "status": "reviewed"
+  },
+  "CgsInput::DeviceX360Pad::BindToPort": {
+   "status": "reviewed"
+  },
+  "CgsInput::DeviceX360Pad::ClearCachedRumble": {
+   "status": "reviewed"
+  },
+  "CgsInput::DeviceX360Pad::Construct": {
+   "status": "reviewed"
+  },
+  "CgsInput::DeviceX360Pad::DeadzoneAxis": {
+   "status": "reviewed"
+  },
+  "CgsInput::DeviceX360Pad::GetAxisValue": {
+   "status": "reviewed"
+  },
+  "CgsInput::DeviceX360Pad::IsButtonPressed": {
+   "status": "reviewed"
+  },
+  "CgsInput::DeviceX360Pad::Update": {
    "status": "reviewed"
   },
   "CgsInput::InputI": {
@@ -27322,6 +27412,21 @@
    "status": "reviewed"
   },
   "CgsSound::Playback::VoiceSchema::VoiceSchema": {
+   "status": "reviewed"
+  },
+  "CgsSound::TestBed::Allocator::Allocator": {
+   "status": "reviewed"
+  },
+  "CgsSound::TestBed::Allocator::SafeDump": {
+   "status": "reviewed"
+  },
+  "CgsSound::TestBed::Allocator::SanityCheck": {
+   "status": "reviewed"
+  },
+  "CgsSound::TestBed::Allocator::SetAllocator": {
+   "status": "reviewed"
+  },
+  "CgsSound::TestBed::Allocator::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "CgsSound::Utils::Average<10,float>::Record": {
@@ -35526,6 +35631,10 @@
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnGui::MovieManager": {
+   "notes": "Verify caught ctor fabricating meState/collision/carpool/language (asm ctor doesn't write +4/8/C; Construct seeds them) + omitting car-pool descriptor init; removed the fabricated state inits, added the 3-pool {base=0,size=0,align=1} seeding, documented the omitted GeneralAllocator block.",
+   "status": "done"
+  },
   "class:BrnGui::MovieManager::VideoDefinition": {
    "notes": "Wave 43: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -37363,6 +37472,10 @@
    "notes": "Verify PASS (none); 5 funcs asm-grounded (stream-status collapse, bounds asserts), PS3-only members gated out.",
    "status": "done"
   },
+  "class:CgsFileSystem::PatchManager": {
+   "notes": "Verify caught 4 divergences: flipped clash compare (higher miValue wins, asm bge), strip leading sep in AddFile (lacChild+1), GetPhysicalPath copies from lpcLogical+7, DirSearch scratch alloc/free+miSearchHandleCount flagged (allocator iface not modelled; overlay logic unaffected).",
+   "status": "done"
+  },
   "class:CgsFileSystem::RemapDevice": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -37417,6 +37530,10 @@
   },
   "class:CgsGraphics::Im2dTransform,33>": {
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsGraphics::ImRendererBase": {
+   "notes": "Verify PASS (minor); 7 builders asm-grounded (blend/raster/depth/texture state params), SetState/SetTexture shadow logic. Parity YELLOW. Cosmetic comment notes only.",
    "status": "done"
   },
   "class:CgsGraphics::InstanceList": {
@@ -37617,6 +37734,10 @@
   },
   "class:CgsInput": {
    "notes": "Wave 43: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsInput::DeviceX360Pad": {
+   "notes": "Verify caught wheel-FF block: store to miField2C(+0x178) not miSubMask(+0x174); rewrote clamp to bias=clamp(mfRumbleY*-200,-100,100); unscrambled the FF clamp/gain rodata constant identities.",
    "status": "done"
   },
   "class:CgsInput::InputIO": {
@@ -38617,6 +38738,10 @@
   },
   "class:CgsSound::Playback::VoiceSchema": {
    "notes": "Adversarial verify PASS (parity): store-for-store vs X360 ARTIST spine; ledger funcs reconciled; minimal/owning homes, additive grows preserve layouts; gate PASS (combined wave-10 build).",
+   "status": "done"
+  },
+  "class:CgsSound::TestBed::Allocator": {
+   "notes": "Verify PASS (none); 5 funcs asm-grounded, DWARF layout (Header/Guard/History ring 500), guard consts grounded.",
    "status": "done"
   },
   "class:CgsSound::Utils::Average<10,float>": {
