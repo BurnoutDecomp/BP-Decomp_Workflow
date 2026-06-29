@@ -3454,34 +3454,34 @@
    "status": "reviewed"
   },
   "BrnEffects::EffectsDebugComponent::Construct": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::GetName": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::OnActivate": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::OnJunkyardEffectEditChange": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::OnJunkyardEffectIndexChange": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::OnJunkyardEffectValueChange": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::RenderWorld": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::SetupBoostMenu": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::SetupJumpMenu": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsDebugComponent::SetupLionMenu": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnEffects::EffectsIO::InputBuffer::Construct": {
    "status": "reviewed"
@@ -7658,6 +7658,30 @@
   },
   "BrnGui::BrnShowtimeMessageComponent::TransitionCompleteCallback": {
    "status": "reviewed"
+  },
+  "BrnGui::BurnoutSkillsManager::Construct": {
+   "status": "compiles"
+  },
+  "BrnGui::BurnoutSkillsManager::ResetPlayerData": {
+   "status": "compiles"
+  },
+  "BrnGui::BurnoutSkillsManager::ResetSkillsData": {
+   "status": "compiles"
+  },
+  "BrnGui::BurnoutSkillsManager::SelectNext": {
+   "status": "compiles"
+  },
+  "BrnGui::BurnoutSkillsManager::SelectNextSkill": {
+   "status": "compiles"
+  },
+  "BrnGui::BurnoutSkillsManager::SetRoadRuleMode": {
+   "status": "compiles"
+  },
+  "BrnGui::BurnoutSkillsManager::Update": {
+   "status": "compiles"
+  },
+  "BrnGui::BurnoutSkillsManager::YouBeatSkill": {
+   "status": "compiles"
   },
   "BrnGui::ButtonIconComponent::Construct": {
    "status": "reviewed"
@@ -35160,6 +35184,10 @@
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.h": {
    "notes": "2 funcs (RaceCar entity-module accessors); verifier minor_drift/low; gate pass.",
    "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleDebugComponent.cpp": {
+   "notes": "Compile-FAILED + reverted. Blocked on two unreconstructed deps: (1) the rw::math::vpu SIMD vector family (VecFloat/Magnitude/Tan/Sin/Cos/TWO_PI/Matrix44Affine) -- the deferred SDKs/EATech vec_float_type_inline.h TU; and (2) CgsCore::KF_MPH_TO_MPS / KF_MPS_TO_MPH constants (do not exist anywhere in the tree). Also the draft split the single inline OnActivate into two and omitted the mbRenderCarStreamingState (+0x11) branch. Unblock when the vpu vec_float family + the CgsCore speed-unit constants are reconstructed.",
+   "status": "blocked"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp": {
    "notes": "InputBuffer_PostScene::Construct @0x822EA5E8 genuinely unbodied: asm zero-fills this+0xC0..+0xF8 (li r9,0; std r9 loop) then writes deep offsets into the nested mCrashInterface (RaceCarOutputInterface -- no struct def found) and mTrafficToRaceCarInterface_PreScene which is a maReserved[256] placeholder (BrnRaceCarEntityModuleIO.h:114). Cannot body member-by-name until those interface layouts are grown by their own TUs.",
