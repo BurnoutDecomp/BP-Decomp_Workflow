@@ -29163,16 +29163,34 @@
   "CgsSceneManager::OverlapCullingIO::RemoveInternalCollisionVolume,256>:": {
    "status": "reviewed"
   },
+  "CgsSceneManager::OverlapCullingModule::Construct": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::OverlapCullingModule::DoInternalCollision": {
    "status": "reviewed"
   },
+  "CgsSceneManager::OverlapCullingModule::DoPairQuery": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::OverlapCullingModule::IsInsideEscapeVolume": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::OverlapCullingModule::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::OverlapCullingModule::ProcessAddInternalVolumeQueue": {
    "status": "reviewed"
   },
   "CgsSceneManager::OverlapCullingModule::ProcessInternalCollisions": {
    "status": "reviewed"
   },
   "CgsSceneManager::OverlapCullingModule::ProcessOverlap": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::OverlapCullingModule::ProcessOverlapsQueue": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::OverlapCullingModule::Release": {
    "status": "reviewed"
   },
   "CgsSceneManager::OverlapCullingModule::Update": {
@@ -30597,6 +30615,78 @@
   "EA::Jobs::LocalBackend::JobThread::~JobThread": {
    "status": "reviewed"
   },
+  "EA::Jobs::LocalBackend::LocalBackend::AddEvent": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::AddNotReady": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::AddThread": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::FlushProfile": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::GetAllowSleepOn": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::GetEnabler": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::GetJobThreadSleepTimeoutMS": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::GetNumJobsInFlight": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::GetNumThreads": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::GetThreadHandle": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::GetThreadId": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::GetThreadParameters": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::IsDone": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::LocalBackend": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::RunSingleJob": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::SetJobThreadSleepTimeoutMS": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::SetProfilingCallback": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::SetProfilingContext": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::SleepOn": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::TryToRunJobInstanceGarbageCollector": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::WaitForEnd": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::WakeThreads": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "EA::Jobs::LocalBackend::LocalBackend::~LocalBackend": {
+   "status": "reviewed"
+  },
   "EA::Jobs::SetAllocator": {
    "status": "reviewed"
   },
@@ -30748,6 +30838,9 @@
    "status": "reviewed"
   },
   "EABarrierData::EABarrierData": {
+   "status": "reviewed"
+  },
+  "EARWMutexData::EARWMutexData": {
    "status": "reviewed"
   },
   "EASemaphoreData::UpdateCancelCount": {
@@ -34475,6 +34568,10 @@
   "GameShared/GameClasses/SceneManager/ContactGen/CgsIntervalStack.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapCullingModule.cpp": {
+   "notes": "CgsOverlapCullingModule (6 fn) \u2014 re-verify PASS after 2 fixes: Release @0x828AB448 guard corrected to (leStage != RELEASESTAGE_DONE) so base ModuleSingleBuffered::Release runs for BOTH START+MANAGER (was wrongly skipping MANAGER); Construct @0x828C18E8 reads luQuerySize=laDesc[0]/luQueryAlignment=laDesc[1] (the asm var_90/var_8C copied words 0/1), not [8]/[9].",
+   "status": "done"
+  },
   "GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeper.cpp": {
    "notes": "Clear=memset (clean), but the other 3 fns delegate to the UNCOMMITTED CgsSceneManager::IntervalList subsystem: Prepare->IntervalList::Prepare; SortLists->std::_Sort<Interval*> + IntervalList::AddSentinelInterval + IntervalList::RepairMappings; SweepLists->IntervalList::SweepIntervals + IntervalList::SweepAgainstList. IntervalList has NO committed home (grep: zero hits) and the SceneSweeper holds IntervalList members it sorts/sweeps. BLOCK until the IntervalList class (Prepare/AddSentinelInterval/RepairMappings/SweepIntervals/SweepAgainstList + Interval layout) lands.",
    "status": "blocked"
@@ -37144,6 +37241,10 @@
   },
   "GameSource/Unity/../World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.cpp": {
    "status": "done"
+  },
+  "GameSource/Unity/../World/EnvironmentManager/BrnEnvironmentManager.cpp": {
+   "notes": "Dep-blocked + opaque home header. (1) Home header BrnEnvironmentManager.h is a committed opaque padding stub (mPad0[0x424]) incompatible with the DWARF class (~50 named members @4F8 mePrepareStage/@4FC meReleaseStage etc) \u2014 needs a header-policy promotion to the full class before ANY by-name body (even Pause @0x827B0D6C touches +0x4F8/+0x4FC). (2) Param/runtime types absent from src: BrnWorldIO::UpdateOutputBuffer (no def/fwd-decl), ResourcePtr<Dictionary>/<TimeLine>/<ColourCube> target types (EnvironmentSettings::Dictionary/TimeLine+LocationData/Keyframe+Tint/Bloom/VignetteData). (3) GenerateShaderConstants calls BrnWorld::EnvironmentSettings::ComputeKeyLightDirection (@0x827D0364) + ComputeIrradianceRigFromSky (@0x827D0504), both [todo] with no recovered home. Schedule those runtime types + the 2 Compute* helpers, then promote the home header, then this 12-fn TU is tractable.",
+   "status": "blocked"
   },
   "GameSource/Unity/../World/EnvironmentManager/BrnGlobalIrradianceManager.cpp": {
    "status": "done"
@@ -42314,6 +42415,10 @@
    "notes": "5 funcs verified (ctor store order, Run loop, CreateEventA mhEvent@+0x28).",
    "status": "done"
   },
+  "class:EA::Jobs::LocalBackend::LocalBackend": {
+   "notes": "EA::Jobs::LocalBackend (24 fn, concrete job-scheduler backend). Structural rework + re-verify PASS: single inheritance from Detail::SchedulerBackend (one vptr; was abstract w/ a 2nd vptr from a bogus Backend base) overriding all 5 pure virtuals incl AddBarrier@+0x38 (=GetAllowSleepOn body), worker entries (ExecuteReadyJobs+0x50/GetSleepTimeoutMs+0x54/WakeThreads+0x1C) folded into the same vtable, instantiability proven via scratch new; CreateNotReadyInstance full-64-bit Ticks delta; GcProfileRecord harvest offsets re-derived from the @0x82BCB938 stores. Final GC reclaim-gate fixed: CAS refcount 1->0 (asm @0x82BCB868), reclaim iff old==1 else republish+skip (was inverted). Gate-clean across all 5 eajobs siblings.",
+   "status": "done"
+  },
   "class:EA::Thread": {
    "notes": "EA threading facade/param POD; X360 eathread -> host Win32; verifier parity/none; gate pass.",
    "status": "done"
@@ -42389,6 +42494,10 @@
   "class:EAConditionData": {
    "notes": "Genuinely blocked. ctor @0x82B43B38: PPU interrupt-masked atomic-init (mfmsr/mtmsree r13/lwarx/stwcx.) zeroing +0, then stw r11=0 ->+4 and ->+8, then two embedded EA::Thread::Semaphore ctors at +0xC/+0x1C, then EA::Thread::Mutex::Mutex at +0x30 which is [external/unknown] (NOT recovered). No homed E",
    "status": "blocked"
+  },
+  "class:EARWMutexData": {
+   "notes": "EA RWMutex data struct (1 fn) verified PASS vs asm; the RWMutex-data POD ctor/init in the eathread vendor home (sibling to the Wave 22 RWMutex).",
+   "status": "done"
   },
   "class:EASemaphoreData": {
    "notes": "UpdateCancelCount verified: scalar lwarx/stwcx CAS under masked interrupts (InterlockedCompareExchange idiom).",
