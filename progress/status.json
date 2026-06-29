@@ -10113,6 +10113,24 @@
   "BrnGui::ProfileMessageComponent::ShowNoSpaceMessage": {
    "status": "reviewed"
   },
+  "BrnGui::ProgressBarRenderer::Construct": {
+   "status": "compiles"
+  },
+  "BrnGui::ProgressBarRenderer::GetID": {
+   "status": "compiles"
+  },
+  "BrnGui::ProgressBarRenderer::Prepare": {
+   "status": "compiles"
+  },
+  "BrnGui::ProgressBarRenderer::RecvEvent": {
+   "status": "compiles"
+  },
+  "BrnGui::ProgressBarRenderer::Release": {
+   "status": "compiles"
+  },
+  "BrnGui::ProgressBarRenderer::RenderQuadUntex": {
+   "status": "compiles"
+  },
   "BrnGui::RaceMainHudState::ConcludeEventCountdown": {
    "status": "reviewed"
   },
@@ -13671,17 +13689,32 @@
   "BrnPhysics::PhysicsModule::BridgeVehicleManagerToSimulation_PostScene": {
    "status": "reviewed"
   },
+  "BrnPhysics::PhysicsModule::Construct": {
+   "status": "compiles"
+  },
+  "BrnPhysics::PhysicsModule::Destruct": {
+   "status": "compiles"
+  },
   "BrnPhysics::PhysicsModule::HandlePlayerStatsUpdate": {
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::Prepare": {
    "status": "reviewed"
   },
+  "BrnPhysics::PhysicsModule::PrepareWorldRigidBody": {
+   "status": "compiles"
+  },
   "BrnPhysics::PhysicsModule::PropPrepareTypes": {
    "status": "reviewed"
   },
+  "BrnPhysics::PhysicsModule::Release": {
+   "status": "compiles"
+  },
   "BrnPhysics::PhysicsModule::StoreContact": {
    "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::UpdateCachedPositions": {
+   "status": "compiles"
   },
   "BrnPhysics::PhysicsModule::UpdateNetworkCatchup": {
    "status": "reviewed"
@@ -17700,8 +17733,20 @@
   "BrnTraffic::FiredKillZoneInfo,8>::Erase": {
    "status": "reviewed"
   },
+  "BrnTraffic::Fuzzy::FuzzyBehaviourLogic::Construct": {
+   "status": "compiles"
+  },
+  "BrnTraffic::Fuzzy::FuzzyBehaviourLogic::ProcessParamRules": {
+   "status": "compiles"
+  },
   "BrnTraffic::Fuzzy::FuzzyBehaviourLogic::ReloadBehaviours": {
    "status": "reviewed"
+  },
+  "BrnTraffic::Fuzzy::FuzzyBehaviourLogic::ResetToDefaults": {
+   "status": "compiles"
+  },
+  "BrnTraffic::Fuzzy::FuzzyBehaviourLogic::SetConstantValue": {
+   "status": "compiles"
   },
   "BrnTraffic::FuzzyEnvelopeSet4::SetEnvelope": {
    "status": "reviewed"
@@ -25552,19 +25597,19 @@
    "status": "reviewed"
   },
   "CgsRenderTarget::Begin": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsRenderTarget::End": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsRenderTarget::GetDepthTexture": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsRenderTarget::GetTexture": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsRenderTarget::SetRenderTargetState": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsResource::AemsBankResourceType::GetTypeID": {
    "status": "reviewed"
@@ -30886,6 +30931,10 @@
   },
   "GameShared/GameClasses/Graphics/CgsRasterizerStateFactory.cpp": {
    "notes": "focused reviewer pass after restoring handle copy, static Initialize wrapper, and assert return semantics",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/CgsRenderTarget.cpp": {
+   "notes": "standard; sonnet fresh-eyes review: Begin/End forwards, GetTexture/GetDepthTexture un-inlined to named accessors with mpRenderTarget null-assert, SetRenderTargetState state-cache + viewport(float)+scissor all faithful; luSection unused matches asm; scissor w/h corrects a Hex-Rays tracking error. compile gate PASS.",
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/CgsShaderConstantHashTable.cpp": {
