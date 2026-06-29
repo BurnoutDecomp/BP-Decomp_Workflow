@@ -7944,9 +7944,6 @@
   "BrnGui::FreeburnChallengeManager::GetCurrentContributionForARCI": {
    "status": "reviewed"
   },
-  "BrnGui::FreeburnChallengeManager::GetCurrentContributionOverall": {
-   "status": "reviewed"
-  },
   "BrnGui::FreeburnChallengeManager::HandleNewData": {
    "status": "reviewed"
   },
@@ -17093,6 +17090,45 @@
   },
   "BrnWorld::ActiveRaceCar::RemoveHandlingModel": {
    "status": "reviewed"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::DEBUG_OverrideScratchAmount": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::GetCrackedGlassEqualisationFactorN": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::GetCrackedGlassFractureAmountN": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::GetCrackedGlassScale": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::GetWheelScaleMatrix": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::GetWheelTransform": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::IsPartVisible": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::RequestBluesAndTwosStateSwitch": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::Reset": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::SetCrackedGlassEqualisationFactorN": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::SetCrackedGlassFractureAmountN": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::SetCrackedGlassScaleFactorsN": {
+   "status": "compiles"
+  },
+  "BrnWorld::ActiveRaceCar::RenderParams::SetWheelScale": {
+   "status": "compiles"
   },
   "BrnWorld::ActiveRaceCar::SendAddedRemovedNetworkCarForCollisionEvents": {
    "status": "reviewed"
@@ -26658,9 +26694,6 @@
   "LoadingScriptedState::RenderGUI": {
    "status": "reviewed"
   },
-  "MainGameFlowStateCheckDiskSpace::OnEnter": {
-   "status": "reviewed"
-  },
   "MassiveAdClient3::CAddressIndexPair::CAddressIndexPair": {
    "status": "reviewed"
   },
@@ -30004,10 +30037,6 @@
    "notes": "batch review pass: Claude sonnet medium; parity RED due assert abstraction reviewed",
    "status": "done"
   },
-  "GameSource/GameFlowController/TopLevel/BrnGameMainFlowStates.h": {
-   "notes": "Keystone: CheckDiskSpace reaches an un-homed disk/storage query surface; honest stub. Deferred until that surface is homed.",
-   "status": "blocked"
-  },
   "GameSource/GameState/BrnGameActions.h": {
    "status": "done"
   },
@@ -30079,10 +30108,6 @@
   },
   "GameSource/Gui/BrnGuiFreeburnChallengeManager.cpp": {
    "notes": "Keystone (reverted, not shipped): StartChallenge/TriggerChallenge are un-recovered, AND HandleNewData @0x824F3FC8 had a GuiChallengeUpdateEvent store-mapping drift (asm copies this+0x68(f32)<-event+0x08 and this+0x28(s32)<-event+0x50; the modelled event offsets were wrong). Needs a careful dedicated freeburn-challenge pass; reverted to avoid shipping the drift.",
-   "status": "blocked"
-  },
-  "GameSource/Gui/BrnGuiFreeburnChallengeManager.h": {
-   "notes": "Keystone (reverted): entangled with the freeburn .cpp HandleNewData drift + StartChallenge/TriggerChallenge keystones; reverted and deferred to a dedicated freeburn pass.",
    "status": "blocked"
   },
   "GameSource/Gui/BrnGuiFsmController.cpp": {
@@ -30742,10 +30767,6 @@
    "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no leaked provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
    "status": "done"
   },
-  "GameSource/Network/Messages/BrnMarkedManMessage.cpp": {
-   "notes": "Blocked on the CgsNetwork message-serialisation base framework (none reconstructed as shared headers; existing message TUs fork minimally): CgsNetwork::Message base (Construct, +25 reliable flag, GetPackedMessageSize, the PackOrUnpackInt/Bool serialise helpers = sub_82881370 / sub_8288DDA0), CgsNetwork::ReliableMessage base layout (>=40B: id@28, +32/+36 fields, PackOrUnpack/PrepareForSend), and the PackOrUnpackResult return enum. Reconstruct the Message/ReliableMessage base hierarchy first; then MarkedManMessage (mMarkedMan s32 @+40, mbFinalAnswer bool @+44) is straightforward.",
-   "status": "blocked"
-  },
   "GameSource/Network/Messages/BrnMarkedManMessage.h": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no leaked provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
    "status": "done"
@@ -31192,10 +31213,6 @@
   },
   "GameSource/Unity/../Game/GameBridgeControllerToX.cpp": {
    "notes": "BridgeControllerToWorld @0x823CD890 steering curve = copysign(pow(fabs(stickLX), exp), stickLX) where exp @0x82035228 is UNDECODED .rdata (EARenderWare pow via vlogefp/vexptefp + coeff tables unk_82014AC0..AF0); the exponent value cannot be recovered without fabrication. Other 4 funcs upstream-committed + correct. Blocked on the undecoded steering exponent.",
-   "status": "blocked"
-  },
-  "GameSource/Unity/../Game/GameBridgeReplayToX.cpp": {
-   "notes": "BridgeReplayToGui @0x823E7210 needs fabricating X360 facts: GuiReplayStatusEvent type-id + on-queue record size NOT dossier-attested; CgsGui::GuiModule::AddGuiEvent<T> is a decl-only skeleton; sub_8284F238 is an un-homed accessor on an undefined CgsGui input-buffer type (VEQ<32768,16> not the committed 18432). Cannot body without fabrication. Deferred.",
    "status": "blocked"
   },
   "GameSource/Unity/../GameFlowController/TopLevel/BrnGameMainFlowController.cpp": {
@@ -33497,10 +33514,6 @@
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
-  "class:BrnGui::Interpolator<float>": {
-   "notes": "VMX keystone (deferred): GetCurrentValue @0x82448898 reads a FOUR-float layout (values@+0/+4, keys@+8/+0xC); IsValid tests the KEY pair @+8/+0xC; it computes t=clamp((in-key0)/(key1-key0),0,1) (fdivs + two fsel) and returns the NON-standard (value1-value0)*value0 + t (vmaddfp v12=delta,v0=splat(value0),v13=splat(t)) -- NOT a textbook lerp. The fast builder collapsed it to a 2-float textbook lerp. Needs the 4-float layout + exact VMX lane roles verified in a dedicated pass; honest floor shipped.",
-   "status": "blocked"
-  },
   "class:BrnGui::Intro": {
    "notes": "Intro ctor @0x824FFF58 is ~20 vtable-pointer stores planted into embedded GUI subobjects across a ~4168-byte object at raw byte offsets (0x00..0x1044), no base-ctor delegation; faithful reconstruction needs ~20 un-homed embedded GUI base/widget types + the full subobject layout, and the X360 body is only expressible via raw-offset casts (forbidden). Defer until the embedded GUI subobject family is homed.",
    "status": "blocked"
@@ -33540,10 +33553,6 @@
   "class:BrnGui::OnlineTimeoutComponent": {
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
-  },
-  "class:BrnGui::OnlineViewChallenges": {
-   "notes": "Un-homed-aggregate keystone: ctor @0x825005C0 installs the primary vtable (off_8207440C @+0x00) plus a sub-object vtable-spew (off_82055B70 then off_82073068 @+0x58, more at +0x40..) over GUI component members whose layout is not committed and has no DWARF -- same class as the wave-27 flow-state ctors (CompletedGame/CarSelectOnlineEnd). By-name store-for-store needs the embedded component aggregate + its vtable owners homed first; honest deferral, not fabricated.",
-   "status": "blocked"
   },
   "class:BrnGui::OptionsDataProfileDLC1": {
    "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
@@ -34514,17 +34523,9 @@
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/GameSource/Sound/BrnResourceRegistrar.cpp. Reconciled.",
    "status": "done"
   },
-  "class:BrnSound::Logic::ResourceRegistrar::RequestedResource,124>": {
-   "notes": "LinkedListHelper<RequestedResource,124u> pool ctor @0x827E17B0 writes miNumNodes at object +0 (=124), but the committed CgsContainers::LinkedListHelper<T,N> (GameShared/GameClasses/Containers/CgsLinkedList.h) OMITS the leading miNumNodes field and orders maNodePool before the two lists -> body cannot be expressed by-name without a NON-ADDITIVE retype/reorder of that committed shared container + rewriting its AddTail. Needs a committed-type retype decision (maintainer); flagged not applied.",
-   "status": "blocked"
-  },
   "class:BrnSound::Logic::Streaming": {
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
-  },
-  "class:BrnSound::Logic::SubmixesEffect": {
-   "notes": "Both ledger funcs are MSVC dtor thunks over a multiply-inheriting polymorphic layout: scalar deleting dtor @0x826BC608 writes 2 base-subobject vtables (off_820AE9BC@+0, off_820AA820@+4) + global-allocator free via vslot+0x14; vector deleting dtor adjustor{4} @0x826BC600 is a COMDAT-fold thunk (addi r3,-4; b scalar). Un-homed MI hierarchy + global mgr; not reconstructible without homing the full hierarchy. Deferred.",
-   "status": "blocked"
   },
   "class:BrnSound::Logic::Traffic::Traffic3DControl": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
@@ -35321,10 +35322,6 @@
   "class:CgsFileSystem::RemapDevice": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
-  },
-  "class:CgsGeometric::AxisAlignedBox": {
-   "notes": "ContainsPoint @0x828AA398 is heavy VMX (19 vcmpgtfp/vcmpgefp/vrlimi128/vcmpeqfp/mfocrf lane-compare ops). Set @0x823A6108 is bodied+correct (two 16B stores mMin/mMax) but the TU is gated by the VMX ContainsPoint. Deferred to a VMX pass.",
-   "status": "blocked"
   },
   "class:CgsGeometric::AxisAlignedBox4": {
    "notes": "GetAxisAlignedBox @0x8283AA68 is heavy VMX (28 lvsl/vperm/vrlimi128/vmrg/vspltw cross-lane permute ops implementing the SoA-4 box-N extract/transpose). No scalar form attested. Deferred to a VMX pass.",
@@ -37003,10 +37000,6 @@
    "notes": "Realmc LoadEntryInfo; parity/none; wave6; verifier reviewed; gate pass.",
    "status": "done"
   },
-  "class:RealmcIface::MessageShowAutosaveIcon": {
-   "notes": "Correctly blocked. Apply @0x82B552A0 is a pure arg-swap tail-call thunk: mr r11,r4; mr r4,r3; mr r3,r11 swaps r3/r4, then lwz r10,0(r11); lwz r11,0x40(r10); mtctr; bctr = (*(*a2 + 0x40))(a2, a1) -- dispatch into slot 0x40 (16) of a2's vtable. The MessageShowAutosaveIcon class, its vtable, the +0x40 ",
-   "status": "blocked"
-  },
   "class:RealmcIface::SaveReq": {
    "notes": "ctor (params-copy +0x20, fields +0x158/15C/160, memcpy 0x20, stb 0 @+0x1F) verified; arg mapping correct.",
    "status": "done"
@@ -37055,17 +37048,9 @@
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
-  "class:Snd::CSign24IntDecS16": {
-   "notes": "Genuine block. Decode @0x82B7A648 is a PCM 24-bit sample-format decoder: per-channel/per-sample loop reading a 24-bit BE source word (lbz 2(r9)/lbz 1(r9), rotlwi r3,8, or r9), sth-ing the widened s16 into dest (sth r9,0(r8)), advancing source 3 bytes/sample (stw r9,4(r11) after +=3). This is the exp",
-   "status": "blocked"
-  },
   "class:Snd::CSign24bIntDecS16": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
-  },
-  "class:Snd::CSign8IntDecS16": {
-   "notes": "Genuine block. Decode @0x82B7A6F8 is a PCM 8-bit decoder: lbz r6,0(r6) source byte, rotlwi r6,8 to widen into s16 high byte, sth r6,0(r9), 1 byte/sample advance -- explicit 'CSign*IntDec*' PCM-decoder BLOCK category. SetState @0x82B7A888 (lhz->sth +0x14) + dtor are real but a partially-bodied codec ",
-   "status": "blocked"
   },
   "class:Snd::CUnSign8IntDecS16": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
@@ -37323,10 +37308,6 @@
    "notes": "Wave 47: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
-  "class:rw::BaseResourceDescriptor": {
-   "notes": "Vendor code; exists in PC lib or vendor source.",
-   "status": "blocked"
-  },
   "class:rw::BaseResourceDescriptors<3>": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -37430,10 +37411,6 @@
   "class:rw::audio::core::LowShelfIir2": {
    "notes": "Coeffs @0x82B97E80 RBJ shelf algebra verified.",
    "status": "done"
-  },
-  "class:rw::audio::core::PackedColumnReader": {
-   "notes": "Correctly blocked. 3 funcs form an RLE-style packed-column audio decoder. ReadRunInfo @0x82B6B928: UnpackInt32(**a1,v6) reads run length+sign, sets *(a1+8)=count (stw r8=v6[0]+1,8), *(a1+12)=literal-flag (stb r7=1,0xC), negative-sign branch flips flag to 0 and count to 1-v3. ReadSymbol @0x82B6B9A0 a",
-   "status": "blocked"
   },
   "class:rw::audio::core::Pan2D1::Speaker": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
@@ -37575,10 +37552,6 @@
    "notes": "Wave 51: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
-  "class:rw::core::atom::UnfixRefixAtoms": {
-   "notes": "Correctly blocked. Single-func TU @0x82BA7E20 = compiler-synthesized `vector deleting destructor': lis/addi off_8217FFE8 then stw r11,0(r31) resets vtable at +0; clrlwi. r10,r4,31 (a2&1) + beq guards conditional bl operator_delete; mr r3,r31 returns this. Confirmed off_8217FFE8 and the polymorphic c",
-   "status": "blocked"
-  },
   "class:rw::core::debug::detail::DebugCriticalSection": {
    "notes": "Gate PASS + adversarially verified (DebugCluster minor_drift/low + resolved an assert-mutex ODR; BrnBurnoutSkillzManager 16/16, MED was cosmetic field-name mislabel with byte-exact-correct offsets). Members by name; additive grows; flagged floors not fabricated.",
    "status": "done"
@@ -37641,10 +37614,6 @@
   },
   "class:rw::math::vpu": {
    "status": "done"
-  },
-  "class:rw::math::vpu::MaskScalar": {
-   "notes": "Correctly blocked VMX lowering. GetBool@0x821F0D78 asm: vspltisw v0,0 (splat zero), lvx128 v13,r0,r3 (load 16B vector at r3), vcmpeqfp. v0,v13,v0 (vector compare all 4 lanes ==0.0, sets CR6), mfocrf r11,2 (read CR6 field), extrwi r3,r11,1,24 (extract EQ-summary bit). No scalar PC equivalent without ",
-   "status": "blocked"
   },
   "class:rw::math::vpu::VecFloat": {
    "notes": "combined fresh-eyes review pass",
