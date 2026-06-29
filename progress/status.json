@@ -11751,6 +11751,30 @@
   "BrnNetwork::BuddyManagerDebugComponent::SendTestMessage": {
    "status": "reviewed"
   },
+  "BrnNetwork::BuddyManagerX360::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BuddyManagerX360::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BuddyManagerX360::DoInvite": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BuddyManagerX360::IsUserInGameSession": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BuddyManagerX360::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BuddyManagerX360::ProcessNetworkQueue": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BuddyManagerX360::Release": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BuddyManagerX360::Update": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BurnoutSkillzMessage::Construct": {
    "status": "reviewed"
   },
@@ -13965,7 +13989,16 @@
   "BrnParticle::ParticleDescriptionResourceType::Serialise": {
    "status": "reviewed"
   },
+  "BrnParticle::ParticleModule::GetLionEffect": {
+   "status": "reviewed"
+  },
+  "BrnParticle::ParticleModule::ParticleModule": {
+   "status": "reviewed"
+  },
   "BrnParticle::ParticleModule::PreRenderUpdate": {
+   "status": "reviewed"
+  },
+  "BrnParticle::ParticleModule::ResetSparkFrameData": {
    "status": "reviewed"
   },
   "BrnParticle::ParticleModule::SpawnSparkShowerFromPoint": {
@@ -16992,13 +17025,22 @@
   "BrnReplays::ReplayModule::Prepare": {
    "status": "reviewed"
   },
+  "BrnReplays::ReplayModule::ReplayModule": {
+   "status": "reviewed"
+  },
   "BrnReplays::ReplayModule::StoreSerialisers": {
    "status": "reviewed"
   },
   "BrnReplays::ReplayModule::UpdateRestoring_PostSim": {
    "status": "reviewed"
   },
+  "BrnReplays::ReplayModule::Update_Dispatch": {
+   "status": "reviewed"
+  },
   "BrnReplays::ReplayModule::WaitForOpenReplayFiles": {
+   "status": "reviewed"
+  },
+  "BrnReplays::ReplayModule::WaitForSerialiseJobs": {
    "status": "reviewed"
   },
   "BrnReplays::SoundSerialiserFrame::operator=": {
@@ -28584,17 +28626,8 @@
   "CgsResource::PoolModule::AllocateResourceList": {
    "status": "reviewed"
   },
-  "CgsResource::PoolModule::Construct": {
-   "status": "compiles"
-  },
-  "CgsResource::PoolModule::ConvertPoolRequestOptions": {
-   "status": "compiles"
-  },
   "CgsResource::PoolModule::CreatePool": {
    "status": "reviewed"
-  },
-  "CgsResource::PoolModule::DebugReport": {
-   "status": "compiles"
   },
   "CgsResource::PoolModule::DoAcquireResourceListRequest": {
    "status": "reviewed"
@@ -28602,14 +28635,8 @@
   "CgsResource::PoolModule::DoAcquireResourceRequest": {
    "status": "reviewed"
   },
-  "CgsResource::PoolModule::DoAllocateResourceListRequest": {
-   "status": "compiles"
-  },
   "CgsResource::PoolModule::DoCreatePoolRequest": {
    "status": "reviewed"
-  },
-  "CgsResource::PoolModule::DoDeletePoolRequest": {
-   "status": "compiles"
   },
   "CgsResource::PoolModule::DoFixUpAndResolveResourceListRequest": {
    "status": "reviewed"
@@ -28632,32 +28659,14 @@
   "CgsResource::PoolModule::PoolModule": {
    "status": "reviewed"
   },
-  "CgsResource::PoolModule::Prepare": {
-   "status": "compiles"
-  },
   "CgsResource::PoolModule::ProcessReceiverQueue": {
    "status": "reviewed"
-  },
-  "CgsResource::PoolModule::Release": {
-   "status": "compiles"
   },
   "CgsResource::PoolModule::SendCreatePoolMemoryRequest": {
    "status": "reviewed"
   },
   "CgsResource::PoolModule::SendDeletePoolMemoryRequest": {
    "status": "reviewed"
-  },
-  "CgsResource::PoolModule::UpdateAllocating": {
-   "status": "compiles"
-  },
-  "CgsResource::PoolModule::UpdateDeAllocating": {
-   "status": "compiles"
-  },
-  "CgsResource::PoolModule::UpdateIntelliFrag": {
-   "status": "compiles"
-  },
-  "CgsResource::PoolModule::UpdateLiveUpdate": {
-   "status": "compiles"
   },
   "CgsResource::RegistryResourceType::GetSerialisedResourceDescriptor": {
    "status": "reviewed"
@@ -34625,10 +34634,6 @@
    "notes": "trivial GetTypeID constant; gate-only",
    "status": "done"
   },
-  "GameShared/GameClasses/System/Resource/CgsPoolModule.cpp": {
-   "notes": "Dual-home ODR: CgsPoolModule.h and the committed CgsResourcePoolModule.h both define CgsResource::PoolModule with different layouts/signatures -- needs maintainer to pick one canonical home before commit. Also Construct (0x828FC0B8) back-half (IDList/ScratchPool::InitPool/5 pool-type regions/Relocator/defrag) + UpdateAllocating/UpdateLiveUpdate response-event payload marshalling are unreconstructed. Files left on disk uncommitted (b5-decomp working tree).",
-   "status": "blocked"
-  },
   "GameShared/GameClasses/System/Resource/CgsResourceDebugComponent.cpp": {
    "status": "done"
   },
@@ -38819,6 +38824,10 @@
    "notes": "Behavior was reconstructed faithfully (Construct/Prepare/Release/Destruct/Update/Suspend/Resume 4-stage machines + perfmon brackets all asm-verified) BUT the draft modelled the embedded +0xC2C component as a FAKED new type BrnNetwork::GamesServerInterfaceX360 that shadows a real home -- forbidden. The real +0xC2C component is the X360 games-interface leaf (CgsServerInterfaceGames.h:200/216 names ServerInterfaceGamesX360); the committed ServerInterfaceComponent base lacks the 7 lifecycle methods the calls drive, and that concrete leaf is not yet homed. Reverted the faked-type files rather than committing a duplicate type. UNBLOCK when ServerInterfaceGamesX360 is reconstructed: embed it (or ServerInterfaceComponent per BrnServerInterface.h:102) at +0xC2C and drive the 7 lifecycle calls through its real vtable surface (Construct@0/Destruct@+0x14/Prepare@+0x18/Release@+0x1C/Update@+0x20/Suspend@+0x24/Resume@+0x28).",
    "status": "blocked"
   },
+  "class:BrnNetwork::BuddyManagerX360": {
+   "notes": "Game-side X360 buddy manager (8 fn, derives from BrnNetwork::BuddyManagerBase; distinct from the platform CgsNetwork leaf). 7/8 faithful first-pass; re-verify PASS after fixing Update XInviteInfo offsets (canonical XDK XINVITE_INFO: xuidInviter@+0x08, dwTitleID@+0x10, hostInfo@+0x14 \u2014 pinned via offsetof _AssertLayout) and the ProtoMangleEncodeSession call (asm 0x82573BEC: source=params.macSessionID, dest=invite.hostInfo \u2014 the prior call had BOTH source and dest wrong, now inverted to match the asm).",
+   "status": "done"
+  },
   "class:BrnNetwork::EventScoresManager": {
    "notes": "Verify PASS (minor); fixed the 128-byte payload byte layout (Array<u64,15> eventIDs @+0, count @+0x78, matching the asm AddEvent buffer). GetNetworkEvent vs GetNetworkEventQueue is a truncated-symbol alias (non-blocking).",
    "status": "done"
@@ -39012,6 +39021,10 @@
   },
   "class:BrnParticle::ParticleDescriptionCollectionResourceType": {
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:BrnParticle::ParticleModule": {
+   "notes": "BrnParticle::ParticleModule (3 fn). Re-verify + 1 hand-fix: tail re-anchored to the ctor asm \u2014 sentinels at +0x25CD0/+0x25D08 (was mislabeled +0x25D50/+0x25D88), 5th -1 store at +0x25D08 added, SparkFrameDataSet0 @+0x25030, SparkFrameDataSet1 @+0x25D30 (ResetSparkFrameData asm 0x8227EBF0 addi 0x5D30 = 154928, 0x24 after the +0x25D08 sentinel, mirroring set0). All offsets gate-pinned via offsetof _AssertLayout.",
    "status": "done"
   },
   "class:BrnParticle::TextureNameMap::Entry": {
@@ -39556,6 +39569,10 @@
   },
   "class:BrnReplays::ReplayIO::StatusInterface": {
    "notes": "GetReel 0x824EB0B8 / SetReel 0x8264B010 / operator= 0x823A6488 store-for-store. Replay-status interface accessors. Verifier parity/none. Gate pass.",
+   "status": "done"
+  },
+  "class:BrnReplays::ReplayModule": {
+   "notes": "BrnReplays::ReplayModule (3 fn) verified PASS first-pass. Minor flagged-deferred: WaitForSerialiseJobs omits the EA::Jobs::Job::WaitOn call (mSerialiseJob is an opaque 0x350 placeholder until Job gains a real layout) \u2014 documented, consistent with the project placeholder convention.",
    "status": "done"
   },
   "class:BrnReplays::SoundSerialiserFrame": {
