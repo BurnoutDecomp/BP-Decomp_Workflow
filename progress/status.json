@@ -13894,7 +13894,7 @@
    "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::CreateInternalMaterial": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::LionParticleRender::EndRendering": {
    "status": "reviewed"
@@ -13960,7 +13960,7 @@
    "status": "reviewed"
   },
   "BrnParticle::Native::BrnSimpleParticleRenderer::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::Native::BrnSimpleParticleRenderer::Dispatch": {
    "status": "reviewed"
@@ -23530,7 +23530,7 @@
    "status": "reviewed"
   },
   "CgsGraphics::ImRendererBase::ConstructBlendState": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGraphics::ImRendererBase::ConstructDefaultTextureSt": {
    "status": "reviewed"
@@ -37632,6 +37632,9 @@
   },
   "SDKs/EATech/include/ps3/gcm/renderengine/programbuffer.h": {
    "notes": "YELLOW is benign: call_count matches exactly (14/14), loop_count exact (2/2). Missing named-callee hits are all via placement-new syntax (debrisparams/surfacelist/ParticleModule) or the base-class ctor chain (RWMutex x2) \u2014 both produce real call sites counted in call_count. return_count delta of 1 is the X360 fastcall convention returning 'this' via register; C++ constructors have no explicit return statement. Loop faithfully reproduces the 8-slot (i=7..0) debris generator init and the 4-slot (j=3..0) cluster init. Opaque body storage (mOpaqueBody[185400]) used because sizeof(ParticleModule) is not yet resolved.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/ps3/gcm/renderengine/stateparams.h": {
    "status": "done"
   },
   "SDKs/EATech/include/rw/audio/core/system.h": {
