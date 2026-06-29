@@ -9297,10 +9297,28 @@
   "BrnGui::ManufacturersIcon::Set": {
    "status": "reviewed"
   },
+  "BrnGui::MapIconManager::AddTeamToNetworkRivals": {
+   "status": "reviewed"
+  },
   "BrnGui::MapIconManager::GetCrashNavIconStateForRival": {
    "status": "reviewed"
   },
+  "BrnGui::MapIconManager::GetDriveThroughOrJun": {
+   "status": "reviewed"
+  },
+  "BrnGui::MapIconManager::GetNumRivalIcons": {
+   "status": "reviewed"
+  },
   "BrnGui::MapIconManager::IconDisplaySort": {
+   "status": "reviewed"
+  },
+  "BrnGui::MapIconManager::MapIconManager": {
+   "status": "reviewed"
+  },
+  "BrnGui::MapIconManager::ResetOwnerParameter": {
+   "status": "reviewed"
+  },
+  "BrnGui::MapIconManager::SetRoadRuleBatchData": {
    "status": "reviewed"
   },
   "BrnGui::MapTransform::DeviceToWorld": {
@@ -11110,16 +11128,16 @@
    "status": "reviewed"
   },
   "BrnNetwork::ImageMessage::GetPackedMessageSize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::ImageMessage::PackOrUnpack": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::ImageMessage::PrepareForSend": {
    "status": "reviewed"
   },
   "BrnNetwork::ImageMessage::Retrieve": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LaunchManager::Construct": {
    "status": "reviewed"
@@ -17484,6 +17502,21 @@
   "BrnTraffic::BrnTrafficIO::TrafficNetworkInputInterface::ActivateHull": {
    "status": "reviewed"
   },
+  "BrnTraffic::BrnTrafficIO::TrafficNetworkOutputInterface::ActivateHull": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::TrafficNetworkOutputInterface::Construct": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::TrafficNetworkOutputInterface::GetActiveHulls": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::TrafficNetworkOutputInterface::GetDataHash": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::TrafficNetworkOutputInterface::GetUpdateFrameForHash": {
+   "status": "reviewed"
+  },
   "BrnTraffic::BrnTrafficIO::TrafficSoundOutputInterface::AddTrafficEntity": {
    "status": "reviewed"
   },
@@ -21034,6 +21067,21 @@
    "status": "reviewed"
   },
   "CgsFileSystem::FileSystem::Destruct": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::FileSystem::FileSystem": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::FileSystem::GetReadStreamIndex": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::FileSystem::GetStatus": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::FileSystem::IsReadStreamClosed": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::FileSystem::IsReadStreamOpen": {
    "status": "reviewed"
   },
   "CgsFileSystem::FileSystem::OpenInternal": {
@@ -26170,6 +26218,12 @@
    "status": "reviewed"
   },
   "CgsResource::ScratchPool::Clear": {
+   "status": "reviewed"
+  },
+  "CgsResource::ScratchPool::GetEntry": {
+   "status": "reviewed"
+  },
+  "CgsResource::ScratchPool::GetOverheadMemoryRequired": {
    "status": "reviewed"
   },
   "CgsResource::ScratchPool::SortIdsQSortCallback": {
@@ -32598,6 +32652,10 @@
    "notes": "fresh-eyes batch review: semantically faithful to X360 pseudocode, named-member access, no offset hacks; standard serialiser TU",
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnImageMessage.cpp": {
+   "notes": "Compile gate PASS. All 3 ASM functions reconstructed faithfully. Parity-RED is heuristic noise: CgsDev::Assert::* calls are inside CGS_ASSERT macro expansions (8 asserts -> branch/call deltas); PackOrUnpackBuffer present as CgsNetwork::PackOrUnpackBuffer; TestConnectionMessage::GetPackedMessageSize present via reinterpret_cast tail-call. Hex-Rays '0x600000000LL' merge in GetPackedMessageSize rejected in favor of the two real ASM stores (mBeatenRoadID=0, mu8ImageType=6). Retrieve param order recovered from the ASM prologue register moves, not the mangled 28-int Hex-Rays signature. Config: added b5-decomp/vendor/dirtysdk/include to verify.config.json (pre-existing missing vendor path that BrnNetworkManager.h's DirtySock chain needs; also unblocks committed BrnRestartTrafficMessage.cpp).",
+   "status": "done"
+  },
   "GameSource/Network/Messages/BrnImageMessage.h": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 ARTIST spine (GetResourcesToLoad table/count + GetName rodata strings); ledgers reconciled (incl CgsPingMessage 2-func); committed CgsGui::State / CgsNetwork message bases reused by name; no reference provenance; combined wave-17 gate PASS. (ODR: stale CgsSignal/CgsTestConnection .cpp stubs flagged for retirement.)",
    "status": "done"
@@ -35418,6 +35476,10 @@
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnGui::MapIconManager": {
+   "notes": "Verify PASS (none); gate clean.",
+   "status": "done"
+  },
   "class:BrnGui::MapTransform": {
    "notes": "6 fns (2D map coord math); VMX128 semantic reconstruction over placeholder statics; SetZoomedViewportRect inverse-vs-multiply FLAGGED as VMX/init floor; verifier minor_drift/low; gate pass.",
    "status": "done"
@@ -36630,6 +36692,10 @@
    "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnTraffic::BrnTrafficIO::TrafficNetworkOutputInterface": {
+   "notes": "Verify caught Construct dropping the inlined operator++(EActiveRaceCarIndex) per-iteration assert; added it matching the committed sibling idiom.",
+   "status": "done"
+  },
   "class:BrnTraffic::BrnTrafficIO::TrafficSoundOutputInterface": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -37257,6 +37323,10 @@
   },
   "class:CgsFileSystem::DeviceMemFileSystem": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsFileSystem::FileSystem": {
+   "notes": "Verify PASS (none); 5 funcs asm-grounded (stream-status collapse, bounds asserts), PS3-only members gated out.",
    "status": "done"
   },
   "class:CgsFileSystem::RemapDevice": {
@@ -38145,6 +38215,10 @@
   },
   "class:CgsResource::SatNavTileResourceType": {
    "notes": "Wave 37: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsResource::ScratchPool": {
+   "notes": "Verify PASS (minor); GetOverheadMemoryRequired distribution-buffer term is a flagged-0 placeholder (unrecovered helper sub_82BBCF10) per no-fabricate policy.",
    "status": "done"
   },
   "class:CgsResource::Type": {
