@@ -15,6 +15,15 @@
   "*,8>::GetI": {
    "status": "reviewed"
   },
+  "*>::": {
+   "status": "reviewed"
+  },
+  "*>::add": {
+   "status": "reviewed"
+  },
+  "*>::remove": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::InitDispatchTable": {
    "status": "reviewed"
   },
@@ -3622,6 +3631,9 @@
    "status": "reviewed"
   },
   "BrnEffects::EffectsModule::DispatchThreadUpdate": {
+   "status": "reviewed"
+  },
+  "BrnEffects::EffectsModule::EffectsModule": {
    "status": "reviewed"
   },
   "BrnEffects::EffectsModule::GenerateDispatchLists": {
@@ -13881,6 +13893,9 @@
   "BrnParticle::LionParticleRender::BeginRendering": {
    "status": "reviewed"
   },
+  "BrnParticle::LionParticleRender::CreateInternalMaterial": {
+   "status": "compiles"
+  },
   "BrnParticle::LionParticleRender::EndRendering": {
    "status": "reviewed"
   },
@@ -13943,6 +13958,9 @@
   },
   "BrnParticle::Native::BrnSimpleParticleArray::AcquireTexture": {
    "status": "reviewed"
+  },
+  "BrnParticle::Native::BrnSimpleParticleRenderer::Construct": {
+   "status": "compiles"
   },
   "BrnParticle::Native::BrnSimpleParticleRenderer::Dispatch": {
    "status": "reviewed"
@@ -23510,6 +23528,9 @@
   },
   "CgsGraphics::Im3dZOnly::Construct": {
    "status": "reviewed"
+  },
+  "CgsGraphics::ImRendererBase::ConstructBlendState": {
+   "status": "compiles"
   },
   "CgsGraphics::ImRendererBase::ConstructDefaultTextureSt": {
    "status": "reviewed"
@@ -37609,6 +37630,10 @@
    "notes": "CollisionDebugComponent::GetTrafficColour verified: 8 packed 0x20xxxxxx colours, 7-threshold bge cascade, 4/pi scale.",
    "status": "done"
   },
+  "SDKs/EATech/include/ps3/gcm/renderengine/programbuffer.h": {
+   "notes": "YELLOW is benign: call_count matches exactly (14/14), loop_count exact (2/2). Missing named-callee hits are all via placement-new syntax (debrisparams/surfacelist/ParticleModule) or the base-class ctor chain (RWMutex x2) \u2014 both produce real call sites counted in call_count. return_count delta of 1 is the X360 fastcall convention returning 'this' via register; C++ constructors have no explicit return statement. Loop faithfully reproduces the 8-slot (i=7..0) debris generator init and the 4-slot (j=3..0) cluster init. Opaque body storage (mOpaqueBody[185400]) used because sizeof(ParticleModule) is not yet resolved.",
+   "status": "done"
+  },
   "SDKs/EATech/include/rw/audio/core/system.h": {
    "notes": "Genuine block. The single func is GinsuPlayer::EventEvent @0x826C3498 -- a Ginsu resampler-player command-queue handler that pushes a deferred cmd into the System ring (cursor *(v3+0x10B8), base *(v3+0x20)) whose handler is &GinsuPlayer::PlayHandler (12B cmd, a2==0) or &GinsuPlayer::StopHandler (8B ",
    "status": "blocked"
@@ -37816,6 +37841,10 @@
   },
   "class:*,8>": {
    "notes": "trivial explicit-instantiation file; compile gate PASS. Parity RED is a known false positive: method bodies live in CgsArray.h, not in this .cpp. Same pattern as every other CgsArray<T,N>.cpp in the project.",
+   "status": "done"
+  },
+  "class:*>": {
+   "notes": "RED parity: expected false-positive for split header/explicit-instantiation pattern. Template bodies live in .h files (CgsLocklessQueue.h, AptListenerSlotList.h); parity scanner sees only the instantiation .cpp (which has just 'template class/struct ...;') so it reports add/remove as absent. X360-specific lock pair (unnamed ___(a1,1) acquire + sub_82360400 release x3) are PPC hardware primitives with no PC equivalent -- omitted from the push() body, which accounts for ~4 of the 11-call delta. All three functions correctly implemented: push() with CAS-fail assert path + ThreadSleep blocking; add() with circular slot-probe + vtable[0] addRef call; remove() with linear scan + vtable[1] release call. CgsLocklessQueue<u32> for RichPresenceManagerX360; AptListenerSlotList<IAptListener> for AptKey/AptCIH listener registration.",
    "status": "done"
   },
   "class:AptActionQueueC": {
