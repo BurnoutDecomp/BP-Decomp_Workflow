@@ -37773,6 +37773,10 @@
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:CgsNetwork::NetworkAdapterX360": {
+   "notes": "Behavior reconstructed+gate-clean (StartupNetworking server-type switch, Update connect FSM, Release, Prepare fixed to the asm shared-tail NetConnControl('frrt') for states 0/1/2). BLOCKED on adapter-hierarchy reconciliation: recon derives NetworkAdapterX360 : NetworkAdapter(intermediate) : NetworkAdapterBase, but PS3 DWARF shows the platform adapter deriving DIRECTLY from NetworkAdapterBase (no SetServerType in the PS3 hierarchy). X360 SetServerType IS real (called by BrnNetworkServers.cpp:81 via the by-value mNetworkAdapter) but its exact vtable owner/slot is unconfirmed without an X360 NetworkAdapterX360 vtable dump; also the tolerated pre-existing ODR vs CgsNetworkManager.cpp's opaque NetworkAdapter{maStorage[72]}. Needs a deliberate decision on the NetworkAdapter/NetworkAdapterX360 typedef/alias + vtable layout across BrnNetworkManager/BrnNetworkServers/CgsNetworkPlayer consumers.",
+   "status": "blocked"
+  },
   "class:CgsNetwork::NetworkManager": {
    "notes": "reconciliation: ctor already committed & complete in CgsNetworkManager.cpp; compile gate PASS; gate-only",
    "status": "done"
