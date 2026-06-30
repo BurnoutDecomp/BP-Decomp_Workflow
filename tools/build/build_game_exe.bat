@@ -303,6 +303,8 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\BrnGuiModule.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootVideos.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLoading.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegal.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegalBoundary.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiState.cpp"
   echo "%SRC%\GameShared\GameClasses\Fsm\CgsState.cpp"
@@ -338,6 +340,9 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Memory\CgsLinearMalloc.cpp"
   echo "%VEN%\PPMalloc\src\EAGeneralAllocator.cpp"
   echo "%VEN%\renderware\src\rwcore_alloc.cpp"
+  echo "%VEN%\renderware\src\rw\BaseResourceDescriptor.cpp"
+  rem ---- baseline link stubs (IntelliFrag/EmergencyFrag defrag + ReplayModule ctor); see BrnBaselineLinkStubs.cpp ----
+  echo "%SRC%\GameSource\BrnBaselineLinkStubs.cpp"
   echo "%VEN%\renderware\src\rw\core\debug\DebugCriticalSection.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsDistributionStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsScatterStream.cpp"
