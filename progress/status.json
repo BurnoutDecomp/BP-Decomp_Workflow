@@ -41002,7 +41002,7 @@
    "status": "done"
   },
   "class:BrnDirector::Camera": {
-   "notes": "FOUNDATION committed (4374580): 7/29 bodied faithfully on the homed BehaviourHandle<T> (IsWaitingToPrepare x6 subclasses + IsReadyToPrepare, via mpManager->IsBehaviourWaitingToPrepare by named member). 22/29 decl-only: un-homed behaviour-slot resolver / per-subclass getters into un-homed Behaviours/* layouts / glue overloads. Camera home grown additively. Unblocks further as the Behaviours/* family is homed.",
+   "notes": "13/29 (a10586d, up from 7/29): the 6 BehaviourHandle<T>::Prepare per-type instantiations now resolve via the committed inline Prepare (Behaviour subclasses homed). 16/29 still decl-only: AttachTweaker/SetUpdatesDuringPause shared-header key-vs-helperIndex overload ambiguity, the un-homed behaviour-slot resolver pool internals, multi-stage VMX, un-recovered near/far-clip rodata. Camera.cpp manifest documents the 6 resolved.",
    "status": "blocked"
   },
   "class:BrnDirector::Camera::AttachmentTruck": {
@@ -43296,7 +43296,7 @@
    "status": "done"
   },
   "class:BrnTraffic::TrafficEntityModule": {
-   "notes": "FOUNDATION committed (de82286): traffic entity-module TYPE homed (committed header grown additively w/ 8 DWARF nested enums + 44 method decls + opaque attested-offset storage; class-TU dossier-DWARF-gap = no member layout in DWARF, modeled opaque + static_assert-pinned). 16/44 bodied faithfully (10 pool/param accessors + 6 state/flag book-keeping, all line-verified vs asm). 28/44 decl-only: 470KB ctor + VMX avoidance/update/spawn pipelines + un-homed Vehicle/Param/mpData interiors + flt_82001CC0 rodata. Unblocks the traffic cluster (BrnTrafficDebugComponent + leaves) as the Vehicle/Param interiors are homed.",
+   "notes": "Stays 16/44 (re-attempt added 0 -- VERIFIED): the interior cascade does NOT help here. The 28 decl-only funcs reach vehicles/params via UNDECLARED module accessors (GetVehicleTypeRuntime/IsDecisionFrame/sub_82707BC0/sub_82707698/module GetVehicleTransform/GetParamTransform) + raw module-interior offsets (mpVehicleList +496516, hull-runtime pool) + multi-stage VMX (Avoidance_*/CalculateDriverGasBrake/SetVehicleTransform) + un-attested rodata flt_82001CC0 -- NOT via the now-homed BrnTraffic::Vehicle/Param public methods. Needs the module's own undeclared accessors homed + VMX.",
    "status": "blocked"
   },
   "class:BrnTraffic::TrafficLightManager": {
@@ -43306,6 +43306,10 @@
   "class:BrnTraffic::TrafficLightRuntimeState": {
    "notes": "Wave 46: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
+  },
+  "class:BrnTraffic::Vehicle": {
+   "notes": "FOUNDATION committed (bd136e9): 58/59 bodied faithfully against the committed BrnTrafficVehicle.h named members (state/identity/crash classifiers + effect/transform book-keeping). Conductor-fixed 3 classifiers reading wrong member (IsCrashing/IsRecoveringFromSlam/IsBeingChecked -> muCrashTrafficType offset 1 not miPhysicalReason offset 0x39). 1/59 decl-only: SetFlashingHeadlights@0x827536D0 inlines an un-homed CgsNumeric::Random LCG by raw offset (awaits the CgsRandom TU). Unblocks the TrafficEntityModule interior-reachers.",
+   "status": "blocked"
   },
   "class:BrnTraffic::VehicleRenderInfo,64>": {
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
