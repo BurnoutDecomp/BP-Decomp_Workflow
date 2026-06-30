@@ -11316,6 +11316,15 @@
   "BrnGui::SatNavRenderer::RenderIconsForSatNav": {
    "status": "reviewed"
   },
+  "BrnGui::SatNavRenderer::RenderSatNavIcon": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavRenderer::SatNavRenderer": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavRenderer::UpdateRendererTransform": {
+   "status": "reviewed"
+  },
   "BrnGui::ScreenLoading::ApplyOptionsDataProfileSettings": {
    "status": "reviewed"
   },
@@ -14272,6 +14281,24 @@
    "status": "reviewed"
   },
   "BrnNetwork::SuspensionManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::TeamSelectMessage::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::TeamSelectMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::TeamSelectMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::TeamSelectMessage::PackOrUnpack": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::TeamSelectMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::TeamSelectMessage::Retrieve": {
    "status": "reviewed"
   },
   "BrnNetwork::TrafficHashMessage::Construct": {
@@ -30972,10 +30999,31 @@
   "CgsSound::Playback::IEntityFixer::GetFixer": {
    "status": "reviewed"
   },
+  "CgsSound::Playback::Module::Module::AttachVoice": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::Module::Module::C": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::Module::Module::ConnectVoice": {
+   "status": "reviewed"
+  },
   "CgsSound::Playback::Module::Module::Construct": {
    "status": "reviewed"
   },
   "CgsSound::Playback::Module::Module::Destruct": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::Module::Module::DumpRegistries": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::Module::Module::GetEnvironment": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::Module::Module::ImportStringTable": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::Module::Module::Module": {
    "status": "reviewed"
   },
   "CgsSound::Playback::Name::HashTable::Store": {
@@ -33832,43 +33880,43 @@
    "status": "reviewed"
   },
   "renderengine::Texture::Destruct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::GetDepth": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::GetFormat": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::GetHeight": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::GetParameters": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::GetPixelDataSize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::GetResourceDescriptor": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::GetType": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::Initialize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::Lock": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::Release": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::Unlock": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture::Xbox2CheckPhysicalMemoryFlags": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "renderengine::Texture>::operator class renderengine::Texture *": {
    "status": "reviewed"
@@ -34626,8 +34674,35 @@
   "rw::graphics::postfx::DepthOfField::SetState": {
    "status": "reviewed"
   },
+  "rw::graphics::postfx::RenderTarget::Begin": {
+   "status": "compiles"
+  },
+  "rw::graphics::postfx::RenderTarget::CreateStates": {
+   "status": "compiles"
+  },
+  "rw::graphics::postfx::RenderTarget::End": {
+   "status": "compiles"
+  },
+  "rw::graphics::postfx::RenderTarget::Initialize": {
+   "status": "compiles"
+  },
+  "rw::graphics::postfx::RenderTarget::RenderTarget": {
+   "status": "compiles"
+  },
+  "rw::graphics::postfx::RenderTarget::Resolve": {
+   "status": "compiles"
+  },
   "rw::graphics::postfx::RenderTargetDebugger::RenderTargetDebugger": {
    "status": "reviewed"
+  },
+  "rw::graphics::postfx::Target::CreateColor": {
+   "status": "compiles"
+  },
+  "rw::graphics::postfx::Target::CreateDepth": {
+   "status": "compiles"
+  },
+  "rw::graphics::postfx::Target::Resolve": {
+   "status": "compiles"
   },
   "rw::graphics::postfx::Tint::Initialize": {
    "status": "reviewed"
@@ -40373,6 +40448,10 @@
    "notes": "Wave 36: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnGui::SatNavRenderer": {
+   "notes": "Wave 32: faithful vs asm, gate clean, pushed dbe0b0c",
+   "status": "done"
+  },
   "class:BrnGui::SelectableGroup": {
    "notes": "Wave 43: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -40637,6 +40716,10 @@
   },
   "class:BrnNetwork::StuntScoreUpdatedMessage": {
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:BrnNetwork::TeamSelectMessage": {
+   "notes": "Wave 32: faithful vs asm, gate clean, pushed dbe0b0c",
    "status": "done"
   },
   "class:BrnNetwork::TrafficManager": {
@@ -41178,6 +41261,10 @@
   },
   "class:BrnProgression::ProgressionData": {
    "status": "done"
+  },
+  "class:BrnProgression::ProgressionManager": {
+   "notes": "Wave32 partial 7/9 (foundation committed dbe0b0c); ctor needs un-homed Profile ctor for the 9 -1 sentinels; Prepare2 needs un-homed LoadProgressionData + 5 helper siblings. Block until Profile + siblings land",
+   "status": "blocked"
   },
   "class:BrnProgression::Race": {
    "notes": "Self-verified vs asm. Parity RED is benign: each CGS_ASSERT collapses the X360's inlined BeginAssert/FireAssert/EndAssert+BasePriorityQueue::Clear+StrStream machinery into one macro call (call_count delta). AddLandmark/GetStart/GetFinishLandmarkIndex match the sthx/lhzx offsets store-for-store.",
@@ -43630,6 +43717,10 @@
    "notes": "CgsSound IEntityFixer; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
   },
+  "class:CgsSound::Playback::Module::Module": {
+   "notes": "Wave 32: faithful vs asm, gate clean, pushed dbe0b0c",
+   "status": "done"
+  },
   "class:CgsSound::Playback::Object": {
    "notes": "sound playback object accessor; verifier parity/none; gate pass.",
    "status": "done"
@@ -44451,6 +44542,10 @@
    "notes": "trivial; gate-only",
    "status": "done"
   },
+  "class:renderengine::Device": {
+   "notes": "Wave32: 6 PC-consumer methods already committed; 9 X360-internal GPU/EDRAM funcs (Clear/EnsureDefaultRenderTarget/InitPresentParameters/InitializeGlobalBuffers/Lock/UnlockFrontBuffer/UnSetResource/UsingGlobalRasters/BeginShaderStates) have ZERO PC consumers + bodying = fabricating PC GPU state -> correctly omitted; SetState declared+called by CgsRenderTarget but unbodied (pre-existing). Block until SetState PC body lands",
+   "status": "blocked"
+  },
   "class:renderengine::Device::Parameters": {
    "notes": "Initialize/FixD3DDefaults verified store-for-store vs asm (packed flags, video-mode ladder, phys-mem masks).",
    "status": "done"
@@ -44485,6 +44580,10 @@
   },
   "class:renderengine::StateHelper": {
    "notes": "renderengine StateHelper::Initialize. Verify caught two byte-reversed blend-factor constants; FIXED gpDefaultBlendState1 0x01010706->0x07060101 and State2 0x01090706->0x07060109 (asm insrwi rA,0x101/0x109,16,16 into low half of 0x07060706; Hex-Rays v32[0]=117833985). Re-gated clean.",
+   "status": "done"
+  },
+  "class:renderengine::Texture": {
+   "notes": "Wave 32: faithful vs asm, gate clean, pushed dbe0b0c",
    "status": "done"
   },
   "class:renderengine::Texture2D": {
