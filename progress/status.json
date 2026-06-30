@@ -3777,6 +3777,9 @@
   "BrnEffects::BrnCrashTriangleCache::CheckForDuplicateTriangles": {
    "status": "reviewed"
   },
+  "BrnEffects::BrnCrashTriangleCache::CollideWithTriangleCache": {
+   "status": "reviewed"
+  },
   "BrnEffects::BrnCrashTriangleCache::Construct": {
    "status": "reviewed"
   },
@@ -8908,6 +8911,9 @@
    "status": "reviewed"
   },
   "BrnGui::EventInfoComponent::SetTakedownsTextState": {
+   "status": "reviewed"
+  },
+  "BrnGui::EventInfoComponent::SetTextFieldDangerColour": {
    "status": "reviewed"
   },
   "BrnGui::EventInfoComponent::UpdateDestinationText": {
@@ -24519,6 +24525,9 @@
   "CgsGeometric::Frustum::IntersectionOf3Planes": {
    "status": "reviewed"
   },
+  "CgsGeometric::Frustum::PlaneToVector": {
+   "status": "reviewed"
+  },
   "CgsGeometric::IntersectTriangleSweptSphere": {
    "status": "reviewed"
   },
@@ -24669,10 +24678,19 @@
   "CgsGraphics::CallbackFn::Interpret": {
    "status": "reviewed"
   },
+  "CgsGraphics::Camera::Camera": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Camera::GetFrustum": {
+   "status": "reviewed"
+  },
   "CgsGraphics::Camera::GetFrustumParallel": {
    "status": "reviewed"
   },
   "CgsGraphics::Camera::GetFrustumPerspective": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Camera::SetFovHorizontal": {
    "status": "reviewed"
   },
   "CgsGraphics::Camera::SetPerspectiveProjectionMatrixRightHanded": {
@@ -24682,6 +24700,9 @@
    "status": "reviewed"
   },
   "CgsGraphics::Camera::UpdatePerspectiveProjectionMatrix": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Camera::operator=": {
    "status": "reviewed"
   },
   "CgsGraphics::ChunkBuffer::GetChunkData": {
@@ -30523,6 +30544,9 @@
    "status": "reviewed"
   },
   "CgsSceneManager::LooseOctree::MergeSubTreeRecursive": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::LooseOctree::NodeInsideFrustumVp4": {
    "status": "reviewed"
   },
   "CgsSceneManager::Neighbour::GetZone": {
@@ -39463,6 +39487,10 @@
    "notes": "MISATTRIBUTED (triage 2026-06-29, high-conf): NOT a reconstruction target -- demangler/DecFIGS mis-bucket. Close/retire this TU id as a stale mis-bucket -- the re-partition is complete in the tree. No reconstruction needed; verify the work ledger no longer lists this SDK-header path as a primary_file.",
    "status": "blocked"
   },
+  "SDKs/EATech/include/rw/math/vpu/detail/vector4_operation_inline.h": {
+   "notes": "Wave 41: faithful vpu ops vs LegacySrc + vec_float convention; decl-only ops genuinely undecoded; pushed 2c974b6",
+   "status": "done"
+  },
   "SDKs/EATech/include/rw/math/vpu/detail/vector4_type_inline.h": {
    "notes": "Wave 40: faithful vpu math vs LegacySrc + vec_float convention, gate clean, pushed 0a2ffce",
    "status": "done"
@@ -43069,6 +43097,10 @@
   "class:CgsGraphics::BasicColouredVertex>": {
    "notes": "Wave30: ledger key is ImRenderer<BasicColouredVertex> not ImRenderBuffer; needs 13 bodies w/ several external sub_* (partial); bad instantiation reverted",
    "status": "blocked"
+  },
+  "class:CgsGraphics::Camera": {
+   "notes": "Wave 42: faithful vs asm, gate clean, pushed 2a52adb",
+   "status": "done"
   },
   "class:CgsGraphics::ChunkBuffer": {
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
