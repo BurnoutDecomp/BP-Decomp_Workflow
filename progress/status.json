@@ -996,6 +996,15 @@
   "AptRenderItemMorph::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "AptRenderItemStaticText::Clone": {
+   "status": "reviewed"
+  },
+  "AptRenderItemStaticText::Render": {
+   "status": "reviewed"
+  },
+  "AptRenderItemStaticText::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "AptRenderManagerItem::Clean": {
    "status": "reviewed"
   },
@@ -36210,10 +36219,6 @@
    "notes": "Verify PASS; 11 not-impl callbacks + Free faithful (assert seq + msgs byte-match). Cosmetic-only notes, no change. Parity RED=assert fold.",
    "status": "done"
   },
-  "GameShared/GameClasses/Gui/View/AptInterface/CgsAptCommunicator.cpp": {
-   "notes": "~6 of 11 fns need EATech-runtime pieces not yet committed (JeBobs lane): AptValue::toString (AptValue.h states it is the not-yet-done follow-on; only toInteger/toFloat/toBool exist) used by UpdateComponentReserved/GetComponentData/SendAptEvent/SendAptSoundEvent + UpdateComponent debug-log; AptValueFactory::CreateArray + AptCallFunctionOpti (UpdateAllComponents); AptIsDeferredVectorFull (UpdateComponentReserved). The 5 self-contained fns (GetName, FindAptComponent, sMethod_GetPlatformString, sMethod_GetCircleButtonAsSelect, sMethod_SetCommunicationObject) are reconstructable now (AptExtObject base landed in wave 8) -- retry once AptValue::toString/AptValueFactory land.",
-   "status": "blocked"
-  },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptCommunicator.h": {
    "status": "done"
   },
@@ -40199,8 +40204,8 @@
    "status": "done"
   },
   "class:AptRenderItemStaticText": {
-   "notes": "Blocked (same deps as AptRenderItemLevel): the un-homed AptCharacterStaticText text/paragraph/glyph layout + sub_82AEB9A0 (the shared render-item copy-ctor helper, no recoverable body). [adri1 apt-100]",
-   "status": "blocked"
+   "notes": "Fresh-eyes review (sonnet) vs X360 asm: 22-point store-for-store match. Render reconstructed (paragraph/glyph walk, per-glyph matrix, advance accumulation, font/glyph table resolvers via declared helpers); AptCharacterStaticText homed. gAptOptFlags&4 clip fast-path deferred consistent w/ AptRenderItem::PushMatrices. Compile gate PASS.",
+   "status": "done"
   },
   "class:AptRenderManagerItem": {
    "notes": "apt-100: render-manager queue cluster, named members vs X360 ARTIST, fresh-eyes verified (Get prune predicate fixed to flag-only) + cl /c gate. Committed b5-decomp dev a54964e.",
