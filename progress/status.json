@@ -37401,6 +37401,10 @@
    "notes": "Wave45: 18/18+5/5 but B3ClassicTakedownPlayer::Update FINISHED-state used an INVENTED proxy condition (should read the interpolate behaviour's internal finished flag) + a raw-offset write into the embedded MomentSelector aggregate (+1520/+1524); discarded. Redo with the interpolate-finished accessor + MomentSelector layout",
    "status": "blocked"
   },
+  "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp": {
+   "notes": "FOUNDATION committed (04b1a3a): 5/9 bodied faithfully (Construct/GetName/Deactivate/GenericActivateCam/ActivateIceCam, own-member+spTestbed only, mirrors committed BrnArbState siblings). 4/9 decl-only: Update (15-way BehaviourManager-pool dispatch over un-homed pool) + Register/UnregisterParameters (un-homed SerialiseBehaviourParameters<DebugMenuSerialiser>) + RegisterIceAnimsWithDebugComponent (un-homed DebugComponent+DirectorResourceManager). Unblocks once BehaviourManager.h layout is homed.",
+   "status": "blocked"
+  },
   "GameSource/Director/BrnCrashAnalyser.cpp": {
    "notes": "CrashAnalyser::Update @0x82209290 non-leaf VMX keystone: ~196 VMX128 instrs reading un-homed GameState(+30944)/VehicleInfo[stride1264]/PlayerCrashInfo/DirectorIO::InputBuffer/CrashAnalysis triple-buffer + StrStream assert. Needs those layouts homed first.",
    "status": "blocked"
@@ -37484,6 +37488,10 @@
   "GameSource/Director/Camera/BrnBehaviourManager.h": {
    "status": "done"
   },
+  "GameSource/Director/Camera/BrnBehaviourParameterBank.cpp": {
+   "notes": "DISCARDED 0/2-body anchor: both funcs (Construct 0x8223DC90, LoadParameters 0x82273268) index the un-homed BehaviourParameterBank aggregate (committed BrnBehaviourParameterBank.h is a minimal NamedParameters slice). Construct raw-offset-pokes ~9600 bytes + copies UN-DUMPED rodata default tables unk_82CDAA10..unk_82CDACD0 (byte values not in dump) + calls un-homed Serialise<BehaviourParameterNamingSerialiser>. Needs the full BehaviourParameterBank LAYOUT + the rodata tables dumped.",
+   "status": "blocked"
+  },
   "GameSource/Director/Camera/BrnCameraEffects.cpp": {
    "status": "done"
   },
@@ -37521,6 +37529,10 @@
   },
   "GameSource/Director/Camera/Utils/CameraUtils.h": {
    "status": "done"
+  },
+  "GameSource/Director/DirectorModule/BrnDirectorModule.cpp": {
+   "notes": "DISCARDED parallel-home (ODR): all 7 funcs were faithful + compiled, BUT the agent created a SECOND home at GameSource/Director/DirectorModule/BrnDirectorModule.{h,cpp} that redefines BrnDirector::DirectorModule (committed home = the EMPTY GROWABLE skeleton at GameSource/Director/BrnDirectorModule.{h,cpp}, zero includers). CONSOLIDATION RECIPE: grow the committed BrnDirectorModule.h skeleton to the ModuleSingleBuffered-derived class + put the 7 bodies (CameraFinaliser::Update 0x82250440, Construct 0x8225C590, Destruct 0x82250D98, PreSceneQueryUpdate 0x8225C768, Prepare 0x822712D8, Release 0x82239198, Update 0x82275300) in the committed .cpp; restore the 2 dropped FLAGGED calls (DebugComponent::Construct in Construct, CgsDev::DebugComponent::Register in Prepare case0); #include committed CgsPerfMonCpu.h instead of re-declaring. Reconcile the committed .cpp local placeholder structs MainDirector/DirectorResourceManager/ReplayDirector with their canonical homes.",
+   "status": "blocked"
   },
   "GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent.cpp": {
    "notes": "Wave33: 3/7 + layout-fidelity defect (extra member shifts owned offsets vs the committed 0x18 CgsDev::DebugComponent base -> bodied stores hit wrong slots); StartEditor recoverable but unbodied. Discarded; redo with correct base-relative layout + StartEditor (ICEAuthor::CreateNewTake)",
@@ -39630,6 +39642,10 @@
   "GameSource/Unity/../World/BrnWorldGraphicsStreamer.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../World/BrnWorldModule.cpp": {
+   "notes": "FOUNDATION committed (04b1a3a): WorldModule TYPE homed (CgsModule::ModuleSingleBuffered subclass, BrnWorldModule.h/.cpp). 1/13 bodied (LoadDistrictMap 5-stage Districts.dat streaming, conductor-fixed swapped AcquireEvent payload offsets pool->+8/u64->+16). 12/13 decl-only: un-homed embedded sub-module fleet (RaceCar/Traffic/Prop/Trigger entity modules + Physics/Scene/AI/Crash) + 3 VMX dispatch builders (GenerateDispatchLists/FrustumQueries/ShadowMapDispatchLists) + Prepare@0x827D53B0. Unblocks once the sub-module fleet layouts are homed.",
+   "status": "blocked"
+  },
   "GameSource/Unity/../World/BrnWorldModuleIO.cpp": {
    "status": "done"
   },
@@ -39946,6 +39962,9 @@
   },
   "SDKs/EATech/include/Apt/AptValue/AptValueFindChild.cpp": {
    "notes": "Gate PASS. Parity RED explained: the GENERIC path (native hash via GetNativeHashVirtual -> __proto__ chain -> global-extension/global objects) is faithful; the 358-line body's 11 inline special-name cases (this/_root/_parent/_level<N>/_global/Math/Mouse/Stage/Key/String/extern/super) are collapsed into ONE delegated call to AptApt_ResolveSpecialName (FLAG'd follow-on -- they navigate the interpreter target-state + global-object singletons, not reconstructed). call_count/return_count deltas = that delegation + named accessors + early-return vs goto-single-return. AptNativeHash::Lookup IS called (method syntax + the LookupInObject helper). KEY: the jump table (word_821453C0) + ObjectIndex name->id wordlist (off_82F79C20) were XEX-extracted (documented in-file; unblocks filling ObjectIndex's data tables). findChild's dispatch + generic resolution match X360 0x82B01298; the special-name navigation is the documented follow-on. b5-decomp 5ec789c2.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/cmn/rw/core/resource/resource.h": {
    "status": "done"
   },
   "SDKs/EATech/include/eathread/powerpc/eathread_atomic_powerpc.h": {
@@ -40820,6 +40839,10 @@
   "class:BrnDirector::KeyAnimController": {
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
+  },
+  "class:BrnDirector::MainDirector": {
+   "notes": "FOUNDATION committed (04b1a3a): MainDirector TYPE homed (BrnMainDirector.h/.cpp, ~0x35450 opaque, static_assert-pinned). 5/23 bodied faithfully (ctor/Release/Destruct + GetICEWrapper/GetArbitrator; conductor-fixed 3 offset bugs: Release case0 collision-gen +0x349D0->+0x50, Destruct listheads A/B/C ->0x1CAB8/0x24848/0x2C5B8, ctor CarScoreData +0x33760->+0x33B50). 18/23 decl-only: gated on the un-homed full BehaviourManager LAYOUT + VMX pipelines + un-dumped rodata flt_82CDA55C/560. Unblocks once BehaviourManager.h layout is homed.",
+   "status": "blocked"
   },
   "class:BrnDirector::MomentBystanderSeesAction": {
    "notes": "SetPerceivedDistanceModificationFactor @0x822197E0 writes stfs@+0x358/stb 1@+0xCF into an un-homed Behaviour aggregate via a truncated external symbol (dossier 6-arg vs 2-arg call site); offsets past the committed nominal Camera slice are unreliable. Side-effecting setter; a no-op would be wrong, bodying = fabrication. Deferred.",
