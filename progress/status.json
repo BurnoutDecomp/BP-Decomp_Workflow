@@ -12747,7 +12747,28 @@
   "BrnNetwork::LiveRevengeManager::AddNewTableEntry": {
    "status": "reviewed"
   },
+  "BrnNetwork::LiveRevengeManager::AddPlayer": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::Disconnected": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::DisplayPlayerTakedownMessage": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::DisplayRivalTakedownMessage": {
+   "status": "reviewed"
+  },
   "BrnNetwork::LiveRevengeManager::FindPlayerInTableByName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::GetNumberOfRelationships": {
    "status": "reviewed"
   },
   "BrnNetwork::LiveRevengeManager::GetNumberOfRivals": {
@@ -12756,22 +12777,73 @@
   "BrnNetwork::LiveRevengeManager::GetUniqueIDByName": {
    "status": "reviewed"
   },
+  "BrnNetwork::LiveRevengeManager::HandleLiveRevengeProfileLoadedEvent": {
+   "status": "reviewed"
+  },
   "BrnNetwork::LiveRevengeManager::HandleRoundResults": {
    "status": "reviewed"
   },
   "BrnNetwork::LiveRevengeManager::IsTableValid": {
    "status": "reviewed"
   },
+  "BrnNetwork::LiveRevengeManager::NetworkPlayerIDToActiveRaceCarIndex": {
+   "status": "reviewed"
+  },
   "BrnNetwork::LiveRevengeManager::OnRoundFinish": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::OnRoundStart": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::Prepare": {
    "status": "reviewed"
   },
   "BrnNetwork::LiveRevengeManager::ProcessAfterSimulation": {
    "status": "reviewed"
   },
+  "BrnNetwork::LiveRevengeManager::ProcessBeforeSimulation": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::ProcessGameDirtyTrickInterface": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::ProcessTakedownQueue": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::Release": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::RemotePlayerFinalised": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::RemoveMappingEntry": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::RemovePlayer": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::SendLiveRevengeRivalsToServer": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::SyncMessageArrivedCallback": {
+   "status": "reviewed"
+  },
   "BrnNetwork::LiveRevengeManager::UpdateLiveRevengeRelationShip": {
    "status": "reviewed"
   },
+  "BrnNetwork::LiveRevengeManager::UpdateMarkedManInfo": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::UpdatePaybacksData": {
+   "status": "reviewed"
+  },
   "BrnNetwork::LiveRevengeManager::UpdateTopRivals": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::_SortTopRivals": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LiveRevengeManager::_SyncMessageArrivedCallback": {
    "status": "reviewed"
   },
   "BrnNetwork::LiveRevengeManager::_SyncMessageDeliveredCallback": {
@@ -36956,6 +37028,10 @@
   },
   "GameSource/Network/Managers/BrnNetworkLaunchManager.cpp": {
    "notes": "Verify PASS (17 funcs branch-for-branch). Stripped a speculative DebugLog triplet in UpdateError (no asm recovered; DebugLog is no-op) -> grounded return only; fixed GetTimerStatus comment offset (+0x95D8C).",
+   "status": "done"
+  },
+  "GameSource/Network/Managers/BrnNetworkLiveRevengeManager.cpp": {
+   "notes": "Construct semantically faithful with correct member layout (X360 byte offsets verified). Parity RED justified: only 1/24 functions executed in boot-trace, majority have garbled pseudo (local variable allocation has failed). IDA-mangled absent callees (GetGa, GetNetworkEvent, TakedownEvent_8_::Construct) are expected name mismatches, not missing calls.",
    "status": "done"
   },
   "GameSource/Network/Managers/BrnNetworkLiveRevengeRelationship.cpp": {
