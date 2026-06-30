@@ -22380,16 +22380,61 @@
   "BrnWorld::RaceCar::FillInOutputInterface": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCar::GetActiveRaceCar": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::GetDirection": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCar::GetGlobalRaceCarIndex": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCar::GetModelId": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCar::GetPosition": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::GetPreviousPosition": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::GetRivalId": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::GetRivalIndex": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCar::GetTransform": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCar::GetVelocity": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::GetWheelModelId": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::HasActiveRaceCar": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::IsAIDriven": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::IsInCurrentGameMode": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::IsInRangeRival": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCar::IsInWorld": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::IsNetworkDriven": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::IsOutOfRangeRival": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::IsPlayerDriven": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCar::Prepare": {
@@ -22404,13 +22449,25 @@
   "BrnWorld::RaceCar::RequestResetOnTrack": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCar::SetActiveRaceCarIndex": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::SetInCurrentGameMode": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCar::ShouldBeInRange": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCar::ShouldBeOutOfRange": {
    "status": "reviewed"
   },
+  "BrnWorld::RaceCar::ToBeRenderedDamaged": {
+   "status": "reviewed"
+  },
   "BrnWorld::RaceCar::UpdatePositioningData": {
+   "status": "reviewed"
+  },
+  "BrnWorld::RaceCar::UpdateVelocity": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarAttributeStreamer::OnAssetLoaded": {
@@ -43252,6 +43309,10 @@
    "notes": "Wave 44: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnWorld::ActiveRaceCar": {
+   "notes": "FOUNDATION committed (5e22ecc): 4/9 bodied (GetTransform/GetDirection/GetVelocity forwarders to committed RaceCar accessors via mpGlobalRaceCar +0x6F0 + IsPlayer). 5/9 decl-only: the committed BrnActiveRaceCar.h is a deliberate SPARSE declaration surface (only 4 members homed; full 7376-byte instance not laid out), so IsCrashing(+0x52A)/IsOnRaceStartState/IsInAnyRaceStartState(+0x77C)/SetBraking(+0x738,+0x1BE7)/UpdateWheelPhysicsState(VMX) reach un-homed deep-offset members. Unblocks once the full ActiveRaceCar layout is homed.",
+   "status": "blocked"
+  },
   "class:BrnWorld::ActiveRaceCar::RenderParams": {
    "notes": "12/13 done + pushed (b5-decomp dev 2651c62): all accessors + recovered layout (offsetof-pinned). DEBUG_OverrideScratchAmount @0x822A21B0 is a 1280-line unrolled-VMX broadcast, deferred to a VMX pass (same tier as RaceCarRenderParams::operator=).",
    "status": "blocked"
@@ -43526,6 +43587,9 @@
   },
   "class:BrnWorld::PropVolumeInstanceID": {
    "notes": "6 funcs (prop-volume id wrapper); verifier parity/none; gate pass.",
+   "status": "done"
+  },
+  "class:BrnWorld::RaceCar": {
    "status": "done"
   },
   "class:BrnWorld::RaceCarCrash": {
