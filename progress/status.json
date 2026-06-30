@@ -1,5 +1,17 @@
 {
  "func": {
+  "*,13>::Get": {
+   "status": "reviewed"
+  },
+  "*,13>::Init": {
+   "status": "reviewed"
+  },
+  "*,13>::Insert": {
+   "status": "reviewed"
+  },
+  "*,13>::Remove": {
+   "status": "reviewed"
+  },
   "*,6>::Add": {
    "status": "reviewed"
   },
@@ -33594,7 +33606,43 @@
   "cQuat::ToMatrix": {
    "status": "reviewed"
   },
+  "char,199>::Peek": {
+   "status": "reviewed"
+  },
+  "char,199>::Pop": {
+   "status": "reviewed"
+  },
+  "char,199>::Push": {
+   "status": "reviewed"
+  },
+  "char,199>::operator[]": {
+   "status": "reviewed"
+  },
   "char,50>::Construct": {
+   "status": "reviewed"
+  },
+  "char>::Cl": {
+   "status": "reviewed"
+  },
+  "char>::Get": {
+   "status": "reviewed"
+  },
+  "char>::GetObjectI": {
+   "status": "reviewed"
+  },
+  "char>::Pu": {
+   "status": "reviewed"
+  },
+  "char>::PushIndex": {
+   "status": "reviewed"
+  },
+  "int,5>::Append": {
+   "status": "reviewed"
+  },
+  "int,5>::Contains": {
+   "status": "reviewed"
+  },
+  "int,5>::FindFirstInstanceOf": {
    "status": "reviewed"
   },
   "operator++": {
@@ -34632,6 +34680,24 @@
   "shadow::Device::SetVertexProgramInternal": {
    "status": "reviewed"
   },
+  "short,1>::Contains": {
+   "status": "reviewed"
+  },
+  "short,1>::FindFirstInstanceOf": {
+   "status": "reviewed"
+  },
+  "short,1>::Peek": {
+   "status": "reviewed"
+  },
+  "short,1>::Pop": {
+   "status": "reviewed"
+  },
+  "short,1>::Push": {
+   "status": "reviewed"
+  },
+  "short,1>::operator[]": {
+   "status": "reviewed"
+  },
   "short,256>::Append": {
    "status": "reviewed"
   },
@@ -34642,6 +34708,27 @@
    "status": "reviewed"
   },
   "short,256>::GetLength": {
+   "status": "reviewed"
+  },
+  "short,400>::Append": {
+   "status": "reviewed"
+  },
+  "short,400>::Contains": {
+   "status": "reviewed"
+  },
+  "short,400>::FindFirstInstanceOf": {
+   "status": "reviewed"
+  },
+  "short,400>::GetItem": {
+   "status": "reviewed"
+  },
+  "short,400>::Pop": {
+   "status": "reviewed"
+  },
+  "short,400>::Push": {
+   "status": "reviewed"
+  },
+  "short,400>::operator[]": {
    "status": "reviewed"
   },
   "short>::AddEvent": {
@@ -38826,6 +38913,10 @@
    "notes": "GetTriggerWorldRegion verified vs asm; parity.",
    "status": "done"
   },
+  "class:*,13>": {
+   "notes": "Wave 30: verified faithful vs X360 asm, gate clean, pushed 4a5867d",
+   "status": "done"
+  },
   "class:*,6>": {
    "notes": "BucketListNode<Job*,6> (Job-dependents) Add/ListSize/operator[] verified; eajobs home grown additively.",
    "status": "done"
@@ -40024,6 +40115,10 @@
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnGui::GuiCache": {
+   "notes": "Wave30 partial 21/60: foundation committed (4a5867d); 39 methods need un-homed sub-aggregate strides/callees",
+   "status": "blocked"
+  },
   "class:BrnGui::GuiCursor": {
    "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -40330,6 +40425,10 @@
   "class:BrnNetwork::GameSearchParamsBase": {
    "notes": "operator= verified vs asm: base copy-assign + memcpy 0x2A0 payload@0x6C + 0x83-byte tail loop@0x30C.",
    "status": "done"
+  },
+  "class:BrnNetwork::GamerPictureManagerX360": {
+   "notes": "Wave30 partial 15/16: foundation committed (4a5867d); AddPlayer needs todo ServerInterfaceGamesX360 + derived PlayerInfoData layout",
+   "status": "blocked"
   },
   "class:BrnNetwork::HullToActivateInfo,7>": {
    "notes": "Wave 52: reconstructed store-for-store from X360 ARTIST asm and adversarially verified (full store set both directions, exact assert operands, BE-qword field order, byte-index/stride). Committed a2da36a.",
@@ -42184,6 +42283,10 @@
   "class:CgsGeometric::Triangle4": {
    "notes": "Verified vs asm; normal-tolerance epsilon flagged inferred.",
    "status": "done"
+  },
+  "class:CgsGraphics::BasicColouredVertex>": {
+   "notes": "Wave30: ledger key is ImRenderer<BasicColouredVertex> not ImRenderBuffer; needs 13 bodies w/ several external sub_* (partial); bad instantiation reverted",
+   "status": "blocked"
   },
   "class:CgsGraphics::ChunkBuffer": {
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
@@ -44142,8 +44245,20 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:char,199>": {
+   "notes": "Wave 30: verified faithful vs X360 asm, gate clean, pushed 4a5867d",
+   "status": "done"
+  },
   "class:char,50>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
+   "status": "done"
+  },
+  "class:char>": {
+   "notes": "Wave 30: verified faithful vs X360 asm, gate clean, pushed 4a5867d",
+   "status": "done"
+  },
+  "class:int,5>": {
+   "notes": "Wave 30: verified faithful vs X360 asm, gate clean, pushed 4a5867d",
    "status": "done"
   },
   "class:princeton_digital": {
@@ -44534,6 +44649,10 @@
    "notes": "focused reviewer pass after adding offset-256 reset and typed ref-array layout",
    "status": "done"
   },
+  "class:rw::core::GeneralResourceAllocator": {
+   "notes": "Wave30: DoAllocate deferred (PC-leaf abstraction); faithful 7-arg Resource-builder + X360-unrepresentable layout pending step-5 CreateAllocators",
+   "status": "blocked"
+  },
   "class:rw::core::arena::DefaultRuntimeAtomFixup": {
    "notes": "@0x82BA7E68 is a COMDAT forwarding thunk (b sub_82C47B08) passing the un-homed global off_832BE208 as this -- no prologue, no recoverable return contract, no call sites. (Vector deleting dtor sibling recoverable but the thunk blocks the TU.) Deferred.",
    "status": "blocked"
@@ -44733,7 +44852,15 @@
    "notes": "Wave 47: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:short,1>": {
+   "notes": "Wave 30: verified faithful vs X360 asm, gate clean, pushed 4a5867d",
+   "status": "done"
+  },
   "class:short,256>": {
+   "status": "done"
+  },
+  "class:short,400>": {
+   "notes": "Wave 30: verified faithful vs X360 asm, gate clean, pushed 4a5867d",
    "status": "done"
   },
   "class:short>": {
