@@ -39931,6 +39931,10 @@
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarComponentStreamers.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp": {
+   "notes": "FOUNDATION grown (f9dba8c): type was already homed (committed opaque header + 5-fn _ScoringMapping slice); this pass added the file-TU .cpp + grew the header additively (4 DWARF-named tail scalars, offsetof-pinned). 2/81 bodied (AddTrainingRequest@0x822A47A8 + UpdateTailgateTimer@0x822CE508, asm-verified). 79/81 decl-only: 38 VMX lvx128/stvx128 pipelines + 28 un-homed BrnWorld::RaceCar/ActiveRaceCar/manager-interior reachers + rodata-table deps + lifecycle far-tail. Unblocks as the RaceCar/ActiveRaceCar interiors are homed. PRE-EXISTING latent ODR noted: committed BrnRaceCar.h/BrnActiveRaceCar.h define full RaceCar/ActiveRaceCar while this module header has opaque placeholders of same FQN (never co-include -> future reconcile).",
+   "status": "blocked"
+  },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.h": {
    "notes": "2 funcs (RaceCar entity-module accessors); verifier minor_drift/low; gate pass.",
    "status": "done"
