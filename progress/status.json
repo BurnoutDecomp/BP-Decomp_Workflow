@@ -2878,25 +2878,25 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::GetName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::Parameters::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::Prepare": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::SetParameters": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::SetupTweaker": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRoadRunner::Construct": {
    "status": "reviewed"
@@ -36087,6 +36087,10 @@
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BehaviourBystanderCam.cpp": {
+   "status": "done"
+  },
+  "GameSource/Director/Camera/Behaviours/BehaviourRig.cpp": {
+   "notes": "Garbled pseudo (local variable allocation has failed) for Construct+Update causes RED call_count/branch_count \u2014 CGS_ASSERT macro expansion and garbled SIMD inflate pseudo counts; all named callees present except constructors and macro internals. All 17 Update steps verified in order by reviewer. SetParams duplicate-arg is a documented dossier ambiguity. VERDICT: pass",
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourAftertouchCam.cpp": {
