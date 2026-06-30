@@ -39292,6 +39292,10 @@
   "GameSource/Unity/../Math/BrnMathUtils.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../Network/BrnNetworkManager.cpp": {
+   "notes": "FOUNDATION committed (4374580): NetworkManager TYPE homed + header grown. 1/23 bodied (PackOrUnpack). 22/23 decl-only: the ~613KB aggregate of 28+ embedded manager sub-objects is un-homed. GetMaxMessageSize@0x825885E8 accounted decl-only (41-entry immediate MessageDef table + rw::math::vpu::Max<s32>, deferred to a per-row asm pass). PRE-EXISTING latent issue noted: BrnNetworkManager.h inline CgsNetwork::VersionDisplay is an ODR dup of committed CgsNetworkManager.cpp's opaque storage (never co-occur, compiles) -> future layout-reconciliation.",
+   "status": "blocked"
+  },
   "GameSource/Unity/../Network/BrnNetworkModule.cpp": {
    "status": "done"
   },
@@ -40683,6 +40687,10 @@
   "class:BrnDirector::BoostShakeController": {
    "notes": "Update verified: clamp01 fsel pair + (w-rampStart)/span remap + amplitude->+0x114 + low-byte->+0x11C; div-by-zero guard; consts 0.0/1.0.",
    "status": "done"
+  },
+  "class:BrnDirector::Camera": {
+   "notes": "FOUNDATION committed (4374580): 7/29 bodied faithfully on the homed BehaviourHandle<T> (IsWaitingToPrepare x6 subclasses + IsReadyToPrepare, via mpManager->IsBehaviourWaitingToPrepare by named member). 22/29 decl-only: un-homed behaviour-slot resolver / per-subclass getters into un-homed Behaviours/* layouts / glue overloads. Camera home grown additively. Unblocks further as the Behaviours/* family is homed.",
+   "status": "blocked"
   },
   "class:BrnDirector::Camera::AttachmentTruck": {
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
