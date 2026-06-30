@@ -39273,6 +39273,10 @@
   "GameSource/Unity/../GameState/ModeManager/BrnModeManager.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp": {
+   "notes": "FOUNDATION committed (a6d312b): challenge-mode manager TYPE homed (opaque attested-offset u8 maOpaque[0x1020] per class-TU DWARF-gap; committed thin slice grown additively + 2 nested enums). 8/57 bodied faithfully (Construct lifecycle spine [EXECUTED] + UpdateResultsTimer + ReceivedSuccessUpdatesFromAllPlayers + GetNumPlayerSucceeding/Contributing + 3 accessors, all line-verified vs asm). 49/57 decl-only: network-reaching / VMX skill-arbitration-action / un-homed nested-aggregate (ObjectPool<StoredLeapingData,7>/FastBitArray<120>[8]) interiors. Committed DebugComponent consumer still gates.",
+   "status": "blocked"
+  },
   "GameSource/Unity/../GameState/ModeManager/Debug/BrnCrashScoreDebugComponent.cpp": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
@@ -39958,6 +39962,10 @@
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp": {
    "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp": {
+   "notes": "FOUNDATION committed (a6d312b): traffic debug component TYPE homed (FULL DWARF member layout mirrored member-for-member, NOT a DWARF-gap; reuses the homed BrnTraffic::TrafficEntityModule by name). 3/51 bodied (Construct/GetName/Update). 48/51 decl-only: VMX debug-draw pipelines + methods reaching the still-un-homed BrnTraffic::Vehicle/Param interiors. Unblocks further as the Vehicle/Param interiors are homed.",
+   "status": "blocked"
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h": {
    "status": "done"
