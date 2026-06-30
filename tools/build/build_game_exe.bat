@@ -53,6 +53,7 @@ rem ---- build the cl response file ----
   echo /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS
   echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%FFM%\include" /I"%VEN%\lua\src"
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
+  echo "%SRC%\GameSource\BrnBaselineLinkStubs.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareInitPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsAudioOutputPC.cpp"
@@ -142,6 +143,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAux.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptDataHandler.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptRenderHooks.cpp"
+  rem ---- Apt render-tree / display-list (Group 3): COMPILE-CLEAN (23/23 via tools\_gate_one.bat)
+  rem but NOT linkable standalone -- it is the top of the Apt stack and needs 4 lower layers first:
+  rem   value-types (AptValue/AptString/AptNativeHash/EAStringC/AptValueWithHash) [Adriwin],
+  rem   VM engine (AptActionInterpreter + gApt_Interpreter) [paused], AptCIH clip-hierarchy,
+  rem   and the Apt pool/startup globals (gpAptPseudoDataPool/gpAptRenderManagerPool/DOGMA_SpinLock).
+  rem Re-add this block (see progress/scratch_dossiers) once those layers are built+wired.
   echo "%SRC%\pc\gcm\renderengine\device.cpp"
   echo "%SRC%\pc\gcm\renderengine\texture.cpp"
   echo "%SRC%\pc\gcm\renderengine\texturestate.cpp"
