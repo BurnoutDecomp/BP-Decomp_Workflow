@@ -25,8 +25,8 @@ Commands:
     work reset-tu <tu>        delete produced files + return TU/functions to todo locally and server-side
     work set <tu> --status S  manual status override
     work sync                 flush queued offline ops to the server (auto-runs first otherwise)
-    work reconcile-from-files [--apply]
-                              re-anchor local ledger/status.json from committed b5-decomp files
+    work reconcile-from-files [--apply] [--allow-demote]
+                              promote from committed b5-decomp files; demote only with opt-in
     work resolve-class-homes [--apply]
                               map class TUs to real home files (progress/class_homes.json)
     work server-sync [--branch BRANCH]
@@ -1570,8 +1570,8 @@ def cmd_server_update(args):
     the server re-warms Git attribution on the next dashboard view.
     """
     if args.reconcile:
-        print("== reconcile-from-files --no-demote ==")
-        cmd_reconcile_from_files(argparse.Namespace(apply=True, no_demote=True))
+        print("== reconcile-from-files ==")
+        cmd_reconcile_from_files(argparse.Namespace(apply=True, allow_demote=False))
     print("\n== resolve-class-homes --apply ==")
     cmd_resolve_class_homes(argparse.Namespace(apply=True))
 
@@ -1720,7 +1720,8 @@ def cmd_reconcile_from_files(args):
     con.row_factory = sqlite3.Row
     try:
         tracked = reconcile_from_files.committed_files()
-        reconcile_from_files.reconcile(con, tracked, args.apply, args.no_demote)
+        allow_demote = getattr(args, "allow_demote", False)
+        reconcile_from_files.reconcile(con, tracked, args.apply, no_demote=not allow_demote)
         if args.apply:
             reconcile_from_files.verify(con, tracked)
     finally:
@@ -1746,8 +1747,8 @@ def cmd_jebobs(args):
     """Private helper for JeBobs' out-of-band progress sync."""
     mode = "apply" if args.apply else "dry run"
     print(f"== JeBobs progress broom ({mode}) ==")
-    print("== reconcile-from-files --no-demote ==")
-    cmd_reconcile_from_files(argparse.Namespace(apply=args.apply, no_demote=True))
+    print("== reconcile-from-files ==")
+    cmd_reconcile_from_files(argparse.Namespace(apply=args.apply, allow_demote=False))
     print("\n== resolve-class-homes ==")
     cmd_resolve_class_homes(argparse.Namespace(apply=args.apply))
     if args.apply:
@@ -2059,8 +2060,9 @@ def main():
         help="re-anchor local ledger/status.json from committed b5-decomp HEAD files",
     )
     rf.add_argument("--apply", action="store_true", help="write ledger.sqlite and status.json; default is dry run")
-    rf.add_argument("--no-demote", action="store_true",
-                    help="only add/promote statuses; preserve existing status.json entries")
+    rf.add_argument("--allow-demote", action="store_true",
+                    help="allow file evidence to demote/remove existing status.json entries")
+    rf.add_argument("--no-demote", dest="allow_demote", action="store_false", help=argparse.SUPPRESS)
     rf.set_defaults(fn=cmd_reconcile_from_files)
     rch = sub.add_parser(
         "resolve-class-homes",

@@ -232,8 +232,8 @@ work server-sync [--branch <branch>]      # tell the server to pull + re-import 
 work server-update [--reconcile] [--no-push]
                                           # one-shot: refresh class homes (+status), push, re-import on the server
 work resolve-class-homes [--apply]        # map class TUs to their real committed home files (progress/class_homes.json)
-work reconcile-from-files [--apply] [--no-demote]
-                                          # re-anchor local ledger/status.json from committed b5-decomp files
+work reconcile-from-files [--apply] [--allow-demote]
+                                          # promote from committed b5-decomp files; --allow-demote permits removals
 work server-reset [--to <ref>]            # local reset + server reseed
 work worker-add "Name" [--admin]
 work worker-list
@@ -319,7 +319,8 @@ These helpers are optional. They do not replace manual reconstruction:
 ```powershell
 work auto --scan              # find fully mechanical TUs
 work auto --run [-n N]        # draft/gate safe forwarder/thunk-only TUs
-work reconcile-from-files [--apply] [--no-demote]
+work reconcile-from-files [--apply] [--allow-demote]
+                            # promote-only by default; --allow-demote permits removals
 python tools/work/find_local_redefs.py [--summary]
 python tools/work/wiki_index.py [--lookup <Type>]
 python tools/work/check_vendor_lib.py <tu>

@@ -36,6 +36,9 @@
   "*>::remove": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::InitDispatchTable": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionAdd": {
    "status": "reviewed"
   },
@@ -43,6 +46,9 @@
    "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionAnd": {
+   "status": "reviewed"
+  },
+  "AptActionInterpreter::_FunctionAptActionBitAnd": {
    "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionBitLShift": {
@@ -153,6 +159,9 @@
   "AptActionInterpreter::_FunctionAptActionPushTrue": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::_FunctionAptActionPushUndefined": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::_FunctionAptActionPushZeroSetVar": {
    "status": "reviewed"
   },
@@ -184,6 +193,9 @@
    "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionSubString": {
+   "status": "reviewed"
+  },
+  "AptActionInterpreter::_FunctionAptActionSubtract": {
    "status": "reviewed"
   },
   "AptActionInterpreter::_FunctionAptActionThrow": {
@@ -219,6 +231,9 @@
   "AptActionInterpreter::stackPop": {
    "status": "reviewed"
   },
+  "AptActionInterpreter::stackPop(int)": {
+   "status": "reviewed"
+  },
   "AptActionInterpreter::stackPopAndPush": {
    "status": "reviewed"
   },
@@ -229,6 +244,9 @@
    "status": "reviewed"
   },
   "AptActionInterpreter::stackPushNoInc": {
+   "status": "reviewed"
+  },
+  "AptActionInterpreter::stackSafePop": {
    "status": "reviewed"
   },
   "AptActionQueueC::AddActionBack": {
@@ -1377,6 +1395,9 @@
   "AptValue::Get_ToString": {
    "status": "reviewed"
   },
+  "AptValue::c_string": {
+   "status": "reviewed"
+  },
   "AptValue::findChild": {
    "status": "reviewed"
   },
@@ -1435,6 +1456,9 @@
    "status": "reviewed"
   },
   "AptValueWithHash::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptValue_toInteger": {
    "status": "reviewed"
   },
   "AptXml::`vector deleting destructor'": {
@@ -40374,8 +40398,97 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "SDKs/EATech/include/Apt/AptActionDispatch.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreter.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterArith.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterBitwise.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterBranch.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterCompare.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterContext.cpp": {
+   "notes": "Gate PASS. Parity YELLOW explained: loop_count 2 vs 4 = the EAStringC leaf-name assignment replaces the console's two raw char-copy do-loops; return_count = early-returns vs goto-single-return (within tol). 'Absent callees' are present/false-positives: findChild IS called (method syntax), InitFromBuffer IS used (via the EAStringC(const char*) ctor), DecreaseInternalRefCount is the temp EAStringC dtor (RAII). The path-parser logic (/ absolute, . descend, .. parent, : context:leaf, plain leaf; target consumed per segment) matches X360 0x82B01830. findChild is the declared follow-on TU; AptApt_GetRootContext encapsulates the root global. b5-decomp 44b060b6.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterControlOps.cpp": {
+   "notes": "Faithful decompile of Trace(0x26)/Throw(0x2A)/ToString(0x4B); compile gate PASS, wired into sGlobalTable. Parity YELLOW within/at tol: call_count +3 (named accessors getVtblIndex/getIsDefined/GetBuffer vs inlined bitfield ops), return_count 3->1 (void-handler-vs-int ABI artifact). Absent callees = false-positives: Append_ToString (method-call p->Append_ToString in ToString, declared on AptValue, body deferred=toString sibling renderer), AptValue_::Pop (=stackPop), EAStringC::DecreaseInternalRefCount (Trace scratch RAII dtor). FLAG: AptHook_Trace (host debug sink dword_8324E82C), Append_ToString renderer. Rode an x64-required refinement: abort slot int mnAbortValue -> AptValue* mpAbortValue (+0x60 holds the thrown AptValue*); runStream 2 checks regression-gated. Opcodes table-verified; SWF Trace 0x26/Throw 0x2A match.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterDefineLocal.cpp": {
+   "notes": "Faithful DefineLocal(0x3C)/DefineLocal2(0x41); gate PASS, wired. First consumers of the AptScriptFunctionBase keystone: mpCurrentFunction->SetInLocalScope/ExistsInLocalScope (public; the console's  IS SetInLocalScope) + setVariable/getVariable fallback at top level. Added interp mpCurrentFunction@+0x3C (a1[15]). Name key via Get_ToString (console direct type-1/33 string extraction). Parity deltas = void-return + method-call (SetInLocalScope/setVariable/AptValue_::Pop) + RAII false-positives. Opcodes SWF-verified.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterDelete.cpp": {
+   "notes": "Faithful decompile of Delete2 (0x3B @0x82B03DF0); gate PASS, wired sGlobalTable[0x3B]. No FLAGs -- Get_ToString + setVariable(null=clear) + push AptInteger(1). Parity YELLOW = void-handler-vs-int return + method-call-syntax false-positives (getVariable/setVariable, AptValue_::Pop=stackPop, DecreaseInternalRefCount=EAStringC dtor).",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterEcmaOps.cpp": {
+   "notes": "Faithful StringEquals(0x13)/Add2(0x47); gate PASS, wired. StringEquals=AptBoolean(string-eq) + v7 undefined rule; Add2=concat-or-numeric ECMA add + v7 guard. Reuse Get_ToString/toFloat/toInteger/AptBoolean/Float/Integer::Create + EAStringC::==. FLAG: Append_ToString renderer, gpUndefinedValue/AptGetSwfVersion (established in arith/compare TUs). Parity deltas = void-return + method-call/RAII false-positives + the IDA &&-decomposition vs compound bools.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterLogic.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterMemberOps.cpp": {
+   "notes": "Faithful decompile of GetMember(0x82B04200)/SetMember(0x82B043C8); compile gate PASS, wired live into sGlobalTable[0x4E/0x4F]. Parity RED is REPRESENTATIONAL, not a fidelity gap -- verified ALL paths present: GetMember {array-numeric get, extern, generic getVariable, undefined-push}; SetMember {array-numeric set, object setVariable + __proto__/SetHasClass, extern, pop3+drain}. call_count +19 = I use the codebase's named AptValue accessors (getVtblIndex/getIsDefined/ContainsNativeHashVirtual/SetHasClass/toInteger/Get_ToString) where the X360 pseudo inlines raw bitfield ops ((x<<25)>>25 / (x>>27)&1) as ZERO calls; branch_count -20 = IDA decomposes each &&/|| into vN=1;if()vN=0 (31 branches) vs my compound boolean expressions (11). Absent callees are method-call-vs-Class::method (getVariable/setVariable/AptArray::set/toInteger/toString=Get_ToString/AptValue_::PopAndPush=stackPopAndPush), EAStringC RAII dtor (DecreaseInternalRefCount), or documented FLAG (AptValueVector::ReleaseValues=AptApt_FlushDeferredReleases). FLAG'd: type-11 Extern host hooks (dword_8324E858/E854) since AptExtern is not reconstructed. vtbl[3]=ContainsNativeHashVirtual/vtbl[5]=SetHasClass per AptValue decl order; __proto__ key=StringPool::saConstant.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterProtoOps.cpp": {
+   "notes": "Faithful Extends(0x69)/ImplementsOp(0x2C); gate PASS, wired. Prototype-chain setup using landed AptNativeHash Get/SetPrototype/Set__Proto__ + AptPrototype + SetSuperConstructor + AptArray (all public). Only FLAG: AptObject_SetImplementedObjects (console AptObject::SetImplementedObjects, not yet on reconstructed AptObject -- free-helper encapsulation). Parity deltas = void-return + method-call/IDA-&&-decomposition false-positives.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterSetVariable.cpp": {
+   "notes": "Gate PASS. Parity RED explained: branch_count 27->9 = the deep frame-stack scope-chain set (AptFrameStack::SetWhereExistsInScopeChain), frame-context fallback, type-12/37 CIH paths + the _global __proto__ reset are deferred to FLAG'd helpers (AptInterp_SetInScopeChain/SetVariableFallback) -- they need Adriwin's in-progress class:AptFrameStack + the interpreter frame-context (deliberate division of labor). return_count = early-returns vs goto-single-return. AptNativeHash::Set/Lookup ARE called (method syntax). The CORE write paths (getContext resolve -> objectMemberSet [vtbl 7] -> context native-hash Set + UpdateObjectMethods, clear-on-absent retarget) are faithful to X360 0x82B03048. b5-decomp 6c631722.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterSpecialOps.cpp": {
+   "notes": "Faithful decompile of 7 small opcodes (PushThis 0x56/PushGlobal 0x58/PushThisVariable 0x70/PushGlobalVariable 0x71/GetTimer 0x34/StoreRegister 0x87/Return 0x3E); compile gate PASS, all wired into sGlobalTable. Parity: call_count PERFECT 19/19, branch 0/0. RED is ONLY return_count 7->0 = the void-handler-vs-int-typed-pseudo ABI artifact (handlers are void per the dispatch table sig; IDA typed them int) -- affects every handler TU. Absent callees are false-positives: getVariable (method-call p->getVariable in PushThisVariable), EAStringC::operator= (IDA operator_, used in PushThis/PushGlobal). Opcodes reverse-mapped from sGlobalTable@0x82F73068; standard SWF verified (GetTime 0x34/Return 0x3E/StoreRegister 0x87). Return target = ctx->mbStop (r4+0x14, asm-verified). Rode a latent-bug fix: StringPool namespace->class in AptNativeHash.h (AptString.h friends it); MemberOps + AptNativeHash regression-gated clean.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterStackOps.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterStringOps2.cpp": {
+   "notes": "Faithful SubString(0x15)/ToNumber(0x4A); gate PASS, wired. SubString uses EAStringC::UTF8_Mid (the console sub_82AE8ED8 = UTF8_Mid(start,len)); ToNumber parses via Get_ToString + UTF8_Find('.'). Only FLAG: isNaN (value NaN test). UTF8_Mid/UTF8_Find are the committed declared text suite. gpUndefinedValue/AptGetSwfVersion established in arith/compare TUs. SWF SubString 0x15/ToNumber 0x4A match. Parity deltas = void-return + method-call/RAII false-positives.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterUnary.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterValueOps.cpp": {
+   "notes": "Faithful decompile of 5 self-contained opcodes (PushZeroSetVar 0x72/StringLength 0x14/StringAdd 0x21/Random 0x30/InitArray 0x42); gate PASS, all wired. Reuse done deps (Get_ToString/setVariable/stack prims/AptInteger/AptString/AptArray). FLAG: AptRand (host RNG), Append_ToString (declared renderer). Random: PC-guards modulus<=0 (console traps). Parity deltas = void-handler return + method-call/RAII false-positives. SWF opcodes verified.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterVarOps.cpp": {
+   "notes": "Faithful decompile of GetVariable(0x82B038A0)/SetVariable(0x82B03970)/Get_ToString(0x82AD8558); compile gate PASS, wired live into sGlobalTable[0x1C/0x1D]. Parity YELLOW = false-positives only: getVariable/setVariable/toString/AptValue_::Pop appear as method calls (p->getVariable) not Class::method; EAStringC::DecreaseInternalRefCount is the EAStringC scratch RAII dtor; AptValueVector::ReleaseValues is the documented FLAG'd AptGC encapsulation (AptApt_FlushDeferredReleases). return/branch deltas = early-return structuring, within tol. LocalContextT offsets +4/+8 verified vs X360 runStream @0x82ADD440.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionInterpreterVariable.cpp": {
+   "notes": "Gate PASS. Parity RED is explained, not a fidelity gap: (1) return_count 6 vs 1 = early-returns vs the console's goto-single-return -- equivalent; the local EAStringC's RAII dtor does the v29 DecreaseInternalRefCount cleanup on every path. (2) call_count +4 = named accessors (getIsDefined/GetBuffer/GetInternalString/IsEmpty) vs inlined field reads. (3) 'absent callees' are false-positives or intentional: findChild IS called (method syntax), operator= IS used (*GetInternalString()=*pName), DecreaseInternalRefCount is the EAStringC dtor (RAII); AptFrameStack::GetInScopeChain + AptNativeHash::Lookup are encapsulated in the FLAG'd AptInterp_LookupScopeChain/LookupGlobalFallback helpers (deep frame-stack/global leaves deferred). Orchestration matches X360 0x82B03430. Follow-on TUs: getContext, AptValue::findChild, the scope-chain/global helpers.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptActionRun.cpp": {
+   "status": "done"
+  },
   "SDKs/EATech/include/Apt/AptValue/AptValue.h": {
    "notes": "AptValue.h inline accessors; gate pass.",
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptValue/AptValueConvert.cpp": {
+   "status": "done"
+  },
+  "SDKs/EATech/include/Apt/AptValue/AptValueFindChild.cpp": {
+   "notes": "Gate PASS. Parity RED explained: the GENERIC path (native hash via GetNativeHashVirtual -> __proto__ chain -> global-extension/global objects) is faithful; the 358-line body's 11 inline special-name cases (this/_root/_parent/_level<N>/_global/Math/Mouse/Stage/Key/String/extern/super) are collapsed into ONE delegated call to AptApt_ResolveSpecialName (FLAG'd follow-on -- they navigate the interpreter target-state + global-object singletons, not reconstructed). call_count/return_count deltas = that delegation + named accessors + early-return vs goto-single-return. AptNativeHash::Lookup IS called (method syntax + the LookupInObject helper). KEY: the jump table (word_821453C0) + ObjectIndex name->id wordlist (off_82F79C20) were XEX-extracted (documented in-file; unblocks filling ObjectIndex's data tables). findChild's dispatch + generic resolution match X360 0x82B01298; the special-name navigation is the documented follow-on. b5-decomp 5ec789c2.",
    "status": "done"
   },
   "SDKs/EATech/include/cmn/rw/core/resource/resource.h": {
