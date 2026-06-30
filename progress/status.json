@@ -2508,7 +2508,19 @@
   "BrnDirector::ArbStateCrashMode::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::ArbStateCrashNav::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ArbStateCrashNav::GetName": {
+   "status": "reviewed"
+  },
   "BrnDirector::ArbStateCrashNav::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ArbStateCrashNav::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ArbStateCrashNav::Update": {
    "status": "reviewed"
   },
   "BrnDirector::ArbStateCrashing::ApplySlomoAndShake": {
@@ -36992,6 +37004,10 @@
   "GameSource/Director/Arbitrator/States/BrnArbStateCrashMode.cpp": {
    "status": "done"
   },
+  "GameSource/Director/Arbitrator/States/BrnArbStateCrashNav.cpp": {
+   "notes": "Wave 45: 4/4 faithful vs asm, GetTransform().wAxis eye-pos fix, gate clean, pushed 02cc5d6",
+   "status": "done"
+  },
   "GameSource/Director/Arbitrator/States/BrnArbStateDriveThru.cpp": {
    "notes": "BrnDirector::ArbStateDriveThru (an arbitrator state). Deeply entangled with UNCOMMITTED subsystems (grep: zero hits for ArbState base / BehaviourManager / ArbUtils::ChangeToState): Construct->Camera::Camera::Construct; Prepare->Camera::BehaviourManager::NewBehaviour + Attrib::Gen::shotgroup::Num_ShotList + sub_821F0E50(unknown); Release->BehaviourManager::UnSetBehaviourUsedByHandle + CheckNoBehavioursAreAllocatedByState; Update->ArbUtils::ChangeToState<ArbStateDriveThru::EState> + Camera::EnsureEffectIsPlaying + sub_821FCE10/sub_821FCDA8(unknown). The Director Camera/BehaviourManager + ArbUtils state-machine + the ArbState polymorphic base must be reconstructed first. BLOCK until those Director subsystems land.",
    "status": "blocked"
@@ -37012,6 +37028,10 @@
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateRoaming.cpp": {
    "status": "done"
+  },
+  "GameSource/Director/Arbitrator/States/BrnArbStateTakedown.cpp": {
+   "notes": "Wave45: 18/18+5/5 but B3ClassicTakedownPlayer::Update FINISHED-state used an INVENTED proxy condition (should read the interpolate behaviour's internal finished flag) + a raw-offset write into the embedded MomentSelector aggregate (+1520/+1524); discarded. Redo with the interpolate-finished accessor + MomentSelector layout",
+   "status": "blocked"
   },
   "GameSource/Director/BrnCrashAnalyser.cpp": {
    "notes": "CrashAnalyser::Update @0x82209290 non-leaf VMX keystone: ~196 VMX128 instrs reading un-homed GameState(+30944)/VehicleInfo[stride1264]/PlayerCrashInfo/DirectorIO::InputBuffer/CrashAnalysis triple-buffer + StrStream assert. Needs those layouts homed first.",
@@ -45623,6 +45643,10 @@
   "class:rw::collision::VolumeLineQuery": {
    "notes": "focused reviewer pass after adding offset-256 reset and typed ref-array layout",
    "status": "done"
+  },
+  "class:rw::collision::VolumeVolumeQuery": {
+   "notes": "Wave45: 3/5 foundation committed (02cc5d6); GetPrimitiveBBoxOverlaps@0x82BB3AB0 + GetPrimitiveIntersections@0x82BB3FF0 are multi-stage hand-VMX (slab-fatten + vcmpgtfp/vor/vsldoi CR-bit overlap) + un-homed rw::collision::PrimitiveBatchIterator",
+   "status": "blocked"
   },
   "class:rw::core::GeneralResourceAllocator": {
    "notes": "Wave30: DoAllocate deferred (PC-leaf abstraction); faithful 7-arg Resource-builder + X360-unrepresentable layout pending step-5 CreateAllocators",
