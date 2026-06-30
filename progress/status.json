@@ -37482,7 +37482,7 @@
    "status": "blocked"
   },
   "GameSource/Director/Camera/BrnBehaviourManager.cpp": {
-   "notes": "Decl-only anchor only (0/10 bodied) -- discarded, not committed. The full BrnDirector::Camera::BehaviourManager 28-slot aggregate (mLargeBehaviourPool/mBehaviourHelperPool ObjectPool<BehaviourHelper,28>/four BitArray<28>/rotation controllers/TweakerHelper) is DWARF-only, homed nowhere; committed BrnBehaviourManager.h is forward-decl-only (defining full class forks BrnICEMoviePlayer.h slice => ODR). Bodies need raw-offset pokes into that un-homed aggregate; 2/10 (PostCollisionUpdateAllBehaviours/UpdateAllBehaviours) are VMX-pipeline-dominated. Needs full BehaviourManager.h LAYOUT homed first.",
+   "notes": "FOUNDATION committed (4374580): 1/10 bodied (CheckNoBehavioursAreAllocatedByState faithful vs homed members). 9/10 decl-only: 7 reach the un-homed INDIVIDUAL-Behaviour interior / AllocateBehaviour<> template family (next blocker = home the Behaviours/* class family); PostCollisionUpdateAllBehaviours@0x8221F870 + UpdateAllBehaviours@0x82251960 are VMX-pipeline-dominated. The BehaviourManager LAYOUT itself is now homed (e1028d1).",
    "status": "blocked"
   },
   "GameSource/Director/Camera/BrnBehaviourManager.h": {
