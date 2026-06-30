@@ -2955,7 +2955,16 @@
   "BrnDirector::Camera::BehaviourSpirallingDeathcam::Start": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Camera::Camera": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::Camera::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Camera::GetNearClipDistance": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Camera::SetFOV": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::Camera::ValidateTransformWithDebugInfo": {
@@ -34974,7 +34983,16 @@
   "sLionMemberToken::EndianTwiddle": {
    "status": "reviewed"
   },
+  "shadow::Device::BeginForceStencilWrite": {
+   "status": "reviewed"
+  },
   "shadow::Device::DrawIndexedMultipleStreams_Custom": {
+   "status": "reviewed"
+  },
+  "shadow::Device::EndForceStencilWrite": {
+   "status": "reviewed"
+  },
+  "shadow::Device::FlushVertexProgramState": {
    "status": "reviewed"
   },
   "shadow::Device::GetVertexProgramState": {
@@ -34983,7 +35001,31 @@
   "shadow::Device::Initialize": {
    "status": "reviewed"
   },
+  "shadow::Device::LockRasteriserState": {
+   "status": "reviewed"
+  },
+  "shadow::Device::ResetShadowing": {
+   "status": "reviewed"
+  },
+  "shadow::Device::SetPixelProgram": {
+   "status": "reviewed"
+  },
+  "shadow::Device::SetResource": {
+   "status": "reviewed"
+  },
+  "shadow::Device::SetState": {
+   "status": "reviewed"
+  },
+  "shadow::Device::SetVertexProgram": {
+   "status": "reviewed"
+  },
   "shadow::Device::SetVertexProgramInternal": {
+   "status": "reviewed"
+  },
+  "shadow::Device::UnlockRasteriserState": {
+   "status": "reviewed"
+  },
+  "shadow::Device::Xbox2SetStateLowLevelShadowed": {
    "status": "reviewed"
   },
   "short,1>::Contains": {
@@ -38366,6 +38408,10 @@
    "notes": "Construct (member-store map +0x34..+0x51, vertex/microcode descriptors) + Destruct (release mVertexDescriptor + allocator vtable) verified.",
    "status": "done"
   },
+  "GameSource/Unity/../Graphics/PostFx/BrnPostFx.cpp": {
+   "notes": "Wave35: 1/6 (ctor foundation committed 72c8970); 5 fns (Construct/Destruct/Render/PrepareDownSampleBuffers/Begin+EndTintBlend) have real X360 asm + are recoverable, left decl-only this pass; mMotionBlurState typed-member layout pending. Future focused pass",
+   "status": "blocked"
+  },
   "GameSource/Unity/../Graphics/PostFx/BrnPostFxBloom.cpp": {
    "notes": "Fresh-eyes batch review: unrolled descriptor copy de-optimized; real shader data; CreateProgram helper matches idiom.",
    "status": "done"
@@ -39777,6 +39823,10 @@
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::BehaviourManager": {
+   "notes": "Wave36: 0/15; bodies index an ~88KB layout by raw member offsets (mBehaviourHelperPool@+64176, mTweakerHelper@+88296) + call un-homed Utils::Tweaker types. Camera base now done (864f73a); needs Tweaker + the behaviour-pool sub-aggregates homed first",
+   "status": "blocked"
+  },
   "class:BrnDirector::Camera::BehaviourPassengerCam": {
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -39791,6 +39841,10 @@
   },
   "class:BrnDirector::Camera::BehaviourSpirallingDeathcam": {
    "notes": "Wave 44: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::Camera": {
+   "notes": "Wave 36: faithful vs asm, gate clean, pushed 864f73a",
    "status": "done"
   },
   "class:BrnDirector::Camera::CameraState": {
@@ -45248,6 +45302,10 @@
   },
   "class:rw::shared_globals::internal::`anonymous namespace'::OSGlobalManager": {
    "notes": "Wave 47: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:shadow::Device": {
+   "notes": "Wave 36: faithful vs asm, gate clean, pushed 864f73a",
    "status": "done"
   },
   "class:short,1>": {
