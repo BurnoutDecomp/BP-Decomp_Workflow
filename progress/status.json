@@ -312,6 +312,75 @@
   "AptAction_TryCatchFinallyBlock::putCaughtObjectInRegister": {
    "status": "reviewed"
   },
+  "AptCIHNativeFunctionHelper::sMethod_attachMovie": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_createEmptyMovieClip": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_createTextField": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_duplicateMovieClip": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_getBounds": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_getBytesTotal": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_getDepth": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_getNewTextFormat": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_getTextFormat": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_gotoAndPlay": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_gotoAndStop": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_hitTest": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_loadMovie": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_loadVariables": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_localToGlobal": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_nextFrame": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_play": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_removeMovieClip": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_removeTextField": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_setMask": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_setTextFormat": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_startDrag": {
+   "status": "reviewed"
+  },
+  "AptCIHNativeFunctionHelper::sMethod_swapDepths": {
+   "status": "reviewed"
+  },
   "AptCIHNone::AptCIHNone": {
    "status": "reviewed"
   },
@@ -17908,6 +17977,9 @@
    "status": "reviewed"
   },
   "BrnRendererMemory::CreateWorkBuffer": {
+   "status": "reviewed"
+  },
+  "BrnRendererMemory::GetShadowMapBuffer": {
    "status": "reviewed"
   },
   "BrnRendererModule::BeginQuarterResBuffer": {
@@ -37390,6 +37462,10 @@
    "notes": "Wave42: 3/5; Construct@0x8222C088 + Update@0x8224A528 are multi-stage hand-VMX + un-homed CollisionPolicy + unk_82000BD0 rodata; Parameters::Construct had a default-value slot-shift; discarded. Needs CollisionPolicy + the VMX spiral math",
    "status": "blocked"
   },
+  "GameSource/Director/Camera/BrnBehaviourManager.cpp": {
+   "notes": "Decl-only anchor only (0/10 bodied) -- discarded, not committed. The full BrnDirector::Camera::BehaviourManager 28-slot aggregate (mLargeBehaviourPool/mBehaviourHelperPool ObjectPool<BehaviourHelper,28>/four BitArray<28>/rotation controllers/TweakerHelper) is DWARF-only, homed nowhere; committed BrnBehaviourManager.h is forward-decl-only (defining full class forks BrnICEMoviePlayer.h slice => ODR). Bodies need raw-offset pokes into that un-homed aggregate; 2/10 (PostCollisionUpdateAllBehaviours/UpdateAllBehaviours) are VMX-pipeline-dominated. Needs full BehaviourManager.h LAYOUT homed first.",
+   "status": "blocked"
+  },
   "GameSource/Director/Camera/BrnBehaviourManager.h": {
    "status": "done"
   },
@@ -39562,6 +39638,10 @@
    "notes": "complex debug TU; compile gate PASS + own postmortem vs ARTIST asm (signatures from prologues, member offsets 0x34-0x50, RenderWorld/RenderHUD flag-branch order, Draw switch case->VOLUMETYPE+colours, 30^2/20^2 dist culls, state>=E_SMASHED part branch all verified) + DWARF shape. RED parity is expected de-inlining (389 inlined asserts/StrStream/crit-sec calls -> clean CGS_ASSERT/StrStream). Subagent reviewer blocked by sandbox (nested --dangerously-skip-permissions). Documented scope: RenderCellGrid per-cell polygon walk summarised; RenderProps intact-path Mass/Lean text stat omitted (PropTypeData lean fields unrecovered); PropEntityModule + rwcollision Volume offsets inferred.",
    "status": "done"
   },
+  "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp": {
+   "notes": "FABRICATED reconstruction DISCARDED (verify caught it): agent invented 9 nonexistent 'replay state machine' methods (PrepareForReplay/RestoreFromReplay/LeaveReplay/etc, all 9 addrs = 0 hits in dossier). Real 22-func dossier (Construct@0x822FA068/PreSceneUpdate/PostSceneUpdate/GenerateDispatchLists/ProcessContacts/UpdateProps/LoadZone/...) UNTOUCHED. Header EReplayMode enum + members contradict authoritative DWARF. Re-home from real dossier.",
+   "status": "blocked"
+  },
   "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityModuleIO.cpp": {
    "notes": "decomp-wave: InputBuffer_PostPhysics::Construct, fresh-eyes verify PASS (high conf); re-gated PASS.",
    "status": "done"
@@ -40125,8 +40205,8 @@
    "status": "done"
   },
   "class:AptCIHNativeFunctionHelper": {
-   "notes": "23 AS MovieClip native-method handlers blocked: needs un-homed AptTextFormat/TextFormat types (no header/DWARF/Feb-2007) + the unbuilt AptCIH behavioural family (InsertChild/_gotoAndX/jumpToFrame/SetMask/getName) + AptActionInterpreter (_doCloneSprite/valueToObject/loadVariables) + AptDisplayListState find/depth ops. Re-claim after those land. No files (avoids fork/poke). [adri1 apt-100 waveE]",
-   "status": "blocked"
+   "notes": "Fresh-eyes review (sonnet) vs X360 asm: all 23 handlers faithful. The 7 newly-added (getBytesTotal/createEmptyMovieClip/attachMovie/createTextField/loadMovie/getNewTextFormat/getTextFormat) verified store-for-store: native-arg fetch order, arg-count gates, type-tag/IsClipHandleOrCIHNone gates, InsertChild depth+0x4000, createTextField homed render-item writes (mFlags bit27/mStateFlags|=6/mBounds/SetProceduralProperty), loadMovie .swf strip + Load(strippedName,targetPath), TextFormat getters (homed TextFormat record writes, mnAlign (mFlagsAndBackColor<<25)>>28, getTextFormat masks color &0xFFFFFF + sets 3 KU_*_DEFINED bits, mpTextFormat is a bare TextFormat record). Un-homed callees (InsertChild/sub_82AFAEB8/sub_82AFB2A8/font-walk/etc) are leaf-first externs. AptLinker::Load int->EAStringC* retype confirmed correct. Compile gate PASS.",
+   "status": "done"
   },
   "class:AptCIHNone": {
    "notes": "apt-100 wave C: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev ed85819.",
@@ -42328,6 +42408,9 @@
    "notes": "GetCheckpointData/GetRankScore/GetRankTime match asm store-for-store (checkpoint stride 40 @+0x18, count @+0x1C; rank scores s32[6] @+0x28; rank times f32[6] @+0x40 via lfsx). Hex-Rays mis-rendered GetRankTime's float return as _DWORD* through the assert path; asm lfsx f1 is authoritative. Parity RED benign: assert-machinery inlined under CGS_ASSERT. Grew BrnRaceEventData.h additively with the complete RaceEventData (was fwd-decl only) + retired the competing 2-method stub in BrnGameModeParams.h (single owner, ODR).",
    "status": "done"
   },
+  "class:BrnRendererMemory": {
+   "status": "done"
+  },
   "class:BrnReplays::BaseSerialiser": {
    "notes": "7 funcs bodied store-for-store; verifier-flagged meId@+0x20 FIXED to X360 +0x28 (8-byte flagged extension placeholder; bodies touch only +0x00..+0x14; host pointer-width precludes a byte static_assert). Gate pass.",
    "status": "done"
@@ -43147,6 +43230,10 @@
   "class:BrnWorld::PropEntityIO::TrafficLightRestoreEvent>": {
    "notes": "Wave 46: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
+  },
+  "class:BrnWorld::PropEntityModule": {
+   "notes": "Paired with BrnPropEntityModule.cpp -- fabricated reconstruction discarded; committed BrnPropEntityModule.h restored (agent had corrupted it with invented EReplayMode members). Re-home layout verbatim from DWARF struct (meStreamingMode/muMaxLoadedZones/muZonesLoaded/mbInReplay/...).",
+   "status": "blocked"
   },
   "class:BrnWorld::PropVolumeID": {
    "notes": "PropVolumeID::Set entity-id bit-pack; parity/none; wave8; verifier parity; gate pass.",
@@ -44911,6 +44998,10 @@
   "class:Csis::System": {
    "notes": "6 funcs verified vs asm; parity.",
    "status": "done"
+  },
+  "class:D3D::CDevice": {
+   "notes": "FOUNDATION committed (0f15ab1): D3D::CDevice TYPE homed + 5/18 software funcs bodied faithfully (IsPastStopPoint/IsPrimaryMemoryBusy/IsSecondaryMemoryBusy/MarkAsOutOfMemory/SaveRingBufferState). 13/18 decl-only: need un-homed sibling layouts (class:D3D::CBlocker/CCommandBuffer/CRingAllocList) and/or build raw PM4 packet streams / poke GPU regs. Unblocks once siblings homed.",
+   "status": "blocked"
   },
   "class:D3D::CVertexShader": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
