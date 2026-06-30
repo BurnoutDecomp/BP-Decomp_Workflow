@@ -36976,6 +36976,10 @@
   "GameSource/Director/Camera/Behaviours/BrnBehaviourRotateAboutVehicle.cpp": {
    "status": "done"
   },
+  "GameSource/Director/Camera/Behaviours/BrnBehaviourSpirallingDeathCam.cpp": {
+   "notes": "Wave42: 3/5; Construct@0x8222C088 + Update@0x8224A528 are multi-stage hand-VMX + un-homed CollisionPolicy + unk_82000BD0 rodata; Parameters::Construct had a default-value slot-shift; discarded. Needs CollisionPolicy + the VMX spiral math",
+   "status": "blocked"
+  },
   "GameSource/Director/Camera/BrnBehaviourManager.h": {
    "status": "done"
   },
@@ -45417,6 +45421,10 @@
   },
   "class:rw::audio::core::XasEnc": {
    "notes": "Encode @0x82BA71F0 is the XAS ADPCM audio block encoder (32-sample-block DSP quantisation). Compression/DSP audio-encoder per the hard-rule block list. Deferred.",
+   "status": "blocked"
+  },
+  "class:rw::collision": {
+   "notes": "Wave42: 1/35; collision primitive tests are multi-stage hand-VMX (vmsum3fp/vrsqrtefp-Newton/vsel/permute slab-clips) + external helpers sub_82BB64C0/75B0; only FindBestSepDirCylVol tail-thunk recoverable; discarded. Needs a dedicated collision-VMX campaign",
    "status": "blocked"
   },
   "class:rw::collision::AALineClipper": {
