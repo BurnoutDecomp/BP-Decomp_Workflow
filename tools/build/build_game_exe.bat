@@ -321,6 +321,8 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\BrnGuiModule.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootVideos.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLoading.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegal.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegalBoundary.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiState.cpp"
   echo "%SRC%\GameShared\GameClasses\Fsm\CgsState.cpp"
