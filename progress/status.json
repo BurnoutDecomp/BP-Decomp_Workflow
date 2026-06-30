@@ -23988,6 +23988,30 @@
   "CgsFileSystem::PatchManager::SearchFolder": {
    "status": "reviewed"
   },
+  "CgsFileSystem::PhysicalX360Device::Close": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PhysicalX360Device::CloseDirectory": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PhysicalX360Device::Init": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PhysicalX360Device::Open": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PhysicalX360Device::OpenDirectory": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PhysicalX360Device::Read": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PhysicalX360Device::ReadDirectory": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::PhysicalX360Device::Seek": {
+   "status": "reviewed"
+  },
   "CgsFileSystem::RemapDevice::Close": {
    "status": "reviewed"
   },
@@ -28746,6 +28770,9 @@
   "CgsRenderTarget::Begin": {
    "status": "reviewed"
   },
+  "CgsRenderTarget::CgsRenderTarget": {
+   "status": "reviewed"
+  },
   "CgsRenderTarget::End": {
    "status": "reviewed"
   },
@@ -28756,6 +28783,9 @@
    "status": "reviewed"
   },
   "CgsRenderTarget::SetRenderTargetState": {
+   "status": "reviewed"
+  },
+  "CgsRenderTarget::SetRenderTargetStateInvertDepth": {
    "status": "reviewed"
   },
   "CgsResource::AemsBankResourceType::GetTypeID": {
@@ -33744,6 +33774,18 @@
   "renderengine::MeshHelper::Initialize": {
    "status": "reviewed"
   },
+  "renderengine::PixelBuffer::Initialize": {
+   "status": "reviewed"
+  },
+  "renderengine::PixelBuffer::Xbox2ResolveTo": {
+   "status": "reviewed"
+  },
+  "renderengine::PixelBuffer::Xbox2SetBaseEDRAM": {
+   "status": "reviewed"
+  },
+  "renderengine::PixelBuffer::Xbox2SetBaseHierarchicalZ": {
+   "status": "reviewed"
+  },
   "renderengine::ProgramBuffer::GetResourceDescriptor": {
    "status": "reviewed"
   },
@@ -33779,6 +33821,54 @@
   },
   "renderengine::StateHelper::ResizeDefaultScissorRectAndViewportParameters": {
    "status": "reviewed"
+  },
+  "renderengine::Texture2D::GetResourceDescriptor": {
+   "status": "reviewed"
+  },
+  "renderengine::Texture2D::Initialize": {
+   "status": "reviewed"
+  },
+  "renderengine::Texture2D::Xbox2GetPhysicalMemorySize": {
+   "status": "reviewed"
+  },
+  "renderengine::Texture::Destruct": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::GetDepth": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::GetFormat": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::GetHeight": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::GetParameters": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::GetPixelDataSize": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::GetResourceDescriptor": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::GetType": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::Initialize": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::Lock": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::Release": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::Unlock": {
+   "status": "compiles"
+  },
+  "renderengine::Texture::Xbox2CheckPhysicalMemoryFlags": {
+   "status": "compiles"
   },
   "renderengine::Texture>::operator class renderengine::Texture *": {
    "status": "reviewed"
@@ -39961,6 +40051,10 @@
   "class:BrnGameState::PaybackDebugComponent": {
    "status": "done"
   },
+  "class:BrnGameState::RichPresenceManagerX360": {
+   "notes": "Wave31 partial 7/11: 4 Set* need un-recovered .rodata presence tables (dword_8202AF80/B000/B020/AFC0); must inherit committed RichPresenceManagerBase + reuse committed CgsLocklessQueue (not bespoke); discarded, redo on correct base",
+   "status": "blocked"
+  },
   "class:BrnGameState::RoadRulesManager": {
    "status": "done"
   },
@@ -41244,6 +41338,10 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnResource::LinearResourceAllocator": {
+   "notes": "Wave31: 3 getters faithful but forked home + wrong inheritance; re-home into committed BrnResourceAllocator.h as LinearResourceAllocator:rw::IResourceAllocator {rw::LinearResourceAllocator* @+4} per header GROW directive; forked files reverted",
+   "status": "blocked"
+  },
   "class:BrnResource::StreamedDeformationSpecResourceType": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -42236,6 +42334,10 @@
    "notes": "Verify caught 4 divergences: flipped clash compare (higher miValue wins, asm bge), strip leading sep in AddFile (lacChild+1), GetPhysicalPath copies from lpcLogical+7, DirSearch scratch alloc/free+miSearchHandleCount flagged (allocator iface not modelled; overlay logic unaffected).",
    "status": "done"
   },
+  "class:CgsFileSystem::PhysicalX360Device": {
+   "notes": "Wave 31: faithful vs asm, gate clean, pushed f6d3487",
+   "status": "done"
+  },
   "class:CgsFileSystem::RemapDevice": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -42983,6 +43085,10 @@
   "class:CgsPhysics::PhysicsSimulationModule": {
    "notes": "Ctor @0x827DF1E0 builds a ~18KB aggregate with NO DWARF layout: two un-homed EA::Thread::RWMutex subobject ctors (X360 264B stride) @+0x10/+0x118 + an un-homed ~12000B CgsPhysics::RigidBodyData ctor @+0x230. Bodying needs fabricating layouts. Deferred.",
    "status": "blocked"
+  },
+  "class:CgsRenderTarget": {
+   "notes": "Wave 31: faithful vs asm, gate clean, pushed f6d3487",
+   "status": "done"
   },
   "class:CgsResource::AttribSysVaultResourceType": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); reference .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
@@ -44357,6 +44463,10 @@
    "notes": "batch reviewed via Claude CLI; pass",
    "status": "done"
   },
+  "class:renderengine::PixelBuffer": {
+   "notes": "Wave 31: faithful vs asm, gate clean, pushed f6d3487",
+   "status": "done"
+  },
   "class:renderengine::ProgramBuffer": {
    "notes": "5 funcs; verifier WRONG -> FIXED 5 attested store bugs (Initialize memcpy Dst=physical/Src=muPart2/Size=muPart3, XMemCpy Src=muPart0, Xbox2 muNameOffset=absolute ptr + transposed metadata bytes +4=rec[-1]/+5=rec[-2]/+6=rec[0] + u32 name read); re-gate pass.",
    "status": "done"
@@ -44375,6 +44485,10 @@
   },
   "class:renderengine::StateHelper": {
    "notes": "renderengine StateHelper::Initialize. Verify caught two byte-reversed blend-factor constants; FIXED gpDefaultBlendState1 0x01010706->0x07060101 and State2 0x01090706->0x07060109 (asm insrwi rA,0x101/0x109,16,16 into low half of 0x07060706; Hex-Rays v32[0]=117833985). Re-gated clean.",
+   "status": "done"
+  },
+  "class:renderengine::Texture2D": {
+   "notes": "Wave 31: faithful vs asm, gate clean, pushed f6d3487",
    "status": "done"
   },
   "class:renderengine::Texture>::operator class renderengine": {
