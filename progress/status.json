@@ -12948,6 +12948,84 @@
   "BrnNetwork::LocalEventScoreUploadData,49>::EraseFast": {
    "status": "reviewed"
   },
+  "BrnNetwork::LoginManagerBase::AnswerAgreeTOS": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::AnswerNoAgreement": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::AnswerOpenUsAccount": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::AnswerSignIn": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::CancelLogin": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::Construct": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::Disconnected": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::Finished": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::LogInToServer": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::PrepareConnectTelemetry": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::PrepareDownloadingTOS": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::PrepareLoadSettings": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::PreparePingRegions": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::ResumeCompleteCallback": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::ShowChatRestrictionPopup": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::Start": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::Update": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdateConnectingDS": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdateConnectingOnline": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdateConnectingTelemetry": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdateDownloadingTOS": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdateGetConfigurationData": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdateLoadSettings": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdateLoggingIn": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdatePingRegions": {
+   "status": "compiles"
+  },
+  "BrnNetwork::LoginManagerBase::UpdateWaitingForPlayerID": {
+   "status": "compiles"
+  },
   "BrnNetwork::MarkedManManager::AddPlayer": {
    "status": "reviewed"
   },
@@ -13416,10 +13494,22 @@
   "BrnNetwork::NetworkPlayerStatsResults::InsertPlayerStats": {
    "status": "reviewed"
   },
+  "BrnNetwork::NetworkRoadRulesManager::GetNex": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkRoadRulesManager::GetRoa": {
+   "status": "reviewed"
+  },
   "BrnNetwork::NetworkRoadRulesManager::GetRoadRulesDataToSend": {
    "status": "reviewed"
   },
   "BrnNetwork::NetworkRoadRulesManager::GetRoadRulesDataToUpload": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkRoadRulesManager::NetworkRoadRulesManager": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkRoadRulesManager::OnAutoLogin": {
    "status": "reviewed"
   },
   "BrnNetwork::NetworkRoadRulesManager::UpdateLocalLobbyScoresWithNewPB": {
@@ -34675,34 +34765,34 @@
    "status": "reviewed"
   },
   "rw::graphics::postfx::RenderTarget::Begin": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::RenderTarget::CreateStates": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::RenderTarget::End": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::RenderTarget::Initialize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::RenderTarget::RenderTarget": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::RenderTarget::Resolve": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::RenderTargetDebugger::RenderTargetDebugger": {
    "status": "reviewed"
   },
   "rw::graphics::postfx::Target::CreateColor": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::Target::CreateDepth": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::Target::Resolve": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "rw::graphics::postfx::Tint::Initialize": {
    "status": "reviewed"
@@ -34711,6 +34801,12 @@
    "status": "reviewed"
   },
   "rw::graphics::postfx::Vignette::Parameters::Parameters": {
+   "status": "reviewed"
+  },
+  "rw::graphics::postfx::Vignette::SetState": {
+   "status": "reviewed"
+  },
+  "rw::graphics::postfx::Vignette::Vignette": {
    "status": "reviewed"
   },
   "rw::math::fpu::Vector2Template<double>::Vector2Template<double>": {
@@ -36496,6 +36592,10 @@
   "GameSource/Director/Camera/Utils/CameraUtils.h": {
    "status": "done"
   },
+  "GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent.cpp": {
+   "notes": "Wave33: 3/7 + layout-fidelity defect (extra member shifts owned offsets vs the committed 0x18 CgsDev::DebugComponent base -> bodied stores hit wrong slots); StartEditor recoverable but unbodied. Discarded; redo with correct base-relative layout + StartEditor (ICEAuthor::CreateNewTake)",
+   "status": "blocked"
+  },
   "GameSource/Director/DirectorModule/BrnDirectorModuleDebugPrinter.cpp": {
    "notes": "Fresh-eyes Opus high review: all member offsets, packed-colour constants (0xFFFFFFFF/0xFF00FF00/0xFF0000FF), float multipliers (0.25/0.1), Justification enum (E_JUSTIFY_LEFT=0), and DebugLog::Print loop verified store-for-store vs ARTIST asm; DWARF-shaped decls; no offset hacks; headers reconstructed not forked. compile gate PASS; parity RED is inlined-assert/accessor noise (advisory).",
    "status": "done"
@@ -37670,12 +37770,20 @@
    "notes": "5/7 funcs reconstructed+gate-clean (CreateProgram/CreateStates/3x InitWeights, asm-verified); ctor@0x82408348 + Release@0x82402E58 blocked on un-recoverable embedded shader microcode blobs (function-only exports, no bytes) + unreconstructed renderengine vendor types (VertexDescriptor/MeshHelper/VertexBuffer/DepthStencilState param structs).",
    "status": "blocked"
   },
+  "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxrendertarget.cpp": {
+   "notes": "Wave 33: faithful vs asm, gate clean, pushed cacce59",
+   "status": "done"
+  },
   "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxrendertargetdebugger.cpp": {
    "notes": "Fresh-eyes batch review: descriptor alloc/init + CreateProgram sizes match; real recovered shader data; members by name.",
    "status": "done"
   },
   "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxtint.cpp": {
    "notes": "Fresh-eyes (general-purpose subagent, cross-checked raw asm): layout/values verified (miFormat=4, m_colourLookupOffset all-zero, mpTexture@+0x48, sampler vals); allocator->DoAllocate + struct-copy de-opt legitimate (RED loop_count benign); shared-header extensions justified + consumers compile.",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxvignette.cpp": {
+   "notes": "Wave 33: faithful vs asm, gate clean, pushed cacce59",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/AI/AISectionsData.cpp": {
@@ -40642,6 +40750,10 @@
    "notes": "Verify PASS (none); asm-grounded. Gate clean.",
    "status": "done"
   },
+  "class:BrnNetwork::NetworkRoadRulesManager": {
+   "notes": "Wave 33: faithful vs asm, gate clean, pushed cacce59",
+   "status": "done"
+  },
   "class:BrnNetwork::NetworkServers": {
    "notes": "Fresh-eyes batch review: IP/port accessors, SetIPAndPort DEV->JUICE redirect, SetServerType all match; real recovered IP constants.",
    "status": "done"
@@ -40721,6 +40833,10 @@
   "class:BrnNetwork::TeamSelectMessage": {
    "notes": "Wave 32: faithful vs asm, gate clean, pushed dbe0b0c",
    "status": "done"
+  },
+  "class:BrnNetwork::TeamSelectionManager": {
+   "notes": "Wave33 partial 17/19 (foundation committed cacce59); ActionAssignFFA/AutobalanceStuntRunTeams need un-homed BrnNetwork::PlayerParams subclass (vtable off_82083550) per-player byte field. Block until PlayerParams subclass homed",
+   "status": "blocked"
   },
   "class:BrnNetwork::TrafficManager": {
    "notes": "Committed BrnNetworkTrafficManager.h models TrafficManager as a NAMESPACE; DWARF + 4 member funcs attest a ~99KB struct (maTrafficData[7]@+0x108B0 stride 0x1160, FixedRingBuffer@+0x18298). ctor is collision-tangled over an un-homed aggregate; namespace->struct breaks RingBuffer_TrafficHashEntry_Push.cpp + BrnNetworkTrafficManager.cpp. FLAGGED.",
