@@ -684,6 +684,24 @@
   "AptIntervalTimer::~AptIntervalTimer": {
    "status": "reviewed"
   },
+  "AptLinker::CancelLoad": {
+   "status": "reviewed"
+  },
+  "AptLinker::ConvertToZombie": {
+   "status": "reviewed"
+  },
+  "AptLinker::Load": {
+   "status": "reviewed"
+  },
+  "AptLinker::Notify": {
+   "status": "reviewed"
+  },
+  "AptLinker::Update": {
+   "status": "reviewed"
+  },
+  "AptLinker::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "AptLinkerThingy::`scalar deleting destructor'": {
    "status": "reviewed"
   },
@@ -2550,7 +2568,25 @@
   "BrnDirector::ArbStateOnlineCarSelect::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::ArbStateOnlineRaceIntro::CalculateStateTimes": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ArbStateOnlineRaceIntro::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ArbStateOnlineRaceIntro::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ArbStateOnlineRaceIntro::Prepare": {
+   "status": "reviewed"
+  },
   "BrnDirector::ArbStateOnlineRaceIntro::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ArbStateOnlineRaceIntro::SetupRivalMovie": {
+   "status": "reviewed"
+  },
+  "BrnDirector::ArbStateOnlineRaceIntro::Update": {
    "status": "reviewed"
   },
   "BrnDirector::ArbStateRaceIntro::Construct": {
@@ -25512,10 +25548,43 @@
   "CgsGui::AptCommunicator::AddNewAptComponent": {
    "status": "reviewed"
   },
+  "CgsGui::AptCommunicator::FindAptComponent": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::GetName": {
+   "status": "reviewed"
+  },
   "CgsGui::AptCommunicator::Initialize": {
    "status": "reviewed"
   },
   "CgsGui::AptCommunicator::RemoveExpiredAptComponent": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::UpdateAllComponents": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::UpdateComponent": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::UpdateComponentReserved": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::sMethod_GetCircleButtonAsSelect": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::sMethod_GetComponentData": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::sMethod_GetPlatformString": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::sMethod_SendAptEvent": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::sMethod_SendAptSoundEvent": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::sMethod_SetCommunicationObject": {
    "status": "reviewed"
   },
   "CgsGui::AptComponentList::GetAptValue": {
@@ -36219,6 +36288,10 @@
    "notes": "Verify PASS; 11 not-impl callbacks + Free faithful (assert seq + msgs byte-match). Cosmetic-only notes, no change. Parity RED=assert fold.",
    "status": "done"
   },
+  "GameShared/GameClasses/Gui/View/AptInterface/CgsAptCommunicator.cpp": {
+   "notes": "Fresh-eyes review (sonnet) vs X360 asm: all 11 fns semantically faithful. AptValue bit tests (w&0x7F / (w<<25)>>25 / (w>>27)&1) correctly mapped to getVtblIndex/string-type/defined-flag; UpdateComponent/Reserved/AllComponents control flow + dirty/pool handling verified; debug-log consolidation faithful; no offset pokes/temporaries. Deps (AptValue::toString, AptValueFactory::CreateArray) committed; AptCallFunctionOpti/AptIsDeferredVectorFull/AptExtObject::GetParam are leaf-first declared callees. Compile gate PASS.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptCommunicator.h": {
    "status": "done"
   },
@@ -37189,6 +37262,10 @@
    "notes": "BrnDirector::ArbStateAttractMode : public BrnDirector::ArbitratorState is a POLYMORPHIC Director-arbitrator FSM state (virtual Construct/Prepare/Update/Release/Destruct/GetName; Update is a vtable-driven EState machine). BLOCKER: the ArbitratorState base is UNCOMMITTED (no committed home to derive from \u2014 a polymorphic derived class needs its full vtable+member layout), PLUS the member BehaviourHandle<BrnDirector::Camera::BehaviourRoadRunner> (uncommitted template + uncommitted BehaviourRoadRunner camera-behaviour), the method param type BrnDirector::ArbStateSharedInfo (uncommitted), and BrnDirector::Camera::BehaviourManager (UnSetBehaviourUsedByHandle / CheckNoBehavioursAreAllocatedByState \u2014 uncommitted), and an unidentified sub_821FDC58 in Update. GetName ('ArbStateAttractMode') is trivial + Construct (BehaviourHandle camera Construct + field zeroing) is simple but they share the TU. BLOCK until the Director Arbitrator state subsystem (ArbitratorState base + ArbStateSharedInfo + BehaviourHandle/BehaviourManager/BehaviourRoadRunner camera-behaviour family) is reconstructed. The sibling BrnArbStateDriveThru/RenderMetrics TUs share this exact dependency.",
    "status": "blocked"
   },
+  "GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp": {
+   "notes": "Wave46: 6/8; Prepare stored 4 shot-data ptrs into WRONG named members vs asm store offsets + camera-seed read wrong source (mTransitionCam.GetProducedCamera vs a2[0]); discarded, redo with correct store offsets",
+   "status": "blocked"
+  },
   "GameSource/Director/Arbitrator/States/BrnArbStateCrashMode.cpp": {
    "status": "done"
   },
@@ -37196,12 +37273,24 @@
    "notes": "Wave 45: 4/4 faithful vs asm, GetTransform().wAxis eye-pos fix, gate clean, pushed 02cc5d6",
    "status": "done"
   },
+  "GameSource/Director/Arbitrator/States/BrnArbStateCrashing.cpp": {
+   "notes": "Wave46: 4/10; Prepare/Update/ProcessPostShakeSlomo + Destruct/ApplySlomoAndShake decl-only (asm recovered but agent under-delivered); discarded, redo bodying the recovered pseudocode",
+   "status": "blocked"
+  },
   "GameSource/Director/Arbitrator/States/BrnArbStateDriveThru.cpp": {
    "notes": "BrnDirector::ArbStateDriveThru (an arbitrator state). Deeply entangled with UNCOMMITTED subsystems (grep: zero hits for ArbState base / BehaviourManager / ArbUtils::ChangeToState): Construct->Camera::Camera::Construct; Prepare->Camera::BehaviourManager::NewBehaviour + Attrib::Gen::shotgroup::Num_ShotList + sub_821F0E50(unknown); Release->BehaviourManager::UnSetBehaviourUsedByHandle + CheckNoBehavioursAreAllocatedByState; Update->ArbUtils::ChangeToState<ArbStateDriveThru::EState> + Camera::EnsureEffectIsPlaying + sub_821FCE10/sub_821FCDA8(unknown). The Director Camera/BehaviourManager + ArbUtils state-machine + the ArbState polymorphic base must be reconstructed first. BLOCK until those Director subsystems land.",
    "status": "blocked"
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateOnlineCarSelect.cpp": {
    "status": "done"
+  },
+  "GameSource/Director/Arbitrator/States/BrnArbStateOnlineRaceIntro.cpp": {
+   "notes": "Wave 46: 6/6 faithful, inverted-branch + transposed-store + Prepare-member fixed, gate clean, pushed f9cc5de",
+   "status": "done"
+  },
+  "GameSource/Director/Arbitrator/States/BrnArbStatePostEvent.cpp": {
+   "notes": "Wave46: 5/7 foundation committed (f9cc5de); PickAppropriateShot@0x8221A080 multi-stage VMX (vmsum3fp128 finish-weight folds) + Destruct no-asm decl-only",
+   "status": "blocked"
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateRaceIntro.cpp": {
    "status": "done"
@@ -40132,8 +40221,8 @@
    "status": "done"
   },
   "class:AptLinker": {
-   "notes": "Update @0x82B0CC68 has 3 wrong-field/dropped-side-effect bugs (conflates the +0x0C resolved-flag with the +0x00 refcount; passes AptFile.mnField12 instead of mpData to the AnimInst ctor); the other 5 fns are faithful. Also needs the asm-grounded AptLinkerThingy layout correction (rewrites a committed home -- coordinate w/ JeBobs). Reconstructed in scratchpad/rework. [adri1 apt-100]",
-   "status": "blocked"
+   "notes": "Fixed Update bug #3: after SetCharacterInst, set the new AnimInst's mnGotoFrame=-1 / mnClipActionFlags|=0x80 via static_cast<AptCharacterSpriteInstBase*> (was wrongly nulling mpRenderItem). Removed dead MarkRenderItemFlag helper. Bugs #1 (mbLinked +0x0C vs refcount +0x00 conflation) & #2 (AnimInst ctor gets pFile=mpData) confirmed already fixed by the corrected AptLinkerThingy layout. Fresh-eyes review (sonnet) PASS, full Update store-for-store vs asm; 2 minor non-bug notes (ListErase head arg; tail mnSize snapshot). Compile gate PASS.",
+   "status": "done"
   },
   "class:AptLinkerThingy": {
    "notes": "verified vs X360 asm; parity.",
