@@ -612,6 +612,54 @@
   "AptDate::~AptDate": {
    "status": "reviewed"
   },
+  "AptDisplayList::AddToDisplayList": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::AptDisplayList": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::GeneralisedProcess": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::GetBoundingRect": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::PreDestroy": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::ReplaceDisplyListItem": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::_addToSetCaches": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::clear": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::instantiateCharacter": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::mergeState": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::placeObject": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::placeObjectNCXForm": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::removeClonedObject": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::removeObject": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::tick": {
+   "status": "reviewed"
+  },
+  "AptDisplayList::~AptDisplayList": {
+   "status": "reviewed"
+  },
   "AptError::CleanNativeFunctions": {
    "status": "reviewed"
   },
@@ -40307,8 +40355,8 @@
    "status": "done"
   },
   "class:AptDisplayList": {
-   "notes": "PARTIAL: 6/16 fns (teardown/removal core: ctor/dtor/PreDestroy/clear/removeObject/removeClonedObject) reconstructed+verified+committed (b5-decomp dev 3d04b46). 10 heavy behavioural fns (tick/placeObject/instantiateCharacter/mergeState/GetBoundingRect/AddToDisplayList/ReplaceDisplyListItem/placeObjectNCXForm/_addToSetCaches) blocked on un-homed AptCharacter frame/clip-event layout + module-static dispatch arrays (off_8324E544/E548/E574). [adri1 apt-100 waveE]",
-   "status": "blocked"
+   "notes": "Fresh-eyes review (sonnet) vs X360 asm: all 7 behavioural fns faithful. AddToDisplayList (placed char = props->mpCharacter, import-table bind, new-inst dispatch order), ReplaceDisplyListItem (ASChanged gate, colour/pos merge), _addToSetCaches (type-5 gate, clip-handler fold, set-cache add, queueClipEvents), instantiateCharacter (vtbl[1]=Release, createdOnFrame, name-hash 12/37 skip, dyn-text seed), placeObject (asm-derived signature, AptCXFormCopy colour, morph stamp, class-bind), placeObjectNCXForm (2-arg AptUint32CXFormCopy scratch), mergeState (gate1/gate2 before merge, lockstep walk). No offset-pokes on runtime objects; un-homed callees are leaf-first externs. Workflow recon->adversarial-verify (caught + fixed 3 bugs) + conductor integration (fixed AddToDisplayList placed-char deref). Compile gate PASS.",
+   "status": "done"
   },
   "class:AptError": {
    "notes": "apt-100: toString-layer value type, named members vs X360 ARTIST, fresh-eyes semantic verify + cl /c gate (toString now committed; urlEncodeCustomRender decl). Committed b5-decomp dev 12dd61c.",
