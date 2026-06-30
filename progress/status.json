@@ -2808,6 +2808,12 @@
   "BrnDirector::Camera::AttachmentTruck::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Behaviour::Fail": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Behaviour::SetCantSwitchFromMeNow": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::Behaviour>::Prep": {
    "status": "reviewed"
   },
@@ -3027,7 +3033,19 @@
   "BrnDirector::Camera::BehaviourInterpolate::Construct": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::BehaviourInterpolate::GetCameraAForSe": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourInterpolate::GetCameraBForSe": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourInterpolate::GetColl": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::BehaviourInterpolate::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourInterpolate::GetParametricTime": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourInterpolate::PostCollisionUpdate": {
@@ -3040,6 +3058,9 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourInterpolate::Setup": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourInterpolate::SetupDuration": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourInterpolate::Update": {
@@ -40988,6 +41009,9 @@
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::Behaviour": {
+   "status": "done"
+  },
   "class:BrnDirector::Camera::Behaviour>": {
    "notes": "Wave 38: faithful vs asm, gate clean, pushed eb594dd",
    "status": "done"
@@ -41034,6 +41058,9 @@
   },
   "class:BrnDirector::Camera::BehaviourIceAnim": {
    "notes": "ctor + GetCollisionPolicy/GetTimeRemaining/HasFinishedOrFailed. Layout pinned. Verified PASS after fixes. Gate green.",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::BehaviourInterpolate": {
    "status": "done"
   },
   "class:BrnDirector::Camera::BehaviourLooseAttachment": {
