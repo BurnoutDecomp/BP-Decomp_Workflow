@@ -12949,82 +12949,112 @@
    "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::AnswerAgreeTOS": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::AnswerNoAgreement": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::AnswerOpenUsAccount": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::AnswerSignIn": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::CancelLogin": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::Disconnected": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::Finished": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::LogInToServer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::PrepareConnectTelemetry": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::PrepareDownloadingTOS": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::PrepareLoadSettings": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::PreparePingRegions": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::ResumeCompleteCallback": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::ShowChatRestrictionPopup": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::Start": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdateConnectingDS": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdateConnectingOnline": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdateConnectingTelemetry": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdateDownloadingTOS": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdateGetConfigurationData": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdateLoadSettings": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdateLoggingIn": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdatePingRegions": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::LoginManagerBase::UpdateWaitingForPlayerID": {
-   "status": "compiles"
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::Construct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::Disconnected": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::GetUserNameAndPassword": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::PlatformSpecificUpdate": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::Release": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::Start": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::UpdateGamerTagSelection": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::LoginManagerX360::UpdateSignInToLive": {
+   "status": "reviewed"
   },
   "BrnNetwork::MarkedManManager::AddPlayer": {
    "status": "reviewed"
@@ -24664,6 +24694,21 @@
    "status": "reviewed"
   },
   "CgsGraphics::PackedOobb::ToMatrix": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::PositionOnlyVertex>::AddProgram": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::PositionOnlyVertex>::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::PositionOnlyVertex>::EndRendering": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::PositionOnlyVertex>::SetProgram": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::PositionOnlyVertex>::SetTransform": {
    "status": "reviewed"
   },
   "CgsGraphics::SetupBuiltinInterpreters": {
@@ -36724,6 +36769,10 @@
   "GameSource/GameState/StreetData/BrnChallengeHighScoreEntry.h": {
    "status": "done"
   },
+  "GameSource/Gamestate/StreetData/BrnGameStateStreetManager.cpp": {
+   "notes": "Wave34: 0/36; blocked on un-homed/un-sized BrnGameState::StreetManagerDebugComponent (recover from the X360 ctor/CgsCollision::BaseCollisionGenerator footprint) + deep un-named sub-object offsets; discarded",
+   "status": "blocked"
+  },
   "GameSource/Graphics/BrnRendererModule.h": {
    "notes": "batch review pass",
    "status": "done"
@@ -36770,6 +36819,10 @@
   },
   "GameSource/Gui/BrnGuiFsmController.cpp": {
    "status": "done"
+  },
+  "GameSource/Gui/BrnGuiHudMessageAnalyzer.cpp": {
+   "notes": "Wave34: 0/38; blocked on un-homed GuiHudMessage 880-byte aggregate (2 fns HandleOnlineTeamChange/NewRoadRulesHighScore recoverable without it). Home GuiHudMessage first, then redo",
+   "status": "blocked"
   },
   "GameSource/Gui/BrnGuiHudMessageDirector.cpp": {
    "status": "done"
@@ -37393,6 +37446,10 @@
    "notes": "Destruct/Release/DEBUGClearRelationship verified (field-clear set, mLastTimeChanged.Clear).",
    "status": "done"
   },
+  "GameSource/Network/Managers/BrnNetworkLoginManagerBase.cpp": {
+   "notes": "Wave 34: 26/26 faithful vs asm, gate clean, pushed 73a0672",
+   "status": "done"
+  },
   "GameSource/Network/Managers/BrnNetworkMarkedManManager.cpp": {
    "notes": "Fresh-eyes verify PASS; 10 funcs faithful to asm. Parity RED = assert-macro fold.",
    "status": "done"
@@ -37416,6 +37473,10 @@
   "GameSource/Network/Managers/BrnNetworkPostRoundManager.cpp": {
    "notes": "Verify PASS (22-fn state machine faithful). ActionEndGame per-player {score,playerID} packing left flagged (score offset/EndGameData payload layout not yet recovered) -- dependency-limited, no fabrication.",
    "status": "done"
+  },
+  "GameSource/Network/Managers/BrnNetworkRoadRulesManager.cpp": {
+   "notes": "Wave34: rewrite reached 23/32 but changed layout incompatibly with + dropped 2 fns from the committed 4-fn class TU (ctor 0x827E2BE8 + OnAutoLogin 0x82564338); REVERTED to preserve class-TU coverage. Redo building ON the committed .h; ProcessAfterSim/ProcessGameActions recoverable, 5 callbacks thread un-named RoadRulesData sub-object offsets",
+   "status": "blocked"
   },
   "GameSource/Network/Managers/BrnNetworkScoreboard.cpp": {
    "status": "done"
@@ -40726,6 +40787,10 @@
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnNetwork::LoginManagerX360": {
+   "notes": "Wave 35: faithful vs asm, gate clean, pushed 72c8970",
+   "status": "done"
+  },
   "class:BrnNetwork::MatchMakingManager": {
    "notes": "fresh-eyes review: 3x7 dispatch installs + extra/status/timer correct",
    "status": "done"
@@ -42647,6 +42712,10 @@
   },
   "class:CgsGraphics::PackedOobb": {
    "notes": "ToMatrix verified vs asm; homed in CgsPackedOobb.cpp.",
+   "status": "done"
+  },
+  "class:CgsGraphics::PositionOnlyVertex>": {
+   "notes": "Wave 35: faithful vs asm, gate clean, pushed 72c8970",
    "status": "done"
   },
   "class:CgsGraphics::TextureScopeTable": {
