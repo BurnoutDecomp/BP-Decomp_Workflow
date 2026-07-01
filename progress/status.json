@@ -19341,6 +19341,9 @@
   "BrnSound::Logic::Collision::CollisionState::CreateObject": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Collision::CollisionState::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::Collision::CollisionStateManager::AddInputCollision": {
    "status": "reviewed"
   },
@@ -19485,6 +19488,9 @@
   "BrnSound::Logic::Explosion::ExplosionState::Attach": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Explosion::ExplosionState::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::FrameInformation::IsPaused": {
    "status": "reviewed"
   },
@@ -19506,10 +19512,16 @@
   "BrnSound::Logic::GlobalStateManager::GetTypeName": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::GlobalStateManager::GlobalStateManager": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::GlobalStateManager::Prepare": {
    "status": "reviewed"
   },
   "BrnSound::Logic::GlobalStateManager::ResourcesAreReady": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::GlobalStateManager::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "BrnSound::Logic::GlobalStateManager::~GlobalStateManager": {
@@ -19764,6 +19776,9 @@
   "BrnSound::Logic::Passby::PassbyStateManager::UpdateParams": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Passby::PassbyStateManager::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::PresentationEffect::UpdateVoiceParams": {
    "status": "reviewed"
   },
@@ -19866,7 +19881,13 @@
   "BrnSound::Logic::Streaming::StreamingEffect::ProcessUpdate": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Streaming::StreamingEffect::StreamingEffect": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::Streaming::StreamingEffect::UpdateParams": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::Streaming::StreamingEffect::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "BrnSound::Logic::Streaming::StreamingEffect::~StreamingEffect": {
@@ -19875,7 +19896,13 @@
   "BrnSound::Logic::Streaming::StreamingState::CreateObject": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Streaming::StreamingState::Get": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::Streaming::StreamingState::StreamingState": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::Streaming::StreamingState::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "BrnSound::Logic::Streaming::StreamingStateManager::CheckForDuplicates": {
@@ -19947,6 +19974,12 @@
   "BrnSound::Logic::Traffic::TrafficEngine::ProcessUpdate": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Traffic::TrafficEngine::TrafficEngine": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::Traffic::TrafficEngine::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::Traffic::TrafficEngine::~TrafficEngine": {
    "status": "reviewed"
   },
@@ -19962,6 +19995,15 @@
   "BrnSound::Logic::Traffic::TrafficState::CreateObject": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Traffic::TrafficState::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::Traffic::TrafficStateManager::CreateObjec": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::Traffic::TrafficStateManager::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::World::Emitter3dControl::CreateObject": {
    "status": "reviewed"
   },
@@ -19975,6 +20017,9 @@
    "status": "reviewed"
   },
   "BrnSound::Logic::World::EmitterEffect::ProcessUpdate": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::World::EmitterState::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "BrnSound::Logic::World::EmitterStateManager::CreateObject": {
@@ -43765,6 +43810,9 @@
   "class:BrnSound::Logic::Collision::CollisionEffect": {
    "status": "done"
   },
+  "class:BrnSound::Logic::Collision::CollisionState": {
+   "status": "done"
+  },
   "class:BrnSound::Logic::Collision::HingeStateCache": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
@@ -43776,11 +43824,17 @@
   "class:BrnSound::Logic::Explosion::ExplosionEffect": {
    "status": "done"
   },
+  "class:BrnSound::Logic::Explosion::ExplosionState": {
+   "status": "done"
+  },
   "class:BrnSound::Logic::FrameInformation": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
   },
   "class:BrnSound::Logic::GlobalState": {
+   "status": "done"
+  },
+  "class:BrnSound::Logic::GlobalStateManager": {
    "status": "done"
   },
   "class:BrnSound::Logic::HUDEffect::GameModeData": {
@@ -43811,6 +43865,9 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 leaked .cpp:line citations scrubbed); combined wave-12 gate PASS.",
    "status": "done"
   },
+  "class:BrnSound::Logic::Passby::PassbyStateManager": {
+   "status": "done"
+  },
   "class:BrnSound::Logic::Passby::PassbyStateManager::DynamicPropByCache": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
@@ -43835,6 +43892,12 @@
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnSound::Logic::Streaming::StreamingEffect": {
+   "status": "done"
+  },
+  "class:BrnSound::Logic::Streaming::StreamingState": {
+   "status": "done"
+  },
   "class:BrnSound::Logic::SubmixesEffect": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
    "status": "done"
@@ -43847,8 +43910,20 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 leaked .cpp:line citations scrubbed); combined wave-12 gate PASS.",
    "status": "done"
   },
+  "class:BrnSound::Logic::Traffic::TrafficEngine": {
+   "status": "done"
+  },
+  "class:BrnSound::Logic::Traffic::TrafficState": {
+   "status": "done"
+  },
+  "class:BrnSound::Logic::Traffic::TrafficStateManager": {
+   "status": "done"
+  },
   "class:BrnSound::Logic::World::Emitter3dControl": {
    "notes": "ctor+dtor verified store-for-store (sth/stb widths, teardown order).",
+   "status": "done"
+  },
+  "class:BrnSound::Logic::World::EmitterState": {
    "status": "done"
   },
   "class:BrnSound::Logic::World::EmitterStateManager": {
