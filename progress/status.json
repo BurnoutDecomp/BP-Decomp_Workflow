@@ -2839,19 +2839,19 @@
    "status": "reviewed"
   },
   "BrnDirector::ArbStateAttractMode::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateAttractMode::GetName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateAttractMode::Prepare": {
    "status": "reviewed"
   },
   "BrnDirector::ArbStateAttractMode::Release": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateAttractMode::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateCarSelect::Release": {
    "status": "reviewed"
@@ -2983,34 +2983,34 @@
    "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::ActivateIceCam": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::Deactivate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::GenericActivateCam": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::GetName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::RegisterIceAnimsWithDebugComponent": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::RegisterParameters": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::Release": {
    "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::UnregisterParameters": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateTestbed::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Arbitrator::UpdateDebugCameras": {
    "status": "reviewed"
@@ -19729,19 +19729,19 @@
    "status": "reviewed"
   },
   "BrnSound::Logic::BrnState::`scalar deleting destructor'": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnSound::Logic::BrnStateManager::CreateObject": {
    "status": "reviewed"
   },
   "BrnSound::Logic::BrnStateManager::GetResourceRegistr": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnSound::Logic::BrnStateManager::GetTypeName": {
    "status": "reviewed"
   },
   "BrnSound::Logic::BrnStateManager::`vector deleting destructor'": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "BrnSound::Logic::CameraControl::Attach": {
    "status": "reviewed"
@@ -25732,7 +25732,7 @@
    "status": "reviewed"
   },
   "CgsDepthStencilStateFactory::Construct": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "CgsDev::Assert::BeginAssert": {
    "status": "reviewed"
@@ -28237,10 +28237,10 @@
    "status": "reviewed"
   },
   "CgsGui::FontCollection::AddFont": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "CgsGui::FontCollection::FindFont": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "CgsGui::GetNormalisedToRendererTransform": {
    "status": "reviewed"
@@ -30334,19 +30334,19 @@
    "status": "reviewed"
   },
   "CgsNetwork::NetworkAdapterX360::Construct": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "CgsNetwork::NetworkAdapterX360::Prepare": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "CgsNetwork::NetworkAdapterX360::Release": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "CgsNetwork::NetworkAdapterX360::StartupNetworking": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "CgsNetwork::NetworkAdapterX360::Update": {
-   "status": "compiles"
+   "status": "recovered"
   },
   "CgsNetwork::NetworkImageConverter::ConvertAndResize": {
    "status": "reviewed"
@@ -39163,10 +39163,6 @@
   "GameShared/GameClasses/Graphics/CgsCamera.cpp": {
    "status": "done"
   },
-  "GameShared/GameClasses/Graphics/CgsDepthStencilStateFactory.cpp": {
-   "notes": "Construct @0x827EBBA0 builds saDepthStencilStates[5] by calling renderengine::DepthStencilState::Initialize(descriptor) 5x \u2014 an UNRECONSTRUCTED prerequisite (work flags unresolved-deps=1; the callee is [external/unknown]). The committed PC/GCM backend renderengine::DepthStencilState (pc/gcm/renderengine/renderstates.h:20-23 + DepthStencilState.cpp) only has GetResourceDescriptor (RECOVERED); it has NO Initialize. Construct cannot compile faithfully without it. Adding Initialize here would be an UNFAITHFUL stub in committed render-engine code (the X360 depth-stencil GPU-state creation doesn't map to the PC backend; cf. sibling RasterizerState/TextureState which have their own PC Initialize TUs). BLOCK until renderengine::DepthStencilState::Initialize is reconstructed as its own TU; then Construct (GetResourceDescriptor + 5x Initialize into the static saDepthStencilStates[5], with the per-state CGS_ASSERT(state != null) guards) is straightforward. Prior session already recognized this exact stub issue.",
-   "status": "blocked"
-  },
   "GameShared/GameClasses/Graphics/CgsMaterialAssembly.cpp": {
    "status": "done"
   },
@@ -39409,10 +39405,6 @@
   },
   "GameShared/GameClasses/Gui/View/AptInterface/CgsAptString.cpp": {
    "status": "done"
-  },
-  "GameShared/GameClasses/Gui/View/CgsGuiFontCollection.cpp": {
-   "notes": "FindFont KA_FONT_MAP[2] {original,replacement} font-remap rodata pairs are not fully recoverable from the export (only entry[0].mpOriginal \"machinestd-bold\" surfaced); the replacement strings + 2nd pair are absent. Bodying would fabricate X360 facts. Deferred.",
-   "status": "blocked"
   },
   "GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp": {
    "notes": "Unchanged body; header extended additively (lifecycle virtuals + sub-object accessors) for BrnGui::ViewModule. Re-confirmed compile.",
@@ -40395,8 +40387,8 @@
    "status": "done"
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateAttractMode.cpp": {
-   "notes": "BrnDirector::ArbStateAttractMode : public BrnDirector::ArbitratorState is a POLYMORPHIC Director-arbitrator FSM state (virtual Construct/Prepare/Update/Release/Destruct/GetName; Update is a vtable-driven EState machine). BLOCKER: the ArbitratorState base is UNCOMMITTED (no committed home to derive from \u2014 a polymorphic derived class needs its full vtable+member layout), PLUS the member BehaviourHandle<BrnDirector::Camera::BehaviourRoadRunner> (uncommitted template + uncommitted BehaviourRoadRunner camera-behaviour), the method param type BrnDirector::ArbStateSharedInfo (uncommitted), and BrnDirector::Camera::BehaviourManager (UnSetBehaviourUsedByHandle / CheckNoBehavioursAreAllocatedByState \u2014 uncommitted), and an unidentified sub_821FDC58 in Update. GetName ('ArbStateAttractMode') is trivial + Construct (BehaviourHandle camera Construct + field zeroing) is simple but they share the TU. BLOCK until the Director Arbitrator state subsystem (ArbitratorState base + ArbStateSharedInfo + BehaviourHandle/BehaviourManager/BehaviourRoadRunner camera-behaviour family) is reconstructed. The sibling BrnArbStateDriveThru/RenderMetrics TUs share this exact dependency.",
-   "status": "blocked"
+   "notes": "Fresh-eyes review: faithful, named-member reconstruction, vtable slots correct.",
+   "status": "done"
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp": {
    "notes": "Wave46: 6/8; Prepare stored 4 shot-data ptrs into WRONG named members vs asm store offsets + camera-seed read wrong source (mTransitionCam.GetProducedCamera vs a2[0]); discarded, redo with correct store offsets",
@@ -40447,8 +40439,8 @@
    "status": "blocked"
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp": {
-   "notes": "FOUNDATION committed (04b1a3a): 5/9 bodied faithfully (Construct/GetName/Deactivate/GenericActivateCam/ActivateIceCam, own-member+spTestbed only, mirrors committed BrnArbState siblings). 4/9 decl-only: Update (15-way BehaviourManager-pool dispatch over un-homed pool) + Register/UnregisterParameters (un-homed SerialiseBehaviourParameters<DebugMenuSerialiser>) + RegisterIceAnimsWithDebugComponent (un-homed DebugComponent+DirectorResourceManager). Unblocks once BehaviourManager.h layout is homed.",
-   "status": "blocked"
+   "notes": "Fresh-eyes review: 5 bodied functions faithful, 4 honestly declaration-only, no fabrication.",
+   "status": "done"
   },
   "GameSource/Director/BrnCrashAnalyser.cpp": {
    "notes": "CrashAnalyser::Update @0x82209290 non-leaf VMX keystone: ~196 VMX128 instrs reading un-homed GameState(+30944)/VehicleInfo[stride1264]/PlayerCrashInfo/DirectorIO::InputBuffer/CrashAnalysis triple-buffer + StrStream assert. Needs those layouts homed first.",
@@ -46093,14 +46085,6 @@
    "notes": "sound-logic effect object; verifier minor_drift/low; gate pass.",
    "status": "done"
   },
-  "class:BrnSound::Logic::BrnState": {
-   "notes": "FABRICATION DISCARDED (verify caught): agent bodied GetTypeName@0x82682A98 + declared GetTypeInfo -- NEITHER in the dossier (only fn is the scalar deleting destructor @0x826C84D8); also redefined committed CgsSound::Logic::State/ClassTypeInfo (ODR vs CgsState.h) + invented a DestroyEffects member. Files restored to HEAD. Re-home: body ONLY the destructor against the committed CgsState.h State base by name.",
-   "status": "blocked"
-  },
-  "class:BrnSound::Logic::BrnStateManager": {
-   "notes": "FABRICATION DISCARDED (verify caught): agent invented functions at 0x82682AB8 + 0x826FB5F0 with fabricated rodata (off_82F2E7F0) + a 152-byte allocation -- NOT in the dossier. Files restored to HEAD (incl. the deleted _embed_check.cpp). Re-home from the real 2-func dossier against the committed sound-logic home.",
-   "status": "blocked"
-  },
   "class:BrnSound::Logic::CameraControl": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 reference .cpp:line citations scrubbed); combined wave-12 gate PASS.",
    "status": "done"
@@ -47235,10 +47219,6 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
-  "class:CgsFileSystem::DeviceManager": {
-   "notes": "COMMITTED but build-broken: CgsDeviceManager.cpp calls EA::Thread::Semaphore::Wait(const u32*) at lines 266/301/317/328 but committed Semaphore::Wait expects (const EA::Thread::ThreadTime&) -> C2664. ctor+operator-new bodied; layout grown. Needs a Semaphore::Wait signature/call-site reconcile (timeout arg), not new decomp. Not standalone-gating.",
-   "status": "blocked"
-  },
   "class:CgsFileSystem::DeviceMemFileSystem": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -47774,10 +47754,6 @@
   "class:CgsNetwork::NetworkAdapterPrepareParams": {
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
-  },
-  "class:CgsNetwork::NetworkAdapterX360": {
-   "notes": "Behavior reconstructed+gate-clean (StartupNetworking server-type switch, Update connect FSM, Release, Prepare fixed to the asm shared-tail NetConnControl('frrt') for states 0/1/2). BLOCKED on adapter-hierarchy reconciliation: recon derives NetworkAdapterX360 : NetworkAdapter(intermediate) : NetworkAdapterBase, but PS3 DWARF shows the platform adapter deriving DIRECTLY from NetworkAdapterBase (no SetServerType in the PS3 hierarchy). X360 SetServerType IS real (called by BrnNetworkServers.cpp:81 via the by-value mNetworkAdapter) but its exact vtable owner/slot is unconfirmed without an X360 NetworkAdapterX360 vtable dump; also the tolerated pre-existing ODR vs CgsNetworkManager.cpp's opaque NetworkAdapter{maStorage[72]}. Needs a deliberate decision on the NetworkAdapter/NetworkAdapterX360 typedef/alias + vtable layout across BrnNetworkManager/BrnNetworkServers/CgsNetworkPlayer consumers.",
-   "status": "blocked"
   },
   "class:CgsNetwork::NetworkManager": {
    "notes": "reconciliation: ctor already committed & complete in CgsNetworkManager.cpp; compile gate PASS; gate-only",
