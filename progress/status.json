@@ -43056,10 +43056,6 @@
    "notes": "BrnBlobbyShadowManager; parity/none; wave9; verifier parity; gate pass.",
    "status": "done"
   },
-  "GameSource/Unity/../Graphics/BrnCoronaManager.cpp": {
-   "notes": "DEFERRED (RE complete, decomp staged but not committed). BrnCoronaManager is a struct w/ nested BrnSubmissionInterface (DWARF), but committed BrnRendererModuleIO.h/BrnRaceCarEntityModuleIO.h forward-declare it as a NAMESPACE and BrnRendererModule.h as an empty struct -> committing the real class needs a cross-tree namespace->class reconciliation (include BrnCoronaManager.h in those 3 headers + fix rwgcoronabuffer.h class->struct) + re-gating ~7 TUs, and the bodies must call real renderengine CoronaBuffer::Iterator::Write/TextureState::Initialize (not stand-ins). Corona type enum (race-car head/rear/brake/indicator/reversing/blues-twos lights), AddCorona SmoothStep distance-falloff + back-face cull, layout all RE'd. Staged: scratchpad/wave4/.",
-   "status": "blocked"
-  },
   "GameSource/Unity/../Graphics/BrnEffectsArbitrator.cpp": {
    "notes": "Construct (per-slot BrnEffectsFrame), EndOfFrame (internal/external flip), EvalTint (tint-weight reweight, residual=1-sum) verified.",
    "status": "done"
