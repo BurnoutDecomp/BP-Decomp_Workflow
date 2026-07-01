@@ -3727,7 +3727,7 @@
    "status": "reviewed"
   },
   "BrnDirector::CameraFinaliser::Update": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnDirector::DebugComponent::Construct": {
    "status": "reviewed"
@@ -3901,10 +3901,10 @@
    "status": "reviewed"
   },
   "BrnDirector::DirectorModule::Construct": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorModule::Destruct": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorModule::DirectorModule": {
    "status": "reviewed"
@@ -3913,19 +3913,19 @@
    "status": "reviewed"
   },
   "BrnDirector::DirectorModule::PreSceneQueryUpdate": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorModule::Prepare": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorModule::ProcessSceneQueryResults": {
    "status": "reviewed"
   },
   "BrnDirector::DirectorModule::Release": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorModule::Update": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorResourceManager::DirectorResourceManager": {
    "status": "reviewed"
@@ -41005,6 +41005,10 @@
    "status": "done"
   },
   "GameSource/Director/Camera/Utils/CameraUtils.h": {
+   "status": "done"
+  },
+  "GameSource/Director/DirectorModule/BrnDirectorModule.cpp": {
+   "notes": "Fresh-eyes review (redo after the earlier offset-cast-violation fail): zero raw offset-cast pokes remain, all access via named members + explicit padding buffers. All 3 bodied functions (Construct/Destruct/Release) traced instruction-by-instruction against asm and match exactly. Declaration-only functions honestly un-bodied. Two disclosed gaps (DirectorResourceManager stub, MainDirector opaque back-pointer) verified accurate. One minor disclosure-completeness gap found (two Clear()-style calls in the mPad_0x8A8 span not called out specifically) -- fixed by tightening the padding comment before landing.",
    "status": "done"
   },
   "GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent.cpp": {
