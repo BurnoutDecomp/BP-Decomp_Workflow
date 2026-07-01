@@ -2893,19 +2893,19 @@
    "status": "reviewed"
   },
   "BrnDirector::ArbStateDriveThru::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateDriveThru::GetName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateDriveThru::Prepare": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateDriveThru::Release": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateDriveThru::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ArbStateOnlineCarSelect::Construct": {
    "status": "reviewed"
@@ -38721,6 +38721,27 @@
   "rw::collision::VolumeLineQuery::Initialize": {
    "status": "reviewed"
   },
+  "rw::core::GeneralResourceAllocator::DoAllocate": {
+   "status": "compiles"
+  },
+  "rw::core::GeneralResourceAllocator::GeneralResourceAllocator": {
+   "status": "compiles"
+  },
+  "rw::core::GeneralResourceAllocator::GetPhysicalGeneralAllocator": {
+   "status": "compiles"
+  },
+  "rw::core::GeneralResourceAllocator::GetResourceDescriptor": {
+   "status": "compiles"
+  },
+  "rw::core::GeneralResourceAllocator::Initialize": {
+   "status": "compiles"
+  },
+  "rw::core::GeneralResourceAllocator::`scalar deleting destructor'": {
+   "status": "compiles"
+  },
+  "rw::core::GeneralResourceAllocator::~GeneralResourceAllocator": {
+   "status": "compiles"
+  },
   "rw::core::atom::FixupAtoms::`vector deleting destructor'": {
    "status": "reviewed"
   },
@@ -40762,6 +40783,10 @@
    "notes": "Wave46: 4/10; Prepare/Update/ProcessPostShakeSlomo + Destruct/ApplySlomoAndShake decl-only (asm recovered but agent under-delivered); discarded, redo bodying the recovered pseudocode",
    "status": "blocked"
   },
+  "GameSource/Director/Arbitrator/States/BrnArbStateDriveThru.cpp": {
+   "notes": "Fresh-eyes review: state machine matches dossier switch exactly (fallthroughs converted to structured C++), reversed-bay dot-product matches asm, no raw offset casts, sub_821FCE10/sub_821FCDA8 honestly unattested externs, RED parity is false-positive (named member-call indirection the text matcher doesn't see through).",
+   "status": "done"
+  },
   "GameSource/Director/Arbitrator/States/BrnArbStateOnlineCarSelect.cpp": {
    "status": "done"
   },
@@ -40786,10 +40811,6 @@
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateRoaming.cpp": {
    "status": "done"
-  },
-  "GameSource/Director/Arbitrator/States/BrnArbStateTakedown.cpp": {
-   "notes": "Wave45: 18/18+5/5 but B3ClassicTakedownPlayer::Update FINISHED-state used an INVENTED proxy condition (should read the interpolate behaviour's internal finished flag) + a raw-offset write into the embedded MomentSelector aggregate (+1520/+1524); discarded. Redo with the interpolate-finished accessor + MomentSelector layout",
-   "status": "blocked"
   },
   "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp": {
    "notes": "Fresh-eyes review: 5 bodied functions faithful, 4 honestly declaration-only, no fabrication.",
