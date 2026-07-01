@@ -9,7 +9,9 @@ This is deliberately local and conservative:
   * `done` requires implementation evidence, or explicit corrected-path evidence;
   * explicit partial/skeleton/blocking notes win over "a file exists".
 
-Default mode is a dry run. Use --apply to write progress/status.json.
+Default mode is a dry run and preserves existing non-todo status entries. Use
+--apply to write progress/status.json. Use --allow-demote only when you want
+file evidence to remove or demote existing status rows.
 
 Compatibility notes:
   work.py imports committed_files(), reconcile(), and verify() from this module.
@@ -403,7 +405,7 @@ def build_reconciled_status(
     status: dict,
     tu_index: dict,
     tracked: Iterable[str],
-    no_demote: bool = False,
+    no_demote: bool = True,
 ) -> tuple[dict, list[tuple[str, str, str, str | None]], dict[str, list[str]]]:
     current_tu = status.setdefault("tu", {})
     current_func = status.setdefault("func", {})
@@ -485,7 +487,7 @@ def print_report(old_status: dict, new_status: dict, changes: list, evidence: di
         print("\n(dry run; use --apply to write progress/status.json)")
 
 
-def reconcile(con=None, tracked=None, apply=False, no_demote=False):
+def reconcile(con=None, tracked=None, apply=False, no_demote=True):
     """Compatibility entry point used by work.py."""
     old_status = load_json(STATUS_JSON)
     tu_index = load_json(TU_INDEX_JSON)
@@ -540,10 +542,15 @@ def verify(con=None, tracked=None):
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true", help="write progress/status.json")
-    parser.add_argument("--no-demote", action="store_true", help="suppress status demotions")
+    parser.add_argument(
+        "--allow-demote",
+        action="store_true",
+        help="allow file evidence to demote/remove existing status entries",
+    )
+    parser.add_argument("--no-demote", dest="allow_demote", action="store_false", help=argparse.SUPPRESS)
     args = parser.parse_args()
     tracked = committed_files()
-    reconcile(None, tracked, args.apply, args.no_demote)
+    reconcile(None, tracked, args.apply, no_demote=not args.allow_demote)
     if args.apply:
         verify(None, tracked)
     return 0
