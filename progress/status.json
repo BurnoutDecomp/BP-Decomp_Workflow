@@ -2803,10 +2803,10 @@
    "status": "reviewed"
   },
   "BrnCoronaManager::BrnSubmissionInterface::AddCorona": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnCoronaManager::BrnSubmissionInterface::AddPropCorona": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnCoronaManager::Construct": {
    "status": "reviewed"
@@ -2815,7 +2815,7 @@
    "status": "reviewed"
   },
   "BrnCoronaManager::SetTextureAtlas": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::AbstractPoolVoidHandle::Prepare": {
    "status": "reviewed"
@@ -43054,6 +43054,10 @@
   },
   "GameSource/Unity/../Graphics/BrnBlobbyShadowManager.cpp": {
    "notes": "BrnBlobbyShadowManager; parity/none; wave9; verifier parity; gate pass.",
+   "status": "done"
+  },
+  "GameSource/Unity/../Graphics/BrnCoronaManager.cpp": {
+   "notes": "Fresh-eyes review: all 3 functions traced instruction-by-instruction against asm and confirmed correct (back-face cull, SmoothStep falloff incl. the previously-inverted AddPropCorona math now correct, 21-field TextureState::Parameters build). Rodata gaps honestly flagged, not fabricated. No offset hacks. Header reconciliation verified sound, 8 sibling includers independently recompiled clean. One non-blocking systemic finding: ResourceCarvingAllocator::Allocate's calling convention (extra implicit-this slot) replicates an existing accepted pattern already done/reviewed in rwgcoronarenderer.cpp -- not new to this TU, flagged for a future cross-TU fix, not blocking this review.",
    "status": "done"
   },
   "GameSource/Unity/../Graphics/BrnEffectsArbitrator.cpp": {
