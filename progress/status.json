@@ -25818,16 +25818,154 @@
   "BrnWorldIO::UpdateInputBuffer::SetTrafficNetworkInterface": {
    "status": "reviewed"
   },
+  "BrnWorldIO::UpdateOutputBuffer::": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendGameEventQueue": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendPropBecamePhysicalEventQueue": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendPropUpdateNotificationQueue": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendReplayRequestInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendResourceRequestInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendRouteResponseQueue": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendSoundWorldLoadInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendTrafficTypeResponseQueue": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::AppendTriangleCacheInterface": {
+   "status": "reviewed"
+  },
   "BrnWorldIO::UpdateOutputBuffer::Construct": {
    "status": "reviewed"
   },
   "BrnWorldIO::UpdateOutputBuffer::Destruct": {
    "status": "reviewed"
   },
+  "BrnWorldIO::UpdateOutputBuffer::G": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::Get": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetA": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetAICarOutputInt": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetContactSpy": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetContactSpyInterf": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetCrashNetwork": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetDe": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetDirector": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetEffectsEnviron": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetEffectsEnvironmentIn": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetGameEv": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetGameEventQue": {
+   "status": "reviewed"
+  },
   "BrnWorldIO::UpdateOutputBuffer::GetGuiEventQueue": {
    "status": "reviewed"
   },
   "BrnWorldIO::UpdateOutputBuffer::GetPlayerActiveRaceCarIndex": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetPlayerGlobalRaceCarIndex": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetPlayerVehicleControls": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetReplayRequestIn": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetResour": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetResourceRequestResourceInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetVeh": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetVehicleOut": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetVehicleOutputInt": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::GetWorldEntitySt": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetAICarOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetActiveRaceCarOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetCrashNetworkOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetDeformationOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetDirectorVehicleInputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetPlayerVehicleControls": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetPropVFXLocatorQueue": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetRaceCarGlobalOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetReplayActiveRaceCarOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetTrafficDirectorOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetTrafficNetworkOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetTrafficSoundOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetTriggerEntityOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnWorldIO::UpdateOutputBuffer::SetWorldEntityStatusInterface": {
    "status": "reviewed"
   },
   "CArgumentList::AddArgument": {
@@ -47472,6 +47610,10 @@
   },
   "class:BrnWorldIO::UpdateInputBuffer": {
    "notes": "All 32 funcs bodied 1:1 (10 IDA-truncated names resolved by asm offset+lock+DWARF). Layout frozen from DWARF, static_assert-pinned (leading per-race-car arrays + queue/interface members). Per-func lock parity VERIFIED correct by the adversarial verifier (read-bit4 getters vs write-bit3 handles/Append/Set; store-only setters no lock) -- the wave-B read/write mixup is absent. memcpy widths match asm (2736/164/60). Verifier minor_drift/low. Fixed: 2 assert-message strings (non-existent E_..._FIRST -> '>= 0'); SetTrafficNetworkInterface comment now flags the X360 selective 3-op update abstracted to the placeholder Set(). Un-homed payload interfaces = nominal HONEST placeholders. Gate pass.",
+   "status": "done"
+  },
+  "class:BrnWorldIO::UpdateOutputBuffer": {
+   "notes": "46/46 funcs; gate PASS incl. cascade consumers; parity RED benign (inlined assert machinery + committed-generic queue Appends invisible to the regex); layout DWARF-frozen, offsets asm-attested",
    "status": "done"
   },
   "class:CArgumentList": {
