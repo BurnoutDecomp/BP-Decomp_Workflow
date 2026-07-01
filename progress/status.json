@@ -15237,6 +15237,15 @@
   "BrnParticle::IInternalAllocator::Free": {
    "status": "reviewed"
   },
+  "BrnParticle::IInternalAllocator::Free`adjustor{4}'": {
+   "status": "compiles"
+  },
+  "BrnParticle::IInternalAllocator::`scalar deleting destructor'": {
+   "status": "compiles"
+  },
+  "BrnParticle::IInternalAllocator::`vector deleting destructor'`adjustor{4}'": {
+   "status": "compiles"
+  },
   "BrnParticle::LionEffect::Construct": {
    "status": "reviewed"
   },
@@ -21297,6 +21306,9 @@
   "BrnSound::Vehicles::Engines::EngineControl::UpdateVolume": {
    "status": "reviewed"
   },
+  "BrnSound::Vehicles::Engines::EngineControl::`vector deleting destructor'": {
+   "status": "compiles"
+  },
   "BrnSound::Vehicles::Engines::HybridEngineControl::Attach": {
    "status": "reviewed"
   },
@@ -22208,6 +22220,9 @@
   },
   "BrnSound::Vehicles::Wheels::WheelControl::WheelControl": {
    "status": "reviewed"
+  },
+  "BrnSound::Vehicles::Wheels::WheelControl::`vector deleting destructor'": {
+   "status": "compiles"
   },
   "BrnSound::World::StaticSoundMap::GetEntity": {
    "status": "reviewed"
@@ -26866,7 +26881,7 @@
    "status": "reviewed"
   },
   "CgsFileSystem::DeviceManager::DeviceManager": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsFileSystem::DeviceManager::FindDevice": {
    "status": "reviewed"
@@ -26896,7 +26911,7 @@
    "status": "reviewed"
   },
   "CgsFileSystem::DeviceManager::operator new": {
-   "status": "recovered"
+   "status": "reviewed"
   },
   "CgsFileSystem::DeviceMemFileSystem::`vector deleting destructor'": {
    "status": "reviewed"
@@ -40814,10 +40829,6 @@
   "GameSource/Gui/CustomRenderer/BrnGuiCustRendererDebugComponent.cpp": {
    "status": "done"
   },
-  "GameSource/Gui/CustomRenderer/Renderers/BrnAboveCarRenderer.cpp": {
-   "notes": "Wave38: 8/8 bodied but fabricated sub_* stubs DUPLICATE committed BasicColouredTexturedVertex SetState/SetTexture (quality-gate) + dropped the RenderComponent fade-alpha colour pack ((1-f)*1020 ROR8); reverted. Redo reusing committed immediate-mode API per BrnSatNavRenderer (also: Prepare stores 3rd param, GetComponentID not new virtual)",
-   "status": "blocked"
-  },
   "GameSource/Gui/CustomRenderer/Renderers/BrnBlackBarRenderer.cpp": {
    "notes": "fresh-eyes (sonnet): Construct/GetID/RecvEvent faithful",
    "status": "done"
@@ -41423,10 +41434,6 @@
   "GameSource/Network/Managers/BrnNetworkPostRoundManager.cpp": {
    "notes": "Verify PASS (22-fn state machine faithful). ActionEndGame per-player {score,playerID} packing left flagged (score offset/EndGameData payload layout not yet recovered) -- dependency-limited, no fabrication.",
    "status": "done"
-  },
-  "GameSource/Network/Managers/BrnNetworkRoadRulesManager.cpp": {
-   "notes": "Wave34: rewrite reached 23/32 but changed layout incompatibly with + dropped 2 fns from the committed 4-fn class TU (ctor 0x827E2BE8 + OnAutoLogin 0x82564338); REVERTED to preserve class-TU coverage. Redo building ON the committed .h; ProcessAfterSim/ProcessGameActions recoverable, 5 callbacks thread un-named RoadRulesData sub-object offsets",
-   "status": "blocked"
   },
   "GameSource/Network/Managers/BrnNetworkScoreboard.cpp": {
    "status": "done"
@@ -42978,10 +42985,6 @@
   "GameSource/Unity/../World/EnvironmentMap/BrnEnvironmentMap.cpp": {
    "status": "done"
   },
-  "GameSource/Unity/../World/ShadowMap/BrnShadowMap.cpp": {
-   "notes": "Wave47: 0/7 agent over-deferred -- CalcOptimisedLod@0x827Bxxxx (pure scalar int) + CalcLodDistanceModifier (trivial branch+vspltw) ARE recoverable; redo bodying them",
-   "status": "blocked"
-  },
   "GameSource/World/AI/BrnAICar.h": {
    "status": "done"
   },
@@ -43141,10 +43144,6 @@
   },
   "SDKs/EATech/include/cmn/rw/core/resource/resourceallocator.h": {
    "status": "done"
-  },
-  "SDKs/EATech/include/eathread/powerpc/eathread_atomic_powerpc.h": {
-   "notes": "Correctly blocked. All 4 funcs (CgsMemory::DataStreamCommandReader::Construct@0x82867830 / Destruct@0x828678B0, DataStreamResultPoster::Construct@0x82867FF0 / Destruct@0x82868070) are PPC 64-bit atomic CAS retry loops: asm shows mfmsr/mtmsree interrupt-disable bracketing ldarx r8,0,r10 (load-reserve",
-   "status": "blocked"
   },
   "SDKs/EATech/include/native/ps3/rw/core/base/detail/hosttype.h": {
    "notes": "CollisionDebugComponent::GetTrafficColour verified: 8 packed 0x20xxxxxx colours, 7-threshold bge cascade, 4/pi scale.",
@@ -45260,10 +45259,6 @@
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
-  "class:BrnParticle::IInternalAllocator": {
-   "notes": "Genuine multiply-inheriting polymorphic dtor thunk block per HARD RULES. Scalar deleting dtor @0x822898A0 writes two un-homed vtable ptrs (off_8200FDB4 stw 0(r9) at this+4, off_8200F5B4 stw 0(r31) at this+0) then conditional operator delete on (a2&1). Free'adjustor{4} @0x82289898 and vector-deleting",
-   "status": "blocked"
-  },
   "class:BrnParticle::Native::BrnDebrisArray": {
    "notes": "verified store-for-store (intrusive list drain / free-list push).",
    "status": "done"
@@ -46312,10 +46307,6 @@
   "class:BrnSound::Vehicles::Engines::DualGinsuExhaustEffect": {
    "status": "done"
   },
-  "class:BrnSound::Vehicles::Engines::EngineControl": {
-   "notes": "Sole ledger func is 'vector deleting destructor' @0x826B2BA0. Asm confirms multiply-inheriting polymorphic dtor over un-homed hierarchy: installs 4 vtables (stw off_820AF228 @+0x38 IShiftingActivator subobj; stw off_820AEA6C @+0; stw off_820AEA38 then off_820AA820 @+4 progressive); member teardown (",
-   "status": "blocked"
-  },
   "class:BrnSound::Vehicles::Engines::HybridEngineControl": {
    "status": "done"
   },
@@ -46435,10 +46426,6 @@
   },
   "class:BrnSound::Vehicles::Wheels::TrafficInAir": {
    "status": "done"
-  },
-  "class:BrnSound::Vehicles::Wheels::WheelControl": {
-   "notes": "Vector deleting destructor @0x826D00A0 stores 3 distinct vtables (off_820AEA6C@+0, off_820AEA38 then off_820AA820@+4 MI-subobject overwrite, off_820AF544@+0x38) + conditionally frees via the global deferred-delete manager off_82FFB954 through (*(*mgr+0x14))(mgr,&rec) -- an un-homed aggregate (full MI hierarchy + 3 vtables + global manager) not growable additively from a single dtor thunk. Deferred.",
-   "status": "blocked"
   },
   "class:BrnSound::World::StaticSoundMap": {
    "notes": "GetSubRegionDescrip verified: fields by name @+0/+4/+0x10/+0x14/+0x20/+0x24/+0x28/+0x2C.",
@@ -47219,6 +47206,10 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:CgsFileSystem::DeviceManager": {
+   "notes": "Independent re-review confirmed the original FAIL was a scope-confusion false positive: the reviewer measured the whole shared .cpp file (12 functions) against this TU's dossier (which only tracks 2: ctor + operator new). The other 10 functions belong to a separate, already-done sibling file-TU (GameShared/GameClasses/System/FileSystem/CgsDeviceManager.cpp) with its own full asm/pseudocode dossier. Independently verified ctor + operator new against their own pseudocode: named-member delegation to OperationPool::Construct(), documented malloc() PC-leaf substitution for the allocator, no offset hacks.",
+   "status": "done"
+  },
   "class:CgsFileSystem::DeviceMemFileSystem": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -47253,10 +47244,6 @@
   },
   "class:CgsGeometric::AxisAlignedBox4": {
    "notes": "GetAxisAlignedBox @0x8283AA68 is heavy VMX (28 lvsl/vperm/vrlimi128/vmrg/vspltw cross-lane permute ops implementing the SoA-4 box-N extract/transpose). No scalar form attested. Deferred to a VMX pass.",
-   "status": "blocked"
-  },
-  "class:CgsGeometric::BT::TriangleData": {
-   "notes": "Construct @0x82839D30 is heavy VMX (136 vsubfp cross-product + vrsqrtefp/vmsum3fp128/vmaddfp/vnmsubfp Newton-Raphson normalize ops storing 22 vectors). Dense hand-vectorised, no scalar form attested. Deferred to a VMX pass.",
    "status": "blocked"
   },
   "class:CgsGeometric::Line": {
