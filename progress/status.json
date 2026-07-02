@@ -3816,6 +3816,9 @@
   "BrnDirector::DebugPrinter::Construct": {
    "status": "reviewed"
   },
+  "BrnDirector::DebugPrinter::PrintName": {
+   "status": "reviewed"
+  },
   "BrnDirector::DestructionPathTakedownPlayer::HasFinished": {
    "status": "reviewed"
   },
@@ -4392,7 +4395,13 @@
   "BrnDirector::VehicleRef::IsValid": {
    "status": "reviewed"
   },
+  "BrnDirector::VehicleRef::Set": {
+   "status": "reviewed"
+  },
   "BrnDirector::VehicleRef::SetToRaceCar": {
+   "status": "reviewed"
+  },
+  "BrnDirector::VehicleRef::operator!=": {
    "status": "reviewed"
   },
   "BrnDirector::VehicleTracker::Construct": {
@@ -8826,6 +8835,9 @@
   "BrnGui::BootAttract::Update": {
    "status": "reviewed"
   },
+  "BrnGui::BootLegal::DisplaySelectionMenu": {
+   "status": "reviewed"
+  },
   "BrnGui::BootLegal::GetResourcesToLoad": {
    "status": "reviewed"
   },
@@ -8836,6 +8848,9 @@
    "status": "reviewed"
   },
   "BrnGui::BootLegal::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::BootLegal::UpdateSelectionMenu": {
    "status": "reviewed"
   },
   "BrnGui::BootLoading::OnEnter": {
@@ -9348,6 +9363,18 @@
   "BrnGui::CrashNavIconRenderer::SetRenderEnabled": {
    "status": "reviewed"
   },
+  "BrnGui::CrashNavLegend::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavLegend::HighlightNext": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavLegend::HighlightPrevious": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavLegend::UpdateIcons": {
+   "status": "reviewed"
+  },
   "BrnGui::CrashNavMap::OnLeave": {
    "status": "reviewed"
   },
@@ -9408,10 +9435,16 @@
   "BrnGui::CrashNavOptions::ApplyAndSaveSettings": {
    "status": "reviewed"
   },
+  "BrnGui::CrashNavOptions::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
   "BrnGui::CrashNavOptions::HandleOptionChanged": {
    "status": "reviewed"
   },
   "BrnGui::CrashNavOptions::OnLeave": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavOptions::SetSettingsFromProfile": {
    "status": "reviewed"
   },
   "BrnGui::CrashNavOptions::Update": {
@@ -11520,6 +11553,9 @@
   "BrnGui::OnlineGameRoomPlayerInfo::ShowMapScreen": {
    "status": "reviewed"
   },
+  "BrnGui::OnlineGameRoomPlayerInfo::ShowSettingsOptions": {
+   "status": "reviewed"
+  },
   "BrnGui::OnlineGameRoomPlayerInfo::ShowSplashScreen": {
    "status": "reviewed"
   },
@@ -12237,6 +12273,18 @@
   "BrnGui::RivalMapPanel::TransitionOut": {
    "status": "reviewed"
   },
+  "BrnGui::RivalTableCell::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::RivalTableCell::SetScreenPosition": {
+   "status": "reviewed"
+  },
+  "BrnGui::RivalTableCell::SetWrecked": {
+   "status": "reviewed"
+  },
+  "BrnGui::RivalTableCell::Update": {
+   "status": "reviewed"
+  },
   "BrnGui::RoadPanel::AppendExpectedAptComponents": {
    "status": "reviewed"
   },
@@ -12276,7 +12324,16 @@
   "BrnGui::RoadRuleComponent::EndTimers": {
    "status": "reviewed"
   },
+  "BrnGui::RoadRuleComponent::EnterRoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::RoadRuleComponent::HandleLeaveRoadEvent": {
+   "status": "reviewed"
+  },
   "BrnGui::RoadRuleComponent::HandleRoadRuleEnd": {
+   "status": "reviewed"
+  },
+  "BrnGui::RoadRuleComponent::HandleUpcomingRoadEvent": {
    "status": "reviewed"
   },
   "BrnGui::RoadRuleComponent::UpdateCurrentTime": {
@@ -42115,6 +42172,10 @@
    "notes": "combined fresh-eyes batch review 5/5 PASS: every format id at converged tails asm-confirmed; WOW tables verbatim vs XEX; road-rule/skills/targets gates match",
    "status": "done"
   },
+  "GameSource/Gui/Flow/HUD/Components/BrnRoadRuleComponent.h": {
+   "notes": "3 inlines asm-exact incl. pre-branch +0x4E0 store, 2-latch loop, event+0x18 leader-types pin (E_SCORE_TYPE_COUNT==2 triangulates), colour-drop == lwz+0x6C!=0; event sizes 120/128 triangulate; X360 mRoadId@+0 divergence noted",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/HUD/States/BrnBootAttract.cpp": {
    "notes": "State-only leaf on the new CgsGui::State base. OnEnter/OnLeave register/unregister the single observed GUI event via mpStateInterface. Gate PASS, parity YELLOW is a false positive: call counts match (4=4); the 'absent' RegisterForEvents/UnRegisterForEvents are present as member-calls (mpStateInterface->...) which the literal qualified-name matcher misses; return delta = void fns.",
    "status": "done"
@@ -42323,6 +42384,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnCrashNavLegend.cpp": {
+   "notes": "4 fns asm-exact; tables XEX byte-verified incl. DriveThough typo + empty 9th; unsigned window >7->8 exact",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnCursor.cpp": {
    "status": "done"
   },
@@ -42359,6 +42424,10 @@
   "GameSource/Gui/Flow/Screen/Components/BrnRivalMapPanel.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnRivalTableCell.cpp": {
+   "notes": "4 fns asm-exact; clrldi id (zero-extend) kept; vtbl order 0/1/2/3 (differs from MenuItem, asm-checked); SetWrecked pre-latch read preserved; nit: DWARF virtual/u64-arg Construct vs 3-arg asm shape (comment-worthy)",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnRoadPanel.cpp": {
    "status": "done"
   },
@@ -42392,6 +42461,10 @@
   },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavEnterOnlineMod.cpp": {
    "notes": "combined fresh-eyes batch review 5/5 PASS: platform OnEnter + meSignInType=NO_TITLE(1) @+0xCC verified",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnCrashNavOptions.h": {
+   "notes": "3 inlines asm-exact; XEX table {0x8D,4}/1 verified; cache+0xB878 pins; SetUpComponent<4> mangled-confirmed; grows additive",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.h": {
@@ -45511,6 +45584,10 @@
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::DebugPrinter": {
+   "notes": "vtbl slot 6 == GetName per the declared Moment virtual order; arg flow exact",
+   "status": "done"
+  },
   "class:BrnDirector::DirectorIO::InputBuffer": {
    "notes": "All 27 funcs bodied (count reconciled, none dropped; 6 IDA-truncated names map 1:1). IOBuffer-derived InputBuffer: read-lock getters + write-side handles/Append mutators. Verifier minor_drift/low; FIXED before commit: non-const GetVehicleInputInterface (0x823B2890) asserted read-lock -> corrected to IsBufferLockedForWriting per the asm bit-3 test (const overload 0x82206DA0 correctly read-lock). Opaque interface members = HONEST asm-sized DWARF-named blobs (32-bit-host pointer-offset caveat flagged). Gate pass.",
    "status": "done"
@@ -45597,6 +45674,10 @@
   },
   "class:BrnDirector::Timestep": {
    "notes": "Wave 47: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:BrnDirector::VehicleRef": {
+   "notes": "bodies asm-exact (case stores, u32 3rd arg retype, != compare order); review found the retype orphaned BehaviourRig.cpp:117 mpRef -- FIXED to mbSet + stale comment updated, re-gated",
    "status": "done"
   },
   "class:BrnDirector::VehicleTracker": {
@@ -46049,6 +46130,10 @@
   },
   "class:BrnGui::BoostMessageSlot,3>": {
    "notes": "Wave 37: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnGui::BootLegal": {
+   "notes": "committed bodies verified vs dossier asm; XEX tables confirmed; extsb-vs-u8 inert; ledger reconciled",
    "status": "done"
   },
   "class:BrnGui::BrnFlaptComponent": {
