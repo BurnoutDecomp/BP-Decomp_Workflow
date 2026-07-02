@@ -2833,13 +2833,13 @@
    "status": "reviewed"
   },
   "BrnDirector::AllVehicleData::GetSqDistanceOfNearestCarToPlayer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::AllVehicleData::NearestCarInfo,8>::Append": {
    "status": "reviewed"
   },
   "BrnDirector::AllVehicleData::SqDistanceOfNearestOpposingTeamMember": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::AllVehicleData::Update": {
    "status": "reviewed"
@@ -3478,7 +3478,7 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRenderMetrics::GameTalkMessageReceiver": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::Construct": {
    "status": "reviewed"
@@ -3697,7 +3697,7 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::CameraImpactEffect::RegisterImpact": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::CameraShake::Update": {
    "status": "reviewed"
@@ -3757,7 +3757,7 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::TransitionSmoother::Set": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::Tweaker::AddMapping": {
    "status": "reviewed"
@@ -3868,10 +3868,10 @@
    "status": "reviewed"
   },
   "BrnDirector::DirectorDevTools::GameTalkMsgHandler": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorDevTools::LiveCamUpdate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorDevTools::Update": {
    "status": "reviewed"
@@ -19453,13 +19453,13 @@
    "status": "reviewed"
   },
   "BrnReplays::DirectorSerialiser::GetStaticLayout": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnReplays::DirectorSerialiser::Read": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnReplays::DirectorSerialiser::Write": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnReplays::DiskReadStream::OnClose": {
    "status": "reviewed"
@@ -45527,6 +45527,10 @@
    "notes": "fresh-eyes review: 16-iter loop + weight table correct",
    "status": "done"
   },
+  "class:BrnDirector::AllVehicleData": {
+   "notes": "Combined batch-11 review: asm-verified @0x82233488/@0x822334E0 incl. per-iteration count re-read + tripwire, X360 12B NearestCarInfo row (+8 team word), FLT_MAX sentinel confirmed from XEX rodata @0x8200173C.",
+   "status": "done"
+  },
   "class:BrnDirector::AllVehicleData::NearestCarInfo,8>": {
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -45617,6 +45621,10 @@
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::BehaviourRenderMetrics": {
+   "notes": "Combined batch-11 review: @0x8220FB60 command map + offsets verified; the 0x82836DC8 GetNumKeys reconciliation PROVEN from raw XEX bytes (lwz r3,0xC(r3)); GetKey/GetContent/GetSize entry accessors confirmed; rename landed with zero stale GetState refs.",
+   "status": "done"
+  },
   "class:BrnDirector::Camera::BehaviourRig": {
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -45665,6 +45673,14 @@
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::Utils::CameraImpactEffect": {
+   "notes": "Combined batch-11 review: RegisterImpact @0x821F3648 fsel branchless-max reconstruction correct; only the accepted fsel NaN micro-edge noted.",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::Utils::TransitionSmoother": {
+   "notes": "Combined batch-11 review: Set @0x821F22A0 store/assert interleaving exact; guard bounds 0.0/1.0 confirmed from XEX rodata; NaN behavior equivalent.",
+   "status": "done"
+  },
   "class:BrnDirector::Camera::ValidityAccount": {
    "notes": "h:219 combined guard + folded :222; committed BitArray u64-field SetBit == the asm word math; comment nit fixed (asm performs both range checks)",
    "status": "done"
@@ -45691,6 +45707,10 @@
   },
   "class:BrnDirector::DebugPrinter": {
    "notes": "vtbl slot 6 == GetName per the declared Moment virtual order; arg flow exact",
+   "status": "done"
+  },
+  "class:BrnDirector::DirectorDevTools": {
+   "notes": "Combined batch-11 review: @0x822095A0 dispatch chain + instance layout + arbitrator +0x44FE/+0x44FF pokes + ICE editor reaches (module+0x27A0 = wrapper+0x50 manager editor) asm-verified; EditorOn s32->ICETakeData* RETYPE asm-proven; LiveCamUpdate @0x82239C80 send/fly paths exact. Post-review: BrnDirectorResourceManager.h debris cleanup, re-gated PASS.",
    "status": "done"
   },
   "class:BrnDirector::DirectorIO::InputBuffer": {
@@ -47461,6 +47481,10 @@
   },
   "class:BrnReplays::BaseSerialiser": {
    "notes": "7 funcs bodied store-for-store; verifier-flagged meId@+0x20 FIXED to X360 +0x28 (8-byte flagged extension placeholder; bodies touch only +0x00..+0x14; host pointer-width precludes a byte static_assert). Gate pass.",
+   "status": "done"
+  },
+  "class:BrnReplays::DirectorSerialiser": {
+   "notes": "Combined batch-11 review: GetStaticLayout/Read/Write verified; asm proves BOTH Read/Write dispatch calls carry li r5,0x180 (Hex-Rays dropped one size arg); construct-before-null-guard order kept; 384B Camera image model correct.",
    "status": "done"
   },
   "class:BrnReplays::EffectsSerialiser": {
