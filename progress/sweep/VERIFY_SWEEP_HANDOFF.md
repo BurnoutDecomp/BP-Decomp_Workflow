@@ -37,8 +37,22 @@ bodies couldn't be auto-mapped to a file — audit at the end, not in the main s
 
 ## Method — verify → fix → re-verify, in waves
 
-Process TUs in waves, **≤1 TU per directory per wave** so parallel fixes never
-collide in a shared header. For each `pending` TU:
+**A wave is a batch of _related_ TUs — one coherent subsystem cluster processed
+together**, not an arbitrary "next N off the queue" and not a single TU. Pick the
+whole related group (a subsystem subtree such as the Debug-UI menu/variable/window
+system, one sound manager family, one replay serialiser set, …) so the verifier
+reasons about a consistent slice and shared types/headers are seen in one pass.
+Tag every TU in the batch with the same `wave` number in `verify_sweep.json`.
+Typical size ~10–15 TUs; let the subsystem boundary — not a hard count — decide.
+
+Collision safety does **not** come from a 1-TU-per-directory rule (a related wave
+deliberately spans a directory): it comes from the **own-files-only** fix rule —
+a fix may touch only the TU's own files, and any divergence whose correct fix
+needs a **sibling-owned shared header** is recorded `flagged`/`conductor_fix`
+(never edited in parallel). That is what keeps concurrent fixes in one subsystem
+from clobbering each other.
+
+For each `pending` TU in the wave:
 
 1. **Packet:** `python tools/work/work.py postmortem "<TU id>" -o <scratch>/<slug>.md`
    — per-function pseudocode **+ RAW PPC asm** + DWARF/Feb refs. Large; read it in
