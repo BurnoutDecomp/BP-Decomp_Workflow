@@ -3696,6 +3696,15 @@
   "BrnDirector::Camera::Utils::PositionLag::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Utils::SmoothMover::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::SmoothMover::UpdateWithLimitsNoCentering": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::SmoothMover::UpdateWithLimitsWithCentering": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::Utils::Tweaker::AddMapping": {
    "status": "reviewed"
   },
@@ -3731,6 +3740,9 @@
   },
   "BrnDirector::CameraFinaliser::Update": {
    "status": "recovered"
+  },
+  "BrnDirector::CameraInterpolationController::RotateAboutPivotParams::Interpolate": {
+   "status": "reviewed"
   },
   "BrnDirector::DebugComponent::Construct": {
    "status": "reviewed"
@@ -4147,6 +4159,15 @@
    "status": "reviewed"
   },
   "BrnDirector::MomentDescription,10>::Append": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentFailSafe::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentFailSafe::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentFailSafe::Update": {
    "status": "reviewed"
   },
   "BrnDirector::MomentHardStop::Release": {
@@ -8827,13 +8848,13 @@
    "status": "reviewed"
   },
   "BrnGui::BrnSaveIconComponent::HideSaveIcon": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::BrnSaveIconComponent::Prepare": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::BrnSaveIconComponent::ShowSaveIcon": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::BrnShowtimeMessageComponent::Construct": {
    "status": "reviewed"
@@ -9031,6 +9052,15 @@
    "status": "reviewed"
   },
   "BrnGui::ColourCalibrationScreen::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::ColourCalibrationScreen::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnGui::ColourCalibrationScreen::RecvEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::ColourCalibrationScreen::Update": {
    "status": "reviewed"
   },
   "BrnGui::ColourField::Construct": {
@@ -9358,7 +9388,7 @@
    "status": "reviewed"
   },
   "BrnGui::Credits::OnEnter": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::Credits::OnLeave": {
    "status": "reviewed"
@@ -9367,10 +9397,10 @@
    "status": "reviewed"
   },
   "BrnGui::Credits::UpdateLoadResources": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::Credits::UpdateRunning": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CreditsTextRenderer::Construct": {
    "status": "reviewed"
@@ -9567,10 +9597,19 @@
   "BrnGui::EffectsArbitrator::UpdateHooks": {
    "status": "reviewed"
   },
+  "BrnGui::EventIconManager::GetEventIDForIconIndex": {
+   "status": "reviewed"
+  },
+  "BrnGui::EventIconManager::GetEventIconPositions": {
+   "status": "reviewed"
+  },
   "BrnGui::EventIconManager::Prepare": {
    "status": "reviewed"
   },
   "BrnGui::EventIconManager::ReleaseResources": {
+   "status": "reviewed"
+  },
+  "BrnGui::EventIconManager::Update2DIcons": {
    "status": "reviewed"
   },
   "BrnGui::EventInfoComponent::SetTakedownsTextState": {
@@ -10434,10 +10473,19 @@
   "BrnGui::GuiOverlaysDirector::BridgeOutEvents": {
    "status": "reviewed"
   },
+  "BrnGui::GuiOverlaysDirector::HandleOverlayRequest": {
+   "status": "reviewed"
+  },
   "BrnGui::GuiOverlaysDirector::HandleShowFreeBurnIntroRequest": {
    "status": "reviewed"
   },
+  "BrnGui::GuiOverlaysDirector::HandleWaitFinishRequest": {
+   "status": "reviewed"
+  },
   "BrnGui::GuiOverlaysDirector::SetUpOverlayInfo": {
+   "status": "reviewed"
+  },
+  "BrnGui::GuiOverlaysDirector::Update": {
    "status": "reviewed"
   },
   "BrnGui::GuiPerfmons::Initialise": {
@@ -10792,6 +10840,15 @@
    "status": "reviewed"
   },
   "BrnGui::KeyboardHost::Release": {
+   "status": "reviewed"
+  },
+  "BrnGui::LeaderboardColumnComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::LeaderboardColumnComponent::Init": {
+   "status": "reviewed"
+  },
+  "BrnGui::LeaderboardColumnComponent::SetCell": {
    "status": "reviewed"
   },
   "BrnGui::LeaderboardTableComponent::GetHighlightedGamertag": {
@@ -16612,6 +16669,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::ExternalPhysicsBody::ReadPropertiesFromChangeInertiaEvent": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::ExternalPhysicsBody::ReadPropertiesFromRenderware": {
    "status": "reviewed"
   },
   "BrnPhysics::ExternalPhysicsBody::Release": {
@@ -29022,6 +29082,12 @@
   "CgsGui::GuiKeyboard::Update": {
    "status": "reviewed"
   },
+  "CgsGui::GuiModule::BridgeFromInputToView": {
+   "status": "reviewed"
+  },
+  "CgsGui::GuiModule::BridgeFromModelToOutput": {
+   "status": "reviewed"
+  },
   "CgsGui::GuiModule::Construct": {
    "status": "reviewed"
   },
@@ -40064,6 +40130,10 @@
   "GameShared/GameClasses/Gui/CgsGuiModule.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/Gui/CgsGuiModuleBridges.cpp": {
+   "notes": "re-review after layout rework: named members + explicit padding accepted; bridges semantics exact",
+   "status": "done"
+  },
   "GameShared/GameClasses/Gui/CgsGuiModuleIO.cpp": {
    "notes": "SetGuiResourceRequestQueue verified: null+write-lock asserts, Append over VariableEventQueue<2048,16>.",
    "status": "done"
@@ -41353,6 +41423,10 @@
   "GameSource/Director/Camera/Camera.h": {
    "status": "done"
   },
+  "GameSource/Director/Camera/Utils/BrnCameraSmoothMover.cpp": {
+   "notes": "batch subagent review: float-exact both variants; reviewer confirmed the pseudocode-dropped IsValid asserts in the XEX",
+   "status": "done"
+  },
   "GameSource/Director/Camera/Utils/BrnCameraTweaker.cpp": {
    "notes": "Wave 38: faithful vs asm, gate clean, pushed eb594dd",
    "status": "done"
@@ -41410,6 +41484,10 @@
    "status": "done"
   },
   "GameSource/Director/MomentController/BrnMomentSelector.cpp": {
+   "status": "done"
+  },
+  "GameSource/Director/MomentController/Moments/BrnMomentFailsafe.cpp": {
+   "notes": "batch subagent review: store-exact incl. CameraState head bit 18",
    "status": "done"
   },
   "GameSource/Director/MomentController/Moments/BrnMomentNewCarJoined.cpp": {
@@ -41556,6 +41634,10 @@
   "GameSource/Gui/BrnGuiCache.h": {
    "status": "done"
   },
+  "GameSource/Gui/BrnGuiColourCalibrationScreen.cpp": {
+   "notes": "batch subagent review: constants/asserts/fallthrough verified",
+   "status": "done"
+  },
   "GameSource/Gui/BrnGuiDebugComponent.cpp": {
    "status": "done"
   },
@@ -41608,6 +41690,10 @@
   },
   "GameSource/Gui/BrnGuiOptionsDataProfile.cpp": {
    "notes": "Verify caught 4 wrong Construct defaults; fixed per asm immediates: songIndex=-1/pictureIndex=0 (swap), meCameraFeedSetting=CAMERA_USER_ON(1, real DWARF enum), mbSixAxisSteering=false, mbForceFeedback=true.",
+   "status": "done"
+  },
+  "GameSource/Gui/BrnGuiOverlaysDirector.cpp": {
+   "notes": "batch subagent review: all 8 dispatch arms + handlers offset-reconciled",
    "status": "done"
   },
   "GameSource/Gui/BrnGuiPerfmons.cpp": {
@@ -41851,6 +41937,10 @@
   "GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Permanent/Components/BrnSaveIconComponent.cpp": {
+   "notes": "batch subagent review: inlined Prepare chain + Show/Hide order exact",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Permanent/Components/BrnShowtimeMessageComponent.cpp": {
    "status": "done"
   },
@@ -41901,6 +41991,10 @@
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnLeaderboardColumnComponent.cpp": {
+   "notes": "batch subagent review: view-state order + buffers exact; cell-name inference honestly flagged",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnManufacturerIcon.cpp": {
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -41949,6 +42043,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavTrax.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnCredits.cpp": {
+   "notes": "reviewer's single finding (uninitialised trailing payload word vs the X360 stw of 0 @0x824CFAB4) applied verbatim: muPayload zero-initialised; rest of the TU passed the fresh-eyes review",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCredits.h": {
@@ -42138,6 +42236,10 @@
    "status": "done"
   },
   "GameSource/Gui/PFX/Resource/BrnGuiPFXHooksResource.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/SatNav/BrnEventIconManager.cpp": {
+   "notes": "batch subagent review: exact table ops incl. the non-gating re-check",
    "status": "done"
   },
   "GameSource/Gui/SatNav/BrnGuiTracker.cpp": {
@@ -44005,6 +44107,10 @@
   "SDKs/EATech/include/rw/math/fpu/scalar.h": {
    "notes": "MISATTRIBUTED (triage 2026-06-29, high-conf): NOT a reconstruction target -- demangler/DecFIGS mis-bucket. Do not reconstruct. Re-partition: dissolve this TU and re-attribute its 7 funcs to their real owning dossiers across the 6 subsystems (AStar etc.), most of which are already committed (DiagonalDistance is done in BrnAStar.cpp). The header itself is just inline scalar math, no standalone target.",
    "status": "blocked"
+  },
+  "SDKs/EATech/include/rw/math/vpu/detail/matrix33_type_inline.h": {
+   "notes": "batch subagent review: exact (reviewer re-verified vperm masks/basis rows/1.0 in XEX)",
+   "status": "done"
   },
   "SDKs/EATech/include/rw/math/vpu/detail/matrix44_operation_inline.h": {
    "notes": "rw::math::vpu Matrix44 inline op; parity/low; wave9; verifier parity; gate pass.",
