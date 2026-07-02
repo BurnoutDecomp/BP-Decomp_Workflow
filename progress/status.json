@@ -49722,6 +49722,10 @@
    "notes": "6 funcs verified vs asm; parity.",
    "status": "done"
   },
+  "class:D3D": {
+   "notes": "X360 XDK D3D runtime (statically linked platform vendor code) - PC uses real Direct3D; not decompiled, same as class:D3D::CDevice",
+   "status": "blocked"
+  },
   "class:D3D::CDevice": {
    "notes": "FOUNDATION committed (0f15ab1): D3D::CDevice TYPE homed + 5/18 software funcs bodied faithfully (IsPastStopPoint/IsPrimaryMemoryBusy/IsSecondaryMemoryBusy/MarkAsOutOfMemory/SaveRingBufferState). 13/18 decl-only: need un-homed sibling layouts (class:D3D::CBlocker/CCommandBuffer/CRingAllocList) and/or build raw PM4 packet streams / poke GPU regs. Unblocks once siblings homed.",
    "status": "blocked"
