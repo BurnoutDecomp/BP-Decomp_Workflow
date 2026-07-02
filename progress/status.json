@@ -14682,6 +14682,9 @@
   "BrnNetwork::PlayerInfoData::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "BrnNetwork::PlayerMenuData::Clear": {
+   "status": "reviewed"
+  },
   "BrnNetwork::PlayerParams::`scalar deleting destructor'": {
    "status": "reviewed"
   },
@@ -15430,6 +15433,9 @@
    "status": "reviewed"
   },
   "BrnNetwork::StatsRequestEvent,32>::Push": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::StatsRequestEvent::Construct": {
    "status": "reviewed"
   },
   "BrnNetwork::StatsUpdateMessage::Construct": {
@@ -21258,6 +21264,9 @@
   "BrnSound::Logic::Traffic::TrafficStateManager::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "BrnSound::Logic::Traffic::TrafficStateManager::~TrafficStateManager": {
+   "status": "reviewed"
+  },
   "BrnSound::Logic::World::Emitter3dControl::CreateObject": {
    "status": "reviewed"
   },
@@ -26380,6 +26389,9 @@
    "status": "reviewed"
   },
   "CWMVMBMode::CWMVMBMode": {
+   "status": "reviewed"
+  },
+  "CgsAttribSys::AttribSysCollectionKey::GetHashKey": {
    "status": "reviewed"
   },
   "CgsAttribSys::AttribSysIO::InputBuffer::Construct": {
@@ -34296,6 +34308,9 @@
   "CgsSceneManager::EntityManager::GetVolumeInstance": {
    "status": "reviewed"
   },
+  "CgsSceneManager::EntityManager::Prepare": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::EntityManager::RemoveEntity": {
    "status": "reviewed"
   },
@@ -35490,6 +35505,9 @@
   "CgsSound::Playback::CsisUpdateCommand::CsisUpdateCommand": {
    "status": "reviewed"
   },
+  "CgsSound::Playback::Environment::DoDispose": {
+   "status": "reviewed"
+  },
   "CgsSound::Playback::Factory::CreateContent": {
    "status": "reviewed"
   },
@@ -35602,6 +35620,9 @@
    "status": "reviewed"
   },
   "CgsSound::Playback::IEntityFixer::GetFixer": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::MasterVoice::~MasterVoice": {
    "status": "reviewed"
   },
   "CgsSound::Playback::Module::Module:": {
@@ -36136,6 +36157,9 @@
    "status": "reviewed"
   },
   "CgsSystem::Timer::Update": {
+   "status": "reviewed"
+  },
+  "CgsSystem::TimerRequestInterface::ApplyToTimers": {
    "status": "reviewed"
   },
   "CgsSystem::TimerStatusInterface::Clear": {
@@ -40814,6 +40838,10 @@
    "notes": "CgsEntityId.h; verifier parity/none; gate pass.",
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp": {
+   "notes": "combined fresh-eyes batch review 8/8 PASS: pool Clears + 541/509 bucket loops exact; element split honestly FLAGGED",
+   "status": "done"
+  },
   "GameShared/GameClasses/SceneManager/CgsEntityManager.h": {
    "notes": "GetVolumeInstanceIndexByID @0x828CD4B8 reads mVolumeInstanceIdToIndex @ this+0x123B20, an offset controlled by un-homed VolumeInstance/IndexedHashTable/VolumeManager + SceneManagerConstants capacities; by-name bodying needs those container layouts homed first. Cannot fabricate the +0x123B20 offset.",
    "status": "blocked"
@@ -41020,7 +41048,15 @@
   "GameShared/GameClasses/Sound/Playback/CgsDataStructures.h": {
    "status": "done"
   },
+  "GameShared/GameClasses/Sound/Playback/CgsEnvironment.h": {
+   "notes": "combined fresh-eyes batch review 8/8 PASS: DoDispose allocator@+48 snapshot + non-deleting dtor + keyed delete",
+   "status": "done"
+  },
   "GameShared/GameClasses/Sound/Playback/CgsFactory.h": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Sound/Playback/CgsMasterVoice.cpp": {
+   "notes": "combined fresh-eyes batch review 8/8 PASS: singleton assert+clear; dtor mechanics implicit",
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Playback/CgsObject.h": {
@@ -41130,6 +41166,10 @@
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Playback/aems/CgsAemsInterfaceImplementation.h": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/System/AttribSys/CgsAttribSysCollectionKey.cpp": {
+   "notes": "combined fresh-eyes batch review 8/8 PASS: ld@+0 GUID, insrdi seed 0xABCDEF0011223344, empty->0",
    "status": "done"
   },
   "GameShared/GameClasses/System/AttribSys/CgsAttribSysModule.cpp": {
@@ -41297,6 +41337,10 @@
   },
   "GameShared/GameClasses/System/Timer/CgsTimer.cpp": {
    "notes": "override of sonnet fail: +4 is an INT field (Prepare stores literal 0, not 0.0), so '*(result+4) += v10' truncates identically to += (int)v10 = a6; reconstruction is faithful",
+   "status": "done"
+  },
+  "GameShared/GameClasses/System/Timer/CgsTimerRequestInterface.cpp": {
+   "notes": "combined fresh-eyes batch review 8/8 PASS: bit fold verified; const + mbRunning byte nits applied post-review",
    "status": "done"
   },
   "GameShared/GameClasses/System/Timer/CgsTimerStatusInterface.h": {
@@ -42458,6 +42502,10 @@
   "GameSource/Network/BrnNetworkManager.h": {
    "status": "done"
   },
+  "GameSource/Network/BrnNetworkPlayerMenuData.cpp": {
+   "notes": "combined fresh-eyes batch review 8/8 PASS: store map field-for-field incl the FLAGGED X360-only float pair",
+   "status": "done"
+  },
   "GameSource/Network/BrnServerInterfaceBase.h": {
    "notes": "trivial / original source match; gate-only",
    "status": "done"
@@ -42588,6 +42636,10 @@
    "status": "done"
   },
   "GameSource/Network/Managers/BrnNetworkTrafficManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Network/Managers/BrnStatsRequestEvent.cpp": {
+   "notes": "combined fresh-eyes batch review 8/8 PASS: strncpy16+stw@+0x10; macName[16] X360 divergence confirmed",
    "status": "done"
   },
   "GameSource/Network/Messages/BrnActiveFburnChallengeMessage.cpp": {
@@ -42891,6 +42943,10 @@
   },
   "GameSource/Sound/Vehicles/Engines/BrnHybridEngineControl.h": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "GameSource/Sound/Vehicles/Traffic/BrnTrafficStateManager.h": {
+   "notes": "combined fresh-eyes batch review 8/8 PASS: empty dtor; Logic::Content home {vptr,mpContent,trailing} + Release-only teardown distinguished from RegisteredContent",
    "status": "done"
   },
   "GameSource/Sound/Vehicles/Wheels/BrnRoadNoise.h": {
