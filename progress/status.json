@@ -3076,10 +3076,10 @@
    "status": "reviewed"
   },
   "BrnDirector::BackgroundEffectRequest::GetBackgroundStartRequestBlendAmount": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::BackgroundEffectRequest::RegisterAndUpdateRequest": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::BoostShakeController::Update": {
    "status": "reviewed"
@@ -3604,7 +3604,7 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::CollisionPolicy::Fail": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::CollisionPolicyAttachedToVehicle::SetDesiredHeight": {
    "status": "reviewed"
@@ -3766,7 +3766,7 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::ValidityAccount::SetFlag": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::VehicleInfo::VehicleInfo": {
    "status": "reviewed"
@@ -3811,10 +3811,10 @@
    "status": "reviewed"
   },
   "BrnDirector::DebugLog::AppendName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::DebugLog::LogSt": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::DebugLog::LogString,20,int>::AllocateObject": {
    "status": "reviewed"
@@ -3994,7 +3994,7 @@
    "status": "recovered"
   },
   "BrnDirector::DirectorOutputInterface::IsIntroCameraStartingToLookAtRival": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::DirectorResourceManager::DirectorResourceManager": {
    "status": "reviewed"
@@ -10162,16 +10162,16 @@
    "status": "reviewed"
   },
   "BrnGui::FriendsListEntry::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::FriendsListEntry::Invalidate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::FriendsListEntry::Prepare": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::FriendsListEntry::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::GenericForwardState::Update": {
    "status": "reviewed"
@@ -12697,19 +12697,19 @@
    "status": "reviewed"
   },
   "BrnGui::TextField::Construct": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::TextField::OutputAptData": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::TextField::SetColour": {
    "status": "reviewed"
   },
   "BrnGui::TextField::SetDatabaseText": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::TextField::SetLocalisedText": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::TextField::SetText": {
    "status": "reviewed"
@@ -38053,10 +38053,10 @@
    "status": "reviewed"
   },
   "RealmcIface::MessageBootupDone::Apply": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "RealmcIface::MessageBootupDone::`scalar deleting destructor'": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "RealmcIface::MessageShowAutosaveIcon::Apply": {
    "status": "reviewed"
@@ -42212,6 +42212,10 @@
   "GameSource/Gui/Flow/HUD/Components/BrnFriendsList.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/HUD/Components/BrnFriendsListEntry.cpp": {
+   "notes": "all 3 tables XEX byte-verified incl. FBC_DONE->BASIC + DISABLED->SHORTCUT quirks; flapt-first Construct order, composite Prepare, dirty/highlight Update, 3-then-1 Invalidate all asm-exact",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/HUD/Components/BrnNorthIndicator.cpp": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -42678,6 +42682,10 @@
   },
   "GameSource/Gui/Flow/Shared/Components/BrnTableRow.cpp": {
    "notes": "wave4: TableRow/DataSet; verify FAIL fixed (restored Name-too-long assert; TableRowDataSet::Clear->void per DWARF); compile PASS",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp": {
+   "notes": "4 bodies asm-exact (store orders, latch semantics, FormatText 1024 chain); nit: StrCpy-guard comment overstates (committed helper truncates silently; outer guard makes it dead)",
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnTextSelection.cpp": {
@@ -45497,6 +45505,10 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::BackgroundEffectRequest": {
+   "notes": "early returns preserved; stays-pending quirk kept (flag clears only on HookExists-false); the inlined start stores called as the named decl-only symbol",
+   "status": "done"
+  },
   "class:BrnDirector::BoostShakeController": {
    "notes": "Update verified: clamp01 fsel pair + (w-rampStart)/span remap + amplitude->+0x114 + low-byte->+0x11C; div-by-zero guard; consts 0.0/1.0.",
    "status": "done"
@@ -45595,6 +45607,10 @@
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::CollisionPolicy": {
+   "notes": "full 64-bit ~2 clear (pseudocode's LODWORD version rejected); typed +0x138 account reach via the new home; Behaviour.cpp stale note fixed",
+   "status": "done"
+  },
   "class:BrnDirector::Camera::CollisionPolicyAttachedToVehicle": {
    "notes": "Wave 44: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -45619,6 +45635,10 @@
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::ValidityAccount": {
+   "notes": "h:219 combined guard + folded :222; committed BitArray u64-field SetBit == the asm word math; comment nit fixed (asm performs both range checks)",
+   "status": "done"
+  },
   "class:BrnDirector::Camera::VehicleInfo": {
    "notes": "copy-ctor 0x8221CDC8 / operator= 0x821F49C8 member-wise copies of the camera vehicle snapshot. Code correct (whole mCrashingCentreOfMass matrix copy); verifier-flagged misleading comment (claimed asm elides the 4th lane) FIXED to all-4-lanes. Gate pass.",
    "status": "done"
@@ -45631,6 +45651,10 @@
    "notes": "VMX keystone: the build is Matrix44AffineFromRota @0x821F8220 -- a dense VMX pipeline (lvx128/stvx128/vmulfp128/vmaddfp/vspltw, ~76 lines building an affine matrix from a rotation). No store-for-store scalar lowering without fabricating per-lane arithmetic the gate cannot verify. Honest no-op floor shipped; deferred to a dedicated VMX/matrix pass.",
    "status": "blocked"
   },
+  "class:BrnDirector::DebugLog": {
+   "notes": "AppendName = PrintName twin (vtbl slot 6); operator[] instantiation matches the committed pool generic (+0x5F8 bit read, 72-stride); nit: duplicate bounds guards folded to one",
+   "status": "done"
+  },
   "class:BrnDirector::DebugLog::LogString,20,int>": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -45641,6 +45665,10 @@
   },
   "class:BrnDirector::DirectorIO::InputBuffer": {
    "notes": "All 27 funcs bodied (count reconciled, none dropped; 6 IDA-truncated names map 1:1). IOBuffer-derived InputBuffer: read-lock getters + write-side handles/Append mutators. Verifier minor_drift/low; FIXED before commit: non-const GetVehicleInputInterface (0x823B2890) asserted read-lock -> corrected to IsBufferLockedForWriting per the asm bit-3 test (const overload 0x82206DA0 correctly read-lock). Opaque interface members = HONEST asm-sized DWARF-named blobs (32-bit-host pointer-offset caveat flagged). Gate pass.",
+   "status": "done"
+  },
+  "class:BrnDirector::DirectorOutputInterface": {
+   "notes": "lwz4/lfs8/lbz0 exact; non-gating tripwires",
    "status": "done"
   },
   "class:BrnDirector::GameState": {
@@ -50899,6 +50927,10 @@
   },
   "class:RealmcIface::LoadEntryInfo": {
    "notes": "Realmc LoadEntryInfo; parity/none; wave6; verifier reviewed; gate pass.",
+   "status": "done"
+  },
+  "class:RealmcIface::MessageBootupDone": {
+   "notes": "slot-15 dispatch pinned per the IRealmcMessageTarget precedent; deleting dtor = virtual dtor + sized operator delete -> FreeMemSize; sizeof divergence FLAG'd",
    "status": "done"
   },
   "class:RealmcIface::MessageShowAutosaveIcon": {
