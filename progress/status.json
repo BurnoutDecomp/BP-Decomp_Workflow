@@ -3687,6 +3687,9 @@
   "BrnDirector::Camera::Utils::Looker::Zoom": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Utils::OrientationLag::Update": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::Utils::PointsWillPassEachOther": {
    "status": "reviewed"
   },
@@ -4074,6 +4077,9 @@
   "BrnDirector::IceMovie::GetCgsID": {
    "status": "reviewed"
   },
+  "BrnDirector::InertiaController::Update": {
+   "status": "reviewed"
+  },
   "BrnDirector::KeyAnimController::GetEyeSpace": {
    "status": "reviewed"
   },
@@ -4225,7 +4231,7 @@
    "status": "reviewed"
   },
   "BrnDirector::PerlinShakeController::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::SceneQueryInterface::Clear": {
    "status": "reviewed"
@@ -4240,7 +4246,7 @@
    "status": "reviewed"
   },
   "BrnDirector::SharedCameraContainer::Prepare": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::SharedCameraContainer::Release": {
    "status": "reviewed"
@@ -8553,6 +8559,9 @@
   "BrnGui::Animator::AddAnimationToLibrary": {
    "status": "reviewed"
   },
+  "BrnGui::Animator::Construct": {
+   "status": "reviewed"
+  },
   "BrnGui::AttachToTextFieldComponent": {
    "status": "reviewed"
   },
@@ -8785,6 +8794,12 @@
    "status": "reviewed"
   },
   "BrnGui::BrnBaseFlow::UpdateStreaming": {
+   "status": "reviewed"
+  },
+  "BrnGui::BrnDebug::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::BrnDebug::OnLeave": {
    "status": "reviewed"
   },
   "BrnGui::BrnDebug::Update": {
@@ -10620,6 +10635,12 @@
   "BrnGui::IdleHudState::Update": {
    "status": "reviewed"
   },
+  "BrnGui::ImageGalleryCarouselItem::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::ImageGalleryCarouselItem::HandleLoadNotifications": {
+   "status": "reviewed"
+  },
   "BrnGui::ImageGalleryState::Update": {
    "status": "reviewed"
   },
@@ -10753,6 +10774,12 @@
    "status": "reviewed"
   },
   "BrnGui::Intro::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::InvisibleOverlayState::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::InvisibleOverlayState::OnLeave": {
    "status": "reviewed"
   },
   "BrnGui::InvisibleOverlayState::Update": {
@@ -11656,6 +11683,9 @@
    "status": "reviewed"
   },
   "BrnGui::PFXNodeFader::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::PauseScreen::HandleControllerInput": {
    "status": "reviewed"
   },
   "BrnGui::PauseScreen::OnEnter": {
@@ -29224,7 +29254,7 @@
    "status": "reviewed"
   },
   "CgsGui::ParticleSystem2d::Release": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CgsGui::SaveLoadSystem::BootupShowAutosaveWarning": {
    "status": "reviewed"
@@ -40187,6 +40217,10 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); leaked-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
    "status": "done"
   },
+  "GameShared/GameClasses/Gui/View/ParticleSystem2d/CgsParticleSystem2d.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
   "GameShared/GameClasses/Language/CgsLanguageManager.cpp": {
    "status": "done"
   },
@@ -41146,6 +41180,10 @@
    "notes": "Wave47: 2/3 foundation committed; Update@0x8226ADA0 dispatches across un-homed camera/effect/behaviour-manager API (SharedCameraContainer gameplay-external, CameraEffects/DepthOfField/DirectorOutputInterface, BehaviourManager::NewBehaviour)",
    "status": "blocked"
   },
+  "GameSource/Director/Arbitrator/BrnDirectorArbitratorSharedCameraContainer.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
   "GameSource/Director/Arbitrator/BrnDirectorArbitratorStateContainer.cpp": {
    "notes": "ConstructAll (11-state pointer-table seed) + UpdateAll (vtable slot2) + ReleaseAll (slot3) verified store-for-store.",
    "status": "done"
@@ -41327,6 +41365,10 @@
    "notes": "Camera Looker (Zoom/Track). Verify caught 6 divergences incl. a FABRICATED depth-of-field section + an inverted FOV-follow loop. Fix+re-verify PASS: running FOV=camera+0x58; first-frame velocity=clamp(Abs(newTarget-camFOV)*factor); overshoot gated on mbForceZoomTargetUpdate(+0x1F); DOF = the real inline camera+0x134 blur write (rate*delta+blur, branch-selected FLAGGED rates) + static path via SetStaticParams; Track tests mbInitialiseToLookingAtTarget(+0x5D); unhandled-type assert only for >=3.",
    "status": "done"
   },
+  "GameSource/Director/Camera/Utils/BrnOrientationLag.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
   "GameSource/Director/Camera/Utils/BrnPositionLag.cpp": {
    "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
    "status": "done"
@@ -41374,12 +41416,20 @@
    "notes": "Wave39 probe: 3/4; Update needs un-homed MomentSharedInfo (a3 +0x504/0x518) + helpers sub_8224EE58/821FD7E8; Construct drops attested stores into private base Moment fields (meType@+0x170, mbIsInhibited@+0x17B, no setters) + empty BehaviourInterpolate::Parameters stub. Discarded. Needs MomentSharedInfo + Parameters layout + base setters homed first",
    "status": "blocked"
   },
+  "GameSource/Director/Shots/ShotControllers/BrnInertiaController.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
   "GameSource/Director/Shots/ShotControllers/BrnKeyAnimController.cpp": {
    "status": "done"
   },
   "GameSource/Director/Shots/ShotControllers/BrnKeyAnimShakeController.cpp": {
    "notes": "Wave39 probe: 1/2; Construct faithful (LCG seed/mult + params asm-grounded) but the 2nd fn dead-ends on un-homed attribsys/shotgroup runtime; discarded, defer to a dedicated shot-controller pass",
    "status": "blocked"
+  },
+  "GameSource/Director/Shots/ShotControllers/BrnPerlinShakeController.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
   },
   "GameSource/Director/Utils/BrnAbstractPool.cpp": {
    "notes": "AbstractPoolVoidHandle::Prepare verified: arg-register mapping r4->+4/r5->+0/r6->+8/r7->+0xC, 4 guards.",
@@ -41780,6 +41830,10 @@
    "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Overlay/States/BrnInvisibleOverlayState.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Overlay/States/BrnPreloadOverlayState.cpp": {
    "notes": "batch review (sonnet) PASS. OnEnter/OnLeave/GetCache vs asm verified; members meInternalState@0x38/mpGuiCache@0x3C named; opaque InputBuffer::GuiEventQueue* cast to real VariableEventQueue<18432,16> (X360-proven). parity RED benign (assert macros).",
    "status": "done"
@@ -41843,6 +41897,10 @@
   "GameSource/Gui/Flow/Screen/Components/BrnEATraxMenuComponent.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnImageGalleryCarouselItem.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnManufacturerIcon.cpp": {
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -41857,6 +41915,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/Components/BrnRoadPanel.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnBrnDebug.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectOnlineEnd.h": {
@@ -41951,6 +42013,10 @@
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/States/BrnPauseScreen.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnScreenLoading.cpp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
    "status": "done"
@@ -41961,6 +42027,10 @@
   },
   "GameSource/Gui/Flow/Screen/States/OnlineYouWin.h": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/Components/BrnAnimator.cpp": {
+   "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnButtonIcon.cpp": {
