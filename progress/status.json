@@ -3694,10 +3694,10 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::PositionFinder::FindPosition": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::PositionFinder::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::PositionLag::Update": {
    "status": "reviewed"
@@ -3985,7 +3985,7 @@
    "status": "reviewed"
   },
   "BrnDirector::EffectInterface::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::GameState::": {
    "status": "reviewed"
@@ -4264,10 +4264,10 @@
    "status": "reviewed"
   },
   "BrnDirector::PrintShotEventFlags": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::PrintShotProperties": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::SceneQueryInterface::Clear": {
    "status": "reviewed"
@@ -4297,7 +4297,7 @@
    "status": "reviewed"
   },
   "BrnDirector::ShotSelector::GetCrashShot": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnDirector::ShutdownTakedownPlayer::Construct": {
    "status": "reviewed"
@@ -10659,7 +10659,13 @@
   "BrnGui::HudMessageAnalyzer::HandleLeaderPassedMileBoundary": {
    "status": "reviewed"
   },
+  "BrnGui::HudMessageAnalyzer::HandleLiveRevengeUpdate": {
+   "status": "reviewed"
+  },
   "BrnGui::HudMessageAnalyzer::HandleNetworkBattling": {
+   "status": "reviewed"
+  },
+  "BrnGui::HudMessageAnalyzer::HandlePlayerEliminated": {
    "status": "reviewed"
   },
   "BrnGui::HudMessageAnalyzer::HandlePlayerLeftLobby": {
@@ -10681,6 +10687,9 @@
    "status": "reviewed"
   },
   "BrnGui::HudMessageAnalyzer::TriggerChallengeEndedMessage": {
+   "status": "reviewed"
+  },
+  "BrnGui::HudMessageAnalyzer::TriggerMessage": {
    "status": "reviewed"
   },
   "BrnGui::HudMessageAnalyzer::TriggerNewRoadRulesHighScoreMessage": {
@@ -11839,6 +11848,15 @@
    "status": "reviewed"
   },
   "BrnGui::PhotoBoothComponent::HandleCompressedStillImageEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::PlayerPositionSingleComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::PlayerPositionSingleComponent::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::PlayerPositionSingleComponent::RenderValue": {
    "status": "reviewed"
   },
   "BrnGui::PlayerPositionSingleComponent::Update": {
@@ -41404,6 +41422,10 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameSource/Director/BrnShotSelector.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: group->bank map, 64-bit class keys, popcount scoring + best cascade all match ASM (pseudo artifacts resolved in code's favor); XEX name tables verbatim",
+   "status": "done"
+  },
   "GameSource/Director/Camera/Behaviours/Behaviour.h": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bug fixed inline (ParticleWaveForm NoiseTableBuild luRand&0xFFFF); 11 leaked .cpp:line citations scrubbed; 5 non-leaf keystones blocked-with-reason; combined wave-13 gate PASS.",
    "status": "done"
@@ -41515,6 +41537,10 @@
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
    "status": "done"
   },
+  "GameSource/Director/Camera/Utils/BrnPositionFinder.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: FindPosition stores/flags + Update world-map query all asm-verified",
+   "status": "done"
+  },
   "GameSource/Director/Camera/Utils/BrnPositionLag.cpp": {
    "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
    "status": "done"
@@ -41593,6 +41619,10 @@
    "status": "done"
   },
   "GameSource/Director/Utils/BrnDirectorAllVehicleData.h": {
+   "status": "done"
+  },
+  "GameSource/Director/Utils/BrnDirectorEffectTrigger.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: Clear-first, gate wraps loop+latch, out-flag !mbGotHooks, offsets 0xCE4/0xD36 attested",
    "status": "done"
   },
   "GameSource/Director/Utils/BrnDirectorEffectTrigger.h": {
@@ -41736,6 +41766,10 @@
   "GameSource/Gui/BrnGuiHudMessageAnalyzer.cpp": {
    "notes": "Wave34: 0/38; blocked on un-homed GuiHudMessage 880-byte aggregate (2 fns HandleOnlineTeamChange/NewRoadRulesHighScore recoverable without it). Home GuiHudMessage first, then redo",
    "status": "blocked"
+  },
+  "GameSource/Gui/BrnGuiHudMessageAnalyzer.h": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: both TriggerMessage overloads + Eliminated + LiveRevenge (LRTkdn*/LRTkndn* switches, 840B wreck-park) all match",
+   "status": "done"
   },
   "GameSource/Gui/BrnGuiHudMessageDirector.cpp": {
    "status": "done"
@@ -41883,6 +41917,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/HUD/Components/BrnOnlineTimeoutTimerComponent.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/HUD/Components/BrnPlayerPositionSingle.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: every format id at converged tails asm-confirmed; WOW tables verbatim vs XEX; road-rule/skills/targets gates match",
    "status": "done"
   },
   "GameSource/Gui/Flow/HUD/States/BrnBootAttract.cpp": {
