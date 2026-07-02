@@ -8973,6 +8973,12 @@
   "BrnGui::CarSelectMain::HandleLaunchingEvent": {
    "status": "reviewed"
   },
+  "BrnGui::CarSelectOnlineCountdown::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectOnlineCountdown::SetTimeLeft": {
+   "status": "reviewed"
+  },
   "BrnGui::CarSelectOnlineEnd::GetResourcesToLoad": {
    "status": "reviewed"
   },
@@ -9208,6 +9214,9 @@
    "status": "reviewed"
   },
   "BrnGui::CrashNavEnterOnlineFull::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavEnterOnlineNoTitle::OnEnter": {
    "status": "reviewed"
   },
   "BrnGui::CrashNavIconRenderer::Construct": {
@@ -10752,6 +10761,12 @@
   "BrnGui::ImageGalleryCarouselItem::HandleLoadNotifications": {
    "status": "reviewed"
   },
+  "BrnGui::ImageGalleryCarouselSelectable::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::ImageGalleryCarouselSelectable::Update": {
+   "status": "reviewed"
+  },
   "BrnGui::ImageGalleryState::Update": {
    "status": "reviewed"
   },
@@ -11322,6 +11337,9 @@
   "BrnGui::OnlineCustomMatch::Update": {
    "status": "reviewed"
   },
+  "BrnGui::OnlineFBurnQuickCustomCreate::ProcessSelectedMenuOption": {
+   "status": "reviewed"
+  },
   "BrnGui::OnlineGameOptions::GetHighlightedOption": {
    "status": "reviewed"
   },
@@ -11860,6 +11878,12 @@
    "status": "reviewed"
   },
   "BrnGui::PlayerPositionSingleComponent::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::PlayerStatsBar::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::PlayerStatsBar::HandleTransitionComplete": {
    "status": "reviewed"
   },
   "BrnGui::PostTitleScreenLoad::GetResourcesToLoad": {
@@ -42120,6 +42144,10 @@
   "GameSource/Gui/Flow/PreEvent/States/BrnPreRaceFlyBy.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnCarSelectOnlineCountdown.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: ceil latch, invisible/tick, %d SnPrintf + hard NUL all match",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnCarSelectOnlinePlayerList.cpp": {
    "status": "done"
   },
@@ -42139,6 +42167,10 @@
   },
   "GameSource/Gui/Flow/Screen/Components/BrnImageGalleryCarouselItem.cpp": {
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/Components/BrnImageGalleryCarouselSelectable.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: MI layout Selectable@0/GuiComponent@+0x18/mbUsed@+0xA4; StateFlags masks match asm",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/Components/BrnLeaderboardColumnComponent.cpp": {
@@ -42186,6 +42218,10 @@
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavEnterOnline.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/States/BrnCrashNavEnterOnlineMod.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: platform OnEnter + meSignInType=NO_TITLE(1) @+0xCC verified",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.h": {
    "status": "done"
   },
@@ -42213,6 +42249,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineCustomMatch.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlineFBurnQuickCustomCreate.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: tail-call table byte-verified from XEX @0x82F26904",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptions.h": {
@@ -42310,6 +42350,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnMenuToggle.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/Components/BrnPlayerStatsBar.cpp": {
+   "notes": "combined fresh-eyes batch review 5/5 PASS: RedBar_mc virtual ctor + de-inlined strcmp vs bar macName",
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnSelectableGroup.cpp": {
