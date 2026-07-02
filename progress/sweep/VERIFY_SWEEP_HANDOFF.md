@@ -45,6 +45,11 @@ reasons about a consistent slice and shared types/headers are seen in one pass.
 Tag every TU in the batch with the same `wave` number in `verify_sweep.json`.
 Typical size ~10–15 TUs; let the subsystem boundary — not a hard count — decide.
 
+**Next wave number = `max(wave field across every entry in `tus`, default 0) + 1`.**
+Compute it from the JSON directly (e.g. a one-liner over `tus.values()`), never from a
+commit message — a commit message wave number is cosmetic labeling only and has
+drifted from the JSON before (see "Known label bug" below).
+
 Collision safety does **not** come from a 1-TU-per-directory rule (a related wave
 deliberately spans a directory): it comes from the **own-files-only** fix rule —
 a fix may touch only the TU's own files, and any divergence whose correct fix
@@ -103,9 +108,22 @@ mistake can't launder itself through all three steps.
 
 ## Status snapshot (keep `summary` current)
 
-As of the last refresh: **2,543 done TUs tracked** — ~2,520 `pending`, 10 `fixed`,
-1 `pass`, 1 `flagged`, 3 `conductor_fix`, 8 `not_reconstructed`, plus 421
-`still_unmapped`. Tier model by difficulty: strong model for hard TUs (many funcs,
-big packets, physics/state/manager logic), cheaper for simple leaf/accessor TUs.
-Done when every `tus` entry is `pass`/`fixed` or routed to a special queue with an
-actionable `note`, `still_unmapped` is audited, and all fixes are pushed to `dev`.
+As of the last refresh (2026-07-02): **2,543 done TUs tracked** — 2,505 `pending`,
+14 `fixed`, 2 `pass`, 1 `flagged`, 3 `conductor_fix`, 18 `not_reconstructed`, plus
+421 `still_unmapped`. **Waves completed so far: wave 1** (commit `f4111ba`, 8 mixed
+leaf TUs — traffic/physics/network/containers/ICE/AI/language/worldIO) and **wave 2**
+(commit `b740191`, the Debug-UI subsystem cluster, 15 related TUs: 4 fixed, 1 pass,
+10 `not_reconstructed`). **Known label bug:** commit `b740191`'s message says "wave
+13" — a prior session's `verify_sweep.json` had a stale `wave: 12` tag on the wave-1
+TUs (there were never waves 2–12; only one sweep commit, `f4111ba`, predates it), so
+the picker miscounted the next wave as 13. The JSON has been corrected (those TUs are
+now tagged `wave: 1`; the Debug-UI batch is `wave: 2`) but the pushed commit message
+itself was left as-is — `dev` had moved by the time this was caught, so amending would
+have required a force-push over other agents' work. **Trust the `wave` field in
+`verify_sweep.json`, not any wave number baked into a commit message, when picking
+the next wave number.**
+
+Tier model by difficulty: strong model for hard TUs (many funcs, big packets,
+physics/state/manager logic), cheaper for simple leaf/accessor TUs. Done when every
+`tus` entry is `pass`/`fixed` or routed to a special queue with an actionable `note`,
+`still_unmapped` is audited, and all fixes are pushed to `dev`.
