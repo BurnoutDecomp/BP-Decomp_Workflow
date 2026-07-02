@@ -50683,7 +50683,7 @@
    "status": "blocked"
   },
   "class:rw::collision": {
-   "notes": "VMX campaign wave 1 (Fable per-function, 2026-07-02): 27/35 bodied faithfully + committed (fce1f51) in src/vendor/renderware/collision/ -- batch/pair intersect kernels, separating-axis family, prism feature family, FatTriangle+SolveQuarticRoots, clustered-mesh helpers, AABBox::Transform; shared vocabulary GPInstance.hpp canonical per DWARF volume.h/primitivepairquery.h + Feb-2007 rwccore.h; fixed committed FeatureEdge::constrain_point vmaddfp operand-order parity bug; Feature/FeatureEdge re-carved to canonical 0x240 layout. REMAINING 8 (decl-only): RimToEdge 0x82BB53F8, RimToRim 0x82BB56C8, ThinTriangleLineSegIntersect 0x82BB9EB8, TriangleLineSegIntersect 0x82BBB7B8, rwcCylinderLineSegIntersect 0x82BAF8A0, rwcSphereLineSegIntersect 0x82BA81D8, rwcTorusLineSegIntersect 0x82BADAB0, PrimitivePairIntersect 0x82BAC130; + pending helpers (cylinder SAT statics 0x82BB64C0/0x82BB75B0, TriangleVolume::GetNormal). Open flags: unk_8327EFC0 epsilon inferred FLT_EPSILON (alt 1e-12); GPInstance inline VolumeMethods +0xA4 rests on 3 indirect-call sites.",
+   "notes": "Wave42: 1/35; collision primitive tests are multi-stage hand-VMX (vmsum3fp/vrsqrtefp-Newton/vsel/permute slab-clips) + external helpers sub_82BB64C0/75B0; only FindBestSepDirCylVol tail-thunk recoverable; discarded. Needs a dedicated collision-VMX campaign",
    "status": "blocked"
   },
   "class:rw::collision::AALineClipper": {
