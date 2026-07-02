@@ -3450,7 +3450,19 @@
   "BrnDirector::Camera::BehaviourManager::UnlockBehaviourForInterpolation": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::BehaviourPassengerCam::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourPassengerCam::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourPassengerCam::Release": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::BehaviourPassengerCam::SetParameters": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourPassengerCam::Update": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourRig::Construct": {
@@ -3544,6 +3556,18 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::CameraEffects::operator=": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::CameraReference::GetCamera": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::CameraReference::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::CameraReference::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::CameraReference::Setup": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::CameraState::Clear": {
@@ -4182,6 +4206,18 @@
   "BrnDirector::MomentHardStop::Release": {
    "status": "reviewed"
   },
+  "BrnDirector::MomentHitTraffic::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentHitTraffic::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentHitTraffic::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentHitTraffic::Update": {
+   "status": "reviewed"
+  },
   "BrnDirector::MomentNewCarJoined::Release": {
    "status": "reviewed"
   },
@@ -4243,6 +4279,18 @@
    "status": "reviewed"
   },
   "BrnDirector::MomentSelector::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStaticCamImpact::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStaticCamImpact::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStaticCamImpact::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStaticCamImpact::Update": {
    "status": "reviewed"
   },
   "BrnDirector::MomentTumbling::Prepare": {
@@ -9150,6 +9198,18 @@
   "BrnGui::CompletedGame::GetResourcesToLoad": {
    "status": "reviewed"
   },
+  "BrnGui::ComplexBar::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::ComplexBar::HandleTransitionComplete": {
+   "status": "reviewed"
+  },
+  "BrnGui::ComplexBar::SetColour": {
+   "status": "reviewed"
+  },
+  "BrnGui::ComplexBar::UpdateFlash": {
+   "status": "reviewed"
+  },
   "BrnGui::CrashNavAccountManagement::ApplyAndSaveSettings": {
    "status": "reviewed"
   },
@@ -10770,6 +10830,15 @@
   "BrnGui::ImageGalleryCarouselSelectable::Update": {
    "status": "reviewed"
   },
+  "BrnGui::ImageGallerySelectable::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::ImageGallerySelectable::HandleLoadNotifications": {
+   "status": "reviewed"
+  },
+  "BrnGui::ImageGallerySelectable::Update": {
+   "status": "reviewed"
+  },
   "BrnGui::ImageGalleryState::Update": {
    "status": "reviewed"
   },
@@ -11152,6 +11221,18 @@
    "status": "reviewed"
   },
   "BrnGui::MenuComponent::SetupMenu": {
+   "status": "reviewed"
+  },
+  "BrnGui::MenuItem::Clear": {
+   "status": "reviewed"
+  },
+  "BrnGui::MenuItem::Set": {
+   "status": "reviewed"
+  },
+  "BrnGui::MenuItem::SetText": {
+   "status": "reviewed"
+  },
+  "BrnGui::MenuItem::Update": {
    "status": "reviewed"
   },
   "BrnGui::MenuToggle::AppendExpectedAptComponent": {
@@ -41532,6 +41613,10 @@
    "notes": "Wave39 probe: Construct/Prepare/SetupTweaker had NO asm in packet (agent fabricated empty bodies -> discarded); Update drops the camera+0x140 OR-2 store (un-homed flag accessor); the heli-cam position/look is vpu-VMX (correctly placeholdered, not paraphrased). Needs Camera+0x140 accessor + the vpu vector3 VMX cluster homed; reverted the rewritten committed BrnBehaviourHeliCam.h",
    "status": "blocked"
   },
+  "GameSource/Director/Camera/Behaviours/BehaviourPassengerCam.cpp": {
+   "notes": "store-for-store base-field clear vs 0x821F9E48; committed Behaviour slice offsets match",
+   "status": "done"
+  },
   "GameSource/Director/Camera/Behaviours/BehaviourRig.cpp": {
    "notes": "Garbled pseudo (local variable allocation has failed) for Construct+Update causes RED call_count/branch_count \u2014 CGS_ASSERT macro expansion and garbled SIMD inflate pseudo counts; all named callees present except constructors and macro internals. All 17 Update steps verified in order by reviewer. SetParams duplicate-arg is a documented dossier ambiguity. VERDICT: pass",
    "status": "done"
@@ -41594,6 +41679,10 @@
    "status": "blocked"
   },
   "GameSource/Director/Camera/BrnCameraEffects.cpp": {
+   "status": "done"
+  },
+  "GameSource/Director/Camera/BrnCameraReference.cpp": {
+   "notes": "stores-before-assert order kept; all 4 GetCamera cases incl. address-check :195; lock-interface convention matches (iface+4 mgr, iface+0, +0x164)",
    "status": "done"
   },
   "GameSource/Director/Camera/BrnCameraState.cpp": {
@@ -41683,9 +41772,17 @@
    "notes": "batch subagent review: store-exact incl. CameraState head bit 18",
    "status": "done"
   },
+  "GameSource/Director/MomentController/Moments/BrnMomentHitTraffic.cpp": {
+   "notes": "all 3 Update paths + rodata 0.0/1.0 + NewBehaviour reg order + bank+0xAB4 arithmetic verified; grows additive; +0x44A FLAG'd helper matches both sites",
+   "status": "done"
+  },
   "GameSource/Director/MomentController/Moments/BrnMomentNewCarJoined.cpp": {
    "notes": "Wave39 probe: 3/4; Update needs un-homed MomentSharedInfo (a3 +0x504/0x518) + helpers sub_8224EE58/821FD7E8; Construct drops attested stores into private base Moment fields (meType@+0x170, mbIsInhibited@+0x17B, no setters) + empty BehaviourInterpolate::Parameters stub. Discarded. Needs MomentSharedInfo + Parameters layout + base setters homed first",
    "status": "blocked"
+  },
+  "GameSource/Director/MomentController/Moments/BrnMomentStaticCamImpact.cpp": {
+   "notes": "4-way switch incl. state-2->3 fall-through, oris 0x1000=bit28, virtual Release dispatch, Release ends SEARCHING (diverges from sibling); nit: FixedCam vptr slot 8B on x64 (by-name, pre-existing pattern)",
+   "status": "done"
   },
   "GameSource/Director/Shots/ShotControllers/BrnInertiaController.cpp": {
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
@@ -42244,6 +42341,10 @@
    "notes": "combined fresh-eyes batch review 5/5 PASS: MI layout Selectable@0/GuiComponent@+0x18/mbUsed@+0xA4; StateFlags masks match asm",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnImageGallerySelectable.cpp": {
+   "notes": "vtable-slot-0 TextField Constructs w/ mpStateInterface/macName resolve through committed GuiComponent layout; strcmp idiom per CarouselItem precedent",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnLeaderboardColumnComponent.cpp": {
    "notes": "batch subagent review: view-state order + buffers exact; cell-name inference honestly flagged",
    "status": "done"
@@ -42406,6 +42507,10 @@
   "GameSource/Gui/Flow/Shared/Components/BrnColourSelection.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Shared/Components/BrnComplexBar.cpp": {
+   "notes": "review found Construct default-colour vararg bug (0xFFFFFFFF vs asm li r6,0) -- FIXED + re-gated; rest verified incl. streamed->static :116 fold + queued promotion",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Shared/Components/BrnHelpBar.cpp": {
    "status": "done"
   },
@@ -42418,6 +42523,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnMenuComponent.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/Components/BrnMenuItem.cpp": {
+   "notes": "review found Set id-store bug (pseudo |0x100000000 vs asm extsw sign-extend, XEX byte-verified) -- FIXED + re-gated; KAC_STATE_NAMES XEX-exact incl. UNUSED alias; vtable order 0/1/3/2 matches",
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnMenuToggle.cpp": {
