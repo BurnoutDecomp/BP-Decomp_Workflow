@@ -3693,6 +3693,12 @@
   "BrnDirector::Camera::Utils::PointsWillPassEachOther": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Utils::PositionFinder::FindPosition": {
+   "status": "compiles"
+  },
+  "BrnDirector::Camera::Utils::PositionFinder::Update": {
+   "status": "compiles"
+  },
   "BrnDirector::Camera::Utils::PositionLag::Update": {
    "status": "reviewed"
   },
@@ -3978,6 +3984,9 @@
   "BrnDirector::EffectInterface::HookExists": {
    "status": "reviewed"
   },
+  "BrnDirector::EffectInterface::Update": {
+   "status": "compiles"
+  },
   "BrnDirector::GameState::": {
    "status": "reviewed"
   },
@@ -4254,6 +4263,12 @@
   "BrnDirector::PerlinShakeController::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::PrintShotEventFlags": {
+   "status": "compiles"
+  },
+  "BrnDirector::PrintShotProperties": {
+   "status": "compiles"
+  },
   "BrnDirector::SceneQueryInterface::Clear": {
    "status": "reviewed"
   },
@@ -4280,6 +4295,9 @@
   },
   "BrnDirector::ShotSelector::Construct": {
    "status": "reviewed"
+  },
+  "BrnDirector::ShotSelector::GetCrashShot": {
+   "status": "compiles"
   },
   "BrnDirector::ShutdownTakedownPlayer::Construct": {
    "status": "reviewed"
@@ -8601,13 +8619,46 @@
   "BrnGui::BaseOkCancelOverlayState::SetupOverlay": {
    "status": "reviewed"
   },
+  "BrnGui::BaseOkCancelOverlayState::UpdateRunning": {
+   "status": "reviewed"
+  },
   "BrnGui::BaseOkOverlayState::SetupOverlay": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseOkOverlayState::UpdateRunning": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseOverlayState::GetCache": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseOverlayState::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseOverlayState::OnLeave": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseOverlayState::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseOverlayState::SetupOverlay": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseOverlayState::SetupOverlayComponents": {
    "status": "reviewed"
   },
   "BrnGui::BaseOverlayState::Update": {
    "status": "reviewed"
   },
   "BrnGui::BaseOverlayState::UpdatePermanent": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseOverlayState::UpdateWFInfo": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseWaitOverlayState::SetupOverlay": {
+   "status": "reviewed"
+  },
+  "BrnGui::BaseWaitOverlayState::UpdateRunning": {
    "status": "reviewed"
   },
   "BrnGui::BlackBarRenderer::Construct": {
@@ -8842,6 +8893,9 @@
    "status": "reviewed"
   },
   "BrnGui::BrnHudFlow::PrintStateSizes": {
+   "status": "reviewed"
+  },
+  "BrnGui::BrnOverlayFlow::Prepare": {
    "status": "reviewed"
   },
   "BrnGui::BrnOverlayFlow::PrintStateSizes": {
@@ -10761,6 +10815,21 @@
   "BrnGui::InGameOkOverlayState::FillInPopupType": {
    "status": "reviewed"
   },
+  "BrnGui::InGameOnlineEnterFreeBurnOverlayState::FillInPopupType": {
+   "status": "reviewed"
+  },
+  "BrnGui::InGameOnlineOkCancelOverlayState::FillInPopupType": {
+   "status": "reviewed"
+  },
+  "BrnGui::InGameOnlineOkOverlayState::FillInPopupType": {
+   "status": "reviewed"
+  },
+  "BrnGui::InGameOnlineWaitOverlayState::FillInPopupType": {
+   "status": "reviewed"
+  },
+  "BrnGui::InGameWaitOverlayState::FillInPopupType": {
+   "status": "reviewed"
+  },
   "BrnGui::InstantResultsState::GetResourcesToLoad": {
    "status": "reviewed"
   },
@@ -11707,6 +11776,9 @@
    "status": "reviewed"
   },
   "BrnGui::OverlayComponent::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::OverlayComponent::RunOverlay": {
    "status": "reviewed"
   },
   "BrnGui::OverlayComponent::TransitionCompleteCallback": {
@@ -41880,8 +41952,28 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes, additive grows; caught fixes applied inline (PerfMonCpu guard widened to match asm; LogFileBuffered/LogWindow sinks marked reconstructed; 3 leaked .cpp:line citations scrubbed); combined wave-12 gate PASS.",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Overlay/BrnOverlayFlow.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: 15 states, sizes 0x40/0x50/13x0x148 verified, vtable cross-check, ids in order, SetStates 15",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Overlay/Components/BrnOverlayComponent.cpp": {
    "notes": "trivial; gate-only. Static callback (r3=user-data per asm, msg 'NULL != lpUserData') asserts non-null then sets mbTransitionComplete via named inline setter (X360 inlined to stb 1,0x14). Layout: base BrnFlaptComponent 0xC + MovieClipRef 8B => flag @0x14 matches the store; compile-verified vs committed headers. parity YELLOW benign (assert calls live inside CGS_ASSERT macro).",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnBaseOkCancelOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: both buttons raw types, SELECT/BACK tails; 49->OK 50->CANCEL 188->NONE",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnBaseOkOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: raw meParamType vararg preserved; 6/49->OK, 188->NONE",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnBaseOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: 9 fns asm-faithful (Update jump table, OnLeave 16/189/16 record, SetupOverlay param loop, rodata byte-verified); 448B response layout cross-confirmed; request record padded to 16B per review note",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnBaseWaitOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: empty-string SetItem x2 + 188 cmpld vs id@+0x110 (Hex-Rays +4 artifact caught)",
    "status": "done"
   },
   "GameSource/Gui/Flow/Overlay/States/BrnCrashNavOkCancelOverlayState.cpp": {
@@ -41914,6 +42006,26 @@
   },
   "GameSource/Gui/Flow/Overlay/States/BrnInGameOkOverlayState.cpp": {
    "notes": "trivial; gate-only (FillInPopupType: single string store at +0x10C, return this)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnInGameOnlineEnterFreeBurnOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: @0x824B1E50 EnterFreeBurn, Wait base",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnInGameOnlineOkCancelOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: @0x824B1E40 InGameOnline, OkCancel base",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnInGameOnlineOkOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: @0x824B1E30 InGameOnline, Ok base",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnInGameOnlineWaitOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: @0x824B1E20 InGameOnline, Wait base",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Overlay/States/BrnInGameWaitOverlayState.cpp": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: @0x824B1DF0 InGame label, Wait base",
    "status": "done"
   },
   "GameSource/Gui/Flow/Overlay/States/BrnInvisibleOverlayState.cpp": {
@@ -45851,6 +45963,10 @@
   },
   "class:BrnGui::OptionsDataProfileDLC1": {
    "notes": "Adversarial verify PARITY (CgsSound-Average SELF-VERIFIED vs asm @0x826A8138 after verifier died on transient API error): Average<N>::Record ring+mean store-for-store; CgsNetwork dtors/Construct/EnableTemetry over committed ServerInterfaceComponent base by name; generics homed once + explicit instantiations; .cpp:line citations scrubbed; combined wave-22 gate PASS. (BrnGui::Intro blocked.)",
+   "status": "done"
+  },
+  "class:BrnGui::OverlayComponent": {
+   "notes": "combined fresh-eyes batch review 11/11 PASS: RunOverlay @0x824B1498 + callback match (non-gating asserts, 2-word rebind, flag store)",
    "status": "done"
   },
   "class:BrnGui::PFXHookNodeBlender": {
