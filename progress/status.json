@@ -5010,6 +5010,9 @@
   "BrnGame::BrnGameModule::BridgeReplayToGui": {
    "status": "reviewed"
   },
+  "BrnGame::BrnGameModule::BridgeSoundToTraining": {
+   "status": "reviewed"
+  },
   "BrnGame::BrnGameModule::BridgeSoundToWorld": {
    "status": "reviewed"
   },
@@ -20029,6 +20032,9 @@
    "status": "reviewed"
   },
   "BrnResource::HudMessageController::AddMessages": {
+   "status": "reviewed"
+  },
+  "BrnResource::HudMessageController::GetIndexFromMessageHash": {
    "status": "reviewed"
   },
   "BrnResource::ICEList::AddListResource": {
@@ -37461,6 +37467,9 @@
   "MainGameFlowStateCheckDiskSpace::OnEnter": {
    "status": "reviewed"
   },
+  "MainGameFlowStateCheckDiskSpace::Update": {
+   "status": "reviewed"
+  },
   "MassiveAdClient3::CAddressIndexPair::CAddressIndexPair": {
    "status": "reviewed"
   },
@@ -38130,6 +38139,9 @@
   "WorldModule::BridgeActionsToWorldModule": {
    "status": "reviewed"
   },
+  "WorldModule::BridgeCrashModuleToPhysicsModule": {
+   "status": "reviewed"
+  },
   "WorldModule::BridgeCrashModuleToPropModule_PostScene": {
    "status": "reviewed"
   },
@@ -38137,6 +38149,9 @@
    "status": "reviewed"
   },
   "WorldModule::BridgeCrashModuleToTrafficModule_PostScene": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgeEntityModulesToCrashModule_PreScene": {
    "status": "reviewed"
   },
   "WorldModule::BridgeEntityModulesToPhysicsModule_PrePhysics": {
@@ -38157,6 +38172,9 @@
   "WorldModule::BridgeInputToCrashModule": {
    "status": "reviewed"
   },
+  "WorldModule::BridgeInputToEntityModules": {
+   "status": "reviewed"
+  },
   "WorldModule::BridgePhysicsModuleToAIModule_PostPhysics": {
    "status": "reviewed"
   },
@@ -38173,6 +38191,9 @@
    "status": "reviewed"
   },
   "WorldModule::BridgePhysicsSceneQueriesToScene": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgePhysicsSceneUpdateToScene": {
    "status": "reviewed"
   },
   "WorldModule::BridgePhysicsToOutput": {
@@ -38194,6 +38215,9 @@
    "status": "reviewed"
   },
   "WorldModule::BridgeRaceCarModuleToAIModule_PostScene": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgeRaceCarModuleToAIModule_PreScene": {
    "status": "reviewed"
   },
   "WorldModule::BridgeRaceCarModuleToPropModule_PreScene": {
@@ -38227,6 +38251,9 @@
    "status": "reviewed"
   },
   "WorldModule::BridgeSceneQueryResultsToPhysics": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgeSceneQueryResultsToRaceCarModule_PrePhysics": {
    "status": "reviewed"
   },
   "WorldModule::BridgeSceneQueryResultsToTrafficModule_PrePhysics": {
@@ -42996,6 +43023,10 @@
    "notes": "fresh-eyes (sonnet): descriptor split-write equiv on big-endian; forwarders fine",
    "status": "done"
   },
+  "GameSource/Unity/../../SharedClasses/DataLists/BrnHudMessageController.cpp": {
+   "notes": "asm-exact vs 0x8267D4C8; u64 id @+0x110 (pseudo +276 rejected); call-for-call ResourcePtr re-deref; DWARF class shape verbatim",
+   "status": "done"
+  },
   "GameSource/Unity/../../SharedClasses/DataLists/ChallengeList.cpp": {
    "notes": "3 verify loops PASS (body fidelity + operator=/CreateFromHandle faithfulness; DWARF layout conformance back-anchored by a1[3256]/[3257]=miCount/miListCount; final sign-off independently re-derived the layout). Gate clean. Parity MILD: loop_count matches 3/3; the lone absent callee CreateFromHandle is deliberately the public operator=(ResourceHandle) per the DWARF (CreateFromHandle is protected, uncallable) - DWARF shows ResourcePtr::operator= as the pre-inline op; return_count diff = void funcs (X360 int return is fastcall artifact). Flags: ChallengeListResource fwd-decl + sentinel value + operator= body equivalence deferred to CgsResourcePtr TU.",
    "status": "done"
@@ -43230,6 +43261,14 @@
   },
   "GameSource/Unity/../Game/GameBridgeReplayToX.cpp": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
+  "GameSource/Unity/../Game/GameBridgeSoundToX.cpp": {
+   "notes": "quirk preserved (single mr r27,r3; loop re-tests r27) w/ do-not-fix comment; queue @GetPreUpdateOutput+0x2A0 pinned; nit: wire mpTrainingManager in Construct before this lands on a live path",
+   "status": "done"
+  },
+  "GameSource/Unity/../GameFlowController/TopLevel/BrnGameMainFlowCheckDiskSpace.cpp": {
+   "notes": "asm-exact vs 0x823F2D28; Option-B global for +0x9A0648 byte; E_MGE_STATEEND==2 confirmed; stub Update removed (no dup)",
    "status": "done"
   },
   "GameSource/Unity/../GameFlowController/TopLevel/BrnGameMainFlowController.cpp": {
@@ -43979,8 +44018,32 @@
   "GameSource/Unity/../World/Bridges/../EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.h": {
    "status": "done"
   },
+  "GameSource/Unity/../World/Bridges/WorldBridgeCrashToEntityModules.cpp": {
+   "notes": "asm-exact vs 0x827AAC70 (asserts :58/:59, GetVehicle +368, crash R getter 0x827A2488); FLAG'd cross-home cast per convention; nit: arg-getter hoist order (inert)",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/Bridges/WorldBridgeEntityModulesToAI.cpp": {
+   "notes": "asm-exact vs 0x827A4FA0; getter 0x8279D6F8 = committed const GetRaceCarAIInterface; new BrnAIModuleIO.h slice minimal/additive",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/Bridges/WorldBridgeEntityModulesToCrash.cpp": {
+   "notes": "asm-exact vs 0x827A5060; getter 0x8279D500; SetActiveRaceCarInterface @0x827A2270 declared additively",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/Bridges/WorldBridgeInputToEntityModules.cpp": {
+   "notes": "instruction-level verify vs b7_4 asm: call order, all 8 per-ARCI offsets+assert lines, case-39 asm-pinned (pseudo wrong), case-23 payload bits, camera/hard-stop constants, tail f32[8]*f32[7], per-iter queue re-fetch; Check fn matches PS3 0x51E15C; nits: undersized NOMINAL payload slices behind FLAG'd casts (prioritize UpdateInputBuffer payload TUs), memcpy-image placeholder merges, raw timer indices",
+   "status": "done"
+  },
   "GameSource/Unity/../World/Bridges/WorldBridgePhysicsToEntityModules.cpp": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/Bridges/WorldBridgePhysicsToScene.cpp": {
+   "notes": "asm-exact vs 0x827ABA40; +179424 carve arithmetic verified; scene +16 W getter 0x825BD8C0; Append on canonical InSceneUpdateInterface home",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/Bridges/WorldBridgeSceneToEntityModules.cpp": {
+   "notes": "asm-exact vs 0x827ABAC8; scene R 0x823B1ED0 +4 / racecar W 0x8279DB98; SceneResultQueue upgraded to real VEQ<32768,16> subclass resolving the real Append 0x827A8FE8",
    "status": "done"
   },
   "GameSource/Unity/../World/BrnBaseStreamer.cpp": {
