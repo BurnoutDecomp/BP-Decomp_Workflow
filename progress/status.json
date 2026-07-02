@@ -4296,7 +4296,22 @@
   "BrnDirector::MomentFailSafe::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::MomentHardStop::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentHardStop::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentHardStop::Prepare": {
+   "status": "reviewed"
+  },
   "BrnDirector::MomentHardStop::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentHardStop::SetParameters": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentHardStop::Update": {
    "status": "reviewed"
   },
   "BrnDirector::MomentHitTraffic::Construct": {
@@ -4384,6 +4399,21 @@
    "status": "reviewed"
   },
   "BrnDirector::MomentStaticCamImpact::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStationaryCrash::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStationaryCrash::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStationaryCrash::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStationaryCrash::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentStationaryCrash::Update": {
    "status": "reviewed"
   },
   "BrnDirector::MomentTumbling::Prepare": {
@@ -41982,6 +42012,10 @@
    "notes": "batch subagent review: store-exact incl. CameraState head bit 18",
    "status": "done"
   },
+  "GameSource/Director/MomentController/Moments/BrnMomentHardStop.cpp": {
+   "notes": "Combined batch-13 review: FAILED first pass (orange colour 0xFF810000 vs the asm's 0xFF80FF00; console-offset reinterpret_cast for the validity dump) -- BOTH FIXED (+the 0xC1EE comment corrected to the iceanim ClassKey equality and the +0xE28 helpers renamed to the committed SetUseCollisionPolicy semantics), re-gated PASS. Everything else asm-verified exact incl. the mfSimTimeScale rename (Takedown 2/7 confirmed in XEX), the NewBehaviour r7 retype (mr r7,r31 proven), the ultra-slomo rodata trio, and the same-frame case-2->3 fall-through.",
+   "status": "done"
+  },
   "GameSource/Director/MomentController/Moments/BrnMomentHitTraffic.cpp": {
    "notes": "all 3 Update paths + rodata 0.0/1.0 + NewBehaviour reg order + bank+0xAB4 arithmetic verified; grows additive; +0x44A FLAG'd helper matches both sites",
    "status": "done"
@@ -41992,6 +42026,10 @@
   },
   "GameSource/Director/MomentController/Moments/BrnMomentStaticCamImpact.cpp": {
    "notes": "4-way switch incl. state-2->3 fall-through, oris 0x1000=bit28, virtual Release dispatch, Release ends SEARCHING (diverges from sibling); nit: FixedCam vptr slot 8B on x64 (by-name, pre-existing pattern)",
+   "status": "done"
+  },
+  "GameSource/Director/MomentController/Moments/BrnMomentStationaryCrash.cpp": {
+   "notes": "Combined batch-13 review: PASS with no findings. Rotation integrator dots, the tumbling/stationary group polarity (asm default +1448, override +1464 when the latch is down), the two-source rm asymmetry (mgr+91068 groups vs shared+1340 guid resolver), the fits check (0.1/2pi/pi-over-2/100.0 rodata all confirmed), and the +0xE28 committed SetUseCollisionPolicy identity all verified.",
    "status": "done"
   },
   "GameSource/Director/Shots/ShotControllers/BrnInertiaController.cpp": {
