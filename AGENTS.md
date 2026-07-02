@@ -14,6 +14,14 @@ the last commit left off. Then `work claim` → pick up the next ready TU. No ot
 is needed. (If the maintainer gave you a coordination-server URL, set it up first — see
 "Coordination server" below; otherwise you work locally, no setup needed.)
 
+**Continuing the verification sweep** (a distinct task from "continue" reconstruction):
+if asked to continue, resume, or run the **verify sweep** — the correctness audit that
+re-verifies every already-`done` TU against the X360 asm and fixes divergences — read
+[`progress/sweep/VERIFY_SWEEP_HANDOFF.md`](progress/sweep/VERIFY_SWEEP_HANDOFF.md) first. It is the
+self-contained operating guide for that pass; its state/queue lives in
+[`progress/verify_sweep.json`](progress/verify_sweep.json) (per-TU `state`:
+`pending`/`pass`/`fixed`/`flagged`/`conductor_fix`/`not_reconstructed`).
+
 ### Environment Checklist (Verify Before Reconstructing)
 
 Before compiling code or exporting functions, verify these settings:
