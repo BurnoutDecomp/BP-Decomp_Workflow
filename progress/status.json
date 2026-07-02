@@ -3048,6 +3048,15 @@
   "BrnDirector::ArbStateTestbed::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::Arbitrator::CycleNormalCamera": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Arbitrator::DebugCameraFlyWorldLookAt": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Arbitrator::GetNormalCamera": {
+   "status": "reviewed"
+  },
   "BrnDirector::Arbitrator::UpdateDebugCameras": {
    "status": "reviewed"
   },
@@ -3501,6 +3510,15 @@
   "BrnDirector::Camera::BehaviourRig::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::BehaviourRig>::A": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourRig>::D": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourRig>::P": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::BehaviourRoadRunner::Construct": {
    "status": "reviewed"
   },
@@ -3789,6 +3807,15 @@
   "BrnDirector::Camera::VehicleInfo::operator=": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::VisibilityCollisionPolicy::SetDesiredHeight": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::VisibilityCollisionPolicy::TimeUntilCollisionWithGeometry": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::VisibilityCollisionPolicy::TimeUntilCollisionWithVehicle": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::VisibilityTest::GetOffscreenTime": {
    "status": "reviewed"
   },
@@ -4062,6 +4089,15 @@
   "BrnDirector::GameState::Clear": {
    "status": "reviewed"
   },
+  "BrnDirector::HookNameStringWrapper,100>::Append": {
+   "status": "reviewed"
+  },
+  "BrnDirector::HookNameStringWrapper,100>::Contains": {
+   "status": "reviewed"
+  },
+  "BrnDirector::HookNameStringWrapper,100>::FindFirstInstanceOf": {
+   "status": "reviewed"
+  },
   "BrnDirector::HookNameStringWrapper::Set": {
    "status": "reviewed"
   },
@@ -4168,6 +4204,18 @@
    "status": "reviewed"
   },
   "BrnDirector::InertiaController::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::InterpolaterHelper::GetCamera": {
+   "status": "reviewed"
+  },
+  "BrnDirector::InterpolaterHelper::HasFinished": {
+   "status": "reviewed"
+  },
+  "BrnDirector::InterpolaterHelper::IsReady": {
+   "status": "reviewed"
+  },
+  "BrnDirector::InterpolaterHelper::Release": {
    "status": "reviewed"
   },
   "BrnDirector::KeyAnimController::GetEyeSpace": {
@@ -10926,7 +10974,19 @@
   "BrnGui::ImageGallerySelectable::Update": {
    "status": "reviewed"
   },
+  "BrnGui::ImageGalleryState::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::ImageGalleryState::HideMiddleImage": {
+   "status": "reviewed"
+  },
+  "BrnGui::ImageGalleryState::SetExpectedAptComponentList": {
+   "status": "reviewed"
+  },
   "BrnGui::ImageGalleryState::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::ImageGalleryState::UpdateWFInit": {
    "status": "reviewed"
   },
   "BrnGui::InGame::HandleInstantFreeburnSearchFail": {
@@ -12058,6 +12118,18 @@
    "status": "reviewed"
   },
   "BrnGui::PlayerStatsBar::HandleTransitionComplete": {
+   "status": "reviewed"
+  },
+  "BrnGui::PositionIndicator::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::PositionIndicator::SetLoaded": {
+   "status": "reviewed"
+  },
+  "BrnGui::PositionIndicator::SetPosition": {
+   "status": "reviewed"
+  },
+  "BrnGui::PositionIndicator::SetVisible": {
    "status": "reviewed"
   },
   "BrnGui::PostTitleScreenLoad::GetResourcesToLoad": {
@@ -42572,6 +42644,10 @@
    "notes": "trivial forwarder; gate-only per policy. Update() tail-calls CgsGui::State::SendStateEvent(\"ADVANCE\") - verified vs asm @0x82500950 (lis/addi 'ADVANCE'; b SendStateEvent). Void override; no offset hacks. YELLOW parity = scanner false-flag on unqualified call + void return.",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/States/BrnImageGallery.h": {
+   "notes": "Combined batch-12 review: FAILED first pass (the +132 loop registered fabricated carousel[4] instead of maCategorySelectable[4] -- asm-proven via OnEnter @0x82495948); FIXED (selectables @+104 stride 760 registered; carousel = [3] @+7780 stride 736; HideMiddleImage = maCarouselItems[1]), re-gated PASS. Tuple @0x8205E608 + category table @0x82F25350 verified.",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnIntro.cpp": {
    "status": "done"
   },
@@ -42751,6 +42827,10 @@
   },
   "GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptTimerFieldComponent.cpp": {
    "notes": "wave4: timer component Construct/Prepare/SetTime/CalculateColour (de-opt VMX lerp); verify PASS; compile PASS",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/hud/Components/BrnPositionIndicator.cpp": {
+   "notes": "Combined batch-12 review: Construct's ASM-vs-pseudocode divergence confirmed handled (+0x1B4/+0x1B5 zero, +0x1B6 one); XEX tables verified. Post-review: DWARF names adopted (mRacePositionTextField/mbFirstFrame/KAC_APTSTATE_NAMES/KAC_POSITION_NAMES), re-gated PASS.",
    "status": "done"
   },
   "GameSource/Gui/Flow/hud/States/BrnIdleHudState.cpp": {
@@ -45535,6 +45615,10 @@
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnDirector::Arbitrator": {
+   "notes": "Combined batch-12 review: +0x2EC==2 testbed routing (arb+0x40/+0x1A1 == testbed+0x10/+0x171) + fly-world warp verified. Post-review: stale decl-only comments fixed, re-gated PASS.",
+   "status": "done"
+  },
   "class:BrnDirector::ArbitratorStateContainer": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -45629,6 +45713,10 @@
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::BehaviourRig>": {
+   "notes": "Combined batch-12 review: tweaker pair + Prepare instantiation verified; DetachTweaker's inlined manager internals = the accepted declared-call de-opt.",
+   "status": "done"
+  },
   "class:BrnDirector::Camera::BehaviourRotateAboutVehicle": {
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -45689,6 +45777,10 @@
    "notes": "copy-ctor 0x8221CDC8 / operator= 0x821F49C8 member-wise copies of the camera vehicle snapshot. Code correct (whole mCrashingCentreOfMass matrix copy); verifier-flagged misleading comment (claimed asm elides the 4th lane) FIXED to all-4-lanes. Gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::Camera::VisibilityCollisionPolicy": {
+   "notes": "Combined batch-12 review: all three bodies asm-verified (latch-before-assert order, embedded predictor pairs +0x80/+0x70, both nested tripwires).",
+   "status": "done"
+  },
   "class:BrnDirector::Camera::VisibilityTest": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -45725,6 +45817,10 @@
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnDirector::HookNameStringWrapper,100>": {
+   "notes": "Combined batch-12 review: generic CgsArray members verified (stride 33, count +0xCE4, Set-folded operator= claim exact).",
+   "status": "done"
+  },
   "class:BrnDirector::ICEMoviePlayer": {
    "notes": "Movie-player family reconstructed; gate green; fidelity verified vs --asm (seed table 36 rows corrected, PlayMovie reconciled to DWARF sig, Play mbIsLooping clear); camera-Behaviour layer minimal-sliced (flagged)",
    "status": "done"
@@ -45743,6 +45839,10 @@
   },
   "class:BrnDirector::IceMovie,20,int>": {
    "notes": "ObjectPool<IceMovie,20,int> AllocateObject/FreeObject explicit instantiation (methods inline in CgsObjectPool.h); gate green",
+   "status": "done"
+  },
+  "class:BrnDirector::InterpolaterHelper": {
+   "notes": "Combined batch-12 review: FAILED first pass (C2011 -- the manager header's BehaviourInterpolate slice + the real home both included); FIXED (real-home include dropped, mutual-exclusion FLAG added), re-gated PASS. Semantics were verified faithful (h:62/:65/:68 + handle tripwires, +0x596 finished byte, GetProducedCamera copy).",
    "status": "done"
   },
   "class:BrnDirector::KeyAnimController": {
