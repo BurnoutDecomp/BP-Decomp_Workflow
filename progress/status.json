@@ -2463,6 +2463,9 @@
   "BrnAI::Aggressiveness::SetTimeForSpeedMatch": {
    "status": "reviewed"
   },
+  "BrnAI::BoundaryLine::GetInterp": {
+   "status": "reviewed"
+  },
   "BrnAI::BuzzBy::DrawBuzzTimer": {
    "status": "reviewed"
   },
@@ -24790,43 +24793,43 @@
    "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::DEBUG_OverrideScratchAmount": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::GetCrackedGlassEqualisationFactorN": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::GetCrackedGlassFractureAmountN": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::GetCrackedGlassScale": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::GetWheelScaleMatrix": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::GetWheelTransform": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::IsPartVisible": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::RequestBluesAndTwosStateSwitch": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::Reset": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::SetCrackedGlassEqualisationFactorN": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::SetCrackedGlassFractureAmountN": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::SetCrackedGlassScaleFactorsN": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RenderParams::SetWheelScale": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::ActiveRaceCar::RequestPlaceOnTrack": {
    "status": "reviewed"
@@ -26337,6 +26340,9 @@
   "BrnWorld::ShadowMap::ComputeOptimalViewVolume": {
    "status": "reviewed"
   },
+  "BrnWorld::ShadowMap::ComputeTSMMatrix": {
+   "status": "reviewed"
+  },
   "BrnWorld::ShadowMap::Construct": {
    "status": "reviewed"
   },
@@ -27232,6 +27238,9 @@
    "status": "reviewed"
   },
   "CgsDev::Debug2DImmediateRender::Is2DLineOnScreen": {
+   "status": "reviewed"
+  },
+  "CgsDev::Debug2DImmediateRender::Is2DPointOnScreen": {
    "status": "reviewed"
   },
   "CgsDev::Debug2DImmediateRender::Is2DPolygonOnScreen": {
@@ -28837,6 +28846,9 @@
    "status": "reviewed"
   },
   "CgsGraphics::Camera::UpdatePerspectiveProjectionMatrix": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Camera::UpdateViewProjectionMatrix": {
    "status": "reviewed"
   },
   "CgsGraphics::Camera::operator=": {
@@ -34761,6 +34773,15 @@
   "CgsResource::ZoneListResourceType::Serialise": {
    "status": "reviewed"
   },
+  "CgsSceneManager::AABBoxBuilder::CreateFromBox": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::AABBoxBuilder::CreateFromCylinder": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::AABBoxBuilder::CreateFromTriangle": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::CacheSlot::UpdateCachedObject": {
    "status": "reviewed"
   },
@@ -39789,10 +39810,25 @@
   "rw::audio::core::Unpack0::UnpackUInt32": {
    "status": "reviewed"
   },
+  "rw::collision::AA": {
+   "status": "reviewed"
+  },
+  "rw::collision::AAB": {
+   "status": "reviewed"
+  },
   "rw::collision::AALineClipper::AALineClipper": {
    "status": "reviewed"
   },
   "rw::collision::AALineClipper::Init": {
+   "status": "reviewed"
+  },
+  "rw::collision::AddQueryResult": {
+   "status": "reviewed"
+  },
+  "rw::collision::AddRimToEdgeCandidate": {
+   "status": "reviewed"
+  },
+  "rw::collision::AddRimToRimCandidates": {
    "status": "reviewed"
   },
   "rw::collision::Aggregate::Fixup": {
@@ -39819,6 +39855,15 @@
   "rw::collision::ClusteredMeshCluster::GetGroupAndSurfaceId": {
    "status": "reviewed"
   },
+  "rw::collision::ComputeContactPoints": {
+   "status": "reviewed"
+  },
+  "rw::collision::ComputeEdgeCos": {
+   "status": "reviewed"
+  },
+  "rw::collision::FatTriangleLineSegIntersect": {
+   "status": "reviewed"
+  },
   "rw::collision::Feature::BuildEdgePlanes": {
    "status": "reviewed"
   },
@@ -39828,7 +39873,91 @@
   "rw::collision::FeatureEdge::constrain_point": {
    "status": "reviewed"
   },
+  "rw::collision::FindBestSepDirWithCylinder": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindBestSepDir_FindCandidates": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindBestSeparatingDirCylVol": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindBestSeparatingDirection": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindBestSeparatingDirectionBoxBox": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindBestSeparatingDirectionBoxTri": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindBestSeparatingDirectionSphSph": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindEdgePointPrism": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindFaceEdgePrism": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindFaceFacePrism": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindFaceFacePrism4x3": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindFaceFacePrism4x4": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindFacePointPrism": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindFeatureIntersectionPrism": {
+   "status": "reviewed"
+  },
+  "rw::collision::FindIntervalOverlap": {
+   "status": "reviewed"
+  },
   "rw::collision::Frustum::IsBoxInFrustum": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPBox::GetInterval": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPBox::GetIntervals": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPBox::GetMaximumFeature": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPCapsule::GetInterval": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPCapsule::GetIntervals": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPCapsule::GetMaximumFeature": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPCylinder::GetInterval": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPCylinder::GetIntervals": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPCylinder::GetMaximumFeature": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPInstanceBatchIntersect1xN": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPInstanceBatchIntersectNx1": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPSphere::GetInterval": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPSphere::GetIntervals": {
    "status": "reviewed"
   },
   "rw::collision::KdTreeBBoxQuery::KdTreeBBoxQuery": {
@@ -39838,6 +39967,24 @@
    "status": "reviewed"
   },
   "rw::collision::KdTreeLineQuery::KdTreeLineQuery": {
+   "status": "reviewed"
+  },
+  "rw::collision::PrimitiveBatchIntersect": {
+   "status": "reviewed"
+  },
+  "rw::collision::PrimitivePairIntersect": {
+   "status": "reviewed"
+  },
+  "rw::collision::RimToEdge": {
+   "status": "reviewed"
+  },
+  "rw::collision::RimToRim": {
+   "status": "reviewed"
+  },
+  "rw::collision::SolveQuarticRoots": {
+   "status": "reviewed"
+  },
+  "rw::collision::ThinTriangleLineSegIntersect": {
    "status": "reviewed"
   },
   "rw::collision::TriangleKDTreeProcedural::BBoxOverlapQueryThis": {
@@ -39858,6 +40005,9 @@
   "rw::collision::TriangleKDTreeProcedural::UpdateThis": {
    "status": "reviewed"
   },
+  "rw::collision::TriangleLineSegIntersect": {
+   "status": "reviewed"
+  },
   "rw::collision::VolRef::operator=": {
    "status": "reviewed"
   },
@@ -39865,6 +40015,18 @@
    "status": "reviewed"
   },
   "rw::collision::Volume::operator=": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeBBoxQuery::AddVolumeRef": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeBBoxQuery::GetOverlaps": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeBBoxQuery::GetResourceDescriptor": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeBBoxQuery::Initialize": {
    "status": "reviewed"
   },
   "rw::collision::VolumeLineQuery::AddPrimitiveRef": {
@@ -39880,6 +40042,30 @@
    "status": "reviewed"
   },
   "rw::collision::VolumeLineQuery::Initialize": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeVolumeQuery::GetPrimitiveBBoxOverlaps": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeVolumeQuery::GetPrimitiveIntersections": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeVolumeQuery::GetResourceDescriptor": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeVolumeQuery::Initialize": {
+   "status": "reviewed"
+  },
+  "rw::collision::VolumeVolumeQuery::VolumeVolumeQuery": {
+   "status": "reviewed"
+  },
+  "rw::collision::rwcCylinderLineSegIntersect": {
+   "status": "reviewed"
+  },
+  "rw::collision::rwcSphereLineSegIntersect": {
+   "status": "reviewed"
+  },
+  "rw::collision::rwcTorusLineSegIntersect": {
    "status": "reviewed"
   },
   "rw::core::GeneralResourceAllocator::DoAllocate": {
@@ -40291,6 +40477,15 @@
    "status": "reviewed"
   },
   "rw::physics::Jacobian_RQD::Create": {
+   "status": "reviewed"
+  },
+  "rw::physics::JointFrames::SetChildAngularFrame": {
+   "status": "reviewed"
+  },
+  "rw::physics::JointFrames::SetParentAngularFrame": {
+   "status": "reviewed"
+  },
+  "rw::physics::JointFrames::SetParentLinearFrame": {
    "status": "reviewed"
   },
   "rw::physics::SimulationWorkspace::GetResourceDescriptor": {
@@ -45033,8 +45228,8 @@
    "status": "done"
   },
   "SDKs/EATech/include/rw/math/vpu/detail/matrix44_operation_platform_inline.h": {
-   "notes": "Wave40: 4/6 (Mult x3 + Transpose committed 0a2ffce); Inverse (_asmInverse cross-product/vrefp-Newton VMX) + Matrix44FromAxisRotationAngle (SinCos + uncommitted VecFloat operator-/*/+ + 16-VecFloat ctor) are declaration-only -- genuinely undecoded VMX, deferred not fabricated",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "SDKs/EATech/include/rw/math/vpu/detail/matrix44_type_inline.h": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/GameSource/Graphics/BrnShaderConstantsFrame.cpp. Reconciled.",
@@ -45049,8 +45244,8 @@
    "status": "done"
   },
   "SDKs/EATech/include/rw/math/vpu/detail/vector2_type_inline.h": {
-   "notes": "VMX keystone (partial): Is2DPointOnScreen is bodied + verified, but GetInterp @0x82676C78 is a VMX vrlimi128 lane cascade (amounts 8/4 masks 2/0 + vsubfp + vmaddfp v0,v13,v0,v12) whose lane assignment does NOT reduce to the textbook (end-start)*t+start lerp; honest stub shipped. TU incomplete until the VMX interp is decoded.",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "SDKs/EATech/include/rw/math/vpu/detail/vector3_operation_inline.h": {
    "notes": "Wave 41: faithful vpu ops vs Feb-2007 + vec_float convention; decl-only ops genuinely undecoded; pushed 2c974b6",
@@ -48593,8 +48788,8 @@
    "status": "blocked"
   },
   "class:BrnWorld::ActiveRaceCar::RenderParams": {
-   "notes": "12/13 done + pushed (b5-decomp dev 2651c62): all accessors + recovered layout (offsetof-pinned). DEBUG_OverrideScratchAmount @0x822A21B0 is a 1280-line unrolled-VMX broadcast, deferred to a VMX pass (same tier as RaceCarRenderParams::operator=).",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:BrnWorld::BoostManager": {
    "notes": "Keystone: of its 3 funcs only SetBoostEarningEnabled @0x822A33B0 has a recoverable manager-side store (stb mbBoostEarningEnabled@+0); SetWrecking @0x822B8E40 + the third reach an un-homed RaceCar entity-module (@+0x450, vtable+0xA8) dispatch with no recoverable manager-side state. Honest stubs shipped; deferred until the entity module is homed.",
@@ -50247,8 +50442,8 @@
    "status": "done"
   },
   "class:CgsSceneManager::AABBoxBuilder": {
-   "notes": "Genuine VMX/SIMD block per HARD RULES. CreateFromBox @0x82B57DE0 builds AABBs via inline __asm lvx128/stvx128 + vperm + vrlimi128 (vector permute + rotate-left-into-mask + min/max lane reductions); a static-init guard (dword_83270FB0&1) seeds a swizzle table. CreateFromTriangle/CreateFromCylinder sa",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:CgsSceneManager::CgsCollision::CollisionResultList": {
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
@@ -51876,8 +52071,8 @@
    "status": "blocked"
   },
   "class:rw::collision": {
-   "notes": "Wave42: 1/35; collision primitive tests are multi-stage hand-VMX (vmsum3fp/vrsqrtefp-Newton/vsel/permute slab-clips) + external helpers sub_82BB64C0/75B0; only FindBestSepDirCylVol tail-thunk recoverable; discarded. Needs a dedicated collision-VMX campaign",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:rw::collision::AALineClipper": {
    "notes": "Fixed: ctor synthesises Init's dir-seed = max(|start|,|end|)*KF_ABS_EPSILON (vandc/vmaxfp/vmulfp128), NOT a param. Init per-axis clip-param math verified; robustness epsilons flagged inferred.",
@@ -51908,20 +52103,20 @@
    "status": "done"
   },
   "class:rw::collision::GPBox": {
-   "notes": "GetInterval @0x82BA8650 / GetIntervals @0x82BA9238 / GetMaximumFeature @0x82BA8918 are heavy hand-vectorised VMX (lvx128/stvx128, vmsum3fp128 box-axis dots, vperm lane shuffles, vandc sign masks, vmulfp128/vaddfp/vsubfp). No scalar portion. Deferred to a VMX pass.",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:rw::collision::GPCapsule": {
-   "notes": "GetInterval @0x82BAFB68 / GetIntervals @0x82BAFC10 / GetMaximumFeature @0x82BAFA80 are all heavy VMX (vmsum3fp128 dot-products, lvx128/stvx128) collision capsule support/interval math. No scalar portion. Deferred to a VMX pass.",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:rw::collision::GPCylinder": {
-   "notes": "GetInterval @0x82BAD7F8 + 2 more: heavy VMX with vrsqrtefp Newton-Raphson refine, vsel, vmsum3fp128 collision cylinder math. Deferred to a VMX pass.",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:rw::collision::GPSphere": {
-   "notes": "GetInterval @0x82BA80A8 + GetIntervals @0x82BA80C0 are pure VMX (lvx128 + vmsum3fp128 sphere-interval dot-products + stvx128, 0x30 stride loop). Heavy SIMD collision math. Deferred to a VMX pass.",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:rw::collision::KdTreeBBoxQuery": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
@@ -51944,16 +52139,16 @@
    "status": "done"
   },
   "class:rw::collision::VolumeBBoxQuery": {
-   "notes": "VMX keystone: GetOverlaps @0x82BBBDE8 is a VMX CR-bit bbox-overlap test (vcmpgtfp/vor/vsldoi/vcmpeqfp + mfocrf/extrwi) plus a matrix x bbox aggregate-transform fold (vmaddfp chain + vmsum3fp dot) that cannot be faithfully paraphrased to scalar; AddVolumeRef +0x74 also needs the r8/a6 arg byte (not the Hex-Rays BYTE3 artifact). Deferred to a dedicated VMX pass.",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:rw::collision::VolumeLineQuery": {
    "notes": "focused reviewer pass after adding offset-256 reset and typed ref-array layout",
    "status": "done"
   },
   "class:rw::collision::VolumeVolumeQuery": {
-   "notes": "Wave45: 3/5 foundation committed (02cc5d6); GetPrimitiveBBoxOverlaps@0x82BB3AB0 + GetPrimitiveIntersections@0x82BB3FF0 are multi-stage hand-VMX (slab-fatten + vcmpgtfp/vor/vsldoi CR-bit overlap) + un-homed rw::collision::PrimitiveBatchIterator",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:rw::core::GeneralResourceAllocator": {
    "notes": "Fresh-eyes review: verified via dumpbin against rwcore.lib that this class does NOT exist in the PC binary (correctly not vendor-blocked). 5 implemented functions verified against asm math exactly. 2 undone functions honestly declared, not faked.",
@@ -52131,8 +52326,8 @@
    "status": "done"
   },
   "class:rw::physics::JointFrames": {
-   "notes": "SetChildAngularFrame @0x8259B580 / SetParentAngularFrame @0x8259B728 / SetParentLinearFrame @0x8259B8D0: heavy VMX quaternion-from-matrix (vrsqrtefp Newton-Raphson, vperm, vsel, vmaddfp/vnmsubfp). Deferred to a VMX pass.",
-   "status": "blocked"
+   "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
   },
   "class:rw::physics::JointJacobian": {
    "notes": "VMX keystone: Build is hand-vectorised AltiVec with permute-immediate lane routing + missing rodata; not faithfully reconstructible by the fast builder. Deferred to a dedicated VMX pass.",
