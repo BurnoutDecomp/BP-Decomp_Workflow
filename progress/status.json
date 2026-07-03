@@ -3585,6 +3585,21 @@
   "BrnDirector::Camera::Camera::operator=": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::CameraEffects::GetStartHookNameBlendAmount": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::CameraEffects::GetStartHookNameS": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::CameraEffects::GetStartHookNameString": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::CameraEffects::GetStopHookNameSt": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::CameraEffects::GetStopHookNameString": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::CameraEffects::Interpolate": {
    "status": "reviewed"
   },
@@ -4260,7 +4275,22 @@
   "BrnDirector::Moment::Inhibit": {
    "status": "reviewed"
   },
+  "BrnDirector::MomentBystanderSeesAction::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentBystanderSeesAction::GetName": {
+   "status": "reviewed"
+  },
   "BrnDirector::MomentBystanderSeesAction::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentBystanderSeesAction::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentBystanderSeesAction::SetParameters": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentBystanderSeesAction::Update": {
    "status": "reviewed"
   },
   "BrnDirector::MomentController::MomentHandle,10>::Append": {
@@ -8919,6 +8949,21 @@
   "BrnGui::BoostBarRenderer::Update": {
    "status": "reviewed"
   },
+  "BrnGui::BoostMessageItem::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageItem::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageItem::SetText": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageItem::SetTransition": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageItem::UpdateBoostType": {
+   "status": "reviewed"
+  },
   "BrnGui::BoostMessageManager::AddMessage": {
    "status": "reviewed"
   },
@@ -10105,6 +10150,21 @@
    "status": "reviewed"
   },
   "BrnGui::FreeburnChallengeStartComponent::Show": {
+   "status": "reviewed"
+  },
+  "BrnGui::FriendsListChangeIconComponent::AnimateIn": {
+   "status": "reviewed"
+  },
+  "BrnGui::FriendsListChangeIconComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::FriendsListChangeIconComponent::Hide": {
+   "status": "reviewed"
+  },
+  "BrnGui::FriendsListChangeIconComponent::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::FriendsListChangeIconComponent::ShowNow": {
    "status": "reviewed"
   },
   "BrnGui::FriendsListComponent::AttemptStateRestore": {
@@ -42008,6 +42068,10 @@
   "GameSource/Director/MomentController/BrnMomentSelector.cpp": {
    "status": "done"
   },
+  "GameSource/Director/MomentController/Moments/BrnMomentBystanderSeesAction.cpp": {
+   "notes": "Combined batch-14a review: Update verified end-to-end (bank +0xEEC/+0x1024 pick, dual trigger, head bits incl. the new 24, blur rodata 0.25/1.0 confirmed, keep ladder, Release-without-double-SetState).",
+   "status": "done"
+  },
   "GameSource/Director/MomentController/Moments/BrnMomentFailsafe.cpp": {
    "notes": "batch subagent review: store-exact incl. CameraState head bit 18",
    "status": "done"
@@ -42349,7 +42413,15 @@
   "GameSource/Gui/Flow/HUD/BrnHudFlow.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/HUD/Components/BrnBoostMessageItem.cpp": {
+   "notes": "Combined batch-14a review: XEX tables + @0x8246D2B0 int-param overload confirmed. Post-review polish: bool mbInTransition (byte-width) + DWARF names + 3-param Construct arity, re-gated PASS.",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/HUD/Components/BrnFriendsList.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/HUD/Components/BrnFriendsListChangeIcon.cpp": {
+   "notes": "Combined batch-14a review: byte-exact latch trio + base re-inlines. Post-review polish: DWARF 2-param Prepare (parent folded NULL) + mbShowing name, re-gated PASS.",
    "status": "done"
   },
   "GameSource/Gui/Flow/HUD/Components/BrnFriendsListEntry.cpp": {
@@ -45765,6 +45837,10 @@
   },
   "class:BrnDirector::Camera::Camera": {
    "notes": "Wave 36: faithful vs asm, gate clean, pushed 864f73a",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::CameraEffects": {
+   "notes": "Combined batch-14a review: all five accessors asm-exact; carve span math re-added to the 0xBC stride; the +0x80 blend corroborates the mfSimTimeScale reconcile.",
    "status": "done"
   },
   "class:BrnDirector::Camera::CameraState": {
