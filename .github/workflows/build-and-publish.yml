@@ -1,33 +1,28 @@
-# Build the game exe on every commit and upload it to the work server, which
-# merges in the game assets and publishes the download.
+# Build the game exe on a schedule / on demand and upload it to the work server,
+# which merges in the game assets and publishes the download.
 #
-# Runs on a GITHUB-HOSTED windows-latest runner. That image ships MSVC (VS2022
-# Enterprise), MSYS2 at C:\msys64, and Strawberry Perl at C:\Strawberry -- the
-# exact toolchain tools\build\build_ffmpeg.bat and build_game_exe.bat expect --
-# so the bespoke `cl` build works without a self-hosted box.
-#
+# Runs on a GITHUB-HOSTED windows-latest runner (MSVC via ilammy/msvc-dev-cmd).
 # CI compiles ONLY the exe (no ~1 GB asset handling): it uploads a small exe
 # bundle, and the SERVER rclone-syncs the assets and assembles the served zip.
 #
-# One repo secret is required (Settings -> Secrets and variables -> Actions):
-#   WORK_PUBLISH_TOKEN  admin X-Work-Token minted on the work server
-# One variable (already set): WORK_SERVER.
+# FFmpeg is NOT compiled here -- the MSYS2 source build is fragile on CI (a GNU
+# Make 4.4 awk-recipe bug). Instead we download a prebuilt copy from the
+# "ffmpeg-prebuilt" release. Rebuild + re-upload that asset when the FFmpeg
+# submodule changes (see deploy/ci/README.md in BP-work-server).
 #
-# See deploy/ci/README.md in BP-work-server for the full setup.
+# One repo secret is required: WORK_PUBLISH_TOKEN (admin X-Work-Token from the
+# work server). One variable (already set): WORK_SERVER.
 
 name: Build & Publish Game
 
 on:
-  # No per-push trigger on purpose: main receives frequent automated ledger
-  # commits, and a ~20-min build on each (with cancel-in-progress) would keep
-  # restarting and never finish. Build once daily -- which also re-pulls the
-  # Drive assets server-side -- and on demand via the Actions "Run workflow"
-  # button (or `gh workflow run`).
+  # No per-push trigger: main gets frequent automated ledger commits, and a build
+  # per push would keep restarting. Build once daily (which also re-pulls the
+  # Drive assets server-side) and on demand via "Run workflow" / `gh workflow run`.
   schedule:
     - cron: "0 4 * * *"
   workflow_dispatch:
 
-# One build at a time; queue rather than cancel, since runs are now rare.
 concurrency:
   group: build-publish
   cancel-in-progress: false
@@ -35,9 +30,7 @@ concurrency:
 jobs:
   build:
     runs-on: windows-latest
-    # First run compiles FFmpeg (uncached); later runs restore it. Also stops a
-    # wedged run from hanging for the default 6h.
-    timeout-minutes: 90
+    timeout-minutes: 45
     steps:
       - name: Checkout (repo only)
         uses: actions/checkout@v4
@@ -47,58 +40,36 @@ jobs:
 
       # Init ONLY the submodules the build needs, non-recursively. `recursive`
       # drags in EABase/EASTL's test/packages submodules, which reference each
-      # other cyclically (EABase -> EAMain -> EABase -> ...) and nest until the
-      # path overflows Windows' 260-char limit ("cannot write keep file ...
-      # Filename too long"). We need only b5-decomp + its direct vendor deps
-      # (EAThread, EABase, EASTL, FFmpeg) one level down.
+      # other cyclically and overflow Windows' 260-char path limit. We need
+      # b5-decomp + the EA vendor libs; FFmpeg comes prebuilt (below), so its
+      # source submodule is skipped.
       - name: Init required submodules
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           git config --global core.longpaths true
-          # Route all github.com fetches (incl. git@ submodule URLs) through https
-          # with the workflow token, so private repos and forks authenticate.
           git config --global url."https://github.com/".insteadOf "git@github.com:"
           git config --global http.https://github.com/.extraheader \
             "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           git submodule update --init b5-decomp
-          git -C b5-decomp submodule update --init
+          git -C b5-decomp submodule update --init vendor/EABase vendor/EASTL vendor/EAThread
 
-      # Preflight: the FFmpeg build relies on these preinstalled runner tools.
-      # Fail early and clearly if the image ever drops them.
-      - name: Verify FFmpeg toolchain present
-        shell: pwsh
-        run: |
-          $ok = $true
-          foreach ($p in 'C:\msys64\usr\bin\bash.exe','C:\Strawberry\c\bin') {
-            if (Test-Path $p) { Write-Host "found $p" }
-            else { Write-Warning "MISSING $p"; $ok = $false }
-          }
-          if (-not $ok) { throw "FFmpeg build prerequisites missing on this runner image" }
-
-      # Build the vendored FFmpeg + Lua once, then reuse. Keyed on the FFmpeg
-      # submodule commit + the build scripts, so a dep or recipe change rebuilds.
-      - name: Dependency cache key
-        id: depkey
+      # Download the prebuilt FFmpeg (libs + DLLs + headers) into the tree where
+      # build_game_exe.bat expects it, instead of compiling FFmpeg from source.
+      - name: Fetch prebuilt FFmpeg
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          ff=$(git -C b5-decomp/vendor/FFmpeg rev-parse HEAD 2>/dev/null || echo none)
-          scripts=$(sha256sum tools/build/build_ffmpeg.bat tools/build/build_ffmpeg.sh tools/build/build_lua.bat | sha256sum | cut -c1-16)
-          echo "key=deps-v1-ff-${ff}-${scripts}" >> "$GITHUB_OUTPUT"
+          dest=b5-decomp/vendor/ffmpeg-build
+          mkdir -p "$dest"
+          gh release download ffmpeg-prebuilt --repo "$GITHUB_REPOSITORY" -p ffmpeg-build.zip -O ffmpeg-build.zip
+          unzip -q -o ffmpeg-build.zip -d "$dest"
+          test -f "$dest/bin/avcodec.lib" || { echo "prebuilt FFmpeg missing bin/avcodec.lib"; exit 1; }
 
-      - name: Cache FFmpeg + Lua builds
-        uses: actions/cache@v4
-        with:
-          path: |
-            b5-decomp/vendor/ffmpeg-build
-            b5-decomp/vendor/lua/lua515.lib
-          key: ${{ steps.depkey.outputs.key }}
-
-      # Put MSVC (cl) on PATH for the whole job. The build .bat files then find cl
-      # via their `cl | findstr "Version 19."` check and skip their own fragile
-      # `call vcvars64 >nul 2>&1` -- which was dying silently with exit 255 on the
-      # runner and taking the build down before any output.
+      # Put MSVC (cl) on PATH so the build .bat files skip their own fragile
+      # `call vcvars64 >nul 2>&1` (which died silently with exit 255 on the runner).
       - name: Set up MSVC (x64)
         uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -107,7 +78,7 @@ jobs:
       - name: Build exe & upload bundle
         shell: pwsh
         env:
-          WORK_SERVER: ${{ vars.WORK_SERVER }}          # e.g. https://adriwin.fr
+          WORK_SERVER: ${{ vars.WORK_SERVER }}          # e.g. https://decomp.adriwin.fr
           WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}  # an admin X-Work-Token
         run: |
           ./ci/publish-build.ps1 `

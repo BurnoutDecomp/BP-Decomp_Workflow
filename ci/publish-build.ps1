@@ -41,7 +41,7 @@ $ProgressPreference = "SilentlyContinue"
 $Root = Split-Path -Parent $PSScriptRoot
 $GameOut = Join-Path $Root "build\game"
 $ExePath = Join-Path $GameOut "Burnout_PC.exe"
-$FfmpegLib = Join-Path $Root "b5-decomp\vendor\ffmpeg-build\avcodec.lib"
+$FfmpegLib = Join-Path $Root "b5-decomp\vendor\ffmpeg-build\bin\avcodec.lib"
 $LuaLib = Join-Path $Root "b5-decomp\vendor\lua\lua515.lib"
 
 function Step($msg) { Write-Host "==> $msg" -ForegroundColor Cyan }
