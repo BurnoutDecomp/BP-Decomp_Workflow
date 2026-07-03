@@ -1,0 +1,8 @@
+# Batch files must be CRLF or cmd.exe mis-parses them on a fresh (LF) checkout --
+# on GitHub-hosted runners this shows up as an instant "exit 255" with no output.
+# Local Windows checkouts hide it via core.autocrlf; make it explicit for CI.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Shell scripts run under MSYS2/bash (e.g. tools/build/build_ffmpeg.sh) must stay LF.
+*.sh text eol=lf
