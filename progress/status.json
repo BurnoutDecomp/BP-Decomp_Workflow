@@ -4446,10 +4446,28 @@
   "BrnDirector::MomentStationaryCrash::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::MomentTumbling::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentTumbling::GetName": {
+   "status": "reviewed"
+  },
   "BrnDirector::MomentTumbling::Prepare": {
    "status": "reviewed"
   },
+  "BrnDirector::MomentTumbling::Release": {
+   "status": "reviewed"
+  },
   "BrnDirector::MomentTumbling::SetGyroCamParameters": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentTumbling::SetParameters": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentTumbling::SignalIsGoodTimeToPlant": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentTumbling::Update": {
    "status": "reviewed"
   },
   "BrnDirector::NewVehicleEvent,50>::Construct": {
@@ -42094,6 +42112,10 @@
   },
   "GameSource/Director/MomentController/Moments/BrnMomentStationaryCrash.cpp": {
    "notes": "Combined batch-13 review: PASS with no findings. Rotation integrator dots, the tumbling/stationary group polarity (asm default +1448, override +1464 when the latch is down), the two-source rm asymmetry (mgr+91068 groups vs shared+1340 guid resolver), the fits check (0.1/2pi/pi-over-2/100.0 rodata all confirmed), and the +0xE28 committed SetUseCollisionPolicy identity all verified.",
+   "status": "done"
+  },
+  "GameSource/Director/MomentController/Moments/BrnMomentTumbling.cpp": {
+   "notes": "Batch-14b review: PASS with no findings. The vmaddfp FMA operand order decoded from raw XEX bytes (v12*v13+v0 == the submitted vpu operator chain); all rodata constants confirmed (0.1/200.0/0.5/0.25/1.0); the byte-to-name map, both trigger gate orders, the state-3 keep conditions (no 449/params gates), the rig-gate head bits 30/24, the INACTIVE(0) Release park, and the LEAD plant pair (+0x630/+0x631 GyroCam grow) all asm-verified.",
    "status": "done"
   },
   "GameSource/Director/Shots/ShotControllers/BrnInertiaController.cpp": {
