@@ -562,6 +562,14 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Memory\CgsMemoryModuleIO.cpp"
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataAllocatorList.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimeUtils.cpp"
+  rem ---- link-resolution: small self-contained reconstructed-body TUs the exe references ----
+  echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsLogicContentDtor.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\CgsTestBedAllocator.cpp"
+  echo "%SRC%\GameShared\GameClasses\Language\CgsLanguageManagerDebugComponent.cpp"
+  echo "%SRC%\GameSource\Resource\BrnGameDataModuleIO.cpp"
+  echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowCheckDiskSpace.cpp"
+  echo "%SRC%\SDKs\EATech\include\Apt\AptRandom.cpp"
+  echo "%SRC%\SDKs\EATech\include\Apt\AptActionInterpreterParseStream.cpp"
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
