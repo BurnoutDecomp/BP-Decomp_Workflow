@@ -22281,6 +22281,12 @@
   "BrnSound::Module::Io::EaTraxHelper::GetSongName": {
    "status": "reviewed"
   },
+  "BrnSound::Module::Io::LogicOut": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::LogicOutputBuf": {
+   "status": "reviewed"
+  },
   "BrnSound::Module::Io::LogicOutputBuffer::": {
    "status": "reviewed"
   },
@@ -22293,17 +22299,110 @@
   "BrnSound::Module::Io::LogicOutputBuffer::GetRes": {
    "status": "reviewed"
   },
+  "BrnSound::Module::Io::RootI": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInp": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputB": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBu": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuff": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer": {
+   "status": "reviewed"
+  },
   "BrnSound::Module::Io::RootInputBuffer::Construct": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::Ge": {
    "status": "reviewed"
   },
   "BrnSound::Module::Io::RootInputBuffer::GetDirectorCamera": {
    "status": "reviewed"
   },
+  "BrnSound::Module::Io::RootInputBuffer::GetGameE": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::GetGuiAudioEventResul": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::GetGuiEventQue": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::GetPlayerActiveRaceCarIndex": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::GetUpdateInfo": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetAICarOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetCameraInput": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetContactSpyQueueInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetDeformationInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetGameModeInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetGuiEventQueue": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetOnlineScoringInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetPhysicalTrafficStates": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetReplayStatusInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetScoringInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetTrafficOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetUpdateInfo": {
+   "status": "reviewed"
+  },
   "BrnSound::Module::Io::RootInputBuffer::SetVehicleData": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootInputBuffer::SetWorldLoadInterface": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootOutp": {
+   "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootOutputBuff": {
    "status": "reviewed"
   },
   "BrnSound::Module::Io::RootOutputBuffer::Construct": {
    "status": "reviewed"
+  },
+  "BrnSound::Module::Io::RootOutputBuffer::G": {
+   "status": "compiles"
+  },
+  "BrnSound::Module::Io::RootOutputBuffer::GetReplayR": {
+   "status": "compiles"
+  },
+  "BrnSound::Module::Io::RootOutputBuffer::GetReplayRequest": {
+   "status": "compiles"
+  },
+  "BrnSound::Module::Io::RootOutputBuffer::GetReso": {
+   "status": "compiles"
   },
   "BrnSound::Module::Io::RootPreUpdateOutputBuffer::Construct": {
    "status": "reviewed"
@@ -48968,8 +49067,16 @@
    "notes": "BrnSound::Module (2); verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:BrnSound::Module::Io": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 435c159",
+   "status": "done"
+  },
   "class:BrnSound::Module::Io::LogicOutputBuffer": {
    "notes": "Wave 52: reconstructed store-for-store from X360 ARTIST asm and adversarially verified (full store set both directions, exact assert operands, BE-qword field order, byte-index/stride). Committed a2da36a.",
+   "status": "done"
+  },
+  "class:BrnSound::Module::Io::RootInputBuffer": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 435c159",
    "status": "done"
   },
   "class:BrnSound::Module::Io::RootPreUpdateOutputBuffer": {
