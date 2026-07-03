@@ -1,0 +1,50 @@
+# Build the game on every commit and publish the zip to the work server's
+# download button.
+#
+# This workflow lives in the BP-Decomp_Workflow repo. The decomp source is the
+# `b5-decomp` submodule (its CMakeLists.txt is the build root); this repo's
+# commits -- including submodule-pointer bumps -- trigger a rebuild. It runs on
+# a SELF-HOSTED WINDOWS runner because the build needs MSVC (`cl`), which the
+# Linux download server cannot run. See deploy/ci/README.md in BP-work-server
+# for the one-time setup (runner registration, rclone remote, secrets).
+
+name: Build & Publish Game
+
+on:
+  push:
+    branches: [main]
+  # Assets in the Google Drive folder can change without a code commit; a daily
+  # run rebuilds so the download reflects the current asset set even when the
+  # source is quiet. Remove if you only ever want commit-triggered builds.
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+# One build at a time; a newer push supersedes an in-flight build.
+concurrency:
+  group: build-publish
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: [self-hosted, windows, msvc]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build, bundle & publish
+        shell: pwsh
+        env:
+          # Set these as repository secrets/variables in BP-Decomp_Workflow.
+          WORK_SERVER: ${{ vars.WORK_SERVER }}          # e.g. https://adriwin.fr
+          WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}  # an admin X-Work-Token
+          RCLONE_REMOTE: ${{ vars.RCLONE_REMOTE }}       # e.g. gdrive:BurnoutParadiseAssets
+        run: |
+          ./ci/publish-build.ps1 `
+            -WorkServer $env:WORK_SERVER `
+            -WorkToken $env:WORK_TOKEN `
+            -RcloneRemote $env:RCLONE_REMOTE `
+            -CommitSha $env:GITHUB_SHA `
+            -Branch $env:GITHUB_REF_NAME
