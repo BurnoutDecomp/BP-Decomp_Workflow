@@ -18,18 +18,19 @@
 name: Build & Publish Game
 
 on:
-  push:
-    branches: [main]
-  # A daily run lets the server re-pull Drive assets and republish even when the
-  # source is quiet (asset-only changes still reach the download).
+  # No per-push trigger on purpose: main receives frequent automated ledger
+  # commits, and a ~20-min build on each (with cancel-in-progress) would keep
+  # restarting and never finish. Build once daily -- which also re-pulls the
+  # Drive assets server-side -- and on demand via the Actions "Run workflow"
+  # button (or `gh workflow run`).
   schedule:
     - cron: "0 4 * * *"
   workflow_dispatch:
 
-# One build at a time; a newer push supersedes an in-flight build.
+# One build at a time; queue rather than cancel, since runs are now rare.
 concurrency:
   group: build-publish
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
