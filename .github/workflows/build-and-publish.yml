@@ -1,12 +1,18 @@
 # Build the game on every commit and publish the zip to the work server's
 # download button.
 #
-# This workflow lives in the BP-Decomp_Workflow repo. The decomp source is the
-# `b5-decomp` submodule (its CMakeLists.txt is the build root); this repo's
-# commits -- including submodule-pointer bumps -- trigger a rebuild. It runs on
-# a SELF-HOSTED WINDOWS runner because the build needs MSVC (`cl`), which the
-# Linux download server cannot run. See deploy/ci/README.md in BP-work-server
-# for the one-time setup (runner registration, rclone remote, secrets).
+# This runs on a GITHUB-HOSTED windows-latest runner. That image ships MSVC
+# (VS2022 Enterprise), MSYS2 at C:\msys64, and Strawberry Perl at C:\Strawberry
+# -- the exact toolchain tools\build\build_ffmpeg.bat and build_game_exe.bat
+# expect -- so the bespoke `cl` build works without a self-hosted box.
+#
+# Two repo secrets are required (Settings -> Secrets and variables -> Actions):
+#   WORK_PUBLISH_TOKEN  admin X-Work-Token minted on the work server
+#   GDRIVE_SA_JSON      Google service-account key JSON with read access to the
+#                       asset Drive folder (share the folder with the SA email)
+# Two variables (already set): WORK_SERVER, RCLONE_REMOTE.
+#
+# See deploy/ci/README.md in BP-work-server for the full setup.
 
 name: Build & Publish Game
 
@@ -15,7 +21,7 @@ on:
     branches: [main]
   # Assets in the Google Drive folder can change without a code commit; a daily
   # run rebuilds so the download reflects the current asset set even when the
-  # source is quiet. Remove if you only ever want commit-triggered builds.
+  # source is quiet.
   schedule:
     - cron: "0 4 * * *"
   workflow_dispatch:
@@ -27,24 +33,77 @@ concurrency:
 
 jobs:
   build:
-    runs-on: [self-hosted, windows, msvc]
+    runs-on: windows-latest
+    # FFmpeg (first run, uncached) + a ~1GB asset sync + zip + upload need room;
+    # this also stops a wedged run from hanging for the default 6h.
+    timeout-minutes: 120
     steps:
-      - name: Checkout
+      - name: Checkout (with submodules)
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
+      # Preflight: the FFmpeg build relies on these preinstalled runner tools.
+      # Fail early and clearly if the image ever drops them, instead of a cryptic
+      # error deep in FFmpeg's configure.
+      - name: Verify FFmpeg toolchain present
+        shell: pwsh
+        run: |
+          $ok = $true
+          foreach ($p in 'C:\msys64\usr\bin\bash.exe','C:\Strawberry\c\bin') {
+            if (Test-Path $p) { Write-Host "found $p" }
+            else { Write-Warning "MISSING $p"; $ok = $false }
+          }
+          if (-not $ok) { throw "FFmpeg build prerequisites missing on this runner image" }
+
+      # Build the vendored FFmpeg + Lua once, then reuse. Keyed on the FFmpeg
+      # submodule commit + the build scripts, so a dep or recipe change rebuilds.
+      - name: Dependency cache key
+        id: depkey
+        shell: bash
+        run: |
+          ff=$(git -C b5-decomp/vendor/FFmpeg rev-parse HEAD 2>/dev/null || echo none)
+          scripts=$(sha256sum tools/build/build_ffmpeg.bat tools/build/build_ffmpeg.sh tools/build/build_lua.bat | sha256sum | cut -c1-16)
+          echo "key=deps-v1-ff-${ff}-${scripts}" >> "$GITHUB_OUTPUT"
+
+      - name: Cache FFmpeg + Lua builds
+        uses: actions/cache@v4
+        with:
+          path: |
+            b5-decomp/vendor/ffmpeg-build
+            b5-decomp/vendor/lua/lua515.lib
+          key: ${{ steps.depkey.outputs.key }}
+
+      - name: Install rclone
+        shell: pwsh
+        run: choco install rclone -y --no-progress
+
+      - name: Configure rclone (Drive service account)
+        shell: pwsh
+        env:
+          GDRIVE_SA_JSON: ${{ secrets.GDRIVE_SA_JSON }}
+        run: |
+          if (-not $env:GDRIVE_SA_JSON) { throw "GDRIVE_SA_JSON secret is not set" }
+          $sa = Join-Path $env:RUNNER_TEMP 'gdrive-sa.json'
+          # WriteAllText avoids a BOM, which would make the JSON key invalid.
+          [System.IO.File]::WriteAllText($sa, $env:GDRIVE_SA_JSON)
+          rclone config create gdrive drive `
+            service_account_file $sa `
+            root_folder_id 1CgSSjtenfAc_Ps6_JLhtGhTly1K5n_HO `
+            scope drive.readonly
+          rclone lsd gdrive: | Select-Object -First 5   # smoke-test the remote
+
       - name: Build, bundle & publish
         shell: pwsh
         env:
-          # Set these as repository secrets/variables in BP-Decomp_Workflow.
           WORK_SERVER: ${{ vars.WORK_SERVER }}          # e.g. https://adriwin.fr
           WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}  # an admin X-Work-Token
-          RCLONE_REMOTE: ${{ vars.RCLONE_REMOTE }}       # e.g. gdrive:BurnoutParadiseAssets
+          RCLONE_REMOTE: ${{ vars.RCLONE_REMOTE }}       # e.g. gdrive:
         run: |
           ./ci/publish-build.ps1 `
             -WorkServer $env:WORK_SERVER `
             -WorkToken $env:WORK_TOKEN `
             -RcloneRemote $env:RCLONE_REMOTE `
+            -AssetsDir "$env:RUNNER_TEMP\assets" `
             -CommitSha $env:GITHUB_SHA `
             -Branch $env:GITHUB_REF_NAME
