@@ -22,6 +22,11 @@ rem standard/Windows headers), so a "where cl" shortcut picks the wrong compiler
 rem build fails on <cstdint>/<Windows.h>. vcvars64 is idempotent + prepends the VS 2022
 rem bin, so cl always resolves to VS 2022's cl, never the 360 SDK's. (Set VCVARS64 to
 rem override which vcvars64.bat is used.)
+rem Exception: if a modern MSVC (cl 19.x) is already on PATH -- e.g. CI ran
+rem ilammy/msvc-dev-cmd -- trust it and skip the vcvars search. The 360 SDK's cl is
+rem 14.x and won't match "Version 19.", so the guard above still holds locally.
+cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
+if not errorlevel 1 goto toolchain_ready
 set "VCVARS="
 if defined VCVARS64 if exist "%VCVARS64%" set "VCVARS=%VCVARS64%"
 for %%P in (

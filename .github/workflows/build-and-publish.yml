@@ -57,6 +57,7 @@ jobs:
 
       # Download the prebuilt FFmpeg (libs + DLLs + headers) into the tree where
       # build_game_exe.bat expects it, instead of compiling FFmpeg from source.
+      # Hosted as the "ffmpeg-prebuilt" release on the FFmpeg fork repo (public).
       - name: Fetch prebuilt FFmpeg
         shell: bash
         env:
@@ -64,7 +65,7 @@ jobs:
         run: |
           dest=b5-decomp/vendor/ffmpeg-build
           mkdir -p "$dest"
-          gh release download ffmpeg-prebuilt --repo "$GITHUB_REPOSITORY" -p ffmpeg-build.zip -O ffmpeg-build.zip
+          gh release download ffmpeg-prebuilt --repo BurnoutDecomp/FFmpeg-Xenia-new -p ffmpeg-build.zip -O ffmpeg-build.zip
           unzip -q -o ffmpeg-build.zip -d "$dest"
           test -f "$dest/bin/avcodec.lib" || { echo "prebuilt FFmpeg missing bin/avcodec.lib"; exit 1; }
 
