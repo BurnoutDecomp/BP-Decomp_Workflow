@@ -94,6 +94,15 @@ jobs:
             b5-decomp/vendor/lua/lua515.lib
           key: ${{ steps.depkey.outputs.key }}
 
+      # Put MSVC (cl) on PATH for the whole job. The build .bat files then find cl
+      # via their `cl | findstr "Version 19."` check and skip their own fragile
+      # `call vcvars64 >nul 2>&1` -- which was dying silently with exit 255 on the
+      # runner and taking the build down before any output.
+      - name: Set up MSVC (x64)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
       - name: Build exe & upload bundle
         shell: pwsh
         env:
