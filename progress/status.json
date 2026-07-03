@@ -23431,33 +23431,54 @@
    "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch::G": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch::GetCor": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch::GetDispatchFrame": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch::GetShadowMap": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch::SetBlobbyShadowBuffer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch::SetCoronaSubmissionInterface": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch::SetDispatchFrame": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch::SetShadowMap": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::Construct": {
    "status": "reviewed"
   },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetActiveRaceCarOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetContactSpyInterface": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetDeformationOutputInterfaceForEntityModules": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetVehicleManagerOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetVehicleOutputInterface": {
+   "status": "reviewed"
+  },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PostScene::Construct": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PostScene::SetActiveRaceCarOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PostScene::SetCrashTrafficOutputInterface": {
    "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PreDispatch::Construct": {
@@ -23466,23 +23487,32 @@
   "BrnTraffic::BrnTrafficIO::InputBuffer_PrePhysics::Construct": {
    "status": "reviewed"
   },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PrePhysics::SetOverlapPairsQueue": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PrePhysics::SetPlayerResetInterface": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::InputBuffer_PrePhysics::SetPotentialContactQueue": {
+   "status": "reviewed"
+  },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PreScene::Construct": {
    "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PreScene::GetTimerS": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PreScene::SetActiveRaceCarOutputInterface": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PreScene::SetGlobalRaceCarOutputInterface": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PreScene::SetTimerStatusInterface": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::InputBuffer_PreScene::SetTrafficNetworkInputInterface": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::NearMissData,16>::Append": {
    "status": "reviewed"
@@ -23551,6 +23581,12 @@
    "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::TrafficSoundOutputInterface::GetTrafficEntityCount": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::TrafficToRaceCarInterface_PreScene::AddPotentialStompee": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::BrnTrafficIO::TrafficToRaceCarInterface_PreScene::SetSympatheticCrasher": {
    "status": "reviewed"
   },
   "BrnTraffic::BrnTrafficIO::TrafficTypeResponse,32>::Construct": {
@@ -48660,6 +48696,26 @@
    "notes": "AddEvent 0x8271A128 / AddEventSafe 0x82558358 / Append 0x823C3E88 explicit instantiations over committed CgsBaseEventQueue.h. Traffic-IO ActivateHull event record+queue (NOT the TrafficData Hull geometry subsystem). Verifier parity/none. Gate pass.",
    "status": "done"
   },
+  "class:BrnTraffic::BrnTrafficIO::InputBuffer_Dispatch": {
+   "notes": "Opus decompile+verify wave; store-for-store IO buffers; gate PASS, pushed b5-decomp dev 695aeb6",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics": {
+   "notes": "Opus decompile+verify wave; store-for-store IO buffers; gate PASS, pushed b5-decomp dev 695aeb6",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::InputBuffer_PostScene": {
+   "notes": "Opus decompile+verify wave; store-for-store IO buffers; gate PASS, pushed b5-decomp dev 695aeb6",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::InputBuffer_PrePhysics": {
+   "notes": "Opus decompile+verify wave; store-for-store IO buffers; gate PASS, pushed b5-decomp dev 695aeb6",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::InputBuffer_PreScene": {
+   "notes": "Opus decompile+verify wave; store-for-store IO buffers; gate PASS, pushed b5-decomp dev 695aeb6",
+   "status": "done"
+  },
   "class:BrnTraffic::BrnTrafficIO::NearMissData,16>": {
    "notes": "Wave 32: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -48690,6 +48746,10 @@
   },
   "class:BrnTraffic::BrnTrafficIO::TrafficSoundOutputInterface": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:BrnTraffic::BrnTrafficIO::TrafficToRaceCarInterface_PreScene": {
+   "notes": "Opus decompile+verify wave; store-for-store IO buffers; gate PASS, pushed b5-decomp dev 695aeb6",
    "status": "done"
   },
   "class:BrnTraffic::BrnTrafficIO::TrafficTypeResponse,32>": {
