@@ -9,8 +9,13 @@ set LUASRC=%ROOT%\b5-decomp\vendor\lua\src
 set OBJ=%ROOT%\b5-decomp\vendor\lua\obj
 set OUT=%ROOT%\b5-decomp\vendor\lua\lua515.lib
 
+rem Probe with "where cl" FIRST: piping a cl that is not on PATH aborts the batch
+rem with exit 255 (no cl locally until vcvars runs), so guard before the version pipe.
+where cl >nul 2>&1
+if errorlevel 1 goto need_vcvars
 cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
 if not errorlevel 1 goto have_cl
+:need_vcvars
 set "VCVARS="
 for %%P in (
   "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
