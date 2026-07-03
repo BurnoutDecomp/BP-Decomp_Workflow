@@ -29,9 +29,12 @@ if [ ! -f ffbuild/config.mak ]; then
 fi
 
 # GNU Make 4.4 consumes one escaping layer in FFmpeg's generated MSVC
-# showIncludes-to-dependency awk recipe. Preserve the regex that matches Windows
-# path separators; without this, awk receives the invalid expression /\/.
-sed -i 's@gsub(/\\\\/, "/")@gsub(/\\\\\\\\/, "/")@g' ffbuild/config.mak
+# showIncludes-to-dependency awk recipe. Without a fix, awk receives the invalid
+# expression /\/ and every .o dependency scan dies with "syntax error".
+# Force the backslash-matching regex inside gsub(/.../) to 4 backslashes so Make
+# leaves awk a valid /\\/ . Match by group so comma/quote spacing is irrelevant
+# (the old exact-string sed silently missed and the awk stayed broken).
+sed -i -E 's@(gsub\(/)\\+(/)@\1\\\\\\\\\2@g' ffbuild/config.mak
 
 echo "==== building FFmpeg ===="
 make -j"$(nproc)"
