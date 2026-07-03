@@ -38,10 +38,31 @@ jobs:
     # wedged run from hanging for the default 6h.
     timeout-minutes: 90
     steps:
-      - name: Checkout (with submodules)
+      - name: Checkout (repo only)
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
+          persist-credentials: true
+
+      # Init ONLY the submodules the build needs, non-recursively. `recursive`
+      # drags in EABase/EASTL's test/packages submodules, which reference each
+      # other cyclically (EABase -> EAMain -> EABase -> ...) and nest until the
+      # path overflows Windows' 260-char limit ("cannot write keep file ...
+      # Filename too long"). We need only b5-decomp + its direct vendor deps
+      # (EAThread, EABase, EASTL, FFmpeg) one level down.
+      - name: Init required submodules
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --global core.longpaths true
+          # Route all github.com fetches (incl. git@ submodule URLs) through https
+          # with the workflow token, so private repos and forks authenticate.
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git config --global http.https://github.com/.extraheader \
+            "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git submodule update --init b5-decomp
+          git -C b5-decomp submodule update --init
 
       # Preflight: the FFmpeg build relies on these preinstalled runner tools.
       # Fail early and clearly if the image ever drops them.
