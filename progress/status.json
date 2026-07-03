@@ -20790,6 +20790,24 @@
   "BrnResource::GameDataIO::AllocatorList::GetLinearAllocator": {
    "status": "reviewed"
   },
+  "BrnResource::GameDataIO::AllocatorList::GetRWGeneralResource": {
+   "status": "reviewed"
+  },
+  "BrnResource::GameDataIO::AllocatorList::GetRWLinearResourceAllocato": {
+   "status": "reviewed"
+  },
+  "BrnResource::GameDataIO::AllocatorList::GetRawResource": {
+   "status": "reviewed"
+  },
+  "BrnResource::GameDataIO::AllocatorList::GetRawResourceDescriptor": {
+   "status": "reviewed"
+  },
+  "BrnResource::GameDataIO::Inpu": {
+   "status": "reviewed"
+  },
+  "BrnResource::GameDataIO::InputBuffe": {
+   "status": "reviewed"
+  },
   "BrnResource::GameDataIO::InputBuffer::Construct": {
    "status": "reviewed"
   },
@@ -20797,6 +20815,9 @@
    "status": "reviewed"
   },
   "BrnResource::GameDataIO::InputBuffer::GetReque": {
+   "status": "reviewed"
+  },
+  "BrnResource::GameDataIO::OutputBuffer:": {
    "status": "reviewed"
   },
   "BrnResource::GameDataIO::OutputBuffer::Construct": {
@@ -26751,25 +26772,7 @@
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatch": {
    "status": "reviewed"
   },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::": {
-   "status": "reviewed"
-  },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::Construct": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::GetShad": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::SetBlobbyShadowBuffer": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::SetCameraInput": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::SetCoronaSubmissionInterface": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::SetDispatchFrame": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_P": {
@@ -26784,37 +26787,10 @@
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::Construct": {
    "status": "reviewed"
   },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::SetContactSpyInterface": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::SetDeformationOutputInterface": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::SetVehicleManagerOutputInterface": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::SetVehicleOutputInterface": {
-   "status": "reviewed"
-  },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostScene::Construct": {
    "status": "reviewed"
   },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostScene::SetCrashInterface": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostScene::SetTrafficToRaceCarInterface_PreScene": {
-   "status": "reviewed"
-  },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::Construct": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::GetControllerActive": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::GetInHardStopCamera": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetAIModuleResultInterface": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetControllerActive": {
@@ -26826,28 +26802,10 @@
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetOnlineScoringInterface": {
    "status": "reviewed"
   },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetPotentialContactQueue": {
-   "status": "reviewed"
-  },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetTakedownEventQueue": {
    "status": "reviewed"
   },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics::SetTrafficToRaceCarInterface_PostScene": {
-   "status": "reviewed"
-  },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::Construct": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::Ge": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::GetActivePaybackAggress": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::GetActivePaybackTy": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::GetCam": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetActivePaybackAggressor": {
@@ -26857,12 +26815,6 @@
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetCameraInput": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetPlayerVehicleControls": {
-   "status": "reviewed"
-  },
-  "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetReplayStatusInterface": {
    "status": "reviewed"
   },
   "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::SetTimerStatusInterface": {
@@ -49278,6 +49230,14 @@
    "notes": "GameDataEventSlot IndexedPool; verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:BrnResource::GameDataIO": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 1615e30",
+   "status": "done"
+  },
+  "class:BrnResource::GameDataIO::AllocatorList": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 1615e30",
+   "status": "done"
+  },
   "class:BrnResource::GameDataIO::InputBuffer": {
    "notes": "GameDataIO InputBuffer; parity/none; wave6; verifier reviewed; gate pass.",
    "status": "done"
@@ -50281,26 +50241,6 @@
   },
   "class:BrnWorld::RaceCarEntityModuleIO::CreateRivalInTrafficSystemEvent,34>": {
    "notes": "Wave 39: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
-   "status": "done"
-  },
-  "class:BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists": {
-   "notes": "Opus decomp+verify; gate PASS; pushed dev 620eb49",
-   "status": "done"
-  },
-  "class:BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics": {
-   "notes": "Opus decomp+verify; gate PASS; pushed dev 620eb49",
-   "status": "done"
-  },
-  "class:BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostScene": {
-   "notes": "Opus decomp+verify; gate PASS; pushed dev 620eb49",
-   "status": "done"
-  },
-  "class:BrnWorld::RaceCarEntityModuleIO::InputBuffer_PrePhysics": {
-   "notes": "Opus decomp+verify; gate PASS; pushed dev 620eb49",
-   "status": "done"
-  },
-  "class:BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene": {
-   "notes": "Opus decomp+verify; gate PASS; pushed dev 620eb49",
    "status": "done"
   },
   "class:BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PreScene": {
