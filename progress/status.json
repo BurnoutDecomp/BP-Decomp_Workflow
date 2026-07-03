@@ -26202,13 +26202,22 @@
   "BrnWorld::PropEntityIO::InputBuffer_PostPhysi": {
    "status": "reviewed"
   },
+  "BrnWorld::PropEntityIO::InputBuffer_PostPhysics::AppendUpdatedPropQueue": {
+   "status": "reviewed"
+  },
   "BrnWorld::PropEntityIO::InputBuffer_PostPhysics::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityIO::InputBuffer_PostPhysics::Ge": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::InputBuffer_PostScene::Construct": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::InputBuffer_PostScene::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityIO::InputBuffer_PrePhysics::AppendPotentialContactQueue": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::InputBuffer_PrePhysics::Construct": {
@@ -26251,6 +26260,12 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::OutputBuffer_PrePhysics::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityIO::OutputBuffer_PrePhysics::Ge": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityIO::OutputBuffer_PrePhysics::GetPropI": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::OutputBuffer_PreS": {
@@ -26319,6 +26334,9 @@
   "BrnWorld::PropEntityIO::PropInstancesNeededForZoneEvent>::Append": {
    "status": "reviewed"
   },
+  "BrnWorld::PropEntityIO::PropToTrafficInterface::RequestTrafficLightKnockDown": {
+   "status": "reviewed"
+  },
   "BrnWorld::PropEntityIO::PropVFXLocatorEvent,10>::Construct": {
    "status": "reviewed"
   },
@@ -26329,6 +26347,12 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::TrafficLightKnockDownEvent,32>::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityIO::TrafficLightKnockDownEvent>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityIO::TrafficLightKnockDownEvent>::Append": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityIO::TrafficLightRestoreEvent,80>::Construct": {
@@ -35704,6 +35728,9 @@
    "status": "reviewed"
   },
   "CgsSceneManager::OverlapGen": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::OverlapGenerationIO::InAddBody>::AddEvent": {
    "status": "reviewed"
   },
   "CgsSceneManager::OverlapGenerationIO::InputBuffer::Construct": {
@@ -50041,8 +50068,20 @@
    "notes": "Wave 51: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "class:BrnWorld::PropEntityIO::InputBuffer_PostPhysics": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev a523dec",
+   "status": "done"
+  },
+  "class:BrnWorld::PropEntityIO::InputBuffer_PrePhysics": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev a523dec",
+   "status": "done"
+  },
   "class:BrnWorld::PropEntityIO::OutputBuffer_PostPhysics": {
    "notes": "Wave 47: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:BrnWorld::PropEntityIO::OutputBuffer_PrePhysics": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev a523dec",
    "status": "done"
   },
   "class:BrnWorld::PropEntityIO::OutputBuffer_PreScene": {
@@ -50085,6 +50124,10 @@
    "notes": "Wave 37: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnWorld::PropEntityIO::PropToTrafficInterface": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev a523dec",
+   "status": "done"
+  },
   "class:BrnWorld::PropEntityIO::PropVFXLocatorEvent,10>": {
    "notes": "PropVFXLocatorEvent queue; parity/none; wave6; verifier reviewed; gate pass.",
    "status": "done"
@@ -50095,6 +50138,10 @@
   },
   "class:BrnWorld::PropEntityIO::TrafficLightKnockDownEvent,32>": {
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:BrnWorld::PropEntityIO::TrafficLightKnockDownEvent>": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev a523dec",
    "status": "done"
   },
   "class:BrnWorld::PropEntityIO::TrafficLightRestoreEvent,80>": {
@@ -51557,6 +51604,10 @@
   },
   "class:CgsSceneManager::OverlapCullingIO::AddInternalCollisionVolume,256>": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsSceneManager::OverlapGenerationIO::InAddBody>": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 89d0a47",
    "status": "done"
   },
   "class:CgsSceneManager::OverlapGenerationModule": {
