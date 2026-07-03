@@ -13,8 +13,16 @@ rem A plain "where cl" is not enough: the Xbox 360 SDK puts an ancient cl (14.x)
 rem on PATH that wins the lookup, and FFmpeg's configure rejects it
 rem ("Unsupported MSVC version"). Run vcvars in that case so VS2022's cl is
 rem prepended and wins.
+rem IMPORTANT: probe with "where cl" FIRST. Piping a command that is not on PATH
+rem (cl 2>&1 | findstr ...) aborts the whole batch with exit 255 -- and locally there
+rem is NO cl until vcvars runs, so the bare pipe killed this script instantly and
+rem vendor\ffmpeg-build was never produced (game build then fails on avcodec.h).
+where cl >nul 2>&1
+if errorlevel 1 goto need_vcvars
 cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
 if not errorlevel 1 goto toolchain_ready
+
+:need_vcvars
 
 set "VCVARS="
 if defined VCVARS64 if exist "%VCVARS64%" set "VCVARS=%VCVARS64%"
