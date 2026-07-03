@@ -13623,6 +13623,12 @@
   "BrnNetwork::BrnNetworkModuleIO::InGamePlayerStatusInterface::SetGameName": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModuleIO::MarkedManInterface::CheckForMarkedManTakedown": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::MarkedManInterface::SetFromPlayerStatusInterface": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkModuleIO::Net": {
    "status": "reviewed"
   },
@@ -13737,6 +13743,9 @@
   "BrnNetwork::BrnNetworkModuleIO::PlayerRe": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModuleIO::PlayerResultsInterface::Clear": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkModuleIO::Pos": {
    "status": "reviewed"
   },
@@ -13758,10 +13767,34 @@
   "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::AppendGameStateToNetworkInterface": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::AppendTakedownQueue": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::AppendVehicleOutputInterface": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::Construct": {
    "status": "reviewed"
   },
   "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetP": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::SetActiveRaceCarInterface": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::SetCrashOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::SetTrafficOutputInterface": {
    "status": "reviewed"
   },
   "BrnNetwork::BrnNetworkModuleIO::PreSimulationInputBuffer:": {
@@ -17676,7 +17709,67 @@
   "BrnPhysics::PhysicsModule::ValidateSimulationContactTypes": {
    "status": "reviewed"
   },
+  "BrnPhysics::PhysicsModuleIO::": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputB": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffe": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer": {
+   "status": "reviewed"
+  },
   "BrnPhysics::PhysicsModuleIO::InputBuffer::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::Get": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::GetCameraInput": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::GetPropMa": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::GetPropManagerI": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::GetSolverMaxIterations": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::GetTimerInterfa": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::GetV": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::GetVehicle": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::SetCameraInput": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::SetRCEntityOutputInterface": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::SetSolverMaxIterations": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::InputBuffer::SetTimerInterface": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::Outp": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::OutputBu": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::OutputBuf": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::OutputBuff": {
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModuleIO::OutputBuffer::": {
@@ -17701,6 +17794,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModuleIO::OutputBuffer::GetVehic": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModuleIO::PotentialC": {
    "status": "reviewed"
   },
   "BrnPhysics::Props::FixableVolume::FixDown": {
@@ -47590,6 +47686,10 @@
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnNetwork::BrnNetworkModuleIO::MarkedManInterface": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 7864b17",
+   "status": "done"
+  },
   "class:BrnNetwork::BrnNetworkModuleIO::NetworkInSelectScoreboardEvent": {
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -47619,6 +47719,14 @@
    "status": "done"
   },
   "class:BrnNetwork::BrnNetworkModuleIO::OutputBuffer": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 7864b17",
+   "status": "done"
+  },
+  "class:BrnNetwork::BrnNetworkModuleIO::PlayerResultsInterface": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 7864b17",
+   "status": "done"
+  },
+  "class:BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer": {
    "notes": "Opus decomp+verify; gate PASS; pushed dev 7864b17",
    "status": "done"
   },
@@ -48114,6 +48222,14 @@
   },
   "class:BrnPhysics::PhysicsModule": {
    "notes": "Verify PASS (minor); ctor base/mutex/embedded-member + tail intrusive-list init asm-grounded; DWARF enums verbatim. ContainedListInterface naming + host-sizeof offset-comment are non-blocking doc nits.",
+   "status": "done"
+  },
+  "class:BrnPhysics::PhysicsModuleIO": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev cbe7b4e",
+   "status": "done"
+  },
+  "class:BrnPhysics::PhysicsModuleIO::InputBuffer": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev cbe7b4e",
    "status": "done"
   },
   "class:BrnPhysics::PhysicsModuleIO::OutputBuffer": {
