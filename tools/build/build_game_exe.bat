@@ -25,8 +25,14 @@ rem override which vcvars64.bat is used.)
 rem Exception: if a modern MSVC (cl 19.x) is already on PATH -- e.g. CI ran
 rem ilammy/msvc-dev-cmd -- trust it and skip the vcvars search. The 360 SDK's cl is
 rem 14.x and won't match "Version 19.", so the guard above still holds locally.
+rem IMPORTANT: probe with "where cl" FIRST. Piping a command that is not on PATH
+rem (cl 2>&1 | findstr ...) aborts the whole batch with exit 255 -- and locally there is
+rem NO cl until vcvars runs, so the bare pipe killed the build instantly before setup.
+where cl >nul 2>&1
+if errorlevel 1 goto need_vcvars
 cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
 if not errorlevel 1 goto toolchain_ready
+:need_vcvars
 set "VCVARS="
 if defined VCVARS64 if exist "%VCVARS64%" set "VCVARS=%VCVARS64%"
 for %%P in (
