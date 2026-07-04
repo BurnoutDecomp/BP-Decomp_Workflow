@@ -121,6 +121,17 @@ a trap-body stub** (`__debugbreak();` — the MSVC trap the generators emit;
 function = replacing its stub body with the real one. Declarations are always
 present, so call sites never break on a missing symbol.
 
+**The trap body is the ONLY honest "not done yet."** A `__debugbreak()` stub is loud — it
+declares the function unfinished and crashes if reached. Do **not** substitute a *quiet* fake to
+slip past the compile gate: `{ return nullptr; }` / `{ return 0; }` / `{}` engine bodies,
+`*(T*)(p+N)` offset-hacks, or `Class_verb` free-function shims all look finished and lie — and the
+compile gate and structural parity are blind to them (they compiled; parity legitimately refactors).
+A decomp is only worth anything if every body traces to the binary, so `work submit` runs a **hard
+faithfulness gate** ([`tools/work/faithfulness_lint.py`](tools/work/faithfulness_lint.py)) that fails
+a TU introducing a new such smell, ratcheted against a grandfathered baseline
+([`progress/faithfulness_baseline.json`](progress/faithfulness_baseline.json)). See **AGENTS.md >
+Verification** (item 2b); scan the whole tree any time with `work faithfulness`.
+
 Caveat that the C++ nature of this codebase forces (unlike a flat C decomp): ~90%
 of functions are **methods on classes**. You cannot stub `int A::B::foo()` without
 class `A::B` declared. Therefore:

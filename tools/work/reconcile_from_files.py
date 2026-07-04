@@ -42,6 +42,13 @@ TRAP_MARKERS = ("__debugbreak", "__builtin_trap", "CGS_ASSERT(false)", "CGS_ASSE
 
 # Narrow on purpose. "placeholder" and "incomplete" often document honest type
 # boundaries in otherwise finished reconstructions.
+#
+# The trailing group are INVENTION-ACCOMMODATION markers: a file that carries a
+# home-grown-format signature scan ("LocateMovieRoot"), reads "our converted"
+# bundle bytes, or documents a "converter accommodation" is not a faithful
+# decompile -- it is bent around invented data, so a `done` row is wrong. These
+# strings are specific enough that they only occur in genuinely-unfaithful code;
+# the mechanical gate is tools/work/faithfulness_lint.py (see `work faithfulness`).
 INCOMPLETE_FILE_RE = re.compile(
     r"TODO:\s*Implement|"
     r"committed file is partial|"
@@ -49,7 +56,11 @@ INCOMPLETE_FILE_RE = re.compile(
     r"skeleton, not faithful|"
     r"All function implementations are guessed|"
     r"\bnot implemented\b|"
-    r"\bunimplemented\b",
+    r"\bunimplemented\b|"
+    r"\bLocateMovieRoot\w*|"
+    r"our\s+converted|"
+    r"converter[-\s]format\s+accommodation|"
+    r"converter\s+accommodation",
     re.I,
 )
 
