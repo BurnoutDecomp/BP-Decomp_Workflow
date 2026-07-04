@@ -33381,6 +33381,15 @@
   "CgsModule::VariableEventQueue<2048,16>::OutputQueueContents": {
    "status": "reviewed"
   },
+  "CgsModule::VariableEventQueue<20480,16>::Clear": {
+   "status": "reviewed"
+  },
+  "CgsModule::VariableEventQueue<20480,16>::Construct": {
+   "status": "reviewed"
+  },
+  "CgsModule::VariableEventQueue<20480,16>::Destruct": {
+   "status": "reviewed"
+  },
   "CgsModule::VariableEventQueue<256,16>::AddEvent": {
    "status": "reviewed"
   },
@@ -37137,6 +37146,12 @@
   "CgsSceneManager::Contact::Construct": {
    "status": "reviewed"
   },
+  "CgsSceneManager::Contact>::AddEventSafe": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::Contact>::GetEv": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::CullingGroupManager::CreateCullingTable": {
    "status": "reviewed"
   },
@@ -37290,10 +37305,19 @@
   "CgsSceneManager::OverlapGen": {
    "status": "reviewed"
   },
+  "CgsSceneManager::OverlapGenerationIO::InAddBody,16384>::Construct": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::OverlapGenerationIO::InAddBody>::AddEvent": {
    "status": "reviewed"
   },
+  "CgsSceneManager::OverlapGenerationIO::InForceNoPadding,128>::Construct": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::OverlapGenerationIO::InForceNoPadding>::AddEvent": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::OverlapGenerationIO::InRemoveBody,16384>::Construct": {
    "status": "reviewed"
   },
   "CgsSceneManager::OverlapGenerationIO::InRemoveBody>::AddEvent": {
@@ -37591,6 +37615,9 @@
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerIO::InEventVolumeTestFine,64>::Construct": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InEventVolumeTestFine>::Append": {
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddForCollision": {
@@ -53389,6 +53416,10 @@
    "notes": "Thin explicit instantiation over committed CgsVariableEventQueue.h generic; ledger methods reconciled 1:1; verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:CgsModule::VariableEventQueue<20480,16>": {
+   "notes": "Thin explicit instantiation vs committed generic; adversarially verified store-for-store; compiles clean.",
+   "status": "done"
+  },
   "class:CgsModule::VariableEventQueue<256,16>": {
    "status": "done"
   },
@@ -54036,6 +54067,10 @@
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:CgsSceneManager::Contact>": {
+   "notes": "Both funcs thin instantiations vs committed BaseEventQueue<Contact>; committed CgsSceneManagerContact.h element; compiles clean.",
+   "status": "done"
+  },
   "class:CgsSceneManager::CullingGroupManager": {
    "notes": "verified store-for-store.",
    "status": "done"
@@ -54080,12 +54115,24 @@
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:CgsSceneManager::OverlapGenerationIO::InAddBody,16384>": {
+   "notes": "Thin explicit instantiation vs committed generic; adversarially verified store-for-store; compiles clean.",
+   "status": "done"
+  },
   "class:CgsSceneManager::OverlapGenerationIO::InAddBody>": {
    "notes": "Opus decomp+verify; gate PASS; pushed dev 89d0a47",
    "status": "done"
   },
+  "class:CgsSceneManager::OverlapGenerationIO::InForceNoPadding,128>": {
+   "notes": "Thin explicit instantiation vs committed generic; adversarially verified store-for-store; compiles clean.",
+   "status": "done"
+  },
   "class:CgsSceneManager::OverlapGenerationIO::InForceNoPadding>": {
    "notes": "Opus decomp+verify; gate PASS; pushed dev 89d0a47",
+   "status": "done"
+  },
+  "class:CgsSceneManager::OverlapGenerationIO::InRemoveBody,16384>": {
+   "notes": "Thin explicit instantiation vs committed generic; adversarially verified store-for-store; compiles clean.",
    "status": "done"
   },
   "class:CgsSceneManager::OverlapGenerationIO::InRemoveBody>": {
@@ -54322,6 +54369,10 @@
   },
   "class:CgsSceneManager::SceneManagerIO::InEventVolumeTestFine,64>": {
    "notes": "Sonnet5 decomp + Opus4.8 verify; gate green; parity advisory",
+   "status": "done"
+  },
+  "class:CgsSceneManager::SceneManagerIO::InEventVolumeTestFine>": {
+   "notes": "Thin explicit instantiation vs committed generic; adversarially verified store-for-store; compiles clean.",
    "status": "done"
   },
   "class:CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,2000>": {
