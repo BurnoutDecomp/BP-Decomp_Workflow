@@ -1435,6 +1435,36 @@ def cmd_submit(args):
         print(glog[-3000:])
         return
 
+    # hard faithfulness gate (NO LLM): fail on NEW invention smells vs the baseline.
+    # A decomp is only faithful if every body traces to the x64 binary; the compile
+    # gate and parity are BLIND to return-null engine stubs, raw offset-hacks, and
+    # Apt*_verb shims. Implemented in tools/work/faithfulness_lint.py. Toggle via the
+    # "faithfulness" block in review.config.json (default: enabled + hard).
+    import parity as _parity
+    _fcfg = _parity.load_config().get("faithfulness", {})
+    if _fcfg.get("enabled", True):
+        try:
+            import faithfulness_lint as fl
+            fnew = fl.new_findings(fl.scan_paths(files), fl.load_baseline())
+        except Exception as exc:  # never let the gate's own bug block a submit
+            print(f"\nfaithfulness gate: SKIP ({exc})")
+        else:
+            if fnew:
+                print("\nfaithfulness gate: FAIL  (new invention smell -- this is a DECOMP)")
+                print(fl.format_findings(fnew, "NEW findings (not in baseline)"))
+                print("\nHome the real body from Burnout_External_Xbox_One.exe, recover the type")
+                print("and access members by name, or mark a genuine PC leaf")
+                print("`// FLAG PC-platform leaf: <reason>`. Do not invent to pass the gate.")
+                log(con, "faithfulness_fail", tu_id=args.tu,
+                    detail=fl.format_findings(fnew, "new")[:2000])
+                if _fcfg.get("hard", True):
+                    con.execute("UPDATE func SET attempts=attempts+1 WHERE tu_id=?", (args.tu,))
+                    set_tu(con, args.tu, "in_progress", notes=args.note)
+                    con.commit()
+                    return
+            else:
+                print("faithfulness gate: PASS")
+
     tier = 1 if status == "pass" else 0
     con.execute("UPDATE func SET status='compiles', verify_tier=?, updated_at=? WHERE tu_id=?", (tier, now(), args.tu))
     set_tu(con, args.tu, "compiled", notes=args.note)
@@ -1799,6 +1829,27 @@ def cmd_parity(args):
     sys.exit(0 if res["verdict"] == "GREEN" else 1)
 
 
+def cmd_faithfulness(args):
+    """Scan for INVENTED-code smells (engine stubs, offset-hacks, Apt*_verb shims,
+    home-grown-format vocab, pack accommodations). Ratchet vs the baseline in
+    progress/faithfulness_baseline.json. Implemented in tools/work/faithfulness_lint.py."""
+    import faithfulness_lint as fl
+    findings = fl.scan_paths(args.files) if args.files else fl.scan_paths(fl.collect_source_files())
+    if args.baseline:
+        n = fl.write_baseline(findings)
+        print(f"wrote {fl.BASELINE_JSON.relative_to(fl.ROOT)}  ({n} grandfathered findings)")
+        return
+    news = fl.new_findings(findings, fl.load_baseline())
+    print(fl.format_findings(findings if args.all else news,
+                             "all findings" if args.all else "NEW findings (not in baseline)"))
+    if news and not args.all:
+        print(f"\nFAIL: {len(news)} new invention smell(s). This is a DECOMP -- home the real")
+        print("body from the x64 binary, or mark a genuine PC leaf. Do not invent.")
+        sys.exit(1)
+    if not news:
+        print("\nPASS: no new invention smells.")
+
+
 def cmd_stubs(args):
     import gen_stubs
     sys.argv = ["gen_stubs", args.tu] + (["--list"] if args.list else [])
@@ -2038,6 +2089,14 @@ def main():
     pa = sub.add_parser("parity"); pa.add_argument("tu")
     pa.add_argument("--files", nargs="*", help="explicit .cpp paths (else the TU's recorded dest_path)")
     pa.set_defaults(fn=cmd_parity)
+    fa = sub.add_parser("faithfulness",
+                        help="scan for invented-code smells (engine stubs, offset-hacks, Apt*_verb "
+                             "shims, home-grown-format vocab); ratchet vs the baseline")
+    fa.add_argument("--files", nargs="*", help="scan only these files (else all of b5-decomp/src)")
+    fa.add_argument("--all", action="store_true", help="report every hit, not just NEW ones")
+    fa.add_argument("--baseline", action="store_true",
+                    help="snapshot current hits as grandfathered debt (shrink, never grow)")
+    fa.set_defaults(fn=cmd_faithfulness)
     sb = sub.add_parser("stubs"); sb.add_argument("tu"); sb.add_argument("--list", action="store_true")
     sb.set_defaults(fn=cmd_stubs)
     au = sub.add_parser("auto"); au.add_argument("--scan", action="store_true", help="census of fully-mechanical TUs")

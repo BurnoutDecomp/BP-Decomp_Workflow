@@ -120,6 +120,11 @@
       "return_count": 2
     }
   },
+  "faithfulness": {
+    "enabled": true,
+    "hard": true,
+    "_comment": "HARD gate (NO LLM) run inside `work submit` after the compile gate: fails a TU that introduces NEW invention smells versus progress/faithfulness_baseline.json and returns it to in_progress. This is a DECOMPILATION -- every body must trace to the x64 binary (Burnout_External_Xbox_One.exe for Apt), so the gate catches what the compile gate and parity are blind to: return-null/{} engine stubs that call themselves stubs, raw offset-hack casts (*(T*)(p+N)), Apt*_verb free-function shims standing in for real methods, home-grown-format vocabulary (apt4, LocateMovieRoot, 'our converted', converter accommodations), and #pragma pack(4) layout accommodations. Genuine PC-platform leaves are allowed but MUST be marked '// FLAG PC-platform leaf: <reason>'. Implemented in tools/work/faithfulness_lint.py; run repo-wide via `work faithfulness` (--all lists every hit, --baseline snapshots debt). The baseline is a RATCHET: it grandfathers existing debt so the gate blocks only NEW smells -- shrink it as debt is paid down; NEVER blind-regenerate it (that hides fresh invention). Set hard:false to warn-only, enabled:false to disable."
+  },
   "batch": {
     "default_tus_per_pass": 1,
     "_comment": "One TU per pass unless you name a count in your prompt ('do 5'); then that many in a single pass, with one combined review pass over the batch. Ensure that a maximum of ONE subagent is spawned to review the entire batch to conserve API quota."
