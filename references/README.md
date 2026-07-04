@@ -6,6 +6,16 @@ disassembly (those live in [`../IDA Files`](../IDA%20Files/)) — this folder ho
 real source, original source-tree structure, DWARF-derived type/declaration hints,
 and memory/module layout maps.
 
+> Data-defect note (2026-07-05): the GUIAPT64 native-8 GuiApt bundles ship with a
+> frame-table alignment bug (113/290 affected — silently missing menu text/panels).
+> Full write-up + repair tool: [`GUIAPT64_FRAMETABLE_BUG.md`](GUIAPT64_FRAMETABLE_BUG.md).
+
+> Disassembly inventory note (2026-07-04): `IDA Files/Burnout_External_Xbox_One.exe.i64`
+> (exported to `.ida-exports/Burnout_External_Xbox_One.exe/`) is the retail Xbox One
+> build — the only **64-bit** binary with Apt symbols. Its named public accessors pin
+> exact 64-bit member offsets, making it the ABI arbiter for every native-8/x64 layout
+> decision. See AGENTS.md ("XBOX ONE EXTERNAL") for its ladder position.
+
 Each subfolder corresponds to a different build or source of truth, because no single
 artifact is complete. Use them together: DecFIGS tells you *which source file and line*
 every instruction came from and provides C++-shaped declaration/type hints,

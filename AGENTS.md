@@ -292,6 +292,19 @@ own** pass first, so you don't ship a known-divergent TU into review.
 - **BPR/TUB are reference-only**, consulted per-function for *platform* layers
   (SIMD, GPU/D3D, codecs) where the PC shape differs from the console. They are not
   in the ledger; do not "decompile" them.
+- **XBOX ONE EXTERNAL (`IDA Files/Burnout_External_Xbox_One.exe.i64`, exported to
+  `.ida-exports/Burnout_External_Xbox_One.exe/`, added 2026-07-04 by JeBobs) is the
+  64-BIT ABI ARBITER for Apt and other vendor layers.** It is the only 64-bit build we
+  have with Apt symbols: ~460 public accessor/API functions carry MSVC-mangled names
+  (`?GetDepth@AptCIH@@QEBAHXZ`-style) whose 1-3 instruction bodies pin EXACT 64-bit
+  member offsets; the large private bodies are unnamed (`sub_14xxxxxxx`) but locatable
+  by call-graph/constant matching against the named X360 twins. Use it to VERIFY every
+  native-8 (x64) layout/record-offset decision that was previously inferred from the
+  32-bit X360 asm (Apt place/remove records, frame tables, display-list nodes, GUIAPT
+  native-8 "1:7:8" data). Ladder position: it does not displace ARTIST as the
+  behavioural spine (it is a later retail-era build — expect content/version drift);
+  it arbitrates *64-bit widths, offsets and alignment* only. `_name_index.tsv` in the
+  export dir maps address -> mangled name.
 - **RenderWare & Vendor SDKs (EATech, rwcore, etc.): Test before decompiling.**
   We have native PC binaries for *some* middleware (e.g., `rwcore.lib`), but not all
   (e.g., `rwcollision`). Additionally, for `EABase`, `EASTL`, and `EAThread`, we have the original
