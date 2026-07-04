@@ -65,6 +65,7 @@ rem ---- build the cl response file ----
   echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%FFM%\include" /I"%VEN%\lua\src"
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
   echo "%SRC%\GameSource\BrnBaselineLinkStubs.cpp"
+  echo "%VEN%\coreallocator\source\icoreallocator_interface.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareInitPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsAudioOutputPC.cpp"
