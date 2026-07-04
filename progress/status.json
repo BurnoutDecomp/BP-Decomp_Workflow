@@ -1491,10 +1491,64 @@
   "Attrib::Attribute::IsInherited": {
    "status": "reviewed"
   },
+  "Attrib::Class::TablePolicy,": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,0,16>": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,0,16>::Add": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,0,16>::CopyFromO": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,0,16>::Fi": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,0,16>::InternalA": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,0,16>::RebuildTa": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,0,16>::U": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,1,9": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,1,96": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,1,96>::Add": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,1,96>::Clear": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,1,96>::Copy": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,1,96>::Inte": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::TablePolicy,1,96>::Rebu": {
+   "status": "reviewed"
+  },
   "Attrib::ClassExportPolicy::Initialize": {
    "status": "reviewed"
   },
   "Attrib::ClassExportPolicy::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "Attrib::ClassPrivate::ClassPrivate": {
+   "status": "reviewed"
+  },
+  "Attrib::ClassPrivate::Release": {
+   "status": "reviewed"
+  },
+  "Attrib::ClassPrivate::~ClassPrivate": {
    "status": "reviewed"
   },
   "Attrib::CollectionExportPolicy::Initialize": {
@@ -47175,8 +47229,24 @@
    "notes": "Needs a rodata-dump tool, not reconstructable from the function exports. The gperf asso_values[256] (byte_82F72BB0) + wordlist {name,miData} (off_82F799D0) tables + the miData dispatch indices (from AptArray::objectMemberLookup @0x82AFDA50 jump table) are file-static .rdata the per-function .ida-exports JSONs do NOT contain; two rework agents either fabricated them (verifier-caught) or correctly produced nothing (blocker_resolved=false). Sibling Apt gperf TUs (ObjectIndex/StringMembers/TextMembers/TextFormat/Sprite) landed because their tables WERE present in the exports; this one's are not. Next: dump the X360 .rdata at those 3 addresses (e.g. extend the IDA export to include referenced data symbols), then it's a thin in_word_set + 2 file-static tables like the landed siblings.",
    "status": "blocked"
   },
+  "class:Attrib::Class": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev cebb8bf",
+   "status": "done"
+  },
+  "class:Attrib::Class::TablePolicy,0,16>": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev cebb8bf",
+   "status": "done"
+  },
+  "class:Attrib::Class::TablePolicy,1,96>": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev cebb8bf",
+   "status": "done"
+  },
   "class:Attrib::ClassExportPolicy": {
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:Attrib::ClassPrivate": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev cebb8bf",
    "status": "done"
   },
   "class:Attrib::CollectionExportPolicy": {
