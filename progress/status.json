@@ -39387,6 +39387,198 @@
   "EASemaphoreData::UpdateCancelCount": {
    "status": "reviewed"
   },
+  "EAStringC::AllocateBuffer": {
+   "status": "reviewed"
+  },
+  "EAStringC::Append": {
+   "status": "reviewed"
+  },
+  "EAStringC::CalculateHashValue": {
+   "status": "reviewed"
+  },
+  "EAStringC::ChangeBuffer": {
+   "status": "reviewed"
+  },
+  "EAStringC::Clear": {
+   "status": "reviewed"
+  },
+  "EAStringC::ClearConstantValue": {
+   "status": "reviewed"
+  },
+  "EAStringC::Compare": {
+   "status": "reviewed"
+  },
+  "EAStringC::CompareNoCase": {
+   "status": "reviewed"
+  },
+  "EAStringC::DeallocateBuffer": {
+   "status": "reviewed"
+  },
+  "EAStringC::DecreaseInternalRefCount": {
+   "status": "reviewed"
+  },
+  "EAStringC::Delete": {
+   "status": "reviewed"
+  },
+  "EAStringC::Duplicate": {
+   "status": "reviewed"
+  },
+  "EAStringC::EAStringC": {
+   "status": "reviewed"
+  },
+  "EAStringC::EndWithRemove": {
+   "status": "reviewed"
+  },
+  "EAStringC::Equal": {
+   "status": "reviewed"
+  },
+  "EAStringC::EqualNoCase": {
+   "status": "reviewed"
+  },
+  "EAStringC::EqualNoCaseHash": {
+   "status": "reviewed"
+  },
+  "EAStringC::Format": {
+   "status": "reviewed"
+  },
+  "EAStringC::GetBuffer": {
+   "status": "reviewed"
+  },
+  "EAStringC::GetHashValue": {
+   "status": "reviewed"
+  },
+  "EAStringC::GetInternalMaxSize": {
+   "status": "reviewed"
+  },
+  "EAStringC::GetInternalRefCount": {
+   "status": "reviewed"
+  },
+  "EAStringC::GetInternalSize": {
+   "status": "reviewed"
+  },
+  "EAStringC::InitFromBuffer": {
+   "status": "reviewed"
+  },
+  "EAStringC::Invalidate": {
+   "status": "reviewed"
+  },
+  "EAStringC::InvalidateHashValue": {
+   "status": "reviewed"
+  },
+  "EAStringC::IsConstantString": {
+   "status": "reviewed"
+  },
+  "EAStringC::IsEmpty": {
+   "status": "reviewed"
+  },
+  "EAStringC::IsValid": {
+   "status": "reviewed"
+  },
+  "EAStringC::LastIndexOf": {
+   "status": "reviewed"
+  },
+  "EAStringC::Left": {
+   "status": "reviewed"
+  },
+  "EAStringC::MakeLower": {
+   "status": "reviewed"
+  },
+  "EAStringC::MemUninitialize": {
+   "status": "reviewed"
+  },
+  "EAStringC::Mid": {
+   "status": "reviewed"
+  },
+  "EAStringC::Reserve": {
+   "status": "reviewed"
+  },
+  "EAStringC::SetInternalMaxSize": {
+   "status": "reviewed"
+  },
+  "EAStringC::SetInternalRefCount": {
+   "status": "reviewed"
+  },
+  "EAStringC::SetInternalSize": {
+   "status": "reviewed"
+  },
+  "EAStringC::TrimRight": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_Append": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_Find": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_GetBuffer": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_GetCharacter": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_GetCharacterSize": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_Initialize": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_IsValid": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_MakeLower": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_MakeUpper": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_Mid": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_ReadCharacter": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_SetCharacter": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_SetOneCharacter": {
+   "status": "reviewed"
+  },
+  "EAStringC::UTF8_Size": {
+   "status": "reviewed"
+  },
+  "EAStringC::UpdateHashValue": {
+   "status": "reviewed"
+  },
+  "EAStringC::Validate": {
+   "status": "reviewed"
+  },
+  "EAStringC::operator<": {
+   "status": "reviewed"
+  },
+  "EAStringC::operator<=": {
+   "status": "reviewed"
+  },
+  "EAStringC::operator=": {
+   "status": "reviewed"
+  },
+  "EAStringC::operator==": {
+   "status": "reviewed"
+  },
+  "EAStringC::operator>": {
+   "status": "reviewed"
+  },
+  "EAStringC::operator>=": {
+   "status": "reviewed"
+  },
+  "EAStringC::operator[]": {
+   "status": "reviewed"
+  },
+  "EAStringC::vsFormat": {
+   "status": "reviewed"
+  },
+  "EAStringC::~EAStringC": {
+   "status": "reviewed"
+  },
   "EActiveRaceCarIndex,7>::FindFirstInstanceOf": {
    "status": "reviewed"
   },
@@ -54156,6 +54348,10 @@
   },
   "class:EASemaphoreData": {
    "notes": "UpdateCancelCount verified: scalar lwarx/stwcx CAS under masked interrupts (InterlockedCompareExchange idiom).",
+   "status": "done"
+  },
+  "class:EAStringC": {
+   "notes": "Adversarial verify 61/64 + 3 reconciled: all 64 EAStringC funcs present+faithful store-for-store (StringDataC m_uSize@2/m_uMaxSize@4/m_uHash@6/buf@8; FNV-1a hash full-u32; UTF8 family). 9 header-declared bodies added, InitFromBuffer empty-branch refcount fix. gate x64 pass. dev 113da9d",
    "status": "done"
   },
   "class:EActiveRaceCarIndex,7>": {
