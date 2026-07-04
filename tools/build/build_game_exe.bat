@@ -412,6 +412,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamResultReader.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\MemoryMap\CgsMemoryMap.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Packeting\BitStream\CgsBitStream.cpp"
+  echo "%SRC%\GameShared\GameClasses\Network\Packeting\BitStream\CgsFloatQuantiser.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Packeting\BitStream\CgsIntQuantiser.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Packeting\BitStream\CgsSmartBitStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Packeting\Messages\CgsMessage.cpp"
