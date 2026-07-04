@@ -221,6 +221,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\EATech\include\Apt\AptArray.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIH.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIHBehaviour.cpp"
+  echo "%SRC%\SDKs\EATech\include\Apt\AptCIHText.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIHNativeFunctionHelper.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIHNone.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCharacter.cpp"
@@ -577,7 +578,28 @@ rem ---- build the cl response file ----
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
-cl /nologo @"%RSP%" /link /SUBSYSTEM:WINDOWS /MAP /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
+rem ---- OBJECT-NAME COLLISION FIX (basename `device.cpp` appears twice) ----------------------
+rem The source list carries two `device.cpp` files with the SAME basename:
+rem   %SRC%\SDKs\EATech\rwcore\filesys\device.cpp   (rw filesys Device)
+rem   %SRC%\pc\gcm\renderengine\device.cpp          (renderengine D3D9 Device)
+rem With /Fo pointing at a single obj dir, cl writes BOTH to obj\device.obj -- the second-compiled
+rem one CLOBBERS the first, so which set of symbols survives depends on compile ORDER (fragile: it
+rem flips when the source list changes, then the link fails with unresolved renderengine::Device*
+rem OR duplicate rw::filesys::Device* symbols). The build was only "passing" because the renderengine
+rem device.obj was clobbering the rw-filesys one (whose rw::core::filesys::Device symbols are provided
+rem by AptRenderLinkStubs.obj + which drags an unlinked EA::Thread::Condition dependency). Fix: keep
+rem the renderengine device.cpp (compiled separately to a UNIQUE object, linked in) and DROP the
+rem rw-filesys device.cpp from the build (its symbols come from AptRenderLinkStubs -- the prior state).
+findstr /v /c:"pc\gcm\renderengine\device.cpp" "%RSP%" > "%RSP%.tmp"
+move /y "%RSP%.tmp" "%RSP%" >nul
+findstr /v /c:"rwcore\filesys\device.cpp" "%RSP%" > "%RSP%.tmp"
+move /y "%RSP%.tmp" "%RSP%" >nul
+cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
+  /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%FFM%\include" /I"%VEN%\lua\src" ^
+  /c "%SRC%\pc\gcm\renderengine\device.cpp" /Fo"%OUT%\\obj\\renderengine_device.obj"
+if errorlevel 1 ( echo ERROR: renderengine device.cpp precompile failed. & exit /b 1 )
+
+cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
