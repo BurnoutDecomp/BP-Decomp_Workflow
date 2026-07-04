@@ -16752,6 +16752,9 @@
   "BrnParticle::LionParticleRender::TextureRegister": {
    "status": "reviewed"
   },
+  "BrnParticle::Native::": {
+   "status": "reviewed"
+  },
   "BrnParticle::Native::BrnDebris,32>::": {
    "status": "compiles"
   },
@@ -16788,13 +16791,46 @@
   "BrnParticle::Native::BrnSimpleParticleRenderer::Dispatch": {
    "status": "reviewed"
   },
+  "BrnParticle::Native::BrnSpark,4>::Clear": {
+   "status": "reviewed"
+  },
+  "BrnParticle::Native::BrnSpark,4>::Get": {
+   "status": "reviewed"
+  },
+  "BrnParticle::Native::EmitterArray::AddEntry": {
+   "status": "reviewed"
+  },
+  "BrnParticle::Native::EmitterArray::RemoveEntry": {
+   "status": "reviewed"
+  },
+  "BrnParticle::Native::SimpleParticleBatch,13>::Append": {
+   "status": "reviewed"
+  },
+  "BrnParticle::Native::SimpleParticleBatch,13>::GetLength": {
+   "status": "reviewed"
+  },
   "BrnParticle::Native::SparkArray::SparkBank::FreeUnusedBuckets": {
    "status": "reviewed"
   },
   "BrnParticle::Native::SparkArray::SparkBank::GetNewSpark": {
    "status": "reviewed"
   },
+  "BrnParticle::Native::SparkBatc": {
+   "status": "reviewed"
+  },
+  "BrnParticle::Native::SparkBatch,4>::Append": {
+   "status": "reviewed"
+  },
+  "BrnParticle::Native::SparkFrameDataSet::GetFrame": {
+   "status": "reviewed"
+  },
+  "BrnParticle::Native::Trail": {
+   "status": "reviewed"
+  },
   "BrnParticle::Native::TrailSystem::AttachTrailEmitter": {
+   "status": "reviewed"
+  },
+  "BrnParticle::NativeParticleVertex::VertexIterator::Write": {
    "status": "reviewed"
   },
   "BrnParticle::P": {
@@ -16977,7 +17013,13 @@
   "BrnParticle::VFXPropCollectionResourceType::Serialise": {
    "status": "reviewed"
   },
+  "BrnPhysics::ContactSpy::BaseContact::Construct": {
+   "status": "reviewed"
+  },
   "BrnPhysics::ContactSpy::ContactSpyData::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::ContactSpy::ContactSpyInterface:": {
    "status": "reviewed"
   },
   "BrnPhysics::ContactSpy::ContactSpyInterface::Construct": {
@@ -16995,16 +17037,31 @@
   "BrnPhysics::ContactSpy::ContactSpyRunData,8>::Construct": {
    "status": "reviewed"
   },
+  "BrnPhysics::ContactSpy::ContactSpyRunData::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::ContactSpy::ContactSpyRunData>::AddEvent": {
+   "status": "reviewed"
+  },
   "BrnPhysics::ContactSpy::ContactSpyRunList<8>::G": {
    "status": "reviewed"
   },
   "BrnPhysics::ContactSpy::DiscardedContact,20>::Construct": {
    "status": "reviewed"
   },
+  "BrnPhysics::ContactSpy::DiscardedContact>::AddEventSafe": {
+   "status": "reviewed"
+  },
   "BrnPhysics::ContactSpy::HingedPartContact,50>::Construct": {
    "status": "reviewed"
   },
   "BrnPhysics::ContactSpy::HingedPartContact>::AddEvent": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::ContactSpy::PhysicalCarPartConta": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::ContactSpy::PhysicalCarPartContact,150>:": {
    "status": "reviewed"
   },
   "BrnPhysics::ContactSpy::PhysicalCarPartContact,150>::Construct": {
@@ -17025,6 +17082,9 @@
   "BrnPhysics::ContactSpy::PropContact>::AddEventSafe": {
    "status": "reviewed"
   },
+  "BrnPhysics::ContactSpy::RaceCarContact,300>:": {
+   "status": "reviewed"
+  },
   "BrnPhysics::ContactSpy::RaceCarContact,300>::Construct": {
    "status": "reviewed"
   },
@@ -17032,6 +17092,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::ContactSpy::RaceCarContact>::AddEventSafe": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::ContactSpy::TrafficContact,400>:": {
    "status": "reviewed"
   },
   "BrnPhysics::ContactSpy::TrafficContact,400>::Construct": {
@@ -48667,6 +48730,10 @@
    "notes": "Fresh-eyes review: two-vtable-dtor claim cross-corroborated against sibling iallocator.cpp; Free/dtor bodies match pseudocode exactly; declare-only virtuals correctly gated on X360 ledger attestation. No offset hacks.",
    "status": "done"
   },
+  "class:BrnParticle::Native": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
+   "status": "done"
+  },
   "class:BrnParticle::Native::BrnDebrisArray": {
    "notes": "verified store-for-store (intrusive list drain / free-list push).",
    "status": "done"
@@ -48679,9 +48746,33 @@
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/GameSource/Effects/Particles/Native/BrnSimpleParticleArray.cpp. Reconciled.",
    "status": "done"
   },
+  "class:BrnParticle::Native::BrnSpark,4>": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
+   "status": "done"
+  },
+  "class:BrnParticle::Native::EmitterArray": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
+   "status": "done"
+  },
   "class:BrnParticle::Native::ShadedRotatingRenderMethod": {
    "notes": "VMX keystone: BuildQuad @0x8291E150 is a multi-stage hand-vectorised VMX/AltiVec quad-build pipeline; no faithful scalar lowering. Honest CGS_ASSERT floor shipped. Deferred to a dedicated VMX pass.",
    "status": "blocked"
+  },
+  "class:BrnParticle::Native::SimpleParticleBatch,13>": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
+   "status": "done"
+  },
+  "class:BrnParticle::Native::SparkBatch,4>": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
+   "status": "done"
+  },
+  "class:BrnParticle::Native::SparkFrameDataSet": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
+   "status": "done"
+  },
+  "class:BrnParticle::NativeParticleVertex::VertexIterator": {
+   "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
+   "status": "done"
   },
   "class:BrnParticle::ParticleCpuMonitors": {
    "notes": "Verify PASS (none); gate clean.",
@@ -48711,6 +48802,18 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnPhysics::ContactSpy": {
+   "notes": "Opus decomp+verify; conductor-finished 4 funcs (rate-limit); gate PASS; pushed dev f8e2122",
+   "status": "done"
+  },
+  "class:BrnPhysics::ContactSpy::BaseContact": {
+   "notes": "Opus decomp+verify; conductor-finished 4 funcs (rate-limit); gate PASS; pushed dev f8e2122",
+   "status": "done"
+  },
+  "class:BrnPhysics::ContactSpy::ContactSpyRunData": {
+   "notes": "Opus decomp+verify; conductor-finished 4 funcs (rate-limit); gate PASS; pushed dev f8e2122",
+   "status": "done"
+  },
   "class:BrnPhysics::ContactSpy::ContactSpyRunData,100>": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
    "status": "done"
@@ -48727,11 +48830,19 @@
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
    "status": "done"
   },
+  "class:BrnPhysics::ContactSpy::ContactSpyRunData>": {
+   "notes": "Opus decomp+verify; conductor-finished 4 funcs (rate-limit); gate PASS; pushed dev f8e2122",
+   "status": "done"
+  },
   "class:BrnPhysics::ContactSpy::ContactSpyRunList<8>": {
    "status": "done"
   },
   "class:BrnPhysics::ContactSpy::DiscardedContact,20>": {
    "notes": "trivial; gate-only (mechanical EventQueue<T,N>::Construct instantiation / enum operator++)",
+   "status": "done"
+  },
+  "class:BrnPhysics::ContactSpy::DiscardedContact>": {
+   "notes": "Opus decomp+verify; conductor-finished 4 funcs (rate-limit); gate PASS; pushed dev f8e2122",
    "status": "done"
   },
   "class:BrnPhysics::ContactSpy::HingedPartContact,50>": {
