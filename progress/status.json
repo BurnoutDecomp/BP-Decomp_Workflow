@@ -21567,7 +21567,76 @@
   "BrnResource::WheelListResourceType::GetTypeID": {
    "status": "reviewed"
   },
+  "BrnShaderConstantsFrame::BrnShaderConstantsFrame": {
+   "status": "reviewed"
+  },
   "BrnShaderConstantsFrame::Construct": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetCloudDarkColour0": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetCloudDistanceCurve": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetCloudLayerDensity": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetCloudLayerInvFeather": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetCloudLayerOpacity": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetCloudLiteColour0": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetCloudTextureScaleAndOffsets0": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetEnvMapViewPosition": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetEnvMapViewProjectionMatrix": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetFogScattering": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetHorBleedSclPow": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetHorColourPow": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetKeyLightColour": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetKeyLightDirection": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetSunColourPow": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetTopColourDrk": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetViewPosition": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::GetViewProjectionMatrix": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::SetCameraTransform": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::SetEnvMapViewPosition": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::SetEnvMapViewProjectionMatrix": {
+   "status": "reviewed"
+  },
+  "BrnShaderConstantsFrame::SetViewProjectionMatrix": {
    "status": "reviewed"
   },
   "BrnSkyDomeManager::Render": {
@@ -50022,6 +50091,10 @@
   },
   "class:BrnResource::WheelList": {
    "notes": "Adversarial verify PASS (parity): store-for-store vs X360 ARTIST spine; ledger funcs reconciled; minimal/owning homes, additive grows preserve layouts; gate PASS (combined wave-10 build).",
+   "status": "done"
+  },
+  "class:BrnShaderConstantsFrame": {
+   "notes": "Adversarial verify pass (Opus, 23/23): getters assert !mbLockedForWriting, setters assert it set; env-map accessors add face-range assert; copy ctor = defaulted memberwise (X360 0x823FC338). Member layout preserved 0x000..0x31C. Gate MSVC x64 pass (TU + RendererModuleIO consumer). dev 32b2584",
    "status": "done"
   },
   "class:BrnSound::Debug::DebugComponent": {
