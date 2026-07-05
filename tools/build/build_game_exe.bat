@@ -164,6 +164,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptString.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAux.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptDataHandler.cpp"
+  rem ---- wave49 link dep: the CgsNumeric::Random out-of-line draws ----
+  echo "%SRC%\GameShared\GameClasses\Numeric\CgsRandom.cpp"
+  rem ---- the faithful AptCommunicator delivery chain (Layer 2) ----
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptCommunicator.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptComponentList.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiComponent.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiShared.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptRenderHooks.cpp"
   rem ---- EATech Apt engine: re-added to LINK BootLegal's title_screen02 Apt render ----
   echo "%SRC%\SDKs\EATech\AptRenderLinkStubs.cpp"
