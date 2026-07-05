@@ -5859,6 +5859,9 @@
   "BrnGame::AutoTestManager::LUACBDeactivateDebugComponent": {
    "status": "reviewed"
   },
+  "BrnGame::AutoTestManager::LUACBPressButton": {
+   "status": "reviewed"
+  },
   "BrnGame::AutoTestManager::LUACBRecordLog": {
    "status": "reviewed"
   },
@@ -28515,6 +28518,12 @@
   "BrnWorld::PropZoneManager::AddPropPartsToScene": {
    "status": "reviewed"
   },
+  "BrnWorld::PropZoneManager::AllocatePartInstancesBlock": {
+   "status": "compiles"
+  },
+  "BrnWorld::PropZoneManager::AllocatePropInstancesBlock": {
+   "status": "compiles"
+  },
   "BrnWorld::PropZoneManager::Construct": {
    "status": "reviewed"
   },
@@ -28524,14 +28533,26 @@
   "BrnWorld::PropZoneManager::DeallocatePropInstancesBlock": {
    "status": "reviewed"
   },
+  "BrnWorld::PropZoneManager::GetHitPropsFromZone": {
+   "status": "compiles"
+  },
   "BrnWorld::PropZoneManager::GetPart": {
    "status": "reviewed"
   },
   "BrnWorld::PropZoneManager::GetProp": {
    "status": "reviewed"
   },
+  "BrnWorld::PropZoneManager::GetRespawnType": {
+   "status": "compiles"
+  },
   "BrnWorld::PropZoneManager::GetZone": {
    "status": "reviewed"
+  },
+  "BrnWorld::PropZoneManager::HasPropBeenHit": {
+   "status": "compiles"
+  },
+  "BrnWorld::PropZoneManager::IsZoneLoaded": {
+   "status": "compiles"
   },
   "BrnWorld::PropZoneManager::LoadProp": {
    "status": "reviewed"
@@ -28553,6 +28574,9 @@
   },
   "BrnWorld::PropZoneManager::RemovePropPartsFromScene": {
    "status": "reviewed"
+  },
+  "BrnWorld::PropZoneManager::SendTrafficLightRestoreEvents": {
+   "status": "compiles"
   },
   "BrnWorld::PropZoneManager::UnloadZone": {
    "status": "reviewed"
@@ -49341,6 +49365,10 @@
    "status": "done"
   },
   "GameSource/Unity/../Game/BrnLUACall.h": {
+   "status": "done"
+  },
+  "GameSource/Unity/../Game/BrnLUACallbackHelper.h": {
+   "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; committed-home grow no ODR fork; compiles clean.",
    "status": "done"
   },
   "GameSource/Unity/../Game/BrnLoadingScreenRenderer.cpp": {
