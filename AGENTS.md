@@ -180,6 +180,20 @@ the maintainer invited you onto a server or you are running one.
    — it never auto-fails a compiled TU, because semantic-parity reconstruction legitimately
    refactors. Run it any time on its own with `work parity <tu>`. Implemented in
    [`tools/work/parity.py`](tools/work/parity.py).
+2b. **Faithfulness gate (NO-LLM, HARD — a decomp must not invent).** After a clean compile gate,
+   `work submit` also runs [`tools/work/faithfulness_lint.py`](tools/work/faithfulness_lint.py) over
+   the TU's files. Unlike parity this gate is **hard**: a TU that introduces a **new** invention smell
+   returns to `in_progress` and never reaches a reviewer packet. It catches exactly what the compile
+   gate and parity are blind to — `return null`/`{}` engine stubs that call themselves stubs, raw
+   offset-hack casts (`*(T*)(p+N)`), `Apt*_<verb>` free-function shims standing in for real methods,
+   home-grown-format vocabulary (`apt4`, `LocateMovieRoot`, "our converted", converter accommodations),
+   and `#pragma pack(4)` layout accommodations. A genuine PC-platform leaf passes **only** when marked
+   `// FLAG PC-platform leaf: <reason>`. It is a **ratchet** against
+   [`progress/faithfulness_baseline.json`](progress/faithfulness_baseline.json), which grandfathers
+   pre-existing debt so only NEW smells fail — **shrink** that baseline as you home real bodies; never
+   blind-regenerate it (that hides fresh invention). Run it repo-wide any time with `work faithfulness`
+   (`--all` lists every hit; `--baseline` re-snapshots after you deliberately pay debt down). Configure
+   or disable via the `faithfulness` block in `progress/review.config.json`.
 3. **Reviewer pass — YOU choose, per `progress/review.config.json`.** Not every TU
    needs a separate full review; an always-on Opus review per TU is the main quota sink.
    The config is a **menu + policy, not an auto-router**: you (the reverser agent) read
@@ -260,6 +274,39 @@ own** pass first, so you don't ship a known-divergent TU into review.
 
   Also use PS3/DecFIGS for file attribution and local-variable hints. Never let a lower rung
   override a higher one.
+- **APT SUBSYSTEM EXCEPTION — `Burnout_External_Xbox_One` is rung 1 for Apt (added 2026-07-01).**
+  For the EATech **Apt** runtime (`SDKs/EATech/Apt`, `SDKs/EATech/include/Apt`, the
+  `CgsApt*` glue), the **`Burnout_External_Xbox_One.exe`** IDA export
+  (`.ida-exports/Burnout_External_Xbox_One.exe/`) **outranks X360 ARTIST**. It is the only
+  native **little-endian 64-bit** build, so its pointer widths, struct layouts, and
+  8-byte strides match our PC target exactly — X360 ARTIST + PS3 (32-bit big-endian) drop
+  to **cross-reference** for the functions that are unnamed `sub_` in x64 (identify by their
+  X360/PS3 name, then **verify against the x64 `assembly`** before trusting any layout).
+  519 files carry named Apt symbols with real mangled x64 signatures — the mangled name
+  IS the exact prototype. **Never** let the 32-bit builds arbitrate an Apt pointer
+  width/offset over x64; hand-"widening" console layouts to x64 is what produced the
+  unfaithful-leaf debt this rule exists to stop. (Rationale + roadmap: the Apt audit,
+  2026-07-01.)
+- **APT: a `Class::method` reduced to a `return null`/`{}` stub, or renamed to an
+  `Apt*_<verb>` free-function shim, is an AUDIT FAILURE — not a leaf.** A leaf is permitted
+  **only** for genuinely PC-platform code (D3D9-vs-D3D11 render backend, single-threaded
+  threading/mutex/thread-id, host `/alternatename` callback shims, `.apt` file-blob offset
+  access) and must be marked `// FLAG PC-platform leaf: <reason>`. The AS VM, CIH timeline,
+  GC, scope/variable resolution, and value coercions are the ENGINE — decompile them
+  faithfully from the x64 build. Reviewers fail an Apt TU whose body (or a body it forwards
+  to in `AptRenderLinkStubs.cpp`) is an engine stub. Before trusting Apt ledger `done`, run
+  `work reconcile-from-files` (stub/`return null` bodies demote to todo).
+- **APT DATA: the 32-bit→64-bit `.apt` widening is done by the existing `libapt2` tool — do NOT
+  reinvent it.** Console `.apt` bundles are 4-byte-pointer (`Apt Data:1:7:4`); the PC/x64 target needs
+  the 8-byte form (`Apt Data:1:7:8`). That widening **already exists** in the maintainer's **libapt2**
+  (`references/private/libapt2-private-alpha`, the GUIAPT64 writer) — never mint a parallel widener
+  (the `apt_widen_4to8.py` / `.apt4` backdoor was exactly this mistake, now reverted). If libapt2's
+  `1:7:8` output diverges from the real XB1 layout, fix it **in libapt2** — **never** bend the
+  decompiled loader to eat the wrong bytes. Offset "accommodations" (reading `+0x04` where XB1 uses
+  `+0x08`), `LocateMovieRoot`-style signature scans, `#pragma pack(4)`, and plausibility guards that
+  silently drop records are all AUDIT FAILURES. The loader stays a pure faithful decompile of the XB1
+  native-8 read path (`CompleteLoad`=`sub_1408348B0` reads `movieOffset@const+0x18` directly); libapt2
+  makes the data match the loader, not the reverse.
 - **BUILD LINEAGE (provenance — confirmed 2026-06-25).**
   `Feb-2007` b5_main source → `Dec-2007` **DecFIGS** (PS3, branch B5_FIGS) → **FIGS was merged
   into `main` BEFORE ARTIST compiled** → `Jan-2008` **ARTIST/"Breaker"** (X360, `main`, the TARGET).
