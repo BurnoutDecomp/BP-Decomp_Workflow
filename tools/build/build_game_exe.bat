@@ -531,6 +531,11 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLoading.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegal.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegalBoundary.cpp"
+  rem The real title-menu frontend (replaces the retired MenuComponent facade).
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnSelectable.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnSelectableGroup.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnMenuItem.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnMenuComponent.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiState.cpp"
   echo "%SRC%\GameShared\GameClasses\Fsm\CgsState.cpp"
