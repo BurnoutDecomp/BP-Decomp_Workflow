@@ -292,6 +292,24 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    `AssociateInstToClass` to compare the container's `pChar->mpFixupLink` vs the title root char, find why nested-container
    back-links diverge, and fix Fixup's `mpFixupLink` population for nested title clips. §6.5-6.7 remain gated on this
    (a nested-container Fixup back-link fix, precisely localized), NOT on import-export resolution.
+4g. ✅✅ **DEFINITIVE root cause — disassembly-verified engine + OFFLINE bundle dump (2026-07-07). SUPERSEDES traces
+   3-6 above (all had a wrong sub-hypothesis).** (a) Read the XB1 Fixup `sub_1408378E0` + X360 `AssociateInstToClass`
+   @0x82B073B8 — the ENGINE IS FAITHFUL (back-link `char[+8]=charTable[0]`; export walk over `char->mpFixupLink`'s
+   table). The `625` export count for the 41-char title is REAL (Flash exports many nested named symbols), not a bad
+   offset. (b) Hard measurement (a `[AptRT] REGISTERED` probe at `AptCommunicator::AddNewAptComponent`): only the 4
+   IMPORT clips bind; the title's `*AnimatorComponent` clips do NOT bind; **`AddNewAptComponent` fires ZERO times — NO
+   component registers.** (c) OFFLINE bundle dump (`/tmp/find_ref.py` reusing the apt8_fix_frametables parser):
+   `SelectionMenuAnimatorComponent` appears in TITLE_SCREEN02.bundle **exactly once, at chunk+0x7010 with charId=-1, and
+   is NOT in the 625-entry export table** (0x170..0x2880). ⇒ **the title's OWN component clips have NO static char→class
+   export linkage** — they are meant to be instantiated/bound by the title's ActionScript FRAMEWORK at runtime
+   (`Object.registerClass(...)` + the init-action attach stream at chunk+0x7010), NOT statically via `AssociateInstToClass`.
+   The 4 imports bind only because their SEPARATE bundles carry static linkage. **So §6.4 == running the title's AS
+   init-action framework component-drive** (the long-noted "MAIN/framework movie drives the menu" thread, now PROVEN from
+   the bundle bytes). And even the imports don't register because `BuildName` needs a bound-component ancestor that only
+   the framework-instantiated components would provide. **This is a substantial reconstruction (the init-action VM
+   component-instantiation), not a static-data or offset fix — genuinely multi-session.** §6.5 (UpdateAll) → §6.6 (delete
+   shim) → §6.7 (validate) → deleting `BrnAptRuntimeBringUp` all sit behind it. NEXT: trace/execute the title frame-0
+   init-action stream (the chunk+0x7010 registerClass+attach) so the framework creates+binds its components.
 5. **Per-frame `UpdateAll`** drives the registered clips through the real communicator path
    (`AptAux::UpdateComponents` → `UpdateAllComponents` → `AptCallFunctionOpti("UpdateAll")`).
 6. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + `AptRuntimeSetComponentKeyValue`
