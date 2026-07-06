@@ -11376,7 +11376,13 @@
   "BrnGui::GenericForwardState::Update": {
    "status": "reviewed"
   },
+  "BrnGui::GetSplashScreenIDForGameMode": {
+   "status": "reviewed"
+  },
   "BrnGui::GuiAudioTriggerEvent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::GuiCach": {
    "status": "reviewed"
   },
   "BrnGui::GuiCache::AppendExpectedAptComponent": {
@@ -14016,6 +14022,9 @@
   "BrnGui::SetMaskAspectCorrectionMatrix": {
    "status": "reviewed"
   },
+  "BrnGui::ShowtimeInstantResultsState:": {
+   "status": "reviewed"
+  },
   "BrnGui::ShowtimeInstantResultsState::GetResourcesToLoad": {
    "status": "reviewed"
   },
@@ -14308,6 +14317,12 @@
    "status": "reviewed"
   },
   "BrnGui::WorldDataController::GetOnlineLandmarkInfoAtPositionInList": {
+   "status": "reviewed"
+  },
+  "BrnGui::operator++": {
+   "status": "reviewed"
+  },
+  "BrnGui::operator--": {
    "status": "reviewed"
   },
   "BrnGuiSaveLoad::Profile::ValidateProfile": {
@@ -28182,6 +28197,9 @@
   "BrnWorld::NearMissData<4,8>::VehicleTimePair,8>::Erase": {
    "status": "reviewed"
   },
+  "BrnWorld::NearMissManager::HasThereBeenARecentNearMiss": {
+   "status": "reviewed"
+  },
   "BrnWorld::P": {
    "status": "reviewed"
   },
@@ -28600,7 +28618,6 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityInstance::CalculateEaseInSpeedModulation": {
-   "attempts": 1,
    "status": "reviewed"
   },
   "BrnWorld::PropEntityInstance::Construct": {
@@ -28625,7 +28642,6 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityInstance::UpdateConstraints": {
-   "attempts": 1,
    "status": "reviewed"
   },
   "BrnWorld::PropEntityModule::GenerateTargetList": {
@@ -30300,6 +30316,9 @@
    "status": "reviewed"
   },
   "CSchemaData::LookupConstantFromTable": {
+   "status": "reviewed"
+  },
+  "CSchemaInMemory::Bind": {
    "status": "reviewed"
   },
   "CTwoPassInfoList::CTwoPassInfoList": {
@@ -36858,15 +36877,12 @@
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceUsersetParamsBase::Prepare": {
-   "attempts": 2,
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceUsersetParamsBase::SerialiseFromUserset": {
-   "attempts": 2,
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceUsersetParamsBase::SerialiseToString": {
-   "attempts": 2,
    "status": "reviewed"
   },
   "CgsNetwork::ServerInterfaceUsersetParamsBase::SetDescription": {
@@ -37677,6 +37693,33 @@
    "status": "reviewed"
   },
   "CgsResource::BaseResourcePtr::~BaseResourcePtr": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::CancelResourceModuleLoa": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::Load": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::PurgeLoadData": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::RestartResourceModuleLo": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::StartResourceModuleLoad": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::Unload": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::Update": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::UpdateResourceModuleLoa": {
+   "status": "reviewed"
+  },
+  "CgsResource::BinaryFileResource>::UpdateUnload": {
    "status": "reviewed"
   },
   "CgsResource::BinaryFileResourceType::GetSerialisedResourceDescript": {
@@ -42320,7 +42363,16 @@
   "EffectsVertexBufferLocked::EndBatch": {
    "status": "reviewed"
   },
+  "EffectsVertexBufferManager::Construct": {
+   "status": "reviewed"
+  },
   "EffectsVertexBufferManager::GetVertexBuffer": {
+   "status": "reviewed"
+  },
+  "EffectsVertexBufferManager::Lock": {
+   "status": "reviewed"
+  },
+  "EffectsVertexBufferManager::UnLock": {
    "status": "reviewed"
   },
   "HACK_SetSnd9InitSubmix": {
@@ -43772,6 +43824,9 @@
   "WorldModule::BridgeRaceCarModuleToTrafficModule_PreScene": {
    "status": "reviewed"
   },
+  "WorldModule::BridgeRaceCarModuleToWorldModule_PreScene": {
+   "status": "reviewed"
+  },
   "WorldModule::BridgeRaceCarResourceRequestsToOutput": {
    "status": "reviewed"
   },
@@ -43812,6 +43867,12 @@
    "status": "reviewed"
   },
   "WorldModule::BridgeTrafficToCrashModule_PostPhysics": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgeTrafficToRaceCar_PrePhysics": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgeTrafficToTrigger_PreScene": {
    "status": "reviewed"
   },
   "WorldModule::BridgeTriggerModuleToSceneModule_PostScene": {
@@ -46885,6 +46946,10 @@
    "notes": "Fixed per reviewer: mask now indexed table[v2] with v2 in {0,4} (element-indexed, matching *(table+v2)); removed the bogus >>2. RED parity = 6 ifs expressed as a loop.",
    "status": "done"
   },
+  "GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceUsersetParams.cpp": {
+   "notes": "wave52 resume: workflow decomp+verify PASS/high (all funcs); consolidated + gates clean (compile-only) against committed tree; external consumers of reconciled headers re-gated pass; no fabrication. b5-decomp ce361c25.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceUsersets.cpp": {
    "status": "done"
   },
@@ -49577,6 +49642,10 @@
    "notes": "wave52 resume: workflow decomp+verify PASS/high; consolidated + gates clean (compile-only); no fabrication. b5-decomp ce361c25.",
    "status": "done"
   },
+  "GameSource/Unity/../Effects/Particles/EffectsVertexBufferManager.cpp": {
+   "notes": "wave53: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication. b5-decomp c1cc494d.",
+   "status": "done"
+  },
   "GameSource/Unity/../Effects/Particles/LionParticleRender.cpp": {
    "notes": "complex TU; fresh-eyes Claude sonnet review (high effort). All 16 X360-attested functions semantically faithful (FNV-1a hash, depth-index flag bits, render-mode switch 0/1/3-4, depth-stencil Setup loop, texture/material tables). Quality gate clean: named members throughout (cParticleMaterial/owning header/LionBlendRenderer/emitter/descriptor reconstructed), no raw offset hacks, loops re-rolled, no gotos. Fixed 2 review findings: BeginRendering's two post-begin SetState calls restored; D3DDevice_SetTexture corrected to 4-arg (device,sampler,texture,flags). EndRendering body not X360-attested in dossier -> PS3-DWARF shadow::Device calls intentionally omitted per ladder (documented). Automated parity RED is expected (CGS_ASSERT macro encapsulates assert call-triples; renderer calls route through mpRenderer).",
    "status": "done"
@@ -50424,6 +50493,10 @@
   },
   "GameSource/Unity/../World/Bridges/WorldBridgeEntityModulesToCrash.cpp": {
    "notes": "asm-exact vs 0x827A5060; getter 0x8279D500; SetActiveRaceCarInterface @0x827A2270 declared additively",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/Bridges/WorldBridgeEntityModulesToEntityModules.cpp": {
+   "notes": "wave53: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication. b5-decomp c1cc494d.",
    "status": "done"
   },
   "GameSource/Unity/../World/Bridges/WorldBridgeInputToEntityModules.cpp": {
@@ -52608,6 +52681,10 @@
   },
   "class:BrnGraphics::WorldTexturedVertex>": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (verifier bug-corrections applied); boot-trace/VMX funcs flagged low-confidence, no fabrication; compiles clean.",
+   "status": "done"
+  },
+  "class:BrnGui": {
+   "notes": "wave53: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication. b5-decomp c1cc494d.",
    "status": "done"
   },
   "class:BrnGui::BankingScore,6>": {
@@ -55361,6 +55438,10 @@
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; XDK/DirtySDK externs declared-not-defined; already-committed accessors confirmed; compiles clean.",
    "status": "done"
   },
+  "class:BrnWorld::NearMissManager": {
+   "notes": "wave53: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication. b5-decomp c1cc494d.",
+   "status": "done"
+  },
   "class:BrnWorld::PVSIO": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; XDK/DirtySDK externs declared-not-defined; already-committed accessors confirmed; compiles clean.",
    "status": "done"
@@ -55712,6 +55793,10 @@
   },
   "class:CSchemaData": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:CSchemaInMemory": {
+   "notes": "wave53: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication. b5-decomp c1cc494d.",
    "status": "done"
   },
   "class:CSeqDissolveDetector": {
@@ -56913,6 +56998,10 @@
   },
   "class:CgsResource::BaseResourcePtr": {
    "notes": "4 funcs (base resource smart-ptr); verifier parity/low; gate pass.",
+   "status": "done"
+  },
+  "class:CgsResource::BinaryFileResource>": {
+   "notes": "wave53: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication. b5-decomp c1cc494d.",
    "status": "done"
   },
   "class:CgsResource::BinaryFileResourceType": {
