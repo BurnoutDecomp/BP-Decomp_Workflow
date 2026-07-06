@@ -310,6 +310,22 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    component-instantiation), not a static-data or offset fix — genuinely multi-session.** §6.5 (UpdateAll) → §6.6 (delete
    shim) → §6.7 (validate) → deleting `BrnAptRuntimeBringUp` all sit behind it. NEXT: trace/execute the title frame-0
    init-action stream (the chunk+0x7010 registerClass+attach) so the framework creates+binds its components.
+4h. ⚠️ **CORRECTION of 4g (the "no static linkage / framework-attach" claim was WRONG — the components DO bind).**
+   Decoded the chunk+0x7010 record: it is a **PlaceObject** (flags=0xa6 HasChar+Matrix+Name+ClipActions, depth=29,
+   **charId=30**, instance-name="SelectionMenuAnimatorComponent", matrix tx=1368.7/ty=406.1; the `-1` I first read is
+   the clipDepth @+0x38, not charId). So the AnimatorComponent clip PLACES import char 30 (a B5HelperComponents symbol)
+   and its INSTANCE name is the class-name string. Class-binding uses the placed CHAR's export name (via the char's
+   `mpFixupLink` = the import bundle's root), NOT the instance name. Confirmed by dumping B5HelperComponents' export table
+   (root+0x68 IS the real class-export table): exports `TwizzleComponent`@2, `TransitionComponent`@4,
+   `B5ScaleAndTintInterpolatorInst`@6. ⇒ the AnimatorComponent clips DO bind (under their char's class, e.g.
+   TransitionComponent — which is exactly what appears in the bind list); I was conflating instance-name vs class-name.
+   **The ONE fact consistent across every careful trace: components BIND + onLoad RUNS, but `AddNewAptComponent` fires
+   ZERO times — registration fails at `BuildName` (no bound-component ANCESTOR in the display tree).** THAT is the real,
+   stable §6.4 core (same as pm9). The session's import-Link / Fixup-back-link / no-linkage sub-hypotheses were all
+   wrong detours (lesson: [[read-disasm-before-boot-tracing]]). REAL NEXT: why does `BuildName`'s `_parent`-walk find no
+   BurnoutComponent ancestor — i.e. which display node SHOULD be the menu items' component ancestor, and does it bind?
+   (Trace the bound clips' display-parent chain + each parent's bound class.) §6.5-6.7 gate on giving the components an
+   ancestor so BuildName resolves → registration.
 5. **Per-frame `UpdateAll`** drives the registered clips through the real communicator path
    (`AptAux::UpdateComponents` → `UpdateAllComponents` → `AptCallFunctionOpti("UpdateAll")`).
 6. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + `AptRuntimeSetComponentKeyValue`
