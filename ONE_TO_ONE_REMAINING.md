@@ -165,10 +165,15 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    by the emitter (same misaligned-tag-1 bug) and `queueFrameActions` dropped it. FIX = swap
    `GUIAPT_MaybeBroken/MAIN.bundle` (intact @0x32e8) + re-apply `apt8_fix_df2_argtab`. NOW
    (binding on): registerClass fires 24×, **9 title classes bind** (TransitionComponent, B5MenuItem×2,
-   StaticHelpItem, ControllerButtons), **ctors run**, SetArgument invoked. **← CURRENT FRONTIER:**
-   SetArgument arg-name relocation truncation — a 2-arg fn gets arg[0] name full ptr but arg[1] name
-   high-dword-zeroed (32-bit relocation). DF2 repair verified correct offline; the truncation is an
-   engine resolve64/SetArgument bug on the 2nd+ arg (argtab is 4-mod-8, not 8-aligned). Needs cdb.
+   StaticHelpItem, ControllerButtons), **ctors run**. The arg[1] SetArgument truncation (arg[1] name
+   high-dword-zeroed) was a THIRD emitter bug — JeBobs' arg TABLE is at a 4-mod-8 offset, so arg[1]'s
+   name-u64 straddles the table's tail word and a later aligned write zeroes its high dword (resolve64
+   writes it full — verified by probe). FIX = `apt8_align_df2_argtab.py` (8-align the argtab). Now
+   **ctors execute their bodies** (B5TextField member init). **← CURRENT FRONTIER (an ENGINE bug, not
+   emitter data):** the AS `+` opcode (`_FunctionAptActionAdd2`) crashes on a DANGLING string —
+   `EAStringC::IncreaseInternalRefCount` with rax=0xbaadf00d (DOGMA-freed) via
+   `AptValue::Append_ToString`, in a ctor's `msName = <str> + <str>`. A GC/string-lifetime
+   use-after-free (operand-stack Release vs the gValuesToRelease drain). Needs cdb page-heap.
    THEN `onLoad` → `SendAptEvent(ONLOAD)` → `AddNewAptComponent`.
 4. **Per-frame `UpdateAll`** drives the clips through the real communicator path.
 5. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + the viewstate pair-map.
