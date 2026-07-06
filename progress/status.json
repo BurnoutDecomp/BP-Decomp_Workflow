@@ -12,6 +12,9 @@
   "*,13>::Remove": {
    "status": "reviewed"
   },
+  "*,25>::Insert": {
+   "status": "reviewed"
+  },
   "*,64>::Append": {
    "status": "reviewed"
   },
@@ -30351,6 +30354,21 @@
   "CGSSTRNLOWER": {
    "status": "reviewed"
   },
+  "CHistogram::CalcHistDist": {
+   "status": "reviewed"
+  },
+  "CHistogram::CalcHistogram": {
+   "status": "reviewed"
+  },
+  "CHistogram::isHistogramChanged": {
+   "status": "reviewed"
+  },
+  "CLocalHuffman::CLocalHuffman": {
+   "status": "reviewed"
+  },
+  "CLocalHuffman::~CLocalHuffman": {
+   "status": "reviewed"
+  },
   "CRct::operator=": {
    "status": "reviewed"
   },
@@ -31858,6 +31876,12 @@
    "status": "reviewed"
   },
   "CgsFileSystem::DeviceMemFileSystem::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::FileHandle::Read": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::FileHandle::Write": {
    "status": "reviewed"
   },
   "CgsFileSystem::FileLog::FileLog": {
@@ -43335,6 +43359,12 @@
   "PIDController::Record": {
    "status": "reviewed"
   },
+  "PackedIndex::SetActiveRaceCarIndex": {
+   "status": "reviewed"
+  },
+  "PackedIndex::SetGlobalRaceCarIndex": {
+   "status": "reviewed"
+  },
   "RealmcCore::Locale::GetString": {
    "status": "reviewed"
   },
@@ -43752,6 +43782,12 @@
   "StringMembersIndex::in_word_set": {
    "status": "reviewed"
   },
+  "TextFormat::TextFormat": {
+   "status": "reviewed"
+  },
+  "TextFormat::copyTextFormatObj": {
+   "status": "reviewed"
+  },
   "TextFormatMembersIndex::in_word_set": {
    "status": "reviewed"
   },
@@ -44071,6 +44107,27 @@
    "status": "reviewed"
   },
   "XGRAPHICS::IRFetch::InstType": {
+   "status": "reviewed"
+  },
+  "[100],20,int>::AllocateObject": {
+   "status": "reviewed"
+  },
+  "[100],20,int>::FreeObject": {
+   "status": "reviewed"
+  },
+  "[250],8,int>::AllocateObject": {
+   "status": "reviewed"
+  },
+  "[250],8,int>::FreeObject": {
+   "status": "reviewed"
+  },
+  "[70],20,int>::AllocateObject": {
+   "status": "reviewed"
+  },
+  "[70],20,int>::FreeObject": {
+   "status": "reviewed"
+  },
+  "[70],20,int>::IsObjectAllocated": {
    "status": "reviewed"
   },
   "_AptValueGC_MemItem::GetSize": {
@@ -44524,6 +44581,12 @@
    "status": "reviewed"
   },
   "int,int>::FindEntry": {
+   "status": "reviewed"
+  },
+  "int>::GetCommand": {
+   "status": "reviewed"
+  },
+  "int>::PostCommand": {
    "status": "reviewed"
   },
   "operator++": {
@@ -51197,6 +51260,10 @@
    "notes": "Wave 30: verified faithful vs X360 asm, gate clean, pushed 4a5867d",
    "status": "done"
   },
+  "class:*,25>": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
   "class:*,64>": {
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
@@ -55862,6 +55929,14 @@
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
+  "class:CHistogram": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
+  "class:CLocalHuffman": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
   "class:CRct": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -56093,6 +56168,10 @@
   },
   "class:CgsFileSystem::DeviceMemFileSystem": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsFileSystem::FileHandle": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
   "class:CgsFileSystem::FileSystem": {
@@ -58612,6 +58691,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:PackedIndex": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
   "class:RealmcCore::Locale": {
    "notes": "RealmcCore Locale; parity/low; wave9; verifier parity; gate pass.",
    "status": "done"
@@ -58752,6 +58835,10 @@
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
    "status": "done"
   },
+  "class:TextFormat": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
   "class:TextFormatMembersIndex": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
@@ -58826,6 +58913,18 @@
   },
   "class:XGRAPHICS::IRFetch": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:[100],20,int>": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
+  "class:[250],8,int>": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
+  "class:[70],20,int>": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
   "class:_AptValueGC_MemItem": {
@@ -58970,6 +59069,10 @@
   },
   "class:int,int>": {
    "notes": "Thin explicit template instantiation vs committed generic (Array/Set/Stack/Linear*HashTable/Selector); compiles clean.",
+   "status": "done"
+  },
+  "class:int>": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
   "class:princeton_digital": {
