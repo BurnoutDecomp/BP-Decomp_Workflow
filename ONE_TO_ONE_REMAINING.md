@@ -206,16 +206,20 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    RegisterComponent = { CAptCommunicator.SendAptEvent(KI_EVENT_ONLOAD, uid, name, clip); }
    Initialize()      = { this._visible = false; ... }             // ← why binding-on renders BLACK
    ```
-   `BuildName` returns undefined because its `_parent`-walk overruns to `undefined` — the title's ancestor
-   clips are NOT bound `BurnoutComponent`s with a set `msName`. VERIFIED that the per-clip primitives are
-   all faithful now: `AssociateInstToClass` Sets `__proto__` = class prototype (proven — onLoad runs);
-   `Extends` (0x69) chains `B5X.prototype.__proto__ = BurnoutComponent.prototype`; so `IsBurnoutComponent`
-   *would* resolve on any bound component. => the gap is that the **framework-movie ROOT component isn't
-   composed/bound at level 0** (STAGE-B multi-level movie: compose MAIN/PERSISTENTAPT as the level-0 root so
-   the menu clips have a `BurnoutComponent` ancestor whose `msName` the walk returns). This is the same
-   stage-B work in §6 "LAYER 2 STAGE B" below. Interim: `SendAptEvent`/`SendAptSoundEvent` carry FLAG'd
-   graceful guards (no-op on bad args) so the shim menu stays working (0 asserts). NEXT: the framework-movie
-   composition, not more per-opcode fixes — the per-clip engine primitives for the drive are done.
+   `BuildName` returns undefined because its `_parent`-walk overruns to `undefined`. A hierarchy trace
+   DISPROVED an earlier "needs stage-B" guess: the menu items DO have bound ancestors **within the title**
+   (`MenuItem_0 → SelectionMenu_mc(bound) → ''(bound) → root`), so NO framework-movie root is needed. The
+   walk overruns because **`reg.IsBurnoutComponent()` does not resolve on the ancestor clips** (the opcode
+   trace shows the `CallMethod` runs no body → returns undefined → the loop continues past every ancestor).
+   `SelectionMenu_mc` is bound (has `__proto__`) yet `IsBurnoutComponent` (a `BurnoutComponent.prototype`
+   method) isn't in its proto chain → its class is not `BurnoutComponent`-derived, OR its
+   `Extends BurnoutComponent` (0x69) didn't run / wire the proto link during MAIN's class-def init streams.
+   Per-clip primitives verified faithful: `AssociateInstToClass` Sets `__proto__` = class prototype (proven —
+   onLoad runs); `Extends` correctly chains `B5X.prototype.__proto__ = BurnoutComponent.prototype`. NEXT
+   (tractable, title-local — NOT stage-B): identify the container clips' bound classes and why the
+   `IsBurnoutComponent` method doesn't resolve up their `__proto__` chain (likely an `Extends`/class-def
+   coverage gap for the container component classes). Interim: `SendAptEvent`/`SendAptSoundEvent` carry
+   FLAG'd graceful guards (no-op on bad args) so the shim menu stays working (0 asserts).
 5. **Per-frame `UpdateAll`** drives the registered clips through the real communicator path
    (`AptAux::UpdateComponents` → `UpdateAllComponents` → `AptCallFunctionOpti("UpdateAll")`).
 6. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + `AptRuntimeSetComponentKeyValue`
