@@ -12912,10 +12912,19 @@
   "BrnGui::OnlineMarkMan::ClearExpectedComponent": {
    "status": "reviewed"
   },
+  "BrnGui::OnlineMarkMan::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineMarkMan::SetExpectedAptComponentList": {
+   "status": "reviewed"
+  },
   "BrnGui::OnlineMarkMan::SetExpectedComponent": {
    "status": "reviewed"
   },
   "BrnGui::OnlineMarkMan::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineMarkMan::UpdateWFInit": {
    "status": "reviewed"
   },
   "BrnGui::OnlineNews::GetResourcesToLoad": {
@@ -48545,6 +48554,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineLoading.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlineMarkMan.h": {
+   "notes": "Decomp+verify PASS/high (adversarial verify agent). Gate compiles clean against committed CgsGui::State + GuiCache. 3 bodies are byte-identical twin of committed ImageGalleryState (SetExpectedAptComponentList/UpdateWFInit/GetResourcesToLoad). Only divergence is standard CGS_ASSERT macro expansion (BeginAssert/EndAssert/FireAssert) accepted campaign-wide; KA_RESOURCES_TO_LOAD id is a FLAG'd nominal placeholder for unattested .rodata. Committed 72ee3bd0/44636484.",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineNews.h": {
