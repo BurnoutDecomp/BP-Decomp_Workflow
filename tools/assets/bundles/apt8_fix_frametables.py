@@ -166,7 +166,19 @@ def fix_bundle(path):
                     p = (apt_base + cmd + 4 + 7) & ~7
                     payload = rd64(data, p)
                     if tag in (1, 2) and (not payload or payload >= apt_size):
-                        continue    # implausible -- leave for manual analysis
+                        # implausible -- the misaligned record's stream pointer was
+                        # destroyed by the 4->8 straddle (reads ~0x2_00000000), so the
+                        # true offset is unrecoverable from this record alone. WARN
+                        # LOUDLY: a skipped tag-1 (action) is a lost frame Stop -- e.g.
+                        # B5MenuItem f9 (the 'Selected' segment stop) / B5HelpItem char[5]
+                        # (the help-prompt stops). Losing it makes the clip PLAY PAST its
+                        # rest frame (menu hover rolls into Unselected; prompt text drops).
+                        # These specific bundles must be sourced from a hand-repaired copy
+                        # (GUIAPT_MaybeBroken's 2026-07-05 set) until the emitter is fixed.
+                        print('  %s: char cmd@+%#x tag=%d UNRECOVERABLE stream (%#x) -- '
+                              'SKIPPED; frame Stop LOST (menu/help regression risk)'
+                              % (os.path.basename(path), cmd, tag, payload))
+                        continue
                     blob = struct.pack('<iiQ', tag, 0, payload)
                 newoff = append_aligned(blob)
                 slot_patches.append((slot, newoff))
