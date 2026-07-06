@@ -2772,10 +2772,34 @@
   "BrnAI::BoundaryLine::GetInterp": {
    "status": "reviewed"
   },
+  "BrnAI::BuzzBy::AICarCanBuzz": {
+   "status": "reviewed"
+  },
+  "BrnAI::BuzzBy::BuzzOccured": {
+   "status": "reviewed"
+  },
+  "BrnAI::BuzzBy::ChooseAheadOrBehind": {
+   "status": "reviewed"
+  },
   "BrnAI::BuzzBy::DrawBuzzTimer": {
    "status": "reviewed"
   },
+  "BrnAI::BuzzBy::IsPlayerBuzzable": {
+   "status": "reviewed"
+  },
+  "BrnAI::BuzzBy::IsPositionInNoBuzzZone": {
+   "status": "reviewed"
+  },
   "BrnAI::BuzzBy::MaintainAheadOrBehind": {
+   "status": "reviewed"
+  },
+  "BrnAI::BuzzBy::ResetActiveList": {
+   "status": "reviewed"
+  },
+  "BrnAI::BuzzBy::StartABuzzBy": {
+   "status": "reviewed"
+  },
+  "BrnAI::BuzzBy::Update": {
    "status": "reviewed"
   },
   "BrnAI::Calc2DIntersectionEquationData": {
@@ -3577,6 +3601,30 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourBystanderCam::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourDebugOrbitPlayer::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourDebugOrbitPlayer::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourDebugOrbitPlayer::LookAtBack": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourDebugOrbitPlayer::LookAtFront": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourDebugOrbitPlayer::LookAtLeftSide": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourDebugOrbitPlayer::LookAtRightSide": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourDebugOrbitPlayer::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::BehaviourDebugOrbitPlayer::SetupTweaker": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::BehaviourDebugOrbitPlayer::Update": {
@@ -10677,7 +10725,34 @@
   "BrnGui::CrashNavStats::GetResourcesToLoad": {
    "status": "reviewed"
   },
+  "BrnGui::CrashNavStats::HandleStatData": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavStats::HandleTriggers": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavStats::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavStats::OnLeave": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavStats::SetExpectedAptComponents": {
+   "status": "reviewed"
+  },
   "BrnGui::CrashNavStats::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavStats::UpdateInitSetup": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavStats::UpdateInitialising": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavStats::UpdateLoading": {
+   "status": "reviewed"
+  },
+  "BrnGui::CrashNavStats::UpdatePermanent": {
    "status": "reviewed"
   },
   "BrnGui::CrashNavTrax::GetResourcesToLoad": {
@@ -39372,7 +39447,31 @@
   "CgsSceneManager::FrustumTestJobData::operator=": {
    "status": "reviewed"
   },
+  "CgsSceneManager::IntervalList::AddObject": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::IntervalList::AddSentinelInterval": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::IntervalList::GetIntervalsAndRemoveObject": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::IntervalList::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::IntervalList::RemoveInterval": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::IntervalList::RemoveObject": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::IntervalList::RepairMappings": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::IntervalList::SweepIntervals": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::IntervalList::UpdateObject": {
    "status": "reviewed"
   },
   "CgsSceneManager::IntervalStack::Push": {
@@ -47419,6 +47518,10 @@
    "notes": "wave56: workflow decomp+verify PASS/high; consolidated (2-agent, transient-drop recovery) + full-set gate clean (compile-only); no FAIL func homed; shared-header edits regression-gated. b5-decomp 42760245.",
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/ContactGen/CgsIntervalList.cpp": {
+   "notes": "wave57: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no FAIL func homed; header edits regression-gated (offset-preserving). b5-decomp bd752169.",
+   "status": "done"
+  },
   "GameShared/GameClasses/SceneManager/ContactGen/CgsIntervalStack.h": {
    "status": "done"
   },
@@ -48091,6 +48194,10 @@
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourAftertouchCrash.cpp": {
+   "status": "done"
+  },
+  "GameSource/Director/Camera/Behaviours/BrnBehaviourDebugOrbitPlayer.cpp": {
+   "notes": "wave57: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no FAIL func homed; header edits regression-gated (offset-preserving). b5-decomp bd752169.",
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourFailsafe.cpp": {
@@ -48950,6 +49057,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnCrashNavStats.cpp": {
+   "notes": "wave57: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no FAIL func homed; header edits regression-gated (offset-preserving). b5-decomp bd752169.",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavStats.h": {
@@ -50725,6 +50836,10 @@
   },
   "GameSource/Unity/../World/AI/BrnAIAggressiveness.cpp": {
    "notes": "Wave 47: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/AI/BrnAIBuzzBy.cpp": {
+   "notes": "wave57: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no FAIL func homed; header edits regression-gated (offset-preserving). b5-decomp bd752169.",
    "status": "done"
   },
   "GameSource/Unity/../World/AI/BrnAICar.cpp": {
