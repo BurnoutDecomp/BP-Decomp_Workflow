@@ -191,17 +191,31 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    (iii) `obj.method()` compiles to fused GetMember `0xA5`/`0xAF` + fused call `0x5D/0x5E/0xB2/0xB3` (all
    route through CallMethod); (iv) onLoad DOES run (9× FUNCTION-drain of the shared `BurnoutComponent.onLoad`
    via the deferred `__proto__` path). BOOT-VERIFIED: SetCommunicationObject binds, SendAptEvent dispatches.
-4b. **AS passes BAD ARGS to the natives — ← CURRENT FRONTIER (§6.4).** `SendAptEvent(ONLOAD,…)`: p0=eventId
-   (int ✓), p1=uid (int ✓), but **p2=component-name is UNDEFINED and p3=receiver renders as `'_global'`**
-   (should be the clip). onLoad reads `this.msName` on the clip CIH (type 12) and gets undefined — the
-   ctor's `this.msName = …` (setVariable) is not visible to onLoad's `getVariable` read. This is a
-   **class-instance `this`/member-context defect**: where do ctor-set members of a class-bound clip live
-   (CIH value hash vs the char-inst `mpProperties` the `__proto__` landed on, per `AssociateInstToClass`),
-   and does the read path consult the same store? NEXT: instrument the ctor's msName store target vs
-   onLoad's read target for the same CIH → fix so a valid name+clip reach `AddNewAptComponent`. Interim:
-   `SendAptEvent`/`SendAptSoundEvent` carry FLAG'd graceful guards (no-op on bad args instead of the
-   halting assert) so the shim menu stays working (title + press-start render, 0 asserts) — restore the
-   `CGS_ASSERT`s once the arg context is faithful.
+4b. ✅ **DONE — `_name` MovieClip property getter** (`fe0ad58f`). `AptCIH::objectMemberLookup` was a
+   *deferred* console override; `_name` fell through `findChild` to undefined, so a class-bound clip's ctor
+   `this.msName = this._name` stored undefined. Reconstructed the override for `_name` → `GetInstanceName()`
+   (returns 0 for other names so `findChild` is unchanged). Boot-verified: `setVar msName` flips undefined
+   → string. The full MovieClip property set (`_x/_y/_width/_visible/…`) is a follow-on.
+4c. **The full AS drive chain is DISASSEMBLED (runtime opcode+dict trace) and the remaining blocker is at
+   the FRAMEWORK-MOVIE / stage-B level — ← CURRENT FRONTIER (§6.4).** The AS:
+   ```
+   onLoad()          = { this.BuildName(); gAptCommunicator.RegisterComponent(name, this); this.Initialize(); }
+   BuildName()       = { this.msName = this._name;
+                         reg = this._parent; while (reg && !reg.IsBurnoutComponent()) reg = reg._parent;
+                         return reg.msName; }                     // ← the registration name
+   RegisterComponent = { CAptCommunicator.SendAptEvent(KI_EVENT_ONLOAD, uid, name, clip); }
+   Initialize()      = { this._visible = false; ... }             // ← why binding-on renders BLACK
+   ```
+   `BuildName` returns undefined because its `_parent`-walk overruns to `undefined` — the title's ancestor
+   clips are NOT bound `BurnoutComponent`s with a set `msName`. VERIFIED that the per-clip primitives are
+   all faithful now: `AssociateInstToClass` Sets `__proto__` = class prototype (proven — onLoad runs);
+   `Extends` (0x69) chains `B5X.prototype.__proto__ = BurnoutComponent.prototype`; so `IsBurnoutComponent`
+   *would* resolve on any bound component. => the gap is that the **framework-movie ROOT component isn't
+   composed/bound at level 0** (STAGE-B multi-level movie: compose MAIN/PERSISTENTAPT as the level-0 root so
+   the menu clips have a `BurnoutComponent` ancestor whose `msName` the walk returns). This is the same
+   stage-B work in §6 "LAYER 2 STAGE B" below. Interim: `SendAptEvent`/`SendAptSoundEvent` carry FLAG'd
+   graceful guards (no-op on bad args) so the shim menu stays working (0 asserts). NEXT: the framework-movie
+   composition, not more per-opcode fixes — the per-clip engine primitives for the drive are done.
 5. **Per-frame `UpdateAll`** drives the registered clips through the real communicator path
    (`AptAux::UpdateComponents` → `UpdateAllComponents` → `AptCallFunctionOpti("UpdateAll")`).
 6. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + `AptRuntimeSetComponentKeyValue`
