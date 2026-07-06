@@ -4,7 +4,46 @@ Title selection menu regressed today: **no visible hover highlight, no prompt te
 (screenshots show items render but the Selected state doesn't hold and the "select"
 prompt string is blank). This note is the clean-start context for tomorrow.
 
-## Status: NOT fixed. Banked deliberately.
+## ✅ RESOLVED (2026-07-06 pm) — it was a BUNDLE-DATA regression, not an engine bug.
+
+**Root cause (both symptoms, one cause):** JeBobs' GUIAPT64 emitter left a handful of
+frame **tag-1 (action) command records misaligned** (record base at 4-mod-8). The engine
+reads a frame action's bytecode-stream pointer at the fixed `cmd+8`; on a misaligned
+record the 4→8 straddle makes that read return garbage (`0x2_00000000`), so
+`AptMovie::queueFrameActions`' sanity guard drops the action. The dropped actions were
+frame **Stop** commands:
+- **B5MENUITEM char[20] frame 9** = the `Selected` segment's Stop. Without it the item
+  played 0→19 (past `Unselected`@10) and parked on the shared frame-19 rest → **both items
+  looked Unselected** (no hover highlight).
+- **B5HELPITEM char[5] f0/f1** = the help-prompt stops. Without them the prompt clip never
+  settled → **prompt text blank / "PROMPT TEXT" placeholder**.
+
+Verified by a tick/frame probe: with the broken bundle the `Selected` clip rested at
+frame 19; with the fixed bundle it rests at frame 9 (highlight) while `Unselected` rests
+at 19 (dim). Screenshots confirm hover holds, nav swaps, and the prompt reads **"Ⓐ SELECT"**.
+
+**Why it "regressed":** the active `build/game/GUIAPT/{B5MENUITEM,B5HELPITEM}.bundle`
+(mtime 07-05 **00:50**) are the PRE-f9-fix repair. The correctly hand-repaired copies live
+in `build/game/GUIAPT_MaybeBroken/` (mtime 07-05 **23:11**) — despite the scary dir name,
+those are the GOOD ones for these two bundles. The 00:50 GUIAPT regen silently lost the f9
+repair. Today's more-faithful tick simply *exposed* it (an earlier under-implemented tick
+left the item parked, hiding the missing Stop). **The engine/apply code was never at fault.**
+
+**The fix (data):** copied the two repaired bundles over the active ones
+(`GUIAPT/B5MENUITEM.bundle`, `GUIAPT/B5HELPITEM.bundle`; broken originals saved as
+`*.bak_broken*`). No engine/source change. `apt8_fix_frametables.py` **cannot** auto-recover
+these — the straddle destroys the real stream offset — so it now prints a loud
+`UNRECOVERABLE stream ... frame Stop LOST` warning instead of silently skipping. **Durability
+caveat:** bundles are uncommitted local artifacts; a fresh GUIAPT regen from the pristine
+JeBobs drop will REINTRODUCE the bug. Keep the `GUIAPT_MaybeBroken` copies as the source of
+truth for these two bundles (or re-apply the swap) until JeBobs fixes the emitter.
+
+Remaining (separate, pre-existing — NOT this regression): the right-panel "BEAT THE TEAM
+PLACEHOLDER" mode-description string is un-localised.
+
+---
+
+## Status: NOT fixed. Banked deliberately.   ← superseded by the RESOLVED section above
 
 What was tried today and did **not** fix the visible symptoms:
 - Gated `KB_CLASS_BINDING = false` (`b5-decomp/src/SDKs/EATech/include/Apt/AptDisplayList.cpp:1302`).
