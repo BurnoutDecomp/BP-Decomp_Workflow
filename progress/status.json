@@ -11952,6 +11952,10 @@
   "BrnGui::GuiNetworkRouteInfo::CalculateZoomFactor": {
    "status": "reviewed"
   },
+  "BrnGui::GuiNetworkRouteInfo::GuiNetworkRouteInfo": {
+   "attempts": 1,
+   "status": "reviewed"
+  },
   "BrnGui::GuiNetworkRouteInfo::SetActiveLandmarks": {
    "status": "reviewed"
   },
@@ -13525,6 +13529,15 @@
    "status": "reviewed"
   },
   "BrnGui::PreRaceFlyByState::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::PreRaceFlyByState::IsMapApplicableToGameMode": {
+   "status": "reviewed"
+  },
+  "BrnGui::PreRaceFlyByState::IsMapPanApplicableToGameMode": {
+   "status": "reviewed"
+  },
+  "BrnGui::PreRaceFlyByState::PreRaceFlyByState": {
    "status": "reviewed"
   },
   "BrnGui::PreloadOverlayState::GetCache": {
@@ -53329,6 +53342,10 @@
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (verifier corrections applied); .data tables flagged attested-vs-reconstructed; compiles clean.",
    "status": "done"
   },
+  "class:BrnGui::GuiNetworkRouteInfo": {
+   "notes": "wave57: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no FAIL func homed; header edits regression-gated (offset-preserving). b5-decomp bd752169.",
+   "status": "done"
+  },
   "class:BrnGui::GuiOverlayRequest": {
    "notes": "Wave 52: reconstructed store-for-store from X360 ARTIST asm and adversarially verified (full store set both directions, exact assert operands, BE-qword field order, byte-index/stride). Committed a2da36a.",
    "status": "done"
@@ -53471,6 +53488,10 @@
   },
   "class:BrnGui::PlayerStatsBar": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; XDK/DirtySDK externs declared-not-defined; already-committed accessors confirmed; compiles clean.",
+   "status": "done"
+  },
+  "class:BrnGui::PreRaceFlyByState": {
+   "notes": "wave57: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no FAIL func homed; header edits regression-gated (offset-preserving). b5-decomp bd752169.",
    "status": "done"
   },
   "class:BrnGui::ProfileHost": {
