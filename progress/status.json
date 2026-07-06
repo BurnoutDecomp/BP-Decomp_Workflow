@@ -13959,6 +13959,18 @@
   "BrnGui::SatNavRenderer::UpdateRendererTransform": {
    "status": "reviewed"
   },
+  "BrnGui::SatNavTile::IsWithinWorldRect": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavTile::sRect::sRect": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavTile::sTexture::QSortCallback": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavTileDirectory::sTileItem::IsWithinWorldRect": {
+   "status": "reviewed"
+  },
   "BrnGui::ScreenLoading::ApplyOptionsDataProfileSettings": {
    "status": "reviewed"
   },
@@ -15234,7 +15246,19 @@
   "BrnNetwork::BurnoutSkillzMessage::Construct": {
    "status": "reviewed"
   },
+  "BrnNetwork::BurnoutSkillzMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BurnoutSkillzMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BurnoutSkillzMessage::PackOrUnpack": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BurnoutSkillzMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BurnoutSkillzMessage::Retrieve": {
    "status": "reviewed"
   },
   "BrnNetwork::CameraRequestMessage::Construct": {
@@ -15283,6 +15307,18 @@
    "status": "reviewed"
   },
   "BrnNetwork::CarSelectMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CarSelectMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CarSelectMessage::PackOrUnpack": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CarSelectMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CarSelectMessage::Retrieve": {
    "status": "reviewed"
   },
   "BrnNetwork::ChallengeSuccessManager:": {
@@ -15336,6 +15372,21 @@
   "BrnNetwork::ChallengeSuccessManager::_ChallengeSuccessMessageDeliveredCallback": {
    "status": "reviewed"
   },
+  "BrnNetwork::CheckpointTriggeredMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CheckpointTriggeredMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CheckpointTriggeredMessage::PackOrUnpack": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CheckpointTriggeredMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CheckpointTriggeredMessage::Retrieve": {
+   "status": "reviewed"
+  },
   "BrnNetwork::CollectableMessage::GetName": {
    "status": "reviewed"
   },
@@ -15349,6 +15400,18 @@
    "status": "reviewed"
   },
   "BrnNetwork::CrashingTrafficMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CrashingTrafficMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CrashingTrafficMessage::PackOrUnpack": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CrashingTrafficMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CrashingTrafficMessage::Retrieve": {
    "status": "reviewed"
   },
   "BrnNetwork::DirtyTrickMessage::Construct": {
@@ -49211,6 +49274,10 @@
    "notes": "verify pass 5/5: ReliableMessage subclass type 30, GetName/PackOrUnpack/PrepareForSend/Retrieve. gate x64 pass",
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnBurnoutSkillzMessage.cpp": {
+   "notes": "wave55: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep; shared-header edits regression-gated. b5-decomp 343c5da9.",
+   "status": "done"
+  },
   "GameSource/Network/Messages/BrnCameraRequestMessage.cpp": {
    "notes": "fresh-eyes batch review: semantically faithful to X360 pseudocode, named-member access, no offset hacks; standard serialiser TU",
    "status": "done"
@@ -49235,12 +49302,24 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); leaked-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnCarSelectMessage.cpp": {
+   "notes": "wave55: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep; shared-header edits regression-gated. b5-decomp 343c5da9.",
+   "status": "done"
+  },
   "GameSource/Network/Messages/BrnCarSelectMessage.h": {
    "notes": "reverted: 13:17 script-auto run marked done with no source file",
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnCheckpointTriggeredMessage.cpp": {
+   "notes": "wave55: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep; shared-header edits regression-gated. b5-decomp 343c5da9.",
+   "status": "done"
+  },
   "GameSource/Network/Messages/BrnCollectableMessage.h": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); leaked-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
+   "status": "done"
+  },
+  "GameSource/Network/Messages/BrnCrashingTrafficMessage.cpp": {
+   "notes": "wave55: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep; shared-header edits regression-gated. b5-decomp 343c5da9.",
    "status": "done"
   },
   "GameSource/Network/Messages/BrnCrashingTrafficMessage.h": {
@@ -51222,6 +51301,10 @@
   },
   "SharedClasses/Gui/Flapt/BrnFlaptFileResourceType.cpp": {
    "notes": "fresh-eyes sonnet review PASS; descriptor<5> matches asm; serialised-blob raw-offset documented exception; compile PASS",
+   "status": "done"
+  },
+  "SharedClasses/Gui/SatNav/BrnSatNavTile.cpp": {
+   "notes": "wave55: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep; shared-header edits regression-gated. b5-decomp 343c5da9.",
    "status": "done"
   },
   "SharedClasses/Gui/SatNav/Resources/BrnSatNavTileResourceType.cpp": {
