@@ -220,6 +220,78 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    `IsBurnoutComponent` method doesn't resolve up their `__proto__` chain (likely an `Extends`/class-def
    coverage gap for the container component classes). Interim: `SendAptEvent`/`SendAptSoundEvent` carry
    FLAG'd graceful guards (no-op on bad args) so the shim menu stays working (0 asserts).
+4d. ✅ **RESOLVED the (a)-vs-(b) fork via a fresh boot trace (2026-07-06).** Widened `AptRegisterClassProbe`
+   (24→64) + logged the export name for `<no-class>` binds, `KB_CLASS_BINDING=true`, booted to title.
+   FINDINGS: (1) MAIN registers **64** classes (the old probe truncated at 24!) incl. `B5MenuItem`,
+   `Carousel_mc`/`CarouselItem_mc`, `Toggle_mc`/`ToggleItem_mc`, `ScrollableSelectionItem`, `TextField`,
+   `ColourField`, `Ticker`, … but **NO `SelectionMenu`** class exists anywhere. (2) The bring-up loads
+   **ONLY `MAIN` at level 0** — `PERSISTENTAPT` (the OTHER framework bundle, which "also has some" component
+   classes) is NEVER loaded/bootstrapped, so any class it registers is missing. (3) The menu-container clip
+   `SelectionMenu_mc` logs `<no-export-name>` — it is a plain timeline container with an INSTANCE name but
+   **no LINKAGE/export name**, so it can NEVER bind to a class (`AssociateInstToClass` needs the export name
+   to hit the registry). The `<no-class:…>` binds are all ART (`Bg`/`copyright2`/`ButtStart`/`MenuDirt`/…),
+   confirming pm9(6). CONCLUSION (resolves the ambiguity): the menu items (`B5MenuItem`, which DO bind) have
+   **NO within-title BurnoutComponent ancestor** — the container cannot be a class (no linkage name) and no
+   `SelectionMenu` class exists — so `BuildName`'s `_parent`-walk correctly overruns. §6.4 is therefore
+   **NOT** a per-clip primitive fix and **NOT** a title-local container class-link; it is at the
+   **FRAMEWORK-COMPOSITION level**. The tractable next leads, in order: **(i)** load + bootstrap
+   `PERSISTENTAPT.bundle` (add a second framework slot alongside MAIN) and re-trace — its registerClass may
+   supply the menu-framework classes MAIN lacks; **(ii)** if still no component ancestor, the console composes
+   the menu THROUGH the framework's component system (§6.5 `UpdateAll` dynamically builds/nests it) rather than
+   from static title clips — wire `UpdateAll` and see whether the framework establishes the hierarchy; **(iii)**
+   only if both fail, the title-under-framework NESTING (stage-B). Diagnostic reverted; KB_CLASS_BINDING=false,
+   working menu rebuilt.
+4e. ✅ **DEFINITIVE (2026-07-06, trace 2) — §6.4 root cause PINNED, and it IS §4.** The title's expected component
+   classes (`SelectionMenu`, `SelectionMenuAnimatorComponent`, `BackgroundAnimatorComponent`,
+   `StartMessageAnimatorComponent`) exist ONLY in TITLE_SCREEN02.bundle (the title defines its own). Uncapping the
+   registerClass probe (24→200) confirmed **200+ classes register**, incl. the title's own `TransitionComponent`/
+   `ControllerButtons`/`StaticHelpItem` (which bind). BUT the menu-container clip still logs **`<no-export-name>`** —
+   its char has NO entry in the title's export table, so `AssociateInstToClass` fails at the export-NAME step (before
+   the registry lookup). So §6.4 is NOT a missing class and NOT framework nesting; it is the **container's EXPORT/
+   LINKAGE resolution**. The container is one of the title's type-5 IMPORTED sprite containers (content in the 5
+   import bundles); its export-name link arrives via the **DEFERRED import-export resolution == §4 "Faithful
+   import-export resolution (Fixup pass-3) — AptMovie::resolve + AptLoader::Load, PS3-ext @0x80E9E4"** (the un-homed
+   import `.apt` load, AptDisplayList.cpp:~626). **⇒ §6.4 (menu drive) and §4 (import-export) are the SAME blocker.**
+   The class-linked clips that DO bind resolve via the title's OWN export table; the container resolves via an import
+   → deferred → no export name → no class → no component ancestor → BuildName overruns. **THE fix for §6.4 is to
+   complete §4's import-export resolution** so an imported container char resolves its export name (+ its
+   `SelectionMenuAnimatorComponent` class). Then: §6.5 `UpdateAll` (already wired) drives → §6.6 delete shim → §6.7
+   validate. This makes §4 the critical-path dependency for the whole menu-drive/shim-deletion chain.
+   **TRACE 3 (exact mechanism, 2026-07-06):** a diagnostic in `AssociateInstToClass` counting the char's ROOT-movie
+   (`pChar->mpFixupLink`) exports showed the `<no-export>` container clips resolve to a movie with **expCount=625,
+   menuish=0** — the container's `mpFixupLink` points to the **IMPORT bundle's root** (625 exports, none the
+   menu/Selection/Animator classes), NOT the title root where `SelectionMenuAnimatorComponent` is defined. So
+   `AssociateInstToClass` walks the WRONG export table. FIX SHAPE: for an imported clip, resolve the class via the
+   **PLACING (title) movie's export/import table** (title import-slot → title export entry → class name), not via
+   `pChar->mpFixupLink` (the import root). Title-defined clips (TransitionComponent/B5MenuItem) keep working because
+   THEIR `mpFixupLink` IS the title root. This is precisely the console import-export resolution (Fixup pass-3, §4).
+   **TRACE 4 (the CORE missing piece — IMPLEMENTED an export-walk fallback, then found the real blocker):** added a
+   fallback in `AssociateInstToClass` that, when the char's own root movie misses, walks pNode up to the display root
+   and tries the PLACING (title) movie's export table. It compiled + ran but the container STILL logged
+   `<no-export-name>`. Reason: the title's export table DOES hold the `SelectionMenuAnimatorComponent` entry
+   (charId→name), but `title_charTable[that charId]` is **NULL** — the imported char was never linked into it — so the
+   match `charTable[id] == pChar` fails against the title too. ⇒ **§4's CORE missing piece is the import LINK**: the
+   deferred `AptCharacterAnimation::Link` / `AptFile::FindExport` must land the referenced import export char into the
+   PARENT (title) movie's `charTable[importId]` (the "leaf imports 3→4 Link → the referenced export char lands in the
+   parent's charTable[importId]" chain from the §4 notes). ONCE that runs, the title's export walk (or the export-walk
+   fallback) matches and the container binds. Fallback reverted (unverified vs console asm + non-functional without the
+   Link); the concrete §4 task is now: home the import-bundle load (`AptLoader_StartAsyncLoad`/`LoadImportBundle`
+   exist in the bring-up) + the `AptCharacterAnimation::Link` charTable-population so `title_charTable[importId]` is
+   filled. Diagnostic reverted; KB_CLASS_BINDING=false; working menu rebuilt.
+4f. ⚠️ **CORRECTION (trace 6 — the import-Link conclusion was PREMATURE).** The existing `CgsApt_ImportProbe` shows the
+   FLOW (title) movie has **importCount=5**, and the 5 imports are `B5MenuItem::MenuArrow`,
+   `B5HelperComponents::TransitionComponent`, `B5MenuItem::B5MenuItem`, `B5ControllerButtons::Grunge_Buttons_Backing`,
+   `B5HelpItem::StaticHelpItem` — all 5 load + resolve (import-load complete) and their clips BIND. The
+   `SelectionMenu`/`SelectionMenuAnimatorComponent` container is **NOT among the 5 imports**, so it is NOT an imported
+   clip and §6.4 is NOT the import path. Its `mpFixupLink → a 625-export movie (menuish=0)` is therefore a **WRONG/garbage
+   back-link** — the known "deep-nested container's back-link may not reach a charTable-bearing root (garbage
+   mpCharacterTable/mnCharacterCount)" issue (`AptMovie::PlaceCommand` guards it with `bAnimSane`). **REAL §6.4 blocker =
+   the title's nested SelectionMenu/Animator container clips get the WRONG `mpFixupLink` (charTable[0] back-link) from
+   Fixup**, so `AssociateInstToClass` walks a bogus export table instead of the title's (which HAS the
+   `SelectionMenuAnimatorComponent` export). The import path (§4, the 5 imports) works. NEXT: instrument
+   `AssociateInstToClass` to compare the container's `pChar->mpFixupLink` vs the title root char, find why nested-container
+   back-links diverge, and fix Fixup's `mpFixupLink` population for nested title clips. §6.5-6.7 remain gated on this
+   (a nested-container Fixup back-link fix, precisely localized), NOT on import-export resolution.
 5. **Per-frame `UpdateAll`** drives the registered clips through the real communicator path
    (`AptAux::UpdateComponents` → `UpdateAllComponents` → `AptCallFunctionOpti("UpdateAll")`).
 6. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + `AptRuntimeSetComponentKeyValue`
