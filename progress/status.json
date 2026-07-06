@@ -10215,6 +10215,15 @@
   "BrnGui::CarSelectOnlinePlayerList::Show": {
    "status": "reviewed"
   },
+  "BrnGui::CarSelectOnlinePlayerListItem::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectOnlinePlayerListItem::OnLoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectOnlinePlayerListItem::SetPlayerCar": {
+   "status": "reviewed"
+  },
   "BrnGui::CarSelectOnlinePlayerListItem::Show": {
    "status": "reviewed"
   },
@@ -16446,7 +16455,16 @@
   "BrnNetwork::NetworkPlayerStatsManager::ValidateQueueAndPostGettingStatsEvents": {
    "status": "reviewed"
   },
+  "BrnNetwork::NetworkPlayerStatsResults::FindReplaceableRecordSet": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStatsResults::GetPlayerStats": {
+   "status": "reviewed"
+  },
   "BrnNetwork::NetworkPlayerStatsResults::InsertPlayerStats": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::NetworkPlayerStatsResults::Prepare": {
    "status": "reviewed"
   },
   "BrnNetwork::NetworkRoadRulesManager::AddPlayer": {
@@ -27096,6 +27114,9 @@
   "BrnTraffic::TrafficLightCollection::GetTrafficLightType": {
    "status": "reviewed"
   },
+  "BrnTraffic::TrafficLightCollection::RenderCoronasForInstance": {
+   "status": "reviewed"
+  },
   "BrnTraffic::TrafficLightManager::ChangeLightState": {
    "status": "reviewed"
   },
@@ -27109,6 +27130,9 @@
    "status": "reviewed"
   },
   "BrnTraffic::TrafficLightManager::SetCountdownValue": {
+   "status": "reviewed"
+  },
+  "BrnTraffic::TrafficLightManager::TrafficLightGotSmashed": {
    "status": "reviewed"
   },
   "BrnTraffic::TrafficLightManager::Update": {
@@ -28575,6 +28599,10 @@
   "BrnWorld::PropEntityIO::TrafficLightRestoreEvent>::Append": {
    "status": "reviewed"
   },
+  "BrnWorld::PropEntityInstance::CalculateEaseInSpeedModulation": {
+   "attempts": 1,
+   "status": "reviewed"
+  },
   "BrnWorld::PropEntityInstance::Construct": {
    "status": "reviewed"
   },
@@ -28594,6 +28622,10 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityInstance::SetState": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityInstance::UpdateConstraints": {
+   "attempts": 1,
    "status": "reviewed"
   },
   "BrnWorld::PropEntityModule::GenerateTargetList": {
@@ -35448,10 +35480,19 @@
   "CgsNetwork::HostKeepAliveMessage::Retrieve": {
    "status": "reviewed"
   },
+  "CgsNetwork::HostMigrationDebugComponent::ForceHostMigration": {
+   "status": "reviewed"
+  },
   "CgsNetwork::HostMigrationDebugComponent::GetName": {
    "status": "reviewed"
   },
   "CgsNetwork::HostMigrationDebugComponent::GetPath": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::HostMigrationDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::HostMigrationDebugComponent::UpdateLocalPlayerID": {
    "status": "reviewed"
   },
   "CgsNetwork::HostMigrationManager::ABecomesHostBeforeB": {
@@ -36816,6 +36857,18 @@
   "CgsNetwork::ServerInterfaceTelemetry::_FirstUsageBufferSendComplete": {
    "status": "reviewed"
   },
+  "CgsNetwork::ServerInterfaceUsersetParamsBase::Prepare": {
+   "attempts": 2,
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceUsersetParamsBase::SerialiseFromUserset": {
+   "attempts": 2,
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfaceUsersetParamsBase::SerialiseToString": {
+   "attempts": 2,
+   "status": "reviewed"
+  },
   "CgsNetwork::ServerInterfaceUsersetParamsBase::SetDescription": {
    "status": "reviewed"
   },
@@ -37081,6 +37134,15 @@
    "status": "reviewed"
   },
   "CgsNetwork::UniquePlayerIDX360::Construct": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::VersionDisplay::GetName": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::VersionDisplay::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::VersionDisplay::RenderHUD": {
    "status": "reviewed"
   },
   "CgsNetwork::VoIPClient::operator=": {
@@ -42249,6 +42311,15 @@
   "ELFHASH::BuildHash": {
    "status": "reviewed"
   },
+  "EffectsVertexBuffer::Lock": {
+   "status": "reviewed"
+  },
+  "EffectsVertexBufferLocked::BeginBatch": {
+   "status": "reviewed"
+  },
+  "EffectsVertexBufferLocked::EndBatch": {
+   "status": "reviewed"
+  },
   "EffectsVertexBufferManager::GetVertexBuffer": {
    "status": "reviewed"
   },
@@ -46638,6 +46709,14 @@
    "notes": "IPAddressIntToString verified: 4 byte extracts + 8 range asserts + SPrintf.",
    "status": "done"
   },
+  "GameShared/GameClasses/Network/CgsNetworkVersionDisplay.cpp": {
+   "notes": "wave52 resume: workflow decomp+verify PASS/high (all funcs); consolidated + gates clean (compile-only) against committed tree; external consumers of reconciled headers re-gated pass; no fabrication. b5-decomp ce361c25.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Network/Debug Components/CgsNetworkHostMigrationDebugComponent.cpp": {
+   "notes": "wave52 resume: workflow decomp+verify PASS/high (all funcs); consolidated + gates clean (compile-only) against committed tree; external consumers of reconciled headers re-gated pass; no fabrication. b5-decomp ce361c25.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Network/Debug Components/CgsNetworkHostMigrationDebugComponent.h": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
    "status": "done"
@@ -48423,6 +48502,10 @@
   "GameSource/Gui/Flow/Screen/Components/BrnCarSelectOnlinePlayerList.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnCarSelectOnlinePlayerListItem.cpp": {
+   "notes": "wave52 resume: workflow decomp+verify PASS/high (all funcs); consolidated + gates clean (compile-only) against committed tree; external consumers of reconciled headers re-gated pass; no fabrication. b5-decomp ce361c25.",
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnCarouselSliderBar.cpp": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -48878,6 +48961,10 @@
    "status": "done"
   },
   "GameSource/Network/Managers/BrnNetworkPlayerStatsManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Network/Managers/BrnNetworkPlayerStatsResults.cpp": {
+   "notes": "wave52 resume: workflow decomp+verify PASS/high (all funcs); consolidated + gates clean (compile-only) against committed tree; external consumers of reconciled headers re-gated pass; no fabrication. b5-decomp ce361c25.",
    "status": "done"
   },
   "GameSource/Network/Managers/BrnNetworkPostRoundManager.cpp": {
@@ -49484,6 +49571,10 @@
   },
   "GameSource/Unity/../Effects/EffectsStateMachine.cpp": {
    "notes": "verify pass 2/2: OnConstruct zeroes mTime@0x08 + Tick. gate x64 pass",
+   "status": "done"
+  },
+  "GameSource/Unity/../Effects/Particles/EffectsVertexBuffer.cpp": {
+   "notes": "wave52 resume: workflow decomp+verify PASS/high; consolidated + gates clean (compile-only); no fabrication. b5-decomp ce361c25.",
    "status": "done"
   },
   "GameSource/Unity/../Effects/Particles/LionParticleRender.cpp": {
@@ -50388,6 +50479,10 @@
    "notes": "complex debug TU; compile gate PASS + own postmortem vs ARTIST asm (signatures from prologues, member offsets 0x34-0x50, RenderWorld/RenderHUD flag-branch order, Draw switch case->VOLUMETYPE+colours, 30^2/20^2 dist culls, state>=E_SMASHED part branch all verified) + DWARF shape. RED parity is expected de-inlining (389 inlined asserts/StrStream/crit-sec calls -> clean CGS_ASSERT/StrStream). Subagent reviewer blocked by sandbox (nested --dangerously-skip-permissions). Documented scope: RenderCellGrid per-cell polygon walk summarised; RenderProps intact-path Mass/Lean text stat omitted (PropTypeData lean fields unrecovered); PropEntityModule + rwcollision Volume offsets inferred.",
    "status": "done"
   },
+  "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityInstance.cpp": {
+   "notes": "wave52 resume: workflow decomp+verify PASS/high; consolidated + gates clean (compile-only); no fabrication. b5-decomp ce361c25.",
+   "status": "done"
+  },
   "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp": {
    "notes": "FABRICATED reconstruction DISCARDED (verify caught it): agent invented 9 nonexistent 'replay state machine' methods (PrepareForReplay/RestoreFromReplay/LeaveReplay/etc, all 9 addrs = 0 hits in dossier). Real 22-func dossier (Construct@0x822FA068/PreSceneUpdate/PostSceneUpdate/GenerateDispatchLists/ProcessContacts/UpdateProps/LoadZone/...) UNTOUCHED. Header EReplayMode enum + members contradict authoritative DWARF. Re-home from real dossier.",
    "status": "blocked"
@@ -50952,6 +51047,10 @@
    "status": "done"
   },
   "SharedClasses/Traffic/BrnTrafficSection.h": {
+   "status": "done"
+  },
+  "SharedClasses/Traffic/Junctions/BrnTrafficLightCollection.h": {
+   "notes": "wave52 resume: workflow decomp+verify PASS/high; consolidated + gates clean (compile-only); no fabrication. b5-decomp ce361c25.",
    "status": "done"
   },
   "SharedClasses/World/BrnWorldRegion.h": {
