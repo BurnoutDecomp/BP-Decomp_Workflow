@@ -12549,6 +12549,9 @@
   "BrnGui::MapIconManager::UpdateWorldIcons": {
    "status": "reviewed"
   },
+  "BrnGui::MapManager::MapManager": {
+   "status": "reviewed"
+  },
   "BrnGui::MapTransform::DeviceToWorld": {
    "status": "reviewed"
   },
@@ -13888,6 +13891,24 @@
    "status": "reviewed"
   },
   "BrnGui::SatNavDebugComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavDebugComponent::GetName": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavDebugComponent::OnActivate": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavDebugComponent::RenderHUD": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavDebugComponent::SatNavPositionCallback": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavDebugComponent::SatNavStateCallback": {
+   "status": "reviewed"
+  },
+  "BrnGui::SatNavDebugComponent::TriggerSatNavPositionUpdate": {
    "status": "reviewed"
   },
   "BrnGui::SatNavDebugComponent::Update": {
@@ -28077,7 +28098,22 @@
   "BrnWorld::EnvironmentS": {
    "status": "reviewed"
   },
+  "BrnWorld::EnvironmentSettings::BuildTimeOfDay": {
+   "status": "reviewed"
+  },
   "BrnWorld::EnvironmentSettings::CloudsData::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::CloudsData::SetToBlend": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::ConsumeBlanks": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::ConsumeEOL": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::ConsumeFieldValue": {
    "status": "reviewed"
   },
   "BrnWorld::EnvironmentSettings::DictionaryResourceType::FixDown": {
@@ -28111,6 +28147,12 @@
    "status": "reviewed"
   },
   "BrnWorld::EnvironmentSettings::LightingData::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::ParseEnvironmentFile": {
+   "status": "reviewed"
+  },
+  "BrnWorld::EnvironmentSettings::ParseTimeOfDay": {
    "status": "reviewed"
   },
   "BrnWorld::EnvironmentSettings::ScatteringData::Construct": {
@@ -31069,6 +31111,24 @@
    "status": "reviewed"
   },
   "CgsDev::DebugComponentPerfMonGpu::GetPath": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugComponentPerfMonGpu::OnActivate": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugComponentPerfMonGpu::RenderGraphCallback": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugComponentPerfMonGpu::RenderHUD": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugComponentPerfMonGpu::RenderPerformanceGraph": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugComponentPerfMonGpu::RenderPerformanceTable": {
+   "status": "reviewed"
+  },
+  "CgsDev::DebugComponentPerfMonGpu::RenderTableCallback": {
    "status": "reviewed"
   },
   "CgsDev::DebugController::Construct": {
@@ -39135,6 +39195,24 @@
   "CgsSceneManager::CgsCollision::PrimitivePairList::Itterator::Prepare": {
    "status": "reviewed"
   },
+  "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AddCollisionHeader": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AddPrimitive": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AddPrimitivePair": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AllocateMemory": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::Construct": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::Prepare": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::CgsCollision::PrimitivePairListJobDesc::Prepare": {
    "status": "reviewed"
   },
@@ -46503,6 +46581,10 @@
    "notes": "trivial / original source match; gate-only",
    "status": "done"
   },
+  "GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonGpu.cpp": {
+   "notes": "wave56: workflow decomp+verify PASS/high; consolidated (2-agent, transient-drop recovery) + full-set gate clean (compile-only); no FAIL func homed; shared-header edits regression-gated. b5-decomp 42760245.",
+   "status": "done"
+  },
   "GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonGpu.h": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
    "status": "done"
@@ -47331,6 +47413,10 @@
    "status": "done"
   },
   "GameShared/GameClasses/SceneManager/Collision/Primitives/CgsPrimitivePairList.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/SceneManager/Collision/Primitives/CgsPrimitivePairListBuilder.cpp": {
+   "notes": "wave56: workflow decomp+verify PASS/high; consolidated (2-agent, transient-drop recovery) + full-set gate clean (compile-only); no FAIL func homed; shared-header edits regression-gated. b5-decomp 42760245.",
    "status": "done"
   },
   "GameShared/GameClasses/SceneManager/ContactGen/CgsIntervalStack.h": {
@@ -48425,6 +48511,10 @@
    "status": "done"
   },
   "GameSource/Gui/BrnGuiProfile.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/BrnGuiSatNavDebugComponent.cpp": {
+   "notes": "wave56: workflow decomp+verify PASS/high; consolidated (2-agent, transient-drop recovery) + full-set gate clean (compile-only); no FAIL func homed; shared-header edits regression-gated. b5-decomp 42760245.",
    "status": "done"
   },
   "GameSource/Gui/BrnGuiViewModule.cpp": {
@@ -49797,6 +49887,10 @@
   },
   "GameSource/Unity/../../SharedClasses/World/BrnCollisionTag.cpp": {
    "notes": "CollisionTag::GetTrafficInfo; parity/none; wave8; verifier parity; gate pass.",
+   "status": "done"
+  },
+  "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentData.cpp": {
+   "notes": "wave56: workflow decomp+verify PASS/high; consolidated (2-agent, transient-drop recovery) + full-set gate clean (compile-only); no FAIL func homed; shared-header edits regression-gated. b5-decomp 42760245.",
    "status": "done"
   },
   "GameSource/Unity/../../SharedClasses/World/BrnEnvironmentDictionaryResourceType.cpp": {
@@ -53178,6 +53272,10 @@
   },
   "class:BrnGui::MapIconManager": {
    "notes": "Verify PASS (none); gate clean.",
+   "status": "done"
+  },
+  "class:BrnGui::MapManager": {
+   "notes": "wave56: workflow decomp+verify PASS/high; consolidated (2-agent, transient-drop recovery) + full-set gate clean (compile-only); no FAIL func homed; shared-header edits regression-gated. b5-decomp 42760245.",
    "status": "done"
   },
   "class:BrnGui::MapTransform": {
