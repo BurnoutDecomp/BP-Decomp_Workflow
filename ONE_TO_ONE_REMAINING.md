@@ -148,12 +148,28 @@ Sub-items:
 
 Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
 `AptRuntimeSetComponentViewState` pair-map. Replace with the real chain and delete the shim:
-1. **Repair the DF2 argtab** in the bundles (§5) — the current live crash. *A bounded data fix.*
+1. ✅ **DONE (2026-07-06) — Repair the DF2 argtab** in the bundles. Was the live crash
+   (`AptScriptFunction2::SetArgument` AV when class binding ran an arg-bearing method). ROOT
+   CAUSE: JeBobs' emitter writes DF2 arg records as {reg u32@0, name-offset u32@4} stride 16;
+   the engine + XB1 arbiter (`sub_14084A920` case 142: relocate name at `argtable+16*i+8`) read
+   the name as a u64 pointer @+8. The ENGINE is XB1-faithful (parse case 0x8E: nStride=16
+   nNameOff=8); the BUNDLE is non-conformant. FIX = `tools/assets/bundles/apt8_fix_df2_argtab.py`
+   (in-place: name +4→u64@+8, zero +4; MAIN 16 args + TOGGLE 2 args). Verified with
+   `KB_CLASS_BINDING=true`: class binding runs 98× with **no SetArgument crash** (was the AV).
 2. **Re-apply the 3 genuine engine fixes** cleanly (no probes/guards): the `prototype` key, the
    clip-event mask table `gAptMemberIndexToEventBit` (extracted from X360 rodata), the
    `CallMethod` `GetHasClass` vtable-slot fix. *(saved on branch `l2-drive-clean` @ `def36a39`)*
-3. **Clip-class instantiation** (§4 pass-3 + `ExecuteInitActions`) → `onLoad` fires →
-   `SendAptEvent(ONLOAD)` → `AddNewAptComponent` (component registration).
+3. **Clip-class instantiation** — PARTLY LANDED (2026-07-06). Was blocked by `<no-registry>` (empty
+   registry): the real cause was **registerClass never firing** because MAIN's tag-1 AS-bootstrap
+   stream (`new AptCommunicator` + registerClass table, @chunk+0x32e8) was straddled to `0x800000000`
+   by the emitter (same misaligned-tag-1 bug) and `queueFrameActions` dropped it. FIX = swap
+   `GUIAPT_MaybeBroken/MAIN.bundle` (intact @0x32e8) + re-apply `apt8_fix_df2_argtab`. NOW
+   (binding on): registerClass fires 24×, **9 title classes bind** (TransitionComponent, B5MenuItem×2,
+   StaticHelpItem, ControllerButtons), **ctors run**, SetArgument invoked. **← CURRENT FRONTIER:**
+   SetArgument arg-name relocation truncation — a 2-arg fn gets arg[0] name full ptr but arg[1] name
+   high-dword-zeroed (32-bit relocation). DF2 repair verified correct offline; the truncation is an
+   engine resolve64/SetArgument bug on the 2nd+ arg (argtab is 4-mod-8, not 8-aligned). Needs cdb.
+   THEN `onLoad` → `SendAptEvent(ONLOAD)` → `AddNewAptComponent`.
 4. **Per-frame `UpdateAll`** drives the clips through the real communicator path.
 5. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + the viewstate pair-map.
 6. **Validate** — menu text / states / navigation byte-identical to the Xbox i64.
@@ -168,8 +184,9 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
 
 ## Priority order (dependency-first)
 
-1. §5 DF2 argtab repair → §6.1–6.2 (unblock the drive frontier).
-2. §4 faithful Fixup / import-export → §6.3–6.4 (clips instantiate + drive).
+1. ✅ §5 DF2 argtab repair DONE (§6.1) → next is §6.2 (re-apply the 3 engine fixes) + §6.3.
+2. §4 faithful Fixup / import-export → §6.3–6.4 (clips instantiate + drive). **Current frontier:
+   export-name → class-registry binding at placement (clips resolve `<no-registry>`).**
 3. §6.5–6.6 delete shim + validate vs Xbox i64 ← **the menu drives faithfully.**
 4. §2 render path (the ~89-smell cluster + Im2d retirement) — the biggest single body of work.
 5. §1 orchestration (retire the facade), §3 VM leaves, §7 init/GC, and the 42 `_embed_check`
