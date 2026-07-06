@@ -174,7 +174,15 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    `EAStringC::IncreaseInternalRefCount` with rax=0xbaadf00d (DOGMA-freed) via
    `AptValue::Append_ToString`, in a ctor's `msName = <str> + <str>`. A GC/string-lifetime
    use-after-free (operand-stack Release vs the gValuesToRelease drain). Needs cdb page-heap.
-   THEN `onLoad` → `SendAptEvent(ONLOAD)` → `AddNewAptComponent`.
+   Then a SetArgument arg-name truncation (4th emitter bug: `apt8_align_df2_argtab.py` 8-aligns the
+   arg table) — after which **ctors execute their bodies**. Current blocker is now an ENGINE bug (the
+   first non-data one): a component ctor's `<str> + <str>` (`_FunctionAptActionAdd2`) AVs on an operand
+   AptString whose `EAStringC::m_pData` high dword is CRT-uninitialized (`0xBAADF00D`) — a post-creation
+   32-bit write of the buffer pointer (nondeterministic). Partly addressed by the **DOGMA 8-byte
+   alignment fix** (b5-decomp `82bd5cd0`: pool rounded allocations to 4 bytes → misaligned vtbl'd
+   AptValues; also cut title memory ~3400→1140MB) but not fully resolved — the residual 32-bit m_pData
+   write needs a targeted write-catcher (DOGMA-free backtrace or a cdb hardware watchpoint). THEN
+   `onLoad` → `SendAptEvent(ONLOAD)` → `AddNewAptComponent`.
 4. **Per-frame `UpdateAll`** drives the clips through the real communicator path.
 5. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + the viewstate pair-map.
 6. **Validate** — menu text / states / navigation byte-identical to the Xbox i64.
