@@ -177,19 +177,31 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    RESULT (binding on): registerClass fires 24×, 9 title classes bind, **all 9 ctors run their
    bodies without crashing**, and **onLoad is dispatched + runs** (9× FUNCTION-drain of one shared
    handler; `AptCIH_queueClipEvents_RunMatched` deferred `__proto__` path resolves it via findChild).
-4. **onLoad → component registration — ← CURRENT FRONTIER (§6.4).** With binding on the title still
-   renders BLACK: the ctors init their clips hidden (`setVar '_visible'`) expecting the per-frame
-   `gAptCommunicator.UpdateAll` drive to show + state them, but **no component registers** so
-   `UpdateAllComponents` is empty → clips stay hidden. DIAGNOSIS (2026-07-06, this session): onLoad
-   RUNS but each run reads `_name → _parent → _parent → msName → KI_EVENT_ONLOAD` then STOPS —
-   `SendAptEvent` is dispatched by **no opcode** (0 GetMember on it, 0 CallMethod the whole boot).
-   Key finding: the VM compiles `obj.method(args)` to the **fused GetMember opcodes** `0xA5`
-   (`PushStringGetMember`) / `0xAF` (`StringDictByteGetMember`) + `CallFunction`, **NOT** `0x52`
-   CallMethod — which is why the earlier CallMethod/SetCommunicationObject theories were both wrong.
-   Also disproven: `mpAptInternalCommunicator` (bound by `SetCommunicationObject`) is **write-only**
-   in the reconstruction and does NOT gate `SendAptEvent`. NEXT: opcode-trace the onLoad handler to
-   see the exact op after `KI_EVENT_ONLOAD` (early `Return` / branch / unhandled op) → fix the break
-   so `onLoad → gAptCommunicator.SendAptEvent(ONLOAD,…) → AddNewAptComponent` fires.
+4a. ✅ **DONE (2026-07-06, b5-decomp `cf4586e9`) — extension natives now dispatch.** The reason
+   `onLoad`'s `SendAptEvent` was a silent no-op: **`AptExtObject` (the CAptCommunicator extension base,
+   tag 29) never overrode `GetNativeHashVirtual()`** so it inherited `AptValue`'s `return 0`.
+   `_FunctionAptActionCallMethod`'s Extension-receiver path resolves natives via
+   `receiver->GetNativeHashVirtual()->Lookup(name)` — a null hash made EVERY extension native
+   (SendAptEvent / SetCommunicationObject / GetCircleButtonAsSelect / SendAptSoundEvent) resolve to null
+   → no-op. Console vtbl[2] returns `mpNativeHash` (+8); the override was dropped in the x64 recon. FIX =
+   add `GetNativeHashVirtual`/`ContainsNativeHashVirtual` overrides. Also fixed `sMethod_SendAptEvent`'s
+   two int-param guards (raw `& 0x7F` → `getVtblIndex()`; meValueType is bits 25-31 on x64, not the low
+   7). Corrected mental model: (i) `SetCommunicationObject` was a RED HERRING — `mpAptInternalCommunicator`
+   is write-only; (ii) "0 CallMethod" was a probe misread (it only logs violations); CallMethod fires;
+   (iii) `obj.method()` compiles to fused GetMember `0xA5`/`0xAF` + fused call `0x5D/0x5E/0xB2/0xB3` (all
+   route through CallMethod); (iv) onLoad DOES run (9× FUNCTION-drain of the shared `BurnoutComponent.onLoad`
+   via the deferred `__proto__` path). BOOT-VERIFIED: SetCommunicationObject binds, SendAptEvent dispatches.
+4b. **AS passes BAD ARGS to the natives — ← CURRENT FRONTIER (§6.4).** `SendAptEvent(ONLOAD,…)`: p0=eventId
+   (int ✓), p1=uid (int ✓), but **p2=component-name is UNDEFINED and p3=receiver renders as `'_global'`**
+   (should be the clip). onLoad reads `this.msName` on the clip CIH (type 12) and gets undefined — the
+   ctor's `this.msName = …` (setVariable) is not visible to onLoad's `getVariable` read. This is a
+   **class-instance `this`/member-context defect**: where do ctor-set members of a class-bound clip live
+   (CIH value hash vs the char-inst `mpProperties` the `__proto__` landed on, per `AssociateInstToClass`),
+   and does the read path consult the same store? NEXT: instrument the ctor's msName store target vs
+   onLoad's read target for the same CIH → fix so a valid name+clip reach `AddNewAptComponent`. Interim:
+   `SendAptEvent`/`SendAptSoundEvent` carry FLAG'd graceful guards (no-op on bad args instead of the
+   halting assert) so the shim menu stays working (title + press-start render, 0 asserts) — restore the
+   `CGS_ASSERT`s once the arg context is faithful.
 5. **Per-frame `UpdateAll`** drives the registered clips through the real communicator path
    (`AptAux::UpdateComponents` → `UpdateAllComponents` → `AptCallFunctionOpti("UpdateAll")`).
 6. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + `AptRuntimeSetComponentKeyValue`
