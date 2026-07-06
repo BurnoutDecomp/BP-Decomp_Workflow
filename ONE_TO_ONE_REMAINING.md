@@ -181,8 +181,20 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    32-bit write of the buffer pointer (nondeterministic). Partly addressed by the **DOGMA 8-byte
    alignment fix** (b5-decomp `82bd5cd0`: pool rounded allocations to 4 bytes → misaligned vtbl'd
    AptValues; also cut title memory ~3400→1140MB) but not fully resolved — the residual 32-bit m_pData
-   write needs a targeted write-catcher (DOGMA-free backtrace or a cdb hardware watchpoint). THEN
-   `onLoad` → `SendAptEvent(ONLOAD)` → `AddNewAptComponent`.
+   write needs a targeted write-catcher (DOGMA-free backtrace or a cdb hardware watchpoint).
+   **✅ FIXED (b5-decomp `1c9c7ba1`):** it was `AptValue::Append_ToString` reading the embedded
+   `EAStringC` at the console offset `+8` — on x64 the AptValue base is 16 B (8-byte vtbl +
+   mnValueData + pad) so the string is at `+0x10`; the `+8` read `{mnValueData, pad}` as the buffer
+   pointer (`0xBAADF00D...`). Now uses the named `c_string()->GetInternalString()`. **All 9 title
+   class ctors now run their bodies without crashing** — §6.3 clip-class instantiation works.
+4. **Per-frame `UpdateAll`** — **← CURRENT FRONTIER.** With binding on the title renders BLACK:
+   the ctors init their clips hidden (`setVar '_visible'`) expecting `gAptCommunicator.UpdateAll` to
+   show + state them, but onLoad→`AddNewAptComponent` registration and the `UpdateAll` per-frame
+   drive are not wired, so clips stay hidden. Isolated: tick-on/ctor-off renders fine; the ctor
+   `callFunction` is what blanks it. Wire: clip `onLoad`→`SendAptEvent(ONLOAD)`→`AddNewAptComponent`
+   (mind the tick-vs-FindAndSetEvents order in `AptCIH_AssociateInstToClass`), then per-frame
+   `AptAux::UpdateComponents`→`UpdateAllComponents`→`AptCallFunctionOpti("UpdateAll")`.
+   Then `onLoad` → `SendAptEvent(ONLOAD)` → `AddNewAptComponent`.
 4. **Per-frame `UpdateAll`** drives the clips through the real communicator path.
 5. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + the viewstate pair-map.
 6. **Validate** — menu text / states / navigation byte-identical to the Xbox i64.
