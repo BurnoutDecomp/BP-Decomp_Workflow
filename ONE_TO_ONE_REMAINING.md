@@ -159,45 +159,42 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
 2. **Re-apply the 3 genuine engine fixes** cleanly (no probes/guards): the `prototype` key, the
    clip-event mask table `gAptMemberIndexToEventBit` (extracted from X360 rodata), the
    `CallMethod` `GetHasClass` vtable-slot fix. *(saved on branch `l2-drive-clean` @ `def36a39`)*
-3. **Clip-class instantiation** — PARTLY LANDED (2026-07-06). Was blocked by `<no-registry>` (empty
-   registry): the real cause was **registerClass never firing** because MAIN's tag-1 AS-bootstrap
-   stream (`new AptCommunicator` + registerClass table, @chunk+0x32e8) was straddled to `0x800000000`
-   by the emitter (same misaligned-tag-1 bug) and `queueFrameActions` dropped it. FIX = swap
-   `GUIAPT_MaybeBroken/MAIN.bundle` (intact @0x32e8) + re-apply `apt8_fix_df2_argtab`. NOW
-   (binding on): registerClass fires 24×, **9 title classes bind** (TransitionComponent, B5MenuItem×2,
-   StaticHelpItem, ControllerButtons), **ctors run**. The arg[1] SetArgument truncation (arg[1] name
-   high-dword-zeroed) was a THIRD emitter bug — JeBobs' arg TABLE is at a 4-mod-8 offset, so arg[1]'s
-   name-u64 straddles the table's tail word and a later aligned write zeroes its high dword (resolve64
-   writes it full — verified by probe). FIX = `apt8_align_df2_argtab.py` (8-align the argtab). Now
-   **ctors execute their bodies** (B5TextField member init). **← CURRENT FRONTIER (an ENGINE bug, not
-   emitter data):** the AS `+` opcode (`_FunctionAptActionAdd2`) crashes on a DANGLING string —
-   `EAStringC::IncreaseInternalRefCount` with rax=0xbaadf00d (DOGMA-freed) via
-   `AptValue::Append_ToString`, in a ctor's `msName = <str> + <str>`. A GC/string-lifetime
-   use-after-free (operand-stack Release vs the gValuesToRelease drain). Needs cdb page-heap.
-   Then a SetArgument arg-name truncation (4th emitter bug: `apt8_align_df2_argtab.py` 8-aligns the
-   arg table) — after which **ctors execute their bodies**. Current blocker is now an ENGINE bug (the
-   first non-data one): a component ctor's `<str> + <str>` (`_FunctionAptActionAdd2`) AVs on an operand
-   AptString whose `EAStringC::m_pData` high dword is CRT-uninitialized (`0xBAADF00D`) — a post-creation
-   32-bit write of the buffer pointer (nondeterministic). Partly addressed by the **DOGMA 8-byte
-   alignment fix** (b5-decomp `82bd5cd0`: pool rounded allocations to 4 bytes → misaligned vtbl'd
-   AptValues; also cut title memory ~3400→1140MB) but not fully resolved — the residual 32-bit m_pData
-   write needs a targeted write-catcher (DOGMA-free backtrace or a cdb hardware watchpoint).
-   **✅ FIXED (b5-decomp `1c9c7ba1`):** it was `AptValue::Append_ToString` reading the embedded
-   `EAStringC` at the console offset `+8` — on x64 the AptValue base is 16 B (8-byte vtbl +
-   mnValueData + pad) so the string is at `+0x10`; the `+8` read `{mnValueData, pad}` as the buffer
-   pointer (`0xBAADF00D...`). Now uses the named `c_string()->GetInternalString()`. **All 9 title
-   class ctors now run their bodies without crashing** — §6.3 clip-class instantiation works.
-4. **Per-frame `UpdateAll`** — **← CURRENT FRONTIER.** With binding on the title renders BLACK:
-   the ctors init their clips hidden (`setVar '_visible'`) expecting `gAptCommunicator.UpdateAll` to
-   show + state them, but onLoad→`AddNewAptComponent` registration and the `UpdateAll` per-frame
-   drive are not wired, so clips stay hidden. Isolated: tick-on/ctor-off renders fine; the ctor
-   `callFunction` is what blanks it. Wire: clip `onLoad`→`SendAptEvent(ONLOAD)`→`AddNewAptComponent`
-   (mind the tick-vs-FindAndSetEvents order in `AptCIH_AssociateInstToClass`), then per-frame
-   `AptAux::UpdateComponents`→`UpdateAllComponents`→`AptCallFunctionOpti("UpdateAll")`.
-   Then `onLoad` → `SendAptEvent(ONLOAD)` → `AddNewAptComponent`.
-4. **Per-frame `UpdateAll`** drives the clips through the real communicator path.
-5. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + the viewstate pair-map.
-6. **Validate** — menu text / states / navigation byte-identical to the Xbox i64.
+3. ✅ **DONE (2026-07-06) — Clip-class instantiation + ctors + onLoad dispatch.** Was blocked by
+   `<no-registry>`: the real cause was **registerClass never firing** because MAIN's tag-1
+   AS-bootstrap stream (`new AptCommunicator` + registerClass table, @chunk+0x32e8) was straddled
+   to `0x800000000` by the emitter and `queueFrameActions` dropped it. Data FIX = swap
+   `GUIAPT_MaybeBroken/MAIN.bundle` (intact @0x32e8) + `apt8_fix_df2_argtab.py` +
+   `apt8_align_df2_argtab.py` (8-align the argtab; fixes the arg[1] name high-dword truncation).
+   Three ENGINE fixes made the ctor bodies run to completion (all committed on `l2-drive-clean`):
+   - **DOGMA 8-byte allocation granularity** (`82bd5cd0`): the pool rounded requests to 4 bytes →
+     every 4-mod-8 request misaligned subsequent vtbl'd AptValues on x64. Also cut title memory
+     ~3400 → ~900 MB.
+   - **`AptValue::Append_ToString` x64 offset** (`1c9c7ba1`): read the embedded `EAStringC` at the
+     console `+8`; on x64 the AptValue base is 16 B so the string is at `+0x10` — the `+8` read
+     `{mnValueData, pad}` as the buffer ptr (`0xBAADF00D…`) → the AS `+` use-after-free crash.
+   - **onLoad tick-order** (`dbcd9964`): `AptCIH_AssociateInstToClass` ticked the node BEFORE
+     `FindAndSetEvents` set the onLoad mask, so the fresh-bit clear raced `HasEvent(onLoad)`.
+   RESULT (binding on): registerClass fires 24×, 9 title classes bind, **all 9 ctors run their
+   bodies without crashing**, and **onLoad is dispatched + runs** (9× FUNCTION-drain of one shared
+   handler; `AptCIH_queueClipEvents_RunMatched` deferred `__proto__` path resolves it via findChild).
+4. **onLoad → component registration — ← CURRENT FRONTIER (§6.4).** With binding on the title still
+   renders BLACK: the ctors init their clips hidden (`setVar '_visible'`) expecting the per-frame
+   `gAptCommunicator.UpdateAll` drive to show + state them, but **no component registers** so
+   `UpdateAllComponents` is empty → clips stay hidden. DIAGNOSIS (2026-07-06, this session): onLoad
+   RUNS but each run reads `_name → _parent → _parent → msName → KI_EVENT_ONLOAD` then STOPS —
+   `SendAptEvent` is dispatched by **no opcode** (0 GetMember on it, 0 CallMethod the whole boot).
+   Key finding: the VM compiles `obj.method(args)` to the **fused GetMember opcodes** `0xA5`
+   (`PushStringGetMember`) / `0xAF` (`StringDictByteGetMember`) + `CallFunction`, **NOT** `0x52`
+   CallMethod — which is why the earlier CallMethod/SetCommunicationObject theories were both wrong.
+   Also disproven: `mpAptInternalCommunicator` (bound by `SetCommunicationObject`) is **write-only**
+   in the reconstruction and does NOT gate `SendAptEvent`. NEXT: opcode-trace the onLoad handler to
+   see the exact op after `KI_EVENT_ONLOAD` (early `Return` / branch / unhandled op) → fix the break
+   so `onLoad → gAptCommunicator.SendAptEvent(ONLOAD,…) → AddNewAptComponent` fires.
+5. **Per-frame `UpdateAll`** drives the registered clips through the real communicator path
+   (`AptAux::UpdateComponents` → `UpdateAllComponents` → `AptCallFunctionOpti("UpdateAll")`).
+6. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + `AptRuntimeSetComponentKeyValue`
+   / the `AptRuntimeSetComponentViewState` pair-map (single driver).
+7. **Validate** — menu text / states / navigation byte-identical to the Xbox i64.
 
 ## 7. Init / globals / GC leftovers
 
@@ -209,10 +206,11 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
 
 ## Priority order (dependency-first)
 
-1. ✅ §5 DF2 argtab repair DONE (§6.1) → next is §6.2 (re-apply the 3 engine fixes) + §6.3.
-2. §4 faithful Fixup / import-export → §6.3–6.4 (clips instantiate + drive). **Current frontier:
-   export-name → class-registry binding at placement (clips resolve `<no-registry>`).**
-3. §6.5–6.6 delete shim + validate vs Xbox i64 ← **the menu drives faithfully.**
+1. ✅ §6.1 DF2 argtab repair + §6.2 engine fixes + §6.3 clip-class instantiation/ctors/onLoad DONE.
+2. **← CURRENT FRONTIER: §6.4** — onLoad runs but stops before `SendAptEvent`, so no component
+   registers. Opcode-trace the onLoad handler past `KI_EVENT_ONLOAD` → fix → registration lands.
+3. §6.5 per-frame `UpdateAll` drive → §6.6 delete shim + §6.7 validate vs Xbox i64 ←
+   **the menu drives faithfully** (deletes `AptRuntimeSetComponentKeyValue`/ViewState).
 4. §2 render path (the ~89-smell cluster + Im2d retirement) — the biggest single body of work.
 5. §1 orchestration (retire the facade), §3 VM leaves, §7 init/GC, and the 42 `_embed_check`
    harness shims.
