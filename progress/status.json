@@ -12,6 +12,9 @@
   "*,13>::Remove": {
    "status": "reviewed"
   },
+  "*,64>::Append": {
+   "status": "reviewed"
+  },
   "*,6>::Add": {
    "status": "reviewed"
   },
@@ -25,6 +28,12 @@
    "status": "reviewed"
   },
   "*,8>::GetI": {
+   "status": "reviewed"
+  },
+  "*,96>::Pop": {
+   "status": "reviewed"
+  },
+  "*,96>::Push": {
    "status": "reviewed"
   },
   "*>::": {
@@ -5029,6 +5038,18 @@
    "status": "reviewed"
   },
   "BrnDirector::MomentStationaryCrash::Update": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentTakedownLookback::Construct": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentTakedownLookback::GetName": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentTakedownLookback::Release": {
+   "status": "reviewed"
+  },
+  "BrnDirector::MomentTakedownLookback::Update": {
    "status": "reviewed"
   },
   "BrnDirector::MomentTumbling::Construct": {
@@ -12922,6 +12943,18 @@
    "status": "reviewed"
   },
   "BrnGui::OnlineLoading::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineLoadingPlayer::AppendExpectedAptComponent": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineLoadingPlayer::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineLoadingPlayer::HandleLoadNotification": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlineLoadingPlayer::Hide": {
    "status": "reviewed"
   },
   "BrnGui::OnlineMarkMan::ClearExpectedComponent": {
@@ -30309,6 +30342,12 @@
   "CDXVAWMV::CDXVAWMV": {
    "status": "reviewed"
   },
+  "CEMBMVQ::CEMBMVQ": {
+   "status": "reviewed"
+  },
+  "CEMBMVQ::getNewInterVBuffer": {
+   "status": "reviewed"
+  },
   "CGSSTRNLOWER": {
    "status": "reviewed"
   },
@@ -33942,16 +33981,28 @@
   "CgsInput::InputModule::Construct": {
    "status": "reviewed"
   },
+  "CgsInput::InputModule::Destruct": {
+   "status": "reviewed"
+  },
   "CgsInput::InputModule::InputModule": {
    "status": "reviewed"
   },
   "CgsInput::InputModule::PostWorldUpdate": {
    "status": "reviewed"
   },
+  "CgsInput::InputModule::Prepare": {
+   "status": "reviewed"
+  },
   "CgsInput::InputModule::ProcessBindRequestQueue": {
    "status": "reviewed"
   },
+  "CgsInput::InputModule::ProcessMappingQueue": {
+   "status": "reviewed"
+  },
   "CgsInput::InputModule::ProcessUnbindRequestQueue": {
+   "status": "reviewed"
+  },
+  "CgsInput::InputModule::Release": {
    "status": "reviewed"
   },
   "CgsInput::InputPads::BindPlayerToPort": {
@@ -47507,6 +47558,10 @@
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
    "status": "done"
   },
+  "GameShared/GameClasses/System/Input/CgsInputModule.cpp": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Input/CgsInputPads.cpp": {
    "notes": "Verify PASS (none); 11 funcs walked store-by-store (jolt/rumble ADSR tables, wheel-FF dispatch, motor clamps), full byte-pinned layout via _AssertLayout offsetof, constants asm-grounded (-1 ints not NAN). gbForceRumbleOnDisconnectedPad flagged BSS-home.",
    "status": "done"
@@ -48004,6 +48059,10 @@
   },
   "GameSource/Director/MomentController/Moments/BrnMomentStationaryCrash.cpp": {
    "notes": "Combined batch-13 review: PASS with no findings. Rotation integrator dots, the tumbling/stationary group polarity (asm default +1448, override +1464 when the latch is down), the two-source rm asymmetry (mgr+91068 groups vs shared+1340 guid resolver), the fits check (0.1/2pi/pi-over-2/100.0 rodata all confirmed), and the +0xE28 committed SetUseCollisionPolicy identity all verified.",
+   "status": "done"
+  },
+  "GameSource/Director/MomentController/Moments/BrnMomentTakedownLookback.cpp": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
   "GameSource/Director/MomentController/Moments/BrnMomentTumbling.cpp": {
@@ -48607,6 +48666,10 @@
   },
   "GameSource/Gui/Flow/Screen/Components/BrnManufacturerIcon.cpp": {
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/Components/BrnOnlineLoadingPlayer.cpp": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/Components/BrnOnlinePreEventMessages.cpp": {
@@ -51134,6 +51197,10 @@
    "notes": "Wave 30: verified faithful vs X360 asm, gate clean, pushed 4a5867d",
    "status": "done"
   },
+  "class:*,64>": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
   "class:*,6>": {
    "notes": "BucketListNode<Job*,6> (Job-dependents) Add/ListSize/operator[] verified; eajobs home grown additively.",
    "status": "done"
@@ -51144,6 +51211,10 @@
   },
   "class:*,8>": {
    "notes": "trivial explicit-instantiation file; compile gate PASS. Parity RED is a known false positive: method bodies live in CgsArray.h, not in this .cpp. Same pattern as every other CgsArray<T,N>.cpp in the project.",
+   "status": "done"
+  },
+  "class:*,96>": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
   "class:*>": {
@@ -55785,6 +55856,10 @@
   },
   "class:CDXVAWMV": {
    "notes": "trivial; gate-only (sets state=1)",
+   "status": "done"
+  },
+  "class:CEMBMVQ": {
+   "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
   "class:CRct": {
