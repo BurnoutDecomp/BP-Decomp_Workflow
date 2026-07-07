@@ -5889,6 +5889,12 @@
   "BrnEffects::WheelStateMachine::FireNativeParticle": {
    "status": "reviewed"
   },
+  "BrnEffects::WheelStateMachine::HandleSmokeLayer": {
+   "status": "reviewed"
+  },
+  "BrnEffects::WheelStateMachine::Update": {
+   "status": "reviewed"
+  },
   "BrnEffectsFrame::Construct": {
    "status": "reviewed"
   },
@@ -6231,7 +6237,16 @@
   "BrnGame::BrnGameModule::BridgeGuiToGame": {
    "status": "reviewed"
   },
+  "BrnGame::BrnGameModule::BridgeGuiToGameState": {
+   "status": "reviewed"
+  },
+  "BrnGame::BrnGameModule::BridgeGuiToReplay_PostSim": {
+   "status": "reviewed"
+  },
   "BrnGame::BrnGameModule::BridgeGuiToResource": {
+   "status": "reviewed"
+  },
+  "BrnGame::BrnGameModule::BridgeGuiToSound": {
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeGuiToWorld": {
@@ -6241,6 +6256,9 @@
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeNetworkToGameState": {
+   "status": "reviewed"
+  },
+  "BrnGame::BrnGameModule::BridgeNetworkToGui": {
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::BridgeNetworkToWorld": {
@@ -6408,10 +6426,22 @@
   "BrnGame::BrnGameModule::TranslateGameActionsToGuiEvents": {
    "status": "reviewed"
   },
+  "BrnGame::BrnGameModule::TranslateGuiEventsToNetworkEvents": {
+   "status": "reviewed"
+  },
   "BrnGame::BrnGameModule::TranslateGuiInterfaceToGuiEvents": {
    "status": "reviewed"
   },
+  "BrnGame::BrnGameModule::TranslateNetworkEventsToGameEvents": {
+   "status": "reviewed"
+  },
+  "BrnGame::BrnGameModule::TranslateNetworkEventsToGuiEvents": {
+   "status": "reviewed"
+  },
   "BrnGame::BrnGameModule::TranslateNetworkEventsToWorld": {
+   "status": "reviewed"
+  },
+  "BrnGame::BrnGameModule::TranslateNetworkInterfaceToGuiEvents": {
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::TranslateShowtimeActionToGuiEvent": {
@@ -15603,6 +15633,15 @@
   "BrnNetwork::BrnServerInterfaceDownloadableConfig::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "BrnNetwork::BrnServerInterfaceTelemetry::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnServerInterfaceTelemetry::Release": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::BrnServerInterfaceTelemetry::Update": {
+   "status": "reviewed"
+  },
   "BrnNetwork::BuddyManagerBase::BuddyListHasChanged": {
    "status": "reviewed"
   },
@@ -15898,6 +15937,18 @@
    "status": "reviewed"
   },
   "BrnNetwork::CollectableMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CollectableMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CollectableMessage::PackOrUnpack": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CollectableMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::CollectableMessage::Retrieve": {
    "status": "reviewed"
   },
   "BrnNetwork::ConnectionManager::Construct": {
@@ -17455,16 +17506,16 @@
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesMessage::GetPackedMessageSize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::RoadRulesMessage::PackOrUnpack": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::RoadRulesMessage::PrepareForSend": {
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesMessage::Retrieve": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnNetwork::RoadRulesMessageData,40>::Construct": {
    "status": "reviewed"
@@ -50812,6 +50863,9 @@
   "GameSource/Unity/../Effects/Particles/ParticleModule.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../Effects/Wheel/WheelStateMachine.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../Game/../Network//BrnNetworkModuleIO.h": {
    "status": "done"
   },
@@ -50842,6 +50896,12 @@
   "GameSource/Unity/../Game/GameBridgeControllerToX.cpp": {
    "notes": "BridgeControllerToWorld @0x823CD890 steering curve = copysign(pow(fabs(stickLX), exp), stickLX) where exp @0x82035228 is UNDECODED .rdata (EARenderWare pow via vlogefp/vexptefp + coeff tables unk_82014AC0..AF0); the exponent value cannot be recovered without fabrication. Other 4 funcs upstream-committed + correct. Blocked on the undecoded steering exponent.",
    "status": "blocked"
+  },
+  "GameSource/Unity/../Game/GameBridgeGUIToX.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../Game/GameBridgeNetworkToX.cpp": {
+   "status": "done"
   },
   "GameSource/Unity/../Game/GameBridgeReplayToX.cpp": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
