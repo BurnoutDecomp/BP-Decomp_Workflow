@@ -422,6 +422,18 @@ dispatch); the gap is COMPOSITION, and every step below needs the build+boot+rea
    the 7 framework children compose → the menu items nest under a framework component → BuildName resolves →
    registration → item 5 drives → item 6 delete shim → item 7 validate.** §6.4 is now a frame-table data
    repair, fully localized — no AS reconstruction needed.
+   **REFINED (2026-07-07): it is NOT a bundle-swap fix — it's the frame-table RELOCATION producing 90 vs 13.**
+   ALL FIVE MAIN.bundle revisions show the IDENTICAL raw frame-0 (`cnt=90 t5 t1(BAD) + 88× t8`): active,
+   MaybeBroken, AND the three pristine JeBobs sets (`Downloads/burnout-paradise-{907389d186ed,7fda84314f0e,
+   f794573e2e48}/GUIAPT/MAIN.bundle`). So no clean bundle exists to swap in — 90 is the raw count in every rev.
+   Yet the runtime log says `STEP5 frame-table: relocated=YES frame0.cmdCount=90 (want 13)` and BringUp.cpp:2132
+   records it was VERIFIED at 13 (→ childNodes=7). ⇒ the RELOCATION/processing that used to reduce the raw frame-0
+   to the 13 real commands (filtering the t8 padding + fixing the straddled t1) now emits 90 → the ~11 PlaceObjects
+   never run. **So the fix is in the frame-table relocation code/data pipeline, not a bundle swap:** compare the
+   relocated frame-table `apt8_fix_frametables.py` appends (the STEP5 `mpFrames`) against the working-era output —
+   the relocation is emitting the raw 90-entry array (with the t8 padding + BAD t1) instead of the repaired
+   13-command array. Find why the frame-0 command-array repair regressed (the fixer's append/patch, or the runtime
+   STEP5 read), restore cmdCount=13/childNodes=7, re-boot, confirm `[AptRT] REGISTERED`.
 2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
    (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
    menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
