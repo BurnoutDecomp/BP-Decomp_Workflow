@@ -326,6 +326,49 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    BurnoutComponent ancestor — i.e. which display node SHOULD be the menu items' component ancestor, and does it bind?
    (Trace the bound clips' display-parent chain + each parent's bound class.) §6.5-6.7 gate on giving the components an
    ancestor so BuildName resolves → registration.
+4i. ✅ **OFFLINE PROOF (2026-07-07) — the ancestor does NOT exist in the title's static tree; the framework must build it.**
+   Reconstructed TITLE_SCREEN02's full display hierarchy directly from the PlaceObject (tag-3) records
+   (`scratchpad/dump_hierarchy.py`, reuses the apt8_fix_frametables parser: root+0x40 charTable, root+0x68 export table,
+   place body flags@0/depth@4/charId@8/name@0x30). The menu tree is:
+   `root → SelectionMenu_mc(char40, NO class) → {MenuItem_0/MenuItem_1(char37), char38, char39}`, and the
+   `*AnimatorComponent` clips (char30, which DO bind — imported `TransitionComponent : BurnoutComponent`) are placed at
+   ROOT LEVEL as **siblings** of `SelectionMenu_mc` (depths 25/27/29), **not ancestors** of the menu items. So the menu
+   items' `_parent`-walk (`MenuItem → SelectionMenu_mc → root`) passes through **zero** bound components — the ancestor
+   BuildName needs is simply absent from the title's own tree. And since `AddNewAptComponent` fires 0× (4g), even the
+   root-level AnimatorComponents don't register ⇒ **the title root (char0) is not a component either.** CONCLUSION
+   (proven, not hypothesised): the top-of-tree BurnoutComponent must be supplied by the FRAMEWORK (MAIN, level 0)
+   composing the title under a component root at runtime — MAIN's frame-0 has NO PlaceObject (t3) commands (`t5 t1 t8×88`),
+   only its single `t1` DoAction bootstrap (`new AptCommunicator` + registerClass @chunk+0x32e8), whereas the title's own
+   frame 0 is `t5 t3×12` with NO action — so the title cannot bootstrap itself; the framework must. NEXT (in-flight boot,
+   binding ON + a display-parent-chain probe in `AssociateInstToClass`): confirm the runtime `_parent` chain matches this
+   static tree and see whether the framework establishes any component above the title root; that determines whether the
+   fix is a bring-up nesting (attach title under a MAIN component) or executing MAIN's bootstrap loadMovie/attach.
+4j. ✅✅✅ **§6.4 ROOT CAUSE PINNED — the component framework bundle (`PERSISTENTAPT`) is never loaded. Boot-proven
+   2026-07-07 (KB_CLASS_BINDING=true + a display-parent-chain probe in `AssociateInstToClass`).** The boot showed, exactly
+   matching the offline static tree (4i): every bound clip's runtime `_parent` chain terminates at the title root with NO
+   component ancestor — `B5MenuItem <- SelectionMenu_mc[c0] <- ..[c0] <-#ROOT`, `TransitionComponent <- ..[c0] <-#ROOT`
+   (the `[cN]` = ancestor's GetHasClass bit; every one is 0). And `AddNewAptComponent` fires **0×**. The bring-up loads
+   MAIN(level 0) + Title(level 1) as **separate sibling movies, both roots `dlParent=0`** (log lines 115/184); MAIN's
+   bootstrap runs (`new AptCommunicator`, `SetCommunicationObject`) and `registerClass` fires **24×** — but all 24 are
+   MAIN's GLOBAL components (RivalShutdown/Ticker/ProgressBar/B5MenuItem/…); **none** is the menu framework
+   (`SelectionMenu*`/`*AnimatorComponent`). The title bundle itself has **0 DF2 / 0 `registerClass`** (defines no AS at
+   all — the `*AnimatorComponent` names are only PlaceObject instance names). **WHERE the component framework lives:
+   `GUIAPT/PERSISTENTAPT.bundle`** — string counts `BurnoutComponent` ×17, `IsBurnoutComponent` ×14, `BuildName` ×3,
+   `RegisterComponent` ×3, `Animator` ×5 (vs MAIN's 2/1/1/1) — i.e. PERSISTENTAPT IS the `BurnoutComponent` base +
+   component library. **It is NEVER loaded** (0 log hits; only a memory-pool name `Gui_Persistent_Apt_Pool`), and the
+   bring-up's own comments already say so: EnsureFrameworkMovie:1394 *"the console composes PERSISTENTAPT (which imports
+   MAIN) persistently at level 0 … PERSISTENTAPT is the follow-on"* and :1499 *"the console has PERSISTENTAPT/MAIN resident
+   at level 0."* So §6.4 == **bring up PERSISTENTAPT at level 0** (it establishes the top-level BurnoutComponent that
+   becomes every menu component's `_parent`-walk ancestor → BuildName resolves → RegisterComponent → AddNewAptComponent).
+   **SCOPE (why it's a real subsystem, not a name-swap):** PERSISTENTAPT is **11.5 MB, charCount=62, importCount=13
+   (imports MAIN + 12 others), exportCount=2014** — vs the framework slot's 4 MB/type pool and MAIN's 0 imports. The
+   bring-up = (a) size a pool that holds it, (b) resolve its 13 imports (§4 import machinery — MAIN as import[?] + 12
+   more), (c) run its AS bootstrap so it composes the persistent component root. This is the "genuinely multi-session"
+   reconstruction 4g predicted, now with an EXACT target (a specific 11.5 MB bundle + the load/import/compose path),
+   superseding all "which node is the ancestor" open questions. Diagnostic reverted (KB_CLASS_BINDING=false, working shim
+   menu preserved); the `AssociateInstToClass` parent-chain probe kept (inert while binding is off) for the PERSISTENTAPT
+   verification boot. **§6.5 (UpdateAll, done) → §6.6 (delete shim) → §6.7 (validate) → delete `BrnAptRuntimeBringUp` all
+   gate on the PERSISTENTAPT bring-up.**
 5. ✅ **DONE / WIRED (verified 2026-07-07) — Per-frame `UpdateAll` drive through the real communicator
    path.** The chain is homed to its console addresses and runs every frame:
    `AptAux::UpdateComponents` (CgsAptAux.cpp:241, X360 `0x82850570`) → `mpAptCommunicator->UpdateAllComponents()`
