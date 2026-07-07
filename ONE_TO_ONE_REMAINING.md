@@ -362,10 +362,17 @@ dispatch); the gap is COMPOSITION, and every step below needs the build+boot+rea
    the menu clips via attachMovie and does NOT set `__proto__` by name — component binding is registerClass
    (export-name → class) + AssociateInstToClass at placement, which the container can't use (no export name).
    ⇒ the OPEN question is HOW MAIN's framework AS makes the menu items' container a `BurnoutComponent` (it must,
-   for `BuildName` to resolve) without an export name or attachMovie. NEXT: disassemble MAIN's frame-0/bootstrap
-   AS (the `new AptCommunicator` + registerClass stream) to find the container-composition step — rebuild the
-   AS2 disassembler (scratchpad `disasm_apt.py`; dict via op 0x88, table base inline in the tag-1 stream) OR
-   runtime opcode+dict trace (gate `AptOpTraceProbe` on the first onLoad drain, per [[title-flow-bringup-status]]).
+   for `BuildName` to resolve) without an export name or attachMovie. **OFFLINE DISASM EXHAUSTED (2026-07-07):**
+   ran `disasm_apt.py` over MAIN's 286 DF2 bodies (30k lines) — the framework uses DICT-based member access
+   (`DictByteGetMember`, shows as `dict[N]`), and the dict is load-relocated so it's UNRESOLVABLE offline (0
+   framework-method names resolved). So the composition can only be read via the RUNTIME opcode+dict trace
+   (a boot) — the `BuildName` decode in [[title-flow-bringup-status]] (pm9-3) IS that trace's output. **NEXT (a
+   dedicated boot session, single targeted trace per [[read-disasm-before-boot-tracing]] — NOT a loop):** gate
+   `AptOpTraceProbe` + `AptDictFetchProbe` on the framework-init window (not just onLoad) and trace what runs
+   BETWEEN registerClass and the menu items' onLoad — i.e. whether a MAIN frame-action composes the container as
+   a component (and whether that action is dropped/straddled like the pm2 tag-1 bootstrap was, which WOULD then
+   be a data fix), or whether it lives in the unloaded PERSISTENTAPT (Lead A). That single trace disambiguates
+   data-fix-vs-VM-reconstruction and is the true unblock.
 2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
    (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
    menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
