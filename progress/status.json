@@ -879,6 +879,36 @@
   "AptLinkerThingy::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "AptLoader::AllImportsAvailable": {
+   "status": "reviewed"
+  },
+  "AptLoader::CancelPreloadedAnimation": {
+   "status": "reviewed"
+  },
+  "AptLoader::CompleteLoad": {
+   "status": "reviewed"
+  },
+  "AptLoader::Invalidate": {
+   "status": "reviewed"
+  },
+  "AptLoader::IsLoaded": {
+   "status": "reviewed"
+  },
+  "AptLoader::Load": {
+   "status": "reviewed"
+  },
+  "AptLoader::Update": {
+   "status": "reviewed"
+  },
+  "AptLoader::findFile": {
+   "status": "reviewed"
+  },
+  "AptLoader::notify": {
+   "status": "reviewed"
+  },
+  "AptLoader::~AptLoader": {
+   "status": "reviewed"
+  },
   "AptLookup::AptLookup": {
    "status": "reviewed"
   },
@@ -12888,6 +12918,12 @@
   "BrnGui::LargeCarComponent::Construct": {
    "status": "reviewed"
   },
+  "BrnGui::LargeCarComponent::EnsureResourcesAreLoaded": {
+   "status": "reviewed"
+  },
+  "BrnGui::LargeCarComponent::EnsureResourcesAreUnloaded": {
+   "status": "reviewed"
+  },
   "BrnGui::LargeCarComponent::HandleAptLoadTriggers": {
    "status": "reviewed"
   },
@@ -12904,6 +12940,9 @@
    "status": "reviewed"
   },
   "BrnGui::LargeCarComponent::ReleaseResources": {
+   "status": "reviewed"
+  },
+  "BrnGui::LargeCarComponent::SetCachePointer": {
    "status": "reviewed"
   },
   "BrnGui::LargeCarComponent::SetCarInfo": {
@@ -32661,6 +32700,12 @@
   "CgsDev::PerfMonGpu::AddMonitor": {
    "status": "reviewed"
   },
+  "CgsDev::PerfMonGpu::ComputeValueFromTimer": {
+   "status": "reviewed"
+  },
+  "CgsDev::PerfMonGpu::Construct": {
+   "status": "reviewed"
+  },
   "CgsDev::PerfMonGpu::GetLastMonitorValue": {
    "status": "reviewed"
   },
@@ -32668,6 +32713,21 @@
    "status": "reviewed"
   },
   "CgsDev::PerfMonGpu::ReportMonitors": {
+   "status": "reviewed"
+  },
+  "CgsDev::PerfMonGpu::StartMonitor": {
+   "status": "reviewed"
+  },
+  "CgsDev::PerfMonGpu::StartProfiling": {
+   "status": "reviewed"
+  },
+  "CgsDev::PerfMonGpu::StopMonitor": {
+   "status": "reviewed"
+  },
+  "CgsDev::PerfMonGpu::StopProfiling": {
+   "status": "reviewed"
+  },
+  "CgsDev::PerfMonGpu::Swap": {
    "status": "reviewed"
   },
   "CgsDev::SimpleStrStream::Reset": {
@@ -44616,6 +44676,15 @@
   "RealmcCore::MessageString::~MessageString": {
    "status": "reviewed"
   },
+  "RealmcCore::MessageTrc::Apply": {
+   "status": "reviewed"
+  },
+  "RealmcCore::MessageTrc::MessageTrc": {
+   "status": "reviewed"
+  },
+  "RealmcCore::MessageTrc::~MessageTrc": {
+   "status": "reviewed"
+  },
   "RealmcCore::ObjectManager::Finalize": {
    "status": "reviewed"
   },
@@ -45339,6 +45408,24 @@
   "XCAM::CObjectRefCount::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "XCAM::COverlappedIO::ApcKernelRoutine": {
+   "status": "reviewed"
+  },
+  "XCAM::COverlappedIO::ApcNormalRoutine": {
+   "status": "reviewed"
+  },
+  "XCAM::COverlappedIO::ApcRundownRoutine": {
+   "status": "reviewed"
+  },
+  "XCAM::COverlappedIO::Setup": {
+   "status": "reviewed"
+  },
+  "XCAM::COverlappedIO::SignalComplete": {
+   "status": "reviewed"
+  },
+  "XCAM::COverlappedIO::SignalSynchronousComplete": {
+   "status": "reviewed"
+  },
   "XCAM::CVideoOutputBase::BufferWriteSucceeded": {
    "status": "reviewed"
   },
@@ -45403,6 +45490,15 @@
    "status": "reviewed"
   },
   "XGRAPHICS::InternalVector::Remove": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::TempValue::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::TempValue::TempValue": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::TempValue::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "[100],20,int>::AllocateObject": {
@@ -45632,6 +45728,24 @@
   },
   "cLionFX::TriggerUpdate": {
    "status": "reviewed"
+  },
+  "cLionParticleEffect::Build": {
+   "status": "compiles"
+  },
+  "cLionParticleEffect::Delocate": {
+   "status": "compiles"
+  },
+  "cLionParticleEffect::GetDurationMax": {
+   "status": "compiles"
+  },
+  "cLionParticleEffect::GetSerialiseSize": {
+   "status": "compiles"
+  },
+  "cLionParticleEffect::Relocate": {
+   "status": "compiles"
+  },
+  "cLionParticleEffect::Serialise": {
+   "status": "compiles"
   },
   "cLionSerialiser::Alloc": {
    "status": "reviewed"
@@ -60345,6 +60459,9 @@
    "notes": "ctor/dtor/scalar-deleting-dtor verified store-for-store (vtable 821BA2CC/370, refcount atomic-zero, Assign range, free 0x1C); recovered Hex-Rays-dropped 3rd arg.",
    "status": "done"
   },
+  "class:RealmcCore::MessageTrc": {
+   "status": "done"
+  },
   "class:RealmcCore::ObjectManager": {
    "notes": "Adversarial verify PASS (parity): store-for-store vs X360 ARTIST spine; ledger funcs reconciled; minimal/owning homes, additive grows preserve layouts; gate PASS (combined wave-10 build).",
    "status": "done"
@@ -60542,6 +60659,9 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XCAM::COverlappedIO": {
+   "status": "done"
+  },
   "class:XCAM::CVideoOutputBase": {
    "status": "done"
   },
@@ -60573,6 +60693,9 @@
    "status": "blocked"
   },
   "class:XGRAPHICS::InternalVector": {
+   "status": "done"
+  },
+  "class:XGRAPHICS::TempValue": {
    "status": "done"
   },
   "class:XGRAPHICS::VRegInfo": {
