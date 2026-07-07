@@ -1671,6 +1671,12 @@
   "Attrib::Attribute::IsInherited": {
    "status": "reviewed"
   },
+  "Attrib::Class::GetCollectionWithDefault": {
+   "status": "reviewed"
+  },
+  "Attrib::Class::RemoveCollection": {
+   "status": "reviewed"
+  },
   "Attrib::Class::TablePolicy,": {
    "status": "reviewed"
   },
@@ -3114,6 +3120,9 @@
   "BrnAI::RacingLine::ClearSectionCache": {
    "status": "reviewed"
   },
+  "BrnAI::RacingLineGenerator::DropHardNoGoLinesIntoMap": {
+   "status": "reviewed"
+  },
   "BrnAI::RacingLineGenerator::ExtrapolateRouteBackwards": {
    "status": "reviewed"
   },
@@ -3139,6 +3148,9 @@
    "status": "reviewed"
   },
   "BrnAI::RacingLineGenerator::SetUpHardNoGoMap": {
+   "status": "reviewed"
+  },
+  "BrnAI::RacingLineGenerator::SetupSectionExit": {
    "status": "reviewed"
   },
   "BrnAI::ResetOnTra": {
@@ -19977,6 +19989,9 @@
   "BrnPhysics::Props::PropManager::RemoveProp": {
    "status": "reviewed"
   },
+  "BrnPhysics::Props::PropManager::RoutePropVsRaceCarContactToDummyCar": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Props::PropManager::UpdateJointedProps": {
    "status": "reviewed"
   },
@@ -21106,6 +21121,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::HandleCrashPredictionForRaceCarAndTrafficVehicle": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehicleManager::HandleCrashPredictionForRaceCarAndWorld": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::HandleRaceCarRaceCarContact": {
@@ -24802,6 +24820,15 @@
    "status": "reviewed"
   },
   "BrnSound::Logic::World::EmitterEffect::~EmitterEffect": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::World::EmitterState::Attach": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::World::EmitterState::GetTypeName": {
+   "status": "reviewed"
+  },
+  "BrnSound::Logic::World::EmitterState::IsAttachedToThis": {
    "status": "reviewed"
   },
   "BrnSound::Logic::World::EmitterState::`scalar deleting destructor'": {
@@ -40626,6 +40653,15 @@
   "CgsSceneManager::SpatialPartitionIO::OutputBuffer::Destruct": {
    "status": "reviewed"
   },
+  "CgsSceneManager::SpatialPartitionManager::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SpatialPartitionManager::ProcessUpdateQueue": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SpatialPartitionManager::Release": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::SpatialPartitionManager::UpdateScene": {
    "status": "reviewed"
   },
@@ -44700,6 +44736,9 @@
   "WorldModule::BridgeEntityModulesToCrashModule_PreScene": {
    "status": "reviewed"
   },
+  "WorldModule::BridgeEntityModulesToOutput_PrePhysics": {
+   "status": "reviewed"
+  },
   "WorldModule::BridgeEntityModulesToPhysicsModule_PrePhysics": {
    "status": "reviewed"
   },
@@ -44748,6 +44787,9 @@
   "WorldModule::BridgePropModuleToTrafficModule_PrePhysics": {
    "status": "reviewed"
   },
+  "WorldModule::BridgePropResourceRequestsToOutput_Prepare": {
+   "status": "reviewed"
+  },
   "WorldModule::BridgePropToOutput_PreScene": {
    "status": "reviewed"
   },
@@ -44785,6 +44827,9 @@
    "status": "reviewed"
   },
   "WorldModule::BridgeRaceCarResourceRequestsToOutput": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgeRaceCarResourceRequestsToOutput_Prepare": {
    "status": "reviewed"
   },
   "WorldModule::BridgeSceneContactsToPropModule_PrePhysics": {
@@ -48182,6 +48227,9 @@
   },
   "GameShared/GameClasses/SceneManager/SpatialPartitionModule/CgsCoarseQueryResultBuffer.h": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; committed-home grow no ODR fork; compiles clean.",
+   "status": "done"
+  },
+  "GameShared/GameClasses/SceneManager/SpatialPartitionModule/CgsSpatialPartitionManager.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionDebugComponent.cpp": {
@@ -51597,6 +51645,9 @@
    "notes": "wave53: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication. b5-decomp c1cc494d.",
    "status": "done"
   },
+  "GameSource/Unity/../World/Bridges/WorldBridgeEntityModulesToOutput.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../World/Bridges/WorldBridgeInputToEntityModules.cpp": {
    "notes": "instruction-level verify vs b7_4 asm: call order, all 8 per-ARCI offsets+assert lines, case-39 asm-pinned (pseudo wrong), case-23 payload bits, camera/hard-stop constants, tail f32[8]*f32[7], per-iter queue re-fetch; Check fn matches PS3 0x51E15C; nits: undersized NOMINAL payload slices behind FLAG'd casts (prioritize UpdateInputBuffer payload TUs), memcpy-image placeholder merges, raw timer indices",
    "status": "done"
@@ -52071,6 +52122,9 @@
   },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/attribsys.h": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
+   "status": "done"
+  },
+  "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/vechashmap.h": {
    "status": "done"
   },
   "SDKs/Packages/ICE/ICECamera.cpp": {
