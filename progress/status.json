@@ -54512,6 +54512,9 @@
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnGui::LicenseComponent": {
+   "status": "done"
+  },
   "class:BrnGui::MainMapRenderer": {
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -60397,6 +60400,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XGRAPHICS::IRInst": {
+   "notes": "8/12 committed d8cb7827. ExportType/Kill/Validate/InstType blocked: un-homed foreign context chain mpContext(+0x3B8)->(+0xAB0)->(+0x60), two unnamed vtable-slot-5/6 virtuals, un-recovered InstType rodata string byte_820DC63C.",
+   "status": "blocked"
+  },
   "class:[100],20,int>": {
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
@@ -60484,6 +60491,10 @@
   "class:cParticleDescriptor": {
    "notes": "verified vs X360 asm; parity.",
    "status": "done"
+  },
+  "class:cParticleRandomSeed": {
+   "notes": "3/4 committed d8cb7827 (Init/Offset/Update). BuildLerp blocked: VMX128 vmaddfp128 addend placement (v0 random t) + un-homed Lion vector blend collaborators.",
+   "status": "blocked"
   },
   "class:cParticleTrigger": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
