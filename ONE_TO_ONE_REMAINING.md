@@ -345,6 +345,36 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
 7. **Validate** — menu text / states / navigation byte-identical to the Xbox i64. ⛔ Gated on §6.4 + item 6
    (needs the real drive producing the menu before a byte-diff is meaningful).
 
+### §6.4 — EXECUTION PLAN (start a DEDICATED boot-loop session here; distilled from traces 4a–4h)
+**Confirmed root cause:** the title's own component clips (`SelectionMenu` / `*AnimatorComponent`) are
+PLACED by init-actions (PlaceObject @chunk+0x7010, charId from an import) but are NOT statically
+class-bound; the menu items (`B5MenuItem`) DO bind + onLoad runs, but `BuildName`'s `_parent`-walk finds
+no `BurnoutComponent` ancestor → `SendAptEvent` gets an undefined name → `AddNewAptComponent` fires **0×**
+(measured). The framework that should instantiate + nest the component hierarchy is not composing it. Every
+engine primitive is faithful (AssociateInstToClass, Extends, GetNativeHashVirtual, `_name`, onLoad
+dispatch); the gap is COMPOSITION, and every step below needs the build+boot+read-log loop.
+
+1. **READ FIRST (per [[read-disasm-before-boot-tracing]]):** decode the title frame-0 init-action stream
+   (the `registerClass` + attach at TITLE_SCREEN02 chunk+0x7010) from the offline bundle dump + the MAIN AS
+   disasm. registerClass already runs (200+ classes, 4e); confirm whether the ATTACH/instantiate step runs.
+2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
+   (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
+   menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
+3. **Lead A — framework composition:** the bring-up loads MAIN at level 0 but NOT `PERSISTENTAPT`
+   (BrnAptRuntimeBringUp.cpp:~1427; deliberate — PERSISTENTAPT imports MAIN and depends on the still-deferred
+   §4 import resolution). Bringing PERSISTENTAPT up may supply the menu-framework component classes MAIN
+   lacks → gives the items a component ancestor. This overlaps §4 (import-export resolution).
+4. **Lead B — the nesting:** verify the display-parent chain (`MenuItem_0 → SelectionMenu_mc → '' → root`).
+   If `SelectionMenu_mc` never binds as a component, either (a) it needs a component class + linkage name
+   (a bundle/data fix — its char currently has no export-name entry), or (b) the framework re-parents the
+   items under a runtime-instantiated component. Distinguish by tracing the container's bind + display parent.
+5. **Then the chain falls:** a bound-component ancestor → `BuildName` resolves → `SendAptEvent` →
+   `AddNewAptComponent` registers → item 5's `UpdateAll` drives the real menu → item 6 (delete the
+   `AptRuntimeSetComponentKeyValue`/`AptRuntimeSetComponentViewState` + `AddOutputAptViewState` shim,
+   single-driver) → item 7 (byte-diff vs `Burnout_External_Xbox_One.exe`).
+Reusable diagnostics live in [[title-flow-bringup-status]] (uncapped `AptRegisterClassProbe`, the
+`<no-export:NAME>` probe, the offline bundle parsers). KB_CLASS_BINDING stays false until §6.4 lands.
+
 ## 7. Init / globals / GC leftovers
 
 `AptStringPool.cpp` (1 apt_shim, `aptstringpool_initialize`), `AptValueGCPoolManager.cpp`
