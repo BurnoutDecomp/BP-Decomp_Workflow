@@ -373,6 +373,14 @@ dispatch); the gap is COMPOSITION, and every step below needs the build+boot+rea
    a component (and whether that action is dropped/straddled like the pm2 tag-1 bootstrap was, which WOULD then
    be a data fix), or whether it lives in the unloaded PERSISTENTAPT (Lead A). That single trace disambiguates
    data-fix-vs-VM-reconstruction and is the true unblock.
+   **OFFLINE HYPOTHESIS SPACE NOW FULLY CLOSED (2026-07-07):** also ruled out the pm2-style dropped/straddled
+   frame-action — `apt8_fix_frametables.py` on the active MAIN reports 0 repairs / no straddle warnings, and the
+   active MAIN has the SAME 286 DF2 records as the intact `GUIAPT_MaybeBroken` copy (no framework function or
+   frame-action was lost by the emitter). So NO data fix exists: §6.4 is unambiguously RUNTIME. Only two leads
+   remain, both boot-loop: **(A)** the composition lives in the un-loaded `PERSISTENTAPT` (⇒ the fix is §4 import
+   resolution + loading it), or **(B)** it IS in MAIN's intact framework but the runtime result doesn't nest the
+   items under a component (⇒ a VM/composition reconstruction). The single targeted framework-init trace decides
+   A vs B. Everything decidable offline is decided; the next move REQUIRES a boot.
 2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
    (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
    menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
