@@ -59107,6 +59107,10 @@
    "notes": "Thin explicit instantiation vs committed generic; adversarially verified store-for-store; compiles clean.",
    "status": "done"
   },
+  "class:CgsSceneManager::SceneManagerIO::InSceneUpdateInterface": {
+   "notes": "11/16 committed 7d60184f. 5 queue funcs blocked (AddVolumeInstanceForCaching/SetVolumeInstanceCullingGroup/SetVolumeInstanceTransform/Clear/Destruct): un-recovered element types for ~14 of the 25 embedded queues (InEvent* callee TUs still todo, no committed element homes).",
+   "status": "blocked"
+  },
   "class:CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,2000>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
    "status": "done"
@@ -60253,6 +60257,9 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XCAM::CVideoOutputBase": {
+   "status": "done"
+  },
   "class:XConfigUserSettings": {
    "notes": "XConfigUserSettings (X360 system user-settings reader) verified first-pass PASS.",
    "status": "done"
@@ -60794,6 +60801,10 @@
   "class:rw::collision::AggregateVolume": {
    "notes": "verify pass 2/2: GetBBox/GetBBoxDiag cached Aggregate::m_AABB @+0x44. gate x64 pass",
    "status": "done"
+  },
+  "class:rw::collision::BoxVolume": {
+   "notes": "0/7 blocked, nothing committed. Needs BoxVolume layout promoted in CollisionVolume.hpp + un-homed Matrix44Affine/AABBox + un-recovered rodata (vperm control unk_82CDA350, off_82F91930 method table 4th-entry stub) + rwcPlaneLineSegIntersect; LineSegIntersect ~250-instr VMX decode flagged unreliable.",
+   "status": "blocked"
   },
   "class:rw::collision::ClusteredMesh": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
