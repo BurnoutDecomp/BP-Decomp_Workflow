@@ -34500,16 +34500,25 @@
   "CgsGui::ObjectController::GetObjectValue": {
    "status": "reviewed"
   },
+  "CgsGui::ObjectController::GetObjectVariableFloat": {
+   "status": "reviewed"
+  },
   "CgsGui::ObjectController::GetPos": {
    "status": "reviewed"
   },
   "CgsGui::ObjectController::Register": {
    "status": "reviewed"
   },
+  "CgsGui::ObjectController::SetControlledObject": {
+   "status": "reviewed"
+  },
   "CgsGui::ObjectController::SetObjectVariableBoolean": {
    "status": "reviewed"
   },
   "CgsGui::ObjectController::UnRegister": {
+   "status": "reviewed"
+  },
+  "CgsGui::ObjectController::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "CgsGui::ObjectController::~ObjectController": {
@@ -44290,6 +44299,24 @@
    "status": "reviewed"
   },
   "MassiveAdClient3::CMassiveTime::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestBuilder::CRequestBuilder": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestBuilder::RemoveFromRequestCollect": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestBuilder::Resume": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestBuilder::Suspend": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestBuilder::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestBuilder::~CRequestBuilder": {
    "status": "reviewed"
   },
   "MassiveAdClient3::CRequestObject::AllocateDataBuffer": {
@@ -54418,6 +54445,10 @@
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (verifier corrections applied); .data tables flagged attested-vs-reconstructed; compiles clean.",
    "status": "done"
   },
+  "class:BrnGui::CrashNavPanel": {
+   "notes": "3/4 committed d98ef9b4 (GetPanelActiveGameModeType/GetPanelActiveRoadRuleType/GetRoadPanelScoreMode). Ctor 0x82500FD0 blocked: installs ~33 embedded sub-object vtables (off_82072F8C.. / MenuToggleGroupVarSize<3>) for un-homed collaborator types out to +0x5194.",
+   "status": "blocked"
+  },
   "class:BrnGui::CrashedHudState": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (verifier corrections applied); .data tables flagged attested-vs-reconstructed; compiles clean.",
    "status": "done"
@@ -57990,6 +58021,9 @@
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:CgsGui::ObjectController": {
+   "status": "done"
+  },
   "class:CgsGui::ParticleSystem2d": {
    "notes": "Fix verified independently: maPad0 now 156 bytes (0x9C), mfExtentSentinel at the asm-attested offset, maPad1 adjusted to keep static_assert(sizeof==8608) satisfied. Compile gate PASS.",
    "status": "done"
@@ -60198,6 +60232,9 @@
    "notes": "ctor (two 64-bit zero stores) + GetTime (64-bit bias + tick) verified.",
    "status": "done"
   },
+  "class:MassiveAdClient3::CRequestBuilder": {
+   "status": "done"
+  },
   "class:MassiveAdClient3::CRequestObject": {
    "status": "done"
   },
@@ -60236,6 +60273,10 @@
   "class:RealmcCore::Locale": {
    "notes": "RealmcCore Locale; parity/low; wave9; verifier parity; gate pass.",
    "status": "done"
+  },
+  "class:RealmcCore::MemcardState": {
+   "notes": "13/15 committed d98ef9b4 (getters/setters/task-stack/waiting-deque). Ctor 0x82C47328 + dtor 0x82C46470 blocked: un-homed Allocator64 deque ctor/dtor (truncated symbols).",
+   "status": "blocked"
   },
   "class:RealmcCore::Message": {
    "notes": "Realmc message; verifier minor_drift/low; gate pass.",
