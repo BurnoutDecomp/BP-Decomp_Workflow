@@ -46909,6 +46909,9 @@
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariableManager.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/MenuItems/CgsMenuItemVariableLineGraph.cpp": {
+   "status": "done"
+  },
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/Widgets/CgsWidgetLineGraph.cpp": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (corrections applied); compiles clean.",
    "status": "done"
@@ -47538,6 +47541,9 @@
    "status": "done"
   },
   "GameShared/GameClasses/Network/Players/CgsPlayersConnectionManager.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Network/Players/CgsReliableMessageManager.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/Network/ServerInterface/DirtySock/CgsServerInterfaceDirtySock.cpp": {
@@ -49033,6 +49039,9 @@
    "notes": "all 3 tables XEX byte-verified incl. FBC_DONE->BASIC + DISABLED->SHORTCUT quirks; flapt-first Construct order, composite Prepare, dirty/highlight Update, 3-then-1 Invalidate all asm-exact",
    "status": "done"
   },
+  "GameSource/Gui/Flow/HUD/Components/BrnJunctionInfoComponent.cpp": {
+   "status": "done"
+  },
   "GameSource/Gui/Flow/HUD/Components/BrnNorthIndicator.cpp": {
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -49289,6 +49298,9 @@
    "notes": "vtable-slot-0 TextField Constructs w/ mpStateInterface/macName resolve through committed GuiComponent layout; strcmp idiom per CarouselItem precedent",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnLargeCarComponent.cpp": {
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnLeaderboardColumnComponent.cpp": {
    "notes": "batch subagent review: view-state order + buffers exact; cell-name inference honestly flagged",
    "status": "done"
@@ -49404,6 +49416,9 @@
    "notes": "Decomp+verify PASS/high (adversarial verify agent). Gate compiles clean against committed CgsGui::State + GuiCache. 3 bodies are byte-identical twin of committed ImageGalleryState (SetExpectedAptComponentList/UpdateWFInit/GetResourcesToLoad). Only divergence is standard CGS_ASSERT macro expansion (BeginAssert/EndAssert/FireAssert) accepted campaign-wide; KA_RESOURCES_TO_LOAD id is a FLAG'd nominal placeholder for unattested .rodata. Committed 72ee3bd0/44636484.",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlineNews.cpp": {
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineNews.h": {
    "status": "done"
   },
@@ -49416,10 +49431,16 @@
   "GameSource/Gui/Flow/Screen/States/BrnOnlinePreEvent.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlineQuickCustomCreate.cpp": {
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineQuickCustomCreate.h": {
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineQuickMatch.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlineRivals.cpp": {
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineRivals.h": {
@@ -49429,6 +49450,9 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineSelectRoute.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlineStats.cpp": {
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineStats.h": {
@@ -49467,6 +49491,9 @@
   },
   "GameSource/Gui/Flow/Shared/Components/BrnColourField.cpp": {
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/Components/BrnColourMenuToggle.cpp": {
    "status": "done"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnColourSelection.cpp": {
@@ -49566,6 +49593,9 @@
    "notes": "wave4: timer component Construct/Prepare/SetTime/CalculateColour (de-opt VMX lerp); verify PASS; compile PASS",
    "status": "done"
   },
+  "GameSource/Gui/Flow/hud/Components/BrnDistrictMarker.cpp": {
+   "status": "done"
+  },
   "GameSource/Gui/Flow/hud/Components/BrnPositionIndicator.cpp": {
    "notes": "Combined batch-12 review: Construct's ASM-vs-pseudocode divergence confirmed handled (+0x1B4/+0x1B5 zero, +0x1B6 one); XEX tables verified. Post-review: DWARF names adopted (mRacePositionTextField/mbFirstFrame/KAC_APTSTATE_NAMES/KAC_POSITION_NAMES), re-gated PASS.",
    "status": "done"
@@ -49599,6 +49629,9 @@
    "status": "done"
   },
   "GameSource/Gui/SatNav/BrnMapIconManager.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/SatNav/BrnMapManager.cpp": {
    "status": "done"
   },
   "GameSource/Gui/SatNav/BrnSatNavIcon.cpp": {
@@ -51342,6 +51375,9 @@
    "notes": "batch review pass: Claude sonnet medium; parity RED due assert abstraction and X360-vs-Feb2007 drift reviewed",
    "status": "done"
   },
+  "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/NearMisses/BrnNearMissManager.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingDebugComponent.cpp": {
    "notes": "verify pass 3/3: GetName/OnActivate/Update debug component. gate x64 pass",
    "status": "done"
@@ -51419,6 +51455,9 @@
    "status": "blocked"
   },
   "GameSource/Unity/../World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.cpp": {
+   "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModuleIO.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../World/EnvironmentManager/BrnEnvironmentManager.cpp": {
