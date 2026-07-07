@@ -1,0 +1,2661 @@
+Summary for E:\Reverse_Engineering\Burnout\BP-Decomp_Workflow - 2\360 - Revenge Feb 7 B4Extern\B4Extern.pdb
+  Size: 12438528 bytes
+  Guid: {2E534D38-9330-4D39-B607-3715DDDA2C81}
+  Age: 1
+  Attributes: HasPrivateSymbols 
+---TYPES---
+  Classes: (Showing 9580 items)
+    const struct AptActionInterpreter
+    const struct AptInitParmsT
+    struct AptActionInterpreter [sizeof = 96] {
+      data +0x00 [sizeof=12] AptBasePtrStack<AptValue> stack
+        data +0x00 [sizeof=4] int m_nElements
+        data +0x04 [sizeof=4] int m_nCapacity
+        data +0x08 [sizeof=4] AptValue** m_aElements
+      data +0x0c [sizeof=12] AptValuePtrStack<AptValue> withStack
+        data +0x0c [sizeof=4] int m_nElements
+        data +0x10 [sizeof=4] int m_nSize
+        data +0x14 [sizeof=4] AptValue** m_aElements
+      data +0x18 [sizeof=12] AptValuePtrStack<AptValue> setTargetStack
+        data +0x18 [sizeof=4] int m_nElements
+        data +0x1c [sizeof=4] int m_nSize
+        data +0x20 [sizeof=4] AptValue** m_aElements
+      data +0x24 [sizeof=12] AptValuePtrStack<AptValue> thisStack
+        data +0x24 [sizeof=4] int m_nElements
+        data +0x28 [sizeof=4] int m_nSize
+        data +0x2c [sizeof=4] AptValue** m_aElements
+      data +0x30 [sizeof=4] AptScriptFunctionBase* mpCurrentFunction
+      data +0x34 [sizeof=8] AptConstantPool constantPool
+        data +0x34 [sizeof=4] int nItems
+        data +0x38 [sizeof=4] AptValue** apItems
+      data +0x3c [sizeof=4] unsigned int input
+      data +0x40 [sizeof=16] AptValue* apRegisters[4]
+      data +0x50 [sizeof=4] int nThisCount
+      data +0x54 [sizeof=4] AptValue* mpThrownValue
+      data +0x58 [sizeof=4] int mnStackFrameBase
+      data +0x5c [sizeof=1] bool bShutDown
+      <padding> (3 bytes)
+    }
+    Total padding 3 bytes (3.125% of class size)
+    Immediate padding 3 bytes (3.125% of class size)
+    
+    struct AptFrame [sizeof = 8] {
+      data +0x00 [sizeof=4] int nControls
+      data +0x04 [sizeof=4] AptControl** apControls
+    }
+    
+    struct AptMovie [sizeof = 12] {
+      data +0x00 [sizeof=4] int nFrames
+      data +0x04 [sizeof=4] AptFrame* aFrames
+      data +0x08 [sizeof=4] AptNativeHash* phLabels
+    }
+    
+    struct AptCharacterGlyphEntry [sizeof = 4] {
+      data +0x00 [sizeof=2] short nIndex
+      data +0x02 [sizeof=2] short nAdvance
+    }
+    
+    struct AptControlDoInitAction [sizeof = 8] {
+      data +0x00 [sizeof=4] int nSpriteID
+      data +0x04 [sizeof=4] AptActionBlock actions
+        data +0x04 [sizeof=4] unsigned char* aActionStream
+    }
+    
+    const struct AptImport
+    struct AptImport [sizeof = 16] {
+      data +0x00 [sizeof=4] char* szFile
+      data +0x04 [sizeof=4] char* szName
+      data +0x08 [sizeof=4] int nID
+      data +0x0c [sizeof=4] AptSharedPtr<AptFile> file
+        data +0x0c [sizeof=4] AptFile* pData
+    }
+    
+    struct AptControlFrameLabel [sizeof = 4] {
+      data +0x00 [sizeof=4] char* szLabel
+    }
+    
+    struct AptExport [sizeof = 8] {
+      data +0x00 [sizeof=4] char* szName
+      data +0x04 [sizeof=4] int nID
+    }
+    
+    struct AptControlDoAction [sizeof = 4] {
+      data +0x00 [sizeof=4] AptActionBlock actions
+        data +0x00 [sizeof=4] unsigned char* aActionStream
+    }
+    
+    struct AptConstantTable [sizeof = 8] {
+      data +0x00 [sizeof=4] AptVirtualFunctionTable_Indices eType
+      data +0x04 [sizeof=4] char* szString
+      data +0x04 [sizeof=4] float fFloat
+      data +0x04 [sizeof=4] int nInteger
+      data +0x04 [sizeof=4] int nRegister
+      data +0x04 [sizeof=4] int bBoolean
+      data +0x04 [sizeof=4] unsigned int nLookup
+    }
+    
+    struct AptEventActionBlock [sizeof = 12] {
+      data +0x00 [sizeof=4] int nTriggers
+      data +0x04 [sizeof=4] int nKeyCode
+      data +0x08 [sizeof=4] AptActionBlock actions
+        data +0x08 [sizeof=4] unsigned char* aActionStream
+    }
+    
+    struct AptCharacterStaticTextRecords [sizeof = 56] {
+      data +0x00 [sizeof=4] int nFontID
+      data +0x04 [sizeof=32] AptCXForm cxform
+        data +0x04 [sizeof=16] float scale[4]
+        data +0x14 [sizeof=16] float translate[4]
+      data +0x24 [sizeof=4] float fXOffset
+      data +0x28 [sizeof=4] float fYOffset
+      data +0x2c [sizeof=4] float fScale
+      data +0x30 [sizeof=4] int nGlyphs
+      data +0x34 [sizeof=4] AptCharacterGlyphEntry* aGlyphs
+    }
+    
+    const class AptMouse
+    class AptMouse [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const class AptValue
+    class AptValueGC_PoolManager [sizeof = 32]
+      : public DOGMA_PoolManager {
+      base +0x00 [sizeof=32] DOGMA_PoolManager
+        data +0x00 [sizeof=4] unsigned int** mpaFirstFreeBySize
+        data +0x04 [sizeof=4] _DOGMA_MemPool* mpFirstPool
+        data +0x08 [sizeof=4] const unsigned int mnOverflowPoolSize
+        data +0x0c [sizeof=4] const unsigned int mnMaxSizeAllocation
+        data +0x10 [sizeof=4] unsigned int mnOffsetToStoreNext : 8
+        data +0x10 [sizeof=4] unsigned int mnOffsetToStoreSize : 8
+        data +0x10 [sizeof=4] unsigned int mnOffsetToStorePrev : 8
+        data +0x10 [sizeof=4] unsigned int mnMinimumAllocationSize : 4
+        data +0x10 [sizeof=4] unsigned int mbStoreFreeBlockSize : 1
+        data +0x10 [sizeof=4] unsigned int mbDoublyLinkFreeList : 1
+        data +0x10 [sizeof=4] unsigned int mbTrackOutsideAllocations : 1
+        data +0x14 [sizeof=4] DOGMA_PoolManager::_OutsideAllocationT* mpFirstOutSideAllocation
+        data +0x18 [sizeof=4] unsigned int mnItemsAllocated
+        data +0x1c [sizeof=4] unsigned int mnItemsFreed
+    }
+    
+    class CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>::ConstIterator [sizeof = 0] {}
+    
+    const class CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>
+    class CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy> [sizeof = 4] {
+      data +0x00 [sizeof=4] CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>::Node* mHead
+    }
+    
+    struct StringAsVectorEncoding<AptSharedPtr<AptFile> > [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    
+    const class AptValueVector
+    class AptValueVector [sizeof = 12] {
+      data +0x00 [sizeof=4] int mCapacity
+      data +0x04 [sizeof=4] int mCurrentNum
+      data +0x08 [sizeof=4] AptValue** mpValues
+    }
+    
+    struct AptPseudoCIH_t [sizeof = 20] {
+      data +0x00 [sizeof=4] AptControl* pControl
+      data +0x04 [sizeof=4] AptPseudoData_t* pControlInfo
+      data +0x08 [sizeof=4] AptPseudoCIH_t* pNext
+      data +0x0c [sizeof=4] AptPseudoCIH_t* pPrev
+      data +0x10 [sizeof=4] int nDepth
+    }
+    
+    const struct AptCharacterShapeInst
+    struct AptCharacterShapeInst [sizeof = 24]
+      : public AptCharacterInst {
+      base +0x00 [sizeof=21] AptCharacterInst
+        vfptr +0x00 [sizeof=4] 
+        data +0x04 [sizeof=4] int nClipDepth
+        data +0x08 [sizeof=4] int nCreatedOnFrame
+        data +0x0c [sizeof=4] AptCharacter* pCharacter
+        data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+        data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+      <padding> (3 bytes)
+    }
+    Total padding 3 bytes (12.5% of class size)
+    Immediate padding 3 bytes (12.5% of class size)
+    
+    const class AptNativeFunction
+    class AptNativeFunction [sizeof = 36]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+      data +0x20 [sizeof=4] AptValue*  (__cdecl * pFunc)(AptValue*, int)
+    }
+    
+    const class AptSound
+    class AptSound [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const class AptBasePtrStack<AptValue>
+    class AptBasePtrStack<AptValue> [sizeof = 12] {
+      data +0x00 [sizeof=4] int m_nElements
+      data +0x04 [sizeof=4] int m_nCapacity
+      data +0x08 [sizeof=4] AptValue** m_aElements
+    }
+    
+    struct AptCharacterAnimation [sizeof = 52]
+      : public AptCharacterSprite {
+      base +0x00 [sizeof=12] AptCharacterSprite
+        data +0x00 [sizeof=12] AptMovie movie
+          data +0x00 [sizeof=4] int nFrames
+          data +0x04 [sizeof=4] AptFrame* aFrames
+          data +0x08 [sizeof=4] AptNativeHash* phLabels
+      data +0x0c [sizeof=4] int nCharacters
+      data +0x10 [sizeof=4] AptCharacter** apCharacters
+      data +0x14 [sizeof=4] unsigned int nWidth
+      data +0x18 [sizeof=4] unsigned int nHeight
+      data +0x1c [sizeof=4] unsigned int nMillisecondsPerFrame
+      data +0x20 [sizeof=4] int nImports
+      data +0x24 [sizeof=4] AptImport* aImports
+      data +0x28 [sizeof=4] int nExports
+      data +0x2c [sizeof=4] AptExport* aExports
+      data +0x30 [sizeof=4] int nCurrentConstantIndex
+    }
+    
+    struct AptCharacterText [sizeof = 52] {
+      data +0x00 [sizeof=16] AptRect rBounds
+        data +0x00 [sizeof=4] float fLeft
+        data +0x04 [sizeof=4] float fTop
+        data +0x08 [sizeof=4] float fRight
+        data +0x0c [sizeof=4] float fBottom
+      data +0x10 [sizeof=4] int nFontID
+      data +0x14 [sizeof=4] AptStringAlignment eAlignment
+      data +0x18 [sizeof=4] unsigned int nColour
+      data +0x1c [sizeof=4] float fFontHeight
+      data +0x20 [sizeof=4] int bReadOnly
+      data +0x24 [sizeof=4] int bMultiLine
+      data +0x28 [sizeof=4] int bWordWrap
+      data +0x2c [sizeof=4] char* szInitialText
+      data +0x30 [sizeof=4] char* szVariable
+    }
+    
+    struct AptControlBackgroundColour [sizeof = 4] {
+      data +0x00 [sizeof=4] unsigned int nColour
+    }
+    
+    const struct AptFileSavedInputState
+    const class EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>
+    struct EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::ConstDbgIterator [sizeof = 0] {}
+    
+    struct EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::RawPtrIteratorFactory [sizeof = 0] {}
+    
+    const struct EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIterator
+    struct EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::BoolToType<1> [sizeof = 0] {}
+    
+    struct EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::BoolToType<0> [sizeof = 0] {}
+    
+    class EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy> [sizeof = 28]
+      : public EA::String::Impl::UseCapacity<1> {
+      base +0x00 [sizeof=8] EA::String::Impl::UseCapacity<1>
+        data +0x00 [sizeof=4] int mSize
+        data +0x04 [sizeof=4] int mCapacity
+      data +0x08 [sizeof=4] AptFileSavedInputState* mString
+      data +0x0c [sizeof=16] AptFileSavedInputState mSmallString[2]
+    }
+    
+    const class EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIteratorBase<AptFileSavedInputState,EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIterator>
+    class EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIteratorBase<AptFileSavedInputState,EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIterator> [sizeof = 12] {
+      data +0x00 [sizeof=4] AptFileSavedInputState* mPtr
+      data +0x04 [sizeof=4] AptFileSavedInputState* mBegin
+      data +0x08 [sizeof=4] AptFileSavedInputState* mEnd
+    }
+    
+    const struct EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIteratorFactory
+    struct EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIteratorFactory [sizeof = 8] {
+      data +0x00 [sizeof=4] AptFileSavedInputState* mBegin
+      data +0x04 [sizeof=4] AptFileSavedInputState* mEnd
+    }
+    
+    struct EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIterator [sizeof = 12]
+      : public EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIteratorBase<AptFileSavedInputState,EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIterator> {
+      base +0x00 [sizeof=12] EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIteratorBase<AptFileSavedInputState,EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy>::DbgIterator>
+        data +0x00 [sizeof=4] AptFileSavedInputState* mPtr
+        data +0x04 [sizeof=4] AptFileSavedInputState* mBegin
+        data +0x08 [sizeof=4] AptFileSavedInputState* mEnd
+    }
+    
+    const class AptSharedPtr<AptFile>
+    const class EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>
+    struct EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::ConstDbgIterator [sizeof = 0] {}
+    
+    struct EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::RawPtrIteratorFactory [sizeof = 0] {}
+    
+    const struct EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIterator
+    struct EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::BoolToType<1> [sizeof = 0] {}
+    
+    struct EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::BoolToType<0> [sizeof = 0] {}
+    
+    class EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy> [sizeof = 20]
+      : public EA::String::Impl::UseCapacity<1> {
+      base +0x00 [sizeof=8] EA::String::Impl::UseCapacity<1>
+        data +0x00 [sizeof=4] int mSize
+        data +0x04 [sizeof=4] int mCapacity
+      data +0x08 [sizeof=4] AptSharedPtr<AptFile>* mString
+      data +0x0c [sizeof=8] AptSharedPtr<AptFile> mSmallString[2]
+    }
+    
+    const struct EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIteratorFactory
+    struct EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIteratorFactory [sizeof = 8] {
+      data +0x00 [sizeof=4] AptSharedPtr<AptFile>* mBegin
+      data +0x04 [sizeof=4] AptSharedPtr<AptFile>* mEnd
+    }
+    
+    struct AptConstantPool [sizeof = 8] {
+      data +0x00 [sizeof=4] int nItems
+      data +0x04 [sizeof=4] AptValue** apItems
+    }
+    
+    const class AptValueGlobalWithHash
+    class AptValueGlobalWithHash [sizeof = 28]
+      : public AptValueWithHash {
+      base +0x00 [sizeof=28] AptValueWithHash
+        base +0x00 [sizeof=8] AptValueGC
+          base +0x00 [sizeof=8] AptValue
+            vfptr +0x00 [sizeof=4] 
+            data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+              data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+              data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+              data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+              data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+              data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+              data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+              data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+              data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+              data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+              data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+            data +0x04 [sizeof=4] unsigned int mnValueData
+        data +0x08 [sizeof=20] AptNativeHash mNativeHash
+          data +0x08 [sizeof=4] int mnTotalSize
+          data +0x0c [sizeof=4] AptHashItem* mpData
+          data +0x10 [sizeof=4] AptValue* mp__proto__
+          data +0x14 [sizeof=4] AptValue* mpPrototype
+          data +0x18 [sizeof=4] unsigned int nEventHandlers
+    }
+    
+    const class AptFrameStack
+    class AptFrameStack [sizeof = 32]
+      : public AptValueWithHash {
+      base +0x00 [sizeof=28] AptValueWithHash
+        base +0x00 [sizeof=8] AptValueGC
+          base +0x00 [sizeof=8] AptValue
+            vfptr +0x00 [sizeof=4] 
+            data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+              data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+              data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+              data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+              data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+              data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+              data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+              data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+              data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+              data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+              data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+            data +0x04 [sizeof=4] unsigned int mnValueData
+        data +0x08 [sizeof=20] AptNativeHash mNativeHash
+          data +0x08 [sizeof=4] int mnTotalSize
+          data +0x0c [sizeof=4] AptHashItem* mpData
+          data +0x10 [sizeof=4] AptValue* mp__proto__
+          data +0x14 [sizeof=4] AptValue* mpPrototype
+          data +0x18 [sizeof=4] unsigned int nEventHandlers
+      data +0x1c [sizeof=4] AptFrameStack* mpParentScope
+    }
+    
+    class AptMath [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    
+    struct AptMath::ClipTransform_t [sizeof = 96] {
+      data +0x00 [sizeof=64] AptMath::Mat44_t Pos44
+        data +0x00 [sizeof=64] float m[16]
+      data +0x40 [sizeof=16] AptMath::Vec4_t vColorMul4
+        data +0x40 [sizeof=4] float vx
+        data +0x44 [sizeof=4] float vy
+        data +0x48 [sizeof=4] float vz
+        data +0x4c [sizeof=4] float vw
+      data +0x50 [sizeof=16] AptMath::Vec4_t vColorAdd4
+        data +0x50 [sizeof=4] float vx
+        data +0x54 [sizeof=4] float vy
+        data +0x58 [sizeof=4] float vz
+        data +0x5c [sizeof=4] float vw
+    }
+    
+    struct AptMath::Vec4_t [sizeof = 16] {
+      data +0x00 [sizeof=4] float vx
+      data +0x04 [sizeof=4] float vy
+      data +0x08 [sizeof=4] float vz
+      data +0x0c [sizeof=4] float vw
+    }
+    
+    struct AptMath::Mat44_t [sizeof = 64] {
+      data +0x00 [sizeof=64] float m[16]
+    }
+    
+    struct AptControl [sizeof = 64] {
+      data +0x00 [sizeof=4] AptControlType eType
+      data +0x04 [sizeof=4] AptControlDoAction action
+        data +0x04 [sizeof=4] AptActionBlock actions
+          data +0x04 [sizeof=4] unsigned char* aActionStream
+      data +0x04 [sizeof=8] AptControlDoInitAction initAction
+        data +0x04 [sizeof=4] int nSpriteID
+        data +0x08 [sizeof=4] AptActionBlock actions
+          data +0x08 [sizeof=4] unsigned char* aActionStream
+      data +0x04 [sizeof=4] AptControlFrameLabel frameLabel
+        data +0x04 [sizeof=4] char* szLabel
+      data +0x04 [sizeof=60] AptControlPlaceObject2 placeObject2
+        data +0x04 [sizeof=4] AptPlaceObjectFlags eFlags
+        data +0x08 [sizeof=4] int nDepth
+        data +0x0c [sizeof=4] int nCharacterID
+        data +0x10 [sizeof=24] AptMatrix matrix
+          data +0x10 [sizeof=4] float a
+          data +0x14 [sizeof=4] float b
+          data +0x18 [sizeof=4] float c
+          data +0x1c [sizeof=4] float d
+          data +0x20 [sizeof=4] float tx
+          data +0x24 [sizeof=4] float ty
+        data +0x28 [sizeof=8] AptnCXForm ncxform
+          data +0x28 [sizeof=4] unsigned int nScale
+          data +0x2c [sizeof=4] unsigned int nBias
+        data +0x30 [sizeof=4] float fRatio
+        data +0x34 [sizeof=4] char* szName
+        data +0x38 [sizeof=4] int nClipDepth
+        data +0x3c [sizeof=4] AptEventActionSet* pActions
+      data +0x04 [sizeof=4] AptControlRemoveObject2 removeObject2
+        data +0x04 [sizeof=4] int nDepth
+      data +0x04 [sizeof=4] AptControlBackgroundColour backgroundColour
+        data +0x04 [sizeof=4] unsigned int nColour
+    }
+    
+    const class AptError
+    class AptError [sizeof = 40]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+      data +0x20 [sizeof=4] EAStringC msMessage
+        data +0x20 [sizeof=4] EAStringC::DebugDataC* m_pData
+      data +0x24 [sizeof=4] EAStringC msName
+        data +0x24 [sizeof=4] EAStringC::DebugDataC* m_pData
+    }
+    
+    const struct AptCharacterAnimationInst
+    struct AptCharacterAnimationInst [sizeof = 56]
+      : public AptCharacterSpriteInstBase {
+      base +0x00 [sizeof=48] AptCharacterSpriteInstBase
+        base +0x00 [sizeof=21] AptCharacterInst
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] int nClipDepth
+          data +0x08 [sizeof=4] int nCreatedOnFrame
+          data +0x0c [sizeof=4] AptCharacter* pCharacter
+          data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+          data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+        <padding> (3 bytes)
+        data +0x18 [sizeof=4] int nFrame
+        data +0x1c [sizeof=4] int nObjectClipActions : 24
+        data +0x1c [sizeof=4] unsigned int bJustLoaded : 1
+        data +0x1c [sizeof=4] unsigned int bIsPlaying : 1
+        data +0x1c [sizeof=4] unsigned int nIsCustomControl : 2
+        data +0x20 [sizeof=4] AptEventActionSet* pClipActions
+        data +0x24 [sizeof=4] AptDisplayList displayList
+          data +0x24 [sizeof=4] AptDisplayListState* pState
+        data +0x28 [sizeof=4] int nGotoAnded
+        data +0x2c [sizeof=4] int bCreatedDynamic
+      data +0x30 [sizeof=4] unsigned int nLeftoverTime
+      data +0x34 [sizeof=4] AptSharedPtr<AptFile> pFile
+        data +0x34 [sizeof=4] AptFile* pData
+    }
+    Total padding 3 bytes (5.357% of class size)
+    Immediate padding 0 bytes (0% of class size)
+    
+    const struct AptFile
+    struct AptFile [sizeof = 24]
+      : public AptSharedPtrRefCount {
+      base +0x00 [sizeof=4] AptSharedPtrRefCount
+        data +0x00 [sizeof=4] int mRefCount
+      data +0x04 [sizeof=4] EAStringC mName
+        data +0x04 [sizeof=4] EAStringC::DebugDataC* m_pData
+      data +0x08 [sizeof=4] AptFile::State mState
+      data +0x0c [sizeof=4] void* mAptData
+      data +0x10 [sizeof=4] AptCharacter* mCharacter
+      data +0x14 [sizeof=4] void* mUserData
+    }
+    
+    struct AptSysClock [sizeof = 32] {
+      data +0x00 [sizeof=4] int Second
+      data +0x04 [sizeof=4] int Minute
+      data +0x08 [sizeof=4] int Hour
+      data +0x0c [sizeof=4] int Day
+      data +0x10 [sizeof=4] int Date
+      data +0x14 [sizeof=4] int Month
+      data +0x18 [sizeof=4] int Year
+      data +0x1c [sizeof=4] int Hundredths
+    }
+    
+    struct AptCharacterSprite [sizeof = 12] {
+      data +0x00 [sizeof=12] AptMovie movie
+        data +0x00 [sizeof=4] int nFrames
+        data +0x04 [sizeof=4] AptFrame* aFrames
+        data +0x08 [sizeof=4] AptNativeHash* phLabels
+    }
+    
+    const class AptNativeHash
+    class AptNativeHash [sizeof = 20] {
+      data +0x00 [sizeof=4] int mnTotalSize
+      data +0x04 [sizeof=4] AptHashItem* mpData
+      data +0x08 [sizeof=4] AptValue* mp__proto__
+      data +0x0c [sizeof=4] AptValue* mpPrototype
+      data +0x10 [sizeof=4] unsigned int nEventHandlers
+    }
+    
+    const class IAptXmlImpl
+    class IAptXmlImpl [sizeof = 4] {
+      vfptr +0x00 [sizeof=4] 
+    }
+    
+    const class AptActionQueueC
+    class AptActionQueueC [sizeof = 20] {
+      data +0x00 [sizeof=4] AptActionQueueC::AptActionPool* m_aActionPool
+      data +0x04 [sizeof=4] AptActionQueueC::AptActionPool* m_pStartDeque
+      data +0x08 [sizeof=4] AptActionQueueC::AptActionPool* m_pEndDeque
+      data +0x0c [sizeof=4] AptActionQueueC::AptActionPool* m_pCurDeque
+      data +0x10 [sizeof=4] int m_iActionPoolSize
+    }
+    
+    struct AptActionQueueC::AptActionPool [sizeof = 20] {
+      data +0x00 [sizeof=4] AptActionQueueC::APT_ACTION_TYPE eActionType
+      data +0x04 [sizeof=4] unsigned int input
+      data +0x08 [sizeof=12] AptActionQueueC::AptAction action
+        data +0x08 [sizeof=4] int nFrame
+        data +0x0c [sizeof=4] AptActionBlock* pBlock
+        data +0x10 [sizeof=4] AptCIH* pCIH
+      data +0x08 [sizeof=12] AptActionQueueC::AptFunction function
+        data +0x08 [sizeof=4] AptCIH* pContext
+        data +0x0c [sizeof=4] AptValue* pFuncDef
+        data +0x10 [sizeof=4] int nParams
+    }
+    
+    struct AptActionQueueC::AptFunction [sizeof = 12] {
+      data +0x00 [sizeof=4] AptCIH* pContext
+      data +0x04 [sizeof=4] AptValue* pFuncDef
+      data +0x08 [sizeof=4] int nParams
+    }
+    
+    struct AptActionQueueC::AptAction [sizeof = 12] {
+      data +0x00 [sizeof=4] int nFrame
+      data +0x04 [sizeof=4] AptActionBlock* pBlock
+      data +0x08 [sizeof=4] AptCIH* pCIH
+    }
+    
+    const class AptMovieClip
+    class AptMovieClip [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const class AptScriptFunction1
+    const struct AptAction_DefineFunction
+    class AptScriptFunction1 [sizeof = 52]
+      : public AptScriptFunctionBase {
+      base +0x00 [sizeof=46] AptScriptFunctionBase
+        base +0x00 [sizeof=32] AptObject
+          base +0x00 [sizeof=28] AptValueWithHash
+            base +0x00 [sizeof=8] AptValueGC
+              base +0x00 [sizeof=8] AptValue
+                vfptr +0x00 [sizeof=4] 
+                data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                  data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                  data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                  data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                  data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                  data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                  data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                  data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                  data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                  data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                  data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+                data +0x04 [sizeof=4] unsigned int mnValueData
+            data +0x08 [sizeof=20] AptNativeHash mNativeHash
+              data +0x08 [sizeof=4] int mnTotalSize
+              data +0x0c [sizeof=4] AptHashItem* mpData
+              data +0x10 [sizeof=4] AptValue* mp__proto__
+              data +0x14 [sizeof=4] AptValue* mpPrototype
+              data +0x18 [sizeof=4] unsigned int nEventHandlers
+          data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+          data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+          data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+        data +0x20 [sizeof=4] AptCIH* mpCIH
+        data +0x24 [sizeof=4] AptCIH* mpParentAnim
+        data +0x28 [sizeof=4] AptFrameStack* mpCreatorScope
+        data +0x2c [sizeof=2] unsigned short mnFrameStackReserve
+      <padding> (2 bytes)
+      data +0x30 [sizeof=4] AptAction_DefineFunction* mpFunction
+    }
+    Total padding 2 bytes (3.846% of class size)
+    Immediate padding 2 bytes (3.846% of class size)
+    
+    class AptSharedPtr<AptFile> [sizeof = 4] {
+      data +0x00 [sizeof=4] AptFile* pData
+    }
+    
+    struct AptValue::<unnamed-tag>::<unnamed-tag> [sizeof = 4] {
+      data +0x00 [sizeof=4] unsigned int mbIsAllocated : 1
+      data +0x00 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+      data +0x00 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+      data +0x00 [sizeof=4] unsigned int mbDestroyedGC : 1
+      data +0x00 [sizeof=4] unsigned int mbIsDefined : 1
+      data +0x00 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+      data +0x00 [sizeof=4] unsigned int mnReferenceCount : 12
+      data +0x00 [sizeof=4] unsigned int mnGCRootCount : 6
+      data +0x00 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+      data +0x00 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+    }
+    
+    class AptValue [sizeof = 8] {
+      vfptr +0x00 [sizeof=4] 
+      data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+        data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+        data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+        data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+        data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+        data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+        data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+        data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+        data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+        data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+        data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+      data +0x04 [sizeof=4] unsigned int mnValueData
+    }
+    
+    const class AptScriptFunctionBase
+    class AptScriptFunctionBase [sizeof = 48]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+      data +0x20 [sizeof=4] AptCIH* mpCIH
+      data +0x24 [sizeof=4] AptCIH* mpParentAnim
+      data +0x28 [sizeof=4] AptFrameStack* mpCreatorScope
+      data +0x2c [sizeof=2] unsigned short mnFrameStackReserve
+      <padding> (2 bytes)
+    }
+    Total padding 2 bytes (4.167% of class size)
+    Immediate padding 2 bytes (4.167% of class size)
+    
+    const class IAptXmlNode
+    class IAptXmlNode [sizeof = 4] {
+      vfptr +0x00 [sizeof=4] 
+    }
+    
+    const struct AptLinkerThingy
+    struct AptLinkerThingy [sizeof = 16]
+      : public AptSharedPtrRefCount {
+      base +0x00 [sizeof=4] AptSharedPtrRefCount
+        data +0x00 [sizeof=4] int mRefCount
+      data +0x04 [sizeof=4] AptSharedPtr<AptFile> mFile
+        data +0x04 [sizeof=4] AptFile* pData
+      data +0x08 [sizeof=4] AptCIH* pTarget
+      data +0x0c [sizeof=1] bool mAttachedToMovie
+      <padding> (3 bytes)
+    }
+    Total padding 3 bytes (18.75% of class size)
+    Immediate padding 3 bytes (18.75% of class size)
+    
+    const class AptSharedPtr<AptLinkerThingy>
+    class AptSharedPtr<AptLinkerThingy> [sizeof = 4] {
+      data +0x00 [sizeof=4] AptLinkerThingy* pData
+    }
+    
+    const class AptFloat
+    class AptFloat [sizeof = 12]
+      : public AptValueNoGC {
+      base +0x00 [sizeof=8] AptValueNoGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=4] float mfValue
+      data +0x08 [sizeof=4] AptFloat* mpNextFree
+    }
+    
+    struct AptnCXForm [sizeof = 8] {
+      data +0x00 [sizeof=4] unsigned int nScale
+      data +0x04 [sizeof=4] unsigned int nBias
+    }
+    
+    struct AptActionSetup [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    
+    struct AptCharacterShape [sizeof = 20] {
+      data +0x00 [sizeof=16] AptRect rBounds
+        data +0x00 [sizeof=4] float fLeft
+        data +0x04 [sizeof=4] float fTop
+        data +0x08 [sizeof=4] float fRight
+        data +0x0c [sizeof=4] float fBottom
+      data +0x10 [sizeof=4] void* zID
+    }
+    
+    struct _AptValueGC_MemItem::<unnamed-tag>::<unnamed-tag> [sizeof = 12] {
+      data +0x00 [sizeof=4] _AptValueGC_MemItem* pNextItem
+      data +0x04 [sizeof=4] unsigned int bIsAllocated : 1
+      data +0x04 [sizeof=4] unsigned int nSize : 31
+      data +0x08 [sizeof=4] _AptValueGC_MemItem* pPrevItem
+    }
+    
+    struct _AptValueGC_MemItem::<unnamed-tag>::<unnamed-tag> [sizeof = 12] {
+      data +0x00 [sizeof=4] unsigned int bIsAllocated : 1
+      data +0x00 [sizeof=4] unsigned int nSize : 31
+      data +0x04 [sizeof=4] _AptValueGC_MemItem* pNextItem
+      data +0x08 [sizeof=4] _AptValueGC_MemItem* pPrevItem
+    }
+    
+    struct _AptValueGC_MemItem [sizeof = 12] {
+      data +0x00 [sizeof=12] _AptValueGC_MemItem::<unnamed-tag>::<unnamed-tag> Type1
+        data +0x00 [sizeof=4] _AptValueGC_MemItem* pNextItem
+        data +0x04 [sizeof=4] unsigned int bIsAllocated : 1
+        data +0x04 [sizeof=4] unsigned int nSize : 31
+        data +0x08 [sizeof=4] _AptValueGC_MemItem* pPrevItem
+      data +0x00 [sizeof=12] _AptValueGC_MemItem::<unnamed-tag>::<unnamed-tag> Type2
+        data +0x00 [sizeof=4] unsigned int bIsAllocated : 1
+        data +0x00 [sizeof=4] unsigned int nSize : 31
+        data +0x04 [sizeof=4] _AptValueGC_MemItem* pNextItem
+        data +0x08 [sizeof=4] _AptValueGC_MemItem* pPrevItem
+    }
+    
+    const struct AptCharacterButtonInst
+    struct AptCharacterButtonInst [sizeof = 24]
+      : public AptCharacterInst {
+      base +0x00 [sizeof=21] AptCharacterInst
+        vfptr +0x00 [sizeof=4] 
+        data +0x04 [sizeof=4] int nClipDepth
+        data +0x08 [sizeof=4] int nCreatedOnFrame
+        data +0x0c [sizeof=4] AptCharacter* pCharacter
+        data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+        data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+      <padding> (3 bytes)
+    }
+    Total padding 3 bytes (12.5% of class size)
+    Immediate padding 3 bytes (12.5% of class size)
+    
+    const class AptExtObject
+    class AptExtObject [sizeof = 16]
+      : public AptValueGC {
+      base +0x00 [sizeof=8] AptValueGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=4] AptNativeHash* mpNativeHash
+      data +0x0c [sizeof=4] unsigned int mnObjectSize
+    }
+    
+    const class AptGlobal
+    class AptGlobal [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const class AptGlobalExtensionObject
+    class AptGlobalExtensionObject [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    struct AptControlPlaceObject2 [sizeof = 60] {
+      data +0x00 [sizeof=4] AptPlaceObjectFlags eFlags
+      data +0x04 [sizeof=4] int nDepth
+      data +0x08 [sizeof=4] int nCharacterID
+      data +0x0c [sizeof=24] AptMatrix matrix
+        data +0x0c [sizeof=4] float a
+        data +0x10 [sizeof=4] float b
+        data +0x14 [sizeof=4] float c
+        data +0x18 [sizeof=4] float d
+        data +0x1c [sizeof=4] float tx
+        data +0x20 [sizeof=4] float ty
+      data +0x24 [sizeof=8] AptnCXForm ncxform
+        data +0x24 [sizeof=4] unsigned int nScale
+        data +0x28 [sizeof=4] unsigned int nBias
+      data +0x2c [sizeof=4] float fRatio
+      data +0x30 [sizeof=4] char* szName
+      data +0x34 [sizeof=4] int nClipDepth
+      data +0x38 [sizeof=4] AptEventActionSet* pActions
+    }
+    
+    struct AptAnalogStickInfo [sizeof = 16] {
+      data +0x00 [sizeof=4] float fXAxisValue
+      data +0x04 [sizeof=4] float fYAxisValue
+      data +0x08 [sizeof=1] unsigned char nController
+      <padding> (3 bytes)
+      data +0x0c [sizeof=4] AptInputType nSide
+    }
+    Total padding 3 bytes (18.75% of class size)
+    Immediate padding 3 bytes (18.75% of class size)
+    
+    struct AptSingleListPolicy [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    
+    struct AptSingleListPolicy::Allocator [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    
+    struct AptEventActionSet [sizeof = 8] {
+      data +0x00 [sizeof=4] int nEventActions
+      data +0x04 [sizeof=4] AptEventActionBlock* aEventActions
+    }
+    
+    const class AptScriptColour
+    class AptScriptColour [sizeof = 36]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+      data +0x20 [sizeof=4] AptCIH* pSprite
+    }
+    
+    class AptValuePtrStack<AptValue> [sizeof = 12] {
+      data +0x00 [sizeof=4] int m_nElements
+      data +0x04 [sizeof=4] int m_nSize
+      data +0x08 [sizeof=4] AptValue** m_aElements
+    }
+    
+    struct AptPseudoData_t [sizeof = 28] {
+      data +0x00 [sizeof=4] AptCharacter* pCharacter
+      data +0x04 [sizeof=4] AptMatrix* matrix
+      data +0x08 [sizeof=4] AptnCXForm* ncxform
+      data +0x0c [sizeof=4] AptEventActionSet* pActions
+      data +0x10 [sizeof=4] float fRatio
+      data +0x14 [sizeof=4] int eFlags
+      data +0x18 [sizeof=4] int nFrameCreated : 16
+      data +0x18 [sizeof=4] int nClipDepth : 16
+    }
+    
+    struct StringAsVectorEncoding<AptFileSavedInputState> [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    
+    const struct AptCharacterSpriteInstBase
+    struct AptCharacterSpriteInstBase [sizeof = 48]
+      : public AptCharacterInst {
+      base +0x00 [sizeof=21] AptCharacterInst
+        vfptr +0x00 [sizeof=4] 
+        data +0x04 [sizeof=4] int nClipDepth
+        data +0x08 [sizeof=4] int nCreatedOnFrame
+        data +0x0c [sizeof=4] AptCharacter* pCharacter
+        data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+        data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+      <padding> (3 bytes)
+      data +0x18 [sizeof=4] int nFrame
+      data +0x1c [sizeof=4] int nObjectClipActions : 24
+      data +0x1c [sizeof=4] unsigned int bJustLoaded : 1
+      data +0x1c [sizeof=4] unsigned int bIsPlaying : 1
+      data +0x1c [sizeof=4] unsigned int nIsCustomControl : 2
+      data +0x20 [sizeof=4] AptEventActionSet* pClipActions
+      data +0x24 [sizeof=4] AptDisplayList displayList
+        data +0x24 [sizeof=4] AptDisplayListState* pState
+      data +0x28 [sizeof=4] int nGotoAnded
+      data +0x2c [sizeof=4] int bCreatedDynamic
+    }
+    Total padding 3 bytes (6.25% of class size)
+    Immediate padding 3 bytes (6.25% of class size)
+    
+    struct AptSharedPtrRefCount [sizeof = 4] {
+      data +0x00 [sizeof=4] int mRefCount
+    }
+    
+    const class AptXmlNode
+    class AptXmlNode [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const class AptString
+    class AptString [sizeof = 16]
+      : public AptValueNoGC {
+      base +0x00 [sizeof=8] AptValueNoGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=4] EAStringC str
+        data +0x08 [sizeof=4] EAStringC::DebugDataC* m_pData
+      data +0x0c [sizeof=4] AptString* mpNext
+    }
+    
+    class AptXmlAttributePair [sizeof = 8] {
+      data +0x00 [sizeof=4] char* pKey
+      data +0x04 [sizeof=4] char* pValue
+    }
+    
+    struct AptCXForm [sizeof = 32] {
+      data +0x00 [sizeof=16] float scale[4]
+      data +0x10 [sizeof=16] float translate[4]
+    }
+    
+    const struct AptCharacterMorphInst
+    struct AptCharacterMorphInst [sizeof = 28]
+      : public AptCharacterInst {
+      base +0x00 [sizeof=21] AptCharacterInst
+        vfptr +0x00 [sizeof=4] 
+        data +0x04 [sizeof=4] int nClipDepth
+        data +0x08 [sizeof=4] int nCreatedOnFrame
+        data +0x0c [sizeof=4] AptCharacter* pCharacter
+        data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+        data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+      <padding> (3 bytes)
+      data +0x18 [sizeof=4] float fRatio
+    }
+    Total padding 3 bytes (10.71% of class size)
+    Immediate padding 3 bytes (10.71% of class size)
+    
+    struct AptAction_DefineFunction [sizeof = 24] {
+      data +0x00 [sizeof=4] const char* szName
+      data +0x04 [sizeof=4] int nParams
+      data +0x08 [sizeof=4] char** aszParams
+      data +0x0c [sizeof=4] int nCodeSize
+      data +0x10 [sizeof=8] AptConstantPool constantPool
+        data +0x10 [sizeof=4] int nItems
+        data +0x14 [sizeof=4] AptValue** apItems
+    }
+    
+    struct AptRegisterParam [sizeof = 8] {
+      data +0x00 [sizeof=4] unsigned int nRegister
+      data +0x04 [sizeof=4] char* szParamName
+    }
+    
+    struct _AptScriptFunctionState [sizeof = 8] {
+      data +0x00 [sizeof=4] AptFrameStack* mpFrameStack
+      data +0x04 [sizeof=4] AptValue** mpRegBlockPreviousFrameBase
+    }
+    
+    struct AptCharacterFont [sizeof = 12] {
+      data +0x00 [sizeof=4] char* szName
+      data +0x04 [sizeof=4] int nGlyphs
+      data +0x08 [sizeof=4] AptCharacter** apGlyphs
+    }
+    
+    struct AptFileSavedInputState [sizeof = 8] {
+      data +0x00 [sizeof=4] EAStringC mName
+        data +0x00 [sizeof=4] EAStringC::DebugDataC* m_pData
+      data +0x04 [sizeof=4] AptFileSavedInputState::State mState
+    }
+    
+    const class AptValueGC
+    class AptValueGC [sizeof = 8]
+      : public AptValue {
+      base +0x00 [sizeof=8] AptValue
+        vfptr +0x00 [sizeof=4] 
+        data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+          data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+          data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+          data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+          data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+          data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+          data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+          data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+          data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+          data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+          data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+        data +0x04 [sizeof=4] unsigned int mnValueData
+    }
+    
+    class AptPseudoDisplayList [sizeof = 8] {
+      data +0x00 [sizeof=4] AptPseudoCIH_t* pHead
+      data +0x04 [sizeof=4] AptCIH* pParentCIH
+    }
+    
+    const class AptMathObj
+    class AptMathObj [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const struct AptMemoryAllocationsT
+    struct AptMemoryAllocationsT [sizeof = 32] {
+      data +0x00 [sizeof=4] unsigned int nAptUpdateAllocations
+      data +0x04 [sizeof=4] unsigned int nAptUpdateDeletions
+      data +0x08 [sizeof=4] unsigned int nAptUpdateAllocationSize
+      data +0x0c [sizeof=4] unsigned int nAptUpdateDeletionSize
+      data +0x10 [sizeof=4] unsigned int nAptUpdateAllocationsGC
+      data +0x14 [sizeof=4] unsigned int nAptUpdateDeletionsGC
+      data +0x18 [sizeof=4] unsigned int nAptUpdateAllocationGCSize
+      data +0x1c [sizeof=4] unsigned int nAptUpdateDeletionGCSize
+    }
+    
+    const class AptTextFormat
+    class AptTextFormat [sizeof = 64]
+      : public AptObject
+      , public TextFormat {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+      base +0x20 [sizeof=32] TextFormat
+        data +0x20 [sizeof=4] EAStringC pFontName
+          data +0x20 [sizeof=4] EAStringC::DebugDataC* m_pData
+        data +0x24 [sizeof=4] float fSize
+        data +0x28 [sizeof=4] int nColor
+        data +0x2c [sizeof=4] AptStringAlignment eAlignment
+        data +0x30 [sizeof=4] unsigned int nFontStyle
+        data +0x34 [sizeof=4] int nIndent
+        data +0x38 [sizeof=4] int nLeftMargin
+        data +0x3c [sizeof=4] int nRightMargin
+    }
+    
+    const struct AptCharacterSpriteInst
+    struct AptCharacterSpriteInst [sizeof = 48]
+      : public AptCharacterSpriteInstBase {
+      base +0x00 [sizeof=48] AptCharacterSpriteInstBase
+        base +0x00 [sizeof=21] AptCharacterInst
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] int nClipDepth
+          data +0x08 [sizeof=4] int nCreatedOnFrame
+          data +0x0c [sizeof=4] AptCharacter* pCharacter
+          data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+          data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+        <padding> (3 bytes)
+        data +0x18 [sizeof=4] int nFrame
+        data +0x1c [sizeof=4] int nObjectClipActions : 24
+        data +0x1c [sizeof=4] unsigned int bJustLoaded : 1
+        data +0x1c [sizeof=4] unsigned int bIsPlaying : 1
+        data +0x1c [sizeof=4] unsigned int nIsCustomControl : 2
+        data +0x20 [sizeof=4] AptEventActionSet* pClipActions
+        data +0x24 [sizeof=4] AptDisplayList displayList
+          data +0x24 [sizeof=4] AptDisplayListState* pState
+        data +0x28 [sizeof=4] int nGotoAnded
+        data +0x2c [sizeof=4] int bCreatedDynamic
+    }
+    Total padding 3 bytes (6.25% of class size)
+    Immediate padding 0 bytes (0% of class size)
+    
+    struct AptCharacterStaticText [sizeof = 48] {
+      data +0x00 [sizeof=16] AptRect rBounds
+        data +0x00 [sizeof=4] float fLeft
+        data +0x04 [sizeof=4] float fTop
+        data +0x08 [sizeof=4] float fRight
+        data +0x0c [sizeof=4] float fBottom
+      data +0x10 [sizeof=24] AptMatrix matrix
+        data +0x10 [sizeof=4] float a
+        data +0x14 [sizeof=4] float b
+        data +0x18 [sizeof=4] float c
+        data +0x1c [sizeof=4] float d
+        data +0x20 [sizeof=4] float tx
+        data +0x24 [sizeof=4] float ty
+      data +0x28 [sizeof=4] int nFontRecords
+      data +0x2c [sizeof=4] AptCharacterStaticTextRecords* aRecords
+    }
+    
+    struct AptConstFile [sizeof = 32] {
+      data +0x00 [sizeof=20] char aMagic[20]
+      data +0x14 [sizeof=4] AptCharacter* pMainCharacter
+      data +0x18 [sizeof=4] int nConstants
+      data +0x1c [sizeof=4] AptConstantTable* aConstants
+    }
+    
+    const class AptExtern
+    class AptExtern [sizeof = 8]
+      : public AptValueNoGC {
+      base +0x00 [sizeof=8] AptValueNoGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+    }
+    
+    struct AptCharacter [sizeof = 60] {
+      data +0x00 [sizeof=4] AptCharacterType eType
+      data +0x04 [sizeof=4] AptCharacter* pParentAnim
+      data +0x08 [sizeof=20] AptCharacterShape shape
+        data +0x08 [sizeof=16] AptRect rBounds
+          data +0x08 [sizeof=4] float fLeft
+          data +0x0c [sizeof=4] float fTop
+          data +0x10 [sizeof=4] float fRight
+          data +0x14 [sizeof=4] float fBottom
+        data +0x18 [sizeof=4] void* zID
+      data +0x08 [sizeof=8] AptCharacterMorph morph
+        data +0x08 [sizeof=4] AptCharacter* pStartCharacter
+        data +0x0c [sizeof=4] AptCharacter* pEndCharacter
+      data +0x08 [sizeof=52] AptCharacterText text
+        data +0x08 [sizeof=16] AptRect rBounds
+          data +0x08 [sizeof=4] float fLeft
+          data +0x0c [sizeof=4] float fTop
+          data +0x10 [sizeof=4] float fRight
+          data +0x14 [sizeof=4] float fBottom
+        data +0x18 [sizeof=4] int nFontID
+        data +0x1c [sizeof=4] AptStringAlignment eAlignment
+        data +0x20 [sizeof=4] unsigned int nColour
+        data +0x24 [sizeof=4] float fFontHeight
+        data +0x28 [sizeof=4] int bReadOnly
+        data +0x2c [sizeof=4] int bMultiLine
+        data +0x30 [sizeof=4] int bWordWrap
+        data +0x34 [sizeof=4] char* szInitialText
+        data +0x38 [sizeof=4] char* szVariable
+      data +0x08 [sizeof=12] AptCharacterFont font
+        data +0x08 [sizeof=4] char* szName
+        data +0x0c [sizeof=4] int nGlyphs
+        data +0x10 [sizeof=4] AptCharacter** apGlyphs
+      data +0x08 [sizeof=12] AptCharacterSprite sprite
+        data +0x08 [sizeof=12] AptMovie movie
+          data +0x08 [sizeof=4] int nFrames
+          data +0x0c [sizeof=4] AptFrame* aFrames
+          data +0x10 [sizeof=4] AptNativeHash* phLabels
+      data +0x08 [sizeof=4] AptCharacterBitmap bitmap
+        data +0x08 [sizeof=4] void* zID
+      data +0x08 [sizeof=52] AptCharacterAnimation animation
+        base +0x08 [sizeof=12] AptCharacterSprite
+          data +0x08 [sizeof=12] AptMovie movie
+            data +0x08 [sizeof=4] int nFrames
+            data +0x0c [sizeof=4] AptFrame* aFrames
+            data +0x10 [sizeof=4] AptNativeHash* phLabels
+        data +0x14 [sizeof=4] int nCharacters
+        data +0x18 [sizeof=4] AptCharacter** apCharacters
+        data +0x1c [sizeof=4] unsigned int nWidth
+        data +0x20 [sizeof=4] unsigned int nHeight
+        data +0x24 [sizeof=4] unsigned int nMillisecondsPerFrame
+        data +0x28 [sizeof=4] int nImports
+        data +0x2c [sizeof=4] AptImport* aImports
+        data +0x30 [sizeof=4] int nExports
+        data +0x34 [sizeof=4] AptExport* aExports
+        data +0x38 [sizeof=4] int nCurrentConstantIndex
+      data +0x08 [sizeof=48] AptCharacterStaticText statictext
+        data +0x08 [sizeof=16] AptRect rBounds
+          data +0x08 [sizeof=4] float fLeft
+          data +0x0c [sizeof=4] float fTop
+          data +0x10 [sizeof=4] float fRight
+          data +0x14 [sizeof=4] float fBottom
+        data +0x18 [sizeof=24] AptMatrix matrix
+          data +0x18 [sizeof=4] float a
+          data +0x1c [sizeof=4] float b
+          data +0x20 [sizeof=4] float c
+          data +0x24 [sizeof=4] float d
+          data +0x28 [sizeof=4] float tx
+          data +0x2c [sizeof=4] float ty
+        data +0x30 [sizeof=4] int nFontRecords
+        data +0x34 [sizeof=4] AptCharacterStaticTextRecords* aRecords
+    }
+    
+    const class AptBoolean
+    class AptBoolean [sizeof = 12]
+      : public AptValueNoGC {
+      base +0x00 [sizeof=8] AptValueNoGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=1] bool mbValue
+      data +0x08 [sizeof=4] AptBoolean* mpNextFree
+    }
+    
+    struct AptAllocateStringParameters [sizeof = 112] {
+      data +0x00 [sizeof=4] const char* szFontName
+      data +0x04 [sizeof=4] float x0
+      data +0x08 [sizeof=4] float y0
+      data +0x0c [sizeof=4] float x1
+      data +0x10 [sizeof=4] float y1
+      data +0x14 [sizeof=4] AptStringAlignment eAlignment
+      data +0x18 [sizeof=4] AptStringAlignment eBoxAlignment
+      data +0x1c [sizeof=4] int nMaxScroll
+      data +0x20 [sizeof=4] float fStrLen
+      data +0x24 [sizeof=4] int bMultiline
+      data +0x28 [sizeof=4] int bWordWrap
+      data +0x2c [sizeof=4] unsigned int nColour
+      data +0x30 [sizeof=4] unsigned int nBackColor
+      data +0x34 [sizeof=4] unsigned int nBorderColor
+      data +0x38 [sizeof=4] int bBackground
+      data +0x3c [sizeof=4] int bBorder
+      data +0x40 [sizeof=4] float fTextWidth
+      data +0x44 [sizeof=4] float fTextHeight
+      data +0x48 [sizeof=4] float fFontHeight
+      data +0x4c [sizeof=4] int nLineOffset
+      data +0x50 [sizeof=4] int* pnNumLines
+      data +0x54 [sizeof=4] const char* szString
+      data +0x58 [sizeof=4] unsigned int eFlags
+      data +0x5c [sizeof=4] void* pCurrString
+      data +0x60 [sizeof=4] unsigned int nFontStyle
+      data +0x64 [sizeof=4] int nIndent
+      data +0x68 [sizeof=4] int nLeftMargin
+      data +0x6c [sizeof=4] int nRightMargin
+    }
+    
+    struct AptCharacterBitmap [sizeof = 4] {
+      data +0x00 [sizeof=4] void* zID
+    }
+    
+    const class AptArray
+    class AptArray [sizeof = 44]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+      data +0x20 [sizeof=4] AptValue** mpValues
+      data +0x24 [sizeof=4] int mnCapacity
+      data +0x28 [sizeof=4] int mnLength
+    }
+    
+    struct AptRect [sizeof = 16] {
+      data +0x00 [sizeof=4] float fLeft
+      data +0x04 [sizeof=4] float fTop
+      data +0x08 [sizeof=4] float fRight
+      data +0x0c [sizeof=4] float fBottom
+    }
+    
+    const class AptCIH
+    const struct AptMatrix
+    class AptCIH [sizeof = 96]
+      : public AptValueGC {
+      base +0x00 [sizeof=8] AptValueGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=4] EAStringC mMyName
+        data +0x08 [sizeof=4] EAStringC::DebugDataC* m_pData
+      data +0x0c [sizeof=24] AptMatrix matrix
+        data +0x0c [sizeof=4] float a
+        data +0x10 [sizeof=4] float b
+        data +0x14 [sizeof=4] float c
+        data +0x18 [sizeof=4] float d
+        data +0x1c [sizeof=4] float tx
+        data +0x20 [sizeof=4] float ty
+      data +0x24 [sizeof=32] AptCXForm cxform
+        data +0x24 [sizeof=16] float scale[4]
+        data +0x34 [sizeof=16] float translate[4]
+      data +0x44 [sizeof=4] AptCIH* pParent
+      data +0x48 [sizeof=4] AptCharacterInst* pData
+      data +0x4c [sizeof=4] AptCIH* pPrev
+      data +0x50 [sizeof=4] AptCIH* pNext
+      data +0x54 [sizeof=4] int nDepth : 17
+      data +0x54 [sizeof=4] int nCreatedOnFrame : 14
+      data +0x58 [sizeof=4] unsigned int nZombieCounter : 16
+      data +0x58 [sizeof=4] unsigned int mbASChange : 1
+      data +0x58 [sizeof=4] unsigned int mbHasClass : 1
+      data +0x58 [sizeof=4] unsigned int mbIsZombie : 2
+      data +0x58 [sizeof=4] unsigned int mbIsVisible : 1
+      data +0x58 [sizeof=4] unsigned int mbInCtor : 1
+      data +0x5c [sizeof=4] float* fRot
+    }
+    
+    const class AptValueNoGC
+    class AptValueNoGC [sizeof = 8]
+      : public AptValue {
+      base +0x00 [sizeof=8] AptValue
+        vfptr +0x00 [sizeof=4] 
+        data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+          data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+          data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+          data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+          data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+          data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+          data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+          data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+          data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+          data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+          data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+        data +0x04 [sizeof=4] unsigned int mnValueData
+    }
+    
+    const struct AptHashItem
+    struct AptHashItem [sizeof = 8] {
+      data +0x00 [sizeof=4] EAStringC Key
+        data +0x00 [sizeof=4] EAStringC::DebugDataC* m_pData
+      data +0x04 [sizeof=4] AptValue* mValue
+    }
+    
+    const class AptLookup
+    class AptLookup [sizeof = 12]
+      : public AptValueNoGC {
+      base +0x00 [sizeof=8] AptValueNoGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=4] int nLookup
+    }
+    
+    const class AptLoadVars
+    class AptLoadVars [sizeof = 36]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+      data +0x20 [sizeof=4] int iIsLoaded
+    }
+    
+    struct AptControlRemoveObject2 [sizeof = 4] {
+      data +0x00 [sizeof=4] int nDepth
+    }
+    
+    class AptValueSet<AptValue *> [sizeof = 8] {
+      data +0x00 [sizeof=2] unsigned short mnElements
+      data +0x02 [sizeof=2] unsigned short mnMaxElements
+      data +0x04 [sizeof=4] AptValue** maElements
+    }
+    
+    const class AptDate
+    class AptDate [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const struct AptLoader
+    struct AptLoader [sizeof = 4] {
+      data +0x00 [sizeof=4] CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy> mFiles
+        data +0x00 [sizeof=4] CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>::Node* mHead
+    }
+    
+    const class AptStringObject
+    class AptStringObject [sizeof = 36]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+      data +0x20 [sizeof=4] AptString* mpStringObject
+    }
+    
+    const class AptPrototype
+    class AptPrototype [sizeof = 32]
+      : public AptValueWithHash {
+      base +0x00 [sizeof=28] AptValueWithHash
+        base +0x00 [sizeof=8] AptValueGC
+          base +0x00 [sizeof=8] AptValue
+            vfptr +0x00 [sizeof=4] 
+            data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+              data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+              data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+              data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+              data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+              data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+              data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+              data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+              data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+              data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+              data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+            data +0x04 [sizeof=4] unsigned int mnValueData
+        data +0x08 [sizeof=20] AptNativeHash mNativeHash
+          data +0x08 [sizeof=4] int mnTotalSize
+          data +0x0c [sizeof=4] AptHashItem* mpData
+          data +0x10 [sizeof=4] AptValue* mp__proto__
+          data +0x14 [sizeof=4] AptValue* mpPrototype
+          data +0x18 [sizeof=4] unsigned int nEventHandlers
+      data +0x1c [sizeof=4] AptValue* mp__constructor__
+    }
+    
+    const class AptKey
+    class AptKey [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    struct AptSavedInputRecord [sizeof = 4] {
+      data +0x00 [sizeof=4] unsigned int nTick
+    }
+    
+    struct AptMatrix [sizeof = 24] {
+      data +0x00 [sizeof=4] float a
+      data +0x04 [sizeof=4] float b
+      data +0x08 [sizeof=4] float c
+      data +0x0c [sizeof=4] float d
+      data +0x10 [sizeof=4] float tx
+      data +0x14 [sizeof=4] float ty
+    }
+    
+    const struct AptLinker
+    struct AptLinker [sizeof = 24] {
+      data +0x00 [sizeof=4] CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy> mThingys
+        data +0x00 [sizeof=4] CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::Node* mHead
+      data +0x04 [sizeof=20] EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy> mLoadedFilesWaitingForLink
+        base +0x04 [sizeof=8] EA::String::Impl::UseCapacity<1>
+          data +0x04 [sizeof=4] int mSize
+          data +0x08 [sizeof=4] int mCapacity
+        data +0x0c [sizeof=4] AptSharedPtr<AptFile>* mString
+        data +0x10 [sizeof=8] AptSharedPtr<AptFile> mSmallString[2]
+    }
+    
+    const class AptXml
+    class AptXml [sizeof = 32]
+      : public AptXmlNode {
+      base +0x00 [sizeof=32] AptXmlNode
+        base +0x00 [sizeof=32] AptObject
+          base +0x00 [sizeof=28] AptValueWithHash
+            base +0x00 [sizeof=8] AptValueGC
+              base +0x00 [sizeof=8] AptValue
+                vfptr +0x00 [sizeof=4] 
+                data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                  data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                  data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                  data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                  data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                  data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                  data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                  data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                  data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                  data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                  data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+                data +0x04 [sizeof=4] unsigned int mnValueData
+            data +0x08 [sizeof=20] AptNativeHash mNativeHash
+              data +0x08 [sizeof=4] int mnTotalSize
+              data +0x0c [sizeof=4] AptHashItem* mpData
+              data +0x10 [sizeof=4] AptValue* mp__proto__
+              data +0x14 [sizeof=4] AptValue* mpPrototype
+              data +0x18 [sizeof=4] unsigned int nEventHandlers
+          data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+          data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+          data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const class AptXmlAttributes
+    class AptXmlAttributes [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    struct AptIntervalTimer [sizeof = 32] {
+      data +0x00 [sizeof=4] int bValid
+      data +0x04 [sizeof=4] AptValue* pCBFunction
+      data +0x08 [sizeof=4] float fInterval
+      data +0x0c [sizeof=4] float fCurTime
+      data +0x10 [sizeof=4] AptValue* pContext
+      data +0x14 [sizeof=12] AptValuePtrStack<AptValue> pParams
+        data +0x14 [sizeof=4] int m_nElements
+        data +0x18 [sizeof=4] int m_nSize
+        data +0x1c [sizeof=4] AptValue** m_aElements
+    }
+    
+    struct AptMovieclipInformation [sizeof = 28] {
+      data +0x00 [sizeof=4] int nAnimations
+      data +0x04 [sizeof=4] int nMovieClips
+      data +0x08 [sizeof=4] int nButtons
+      data +0x0c [sizeof=4] int nStaticText
+      data +0x10 [sizeof=4] int nDynamicText
+      data +0x14 [sizeof=4] int nMorph
+      data +0x18 [sizeof=4] int nShapes
+    }
+    
+    const struct AptAction_TryCatchFinallyBlock
+    struct AptAction_TryCatchFinallyBlock [sizeof = 20] {
+      data +0x00 [sizeof=4] unsigned int uTryCodeSize
+      data +0x04 [sizeof=4] unsigned int uCatchCodeSize
+      data +0x08 [sizeof=4] unsigned int uFinallyCodeSize
+      data +0x0c [sizeof=1] unsigned char uFlags
+      data +0x0d [sizeof=1] unsigned char uAlignment1
+      data +0x0e [sizeof=1] unsigned char uAlignment2
+      data +0x0f [sizeof=1] unsigned char uCaughtRegister
+      data +0x10 [sizeof=4] char* szCaughtVarName
+    }
+    
+    const class CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>::Iterator
+    class CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>::Iterator [sizeof = 4] {
+      data +0x00 [sizeof=4] CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>::Node* mRep
+    }
+    
+    struct CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>::Node [sizeof = 8] {
+      data +0x00 [sizeof=4] AptFile* mData
+      data +0x04 [sizeof=4] CommonSense::SingleList::SingleList<AptFile *,AptSingleListPolicy>::Node* mNext
+    }
+    
+    class CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::ConstIterator [sizeof = 0] {}
+    
+    const class CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>
+    class CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy> [sizeof = 4] {
+      data +0x00 [sizeof=4] CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::Node* mHead
+    }
+    
+    const class CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::Iterator
+    class CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::Iterator [sizeof = 4] {
+      data +0x00 [sizeof=4] CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::Node* mRep
+    }
+    
+    const struct CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::Node
+    struct CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::Node [sizeof = 8] {
+      data +0x00 [sizeof=4] AptSharedPtr<AptLinkerThingy> mData
+        data +0x00 [sizeof=4] AptLinkerThingy* pData
+      data +0x04 [sizeof=4] CommonSense::SingleList::SingleList<AptSharedPtr<AptLinkerThingy>,AptSingleListPolicy>::Node* mNext
+    }
+    
+    const struct AptAction_DefineFunction2
+    struct AptAction_DefineFunction2 [sizeof = 28] {
+      data +0x00 [sizeof=4] const char* szName
+      data +0x04 [sizeof=4] int nParams
+      data +0x08 [sizeof=2] short nRegisterCount
+      data +0x0a [sizeof=2] short nFlags
+      data +0x0c [sizeof=4] AptRegisterParam* aszParams
+      data +0x10 [sizeof=4] int nCodeSize
+      data +0x14 [sizeof=8] AptConstantPool constantPool
+        data +0x14 [sizeof=4] int nItems
+        data +0x18 [sizeof=4] AptValue** apItems
+    }
+    
+    const struct AptSavedInputCheckpoints
+    struct AptSavedInputCheckpoints [sizeof = 28] {
+      data +0x00 [sizeof=28] EA::String::BasicString<StringAsVectorEncoding<AptFileSavedInputState>,StringAsVectorPolicy> mPending
+        base +0x00 [sizeof=8] EA::String::Impl::UseCapacity<1>
+          data +0x00 [sizeof=4] int mSize
+          data +0x04 [sizeof=4] int mCapacity
+        data +0x08 [sizeof=4] AptFileSavedInputState* mString
+        data +0x0c [sizeof=16] AptFileSavedInputState mSmallString[2]
+    }
+    
+    struct AptActionBlock [sizeof = 4] {
+      data +0x00 [sizeof=4] unsigned char* aActionStream
+    }
+    
+    class AptValueSet<AptCIH *> [sizeof = 8] {
+      data +0x00 [sizeof=2] unsigned short mnElements
+      data +0x02 [sizeof=2] unsigned short mnMaxElements
+      data +0x04 [sizeof=4] AptCIH** maElements
+    }
+    
+    const class AptInteger
+    class AptInteger [sizeof = 12]
+      : public AptValueNoGC {
+      base +0x00 [sizeof=8] AptValueNoGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=4] int mnValue
+      data +0x08 [sizeof=4] AptInteger* mpNextFree
+    }
+    
+    const struct AptDisplayListState
+    struct AptDisplayListState [sizeof = 4] {
+      data +0x00 [sizeof=4] AptCIH* pHead
+    }
+    
+    const class AptRegister
+    class AptRegister [sizeof = 12]
+      : public AptValueNoGC {
+      base +0x00 [sizeof=8] AptValueNoGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=4] int nVal
+    }
+    
+    const class AptScriptFunctionByteCodeBlock
+    class AptScriptFunctionByteCodeBlock [sizeof = 68]
+      : public AptScriptFunctionBase {
+      base +0x00 [sizeof=46] AptScriptFunctionBase
+        base +0x00 [sizeof=32] AptObject
+          base +0x00 [sizeof=28] AptValueWithHash
+            base +0x00 [sizeof=8] AptValueGC
+              base +0x00 [sizeof=8] AptValue
+                vfptr +0x00 [sizeof=4] 
+                data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                  data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                  data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                  data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                  data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                  data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                  data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                  data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                  data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                  data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                  data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+                data +0x04 [sizeof=4] unsigned int mnValueData
+            data +0x08 [sizeof=20] AptNativeHash mNativeHash
+              data +0x08 [sizeof=4] int mnTotalSize
+              data +0x0c [sizeof=4] AptHashItem* mpData
+              data +0x10 [sizeof=4] AptValue* mp__proto__
+              data +0x14 [sizeof=4] AptValue* mpPrototype
+              data +0x18 [sizeof=4] unsigned int nEventHandlers
+          data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+          data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+          data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+        data +0x20 [sizeof=4] AptCIH* mpCIH
+        data +0x24 [sizeof=4] AptCIH* mpParentAnim
+        data +0x28 [sizeof=4] AptFrameStack* mpCreatorScope
+        data +0x2c [sizeof=2] unsigned short mnFrameStackReserve
+      <padding> (2 bytes)
+      data +0x30 [sizeof=4] const unsigned char* mpByteCodeBase
+      data +0x34 [sizeof=4] const int mnByteCodeSize
+      data +0x38 [sizeof=4] const char* mpName
+      data +0x3c [sizeof=8] AptConstantPool mConstantPool
+        data +0x3c [sizeof=4] int nItems
+        data +0x40 [sizeof=4] AptValue** apItems
+    }
+    Total padding 2 bytes (2.941% of class size)
+    Immediate padding 2 bytes (2.941% of class size)
+    
+    struct AptCharacterMorph [sizeof = 8] {
+      data +0x00 [sizeof=4] AptCharacter* pStartCharacter
+      data +0x04 [sizeof=4] AptCharacter* pEndCharacter
+    }
+    
+    const class AptValueWithHash
+    class AptValueWithHash [sizeof = 28]
+      : public AptValueGC {
+      base +0x00 [sizeof=8] AptValueGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+      data +0x08 [sizeof=20] AptNativeHash mNativeHash
+        data +0x08 [sizeof=4] int mnTotalSize
+        data +0x0c [sizeof=4] AptHashItem* mpData
+        data +0x10 [sizeof=4] AptValue* mp__proto__
+        data +0x14 [sizeof=4] AptValue* mpPrototype
+        data +0x18 [sizeof=4] unsigned int nEventHandlers
+    }
+    
+    const struct AptCharacterTextInst
+    struct AptCharacterTextInst [sizeof = 120]
+      : public AptCharacterInst {
+      base +0x00 [sizeof=21] AptCharacterInst
+        vfptr +0x00 [sizeof=4] 
+        data +0x04 [sizeof=4] int nClipDepth
+        data +0x08 [sizeof=4] int nCreatedOnFrame
+        data +0x0c [sizeof=4] AptCharacter* pCharacter
+        data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+        data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+      <padding> (3 bytes)
+      data +0x18 [sizeof=4] EAStringC mTextValue
+        data +0x18 [sizeof=4] EAStringC::DebugDataC* m_pData
+      data +0x1c [sizeof=4] EAStringC mVarValue
+        data +0x1c [sizeof=4] EAStringC::DebugDataC* m_pData
+      data +0x20 [sizeof=4] void* zID
+      data +0x24 [sizeof=4] unsigned int nColour
+      data +0x28 [sizeof=4] int nMaxScroll
+      data +0x2c [sizeof=4] int nScroll
+      data +0x30 [sizeof=4] unsigned int nBackColor
+      data +0x34 [sizeof=4] unsigned int nBorderColor
+      data +0x38 [sizeof=4] AptStringAlignment eBoxAlignment
+      data +0x3c [sizeof=4] AptStringAlignment eAlignment
+      data +0x40 [sizeof=4] int nMaxChars
+      data +0x44 [sizeof=4] float fTextWidth
+      data +0x48 [sizeof=4] float fTextHeight
+      data +0x4c [sizeof=4] float fLength
+      data +0x50 [sizeof=16] AptRect rBounds
+        data +0x50 [sizeof=4] float fLeft
+        data +0x54 [sizeof=4] float fTop
+        data +0x58 [sizeof=4] float fRight
+        data +0x5c [sizeof=4] float fBottom
+      data +0x60 [sizeof=4] float fFontSize
+      data +0x64 [sizeof=4] int nFontID
+      data +0x68 [sizeof=4] TextFormat* pMyTextFormat
+      data +0x6c [sizeof=4] unsigned int eFlags
+      data +0x70 [sizeof=4] unsigned int nFontStyle
+      data +0x74 [sizeof=4] unsigned int bCreatedDynamic : 1
+      data +0x74 [sizeof=4] unsigned int bBorder : 1
+      data +0x74 [sizeof=4] unsigned int bBackground : 1
+      data +0x74 [sizeof=4] unsigned int bMouseWheelEnabled : 1
+    }
+    Total padding 3 bytes (2.5% of class size)
+    Immediate padding 3 bytes (2.5% of class size)
+    
+    const class AptStage
+    class AptStage [sizeof = 32]
+      : public AptObject {
+      base +0x00 [sizeof=32] AptObject
+        base +0x00 [sizeof=28] AptValueWithHash
+          base +0x00 [sizeof=8] AptValueGC
+            base +0x00 [sizeof=8] AptValue
+              vfptr +0x00 [sizeof=4] 
+              data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+              data +0x04 [sizeof=4] unsigned int mnValueData
+          data +0x08 [sizeof=20] AptNativeHash mNativeHash
+            data +0x08 [sizeof=4] int mnTotalSize
+            data +0x0c [sizeof=4] AptHashItem* mpData
+            data +0x10 [sizeof=4] AptValue* mp__proto__
+            data +0x14 [sizeof=4] AptValue* mpPrototype
+            data +0x18 [sizeof=4] unsigned int nEventHandlers
+        data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+        data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+        data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    const struct AptCharacterStaticTextInst
+    struct AptCharacterStaticTextInst [sizeof = 24]
+      : public AptCharacterInst {
+      base +0x00 [sizeof=21] AptCharacterInst
+        vfptr +0x00 [sizeof=4] 
+        data +0x04 [sizeof=4] int nClipDepth
+        data +0x08 [sizeof=4] int nCreatedOnFrame
+        data +0x0c [sizeof=4] AptCharacter* pCharacter
+        data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+        data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+      <padding> (3 bytes)
+    }
+    Total padding 3 bytes (12.5% of class size)
+    Immediate padding 3 bytes (12.5% of class size)
+    
+    const class AptNone
+    class AptNone [sizeof = 8]
+      : public AptValueNoGC {
+      base +0x00 [sizeof=8] AptValueNoGC
+        base +0x00 [sizeof=8] AptValue
+          vfptr +0x00 [sizeof=4] 
+          data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+            data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+            data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+            data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+            data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+            data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+            data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+            data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+            data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+            data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+            data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+          data +0x04 [sizeof=4] unsigned int mnValueData
+    }
+    
+    struct AptAnimationPoolData [sizeof = 144] {
+      data +0x00 [sizeof=4] AptCIH** apNewInsts
+      data +0x04 [sizeof=4] int nNewInsts
+      data +0x08 [sizeof=8] AptValueSet<AptValue *> listenerSet
+        data +0x08 [sizeof=2] unsigned short mnElements
+        data +0x0a [sizeof=2] unsigned short mnMaxElements
+        data +0x0c [sizeof=4] AptValue** maElements
+      data +0x10 [sizeof=8] AptValueSet<AptCIH *> inputSet
+        data +0x10 [sizeof=2] unsigned short mnElements
+        data +0x12 [sizeof=2] unsigned short mnMaxElements
+        data +0x14 [sizeof=4] AptCIH** maElements
+      data +0x18 [sizeof=4] AptDisplayList displayList
+        data +0x18 [sizeof=4] AptDisplayListState* pState
+      data +0x1c [sizeof=4] AptIntervalTimer* aIntervalTimers
+      data +0x20 [sizeof=4] int nIntervalTimers
+      data +0x24 [sizeof=4] int nQueuedInputs
+      data +0x28 [sizeof=4] unsigned int* aQueuedInputs
+      data +0x2c [sizeof=4] AptValue* pDragMC
+      data +0x30 [sizeof=24] AptMatrix mDragPos
+        data +0x30 [sizeof=4] float a
+        data +0x34 [sizeof=4] float b
+        data +0x38 [sizeof=4] float c
+        data +0x3c [sizeof=4] float d
+        data +0x40 [sizeof=4] float tx
+        data +0x44 [sizeof=4] float ty
+      data +0x48 [sizeof=4] AptValue* pOnPress
+      data +0x4c [sizeof=4] AptValue* pOnRollOver
+      data +0x50 [sizeof=4] AptValue* pTopMostSprite
+      data +0x54 [sizeof=4] int nXMousePos
+      data +0x58 [sizeof=4] int nYMousePos
+      data +0x5c [sizeof=16] AptAnalogStickInfo gAStickLeft
+        data +0x5c [sizeof=4] float fXAxisValue
+        data +0x60 [sizeof=4] float fYAxisValue
+        data +0x64 [sizeof=1] unsigned char nController
+        <padding> (3 bytes)
+        data +0x68 [sizeof=4] AptInputType nSide
+      data +0x6c [sizeof=16] AptAnalogStickInfo gAStickRight
+        data +0x6c [sizeof=4] float fXAxisValue
+        data +0x70 [sizeof=4] float fYAxisValue
+        data +0x74 [sizeof=1] unsigned char nController
+        <padding> (3 bytes)
+        data +0x78 [sizeof=4] AptInputType nSide
+      data +0x7c [sizeof=4] AptCIH* pInputMask
+      data +0x80 [sizeof=4] AptActionQueueC* m_pAptActionPool
+      data +0x84 [sizeof=4] int m_iMaxNewMovieClips
+      data +0x88 [sizeof=4] int m_iMaxIntervalTimers
+      data +0x8c [sizeof=4] int m_iMaxQueuedInputs
+    }
+    Total padding 6 bytes (4.167% of class size)
+    Immediate padding 0 bytes (0% of class size)
+    
+    struct AptInitParmsT [sizeof = 60] {
+      data +0x00 [sizeof=4] int iButtonSetSize
+      data +0x04 [sizeof=4] int iInputSetSize
+      data +0x08 [sizeof=4] int iListenerSetSize
+      data +0x0c [sizeof=4] int iActionPoolSize
+      data +0x10 [sizeof=4] int iMaxIntervalFunctions
+      data +0x14 [sizeof=4] int iMaxButtonInstances
+      data +0x18 [sizeof=4] int iMaxNewMovieClipsPerFrame
+      data +0x1c [sizeof=4] int iMaxQueuedInputs
+      data +0x20 [sizeof=4] int iStackSize
+      data +0x24 [sizeof=4] int iCallStackDepth
+      data +0x28 [sizeof=4] int iDeferedVectorSize
+      data +0x2c [sizeof=4] int iStringPoolSize
+      data +0x30 [sizeof=4] int iRegArraySize
+      data +0x34 [sizeof=4] int iZombieVectorSize
+      data +0x38 [sizeof=1] bool bDefaultMouseWheelFlag
+      data +0x39 [sizeof=1] bool bPrintZombieDump
+      <padding> (2 bytes)
+    }
+    Total padding 2 bytes (3.333% of class size)
+    Immediate padding 2 bytes (3.333% of class size)
+    
+    const struct AptCharacterInst
+    struct AptCharacterInst [sizeof = 24] {
+      vfptr +0x00 [sizeof=4] 
+      data +0x04 [sizeof=4] int nClipDepth
+      data +0x08 [sizeof=4] int nCreatedOnFrame
+      data +0x0c [sizeof=4] AptCharacter* pCharacter
+      data +0x10 [sizeof=4] AptNativeHash* mpNativeHash
+      data +0x14 [sizeof=1] bool mbGCPointersDestroyed
+      <padding> (3 bytes)
+    }
+    Total padding 3 bytes (12.5% of class size)
+    Immediate padding 3 bytes (12.5% of class size)
+    
+    const class AptObject
+    class AptObject [sizeof = 32]
+      : public AptValueWithHash {
+      base +0x00 [sizeof=28] AptValueWithHash
+        base +0x00 [sizeof=8] AptValueGC
+          base +0x00 [sizeof=8] AptValue
+            vfptr +0x00 [sizeof=4] 
+            data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+              data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+              data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+              data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+              data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+              data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+              data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+              data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+              data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+              data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+              data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+            data +0x04 [sizeof=4] unsigned int mnValueData
+        data +0x08 [sizeof=20] AptNativeHash mNativeHash
+          data +0x08 [sizeof=4] int mnTotalSize
+          data +0x0c [sizeof=4] AptHashItem* mpData
+          data +0x10 [sizeof=4] AptValue* mp__proto__
+          data +0x14 [sizeof=4] AptValue* mpPrototype
+          data +0x18 [sizeof=4] unsigned int nEventHandlers
+      data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+      data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+      data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+    }
+    
+    struct AptDisplayList [sizeof = 4] {
+      data +0x00 [sizeof=4] AptDisplayListState* pState
+    }
+    
+    const class AptScriptFunction2
+    class AptScriptFunction2 [sizeof = 52]
+      : public AptScriptFunctionBase {
+      base +0x00 [sizeof=46] AptScriptFunctionBase
+        base +0x00 [sizeof=32] AptObject
+          base +0x00 [sizeof=28] AptValueWithHash
+            base +0x00 [sizeof=8] AptValueGC
+              base +0x00 [sizeof=8] AptValue
+                vfptr +0x00 [sizeof=4] 
+                data +0x04 [sizeof=4] AptValue::<unnamed-tag>::<unnamed-tag> mValueBitfield
+                  data +0x04 [sizeof=4] unsigned int mbIsAllocated : 1
+                  data +0x04 [sizeof=4] unsigned int mbHasRegisterReferenceMark : 1
+                  data +0x04 [sizeof=4] unsigned int mbIsInDeferredVector : 1
+                  data +0x04 [sizeof=4] unsigned int mbDestroyedGC : 1
+                  data +0x04 [sizeof=4] unsigned int mbIsDefined : 1
+                  data +0x04 [sizeof=4] unsigned int mbAllowsDelayedDeletion : 1
+                  data +0x04 [sizeof=4] unsigned int mnReferenceCount : 12
+                  data +0x04 [sizeof=4] unsigned int mnGCRootCount : 6
+                  data +0x04 [sizeof=4] unsigned int mnMaxRefCountHit : 1
+                  data +0x04 [sizeof=4] AptVirtualFunctionTable_Indices meValueType : 7
+                data +0x04 [sizeof=4] unsigned int mnValueData
+            data +0x08 [sizeof=20] AptNativeHash mNativeHash
+              data +0x08 [sizeof=4] int mnTotalSize
+              data +0x0c [sizeof=4] AptHashItem* mpData
+              data +0x10 [sizeof=4] AptValue* mp__proto__
+              data +0x14 [sizeof=4] AptValue* mpPrototype
+              data +0x18 [sizeof=4] unsigned int nEventHandlers
+          data +0x1c [sizeof=4] unsigned int mnImplementedObjects : 8
+          data +0x1c [sizeof=4] unsigned int mbHasClass : 1
+          data +0x1c [sizeof=4] unsigned int mbIsInMainInst : 1
+        data +0x20 [sizeof=4] AptCIH* mpCIH
+        data +0x24 [sizeof=4] AptCIH* mpParentAnim
+        data +0x28 [sizeof=4] AptFrameStack* mpCreatorScope
+        data +0x2c [sizeof=2] unsigned short mnFrameStackReserve
+      <padding> (2 bytes)
+      data +0x30 [sizeof=4] AptAction_DefineFunction2* mpFunction
+    }
+    Total padding 2 bytes (3.846% of class size)
+    Immediate padding 2 bytes (3.846% of class size)
+    
+    struct AptActionInterpreter::FunctionTable [sizeof = 4] {
+      data +0x00 [sizeof=4] void  (__cdecl * mFunctionPointer)(AptActionInterpreter* const , AptActionInterpreter::LocalContextT* const )
+    }
+    
+    struct AptActionInterpreter::LocalContextT [sizeof = 28] {
+      data +0x00 [sizeof=4] const unsigned char* pInstruction
+      data +0x04 [sizeof=4] AptCIH* pCurrentContext
+      data +0x08 [sizeof=4] AptValue* pCurWith
+      data +0x0c [sizeof=4] unsigned char* pRemoveWithAt
+      data +0x10 [sizeof=4] AptValue* pSuper
+      data +0x14 [sizeof=1] bool bEncounteredReturn
+      <padding> (3 bytes)
+      data +0x18 [sizeof=4] AptCharacterInst* pParentCharacter
+    }
+    Total padding 3 bytes (10.71% of class size)
+    Immediate padding 3 bytes (10.71% of class size)
+    
+    struct AptUserFunctions [sizeof = 156] {
+      data +0x00 [sizeof=4] void*  (__cdecl * pfnMemAlloc)(unsigned int)
+      data +0x04 [sizeof=4] void  (__cdecl * pfnMemFree)(void*)
+      data +0x08 [sizeof=4] void  (__cdecl * pfnMemFreeSize)(void*, unsigned int)
+      data +0x0c [sizeof=4] void  (__cdecl * pfnAssertFail)(const char*, const char*, unsigned int)
+      data +0x10 [sizeof=4] void  (__cdecl * pfnSetBackgroundColour)(unsigned int)
+      data +0x14 [sizeof=4] void  (__cdecl * pfnDebugPrint)(const char*, ...)
+      data +0x18 [sizeof=4] void  (__cdecl * pfnDebugAddSavedInput)(AptSavedInputRecord*, int)
+      data +0x1c [sizeof=4] void  (__cdecl * pfnDebugSetScreenGrabPending)(const char*)
+      data +0x20 [sizeof=4] void  (__cdecl * pfnLoadAnimation)(const char*, AptSharedPtr<AptFile>)
+      data +0x24 [sizeof=4] void  (__cdecl * pfnFreeAnimation)(void*)
+      data +0x28 [sizeof=4] void  (__cdecl * pfnFreeConstantTable)(void*)
+      data +0x2c [sizeof=4] void  (__cdecl * pfnLoadAnimationCompleted)(const char*, const char*)
+      data +0x30 [sizeof=4] void  (__cdecl * pfnCommand)(const char*, const char*)
+      data +0x34 [sizeof=4] AptValue*  (__cdecl * pfnLoadVariables)(const char*)
+      data +0x38 [sizeof=4] AptValue*  (__cdecl * pfnLoadVariablesNULL)()
+      data +0x3c [sizeof=4] void  (__cdecl * pfnSetExternVariable)(const char*, const char*)
+      data +0x40 [sizeof=4] AptValue*  (__cdecl * pfnGetExternVariable)(const char*)
+      data +0x44 [sizeof=4] void  (__cdecl * pfnSendVariables)(const char*, const char*, const char*, const char*, int)
+      data +0x48 [sizeof=4] void*  (__cdecl * pfnAllocateString)(AptAllocateStringParameters*)
+      data +0x4c [sizeof=4] void  (__cdecl * pfnDeallocateString)(void*, unsigned int)
+      data +0x50 [sizeof=4] void  (__cdecl * pfnDrawString)(void*, AptMaskRenderOperation)
+      data +0x54 [sizeof=4] void*  (__cdecl * pfnLoadTexture)(void*, int)
+      data +0x58 [sizeof=4] void  (__cdecl * pfnFreeTexture)(void*)
+      data +0x5c [sizeof=4] void  (__cdecl * pfnBindTexture)(void*, int, void*)
+      data +0x60 [sizeof=4] void*  (__cdecl * pfnLoadRenderingUnit)(void*, int)
+      data +0x64 [sizeof=4] void  (__cdecl * pfnFreeRenderingUnit)(void*)
+      data +0x68 [sizeof=4] void  (__cdecl * pfnSetVertexMatrix)(AptMatrix*)
+      data +0x6c [sizeof=4] void  (__cdecl * pfnSetColourTransform)(AptCXForm*)
+      data +0x70 [sizeof=4] void  (__cdecl * pfnDrawRenderingUnit)(void*, AptMaskRenderOperation)
+      data +0x74 [sizeof=4] void  (__cdecl * pfnCustomControlRender)(char*, char*, void*, const char*)
+      data +0x78 [sizeof=4] bool  (__cdecl * pfnCustomControlUpdate)(void*)
+      data +0x7c [sizeof=4] int  (__cdecl * pfnPointHitTest)(float, float, void*)
+      data +0x80 [sizeof=4] void  (__cdecl * pfnGetRealTimeClock)(AptSysClock*, bool)
+      data +0x84 [sizeof=4] int  (__cdecl * pfnGetBytesTotal)(const char*, AptGetBytesEnum)
+      data +0x88 [sizeof=4] int  (__cdecl * pfnGetBytesLoaded)(const char*, AptGetBytesEnum)
+      data +0x8c [sizeof=4] void  (__cdecl * pfnUninitializedVarAccess)(const char*)
+      data +0x90 [sizeof=4] float  (__cdecl * pfnGetStageHeight)()
+      data +0x94 [sizeof=4] float  (__cdecl * pfnGetStageWidth)()
+      data +0x98 [sizeof=4] void  (__cdecl * pfnCustomSavedInputHandler)(void*, unsigned int)
+    }
+    
+    const class IAptXml
+    class IAptXml [sizeof = 4]
+      : public IAptXmlNode {
+      base +0x00 [sizeof=4] IAptXmlNode
+        vfptr +0x00 [sizeof=4] 
+    }
+    
+    struct AptSavedInputRecordCustom [sizeof = 8]
+      : public AptSavedInputRecord {
+      base +0x00 [sizeof=4] AptSavedInputRecord
+        data +0x00 [sizeof=4] unsigned int nTick
+      data +0x04 [sizeof=2] unsigned short nInputType
+      data +0x06 [sizeof=2] unsigned short nInputBufferSize
+    }
+    
+    struct AptSavedInputRecordInput [sizeof = 8]
+      : public AptSavedInputRecord {
+      base +0x00 [sizeof=4] AptSavedInputRecord
+        data +0x00 [sizeof=4] unsigned int nTick
+      data +0x04 [sizeof=4] unsigned int nInput
+    }
+    
+    class AptFastStack [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    
+    struct AptGC::RegisteredTraceObject [sizeof = 0] {}
+    
+    const class AptGC
+    class AptGC [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    
+    struct AptGC::GCLinkedList [sizeof = 8] {
+      data +0x00 [sizeof=4] AptValue* mPrev
+      data +0x04 [sizeof=4] AptValue* mNext
+    }
+    
+    struct AptActionInterpreter::_FunctionAptActionPushStringDictWord::__l2::<unnamed-tag>::<unnamed-tag> [sizeof = 2] {
+      data +0x00 [sizeof=1] char c0
+      data +0x01 [sizeof=1] char c1
+    }
+    
+    union AptActionInterpreter::_FunctionAptActionPushStringDictWord::__l2::<unnamed-tag> [sizeof = 2] {
+      data +0x00 [sizeof=2] unsigned short uDictionary
+      data +0x00 [sizeof=2] AptActionInterpreter::_FunctionAptActionPushStringDictWord::__l2::<unnamed-tag>::<unnamed-tag> S
+        data +0x00 [sizeof=1] char c0
+        data +0x01 [sizeof=1] char c1
+    }
+    
+    struct AptActionInterpreter::_FunctionAptActionPushFloat::__l2::<unnamed-tag>::<unnamed-tag> [sizeof = 4] {
+      data +0x00 [sizeof=1] char c0
+      data +0x01 [sizeof=1] char c1
+      data +0x02 [sizeof=1] char c2
+      data +0x03 [sizeof=1] char c3
+    }
+    
+    union AptActionInterpreter::_FunctionAptActionPushFloat::__l2::<unnamed-tag> [sizeof = 4] {
+      data +0x00 [sizeof=4] float fValue
+      data +0x00 [sizeof=4] AptActionInterpreter::_FunctionAptActionPushFloat::__l2::<unnamed-tag>::<unnamed-tag> S
+        data +0x00 [sizeof=1] char c0
+        data +0x01 [sizeof=1] char c1
+        data +0x02 [sizeof=1] char c2
+        data +0x03 [sizeof=1] char c3
+    }
+    
+    struct AptActionInterpreter::_FunctionAptActionPushWord::__l2::<unnamed-tag>::<unnamed-tag> [sizeof = 2] {
+      data +0x00 [sizeof=1] unsigned char c0
+      data +0x01 [sizeof=1] unsigned char c1
+    }
+    
+    union AptActionInterpreter::_FunctionAptActionPushWord::__l2::<unnamed-tag> [sizeof = 2] {
+      data +0x00 [sizeof=2] short nValue
+      data +0x00 [sizeof=2] AptActionInterpreter::_FunctionAptActionPushWord::__l2::<unnamed-tag>::<unnamed-tag> S
+        data +0x00 [sizeof=1] unsigned char c0
+        data +0x01 [sizeof=1] unsigned char c1
+    }
+    
+    struct AptActionInterpreter::_FunctionAptActionPushDWord::__l2::<unnamed-tag>::<unnamed-tag> [sizeof = 4] {
+      data +0x00 [sizeof=1] unsigned char c0
+      data +0x01 [sizeof=1] unsigned char c1
+      data +0x02 [sizeof=1] unsigned char c2
+      data +0x03 [sizeof=1] unsigned char c3
+    }
+    
+    union AptActionInterpreter::_FunctionAptActionPushDWord::__l2::<unnamed-tag> [sizeof = 4] {
+      data +0x00 [sizeof=4] int nValue
+      data +0x00 [sizeof=4] AptActionInterpreter::_FunctionAptActionPushDWord::__l2::<unnamed-tag>::<unnamed-tag> S
+        data +0x00 [sizeof=1] unsigned char c0
+        data +0x01 [sizeof=1] unsigned char c1
+        data +0x02 [sizeof=1] unsigned char c2
+        data +0x03 [sizeof=1] unsigned char c3
+    }
+    
+    struct AptAction_GotoFrame2 [sizeof = 4] {
+      data +0x00 [sizeof=4] int bPlay
+    }
+    
+    struct AptAction_PushString [sizeof = 4] {
+      data +0x00 [sizeof=4] char* szStringToBePushed
+    }
+    
+    struct AptAction_With [sizeof = 4] {
+      data +0x00 [sizeof=4] unsigned char* pEnd
+    }
+    
+    struct AptAction_GotoFrame [sizeof = 4] {
+      data +0x00 [sizeof=4] int nFrame
+    }
+    
+    struct AptAction_Push [sizeof = 8] {
+      data +0x00 [sizeof=8] AptConstantPool items
+        data +0x00 [sizeof=4] int nItems
+        data +0x04 [sizeof=4] AptValue** apItems
+    }
+    
+    struct AptAction_SetTarget [sizeof = 4] {
+      data +0x00 [sizeof=4] char* szTarget
+    }
+    
+    struct AptAction_StoreRegister [sizeof = 4] {
+      data +0x00 [sizeof=4] int nRegister
+    }
+    
+    struct AptAction_BranchAddress [sizeof = 4] {
+      data +0x00 [sizeof=4] int nTargetDelta
+    }
+    
+    struct AptAction_GetUrl [sizeof = 8] {
+      data +0x00 [sizeof=4] char* szUrl
+      data +0x04 [sizeof=4] char* szWin
+    }
+    
+    struct AptAction_GotoLabel [sizeof = 4] {
+      data +0x00 [sizeof=4] char* szLabel
+    }
+    
+    struct AptRenderingContext [sizeof = 960] {
+      data +0x00 [sizeof=32] AptCXForm curCXForm
+        data +0x00 [sizeof=16] float scale[4]
+        data +0x10 [sizeof=16] float translate[4]
+      data +0x20 [sizeof=24] AptMatrix curVertexMatrix
+        data +0x20 [sizeof=4] float a
+        data +0x24 [sizeof=4] float b
+        data +0x28 [sizeof=4] float c
+        data +0x2c [sizeof=4] float d
+        data +0x30 [sizeof=4] float tx
+        data +0x34 [sizeof=4] float ty
+      data +0x38 [sizeof=512] AptCXForm aCXFormStack[16]
+      data +0x238 [sizeof=384] AptMatrix aVertexMatrixStack[16]
+      data +0x3b8 [sizeof=4] int nCXFormStack
+      data +0x3bc [sizeof=4] int nVertexMatrixStack
+    }
+    
+    struct EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIterator [sizeof = 12]
+      : public EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIteratorBase<AptSharedPtr<AptFile>,EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIterator> {
+      base +0x00 [sizeof=12] EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIteratorBase<AptSharedPtr<AptFile>,EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIterator>
+        data +0x00 [sizeof=4] AptSharedPtr<AptFile>* mPtr
+        data +0x04 [sizeof=4] AptSharedPtr<AptFile>* mBegin
+        data +0x08 [sizeof=4] AptSharedPtr<AptFile>* mEnd
+    }
+    
+    struct AptSavedInputRecordCheckpoint [sizeof = 260]
+      : public AptSavedInputRecord {
+      base +0x00 [sizeof=4] AptSavedInputRecord
+        data +0x00 [sizeof=4] unsigned int nTick
+      data +0x04 [sizeof=256] char szBuf[256]
+    }
+    
+    class EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy> [sizeof = 20]
+      : public EA::String::Impl::UseCapacity<1> {
+      base +0x00 [sizeof=8] EA::String::Impl::UseCapacity<1>
+        data +0x00 [sizeof=4] int mSize
+        data +0x04 [sizeof=4] int mCapacity
+      data +0x08 [sizeof=4] AptSharedPtr<AptFile>* mString
+      data +0x0c [sizeof=8] AptSharedPtr<AptFile> mSmallString[2]
+    }
+    
+    const class EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIteratorBase<AptSharedPtr<AptFile>,EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIterator>
+    class EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIteratorBase<AptSharedPtr<AptFile>,EA::String::BasicString<StringAsVectorEncoding<AptSharedPtr<AptFile> >,StringAsVectorPolicy>::DbgIterator> [sizeof = 12] {
+      data +0x00 [sizeof=4] AptSharedPtr<AptFile>* mPtr
+      data +0x04 [sizeof=4] AptSharedPtr<AptFile>* mBegin
+      data +0x08 [sizeof=4] AptSharedPtr<AptFile>* mEnd
+    }
+    
+    class AptValueFactory [sizeof = 1] {}
+    Total padding 1 bytes (100% of class size)
+    Immediate padding 1 bytes (100% of class size)
+    

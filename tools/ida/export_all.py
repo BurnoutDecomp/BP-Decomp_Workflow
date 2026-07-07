@@ -39,7 +39,9 @@ DB_NAME = os.path.splitext(os.path.basename(DB_PATH))[0]
 # When sharded, workers open per-worker DB copies named "<shard>/<real_db>.i64",
 # so DB_NAME stays correct. Pass EXPORT_DB_NAME to override explicitly if needed.
 DB_NAME = os.environ.get("EXPORT_DB_NAME") or DB_NAME
-OUT_DIR = os.path.join(
+# EXPORT_OUT_DIR overrides the default `.ida-exports/<DB_NAME>` destination verbatim
+# (used to land a targeted export under references/ instead of the build export tree).
+OUT_DIR = os.environ.get("EXPORT_OUT_DIR") or os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
     ".ida-exports",
     DB_NAME,
@@ -188,9 +190,34 @@ def export_function(fva):
         json.dump(fdata, f, indent=2)
     return True
 
+def load_addr_allowlist():
+    """EXPORT_ADDR_FILE: newline-separated hex addresses (0x... or bare hex).
+    When set, only functions whose start_ea is in this set are exported. This lets a
+    caller restrict a huge multi-library DB (e.g. B4Extern's XDK/DirtySDK/Apt mix) to
+    a single subsystem's functions."""
+    path = os.environ.get("EXPORT_ADDR_FILE")
+    if not path:
+        return None
+    allow = set()
+    with open(path, "r", encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            try:
+                allow.add(int(line, 16))
+            except ValueError:
+                pass
+    print(f"[IDA-EXPORT] Address allowlist: {len(allow)} addresses from {path}")
+    return allow
+
 def main():
     print("[IDA-EXPORT] Beginning function export...")
     functions = list(idautils.Functions())
+    allow = load_addr_allowlist()
+    if allow is not None:
+        functions = [fva for fva in functions if fva in allow]
+        print(f"[IDA-EXPORT] Restricted to {len(functions)} allowlisted functions.")
     total = len(functions)
     if SHARD_COUNT > 1:
         print(f"[IDA-EXPORT] Shard {SHARD_INDEX + 1}/{SHARD_COUNT}: "

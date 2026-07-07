@@ -352,6 +352,24 @@ own** pass first, so you don't ship a known-divergent TU into review.
   behavioural spine (it is a later retail-era build — expect content/version drift);
   it arbitrates *64-bit widths, offsets and alignment* only. `_name_index.tsv` in the
   export dir maps address -> mangled name.
+- **APT NAMING/SHAPE REFERENCE — Burnout Revenge `B4Extern` (Apt 0.19.02), added
+  2026-07-07.** A fully-symbolized Xbox 360 build of *Burnout Revenge* ("Burnout 4")
+  ships a real MSVC **PDB** (`IDA Files/B4Extern.pdb`) covering the
+  EATech **Apt** runtime — the only PDB we have with the Apt **engine** named and laid
+  out: the AS VM (`AptActionInterpreter`), CIH timeline (`AptCIH`), GC
+  (`AptValueGC*`), and the `AptValue`/`AptScriptFunction*` hierarchies, with full
+  member offsets, bitfields, base chains, and method signatures. Extracted to
+  [`references/B4Extern/`](references/B4Extern/) (raw PDB dumps
+  + a generated `include/apt_types.gen.h` + per-function Hex-Rays/asm under
+  `.ida-export/`, regen via [`tools/apt_revenge/generate_apt_headers.py`](tools/apt_revenge/generate_apt_headers.py)).
+  **Ladder position: naming / class-hierarchy / signature corroboration ONLY.** It is
+  Apt **0.19.02 (2005)** vs Paradise's ~2008 Apt, and 32-bit big-endian — so it is
+  **not** offset/width authority (that stays the x64 XB1 build) and **not** the
+  behavioural spine (that stays ARTIST). Use it to *name* engine functions the x64
+  build leaves as `sub_`, recover the *class hierarchy*, and pin *method signatures* —
+  then verify offsets against x64 and behaviour against ARTIST. Adopting its layouts
+  wholesale into `b5-decomp/src` is the VERSION-DRIFT TRAP; see the bundle's README.
+  Addresses are VAs = PDB-RVA + ImageBase `0x400000`.
 - **RenderWare & Vendor SDKs (EATech, rwcore, etc.): Test before decompiling.**
   We have native PC binaries for *some* middleware (e.g., `rwcore.lib`), but not all
   (e.g., `rwcollision`). Additionally, for `EABase`, `EASTL`, and `EAThread`, we have the original
