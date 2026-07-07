@@ -408,6 +408,15 @@
   "AptCXForm::AptUint32CXFormCopy": {
    "status": "reviewed"
   },
+  "AptCharacter::ReleaseAnimationFile": {
+   "status": "reviewed"
+  },
+  "AptCharacter::SetupCharacter": {
+   "status": "reviewed"
+  },
+  "AptCharacter::render": {
+   "status": "reviewed"
+  },
   "AptCharacterAnimationInst::PreDestroy": {
    "status": "reviewed"
   },
@@ -2209,6 +2218,9 @@
    "status": "reviewed"
   },
   "Attrib::Vault::DataBlock::Set": {
+   "status": "reviewed"
+  },
+  "Attrib::Vault::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "BrnAI::AIAggression::AcrossSeparationTooBig": {
@@ -44643,6 +44655,15 @@
   "RealmcCore::ResponsePtr::~ResponsePtr": {
    "status": "reviewed"
   },
+  "RealmcCore::Trc::Trc": {
+   "status": "reviewed"
+  },
+  "RealmcCore::Trc::_SetMsgOptions": {
+   "status": "reviewed"
+  },
+  "RealmcCore::Trc::~Trc": {
+   "status": "reviewed"
+  },
   "RealmcCore::allocator,64>::DoFreeSubar": {
    "status": "reviewed"
   },
@@ -45262,6 +45283,21 @@
    "status": "reviewed"
   },
   "XAUDIO::CEffect::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CFrameBuffer::CFrameBuffer": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CFrameBuffer::GetProcessingData": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CFrameBuffer::Prepare": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CFrameBuffer::Release": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CFrameBuffer::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "XAUDIO::CMasterVoiceList::~CMasterVoiceList": {
@@ -53329,6 +53365,9 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:Attrib::Vault": {
+   "status": "done"
+  },
   "class:Attrib::Vault::DataBlock": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; committed-home grows regression-gated; X360 XDK via extern-C decls; compiles clean.",
    "status": "done"
@@ -60311,6 +60350,9 @@
   },
   "class:RealmcCore::ResponsePtr": {
    "notes": "ResponsePtr (4 explicit + compiler-synth scalar-deleting-dtor) verified; 2-vtable install reproduced; RealmcCore.h grown additively.",
+   "status": "done"
+  },
+  "class:RealmcCore::Trc": {
    "status": "done"
   },
   "class:RealmcCore::allocator": {
