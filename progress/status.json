@@ -49492,6 +49492,10 @@
    "notes": "all 3 tables XEX byte-verified incl. FBC_DONE->BASIC + DISABLED->SHORTCUT quirks; flapt-first Construct order, composite Prepare, dirty/highlight Update, 3-then-1 Invalidate all asm-exact",
    "status": "done"
   },
+  "GameSource/Gui/Flow/HUD/Components/BrnInGameMessagesComponent.cpp": {
+   "notes": "6 message-pump funcs need GUI event-output vein VariableEventQueue<65536,16> + un-homed sub_8246F3E8 (MovieClipRef bind) / sub_8246D158 (TextField param format); AddMessage/TerminateMessages/UpdateInPlace committed",
+   "status": "blocked"
+  },
   "GameSource/Gui/Flow/HUD/Components/BrnJunctionInfoComponent.cpp": {
    "status": "done"
   },
@@ -50852,6 +50856,10 @@
    "notes": "verify pass 2/2: OnConstruct zeroes mTime@0x08 + Tick. gate x64 pass",
    "status": "done"
   },
+  "GameSource/Unity/../Effects/Jump/JumpStateMachine.cpp": {
+   "notes": "effect-asset strings IDA-truncated at gamedb://.../Cam_V (unrecoverable runtime HashString args); FireWheelSparks/Debris need EffectsModule::FireJumpSparks + ParticleModule::SpawnDebris homed",
+   "status": "blocked"
+  },
   "GameSource/Unity/../Effects/Particles/EffectsVertexBuffer.cpp": {
    "notes": "wave52 resume: workflow decomp+verify PASS/high; consolidated + gates clean (compile-only); no fabrication. b5-decomp ce361c25.",
    "status": "done"
@@ -50923,6 +50931,10 @@
   },
   "GameSource/Unity/../Game/GameBridgeGUIToX.cpp": {
    "status": "done"
+  },
+  "GameSource/Unity/../Game/GameBridgeGameStateToX.cpp": {
+   "notes": "BridgeGameStateToGui/ToNetwork: IDA local-var-alloc-failed + ~240-case switch over VEQ<13312,16> into ~15 un-homed network-action payload structs; TranslateTakedownsToGuiEvents committed",
+   "status": "blocked"
   },
   "GameSource/Unity/../Game/GameBridgeNetworkToX.cpp": {
    "status": "done"
@@ -51542,6 +51554,10 @@
   },
   "GameSource/Unity/../Sound/Vehicles/BrnVehicleStateManager.cpp": {
    "status": "done"
+  },
+  "GameSource/Unity/../Sound/Vehicles/Deformation/BrnDeformationEffect.cpp": {
+   "notes": "Attach needs un-homed CgsSound::Logic::VoiceWrapper::Create(CreateParams*)/Play(s32) + CreateParams; DeformationEffect ctor already committed",
+   "status": "blocked"
   },
   "GameSource/Unity/../Sound/Vehicles/Engines/BrnAIPhysicsControl.cpp": {
    "status": "done"
