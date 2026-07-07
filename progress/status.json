@@ -726,6 +726,24 @@
   "AptFileSavedInputState::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "AptFloat::AptFloat": {
+   "status": "reviewed"
+  },
+  "AptFloat::ClearPool": {
+   "status": "reviewed"
+  },
+  "AptFloat::Create": {
+   "status": "reviewed"
+  },
+  "AptFloat::Destroy": {
+   "status": "reviewed"
+  },
+  "AptFloat::GetFloat": {
+   "status": "reviewed"
+  },
+  "AptFloat::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "AptFrameStack::AptFrameStack": {
    "status": "reviewed"
   },
@@ -44505,6 +44523,27 @@
   "RealmcCore::allocator::deallocate": {
    "status": "reviewed"
   },
+  "RealmcCore::allocator>::AllocateSelf": {
+   "status": "reviewed"
+  },
+  "RealmcCore::allocator>::DoClear": {
+   "status": "reviewed"
+  },
+  "RealmcCore::allocator>::DoErase": {
+   "status": "reviewed"
+  },
+  "RealmcCore::allocator>::DoInsertValue": {
+   "status": "reviewed"
+  },
+  "RealmcCore::allocator>::RangeInitialize": {
+   "status": "reviewed"
+  },
+  "RealmcCore::allocator>::erase": {
+   "status": "reviewed"
+  },
+  "RealmcCore::allocator>::reserve": {
+   "status": "reviewed"
+  },
   "RealmcIface::CardData::CardData": {
    "status": "reviewed"
   },
@@ -45125,6 +45164,30 @@
   },
   "XCAM::CObjectRefCount::`vector deleting destructor'": {
    "status": "reviewed"
+  },
+  "XCAM::CVideoOutputBase::BufferWriteSucceeded": {
+   "status": "compiles"
+  },
+  "XCAM::CVideoOutputBase::CopyBufferHelper": {
+   "status": "compiles"
+  },
+  "XCAM::CVideoOutputBase::GetBufferForWriting": {
+   "status": "compiles"
+  },
+  "XCAM::CVideoOutputBase::GetNextBufferHelper": {
+   "status": "compiles"
+  },
+  "XCAM::CVideoOutputBase::Initialize": {
+   "status": "compiles"
+  },
+  "XCAM::CVideoOutputBase::SetRenderRect": {
+   "status": "compiles"
+  },
+  "XCAM::CVideoOutputBase::Shutdown": {
+   "status": "compiles"
+  },
+  "XCAM::CVideoOutputBase::UpdateVertexBuffer": {
+   "status": "compiles"
   },
   "XConfigUserSettings::GetVideoFlags": {
    "status": "reviewed"
@@ -46282,6 +46345,21 @@
    "status": "reviewed"
   },
   "rw::audio::core::TimerHandle::TimerHandle": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::TimerManager::AddTimer": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::TimerManager::ExecuteTimers": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::TimerManager::Release": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::TimerManager::RemoveTimer": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::TimerManager::TimerManager": {
    "status": "reviewed"
   },
   "rw::audio::core::Unpack0::UnpackInt32": {
@@ -52617,6 +52695,9 @@
   },
   "class:AptFileSavedInputState": {
    "notes": "wave3: vector deleting destructor (compiler thunk) + EAStringC element; verify PASS; compile PASS",
+   "status": "done"
+  },
+  "class:AptFloat": {
    "status": "done"
   },
   "class:AptFrameStack": {
@@ -60005,6 +60086,9 @@
    "notes": "allocator<64> verified vs asm; parity.",
    "status": "done"
   },
+  "class:RealmcCore::allocator>": {
+   "status": "done"
+  },
   "class:RealmcIface::CardData": {
    "notes": "RealmcIface::CardData (6 funcs); verifier parity/none; gate pass.",
    "status": "done"
@@ -60678,6 +60762,9 @@
   },
   "class:rw::audio::core::TimerHandle": {
    "notes": "rw audio TimerHandle; parity/low; wave6; verifier reviewed; gate pass.",
+   "status": "done"
+  },
+  "class:rw::audio::core::TimerManager": {
    "status": "done"
   },
   "class:rw::audio::core::Unpack0": {
