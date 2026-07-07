@@ -408,6 +408,20 @@ dispatch); the gap is COMPOSITION, and every step below needs the build+boot+rea
    This is a concrete frame-table/data debug, NOT an AS reconstruction — the single most actionable §6.4 state
    reached. NEXT: dump the active MAIN frame-0 command list, find why cmdCount=90 not 13, restore the 7-child
    composition, re-boot, confirm `[AptRT] REGISTERED` fires.
+   **⭐⭐⭐ ROOT CAUSE PINNED (2026-07-07, offline `dump_frames.py`):** MAIN's root frame-0 command array is
+   CORRUPT — `cnt=90 = t5, t1(stream=0x32e8 **BAD**), + 88× t8` (garbage; no real frame has 88 identical
+   tag-8s). The tag-1 bootstrap stream at chunk+0x32e8 reads BAD = the **pm2 straddled-tag-1 bug** (the emitter
+   4-mod-8 misalignment → the stream ptr straddles to `0x2_00000000`), and it corrupts the rest of the frame-0
+   command array so the ~11 PlaceObject commands for the 7 framework children are replaced by garbage t8s ⇒ 0
+   children compose. BOTH `GUIAPT/MAIN.bundle` AND `GUIAPT_MaybeBroken/MAIN.bundle` show it (the pm2 swap
+   regressed or the intact rev is elsewhere), and `apt8_fix_frametables.py` reports "0 repaired" (it does NOT
+   detect/repair this frame-0 corruption). **⇒ §6.4 fix (bounded, DATA): obtain/repair a MAIN.bundle whose root
+   frame-0 parses to the real ~13 commands with a VALID tag-1 @0x32e8 — check the pristine GUIAPT
+   ([[guiapt-widening-pipeline]]: `Downloads/…907389d186ed/GUIAPT/MAIN.bundle`) first; if it too is straddled,
+   extend `apt8_fix_frametables` to repair the frame-0 command-array (not just the frame-table offsets). Then
+   the 7 framework children compose → the menu items nest under a framework component → BuildName resolves →
+   registration → item 5 drives → item 6 delete shim → item 7 validate.** §6.4 is now a frame-table data
+   repair, fully localized — no AS reconstruction needed.
 2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
    (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
    menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
