@@ -798,6 +798,24 @@
   "AptGlobalExtensionObject::operator new": {
    "status": "reviewed"
   },
+  "AptInteger::AptInteger": {
+   "status": "reviewed"
+  },
+  "AptInteger::ClearPool": {
+   "status": "reviewed"
+  },
+  "AptInteger::Create": {
+   "status": "reviewed"
+  },
+  "AptInteger::DeleteThis": {
+   "status": "reviewed"
+  },
+  "AptInteger::Destroy": {
+   "status": "reviewed"
+  },
+  "AptInteger::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "AptIntervalTimer::AptIntervalTimer": {
    "status": "reviewed"
   },
@@ -42654,6 +42672,39 @@
   "EA::GameTalk::Free": {
    "status": "reviewed"
   },
+  "EA::GameTalk::GameTalkManager::ConfigHandler": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::CreateInstance": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::GameTalkManager": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::GetInstance": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::IsMessageMatching": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::ReceiveMessage": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::RegisterMessageHandler": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::SendKeywordMessage": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::SendMessage": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::SendServerChannel": {
+   "status": "reviewed"
+  },
+  "EA::GameTalk::GameTalkManager::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "EA::GameTalk::GameTalkMessage::AddKeyContent": {
    "status": "reviewed"
   },
@@ -50102,6 +50153,10 @@
   "GameSource/Gui/SatNav/BrnGuiTracker.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/SatNav/BrnMainMap.cpp": {
+   "notes": "1/7 committed f18d24df (RecvEvent). Construct/Update/SnapToLocation/ApplyZoom/SetZoom/SetStandardDefZoomParams blocked: VMX rect-transform sub_8245A080 + todo CalculateViewPaddingOffset/CalculatePosition + GuiAudioTriggerEvent home.",
+   "status": "blocked"
+  },
   "GameSource/Gui/SatNav/BrnMapIconManager.cpp": {
    "status": "done"
   },
@@ -52257,6 +52312,10 @@
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
+  "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/common/attribhashmap.h": {
+   "notes": "5/10 committed f18d24df. Clear/FreeNodeData/GetData/GetNode/NextKey blocked: need Attrib::Collection re-homed as HashMap-derived + un-homed Class inherited-data chain + ScanForValidKey<HashMap> template.",
+   "status": "blocked"
+  },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/vechashmap.h": {
    "status": "done"
   },
@@ -52574,6 +52633,9 @@
   },
   "class:AptGlobalExtensionObject": {
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
+   "status": "done"
+  },
+  "class:AptInteger": {
    "status": "done"
   },
   "class:AptIntervalTimer": {
@@ -59549,6 +59611,9 @@
    "notes": "EA GameTalk facade; parity/none; wave7; verifier parity; gate pass.",
    "status": "done"
   },
+  "class:EA::GameTalk::GameTalkManager": {
+   "status": "done"
+  },
   "class:EA::GameTalk::GameTalkMessage": {
    "notes": "verify pass 11/11: key/content wire message, mppEntries stride-16 table; deleting-dtor compiler artifact. gate x64 pass",
    "status": "done"
@@ -59908,6 +59973,10 @@
    "notes": "MessageFilter verified; vector-deleting-dtor (free 0x10) correctly compiler-synthesized; RealmcCore.h grown additively.",
    "status": "done"
   },
+  "class:RealmcCore::MessageQueue": {
+   "notes": "3/8 committed f18d24df (ctor/Initialize/ShutDown). 5 list-node funcs blocked: un-homed RealmcCore::allocator_::RangeInitialize/DoErase (separate todo TU) + 24B node type + _WaitForResponse empty-response indirection off_832BE1F4.",
+   "status": "blocked"
+  },
   "class:RealmcCore::MessageString": {
    "notes": "ctor/dtor/scalar-deleting-dtor verified store-for-store (vtable 821BA2CC/370, refcount atomic-zero, Assign range, free 0x1C); recovered Hex-Rays-dropped 3rd arg.",
    "status": "done"
@@ -59987,6 +60056,10 @@
   "class:ShaderConstantTableElement": {
    "notes": "3 verify loops PASS (fidelity, adversarial w/ exhaustive 65536-input codegen probe = 0 mismatches vs X360, final sign-off). Gate clean. Parity RED is an artifact: --files is the whole CgsShaderConstants.cpp (7 fns incl. loop-heavy AddDirtyConstantsToDispatchBin) vs this TU's 2-fn pseudocode, so branch/loop counts inflate on the cpp side; absent callees = assert machinery folded into CGS_ASSERT. SetSize/SetNumEntries byte-faithful (signed /16 qw idiom).",
    "status": "done"
+  },
+  "class:Snd": {
+   "notes": "5/8 committed f18d24df (EALayer3 reorder/inversion + MicroTalk discardbits/process_raw_block). readsamples/decodemut/decodexac blocked: un-recovered MicroTalk/XA-ADPCM codebook rodata LUTs (byte_82F88928, flt_82F888xx) not in dossier.",
+   "status": "blocked"
   },
   "class:Snd9::AemsPlayerInputAccessor": {
    "notes": "verified vs X360 asm; parity.",
