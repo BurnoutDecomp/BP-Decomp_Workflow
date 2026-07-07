@@ -48254,6 +48254,10 @@
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (corrections applied); compiles clean.",
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator.cpp": {
+   "notes": "6/7 committed fc21ec35. CollideLineAgainstPolySoupList 0x82812AE0 blocked: un-homed CgsGeometric::IntersectLinePolygonSoupSingleSided + PolygonSoupListSpatialMap query + vpermwi128 permute tables + sub_82843E98.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsPrimitiveListWithTriangleListJobDesc.cpp": {
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -49389,6 +49393,10 @@
   "GameSource/Gui/BrnGuiViewModule.cpp": {
    "notes": "Fresh-eyes review (claude sonnet-4-5): semantic parity confirmed for all 7 functions vs ARTIST asm; named-member access throughout; state-machine fall-through, store offsets, and load-notification offsets verified. Uncertainties: FLAPT request-type literal 10 (PS3 enum drift), GuiEventLoadNotification empty-GuiEvent-base layout, GuiModule AAC far-offset 0x17D670.",
    "status": "done"
+  },
+  "GameSource/Gui/BrnGuiWorldDataController.cpp": {
+   "notes": "7/8 committed fc21ec35. Prepare 0x82516770 blocked: needs EventReceiverQueue<1024,16>/BaseEventReceiverQueue ring internals + InputBuffer::GetRequestQueue + BaseResourcePtr::CreateFromHandle (mReceiverQueue is opaque u8[0x41C]).",
+   "status": "blocked"
   },
   "GameSource/Gui/CustomRenderer/BrnCustomRenderer.cpp": {
    "notes": "Reconstructed from asm/dossier, adversarially verified, gate PASS, pushed to dev.",
@@ -52236,6 +52244,10 @@
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribinstance.cpp": {
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
    "status": "done"
+  },
+  "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribsupport.cpp": {
+   "notes": "8/9 committed fc21ec35. FindCollection 0x82808378 blocked: committed decl (int,void*=null; 57 ctor consumers) irreconcilable with true DWARF sig (Attribute::Key,Attribute::Key); needs coordinated decl+consumer fix.",
+   "status": "blocked"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribute.cpp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bugs fixed inline (VoiceConfig operator new -> committed CgsResource::ResourceDescriptor <5>; MaterialTechnique s8 extsb; CgsContent covariant DoDispose int->void); leaked .cpp:line citations scrubbed; 1 keystone (GinsuPlayer) blocked; link-time ODR hazards flagged not applied; combined wave-15 gate PASS.",
@@ -59879,6 +59891,10 @@
   "class:PackedIndex": {
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
+  },
+  "class:RealmcCore": {
+   "notes": "3/8 committed fc21ec35. 5 MessageQueue ops blocked: un-homed RealmcCore::MessageQueue 24B intrusive node + RealmcCore::allocator_::RangeInitialize (separate todo TU).",
+   "status": "blocked"
   },
   "class:RealmcCore::Locale": {
    "notes": "RealmcCore Locale; parity/low; wave9; verifier parity; gate pass.",
