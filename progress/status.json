@@ -1716,6 +1716,27 @@
   "AptValueGC_PoolManager::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "AptValueVector::AptValueVector": {
+   "status": "reviewed"
+  },
+  "AptValueVector::GetAt": {
+   "status": "reviewed"
+  },
+  "AptValueVector::GetNumValues": {
+   "status": "reviewed"
+  },
+  "AptValueVector::IsVectorFull": {
+   "status": "reviewed"
+  },
+  "AptValueVector::ReleaseValues": {
+   "status": "reviewed"
+  },
+  "AptValueVector::RemoveAt": {
+   "status": "reviewed"
+  },
+  "AptValueVector::SetAt": {
+   "status": "reviewed"
+  },
   "AptValueWithHash::AptValueWithHash": {
    "status": "reviewed"
   },
@@ -12892,19 +12913,19 @@
    "status": "reviewed"
   },
   "BrnGui::LicenseComponent::EnsureResourcesAreLoaded": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::LicenseComponent::EnsureResourcesAreUnloaded": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::LicenseComponent::SetCachePointer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::LicenseComponent::SetProfilePointer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::LicenseComponent::SetRank": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::LicenseComponent::StopOutputtingGamerpic": {
    "status": "reviewed"
@@ -45309,6 +45330,18 @@
   "XGRAPHICS::IRFetch::InstType": {
    "status": "reviewed"
   },
+  "XGRAPHICS::InternalVector::Grow": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::InternalVector::Insert": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::InternalVector::InternalVector": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::InternalVector::Remove": {
+   "status": "reviewed"
+  },
   "[100],20,int>::AllocateObject": {
    "status": "reviewed"
   },
@@ -46474,6 +46507,36 @@
    "status": "reviewed"
   },
   "rw::audio::core::Unpack0::UnpackUInt32": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::CreateInstanceHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::ExpelAfterDecay": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::ExpelImmediate": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::Release": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::ReleaseHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::ReleaseImmediate": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::RemoveActiveVoice": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::SetPriority": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Voice::SetPriorityHandler": {
    "status": "reviewed"
   },
   "rw::collision::AA": {
@@ -52499,7 +52562,7 @@
    "status": "done"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/common/attribhashmap.h": {
-   "notes": "5/10 committed f18d24df. Clear/FreeNodeData/GetData/GetNode/NextKey blocked: need Attrib::Collection re-homed as HashMap-derived + un-homed Class inherited-data chain + ScanForValidKey<HashMap> template.",
+   "notes": "9/10 committed 0f8495f1 (Collection GetNode/GetData/FreeNodeData/Clear now done via HashMap-derived Collection). NextKey 0x828050D0 blocked: un-homed Attrib::ScanForValidKey<HashMap> template.",
    "status": "blocked"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/vechashmap.h": {
@@ -52979,6 +53042,9 @@
   },
   "class:AptValueGC_PoolManager": {
    "notes": "AptValue GC pool manager (6 funcs); verifier MED -> FIXED item-walk byte-stride (AdvanceItem helper, 3 sites); re-gate pass.",
+   "status": "done"
+  },
+  "class:AptValueVector": {
    "status": "done"
   },
   "class:AptValueWithHash": {
@@ -60163,6 +60229,10 @@
    "notes": "3/8 committed fc21ec35. 5 MessageQueue ops blocked: un-homed RealmcCore::MessageQueue 24B intrusive node + RealmcCore::allocator_::RangeInitialize (separate todo TU).",
    "status": "blocked"
   },
+  "class:RealmcCore::IRunnableTask": {
+   "notes": "5/6 committed 0f8495f1 (ctor/dtor/Starting/InvokeSynchronously). operator() 0x82C475D8 blocked: async ThrFunction<T> task-run loop dispatching into mpMemcardState +0x50 servicer (un-homed).",
+   "status": "blocked"
+  },
   "class:RealmcCore::Locale": {
    "notes": "RealmcCore Locale; parity/low; wave9; verifier parity; gate pass.",
    "status": "done"
@@ -60403,6 +60473,9 @@
   "class:XGRAPHICS::IRInst": {
    "notes": "8/12 committed d8cb7827. ExportType/Kill/Validate/InstType blocked: un-homed foreign context chain mpContext(+0x3B8)->(+0xAB0)->(+0x60), two unnamed vtable-slot-5/6 virtuals, un-recovered InstType rodata string byte_820DC63C.",
    "status": "blocked"
+  },
+  "class:XGRAPHICS::InternalVector": {
+   "status": "done"
   },
   "class:[100],20,int>": {
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
@@ -60904,6 +60977,9 @@
   },
   "class:rw::audio::core::Unpack0": {
    "notes": "Adversarial verify PASS (parity): store-for-store vs X360 ARTIST spine; ledger funcs reconciled; minimal/owning homes, additive grows preserve layouts; gate PASS (combined wave-10 build).",
+   "status": "done"
+  },
+  "class:rw::audio::core::Voice": {
    "status": "done"
   },
   "class:rw::audio::core::Xas1Enc": {
