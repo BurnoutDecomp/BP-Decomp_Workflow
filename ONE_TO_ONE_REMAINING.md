@@ -364,10 +364,19 @@ dispatch); the gap is COMPOSITION, and every step below needs the build+boot+rea
    (BrnAptRuntimeBringUp.cpp:~1427; deliberate — PERSISTENTAPT imports MAIN and depends on the still-deferred
    §4 import resolution). Bringing PERSISTENTAPT up may supply the menu-framework component classes MAIN
    lacks → gives the items a component ancestor. This overlaps §4 (import-export resolution).
-4. **Lead B — the nesting:** verify the display-parent chain (`MenuItem_0 → SelectionMenu_mc → '' → root`).
-   If `SelectionMenu_mc` never binds as a component, either (a) it needs a component class + linkage name
-   (a bundle/data fix — its char currently has no export-name entry), or (b) the framework re-parents the
-   items under a runtime-instantiated component. Distinguish by tracing the container's bind + display parent.
+4. **Lead B — the nesting.** ✅ **RESOLVED OFFLINE (2026-07-07, no boot):** grep of
+   `build/game/GUIAPT/TITLE_SCREEN02.bundle` — the export/import table is at bundle `0x170..0x2880`
+   (`B5MenuItem` lives there @592/672/688: the imported, binding menu-item class), but `SelectionMenu_mc`
+   (@0x43176/0x44408), `SelectionMenuAnimatorComponent` (@0x43128) and `MenuItem_0` (@0x43376) are all in
+   the PLACEMENT/frame-command region as INSTANCE names — NOT export entries — and there is NO `SelectionMenu`
+   (or `BurnoutComponent`) class string at all. So the container's char has no export name ⇒ no static class
+   can bind to it (`AssociateInstToClass` needs the export name). **Option (a) "restore a lost linkage" is
+   RULED OUT** — the console data has no linkage for it either. §6.4 is therefore definitively (b): the
+   title's AS FRAMEWORK must CREATE the `SelectionMenu` component at runtime (attachMovie/`new` +
+   registerClass) and nest `MenuItem_0/1` under it — so the reconstruction target is the frame-0
+   init-action component-instantiation VM path (step 1), NOT a bundle/data fix. Re-verify offline with the
+   export-table parser (apt8_fix_frametables format: chunk `Apt Data:1:7:8`, type-9 root `0x09876543`,
+   exports stride-16 `{name-off, charId}`).
 5. **Then the chain falls:** a bound-component ancestor → `BuildName` resolves → `SendAptEvent` →
    `AddNewAptComponent` registers → item 5's `UpdateAll` drives the real menu → item 6 (delete the
    `AptRuntimeSetComponentKeyValue`/`AptRuntimeSetComponentViewState` + `AddOutputAptViewState` shim,
