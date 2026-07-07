@@ -326,11 +326,24 @@ Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
    BurnoutComponent ancestor — i.e. which display node SHOULD be the menu items' component ancestor, and does it bind?
    (Trace the bound clips' display-parent chain + each parent's bound class.) §6.5-6.7 gate on giving the components an
    ancestor so BuildName resolves → registration.
-5. **Per-frame `UpdateAll`** drives the registered clips through the real communicator path
-   (`AptAux::UpdateComponents` → `UpdateAllComponents` → `AptCallFunctionOpti("UpdateAll")`).
+5. ✅ **DONE / WIRED (verified 2026-07-07) — Per-frame `UpdateAll` drive through the real communicator
+   path.** The chain is homed to its console addresses and runs every frame:
+   `AptAux::UpdateComponents` (CgsAptAux.cpp:241, X360 `0x82850570`) → `mpAptCommunicator->UpdateAllComponents()`
+   → `AptCommunicator::UpdateAllComponents` (CgsAptCommunicator.cpp:423, X360 `0x828499D0`; collects each
+   dirty component's bound ref into a temp array + clears the per-frame dirty flags) →
+   `AptCallFunctionOpti("UpdateAll", 0, "gAptCommunicator", 1, lpArray)`. It currently **no-ops only because
+   `muNumActivecomponents == 0`** (§6.4 registers nothing) — the drive itself is faithful and complete. (It
+   is presently *triggered* from the `BrnAptRuntimeBringUp` tick @2404, standing in for the console
+   `AptAux::Update` @0x82853B20 per-frame call; that trigger site moves onto `AptAux::Update` when the facade
+   is retired in item 6.)
 6. **Delete the shim** — the `AddOutputAptViewState` FLAG fallback + `AptRuntimeSetComponentKeyValue`
-   / the `AptRuntimeSetComponentViewState` pair-map (single driver).
-7. **Validate** — menu text / states / navigation byte-identical to the Xbox i64.
+   / the `AptRuntimeSetComponentViewState` pair-map (single driver). ⛔ **HARD-GATED on §6.4:** the shim is
+   what currently drives the *working* menu; because §6.4 registers 0 components, the real `UpdateAll` path
+   (item 5) drives nothing, so deleting the shim now makes the menu go **dead/blank**. It can only be removed
+   once §6.4 gives the menu items a bound-`BurnoutComponent` ancestor → `BuildName` resolves → `SendAptEvent`
+   → `AddNewAptComponent` registers → `UpdateAllComponents` has components to drive.
+7. **Validate** — menu text / states / navigation byte-identical to the Xbox i64. ⛔ Gated on §6.4 + item 6
+   (needs the real drive producing the menu before a byte-diff is meaningful).
 
 ## 7. Init / globals / GC leftovers
 
