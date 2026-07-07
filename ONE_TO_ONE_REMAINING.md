@@ -6,6 +6,11 @@ menu (and every other Apt screen) to be truly 1:1. Grounded in the repo's own tr
 faithfulness debt (`progress/faithfulness_baseline.json`), the scaffold headers, and the
 stub files — not estimates. 2026-07-05.
 
+> **Current menu-flow authority (2026-07-07):** for the active Apt/AS menu
+> registration frontier, use [`HANDOFF_MENU_DRIVE.md`](HANDOFF_MENU_DRIVE.md).
+> The long Section 6 below is retained as trace history. It contains several
+> corrected "root cause pinned" claims and should not be executed linearly.
+
 > **What "done" means, precisely.** The counts below track *invention-smells* caught by
 > `tools/work/faithfulness_lint.py` — a mechanical detector of four fake-code patterns
 > (underscore shims, trivial stub bodies, raw `*(T*)(p+N)` offset pokes, home-grown-format
@@ -145,6 +150,14 @@ Sub-items:
   authoritative X360→PC bundle port), retiring the fan-tool + patch-script dependency entirely.
 
 ## 6. The menu-drive path — "Layer 2"
+
+> **Read this section as history, not the active handoff.** The current actionable
+> state is in [`HANDOFF_MENU_DRIVE.md`](HANDOFF_MENU_DRIVE.md): `MAIN` and
+> `PERSISTENTAPT` now load; onLoad reaches `SendAptEvent`; registration still fails
+> because the call has `name=undefined` and `clip='_global'` as a string. The next
+> real step is one diagnostic boot to capture the nested RegisterComponent /
+> CallMethod bytecode/operand path. Do not chase older PERSISTENTAPT-not-loaded or
+> `cmdCount=90 (want 13)` theories from this section.
 
 > **RECONSTRUCTION ROADMAP (2026-07-07, from a 4-agent map of the real console path).** Goal: the real
 > 1:1 menu, NO `BrnAptRuntimeBringUp`, no shims. Findings that scope the whole effort:
@@ -558,6 +571,12 @@ Reusable diagnostics live in [[title-flow-bringup-status]] (uncapped `AptRegiste
 ---
 
 ## Priority order (dependency-first)
+
+> **Current priority override:** before following the older numbered item 2 below,
+> read and execute [`HANDOFF_MENU_DRIVE.md`](HANDOFF_MENU_DRIVE.md). The current
+> observed frontier is not "onLoad stops before SendAptEvent"; onLoad reaches
+> `SendAptEvent`, but the registration call carries `name=undefined` and
+> `clip='_global'` as a string.
 
 1. ✅ §6.1 DF2 argtab repair + §6.2 engine fixes + §6.3 clip-class instantiation/ctors/onLoad DONE.
 2. **← CURRENT FRONTIER: §6.4** — onLoad runs but stops before `SendAptEvent`, so no component
