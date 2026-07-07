@@ -152,12 +152,16 @@ Sub-items:
 ## 6. The menu-drive path — "Layer 2"
 
 > **Read this section as history, not the active handoff.** The current actionable
-> state is in [`HANDOFF_MENU_DRIVE.md`](HANDOFF_MENU_DRIVE.md): `MAIN` and
-> `PERSISTENTAPT` now load; onLoad reaches `SendAptEvent`; registration still fails
-> because the call has `name=undefined` and `clip='_global'` as a string. The next
-> real step is one diagnostic boot to capture the nested RegisterComponent /
-> CallMethod bytecode/operand path. Do not chase older PERSISTENTAPT-not-loaded or
-> `cmdCount=90 (want 13)` theories from this section.
+> state is in [`HANDOFF_MENU_DRIVE.md`](HANDOFF_MENU_DRIVE.md): scripted
+> screenshot/key driving now proves `MAIN`, `PERSISTENTAPT`, `BuildName`,
+> `_parent`, `IsBurnoutComponent`, `msName`, `RegisterComponent`, menu selection,
+> and `BootLegal stage 8 -> 9` all work in the current checkout. The active
+> blocker is later: `BrnGuiModule.cpp` handles BF_LEGAL command 70 by calling
+> `BootLegal::OnLeave()`, stopping the Apt flow movie, setting `miBootPhase = 3`,
+> and parking because the post-legal GuiFsmController transition is not
+> reconstructed. Do not chase older PERSISTENTAPT-not-loaded,
+> `cmdCount=90 (want 13)`, or DF2/RegisterComponent-argument theories before
+> reading the handoff.
 
 > **RECONSTRUCTION ROADMAP (2026-07-07, from a 4-agent map of the real console path).** Goal: the real
 > 1:1 menu, NO `BrnAptRuntimeBringUp`, no shims. Findings that scope the whole effort:
@@ -571,6 +575,13 @@ Reusable diagnostics live in [[title-flow-bringup-status]] (uncapped `AptRegiste
 ---
 
 ## Priority order (dependency-first)
+
+> **2026-07-07 correction:** the override immediately below is stale. The current
+> frontier is no longer "onLoad stops before SendAptEvent" or bad
+> `RegisterComponent` arguments. Scripted window input reaches `BootLegal stage 8
+> -> 9`; the hard blocker is now the post-BF_LEGAL command-70 park in
+> `BrnGuiModule.cpp`. Read [`HANDOFF_MENU_DRIVE.md`](HANDOFF_MENU_DRIVE.md)
+> before using this priority list.
 
 > **Current priority override:** before following the older numbered item 2 below,
 > read and execute [`HANDOFF_MENU_DRIVE.md`](HANDOFF_MENU_DRIVE.md). The current

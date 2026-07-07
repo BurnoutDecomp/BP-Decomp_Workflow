@@ -1,189 +1,160 @@
 # APT Menu 1:1 Handoff - Current Next Step
 
-This is the authoritative handoff for the real Burnout Paradise Apt/ActionScript
-menu flow as of 2026-07-07. It deliberately supersedes the older running notes in
-`ONE_TO_ONE_REMAINING.md` section 6, which contains useful history but also many
-corrected hypotheses.
+This is the authoritative handoff for the active Burnout Paradise Apt/menu-flow
+work as of 2026-07-07. It supersedes the older notes that said registration was
+still blocked by `RegisterComponent` arguments or by `PERSISTENTAPT` not loading.
 
 ## Goal
 
-Make the menu drive through the real console Apt component system, then retire the
-host-only `BrnAptRuntimeBringUp` shim path. The target is behavioral parity with
-the Xbox One 64-bit Apt reference plus the normal repo gates:
+Drive the title/menu path through the real console GUI/Apt flow, then retire the
+host-only `BrnAptRuntimeBringUp` fallback once the real path owns the menu.
+
+The target is behavioral parity with the Xbox One 64-bit Apt reference plus the
+normal repo gates:
 
 - compile gate for touched TUs
 - no new faithfulness-lint debt
-- boot behavior matches the reference path
+- boot/menu behavior proven by the real window, screenshots, key input, and log
 - no quiet stubs, raw offset accommodations, or fake Apt free-function shims
 
-Do not delete `BrnAptRuntimeBringUp` yet. It is still the working-menu fallback and
-also contains the current diagnostic hooks.
+Do not delete `BrnAptRuntimeBringUp` yet. It is still the runnable bridge and it
+contains useful diagnostic hooks.
 
-## Current Workspace State
+## Verified Runtime Result
 
-Parent repo:
+The current build was driven with scripted window automation, not just a timed
+launch. The script:
 
-- branch: `main`
-- dirty: `b5-decomp`, `tools/volatility`, and local `scratchpad_*` files
+- launched `build/game/Burnout_PC.exe`
+- captured the Burnout window by process `MainWindowHandle`
+- saved screenshots under `scratchpad_screens/`
+- sent `Enter`, `Down`, and `Enter` with `keybd_event`
+- stopped the process cleanly after the run
 
-Submodule `b5-decomp`:
-
-- branch: `l2-drive-clean`
-- HEAD: `cf1379c5`
-- ahead of `origin/l2-drive-clean` by 4 commits
-- dirty diagnostic files:
-  - `src/GameSource/Gui/BrnAptRuntimeBringUp.cpp`
-  - `src/SDKs/EATech/include/Apt/AptActionInterpreterInterpHelpers.cpp`
-  - `src/SDKs/EATech/include/Apt/AptAnimationTarget.cpp`
-  - `src/SDKs/EATech/include/Apt/AptDisplayList.cpp`
-
-Important: committed `cf1379c5` has `KB_CLASS_BINDING=false`. The dirty diagnostic
-tree currently flips it to `true` to exercise the real binding path. Before any
-real commit, restore `KB_CLASS_BINDING=false` unless the commit is explicitly a
-diagnostic-only checkpoint.
-
-Do not commit `progress/status.json`, the parent repo submodule pointer, or
-`scratchpad_*` files as part of this work.
-
-## Proven Current Symptom
-
-With class binding enabled, the framework now gets far enough that the onLoad path
-reaches `AptCommunicator::sMethod_SendAptEvent`, but registration still fails:
+Fresh evidence from `build/game/BrnGame.log`:
 
 ```text
-[AptRT] framework: 'MAIN' up ... level 0
-[AptRT] persist: 'PERSISTENTAPT' up ... level 2
-[AptRT] SendAptEvent#N np=4: ev(id=1) uid=1 | p2Vft=-1 p2='<undef>' | p3Vft=1 p3CIH=0 p3='_global'
-AddNewAptComponent / REGISTERED: 0
+[AptRT] framework: 'MAIN' up (loaded=1 instantiated=1 level=0).
+[AptRT] persist: 'PERSISTENTAPT' up (loaded=1 instantiated=1 level=2).
+[AptRT] flow: LoadAnimation('Title_Screen02', ...)
+[AptRT] findChild hash    name='BuildName' -> ... (35/1)
+[AptRT] findChild special name='_parent'   -> ... (12/1)
+[AptRT] findChild hash    name='IsBurnoutComponent' -> ... (34/1)
+[AptRT] findChild hash    name='msName' -> ... (1/1)
+[AptRT] findChild hash    name='RegisterComponent' -> ... (35/1)
+[AptRT] SendAptEvent#N np=4: ev(id=1) ...
+[AptRT] kv: 'MenuItem_0' apt_labeltxt='$TITLESCREEN_MENU_NORMAL'
+[AptRT] kv: 'MenuItem_1' apt_labeltxt='$TITLESCREEN_MENU_BEATTHETEAM'
+[BootLegal] stage 7 -> 8
+[GuiModule] key vk=0x28 -> event 6/41 (AddEvent=1)
+[GuiModule] key vk=0x0D -> event 6/45 (AddEvent=1)
+[AptRT] viewstate: 'BackgroundAnimatorComponent' -> 'BeatTheTeam' ... (APPLIED)
+[BootLegal] stage 8 -> 9
 ```
 
-That is the current blocker. Treat it as an observed failure, not proof that every
-downstream piece is finished.
+Screenshots from the same scripted run:
 
-The likely failing chain is:
+- `scratchpad_screens/burnout_20_title_initial.png` - EA splash
+- `scratchpad_screens/burnout_22_stage8_menu.png` - title screen at menu stage
+- `scratchpad_screens/burnout_23_after_stage8_enter.png` - transition strip after accept attempt
+- `scratchpad_screens/burnout_24_after_down_enter.png` - after `Down`, `Enter`, stage 9 reached
+
+## Current Diagnosis
+
+The previous registration diagnosis is superseded. In the current runtime:
+
+- `MAIN` loads and instantiates.
+- `PERSISTENTAPT` loads and instantiates.
+- `BuildName`, `_parent`, `IsBurnoutComponent`, `msName`, `gAptCommunicator`, and
+  `RegisterComponent` resolve.
+- `SendAptEvent` fires repeatedly.
+- The title selection menu receives component key/value and view-state updates.
+- Scripted input can move selection to Beat The Team and accept it.
+- `BootLegal` advances from menu-active stage 8 to accepted stage 9.
+
+The current hard stop is later:
 
 ```text
-onLoad()
-  -> BuildName()
-  -> RegisterComponent(name, this)
-  -> gAptCommunicator.SendAptEvent(E_APT_EVENT_ONLOAD, uid, name, clip)
-  -> AddNewAptComponent(clip, name)
+[GuiModule] BF_LEGAL command 70 (accepted) -> OnLeave + park
+           (frontend flow un-reconstructed; FLAG follow-on).
+[AptRT] StopMovie: BF_LEGAL left -- FLOW slot tick+render parked ...
 ```
 
-The current bad call reaches `SendAptEvent` with `name=undefined` and
-`clip='_global'` as a string value instead of a CIH clip. The next job is to find
-where those two arguments are produced.
+That log comes from `b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp`. On command 70,
+the current PC bridge calls `BootLegal::OnLeave()`, stops the flow Apt movie, stops
+menu music, sets `miBootPhase = 3`, and then phase 3 immediately returns forever.
+
+So the next real implementation target is not another speculative AS VM patch. It
+is reconstructing the post-`BF_LEGAL` GuiFsmController transition instead of
+parking.
 
 ## What Not To Chase Next
 
-These were useful historical leads, but they are not the next actionable path:
+- Do not keep treating `PERSISTENTAPT is never loaded` as current. It is loaded now.
+- Do not treat `MAIN frame0.cmdCount=90 (want 13)` as a root cause. That old
+  expectation was from a stale probe for a different movie.
+- Do not assume the DF2 arg-table/register mismatch remains the active blocker.
+  The current run proves the menu path reaches selection and stage 9.
+- Do not delete the Apt bridge/shim yet. The real post-legal flow is still missing.
+- Do not patch core AS interpreter behavior from a hunch.
 
-- "PERSISTENTAPT is never loaded" is superseded. The current code loads and
-  instantiates `MAIN` plus `PERSISTENTAPT`.
-- The `MAIN frame0.cmdCount=90 (want 13)` line is not a valid root cause. That
-  expectation came from a stale probe for a different movie.
-- Do not delete the shim or ungate the hard `SendAptEvent` asserts until
-  registration is actually working.
-- Do not patch core AS interpreter behavior from a hunch. A wrong VM change breaks
-  the working shim menu, MAIN bootstrap, and all future Apt screens.
+## Next Step
 
-## Next Step: One Diagnostic Boot
+Implement the real transition after `BF_LEGAL` command 70.
 
-The dirty tree has already started the needed diagnostic:
+1. Confirm the exact post-legal target from source-of-truth evidence before coding.
+   Use the real FSM/assets and dossiers, not a guess. Likely evidence surfaces:
+   `build/game/FSM/BRNLEGALFSM.BUNDLE`, `build/game/FSM/BRNHUD.BUNDLE`,
+   `BrnGui::BrnHudFlow`, `BrnGuiModule::Update`, and the X360
+   GuiFsmController/ModelIO path.
 
-- `BrnAptRuntimeBringUp.cpp` has `AptOpTraceArmDrain`, `AptOpTraceIsArmed`, and
-  `AptFnDumpProbe`.
-- `AptActionInterpreterInterpHelpers.cpp` dumps script-function bytecode while the
-  op trace is armed.
-- `AptAnimationTarget.cpp` arms the trace around the deferred onLoad function drain.
-- `AptDisplayList.cpp` currently has `KB_CLASS_BINDING=true`.
+2. Determine whether command 70 should enter another HUD boot state such as
+   `BF_PROFILE`, `BF_ATTR`, or `BF_COMPLOAD`, or whether it should switch into a
+   separate frontend/screen flow. `BrnHudFlow` already constructs these boot states:
+   `BF_PRELOAD`, `BF_VIDEOS`, `BF_LEGAL`, `BF_ATTR`, `BF_COMPLOAD`, `BF_PROFILE`,
+   and `BF_LOADING`.
 
-Do one controlled rebuild and boot, then read the log. Do not make a semantic fix
-until this boot tells us whether the bad arguments come from bytecode decoding,
-stack/CallMethod handling, or an untraced nested call.
+3. Replace the phase-3 park in `BrnGuiModule.cpp` with the faithful controller
+   transition pattern. Reuse the existing BF_LOADING -> BF_VIDEOS -> BF_LEGAL
+   sequencing style only if the source evidence confirms the next state and event.
 
-Commands from repo root:
+4. Rebuild the runnable exe and verify by scripted window driving:
 
 ```powershell
-git -C b5-decomp status --short --branch
 & cmd.exe /c "tools\build\build_game_exe.bat"
-if (Test-Path build/game/BrnGame.log) { Clear-Content build/game/BrnGame.log }
-Get-Process Burnout_PC -ErrorAction SilentlyContinue | Stop-Process -Force
-Start-Process build/game/Burnout_PC.exe -WorkingDirectory build/game
-Start-Sleep -Seconds 40
-Get-Process Burnout_PC -ErrorAction SilentlyContinue | Stop-Process -Force
-Select-String build/game/BrnGame.log -Pattern "\[AptFn\]|\[AptOp\]|SendAptEvent|REGISTERED|optrace ARM|optrace DISARM|framework:|persist:" |
-  Set-Content scratchpad_menu_apt_diag_log.txt
+# launch, screenshot the Burnout window, send Enter/Down/Enter, read BrnGame.log
 ```
 
-## How To Read The Diagnostic
-
-First check whether the current dump captures only the 98-byte onLoad body or also
-captures a nested script function around the `SendAptEvent` calls.
-
-If the log only repeats the same 98-byte function body:
-
-- The current dump window is not seeing the nested `RegisterComponent` execution.
-- Do not infer the fix from the outer onLoad bytecode.
-- Instrument `CallMethod` / `CallFunctionDispatch` next to log:
-  - member name or dictionary key being called
-  - receiver value type/vtable
-  - resolved callee value type/vtable
-  - script-function bytecode pointer and size if the callee is script-backed
-  - parameter count and top stack values before dispatch
-
-If a distinct nested function body is captured:
-
-- Disassemble that body with operand sizes from the Apt parse table, not generic SWF
-  assumptions.
-- Confirm whether `_global` is a literal operand that should be consumed by
-  `GetVariable`/`GetMember`, or whether a native-8 Push/constant-pool decode is
-  producing the wrong value.
-- Compare the relevant implementation against the dossiers before editing:
-
-```powershell
-python tools/work/work.py show class:AptActionInterpreter --full --asm -o scratchpad_AptActionInterpreter.md
-python tools/work/work.py show class:AptActionInterpreterStackOps --full --asm -o scratchpad_AptActionInterpreterStackOps.md
-python tools/work/work.py show class:AptScriptFunction2 --full --asm -o scratchpad_AptScriptFunction2.md
-```
-
-Only after that comparison should you touch VM behavior.
-
-## Success Criteria For This Frontier
-
-With `KB_CLASS_BINDING=true`, a successful fix must produce:
+Success for this frontier is:
 
 ```text
-SendAptEvent#N ... p2='<real component name>' ... p3CIH=1
-[AptComm] component registered: '<name>' (count=N)
-AddNewAptComponent / REGISTERED > 0
+[BootLegal] stage 8 -> 9
+[GuiModule] BF_LEGAL command 70 ...
+<real next FSM/state entered; no miBootPhase=3 park>
 ```
 
-Then and only then:
+After the post-legal flow is real, return to the remaining visual issues from the
+same screenshots: stage 8 still mostly shows the title/transition strip rather than
+a polished selectable menu. Treat that as a render/component-drive follow-up after
+the flow no longer parks.
 
-1. Restore the hard `SendAptEvent` argument asserts.
-2. Verify `AptCommunicator::UpdateAllComponents` has registered components to drive.
-3. Remove the menu-state shim (`AptRuntimeSetComponentKeyValue`,
-   `AptRuntimeSetComponentViewState`, and the `CgsGuiComponent.cpp` fallback) only
-   after the real `UpdateAll` path visibly drives the menu.
-4. Re-home the remaining integration pieces:
-   - `AptLoader_StartAsyncLoad`
-   - `GuiResourceModule::Prepare/Update`
-   - `ViewModule::Construct/Prepare`
-   - `GuiModule::Update` / `AptAux::Update`
-   - `gpfnApt*TextRenderData` hooks
-5. Delete `BrnAptRuntimeBringUp.cpp/.h` only after those callers are real.
+## Diagnostic State
 
-## Commit Hygiene
+The current submodule checkout is diagnostic-heavy:
 
-Before committing real work:
+- `KB_CLASS_BINDING` is `true` in `AptDisplayList.cpp` at current `HEAD`
+  (`88994eb9`), not merely an unstaged local change.
+- Dirty diagnostic files currently include:
+  - `src/GameSource/Gui/BrnAptRuntimeBringUp.cpp`
+  - `src/SDKs/EATech/include/Apt/AptActionInterpreterInterpHelpers.cpp`
+  - `src/SDKs/EATech/include/Apt/AptActionInterpreterVariable.cpp`
+  - `src/SDKs/EATech/include/Apt/AptScriptFunction2.cpp`
+  - `src/SDKs/EATech/include/Apt/AptValue/AptValueFindChild.cpp`
 
-- restore `KB_CLASS_BINDING=false` unless the commit is deliberately diagnostic
-- remove or gate noisy `[AptFn]` / `[AptOp]` probes
-- keep the working shim menu bootable until the real path is proven
-- run at least the touched-TU compile gate
-- run `python tools/work/faithfulness_lint.py --all` and make sure no new Apt debt
-  appears
+Before a clean production commit, gate or remove noisy `[AptRT] var`,
+`[AptRT] findChild`, `[AptRT] bind`, and `[AptRT] f2` probes unless the commit is
+explicitly a diagnostic checkpoint. Keep the scripted screenshot/key-driving
+validation path.
 
-The handoff is intentionally narrow: make the registration call faithful first. The
-rest of the 1:1 Apt debt remains real, but it should not be mixed into this frontier.
+Do not commit `progress/status.json`, parent repo submodule-pointer churn, or
+`scratchpad_*` artifacts as part of the handoff.
