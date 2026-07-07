@@ -354,9 +354,18 @@ no `BurnoutComponent` ancestor → `SendAptEvent` gets an undefined name → `Ad
 engine primitive is faithful (AssociateInstToClass, Extends, GetNativeHashVirtual, `_name`, onLoad
 dispatch); the gap is COMPOSITION, and every step below needs the build+boot+read-log loop.
 
-1. **READ FIRST (per [[read-disasm-before-boot-tracing]]):** decode the title frame-0 init-action stream
-   (the `registerClass` + attach at TITLE_SCREEN02 chunk+0x7010) from the offline bundle dump + the MAIN AS
-   disasm. registerClass already runs (200+ classes, 4e); confirm whether the ATTACH/instantiate step runs.
+1. **READ FIRST (per [[read-disasm-before-boot-tracing]]).** ✅ **Partly done offline (2026-07-07):** an AS-symbol
+   grep of the bundles shows the BurnoutComponent FRAMEWORK AS is ENTIRELY in `MAIN.bundle` (`BuildName`×2,
+   `RegisterComponent`×2, `IsBurnoutComponent`, `onLoad`, `registerClass`, `Initialize`×59, `prototype`×88) —
+   `TITLE_SCREEN02.bundle` has ZERO AS-method strings (pure placements/art). And NEITHER bundle contains
+   `attachMovie` / `createEmptyMovieClip` / `__proto__` / `Extends` strings, so the framework does NOT create
+   the menu clips via attachMovie and does NOT set `__proto__` by name — component binding is registerClass
+   (export-name → class) + AssociateInstToClass at placement, which the container can't use (no export name).
+   ⇒ the OPEN question is HOW MAIN's framework AS makes the menu items' container a `BurnoutComponent` (it must,
+   for `BuildName` to resolve) without an export name or attachMovie. NEXT: disassemble MAIN's frame-0/bootstrap
+   AS (the `new AptCommunicator` + registerClass stream) to find the container-composition step — rebuild the
+   AS2 disassembler (scratchpad `disasm_apt.py`; dict via op 0x88, table base inline in the tag-1 stream) OR
+   runtime opcode+dict trace (gate `AptOpTraceProbe` on the first onLoad drain, per [[title-flow-bringup-status]]).
 2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
    (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
    menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
