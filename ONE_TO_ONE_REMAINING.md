@@ -434,6 +434,18 @@ dispatch); the gap is COMPOSITION, and every step below needs the build+boot+rea
    the relocation is emitting the raw 90-entry array (with the t8 padding + BAD t1) instead of the repaired
    13-command array. Find why the frame-0 command-array repair regressed (the fixer's append/patch, or the runtime
    STEP5 read), restore cmdCount=13/childNodes=7, re-boot, confirm `[AptRT] REGISTERED`.
+   **⚠️ CORRECTION (2026-07-07, read the STEP5 probe source):** the `(want 13)` in the log is a STALE
+   hardcoded expectation — BringUp.cpp:1811 says "13 ... verified vs **TITLE_SCREEN02.bundle**", but the probe
+   now runs on **MAIN** (a different movie), so `frame0.cmdCount=90 (want 13)` for MAIN is a FALSE mismatch, NOT
+   a regression. The `cmdCount 90 vs 13` framing above is therefore WRONG (my over-eager read of a mislabelled
+   probe — the classic contradiction trap). The SOLID, measured blocker is just **`childNodes=0`**: MAIN's
+   framework movie loads + instantiates + relocates its frame table fine, but composing frame-0 yields ZERO
+   child display nodes, so the framework is empty. Also note MAIN is at display LEVEL 0 while the title menu is
+   LEVEL 1 — separate movies — so it is NOT yet established that a level-0 framework even becomes the level-1
+   menu items' `_parent` ancestor (4c/4d found the items' `_parent` stays within the title). **REAL OPEN
+   QUESTION, honestly restated:** (a) why does MAIN's frame-0 compose 0 children, and (b) IS the intended menu
+   ancestor a level-0 framework node at all, or something within the title. Next boot trace must answer BOTH
+   before assuming the fix — do NOT chase the phantom "90 vs 13".
 2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
    (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
    menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
