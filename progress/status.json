@@ -1413,6 +1413,72 @@
   "AptStage::~AptStage": {
    "status": "reviewed"
   },
+  "AptString::AptString": {
+   "status": "reviewed"
+  },
+  "AptString::CleanNativeFunctions": {
+   "status": "reviewed"
+  },
+  "AptString::Create": {
+   "status": "reviewed"
+  },
+  "AptString::Destroy": {
+   "status": "reviewed"
+  },
+  "AptString::ForceDelete": {
+   "status": "reviewed"
+  },
+  "AptString::GetInternalString": {
+   "status": "reviewed"
+  },
+  "AptString::IsConstantString": {
+   "status": "reviewed"
+  },
+  "AptString::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "AptString::cat": {
+   "status": "reviewed"
+  },
+  "AptString::cpy": {
+   "status": "reviewed"
+  },
+  "AptString::objectMemberLookup": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_charAt": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_charCodeAt": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_concat": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_fromCharCode": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_indexOf": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_lastIndexOf": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_slice": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_split": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_substring": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_toLowerCase": {
+   "status": "reviewed"
+  },
+  "AptString::sMethod_toUpperCase": {
+   "status": "reviewed"
+  },
   "AptStringObject::AptStringObject": {
    "status": "reviewed"
   },
@@ -1771,6 +1837,15 @@
    "status": "reviewed"
   },
   "Attrib::ClassPrivate::~ClassPrivate": {
+   "status": "reviewed"
+  },
+  "Attrib::Collection::AddRef": {
+   "status": "reviewed"
+  },
+  "Attrib::Collection::Release": {
+   "status": "reviewed"
+  },
+  "Attrib::Collection::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "Attrib::CollectionExportPolicy::Initialize": {
@@ -12815,6 +12890,21 @@
   },
   "BrnGui::LeaderboardTableComponent::GetHighlightedGamertag": {
    "status": "reviewed"
+  },
+  "BrnGui::LicenseComponent::EnsureResourcesAreLoaded": {
+   "status": "compiles"
+  },
+  "BrnGui::LicenseComponent::EnsureResourcesAreUnloaded": {
+   "status": "compiles"
+  },
+  "BrnGui::LicenseComponent::SetCachePointer": {
+   "status": "compiles"
+  },
+  "BrnGui::LicenseComponent::SetProfilePointer": {
+   "status": "compiles"
+  },
+  "BrnGui::LicenseComponent::SetRank": {
+   "status": "compiles"
   },
   "BrnGui::LicenseComponent::StopOutputtingGamerpic": {
    "status": "reviewed"
@@ -45166,28 +45256,28 @@
    "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::BufferWriteSucceeded": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::CopyBufferHelper": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::GetBufferForWriting": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::GetNextBufferHelper": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::Initialize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::SetRenderRect": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::Shutdown": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::UpdateVertexBuffer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "XConfigUserSettings::GetVideoFlags": {
    "status": "reviewed"
@@ -46078,6 +46168,24 @@
    "status": "reviewed"
   },
   "rw::audio::core::CompressorLimiter1::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Decoder::AdvanceDecodeState": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Decoder::Decode": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Decoder::GetCurrentRequestDesc": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Decoder::GetSamplesRemaining": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Decoder::Release": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Decoder::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "rw::audio::core::EaLayer31Dec::CreateInstanceEvent": {
@@ -52851,6 +52959,9 @@
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
   },
+  "class:AptString": {
+   "status": "done"
+  },
   "class:AptStringObject": {
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
@@ -52908,6 +53019,9 @@
   },
   "class:Attrib::ClassPrivate": {
    "notes": "Opus decomp+verify; gate PASS; pushed dev cebb8bf",
+   "status": "done"
+  },
+  "class:Attrib::Collection": {
    "status": "done"
   },
   "class:Attrib::CollectionExportPolicy": {
@@ -60681,6 +60795,9 @@
   },
   "class:rw::audio::core::CompressorLimiter1": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/vendor/renderware/src/rw/audio/core/CompressorLimiter1.cpp. Reconciled.",
+   "status": "done"
+  },
+  "class:rw::audio::core::Decoder": {
    "status": "done"
   },
   "class:rw::audio::core::EaLayer31Dec": {
