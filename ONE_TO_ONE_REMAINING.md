@@ -394,6 +394,20 @@ dispatch); the gap is COMPOSITION, and every step below needs the build+boot+rea
    bounded relocation-walk shape, §4-adjacent; many Fixup fixes have landed since 07-05) so `EnsureFrameworkMovie`
    composes MAIN at level 0; (ii) boot-verify the menu items then gain a component ancestor → BuildName resolves
    → registration.** This is FAR more bounded than "reconstruct the framework AS."
+   **⭐⭐ BOOT LOG READ (2026-07-07, exe 03:06) — the AV is FIXED and the blocker is now a bounded FRAME-0
+   COMPOSITION REGRESSION:** the framework movie MAIN now LOADS + INSTANTIATES at level 0 (`Fixup COMPLETED
+   charCount=89`, `INSTANTIATED ... bound to root CIH @level 0`, `'MAIN' up loaded=1 instantiated=1`). BUT the
+   log shows `frame0.cmdCount=90 (want 13)` and the framework ticks with **`childNodes=0`**, whereas the code
+   comment (BrnAptRuntimeBringUp.cpp:2132/2143) records it was PROVEN at `frame0.cmdCount=13 → childNodes=7`.
+   So MAIN's frame-0 PLACE-commands that composed its 7 framework children NO LONGER RUN (0 children) — the
+   framework instantiates but is empty, so it provides no component ancestor. ⇒ **the §6.4 unblock is now a
+   specific, bounded bug: MAIN's frame-0 command table reads 90 vs the expected 13 → 0 children placed. Fix
+   the frame-0 command-count/placement regression (compare active `GUIAPT/MAIN.bundle` [236416 B, cmdCount 90]
+   vs the `childNodes=7`-era bundle; likely a frame-table relocation or a wrong MAIN bundle revision) so the 7
+   framework children compose → then the menu items nest under a framework component → BuildName resolves.**
+   This is a concrete frame-table/data debug, NOT an AS reconstruction — the single most actionable §6.4 state
+   reached. NEXT: dump the active MAIN frame-0 command list, find why cmdCount=90 not 13, restore the 7-child
+   composition, re-boot, confirm `[AptRT] REGISTERED` fires.
 2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
    (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
    menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
