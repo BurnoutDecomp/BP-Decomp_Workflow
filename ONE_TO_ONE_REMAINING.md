@@ -146,6 +146,39 @@ Sub-items:
 
 ## 6. The menu-drive path — "Layer 2"
 
+> **RECONSTRUCTION ROADMAP (2026-07-07, from a 4-agent map of the real console path).** Goal: the real
+> 1:1 menu, NO `BrnAptRuntimeBringUp`, no shims. Findings that scope the whole effort:
+> - **The Apt engine + component drive is ALREADY REAL/homed:** `AptAux::InitializeApt`/`UpdateComponents`,
+>   `AptCommunicator::Initialize`/`sMethod_SendAptEvent`/`AddNewAptComponent`/`UpdateComponent`/`UpdateAllComponents`,
+>   `AptDataHandler::AddAptData`/`FindAptData`, `AptCallbackFile::LoadAnimation`→CompleteLoad/Resolve/Fixup,
+>   `AptGetAnimationAtLevel`, the render-callback family + `AptRender`. The shim only DRIVES these.
+> - **The real owner classes `CgsGui::GuiModule`/`ViewModule`/`GuiResourceModule` are SKELETONS** (ctors +
+>   a few accessors). The module-lifecycle orchestration (staged bundle load, per-frame `AptAux::Update`,
+>   `ViewModule::Construct/Prepare`) is what the shim `BrnAptRuntimeBringUp.cpp` stands in for.
+> - **The single FUNCTIONAL blocker = registration.** `AddNewAptComponent` fires 0× because `BuildName`
+>   returns an undefined name (guard at `CgsAptCommunicator.cpp:837` no-ops). The menu framework classes
+>   (`SelectionMenu`, the `*AnimatorComponent`s, the `BurnoutComponent` base) are defined in
+>   **`PERSISTENTAPT.bundle` — a 101-resource PACKAGE (~60 AptData movies + ~40 textures)** that is never
+>   loaded. Register those (AddAptData for each) at level 0 and the ancestor binds → registration lights up
+>   → the whole real drive works. The ancestor is BOTH a display-`_parent` walk AND an AS-scope/class
+>   resolution: the container clips (SelectionMenu_mc) need their PERSISTENTAPT class registered to bind as
+>   BurnoutComponents, and `gAptCommunicator`/`registerClass` live in the shared level-0 global scope.
+> - **Shim deletion checklist (R2):** the ONLY hard link-break is `AptLoader_StartAsyncLoad` (cpp:3033, a PC
+>   platform leaf — re-home it). The rest: (2) a driver calling `AptAux::InitializeApt`+`Update`+`AptRender`
+>   [`BrnGuiModule.cpp:194/361/682`, `BrnRendererModule.cpp:118`]; (3) channel-41 load via GuiResourceModule/
+>   AptLoader [`BrnGuiModule.cpp:195`] incl. the x64 root-locate + `gAptResourceSpan*`/`gAptLoadAnimRootOverride`
+>   handshake; (4) ViewModule-owned font/text/language + `AptAux::Construct` + the `gpfnApt*TextRenderData`
+>   hooks; (5) a "movie composed/components initialised" handshake [`BrnBootLegalBoundary.cpp:85`]; (6) the
+>   faithful `GuiComponent::AddOutputAptViewState`→`FillAptViewMessage`→`UpdateComponent`→`UpdateAll` drive so
+>   the `CgsGuiComponent.cpp:54` fallback + the whole B7 scaffolding cluster (BringUp:2565-end) can go; (7)
+>   `AptRuntimeStopMovie`→real unload [`BrnGuiModule.cpp:645`]. Free to delete: `AptRuntimeIsReady` (no caller)
+>   + all 25 `[AptRT]` probe sinks (weak `*Default` no-ops absorb them).
+> - **PHASING:** (1) get PERSISTENTAPT loaded + all AptData registered via the existing load machinery and
+>   PROVE registration lights up (KB_CLASS_BINDING=true, AddNewAptComponent>0); (2) un-gate the SendAptEvent
+>   asserts + delete the menu shim; (3) reconstruct GuiResourceModule::Prepare/Update + ViewModule::Construct/
+>   Prepare + the module Update/AptAux::Update, re-home AptLoader_StartAsyncLoad + text hooks, delete
+>   BrnAptRuntimeBringUp; (4) validate vs the Xbox One i64.
+
 Today the menu is driven by the **shim** `AptRuntimeSetComponentKeyValue` + the
 `AptRuntimeSetComponentViewState` pair-map. Replace with the real chain and delete the shim:
 1. ✅ **DONE (2026-07-06) — Repair the DF2 argtab** in the bundles. Was the live crash
