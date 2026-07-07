@@ -381,6 +381,19 @@ dispatch); the gap is COMPOSITION, and every step below needs the build+boot+rea
    resolution + loading it), or **(B)** it IS in MAIN's intact framework but the runtime result doesn't nest the
    items under a component (⇒ a VM/composition reconstruction). The single targeted framework-init trace decides
    A vs B. Everything decidable offline is decided; the next move REQUIRES a boot.
+   **⭐ CONCRETE BLOCKER IDENTIFIED (2026-07-07) — the framework composition is ALREADY WIRED:**
+   `BrnAptRuntimeBringUp.cpp:EnsureFrameworkMovie()` loads the AS framework movie at display level 0 with
+   `KB_LOAD_FRAMEWORK_MOVIE = true` — this IS the stage-B "compose the framework beneath the flow movie" path
+   that would give the menu items a framework-level component ancestor. It loads **MAIN**, and its own FLAG
+   (2026-07-05) says **MAIN's load AVs inside `LoadAnimation`'s `CompleteLoad/Resolve/Fixup`** — a char-record
+   shape among MAIN's 89 chars the relocation walk has not met — handled gracefully (one-shot, logged, not
+   retried), so the title boots but the framework never composes ⇒ no component ancestor ⇒ 0 registrations.
+   Neither MAIN nor PERSISTENTAPT (present, 11.5 MB, NOT loaded) has a `SelectionMenu` CLASS string (both carry
+   `BurnoutComponent`/`B5MenuItem`/`B5MenuToggle`), so the ancestor is the FRAMEWORK ROOT (stage-B), not a
+   container class-bind. **⇒ the real §6.4 unblock is: (i) re-verify / fix the MAIN framework-movie Fixup AV (a
+   bounded relocation-walk shape, §4-adjacent; many Fixup fixes have landed since 07-05) so `EnsureFrameworkMovie`
+   composes MAIN at level 0; (ii) boot-verify the menu items then gain a component ancestor → BuildName resolves
+   → registration.** This is FAR more bounded than "reconstruct the framework AS."
 2. **One instrumented boot:** probe `AddNewAptComponent` (`[AptRT] REGISTERED <name>`) + `BuildName`'s walk
    (log each `_parent` + its `IsBurnoutComponent()` result). Read `build/game/BrnGame.log`: which node is the
    menu items' `_parent`, and why is it not a bound `BurnoutComponent`? (Target: REGISTERED count 0 → N.)
