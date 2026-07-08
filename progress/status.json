@@ -31521,6 +31521,18 @@
   "CLocalHuffman::~CLocalHuffman": {
    "status": "reviewed"
   },
+  "CPictureFYUV420::CPictureFYUV420": {
+   "status": "compiles"
+  },
+  "CPictureFYUV420::Clean": {
+   "status": "compiles"
+  },
+  "CPictureFYUV420::getPlane": {
+   "status": "compiles"
+  },
+  "CPictureFYUV420::~CPictureFYUV420": {
+   "status": "compiles"
+  },
   "CRct::operator=": {
    "status": "reviewed"
   },
@@ -44784,6 +44796,30 @@
   "MassiveAdClient3::CMassiveRecordImpression::`vector deleting destructor'": {
    "status": "compiles"
   },
+  "MassiveAdClient3::CMassiveSocket::CMassiveSocket": {
+   "status": "compiles"
+  },
+  "MassiveAdClient3::CMassiveSocket::Disconnect": {
+   "status": "compiles"
+  },
+  "MassiveAdClient3::CMassiveSocket::IsConnected": {
+   "status": "compiles"
+  },
+  "MassiveAdClient3::CMassiveSocket::ProcessError": {
+   "status": "compiles"
+  },
+  "MassiveAdClient3::CMassiveSocket::Receive": {
+   "status": "compiles"
+  },
+  "MassiveAdClient3::CMassiveSocket::Send": {
+   "status": "compiles"
+  },
+  "MassiveAdClient3::CMassiveSocket::`vector deleting destructor'": {
+   "status": "compiles"
+  },
+  "MassiveAdClient3::CMassiveSocket::~CMassiveSocket": {
+   "status": "compiles"
+  },
   "MassiveAdClient3::CMassiveSystem::ClearMassiveGuid": {
    "status": "reviewed"
   },
@@ -46449,6 +46485,15 @@
   "XGRAPHICS::IRFetch::InstType": {
    "status": "reviewed"
   },
+  "XGRAPHICS::IRLoadInterp::IRLoadInterp": {
+   "status": "compiles"
+  },
+  "XGRAPHICS::IRLoadInterp::InstType": {
+   "status": "compiles"
+  },
+  "XGRAPHICS::IRLoadInterp::`vector deleting destructor'": {
+   "status": "compiles"
+  },
   "XGRAPHICS::IRLoadTemp::IRLoadTemp": {
    "status": "reviewed"
   },
@@ -47775,6 +47820,18 @@
   "rw::audio::core::Route::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "rw::audio::core::SeekTableParser::Parse": {
+   "status": "compiles"
+  },
+  "rw::audio::core::SeekTableParser::ParseChunkSection0": {
+   "status": "compiles"
+  },
+  "rw::audio::core::SeekTableParser::ParseChunkSection1": {
+   "status": "compiles"
+  },
+  "rw::audio::core::SeekTableParser::ParseHeader0": {
+   "status": "compiles"
+  },
   "rw::audio::core::SndPlayer1_CgsStreamMod::AdvanceCurrentRequest": {
    "status": "reviewed"
   },
@@ -48638,6 +48695,27 @@
   },
   "rw::physics::JointFrames::SetParentLinearFrame": {
    "status": "reviewed"
+  },
+  "rw::physics::PairSet::GetResourceDescriptor": {
+   "status": "compiles"
+  },
+  "rw::physics::PairSet::Initialize": {
+   "status": "compiles"
+  },
+  "rw::physics::PairSet::InitializeLink": {
+   "status": "compiles"
+  },
+  "rw::physics::PairSet::LinkParts": {
+   "status": "compiles"
+  },
+  "rw::physics::PairSet::ReleaseLink": {
+   "status": "compiles"
+  },
+  "rw::physics::PairSet::UnlinkPair": {
+   "status": "compiles"
+  },
+  "rw::physics::PairSet::UnlinkParts": {
+   "status": "compiles"
   },
   "rw::physics::SimulationWorkspace::GetResourceDescriptor": {
    "status": "reviewed"
@@ -62751,6 +62829,10 @@
    "notes": "1 func (2nd-order IIR filter); gate pass.",
    "status": "done"
   },
+  "class:rw::audio::core::Limiter1": {
+   "notes": "4 of 5 done+committed in new audio-core plugins/Limiter1 home; 1 blocked on undecoded rodata (honest placeholder)",
+   "status": "blocked"
+  },
   "class:rw::audio::core::LowPassIir2": {
    "notes": "CalculateFilterCoefficients @0x82B97DC0 RBJ algebra store-for-store verified; shared Iir2 kernel.",
    "status": "done"
@@ -62881,6 +62963,10 @@
   "class:rw::collision::ClusteredMeshCluster": {
    "notes": "Verified vs X360 asm; parity.",
    "status": "done"
+  },
+  "class:rw::collision::CylinderVolume": {
+   "notes": "4 of 7 done+committed in new rw/collision home; 3 blocked (no-fabrication, mirrors TriangleVolume pattern)",
+   "status": "blocked"
   },
   "class:rw::collision::Feature": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
