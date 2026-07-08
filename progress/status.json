@@ -45819,6 +45819,30 @@
   "XAUDIO::CPacketQueue::Initialize": {
    "status": "reviewed"
   },
+  "XAUDIO::CSourceEffect::CSourceEffect": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CSourceEffect::CompletePacket": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CSourceEffect::GetParam": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CSourceEffect::Initialize": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CSourceEffect::SetParam": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CSourceEffect::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CSourceEffect::`vector deleting destructor'`adjustor{12}'": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CSourceEffect::~CSourceEffect": {
+   "status": "reviewed"
+  },
   "XAUDIO::CXMemMemoryManager::XMemAlloc": {
    "status": "reviewed"
   },
@@ -51042,6 +51066,10 @@
   "GameSource/Gui/Flow/Screen/States/BrnOnlinePause.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlinePlay.cpp": {
+   "notes": "9 funcs committed dfaf2c48 but blocked: SelectOnlineMenuOption indexes the off_82F26800 transition-name table where only [0]=TO_FBURN is attested; [1..6] guessed placeholders would mis-dispatch menu options (no-guessed-runtime-dispatch-rodata rule).",
+   "status": "blocked"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnOnlinePlay.h": {
    "status": "done"
   },
@@ -51213,6 +51241,10 @@
   "GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptTimerFieldComponent.cpp": {
    "notes": "wave4: timer component Construct/Prepare/SetTime/CalculateColour (de-opt VMX lerp); verify PASS; compile PASS",
    "status": "done"
+  },
+  "GameSource/Gui/Flow/hud/Components/BrnChallengeSelector.cpp": {
+   "notes": "6/7 committed dfaf2c48 (homed at HUD/Components/). SelectAvailableChallenge blocked (un-homed collaborator).",
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/hud/Components/BrnDistrictMarker.cpp": {
    "status": "done"
@@ -53145,7 +53177,7 @@
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp": {
-   "notes": "Wave47: 8/19; Release dropped asm case 4 (E_RELEASESTAGE_MASSIVE -> CgsSound::Playback::Content::DoOnPostLoad) + 11 decl-only VMX/streamer/scene-IO giants; discarded, redo with the streamer/scene-update-interface homed",
+   "notes": "0/7 blocked, nothing committed. BrnWorld::WorldEntityModule needs un-homed BrnWorld IO/entity + Massive-instance types + surface/zone queries.",
    "status": "blocked"
   },
   "GameSource/Unity/../World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.cpp": {
@@ -60789,6 +60821,10 @@
   "class:D3D::CCapture::HashMap": {
    "status": "done"
   },
+  "class:D3D::CCommandBuffer": {
+   "notes": "5/7 committed dfaf2c48 (Destroy/Flush/DebugDestroy/Growable alloc+free). DebugAddAllocation/DebugReclaim blocked (un-homed debug alloc-tracking collaborators).",
+   "status": "blocked"
+  },
   "class:D3D::CDevice": {
    "notes": "FOUNDATION committed (0f15ab1): D3D::CDevice TYPE homed + 5/18 software funcs bodied faithfully (IsPastStopPoint/IsPrimaryMemoryBusy/IsSecondaryMemoryBusy/MarkAsOutOfMemory/SaveRingBufferState). 13/18 decl-only: need un-homed sibling layouts (class:D3D::CBlocker/CCommandBuffer/CRingAllocList) and/or build raw PM4 packet streams / poke GPU regs. Unblocks once siblings homed.",
    "status": "blocked"
@@ -61421,6 +61457,9 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XAUDIO::CSourceEffect": {
+   "status": "done"
+  },
   "class:XAUDIO::CXMemMemoryManager": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -61938,6 +61977,10 @@
   },
   "class:rw::audio::core::GinsuPlayer::GinsuSynthData": {
    "notes": "Ginsu audio codec DSP: DecodeBlock @0x8268B588 (ADPCM-style predictor/filter over float coeff tables), GetSamples @0x8268BED8 (16.16 fractional resampler), CyclePeriod @0x8268BA20 + FrequencyToSample @0x8268B7B8 (pitch-period FP table interpolation). Audio codec + DSP per hard-rule block list. Deferred.",
+   "status": "blocked"
+  },
+  "class:rw::audio::core::HELPER_CMpegBase": {
+   "notes": "8/9 committed dfaf2c48. PolySynth 0x82B8EE50 blocked: un-recovered synthesis-window rodata (unk_82156740/780) + un-homed sub_82B86488.",
    "status": "blocked"
   },
   "class:rw::audio::core::HighShelfIir2": {
