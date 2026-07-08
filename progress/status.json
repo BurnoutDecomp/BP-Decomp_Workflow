@@ -22617,10 +22617,31 @@
   "BrnReplays::DirectorSerialiser::Write": {
    "status": "reviewed"
   },
+  "BrnReplays::DiskReadStream::CloseCallback": {
+   "status": "reviewed"
+  },
   "BrnReplays::DiskReadStream::OnClose": {
    "status": "reviewed"
   },
   "BrnReplays::DiskReadStream::OnRead": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::ReadBlock": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::ReadCallback": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::ResetStreamBlocks": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::Service": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::SetRange": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::SubmitReadRequest": {
    "status": "reviewed"
   },
   "BrnReplays::EffectsSerialiser::Construct": {
@@ -42147,6 +42168,12 @@
   "CgsSound::Playback::SlotSchema>::DoUnresolve": {
    "status": "reviewed"
   },
+  "CgsSound::Playback::SpliceBankStatistics::DumpAllToTty": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::SpliceBankStatistics::DumpToTty": {
+   "status": "reviewed"
+  },
   "CgsSound::Playback::SpliceBankStatistics::SpliceBankStatistics": {
    "status": "reviewed"
   },
@@ -42178,6 +42205,12 @@
    "status": "reviewed"
   },
   "CgsSound::Playback::SplicerContentSlot::DoPlay": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::SplicerContentSlot::DoPreDetach": {
+   "status": "reviewed"
+  },
+  "CgsSound::Playback::SplicerContentSlot::DoStop": {
    "status": "reviewed"
   },
   "CgsSound::Playback::SplicerContentSlot::DoUpdatePlaying": {
@@ -46551,6 +46584,18 @@
   "rw::audio::core::Fir64::MultiplyAccumulate": {
    "status": "reviewed"
   },
+  "rw::audio::core::Gain::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Gain::GetPlugInDescRunTime": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Gain::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Gain::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::audio::core::HighPassIir2::CalculateFilterCoefficients": {
    "status": "compiles"
   },
@@ -48114,6 +48159,10 @@
   "GameShared/GameClasses/Geometric/Intersection/CgsTriangleBox.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Geometric/Primitives/CgsFrustum.cpp": {
+   "notes": "1/4 committed d779d56c (VectorToPlane). SetFromRwFrustum (VMX SoA plane transpose) + DebugRender/DebugRenderCustomPlanes (un-homed CgsDev::DebugRender 3D debug-draw API) blocked.",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Geometric/Primitives/CgsTriangle4.h": {
    "notes": "Triangle4 header-keyed TU; defined out-of-line in CgsTriangle4.cpp.",
    "status": "done"
@@ -49217,6 +49266,9 @@
   },
   "GameShared/GameClasses/Sound/Playback/Rwac/CgsGenericRwacWaveContentResourceType.h": {
    "notes": "trivial; gate-only (constant GetTypeID, GREEN parity)",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Sound/Playback/Splicer/CgsSplicerContent.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Playback/Splicer/CgsSplicerContent.h": {
@@ -51160,6 +51212,9 @@
   },
   "GameSource/Replays/Serialisers/BrnReplayRaceCarEntitySerialiser.cpp": {
    "notes": "trivial; gate-only. Forwarder + clears field at exact pseudocode offset 0x5C.",
+   "status": "done"
+  },
+  "GameSource/Replays/Stream/BrnReplayDiskReadStream.cpp": {
    "status": "done"
   },
   "GameSource/Replays/Stream/BrnReplayWriteStream.cpp": {
@@ -55098,6 +55153,10 @@
   "class:BrnGui::SatNavRenderer": {
    "notes": "Wave 32: faithful vs asm, gate clean, pushed dbe0b0c",
    "status": "done"
+  },
+  "class:BrnGui::SelectRoutes": {
+   "notes": "3/6 committed d779d56c (checkpoint-landmark getters, incl a fixed round-index crit). RemoveLastCheckpoint/SetStartLightTriggerID/SetCurrentlySelectedCheckpointLandmark blocked: gate on unrecovered GuiCache+0xA9B8 two-player-mode member (no getter/DWARF).",
+   "status": "blocked"
   },
   "class:BrnGui::SelectableGroup": {
    "notes": "Wave 43: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
@@ -61316,6 +61375,9 @@
   },
   "class:rw::audio::core::Fir64": {
    "notes": "Keystone campaign R3: partial-completion + faithful VMX->scalar lowering, adversarially verified vs X360 asm. Committed 2c0bc47.",
+   "status": "done"
+  },
+  "class:rw::audio::core::Gain": {
    "status": "done"
   },
   "class:rw::audio::core::GinsuPlayer::GinsuSynthData": {
