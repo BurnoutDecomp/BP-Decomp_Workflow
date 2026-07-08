@@ -699,6 +699,33 @@
   "AptDisplayList::~AptDisplayList": {
    "status": "reviewed"
   },
+  "AptDisplayListState::AddToDelayReleaseList": {
+   "status": "reviewed"
+  },
+  "AptDisplayListState::ChangeDepth": {
+   "status": "reviewed"
+  },
+  "AptDisplayListState::GetFirstItem": {
+   "status": "reviewed"
+  },
+  "AptDisplayListState::RegisterReferences": {
+   "status": "reviewed"
+  },
+  "AptDisplayListState::findInst": {
+   "status": "reviewed"
+  },
+  "AptDisplayListState::insert": {
+   "status": "reviewed"
+  },
+  "AptDisplayListState::remove": {
+   "status": "reviewed"
+  },
+  "AptDisplayListState::removeItem": {
+   "status": "reviewed"
+  },
+  "AptDisplayListState::swapDepths": {
+   "status": "reviewed"
+  },
   "AptError::CleanNativeFunctions": {
    "status": "reviewed"
   },
@@ -43083,6 +43110,21 @@
   "D3D::CCapture::HashMap::~HashMap": {
    "status": "reviewed"
   },
+  "D3D::CRingAllocList::AddChunkNode": {
+   "status": "reviewed"
+  },
+  "D3D::CRingAllocList::Finalize": {
+   "status": "reviewed"
+  },
+  "D3D::CRingAllocList::GetFirstChunk": {
+   "status": "reviewed"
+  },
+  "D3D::CRingAllocList::Initialize": {
+   "status": "reviewed"
+  },
+  "D3D::CRingAllocList::MakeSpace": {
+   "status": "reviewed"
+  },
   "D3D::CVertexShader::GetDebuggerHint": {
    "status": "reviewed"
   },
@@ -49744,6 +49786,10 @@
   "GameShared/GameClasses/SceneManager/SpatialPartitionModule/CgsSpatialPartitionManager.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/SceneManager/SpatialPartitionModule/SpatialPartitions/CgsLooseOctree.cpp": {
+   "notes": "3 of 24 done+committed; 21 blocked on un-homed spatial-partition collaborator types",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionDebugComponent.cpp": {
    "status": "done"
   },
@@ -50485,6 +50531,10 @@
   },
   "GameSource/Director/Camera/Camera.h": {
    "status": "done"
+  },
+  "GameSource/Director/Camera/CollisionPolicies/BrnCollisionPolicyAttachedToVehicle.cpp": {
+   "notes": "0 of 6 all blocked: embeds by-value and calls methods on three entirely un-homed collaborator types FrustrumCollisionResolver +0x10, LineTestNearestPostBox +0x170, and a Gr-prefixed type; no groundable func without those layouts",
+   "status": "blocked"
   },
   "GameSource/Director/Camera/Utils/BrnCamera2DRotationController.cpp": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (corrections applied); compiles clean.",
@@ -54054,6 +54104,9 @@
   },
   "class:AptDisplayList": {
    "notes": "Fresh-eyes review (sonnet) vs X360 asm: all 7 behavioural fns faithful. AddToDisplayList (placed char = props->mpCharacter, import-table bind, new-inst dispatch order), ReplaceDisplyListItem (ASChanged gate, colour/pos merge), _addToSetCaches (type-5 gate, clip-handler fold, set-cache add, queueClipEvents), instantiateCharacter (vtbl[1]=Release, createdOnFrame, name-hash 12/37 skip, dyn-text seed), placeObject (asm-derived signature, AptCXFormCopy colour, morph stamp, class-bind), placeObjectNCXForm (2-arg AptUint32CXFormCopy scratch), mergeState (gate1/gate2 before merge, lockstep walk). No offset-pokes on runtime objects; un-homed callees are leaf-first externs. Workflow recon->adversarial-verify (caught + fixed 3 bugs) + conductor integration (fixed AddToDisplayList placed-char deref). Compile gate PASS.",
+   "status": "done"
+  },
+  "class:AptDisplayListState": {
    "status": "done"
   },
   "class:AptError": {
@@ -58387,6 +58440,10 @@
    "notes": "ComputeBestPlaceOnT verified: vmsum3fp -> true 3-lane squared distance + height test (faithful VMX->scalar).",
    "status": "done"
   },
+  "class:BrnWorld::PropCellManager": {
+   "notes": "6 of 8 done+committed in new BrnPropCellManager home; 2 funcs blocked on un-homed collaborators",
+   "status": "blocked"
+  },
   "class:BrnWorld::PropEntityID": {
    "notes": "prop entity-id wrapper; verifier parity/none; gate pass.",
    "status": "done"
@@ -61131,6 +61188,9 @@
    "notes": "FOUNDATION committed (0f15ab1): D3D::CDevice TYPE homed + 5/18 software funcs bodied faithfully (IsPastStopPoint/IsPrimaryMemoryBusy/IsSecondaryMemoryBusy/MarkAsOutOfMemory/SaveRingBufferState). 13/18 decl-only: need un-homed sibling layouts (class:D3D::CBlocker/CCommandBuffer/CRingAllocList) and/or build raw PM4 packet streams / poke GPU regs. Unblocks once siblings homed.",
    "status": "blocked"
   },
+  "class:D3D::CRingAllocList": {
+   "status": "done"
+  },
   "class:D3D::CVertexShader": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -61453,6 +61513,10 @@
   "class:MassiveAdClient3::CMassiveAdObjectSubscriber": {
    "status": "done"
   },
+  "class:MassiveAdClient3::CMassiveAsset": {
+   "notes": "9 of 12 done+committed in new Asset home + Record home; 3 blocked on un-homed deps",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CMassiveBaseObject": {
    "notes": "6 funcs (ctor/virtual dtor/IsValidString/SetLastError/scalar-deleting-dtor[compiler-synth via vdtor+operator delete]/operator delete); new MassiveAd home (no leak/DWARF -- sole owning home). Verifier minor_drift/low: harmless ctor pre-zero of mpcName (first-written later anyway, no fix); scalar-deleting-dtor correctly realized by the virtual dtor + class operator delete. MassiveMalloc/Free declared-only platform hooks. Gate pass.",
    "status": "done"
@@ -61493,6 +61557,10 @@
    "notes": "ctor (two 64-bit zero stores) + GetTime (64-bit bias + tick) verified.",
    "status": "done"
   },
+  "class:MassiveAdClient3::CMassiveZoneManager": {
+   "notes": "6 of 17 done+committed; reconciled the Wave-23 surface-pin into a real ZoneManager home; 11 blocked on un-homed MassiveAd deps",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CRequestBuilder": {
    "status": "done"
   },
@@ -61512,6 +61580,10 @@
   },
   "class:MassiveAdClient3::CRequestObject": {
    "status": "done"
+  },
+  "class:NFSMixMapState": {
+   "notes": "14 of 16 done+committed (6 new + 8 already-committed); 2 blocked on un-homed deps",
+   "status": "blocked"
   },
   "class:NFSMixShape": {
    "status": "done"
@@ -61643,6 +61715,10 @@
   "class:RealmcIface::TitleInfo": {
    "notes": "TitleInfo copy-ctor + one-shot Empty(); SELF-VERIFIED parity (workflow verifier hit transient API error; asm: *result=*a2 single-word copy + singleton zero-once mirroring CardData::Empty); gate pass.",
    "status": "done"
+  },
+  "class:RealmcIface::XenonUtil": {
+   "notes": "19 of 22 done+committed in new RealmcXenonUtil home. 3 blocked: CardResultToCardStatus needs 16-byte jump-table rodata byte_82148638 absent from dossier; ReadFileLayer2 and SaveDataRegular need a real pointer+size member on LoadEntryInfo maTrailing[2] - a layout change owned by the LoadEntryInfo TU",
+   "status": "blocked"
   },
   "class:RendererIO::InputBuffer": {
    "notes": "SetBrnCamera write-lock copy into embedded camera; compile gate PASS; verify-agent PASS. Same benign assert-machinery parity note as OutputBuffer.",
@@ -62401,6 +62477,10 @@
   "class:rw::audio::core::SubMixConnector": {
    "notes": "rw audio SubMixConnector; parity/low; wave6; verifier reviewed; gate pass.",
    "status": "done"
+  },
+  "class:rw::audio::core::System": {
+   "notes": "20 of 24 done+committed - THE top audio-core root IN-degree 40; new System.cpp + additive PlugIn.h extension; cascade-gated all DONE audio-core consumers clean. 4 blocked: CreateInstance self-carved-mutex tail layout, Release and ExecuteCommands un-homed collaborator sub-objects via raw-offset vtable dispatch, GetProfiler un-homed profiler vtable + unrecovered rodata double",
+   "status": "blocked"
   },
   "class:rw::audio::core::TimerHandle": {
    "notes": "rw audio TimerHandle; parity/low; wave6; verifier reviewed; gate pass.",
