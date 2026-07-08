@@ -24,14 +24,35 @@ SPECIAL = ("vector deleting destructor", "scalar deleting destructor")
 
 def class_path(canonical: str) -> str:
     """Namespace::Class from a demangled qualified name. Drops the final method
-    component; leaves free functions under a synthetic <global> unit."""
+    component; leaves free functions under a synthetic <global> unit.
+
+    TEMPLATE-AWARE: the enclosing scope ends at the LAST '::' that occurs at
+    angle-bracket depth 0, so a class's own template args (e.g. <512,16>) and
+    templated method/operator names (operator<<<T>) are never split.
+    """
     name = canonical.strip()
-    # MSVC-mangled leftovers (?..) and odd names have no usable path -> global bucket.
-    if name.startswith("?") or "::" not in name:
+    # MSVC-mangled leftovers (?..) have no usable path -> global bucket. After the
+    # build_identity demangle pass this should essentially never fire.
+    if name.startswith("?"):
         return "<global>"
-    parts = name.split("::")
-    # `A::B::~B` / `A::B::B` (ctor/dtor) and operators still belong to class A::B.
-    return "::".join(parts[:-1])
+    depth = 0
+    last = -1                       # index of the last depth-0 "::"
+    i, n = 0, len(name)
+    while i < n:
+        c = name[i]
+        if c == "<":
+            depth += 1
+        elif c == ">":
+            if depth > 0:
+                depth -= 1
+        elif c == ":" and depth == 0 and i + 1 < n and name[i + 1] == ":":
+            last = i
+            i += 2
+            continue
+        i += 1
+    if last < 0:                    # no depth-0 "::" -> free function / free template
+        return "<global>"
+    return name[:last]
 
 
 def main():

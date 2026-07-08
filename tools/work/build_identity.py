@@ -16,6 +16,7 @@ Run from the repo root inside an environment where `c++filt` is on PATH:
     python tools/work/build_identity.py --with-ps3 # also fold in PS3-External
 """
 import argparse, json, os, re, subprocess, sys
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -27,6 +28,15 @@ X360 = "BURNOUT_X360_ARTIST.XEX"
 PS3EXT = "Burnout_External_PS3.ELF"
 
 AUTO = re.compile(r"^(sub_|j_|nullsub|unknown|loc_|off_|byte_|dword_|word_|qword_|unk_|Burnout_X360_Artist_)")
+
+# MSVC demangler for the '?'-prefixed X360 names IDA left mangled (C++ function-template
+# instantiations). Override the path via UNDNAME_EXE if VS lives elsewhere.
+UNDNAME = os.environ.get(
+    "UNDNAME_EXE",
+    r"C:\Program Files\Microsoft Visual Studio\2022\Community"
+    r"\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\undname.exe",
+)
+_QQ = " ?? ::"
 
 
 def strip_params(demangled: str) -> str:
@@ -64,6 +74,44 @@ def batch_demangle(mangled: list[str]) -> list[str]:
         sys.exit(f"c++filt failed: {proc.stderr}")
     out = proc.stdout.split("\n")
     return out[: len(mangled)]
+
+
+def msvc_demangle(mangled: str) -> str | None:
+    """Name-only (0x1000) MSVC demangle of a single '?'-mangled X360 symbol.
+    Keeps template args, drops params. Returns None on failure."""
+    p = subprocess.run([UNDNAME, "0x1000", mangled], capture_output=True, text=True)
+    m = re.search(r'is :- "(.*)"', p.stdout, re.DOTALL)
+    if not m:
+        return None
+    dem = m.group(1)
+    while _QQ in dem:                       # strip the truncation/anon-namespace artifact
+        dem = dem.replace(_QQ, "")
+    return dem
+
+
+def demangle_mangled_entries(identity: dict) -> dict:
+    """Re-key every '?'-prefixed identity entry to its demangled name (canonical too),
+    disambiguating name-only collisions so no entry is dropped. Non-'?' entries untouched."""
+    qkeys = [k for k in identity if k.startswith("?")]
+    existing = {k for k in identity if not k.startswith("?")}
+    dem_of = {}
+    for k in qkeys:
+        d = msvc_demangle(k)
+        if d is None:
+            continue                        # leave undecodable entries as-is (none observed)
+        dem_of[k] = d
+    groups = defaultdict(list)
+    for k, d in dem_of.items():
+        groups[d].append(k)
+    for d, members in groups.items():
+        members.sort()
+        shadows = d in existing
+        for i, k in enumerate(members):
+            key = d if (i == 0 and not shadows) else f"{d}  [ovl{i + 1}]"
+            e = identity.pop(k)
+            e["canonical"] = key
+            identity[key] = e
+    return identity
 
 
 def read_export(path: str):
@@ -151,6 +199,9 @@ def main():
             "decfigs_ps3_addr": df["ps3_addr"] if df else None,
             "ps3ext_addrs": pc["addrs"] if pc else None,
         }
+
+    # Demangle the '?'-prefixed X360 names IDA left mangled, so class_path can home them.
+    identity = demangle_mangled_entries(identity)
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump(identity, open(OUT, "w", encoding="utf-8"), indent=1)
