@@ -31545,6 +31545,18 @@
   "CLocalHuffman::~CLocalHuffman": {
    "status": "reviewed"
   },
+  "CMarshaller::GetArgumentFromSchema": {
+   "status": "reviewed"
+  },
+  "CMarshaller::Initialize": {
+   "status": "reviewed"
+  },
+  "CMarshaller::Marshal": {
+   "status": "reviewed"
+  },
+  "CMarshaller::RecursiveMarshal": {
+   "status": "reviewed"
+  },
   "CPictureFYUV420::CPictureFYUV420": {
    "status": "reviewed"
   },
@@ -40510,6 +40522,15 @@
    "status": "reviewed"
   },
   "CgsSceneManager::CgsCollision::CollisionResultList::SetNumResults": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::FillTriangleCacheJobDesc::GetCacheSph": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::FillTriangleCacheJobDesc::GetMaxNumTriangles": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::CgsCollision::FillTriangleCacheJobDesc::GetTriangleLis": {
    "status": "reviewed"
   },
   "CgsSceneManager::CgsCollision::PrimitiveListWithTriangleListJobDesc::Prepare": {
@@ -59285,6 +59306,9 @@
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
+  "class:CMarshaller": {
+   "status": "done"
+  },
   "class:CPictureFYUV420": {
    "status": "done"
   },
@@ -60791,6 +60815,9 @@
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:CgsSceneManager::CgsCollision::FillTriangleCacheJobDesc": {
+   "status": "done"
+  },
   "class:CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc": {
    "notes": "Genuine un-homed-accessor block. GetTestNearest @0x82917088: bl CgsSceneManager__CgsC (external/truncated, identity not asm-attested) then lbz r3,0xC(r3). GetTestDoubleSided @0x829170B8: same accessor then lbz r3,0xD(r3). Builder's reason cites +0xC/+0xD which the asm confirms exactly. The accessor ",
    "status": "blocked"
@@ -62127,6 +62154,10 @@
   "class:MassiveAdClient3::CRequestObject": {
    "status": "done"
   },
+  "class:MassiveAdClient3::CRequestOpenSession": {
+   "notes": "5 of 6 done+committed; Parse blocked on CRequestObject::ReadRemoveSignature (CRequest* pattern)",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CTransactionHTTP": {
    "status": "done"
   },
@@ -62255,6 +62286,10 @@
   "class:RealmcIface::MessageBootupDone": {
    "notes": "slot-15 dispatch pinned per the IRealmcMessageTarget precedent; deleting dtor = virtual dtor + sized operator delete -> FreeMemSize; sizeof divergence FLAG'd",
    "status": "done"
+  },
+  "class:RealmcIface::MessageLoadDone": {
+   "notes": "2 of 3 done+committed (Apply+dtor; layout fix removed fabricated mPad18); ctor blocked on un-homed EASTL basic_string helper + RealmcCore::allocator<char>::RangeInitialize",
+   "status": "blocked"
   },
   "class:RealmcIface::MessageShowAutosaveIcon": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
@@ -62509,6 +62544,10 @@
   },
   "class:XGRAPHICS::IRInst": {
    "notes": "8/12 committed d8cb7827. ExportType/Kill/Validate/InstType blocked: un-homed foreign context chain mpContext(+0x3B8)->(+0xAB0)->(+0x60), two unnamed vtable-slot-5/6 virtuals, un-recovered InstType rodata string byte_820DC63C.",
+   "status": "blocked"
+  },
+  "class:XGRAPHICS::IRLoadConst": {
+   "notes": "2 of 3 done+committed; Kill blocked on un-homed dep",
    "status": "blocked"
   },
   "class:XGRAPHICS::IRLoadInterp": {
@@ -63021,6 +63060,10 @@
   "class:rw::audio::core::LowShelfIir2": {
    "notes": "Coeffs @0x82B97E80 RBJ shelf algebra verified.",
    "status": "done"
+  },
+  "class:rw::audio::core::Mixer": {
+   "notes": "0 of 4 all blocked on un-homed SubMix collection/node layout + un-recovered mix-scratch-buffer rodata",
+   "status": "blocked"
   },
   "class:rw::audio::core::PackedColumnReader": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
