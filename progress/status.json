@@ -44817,6 +44817,75 @@
   "MassiveAdClient3::CMassiveTime::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "MassiveAdClient3::CNetworkManager::CNetworkManager": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::Connect": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::CreateHeartbeat": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::Disconnect": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::GetServerAddressU32": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::GetServerHostName": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::HandleError": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::Initialize": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::KillAndWaitForDNS": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::PrepareForShutdown": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::Receive": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::RemoveCurrentRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::ResetHeartbeatWaitTime": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::ResolveAddresses": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::Send": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::SetDNSFinished": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::SetDNSPending": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::SetServerAddress": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::SetServerPort": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::Shutdown": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::Tick": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CNetworkManager::~CNetworkManager": {
+   "status": "reviewed"
+  },
   "MassiveAdClient3::CRequestBuilder::CRequestBuilder": {
    "status": "reviewed"
   },
@@ -48805,6 +48874,10 @@
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuWindow.cpp": {
    "status": "done"
   },
+  "GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp": {
+   "notes": "17 of 21 done+committed; 4 blocked on un-homed debug-UI collaborators",
+   "status": "blocked"
+  },
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsMenuItemVariable.cpp": {
    "status": "done"
   },
@@ -50071,6 +50144,10 @@
   },
   "GameShared/GameClasses/Sound/Playback/Splicer/internal/SpliceManager.cpp": {
    "notes": "6/10 committed 9b0264bc (FindSplice/DestroyVoice/voice-plugin alloc+free). Ctor/LoadSplice/CreateMonoVoice/CreateStereoVoice blocked: un-homed Environment& @+0x6C4 + VoiceStageConfig[4] + SpliceManager::LoadSpliceData.",
+   "status": "blocked"
+  },
+  "GameShared/GameClasses/Sound/Playback/Splicer/internal/SpliceObjects.cpp": {
+   "notes": "11 of 12 done+committed; 1 blocked on un-homed dep",
    "status": "blocked"
   },
   "GameShared/GameClasses/Sound/Playback/aems/CgsAemsInterfaceImplementation.h": {
@@ -53789,6 +53866,10 @@
   "SDKs/EATech/include/rw/math/vpu/detail/vector4_type_inline.h": {
    "notes": "Wave 40: faithful vpu math vs Feb-2007 + vec_float convention, gate clean, pushed 0a2ffce",
    "status": "done"
+  },
+  "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp": {
+   "notes": "5 of 15 done+committed (export-policy CGS_ASSERT guards, verbatim rodata); 10 blocked on un-homed AttribSys templates ScanForValidKey/lower_bound/CollectGarbageBag + opaque DatabasePrivate offsets",
+   "status": "blocked"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribinstance.cpp": {
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
@@ -61561,6 +61642,9 @@
    "notes": "6 of 17 done+committed; reconciled the Wave-23 surface-pin into a real ZoneManager home; 11 blocked on un-homed MassiveAd deps",
    "status": "blocked"
   },
+  "class:MassiveAdClient3::CNetworkManager": {
+   "status": "done"
+  },
   "class:MassiveAdClient3::CRequestBuilder": {
    "status": "done"
   },
@@ -61715,6 +61799,10 @@
   "class:RealmcIface::TitleInfo": {
    "notes": "TitleInfo copy-ctor + one-shot Empty(); SELF-VERIFIED parity (workflow verifier hit transient API error; asm: *result=*a2 single-word copy + singleton zero-once mirroring CardData::Empty); gate pass.",
    "status": "done"
+  },
+  "class:RealmcIface::XenonRunnableTask": {
+   "notes": "4 of 6 done+committed in new RealmcXenonRunnableTask home; 2 blocked on un-homed deps",
+   "status": "blocked"
   },
   "class:RealmcIface::XenonUtil": {
    "notes": "19 of 22 done+committed in new RealmcXenonUtil home. 3 blocked: CardResultToCardStatus needs 16-byte jump-table rodata byte_82148638 absent from dossier; ReadFileLayer2 and SaveDataRegular need a real pointer+size member on LoadEntryInfo maTrailing[2] - a layout change owned by the LoadEntryInfo TU",
@@ -62804,6 +62892,10 @@
   },
   "class:rw::physics::RigidBody": {
    "notes": "DynamicUpdate @0x82BC2B78 reads this+0x1C/+0x4C/+0x5C as POINTERS (load bases @0x82BC2B8C/B80/D3C) conflicting with committed float-lane members mCom.w/mRi.w/mUp.w (NON-ADDITIVE committed-type change -> flagged, not applied) + reaches undecoded .rdata masks (unk_82CDA3D0/410/450, gSqrt2s). operator= committed; DynamicUpdate declared-only.",
+   "status": "blocked"
+  },
+  "class:rw::physics::Simulation": {
+   "notes": "3 of 22 done+committed; 19 blocked on un-homed physics collaborator types",
    "status": "blocked"
   },
   "class:rw::physics::SimulationWorkspace": {
