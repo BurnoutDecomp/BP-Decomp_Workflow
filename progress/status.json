@@ -2301,6 +2301,15 @@
   "Attrib::Instance::~Instance": {
    "status": "reviewed"
   },
+  "Attrib::Node::GetCount": {
+   "status": "reviewed"
+  },
+  "Attrib::Node::GetTypeDesc": {
+   "status": "reviewed"
+  },
+  "Attrib::Node::Node": {
+   "status": "reviewed"
+  },
   "Attrib::TypeDesc::Lookup": {
    "status": "reviewed"
   },
@@ -39561,6 +39570,27 @@
   "CgsResource::LiveUpdateModule::Update": {
    "status": "reviewed"
   },
+  "CgsResource::LiveUpdatePoolModuleState::AllocateNewResources": {
+   "status": "reviewed"
+  },
+  "CgsResource::LiveUpdatePoolModuleState::BeginAllocation": {
+   "status": "reviewed"
+  },
+  "CgsResource::LiveUpdatePoolModuleState::CheckListDependencies": {
+   "status": "reviewed"
+  },
+  "CgsResource::LiveUpdatePoolModuleState::CreateEntryListResource": {
+   "status": "reviewed"
+  },
+  "CgsResource::LiveUpdatePoolModuleState::DeleteOriginalResources": {
+   "status": "reviewed"
+  },
+  "CgsResource::LiveUpdatePoolModuleState::FindPoolToUpdate": {
+   "status": "reviewed"
+  },
+  "CgsResource::LiveUpdatePoolModuleState::GenerateResponse": {
+   "status": "reviewed"
+  },
   "CgsResource::LuaCodeResourceType::GetTypeID": {
    "status": "reviewed"
   },
@@ -45108,6 +45138,15 @@
   "RealmcIface::LoadEntryInfo::operator=": {
    "status": "reviewed"
   },
+  "RealmcIface::MemcardInterface::CreateInstance": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MemcardInterface::MemcardInterface": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MemcardInterface::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "RealmcIface::MessageBootupDone::Apply": {
    "status": "reviewed"
   },
@@ -45310,6 +45349,15 @@
    "status": "reviewed"
   },
   "ShaderConstantsInternal::FixUp": {
+   "status": "reviewed"
+  },
+  "Snd9::Aems::BeginRemoveModuleBank": {
+   "status": "reviewed"
+  },
+  "Snd9::Aems::IsModuleBankRemoved": {
+   "status": "reviewed"
+  },
+  "Snd9::Aems::SetSamplePlayerFactory": {
    "status": "reviewed"
   },
   "Snd9::AemsPlayerInputAccessor::GetValueByType": {
@@ -49769,6 +49817,9 @@
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "GameShared/GameClasses/System/Resource/PoolModuleStates/CgsLiveUpdatePoolModuleState.cpp": {
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Threads/CgsThreadLayout.cpp": {
    "notes": "Verify PASS (minor, no change needed); 4 funcs asm-grounded. Ctor scalar zero-init is defensive (asm leaves them for Begin(); no behavioral impact); the +0x7C double atomic-store is an AtomicPointer(NULL) inline artifact.",
    "status": "done"
@@ -50756,6 +50807,10 @@
   "GameSource/Gui/Flow/Screen/Components/BrnCarouselSliderBar.cpp": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/Components/BrnChallengeListComponent.cpp": {
+   "notes": "5/8 committed 59967ede (Construct/Setup/filter+highlight getters, homed at src/GameSource/Gui/). HighlightNext/HighlightPrevious/Update blocked (un-homed cursor/list-nav collaborators).",
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/Components/BrnCrashNavLegend.cpp": {
    "notes": "4 fns asm-exact; tables XEX byte-verified incl. DriveThough typo + empty 9th; unsigned window >7->8 exact",
@@ -54048,6 +54103,9 @@
   },
   "class:Attrib::IExportPolicy": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:Attrib::Node": {
    "status": "done"
   },
   "class:Attrib::Vault": {
@@ -61117,6 +61175,9 @@
    "notes": "Realmc LoadEntryInfo; parity/none; wave6; verifier reviewed; gate pass.",
    "status": "done"
   },
+  "class:RealmcIface::MemcardInterface": {
+   "status": "done"
+  },
   "class:RealmcIface::MessageBootupDone": {
    "notes": "slot-15 dispatch pinned per the IRealmcMessageTarget precedent; deleting dtor = virtual dtor + sized operator delete -> FreeMemSize; sizeof divergence FLAG'd",
    "status": "done"
@@ -61152,6 +61213,9 @@
   "class:Snd": {
    "notes": "5/8 committed f18d24df (EALayer3 reorder/inversion + MicroTalk discardbits/process_raw_block). readsamples/decodemut/decodexac blocked: un-recovered MicroTalk/XA-ADPCM codebook rodata LUTs (byte_82F88928, flt_82F888xx) not in dossier.",
    "status": "blocked"
+  },
+  "class:Snd9::Aems": {
+   "status": "done"
   },
   "class:Snd9::AemsPlayerInputAccessor": {
    "notes": "verified vs X360 asm; parity.",
@@ -61281,6 +61345,10 @@
   },
   "class:XCAM::CPacketizer": {
    "status": "done"
+  },
+  "class:XCAM::CQOSController": {
+   "notes": "7/14 committed 59967ede (bandwidth calc/DoWork/QOS feedback/target bitrate+framerate/SumSendSize/ForceKeyFrame). 7 rate-actuation funcs blocked: reach through un-homed XCAM::CStreamEngine into embedded CEncoder(+0x44)/CPacketizer(+0x1BC)/CRemoteConsoleList(+0x268) + un-recovered frame-rate ladder rodata (unk_8210BCF4..).",
+   "status": "blocked"
   },
   "class:XCAM::CVideoOutputBase": {
    "status": "done"
