@@ -13059,7 +13059,22 @@
   "BrnGui::LeaderboardColumnComponent::SetCell": {
    "status": "reviewed"
   },
+  "BrnGui::LeaderboardTableComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::LeaderboardTableComponent::DrawScoreboard": {
+   "status": "reviewed"
+  },
   "BrnGui::LeaderboardTableComponent::GetHighlightedGamertag": {
+   "status": "reviewed"
+  },
+  "BrnGui::LeaderboardTableComponent::LocaliseTextInCell": {
+   "status": "reviewed"
+  },
+  "BrnGui::LeaderboardTableComponent::SetCell": {
+   "status": "reviewed"
+  },
+  "BrnGui::LeaderboardTableComponent::SetupScoreboard": {
    "status": "reviewed"
   },
   "BrnGui::LicenseComponent::EnsureResourcesAreLoaded": {
@@ -15265,6 +15280,21 @@
    "status": "reviewed"
   },
   "BrnMassive::BrnMassive::Update": {
+   "status": "reviewed"
+  },
+  "BrnMassive::BrnMassiveSubscriber::BrnMassiveSubscriber": {
+   "status": "reviewed"
+  },
+  "BrnMassive::BrnMassiveSubscriber::MediaDownload": {
+   "status": "reviewed"
+  },
+  "BrnMassive::BrnMassiveSubscriber::MediaDownloadComplete": {
+   "status": "reviewed"
+  },
+  "BrnMassive::BrnMassiveSubscriber::SetImpressionData": {
+   "status": "reviewed"
+  },
+  "BrnMassive::BrnMassiveSubscriber::Tick": {
    "status": "reviewed"
   },
   "BrnMassive::System360HWMassive::BurnoutMassiveFree": {
@@ -50885,6 +50915,9 @@
    "notes": "batch subagent review: view-state order + buffers exact; cell-name inference honestly flagged",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/Components/BrnLeaderboardTableComponent.cpp": {
+   "status": "done"
+  },
   "GameSource/Gui/Flow/Screen/Components/BrnManufacturerIcon.cpp": {
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
@@ -52339,6 +52372,10 @@
   },
   "GameSource/Unity/../GameState/RoadRules/BrnRoadRulesManager.cpp": {
    "status": "done"
+  },
+  "GameSource/Unity/../GameState/RumbleManager/BrnRumbleManager.cpp": {
+   "notes": "2/6 committed 62174655 (Prepare/UpdatePauseState). Update/UpdateImpacts/UpdateSurfaceRumble/OnVehicleAggression blocked: un-homed rumble-source collaborators.",
+   "status": "blocked"
   },
   "GameSource/Unity/../GameState/TakedownManager/BrnTakedownManagerDebugComponent.cpp": {
    "notes": "Review passed: ForceTakedownCallback and OnActivate registration callbacks are correct.",
@@ -55683,6 +55720,9 @@
    "notes": "Verify caught Construct byte-init: +0x92C=0 (not 1) and mbReady(+0x92D)=1 (was uninit; gates IsSafeToDownload). Trusted asm over mislabeled Hex-Rays. Fixed.",
    "status": "done"
   },
+  "class:BrnMassive::BrnMassiveSubscriber": {
+   "status": "done"
+  },
   "class:BrnMassive::System360HWMassive": {
    "status": "done"
   },
@@ -58369,6 +58409,10 @@
   "class:CVideoAnalyst": {
    "status": "done"
   },
+  "class:CVideoFrameAnalyst": {
+   "notes": "4/6 committed 62174655 (Init/detectHighTextureBand/dtors). computeBlockAvg/computeFrameTexture blocked: un-homed CWMVFARoutines virtual vtable dispatch (off_8322634C slots +4/+8).",
+   "status": "blocked"
+  },
   "class:CWMVMBMode": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -59822,6 +59866,10 @@
   "class:CgsSceneManager::AABBoxBuilder": {
    "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
    "status": "done"
+  },
+  "class:CgsSceneManager::CgsCollision": {
+   "notes": "3/7 committed 62174655 (BaseCollisionGenerator ext + CollisionResult/JobDescription). FillTriangleCache/LineWithPolySoup blocked: un-homed CgsGeometric/PolygonSoup query collaborators + VMX.",
+   "status": "blocked"
   },
   "class:CgsSceneManager::CgsCollision::CollisionResultList": {
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
@@ -61844,6 +61892,10 @@
   },
   "class:rw::audio::core::Butterworth": {
    "notes": "Keystone: CalculateFilterCoefficients @0x82B64698 requires decoding helper sub_82C09970 + three undecoded rodata coefficient tables (cascaded-section split shape IDA cannot recover); fabricating coefficients is forbidden. The other 4 funcs (ClearBuffer/CreateInstance/Filter/GetSize @0x82B64980/0x82B6C420/0x82B649E8/0x82B6C408) are bodied + committed; coeff calc left flagged.",
+   "status": "blocked"
+  },
+  "class:rw::audio::core::CMpegBase": {
+   "notes": "5/6 committed 62174655. PolySynth 0x82B8EE50 blocked: un-recovered poly-phase synthesis-window rodata (unk_82159D70/DB0) + un-homed sub_82B8E258.",
    "status": "blocked"
   },
   "class:rw::audio::core::Collection": {
