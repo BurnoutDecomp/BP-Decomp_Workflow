@@ -324,6 +324,24 @@
   "AptAction_TryCatchFinallyBlock::putCaughtObjectInRegister": {
    "status": "reviewed"
   },
+  "AptBoolean::AptBoolean": {
+   "status": "reviewed"
+  },
+  "AptBoolean::Create": {
+   "status": "reviewed"
+  },
+  "AptBoolean::GetBool": {
+   "status": "reviewed"
+  },
+  "AptBoolean::Initialize": {
+   "status": "reviewed"
+  },
+  "AptBoolean::Shutdown": {
+   "status": "reviewed"
+  },
+  "AptBoolean::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "AptCIHNativeFunctionHelper::sMethod_attachMovie": {
    "status": "reviewed"
   },
@@ -45492,6 +45510,27 @@
   "XCAM::COverlappedIO::SignalSynchronousComplete": {
    "status": "reviewed"
   },
+  "XCAM::CPacketizer::BufferWriteCompleted": {
+   "status": "reviewed"
+  },
+  "XCAM::CPacketizer::GetBufferForWriting": {
+   "status": "reviewed"
+  },
+  "XCAM::CPacketizer::GetEncodedPacket": {
+   "status": "reviewed"
+  },
+  "XCAM::CPacketizer::GetNewestPacketSequenceNumber": {
+   "status": "reviewed"
+  },
+  "XCAM::CPacketizer::Initialize": {
+   "status": "reviewed"
+  },
+  "XCAM::CPacketizer::SetBitrate": {
+   "status": "reviewed"
+  },
+  "XCAM::CPacketizer::Shutdown": {
+   "status": "reviewed"
+  },
   "XCAM::CVideoOutputBase::BufferWriteSucceeded": {
    "status": "reviewed"
   },
@@ -46642,6 +46681,27 @@
    "status": "reviewed"
   },
   "rw::audio::core::RawPuller2::StopHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Resample::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Resample::GetOutputSamples": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Resample::GetPlugInDescRunTime": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Resample::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Resample::PreProcess": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Resample::SetResampleIncrement": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Resample::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "rw::audio::core::Route::ConnectByPointerHandler": {
@@ -48140,6 +48200,10 @@
   },
   "GameShared/GameClasses/Graphics/MoviePlayer/CgsMoviePlayer.cpp": {
    "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/MoviePlayer/CgsMovieVideoRenderer.cpp": {
+   "notes": "0/6 blocked, nothing committed. All funcs need the un-homed MovieVideoRenderer layout: EA::Jobs::Job mJob@+0x180, renderengine::Texture (maTextureInfoTypes), rw::movie::VideoRenderable, + a virtual resource-allocation chain. Needs those deps homed first.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Graphics/MoviePlayer/CgsMovieVideoRenderer.h": {
    "notes": "verify pass 10/10: position/scale/delay assert-false/identity stubs. gate x64 pass",
@@ -50500,6 +50564,10 @@
   "GameSource/Gui/Flow/Screen/States/OnlineYouWin.h": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
+  },
+  "GameSource/Gui/Flow/Shared/Components/BrnAnimationComponent.h": {
+   "notes": "0/5 blocked, nothing committed. The 5 funcs are out-of-line members of ~16KB un-homed screen-state classes (CrashNavEnterOnlineBase, OnlineCustomMatch) - access embedded TextField/MenuComponent/component sub-objects at raw offsets that need the owner-class layouts homed first.",
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/Shared/Components/BrnAnimator.cpp": {
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
@@ -53027,6 +53095,9 @@
   },
   "class:AptAction_TryCatchFinallyBlock": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:AptBoolean": {
    "status": "done"
   },
   "class:AptCIHNativeFunctionHelper": {
@@ -60740,6 +60811,9 @@
   "class:XCAM::COverlappedIO": {
    "status": "done"
   },
+  "class:XCAM::CPacketizer": {
+   "status": "done"
+  },
   "class:XCAM::CVideoOutputBase": {
    "status": "done"
   },
@@ -61261,6 +61335,9 @@
   },
   "class:rw::audio::core::RawPuller2": {
    "notes": "Wave 52: reconstructed store-for-store from X360 ARTIST asm and adversarially verified (full store set both directions, exact assert operands, BE-qword field order, byte-index/stride). Committed a2da36a.",
+   "status": "done"
+  },
+  "class:rw::audio::core::Resample": {
    "status": "done"
   },
   "class:rw::audio::core::Route": {
