@@ -44391,6 +44391,36 @@
   "MassiveAdClient3::CRequestBuilder::~CRequestBuilder": {
    "status": "reviewed"
   },
+  "MassiveAdClient3::CRequestManager::CRequestManager": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::GetNextRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::Initialize": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::PrepareForShutdown": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::RemoveRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::Shutdown": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::SubmitRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::SuspendAll": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestManager::~CRequestManager": {
+   "status": "reviewed"
+  },
   "MassiveAdClient3::CRequestObject::AllocateDataBuffer": {
    "status": "reviewed"
   },
@@ -45078,6 +45108,24 @@
   "StringMembersIndex::in_word_set": {
    "status": "reviewed"
   },
+  "StringPool::ClearTemporaryPool": {
+   "status": "reviewed"
+  },
+  "StringPool::GetFromPool": {
+   "status": "reviewed"
+  },
+  "StringPool::GetString": {
+   "status": "reviewed"
+  },
+  "StringPool::Initialize": {
+   "status": "reviewed"
+  },
+  "StringPool::RemoveFromPool": {
+   "status": "reviewed"
+  },
+  "StringPool::Teardown": {
+   "status": "reviewed"
+  },
   "TextFormat::TextFormat": {
    "status": "reviewed"
   },
@@ -45400,6 +45448,24 @@
    "status": "reviewed"
   },
   "XAUDIO::XAUDIOPACKETCTX>::GetNextEntry": {
+   "status": "reviewed"
+  },
+  "XCAM::CI420VideoOutput::GetBuffersForWriting": {
+   "status": "reviewed"
+  },
+  "XCAM::CI420VideoOutput::GetNextBuffer": {
+   "status": "reviewed"
+  },
+  "XCAM::CI420VideoOutput::Initialize": {
+   "status": "reviewed"
+  },
+  "XCAM::CI420VideoOutput::Render": {
+   "status": "reviewed"
+  },
+  "XCAM::CI420VideoOutput::Reset": {
+   "status": "reviewed"
+  },
+  "XCAM::CI420VideoOutput::Shutdown": {
    "status": "reviewed"
   },
   "XCAM::CObjectRefCount::Release": {
@@ -45730,22 +45796,22 @@
    "status": "reviewed"
   },
   "cLionParticleEffect::Build": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "cLionParticleEffect::Delocate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "cLionParticleEffect::GetDurationMax": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "cLionParticleEffect::GetSerialiseSize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "cLionParticleEffect::Relocate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "cLionParticleEffect::Serialise": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "cLionSerialiser::Alloc": {
    "status": "reviewed"
@@ -60403,6 +60469,9 @@
   "class:MassiveAdClient3::CRequestBuilder": {
    "status": "done"
   },
+  "class:MassiveAdClient3::CRequestManager": {
+   "status": "done"
+  },
   "class:MassiveAdClient3::CRequestObject": {
    "status": "done"
   },
@@ -60599,6 +60668,9 @@
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
    "status": "done"
   },
+  "class:StringPool": {
+   "status": "done"
+  },
   "class:TextFormat": {
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
@@ -60656,6 +60728,9 @@
   },
   "class:XAUDIO::XAUDIOPACKETCTX>": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:XCAM::CI420VideoOutput": {
    "status": "done"
   },
   "class:XCAM::CObjectRefCount": {
@@ -61218,6 +61293,10 @@
    "notes": "XAS1 audio compression encoder (explicitly named block target). EncodeBlock @0x82BA74A8 (adaptive predictor search + quantisation), Encode @0x82BA7860, CustomInterleaveXAS @0x82BA7420, Flush @0x82BA79B8. Deferred.",
    "status": "blocked"
   },
+  "class:rw::audio::core::XasDec": {
+   "notes": "3/4 committed 058ed819 (CreateInstanceEvent/GetSize/GetDecoderDesc). DecodeEvent 0x82B94118 blocked: XAS0 per-channel decode indexes un-recovered coefficient rodata (flt_8215A7F0/F4/810), same wall as Xas1Dec::DecodeChannel.",
+   "status": "blocked"
+  },
   "class:rw::audio::core::XasEnc": {
    "notes": "Encode @0x82BA71F0 is the XAS ADPCM audio block encoder (32-sample-block DSP quantisation). Compression/DSP audio-encoder per the hard-rule block list. Deferred.",
    "status": "blocked"
@@ -61289,6 +61368,10 @@
   "class:rw::collision::TriangleKDTreeProcedural": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
+  },
+  "class:rw::collision::TriangleVolume": {
+   "notes": "6/7 committed 058ed819 (Initialize/GetNormal/GetPoints/GetBBox/GetMaximumFeature/LineSegIntersect). CreateGPInstance 0x82BBAA00 blocked: vperm edge-length assembly through un-recovered rodata.",
+   "status": "blocked"
   },
   "class:rw::collision::VolRef": {
    "notes": "Verified vs X360 asm; parity.",
