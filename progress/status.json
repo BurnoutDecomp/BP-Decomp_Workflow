@@ -22989,7 +22989,19 @@
   "BrnReplays::QuantisedVector4Compression::QuantisedVector4Compression": {
    "status": "reviewed"
   },
+  "BrnReplays::RaceCarEntitySerialiser::CheckStaticLayoutCleared": {
+   "status": "reviewed"
+  },
   "BrnReplays::RaceCarEntitySerialiser::Construct": {
+   "status": "reviewed"
+  },
+  "BrnReplays::RaceCarEntitySerialiser::GetStaticLayout": {
+   "status": "reviewed"
+  },
+  "BrnReplays::RaceCarEntitySerialiser::Read": {
+   "status": "reviewed"
+  },
+  "BrnReplays::RaceCarEntitySerialiser::Write": {
    "status": "reviewed"
   },
   "BrnReplays::ReadStream::MoveToNextFrunk": {
@@ -31482,6 +31494,18 @@
   "CBaseEndianBuffer::WriteWords": {
    "status": "reviewed"
   },
+  "CConformanceList::AcquireConformanceInfo": {
+   "status": "reviewed"
+  },
+  "CConformanceList::EstablishConformanceInfo": {
+   "status": "reviewed"
+  },
+  "CConformanceList::GetConformingScopeAndValue": {
+   "status": "reviewed"
+  },
+  "CConformanceList::UpdateConformance": {
+   "status": "reviewed"
+  },
   "CDXVAWMV::CDXVAWMV": {
    "status": "reviewed"
   },
@@ -31534,6 +31558,21 @@
    "status": "reviewed"
   },
   "CRct::operator=": {
+   "status": "reviewed"
+  },
+  "CReferenceLibrary::AddFrame": {
+   "status": "reviewed"
+  },
+  "CReferenceLibrary::CloseReferenceLibrary": {
+   "status": "reviewed"
+  },
+  "CReferenceLibrary::RemoveFrame": {
+   "status": "reviewed"
+  },
+  "CReferenceLibrary::SetupReferenceLibrary": {
+   "status": "reviewed"
+  },
+  "CReferenceLibrary::~CReferenceLibrary": {
    "status": "reviewed"
   },
   "CSchemaData::LookupConstantFromTable": {
@@ -47625,6 +47664,21 @@
   "rw::audio::core::Gain::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "rw::audio::core::HighPassButterworth::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HighPassButterworth::GetPlugInDescR": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HighPassButterworth::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HighPassButterworth::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HighPassButterworth::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::audio::core::HighPassIir2::CalculateFilterCoefficients": {
    "status": "compiles"
   },
@@ -57779,6 +57833,9 @@
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnReplays::RaceCarEntitySerialiser": {
+   "status": "done"
+  },
   "class:BrnReplays::ReplayIO": {
    "notes": "Wave 33: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -59201,6 +59258,9 @@
    "notes": "verify pass 12/12: endian read/write buffer GetWord/AppendBytes/SeekTo + overflow enums. gate x64 pass",
    "status": "done"
   },
+  "class:CConformanceList": {
+   "status": "done"
+  },
   "class:CCriticalSection": {
    "notes": "Correctly blocked. @0x8297D9E0 lone `scalar deleting destructor' thunk: stw r11,0(r31) installs un-homed vtable off_8210BC20; clrlwi. r10,r4,31 + beq + bl operator_delete = conditional operator delete(this); no member teardown stores, no chained base dtor, functions:1, no ctor/Enter/Leave/Create. DW",
    "status": "blocked"
@@ -59230,6 +59290,9 @@
   },
   "class:CRct": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:CReferenceLibrary": {
    "status": "done"
   },
   "class:CSchemaData": {
@@ -59570,6 +59633,10 @@
   "class:CgsGraphics::DispatchBin": {
    "notes": "5 funcs (render dispatch bin); verifier minor_drift/low; gate pass.",
    "status": "done"
+  },
+  "class:CgsGraphics::Im2d": {
+   "notes": "0 of 4 - all blocked on un-homed mask-stack + shader-constants collaborators (SaveMaskShaderConstants/PushMask/PopMask/PushBoostBarColours)",
+   "status": "blocked"
   },
   "class:CgsGraphics::Im2dTransform": {
    "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
@@ -62043,6 +62110,10 @@
    "notes": "4/5 committed 41debf44 (ctor/WriteExitZoneReport/CreateRequest/dtor). Parse blocked: un-homed STUB signature-parse callee.",
    "status": "blocked"
   },
+  "class:MassiveAdClient3::CRequestHeartbeat": {
+   "notes": "5 of 6 done+committed; Parse blocked on CRequestObject::ReadRemoveSignature + unnamed STUB callee (same as sibling CRequest* Parse)",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CRequestImpressionUpdate": {
    "notes": "9/10 committed 7be37490 (ctor/dtor/GetRequestURL/Add*Report/Finish). Parse blocked: un-homed STUB signature-parse callee (mpSignature@+0x30, 20).",
    "status": "blocked"
@@ -62927,6 +62998,9 @@
   "class:rw::audio::core::HELPER_CMpegBase": {
    "notes": "8/9 committed dfaf2c48. PolySynth 0x82B8EE50 blocked: un-recovered synthesis-window rodata (unk_82156740/780) + un-homed sub_82B86488.",
    "status": "blocked"
+  },
+  "class:rw::audio::core::HighPassButterworth": {
+   "status": "done"
   },
   "class:rw::audio::core::HighShelfIir2": {
    "notes": "Coeffs @0x82B97988 RBJ shelf algebra verified.",
