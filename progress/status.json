@@ -39657,6 +39657,9 @@
   "CgsResource::Pool::DeleteMemoryForEntry": {
    "status": "reviewed"
   },
+  "CgsResource::Pool::ExecuteBatchAddressedAllocation": {
+   "status": "reviewed"
+  },
   "CgsResource::Pool::ExecuteBatchAllocation": {
    "status": "reviewed"
   },
@@ -39672,7 +39675,16 @@
   "CgsResource::Pool::FindResourceWithDependencies": {
    "status": "reviewed"
   },
+  "CgsResource::Pool::FixUpEntry": {
+   "status": "reviewed"
+  },
   "CgsResource::Pool::FreeMemoryForResource": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::GenerateLinearHeap": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::GetDependency": {
    "status": "reviewed"
   },
   "CgsResource::Pool::GetResource": {
@@ -39687,7 +39699,13 @@
   "CgsResource::Pool::MergeBatchAllocations": {
    "status": "reviewed"
   },
+  "CgsResource::Pool::PostFixUpEntry": {
+   "status": "reviewed"
+  },
   "CgsResource::Pool::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::PrintOverheadMemoryRequired": {
    "status": "reviewed"
   },
   "CgsResource::Pool::ReAllocateMemoryForEntry": {
@@ -39718,6 +39736,9 @@
    "status": "reviewed"
   },
   "CgsResource::Pool::ResolveImportForEntry": {
+   "status": "reviewed"
+  },
+  "CgsResource::Pool::ResolveImportsForEntry": {
    "status": "reviewed"
   },
   "CgsResource::Pool::Update": {
@@ -42853,6 +42874,15 @@
    "status": "reviewed"
   },
   "D3D::CBlocker::~CBlocker": {
+   "status": "reviewed"
+  },
+  "D3D::CCapture::HashMap::HashMap": {
+   "status": "reviewed"
+  },
+  "D3D::CCapture::HashMap::HashMemAlloc": {
+   "status": "reviewed"
+  },
+  "D3D::CCapture::HashMap::~HashMap": {
    "status": "reviewed"
   },
   "D3D::CVertexShader::GetDebuggerHint": {
@@ -46894,6 +46924,24 @@
    "status": "reviewed"
   },
   "rw::audio::core::RawPuller2::StopHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Rechannel::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Rechannel::GetPlugInDescRunTime": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Rechannel::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Rechannel::PreProcess": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Rechannel::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Rechannel::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "rw::audio::core::Resample::CreateInstance": {
@@ -54842,6 +54890,10 @@
   "class:BrnGameState::StartLocation,8>": {
    "status": "done"
   },
+  "class:BrnGameState::StreetManager": {
+   "notes": "3/8 committed cce5c210 (Prepare2 + CreateHighScoreEntryFromDown + CreateUserChallengeScoreFr). 5 funcs blocked: un-homed StreetData/TriggerData/ChallengePlayerScoreEntry types.",
+   "status": "blocked"
+  },
   "class:BrnGameState::StuntManager": {
    "notes": "Compile-gate GREEN; per-TU recon+verify pass. Minimal-slice owning header (declared-only siblings).",
    "status": "done"
@@ -55129,6 +55181,10 @@
   },
   "class:BrnGui::HelpBar": {
    "notes": "GetItemNameHash+GetAnimator bodied+committed; ctor @0x82515328 is a heavy embedded-aggregate (own vtable off_8207710C + 21 head sub-vtables + 2x AnimChannel<6> vector_constructor_iterator loops). Needs AnimChannel<6> + head sub-objects homed first; multi-func TU incomplete.",
+   "status": "blocked"
+  },
+  "class:BrnGui::HudMessageAnalyzer": {
+   "notes": "6/8 committed cce5c210 (GetOnlineName + 5 online-stunt-record handlers). HandleDeveloperChallenge/TriggerDeveloperChallenge blocked: un-homed analyzer members @+0x4F9/+0x500 + inlined FameAssert.",
    "status": "blocked"
   },
   "class:BrnGui::HudMessageDirector": {
@@ -59428,6 +59484,9 @@
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:CgsResource::Pool": {
+   "status": "done"
+  },
   "class:CgsResource::PoolIO::InputBuffer": {
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -60437,6 +60496,9 @@
    "status": "blocked"
   },
   "class:D3D::CBlocker": {
+   "status": "done"
+  },
+  "class:D3D::CCapture::HashMap": {
    "status": "done"
   },
   "class:D3D::CDevice": {
@@ -61623,6 +61685,9 @@
   },
   "class:rw::audio::core::RawPuller2": {
    "notes": "Wave 52: reconstructed store-for-store from X360 ARTIST asm and adversarially verified (full store set both directions, exact assert operands, BE-qword field order, byte-index/stride). Committed a2da36a.",
+   "status": "done"
+  },
+  "class:rw::audio::core::Rechannel": {
    "status": "done"
   },
   "class:rw::audio::core::Resample": {
