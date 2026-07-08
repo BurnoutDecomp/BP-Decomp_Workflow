@@ -1587,6 +1587,18 @@
   "AptStringObject::~AptStringObject": {
    "status": "reviewed"
   },
+  "AptTarget::AptTarget": {
+   "status": "reviewed"
+  },
+  "AptTarget::GetAnimationTarget": {
+   "status": "reviewed"
+  },
+  "AptTarget::SetNext": {
+   "status": "reviewed"
+  },
+  "AptTarget::Shutdown": {
+   "status": "reviewed"
+  },
   "AptTextFormat::AptTextFormat": {
    "status": "reviewed"
   },
@@ -15253,6 +15265,18 @@
    "status": "reviewed"
   },
   "BrnMassive::BrnMassive::Update": {
+   "status": "reviewed"
+  },
+  "BrnMassive::System360HWMassive::BurnoutMassiveFree": {
+   "status": "reviewed"
+  },
+  "BrnMassive::System360HWMassive::BurnoutMassiveMalloc": {
+   "status": "reviewed"
+  },
+  "BrnMassive::System360HWMassive::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnMassive::System360HWMassive::Release": {
    "status": "reviewed"
   },
   "BrnMassive::operator++": {
@@ -34293,6 +34317,15 @@
   "CgsGui::BillboardInfo,32>::GetLength": {
    "status": "reviewed"
   },
+  "CgsGui::BillboardRenderer::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGui::BillboardRenderer::Render": {
+   "status": "reviewed"
+  },
+  "CgsGui::BillboardRenderer::SetUVTable": {
+   "status": "reviewed"
+  },
   "CgsGui::CgsAptString::Construct": {
    "status": "reviewed"
   },
@@ -48823,6 +48856,9 @@
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; Zone::IsPointInZone unblocked (semantic-parity scalar, VMX byte-shape documented out-of-reach); leaked-source provenance scrubbed (neutralized to DWARF) + misleading offset comment fixed; combined wave-16 gate PASS.",
    "status": "done"
   },
+  "GameShared/GameClasses/Gui/View/ParticleSystem2d/CgsBillboardRenderer.cpp": {
+   "status": "done"
+  },
   "GameShared/GameClasses/Gui/View/ParticleSystem2d/CgsParticleSystem2d.cpp": {
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
    "status": "done"
@@ -50859,6 +50895,10 @@
   },
   "GameSource/Gui/Flow/Screen/Components/BrnOnlinePreEventMessages.cpp": {
    "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/Components/BrnPhotoBoothComponent.cpp": {
+   "notes": "4/11 committed 3efdd0fb (Construct/GetTakePhotoString/HideComponent/AppendExpectedApp). Cancel/Select/SendPlayerPicture/OnLoad/ReleaseResources/ShowComponent/SetButtonPromptVisible blocked (un-homed collaborators).",
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/Components/BrnRivalMapPanel.cpp": {
    "status": "done"
@@ -52991,6 +53031,10 @@
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/NearMisses/BrnNearMissManager.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/PlaceOnTrack/BrnPlaceOnTrackManager.cpp": {
+   "notes": "0/3 blocked, nothing committed. GetValuesForCarStart/PostSceneUpdate/PrePhysicsUpdate need VMX car-start transforms + un-homed physics/scene collaborators.",
+   "status": "blocked"
+  },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingDebugComponent.cpp": {
    "notes": "verify pass 3/3: GetName/OnActivate/Update debug component. gate x64 pass",
    "status": "done"
@@ -53830,6 +53874,9 @@
   },
   "class:AptStringObject": {
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
+   "status": "done"
+  },
+  "class:AptTarget": {
    "status": "done"
   },
   "class:AptTextFormat": {
@@ -54791,6 +54838,10 @@
   "class:BrnGameState::CarSelectManager": {
    "status": "done"
   },
+  "class:BrnGameState::ChallengeManager": {
+   "notes": "3/4 committed 3efdd0fb (GetChallengeStyle/CountCompletedChallenges/UpdateStuntScores). ResetActionData 0x823246F0 blocked: un-recovered 41-entry dword_82021288 action-type->skill rodata lookup table.",
+   "status": "blocked"
+  },
   "class:BrnGameState::ChallengeManager::CarLeapingData,7,int>": {
    "status": "done"
   },
@@ -55630,6 +55681,9 @@
   },
   "class:BrnMassive::BrnMassive": {
    "notes": "Verify caught Construct byte-init: +0x92C=0 (not 1) and mbReady(+0x92D)=1 (was uninit; gates IsSafeToDownload). Trusted asm over mislabeled Hex-Rays. Fixed.",
+   "status": "done"
+  },
+  "class:BrnMassive::System360HWMassive": {
    "status": "done"
   },
   "class:BrnMath": {
