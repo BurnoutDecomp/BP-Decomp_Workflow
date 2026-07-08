@@ -1260,6 +1260,36 @@
   "AptRenderManagerQueue::IsEmpty": {
    "status": "reviewed"
   },
+  "AptRenderTreeManager::Render_GetChildInvisible": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::Render_GetMaskInvisible": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::Render_GetRoot": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::Render_GetSiblingInvisible": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::Update_CloneItem": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::Update_ItemFirstChildChanged": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::Update_ItemMoved": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::Update_ItemNextSiblingChanged": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::Update_ItemSetMaskState": {
+   "status": "reviewed"
+  },
+  "AptRenderTreeManager::_AptRenderItemRootLi": {
+   "status": "reviewed"
+  },
   "AptRenderTreeManager::_AptRenderItemRootList::Get": {
    "status": "reviewed"
   },
@@ -33177,10 +33207,19 @@
   "CgsGeometric::ClipTriWithAABB": {
    "status": "reviewed"
   },
+  "CgsGeometric::Frustum::GetPlaneByIndex": {
+   "status": "reviewed"
+  },
   "CgsGeometric::Frustum::IntersectionOf3Planes": {
    "status": "reviewed"
   },
+  "CgsGeometric::Frustum::IsSphereInFrustum": {
+   "status": "reviewed"
+  },
   "CgsGeometric::Frustum::PlaneToVector": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::Frustum::SetPlaneByIndex": {
    "status": "reviewed"
   },
   "CgsGeometric::IntersectTriangleBox": {
@@ -42759,6 +42798,15 @@
   "Csis::System::Unsubscribe": {
    "status": "reviewed"
   },
+  "D3D::CBlocker::CBlocker": {
+   "status": "reviewed"
+  },
+  "D3D::CBlocker::Check": {
+   "status": "reviewed"
+  },
+  "D3D::CBlocker::~CBlocker": {
+   "status": "reviewed"
+  },
   "D3D::CVertexShader::GetDebuggerHint": {
    "status": "reviewed"
   },
@@ -45634,6 +45682,18 @@
    "status": "reviewed"
   },
   "XGRAPHICS::IRLoadTemp::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRMov::IRMov": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRMov::MakeIRMov": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRMov::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRMov::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "XGRAPHICS::InternalVector::Grow": {
@@ -58158,6 +58218,9 @@
    "notes": "Fresh-eyes review: manually traced stvx128 store-offset sequence against header member offsets, every store target matches. VMX cross-product/normalize de-vectorization follows established CgsTriangle4/CgsPackedOobb precedent. No offset casts.",
    "status": "done"
   },
+  "class:CgsGeometric::Frustum": {
+   "status": "done"
+  },
   "class:CgsGeometric::Line": {
    "notes": "CgsGeometric::Line; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
@@ -60266,6 +60329,9 @@
    "notes": "X360 XDK D3D runtime (statically linked platform vendor code) - PC uses real Direct3D; not decompiled, same as class:D3D::CDevice",
    "status": "blocked"
   },
+  "class:D3D::CBlocker": {
+   "status": "done"
+  },
   "class:D3D::CDevice": {
    "notes": "FOUNDATION committed (0f15ab1): D3D::CDevice TYPE homed + 5/18 software funcs bodied faithfully (IsPastStopPoint/IsPrimaryMemoryBusy/IsSecondaryMemoryBusy/MarkAsOutOfMemory/SaveRingBufferState). 13/18 decl-only: need un-homed sibling layouts (class:D3D::CBlocker/CCommandBuffer/CRingAllocList) and/or build raw PM4 packet streams / poke GPU regs. Unblocks once siblings homed.",
    "status": "blocked"
@@ -60937,6 +61003,9 @@
    "status": "blocked"
   },
   "class:XGRAPHICS::IRLoadTemp": {
+   "status": "done"
+  },
+  "class:XGRAPHICS::IRMov": {
    "status": "done"
   },
   "class:XGRAPHICS::InternalVector": {
