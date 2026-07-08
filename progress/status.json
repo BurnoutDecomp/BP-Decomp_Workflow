@@ -33207,10 +33207,58 @@
   "CgsFileSystem::RemapDevice::Write": {
    "status": "reviewed"
   },
+  "CgsFileSystem::StreamDeviceDiskRead::Close": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::CloseCallback": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::Construct": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::GetAmountOfDataInBuffer": {
+   "status": "reviewed"
+  },
   "CgsFileSystem::StreamDeviceDiskRead::OnClose": {
    "status": "reviewed"
   },
   "CgsFileSystem::StreamDeviceDiskRead::OnOpen": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::OnRead": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::Open": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::OpenCallback": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::Read": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::ReadCallback": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::ResetStreamBlocks": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::Seek": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::Service": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::StartAsyncReadInternal": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::StopAsyncReadInternal": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::SubmitCloseRequest": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::StreamDeviceDiskRead::SubmitReadRequest": {
    "status": "reviewed"
   },
   "CgsFsm::Fsm::Update": {
@@ -45843,6 +45891,18 @@
   "XAUDIO::CSourceEffect::~CSourceEffect": {
    "status": "reviewed"
   },
+  "XAUDIO::CStaticBatchAllocator::AbsoluteRelease": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CStaticBatchAllocator::CreateObject": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CStaticBatchAllocator::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CStaticBatchAllocator::`vector deleting destructor'`adjustor{4}'": {
+   "status": "reviewed"
+  },
   "XAUDIO::CXMemMemoryManager::XMemAlloc": {
    "status": "reviewed"
   },
@@ -46948,6 +47008,18 @@
    "status": "reviewed"
   },
   "rw::audio::core::Decoder::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::DelayFilter::DelayFilter": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::DelayFilter::DelayFilterApplyFunc": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::DelayFilter::DelayFilterResetFunc": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::DelayFilter::SetFeedback": {
    "status": "reviewed"
   },
   "rw::audio::core::EaLayer31Dec::CreateInstanceEvent": {
@@ -49788,6 +49860,9 @@
    "status": "done"
   },
   "GameShared/GameClasses/System/FileSystem/CgsFileSystem.cpp": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/System/FileSystem/CgsStreamDeviceDiskRead.cpp": {
    "status": "done"
   },
   "GameShared/GameClasses/System/FileSystem/Devices/CgsRemapDevice.cpp": {
@@ -61191,6 +61266,10 @@
   "class:MassiveAdClient3::CRequestBuilder": {
    "status": "done"
   },
+  "class:MassiveAdClient3::CRequestExitZone": {
+   "notes": "4/5 committed 41debf44 (ctor/WriteExitZoneReport/CreateRequest/dtor). Parse blocked: un-homed STUB signature-parse callee.",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CRequestImpressionUpdate": {
    "notes": "9/10 committed 7be37490 (ctor/dtor/GetRequestURL/Add*Report/Finish). Parse blocked: un-homed STUB signature-parse callee (mpSignature@+0x30, 20).",
    "status": "blocked"
@@ -61367,6 +61446,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:Snd::CMpegLayer3Base": {
+   "notes": "0/6 blocked, nothing committed. AntiAlias/Dequantize/Hybrid/Reorder/Stereo need un-recovered MP3 huffman/synthesis-window rodata tables.",
+   "status": "blocked"
+  },
   "class:Snd::CShortDestDecoder": {
    "notes": "Wave 42: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -61460,6 +61543,9 @@
   "class:XAUDIO::CSourceEffect": {
    "status": "done"
   },
+  "class:XAUDIO::CStaticBatchAllocator": {
+   "status": "done"
+  },
   "class:XAUDIO::CXMemMemoryManager": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -61493,6 +61579,10 @@
   },
   "class:XCAM::CVideoOutputBase": {
    "status": "done"
+  },
+  "class:XCAM::CYUY2VideoOutput": {
+   "notes": "3/4 committed 41debf44 (Initialize/Render/GetNextBuffer). GetNextBufferRGB 0x82984BD0 blocked: VMX128 YUY2->RGBA needs un-recovered BT.601 float rodata + 32-byte clamp const unk_8210C300.",
+   "status": "blocked"
   },
   "class:XConfigUserSettings": {
    "notes": "XConfigUserSettings (X360 system user-settings reader) verified first-pass PASS.",
@@ -61950,6 +62040,9 @@
    "status": "done"
   },
   "class:rw::audio::core::Decoder": {
+   "status": "done"
+  },
+  "class:rw::audio::core::DelayFilter": {
    "status": "done"
   },
   "class:rw::audio::core::EaLayer31Dec": {
