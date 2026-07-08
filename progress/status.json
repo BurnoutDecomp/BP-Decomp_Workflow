@@ -5661,13 +5661,28 @@
   "BrnDirector::VehicleTracker::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::WorldMap::GetInterestingPointNear": {
+   "status": "reviewed"
+  },
+  "BrnDirector::WorldMap::GetLanePositionNearestPoint": {
+   "status": "reviewed"
+  },
   "BrnDirector::WorldMap::GetLanePositionNearestPointWithDispla": {
+   "status": "reviewed"
+  },
+  "BrnDirector::WorldMap::GetSafePositionNearest": {
+   "status": "reviewed"
+  },
+  "BrnDirector::WorldMap::GetSafePositionNearestPointWithDisplacement": {
    "status": "reviewed"
   },
   "BrnDirector::WorldMap::GetTrafficData": {
    "status": "reviewed"
   },
   "BrnDirector::WorldMap::LoadData": {
+   "status": "reviewed"
+  },
+  "BrnDirector::WorldMap::WalkLaneLeft": {
    "status": "reviewed"
   },
   "BrnEffects::ActiveRaceCarData::Construct": {
@@ -15261,7 +15276,22 @@
   "BrnNetwork::ActiveFburnChallengeMessage::Retrieve": {
    "status": "reviewed"
   },
+  "BrnNetwork::AggressiveDrivingMessage::Construct": {
+   "status": "reviewed"
+  },
   "BrnNetwork::AggressiveDrivingMessage::GetName": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::AggressiveDrivingMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::AggressiveDrivingMessage::PackOrUnpack": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::AggressiveDrivingMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::AggressiveDrivingMessage::Retrieve": {
    "status": "reviewed"
   },
   "BrnNetwork::AmendGameModeContexts": {
@@ -40305,7 +40335,13 @@
   "CgsSceneManager::EntityManager::AddVolumeInstance": {
    "status": "reviewed"
   },
+  "CgsSceneManager::EntityManager::GetFirstEntityVolumeInsta": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::EntityManager::GetVolumeInstance": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::EntityManager::GetVolumeInstanceIdByIndex": {
    "status": "reviewed"
   },
   "CgsSceneManager::EntityManager::Prepare": {
@@ -40315,6 +40351,18 @@
    "status": "reviewed"
   },
   "CgsSceneManager::EntityManager::RemoveVolumeInstanceFromEntity": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::EntityManager::SetVolumeForCollision": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::EntityManager::SetVolumeForCollisionByIndex": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::EntityManager::SetVolumeInstanceTransform": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::EntityManager::SetVolumePadding": {
    "status": "reviewed"
   },
   "CgsSceneManager::ErrorEvent,128>::Construct": {
@@ -44655,6 +44703,30 @@
   "MassiveAdClient3::CRequestObject::~CRequestObject": {
    "status": "reviewed"
   },
+  "NFSMixShape::GetAzimShapeOutput": {
+   "status": "reviewed"
+  },
+  "NFSMixShape::GetCentsFromPitchMult": {
+   "status": "reviewed"
+  },
+  "NFSMixShape::GetCurveOutput": {
+   "status": "reviewed"
+  },
+  "NFSMixShape::GetFloatCurveOutput": {
+   "status": "reviewed"
+  },
+  "NFSMixShape::GetIntPitchMultFromCents": {
+   "status": "reviewed"
+  },
+  "NFSMixShape::GetPitchMultFromCents": {
+   "status": "reviewed"
+  },
+  "NFSMixShape::GetQ15FromHundredthsdB": {
+   "status": "reviewed"
+  },
+  "NFSMixShape::GetdBFromQ15": {
+   "status": "reviewed"
+  },
   "Nicotine::DMixIO::DMixIO": {
    "status": "reviewed"
   },
@@ -45556,6 +45628,24 @@
    "status": "reviewed"
   },
   "XAUDIO::XAUDIOPACKETCTX>::GetNextEntry": {
+   "status": "reviewed"
+  },
+  "XCAM::CDecoderOutput::BufferWriteSucceeded": {
+   "status": "reviewed"
+  },
+  "XCAM::CDecoderOutput::Initialize": {
+   "status": "reviewed"
+  },
+  "XCAM::CDecoderOutput::Render": {
+   "status": "reviewed"
+  },
+  "XCAM::CDecoderOutput::Reset": {
+   "status": "reviewed"
+  },
+  "XCAM::CDecoderOutput::SetDefaultRGBTexture": {
+   "status": "reviewed"
+  },
+  "XCAM::CDecoderOutput::Shutdown": {
    "status": "reviewed"
   },
   "XCAM::CI420VideoOutput::GetBuffersForWriting": {
@@ -51043,6 +51133,9 @@
    "notes": "Fresh-eyes review (claude sonnet, low effort): signature/CC verified from asm prologue (PrepareForSend CgsID-in-single-GPR resolved via DWARF over Hex-Rays __PAIR64__), all stores/branches/early-outs/asserts accounted for, offsets X360-attested (+0x28 id array[7], +0x48 CgsID, +0x50 count), ICF-folded GetPackedMessageSize redirected to ReliableMessage base, no offset hacks/temporaries/gotos. Parity RED fully explained by CGS_ASSERT macro-folding + BrnNetworkManager:: name-match miss.",
    "status": "done"
   },
+  "GameSource/Network/Messages/BrnAggressiveDrivingMessage.cpp": {
+   "status": "done"
+  },
   "GameSource/Network/Messages/BrnAggressiveDrivingMessage.h": {
    "notes": "reverted: 13:17 script-auto run marked done with no source file",
    "status": "done"
@@ -53091,6 +53184,10 @@
   },
   "SDKs/Packages/Lion/Final/eauk_common/Maths/C/quat_c.inl": {
    "notes": "cParticleLocator::Update @0x829098D0 is BLOCKED: (1) MIS-BUCKETED foreign class -- TU id quat_c.inl houses a cParticleLocator fn but ALL DWARF hints+the cQuat callee home are cQuat (CgsQuat.cpp); cParticleLocator is only forward-declared (LionBindings.h:16, owned by the Lion particle subsystem). (2) VMX/SIMD: asm uses lvx128 v0,r4,0x30 + stvx128 v0,r11,r31 (128-bit VMX vector load/store, rendered __asm{} in pseudocode). (3) UN-HOMED opaque aggregate: cParticleLocator has no class definition/layout -- strided 16*(idx+N) arrays at +0x40/+0x9C/+0xA0 cannot be member-by-name accessed and there is no home to grow additively.",
+   "status": "blocked"
+  },
+  "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/Source/ParticleRender/ParticleRender.cpp": {
+   "notes": "1/4 committed 7be37490 (Dispatch). EmitterRender/EmitterCubeRender/Render blocked: VMX128 per-particle box-clip/frustum-cull + un-recovered rodata constants.",
    "status": "blocked"
   },
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionBindings.cpp": {
@@ -59487,6 +59584,9 @@
    "notes": "verify pass 2/2: RingBuffer<EntityId> Push/operator[] 4B stride. gate x64 pass",
    "status": "done"
   },
+  "class:CgsSceneManager::EntityManager": {
+   "status": "done"
+  },
   "class:CgsSceneManager::ErrorEvent,128>": {
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -60705,10 +60805,17 @@
   "class:MassiveAdClient3::CRequestBuilder": {
    "status": "done"
   },
+  "class:MassiveAdClient3::CRequestImpressionUpdate": {
+   "notes": "9/10 committed 7be37490 (ctor/dtor/GetRequestURL/Add*Report/Finish). Parse blocked: un-homed STUB signature-parse callee (mpSignature@+0x30, 20).",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CRequestManager": {
    "status": "done"
   },
   "class:MassiveAdClient3::CRequestObject": {
+   "status": "done"
+  },
+  "class:NFSMixShape": {
    "status": "done"
   },
   "class:Nicotine::DMixIO": {
@@ -60966,6 +61073,9 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XCAM::CDecoderOutput": {
+   "status": "done"
+  },
   "class:XCAM::CI420VideoOutput": {
    "status": "done"
   },
@@ -61013,7 +61123,6 @@
    "status": "done"
   },
   "class:XGRAPHICS::IRMov": {
-   "notes": "released to avoid parallel XGraphics-IR header collision with IRLoadTemp; future wave",
    "status": "done"
   },
   "class:XGRAPHICS::InternalVector": {
