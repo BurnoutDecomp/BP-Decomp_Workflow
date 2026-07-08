@@ -48033,6 +48033,63 @@
   "rw::core::filesys::Manager::~Manager": {
    "status": "reviewed"
   },
+  "rw::core::filesys::Stream::CancelRequest": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::GetChunk": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::GetFileSize": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::GetRequestState": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::GetState": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::IsEndOfStream": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::Kill": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::QueueFile": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::ReleaseChunk": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::closecallback": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::decbufferusage": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::filereadcallback": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::freerequest": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::getfreerequest": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::opencallback": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::parsechunks": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::queuerequest": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::readcallback": {
+   "status": "reviewed"
+  },
+  "rw::core::filesys::Stream::restartstream": {
+   "status": "reviewed"
+  },
   "rw::core::stdc::ConvertI64ToA": {
    "status": "reviewed"
   },
@@ -62538,6 +62595,9 @@
   "class:rw::core::filesys::NullFileDriver": {
    "notes": "MISATTRIBUTED (triage 2026-06-29, high-conf): NOT a reconstruction target -- demangler/DecFIGS mis-bucket. Re-partition: drop the fabricated rw::core::filesys::NullFileDriver class. The @0x82BBD5E8 address belongs to the already-homed DeviceMemFileSystem vtable family (CgsDeviceMemFileSystem.cpp); either fold it there as the matching deleting-destructor slot or close it as a duplicate. Do NOT reconstruct a new class (would ODR-collide on off_8209FEA8).",
    "status": "blocked"
+  },
+  "class:rw::core::filesys::Stream": {
+   "status": "done"
   },
   "class:rw::core::stdc": {
    "notes": "RenderWare core stdc shims (17 fn) verified PASS vs asm. Minor accepted (cosmetic/deopt): MemFill32 byte-tail uses rotate vs the asm plain shift (same result); Mem* declared void vs asm returning the advanced/orig pointer (all call sites discard).",
