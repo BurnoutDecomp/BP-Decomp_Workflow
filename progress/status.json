@@ -22782,7 +22782,16 @@
   "BrnReplays::DirectorSerialiser::Write": {
    "status": "reviewed"
   },
+  "BrnReplays::DiskReadStream::ChopEOFBlocks": {
+   "status": "reviewed"
+  },
   "BrnReplays::DiskReadStream::CloseCallback": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::GetAmountOfDataInBuffer": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::GetCurrentFilePriority": {
    "status": "reviewed"
   },
   "BrnReplays::DiskReadStream::OnClose": {
@@ -22804,6 +22813,12 @@
    "status": "reviewed"
   },
   "BrnReplays::DiskReadStream::SetRange": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::StartAsyncReadInternal": {
+   "status": "reviewed"
+  },
+  "BrnReplays::DiskReadStream::StopAsyncReadInternal": {
    "status": "reviewed"
   },
   "BrnReplays::DiskReadStream::SubmitReadRequest": {
@@ -45087,6 +45102,45 @@
   "MassiveAdClient3::CRequestObject::~CRequestObject": {
    "status": "reviewed"
   },
+  "MassiveAdClient3::CTransactionHTTP::AllocateHTTPDataBuffer": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::CTransactionHTTP": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::ForwardChunkedToRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::ForwardToHTTPData": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::ForwardUnChunkedToRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::ParseHeaders": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::ProcessRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::ProcessResponse": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::ReallocateHTTPDataBuff": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::SetRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::`vector deleting destructor'`adjustor{12}'": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CTransactionHTTP::~CTransactionHTTP": {
+   "status": "reviewed"
+  },
   "NFSMixShape::GetAzimShapeOutput": {
    "status": "reviewed"
   },
@@ -46035,6 +46089,30 @@
   "XAUDIO::CEffect::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "XAUDIO::CEffectManager::CEffectManager": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffectManager::CreateEffect": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffectManager::GetObjectAdditionalSize": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffectManager::QueryEffectSize": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffectManager::QueryInterface": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffectManager::RegisterEffects": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffectManager::UnregisterEffects": {
+   "status": "reviewed"
+  },
+  "XAUDIO::CEffectManager::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "XAUDIO::CFrameBuffer::CFrameBuffer": {
    "status": "reviewed"
   },
@@ -46657,6 +46735,15 @@
    "status": "reviewed"
   },
   "cLionParticleEffect::Serialise": {
+   "status": "reviewed"
+  },
+  "cLionParticleEffectManager::BindingsAttach": {
+   "status": "reviewed"
+  },
+  "cLionParticleEffectManager::BindingsRemove": {
+   "status": "reviewed"
+  },
+  "cLionParticleEffectManager::CreateBehaviour": {
    "status": "reviewed"
   },
   "cLionSerialiser::Alloc": {
@@ -50851,6 +50938,10 @@
    "notes": "Batch-14b review: PASS with no findings. The vmaddfp FMA operand order decoded from raw XEX bytes (v12*v13+v0 == the submitted vpu operator chain); all rodata constants confirmed (0.1/200.0/0.5/0.25/1.0); the byte-to-name map, both trigger gate orders, the state-3 keep conditions (no 449/params gates), the rig-gate head bits 30/24, the INACTIVE(0) Release park, and the LEAD plant pair (+0x630/+0x631 GyroCam grow) all asm-verified.",
    "status": "done"
   },
+  "GameSource/Director/Shots/ShotControllers/BrnCameraInterpolationController.cpp": {
+   "notes": "1 of 3 done+committed (homed at GameSource/Director/Camera/BrnCameraInterpolationController); 2 blocked on an unreconstructed VMX keystone (left unfabricated)",
+   "status": "blocked"
+  },
   "GameSource/Director/Shots/ShotControllers/BrnInertiaController.cpp": {
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
    "status": "done"
@@ -54089,6 +54180,9 @@
    "status": "done"
   },
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionParticleEffect.cpp": {
+   "status": "done"
+  },
+  "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionParticleEffectManager.cpp": {
    "status": "done"
   },
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionSerialiser.cpp": {
@@ -57496,6 +57590,9 @@
   },
   "class:BrnReplays::DirectorSerialiser": {
    "notes": "Combined batch-11 review: GetStaticLayout/Read/Write verified; asm proves BOTH Read/Write dispatch calls carry li r5,0x180 (Hex-Rays dropped one size arg); construct-before-null-guard order kept; 384B Camera image model correct.",
+   "status": "done"
+  },
+  "class:BrnReplays::DiskReadStream": {
    "status": "done"
   },
   "class:BrnReplays::EffectsSerialiser": {
@@ -61724,6 +61821,10 @@
   "class:MassiveAdClient3::CMassiveAdObjectSubscriber": {
    "status": "done"
   },
+  "class:MassiveAdClient3::CMassiveAdObjectTexture": {
+   "notes": "2 of 3 done+committed; reconciled the W23 CMassiveAdObject pin; 1 blocked on un-homed dep",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CMassiveAsset": {
    "notes": "9 of 12 done+committed in new Asset home + Record home; 3 blocked on un-homed deps",
    "status": "blocked"
@@ -61793,6 +61894,9 @@
    "status": "done"
   },
   "class:MassiveAdClient3::CRequestObject": {
+   "status": "done"
+  },
+  "class:MassiveAdClient3::CTransactionHTTP": {
    "status": "done"
   },
   "class:NFSMixMapState": {
@@ -62051,6 +62155,9 @@
    "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
   },
+  "class:XAUDIO::CEffectManager": {
+   "status": "done"
+  },
   "class:XAUDIO::CFrameBuffer": {
    "status": "done"
   },
@@ -62069,6 +62176,10 @@
   "class:XAUDIO::CPacketQueue": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
+  },
+  "class:XAUDIO::CRoutedVoice": {
+   "notes": "2 of 11 done+committed (SetVoiceOutput + operator delete) in new XAudioRoutedVoice home; 9 blocked on un-homed XAUDIO::CEngine singleton off_832BB944 + deliberately-deferred CVoice/CEffect vtable slot orders + Xbox kernel spinlock/IRQL",
+   "status": "blocked"
   },
   "class:XAUDIO::CSourceEffect": {
    "status": "done"
