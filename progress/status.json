@@ -17664,10 +17664,16 @@
   "BrnNetwork::RestartTrafficMessage::GetName": {
    "status": "reviewed"
   },
+  "BrnNetwork::RestartTrafficMessage::GetPackedMessageSize": {
+   "status": "reviewed"
+  },
   "BrnNetwork::RestartTrafficMessage::PackOrUnpack": {
    "status": "reviewed"
   },
   "BrnNetwork::RestartTrafficMessage::PrepareForSend": {
+   "status": "reviewed"
+  },
+  "BrnNetwork::RestartTrafficMessage::Retrieve": {
    "status": "reviewed"
   },
   "BrnNetwork::RoadRulesD": {
@@ -37800,6 +37806,9 @@
   "CgsNetwork::ServerInterfacePlayerInfo::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "CgsNetwork::ServerInterfacePlayerInfoDataBase::Prepare": {
+   "status": "reviewed"
+  },
   "CgsNetwork::ServerInterfacePlayerInfoDataBase::SerialiseFromUser": {
    "status": "reviewed"
   },
@@ -45585,6 +45594,15 @@
   "XGRAPHICS::IRFetch::InstType": {
    "status": "reviewed"
   },
+  "XGRAPHICS::IRLoadTemp::IRLoadTemp": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRLoadTemp::InstType": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRLoadTemp::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::InternalVector::Grow": {
    "status": "reviewed"
   },
@@ -47802,6 +47820,15 @@
   "static initializer for BrnSound::ParameterIndexes::AEMS_Class::gaAEMS_ClassParameterNames": {
    "status": "reviewed"
   },
+  "std::exception::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "std::exception::exception": {
+   "status": "reviewed"
+  },
+  "std::exception::what": {
+   "status": "reviewed"
+  },
   "vp6::Alloc": {
    "status": "reviewed"
   },
@@ -47887,6 +47914,9 @@
    "status": "done"
   },
   "GameShared/GameClasses/Core/CgsStringUtils.h": {
+   "status": "done"
+  },
+  "GameShared/GameClasses/Core/PS3/CgsCorePS3.h": {
    "status": "done"
   },
   "GameShared/GameClasses/Development/AssertSystem/CgsAssertManager.cpp": {
@@ -60844,6 +60874,9 @@
    "notes": "8/12 committed d8cb7827. ExportType/Kill/Validate/InstType blocked: un-homed foreign context chain mpContext(+0x3B8)->(+0xAB0)->(+0x60), two unnamed vtable-slot-5/6 virtuals, un-recovered InstType rodata string byte_820DC63C.",
    "status": "blocked"
   },
+  "class:XGRAPHICS::IRLoadTemp": {
+   "status": "done"
+  },
   "class:XGRAPHICS::InternalVector": {
    "status": "done"
   },
@@ -61065,6 +61098,10 @@
   "class:princeton_digital::occlusion_t<float,2>": {
    "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
    "status": "done"
+  },
+  "class:princeton_digital::stereo_room_t<float>": {
+   "notes": "3/6 committed 45a2eac4 (input_mode_set/wet_dry_mix_set/dtor). process/properties_set/ctor blocked: ~300KB sub-filter bank at raw offsets (+104..+299312) + un-recovered filter-coefficient rodata.",
+   "status": "blocked"
   },
   "class:princeton_digital::stereo_room_t<float>::properties_t": {
    "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
@@ -61546,6 +61583,10 @@
    "notes": "RenderWare core stdc shims (17 fn) verified PASS vs asm. Minor accepted (cosmetic/deopt): MemFill32 byte-tail uses rotate vs the asm plain shift (same result); Mem* declared void vs asm returning the advanced/orig pointer (all call sites discard).",
    "status": "done"
   },
+  "class:rw::graphics::postfx": {
+   "notes": "1/8 committed 45a2eac4 (ColourCube ResourcePtr). Blend2-6Cubes/SetColour/TintBlend blocked: un-homed VMX128 blend workers (VMXBlend/sub_82AD2F38/3250/3668/3AF8) + vperm control rodata + dword_82F7238C dispatch table.",
+   "status": "blocked"
+  },
   "class:rw::graphics::postfx::B4Blur::State": {
    "notes": "Keystone campaign R3: partial-completion + faithful VMX->scalar lowering, adversarially verified vs X360 asm. Committed 2c0bc47.",
    "status": "done"
@@ -61750,6 +61791,9 @@
   },
   "class:static initializer for BrnSound::ParameterIndexes::AEMS_Class": {
    "notes": "3 verify loops PASS (parallel A=12-string byte-exact transcription + array structure/scope + 14 header counts vs DWARF; B=Name(const char*) ctor grow correctness + no-regression + static-init safety; C=sign-off). Gate compiles clean (MSVC). Parity YELLOW: call_count 12 vs 13 (delta 1 < tol 3); MakeHash 'absent' because it is reached via the inlined Name(const char*) ctor (12 Name(\"AEMS_...\") constructions -> 12 MakeHash); the other 'absent' callee is the initializer's own self-symbol. Defines BrnSound::ParameterIndexes::AEMS_Class::gaAEMS_ClassParameterNames[12] (Name) from the 12 AEMS param strings in order; auto-gen home BrnAutoGenAemsParameterIndexes.{h,cpp} declares all 14 sibling arrays (extern) but defines ONLY AEMS_Class (the other 13 are their own static-init TUs). Grew CgsCommon Name home with the public inlined-only Name(const char*) ctor (mHash=MakeHash; DWARF CgsCommon.h:126). HashTable pool zero/constant-init before dynamic init -> static-init-order safe.",
+   "status": "done"
+  },
+  "class:std::exception": {
    "status": "done"
   },
   "class:vp6": {
