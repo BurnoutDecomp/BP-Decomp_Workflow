@@ -1587,6 +1587,21 @@
   "AptStringObject::~AptStringObject": {
    "status": "reviewed"
   },
+  "AptTextFormat::AptTextFormat": {
+   "status": "reviewed"
+  },
+  "AptTextFormat::objectMemberLookup": {
+   "status": "reviewed"
+  },
+  "AptTextFormat::operator delete": {
+   "status": "reviewed"
+  },
+  "AptTextFormat::operator new": {
+   "status": "reviewed"
+  },
+  "AptTextFormat::~AptTextFormat": {
+   "status": "reviewed"
+  },
   "AptValue::AddRef": {
    "status": "reviewed"
   },
@@ -31416,6 +31431,30 @@
   "CTwoPassStatsList::CTwoPassStatsList": {
    "status": "reviewed"
   },
+  "CVideoAnalyst::Clean": {
+   "status": "reviewed"
+  },
+  "CVideoAnalyst::Init": {
+   "status": "reviewed"
+  },
+  "CVideoAnalyst::analysisFrame": {
+   "status": "reviewed"
+  },
+  "CVideoAnalyst::getCurFrameAnalyst": {
+   "status": "reviewed"
+  },
+  "CVideoAnalyst::setCurFrameAnalyst": {
+   "status": "reviewed"
+  },
+  "CVideoAnalyst::setFreeAnalyst": {
+   "status": "reviewed"
+  },
+  "CVideoAnalyst::setTemporal": {
+   "status": "reviewed"
+  },
+  "CVideoAnalyst::~CVideoAnalyst": {
+   "status": "reviewed"
+  },
   "CWMVMBMode::CWMVMBMode": {
    "status": "reviewed"
   },
@@ -38838,7 +38877,25 @@
   "CgsResource::AlignedBinaryFileResource>::UpdateUnload": {
    "status": "reviewed"
   },
+  "CgsResource::AllocatePoolModuleState::BeginAllocation": {
+   "status": "reviewed"
+  },
+  "CgsResource::AllocatePoolModuleState::CheckEntryListDependency": {
+   "status": "reviewed"
+  },
+  "CgsResource::AllocatePoolModuleState::CheckListDependencies": {
+   "status": "reviewed"
+  },
+  "CgsResource::AllocatePoolModuleState::CreateEntryListResource": {
+   "status": "reviewed"
+  },
+  "CgsResource::AllocatePoolModuleState::CreateResourceList": {
+   "status": "reviewed"
+  },
   "CgsResource::AllocatePoolModuleState::DebugPrintAllocListSet": {
+   "status": "reviewed"
+  },
+  "CgsResource::AllocatePoolModuleState::UndoEntryCreations": {
    "status": "reviewed"
   },
   "CgsResource::AptDataHeaderType::FixDown": {
@@ -45678,6 +45735,30 @@
   "XCAM::CDecoderOutput::Shutdown": {
    "status": "reviewed"
   },
+  "XCAM::CEncoder::EncodeFrame": {
+   "status": "reviewed"
+  },
+  "XCAM::CEncoder::Initialize": {
+   "status": "reviewed"
+  },
+  "XCAM::CEncoder::RecoveryFrameRequired": {
+   "status": "reviewed"
+  },
+  "XCAM::CEncoder::SetBitrate": {
+   "status": "reviewed"
+  },
+  "XCAM::CEncoder::SetFramerate": {
+   "status": "reviewed"
+  },
+  "XCAM::CEncoder::Shutdown": {
+   "status": "reviewed"
+  },
+  "XCAM::CEncoder::SkipFrame": {
+   "status": "reviewed"
+  },
+  "XCAM::CEncoder::SubmitFrameToEncodeQueue": {
+   "status": "reviewed"
+  },
   "XCAM::CI420VideoOutput::GetBuffersForWriting": {
    "status": "reviewed"
   },
@@ -46846,6 +46927,36 @@
    "status": "reviewed"
   },
   "rw::audio::core::Pan2D1::Speaker::Set": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::ComputeLevels": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::ComputeTransform": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::ComputeZeroRadiusLevels": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::GetPlugInDescRunTime": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::RampPanOutput": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::SpeakerConfig": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "rw::audio::core::Pause::CreateInstance": {
@@ -49639,6 +49750,9 @@
    "notes": "descriptor builder VERIFIED against asm (entry0={*res+5,4}, rest {0,1}); gate-only",
    "status": "done"
   },
+  "GameShared/GameClasses/System/Resource/PoolModuleStates/CgsAllocatePoolModuleState.cpp": {
+   "status": "done"
+  },
   "GameShared/GameClasses/System/Resource/PoolModuleStates/CgsBaseDefragPoolModuleState.cpp": {
    "notes": "BaseDefragPoolModuleState; parity/none; wave8; verifier parity; gate pass.",
    "status": "done"
@@ -50652,6 +50766,10 @@
   },
   "GameSource/Gui/Flow/Screen/Components/BrnEATraxMenuComponent.cpp": {
    "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/Components/BrnGuiNetworkPlayerStats.cpp": {
+   "notes": "5/6 committed 9b0264bc (Construct/Destruct/SetState/Update/AppendExpectedApp). FormatNetworkStats 0x82416E88 blocked: un-recovered KAE_FORMAT_LOOKUP rodata (dword_8204C6B4).",
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/Components/BrnImageGalleryCarouselItem.cpp": {
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
@@ -58132,6 +58250,9 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:CVideoAnalyst": {
+   "status": "done"
+  },
   "class:CWMVMBMode": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -61141,6 +61262,9 @@
   "class:XCAM::CDecoderOutput": {
    "status": "done"
   },
+  "class:XCAM::CEncoder": {
+   "status": "done"
+  },
   "class:XCAM::CI420VideoOutput": {
    "status": "done"
   },
@@ -61660,6 +61784,9 @@
   },
   "class:rw::audio::core::PackedTableReader": {
    "notes": "verify pass: UnpackNextRow 4x PackedColumnReader::GetNextValue @+0x04/0x14/0x24/0x34. gate x64 pass",
+   "status": "done"
+  },
+  "class:rw::audio::core::Pan2D": {
    "status": "done"
   },
   "class:rw::audio::core::Pan2D1::Speaker": {
