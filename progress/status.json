@@ -49966,6 +49966,9 @@
    "notes": "GetImplicitVelocity verified vs asm; parity.",
    "status": "done"
   },
+  "GameSource/Director/Utils/BrnDirectorWorldMap.cpp": {
+   "status": "done"
+  },
   "GameSource/Director/Utils/BrnICEMoviePlayer.cpp": {
    "notes": "Movie-player family reconstructed; gate green; fidelity verified vs --asm (seed table 36 rows corrected, PlayMovie reconciled to DWARF sig, Play mbIsLooping clear); camera-Behaviour layer minimal-sliced (flagged)",
    "status": "done"
@@ -51237,6 +51240,10 @@
   },
   "GameSource/Physics/PhysicsUtilities/PotentialContactOrderer.h": {
    "status": "done"
+  },
+  "GameSource/Physics/VehicleManager/BrnPhysicalTrafficVehicle.h": {
+   "notes": "1/3 committed 1a3e2df5 (HasNonBrokenJoint). SetTrafficVehicleCheck 0x8262D748 (slam steering/drive-dir, un-homed) + AddArticulatedJointConstraint 0x825F3000 (IDA local-alloc-fail + un-homed joint types) blocked.",
+   "status": "blocked"
   },
   "GameSource/Physics/VehicleManager/SharedIO/BrnVehicleInputInterface.h": {
    "status": "done"
@@ -61006,6 +61013,7 @@
    "status": "done"
   },
   "class:XGRAPHICS::IRMov": {
+   "notes": "released to avoid parallel XGraphics-IR header collision with IRLoadTemp; future wave",
    "status": "done"
   },
   "class:XGRAPHICS::InternalVector": {
@@ -61514,6 +61522,10 @@
   "class:rw::audio::core::Route": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
+  },
+  "class:rw::audio::core::Send": {
+   "notes": "9/10 committed 1a3e2df5 (CreateInstance/GetSize/Process/DisconnectImmediate/ConnectByPointer/EventEvent/ReleaseEvent/dtor). ConnectByNameHandler 0x82B9FF80 blocked: un-homed by-name SubMix registry statics (off_8327EE68 list head, dword_8327EE00 iterator) + un-groundable list-link/name member offsets.",
+   "status": "blocked"
   },
   "class:rw::audio::core::SubMixConnector": {
    "notes": "rw audio SubMixConnector; parity/low; wave6; verifier reviewed; gate pass.",
