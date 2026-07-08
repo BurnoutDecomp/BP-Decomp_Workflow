@@ -45798,6 +45798,15 @@
   "Snd9::AemsPlayerInputAccessor::GetValueByType": {
    "status": "reviewed"
   },
+  "Snd9::Hal::SetPan": {
+   "status": "reviewed"
+  },
+  "Snd9::Hal::SetVol": {
+   "status": "reviewed"
+  },
+  "Snd9::Hal::SetVolInternal": {
+   "status": "reviewed"
+  },
   "Snd9::IAemsSamplePlayer::`vector deleting destructor'": {
    "status": "reviewed"
   },
@@ -51194,6 +51203,10 @@
   },
   "GameSource/Gamestate/StreetData/BrnGameStateStreetManager.cpp": {
    "notes": "Wave34: 0/36; blocked on un-homed/un-sized BrnGameState::StreetManagerDebugComponent (recover from the X360 ctor/CgsCollision::BaseCollisionGenerator footprint) + deep un-named sub-object offsets; discarded",
+   "status": "blocked"
+  },
+  "GameSource/Gamestate/StreetData/BrnStreetManagerDebugComponent.cpp": {
+   "notes": "4 of 8 done+committed; 4 blocked on un-homed deps",
    "status": "blocked"
   },
   "GameSource/Graphics/BrnRendererModule.h": {
@@ -62019,6 +62032,10 @@
   "class:MassiveAdClient3::CRequestBuilder": {
    "status": "done"
   },
+  "class:MassiveAdClient3::CRequestCloseSession": {
+   "notes": "5 of 6 done+committed; Parse blocked on CRequestObject::ReadRemoveSignature",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CRequestDownloadBinary": {
    "status": "done"
   },
@@ -62215,6 +62232,9 @@
    "notes": "verified vs X360 asm; parity.",
    "status": "done"
   },
+  "class:Snd9::Hal": {
+   "status": "done"
+  },
   "class:Snd9::IAemsSamplePlayer": {
    "notes": "verified vs X360 asm; parity.",
    "status": "done"
@@ -62323,6 +62343,10 @@
   "class:XAUDIO::CPacketQueue": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
+  },
+  "class:XAUDIO::CReverbEffect": {
+   "notes": "1 of 9 done+committed; 8 blocked on un-reconstructed CEffect/CVoice vtable slot orders (same pattern as CRoutedVoice)",
+   "status": "blocked"
   },
   "class:XAUDIO::CRoutedVoice": {
    "notes": "2 of 11 done+committed (SetVoiceOutput + operator delete) in new XAudioRoutedVoice home; 9 blocked on un-homed XAUDIO::CEngine singleton off_832BB944 + deliberately-deferred CVoice/CEffect vtable slot orders + Xbox kernel spinlock/IRQL",
@@ -62436,6 +62460,10 @@
   },
   "class:XGRAPHICS::VRegInfo": {
    "notes": "5/6 committed 76bf1173 (ctor/dtor/BumpDefs/BumpUses + deleting-dtor; expanded VReg stand-in into full class). Make 0x82C28E58 blocked: tail-call through un-recovered rodata factory-dispatch table off_821B5108 (3-word per-kind entries absent from dossier).",
+   "status": "blocked"
+  },
+  "class:XGRAPHICS::VRegTable": {
+   "notes": "3 of 4 done+committed; RemoveConstant blocked on un-homed IRLoadConst +0x3A0 layout",
    "status": "blocked"
   },
   "class:[100],20,int>": {
@@ -62876,6 +62904,10 @@
   "class:rw::audio::core::EaLayer32PcmDec": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
+  },
+  "class:rw::audio::core::EaXmaDec": {
+   "notes": "5 of 16 done+committed (stream/sizing leaf funcs GetSize/FeedEvent/LeftShiftInBits/ParseToNextFrame/XMAmemcpy); 11 blocked on XMA HW intrinsics + un-recovered context-pair/instance layout + a VMX permute table",
+   "status": "blocked"
   },
   "class:rw::audio::core::Encoder": {
    "notes": "Audio-codec encoder base (hard-rule block list). Release @0x82B6D048 is a vtable thunk into the concrete (blocked) XAS/EALayer3 codec DoRelease; whole-blocked per the encoder naming + no-partial-TU rule (GetDataRateOverhead getter alone is trivial but the class thunks into blocked DSP). Deferred.",
