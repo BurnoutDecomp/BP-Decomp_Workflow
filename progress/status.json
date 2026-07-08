@@ -45183,6 +45183,57 @@
   "Nicotine::SnapshotChannel::GetFinalVolume": {
    "status": "reviewed"
   },
+  "Nicotine::SnapshotMixer::ActiveStatesChanged": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::AttachToMixMap": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::Construct": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::GetChannel": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::GetSnapshot": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::GetSnapshotChannel": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::GetSnapshotChannelId": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::IsStatusActive": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::Recall": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::SetSnapshot": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::SetSnapshotOverride": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::TurnOffAllSnapshots": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::TurnOnSnapshot": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::Update": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::UpdateMixerTargets": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::UpdateNicotineChannelData": {
+   "status": "reviewed"
+  },
+  "Nicotine::SnapshotMixer::UpdateSnapshotChannelData": {
+   "status": "reviewed"
+  },
   "ObjectIndex::in_word_set": {
    "status": "reviewed"
   },
@@ -49005,6 +49056,10 @@
   "GameShared/GameClasses/Fsm/CgsScriptedState.cpp": {
    "notes": "Fresh-eyes sonnet review. PASS: HIDWORD ABI artifact correctly interpreted, offsets +8/+16 correct, returns this; +8 self-ref uncertainty flagged in-code.",
    "status": "done"
+  },
+  "GameShared/GameClasses/Geometric/Intersection/CgsPolygonSoupTests.cpp": {
+   "notes": "2 of 6 done+committed; 4 blocked on un-homed collaborators",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Geometric/Intersection/CgsTriangleBox.cpp": {
    "status": "done"
@@ -53875,6 +53930,10 @@
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
    "status": "done"
   },
+  "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribloadandgo.cpp": {
+   "notes": "4 of 11 done+committed; 7 blocked on un-homed AttribSys templates + opaque offsets",
+   "status": "blocked"
+  },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribsupport.cpp": {
    "notes": "8/9 committed fc21ec35. FindCollection 0x82808378 blocked: committed decl (int,void*=null; 57 ctor consumers) irreconcilable with true DWARF sig (Attribute::Key,Attribute::Key); needs coordinated decl+consumer fix.",
    "status": "blocked"
@@ -53987,6 +54046,10 @@
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleBehaviour.cpp": {
    "notes": "Lion ParticleBehaviour (7); BuildColourSteps dest mRGBATime FIXED; gate pass.",
    "status": "done"
+  },
+  "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleBucketManager.cpp": {
+   "notes": "6 of 7 done+committed in new Lion home; 1 blocked on un-homed dep",
+   "status": "blocked"
   },
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleDescriptor.cpp": {
    "status": "done"
@@ -58437,6 +58500,10 @@
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
   },
+  "class:BrnWorld::EnvironmentSettings::EnvironmentManager": {
+   "notes": "2 of 8 done+committed (UpdateFromTool + DiscardCurrSeason byte-faithful); ctor+layout de-fabricated to padding pending asm; 5 blocked on un-homed deps",
+   "status": "blocked"
+  },
   "class:BrnWorld::EnvironmentSettings::KeyframeResourceType": {
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
@@ -61684,6 +61751,9 @@
    "notes": "verified vs X360 asm; parity.",
    "status": "done"
   },
+  "class:Nicotine::SnapshotMixer": {
+   "status": "done"
+  },
   "class:ObjectIndex": {
    "notes": "Compile-gate GREEN; per-TU recon+verify pass; vendor/SDK reconstructed in canonical home.",
    "status": "done"
@@ -62553,6 +62623,10 @@
   },
   "class:rw::audio::core::Resample": {
    "status": "done"
+  },
+  "class:rw::audio::core::ReverbModel1": {
+   "notes": "12 of 16 done+committed in new audio-core plugins/ReverbModel1 home (reuses DONE DelayLine/System/CombFilter/AllPassFilter); 4 blocked on undecoded rodata coefficient tables flt_82170638/flt_82170540 + un-homed STUB callees",
+   "status": "blocked"
   },
   "class:rw::audio::core::Route": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
