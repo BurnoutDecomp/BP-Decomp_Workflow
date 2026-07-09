@@ -3,9 +3,12 @@
 Phase 0 - translation-unit index (the work-unit list).
 
 Consumes progress/identity.json and groups every X360 function into a translation
-unit, from one of two sources:
+unit, from one of three sources:
   - `decfigs`: the real original `primary_file` (ground truth, ~43% of functions)
-  - `class`  : the `Namespace::Class` path from the demangled name (fallback, ~57%)
+  - `vendor` : a function that would otherwise fall to <global> but is a known
+               third-party/runtime symbol -- routed to its `vendor:<lib>` TU per
+               references/vendor_classification.json (Pass B; these TUs are blocked)
+  - `class`  : the `Namespace::Class` path from the demangled name (fallback)
 
 Output: progress/tu_index.json  -- the list of work units the ledger is seeded from.
 
@@ -17,6 +20,9 @@ from collections import defaultdict
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 IDENTITY = os.path.join(ROOT, "progress", "identity.json")
 OUT = os.path.join(ROOT, "progress", "tu_index.json")
+# Pass B: frozen {func_name -> "vendor:<lib>"} classification for the non-game
+# runtime/vendor free functions. Optional -- absent file just means no routing.
+VENDOR_MAP = os.path.join(ROOT, "references", "vendor_classification.json")
 
 # Special trailing components that are NOT the real method name for class-grouping.
 SPECIAL = ("vector deleting destructor", "scalar deleting destructor")
@@ -59,6 +65,7 @@ def main():
     if not os.path.exists(IDENTITY):
         raise SystemExit("run build_identity.py first (progress/identity.json missing)")
     identity = json.load(open(IDENTITY, encoding="utf-8"))
+    vendor = json.load(open(VENDOR_MAP, encoding="utf-8")) if os.path.exists(VENDOR_MAP) else {}
 
     tus = defaultdict(lambda: {"source": None, "functions": [], "n_decfigs": 0})
     for canonical, e in identity.items():
@@ -66,7 +73,13 @@ def main():
         if pf:
             key, source = pf, "decfigs"
         else:
-            key, source = "class:" + class_path(canonical), "class"
+            cp = class_path(canonical)
+            # Pass B: a function that would otherwise be <global> and is a known
+            # vendor/runtime symbol goes to its vendor: TU. File/class TUs untouched.
+            if cp == "<global>" and canonical in vendor:
+                key, source = vendor[canonical], "vendor"
+            else:
+                key, source = "class:" + cp, "class"
         tu = tus[key]
         # a file-sourced unit always wins its source label
         if tu["source"] is None or source == "decfigs":
@@ -92,7 +105,8 @@ def main():
 
     n_tu = len(index)
     by_decfigs = sum(1 for t in index.values() if t["source"] == "decfigs")
-    by_class = n_tu - by_decfigs
+    by_vendor = sum(1 for t in index.values() if t["source"] == "vendor")
+    by_class = n_tu - by_decfigs - by_vendor
     sizes = sorted((t["n_funcs"] for t in index.values()), reverse=True)
     print("=== TU index report ===")
     print(f"translation units      : {n_tu}")
