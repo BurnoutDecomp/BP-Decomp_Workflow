@@ -238,6 +238,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\EATech\include\Apt\AptArray.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIH.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIHBehaviour.cpp"
+  echo "%SRC%\SDKs\EATech\include\Apt\AptCIHMembers.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIHText.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIHNativeFunctionHelper.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptCIHNone.cpp"
