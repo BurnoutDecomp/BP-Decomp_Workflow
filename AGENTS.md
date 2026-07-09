@@ -370,6 +370,22 @@ own** pass first, so you don't ship a known-divergent TU into review.
   then verify offsets against x64 and behaviour against ARTIST. Adopting its layouts
   wholesale into `b5-decomp/src` is the VERSION-DRIFT TRAP; see the bundle's README.
   Addresses are VAs = PDB-RVA + ImageBase `0x400000`.
+- **APT ORIGINAL SDK SOURCE — leaked EATech Apt source drops, added 2026-07-10.**
+  [`references/Apt/`](references/Apt/) holds *real EA-internal Apt source* (EA-leak
+  provenance, untracked by design): `2.07.00-custom/` (public-API surface only,
+  version log ends 03/2008 — closest in time to Paradise) and `3.02.02-fifafb.01/`
+  (a full SDK tree — CIH/interpreter/GC internals, the `objects/sprite/text.gperf`
+  member tables, original internal headers/macros — but **Apt-3.02.02, built 2014**:
+  six years newer than Paradise's Apt). **Ladder position: naming / macro /
+  structure / algorithm corroboration ONLY — the Apt analogue of Feb-2007.** It
+  does not displace XB1 x64 (widths/offsets) or ARTIST (behaviour), and it is
+  **known incomplete**: BP's rendering goes through the Cgs bridge, not the SDK's
+  own renderables, and files are missing — absence there ≠ absence in BP.
+  **No verbatim copy-paste into `b5-decomp`** — reconstructions stay
+  binary-derived; use the source to confirm names/shape/intent. Paradise's Apt is
+  bracketed by B4Extern (0.19.02, older) and this drop (3.02.02, newer): where both
+  agree with the binary, trust the shared shape; where they disagree, the binary
+  decides. Full caveats: [`references/Apt/README.md`](references/Apt/README.md).
 - **RenderWare & Vendor SDKs (EATech, rwcore, etc.): Test before decompiling.**
   We have native PC binaries for *some* middleware (e.g., `rwcore.lib`), but not all
   (e.g., `rwcollision`). Additionally, for `EABase`, `EASTL`, and `EAThread`, we have the original

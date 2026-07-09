@@ -100,6 +100,13 @@ signatures, and local-variable hints. It is not complete implementation source a
 not offset authority; X360 pseudocode/asm remains the source of truth for behavior
 and member placement, and Feb-2007 partial source wins where it overlaps.
 
+For **Apt** TUs there is an analogous rung: the leaked original Apt SDK source in
+`references/Apt/` (untracked; see its README) corroborates names, macros, member-table
+semantics, and algorithms — but it is version-drifted (2008 API-only drop + a 2014
+full tree vs Paradise's ~2008 engine) and incomplete, is never offset/behaviour
+authority (that stays XB1 x64 / X360 ARTIST), and is **never copied verbatim** into
+`b5-decomp`.
+
 **Ordering:** leaf-first (callees before callers) is the *quality* preference — a
 caller reconstructed after its callees sees real signatures and recovered types.
 It is **not** a correctness requirement (see stubs below), so any ready TU may be
