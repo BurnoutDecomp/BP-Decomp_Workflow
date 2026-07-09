@@ -20,9 +20,15 @@ from collections import defaultdict
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 IDENTITY = os.path.join(ROOT, "progress", "identity.json")
 OUT = os.path.join(ROOT, "progress", "tu_index.json")
-# Pass B: frozen {func_name -> "vendor:<lib>"} classification for the non-game
-# runtime/vendor free functions. Optional -- absent file just means no routing.
-VENDOR_MAP = os.path.join(ROOT, "references", "vendor_classification.json")
+# Frozen {func_name -> "<ns>:<id>"} reclassification maps for functions that would
+# otherwise fall to <global>. Each is optional (absent file = no routing); the target
+# id's namespace prefix ("vendor" / "module") becomes the TU source label.
+#   Pass B: vendor_classification.json -> vendor:<lib>  (third-party/runtime)
+#   Pass C: apt_classification.json    -> module:apt/<obj>  (Apt UI runtime)
+RECLASS_MAPS = [
+    os.path.join(ROOT, "references", "vendor_classification.json"),
+    os.path.join(ROOT, "references", "apt_classification.json"),
+]
 
 # Special trailing components that are NOT the real method name for class-grouping.
 SPECIAL = ("vector deleting destructor", "scalar deleting destructor")
@@ -65,7 +71,10 @@ def main():
     if not os.path.exists(IDENTITY):
         raise SystemExit("run build_identity.py first (progress/identity.json missing)")
     identity = json.load(open(IDENTITY, encoding="utf-8"))
-    vendor = json.load(open(VENDOR_MAP, encoding="utf-8")) if os.path.exists(VENDOR_MAP) else {}
+    reclass = {}
+    for path in RECLASS_MAPS:
+        if os.path.exists(path):
+            reclass.update(json.load(open(path, encoding="utf-8")))
 
     tus = defaultdict(lambda: {"source": None, "functions": [], "n_decfigs": 0})
     for canonical, e in identity.items():
@@ -74,10 +83,12 @@ def main():
             key, source = pf, "decfigs"
         else:
             cp = class_path(canonical)
-            # Pass B: a function that would otherwise be <global> and is a known
-            # vendor/runtime symbol goes to its vendor: TU. File/class TUs untouched.
-            if cp == "<global>" and canonical in vendor:
-                key, source = vendor[canonical], "vendor"
+            # A function that would otherwise be <global> and is in a reclassification
+            # map goes to its target TU; the id prefix (vendor:/module:) is the source.
+            # File/class TUs are never touched.
+            if cp == "<global>" and canonical in reclass:
+                key = reclass[canonical]
+                source = key.split(":", 1)[0]
             else:
                 key, source = "class:" + cp, "class"
         tu = tus[key]
@@ -106,7 +117,8 @@ def main():
     n_tu = len(index)
     by_decfigs = sum(1 for t in index.values() if t["source"] == "decfigs")
     by_vendor = sum(1 for t in index.values() if t["source"] == "vendor")
-    by_class = n_tu - by_decfigs - by_vendor
+    by_module = sum(1 for t in index.values() if t["source"] == "module")
+    by_class = n_tu - by_decfigs - by_vendor - by_module
     sizes = sorted((t["n_funcs"] for t in index.values()), reverse=True)
     print("=== TU index report ===")
     print(f"translation units      : {n_tu}")
