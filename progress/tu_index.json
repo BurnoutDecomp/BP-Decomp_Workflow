@@ -24679,7 +24679,7 @@
  "class:<global>": {
   "source": "class",
   "status": "todo",
-  "n_funcs": 1620,
+  "n_funcs": 1577,
   "n_decfigs": 0,
   "functions": [
    "*",
@@ -24721,53 +24721,11 @@
    "AllocatePictureCYUV420",
    "AppendArray<124>",
    "ApplySmoothing_Xenon",
-   "AptAllocatorInitialize",
-   "AptAllocatorShutdown",
-   "AptCallFunctionInternal",
-   "AptCallFunctionOpti",
-   "AptCallFunctionVOpti",
    "AptCallMemberFunctionInternal",
-   "AptChangeTargetInstance",
-   "AptCleanupInvisibleMovieClipInternal",
-   "AptCommonInitialize",
-   "AptCommonShutdown",
-   "AptCompleteAnimationAsyncLoad",
-   "AptCreateTargetInstance",
-   "AptDecoupleClippedTreeTraversal",
-   "AptDecoupleMaskedTreeTraversal",
-   "AptDecoupleTreeCleanUpInvisibleRI",
-   "AptDecoupleTreeTraversal",
-   "AptDecoupleTreeTraversalClipper",
-   "AptDestroyTargetInstance",
-   "AptFlushInputQueue",
-   "AptIsDeferredVectorFull",
-   "AptLoadAnimation",
-   "AptPartialGarbageCollection",
-   "AptRand",
-   "AptRegisterExtension",
-   "AptRegisterGlobalReferences",
    "AptRender",
-   "AptRenderInitialize",
-   "AptRenderLeaf",
-   "AptRenderShutdown",
-   "AptSeedRand",
-   "AptSetRenderThreadID",
-   "AptSetSimulationThreadID",
-   "AptSharedPtrDecRef",
-   "AptSharedPtrDelete",
-   "AptSharedPtrIncRef",
    "AptSingleL",
-   "AptSingleLis",
-   "AptUnRegisterExtension",
    "AptUpdate",
-   "AptUpdateInitialize",
-   "AptUpdateShutdown",
-   "AptUpdateTarget",
-   "AptUpdateZombieVector",
    "AptValue>",
-   "AptValueInitialize",
-   "AptValueShutdown",
-   "AptValueShutdownRemaining",
    "Attri",
    "B",
    "BS_StartCodeProcess",
@@ -25753,7 +25711,6 @@
    "YUVCopy",
    "ZerosBoolTreeToHuffCodes",
    "_",
-   "_AptGetAnimationAtLevel",
    "__",
    "__c",
    "__cd",
@@ -60532,6 +60489,129 @@
    "vp6::Alloc",
    "vp6::Free",
    "vp6::SetAllocator"
+  ]
+ },
+ "module:apt/Apt": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 11,
+  "n_decfigs": 0,
+  "functions": [
+   "AptAllocatorInitialize",
+   "AptAllocatorShutdown",
+   "AptCallFunctionOpti",
+   "AptCompleteAnimationAsyncLoad",
+   "AptFlushInputQueue",
+   "AptLoadAnimation",
+   "AptPartialGarbageCollection",
+   "AptRegisterExtension",
+   "AptRegisterGlobalReferences",
+   "AptUpdateZombieVector",
+   "_AptGetAnimationAtLevel"
+  ]
+ },
+ "module:apt/AptCommon": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 10,
+  "n_decfigs": 0,
+  "functions": [
+   "AptCallFunctionInternal",
+   "AptCallFunctionVOpti",
+   "AptChangeTargetInstance",
+   "AptCleanupInvisibleMovieClipInternal",
+   "AptCommonInitialize",
+   "AptCommonShutdown",
+   "AptCreateTargetInstance",
+   "AptDestroyTargetInstance",
+   "AptIsDeferredVectorFull",
+   "AptUnRegisterExtension"
+  ]
+ },
+ "module:apt/AptDecouple": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 5,
+  "n_decfigs": 0,
+  "functions": [
+   "AptDecoupleClippedTreeTraversal",
+   "AptDecoupleMaskedTreeTraversal",
+   "AptDecoupleTreeCleanUpInvisibleRI",
+   "AptDecoupleTreeTraversal",
+   "AptDecoupleTreeTraversalClipper"
+  ]
+ },
+ "module:apt/AptList": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 1,
+  "n_decfigs": 0,
+  "functions": [
+   "AptSingleLis"
+  ]
+ },
+ "module:apt/AptLoad": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 3,
+  "n_decfigs": 0,
+  "functions": [
+   "AptSharedPtrDecRef",
+   "AptSharedPtrDelete",
+   "AptSharedPtrIncRef"
+  ]
+ },
+ "module:apt/AptRand": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 2,
+  "n_decfigs": 0,
+  "functions": [
+   "AptRand",
+   "AptSeedRand"
+  ]
+ },
+ "module:apt/AptRender": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 3,
+  "n_decfigs": 0,
+  "functions": [
+   "AptRenderInitialize",
+   "AptRenderLeaf",
+   "AptRenderShutdown"
+  ]
+ },
+ "module:apt/AptThread": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 2,
+  "n_decfigs": 0,
+  "functions": [
+   "AptSetRenderThreadID",
+   "AptSetSimulationThreadID"
+  ]
+ },
+ "module:apt/AptUpdate": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 3,
+  "n_decfigs": 0,
+  "functions": [
+   "AptUpdateInitialize",
+   "AptUpdateShutdown",
+   "AptUpdateTarget"
+  ]
+ },
+ "module:apt/AptValue": {
+  "source": "module",
+  "status": "todo",
+  "n_funcs": 3,
+  "n_decfigs": 0,
+  "functions": [
+   "AptValueInitialize",
+   "AptValueShutdown",
+   "AptValueShutdownRemaining"
   ]
  },
  "vendor:compiler-rt": {
