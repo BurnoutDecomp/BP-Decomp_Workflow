@@ -103,7 +103,7 @@ For a new local workspace:
    ```
 
 2. Download the archive from
-   [Google Drive](https://drive.google.com/file/d/1i0Pj8a9HGE4kfPq84co752l4I862DdZ4/view?usp=sharing)
+   [Google Drive](https://drive.google.com/file/d/1Aj5Qr9SF9oGLLcWCFjhr6k86BtdxbsvJ/view?usp=drive_link)
    and extract it directly into the repository root.
 
 3. Bootstrap the workspace:
