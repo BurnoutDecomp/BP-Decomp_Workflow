@@ -566,10 +566,28 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\BrnGuiViewModuleLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiModule.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiAptRuntime.cpp"
+  rem ---- the real GUI flow-controller chain (GuiFsmController + BrnHudFlow's 14-state pool) ----
+  echo "%SRC%\GameSource\Gui\BrnGuiFsmController.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\BrnBaseFlow.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\BrnHudFlow.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsEventObserver.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModuleIO_InputBuffer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModuleIO_OutputBuffer.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootPreload.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootAttract.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnPostTitleScreenLoad.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootProfile.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootVideos.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLoading.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegal.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegalBoundary.cpp"
+  rem The in-game HUD states the 14-state pool instantiates: real TUs where they are
+  rem header-homed (Paused/Idle + the TextField component they embed), the link
+  rem scaffold for the rest (see BrnHudStatesLinkStubs.cpp).
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnPausedHudState.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnIdleHudState.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnHudStatesLinkStubs.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextField.cpp"
   rem The real title-menu frontend (replaces the retired MenuComponent facade).
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnSelectable.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnSelectableGroup.cpp"
