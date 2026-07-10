@@ -96,6 +96,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Game\GameBridgeControllerToX.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Input\CgsInputModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Input\PC\CgsInputPadsPC.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsGuiSoundPC.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOInputBuffer.cpp"
   echo "%SRC%\GameSource\World\BrnWorldModuleIO.cpp"
   echo "%SRC%\GameSource\GameState\BrnGameStateModuleIO.cpp"
