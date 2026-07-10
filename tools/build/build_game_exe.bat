@@ -61,7 +61,9 @@ rc /fo"%OUT%\\obj\\burnout.res" "%RES%\burnout.rc"
 
 rem ---- build the cl response file ----
 > "%RSP%" (
-  echo /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS
+  rem /Gy: function-level linking, so /OPT:REF (link line) can strip the never-called
+  rem sibling controller bridges (Director/World/GameState) whose IO callees are unlinked.
+  echo /nologo /EHsc /std:c++17 /permissive- /Gy /DWIN32 /D_WINDOWS
   echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%VEN%\zlib\src" /I"%FFM%\include" /I"%VEN%\lua\src"
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
   echo "%SRC%\GameSource\BrnBaselineLinkStubs.cpp"
@@ -88,6 +90,22 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Development\CgsStrStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\Log\CgsLog.cpp"
   echo "%SRC%\GameSource\Game\BrnGameModule.cpp"
+  rem GameBridgeControllerToX also carries the Director/World/GameState bridges; their IO
+  rem callees (and those TUs' interface operator= homes) are linked below so the whole
+  rem controller-bridge family resolves.
+  echo "%SRC%\GameSource\Game\GameBridgeControllerToX.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Input\CgsInputModuleIO.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Input\PC\CgsInputPadsPC.cpp"
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOInputBuffer.cpp"
+  echo "%SRC%\GameSource\World\BrnWorldModuleIO.cpp"
+  echo "%SRC%\GameSource\GameState\BrnGameStateModuleIO.cpp"
+  echo "%SRC%\GameSource\Director\Camera\SharedIO\BrnPlayerInfo.cpp"
+  echo "%SRC%\GameSource\Replays\BrnReplayStatusInterface.cpp"
+  echo "%SRC%\GameSource\World\CrashModule\SharedIO\NetworkInputInterface.cpp"
+  echo "%SRC%\GameSource\Network\BrnNetworkModuleIO.cpp"
+  echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleGameStateIOInterfaces.cpp"
+  echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleInGamePlayerStatusInterface.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleEvents.cpp"
   echo "%SRC%\GameSource\Game\BrnGlobalCpuMonitors.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowStates.cpp"
   echo "%SRC%\GameSource\Sound\Module\BrnRootSoundModule.cpp"
@@ -414,6 +432,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\parameter.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\parametersemantic.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModuleIO.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsEventInterpreterModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsAptDataHeaderType.cpp"
@@ -635,7 +654,7 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   /c "%SRC%\pc\gcm\renderengine\device.cpp" /Fo"%OUT%\\obj\\renderengine_device.obj"
 if errorlevel 1 ( echo ERROR: renderengine device.cpp precompile failed. & exit /b 1 )
 
-cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
+cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
