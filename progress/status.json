@@ -31470,6 +31470,33 @@
   "CArgumentList::AddArgument": {
    "status": "reviewed"
   },
+  "CArrayLookahead::AddArrayElement": {
+   "status": "reviewed"
+  },
+  "CArrayLookahead::CArrayLookahead": {
+   "status": "reviewed"
+  },
+  "CArrayLookahead::DetectDissolve": {
+   "status": "reviewed"
+  },
+  "CArrayLookahead::DetectEventInArray": {
+   "status": "reviewed"
+  },
+  "CArrayLookahead::Filter1stOrderDiffLumaVarMean": {
+   "status": "reviewed"
+  },
+  "CArrayLookahead::Initialize": {
+   "status": "reviewed"
+  },
+  "CArrayLookahead::ResetElement": {
+   "status": "reviewed"
+  },
+  "CArrayLookahead::SetDissolveDumpFile": {
+   "status": "reviewed"
+  },
+  "CArrayLookahead::~CArrayLookahead": {
+   "status": "reviewed"
+  },
   "CBaseEndianBuffer::AppendBytes": {
    "status": "reviewed"
   },
@@ -51341,7 +51368,7 @@
    "status": "blocked"
   },
   "GameSource/Gamestate/StreetData/BrnStreetManagerDebugComponent.cpp": {
-   "notes": "7 of 8 done+committed (3 RoadRules funcs finished this round); 1 still blocked on un-homed dep",
+   "notes": "7 of 8 done+committed; 1 still blocked on un-homed dep",
    "status": "blocked"
   },
   "GameSource/Graphics/BrnRendererModule.h": {
@@ -54282,7 +54309,7 @@
    "status": "done"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribloadandgo.cpp": {
-   "notes": "6 of 11 done+committed (PrepareToDeinitialize + ~Vault finished); 5 still blocked on 64-bit Vault::AssetID vs committed 32-bit typedef + un-homed eastl::lower_bound<ExportPolicyPair> + serialized ChunkBlock accessors",
+   "notes": "6 of 11 done+committed; 5 Vault funcs irreducibly blocked on the 64-bit Vault::AssetID vs committed 32-bit HashInt typedef + ReleaseAsset(u32) - NON-ADDITIVE global change",
    "status": "blocked"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribsupport.cpp": {
@@ -59263,8 +59290,7 @@
    "status": "done"
   },
   "class:CArrayLookahead": {
-   "notes": "7 of 9 done+committed; DetectDissolve/DetectEventInArray still blocked on un-homed detector/histogram deps",
-   "status": "blocked"
+   "status": "done"
   },
   "class:CBaseEndianBuffer": {
    "notes": "verify pass 12/12: endian read/write buffer GetWord/AppendBytes/SeekTo + overflow enums. gate x64 pass",
@@ -62116,7 +62142,7 @@
    "status": "done"
   },
   "class:MassiveAdClient3::CMassiveZoneManager": {
-   "notes": "9 of 17 done+committed (DeleteElements/AssetFind/PreSubscriberAssignT finished this round); 8 still blocked on un-homed MassiveAd deps",
+   "notes": "13 of 17 done+committed (MAOFind/SetAssetExpired/Resume/ReportImpressions finished this round); 4 still blocked on un-homed MassiveAd deps",
    "status": "blocked"
   },
   "class:MassiveAdClient3::CNetworkManager": {
@@ -62307,7 +62333,7 @@
    "status": "blocked"
   },
   "class:RealmcIface::XenonUtil": {
-   "notes": "19 of 22 done+committed; 3 still blocked: LoadEntryInfo data-buffer member still un-homed; CardResultToCardStatus jump-table rodata absent",
+   "notes": "21 of 22 done+committed (ReadFileLayer2 + SaveDataRegular finished by homing the LoadEntryInfo data-buffer member); 1 still blocked: CardResultToCardStatus needs byte_82148638 jump-table rodata",
    "status": "blocked"
   },
   "class:RendererIO::InputBuffer": {
