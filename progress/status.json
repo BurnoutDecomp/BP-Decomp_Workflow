@@ -13863,7 +13863,25 @@
   "BrnGui::OnlinePreEvent::GetResourcesToLoad": {
    "status": "reviewed"
   },
+  "BrnGui::OnlinePreEvent::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlinePreEvent::OnLeave": {
+   "status": "reviewed"
+  },
   "BrnGui::OnlinePreEvent::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlinePreEvent::UpdateGetCache": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlinePreEvent::UpdateLoadResources": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlinePreEvent::UpdatePermanent": {
+   "status": "reviewed"
+  },
+  "BrnGui::OnlinePreEvent::UpdateRunning": {
    "status": "reviewed"
   },
   "BrnGui::OnlinePreEventMessages::Construct": {
@@ -47775,6 +47793,36 @@
   "rw::RwHash32String": {
    "status": "reviewed"
   },
+  "rw::audio::core::AiffWriter::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::EventEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::GetPlugInDescRunTime": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::IntToExtended": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::ReleaseEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::StartHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::StopHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::AiffWriter::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::audio::core::AllPassFilter::AllPassFilter": {
    "status": "reviewed"
   },
@@ -51858,6 +51906,10 @@
   "GameSource/Gui/Flow/HUD/Components/BrnBoostMessageSlot.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/HUD/Components/BrnCompassComponent.cpp": {
+   "notes": "4 of 8 done+committed; 4 blocked on un-homed HUD collaborators",
+   "status": "blocked"
+  },
   "GameSource/Gui/Flow/HUD/Components/BrnFriendsList.cpp": {
    "status": "done"
   },
@@ -52290,6 +52342,9 @@
    "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlinePlay.h": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlinePreEvent.cpp": {
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlinePreEvent.h": {
@@ -62048,7 +62103,7 @@
    "status": "done"
   },
   "class:D3D::CCapture": {
-   "notes": "7 of 11 done+committed; 4 blocked on rodata opcode tables + un-homed HashMap methods + CCapture vtable slots",
+   "notes": "8 of 11 done+committed (MarkUsedPages finished by homing the page-HashMap); 3 blocked on rodata opcode tables + CCapture vtable slots",
    "status": "blocked"
   },
   "class:D3D::CCapture::HashMap": {
@@ -62383,6 +62438,10 @@
   "class:MassiveAdClient3::CLog": {
    "notes": "Initialize verified (slot guard, base ctor, vftable, flag).",
    "status": "done"
+  },
+  "class:MassiveAdClient3::CMassiveAdObjectAudioDynamic": {
+   "notes": "8 of 11 done+committed; 3 blocked on un-homed deps",
+   "status": "blocked"
   },
   "class:MassiveAdClient3::CMassiveAdObjectSubscriber": {
    "status": "done"
@@ -62847,7 +62906,7 @@
    "status": "blocked"
   },
   "class:XCAM::CRemoteConsole": {
-   "notes": "4 of 7 done+committed; 3 blocked reaching through un-homed CStreamEngine to CPacketizer/CQOSController",
+   "notes": "4 of 7 done+committed; 3 blocked on un-homed CStreamEngine/CQOSController",
    "status": "blocked"
   },
   "class:XCAM::CRemoteConsoleList": {
@@ -63306,6 +63365,9 @@
   "class:rw::Xbox2NativeSystemAllocator": {
    "notes": "DoAllocate @0x82BBCA38 / DoFree @0x82BBCAE8 call X360 kernel XMemAlloc/XMemFree (no PC shim) with a page-attribute = dword_82181088[cntlzw(size)] rodata lookup table NOT in the dossier + un-homed RwMallocMemAlignedStub fn-ptrs (off_82F91A04). Cannot body without fabricating the page-attr table + XMem semantics. Deferred.",
    "status": "blocked"
+  },
+  "class:rw::audio::core::AiffWriter": {
+   "status": "done"
   },
   "class:rw::audio::core::AllPassFilter": {
    "notes": "ctor/ApplyFunc/SetGains + kernel verified: denormal-flush + y=base-g1*x (fnmsubs) + lowPass accumulate branch.",
