@@ -53934,6 +53934,10 @@
    "notes": "verify pass 3/3: GetName/OnActivate/Update debug component. gate x64 pass",
    "status": "done"
   },
+  "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingManager.cpp": {
+   "notes": "2 of 4 done+committed (Prepare/DetermineOutcome grounded); Update/UpdateScoring blocked on un-homed BrnGameState/ActiveRaceCar; also removed the pre-existing fabricated CheckVehicleForPowerPark free function",
+   "status": "blocked"
+  },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/TrafficCheck/BrnTrafficCheckManager.cpp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bug fixed inline (ParticleWaveForm NoiseTableBuild luRand&0xFFFF); 11 leaked .cpp:line citations scrubbed; 5 non-leaf keystones blocked-with-reason; combined wave-13 gate PASS.",
    "status": "done"
@@ -59162,6 +59166,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:CArrayLookahead": {
+   "notes": "7 of 9 done+committed in new MoviePlayer home; DetectDissolve/DetectEventInArray blocked on un-homed deps",
+   "status": "blocked"
+  },
   "class:CBaseEndianBuffer": {
    "notes": "verify pass 12/12: endian read/write buffer GetWord/AppendBytes/SeekTo + overflow enums. gate x64 pass",
    "status": "done"
@@ -59236,6 +59244,10 @@
   "class:CWMVMBMode": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
+  },
+  "class:CWMVideoPerceptionModel": {
+   "notes": "2 of 7 done+committed; 5 blocked on un-recovered VMX rodata tables",
+   "status": "blocked"
   },
   "class:CgsAttribSys": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; already-committed bodies confirmed; compiles clean.",
@@ -61956,6 +61968,10 @@
    "notes": "2 of 3 done+committed; reconciled the W23 CMassiveAdObject pin; 1 blocked on un-homed dep",
    "status": "blocked"
   },
+  "class:MassiveAdClient3::CMassiveAdObjectVideo": {
+   "notes": "2 of 3 done+committed; reconciled the CMassiveAdObject pin; GetBestImpression blocked",
+   "status": "blocked"
+  },
   "class:MassiveAdClient3::CMassiveAsset": {
    "notes": "9 of 12 done+committed in new Asset home + Record home; 3 blocked on un-homed deps",
    "status": "blocked"
@@ -62224,6 +62240,10 @@
   "class:Snd9::AemsPlayerInputAccessor": {
    "notes": "verified vs X360 asm; parity.",
    "status": "done"
+  },
+  "class:Snd9::AemsStandardSamplePlayer": {
+   "notes": "5 of 7 done+committed; GetOutputs + dtor blocked",
+   "status": "blocked"
   },
   "class:Snd9::Hal": {
    "status": "done"
@@ -62883,6 +62903,10 @@
   },
   "class:rw::audio::core::DecoderRegistry": {
    "status": "done"
+  },
+  "class:rw::audio::core::Delay": {
+   "notes": "8 of 9 done+committed in new audio-core plugins/Delay home (reuses DelayLine/DelayFilter/System); vector deleting destructor blocked on the TimerHandle teardown STUB (same as ReverbModel1)",
+   "status": "blocked"
   },
   "class:rw::audio::core::DelayFilter": {
    "status": "done"
