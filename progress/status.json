@@ -6837,6 +6837,9 @@
   "BrnGame::LoadingScreenRenderer::Construct": {
    "status": "reviewed"
   },
+  "BrnGame::LoadingScreenRenderer::Render": {
+   "status": "reviewed"
+  },
   "BrnGame::LoadingScreenRenderer::RenderBackground": {
    "status": "reviewed"
   },
@@ -22593,6 +22596,12 @@
   "BrnRendererModule::RenderAssert": {
    "status": "reviewed"
   },
+  "BrnRendererModule::RenderLetterBoxBars": {
+   "status": "reviewed"
+  },
+  "BrnRendererModule::RenderThreeThreadMonitors": {
+   "status": "reviewed"
+  },
   "BrnRendererModule::ResolveMSAA": {
    "status": "reviewed"
   },
@@ -31432,31 +31441,31 @@
    "status": "reviewed"
   },
   "CAltTablesEncoder::CAltTablesEncoder": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CAltTablesEncoder::allocateSymbolArray": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CAltTablesEncoder::checkFrame": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CAltTablesEncoder::checkInRTCMV": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CAltTablesEncoder::clear": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CAltTablesEncoder::encodeFrame": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CAltTablesEncoder::encodeSymbol": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CAltTablesEncoder::updateHistory": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CAltTablesEncoder::~CAltTablesEncoder": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "CArgumentList::AddArgument": {
    "status": "reviewed"
@@ -45877,13 +45886,13 @@
    "status": "reviewed"
   },
   "Snd::CMTBLKDecf::Decode": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "Snd::CMTBLKDecf::Feed": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "Snd::CMTBLKDecf::initmut": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "Snd::CShortDestDecoder::`vector deleting destructor'": {
    "status": "reviewed"
@@ -46053,6 +46062,12 @@
   "WorldModule::BridgePhysicsToOutput": {
    "status": "reviewed"
   },
+  "WorldModule::BridgePropModuleToPhysicsModule_Prepare": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgePropModuleToSceneModule_Prepare": {
+   "status": "reviewed"
+  },
   "WorldModule::BridgePropModuleToTrafficModule_PrePhysics": {
    "status": "reviewed"
   },
@@ -46132,6 +46147,9 @@
    "status": "reviewed"
   },
   "WorldModule::BridgeTrafficModuleToSceneModule_PostScene": {
+   "status": "reviewed"
+  },
+  "WorldModule::BridgeTrafficModuleToSceneModule_Prepare": {
    "status": "reviewed"
   },
   "WorldModule::BridgeTrafficResourceRequestsToOutput": {
@@ -46653,6 +46671,18 @@
   "XGRAPHICS::TempValue::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "XGRAPHICS::VRegTable::Create": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegTable::Find": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegTable::FindOrCreate": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegTable::RemoveConstant": {
+   "status": "reviewed"
+  },
   "[100],20,int>::AllocateObject": {
    "status": "reviewed"
   },
@@ -46951,6 +46981,24 @@
    "status": "reviewed"
   },
   "cParticleBucket::AllocateParticle": {
+   "status": "reviewed"
+  },
+  "cParticleBucketManager::AllocateBucket": {
+   "status": "reviewed"
+  },
+  "cParticleBucketManager::AppDeInit": {
+   "status": "reviewed"
+  },
+  "cParticleBucketManager::AppInit": {
+   "status": "reviewed"
+  },
+  "cParticleBucketManager::BucketAlloc": {
+   "status": "reviewed"
+  },
+  "cParticleBucketManager::Free": {
+   "status": "reviewed"
+  },
+  "cParticleBucketManager::VectorBucketAlloc": {
    "status": "reviewed"
   },
   "cParticleDescriptor::Delocate": {
@@ -50568,7 +50616,7 @@
    "status": "blocked"
   },
   "GameShared/GameClasses/Sound/Playback/Splicer/internal/SpliceObjects.cpp": {
-   "notes": "11 of 12 done+committed; 1 blocked on un-homed dep",
+   "notes": "11 of 12 done+committed; SpliceSample::Update source-lookup now groundable but voice-start branch irreducibly blocked on rodata dbl_82001CA8 (no recovered value in any dump)",
    "status": "blocked"
   },
   "GameShared/GameClasses/Sound/Playback/aems/CgsAemsInterfaceImplementation.h": {
@@ -53836,6 +53884,9 @@
   "GameSource/Unity/../World/Bridges/WorldBridgeEntityModulesToOutput.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../World/Bridges/WorldBridgeEntityModulesToScene.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../World/Bridges/WorldBridgeInputToEntityModules.cpp": {
    "notes": "instruction-level verify vs b7_4 asm: call order, all 8 per-ARCI offsets+assert lines, case-39 asm-pinned (pseudo wrong), case-23 payload bits, camera/hard-stop constants, tail f32[8]*f32[7], per-iter queue re-fetch; Check fn matches PS3 0x51E15C; nits: undersized NOMINAL payload slices behind FLAG'd casts (prioritize UpdateInputBuffer payload TUs), memcpy-image placeholder merges, raw timer indices",
    "status": "done"
@@ -54152,6 +54203,9 @@
    "notes": "Wave43: 1/1 but ODR-redefines the committed rw:: resource family (rwcore_structs.h, 153 includers) + a <6>-pool that contradicts the committed <5> X360 form (PS3 DWARF version-drift). Discarded. GROW rwcore_structs.h if a resource-target accessor is genuinely needed",
    "status": "blocked"
   },
+  "SDKs/EATech/include/ps3/gcm/renderengine/device.h": {
+   "status": "done"
+  },
   "SDKs/EATech/include/ps3/gcm/renderengine/programbuffer.h": {
    "notes": "YELLOW is benign: call_count matches exactly (14/14), loop_count exact (2/2). Missing named-callee hits are all via placement-new syntax (debrisparams/surfacelist/ParticleModule) or the base-class ctor chain (RWMutex x2) \u2014 both produce real call sites counted in call_count. return_count delta of 1 is the X360 fastcall convention returning 'this' via register; C++ constructors have no explicit return statement. Loop faithfully reproduces the 8-slot (i=7..0) debris generator init and the 4-slot (j=3..0) cluster init. Opaque body storage (mOpaqueBody[185400]) used because sizeof(ParticleModule) is not yet resolved.",
    "status": "done"
@@ -54220,7 +54274,7 @@
    "status": "done"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp": {
-   "notes": "5 of 15 done+committed (export-policy CGS_ASSERT guards, verbatim rodata); 10 blocked on un-homed AttribSys templates ScanForValidKey/lower_bound/CollectGarbageBag + opaque DatabasePrivate offsets",
+   "notes": "6 of 15 done+committed (CollectGarbage finished now DatabasePrivate is homed); 9 still blocked on un-homed AttribSys templates ScanForValidKey/lower_bound/QueueForDelete",
    "status": "blocked"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribinstance.cpp": {
@@ -54348,8 +54402,7 @@
    "status": "done"
   },
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleBucketManager.cpp": {
-   "notes": "6 of 7 done+committed in new Lion home; 1 blocked on un-homed dep",
-   "status": "blocked"
+   "status": "done"
   },
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleDescriptor.cpp": {
    "status": "done"
@@ -55683,6 +55736,10 @@
   "class:BrnGameState": {
    "notes": "All 20 catch-all funcs bodied + adversarially verified across 2 rounds (container instances store-for-store; the 7 buffer accessors byte-exact offsets + correct read/write lock bits vs asm; RichPresence/GetGameStateToGuiInterface parity). All home grows additive (carved from opaque storage, committed offsets + 8 static_asserts preserved, gates clean). 5 interface member types modeled named-opaque (accessors faithfully return &member; DWARF identities noted for their own TUs). No fabrication (un-attested fields left opaque). Member-by-name throughout.",
    "status": "done"
+  },
+  "class:BrnGameState::AchievementManagerX360": {
+   "notes": "4 of 7 done+committed in new home + CgsXOverlappedX360 helper; Update/GetAchievementsFromX360Api/WriteAchievements blocked on Xbox-live intrinsics",
+   "status": "blocked"
   },
   "class:BrnGameState::BaseOnlineModeScoring": {
    "status": "done"
@@ -58898,7 +58955,7 @@
    "status": "done"
   },
   "class:BrnWorld::PropCellManager": {
-   "notes": "6 of 8 done+committed in new BrnPropCellManager home; 2 funcs blocked on un-homed collaborators",
+   "notes": "7 of 8 done+committed (ClearPropsNearPosition finished this round); 1 still blocked on un-homed collaborator",
    "status": "blocked"
   },
   "class:BrnWorld::PropEntityID": {
@@ -59196,6 +59253,9 @@
   },
   "class:BrnWorldIO::UpdateOutputBuffer": {
    "notes": "46/46 funcs; gate PASS incl. cascade consumers; parity RED benign (inlined assert machinery + committed-generic queue Appends invisible to the regex); layout DWARF-frozen, offsets asm-attested",
+   "status": "done"
+  },
+  "class:CAltTablesEncoder": {
    "status": "done"
   },
   "class:CArgumentList": {
@@ -62101,7 +62161,7 @@
    "status": "done"
   },
   "class:NFSMixMapState": {
-   "notes": "14 of 16 done+committed (6 new + 8 already-committed); 2 blocked on un-homed deps",
+   "notes": "15 of 16 done+committed (CreateMixCtls finished this round); 1 still blocked on un-homed dep",
    "status": "blocked"
   },
   "class:NFSMixShape": {
@@ -62290,6 +62350,9 @@
   },
   "class:Snd9::IAemsSamplePlayerFactory": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:Snd::CMTBLKDecf": {
    "status": "done"
   },
   "class:Snd::CMpegBase": {
@@ -62516,8 +62579,7 @@
    "status": "blocked"
   },
   "class:XGRAPHICS::VRegTable": {
-   "notes": "3 of 4 done+committed; RemoveConstant blocked on un-homed IRLoadConst +0x3A0 layout",
-   "status": "blocked"
+   "status": "done"
   },
   "class:[100],20,int>": {
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
@@ -62968,6 +63030,10 @@
   },
   "class:rw::audio::core::Encoder": {
    "notes": "Audio-codec encoder base (hard-rule block list). Release @0x82B6D048 is a vtable thunk into the concrete (blocked) XAS/EALayer3 codec DoRelease; whole-blocked per the encoder naming + no-partial-TU rule (GetDataRateOverhead getter alone is trivial but the class thunks into blocked DSP). Deferred.",
+   "status": "blocked"
+  },
+  "class:rw::audio::core::FastFirEngine": {
+   "notes": "6 of 9 done+committed (ctor/dtor/Reset/SetChannels/Configure/Filter store-for-store); MultiplyAccumulateComplex VMX vperm kernel + LoadDistributionCalc garbled-decompiler + EstimateLoad un-attested rodata blocked",
    "status": "blocked"
   },
   "class:rw::audio::core::Fir64": {
