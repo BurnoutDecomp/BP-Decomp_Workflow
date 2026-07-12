@@ -972,6 +972,21 @@
   "AptMathObj::~AptMathObj": {
    "status": "reviewed"
   },
+  "AptMovie::DoTemporaryFrameControls": {
+   "status": "reviewed"
+  },
+  "AptMovie::doFrameControls": {
+   "status": "reviewed"
+  },
+  "AptMovie::queueFrameActions": {
+   "status": "reviewed"
+  },
+  "AptMovie::resolve": {
+   "status": "reviewed"
+  },
+  "AptMovie::unresolve": {
+   "status": "reviewed"
+  },
   "AptMovieClip::AptMovieClip": {
    "status": "reviewed"
   },
@@ -13513,6 +13528,27 @@
    "status": "reviewed"
   },
   "BrnGui::NorthIndicatorComponent::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::OdometerComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::OdometerComponent::HandleDriveThruDiscovered": {
+   "status": "reviewed"
+  },
+  "BrnGui::OdometerComponent::HandleJunctionChange": {
+   "status": "reviewed"
+  },
+  "BrnGui::OdometerComponent::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::OdometerComponent::TransIn": {
+   "status": "reviewed"
+  },
+  "BrnGui::OdometerComponent::TransOutActiveText": {
+   "status": "reviewed"
+  },
+  "BrnGui::OdometerComponent::Update": {
    "status": "reviewed"
   },
   "BrnGui::OfflineRivalShutdown::GetResourcesToLoad": {
@@ -46126,25 +46162,25 @@
    "status": "reviewed"
   },
   "WMSDKRESIZER::BMPSize": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "WMSDKRESIZER::CopyBuffer2D": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "WMSDKRESIZER::Reset": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "WMSDKRESIZER::allocBuffer": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "WMSDKRESIZER::getType": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "WMSDKRESIZER::putField": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "WMSDKRESIZER::~WMSDKRESIZER": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "WorldModule::BridgeAIModuleToOutput": {
    "status": "reviewed"
@@ -47806,6 +47842,18 @@
    "status": "reviewed"
   },
   "rw::audio::core::CompressorLimiter1::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CpuLoadBalancer::Balance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CpuLoadBalancer::FindLowestPriorityVoice": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CpuLoadBalancer::Init": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CpuLoadBalancer::Reset": {
    "status": "reviewed"
   },
   "rw::audio::core::Decoder::AdvanceDecodeState": {
@@ -51832,6 +51880,9 @@
    "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
    "status": "done"
   },
+  "GameSource/Gui/Flow/HUD/Components/BrnOdometerComponent.cpp": {
+   "status": "done"
+  },
   "GameSource/Gui/Flow/HUD/Components/BrnOnlineTimeoutTimerComponent.cpp": {
    "status": "done"
   },
@@ -52136,6 +52187,10 @@
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectMain.cpp": {
    "notes": "8 of 16 done+committed groundable UI helpers; 8 screen-flow lifecycle funcs OnEnter/OnLeave/ExitCarSelection/Update/HandleLaunched/HandleLeftGame/GetResourcesToLoad/ProcessIncoming blocked on un-homed BrnScreenState flow-state collaborators",
+   "status": "blocked"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnCarSelectOnlineEnd.cpp": {
+   "notes": "3 of 5 done+committed; 2 blocked on un-recovered CarSelectOnlinePlayerList mutators",
    "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectOnlineEnd.h": {
@@ -54936,6 +54991,9 @@
    "notes": "apt-100 wave: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev 2cb6af2.",
    "status": "done"
   },
+  "class:AptMovie": {
+   "status": "done"
+  },
   "class:AptMovieClip": {
    "notes": "apt-100 wave C: reconstructed by named members vs X360 ARTIST; fresh-eyes verified + cl /c gate. Committed b5-decomp dev ed85819.",
    "status": "done"
@@ -56458,6 +56516,10 @@
   "class:BrnGui::CrashNavColourCalibrate": {
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
    "status": "done"
+  },
+  "class:BrnGui::CrashNavEnterOnlineX360": {
+   "notes": "3 of 4 done+committed; 1 blocked on un-homed flow-state collaborator",
+   "status": "blocked"
   },
   "class:BrnGui::CrashNavIconRenderer": {
    "notes": "fresh-eyes review: clean members, loop count correct; offset-hack version replaced",
@@ -61985,6 +62047,10 @@
   "class:D3D::CBlocker": {
    "status": "done"
   },
+  "class:D3D::CCapture": {
+   "notes": "7 of 11 done+committed; 4 blocked on rodata opcode tables + un-homed HashMap methods + CCapture vtable slots",
+   "status": "blocked"
+  },
   "class:D3D::CCapture::HashMap": {
    "status": "done"
   },
@@ -62673,6 +62739,9 @@
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
   },
+  "class:WMSDKRESIZER": {
+   "status": "done"
+  },
   "class:XAUDIO::CBatchAllocatedObject": {
    "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
@@ -62777,6 +62846,10 @@
    "notes": "7/14 committed 59967ede (bandwidth calc/DoWork/QOS feedback/target bitrate+framerate/SumSendSize/ForceKeyFrame). 7 rate-actuation funcs blocked: reach through un-homed XCAM::CStreamEngine into embedded CEncoder(+0x44)/CPacketizer(+0x1BC)/CRemoteConsoleList(+0x268) + un-recovered frame-rate ladder rodata (unk_8210BCF4..).",
    "status": "blocked"
   },
+  "class:XCAM::CRemoteConsole": {
+   "notes": "4 of 7 done+committed; 3 blocked reaching through un-homed CStreamEngine to CPacketizer/CQOSController",
+   "status": "blocked"
+  },
   "class:XCAM::CRemoteConsoleList": {
    "status": "done"
   },
@@ -62809,6 +62882,14 @@
   "class:XGRAPHICS::DListNode": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
+  },
+  "class:XGRAPHICS::IRAlu": {
+   "notes": "4 of 7 done+committed; 3 blocked on un-homed foreign microcode context (raw +0xAB0 CFG hop)",
+   "status": "blocked"
+  },
+  "class:XGRAPHICS::IRExport": {
+   "notes": "2 of 4 done+committed; 2 blocked on un-attested vtable slots / un-homed deps",
+   "status": "blocked"
   },
   "class:XGRAPHICS::IRFetch": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
@@ -63260,6 +63341,9 @@
   },
   "class:rw::audio::core::CompressorLimiter1": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/vendor/renderware/src/rw/audio/core/CompressorLimiter1.cpp. Reconciled.",
+   "status": "done"
+  },
+  "class:rw::audio::core::CpuLoadBalancer": {
    "status": "done"
   },
   "class:rw::audio::core::Decoder": {
