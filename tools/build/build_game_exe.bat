@@ -519,6 +519,17 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\Utils\BrnAbstractPool.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnVehicleRef.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiProfile.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadPS3.cpp"
+  rem ---- ProfileManager link closure (2026-07-12): the committed save/load + profile ----
+  rem ---- validation TUs the real BrnGui::ProfileManager references.                 ----
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadX360.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoad.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuideIntegration.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModuleIO_OutputBuffer.cpp"
+  echo "%SRC%\GameSource\Gui\SaveLoad\BrnGuiSaveLoadProfile.cpp"
+  echo "%SRC%\GameSource\Gui\SaveLoad\BrnGuiSaveLoadProfileDLC1.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiOptionsDataProfileDLC1.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiEventTypeDefs.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBoostBarRenderer.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer.cpp"
