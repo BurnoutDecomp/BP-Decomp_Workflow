@@ -657,6 +657,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnIdleHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnHudStatesLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextField.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnButtonIcon.cpp"
   rem The real title-menu frontend (replaces the retired MenuComponent facade).
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnSelectable.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnSelectableGroup.cpp"
