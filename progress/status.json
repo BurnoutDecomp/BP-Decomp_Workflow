@@ -62437,6 +62437,10 @@
   "class:XAUDIO::CEffectManager": {
    "status": "done"
   },
+  "class:XAUDIO::CEngine": {
+   "notes": "0 of 18 - layout LEVERAGE HOME only (new XAudioEngine.h/.cpp: full 0x174 layout + gpEngine singleton off_832BB944, named members downstream reads by offset); all 18 bodies blocked on Xbox Ke/Ex/Ob kernel threading + spinlock/IRQL + r13 KPCR reads + un-recovered module rodata",
+   "status": "blocked"
+  },
   "class:XAUDIO::CFrameBuffer": {
    "status": "done"
   },
@@ -62457,11 +62461,11 @@
    "status": "done"
   },
   "class:XAUDIO::CReverbEffect": {
-   "notes": "1 of 9 done+committed; 8 blocked on un-reconstructed CEffect/CVoice vtable slot orders (same pattern as CRoutedVoice)",
+   "notes": "1 of 9 done+committed; 8 still blocked on the un-recovered CEffect/CVoice vtable slot order",
    "status": "blocked"
   },
   "class:XAUDIO::CRoutedVoice": {
-   "notes": "2 of 11 done+committed (SetVoiceOutput + operator delete) in new XAudioRoutedVoice home; 9 blocked on un-homed XAUDIO::CEngine singleton off_832BB944 + deliberately-deferred CVoice/CEffect vtable slot orders + Xbox kernel spinlock/IRQL",
+   "notes": "2 of 11 done+committed; 9 still blocked on the un-recovered CVoice/CEffect vtable slot order (ctor-seating asm + rodata vtable blob in no dossier) + Xbox kernel",
    "status": "blocked"
   },
   "class:XAUDIO::CSourceEffect": {
@@ -62471,7 +62475,7 @@
    "status": "done"
   },
   "class:XAUDIO::CVoice": {
-   "notes": "7 of 22 done+committed: the self-contained accessors GetVoiceType/Context/Format SetVoiceFormat GetVoiceState Get/SetEffectState in new XAudioVoice.h/.cpp. 15 blocked on un-homed XAudio internals: ref-counted allocator vtable, CEngine global off_832BB944, XAudioEffectManager and XAudioFrameBuffer helpers, per-effect foreign vtable, Xbox kernel spinlock/IRQL primitives, un-recovered CEngine effect-transition table",
+   "notes": "14 of 22 done+committed (+7 this wave: ctor/dtor/CreateEffect/Get-SetEffectParam/ProcessEffects/deleting-dtor, unblocked by the CEngine layout + CEffectManager); 8 still blocked on the un-recovered CVoice vtable slot order + Xbox kernel spinlock/IRQL",
    "status": "blocked"
   },
   "class:XAUDIO::CXMemMemoryManager": {
