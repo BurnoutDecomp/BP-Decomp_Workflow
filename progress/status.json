@@ -48150,7 +48150,37 @@
   "rw::audio::core::PackedTableReader::UnpackNextRow": {
    "status": "reviewed"
   },
+  "rw::audio::core::Pan2D1::ComputeLevels": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::ComputePerimeterTerm": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::EmitterConfig": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::GetPlugInDescRunTime": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::PanOutput": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::RampPanOutput": {
+   "status": "reviewed"
+  },
   "rw::audio::core::Pan2D1::Speaker::Set": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::SpeakerConfig": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Pan2D1::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "rw::audio::core::Pan2D::ComputeLevels": {
@@ -51907,7 +51937,7 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/HUD/Components/BrnCompassComponent.cpp": {
-   "notes": "4 of 8 done+committed; 4 blocked on un-homed HUD collaborators",
+   "notes": "5/8: ShowPositionOnCompass (VMX permute/const rodata + XMVectorACos), FormatDirectionLetters (per-language rodata off_82F248B8/off_82F24918), Update (un-homed GuiTracker accessors)",
    "status": "blocked"
   },
   "GameSource/Gui/Flow/HUD/Components/BrnFriendsList.cpp": {
@@ -52247,6 +52277,10 @@
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectOnlineEnd.h": {
    "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnCarSelectUnlock.cpp": {
+   "notes": "6/7: UpdateRunning reaches un-homed flow collaborators; maResourcesToLoad/.data ids un-recovered (flagged 0u)",
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectVehicle.cpp": {
    "status": "done"
@@ -62439,8 +62473,8 @@
    "notes": "Initialize verified (slot guard, base ctor, vftable, flag).",
    "status": "done"
   },
-  "class:MassiveAdClient3::CMassiveAdObjectAudioDynamic": {
-   "notes": "8 of 11 done+committed; 3 blocked on un-homed deps",
+  "class:MassiveAdClient3::CMassiveAdObjectModelDynamic": {
+   "notes": "8/11: CreateSlaveM/GetNextAssetID/Initialize need un-homed CMassiveAdObjectModel slave (off_82187214) + base AssetIDAdd + base fields +0x18/0x38/0x4C/0x50/0x58/0x5C + CMassiveClientCore",
    "status": "blocked"
   },
   "class:MassiveAdClient3::CMassiveAdObjectSubscriber": {
@@ -62947,7 +62981,7 @@
    "status": "blocked"
   },
   "class:XGRAPHICS::IRExport": {
-   "notes": "2 of 4 done+committed; 2 blocked on un-attested vtable slots / un-homed deps",
+   "notes": "2/4 unchanged: 2 funcs on un-attested vtable slots / un-recovered rodata",
    "status": "blocked"
   },
   "class:XGRAPHICS::IRFetch": {
@@ -63500,6 +63534,9 @@
   "class:rw::audio::core::Pan2D": {
    "status": "done"
   },
+  "class:rw::audio::core::Pan2D1": {
+   "status": "done"
+  },
   "class:rw::audio::core::Pan2D1::Speaker": {
    "notes": "Adversarial verify PARITY: store-for-store vs X360 (BitGetter MSB bit-read, EaLayer thunks, BrnSound RTTI/accessor/ctor hooks, DynamicPropByCache 5s lifetime cull); ledgers reconciled; committed CgsGui::State / rw::audio / CgsSound::Logic bases by name; leaked-source disclaimers neutralized; wave-20 gate PASS. (RequestedResource,124> blocked: needs LinkedListHelper retype.)",
    "status": "done"
@@ -63625,7 +63662,7 @@
    "status": "done"
   },
   "class:rw::collision::CylinderVolume": {
-   "notes": "4 of 7 done+committed; 3 blocked on un-homed sibling Volume types / VMX rodata",
+   "notes": "4/7 unchanged: 3 funcs need un-recovered VMX permute rodata + sibling intersection helpers still un-homed",
    "status": "blocked"
   },
   "class:rw::collision::Feature": {
