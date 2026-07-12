@@ -48195,6 +48195,27 @@
   "rw::audio::core::SeekTableParser::ParseHeader0": {
    "status": "reviewed"
   },
+  "rw::audio::core::Snd9Service::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Snd9Service::GetPlugInDescRunTime": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Snd9Service::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Snd9Service::ReleaseEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Snd9Service::RwacTimerClient": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Snd9Service::UpdateSnd9SampleRate": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Snd9Service::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::audio::core::SndPlayer1_CgsStreamMod::AdvanceCurrentRequest": {
    "status": "reviewed"
   },
@@ -54447,7 +54468,7 @@
    "status": "done"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp": {
-   "notes": "6 of 15 done+committed (CollectGarbage finished now DatabasePrivate is homed); 9 still blocked on un-homed AttribSys templates ScanForValidKey/lower_bound/QueueForDelete",
+   "notes": "6 of 15 done+committed; 9 blocked on un-homed AttribSys templates (eastl not recoverable this pass) + opaque offsets",
    "status": "blocked"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribinstance.cpp": {
@@ -54534,6 +54555,10 @@
   },
   "SDKs/Packages/Lion/Final/eauk_common/Maths/C/quat_c.inl": {
    "notes": "cParticleLocator::Update @0x829098D0 is BLOCKED: (1) MIS-BUCKETED foreign class -- TU id quat_c.inl houses a cParticleLocator fn but ALL DWARF hints+the cQuat callee home are cQuat (CgsQuat.cpp); cParticleLocator is only forward-declared (LionBindings.h:16, owned by the Lion particle subsystem). (2) VMX/SIMD: asm uses lvx128 v0,r4,0x30 + stvx128 v0,r11,r31 (128-bit VMX vector load/store, rendered __asm{} in pseudocode). (3) UN-HOMED opaque aggregate: cParticleLocator has no class definition/layout -- strided 16*(idx+N) arrays at +0x40/+0x9C/+0xA0 cannot be member-by-name accessed and there is no home to grow additively.",
+   "status": "blocked"
+  },
+  "SDKs/Packages/Lion/Final/eauk_common/Maths/PS3/vector_ps3.inl": {
+   "notes": "2 of 7 done+committed (ParticleBehaviour/ParticleLocator Init); 5 blocked on un-homed deps",
    "status": "blocked"
   },
   "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/Source/ParticleRender/ParticleRender.cpp": {
@@ -59040,7 +59065,7 @@
    "status": "done"
   },
   "class:BrnWorld::EnvironmentSettings::EnvironmentManager": {
-   "notes": "2 of 8 done+committed; 5 still blocked on un-homed deps",
+   "notes": "5 of 8 done+committed (PerformBlend/SetupUpdateFromToolBlend/ResourcePointerAssertThingy finished; homed BlendFrame + Scattering/Lighting/Clouds targets at asm offsets); 3 still blocked on un-homed deps",
    "status": "blocked"
   },
   "class:BrnWorld::EnvironmentSettings::KeyframeResourceType": {
@@ -60976,6 +61001,10 @@
   },
   "class:CgsSceneManager::CgsCollision": {
    "notes": "3/7 committed 62174655 (BaseCollisionGenerator ext + CollisionResult/JobDescription). FillTriangleCache/LineWithPolySoup blocked: un-homed CgsGeometric/PolygonSoup query collaborators + VMX.",
+   "status": "blocked"
+  },
+  "class:CgsSceneManager::CgsCollision::BaseCollisionGenerator": {
+   "notes": "2 of 15 done+committed; 13 blocked on un-homed collision collaborators",
    "status": "blocked"
   },
   "class:CgsSceneManager::CgsCollision::CollisionResultList": {
@@ -63314,6 +63343,9 @@
    "notes": "9/10 committed 1a3e2df5 (CreateInstance/GetSize/Process/DisconnectImmediate/ConnectByPointer/EventEvent/ReleaseEvent/dtor). ConnectByNameHandler 0x82B9FF80 blocked: un-homed by-name SubMix registry statics (off_8327EE68 list head, dword_8327EE00 iterator) + un-groundable list-link/name member offsets.",
    "status": "blocked"
   },
+  "class:rw::audio::core::Snd9Service": {
+   "status": "done"
+  },
   "class:rw::audio::core::SubMixConnector": {
    "notes": "rw audio SubMixConnector; parity/low; wave6; verifier reviewed; gate pass.",
    "status": "done"
@@ -63381,7 +63413,7 @@
    "status": "done"
   },
   "class:rw::collision::CylinderVolume": {
-   "notes": "4 of 7 done+committed in new rw/collision home; 3 blocked (no-fabrication, mirrors TriangleVolume pattern)",
+   "notes": "4 of 7 done+committed; 3 blocked on un-homed sibling Volume types / VMX rodata",
    "status": "blocked"
   },
   "class:rw::collision::Feature": {
