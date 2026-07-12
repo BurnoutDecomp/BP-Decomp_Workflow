@@ -38,6 +38,8 @@ public static class BootTestNative
     [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr hwnd, IntPtr hdc, uint flags);
     [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr hwnd, out RECT rect);
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hwnd);
+    [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
     [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
     public struct RECT { public int Left, Top, Right, Bottom; }
 }
@@ -63,12 +65,26 @@ function Take-Shot([System.Diagnostics.Process]$proc, [string]$name) {
 
 function Send-Key([System.Diagnostics.Process]$proc, [byte]$vk, [string]$label) {
     $proc.Refresh()
-    if ($proc.MainWindowHandle -ne [IntPtr]::Zero) {
-        [BootTestNative]::SetForegroundWindow($proc.MainWindowHandle) | Out-Null
+    $hwnd = $proc.MainWindowHandle
+    if ($hwnd -ne [IntPtr]::Zero) {
+        # The game's input leaf gates GetAsyncKeyState on GetForegroundWindow(), and a
+        # background script cannot always steal foreground (Windows foreground lock).
+        # The ALT-tap unlocks SetForegroundWindow; verify + retry until it sticks.
+        for ($try = 0; $try -lt 5; $try++) {
+            if ([BootTestNative]::GetForegroundWindow() -eq $hwnd) { break }
+            [BootTestNative]::keybd_event(0x12, 0, 0, [UIntPtr]::Zero)      # ALT down
+            [BootTestNative]::SetForegroundWindow($hwnd) | Out-Null
+            [BootTestNative]::keybd_event(0x12, 0, 2, [UIntPtr]::Zero)      # ALT up
+            [BootTestNative]::ShowWindow($hwnd, 5) | Out-Null               # SW_SHOW
+            Start-Sleep -Milliseconds 200
+        }
+        if ([BootTestNative]::GetForegroundWindow() -ne $hwnd) {
+            Write-Host "  [key] $label -- WARNING: window not foreground (input may be gated)"
+        }
         Start-Sleep -Milliseconds 150
     }
     [BootTestNative]::keybd_event($vk, 0, 0, [UIntPtr]::Zero)
-    Start-Sleep -Milliseconds 80
+    Start-Sleep -Milliseconds 250
     [BootTestNative]::keybd_event($vk, 0, 2, [UIntPtr]::Zero)   # KEYEVENTF_KEYUP
     Write-Host "  [key] $label"
     Start-Sleep -Milliseconds 400
@@ -106,6 +122,8 @@ Send-Key $proc $VK_END "END (assert release)"
 if (Wait-ForLog $proc "\[BootVideos\] play" 60 "boot videos") {
     Take-Shot $proc "boot_10_videos"
 }
+# The overlay flow FSM loads during boot (RunFsm{BrnOverlay -> OVERLAY} at the GUIMODULE stage).
+Wait-ForLog $proc "BRNOVERLAY\.BUNDLE' -> loaded" 30 "overlay FSM loaded" | Out-Null
 if (Wait-ForLog $proc "PlayMovie: consume channel-41 'Title_Screen02'" 90 "title requested") {
     # Give the title time to compose + fade in, then shoot it.
     Wait-ForLog $proc "resources-ready \(567\)" 30 "title composed" | Out-Null
@@ -135,9 +153,22 @@ if (Wait-ForLog $proc "PlayMovie: consume channel-41 'Title_Screen02'" 90 "title
             Start-Sleep -Seconds 8
             Take-Shot $proc "boot_23_compload_intro"
             Send-Key $proc $VK_RETURN "ENTER (skip intro)"
-            Wait-ForLog $proc "BRNFBFSM|FBurnMainHudState|un-reconstructed state" 60 "in-game handoff" | Out-Null
-            Start-Sleep -Seconds 5
-            Take-Shot $proc "boot_24_ingame"
+            # Stage 5 posts BrnScreenFsm@LOADING (SCREEN flow) + BrnFBFsm (HUD flow).
+            if (Wait-ForLog $proc "BRNSCREENFSM\.BUNDLE' -> loaded" 60 "SCREEN FSM loaded") {
+                Wait-ForLog $proc "BRNFBFSM\.BUNDLE' -> loaded" 30 "freeburn HUD FSM loaded" | Out-Null
+                Start-Sleep -Seconds 5
+                Take-Shot $proc "boot_24_screen_loading"
+                # ScreenLoading waits on the world-load-complete event (137); if the game
+                # side posts it, the FSM moves LOADING -> INGAME. Give it a window, then
+                # try the pause path (ESC -> InGame::HandleControllerInput).
+                Start-Sleep -Seconds 8
+                Take-Shot $proc "boot_25_ingame"
+                Send-Key $proc 0x1B "ESC (pause probe)"
+                Start-Sleep -Seconds 3
+                Take-Shot $proc "boot_26_pause_probe"
+            } else {
+                Take-Shot $proc "boot_24_stuck_handoff"
+            }
         } else {
             Take-Shot $proc "boot_23_stuck_profile"
         }

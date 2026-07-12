@@ -15,6 +15,22 @@ tables with NATURAL C packing instead:
   * DefineFunction2 argtabs  — engine (XB1 case-142): stride-16 {u32 reg; u64 name@+8};
                                emitter: natural {u32 reg; u64 name@align8(+4)},
                                strides alternate 12/16 with the running alignment.
+  * frame command ARRAY base — the emitter records the array pointer from the
+                               PRE-alignment write cursor, then 8-aligns before
+                               emitting the u64 slots: when the cursor was 4-mod-8
+                               the pointer is 4 short of the real array (a zero pad
+                               dword sits at the pointed-to spot) and every stride-8
+                               slot read straddles two slots (<low dword of a
+                               slot> << 32 -> implausible -> "all NULL commands").
+                               Diagnosed 2026-07-12 from SAVELOADCOMPONENT root f0's
+                               18 NULL slots vs the X360 original (18 real commands,
+                               all present and intact on PC at pointer+4); 15 arrays
+                               across 14 bundles fleet-wide, always frame 0 — the
+                               initial scene placement never ran in those movies.
+                               Fix = patch the frame record's pointer slot to +4:
+                               pure pointer patch, the slots need no re-emission
+                               (the ordinary record passes then finally REACH those
+                               commands and normalize any packed ones among them).
 
 THE OLD SCRIPT'S DAMAGE (why this rebuild exists, diagnosed 2026-07-09):
 apt8_fix_df2_argtab.py assumed the argtab was flat stride-16 {reg@0, name-u32@+4} and
@@ -73,7 +89,7 @@ class ResourceRepair(object):
         self.appended = bytearray()
         self.patches = []                        # (abs u64 slot, new chunk-rel value)
         self.n_frames = self.n_cmds = self.n_argtabs = self.n_dense = 0
-        self.n_clips = 0
+        self.n_clips = self.n_abase = 0
 
     def ok(self):
         return bytes(self.d[self.ab:self.ab + 14]).startswith(b'Apt Data:1:7:8')
@@ -117,6 +133,23 @@ class ResourceRepair(object):
                         and self.au32(v + 8) == 0x09876543:
                     out.append(v)
         return out
+
+    # ---- misaligned command-array base pointers ----------------------------
+    def abase_fixed(self, cmds, cnt):
+        """The off-by-4 command-ARRAY pointer (see the bug-family note above):
+        pointer 4-mod-8 AND a zero pad dword at the pointed-to spot AND every
+        u64 slot at +4 plausible -> the true array starts at +4. Returns the
+        corrected chunk-relative pointer (or the input unchanged). Idempotent:
+        a patched pointer is 8-aligned and never re-fires the detection."""
+        if not (0 < cnt <= 512 and 0 < cmds < self.asz):
+            return cmds
+        if (self.ab + cmds) % 8 != 4 or rd32(self.d, self.ab + cmds) != 0:
+            return cmds
+        for i in range(cnt):
+            v = rd64(self.d, self.ab + cmds + 4 + 8 * i)
+            if not (0 < v < self.asz):
+                return cmds
+        return cmds + 4
 
     # ---- frame command records -------------------------------------------
     def fix_command_array(self, cmds, cnt):
@@ -244,7 +277,19 @@ class ResourceRepair(object):
             if (self.ab + fro) % 8 == 0:
                 for fi in range(fc):
                     rec = fro + 16 * fi
-                    self.fix_command_array(self.au64(rec + 8), rd32(self.d, self.ab + rec))
+                    cnt = rd32(self.d, self.ab + rec)
+                    cmds = self.au64(rec + 8)
+                    fixed = self.abase_fixed(cmds, cnt)
+                    if fixed != cmds:
+                        # the movie walk visits the root twice (it is also in
+                        # its own character table) — count each slot once
+                        patch = (self.ab + rec + 8, fixed)
+                        if patch not in self.patches:
+                            self.patches.append(patch)
+                            self.n_abase += 1
+                            self.log('  movie@+%#x f%d: command-array base +%#x -> +%#x'
+                                     % (ch, fi, cmds, fixed))
+                    self.fix_command_array(fixed, cnt)
                 continue
             # packed table: {u32 count; u64 cmds@align8(+4)}, strides 12/16
             recs = []
@@ -263,6 +308,15 @@ class ResourceRepair(object):
                 self.log('  movie@+%#x fc=%d — packed frame decode implausible, skipped'
                          % (ch, fc))
                 continue
+            fixed_recs = []
+            for fi, (cnt, cmds) in enumerate(recs):
+                fixed = self.abase_fixed(cmds, cnt)
+                if fixed != cmds:
+                    self.n_abase += 1
+                    self.log('  movie@+%#x f%d: command-array base +%#x -> +%#x'
+                             % (ch, fi, cmds, fixed))
+                fixed_recs.append((cnt, fixed))
+            recs = fixed_recs
             blob = b''.join(struct.pack('<iiQ', cnt, 0, cmds) for cnt, cmds in recs)
             self.patches.append((self.ab + ch + 0x28, self.append_aligned(blob)))
             self.n_frames += 1
@@ -345,7 +399,7 @@ def fix_bundle(path):
 
     msgs = []
     grown = {}       # entry base -> appended bytes
-    totals = [0, 0, 0, 0, 0]
+    totals = [0, 0, 0, 0, 0, 0]
     for e in entries:
         if e['typeid'] != 0x1E:
             continue
@@ -371,6 +425,7 @@ def fix_bundle(path):
             totals[2] += rep.n_argtabs
             totals[3] += rep.n_dense
             totals[4] += rep.n_clips
+            totals[5] += rep.n_abase
 
     if not grown and not any(totals):
         return False
@@ -413,7 +468,8 @@ def fix_bundle(path):
     for m in msgs:
         print('%s:%s' % (os.path.basename(path), m))
     print('%s: repaired %d frame table(s), %d packed command(s), %d argtab(s), '
-          '%d dense stream(s), %d clipActions block(s)' % (os.path.basename(path), *totals))
+          '%d dense stream(s), %d clipActions block(s), %d cmd-array base ptr(s)'
+          % (os.path.basename(path), *totals))
     return True
 
 
