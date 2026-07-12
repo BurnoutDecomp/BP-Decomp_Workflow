@@ -18,7 +18,8 @@
 param(
     [string]$OutDir = "scratch\boot_shots",
     [int]$SettleSeconds = 25,
-    [int]$MenuDwellSeconds = 6
+    [int]$MenuDwellSeconds = 6,
+    [switch]$LeaveRunning   # diagnostics: keep the game alive at the end (skip the kill)
 )
 
 $ErrorActionPreference = 'Stop'
@@ -111,6 +112,10 @@ Start-Sleep -Seconds 1
 if (Test-Path $log) { Remove-Item $log -Force }
 
 Write-Host "[boot_test] launching $exe"
+# The input leaf honours BRN_INPUT_ALLOW_BACKGROUND (a FLAG'd PC test hook): the game
+# accepts the harness's injected key state without needing the desktop foreground, so
+# the script no longer fights the user's focus (and runs reliably unattended).
+$env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 $proc = Start-Process -FilePath $exe -WorkingDirectory (Split-Path $exe) -PassThru
 
 $VK_END = 0x23; $VK_RETURN = 0x0D; $VK_DOWN = 0x28
@@ -178,7 +183,11 @@ if (Wait-ForLog $proc "PlayMovie: consume channel-41 'Title_Screen02'" 90 "title
 }
 Start-Sleep -Seconds 3
 Take-Shot $proc "boot_30_final"
-Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+if ($LeaveRunning) {
+    Write-Host "[boot_test] -LeaveRunning: game stays up (pid $($proc.Id))"
+} else {
+    Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+}
 
 Write-Host "`n[boot_test] ---- BrnGame.log tail ----"
 if (Test-Path $log) { Get-Content $log -Tail 80 } else { Write-Host "(no log written)" }
