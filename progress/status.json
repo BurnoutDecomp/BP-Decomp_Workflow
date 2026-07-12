@@ -49340,7 +49340,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp": {
-   "notes": "17 of 21 done+committed; 4 blocked on un-homed debug-UI collaborators",
+   "notes": "17 of 21 done+committed; 4 still blocked: ExecuteScriptCommand/ScriptCommand_Help need KA_COMMAND_TABLE rodata off_820DC198; ScriptCommand_Window needs MenuManager::OpenWindowFromPath; SaveState needs un-homed foreign layouts",
    "status": "blocked"
   },
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsMenuItemVariable.cpp": {
@@ -50998,7 +50998,7 @@
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourDebugFlyWorld.cpp": {
-   "notes": "11 of 12 done+committed - Construct/Prepare/SetupTweaker/WarpToLookAt/ChangeMovingSpeed/toggles byte-faithful; Update blocked on un-homed Camera/BehaviourSharedInfo interiors + a GetImplicitVelocity out-vehicle overload contradicting the committed VehicleTracker home",
+   "notes": "11 of 12 done+committed; Update still blocked on un-homed BehaviourSharedInfo interior + GetImplicitVelocity out-vehicle overload",
    "status": "blocked"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourDebugOrbitPlayer.cpp": {
@@ -59263,7 +59263,7 @@
    "status": "done"
   },
   "class:CArrayLookahead": {
-   "notes": "7 of 9 done+committed in new MoviePlayer home; DetectDissolve/DetectEventInArray blocked on un-homed deps",
+   "notes": "7 of 9 done+committed; DetectDissolve/DetectEventInArray still blocked on un-homed detector/histogram deps",
    "status": "blocked"
   },
   "class:CBaseEndianBuffer": {
@@ -62069,7 +62069,7 @@
    "status": "blocked"
   },
   "class:MassiveAdClient3::CMassiveAsset": {
-   "notes": "9 of 12 done+committed in new Asset home + Record home; 3 blocked on un-homed deps",
+   "notes": "11 of 12 done+committed (RequestDownloadBinary + SendReport finished this round); 1 still blocked on un-homed dep",
    "status": "blocked"
   },
   "class:MassiveAdClient3::CMassiveBaseObject": {
@@ -62116,7 +62116,7 @@
    "status": "done"
   },
   "class:MassiveAdClient3::CMassiveZoneManager": {
-   "notes": "6 of 17 done+committed; reconciled the Wave-23 surface-pin into a real ZoneManager home; 11 blocked on un-homed MassiveAd deps",
+   "notes": "9 of 17 done+committed (DeleteElements/AssetFind/PreSubscriberAssignT finished this round); 8 still blocked on un-homed MassiveAd deps",
    "status": "blocked"
   },
   "class:MassiveAdClient3::CNetworkManager": {
@@ -62307,7 +62307,7 @@
    "status": "blocked"
   },
   "class:RealmcIface::XenonUtil": {
-   "notes": "19 of 22 done+committed in new RealmcXenonUtil home. 3 blocked: CardResultToCardStatus needs 16-byte jump-table rodata byte_82148638 absent from dossier; ReadFileLayer2 and SaveDataRegular need a real pointer+size member on LoadEntryInfo maTrailing[2] - a layout change owned by the LoadEntryInfo TU",
+   "notes": "19 of 22 done+committed; 3 still blocked: LoadEntryInfo data-buffer member still un-homed; CardResultToCardStatus jump-table rodata absent",
    "status": "blocked"
   },
   "class:RendererIO::InputBuffer": {
