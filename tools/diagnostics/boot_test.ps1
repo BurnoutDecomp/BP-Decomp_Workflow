@@ -46,10 +46,28 @@ public static class BootTestNative
 }
 "@
 
+function Foreground-Window([IntPtr]$hwnd) {
+    # PrintWindow(PW_RENDERFULLCONTENT) reads the DWM redirection surface, which DWM
+    # only keeps fresh for a foregrounded/unoccluded window. Without this the capture
+    # returns the blank (30,32,35) window backdrop for any occluded frame -- which read
+    # as "black video / black title" and caused false render-bug reports. Force
+    # foreground (ALT-tap unlock, same as Send-Key) + let DWM refresh before capturing.
+    for ($try = 0; $try -lt 5; $try++) {
+        if ([BootTestNative]::GetForegroundWindow() -eq $hwnd) { break }
+        [BootTestNative]::keybd_event(0x12, 0, 0, [UIntPtr]::Zero)      # ALT down
+        [BootTestNative]::SetForegroundWindow($hwnd) | Out-Null
+        [BootTestNative]::keybd_event(0x12, 0, 2, [UIntPtr]::Zero)      # ALT up
+        [BootTestNative]::ShowWindow($hwnd, 5) | Out-Null               # SW_SHOW
+        Start-Sleep -Milliseconds 200
+    }
+    Start-Sleep -Milliseconds 300   # let DWM composite a fresh frame into the surface
+}
+
 function Take-Shot([System.Diagnostics.Process]$proc, [string]$name) {
     $proc.Refresh()
     $hwnd = $proc.MainWindowHandle
     if ($hwnd -eq [IntPtr]::Zero) { Write-Host "  [shot] $name -- no window yet"; return }
+    Foreground-Window $hwnd
     $rect = New-Object BootTestNative+RECT
     [BootTestNative]::GetWindowRect($hwnd, [ref]$rect) | Out-Null
     $w = $rect.Right - $rect.Left; $h = $rect.Bottom - $rect.Top
@@ -155,7 +173,9 @@ if (Wait-ForLog $proc "PlayMovie: consume channel-41 'Title_Screen02'" 90 "title
             # The post-title intro montage is 116s; a press skips it (the state's
             # unload-or-stop handler posts StopVideo).
             Wait-ForLog $proc "QueueNextMovie: file 'VIDEOS\\intro" 30 "intro video queued" | Out-Null
-            Start-Sleep -Seconds 8
+            Start-Sleep -Seconds 5
+            Take-Shot $proc "boot_23a_compload_intro"
+            Start-Sleep -Seconds 4
             Take-Shot $proc "boot_23_compload_intro"
             Send-Key $proc $VK_RETURN "ENTER (skip intro)"
             # Stage 5 posts BrnScreenFsm@LOADING (SCREEN flow) + BrnFBFsm (HUD flow).
