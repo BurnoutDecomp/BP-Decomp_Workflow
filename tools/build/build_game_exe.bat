@@ -642,6 +642,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsEventObserver.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModuleIO_OutputBuffer.cpp"
+  rem The REAL GuiResourceModule (FSM-bundle loading migrated off BrnGuiAptRuntime's host stand-in).
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiResourceModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiResourceModulePC.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiResourceModuleIO.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiResourceModuleIO_InputBuffer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiResourceModuleIO_OutputBuffer.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootPreload.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootAttract.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnPostTitleScreenLoad.cpp"
