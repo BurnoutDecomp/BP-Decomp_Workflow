@@ -32,8 +32,10 @@ if (-not $FFmpeg) {
 }
 if (-not (Test-Path $Src)) { throw "source not found: $Src" }
 Write-Host "transcoding $Src -> $Dst (VP6 3-strip -> H.264 720p30) ..."
+# NOTE: the PC movie player's FFmpeg decoder glitches on H.264 High profile (blocky
+# corruption + banding). Match the working boot logos exactly: MAIN profile, <=1 B-frame.
 & $FFmpeg -y -hide_banner -loglevel error -i $Src -vf "tile=1x3,setpts=N/30/TB" -r 30 `
-    -c:v libx264 -preset fast -crf 20 -pix_fmt yuv420p -an -f mp4 $Dst
+    -c:v libx264 -profile:v main -level 4.2 -bf 1 -preset fast -crf 20 -pix_fmt yuv420p -an -f mp4 $Dst
 if ($LASTEXITCODE -eq 0) {
     Write-Host "OK: $([math]::Round((Get-Item $Dst).Length/1MB,1)) MB"
 } else {
