@@ -1,3 +1,6 @@
+# DEPRECATED (2026-07-13): the movie player now decodes the ORIGINAL X360 3-strip VP6
+# in-code (CgsMoviePlayer 3-strip recombine, commit 6026e55a) -- put the original .vp6
+# in build/game/VIDEOS and the game reads them faithfully. Kept only for reference.
 # transcode_x360_video.ps1 -- convert an original Burnout X360 VIDEOS\*.vp6 into the
 # PC build's playable H.264/MP4 form (build\game\VIDEOS\*.VP6).
 #
