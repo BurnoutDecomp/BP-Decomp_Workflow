@@ -14100,10 +14100,16 @@
   "BrnGui::LeaderboardTableComponent::GetHighlightedGamertag": {
    "status": "reviewed"
   },
+  "BrnGui::LeaderboardTableComponent::GetHighlightedScore": {
+   "status": "reviewed"
+  },
   "BrnGui::LeaderboardTableComponent::LocaliseTextInCell": {
    "status": "reviewed"
   },
   "BrnGui::LeaderboardTableComponent::SetCell": {
+   "status": "reviewed"
+  },
+  "BrnGui::LeaderboardTableComponent::SetTargetGamertag": {
    "status": "reviewed"
   },
   "BrnGui::LeaderboardTableComponent::SetupScoreboard": {
@@ -35739,6 +35745,9 @@
   "CgsGui::AptCommunicator::FindAptComponent": {
    "status": "reviewed"
   },
+  "CgsGui::AptCommunicator::GetComponentNameForHash": {
+   "status": "reviewed"
+  },
   "CgsGui::AptCommunicator::GetName": {
    "status": "reviewed"
   },
@@ -35755,6 +35764,9 @@
    "status": "reviewed"
   },
   "CgsGui::AptCommunicator::UpdateComponentReserved": {
+   "status": "reviewed"
+  },
+  "CgsGui::AptCommunicator::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "CgsGui::AptCommunicator::sMethod_GetCircleButtonAsSelect": {
@@ -58138,6 +58150,10 @@
   "class:BrnGui::LargeCarComponent": {
    "status": "done"
   },
+  "class:BrnGui::LeaderboardTableComponent": {
+   "notes": "bounded keystone: 2 funcs bodied+faithful, named members; gates PASS",
+   "status": "done"
+  },
   "class:BrnGui::LicenseComponent": {
    "status": "done"
   },
@@ -61540,6 +61556,10 @@
   },
   "class:CgsGui::AnimData::AnimatorChannel,6>": {
    "notes": "Wave 31: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
+   "status": "done"
+  },
+  "class:CgsGui::AptCommunicator": {
+   "notes": "GetComponentNameForHash bodied faithful; deleting-destructor auto-emitted (family convention); gates PASS",
    "status": "done"
   },
   "class:CgsGui::AptComponentList": {
