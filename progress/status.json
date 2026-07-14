@@ -543,6 +543,132 @@
   "AptAction_TryCatchFinallyBlock::putCaughtObjectInRegister": {
    "status": "reviewed"
   },
+  "AptAnimationTarget::AddActionBack": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::AddActionFront": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::AddAnalogInput": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::AddFunctionBack": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::AddFunctionFront": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::AddInput": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::AddListenerToQueue": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::AptAnimationTarget": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::CleanRemList": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::CleanupStaticData": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::DecNewInstSize": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetAStickLeft": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetAStickRight": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetDelayedReleaseList": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetDelayedReleaseListSize": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetDisplayList": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetDragMC": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetDragPos": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetInputSet": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetListenerSet": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetMaxNewMovieClips": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetNewInstSize": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetNewInsts": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetXMousePos": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::GetYMousePos": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::PreDestroy": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::ProcessAptInput": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::ProcessInputSet": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::ProcessInputs": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::ProcessListenerEvents": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::RegisterReferences": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::RemoveCIHReferences": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::RemoveTimerFunctions": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::RunActions": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::SetDragMC": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::SetOnPressObject": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::SetOnRollOverObject": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::SetQueuedInputsSize": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::SetupStaticData": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::TickIntervalTimers": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::TickNewInsts": {
+   "status": "reviewed"
+  },
+  "AptAnimationTarget::~AptAnimationTarget": {
+   "status": "reviewed"
+  },
   "AptArray::AptArray": {
    "status": "reviewed"
   },
@@ -21237,6 +21363,9 @@
   "BrnPhysics::Props::PropManager::FindPartIndex": {
    "status": "reviewed"
   },
+  "BrnPhysics::Props::PropManager::FindPropIndex": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Props::PropManager::GetTriangleCacheSlotAndRadius": {
    "status": "reviewed"
   },
@@ -21244,6 +21373,12 @@
    "status": "reviewed"
   },
   "BrnPhysics::Props::PropManager::HandleContactWithTiltProp": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Props::PropManager::HasPartJustBeenRemoved": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Props::PropManager::HasPropJustBeenRemoved": {
    "status": "reviewed"
   },
   "BrnPhysics::Props::PropManager::OutputUpdatedProps": {
@@ -34426,6 +34561,15 @@
    "status": "reviewed"
   },
   "CgsGameTalk::GameTalk::Update": {
+   "status": "reviewed"
+  },
+  "CgsGameTalk::GameTalkDebugComponent::GetName": {
+   "status": "reviewed"
+  },
+  "CgsGameTalk::GameTalkDebugComponent::GetPath": {
+   "status": "reviewed"
+  },
+  "CgsGameTalk::GameTalkDebugComponent::OnActivate": {
    "status": "reviewed"
   },
   "CgsGameTalk::GameTalkProtocol::AcceptIncomingConnection": {
@@ -55838,6 +55982,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:AptAnimationTarget": {
+   "notes": "reconcile: 42/42 funcs bodied inline; verifier-confirmed faithful; gates PASS",
+   "status": "done"
+  },
   "class:AptArray": {
    "notes": "finish-partial sub2b: verifier-confirmed faithful; gates PASS",
    "status": "done"
@@ -58755,6 +58903,10 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnPhysics::Props::PropManager": {
+   "notes": "sub5: bodied+verifier-confirmed (named members); gates PASS",
+   "status": "done"
+  },
   "class:BrnPhysics::Props::PropOutputInterface": {
    "notes": "Opus decomp+verify; gate PASS; pushed dev db70ae9",
    "status": "done"
@@ -60944,6 +61096,10 @@
   },
   "class:CgsGameTalk::GameTalk": {
    "notes": "Verify PASS (minor); 5 funcs asm-grounded (Construct/Prepare/Register/Send/Update, port 9876, channels 10). Manager-update virtual-dispatch + Construct r4 are documented opaque-SDK abstractions.",
+   "status": "done"
+  },
+  "class:CgsGameTalk::GameTalkDebugComponent": {
+   "notes": "sub5: bodied+verifier-confirmed (named members); gates PASS",
    "status": "done"
   },
   "class:CgsGameTalk::GameTalkProtocol": {
