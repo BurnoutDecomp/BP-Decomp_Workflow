@@ -32979,6 +32979,9 @@
   "CgsAttribSys::AttribSysDebugComponent::OnActivate": {
    "status": "reviewed"
   },
+  "CgsAttribSys::AttribSysGarbageCollector::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "CgsAttribSys::AttribSysIO::AttribSysRequestInterface<2048>::RegisterSchema": {
    "status": "reviewed"
   },
@@ -33007,6 +33010,9 @@
    "status": "reviewed"
   },
   "CgsAttribSys::AttribSysMemoryManager::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsAttribSys::AttribSysModule::AttribulatorGameTalkHandler": {
    "status": "reviewed"
   },
   "CgsAttribSys::AttribSysModule::Construct": {
@@ -34701,6 +34707,9 @@
   "CgsFileSystem::StreamDeviceDiskRead::GetAmountOfDataInBuffer": {
    "status": "reviewed"
   },
+  "CgsFileSystem::StreamDeviceDiskRead::GetCurrentFilePriority": {
+   "status": "reviewed"
+  },
   "CgsFileSystem::StreamDeviceDiskRead::OnClose": {
    "status": "reviewed"
   },
@@ -35310,6 +35319,9 @@
   "CgsGraphics::Im3d::Construct": {
    "status": "reviewed"
   },
+  "CgsGraphics::Im3d::PushMask": {
+   "status": "reviewed"
+  },
   "CgsGraphics::Im3dUntex::Construct": {
    "status": "reviewed"
   },
@@ -35494,6 +35506,9 @@
    "status": "reviewed"
   },
   "CgsGraphics::MovieVideoRenderer::SetScaleY": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::MovieVideoRenderer::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "CgsGraphics::OcclusionCullManager::BeginConditionalRender": {
@@ -41217,6 +41232,9 @@
   "CgsResource::LiveUpdatePoolModuleState::GenerateResponse": {
    "status": "reviewed"
   },
+  "CgsResource::LiveUpdatePoolModuleState::Up": {
+   "status": "reviewed"
+  },
   "CgsResource::LuaCodeResourceType::GetTypeID": {
    "status": "reviewed"
   },
@@ -44671,6 +44689,12 @@
    "status": "reviewed"
   },
   "D3D::CVertexShader::GetDebuggerHint": {
+   "status": "reviewed"
+  },
+  "D3D::GPUTimingMarkerFull::~GPUTimingMarkerFull": {
+   "status": "reviewed"
+  },
+  "D3D::TimingMarker::TimingMarker": {
    "status": "reviewed"
   },
   "D3DXShader::Instruction::Instruction": {
@@ -61244,6 +61268,10 @@
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; already-committed bodies confirmed; compiles clean.",
    "status": "done"
   },
+  "class:CgsAttribSys::AttribSysGarbageCollector": {
+   "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable; shared-header changes additive/dedup + committed consumers re-gated clean",
+   "status": "done"
+  },
   "class:CgsAttribSys::AttribSysIO": {
    "notes": "Opus decomp+verify; gate PASS (8 consumers clean); pushed dev 9f1dd57",
    "status": "done"
@@ -61258,6 +61286,10 @@
   },
   "class:CgsAttribSys::AttribSysMemoryManager": {
    "notes": "1 func (AttribSys memory manager); gate pass.",
+   "status": "done"
+  },
+  "class:CgsAttribSys::AttribSysModule": {
+   "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable; shared-header changes additive/dedup + committed consumers re-gated clean",
    "status": "done"
   },
   "class:CgsAttribSys::AttribSysPackageAllocator": {
@@ -61465,6 +61497,10 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:CgsFileSystem::StreamDeviceDiskRead": {
+   "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable, own home file, nothing fabricated",
+   "status": "done"
+  },
   "class:CgsGameTalk::GameTalk": {
    "notes": "Verify PASS (minor); 5 funcs asm-grounded (Construct/Prepare/Register/Send/Update, port 9876, channels 10). Manager-update virtual-dispatch + Construct r4 are documented opaque-SDK abstractions.",
    "status": "done"
@@ -61564,6 +61600,10 @@
    "notes": "Wave 41: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:CgsGraphics::Im3d": {
+   "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable; shared-header changes additive/dedup + committed consumers re-gated clean",
+   "status": "done"
+  },
   "class:CgsGraphics::ImRendererBase": {
    "notes": "Verify PASS (minor); 7 builders asm-grounded (blend/raster/depth/texture state params), SetState/SetTexture shadow logic. Parity YELLOW. Cosmetic comment notes only.",
    "status": "done"
@@ -61594,6 +61634,10 @@
   },
   "class:CgsGraphics::MoviePlayerCoreAllocator": {
    "notes": "Wave 40: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "status": "done"
+  },
+  "class:CgsGraphics::MovieVideoRenderer": {
+   "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable, own home file, nothing fabricated",
    "status": "done"
   },
   "class:CgsGraphics::OcclusionCullManager": {
@@ -62592,6 +62636,10 @@
   },
   "class:CgsResource::LiveUpdateModule": {
    "notes": "Verify caught GameTalkMsgHandler dropping the OUTER strlen>=256 early-out (asm bge->return); added it before the assert/copy so an oversized name leaves macFileName/miUpdateState untouched. Other 4 funcs faithful.",
+   "status": "done"
+  },
+  "class:CgsResource::LiveUpdatePoolModuleState": {
+   "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable, own home file, nothing fabricated",
    "status": "done"
   },
   "class:CgsResource::MassiveLookupTableResourceType": {
@@ -63663,6 +63711,14 @@
   },
   "class:D3D::CVertexShader": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:D3D::GPUTimingMarkerFull": {
+   "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable; shared-header changes additive/dedup + committed consumers re-gated clean",
+   "status": "done"
+  },
+  "class:D3D::TimingMarker": {
+   "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable, own home file, nothing fabricated",
    "status": "done"
   },
   "class:D3DXShader::Instruction": {
