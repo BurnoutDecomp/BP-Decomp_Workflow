@@ -2811,6 +2811,9 @@
   "Attrib::DefaultDataArea": {
    "status": "reviewed"
   },
+  "Attrib::EditRecord::~EditRecord": {
+   "status": "reviewed"
+  },
   "Attrib::EditSpecifier::Decode": {
    "status": "reviewed"
   },
@@ -3085,6 +3088,9 @@
    "status": "reviewed"
   },
   "Attrib::IExportPolicy::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "Attrib::IGarbageCollector::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "Attrib::Instance::Change": {
@@ -6441,6 +6447,9 @@
   "BrnDirector::SceneQueryInterface::LineTestNearest": {
    "status": "reviewed"
   },
+  "BrnDirector::SceneQueryInterface::VolumeTestDeepest": {
+   "status": "reviewed"
+  },
   "BrnDirector::SharedCameraContainer::GetGameplayCameraHe": {
    "status": "reviewed"
   },
@@ -7567,6 +7576,9 @@
    "status": "reviewed"
   },
   "BrnGame::BrnGameModule::UpdateTimers": {
+   "status": "reviewed"
+  },
+  "BrnGame::BrnGameModuleIO::InputBuffer,cla": {
    "status": "reviewed"
   },
   "BrnGame::DispatchThreadInputBuffer": {
@@ -9955,6 +9967,9 @@
    "status": "reviewed"
   },
   "BrnGameState::PaybackManager::HandleTriggeringPayback": {
+   "status": "reviewed"
+  },
+  "BrnGameState::PaybackManager::HandleWaitForPaybackAggressorToCrash": {
    "status": "reviewed"
   },
   "BrnGameState::PaybackManager::HandleWaitingToAwardPayback": {
@@ -32031,6 +32046,9 @@
   "BrnWorld::TriggerEntityModuleIO::OutputBuffer_PreScene::Construct": {
    "status": "reviewed"
   },
+  "BrnWorld::TriggerEntityModuleIO::TriggerManagementInputInterface::AddTriggerRegion": {
+   "status": "reviewed"
+  },
   "BrnWorld::Wor": {
    "status": "reviewed"
   },
@@ -32941,6 +32959,9 @@
    "status": "reviewed"
   },
   "CWMVMBMode::CWMVMBMode": {
+   "status": "reviewed"
+  },
+  "CXLiveAsyncTask::Initialize": {
    "status": "reviewed"
   },
   "CgsAttribSys::Attri": {
@@ -56670,6 +56691,10 @@
    "notes": "verify pass: virtual ~dtor + operator delete via FreeWithCensusIf (null-guarded); deleting-dtor thunk is compiler artifact. gate x64 pass",
    "status": "done"
   },
+  "class:Attrib::EditRecord": {
+   "notes": "fresh-eyes Opus verifier: faithful store-for-store, compiles, instantiable, nothing fabricated; parity drift = inlined/member-call/decl-only callee",
+   "status": "done"
+  },
   "class:Attrib::EditSpecifier": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; committed-home grows regression-gated; X360 XDK via extern-C decls; compiles clean.",
    "status": "done"
@@ -56861,6 +56886,10 @@
   },
   "class:Attrib::IExportPolicy": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "status": "done"
+  },
+  "class:Attrib::IGarbageCollector": {
+   "notes": "fresh-eyes Opus verifier: faithful store-for-store, compiles, instantiable, nothing fabricated; parity drift = inlined/member-call/decl-only callee",
    "status": "done"
   },
   "class:Attrib::Node": {
@@ -57345,6 +57374,10 @@
    "notes": "Wave43: 1/4 ctor foundation committed (7c06f9a, the only boot-trace-executed fn); FillInSharedInfo/PreSceneQueryUpdate/Update need un-homed MomentSharedInfo + the gpExternal/Bumper/IceWrapperBehaviourVTable externs (land with their TUs)",
    "status": "blocked"
   },
+  "class:BrnDirector::SceneQueryInterface": {
+   "notes": "fresh-eyes Opus verifier: faithful store-for-store, compiles, instantiable, nothing fabricated; parity drift = inlined/member-call/decl-only callee",
+   "status": "done"
+  },
   "class:BrnDirector::SharedCameraContainer": {
    "notes": "GetGameplayCameraHe verified: select (primaryActive && !primarySuspended), handles @+0x04/+0x18.",
    "status": "done"
@@ -57514,6 +57547,10 @@
   },
   "class:BrnGame::BrnGameModule": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (corrections applied); vendor/XDK externs declared-not-defined; compiles clean.",
+   "status": "done"
+  },
+  "class:BrnGame::BrnGameModuleIO": {
+   "notes": "fresh-eyes Opus verifier: faithful store-for-store, compiles, instantiable, nothing fabricated; parity drift = inlined/member-call/decl-only callee",
    "status": "done"
   },
   "class:BrnGame::DispatchThreadInputBuffer": {
@@ -57824,6 +57861,10 @@
    "status": "done"
   },
   "class:BrnGameState::PaybackDebugComponent": {
+   "status": "done"
+  },
+  "class:BrnGameState::PaybackManager": {
+   "notes": "fresh-eyes Opus verifier: faithful store-for-store, compiles, instantiable, nothing fabricated; parity drift = inlined/member-call/decl-only callee",
    "status": "done"
   },
   "class:BrnGameState::RichPresenceManagerX360": {
@@ -61035,6 +61076,10 @@
   "class:BrnWorld::TriggerEntityModuleIO::InRemoveTriggerEvent>": {
    "status": "done"
   },
+  "class:BrnWorld::TriggerEntityModuleIO::TriggerManagementInputInterface": {
+   "notes": "fresh-eyes Opus verifier: faithful store-for-store, compiles, instantiable, nothing fabricated; parity drift = inlined/member-call/decl-only callee",
+   "status": "done"
+  },
   "class:BrnWorld::WorldEntityIO": {
    "notes": "Adversarial verify pass: read/write-lock &member accessors match X360; OutputBuffer_PostPhysics reconciled Get->GetStatusInterface/mOutputPayload->mStatusInterface, no external callers of old names. Gate x64 pass. dev f65eb4f",
    "status": "done"
@@ -61190,6 +61235,10 @@
   "class:CWMVideoPerceptionModel": {
    "notes": "2 of 7 done+committed; 5 blocked on un-recovered VMX rodata tables",
    "status": "blocked"
+  },
+  "class:CXLiveAsyncTask": {
+   "notes": "fresh-eyes Opus verifier: faithful store-for-store, compiles, instantiable, nothing fabricated; parity drift = inlined/member-call/decl-only callee",
+   "status": "done"
   },
   "class:CgsAttribSys": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; already-committed bodies confirmed; compiles clean.",
