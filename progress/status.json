@@ -42543,19 +42543,67 @@
   "CgsSceneManager::SceneManagerIO::InEventVolumeTestFine>::Append": {
    "status": "reviewed"
   },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddDynamicVolume": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddEntity": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddForCollision": {
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddVolumeInstance": {
    "status": "reviewed"
   },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::AddVolumeInstanceForCaching": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::Append": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::Clear": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::ClearCullingTable": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::ClearEntityVolumesPadding": {
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::Construct": {
    "status": "reviewed"
   },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::Destruct": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::RemoveEntity": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::RemoveForCollision": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::RemoveVolume": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::RemoveVolumeInstance": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::ReplaceDynamicVolume": {
+   "status": "reviewed"
+  },
   "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::SetCullingGroupPair": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::SetEntityPosition": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::SetEntityRadius": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::SetVolumeInstanceCullingGroup": {
+   "status": "reviewed"
+  },
+  "CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::SetVolumeInstanceTransform": {
    "status": "reviewed"
   },
   "CgsSceneManager::SceneManagerIO::InputBuffer_Query::Construct": {
@@ -62893,8 +62941,8 @@
    "status": "done"
   },
   "class:CgsSceneManager::SceneManagerIO::InSceneUpdateInterface": {
-   "notes": "11/16 committed 7d60184f. 5 queue funcs blocked (AddVolumeInstanceForCaching/SetVolumeInstanceCullingGroup/SetVolumeInstanceTransform/Clear/Destruct): un-recovered element types for ~14 of the 25 embedded queues (InEvent* callee TUs still todo, no committed element homes).",
-   "status": "blocked"
+   "notes": "keystone closed: 16 funcs bodied, embedded-queue layout modeled from Construct asm, named members, 0 faithfulness findings; gates PASS",
+   "status": "done"
   },
   "class:CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,2000>": {
    "notes": "Gate-only (batch self-review). Explicit template instantiation of CgsModule::EventQueue<Event,N>::Construct (body in CgsEventQueue.h) - established pattern. Event structs reconstructed from DecFIGS DWARF into mirrored headers; events derive from an empty per-module Event base (CgsModule convention). Supporting types (JoltEffect/JoltEnvelope, EBindResult/EUnbindResult, BundleLoaderEvent, SceneQueryId, OverlappingIntervalPair, CullingGroup, CgsID) in their mirrored homes. x64 gate -> structural parity not byte-match. SetModelCullingGroupEvent + CreateArticulatedTrafficEvent unblocked now that CullingGroup(u32)/CgsID(u64) exist.",
