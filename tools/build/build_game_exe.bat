@@ -188,6 +188,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Numeric\CgsRandom.cpp"
   rem ---- the faithful AptCommunicator delivery chain (Layer 2) ----
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptCommunicator.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptObjectController.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptComponentList.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiComponent.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiShared.cpp"
@@ -406,6 +407,8 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Instances\CgsInstance.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsEntryListResource.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptDataHeader.cpp"
+  echo "%SRC%\SharedClasses\Gui\Flapt\BrnFlaptFile.cpp"
+  echo "%SRC%\SharedClasses\Gui\Flapt\BrnFlaptFileResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceTypeRegistration.cpp"
   rem ---- bulk sweep: 128 reconstructed (done) TUs, linker-verified self-consistent ----
   echo "%SRC%\GameShared\GameClasses\Containers\CgsHash.cpp"
@@ -572,11 +575,19 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\BrnGuiViewModule.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptManager.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptFileInstance.cpp"
+  echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptTextFieldInstance.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptRenderer.cpp"
   rem FLAG link stubs for the un-homed BrnFlapt engine bodies + tiny GUI output-queue
   rem lifecycle the real ViewModule slice references (see the file header audit).
   echo "%SRC%\GameSource\Gui\BrnGuiViewModuleLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiModule.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiAlwaysAvailableComponentsManager.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnEATraxInGameComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnAchievementPopupComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnOnlineInviteMessageComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnSaveIconComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnShowtimeMessageComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptComponentUtils.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiAptRuntime.cpp"
   rem ---- the real GUI flow-controller chain (GuiFsmController + BrnHudFlow's 14-state pool) ----
   echo "%SRC%\GameSource\Gui\BrnGuiFsmController.cpp"
@@ -756,5 +767,9 @@ rem Convert the linker .map into the binary CgsMapFile the assert call-stack res
 if "%BUILD_ERR%"=="0" if exist "%OUT%\Burnout_PC.map" py "%ROOT%\tools\build\make_cgsmap.py" "%OUT%\Burnout_PC.map" "%OUT%\Burnout_PC.cgsmap"
 rem Stage the FFmpeg runtime DLLs next to the exe so the movie player loads at runtime.
 if "%BUILD_ERR%"=="0" copy /Y "%FFM%\bin\*.dll" "%OUT%\" >nul
+rem Stage locally converted native-x64 FLApt HUD bundles when present. These are
+rem generated/licensed assets and remain outside source control.
+if "%BUILD_ERR%"=="0" if exist "%OUT%\_staging_uiassets\FLAPTHUD.BUNDLE" copy /Y "%OUT%\_staging_uiassets\FLAPTHUD.BUNDLE" "%OUT%\" >nul
+if "%BUILD_ERR%"=="0" if exist "%OUT%\_staging_uiassets\FLAPTHUDSD.BUNDLE" copy /Y "%OUT%\_staging_uiassets\FLAPTHUDSD.BUNDLE" "%OUT%\" >nul
 
 endlocal & exit /b %BUILD_ERR%

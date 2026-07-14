@@ -1,7 +1,7 @@
 # boot_test.ps1 -- the scripted boot/menu validation loop.
 
 #
-# Launches build\game\Burnout_PC.exe, captures PrintWindow screenshots at scripted
+# Launches build\game\Burnout_PC.exe, captures foreground pixels at scripted
 # points, drives scripted key presses (menu accept/navigate), then stops the process
 # and prints the tail of build\game\BrnGame.log.
 #
@@ -36,22 +36,28 @@ using System;
 using System.Runtime.InteropServices;
 public static class BootTestNative
 {
-    [DllImport("user32.dll")] public static extern bool PrintWindow(IntPtr hwnd, IntPtr hdc, uint flags);
     [DllImport("user32.dll")] public static extern bool GetWindowRect(IntPtr hwnd, out RECT rect);
     [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hwnd);
     [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
     [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
     [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, UIntPtr extra);
+    [DllImport("kernel32.dll", CharSet=CharSet.Unicode, SetLastError=true)]
+    public static extern IntPtr CreateEvent(IntPtr attributes, bool manualReset, bool initialState, string name);
+    [DllImport("kernel32.dll", SetLastError=true)] public static extern bool SetEvent(IntPtr handle);
     public struct RECT { public int Left, Top, Right, Bottom; }
 }
 "@
 
+$script:HarnessInputEvents = @{
+    0x0D = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Accept")
+    0x1B = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Stop")
+    0x28 = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Next")
+    0x26 = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Prev")
+}
+
 function Foreground-Window([IntPtr]$hwnd) {
-    # PrintWindow(PW_RENDERFULLCONTENT) reads the DWM redirection surface, which DWM
-    # only keeps fresh for a foregrounded/unoccluded window. Without this the capture
-    # returns the blank (30,32,35) window backdrop for any occluded frame -- which read
-    # as "black video / black title" and caused false render-bug reports. Force
-    # foreground (ALT-tap unlock, same as Send-Key) + let DWM refresh before capturing.
+    # CopyFromScreen needs the game to be foregrounded and unobscured. Force foreground
+    # (ALT-tap unlock, same as Send-Key) and let DWM refresh before capturing.
     for ($try = 0; $try -lt 5; $try++) {
         if ([BootTestNative]::GetForegroundWindow() -eq $hwnd) { break }
         [BootTestNative]::keybd_event(0x12, 0, 0, [UIntPtr]::Zero)      # ALT down
@@ -74,16 +80,30 @@ function Take-Shot([System.Diagnostics.Process]$proc, [string]$name) {
     if ($w -le 0 -or $h -le 0) { Write-Host "  [shot] $name -- zero-size window"; return }
     $bmp = New-Object System.Drawing.Bitmap($w, $h)
     $gfx = [System.Drawing.Graphics]::FromImage($bmp)
-    $hdc = $gfx.GetHdc()
-    [BootTestNative]::PrintWindow($hwnd, $hdc, 2) | Out-Null   # 2 = PW_RENDERFULLCONTENT (D3D content)
-    $gfx.ReleaseHdc($hdc); $gfx.Dispose()
-    $file = Join-Path $outPath "$name.png"
-    $bmp.Save($file, [System.Drawing.Imaging.ImageFormat]::Png); $bmp.Dispose()
-    Write-Host "  [shot] $file"
+    try {
+        # Capture the actual foreground pixels. PrintWindow(PW_RENDERFULLCONTENT) can
+        # return only the window-class background while a D3D9 swap chain is actively
+        # presenting, producing a plausible-looking but false blank-video result.
+        $gfx.CopyFromScreen($rect.Left, $rect.Top, 0, 0, (New-Object System.Drawing.Size($w, $h)))
+        $file = Join-Path $outPath "$name.png"
+        $bmp.Save($file, [System.Drawing.Imaging.ImageFormat]::Png)
+        Write-Host "  [shot] $file"
+    }
+    catch {
+        # A locked/disconnected Windows desktop can make CopyFromScreen report an
+        # invalid display handle even though the game window and validation run are
+        # healthy. Keep driving the state/log harness and report the missing frame.
+        Write-Host "  [shot] $name -- capture unavailable: $($_.Exception.Message)"
+    }
+    finally {
+        $gfx.Dispose()
+        $bmp.Dispose()
+    }
 }
 
 function Send-Key([System.Diagnostics.Process]$proc, [byte]$vk, [string]$label) {
     $proc.Refresh()
+    if ($proc.HasExited) { Write-Host "  [key] $label -- game already exited"; return }
     $hwnd = $proc.MainWindowHandle
     if ($hwnd -ne [IntPtr]::Zero) {
         # The game's input leaf gates GetAsyncKeyState on GetForegroundWindow(), and a
@@ -105,6 +125,9 @@ function Send-Key([System.Diagnostics.Process]$proc, [byte]$vk, [string]$label) 
     [BootTestNative]::keybd_event($vk, 0, 0, [UIntPtr]::Zero)
     Start-Sleep -Milliseconds 250
     [BootTestNative]::keybd_event($vk, 0, 2, [UIntPtr]::Zero)   # KEYEVENTF_KEYUP
+    if ($script:HarnessInputEvents.ContainsKey([int]$vk)) {
+        [BootTestNative]::SetEvent($script:HarnessInputEvents[[int]$vk]) | Out-Null
+    }
     Write-Host "  [key] $label"
     Start-Sleep -Milliseconds 400
 }
@@ -142,8 +165,17 @@ $VK_END = 0x23; $VK_RETURN = 0x0D; $VK_DOWN = 0x28
 Start-Sleep -Seconds 5
 Send-Key $proc $VK_END "END (assert release)"
 
-if (Wait-ForLog $proc "\[BootVideos\] play" 60 "boot videos") {
-    Take-Shot $proc "boot_10_videos"
+if (Wait-ForLog $proc "\[Movie\] prepared VIDEOS\\EAFranchise\.vp6" 60 "EA intro prepared") {
+    Start-Sleep -Milliseconds 500
+    Take-Shot $proc "boot_10_ea_video"
+    Start-Sleep -Seconds 1
+    Take-Shot $proc "boot_10b_ea_video"
+}
+if (Wait-ForLog $proc "\[Movie\] prepared VIDEOS\\Criterion\.vp6" 60 "Criterion intro prepared") {
+    Start-Sleep -Milliseconds 500
+    Take-Shot $proc "boot_11_criterion_video"
+    Start-Sleep -Seconds 1
+    Take-Shot $proc "boot_11b_criterion_video"
 }
 # The overlay flow FSM loads during boot (RunFsm{BrnOverlay -> OVERLAY} at the GUIMODULE stage).
 Wait-ForLog $proc "BRNOVERLAY\.BUNDLE' -> loaded" 30 "overlay FSM loaded" | Out-Null
@@ -164,18 +196,20 @@ if (Wait-ForLog $proc "PlayMovie: consume channel-41 'Title_Screen02'" 90 "title
         Send-Key $proc $VK_RETURN "ENTER (menu accept retry)"
     }
     if (Wait-ForLog $proc "MemoryCard: OnEnter" 20 "BF_PROFILE entered (retry)") {
-        # Wait for the save/load prompt to instantiate, then accept it.
+        # BootProfile owns the save/load prompt while the profile task runs. It is
+        # not an input-confirmation stage on a normal boot: the original manager's
+        # completion callback advances it. Sending ENTER here can race that callback
+        # and become an unintended intro-video skip.
         Wait-ForLog $proc "aux: faithful: INSTANTIATED" 30 "profile prompt up" | Out-Null
-        Start-Sleep -Seconds 3
+        Start-Sleep -Milliseconds 300
         Take-Shot $proc "boot_22_profile"
-        Send-Key $proc $VK_RETURN "ENTER (profile accept)"
         if (Wait-ForLog $proc "CompleteLoading: OnEnter" 30 "BF_COMPLOAD entered") {
             # The post-title intro montage is 116s; a press skips it (the state's
             # unload-or-stop handler posts StopVideo).
-            Wait-ForLog $proc "QueueNextMovie: file 'VIDEOS\\intro" 30 "intro video queued" | Out-Null
-            Start-Sleep -Seconds 5
+            Wait-ForLog $proc "\[Movie\] prepared VIDEOS\\intro\.vp6" 30 "intro video prepared" | Out-Null
+            Start-Sleep -Seconds 2
             Take-Shot $proc "boot_23a_compload_intro"
-            Start-Sleep -Seconds 4
+            Start-Sleep -Seconds 3
             Take-Shot $proc "boot_23_compload_intro"
             Send-Key $proc $VK_RETURN "ENTER (skip intro)"
             # Stage 5 posts BrnScreenFsm@LOADING (SCREEN flow) + BrnFBFsm (HUD flow).
