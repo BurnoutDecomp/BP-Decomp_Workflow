@@ -14946,7 +14946,40 @@
   "BrnGui::PausedHudState::Update": {
    "status": "reviewed"
   },
+  "BrnGui::PaybackComponent::BecomeInvisible": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::BeginAwardAnimation": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::ChooseRandomAward": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::Initialize": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::RespondToTransitionComplete": {
+   "status": "reviewed"
+  },
   "BrnGui::PaybackComponent::SendAwardTriggerableEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::SetDisplayedIcon": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::ShowAvailableInstantly": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::TriggerAptAnimation": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::PaybackComponent::UpdateState": {
    "status": "reviewed"
   },
   "BrnGui::PhotoBoothComponent::EnsureResourcesAreLoaded": {
@@ -34083,6 +34116,42 @@
   "CgsFileSystem::DeviceMemFileSystem::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "CgsFileSystem::File::Close": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::CloseCallback": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::OnClose": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::OnOpen": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::OnRead": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::OnWrite": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::Open": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::OpenCallback": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::Read": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::ReadCallback": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::Write": {
+   "status": "reviewed"
+  },
+  "CgsFileSystem::File::WriteCallback": {
+   "status": "reviewed"
+  },
   "CgsFileSystem::FileHandle::Read": {
    "status": "reviewed"
   },
@@ -51840,6 +51909,10 @@
    "notes": "3 verify loops PASS (fidelity, adversarial w/ compiled+run probe proving 1st-ctor-registers + 2nd-ctor-asserts w/ exact message, final sign-off). Gate clean. Parity MILD benign: absent callees = assert machinery (BasePriorityQueue::Clear + Assert::Begin/Fire/End) folded into CGS_ASSERT; return diff = void ctor (X360 'return a1' is the fastcall this-artifact). New home CgsFileLog.h DWARF-exact; rw::IResourceAllocator fwd-decl matched to vendor struct tag.",
    "status": "done"
   },
+  "GameShared/GameClasses/System/FileSystem/CgsFileRW.cpp": {
+   "notes": "fresh-decomp: all ledger funcs bodied+faithful; gates PASS",
+   "status": "done"
+  },
   "GameShared/GameClasses/System/FileSystem/CgsFileSystem.cpp": {
    "status": "done"
   },
@@ -52755,6 +52828,10 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/HUD/Components/BrnOnlineTimeoutTimerComponent.cpp": {
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/HUD/Components/BrnPaybackComponent.cpp": {
+   "notes": "fresh-decomp: all ledger funcs bodied+faithful; gates PASS",
    "status": "done"
   },
   "GameSource/Gui/Flow/HUD/Components/BrnPlayerPositionSingle.cpp": {
