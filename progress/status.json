@@ -48018,6 +48018,9 @@
   "XAUDIO::CEffectManager::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "XAUDIO::CEngine::CEngineVoiceList::SwapActiveLists": {
+   "status": "reviewed"
+  },
   "XAUDIO::CFrameBuffer::CFrameBuffer": {
    "status": "reviewed"
   },
@@ -48139,6 +48142,12 @@
    "status": "reviewed"
   },
   "XAUDIO::XAUDIOPACKETCTX>::GetNextEntry": {
+   "status": "reviewed"
+  },
+  "XCAM::CCameraConnector::DoWork": {
+   "status": "reviewed"
+  },
+  "XCAM::CCameraConnector::Shutdown": {
    "status": "reviewed"
   },
   "XCAM::CDecoder::DecodeFrame": {
@@ -48352,6 +48361,21 @@
    "status": "reviewed"
   },
   "XCAM::CVideoOutputBase::UpdateVertexBuffer": {
+   "status": "reviewed"
+  },
+  "XCAM::CXCamVideo::ReadFrame": {
+   "status": "reviewed"
+  },
+  "XCAM::CXCamVideo::Release": {
+   "status": "reviewed"
+  },
+  "XCAM::CXCamVideo::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XCAM::CXCamVideo::`vector deleting destructor'`adjustor{4}'": {
+   "status": "reviewed"
+  },
+  "XCAM::CXCamVideo::~CXCamVideo": {
    "status": "reviewed"
   },
   "XConfigUserSettings::GetVideoFlags": {
@@ -64835,6 +64859,10 @@
    "notes": "0 of 18 - layout LEVERAGE HOME only (new XAudioEngine.h/.cpp: full 0x174 layout + gpEngine singleton off_832BB944, named members downstream reads by offset); all 18 bodies blocked on Xbox Ke/Ex/Ob kernel threading + spinlock/IRQL + r13 KPCR reads + un-recovered module rodata",
    "status": "blocked"
   },
+  "class:XAUDIO::CEngine::CEngineVoiceList": {
+   "notes": "Vendor SDK (XAudio/XCam) mirror committed siblings; named-member ops, foreign COM interfaces held void* w/ attested vtable-slot dispatch per committed precedent. Verifier pass, faithfulness 0-new, compile pass.",
+   "status": "done"
+  },
   "class:XAUDIO::CFrameBuffer": {
    "status": "done"
   },
@@ -64883,6 +64911,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XCAM::CCameraConnector": {
+   "notes": "Vendor SDK (XAudio/XCam) mirror committed siblings; named-member ops, foreign COM interfaces held void* w/ attested vtable-slot dispatch per committed precedent. Verifier pass, faithfulness 0-new, compile pass.",
+   "status": "done"
+  },
   "class:XCAM::CDecoder": {
    "status": "done"
   },
@@ -64920,6 +64952,10 @@
    "status": "done"
   },
   "class:XCAM::CVideoOutputBase": {
+   "status": "done"
+  },
+  "class:XCAM::CXCamVideo": {
+   "notes": "Vendor SDK (XAudio/XCam) mirror committed siblings; named-member ops, foreign COM interfaces held void* w/ attested vtable-slot dispatch per committed precedent. Verifier pass, faithfulness 0-new, compile pass.",
    "status": "done"
   },
   "class:XCAM::CYUY2VideoOutput": {
