@@ -44769,6 +44769,12 @@
   "D3D::GPUTimingMarkerFull::~GPUTimingMarkerFull": {
    "status": "reviewed"
   },
+  "D3D::GPUTimingMarkerSmall::GPUTimingMarkerSmall": {
+   "status": "reviewed"
+  },
+  "D3D::GPUTimingMarkerSmall::~GPUTimingMarkerSmall": {
+   "status": "reviewed"
+  },
   "D3D::Hang::Out": {
    "status": "reviewed"
   },
@@ -64085,6 +64091,10 @@
   },
   "class:D3D::GPUTimingMarkerFull": {
    "notes": "fresh-eyes verifier pass: faithful, compiles, instantiable; shared-header changes additive/dedup + committed consumers re-gated clean",
+   "status": "done"
+  },
+  "class:D3D::GPUTimingMarkerSmall": {
+   "notes": "Mirror committed sibling (GPUTimingMarkerFull / eastl vector reserve); verifier pass, faithfulness 0-new, compile pass.",
    "status": "done"
   },
   "class:D3D::Hang": {
