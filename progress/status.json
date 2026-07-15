@@ -57258,11 +57258,11 @@
    "status": "done"
   },
   "class:BrnDirector::Camera::TextFileReadSerialiser": {
-   "notes": "Wave 44: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
+   "notes": "done-TU finish: Serialise<AttachmentTruck::Parameters> @0x82215C78 emitted (line 225); link-fix = added the odr-used AttachmentTruck::Parameters::Serialise<TextFileReadSerialiser> instantiation to BrnAttachmentTruck.cpp mirroring the AftertouchCam pattern",
    "status": "done"
   },
   "class:BrnDirector::Camera::TextFileWriteSerialiser": {
-   "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
+   "notes": "done-TU finish: 5 stale Serialise<X::Parameters> instantiations now emitted (lines 199-203); 3 un-homed behaviours use faithful empty visitors (asm makes no inner field-walk call); AttachmentTruck/CameraImpactEffect homed",
    "status": "done"
   },
   "class:BrnDirector::Camera::TrafficLaneTruck": {
@@ -62083,7 +62083,7 @@
    "status": "done"
   },
   "class:CgsModule::VariableEventQueue<8192,16>": {
-   "notes": "Thin explicit instantiation over committed CgsVariableEventQueue.h generic; ledger methods reconciled 1:1; verifier parity/none; gate pass.",
+   "notes": "reconcile: TU already done; 2 AddEvent<Message<GuiEventAudioEventIntros/GuiEventAudioTraxPlayOrder>> instantiations present in committed VariableEventQueue_8192_16.cpp, flip stale todo->reviewed",
    "status": "done"
   },
   "class:CgsNetwork": {
