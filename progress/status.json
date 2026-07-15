@@ -11745,6 +11745,12 @@
   "BrnGui::ChallengeListComponent::ShowDescriptionInTicker": {
    "status": "reviewed"
   },
+  "BrnGui::ChallengeSelector::Hide": {
+   "status": "reviewed"
+  },
+  "BrnGui::ChallengeSelector::Show": {
+   "status": "reviewed"
+  },
   "BrnGui::ColourCalibrationScreen::Construct": {
    "status": "reviewed"
   },
@@ -39582,6 +39588,12 @@
   "CgsNetwork::ServerInterfacePlayerInfoDataBase::SerialiseFromUser": {
    "status": "reviewed"
   },
+  "CgsNetwork::ServerInterfacePlayerInfoDataX360::Prepare": {
+   "status": "reviewed"
+  },
+  "CgsNetwork::ServerInterfacePlayerInfoDataX360::SerialiseFromUser": {
+   "status": "reviewed"
+  },
   "CgsNetwork::ServerInterfacePlayerParamsBase::SerialiseFromPlayer": {
    "status": "reviewed"
   },
@@ -47212,6 +47224,18 @@
    "status": "reviewed"
   },
   "RealmcIface::EntryContentName::SetTitle": {
+   "status": "reviewed"
+  },
+  "RealmcIface::GameCallbackProcessor::GameCallbackProcessor": {
+   "status": "reviewed"
+  },
+  "RealmcIface::GameCallbackProcessor::ProcessMessage": {
+   "status": "reviewed"
+  },
+  "RealmcIface::GameCallbackProcessor::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "RealmcIface::GameCallbackProcessor::~GameCallbackProcessor": {
    "status": "reviewed"
   },
   "RealmcIface::GameInfo::GameInfo": {
@@ -58080,6 +58104,10 @@
    "notes": "Adversarial verify PARITY (fixes applied): allpass write/carry swap corrected + threetap tap-offset sign corrected (asm-verified); delay/occlusion/nearest_prime/properties_t store-for-store; CgsNet dtors/Construct (PrepareParams +0x48 -> u8 byte); committed bases reused by name; generics homed once + explicit instantiations. wave-21 gate PASS. (5 keystones blocked: vardelay x2, BrnServerInterface[Base], ColourMenuToggle.)",
    "status": "done"
   },
+  "class:BrnGui::ChallengeSelector": {
+   "notes": "Fresh-decomp, mirror committed sibling; verifier pass, faithfulness 0-new, joint compile incl. shared-header consumer pass.",
+   "status": "done"
+  },
   "class:BrnGui::ColourField": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (verifier corrections applied); .data tables flagged attested-vs-reconstructed; compiles clean.",
    "status": "done"
@@ -62260,6 +62288,10 @@
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; X360 XDK deps via extern-C decls (not fabricated); compiles clean.",
    "status": "done"
   },
+  "class:CgsNetwork::ServerInterfacePlayerInfoDataX360": {
+   "notes": "Fresh-decomp, mirror committed sibling; verifier pass, faithfulness 0-new, joint compile incl. shared-header consumer pass.",
+   "status": "done"
+  },
   "class:CgsNetwork::ServerInterfacePlayerParamsX360": {
    "notes": "verified vs asm; parity.",
    "status": "done"
@@ -64323,6 +64355,10 @@
   },
   "class:RealmcIface::EntryContentName": {
    "notes": "verified vs asm; parity.",
+   "status": "done"
+  },
+  "class:RealmcIface::GameCallbackProcessor": {
+   "notes": "Fresh-decomp, mirror committed sibling; verifier pass, faithfulness 0-new, joint compile incl. shared-header consumer pass.",
    "status": "done"
   },
   "class:RealmcIface::GameInfo": {
