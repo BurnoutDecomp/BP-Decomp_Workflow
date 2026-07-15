@@ -48357,6 +48357,12 @@
   "XGRAPHICS::DListNode::Remove": {
    "status": "reviewed"
   },
+  "XGRAPHICS::IRBinary::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRBinary::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::IRFetch::InstType": {
    "status": "reviewed"
   },
@@ -48390,6 +48396,27 @@
   "XGRAPHICS::IRMov::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "XGRAPHICS::IRNop::IRNop": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRNop::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRNop::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRUnary::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRUnary::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRZeroary::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRZeroary::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::InternalHashTable::Insert": {
    "status": "reviewed"
   },
@@ -48409,6 +48436,30 @@
    "status": "reviewed"
   },
   "XGRAPHICS::InternalVector::Remove": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopIndexedConstSet::LoopIndexedConstSet": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopIndexedConstSet::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopIndexedInputSet::LoopIndexedInputSet": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopIndexedInputSet::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopIndexedInputSet::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopIndexedOutputSet::LoopIndexedOutputSet": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopIndexedOutputSet::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopIndexedOutputSet::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "XGRAPHICS::TempValue::NewItem": {
@@ -64772,6 +64823,10 @@
    "notes": "4 of 7 done+committed; 3 blocked on un-homed foreign microcode context (raw +0xAB0 CFG hop)",
    "status": "blocked"
   },
+  "class:XGRAPHICS::IRBinary": {
+   "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:XGRAPHICS::IRExport": {
    "notes": "2/4 unchanged: 2 funcs on un-attested vtable slots / un-recovered rodata",
    "status": "blocked"
@@ -64797,10 +64852,34 @@
   "class:XGRAPHICS::IRMov": {
    "status": "done"
   },
+  "class:XGRAPHICS::IRNop": {
+   "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::IRUnary": {
+   "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::IRZeroary": {
+   "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:XGRAPHICS::InternalHashTable": {
    "status": "done"
   },
   "class:XGRAPHICS::InternalVector": {
+   "status": "done"
+  },
+  "class:XGRAPHICS::LoopIndexedConstSet": {
+   "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::LoopIndexedInputSet": {
+   "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::LoopIndexedOutputSet": {
+   "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
    "status": "done"
   },
   "class:XGRAPHICS::TempValue": {
