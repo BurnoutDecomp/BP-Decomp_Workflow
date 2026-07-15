@@ -47037,6 +47037,12 @@
   "RealmcCore::Message::`vector deleting destructor'": {
    "status": "reviewed"
   },
+  "RealmcCore::MessageClear::Apply": {
+   "status": "reviewed"
+  },
+  "RealmcCore::MessageClear::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "RealmcCore::MessageFilter::FilterMessage": {
    "status": "reviewed"
   },
@@ -47190,6 +47196,12 @@
   "RealmcIface::CardData::operator==": {
    "status": "reviewed"
   },
+  "RealmcIface::CheckCardTask::CheckCardTask": {
+   "status": "reviewed"
+  },
+  "RealmcIface::CheckCardTask::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "RealmcIface::DataBuffer::operator=": {
    "status": "reviewed"
   },
@@ -47226,7 +47238,43 @@
   "RealmcIface::MessageBootupDone::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "RealmcIface::MessageCardRemoved::Apply": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageCardRemoved::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageCheckLoadedData::Apply": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageCheckLoadedData::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageSaveDone::Apply": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageSaveDone::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageSetActiveCardDone::Apply": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageSetActiveCardDone::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageSetAutosaveDone::Apply": {
+   "status": "reviewed"
+  },
+  "RealmcIface::MessageSetAutosaveDone::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "RealmcIface::MessageShowAutosaveIcon::Apply": {
+   "status": "reviewed"
+  },
+  "RealmcIface::SaveCheckParams::SaveCheckParams": {
+   "status": "reviewed"
+  },
+  "RealmcIface::SaveCheckParams::~SaveCheckParams": {
    "status": "reviewed"
   },
   "RealmcIface::SaveReq::SaveReq": {
@@ -64208,6 +64256,10 @@
    "notes": "Realmc message; verifier minor_drift/low; gate pass.",
    "status": "done"
   },
+  "class:RealmcCore::MessageClear": {
+   "notes": "Fresh-decomp mirroring committed MessageBootupDone/MessageLoadDone: Apply=target-vtable-slot dispatch (slot from asm), deleting-dtor compiler-generated (virtual dtor + operator delete->FreeMemSize), base=IRunnableTask/MessageString per asm dtor-chain. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:RealmcCore::MessageFilter": {
    "notes": "MessageFilter verified; vector-deleting-dtor (free 0x10) correctly compiler-synthesized; RealmcCore.h grown additively.",
    "status": "done"
@@ -64261,6 +64313,10 @@
    "notes": "RealmcIface::CardData (6 funcs); verifier parity/none; gate pass.",
    "status": "done"
   },
+  "class:RealmcIface::CheckCardTask": {
+   "notes": "Fresh-decomp: ctor asm-grounded (base-ctor chain + register field stores), deleting-dtor compiler-generated. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:RealmcIface::DataBuffer": {
    "notes": "operator= (mpData/muSize word copy) verified.",
    "status": "done"
@@ -64284,12 +64340,36 @@
    "notes": "slot-15 dispatch pinned per the IRealmcMessageTarget precedent; deleting dtor = virtual dtor + sized operator delete -> FreeMemSize; sizeof divergence FLAG'd",
    "status": "done"
   },
+  "class:RealmcIface::MessageCardRemoved": {
+   "notes": "Fresh-decomp mirroring committed MessageBootupDone/MessageLoadDone: Apply=target-vtable-slot dispatch (slot from asm), deleting-dtor compiler-generated (virtual dtor + operator delete->FreeMemSize), base=IRunnableTask/MessageString per asm dtor-chain. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:RealmcIface::MessageCheckLoadedData": {
+   "notes": "Fresh-decomp mirroring committed MessageBootupDone/MessageLoadDone: Apply=target-vtable-slot dispatch (slot from asm), deleting-dtor compiler-generated (virtual dtor + operator delete->FreeMemSize), base=IRunnableTask/MessageString per asm dtor-chain. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:RealmcIface::MessageLoadDone": {
    "notes": "2 of 3 done+committed (Apply+dtor; layout fix removed fabricated mPad18); ctor blocked on un-homed EASTL basic_string helper + RealmcCore::allocator<char>::RangeInitialize",
    "status": "blocked"
   },
+  "class:RealmcIface::MessageSaveDone": {
+   "notes": "Fresh-decomp mirroring committed MessageBootupDone/MessageLoadDone: Apply=target-vtable-slot dispatch (slot from asm), deleting-dtor compiler-generated (virtual dtor + operator delete->FreeMemSize), base=IRunnableTask/MessageString per asm dtor-chain. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:RealmcIface::MessageSetActiveCardDone": {
+   "notes": "Fresh-decomp mirroring committed MessageBootupDone/MessageLoadDone: Apply=target-vtable-slot dispatch (slot from asm), deleting-dtor compiler-generated (virtual dtor + operator delete->FreeMemSize), base=IRunnableTask/MessageString per asm dtor-chain. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:RealmcIface::MessageSetAutosaveDone": {
+   "notes": "Fresh-decomp mirroring committed MessageBootupDone/MessageLoadDone: Apply=target-vtable-slot dispatch (slot from asm), deleting-dtor compiler-generated (virtual dtor + operator delete->FreeMemSize), base=IRunnableTask/MessageString per asm dtor-chain. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:RealmcIface::MessageShowAutosaveIcon": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
+   "status": "done"
+  },
+  "class:RealmcIface::SaveCheckParams": {
+   "notes": "Fresh-decomp: ctor asm-grounded (base-ctor chain + register field stores), deleting-dtor compiler-generated. Verifier pass, faithfulness 0-new, joint compile pass.",
    "status": "done"
   },
   "class:RealmcIface::SaveReq": {
