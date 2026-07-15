@@ -48366,6 +48366,24 @@
   "XGRAPHICS::DListNode::Remove": {
    "status": "reviewed"
   },
+  "XGRAPHICS::ExportAddress::ExportAddress": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::ExportAddress::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::ExportAddress::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::ExportSlot::ExportSlot": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::ExportSlot::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::ExportSlot::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::IRAllocColor::InstType": {
    "status": "reviewed"
   },
@@ -48435,6 +48453,15 @@
   "XGRAPHICS::IRLoadTemp::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "XGRAPHICS::IRLoopIndex::InstType": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRLoopIndex::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRLoopIndex::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::IRMov::IRMov": {
    "status": "reviewed"
   },
@@ -48454,6 +48481,12 @@
    "status": "reviewed"
   },
   "XGRAPHICS::IRNop::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRTrinary::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRTrinary::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "XGRAPHICS::IRUnary::NewInst": {
@@ -48511,6 +48544,15 @@
    "status": "reviewed"
   },
   "XGRAPHICS::LoopIndexedOutputSet::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopRegister::LoopRegister": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopRegister::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::LoopRegister::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "XGRAPHICS::TempValue::NewItem": {
@@ -64874,6 +64916,14 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XGRAPHICS::ExportAddress": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlloc; ctor records index/InstType tag/NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::ExportSlot": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlloc; ctor records index/InstType tag/NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:XGRAPHICS::IRAllocColor": {
    "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlu; InstType returns asm-immediate tag, NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile w/ IRInst consumers pass.",
    "status": "done"
@@ -64924,11 +64974,19 @@
   "class:XGRAPHICS::IRLoadTemp": {
    "status": "done"
   },
+  "class:XGRAPHICS::IRLoopIndex": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlloc; ctor records index/InstType tag/NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:XGRAPHICS::IRMov": {
    "status": "done"
   },
   "class:XGRAPHICS::IRNop": {
    "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::IRTrinary": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlloc; ctor records index/InstType tag/NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile pass.",
    "status": "done"
   },
   "class:XGRAPHICS::IRUnary": {
@@ -64955,6 +65013,10 @@
   },
   "class:XGRAPHICS::LoopIndexedOutputSet": {
    "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::LoopRegister": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlloc; ctor records index/InstType tag/NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile pass.",
    "status": "done"
   },
   "class:XGRAPHICS::TempValue": {
