@@ -35271,6 +35271,12 @@
   "CgsGraphics::DispatchList::ReconnectChainBlocks": {
    "status": "reviewed"
   },
+  "CgsGraphics::DispatchList::ReserveKey": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::DispatchList::Submit": {
+   "status": "reviewed"
+  },
   "CgsGraphics::DispatchObjectContext::ResetShadowing": {
    "status": "reviewed"
   },
@@ -47308,6 +47314,18 @@
    "status": "reviewed"
   },
   "RealmcIface::TitleInfo::TitleInfo": {
+   "status": "reviewed"
+  },
+  "RealmcIface::XenonMessageFilter::ProcessMessage": {
+   "status": "reviewed"
+  },
+  "RealmcIface::XenonMessageFilter::Reset": {
+   "status": "reviewed"
+  },
+  "RealmcIface::XenonMessageFilter::XenonMessageFilter": {
+   "status": "reviewed"
+  },
+  "RealmcIface::XenonMessageFilter::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "Renderable::UsesTexture": {
@@ -61668,6 +61686,10 @@
    "notes": "5 funcs (render dispatch bin); verifier minor_drift/low; gate pass.",
    "status": "done"
   },
+  "class:CgsGraphics::DispatchList": {
+   "notes": "Fresh-decomp, mirror committed sibling; verifier pass, faithfulness 0-new, joint compile incl. shared-header consumers pass.",
+   "status": "done"
+  },
   "class:CgsGraphics::Im2d": {
    "notes": "0 of 4 - all blocked on un-homed mask-stack + shader-constants collaborators (SaveMaskShaderConstants/PushMask/PopMask/PushBoostBarColours)",
    "status": "blocked"
@@ -64414,6 +64436,10 @@
   },
   "class:RealmcIface::TitleInfo": {
    "notes": "TitleInfo copy-ctor + one-shot Empty(); SELF-VERIFIED parity (workflow verifier hit transient API error; asm: *result=*a2 single-word copy + singleton zero-once mirroring CardData::Empty); gate pass.",
+   "status": "done"
+  },
+  "class:RealmcIface::XenonMessageFilter": {
+   "notes": "Fresh-decomp, mirror committed sibling; verifier pass, faithfulness 0-new, joint compile incl. shared-header consumers pass.",
    "status": "done"
   },
   "class:RealmcIface::XenonRunnableTask": {
