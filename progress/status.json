@@ -32838,6 +32838,24 @@
   "CLocalHuffman::~CLocalHuffman": {
    "status": "reviewed"
   },
+  "CLocalHuffmanEncoder::WriteSymbol": {
+   "status": "reviewed"
+  },
+  "CLocalHuffmanEncoder::checkFrame": {
+   "status": "reviewed"
+  },
+  "CLocalHuffmanEncoder::checkInMV": {
+   "status": "reviewed"
+  },
+  "CLocalHuffmanEncoder::checkInRTCMV": {
+   "status": "reviewed"
+  },
+  "CLocalHuffmanEncoder::encodeHeader": {
+   "status": "reviewed"
+  },
+  "CLocalHuffmanEncoder::encodeSymbol": {
+   "status": "reviewed"
+  },
   "CMarshaller::GetArgumentFromSchema": {
    "status": "reviewed"
   },
@@ -35326,6 +35344,21 @@
    "status": "reviewed"
   },
   "CgsGraphics::Im2d::Construct": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Im2dRenderBuffer::BatchTransformTextureBlendRenderStatic": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Im2dRenderBuffer::PopMask": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Im2dRenderBuffer::PushBoostBarColours": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Im2dRenderBuffer::PushMask": {
+   "status": "reviewed"
+  },
+  "CgsGraphics::Im2dRenderBuffer::SetTransform": {
    "status": "reviewed"
   },
   "CgsGraphics::Im2dTransform,33>::Grow": {
@@ -61488,6 +61521,10 @@
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
    "status": "done"
   },
+  "class:CLocalHuffmanEncoder": {
+   "notes": "Template-instantiation over committed generic / vendor codec / 2D-render state ops; verifier pass, faithfulness 0-new, joint compile + consumer re-gate pass.",
+   "status": "done"
+  },
   "class:CMarshaller": {
    "status": "done"
   },
@@ -61887,6 +61924,10 @@
   "class:CgsGraphics::Im2d": {
    "notes": "0 of 4 - all blocked on un-homed mask-stack + shader-constants collaborators (SaveMaskShaderConstants/PushMask/PopMask/PushBoostBarColours)",
    "status": "blocked"
+  },
+  "class:CgsGraphics::Im2dRenderBuffer": {
+   "notes": "Template-instantiation over committed generic / vendor codec / 2D-render state ops; verifier pass, faithfulness 0-new, joint compile + consumer re-gate pass.",
+   "status": "done"
   },
   "class:CgsGraphics::Im2dTransform": {
    "notes": "Keystone campaign: faithful VMX->scalar lowering / prerequisite homing, adversarially verified vs X360 asm. Committed d7b641b.",
