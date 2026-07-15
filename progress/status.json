@@ -32877,6 +32877,21 @@
   "CPictureFYUV420::~CPictureFYUV420": {
    "status": "reviewed"
   },
+  "CQueue::AddElement": {
+   "status": "reviewed"
+  },
+  "CQueue::CQueue": {
+   "status": "reviewed"
+  },
+  "CQueue::DestroyQueue": {
+   "status": "reviewed"
+  },
+  "CQueue::GetElement": {
+   "status": "reviewed"
+  },
+  "CQueue::RemoveElement": {
+   "status": "reviewed"
+  },
   "CRct::operator=": {
    "status": "reviewed"
   },
@@ -43695,6 +43710,9 @@
   "CgsSound::Playback::ContentSpec>::DoUnresolve": {
    "status": "reviewed"
   },
+  "CgsSound::Playback::ContentType::GetContentClass": {
+   "status": "reviewed"
+  },
   "CgsSound::Playback::ContentType>::DoFixDown": {
    "status": "reviewed"
   },
@@ -46158,6 +46176,9 @@
   "KeyMembersIndex::in_word_set": {
    "status": "reviewed"
   },
+  "LionBatch,512>::GetItem": {
+   "status": "reviewed"
+  },
   "LionPerfMon::Construct": {
    "status": "reviewed"
   },
@@ -47343,6 +47364,9 @@
   "RendererIO::InputBuffer::SetBrnCamera": {
    "status": "reviewed"
   },
+  "RendererIO::InputBuffer>": {
+   "status": "reviewed"
+  },
   "RendererIO::OutputBuffer::Construct": {
    "status": "reviewed"
   },
@@ -47449,6 +47473,9 @@
    "status": "reviewed"
   },
   "RendererIO::OutputBuffer::SetWorldEffectsFrame": {
+   "status": "reviewed"
+  },
+  "RendererIO::OutputBuffer>": {
    "status": "reviewed"
   },
   "Shader::ParameterBlock::GetResourceDescriptor": {
@@ -61308,6 +61335,10 @@
   "class:CPictureFYUV420": {
    "status": "done"
   },
+  "class:CQueue": {
+   "notes": "Fresh-decomp/finish-partial/reconcile; verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:CRct": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
@@ -63514,6 +63545,10 @@
   "class:CgsSound::Playback::ContentSpec>": {
    "status": "done"
   },
+  "class:CgsSound::Playback::ContentType": {
+   "notes": "Fresh-decomp/finish-partial/reconcile; verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:CgsSound::Playback::ContentType>": {
    "status": "done"
   },
@@ -64135,6 +64170,10 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:LionBatch,512>": {
+   "notes": "Fresh-decomp/finish-partial/reconcile; verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
   "class:MassiveAdClient3::CAddressIndexPair": {
    "notes": "ctor (strncpy alloc) + dtor verified; dropped a dead post-free store for strict parity.",
    "status": "done"
@@ -64449,6 +64488,10 @@
   "class:RealmcIface::XenonUtil": {
    "notes": "21 of 22 done+committed (ReadFileLayer2 + SaveDataRegular finished by homing the LoadEntryInfo data-buffer member); 1 still blocked: CardResultToCardStatus needs byte_82148638 jump-table rodata",
    "status": "blocked"
+  },
+  "class:RendererIO": {
+   "notes": "Fresh-decomp/finish-partial/reconcile; verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
   },
   "class:RendererIO::InputBuffer": {
    "notes": "SetBrnCamera write-lock copy into embedded camera; compile gate PASS; verify-agent PASS. Same benign assert-machinery parity note as OutputBuffer.",
