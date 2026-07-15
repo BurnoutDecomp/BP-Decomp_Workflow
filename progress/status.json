@@ -48342,6 +48342,15 @@
   "XGRAPHICS::Arena::Malloc": {
    "status": "reviewed"
   },
+  "XGRAPHICS::BaseAddr::BaseAddr": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::BaseAddr::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::BaseAddr::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::Block::Append": {
    "status": "reviewed"
   },
@@ -48357,10 +48366,52 @@
   "XGRAPHICS::DListNode::Remove": {
    "status": "reviewed"
   },
+  "XGRAPHICS::IRAllocColor::InstType": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocColor::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocColor::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocInterp::InstType": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocInterp::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocMem::InstType": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocMem::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocMem::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocPos::InstType": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocPos::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRAllocPos::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::IRBinary::NewInst": {
    "status": "reviewed"
   },
   "XGRAPHICS::IRBinary::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRCmp1S::InstType": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRCmp1S::NewInst": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::IRCmp1S::`scalar deleting destructor'": {
    "status": "reviewed"
   },
   "XGRAPHICS::IRFetch::InstType": {
@@ -64807,6 +64858,10 @@
   "class:XGRAPHICS::Arena": {
    "status": "done"
   },
+  "class:XGRAPHICS::BaseAddr": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlu; InstType returns asm-immediate tag, NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile w/ IRInst consumers pass.",
+   "status": "done"
+  },
   "class:XGRAPHICS::Block": {
    "notes": "Wave 54: reconstructed store-for-store from X360 ARTIST asm + adversarially verified. CObjectRefCount XMemFree routed via canonical gXMemMemoryManager. Committed ea9939a.",
    "status": "done"
@@ -64819,12 +64874,32 @@
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
    "status": "done"
   },
+  "class:XGRAPHICS::IRAllocColor": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlu; InstType returns asm-immediate tag, NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile w/ IRInst consumers pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::IRAllocInterp": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlu; InstType returns asm-immediate tag, NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile w/ IRInst consumers pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::IRAllocMem": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlu; InstType returns asm-immediate tag, NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile w/ IRInst consumers pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::IRAllocPos": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlu; InstType returns asm-immediate tag, NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile w/ IRInst consumers pass.",
+   "status": "done"
+  },
   "class:XGRAPHICS::IRAlu": {
    "notes": "4 of 7 done+committed; 3 blocked on un-homed foreign microcode context (raw +0xAB0 CFG hop)",
    "status": "blocked"
   },
   "class:XGRAPHICS::IRBinary": {
    "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
+  },
+  "class:XGRAPHICS::IRCmp1S": {
+   "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlu; InstType returns asm-immediate tag, NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile w/ IRInst consumers pass.",
    "status": "done"
   },
   "class:XGRAPHICS::IRExport": {
