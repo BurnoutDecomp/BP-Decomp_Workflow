@@ -3000,6 +3000,12 @@
   "Attrib::Gen::song::song": {
    "status": "reviewed"
   },
+  "Attrib::Gen::songlist::Songs": {
+   "status": "reviewed"
+  },
+  "Attrib::Gen::songlist::songlist": {
+   "status": "reviewed"
+  },
   "Attrib::Gen::sparkeffect::sparkeffect": {
    "status": "reviewed"
   },
@@ -48318,6 +48324,15 @@
   "XConfigUserSettings::GetVideoFlags": {
    "status": "reviewed"
   },
+  "XGRAPHICS::AddrIndexedSet::AddrIndexedSet": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::AddrIndexedSet::NewItem": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::AddrIndexedSet::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "XGRAPHICS::Arena::Free": {
    "status": "reviewed"
   },
@@ -56987,6 +57002,10 @@
   "class:Attrib::Gen::song": {
    "status": "done"
   },
+  "class:Attrib::Gen::songlist": {
+   "notes": "Generated attrib class; Songs+ctor split out-of-line into songlist.cpp (real X360 out-of-line funcs 0x82683998/0x82697978), mirrors committed song::song. Verifier pass.",
+   "status": "done"
+  },
   "class:Attrib::Gen::sparkeffect": {
    "status": "done"
   },
@@ -64729,6 +64748,10 @@
   "class:XGRAPHICS": {
    "notes": "FOUNDATION committed (af326ab): 83/85 bodied faithfully (every GPU mask/AS-table-index asm-grounded; AS_* infra core + 34 CompileGet* + 38 CompileWith* + plumbing; partial AS_Object struct from 4 attested offsets). 2/85 decl-only: CopyMemoryCachedDst@0x8295E070 (multi-stage VMX cache-aligned memcpy) + CompileGetMemExportConstant2@0x82C25CC0 (un-homed rodata unk_82FA5220). Minor doc nit: AS_GetStateI sibling address attribution.",
    "status": "blocked"
+  },
+  "class:XGRAPHICS::AddrIndexedSet": {
+   "notes": "Thin explicit-instantiation over committed generic / vendor container; verifier pass, faithfulness 0-new, joint compile pass.",
+   "status": "done"
   },
   "class:XGRAPHICS::Arena": {
    "status": "done"
