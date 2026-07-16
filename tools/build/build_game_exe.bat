@@ -200,6 +200,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\EATech\Apt\AptActionTryCatchFinallyBlock.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptKeyMembersIndex.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptInit.cpp"
+  echo "%SRC%\SDKs\EATech\Apt\Apt.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptUpdate.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptMath.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptObjectIndex.cpp"
