@@ -199,6 +199,8 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\EATech\Apt\AptActionDefineFunction2.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptActionTryCatchFinallyBlock.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptKeyMembersIndex.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\PC\CgsAptRenderBackendPC.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\PC\CgsAptStreamLoaderPC.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptInit.cpp"
   echo "%SRC%\SDKs\EATech\Apt\Apt.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptUpdate.cpp"
@@ -525,6 +527,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\BrnGuiCache.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiProfile.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadPS3.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\PC\CgsSaveLoadPC.cpp"
   rem ---- ProfileManager link closure (2026-07-12): the committed save/load + profile ----
   rem ---- validation TUs the real BrnGui::ProfileManager references.                 ----
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadX360.cpp"
@@ -589,7 +592,6 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnSaveIconComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnShowtimeMessageComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptComponentUtils.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiAptRuntime.cpp"
   rem ---- the real GUI flow-controller chain (GuiFsmController + BrnHudFlow's 14-state pool) ----
   echo "%SRC%\GameSource\Gui\BrnGuiFsmController.cpp"
   echo "%SRC%\GameSource\Gui\Flow\BrnBaseFlow.cpp"
@@ -673,6 +675,10 @@ rem ---- build the cl response file ----
   rem scaffold for the rest (see BrnHudStatesLinkStubs.cpp).
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnPausedHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnIdleHudState.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnFBurnMainHudState.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsList.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListChangeIcon.cpp"
+  echo "%SRC%\GameSource\Gui\View\BrnDistrictMarkerComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnHudStatesLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextField.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnButtonIcon.cpp"
