@@ -3,7 +3,7 @@
 # profile save is in flight (event 355 -> ShowSaveIcon). Reuses popup_capture's PID-window harness.
 param([string]$OutDir = "scratch\saveicon_cap")
 $ErrorActionPreference = 'Stop'
-$root = Resolve-Path (Join-Path $PSScriptRoot "..")
+$root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $exe  = Join-Path $root "build\game\Burnout_PC.exe"
 $log  = Join-Path $root "build\game\BrnGame.log"
 $outPath = Join-Path $root $OutDir

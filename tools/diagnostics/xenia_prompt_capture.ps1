@@ -2,7 +2,7 @@
 # title -> menu -> autosave-prompt sequence (ground truth for the PC recon).
 param([string]$OutDir = "scratch\xenia_truth", [int]$BootSeconds = 75)
 $ErrorActionPreference = 'Stop'
-$root = Resolve-Path (Join-Path $PSScriptRoot "..")
+$root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $outPath = Join-Path $root $OutDir
 New-Item -ItemType Directory -Force $outPath | Out-Null
 Add-Type -AssemblyName System.Drawing
