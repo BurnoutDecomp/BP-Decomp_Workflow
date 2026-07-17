@@ -561,6 +561,11 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Replays\Stream\BrnReplayWriteStream.cpp"
   echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribinstance.cpp"
   echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribute.cpp"
+  rem ---- l2-into-dev merge link closure (dev waves grew shared TUs; their homes join;
+  rem      the cascade-heavy waves -- ScreenFlow/HudFlow new states, CgsRegistry schema
+  rem      web, Attrib node web -- are reverted-in-merge to l2 pending integration) ----
+  echo "%SRC%\SDKs\EATech\include\NFSMix\NFSMixMapLinkStubs.cpp"
+  echo "%VEN%\renderware\src\rw\core\stdc\stdc.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEMemory.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEPoint.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionBlockAlloc.cpp"
@@ -621,6 +626,8 @@ rem ---- build the cl response file ----
   rem ---- the SCREEN flow container + its committed state set (2026-07-12) ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\BrnScreenFlow.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenStatesLinkStubs.cpp"
+  rem (the dev-wave state TUs -- CarSelectOnlineEnd/CrashNavStats/CrashNavEnterOnlineX360/
+  rem  PreRaceFlyBy -- bind when the ScreenFlow/HudFlow pool growth is integrated)
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnIntro.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnInGame.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle.cpp"
@@ -640,6 +647,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnReplayOutro.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnBrnDebug.cpp"
   echo "%SRC%\GameSource\Gui\Flow\PostEvent\States\Offline\BrnOfflineInstantResults.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PostEvent\States\Offline\BrnCompletedGame.cpp"
   echo "%SRC%\GameSource\Gui\Flow\PostEvent\States\Showtime\BrnShowtimeInstantResults.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\Replays\BrnReplayHudMessageComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\Shared\BrnScreenShared.cpp"

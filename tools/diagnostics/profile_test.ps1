@@ -14,7 +14,7 @@ param(
     [switch]$LeaveRunning
 )
 $ErrorActionPreference = 'Stop'
-$root = Resolve-Path (Join-Path $PSScriptRoot "..")
+$root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $exe  = Join-Path $root "build\game\Burnout_PC.exe"
 $log  = Join-Path $root "build\game\BrnGame.log"
 if (-not (Test-Path $exe)) { throw "exe not found: $exe" }

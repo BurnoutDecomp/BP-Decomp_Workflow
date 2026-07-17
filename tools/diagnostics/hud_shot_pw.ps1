@@ -3,7 +3,7 @@
 # dance deterministically freezes the in-game Present -- proven by CPU probing).
 param([string]$OutDir = "scratch\hud_shots_pw")
 $ErrorActionPreference = 'Stop'
-$root = Resolve-Path (Join-Path $PSScriptRoot "..")
+$root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $exe  = Join-Path $root "build\game\Burnout_PC.exe"
 $log  = Join-Path $root "build\game\BrnGame.log"
 $outPath = Join-Path $root $OutDir

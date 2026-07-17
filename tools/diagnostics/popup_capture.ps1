@@ -2,7 +2,7 @@
 # (Process.MainWindowHandle reads 0 intermittently; FindWindow by title is robust).
 param([string]$OutDir = "scratch\popup_cap", [switch]$LeaveRunning)
 $ErrorActionPreference = 'Stop'
-$root = Resolve-Path (Join-Path $PSScriptRoot "..")
+$root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $exe  = Join-Path $root "build\game\Burnout_PC.exe"
 $log  = Join-Path $root "build\game\BrnGame.log"
 $outPath = Join-Path $root $OutDir
