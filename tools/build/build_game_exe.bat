@@ -176,6 +176,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Graphics\BrnRendererModule.cpp"
   echo "%SRC%\GameSource\Graphics\BrnShaderConstantsFrame.cpp"
   echo "%SRC%\GameSource\Game\BrnLoadingScreenRenderer.cpp"
+  echo "%SRC%\GameSource\Game\BrnDispatchThreadInputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm2d.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\ImRenderBuffer\CgsImRenderBufferTemplate.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptRenderHandler.cpp"
