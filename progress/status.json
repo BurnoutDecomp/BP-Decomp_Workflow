@@ -33708,7 +33708,37 @@
   "BrnWorld::WorldEntityIO::RequestInterface::ValidateCollisionWorld": {
    "status": "reviewed"
   },
+  "BrnWorld::WorldEntityModule::AddBackdropEntity": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::AddCollisionZoneToSceneManager": {
+   "status": "reviewed"
+  },
   "BrnWorld::WorldEntityModule::BridgePVSToOutput_Prepare": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::Destruct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::GenerateDispatchLists": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::GenerateDispatchListsForEnvironmentMap": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::HandleExternalRequests": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::InvalidateCollision": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::LoadBackdropForZone": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::OnWorldGraphicsLoadComplete": {
    "status": "reviewed"
   },
   "BrnWorld::WorldEntityModule::OnWorldGraphicsUnloadBegin": {
@@ -33720,13 +33750,40 @@
   "BrnWorld::WorldEntityModule::Prepare": {
    "status": "reviewed"
   },
+  "BrnWorld::WorldEntityModule::PrepareSurfaceList": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::PrepareWorldCollision": {
+   "status": "reviewed"
+  },
   "BrnWorld::WorldEntityModule::PrepareZoneCollision": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::ProcessValidationRequests": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::QueryWorldGraphicsLoad": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::Release": {
    "status": "reviewed"
   },
   "BrnWorld::WorldEntityModule::RemoveBackdropEntity": {
    "status": "reviewed"
   },
+  "BrnWorld::WorldEntityModule::UnloadBackdropForZone": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::UpdateBackdropSceneEntities": {
+   "status": "reviewed"
+  },
   "BrnWorld::WorldEntityModule::UpdateCollisionValidation": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::UpdateStream": {
+   "status": "reviewed"
+  },
+  "BrnWorld::WorldEntityModule::ValidateCollision": {
    "status": "reviewed"
   },
   "BrnWorld::WorldGraphicsStreamer::Construct": {
@@ -59499,8 +59556,8 @@
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp": {
-   "notes": "0/7 blocked, nothing committed. BrnWorld::WorldEntityModule needs un-homed BrnWorld IO/entity + Massive-instance types + surface/zone queries.",
-   "status": "blocked"
+   "notes": "Full fresh-eyes subagent review (2026-07-24) verdict FAIL with 2 real findings + 3 cosmetic; ALL fixed and re-gated: (1) RenderInstance override-LOD early-out restored (instance skipped when the model lacks the override state, both passes); (2) debug bounding-circle block now runs in the shadow pass too (X360 parity); (3) omitted dev PM stack node documented; (4) header offset-map comment corrected to 0x72B8/BC/C0; (5) header param names aligned to verified semantics (lfDrawDistanceScale/liList/liSortLayer/liSortKey/liPreZList). Delta re-verified against the reviewer's X360 citations; pass recorded on the fixed revision (delta-only re-review, reason noted per policy).",
+   "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.cpp": {
    "status": "done"
