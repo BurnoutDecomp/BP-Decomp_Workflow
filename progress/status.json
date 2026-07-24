@@ -51126,13 +51126,49 @@
   "WorldModule::CalculateVehicleLODs": {
    "status": "reviewed"
   },
+  "WorldModule::Construct": {
+   "status": "reviewed"
+  },
+  "WorldModule::Destruct": {
+   "status": "reviewed"
+  },
+  "WorldModule::EntityModulePostSceneUpdate": {
+   "status": "reviewed"
+  },
+  "WorldModule::EntityModulePrePhysicsUpdate": {
+   "status": "reviewed"
+  },
+  "WorldModule::ExternalSceneQueriesUpdate": {
+   "status": "reviewed"
+  },
   "WorldModule::FilterFrustumTestResults": {
+   "status": "reviewed"
+  },
+  "WorldModule::GenerateDispatchLists": {
+   "status": "reviewed"
+  },
+  "WorldModule::GenerateFrustumQueries": {
+   "status": "reviewed"
+  },
+  "WorldModule::GenerateShadowMapDispatchLists": {
+   "status": "reviewed"
+  },
+  "WorldModule::HandleGameActions": {
    "status": "reviewed"
   },
   "WorldModule::LoadAttribSysVault": {
    "status": "reviewed"
   },
+  "WorldModule::LoadDistrictMap": {
+   "status": "reviewed"
+  },
+  "WorldModule::Prepare": {
+   "status": "reviewed"
+  },
   "WorldModule::PrepareWorldCollision": {
+   "status": "reviewed"
+  },
+  "WorldModule::Release": {
    "status": "reviewed"
   },
   "WorldModule::SetupShaderConstantsBeforeRendering": {
@@ -51142,6 +51178,9 @@
    "status": "reviewed"
   },
   "WorldModule::UpdateForBootUpVideo": {
+   "status": "reviewed"
+  },
+  "WorldModule::UpdatePhysicsNetworkCatchup": {
    "status": "reviewed"
   },
   "WorldModule::WorldModule": {
@@ -59373,8 +59412,8 @@
    "status": "done"
   },
   "GameSource/Unity/../World/BrnWorldModule.cpp": {
-   "notes": "FOUNDATION committed (04b1a3a): WorldModule TYPE homed (CgsModule::ModuleSingleBuffered subclass, BrnWorldModule.h/.cpp). 1/13 bodied (LoadDistrictMap 5-stage Districts.dat streaming, conductor-fixed swapped AcquireEvent payload offsets pool->+8/u64->+16). 12/13 decl-only: un-homed embedded sub-module fleet (RaceCar/Traffic/Prop/Trigger entity modules + Physics/Scene/AI/Crash) + 3 VMX dispatch builders (GenerateDispatchLists/FrustumQueries/ShadowMapDispatchLists) + Prepare@0x827D53B0. Unblocks once the sub-module fleet layouts are homed.",
-   "status": "blocked"
+   "notes": "Fresh-eyes review returned FAIL with 7 material findings; ALL FIXED + regated (8-TU sweep green, lint PASS): (1) shadow cascade-0 seeds now use the caller's live result size + the X360 local -1 seed type (signature param liResultType->liResultSize); (2) entity-mask/query-flags UNSWAPPED at all 3 frustum-query sites (computed backdrops word/1024/128 -> mx32EntityTypeFlags, 0 -> mxQueryFlags; KX_* placeholders deleted); (3) env-face far-clip-10000/UpdateProj/RH mutations retargeted to the LOCAL camera copy (member maEnvMapCameras never mutated) + local VP fed to SetEnvMapViewProjectionMatrix; (4) Construct's +6175760 block re-homed from mLastCameraInput to mShaderLodInfo (zero splats, 20.0 near, 0, -1, off) + ShaderLodInfo::Construct/Update bodied in this TU (Update = the broadcast splat); (5) 0x827BACA8 re-read as the VECTOR setter: ids 8 (view position) / 9 (UNCLAMPED key light) now carry payloads, 12 keeps the clamped colour, SetShaderConstantScope additive deleted; (6) mSkyDebugComponent retyped to the real EnvironmentSettings::DebugComponent (new BrnSkyDebugComponent.h, DWARF shape; Construct(@0x827C7668, no export -- body with that TU) called with &mEnvironmentManager; (7) ReleaseWorld/DestructWorld renamed to the real this-only virtual Release()/Destruct() slots. Minors also fixed: UT_FrustumTesting bracket, RMS pause-across-FX + cache bracket, CalculateVehicleLODs camera-position arg, shadow traffic gets the live camera input; CalculateShadowMapCameras r4 discrepancy FLAGged in-code.",
+   "status": "done"
   },
   "GameSource/Unity/../World/BrnWorldModuleIO.cpp": {
    "status": "done"
