@@ -325,3 +325,41 @@ pools:
     allocator_indices: [64, 26]   # [linear?, heap?] -- into the map allocator arrays
     heaps:
       - { type: 0, size: 0x0003F000, align: 16 }
+
+# The memory map's five ALLOCATOR record tables (header counts @+16..+32, table offsets
+# @+44..+60): the definitions GameDataModule::CreateAllocators (0x8266DD00) publishes as
+# type-10/14/11/12 create requests. Dumped 2026-07-26 via headless IDA over the ARTIST
+# .i64 (scratch/ida_tmp/dump_memmap.py -> memmap_blob.bin; the decrypted XEX file the
+# exporter used is no longer present). Bank ids key the AllocatorList registry (0..0x42);
+# parent = the CreateBanks-tree parent bank the X360 carves the allocator's leaf bank
+# from. desc lanes are the rw 5-entry {size, align} descriptor (only lanes 0/2 are used).
+allocators:
+  raw_resources:
+    - { bank: 34, name: Ice, parent: 29, desc: [ { type: 0, size: 0x00040000, align: 16 } ] }
+  linear:
+    - { bank: 22, name: AttribSysLinAlloc, parent: 10, size: 0x00044000 }
+    - { bank: 30, name: Behaviours, parent: 29, size: 0x00010000 }
+    - { bank: 44, name: Gui_State_Allocator, parent: 5, size: 0x000F0000 }
+    - { bank: 48, name: Replays Allocator, parent: 47, size: 0x00200000 }
+    - { bank: 61, name: SP Allocator, parent: 2, size: 0x00419000 }
+    - { bank: 65, name: Mugshots, parent: 5, size: 0x00100000 }
+    - { bank: 66, name: FLAPT_Allocator, parent: 5, size: 0x000E1000 }
+  heap:
+    - { bank: 19, name: AttrSysHeap, parent: 10, size: 0x00094000 }
+    - { bank: 20, name: GameTalkAlloc, parent: 10, size: 0x00024000 }
+    - { bank: 21, name: EAStl, parent: 10, size: 0x00004000 }
+    - { bank: 27, name: Network Memory, parent: 26, size: 0x006F0000 }
+    - { bank: 32, name: Apt_Heap_Allocator, parent: 5, size: 0x000D0000 }
+    - { bank: 38, name: Gui_FSM_Lang_Alloc, parent: 5, size: 0x00080000 }
+    - { bank: 41, name: VFX Heap, parent: 33, size: 0x00340000 }
+    - { bank: 63, name: Massive Heap, parent: 62, size: 0x00020000 }
+  rw_linear:
+    - { bank: 23, name: PhysicsAlloc, parent: 2, desc: [ { type: 0, size: 0x003ED800, align: 16 } ] }
+    - { bank: 42, name: Network Image Allocator, parent: 26, desc: [ { type: 0, size: 0x00040000, align: 16 }, { type: 2, size: 0x00200000, align: 128 } ] }
+    - { bank: 49, name: Scene Manager, parent: 2, desc: [ { type: 0, size: 0x0017A800, align: 16 } ] }
+    - { bank: 60, name: VFX Graphics Allocator, parent: 33, desc: [ { type: 0, size: 0x0003C000, align: 16 }, { type: 2, size: 0x00400000, align: 128 } ] }
+  rw_general:
+    - { bank: 9, name: Playback, parent: 4, desc: [ { type: 0, size: 0x0013BC00, align: 16 } ] }
+    - { bank: 24, name: Rwac, parent: 4, desc: [ { type: 0, size: 0x0035C000, align: 16 } ] }
+    - { bank: 25, name: Logic, parent: 4, desc: [ { type: 0, size: 0x0003BC00, align: 16 } ] }
+    - { bank: 31, name: 2D Immediate Heap, parent: 8, desc: [ { type: 0, size: 0x003FC000, align: 16 } ] }
