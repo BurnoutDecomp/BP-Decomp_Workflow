@@ -211,6 +211,11 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficNetworkOutputInterface.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficSoundInterfaces.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\BrnTriggerEntityModuleIO_QueueAccessors.cpp"
+  rem ---- world-IO Construct family (2026-07-27): the trigger pre/post-scene +      ----
+  rem ---- pre-physics buffer Constructs (X360 0x822EED48/0x822DA168/0x822DA180/      ----
+  rem ---- 0x822DA198/0x822DA1B0) and the vehicle driver input interface Construct.   ----
+  echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\BrnTriggerEntityModuleIO.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleDriverInputInterface.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\Bridges\WorldEntityBridgePVSToOutput.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\BrnWorldEntityModuleIO_InputBuffer_GenerateDispatchLists.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\BrnWorldEntityModuleIO_InputBuffer_PostPhysics.cpp"
@@ -227,6 +232,14 @@ rem ---- build the cl response file ----
   rem ---- unrecovered) -- stubbed at the vtable seam in WorldLinkStubs instead.     ----
   echo "%SRC%\GameSource\World\DebugComponents\BrnWorldDebugComponent.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\PVSModule\BrnPVSModuleIO.cpp"
+  rem ---- PVS wave (2026-07-27): the real BrnWorld::PVSModule::Update/Prepare pulls  ----
+  rem ---- the zone point query, the GetZoneRequest velocity getter and the           ----
+  rem ---- RequestInterface<512>::LoadPVS request builder.                            ----
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Zones\ZoneList_GetFirstZoneForPoint.cpp"
+  rem (CgsFrustum: BrnShadowMap's ComputeOptimalViewVolume calls Get/SetPlaneByIndex)
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsFrustum.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\PVSModule\SharedIO\BrnPVSModuleEvents.cpp"
+  echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_512.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\SharedIO\BrnWorldEntityRequestInterface.cpp"
   echo "%SRC%\vendor\renderware\collision\BitTable.cpp"
   echo "%SRC%\GameSource\World\WorldLinkStubs.cpp"
@@ -610,6 +623,9 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Numeric\CgsVPUConstantInitializers.cpp"
   echo "%SRC%\GameShared\GameClasses\Physics\CgsCollisionMeshData.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\PS3\CgsRwMaterialCRC32ResourceTypePS3.cpp"
+  rem  world-pixels wave: homes RwRenderableResourceType::FixUpRenderableMesh (@0x828A8968),
+  rem  which the newly-overridden RwRenderableResourceType::FixUp calls per mesh.
+  echo "%SRC%\GameShared\GameClasses\RenderWare\PS3\CgsRwRenderableResourceTypePS3.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\PS3\materialstates\CgsRwShaderParameterResourceTypePS3.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\cross\CgsClusteredMeshResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\cross\CgsKdTreeResourceType.cpp"
