@@ -25,11 +25,16 @@ Layout:
   +0   u32 vltOffset   +4  u32 vltSize   +8 u32 binOffset  +12 u32 binSize
   VLT = chunk stream {u32 fourCC, s32 size, payload, pad-to-size}:
     Vers: u64 versionHash
-    DepN: s64 count, u64 hash1, u64 hash2, s32 nop, s32 entrySize,
-          count * entrySize ASCII bytes (dependency names -- not flipped)
+    DepN: u32 pad, u32 count, count * u64 assetId, count * u32 nameOffset,
+          count NUL-terminated ASCII names (not flipped).  NB the head is TWO
+          u32s -- Attrib::Vault::DependencyNode {u32 muPad, u32 muNumDependencies}
+          (Vault ctor 0x8280A2E8 reads the count with `lwz +12`).  Modelling it
+          as one s64 flips the two halves in LE output and the runtime then sees
+          numDeps == 0 (every PtrN dep reference asserts "invalid index").
     StrN: s64
     DatN: the attribute-header arena; its interior is typed via ExpN records
-    ExpN: s64 count, count * {u64 exportHash, u64 entryTypeHash, s32 size,
+    ExpN: u32 baseAllocExports, u32 count (same two-u32 head as DepN --
+          Attrib::Vault::ExportNode), count * {u64 exportHash, u64 entryTypeHash, s32 size,
           s32 vltPos}; at each vltPos an attribute header:
             u64 collectionHash, u64 classHash, u64 unk1, s32 itemCount,
             s32 unk2, s32 itemCountDup, s16 paramCount, s16 paramsToRead,
@@ -274,18 +279,38 @@ def walk_attribsys_vault(data, big_endian):
             w.scalar(body, 8, 'StrN value')
             content_end = body + 8
         elif cc == FOURCC_DEPN:
-            count = w.scalar(body, 8, 'DepN count')
-            w.scalar(body + 8, 8, 'DepN hash1')
-            w.scalar(body + 16, 8, 'DepN hash2')
-            w.scalar(body + 24, 4, 'DepN nop')
-            entry_size = w.scalar(body + 28, 4, 'DepN entrySize')
-            names_off = body + 32
-            w.raw(names_off, count * entry_size, 'DepN name strings')
-            content_end = names_off + count * entry_size
+            # RUNTIME-ATTESTED head: TWO separate u32s, not one u64. The Vault ctor
+            # (X360 0x8280A2E8) reads the count with `lwz +12` and the pad word sits
+            # at +8 -- Attrib::Vault::DependencyNode {ChunkBlock, u32 muPad,
+            # u32 muNumDependencies} (attribloadandgo.h). Flipping the pair as a u64
+            # SWAPS the two halves in the LE output, so the runtime read numDeps == 0
+            # and every PtrN dep reference asserted "invalid index".
+            w.scalar(body, 4, 'DepN pad')
+            count = w.scalar(body + 4, 4, 'DepN count')
+            ids_off = body + 8
+            for i in range(count):
+                w.scalar(ids_off + i * 8, 8, 'DepN[%d] assetId' % i)
+            names_tab = ids_off + count * 8
+            for i in range(count):
+                w.scalar(names_tab + i * 4, 4, 'DepN[%d] nameOffset' % i)
+            names_off = names_tab + count * 4
+            # The name blob is `count` NUL-terminated ASCII strings (never flipped).
+            at = names_off
+            for i in range(count):
+                end = data.find(b'\0', at)
+                if end < 0 or end >= pos + size:
+                    raise WalkError('DepN name %d unterminated at +0x%X' % (i, at))
+                at = end + 1
+            w.raw(names_off, at - names_off, 'DepN name strings')
+            content_end = at
         elif cc == FOURCC_DATN:
             content_end = body    # interior typed via ExpN below
         elif cc == FOURCC_EXPN:
-            count = w.scalar(body, 8, 'ExpN count')
+            # Same two-u32 head as DepN: Attrib::Vault::ExportNode
+            # {ChunkBlock, u32 muBaseAllocExports, u32 muNumEntries}; the X360
+            # ExpN body is 00000000 00000003 for WORLDVAULT (3 exports).
+            w.scalar(body, 4, 'ExpN baseAllocExports')
+            count = w.scalar(body + 4, 4, 'ExpN count')
             at = body + 8
             for i in range(count):
                 w.scalar(at, 8, 'ExpN[%d] exportHash' % i)

@@ -24,7 +24,7 @@ import traceback
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-GAME = os.path.join(ROOT, 'build', 'game')
+GAME = os.path.join(ROOT, 'build', 'game_x360_world')   # the X360 originals (build/game holds staged conversions)
 OUT = os.path.join(ROOT, 'build', 'game_p4_world')
 VOLA_SRC = os.path.join(ROOT, 'build', 'tools', 'volatility')
 WORKTMP = os.path.join(ROOT, 'build', 'tools', 'volatility_workers')
@@ -66,7 +66,7 @@ def main():
 
     names = sorted(n for n in os.listdir(GAME)
                    if n.startswith('TRK_UNIT') and n.endswith('_GR.BNDL'))
-    for extra in ('WORLDTEX.BIN', 'GLOBALBACKDROPS.BNDL'):
+    for extra in ('GLOBALBACKDROPS.BNDL', 'GLOBALPROPS.BIN'):
         if os.path.isfile(os.path.join(GAME, extra)):
             names.append(extra)
     if args.limit:

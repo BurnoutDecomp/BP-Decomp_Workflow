@@ -31,6 +31,7 @@ import shutil
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import renderable_transcode
 import world_type_transcode
+import tex_transcode
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 YAP = os.path.join(ROOT, 'build', 'tools', 'yap', 'YAP.exe')
@@ -48,12 +49,14 @@ FLIP_PORTABLE = {
     'MaterialTechnique': world_type_transcode.transcode_materialtechnique,
     'TextureState': world_type_transcode.transcode_texturestate,
     'VertexDescriptor': world_type_transcode.transcode_vertexdescriptor,
+    # widening rebuilds (round-trip-proven; PropGraphicsList also rewrites imports)
+    'MaterialState': world_type_transcode.transcode_materialstate,
+    'PropGraphicsList': world_type_transcode.transcode_propgraphicslist,
+    'PropInstanceData': world_type_transcode.transcode_propinstancedata,
+    'StaticSoundMap': world_type_transcode.transcode_staticsoundmap,
 }
-# Types whose committed PC consumers model HOST-WIDENED structs (recon debt
-# documented in world_type_transcode.py) -- passthrough until reconciled:
 PASSTHROUGH = {
-    'MaterialState', 'PropGraphicsList',
-    'PropInstanceData', 'StaticSoundMap', 'PropData',
+    'PropData',
 }
 
 
@@ -91,7 +94,15 @@ def port_texture(work, folder, rid):
     run([VOLA, 'PortTexture', '--informat=x360',
          '--inpath=%s' % os.path.join(stage, rid + '.dat'),
          '--outformat=bprx64', '--outpath=%s' % stage])
-    shutil.copy(os.path.join(stage, rid + '.dat'), hdr)
+    # PortTexture emits the REMASTER (bprx64) 96-byte header; the engine reads the
+    # 0x30-byte serialised renderengine::Texture (fmt @0x1C, w/h @0x20) -- the
+    # boot-proven convert_texture_bundle.py step this flow was missing (the
+    # CreateTexture(fmt=0 0x0 mips=1) WORLDTEX seam).
+    with open(os.path.join(stage, rid + '.dat'), 'rb') as fh:
+        remaster = fh.read()
+    engine, _info = tex_transcode.transcode_header(remaster)
+    with open(hdr, 'wb') as fh:
+        fh.write(engine)
     shutil.copy(os.path.join(stage, rid + '_texture.dat'), body)
 
 
@@ -157,6 +168,20 @@ def convert(in_bundle, out_bundle):
             else:
                 manifest['passthrough'][entry] = len(files)
                 sys.stderr.write('WARNING: unknown resource type folder %s (passthrough)\n' % entry)
+
+        # YAP sidecar naming mismatch fix: extraction emits '<file>.dat_imports.yaml'
+        # (extract.cpp outputImports: generateFilePath()+importsSuffix) but creation
+        # looks up '<ID>_imports.yaml' (yap.cpp validateImports: chopped suffix) --
+        # without this rename YAP c silently drops EVERY import (missing sidecar ->
+        # continue), stripping the bundle's whole import table.
+        for lroot, _dirs, lfiles in os.walk(ex):
+            for f in lfiles:
+                if f.endswith('.dat_imports.yaml'):
+                    base = f[:-len('.dat_imports.yaml')]
+                    if base.endswith('_header'):
+                        base = base[:-len('_header')]
+                    os.replace(os.path.join(lroot, f),
+                               os.path.join(lroot, base + '_imports.yaml'))
 
         # meta: platform 2 -> 4, uncompressed (the PC loader path reads raw).
         meta_path = os.path.join(ex, '.meta.yaml')

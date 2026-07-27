@@ -94,6 +94,11 @@ rem ---- build the cl response file ----
   rem callees (and those TUs' interface operator= homes) are linked below so the whole
   rem controller-bridge family resolves.
   echo "%SRC%\GameSource\Game\GameBridgeControllerToX.cpp"
+  rem ---- world-drive wave (2026-07-27): GameBridgeRendererToX.cpp carries the REAL --
+  rem ---- BridgeRendererToWorld @0x823CDD20 (renderer-output -> world-dispatch-input --
+  rem ---- handle copy) but is NOT mounted: the seven RendererIO::OutputBuffer getters --
+  rem ---- it reads are declaration-only in the linked set (cost rule). Mount it with  --
+  rem ---- BrnRendererModule::Update + the renderer-output accessor bodies.            --
   echo "%SRC%\GameShared\GameClasses\System\Input\CgsInputModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Input\PC\CgsInputPadsPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsGuiSoundPC.cpp"
@@ -107,6 +112,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\BrnWorldEntityModule.cpp"
   echo "%SRC%\GameSource\World\BrnWorldGraphicsStreamer.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToOutput.cpp"
+  rem ---- world-drive wave (2026-07-27): the six sibling bridge TUs with REAL   ----
+  rem ---- bodies (WorldBridgeEntityModulesToEntityModules / ...ToAI / ...ToCrash ---
+  rem ---- / WorldBridgeCrashToEntityModules / WorldBridgeInputToEntityModules /  ---
+  rem ---- WorldBridgePhysicsToScene) are NOT mounted: each drags 1-23 unresolved  ---
+  rem ---- module-IO accessors/setters that are declaration-only (cost rule), so   ---
+  rem ---- their bridges stay boot-gated in WorldLinkStubs.cpp. Mount them with    ---
+  rem ---- the entity-module IO pass that lands those accessors.                   ---
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
@@ -124,12 +136,57 @@ rem ---- build the cl response file ----
   rem ---- offline dumpbin closure analysis; leftovers stubbed in WorldLinkStubs ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatcher.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsGraphicsDispatchList.cpp"
+  rem ---- renderer world-pass wave (2026-07-27): the render-dispatch walk ----------
+  rem ---- (object->mesh expansion, the sorted mesh walk, the shadowing device) ----
+  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatcherCommands.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDrawRenderableFrustumTest.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsPackedOobb.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsOcclusionCullManager.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\shadowingdevice.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\CgsBufferedDispatchFrame.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\CgsMaterialAssembly.cpp"
+  echo "%SRC%\pc\gcm\renderengine\VertexProgramState.cpp"
+  echo "%SRC%\pc\gcm\renderengine\XenonD3D9Shims.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityManager.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysModuleIO.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysMemoryManager.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysPackageAllocator.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysVaultArray.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysVaultSlot.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysVaultLoad.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribhash64.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribarray.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\AttribVector_TypeDescPtr_operator_index.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\CgsShaderConstantTable.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribloadandgo.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribdatabase.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribdatabaseprivate.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribclassprivate.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribhashmap.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribcollection.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribsupport.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribgarbagecollector.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\AttribHashMapTablePolicy.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\vechashmap.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\attribsys.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\attribsysallochooks.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\export\attribexportmanager.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\export\attribiexportpolicy.cpp"
+  rem (data-seam wave: the three world prop/sound resource types + the graphics list home)
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropGraphicsList.cpp"
+  rem (world-render resource-type handlers: registered 2026-07-27)
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\states\programbuffer.cpp"
+  echo "%SRC%\GameShared\GameClasses\RenderWare\cross\CgsMaterialResourceType.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\Resources\CgsShaderTechniqueResourceType.cpp"
+  echo "%SRC%\GameShared\GameClasses\RenderWare\x360\materialstates\CgsRwShaderProgramBufferResourceTypeX360.cpp"
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropGraphicsListResourceType.cpp"
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropInstanceDataResourceType.cpp"
+  echo "%SRC%\SharedClasses\Sound\World\BrnStaticSoundMapResourceType.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
@@ -820,6 +877,8 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Memory\CgsScatterStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsGatherStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsHeapMalloc.cpp"
+  rem PC-platform leaf: the low-4GB root reservation the serialised PointerFromU32 slots need.
+  echo "%SRC%\GameShared\GameClasses\Memory\PC\CgsLowMemoryPC.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsMemoryModule.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\CgsMemoryModuleIO.cpp"
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataAllocatorList.cpp"
