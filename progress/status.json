@@ -54396,6 +54396,87 @@
   "rw::audio::core::SubMixConnector::Disconnect": {
    "status": "reviewed"
   },
+  "rw::audio::core::System::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::DefaultPhysicalAlloc": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::DefaultPhysicalFree": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::ExecuteCommands": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::ExecuteCommandsLock": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::ExecuteCommandsUnlock": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::Free": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::GetPlugInRegistry": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::GetProfiler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::IsCommandComplete": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::IsLocked": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::Lock": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::New2<rw::audio::core::Decoder>": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::New2<rw::audio::core::PlugInRegistry>": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::New2<rw::audio::core::Voice>": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::PhysicalAlloc": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::PhysicalFree": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::Release": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::ReleaseHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::RemoveTimer": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::RemoveVoiceFromExpulsionCandidateList": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::SetRwAudioCoreThreadId": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::SetThreadProcessor": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::System": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::Unlock": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::UpdateExpellingVoices": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::System::VectorToCsisMutex": {
+   "status": "reviewed"
+  },
   "rw::audio::core::TimerHandle::TimerHandle": {
    "status": "reviewed"
   },
@@ -70020,6 +70101,10 @@
   },
   "class:rw::audio::core::SubMixConnector": {
    "notes": "rw audio SubMixConnector; parity/low; wave6; verifier reviewed; gate pass.",
+   "status": "done"
+  },
+  "class:rw::audio::core::System": {
+   "notes": "wave F: ExecuteCommands @0x82B6F6D0 bodied -- the ring pump that was DECLARED but defined nowhere, which is why I refused to close this TU last wave. Reconstructed store-for-store over 131 lines of asm: 4 phases (timer-A locked, expel phase UNLOCKED, ring replay locked, timer-B locked + TimerManager::Defragment). 8 inlined hook-or-mutex lock sites reversed to System::Lock/Unlock. Three X360-literal traps defused: the ring stride now uses host sizeof via a named SystemCommandHeader, the container-of  routes through ITask::GetITaskFromNode, and Defragment's 0x1C Collection stride is indexed as maCollections[i]. TimerManager::Defragment verified instruction-for-instruction by headless IDA and landed as an additive grow on the done TimerManager TU. Verifier walked both functions against the asm and found NO divergence. Ctor is System_ctor per this vendor tree's placement-construction convention. NOT link-clean and knowingly so: GetCpuCycle (declared in 4 .cpp, defined nowhere -- committed precedent) and EaXmaDec::DeallocateResources (blocked sibling TU) are pre-existing cross-TU externals that cl /c cannot see.",
    "status": "done"
   },
   "class:rw::audio::core::TimerHandle": {
