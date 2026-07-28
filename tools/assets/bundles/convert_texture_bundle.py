@@ -39,6 +39,18 @@ def convert(in_bundle, out_bundle):
         ex = os.path.join(work, 'ex')
         run([YAP, 'e', in_bundle, ex])
         ported = tex_transcode.port_textures(ex, work, verbose=True)
+        # YAP sidecar naming mismatch (extract.cpp outputImports writes
+        # '<file>.dat_imports.yaml', yap.cpp validateImports reads
+        # '<ID>_imports.yaml'): without the rename YAP c silently drops every
+        # import. Texture-only bundles have none today, but the flow is shared.
+        for lroot, _dirs, lfiles in os.walk(ex):
+            for f in lfiles:
+                if f.endswith('.dat_imports.yaml'):
+                    base = f[:-len('.dat_imports.yaml')]
+                    if base.endswith('_header'):
+                        base = base[:-len('_header')]
+                    os.replace(os.path.join(lroot, f),
+                               os.path.join(lroot, base + '_imports.yaml'))
 
         meta = os.path.join(ex, '.meta.yaml')
         txt = open(meta).read().replace('platform: 2', 'platform: 4') \

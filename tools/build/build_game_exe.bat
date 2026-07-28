@@ -184,6 +184,10 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\RenderWare\cross\CgsMaterialResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Resources\CgsShaderTechniqueResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\x360\materialstates\CgsRwShaderProgramBufferResourceTypeX360.cpp"
+  rem (textures/shaders wave 2026-07-28: MaterialTechniqueResourceType::PostFixUp now really
+  rem  runs -- SHADERS.BNDL is staged -- and calls renderengine::BlendState::GetParameters
+  rem  @0x82B60A50, whose real home is this SDK TU. Its local __debugbreak placeholder is gone.)
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\states\blendstate.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropGraphicsListResourceType.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropInstanceDataResourceType.cpp"
   echo "%SRC%\SharedClasses\Sound\World\BrnStaticSoundMapResourceType.cpp"
@@ -240,6 +244,9 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsFrustum.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\PVSModule\SharedIO\BrnPVSModuleEvents.cpp"
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_512.cpp"
+  rem (textures/shaders wave 2026-07-28: BrnGameModule::GamePrepare's three one-time
+  rem  LoadBundle requests go through RequestInterface<32768> -- X360 0x823CE558.)
+  echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_32768.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\SharedIO\BrnWorldEntityRequestInterface.cpp"
   echo "%SRC%\vendor\renderware\collision\BitTable.cpp"
   echo "%SRC%\GameSource\World\WorldLinkStubs.cpp"
@@ -682,6 +689,14 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\BrnGuiProfile.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadPS3.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\PC\CgsSaveLoadPC.cpp"
+  rem (2026-07-28: SaveLoadSystem::Save now builds the real Realmc records, so the two
+  rem  self-contained RealmcIface record TUs that own those ctors/operators join the link.
+  rem  RealmcIfaceSaveCheckParams.cpp stays OUT -- it calls the RealmcCore allocator
+  rem  primitives, and RealmcCore.cpp brings the whole Message/RefCount/RealmcString
+  rem  vendor closure with it; the two SaveCheckParams symbols are stubbed in
+  rem  BrnBaselineLinkStubs.cpp until that closure is added.)
+  echo "%SRC%\SDKs\Realmc\RealmcLoadEntryInfo.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcTitleInfo.cpp"
   rem ---- ProfileManager link closure (2026-07-12): the committed save/load + profile ----
   rem ---- validation TUs the real BrnGui::ProfileManager references.                 ----
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadX360.cpp"
