@@ -144,9 +144,23 @@ def build_technique_map(fx_dirs):
 
 
 def compile_entry(fxc, fx_path, entry, profile, include_dir, out_path):
+    # /Zpr == D3DCOMPILE_PACK_MATRIX_ROW_MAJOR.  MANDATORY, not a preference: the engine
+    # uploads a matrix constant as the raw run of float4s the runtime ShaderConstantTable
+    # holds (row-vector rows for `world`, the dot-product rows for
+    # ViewProjectionModified), so shader register N must be logical ROW N.  fxc's default
+    # is column-major, which silently transposes every matrix constant.
+    #
+    # Attested against the X360 originals' own variable tables
+    # (build/game_x360_world/SHADERS.BNDL, read with shader_transcode.program_buffer_variables):
+    #                          X360    /Zpr    fxc default
+    #   world                    4       4          3
+    #   IrradianceQuadricA       4       4          4
+    #   IrradianceQuadricB       3       3          4
+    #   ShadowMap_WorldToLight  12      12         10
+    # i.e. /Zpr reproduces the console register counts exactly and the default does not.
     def attempt(src):
         return subprocess.run([fxc, '/nologo', '/T', profile, '/E', entry,
-                               '/I', include_dir, '/O2', '/Fo', out_path, src],
+                               '/I', include_dir, '/O2', '/Zpr', '/Fo', out_path, src],
                               capture_output=True, text=True)
     r = attempt(fx_path)
     if r.returncode != 0 and "undeclared identifier 'g_verletOffsets'" in (r.stdout + r.stderr):
