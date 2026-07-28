@@ -12324,7 +12324,55 @@
   "BrnGui::CarSelectLivery::UpdateMenuComponents": {
    "status": "reviewed"
   },
+  "BrnGui::CarSelectMain::AppendAptComponents": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::ExitCarSelection": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::GetResourcesToLoadForCarSelect": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::HandleControllerInput": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::HandleLaunchedEvent": {
+   "status": "reviewed"
+  },
   "BrnGui::CarSelectMain::HandleLaunchingEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::HandleLeftGameEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::OnLeave": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::ProcesssIncomingEvents": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::SetupCar": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::SetupCarNameComponent": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::TriggerSetupCar": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectMain::UpdateGuiCache": {
    "status": "reviewed"
   },
   "BrnGui::CarSelectOnlineCountdown::Construct": {
@@ -53883,6 +53931,54 @@
   "rw::audio::core::EaLayer32PcmDec::CreateInstanceEvent": {
    "status": "reviewed"
   },
+  "rw::audio::core::EaXmaDec::AllocateResources": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::CopySamplesOut": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::CreateInstanceEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::DecodeEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::EnterRecoveryMode": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::FeedEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::GetDecoderDesc": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::LeftShiftInBits": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::ParseToNextFrame": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::ReleaseEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::Reset": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::Service": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::StartPair": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::XMAmemcpy": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::EaXmaDec::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::audio::core::Fir64::ClearBuffer": {
    "status": "reviewed"
   },
@@ -58352,8 +58448,8 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectMain.cpp": {
-   "notes": "8 of 16 done+committed groundable UI helpers; 8 screen-flow lifecycle funcs OnEnter/OnLeave/ExitCarSelection/Update/HandleLaunched/HandleLeftGame/GetResourcesToLoad/ProcessIncoming blocked on un-homed BrnScreenState flow-state collaborators",
-   "status": "blocked"
+   "notes": "wave G: the last 7 of 16 bodied across BrnCarSelectMain_wG_01..03.cpp. Conductor fixes after verify: KPAC_MODE_STRINGS is EIGHTEEN slots, not seventeen -- I re-dumped 0x82F26CB0 big-endian myself and index 17 is a live pointer to ONLINE_GAME_OPTION_MODE_STUNT_COOP, with the table ending at [18]=0x95 (not a pointer); the [17] declaration lost that mode string with no diagnostic. Also corrected an inverted claim about event 189: I re-read maiEventToObserve @0x82065E80 (21 words, count word at 0x82065ED4) and 189 IS index 15 of the registered set -- 414 is the one that is not -- so the constant is renamed KI_EVENT_OVERLAY_COMPLETE and documented as registered-but-no-op. LINK CAVEAT recorded, not a blocker for this TU: ten callees it dispatches to are marked reviewed in OTHER TUs but are defined nowhere in the tree (BrnGui::CarSelectMain::HandleLaunchingEvent under the BrnGuiEventTypeDefs.h key, GuiOverlayRequest::AddMessageParam under the CgsStrStream catch-all, plus nine virtuals). Those are cross-TU decl-only callees under the compile-only gate, but they mean this screen will not link until their owning TUs are honest.",
+   "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectOnlineEnd.cpp": {
    "notes": "3 of 5 done+committed; 2 blocked on un-recovered CarSelectOnlinePlayerList mutators",
@@ -69974,8 +70070,8 @@
    "status": "done"
   },
   "class:rw::audio::core::EaXmaDec": {
-   "notes": "5 of 16 done+committed (stream/sizing leaf funcs GetSize/FeedEvent/LeftShiftInBits/ParseToNextFrame/XMAmemcpy); 11 blocked on XMA HW intrinsics + un-recovered context-pair/instance layout + a VMX permute table",
-   "status": "blocked"
+   "notes": "wave G: the last 10-11 of 16 bodied across EaXmaDec.cpp + EaXmaDec_wG_02..04.cpp (AllocateResources, DeallocateResources, ReleaseEvent, CopySamplesOut, GetDecoderDesc, CreateInstanceEvent, StartPair, Service, EnterRecoveryMode, DecodeEvent, dtor). The dtor at 0x82B93ED0 is exported as a vector deleting destructor but reconstructed as ~EaXmaDec per the native-C++ codec convention in this directory -- my scanner reported it missing purely on the name mismatch. Bodying DeallocateResources also closes the unresolved external that rw::audio::core::System::Release was calling after last wave's close. All four groups fresh-eyes verified.",
+   "status": "done"
   },
   "class:rw::audio::core::Encoder": {
    "notes": "Audio-codec encoder base (hard-rule block list). Release @0x82B6D048 is a vtable thunk into the concrete (blocked) XAS/EALayer3 codec DoRelease; whole-blocked per the encoder naming + no-partial-TU rule (GetDataRateOverhead getter alone is trivial but the class thunks into blocked DSP). Deferred.",
