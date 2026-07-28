@@ -53778,6 +53778,21 @@
   "rw::audio::core::CombFilter::SetGains": {
    "status": "reviewed"
   },
+  "rw::audio::core::Compressor1::Configure": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Compressor1::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Compressor1::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Compressor1::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::Compressor1::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::audio::core::CompressorLimiter1::ClearBuffer": {
    "status": "reviewed"
   },
@@ -54408,6 +54423,27 @@
   "rw::audio::core::SeekTableParser::ParseHeader0": {
    "status": "reviewed"
   },
+  "rw::audio::core::SinePlayer::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::SinePlayer::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::SinePlayer::PlayHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::SinePlayer::PreProcess": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::SinePlayer::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::SinePlayer::StopHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::SinePlayer::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::audio::core::Snd9Service::CreateInstance": {
    "status": "reviewed"
   },
@@ -54627,6 +54663,39 @@
   "rw::audio::core::Voice::SetPriorityHandler": {
    "status": "reviewed"
   },
+  "rw::audio::core::VuMeter::CreateInstance": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::EventEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::GetSize": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::Process": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::ReleaseEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::ResetFunc": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::ResetHandler": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::RwacTimerClient": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::UpdateAttributes": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::UpdateRunningPeakandRMS": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::VuMeter::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::collision::AA": {
    "status": "reviewed"
   },
@@ -54781,6 +54850,15 @@
    "status": "reviewed"
   },
   "rw::collision::GPSphere::GetIntervals": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPTriangle::GetInterval": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPTriangle::GetIntervals": {
+   "status": "reviewed"
+  },
+  "rw::collision::GPTriangle::GetMaximumFeature": {
    "status": "reviewed"
   },
   "rw::collision::KdTreeBBoxQuery::KdTreeBBoxQuery": {
@@ -69577,6 +69655,10 @@
    "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
    "status": "done"
   },
+  "class:XGRAPHICS::IRProjection": {
+   "notes": "Wave H: all 3 funcs are bodied and the reconstruction was verified as non-fabricated, but the TU is NOT closeable. Three MUST_FIX defects all root in the IRInst base TU, outside this TU's files. (1) The ctor drops the attested apContext argument. NewInst at 0x82C2C2B0 does mr r5,r31 then li r4,0x80 then bl 0x82C2B030, a 3-arg base ctor, and that base ctor reads r5 four times: it takes the node id from CFG +0x560, post-increments that counter, and stores the context at +0x3B8. XGraphicsIRInst.h declares only IRInst(s32), so those side effects never happen. (2) InstType is declared non-virtual, so on the host it name-hides IRInst::InstType instead of overriding it. Headless IDA proves it is vtable slot 23 in all three sibling vtables and that 0x82C2B590 has exactly one xref, the slot-23 data ref at 0x821B249C. Making it virtual in the derived class ALONE would mint a bogus 27th slot, so the fix must start in XGraphicsIRInst.h, with the caveat that IRInst::InstType has no body yet (blocked on the unrecovered string byte_820DC63C), so virtualising it converts a silent missing symbol into a hard vtable-emission link error. (3) Checklist B link blocker: XGRAPHICS::IRInst::IRInst(s32) is declared at XGraphicsIRInst.h:90 and defined nowhere in the tree, so this TU cannot link. Every committed XGRAPHICS IR node TU shares that blocker, so bodying the 3-arg base ctor in XGraphicsIRInst.cpp unblocks the whole family at once and is the right keystone. What DID land: the header claim that the only distinct behaviour is the vtable, opcode 128 and the InstType tag was rewritten against the six divergent vtable slots (1, 2, 3, 13, 18, 23); a wrong claim that the deleting-dtor thunk restamps off_821AEB78 as the IRInst vtable was corrected, that symbol is the DListNode vtable; a layout pin was added; and the de-inlining of the ctor into NewInst was confirmed legitimate per checklist G. Conductor fix after re-verify: the fix pass had introduced a NEW wrong comment claiming 0x3C4 equals 964 equals console sizeof(IRProjection). It does not. 964 is the object 960 plus the 4-byte arena prefix, since addic. r3,r11,4 makes the object pointer r11+4; corrected at all three sites so no future sweep double-counts the prefix or invents a phantom member. Five non-InstType vtable overrides (slots 1, 2, 3, 13, 18) remain honestly unreconstructed.",
+   "status": "blocked"
+  },
   "class:XGRAPHICS::IRTrinary": {
    "notes": "XGRAPHICS IR/value-kind mirror committed AddrIndexedSet/IRAlloc; ctor records index/InstType tag/NewInst arena factory, dtor thunk dropped. Verifier pass, faithfulness 0-new, joint compile pass.",
    "status": "done"
@@ -70035,6 +70117,10 @@
    "notes": "ctor(miMode=2, 4 gains + mfState)/ResetFunc/SetGains verified.",
    "status": "done"
   },
+  "class:rw::audio::core::Compressor1": {
+   "notes": "Wave H: all 5 funcs verified, fixed, re-verified, plus a conductor fix round. Configure 0x82B96B28 was DECLARED ONLY and called by Process, so this TU could not link even though cl slash c was green; it is now bodied from the asm. The committed BLOCKED rationale for it was factually wrong on both prongs and was deleted: sub_82C09970 is the CRT pow with a visible 2-float-arg shape, and the rodata constants it claimed were unrecovered all dump fine. Configure also carried a fabricated 8-parameter Hex-Rays signature; the asm reads only r3 and f1, so it is now Configure(Compressor1*, f32). GetSize returned the console literal 192 while host sizeof is 216, a real 24-byte under-allocation on the host: it now returns host sizeof with the console immediate in a comment, verified by an independent hand re-derivation of the x64 layout. Added an _AssertLayout pin on the pointer-width-invariant facts, and corrected two header comments that asserted measurably false host-layout arithmetic. Conductor fix round after re-verify: all five fcmpu-derived comparisons had the wrong unordered polarity and two comments asserted the opposite of PowerPC semantics. On PPC bge is bc 4,LT and ble is bc 4,GT, so BOTH are taken when unordered, meaning a NaN attribute is left unclamped by Configure and forces the bypass path in Process. The plain C++ >= and <= forms are false for NaN and did the opposite; each lower-bound test is now the negated ordered predicate. TWO FOLLOW-UPS FILED, both outside this TU: CompressorLimiter1::Configure is declared with three spurious tail parameters u32 a8, u32 a9, u8 a10 that its own asm at 0x82B67188 refutes, so this TU passes 0,0,0 as inert filler until that declaration is corrected in CompressorLimiter1.h, a file a different live session owns; and the rest of the rwaudio plug-in family still returns console GetSize literals that under-allocate on the host. Behavioural caveat: CompressorLimiter1::Process remains a deliberate un-bodied VMX128 keystone stub returning 0, so Compressor1::Process wires up correctly but the compression math itself is not yet reconstructed. Parity RED is scanner noise.",
+   "status": "done"
+  },
   "class:rw::audio::core::CompressorLimiter1": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/vendor/renderware/src/rw/audio/core/CompressorLimiter1.cpp. Reconciled.",
    "status": "done"
@@ -70192,6 +70278,10 @@
    "notes": "9/10 committed 1a3e2df5 (CreateInstance/GetSize/Process/DisconnectImmediate/ConnectByPointer/EventEvent/ReleaseEvent/dtor). ConnectByNameHandler 0x82B9FF80 blocked: un-homed by-name SubMix registry statics (off_8327EE68 list head, dword_8327EE00 iterator) + un-groundable list-link/name member offsets.",
    "status": "blocked"
   },
+  "class:rw::audio::core::SinePlayer": {
+   "notes": "Wave H: all 7 funcs independently verified against the X360 asm, fixed, and re-verified. Two MUST_FIX checklist-A ring-stride defects fixed: PlayHandler returned the console record size 16 and StopHandler returned 8, but those returns ARE the ring cursor advance System::ExecuteCommands applies, and the host records are 24 and 16 bytes. Both now return host sizeof of their command record, with the console immediates in comments; the header comments that actively PRESCRIBED the console literal as the return value were rewritten to the RawPuller2 and Route house wording, since that is exactly how a stale comment reseeds the bug. The fixer built a throwaway probe TU to measure the host record sizes rather than asserting them. GetSize still returns the console literal 72 while host sizeof is 96: confirmed dormant and left deliberately, because switching it is a tree-wide decision for the whole rwaudio plug-in family, and the false doc claim that 72 IS host sizeof was corrected. Note the family is no longer uniform: Compressor1::GetSize moved to host sizeof this wave because its console 192 under-allocates the 216-byte host object. Re-verify verdict SAFE_TO_CLOSE with 3 advisories: the dormant GetSize hazard, no static_assert pin on the two command records whose sizeof is now load-bearing, and two cosmetic comment inaccuracies. The TU-specific claim that Process reads AudioProcessContext stream time at +0x30000 as an f64 and sample rate at +0x30024 was verified against the asm and holds.",
+   "status": "done"
+  },
   "class:rw::audio::core::Snd9Service": {
    "status": "done"
   },
@@ -70215,6 +70305,10 @@
    "status": "done"
   },
   "class:rw::audio::core::Voice": {
+   "status": "done"
+  },
+  "class:rw::audio::core::VuMeter": {
+   "notes": "Wave H: all 11 funcs independently verified against the X360 asm, fixed, and re-verified. Two MUST_FIX ring-stride defects fixed: EventEvent advanced the System deferred-command ring by the console literal 8 and ResetHandler returned 8, while the two-pointer record is 16 bytes on the host. That is live ring corruption now that System::ExecuteCommands actually replays the ring; both now use host sizeof with the console immediates demoted to comments, and the reseeding comments in VuMeter.cpp and VuMeter.h were fixed too. Third fix: UpdateRunningPeakandRMS had re-rolled the x4-unrolled loop and folded mPeakCurrent into mPeakHold on every sample, but the asm scalar tail folds the sample MAGNITUDE; the two diverge after a deferred ResetFunc, which zeroes the hold column and deliberately leaves the running peak, so the wrong hold value reaches the display. The asm chunking is now reproduced exactly and the false store-for-store equivalence claim in the file header is gone. Added a pointer-width-invariant _AssertLayout pin. Re-verify verdict SAFE_TO_CLOSE with 3 advisories only: ReleaseEvent returns 0 on both paths where the console returns self or RemoveTimer r3; the ring backing allocation is align 4 while the host record now holds two 8-byte pointers; and the pre-existing inline reproduction of PlugIn::Initialize with null vtable placeholders. Parity RED is scanner noise, the three callees it reports absent are all present as qualified calls.",
    "status": "done"
   },
   "class:rw::audio::core::Xas1Dec": {
@@ -70251,6 +70345,10 @@
   },
   "class:rw::collision::BoxVolume": {
    "notes": "0/7 blocked, nothing committed. Needs BoxVolume layout promoted in CollisionVolume.hpp + un-homed Matrix44Affine/AABBox + un-recovered rodata (vperm control unk_82CDA350, off_82F91930 method table 4th-entry stub) + rwcPlaneLineSegIntersect; LineSegIntersect ~250-instr VMX decode flagged unreliable.",
+   "status": "blocked"
+  },
+  "class:rw::collision::CapsuleVolume": {
+   "notes": "Wave H: 4 of 5 bodied and verified (GetBBoxDiag 0x82BAF6A8, GetMaximumFeature 0x82BAF808, GetBBox 0x82BAF9C8 and the newly bodied CreateGPInstance 0x82BAF6F0). NOT closeable: LineSegIntersect 0x82BAFCF8 is honestly unbodied and was NOT fabricated. It is 428 instructions of hand-register-allocated VMX with the bank saved through __savevmx_120/__restvmx_120 and live values held in v120-v127, calling rwcSphereLineSegIntersect and rwcCylinderLineSegIntersect. CreateGPInstance was unblocked this wave: the previous blocked reason claimed the copy could not be grounded, which the asm refutes, and the three rodata constants the LineSegIntersect note called unrecovered were read straight out of the IDA database (0x82001CC0 is 0.0f, 0x82001C98 is 1.0f). The console 0x10-byte methods-table copy is host-side a whole-struct assignment per checklist A, and the transform path computes all four VMX lanes. mu5C renamed muFlags now its role is attested (lwz 0x5C then stw 0x94 into GPInstance mFlags). TWO FOLLOW-UPS, both outside this TU: CreateGPInstance reconstructs the console 32-bit this-into-mVolumeTag store as a truncating cast, and the honest fix is widening GPInstance mVolumeTag, which lives in GPInstance.hpp, a file a different live session owns; and CylinderVolume.hpp and .cpp carry comments that this wave disproved, still stating unk_82F918F0 is unrecovered rodata. Newly armed link blocker, precedented and non-blocking under this codebase model: g_aGPVolumeMethods is declared extern and defined nowhere, the same seam WorldLinkStubs.cpp already documents for the rw collision query closure. GPSphere::GetMaximumFeature 0x82BA8088 is the prerequisite that must land before that table can be defined.",
    "status": "blocked"
   },
   "class:rw::collision::ClusteredMesh": {
@@ -70291,6 +70389,10 @@
   },
   "class:rw::collision::GPSphere": {
    "notes": "VMX Tier-2 campaign waves 1+2 (Fable): all ledger funcs bodied, gate PASS incl cascade; parity RED benign (scalar-lowered VMX invisible to regex)",
+   "status": "done"
+  },
+  "class:rw::collision::GPTriangle": {
+   "notes": "Wave H: all 3 VolumeMethods callbacks (GetMaximumFeature 0x82BBA158, GetInterval 0x82BBA6A0, GetIntervals 0x82BBA6E0) independently verified against the X360 asm. The only verdict was SAFE_TO_CLOSE on the first pass: the vertex aliasing claim, the edge ordering, the FACE and EDGE and VERTEX branch polarity and the VMX reconstruction all check out against the raw asm, and no code changed. Two comment defects were fixed, both checklist-H: the file-header VMX decode note called every branch a vcmpgtfp lane-0 bit test when the asm extracts CR6 bit 0, which for vcmpgtfp with Rc set is the ALL-FOUR-LANES-true bit, and a second site described the Dot3 helper vmsum3fp128 as broadcast lane 0, which reads as result-taken-from-lane-0 and is the misreading that seeded the first error. Code is unchanged from what was already on disk. Note this TU has no header of its own: struct GPTriangle is declared in GPInstance.hpp, whose uncommitted declaration block belongs to this TU and lands in the same commit.",
    "status": "done"
   },
   "class:rw::collision::KdTreeBBoxQuery": {
