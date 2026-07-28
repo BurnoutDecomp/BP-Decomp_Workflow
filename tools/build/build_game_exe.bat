@@ -63,7 +63,10 @@ rem ---- build the cl response file ----
 > "%RSP%" (
   rem /Gy: function-level linking, so /OPT:REF (link line) can strip the never-called
   rem sibling controller bridges (Director/World/GameState) whose IO callees are unlinked.
-  echo /nologo /EHsc /std:c++17 /permissive- /Gy /DWIN32 /D_WINDOWS
+  rem /O2: the exe had NO optimisation flag at all until the culling wave measured it --
+  rem every per-entity frustum test, every dispatch walk and every VMX-derived math helper
+  rem was running unoptimised, which is why culling cost more than the draws it saved.
+  echo /nologo /EHsc /std:c++17 /permissive- /O2 /Gy /DWIN32 /D_WINDOWS
   echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%VEN%\zlib\src" /I"%FFM%\include" /I"%VEN%\lua\src"
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
   echo "%SRC%\GameSource\BrnBaselineLinkStubs.cpp"
@@ -152,6 +155,11 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModule.cpp"
+  rem ---- the broad phase (culling wave 2026-07-28): the loose octree + its manager ----
+  echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\SpatialPartitions\CgsSpatialPartition.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\SpatialPartitions\CgsLooseOctree.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\CgsSpatialPartitionManager.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\CgsSpatialPartitionManagerIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysMemoryManager.cpp"
