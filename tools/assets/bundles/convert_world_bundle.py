@@ -83,27 +83,16 @@ def port_tub(folder, fname, vtype, store_suffix):
 
 
 def port_texture(work, folder, rid):
-    """X360 split texture (rid_header.dat + rid_body.dat) -> bprx64 in place,
-    via the convert_x360_bundle.py PortTexture staging convention."""
+    """X360 split texture (rid_header.dat + rid_body.dat) -> the serialised
+    renderengine::Texture header + a tight linear mip chain, in place.
+
+    Shares the single texture porter with convert_texture_bundle.py; `work` is
+    unused since the Volatility PortTexture staging was retired (its pixel
+    output missed the GPUENDIAN_8IN16 swap and lost the packed mip tail -- see
+    tex_transcode / x360_tex)."""
     hdr = os.path.join(folder, rid + '_header.dat')
     body = os.path.join(folder, rid + '_body.dat')
-    stage = os.path.join(work, 'tex_' + rid)
-    os.makedirs(stage, exist_ok=True)
-    shutil.copy(hdr, os.path.join(stage, rid + '.dat'))
-    shutil.copy(body, os.path.join(stage, rid + '_texture.dat'))
-    run([VOLA, 'PortTexture', '--informat=x360',
-         '--inpath=%s' % os.path.join(stage, rid + '.dat'),
-         '--outformat=bprx64', '--outpath=%s' % stage])
-    # PortTexture emits the REMASTER (bprx64) 96-byte header; the engine reads the
-    # 0x30-byte serialised renderengine::Texture (fmt @0x1C, w/h @0x20) -- the
-    # boot-proven convert_texture_bundle.py step this flow was missing (the
-    # CreateTexture(fmt=0 0x0 mips=1) WORLDTEX seam).
-    with open(os.path.join(stage, rid + '.dat'), 'rb') as fh:
-        remaster = fh.read()
-    engine, _info = tex_transcode.transcode_header(remaster)
-    with open(hdr, 'wb') as fh:
-        fh.write(engine)
-    shutil.copy(os.path.join(stage, rid + '_texture.dat'), body)
+    tex_transcode.port_texture_files(hdr, body)
 
 
 def convert(in_bundle, out_bundle):

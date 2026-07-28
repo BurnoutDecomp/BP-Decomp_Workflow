@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 """Texture porting helper for the x64 PC port bundles.
 
-Volatility's `PortTexture --outformat=bprx64` fully handles the PIXEL side
-(X360 GPU de-tile + endian + mip repack) but emits the Burnout Paradise
-REMASTERED texture header (96 bytes: DXGI_FORMAT @0x2C, w/h/depth/array
-@0x34.., mips @0x3D). The reconstructed engine's loader is NOT the remaster:
-renderengine::Texture::Create / GetParameters (b5-decomp
-src/pc/gcm/renderengine/texture.{h,cpp}) read the serialised
-renderengine::Texture x64 object:
+The reconstructed engine's loader reads the serialised renderengine::Texture x64
+object (b5-decomp src/pc/gcm/renderengine/texture.{h,cpp},
+renderengine::Texture::Create / GetParameters):
 
     +0x00..0x17  three pointers (0 on disk)
     +0x18..0x1B  four bools (0)
@@ -19,21 +15,36 @@ renderengine::Texture x64 object:
     +0x26  u16 muFlags (0)
     (sizeof 0x28, stored 16-aligned = 0x30)
 
--- the exact form of the boot-proven GUIAPT texture headers ('DXT1' @0x1C,
-w/h @0x20/0x22). transcode_header() converts remaster -> engine form;
-port_textures() runs Volatility then the transcode over a YAP extraction dir.
+and, as the pixel body, a TIGHTLY PACKED linear mip chain in host byte order.
+
+Pixel path (2026-07-28)
+-----------------------
+This used to shell out to Volatility `PortTexture --outformat=bprx64` and keep
+its bitmap output. That output was wrong three ways -- the Xenos
+`GPUENDIAN_8IN16` word order was never undone (`SwapEndian8in16` exists in
+Volatility but nothing calls it, and `TryConvertTexture` has no
+(TextureX360, TextureBPR) case), the mip source stepping assumed every level is
+32-block aligned so the packed mip tail was lost, and non-square surfaces were
+truncated to half their rows. Every DXT texture the port produced therefore
+sampled as noise. `x360_tex.port_pixels` replaces it with the real Xenos layout
+(see that module for the model and its validation); `x360_tex.engine_header`
+replaces the Volatility header round-trip and is byte-identical to it on all
+116 WORLDTEX textures.
+
+`transcode_header()` (remaster bprx64 -> engine form) is kept for any flow that
+still has a bprx64 header in hand.
 """
 import glob
 import os
-import shutil
 import struct
-import subprocess
 import sys
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-VOL = os.path.join(ROOT, 'build', 'tools', 'volatility', 'Volatility.Cli.exe')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import x360_tex
 
-# DXGI_FORMAT -> D3DFORMAT (only formats seen in the Burnout UI texture sets,
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+
+# DXGI_FORMAT -> D3DFORMAT (only formats seen in the Burnout texture sets,
 # extend as needed; every entry keeps the byte-level pixel layout identical).
 DXGI_TO_D3D9 = {
     71: 0x31545844,   # BC1_UNORM        -> FOURCC 'DXT1'
@@ -66,35 +77,45 @@ def transcode_header(bprx64_header):
     return bytes(out), (dxgi, w, h, mips)
 
 
-def run(args):
-    r = subprocess.run(args, capture_output=True, text=True)
-    if r.returncode != 0:
-        sys.stderr.write(r.stdout + r.stderr)
-        raise SystemExit('command failed (%d): %s' % (r.returncode, args[0]))
-    return r.stdout
+def port_texture_files(header_path, body_path, verbose=False):
+    """Port one extracted X360 Texture resource in place:
+    header -> serialised renderengine::Texture, body -> tight linear mip chain."""
+    with open(header_path, 'rb') as fh:
+        x360_header = fh.read()
+    with open(body_path, 'rb') as fh:
+        x360_body = fh.read()
+    pixels, fetch, stored = x360_tex.port_pixels(x360_header, x360_body)
+    if stored != len(x360_body):
+        sys.stderr.write(
+            'WARNING: %s modelled X360 storage %d != body %d (%dx%d mips=%d fmt=%d)\n'
+            % (os.path.basename(header_path), stored, len(x360_body),
+               fetch['width'], fetch['height'], fetch['mips'], fetch['data_format']))
+    with open(header_path, 'wb') as fh:
+        fh.write(x360_tex.engine_header(fetch))
+    with open(body_path, 'wb') as fh:
+        fh.write(pixels)
+    if verbose:
+        print('  Texture %s: GPUFMT %d -> D3DFMT %#x, %dx%d depth=%d mips=%d, '
+              '%d -> %d bytes'
+              % (os.path.basename(header_path)[:-len('_header.dat')],
+                 fetch['data_format'],
+                 x360_tex.GPUFORMAT_INFO[fetch['data_format']][2],
+                 fetch['width'], fetch['height'], fetch['depth'], fetch['mips'],
+                 len(x360_body), len(pixels)))
+    return fetch
 
 
-def port_textures(ex, work, verbose=False):
-    """Port every Texture resource in a YAP extraction dir in place:
-    Volatility pixel port + engine-form header transcode."""
+def port_textures(ex, work=None, verbose=False):
+    """Port every Texture resource in a YAP extraction dir in place.
+
+    `work` is accepted (and ignored) for call-site compatibility with the old
+    Volatility staging flow.
+    """
     texdir = os.path.join(ex, 'Texture')
     ported = 0
     for hdr in sorted(glob.glob(os.path.join(texdir, '*_header.dat'))):
         rid = os.path.basename(hdr)[:-len('_header.dat')]
         body = os.path.join(texdir, rid + '_body.dat')
-        stage = os.path.join(work, 'tex_' + rid)
-        os.makedirs(stage, exist_ok=True)
-        shutil.copy(hdr, os.path.join(stage, rid + '.dat'))
-        shutil.copy(body, os.path.join(stage, rid + '_texture.dat'))
-        run([VOL, 'PortTexture', '--informat=x360',
-             '--inpath=%s' % os.path.join(stage, rid + '.dat'),
-             '--outformat=bprx64', '--outpath=%s' % stage])
-        remaster = open(os.path.join(stage, rid + '.dat'), 'rb').read()
-        engine, info = transcode_header(remaster)
-        open(hdr, 'wb').write(engine)
-        shutil.copy(os.path.join(stage, rid + '_texture.dat'), body)
-        if verbose:
-            print('  Texture %s: DXGI %d -> D3DFMT %#x, %dx%d mips=%d'
-                  % (rid, info[0], DXGI_TO_D3D9[info[0]], info[1], info[2], info[3]))
+        port_texture_files(hdr, body, verbose=verbose)
         ported += 1
     return ported
