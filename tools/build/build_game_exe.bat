@@ -128,6 +128,10 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\EnvironmentManager\BrnEnvironmentManager.cpp"
+  rem (sky wave: the environment utils; the sky-dome draw TUs are held
+  rem  out of the link until the renderengine VertexDescriptor/ImRendererBase
+  rem  closure lands -- see the sky wave log section 5)
+  echo "%SRC%\SharedClasses\World\BrnEnvironmentUtil.cpp"
   echo "%SRC%\GameSource\World\EnvironmentMap\BrnEnvironmentMap.cpp"
   echo "%SRC%\GameSource\World\ShadowMap\BrnShadowMap.cpp"
   echo "%SRC%\GameSource\World\BrnPlaceOnTrackManager.cpp"
@@ -693,6 +697,59 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentParameterBank.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnAbstractPool.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnVehicleRef.cpp"
+  rem ---- DirectorModule mount (2026-07-29, DJ fly-by campaign) -------------------------
+  rem  The director spine: module -> MainDirector -> Arbitrator -> AttractMode ->
+  rem  BehaviourManager -> BehaviourRoadRunner -> CameraFinaliser -> OutputBuffer.
+  rem  NOTE: %SRC%\GameSource\Director\BrnDirectorModule.cpp is the REVERTED raw-offset
+  rem  duplicate and must NOT be mounted -- the live TU is the one under DirectorModule\.
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModule.cpp"
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOOutputBuffer.cpp"
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
+  echo "%SRC%\GameSource\Director\BrnMainDirector.cpp"
+  rem  NOTE: %SRC%\GameSource\Director\BrnDirectorResourceManager.cpp is NOT mounted either.
+  rem  It is the same reverted pattern: it declares its OWN local `struct
+  rem  DirectorResourceManager { DirectorResourceManager(); }` and writes the real object
+  rem  through raw console byte offsets (552/568..1592/1608/1616/1624). Those offsets are the
+  rem  4-byte-pointer CONSOLE layout, so on x64 the ctor would scribble across the live class
+  rem  (and across the DirectorModule that embeds it). It also collides at link with the
+  rem  header's implicit default ctor (LNK2005 vs BrnGameModule.obj). The real class in
+  rem  BrnDirectorResourceManager.h default-constructs correctly; its Prepare is stubbed in
+  rem  DirectorLinkStubs.cpp. DELETE-WHEN: that TU is rewritten against named members.
+  echo "%SRC%\GameSource\Director\Camera\BrnCameraFinaliser.cpp"
+  echo "%SRC%\GameSource\Director\Camera\BrnBehaviourManager.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\Behaviour.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourRoadRunner.cpp"
+  echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitrator.cpp"
+  echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorState.cpp"
+  echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorStateContainer.cpp"
+  echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorSharedCameraContainer.cpp"
+  rem  ONLY the attract-mode state is mounted -- it is the DJ fly-by's own state, and the one
+  rem  the arbitrator drives on this path. The other nine states (CrashMode / CrashNav /
+  rem  DriveThru / OnlineCarSelect / OnlineRaceIntro / PostEvent / RaceIntro / RankUp /
+  rem  Roaming) are RECONSTRUCTED but each drags a different un-landed sub-system with it
+  rem  (ICEMoviePlayer, MomentSelector, BehaviourIceAnim, BehaviourInterpolate, the
+  rem  DirectorResourceManager shot-group getters, the Attrib shot vault, ...) -- mounting all
+  rem  ten took the link from 47 to 137 unresolved externals, most of them functions that
+  rem  return REFERENCES and therefore cannot be honestly stubbed. Their vtables are stubbed
+  rem  in DirectorLinkStubs.cpp instead (void/bool/const char* only), so the state container
+  rem  still builds and the arbitrator can still refuse to enter them.
+  rem  DELETE-WHEN: each state's own sub-system lands; mount the state and drop its stubs.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateAttractMode.cpp"
+  echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
+  echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
+  echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
+  echo "%SRC%\GameSource\Director\Shots\ShotControllers\BrnInertiaController.cpp"
+  rem  The TRAFFIC-LANE graph the fly-by rides. WorldMap::GetLanePositionNearestPoint walks
+  rem  Pvs::GetHullIndexForPoint -> TrafficData::GetHull -> the section's rungs, and
+  rem  TrafficLaneTruck::Update samples Section::Calc{Position,Direction,Transform}AtParameter.
+  rem  These MUST be the real bodies -- a stubbed lane walk is a stationary camera.
+  echo "%SRC%\SharedClasses\Traffic\BrnTrafficData.cpp"
+  echo "%SRC%\SharedClasses\Traffic\BrnTrafficPvs.cpp"
+  echo "%SRC%\SharedClasses\Traffic\BrnTrafficSection.cpp"
+  echo "%SRC%\SharedClasses\Trigger\BrnGenericRegion.cpp"
+  echo "%SRC%\SharedClasses\Trigger\BrnTriggerData.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneQueryInterface.cpp"
+  echo "%SRC%\GameSource\Director\DirectorLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiProfile.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadPS3.cpp"
