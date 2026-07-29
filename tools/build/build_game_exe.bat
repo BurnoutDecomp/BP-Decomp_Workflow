@@ -688,6 +688,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsTextFileResource.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\PoolModuleStates\CgsBaseDefragPoolModuleState.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimer.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimerStatusInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\PS3\CgsDateAndTimePS3.cpp"
   echo "%SRC%\GameShared\GameClasses\World\CgsWorldMap2D.cpp"
   echo "%SRC%\GameShared\Jobs\Relocator\CgsRelocator.cpp"
