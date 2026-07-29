@@ -719,6 +719,16 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\Camera\BrnBehaviourManager.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\Behaviour.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourRoadRunner.cpp"
+  rem The two SHARED gameplay cameras SharedCameraContainer::Prepare allocates. Mounted
+  rem 2026-07-29 with their RE-BASE onto Camera::Behaviour: they now carry real virtuals
+  rem (Construct/Prepare/GetName, + the external's SetParameters), so their vtables need a
+  rem home. Before the re-base they were non-polymorphic offset slices and placement-new
+  rem installed no vtable -- BehaviourHelper::Prepare's slot-0 dispatch then faulted.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGameplayBumper.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGameplayExternal.cpp"
+  rem (Each cam's Parameters::Serialise<S> visitor stays OUT of the link, in its own
+  rem  *Parameters.cpp sibling -- it drags the three camera-tunings serialisers in and none
+  rem  of them is on the runtime director path.)
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitrator.cpp"
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorState.cpp"
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorStateContainer.cpp"
@@ -748,6 +758,21 @@ rem ---- build the cl response file ----
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficSection.cpp"
   echo "%SRC%\SharedClasses\Trigger\BrnGenericRegion.cpp"
   echo "%SRC%\SharedClasses\Trigger\BrnTriggerData.cpp"
+  rem  The lane-data RESOURCE TYPE handlers (traffic-lane fetch wave, 2026-07-29).
+  rem  Registered by CgsResourceTypeRegistration.cpp; without a registered handler the pool
+  rem  stores a NULL mpResourceType for the bundle's resource and AllocateMemoryForResource
+  rem  null-derefs it -- exactly the trap ZoneList/0xB000 hit on the PVS wave.
+  rem  ⚠️ ONLY the Trigger one is mounted. AISectionsResourceType.cpp and
+  rem  BrnTrafficDataResourceType.cpp do NOT link yet -- they forward to Fix* bodies that are
+  rem  not reconstructed anywhere in the tree (LNK2019, measured 2026-07-29):
+  rem      BrnTraffic::TrafficData::FixDown()   @0x82763CB8  (needs Pvs::FixDown @0x827624A0
+  rem                                                        + Hull::FixDown @0x827622E0)
+  rem      BrnAI::AISectionsData::FixUp(int)    @0x8267DA28  (needs AISection::FixUp @0x8267D8C8)
+  rem      BrnAI::AISectionsData::FixDown(int)  @0x8267DAA0
+  rem      BrnAI::AISection::GetMiddle()        @0x826771D0  (needs GetPortal @0x8230F5D0)
+  rem  See the traffic-lane note in GameSource/Resource/BrnGameDataModule.cpp for why bodying
+  rem  those BEFORE the payload widener exists would be writing code that cannot be right.
+  echo "%SRC%\SharedClasses\Trigger\BrnTriggerResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\DirectorLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache.cpp"
