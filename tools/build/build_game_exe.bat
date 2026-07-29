@@ -762,17 +762,26 @@ rem ---- build the cl response file ----
   rem  Registered by CgsResourceTypeRegistration.cpp; without a registered handler the pool
   rem  stores a NULL mpResourceType for the bundle's resource and AllocateMemoryForResource
   rem  null-derefs it -- exactly the trap ZoneList/0xB000 hit on the PVS wave.
-  rem  ⚠️ ONLY the Trigger one is mounted. AISectionsResourceType.cpp and
-  rem  BrnTrafficDataResourceType.cpp do NOT link yet -- they forward to Fix* bodies that are
-  rem  not reconstructed anywhere in the tree (LNK2019, measured 2026-07-29):
-  rem      BrnTraffic::TrafficData::FixDown()   @0x82763CB8  (needs Pvs::FixDown @0x827624A0
-  rem                                                        + Hull::FixDown @0x827622E0)
-  rem      BrnAI::AISectionsData::FixUp(int)    @0x8267DA28  (needs AISection::FixUp @0x8267D8C8)
-  rem      BrnAI::AISectionsData::FixDown(int)  @0x8267DAA0
-  rem      BrnAI::AISection::GetMiddle()        @0x826771D0  (needs GetPortal @0x8230F5D0)
-  rem  See the traffic-lane note in GameSource/Resource/BrnGameDataModule.cpp for why bodying
-  rem  those BEFORE the payload widener exists would be writing code that cannot be right.
+  rem  ALL THREE are mounted as of the lane-data widening wave (2026-07-29). The seven Fix*
+  rem  bodies that used to be missing are reconstructed:
+  rem      BrnTraffic::TrafficData::FixUp/FixDown   @0x827637D8 / @0x82763CB8  BrnTrafficData.cpp
+  rem      BrnTraffic::Hull::FixUp/FixDown          @0x827620A0 / @0x827622E0  BrnTrafficHull.cpp
+  rem      BrnTraffic::Pvs::FixUp/FixDown           @0x827623E8 / @0x827624A0  BrnTrafficPvs.cpp
+  rem      BrnTraffic::{TrafficLightCollection,FlowType}::FixUp/FixDown        BrnTrafficData.cpp
+  rem                                               (inlined on console, de-inlined here)
+  rem      BrnAI::AISectionsData::FixUp/FixDown     @0x8267DA28 / @0x8267DAA0  AISectionsData.cpp
+  rem      BrnAI::AISection::FixUp/FixDown/GetMiddle @0x8267D8C8 / @0x8267D978 / @0x826771D0
+  rem                                                                          AISection.cpp
+  rem      BrnAI::Portal::FixUp/FixDown             (inlined on console)       BrnAIPortal.cpp
+  rem  The payloads are transcoded to platform 4 with WIDENED 64-bit pointer slots by
+  rem  tools/assets/bundles/lane_transcode.py (X360 originals in build/game_x360_world/).
   echo "%SRC%\SharedClasses\Trigger\BrnTriggerResourceType.cpp"
+  echo "%SRC%\SharedClasses\Traffic\BrnTrafficDataResourceType.cpp"
+  echo "%SRC%\SharedClasses\Traffic\BrnTrafficHull.cpp"
+  echo "%SRC%\SharedClasses\AI\AISectionsResourceType.cpp"
+  echo "%SRC%\SharedClasses\AI\AISectionsData.cpp"
+  echo "%SRC%\SharedClasses\AI\AISection.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIPortal.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\DirectorLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache.cpp"
