@@ -223,6 +223,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_Prepare.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\SharedIO\BrnRCEntityActiveRaceCarOutputInterface.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\SharedIO\BrnRCEntityGlobalRaceCarOutputInterface.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModuleIO_InputBuffer_Getters.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficNetworkOutputInterface.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficSoundInterfaces.cpp"
