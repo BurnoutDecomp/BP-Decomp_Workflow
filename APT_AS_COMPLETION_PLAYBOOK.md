@@ -38,6 +38,37 @@ Treat these as hard preconditions. If any is red, keep working on AS — not on 
 
 Only when all five are checked do you proceed.
 
+### Where this actually stands
+
+The gate reads binary, which hides how close it is. Apt **reconstruction** is nearly
+finished — the great majority of Apt TUs are `done`, menus drive, and the input chain is
+real. What is *not* finished is everything this playbook is about. Measure before assuming
+either way:
+
+```powershell
+# outstanding Apt TUs (the tail, not the bulk)
+python -c "import json; st=json.load(open('progress/status.json')); tu=json.load(open('progress/tu_index.json')); f=lambda k:(st['tu'].get(k) or {}).get('status','todo'); print([(k,tu[k]['n_funcs']) for k in tu if (k.startswith('module:apt/') or k.startswith('class:Apt') or '/Apt' in k) and f(k)!='done'])"
+
+# grandfathered Apt debt in the ratchet (gate 3 wants this shrinking)
+python -c "import json,collections; f=json.load(open('progress/faithfulness_baseline.json'))['fingerprints']; print('Apt:',collections.Counter(k.split(chr(9))[0] for k in f if 'Apt' in k)); print('all:',collections.Counter(k.split(chr(9))[0] for k in f))"
+
+# is the stub path still linked? (gate 5)
+grep -n "AptRenderLinkStubs\|AptGlobals" tools/build/build_game_exe.bat
+```
+
+At the time of writing, the blockers were concentrated and specific rather than diffuse:
+
+- **`class:AptCIH`** is the keystone — a large behavioural cluster that most of the
+  remaining tail depends on. The rest of the outstanding TUs are small `module:apt/*` units.
+- **The ratchet still holds every `apt_shim` fingerprint in the project.** Gate 3 asks for
+  that set to *shrink*; holding steady is not passing.
+- **The stub path is load-bearing, not vestigial.** `AptRenderLinkStubs.cpp` supplies
+  symbols the real engine does not yet satisfy (see the `EA::Thread::Condition` note near
+  the end of `build_game_exe.bat`). Retiring it is its own piece of work, not a line
+  deletion — plan for it rather than discovering it during §2.4.
+
+The path move itself has **not** started: all three shapes in §1 are still present.
+
 ---
 
 ## 1. Why the paths are scattered (context for the move)
