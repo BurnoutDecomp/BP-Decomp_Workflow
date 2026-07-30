@@ -1,7 +1,7 @@
 # Goal Scoping & Execution Traces
 
 How to make `work next` drive toward a concrete milestone (e.g. "boot to the main menu")
-instead of grinding the whole 4,319-TU program leaf-first. This is the reference for the
+instead of grinding the whole 4,412-TU program leaf-first. This is the reference for the
 `work goal` command, the `goals.json` schema, and — most importantly — how to capture a
 **Xenia execution trace** and turn it into an exact, real goal scope.
 
@@ -160,12 +160,13 @@ then in the `[CPU]` section set:
 ```toml
 trace_functions = true
 trace_function_data = true
-trace_function_data_path = "e:/Reverse_Engineering/Burnout/BP-Decomp_Workflow/.trace/funcdata/"
+trace_function_data_path = "<absolute path to this repo>/.trace/funcdata/"
 ```
 
 Notes learned the hard way:
-- `trace_function_data_path` is a **directory** — Xenia writes 32 MB chunk files into it
-  named `.0`, `.1`, … Create the dir first.
+- `trace_function_data_path` must be an **absolute path with forward slashes**, and it is a
+  **directory** — Xenia writes 32 MB chunk files into it named `.0`, `.1`, … Create the dir
+  first. Point it at this repo's `.trace/funcdata/` so `import-trace` finds it by default.
 - Xenia **rewrites the config on launch** but preserves your edits (it round-trips).
 - Xenia **ignores `log_file`** and always logs to its own `xenia.log` in the emulator dir.
 - The cheaper signals do **not** work: debug `log_level=3` logs kernel/GPU calls but no

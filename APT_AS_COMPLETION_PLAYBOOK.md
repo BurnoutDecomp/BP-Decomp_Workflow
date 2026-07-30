@@ -22,9 +22,9 @@ Treat these as hard preconditions. If any is red, keep working on AS — not on 
 - [ ] AS bytecode executes for real: `AptActionInterpreter` runs a real menu's
       action stream (no `_embed_check` / shim fallbacks on the hot path).
 - [ ] Menus drive end-to-end through the boot test (title → press-start → menu
-      navigation → accept), matching the flow tracked in
-      [HANDOFF_MENU_DRIVE.md](HANDOFF_MENU_DRIVE.md) and free of the regression in
-      [MENU_REGRESSION_2026-07-06.md](MENU_REGRESSION_2026-07-06.md).
+      navigation → accept). Verify with `tools/diagnostics/boot_test.ps1`; the
+      per-session menu-drive and menu-regression handoff notes this originally
+      pointed at were never committed to the repo, so the boot test is the gate.
 - [ ] `python tools/work/faithfulness_lint.py` reports **no new** `apt_shim` /
       `engine_stub` smells, and the Apt-related entries in
       `progress/faithfulness_baseline.json` are shrinking, not holding. (Per the
@@ -48,9 +48,21 @@ relocated under `SDKs/EATech/` during decomp:
 
 | # | Current path | Contents | Notes |
 |---|---|---|---|
-| 1 | `src/SDKs/EATech/include/Apt/` | **218 files** — bulk engine: interpreter, `AptCIH`, `AptMovie`, `AptArray`, characters, `AptStd/`, `AptString/`, `AptValue/` | Holds **both** `.h` and `.cpp` despite being named `include/` |
-| 2 | `src/SDKs/EATech/Apt/` | **24 files** — init/bootstrap, GC (`AptValueGC*`), `DogmaAllocator`, `Apt*MembersIndex` tables, `AptMath` | |
-| 3 | `src/SDKs/Packages/Apt/2.00.00/source/AptValue/` | **4 files** — `AptSprite`, `AptString` | Un-migrated remnant sitting at the *original* EA package path |
+| 1 | `src/SDKs/EATech/include/Apt/` | bulk engine: interpreter, `AptCIH`, `AptMovie`, `AptArray`, characters, `AptStd/`, `AptString/`, `AptValue/` | Holds **both** `.h` and `.cpp` despite being named `include/` |
+| 2 | `src/SDKs/EATech/Apt/` | init/bootstrap, GC (`AptValueGC*`), `DogmaAllocator`, `Apt*MembersIndex` tables, `AptMath` | |
+| 3 | `src/SDKs/Packages/Apt/2.00.00/source/AptValue/` | `AptSprite`, `AptString` | Un-migrated remnant sitting at the *original* EA package path |
+
+File counts drift as the engine is reconstructed, so **measure at move time** rather than
+trusting a number written here:
+
+```bash
+for d in src/SDKs/EATech/include/Apt src/SDKs/EATech/Apt src/SDKs/Packages/Apt; do
+  echo "$d: $(find b5-decomp/$d -name '*.h' | wc -l) .h, $(find b5-decomp/$d -name '*.cpp' | wc -l) .cpp"
+done
+```
+
+(At the time of writing that was roughly 253 / 26 / 4 files respectively — a little over
+280 in total, split about 115 headers to 165 bodies.)
 
 Original EA layout (preserved in `references/Feb-2007/.../SDKs/Packages/Apt/2.00.00/`):
 `include/Apt/...` for public headers, `source/...` for bodies. The decomp flattened
@@ -61,11 +73,11 @@ most of that into `SDKs/EATech/` but left the `AptValue` sub-package behind, and
 
 Consolidate everything to the **original EA package path** — the historically
 faithful location, matching the layout preserved in
-`references/Feb-2007/.../SDKs/Packages/Apt/2.00.00/`. All 278 Apt files land here:
+`references/Feb-2007/.../SDKs/Packages/Apt/2.00.00/`. Every Apt file lands here:
 
 ```
 src/SDKs/Packages/Apt/2.00.00/
-    include/Apt/            ← all 274 headers (.h)
+    include/Apt/            ← every header (.h)
         AptStd/             ← (substructure already matches the Feb-2007 reference exactly)
         AptString/
         AptValue/
@@ -82,10 +94,12 @@ everything else moves **to** it rather than away from it. The reference confirms
 `include/Apt/{AptStd,AptString,AptValue}` shape, and the current `include/Apt/`
 substructure is identical, so headers map 1:1.
 
-> The three shapes being retired: `src/SDKs/EATech/include/Apt/` (250 files),
-> `src/SDKs/EATech/Apt/` (24 files), and the partial `src/SDKs/Packages/Apt/2.00.00/source/AptValue/`
-> (4 files — these stay in place; the rest join them). Delete the two `EATech/` dirs
-> once emptied.
+> The three shapes being retired: `src/SDKs/EATech/include/Apt/`,
+> `src/SDKs/EATech/Apt/`, and the partial `src/SDKs/Packages/Apt/2.00.00/source/AptValue/`
+> (those 4 files stay in place; the rest join them). Delete the two `EATech/` dirs
+> once emptied. Note `src/SDKs/EATech/` also holds the two Apt stub TUs
+> (`AptGlobals.cpp`, `AptRenderLinkStubs.cpp`) plus unrelated middleware (`eathread`,
+> `rw*`, `eajobs`) — only the Apt engine moves.
 
 ---
 
@@ -143,8 +157,10 @@ paths too and must land on the new location.
 
 ### 2.3 Update the build source list — `tools/build/build_game_exe.bat`
 
-The build does **not** glob; it enumerates every Apt `.cpp` by hand. The Apt block
-is roughly **lines 174–260**, listing paths like:
+The build does **not** glob; it enumerates every Apt `.cpp` by hand. Find the block with
+`grep -n "EATech" tools/build/build_game_exe.bat | grep -i apt` rather than trusting a line
+number — it was around **lines 373–566** when this was written, with a couple of stragglers
+near the end of the file. It lists paths like:
 
 ```
 echo "%SRC%\SDKs\EATech\Apt\AptInit.cpp"
@@ -252,8 +268,9 @@ Once paths are consolidated and the site is correct:
       now lives entirely under `src/SDKs/Packages/Apt/2.00.00/`.
 - [ ] **Update the goal/ledger.** Mark the `apt` goal done in the ledger; move the
       Apt TUs to their terminal status.
-- [ ] **Update the handoff docs** — reconcile [ONE_TO_ONE_REMAINING.md](ONE_TO_ONE_REMAINING.md)
-      and the menu-drive handoff to reflect AS-complete.
+- [ ] **Update the handoff docs** — if a session is carrying one-to-one/menu-drive
+      handoff notes in its own worktree, reconcile them to reflect AS-complete (they
+      are not committed here, so they will not turn up in a clone).
 - [ ] **Update agent memory.** The memory notes that currently describe the Apt
       framework as shimmed / not-fully-loaded (PERSISTENTAPT menu framework,
       title-flow bring-up, apt-decomp-campaign) will be stale — refresh or retire
@@ -267,9 +284,9 @@ Once paths are consolidated and the site is correct:
 ```
 [ ] DoD gate green (AS runs, menus drive, lint clean, TUs reviewed, links)
 [ ] Target LOCKED: src/SDKs/Packages/Apt/2.00.00/{include/Apt,source}
-[ ] git mv all 278 files into new layout (headers->include/Apt, bodies->source)
+[ ] git mv every Apt file into new layout (headers->include/Apt, bodies->source)
 [ ] Rewrite every #include across src/ (engine + AptInterface consumers)
-[ ] Repoint tools/build/build_game_exe.bat Apt block (~L174-260)
+[ ] Repoint tools/build/build_game_exe.bat Apt block (locate it by grep, not line no.)
 [ ] Full build + link gate green
 [ ] resolve_class_homes.py --apply           (site path source)
 [ ] faithfulness_lint.py, then --baseline     (deliberate, expect shrink)

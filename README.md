@@ -34,12 +34,19 @@ No single binary contains enough information. The workflow triangulates:
 | `Burnout_External_PS3.ELF` | Symbol-rich PS3 corroboration for names and behavior. |
 | `DecFIGS_Burnout_Internal_PS3.ELF` | DWARF source/file attribution plus declaration, type, enum, global, signature, and local-variable hints. |
 | `BurnoutPR.exe` and `TUB_Burnout_PC_External.exe` | Stripped PC references, consulted selectively for platform-specific code paths. |
+| `Burnout_External_Xbox_One.exe` | The only native **x64** build with Apt symbols. The 64-bit ABI arbiter for Apt pointer widths, member offsets, and alignment. |
+| `B4Extern` + `B4Extern.pdb` (Burnout Revenge) | The only PDB that names the Apt **engine**. Naming, class hierarchy, and signature corroboration for Apt only — older version, so never layout or behaviour authority. |
+| `ProStreet08Milestone.pdb` / `.map` (NFS, X360) | `rw::audio::core` (`rwaudiocore`) type ground truth, which `rwcore.pdb` does not cover. Different game — shared middleware vocabulary only. |
 | `rwcore.lib` / `rwcore.pdb` / `rwcore_master.obj` | RenderWare core type and layout evidence. |
-| `references/Feb-2007/` | A real source-code slice used as the highest-fidelity template where it overlaps. |
+| `references/Feb-2007/` | A real source-code slice. Style and inlining reference — it predates the target build, so not a layout blueprint. |
+| `references/Apt/` | Leaked EATech Apt SDK source. Naming/structure corroboration for Apt; version-drifted, untracked, never copied verbatim. |
 | `references/Wiki/` | burnout.wiki-derived type tables. Use names/types/semantics, never offsets. |
 
 The canonical identity is a normalized qualified function name, not an address.
 Addresses are build-local and must not be treated as stable across binaries.
+
+Each source wins on a specific axis and loses on the others; the precedence rules that
+resolve conflicts between them live in [`AGENTS.md`](AGENTS.md) and [`STRATEGY.md`](STRATEGY.md).
 
 ## Repository Layout
 
@@ -47,13 +54,17 @@ Addresses are build-local and must not be treated as stable across binaries.
 | --- | --- |
 | [`AGENTS.md`](AGENTS.md) | Tool-agnostic operating guide: resume behavior, work loop, server coordination, reconstruction rules, review policy, and "don't" rules. |
 | [`STRATEGY.md`](STRATEGY.md) | Design document for the workflow: target, build roles, identity model, TU model, stubs, verification, goals, and phase status. |
-| [`IDA Files/`](IDA%20Files/) | IDA Pro databases and RenderWare library/PDB inputs. Some large `.i64` files are intentionally git-ignored and must be supplied locally. |
+| [`APT_AS_COMPLETION_PLAYBOOK.md`](APT_AS_COMPLETION_PLAYBOOK.md) | Forward-looking plan for consolidating the Apt source tree once the ActionScript interpreter is confirmed working end-to-end. Gated — not yet actionable. |
+| [`work.cmd`](work.cmd) | Repo-root shim so you can type `work <cmd>`; finds a Python interpreter and runs `tools/work/work.py`. |
+| [`IDA Files/`](IDA%20Files/) | IDA Pro databases and RenderWare/Apt library/PDB inputs. Some large `.i64` and `.pdb` files are intentionally git-ignored and must be supplied locally. |
 | [`.ida-exports/`](.ida-exports/) | Generated per-function JSON exports from IDA: names, prototypes, locals, pseudocode, asm, callers, and callees. Git-ignored. |
-| [`references/`](references/) | Non-disassembly evidence: Feb-2007 source slice, DecFIGS DWARF artifacts, BPR module map, wiki index, and naming conventions. |
-| [`tools/`](tools/) | Domain-organized IDA, build, asset, RenderWare, diagnostic, and `tools/work/` ledger/reconstruction tooling. |
-| [`progress/`](progress/) | Shared ledger inputs and outputs: identity, TU index, dependencies, status mirror, goals, verification/review configs, and generated review packets. |
-| [`b5-decomp/`](https://github.com/BurnoutDecomp/b5-decomp) | Submodule containing recovered C++, vendor libraries, RenderWare headers, and CMake project files. |
-| [`build/`](build/) | Local build tree for `b5-decomp`; not source of truth. |
+| [`references/`](references/) | Non-disassembly evidence: Feb-2007 source slice, DecFIGS DWARF artifacts, Apt SDK source and B4Extern Apt vocabulary, BPR module map, wiki index, naming conventions, and the goal-scoping/coordination guides. |
+| [`tools/`](tools/) | Domain-organized IDA, build, asset-conversion, RenderWare, diagnostic, and `tools/work/` ledger/reconstruction tooling. Inventory: [`tools/README.md`](tools/README.md). |
+| [`progress/`](progress/) | Shared ledger inputs and outputs: identity, TU index, dependencies, status mirror, goals, verification/review configs, the faithfulness baseline, generated review packets, and the verify sweep under [`progress/sweep/`](progress/sweep/). |
+| [`b5-decomp/`](https://github.com/BurnoutDecomp/b5-decomp) | Submodule containing recovered C++, vendor libraries, RenderWare headers, and CMake project files. **The only repo contributors push to.** |
+| [`build/`](build/) | Local build tree for `b5-decomp`; not source of truth. Git-ignored. |
+| [`ci/`](ci/) | Build-publishing script used by the release workflow. |
+| [`.github/workflows/`](.github/workflows/) | `reconcile-status.yml` (regenerates `status.json` + bumps the submodule pointer on every b5-decomp commit) and `build-and-publish.yml`. |
 | [`.env.example`](.env.example) | Optional work-server configuration template. Copy to `.env` only if a maintainer gives you a worker id. |
 
 Generated review packets under `progress/reviews/` and vendor Markdown under
@@ -142,16 +153,24 @@ work claim [-n N]                   # claim next ready TU(s)
 work claim <tu> [<tu> ...]          # claim specific TU(s)
 work show <tu> --full [--asm]       # reconstruction dossier
 work stubs <tu> --list              # unresolved callees and owning headers
-work submit <tu> [--files path ...] # compile gate, parity, reviewer packet
+work postmortem <tu>                # self-review packet: dossier + asm + verify checklist
+work submit <tu> [--files path ...] # compile gate, parity, faithfulness, reviewer packet
 work parity <tu>                    # standalone deterministic parity check
+work faithfulness                   # standalone invented-code scan
 work review <tu> --verdict pass     # mark done after review/self-check
 work review <tu> --verdict fail     # return to in_progress with notes
 work block <tu> "reason"            # stop it being reclaimed
 work reset-tu <tu>                  # delete produced files and return TU/functions to todo locally and server-side
 ```
 
-The compile gate is per translation unit (`cl /c`, no link). The target is semantic
-parity with the X360 build expressed as source-like PC C++, not byte matching.
+`work submit` runs three gates: the per-TU compile gate (`cl /c`, no link), an advisory
+structural parity check, and a **hard** faithfulness ratchet that fails any TU introducing
+a new invented-code smell. The target is semantic parity with the X360 build expressed as
+source-like PC C++, not byte matching.
+
+`work status` prints how much of the program is reconstructed. That figure changes on
+essentially every commit — CI regenerates `progress/status.json` on every push to
+`b5-decomp` — so it is deliberately not written down here.
 
 ## Tool Inventory
 
@@ -160,13 +179,15 @@ At a glance:
 
 | Tool area | Entry points |
 | --- | --- |
-| Day-to-day ledger work | `work bootstrap`, `work status`, `work next`, `work claim`, `work show`, `work submit`, `work parity`, `work review`, `work block`, `work reset-tu` |
+| Day-to-day ledger work | `work bootstrap`, `work status`, `work next`, `work claim`, `work show`, `work postmortem`, `work submit`, `work parity`, `work faithfulness`, `work review`, `work block`, `work reset-tu` |
 | Goal scoping and traces | `work goal ...`, `work goal import-trace`, `tools/work/trace_import.py` |
 | IDA export pipeline | `tools/export_db.ps1`, `tools/ida/export_all.py`, `tools/ida/export_lineinfo.py`, `tools/ida/decompile.py` |
 | Derived ledger builders | `tools/work/build_identity.py`, `tools/work/build_tu_index.py`, `tools/work/build_type_deps.py`, `work seed --deps` |
 | Reconstruction helpers | `tools/work/dossier.py`, `tools/work/gen_stubs.py`, `tools/work/gen_skeleton.py`, `tools/work/auto_draft.py` |
-| Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `progress/verify.config.json`, `progress/review.config.json` |
-| Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/renderware/generate_headers.py` |
+| Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `tools/work/faithfulness_lint.py`, `tools/_gate_tu.bat`, `progress/verify.config.json`, `progress/review.config.json` |
+| Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/renderware/generate_headers.py`, `tools/apt_revenge/generate_apt_headers.py` |
+| Building and booting | `tools/build/build_game_exe.bat`, `tools/build/build_ffmpeg.bat`, `tools/build/build_tools.ps1`, `tools/diagnostics/boot_test.ps1` |
+| X360 → PC asset conversion | `tools/assets/bundles/` (world, texture, GUI, Apt/Flapt, lane), `tools/assets/shaders/`, `tools/assets/fonts/`, `tools/assets/textures/`, `tools/assets/memory_map/` |
 | Optional server coordination | `work sync`, `work server-sync`, `work server-update`, `work resolve-class-homes`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
 
 ## Goals And Execution Traces

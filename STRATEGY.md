@@ -29,10 +29,17 @@ Two tiers, decided by how richly each is symbolized (measured, not assumed):
 | `BurnoutPR.exe` (BPR) | ~0% | PC reference, **stripped**. Consulted per-function for platform layers only. Partially hand-RE'd. |
 | `TUB_Burnout_PC_External.exe` | ~6% | PC reference, **stripped**. Same opportunistic role as BPR. |
 | `rwcore_master.obj` + `rwcore.pdb` | 100% | RenderWare type ground truth. PDB → `rw::` vocab via [`tools/renderware/generate_headers.py`](tools/renderware/generate_headers.py); extract layouts with `llvm-pdbutil`. |
+| `Burnout_External_Xbox_One.exe` | Apt slice named | **64-bit ABI arbiter.** The only native little-endian **x64** build with Apt symbols — its mangled public accessors pin exact 8-byte member offsets/strides, so it outranks the 32-bit builds for *Apt widths, offsets and alignment* (and for Apt only). Never the behavioural spine. |
+| `B4Extern` (Burnout Revenge) + `B4Extern.pdb` | Apt engine fully named | **Apt naming / hierarchy / signature reference.** The only PDB that names the Apt *engine* (AS VM, CIH, GC, value hierarchy). Apt **0.19.02 (2005)**, PPC 32-bit BE — corroboration only, never layout or behaviour authority. |
+| `ProStreet08Milestone` (NFS, X360) `.pdb` + `.map` | 100% (its own build) | **`rw::audio::core` (`rwaudiocore`) type ground truth** — the audio middleware `rwcore.pdb` does not cover. Different game; use only for the shared middleware vocabulary. Git-ignored, supply locally. |
 
-The three **symbolized console builds join by name**. The two **stripped PC builds
-are never the spine** — they are a lookup tool the agent reaches for mid-
-reconstruction when it wants the PC-shaped version of a platform function.
+The three Paradise-era **symbolized console builds join by name**. The two **stripped PC
+builds are never the spine** — they are a lookup tool the agent reaches for mid-
+reconstruction when it wants the PC-shaped version of a platform function. The last three
+rows are **narrow-scope arbiters** added later: each wins on exactly one axis (x64 widths;
+Apt naming; `rwaudiocore` types) and loses everywhere else. Their precise ladder positions,
+including the **Apt subsystem exception** where the Xbox One build outranks ARTIST for
+layout, are spelled out in AGENTS.md > Conventions.
 
 **Build lineage (provenance):** `Feb-2007` b5_main source → `Dec-2007`
 `DecFIGS` (branch B5_FIGS) → **FIGS merged into `main` before ARTIST compiled** →
@@ -80,18 +87,28 @@ compose it — not a loose function. An agent claims a TU, reconstructs its func
 together, and lands them under the mirrored path in [`b5-decomp/src`](b5-decomp/src/).
 Internally the ledger still tracks per-function status.
 
-**TU grouping has two sources (measured):**
+**TU grouping has four sources (measured; 4,412 TUs over 27,549 functions):**
 
-- **DecFIGS file attribution — ~43% of X360 functions (11,357 / 27,549).** DecFIGS
+- **DecFIGS file attribution — 11,357 / 27,549 functions (~41%), 1,655 TUs.** DecFIGS
   gives these a real `primary_file` (their original `.cpp`). Ground truth.
-- **Class-derived grouping — the other ~57%.** Verified empirically: the unmatched
-  functions are *genuinely absent* from the DecFIGS build (different build/inlining),
-  not a name-spelling mismatch (only 1% were spelling diffs; 5% MSVC-mangled, 4%
-  truncated at 119 chars — all minor). These still carry their `Namespace::Class`
+- **Class-derived grouping — 2,740 TUs, the bulk of the rest.** Verified empirically: the
+  unmatched functions are *genuinely absent* from the DecFIGS build (different build/
+  inlining), not a name-spelling mismatch (only 1% were spelling diffs; 5% MSVC-mangled,
+  4% truncated at 119 chars — all minor). These still carry their `Namespace::Class`
   path in the X360 demangled name, so they group by class, which ≈ file for C++.
+- **Vendor reclassification — 7 TUs.** Free functions that would otherwise fall into the
+  synthetic `<global>` bucket but are known third-party/runtime symbols get routed to a
+  `vendor:<lib>` unit via [`references/vendor_classification.json`](references/vendor_classification.json).
+  These are **blocked** by design: we link the PC library instead (see Middleware below).
+- **Module reclassification — 10 TUs.** Same mechanism for the Apt UI runtime, routed to
+  `module:apt/<obj>` via [`references/apt_classification.json`](references/apt_classification.json).
 
-The TU index marks each unit's `source` (`decfigs` vs `class`) so confidence is
-explicit. A `class`-sourced TU may later be re-partitioned if file evidence appears.
+Both reclassification maps are frozen inputs to
+[`tools/work/build_tu_index.py`](tools/work/build_tu_index.py) and exist purely to stop a
+5,000-function `class:<global>` mega-unit from swallowing code that has a real home.
+
+The TU index marks each unit's `source` so confidence is explicit. A `class`-sourced TU may
+later be re-partitioned if file evidence appears.
 
 For DecFIGS-backed TUs, `references/DecFIGS/dwarfdump/` is also part of the
 reconstruction dossier. It is DWARF-derived, C++-shaped reference material: use it
@@ -196,17 +213,40 @@ handlers use those real types instead of opaque blobs / offset-pokes. The PDB is
 PC build, so it is the right layout for our compile; X360 differences are modelled as
 explicit deltas on that baseline (see AGENTS.md, "`rw::` types come from `rwcore.pdb`").
 
-## Verification (reconstruction target — two tiers, both local)
+## Verification (reconstruction target — four gates, all local)
 
-1. **Compile gate** — the affected TU compiles against current headers (CMake).
-   Cheap, mandatory.
-2. **Reviewer pass** — a *separate* agent/sub-agent gets only the dossier + the
-   produced diff (not the reconstruction reasoning) and answers: does this C++ match
-   the pseudocode/asm semantics? Verdict is written to the ledger. `/code-review` is
-   the manual equivalent.
+`work submit` runs the first three in order; the fourth is the agent's judgement call.
 
-A dormant third tier (`match_required` flag in the ledger, default off) reserves
+1. **Compile gate** *(hard)* — the affected TU compiles on its own: `cl /c`, no link, under
+   `vcvars`, against the current headers ([`tools/work/verify.py`](tools/work/verify.py),
+   configured by [`progress/verify.config.json`](progress/verify.config.json)). Not a CMake
+   build — per-TU compilation is deliberately the gate, so nothing waits on a whole-program
+   link. A fail returns the TU to `in_progress`. If `vcvars` is missing the gate reports
+   `skip` and the loop still runs — useful for bookkeeping, but it catches nothing.
+2. **Structural parity** *(advisory)* — a NO-LLM fingerprint comparison (call/branch/loop/
+   return counts, X360 pseudocode vs reconstructed C++) via
+   [`tools/work/parity.py`](tools/work/parity.py). GREEN/YELLOW/RED. It never auto-fails,
+   because semantic-parity reconstruction legitimately refactors.
+3. **Faithfulness ratchet** *(hard)* — a NO-LLM scan for *invented* code via
+   [`tools/work/faithfulness_lint.py`](tools/work/faithfulness_lint.py): quiet `return
+   null`/`{}` engine stubs, raw offset-hack casts, `Class_verb` free-function shims,
+   home-grown-format vocabulary, `#pragma pack` layout accommodations. Ratcheted against
+   [`progress/faithfulness_baseline.json`](progress/faithfulness_baseline.json) so only
+   **new** smells fail. This is the gate that catches what 1 and 2 are structurally blind
+   to — see "The stub scaffold" above for why it has to be hard.
+4. **Reviewer pass** *(policy)* — a *separate* agent/sub-agent gets only the dossier + the
+   produced diff (not the reconstruction reasoning) and answers: does this C++ match the
+   pseudocode/asm semantics? Verdict is written to the ledger. Whether to run it, and with
+   which model, is a per-TU decision driven by
+   [`progress/review.config.json`](progress/review.config.json) — see AGENTS.md >
+   Verification. `/code-review` is the manual equivalent.
+
+A dormant fifth tier (`match_required` flag in the ledger, default off) reserves
 per-TU asm-matching for if/when a PPC toolchain is wired up. Not built now.
+
+Orthogonal to all of the above, the **verify sweep** re-audits already-`done` TUs against
+the X360 asm and fixes divergences found after the fact; it has its own operating guide and
+queue under [`progress/sweep/`](progress/sweep/).
 
 ## Phase plan
 
@@ -226,9 +266,33 @@ per-TU asm-matching for if/when a PPC toolchain is wired up. Not built now.
 - **Phase 3 — Compile gate + reviewer sub-agent** *(done)*: `work submit` runs the
   per-TU compile gate (`cl /c` under MSVC, `tools/work/verify.py`,
   `progress/verify.config.json`) and, on pass, emits a fresh-eyes reviewer packet;
-  `work review --verdict pass|fail` records the verdict. This completes the
-  self-verifying loop — Phase 3 is the last infrastructure phase.
+  `work review --verdict pass|fail` records the verdict. This closed the
+  self-verifying loop.
 
-Day-one mode is **assisted single-agent**: one agent at a time, you in the loop.
-The atomic-claim and per-build match seams exist from the start so scaling to a
-parallel fleet, or adding asm-matching, is a config flip, not a rewrite.
+Phases 0–3 were the planned infrastructure and are all complete. What has been built
+**since**, in response to what the work surfaced, is not a numbered phase but is part of
+the standing workflow:
+
+- **Goal scoping + execution traces** — `work goal`, and Xenia-trace-derived milestone
+  scopes via `work goal import-trace` ([`references/GOAL_SCOPING.md`](references/GOAL_SCOPING.md)).
+- **Faithfulness ratchet** — the hard anti-invention gate (Verification, item 3).
+- **Deterministic auto-draft** — `work auto`, a NO-LLM sweep for purely mechanical TUs.
+- **Optional coordination server** — atomic cross-agent claiming, an offline outbox, and a
+  GitHub Action that reconciles `status.json` + the submodule pointer
+  ([`references/COORDINATION.md`](references/COORDINATION.md)).
+- **The verify sweep** — a second-pass correctness audit of already-`done` TUs
+  ([`progress/sweep/`](progress/sweep/)).
+- **Build + asset pipelines** — the reconstructed code is now built and booted, and the
+  X360 data it consumes is converted to the PC format ([`tools/README.md`](tools/README.md)).
+
+The original day-one mode was **assisted single-agent**: one agent at a time, you in the
+loop. The atomic-claim and per-build match seams that were built in from the start are what
+made the move to concurrent agents a config flip rather than a rewrite; asm-matching remains
+the one dormant seam.
+
+**Where the work stands: run `work status`.** No count is written into this file. The
+durable state lives in [`progress/status.json`](progress/status.json), which CI regenerates
+on every `b5-decomp` commit — any number committed to a doc is wrong by the next push. The
+one thing worth stating, because it is a *policy* rather than a count: `blocked` is
+dominated by vendor SDK code we deliberately link instead of reconstructing, so it is not
+outstanding work.

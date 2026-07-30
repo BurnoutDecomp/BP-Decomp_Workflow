@@ -1,8 +1,9 @@
 # BPR — Burnout Paradise Remastered / PC module map
 
 Hand-recovered structure of the top-level engine object graph for the PC / Remastered
-build, derived from analyzing `BurnoutPR.exe` (see
-[`../../IDA Files/BurnoutPR.exe.i64`](../../IDA%20Files/BurnoutPR.exe.i64)).
+build, derived from analyzing `BurnoutPR.exe` (`IDA Files/BurnoutPR.exe.i64` — git-ignored
+for size, so supply it locally if you need to re-derive any of this; the committed `.cpp`
+below is the usable artifact).
 
 ## What's in here
 

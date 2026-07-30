@@ -18,9 +18,10 @@ is needed. (If the maintainer gave you a coordination-server URL, set it up firs
 if asked to continue, resume, or run the **verify sweep** — the correctness audit that
 re-verifies every already-`done` TU against the X360 asm and fixes divergences — read
 [`progress/sweep/VERIFY_SWEEP_HANDOFF.md`](progress/sweep/VERIFY_SWEEP_HANDOFF.md) first. It is the
-self-contained operating guide for that pass; its state/queue lives in
-[`progress/verify_sweep.json`](progress/verify_sweep.json) (per-TU `state`:
-`pending`/`pass`/`fixed`/`flagged`/`conductor_fix`/`not_reconstructed`).
+self-contained operating guide for that pass; its state/queue lives beside it in
+[`progress/sweep/verify_sweep.json`](progress/sweep/verify_sweep.json) (per-TU `state`:
+`pending`/`in_wave`/`pass`/`fixed`/`flagged`/`conductor_fix`/`fix_unverified`/`not_reconstructed`;
+the file's own `legend` key is authoritative).
 
 ### Environment Checklist (Verify Before Reconstructing)
 
@@ -47,11 +48,12 @@ TU compiles → a reviewer pass approves.
 ## The work loop
 
 ```
+work status           # counts by status, % done, active goal, server-vs-local
 work claim <tu>...    # claim specific TU id(s) — when you want a particular one
 work claim [-n N]     # ...or, with no id, claim the next N ready TUs from the queue.
                       #   With a coordination server (invite-only, see below) every claim
                       #   is atomic across everyone; without one it claims locally.
-work next             # read-only PREVIEW of the queue (reserves nothing)
+work next [-n N]      # read-only PREVIEW of the queue (reserves nothing)
 work show <tu>        # concise overview (functions, signatures, dependency TUs)
 work show <tu> --full # the full dossier: pseudocode, locals, DecFIGS dwarfdump
                       #   hints, Feb-2007 original source, callee signatures
@@ -62,15 +64,22 @@ work stubs <tu>       # trap-stub the callees this TU needs that aren't done yet
                       #   (--list shows what must be declared — the part that matters
                       #   under the compile-only gate; defs are for the future link)
   …reconstruct the C++ into b5-decomp/src/<mirrored path>…
-work submit <tu>      # run the compile gate; on pass, run the parity check + emit a reviewer packet
+work submit <tu> [--files a.cpp …]
+                      # run the compile gate; on pass, run the parity + faithfulness checks
+                      #   and emit a reviewer packet. --files overrides the recorded dest_path.
 work parity <tu>      # standalone NO-LLM structural parity check (no status change)
+work faithfulness     # standalone NO-LLM invented-code scan (--all, --files, --baseline)
 work postmortem <tu>  # SELF-REVIEW packet: full dossier WITH X360 asm + a checklist to
                       #   re-verify your reconstruction against ARTIST (pseudocode+asm), then
                       #   DecFIGS (DWARF), before you submit/review (see "Postmortem" below)
   …review per policy (see Verification) — tiered, may be skipped or delegated…
 work review <tu> --verdict pass|fail [--notes "…"]   # record the verdict
 work block <tu> "…"   # mark blocked + reason so it is not reclaimed
+work unblock <tu>     # …and the inverse
 work reset-tu <tu>    # delete produced files + return TU/functions to todo locally and server-side
+work set <tu> --status <s> [--note "…"]
+                      # maintenance escape hatch: force a status without running any gate.
+                      #   Use only to repair ledger drift, never to declare work done.
 ```
 
 **Goal scoping (optional, milestone-driven ordering).** By default `work next` is
@@ -85,10 +94,14 @@ reproduction, the binary format):
 
 A goal is a **membership selector**, not a call-graph closure: the X360 TU call graph is
 a single ~75%-of-the-program strongly-connected component, so reachability/closure cannot
-carve out a milestone (any boot seed's closure is 75% of the game). Each goal is therefore
-defined in [`progress/goals.json`](progress/goals.json) by `include`/`exclude` glob lists
-(`*` = any chars) matched against each TU's id **and** the function names it contains —
-so `GameSource/Gui/**` matches by path, `BrnGui::*` by namespace, `*Director*` by either.
+carve out a milestone (any boot seed's closure is 75% of the game). Goals live in
+[`progress/goals.json`](progress/goals.json) under two category buckets — `milestones`
+(execution-derived, defined by an exact `include_tus` list) and `pattern_slices`
+(hand-authored `include`/`exclude` glob lists). Globs use `*` = any chars and are matched
+against each TU's id **and** the function names it contains — so `GameSource/Gui/**`
+matches by path, `BrnGui::*` by namespace, `*Director*` by either. The CLI is
+bucket-agnostic (goal names are unique across buckets and a goal may carry either kind of
+membership field), so the buckets are organisation, not semantics.
 
 ```
 work goal                     # list defined goals + the active one (with TU/done counts)
@@ -299,8 +312,10 @@ own** pass first, so you don't ship a known-divergent TU into review.
 - **APT DATA: the 32-bit→64-bit `.apt` widening is done by the existing `libapt2` tool — do NOT
   reinvent it.** Console `.apt` bundles are 4-byte-pointer (`Apt Data:1:7:4`); the PC/x64 target needs
   the 8-byte form (`Apt Data:1:7:8`). That widening **already exists** in the maintainer's **libapt2**
-  (`references/private/libapt2-private-alpha`, the GUIAPT64 writer) — never mint a parallel widener
-  (the `apt_widen_4to8.py` / `.apt4` backdoor was exactly this mistake, now reverted). If libapt2's
+  (`references/private/libapt2-private-alpha`, the GUIAPT64 writer — git-ignored via
+  `references/private`, so it is maintainer-local and absent from a clone) — never mint a parallel
+  widener. `tools/assets/bundles/apt_widen_4to8.py` is the retired remnant of exactly that mistake
+  (the `.apt4` backdoor); it is kept for reference only and must not be used or revived. If libapt2's
   `1:7:8` output diverges from the real XB1 layout, fix it **in libapt2** — **never** bend the
   decompiled loader to eat the wrong bytes. Offset "accommodations" (reading `+0x04` where XB1 uses
   `+0x08`), `LocateMovieRoot`-style signature scans, `#pragma pack(4)`, and plausibility guards that
@@ -350,18 +365,21 @@ own** pass first, so you don't ship a known-divergent TU into review.
   32-bit X360 asm (Apt place/remove records, frame tables, display-list nodes, GUIAPT
   native-8 "1:7:8" data). Ladder position: it does not displace ARTIST as the
   behavioural spine (it is a later retail-era build — expect content/version drift);
-  it arbitrates *64-bit widths, offsets and alignment* only. `_name_index.tsv` in the
-  export dir maps address -> mangled name.
+  it arbitrates *64-bit widths, offsets and alignment* only. There is no separate index
+  file: each `0x<addr>.json` in the export dir carries the mangled `name` (plus
+  `prototype`/`pseudocode`/`assembly`/`xrefs_*`), so grep the export dir by name.
 - **APT NAMING/SHAPE REFERENCE — Burnout Revenge `B4Extern` (Apt 0.19.02), added
   2026-07-07.** A fully-symbolized Xbox 360 build of *Burnout Revenge* ("Burnout 4")
   ships a real MSVC **PDB** (`IDA Files/B4Extern.pdb`) covering the
   EATech **Apt** runtime — the only PDB we have with the Apt **engine** named and laid
   out: the AS VM (`AptActionInterpreter`), CIH timeline (`AptCIH`), GC
   (`AptValueGC*`), and the `AptValue`/`AptScriptFunction*` hierarchies, with full
-  member offsets, bitfields, base chains, and method signatures. Extracted to
-  [`references/B4Extern/`](references/B4Extern/) (raw PDB dumps
-  + a generated `include/apt_types.gen.h` + per-function Hex-Rays/asm under
-  `.ida-export/`, regen via [`tools/apt_revenge/generate_apt_headers.py`](tools/apt_revenge/generate_apt_headers.py)).
+  member offsets, bitfields, base chains, and method signatures. The committed bundle is
+  [`references/B4Extern/`](references/B4Extern/) — raw `pdb-dump/` llvm-pdbutil output
+  plus the generated `include/apt_types.gen.h` (regen via
+  [`tools/apt_revenge/generate_apt_headers.py`](tools/apt_revenge/generate_apt_headers.py));
+  per-function Hex-Rays/asm lives with the other exports, in
+  `.ida-exports/B4Extern/ida-export/0x<VA>.json`.
   **Ladder position: naming / class-hierarchy / signature corroboration ONLY.** It is
   Apt **0.19.02 (2005)** vs Paradise's ~2008 Apt, and 32-bit big-endian — so it is
   **not** offset/width authority (that stays the x64 XB1 build) and **not** the
@@ -412,7 +430,8 @@ own** pass first, so you don't ship a known-divergent TU into review.
   `RW_VERIFY_LAYOUT`. Caveat: the generator's input (`.ghidra-exports/rwcore/`) is **not
   checked in**, so it can't be regenerated here — template-instantiation types live in its
   hand-maintained prelude and the emitted header is hand-synced to match it.
-- **`rw::audio::core::` types come from `IDA Files/ProStreet08Milestone.pdb`.** `rwcore.pdb`
+- **`rw::audio::core::` types come from `IDA Files/ProStreet08Milestone.pdb`** (git-ignored
+  by `IDA Files/ProStreet*` — supply it locally; it is not in a fresh clone). `rwcore.pdb`
   covers only `rw::core` (the renderer/resource core), **not** the audio middleware. The EA
   Black Box **`rwaudiocore`** runtime (the layer Burnout's `CgsSound::Playback` sits on —
   `System`/`Mixer`/`SubMix`/`Voice`/`Dac`/`SndPlayer1`/`Decoder`/`PlugIn`/`Send`/`Route`/
@@ -541,15 +560,43 @@ own** pass first, so you don't ship a known-divergent TU into review.
   If the ledger ever disagrees with the files (it has — an older `work submit` guessed
   the file from `git status` and marked TUs done with no source; `submit` now requires
   a recorded `dest_path` or explicit `--files`), re-anchor it with
-  `work reconcile-from-files --apply` (or `--no-demote --apply` to add/promote only; wrapper for
-  [`tools/work/reconcile_from_files.py`](tools/work/reconcile_from_files.py)):
-  a TU is `done` only if its committed file is real **and complete** (no `TODO`/`FIXME`/
+  `work reconcile-from-files --apply` — promote-only by default; add `--allow-demote` to let
+  file evidence remove/demote existing entries too, and drop `--apply` for a dry run.
+  (Wrapper for [`tools/work/reconcile_from_files.py`](tools/work/reconcile_from_files.py).)
+  Its rule: a TU is `done` only if its committed file is real **and complete** (no `TODO`/`FIXME`/
   `guessed`/`placeholder` markers — those land `in_progress`), else `todo`; `blocked`
   preserved. It verifies both directions and round-trips through `work seed`. **A
   committed file is not "done" if it still carries author TODOs** — don't mark partials
   done. ("done" = complete reconstructed file, not necessarily LLM-reviewed.)
 - **Mirror original paths.** A function whose `primary_file` is
   `GameSource/Replays/Foo.cpp` lands at `b5-decomp/src/GameSource/Replays/Foo.cpp`.
+
+## Beyond the ledger: building and running what you reconstruct
+
+The `work` CLI covers reconstruction bookkeeping only. Reconstructed code is also
+**built and booted**, and the console data it consumes is **converted to the PC format**
+first. Those pipelines live under [`tools/`](tools/) and are inventoried in
+[`tools/README.md`](tools/README.md) — read it before hand-rolling a script; most of what
+you need already exists.
+
+- **Build the game exe** — `tools/build/build_game_exe.bat` (source list is enumerated by
+  hand, not globbed: **mounting a new TU means adding it there**). FFmpeg and the
+  standalone tools have their own drivers in the same folder.
+- **Per-TU compile gate outside the ledger** — `tools/_gate_tu.bat <abs.cpp>`, or
+  `tools/_gate_one.bat` when several agents gate in parallel (unique `.obj` per input).
+  These are `work submit`'s gate without the status change; note they hard-code a
+  **VS 2022 Enterprise** vcvars path while `progress/verify.config.json` points at
+  **Community** — fix whichever one doesn't match your host.
+- **Asset conversion (X360 big-endian platform-2 → PC x64 little-endian platform-4)** —
+  `tools/assets/bundles/`. Bundles are not byte-portable; a missing conversion looks like
+  an engine bug. `tools/assets/{textures,fonts,videos,shaders,memory_map}/` cover the
+  non-bundle formats.
+- **Boot / runtime diagnostics** — `tools/diagnostics/` (boot tests, HUD and save-icon
+  capture, bundle dumps). Screen capture on this D3D9 swap chain needs `CopyFromScreen`;
+  `PrintWindow` returns black.
+
+Standing data rule, restated because it bites: never bend a decompiled loader to eat
+malformed data. Fix the converter/emitter so the data matches the faithful loader.
 
 ## Don't
 

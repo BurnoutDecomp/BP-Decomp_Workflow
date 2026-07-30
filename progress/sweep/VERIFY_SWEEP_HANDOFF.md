@@ -10,7 +10,7 @@ naming conventions; the b5-decomp-only commit rule; `work` CLI). This doc covers
 
 Pull first.
 
-## The state file — `progress/verify_sweep.json`
+## The state file — `progress/sweep/verify_sweep.json`
 
 This IS your queue and your memory; **update it as you finish each TU**, or the
 progress is lost. It has self-documenting `legend` / `fields` / `summary` keys,
@@ -24,7 +24,8 @@ then `tus` — one entry per done TU:
 ```
 
 `state` is the whole point — the `legend` in the file is authoritative, in short:
-`pending` (queue) · `pass` (verified clean) · `fixed` (divergence fixed +
+`pending` (queue) · `in_wave` (currently being processed; reset to `pending` if that
+wave died) · `pass` (verified clean) · `fixed` (divergence fixed +
 re-verified + committed) · `flagged` (real divergence, fix needs a **cross-TU /
 shared-header** change — not applied, finding in `note`) · `conductor_fix`
 (divergence whose fix lives in **another TU / vendor lib** — apply deliberately,
@@ -32,7 +33,7 @@ not via a blind in-TU pass) · `not_reconstructed` (⚠️ ledger says done but 
 does **not** contain this TU's functions — needs a **full re-decompile**) ·
 `fix_unverified` (fix applied, never confirmed — re-verify or revert).
 
-`still_unmapped` (~421) are done TUs (mostly mangled template `class:` ids) whose
+`still_unmapped` (421) are done TUs (mostly mangled template `class:` ids) whose
 bodies couldn't be auto-mapped to a file — audit at the end, not in the main sweep.
 
 ## Method — verify → fix → re-verify, in waves
@@ -106,22 +107,29 @@ mistake can't launder itself through all three steps.
   deliberately: recover the real type/signature, gate the whole include cascade,
   compile every dependent TU, then re-verify and commit.
 
-## Status snapshot (keep `summary` current)
+## Status (read it from the JSON, not from here)
 
-As of the last refresh (2026-07-02): **2,543 done TUs tracked** — 2,505 `pending`,
-14 `fixed`, 2 `pass`, 1 `flagged`, 3 `conductor_fix`, 18 `not_reconstructed`, plus
-421 `still_unmapped`. **Waves completed so far: wave 1** (commit `f4111ba`, 8 mixed
-leaf TUs — traffic/physics/network/containers/ICE/AI/language/worldIO) and **wave 2**
-(commit `b740191`, the Debug-UI subsystem cluster, 15 related TUs: 4 fixed, 1 pass,
-10 `not_reconstructed`). **Known label bug:** commit `b740191`'s message says "wave
-13" — a prior session's `verify_sweep.json` had a stale `wave: 12` tag on the wave-1
-TUs (there were never waves 2–12; only one sweep commit, `f4111ba`, predates it), so
-the picker miscounted the next wave as 13. The JSON has been corrected (those TUs are
-now tagged `wave: 1`; the Debug-UI batch is `wave: 2`) but the pushed commit message
-itself was left as-is — `dev` had moved by the time this was caught, so amending would
-have required a force-push over other agents' work. **Trust the `wave` field in
-`verify_sweep.json`, not any wave number baked into a commit message, when picking
-the next wave number.**
+**Do not trust a snapshot pasted into this doc** — it has gone stale before. The live
+figures are the `summary` and `note` keys of `verify_sweep.json`; recompute rather than
+copy:
+
+```powershell
+python -c "import json,collections; d=json.load(open('progress/sweep/verify_sweep.json')); print(d['summary']); print('unmapped', len(d['still_unmapped'])); print('next wave', max((t.get('wave') or 0) for t in d['tus'].values())+1); print(d['note'])"
+```
+
+**Keep `summary` and `note` current as you finish each wave** — they are the handoff.
+`note` carries what a bare count can't: which subsystems a session covered, which commits
+carried the fixes, and any TUs deliberately reset to `pending`.
+
+For orientation only, as of 2026-07-03: 2,543 done TUs tracked, ~1,400 still `pending`,
+~600 `pass`, ~110 `fixed`, ~350 `not_reconstructed`, plus 421 `still_unmapped`; waves 1–20
+processed and the next wave number was 21. Recompute before acting on any of that.
+
+**Wave numbers come from the `wave` field, never from a commit message.** They have
+disagreed: one sweep commit is labelled "wave 13" for what the JSON records as wave 2,
+because a stale tag made the picker miscount and `dev` had moved on by the time it was
+caught (amending would have meant force-pushing over other agents' work). The JSON was
+corrected; the commit message was not.
 
 Tier model by difficulty: strong model for hard TUs (many funcs, big packets,
 physics/state/manager logic), cheaper for simple leaf/accessor TUs. Done when every
