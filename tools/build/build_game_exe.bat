@@ -922,10 +922,24 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\Replays\BrnReplayHudMessageComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\Shared\BrnScreenShared.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiOptionsDataProfile.cpp"
+  rem ---- intro wave (2026-07-30): BrnLicenseComponent.cpp / BrnPhotoBoothComponent.cpp are
+  rem ---- deliberately NOT mounted. Both fail to link today, on symbols that are DECLARED
+  rem ---- but never DEFINED anywhere in the tree:
+  rem ----   BrnGui::GuiCache::EnsureResourceIsUnloaded(const sResourceTuple&)
+  rem ----   BrnGui::GuiCache::EnsureResourcesAreUnloaded(const sResourceTuple*, u32)
+  rem ---- plus CgsNetwork::NetworkTexture::Prepare, whose committed signature
+  rem ---- (HeapMalloc*, s32, s32, ...) does not match the one BrnPhotoBoothComponent.cpp
+  rem ---- was written against (char*, int, int, int, PixelFormat), and
+  rem ---- BrnProgression::Profile::GetLicenceIssuedDate / SetLicenceIssuedDateAsNow, which
+  rem ---- live in the unmounted BrnProfile.cpp. Mount them together with those four fixes.
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnImageGalleryCarouselItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnImageGallerySelectable.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextSelection.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnIcon.cpp"
+  rem intro wave (2026-07-30): HelpItem declares a VIRTUAL Construct, so its vtable must be
+  rem emitted for any TU that embeds one by value -- BrnGui::Intro does, through
+  rem BrnGui::PhotoBoothComponent's two HelpItem members.
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnHelpItem.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayGuiModuleSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayGuiModuleStaticLayout.cpp"
   rem FLAG link scaffold: the SCREEN states' unrecovered .rdata tables + partial-state
