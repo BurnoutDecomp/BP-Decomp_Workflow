@@ -268,6 +268,15 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\Camera\BrnCameraValidityAccount.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\CameraUtils.cpp"
   echo "%SRC%\GameSource\GameState\BrnGameStateModuleIO.cpp"
+  rem intro wave (2026-07-30): the live BrnProgression::Profile TU. Needed by
+  rem BrnGuiModule::Prepare (Profile::Construct seeds mbIsNewProfile = true, the
+  rem first-boot INTRO gate) and by the licence component (GetLicenceIssuedDate /
+  rem SetLicenceIssuedDateAsNow).
+  echo "%SRC%\GameSource\GameState\Progression\BrnProfile.cpp"
+  rem ...and the two TUs BrnProfile::SetPlayerLicencePicture links against (the licence
+  rem mugshot wrapper + the RGB->A1R5G5B5 converter).
+  echo "%SRC%\GameShared\GameClasses\Network\Texture\CgsNetworkTexture.cpp"
+  echo "%SRC%\GameShared\GameClasses\Network\Utilities\CgsNetworkImageConverter.cpp"
   echo "%SRC%\GameSource\Director\Camera\SharedIO\BrnPlayerInfo.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayStatusInterface.cpp"
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\NetworkInputInterface.cpp"
@@ -922,16 +931,15 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\Replays\BrnReplayHudMessageComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\Shared\BrnScreenShared.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiOptionsDataProfile.cpp"
-  rem ---- intro wave (2026-07-30): BrnLicenseComponent.cpp / BrnPhotoBoothComponent.cpp are
-  rem ---- deliberately NOT mounted. Both fail to link today, on symbols that are DECLARED
-  rem ---- but never DEFINED anywhere in the tree:
-  rem ----   BrnGui::GuiCache::EnsureResourceIsUnloaded(const sResourceTuple&)
-  rem ----   BrnGui::GuiCache::EnsureResourcesAreUnloaded(const sResourceTuple*, u32)
-  rem ---- plus CgsNetwork::NetworkTexture::Prepare, whose committed signature
-  rem ---- (HeapMalloc*, s32, s32, ...) does not match the one BrnPhotoBoothComponent.cpp
-  rem ---- was written against (char*, int, int, int, PixelFormat), and
-  rem ---- BrnProgression::Profile::GetLicenceIssuedDate / SetLicenceIssuedDateAsNow, which
-  rem ---- live in the unmounted BrnProfile.cpp. Mount them together with those four fixes.
+  rem ---- intro wave (2026-07-30): the licence / photo-booth screen components. All four
+  rem ---- link gaps that kept them out are now closed:
+  rem ----   GuiCache::EnsureResourceIsUnloaded / EnsureResourcesAreUnloaded  -> BrnGuiCache.cpp
+  rem ----   Profile::GetLicenceIssuedDate / SetLicenceIssuedDateAsNow        -> BrnProfile.cpp (mounted above)
+  rem ----   NetworkTexture::Prepare(char*, s32, s32, s32, PixelFormat)       -> the SECOND
+  rem ----     X360 overload @0x82893A80 (caller-owned buffer), a sibling of the allocating
+  rem ----     Prepare @0x82893928 -- never a signature conflict with it.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnLicenseComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnPhotoBoothComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnImageGalleryCarouselItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnImageGallerySelectable.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextSelection.cpp"
