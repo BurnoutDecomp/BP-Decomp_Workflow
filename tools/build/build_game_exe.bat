@@ -286,6 +286,9 @@ rem ---- build the cl response file ----
   rem (textures/shaders wave 2026-07-28: BrnGameModule::GamePrepare's three one-time
   rem  LoadBundle requests go through RequestInterface<32768> -- X360 0x823CE558.)
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_32768.cpp"
+  rem (race-car global-resource wave 2026-07-31: RaceCarEntityModule::LoadGlobalResources
+  rem  @0x82300730 posts LoadBundle/GetVehicleList/GetWheelList through RequestInterface<8192>.)
+  echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_8192.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\SharedIO\BrnWorldEntityRequestInterface.cpp"
   echo "%SRC%\vendor\renderware\collision\BitTable.cpp"
   echo "%SRC%\GameSource\World\WorldLinkStubs.cpp"
