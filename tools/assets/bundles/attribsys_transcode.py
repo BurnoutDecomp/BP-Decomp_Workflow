@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 """Structural endian transcoder for the world-support single-resource bundles:
 
-  AttribSysVault  (WORLDVAULT.BIN rid 7CD1FBEE, SURFACELIST.BIN rid 43096C31)
+  AttribSysVault  (WORLDVAULT.BIN rid 7CD1FBEE, SURFACELIST.BIN rid 43096C31,
+                   CAMERAS.BUNDLE  rid 28FE4576 -- the "CameraVault")
   WorldPainter2D  (DISTRICTS.DAT  rid 68E318DC)
 
 X360 (bnd2 platform 2, big-endian) -> the platform-4 LE form the reconstructed
 PC engine loads. This is a STRUCTURAL transcoder: it walks the container format
 and flips every field the walk identifies, in place; it does NOT re-serialise.
+
+Bundles that ALSO carry a resource whose host form needs a genuine re-layout
+(not just a flip) delegate that resource to a sibling REBUILDER module -- see
+REBUILDERS below. CAMERAS.BUNDLE is the first: its second resource is an
+ICETakeDictionary whose DictEntry stride widens 16 -> 24 bytes on the x64 host,
+so ice_transcode.py rebuilds it (the same widening-rebuild convention
+lane_transcode.py uses for the traffic/AI/trigger lane payloads).
 
 == AttribSysVault container (walk authority) ==
 The container walk mirrors tools/volatility/src/Volatility.Core/Resources/
@@ -82,6 +90,45 @@ X360 consumers, cross-validated against the BPR LE oracle):
       (60B), visualfxsurface 0x12B5F62BE1A5AB30 (96B): u32 scalars -- zero
       u64-inconsistent dwords across every collection vs the BPR oracle.
 
+CAMERAS.BUNDLE / CameraVault classes (added with that wave). Every payload size
+below is the DefaultDataArea(N) the class's GENERATED CONSTRUCTOR passes, read
+out of b5-decomp/src/GameSource/AttribSys/Generated/classes/<name>.h, and every
+one was confirmed against the instance count/extent measured in the retail
+resource -- so the schemas are sized by the reconstructed ctor, not by the data:
+  iceanim 0x4644E379A997C1EE (549 collections, DefaultDataArea 0x10): FOUR
+      4-byte words. +0x00 SuitableFor and +0x04 ShotProperties are the generated
+      accessors iceanim.h declares (`u32*(GetLayoutPointer())[0]` / `[1]`, from
+      ShotSelector::GetCrashShot @0x822398F0..F8); +0x08 is zero in every one of
+      the 549 instances (semantic unknown, flipped as a word like its
+      neighbours); +0x0C is the ICE take guid (iceanim.h GetAnimGuid, "instance
+      +0xC") -- 549 DISTINCT values, each one a guid that resolves in the
+      bundle's take dictionary.
+  proceduralshot 0x9B2E3C86E02737B0 (7, DefaultDataArea 0x10): FOUR 4-byte
+      words; proceduralshot.h declares SuitableFor at layout +0x00 and
+      ShotProperties at +0x08 (`[0]` / `[2]`, @0x8223992C..34).
+  proceduralshake 0x88C5A4BDB8FDFFFF (5, DefaultDataArea 0x1C): SEVEN 4-byte
+      scalars -- the Pitch/Roll/Yaw Frequency+Scale pairs + ShakeMethod named in
+      proceduralshake.h (data reads as f32 f32 u32 f32 f32 f32 f32: 0.03/6.0/1,
+      0.001/10.0/1 ...); all seven are 4 bytes so the flip is width-identical
+      whichever field is which.
+  cameradefaults 0x095B375E5F206F31 (1, DefaultDataArea 0x38): one RefSpec then
+      EIGHT 4-byte scalars. The leading RefSpec is proven, not assumed: its
+      classKey is exactly Attrib::Gen::iceanim::ClassKey() 0x4644E379A997C1EE
+      and its collectionKey 0x3CADC5C2EEF63366 IS one of this vault's 549
+      iceanim collections (i.e. the default camera take). The u64 halves must
+      therefore flip as u64s, not as pairs of u32s.
+  aftertouchcam 0x75E62FC1632388D6 (1, DefaultDataArea 0x18): SIX 4-byte
+      scalars (retail values 15.0 / 1.75 / 4.0 / 2.0 / 8.0 / 90.0 -- f32).
+  shotgroup 0x38ED2D373887CBC7, ITEM payload (73 arrays): the SAME shape as
+      surfacelist's "Surfaces" item -- {u16 alloc, u16 num, u16 elemSize, u16
+      pad} + num * RefSpec. Attested by shotgroup.h (the "ShotList" attribute
+      key 0x7533C0E215246B49, resolved through the indexed
+      Attrib::Instance::GetAttributePointer with a DefaultDataArea(0x18) null
+      element == a 24-byte RefSpec) and confirmed by the data: every one of the
+      73 arrays reads elemSize == 0x18 and its extent is exactly 8 + num * 24.
+      shotgroup collections have NO main payload (their header +40 slot is not a
+      PtrN target), which is why only the item form is registered.
+
 == WorldPainter2D (DISTRICTS.DAT) ==
 Attested by CgsWorld::WorldMap2D::Construct @0x82907FD0 / GetValue @0x82907FF8
 and BrnWorld::RaceCarEntityModule::Prepare @0x82303E78 (map = resMem +
@@ -129,6 +176,15 @@ CLS_AUDIOSURFACE = 0x64F8A2D1237050D1
 CLS_RUMBLESURFACE = 0x540C6D1714E37D72
 CLS_VISUALFXSURFACE = 0x12B5F62BE1A5AB30
 
+# CAMERAS.BUNDLE / CameraVault (class keys are the ClassKey() / class-id literals
+# in the generated classes under GameSource/AttribSys/Generated/classes/).
+CLS_ICEANIM = 0x4644E379A997C1EE           # iceanim.h ClassKey()
+CLS_PROCEDURALSHOT = 0x9B2E3C86E02737B0    # proceduralshot.h ClassKey()
+CLS_PROCEDURALSHAKE = 0x88C5A4BDB8FDFFFF   # proceduralshake.h (low word 0xB8FDFFFF)
+CLS_CAMERADEFAULTS = 0x095B375E5F206F31    # cameradefaults.h (low word 0x5F206F31)
+CLS_AFTERTOUCHCAM = 0x75E62FC1632388D6     # aftertouchcam.h (low word 0x632388D6)
+CLS_SHOTGROUP = 0x38ED2D373887CBC7         # shotgroup.h (low word 0x3887CBC7)
+
 REFSPEC = (8, 8, 4, 4)          # {u64 classKey, u64 collectionKey, u32 ptr, u32 pad}
 
 
@@ -158,6 +214,22 @@ def _schema_surface_list_items(size):
     return _scalars(2, 4) + REFSPEC * n
 
 
+def _fixed_words(count):
+    """A FIXED-SIZE data area of `count` 4-byte scalars (the class's generated
+    DefaultDataArea(N), N == 4*count). Anything past it in the tiled region is
+    inter-payload alignment padding and is left to the generic raw/report path."""
+    def build(_size):
+        return _scalars(4, count)
+    return build
+
+
+def _schema_cameradefaults(_size):
+    """DefaultDataArea(0x38): one RefSpec (the default camera take -- its classKey
+    IS iceanim's and its collectionKey resolves to a real iceanim collection in
+    this vault) followed by eight 4-byte scalars."""
+    return REFSPEC + _scalars(4, 8)
+
+
 # (classHash, is_item_payload) -> schema builder (region size -> field widths).
 # The widths tile the region from its start; any remainder is left raw and
 # reported unless it is all zero padding.
@@ -171,6 +243,13 @@ PAYLOAD_CLASS_SCHEMAS = {
     (CLS_AUDIOSURFACE, False): _schema_words,
     (CLS_RUMBLESURFACE, False): _schema_words,
     (CLS_VISUALFXSURFACE, False): _schema_words,
+    # -- CameraVault (CAMERAS.BUNDLE); sizes are the generated DefaultDataArea(N)
+    (CLS_ICEANIM, False): _fixed_words(4),           # 0x10
+    (CLS_PROCEDURALSHOT, False): _fixed_words(4),    # 0x10
+    (CLS_PROCEDURALSHAKE, False): _fixed_words(7),   # 0x1C
+    (CLS_CAMERADEFAULTS, False): _schema_cameradefaults,  # 0x38
+    (CLS_AFTERTOUCHCAM, False): _fixed_words(6),     # 0x18
+    (CLS_SHOTGROUP, True): _schema_surface_list_items,
 }
 
 
@@ -457,6 +536,19 @@ WALKERS = {
 }
 
 
+# Resource types whose host form is a genuine RE-LAYOUT, not an in-place flip:
+# a rebuilder takes the BE resource bytes and returns (host bytes, reports). The
+# import is lazy so the flip-only paths never pay for it.
+def _rebuilder(kind):
+    if kind != 'ICETakeDictionary':
+        return None
+    here = os.path.dirname(os.path.abspath(__file__))
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import ice_transcode
+    return ice_transcode.transcode_take_dictionary
+
+
 def flip(data, fields):
     out = bytearray(data)
     for off, width, _tag in fields:
@@ -535,7 +627,8 @@ def convert_bundle(in_bundle, out_bundle, reference_dir=None):
             folder = os.path.join(ex, entry)
             if not os.path.isdir(folder):
                 continue
-            if entry not in WALKERS:
+            rebuild = _rebuilder(entry)
+            if rebuild is None and entry not in WALKERS:
                 raise WalkError('no structural walker for resource type %r' % entry)
             for f in sorted(os.listdir(folder)):
                 if not f.endswith('.dat'):
@@ -543,13 +636,16 @@ def convert_bundle(in_bundle, out_bundle, reference_dir=None):
                 fp = os.path.join(folder, f)
                 with open(fp, 'rb') as fh:
                     data = fh.read()
-                le, report, _regions = transcode_resource(entry, data)
+                if rebuild is not None:
+                    le, report = rebuild(data)
+                else:
+                    le, report, _regions = transcode_resource(entry, data)
                 with open(fp, 'wb') as fh:
                     fh.write(le)
                 seen += 1
                 name = '%s/%s' % (entry, f)
                 reports.extend('%s: %s' % (name, r) for r in report)
-                if reference_dir:
+                if reference_dir and rebuild is None:
                     ref = os.path.join(reference_dir, entry, f)
                     if os.path.isfile(ref):
                         with open(ref, 'rb') as fh:
@@ -584,6 +680,13 @@ def inspect(path):
         data = fh.read()
     kind = 'AttribSysVault'
     parent = os.path.basename(os.path.dirname(os.path.abspath(path)))
+    if _rebuilder(parent) is not None:
+        here = os.path.dirname(os.path.abspath(__file__))
+        if here not in sys.path:
+            sys.path.insert(0, here)
+        import ice_transcode
+        ice_transcode.inspect(path)
+        return
     if parent in WALKERS:
         kind = parent
     errors = []
