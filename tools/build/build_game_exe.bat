@@ -923,6 +923,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Replays\Stream\BrnReplayWriteStream.cpp"
   echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribinstance.cpp"
   echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attribute.cpp"
+  rem ---- generated-class out-of-line bodies (2026-07-31, attrib-chain wave) -------------
+  rem  Same convention as the already-mounted songlist.cpp: one .cpp per generated class,
+  rem  holding only the functions the X360 attests as out of line. shotgroup.cpp bodies
+  rem  Num_ShotList @0x821F5948 (~20 committed callers, no body and no home before today);
+  rem  iceanim.cpp bodies GetAnimGuid (no X360 symbol -- inlined -- but likewise homeless).
+  echo "%SRC%\GameSource\AttribSys\Generated\classes\shotgroup.cpp"
+  echo "%SRC%\GameSource\AttribSys\Generated\classes\iceanim.cpp"
   rem ---- l2-into-dev merge link closure (dev waves grew shared TUs; their homes join;
   rem      the cascade-heavy waves -- ScreenFlow/HudFlow new states, CgsRegistry schema
   rem      web, Attrib node web -- are reverted-in-merge to l2 pending integration) ----
