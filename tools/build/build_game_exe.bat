@@ -772,20 +772,37 @@ rem ---- build the cl response file ----
   rem  GAME_INTRO_PART_ONE/TWO/THREE off the DirectorResourceManager's mGameIntroGroup, vault
   rem  name key "606002") now COMPILES: the six CollisionPolicy / Utils C2011 forks inside
   rem  Behaviours/BrnBehaviourIceAnim.h are retired, and so do its six sibling ICE-anim states.
-  rem  It is still NOT MOUNTED, but the reason has changed and is no longer a header defect:
-  rem  mounting it pulls BrnBehaviourIceAnim.cpp, and that TU's camera actually comes out of
-  rem      BrnDirector::KeyAnimController        -- the ICE take evaluator: 2 of ~8 functions
-  rem                                              bodied (GetLookPos/HasFinished only; Prepare,
-  rem                                              Update, Get/SetParametricTime0To1, GetEyeSpace
-  rem                                              and GetLookSpace have no body anywhere), and
-  rem      BrnDirector::Camera::IceAnimCameraOps -- 10 declaration-only free functions that are
-  rem                                              a NAMING DEVICE for the console's inlined
-  rem                                              camera writes; they have no bodies at all.
-  rem  Stubbing either group would be stubbing the very code that produces the camera, so the
-  rem  state stays stubbed in DirectorLinkStubs.cpp (group A) instead. Measured link cost of
-  rem  mounting today: 61 unresolved externals (13 of them the DirectorResourceManager shot-group
-  rem  getters, the rest that ICE take chain + BehaviourInterpolate/RotateAboutVehicle).
-  rem  DELETE-WHEN: KeyAnimController::Update/Prepare land and IceAnimCameraOps is bodied.
+  rem  ---- 2026-07-31 UPDATE: the camera code itself is DONE. ----
+  rem  BrnDirector::KeyAnimController (the ICE take evaluator: Prepare, Update,
+  rem  UpdateCameraFromICE, UpdateTransformationMatrix, UpdateFocus, UpdateLens,
+  rem  Get/SetParametricTime0To1 + the four accessors) is fully reconstructed in
+  rem  Shots/ShotControllers/BrnKeyAnimController.cpp, and the ten declaration-only
+  rem  BrnDirector::Camera::IceAnimCameraOps placeholders are RETIRED onto the real APIs
+  rem  (Camera::operator=, Camera::RequestMotionBlur, Camera::Set/GetFOV,
+  rem  DepthOfField::SetParams, Looker::Update, CameraShake::Update,
+  rem  Behaviour::SetCantSwitchToMeNow, CollisionPolicyAttachedToVehicle::SetVehicleRef).
+  rem  CAMERAS.BUNDLE is ported to platform 4 as well, so the data is there too.
+  rem
+  rem  The three TUs are STILL NOT MOUNTED, and the reason has changed again. Measured today
+  rem  with all three in the link (BrnKeyAnimController.cpp + BrnBehaviourIceAnim.cpp +
+  rem  BrnArbStateCarSelect.cpp): 0 compile errors, 54 unique unresolved externals --
+  rem      17  DirectorResourceManager accessors (14 shot-group getters + GetICEAuthor /
+  rem          GetICEList / GetKeyAnimFromGuid). These are the FORK's accessors in
+  rem          Behaviours/BrnBehaviourIceAnim.h; retiring that fork needs the manager's 65
+  rem          shot-group members DECLARED, which in turn needs Attrib::FindCollection's real
+  rem          (classKey, collectionKey) signature and Attrib::Instance::operator= -- see the
+  rem          recon map at the top of GameSource/Director/BrnDirectorResourceManager.h.
+  rem       8  BehaviourInterpolate / BehaviourRotateAboutVehicle (two un-landed behaviours).
+  rem       6  the ICE SDK take runtime (ICETake::Construct / SetDataPointers / SetParameter /
+  rem          GetValueInt / GetValueFloat, CameraSpaceHandler::TransformToWorld) -- all
+  rem          RECONSTRUCTED under SDKs/Packages/ICE/, just not in this source list.
+  rem      the rest: Camera::RequestMotionBlur / GetDepthOfField, DepthOfField::GetBlurriness,
+  rem          CameraShake::Update, Tweaker::Construct, VehicleRef::Get, ICEAuthor /
+  rem          ICEList guid lookups, Attrib::Gen::{iceanim::GetAnimGuid, shotgroup::Num_ShotList},
+  rem          SharedCameraContainer / AllVehicleData / DebugPrinter leaves.
+  rem  None of that is camera code any more -- it is the surrounding subsystems.
+  rem  DELETE-WHEN: the DirectorResourceManager fork is retired and the ICE SDK take runtime
+  rem  is in this source list.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
