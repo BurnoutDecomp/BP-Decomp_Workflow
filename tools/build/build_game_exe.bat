@@ -123,6 +123,12 @@ rem ---- build the cl response file ----
   rem ---- their bridges stay boot-gated in WorldLinkStubs.cpp. Mount them with    ---
   rem ---- the entity-module IO pass that lands those accessors.                   ---
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
+  rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
+  rem ---- its shared component-streamer base + the five concrete leaves. These ----
+  rem ---- are what post the first VEH_ load requests.                          ----
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarStreamer.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarBaseComponentStreamer.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarComponentStreamers.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
