@@ -128,9 +128,20 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\EnvironmentManager\BrnEnvironmentManager.cpp"
-  rem (sky wave: the environment utils; the sky-dome draw TUs are held
-  rem  out of the link until the renderengine VertexDescriptor/ImRendererBase
-  rem  closure lands -- see the sky wave log section 5)
+  rem ---- SKY WAVE (2026-07-31): the sky-dome draw path, MOUNTED. ----------------
+  rem The closure was measured with dumpbin over the linked object set: the three
+  rem sky TUs raise 67 externals / 45 already provided / 22 unresolved; the two
+  rem existing renderengine TUs below resolve 2 and drag nothing, and
+  rem ImmediateModePCLeaf.cpp (a new PC leaf) defines the other 20. Mounting the
+  rem existing VertexBuffer.cpp / IndexBuffer.cpp / CgsImRenderer.cpp instead makes
+  rem it WORSE (29 / 23 unresolved + an LNK2005 against the linked CgsIm2d.cpp).
+  echo "%SRC%\pc\gcm\renderengine\VertexDescriptorParameters.cpp"
+  echo "%SRC%\GameShared\GameClasses\RenderWare\PS3\CgsRwVertexDescResourceType.cpp"
+  echo "%SRC%\pc\gcm\renderengine\ImmediateModePCLeaf.cpp"
+  echo "%SRC%\pc\gcm\renderengine\SkyDomeProgramsPC.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3dSkyDome.cpp"
+  echo "%SRC%\GameSource\Graphics\ImmediateMode\BrnIm3d.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnSkyDomeManager.cpp"
   echo "%SRC%\SharedClasses\World\BrnEnvironmentUtil.cpp"
   echo "%SRC%\GameSource\World\EnvironmentMap\BrnEnvironmentMap.cpp"
   echo "%SRC%\GameSource\World\ShadowMap\BrnShadowMap.cpp"
