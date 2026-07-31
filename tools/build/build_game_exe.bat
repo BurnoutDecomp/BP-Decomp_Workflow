@@ -839,6 +839,44 @@ rem ---- build the cl response file ----
   rem  DELETE-WHEN: the DirectorResourceManager fork is retired and the ICE take runtime's own
   rem  ~11 missing bodies are reconstructed (then the SDKs/Packages/ICE data-layer TUs can join
   rem  this source list as a unit).
+  rem
+  rem  ---- 2026-07-31, THIRD PASS: the C2011 blocker is GONE; the number is now 27. ---------
+  rem  Re-measured with dumpbin /SYMBOLS over build\game\obj (the linked object set) rather
+  rem  than by trial builds, so the split is exact. FIRST: all three ArbState TUs now COMPILE
+  rem  CLEAN -- 0 errors, real objects. The six C2011 redefinitions the old note (and the .cpp's
+  rem  own banner) blamed on Behaviours/BrnBehaviourIceAnim.h are stale: that header now
+  rem  #includes all six canonical homes. The AttribSys wave also closed the attribinstance.h
+  rem  failure the previous probe hit.
+  rem
+  rem  What is left is pure LINK closure, and it still says DO NOT MOUNT:
+  rem      BrnArbStateCarSelect.cpp alone .. 63 referenced / 26 provided / 10 CRT / 27 UNRESOLVED
+  rem      + RaceIntro + OnlineCarSelect ... 81 referenced / 33 provided / 11 CRT / 37 UNRESOLVED
+  rem  (The old '54' above was a different set -- three CAMERA TUs, not these -- so it is not
+  rem  comparable; it is left in place as the record of that experiment.)
+  rem
+  rem  The 27 for CarSelect break down as:
+  rem      14  DirectorResourceManager::GetCarSelect*Shots / GetCarUnlockShots /
+  rem          GetGameIntroShots. Declaration-only in Behaviours/BrnBehaviourIceAnim.h, and NO
+  rem          body exists anywhere: the fourteen mCarSelect*/mCarUnlock/mGameIntroGroup members
+  rem          live only in the recon-map COMMENT in BrnDirectorResourceManager.h (they are not
+  rem          declared), and that TU is not mounted. This is the dominant block and the one
+  rem          real next step -- Attrib::FindCollection / Instance::operator= /
+  rem          GetAttributePointer / shotgroup::Num_ShotList are all real now, so declaring the
+  rem          member set and bodying Prepare is finally unblocked.
+  rem       6  Camera::BehaviourInterpolate::{Setup, SetupDuration, SetupCameraAFromHelper,
+  rem          SetupCameraBFromHelper, SetParameters, HasFinished}  -- un-landed behaviour.
+  rem       2  Camera::BehaviourRotateAboutVehicle::{BecomeSimilarTo, SetParameters} -- ditto.
+  rem       5  BehaviourIceAnim::ClearBaseFirstFrameGate (the known hole noted above),
+  rem          Camera::EnsureEffectIsPlaying, SharedCameraContainer::
+  rem          {ForcePrimaryGameplayBehaviourToFinish, GetSelectedGameplayCamera}, and
+  rem          CgsDev::StrStreamBase's vector-deleting destructor.
+  rem  Reproduce with scratchpad w10_unres2.py (dumpbin diff, seconds, no rebuild).
+  rem
+  rem  WARNING -- AND BEFORE MOUNTING: BrnBehaviourIceAnim.h typedefs ShotReference to
+  rem  Attrib::Gen::iceanim, but SetParameters is handed the raw Attrib::RefSpec ShotList
+  rem  element. The console wraps it in a TEMPORARY iceanim and reads that temporary's resolved
+  rem  layout at +0xC; the committed C++ calls GetAnimGuid() straight on the RefSpec. Latent
+  rem  only while these TUs stay unmounted. See Attrib::Gen::iceanim::GetAnimGuid.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
