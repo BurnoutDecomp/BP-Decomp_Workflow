@@ -134,6 +134,10 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Render.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCarRenderParams.cpp"
+  rem (pose wave 2026-08-01: RaceCar::Construct/Prepare/AddToWorld/UpdatePositioningData/
+  rem  AssignActiveRaceCar/ToBeRenderedDamaged are now called by the real attach chain.)
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCar.cpp"
+  echo "%SRC%\SharedClasses\World\BrnWorldRegion.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
