@@ -767,6 +767,25 @@ rem ---- build the cl response file ----
   rem  still builds and the arbitrator can still refuse to enter them.
   rem  DELETE-WHEN: each state's own sub-system lands; mount the state and drop its stubs.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateAttractMode.cpp"
+  rem ---- ICE-anim de-fork wave (2026-07-30) ------------------------------------------------
+  rem  ArbStateCarSelect (the retail GAME-INTRO state -- it walks PREPARING ->
+  rem  GAME_INTRO_PART_ONE/TWO/THREE off the DirectorResourceManager's mGameIntroGroup, vault
+  rem  name key "606002") now COMPILES: the six CollisionPolicy / Utils C2011 forks inside
+  rem  Behaviours/BrnBehaviourIceAnim.h are retired, and so do its six sibling ICE-anim states.
+  rem  It is still NOT MOUNTED, but the reason has changed and is no longer a header defect:
+  rem  mounting it pulls BrnBehaviourIceAnim.cpp, and that TU's camera actually comes out of
+  rem      BrnDirector::KeyAnimController        -- the ICE take evaluator: 2 of ~8 functions
+  rem                                              bodied (GetLookPos/HasFinished only; Prepare,
+  rem                                              Update, Get/SetParametricTime0To1, GetEyeSpace
+  rem                                              and GetLookSpace have no body anywhere), and
+  rem      BrnDirector::Camera::IceAnimCameraOps -- 10 declaration-only free functions that are
+  rem                                              a NAMING DEVICE for the console's inlined
+  rem                                              camera writes; they have no bodies at all.
+  rem  Stubbing either group would be stubbing the very code that produces the camera, so the
+  rem  state stays stubbed in DirectorLinkStubs.cpp (group A) instead. Measured link cost of
+  rem  mounting today: 61 unresolved externals (13 of them the DirectorResourceManager shot-group
+  rem  getters, the rest that ICE take chain + BehaviourInterpolate/RotateAboutVehicle).
+  rem  DELETE-WHEN: KeyAnimController::Update/Prepare land and IceAnimCameraOps is bodied.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
