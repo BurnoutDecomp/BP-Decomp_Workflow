@@ -214,6 +214,21 @@ rem ---- build the cl response file ----
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropGraphicsListResourceType.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropInstanceDataResourceType.cpp"
   echo "%SRC%\SharedClasses\Sound\World\BrnStaticSoundMapResourceType.cpp"
+  rem ---- vehicle/wheel LIST data (vehicle-load wave, 2026-07-31) -------------------------
+  rem  GameDataModule::Prepare stages 9 and 12 (PrepareVehicleList @0x8266C410 /
+  rem  PrepareWheelList @0x8266D1F8) stream Vehicles/VehicleList.bundle + Wheels/WheelList.bundle
+  rem  into pool 5 and hand the acquired resources to the two embedded list managers. Without
+  rem  the two ResourceType handlers registered the pool stores a NULL mpResourceType and the
+  rem  entry-array pointer is never rebased (same trap ZoneList/0xB000 hit on the PVS wave).
+  rem  BrnVehicleGraphicsSpecResourceType (65542) joins them: MEASURED over
+  rem  build/game/VEHICLES/VEH_PUSMC01_GR.BIN, it was the ONLY type in that bundle's
+  rem  {0,1,10,12,13,14,15,42,65542} set without a registered handler.
+  echo "%SRC%\SharedClasses\World\BrnVehicleGraphicsSpecResourceType.cpp"
+  echo "%SRC%\SharedClasses\DataLists\VehicleList.cpp"
+  echo "%SRC%\SharedClasses\DataLists\VehicleListEntry.cpp"
+  echo "%SRC%\SharedClasses\DataLists\VehicleListResourceType.cpp"
+  echo "%SRC%\SharedClasses\DataLists\WheelList.cpp"
+  echo "%SRC%\SharedClasses\DataLists\WheelListResourceType.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
