@@ -129,6 +129,11 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarStreamer.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarBaseComponentStreamer.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarComponentStreamers.cpp"
+  rem ---- race-car RENDER wave (2026-07-31): RenderRaceCar + GenerateDispatchLists ----
+  rem ---- plus the ActiveRaceCar / RenderParams homes the render leg reads.        ----
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Render.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCarRenderParams.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
