@@ -877,6 +877,64 @@ rem ---- build the cl response file ----
   rem  element. The console wraps it in a TEMPORARY iceanim and reads that temporary's resolved
   rem  layout at +0xC; the committed C++ calls GetAnimGuid() straight on the RefSpec. Latent
   rem  only while these TUs stay unmounted. See Attrib::Gen::iceanim::GetAnimGuid.
+  rem
+  rem  ---- 2026-07-31, FOURTH PASS: the 14 shot-group accessors LANDED. 27 -> 13. --------
+  rem  BrnDirectorResourceManager.h now declares all 65 shot-group members (64 shotgroup +
+  rem  1 cameradefaults) plus the DWARF head members, and carries the whole public accessor
+  rem  bank as header inlines under the DWARF NAMES. The second definition of
+  rem  BrnDirector::DirectorResourceManager that lived in Behaviours/BrnBehaviourIceAnim.h is
+  rem  DELETED (that header now includes the real one), and every call site was migrated --
+  rem  GetCarSelectMotorCityShots -> GetCarSelect_MotorCity, GetGameIntroShots ->
+  rem  GetGameIntro, GetTumblingCrashShots -> GetAfterCrash, and so on.
+  rem
+  rem  Re-measured with the same dumpbin diff (scratchpad w10_unres2.py), same method:
+  rem      BrnArbStateCarSelect.cpp alone .. 49 referenced / 26 provided / 10 CRT / 13 UNRESOLVED
+  rem      + RaceIntro + OnlineCarSelect ... 66 referenced / 33 provided / 11 CRT / 22 UNRESOLVED
+  rem  (was 27 and 37.) All fourteen DirectorResourceManager symbols are gone from the set --
+  rem  they are inlines over real members now, so they cost nothing at all.
+  rem
+  rem  VERDICT: STILL DO NOT MOUNT, and the reason is now a short, specific list.
+  rem  The 13 left for CarSelect are:
+  rem       6  Camera::BehaviourInterpolate::{Setup, SetupDuration, SetupCameraAFromHelper,
+  rem          SetupCameraBFromHelper, SetParameters, HasFinished}
+  rem       2  Camera::BehaviourRotateAboutVehicle::{BecomeSimilarTo, SetParameters}
+  rem       1  BehaviourIceAnim::ClearBaseFirstFrameGate  (a hole in BrnBehaviourIceAnim.cpp)
+  rem       1  Camera::EnsureEffectIsPlaying
+  rem       2  SharedCameraContainer::{ForcePrimaryGameplayBehaviourToFinish,
+  rem                                  GetSelectedGameplayCamera}   <- returns a REFERENCE
+  rem       1  CgsDev::StrStreamBase's vector-deleting destructor
+  rem
+  rem  MEASURED, and it kills the obvious next idea: BrnBehaviourInterpolate.cpp and
+  rem  BrnBehaviourRotateAboutVehicle.cpp DO exist and are self-contained (0 unresolved
+  rem  each), but mounting them closes NONE of the 8 above. dumpbin says those two TUs
+  rem  define only BehaviourInterpolate::{GetCollisionPolicy, GetParametricTime} and
+  rem  BehaviourRotateAboutVehicle::{GetEmbeddedSubObject + its anchor helper} -- they are
+  rem  accessor slices, not the behaviours. The 8 really are un-landed.
+  rem  Measured combination: CarSelect + both behaviour TUs + BrnDirectorResourceManager.cpp
+  rem  = 19 unresolved (the manager TU adds its own 5 ICE leaves; see below).
+  rem
+  rem  BrnDirectorResourceManager.cpp was REWRITTEN in the same wave (it used to be the
+  rem  reverted raw-console-offset ctor; the ctor is now the compiler-generated one, member
+  rem  by member, so that TU had nothing left to do). It now holds the manager's real
+  rem  out-of-line bodies: GetKeyAnim x2, GetShakeTakes, GetICEAuthor, GetKeyAnimFromGuid
+  rem  and -- fully reconstructed from the export's jump table -- GetEventIntroShots
+  rem  @0x821F6AB8. It is STILL NOT MOUNTED: it costs 5 unresolved ICE leaves
+  rem  (ICEWrapper::{GetICETakeData, GetShakeGroup, GetAuthor},
+  rem  ICEAuthor::FindEditedTakeFromGuid, BrnResource::MakeICEMovieId), i.e. exactly the ICE
+  rem  take-runtime group this note already says has to go in as a unit.
+  rem  The old "NOT mounted -- raw console byte offsets, LNK2005" warning further up this
+  rem  file is therefore STALE for that TU; only the mount decision still stands.
+  rem
+  rem  AND THE SECOND OBVIOUS IDEA IS DEAD TOO: BrnSharedCameraContainer.cpp and
+  rem  BrnDirectorEffectTrigger.cpp also exist unmounted, and adding them to CarSelect takes
+  rem  13 -> 16. They do NOT define ForcePrimaryGameplayBehaviourToFinish /
+  rem  GetSelectedGameplayCamera / EnsureEffectIsPlaying -- those three stay unresolved --
+  rem  and they open three NEW leaves (HookNameStringWrapper::operator==,
+  rem  EffectInterface::{HookExists, RegisterStartingBackgroundEffectWithName}).
+  rem  PATTERN WORTH REMEMBERING: four "the TU already exists, just mount it" candidates were
+  rem  measured this wave and ALL FOUR are accessor SLICES whose file name matches the class
+  rem  but whose object does not define the function that is missing. Check what an object
+  rem  DEFINES (dumpbin /SYMBOLS, filter out UNDEF) before assuming a mount closes anything.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
