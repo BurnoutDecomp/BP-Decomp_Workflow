@@ -794,15 +794,51 @@ rem ---- build the cl response file ----
   rem          recon map at the top of GameSource/Director/BrnDirectorResourceManager.h.
   rem       8  BehaviourInterpolate / BehaviourRotateAboutVehicle (two un-landed behaviours).
   rem       6  the ICE SDK take runtime (ICETake::Construct / SetDataPointers / SetParameter /
-  rem          GetValueInt / GetValueFloat, CameraSpaceHandler::TransformToWorld) -- all
-  rem          RECONSTRUCTED under SDKs/Packages/ICE/, just not in this source list.
+  rem          GetValueInt / GetValueFloat, CameraSpaceHandler::TransformToWorld).
   rem      the rest: Camera::RequestMotionBlur / GetDepthOfField, DepthOfField::GetBlurriness,
   rem          CameraShake::Update, Tweaker::Construct, VehicleRef::Get, ICEAuthor /
   rem          ICEList guid lookups, Attrib::Gen::{iceanim::GetAnimGuid, shotgroup::Num_ShotList},
   rem          SharedCameraContainer / AllVehicleData / DebugPrinter leaves.
   rem  None of that is camera code any more -- it is the surrounding subsystems.
-  rem  DELETE-WHEN: the DirectorResourceManager fork is retired and the ICE SDK take runtime
-  rem  is in this source list.
+  rem
+  rem  ---- 2026-07-31, SECOND PASS: "just not in this source list" was WRONG. ----------------
+  rem  The 6 ICE entries used to be annotated "all RECONSTRUCTED under SDKs/Packages/ICE/, just
+  rem  not in this source list", and the DirectorResourceManager block above called that the
+  rem  cheapest next win. It is not a packaging problem. MEASURED, four builds:
+  rem      three camera TUs alone .......................... 54 unresolved   (baseline, confirmed)
+  rem      + ICEData.cpp + ICECameraSpaceHandler.cpp ....... 64  (closes 5, opens 15)
+  rem      + ICEDataICETake/ICEDataEnums/ICEMath/ICEFile/
+  rem        ICECameraSpaceHandlerCtor ..................... 67  (closes 5 more, opens 8)
+  rem      three camera TUs + BrnCameraTweaker + ICEList ... 58  (closes 2, opens 6)
+  rem  Every candidate mount is NET NEGATIVE. ICEData.cpp is not self-consistent: its own
+  rem  reconstructed bodies call ~11 siblings that have no body anywhere --
+  rem      ICETake::SetParameter(f32,bool,bool)   <- the PUBLIC take-level driver KeyAnimController
+  rem                                                calls; only the PRIVATE per-channel
+  rem                                                SetParameter(s32,f32,bool) is bodied
+  rem      ICETake::GetValueFloat(s32,u16) / GetValueInt(s32,u16) / GetParameterData / GetKeyData
+  rem      ICETake::GetNumKeys(s32) / GetNumIntervals(s32) / IsEditable
+  rem      ICEChannel::GetKeyIndex(u16) / GetIntervalBracket(f32*,f32*)
+  rem      CameraSpaceHandler::GetTransformToWorld
+  rem      the globals ICE::ICE_EPSILON and ICE::spICEMemory
+  rem  and ICEFile.cpp drags EA::GameTalk's message API + rw::core::stdc::Vsprintf behind it.
+  rem  Of the 32 non-DirectorResourceManager leaves, exactly THREE have a real body that is
+  rem  merely unmounted -- ICEAuthorTakeOps.cpp (ICEAuthor::FindEditedTakeFromGuid),
+  rem  SharedClasses/DataLists/ICEList.cpp (ICEList::GetICETakeDataFromGuid) and
+  rem  Camera/Utils/BrnCameraTweaker.cpp (Tweaker::Construct); each still opens 2-4 new ones.
+  rem  Everything else is declaration-only. The frontier is genuinely open, so nothing is
+  rem  mounted here and no camera-adjacent symbol is stubbed to fake it.
+  rem
+  rem  Two further notes for whoever picks this up:
+  rem   * BehaviourIceAnim::ClearBaseFirstFrameGate is declared (BrnBehaviourIceAnim.h:476) and
+  rem     never defined -- a hole in BrnBehaviourIceAnim.cpp itself, not in a dependency.
+  rem   * DebugPrinter::ActualPrint is NOT a missing body: BrnBehaviourIceAnim.cpp:91 re-declares
+  rem     a local `struct DebugPrinter` with a 3-arg STATIC ActualPrint, while the real body
+  rem     (DirectorModule/BrnDirectorModuleDebugPrinter.cpp:52) is a 2-arg member. Different
+  rem     mangling -- mounting that TU will not resolve it; drop the local re-declaration.
+  rem
+  rem  DELETE-WHEN: the DirectorResourceManager fork is retired and the ICE take runtime's own
+  rem  ~11 missing bodies are reconstructed (then the SDKs/Packages/ICE data-layer TUs can join
+  rem  this source list as a unit).
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
