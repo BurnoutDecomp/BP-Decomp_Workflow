@@ -917,6 +917,36 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorState.cpp"
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorStateContainer.cpp"
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorSharedCameraContainer.cpp"
+  rem ---- EIGHTH PASS (2026-08-01): the camera-family closure set. -----------------------
+  rem  Measured against the object list DERIVED FROM THIS BAT, not by scanning
+  rem  build\game\obj -- that directory held 43 STALE objects from TUs no longer on the
+  rem  source list (including all three camera TUs), so any measurement that scans the
+  rem  directory silently treats unmounted code as linked. Scanning it, the camera TUs
+  rem  appear to open ONE symbol; the true figure was 13. Tooling: scratchpad\ice5_list.py
+  rem  (bat -> object list, prints the stale set) and ice5_net.py (closes/opens diff).
+  rem  These four each open ZERO after their own leaves were bodied in place:
+  echo "%SRC%\SDKs\Packages\ICE\ICECameraSpaceHandler.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEAuthorTakeOps.cpp"
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugPrinter.cpp"
+  echo "%SRC%\GameSource\Director\BrnDirectorResourceManagerICE.cpp"
+  rem  BrnDirectorEffectTrigger.cpp is NOT mounted yet, deliberately. It now DOES define
+  rem  Camera::EnsureEffectIsPlaying @0x821F2720 (the note further down claiming otherwise
+  rem  is STALE), but mounting it costs two REAL unresolved externals --
+  rem  EffectInterface::HookExists and RegisterStartingBackgroundEffectWithName, both
+  rem  declaration-only in BrnDirectorEffectTrigger.h with no body anywhere in the tree.
+  rem  They are reached only by BackgroundEffectRequest::RegisterAndUpdateRequest, which is
+  rem  off the camera path. The camera TUs are not mounted either, so EnsureEffectIsPlaying
+  rem  is not needed for today's link: mount this TU together with them, once those two
+  rem  leaves are recovered from asm. Bodying them by guess would have been the wrong trade.
+  rem      %SRC%\GameSource\Director\Utils\BrnDirectorEffectTrigger.cpp
+  rem  Adds ZERO new unresolved: every callee is a header inline and
+  rem  mRotationController.Construct() resolves against the existing DirectorLinkStubs symbol.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourRotateAboutVehicle.cpp"
+  rem  NOT mounted, deliberately -- these two hold the blocked bodies (SaveTake's
+  rem  ICEFileHandler::FileClose costs +5 as the sole EA::GameTalk user; the ICE-wrapper
+  rem  getters need MakeICEMovieId / GetICETakeData / GetShakeGroup):
+  rem      %SRC%\SDKs\Packages\ICE\ICEAuthorSaveTake.cpp
+  rem      %SRC%\GameSource\Director\BrnDirectorResourceManagerICEWrapper.cpp
   rem  ONLY the attract-mode state is mounted -- it is the DJ fly-by's own state, and the one
   rem  the arbitrator drives on this path. The other nine states (CrashMode / CrashNav /
   rem  DriveThru / OnlineCarSelect / OnlineRaceIntro / PostEvent / RaceIntro / RankUp /
