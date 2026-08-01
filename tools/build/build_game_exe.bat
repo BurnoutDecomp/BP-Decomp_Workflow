@@ -359,6 +359,18 @@ rem ---- build the cl response file ----
   rem  binding arrays, so this costs zero and pre-closes one of the camera family's 31.
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraTweakerConstruct.cpp"
   echo "%SRC%\GameSource\GameState\BrnGameStateModuleIO.cpp"
+  rem producer wave (2026-08-01): the GameState module itself + its progression manager.
+  rem  BrnGameStateModule.cpp had SEVEN finished X360 reconstructions that DID NOT COMPILE --
+  rem  it was written against a richer BrnGameStateModule.h that was later reduced to the
+  rem  "minimal slice", and because the TU was never mounted nobody noticed (15 cl errors).
+  rem  Growing the header back (the members those bodies bind to + the module's OutputBuffer)
+  rem  makes them real. MEASURED: mounting both of these costs SEVEN unresolved, all trivial
+  rem  accessors (ModeManager::GetCurrentGameMode[Type], ProgressionManager::GetProfile,
+  rem  Profile::GetCarCount / SetRoadRule*, CarData::GetId) -- all now bodied.
+  rem  This is what gives the game-state module a REAL GameStateModuleIO::OutputBuffer, i.e.
+  rem  the queue BridgeGameStateToDirector appends into the director every frame.
+  echo "%SRC%\GameSource\GameState\BrnGameStateModule.cpp"
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager.cpp"
   rem intro wave (2026-07-30): the live BrnProgression::Profile TU. Needed by
   rem BrnGuiModule::Prepare (Profile::Construct seeds mbIsNewProfile = true, the
   rem first-boot INTRO gate) and by the licence component (GetLicenceIssuedDate /
@@ -1187,6 +1199,10 @@ rem ---- build the cl response file ----
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficSection.cpp"
   echo "%SRC%\SharedClasses\Trigger\BrnGenericRegion.cpp"
   echo "%SRC%\SharedClasses\Trigger\BrnTriggerData.cpp"
+  rem producer wave (2026-08-01): SpawnLocation::GetType/GetJunkyardId -- the junkyard spawn
+  rem points CarSelectManager::SetupSpawnLocations files and EnterJunkyardAtStartOfGame takes
+  rem maSpawnLocations[1] from. Costs ZERO new unresolved.
+  echo "%SRC%\SharedClasses\Trigger\BrnSpawnLocation.cpp"
   rem  The lane-data RESOURCE TYPE handlers (traffic-lane fetch wave, 2026-07-29).
   rem  Registered by CgsResourceTypeRegistration.cpp; without a registered handler the pool
   rem  stores a NULL mpResourceType for the bundle's resource and AllocateMemoryForResource
