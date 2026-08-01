@@ -259,32 +259,31 @@ rem ---- build the cl response file ----
   rem  BaseLinkedList::InternalRemoveNode 0x82815708 and FixDown 0x82815848); recovered
   rem  from the ARTIST IDA database with headless IDA 9.3. Links clean on its own.
   echo "%SRC%\GameShared\GameClasses\Containers\CgsDictionary.cpp"
-  rem  ---- NOT MOUNTED: CgsDictionaryResourceType.cpp (ICE take dictionary, type 65) -------
-  rem  MEASURED 2026-08-01, two builds. Mounting it alone costs exactly TWO unresolved
-  rem  externals -- ICE::ICETakeData::FixUp and ::FixDown -- because the explicit
-  rem  `template struct DictionaryResourceType<ICE::ICETakeData>;` instantiation emits the
-  rem  generic Dictionary<T>::FixUp/FixDown wrappers, which call both.
-  rem    * FixUp is now REAL (SDKs/Packages/ICE/ICEData.cpp): its X360 symbol is ICF-FOLDED
-  rem      onto CgsGeometric::PolygonSoupListSpatialMap::Construct @0x82839600, four
-  rem      instructions that zero the take's two bTNode link words. Nothing else.
-  rem    * FixDown is real too, but it lives in ICEData.cpp, and mounting THAT costs 15
-  rem      unresolved externals -- the whole ICE take runtime:
-  rem        ICE::spICEMemory, ICE::ICE_EPSILON, ICEMath::Round,
-  rem        ICETake::{SetParameter(f32,bool,bool), GetValueFloat, GetValueInt,
-  rem                  GetParameterData, GetKeyData, GetNumKeys, GetNumIntervals,
-  rem                  MarkChannelFromSubTake, FlushUndo},
-  rem        ICEChannel::GetKeyIndex, ICEParameter::SetValue, ICEFileHandler::FilePrintf.
-  rem  So type 65 stays unregistered and PrepareICEList's AddListResource stays gated. That
-  rem  gate is DELIBERATE, not laziness: with no registered handler the pool skips FixUp, so
-  rem  the dictionary's mpaIndex and every entry's mpData are still RESOURCE-RELATIVE
-  rem  OFFSETS (measured on the shipped file: mpaIndex 0x10, entry[0].mpData 0x3388).
-  rem  Binding that into the ICEList would make every take lookup dereference an offset as a
-  rem  pointer -- the silent-wrong-data shape, not a crash.
-  rem  DELETE-WHEN: the 13 ICE take-runtime bodies + 2 globals above land; then mount both
-  rem  TUs, register DictionaryResourceType<ICE::ICETakeData> (0x41) in
-  rem  CgsResourceTypeRegistration.cpp, and un-gate PrepareICEList.
-  rem  echo "%SRC%\GameShared\GameClasses\Containers\CgsDictionaryResourceType.cpp"
-  rem  echo "%SRC%\SDKs\Packages\ICE\ICEData.cpp"
+  rem  ---- THE ICE TAKE RUNTIME (2026-08-01, ICE take-runtime wave) -------------------------
+  rem  MOUNTED. The previous wave measured this group at 15 unresolved externals and left it
+  rem  out; ELEVEN of those fifteen were bodies the X360 export set already carries -- just
+  rem  not under a NAME, so a name-based search found nothing. Recovered as unnamed subs,
+  rem  each pinned by its caller set (see the GROUP 5 banner in ICEData.cpp):
+  rem    sub_8252F848 = ICETake::GetValueFloat(s32,u16)  sub_8252F8F0 = GetValueInt(s32,u16)
+  rem    sub_82534118 = ICETake::SetParameter(f32,bool,bool)  <- the take-level playback driver
+  rem    sub_82533360 = ICETake::SetSubTake(s32,bool)   (its assert names ICEData.cpp:2575)
+  rem  plus IsEditable / GetKeyIndex / GetNumKeys / GetNumIntervals / GetKeyData /
+  rem  GetParameterData / ICETakeData::GetName, which the console INLINES everywhere (bodied
+  rem  in the headers beside the other trivial accessors, each cited to the inlined asm),
+  rem  ICE_EPSILON (the value is X360 flt_8207AB94 == 1e-5f, read out of two pseudocode sites
+  rem  that folded the literal) and spICEMemory. ICEMath.cpp + ICEDataEnums.cpp +
+  rem  ICEDataICETake.cpp came along and closed Round / ICEParameter::SetValue /
+  rem  MarkChannelFromSubTake / FlushUndo.
+  rem  MEASURED: 15 -> 14 (5 TUs) -> 0 (6 TUs + the recovered bodies). No compile errors.
+  rem  ⚠️ ICEFile.cpp is mountable only because FileClose was split into ICEFileClose.cpp:
+  rem  it is the sole EA::GameTalk user in the ICE package (measured at +5, and +3 even with
+  rem  GameTalk.cpp mounted) and it serves a debug XML dumper. See that file's header.
+  echo "%SRC%\GameShared\GameClasses\Containers\CgsDictionaryResourceType.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEData.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEDataICETake.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEDataEnums.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEMath.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEFile.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
@@ -901,6 +900,18 @@ rem ---- build the cl response file ----
   rem  Everything else is declaration-only. The frontier is genuinely open, so nothing is
   rem  mounted here and no camera-adjacent symbol is stubbed to fake it.
   rem
+  rem  ⛔⛔ THE "no body anywhere" LIST ABOVE IS RETRACTED (2026-08-01, ICE take-runtime wave).
+  rem  It was a NAME search, and the X360 export set does not carry these under a name. Every
+  rem  entry on it is now bodied and the whole ICE data layer is MOUNTED (see the take-runtime
+  rem  block near the top of this file for the recovery). ⭐ THE LESSON, which generalises far
+  rem  past ICE: `sub_XXXXXXXX` entries in .ida-exports ARE bodies. When a symbol "does not
+  rem  exist", search the CALLERS' xref lists for unnamed subs and identify them by their
+  rem  caller set and their asserts' __FILE__/__LINE__ strings -- ICETake::SetSubTake was
+  rem  pinned to ICEData.cpp:2575 by its own assert. Two of the entries above were not even
+  rem  missing: ICEChannel::GetIntervalBracket(f32*,f32*) and GetIntervalStart() were bodied
+  rem  all along, attached to their interval-ARGUMENT overloads by mistake, because their only
+  rem  real callers were not in the tree yet.
+  rem
   rem  Two further notes for whoever picks this up:
   rem   * BehaviourIceAnim::ClearBaseFirstFrameGate is declared (BrnBehaviourIceAnim.h:476) and
   rem     never defined -- a hole in BrnBehaviourIceAnim.cpp itself, not in a dependency.
@@ -1008,6 +1019,36 @@ rem ---- build the cl response file ----
   rem  measured this wave and ALL FOUR are accessor SLICES whose file name matches the class
   rem  but whose object does not define the function that is missing. Check what an object
   rem  DEFINES (dumpbin /SYMBOLS, filter out UNDEF) before assuming a mount closes anything.
+  rem
+  rem  ---- 2026-08-01, FIFTH PASS: the ICE take runtime LANDED; the camera set is 31. -------
+  rem  RE-MEASURED against the current source list (which now carries the whole ICE data layer
+  rem  and BrnDirectorResourceManager.cpp), by trial build:
+  rem      KeyAnimController + BehaviourIceAnim + ArbStateCarSelect = 31 UNRESOLVED, 0 compile
+  rem      errors. (41 before the ICE runtime went in -- so it closed 10 outright: ICETake's
+  rem      ctor / Construct / SetDataPointers / SetParameter / GetValueFloat / GetValueInt and
+  rem      ICETakeData::FixUp/FixDown among them.)
+  rem  ⚠️ The "13" in the FOURTH PASS above is ArbStateCarSelect ALONE; 31 is all three camera
+  rem  TUs together, which is what actually has to go in for the retail intro camera. Not
+  rem  comparable -- both are kept as the record.
+  rem
+  rem  THE 31 ARE A WAVE OF THEIR OWN, and the shape is now clear: ~15 of them have NO
+  rem  definition anywhere in the tree (checked file by file), i.e. they need reconstruction,
+  rem  not mounting --
+  rem      Camera::{IsLookingAtTarget, GetDepthOfField, RequestMotionBlur,
+  rem               CreateHeadingSpaceLookAt, GetVehicleWorldPosition, EnsureEffectIsPlaying}
+  rem      DepthOfField::GetBlurriness,  BehaviourSharedInfo::{GetEyeTarget, GetLookTarget}
+  rem      SharedCameraContainer::GetSelectedGameplayCamera  <- returns a const Camera& and
+  rem                                                           CANNOT be honestly stubbed
+  rem      AllVehicleData::GetNearestRaceCarIndexToPlayer
+  rem      BehaviourIceAnim::ClearBaseFirstFrameGate  (still the hole in its own .cpp)
+  rem      BehaviourInterpolate::{SetupCameraAFromHelper, SetupCameraBFromHelper, SetupDuration}
+  rem      BehaviourRotateAboutVehicle::BecomeSimilarTo
+  rem      CollisionPolicyAttachedToVehicle::SetVehicleRef
+  rem  The remainder are real bodies in unmounted TUs (BrnDirectorResourceManagerICE.cpp,
+  rem  ICEAuthorTakeOps.cpp, ICECameraSpaceHandler.cpp, BrnDirectorModuleDebugPrinter.cpp,
+  rem  BrnCameraTweaker.cpp), each of which opens its own leaves.
+  rem  The WARNING above about the iceanim ShotReference temporary still stands and must be
+  rem  settled BEFORE that wave mounts anything.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
