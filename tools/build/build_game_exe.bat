@@ -344,6 +344,12 @@ rem ---- build the cl response file ----
   rem (race-car global-resource wave 2026-07-31: RaceCarEntityModule::LoadGlobalResources
   rem  @0x82300730 posts LoadBundle/GetVehicleList/GetWheelList through RequestInterface<8192>.)
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_8192.cpp"
+  rem (TRIGGERS wave 2026-08-01: the GameStateModuleIO::OutputBuffer's +0x3414 request
+  rem  interface IS RequestInterface<3072> -- TriggerQueryManager::Prepare @0x82398218 calls
+  rem  LoadBundle/AcquireResource/LoadTrafficLanes on it, and GameStateModule::Prepare's list
+  rem  stages call GetVehicleList/GetWheelList/GetFreeburnChallengeList. The instance TU
+  rem  existed but was never mounted.)
+  echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_3072.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\SharedIO\BrnWorldEntityRequestInterface.cpp"
   echo "%SRC%\vendor\renderware\collision\BitTable.cpp"
   echo "%SRC%\GameSource\World\WorldLinkStubs.cpp"
@@ -386,6 +392,20 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\GameState\CarSelect\BrnCarSelectManager.cpp"
   echo "%SRC%\GameSource\GameState\CarSelect\BrnCarSelectManager_CarChange.cpp"
   echo "%SRC%\SharedClasses\Progression\BrnProgressionData.cpp"
+  rem ⭐ TRIGGERS wave (2026-08-01) -- THE TRIGGERS.DAT LOADER.
+  rem  TriggerQueryManager::Prepare @0x82398218 is the console's own loader: LoadBundle
+  rem  ("Triggers.dat", pool 5) -> acquire("TriggerData") -> LoadTrafficLanes. It is driven by
+  rem  GameStateModule::Prepare @0x8239E578 stage 3, whose sole caller is BrnGameModule::
+  rem  GamePrepare @0x823EFBD0 stage 4 -- which the PC build had stubbed out, which is why
+  rem  the boot log said `[WorldMap] LOADED -- traffic=1 trigger=0 ai=0`.
+  rem  SIBLING TU, MEASURED: mounting the owning BrnTriggerQueryManager.cpp costs 13
+  rem  unresolved externals, every one of them pulled in by UpdateTriggers /
+  rem  ProcessPlayerTriggers (RoadRulesManager x2, DriveThruManager::HandleDriveThru,
+  rem  StuntManager::LatchJumpElement, TriggerManagementInputInterface x2, Killzone::GetTrigger,
+  rem  GenericRegion::GetGroupId, BoxRegion::ComputeDirection, 3 x
+  rem  RCEntityActiveRaceCarOutputInterface). Prepare touches NONE of them, so the split costs
+  rem  zero. Fold back into the owning TU when those 13 land.
+  echo "%SRC%\GameSource\GameState\TriggerQueryManager\BrnTriggerQueryManager_Prepare.cpp"
   rem intro wave (2026-07-30): the live BrnProgression::Profile TU. Needed by
   rem BrnGuiModule::Prepare (Profile::Construct seeds mbIsNewProfile = true, the
   rem first-boot INTRO gate) and by the licence component (GetLicenceIssuedDate /
