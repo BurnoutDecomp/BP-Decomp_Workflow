@@ -303,6 +303,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_Dispatch.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_Prepare.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO.cpp"
+  rem ---- reset-player-car wave (2026-08-01): the game-action-0 consumer chain.        ----
+  rem ---- Each of these was already committed and NEVER LINKED BY ANYTHING.            ----
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO_PreSceneAccessors.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ScoringMapping.cpp"
+  echo "%SRC%\GameSource\Math\BrnMathUtils.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysCollectionKey.cpp"
+  echo "%SRC%\GameSource\GameState\BrnGameActions.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\SharedIO\BrnRCEntityActiveRaceCarOutputInterface.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\SharedIO\BrnRCEntityGlobalRaceCarOutputInterface.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModuleIO_InputBuffer_Getters.cpp"
