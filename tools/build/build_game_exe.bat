@@ -808,6 +808,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOOutputBuffer.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
   echo "%SRC%\GameSource\Director\BrnMainDirector.cpp"
+  rem  MOUNTED 2026-08-01 (junkyard chain wave). BrnDirector::GameState -- the director's
+  rem  per-event snapshot. MainDirector now carries it as a REAL named member (it was three
+  rem  opaque byte spans), so GameState::Clear @0x82218930 finally runs from
+  rem  MainDirector::Construct and GameState::ResetPerFrameData runs every frame from
+  rem  ProcessInputQueue. Self-contained: DataJournal<T,N> is header-only and the TU's only
+  rem  other dependencies are memset/memcpy. Measured link cost: ZERO new unresolved.
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorGameState.cpp"
   rem  MOUNTED 2026-08-01. This TU was the reverted raw-console-offset ctor over a LOCAL
   rem  re-declaration of the class; the shot-group wave rewrote it against named members and
   rem  this wave added the real DirectorResourceManager::Prepare @0x8225CA08 (the 65
