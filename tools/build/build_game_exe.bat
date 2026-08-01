@@ -890,6 +890,18 @@ rem ---- build the cl response file ----
   rem  GetShakeTakes / GetICEAuthor / GetKeyAnimFromGuid reach ICEWrapper + ICEAuthor +
   rem  ICEList); those resolve through the existing Director/ICE link stubs.
   echo "%SRC%\GameSource\Director\BrnDirectorResourceManager.cpp"
+  rem  MOUNTED 2026-08-01 (ICE-anim transform wave). ⭐⭐ ICEWrapper::Prepare @0x8253DD90 -- a
+  rem  FILE SPLIT out of the un-mounted BrnDirectorICEWrapper.cpp (same pattern as
+  rem  BrnCameraTweakerConstruct.cpp above), because that TU still costs the link two
+  rem  unresolved externals (ICEManager::GetCameraTake / ICECameraMover::Construct) that
+  rem  Prepare itself does not need. This retires the `return true` stub that was the ONLY
+  rem  thing standing between the ICE take evaluator and its element schedules: Prepare's
+  rem  stage 0 is the whole image's single caller of ICE::InitICEDescriptions(), so without it
+  rem  gaICEElementChannels stayed empty, ICETake::SetParameter evaluated zero elements and
+  rem  every authored ICE camera value read 0. Self-contained: it reaches only
+  rem  ICEElementDescription::Prepare + InitICEDescriptions, both already in the link via
+  rem  ICEData.cpp / ICEDataEnums.cpp. Measured link cost: ZERO new unresolved.
+  echo "%SRC%\GameSource\Director\BrnDirectorICEWrapperPrepare.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraFinaliser.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnBehaviourManager.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\Behaviour.cpp"
