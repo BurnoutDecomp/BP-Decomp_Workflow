@@ -97,6 +97,10 @@ rem ---- build the cl response file ----
   rem callees (and those TUs' interface operator= homes) are linked below so the whole
   rem controller-bridge family resolves.
   echo "%SRC%\GameSource\Game\GameBridgeControllerToX.cpp"
+  rem ---- camera wave (2026-08-01): the WORLD -> DIRECTOR seam. BridgeWorldToDirector --
+  rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
+  rem ---- without it every camera VehicleRef resolves to a zero transform.             --
+  echo "%SRC%\GameSource\Game\GameBridgeWorldToX.cpp"
   rem ---- world-drive wave (2026-07-27): GameBridgeRendererToX.cpp carries the REAL --
   rem ---- BridgeRendererToWorld @0x823CDD20 (renderer-output -> world-dispatch-input --
   rem ---- handle copy) but is NOT mounted: the seven RendererIO::OutputBuffer getters --
