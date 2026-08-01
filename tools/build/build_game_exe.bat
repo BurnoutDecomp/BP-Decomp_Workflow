@@ -359,6 +359,10 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_3072.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\SharedIO\BrnWorldEntityRequestInterface.cpp"
   echo "%SRC%\vendor\renderware\collision\BitTable.cpp"
+  rem  Self-contained (its own header only) -- a FREE mount. It owns the single Frustum
+  rem  function the X360 defines, rw::collision::Frustum::IsBoxInFrustum @0x82BA7FA0, which is
+  rem  the leaf BrnDirector::Camera::IsLookingAtTarget @0x822331F0 needs.
+  echo "%SRC%\vendor\renderware\collision\Frustum.cpp"
   echo "%SRC%\GameSource\World\WorldLinkStubs.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraState.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnDepthOfField.cpp"
@@ -897,6 +901,15 @@ rem ---- build the cl response file ----
   rem installed no vtable -- BehaviourHelper::Prepare's slot-0 dispatch then faulted.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGameplayBumper.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGameplayExternal.cpp"
+  rem  ---- 2026-08-01, SEVENTH PASS: the BehaviourInterpolate ODR reconcile ------------------
+  rem  BrnBehaviourManager.h used to carry a SECOND definition of BehaviourInterpolate -- no
+  rem  base, no members, sizeof == 1 -- and because that header is the one every arbitrator
+  rem  state includes, the slice was what the whole tree saw while the real home
+  rem  (Behaviours/BrnBehaviourInterpolate.h) sat unreachable behind a C2011. Six symbols could
+  rem  never be closed because there were no members to write. The slice is retired.
+  rem  Mounting the real TU is FREE (0 new unresolved) and it makes AllocateBehaviour<
+  rem  BehaviourInterpolate> book a bucket for the real size instead of for one byte.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourInterpolate.cpp"
   rem (Each cam's Parameters::Serialise<S> visitor stays OUT of the link, in its own
   rem  *Parameters.cpp sibling -- it drags the three camera-tunings serialisers in and none
   rem  of them is on the runtime director path.)
@@ -1237,6 +1250,70 @@ rem ---- build the cl response file ----
   rem  that generated ctor is bodied. Not done here -- it cannot be boot-verified while the TU is
   rem  unmounted, and guessing the generated ctor's body is exactly the kind of fabrication this
   rem  file exists to prevent.
+  rem
+  rem  ---- 2026-08-01, SEVENTH PASS: 24 -> 12, and the entry gate is now MAPPED. -------------
+  rem  RE-MEASURED baseline for KeyAnimController + BehaviourIceAnim + ArbStateCarSelect:
+  rem  24 unresolved / 0 compile errors (the "30" in an earlier brief was stale; the SIXTH
+  rem  PASS's 24 was right). After this wave: 12 unresolved / 0 compile errors, measured with
+  rem  the same three TUs plus Frustum.cpp and BrnBehaviourInterpolate.cpp (both now mounted
+  rem  for real, see their own notes above).
+  rem
+  rem  ⚠️ MOUNTING THE THREE CAMERA TUs IS STILL BLOCKED. Twelve is not zero, and an exe does
+  rem  not link at twelve. DirectorLinkStubs.cpp also still defines ArbStateCarSelect's four
+  rem  virtuals, so mounting the TU is an LNK2005 until those four stubs come out. Both are
+  rem  next wave's first two jobs.
+  rem
+  rem  CLOSED THIS WAVE (12):
+  rem    * the six BehaviourInterpolate symbols -- by RETIRING the member-less slice this
+  rem      header used to carry (see the BrnBehaviourInterpolate.cpp mount note above) and
+  rem      bodying SetParameters / SetupCameraA|BFromHelper against the real members. All three
+  rem      are X360 HEADER-INLINES (their assert-file string is the .h, not the .cpp) recovered
+  rem      from twelve identical call sites.
+  rem    * VehicleRef::Get, AllVehicleData::{GetPlayer, GetRaceCar, GetNearestRaceCarIndexToPlayer},
+  rem      NearestCarInfo::operator> -- all five are HEADER INLINES on the console (every assert
+  rem      in them cites BrnDirectorAllVehicleData.h / BrnVehicleRef.h, and a function whose
+  rem      asserts cite a header was defined in that header). GetNearestRaceCarIndexToPlayer had
+  rem      been bodied out-of-line in a .cpp that is NOT on this build list, so every consumer
+  rem      saw an unresolved external for code that was already written.
+  rem    * BehaviourSharedInfo::{GetEyeTarget, GetLookTarget} -- the FLAG blocking them (a
+  rem      SuspensionSpring ODR fork) was STALE; there is exactly one struct SuspensionSpring in
+  rem      the tree now, so mPlayerInfo is embedded by value and both resolve to named members.
+  rem    * Camera::IsLookingAtTarget -- bodied; Frustum.cpp mounted for its one leaf.
+  rem    * CollisionPolicyAttachedToVehicle::{Construct, SetVehicleRef}.
+  rem
+  rem  ⛔⛔ AND THE REAL NEWS, WHICH IS NOT ABOUT LINK CLOSURE:
+  rem  ArbStateCarSelect STILL CANNOT LEAVE E_STATE_INACTIVE AT ZERO UNRESOLVED. The SIXTH
+  rem  PASS said so; this wave mapped the gate exactly, and it is SHALLOWER than feared:
+  rem    - ArbitratorStateContainer::UpdateAll calls Update on ALL ELEVEN states every frame
+  rem      (vtable slot 2, verified @0x821F5E70), so ArbStateCarSelect::Update runs regardless
+  rem      of which state is current. The gate is purely that nothing calls its Prepare().
+  rem    - The only writer of E_STATE_CAR_SELECT is ArbStateRoaming::ProcessPossibleStateChanges
+  rem      @0x82219C58 (already reconstructed), whose only caller is ArbStateRoaming::Update
+  rem      @0x822643A0 -- which has NO BODY ANYWHERE IN THE TREE (the ledger says `reviewed`;
+  rem      that is the same drift that bit three functions last wave).
+  rem    - Its critical path is ONE guard deep: `meState == E_STATE_PREPARING` -> the virtual
+  rem      Prepare() returns true -> meState = E_STATE_DRIVING and the arm FALLS THROUGH into
+  rem      the DRIVING body in the same frame, which reaches ProcessPossibleStateChanges
+  rem      UNCONDITIONALLY (@0x8226464C). Then H1..H9 in that function, ending on
+  rem      `meJunkyardState != E_JY_INACTIVE` -- which this build already satisfies (0 -> 2).
+  rem    - Update is a flat 16-arm jump-table switch on meState. Arms 0/1/2 + the nine
+  rem      CHANGING_TO_* arms + default are 41%% of the instructions and 100%% of the
+  rem      transition-out paths; the four Picture-Paradise/idle arms are the other 59%% and are
+  rem      unreachable in the junkyard scenario. A T2 slice is a recognisable SUBSET, not a
+  rem      fiction -- every arm boundary is a jump-table entry with its own epilogue.
+  rem      ⚠️ Case 13 (CHANGING_TO_CAR_SELECT, @0x8226548C) MUST be in the slice: if
+  rem      ArbStateCarSelect::Prepare declines, meState parks on 0xD and case 13 is the retry.
+  rem    - COST: two unmounted prerequisites are called UNCONDITIONALLY from the DRIVING arm --
+  rem      MomentSelector::Update @0x82239FC0 (425 asm lines, no PC body) and
+  rem      ArbStateRoaming::ProcessPossiblePaybackEffects @0x82208BA8 (117 lines, no PC body;
+  rem      BrnArbStateRoaming.h:82 wrongly records it as "not in this TU's X360 set").
+  rem    - ⛔ AND ArbUtils::ChangeToStateWithoutRelease -- the function that performs the
+  rem      hand-off -- is a __debugbreak() TRAP STUB in BrnDirectorArbitratorUtils.h:50. Even a
+  rem      perfect ladder would trap there. Body it from @0x821FE2B8 FIRST.
+  rem      ⚠️ Its console parameter order is INVERTED vs the committed declaration: the console
+  rem      passes whenBlocked in r6 and whenSwitched in r7; the header declares
+  rem      leFromStateWhenSwitched 4th and leFromStateWhenBlocked 5th, and every call site in
+  rem      the tree matches the header. Consistent today only because the body traps.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
