@@ -1645,7 +1645,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnPhotoBoothComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnImageGalleryCarouselItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnImageGallerySelectable.cpp"
+  rem ---- text-selection widget (2026-08-02): BrnGui::TextSelection was re-homed onto
+  rem      BrnGui::SelectableGroup and grew its 100 TextSelectionItem rows + display
+  rem      TextField, so the row TU must bind here (TextSelectionItem is polymorphic --
+  rem      it overrides Selectable::Select -- and embedding 100 of them by value emits
+  rem      its vtable, which needs Select()'s definition).
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextSelection.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextSelectionItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnIcon.cpp"
   rem intro wave (2026-07-30): HelpItem declares a VIRTUAL Construct, so its vtable must be
   rem emitted for any TU that embeds one by value -- BrnGui::Intro does, through
