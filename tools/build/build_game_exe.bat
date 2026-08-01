@@ -435,6 +435,9 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleGameStateIOInterfaces.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleInGamePlayerStatusInterface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleEvents.cpp"
+  rem drivable wave 2026-08-01: ActiveRaceCar::AddHandlingModel calls VehicleInputInterface::CreateRaceCar
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleInputInterface.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\CreateRaceCarEvent.cpp"
   echo "%SRC%\GameSource\Game\BrnGlobalCpuMonitors.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowStates.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowInGameState.cpp"
