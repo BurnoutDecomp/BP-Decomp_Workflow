@@ -1044,7 +1044,15 @@ def plan_attribsysvault(d):
         p.field(h + 32, 'u32', 'attr[%d].itemCountDup' % i)
         p.field(h + 36, 'u16', 'attr[%d].paramCount' % i)
         p.field(h + 38, 'u16', 'attr[%d].paramsToRead' % i)
-        p.field(h + 40, 'u64', 'attr[%d].dataPtrSlot' % i)
+        # CollectionLoadData +0x28/+0x2C == {u32 mLayout, u32 mPad}, NOT one u64.
+        # mLayout is a PtrN fixup SLOT and Vault::Initialize rebases it with a
+        # 32-bit store, so it does not widen on x64 (attribinstance.h; the same
+        # defect that cost attribsys_transcode.py every array attribute in every
+        # vault it ported -- see its walk_attribute_header). BYTE-NEUTRAL here:
+        # both halves are zero on disk in every engine vault (fixup targets are
+        # written at load), so no ENGINES bundle needs re-emitting for this.
+        p.field(h + 40, 'u32', 'attr[%d].mLayout' % i)
+        p.field(h + 44, 'u32', 'attr[%d].mPad' % i)
         for k in range(params_to_read):
             p.field(h + 48 + k * 8, 'u64', 'attr[%d].paramTypeHash[%d]' % (i, k))
         hdr_spans.append((h, 48 + params_to_read * 8))

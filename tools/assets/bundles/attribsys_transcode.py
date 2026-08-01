@@ -43,18 +43,27 @@ Layout:
     DatN: the attribute-header arena; its interior is typed via ExpN records
     ExpN: u32 baseAllocExports, u32 count (same two-u32 head as DepN --
           Attrib::Vault::ExportNode), count * {u64 exportHash, u64 entryTypeHash, s32 size,
-          s32 vltPos}; at each vltPos an attribute header:
-            u64 collectionHash, u64 classHash, u64 unk1, s32 itemCount,
-            s32 unk2, s32 itemCountDup, s16 paramCount, s16 paramsToRead,
-            u64 dataPtrSlot(+40 -- a PtrN fixup target), paramsToRead * u64
-            paramTypeHashes, itemCount * items.  An item is {u64 keyHash,
-            u64 dataPtrSlot} when its +8 is named by a PtrN record (the
-            surfacelist "Surfaces" list item), else the Volatility shape
-            {u64 keyHash, u32 unk, s16 paramIdx, s16 unk2}.
+          s32 vltPos}; at each vltPos a serialised Attrib::CollectionLoadData
+          (attribinstance.h): u64 mKey, u64 mClass, u64 mParent,
+            u32 mTableReserve, u32 mTableKeyShift, u32 mNumEntries,
+            u16 mNumTypes, u16 mTypesLen, u32 mLayout(+0x28 -- a PtrN fixup
+            target), u32 mPad, then mTypesLen u64 type keys, then mNumEntries
+            16-byte entries {u64 mKey, u32 muValue(a PtrN fixup target),
+            u16 muTypeIndex, u8 mu8Flags, u8 mu8Pad}.
+          ⭐ mLayout AND muValue ARE 4 BYTES, NOT 8, ON x64. They are fixup
+          SLOTS inside a serialised record: Vault::Initialize's type-3 case
+          stores 32 bits (the PointerFromU32 low-4GB convention) and the record
+          stride stays 16. Modelling either as a u64 -- which the Volatility
+          reader's shape invites, since a PtrN record does name entry+8 -- walks
+          mu8Flags off its byte and every array attribute loses its 0x2 bit.
+          That shipped once; see walk_attribute_header for the measurement.
     PtrN: (size-8)/16 * {u32 ptr, s16 type, s16 flag, u64 data}.  Type-3
           records are pointer fixups: ptr = the VLT offset of a pointer slot
-          (header+40, or inside an item), data = the BIN offset of that
-          collection/item's payload.  Type-2/all-zero records are inert.
+          (header+0x28, or an entry's +8), data = the BIN offset of that
+          collection/entry's payload.  Type-2/all-zero records are inert.
+          EVERY type-3 ptr must land on a slot the record shapes declared --
+          the walk raises otherwise, which is the check that would have caught
+          the entry-tail defect on day one.
   BIN = {u32 'StrE', s32 size, NUL-strings...} then the class-payload arena,
         tiled exactly by the sorted PtrN targets.
 
@@ -268,6 +277,12 @@ class Walk(object):
         self.raw_spans = []   # (offset, size, tag) -- bytes deliberately kept
         self.report = []      # human-readable findings
         self.payload_regions = []   # (abs offset, size) -- for reference diffs
+        # Every 4-byte pointer SLOT the walk declares (VLT-relative offset, tag).
+        # Vault::Initialize's PtrN type-3 records may only ever name one of these;
+        # a fixup that lands anywhere else means the record shape is wrong.
+        self.slots = []
+        # (VLT-relative muValue offset, mu8Flags, tag, index) per serialised entry.
+        self.entries = []
 
     def _read(self, off, width, signed=False):
         return int.from_bytes(self.data[off:off + width],
@@ -321,7 +336,6 @@ def _scan_ptr_slots(data, big_endian):
 def walk_attribsys_vault(data, big_endian):
     w = Walk(data, big_endian)
     ptr_records = _scan_ptr_slots(data, big_endian)
-    ptr_slot_offsets = set(ptr for ptr, _target in ptr_records)
 
     vlt_off = w.scalar(0, 4, 'vltOffset')
     vlt_size = w.scalar(4, 4, 'vltSize')
@@ -397,7 +411,7 @@ def walk_attribsys_vault(data, big_endian):
                 w.scalar(at + 16, 4, 'ExpN[%d] size' % i, signed=True)
                 hdr_pos = w.scalar(at + 20, 4, 'ExpN[%d] vltPos' % i, signed=True)
                 headers[hdr_pos] = walk_attribute_header(
-                    w, vlt_off, hdr_pos, i, ptr_slot_offsets)
+                    w, vlt_off, hdr_pos, i)
                 at += 24
             content_end = at
         else:   # PtrN
@@ -428,6 +442,22 @@ def walk_attribsys_vault(data, big_endian):
         raise WalkError('BIN does not start with StrE (%r)' % cc)
     stre_size = w.scalar(bin_off + 4, 4, 'StrE size', signed=True)
     w.raw(bin_off + 8, stre_size - 8, 'StrE string bytes')
+
+    # ---- MANDATORY: every PtrN fixup must land on a slot the walk DECLARED ----
+    # Vault::Initialize writes each type-3 record with a 32-bit store into
+    # (block + muSlotOffset). If a record names a byte the record shapes above do
+    # not model as a 4-byte pointer slot, the shapes are wrong -- which is exactly
+    # how the entry-tail defect shipped (the tool "explained" a fixup that landed
+    # on entry+8 by making that slot 8 bytes wide).
+    declared = dict(w.slots)
+    for ptr, _target in ptr_records:
+        if ptr not in declared:
+            near = min(declared, key=lambda s: abs(s - ptr)) if declared else -1
+            raise WalkError('PtrN type-3 fixup names VLT+0x%X, which no record '
+                            'shape declares as a 4-byte pointer slot (nearest '
+                            'declared slot VLT+0x%X %s) -- the CollectionLoadData '
+                            'shape is wrong'
+                            % (ptr, near, declared.get(near, '?')))
 
     # payload regions: each type-3 PtrN record names one payload; its slot
     # lives inside an attribute header (+40 = the collection payload; any
@@ -476,35 +506,118 @@ def walk_attribsys_vault(data, big_endian):
             if any(rem):
                 w.report.append('NON-ZERO bytes beyond the class %016X schema '
                                 'at BIN+0x%X kept raw' % (cls, off - bin_off))
+
+    # ---- MANDATORY: the ARRAY flag must agree with the payload it points at ----
+    # An entry with mu8Flags bit 0x2 is an array: Node::GetCount (@0x82804610)
+    # resolves its value pointer and returns the Attrib::Array header's
+    # muNumElements. So a set 0x2 bit MUST name a payload whose first 8 bytes are
+    # a well-formed Array header {u16 muNumElementsHeader, u16 muNumElements,
+    # u16 muElementSize, u16 muTypeInfo}. This is the semantic check the pure
+    # field-grouping round trip cannot make: a wrong grouping is self-consistent
+    # under flip/unflip, but it moves the flag byte, and then EITHER no entry
+    # claims to be an array (the shipped defect) OR one claims it over bytes that
+    # are not an array header.
+    slot_target = dict(ptr_records)
+    region_size = {}
+    for i, start in enumerate(starts):
+        region_size[start] = (starts[i + 1] if i + 1 < len(starts) else bin_size) - start
+    n_arrays = 0
+    for slot, flags, tag, _i in w.entries:
+        is_array = (flags & 0x02) != 0
+        named = slot in slot_target
+        if is_array and not named:
+            raise WalkError('%s has the 0x2 ARRAY flag but no PtrN fixup names '
+                            'its muValue slot VLT+0x%X' % (tag, slot))
+        if not named:
+            continue
+        target = slot_target[slot]
+        if not is_array:
+            # Every out-of-line entry payload in every vault this tool handles is
+            # an Attrib::Array (that is also the only ITEM payload schema
+            # registered below), so this is an error, not a note. If a genuinely
+            # non-array out-of-line attribute ever turns up, add its case here
+            # AND its payload schema -- do not weaken the check.
+            raise WalkError('%s muValue VLT+0x%X is a PtrN fixup target but the '
+                            'entry carries no 0x2 array flag (mu8Flags 0x%02X) '
+                            '-- the entry tail grouping is wrong or the payload '
+                            'is a kind this tool has no schema for'
+                            % (tag, slot, flags))
+        n_arrays += 1
+        hdr = bin_off + target
+        alloc = w._read(hdr, 2)
+        num = w._read(hdr + 2, 2)
+        elem = w._read(hdr + 4, 2)
+        info = w._read(hdr + 6, 2)
+        avail = region_size.get(target, 0)
+        data_at = ((info >> 12) & 0xFFFF8) + 8
+        if not (num <= alloc and elem > 0 and
+                data_at + alloc * elem <= avail):
+            raise WalkError('%s claims the 0x2 ARRAY flag, but BIN+0x%X is not a '
+                            'well-formed Attrib::Array header (alloc=%d num=%d '
+                            'elemSize=%d typeInfo=0x%X region=%d bytes)'
+                            % (tag, target, alloc, num, elem, info, avail))
+    if w.entries and not n_arrays:
+        raise WalkError('%d serialised entries and NOT ONE carries the 0x2 array '
+                        'flag -- the entry tail grouping has walked mu8Flags off '
+                        'its byte' % len(w.entries))
     return w
 
 
-def walk_attribute_header(w, vlt_off, hdr_pos, idx, ptr_slot_offsets):
-    """Flip one DatN attribute header (position from its ExpN record)."""
+def walk_attribute_header(w, vlt_off, hdr_pos, idx):
+    """Flip one serialised Attrib::CollectionLoadData (position from its ExpN
+    record) -- head, trailing type-key table, then the 16-byte entries.
+
+    ⭐ A POINTER-SHAPED SLOT INSIDE A SERIALISED RECORD IS 4 BYTES, NOT 8.
+    Both `mLayout` (+0x28) and every entry's `muValue` (+0x08) are PtrN fixup
+    targets, and Vault::Initialize's type-3 case writes them with a 32-bit store
+    (`*(u32*)(base + slot) = (u32)target` -- attribloadandgo.cpp, the committed
+    PointerFromU32 low-4GB convention). They do NOT widen on x64 and the record
+    stride stays 16. Grouping either one as a u64 destroys its neighbours:
+      * `mLayout`/`mPad`   -> the two halves swap, so mLayout reads as the pad.
+      * `muValue`+tail     -> the flip walks `mu8Flags` (+0x0E) to +0x09, every
+        node loses its 0x02 ARRAY bit, Node::GetCount takes the non-array exit
+        and EVERY generated Num_<array>() returns exactly 1. That shipped: it is
+        why `mGameIntroGroup` reported shots=1 for a 3-shot group, and why the
+        world's surfacelist reported one surface.
+    Oracle: over the 74 entries the X360 and BPR vaults share by collection key,
+    {u32,u16,u8,u8} agrees with BPR's shipped LE bytes 74/74; one-u64 0/74 and
+    Volatility's {u32,s16,s16} 0/74.
+    """
     at = vlt_off + hdr_pos
     tag = 'attr[%d]' % idx
-    w.scalar(at, 8, tag + ' collectionHash')
-    class_hash = w.scalar(at + 8, 8, tag + ' classHash')
-    w.scalar(at + 16, 8, tag + ' unk1')
-    item_count = w.scalar(at + 24, 4, tag + ' itemCount', signed=True)
-    w.scalar(at + 28, 4, tag + ' unk2', signed=True)
-    w.scalar(at + 32, 4, tag + ' itemCountDup', signed=True)
-    w.scalar(at + 36, 2, tag + ' paramCount', signed=True)
-    params_to_read = w.scalar(at + 38, 2, tag + ' paramsToRead', signed=True)
-    w.scalar(at + 40, 8, tag + ' dataPtrSlot')    # a PtrN fixup target
+    w.scalar(at, 8, tag + ' mKey')
+    class_hash = w.scalar(at + 8, 8, tag + ' mClass')
+    w.scalar(at + 16, 8, tag + ' mParent')
+    w.scalar(at + 24, 4, tag + ' mTableReserve', signed=True)
+    w.scalar(at + 28, 4, tag + ' mTableKeyShift', signed=True)
+    item_count = w.scalar(at + 32, 4, tag + ' mNumEntries', signed=True)
+    num_types = w.scalar(at + 36, 2, tag + ' mNumTypes')
+    types_len = w.scalar(at + 38, 2, tag + ' mTypesLen')
+    w.scalar(at + 40, 4, tag + ' mLayout')     # u32 -- a PtrN fixup target
+    w.scalar(at + 44, 4, tag + ' mPad')
+    w.slots.append((at + 40 - vlt_off, '%s mLayout' % tag))
     pos = at + 48
-    for i in range(params_to_read):
-        w.scalar(pos, 8, tag + ' paramTypeHash[%d]' % i)
+    for i in range(types_len):
+        w.scalar(pos, 8, tag + ' typeKey[%d]' % i)
         pos += 8
     for i in range(item_count):
-        w.scalar(pos, 8, tag + ' item[%d] keyHash' % i)
-        if (pos + 8 - vlt_off) in ptr_slot_offsets:
-            # the item's own data-pointer slot (PtrN names it -- surfacelist)
-            w.scalar(pos + 8, 8, tag + ' item[%d] dataPtrSlot' % i)
-        else:
-            w.scalar(pos + 8, 4, tag + ' item[%d] unk' % i)
-            w.scalar(pos + 12, 2, tag + ' item[%d] paramIdx' % i, signed=True)
-            w.scalar(pos + 14, 2, tag + ' item[%d] unk2' % i, signed=True)
+        w.scalar(pos, 8, tag + ' entry[%d] mKey' % i)
+        w.scalar(pos + 8, 4, tag + ' entry[%d] muValue' % i)   # u32 PtrN slot
+        type_index = w.scalar(pos + 12, 2, tag + ' entry[%d] muTypeIndex' % i)
+        flags = w.scalar(pos + 14, 1, tag + ' entry[%d] mu8Flags' % i)
+        pad = w.scalar(pos + 15, 1, tag + ' entry[%d] mu8Pad' % i)
+        w.slots.append((pos + 8 - vlt_off, '%s entry[%d] muValue' % (tag, i)))
+        # The runtime's own load-time assert (attribcollection.cpp).
+        if type_index > num_types:
+            raise WalkError('%s entry[%d] type index %d > mNumTypes %d'
+                            % (tag, i, type_index, num_types))
+        # The trailing pad byte is zero in every shipped vault. A non-zero one
+        # means the tail is being read one byte out of phase -- which is exactly
+        # what a u64 grouping does to mu8Flags.
+        if pad != 0:
+            raise WalkError('%s entry[%d] mu8Pad is 0x%02X, not 0 -- the 16-byte '
+                            'entry tail is out of phase' % (tag, i, pad))
+        w.entries.append((pos + 8 - vlt_off, flags, tag, i))
         pos += 16
     return class_hash
 

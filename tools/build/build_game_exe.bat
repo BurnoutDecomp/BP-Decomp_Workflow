@@ -248,6 +248,43 @@ rem ---- build the cl response file ----
   echo "%SRC%\SharedClasses\DataLists\VehicleListResourceType.cpp"
   echo "%SRC%\SharedClasses\DataLists\WheelList.cpp"
   echo "%SRC%\SharedClasses\DataLists\WheelListResourceType.cpp"
+  rem  ---- the ICE take-dictionary list (2026-08-01, ICEList wave) --------------------------
+  rem  The THIRD resident data table beside VehicleList/WheelList (X360 GameDataModule member
+  rem  +457664, attested twice: PrepareICEList's AddListResource target and
+  rem  ProcessGetICEListRequest's reply payload both spell `this + 0x70000 - 0x440`).
+  rem  Whole TU already reconstructed; it was simply never in this list.
+  echo "%SRC%\SharedClasses\DataLists\ICEList.cpp"
+  rem  DictionaryBase::FixUp/FixDown -- the untyped dictionary relocation pass. FixUp
+  rem  @0x828157F8 is ABSENT from the .ida-exports set (the gap between
+  rem  BaseLinkedList::InternalRemoveNode 0x82815708 and FixDown 0x82815848); recovered
+  rem  from the ARTIST IDA database with headless IDA 9.3. Links clean on its own.
+  echo "%SRC%\GameShared\GameClasses\Containers\CgsDictionary.cpp"
+  rem  ---- NOT MOUNTED: CgsDictionaryResourceType.cpp (ICE take dictionary, type 65) -------
+  rem  MEASURED 2026-08-01, two builds. Mounting it alone costs exactly TWO unresolved
+  rem  externals -- ICE::ICETakeData::FixUp and ::FixDown -- because the explicit
+  rem  `template struct DictionaryResourceType<ICE::ICETakeData>;` instantiation emits the
+  rem  generic Dictionary<T>::FixUp/FixDown wrappers, which call both.
+  rem    * FixUp is now REAL (SDKs/Packages/ICE/ICEData.cpp): its X360 symbol is ICF-FOLDED
+  rem      onto CgsGeometric::PolygonSoupListSpatialMap::Construct @0x82839600, four
+  rem      instructions that zero the take's two bTNode link words. Nothing else.
+  rem    * FixDown is real too, but it lives in ICEData.cpp, and mounting THAT costs 15
+  rem      unresolved externals -- the whole ICE take runtime:
+  rem        ICE::spICEMemory, ICE::ICE_EPSILON, ICEMath::Round,
+  rem        ICETake::{SetParameter(f32,bool,bool), GetValueFloat, GetValueInt,
+  rem                  GetParameterData, GetKeyData, GetNumKeys, GetNumIntervals,
+  rem                  MarkChannelFromSubTake, FlushUndo},
+  rem        ICEChannel::GetKeyIndex, ICEParameter::SetValue, ICEFileHandler::FilePrintf.
+  rem  So type 65 stays unregistered and PrepareICEList's AddListResource stays gated. That
+  rem  gate is DELIBERATE, not laziness: with no registered handler the pool skips FixUp, so
+  rem  the dictionary's mpaIndex and every entry's mpData are still RESOURCE-RELATIVE
+  rem  OFFSETS (measured on the shipped file: mpaIndex 0x10, entry[0].mpData 0x3388).
+  rem  Binding that into the ICEList would make every take lookup dereference an offset as a
+  rem  pointer -- the silent-wrong-data shape, not a crash.
+  rem  DELETE-WHEN: the 13 ICE take-runtime bodies + 2 globals above land; then mount both
+  rem  TUs, register DictionaryResourceType<ICE::ICETakeData> (0x41) in
+  rem  CgsResourceTypeRegistration.cpp, and un-gate PrepareICEList.
+  rem  echo "%SRC%\GameShared\GameClasses\Containers\CgsDictionaryResourceType.cpp"
+  rem  echo "%SRC%\SDKs\Packages\ICE\ICEData.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
