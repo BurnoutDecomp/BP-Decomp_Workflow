@@ -351,6 +351,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\Camera\BrnDepthOfField.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraValidityAccount.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\CameraUtils.cpp"
+  rem  Camera::Utils::Tweaker::Construct @0x821F8588 ONLY -- file-split out of
+  rem  BrnCameraTweaker.cpp on 2026-08-01 (see that file's banner). MEASURED: mounting the
+  rem  whole tweaker TU closes 1 unresolved and opens 5 (KAAC_AXIS_NAMES / KAAC_CONTROL_NAMES
+  rem  rodata + DebugController::GetControllerInfo + DebugInterface::Get2dRender +
+  rem  DebugRender::Draw2DTextJustified); the Construct body alone touches nothing but its own
+  rem  binding arrays, so this costs zero and pre-closes one of the camera family's 31.
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraTweakerConstruct.cpp"
   echo "%SRC%\GameSource\GameState\BrnGameStateModuleIO.cpp"
   rem intro wave (2026-07-30): the live BrnProgression::Profile TU. Needed by
   rem BrnGuiModule::Prepare (Profile::Construct seeds mbIsNewProfile = true, the
@@ -1049,6 +1056,117 @@ rem ---- build the cl response file ----
   rem  BrnCameraTweaker.cpp), each of which opens its own leaves.
   rem  The WARNING above about the iceanim ShotReference temporary still stands and must be
   rem  settled BEFORE that wave mounts anything.
+  rem
+  rem  ---- 2026-08-01, SIXTH PASS: 31 CONFIRMED -- and link closure is NOT the last blocker. --
+  rem  Re-measured independently (scratchpad ice_measure.ps1 -Tag CAMW1): the three camera TUs
+  rem  together are 31 unresolved / 0 compile errors, exactly as the FIFTH PASS says. One
+  rem  correction to that list: CgsDev::StrStreamBase's vector-deleting destructor is NOT in the
+  rem  set any more (the FOURTH PASS bullet is stale on it).
+  rem
+  rem  ⛔⛔ THE BIGGER FINDING: ArbStateCarSelect can never leave E_STATE_INACTIVE on this build,
+  rem  at 31 unresolved OR at 0. Its Update's INACTIVE arm returns immediately; the state only
+  rem  starts when something calls Prepare(), and the ONLY writer of E_STATE_CAR_SELECT in the
+  rem  whole tree is ArbStateRoaming::ProcessActiveDrivingTransitions
+  rem  (BrnArbStateRoaming.cpp:551, `meJunkyardState != E_JY_INACTIVE` -> ChangeToStateWithoutRelease).
+  rem  THREE independent reasons that never runs today:
+  rem    (a) BrnArbStateRoaming.cpp is NOT mounted -- Construct/Prepare/Release/GetName come from
+  rem        DirectorLinkStubs.cpp:151-154;
+  rem    (b) ArbStateRoaming::Update is not even an override in the linked set (its header
+  rem        records Update/Destruct as living in their own X360 TUs), so roaming inherits
+  rem        ArbitratorState::Update, which drives nothing;
+  rem    (c) GameState::meJunkyardState has EXACTLY ONE writer in the tree -- GameState::Clear()
+  rem        setting it to E_JY_INACTIVE (BrnDirectorGameState.cpp:87). Nothing makes it active.
+  rem  mbNewProfileIntroActive (bridge 476) IS live and reaches GameState, but it is only read
+  rem  INSIDE ArbStateCarSelect::Update's PREPARING arm -- i.e. downstream of that gate.
+  rem  => Finishing the 31 is necessary but NOT sufficient. Budget the entry gate as a second,
+  rem  independent blocker of comparable size.
+  rem
+  rem  MEASURED (CAMW2, same method): mounting the six "the TU exists, just mount it" candidates
+  rem  the FIFTH PASS lists takes 31 -> 46. Closed 5, opened 20. Per-TU, from the diff:
+  rem      BrnCameraTweaker.cpp            closes Tweaker::Construct;   opens 5 (KAAC_AXIS_NAMES,
+  rem                                      KAAC_CONTROL_NAMES, DebugController::GetControllerInfo,
+  rem                                      DebugInterface::Get2dRender, DebugRender::Draw2DTextJustified)
+  rem      BrnDirectorModuleDebugPrinter   closes 0;  opens 6 (DebugLog::ActualAppend,
+  rem                                      DebugPrinter::Print, DebugInterface::{En,Dis}ableConsole, ...)
+  rem      BrnDirectorResourceManagerICE   closes 2;  opens 3 (MakeICEMovieId,
+  rem                                      ICEWrapper::GetShakeGroup, ICEWrapper::GetICETakeData)
+  rem      ICEAuthorTakeOps.cpp            closes 1;  opens 5 (bList::EndOfList,
+  rem                                      ICEController::{EditorOn,SetState}, ICEFileHandler::FileClose)
+  rem      ICECameraSpaceHandler.cpp       closes 1;  opens 1 (CameraSpaceHandler::GetTransformToWorld)
+  rem      BrnDirectorICEWrapper.cpp       closes 1;  opens 2 (ICEManager::GetCameraTake,
+  rem                                      ICECameraMover::Construct)
+  rem  That is now SEVEN, EIGHT, NINE, TEN, ELEVEN and TWELVE measured mount candidates that are
+  rem  net-negative. Treat "the TU exists, just mount it" as false by default in this subsystem.
+  rem
+  rem  WHAT THIS WAVE ACTUALLY LANDED against the 31 (all in TUs that are ALREADY mounted or
+  rem  that mount WITH the camera family, so they cost zero, and all boot-verified):
+  rem      DepthOfField::GetBlurriness / ::SetBlurriness   -> BrnDepthOfField.cpp
+  rem      Camera::GetDepthOfField (both overloads)        -> Camera.cpp
+  rem      Camera::RequestMotionBlur                       -> Camera.cpp
+  rem      Utils::Tweaker::Construct                       -> NEW BrnCameraTweakerConstruct.cpp
+  rem                                                         (file split; mounted above)
+  rem      SharedCameraContainer::GetSelectedGameplayCamera-> BrnDirectorArbitratorSharedCameraContainer.cpp
+  rem      Camera::CreateHeadingSpaceLookAt                -> BrnBehaviourIceAnim.cpp
+  rem      Camera::GetVehicleWorldPosition                 -> BrnBehaviourIceAnim.cpp
+  rem  RE-MEASURED after landing them (CAMW3, same method): **31 -> 24**. Eight symbols left
+  rem  the set and ONE joined it -- the DebugPrinter fix below SWAPS an unresolvable symbol for
+  rem  a resolvable one (the fabricated `static ActualPrint(void*, const char*, s32)` is gone;
+  rem  the real `private: ActualPrint(const char*, unsigned int)` takes its place and is bodied
+  rem  in BrnDirectorModuleDebugPrinter.cpp, waiting only on that TU's debug-render leaves).
+  rem  ⚠️ Do not read "-8" as "-8 net": count the SET, not the closures.
+  rem  ⭐ GetSelectedGameplayCamera -- the one the FIFTH PASS singled out as un-stubbable
+  rem  because it returns a const Camera& -- has NO standalone X360 symbol: it is inlined at
+  rem  every site (ArbStateCarSelect::Prepare @0x8226EFA0, ArbStateRaceIntro::Update
+  rem  @0x8226E5B0 case 4, Arbitrator::Update @0x8226ADA0), all three emitting the same
+  rem  select-bit + handle-resolve pair. The two callees are UNNAMED subs (sub_82212288 /
+  rem  sub_82212438) and were pinned by their own assert -- "IsAllocated()",
+  rem  BrnBehaviourManager.h, line 610 -- which is BehaviourHandle::GetProducedCamera's
+  rem  tripwire; their sibling sub_821FD3E8 asserts at :589 and is GetBehaviour. That is the
+  rem  seventh and eighth time an unnamed sub, not missing code, was the actual blocker.
+  rem  ALSO FIXED, and it is a defect species worth naming: BrnBehaviourIceAnim.cpp declared its
+  rem  own `struct DebugPrinter { static void ActualPrint(void*, const char*, s32); };`. The real
+  rem  @0x821F71D8 is a NON-static PRIVATE member `ActualPrint(const char*, CgsDev::RGBA)` -- the
+  rem  console's r3 there is the printer, not an argument. The forked spelling mangles to a symbol
+  rem  NO TU CAN EVER DEFINE, so it would have sat in the unresolved list for ever looking like it
+  rem  just needed its home mounted. Now goes through BehaviourSharedInfo::GetDebugPrinter() and
+  rem  the public Print(text, colour) forwarder (bodied in the home header, which is what the
+  rem  console inlines). ARITY/STATICNESS forks only ever surface as LNK2019 -- check the
+  rem  signature, not just the name.
+  rem
+  rem  ⚠️⚠️ A LIVE ODR FORK found on the way, NOT fixed: there are TWO
+  rem  BrnDirector::Camera::BehaviourInterpolate. BrnBehaviourManager.h:114 is a slice with NO
+  rem  base and NO members (sizeof == 1) -- the one ArbStateCarSelect reaches -- and
+  rem  Behaviours/BrnBehaviourInterpolate.h:93 is the real one (: public Behaviour, with
+  rem  mFromCamera/mToCamera/mfDuration/mbSetup/mbHasFinished and header-inline bodies for
+  rem  SetupDuration/Setup/HasFinished). BrnBehaviourManager.cpp:755 explicitly instantiates
+  rem  AllocateBehaviour<BehaviourInterpolate> over the EMPTY one: it books a 1600-byte small-pool
+  rem  bucket by sizeof, placement-news a ONE-BYTE object into it, and BehaviourHelper::Prepare
+  rem  then static_casts that to Behaviour* and dispatches vtable slot 0. Inert only because
+  rem  nothing in the linked set allocates one. BehaviourRotateAboutVehicle (line 759) is the same
+  rem  shape. Retiring the manager slice in favour of the real home is the highest-value next step
+  rem  on the link side: it closes 3 of the 6 interpolate symbols outright (already header inlines
+  rem  there) and removes the hazard. NOTE the real home ALSO carries its own local `class
+  rem  Behaviour` fork (line 71), so the reconcile has to retire that too.
+  rem
+  rem  ⭐ AND ClearBaseFirstFrameGate IS MIS-NAMED. The store IS verified -- ArbStateCarSelect::
+  rem  Prepare emits `stb r23, 0x28(behaviour)` at 0x8226F0C4 and 0x8226F1A8 (pseudocode
+  rem  `*(GetBehaviour(handle) + 40) = 0`). But BehaviourIceAnim's canonical Behaviour base ends
+  rem  well before +0x28 (vptr, meTimestepType @+4, five flag bytes @+8..+0xC, mpcDebugParametersName
+  rem  @+0x10) and GetCollisionPolicy returns `this + 0x20`, so byte +0x28 is mCollisionPolicy
+  rem  +0x08 -- a VisibilityCollisionPolicy field, inside maReservedToVehiclePredictor
+  rem  [+0x08, +0x70). It is NOT a base gate. Name it on the POLICY when that span is carved.
+  rem
+  rem  ⭐ THE iceanim ShotReference HAZARD IS NOW SETTLED (what the right answer is, not the fix):
+  rem  Camera.h:83-84 carries the DWARF-attested `typedef const Attrib::RefSpec ShotReference;`
+  rem  (DWARF Camera.h:43) and Camera::mpSourceShot @+0x54 uses it. BrnBehaviourIceAnim.h:278's
+  rem  `typedef Attrib::Gen::iceanim ShotReference;` is simply the WRONG one for the SAME console
+  rem  field role (behaviour +0x0E24). The fix is to point the behaviour's typedef at
+  rem  Camera::ShotReference and have SetParameters build the TEMPORARY iceanim over the RefSpec
+  rem  the way @0x8220F5C0 does. COST, so the next wave budgets it: Attrib::Gen::iceanim's
+  rem  RefSpec ctor (iceanim.h:34) is DECLARATION-ONLY, so doing this ADDS one unresolved until
+  rem  that generated ctor is bodied. Not done here -- it cannot be boot-verified while the TU is
+  rem  unmounted, and guessing the generated ctor's body is exactly the kind of fabrication this
+  rem  file exists to prevent.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
