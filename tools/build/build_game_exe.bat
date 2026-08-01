@@ -1598,7 +1598,21 @@ rem ---- build the cl response file ----
   rem  PreRaceFlyBy -- bind when the ScreenFlow/HudFlow pool growth is integrated)
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnIntro.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnInGame.cpp"
+  rem ---- car-select screen (2026-08-02): CarSelectVehicle derives from CarSelectMain, so the
+  rem      base TU + its three wave-G partfiles + the embedded component TUs all bind here.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectMain.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectMain_wG_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectMain_wG_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectMain_wG_03.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnManufacturerIcon.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnPlayerStatsBar.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnRivalTableCell.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarouselSliderBar.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarSelectOnlineCountdown.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarSelectOnlinePlayerList.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnComplexBar.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiWorldDataController.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenLoading.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavOptions.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavColourCalibrate.cpp"

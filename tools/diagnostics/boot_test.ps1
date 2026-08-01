@@ -78,6 +78,15 @@ $script:HarnessInputEvents = @{
     0x26 = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Prev")
 }
 
+# The assert-release channel CgsAssertManager.cpp:207 opens ("Local\BurnoutPC_Assert_Release",
+# gated on BRN_INPUT_ALLOW_BACKGROUND). A dev assert BLOCKS the sim in a DisplayAssertScreen
+# loop, and the single END keystroke this script sends at t=5s only covers asserts that fire
+# in that window. Every later assert -- e.g. BrnWorldModule.cpp:1327 during
+# "CarSelectManager: Transition In", which fires ~40s in -- froze the run and made the GUI look
+# stuck when it had simply never been ticked. Wait-ForLog now pulses this every poll.
+$script:HarnessAssertRelease =
+    [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Assert_Release")
+
 function Foreground-Window([IntPtr]$hwnd) {
     # CopyFromScreen needs the game to be foregrounded and unobscured. Force foreground
     # (ALT-tap unlock, same as Send-Key) and let DWM refresh before capturing.
@@ -170,6 +179,8 @@ function Wait-ForLog([System.Diagnostics.Process]$proc, [string]$pattern, [int]$
             Write-Host "  [cue] $label"
             return $true
         }
+        # Release any assert screen the game is halted on (see $HarnessAssertRelease).
+        [BootTestNative]::SetEvent($script:HarnessAssertRelease) | Out-Null
         Start-Sleep -Seconds 1
     }
     Write-Host "  [cue] TIMEOUT waiting for '$label' ($pattern)"
@@ -249,12 +260,38 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
                 Take-Shot $proc "boot_24_screen_loading"
                 # ScreenLoading waits on the world-load-complete event (137); if the game
                 # side posts it, the FSM moves LOADING -> INGAME. Give it a window, then
-                # try the pause path (ESC -> InGame::HandleControllerInput).
+                # drive the intro.
                 Start-Sleep -Seconds 8
                 Take-Shot $proc "boot_25_ingame"
+
+                # ---- the DJ-Atomika intro (BrnGui::Intro) --------------------------------
+                # VERIFIED 2026-08-02: state 8 (PHOTOBOOTH) advances ONLY on a controller
+                # confirm -- it is a player press on console too, so it is not a bug and no
+                # timer will ever release it. Until this script sent one, every boot measured
+                # here was measuring an UNPRESSED intro: the driver-licence apt stayed
+                # composited over everything, BrnGui::Intro never reached
+                # WAIT_FOR_FLYBY_FINISH(4) (the only state that calls SendStateEvent) and the
+                # SCREEN FSM could never leave INTRO. One accept clears all of it:
+                #   8 -> 9 -> 3 -> 4, both licence/photo-booth apt bundles unload, and the FSM
+                #   advances to CS_VEHICLE. Wait out the state-8 voice-over first
+                #   (mbVoiceOverPlaying swallows input while it plays).
+                if (Wait-ForLog $proc "\[Intro\] state 7 -> 8" 90 "INTRO at PHOTOBOOTH(8)") {
+                    Wait-ForLog $proc "\[Intro\] voice-over FINISHED \(state 8\)" 40 "state-8 VO done" | Out-Null
+                    Start-Sleep -Seconds 3
+                    Take-Shot $proc "boot_26_intro_photobooth"
+                    Send-Key $proc $VK_RETURN "ENTER (intro photo-booth confirm)"
+                    if (-not (Wait-ForLog $proc "\[Intro\] state 8 -> " 15 "INTRO advanced")) {
+                        Send-Key $proc $VK_RETURN "ENTER (intro confirm retry)"
+                        Wait-ForLog $proc "\[Intro\] state 8 -> " 15 "INTRO advanced (retry)" | Out-Null
+                    }
+                    Wait-ForLog $proc "\[Intro\] state 3 -> 4" 60 "INTRO fly-by" | Out-Null
+                    Start-Sleep -Seconds 12
+                    Take-Shot $proc "boot_27_post_intro"
+                }
+
                 Send-Key $proc 0x1B "ESC (pause probe)"
                 Start-Sleep -Seconds 3
-                Take-Shot $proc "boot_26_pause_probe"
+                Take-Shot $proc "boot_28_pause_probe"
             } else {
                 Take-Shot $proc "boot_24_stuck_handoff"
             }
