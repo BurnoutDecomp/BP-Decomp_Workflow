@@ -126,6 +126,15 @@ rem ---- build the cl response file ----
   rem ---- module-IO accessors/setters that are declaration-only (cost rule), so   ---
   rem ---- their bridges stay boot-gated in WorldLinkStubs.cpp. Mount them with    ---
   rem ---- the entity-module IO pass that lands those accessors.                   ---
+  rem ---- car-select hand-off wave (2026-08-01): ONE of those six bridges is      ---
+  rem ---- fully closed on its own -- BridgeRaceCarModuleToWorldModule_PreScene    ---
+  rem ---- @0x827A52B0, the ONLY producer of WorldModule::                         ---
+  rem ---- meLocalPlayerActiveRaceCarIndex. It shared a TU with two bridges that   ---
+  rem ---- need 3 declaration-only IO accessors (MEASURED: +3 unresolved for the   ---
+  rem ---- whole TU, 0 for this function alone), so the inert WorldLinkStubs copy  ---
+  rem ---- is what linked and the player index stayed -1 all session. Split into   ---
+  rem ---- its own TU and mounted. Fold back when those 3 accessors land.          ---
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToWorldModule.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
   rem ---- its shared component-streamer base + the five concrete leaves. These ----
