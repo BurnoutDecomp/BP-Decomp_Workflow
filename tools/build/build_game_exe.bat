@@ -371,6 +371,21 @@ rem ---- build the cl response file ----
   rem  the queue BridgeGameStateToDirector appends into the director every frame.
   echo "%SRC%\GameSource\GameState\BrnGameStateModule.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager.cpp"
+  rem ⭐ FINAL PRODUCER WAVE (2026-08-01) -- THE JUNKYARD CAR-SELECT FSM ITSELF.
+  rem  The previous wave measured these two TUs at FOURTEEN unresolved externals (7 x
+  rem  GameStateModule, 5 x ProgressionManager, 2 x CarSelectManager privates). All fourteen
+  rem  are bodied now, plus the three console callees they pull in (GameStateModule::
+  rem  ApplyCarStats @0x82381188 + GetOriginalCarId @0x823758E8, ProgressionManager::
+  rem  OnPlayerCarChange @0x8237AC38). MEASURED after that: 14 -> 1 -> 0, the one being
+  rem  ProgressionData::FindCarOpponentSet, which is why BrnProgressionData.cpp joins them
+  rem  (it in turn wanted OpponentBalanceData's four graph accessors -- the X360 has no
+  rem  symbol for any of them, they are header-inline now).
+  rem  THIS IS THE PRODUCER: CarSelectManager posts game action 73 onto the GameState
+  rem  OutputBuffer's queue, BridgeGameStateToDirector appends it, MainDirector::
+  rem  ProcessInputQueue case 73 moves meJunkyardState 0 -> 2.
+  echo "%SRC%\GameSource\GameState\CarSelect\BrnCarSelectManager.cpp"
+  echo "%SRC%\GameSource\GameState\CarSelect\BrnCarSelectManager_CarChange.cpp"
+  echo "%SRC%\SharedClasses\Progression\BrnProgressionData.cpp"
   rem intro wave (2026-07-30): the live BrnProgression::Profile TU. Needed by
   rem BrnGuiModule::Prepare (Profile::Construct seeds mbIsNewProfile = true, the
   rem first-boot INTRO gate) and by the licence component (GetLicenceIssuedDate /
