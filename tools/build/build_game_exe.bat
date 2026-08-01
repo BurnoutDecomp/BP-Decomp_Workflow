@@ -377,6 +377,29 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\Camera\BrnDepthOfField.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraValidityAccount.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\CameraUtils.cpp"
+  rem ---- ORBIT-CAMERA WAVE (2026-08-01): the free-look stick the car-select camera reads ----
+  rem  BehaviourRotateAboutVehicle::Update calls CameraSphericalRotationController::Update
+  rem  every frame (the stick-driven yaw/pitch the player spins the car with). Its body
+  rem  already existed in a TU nothing had ever mounted; mounting it also makes
+  rem  CameraSphericalRotationController::Construct real, retiring the EMPTY STUB that used to
+  rem  stand in for it in DirectorLinkStubs.cpp. It drags exactly two callees, both of which
+  rem  are bodied and are mounted with it:
+  rem      SmoothMover::Update                    -> Utils\BrnCameraSmoothMover.cpp (mounted below)
+  rem      GetSmallestDifferenceBetweenDegsAngles -> BODIED this wave in CameraUtils.cpp. It was
+  rem          declaration-only; BrnCamera2DRotationController.cpp only CALLS it, and mounting
+  rem          that TU to reach it opens more than it closes (it needs the
+  rem          Camera2DRotationController::kfDeadZoneRadius static, which has no definition
+  rem          anywhere in the tree). MEASURED both ways.
+  rem  ⚠️ BrnLooker.cpp is deliberately NOT mounted: it DOES NOT COMPILE (BrnLooker.cpp:189
+  rem  calls the three-argument rw::math::vpu::SLerp that was replaced by the four-argument
+  rem  form long ago and never re-fitted -- a stale TU nobody noticed because nothing ever
+  rem  linked it). Looker::Parameters::Construct, the one function this wave needs out of it,
+  rem  moved to BrnLooker.h as an inline. DELETE-WHEN: BrnLooker.cpp is re-fitted.
+  rem  ⛔ BrnCameraShake.cpp is NOT mounted either, and CameraShake::Update is GATED in
+  rem  DirectorLinkStubs.cpp instead -- see the FLAG there for the three callees that block it
+  rem  and for the exact (currently unobservable) consequence.
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSphericalRotationController.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSmoothMover.cpp"
   rem  Camera::Utils::Tweaker::Construct @0x821F8588 ONLY -- file-split out of
   rem  BrnCameraTweaker.cpp on 2026-08-01 (see that file's banner). MEASURED: mounting the
   rem  whole tweaker TU closes 1 unresolved and opens 5 (KAAC_AXIS_NAMES / KAAC_CONTROL_NAMES
