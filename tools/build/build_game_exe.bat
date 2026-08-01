@@ -765,15 +765,14 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOOutputBuffer.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
   echo "%SRC%\GameSource\Director\BrnMainDirector.cpp"
-  rem  NOTE: %SRC%\GameSource\Director\BrnDirectorResourceManager.cpp is NOT mounted either.
-  rem  It is the same reverted pattern: it declares its OWN local `struct
-  rem  DirectorResourceManager { DirectorResourceManager(); }` and writes the real object
-  rem  through raw console byte offsets (552/568..1592/1608/1616/1624). Those offsets are the
-  rem  4-byte-pointer CONSOLE layout, so on x64 the ctor would scribble across the live class
-  rem  (and across the DirectorModule that embeds it). It also collides at link with the
-  rem  header's implicit default ctor (LNK2005 vs BrnGameModule.obj). The real class in
-  rem  BrnDirectorResourceManager.h default-constructs correctly; its Prepare is stubbed in
-  rem  DirectorLinkStubs.cpp. DELETE-WHEN: that TU is rewritten against named members.
+  rem  MOUNTED 2026-08-01. This TU was the reverted raw-console-offset ctor over a LOCAL
+  rem  re-declaration of the class; the shot-group wave rewrote it against named members and
+  rem  this wave added the real DirectorResourceManager::Prepare @0x8225CA08 (the 65
+  rem  shot-group slot builds + the CameraVault register). Its DirectorLinkStubs `return true`
+  rem  stub is deleted with it. It carries five ICE-cone leaves (GetKeyAnim x2 /
+  rem  GetShakeTakes / GetICEAuthor / GetKeyAnimFromGuid reach ICEWrapper + ICEAuthor +
+  rem  ICEList); those resolve through the existing Director/ICE link stubs.
+  echo "%SRC%\GameSource\Director\BrnDirectorResourceManager.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraFinaliser.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnBehaviourManager.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\Behaviour.cpp"
