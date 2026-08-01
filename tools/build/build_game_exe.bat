@@ -959,6 +959,52 @@ rem ---- build the cl response file ----
   rem  still builds and the arbitrator can still refuse to enter them.
   rem  DELETE-WHEN: each state's own sub-system lands; mount the state and drop its stubs.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateAttractMode.cpp"
+  rem ---- NINTH PASS (2026-08-01): ArbStateRoaming -- THE DIRECTOR'S ENTRY GATE ------------
+  rem  ⭐ ArbStateRoaming::Update @0x822643A0 is now WRITTEN (it did not exist anywhere in the
+  rem  tree, and BrnArbStateRoaming.h deliberately omitted the override, so vtable slot 2 fell
+  rem  through to ArbitratorState::Update's empty body -- meState froze at E_STATE_PREPARING
+  rem  for the whole session and ProcessPossibleStateChanges, the ONLY writer of
+  rem  E_STATE_CHANGING_TO_CAR_SELECT, was never called). Its four LNK2005 stubs are gone from
+  rem  DirectorLinkStubs.cpp.
+  rem  ⚠️ BrnArbStateRoaming.cpp DID NOT COMPILE before this wave (its Construct called a
+  rem  two-argument MomentSelector::AddMoment that does not exist and its Prepare passed a
+  rem  GameState where a BehaviourManager& is required) -- the ledger said `reviewed`.
+  rem  MEASURED with scratchpad\ice5_list.py + ice5_net.py against the object list DERIVED FROM
+  rem  THIS BAT: these four together are NET +0 unresolved. The order matters --
+  rem  BrnArbStateRoaming alone is +7, +MomentSelector/+MomentController/+EffectTrigger is +4,
+  rem  and the last 4 (MomentController::NewMoment, MomentHandle::Release,
+  rem  MomentSelector::Update, SelectBestMomentWithExclusion) are the GROUP F stubs at the foot
+  rem  of DirectorLinkStubs.cpp, which is where the moment sub-system's DELETE-WHEN lives.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateRoaming.cpp"
+  echo "%SRC%\GameSource\Director\MomentController\BrnMomentSelector.cpp"
+  echo "%SRC%\GameSource\Director\MomentController\BrnMomentController.cpp"
+  rem  BrnDirectorEffectTrigger.cpp joins the link at last: the note further down claiming it
+  rem  costs two real unresolved externals is now STALE -- EffectInterface::HookExists is
+  rem  bodied in it (from @0x8221E268) and RegisterStartingBackgroundEffectWithName from the
+  rem  three stores the console inlines at @0x82232F20. Camera::StopCurrentEffect @0x82205BB8
+  rem  and Camera::RequestStartEffectHook are bodied there too.
+  echo "%SRC%\GameSource\Director\Utils\BrnDirectorEffectTrigger.cpp"
+  rem ---- TENTH PASS (2026-08-01): ArbStateCarSelect -- THE REAL CAMERAS --------------------
+  rem  ⭐⭐ The state that owns the junkyard shot-group setup, the three authored ICE intro
+  rem  shots off mGameIntroGroup ("606002") and the rotate-about-car orbit camera. Its four
+  rem  LNK2005 stubs are gone from DirectorLinkStubs.cpp. It only becomes REACHABLE because of
+  rem  the NINTH PASS above -- ArbStateRoaming::Update is the only path that ever writes
+  rem  E_STATE_CHANGING_TO_CAR_SELECT.
+  rem  MEASURED 2026-08-01 (fresh --rescan against the NINTH-PASS object list): these four
+  rem  together are NET +4, and TWO of the four are the CRT (atan2, fabs, which the measure
+  rem  script's CRT filter does not cover). The last two:
+  rem    * Utils::CameraShake::Update -- GATED at BrnBehaviourIceAnim.cpp's bystander-space
+  rem      wobble, with the reason and the DELETE-WHEN there. Mounting its real TU
+  rem      (Camera/Utils/BrnCameraShake.cpp) costs +5 today.
+  rem    * BehaviourIceAnim's vector deleting destructor -- a COFF WeakExternal off its own
+  rem      vtable.
+  rem  ⚠️ The FOURTH/FIFTH/SIXTH-PASS notes below quoting 54 / 31 / 13 / 12 unresolved for this
+  rem  same set are ALL STALE: that was before CameraReference::Setup was bodied, before the
+  rem  BehaviourInterpolate ODR fork was retired, and before the EIGHTH PASS closure set.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCarSelect.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourIceAnim.cpp"
+  echo "%SRC%\GameSource\Director\Shots\ShotControllers\BrnKeyAnimController.cpp"
+  echo "%SRC%\GameSource\Director\Camera\BrnCameraReference.cpp"
   rem ---- ICE-anim de-fork wave (2026-07-30) ------------------------------------------------
   rem  ArbStateCarSelect (the retail GAME-INTRO state -- it walks PREPARING ->
   rem  GAME_INTRO_PART_ONE/TWO/THREE off the DirectorResourceManager's mGameIntroGroup, vault
