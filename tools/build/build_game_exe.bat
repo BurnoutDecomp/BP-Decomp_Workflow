@@ -365,6 +365,12 @@ rem ---- build the cl response file ----
   rem  binding arrays, so this costs zero and pre-closes one of the camera family's 31.
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraTweakerConstruct.cpp"
   echo "%SRC%\GameSource\GameState\BrnGameStateModuleIO.cpp"
+  rem  BridgeGameStateToWorld wave (2026-08-01): OutputBuffer::Construct now runs the console's
+  rem  own RaceCarRaceDistanceInterface::Clear (X360 0x82357470) on its +173196 member, whose
+  rem  body lives here. MEASURED mount cost: ZERO -- the object's only UNDEF externals are CRT
+  rem  plus the assert/StrStream trio the exe already links (dumpbin /SYMBOLS, 17 UNDEFs, none
+  rem  project-specific).
+  echo "%SRC%\GameSource\GameState\BrnGameStateSharedIO.cpp"
   rem producer wave (2026-08-01): the GameState module itself + its progression manager.
   rem  BrnGameStateModule.cpp had SEVEN finished X360 reconstructions that DID NOT COMPILE --
   rem  it was written against a richer BrnGameStateModule.h that was later reduced to the
