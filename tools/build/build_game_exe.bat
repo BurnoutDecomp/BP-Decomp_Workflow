@@ -505,8 +505,25 @@ rem ---- build the cl response file ----
   rem      CgsNumeric::Random::RandomFloat(f32,f32)     -> BODIED in Numeric\CgsRandom.cpp
   rem      CgsNumeric::Random::RandomVector(V3,V3)      -> BODIED in Numeric\CgsRandom.cpp
   rem  (both of those TUs are already on this list, so the mount cost is this ONE file).
+  rem  ⭐⭐ ICE-SHAKE WAVE (2026-08-02): the SAME split again, for the other class in that
+  rem  header -- BrnCameraShakeICEController.cpp carries CameraShakeICEController::Construct
+  rem  (COMPLETE) and ::Update (head + the three gates; the authored-take arm is a documented,
+  rem  self-announcing partial). It RETIRES the second and last DirectorLinkStubs.cpp group-E
+  rem  stub, and that one was ARMED: Construct's job is to set mMatrix to the IDENTITY, and
+  rem  BehaviourGameplayExternal::Update inlines GetMatrix() into a post-multiply on the camera
+  rem  transform -- the zero-initialised matrix the stub left behind would have ANNIHILATED it.
+  rem  Everything it calls was already on this list (shotgroup.cpp, CgsRandom.cpp,
+  rem  BrnDirectorResourceManager*.cpp), so the mount cost is this ONE file.
+  rem  ⭐ AND WITH IT, BrnBoostShakeController.cpp -- the FIFTH "body exists, nothing links it"
+  rem  in this cluster. BoostShakeController::Update @0x8220E548 has been bodied at
+  rem  Camera\BrnBoostShakeController.cpp:47 all along; the link was green only because nothing
+  rem  reached it. BehaviourGameplayExternal::Update calls it directly at 0x822422B0.
+  rem  MEASURED cascade: the TU includes only its own header, which includes only types.hpp
+  rem  and <cstddef>. Zero new unresolved.
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSphericalRotationController.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeUpdate.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeICEController.cpp"
+  echo "%SRC%\GameSource\Director\Camera\BrnBoostShakeController.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSmoothMover.cpp"
   rem  Camera::Utils::Tweaker::Construct @0x821F8588 ONLY -- file-split out of
   rem  BrnCameraTweaker.cpp on 2026-08-01 (see that file's banner). MEASURED: mounting the
