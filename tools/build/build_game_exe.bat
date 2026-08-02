@@ -1604,7 +1604,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectMain_wG_01.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectMain_wG_02.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectMain_wG_03.cpp"
+  rem  CarSelectVehicle re-homed onto CarSelectMain (2026-08-02): three partfiles
+  rem  (statics+FSM / the screen build / input+events) + the online player-list ROW TU the
+  rem  re-homed player list now embeds by value.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle_Components.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle_Input.cpp"
+  echo "%SRC%\GameSource\Gui\Components\BrnCarSelectOnlinePlayerListItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnManufacturerIcon.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnPlayerStatsBar.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnRivalTableCell.cpp"
