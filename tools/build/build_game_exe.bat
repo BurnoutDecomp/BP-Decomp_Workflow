@@ -494,10 +494,19 @@ rem ---- build the cl response file ----
   rem  form long ago and never re-fitted -- a stale TU nobody noticed because nothing ever
   rem  linked it). Looker::Parameters::Construct, the one function this wave needs out of it,
   rem  moved to BrnLooker.h as an inline. DELETE-WHEN: BrnLooker.cpp is re-fitted.
-  rem  ⛔ BrnCameraShake.cpp is NOT mounted either, and CameraShake::Update is GATED in
-  rem  DirectorLinkStubs.cpp instead -- see the FLAG there for the three callees that block it
-  rem  and for the exact (currently unobservable) consequence.
+  rem  ⛔ BrnCameraShake.cpp (the Parameters::Serialise<S> slice) is STILL not mounted: its
+  rem  three explicit instantiations drag DebugMenuSerialiser / TextFileWriteSerialiser /
+  rem  TextFileReadSerialiser, whose Serialise(const char*, f32&) are all out-of-line in TUs
+  rem  that are not on this list -- three unresolved externals opened to close one.
+  rem  ⭐ ROTATE-HELPER WAVE (2026-08-02): CameraShake::Update was file-split OUT of that TU
+  rem  into BrnCameraShakeUpdate.cpp and is mounted below, which RETIRES the empty `{}` stub
+  rem  DirectorLinkStubs.cpp used to resolve it to. Its three blockers are all closed:
+  rem      Utils::RotateMatrix44AffineByEulerAnglesZXY  -> BODIED in CameraUtils.cpp
+  rem      CgsNumeric::Random::RandomFloat(f32,f32)     -> BODIED in Numeric\CgsRandom.cpp
+  rem      CgsNumeric::Random::RandomVector(V3,V3)      -> BODIED in Numeric\CgsRandom.cpp
+  rem  (both of those TUs are already on this list, so the mount cost is this ONE file).
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSphericalRotationController.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeUpdate.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSmoothMover.cpp"
   rem  Camera::Utils::Tweaker::Construct @0x821F8588 ONLY -- file-split out of
   rem  BrnCameraTweaker.cpp on 2026-08-01 (see that file's banner). MEASURED: mounting the
