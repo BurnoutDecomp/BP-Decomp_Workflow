@@ -308,6 +308,51 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleManagerOutputInterface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleOutputInterface.cpp"
+  rem ---- VEHICLE-DYNAMICS CORE (physics wave 3, 2026-08-02) --------------------------------
+  rem  The first vehicle-physics translation units ever mounted. Before this the whole domain
+  rem  was unmounted: 119 reconstructed bodies, ZERO of them in the build.
+  rem
+  rem  MEASURED link closure of the full core (the eight below + VehiclePhysics.cpp + Engine.cpp):
+  rem  17 unresolved externals. Fourteen were closed this wave -- six were SHADOWING
+  rem  redeclarations in VehiclePhysics.h of members ExternalPhysicsBody/SimpleVehiclePhysics
+  rem  already own (deleted), three were the rw::physics::RigidBody read accessors (bodied in
+  rem  vendor/renderware/physics/RigidBody.cpp), and two callers of genuinely-unbodyable callees
+  rem  were split into their own unmounted TUs (ExternalPhysicsBody_ReadPropertiesFromRenderware.cpp
+  rem  and BrnSimpleVehiclePhysics_Construct.cpp -- see each file's banner).
+  rem
+  rem  ⚠️ STILL OUT: VehiclePhysics.cpp and Engine.cpp. VehiclePhysics.cpp is THREE symbols away:
+  rem      VehiclePhysics::CheckForEnteringDrift  X360 @0x825FA448 (absent from the IDA export
+  rem                                             set; the body IS in the PS3 DecFIGS set at
+  rem                                             0x6C8924, 218 asm lines, and that mangled name
+  rem                                             gives the real signature: the last parameter is
+  rem                                             a VecFloat, not the f32 the tree declares)
+  rem      BrnPlayerDriverControls::GetMode       reads controls+0x44 as a WORD (==1 test)
+  rem      BrnPlayerDriverControls::GetFlag78     reads controls+0x4D as a BYTE -- NOT +0x4E as
+  rem                                             the committed comment claims. Both offsets lie
+  rem                                             PAST the end of BrnPlayerDriverControls
+  rem                                             (sizeof 0x44 by the DWARF and by the asm-proven
+  rem                                             field offsets), so neither can be bodied until
+  rem                                             it is settled which type the console is really
+  rem                                             indexing. DO NOT GUESS THOSE TWO.
+  rem  Engine.cpp needs Engine::Reset (X360 @0x825CF130, also an export-set hole; PS3 body at
+  rem  0x6D5A24, and its mangled name says the parameter is a VecFloat, not the Vector4 declared).
+  rem
+  rem  ⚠️⚠️ MOUNTING THESE PUTS **ZERO BYTES** IN THE EXE TODAY, and that is expected, not a bug:
+  rem  nothing calls any of them yet, so /OPT:REF strips every function (VERIFIED -- grep
+  rem  Burnout_PC.map for ExternalPhysicsBody.obj / Wheel.obj / Spring1D.obj returns 0 symbols;
+  rem  only BrnSimpleVehiclePhysics.obj's KV_ZERO datum survives). They are mounted anyway so the
+  rem  closure is CONTINUOUSLY ENFORCED -- any future edit that re-opens it now fails the build --
+  rem  and so the first real caller pulls the whole subsystem in with no mount work at all.
+  rem  Do not read "mounted" here as "running".
+  echo "%SRC%\vendor\renderware\physics\RigidBody.cpp"
+  echo "%SRC%\GameSource\Physics\PhysicsUtilities\ExternallySimulatedBody.cpp"
+  echo "%SRC%\GameSource\Physics\PhysicsUtilities\ExternalPhysicsBody.cpp"
+  echo "%SRC%\GameSource\Physics\PhysicsUtilities\Spring1D.cpp"
+  echo "%SRC%\GameSource\Physics\PhysicsUtilities\SuspensionSpring.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Wheel.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\ShuntEffect.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnSimpleVehiclePhysics.cpp"
+  rem ---- end vehicle-dynamics core ---------------------------------------------------------
   echo "%SRC%\GameSource\Resource\SharedIO\BrnAssetIds.cpp"
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestQueue.cpp"
   echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModule.cpp"
