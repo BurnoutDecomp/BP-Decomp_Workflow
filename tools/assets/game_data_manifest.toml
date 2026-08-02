@@ -231,11 +231,25 @@ graphics bundle -- `no porter for Material x17, MaterialState x4, MaterialTechni
 Model x4, Renderable x8, Texture x10, TextureState x21, VertexDescriptor x4. Refusing to
 emit a half-converted bundle` (run against VEH_PSPCHRO_GR.BIN, 2026-08-02).  Those are
 WORLD types.  `--car-gr <CODE>` is the real path: _port_graphics_bundle() registers the
-GraphicsSpec/WheelGraphicsSpec porters into convert_world_bundle.FLIP_PORTABLE and reuses
-the world pipeline, then refuses if anything is left big-endian.  It writes to
+GraphicsSpec/WheelGraphicsSpec/GraphicsStub porters into convert_world_bundle.FLIP_PORTABLE
+and reuses the world pipeline, then refuses if anything is left big-endian.  It writes to
 <ROOT>/build/game/VEHICLES with no override, which under the mirrored worker root is
 {workroot}/build/game/VEHICLES -- collected via `produces`.  Reuses convert_world_bundle,
-hence isolate="volatility"."""
+hence isolate="volatility".
+
+TRAFFIC CARS (2026-08-02).  This one rule covers all 430 VEH_*_GR.BIN, and it deliberately
+stays one rule -- the 42 T-prefixed (traffic) bundles are NOT a separate pipeline, they just
+carry one extra resource type.  Until now they were the tool's largest single failure class:
+42 of the 46 whole-run failures, every one of them
+    `unknown resource type folder GraphicsStub (passthrough)` ->
+    `{'GraphicsStub': 1} left BIG-ENDIAN. Refusing to claim a ported bundle ...`
+VERIFIED by two independent readers (YAP, and a from-scratch bnd2+zlib parser) over all 568
+retail graphics bundles: exactly 42 carry a BrnTraffic::GraphicsStub (type 65557 / 0x10015,
+the name burnout.wiki gives that id), and they are exactly the 42 T-prefixed VEH_*_GR.BIN --
+no P (225), X (157), C (6) or WHE_ bundle has one.  vehicle_transcode.py now ports the type;
+read its GraphicsStub section for why the correct port is "swap nothing" and for the
+per-slot contest against the shipped little-endian BPR Remaster oracle (VERBATIM 42/42,
+byte-swap 0/42).  The traffic cars are the only consumers of this type, so this closes it."""
 
 [[rule]]
 id       = "vehicle-attrib-deform"
@@ -289,10 +303,16 @@ verify   = ["bnd2_platform=4"]
 isolate  = "volatility"
 why      = """Same _port_graphics_bundle path as the car graphics, and the bare 2-positional
 form fails the same way (MEASURED against WHE_52120650_GR.BNDL).
-⚠️ KNOWN LIMITATION, not fixed here: `--wheel-gr` takes the code verbatim only when it is
-all digits, otherwise it runs wheel_code_from_name(), which demands four numeric fields.
-The two alphanumeric wheels -- WHE_TW01800F_GR.BNDL and WHE_TW04800F_GR.BNDL -- therefore
-fail.  136 of 138 convert; the 2 are reported as FAILED rather than papered over."""
+✅ The old KNOWN LIMITATION here is FIXED (2026-08-02).  `--wheel-gr` used to take the code
+verbatim only when it was all digits and otherwise ran wheel_code_from_name(), which demands
+four numeric fields -- so the two alphanumeric TRAFFIC wheels were rejected with
+`wheel name 'TW01800' does not have the four numeric fields the WHE_ filename is built from`.
+(The old note here named WHE_TW04800F; the retail pair is actually WHE_TW01800_GR.BNDL and
+WHE_TW01800F_GR.BNDL -- there is no TW04800F on disc.)  The argument is now resolved by
+wheel_bundle_code(), which decides by EXISTENCE of WHE_<arg>_GR.BNDL rather than by the shape
+of the string.  This was only ever a filename parse: MEASURED, all 138 retail WHE_*_GR.BNDL
+carry the identical resource-type set [0,1,10,12,13,14,15,42,65546], the two traffic wheels
+included, so no porter was ever missing.  138 of 138 now convert."""
 
 [[rule]]
 id     = "engines"

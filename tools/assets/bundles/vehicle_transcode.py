@@ -64,6 +64,9 @@ VALIDATION (always on; the tool refuses to emit rather than emit garbage)
 TYPES PORTED HERE (graphics bundles -- phase 2)
     65542 0x10006 GraphicsSpec       VEHICLES/VEH_<code>_GR.BIN   (BrnVehicle::GraphicsSpec)
     65546 0x1000A WheelGraphicsSpec  WHEELS/WHE_<code>_GR.BNDL    (BrnWheel::GraphicsSpec)
+    65557 0x10015 GraphicsStub       VEHICLES/VEH_T<code>_GR.BIN  (BrnTraffic::GraphicsStub)
+                                     -- TRAFFIC CARS ONLY; see the section comment for why the
+                                     correct port of this type is "swap nothing".
     The other eight types in those bundles (Renderable / Material / MaterialState /
     MaterialTechnique / Model / Texture / TextureState / VertexDescriptor) are already handled
     by convert_world_bundle.py, so --car-gr / --wheel-gr reuse that pipeline verbatim and
@@ -736,6 +739,150 @@ def transcode_wheelgraphicsspec(data, imports_text=None):
 
 
 # ---------------------------------------------------------------------------
+# type 65557 (0x10015) -- BrnTraffic::GraphicsStub  (VEH_T<code>_GR.BIN)
+#
+# The resource TRAFFIC cars carry instead of a full BrnVehicle::GraphicsSpec: a pair of
+# pointers naming the body graphics and the wheel graphics the traffic car reuses.
+#
+# ⭐ THE ANSWER FOR THIS TYPE IS "SWAP NOTHING", AND THAT IS ASSERTED, NOT ASSUMED.
+# A no-op porter is exactly the silent-drop shape this repo has been burned by, so the whole
+# case is written out here.
+#
+# THE CONSUMER IS THE SPEC (b5-decomp/src/SharedClasses/Traffic/
+# BrnTrafficGraphicsStubResourceType.cpp, recovered from the X360 asm):
+#     GetTypeID()                         -> 65557
+#     GetSerialisedResourceDescriptor()   -> a CONSTANT {size = 8, align = 4}; entries 1..4 {0,1}
+#     FixUp()                             -> EMPTY  (no rebase, no swap, no touch)
+#     FixDown()                           -> EMPTY
+#     GetImportCount()                    -> 2
+#     GetImportPointer(i) -> offset       -> 0 for mpVehicleGraphics, 4 for mpWheelGraphics
+# and DWARF (references/DecFIGS/dwarfdump/SharedClasses/Traffic/BrnTrafficGraphicsStub.h):
+#     struct BrnTraffic::GraphicsStub {
+#         BrnVehicle::GraphicsSpec* mpVehicleGraphics;   // X360 offset 0
+#         BrnWheel::GraphicsSpec*   mpWheelGraphics;     // X360 offset 4
+#     };
+# So the entire serialised resource is EIGHT bytes: two 4-byte slots and nothing else.
+# burnout.wiki's resource-type table independently names 0x10015 "GraphicsStub"
+# (aka TrafficStub / TrafficGraphicsStub), matching GetTypeID.
+#
+# WHY BOTH SLOTS ARE DEAD BYTES ON DISC
+# CgsResource::Pool::ResolveImportForEntry (b5-decomp .../Resource/CgsResourcePool.cpp,
+# X360 0x828F6068) NEVER READS the slot -- it unconditionally STORES the resolved pointer
+# (or 0 when unresolved) at the import offset. Both of this resource's slots are import
+# slots, so whatever is on disc is overwritten before anything can observe it, and the
+# load order (FixUp -> ResolveImports -> PostFixUp) leaves no window in which it could be.
+# There is therefore no byte in this resource whose ENDIANNESS is observable.
+#
+# MEASURED over all 568 retail X360 VEH_*/WHE_* graphics bundles AND all 674 of the BPR
+# Remaster's, by two independent readers (YAP extraction, and a from-scratch bnd2+zlib
+# parser -- both agree exactly):
+#   * exactly 42 X360 bundles contain a GraphicsStub, and they are exactly the 42
+#     T-prefixed (traffic) VEH_*_GR.BIN. Zero P (225), X (157), C (6) or WHE_ bundles
+#     carry one. The traffic/GraphicsStub correlation is exact, not coincidental.
+#   * payload 16 bytes in 42/42; importCount 2 in 42/42; import offsets exactly
+#     {0x0, 0x4} in 42/42 -- i.e. the bundle data agrees with GetImportCount/GetImportPointer.
+#   * bytes 0..7 are `01 00 00 00 02 00 00 00` in 42/42 -- the same LE-in-BE small-index
+#     convention the vehicle GraphicsSpec's mppPartsModels table uses (see the trap note
+#     above), here reading 1 and 2 little-endian inside the big-endian image.
+#   * bytes 8..15 are UNINITIALISED SLACK past the 8-byte record: 23 distinct values across
+#     the 42, 15 of them zero and the rest stale float bit patterns (3f14ed58, bb4cbefb...).
+#
+# ⭐ PER-SLOT WIDTH/ENDIAN CONTEST against the shipped little-endian oracle (BPR Remaster,
+# platform 1, which ships the same 42 stubs). For each slot, re-derive what each hypothesis
+# says the LE build must contain, then tally which one the oracle agrees with:
+#       slot0 @0x00   VERBATIM (dead/LE-in-BE) wins 42/42     BE-swap wins 0/42
+#       slot1 @0x04   VERBATIM (dead/LE-in-BE) wins 42/42     BE-swap wins 0/42
+# The shipped LE build's bytes 0..7 are `01 00 00 00 02 00 00 00` -- BYTE-IDENTICAL to the
+# big-endian console image. A u32 swap would have produced `00 00 00 01 00 00 00 02`; the
+# oracle does not contain that in a single one of the 42.
+# For the 8..15 tail the oracle is all-zero in 42/42 while X360 is garbage in 27 of them --
+# two shipped builds disagreeing on those bytes is itself proof that nothing reads them.
+#
+# ⚠ ORACLE NOT SOURCE: BPR is platform 1, ours is platform 4, and the remaster's content
+# genuinely differs. What is emitted here is the COMMITTED CONSUMER's layout -- 8 bytes of
+# import slots, unswapped -- which merely happens to coincide with BPR's bytes. The 8..15
+# slack is preserved VERBATIM rather than zeroed to match BPR, for the same reason
+# plan_wheelgraphicsspec preserves its slack: this tool's own byte-fidelity invariant
+# (docstring check 4) forbids changing a byte that is not inside a swapped field, and
+# writing BPR's zeros would be copying the oracle instead of honouring the consumer.
+#
+# NB the "serialized pointer slots stay 32-bit on x64" rule applies and is already satisfied:
+# these are 4-byte serialised slots, ResolveImportForEntry stores the low 32 bits for a
+# sub-4GB target, and the committed GetImportPointer hardcodes the X360 offsets 0 and 4
+# rather than offsetof() precisely so the widened host struct does not leak into the format.
+# ---------------------------------------------------------------------------
+
+GRAPHICS_STUB_RECORD = 8            # GetSerialisedResourceDescriptor's literal size
+GRAPHICS_STUB_IMPORT_OFFSETS = (0, 4)   # GetImportPointer's two literal offsets
+
+
+def _import_offsets(imports_text):
+    """Offsets named by a YAP '<file>.dat_imports.yaml' sidecar. Lines look like
+       - 0x00000000: 0x6fcbb4dd
+    Returns None when there is no sidecar (so callers can tell "absent" from "empty")."""
+    if imports_text is None:
+        return None
+    offs = []
+    for line in imports_text.splitlines():
+        line = line.strip()
+        if line.startswith('- 0x'):
+            offs.append(int(line[2:].split(':')[0], 16))
+    return sorted(offs)
+
+
+def plan_graphicsstub(d, imports_text=None):
+    if len(d) < GRAPHICS_STUB_RECORD:
+        raise PortError('GraphicsStub: %d-byte payload is shorter than the %d-byte record the '
+                        'X360 GetSerialisedResourceDescriptor declares'
+                        % (len(d), GRAPHICS_STUB_RECORD))
+
+    # THE load-bearing assertion. It is not the slot VALUES that make this port a no-op, it is
+    # that both slots are bundle imports -- and an import slot is overwritten by
+    # Pool::ResolveImportForEntry before anything reads it. If a stub ever turns up whose
+    # import geometry is not the committed GetImportCount()==2 / GetImportPointer()->{0,4},
+    # then this resource is not what the consumer models and porting it verbatim would be a
+    # guess. Refuse instead.
+    offs = _import_offsets(imports_text)
+    if offs is not None and tuple(offs) != GRAPHICS_STUB_IMPORT_OFFSETS:
+        raise PortError('GraphicsStub: the bundle declares imports at %s, but the committed '
+                        'BrnTraffic::GraphicsStubResourceType::GetImportPointer names exactly '
+                        '%s (GetImportCount()==2). This resource is not the modelled stub; '
+                        'refusing to port it verbatim.'
+                        % ([hex(o) for o in offs], [hex(o) for o in GRAPHICS_STUB_IMPORT_OFFSETS]))
+
+    p = Plan(len(d), 'GraphicsStub')
+    # Claimed, deliberately NOT swapped -- p.raw() is this tool's "covered but not swapped".
+    p.raw(0, 4, 'mpVehicleGraphics (import slot @0; overwritten by ResolveImportForEntry)')
+    p.raw(4, 4, 'mpWheelGraphics   (import slot @4; overwritten by ResolveImportForEntry)')
+    if len(d) > GRAPHICS_STUB_RECORD:
+        p.raw(GRAPHICS_STUB_RECORD, len(d) - GRAPHICS_STUB_RECORD,
+              'alignment slack past the 8-byte record (uninitialised; preserved verbatim)')
+    return p.finish()
+
+
+def check_graphicsstub(out, src):
+    # Assert the no-op is DELIBERATE. If a future edit adds a swap to the plan, this fires
+    # rather than letting a "helpful" byte flip through unnoticed.
+    if out != src:
+        raise PortError('GraphicsStub: the port changed %d byte(s). This type has no swappable '
+                        'field -- both 4-byte slots are import slots the loader overwrites, and '
+                        'everything past byte 8 is outside the 8-byte serialised record.'
+                        % sum(1 for a, b in zip(src, out) if a != b))
+    return {'slots': (le32(out, 0), le32(out, 4)), 'bytes': len(out),
+            'slack': len(out) - GRAPHICS_STUB_RECORD}
+
+
+def transcode_graphicsstub(data, imports_text=None):
+    """convert_world_bundle.FLIP_PORTABLE signature: (data, imports_yaml) -> (data, imports_yaml).
+    Nothing widens and nothing moves, so the import sidecar is returned unchanged."""
+    plan = plan_graphicsstub(data, imports_text)
+    out = plan.apply(data)
+    plan.verify(data, out)
+    check_graphicsstub(out, data)
+    return out, imports_text
+
+
+# ---------------------------------------------------------------------------
 # porter registry -- keyed on the YAP type-folder name (YAP owns that mapping, not us)
 # ---------------------------------------------------------------------------
 
@@ -745,6 +892,7 @@ PORTERS = {
     'PlayerCarColours':  (plan_playercarcolours,     check_playercarcolours),
     'GraphicsSpec':      (plan_graphicsspec,         check_graphicsspec),
     'WheelGraphicsSpec': (plan_wheelgraphicsspec,    check_wheelgraphicsspec),
+    'GraphicsStub':      (plan_graphicsstub,         check_graphicsstub),
 }
 
 
@@ -937,6 +1085,10 @@ def _port_graphics_bundle(src, dst, label):
     import convert_world_bundle
     convert_world_bundle.FLIP_PORTABLE['GraphicsSpec'] = transcode_graphicsspec
     convert_world_bundle.FLIP_PORTABLE['WheelGraphicsSpec'] = transcode_wheelgraphicsspec
+    # traffic cars only: the 42 VEH_T*_GR.BIN carry a BrnTraffic::GraphicsStub instead of a
+    # full GraphicsSpec. Without this the world pipeline reports it as an unknown type folder
+    # and _port_graphics_bundle refuses the whole bundle.
+    convert_world_bundle.FLIP_PORTABLE['GraphicsStub'] = transcode_graphicsstub
 
     if not os.path.isfile(src):
         raise PortError('no such graphics bundle: %s' % src)
@@ -970,12 +1122,39 @@ def do_wheel_graphics(code):
 
 def wheel_code_from_name(name):
     """"5Spoke_19_16_650" -> "51916650" (the WHE_<code>_GR.BNDL filename). Verified against the
-    retail set: the four underscore-separated numeric fields concatenate to the file code."""
+    retail set: the four underscore-separated numeric fields concatenate to the file code.
+
+    ⚠ This is the WHEEL-NAME form only. A caller that already holds a FILE code must not come
+    through here -- see wheel_bundle_code() below."""
     parts = re.findall(r'\d+', name)
     if len(parts) != 4:
         raise PortError('wheel name %r does not have the four numeric fields the WHE_ filename '
                         'is built from' % name)
     return ''.join(parts)
+
+
+def wheel_bundle_code(arg):
+    """Resolve a --wheel-gr argument to the <code> in WHE_<code>_GR.BNDL.
+
+    The argument is EITHER a file code already (the orchestrator passes {tok1} of the source
+    stem, e.g. WHE_TW01800F_GR -> "TW01800F") OR a wheel NAME from WHEELLIST that has to be
+    reduced to a code ("5Spoke_19_16_650" -> "51916650").
+
+    The old test was `arg.isdigit()`, which routed anything non-numeric through
+    wheel_code_from_name(). That is wrong for the two TRAFFIC wheels: retail ships
+    WHE_TW01800_GR.BNDL and WHE_TW01800F_GR.BNDL, whose codes are alphanumeric ("TW" =
+    traffic wheel) and have ONE numeric field, not four -- so both were rejected with
+    "does not have the four numeric fields". MEASURED: all 138 retail WHE_*_GR.BNDL carry the
+    identical resource-type set [0,1,10,12,13,14,15,42,65546], the two traffic ones included,
+    so nothing but this filename parse ever blocked them.
+
+    Deciding by EXISTENCE of the bundle rather than by the shape of the string is what makes
+    this total: if WHE_<arg>_GR.BNDL is on disc, <arg> is the code, whatever it looks like."""
+    if os.path.isfile(os.path.join(RETAIL, 'WHEELS', 'WHE_%s_GR.BNDL' % arg)):
+        return arg
+    if arg.isdigit():
+        return arg
+    return wheel_code_from_name(arg)
 
 
 def survey_graphicsspec():
@@ -1045,7 +1224,7 @@ def main():
         elif len(args) == 2 and args[0] == '--car-gr':
             do_car_graphics(args[1].upper())
         elif len(args) == 2 and args[0] == '--wheel-gr':
-            do_wheel_graphics(args[1] if args[1].isdigit() else wheel_code_from_name(args[1]))
+            do_wheel_graphics(wheel_bundle_code(args[1]))
         elif len(args) == 2 and args[0] == '--check':
             check_only(args[1])
         elif len(args) == 2:
