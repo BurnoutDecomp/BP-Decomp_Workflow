@@ -303,9 +303,30 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
                     Take-Shot $proc "boot_27_post_intro"
                 }
 
-                Send-Key $proc 0x1B "ESC (pause probe)"
-                Settle 3
-                Take-Shot $proc "boot_28_pause_probe"
+                # ---- the Junkyard car select (BrnGui::CarSelectVehicle, FSM 33 CS_VEHICLE) ----
+                # The screen announces itself with CarSelectVehicle::OnEnter's own
+                # gpDebugPrint trace. Once the carousel is populated the CONTINUE prompt is
+                # live, and the accept press is the last player action the user asked for.
+                # ⚠️ Named-event channel ONLY (Send-Key handles that for VK_RETURN): sending
+                # the event AND a raw keystroke double-fires the action.
+                # ⓘ The screen's accept is EGameInputActions 49 (GUI_SELECT) on console; the
+                # PC input bridge delivers the accept key as action 45, which
+                # BrnCarSelectVehicle_Input.cpp now recognises alongside 49 (the same
+                # PC-bridge alias BrnIntro / BrnBootProfile already carry).
+                if (Wait-ForLog $proc "RG :: CSV : Entering Car Select" 60 "CAR SELECT entered") {
+                    Settle 10   # carousel populate + the INT_SHOWCAR voice-over
+                    Take-Shot $proc "boot_28_carselect_carousel"
+
+                    Send-Key $proc $VK_RETURN "ENTER (car select CONTINUE)"
+                    if (-not (Wait-ForLog $proc "RG :: CSV : SendStateEvent" 15 "CAR SELECT accepted")) {
+                        Send-Key $proc $VK_RETURN "ENTER (car select CONTINUE retry)"
+                        Wait-ForLog $proc "RG :: CSV : SendStateEvent" 15 "CAR SELECT accepted (retry)" | Out-Null
+                    }
+                    Settle 8
+                    Take-Shot $proc "boot_29_carselect_accepted"
+                    Settle 8
+                    Take-Shot $proc "boot_29b_carselect_accepted"
+                }
             } else {
                 Take-Shot $proc "boot_24_stuck_handoff"
             }
