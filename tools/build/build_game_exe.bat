@@ -257,6 +257,16 @@ rem ---- build the cl response file ----
   echo "%SRC%\SharedClasses\DataLists\VehicleListResourceType.cpp"
   echo "%SRC%\SharedClasses\DataLists\WheelList.cpp"
   echo "%SRC%\SharedClasses\DataLists\WheelListResourceType.cpp"
+  rem  ---- the player-car colour palette (colour-picker wave, 2026-08-02) -------------------
+  rem  VEHICLELIST.BUNDLE's SECOND resource is a PlayerCarColours payload, type 0x1001E
+  rem  (65566). With no registered handler the pool logged "[bundle] UNREGISTERED resource
+  rem  type id 65566" and skipped FixUp, the "CarColours" acquire replied with a NULL memory
+  rem  pointer ("carColours=0"), and the car-livery colour picker was empty. The handler was
+  rem  already reconstructed; it simply did not compile for x64 (it spelled the load-base
+  rem  truncations as reinterpret_cast<u32>(pointer)). Both colour-array columns inside the
+  rem  record stay 32-BIT SERIALISED SLOTS -- proven twice in BrnGlobalColourPalette.h, from
+  rem  the shipped platform-4 bytes and from GetColourPaletteFromType's own 12-byte stride.
+  echo "%SRC%\SharedClasses\Graphics\PlayerCarColoursResourceType.cpp"
   rem  ---- the ICE take-dictionary list (2026-08-01, ICEList wave) --------------------------
   rem  The THIRD resident data table beside VehicleList/WheelList (X360 GameDataModule member
   rem  +457664, attested twice: PrepareICEList's AddListResource target and
