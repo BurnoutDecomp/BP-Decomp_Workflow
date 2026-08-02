@@ -378,6 +378,25 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_RaceCarContact_AddEventSafe.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager.cpp"
   rem ---- end contact-spy / prop perf-monitor block -----------------------------------------
+  rem ---- PROP MANAGER CONSTRUCT + ITS DEBUG COMPONENT (physics wave 5, 2026-08-02) ---------
+  rem  BrnPhysics::Props::PropManager::Construct @0x82627390 is now real, which needed the whole
+  rem  PropDebugComponent TU: the component is embedded BY VALUE at PropManager+0x00, so any TU
+  rem  that instantiates a PropManager needs its vtable, i.e. bodies for RenderHUD / GetName /
+  rem  OnActivate / OnRegister, and RenderHUD needs RenderStats @0x826131E8 and OnActivate needs
+  rem  the seven OnChange* statics @0x825BAEF0..0x825BB040.
+  rem  BrnPropManager.cpp (mounted just above) now also DEFINES the twelve prop tuning globals
+  rem  (KVF_* / KF_PROP_*) that OnActivate registers -- the DWARF homes them in that .cpp.
+  rem  The two EventQueue<UpdatePropEvent,N> explicit-instantiation TUs Construct calls had never
+  rem  been in the build at all; they are mounted here.
+  rem
+  rem  ⚠️⚠️ SAME CAVEAT AS THE TWO BLOCKS ABOVE: PhysicsModule::Construct is still a stub (it
+  rem  additionally needs VehicleManager::Construct and PhysicsSimulationModule::Construct, both
+  rem  of which have no body and no type), so NOTHING calls PropManager::Construct yet and
+  rem  /OPT:REF strips all of this. ZERO BYTES IN THE EXE. Mounted so the closure is enforced.
+  echo "%SRC%\GameSource\Physics\PropManager\BrnPropDebugComponent.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_UpdatePropEvent_200.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_UpdatePropEvent_15.cpp"
+  rem ---- end prop-manager construct block ---------------------------------------------------
   echo "%SRC%\GameSource\Resource\SharedIO\BrnAssetIds.cpp"
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestQueue.cpp"
   echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModule.cpp"
