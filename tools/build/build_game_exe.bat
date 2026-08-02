@@ -1006,6 +1006,16 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOOutputBuffer.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
   echo "%SRC%\GameSource\Director\BrnMainDirector.cpp"
+  rem  MOUNTED 2026-08-02 (camera parameter-chain wave). BrnDirectorVehicleInputInterface --
+  rem  the world -> director "a car entered the simulation" seam (Construct /
+  rem  GetNewVehicleEventQueue / NewVehicle @0x822CBA90). It is the first link that actually
+  rem  carries data toward the two SHARED gameplay cameras' Parameters::mbIsValid, which is
+  rem  the byte their whole Update body sits behind. Self-contained: the queue template is
+  rem  header-only and the only other dependencies are the already-mounted generated
+  rem  Attrib::Gen classes (burnoutcarasset / camerabumperbehaviour / cameraexternalbehaviour,
+  rem  all header-inline) plus Attrib::FindCollection / RefSpec::GetCollection, which
+  rem  attribsupport.cpp already provides.
+  echo "%SRC%\GameSource\Director\SharedIO\BrnDirectorVehicleInputInterface.cpp"
   rem  MOUNTED 2026-08-01 (junkyard chain wave). BrnDirector::GameState -- the director's
   rem  per-event snapshot. MainDirector now carries it as a REAL named member (it was three
   rem  opaque byte spans), so GameState::Clear @0x82218930 finally runs from
@@ -1060,6 +1070,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorState.cpp"
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorStateContainer.cpp"
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorSharedCameraContainer.cpp"
+  rem  MOUNTED 2026-08-02 (camera parameter-chain wave). BehaviourPassengerCam's four REAL
+  rem  virtuals (Construct/Update/Release/GetName, 57 lines, only CgsAssert). Needed because
+  rem  BrnBehaviourManager.cpp:965's explicit AllocateBehaviour<BehaviourPassengerCam>() now
+  rem  binds to the DWARF-verbatim class instead of the stale 0x18-byte
+  rem  BrnBehaviourPassengerCam.h slice, so it emits a vtable. Its two declaration-only
+  rem  virtuals (Prepare/SetupTweaker) are in DirectorLinkStubs.cpp.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourPassengerCam.cpp"
   rem ---- EIGHTH PASS (2026-08-01): the camera-family closure set. -----------------------
   rem  Measured against the object list DERIVED FROM THIS BAT, not by scanning
   rem  build\game\obj -- that directory held 43 STALE objects from TUs no longer on the
