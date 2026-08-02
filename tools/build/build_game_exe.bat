@@ -353,6 +353,31 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\ShuntEffect.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnSimpleVehiclePhysics.cpp"
   rem ---- end vehicle-dynamics core ---------------------------------------------------------
+  rem ---- CONTACT-SPY DATA + PROP-MANAGER PERF MONITORS (physics wave 4, 2026-08-02) --------
+  rem  Two of the sub-constructors BrnPhysics::PhysicsModule::Construct @0x825AE308 calls:
+  rem      BrnPhysics::ContactSpy::ContactSpyData::Construct            @0x825AE010
+  rem      BrnPhysics::Props::PropManager::ConstructPreScenePerfMonitors @0x825BAC70
+  rem      BrnPhysics::Props::PropManager::ConstructContactGenerationPerfMonitors @0x825BAC60
+  rem  ContactSpyData::Construct needs its ten owned queues' EventQueue<T,N>::Construct
+  rem  instantiations, so those explicit-instantiation TUs are mounted with it (they were all
+  rem  already written; none of them was in the build).
+  rem
+  rem  ⚠️⚠️ SAME CAVEAT AS THE BLOCK ABOVE: nothing calls any of this yet, so /OPT:REF strips it
+  rem  and it puts ZERO BYTES in the exe. It is mounted so the closure is continuously enforced.
+  echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyData.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_RaceCarContact_300.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_TrafficContact_400.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_PhysicalCarPartContact_150.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_HingedPartContact_50.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_PropContact_100.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_DiscardedContact_20.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_ContactSpyRunData_8.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_ContactSpyRunData_50.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_ContactSpyRunData_64.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_ContactSpyRunData_100.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_RaceCarContact_AddEventSafe.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager.cpp"
+  rem ---- end contact-spy / prop perf-monitor block -----------------------------------------
   echo "%SRC%\GameSource\Resource\SharedIO\BrnAssetIds.cpp"
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestQueue.cpp"
   echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModule.cpp"
