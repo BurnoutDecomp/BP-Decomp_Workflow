@@ -87,6 +87,20 @@ $script:HarnessInputEvents = @{
 $script:HarnessAssertRelease =
     [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Assert_Release")
 
+# Sleep while KEEPING THE SIM ALIVE. Wait-ForLog pulses the assert-release channel every
+# poll, but the bare `Start-Sleep` dwells between shots did not -- so an assert that fired
+# during a dwell froze the game inside DisplayAssertScreen and every following screenshot
+# captured the assert overlay instead of the screen under test. (2026-08-02: the car-select
+# screen composited correctly and three ComplexBar.cpp:67 asserts froze it mid-transition;
+# the shots showed the assert screen, not the bug.) Use this instead of Start-Sleep whenever
+# the game is expected to be running.
+function Settle([int]$Seconds) {
+    for ($t = 0; $t -lt ($Seconds * 5); $t++) {
+        [BootTestNative]::SetEvent($script:HarnessAssertRelease) | Out-Null
+        Start-Sleep -Milliseconds 200
+    }
+}
+
 function Foreground-Window([IntPtr]$hwnd) {
     # CopyFromScreen needs the game to be foregrounded and unobscured. Force foreground
     # (ALT-tap unlock, same as Send-Key) and let DWM refresh before capturing.
@@ -202,19 +216,19 @@ $proc = Start-Process -FilePath $exe -WorkingDirectory (Split-Path $exe) -PassTh
 $VK_END = 0x23; $VK_RETURN = 0x0D; $VK_DOWN = 0x28
 
 # Release the known Construct-time dev assert, then pace on log cues.
-Start-Sleep -Seconds 5
+Settle 5
 Send-Key $proc $VK_END "END (assert release)"
 
 if (Wait-ForLog $proc "\[Movie\] prepared VIDEOS\\EAFranchise\.vp6" 60 "EA intro prepared") {
     Start-Sleep -Milliseconds 500
     Take-Shot $proc "boot_10_ea_video"
-    Start-Sleep -Seconds 1
+    Settle 1
     Take-Shot $proc "boot_10b_ea_video"
 }
 if (Wait-ForLog $proc "\[Movie\] prepared VIDEOS\\Criterion\.vp6" 60 "Criterion intro prepared") {
     Start-Sleep -Milliseconds 500
     Take-Shot $proc "boot_11_criterion_video"
-    Start-Sleep -Seconds 1
+    Settle 1
     Take-Shot $proc "boot_11b_criterion_video"
 }
 # The overlay flow FSM loads during boot (RunFsm{BrnOverlay -> OVERLAY} at the GUIMODULE stage).
@@ -222,13 +236,13 @@ Wait-ForLog $proc "BRNOVERLAY\.BUNDLE' -> loaded" 30 "overlay FSM loaded" | Out-
 if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
     # Give the title time to compose + fade in, then shoot it.
     Wait-ForLog $proc "resources-ready \(567\)" 30 "title composed" | Out-Null
-    Start-Sleep -Seconds 6
+    Settle 6
     Take-Shot $proc "boot_20_title"
 
     Send-Key $proc $VK_RETURN "ENTER (press start)"
     # The menu blip fires when the selection menu transitions in; accept only after it.
     Wait-ForLog $proc "'B5MenuItem' -> splice" 20 "menu transin" | Out-Null
-    Start-Sleep -Seconds 4
+    Settle 4
     Take-Shot $proc "boot_21_menu"
 
     Send-Key $proc $VK_RETURN "ENTER (menu accept)"
@@ -241,27 +255,27 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
         # warning prompt waits for CONTINUE (the console waits for the A press), so the
         # harness must accept it -- capture the prompt first, then send the accept.
         Wait-ForLog $proc "aux: faithful: INSTANTIATED" 30 "profile prompt up" | Out-Null
-        Start-Sleep -Seconds 3   # let ShowMessage resolve the text + glyphs into the prompt
+        Settle 3   # let ShowMessage resolve the text + glyphs into the prompt
         Take-Shot $proc "boot_22_profile"
         Send-Key $proc $VK_RETURN "ENTER (autosave prompt CONTINUE)"
         if (Wait-ForLog $proc "CompleteLoading: OnEnter" 30 "BF_COMPLOAD entered") {
             # The post-title intro montage is 116s; a press skips it (the state's
             # unload-or-stop handler posts StopVideo).
             Wait-ForLog $proc "\[Movie\] prepared VIDEOS\\intro\.vp6" 30 "intro video prepared" | Out-Null
-            Start-Sleep -Seconds 2
+            Settle 2
             Take-Shot $proc "boot_23a_compload_intro"
-            Start-Sleep -Seconds 3
+            Settle 3
             Take-Shot $proc "boot_23_compload_intro"
             Send-Key $proc $VK_RETURN "ENTER (skip intro)"
             # Stage 5 posts BrnScreenFsm@LOADING (SCREEN flow) + BrnFBFsm (HUD flow).
             if (Wait-ForLog $proc "BRNSCREENFSM\.BUNDLE' -> loaded" 60 "SCREEN FSM loaded") {
                 Wait-ForLog $proc "BRNFBFSM\.BUNDLE' -> loaded" 30 "freeburn HUD FSM loaded" | Out-Null
-                Start-Sleep -Seconds 5
+                Settle 5
                 Take-Shot $proc "boot_24_screen_loading"
                 # ScreenLoading waits on the world-load-complete event (137); if the game
                 # side posts it, the FSM moves LOADING -> INGAME. Give it a window, then
                 # drive the intro.
-                Start-Sleep -Seconds 8
+                Settle 8
                 Take-Shot $proc "boot_25_ingame"
 
                 # ---- the DJ-Atomika intro (BrnGui::Intro) --------------------------------
@@ -277,7 +291,7 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
                 #   (mbVoiceOverPlaying swallows input while it plays).
                 if (Wait-ForLog $proc "\[Intro\] state 7 -> 8" 90 "INTRO at PHOTOBOOTH(8)") {
                     Wait-ForLog $proc "\[Intro\] voice-over FINISHED \(state 8\)" 40 "state-8 VO done" | Out-Null
-                    Start-Sleep -Seconds 3
+                    Settle 3
                     Take-Shot $proc "boot_26_intro_photobooth"
                     Send-Key $proc $VK_RETURN "ENTER (intro photo-booth confirm)"
                     if (-not (Wait-ForLog $proc "\[Intro\] state 8 -> " 15 "INTRO advanced")) {
@@ -285,12 +299,12 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
                         Wait-ForLog $proc "\[Intro\] state 8 -> " 15 "INTRO advanced (retry)" | Out-Null
                     }
                     Wait-ForLog $proc "\[Intro\] state 3 -> 4" 60 "INTRO fly-by" | Out-Null
-                    Start-Sleep -Seconds 12
+                    Settle 12
                     Take-Shot $proc "boot_27_post_intro"
                 }
 
                 Send-Key $proc 0x1B "ESC (pause probe)"
-                Start-Sleep -Seconds 3
+                Settle 3
                 Take-Shot $proc "boot_28_pause_probe"
             } else {
                 Take-Shot $proc "boot_24_stuck_handoff"
@@ -302,7 +316,7 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
         Take-Shot $proc "boot_22_stuck_legal"
     }
 }
-Start-Sleep -Seconds 3
+Settle 3
 Take-Shot $proc "boot_30_final"
 if ($LeaveRunning) {
     Write-Host "[boot_test] -LeaveRunning: game stays up (pid $($proc.Id))"
