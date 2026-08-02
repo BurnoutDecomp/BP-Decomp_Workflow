@@ -175,6 +175,15 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\ShadowMap\BrnShadowMap.cpp"
   echo "%SRC%\GameSource\World\BrnPlaceOnTrackManager.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModule.cpp"
+  rem ---- PhysicsSimulationModule (physics wave 6, 2026-08-03) ------------------------------
+  rem  BrnPhysicsModule.h now embeds CgsPhysics::PhysicsSimulationModule BY VALUE at +0x230
+  rem  (the 18544-byte opaque placeholder folded), so BrnPhysicsModule.cpp -- which IS on the
+  rem  live boot path, PhysicsModule::Construct is reached by the WorldModule cascade --
+  rem  instantiates the class and therefore needs its vtable and its constructor. That makes
+  rem  this TU a HARD link dependency, not a closure-only mount: PhysicsSimulationModule::
+  rem  Construct @0x828A1EE8, the class constructor @0x827DF1E0 and RigidBodyData::
+  rem  RigidBodyData @0x827DB728 all live here.
+  echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModule.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsCamera.cpp"
   echo "%SRC%\GameSource\Director\Camera\Camera.cpp"
