@@ -1,0 +1,479 @@
+#  game_data_manifest.toml -- source path pattern  ->  action, for the whole retail
+#  X360 game folder.  Read by tools/assets/build_game_data.py (see that file's module
+#  docstring for the actions, the placeholders, and how a rule is executed).
+#
+#  ORDER MATTERS: the FIRST rule whose `match` accepts a file wins.  A file that
+#  matches nothing falls through to the built-in catch-all and is reported UNHANDLED.
+#
+#  Every rule carries `why` -- the evidence the rule rests on.  The house style in this
+#  repo is that a constant without provenance is a guess; the same applies to a mapping.
+#  When you add a converter, edit THIS FILE, not the orchestrator.
+#
+#  ACTIONS
+#    convert    run `py <tool> <argv...>`; the product must satisfy `verify`
+#    copy       byte-for-byte copy (only legitimate when the file needs NO change)
+#    skip       deliberately not shipped
+#    generate   produce a file that has no 1:1 source (schema.vlt/bin, loading screens)
+#    unhandled  needs conversion, has no converter -- REQUIRES `reason`
+#
+#  PLACEHOLDERS in `argv` / `produces` / `out_name`
+#    {src} {out} {srcdir} {outdir} {name} {stem} {ext} {src_rel} {out_rel}
+#    {tok0} {tok1} ...   underscore-split tokens of {stem}  (VEH_PUSMC01_AT -> tok1=PUSMC01)
+#    {workroot}          the private mirrored repo root this invocation runs in
+#
+#  VERIFY expressions (checked against the produced file; a failure is a FAILURE, and
+#  the half-written output is deleted so a re-run retries it)
+#    bnd2_platform=N   nonempty   min_size=N   magic=<ascii or 0x hex>
+#
+#  ⚠️  A `copy` rule on a file whose first four bytes are `bnd2` with platform 2 is a
+#  manifest BUG -- the orchestrator flags it loudly in --dry-run.  X360 platform-2
+#  containers are inert to the reconstructed BundleLoader, which hard-requires
+#  platform 4 (tools/assets/bundles/convert_x360_bundle.py module docstring).
+
+schema_version = 1
+
+
+# ---------------------------------------------------------------------------------
+# 0.  Things that must never reach the game folder
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id     = "skip-x360-executables"
+match  = ["*.XEX", "*.XDB"]
+action = "skip"
+why    = """The Xbox 360 executables and their debug databases. The PC build ships
+Burnout_PC.exe instead (tools/build/build_game_exe.bat). BURNOUT_X360_ARTIST.XEX is
+still USED by this tool -- see the loadingscreen generate rule -- but as an input, not
+as a shipped file."""
+
+[[rule]]
+id     = "skip-console-caches"
+match  = ["files.bmcache", "*/files.bmcache", "XBOXMEM.MEM", "$SYSTEMUPDATE/*"]
+action = "skip"
+why    = """`files.bmcache` is the console bundle-manager's on-disc file cache,
+XBOXMEM.MEM is a memory dump, and $SYSTEMUPDATE is the Xbox 360 title update payload.
+None is read by the reconstructed loader."""
+
+[[rule]]
+id     = "skip-vehicle-readme"
+match  = ["VEHICLES/do not share originals.txt"]
+action = "skip"
+why    = "A zero-byte marker file left in the rip. Not game data."
+
+
+# ---------------------------------------------------------------------------------
+# 1.  Generated -- no 1:1 source file exists
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id       = "generate-attribsys-schema"
+action   = "generate"
+tool     = "bundles/attribsys_schema_port.py"
+argv     = ["{repo}/build/game_x360_world/SCHEMA_VLT_BE.bin",
+            "{repo}/build/game_x360_world/SCHEMA_BIN_BE.bin",
+            "{outdir}"]
+outputs  = ["schema.vlt", "schema.bin"]
+inputs   = ["{repo}/build/game_x360_world/SCHEMA_VLT_BE.bin",
+            "{repo}/build/game_x360_world/SCHEMA_BIN_BE.bin"]
+verify   = ["nonempty"]
+why      = """The AttribSys schema is NOT shipped as a resource -- the X360 exe bakes the
+serialised pair in .rdata and registers it in GameDataModule::PrepareAttribSysSchemaResource
+@0x82673258 (vlt @0x82CD3D88 size 5664, bin @0x82CD53B0 size 20352).  The big-endian
+payloads were chiselled out with headless IDA into build/game_x360_world/SCHEMA_*_BE.bin;
+attribsys_schema_port.py ports them to the loose LE schema.vlt/schema.bin the runtime opens.
+See the module docstring of attribsys_schema_port.py."""
+
+[[rule]]
+id       = "generate-loadingscreen"
+action   = "generate"
+tool     = "textures/extract_xex.py"
+argv     = []
+cwd      = "{workroot}"
+stage_in = [["BURNOUT_X360_ARTIST.XEX", "references/artist.xex"]]
+produces_dir = "build/loadingscreen"
+out_subdir   = "LOADINGSCREEN"
+verify   = ["nonempty"]
+why      = """The four boot loading-screen textures live in the ARTIST XEX's .rdata, not in
+any bundle (addresses/sizes from LoadingScreenRenderer::Construct @0x823CE208).
+tools/assets/textures/extract_xex.py untiles + DXT5-decodes them into the A8R8G8B8 .dds
+the PC loader's LoadFromDDS reads.  It has hardcoded relative paths
+(`references/artist.xex` -> `build/loadingscreen`) and no CLI, so the orchestrator stages
+the XEX into the worker root under that name and runs it with cwd=<workroot>."""
+
+
+# ---------------------------------------------------------------------------------
+# 2.  World / streaming data
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id      = "world-units"
+match   = ["TRK_UNIT*_GR.BNDL", "GLOBALBACKDROPS.BNDL", "WORLDTEX.BIN", "GLOBALPROPS.BIN"]
+action  = "convert"
+tool    = "bundles/convert_world_bundle.py"
+argv    = ["{src}", "{out}"]
+verify  = ["bnd2_platform=4"]
+isolate = "volatility"
+why     = """convert_world_bundle.py's docstring names exactly this set ("TRK_UNIT<N>_GR.BNDL,
+GLOBALBACKDROPS, WORLDTEX..."), and batch_convert_world.py's own file list is
+TRK_UNIT*_GR.BNDL + GLOBALBACKDROPS.BNDL + GLOBALPROPS.BIN.  It shells out to Volatility,
+which stores imported resources in an exe-adjacent data dir, so parallel workers must not
+share one -- hence isolate="volatility" (the same workaround batch_convert_world._worker_init
+applies)."""
+
+[[rule]]
+id     = "world-support"
+match  = ["PVS.BNDL", "WORLDCOL.BIN"]
+action = "convert"
+tool   = "bundles/world_support_transcode.py"
+argv   = ["--bundle", "{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """world_support_transcode.py docstring: PVS.BNDL = ZoneList (type 0xB000),
+WORLDCOL.BIN = PolygonSoupList (0x43) + IdList (0x25).  All three have committed PC
+consumers with real widened pointer members, so this is a widening rebuild, not a flip."""
+
+[[rule]]
+id     = "lane-data"
+match  = ["B5TRAFFIC.BNDL", "AI.DAT", "TRIGGERS.DAT"]
+action = "convert"
+tool   = "bundles/lane_transcode.py"
+argv   = ["--bundle", "{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """lane_transcode.py docstring names these three by name and by resource type:
+BrnTraffic::TrafficData (0x10002), BrnAI::AISectionsData (0x10001),
+BrnTrigger::TriggerData (0x10003)."""
+
+[[rule]]
+id     = "attribsys-vaults"
+match  = ["WORLDVAULT.BIN", "SURFACELIST.BIN", "CAMERAS.BUNDLE", "DISTRICTS.DAT"]
+action = "convert"
+tool   = "bundles/attribsys_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """attribsys_transcode.py docstring names all four with their resource ids
+(WORLDVAULT rid 7CD1FBEE, SURFACELIST rid 43096C31, CAMERAS.BUNDLE rid 28FE4576 the
+CameraVault, DISTRICTS.DAT rid 68E318DC WorldPainter2D).  CAMERAS.BUNDLE additionally
+delegates its ICETakeDictionary to the ice_transcode rebuilder."""
+
+
+# ---------------------------------------------------------------------------------
+# 3.  Textures / GUI banks / HUD
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id     = "texture-bundles"
+match  = ["GUITEXTURES.BIN", "SMALL8X8WHITESQUARE.BUNDLE",
+          "GLOBALTEXTUREDICTIONARY.BIN", "MASSIVETEXTUREDICTIONARY.BIN"]
+action = "convert"
+tool   = "bundles/convert_texture_bundle.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """convert_texture_bundle.py handles "a stock X360 texture-only bundle
+(GUITEXTURES.BIN, SMALL8X8WHITESQUARE.BUNDLE, ...)".  The two texture DICTIONARIES are
+listed here because build/game holds both at platform 4 at ~1.7x the source size, the
+signature of the same Volatility pixel port + x64 header transcode; if a dictionary turns
+out to carry a non-Texture resource the verify step will fail it rather than let it pass."""
+
+[[rule]]
+id     = "gui-banks"
+match  = ["POPUPS.PUP", "HUDMESSAGES.HM", "HUDMESSAGESEQUENCES.HMSC"]
+action = "convert"
+tool   = "bundles/convert_gui_banks.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """convert_gui_banks.py docstring names exactly these three (GuiPopup 0x1F,
+HudMessage 0x2C, HudMessageSequence 0x2E) with their committed PC readers."""
+
+[[rule]]
+id     = "flapt-hud"
+match  = ["FLAPTHUD.BUNDLE", "FLAPTHUDSD.BUNDLE"]
+action = "convert"
+tool   = "bundles/convert_flapt_bundle.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """convert_flapt_bundle.py docstring: "a stock X360 Flapt HUD bundle
+(FLAPTHUD.BUNDLE / FLAPTHUDSD.BUNDLE: 33 Texture resources + 1 FlaptFile 0x10020)"."""
+
+[[rule]]
+id     = "shaders"
+match  = ["SHADERS.BNDL"]
+action = "convert"
+tool   = "shaders/convert_shaders_bundle.py"
+argv    = ["convert", "{src}", "{out}", "--fallback"]
+verify  = ["bnd2_platform=4"]
+isolate = "volatility"
+why     = """convert_shaders_bundle.py is the only tool for SHADERS.BNDL and takes an
+explicit `convert <in> <out>` subcommand.  Default --mode d3d9 recompiles every
+ShaderProgramBuffer from the TUB HLSL with fxc.
+⚠️ `--fallback` IS A DELIBERATE DEGRADATION and is on because without it the whole bundle
+is unproducible: MEASURED 2026-08-02, a strict run hard-fails with `no TUB HLSL source for
+2 technique(s)` (the Vehicle_* set), so tools/assets/shaders/fallback_world.fx is
+substituted for those two techniques.  Everything else is really recompiled.
+Prerequisites this rule does NOT provide: fxc.exe (env PC_FXC or a Win10/11 SDK) and the
+TUB HLSL tree at D:\\Reverse\\nushaders\\Reference\\TUB\\... -- a separate repo.  It also
+uses the Volatility texture flow, hence isolate."""
+
+
+# ---------------------------------------------------------------------------------
+# 4.  Vehicles / wheels / engines
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id       = "vehicle-graphics"
+match    = ["VEHICLES/VEH_*_GR.BIN"]
+action   = "convert"
+tool     = "bundles/vehicle_transcode.py"
+argv     = ["--car-gr", "{tok1}"]
+produces = "build/game/VEHICLES/{name}"
+verify   = ["bnd2_platform=4"]
+isolate  = "volatility"
+why      = """MEASURED, not assumed: the bare 2-positional `<in> <out>` form REFUSES a
+graphics bundle -- `no porter for Material x17, MaterialState x4, MaterialTechnique x66,
+Model x4, Renderable x8, Texture x10, TextureState x21, VertexDescriptor x4. Refusing to
+emit a half-converted bundle` (run against VEH_PSPCHRO_GR.BIN, 2026-08-02).  Those are
+WORLD types.  `--car-gr <CODE>` is the real path: _port_graphics_bundle() registers the
+GraphicsSpec/WheelGraphicsSpec porters into convert_world_bundle.FLIP_PORTABLE and reuses
+the world pipeline, then refuses if anything is left big-endian.  It writes to
+<ROOT>/build/game/VEHICLES with no override, which under the mirrored worker root is
+{workroot}/build/game/VEHICLES -- collected via `produces`.  Reuses convert_world_bundle,
+hence isolate="volatility"."""
+
+[[rule]]
+id       = "vehicle-attrib-deform"
+match    = ["VEHICLES/VEH_*_AT.BIN"]
+action   = "convert"
+tool     = "bundles/vehicledeform_transcode.py"
+argv     = ["--stage", "{tok1}"]
+produces = "build/game/VEHICLES/{name}"
+verify   = ["bnd2_platform=4"]
+why      = """VEH_<code>_AT.BIN carries TWO resource types -- 28 AttribSysVault (the
+physics/handling tune) and 65564 StreamedDeformationSpec.  vehicleattrib_transcode.py
+deliberately REFUSES to write a bundle (half-converted-bundle failure mode);
+vehicledeform_transcode.py ports the second half and owns the write path, but only
+through `--stage <CARCODE>`, which writes to VEH_DST = <ROOT>/build/game/VEHICLES with no
+override.  Because the orchestrator runs every tool from a MIRRORED worker root, that
+<ROOT> is the worker root -- so the file lands at {workroot}/build/game/VEHICLES/<name>
+and is collected from there via `produces`.  The real build/game is unreachable.
+⚠️ vehicledeform_transcode prints a FIXUP_WIDTH_WARNING: format-level result only; the
+b5-decomp FixUp still reads these slots at the wrong width."""
+
+[[rule]]
+id     = "vehicle-textures"
+match  = ["VEHICLES/VEHICLETEX.BIN"]
+action = "convert"
+tool   = "bundles/vehicletex_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """vehicletex_transcode.py exists specifically for VEHICLETEX.BIN (49 type-0
+Texture resources) and documents a bare `<in> <out>` mode in its Usage block."""
+
+[[rule]]
+id     = "vehicle-wheel-lists"
+match  = ["VEHICLES/VEHICLELIST.BUNDLE", "VEHICLES/VEHICLELIST_V1.BUNDLE",
+          "WHEELS/WHEELLIST.BUNDLE"]
+action = "convert"
+tool   = "bundles/vehicle_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """vehicle_transcode.py --lists is the documented path for VEHICLELIST + WHEELLIST
+but writes into build/game; the same convert() is reachable through the 2-positional form,
+which is what is used here."""
+
+[[rule]]
+id       = "wheel-graphics"
+match    = ["WHEELS/WHE_*_GR.BNDL"]
+action   = "convert"
+tool     = "bundles/vehicle_transcode.py"
+argv     = ["--wheel-gr", "{tok1}"]
+produces = "build/game/WHEELS/{name}"
+verify   = ["bnd2_platform=4"]
+isolate  = "volatility"
+why      = """Same _port_graphics_bundle path as the car graphics, and the bare 2-positional
+form fails the same way (MEASURED against WHE_52120650_GR.BNDL).
+⚠️ KNOWN LIMITATION, not fixed here: `--wheel-gr` takes the code verbatim only when it is
+all digits, otherwise it runs wheel_code_from_name(), which demands four numeric fields.
+The two alphanumeric wheels -- WHE_TW01800F_GR.BNDL and WHE_TW04800F_GR.BNDL -- therefore
+fail.  136 of 138 convert; the 2 are reported as FAILED rather than papered over."""
+
+[[rule]]
+id     = "engines"
+match  = ["ENGINES/*.BUNDLE"]
+action = "convert"
+tool   = "bundles/engine_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """engine_transcode.py ports the 149 hash-named per-car engine/exhaust audio
+bundles.  Its main() falls through to `convert(argv[1], argv[2])` for a bare 2-positional
+call; --all writes into build/game and is never used.  NB --all also drops a `.x360`
+sidecar beside each output (keep_x360_copy); the per-file path does not, and the
+orchestrator sweeps any *.x360 out of the game folder regardless."""
+
+
+# ---------------------------------------------------------------------------------
+# 5.  Environment / misc single bundles
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id     = "environment-settings"
+match  = ["ENVIRONMENTSETTINGS/*.BUNDLE", "ENVIRONMENTSETTINGS/*/*.BUNDLE"]
+action = "convert"
+tool   = "bundles/env_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """env_transcode.py exists because the generic container convert leaves the env
+keyframes big-endian and inert ("that is the data half of 'the sky is black'").  It has a
+2-positional `<in> <out>` mode; --all rewrites build/game/ENVIRONMENTSETTINGS in place and
+leaves .x360 backups, so it is never used."""
+
+[[rule]]
+id     = "environment-lighting-text"
+match  = ["ENVIRONMENTSETTINGS/*.DAT"]
+action = "copy"
+why    = """JUNKYARDLIGHTING.DAT is a plain ASCII file (first bytes `# Ju`), not a bnd2
+container -- nothing to endian-flip.  build/game holds it byte-identical (738 bytes)."""
+
+[[rule]]
+id     = "video-list"
+match  = ["VIDEOS/VIDEOLIST.BUNDLE"]
+action = "convert"
+tool   = "bundles/convert_x360_bundle.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """A 640-byte container-only bundle; build/game holds it at platform 4 / 1024
+bytes, the signature of the generic YAP decompress -> meta platform 4 -> repack path with
+no payload porter needed."""
+
+
+# ---------------------------------------------------------------------------------
+# 6.  Verbatim -- genuinely needs no conversion
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id     = "videos"
+match  = ["VIDEOS/*.VP6"]
+action = "copy"
+why    = """The movie player decodes the ORIGINAL X360 3-strip VP6 in-code
+(CgsMoviePlayer 3-strip recombine, commit 6026e55a); tools/assets/videos/
+transcode_x360_video.ps1 was DEPRECATED on 2026-07-13 with the note "put the original
+.vp6 in build/game/VIDEOS and the game reads them faithfully".  build/game's five .VP6
+are byte-size-identical to the retail originals."""
+
+[[rule]]
+id     = "videos-mp4-duplicates"
+match  = ["VIDEOS/*.mp4"]
+action = "skip"
+why    = """The retail folder ships both `INTRO.VP6` and `INTRO.mp4` for each movie.  The
+loader requests the .VP6 names (VIDEOLIST) and build/game contains only the five .VP6 --
+no .mp4.  541.9 MB of duplicate media; skipped rather than copied."""
+
+[[rule]]
+id     = "sound-streams"
+match  = ["SOUND/STREAMS/*.SNS"]
+action = "copy"
+why    = """.SNS are raw XMA stream containers, decoded in-engine
+(tools/audio/sns_xma_decode.cpp) -- no container to re-platform.  VERIFIED: the .SNS in
+build/game/SOUND/STREAMS are byte-size-identical to the retail originals (spot-checked
+00RACE_END_RANK_01/02/03)."""
+
+[[rule]]
+id     = "map-files"
+match  = ["MAP_*.BIN"]
+action = "copy"
+why    = """MAP_ARTIST/EXTERNAL/INTERNAL.BIN are CgsMapFile symbol maps, not bnd2
+containers (magic 00 00 7E 99).  build/game holds all three byte-identical, with their
+original 2008 timestamps -- never touched by any wave."""
+
+[[rule]]
+id     = "memcard-image"
+match  = ["MEMCARD/*.PNG"]
+action = "copy"
+why    = "A plain PNG save icon. No console-specific layout."
+
+
+# ---------------------------------------------------------------------------------
+# 7.  UNHANDLED -- needs conversion, has no converter.  THE POINT OF THIS FILE.
+#     Every entry states WHY, so the next agent can attack the right thing.
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id     = "unhandled-guiapt"
+match  = ["GUIAPT/*.BUNDLE", "GUIAPTSD/*.BUNDLE"]
+action = "unhandled"
+reason = """No big-endian -> little-endian AptData (type 0x1E) porter exists in this repo.
+apt_widen_4to8.py widens 1:7:4 -> 1:7:8 but asserts `version == 2 and platform == 4`
+(apt_widen_4to8.py:735) and reads every field little-endian, so it cannot consume the
+platform-2 big-endian console set.  convert_x360_bundle.py's docstring is explicit that
+AptData "has no porter yet" and is "passed through verbatim ... X360 big-endian, so they
+are inert".  The platform-4 `Apt Data:1:7:8` bundles in build/game/GUIAPT came from
+JeBobs' external GUIAPT64 emitter, then apt8_repair.py.  584 files / 99.7 MB.
+TO CLOSE THIS: either a BE->LE 1:7:4 transcoder feeding apt_widen_4to8.py, or keep
+sourcing the emitter output and run apt8_repair.py on FRESH copies (the retired
+apt8_fix_df2_argtab.py pass is destructive and its output cannot be re-repaired)."""
+
+[[rule]]
+id     = "unhandled-fsm"
+match  = ["FSM/*.DAT"]
+action = "unhandled"
+out_name = "{stem}.BUNDLE"
+reason = """No FSM bundle converter exists.  build/game/FSM is an NTFS junction into the
+curated Google Drive ("Burnout Paradise Decomp Files") and holds platform-4 `.BUNDLE`
+files -- note the EXTENSION CHANGES, e.g. BRNSCREENFSM.DAT (6,656 B, p2) ->
+BRNSCREENFSM.BUNDLE (69,760 B, p4), a ~10x widening of the Lua-backed state machine.
+Externally produced; not reproducible from the retail folder with anything in this repo.
+`out_name` records the rename so that a future converter only needs the rule flipped to
+`convert`."""
+
+[[rule]]
+id     = "unhandled-language"
+match  = ["LANGUAGE/*.BUNDLE", "LANGUAGE/FONTS/*.FONT", "LANGUAGE/FONTSSD/*.FONT"]
+action = "unhandled"
+reason = """No bundle-level driver.  tools/assets/fonts/convert_x360.py converts a single
+LOOSE Font resource (type 0x21) already extracted from a bundle, prints an old->new import
+offset map for the operator to hand-apply, and explicitly puts the atlas-page Textures out
+of scope -- it is a helper, not a bundle converter.  The 7 LANGUAGE/*.BUNDLE string banks
+have no tool at all.  build/game/LANGUAGE is another Drive junction holding platform-4
+artefacts (0001.BUNDLE 80,512 p2 -> 238,976 p4; DEFAULT.FONT 29,696 p2 -> 86,144 p4)."""
+
+[[rule]]
+id     = "unhandled-sound-bundles"
+match  = ["SOUND/*.BIN", "SOUND/*.BUNDLE", "SOUND/*/*.BUNDLE", "SOUND/*/*.DAT"]
+action = "unhandled"
+reason = """No sound-bundle porter.  These are bnd2 platform-2 containers (AEMS, SPLICER,
+STREAMS index bundles, WORLD, BURNOUTGLOBALDATA.BIN, REGIONS).  VERIFIED that even the
+Drive copy is unconverted: build/game/SOUND/BURNOUTGLOBALDATA.BIN is still platform 2.
+engine_transcode.py ports the *engine* audio vault/wave types (GenericRwacWaveContent,
+GinsuWaveContent, Splicer, LoopModel, Registry) inside ENGINES/*.BUNDLE, so it is the
+obvious starting point for these -- but its type coverage has not been checked against
+these containers, so wiring it in blind would be a guess."""
+
+[[rule]]
+id     = "unhandled-postfx"
+match  = ["POSTFX/*"]
+action = "unhandled"
+reason = """COLOURCUBEDICTIONARY.BIN, PFXHOOKS.PFX and POSTFXVAULT.BIN are all bnd2
+platform 2 and have no rule.  ⚠️ They are present in build/game at platform 2, byte-
+identical to retail -- a wave copied them verbatim, so they are INERT to the loader.
+POSTFXVAULT.BIN is an AttribSysVault by name and may well fall to attribsys_transcode.py;
+COLOURCUBEDICTIONARY.BIN is probably a texture dictionary.  Neither has been checked, so
+neither is asserted here."""
+
+[[rule]]
+id     = "unhandled-props"
+match  = ["PROPS/*.BUNDLE", "PARTICLES.BUNDLE"]
+action = "unhandled"
+reason = """PROPPHYSICS.BUNDLE and PARTICLES.BUNDLE are bnd2 platform 2 with no rule, and
+are present in build/game at platform 2 byte-identical to retail (inert).
+convert_world_bundle.py lists Prop* among the types it still PASSES THROUGH pending the
+engine-side widening reconciliation, so pointing this at that tool would produce a
+platform-4 container with big-endian payloads -- a worse failure than none."""
+
+[[rule]]
+id     = "unhandled-misc-root-bundles"
+match  = ["ONLINECHALLENGES.BNDL", "PLAYBACKREGISTRY.BUNDLE", "RWACFEATUREREGISTRY.BUNDLE",
+          "MASSIVETABLE.BIN", "PROFILEUPG.BIN", "PROGRESSION.DAT", "BTTPROGRESSION.DAT",
+          "STREETDATA.DAT"]
+action = "unhandled"
+reason = """Eight small loose bnd2 platform-2 containers with no converter.  ⚠️ ALL EIGHT
+are in build/game at platform 2, byte-identical to the retail originals -- copied verbatim
+by some wave and therefore inert to a loader that hard-requires platform 4.  This is the
+'silently copied and counted as success' failure mode; they are classified UNHANDLED here
+so they show up on the ledger instead of inflating a success count."""
