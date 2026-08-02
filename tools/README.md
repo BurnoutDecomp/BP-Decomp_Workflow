@@ -10,6 +10,9 @@ root unless a section says otherwise.
 | [`work/`](work/) | Ledger, TU claiming, dossiers, reconstruction helpers, parity, compile verification, review packets, goals, and maintenance. The repo-root `work.cmd` is the normal entry point. |
 | [`ida/`](ida/) | IDAPython exporters, the parallel export driver, and DecFIGS source-attribution post-processing. |
 | [`build/`](build/) | Game, FFmpeg, and standalone-tool build drivers plus linker-map conversion. |
+| [`assets/build_game_data.py`](assets/build_game_data.py) | **The game-data stager.** Turns a stock X360 game folder into a launchable PC data folder, driven by [`assets/game_data_manifest.toml`](assets/game_data_manifest.toml). See "Building the game data folder" below. |
+| [`assets/bundles/`](assets/bundles/) | Per-format bundle converters (world, vehicles, engines, textures, GUI banks, AttribSys, lanes, Apt). Driven by the stager; each is also usable standalone. |
+| [`assets/shaders/`](assets/shaders/) | `SHADERS.BNDL` X360 -> PC conversion and per-resource shader transcoders. |
 | [`assets/memory_map/`](assets/memory_map/) | Extract, export, and generate the X360 memory-map data used by the PC build. |
 | [`assets/textures/`](assets/textures/) | Loading-screen texture extraction and conversion experiments. |
 | [`assets/fonts/`](assets/fonts/) | X360 font conversion, vector-font carving, and layout inspection. |
@@ -63,6 +66,55 @@ pwsh tools/build_tools.ps1
 The implementations are under `tools/build/`. Build products go under
 `build/game/` and `build/tools/`; generated FFmpeg binaries go under
 `b5-decomp/vendor/ffmpeg-build/`.
+
+## Building the game data folder
+
+`assets/build_game_data.py` is the one entry point that turns a **stock Xbox 360
+Burnout Paradise folder** into a complete, launchable data folder for the x64 PC
+build. It is manifest-driven: all `source pattern -> action` policy lives in
+[`assets/game_data_manifest.toml`](assets/game_data_manifest.toml), so **adding a
+converter is a manifest edit, not a code change**.
+
+```powershell
+# 0. build the executable first (build_game_data.py never builds anything)
+tools\build\build_game_exe.bat
+
+# 1. plan only - writes nothing, prints the UNHANDLED inventory
+py tools\assets\build_game_data.py --src "D:\...\Burnout_tcartwright" `
+       --out D:\BurnoutPC --dry-run
+
+# 2. convert for real
+py tools\assets\build_game_data.py --src "D:\...\Burnout_tcartwright" `
+       --out D:\BurnoutPC --jobs 6
+
+# 3. fill what this repo cannot yet produce, and deploy the runtime
+py tools\assets\build_game_data.py --src "D:\...\Burnout_tcartwright" `
+       --out D:\BurnoutPC --jobs 6 --borrow-dir build\game --with-exe
+
+# 4. launch  D:\BurnoutPC\Burnout_PC.exe
+```
+
+The report lands in `<out>\.build_game_data\report.txt` (plus `report.json`).
+Re-runs are idempotent: a state sidecar keyed on source size/mtime, rule id and
+converter mtime means adding one converter and re-running costs one converter's
+work, not 3.7 GB.
+
+Two things worth knowing before you run it:
+
+* **`--out` is fussy on purpose.** It refuses a destination inside `build/game`
+  (another agent's live run directory), inside `b5-decomp`, inside `tools/`, or
+  inside `--src`, and refuses C: without `--allow-c-drive`.
+* **UNHANDLED is the point.** A source file that needs conversion and has no
+  converter is reported, not quietly copied verbatim - the failure mode that left
+  eight platform-2 containers sitting inert in `build/game`. Pass
+  `--copy-unhandled` or `--borrow-dir` if you want the folder filled anyway; both
+  keep the honest classification in the report.
+
+Every converter runs from a **mirrored worker root** (`tools/assets/**` plus
+`build/tools/{yap,volatility}` copied into a scratch tree). Each tool computes its
+own `ROOT` from `__file__`, so the several batch modes that hardcode
+`ROOT/build/game` as their destination write into the scratch tree instead, and
+Volatility's exe-adjacent resource store is per worker rather than shared.
 
 ## Asset pipelines
 
