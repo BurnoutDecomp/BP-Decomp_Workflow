@@ -1610,6 +1610,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle_Components.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle_Input.cpp"
+  rem  CarSelectLivery -- the CS_LIVERY screen, RECONSTRUCTED 2026-08-02 (it was a
+  rem  three-method shell in BrnScreenStatesLinkStubs). Three partfiles: statics+FSM /
+  rem  the screen build / input+events. This is the ACCEPT PATH of the Junkyard handover.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_Components.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_Input.cpp"
   echo "%SRC%\GameSource\Gui\Components\BrnCarSelectOnlinePlayerListItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnManufacturerIcon.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnPlayerStatsBar.cpp"
@@ -1618,6 +1624,20 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarSelectOnlineCountdown.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarSelectOnlinePlayerList.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnComplexBar.cpp"
+  rem ---- menu-toggle / colour-picker component cluster (2026-08-02, CarSelectLivery wave).
+  rem      BrnGui::CarSelectLivery embeds a MenuToggleGroupVarSize<2> and a ColourMenuToggle
+  rem      BY VALUE, so both -- and the ColourSelection / ColourSelectionItem / ColourField
+  rem      chain the toggle owns -- bind here. ⚠️ All six TUs were previously unmounted AND
+  rem      dispatched their sub-components through raw `mppVTable[slot]` / `*(void***)storage`
+  rem      reads on modelled heads that nothing ever initialises; every one of those would
+  rem      have jumped through an uninitialised pointer on the first call. They are by-name
+  rem      calls now (see the banners in BrnMenuToggleGroup.cpp / BrnColourMenuToggle.cpp).
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnMenuToggle.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnMenuToggleGroup.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnColourMenuToggle.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnColourSelection.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnColourSelectionItem.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnColourField.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiWorldDataController.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenLoading.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavOptions.cpp"

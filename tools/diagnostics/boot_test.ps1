@@ -326,6 +326,27 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
                     Take-Shot $proc "boot_29_carselect_accepted"
                     Settle 8
                     Take-Shot $proc "boot_29b_carselect_accepted"
+
+                    # ---- the LIVERY screen (BrnGui::CarSelectLivery, FSM 34 CS_LIVERY) ----
+                    # The last screen before the handover. It announces itself with
+                    # CarSelectLivery::OnEnter's own gpDebugPrint trace; the second accept
+                    # press runs HandleControllerInput case 0x31 -> ExitCarSelection, which
+                    # posts the {4,1} activate record and sends "ACCEPT" -- the FSM edge
+                    # 34 CS_LIVERY -> 4 INGAME. ⓘ Same PC action-45 alias as the carousel.
+                    if (Wait-ForLog $proc "RG :: CSL : Entering Car Select" 40 "LIVERY screen entered") {
+                        Settle 10
+                        Take-Shot $proc "boot_31_livery_screen"
+
+                        Send-Key $proc $VK_RETURN "ENTER (livery CONTINUE)"
+                        if (-not (Wait-ForLog $proc 'RG :: CSM : SendStateEvent\( "ACCEPT" \) 2' 15 "LIVERY accepted")) {
+                            Send-Key $proc $VK_RETURN "ENTER (livery CONTINUE retry)"
+                            Wait-ForLog $proc 'RG :: CSM : SendStateEvent\( "ACCEPT" \) 2' 15 "LIVERY accepted (retry)" | Out-Null
+                        }
+                        Settle 10
+                        Take-Shot $proc "boot_32_livery_accepted"
+                        Settle 10
+                        Take-Shot $proc "boot_33_ingame"
+                    }
                 }
             } else {
                 Take-Shot $proc "boot_24_stuck_handoff"
