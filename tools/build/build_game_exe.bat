@@ -554,6 +554,34 @@ rem ---- build the cl response file ----
   rem  No faithful body could ever have defined the symbol that call site asked for.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManagerIO.cpp"
+  rem  ⭐⭐⭐ 2026-08-03 (task #116) -- UN-STUBBING BrnPhysics::PhysicsModule::Construct @0x825AE308.
+  rem  That function had been a LIVE EMPTY STUB in WorldLinkStubs.cpp since 2026-07-26: a quiet
+  rem  no-op reached every boot by the WorldModule::Construct cascade, so NOTHING in the physics
+  rem  module was ever constructed -- every physics Construct this campaign landed hung off it.
+  rem  Its X360 xrefs_from is a CLOSED set of ten callees, ALL of which already had bodies; only
+  rem  three TUs were unmounted. The four lines below are the whole cost.
+  rem
+  rem  ⚠️ THE PREVIOUS PLAN ("mount BrnVehicleManager.cpp, close its 14 unresolved externals") WAS
+  rem  NOT THE STEP. VehicleManager::Construct @0x8263B7C8 calls only SIX functions, five of them
+  rem  already mounted; the 14 belong to the REST of BrnVehicleManager.cpp (HandleRaceCarRaceCar-
+  rem  Contact / ApplySlam / ApplyShunt / SetRaceCarCrashing). Split-TU instead -- the same
+  rem  precedent as RaceCarPhysics_Construct.cpp / TrafficPhysics_Construct.cpp.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Construct.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\StuntOffences\BrnStuntOffencesManager_Construct.cpp"
+  rem  The deformation leg of PhysicsModule::Construct. Each of these is the SPLIT-OUT Construct of a
+  rem  TU that cannot be mounted whole; every count below is a MEASURED trial link, not an estimate:
+  rem     BrnDeformationManager.cpp        25 unresolved (Prepare/Release/Destruct/OutputData/Process*)
+  rem     BrnDeformationDebugComponent.cpp 53 unresolved (25 OnActivate, 12 RenderWorld, ...)
+  rem     BrnPhysicalBodyPart.cpp          16 unresolved (TestJointForBreaking/RemoveFromScene/...)
+  rem     BrnPhysicalBodyPartPool.cpp       9 unresolved (CreatePart/UpdateRWBodies/UpdateJoinedParts)
+  rem  ⭐ Across all four, exactly ONE of those 103 was referenced from a Construct:
+  rem  ExternalPhysicsBody::SetMass, now bodied in ExternalPhysicsBody.cpp (already mounted).
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_Construct.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationConstructShims.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationDebugComponent_Construct.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Construct.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPart_Construct.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationInputInterface.cpp"
   rem  ⛔ BrnVehicleManager.cpp IS STILL NOT MOUNTED. 2026-08-03 (task #110) RE-MEASURED the whole
   rem  closure from a fresh link rather than trusting the previous wave's note, and the numbers here
   rem  REPLACE the "15 unresolved externals" recorded before. Three separate builds:
