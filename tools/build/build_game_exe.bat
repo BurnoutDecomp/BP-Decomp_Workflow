@@ -266,6 +266,14 @@ rem ---- build the cl response file ----
   echo "%SRC%\SharedClasses\DataLists\VehicleListResourceType.cpp"
   echo "%SRC%\SharedClasses\DataLists\WheelList.cpp"
   echo "%SRC%\SharedClasses\DataLists\WheelListResourceType.cpp"
+  rem  BrnWheelGraphicsSpecResourceType (65546) is the wheel twin of the vehicle spec above,
+  rem  mounted by the LoadWheel wave (2026-08-03). Its body was reconstructed long ago and
+  rem  simply never linked. It is LOAD-BEARING, not cosmetic: BundleLoader::LoadBundle gates
+  rem  FixUp *and* ResolveImportsForEntry *and* PostFixUp on `mpResourceType != 0`, and the
+  rem  shipped WHEELS/WHE_51916650_GR.BNDL's single 0x1000A resource carries TWO imports
+  rem  (+0x04 / +0x08) that both point at type-42 CgsGraphics::Model resources in the same
+  rem  bundle -- +0x04 is the wheel model RenderRaceCar's wheel block reads.
+  echo "%SRC%\SharedClasses\World\BrnWheelGraphicsSpecResourceType.cpp"
   rem  ---- the player-car colour palette (colour-picker wave, 2026-08-02) -------------------
   rem  VEHICLELIST.BUNDLE's SECOND resource is a PlayerCarColours payload, type 0x1001E
   rem  (65566). With no registered handler the pool logged "[bundle] UNREGISTERED resource
