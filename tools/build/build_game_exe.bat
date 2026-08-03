@@ -175,6 +175,14 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\ShadowMap\BrnShadowMap.cpp"
   echo "%SRC%\GameSource\World\BrnPlaceOnTrackManager.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModule.cpp"
+  rem ---- PhysicsModule LAYOUT GATE (task #123, 2026-08-03) --------------------------------
+  rem  MUST STAY MOUNTED. BrnPhysicsModule.h was re-seated from an opaque 26KB-short tail into
+  rem  seven real typed sub-objects + the DWARF state/perf-mon block; this TU is the only place
+  rem  the console arithmetic behind that is checked. It emits NOTHING at link time (a single
+  rem  never-called static _AssertLayout, discarded by /OPT:REF) -- but the static_asserts only
+  rem  run if it is COMPILED. BrnVehicleManager.h's _AssertLayout sat in an UNMOUNTED TU for ten
+  rem  waves and was therefore a comment, not a gate; do not repeat that here.
+  echo "%SRC%\GameSource\Physics\BrnPhysicsModule_layout_check.cpp"
   rem ---- PhysicsSimulationModule (physics wave 6, 2026-08-03) ------------------------------
   rem  BrnPhysicsModule.h now embeds CgsPhysics::PhysicsSimulationModule BY VALUE at +0x230
   rem  (the 18544-byte opaque placeholder folded), so BrnPhysicsModule.cpp -- which IS on the
