@@ -12312,13 +12312,64 @@
   "BrnGui::ButtonIconComponent::SetButton": {
    "status": "reviewed"
   },
+  "BrnGui::CarSelectLivery::AppendAptComponents": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::Construct": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::GetResourcesToLoad": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::HandleCarInfoResponseEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::HandleControllerInput": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::HandleLobbyPlayerList": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::HandlePlayerCarColourResponseEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::HandlePlayerInfoResponse": {
+   "status": "reviewed"
+  },
   "BrnGui::CarSelectLivery::HandleUnlockedLiveryResponseEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::IsLoading": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::OnEnter": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::OnLeave": {
    "status": "reviewed"
   },
   "BrnGui::CarSelectLivery::PlayMovie": {
    "status": "reviewed"
   },
+  "BrnGui::CarSelectLivery::SendPlayerCarColourEvent": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::SetupCar": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::SetupComponents": {
+   "status": "reviewed"
+  },
   "BrnGui::CarSelectLivery::SetupPaintColourToggle": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::TriggerSound": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::CarSelectLivery::UpdateComponents": {
    "status": "reviewed"
   },
   "BrnGui::CarSelectLivery::UpdateMenuComponents": {
@@ -58865,6 +58916,10 @@
   },
   "GameSource/Gui/Flow/Screen/States/BrnBrnDebug.cpp": {
    "notes": "combined batch fresh-eyes subagent review: semantic parity vs X360 asm confirmed (rodata re-verified against XEX)",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnCarSelectLivery.cpp": {
+   "notes": "wave J: 17/17. 16 were already bodied by an earlier session but never ledger-closed; the 17th (HandleLobbyPlayerList) was reconstructed this wave and unblocked by 5 declarations added to BrnCarSelectOnlinePlayerList.h (Show/Hide/SetPlayerName/SetPlayerCar/SetFinalSelection, DWARF rows 21/24/27/30/33, bodies link from that component's own TU). A dedicated fresh-eyes audit of the 16 pre-existing bodies against raw asm found and this wave FIXED: (a) an ODR duplicate - _Input.cpp still carried a stale CGS_ASSERT-false stub of HandleLobbyPlayerList, invisible to cl /c, LNK2005 at link; (b) the UpdateComponents ticker record dropped maFlags[0]=1, the byte that selects the ticker KIND, so the repair line went out as the wrong kind; (c) HandlePlayerInfoResponse modelled the +0x38 repair flag as s32 when the X360 uses lbz - on little-endian that made != 0 true for any non-zero byte in +0x38..3B; (d) two comments asserting the opposite of the asm (both Highlight calls DO load their index args), one of which had propagated into BrnColourMenuToggle.h. Audit reached all 16; other 12 clean. NOT re-measured: the two rodata statics maResourcesToLoad @0x82F26C50 and maiEventToObserve @0x82065DC0 still rest on an earlier session's dump.",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectMain.cpp": {
