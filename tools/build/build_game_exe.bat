@@ -485,6 +485,28 @@ rem ---- build the cl response file ----
   rem  member full of static_asserts, zero link closure -- and it also carries the record-side seats
   rem  for BrnVehicleManager's RaceCarVehicleRecord, which had the same hole.
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\RaceCarPhysics_layout_check.cpp"
+  rem  ⭐ 2026-08-03 (VehicleManager::Construct wave) -- RaceCarPhysics_Construct.cpp is NEW.
+  rem  RaceCarPhysics::Construct split out of RaceCarPhysics.cpp so it can be mounted: the eight-car
+  rem  loop of VehicleManager::Construct calls it, and RaceCarPhysics.cpp itself must stay unmounted
+  rem  while flt_820037C8 / unk_82FB8880 are unread. Its only callee is VehiclePhysics::Construct,
+  rem  already mounted above. Same split precedent as BrnSimpleVehiclePhysics_Construct.cpp.
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\RaceCarPhysics_Construct.cpp"
+  rem  ⛔ BrnVehicleManager.cpp IS STILL NOT MOUNTED, and 2026-08-03 MEASURED why rather than
+  rem  guessing. VehicleManager::Construct @0x8263B7C8 is bodied in it as of this wave; mounting the
+  rem  TU was tried and produced **15 unresolved externals** (build log VMF_BUILD3):
+  rem     from Construct itself (2):  StuntOffencesManager::Construct, PhysicalTrafficManager::
+  rem       Construct -- BOTH BODIES EXIST (BrnStuntOffencesManager.cpp, BrnPhysicalTrafficManager.
+  rem       cpp) but NEITHER TU IS IN THIS LIST. BrnVehicleManager.h's "Construct is NOT blocked on
+  rem       link closure" was therefore wrong; its blocker table's "✅ READY" meant the class FITS
+  rem       ITS SPAN, not that the symbol resolves.
+  rem     from the takedown chain in the same TU (13): VehicleManagerOutputInterface::GetEventQueue /
+  rem       AddRaceCarCrashEvent / AddRemappedEntityIdEvent / FlagTakedownScoredForDriver;
+  rem       RaceCarPhysics::SetCrashing; and seven of VehicleManager's OWN methods, called here and
+  rem       bodied nowhere (ApplySlam, ApplyShunt, GenerateContactSituation,
+  rem       CheckForGrindingAndRubbing, CheckForVerticalTakedownSituation,
+  rem       ShouldRaceCarCrashOnCarImpact, IsPointBetweenTwoParallelPlanes, HasRaceCarHadRecentImpact).
+  rem  ⭐ The standing rule again: a mount's closure is the static reference graph of the WHOLE TU,
+  rem  not of the one function you care about. Mounting this file is its own wave.
   rem  ⚠️⚠️ 2026-08-03 (VehiclePhysics own-block wave) -- VehiclePhysics_layout_check.cpp is NEW and
   rem  must stay mounted, one level DOWN from the file above. BrnSimpleVehiclePhysics.h and
   rem  VehiclePhysics.h now carry those two classes' own-member blocks at their X360 seats, and the
