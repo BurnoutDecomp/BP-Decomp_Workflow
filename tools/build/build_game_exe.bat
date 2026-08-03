@@ -362,22 +362,41 @@ rem ---- build the cl response file ----
   rem  "==1" test is `driver type == E_DRIVER_TYPE_AI`. +0x4D and +0x4E are two DIFFERENT members
   rem  of BrnAIDriverControls. The committed comment and this one were each right about a
   rem  different call site.)
-  rem  ⚠️ STILL OUT: Engine.cpp. ⭐ MEASURED 2026-08-03 (mounted, linked, reverted) -- it is TWO
-  rem  unresolved externals, NOT one. The standing note said only Engine::Reset:
-  rem      Engine.obj : LNK2019 BrnPhysics::Vehicle::EngineAttribs::Construct(void)
-  rem                          <- referenced by Engine::Construct. Owned by VehicleAttribs.cpp,
-  rem                             which cannot be mounted as-is (it locally re-declares
-  rem                             rw::math::vpu types == an ODR fork). THIS is the real blocker.
-  rem      Engine.obj : LNK2019 BrnPhysics::Vehicle::Engine::Reset(rw::math::vpu::Vector4)
-  rem                          <- X360 @0x825CF130..0x825CF274, 81 instructions, a FOURTH
-  rem                             export-set hole (probed with headless IDA 9.3; ComputeGear
-  rem                             @0x825CF010 is 72 instrs so it ends exactly at 0x825CF130).
-  rem                             Its layout dependencies are all already pinned in Engine.h
-  rem                             (+0xA0/+0xB0/+0xC0/+0xC4/+0xC5), so it is a small, tractable
-  rem                             body -- but bodying it ALONE will not mount the TU.
+  rem  ⚠️ STILL OUT: Engine.cpp AND VehicleAttribs.cpp -- and they are ONE mount, not two.
+  rem  ⭐⭐ RE-MEASURED 2026-08-03 (both mounted together, linked, reverted) after the
+  rem  VehicleAttribs de-fork wave. **32 unresolved externals, and the breakdown is now clean:**
+  rem      29 x  BrnPhysics::Vehicle::EngineDefaults::KF_DEFAULT_*   <- VehicleAttribs.obj
+  rem       2 x  BrnPhysics::InterpedParam3::Construct / ::Prepare   <- VehicleAttribs.obj
+  rem       1 x  BrnPhysics::Vehicle::Engine::Reset(Vector4)         <- Engine.obj
+  rem  All 32 are TRACTABLE and none of them is a type problem any more:
+  rem    * the 29 constants are .rdata floats loaded one-per-slot by EngineAttribs::Construct
+  rem      @0x825B7B90 (267 instrs) -- read them out of the image and define them.
+  rem    * InterpedParam3::Construct @0x8259CD30 (36 instrs) / ::Prepare @0x8259CDC0 (34 instrs).
+  rem    * Engine::Reset @0x825CF130..0x825CF274, 81 instructions, an export-set hole (ComputeGear
+  rem      @0x825CF010 is 72 instrs so it ends exactly at 0x825CF130). Layout already pinned in
+  rem      Engine.h (+0xA0/+0xB0/+0xC0/+0xC4/+0xC5).
+  rem
+  rem  ⭐ CORRECTED, and this is why the count moved: the previous note blamed
+  rem  "EngineAttribs::Construct, owned by VehicleAttribs.cpp, which cannot be mounted as-is
+  rem  (rw::math::vpu ODR fork)". Mounting VehicleAttribs.cpp would NOT have closed it. The
+  rem  console symbol is NESTED -- VehicleAttribs::EngineAttribs::Construct @0x825B7B90, which is
+  rem  what Engine::Construct @0x825F3EE8 actually calls -- but Engine.h declared its own
+  rem  EngineAttribs at NAMESPACE scope, so Engine.cpp emitted a call to
+  rem  BrnPhysics::Vehicle::EngineAttribs::Construct, a symbol the console never had and no TU
+  rem  could ever define. Engine.h's slice was a third fork, not a stand-in. It is retired now
+  rem  (typedef to the nested type) and that LNK2019 is GONE from the measured list above.
   rem  Also stale in that note: "its mangled name says the parameter is a VecFloat, not the
   rem  Vector4 declared". In this tree VecFloat IS rw::math::vpu::Vector4 (BrnCommonTypes.h:23),
   rem  so the two mangle identically and the committed declaration is already correct.
+  rem
+  rem  ⚠️⚠️ AND THE LAYOUT UNDER ALL OF THIS WAS WRONG UNTIL 2026-08-03. VehicleAttribs.cpp had
+  rem  mDriftAttribs and mEngineAttribs TRANSPOSED against the DWARF, with static_asserts baking
+  rem  it in. Referee: SetupAttribsForDonutAI @0x825F6298 writes [this+0x110].x = 0 and
+  rem  [this+0x1B0].x = flt_8205820C; under the old layout that is "MinSpeedForDrift = 700,
+  rem  Differential = 0" (a car that must do 700 mph to drift and cannot drive), under the DWARF
+  rem  layout it is "MinSpeedForDrift = 0, MaxTorque = 700". Every mpAttribs read in the MOUNTED
+  rem  VehiclePhysics.cpp (32 distinct offsets) lands on a name-matching DWARF field only under
+  rem  the corrected layout. See VehicleAttribs.h's banner.
   rem
   rem  ⚠️⚠️ MOUNTING THESE PUTS **ZERO BYTES** IN THE EXE TODAY, and that is expected, not a bug:
   rem  nothing calls any of them yet, so /OPT:REF strips every function (VERIFIED -- grep
