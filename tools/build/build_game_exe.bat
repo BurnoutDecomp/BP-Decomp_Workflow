@@ -491,22 +491,85 @@ rem ---- build the cl response file ----
   rem  while flt_820037C8 / unk_82FB8880 are unread. Its only callee is VehiclePhysics::Construct,
   rem  already mounted above. Same split precedent as BrnSimpleVehiclePhysics_Construct.cpp.
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\RaceCarPhysics_Construct.cpp"
-  rem  ⛔ BrnVehicleManager.cpp IS STILL NOT MOUNTED, and 2026-08-03 MEASURED why rather than
-  rem  guessing. VehicleManager::Construct @0x8263B7C8 is bodied in it as of this wave; mounting the
-  rem  TU was tried and produced **15 unresolved externals** (build log VMF_BUILD3):
-  rem     from Construct itself (2):  StuntOffencesManager::Construct, PhysicalTrafficManager::
-  rem       Construct -- BOTH BODIES EXIST (BrnStuntOffencesManager.cpp, BrnPhysicalTrafficManager.
-  rem       cpp) but NEITHER TU IS IN THIS LIST. BrnVehicleManager.h's "Construct is NOT blocked on
-  rem       link closure" was therefore wrong; its blocker table's "✅ READY" meant the class FITS
-  rem       ITS SPAN, not that the symbol resolves.
-  rem     from the takedown chain in the same TU (13): VehicleManagerOutputInterface::GetEventQueue /
-  rem       AddRaceCarCrashEvent / AddRemappedEntityIdEvent / FlagTakedownScoredForDriver;
-  rem       RaceCarPhysics::SetCrashing; and seven of VehicleManager's OWN methods, called here and
-  rem       bodied nowhere (ApplySlam, ApplyShunt, GenerateContactSituation,
-  rem       CheckForGrindingAndRubbing, CheckForVerticalTakedownSituation,
-  rem       ShouldRaceCarCrashOnCarImpact, IsPointBetweenTwoParallelPlanes, HasRaceCarHadRecentImpact).
+  rem  ⭐ 2026-08-03 (task #110, the BrnVehicleManager mount survey) -- the articulation-joint pair
+  rem  is MOUNTED. BrnArticulatedJointPool.cpp had never been in this list and had therefore never
+  rem  been linked; mounting it exposed that its private re-declaration of ArticulatedJoint asked
+  rem  for `int Construct()` while the real BrnArticulatedJoint.h declares `void Construct()` --
+  rem  two different mangled names, so no TU could ever have satisfied its call site. That fork is
+  rem  retired (see the banner in BrnArticulatedJointPool.cpp) and ArticulatedJoint::Construct
+  rem  @0x825B8DC0 is now bodied in BrnArticulatedJoint.cpp (identity transform + invalid joint id).
+  rem  ⚠️ SAME CAVEAT AS THE BLOCKS ABOVE: nothing calls either of these yet, so /OPT:REF strips
+  rem  them and they put ZERO BYTES in the exe. Mounted so the closure stays enforced.
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnArticulatedJoint.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnArticulatedJointPool.cpp"
+  rem  ⛔ BrnVehicleManager.cpp IS STILL NOT MOUNTED. 2026-08-03 (task #110) RE-MEASURED the whole
+  rem  closure from a fresh link rather than trusting the previous wave's note, and the numbers here
+  rem  REPLACE the "15 unresolved externals" recorded before. Three separate builds:
+  rem
+  rem    M1  group A only (BrnStuntOffencesManager.cpp + BrnPhysicalTrafficManager.cpp, no
+  rem        BrnVehicleManager.cpp)                                   -> 10 unresolved.
+  rem        ⇒ the previous note's "one mount line each" is FALSE: both group-A TUs drag their own
+  rem        closure. BrnStuntOffencesManager wants SEVEN RaceCarPhysics stunt accessors
+  rem        (GetDriftActiveTime / GetDriftLateralSpeed / IsHandbrakeHeld / IsConsideredAirborne /
+  rem        GetStuntReferenceVelocity / GetStuntWorldPosition / GetStuntForwardAxis, all
+  rem        declare-only "ADDITIVE GROW" entries in RaceCarPhysics.h:268-274 with no body anywhere);
+  rem        BrnPhysicalTrafficManager wants TrafficPhysics::Construct, ArticulatedJointPool::
+  rem        Construct and ArticulatedJointPool::SendCreateRemoveJointEvents.
+  rem
+  rem    M2  group A + BrnVehicleManager.cpp + BrnVehicleManagerPlayerStats.cpp +
+  rem        BrnArticulatedJointPool.cpp                              -> 23 unresolved, of which
+  rem        BrnVehicleManager.obj owns exactly TWELVE:
+  rem          VehicleManagerOutputInterface::GetEventQueue / AddRaceCarCrashEvent /
+  rem          AddRemappedEntityIdEvent / FlagTakedownScoredForDriver ; RaceCarPhysics::SetCrashing ;
+  rem          and SEVEN of VehicleManager's own -- ApplySlam, ApplyShunt, GenerateContactSituation,
+  rem          CheckForGrindingAndRubbing, CheckForVerticalTakedownSituation,
+  rem          ShouldRaceCarCrashOnCarImpact, IsPointBetweenTwoParallelPlanes.
+  rem        ⭐ HasRaceCarHadRecentImpact is NOT among them: it is ALREADY BODIED, at
+  rem        BrnVehicleManagerPlayerStats.cpp:207 (X360 @0x825B4EB8). The old note listed it as
+  rem        "bodied nowhere"; it is an unmounted TU, not a missing body. That is the whole of the
+  rem        old note's seven-vs-eight arithmetic contradiction.
+  rem        ⭐ ADDRESSES for the twelve, so the next wave does not re-hunt them:
+  rem          ApplySlam 0x8261A738 (101 instr) ; ApplyShunt 0x8261A5B0 (98) ;
+  rem          GenerateContactSituation 0x825B5520 (91) ; CheckForGrindingAndRubbing 0x825B5450 (52) ;
+  rem          ShouldRaceCarCrashOnCarImpact 0x825C6FF8 (42) ;
+  rem          IsPointBetweenTwoParallelPlanes 0x825C5660 (30) ;
+  rem          RaceCarPhysics::SetCrashing 0x825B8A70 (31) ;
+  rem          VehicleManagerOutputInterface::AddRaceCarCrashEvent 0x825E6F60 (132).
+  rem        ⚠️ CheckForVerticalTakedownSituation is @0x825C56D8 and is ANOTHER export hole: it is
+  rem        absent from progress/identity.json AND has no 0x825C56D8.json, but the caller
+  rem        CheckForVerticalTakedown @0x8263D728 names it in its own `xrefs_from` and calls it
+  rem        twice (0x8263D7AC / 0x8263D85C). Absent-from-JSON is not absent-from-image.
+  rem        ⛔ AND THREE OF THE TWELVE ARE NOT X360 FUNCTIONS AT ALL. GetEventQueue,
+  rem        AddRemappedEntityIdEvent and FlagTakedownScoredForDriver appear nowhere in
+  rem        identity.json: they are accessor names minted over raw sink offsets, and TWO of them
+  rem        were hung on the wrong class (0x65F0 / 0x6C00 are VehicleOutputInterface's, ~24 KB
+  rem        outside VehicleManagerOutputInterface). Proof and the asm lines are recorded at their
+  rem        declarations in SharedIO/BrnVehicleOutputInterface.h. Fix the class before bodying.
+  rem        ⛔ The seven RaceCarPhysics stunt accessors that block group A are likewise NOT free:
+  rem        FOUR of their offsets contradict the committed member map in VehiclePhysics.h -- see
+  rem        the ⛔⛔ block at VehiclePhysics/RaceCarPhysics.h:262.
+  rem
+  rem    M3  as shipped (the two joint TUs above only)               -> 0 unresolved, exe unchanged.
+  rem
+  rem  ⛔⛔ THE REAL BLOCKER IS NOT IN BrnVehicleManager.cpp AT ALL. VehicleManager::Construct
+  rem  @0x8263B7C8 calls PhysicalTrafficManager::Construct, which calls TrafficPhysics::Construct
+  rem  @0x8262E980 -- and that address is an .ida-exports HOLE (the X360 JSON set jumps
+  rem  0x8262E848 -> 0x8262EBE8; the caller's asm still names the symbol, so it exists, it is just
+  rem  not exported). ⭐ IT IS RECOVERABLE: the PS3 DecFIGS export set HAS it, at
+  rem  .ida-exports\DecFIGS_Burnout_Internal_PS3.ELF\0x6EB440.json
+  rem  (_ZN10BrnPhysics7Vehicle14TrafficPhysics9ConstructEv, 47 instructions).
+  rem  ⚠️ But landing it is gated on the OPEN `TrafficPhysics` ODR fork, and NOT merely for tidiness:
+  rem  BrnPhysicalTrafficManager.h slices TrafficPhysics as `struct { u8[5168]; }` and strides
+  rem  maFullTrafficPhysics[20] by that console size, while the real
+  rem  `class TrafficPhysics : public VehiclePhysics` is LARGER on the host (pointer widening --
+  rem  the same +176 drift this header already tabulates for its own members). The mangled name
+  rem  ?Construct@TrafficPhysics@Vehicle@BrnPhysics@@QEAAXXZ encodes neither the class-key nor the
+  rem  bases, so a body written against the real class WOULD link against the sliced call site --
+  rem  silently, with the array stride 5168 and the constructor writing past it. Do not do that.
+  rem  De-fork first (that is finding (2) in BrnPhysicalTrafficManager.h), then body Construct.
   rem  ⭐ The standing rule again: a mount's closure is the static reference graph of the WHOLE TU,
-  rem  not of the one function you care about. Mounting this file is its own wave.
+  rem  not of the one function you care about. Mounting this file is still its own wave -- and the
+  rem  wave AHEAD of it is the TrafficPhysics de-fork, not the takedown chain.
   rem  ⚠️⚠️ 2026-08-03 (VehiclePhysics own-block wave) -- VehiclePhysics_layout_check.cpp is NEW and
   rem  must stay mounted, one level DOWN from the file above. BrnSimpleVehiclePhysics.h and
   rem  VehiclePhysics.h now carry those two classes' own-member blocks at their X360 seats, and the
