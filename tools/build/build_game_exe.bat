@@ -533,6 +533,27 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\TrafficPhysics_Construct.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\TrafficPhysics_layout_check.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehiclePhysicsLinkStubs.cpp"
+  rem  ⭐⭐ 2026-08-03 (task #113, the ArticulatedJointPool de-fork) -- BrnPhysicalTrafficManager.cpp
+  rem  IS NOW MOUNTED, together with the IO TU that owns its buffer accessors. What made it
+  rem  mountable was NOT bodying one more function: it was retiring the last TWO ODR forks in
+  rem  BrnPhysicalTrafficManager.h, and the second of those was never counted by any wave --
+  rem    * ArticulatedJointPool          -- the real class had no header at all (it was declared
+  rem      inside BrnArticulatedJointPool.cpp), which is why the fork existed. It has one now:
+  rem      VehiclePhysics/BrnArticulatedJointPool.h. The fold is LAYOUT-NEUTRAL (the class is
+  rem      pointer-free and 832 bytes on both targets), so nothing in the manager's layout moved --
+  rem      unlike the TrafficPhysics fold, which moved everything behind it by -4160.
+  rem    * ArticulatedJointCreateBuffer  -- a 16-byte opaque standing in for the 2032-byte class
+  rem      BrnPhysicalTrafficManagerIO.h has owned since its own wave. ⚠️ NOT a layout-neutral
+  rem      stand-in: AllocateInternalBuffers instantiates CreateIOBuffer<ArticulatedJointCreateBuffer>
+  rem      on it, so mounting this TU with the fork in place would have allocated 16 bytes for a
+  rem      2032-byte IO buffer. The fuse had not lit only because the TU had never been mounted.
+  rem  ⚠️ The previous wave's "UNRESOLVED COUNT = 1, one body away" was measured correctly and
+  rem  concluded wrongly: that one symbol was the FORK's mangled name
+  rem  (?SendCreateRemoveJointEvents@...@@QEAAXPEBXPEAU..., i.e. `const void*` + non-const buffer),
+  rem  while the DWARF signature is (VehicleOutputRequestInterface*, const ArticulatedJointCreateBuffer*).
+  rem  No faithful body could ever have defined the symbol that call site asked for.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManagerIO.cpp"
   rem  ⛔ BrnVehicleManager.cpp IS STILL NOT MOUNTED. 2026-08-03 (task #110) RE-MEASURED the whole
   rem  closure from a fresh link rather than trusting the previous wave's note, and the numbers here
   rem  REPLACE the "15 unresolved externals" recorded before. Three separate builds:
