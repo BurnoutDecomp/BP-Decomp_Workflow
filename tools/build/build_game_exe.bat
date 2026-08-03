@@ -1891,6 +1891,10 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_Components.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_Input.cpp"
+  rem  wave-J partfile 04 (2026-08-03): HandleLobbyPlayerList @0x824B5190. Landed by Niaz in
+  rem  b5-decomp fd0925f4 WITHOUT this mount line -- CarSelectLivery::Update calls it, so the
+  rem  exe did not link until this was added here (contributors have no parent-repo access).
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_wJ_01.cpp"
   echo "%SRC%\GameSource\Gui\Components\BrnCarSelectOnlinePlayerListItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnManufacturerIcon.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnPlayerStatsBar.cpp"
@@ -1997,6 +2001,20 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnSelectableGroup.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnMenuItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnMenuComponent.cpp"
+  rem  GUI table component family (2026-08-03). BrnOnlineCustomMatch.h embeds a BrnGui::Table
+  rem  BY VALUE, so BrnScreenFlow's NewPoolState<OnlineCustomMatch> needs Table::Table(), which
+  rem  needs TableRow's implicit ctor, which needs TableCell::TableCell(). All three TUs were
+  rem  in the tree and none was mounted.
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTable.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTableRow.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTableCell.cpp"
+  rem  BrnGuiTextField.cpp homes TextField::SetColour @0x82481E48 + operator= @0x824470F0 and
+  rem  had NEVER been mounted -- the mounted BrnTextField.cpp defines neither (no overlap, so
+  rem  no LNK2005). TableCell::SetColourValue is the first mounted caller of SetColour.
+  echo "%SRC%\GameSource\Gui\BrnGuiTextField.cpp"
+  rem  GuiCache::GetOnlinePlayerInfoFromPlayerId, split out of BrnGuiCache.cpp for that TU's
+  rem  documented include clash (same reason as BrnGuiCache_GetNumEventStarts.cpp).
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_GetOnlinePlayerInfoFromPlayerId.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiState.cpp"
   echo "%SRC%\GameShared\GameClasses\Fsm\CgsState.cpp"
