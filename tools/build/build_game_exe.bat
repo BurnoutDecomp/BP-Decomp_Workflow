@@ -362,19 +362,43 @@ rem ---- build the cl response file ----
   rem  "==1" test is `driver type == E_DRIVER_TYPE_AI`. +0x4D and +0x4E are two DIFFERENT members
   rem  of BrnAIDriverControls. The committed comment and this one were each right about a
   rem  different call site.)
-  rem  ⚠️ STILL OUT: Engine.cpp AND VehicleAttribs.cpp -- and they are ONE mount, not two.
-  rem  ⭐⭐ RE-MEASURED 2026-08-03 (both mounted together, linked, reverted) after the
-  rem  VehicleAttribs de-fork wave. **32 unresolved externals, and the breakdown is now clean:**
+  rem  ⭐⭐ CLOSED 2026-08-03. Engine.cpp and VehicleAttribs.cpp were ONE mount, not two, and the
+  rem  measured gap between them and the build was 32 unresolved externals:
   rem      29 x  BrnPhysics::Vehicle::EngineDefaults::KF_DEFAULT_*   <- VehicleAttribs.obj
   rem       2 x  BrnPhysics::InterpedParam3::Construct / ::Prepare   <- VehicleAttribs.obj
   rem       1 x  BrnPhysics::Vehicle::Engine::Reset(Vector4)         <- Engine.obj
-  rem  All 32 are TRACTABLE and none of them is a type problem any more:
-  rem    * the 29 constants are .rdata floats loaded one-per-slot by EngineAttribs::Construct
-  rem      @0x825B7B90 (267 instrs) -- read them out of the image and define them.
-  rem    * InterpedParam3::Construct @0x8259CD30 (36 instrs) / ::Prepare @0x8259CDC0 (34 instrs).
-  rem    * Engine::Reset @0x825CF130..0x825CF274, 81 instructions, an export-set hole (ComputeGear
-  rem      @0x825CF010 is 72 instrs so it ends exactly at 0x825CF130). Layout already pinned in
-  rem      Engine.h (+0xA0/+0xB0/+0xC0/+0xC4/+0xC5).
+  rem  All 32 are now defined and all three TUs are on the source list below.
+  rem    * the 29 constants were read out of the image TWICE (a self-calibrating .id1 reader,
+  rem      delta -1594 with 9/9 prologue witnesses, and headless IDA 9.3 on the .i64 -- identical).
+  rem      WHICH .rdata slot lands in WHICH (register, lane) had to be settled by symbolically
+  rem      SIMULATING EngineAttribs::Construct @0x825B7B90: 267 instructions that reuse eight stack
+  rem      slots as scratch between lvlx/vspltw/vrlimi128 lane inserts. Hex-Rays decodes nine of
+  rem      the constants inline and all nine match. Gear ratios come out -2.5 (reverse), 3.21,
+  rem      1.93, 1.30, 1.00, 0.75 -- a real gearbox, which is the role check.
+  rem    * InterpedParam3 got its DecFIGS home (GameSource/Physics/PhysicsUtilities/
+  rem      InterpedParam3.{h,cpp}); VehicleAttribs.h had been carrying a private declaration with
+  rem      the member typed Vector4 where the DWARF says Vector3. Its vperm mask table
+  rem      unk_8327F140 is `.data` and reads ALL ZEROS, so the lane mapping came instead from
+  rem      Frustum::SetPlaneByIndex @0x827BAA48 decoding the table index as `(i & 3) << 6`, plus
+  rem      the DWARF's `Vector3 mvParams` and its "exactly three VecFloatRefIndex::operator=".
+  rem    * Engine::Reset @0x825CF130..0x825CF274 (82 items) is the FOURTH confirmed export-set
+  rem      hole (ComputeGear @0x825CF010 is 72 instrs so it ends exactly at 0x825CF130, and the
+  rem      next indexed symbol is 0x825CF278); pulled with headless IDA 9.3.
+  rem
+  rem  ⭐ AND IT SETTLED TWO LIVE PLACEHOLDER BUGS IN THE ALREADY-COMMITTED Engine.cpp. Both were
+  rem  `.data` slots that read zero in the image and are filled by IDA-unmarked static
+  rem  initialisers; scratch/GVM/init_map_table.txt reports NO source for one and two
+  rem  contradictory sources for the other, so both were recovered by disassembling the
+  rem  initialiser thunks (0x82C5B0C8 and 0x82C5C050 -- the second is a COMPUTED initialiser,
+  rem  1000.0 / flt_82F2A3E0):
+  rem      unk_82FB9110 = 9.54929638   == 60/(2*pi), rad/s -> RPM
+  rem      unk_82FB9B10 = 104.719757   == 1000 RPM in rad/s (Reset's idle flywheel speed)
+  rem      flt_82F2A3E0 = 9.54929638   -- in `.data` but INITIALISED IN THE IMAGE, and no writer
+  rem  ComputeGear carried the first as a FLAGGED 0.0f, which made its up-shift metric identically
+  rem  zero and welded the gearbox in gear 1 forever; GetMaxWheelAngularVelocity carried the third
+  rem  as a FLAGGED 1.0f, making the rev limiter 9.55x too permissive. ComputeGear was also missing
+  rem  the asm's `vandc` sign-clear (fabs) and had its parameter declared `f32` when the asm plainly
+  rem  uses vector register v1.
   rem
   rem  ⭐ CORRECTED, and this is why the count moved: the previous note blamed
   rem  "EngineAttribs::Construct, owned by VehicleAttribs.cpp, which cannot be mounted as-is
@@ -421,6 +445,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Wheel.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\ShuntEffect.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnSimpleVehiclePhysics.cpp"
+  rem  ⭐ 2026-08-03 -- THE 32 ARE CLOSED. VehicleAttribs.cpp and Engine.cpp are MOUNTED, together
+  rem  with InterpedParam3.cpp (new: the DecFIGS home for BrnPhysics::InterpedParam3, whose two
+  rem  leaves were 2 of the 32 and which VehicleAttribs.h had been carrying as a private
+  rem  declaration). See the note above the vehicle-dynamics core for the breakdown.
+  echo "%SRC%\GameSource\Physics\PhysicsUtilities\InterpedParam3.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehicleAttribs.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Engine.cpp"
   rem ---- end vehicle-dynamics core ---------------------------------------------------------
   rem ---- CONTACT-SPY DATA + PROP-MANAGER PERF MONITORS (physics wave 4, 2026-08-02) --------
   rem  Two of the sub-constructors BrnPhysics::PhysicsModule::Construct @0x825AE308 calls:
