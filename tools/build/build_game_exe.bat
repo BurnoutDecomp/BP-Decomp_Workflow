@@ -465,6 +465,15 @@ rem ---- build the cl response file ----
   rem      had never compiled. Include fixed; Construct added (inlined at 0x82636DF8).
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerDebugComponent.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManagerDebugComponent.cpp"
+  rem  ⚠️⚠️ 2026-08-03 (tuning-bank wave) -- BrnVehicleManager_layout_check.cpp is NEW and must
+  rem  stay mounted. BrnVehicleManager.h claims its ~172 KB layout is "pinned by the offsetof
+  rem  asserts in _AssertLayout / _AssertLayoutPlayerStats" -- but those live in
+  rem  BrnVehicleManager.cpp and BrnVehicleManagerPlayerStats.cpp, and NEITHER of those TUs is in
+  rem  this list. A static_assert in an uncompiled TU is a comment, not a gate, so that whole class
+  rem  layout had never once been checked by a build. This TU is compile-only (one never-called
+  rem  static member full of static_asserts, zero link closure) and pins the +171464..+172616
+  rem  tuning bank that VehicleManager::Construct @0x8263B7C8 seeds.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_layout_check.cpp"
   rem ---- end vehicle-dynamics core ---------------------------------------------------------
   rem ---- CONTACT-SPY DATA + PROP-MANAGER PERF MONITORS (physics wave 4, 2026-08-02) --------
   rem  Two of the sub-constructors BrnPhysics::PhysicsModule::Construct @0x825AE308 calls:
