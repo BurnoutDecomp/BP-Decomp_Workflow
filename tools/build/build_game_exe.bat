@@ -502,6 +502,37 @@ rem ---- build the cl response file ----
   rem  them and they put ZERO BYTES in the exe. Mounted so the closure stays enforced.
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnArticulatedJoint.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnArticulatedJointPool.cpp"
+  rem  ⭐⭐ 2026-08-03 (task #112, the TrafficPhysics de-fork) -- TWO NEW FILES, BOTH REQUIRED.
+  rem  BrnPhysicalTrafficManager.h no longer declares its own opaque `struct TrafficPhysics
+  rem  { void Construct(); u8[5168]; }`; it includes the real class and embeds
+  rem  `TrafficPhysics maFullTrafficPhysics[20]`. That was a CORRECTNESS item, not tidiness: the
+  rem  mangled name ?Construct@TrafficPhysics@Vehicle@BrnPhysics@@QEAAXXZ encodes neither the
+  rem  class-key nor the bases, so a body written against the real class would have linked against
+  rem  the sliced call site silently, writing host-offset members into console-strided storage.
+  rem    TrafficPhysics_Construct.cpp   -- NEW. TrafficPhysics::Construct @0x8262E980 (an
+  rem      `.ida-exports` HOLE -- the JSON set jumps 0x8262E848 -> 0x8262EBE8; pulled with headless
+  rem      IDA 9.3, 154 instructions) + SetFreakedOut @0x825B8948. Split out of TrafficPhysics.cpp
+  rem      for the same reason as RaceCarPhysics_Construct.cpp: PreparePhysical and Update call
+  rem      VehiclePhysics::Prepare / UpdateShunt / UpdateCrashing, all three still declare-only, so
+  rem      TrafficPhysics.cpp cannot be mounted.
+  rem    TrafficPhysics_layout_check.cpp -- NEW, compile-only, and it REPLACES a gate that had gone
+  rem      vacuous. BrnVehicleManager_layout_check.cpp used to "check" the 0x1430 stride with
+  rem      `static_assert(sizeof(TrafficPhysics) == 5168)` -- a HOST sizeof gate that only ever
+  rem      asserted the stand-in was still a stand-in. The console 0x1430 is now derived as
+  rem      arithmetic over the recovered seats, closing with zero slack from 0x13F0.
+  rem      Tamper-tested 8 cases, 7 fire (the 8th is the documented 3-byte pad hole).
+  rem    VehiclePhysicsLinkStubs.cpp -- NEW, and it is the MEASURED price of the fold, not a
+  rem      convenience. Making maFullTrafficPhysics the real class puts TrafficPhysics's VTABLE on
+  rem      the link's critical path (BrnPhysicsModule.obj emits the ctor chain that seats twenty
+  rem      vptrs -- which is what the console ctor @0x827E42E8 does too), and the link named exactly
+  rem      one missing slot: TrafficPhysics::Update, the only virtual the class introduces. Defining
+  rem      it drags VehiclePhysics::UpdateShunt (@0x825FC748, 100 instrs) and ::UpdateCrashing
+  rem      (@0x82638810, 732 instrs), neither of which has a body anywhere. Both are LOUD
+  rem      CGS_ASSERT(false) traps, both are dead today, and bodying either one will fail with a
+  rem      hard LNK2005 until the stub is deleted -- which is the point.
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\TrafficPhysics_Construct.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\TrafficPhysics_layout_check.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehiclePhysicsLinkStubs.cpp"
   rem  ⛔ BrnVehicleManager.cpp IS STILL NOT MOUNTED. 2026-08-03 (task #110) RE-MEASURED the whole
   rem  closure from a fresh link rather than trusting the previous wave's note, and the numbers here
   rem  REPLACE the "15 unresolved externals" recorded before. Three separate builds:
