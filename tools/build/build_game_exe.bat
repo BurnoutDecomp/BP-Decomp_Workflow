@@ -442,6 +442,7 @@ rem ---- build the cl response file ----
   rem  suspension, weight transfer, wheel friction, contact impulses. Mounted the moment its last
   rem  unresolved external (CheckForEnteringDrift) was bodied; see the block above.
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehiclePhysics.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehiclePhysics_embed_check.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Wheel.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\ShuntEffect.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnSimpleVehiclePhysics.cpp"
