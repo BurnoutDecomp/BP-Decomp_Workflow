@@ -485,6 +485,17 @@ rem ---- build the cl response file ----
   rem  member full of static_asserts, zero link closure -- and it also carries the record-side seats
   rem  for BrnVehicleManager's RaceCarVehicleRecord, which had the same hole.
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\RaceCarPhysics_layout_check.cpp"
+  rem  ⚠️⚠️ 2026-08-03 (VehiclePhysics own-block wave) -- VehiclePhysics_layout_check.cpp is NEW and
+  rem  must stay mounted, one level DOWN from the file above. BrnSimpleVehiclePhysics.h and
+  rem  VehiclePhysics.h now carry those two classes' own-member blocks at their X360 seats, and the
+  rem  claim that makes them derivations is that the DWARF's ORDER and the asm's OFFSETS close with
+  rem  zero slack at BOTH ends: 0x720 (== VehiclePhysics::mpAttribs, a different function) and
+  rem  0x13F0 (== RaceCarPhysics::mPropCollisionImpulseSum, a different wave). This gate is console
+  rem  ARITHMETIC, not host offsetof -- the block owns two pointers and several of its embedded
+  rem  sub-types are reconstructions, so an absolute offsetof gate here would be false or vacuous.
+  rem  It also asserts the host sizeof of every pointer-free sub-struct the arithmetic depends on.
+  rem  Compile-only: one never-called static member, zero link closure.
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehiclePhysics_layout_check.cpp"
   rem ---- end vehicle-dynamics core ---------------------------------------------------------
   rem ---- CONTACT-SPY DATA + PROP-MANAGER PERF MONITORS (physics wave 4, 2026-08-02) --------
   rem  Two of the sub-constructors BrnPhysics::PhysicsModule::Construct @0x825AE308 calls:
