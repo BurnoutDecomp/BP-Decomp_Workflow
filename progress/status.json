@@ -58800,6 +58800,10 @@
   "GameSource/Gui/Flow/PostEvent/States/Showtime/BrnShowtimeInstantResults.h": {
    "status": "done"
   },
+  "GameSource/Gui/Flow/PreEvent/States/BrnPreRaceFlyBy.cpp": {
+   "notes": "wave J PARTIAL, 17 funcs: bodies reconstructed and merged into BrnPreRaceFlyBy_wJ_01..07.cpp (UNTRACKED, not committed, not compiling). Leaf header grown + committed. Remaining, measured with cl /c: GuiCache::UnloadResource; BrnProgression Profile/ProfileEvent + RaceEventData member access (E_FLAG_RANK_WIN, E_CURRENT_MEDAL_TARGET_TIME_GOLD, E_MODE_ROAD_RAGE, E_MODE_STUNT_ATTACK); plus file-local items the parked banners ask the CONDUCTOR to supply and which are NOT in the bodies (KF_MAP_BASE_ASPECT_RATIO 1.7777778f for wJ_05; GuiEventPreRaceDescription + KI_CHANNEL_GUI_OUT for wJ_06/07 - read each parked banner in scratchpad/waveJ/parked_SUPERSEDED equivalents under scratchpad/waveJ/parked). 4 verify MUST_FIX in scratchpad/waveJ/result.json.",
+   "status": "blocked"
+  },
   "GameSource/Gui/Flow/PreEvent/States/BrnPreRaceFlyBy.h": {
    "status": "done"
   },
@@ -58963,6 +58967,10 @@
    "notes": "combined fresh-eyes batch review 5/5 PASS: platform OnEnter + meSignInType=NO_TITLE(1) @+0xCC verified",
    "status": "done"
   },
+  "GameSource/Gui/Flow/Screen/States/BrnCrashNavMap.cpp": {
+   "notes": "wave J PARTIAL, 19 funcs: all 19 bodies are RECONSTRUCTED and merged into BrnCrashNavMap_wJ_01..08.cpp (UNTRACKED on disk, not committed - they do not compile yet). Leaf header BrnCrashNavMap.h is complete and committed. Remaining work is shared-component declarations only, measured with cl /c: GuiCache::AppendExpectedAptComponentList + ClearExpectedControlledAptComponentList; GuiCursor::SetScreenRect; CrashNavPanel::Construct + GetPanelType + the panel-type enumerators the bodies spell E_SHOWING_MODE_EVENTS / E_SHOWING_MODE_ROAD_RULES / E_PANEL_RIVAL (a wave-J header pass RENAMED one of these to E_PANEL_ROADSIGN - decide rename-vs-callers); GetJunctionID; ChallengedEventScore. A prior header pass DELIBERATELY REJECTED CrashNavPanel::Construct as needing a real base-class fix rather than a declaration - re-arbitrate. 11 verify MUST_FIX findings for this TU are recorded in scratchpad/waveJ/result.json (.tus[].groups[].issues).",
+   "status": "blocked"
+  },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavOptions.cpp": {
    "status": "done"
   },
@@ -59009,6 +59017,10 @@
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineCreateFreeburn.h": {
    "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnOnlineCustomMatch.cpp": {
+   "notes": "wave J PARTIAL, 16 funcs: bodies reconstructed and merged into BrnOnlineCustomMatch_wJ_01..06.cpp (UNTRACKED, not committed, not compiling). Leaf header grown + committed. Remaining, measured with cl /c: GuiEventNetworkCustomMatchSearch needs miOpponentOption + mbUnranked, and the search-results record needs maiGameIds / maiGameModes / maiPrevGameModes / maiCurrentPlayers / maiMaxPlayers / maiFlags. A wave-J header pass REJECTED reshaping GuiEventNetworkCustomMatchSearch, arguing it travels BrnNetworkModule::AddOutputGuiEvent rather than the direct OutputGuiEvent path and so must NOT gain the 12-byte GuiEvent base - re-arbitrate from the asm before adding members; the fix may belong in the caller. Also file-local KAC_APT_TRANSITION / KAC_INTEGER_FORMAT / KI_ANIMATION_STATE_* per the parked banners. 2 verify MUST_FIX in scratchpad/waveJ/result.json.",
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineCustomMatch.h": {
    "status": "done"
