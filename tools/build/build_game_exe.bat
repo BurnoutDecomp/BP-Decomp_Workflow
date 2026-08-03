@@ -345,25 +345,39 @@ rem ---- build the cl response file ----
   rem  were split into their own unmounted TUs (ExternalPhysicsBody_ReadPropertiesFromRenderware.cpp
   rem  and BrnSimpleVehiclePhysics_Construct.cpp -- see each file's banner).
   rem
-  rem  ⚠️ STILL OUT: VehiclePhysics.cpp and Engine.cpp.
-  rem  ⭐ UPDATE 2026-08-03 (driver-controls layout wave): VehiclePhysics.cpp is now ONE symbol
-  rem  away, not three. BrnPlayerDriverControls::GetMode and ::GetFlag78 were never console
-  rem  functions -- they were invented accessors standing in for reads at controls +0x44 / +0x4D /
-  rem  +0x4E, which the re-seated BrnVehicleDriverControls.h now names (meDriverType and the
-  rem  BrnAIDriverControls tail). Both accessors are deleted and every call site reads the real
-  rem  member, so neither can be an unresolved external any more. What remains:
-  rem      VehiclePhysics::CheckForEnteringDrift  X360 @0x825FA448 (absent from the IDA export
-  rem                                             set; the body IS in the PS3 DecFIGS set at
-  rem                                             0x6C8924, 218 asm lines, and that mangled name
-  rem                                             gives the real signature: the last parameter is
-  rem                                             a VecFloat, not the f32 the tree declares)
+  rem  ⭐⭐ UPDATE 2026-08-03 (CheckForEnteringDrift wave): **VehiclePhysics.cpp IS NOW MOUNTED.**
+  rem  Its last unresolved external, VehiclePhysics::CheckForEnteringDrift, is bodied. That symbol
+  rem  is ABSENT from `.ida-exports/BURNOUT_X360_ARTIST.XEX/` -- the third confirmed hole in that
+  rem  export set -- but it is an ordinary named function inside the IDB (headless IDA 9.3:
+  rem  `0x825FA448..0x825FA748`, 192 instructions), and the hole is visible from fn_index.txt alone
+  rem  (EnterDrift @0x825FA268 is 120 instrs, so it ends exactly at 0x825FA448; the next indexed
+  rem  symbol is UpdateDriftScale @0x825FA748).
+  rem  The LNK2019's signature complaint was real AND bigger than one function: the DecFIGS DWARF
+  rem  declares the WHOLE drift family with a trailing `VecFloat` time-step that the tree had
+  rem  dropped from all five (UpdateDrift / UpdateDriftState / CheckForEnteringDrift /
+  rem  ApplyDriftForces / UpdateDriftScale). All five are corrected; the dt turns out to have two
+  rem  real consumers that had been written as `(void)` no-ops.
   rem  (RESOLVED, for the record: sizeof(BrnPlayerDriverControls) is 0x48, not 0x44 -- the X360
   rem  UpdateDriving does memcpy(&local, controls, 0x48) -- and +0x44 is meDriverType, so the
   rem  "==1" test is `driver type == E_DRIVER_TYPE_AI`. +0x4D and +0x4E are two DIFFERENT members
   rem  of BrnAIDriverControls. The committed comment and this one were each right about a
   rem  different call site.)
-  rem  Engine.cpp needs Engine::Reset (X360 @0x825CF130, also an export-set hole; PS3 body at
-  rem  0x6D5A24, and its mangled name says the parameter is a VecFloat, not the Vector4 declared).
+  rem  ⚠️ STILL OUT: Engine.cpp. ⭐ MEASURED 2026-08-03 (mounted, linked, reverted) -- it is TWO
+  rem  unresolved externals, NOT one. The standing note said only Engine::Reset:
+  rem      Engine.obj : LNK2019 BrnPhysics::Vehicle::EngineAttribs::Construct(void)
+  rem                          <- referenced by Engine::Construct. Owned by VehicleAttribs.cpp,
+  rem                             which cannot be mounted as-is (it locally re-declares
+  rem                             rw::math::vpu types == an ODR fork). THIS is the real blocker.
+  rem      Engine.obj : LNK2019 BrnPhysics::Vehicle::Engine::Reset(rw::math::vpu::Vector4)
+  rem                          <- X360 @0x825CF130..0x825CF274, 81 instructions, a FOURTH
+  rem                             export-set hole (probed with headless IDA 9.3; ComputeGear
+  rem                             @0x825CF010 is 72 instrs so it ends exactly at 0x825CF130).
+  rem                             Its layout dependencies are all already pinned in Engine.h
+  rem                             (+0xA0/+0xB0/+0xC0/+0xC4/+0xC5), so it is a small, tractable
+  rem                             body -- but bodying it ALONE will not mount the TU.
+  rem  Also stale in that note: "its mangled name says the parameter is a VecFloat, not the
+  rem  Vector4 declared". In this tree VecFloat IS rw::math::vpu::Vector4 (BrnCommonTypes.h:23),
+  rem  so the two mangle identically and the committed declaration is already correct.
   rem
   rem  ⚠️⚠️ MOUNTING THESE PUTS **ZERO BYTES** IN THE EXE TODAY, and that is expected, not a bug:
   rem  nothing calls any of them yet, so /OPT:REF strips every function (VERIFIED -- grep
@@ -381,6 +395,10 @@ rem ---- build the cl response file ----
   rem  @0x825B83C8 is bodied; the class is now the real type behind VehicleManager's
   rem  maRaceCarDrivers[8] and mPlayerAiDriver, replacing a 224-byte stand-in record.
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnVehicleDriver.cpp"
+  rem  VehiclePhysics.cpp (2026-08-03): 2600 lines, ~54 force/handling bodies -- drift, boost,
+  rem  suspension, weight transfer, wheel friction, contact impulses. Mounted the moment its last
+  rem  unresolved external (CheckForEnteringDrift) was bodied; see the block above.
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehiclePhysics.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Wheel.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\ShuntEffect.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnSimpleVehiclePhysics.cpp"
