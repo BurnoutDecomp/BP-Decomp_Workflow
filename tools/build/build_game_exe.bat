@@ -345,20 +345,23 @@ rem ---- build the cl response file ----
   rem  were split into their own unmounted TUs (ExternalPhysicsBody_ReadPropertiesFromRenderware.cpp
   rem  and BrnSimpleVehiclePhysics_Construct.cpp -- see each file's banner).
   rem
-  rem  ⚠️ STILL OUT: VehiclePhysics.cpp and Engine.cpp. VehiclePhysics.cpp is THREE symbols away:
+  rem  ⚠️ STILL OUT: VehiclePhysics.cpp and Engine.cpp.
+  rem  ⭐ UPDATE 2026-08-03 (driver-controls layout wave): VehiclePhysics.cpp is now ONE symbol
+  rem  away, not three. BrnPlayerDriverControls::GetMode and ::GetFlag78 were never console
+  rem  functions -- they were invented accessors standing in for reads at controls +0x44 / +0x4D /
+  rem  +0x4E, which the re-seated BrnVehicleDriverControls.h now names (meDriverType and the
+  rem  BrnAIDriverControls tail). Both accessors are deleted and every call site reads the real
+  rem  member, so neither can be an unresolved external any more. What remains:
   rem      VehiclePhysics::CheckForEnteringDrift  X360 @0x825FA448 (absent from the IDA export
   rem                                             set; the body IS in the PS3 DecFIGS set at
   rem                                             0x6C8924, 218 asm lines, and that mangled name
   rem                                             gives the real signature: the last parameter is
   rem                                             a VecFloat, not the f32 the tree declares)
-  rem      BrnPlayerDriverControls::GetMode       reads controls+0x44 as a WORD (==1 test)
-  rem      BrnPlayerDriverControls::GetFlag78     reads controls+0x4D as a BYTE -- NOT +0x4E as
-  rem                                             the committed comment claims. Both offsets lie
-  rem                                             PAST the end of BrnPlayerDriverControls
-  rem                                             (sizeof 0x44 by the DWARF and by the asm-proven
-  rem                                             field offsets), so neither can be bodied until
-  rem                                             it is settled which type the console is really
-  rem                                             indexing. DO NOT GUESS THOSE TWO.
+  rem  (RESOLVED, for the record: sizeof(BrnPlayerDriverControls) is 0x48, not 0x44 -- the X360
+  rem  UpdateDriving does memcpy(&local, controls, 0x48) -- and +0x44 is meDriverType, so the
+  rem  "==1" test is `driver type == E_DRIVER_TYPE_AI`. +0x4D and +0x4E are two DIFFERENT members
+  rem  of BrnAIDriverControls. The committed comment and this one were each right about a
+  rem  different call site.)
   rem  Engine.cpp needs Engine::Reset (X360 @0x825CF130, also an export-set hole; PS3 body at
   rem  0x6D5A24, and its mangled name says the parameter is a VecFloat, not the Vector4 declared).
   rem
@@ -374,6 +377,10 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\PhysicsUtilities\ExternalPhysicsBody.cpp"
   echo "%SRC%\GameSource\Physics\PhysicsUtilities\Spring1D.cpp"
   echo "%SRC%\GameSource\Physics\PhysicsUtilities\SuspensionSpring.cpp"
+  rem  VehicleDriver (driver-controls layout wave, 2026-08-03): the per-car driver. Construct
+  rem  @0x825B83C8 is bodied; the class is now the real type behind VehicleManager's
+  rem  maRaceCarDrivers[8] and mPlayerAiDriver, replacing a 224-byte stand-in record.
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnVehicleDriver.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Wheel.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\ShuntEffect.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnSimpleVehiclePhysics.cpp"
