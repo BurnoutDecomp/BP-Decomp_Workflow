@@ -323,6 +323,14 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
+  rem  StreamedDeformationSpec (wheel-render wave, 2026-08-03): the car's authored WheelSpec
+  rem  table -- GetWheelSpec is what RaceCarEntityModule::PublishRenderPoseWithoutPhysicsBringUp
+  rem  reads the four wheel positions/scales out of. The body has existed since the deformation
+  rem  wave and was simply never on this list (LNK2019 on first attempt).
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnStreamedDeformationSpec.cpp"
+  rem  ...and its one link dependency, BodyPartBBoxSpec::HackCheckHandedness (called from the
+  rem  spec's FixUp). Same story: body committed, never on the list.
+  echo "%SRC%\SharedClasses\Physics\Deformation\BrnBodyPartBBoxSpec.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleManagerOutputInterface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleOutputInterface.cpp"
   rem ---- VEHICLE-DYNAMICS CORE (physics wave 3, 2026-08-02) --------------------------------
