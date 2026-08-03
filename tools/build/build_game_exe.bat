@@ -474,6 +474,17 @@ rem ---- build the cl response file ----
   rem  static member full of static_asserts, zero link closure) and pins the +171464..+172616
   rem  tuning bank that VehicleManager::Construct @0x8263B7C8 seeds.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_layout_check.cpp"
+  rem  ⚠️⚠️ 2026-08-03 (RaceCarPhysics own-block wave) -- RaceCarPhysics_layout_check.cpp is NEW and
+  rem  must stay mounted, for exactly the reason above one level down. RaceCarPhysics.h now carries
+  rem  all sixteen of that class's DWARF members at their X360 seats, and the claim that makes it a
+  rem  derivation rather than sixteen guesses is that the DWARF's member ORDER and the asm's member
+  rem  OFFSETS close, with zero slack, on sizeof == 5216 -- the same 5216 BrnVehicleManager.h pins as
+  rem  its per-car stride. Neither RaceCarPhysics.cpp nor RaceCarPhysics_embed_check.cpp is in this
+  rem  list (grep: zero hits for RaceCarPhysics.cpp before this line), so a static_assert in either
+  rem  of them would be compiled by nothing. This TU is compile-only -- one never-called static
+  rem  member full of static_asserts, zero link closure -- and it also carries the record-side seats
+  rem  for BrnVehicleManager's RaceCarVehicleRecord, which had the same hole.
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\RaceCarPhysics_layout_check.cpp"
   rem ---- end vehicle-dynamics core ---------------------------------------------------------
   rem ---- CONTACT-SPY DATA + PROP-MANAGER PERF MONITORS (physics wave 4, 2026-08-02) --------
   rem  Two of the sub-constructors BrnPhysics::PhysicsModule::Construct @0x825AE308 calls:
