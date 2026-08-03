@@ -452,6 +452,18 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\PhysicsUtilities\InterpedParam3.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehicleAttribs.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Engine.cpp"
+  rem  ⭐ 2026-08-03 (W-C wave) -- the two debug components VehicleManager::Construct @0x8263B7C8
+  rem  and PhysicalTrafficManager::Construct @0x82636CA8 build. Both were empty/opaque slices
+  rem  until now; both now carry their FULL DecFIGS member layout with the offsets asm-derived
+  rem  from those two Constructs.
+  rem    BrnVehicleManagerDebugComponent.cpp  -- NEW. VehicleManagerDebugComponent::Construct
+  rem      @0x825B5A78 (194 instrs) + GetName @0x825B5D80 + a tamper-tested (5/5) _AssertLayout.
+  rem      The class closes to 1296 bytes == BrnVehicleManager.h's mDebugComponent span.
+  rem    BrnPhysicalTrafficManagerDebugComponent.cpp -- existed, but its ONLY include
+  rem      ("DebugSystem/Core/CgsDebugComponent.h") resolved against no -I directory, so the file
+  rem      had never compiled. Include fixed; Construct added (inlined at 0x82636DF8).
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerDebugComponent.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManagerDebugComponent.cpp"
   rem ---- end vehicle-dynamics core ---------------------------------------------------------
   rem ---- CONTACT-SPY DATA + PROP-MANAGER PERF MONITORS (physics wave 4, 2026-08-02) --------
   rem  Two of the sub-constructors BrnPhysics::PhysicsModule::Construct @0x825AE308 calls:
