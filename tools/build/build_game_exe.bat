@@ -192,6 +192,12 @@ rem ---- build the cl response file ----
   rem  Construct @0x828A1EE8, the class constructor @0x827DF1E0 and RigidBodyData::
   rem  RigidBodyData @0x827DB728 all live here.
   echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModule.cpp"
+  rem  ⭐ 2026-08-04 (task #140): the InputBuffer TU is now a HARD dependency of the TU above.
+  rem  ProcessAddRigidBodyQueue -- the first of the nineteen input drains -- calls
+  rem  InputBuffer::GetAddRigidBodyQueue() const @0x8289E408, which is defined here. Mounted
+  rem  after reading the link (ONE unresolved external, this symbol, nothing else came with
+  rem  it): the TU adds no further unresolved symbols of its own.
+  echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsCamera.cpp"
   echo "%SRC%\GameSource\Director\Camera\Camera.cpp"
