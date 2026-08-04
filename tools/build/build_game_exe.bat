@@ -448,11 +448,24 @@ rem ---- build the cl response file ----
   rem  ⛔ Simulation_SimulationUpdate.cpp is NOT here on purpose: SimulationUpdate calls eight
   rem  stages that are not reconstructed (ContactBatchBuild, the four pipelines, the three
   rem  Spy* dumps), so mounting it is an instant 8x LNK2019. See that file's banner.
-  rem  ⚠️ ZERO BYTES ENTER THE EXE: nothing constructs a rw::physics::Simulation anywhere in the
-  rem  tree (CgsPhysicsSimulationModule::mpSimulation is declared and never assigned), so this
-  rem  code LINKS and cannot RUN. Mounted anyway so the closure is continuously enforced.
+  rem  ⭐⭐ 2026-08-04 (task #135) -- THE "ZERO BYTES ENTER THE EXE" NOTE THAT USED TO STAND HERE
+  rem  IS RETIRED. It said "nothing constructs a rw::physics::Simulation anywhere in the tree
+  rem  (CgsPhysicsSimulationModule::mpSimulation is declared and never assigned), so this code
+  rem  LINKS and cannot RUN." That is fixed at the ROOT: PhysicsSimulationModule::Prepare and
+  rem  AllocateMemoryAndInitialiseRW are bodied, BrnPhysics::PhysicsModule::Prepare is bodied
+  rem  (its stage 3 is what calls them), and Simulation::Initialize now exists. The simulation
+  rem  is built at world-prepare time and mpSimulation is non-null from then on.
+  rem    Simulation.cpp also gained Initialize @0x82BC5158 + RemoveJoint/RemoveDrive.
+  rem    SimulationWorkspace.cpp gained Initialize (IDA calls it AptDisplayListState::GetFirstItem).
+  rem    PairSet.cpp gained ClearAll @0x82BC6DC0 (a FOURTH confirmed export-set hole, pulled
+  rem    out of the .i64 headless) -- and two console-stride bugs were fixed in it and in the
+  rem    workspace sizer; see each function's banner.
+  rem  ⛔ The Simulation_SimulationUpdate.cpp line above still stands: the simulation now EXISTS
+  rem  and is populated-capable, but it does NOT STEP yet.
   echo "%VEN%\renderware\src\rw\physics\Quaternion.cpp"
   echo "%VEN%\renderware\src\rw\physics\Simulation.cpp"
+  echo "%VEN%\renderware\src\rw\physics\SimulationWorkspace.cpp"
+  echo "%VEN%\renderware\src\rw\physics\PairSet.cpp"
   rem    Jacobian.cpp -- Jacobian_RQD::Create @0x82BC0FA8 and DriveJacobian::GetMatIBT
   rem                    @0x82BC1128, plus the 384-byte jacobian RECORD declaration the two
   rem                    constraint builders write into.
