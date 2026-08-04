@@ -35,10 +35,37 @@ def strip_comments(text):
 
 
 def defined_leaves(src, cls=None):
-    """(class, leaf) pairs defined out-of-line in `src`; `cls` restricts to one class."""
+    """(class, leaf) pairs DEFINED out-of-line in `src`; `cls` restricts to one class.
+
+    A definition is distinguished from a CALL SITE by what follows the parameter list: a
+    definition is followed by a body (optionally via `const` and/or a ctor-initialiser),
+    whereas `x = Foo::Make(a, b);` is followed by `;`. Matching `Qual::leaf(` alone counts
+    every call as a definition -- which is how an earlier check reported a bogus ODR
+    duplicate for a function called once and defined once.
+    """
     who = re.escape(cls) if cls else r'[A-Za-z_]\w*'
     pat = re.compile(r'\b(' + who + r')\s*::\s*(~?\s*[A-Za-z_]\w*)\s*\(')
-    return [(m.group(1), m.group(2).replace(' ', '')) for m in pat.finditer(src)]
+    out = []
+    for m in pat.finditer(src):
+        # walk the parameter list to its matching close paren
+        i, depth = m.end() - 1, 0
+        while i < len(src):
+            if src[i] == '(':
+                depth += 1
+            elif src[i] == ')':
+                depth -= 1
+                if depth == 0:
+                    break
+            i += 1
+        if i >= len(src):
+            continue
+        tail = src[i + 1:i + 200].lstrip()
+        for kw in ('const', 'throw()', 'noexcept'):      # trailing specifiers
+            if tail.startswith(kw):
+                tail = tail[len(kw):].lstrip()
+        if tail[:1] in ('{', ':'):                        # body, or ctor-initialiser
+            out.append((m.group(1), m.group(2).replace(' ', '')))
+    return out
 
 
 def check(tu_id, cls, directory, prefix=''):
