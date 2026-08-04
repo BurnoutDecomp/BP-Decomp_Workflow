@@ -36,7 +36,18 @@ $bm.Dispose()
 $mean = ($lum | Measure-Object -Average).Average
 $sd   = [math]::Sqrt((($lum | ForEach-Object { ($_-$mean)*($_-$mean) }) | Measure-Object -Average).Average)
 
-if ($WriteGolden -ne "") { ($lum -join ',') | Set-Content $WriteGolden; Write-Host "[frame-gate] golden written -> $WriteGolden" }
+# ⚠️⚠️ INVARIANT CULTURE, NOT THE HOST'S. On this machine (Get-Culture -> fr-FR) `$_.ToString()`
+#   emits "79,444", so `$lum -join ','` produced 4608 comma-separated fields instead of 2304 --
+#   the count test below then failed, the whole correlation block was SKIPPED, and the gate
+#   printed "corr=n/a  PASS". golden_junkyard_handover.csv had been in that state since it was
+#   banked: the absolute tripwires were doing all the work and the golden was decorative.
+#   Found 2026-08-04 (task #127). Both ends are pinned to InvariantCulture now, and a length
+#   mismatch is a LOUD FAILURE instead of a silent skip.
+$INV = [System.Globalization.CultureInfo]::InvariantCulture
+if ($WriteGolden -ne "") {
+  (($lum | ForEach-Object { $_.ToString($INV) }) -join ',') | Set-Content $WriteGolden
+  Write-Host "[frame-gate] golden written -> $WriteGolden"
+}
 
 $fail = @()
 if ($mean -lt $MinMean) { $fail += ("mean luminance {0:f1} < {1}" -f $mean, $MinMean) }
@@ -44,8 +55,11 @@ if ($sd   -lt $MinSd)   { $fail += ("luminance sd {0:f1} < {1} (a flat/shard fra
 
 $corrTxt = "n/a"
 if ($Golden -ne "" -and (Test-Path $Golden)) {
-  $g = (Get-Content $Golden) -split ',' | ForEach-Object { [double]$_ }
-  if ($g.Count -eq $lum.Count) {
+  $g = (Get-Content $Golden) -split ',' | ForEach-Object { [double]::Parse($_, $INV) }
+  if ($g.Count -ne $lum.Count) {
+    $fail += ("golden has {0} values, the frame has {1} -- STALE OR LOCALE-CORRUPTED GOLDEN, re-bank it" -f $g.Count, $lum.Count)
+  }
+  else {
     $gm = ($g | Measure-Object -Average).Average
     $num=0.0; $da=0.0; $db=0.0
     for ($i=0; $i -lt $g.Count; $i++) { $a=$lum[$i]-$mean; $b=$g[$i]-$gm; $num+=$a*$b; $da+=$a*$a; $db+=$b*$b }
