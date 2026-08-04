@@ -2703,6 +2703,12 @@
   "Attrib::Attribute::Attribute": {
    "status": "reviewed"
   },
+  "Attrib::Attribute::GetInternalPointer": {
+   "status": "reviewed"
+  },
+  "Attrib::Attribute::GetLength": {
+   "status": "reviewed"
+  },
   "Attrib::Attribute::IsInherited": {
    "status": "reviewed"
   },
@@ -2781,7 +2787,22 @@
   "Attrib::Collection::Clean": {
    "status": "reviewed"
   },
+  "Attrib::Collection::Clear": {
+   "status": "reviewed"
+  },
+  "Attrib::Collection::FreeNodeData": {
+   "status": "reviewed"
+  },
   "Attrib::Collection::Get": {
+   "status": "reviewed"
+  },
+  "Attrib::Collection::GetData": {
+   "status": "reviewed"
+  },
+  "Attrib::Collection::GetNode": {
+   "status": "reviewed"
+  },
+  "Attrib::Collection::NextKey": {
    "status": "reviewed"
   },
   "Attrib::Collection::Release": {
@@ -3081,6 +3102,9 @@
   "Attrib::Gen::worldemitterlist::mWorldEmitters": {
    "status": "reviewed"
   },
+  "Attrib::HashMap::Add": {
+   "status": "reviewed"
+  },
   "Attrib::HashMap::CountSearchCacheLines": {
    "status": "reviewed"
   },
@@ -3141,6 +3165,9 @@
   "Attrib::Instance::Instance": {
    "status": "reviewed"
   },
+  "Attrib::Instance::Unmodify": {
+   "status": "reviewed"
+  },
   "Attrib::Instance::~Instance": {
    "status": "reviewed"
   },
@@ -3151,6 +3178,9 @@
    "status": "reviewed"
   },
   "Attrib::Node::Node": {
+   "status": "reviewed"
+  },
+  "Attrib::RefSpec::RefSpec": {
    "status": "reviewed"
   },
   "Attrib::TypeDesc::Lookup": {
@@ -51183,6 +51213,21 @@
   "MassiveAdClient3::CRequestDownloadBinary::~CRequestDownloadBinary": {
    "status": "reviewed"
   },
+  "MassiveAdClient3::CRequestExitZone::CRequestExitZone": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestExitZone::CreateRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestExitZone::Parse": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestExitZone::WriteExitZoneRequest": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CRequestExitZone::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "MassiveAdClient3::CRequestImpressionUpdate::AddAudioReport": {
    "status": "reviewed"
   },
@@ -55540,6 +55585,18 @@
    "status": "reviewed"
   },
   "rw::audio::core::VuMeter::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::XasDec::CreateInstanceEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::XasDec::DecodeEvent": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::XasDec::GetDecoderDesc": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::XasDec::GetSize": {
    "status": "reviewed"
   },
   "rw::collision::AA": {
@@ -61882,8 +61939,8 @@
    "status": "done"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/common/attribhashmap.h": {
-   "notes": "9/10 committed 0f8495f1 (Collection GetNode/GetData/FreeNodeData/Clear now done via HashMap-derived Collection). NextKey 0x828050D0 blocked: un-homed Attrib::ScanForValidKey<HashMap> template.",
-   "status": "blocked"
+   "notes": "wave M: 10/10. NextKey was blocked on an un-homed Attrib::ScanForValidKey<HashMap> template; homing it was the whole job, as suspected - a template instantiation is a homing problem, not a reconstruction one. Note for future close-outs: this is a HEADER-KEYED TU spanning SEVERAL classes (Attribute, Collection, RefSpec), so a coverage check pinned to one class name reports every function missing; the checker now derives the owning class from each ledger name instead.",
+   "status": "done"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/attribsys/runtime/vechashmap.h": {
    "status": "done"
@@ -64017,7 +64074,7 @@
    "status": "blocked"
   },
   "class:BrnGui::HudMessageAnalyzer": {
-   "notes": "6/8 committed cce5c210 (GetOnlineName + 5 online-stunt-record handlers). HandleDeveloperChallenge/TriggerDeveloperChallenge blocked: un-homed analyzer members @+0x4F9/+0x500 + inlined FameAssert.",
+   "notes": "wave M NOT REACHED: the unblock agent was killed by a session limit before it ran (resets 13:50 Europe/Berlin). Original blocker note stands, unchanged. NOTE for the resumed wave: HELPER_CMpegBase and CMpegBase are blocked on the SAME function address (PolySynth @0x82B8EE50) with different window symbols - decide which class OWNS the body before landing it, or the tree gets two definitions that cl /c cannot see. CMpegBase.h already carries the poly-synth member map recovered this wave.",
    "status": "blocked"
   },
   "class:BrnGui::HudMessageDirector": {
@@ -69968,8 +70025,8 @@
    "status": "done"
   },
   "class:MassiveAdClient3::CRequestExitZone": {
-   "notes": "4/5 committed 41debf44 (ctor/WriteExitZoneReport/CreateRequest/dtor). Parse blocked: un-homed STUB signature-parse callee.",
-   "status": "blocked"
+   "notes": "wave M: 5/5. The 'un-homed STUB signature-parse callee' was DUMPED and turns out to be 0x82AD5078, whose entire body is a single blr with ~140 callers across unrelated subsystems - an ICF-folded empty debug/trace hook compiled out of retail. Every bl STUB in Parse targets that one folded address, so the log-shaped sites map to the already-declared MassiveLog vendor hook and the nameless digest site is documented at the call site rather than modelled. The second half of the blocker (CRequestObject::ReadRemoveSignature) had already been homed by the previous wave - the note was stale. Parse implemented and verified against 0x82BDC700..0x82BDC898. Also fixed a stale comment asserting ReadRemoveSignature was un-attested, which could have led a later sweep to re-park the working path. The other four committed bodies were audited instruction-by-instruction and match.",
+   "status": "done"
   },
   "class:MassiveAdClient3::CRequestHeartbeat": {
    "notes": "5 of 6 done+committed; Parse blocked on CRequestObject::ReadRemoveSignature + unnamed STUB callee (same as sibling CRequest* Parse)",
@@ -70430,7 +70487,7 @@
    "status": "done"
   },
   "class:XCAM::CYUY2VideoOutput": {
-   "notes": "3/4 committed 41debf44 (Initialize/Render/GetNextBuffer). GetNextBufferRGB 0x82984BD0 blocked: VMX128 YUY2->RGBA needs un-recovered BT.601 float rodata + 32-byte clamp const unk_8210C300.",
+   "notes": "wave M PARTIAL 3/4: GetNextBufferRGB @0x82984BD0 still missing (its implementer was killed by a session limit mid-run). The blocker IS cracked and recorded in scratchpad/waveM/YUY2Output.spec.md - the BT.601 rodata and the 32-byte clamp constant were dumped, and the header now records that the pixel-shader container is a 0x288-byte Xenos microcode blob at 0x8210C098 bounded by flt_8210C320, deliberately unmodelled since it has no meaning on the PC target. Resume: implement the one function from the spec.",
    "status": "blocked"
   },
   "class:XConfigUserSettings": {
@@ -70575,7 +70632,7 @@
    "status": "done"
   },
   "class:XGRAPHICS::VRegInfo": {
-   "notes": "5/6 committed 76bf1173 (ctor/dtor/BumpDefs/BumpUses + deleting-dtor; expanded VReg stand-in into full class). Make 0x82C28E58 blocked: tail-call through un-recovered rodata factory-dispatch table off_821B5108 (3-word per-kind entries absent from dossier).",
+   "notes": "wave M NOT REACHED: the unblock agent was killed by a session limit before it ran (resets 13:50 Europe/Berlin). Original blocker note stands, unchanged. NOTE for the resumed wave: HELPER_CMpegBase and CMpegBase are blocked on the SAME function address (PolySynth @0x82B8EE50) with different window symbols - decide which class OWNS the body before landing it, or the tree gets two definitions that cl /c cannot see. CMpegBase.h already carries the poly-synth member map recovered this wave.",
    "status": "blocked"
   },
   "class:XGRAPHICS::VRegTable": {
@@ -70984,7 +71041,7 @@
    "status": "blocked"
   },
   "class:rw::audio::core::CMpegBase": {
-   "notes": "5/6 committed 62174655. PolySynth 0x82B8EE50 blocked: un-recovered poly-phase synthesis-window rodata (unk_82159D70/DB0) + un-homed sub_82B8E258.",
+   "notes": "wave M NOT REACHED: the unblock agent was killed by a session limit before it ran (resets 13:50 Europe/Berlin). Original blocker note stands, unchanged. NOTE for the resumed wave: HELPER_CMpegBase and CMpegBase are blocked on the SAME function address (PolySynth @0x82B8EE50) with different window symbols - decide which class OWNS the body before landing it, or the tree gets two definitions that cl /c cannot see. CMpegBase.h already carries the poly-synth member map recovered this wave.",
    "status": "blocked"
   },
   "class:rw::audio::core::Collection": {
@@ -71057,7 +71114,7 @@
    "status": "blocked"
   },
   "class:rw::audio::core::HELPER_CMpegBase": {
-   "notes": "8/9 committed dfaf2c48. PolySynth 0x82B8EE50 blocked: un-recovered synthesis-window rodata (unk_82156740/780) + un-homed sub_82B86488.",
+   "notes": "wave M NOT REACHED: the unblock agent was killed by a session limit before it ran (resets 13:50 Europe/Berlin). Original blocker note stands, unchanged. NOTE for the resumed wave: HELPER_CMpegBase and CMpegBase are blocked on the SAME function address (PolySynth @0x82B8EE50) with different window symbols - decide which class OWNS the body before landing it, or the tree gets two definitions that cl /c cannot see. CMpegBase.h already carries the poly-synth member map recovered this wave.",
    "status": "blocked"
   },
   "class:rw::audio::core::HighPassButterworth": {
@@ -71198,8 +71255,8 @@
    "status": "blocked"
   },
   "class:rw::audio::core::XasDec": {
-   "notes": "3/4 committed 058ed819 (CreateInstanceEvent/GetSize/GetDecoderDesc). DecodeEvent 0x82B94118 blocked: XAS0 per-channel decode indexes un-recovered coefficient rodata (flt_8215A7F0/F4/810), same wall as Xas1Dec::DecodeChannel.",
-   "status": "blocked"
+   "notes": "wave M: 4/4, vendor TU. DecodeEvent was blocked on un-recovered coefficient rodata; dumped: flt_8215A7F0 is the EA-XA ADPCM filter table (4 pairs of BE f32, {0,0} {0.9375,0} {1.796875,-0.8125} {1.53125,-0.859375}) and flt_8215A810 is a 13-entry residual scale ladder 2^-(31+e). Entry counts pinned three ways (next-item boundary, a byte-identical duplicate copy bounded by its own pointer table, and the exact geometric ladder terminating). The consumer masks are raw 4-bit nibble extracts with NO bound check, so indices 4-15 read adjacent rodata on console - documented in code rather than silently 'fixed'. BONUS: the duplicate copy proves the sibling TU class:rw::audio::core::Xas1Dec is blocked on the SAME data and is now unblockable with zero further dumping. FILED, not changed: DecoderRequest::muReserved00 is a console POINTER squeezed into a u32 (asm lwz r11,0(r3) feeds it straight to the byte-stream cursor) - the recurring u32-standing-in-for-a-pointer hazard; widening it needs a coordinated change across its three committed readers. Also filed: GetSize returns the CONSOLE instance size family-wide, which is the GetSize-feeds-allocation pattern if the framework ever allocates by it.",
+   "status": "done"
   },
   "class:rw::audio::core::XasEnc": {
    "notes": "Encode @0x82BA71F0 is the XAS ADPCM audio block encoder (32-sample-block DSP quantisation). Compression/DSP audio-encoder per the hard-rule block list. Deferred.",
