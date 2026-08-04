@@ -4,50 +4,59 @@
 # full day, across ~15 boot-verified commits, because nothing ever LOOKED AT A FRAME.
 # This is the cheapest thing that does. Runtime: about 1 second on top of a boot run.
 #
-# Usage (after a BRN_FRAME_DUMP run):
-#     frame_gate.ps1 -FrameDir D:\...\dh_frames                 # absolute tripwire only
-#     frame_gate.ps1 -FrameDir ... -Golden sig_good.csv         # + golden correlation
-#     frame_gate.ps1 -FrameDir ... -WriteGolden sig_good.csv    # bank a new golden
+# ⛔⛔ AND THE CHECK THAT ITSELF FAILED, 2026-08-04 (task #139).
+#   Until this revision the gate sorted the dump directory BY NAME and scored the last entry,
+#   with no notion of when those pixels were produced.  `BRN_FRAME_DUMP=1` dumps NOTHING
+#   silently (the game fopen()s "1\bb_000000.bmp" relative to build\game\ and gets NULL), so
+#   the gate happily scored bitmaps left over from an earlier -- possibly days-old -- run and
+#   reported PASS at corr 1.000.  EVERY "frame gate PASS" banked before this revision is
+#   therefore unproven: not one of them verified the frames came from that run.
+#   Provenance is now mandatory.  See frame_gate_common.ps1 for the full autopsy.
+#
+# Usage (after a flow_run.ps1 -Frames run):
+#     frame_gate.ps1 -FrameDir <dir> -Marks <out>\marks.txt
+#     frame_gate.ps1 -FrameDir <dir> -NotBefore 2026-08-04T18:22:31.4470000+02:00
+#     frame_gate.ps1 -FrameDir <dir> -Marks ... -Golden golden_junkyard_handover.csv
+#     frame_gate.ps1 -FrameDir <dir> -Marks ... -WriteGolden golden_junkyard_handover.csv
+#
+#   -Marks or -NotBefore is REQUIRED.  Without one the gate refuses to score rather than
+#   emit an unprovenanced green.  flow_run.ps1 writes the RUNSTART line -Marks reads.
+#
+# ⛔ Goldens must be banked on a DEFAULT run -- never through BRN_WORLD_CAMFREE.  That flag
+#   is how a day-long world-render regression hid: it was added by the very commit that broke
+#   the world, so every shot taken through it looked fine while the default run was broken.
 #
 # Exit code 0 = PASS, 1 = FAIL. Intended to be the LAST line of the boot harness, so a wave
 # cannot report "baseline held" without a frame that actually shows the world.
 param(
   [Parameter(Mandatory=$true)][string]$FrameDir,
+  [string]$Marks = "",
+  [string]$NotBefore = "",
   [string]$Golden = "",
   [string]$WriteGolden = "",
   [double]$MinMean = 60.0,     # good junkyard frames measure 122-124; shard frames 33-39
   [double]$MinSd   = 40.0,     # good 89-90; shard 16-20
-  [double]$MinCorr = 0.90
+  [double]$MinCorr = 0.90,
+  [double]$SkewSeconds = 2.0
 )
 $ErrorActionPreference = 'Stop'
-Add-Type -AssemblyName System.Drawing
+. (Join-Path $PSScriptRoot 'frame_gate_common.ps1')
+$TAG = 'frame-gate'
 
-$f = Get-ChildItem $FrameDir -Filter *.bmp -ErrorAction SilentlyContinue | Sort-Object Name
-if ($f.Count -eq 0) { Write-Host "[frame-gate] FAIL: no frames dumped -- did BRN_FRAME_DUMP get set?"; exit 1 }
+# --- provenance first: refuse bad input before any pixel is read -------------------------
+Assert-FrameDirUsable -Tag $TAG -FrameDir $FrameDir
+$launch = Resolve-NotBefore -Tag $TAG -NotBefore $NotBefore -Marks $Marks
+$frames = Get-FreshFrames -Tag $TAG -FrameDir $FrameDir -NotBefore $launch -SkewSeconds $SkewSeconds
 
-$img = [System.Drawing.Image]::FromFile($f[-1].FullName)
-$bm  = New-Object System.Drawing.Bitmap($img, 64, 36)
-$img.Dispose()
-$lum = New-Object System.Collections.Generic.List[double]
-for ($y=0; $y -lt 36; $y++) { for ($x=0; $x -lt 64; $x++) {
-  $c = $bm.GetPixel($x,$y); $lum.Add(0.299*$c.R + 0.587*$c.G + 0.114*$c.B) } }
-$bm.Dispose()
+# The post-handover chase shot is the last frame of the run.  Sorted by name = by present
+# count; every frame here is already proven to belong to this run.
+$scored = ($frames | Sort-Object Name)[-1]
 
-$mean = ($lum | Measure-Object -Average).Average
-$sd   = [math]::Sqrt((($lum | ForEach-Object { ($_-$mean)*($_-$mean) }) | Measure-Object -Average).Average)
+$lum = Get-FrameLuma -Path $scored.FullName
+$st  = Get-LumaStats -Lum $lum
+$mean = $st.mean; $sd = $st.sd
 
-# ⚠️⚠️ INVARIANT CULTURE, NOT THE HOST'S. On this machine (Get-Culture -> fr-FR) `$_.ToString()`
-#   emits "79,444", so `$lum -join ','` produced 4608 comma-separated fields instead of 2304 --
-#   the count test below then failed, the whole correlation block was SKIPPED, and the gate
-#   printed "corr=n/a  PASS". golden_junkyard_handover.csv had been in that state since it was
-#   banked: the absolute tripwires were doing all the work and the golden was decorative.
-#   Found 2026-08-04 (task #127). Both ends are pinned to InvariantCulture now, and a length
-#   mismatch is a LOUD FAILURE instead of a silent skip.
-$INV = [System.Globalization.CultureInfo]::InvariantCulture
-if ($WriteGolden -ne "") {
-  (($lum | ForEach-Object { $_.ToString($INV) }) -join ',') | Set-Content $WriteGolden
-  Write-Host "[frame-gate] golden written -> $WriteGolden"
-}
+if ($WriteGolden -ne "") { Write-Golden -Lum $lum -Path $WriteGolden -Tag $TAG }
 
 $fail = @()
 if ($mean -lt $MinMean) { $fail += ("mean luminance {0:f1} < {1}" -f $mean, $MinMean) }
@@ -55,26 +64,20 @@ if ($sd   -lt $MinSd)   { $fail += ("luminance sd {0:f1} < {1} (a flat/shard fra
 
 $corrTxt = "n/a"
 if ($Golden -ne "" -and (Test-Path $Golden)) {
-  $g = (Get-Content $Golden) -split ',' | ForEach-Object { [double]::Parse($_, $INV) }
-  if ($g.Count -ne $lum.Count) {
-    $fail += ("golden has {0} values, the frame has {1} -- STALE OR LOCALE-CORRUPTED GOLDEN, re-bank it" -f $g.Count, $lum.Count)
-  }
-  else {
-    $gm = ($g | Measure-Object -Average).Average
-    $num=0.0; $da=0.0; $db=0.0
-    for ($i=0; $i -lt $g.Count; $i++) { $a=$lum[$i]-$mean; $b=$g[$i]-$gm; $num+=$a*$b; $da+=$a*$a; $db+=$b*$b }
-    $corr = if ($da -gt 0 -and $db -gt 0) { $num / [math]::Sqrt($da*$db) } else { 0 }
+  $corr = Get-GoldenCorr -Lum $lum -Mean $mean -Path $Golden -Fail ([ref]$fail)
+  if ($null -ne $corr) {
     $corrTxt = "{0:f3}" -f $corr
     if ($corr -lt $MinCorr) { $fail += ("golden correlation {0:f3} < {1}" -f $corr, $MinCorr) }
   }
 }
 
-Write-Host ("[frame-gate] frame {0}  mean={1:f1} sd={2:f1} corr={3}" -f $f[-1].Name, $mean, $sd, $corrTxt)
+Write-Provenance -Tag $TAG -FrameDir $FrameDir -Frames $frames -NotBefore $launch -Scored $scored
+Write-Host ("[{0}] frame {1}  mean={2:f1} sd={3:f1} corr={4}" -f $TAG, $scored.Name, $mean, $sd, $corrTxt)
 if ($fail.Count -gt 0) {
-  Write-Host "[frame-gate] *** FAIL *** the rendered world is not plausible:"
+  Write-Host "[$TAG] *** FAIL *** the rendered world is not plausible:"
   $fail | ForEach-Object { Write-Host "    - $_" }
-  Write-Host "    LOOK AT $($f[-1].FullName) BEFORE REPORTING THIS BUILD GREEN."
+  Write-Host "    LOOK AT $($scored.FullName) BEFORE REPORTING THIS BUILD GREEN."
   exit 1
 }
-Write-Host "[frame-gate] PASS"
+Write-Host "[$TAG] PASS"
 exit 0
