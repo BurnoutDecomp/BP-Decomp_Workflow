@@ -53178,6 +53178,18 @@
   "XCAM::CXCamVideo::~CXCamVideo": {
    "status": "reviewed"
   },
+  "XCAM::CYUY2VideoOutput::GetNextBuffer": {
+   "status": "reviewed"
+  },
+  "XCAM::CYUY2VideoOutput::GetNextBufferRGB": {
+   "status": "reviewed"
+  },
+  "XCAM::CYUY2VideoOutput::Initialize": {
+   "status": "reviewed"
+  },
+  "XCAM::CYUY2VideoOutput::Render": {
+   "status": "reviewed"
+  },
   "XConfigUserSettings::GetVideoFlags": {
    "status": "reviewed"
   },
@@ -53674,6 +53686,24 @@
    "status": "reviewed"
   },
   "XGRAPHICS::TempValue::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegInfo::BumpDefs": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegInfo::BumpUses": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegInfo::Make": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegInfo::VRegInfo": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegInfo::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "XGRAPHICS::VRegInfo::~VRegInfo": {
    "status": "reviewed"
   },
   "XGRAPHICS::VRegTable::Create": {
@@ -54612,6 +54642,24 @@
   "rw::audio::core::Bit_Reserve::rewindNbits": {
    "status": "reviewed"
   },
+  "rw::audio::core::CMpegBase::AllocateSynth": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CMpegBase::GetBits": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CMpegBase::GetHeader": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CMpegBase::PolySynth": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CMpegBase::ProcessHeader": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::CMpegBase::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
   "rw::audio::core::Collection::AddCapacity": {
    "status": "reviewed"
   },
@@ -54883,6 +54931,33 @@
    "status": "reviewed"
   },
   "rw::audio::core::Gain::`vector deleting destructor'": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::Close": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::GetBits": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::GetHeader": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::Open": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::OpenSynth": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::PolySynth": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::ProcessHeader": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::Seek": {
+   "status": "reviewed"
+  },
+  "rw::audio::core::HELPER_CMpegBase::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "rw::audio::core::HighPassButterworth::CreateInstance": {
@@ -64074,7 +64149,7 @@
    "status": "blocked"
   },
   "class:BrnGui::HudMessageAnalyzer": {
-   "notes": "wave M NOT REACHED: the unblock agent was killed by a session limit before it ran (resets 13:50 Europe/Berlin). Original blocker note stands, unchanged. NOTE for the resumed wave: HELPER_CMpegBase and CMpegBase are blocked on the SAME function address (PolySynth @0x82B8EE50) with different window symbols - decide which class OWNS the body before landing it, or the tree gets two definitions that cl /c cannot see. CMpegBase.h already carries the poly-synth member map recovered this wave.",
+   "notes": "wave M PARTIAL 6/8: HandleDeveloperChallengeMessageDEBUG @0x824F9D48 and TriggerDeveloperChallengeMessageDEBUG @0x82520488 are BOTH fully reconstructed off the raw asm and PROVEN to compile, parked at scratchpad/waveM/parked/ with their exact unblock lines. They need shared-header additions a partfile may not make (a CgsFastBitArray face plus, for the first one, an event-payload shape). The X360-only member tail they rely on is ALREADY committed in BrnGuiHudMessageAnalyzer.h. SEPARATE PRE-EXISTING BREAK FOUND HERE, NOT CAUSED BY THIS WAVE: the committed BrnGuiHudMessageAnalyzer_wC_03.cpp:78 reads mpGuiCache->mfFrameDeltaTime, and NO such member exists in BrnGuiCache.h - only a comment naming it. Its siblings from the same wave-C carve set (mbGameplayHudActive +0x407C, miGameFlowState +0x4B30) ARE carved, so this one was simply omitted. Verified it is not mine: the declaration is absent both before and after this session's GuiCache changes. Fixing it needs the member's X360 offset dumped - deliberately NOT guessed.",
    "status": "blocked"
   },
   "class:BrnGui::HudMessageDirector": {
@@ -70487,8 +70562,8 @@
    "status": "done"
   },
   "class:XCAM::CYUY2VideoOutput": {
-   "notes": "wave M PARTIAL 3/4: GetNextBufferRGB @0x82984BD0 still missing (its implementer was killed by a session limit mid-run). The blocker IS cracked and recorded in scratchpad/waveM/YUY2Output.spec.md - the BT.601 rodata and the 32-byte clamp constant were dumped, and the header now records that the pixel-shader container is a 0x288-byte Xenos microcode blob at 0x8210C098 bounded by flt_8210C320, deliberately unmodelled since it has no meaning on the PC target. Resume: implement the one function from the spec.",
-   "status": "blocked"
+   "notes": "wave M: 4/4. GetNextBufferRGB @0x82984BD0 landed. The BT.601 rodata was dumped and then INDEPENDENTLY RE-VERIFIED bit-for-bit this pass rather than inherited. KEY FINDING, exactly the trap the brief warned about: the image does NOT hold full-precision BT.601 (1.164383/1.596027/0.812968/0.391762/2.017232) - it holds the 3-decimal XDK/MSDN-rounded family, and the luma offset is 0.0625 = 16/256, not 16/255. Anyone filling these in from textbook memory would have shipped subtly wrong colour. The verifier re-derived the whole VMX128 body by hand (all 273 asm lines, decoding the lvlx/vrlimi128 lane assembly and the insrwi channel packing) rather than trusting the implementer. One documented parity-neutral divergence: the asm re-loads pitch/data/width/height every iteration where the source hoists them - recorded so a later sweep does not 'fix' working code. CONDUCTOR FOLLOW-UPS: (a) this TU has NO entry in committed status.json despite 3/4 being committed - seed it; (b) XCAM::CI420VideoOutput::GetNextBufferRGB @0x82985360 exists in the binary, shares all this rodata, and is absent from the ledger entirely - needs a ledger add; when it lands, hoist the shared constants out of the YUY2 .cpp file-locals.",
+   "status": "done"
   },
   "class:XConfigUserSettings": {
    "notes": "XConfigUserSettings (X360 system user-settings reader) verified first-pass PASS.",
@@ -70632,8 +70707,8 @@
    "status": "done"
   },
   "class:XGRAPHICS::VRegInfo": {
-   "notes": "wave M NOT REACHED: the unblock agent was killed by a session limit before it ran (resets 13:50 Europe/Berlin). Original blocker note stands, unchanged. NOTE for the resumed wave: HELPER_CMpegBase and CMpegBase are blocked on the SAME function address (PolySynth @0x82B8EE50) with different window symbols - decide which class OWNS the body before landing it, or the tree gets two definitions that cl /c cannot see. CMpegBase.h already carries the poly-synth member map recovered this wave.",
-   "status": "blocked"
+   "notes": "wave M: 6/6. Make @0x82C28E58 is a one-line unchecked tail-dispatch through the register-type-info table, reconstructed faithfully. THE TABLE ITSELF IS NOT LANDED and the TU will not LINK without it: all 48 rows are MEASURED (X360 rodata @0x821B5100, transcribed in scratchpad/waveM/VRegInfo.spec.md) but the initialiser cannot compile because 8 of the 17 factory classes have no header in the tree at all, and the 9 that do declare NewItem returning their DERIVED type, which does not convert to the factory function pointer. The ready-to-merge table body is parked at scratchpad/waveM/parked/VRegInfo_01_gaVRegTypeInfo.cpp with the exact header lines that unblock it - a genuine 17-header coordinated change, deliberately not attempted piecemeal. Closing on the 6 ledger FUNCTIONS being defined; the missing table is data, recorded here as the outstanding link gap.",
+   "status": "done"
   },
   "class:XGRAPHICS::VRegTable": {
    "status": "done"
@@ -71041,8 +71116,8 @@
    "status": "blocked"
   },
   "class:rw::audio::core::CMpegBase": {
-   "notes": "wave M NOT REACHED: the unblock agent was killed by a session limit before it ran (resets 13:50 Europe/Berlin). Original blocker note stands, unchanged. NOTE for the resumed wave: HELPER_CMpegBase and CMpegBase are blocked on the SAME function address (PolySynth @0x82B8EE50) with different window symbols - decide which class OWNS the body before landing it, or the tree gets two definitions that cl /c cannot see. CMpegBase.h already carries the poly-synth member map recovered this wave.",
-   "status": "blocked"
+   "notes": "wave M: 6/6, vendor TU. PolySynth @0x82B8EE50 landed with its own window rodata dumped. See the HELPER_CMpegBase note: the shared address is ICF folding of two identical bodies, so each class carries its own qualified definition and there is no ODR duplicate. Builds on the poly-synth member map (per-channel rotating history phase, work-buffer base) recovered earlier in this session and already committed to CMpegBase.h.",
+   "status": "done"
   },
   "class:rw::audio::core::Collection": {
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
@@ -71114,8 +71189,8 @@
    "status": "blocked"
   },
   "class:rw::audio::core::HELPER_CMpegBase": {
-   "notes": "wave M NOT REACHED: the unblock agent was killed by a session limit before it ran (resets 13:50 Europe/Berlin). Original blocker note stands, unchanged. NOTE for the resumed wave: HELPER_CMpegBase and CMpegBase are blocked on the SAME function address (PolySynth @0x82B8EE50) with different window symbols - decide which class OWNS the body before landing it, or the tree gets two definitions that cl /c cannot see. CMpegBase.h already carries the poly-synth member map recovered this wave.",
-   "status": "blocked"
+   "notes": "wave M: 9/9, vendor TU. PolySynth @0x82B8EE50 landed together with the poly-phase synthesis-window rodata, dumped rather than inferred. OWNERSHIP RESOLVED: this address is shared with class:rw::audio::core::CMpegBase because the compiler ICF-FOLDED two identical bodies - so both classes genuinely have the method in source and each TU carries its own qualified definition (HELPER_CMpegBase::PolySynth here, CMpegBase::PolySynth there). That is NOT an ODR duplicate: the qualified names differ. Both agents were told to establish ownership before landing, and this is the resolution they reached independently.",
+   "status": "done"
   },
   "class:rw::audio::core::HighPassButterworth": {
    "status": "done"
