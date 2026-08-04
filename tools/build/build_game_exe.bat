@@ -438,8 +438,40 @@ rem ---- build the cl response file ----
   rem  and so the first real caller pulls the whole subsystem in with no mount work at all.
   rem  Do not read "mounted" here as "running".
   echo "%SRC%\vendor\renderware\physics\RigidBody.cpp"
+  rem  rw::physics SOLVER SPINE (2026-08-04, task #121). Six read-only waves reconstructed the
+  rem  EATech RenderWare rigid-body solver; this is where it lands.
+  rem    Quaternion.cpp  -- Quaternion::UnitQuaternionToMatrix @0x82BC3EC0 (an EXPORT HOLE,
+  rem                       recovered from the copy inlined into DynamicUpdate).
+  rem    Simulation.cpp  -- GetResourceDescriptor / SetWorkspace / BatchIntegrator /
+  rem                       Activate / Freeze / RemoveRigidBody.
+  rem    RigidBody.cpp   -- now carries DynamicUpdate @0x82BC2B78, the per-body integrator.
+  rem  ⛔ Simulation_SimulationUpdate.cpp is NOT here on purpose: SimulationUpdate calls eight
+  rem  stages that are not reconstructed (ContactBatchBuild, the four pipelines, the three
+  rem  Spy* dumps), so mounting it is an instant 8x LNK2019. See that file's banner.
+  rem  ⚠️ ZERO BYTES ENTER THE EXE: nothing constructs a rw::physics::Simulation anywhere in the
+  rem  tree (CgsPhysicsSimulationModule::mpSimulation is declared and never assigned), so this
+  rem  code LINKS and cannot RUN. Mounted anyway so the closure is continuously enforced.
+  echo "%VEN%\renderware\src\rw\physics\Quaternion.cpp"
+  echo "%VEN%\renderware\src\rw\physics\Simulation.cpp"
+  rem    Jacobian.cpp -- Jacobian_RQD::Create @0x82BC0FA8 and DriveJacobian::GetMatIBT
+  rem                    @0x82BC1128, plus the 384-byte jacobian RECORD declaration the two
+  rem                    constraint builders write into.
+  echo "%SRC%\vendor\renderware\physics\Jacobian.cpp"
+  rem    The two constraint builders -- the largest functions in the closure and the last
+  rem    thing standing between the solver and a real constraint:
+  rem      DriveJacobian::Build @0x82BC5590 (1320 X360 insn)
+  rem      JointJacobian::Build @0x82BC42E8  (873 X360 insn)
+  rem    Mounting them also closes Simulation::Joint/DriveBatchBuild, which call them.
+  echo "%SRC%\vendor\renderware\physics\DriveJacobian_Build.cpp"
+  echo "%SRC%\vendor\renderware\physics\JointJacobian_Build.cpp"
   echo "%SRC%\GameSource\Physics\PhysicsUtilities\ExternallySimulatedBody.cpp"
   echo "%SRC%\GameSource\Physics\PhysicsUtilities\ExternalPhysicsBody.cpp"
+  rem  ReadPropertiesFromRenderware: unmounted since physics wave 3 because
+  rem  RigidBody::GetLocalInvInertiaDiagonal() could not be bodied while the Inertia pointer was
+  rem  modelled as a float lane. The rw::physics landing promoted that lane to a real member, so
+  rem  the blocker is gone and the TU links. Its only caller (BrnPhysicalBodyPart.cpp) is still
+  rem  unmounted, so this too is closure only, not behaviour.
+  echo "%SRC%\GameSource\Physics\PhysicsUtilities\ExternalPhysicsBody_ReadPropertiesFromRenderware.cpp"
   echo "%SRC%\GameSource\Physics\PhysicsUtilities\Spring1D.cpp"
   echo "%SRC%\GameSource\Physics\PhysicsUtilities\SuspensionSpring.cpp"
   rem  VehicleDriver (driver-controls layout wave, 2026-08-03): the per-car driver. Construct
