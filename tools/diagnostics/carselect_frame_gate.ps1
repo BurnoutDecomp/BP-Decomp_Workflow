@@ -22,6 +22,16 @@
 #   movement of the car-select camera visible immediately instead of 25 hours later. When the
 #   framing is fixed, re-bank with -WriteGolden and delete this paragraph.
 #
+#   RE-BANKED 2026-08-04 (task #133), mean 21.5/sd 27.8 -> mean 27.6/sd 34.4, old corr 0.758.
+#   The gate did its job and the change was LOOKED AT before re-banking: THE WHEELS NOW DRAW.
+#   Because this camera sits BELOW the junkyard floor it is the one shot in the whole flow that
+#   sees them -- from the chase camera they are 0.74 m underground (no suspension settle), so
+#   frame_gate.ps1 correctly still reads corr 1.000. The four tyres are the pale grey of the
+#   flagged fallback pair, which is expected: a console-instanced mesh cannot use its own
+#   `*_Instanced` technique program on this build (see the banner in XenonD3D9Shims.cpp).
+#   ⇒ EXPECT THIS GOLDEN TO GO RED AGAIN, correctly, when either the suspension settle or the
+#   real instanced shader lands. Re-bank then, after looking.
+#
 # Exit code 0 = PASS, 1 = FAIL.
 param(
   [Parameter(Mandatory=$true)][string]$FrameDir,
