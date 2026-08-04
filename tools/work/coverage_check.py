@@ -44,7 +44,7 @@ def defined_leaves(src, cls=None):
     duplicate for a function called once and defined once.
     """
     who = re.escape(cls) if cls else r'[A-Za-z_]\w*'
-    pat = re.compile(r'\b(' + who + r')\s*::\s*(~?\s*[A-Za-z_]\w*)\s*\(')
+    pat = re.compile(r'\b(' + who + r')\s*::\s*(~?\s*(?:operator\s*[^\s(]+|[A-Za-z_]\w*))\s*\(')
     out = []
     for m in pat.finditer(src):
         # walk the parameter list to its matching close paren
@@ -68,6 +68,23 @@ def defined_leaves(src, cls=None):
     return out
 
 
+FREE_DEF = re.compile(
+    r'^[A-Za-z_][\w:<>,\*&\s]*?\b(operator\s*[^\s(]+|[A-Za-z_]\w*)\s*\([^;{}]*\)\s*(?:const\s*)?\{',
+    re.M)
+
+
+def free_leaves(src):
+    """unqualified definitions at namespace scope.
+
+    A ledger name's second-to-last component may be a NAMESPACE rather than a class
+    (Attrib::FindCollection is a free function inside `namespace Attrib`), and such a
+    definition carries no `Qual::` at all. Matching only qualified forms reports every one
+    of them missing -- a trap this campaign has hit before.
+    """
+    kw = {'if', 'while', 'for', 'switch', 'catch', 'return', 'sizeof', 'else', 'do'}
+    return {m.group(1).replace(' ', '') for m in FREE_DEF.finditer(src) if m.group(1) not in kw}
+
+
 def check(tu_id, cls, directory, prefix=''):
     src = ''
     d = Path(directory)
@@ -85,6 +102,8 @@ def check(tu_id, cls, directory, prefix=''):
     for c, leaf in defined_leaves(src, cls if cls and cls != '-' else None):
         counts[(c, leaf)] = counts.get((c, leaf), 0) + 1
 
+    frees = free_leaves(src)
+
     con = sqlite3.connect(str(LEDGER))
     rows = [r[0] for r in con.execute('select name from func where tu_id=?', (tu_id,))]
 
@@ -96,9 +115,11 @@ def check(tu_id, cls, directory, prefix=''):
         if 'deleting destructor' in leaf:
             continue                                   # compiler-auto-emitted
         exact = counts.get((owner, leaf), 0)
+        if exact == 0 and leaf in frees:
+            continue                                   # free function in namespace `owner`
         if exact == 0:
             # a leaf may be clipped: the FULL ledger name sits right at IDA's limit
-            if len(name) >= IDA_SYMBOL_MAX:
+            if len(name) == IDA_SYMBOL_MAX:   # exactly at the clip width; longer names are simply long
                 cands = sorted({l for (c, l) in counts
                                 if c == owner and l.startswith(leaf) and l != leaf})
                 if len(cands) == 1:
