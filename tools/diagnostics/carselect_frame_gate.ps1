@@ -48,8 +48,17 @@
 #   ⇒ EXPECT THIS GOLDEN TO GO RED AGAIN, correctly, when either the suspension settle or the
 #   real instanced shader lands. Re-bank then, after looking.
 #
-# ⭐ NEGATIVE CONTROL: this gate scores corr -0.371 on a post-handover chase frame. That is
-#   what proves it discriminates rather than merely passing. Re-check it when re-banking.
+#   RE-BANKED 2026-08-05 (the junkyard-reveal wave), mean 27.6/sd 34.4 -> mean 39.8/sd 52.9,
+#   old corr 0.539. The gate did its job and the change was LOOKED AT before re-banking: the
+#   AUTHORED GAME-INTRO REVEAL now really plays (the ~8 s ICE pan onto the junkyard exterior),
+#   so 'Entering Car Select' fires ~5 s later and +300 presents lands while the car-select GUI
+#   chrome (banner + stat labels) is still animating in over the SAME floor-level framing --
+#   the camera and car did not move (the livery-mark frame is unchanged). Task #127's wrong
+#   floor-level framing is still wrong; the paragraph above still applies.
+#
+# ⭐ NEGATIVE CONTROL: this gate scores corr -0.381 (was -0.371 on the 08-04 golden) on a
+#   post-handover chase frame. That is what proves it discriminates rather than merely
+#   passing. Re-check it when re-banking.
 #
 # Exit code 0 = PASS, 1 = FAIL.
 param(
