@@ -235,7 +235,8 @@ work server-update [--reconcile] [--no-push]
                                           # one-shot: refresh class homes (+status), push, re-import on the server
 work resolve-class-homes [--apply]        # map class TUs to their real committed home files (progress/class_homes.json)
 work reconcile-from-files [--apply] [--allow-demote]
-                                          # promote from committed b5-decomp files; --allow-demote permits removals
+                                          # derive from committed b5-decomp files + vendor coverage;
+                                          # --allow-demote makes the current files/index authoritative
 work server-reset [--to <ref>]            # local reset + server reseed
 work worker-add "Name" [--admin]
 work worker-list
@@ -322,7 +323,8 @@ These helpers are optional. They do not replace manual reconstruction:
 work auto --scan              # find fully mechanical TUs
 work auto --run [-n N]        # draft/gate safe forwarder/thunk-only TUs
 work reconcile-from-files [--apply] [--allow-demote]
-                            # promote-only by default; --allow-demote permits removals
+                            # promote-only by default; --allow-demote makes the current
+                            # files/index authoritative and permits removals
 python tools/work/find_local_redefs.py [--summary]
 python tools/work/wiki_index.py [--lookup <Type>]
 python tools/work/check_vendor_lib.py <tu>
