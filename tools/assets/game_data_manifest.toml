@@ -218,6 +218,15 @@ uses the Volatility texture flow, hence isolate."""
 # ---------------------------------------------------------------------------------
 
 [[rule]]
+id     = "skip-orphan-pddk01xs-attrib"
+match  = ["VEHICLES/VEH_PDDK01XS_AT.BIN"]
+action = "skip"
+why    = """This one orphan bundle contains VehicleAnimation (0x10023) and
+BodypartRemapData (0x10024), but PDDK01XS has no VehicleList entry and no reconstructed
+consumer requests it. vehicledeform_transcode.py deliberately refuses it by name rather
+than emitting guessed native layouts. Omit the unreachable disc orphan from the PC folder."""
+
+[[rule]]
 id       = "vehicle-graphics"
 match    = ["VEHICLES/VEH_*_GR.BIN"]
 action   = "convert"
@@ -333,6 +342,19 @@ orchestrator sweeps any *.x360 out of the game folder regardless."""
 # ---------------------------------------------------------------------------------
 
 [[rule]]
+id     = "environment-colour-cubes"
+match  = ["ENVIRONMENTSETTINGS/COLOURCUBES/*.BUNDLE"]
+action = "convert"
+tool   = "bundles/nonapt_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """These nested bundles contain ColourCube (type 0x2b), not the
+Keyframe/TimeLine/Dictionary resources handled by env_transcode.py.  The schema is a u32
+edge length followed by byte-valued RGB cube data, so nonapt_transcode swaps the length and
+preserves the colour bytes.  The known-good PC PARADISE_INGAME_JUNK bundle confirms this
+separate resource family."""
+
+[[rule]]
 id     = "environment-settings"
 match  = ["ENVIRONMENTSETTINGS/*.BUNDLE", "ENVIRONMENTSETTINGS/*/*.BUNDLE"]
 action = "convert"
@@ -355,12 +377,13 @@ container -- nothing to endian-flip.  build/game holds it byte-identical (738 by
 id     = "video-list"
 match  = ["VIDEOS/VIDEOLIST.BUNDLE"]
 action = "convert"
-tool   = "bundles/convert_x360_bundle.py"
+tool   = "bundles/videolist_transcode.py"
 argv   = ["{src}", "{out}"]
 verify = ["bnd2_platform=4"]
-why    = """A 640-byte container-only bundle; build/game holds it at platform 4 / 1024
-bytes, the signature of the generic YAP decompress -> meta platform 4 -> repack path with
-no payload porter needed."""
+why    = """The five type-0x42 payloads contain six 12-byte X360 VideoFile records with
+big-endian 32-bit self-relative name pointers. The x64 runtime needs 16-byte records with
+little-endian 64-bit self-relative pointers; a container-only conversion leaves corrupt
+pointers and crashes MovieManager::QueueNextMovie."""
 
 
 # ---------------------------------------------------------------------------------
@@ -403,22 +426,183 @@ containers (magic 00 00 7E 99).  build/game holds all three byte-identical, with
 original 2008 timestamps -- never touched by any wave."""
 
 [[rule]]
-id     = "memcard-image"
+id     = "skip-console-memcard-image"
 match  = ["MEMCARD/*.PNG"]
-action = "copy"
-why    = "A plain PNG save icon. No console-specific layout."
+action = "skip"
+why    = """Console save-container artwork. The PC profile backend does not consume it,
+and SaveLoadSystem currently uses Memcard/SaveImage.png as its console content-info probe:
+shipping the file enters the unavailable Realmc callback path instead of the PC no-save path."""
 
 
 # ---------------------------------------------------------------------------------
-# 7.  UNHANDLED -- needs conversion, has no converter.  THE POINT OF THIS FILE.
+# 7.  Additional non-Apt resource families
+# ---------------------------------------------------------------------------------
+
+[[rule]]
+id       = "fsm-lua"
+match    = ["FSM/*.DAT"]
+action   = "convert"
+tool     = "bundles/nonapt_transcode.py"
+argv     = ["{src}", "{out}"]
+out_name = "{stem}.BUNDLE"
+verify   = ["bnd2_platform=4"]
+why      = """FSM resources are BinaryFileResource-wrapped Lua blobs.  The payload body is
+opaque Lua data and remains byte-identical; only the native-endian size/offset header is
+flipped.  The converter was differentially checked against the curated platform-4 FSM set
+(BRNSCREENFSM payload byte-identical) and performs the retail .DAT -> runtime .BUNDLE rename."""
+
+[[rule]]
+id     = "language-banks"
+match  = ["LANGUAGE/*.BUNDLE"]
+action = "convert"
+tool   = "bundles/nonapt_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """LanguageResource is relaid from its BE u32 header and 8-byte entries to the
+decomp's LE x64 header and 16-byte entries; string offsets widen to u64 and each UTF-8 string
+is padded to the runtime's 8-byte alignment.  The result for retail 0001.BUNDLE is byte-for-byte
+identical to the independently produced platform-4 payload."""
+
+[[rule]]
+id      = "language-fonts"
+match   = ["LANGUAGE/FONTS/*.FONT", "LANGUAGE/FONTSSD/*.FONT"]
+action  = "convert"
+tool    = "bundles/nonapt_transcode.py"
+argv    = ["{src}", "{out}"]
+verify  = ["bnd2_platform=4"]
+isolate = "volatility"
+why     = """The bundle driver combines the existing Font u32->u64 relayout with the proven
+Xenos texture detile/endian porter, moves the atlas import to the widened page-pointer array,
+and repacks both resources as platform 4.  Font height/name offsets are taken from the ARTIST
+retail bytes and the native-x64 struct schema, not the older four-byte-shifted conversion."""
+
+[[rule]]
+id     = "sound-pc-direct-big-endian"
+match  = ["SOUND/BURNOUTGLOBALDATA.BIN", "SOUND/SPLICER/PRESENTATIONASSET.BUNDLE",
+          "SOUND/STREAMS/STREAMHEADERS*.BUNDLE", "SOUND/STREAMS/STREAMSREGISTRY*.BUNDLE"]
+action = "copy"
+verify = ["bnd2_platform=2", "nonempty"]
+why    = """These two files are deliberately consumed outside BundleLoader by the current
+PC audio bridges (CgsGuiSoundPC.cpp and CgsStreamHeadersPC.cpp). They read the original X360
+bnd2 headers, registry records, Splicer tables, and embedded SNR images with explicit
+Be16/Be32/Be64 accessors. Converting these inputs to platform 4 breaks those direct reads;
+omitting BURNOUTGLOBALDATA disables the presentation-action mapping. Keep them byte-identical
+and verify platform 2.
+This is a PC-platform serialized-data leaf, not an unconverted BundleLoader input."""
+
+[[rule]]
+id     = "sound-proven-binary-resources"
+match  = ["SOUND/GLOBALWAVES.BUNDLE", "SOUND/SPLICER/*.BUNDLE",
+          "SOUND/WORLD/EMITTERS.BUNDLE"]
+action = "convert"
+tool   = "bundles/engine_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """These bundles contain only resource types already covered and validated by
+engine_transcode.py: GenericRwacWaveContent, Splicer, and ContentSpec-only Registry.  The driver
+is strict and refuses an unexpected type or Registry entity subclass, so this cannot silently
+emit a half-converted sound bank."""
+
+[[rule]]
+id     = "sound-worldpainter-regions"
+match  = ["SOUND/REGIONS/AMBIENCES.DAT"]
+action = "convert"
+tool   = "bundles/attribsys_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """Despite its path, this is not an audio-middleware bank: it contains one
+WorldPainter2D resource. attribsys_transcode.py has a strict schema walk for its BinaryFile
+header, u16 dimensions, and byte-valued map, including LE re-walk and byte-exact round trip."""
+
+[[rule]]
+id      = "sound-nicotine-snapshots"
+match   = ["SOUND/NICOTINEASSET*.BUNDLE"]
+action  = "convert"
+tool    = "bundles/nonapt_transcode.py"
+argv    = ["{src}", "{out}"]
+verify  = ["bnd2_platform=4"]
+isolate = "volatility"
+why     = """Nicotine's mix-map body is a documented all-dword format; the porter
+validates the map/state table and every section offset before endian-mapping it with a
+byte-exact reverse round trip. SnapshotData uses Volatility's native X360 importer and TUB
+exporter, which rebuilds its platform-specific header/status table instead of blanket-swapping."""
+
+[[rule]]
+id     = "progression-data"
+match  = ["PROGRESSION.DAT", "BTTPROGRESSION.DAT"]
+action = "convert"
+tool   = "bundles/progression_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """progression_transcode.py is the dedicated, schema-walked type-65550 porter for
+both retail progression resources.  It rebuilds the platform-4 container and validates every
+array, record stride, pointer, and mixed-endian balance field."""
+
+[[rule]]
+id     = "postfx-struct-data"
+match  = ["POSTFX/COLOURCUBEDICTIONARY.BIN", "POSTFX/PFXHOOKS.PFX"]
+action = "convert"
+tool   = "bundles/nonapt_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """ColourCube is a u32 edge length followed by 3*N^3 byte-valued RGB data.
+PFXHookBundle is schema-walked through its hook/group pointer tables, hook records, node tables,
+and 0xc0 PFXGroup records; ASCII ids, bools, and padding remain byte-identical."""
+
+[[rule]]
+id     = "online-challenges"
+match  = ["ONLINECHALLENGES.BNDL"]
+action = "convert"
+tool   = "bundles/nonapt_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """The type-65567 payload is a 16-byte header followed by fixed 0xd8
+ChallengeListEntry records.  The porter swaps the documented CgsID, target, time, and prop
+fields while preserving byte enums, ASCII string ids, and padding."""
+
+[[rule]]
+id     = "massive-lookup-table"
+match  = ["MASSIVETABLE.BIN"]
+action = "convert"
+tool   = "bundles/nonapt_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """MassiveLookupTable is a 16-byte header plus fixed 64-byte items. The native
+x64 layout retains that stride but moves/widens the subscriber pointer; vectors, CgsID, and
+the item index are endian-mapped from the documented DecFIGS structure."""
+
+[[rule]]
+id     = "street-data"
+match  = ["STREETDATA.DAT"]
+action = "convert"
+tool   = "bundles/nonapt_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """Version-5 StreetData is schema-walked without changing its serialized u32
+offset representation: header, fixed 16/36/64/40-byte tables, junction Exit arrays, road
+SpanIndex arrays, floats, CgsIDs, bit arrays, and scores are endian-mapped. This matches the
+committed loader's raw serialized strides; widening the file offsets would not."""
+
+[[rule]]
+id     = "skip-disabled-profile-upgrade"
+match  = ["PROFILEUPG.BIN"]
+action = "skip"
+why    = """The reconstructed PC path explicitly disables ProfileUpgradeFeatureIsEnabled;
+BrnGuiProfile.cpp documents PROFILEUPG as an optional X360-only upgrade table. It is not loaded
+on PC and therefore is deliberately omitted rather than counted as missing runtime data."""
+
+
+# ---------------------------------------------------------------------------------
+# 8.  UNHANDLED -- needs conversion, has no converter.  THE POINT OF THIS FILE.
 #     Every entry states WHY, so the next agent can attack the right thing.
 # ---------------------------------------------------------------------------------
 
 [[rule]]
-id     = "unhandled-guiapt"
+id     = "skip-guiapt-this-pass"
 match  = ["GUIAPT/*.BUNDLE", "GUIAPTSD/*.BUNDLE"]
-action = "unhandled"
-reason = """No big-endian -> little-endian AptData (type 0x1E) porter exists in this repo.
+action = "skip"
+why    = """Explicitly excluded from this build pass. No big-endian -> little-endian AptData
+(type 0x1E) porter exists in this repo.
 apt_widen_4to8.py widens 1:7:4 -> 1:7:8 but asserts `version == 2 and platform == 4`
 (apt_widen_4to8.py:735) and reads every field little-endian, so it cannot consume the
 platform-2 big-endian console set.  convert_x360_bundle.py's docstring is explicit that
@@ -430,51 +614,26 @@ sourcing the emitter output and run apt8_repair.py on FRESH copies (the retired
 apt8_fix_df2_argtab.py pass is destructive and its output cannot be re-repaired)."""
 
 [[rule]]
-id     = "unhandled-fsm"
-match  = ["FSM/*.DAT"]
-action = "unhandled"
-out_name = "{stem}.BUNDLE"
-reason = """No FSM bundle converter exists.  build/game/FSM is an NTFS junction into the
-curated Google Drive ("Burnout Paradise Decomp Files") and holds platform-4 `.BUNDLE`
-files -- note the EXTENSION CHANGES, e.g. BRNSCREENFSM.DAT (6,656 B, p2) ->
-BRNSCREENFSM.BUNDLE (69,760 B, p4), a ~10x widening of the Lua-backed state machine.
-Externally produced; not reproducible from the retail folder with anything in this repo.
-`out_name` records the rename so that a future converter only needs the rule flipped to
-`convert`."""
-
-[[rule]]
-id     = "unhandled-language"
-match  = ["LANGUAGE/*.BUNDLE", "LANGUAGE/FONTS/*.FONT", "LANGUAGE/FONTSSD/*.FONT"]
-action = "unhandled"
-reason = """No bundle-level driver.  tools/assets/fonts/convert_x360.py converts a single
-LOOSE Font resource (type 0x21) already extracted from a bundle, prints an old->new import
-offset map for the operator to hand-apply, and explicitly puts the atlas-page Textures out
-of scope -- it is a helper, not a bundle converter.  The 7 LANGUAGE/*.BUNDLE string banks
-have no tool at all.  build/game/LANGUAGE is another Drive junction holding platform-4
-artefacts (0001.BUNDLE 80,512 p2 -> 238,976 p4; DEFAULT.FONT 29,696 p2 -> 86,144 p4)."""
-
-[[rule]]
 id     = "unhandled-sound-bundles"
 match  = ["SOUND/*.BIN", "SOUND/*.BUNDLE", "SOUND/*/*.BUNDLE", "SOUND/*/*.DAT"]
 action = "unhandled"
-reason = """No sound-bundle porter.  These are bnd2 platform-2 containers (AEMS, SPLICER,
-STREAMS index bundles, WORLD, BURNOUTGLOBALDATA.BIN, REGIONS).  VERIFIED that even the
-Drive copy is unconverted: build/game/SOUND/BURNOUTGLOBALDATA.BIN is still platform 2.
-engine_transcode.py ports the *engine* audio vault/wave types (GenericRwacWaveContent,
-GinsuWaveContent, Splicer, LoopModel, Registry) inside ENGINES/*.BUNDLE, so it is the
-obvious starting point for these -- but its type coverage has not been checked against
-these containers, so wiring it in blind would be a guess."""
+reason = """No sound-bundle porter.  These are bnd2 platform-2 containers containing AEMS
+and mixed-entity Registry middleware images.  The generic wave/Splicer/ContentSpec-only
+Registry files are covered by the earlier strict rule, while BURNOUTGLOBALDATA and the
+presentation splice bank are deliberately copied for their direct big-endian PC consumer.
+These remaining resources contain compiled AEMS/CSIS middleware images or non-ContentSpec
+Registry subclasses. Relabelling their containers while preserving BE payloads would be
+corrupt, so they remain explicit blockers."""
 
 [[rule]]
 id     = "unhandled-postfx"
-match  = ["POSTFX/*"]
+match  = ["POSTFX/POSTFXVAULT.BIN"]
 action = "unhandled"
 reason = """COLOURCUBEDICTIONARY.BIN, PFXHOOKS.PFX and POSTFXVAULT.BIN are all bnd2
-platform 2 and have no rule.  ⚠️ They are present in build/game at platform 2, byte-
-identical to retail -- a wave copied them verbatim, so they are INERT to the loader.
-POSTFXVAULT.BIN is an AttribSysVault by name and may well fall to attribsys_transcode.py;
-COLOURCUBEDICTIONARY.BIN is probably a texture dictionary.  Neither has been checked, so
-neither is asserted here."""
+platform 2 in retail. ColourCube and PFXHookBundle are handled by the schema-walked rule
+above. POSTFXVAULT is the sole remaining file: its AttribSys PtrN graph differs from the
+vehicle/engine vault schemas, and the strict generic converter rejects it rather than
+silently swapping the wrong pointer-selected block."""
 
 [[rule]]
 id     = "unhandled-props"
@@ -488,12 +647,10 @@ platform-4 container with big-endian payloads -- a worse failure than none."""
 
 [[rule]]
 id     = "unhandled-misc-root-bundles"
-match  = ["ONLINECHALLENGES.BNDL", "PLAYBACKREGISTRY.BUNDLE", "RWACFEATUREREGISTRY.BUNDLE",
-          "MASSIVETABLE.BIN", "PROFILEUPG.BIN", "PROGRESSION.DAT", "BTTPROGRESSION.DAT",
-          "STREETDATA.DAT"]
+match  = ["PLAYBACKREGISTRY.BUNDLE", "RWACFEATUREREGISTRY.BUNDLE",
+          ]
 action = "unhandled"
-reason = """Eight small loose bnd2 platform-2 containers with no converter.  ⚠️ ALL EIGHT
-are in build/game at platform 2, byte-identical to the retail originals -- copied verbatim
-by some wave and therefore inert to a loader that hard-requires platform 4.  This is the
-'silently copied and counted as success' failure mode; they are classified UNHANDLED here
-so they show up on the ledger instead of inflating a success count."""
+reason = """Two small Registry containers remain. Their payloads use Entity subclasses
+outside the proven ContentSpec-only schema. Existing build/game copies are byte-identical
+platform-2 files and therefore inert. They stay UNHANDLED so the report cannot count them as
+success."""

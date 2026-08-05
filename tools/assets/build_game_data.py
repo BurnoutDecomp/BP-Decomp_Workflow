@@ -1,9 +1,9 @@
-"""build_game_data.py -- turn a stock Xbox 360 Burnout Paradise game folder into a
-complete, launchable data folder for the reconstructed x64 PC build.
+"""build_game_data.py -- convert a stock Xbox 360 Burnout Paradise game folder into
+the data layout used by the reconstructed PC build.
 
-    py tools/assets/build_game_data.py --src <X360 folder> --out <new folder> --dry-run
-    py tools/assets/build_game_data.py --src <X360 folder> --out <new folder> --jobs 6
-    py tools/assets/build_game_data.py --src <X360 folder> --out <new folder> --with-exe
+    py tools/assets/build_game_data.py "<X360 game folder>"
+    py tools/assets/build_game_data.py "<X360 game folder>" --out <new folder> --jobs 6
+    py tools/assets/build_game_data.py "<X360 game folder>" --with-exe
 
 WHY THIS EXISTS
     The retail X360 disc set is 5,923 files / 3.69 GiB of big-endian `bnd2` platform-2
@@ -91,12 +91,11 @@ DEPLOY
 TO REBUILD THE GAME FOLDER FROM SCRATCH
     1. Build the exe:      tools\\build\\build_game_exe.bat
     2. Plan and read the gap report (writes nothing):
-         py tools\\assets\\build_game_data.py --src "<X360 folder>" --out D:\\BurnoutPC --dry-run
+         py tools\\assets\\build_game_data.py "<X360 folder>" --out D:\\BurnoutPC --dry-run
     3. Convert:
-         py tools\\assets\\build_game_data.py --src "<X360 folder>" --out D:\\BurnoutPC --jobs 6
-    4. Fill what this repo cannot yet produce (GUIAPT/GUIAPTSD, FSM, LANGUAGE) from an
-       existing good folder, and deploy the runtime:
-         ... --jobs 6 --borrow-dir <existing good folder> --with-exe
+         py tools\\assets\\build_game_data.py "<X360 folder>" --out D:\\BurnoutPC --jobs 6
+    4. GUIAPT/GUIAPTSD remain intentionally outside this pass. Add real libapt2-produced
+       GUI bundles separately, then deploy the runtime with `--with-exe`.
     5. Launch  <out>\\Burnout_PC.exe.
     The report lands in <out>\\.build_game_data\\report.txt (and report.json).
 """
@@ -114,6 +113,15 @@ import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+
+# Windows may inherit a cp1252 console even though reports are UTF-8.  A warning glyph
+# or a non-ASCII filename must not crash a successful conversion/dry run.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, OSError):
+            pass
 
 try:
     import tomllib                                    # stdlib from 3.11
@@ -210,6 +218,40 @@ def free_bytes(path):
             break
         probe = parent
     return shutil.disk_usage(probe or ".").free
+
+
+def glob_files(root, pattern):
+    """Small case-insensitive top-level glob used for source-root recognition."""
+    low = pattern.lower()
+    try:
+        return [name for name in os.listdir(root) if fnmatch.fnmatch(name.lower(), low)]
+    except OSError:
+        return []
+
+
+def find_game_root(path):
+    """Resolve a game folder, or a folder immediately above it, to the data root."""
+    path = os.path.abspath(path)
+
+    def looks_like_game(candidate):
+        return (os.path.isfile(os.path.join(candidate, "SHADERS.BNDL")) and
+                os.path.isdir(os.path.join(candidate, "VEHICLES")) and
+                bool(glob_files(candidate, "TRK_UNIT*_GR.BNDL")))
+
+    if looks_like_game(path):
+        return path
+    try:
+        children = [os.path.join(path, name) for name in os.listdir(path)]
+    except OSError:
+        children = []
+    candidates = [child for child in children
+                  if os.path.isdir(child) and looks_like_game(child)]
+    if len(candidates) == 1:
+        return candidates[0]
+    if candidates:
+        raise SystemExit("more than one Burnout data root found under %s: %s" %
+                         (path, ", ".join(candidates)))
+    return path
 
 
 # ------------------------------------------------------------------ manifest
@@ -431,6 +473,12 @@ def do_item(item, srcroot, outroot, workroot, args, state):
     r = item.rule
     if r.action == "skip":
         item.status = ST_SKIPPED
+        if not args.dry_run and item.out_rel in state:
+            # Reconcile an existing destination when policy changes from copy/convert
+            # to skip, but preserve externally supplied files (notably the separately
+            # converted PC GUIAPT set) because those deliberately have no state entry.
+            _unlink(item.out)
+            state.pop(item.out_rel, None)
         return item
     if denied(item.out_rel):
         item.status = ST_SKIPPED
@@ -788,7 +836,8 @@ def build_report(items, gens, args, srcroot, outroot, elapsed):
                 add("      %s" % line)
 
     warn = [it for it in items
-            if it.rule.action == "copy" and bnd2_platform(it.src) == 2]
+            if (it.rule.action == "copy" and bnd2_platform(it.src) == 2 and
+                "bnd2_platform=2" not in it.rule.verify)]
     if warn:
         add("")
         add("=" * 96)
@@ -891,32 +940,34 @@ def main(argv=None):
     ap = argparse.ArgumentParser(
         prog="build_game_data.py",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="Convert a stock Xbox 360 Burnout Paradise folder into a launchable "
-                    "data folder for the reconstructed x64 PC build.",
+        description="Convert a stock Xbox 360 Burnout Paradise folder into the data "
+                    "layout used by the reconstructed x64 PC build.",
         epilog="""\
 TYPICAL USE
-  1. plan only, writes nothing, prints the UNHANDLED inventory:
-       py tools/assets/build_game_data.py --src "D:/.../Burnout_tcartwright" \\
-              --out D:/BurnoutPC --dry-run
-  2. convert for real, six workers:
+  1. Give it the game folder; output defaults beside it as <folder>_decomp:
+       py tools/assets/build_game_data.py "D:/.../Burnout_tcartwright" --dry-run
+  2. Use --dry-run to plan, or --out/--jobs to override the defaults:
        ... --out D:/BurnoutPC --jobs 6
-  3. fill the gaps this repo cannot yet close, and make it launchable
-     (build the exe FIRST with tools\\build\\build_game_exe.bat):
+  3. To deploy the runtime, all non-skipped gaps must have converters or known-good
+     platform-4 files supplied with --borrow-dir (build the exe first):
        ... --out D:/BurnoutPC --jobs 6 --borrow-dir D:/Reverse/BP-Decomp_Workflow/build/game \\
               --with-exe
   4. launch D:/BurnoutPC/Burnout_PC.exe
 
 NOTES
-  * --out may not be inside build/game, b5-decomp, tools/, or --src, and may not be on C:
+  * --out may not be inside build/game, b5-decomp, tools/, or the source, and may not be on C:
     without --allow-c-drive.
   * All policy lives in tools/assets/game_data_manifest.toml. Adding a converter is a
     manifest edit.
   * UNHANDLED files are NOT written out by default. They are the point of the report.
+  * --with-exe refuses to deploy while a non-skipped file is still UNHANDLED.
   * --with-exe needs Burnout_PC.exe to exist already; it does not build anything.
 """)
+    ap.add_argument("game_folder", nargs="?",
+                    help="the stock X360 game folder (the only required argument)")
     ap.add_argument("--src", default=os.environ.get("BRN_X360_ROOT"),
-                    help="the stock X360 game folder (or set BRN_X360_ROOT)")
-    ap.add_argument("--out", required=True, help="destination folder (created if absent)")
+                    help="legacy spelling for game_folder (or set BRN_X360_ROOT)")
+    ap.add_argument("--out", help="destination (default: <game folder>_decomp beside source)")
     ap.add_argument("--manifest", default=DEFAULT_MANIFEST,
                     help="path -> action table (default: %(default)s)")
     ap.add_argument("--dry-run", action="store_true",
@@ -943,12 +994,23 @@ NOTES
     ap.add_argument("--report", help="also write the text report here")
     args = ap.parse_args(argv)
 
-    if not args.src:
-        ap.error("--src is required (or set BRN_X360_ROOT)")
-    srcroot = os.path.abspath(args.src)
-    outroot = os.path.abspath(args.out)
+    supplied = args.game_folder or args.src
+    if (args.game_folder and args.src and
+            os.path.abspath(args.game_folder) != os.path.abspath(args.src)):
+        ap.error("give the source once: positional game_folder and --src disagree")
+    if not supplied:
+        ap.error("game_folder is required (or use --src / BRN_X360_ROOT)")
+    srcroot = find_game_root(supplied)
+    outroot = os.path.abspath(args.out or (srcroot.rstrip("\\/") + "_decomp"))
     if not os.path.isdir(srcroot):
-        raise SystemExit("--src is not a directory: %s" % srcroot)
+        raise SystemExit("game folder is not a directory: %s" % srcroot)
+    if not os.path.isfile(os.path.join(srcroot, "SHADERS.BNDL")):
+        raise SystemExit("not a Burnout Paradise data root (SHADERS.BNDL missing): %s" % srcroot)
+    sample = os.path.join(srcroot, "SHADERS.BNDL")
+    platform = bnd2_platform(sample)
+    if platform != 2:
+        raise SystemExit("unsupported source platform %r in %s; this pass converts X360 "
+                         "platform-2 data, not PC/PS3 bundles." % (platform, sample))
     args.jobs = max(1, args.jobs)
 
     rules, file_rules, gen_rules = load_manifest(args.manifest)
@@ -1056,15 +1118,23 @@ NOTES
         if n:
             print("swept %d denied file(s)/dir(s) out of the output" % n)
         if args.with_exe:
-            copied, missing = deploy_runtime(outroot, args.exe_dir)
-            if missing:
+            unresolved = [it for it in items + gens if it.status == ST_UNHANDLED]
+            if unresolved:
+                print("\n*** --with-exe REFUSED: %d non-skipped data file(s) are still "
+                      "UNHANDLED." % len(unresolved))
+                print("*** Add faithful converters or provide known-good platform-4 files "
+                      "with --borrow-dir.")
+                exit_code = 2
+            else:
+                copied, missing = deploy_runtime(outroot, args.exe_dir)
+            if not unresolved and missing:
                 print("\n*** --with-exe FAILED: %s not found in %s"
                       % (", ".join(missing), args.exe_dir))
                 print("*** Build it first:  tools\\build\\build_game_exe.bat")
                 print("*** (that script emits Burnout_PC.exe into build\\game and copies the")
                 print("***  FFmpeg DLLs from b5-decomp\\vendor\\ffmpeg-build\\bin)")
                 exit_code = 2
-            else:
+            elif not unresolved:
                 print("deployed runtime: %s" % ", ".join(copied))
         if not args.keep_work and os.path.isdir(workbase):
             shutil.rmtree(workbase, ignore_errors=True)

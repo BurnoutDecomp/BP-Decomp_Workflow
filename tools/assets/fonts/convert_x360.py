@@ -26,13 +26,13 @@ import sys
 X360 = dict(
     VERSION=0x00, SIZE=0x04, SCALE_X=0x08, SCALE_Y=0x0C, LOWERCASE=0x10, BASELINE=0x14,
     XHEIGHT=0x18, NUMCHARS=0x1C, FONTCHARS_PTR=0x20, FONTCHARIDS_PTR=0x24, HASHOFFSETS=0x28,
-    # CORRECTED 2026-07-04: the console rw::Resource mTextureStateResource is 12 bytes
-    # (E_MEMTYPE_NUMTYPES == 3 x u32), NOT 16 -- mpTextureState @0x134, resource
-    # 0x138..0x143, so height = 0x144 and the names = 0x148/0x1C8. (The prior
-    # 0x148/0x14C map byte-swapped the family's first 4 chars into "height" and
+    # The ARTIST retail payload and native-x64 oracle place a 16-byte console
+    # rw::Resource block at 0x134..0x143, then height at 0x14c and names at 0x150/0x1d0.
+    # (An older 12-byte interpretation put these fields four bytes too early,
+    # byte-swapped the family's first four characters into "height", and
     # truncated family/style by 4 -- runtime log showed family='condiss' instead of
     # 'b5eacondiss(drop)'.)
-    NUMPAGES=0x12C, TEXTURES_PTR=0x130, FONTHEIGHT_PX=0x144, FAMILY=0x148, STYLE=0x1C8, SIZEOF=0x24C,
+    NUMPAGES=0x12C, TEXTURES_PTR=0x130, FONTHEIGHT_PX=0x14C, FAMILY=0x150, STYLE=0x1D0, SIZEOF=0x250,
 )
 # --- Our x64 Font layout (little-endian, 8-byte pointers); offsets dumped via offsetof ---
 OUR = dict(
