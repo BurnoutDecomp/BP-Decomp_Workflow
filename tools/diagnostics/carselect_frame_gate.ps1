@@ -56,7 +56,27 @@
 #   the camera and car did not move (the livery-mark frame is unchanged). Task #127's wrong
 #   floor-level framing is still wrong; the paragraph above still applies.
 #
-# ⭐ NEGATIVE CONTROL: this gate scores corr -0.381 (was -0.371 on the 08-04 golden) on a
+#   RE-BANKED 2026-08-05 (the SEAT wave), old corr -0.101 -- THE POSE CHANGED BY DESIGN and was
+#   LOOKED AT frame-by-frame before re-banking. Three coupled landings moved the whole car:
+#     1. the ANALYTIC REST SEAT (VehiclePhysics::SetTransformFromPositionOnRoad @0x825D1C00,
+#        run at the promote seam over the resident spec's own wheel radii/positions): the
+#        seeded physics transform is now the handling frame at ground+1.4459, retail's own
+#        value (user-measured retail rest ~1.481 = seat + the 0.035 tyre-compression settle);
+#     2. mCentreOfMassTransform = the SHIPPED spec+1552 matrix (was identity), so the model
+#        frame renders at ground+0.7054;
+#     3. the graphics-frame step in the render publish (the GR part locators are authored one
+#        more model->handling step down -- measured 1 mm fit on the wheel-arch locators).
+#   RESULT: the car sits ON its four wheels ON the sand (wheels in the arches for the first
+#   time), the body no longer clips the ground, and the ⚠️⚠️ WHAT-THE-BANKED-GOLDEN-IS
+#   paragraph above is PARTLY retired: the car is no longer sunk, so the floor-level orbit
+#   camera now sees the car from just below the beltline instead of seeing its underbody.
+#   Whether that low orbit height itself is retail-correct (task #127) is still open.
+#
+# ⭐ NEGATIVE CONTROL: on the seat-wave golden this gate scores corr -0.233 on a post-handover
+#   chase frame (re-proven 2026-08-05 after the re-bank; the handover golden scores the same
+#   -0.233 against the car-select frame). Earlier goldens: -0.381 (08-05 reveal), -0.371 (08-04).
+#   Historical wording kept below:
+#   (this gate scored corr -0.381 (was -0.371 on the 08-04 golden) on a
 #   post-handover chase frame. That is what proves it discriminates rather than merely
 #   passing. Re-check it when re-banking.
 #
