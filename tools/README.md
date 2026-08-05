@@ -69,9 +69,9 @@ The implementations are under `tools/build/`. Build products go under
 
 ## Building the game data folder
 
-`assets/build_game_data.py` is the one entry point that turns a **stock Xbox 360
-Burnout Paradise folder** into a complete, launchable data folder for the x64 PC
-build. It is manifest-driven: all `source pattern -> action` policy lives in
+`assets/build_game_data.py` is the one entry point that converts a **stock Xbox 360
+Burnout Paradise folder** into the data layout used by the x64 PC build. It is
+manifest-driven: all `source pattern -> action` policy lives in
 [`assets/game_data_manifest.toml`](assets/game_data_manifest.toml), so **adding a
 converter is a manifest edit, not a code change**.
 
@@ -80,15 +80,13 @@ converter is a manifest edit, not a code change**.
 tools\build\build_game_exe.bat
 
 # 1. plan only - writes nothing, prints the UNHANDLED inventory
-py tools\assets\build_game_data.py --src "D:\...\Burnout_tcartwright" `
-       --out D:\BurnoutPC --dry-run
+py tools\assets\build_game_data.py "D:\...\Burnout_tcartwright" --dry-run
 
-# 2. convert for real
-py tools\assets\build_game_data.py --src "D:\...\Burnout_tcartwright" `
-       --out D:\BurnoutPC --jobs 6
+# 2. convert for real; output defaults to Burnout_tcartwright_decomp
+py tools\assets\build_game_data.py "D:\...\Burnout_tcartwright" --jobs 6
 
-# 3. fill what this repo cannot yet produce, and deploy the runtime
-py tools\assets\build_game_data.py --src "D:\...\Burnout_tcartwright" `
+# 3. optionally choose an output and borrow known-good files for explicit gaps
+py tools\assets\build_game_data.py "D:\...\Burnout_tcartwright" `
        --out D:\BurnoutPC --jobs 6 --borrow-dir build\game --with-exe
 
 # 4. launch  D:\BurnoutPC\Burnout_PC.exe
@@ -103,12 +101,17 @@ Two things worth knowing before you run it:
 
 * **`--out` is fussy on purpose.** It refuses a destination inside `build/game`
   (another agent's live run directory), inside `b5-decomp`, inside `tools/`, or
-  inside `--src`, and refuses C: without `--allow-c-drive`.
+  inside the source, and refuses C: without `--allow-c-drive`.
 * **UNHANDLED is the point.** A source file that needs conversion and has no
   converter is reported, not quietly copied verbatim - the failure mode that left
   eight platform-2 containers sitting inert in `build/game`. Pass
   `--copy-unhandled` or `--borrow-dir` if you want the folder filled anyway; both
-  keep the honest classification in the report.
+  keep the honest classification in the report. `--with-exe` refuses deployment
+  while any non-skipped item remains UNHANDLED.
+* **APT is deliberately excluded.** `GUIAPT` and `GUIAPTSD` are skipped rather than
+  copied or widened here. Supply bundles produced by the real libapt2 pipeline
+  separately. The dry-run report also lists every remaining non-APT resource family
+  that still lacks a proven converter.
 
 Every converter runs from a **mirrored worker root** (`tools/assets/**` plus
 `build/tools/{yap,volatility}` copied into a scratch tree). Each tool computes its
