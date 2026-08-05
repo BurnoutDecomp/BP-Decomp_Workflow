@@ -26,6 +26,14 @@
 #   is how a day-long world-render regression hid: it was added by the very commit that broke
 #   the world, so every shot taken through it looked fine while the default run was broken.
 #
+# RE-BANKED 2026-08-05 (the SEAT wave), old golden 123.2/89.5, old corr 0.654 -- THE CAR POSE
+# CHANGED BY DESIGN and the frame was LOOKED AT before re-banking: the analytic rest seat
+# (VehiclePhysics::SetTransformFromPositionOnRoad @0x825D1C00, run at the promote seam) +
+# mCentreOfMassTransform from the shipped spec+1552 + the render publish's graphics-frame step
+# put the car ON its wheels ON the ground (physics ground+1.4459 / model +0.7054 / body-draw
+# -0.035 -- witness lines "[seat]" and "[seat-pose]" in BrnGame.log). The chase framing shifts
+# because the visible car dropped ~0.74 m onto its wheels.
+#
 # Exit code 0 = PASS, 1 = FAIL. Intended to be the LAST line of the boot harness, so a wave
 # cannot report "baseline held" without a frame that actually shows the world.
 param(
