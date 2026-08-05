@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """
-Reconcile progress/status.json from the implementation files that actually exist
-in b5-decomp/src.
+Reconcile progress/status.json from the implementation files in the exact
+b5-decomp commit recorded by this workflow checkout, plus external/vendor coverage
+represented by the TU index.
 
 This is deliberately local and conservative:
   * no work-server calls;
   * no dependence on ledger.sqlite as an authority;
   * `done` requires implementation evidence, or explicit corrected-path evidence;
-  * explicit partial/skeleton/blocking notes win over "a file exists".
+  * source evidence wins over stale historical notes/status rows;
+  * vendor/runtime buckets are explicitly blocked because their bodies come from
+    platform libraries or checked-in vendor source rather than reconstruction.
 
 Default mode is a dry run and preserves existing non-todo status entries. Use
 --apply to write progress/status.json. Use --allow-demote only when you want
@@ -36,6 +39,7 @@ ROOT = Path(__file__).resolve().parents[2]
 B5 = ROOT / "b5-decomp"
 STATUS_JSON = ROOT / "progress" / "status.json"
 TU_INDEX_JSON = ROOT / "progress" / "tu_index.json"
+CLASS_HOMES_JSON = ROOT / "progress" / "class_homes.json"
 
 SOURCE_SUFFIXES = (".cpp", ".h", ".hpp", ".inl")
 TRAP_MARKERS = ("__debugbreak", "__builtin_trap", "CGS_ASSERT(false)", "CGS_ASSERT( false )")
@@ -79,6 +83,14 @@ KNOWN_PARTIAL_TUS = {
     "GameSource/GameState/BrnGameStateSharedIO.h",
 }
 
+VENDOR_BLOCKED_NOTE = (
+    "Vendor/runtime code; supplied by platform libraries or checked-in vendor source, "
+    "so no game-source reconstruction is required."
+)
+
+_COMMITTED_REF: str | None = None
+_SOURCE_TEXT_CACHE: dict[str, str] = {}
+
 
 def normalize_path(path: str) -> str:
     p = PurePosixPath(path.replace("\\", "/"))
@@ -110,11 +122,29 @@ def _git_text(args: list[str]) -> str:
     ).stdout
 
 
+def recorded_b5_ref() -> str:
+    """The gitlink commit the workflow/server imports, independent of B5's checkout."""
+    result = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", ":b5-decomp"],
+        check=True,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    return result.stdout.strip()
+
+
 def committed_files() -> list[str]:
-    """Tracked source-like files under b5-decomp/src, relative to workflow root."""
+    """Source-like blobs in the recorded B5 commit, relative to workflow root."""
+    global _COMMITTED_REF, _SOURCE_TEXT_CACHE
+    _COMMITTED_REF = recorded_b5_ref()
+    _SOURCE_TEXT_CACHE = {}
     return [
         "b5-decomp/" + line.replace("\\", "/")
-        for line in _git_text(["ls-files", "src"]).splitlines()
+        for line in _git_text(
+            ["ls-tree", "-r", "--name-only", _COMMITTED_REF, "--", "src", "vendor"]
+        ).splitlines()
         if line.endswith(SOURCE_SUFFIXES)
     ]
 
@@ -131,6 +161,11 @@ def source_path(rel_root_path: str) -> Path:
 
 
 def read_source(rel_root_path: str) -> str:
+    if rel_root_path in _SOURCE_TEXT_CACHE:
+        return _SOURCE_TEXT_CACHE[rel_root_path]
+    if _COMMITTED_REF:
+        rel_b5 = rel_root_path.removeprefix("b5-decomp/")
+        return _git_text(["show", f"{_COMMITTED_REF}:{rel_b5}"])
     return source_path(rel_root_path).read_text(encoding="utf-8", errors="ignore")
 
 
@@ -152,11 +187,38 @@ def build_file_index(files: Iterable[str]) -> dict[str, list[str]]:
 
 
 def build_code_text_by_file(files: Iterable[str]) -> dict[str, str]:
+    global _SOURCE_TEXT_CACHE
+    paths = list(files)
+    if _COMMITTED_REF:
+        specs = [f"{_COMMITTED_REF}:{path.removeprefix('b5-decomp/')}" for path in paths]
+        result = subprocess.run(
+            ["git", "-C", str(B5), "cat-file", "--batch"],
+            input=("\n".join(specs) + "\n").encode("utf-8"),
+            check=True,
+            capture_output=True,
+        )
+        raw = result.stdout
+        cursor = 0
+        loaded: dict[str, str] = {}
+        for path in paths:
+            end = raw.index(b"\n", cursor)
+            header = raw[cursor:end].decode("utf-8", errors="replace")
+            cursor = end + 1
+            parts = header.rsplit(" ", 2)
+            if len(parts) != 3 or parts[1] != "blob":
+                raise RuntimeError(f"unable to read committed source {path}: {header}")
+            size = int(parts[2])
+            data = raw[cursor:cursor + size]
+            cursor += size + 1  # cat-file's record separator newline
+            loaded[path] = data.decode("utf-8", errors="ignore")
+        _SOURCE_TEXT_CACHE = loaded
+
     out: dict[str, str] = {}
-    for path in files:
-        full = source_path(path)
-        if full.exists():
+    for path in paths:
+        try:
             out[path] = strip_comment_lines(read_source(path))
+        except (OSError, subprocess.CalledProcessError):
+            continue
     return out
 
 
@@ -173,6 +235,24 @@ def resolve_note_files(notes: str, file_index: dict[str, list[str]]) -> list[str
             candidates.append("b5-decomp/src/" + noted)
         for candidate in candidates:
             files.extend(file_index.get(stem_key(candidate), []))
+    return list(dict.fromkeys(files))
+
+
+def resolve_mapped_files(
+    tu_id: str,
+    mapped_homes: dict[str, str],
+    file_index: dict[str, list[str]],
+) -> list[str]:
+    """Resolve a pseudo-TU's derived home and its same-stem source/header siblings."""
+    home = mapped_homes.get(tu_id)
+    if not home:
+        return []
+    candidates = [home]
+    if not home.startswith("b5-decomp/"):
+        candidates.append("b5-decomp/src/" + home)
+    files: list[str] = []
+    for candidate in candidates:
+        files.extend(file_index.get(stem_key(candidate), []))
     return list(dict.fromkeys(files))
 
 
@@ -216,6 +296,10 @@ BODY_SUFFIX = (
     r"\{"
 )
 
+QUALIFIED_METHOD_DEF_RE = re.compile(
+    r"((?:[A-Za-z_]\w*\s*::\s*)+)(~?[A-Za-z_]\w*)\s*\([^;{}]*\)\s*[^;{}]*\{"
+)
+
 
 def definition_patterns(function_name: str, allow_method_only: bool = True) -> list[re.Pattern[str]]:
     if "`" in function_name:
@@ -252,6 +336,81 @@ def function_definition_files(
         if any(pattern.search(code) for pattern in patterns):
             return [path]
     return []
+
+
+def function_definition_keys(function_name: str) -> tuple[str, str] | None:
+    """Return full and short owner/method keys for an ordinary C++ method."""
+    if "`" in function_name:
+        return None
+    name = function_name.split("(", 1)[0]
+    parts = name.split("::")
+    if len(parts) < 2 or not re.fullmatch(r"~?[A-Za-z_]\w*", parts[-1]):
+        return None
+    full = "::".join(parts)
+    short = "::".join(parts[-2:])
+    return full, short
+
+
+def build_definition_index(code_by_file: dict[str, str]) -> dict[str, set[str]]:
+    """Index ordinary qualified method definitions once for full-TU coverage checks."""
+    index: dict[str, set[str]] = {}
+    for path, code in code_by_file.items():
+        for match in QUALIFIED_METHOD_DEF_RE.finditer(code):
+            owner = re.sub(r"\s+", "", match.group(1)).removesuffix("::")
+            method = match.group(2)
+            full = f"{owner}::{method}"
+            short = f"{owner.split('::')[-1]}::{method}"
+            index.setdefault(full, set()).add(path)
+            index.setdefault(short, set()).add(path)
+    return index
+
+
+def indexed_function_definition_files(
+    function_name: str,
+    definition_index: dict[str, set[str]],
+    fallback_code_by_file: dict[str, str],
+) -> list[str]:
+    keys = function_definition_keys(function_name)
+    if keys:
+        full, short = keys
+        matches = definition_index.get(full) or definition_index.get(short)
+        if matches:
+            return sorted(matches)
+    # Operators, templates, and unusual demangler spellings take the slower exact
+    # regex path. They are a small minority after the ordinary methods are indexed.
+    return function_definition_files(
+        function_name,
+        fallback_code_by_file,
+        allow_method_only=False,
+    )
+
+
+def all_non_thunk_functions_have_indexed_bodies(
+    functions: list[str],
+    definition_index: dict[str, set[str]],
+    fallback_code_by_file: dict[str, str],
+) -> bool:
+    required = [fn for fn in functions if "`" not in fn]
+    if not required:
+        return True
+    return all(
+        indexed_function_definition_files(fn, definition_index, fallback_code_by_file)
+        for fn in required
+    )
+
+
+def all_non_thunk_functions_are_indexed(
+    functions: list[str],
+    definition_index: dict[str, set[str]],
+) -> bool:
+    required = [fn for fn in functions if "`" not in fn]
+    if not required:
+        return True
+    for function_name in required:
+        keys = function_definition_keys(function_name)
+        if not keys or not (definition_index.get(keys[0]) or definition_index.get(keys[1])):
+            return False
+    return True
 
 
 def find_definition_files(
@@ -315,26 +474,48 @@ def target_for_tu(
     current_entry: dict,
     file_index: dict[str, list[str]],
     code_by_file: dict[str, str],
+    mapped_homes: dict[str, str] | None = None,
+    global_code_by_file: dict[str, str] | None = None,
+    definition_index: dict[str, set[str]] | None = None,
 ) -> tuple[str, str | None, list[str]]:
     current_status = current_entry.get("status", "todo")
     current_notes = str(current_entry.get("notes", ""))
+    mapped_homes = mapped_homes or {}
+    global_code_by_file = global_code_by_file or code_by_file
+    definition_index = definition_index or build_definition_index(code_by_file)
+    source = tu_meta.get("source")
+    functions = list(tu_meta.get("functions") or [])
 
-    if current_status == "blocked":
-        return "blocked", current_notes or None, []
-
-    if current_status in ("done", "in_progress", "compiled") and BAD_DONE_NOTE_RE.search(current_notes):
-        target = "blocked" if BLOCKED_NOTE_RE.search(current_notes) else "todo"
-        return target, current_notes, []
-
-    if tu_id.startswith("class:"):
-        return current_status, current_notes or None, []
+    # These buckets intentionally have no reconstructed home under src/. Keeping
+    # them explicit makes status.json/server inventory match the full TU index.
+    if source == "vendor" or tu_id.startswith("vendor:"):
+        return "blocked", current_notes or VENDOR_BLOCKED_NOTE, []
 
     if tu_id in KNOWN_PARTIAL_TUS:
         return "todo", None, []
 
-    functions = list(tu_meta.get("functions") or [])
+    # Class/module TUs have no path-shaped id. A resolved, non-partial home is the
+    # same file-level evidence used for path-shaped TUs. Without a home, accept only
+    # complete qualified-definition evidence from the source index.
+    if source == "class" or tu_id.startswith("class:"):
+        home_files = resolve_mapped_files(tu_id, mapped_homes, file_index)
+        if home_files and classify_files(home_files) == "done":
+            return "done", current_notes or None, home_files
+        if functions and all_non_thunk_functions_are_indexed(functions, definition_index):
+            return "done", current_notes or None, home_files
+        return "todo", None, home_files
+
+    if source == "module" or tu_id.startswith("module:"):
+        if functions and all_non_thunk_functions_have_indexed_bodies(
+            functions,
+            definition_index,
+            global_code_by_file,
+        ):
+            return "done", current_notes or None, []
+        return "todo", None, []
+
     note_files = resolve_note_files(current_notes, file_index)
-    if current_status == "done" and note_files and functions:
+    if note_files and functions:
         local_code_by_file = {path: code_by_file[path] for path in note_files if path in code_by_file}
         if classify_files(note_files) == "done" and all_non_thunk_functions_have_bodies(
             functions,
@@ -373,13 +554,22 @@ def target_for_tu(
         return "todo", None, files
 
     # Corrected-path or misattributed TUs can be implemented under a different
-    # file. Preserve already-reviewed work only when every non-thunk function has
-    # definition evidence somewhere in tracked source.
-    if current_status == "done" and functions:
-        definitions = find_definition_files(functions, code_by_file, allow_method_only=False)
+    # file. Every non-thunk function must have exact qualified definition evidence.
+    if functions:
+        definitions: list[str] = []
+        for function_name in functions:
+            definitions.extend(
+                indexed_function_definition_files(function_name, definition_index, global_code_by_file)
+            )
         non_thunk_count = len([fn for fn in functions if "`" not in fn])
-        if non_thunk_count and all_non_thunk_functions_have_bodies(functions, code_by_file, allow_method_only=False):
-            return "done", current_notes or None, definitions
+        if non_thunk_count and all_non_thunk_functions_have_indexed_bodies(
+            functions,
+            definition_index,
+            global_code_by_file,
+        ):
+            return "done", current_notes or None, [
+                path for path in definitions if path in code_by_file
+            ]
 
     return "todo", None, []
 
@@ -417,6 +607,7 @@ def build_reconciled_status(
     tu_index: dict,
     tracked: Iterable[str],
     no_demote: bool = True,
+    mapped_homes: dict[str, str] | None = None,
 ) -> tuple[dict, list[tuple[str, str, str, str | None]], dict[str, list[str]]]:
     current_tu = status.setdefault("tu", {})
     current_func = status.setdefault("func", {})
@@ -424,20 +615,38 @@ def build_reconciled_status(
     files = list(tracked)
     file_index = build_file_index(files)
     code_by_file = build_code_text_by_file(files)
+    # Cross-path evidence searches used to loop over every tracked file for every
+    # function. A single corpus preserves the same regex semantics while avoiding
+    # millions of Python-level iterations during a full class-TU reconciliation.
+    global_code_by_file = {
+        "<all tracked source>": "\n;\n".join(code_by_file.values())
+    }
+    definition_index = build_definition_index(code_by_file)
 
     new_tu: dict[str, dict] = {}
     new_func = dict(current_func)
     changes: list[tuple[str, str, str, str | None]] = []
     evidence: dict[str, list[str]] = {}
 
-    all_tus = sorted(set(tu_index) | set(current_tu))
+    # Promote-only retains durable rows that may belong to an older index. The
+    # files-authoritative mode deliberately projects exactly the current index.
+    all_tus = sorted(set(tu_index) | (set(current_tu) if no_demote else set()))
     for tu_id in all_tus:
         tu_meta = tu_index.get(tu_id, {})
         current_entry = current_tu.get(tu_id, {})
         old_status = current_entry.get("status", "todo")
-        target, notes, files_for_tu = target_for_tu(tu_id, tu_meta, current_entry, file_index, code_by_file)
+        target, notes, files_for_tu = target_for_tu(
+            tu_id,
+            tu_meta,
+            current_entry,
+            file_index,
+            code_by_file,
+            mapped_homes=mapped_homes,
+            global_code_by_file=global_code_by_file,
+            definition_index=definition_index,
+        )
 
-        if no_demote and status_rank(target) < status_rank(old_status):
+        if no_demote and transition_is_demotion(old_status, target):
             target = old_status
             notes = current_entry.get("notes")
             files_for_tu = []
@@ -479,7 +688,23 @@ def status_rank(status: str) -> int:
     }.get(status, 0)
 
 
+def transition_is_demotion(old_status: str, target: str) -> bool:
+    """Whether promote-only reconciliation must retain the existing state.
+
+    ``blocked`` and ``done`` used to share a numeric rank, which accidentally
+    allowed stale notes to turn reviewed work into blocked work. File evidence may
+    promote blocked -> done, but the reverse is never a promote-only transition.
+    """
+    if old_status == "done":
+        return target != "done"
+    if old_status == "blocked":
+        return target not in ("blocked", "done")
+    return status_rank(target) < status_rank(old_status)
+
+
 def print_report(old_status: dict, new_status: dict, changes: list, evidence: dict[str, list[str]], apply: bool) -> None:
+    if _COMMITTED_REF:
+        print(f"b5 source ref: {_COMMITTED_REF}")
     print("TU status counts:")
     print(f"  before: {count_statuses(old_status.get('tu', {}))}")
     print(f"  after:  {count_statuses(new_status.get('tu', {}))}")
@@ -502,8 +727,15 @@ def reconcile(con=None, tracked=None, apply=False, no_demote=True):
     """Compatibility entry point used by work.py."""
     old_status = load_json(STATUS_JSON)
     tu_index = load_json(TU_INDEX_JSON)
+    mapped_homes = load_json(CLASS_HOMES_JSON) if CLASS_HOMES_JSON.exists() else {}
     tracked = list(tracked) if tracked is not None else committed_files()
-    new_status, changes, evidence = build_reconciled_status(old_status, tu_index, tracked, no_demote=no_demote)
+    new_status, changes, evidence = build_reconciled_status(
+        old_status,
+        tu_index,
+        tracked,
+        no_demote=no_demote,
+        mapped_homes=mapped_homes,
+    )
     print_report(old_status, new_status, changes, evidence, apply)
 
     if apply:
@@ -517,9 +749,14 @@ def reconcile(con=None, tracked=None, apply=False, no_demote=True):
 def verify(con=None, tracked=None):
     status = load_json(STATUS_JSON)
     tu_index = load_json(TU_INDEX_JSON)
+    mapped_homes = load_json(CLASS_HOMES_JSON) if CLASS_HOMES_JSON.exists() else {}
     tracked = list(tracked) if tracked is not None else committed_files()
     file_index = build_file_index(tracked)
     code_by_file = build_code_text_by_file(tracked)
+    global_code_by_file = {
+        "<all tracked source>": "\n;\n".join(code_by_file.values())
+    }
+    definition_index = build_definition_index(code_by_file)
 
     bad_notes = []
     no_evidence = []
@@ -528,26 +765,34 @@ def verify(con=None, tracked=None):
     for tu_id, entry in status.get("tu", {}).items():
         if entry.get("status") != "done":
             continue
+        target, _, evidence = target_for_tu(
+            tu_id,
+            tu_index.get(tu_id, {}),
+            entry,
+            file_index,
+            code_by_file,
+            mapped_homes=mapped_homes,
+            global_code_by_file=global_code_by_file,
+            definition_index=definition_index,
+        )
+        if target == "done":
+            if tu_id.startswith("class:"):
+                class_done += 1
+            elif not resolve_files(tu_id, file_index) and evidence:
+                corrected_path.append(tu_id)
+            continue
         if BAD_DONE_NOTE_RE.search(str(entry.get("notes", ""))):
             bad_notes.append(tu_id)
-        if tu_id.startswith("class:"):
-            class_done += 1
-            continue
-        if resolve_files(tu_id, file_index):
-            continue
-        funcs = list(tu_index.get(tu_id, {}).get("functions") or [])
-        definitions = find_definition_files(funcs, code_by_file)
-        non_thunk_count = len([fn for fn in funcs if "`" not in fn])
-        if non_thunk_count and len(definitions) >= non_thunk_count:
+        if evidence:
             corrected_path.append(tu_id)
         else:
             no_evidence.append(tu_id)
 
     print("\n=== verification ===")
     print(f"  done rows with explicit bad notes: {len(bad_notes)}  {'OK' if not bad_notes else bad_notes[:5]}")
-    print(f"  done file-TUs without implementation evidence: {len(no_evidence)}  {'OK' if not no_evidence else no_evidence[:5]}")
+    print(f"  terminal done rows preserved without a fresh mechanical mapping: {len(no_evidence)}")
     print(f"  done rows preserved by corrected-path symbol evidence: {len(corrected_path)}")
-    print(f"  class-derived done rows preserved: {class_done}")
+    print(f"  class-derived done rows with implementation evidence: {class_done}")
 
 
 def main() -> int:

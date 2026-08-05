@@ -1599,11 +1599,11 @@ def cmd_server_update(args):
     re-import with reset=false -- live claims and the event log are preserved, and
     the server re-warms Git attribution on the next dashboard view.
     """
-    if args.reconcile:
-        print("== reconcile-from-files ==")
-        cmd_reconcile_from_files(argparse.Namespace(apply=True, allow_demote=False))
-    print("\n== resolve-class-homes --apply ==")
+    print("== resolve-class-homes --apply ==")
     cmd_resolve_class_homes(argparse.Namespace(apply=True))
+    if args.reconcile:
+        print("\n== reconcile-from-files ==")
+        cmd_reconcile_from_files(argparse.Namespace(apply=True, allow_demote=False))
 
     progress_paths = [os.path.join("progress", "class_homes.json")]
     if args.reconcile:
