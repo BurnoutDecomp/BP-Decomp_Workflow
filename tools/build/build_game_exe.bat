@@ -368,6 +368,16 @@ rem ---- build the cl response file ----
   rem  UpdateTriangleCache / spatial-query tail carries ~19 unresolved of its own); the four
   rem  bridge callees were split into the _ContactFixups slice below (fold back when it mounts).
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_ContactFixups.cpp"
+  rem  2026-08-06 (big-five #1, FixUpVehicleContacts wave): the driver's home TU + the
+  rem  DeformationManager vehicle-contact fix-up slice (ByInterpolation / WithBoxes /
+  rem  FixUpVehicleContact / GetInterpolatedContactPointAndNormal / CalculateTangentPoints /
+  rem  the two Project* helpers), its DeformableObject accessor slice, and the _BBox slice
+  rem  that owns GetDeformationSphereFromVolumeInstance. All strip under /OPT:REF until
+  rem  PhysicsModule::Update lands -- mounted for closure enforcement only.
+  echo "%SRC%\GameSource\Physics\BrnPhysicsModuleUpdateFunctions.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_VehicleContactFixUp.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Accessors.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_BBox.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDetachedWheelManager_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ValidateSimulationContacts.cpp"
