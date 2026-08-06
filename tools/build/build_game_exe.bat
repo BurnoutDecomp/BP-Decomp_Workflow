@@ -2091,6 +2091,9 @@ rem ---- build the cl response file ----
   rem ---- ProfileManager link closure (2026-07-12): the committed save/load + profile ----
   rem ---- validation TUs the real BrnGui::ProfileManager references.                 ----
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadX360.cpp"
+  rem ---- dev merge (2026-08-07): BrnGuiProfile's ProfileManager::CopyImageToBuffer now ----
+  rem ---- forwards to the real SaveLoadSystem::CopyImageToBuffer body in wB_03.        ----
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadX360_wB_03.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoad.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuideIntegration.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModuleIO_OutputBuffer.cpp"
@@ -2226,6 +2229,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarouselSliderBar.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarSelectOnlineCountdown.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarSelectOnlinePlayerList.cpp"
+  rem ---- dev merge (2026-08-07): dev's restored BrnOnlinePlay.h embeds GuiNetworkPlayerStats
+  rem ---- BY VALUE, so the scaffolded OnlinePlay ctor materialises its vtable, which needs the
+  rem ---- real virtuals (dev a1cad009). _wL_01 (FormatNetworkStats) stays OUT: its only caller
+  rem ---- (SetInfo) has no body in the tree, and it pulls four undefined NetworkPlayerStats/
+  rem ---- ChallengeList symbols.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnGuiNetworkPlayerStats.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnComplexBar.cpp"
   rem ---- menu-toggle / colour-picker component cluster (2026-08-02, CarSelectLivery wave).
   rem      BrnGui::CarSelectLivery embeds a MenuToggleGroupVarSize<2> and a ColourMenuToggle
