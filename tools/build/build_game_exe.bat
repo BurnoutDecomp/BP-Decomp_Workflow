@@ -371,6 +371,15 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDetachedWheelManager_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ValidateSimulationContacts.cpp"
+  rem  2026-08-06 (PhysicsModule::Update leaves wave): the four small per-frame leaves of
+  rem  PhysicsModule::Update (FreeAllocations / UpdateVehicleEffects / ReadUpdatedBodyProperties /
+  rem  ProcessDeformationStates) -- slice TU, home BrnVehicleManager.cpp still unmounted.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PerFrameLeaves.cpp"
+  rem  ...and its two link dependencies: UpdateShowtimeBounceModifiers + the msPlayerParams
+  rem  singleton (split out of the still-unmounted RaceCarPhysics.cpp, RaceCarPhysics_Construct
+  rem  precedent), and DeformationState::GetCarStateF (bodied SharedIO slice, never mounted).
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\RaceCarPhysics_ShowtimeBounce.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationState_DeformationState.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
   rem  StreamedDeformationSpec (wheel-render wave, 2026-08-03): the car's authored WheelSpec
   rem  table -- GetWheelSpec is what RaceCarEntityModule::PublishRenderPoseWithoutPhysicsBringUp
