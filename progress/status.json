@@ -9559,13 +9559,13 @@
    "status": "reviewed"
   },
   "BrnGameState::ChallengeManagerDebugComponent::CompleteAllChallenges": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::ChallengeManagerDebugComponent::GetName": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::ChallengeManagerDebugComponent::OnActivate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGameState::CheckpointData,16>:": {
    "status": "reviewed"
@@ -20046,6 +20046,9 @@
   "BrnGui::ViewModule::ViewModule": {
    "status": "reviewed"
   },
+  "BrnGui::WorldDataController::GetColourPaletteFromType": {
+   "status": "reviewed"
+  },
   "BrnGui::WorldDataController::GetEventInfoFromEventId": {
    "status": "reviewed"
   },
@@ -20067,6 +20070,18 @@
   "BrnGui::WorldDataController::GetOnlineLandmarkInfoAtPositionInList": {
    "status": "reviewed"
   },
+  "BrnGui::WorldDataController::GetProgressionData": {
+   "status": "reviewed"
+  },
+  "BrnGui::WorldDataController::GetRequiredWinsInRank": {
+   "status": "reviewed"
+  },
+  "BrnGui::WorldDataController::GetTotalNumberOfLandmarks": {
+   "status": "reviewed"
+  },
+  "BrnGui::WorldDataController::GetTotalNumberOfOnlineLandmarks": {
+   "status": "reviewed"
+  },
   "BrnGui::WorldDataController::GetTriggerVolumeRegion": {
    "status": "reviewed"
   },
@@ -20074,6 +20089,9 @@
    "status": "reviewed"
   },
   "BrnGui::WorldDataController::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnGui::WorldDataController::Prepare2": {
    "status": "reviewed"
   },
   "BrnGui::operator++": {
@@ -53877,6 +53895,60 @@
   "D3D::CCommandBuffer::GrowableFree": {
    "status": "reviewed"
   },
+  "D3D::CDevice::AddCallsToPrimaryBuffer": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::AddCommandsToPrimaryBuffer": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::BeginRingAlloc": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::BeginRingBig": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::BlockOnFence": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::BlockOnPrimaryRange": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::BlockOnSecondaryPosition": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::CreateInvalidateBuffer": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::IsPastStopPoint": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::IsPrimaryMemoryBusy": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::IsSecondaryMemoryBusy": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::KickOff": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::KickOffSegment": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::MarkAsOutOfMemory": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::QueueIndirectBuffer": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::SaveRingBufferState": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::SetFence": {
+   "status": "reviewed"
+  },
+  "D3D::CDevice::StartNewSegment": {
+   "status": "reviewed"
+  },
   "D3D::CRingAllocList::AddChunkNode": {
    "status": "reviewed"
   },
@@ -55528,6 +55600,12 @@
    "status": "reviewed"
   },
   "MassiveAdClient3::CMassiveAdObjectAudioDynamic::`scalar deleting destructor'": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CMassiveAdObjectModel::GetBestImpression": {
+   "status": "reviewed"
+  },
+  "MassiveAdClient3::CMassiveAdObjectModel::`vector deleting destructor'": {
    "status": "reviewed"
   },
   "MassiveAdClient3::CMassiveAdObjectModelDynamic::CMassiveAdObjectModelDynamic": {
@@ -63243,7 +63321,7 @@
   },
   "GameShared/GameClasses/Geometric/Intersection/CgsPolygonSoupTests.cpp": {
    "notes": "2 of 6 done+committed; 4 still blocked on un-homed collaborators",
-   "status": "done"
+   "status": "blocked"
   },
   "GameShared/GameClasses/Geometric/Intersection/CgsTriangleBox.cpp": {
    "status": "done"
@@ -63314,7 +63392,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Graphics/Dispatch/CgsMaterialAnimation.cpp": {
    "notes": "verify pass 4/4: ShaderConstantsCPU FixUp/GetValue/GetSizeOf/ShouldSerialise, <256 assert. gate x64 pass",
@@ -63382,7 +63461,7 @@
   },
   "GameShared/GameClasses/Graphics/Resources/CgsShaderTechniqueResourceType.cpp": {
    "notes": "3/4 done + pushed (b5-decomp dev 97c4423): GetTypeID(=50)/GetImportPointer/FixUp + header (derives CgsResource::Type). PostFixUp @0x827EEBF0 deferred: rodata profile tables off_82F30F78/dword_82F30F7C absent from IDA exports (never-fabricate).",
-   "status": "done"
+   "status": "blocked"
   },
   "GameShared/GameClasses/Graphics/Resources/CgsVideoDataResource.cpp": {
    "notes": "trivial; gate-only (constant return / single-field relocation / pure forwarder / debug-string)",
@@ -64101,7 +64180,7 @@
   },
   "GameShared/GameClasses/SceneManager/FineIntersectionTestModule/CgsFineIntersectionTestModule.cpp": {
    "notes": "4/8 functions reconstructed + verified faithful (Construct/Prepare/Release/Destruct: the START->MANAGER->DONE stage handshakes + VolumeVolumeQuery/VolumeLineQuery scratch sizing 0x49000/0x10800, layout pinned by offsetof _AssertLayout). The 4 core narrow-phase Compute* methods (ComputeLineTestFine @0x828C7D70 / ComputeLineTestNearest / ComputeVolumeTestDeepest / ComputeVolumeTestFine) are committed as empty dep-blocked stubs -- huge VMX128 loops needing the unreconstructed EntityManager/VolumeManager/VolumeInstance/SceneManagerEntity classes + the rw::collision query/ClusteredMesh/KdTreeLineQuery runtime + the InEvent*/OutEvent*/OutputBuffer payload structs (3 of 4 have no pseudocode). Unblock when those dependency types land; also tighten the void* OutputBuffer params then.",
-   "status": "done"
+   "status": "blocked"
   },
   "GameShared/GameClasses/SceneManager/SpatialPartitionModule/CgsCoarseQueryResultBuffer.h": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified; committed-home grow no ODR fork; compiles clean.",
@@ -64401,7 +64480,7 @@
   },
   "GameShared/GameClasses/Sound/Playback/Splicer/internal/SpliceObjects.cpp": {
    "notes": "11 of 12 done+committed; SpliceSample::Update source-lookup now groundable but voice-start branch irreducibly blocked on rodata dbl_82001CA8 (no recovered value in any dump)",
-   "status": "done"
+   "status": "blocked"
   },
   "GameShared/GameClasses/Sound/Playback/aems/CgsAemsInterfaceImplementation.h": {
    "status": "done"
@@ -64494,7 +64573,7 @@
   },
   "GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp": {
    "notes": "CgsBundleLoaderModule.cpp (14 fn) reconstructed, verified PASS vs asm (load/unload request processing on the BundleLoaderModule home from Wave 24). Gate-clean.",
-   "status": "done"
+   "status": "blocked"
   },
   "GameShared/GameClasses/System/Resource/CgsDebugPoolTextures.cpp": {
    "notes": "Compile-gate PASS. 17 ASM-attested functions reconstructed with named members. Parity RED is the expected SIMD-collapse (vrefp/vmaddfp Newton reciprocals de-optimized to float divides; _savegprlr_/_restgprlr_ thunks counted as calls). 4 'absent callees' are false positives.",
@@ -65185,7 +65264,8 @@
    "status": "done"
   },
   "GameSource/Gui/BrnGuiEventTypeDefs.h": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Gui/BrnGuiFreeburnChallengeManager.cpp": {
    "notes": "Reconstructed from asm/dossier, adversarially verified, gate PASS, pushed to dev.",
@@ -65751,7 +65831,7 @@
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectOnlineEnd.cpp": {
    "notes": "3 of 5 done+committed; 2 blocked on un-recovered CarSelectOnlinePlayerList mutators",
-   "status": "done"
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectOnlineEnd.h": {
    "status": "done"
@@ -65761,7 +65841,8 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCarSelectVehicle.cpp": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavAccountManagement.h": {
    "status": "done"
@@ -66668,7 +66749,7 @@
   },
   "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxhelper.cpp": {
    "notes": "5/7 funcs reconstructed+gate-clean (CreateProgram/CreateStates/3x InitWeights, asm-verified); ctor@0x82408348 + Release@0x82402E58 blocked on un-recoverable embedded shader microcode blobs (function-only exports, no bytes) + unreconstructed renderengine vendor types (VertexDescriptor/MeshHelper/VertexBuffer/DepthStencilState param structs).",
-   "status": "done"
+   "status": "blocked"
   },
   "GameSource/Unity/../../SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxrendertarget.cpp": {
    "notes": "Wave 33: faithful vs asm, gate clean, pushed cacce59",
@@ -67094,6 +67175,9 @@
    "notes": "wave C: 18 remaining funcs bodied 3-per-agent over the wave-B keystone; per-group fresh-eyes verify vs raw asm; conductor fixed UpdateArbitration (mr r3,r24 re-seed -- empty intersection must keep scanning, not return) and CheckCurrentLocation (bare inline XZ vperm, not a BrnMath::Flatten call). Joint compile + faithfulness 0-new; parity name-scan divergence is the usual inlined/decl-only callee noise.",
    "status": "done"
   },
+  "GameSource/Unity/../GameState/ModeManager/ChallengeManager/BrnChallengeManagerDebugComponent.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../GameState/ModeManager/Debug/BrnCrashScoreDebugComponent.cpp": {
    "notes": "Diagnosis-driven rework; compile-gate GREEN. (gperf tables extracted from X360 .rdata; SDK code in canonical home.)",
    "status": "done"
@@ -67463,7 +67547,7 @@
   },
   "GameSource/Unity/../Physics/PropManager/BrnPropManager.cpp": {
    "notes": "0/15 functions reconstructed -- committed as a compiling comment-only stub. Blocked on unreconstructed dependency types the whole TU dereferences: PropInstance (112B stride: SetTransform/SetLinearVelocity/SetAngularVelocity/GetJointIndex), PropPart (64B stride), and BaseCollisionGenerator (the base whose Destruct/Prepare/Begin*ContactGeneration this class chains -- not yet homed). Also the header layout needs correcting (mbRenderCentreOfMass actual offset per asm differs from the committed +0). Unblock when PropInstance/PropPart/BaseCollisionGenerator are reconstructed.",
-   "status": "done"
+   "status": "blocked"
   },
   "GameSource/Unity/../Physics/PropManager/BrnPropManager.h": {
    "status": "done"
@@ -68027,7 +68111,7 @@
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingManager.cpp": {
    "notes": "2 of 4 done+committed (Prepare/DetermineOutcome grounded); Update/UpdateScoring blocked on un-homed BrnGameState/ActiveRaceCar; also removed the pre-existing fabricated CheckVehicleForPowerPark free function",
-   "status": "done"
+   "status": "blocked"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/TrafficCheck/BrnTrafficCheckManager.cpp": {
    "notes": "Adversarial verify PASS: store-for-store vs X360 ARTIST spine; ledgers reconciled; minimal/owning homes + insertion-only additive grows; caught bug fixed inline (ParticleWaveForm NoiseTableBuild luRand&0xFFFF); 11 leaked .cpp:line citations scrubbed; 5 non-leaf keystones blocked-with-reason; combined wave-13 gate PASS.",
@@ -68282,7 +68366,7 @@
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp": {
    "notes": "6 of 15 done+committed; 9 blocked on un-homed AttribSys templates (eastl not recoverable this pass) + opaque offsets",
-   "status": "done"
+   "status": "blocked"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribinstance.cpp": {
    "notes": "combined batch review (sonnet fresh-eyes): semantic parity confirmed",
@@ -68290,7 +68374,7 @@
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribloadandgo.cpp": {
    "notes": "6 of 11 done+committed; 5 Vault funcs irreducibly blocked on the 64-bit Vault::AssetID vs committed 32-bit HashInt typedef + ReleaseAsset(u32) - NON-ADDITIVE global change",
-   "status": "done"
+   "status": "blocked"
   },
   "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribsupport.cpp": {
    "notes": "wave N: 9/9. FindCollection @0x82808378 was a SIGNATURE RECONCILIATION, not a reconstruction: the committed decl was (int, void*=null) with 57 consumers while the DWARF gives two Attribute::Keys. Resolved to the DWARF form. NOTE FOR FUTURE COVERAGE CHECKS: this TU's ledger names are qualified by the NAMESPACE Attrib, not by a class - Attrib::FindCollection and Attrib::AssertOnClassCheck are namespace-scope FREE functions, so a qualified-only Qual::leaf( match reports them missing. The coverage_check tool now handles free functions and operator names for exactly this reason.",
@@ -69536,7 +69620,7 @@
   },
   "class:BrnDirector::CameraInterpolationController": {
    "notes": "VMX keystone: the build is Matrix44AffineFromRota @0x821F8220 -- a dense VMX pipeline (lvx128/stvx128/vmulfp128/vmaddfp/vspltw, ~76 lines building an affine matrix from a rotation). No store-for-store scalar lowering without fabricating per-lane arithmetic the gate cannot verify. Honest no-op floor shipped; deferred to a dedicated VMX/matrix pass.",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnDirector::DebugLog": {
    "notes": "AppendName = PrintName twin (vtbl slot 6); operator[] instantiation matches the committed pool generic (+0x5F8 bit read, 72-stride); nit: duplicate bounds guards folded to one",
@@ -69845,7 +69929,7 @@
   },
   "class:BrnGameState::AchievementManagerX360": {
    "notes": "4 of 7 done+committed in new home + CgsXOverlappedX360 helper; Update/GetAchievementsFromX360Api/WriteAchievements blocked on Xbox-live intrinsics",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnGameState::BaseOnlineModeScoring": {
    "status": "done"
@@ -69918,7 +70002,7 @@
   },
   "class:BrnGameState::GameStateModule": {
    "notes": "6 of 8 done+committed extending BrnGameStateModule.h/.cpp; 2 funcs blocked on un-homed module collaborators",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnGameState::GameStateModuleIO": {
    "status": "done"
@@ -70326,7 +70410,7 @@
   },
   "class:BrnGui::CrashNavEnterOnlineX360": {
    "notes": "3 of 4 done+committed; 1 blocked on un-homed flow-state collaborator",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnGui::CrashNavIconRenderer": {
    "notes": "fresh-eyes review: clean members, loop count correct; offset-hack version replaced",
@@ -70758,6 +70842,9 @@
    "notes": "tightened: real member names meBrnPrepareStage/meBrnReleaseStage/mFlaptManager/mpGuiModule from DWARF; re-reviewed pass",
    "status": "done"
   },
+  "class:BrnGui::WorldDataController": {
+   "status": "done"
+  },
   "class:BrnGuiSaveLoad::Profile": {
    "notes": "ValidateProfile verified: version cmpwi 0x1C, manifest scan stored-stride 8 / expected-stride 0x10, empty-manifest returns false without logging.",
    "status": "done"
@@ -71177,14 +71264,15 @@
   },
   "class:BrnParticle::Native::BrnDebrisArrayLite": {
    "notes": "VMX keystone: UpdateBucket @0x82C08410 marshals hand-vectorised VMX register state (vspltw128-splatted frame-time etc. passed BY VMX register); no faithful scalar lowering. Honest floor shipped. Deferred.",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnParticle::Native::BrnSimpleParticleArray": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/GameSource/Effects/Particles/Native/BrnSimpleParticleArray.cpp. Reconciled.",
    "status": "done"
   },
   "class:BrnParticle::Native::BrnSimpleParticleArray::CB4ParticleBank": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "class:BrnParticle::Native::BrnSpark,4>": {
    "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
@@ -71196,7 +71284,7 @@
   },
   "class:BrnParticle::Native::ShadedRotatingRenderMethod": {
    "notes": "VMX keystone: BuildQuad @0x8291E150 is a multi-stage hand-vectorised VMX/AltiVec quad-build pipeline; no faithful scalar lowering. Honest CGS_ASSERT floor shipped. Deferred to a dedicated VMX pass.",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnParticle::Native::SimpleParticleBatch,13>": {
    "notes": "Opus decomp+verify; gate PASS; pushed dev 8f2295c",
@@ -71361,7 +71449,7 @@
   },
   "class:BrnPhysics::Deformation::BBoxPointSkinData": {
    "notes": "VMX keystone: HackSwapHandedness @0x825E6DB8 is a hand-vectorised AltiVec matrix*point pipeline (lvx128 four rows + vsubfp negate + vmrglw/vmrghw lane cascade + vmulfp128/3-stage vmaddfp accumulation + vrlimi128 handedness flip scaled by undecoded rodata flt_820037C8 + 3 stvx128). No faithful scalar lowering; honest no-op floor shipped. Deferred to a dedicated VMX pass.",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnPhysics::Deformation::BodyPartBBoxSpec": {
    "notes": "VMX keystone: HackCheckHandedness @0x825E6EA0 is a multi-stage VMX128 triple-product handedness test (vpermwi128 0x63, vmulfp128, vnmsubfp, vmsum3fp128, vcmpgefp/vcmpeqfp) + conditional mirror (8-iter loop @+0x40 stride 0x20, then +0x140/+0x160, sign-bit flip). No faithful scalar lowering; honest no-op floor shipped. Deferred to a dedicated VMX pass.",
@@ -72985,7 +73073,7 @@
   },
   "class:BrnWorld::BoostManager": {
    "notes": "Keystone: of its 3 funcs only SetBoostEarningEnabled @0x822A33B0 has a recoverable manager-side store (stb mbBoostEarningEnabled@+0); SetWrecking @0x822B8E40 + the third reach an un-homed RaceCar entity-module (@+0x450, vtable+0xA8) dispatch with no recoverable manager-side state. Honest stubs shipped; deferred until the entity module is homed.",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnWorld::CrashIO": {
    "notes": "Wave 49: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
@@ -73097,7 +73185,7 @@
   },
   "class:BrnWorld::EnvironmentSettings::EnvironmentManager": {
    "notes": "5 of 8 done+committed (PerformBlend/SetupUpdateFromToolBlend/ResourcePointerAssertThingy finished; homed BlendFrame + Scattering/Lighting/Clouds targets at asm offsets); 3 still blocked on un-homed deps",
-   "status": "done"
+   "status": "blocked"
   },
   "class:BrnWorld::EnvironmentSettings::KeyframeResourceType": {
    "notes": "Wave 35: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
@@ -73608,7 +73696,7 @@
   },
   "class:CWMVideoPerceptionModel": {
    "notes": "2 of 7 done+committed; 5 blocked on un-recovered VMX rodata tables",
-   "status": "done"
+   "status": "blocked"
   },
   "class:CXLiveAsyncTask": {
    "notes": "fresh-eyes Opus verifier: faithful store-for-store, compiles, instantiable, nothing fabricated; parity drift = inlined/member-call/decl-only callee",
@@ -75156,7 +75244,7 @@
   },
   "class:CgsSceneManager::CgsCollision::BaseCollisionGenerator": {
    "notes": "2 of 15 done+committed; 13 blocked on un-homed collision collaborators",
-   "status": "done"
+   "status": "blocked"
   },
   "class:CgsSceneManager::CgsCollision::CollisionResultList": {
    "notes": "Wave 34: adversarially verified store-for-store vs X360 asm (parity); member access by name; committed homes grown additively only; combined MSVC gate green.",
@@ -75171,7 +75259,7 @@
   },
   "class:CgsSceneManager::CgsCollision::PrimitiveTestResult": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/GameShared/GameClasses/SceneManager/Collision/Primitives/CgsCollisionResult.cpp. Reconciled.",
-   "status": "done"
+   "status": "blocked"
   },
   "class:CgsSceneManager::CgsCollision::TriangleList": {
    "notes": "Adversarial verify PASS (parity): store-for-store vs X360 ARTIST spine; ledger funcs reconciled; minimal/owning homes, additive grows preserve layouts; gate PASS (combined wave-10 build).",
@@ -76112,7 +76200,7 @@
   },
   "class:D3D::CCapture": {
    "notes": "8 of 11 done+committed (MarkUsedPages finished by homing the page-HashMap); 3 blocked on rodata opcode tables + CCapture vtable slots",
-   "status": "done"
+   "status": "blocked"
   },
   "class:D3D::CCapture::HashMap": {
    "status": "done"
@@ -76123,7 +76211,7 @@
   },
   "class:D3D::CDevice": {
    "notes": "FOUNDATION committed (0f15ab1): D3D::CDevice TYPE homed + 5/18 software funcs bodied faithfully (IsPastStopPoint/IsPrimaryMemoryBusy/IsSecondaryMemoryBusy/MarkAsOutOfMemory/SaveRingBufferState). 13/18 decl-only: need un-homed sibling layouts (class:D3D::CBlocker/CCommandBuffer/CRingAllocList) and/or build raw PM4 packet streams / poke GPU regs. Unblocks once siblings homed.",
-   "status": "blocked"
+   "status": "done"
   },
   "class:D3D::CRingAllocList": {
    "status": "done"
@@ -76473,6 +76561,9 @@
   "class:MassiveAdClient3::CMassiveAdObjectAudioDynamic": {
    "status": "done"
   },
+  "class:MassiveAdClient3::CMassiveAdObjectModel": {
+   "status": "done"
+  },
   "class:MassiveAdClient3::CMassiveAdObjectModelDynamic": {
    "notes": "wave O: ALL 11 FUNCTIONS ARE NOW BODIED AND GATE-GREEN (whole MassiveAd dir selfchecks pass). The base carve landed in MassiveAdClient3AdObject.h (virtual Initialize, AssetIDAdd, mpMaster+0x34, mpZone+0x18, mnField38+0x38, muAssetIDCount+0x4C, mAssetIDList+0x50) plus friendships on ZoneManager/Subscriber, and the 3 parked bodies (GetNextAssetID/CreateSlaveM/Initialize) are in _wO_01/_wO_02.cpp. THE ONLY THING BLOCKING CLOSURE IS LEDGER BOOKKEEPING, NOT CODE: (1) rows 'Rep' and 'Sub' name functions now correctly defined as ReportImpressions and SubscriberAdd -- the rename was FORCED by a real fix (both were non-virtual but occupy base vtable slots 4/+0x10 and 7/+0x1C, dispatched virtually by CMassiveZoneManager::ReportImpressions @0x82BD2F80 and the subscriber ctor @0x82BCEA44, so the host ran the BASE body and silently lost every dynamic-model impression / never spawned the slave). coverage_check therefore reports missing=2. (2) Suspend @0x82BDEBC8 is bodied (slot 5 of off_821872B4) but has NO ledger row and no .ida-export, so the TU ships 12 real bodies against 11 rows. MEASURED AND REFUTED THIS WAVE: the '51-char IDA truncation' story for Rep/Sub/Tic is WRONG -- names in this very TU run to 76 and 77 chars, so there is no 51-char cap; the rename is justified by the MEASURED vtable slots alone, not by any truncation argument. UNBLOCK = fix ledger identities (Rep->ReportImpressions, Sub->SubscriberAdd, add Suspend @0x82BDEBC8 extent 0x82BDEBC8-0x82BDEC34 xrefs 0x821872C8+0x821E94D8), then close. ALSO FILED, NOT FIXED (needs ONE coordinated cross-TU commit): CMassiveAdObject's 4th ctor param feeds mpZone so its true type is CMassiveZoneManager*, not int -- retyping it breaks the four derived ctors (AudioDynamic/ModelDynamic/Texture/Video) that forward it as int; attempted and REVERTED this wave to keep the gate green. Sibling AudioDynamic carries the identical Rep/Sub/Initialize slot defects AND types its 3rd ctor param int where the PPC float-skips-a-GPR rule says float; Texture's ctor decl has a phantom 7th param (measured 0x82BDAB18 = 6 args).",
    "status": "done"
@@ -76482,11 +76573,11 @@
   },
   "class:MassiveAdClient3::CMassiveAdObjectTexture": {
    "notes": "2 of 3 done+committed; reconciled the W23 CMassiveAdObject pin; 1 blocked on un-homed dep",
-   "status": "done"
+   "status": "blocked"
   },
   "class:MassiveAdClient3::CMassiveAdObjectVideo": {
    "notes": "2 of 3 done+committed; reconciled the CMassiveAdObject pin; GetBestImpression blocked",
-   "status": "done"
+   "status": "blocked"
   },
   "class:MassiveAdClient3::CMassiveAsset": {
    "status": "done"
@@ -76746,7 +76837,7 @@
   },
   "class:RealmcIface::MessageLoadDone": {
    "notes": "2 of 3 done+committed (Apply+dtor; layout fix removed fabricated mPad18); ctor blocked on un-homed EASTL basic_string helper + RealmcCore::allocator<char>::RangeInitialize",
-   "status": "done"
+   "status": "blocked"
   },
   "class:RealmcIface::MessageSaveDone": {
    "notes": "Fresh-decomp mirroring committed MessageBootupDone/MessageLoadDone: Apply=target-vtable-slot dispatch (slot from asm), deleting-dtor compiler-generated (virtual dtor + operator delete->FreeMemSize), base=IRunnableTask/MessageString per asm dtor-chain. Verifier pass, faithfulness 0-new, joint compile pass.",
@@ -76782,7 +76873,7 @@
   },
   "class:RealmcIface::XenonRunnableTask": {
    "notes": "4 of 6 done+committed; 2 still blocked on un-homed deps",
-   "status": "done"
+   "status": "blocked"
   },
   "class:RealmcIface::XenonUtil": {
    "notes": "wave D: CardResultToCardStatus bodied -- the last of 22. byte_82148638 recovered by headless IDA; conductor INDEPENDENTLY re-dumped the 16 bytes (00400840404020282830400030380840) and the cmplwi r3,0xF bound check, and checked the switch against all 16 indices plus the >15 default. Gates pass, lint 0-new, fresh-eyes verified.",
@@ -76821,7 +76912,7 @@
   },
   "class:Snd9::AemsStandardSamplePlayer": {
    "notes": "5 of 7 done+committed; GetOutputs + dtor blocked",
-   "status": "done"
+   "status": "blocked"
   },
   "class:Snd9::Hal": {
    "status": "done"
@@ -76934,7 +77025,7 @@
   },
   "class:XAUDIO::CEngine": {
    "notes": "0 of 18 - layout LEVERAGE HOME only (new XAudioEngine.h/.cpp: full 0x174 layout + gpEngine singleton off_832BB944, named members downstream reads by offset); all 18 bodies blocked on Xbox Ke/Ex/Ob kernel threading + spinlock/IRQL + r13 KPCR reads + un-recovered module rodata",
-   "status": "done"
+   "status": "blocked"
   },
   "class:XAUDIO::CEngine::CEngineVoiceList": {
    "notes": "Vendor SDK (XAudio/XCam) mirror committed siblings; named-member ops, foreign COM interfaces held void* w/ attested vtable-slot dispatch per committed precedent. Verifier pass, faithfulness 0-new, compile pass.",
@@ -76961,11 +77052,11 @@
   },
   "class:XAUDIO::CReverbEffect": {
    "notes": "1 of 9 done+committed; 8 still blocked on the un-recovered CEffect/CVoice vtable slot order",
-   "status": "done"
+   "status": "blocked"
   },
   "class:XAUDIO::CRoutedVoice": {
    "notes": "2 of 11 done+committed; 9 still blocked on the un-recovered CVoice/CEffect vtable slot order (ctor-seating asm + rodata vtable blob in no dossier) + Xbox kernel",
-   "status": "done"
+   "status": "blocked"
   },
   "class:XAUDIO::CSourceEffect": {
    "status": "done"
@@ -77032,7 +77123,7 @@
   },
   "class:XCAM::CRemoteConsole": {
    "notes": "4 of 7 done+committed; 3 blocked on un-homed CStreamEngine/CQOSController",
-   "status": "done"
+   "status": "blocked"
   },
   "class:XCAM::CRemoteConsoleList": {
    "status": "done"
@@ -77076,7 +77167,7 @@
   },
   "class:XGRAPHICS::CFG": {
    "notes": "4 of 5 done+committed; BuildUsesAndDefs blocked on un-attested VRegInfo vtable slots +0x1C/+0x20 (phantom-slot) + raw +0x5E4 poke on un-reconstructed function ctx (NOT a VRegTable dep - premise corrected)",
-   "status": "done"
+   "status": "blocked"
   },
   "class:XGRAPHICS::DListNode": {
    "notes": "Wave 53: reconstructed store-for-store from X360 ARTIST asm + adversarially verified (full store set both directions, exact assert operands, byte-vs-dword, COMDAT-fold li-consts). Committed 6e29372.",
@@ -77108,7 +77199,7 @@
   },
   "class:XGRAPHICS::IRAlu": {
    "notes": "4 of 7 done+committed; 3 blocked on un-homed foreign microcode context (raw +0xAB0 CFG hop)",
-   "status": "done"
+   "status": "blocked"
   },
   "class:XGRAPHICS::IRBinary": {
    "notes": "XGRAPHICS IR/value-kind: ctor forwards to VRegInfo/IRInst base + NewItem arena factory; deleting-dtor thunk dropped per policy. Mirror committed AddrIndexedSet/IRAlu. Verifier pass, faithfulness 0-new, joint compile pass.",
@@ -77132,7 +77223,7 @@
   },
   "class:XGRAPHICS::IRLoadConst": {
    "notes": "2 of 3 done+committed; Kill blocked on un-homed dep",
-   "status": "done"
+   "status": "blocked"
   },
   "class:XGRAPHICS::IRLoadInterp": {
    "status": "done"
@@ -77605,7 +77696,7 @@
   },
   "class:rw::audio::core::Butterworth": {
    "notes": "Keystone: CalculateFilterCoefficients @0x82B64698 requires decoding helper sub_82C09970 + three undecoded rodata coefficient tables (cascaded-section split shape IDA cannot recover); fabricating coefficients is forbidden. The other 4 funcs (ClearBuffer/CreateInstance/Filter/GetSize @0x82B64980/0x82B6C420/0x82B649E8/0x82B6C408) are bodied + committed; coeff calc left flagged.",
-   "status": "done"
+   "status": "blocked"
   },
   "class:rw::audio::core::CMpegBase": {
    "notes": "wave M: 6/6, vendor TU. PolySynth @0x82B8EE50 landed with its own window rodata dumped. See the HELPER_CMpegBase note: the shared address is ICF folding of two identical bodies, so each class carries its own qualified definition and there is no ODR duplicate. Builds on the poly-synth member map (per-channel rotating history phase, work-buffer base) recovered earlier in this session and already committed to CMpegBase.h.",
@@ -77625,7 +77716,7 @@
   },
   "class:rw::audio::core::CompressorLimiter1": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/vendor/renderware/src/rw/audio/core/CompressorLimiter1.cpp. Reconciled.",
-   "status": "done"
+   "status": "blocked"
   },
   "class:rw::audio::core::CpuLoadBalancer": {
    "status": "done"
@@ -77670,7 +77761,7 @@
   },
   "class:rw::audio::core::FastFirEngine": {
    "notes": "6 of 9 done+committed (ctor/dtor/Reset/SetChannels/Configure/Filter store-for-store); MultiplyAccumulateComplex VMX vperm kernel + LoadDistributionCalc garbled-decompiler + EstimateLoad un-attested rodata blocked",
-   "status": "done"
+   "status": "blocked"
   },
   "class:rw::audio::core::Fir64": {
    "notes": "Keystone campaign R3: partial-completion + faithful VMX->scalar lowering, adversarially verified vs X360 asm. Committed 2c0bc47.",
@@ -77703,7 +77794,7 @@
   },
   "class:rw::audio::core::Limiter1": {
    "notes": "4 of 5 done+committed in new audio-core plugins/Limiter1 home; 1 blocked on undecoded rodata (honest placeholder)",
-   "status": "done"
+   "status": "blocked"
   },
   "class:rw::audio::core::LowPassIir2": {
    "notes": "CalculateFilterCoefficients @0x82B97DC0 RBJ algebra store-for-store verified; shared Iir2 kernel.",
@@ -78071,7 +78162,8 @@
    "status": "done"
   },
   "class:rw::math::vpu": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "class:rw::math::vpu::MaskScalar": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
@@ -78158,7 +78250,7 @@
   },
   "class:rw::physics::Simulation": {
    "notes": "3 of 22 done+committed; 19 blocked on un-homed physics collaborator types",
-   "status": "done"
+   "status": "blocked"
   },
   "class:rw::physics::SimulationWorkspace": {
    "notes": "Wave 52: reconstructed store-for-store from X360 ARTIST asm and adversarially verified (full store set both directions, exact assert operands, BE-qword field order, byte-index/stride). Committed a2da36a.",

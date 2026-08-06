@@ -44,8 +44,10 @@ CLASS_HOMES_JSON = ROOT / "progress" / "class_homes.json"
 SOURCE_SUFFIXES = (".cpp", ".h", ".hpp", ".inl")
 TRAP_MARKERS = ("__debugbreak", "__builtin_trap", "CGS_ASSERT(false)", "CGS_ASSERT( false )")
 
-# Narrow on purpose. "placeholder" and "incomplete" often document honest type
-# boundaries in otherwise finished reconstructions.
+# Narrow on purpose. "placeholder", "not implemented", and "incomplete" often
+# quote the original game's asserts or document dependency/type boundaries in an
+# otherwise finished reconstruction.  These markers are reserved for files that
+# explicitly admit that one of their own bodies is still a reconstruction floor.
 #
 # The trailing group are INVENTION-ACCOMMODATION markers: a file that carries a
 # home-grown-format signature scan ("LocateMovieRoot"), reads "our converted"
@@ -59,8 +61,14 @@ INCOMPLETE_FILE_RE = re.compile(
     r"needs finishing|"
     r"skeleton, not faithful|"
     r"All function implementations are guessed|"
-    r"\bnot implemented\b|"
-    r"\bunimplemented\b|"
+    r"DELIBERATELY NOT BODIED|"
+    r"body intentionally not reconstructed|"
+    r"\bnot fully reconstructed\b|"
+    r"\bcompiling comment-only stub\b|"
+    r"\bleft unbodied and flagged\b|"
+    r"\bnot reconstructed\s*\(keystone\)|"
+    r"\b(?:VMX\s+)?KEYSTONE\b[^\n]{0,120}\bNOT reconstructed\b|"
+    r"\blink stub\b[^\n]{0,120}\breconstruct\b|"
     r"\bLocateMovieRoot\w*|"
     r"our\s+converted|"
     r"converter[-\s]format\s+accommodation|"
@@ -79,9 +87,35 @@ BAD_DONE_NOTE_RE = re.compile(
 
 BLOCKED_NOTE_RE = re.compile(r"\bBLOCKED on\b|\bUnblock when\b", re.I)
 CORRECTED_PATH_RE = re.compile(r"\b(?:corrected|Landed at corrected)\s+path\s+([^\s,)]+)", re.I)
-KNOWN_PARTIAL_TUS = {
-    "GameSource/GameState/BrnGameStateSharedIO.h",
-}
+PROGRESS_COUNT_RE = re.compile(
+    r"\b(?P<done>\d+)\s*(?:of|/)\s*(?P<total>\d+)\s*"
+    r"(?:done(?:\+committed)?|func(?:tion)?s?\s+(?:bodied|reconstructed)|bodies\s+bodied)",
+    re.I,
+)
+EXPLICIT_INCOMPLETE_NOTE_RE = re.compile(
+    r"\ball \d+ bodies blocked\b|"
+    r"\bcommitted as a compiling comment-only stub\b|"
+    r"\bhonest (?:no-op )?(?:stub|stubs|floor|floors) shipped\b[^.]*\bdeferred\b",
+    re.I,
+)
+
+EXPLICIT_INCOMPLETE_BODY_RE = re.compile(
+    r"CGS_ASSERT\s*\(\s*false[^;]{0,300}(?:"
+    r"not (?:fully |yet )?reconstructed|"
+    r"link stub[^;]{0,120}reconstruct|"
+    r"deferred[^;]{0,120}(?:pass|reconstruct)"
+    r")",
+    re.I | re.S,
+)
+EXPLICIT_INCOMPLETE_FUNCTION_CONTEXT_RE = re.compile(
+    r"DELIBERATELY NOT BODIED|"
+    r"body intentionally not reconstructed|"
+    r"\bnot fully reconstructed\b|"
+    r"\bleft unbodied and flagged\b|"
+    r"\b(?:VMX\s+)?KEYSTONE\b[^\n]{0,160}\bNOT reconstructed\b|"
+    r"\bHonest (?:placeholder|stub|floor)\b[^\n]{0,200}\b(?:not reconstructed|unrecoverable|deferred)\b",
+    re.I,
+)
 
 VENDOR_BLOCKED_NOTE = (
     "Vendor/runtime code; supplied by platform libraries or checked-in vendor source, "
@@ -274,7 +308,12 @@ def is_real_reconstruction(text: str) -> bool:
 
 
 def classify_files(files: list[str]) -> str:
-    texts = [read_source(path) for path in files if source_path(path).exists()]
+    texts = []
+    for path in files:
+        try:
+            texts.append(read_source(path))
+        except (OSError, subprocess.CalledProcessError):
+            continue
     if not texts:
         return "none"
     if not any(is_real_reconstruction(text) for text in texts):
@@ -282,6 +321,19 @@ def classify_files(files: list[str]) -> str:
     if any(INCOMPLETE_FILE_RE.search(text) for text in texts):
         return "partial"
     return "done"
+
+
+def note_declares_incomplete(notes: str) -> bool:
+    """Whether a TU's own durable note says its implementation is unfinished.
+
+    Historical notes frequently contain the word "blocked" while explaining how
+    the blocker was later removed.  Numeric progress is unambiguous, however, and
+    the remaining phrase checks are limited to explicit shipped floors/stubs.
+    """
+    for match in PROGRESS_COUNT_RE.finditer(notes):
+        if int(match.group("done")) < int(match.group("total")):
+            return True
+    return bool(EXPLICIT_INCOMPLETE_NOTE_RE.search(notes))
 
 
 BODY_SUFFIX = (
@@ -385,6 +437,72 @@ def indexed_function_definition_files(
     )
 
 
+def build_explicit_incomplete_function_keys(code_by_file: dict[str, str]) -> set[str]:
+    """Index canonical function names admitted by explicit reconstruction traps.
+
+    Stub assertion strings normally name their canonical target.  Indexing those
+    names once avoids a full source-regex pass for every one of ~60k functions.
+    Both fully-qualified and final-owner keys are stored to match the definition
+    index's namespace-tolerant behaviour.
+    """
+    keys: set[str] = set()
+    canonical_re = re.compile(r"(?:[A-Za-z_]\w*::)+~?[A-Za-z_]\w*")
+    for path, code in code_by_file.items():
+        for match in EXPLICIT_INCOMPLETE_BODY_RE.finditer(code):
+            for canonical in canonical_re.findall(match.group(0)):
+                keys.add(canonical)
+                parts = canonical.split("::")
+                if len(parts) >= 2:
+                    keys.add("::".join(parts[-2:]))
+
+        # Strong comments immediately attached to a qualified definition cover
+        # non-trapping floors such as `return true` and identity/no-op VMX shims.
+        # Read the raw blob here because code_by_file intentionally strips full
+        # comment lines for ordinary definition matching.
+        try:
+            raw = read_source(path)
+        except (OSError, subprocess.CalledProcessError):
+            continue
+        raw_lines = raw.splitlines(keepends=True)
+        line_offsets: list[int] = []
+        offset = 0
+        for line in raw_lines:
+            line_offsets.append(offset)
+            offset += len(line)
+        for match in QUALIFIED_METHOD_DEF_RE.finditer(raw):
+            line_index = 0
+            lo, hi = 0, len(line_offsets)
+            while lo < hi:
+                mid = (lo + hi) // 2
+                if line_offsets[mid] <= match.start():
+                    lo = mid + 1
+                else:
+                    hi = mid
+            line_index = max(0, lo - 1)
+            # Keep the attachment window tight: file prologues often discuss
+            # other, separately-owned methods that are intentionally unbodied.
+            context = "".join(raw_lines[max(0, line_index - 16) : line_index + 3])
+            if not EXPLICIT_INCOMPLETE_FUNCTION_CONTEXT_RE.search(context):
+                continue
+            owner = re.sub(r"\s+", "", match.group(1)).removesuffix("::")
+            method = match.group(2)
+            full = f"{owner}::{method}"
+            keys.add(full)
+            keys.add(f"{owner.split('::')[-1]}::{method}")
+    return keys
+
+
+def any_function_has_explicit_incomplete_body(
+    functions: Iterable[str],
+    incomplete_function_keys: set[str],
+) -> bool:
+    for function_name in functions:
+        keys = function_definition_keys(function_name)
+        if keys and (keys[0] in incomplete_function_keys or keys[1] in incomplete_function_keys):
+            return True
+    return False
+
+
 def all_non_thunk_functions_have_indexed_bodies(
     functions: list[str],
     definition_index: dict[str, set[str]],
@@ -477,12 +595,14 @@ def target_for_tu(
     mapped_homes: dict[str, str] | None = None,
     global_code_by_file: dict[str, str] | None = None,
     definition_index: dict[str, set[str]] | None = None,
+    incomplete_function_keys: set[str] | None = None,
 ) -> tuple[str, str | None, list[str]]:
     current_status = current_entry.get("status", "todo")
     current_notes = str(current_entry.get("notes", ""))
     mapped_homes = mapped_homes or {}
     global_code_by_file = global_code_by_file or code_by_file
     definition_index = definition_index or build_definition_index(code_by_file)
+    incomplete_function_keys = incomplete_function_keys or build_explicit_incomplete_function_keys(code_by_file)
     source = tu_meta.get("source")
     functions = list(tu_meta.get("functions") or [])
 
@@ -491,16 +611,32 @@ def target_for_tu(
     if source == "vendor" or tu_id.startswith("vendor:"):
         return "blocked", current_notes or VENDOR_BLOCKED_NOTE, []
 
-    if tu_id in KNOWN_PARTIAL_TUS:
-        return "todo", None, []
+    # Durable notes with an explicit partial count or a deliberately shipped
+    # reconstruction floor override mere file/symbol presence.  Keep the reason:
+    # this is a genuine blocked TU, not a missing-source todo.
+    if note_declares_incomplete(current_notes):
+        return "blocked", current_notes, []
+
+    if functions and any_function_has_explicit_incomplete_body(
+        functions,
+        incomplete_function_keys,
+    ):
+        return "blocked", current_notes or "Explicit reconstruction stub remains in the committed source.", []
 
     # Class/module TUs have no path-shaped id. A resolved, non-partial home is the
     # same file-level evidence used for path-shaped TUs. Without a home, accept only
     # complete qualified-definition evidence from the source index.
     if source == "class" or tu_id.startswith("class:"):
         home_files = resolve_mapped_files(tu_id, mapped_homes, file_index)
-        if home_files and classify_files(home_files) == "done":
-            return "done", current_notes or None, home_files
+        if home_files:
+            home_kind = classify_files(home_files)
+            if home_kind == "skeleton":
+                return "todo", None, home_files
+            # A single physical file can home several independent class TUs. An
+            # incomplete sibling must not contaminate this class; function-level
+            # explicit-stub evidence was checked above.
+            if home_kind in ("done", "partial"):
+                return "done", current_notes or None, home_files
         if functions and all_non_thunk_functions_are_indexed(functions, definition_index):
             return "done", current_notes or None, home_files
         return "todo", None, home_files
@@ -549,7 +685,7 @@ def target_for_tu(
             return "todo", None, files
         return "done", current_notes or None, files
     if kind == "partial":
-        return "todo", None, files
+        return "blocked", current_notes or "Explicit incomplete reconstruction marker remains in the committed source.", files
     if kind == "skeleton":
         return "todo", None, files
 
@@ -622,6 +758,7 @@ def build_reconciled_status(
         "<all tracked source>": "\n;\n".join(code_by_file.values())
     }
     definition_index = build_definition_index(code_by_file)
+    incomplete_function_keys = build_explicit_incomplete_function_keys(code_by_file)
 
     new_tu: dict[str, dict] = {}
     new_func = dict(current_func)
@@ -635,6 +772,7 @@ def build_reconciled_status(
         tu_meta = tu_index.get(tu_id, {})
         current_entry = current_tu.get(tu_id, {})
         old_status = current_entry.get("status", "todo")
+        functions = list(tu_meta.get("functions") or [])
         target, notes, files_for_tu = target_for_tu(
             tu_id,
             tu_meta,
@@ -644,14 +782,26 @@ def build_reconciled_status(
             mapped_homes=mapped_homes,
             global_code_by_file=global_code_by_file,
             definition_index=definition_index,
+            incomplete_function_keys=incomplete_function_keys,
         )
 
-        if no_demote and transition_is_demotion(old_status, target):
+        # Promote-only mode normally preserves terminal history when a TU cannot
+        # be mapped mechanically.  Explicit contradictory evidence is different:
+        # a durable partial-count note, a named reconstruction trap, or a strong
+        # marker in the resolved source must demote a false `done` row.
+        explicit_incomplete = (
+            target == "blocked"
+            and (
+                note_declares_incomplete(str(current_entry.get("notes", "")))
+                or any_function_has_explicit_incomplete_body(functions, incomplete_function_keys)
+                or (files_for_tu and classify_files(files_for_tu) == "partial")
+            )
+        )
+        if no_demote and transition_is_demotion(old_status, target) and not explicit_incomplete:
             target = old_status
             notes = current_entry.get("notes")
             files_for_tu = []
 
-        functions = list(tu_meta.get("functions") or [])
         if target == "todo":
             set_functions(new_func, functions, None, no_demote=no_demote)
             if tu_id in current_tu:
@@ -757,6 +907,7 @@ def verify(con=None, tracked=None):
         "<all tracked source>": "\n;\n".join(code_by_file.values())
     }
     definition_index = build_definition_index(code_by_file)
+    incomplete_function_keys = build_explicit_incomplete_function_keys(code_by_file)
 
     bad_notes = []
     no_evidence = []
@@ -774,6 +925,7 @@ def verify(con=None, tracked=None):
             mapped_homes=mapped_homes,
             global_code_by_file=global_code_by_file,
             definition_index=definition_index,
+            incomplete_function_keys=incomplete_function_keys,
         )
         if target == "done":
             if tu_id.startswith("class:"):
