@@ -353,6 +353,24 @@ rem ---- build the cl response file ----
   rem  4x SortAndCreateRunList, DeformationManager_Fixup*, StoreContact, ... see the wave report).
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_OutputBuffer.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsQueueFacades.cpp"
+  rem  ---- BRIDGE DE-FACADE MOUNTS (2026-08-06, step 1 of the PhysicsModule::Update subtree) ----
+  rem  BrnPhysicsModuleBridgeFunctions.cpp is REWRITTEN as the real private PhysicsModule members
+  rem  (the 18-LNK2019 facade note above is retired); its closure TUs mount with it:
+  echo "%SRC%\GameSource\Physics\BrnPhysicsModuleBridgeFunctions.cpp"
+  echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_PotentialContactInterface.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyEvents.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\ContactSpyQueue_RaceCarContact_300_SortAndCreateRunList_8.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\ContactSpyQueue_TrafficContact_400_SortAndCreateRunList_64.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\ContactSpyQueue_PhysicalCarPartContact_150_SortAndCreateRunList_50.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\ContactSpyQueue_PropContact_100_SortAndCreateRunList_100.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyRunList.cpp"
+  rem  BrnDeformationManager_Contacts.cpp itself STAYS UNMOUNTED (its SolvePenetration /
+  rem  UpdateTriangleCache / spatial-query tail carries ~19 unresolved of its own); the four
+  rem  bridge callees were split into the _ContactFixups slice below (fold back when it mounts).
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_ContactFixups.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Accessors.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDetachedWheelManager_Accessors.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ValidateSimulationContacts.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
   rem  StreamedDeformationSpec (wheel-render wave, 2026-08-03): the car's authored WheelSpec
   rem  table -- GetWheelSpec is what RaceCarEntityModule::PublishRenderPoseWithoutPhysicsBringUp
