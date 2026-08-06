@@ -402,6 +402,23 @@ rem ---- build the cl response file ----
   rem  PhysicsModule::Update (FreeAllocations / UpdateVehicleEffects / ReadUpdatedBodyProperties /
   rem  ProcessDeformationStates) -- slice TU, home BrnVehicleManager.cpp still unmounted.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PerFrameLeaves.cpp"
+  rem  ⭐⭐ 2026-08-06 (big-five #3, UpdateVehiclePhysics wave): the per-frame FORCE PRODUCER
+  rem  VehicleManager::UpdateVehiclePhysics @0x82644FA8 (1,038 insns) FULL body + four in-TU
+  rem  siblings (IsRaceCarCrashing / ForceRaceCarCrash-5arg==sub_82635B78 / ProcessAboveGround-
+  rem  LineTestsResults / ProcessAftertouchEvents) -- slice TU, home BrnVehicleManager.cpp still
+  rem  unmounted. Its honest-closure remainder is NAMED trap stubs in BrnVehicleManagerLinkStubs
+  rem  (all dead until PhysicsModule::Update lands -- that wave must resolve every stub there).
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateVehiclePhysics.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerLinkStubs.cpp"
+  rem  ⭐⭐ RaceCarPhysics.cpp MOUNTS (same wave): the per-car dispatch target RaceCarPhysics::
+  rem  Update + ~40 showtime/aftertouch bodies. Its banner's five measured LNK2019s resolve as:
+  rem  VehiclePhysics::Update + UpdateSteering -> trap stubs in VehiclePhysicsLinkStubs.cpp (the
+  rem  integrator orchestrator seam, still THE wall); GetAftertouchValues -> overload fork DELETED
+  rem  (the 4-arg ref form @0x825B2E88 is the leaf; BrnPlayerDriverControls.cpp mounts below);
+  rem  gbVehicleBounceBoosting -> extern RETIRED (it was a data fork of msPlayerParams
+  rem  .mbLaunchActive -- one console byte, two PC names; see RaceCarPhysics.cpp).
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\RaceCarPhysics.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnPlayerDriverControls.cpp"
   rem  ...and its two link dependencies: UpdateShowtimeBounceModifiers + the msPlayerParams
   rem  singleton (split out of the still-unmounted RaceCarPhysics.cpp, RaceCarPhysics_Construct
   rem  precedent), and DeformationState::GetCarStateF (bodied SharedIO slice, never mounted).
