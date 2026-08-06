@@ -198,6 +198,15 @@ rem ---- build the cl response file ----
   rem  after reading the link (ONE unresolved external, this symbol, nothing else came with
   rem  it): the TU adds no further unresolved symbols of its own.
   echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModuleIO_InputBuffer.cpp"
+  rem  ⭐ 2026-08-06 (the game-side six + the two virtuals): the OutputBuffer TUs are now HARD
+  rem  dependencies of the module TU above. PhysicsSimulationModule::Update and its four
+  rem  output emitters call SetTimeStepUsed/SetMaxIterationsUsed and the four write-side
+  rem  queue accessors (GetUpdateRigidBodyQueue @0x8289F130, GetContactSpyQueue @0x8259F120,
+  rem  GetJointSpyQueue @0x8259F1C8, GetDriveSpyQueue @0x8259F270), all defined in the first
+  rem  TU; the second holds OutputBuffer::Destruct @0x828A5F38 (rewritten off its local
+  rem  slice-fork the same day). /OPT:REF strips all of it until PhysicsModule::Update lands.
+  echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModuleIO_OutputBuffer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsCamera.cpp"
   echo "%SRC%\GameSource\Director\Camera\Camera.cpp"
