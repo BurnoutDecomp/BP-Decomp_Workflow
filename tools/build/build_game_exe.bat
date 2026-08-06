@@ -345,6 +345,14 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\Packages\ICE\ICEFile.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_InputBuffer_Accessors.cpp"
+  rem  ---- CLOSURE-ENFORCEMENT MOUNTS (PhysicsModule::Update closure wave 2026-08-06) ----
+  rem  Both TUs are bodied ('done' in the ledger) and were measured link-GREEN this wave; mounted
+  rem  so their closure stays enforced (mount-gap doctrine: /OPT:REF strips the bytes, the link
+  rem  keeps the contract). NOTE: BrnPhysicsModuleBridgeFunctions.cpp was trial-mounted the same
+  rem  day and is NOT green: 18 LNK2019 (its own facade helpers -- GetOutContactSpy,
+  rem  4x SortAndCreateRunList, DeformationManager_Fixup*, StoreContact, ... see the wave report).
+  echo "%SRC%\GameSource\Physics\BrnPhysicsModuleIO_OutputBuffer.cpp"
+  echo "%SRC%\GameSource\Physics\BrnPhysicsQueueFacades.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationOutputInterface.cpp"
   rem  StreamedDeformationSpec (wheel-render wave, 2026-08-03): the car's authored WheelSpec
   rem  table -- GetWheelSpec is what RaceCarEntityModule::PublishRenderPoseWithoutPhysicsBringUp
