@@ -368,6 +368,23 @@ rem ---- build the cl response file ----
   rem  UpdateTriangleCache / spatial-query tail carries ~19 unresolved of its own); the four
   rem  bridge callees were split into the _ContactFixups slice below (fold back when it mounts).
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_ContactFixups.cpp"
+  rem  2026-08-06 (big-five #2, contact-generation wave): the contact-BRIDGE slice consumed by
+  rem  PhysicsModule::BridgeContactsToSimulation -- ReadPotentialVehicleWorldContact +
+  rem  FindModelIndexByGlobalEntityID (moved out of the still-unmounted _Contacts.cpp),
+  rem  the NEW ReadPotentialContact, and the two Bridge*CarContactsToSimulation trap stubs.
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_ContactBridges.cpp"
+  rem  ...and its storage callee, sliced out of the still-unmounted BrnDeformationSensor.cpp:
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformationSensor_ValidateAndAddContact.cpp"
+  rem  2026-08-06 (big-five #2, contact-generation wave, slice B): StartVehicleContactGeneration's
+  rem  home TU + its closure -- the pair-list builder bodies, the contact-gen list bodies, the
+  rem  producer Begin slice (home TU still carries DataStreamCommandPoster::Construct demands),
+  rem  and the collide-stream trap-stub TU.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerContactGeneration.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsPrimitivePairListBuilder.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsPrimitivePairList.cpp"
+  echo "%SRC%\GameSource\Physics\BrnContactGenerationList.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer_Begin.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
   rem  2026-08-06 (big-five #1, FixUpVehicleContacts wave): the driver's home TU + the
   rem  DeformationManager vehicle-contact fix-up slice (ByInterpolation / WithBoxes /
   rem  FixUpVehicleContact / GetInterpolatedContactPointAndNormal / CalculateTangentPoints /
