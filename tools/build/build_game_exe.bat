@@ -451,9 +451,10 @@ rem ---- build the cl response file ----
   rem    Simulation.cpp  -- GetResourceDescriptor / SetWorkspace / BatchIntegrator /
   rem                       Activate / Freeze / RemoveRigidBody.
   rem    RigidBody.cpp   -- now carries DynamicUpdate @0x82BC2B78, the per-body integrator.
-  rem  ⛔ Simulation_SimulationUpdate.cpp is NOT here on purpose: SimulationUpdate calls eight
-  rem  stages that are not reconstructed (ContactBatchBuild, the four pipelines, the three
-  rem  Spy* dumps), so mounting it is an instant 8x LNK2019. See that file's banner.
+  rem  ⭐ 2026-08-06: the Simulation_SimulationUpdate.cpp quarantine TU is DELETED -- all
+  rem  eleven solver stages (ContactBatchBuild, the four pipelines, the three Spy* dumps)
+  rem  are bodied and SimulationUpdate moved home into Simulation.cpp. Nothing calls it yet
+  rem  (PhysicsSimulationModule::Update is unbodied), so /OPT:REF strips the cluster.
   rem  ⭐⭐ 2026-08-04 (task #135) -- THE "ZERO BYTES ENTER THE EXE" NOTE THAT USED TO STAND HERE
   rem  IS RETIRED. It said "nothing constructs a rw::physics::Simulation anywhere in the tree
   rem  (CgsPhysicsSimulationModule::mpSimulation is declared and never assigned), so this code
@@ -466,8 +467,8 @@ rem ---- build the cl response file ----
   rem    PairSet.cpp gained ClearAll @0x82BC6DC0 (a FOURTH confirmed export-set hole, pulled
   rem    out of the .i64 headless) -- and two console-stride bugs were fixed in it and in the
   rem    workspace sizer; see each function's banner.
-  rem  ⛔ The Simulation_SimulationUpdate.cpp line above still stands: the simulation now EXISTS
-  rem  and is populated-capable, but it does NOT STEP yet.
+  rem  ⚠️ The simulation EXISTS, is populated-capable and (2026-08-06) fully solvable, but it
+  rem  still does NOT STEP: SimulationUpdate's caller chain is the remaining wall.
   echo "%VEN%\renderware\src\rw\physics\Quaternion.cpp"
   echo "%VEN%\renderware\src\rw\physics\Simulation.cpp"
   echo "%VEN%\renderware\src\rw\physics\SimulationWorkspace.cpp"
