@@ -135,6 +135,13 @@ rem ---- build the cl response file ----
   rem ---- is what linked and the player index stayed -1 all session. Split into   ---
   rem ---- its own TU and mounted. Fold back when those 3 accessors land.          ---
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToWorldModule.cpp"
+  rem ---- feed wave (2026-08-09): the SECOND split-out bridge, same reason as the one ----
+  rem ---- above. WorldModule::BridgeInputToPhysicsModule @0x827AB830 (an address that   ----
+  rem ---- had to be recovered from the image -- it is a HOLE in the IDA export set) is  ----
+  rem ---- the physics module's per-frame INPUT FEED and is fully closed on its own,     ----
+  rem ---- while its DWARF file-mate BridgeInputToEntityModules still is not. Fold back  ----
+  rem ---- when WorldBridgeInputToEntityModules.cpp can be mounted whole.                ----
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeInputToPhysicsModule.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
   rem ---- its shared component-streamer base + the five concrete leaves. These ----
