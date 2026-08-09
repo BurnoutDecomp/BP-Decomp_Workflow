@@ -435,6 +435,19 @@ rem ---- build the cl response file ----
   echo "%SRC%\SharedClasses\Physics\Deformation\BrnBodyPartBBoxSpec.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleManagerOutputInterface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleOutputInterface.cpp"
+  rem  ⭐⭐ 2026-08-09 (CONDUCTOR WAVE): PhysicsModule::Update @0x825B0640 IS REAL
+  rem  (BrnPhysicsModuleUpdateFunctions.cpp). Three new mounts:
+  rem    * BrnVehicleManagerIO.cpp -- the DWARF-true VehicleManagerOutputBuffer (the
+  rem      "VehManager" stack buffer Update creates; the old invented VehicleManagerIO
+  rem      class is retired by the same commit).
+  rem    * BrnVehicleManager_ConductorLeaves.cpp -- UpdateCameraMatrix + the
+  rem      empty-as-shipped ProcessWheelContacts.
+  rem    * BrnPhysicsConductorGates.cpp -- THE NAMED DEFERRALS: every not-yet-reconstructed
+  rem      direct callee of the conductor as a LOUD one-shot boot gate (symbol + X360
+  rem      address + insn count, once per boot). Reconstruct each and DELETE its gate.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerIO.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ConductorLeaves.cpp"
+  echo "%SRC%\GameSource\Physics\BrnPhysicsConductorGates.cpp"
   rem ---- VEHICLE-DYNAMICS CORE (physics wave 3, 2026-08-02) --------------------------------
   rem  The first vehicle-physics translation units ever mounted. Before this the whole domain
   rem  was unmounted: 119 reconstructed bodies, ZERO of them in the build.
