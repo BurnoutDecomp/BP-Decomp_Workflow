@@ -1473,6 +1473,15 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupList.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap.cpp"
+  rem  Spatial-partition wave 2026-08-10: BuildSpacialPartition @0x82841740 (2,255) and the
+  rem  two types it carves, plus the layout gate MOUNTED with the code it guards.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsAxisAlignedBox4.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap_Build.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupSpacialNode_embed_check.cpp"
+  rem  ...and the registration leg they unblock. BOTH of these were fully reconstructed
+  rem  already and had simply never been on the link (mount gap, not a reconstruction gap).
+  echo "%SRC%\GameShared\GameClasses\SceneManager\TriangleCollision\CgsTriangleCollisionManager.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\TriangleCollision\BaseEventQueue_InEventAddPolySoupList_GetEvent.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsModel.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsShaderConstantHashTable.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsShaderConstants.cpp"
