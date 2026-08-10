@@ -415,6 +415,12 @@ rem ---- build the cl response file ----
   rem  PhysicsModule::Update (FreeAllocations / UpdateVehicleEffects / ReadUpdatedBodyProperties /
   rem  ProcessDeformationStates) -- slice TU, home BrnVehicleManager.cpp still unmounted.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PerFrameLeaves.cpp"
+  rem  ⭐⭐ 2026-08-10 (create-path wave): THE PER-FRAME GRAVITY + INTEGRATION STEP --
+  rem  VehicleManager::ReadUpdatedBodies @0x82619A10 (198) + PhysicalTrafficManager::
+  rem  ReadUpdatedBodies @0x825EF608 (334). Deletes the conductor gate of the same name.
+  rem  Despite the name neither reads a body back: it is the only place gravity enters a car
+  rem  and the only place a car's pose advances.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ReadUpdatedBodies.cpp"
   rem  ⭐⭐ 2026-08-06 (big-five #3, UpdateVehiclePhysics wave): the per-frame FORCE PRODUCER
   rem  VehicleManager::UpdateVehiclePhysics @0x82644FA8 (1,038 insns) FULL body + four in-TU
   rem  siblings (IsRaceCarCrashing / ForceRaceCarCrash-5arg==sub_82635B78 / ProcessAboveGround-
