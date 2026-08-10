@@ -1543,19 +1543,10 @@ rem ---- build the cl response file ----
   rem    CgsReadOnlyObjectCache_PolygonSoupLeafNode.cpp -- the leaf-node cache instantiation
   rem                                 (Construct @0x829170F8 / Release @0x829172D0) FillTriangleCache
   rem                                 walks the query results through.
-  rem  ⛔ NOT MOUNTED, and the reason is a MEASUREMENT: CgsPolygonSoupTests.cpp
-  rem  (PolySoupAddToTriangleBuffer @0x82844B70 / PolySoupFinishTriangleBuffer @0x8283B3B8) was
-  rem  mounted in this wave and produced TWO hard LNK2019s for bodies that genuinely do not exist
-  rem  anywhere in the tree:
-  rem    * CgsGeometric::PolySoupCopyTriangleBufferIntoTriangle4 -- its own banner admits it
-  rem      ("reconstructed in a later wave ... link-time trap stub until then").
-  rem    * CgsGeometric::Triangle4::AssertIsValid() const -- and this one is THE OPEN ODR FORK.
-  rem      CgsTriangle4.h:96 declares it as a CONST MEMBER of struct Triangle4 taking void;
-  rem      CgsTriangleList.h:27 declares `namespace Triangle4 { int AssertIsValid(void*); }` --
-  rem      a FREE function in a namespace of the same qualified name -- and
-  rem      CgsTriangleList_embed_check.cpp:9 DEFINES that one as `{ return 0; }`. Two different
-  rem      symbols, one stubbed to a constant and one undefined. The mount is what proved it.
-  rem      Retiring the fork needs Triangle4::AssertIsValid's real body; flagged, not smuggled.
+  rem  ⭐⭐⭐ 2026-08-11 (THE EXTRACTOR wave). The "NOT MOUNTED" note that stood here -- two hard
+  rem  LNK2019s from CgsPolygonSoupTests.cpp for PolySoupCopyTriangleBufferIntoTriangle4 and
+  rem  Triangle4::AssertIsValid -- is RESOLVED on both counts and the TU is mounted below.
+  rem  AssertIsValid landed with CgsTriangle4.cpp last wave; Copy is bodied this wave.
   echo "%SRC%\GameShared\GameClasses\Geometric\Intersection\CgsLineTests.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamConsumer.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamCommandReader.cpp"
@@ -1590,12 +1581,21 @@ rem ---- build the cl response file ----
   rem                                 side takes its ping/pong buffers as a parameter so the map
   rem                                 stays const. X360 export HOLE; name + full signature
   rem                                 recovered from the PS3 mangle @0xB63F20.
-  rem  ⛔ STILL ABSENT AND LOUDLY NAMED, NOT SMUGGLED: ExtractTriangle4ListIntersectingSphere
-  rem  @0x82844C80 (602) + LoadEdgeCosines (534) + TestSphereTriangle4SOA (144) +
-  rem  UnpackPolygonSoupVertices (40) + PolySoupCopyTriangleBufferIntoTriangle4 (97) = ~1,475
-  rem  instructions of dense hand-vectorised VMX. Until it lands every slot folds back 0 batches
-  rem  and FillTriangleCache says so once through a [FLAG PC boot gate] line.
+  rem  ⭐⭐⭐ 2026-08-11 -- THE EXTRACTOR. The gate named on this line since the fill worker landed
+  rem  is GONE: ExtractTriangle4ListIntersectingSphere @0x82844C80 (602) +
+  rem  PolygonSoupPoly::LoadEdgeCosines @0x8283A120 (534) + TestSphereTriangle4SOA @0x8283FD50
+  rem  (144) + PolySoupCopyTriangleBufferIntoTriangle4 @0x82839690 (97) +
+  rem  UnpackPolygonSoupVertices @0x8283B480 (40) are all bodied, and GetPolygon/GetVertex
+  rem  (29+29, CgsPolygonSoup.cpp) + Add/FinishToTriangleBuffer (68+49, CgsPolygonSoupTests.cpp)
+  rem  were PURE MOUNT GAPS -- bodied long ago, never once on the link.
+  rem  ⭐ It was not "1,475 instructions of dense VMX": the extractor itself is a loop driver, and
+  rem  every one of the twelve vector constants those five functions load is ZERO in the image
+  rem  because they are built at runtime by C++ dynamic initialisers (0x82C6DA98..0x82C6DC10).
+  rem  Each was resolved through its writer, not guessed.
   rem  =============================================================================================
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoup.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupPoly.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Intersection\CgsPolygonSoupTests.cpp"
   echo "%SRC%\GameShared\Jobs\PolygonSoupTester\PolygonSoupTesterJob.cpp"
   echo "%SRC%\GameShared\Jobs\PolygonSoupTester\PolygonSoupTester.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap_Query.cpp"
