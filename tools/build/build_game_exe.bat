@@ -994,6 +994,28 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_Dispatch.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_Prepare.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO.cpp"
+  rem ---- PRE-PHYSICS BRIDGE wave (2026-08-10). WorldModule::BridgeEntityModulesToPhysicsModule_ ----
+  rem ---- PrePhysics @0x827AAEC0 is real now; it is the ONLY carrier of a staged                ----
+  rem ---- CreateRaceCarEvent into the physics input buffer. Its closure needs these TUs, every  ----
+  rem ---- one of which was already reconstructed and simply never on the build list:            ----
+  rem ----  * BrnTrafficEntityModuleIO.cpp  -- OutputBuffer_PrePhysics Construct + 6 accessors,  ----
+  rem ----    and its three interfaces are REAL types now (they were `unsigned char[1]`).        ----
+  rem ----  * BrnPropEntityModuleIO_OutputBuffer_PrePhysics.cpp -- GetPropInputInterface() const ----
+  rem ----  * VariableEventQueue_5040_16.cpp -- the driver-controls queue's out-of-line methods  ----
+  rem ----  * the six event-queue Append instantiations the bridge's inlined merges reach.       ----
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModuleIO.cpp"
+  rem ----  * BrnTrafficNetworkInputInterface.cpp -- the three accessors mounting the IO TU  ----
+  rem ----    turned into LNK2019s (Get/Set/HasDiverged, bodied in the same commit).         ----
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficNetworkInputInterface.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_PrePhysics.cpp"
+  echo "%SRC%\GameShared\GameClasses\Module\VariableEventQueue_5040_16.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BaseEventQueue_CreateAirRamEvent_AddEventSafeAppend.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BaseEventQueue_CreateSpinEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_AddPhysicalPropEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_AddPhysicalPartEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_RemovePhysicalPropEvent_AddEventAppend.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_RemovePhysicalPartEvent_AddEventAppend.cpp"
+  rem ---- end pre-physics bridge block ---------------------------------------------------------
   rem ---- reset-player-car wave (2026-08-01): the game-action-0 consumer chain.        ----
   rem ---- Each of these was already committed and NEVER LINKED BY ANYTHING.            ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO_PreSceneAccessors.cpp"
