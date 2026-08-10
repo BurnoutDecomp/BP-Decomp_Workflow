@@ -239,6 +239,15 @@ rem ---- build the cl response file ----
   echo "%SRC%\pc\gcm\renderengine\VertexProgramState.cpp"
   echo "%SRC%\pc\gcm\renderengine\XenonD3D9Shims.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager.cpp"
+  rem  ⭐⭐⭐ 2026-08-10 (fill-worker wave): CachedTriangleList::Prepare @0x828BE520 (79) -- THE
+  rem  SHARED TRIANGLE ARENA'S ALLOCATION. Its WorldLinkStubs gate returned true WITHOUT
+  rem  allocating, so mpaTriangleCache was NULL and every one of the 298 slot windows indexed
+  rem  off a null base. Found by forcing the console's own mbDEBUGForceAllDirty for one
+  rem  instrumented boot, which fired the never-before-executed shipped tripwire
+  rem  "mpaTriangleCache != NULL" (CgsTriangleCacheManager.h:172) 862 times.
+  rem  ⚠ 0x828BE520 is an X360 export HOLE; name from the caller's xrefs_from, signature from
+  rem  the PS3 DWARF mangle @0xC7B30C. Allocates 13112 * sizeof(Triangle4) == 2,937,088 bytes.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsCachedTriangleList.cpp"
   rem  Triangle-cache SLOT BOOKKEEPING (triangle-cache wave 2026-08-10): the write side of
   rem  the cache's 298-slot table -- ProcessRemoveFromCacheEvents @0x828B2710 /
   rem  ProcessAddToCacheEvents @0x828B2C78 / ProcessUpdateCachedPositionEvents @0x828BE898 /
@@ -1499,6 +1508,36 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsBinaryFileResource.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateMachine.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupList.cpp"
+  rem  ⭐⭐ 2026-08-10 (fill-worker wave) -- PURE MOUNT GAP. These TUs were reconstructed long ago
+  rem  and never once compiled into anything; all are prerequisites of the triangle-cache FILL
+  rem  worker (PolygonSoupTesterJob), so they are mounted now to enforce the link closure over
+  rem  them BEFORE the worker lands rather than after:
+  rem    CgsLineTests.cpp          -- TestAxisAlignedBoxAxisAlignedBox @0x82812460, the per-leaf
+  rem                                 filter PolygonSoupTesterJob::FillTriangleCache @0x82915FD0 runs.
+  rem    CgsSimpleDataStreamConsumer.cpp  -- ReadCo, the consumer side of the fill stream...
+  rem    CgsDataStreamCommandReader.cpp   -- ...and DataStreamCommandReader::ReadCom @0x82867920,
+  rem                                 which ReadCo tail-calls. BODIED all along, never mounted --
+  rem                                 the mount is what found it (LNK2019, invisible to every gate).
+  rem    CgsReadOnlyObjectCache_PolygonSoupLeafNode.cpp -- the leaf-node cache instantiation
+  rem                                 (Construct @0x829170F8 / Release @0x829172D0) FillTriangleCache
+  rem                                 walks the query results through.
+  rem  ⛔ NOT MOUNTED, and the reason is a MEASUREMENT: CgsPolygonSoupTests.cpp
+  rem  (PolySoupAddToTriangleBuffer @0x82844B70 / PolySoupFinishTriangleBuffer @0x8283B3B8) was
+  rem  mounted in this wave and produced TWO hard LNK2019s for bodies that genuinely do not exist
+  rem  anywhere in the tree:
+  rem    * CgsGeometric::PolySoupCopyTriangleBufferIntoTriangle4 -- its own banner admits it
+  rem      ("reconstructed in a later wave ... link-time trap stub until then").
+  rem    * CgsGeometric::Triangle4::AssertIsValid() const -- and this one is THE OPEN ODR FORK.
+  rem      CgsTriangle4.h:96 declares it as a CONST MEMBER of struct Triangle4 taking void;
+  rem      CgsTriangleList.h:27 declares `namespace Triangle4 { int AssertIsValid(void*); }` --
+  rem      a FREE function in a namespace of the same qualified name -- and
+  rem      CgsTriangleList_embed_check.cpp:9 DEFINES that one as `{ return 0; }`. Two different
+  rem      symbols, one stubbed to a constant and one undefined. The mount is what proved it.
+  rem      Retiring the fork needs Triangle4::AssertIsValid's real body; flagged, not smuggled.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Intersection\CgsLineTests.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamConsumer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamCommandReader.cpp"
+  echo "%SRC%\GameShared\GameClasses\Containers\CgsReadOnlyObjectCache_PolygonSoupLeafNode.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap.cpp"
   rem  Spatial-partition wave 2026-08-10: BuildSpacialPartition @0x82841740 (2,255) and the
