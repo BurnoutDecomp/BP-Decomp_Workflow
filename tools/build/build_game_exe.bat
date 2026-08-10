@@ -461,6 +461,22 @@ rem ---- build the cl response file ----
   rem  Its stage-1 arm VehicleManager::PrepareData @0x82633568 (161) stays a NAMED stub -- see
   rem  WorldLinkStubs.cpp for the two measured reasons and exactly what is dropped.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Prepare.cpp"
+  rem  ⭐⭐ 2026-08-10 (create-path wave): THE MAINTENANCE SPINE -- the leg that finally gives the
+  rem  create path a caller. VehicleManager::ProcessVehicleMaintenanceEvents @0x8264AB38 (118) is
+  rem  real here; its five arms + the traffic twin are NAMED one-shot gates, and the
+  rem  ProcessCreateEvents gate PRINTS the undrained CreateRaceCarEvent queue length.
+  rem  ⛔ ProcessCreateEvents @0x82616770 (1067) stays a gate ON PURPOSE: setting one bit of
+  rem  mUsedRaceCars turns on the already-mounted ReadUpdatedBodies gravity+integrate loop, so the
+  rem  traction-line chain must land first. Slice TU; home BrnVehicleManager.cpp still unmounted.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_MaintenanceEvents.cpp"
+  rem  ⭐ 2026-08-10 (create-path wave): PURE MOUNT GAP, found by an LNK2019 and not by a grep.
+  rem  PostSceneUpdate calls VehicleManager::SetPlayerActiveRaceCarIndex @0x8259C028, which has
+  rem  been BODIED in BrnVehicleManagerPlayerStats.cpp all along in a TU nothing ever compiled
+  rem  (this file's own note at the _layout_check mount already said "NEITHER of those TUs is in
+  rem  the build list"). Mounting it also finally COMPILES VehicleManager::_AssertLayoutPlayerStats,
+  rem  a layout gate that had never once run, and brings ApplyPlayerStats / SetShowtimeBehaviour /
+  rem  SetPlayerCarToShowtimeMode / HasRaceCarHadRecentImpact / GetVehiclePhysi with it.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerPlayerStats.cpp"
   rem  ⭐⭐ 2026-08-10 (ground wave): THE TRACTION-LINE PRODUCER LIFECYCLE + THE RACE-CAR HARVEST.
   rem  DoVehicleTractionLineAllocations @0x825B5098 / RunTractionLineTestJobs @0x825B5168 /
   rem  DoVehicleTractionLineDecallocations @0x825B5268 / ReadRaceCarTractionLineTestResults
