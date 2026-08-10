@@ -257,6 +257,12 @@ rem ---- build the cl response file ----
   rem  StartUpdateTriangleCache, which stays gated because TriangleCollisionManager::Prepare
   rem  @0x828D0C40 is inert and BuildSpacialPartition @0x82841740 (2,255 insns) is absent.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_Update.cpp"
+  rem  ⭐⭐ 2026-08-10 (producer wave): the InEventAddToCache queue APPEND instantiation
+  rem  (BaseEventQueue<InEventAddToCache>::AddEvent @0x825E4620). Reconstructed long ago and
+  rem  never mounted -- a pure mount gap. It is the single producer edge that VehicleManager::
+  rem  PrepareTriangleCache and PhysicalTrafficManager::PrepareTriangleCache both call, i.e. the
+  rem  only path by which TriangleCacheManager::mUsedCacheSlots can ever become non-zero.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\BaseEventQueue_InEventAddToCache_AddEvent.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityManager.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
@@ -449,6 +455,12 @@ rem ---- build the cl response file ----
   rem  Despite the name neither reads a body back: it is the only place gravity enters a car
   rem  and the only place a car's pose advances.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ReadUpdatedBodies.cpp"
+  rem  ⭐⭐ 2026-08-10 (producer wave): THE LEG THAT REGISTERS A CAR WITH THE TRIANGLE CACHE.
+  rem  VehicleManager::Prepare @0x8263C688 (75, WorldLinkStubs gate DELETED) + VehicleManager::
+  rem  PrepareTriangleCache @0x82615BA0 (37). Slice TU; home BrnVehicleManager.cpp still unmounted.
+  rem  Its stage-1 arm VehicleManager::PrepareData @0x82633568 (161) stays a NAMED stub -- see
+  rem  WorldLinkStubs.cpp for the two measured reasons and exactly what is dropped.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Prepare.cpp"
   rem  ⭐⭐ 2026-08-10 (ground wave): THE TRACTION-LINE PRODUCER LIFECYCLE + THE RACE-CAR HARVEST.
   rem  DoVehicleTractionLineAllocations @0x825B5098 / RunTractionLineTestJobs @0x825B5168 /
   rem  DoVehicleTractionLineDecallocations @0x825B5268 / ReadRaceCarTractionLineTestResults
