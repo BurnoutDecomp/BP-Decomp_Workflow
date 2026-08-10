@@ -421,6 +421,24 @@ rem ---- build the cl response file ----
   rem  Despite the name neither reads a body back: it is the only place gravity enters a car
   rem  and the only place a car's pose advances.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ReadUpdatedBodies.cpp"
+  rem  ⭐⭐ 2026-08-10 (ground wave): THE TRACTION-LINE PRODUCER LIFECYCLE + THE RACE-CAR HARVEST.
+  rem  DoVehicleTractionLineAllocations @0x825B5098 / RunTractionLineTestJobs @0x825B5168 /
+  rem  DoVehicleTractionLineDecallocations @0x825B5268 / ReadRaceCarTractionLineTestResults
+  rem  @0x82618058 (the one that reaches AddTractionPoint -> mbIsOnGround).
+  rem  ⚠ NOT WIRED IN: their only callers (StartVehicleTractionLineTests, EndVehicleTraction-
+  rem  LineTests) stay gated -- the generation half needs the absent TriangleCacheManager, and
+  rem  the two halves are lifetime-coupled through mpTractionLineStreamProducer. Mounted so the
+  rem  LINK closure is enforced; /OPT:REF keeps the bytes out until they are called.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_TractionLineTests.cpp"
+  rem  Its floor: the line-vs-triangle stream factory (real) + the job dispatcher (export hole,
+  rem  named boot gate), plus the result-cursor slice the harvest walks.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_LineStream.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer_ResultIterator.cpp"
+  rem  ⭐ 2026-08-10 (ground wave): the SimpleDataStreamProducer HOME finally mounts. Its one
+  rem  unresolved edge since 2026-08-06 -- DataStreamCommandPoster::Construct @0x82869E08, an
+  rem  export-set hole -- is carried by a loud dead trap stub, per the StreamStubs precedent.
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamCommandPoster_LinkStub.cpp"
   rem  ⭐⭐ 2026-08-06 (big-five #3, UpdateVehiclePhysics wave): the per-frame FORCE PRODUCER
   rem  VehicleManager::UpdateVehiclePhysics @0x82644FA8 (1,038 insns) FULL body + four in-TU
   rem  siblings (IsRaceCarCrashing / ForceRaceCarCrash-5arg==sub_82635B78 / ProcessAboveGround-
