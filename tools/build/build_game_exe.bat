@@ -239,6 +239,16 @@ rem ---- build the cl response file ----
   echo "%SRC%\pc\gcm\renderengine\VertexProgramState.cpp"
   echo "%SRC%\pc\gcm\renderengine\XenonD3D9Shims.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager.cpp"
+  rem  Triangle-cache SLOT BOOKKEEPING (triangle-cache wave 2026-08-10): the write side of
+  rem  the cache's 298-slot table -- ProcessRemoveFromCacheEvents @0x828B2710 /
+  rem  ProcessAddToCacheEvents @0x828B2C78 / ProcessUpdateCachedPositionEvents @0x828BE898 /
+  rem  CacheSlot::UpdateCachedObject @0x828BE660. UNREACHABLE today: their only caller,
+  rem  SceneManagerModule::StartUpdateTriangleCache, is still a WorldLinkStubs gate, so
+  rem  /OPT:REF strips every byte. Mounted anyway to enforce the link closure over them.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_Events.cpp"
+  rem  ...and its layout gate, which was UNMOUNTED until this wave -- i.e. every
+  rem  static_assert in it was submit-time only and had never run in a build.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_embed_check.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityManager.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
