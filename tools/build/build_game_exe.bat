@@ -1564,9 +1564,50 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap.cpp"
   rem  Spatial-partition wave 2026-08-10: BuildSpacialPartition @0x82841740 (2,255) and the
   rem  two types it carves, plus the layout gate MOUNTED with the code it guards.
+  rem  ⭐ 2026-08-10 (fill-worker wave 2): PURE MOUNT GAP again -- both bodied long ago, both
+  rem  never linked. FillTriangleCache needs Sphere::GetPosition @0x825B27F8 /
+  rem  Sphere::GetRadius @0x825BD1F8 and AxisAlignedBox::Set @0x823A6108 to turn the fill
+  rem  command's cache sphere into the box the query runs on. Found by the LINK, as always.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsSphere.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsAxisAlignedBox.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsAxisAlignedBox4.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap_Build.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupSpacialNode_embed_check.cpp"
+  rem  =============================================================================================
+  rem  ⭐⭐⭐ 2026-08-10 (fill-worker wave 2) -- THE TRIANGLE-CACHE FILL WORKER, front half.
+  rem  This is the FIRST EA::Jobs dispatch this PC port has ever performed (before it, `grep
+  rem  AddTree` outside SDKs/EATech/eajobs found ZERO call sites). RunFillTriangleCacheStream
+  rem  @0x82810D38 is no longer a gate; it wires a real batch, a real descriptor and a real job
+  rem  and runs the entry inline (FLAG PC-platform leaf -- there is no JobScheduler singleton on
+  rem  PC, CgsHardwareInitPC.cpp:40; same precedent as CgsLooseOctree::StartFrustumTestJobs).
+  rem    PolygonSoupTester.cpp     -- PolygonSoupTesterEntry @0x829157B8 (80)
+  rem    PolygonSoupTesterJob.cpp  -- Execute @0x82915930 (107) / ExecuteFillTriangleCacheStream
+  rem                                 @0x82915D88 (145) / FillTriangleCache @0x82915FD0 (219) /
+  rem                                 AllocateMemory @0x82916B98 (99) / RunBoxQuery @0x82916D28
+  rem                                 (46) / LoadPrimitive @0x82916AB8 (8)
+  rem    CgsPolygonSoupListSpatialMap_Query.cpp -- ⭐ RunJobQuery @0x82844680 (316). NOT the
+  rem                                 RunQuery @0x82843A80 every earlier costing named: the job
+  rem                                 side takes its ping/pong buffers as a parameter so the map
+  rem                                 stays const. X360 export HOLE; name + full signature
+  rem                                 recovered from the PS3 mangle @0xB63F20.
+  rem  ⛔ STILL ABSENT AND LOUDLY NAMED, NOT SMUGGLED: ExtractTriangle4ListIntersectingSphere
+  rem  @0x82844C80 (602) + LoadEdgeCosines (534) + TestSphereTriangle4SOA (144) +
+  rem  UnpackPolygonSoupVertices (40) + PolySoupCopyTriangleBufferIntoTriangle4 (97) = ~1,475
+  rem  instructions of dense hand-vectorised VMX. Until it lands every slot folds back 0 batches
+  rem  and FillTriangleCache says so once through a [FLAG PC boot gate] line.
+  rem  =============================================================================================
+  echo "%SRC%\GameShared\Jobs\PolygonSoupTester\PolygonSoupTesterJob.cpp"
+  echo "%SRC%\GameShared\Jobs\PolygonSoupTester\PolygonSoupTester.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap_Query.cpp"
+  rem  ⭐⭐ ODR FORK #2 RETIRED. CgsTriangle4.cpp was reconstructed long ago (GetAOSTriangle
+  rem  @0x825B2808, AOSTriangle::IsValid @0x825BD208) and never mounted, which is the ONLY reason
+  rem  the tree believed Triangle4::AssertIsValid had no body. It does: X360 0x825BD808 (46), plus
+  rem  AOSTriangle::AssertIsValid @0x825BD648 (112), both landed this wave. With the TU mounted the
+  rem  `namespace Triangle4 { int AssertIsValid(void*); } = { return 0; }` fork in
+  rem  CgsTriangleList.h / CgsTriangleList_embed_check.cpp is deleted and CgsTriangleList.cpp
+  rem  validates for real for the first time.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsTriangle4.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsTriangleList.cpp"
   rem  ...and the registration leg they unblock. BOTH of these were fully reconstructed
   rem  already and had simply never been on the link (mount gap, not a reconstruction gap).
   echo "%SRC%\GameShared\GameClasses\SceneManager\TriangleCollision\CgsTriangleCollisionManager.cpp"
