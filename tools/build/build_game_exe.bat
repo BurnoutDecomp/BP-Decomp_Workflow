@@ -249,6 +249,14 @@ rem ---- build the cl response file ----
   rem  ...and its layout gate, which was UNMOUNTED until this wave -- i.e. every
   rem  static_assert in it was submit-time only and had never run in a build.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_embed_check.cpp"
+  rem  ⭐⭐ 2026-08-10 (cache-fill wave): THE FILL HALF -- StartUpdateTriangleCaches @0x828BECF8
+  rem  (278) + EndUpdateTriangleCaches @0x828BF150 (475). Both WorldLinkStubs gates DELETED.
+  rem  ⚠ ASYMMETRIC REACHABILITY: End is LIVE from the frame it lands (SceneManagerModule::
+  rem  EndUpdateTriangleCache @0x828C7500 is real and WorldModule::Update calls it every frame)
+  rem  and takes its own null guard; Start is still only reached through SceneManagerModule::
+  rem  StartUpdateTriangleCache, which stays gated because TriangleCollisionManager::Prepare
+  rem  @0x828D0C40 is inert and BuildSpacialPartition @0x82841740 (2,255 insns) is absent.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityManager.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
@@ -408,6 +416,16 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\BrnContactGenerationList.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer_Begin.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
+  rem  ⭐⭐ 2026-08-10 (cache-fill wave): the BaseCollisionGenerator HOME finally mounts. It has
+  rem  been fully reconstructed since 2026-08-06 (Construct / Prepare / Finish / FinishBatch /
+  rem  CreateNewBatch / AllocateJob / GetResultList / CreateStreamProducer) but stayed off the
+  rem  link, so WorldModule::Update's per-frame generator was carved and never initialised behind
+  rem  two WorldLinkStubs gates -- BOTH NOW DELETED. This is a LIVE behaviour change: the frame's
+  rem  collision generator is really Construct()ed and Prepare()d from the frame it lands.
+  rem  (CgsCollisionBatch.cpp stays UNMOUNTED: its only body, CollisionBatch::SetupJob, references
+  rem   the absent ContactGeneratorEntry. The generator home needs only the header-inline ctor
+  rem   and WaitOn.)
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator.cpp"
   rem  2026-08-06 (big-five #1, FixUpVehicleContacts wave): the driver's home TU + the
   rem  DeformationManager vehicle-contact fix-up slice (ByInterpolation / WithBoxes /
   rem  FixUpVehicleContact / GetInterpolatedContactPointAndNormal / CalculateTangentPoints /
@@ -444,11 +462,12 @@ rem ---- build the cl response file ----
   rem  named boot gate), plus the result-cursor slice the harvest walks.
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_LineStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer_ResultIterator.cpp"
-  rem  ⭐ 2026-08-10 (ground wave): the SimpleDataStreamProducer HOME finally mounts. Its one
-  rem  unresolved edge since 2026-08-06 -- DataStreamCommandPoster::Construct @0x82869E08, an
-  rem  export-set hole -- is carried by a loud dead trap stub, per the StreamStubs precedent.
+  rem  ⭐ 2026-08-10 (ground wave): the SimpleDataStreamProducer HOME finally mounts.
+  rem  ⭐⭐ 2026-08-10 (cache-fill wave): its one unresolved edge since 2026-08-06 --
+  rem  DataStreamCommandPoster::Construct @0x82869E08, an export-set hole -- is now a REAL
+  rem  BODY lifted from the image into the poster's own home TU, so the trap TU
+  rem  CgsDataStreamCommandPoster_LinkStub.cpp is DELETED (was mounted here).
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer.cpp"
-  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamCommandPoster_LinkStub.cpp"
   rem  ⭐⭐ 2026-08-06 (big-five #3, UpdateVehiclePhysics wave): the per-frame FORCE PRODUCER
   rem  VehicleManager::UpdateVehiclePhysics @0x82644FA8 (1,038 insns) FULL body + four in-TU
   rem  siblings (IsRaceCarCrashing / ForceRaceCarCrash-5arg==sub_82635B78 / ProcessAboveGround-
