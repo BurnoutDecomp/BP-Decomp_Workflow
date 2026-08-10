@@ -142,6 +142,12 @@ rem ---- build the cl response file ----
   rem ---- while its DWARF file-mate BridgeInputToEntityModules still is not. Fold back  ----
   rem ---- when WorldBridgeInputToEntityModules.cpp can be mounted whole.                ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeInputToPhysicsModule.cpp"
+  rem ---- root-cause wave (2026-08-10): the PRE-SCENE entity-modules -> physics bridge  ----
+  rem ---- @0x827AADB8. It is the ONLY caller in the image of InputBuffer::              ----
+  rem ---- SetSolverMaxIterations, so while it was a boot gate the solver iteration cap  ----
+  rem ---- stayed 0 and the whole MaxIterations chain asserted. Its file-mate            ----
+  rem ---- _PrePhysics @0x827AAEC0 is still a gate and stays in WorldLinkStubs.          ----
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToPhysics.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
   rem ---- its shared component-streamer base + the five concrete leaves. These ----
@@ -841,6 +847,16 @@ rem ---- build the cl response file ----
   rem
   rem  ⚠️⚠️ SAME CAVEAT AS THE BLOCK ABOVE: nothing calls any of this yet, so /OPT:REF strips it
   rem  and it puts ZERO BYTES in the exe. It is mounted so the closure is continuously enforced.
+  rem ---- root-cause wave (2026-08-10) mount closure. All three bodies were already ----
+  rem ---- reconstructed and simply not in the exe:                                  ----
+  rem ----  * ContactSpyInterface::Construct  -- PhysicsModuleIO::OutputBuffer::Construct ----
+  rem ----  * PropInputInterface Append/Construct/Clear -- both prop->physics bridges ----
+  rem ----  * PropEntityIO::OutputBuffer_PreScene accessors -- the PreScene bridge     ----
+  echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyInterface.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BrnPropInputInterface.cpp"
+  rem ----  * PropEntityID::AssertIsProp -- the owner tripwire every prop enqueue runs ----
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropEntityID.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_PreScene.cpp"
   echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyData.cpp"
   echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_RaceCarContact_300.cpp"
   echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_TrafficContact_400.cpp"
