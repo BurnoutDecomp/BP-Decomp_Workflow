@@ -79,6 +79,7 @@ rem ---- build the cl response file ----
   echo "%VEN%\zlib\src\zutil.c"
   echo "%VEN%\zlib\src\uncompr.c"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareInitPC.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsCrashHandlerPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsAudioOutputPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsMovieAudioPC.cpp"
@@ -1251,7 +1252,6 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\EATech\include\Apt\AptPseudoCIH.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptPseudoData.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptPseudoDisplayList.cpp"
-  echo "%SRC%\SDKs\EATech\include\Apt\AptRenderHooks.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptRenderItem.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptRenderItemAnimation.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptRenderItemButton.cpp"
@@ -1275,6 +1275,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\EATech\include\Apt\AptScriptFunctionByteCodeBlock.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptSharedPtr.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptSingleListPolicy.cpp"
+  echo "%SRC%\SDKs\EATech\include\Apt\StringAsVectorPolicy.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptSound.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptStage.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptStd\AptCXForm.cpp"
@@ -1296,6 +1297,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\EATech\include\Apt\AptValue\AptValueConvert.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptValue\AptValueFindChild.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptValue\AptValueVector.cpp"
+  rem NOTE the un-migrated Packages/Apt/2.00.00 remnants (AptSprite.cpp / AptString.cpp)
+  rem stay OUT of the link: both are full duplicates of symbols already linked here
+  rem (SpriteMembersIndex from EATech\Apt\AptSpriteMembersIndex.cpp; StringMembersIndex
+  rem from the EATech AptValue\AptString.cpp above -- LNK2005-measured 2026-08-10). They
+  rem also share the AptString.cpp basename, which silently CLOBBERS the EATech obj via
+  rem /Fo"obj\" if ever re-added -- use a unique /Fo like renderengine_device.obj then.
   echo "%SRC%\SDKs\EATech\include\Apt\AptXml.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptXmlNode.cpp"
   echo "%SRC%\SDKs\EATech\include\NFSMix\MixerAllocator.cpp"
@@ -1333,8 +1340,6 @@ rem ---- build the cl response file ----
   echo "%SRC%\SDKs\EATech\rwmovie\ivideorenderer.cpp"
   echo "%SRC%\SDKs\EATech\rwmovie\videorenderable.cpp"
   echo "%SRC%\SDKs\EATech\rwmovie\vp6.cpp"
-  echo "%SRC%\SDKs\EATech\AptRenderLinkStubs.cpp"
-  echo "%SRC%\SDKs\EATech\AptGlobals.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptRandom.cpp"
   echo "%SRC%\pc\gcm\renderengine\device.cpp"
   echo "%SRC%\pc\gcm\renderengine\texture.cpp"
@@ -1362,6 +1367,7 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptDataHeader.cpp"
   echo "%SRC%\SharedClasses\Gui\Flapt\BrnFlaptFile.cpp"
   echo "%SRC%\SharedClasses\Gui\Flapt\BrnFlaptFileResourceType.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourcePtr_BrnFlapt_FlaptFile.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceTypeRegistration.cpp"
   rem ---- bulk sweep: 128 reconstructed (done) TUs, linker-verified self-consistent ----
   echo "%SRC%\GameShared\GameClasses\Containers\CgsHash.cpp"
@@ -1401,6 +1407,19 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiPopupResource.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimData.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptInterpolator.cpp"
+  rem ---- the CgsAptAnim* container-instantiation TUs: reconstructed in the flapt wave ----
+  rem ---- but never registered here (the standing "flapt .cpp need adding" flag).      ----
+  rem ---- PARKED (link-measured 2026-08-10, honest out-of-tree): CgsAptAnimator.cpp    ----
+  rem ---- (needs AnimChannel::Stop + AnimData::GetChannelData -- no reconstructed      ----
+  rem ---- bodies anywhere in src) and CgsAptAnimChannel.cpp (needs the Interpolator    ----
+  rem ---- SetInterpolator/Update/Reset virtuals; CgsAptInterpolator.cpp only has       ----
+  rem ---- GetCurrentValue). Mount them when those bodies land.                          ----
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimChannelArray6.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimChannelDataArray2.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimChannelDataArray6.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimDataAnimatorChannelArray6.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimDataAnimData.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimDataArray2.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\CustomRenderer\CgsCustomRenderer.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamCommandPoster.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamResultPoster.cpp"
@@ -2101,6 +2120,9 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\SaveLoad\BrnGuiSaveLoadProfileDLC1.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiOptionsDataProfileDLC1.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiEventTypeDefs.cpp"
+  rem ---- the GuiPerfmons static counters CgsAptAux's audited Update/Render/          ----
+  rem ---- UpdateFlashComponent bodies reference (apt-audit retired the shim path).    ----
+  echo "%SRC%\GameSource\Gui\BrnGuiPerfmons.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBoostBarRenderer.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipInstance.cpp"
@@ -2190,6 +2212,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptHelpItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnFlaptButtonIcon.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptInterpolatorComponent.cpp"
+  rem ---- PARKED (link-measured 2026-08-10): BrnGuiFlaptRoadSignIconComponent.cpp      ----
+  rem ---- (DisplayRoad(ERoadIcon,bool) body + gapcRoadIconNames/KAV4_SIGN_TEXT_COLOURS ----
+  rem ---- definitions unreconstructed) and BrnGuiFlaptTimerFieldComponent.cpp          ----
+  rem ---- (TextFieldRef::SetColour / SetLocalisedText(float,int) + SetBoundaries       ----
+  rem ---- unreconstructed). Mount when their closures land.                            ----
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipRef.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptTextFieldRef.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptFileRef.cpp"
@@ -2404,8 +2432,6 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Language\CgsLanguageManagerDebugComponent.cpp"
   echo "%SRC%\GameSource\Resource\BrnGameDataModuleIO.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowCheckDiskSpace.cpp"
-  echo "%SRC%\SDKs\EATech\include\Apt\AptRandom.cpp"
-  echo "%SRC%\SDKs\EATech\include\Apt\AptActionInterpreterParseStream.cpp"
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
@@ -2430,7 +2456,7 @@ cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
   /c "%SRC%\pc\gcm\renderengine\device.cpp" /Fo"%OUT%\\obj\\renderengine_device.obj"
 if errorlevel 1 ( echo ERROR: renderengine device.cpp precompile failed. & exit /b 1 )
 
-cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
+cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
