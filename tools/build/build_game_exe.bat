@@ -361,6 +361,17 @@ rem ---- build the cl response file ----
   rem  record stay 32-BIT SERIALISED SLOTS -- proven twice in BrnGlobalColourPalette.h, from
   rem  the shipped platform-4 bytes and from GetColourPaletteFromType's own 12-byte stride.
   echo "%SRC%\SharedClasses\Graphics\PlayerCarColoursResourceType.cpp"
+  rem  ---- the offline progression resource (progression-load wave, 2026-08-11) ------------
+  rem  PROGRESSION.DAT's single resource is id 0x988F38C0 == HashString("ProgressionData"),
+  rem  type 0x1000E (65550) -- the exact name+id ProgressionManager::LoadProgressionData
+  rem  @0x82399ED0 loads the bundle for and then acquires from pool 5. The handler TU existed
+  rem  but was never in this list and was never registered, so the acquire would have taken
+  rem  the null-mpResourceType path and BundleLoader would have skipped all three fix-up
+  rem  passes -- and EVERY table base in a ProgressionData payload is a serialised 32-bit
+  rem  offset that only ProgressionData::FixUp rebases. Registered in
+  rem  CgsResourceTypeRegistration.cpp; FixUp/FixDown live in the already-mounted
+  rem  SharedClasses\Progression\BrnProgressionData.cpp, so this costs no new externals.
+  echo "%SRC%\SharedClasses\Progression\BrnProgressionResourceType.cpp"
   rem  ---- the ICE take-dictionary list (2026-08-01, ICEList wave) --------------------------
   rem  The THIRD resident data table beside VehicleList/WheelList (X360 GameDataModule member
   rem  +457664, attested twice: PrepareICEList's AddListResource target and
