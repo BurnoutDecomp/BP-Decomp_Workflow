@@ -1260,6 +1260,31 @@ rem ---- build the cl response file ----
   rem  not call StreetManager::Construct yet (its first statement constructs that component) --
   rem  see the DELETE-WHEN block there.
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_01.cpp"
+  rem  ---- leg 3: THE DISTRICT MAP (2026-08-11) --------------------------------------------
+  rem  GameStateModule::Prepare @0x8239E578 stage 23 (E_PREPARESTAGE_STREET_MANAGER) is
+  rem  `StreetManager::Prepare(this+284520, out, this+232384)` @0x82350900 == LoadAIData &&
+  rem  LoadDistrictMap. LoadDistrictMap @0x8234FB98 is the ONLY writer of
+  rem  mDistrictMapResourceHandle, which SetupParRivals dereferences unconditionally -- so this
+  rem  is the leg the Prepare2 SetupParRivals park was blocked on. Its bind is real now (the
+  rem  acquire response's handle pair, read BY MEMBER off AcquireResourceResponse).
+  rem  ⚠️ IT ONLY ACQUIRES. The console never loads Districts.dat here -- stage 4
+  rem  (StuntManager::Prepare -> LoadDistrictMap @0x82399458) did that 19 stages earlier. There is
+  rem  no reconstructed StuntManager sub-object on this module, so stage 4 now issues the
+  rem  console's own LoadBundle("Districts.dat", pool 5) itself, latched by
+  rem  meDistrictsBundleStage (declared + flagged in BrnGameStateModule.h).
+  rem  SIBLING TU, MEASURED (cl /c with THESE flags + dumpbin /SYMBOLS against the linked obj
+  rem  set): mounting the owning wB_00 partfile costs ONE unresolved external,
+  rem  BrnStreetData::operator++(ScoreType&, int) (street-DATA side,
+  rem  SharedClasses\StreetData\BrnChallengeData.cpp), pulled in by Construct's/Destruct's
+  rem  score-type loops. Prepare touches none of it, so the split costs ZERO. Net new unresolved
+  rem  for this whole wave (module + wB_01 + this): ZERO. Fold back into wB_00 when that lands.
+  rem  ⛔ STILL OUT, and it is a pure BODY gap now, not a data gap: BrnGameStateStreetManager.cpp
+  rem  (Prepare2) + _wC_02.cpp (SetupParRivals). SetupParRivals alone needs FOUR symbols --
+  rem  Road::GetRoadLimitId0, ProgressionData::GetRival(s32) and Random::RandomInt(s32,s32) are
+  rem  DECLARED-ONLY everywhere in the tree, and StreetManager::FindRivalsByDistrict is bodied
+  rem  only in the unmounted _wC_04 partfile. Mounting anyway is LNK2019 (/OPT:REF resolves
+  rem  before it discards -- see the achievement-manager note above).
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_Prepare.cpp"
   rem ---- (2026-08-11) the embedded StreetManagerDebugComponent's vtable is emitted by ----
   rem ---- BrnGameModule.obj's implicit ctor chain; its real TUs stay UNMOUNTED (they   ----
   rem ---- close over the road-rules cheat set: StreetManager score setters, ScoreList  ----
@@ -1307,6 +1332,14 @@ rem ---- build the cl response file ----
   rem first-boot INTRO gate) and by the licence component (GetLicenceIssuedDate /
   rem SetLicenceIssuedDateAsNow).
   echo "%SRC%\GameSource\GameState\Progression\BrnProfile.cpp"
+  rem save-image codec wave (2026-08-11): Profile::Serialise @0x8237C1F0 + Profile::Deserialise
+  rem @0x8237D308, split out of BrnProfile.cpp as a per-function TU (they are ~700 lines of
+  rem console code sharing ONE serialised-layout table, so they stay in one TU together).
+  rem Needed by BrnGuiProfile.cpp's ProgressionProfile_Serialise/_Deserialise shims, which
+  rem previously stood in with BrnGuiSaveLoad::Profile/ProfileDLC1::ConstructImage() and a
+  rem no-op respectively. New externals: none beyond BrnProfile.cpp's own (the four
+  rem SplitArray specialisations live there, CgsNetworkTexture.cpp is already mounted below).
+  echo "%SRC%\GameSource\GameState\Progression\BrnProfile_SaveImage.cpp"
   rem ...and the two TUs BrnProfile::SetPlayerLicencePicture links against (the licence
   rem mugshot wrapper + the RGB->A1R5G5B5 converter).
   echo "%SRC%\GameShared\GameClasses\Network\Texture\CgsNetworkTexture.cpp"

@@ -284,13 +284,44 @@ def _massive_table(data, label):
     return bytes(out), "%d 64-byte items; subscriber pointers widened to u64" % count
 
 
-def _street_data(data, label):
-    """Endian-map version-5 StreetData while retaining its serialised u32 offsets.
+# --- version-5 StreetData record geometry -------------------------------------------
+# Left column = the X360 image (4-byte pointers), right column = the decomp's native x64
+# image (8-byte pointers).  Pinned on the C++ side by
+# b5-decomp/src/SharedClasses/StreetData/BrnStreetData.h::_AssertLayout().
+_SD_HEADER_IN, _SD_HEADER_OUT = 36, 56          # StreetData
+_SD_STREET = 16                                 # Street: no pointer, stride unchanged
+_SD_JUNCTION_IN, _SD_JUNCTION_OUT = 36, 48      # Junction: mpaExits +0xC -> +0x10
+_SD_ROAD_IN, _SD_ROAD_OUT = 64, 72              # Road: mpaSpans +0xC -> +0x10
+_SD_CHALLENGE = 40                              # ChallengeParScoresEntry: no pointer
+_SD_EXIT = 8                                    # Junction::Exit {s16 span, f32 angle}
+_SD_ALIGN = 16                                  # StreetData::KI_ALIGNMENT
 
-    Unlike live host pointers, the file image consumed by StreetData::FixUp is explicitly
-    the X360's compact 32-bit layout. The committed loader uses the same 16/36/64/40-byte
-    record strides, so widening these offsets would make its raw stride walks incorrect.
+
+def _street_data(data, label):
+    """Relayout version-5 StreetData from the X360 32-bit BE image to the native x64 LE one.
+
+    STREETDATA.DAT is consumed IN PLACE: the resource blob *is* the
+    BrnStreetData::StreetData object, and StreetData::FixUp only turns each serialised
+    offset slot into a host pointer by adding the resource load base.  So the file has to
+    carry the layout the host compiler gives that class.  On x64 the four header pointers
+    (and Road::mpaSpans / Junction::mpaExits) widen 4 -> 8 bytes, which shifts every field
+    behind them and grows two strides: the header goes 36 -> 56 bytes (miRoadCount moves
+    +0x20 -> +0x30), Junction 36 -> 48, Road 64 -> 72.  Street (16) and
+    ChallengeParScoresEntry (40) hold no pointers and are stride-identical.
+
+    Emitting the console layout instead is what fired
+    "The number of roads in the design data doesn't match the code const" at boot: both the
+    retail X360 file and the converted file carry miRoadCount == 64 (== the code const), but
+    the x64 loader read that field at +0x30, which in the console layout is street[0].
+
+    Allocation policy mirrors the source image, which the original data compiler built with
+    a 16-byte-aligned LinearMalloc: every table and every nested array starts on a 16-byte
+    boundary, the nested arena keeps its source ordering, and miSize is the unaligned end of
+    the last allocation.
     """
+    def align_up(value):
+        return (value + _SD_ALIGN - 1) & ~(_SD_ALIGN - 1)
+
     if len(data) < 0x30:
         raise PortError("%s: StreetData is too small" % label)
     header = struct.unpack_from(">9I", data, 0)
@@ -298,96 +329,155 @@ def _street_data(data, label):
      street_count, junction_count, road_count) = header
     if version != 5:
         raise PortError("%s: StreetData version %d, expected 5" % (label, version))
-    if declared_size > len(data) or len(data) - declared_size > 16:
+    if declared_size > len(data) or len(data) - declared_size > _SD_ALIGN:
         raise PortError("%s: declared size %#x is inconsistent with payload %#x" %
                         (label, declared_size, len(data)))
-    if streets_at != 0x30:
-        raise PortError("%s: street table starts at %#x, expected 0x30" %
-                        (label, streets_at))
-    if (streets_at + street_count * 16 > junctions_at or
-            junctions_at + junction_count * 36 > roads_at or
-            roads_at + road_count * 64 > challenges_at or
-            challenges_at + road_count * 40 > declared_size):
+    if streets_at != align_up(_SD_HEADER_IN):
+        raise PortError("%s: street table starts at %#x, expected %#x" %
+                        (label, streets_at, align_up(_SD_HEADER_IN)))
+    if (streets_at + street_count * _SD_STREET > junctions_at or
+            junctions_at + junction_count * _SD_JUNCTION_IN > roads_at or
+            roads_at + road_count * _SD_ROAD_IN > challenges_at or
+            challenges_at + road_count * _SD_CHALLENGE > declared_size):
         raise PortError("%s: StreetData fixed tables overlap or run out of bounds" % label)
 
-    out = bytearray(data)
-    touched = set()
-
-    def scalar(off, width, what):
+    def be(off, width, what):
         if off < 0 or off + width > declared_size:
             raise PortError("%s: %s at %#x is out of bounds" % (label, what, off))
-        key = (off, width)
-        if key in touched:
-            raise PortError("%s: field %s at %#x was visited twice" % (label, what, off))
-        touched.add(key)
-        value = int.from_bytes(data[off:off + width], "big")
-        out[off:off + width] = value.to_bytes(width, "little")
-        return value
+        return int.from_bytes(data[off:off + width], "big")
 
-    for i in range(9):
-        scalar(i * 4, 4, "header[%d]" % i)
+    def be_s32(off, what):
+        value = be(off, 4, what)
+        return value - (1 << 32) if value >> 31 else value
 
-    # Street = SpanBase {s32 road, s16 span, pad, s32 type} + two byte AI speeds.
+    # ---- destination geometry -------------------------------------------------------
+    out_streets_at = align_up(_SD_HEADER_OUT)
+    out_junctions_at = align_up(out_streets_at + street_count * _SD_STREET)
+    out_roads_at = align_up(out_junctions_at + junction_count * _SD_JUNCTION_OUT)
+    out_challenges_at = align_up(out_roads_at + road_count * _SD_ROAD_OUT)
+    out_fixed_end = align_up(out_challenges_at + road_count * _SD_CHALLENGE)
+
+    out = bytearray(out_fixed_end)
+    struct.pack_into("<i", out, 0, version)                     # miVersion (miSize filled last)
+    struct.pack_into("<4Q", out, 8, out_streets_at, out_junctions_at,
+                     out_roads_at, out_challenges_at)
+    struct.pack_into("<3i", out, 40, street_count, junction_count, road_count)
+
+    def span_base(src, dst, what):
+        struct.pack_into("<i", out, dst + 0, be_s32(src + 0, what + ".miRoadIndex"))
+        struct.pack_into("<h", out, dst + 4,
+                         struct.unpack_from(">h", data, src + 4)[0])   # miSpanIndex
+        # meSpanType occupies a 4-byte slot but the X360 image stores the enum in its LOW
+        # byte: every junction record holds `01 00 00 00` and every street `00 00 00 00`,
+        # never the `00 00 00 01` a big-endian 4-byte enum would hold.  Copied verbatim, so
+        # the little-endian host reads back JUNCTION == 1 / STREET == 0.
+        out[dst + 8:dst + 12] = data[src + 8:src + 12]
+
+    # Street = SpanBase + AIInfo {u8 max speed, u8 min speed}.
     for i in range(street_count):
-        base = streets_at + i * 16
-        scalar(base + 0, 4, "street[%d].road" % i)
-        scalar(base + 4, 2, "street[%d].span" % i)
-        scalar(base + 8, 4, "street[%d].type" % i)
+        src = streets_at + i * _SD_STREET
+        dst = out_streets_at + i * _SD_STREET
+        span_base(src, dst, "street[%d]" % i)
+        out[dst + 12:dst + 14] = data[src + 12:src + 14]
 
+    # Each entry: (source offset, element count, element size, slot offset in `out`, label).
+    # The slot is the 8-byte pointer field the nested pass back-patches.
     nested = []
-    # Junction = SpanBase + u32 Exit offset + s32 count + char name[16].
+
+    # Junction = SpanBase + Exit* mpaExits + s32 miExitCount + char macName[16].
     for i in range(junction_count):
-        base = junctions_at + i * 36
-        scalar(base + 0, 4, "junction[%d].road" % i)
-        scalar(base + 4, 2, "junction[%d].span" % i)
-        scalar(base + 8, 4, "junction[%d].type" % i)
-        exits = scalar(base + 12, 4, "junction[%d].exits" % i)
-        count = scalar(base + 16, 4, "junction[%d].exitCount" % i)
-        if count:
-            nested.append((exits, count * 8, "junction[%d].exits" % i))
-            for j in range(count):
-                scalar(exits + j * 8, 2, "junction[%d].exit[%d].span" % (i, j))
-                scalar(exits + j * 8 + 4, 4, "junction[%d].exit[%d].angle" % (i, j))
+        src = junctions_at + i * _SD_JUNCTION_IN
+        dst = out_junctions_at + i * _SD_JUNCTION_OUT
+        what = "junction[%d]" % i
+        span_base(src, dst, what)
+        exit_count = be_s32(src + 16, what + ".miExitCount")
+        struct.pack_into("<i", out, dst + 24, exit_count)
+        out[dst + 28:dst + 44] = data[src + 20:src + 36]        # macName[16]
+        nested.append((be(src + 12, 4, what + ".mpaExits"), exit_count, _SD_EXIT,
+                       dst + 16, what + ".mpaExits"))
 
-    # Road = Vector3, span offset, three CgsIDs, name[16], challenge, span count.
+    # Road = Vector3 reference position, SpanIndex* mpaSpans, three CgsIDs,
+    #        char macDebugName[16], ChallengeIndex mChallenge, s32 miSpanCount.
     for i in range(road_count):
-        base = roads_at + i * 64
+        src = roads_at + i * _SD_ROAD_IN
+        dst = out_roads_at + i * _SD_ROAD_OUT
+        what = "road[%d]" % i
         for axis in range(3):
-            scalar(base + axis * 4, 4, "road[%d].position[%d]" % (i, axis))
-        spans = scalar(base + 12, 4, "road[%d].spans" % i)
-        for field in (16, 24, 32):
-            scalar(base + field, 8, "road[%d].CgsID@%#x" % (i, field))
-        scalar(base + 56, 4, "road[%d].challenge" % i)
-        count = scalar(base + 60, 4, "road[%d].spanCount" % i)
-        if count:
-            nested.append((spans, count * 2, "road[%d].spans" % i))
-            for j in range(count):
-                scalar(spans + j * 2, 2, "road[%d].span[%d]" % (i, j))
+            struct.pack_into("<I", out, dst + axis * 4,
+                             be(src + axis * 4, 4, what + ".maReferencePosition"))
+        for index, field in enumerate((16, 24, 32)):            # mId / miRoadLimitId0/1
+            struct.pack_into("<Q", out, dst + 24 + index * 8,
+                             be(src + field, 8, "%s.CgsID@%#x" % (what, field)))
+        out[dst + 48:dst + 64] = data[src + 40:src + 56]        # macDebugName[16]
+        struct.pack_into("<i", out, dst + 64, be_s32(src + 56, what + ".mChallenge"))
+        span_count = be_s32(src + 60, what + ".miSpanCount")
+        struct.pack_into("<i", out, dst + 68, span_count)
+        nested.append((be(src + 12, 4, what + ".mpaSpans"), span_count, 2,
+                       dst + 16, what + ".mpaSpans"))
 
-    # One 40-byte ChallengeParScoresEntry per road: two 8-byte bit arrays,
-    # two s32 scores, and two CgsID rivals.
+    # One 40-byte ChallengeParScoresEntry per road: two 8-byte bit arrays, two s32 scores,
+    # and two CgsID rivals.  Pointer-free, so this is a pure endian map.
     for i in range(road_count):
-        base = challenges_at + i * 40
-        scalar(base + 0, 8, "challenge[%d].dirty" % i)
-        scalar(base + 8, 8, "challenge[%d].valid" % i)
-        scalar(base + 16, 4, "challenge[%d].time" % i)
-        scalar(base + 20, 4, "challenge[%d].crash" % i)
-        scalar(base + 24, 8, "challenge[%d].rival0" % i)
-        scalar(base + 32, 8, "challenge[%d].rival1" % i)
+        src = challenges_at + i * _SD_CHALLENGE
+        dst = out_challenges_at + i * _SD_CHALLENGE
+        what = "challenge[%d]" % i
+        struct.pack_into("<Q", out, dst + 0, be(src + 0, 8, what + ".mDirty"))
+        struct.pack_into("<Q", out, dst + 8, be(src + 8, 8, what + ".mValidScores"))
+        struct.pack_into("<i", out, dst + 16, be_s32(src + 16, what + ".score[TIME]"))
+        struct.pack_into("<i", out, dst + 20, be_s32(src + 20, what + ".score[CRASH]"))
+        struct.pack_into("<Q", out, dst + 24, be(src + 24, 8, what + ".mRivals[0]"))
+        struct.pack_into("<Q", out, dst + 32, be(src + 32, 8, what + ".mRivals[1]"))
 
-    # Every non-empty nested allocation must live after the fixed tables and inside
-    # miSize. Overlap is legal only through zero-count shared sentinels, excluded above.
-    fixed_end = challenges_at + road_count * 40
-    for start, size, what in nested:
-        if start < fixed_end or start + size > declared_size:
+    # ---- nested arena ---------------------------------------------------------------
+    # Every non-empty allocation must live after the source fixed tables and inside miSize.
+    # Zero-count allocations legally share a sentinel offset (the compiler's next free byte),
+    # so they are excluded from that check and simply re-point at the destination cursor.
+    src_fixed_end = challenges_at + road_count * _SD_CHALLENGE
+    for src_off, count, elem, _slot, what in nested:
+        if count < 0:
+            raise PortError("%s: %s has a negative count %d" % (label, what, count))
+        if count and not (src_fixed_end <= src_off and
+                          src_off + count * elem <= declared_size):
             raise PortError("%s: %s range %#x..%#x is outside nested arena %#x..%#x" %
-                            (label, what, start, start + size, fixed_end, declared_size))
+                            (label, what, src_off, src_off + count * elem,
+                             src_fixed_end, declared_size))
 
-    # Re-read the LE header and prove every semantic value survived the flip.
-    if struct.unpack_from("<9I", out, 0) != header:
-        raise PortError("%s: LE StreetData header does not round-trip" % label)
-    return bytes(out), ("v5: %d streets, %d junctions, %d roads, %d nested arrays" %
-                        (street_count, junction_count, road_count, len(nested)))
+    for src_off, count, elem, slot, what in sorted(nested, key=lambda item: (item[0], item[4])):
+        cursor = align_up(len(out))
+        out.extend(b"\0" * (cursor - len(out)))
+        struct.pack_into("<Q", out, slot, cursor)
+        if elem == _SD_EXIT:                                    # Junction::Exit
+            for j in range(count):
+                entry = src_off + j * _SD_EXIT
+                out.extend(struct.pack("<hxx", struct.unpack_from(">h", data, entry)[0]))
+                out.extend(struct.pack("<I", be(entry + 4, 4, "%s[%d].mrAngle" % (what, j))))
+        else:                                                   # Road::SpanIndex
+            for j in range(count):
+                out.extend(struct.pack("<h", struct.unpack_from(">h", data, src_off + j * 2)[0]))
+
+    out_size = len(out)                                          # miSize == unaligned end
+    struct.pack_into("<i", out, 4, out_size)
+    out.extend(b"\0" * (align_up(out_size) - out_size))
+
+    # ---- prove the emitted image ----------------------------------------------------
+    emitted = struct.unpack_from("<i i 4Q 3i", out, 0)
+    if emitted != (version, out_size, out_streets_at, out_junctions_at, out_roads_at,
+                   out_challenges_at, street_count, junction_count, road_count):
+        raise PortError("%s: emitted StreetData header does not round-trip" % label)
+    for src_off, count, elem, slot, what in nested:
+        dst_off = struct.unpack_from("<Q", out, slot)[0]
+        if dst_off < out_fixed_end or dst_off + count * elem > out_size:
+            raise PortError("%s: %s landed at %#x, outside the emitted arena %#x..%#x" %
+                            (label, what, dst_off, out_fixed_end, out_size))
+        if elem != _SD_EXIT:
+            for j in range(count):
+                if (struct.unpack_from("<h", out, dst_off + j * 2)[0] !=
+                        struct.unpack_from(">h", data, src_off + j * 2)[0]):
+                    raise PortError("%s: %s[%d] did not survive the relayout" % (label, what, j))
+    return bytes(out), ("v5: %d streets, %d junctions, %d roads, %d nested arrays; "
+                        "relaid out to the native x64 image (%#x -> %#x bytes)" %
+                        (street_count, junction_count, road_count, len(nested),
+                         declared_size, out_size))
 
 
 def _rewrite_font_imports(path, old_page_array, new_page_array, page_count):
