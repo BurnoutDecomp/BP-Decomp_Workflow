@@ -495,10 +495,29 @@ rem ---- build the cl response file ----
   rem  the two halves are lifetime-coupled through mpTractionLineStreamProducer. Mounted so the
   rem  LINK closure is enforced; /OPT:REF keeps the bytes out until they are called.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_TractionLineTests.cpp"
-  rem  Its floor: the line-vs-triangle stream factory (real) + the job dispatcher (export hole,
-  rem  named boot gate), plus the result-cursor slice the harvest walks.
+  rem  Its floor: the line-vs-triangle stream factory + the job dispatcher, plus the result-cursor
+  rem  slice the harvest walks.
+  rem  ⭐⭐⭐ 2026-08-11 (traction-line wave): RunLineWithTriangleListStream @0x82810E80 (89,
+  rem  export hole, lifted from the image) is now a REAL BODY and its boot gate is DELETED.
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_LineStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer_ResultIterator.cpp"
+  rem  ⭐⭐⭐ 2026-08-11 (traction-line wave): THE DRAIN. Until this TU, the triangle cache filled
+  rem  with real Paradise City geometry every frame and nothing read it.
+  rem    ContactGeneratorEntry                             @0x82920F10  (80, EXPORT HOLE, lifted)
+  rem    ContactGeneratorJob::Execute                      @0x829267E0  (77)
+  rem    ContactGeneratorJob::ExecuteLineWithTriangleListStream @0x82921968 (589) -- Moller-
+  rem      Trumbore, single-sided, SoA over four triangles per Triangle4 block, t clamped to the
+  rem      segment. The whole kernel is INLINED in the console (xrefs_from has no CgsGeometric
+  rem      call at all), so this needs neither IntersectLinePolygonSoupNearestSingleSided nor
+  rem      PolygonSoupListSpatialMap::RunQuery -- both of which earlier costings put on this leg.
+  rem    ContactGeneratorJob::AllocateMemory               @0x829212A0  (54)
+  rem    ContactGeneratorJob::RestoreMemory                @0x82921050  (39)
+  rem  The other ten Execute arms are NAMED one-shot boot gates (nothing posts their descriptor
+  rem  types in this tree). ⚠ NOT WIRED INTO THE CONDUCTOR: StartVehicleTractionLineTests /
+  rem  EndVehicleTractionLineTests stay gated -- they are lifetime-coupled through
+  rem  mpTractionLineStreamProducer and must land together, in a later wave.
+  echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGenerator.cpp"
+  echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGeneratorJob.cpp"
   rem  ⭐ 2026-08-10 (ground wave): the SimpleDataStreamProducer HOME finally mounts.
   rem  ⭐⭐ 2026-08-10 (cache-fill wave): its one unresolved edge since 2026-08-06 --
   rem  DataStreamCommandPoster::Construct @0x82869E08, an export-set hole -- is now a REAL
