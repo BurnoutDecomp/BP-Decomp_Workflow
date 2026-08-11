@@ -1278,13 +1278,38 @@ rem ---- build the cl response file ----
   rem  SharedClasses\StreetData\BrnChallengeData.cpp), pulled in by Construct's/Destruct's
   rem  score-type loops. Prepare touches none of it, so the split costs ZERO. Net new unresolved
   rem  for this whole wave (module + wB_01 + this): ZERO. Fold back into wB_00 when that lands.
-  rem  ⛔ STILL OUT, and it is a pure BODY gap now, not a data gap: BrnGameStateStreetManager.cpp
-  rem  (Prepare2) + _wC_02.cpp (SetupParRivals). SetupParRivals alone needs FOUR symbols --
-  rem  Road::GetRoadLimitId0, ProgressionData::GetRival(s32) and Random::RandomInt(s32,s32) are
-  rem  DECLARED-ONLY everywhere in the tree, and StreetManager::FindRivalsByDistrict is bodied
-  rem  only in the unmounted _wC_04 partfile. Mounting anyway is LNK2019 (/OPT:REF resolves
-  rem  before it discards -- see the achievement-manager note above).
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_Prepare.cpp"
+  rem  ---- leg 4: PAR RIVALS (2026-08-11) -- the body gap that leg 3 left behind ------------
+  rem  GameStateModule::Prepare2 case 2 is `StreetManager::Prepare2(out, &rq, &tqm)` @0x823509D8
+  rem  == `if (LoadStreetData(out, rq)) { SetupParRivals(tqm); return 1; }`. The SetupParRivals
+  rem  half was PARKED because it closed over four symbols with no body anywhere in the tree.
+  rem  All four are homed now:
+  rem    * Road::GetRoadLimitId0()        -> header inline in SharedClasses\StreetData\BrnStreetData.h
+  rem    * ProgressionData::GetRival(s32) -> SharedClasses\Progression\BrnProgressionData.cpp (mounted below)
+  rem    * Random::RandomInt(s32,s32)     -> GameShared\GameClasses\Numeric\CgsRandom.cpp (mounted elsewhere)
+  rem    * Rival::GetDistrict()           -> header inline in SharedClasses\Progression\BrnRival.h
+  rem  THREE SIBLING SPLITS, each MEASURED (cl /c with THESE flags + dumpbin /SYMBOLS against the
+  rem  defined-symbol set of build\game\obj) -- the _Prepare.cpp precedent, one function per TU:
+  rem    * _Prepare2.cpp             out of BrnGameStateStreetManager.cpp, which costs SIX
+  rem      (BrnStreetData::operator++, ChallengeHighScoreEntry::Construct,
+  rem       ChallengePlayerScoreEntry::Construct, ChallengeData::SetScore, ScoreList::
+  rem       KAI_MIN_SCORES/KAI_MAX_SCORES -- all from its two score-entry factories).
+  rem    * _SetupParRivals.cpp       out of _wC_02.cpp, which costs THIRTEEN (the whole
+  rem      score-entry + PlayerName + SPrintf + StrStream chain, all ProcessScoreRequestEvent's).
+  rem    * _FindRivalsByDistrict.cpp out of _wC_04.cpp, which costs FOUR (StreetManager::
+  rem      GetStreetData / HasPlayerBeatenParScore / HasPlayerBeatenFriendScore, plus
+  rem      Rival::GetDistrict -- the first three are FillInRoadRulesQuery's and
+  rem      GetNumberOfCompleteRoadsRuledByLocalPlayer's).
+  rem  Each function was MOVED, not copied, so folding a split back in later is a delete, not a
+  rem  duplicate-symbol hunt. NET NEW UNRESOLVED FOR THESE THREE TUs: ZERO.
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_Prepare2.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_SetupParRivals.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_FindRivalsByDistrict.cpp"
+  rem  ⛔ STILL OUT: the rest of BrnGameStateStreetManager.cpp (the two score-entry
+  rem  factories), _wC_02.cpp (ProcessScoreRequestEvent) and _wC_04.cpp (the two road-rules
+  rem  tallies). Their costs are the measured numbers above; mounting any of them anyway is
+  rem  LNK2019, not a stripped COMDAT (/OPT:REF resolves before it discards -- see the
+  rem  achievement-manager note above).
   rem ---- (2026-08-11) the embedded StreetManagerDebugComponent's vtable is emitted by ----
   rem ---- BrnGameModule.obj's implicit ctor chain; its real TUs stay UNMOUNTED (they   ----
   rem ---- close over the road-rules cheat set: StreetManager score setters, ScoreList  ----
