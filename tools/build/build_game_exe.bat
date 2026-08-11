@@ -520,6 +520,9 @@ rem ---- build the cl response file ----
   rem  the real ProcessCreateEvents body is mounted below (see the CREATE DRAIN block), so the
   rem  create queue is drained, not counted. Slice TU; home BrnVehicleManager.cpp still unmounted.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_MaintenanceEvents.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_CreateRemoveEvents.cpp"
+  echo "%SRC%\GameShared\GameClasses\Physics\BaseEventQueue_InRemoveRigidBody_AddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_DeactivateDeformationModelEvent_AddEvent.cpp"
   rem  ⭐ 2026-08-10 (create-path wave): PURE MOUNT GAP, found by an LNK2019 and not by a grep.
   rem  PostSceneUpdate calls VehicleManager::SetPlayerActiveRaceCarIndex @0x8259C028, which has
   rem  been BODIED in BrnVehicleManagerPlayerStats.cpp all along in a TU nothing ever compiled
