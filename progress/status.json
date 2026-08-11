@@ -25500,10 +25500,22 @@
   "BrnPhysics::PhysicsModule::Destruct": {
    "status": "reviewed"
   },
+  "BrnPhysics::PhysicsModule::FixUpVehicleContacts": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::HandleGameActions": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::HandleGameActionsPostScene": {
+   "status": "reviewed"
+  },
   "BrnPhysics::PhysicsModule::HandlePlayerStatsUpdate": {
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::PhysicsModule": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::PostSceneUpdate": {
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::Prepare": {
@@ -25525,6 +25537,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::StoreContact": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::Update": {
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::UpdateCachedPositions": {
@@ -26931,6 +26946,9 @@
   "BrnPhysics::Vehicle::VehicleInputInterface::operator": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehicleManager::AddContactResultsToQueue": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehicleManager::AddPlayerStuckInCollisionLineTests": {
    "status": "reviewed"
   },
@@ -27030,6 +27048,9 @@
   "BrnPhysics::Vehicle::VehicleManager::DoRaceCarWorldContactValidation": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehicleManager::DoTrafficWorldContactOrdering": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehicleManager::DoVehicleTractionLineAllocations": {
    "status": "reviewed"
   },
@@ -27037,6 +27058,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::EndImpactTime": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehicleManager::EndPartContactGeneration": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::EndVehicleContactGeneration": {
@@ -27193,6 +27217,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::StartPartContactGeneration": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehicleManager::StartVehicleContactGeneration": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::SwitchPlayerAIDonuttingAttribs": {
@@ -62655,6 +62682,12 @@
   "rw::physics::ComputeFatBoxInertia": {
    "status": "reviewed"
   },
+  "rw::physics::DriveJacobian::Build": {
+   "status": "reviewed"
+  },
+  "rw::physics::DriveJacobian::GetMatIBT": {
+   "status": "reviewed"
+  },
   "rw::physics::Jacobian_RQD::Create": {
    "status": "reviewed"
   },
@@ -62665,6 +62698,9 @@
    "status": "reviewed"
   },
   "rw::physics::JointFrames::SetParentLinearFrame": {
+   "status": "reviewed"
+  },
+  "rw::physics::JointJacobian::Build": {
    "status": "reviewed"
   },
   "rw::physics::PairSet::GetResourceDescriptor": {
@@ -63049,7 +63085,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/Containers/./CgsBitArray.h": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Containers/CgsArray.h": {
    "status": "done"
@@ -63131,7 +63168,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/Development/CgsStrStream.h": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Development/DebugSystem/Controller/CgsDebugController.cpp": {
    "status": "done"
@@ -63260,6 +63298,10 @@
   },
   "GameShared/GameClasses/Development/PerfMon/Cpu/CgsPerfMonCpu.cpp": {
    "status": "done"
+  },
+  "GameShared/GameClasses/Development/PerfMon/Cpu/PS3/CgsPerfMonCpuPS3.h": {
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.cpp": {
    "status": "done"
@@ -67486,6 +67528,10 @@
    "status": "done"
   },
   "GameSource/Unity/../Physics/BrnPhysicsModuleBridgeFunctions.cpp": {
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
+  },
+  "GameSource/Unity/../Physics/BrnPhysicsModuleUpdateFunctions.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../Physics/ContactSpies/BrnContactSpyInterface.cpp": {
@@ -67553,10 +67599,12 @@
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnPhysicalTrafficManager.cpp": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnPhysicalTrafficManager.h": {
-   "status": "done"
+   "notes": "Explicit incomplete reconstruction marker remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnPhysicalTrafficManagerDebugComponent.cpp": {
    "status": "done"
@@ -67569,9 +67617,13 @@
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManager.cpp": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManager.h": {
+   "status": "done"
+  },
+  "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManagerContactGeneration.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManagerDebugComponent.cpp": {
@@ -67625,7 +67677,8 @@
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/VehiclePhysics.cpp": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/Wheel.cpp": {
    "status": "done"
@@ -78227,7 +78280,7 @@
   },
   "class:rw::physics::DriveJacobian": {
    "notes": "VMX keystone: Build keystone (permute-immediate VMX) AND GetMatIBT @0x82BC1128 is a strided 3x3 gather from sparse source offsets (0xDC/0xEC/0xFC, 0x11C/0x12C/0x13C, 0x15C/0x16C/0x17C; stride 0x10, rows 0x40 apart, w-lane zeroed) -> needs careful VMX reconstruction. Deferred.",
-   "status": "blocked"
+   "status": "done"
   },
   "class:rw::physics::Jacobian_RQD": {
    "notes": "Verified vs X360 asm; parity.",
@@ -78239,7 +78292,7 @@
   },
   "class:rw::physics::JointJacobian": {
    "notes": "VMX keystone: Build is hand-vectorised AltiVec with permute-immediate lane routing + missing rodata; not faithfully reconstructible by the fast builder. Deferred to a dedicated VMX pass.",
-   "status": "blocked"
+   "status": "done"
   },
   "class:rw::physics::PairSet": {
    "status": "done"
