@@ -178,6 +178,10 @@ rem ---- build the cl response file ----
   rem ---- plus the ActiveRaceCar / RenderParams homes the render leg reads.        ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Render.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar.cpp"
+  rem  2026-08-11 (create-drain wave, conductor): ProcessPlayerVehicleInput calls
+  rem  BoostManager::SetBoostEarningEnabled @0x822A33B0 -- the body existed in this TU all along
+  rem  but the TU was never on this list (LNK2019 on the wave's first link).
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostManager.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCarRenderParams.cpp"
   rem (pose wave 2026-08-01: RaceCar::Construct/Prepare/AddToWorld/UpdatePositioningData/
   rem  AssignActiveRaceCar/ToBeRenderedDamaged are now called by the real attach chain.)
@@ -509,11 +513,12 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Prepare.cpp"
   rem  ⭐⭐ 2026-08-10 (create-path wave): THE MAINTENANCE SPINE -- the leg that finally gives the
   rem  create path a caller. VehicleManager::ProcessVehicleMaintenanceEvents @0x8264AB38 (118) is
-  rem  real here; its five arms + the traffic twin are NAMED one-shot gates, and the
-  rem  ProcessCreateEvents gate PRINTS the undrained CreateRaceCarEvent queue length.
-  rem  ⛔ ProcessCreateEvents @0x82616770 (1067) stays a gate ON PURPOSE: setting one bit of
-  rem  mUsedRaceCars turns on the already-mounted ReadUpdatedBodies gravity+integrate loop, so the
-  rem  traction-line chain must land first. Slice TU; home BrnVehicleManager.cpp still unmounted.
+  rem  real here; its five arms + the traffic twin are NAMED one-shot gates.
+  rem  ⭐ STALE NOTE CORRECTED (create-drain wave): this line used to say "ProcessCreateEvents
+  rem  @0x82616770 (1067) stays a gate ON PURPOSE ... the traction-line chain must land first",
+  rem  and that the gate PRINTS the undrained CreateRaceCarEvent queue length. NOT TRUE ANY MORE --
+  rem  the real ProcessCreateEvents body is mounted below (see the CREATE DRAIN block), so the
+  rem  create queue is drained, not counted. Slice TU; home BrnVehicleManager.cpp still unmounted.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_MaintenanceEvents.cpp"
   rem  ⭐ 2026-08-10 (create-path wave): PURE MOUNT GAP, found by an LNK2019 and not by a grep.
   rem  PostSceneUpdate calls VehicleManager::SetPlayerActiveRaceCarIndex @0x8259C028, which has
@@ -575,10 +580,59 @@ rem ---- build the cl response file ----
   rem  (all dead until PhysicsModule::Update lands -- that wave must resolve every stub there).
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateVehiclePhysics.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerLinkStubs.cpp"
+  rem  ⭐⭐ 2026-08-11 (prepare-chain wave): the DRIVER-CONTROLS CONSUMER, VehicleManager::
+  rem  UpdateDrivers @0x82642C68 (120 insns) -- slice TU, home BrnVehicleManager.cpp still
+  rem  unmounted. ⛔ THIS MOUNT IS MANDATORY, NOT OPTIONAL: the same commit DELETES the
+  rem  UpdateDrivers gate from BrnPhysicsConductorGates.cpp, and its caller
+  rem  (BrnPhysicsModuleUpdateFunctions.cpp's driver stage) is already mounted and live -- so
+  rem  without this line the build loses the symbol outright (LNK2019).
+  rem  Its own link closure is already here: the five dispatch arms (UpdatePlayer/AI/Network-
+  rem  Driver, PhysicalTrafficManager::UpdateTrafficDriver, DoHornTakedowns -- 1,346 console
+  rem  instructions, all still BODYLESS) are named gates in BrnPhysicsConductorGates.cpp above,
+  rem  msPlayerParams comes from RaceCarPhysics.cpp below, and GetTargetAssistParams from
+  rem  SharedIO\BrnVehicleDriverInputInterface.cpp. Nothing new is dragged in.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateDrivers.cpp"
+  rem  ⭐⭐ 2026-08-11 (create-drain wave, same day): the FIVE driver dispatch arms
+  rem  (UpdatePlayer/AI/NetworkDriver + DoHornTakedowns; traffic twin in its own slice below) --
+  rem  their five gates are DELETED from BrnPhysicsConductorGates.cpp, and UpdateDrivers above is
+  rem  live every frame, so BOTH mounts are mandatory (LNK2019 otherwise). Note DoHornTakedowns
+  rem  -> InstantTakedown, whose only body is in the UNMOUNTED BrnVehicleManager.cpp -- if the
+  rem  link 2019s on it, split the body into a slice TU (RaceCarPhysics_Construct precedent);
+  rem  its own callee SetRaceCarCrashing resolves to the loud LinkStubs trap, which is the
+  rem  honest state for the horn-cheat edge path.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DriverArms.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_UpdateTrafficDriver.cpp"
+  rem  ...and the InstantTakedown split the note above predicted: the link DID 2019 on it, so the
+  rem  body moved byte-identical from the unmounted BrnVehicleManager.cpp into its own slice
+  rem  (RaceCarPhysics_Construct precedent). Its callee SetRaceCarCrashing = the loud LinkStubs trap.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_InstantTakedown.cpp"
+  rem  ⭐⭐⭐ THE CREATE DRAIN MOUNTS (create-drain wave): ProcessCreateEvents @0x82616770 -- the
+  rem  ONLY writer of mUsedRaceCars in the XEX. Setting that bit switches on the four already-
+  rem  mounted per-frame loops (ReadUpdatedBodies gravity, UpdateVehiclePhysics force path,
+  rem  contact generation, traction harvest) against the car the Prepare chain just filled.
+  rem  The author deliberately left this line to the conductor: the mount belongs to a commit
+  rem  whose gated run is actually BOOTED. This is that commit -- do not cherry-pick the line
+  rem  out of it.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ProcessCreateEvents.cpp"
   rem  ⭐⭐ RaceCarPhysics.cpp MOUNTS (same wave): the per-car dispatch target RaceCarPhysics::
   rem  Update + ~40 showtime/aftertouch bodies. Its banner's five measured LNK2019s resolve as:
-  rem  VehiclePhysics::Update + UpdateSteering -> trap stubs in VehiclePhysicsLinkStubs.cpp (the
-  rem  integrator orchestrator seam, still THE wall); GetAftertouchValues -> overload fork DELETED
+  rem  ⛔ STALE NOTE CORRECTED 2026-08-11 (orchestrator re-audit). This line used to say
+  rem  "VehiclePhysics::Update + UpdateSteering -> trap stubs in VehiclePhysicsLinkStubs.cpp (the
+  rem  integrator orchestrator seam, still THE wall)". THAT IS NO LONGER TRUE and it has now sent
+  rem  one wave at an already-closed hole. All THREE of that LNK triple are resolved in-tree:
+  rem    VehiclePhysics::Update       @0x826412C0 (200) -- BODIED, VehiclePhysics.cpp:5849.
+  rem      Re-verified against the ARTIST asm this wave: callee set 16/16 exact vs xrefs_from,
+  rem      call ORDER exact, no absent callee.
+  rem    VehiclePhysics::UpdateSteering @0x825D3720 (577) -- BODIED, VehiclePhysics.cpp:5661,
+  rem      to the DWARF signature (f32, f32, VecFloat, bool).
+  rem    VehiclePhysics::AddTractionPoint(s32,u32) -- NEVER EXISTED. The DWARF carries
+  rem      AddTractionPoint only on SimpleVehiclePhysics and RaceCarPhysics, both 4-arg; the
+  rem      2-arg symbol was a mangling artifact of a since-deleted stand-in decl in
+  rem      VehiclePhysics.h that HID the base overload. Both real bodies are landed.
+  rem  THE WALL MOVED UPSTREAM: it is now VehicleManager::UpdatePlayerDriver @0x825E9F38 (401),
+  rem  the BRN_CONDUCTOR_GATE in BrnPhysicsConductorGates.cpp where the player's controls record
+  rem  stops -- so the orchestrator below runs every frame on an all-zero controls record.
+  rem  GetAftertouchValues -> overload fork DELETED
   rem  (the 4-arg ref form @0x825B2E88 is the leaf; BrnPlayerDriverControls.cpp mounts below);
   rem  gbVehicleBounceBoosting -> extern RETIRED (it was a data fork of msPlayerParams
   rem  .mbLaunchActive -- one console byte, two PC names; see RaceCarPhysics.cpp).
@@ -1047,6 +1101,13 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModule.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToScene.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToEntityModules.cpp"
+  rem  ⭐⭐ 2026-08-11 (create-drain wave, triangle-cache wiring): the two bridges that carry the
+  rem  scene's TriangleCacheInterface to physics (@0x827A8E88) and to the world output (@0x827A5700)
+  rem  -- crash-measured: without them AddRaceCarTractionLineTests dereferences a NULL
+  rem  mpTriangleCacheManager on the first live car. Their WorldLinkStubs gates are deleted in the
+  rem  same wave (LNK2005 tripwire otherwise).
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToPhysics.cpp"
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToOutput.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeToEntityModules.cpp"
   echo "%SRC%\GameSource\World\BrnBaseStreamer.cpp"
   echo "%SRC%\GameSource\World\BrnWorldModuleIO_DispatchInputBuffer.cpp"
