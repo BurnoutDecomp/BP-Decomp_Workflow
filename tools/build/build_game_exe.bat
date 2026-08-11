@@ -136,6 +136,19 @@ rem ---- build the cl response file ----
   rem ---- is what linked and the player index stayed -1 all session. Split into   ---
   rem ---- its own TU and mounted. Fold back when those 3 accessors land.          ---
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToWorldModule.cpp"
+  rem ---- feed wave (2026-08-09): the SECOND split-out bridge, same reason as the one ----
+  rem ---- above. WorldModule::BridgeInputToPhysicsModule @0x827AB830 (an address that   ----
+  rem ---- had to be recovered from the image -- it is a HOLE in the IDA export set) is  ----
+  rem ---- the physics module's per-frame INPUT FEED and is fully closed on its own,     ----
+  rem ---- while its DWARF file-mate BridgeInputToEntityModules still is not. Fold back  ----
+  rem ---- when WorldBridgeInputToEntityModules.cpp can be mounted whole.                ----
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeInputToPhysicsModule.cpp"
+  rem ---- root-cause wave (2026-08-10): the PRE-SCENE entity-modules -> physics bridge  ----
+  rem ---- @0x827AADB8. It is the ONLY caller in the image of InputBuffer::              ----
+  rem ---- SetSolverMaxIterations, so while it was a boot gate the solver iteration cap  ----
+  rem ---- stayed 0 and the whole MaxIterations chain asserted. Its file-mate            ----
+  rem ---- _PrePhysics @0x827AAEC0 is still a gate and stays in WorldLinkStubs.          ----
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToPhysics.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
   rem ---- its shared component-streamer base + the five concrete leaves. These ----
@@ -227,7 +240,47 @@ rem ---- build the cl response file ----
   echo "%SRC%\pc\gcm\renderengine\VertexProgramState.cpp"
   echo "%SRC%\pc\gcm\renderengine\XenonD3D9Shims.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager.cpp"
+  rem  ⭐⭐⭐ 2026-08-10 (fill-worker wave): CachedTriangleList::Prepare @0x828BE520 (79) -- THE
+  rem  SHARED TRIANGLE ARENA'S ALLOCATION. Its WorldLinkStubs gate returned true WITHOUT
+  rem  allocating, so mpaTriangleCache was NULL and every one of the 298 slot windows indexed
+  rem  off a null base. Found by forcing the console's own mbDEBUGForceAllDirty for one
+  rem  instrumented boot, which fired the never-before-executed shipped tripwire
+  rem  "mpaTriangleCache != NULL" (CgsTriangleCacheManager.h:172) 862 times.
+  rem  ⚠ 0x828BE520 is an X360 export HOLE; name from the caller's xrefs_from, signature from
+  rem  the PS3 DWARF mangle @0xC7B30C. Allocates 13112 * sizeof(Triangle4) == 2,937,088 bytes.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsCachedTriangleList.cpp"
+  rem  Triangle-cache SLOT BOOKKEEPING (triangle-cache wave 2026-08-10): the write side of
+  rem  the cache's 298-slot table -- ProcessRemoveFromCacheEvents @0x828B2710 /
+  rem  ProcessAddToCacheEvents @0x828B2C78 / ProcessUpdateCachedPositionEvents @0x828BE898 /
+  rem  CacheSlot::UpdateCachedObject @0x828BE660. UNREACHABLE today: their only caller,
+  rem  SceneManagerModule::StartUpdateTriangleCache, is still a WorldLinkStubs gate, so
+  rem  /OPT:REF strips every byte. Mounted anyway to enforce the link closure over them.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_Events.cpp"
+  rem  ...and its layout gate, which was UNMOUNTED until this wave -- i.e. every
+  rem  static_assert in it was submit-time only and had never run in a build.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_embed_check.cpp"
+  rem  ⭐⭐ 2026-08-10 (cache-fill wave): THE FILL HALF -- StartUpdateTriangleCaches @0x828BECF8
+  rem  (278) + EndUpdateTriangleCaches @0x828BF150 (475). Both WorldLinkStubs gates DELETED.
+  rem  ⚠ ASYMMETRIC REACHABILITY: End is LIVE from the frame it lands (SceneManagerModule::
+  rem  EndUpdateTriangleCache @0x828C7500 is real and WorldModule::Update calls it every frame)
+  rem  and takes its own null guard; Start is still only reached through SceneManagerModule::
+  rem  StartUpdateTriangleCache, which stays gated because TriangleCollisionManager::Prepare
+  rem  @0x828D0C40 is inert and BuildSpacialPartition @0x82841740 (2,255 insns) is absent.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_Update.cpp"
+  rem  ⭐⭐ 2026-08-10 (producer wave): the InEventAddToCache queue APPEND instantiation
+  rem  (BaseEventQueue<InEventAddToCache>::AddEvent @0x825E4620). Reconstructed long ago and
+  rem  never mounted -- a pure mount gap. It is the single producer edge that VehicleManager::
+  rem  PrepareTriangleCache and PhysicalTrafficManager::PrepareTriangleCache both call, i.e. the
+  rem  only path by which TriangleCacheManager::mUsedCacheSlots can ever become non-zero.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\BaseEventQueue_InEventAddToCache_AddEvent.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityManager.cpp"
+  rem  ---- create-path wave 2026-08-11 ----
+  rem  CgsSceneManager::VolumeInstanceId::SetEntityIDOwner @0x822B0E00 /
+  rem  ::SetEntityIDEntityIndex @0x822B0E70. Bodied since their own wave, never linked -- no
+  rem  mounted caller existed. ActiveRaceCar::Attach now seeds mHandlingBodyVolumeId through
+  rem  them (the console step that was flagged "omitted"), which is what gives
+  rem  VehicleManager::ProcessCreateEvents its owner byte and its race-car slot index.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsVolumeInstanceId.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModule.cpp"
@@ -386,6 +439,16 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\BrnContactGenerationList.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer_Begin.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
+  rem  ⭐⭐ 2026-08-10 (cache-fill wave): the BaseCollisionGenerator HOME finally mounts. It has
+  rem  been fully reconstructed since 2026-08-06 (Construct / Prepare / Finish / FinishBatch /
+  rem  CreateNewBatch / AllocateJob / GetResultList / CreateStreamProducer) but stayed off the
+  rem  link, so WorldModule::Update's per-frame generator was carved and never initialised behind
+  rem  two WorldLinkStubs gates -- BOTH NOW DELETED. This is a LIVE behaviour change: the frame's
+  rem  collision generator is really Construct()ed and Prepare()d from the frame it lands.
+  rem  (CgsCollisionBatch.cpp stays UNMOUNTED: its only body, CollisionBatch::SetupJob, references
+  rem   the absent ContactGeneratorEntry. The generator home needs only the header-inline ctor
+  rem   and WaitOn.)
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator.cpp"
   rem  2026-08-06 (big-five #1, FixUpVehicleContacts wave): the driver's home TU + the
   rem  DeformationManager vehicle-contact fix-up slice (ByInterpolation / WithBoxes /
   rem  FixUpVehicleContact / GetInterpolatedContactPointAndNormal / CalculateTangentPoints /
@@ -403,6 +466,78 @@ rem ---- build the cl response file ----
   rem  PhysicsModule::Update (FreeAllocations / UpdateVehicleEffects / ReadUpdatedBodyProperties /
   rem  ProcessDeformationStates) -- slice TU, home BrnVehicleManager.cpp still unmounted.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PerFrameLeaves.cpp"
+  rem  ⭐⭐ 2026-08-10 (create-path wave): THE PER-FRAME GRAVITY + INTEGRATION STEP --
+  rem  VehicleManager::ReadUpdatedBodies @0x82619A10 (198) + PhysicalTrafficManager::
+  rem  ReadUpdatedBodies @0x825EF608 (334). Deletes the conductor gate of the same name.
+  rem  Despite the name neither reads a body back: it is the only place gravity enters a car
+  rem  and the only place a car's pose advances.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ReadUpdatedBodies.cpp"
+  rem  ⭐⭐ 2026-08-10 (producer wave): THE LEG THAT REGISTERS A CAR WITH THE TRIANGLE CACHE.
+  rem  VehicleManager::Prepare @0x8263C688 (75, WorldLinkStubs gate DELETED) + VehicleManager::
+  rem  PrepareTriangleCache @0x82615BA0 (37). Slice TU; home BrnVehicleManager.cpp still unmounted.
+  rem  Its stage-1 arm VehicleManager::PrepareData @0x82633568 (161) stays a NAMED stub -- see
+  rem  WorldLinkStubs.cpp for the two measured reasons and exactly what is dropped.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Prepare.cpp"
+  rem  ⭐⭐ 2026-08-10 (create-path wave): THE MAINTENANCE SPINE -- the leg that finally gives the
+  rem  create path a caller. VehicleManager::ProcessVehicleMaintenanceEvents @0x8264AB38 (118) is
+  rem  real here; its five arms + the traffic twin are NAMED one-shot gates, and the
+  rem  ProcessCreateEvents gate PRINTS the undrained CreateRaceCarEvent queue length.
+  rem  ⛔ ProcessCreateEvents @0x82616770 (1067) stays a gate ON PURPOSE: setting one bit of
+  rem  mUsedRaceCars turns on the already-mounted ReadUpdatedBodies gravity+integrate loop, so the
+  rem  traction-line chain must land first. Slice TU; home BrnVehicleManager.cpp still unmounted.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_MaintenanceEvents.cpp"
+  rem  ⭐ 2026-08-10 (create-path wave): PURE MOUNT GAP, found by an LNK2019 and not by a grep.
+  rem  PostSceneUpdate calls VehicleManager::SetPlayerActiveRaceCarIndex @0x8259C028, which has
+  rem  been BODIED in BrnVehicleManagerPlayerStats.cpp all along in a TU nothing ever compiled
+  rem  (this file's own note at the _layout_check mount already said "NEITHER of those TUs is in
+  rem  the build list"). Mounting it also finally COMPILES VehicleManager::_AssertLayoutPlayerStats,
+  rem  a layout gate that had never once run, and brings ApplyPlayerStats / SetShowtimeBehaviour /
+  rem  SetPlayerCarToShowtimeMode / HasRaceCarHadRecentImpact / GetVehiclePhysi with it.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerPlayerStats.cpp"
+  rem  ⭐⭐ 2026-08-10 (ground wave): THE TRACTION-LINE PRODUCER LIFECYCLE + THE RACE-CAR HARVEST.
+  rem  DoVehicleTractionLineAllocations @0x825B5098 / RunTractionLineTestJobs @0x825B5168 /
+  rem  DoVehicleTractionLineDecallocations @0x825B5268 / ReadRaceCarTractionLineTestResults
+  rem  @0x82618058 (the one that reaches AddTractionPoint -> mbIsOnGround).
+  rem  ⚠ NOT WIRED IN: their only callers (StartVehicleTractionLineTests, EndVehicleTraction-
+  rem  LineTests) stay gated -- the generation half needs the absent TriangleCacheManager, and
+  rem  the two halves are lifetime-coupled through mpTractionLineStreamProducer. Mounted so the
+  rem  LINK closure is enforced; /OPT:REF keeps the bytes out until they are called.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_TractionLineTests.cpp"
+  rem  ⭐⭐ 2026-08-11 (lifetime wave): the SceneManagerIO leaf TU mounts, and the LINK is what
+  rem  found it. AddRaceCarTractionLineTests calls TriangleCacheInterface::GetNumCachedTriangleBatches
+  rem  @0x82277880 -- declared since its own wave, bodied since its own wave, and never once linked,
+  rem  because its home TU had no mounted caller. Two functions, both already reconstructed
+  rem  (SceneQueryInterface::HasData @0x82204E48 is the other).
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModuleIO.cpp"
+  rem  Its floor: the line-vs-triangle stream factory + the job dispatcher, plus the result-cursor
+  rem  slice the harvest walks.
+  rem  ⭐⭐⭐ 2026-08-11 (traction-line wave): RunLineWithTriangleListStream @0x82810E80 (89,
+  rem  export hole, lifted from the image) is now a REAL BODY and its boot gate is DELETED.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_LineStream.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer_ResultIterator.cpp"
+  rem  ⭐⭐⭐ 2026-08-11 (traction-line wave): THE DRAIN. Until this TU, the triangle cache filled
+  rem  with real Paradise City geometry every frame and nothing read it.
+  rem    ContactGeneratorEntry                             @0x82920F10  (80, EXPORT HOLE, lifted)
+  rem    ContactGeneratorJob::Execute                      @0x829267E0  (77)
+  rem    ContactGeneratorJob::ExecuteLineWithTriangleListStream @0x82921968 (589) -- Moller-
+  rem      Trumbore, single-sided, SoA over four triangles per Triangle4 block, t clamped to the
+  rem      segment. The whole kernel is INLINED in the console (xrefs_from has no CgsGeometric
+  rem      call at all), so this needs neither IntersectLinePolygonSoupNearestSingleSided nor
+  rem      PolygonSoupListSpatialMap::RunQuery -- both of which earlier costings put on this leg.
+  rem    ContactGeneratorJob::AllocateMemory               @0x829212A0  (54)
+  rem    ContactGeneratorJob::RestoreMemory                @0x82921050  (39)
+  rem  The other ten Execute arms are NAMED one-shot boot gates (nothing posts their descriptor
+  rem  types in this tree). ⚠ NOT WIRED INTO THE CONDUCTOR: StartVehicleTractionLineTests /
+  rem  EndVehicleTractionLineTests stay gated -- they are lifetime-coupled through
+  rem  mpTractionLineStreamProducer and must land together, in a later wave.
+  echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGenerator.cpp"
+  echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGeneratorJob.cpp"
+  rem  ⭐ 2026-08-10 (ground wave): the SimpleDataStreamProducer HOME finally mounts.
+  rem  ⭐⭐ 2026-08-10 (cache-fill wave): its one unresolved edge since 2026-08-06 --
+  rem  DataStreamCommandPoster::Construct @0x82869E08, an export-set hole -- is now a REAL
+  rem  BODY lifted from the image into the poster's own home TU, so the trap TU
+  rem  CgsDataStreamCommandPoster_LinkStub.cpp is DELETED (was mounted here).
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer.cpp"
   rem  ⭐⭐ 2026-08-06 (big-five #3, UpdateVehiclePhysics wave): the per-frame FORCE PRODUCER
   rem  VehicleManager::UpdateVehiclePhysics @0x82644FA8 (1,038 insns) FULL body + four in-TU
   rem  siblings (IsRaceCarCrashing / ForceRaceCarCrash-5arg==sub_82635B78 / ProcessAboveGround-
@@ -436,6 +571,19 @@ rem ---- build the cl response file ----
   echo "%SRC%\SharedClasses\Physics\Deformation\BrnBodyPartBBoxSpec.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleManagerOutputInterface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleOutputInterface.cpp"
+  rem  ⭐⭐ 2026-08-09 (CONDUCTOR WAVE): PhysicsModule::Update @0x825B0640 IS REAL
+  rem  (BrnPhysicsModuleUpdateFunctions.cpp). Three new mounts:
+  rem    * BrnVehicleManagerIO.cpp -- the DWARF-true VehicleManagerOutputBuffer (the
+  rem      "VehManager" stack buffer Update creates; the old invented VehicleManagerIO
+  rem      class is retired by the same commit).
+  rem    * BrnVehicleManager_ConductorLeaves.cpp -- UpdateCameraMatrix + the
+  rem      empty-as-shipped ProcessWheelContacts.
+  rem    * BrnPhysicsConductorGates.cpp -- THE NAMED DEFERRALS: every not-yet-reconstructed
+  rem      direct callee of the conductor as a LOUD one-shot boot gate (symbol + X360
+  rem      address + insn count, once per boot). Reconstruct each and DELETE its gate.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerIO.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ConductorLeaves.cpp"
+  echo "%SRC%\GameSource\Physics\BrnPhysicsConductorGates.cpp"
   rem ---- VEHICLE-DYNAMICS CORE (physics wave 3, 2026-08-02) --------------------------------
   rem  The first vehicle-physics translation units ever mounted. Before this the whole domain
   rem  was unmounted: 119 reconstructed bodies, ZERO of them in the build.
@@ -822,6 +970,16 @@ rem ---- build the cl response file ----
   rem
   rem  ⚠️⚠️ SAME CAVEAT AS THE BLOCK ABOVE: nothing calls any of this yet, so /OPT:REF strips it
   rem  and it puts ZERO BYTES in the exe. It is mounted so the closure is continuously enforced.
+  rem ---- root-cause wave (2026-08-10) mount closure. All three bodies were already ----
+  rem ---- reconstructed and simply not in the exe:                                  ----
+  rem ----  * ContactSpyInterface::Construct  -- PhysicsModuleIO::OutputBuffer::Construct ----
+  rem ----  * PropInputInterface Append/Construct/Clear -- both prop->physics bridges ----
+  rem ----  * PropEntityIO::OutputBuffer_PreScene accessors -- the PreScene bridge     ----
+  echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyInterface.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BrnPropInputInterface.cpp"
+  rem ----  * PropEntityID::AssertIsProp -- the owner tripwire every prop enqueue runs ----
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropEntityID.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_PreScene.cpp"
   echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyData.cpp"
   echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_RaceCarContact_300.cpp"
   echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_TrafficContact_400.cpp"
@@ -869,6 +1027,39 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_Dispatch.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_Prepare.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO.cpp"
+  rem ---- PRE-PHYSICS BRIDGE wave (2026-08-10). WorldModule::BridgeEntityModulesToPhysicsModule_ ----
+  rem ---- PrePhysics @0x827AAEC0 is real now; it is the ONLY carrier of a staged                ----
+  rem ---- CreateRaceCarEvent into the physics input buffer. Its closure needs these TUs, every  ----
+  rem ---- one of which was already reconstructed and simply never on the build list:            ----
+  rem ----  * BrnTrafficEntityModuleIO.cpp  -- OutputBuffer_PrePhysics Construct + 6 accessors,  ----
+  rem ----    and its three interfaces are REAL types now (they were `unsigned char[1]`).        ----
+  rem ----  * BrnPropEntityModuleIO_OutputBuffer_PrePhysics.cpp -- GetPropInputInterface() const ----
+  rem ----  * VariableEventQueue_5040_16.cpp -- the driver-controls queue's out-of-line methods  ----
+  rem ----  * the six event-queue Append instantiations the bridge's inlined merges reach.       ----
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModuleIO.cpp"
+  rem ----  * BrnTrafficNetworkInputInterface.cpp -- the three accessors mounting the IO TU  ----
+  rem ----    turned into LNK2019s (Get/Set/HasDiverged, bodied in the same commit).         ----
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficNetworkInputInterface.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_PrePhysics.cpp"
+  echo "%SRC%\GameShared\GameClasses\Module\VariableEventQueue_5040_16.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BaseEventQueue_CreateAirRamEvent_AddEventSafeAppend.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BaseEventQueue_CreateSpinEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_AddPhysicalPropEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_AddPhysicalPartEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_RemovePhysicalPropEvent_AddEventAppend.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_RemovePhysicalPartEvent_AddEventAppend.cpp"
+  rem ---- end pre-physics bridge block ---------------------------------------------------------
+  rem ---- create-path wave 2026-08-11: the FOUR event-queue instantiations
+  rem ---- VehicleManager::ProcessCreateEvents @0x82616770 reaches. NOTHING CALLS THEM YET -- the
+  rem ---- drain is still a named gate -- and they are mounted anyway, per the standing
+  rem ---- [[shadowing-redeclarations]] mitigation: /OPT:REF strips every byte, but the LINK
+  rem ---- closure over the create body's queue API is enforced NOW rather than discovered by the
+  rem ---- wave that writes it. GetEvent is the truncated export "BrnPhysics::Vehic" @0x825BB7F0
+  rem ---- (console element stride 0xA0 == sizeof(CreateRaceCarEvent)).
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BaseEventQueue_CreateRaceCarEvent_GetEvent.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BaseEventQueue_CreateVehicleResult_AppendAddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_AddDeformationModelEvent_AddEvent.cpp"
+  echo "%SRC%\GameShared\GameClasses\Physics\BaseEventQueue_InAddRigidBody.cpp"
   rem ---- reset-player-car wave (2026-08-01): the game-action-0 consumer chain.        ----
   rem ---- Each of these was already committed and NEVER LINKED BY ANYTHING.            ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO_PreSceneAccessors.cpp"
@@ -1388,8 +1579,88 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsBinaryFileResource.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateMachine.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupList.cpp"
+  rem  ⭐⭐ 2026-08-10 (fill-worker wave) -- PURE MOUNT GAP. These TUs were reconstructed long ago
+  rem  and never once compiled into anything; all are prerequisites of the triangle-cache FILL
+  rem  worker (PolygonSoupTesterJob), so they are mounted now to enforce the link closure over
+  rem  them BEFORE the worker lands rather than after:
+  rem    CgsLineTests.cpp          -- TestAxisAlignedBoxAxisAlignedBox @0x82812460, the per-leaf
+  rem                                 filter PolygonSoupTesterJob::FillTriangleCache @0x82915FD0 runs.
+  rem    CgsSimpleDataStreamConsumer.cpp  -- ReadCo, the consumer side of the fill stream...
+  rem    CgsDataStreamCommandReader.cpp   -- ...and DataStreamCommandReader::ReadCom @0x82867920,
+  rem                                 which ReadCo tail-calls. BODIED all along, never mounted --
+  rem                                 the mount is what found it (LNK2019, invisible to every gate).
+  rem    CgsReadOnlyObjectCache_PolygonSoupLeafNode.cpp -- the leaf-node cache instantiation
+  rem                                 (Construct @0x829170F8 / Release @0x829172D0) FillTriangleCache
+  rem                                 walks the query results through.
+  rem  ⭐⭐⭐ 2026-08-11 (THE EXTRACTOR wave). The "NOT MOUNTED" note that stood here -- two hard
+  rem  LNK2019s from CgsPolygonSoupTests.cpp for PolySoupCopyTriangleBufferIntoTriangle4 and
+  rem  Triangle4::AssertIsValid -- is RESOLVED on both counts and the TU is mounted below.
+  rem  AssertIsValid landed with CgsTriangle4.cpp last wave; Copy is bodied this wave.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Intersection\CgsLineTests.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamConsumer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsDataStreamCommandReader.cpp"
+  echo "%SRC%\GameShared\GameClasses\Containers\CgsReadOnlyObjectCache_PolygonSoupLeafNode.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap.cpp"
+  rem  Spatial-partition wave 2026-08-10: BuildSpacialPartition @0x82841740 (2,255) and the
+  rem  two types it carves, plus the layout gate MOUNTED with the code it guards.
+  rem  ⭐ 2026-08-10 (fill-worker wave 2): PURE MOUNT GAP again -- both bodied long ago, both
+  rem  never linked. FillTriangleCache needs Sphere::GetPosition @0x825B27F8 /
+  rem  Sphere::GetRadius @0x825BD1F8 and AxisAlignedBox::Set @0x823A6108 to turn the fill
+  rem  command's cache sphere into the box the query runs on. Found by the LINK, as always.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsSphere.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsAxisAlignedBox.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsAxisAlignedBox4.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap_Build.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupSpacialNode_embed_check.cpp"
+  rem  =============================================================================================
+  rem  ⭐⭐⭐ 2026-08-10 (fill-worker wave 2) -- THE TRIANGLE-CACHE FILL WORKER, front half.
+  rem  This is the FIRST EA::Jobs dispatch this PC port has ever performed (before it, `grep
+  rem  AddTree` outside SDKs/EATech/eajobs found ZERO call sites). RunFillTriangleCacheStream
+  rem  @0x82810D38 is no longer a gate; it wires a real batch, a real descriptor and a real job
+  rem  and runs the entry inline (FLAG PC-platform leaf -- there is no JobScheduler singleton on
+  rem  PC, CgsHardwareInitPC.cpp:40; same precedent as CgsLooseOctree::StartFrustumTestJobs).
+  rem    PolygonSoupTester.cpp     -- PolygonSoupTesterEntry @0x829157B8 (80)
+  rem    PolygonSoupTesterJob.cpp  -- Execute @0x82915930 (107) / ExecuteFillTriangleCacheStream
+  rem                                 @0x82915D88 (145) / FillTriangleCache @0x82915FD0 (219) /
+  rem                                 AllocateMemory @0x82916B98 (99) / RunBoxQuery @0x82916D28
+  rem                                 (46) / LoadPrimitive @0x82916AB8 (8)
+  rem    CgsPolygonSoupListSpatialMap_Query.cpp -- ⭐ RunJobQuery @0x82844680 (316). NOT the
+  rem                                 RunQuery @0x82843A80 every earlier costing named: the job
+  rem                                 side takes its ping/pong buffers as a parameter so the map
+  rem                                 stays const. X360 export HOLE; name + full signature
+  rem                                 recovered from the PS3 mangle @0xB63F20.
+  rem  ⭐⭐⭐ 2026-08-11 -- THE EXTRACTOR. The gate named on this line since the fill worker landed
+  rem  is GONE: ExtractTriangle4ListIntersectingSphere @0x82844C80 (602) +
+  rem  PolygonSoupPoly::LoadEdgeCosines @0x8283A120 (534) + TestSphereTriangle4SOA @0x8283FD50
+  rem  (144) + PolySoupCopyTriangleBufferIntoTriangle4 @0x82839690 (97) +
+  rem  UnpackPolygonSoupVertices @0x8283B480 (40) are all bodied, and GetPolygon/GetVertex
+  rem  (29+29, CgsPolygonSoup.cpp) + Add/FinishToTriangleBuffer (68+49, CgsPolygonSoupTests.cpp)
+  rem  were PURE MOUNT GAPS -- bodied long ago, never once on the link.
+  rem  ⭐ It was not "1,475 instructions of dense VMX": the extractor itself is a loop driver, and
+  rem  every one of the twelve vector constants those five functions load is ZERO in the image
+  rem  because they are built at runtime by C++ dynamic initialisers (0x82C6DA98..0x82C6DC10).
+  rem  Each was resolved through its writer, not guessed.
+  rem  =============================================================================================
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoup.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupPoly.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Intersection\CgsPolygonSoupTests.cpp"
+  echo "%SRC%\GameShared\Jobs\PolygonSoupTester\PolygonSoupTesterJob.cpp"
+  echo "%SRC%\GameShared\Jobs\PolygonSoupTester\PolygonSoupTester.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap_Query.cpp"
+  rem  ⭐⭐ ODR FORK #2 RETIRED. CgsTriangle4.cpp was reconstructed long ago (GetAOSTriangle
+  rem  @0x825B2808, AOSTriangle::IsValid @0x825BD208) and never mounted, which is the ONLY reason
+  rem  the tree believed Triangle4::AssertIsValid had no body. It does: X360 0x825BD808 (46), plus
+  rem  AOSTriangle::AssertIsValid @0x825BD648 (112), both landed this wave. With the TU mounted the
+  rem  `namespace Triangle4 { int AssertIsValid(void*); } = { return 0; }` fork in
+  rem  CgsTriangleList.h / CgsTriangleList_embed_check.cpp is deleted and CgsTriangleList.cpp
+  rem  validates for real for the first time.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsTriangle4.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsTriangleList.cpp"
+  rem  ...and the registration leg they unblock. BOTH of these were fully reconstructed
+  rem  already and had simply never been on the link (mount gap, not a reconstruction gap).
+  echo "%SRC%\GameShared\GameClasses\SceneManager\TriangleCollision\CgsTriangleCollisionManager.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\TriangleCollision\BaseEventQueue_InEventAddPolySoupList_GetEvent.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsModel.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsShaderConstantHashTable.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsShaderConstants.cpp"
