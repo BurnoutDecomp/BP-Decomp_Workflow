@@ -495,6 +495,12 @@ rem ---- build the cl response file ----
   rem  the two halves are lifetime-coupled through mpTractionLineStreamProducer. Mounted so the
   rem  LINK closure is enforced; /OPT:REF keeps the bytes out until they are called.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_TractionLineTests.cpp"
+  rem  ⭐⭐ 2026-08-11 (lifetime wave): the SceneManagerIO leaf TU mounts, and the LINK is what
+  rem  found it. AddRaceCarTractionLineTests calls TriangleCacheInterface::GetNumCachedTriangleBatches
+  rem  @0x82277880 -- declared since its own wave, bodied since its own wave, and never once linked,
+  rem  because its home TU had no mounted caller. Two functions, both already reconstructed
+  rem  (SceneQueryInterface::HasData @0x82204E48 is the other).
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModuleIO.cpp"
   rem  Its floor: the line-vs-triangle stream factory + the job dispatcher, plus the result-cursor
   rem  slice the harvest walks.
   rem  ⭐⭐⭐ 2026-08-11 (traction-line wave): RunLineWithTriangleListStream @0x82810E80 (89,
