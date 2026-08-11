@@ -167,6 +167,16 @@ rem ---- build the cl response file ----
   rem ---- stayed 0 and the whole MaxIterations chain asserted. Its file-mate            ----
   rem ---- _PrePhysics @0x827AAEC0 is still a gate and stays in WorldLinkStubs.          ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToPhysics.cpp"
+  rem ---- physics->output publish wave (2026-08-11): the RETURN direction of the same    ----
+  rem ---- handover. WorldModule::BridgePhysicsModuleToRaceCarModule_PostPhysics          ----
+  rem ---- @0x827AE9D0 is the ONLY thing in the image that copies the physics module's    ----
+  rem ---- output buffer into the race-car module's post-physics INPUT buffer, so while   ----
+  rem ---- it was a WorldLinkStubs gate the landed readback (ReadUpdatedActiveRaceCar-    ----
+  rem ---- DataFromPhysics) could never see a set mUsedRaceCars bit and every active car  ----
+  rem ---- fell through to the bring-up pose stand-in. Two of its six legs are live; the  ----
+  rem ---- other four are parked LOUDLY in the TU (opaque physics-output seats).          ----
+  rem ---- Its WorldLinkStubs gate is DELETED; leaving both = LNK2005.                    ----
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
   rem ---- its shared component-streamer base + the five concrete leaves. These ----
@@ -505,6 +515,18 @@ rem ---- build the cl response file ----
   rem  Despite the name neither reads a body back: it is the only place gravity enters a car
   rem  and the only place a car's pose advances.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ReadUpdatedBodies.cpp"
+  rem  ⭐⭐ 2026-08-11 (PHYSICS->OUTPUT PUBLISH WAVE): THE LEG THAT PUTS A SIMULATED CAR WHERE
+  rem  THE WORLD CAN SEE IT. VehicleManager::WriteOutVehicleStats @0x8263F460 (380, conductor
+  rem  gate DELETED) + VehicleManager::IsRaceCarHidden @0x825C2EA0 (104, trap stub DELETED --
+  rem  it was mis-recorded as an .ida-exports hole; pulled headless from the IDB). It copies
+  rem  mUsedRaceCars into the VehicleOutputInterface -- the single store the whole world-side
+  rem  readback is gated on -- and drives the per-car publish below.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_WriteOutVehicleStats.cpp"
+  rem  ...and the function that actually WRITES a RaceCarState. VehicleOutputInterface::
+  rem  UpdateRaceCarState @0x825EC808 (535) + the three inlined DWARF setters (SetEntityID /
+  rem  SetRaceCarHidden / SetWheelTransform). It was ABSENT FROM THE TREE ALTOGETHER -- not
+  rem  gated, not stubbed, not declared -- which is why the readback had nothing to read.
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleOutputInterface_UpdateRaceCarState.cpp"
   rem  ⭐⭐ 2026-08-10 (producer wave): THE LEG THAT REGISTERS A CAR WITH THE TRIANGLE CACHE.
   rem  VehicleManager::Prepare @0x8263C688 (75, WorldLinkStubs gate DELETED) + VehicleManager::
   rem  PrepareTriangleCache @0x82615BA0 (37). Slice TU; home BrnVehicleManager.cpp still unmounted.
