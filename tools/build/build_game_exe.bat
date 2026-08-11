@@ -122,7 +122,8 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToOutput.cpp"
   rem ---- world-drive wave (2026-07-27): the six sibling bridge TUs with REAL   ----
   rem ---- bodies (WorldBridgeEntityModulesToEntityModules / ...ToAI / ...ToCrash ---
-  rem ---- / WorldBridgeCrashToEntityModules / WorldBridgeInputToEntityModules /  ---
+  rem ---- / WorldBridgeCrashToEntityModules / WorldBridgeInputToEntityModules    ---
+  rem ---- [MOUNTED 2026-08-11, see the driving-input wave note below] /           ---
   rem ---- WorldBridgePhysicsToScene) are NOT mounted: each drags 1-23 unresolved  ---
   rem ---- module-IO accessors/setters that are declaration-only (cost rule), so   ---
   rem ---- their bridges stay boot-gated in WorldLinkStubs.cpp. Mount them with    ---
@@ -142,7 +143,24 @@ rem ---- build the cl response file ----
   rem ---- the physics module's per-frame INPUT FEED and is fully closed on its own,     ----
   rem ---- while its DWARF file-mate BridgeInputToEntityModules still is not. Fold back  ----
   rem ---- when WorldBridgeInputToEntityModules.cpp can be mounted whole.                ----
+  rem ---- (2026-08-11: it now IS mounted -- see the next block. The two are still split ----
+  rem ----  TUs; folding them back into one DWARF-home TU is a follow-up.)               ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeInputToPhysicsModule.cpp"
+  rem ---- driving-input wave (2026-08-11): the DWARF file-mate above is now MOUNTED WHOLE. ----
+  rem ---- WorldModule::BridgeInputToEntityModules @0x827ADF88 is the ONLY caller in the    ----
+  rem ---- image of RaceCarEntityModuleIO::InputBuffer_PreScene::SetPlayerVehicleControls,  ----
+  rem ---- i.e. the last hop between the wired keyboard/pad input and the player car; while ----
+  rem ---- it was a WorldLinkStubs gate the controls stopped at the world input buffer.     ----
+  rem ---- MEASURED closure (dumpbin over the linked obj set): the TU raised 21 unresolved  ----
+  rem ---- project externals; all 21 are bodied this wave (4 BrnWorldIO::UpdateInputBuffer  ----
+  rem ---- const getters, 15 RaceCarEntityModuleIO PreScene/PrePhysics setters -- 6 of them ----
+  rem ---- X360 header-inlines, now header-inline here too -- the prop replay-status setter ----
+  rem ---- in its new home TU below, and TriggerEntityModuleIO::InputBuffer_PreScene::      ----
+  rem ---- GetInputInterface, which was already committed in a TU nobody had mounted.       ----
+  rem ---- The WorldLinkStubs gate is retired (tombstoned there); leaving both = LNK2005.   ----
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeInputToEntityModules.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PreScene.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\BrnTriggerEntityModuleIO_Accessors.cpp"
   rem ---- root-cause wave (2026-08-10): the PRE-SCENE entity-modules -> physics bridge  ----
   rem ---- @0x827AADB8. It is the ONLY caller in the image of InputBuffer::              ----
   rem ---- SetSolverMaxIterations, so while it was a boot gate the solver iteration cap  ----
