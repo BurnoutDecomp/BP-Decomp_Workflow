@@ -273,6 +273,13 @@ rem ---- build the cl response file ----
   rem  only path by which TriangleCacheManager::mUsedCacheSlots can ever become non-zero.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\BaseEventQueue_InEventAddToCache_AddEvent.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityManager.cpp"
+  rem  ---- create-path wave 2026-08-11 ----
+  rem  CgsSceneManager::VolumeInstanceId::SetEntityIDOwner @0x822B0E00 /
+  rem  ::SetEntityIDEntityIndex @0x822B0E70. Bodied since their own wave, never linked -- no
+  rem  mounted caller existed. ActiveRaceCar::Attach now seeds mHandlingBodyVolumeId through
+  rem  them (the console step that was flagged "omitted"), which is what gives
+  rem  VehicleManager::ProcessCreateEvents its owner byte and its race-car slot index.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsVolumeInstanceId.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModule.cpp"
@@ -1041,6 +1048,17 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_RemovePhysicalPropEvent_AddEventAppend.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_RemovePhysicalPartEvent_AddEventAppend.cpp"
   rem ---- end pre-physics bridge block ---------------------------------------------------------
+  rem ---- create-path wave 2026-08-11: the FOUR event-queue instantiations
+  rem ---- VehicleManager::ProcessCreateEvents @0x82616770 reaches. NOTHING CALLS THEM YET -- the
+  rem ---- drain is still a named gate -- and they are mounted anyway, per the standing
+  rem ---- [[shadowing-redeclarations]] mitigation: /OPT:REF strips every byte, but the LINK
+  rem ---- closure over the create body's queue API is enforced NOW rather than discovered by the
+  rem ---- wave that writes it. GetEvent is the truncated export "BrnPhysics::Vehic" @0x825BB7F0
+  rem ---- (console element stride 0xA0 == sizeof(CreateRaceCarEvent)).
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BaseEventQueue_CreateRaceCarEvent_GetEvent.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BaseEventQueue_CreateVehicleResult_AppendAddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_AddDeformationModelEvent_AddEvent.cpp"
+  echo "%SRC%\GameShared\GameClasses\Physics\BaseEventQueue_InAddRigidBody.cpp"
   rem ---- reset-player-car wave (2026-08-01): the game-action-0 consumer chain.        ----
   rem ---- Each of these was already committed and NEVER LINKED BY ANYTHING.            ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO_PreSceneAccessors.cpp"
