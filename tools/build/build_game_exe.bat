@@ -1211,6 +1211,68 @@ rem ---- build the cl response file ----
   rem  the queue BridgeGameStateToDirector appends into the director every frame.
   echo "%SRC%\GameSource\GameState\BrnGameStateModule.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager.cpp"
+  rem ⭐ PREPARE2 SUB-OBJECT WAVE (2026-08-11) -- the two legs GameStateModule::Prepare2
+  rem  @0x8239ED10 left parked. The module now EMBEDS both sub-objects by value, exactly as the
+  rem  console does (X360 Construct @0x82380388 / ctor @0x827E44B8): the achievement manager at
+  rem  this+181680 and the street manager at this+284520.
+  rem
+  rem  ---- leg 1: the achievement manager ------------------------------------------------
+  rem  ProgressionManager::Prepare2's faithful console assert `lpAchievementManager`
+  rem  (BrnProgressionManager.cpp:265) fired every boot because GameStateModule::Prepare2 passed
+  rem  0 where the X360 passes r8 = this+181680. The concrete type is the X360 leaf, attested four
+  rem  ways in the asm (Prepare @0x8239E578 -> AchievementManagerX360::Prepare, Release
+  rem  @0x823756A8 -> ::Release, PreWorldUpdate @0x823A5328 -> ::Update, and the ctor stores that
+  rem  class's vtable off_820CE768 at +181680). PC reuses the X360 leaf -- the same precedent as
+  rem  CgsSaveLoadX360.cpp below and CgsNetwork::BuddyManagerX360 standing in as the platform
+  rem  buddy leaf; no build has an AchievementManagerPC.
+  rem  MEASURED (cl /c + dumpbin /SYMBOLS): this TU costs exactly ONE new symbol,
+  rem  CgsSystem::CgsXOverlapped::Construct (the embedded XOVERLAPPED its Prepare/Release build),
+  rem  hence CgsXOverlappedX360.cpp joining right after -- which in turn wanted ONE XDK import,
+  rem  XGetOverlappedExtendedError, now a PC leaf beside its twin XGetOverlappedResult in
+  rem  BrnBaselineLinkStubs.cpp. Net new unresolved after both: ZERO.
+  rem  ⛔ BrnGameStateAchievementManagerBase.cpp is deliberately NOT here: mounting it costs EIGHT
+  rem  unresolved externals that have no definition anywhere in the tree (ScoringSystem::
+  rem  GetPlayerScore / GetPlayerModeCrashes / GetPlayerModeTakedowns / GetNewlyWreckedCarCount /
+  rem  GetNumberOfTakedownsAgainst, ProgressionManager::GetCarChallengeWinCount /
+  rem  GetCollectedStuntElementCount / GetProfileTotalTakedowns), all pulled in by the base's
+  rem  gameplay-event hooks. ⚠️ AND "nothing calls them, /OPT:REF strips them" IS NOT A DEFENCE --
+  rem  VERIFIED this wave with a minimal repro: an unreferenced COMDAT that calls an undefined
+  rem  symbol still fails LNK2019 under /Gy + /OPT:REF (the linker resolves before it discards).
+  rem  Several rem blocks further up in this file assume otherwise; they are about CODE SIZE, not
+  rem  about unresolved externals. Mount the base TU when those eight land.
+  echo "%SRC%\GameSource\GameState\AchievementManager\X360\BrnGameStateAchievementManagerX360.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\X360\CgsXOverlappedX360.cpp"
+  rem  ---- leg 2: the street manager / STREETDATA.DAT loader -------------------------------
+  rem  Prepare2 case 2 is `StreetManager::Prepare2(this+284520, out, this+232384, this+42320)`
+  rem  @0x823509D8 == LoadStreetData then SetupParRivals. LoadStreetData @0x8234F630 was the ONE
+  rem  function of that family with no body on disk (the ledger had it `reviewed` -- the
+  rem  reviewed != implemented trap); it is reconstructed this wave into the sibling loads
+  rem  partfile, and it is the only writer of mpStreetData in the whole image.
+  rem  MEASURED: these three TUs add ZERO unresolved externals -- every callee
+  rem  (RequestInterface<3072>::LoadBundle/AcquireResource, EventReceiverQueue<3072,16>,
+  rem  BaseResourcePtr::CreateFromHandle, ID::HashString + its StrStream operator<<) is already in
+  rem  the link.
+  rem  ⛔ The REST of the StreetManager family stays out. BrnGameStateStreetManager.cpp
+  rem  (Prepare2/SetupParRivals) and BrnStreetManagerDebugComponent.cpp are the expensive ones:
+  rem  the debug component has a vtable, so mounting it hard-references its virtual
+  rem  Update/OnActivate/RenderHUD and ~15 still-unhomed StreetManager/ScoringSystem/
+  rem  ProgressionManager/OutputBuffer symbols. That is also why GameStateModule::Construct does
+  rem  not call StreetManager::Construct yet (its first statement constructs that component) --
+  rem  see the DELETE-WHEN block there.
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_01.cpp"
+  rem ---- (2026-08-11) the embedded StreetManagerDebugComponent's vtable is emitted by ----
+  rem ---- BrnGameModule.obj's implicit ctor chain; its real TUs stay UNMOUNTED (they   ----
+  rem ---- close over the road-rules cheat set: StreetManager score setters, ScoreList  ----
+  rem ---- tables, ProgressionManager trophy hooks -- 16 link-measured externals). The  ----
+  rem ---- two vtable slots are gated in BrnBaselineLinkStubs.cpp until that wave.      ----
+  rem  ...and the resource type STREETDATA.DAT's one resource carries (id 0xBC9CC502 ==
+  rem  HashString("StreetData"), type 0x10018 == 65560, measured on the shipped bundle). Newly
+  rem  REGISTERED in CgsResourceTypeRegistration.cpp: without a handler the pool stores a null
+  rem  mpResourceType, BundleLoader skips FixUp, and the acquire hands back a record whose table
+  rem  bases are still file offsets -- the same defect that made ProgressionData/PlayerCarColours
+  rem  look loaded but read as garbage.
+  echo "%SRC%\SharedClasses\StreetData\BrnStreetDataResourceType.cpp"
+  echo "%SRC%\SharedClasses\StreetData\BrnStreetData.cpp"
   rem ⭐ FINAL PRODUCER WAVE (2026-08-01) -- THE JUNKYARD CAR-SELECT FSM ITSELF.
   rem  The previous wave measured these two TUs at FOURTEEN unresolved externals (7 x
   rem  GameStateModule, 5 x ProgressionManager, 2 x CarSelectManager privates). All fourteen
