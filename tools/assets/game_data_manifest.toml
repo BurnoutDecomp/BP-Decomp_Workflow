@@ -578,10 +578,15 @@ action = "convert"
 tool   = "bundles/nonapt_transcode.py"
 argv   = ["{src}", "{out}"]
 verify = ["bnd2_platform=4"]
-why    = """Version-5 StreetData is schema-walked without changing its serialized u32
-offset representation: header, fixed 16/36/64/40-byte tables, junction Exit arrays, road
-SpanIndex arrays, floats, CgsIDs, bit arrays, and scores are endian-mapped. This matches the
-committed loader's raw serialized strides; widening the file offsets would not."""
+why    = """Version-5 StreetData is schema-walked and RELAID OUT to the native x64 image:
+header 36 -> 56 bytes, Junction 36 -> 48, Road 64 -> 72, with every serialized u32 offset
+slot widened to u64 (Street 16 and ChallengeParScoresEntry 40 are pointer-free and keep
+their strides). The blob is consumed in place -- it *is* the BrnStreetData::StreetData
+object, and StreetData::FixUp only adds the resource load base to those slots -- so it must
+carry the layout the host compiler gives that class. Keeping the console's compact 32-bit
+layout put miRoadCount at +0x20 where the x64 loader reads +0x30, which is street[0]: that
+is what fired "The number of roads in the design data doesn't match the code const" on boot
+(2026-08-11). BrnStreetData.h::_AssertLayout() pins the C++ side of this wire contract."""
 
 [[rule]]
 id     = "skip-disabled-profile-upgrade"
