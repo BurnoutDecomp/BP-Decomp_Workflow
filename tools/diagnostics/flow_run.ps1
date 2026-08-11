@@ -140,15 +140,34 @@ if (-not (Wait-ForOwnLog)) {
 Write-Host "[flow] log confirmed fresh (mtime >= launch) -- previous-run marks are impossible."
 
 # --- flow-state cues.  VERIFIED PRESENT in real logs; see the banner. --------------------
+#
+# ⛔⛔ 2026-08-11 -- 'exitst' REMOVED, and the reason matters more than the cue did.
+# It matched 'CarSelectManager::UpdateExitState', and the game NEVER logs that as a progress
+# line -- the only occurrence in any log was as a frame INSIDE the callstack printed by the
+# [ASSERT] lpProgressionData != NULL crash dump.  So `phase=DRIVING` was being derived from a
+# stack trace: the flow only ever "reached DRIVING" *because* it was asserting.  Converting
+# PROGRESSION.DAT to platform 4 retired that assert (3 asserts -> 0) and the mark stopped
+# firing, which reads as a regression and is the exact opposite.
+# The junkyard-exit signal is 'strfin', which fired at the IDENTICAL timestamp (81.8s) in the
+# last pre-conversion run -- so promoting on it reproduces the old behaviour without depending
+# on a crash.  See Read-CueText below for the general guard.
 $cues = @(
   @('flyby',    '\[Intro\] state 9 -> 3'),
   @('carsel',   'Entering Car Select'),
   @('livery',   'CSL : Entering Car Select'),
   @('accept',   'CSM : SendStateEvent\( "ACCEPT" \)'),
   @('exitjy',   'action 4 -> ExitJunkyard'),
-  @('strfin',   'signalling StreamingFinished'),
-  @('exitst',   'CarSelectManager::UpdateExitState')
+  @('strfin',   'signalling StreamingFinished')
 )
+
+# ⭐ Cue text with ASSERT CALLSTACK FRAMES STRIPPED.  A callstack frame is 4-space-indented and
+# is a single bare token ("    BrnGameState::CarSelectManager::UpdateExitState", "    0xB16D2").
+# Matching cues against those makes a crash look like progress -- which is exactly what happened
+# above.  Any cue, not just the removed one, is vulnerable; strip once, centrally.
+function Strip-CallstackFrames([string]$t) {
+  if ($null -eq $t) { return $t }
+  return ($t -split "`n" | Where-Object { $_ -notmatch '^\s{4}\S+\s*$' }) -join "`n"
+}
 
 $lastAccept = Get-Date
 $seenAsserts = 0
@@ -171,8 +190,9 @@ while ($true) {
       Write-Host ("[flow] dismissed assert #{0} at {1:f1}s" -f $n, $elapsed)
     }
 
+    $cueTxt = Strip-CallstackFrames $txt
     foreach ($m in $cues) {
-      if (-not $marks.ContainsKey($m[0]) -and $txt -match $m[1]) {
+      if (-not $marks.ContainsKey($m[0]) -and $cueTxt -match $m[1]) {
         $marks[$m[0]] = $elapsed
         $markFrame[$m[0]] = Newest-Frame
         Write-Host ("[flow] {0,-8} at {1,6:f1}s  frame={2}" -f $m[0], $elapsed, $markFrame[$m[0]])
@@ -181,7 +201,7 @@ while ($true) {
 
     if ($phase -eq 'BOOT'      -and $marks.ContainsKey('flyby'))  { $phase = 'FLYBY' }
     if ($phase -eq 'FLYBY'     -and $marks.ContainsKey('carsel')) { $phase = 'CARSELECT'; $acceptGap = 3.0; $lastAccept = Get-Date }
-    if ($phase -eq 'CARSELECT' -and $marks.ContainsKey('exitst')) { $phase = 'DRIVING' }
+    if ($phase -eq 'CARSELECT' -and $marks.ContainsKey('strfin')) { $phase = 'DRIVING' }
   }
 
   $pump = ($phase -eq 'BOOT') -or (($phase -eq 'CARSELECT') -and (-not $HoldCarSelect))
@@ -203,7 +223,7 @@ Copy-Item $log (Join-Path $OutDir "BrnGame.log") -ErrorAction SilentlyContinue
 $summary = @()
 $summary += ("RUNSTART {0}" -f $t0.ToString('o'))
 $summary += ("FRAMEDIR {0}" -f $(if ($framesOut) { $framesOut } else { "-" }))
-foreach ($k in @('flyby','carsel','livery','accept','exitjy','strfin','exitst')) {
+foreach ($k in @('flyby','carsel','livery','accept','exitjy','strfin')) {
   if ($marks.ContainsKey($k)) { $summary += ("{0,-8} {1,6:f1}s  frame={2}" -f $k, $marks[$k], $markFrame[$k]) }
   else                        { $summary += ("{0,-8} (never)" -f $k) }
 }
