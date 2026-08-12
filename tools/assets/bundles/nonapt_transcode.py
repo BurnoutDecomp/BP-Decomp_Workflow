@@ -33,6 +33,7 @@ sys.path.insert(0, FONTS)
 
 import engine_transcode
 import tex_transcode
+import world_type_transcode
 import convert_x360 as font_transcode
 
 
@@ -480,6 +481,29 @@ def _street_data(data, label):
                          declared_size, out_size))
 
 
+def _prop_physics(data, label):
+    """Relayout the serialised PropPhysicsDataHeader to the native x64 image.
+
+    PROPPHYSICS.BUNDLE is the game's single PropPhysics resource (type 0x1000F): the prop
+    TYPE table every prop spawn resolves through.  Like STREETDATA.DAT it is consumed IN
+    PLACE -- the blob *is* the BrnPhysics::Props::PropPhysicsDataHeader object, and
+    PropPhysicsDataHeader::FixUp only turns each serialised offset slot into a host pointer
+    by adding the resource load base -- so it must carry the layout the host compiler gives
+    that class.  On x64 the three fixed pointer tables widen 4 -> 8 (header 0x2C94 ->
+    0x5818, so mapPropPartTypes moves 0x7E0 -> 0xFB0 and mapVolumeTypes 0xC90 -> 0x1810),
+    PropPartTypeData grows 48 -> 64, and PropTypeData keeps its 112-byte stride (widening
+    its two pointers exactly consumes the console record's 15-byte tail pad).
+
+    The transcoder itself lives beside the other Prop* porters in world_type_transcode.py;
+    it runs its own narrow_propphysics() round-trip proof and a PC-consumer LE re-walk.
+    """
+    ported, _ = world_type_transcode.transcode_propphysics(data, None)
+    num_types, num_vols, num_parts = struct.unpack_from("<3I", ported, 0)
+    return ported, ("%d prop types, %d part types, %d collision volumes; "
+                    "relaid out to the native x64 image (%#x -> %#x bytes)" %
+                    (num_types, num_parts, num_vols, len(data), len(ported)))
+
+
 def _rewrite_font_imports(path, old_page_array, new_page_array, page_count):
     if page_count == 0:
         return 0
@@ -574,6 +598,11 @@ def convert(in_bundle, out_bundle, verbose=True):
             elif folder == "StreetData":
                 raw = open(path, "rb").read()
                 ported, info = _street_data(raw, name)
+                with open(path, "wb") as fh:
+                    fh.write(ported)
+            elif folder == "PropPhysics":
+                raw = open(path, "rb").read()
+                ported, info = _prop_physics(raw, name)
                 with open(path, "wb") as fh:
                     fh.write(ported)
             elif folder == "Nicotine":

@@ -709,13 +709,27 @@ PROP_CELL_STRIDE = 12            # 6 u16 fields: does NOT widen
 
 
 def _flip_prop_instance(out, d, src, dst):
+    # Trailer widths are DWARF ground truth (BrnPhysicsPropInstanceData.h:160-170,
+    # homed in b5-decomp as BrnPhysicsPropInstanceData.h) and agree with LoadProp
+    # @0x822F2EF0's byte reads into PropEntityRotationParams:
+    #   +0x40 u32 muTypeIdAndFlags   +0x44 u32 muInstanceID
+    #   +0x48 u16 muAlternativeType  +0x4A i8 mn8RotSpeed
+    #   +0x4B u8  mn8MaxAngle        +0x4C u8 mn8MinAngle   +0x4D u8[3] padding
     _u32_flip_range(out, d, src, src + 64, dst - src)          # 4x16 matrix
-    out[dst + 64:dst + 68] = d[src + 64:src + 68][::-1]        # u32 typeFlags
-    out[dst + 68:dst + 72] = d[src + 68:src + 72][::-1]        # u32 id
-    out[dst + 72:dst + 74] = d[src + 72:src + 74][::-1]        # u16
-    out[dst + 74] = d[src + 74]                                # u8 anim bits
-    out[dst + 75] = d[src + 75]                                # u8
-    out[dst + 76:dst + 80] = d[src + 76:src + 80][::-1]        # u32
+    out[dst + 64:dst + 68] = d[src + 64:src + 68][::-1]        # u32 muTypeIdAndFlags
+    out[dst + 68:dst + 72] = d[src + 68:src + 72][::-1]        # u32 muInstanceID
+    out[dst + 72:dst + 74] = d[src + 72:src + 74][::-1]        # u16 muAlternativeType
+    out[dst + 74] = d[src + 74]                                # i8  mn8RotSpeed (anim bits)
+    out[dst + 75] = d[src + 75]                                # u8  mn8MaxAngle
+    # 0x4C..0x4F is NOT a u32.  It was flipped as one until 2026-08-12, which moved
+    # mn8MinAngle to 0x4F and read a padding byte as the min angle.  Byte-granular,
+    # so the flip stays involutive and both round-trip proofs still hold.  MEASURED
+    # over all 396 shipped TRK_UNIT*_GR.BNDL (24,047 instances): mn8MinAngle,
+    # mn8MaxAngle and the padding are zero in every retail record, so the old code
+    # reversed four zero bytes and the emitted data was never actually wrong -- the
+    # bug was latent, not live.  verify_propinstancedata_le now pins the padding.
+    out[dst + 76] = d[src + 76]                                # u8  mn8MinAngle
+    out[dst + 77:dst + 80] = d[src + 77:src + 80]              # u8[3] mau8Padding
 
 
 def _parse_propzonedata_be(d):
@@ -839,6 +853,9 @@ def verify_propinstancedata_le(data):
             'matrix W lane'    # rows are {x,y,z,pad}: translation w == 1.0
         type_id = le32(data, rec + 64) & 0x3FFFFFF
         assert type_id < 0x10000, 'prop type id'
+        # mau8Padding @0x4D..0x4F must stay zero -- this is what a u32 flip over the
+        # 0x4C..0x4F byte fields would break (it would park mn8MinAngle at 0x4F).
+        assert data[rec + 77:rec + 80] == b'\0\0\0', 'mau8Padding must be zero'
 
 
 # ---- StaticSoundMap -------------------------------------------------------
@@ -949,6 +966,322 @@ def verify_staticsoundmap_le(data):
             'grid does not tile the X extent'
 
 
+# ---- PropPhysics (serialised PropPhysicsDataHeader) -----------------------
+# PROPS/PROPPHYSICS.BUNDLE, resource 0xD75C5932, type 0x1000F.  ONE resource in
+# the whole game: the prop TYPE table every prop spawn resolves through.
+#
+# Member set + declaration order are DWARF ground truth (DecFIGS
+# SharedClasses/Physics/Props/BrnPropPhysicsDataHeader.h,
+# BrnPhysicsPropTypeData.h, BrnPhysicsPropPartTypeData.h); the console offsets
+# below are pinned by PropPhysicsDataHeader::FixUp @0x8267F570, whose three
+# array bases are +0x10 / +0x7E0 / +0xC90 (which is what fixes the array bounds
+# at 500 / 300 / 2048) and whose inner relocation slots are PropTypeData +0x3C,
+# +0x40 and PropPartTypeData +0x24.  Verified against the shipped blob: every
+# object tiles [arena, EOF) at exactly these strides.
+PPH_MAX_PROP_TYPES = 500
+PPH_MAX_PART_TYPES = 300
+PPH_MAX_VOLUMES = 2048
+#
+# The x64 column is pinned on the C++ side by
+# BrnPropPhysicsDataHeader.h::PropPhysicsDataHeader::_AssertLayout(): 0x10 + 500*8
+# = 0xFB0, + 300*8 = 0x1910, + 2048*8 = 0x5910 (muTimeStamp), sizeof 0x5918.
+PPH_X360_TYPES_AT, PPH_X64_TYPES_AT = 0x10, 0x10
+PPH_X360_PARTS_AT, PPH_X64_PARTS_AT = 0x7E0, 0xFB0
+PPH_X360_VOLS_AT, PPH_X64_VOLS_AT = 0xC90, 0x1910
+# ...muTimeStamp is the last member, immediately after mapVolumeTypes.
+PPH_X360_STAMP_AT, PPH_X64_STAMP_AT = 0x2C94 - 4, 0x5918 - 8
+PPH_X360_HEADER, PPH_X64_HEADER = 0x2C94, 0x5918   # sizeof(PropPhysicsDataHeader)
+PPH_ALIGN = 16                                     # the resource's bundle alignment
+# PropTypeData: three alignas(16) Vector3, a u64 CgsResource::ID, then the two
+# relocated pointers.  Widening mfMass's tail padding + the two pointers exactly
+# consumes the console record's 15-byte tail pad, so the stride is unchanged.
+PROP_TYPE_STRIDE = 112
+PT_IN_VOLS, PT_OUT_VOLS = 0x3C, 0x40      # maCollisionVolumes  (FixUp slot 0)
+PT_IN_PARTS, PT_OUT_PARTS = 0x40, 0x48    # maParts             (FixUp slot 1)
+PT_IN_TAIL, PT_OUT_TAIL = 0x44, 0x50      # mfSphereRadius .. mu8ExtraTypeInfo
+PT_TAIL_F32 = 5                           # sphereRadius, maxJointAngleCos,
+#                                           leanThreshold, moveThreshold,
+#                                           smashThreshold ... then muSceneUriId
+PT_TAIL_U8 = 5                            # maxState, numParts, numVolumes,
+#                                           jointType, extraTypeInfo
+# PropPartTypeData: two alignas(16) Vector3, then mfMass + one relocated
+# pointer.  48 -> 64 (the pointer widens and the record re-pads to 16).
+PROP_PART_IN, PROP_PART_OUT = 48, 64
+PP_IN_VOLS, PP_OUT_VOLS = 0x24, 0x28      # maCollisionVolumes  (FixUp slot)
+# rw::collision::Volume: an opaque fixed 96-byte serialised record on BOTH
+# platforms (b5-decomp models it as `u8 maPayload[96]` in volume.cpp,
+# volume_debug_access.h and FixableVolume.h).  Every field is u32-granular --
+# 4x4 transform lanes, the type slot, volumeData, radius, groupID, surfaceID,
+# flags -- so it is a straight dword flip with no widening.  See the report note
+# on FixableVolume::FixUp's 8-byte store at +0x40 if that ever changes.
+PPH_VOLUME_STRIDE = 96
+PPH_VOLUME_TYPE_AT = 0x40                 # on disk: the VOLUMETYPE enum (1..5)
+PPH_VOLUME_FLAGS_AT = 0x5C                # rwcollision VOLUMEFLAG_ISENABLED
+
+
+def _pph_align(value):
+    return (value + PPH_ALIGN - 1) & ~(PPH_ALIGN - 1)
+
+
+def _parse_propphysics_be(d):
+    """Walk the X360 blob and prove it tiles exactly, returning the arena as an
+    ordered ['T'|'P'|'V', console_offset] list plus the header scalars."""
+    if len(d) < PPH_X360_HEADER:
+        raise PlanError('PropPhysics blob is only %d bytes' % len(d))
+    num_types, num_vols, num_parts = struct.unpack_from('>3I', d, 0)
+    # muSizeInBytes is LITTLE-endian on the BE disk (ARTIST bake-tool anomaly,
+    # the PropGraphicsList precedent).  Requiring it to equal the blob length is
+    # what PROVES the LE reading rather than assuming it.
+    size_le = struct.unpack_from('<I', d, 0x0C)[0]
+    if size_le != len(d):
+        size_be = struct.unpack_from('>I', d, 0x0C)[0]
+        raise PlanError('muSizeInBytes LE %#x != blob %#x (BE reads %#x)'
+                        % (size_le, len(d), size_be))
+    stamp = be32(d, PPH_X360_STAMP_AT)
+    if not (num_types <= PPH_MAX_PROP_TYPES and num_parts <= PPH_MAX_PART_TYPES
+            and num_vols <= PPH_MAX_VOLUMES):
+        raise PlanError('counts %d/%d/%d exceed the fixed array bounds'
+                        % (num_types, num_vols, num_parts))
+    tables = []
+    for base, used, cap in ((PPH_X360_TYPES_AT, num_types, PPH_MAX_PROP_TYPES),
+                            (PPH_X360_PARTS_AT, num_parts, PPH_MAX_PART_TYPES),
+                            (PPH_X360_VOLS_AT, num_vols, PPH_MAX_VOLUMES)):
+        slots = list(struct.unpack_from('>%dI' % cap, d, base))
+        if any(slots[used:]):
+            raise PlanError('unused slots in the table at %#x are not null' % base)
+        tables.append(slots[:used])
+    types, parts, vols = tables
+    arena = _pph_align(PPH_X360_HEADER)
+    if any(b != 0 for b in d[PPH_X360_HEADER:arena]):
+        raise PlanError('header alignment pad is not zero')
+    # every object must be inside the arena, distinct, and tile it exactly
+    objects = []
+    for kind, offs, stride in (('T', types, PROP_TYPE_STRIDE),
+                               ('P', parts, PROP_PART_IN),
+                               ('V', vols, PPH_VOLUME_STRIDE)):
+        for off in offs:
+            if not (arena <= off and off + stride <= len(d)) or off % PPH_ALIGN:
+                raise PlanError('%s object at %#x is out of the arena' % (kind, off))
+            objects.append((off, kind, stride))
+    objects.sort()
+    if len(set(o for o, _, _ in objects)) != len(objects):
+        raise PlanError('two table slots point at the same object')
+    cursor = arena
+    for off, kind, stride in objects:
+        if off != cursor:
+            raise PlanError('arena gap: expected %s at %#x, found it at %#x'
+                            % (kind, cursor, off))
+        cursor += stride
+    if cursor != len(d):
+        raise PlanError('arena ends at %#x, blob is %#x' % (cursor, len(d)))
+    # cross-validate the intra-record pointers against the object tables
+    vol_set, part_set = set(vols), set(parts)
+    for i, off in enumerate(types):
+        cv, mp = struct.unpack_from('>2I', d, off + PT_IN_VOLS)
+        n_parts, n_vols = d[off + 0x5D], d[off + 0x5E]
+        _pph_check_run(vol_set, cv, n_vols, PPH_VOLUME_STRIDE,
+                       'propType %d volumes' % i)
+        if n_parts:
+            _pph_check_run(part_set, mp, n_parts, PROP_PART_IN,
+                           'propType %d parts' % i)
+        elif mp in part_set:
+            raise PlanError('propType %d has 0 parts but a live maParts' % i)
+        if any(d[off + 0x61:off + PROP_TYPE_STRIDE]):
+            raise PlanError('propType %d tail pad is not zero' % i)
+    if sum(d[off + 0x5D] for off in types) != num_parts:
+        raise PlanError('sum(muNumberOfParts) != muNumberOfPartTypes')
+    for i, off in enumerate(parts):
+        cv = be32(d, off + PP_IN_VOLS)
+        _pph_check_run(vol_set, cv, d[off + 0x2C], PPH_VOLUME_STRIDE,
+                       'partType %d volumes' % i)
+        if any(d[off + 0x2D:off + PROP_PART_IN]):
+            raise PlanError('partType %d tail pad is not zero' % i)
+    for i, off in enumerate(vols):
+        vtype = be32(d, off + PPH_VOLUME_TYPE_AT)
+        if not 1 <= vtype <= 5:
+            raise PlanError('volume %d type enum %d is outside FixableVolume\'s '
+                            'supported 1..5' % (i, vtype))
+    return num_types, num_vols, num_parts, stamp, types, parts, vols, objects
+
+
+def _pph_check_run(known, base, count, stride, what):
+    """The `count` records starting at `base` must all be table objects (the
+    console consumers index a run off a single base pointer)."""
+    if not count:
+        return
+    for k in range(count):
+        if base + stride * k not in known:
+            raise PlanError('%s: run of %d from %#x leaves the table at %d'
+                            % (what, count, base, k))
+
+
+def _pph_plan(objects):
+    """old console offset -> (kind, new x64 offset), preserving arena ORDER."""
+    out_strides = {'T': PROP_TYPE_STRIDE, 'P': PROP_PART_OUT,
+                   'V': PPH_VOLUME_STRIDE}
+    cursor = _pph_align(PPH_X64_HEADER)
+    plan = {}
+    for off, kind, _ in objects:
+        plan[off] = (kind, cursor)
+        cursor += out_strides[kind]
+    return plan, cursor
+
+
+def _pph_flip_volume(out, d, src, dst):
+    """The 96-byte rwcollision record is entirely u32-granular."""
+    _u32_flip_range(out, d, src, src + PPH_VOLUME_STRIDE, dst - src)
+
+
+def transcode_propphysics(header_bytes, imports_yaml_text=None):
+    d = header_bytes
+    (num_types, num_vols, num_parts, stamp,
+     types, parts, vols, objects) = _parse_propphysics_be(d)
+    plan, new_total = _pph_plan(objects)
+    out = bytearray(new_total)
+
+    struct.pack_into('<4I', out, 0, num_types, num_vols, num_parts, new_total)
+    struct.pack_into('<I', out, PPH_X64_STAMP_AT, stamp)
+    for base, offs in ((PPH_X64_TYPES_AT, types), (PPH_X64_PARTS_AT, parts),
+                       (PPH_X64_VOLS_AT, vols)):
+        for i, off in enumerate(offs):
+            struct.pack_into('<Q', out, base + 8 * i, plan[off][1])
+
+    for off in types:
+        dst = plan[off][1]
+        _u32_flip_range(out, d, off, off + 0x30, dst - off)   # 3x Vector3 lanes
+        struct.pack_into('<Q', out, dst + 0x30,
+                         struct.unpack_from('>Q', d, off + 0x30)[0])  # ID (u64)
+        out[dst + 0x38:dst + 0x3C] = d[off + 0x38:off + 0x3C][::-1]   # mfMass
+        # maCollisionVolumes / maParts.  A prop type with muNumberOfParts == 0
+        # carries the bake tool's uninitialised sentinel in maParts instead of a
+        # table offset; FixUp rebases it unconditionally and nothing ever
+        # dereferences it, so it is widened verbatim (zero-extended).
+        cv, mp = struct.unpack_from('>2I', d, off + PT_IN_VOLS)
+        struct.pack_into('<Q', out, dst + PT_OUT_VOLS, plan[cv][1])
+        struct.pack_into('<Q', out, dst + PT_OUT_PARTS,
+                         plan[mp][1] if mp in plan else mp)
+        _u32_flip_range(out, d, off + PT_IN_TAIL,                     # 5 f32 +
+                        off + PT_IN_TAIL + 4 * (PT_TAIL_F32 + 1),     # muSceneUriId
+                        (dst - off) + (PT_OUT_TAIL - PT_IN_TAIL))
+        out[dst + PT_OUT_TAIL + 4 * (PT_TAIL_F32 + 1):
+            dst + PT_OUT_TAIL + 4 * (PT_TAIL_F32 + 1) + PT_TAIL_U8] = \
+            d[off + 0x5C:off + 0x5C + PT_TAIL_U8]                     # 5 u8 fields
+
+    for off in parts:
+        dst = plan[off][1]
+        _u32_flip_range(out, d, off, off + 0x24, dst - off)   # 2x Vector3 + mfMass
+        struct.pack_into('<Q', out, dst + PP_OUT_VOLS,
+                         plan[be32(d, off + PP_IN_VOLS)][1])
+        out[dst + 0x30:dst + 0x34] = d[off + 0x28:off + 0x2C][::-1]   # mfSphereRadius
+        out[dst + 0x34] = d[off + 0x2C]                               # muNumberOfVolumes
+
+    for off in vols:
+        _pph_flip_volume(out, d, off, plan[off][1])
+
+    if narrow_propphysics(bytes(out)) != d:
+        raise PlanError('PropPhysics round-trip mismatch')
+    verify_propphysics_le(bytes(out))
+    return bytes(out), imports_yaml_text
+
+
+def narrow_propphysics(x64_bytes):
+    """Inverse of transcode_propphysics (the round-trip proof).  The arena order
+    is preserved by the widening, so the console offsets are recomputed by
+    replaying the same walk at the console strides."""
+    d = x64_bytes
+    num_types, num_vols, num_parts = struct.unpack_from('<3I', d, 0)
+    stamp = struct.unpack_from('<I', d, PPH_X64_STAMP_AT)[0]
+    tables = []
+    for base, used in ((PPH_X64_TYPES_AT, num_types),
+                       (PPH_X64_PARTS_AT, num_parts),
+                       (PPH_X64_VOLS_AT, num_vols)):
+        tables.append(list(struct.unpack_from('<%dQ' % used, d, base)))
+    types, parts, vols = tables
+    kinds = {}
+    for kind, offs in (('T', types), ('P', parts), ('V', vols)):
+        for off in offs:
+            kinds[off] = kind
+    in_strides = {'T': PROP_TYPE_STRIDE, 'P': PROP_PART_IN,
+                  'V': PPH_VOLUME_STRIDE}
+    back, cursor = {}, _pph_align(PPH_X360_HEADER)
+    for off in sorted(kinds):
+        back[off] = cursor
+        cursor += in_strides[kinds[off]]
+    out = bytearray(cursor)
+    struct.pack_into('>3I', out, 0, num_types, num_vols, num_parts)
+    struct.pack_into('<I', out, 0x0C, cursor)          # LE-baked, reproduced
+    struct.pack_into('>I', out, PPH_X360_STAMP_AT, stamp)
+    for base, offs in ((PPH_X360_TYPES_AT, types), (PPH_X360_PARTS_AT, parts),
+                       (PPH_X360_VOLS_AT, vols)):
+        for i, off in enumerate(offs):
+            struct.pack_into('>I', out, base + 4 * i, back[off])
+    for off in types:
+        dst = back[off]
+        _u32_flip_range(out, d, off, off + 0x30, dst - off)
+        struct.pack_into('>Q', out, dst + 0x30,
+                         struct.unpack_from('<Q', d, off + 0x30)[0])
+        out[dst + 0x38:dst + 0x3C] = d[off + 0x38:off + 0x3C][::-1]
+        cv, mp = struct.unpack_from('<2Q', d, off + PT_OUT_VOLS)
+        struct.pack_into('>I', out, dst + PT_IN_VOLS, back[cv])
+        struct.pack_into('>I', out, dst + PT_IN_PARTS,
+                         back[mp] if mp in back else mp)
+        _u32_flip_range(out, d, off + PT_OUT_TAIL,
+                        off + PT_OUT_TAIL + 4 * (PT_TAIL_F32 + 1),
+                        (dst - off) + (PT_IN_TAIL - PT_OUT_TAIL))
+        out[dst + 0x5C:dst + 0x5C + PT_TAIL_U8] = \
+            d[off + PT_OUT_TAIL + 4 * (PT_TAIL_F32 + 1):
+              off + PT_OUT_TAIL + 4 * (PT_TAIL_F32 + 1) + PT_TAIL_U8]
+    for off in parts:
+        dst = back[off]
+        _u32_flip_range(out, d, off, off + 0x24, dst - off)
+        struct.pack_into('>I', out, dst + PP_IN_VOLS,
+                         back[struct.unpack_from('<Q', d, off + PP_OUT_VOLS)[0]])
+        out[dst + 0x28:dst + 0x2C] = d[off + 0x30:off + 0x34][::-1]
+        out[dst + 0x2C] = d[off + 0x34]
+    for off in vols:
+        _pph_flip_volume(out, d, off, back[off])
+    return bytes(out)
+
+
+def verify_propphysics_le(data):
+    """Re-walk the widened blob with the committed PC consumer logic:
+    PropPhysicsDataHeader::FixUp's three array walks + its inner relocation
+    slots at the HOST offsets, GetType/GetPartType's bounds asserts, and
+    FixableVolume::FixUp's 1..5 type-enum assert."""
+    num_types, num_vols, num_parts, size = struct.unpack_from('<4I', data, 0)
+    assert size == len(data), 'muSizeInBytes'
+    assert num_types <= PPH_MAX_PROP_TYPES, 'GetType bound (KU_MAX_PROP_TYPES)'
+    assert num_parts <= PPH_MAX_PART_TYPES, 'mapPropPartTypes bound'
+    assert num_vols <= PPH_MAX_VOLUMES, 'KU_MAX_PROP_PHYSICS_VOLUMES bound'
+    arena = _pph_align(PPH_X64_HEADER)
+    types = list(struct.unpack_from('<%dQ' % num_types, data, PPH_X64_TYPES_AT))
+    parts = list(struct.unpack_from('<%dQ' % num_parts, data, PPH_X64_PARTS_AT))
+    vols = list(struct.unpack_from('<%dQ' % num_vols, data, PPH_X64_VOLS_AT))
+    part_set, vol_set = set(parts), set(vols)
+    for off in types + parts + vols:
+        assert arena <= off < len(data) and off % PPH_ALIGN == 0, 'object oob'
+    for i, off in enumerate(types):
+        cv, mp = struct.unpack_from('<2Q', data, off + PT_OUT_VOLS)
+        n_vols = data[off + 0x6A]
+        n_parts = data[off + 0x69]
+        for k in range(n_vols):
+            assert cv + PPH_VOLUME_STRIDE * k in vol_set, 'type %d volume run' % i
+        for k in range(n_parts):
+            assert mp + PROP_PART_OUT * k in part_set, 'type %d part run' % i
+        assert struct.unpack_from('<f', data, off + 0x50)[0] >= 0.0, 'sphere radius'
+        assert -1.0009 <= struct.unpack_from('<f', data, off + 0x54)[0] <= 1.0009, \
+            'mfMaxJointAngleCos is not a cosine'
+    for i, off in enumerate(parts):
+        cv = struct.unpack_from('<Q', data, off + PP_OUT_VOLS)[0]
+        for k in range(data[off + 0x34]):
+            assert cv + PPH_VOLUME_STRIDE * k in vol_set, 'part %d volume run' % i
+    for i, off in enumerate(vols):
+        vtype = struct.unpack_from('<I', data, off + PPH_VOLUME_TYPE_AT)[0]
+        assert 1 <= vtype <= 5, 'volume %d FixableVolume type enum' % i
+        assert struct.unpack_from('<I', data, off + PPH_VOLUME_FLAGS_AT)[0] == 1, \
+            'volume %d VOLUMEFLAG_ISENABLED' % i
+
+
 # --------------------------------------------------------------------------
 # post-flip consumer-logic verification (LE re-walk)
 # --------------------------------------------------------------------------
@@ -1030,6 +1363,7 @@ WIDEN_TYPES = {
     'MaterialState': transcode_materialstate,
     'PropGraphicsList': transcode_propgraphicslist,
     'PropInstanceData': transcode_propinstancedata,
+    'PropPhysics': transcode_propphysics,
     'StaticSoundMap': transcode_staticsoundmap,
 }
 MARKER = '.le_transcoded'
