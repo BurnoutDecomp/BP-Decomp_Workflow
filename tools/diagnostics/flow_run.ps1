@@ -34,11 +34,25 @@
 #   and never release it, so the flow parks at car select for ever.  The accept pump here
 #   RESUMES once car select is up (that is the whole point of the FLYBY -> CARSELECT phase).
 #
+# ⭐ IT CAN DRIVE (2026-08-12).  -Drive holds the throttle and -Steer holds a lock once the flow
+#   reaches DRIVING, through the game's ORDINARY input chain: the input leaf's harness event
+#   channel fills maActionInfo[0] (accelerate) / [1] (brake) / [2] (handbrake) and mfStickLX
+#   (steer), which is where the right trigger / left trigger / X / left stick land, and
+#   BridgeControllerToWorld reads them into PlayerVehicleControls exactly as it does for a pad.
+#   Nothing here writes a velocity, a force, or a physics field.
+#   ⚠️ THE DRIVING EVENTS ARE MANUAL-RESET, the four menu events AUTO-RESET, and the difference
+#   is the whole point: an auto-reset event is a TAP (one input update observes it), a
+#   manual-reset event is a HOLD (every update between Set() and Reset() observes it).  A pedal
+#   you can only tap for one frame cannot drive a car.  The game side does not know or care --
+#   it is one zero-timeout wait for both.
+#
 # Usage:
 #   flow_run.ps1 -Frames -Gates                     # boot, dump frames, run BOTH gates
 #   flow_run.ps1 -Frames -HoldCarSelect             # park at car select for a clean capture
 #   flow_run.ps1                                    # plain boot, marks only, no frames
 #   flow_run.ps1 -Frames -Gates -WriteGoldens       # RE-BANK both goldens (look first!)
+#   flow_run.ps1 -Frames -Drive                     # ... then hold the throttle, dead straight
+#   flow_run.ps1 -Frames -Drive -Steer right        # ... and hold full right lock
 #
 # Exit code 0 = the run completed and any requested gates passed; 1 = something failed.
 param(
@@ -48,6 +62,11 @@ param(
   [switch]$Gates,                # run frame_gate.ps1 + carselect_frame_gate.ps1 at the end
   [switch]$WriteGoldens,         # re-bank both goldens instead of checking them
   [switch]$HoldCarSelect,        # stay at car select instead of accepting through it
+  [switch]$Drive,                # hold ACCELERATE once the flow reaches DRIVING
+  [ValidateSet('none','left','right')]
+  [string]$Steer       = 'none', # hold a steering lock alongside -Drive
+  [double]$DriveDelay  = 6.0,    # seconds after the DRIVING mark before any input is applied
+  [double]$DriveSeconds= 0,      # 0 = hold until the run ends
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
   [int]$LogWaitSeconds = 90
 )
@@ -112,6 +131,23 @@ function Newest-Frame {
 
 $evAccept = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_Accept")
 
+# ⭐ THE DRIVING CHANNELS -- MANUAL-RESET (see the banner).  Created unconditionally so the game
+#   always finds them; a channel that is never Set() is a control that is never pressed, which is
+#   exactly the "resting car undisturbed" case.  Named after the EGameInputActions slot each one
+#   fills, so the game side's switch and this list can be diffed by eye.
+$evAccel = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_Accelerate")
+$evBrake = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_Brake")
+$evHandB = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_HandBrake")
+$evStrL  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_SteerLeft")
+$evStrR  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_SteerRight")
+foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR)) { $e.Reset() | Out-Null }
+if ($Drive) {
+  Write-Host ("[flow] DRIVE armed: throttle held from DRIVING+{0:f1}s, steer={1}, hold={2}" -f `
+              $DriveDelay, $Steer, $(if ($DriveSeconds -gt 0) { ("{0:f0}s" -f $DriveSeconds) } else { "to end" }))
+} else {
+  Write-Host "[flow] DRIVE not armed: the five driving channels exist but are never signalled."
+}
+
 # --- launch ------------------------------------------------------------------------------
 $t0 = Get-Date                      # THE launch instant; the gates' freshness cut-off.
 $p  = Start-Process -FilePath $exe -WorkingDirectory (Split-Path $exe) -PassThru
@@ -175,6 +211,8 @@ $phase = 'BOOT'          # BOOT -> FLYBY (quiet) -> CARSELECT (pump again) -> DR
 $acceptGap = 2.0
 $marks = @{}
 $markFrame = @{}
+$drivingAt = Get-Date    # set for real on the BOOT->...->DRIVING transition
+$driveHeld = $false      # the throttle/steer hold currently asserted on the channels
 
 while ($true) {
   $elapsed = ((Get-Date) - $t0).TotalSeconds
@@ -201,7 +239,7 @@ while ($true) {
 
     if ($phase -eq 'BOOT'      -and $marks.ContainsKey('flyby'))  { $phase = 'FLYBY' }
     if ($phase -eq 'FLYBY'     -and $marks.ContainsKey('carsel')) { $phase = 'CARSELECT'; $acceptGap = 3.0; $lastAccept = Get-Date }
-    if ($phase -eq 'CARSELECT' -and $marks.ContainsKey('strfin')) { $phase = 'DRIVING' }
+    if ($phase -eq 'CARSELECT' -and $marks.ContainsKey('strfin')) { $phase = 'DRIVING'; $drivingAt = Get-Date }
   }
 
   $pump = ($phase -eq 'BOOT') -or (($phase -eq 'CARSELECT') -and (-not $HoldCarSelect))
@@ -209,8 +247,28 @@ while ($true) {
     $evAccept.Set() | Out-Null
     $lastAccept = Get-Date
   }
+
+  # ---- the driving hold ------------------------------------------------------------------
+  # Set()/Reset() on a MANUAL-RESET event is press-and-hold / release: the game observes the
+  # channel as down on EVERY input update in between, which is the only way a throttle means
+  # anything.  DriveDelay leaves the car settled on its springs first so the run measures
+  # driving, not the tail of the spawn drop.
+  if ($Drive -and $phase -eq 'DRIVING') {
+    $sinceDriving = ((Get-Date) - $drivingAt).TotalSeconds
+    $want = ($sinceDriving -ge $DriveDelay) -and `
+            (($DriveSeconds -le 0) -or ($sinceDriving -lt ($DriveDelay + $DriveSeconds)))
+    if ($want -ne $driveHeld) {
+      $driveHeld = $want
+      if ($want) { $evAccel.Set() | Out-Null } else { $evAccel.Reset() | Out-Null }
+      if ($Steer -eq 'left')  { if ($want) { $evStrL.Set() | Out-Null } else { $evStrL.Reset() | Out-Null } }
+      if ($Steer -eq 'right') { if ($want) { $evStrR.Set() | Out-Null } else { $evStrR.Reset() | Out-Null } }
+      Write-Host ("[flow] drive {0} at {1:f1}s (DRIVING+{2:f1}s) steer={3}" -f `
+                  $(if ($want) { "HOLD" } else { "RELEASE" }), $elapsed, $sinceDriving, $Steer)
+    }
+  }
   Start-Sleep -Milliseconds 250
 }
+foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR)) { $e.Reset() | Out-Null }
 
 $endFrame = Newest-Frame
 $endElapsed = ((Get-Date) - $t0).TotalSeconds
@@ -229,6 +287,8 @@ foreach ($k in @('flyby','carsel','livery','accept','exitjy','strfin')) {
 }
 $summary += ("END      {0,6:f1}s  frame={1}" -f $endElapsed, $endFrame)
 $summary += ("asserts={0} phase={1}" -f $seenAsserts, $phase)
+$summary += ("drive={0} steer={1} delay={2:f1}s hold={3}" -f `
+             [bool]$Drive, $Steer, $DriveDelay, $(if ($DriveSeconds -gt 0) { ("{0:f0}s" -f $DriveSeconds) } else { "to-end" }))
 $marksPath = Join-Path $OutDir "marks.txt"
 $summary | Set-Content $marksPath
 
