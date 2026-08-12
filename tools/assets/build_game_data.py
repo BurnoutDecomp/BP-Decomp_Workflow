@@ -81,6 +81,26 @@ VERIFY -- A CONVERTER THAT RAN IS NOT A CONVERTER THAT WORKED
     This is deliberate -- more than one tool in this repo has shipped with its own sanity
     check already failing.
 
+PREFLIGHT -- THE PREREQUISITES THIS REPO DOES NOT SHIP
+    Two binaries (YAP, Volatility) are BUILT into build/tools, and build/ is gitignored, so
+    a fresh clone has neither.  The plan is checked against them before any work starts, so
+    a missing toolchain stops the run outright instead of becoming hundreds of identical
+    per-file failures spread over a multi-hour run.  --dry-run reports without enforcing.
+
+    What each rule needs is READ OUT OF THE CONVERTER'S OWN SOURCE (tool_binary_needs
+    follows its local imports and looks for the exe names), not declared -- a declaration is
+    one more thing to forget, and `lane-data` had already forgotten it.  `requires` +
+    `requires_fix` in the manifest are for what no scan can find: today only the
+    out-of-repo nushaders TUB HLSL tree.
+
+    ⚠️ THE SAME CLASS OF BUG IS WHAT THIS PASS KEEPS PRODUCING.  A prerequisite that only
+    the machine which first solved a problem owns -- an IDA dump under build/, a sibling
+    checkout at a hardcoded path -- turns a one-time conversion into a thing only one person
+    can run.  The AttribSys schema was exactly this until 2026-08-13 (it read a headless-IDA
+    dump from gitignored build/game_x360_world/; it now slices the payloads out of the ARTIST
+    XEX in the game folder).  When you add a converter, source its inputs from the RETAIL
+    DATA or from the repo -- and if you genuinely cannot, declare it in `requires`.
+
 DEPLOY
     --with-exe copies Burnout_PC.exe, Burnout_PC.cgsmap and the seven FFmpeg DLLs
     (avcodec-63 avdevice-63 avfilter-12 avformat-63 avutil-61 swresample-7 swscale-10) from
@@ -89,14 +109,23 @@ DEPLOY
     build/game and copies the DLLs from b5-decomp/vendor/ffmpeg-build/bin.
 
 TO REBUILD THE GAME FOLDER FROM SCRATCH
-    1. Build the exe:      tools\\build\\build_game_exe.bat
-    2. Plan and read the gap report (writes nothing):
+    1. Build the converter binaries:  pwsh tools\\build\\build_tools.ps1
+         (YAP + Volatility into build\\tools; needs the .NET SDK, and Qt6 for YAP.
+          Skipping this is the single most common cause of a run that fails 970 times.)
+    2. Build the exe:                 tools\\build\\build_game_exe.bat
+    3. Plan and read the gap report (writes nothing, and reports missing prerequisites):
          py tools\\assets\\build_game_data.py "<X360 folder>" --out D:\\BurnoutPC --dry-run
-    3. Convert:
+    4. Convert:
          py tools\\assets\\build_game_data.py "<X360 folder>" --out D:\\BurnoutPC --jobs 6
-    4. GUIAPT/GUIAPTSD remain intentionally outside this pass. Add real libapt2-produced
-       GUI bundles separately, then deploy the runtime with `--with-exe`.
-    5. Launch  <out>\\Burnout_PC.exe.
+    5. Supply what has no converter yet -- today that is GUIAPT/GUIAPTSD (no BE->LE AptData
+       porter exists) and a short tail of sound/particle/postfx bundles.  Point
+       --borrow-dir at a folder that already holds good platform-4 copies:
+         ... --borrow-dir D:\\Reverse\\BP-Decomp_Workflow\\build\\game --with-exe
+       --with-exe refuses while anything is still UNHANDLED or FAILED, so a folder it
+       deploys into is a folder every rule actually produced.
+    6. Launch  <out>\\Burnout_PC.exe.  Launch it FROM ITS OWN FOLDER: schema.vlt/schema.bin
+       are opened with a bare relative fopen() by GameDataModule::PrepareAttribSysSchemaResource,
+       so a wrong working directory presents as "PC schema file missing".
     The report lands in <out>\\.build_game_data\\report.txt (and report.json).
 """
 
@@ -149,6 +178,13 @@ EMIT_DENY_FILE_RE = re.compile(r"\.x360$|\.log$|\.map$|^desktop\.ini$|\.le_trans
                                r"|\.lane_transcoded$", re.I)
 
 STATE_DIR = ".build_game_data"
+
+# The two binaries this repo builds rather than ships.  build/ is gitignored, so a fresh
+# clone has neither until build_tools.ps1 runs -- and WorkerRoots mirrors build/tools only
+# `if os.path.isdir(s)`, so without this preflight their absence is silent.
+BUILD_TOOLS_FIX = ("pwsh tools/build/build_tools.ps1        "
+                   "(builds YAP + Volatility into build/tools; needs the .NET SDK, "
+                   "and Qt6 for YAP)")
 
 # Status vocabulary.  `unhandled` is deliberately NOT a success.
 ST_CONVERTED = "converted"
@@ -259,7 +295,8 @@ def find_game_root(path):
 class Rule:
     __slots__ = ("id", "action", "match", "tool", "argv", "verify", "isolate", "why",
                  "reason", "produces", "out_name", "outputs", "inputs", "cwd",
-                 "stage_in", "produces_dir", "out_subdir", "index")
+                 "stage_in", "produces_dir", "out_subdir", "requires", "requires_fix",
+                 "index")
 
     def __init__(self, raw, index):
         self.index = index
@@ -280,6 +317,8 @@ class Rule:
         self.stage_in = raw.get("stage_in", [])
         self.produces_dir = raw.get("produces_dir")
         self.out_subdir = raw.get("out_subdir")
+        self.requires = raw.get("requires", [])
+        self.requires_fix = (raw.get("requires_fix") or "").strip()
         if self.action not in ("convert", "copy", "skip", "generate", "unhandled"):
             raise SystemExit("manifest rule %s: bad action %r" % (self.id, self.action))
         if self.action == "unhandled" and not self.reason:
@@ -562,13 +601,26 @@ def do_item(item, srcroot, outroot, workroot, args, state):
     return item
 
 
+def generate_prereqs(rule, srcroot, outroot, workroot):
+    """Expanded paths a generate rule needs BEFORE it runs -- its declared `inputs` plus
+    the source side of every `stage_in`.  One function so --dry-run reports exactly what an
+    execute run would hit: a prerequisite that only surfaces at execute time is a gap the
+    planning step was supposed to close."""
+    ctx = context_for("", "", "", "", srcroot, outroot, workroot)
+    missing = [expand(p, ctx) for p in rule.inputs
+               if not os.path.exists(expand(p, ctx))]
+    missing += [os.path.join(srcroot, *src.split("/"))
+                for src, _dst in rule.stage_in
+                if not os.path.isfile(os.path.join(srcroot, *src.split("/")))]
+    return missing
+
+
 def do_generate(item, srcroot, outroot, workroot, args, state):
     r = item.rule
     ctx = context_for("", "", "", "", srcroot, outroot, workroot)
     ctx["outdir"] = os.path.join(outroot, r.out_subdir) if r.out_subdir else outroot
 
-    missing = [expand(p, ctx) for p in r.inputs
-               if not os.path.exists(expand(p, ctx))]
+    missing = generate_prereqs(r, srcroot, outroot, workroot)
     if missing:
         item.status = ST_FAILED
         item.detail = "prerequisite missing: %s" % ", ".join(missing)
@@ -909,6 +961,108 @@ def sweep(outroot):
 
 # ------------------------------------------------------------------ guards
 
+_TOOL_NEEDS = {}
+
+# The two binaries this repo builds.  A converter that uses one names its exe outright, so
+# the converter's own source is the authority on whether a rule needs it -- better than a
+# manifest field, which is one more thing to forget.  (lane-data DID forget: it was found
+# needing YAP only by failing at runtime, after the preflight had passed it.)
+BUILT_BINARIES = {"YAP.exe": "build/tools/yap/YAP.exe",
+                  "Volatility.Cli.exe": "build/tools/volatility/Volatility.Cli.exe"}
+
+
+def tool_binary_needs(tool_rel, _seen=None):
+    """Which built binaries a converter reaches for, following its local imports.
+
+    convert_shaders_bundle.py never says 'Volatility.Cli.exe' itself -- it imports
+    convert_world_bundle, which does; a scan that stopped at the entry file would miss it."""
+    if not tool_rel:
+        return set()
+    if tool_rel in _TOOL_NEEDS:
+        return _TOOL_NEEDS[tool_rel]
+    seen = _seen if _seen is not None else set()
+    if tool_rel in seen:
+        return set()
+    seen.add(tool_rel)
+    path = os.path.join(REPO, "tools", "assets", *tool_rel.split("/"))
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as fh:
+            text = fh.read()
+    except OSError:
+        return set()
+    needs = {want for name, want in BUILT_BINARIES.items() if name in text}
+    here = os.path.dirname(tool_rel)
+    for mod in re.findall(r"^\s*import\s+(\w+)", text, re.M):
+        for cand in (norm(os.path.join(here, mod + ".py")), "bundles/%s.py" % mod):
+            if os.path.isfile(os.path.join(REPO, "tools", "assets", *cand.split("/"))):
+                needs |= tool_binary_needs(cand, seen)
+                break
+    if _seen is None:
+        _TOOL_NEEDS[tool_rel] = needs
+    return needs
+
+
+def preflight(items, gens, srcroot, outroot):
+    """External prerequisites of the rules that actually have work in THIS plan.
+
+    A converter this repo does not ship -- Volatility, YAP, the TUB HLSL tree -- is not a
+    per-file failure, it is a missing toolchain: if Volatility.Cli.exe is absent then ~970
+    of the 5,923 files fail, one at a time, hours apart, each with its own opaque tail.  So
+    the plan is checked against them BEFORE any work starts.
+
+    Three sources, in decreasing order of how much they can drift out of date:
+      * tool_binary_needs() reads the converter's own source (and its local imports) for
+        YAP/Volatility -- nothing to declare, nothing to forget;
+      * `isolate = "volatility"` implies the Volatility requirement;
+      * a rule's `requires` (paths, repo-relative unless absolute) + `requires_fix`, for
+        what no scan can find: today only the out-of-repo nushaders TUB HLSL tree.
+
+    Returns [(missing_path, rule_ids, fix)]."""
+    ctx = {"repo": REPO, "srcroot": srcroot, "outroot": outroot}
+    planned = {}
+    for it in items + gens:
+        if it.rule.action in ("convert", "generate"):
+            planned.setdefault(it.rule.id, it.rule)
+    missing = {}
+    for rule in planned.values():
+        # a `requires` entry is either a bare path (falling back to the rule-wide
+        # requires_fix) or {path=..., fix=...} when one rule needs several unrelated things
+        needs = [(r, rule.requires_fix) if isinstance(r, str)
+                 else (r["path"], r.get("fix") or rule.requires_fix)
+                 for r in rule.requires]
+        needs += [(p, BUILD_TOOLS_FIX) for p in tool_binary_needs(rule.tool)]
+        if rule.isolate == "volatility":
+            needs.append(("build/tools/volatility/Volatility.Cli.exe", BUILD_TOOLS_FIX))
+        for raw, fix in needs:
+            p = expand(raw, ctx)
+            if not os.path.isabs(p):
+                p = os.path.join(REPO, *p.split("/"))
+            if os.path.exists(p):
+                continue
+            e = missing.setdefault(p, [set(), ""])
+            e[0].add(rule.id)
+            if fix and not e[1]:
+                e[1] = fix
+    return [(p, sorted(rids), fix) for p, (rids, fix) in sorted(missing.items())]
+
+
+def report_preflight(gaps, fatal):
+    head = "*** PREFLIGHT: %d external prerequisite(s) missing." % len(gaps)
+    print("\n" + head)
+    for path, rids, fix in gaps:
+        print("  MISSING  %s" % path)
+        print("           needed by: %s" % ", ".join(rids))
+        for line in (fix or "(no fix recorded in the manifest)").splitlines():
+            print("           fix: %s" % line)
+    if not fatal:
+        print("*** (dry run: reported, not enforced -- an execute run stops here.)\n")
+        return
+    raise SystemExit(
+        "*** REFUSING to start: every file those rules own would fail, one at a time,\n"
+        "*** across a multi-hour run. Install the prerequisites above and re-run.\n"
+        "*** To plan anyway without converting, add --dry-run.")
+
+
 def guard_out(outroot, srcroot, args, need_bytes):
     out = os.path.abspath(outroot)
     forbidden = [(os.path.join(REPO, "build", "game"),
@@ -1026,6 +1180,10 @@ NOTES
                if i.rule.action in ("convert", "copy")) * 2 + (1 << 30)
     guard_out(outroot, srcroot, args, 0 if args.dry_run else need)
 
+    gaps = preflight(items, gens, srcroot, outroot)
+    if gaps:
+        report_preflight(gaps, fatal=not args.dry_run)
+
     state_path = os.path.join(outroot, STATE_DIR, "state.json")
     state = {}
     if not args.dry_run:
@@ -1045,9 +1203,7 @@ NOTES
             do_item(it, srcroot, outroot, "", args, state)
         for it in gens:
             it.status = ST_GENERATED
-            missing = [p for p in it.rule.inputs
-                       if not os.path.exists(expand(p, {"repo": REPO, "srcroot": srcroot,
-                                                        "outroot": outroot, "workroot": ""}))]
+            missing = generate_prereqs(it.rule, srcroot, outroot, "")
             if missing:
                 it.status, it.detail = ST_FAILED, "prerequisite missing: %s" % missing[0]
             else:
@@ -1118,10 +1274,24 @@ NOTES
         if n:
             print("swept %d denied file(s)/dir(s) out of the output" % n)
         if args.with_exe:
-            unresolved = [it for it in items + gens if it.status == ST_UNHANDLED]
+            # UNHANDLED *and* FAILED both block the deploy.  Until 2026-08-13 only UNHANDLED
+            # did, so a run whose generate rule failed its prerequisite check still produced
+            # a complete-looking, launchable folder -- which is exactly how a build shipped
+            # without schema.vlt/schema.bin and asserted "PC schema file missing" at boot.
+            # A folder this tool hands to the exe is a folder it is claiming is complete.
+            unhandled = [it for it in items + gens if it.status == ST_UNHANDLED]
+            failed = [it for it in items + gens if it.status == ST_FAILED]
+            unresolved = unhandled + failed
             if unresolved:
-                print("\n*** --with-exe REFUSED: %d non-skipped data file(s) are still "
-                      "UNHANDLED." % len(unresolved))
+                print("\n*** --with-exe REFUSED: %d data file(s) are not converted "
+                      "(%d UNHANDLED, %d FAILED)." % (len(unresolved), len(unhandled),
+                                                      len(failed)))
+                for it in failed[:10]:
+                    print("***   FAILED %-42s %s" % (it.src_rel or it.rule.id,
+                                                     (it.detail or "")[:70]))
+                if len(failed) > 10:
+                    print("***   ... +%d more (see the FAILURES section below)"
+                          % (len(failed) - 10))
                 print("*** Add faithful converters or provide known-good platform-4 files "
                       "with --borrow-dir.")
                 exit_code = 2
