@@ -641,14 +641,36 @@ vehicle/engine vault schemas, and the strict generic converter rejects it rather
 silently swapping the wrong pointer-selected block."""
 
 [[rule]]
-id     = "unhandled-props"
-match  = ["PROPS/*.BUNDLE", "PARTICLES.BUNDLE"]
+id     = "prop-physics"
+match  = ["PROPS/PROPPHYSICS.BUNDLE"]
+action = "convert"
+tool   = "bundles/nonapt_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """The game's ONE PropPhysics resource (0xD75C5932, type 0x1000F): the prop TYPE
+table that every prop spawn resolves through -- without it PropPhysicsDataHeader::GetType
+has nothing to return and no prop can be created. Consumed IN PLACE (the blob *is* the
+BrnPhysics::Props::PropPhysicsDataHeader object; FixUp only adds the resource load base to
+each serialised offset slot), so it must carry the host layout, exactly like STREETDATA.DAT.
+The three fixed pointer tables widen 4 -> 8 (header 0x2C94 -> 0x5818; mapPropTypes[500]
+stays at +0x10, mapPropPartTypes[300] moves 0x7E0 -> 0xFB0, mapVolumeTypes[2048]
+0xC90 -> 0x1810, muTimeStamp 0x2C90 -> 0x5810), PropTypeData's two relocated pointers move
++0x3C/+0x40 -> +0x40/+0x48 within an unchanged 112-byte stride, and PropPartTypeData grows
+48 -> 64 (maCollisionVolumes +0x24 -> +0x28). The 96-byte rwcollision Volume records are a
+pure dword flip. Array bounds 500/300/2048 are pinned by the FixUp @0x8267F570 table bases;
+the member set is DecFIGS DWARF. muSizeInBytes is LITTLE-endian on the BE disk (ARTIST
+bake-tool anomaly, the PropGraphicsList precedent) and is recomputed for the widened blob.
+Pinned on the C++ side by BrnPhysicsPropTypeData.h / BrnPropPhysicsDataHeader.h
+_AssertLayout() and the static_asserts in BrnPropPhysicsListResourceType.cpp."""
+
+[[rule]]
+id     = "unhandled-particles"
+match  = ["PARTICLES.BUNDLE"]
 action = "unhandled"
-reason = """PROPPHYSICS.BUNDLE and PARTICLES.BUNDLE are bnd2 platform 2 with no rule, and
-are present in build/game at platform 2 byte-identical to retail (inert).
-convert_world_bundle.py lists Prop* among the types it still PASSES THROUGH pending the
-engine-side widening reconciliation, so pointing this at that tool would produce a
-platform-4 container with big-endian payloads -- a worse failure than none."""
+reason = """PARTICLES.BUNDLE is bnd2 platform 2 with no rule, and is present in build/game
+at platform 2 byte-identical to retail (inert). Its ParticleDescriptionCollection /
+ParticleDescription payloads have no porter in this repo. (PROPS/PROPPHYSICS.BUNDLE was
+split out of this rule and now has a real converter -- see "prop-physics" above.)"""
 
 [[rule]]
 id     = "unhandled-misc-root-bundles"

@@ -1122,6 +1122,99 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_UpdatePropEvent_200.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_UpdatePropEvent_15.cpp"
   rem ---- end prop-manager construct block ---------------------------------------------------
+
+  rem ==== PROP SPAWN WAVE (2026-08-12) =======================================================
+  rem  WHY THIS BLOCK EXISTS: no prop had ever spawned in the PC build. Props are SCENE
+  rem  ENTITIES emitted by BrnWorld::PropEntityModule, and that module was a shell -- every
+  rem  entry point was a one-shot inert gate in WorldLinkStubs.cpp, and BrnPropEntityModule.cpp
+  rem  did not exist at all. Worse, a large amount of REAL prop code (PropZoneManager 821
+  rem  lines, PropCellManager, PropEntityInstance) was already committed but had never been
+  rem  added to this file, so it was dead source rather than link stubs -- `Burnout_PC.map`
+  rem  carried ZERO PropZoneManager / PropCellManager / PropEntityInstance symbols. The world
+  rem  octree took 10,752 entities last run and not one of them was a prop.
+  rem
+  rem  The data side was never the problem and is untouched: 396 TRK_UNIT<n>_GR.BNDL each carry
+  rem  one PropGraphicsList (0x10010) + one PropInstanceData (0x10011), 24,047 prop instances
+  rem  total, correctly transcoded to platform 4 / x64, all 11,616 Model imports resolving, and
+  rem  demonstrably loaded + fixed-up at runtime. It was sitting in pool 3 with no reader.
+  rem
+  rem  The one real data defect WAS PROPS\PROPPHYSICS.BUNDLE -- still a raw big-endian X360
+  rem  platform-2 file with no transcoder and no registered handler. PropZoneManager::LoadZone
+  rem  takes a `const PropPhysicsDataHeader*`, so that was a CO-REQUISITE of the code work, not
+  rem  a follow-up. It now has a real transcoder + manifest rule and a regenerated platform-4
+  rem  file, and its resource type (0x1000F) is registered in CgsResourceTypeRegistration.cpp.
+  rem
+  rem  ---- the prop type table + its resource type (0x1000F) ----
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropPhysicsListResourceType.cpp"
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropPhysicsDataHeader.cpp"
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPhysicsPropTypeData.cpp"
+  rem  ---- the instance/cell/zone machinery: real bodies that were never mounted ----
+  rem  BrnPropZoneManager.cpp could not have linked before this wave even if it had been
+  rem  mounted: it calls PropCellManager::Construct, which was declared and defined nowhere.
+  rem  `cl /c` cannot see unresolved externals, which is exactly why that went unnoticed.
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityInstance.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropCellManager.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropZoneManager.cpp"
+  rem  ---- the module itself: lifecycle + streaming (PreScene/render land with their TUs) ----
+  rem  PropEntityModule::Construct was THE earliest break in the whole chain: it is the only
+  rem  writer of mauStartIndexOfZone[0..499] = KU_UNLOADED_ZONE (65535). While it was an empty
+  rem  stub the zero-initialised module made IsZoneLoaded() return TRUE FOR EVERY ZONE, so no
+  rem  zone could ever load no matter what else was fixed.
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_Streaming.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_PreScene.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_Render.cpp"
+  rem  ---- the replay serialiser LoadProp threads through the whole load path ----
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropEntitySerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame_operator_assign.cpp"
+  echo "%SRC%\GameSource\Replays\Array_PropLoadedZoneRecord_9_operator_index.cpp"
+  rem  ---- LINK CLOSURE: TUs that already held real bodies but had never been mounted -------
+  rem  Found by running the real link (cl /c cannot see unresolved externals, so the compile
+  rem  gate was green with all of these missing). Each supplies symbols the block above calls:
+  rem    BrnPropVolumeID / BrnPropVolumeInstanceID  -- the volume-id setters LoadProp and the
+  rem       cell manager use to key props into the scene manager
+  rem    BrnPhysicsPropZoneData  -- PropZoneData::GetCellId / GetRespawnTypeForProp, read by
+  rem       LoadProp for every single prop instance
+  rem    BrnPropEntityDebugComponent  -- embedded BY VALUE in PropEntityModule, so its vtable
+  rem       (GetName / OnActivate / RenderHUD / RenderWorld) is required the moment the module
+  rem       is constructed, whether or not the debug menu is ever opened
+  rem    BrnPropToTrafficInterface  -- RequestTrafficLightRestore, from the traffic-light
+  rem       restore path in PropZoneManager
+  rem    BrnPropEntityModuleIO_OutputBuffer_PostPhysics  -- GetSceneInputInterface
+  rem    FixableVolume  -- FixUp/FixDown on the prop collision volumes
+  rem    BrnGameDataRequestInterface_1024  -- the explicit instantiation carrying
+  rem       AcquireResource / GetPropInstances / LoadPropPhysics for the prop request queue
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropVolumeID.cpp"
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPropVolumeInstanceID.cpp"
+  echo "%SRC%\SharedClasses\Physics\Props\BrnPhysicsPropZoneData.cpp"
+  rem  NOT MOUNTED -- BrnPropEntityDebugComponent.cpp. Measured 2026-08-12: mounting it
+  rem  RAISED the unresolved count, because its Render{HUD,World} bodies drag in the whole
+  rem  CgsDev debug-render stack (Debug3DImmediateRender::DrawBox/DrawSphere/DrawText/...,
+  rem  Debug2DImmediateRender::DrawCircle, rw::RGBA's ctor, Volume::GetRelativeTransform),
+  rem  none of which is reconstructed. The component is embedded BY VALUE at PropEntityModule
+  rem  +0xCD900 so its VTABLE is still required; per the precedent set by the 2026-08-11
+  rem  baseline wave, the four out-of-line virtuals are served as gates in WorldLinkStubs.cpp
+  rem  (real GetName, inert OnActivate/RenderHUD/RenderWorld) instead. Mount the real TU when
+  rem  the debug-render stack lands -- it is dev-menu-only and cannot affect prop spawning.
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\SharedIO\BrnPropToTrafficInterface.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_PostPhysics.cpp"
+  echo "%SRC%\GameShared\GameClasses\RenderWare\FixableVolume.cpp"
+  echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_1024.cpp"
+  rem  ---- the two PreScene bridges that FEED the prop module ------------------------------
+  rem  Without these the whole subsystem is inert no matter how much of it is reconstructed:
+  rem  BridgeWorldModuleToPropModule_PreScene is what copies the PropInstancesNeededForZone /
+  rem  PropGraphicsLoaded / PropGraphicsUnloaded queues (and the player zone number) into the
+  rem  module's InputBuffer_PreScene, and BridgeRaceCarModuleToPropModule_PreScene publishes
+  rem  the player position/index/flags plus the 8-slot race-car velocity array. While both were
+  rem  gates every queue read length 0 and miPlayerZoneNumber read 0, so the streaming machine
+  rem  had nothing to ask for. Their DWARF home (WorldBridgeEntityModulesToEntityModules.cpp)
+  rem  is still unmounted -- 3 of its other bridges have declaration-only IO accessors -- so
+  rem  they are split out per the WorldBridgeRaceCarToWorldModule.cpp precedent.
+  rem  BridgePropToOutput_PreScene went into the already-mounted WorldBridgeEntityModulesToOutput.cpp.
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeWorldModuleToPropModule.cpp"
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToPropModule.cpp"
+  rem ==== end prop spawn wave ================================================================
   echo "%SRC%\GameSource\Resource\SharedIO\BrnAssetIds.cpp"
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestQueue.cpp"
   echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModule.cpp"
@@ -1551,6 +1644,24 @@ rem ---- build the cl response file ----
   echo "%VEN%\EAThread\source\pc\eathread_callstack_win64.cpp"
   echo "%VEN%\EAThread\source\pc\eathread_x360align.cpp"
   echo "%SRC%\GameSource\Graphics\BrnRendererModule.cpp"
+  rem ---- BLOBBY SHADOW COLLECTOR (2026-08-12): the AddShadow TU, ledger-`done` since its
+  rem  reconstruction but never actually mounted -- so its three data defects (a 0.0f reject
+  rem  threshold that dropped every car off the ground, a missing 3 cm mvPos lift, and the
+  rem  extents bias landing on the wrong field) were never compiled, let alone run.
+  rem  MEASURED closure, not assumed: cl /c on both TUs then dumpbin /SYMBOLS gives exactly
+  rem  ONE unresolved external between them -- AddShadow itself, defined by the first file
+  rem  (plus _fltused, CRT). The header pulls only header-only types, and BrnRendererModule.h
+  rem  already embeds BrnBlobbyShadowManager BY VALUE, so the type is in the linked set anyway.
+  rem  The two CgsSceneManager::EntityId / CgsPhysics::RigidBodyId ctors they emit are COMDAT
+  rem  "pick any" -> no LNK2005. Both basenames are unique in this list.
+  rem  NOTE: mounting this does NOT put a blob on screen -- the Im3d/shader hop that consumes
+  rem  the buffer (ImRenderer<BasicColouredTexturedVertex> + the PC program pair) is still
+  rem  missing. This mounts the COLLECTOR and makes its layout pins real.
+  echo "%SRC%\GameSource\Graphics\BrnBlobbyShadowManager.cpp"
+  rem  ...and the embed check beside it: never called (discarded by /OPT:REF), but it is the
+  rem  only place the ShadowStruct/buffer static_asserts actually execute. Same trap as
+  rem  BrnVehicleManager.h's _AssertLayout, which sat in an unmounted TU for ten waves.
+  echo "%SRC%\GameSource\Graphics\BrnBlobbyShadowManager_embed_check.cpp"
   echo "%SRC%\GameSource\Graphics\BrnShaderConstantsFrame.cpp"
   echo "%SRC%\GameSource\Game\BrnLoadingScreenRenderer.cpp"
   echo "%SRC%\GameSource\Game\BrnDispatchThreadInputBuffer.cpp"
@@ -2665,6 +2776,9 @@ rem ---- build the cl response file ----
   rem      web, Attrib node web -- are reverted-in-merge to l2 pending integration) ----
   echo "%SRC%\SDKs\EATech\include\NFSMix\NFSMixMapLinkStubs.cpp"
   echo "%VEN%\renderware\src\rw\core\stdc\stdc.cpp"
+  rem rw::math::vpu::Inverse @0x825B2628 -- general 4x4 inverse; replaces the
+  rem WorldLinkStubs.cpp link stub retired 2026-08-12 (prop-render wave).
+  echo "%VEN%\renderware\src\rw\math\vpu\Matrix44Operation.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEMemory.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEPoint.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionBlockAlloc.cpp"

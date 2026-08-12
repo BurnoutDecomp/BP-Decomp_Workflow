@@ -13,10 +13,18 @@ Per-type state (2026-07-25 -- see scratch/wem_recon_checkpoint.md TASK 3):
                 NB Volatility rebuilds two serialized-null pointer slots
                 (+0x18/+0x1C) with real offsets -- verify vs CgsModelResource-
                 Type FixUp when the load path is boot-tested.
-  Renderable / VertexDescriptor / Material / MaterialState / MaterialTechnique
-  TextureState / PropGraphicsList / PropInstanceData / StaticSoundMap
-                PASSTHROUGH (still big-endian!) -- recorded in the manifest;
-                the bundle is NOT fully loadable until these land.
+  VertexDescriptor / Material / MaterialTechnique / TextureState
+                PORTED  endian FLIP via world_type_transcode (FLIP_PORTABLE).
+  MaterialState / PropGraphicsList / PropInstanceData / StaticSoundMap
+                PORTED  widening x360 -> x64 relayout via world_type_transcode
+                (FLIP_PORTABLE), each with a narrow_* round-trip proof.
+  Renderable    PORTED  via renderable_transcode.py.
+  PropData      PASSTHROUGH (still big-endian!) -- recorded in the manifest;
+                the bundle is NOT fully loadable until it lands.
+  (PropPhysics is NOT a world-bundle type: the game's single PropPhysics
+   resource lives in PROPS/PROPPHYSICS.BUNDLE and is converted by the manifest
+   "prop-physics" rule through nonapt_transcode.py, which calls the same
+   world_type_transcode.transcode_propphysics porter.)
 
 Usage:
   py tools/assets/bundles/convert_world_bundle.py <in_x360_bundle> <out_plat4_bundle>
