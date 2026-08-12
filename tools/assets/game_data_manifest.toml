@@ -69,19 +69,25 @@ why    = "A zero-byte marker file left in the rip. Not game data."
 id       = "generate-attribsys-schema"
 action   = "generate"
 tool     = "bundles/attribsys_schema_port.py"
-argv     = ["{repo}/build/game_x360_world/SCHEMA_VLT_BE.bin",
-            "{repo}/build/game_x360_world/SCHEMA_BIN_BE.bin",
-            "{outdir}"]
+argv     = ["--xex", "{workroot}/references/artist.xex", "--out", "{outdir}"]
+stage_in = [["BURNOUT_X360_ARTIST.XEX", "references/artist.xex"]]
+inputs   = ["{srcroot}/BURNOUT_X360_ARTIST.XEX"]
 outputs  = ["schema.vlt", "schema.bin"]
-inputs   = ["{repo}/build/game_x360_world/SCHEMA_VLT_BE.bin",
-            "{repo}/build/game_x360_world/SCHEMA_BIN_BE.bin"]
 verify   = ["nonempty"]
 why      = """The AttribSys schema is NOT shipped as a resource -- the X360 exe bakes the
 serialised pair in .rdata and registers it in GameDataModule::PrepareAttribSysSchemaResource
-@0x82673258 (vlt @0x82CD3D88 size 5664, bin @0x82CD53B0 size 20352).  The big-endian
-payloads were chiselled out with headless IDA into build/game_x360_world/SCHEMA_*_BE.bin;
-attribsys_schema_port.py ports them to the loose LE schema.vlt/schema.bin the runtime opens.
-See the module docstring of attribsys_schema_port.py."""
+@0x82673258 (vlt @0x82CD3D88 size 5664, bin @0x82CD53B0 size 20352).
+attribsys_schema_port.py ports them to the loose LE schema.vlt/schema.bin the runtime opens
+by bare relative name (fopen("schema.vlt") -- so they belong at the game folder ROOT).
+
+⭐ 2026-08-13: this rule used to read the big-endian pair from
+build/game_x360_world/SCHEMA_*_BE.bin, a headless-IDA dump.  `build/` is gitignored, so on
+every clone but the one that did the dumping this rule failed `prerequisite missing`, the
+folder deployed anyway, and the game asserted at boot with "PC schema file missing (run
+attribsys_schema_port.py)".  --xex now rebuilds the loaded ARTIST XEX image from the retail
+game folder and slices the payloads out of .rdata directly -- MEASURED byte-identical to the
+IDA dump, and the resulting LE pair is byte-identical to the one the booting build uses.
+Same stage_in mechanism as generate-loadingscreen below, for the same reason."""
 
 [[rule]]
 id       = "generate-loadingscreen"
@@ -201,6 +207,11 @@ tool   = "shaders/convert_shaders_bundle.py"
 argv    = ["convert", "{src}", "{out}", "--fallback"]
 verify  = ["bnd2_platform=4"]
 isolate = "volatility"
+# TOML inline tables must each stay on ONE line.
+requires = [
+  { path = "build/tools/yap/YAP.exe", fix = "pwsh tools/build/build_tools.ps1" },
+  { path = "D:/Reverse/nushaders/Reference/TUB/Bundle/gamedb/burnout5/Shaders", fix = "clone the separate nushaders repo to D:/Reverse/nushaders (hardcoded as NUSHADERS_TUB in convert_shaders_bundle.py; --fxdir overrides it).\nWithout the TUB HLSL every technique would compile to fallback_world.fx, so the tool refuses rather than emit a bundle in which nothing is the real shader." },
+]
 why     = """convert_shaders_bundle.py is the only tool for SHADERS.BNDL and takes an
 explicit `convert <in> <out>` subcommand.  Default --mode d3d9 recompiles every
 ShaderProgramBuffer from the TUB HLSL with fxc.
@@ -603,11 +614,16 @@ on PC and therefore is deliberately omitted rather than counted as missing runti
 # ---------------------------------------------------------------------------------
 
 [[rule]]
-id     = "skip-guiapt-this-pass"
+id     = "unhandled-guiapt"
 match  = ["GUIAPT/*.BUNDLE", "GUIAPTSD/*.BUNDLE"]
-action = "skip"
-why    = """Explicitly excluded from this build pass. No big-endian -> little-endian AptData
-(type 0x1E) porter exists in this repo.
+action = "unhandled"
+reason = """⭐ 2026-08-13: this was `action = "skip"`, which reported 584 files as a clean
+deliberate omission and let --with-exe deploy a game folder with NO GUI DATA AT ALL.  It is
+not a skip -- a skip is something the PC build does not want.  The runtime wants every one
+of these; what is missing is a converter.  As `unhandled` they are counted against the data
+gap, they can be supplied with --borrow-dir, and they block --with-exe until they are.
+
+No big-endian -> little-endian AptData (type 0x1E) porter exists in this repo.
 apt_widen_4to8.py widens 1:7:4 -> 1:7:8 but asserts `version == 2 and platform == 4`
 (apt_widen_4to8.py:735) and reads every field little-endian, so it cannot consume the
 platform-2 big-endian console set.  convert_x360_bundle.py's docstring is explicit that

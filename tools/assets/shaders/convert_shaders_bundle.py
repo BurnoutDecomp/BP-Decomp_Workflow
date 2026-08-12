@@ -419,6 +419,20 @@ def main():
     cv.add_argument('--keep-work', default=None)
     a = ap.parse_args()
     fx_dirs = a.fxdir or [DEFAULT_FX_DIR]
+    if a.fxdir is None and not os.path.isdir(DEFAULT_FX_DIR):
+        # An absent TUB tree yields an EMPTY technique map, and --fallback then maps every
+        # technique to fallback_world.fx without a word -- a bundle in which nothing is the
+        # real shader, indistinguishable from a good one by size, platform byte or verify.
+        # MINIMAL_PATH.md asks for exactly that bundle on purpose, via an explicit
+        # `--fxdir <nonexistent>`; that stays available.  What must not happen is the same
+        # output arriving because a checkout is missing on this box.
+        raise SystemExit(
+            'TUB HLSL source tree not found:\n  %s\n'
+            'Every technique would silently compile to fallback_world.fx.\n'
+            'Clone the nushaders repo there, point --fxdir at your copy, or -- if you '
+            'really want the all-fallback diagnostic bundle -- ask for it explicitly with '
+            '`--fallback --fxdir <nonexistent-dir>` (MINIMAL_PATH.md option A).'
+            % DEFAULT_FX_DIR)
     if a.cmd == 'inventory':
         inventory(a.in_bundle, fx_dirs)
         return 0

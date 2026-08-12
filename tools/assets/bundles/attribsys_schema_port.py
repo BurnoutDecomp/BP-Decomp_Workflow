@@ -11,9 +11,20 @@ GameDataModule::PrepareAttribSysSchemaResource @0x82673258:
 NOTE the bin payload base: 0x82CD53AC holds a u32 1 PREFIX word; the payload
 the PtrN fixups are relative to starts at +4 (= 0x82CD53B0).  An earlier
 extraction window [0x82CD53AC, +20352) was 4-bytes-shifted and clipped the
-last 4 bytes of the final Definition record; the corrected BE payloads live in
-build/game_x360_world/SCHEMA_{VLT,BIN}_BE.bin (re-dumped via headless IDA,
-scratch/ida_tmp/dump_schema.py).
+last 4 bytes of the final Definition record.
+
+⭐ THE BE PAYLOADS COME OUT OF THE SHIPPED XEX -- NO IDA REQUIRED (2026-08-13).
+This tool used to take them from build/game_x360_world/SCHEMA_{VLT,BIN}_BE.bin,
+chiselled out by a headless IDA run.  `build/` is gitignored, so on every clone
+but the one that did the chiselling those files do not exist, the manifest's
+generate rule failed `prerequisite missing`, and the game asserted at boot with
+"PC schema file missing (run attribsys_schema_port.py)".  --xex rebuilds the
+loaded image straight from BURNOUT_X360_ARTIST.XEX in the retail game folder
+(XEX2, unencrypted + 'basic' compressed -- the same walk
+tools/assets/textures/extract_xex.py uses for the loading-screen textures) and
+slices the two payloads out of it.  MEASURED 2026-08-13: both slices are
+byte-identical (sha256) to the IDA-dumped SCHEMA_*_BE.bin, and the sizes read
+back out of the image's own size words are exactly the documented 5664/20352.
 
 Container (same chunk container the vault transcoder walks,
 tools/assets/bundles/attribsys_transcode.py; every chunk = {u32 fourCC,
@@ -60,12 +71,15 @@ Validation: LE re-walk field-set identity + flip-back byte identity, plus
 structural asserts (chunk coverage, ExpN/DatN cross-check, def-area tiling).
 
 Usage:
-  py attribsys_schema_port.py                       (default in/out paths)
-  py attribsys_schema_port.py <vlt_be> <bin_be> <out_dir>
+  py attribsys_schema_port.py --xex <BURNOUT_X360_ARTIST.XEX> [--out <dir>]
+  py attribsys_schema_port.py <vlt_be> <bin_be> <out_dir>     (pre-dumped BE pair)
+  py attribsys_schema_port.py                                 (default in/out paths)
 
 Outputs: <out_dir>/schema.vlt + <out_dir>/schema.bin (LE), the filenames the
 DepN dependency table itself names.  Consumed on PC by
-GameDataModule::PrepareAttribSysSchemaResource (BrnGameDataModule.cpp).
+GameDataModule::PrepareAttribSysSchemaResource (BrnGameDataModule.cpp), which
+fopen()s them by bare relative name -- so they belong at the game folder root,
+beside Burnout_PC.exe.
 """
 import os
 import struct
@@ -79,6 +93,87 @@ DEF_OUT = os.path.join(ROOT, 'build', 'game')
 GDATABASE_TYPE = 0x0B38846845E9C175   # hash64('Attrib::DatabaseLoadData')
 GCLASS_TYPE = 0x2A7895AC4A876152      # hash64('Attrib::ClassLoadData')
 GCOLLECTION_TYPE = 0xAD303B8F42B3307E  # hash64('Attrib::CollectionLoadData')
+
+# .rdata addresses in the ARTIST XEX image, from
+# GameDataModule::PrepareAttribSysSchemaResource @0x82673258.  The SIZE words are
+# read back out of the image and must agree with the documented sizes: together
+# with the fourCC check that is what tells a different XEX build (where these VAs
+# would point at something else entirely) from the one these addresses came from.
+# The bin PREFIX word at 0x82CD53AC is the u32 1 the payload base sits 4 bytes
+# past (see the note above).
+SCHEMA_VA = {
+    'vlt': (0x82CD3D88, 0x82CD3D84, 5664, b'Vers'),
+    'bin': (0x82CD53B0, 0x82CD53A8, 20352, b'StrE'),
+}
+SCHEMA_BIN_PREFIX_VA = 0x82CD53AC
+
+
+def load_xex_image(path):
+    """Rebuild an XEX2's loaded image -> (image_bytes, image_base).
+
+    Burnout's XEX is unencrypted and 'basic' compressed, so the image is the
+    concatenation of the PE payload's (data, zero) block runs -- no AES, no LZX.
+    Same walk as tools/assets/textures/extract_xex.py, which pulls the
+    loading-screen textures out of this very file."""
+    with open(path, 'rb') as fh:
+        d = fh.read()
+    if d[:4] != b'XEX2':
+        raise AssertionError('%s is not an XEX2 (magic %r)' % (path, d[:4]))
+
+    def u32(o):
+        return struct.unpack_from('>I', d, o)[0]
+
+    pe_off = u32(0x08)
+    base = 0x82000000
+    ffo = None
+    for i in range(u32(0x14)):
+        k, v = u32(0x18 + i * 8), u32(0x18 + i * 8 + 4)
+        if k == 0x000003FF:              # XEX_HEADER_FILE_FORMAT_INFO
+            ffo = v
+        if k == 0x00010001:              # XEX_HEADER_IMAGE_BASE_ADDRESS
+            base = v
+    if ffo is None:
+        raise AssertionError('%s has no file-format-info header' % path)
+    img = bytearray()
+    src = pe_off
+    o = ffo + 8
+    while o < ffo + u32(ffo):
+        data_size, zero_size = u32(o), u32(o + 4)
+        img += d[src:src + data_size]
+        src += data_size
+        img += b'\x00' * zero_size
+        o += 8
+    return bytes(img), base
+
+
+def extract_schema_from_xex(path):
+    """(vlt_be, bin_be) sliced out of the ARTIST XEX's .rdata."""
+    img, base = load_xex_image(path)
+    out = []
+    for which in ('vlt', 'bin'):
+        va, size_va, documented, magic = SCHEMA_VA[which]
+        for tag, addr in (('payload', va), ('size word', size_va)):
+            if not (base <= addr and addr + 4 <= base + len(img)):
+                raise AssertionError('%s %s 0x%08X is outside the image '
+                                     '[0x%08X, 0x%08X) -- wrong XEX build?'
+                                     % (which, tag, addr, base, base + len(img)))
+        size = struct.unpack_from('>I', img, size_va - base)[0]
+        if size != documented:
+            raise AssertionError('%s size word @0x%08X reads %d, not the '
+                                 'documented %d -- wrong XEX build?'
+                                 % (which, size_va, size, documented))
+        blob = img[va - base: va - base + size]
+        if len(blob) != size:
+            raise AssertionError('%s payload runs past the image end' % which)
+        if blob[:4] != magic:
+            raise AssertionError('%s @0x%08X does not start with %r (got %r) -- '
+                                 'wrong XEX build?' % (which, va, magic, blob[:4]))
+        out.append(blob)
+    prefix = struct.unpack_from('>I', img, SCHEMA_BIN_PREFIX_VA - base)[0]
+    if prefix != 1:
+        raise AssertionError('bin prefix word @0x%08X is %d, not 1 -- the payload '
+                             'base may be misaligned' % (SCHEMA_BIN_PREFIX_VA, prefix))
+    return out[0], out[1]
 
 
 class Walker(object):
@@ -304,9 +399,42 @@ def port(vlt_be, bin_be):
 
 
 def main(argv):
-    vlt_path, bin_path, out_dir = (argv + [DEF_VLT, DEF_BIN, DEF_OUT][len(argv):])[:3]
-    vlt_be = open(vlt_path, 'rb').read()
-    bin_be = open(bin_path, 'rb').read()
+    xex = out_dir = None
+    rest = []
+    it = iter(range(len(argv)))
+    for i in it:
+        if argv[i] in ('--xex', '--out'):
+            if i + 1 >= len(argv):
+                raise SystemExit('%s needs a value' % argv[i])
+            if argv[i] == '--xex':
+                xex = argv[i + 1]
+            else:
+                out_dir = argv[i + 1]
+            next(it, None)
+        else:
+            rest.append(argv[i])
+
+    if xex:
+        if rest:
+            raise SystemExit('--xex takes no positional BE files (got %r)' % rest)
+        vlt_be, bin_be = extract_schema_from_xex(xex)
+        print('schema payloads sliced from %s' % xex)
+        out_dir = out_dir or DEF_OUT
+    else:
+        vlt_path, bin_path, positional_out = \
+            (rest + [DEF_VLT, DEF_BIN, DEF_OUT][len(rest):])[:3]
+        for p in (vlt_path, bin_path):
+            if not os.path.isfile(p):
+                raise SystemExit(
+                    'missing BE payload %s.\nThese are build artefacts and `build/` is '
+                    'gitignored, so a clone will not have them. Extract them from the '
+                    'retail data instead:\n'
+                    '  py %s --xex "<game folder>/BURNOUT_X360_ARTIST.XEX" --out <dir>'
+                    % (p, os.path.basename(__file__)))
+        vlt_be = open(vlt_path, 'rb').read()
+        bin_be = open(bin_path, 'rb').read()
+        out_dir = out_dir or positional_out
+
     vlt_le, bin_le, (nexp, nfix) = port(vlt_be, bin_be)
     os.makedirs(out_dir, exist_ok=True)
     ov = os.path.join(out_dir, 'schema.vlt')
