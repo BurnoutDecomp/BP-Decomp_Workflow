@@ -267,6 +267,39 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsPackedOobb.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsOcclusionCullManager.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\shadowingdevice.cpp"
+  rem ---- SHADOW-MAP RENDER TARGET wave (2026-08-12): the four TUs that make the shadow ----
+  rem ---- pass's target EXIST. BRN_SHADOW_MAP_TARGET_AVAILABLE in BrnRendererModule.cpp ----
+  rem ---- is now 1 and these are its link closure.                                     ----
+  rem
+  rem  The blocker was never these files -- it was the layer beneath them. postfx::RenderTarget
+  rem  (Initialize / Parameters::Parameters / Begin / End / GetTexture / GetDepthStencilTexture /
+  rem  Get,SetSectionRenderTargetState / GetRenderTargetState), postfx::gpDefaultRenderTargetState
+  rem  and renderengine::Device::SetState(const RenderTargetState*) were declared everywhere and
+  rem  DEFINED NOWHERE (the only Device::SetState in the tree was shadow::Device::SetState(void*,
+  rem  u32), a different class). PostFxRenderTargetPCLeaf.cpp is the new PC leaf that defines all
+  rem  of them over Direct3D 9: a real depth-sampleable INTZ texture (1280x1920 = the 1x3 cascade
+  rem  atlas the recovered ShadowMap_* constants encode) bound as the depth-stencil surface.
+  rem
+  rem  ⚠ THE CONSOLE SIBLING STAYS OUT.
+  rem  SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxrendertarget.cpp is the FAITHFUL
+  rem  X360 reconstruction of this same surface, and it is deliberately NOT mounted: it is EDRAM
+  rem  end to end (PixelBuffer::Initialize / Xbox2ResolveTo / Xbox2SetBaseEDRAM /
+  rem  Xbox2SetBaseHierarchicalZ / Texture::Xbox2CheckPhysicalMemoryFlags / AllocateAndInitializeTexture
+  rem  / TextureState::GetResourceDescriptor / RenderTargetState__{GetResourceDescriptor,Initialize}
+  rem  -- none of which has a body in the tree), and it would ALSO LNK2005 against the leaf, since
+  rem  both define RenderTarget::Begin/End/Resolve/Initialize and Target::Resolve. It stays parked
+  rem  as the console record until the renderengine PixelBuffer layer exists.
+  rem
+  rem  MEASURED CLOSURE (a real trial link over the 1,139-object set + these five, NOT `cl /c`):
+  rem  the five TUs raise 101 distinct externals; 84 are satisfied by the object set and the
+  rem  remaining 17 are CRT / import-lib symbols (operator new/delete, type_info, __security_*,
+  rem  memset, __imp_GetEnvironmentVariableA, ...). link exit 0, zero LNK2019/LNK2005.
+  rem  BrnRendererMemory::Construct is COMPILED OUT behind BRN_RENDERER_MEMORY_FULL_POOL_AVAILABLE
+  rem  (its 14 unresolvable pool/blit symbols are listed in that banner) -- do not un-gate it here.
+  echo "%SRC%\GameShared\GameClasses\Graphics\CgsRenderTarget.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnRendererMemory.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnShadowMapRenderManager.cpp"
+  echo "%SRC%\pc\gcm\renderengine\PostFxRenderTargetPCLeaf.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsBufferedDispatchFrame.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsMaterialAssembly.cpp"
   echo "%SRC%\pc\gcm\renderengine\VertexProgramState.cpp"
