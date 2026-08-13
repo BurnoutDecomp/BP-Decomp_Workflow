@@ -490,6 +490,20 @@ def plan(srcroot, outroot, file_rules, gen_rules, only=None, limit=0):
 
 # ------------------------------------------------------------------ execution
 
+# A converter that died before it ran is not a converter that disagreed with its input.
+# MEASURED on the first full 5,923-file run (2026-08-13): TRK_UNIT336/337/338 failed in two
+# different worker slots within the same moment with `Failed to create CoreCLR` --
+# System.Private.CoreLib.dll first missing (0x80070002) and then locked (0x80070020) -- i.e.
+# the .NET runtime was being replaced underneath a 3.4-hour run.  All three converted on a
+# plain retry.  Losing three world bundles to that is exactly what stops this being a
+# one-time operation, so a launch-level fault gets ONE retry.  Deliberately narrow: it
+# matches the toolchain failing to start, never a converter's own verdict on the data.
+TRANSIENT_LAUNCH_RE = re.compile(
+    r"Failed to create CoreCLR|Failed to load System\.Private\.CoreLib"
+    r"|being used by another process|The process cannot access the file", re.I)
+RETRY_PAUSE_S = 5
+
+
 def run_tool(rule, workroot, argv, cwd, log):
     tool = os.path.join(workroot, "tools", "assets", *rule.tool.split("/"))
     if not os.path.isfile(tool):
@@ -498,13 +512,21 @@ def run_tool(rule, workroot, argv, cwd, log):
     env = dict(os.environ)
     env["BRN_X360_ROOT"] = log["srcroot"]
     env["PYTHONIOENCODING"] = "utf-8"
-    try:
-        p = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, timeout=1800)
-    except subprocess.TimeoutExpired:
-        return 124, "timed out after 1800 s"
-    out = (p.stdout or b"").decode("utf-8", "replace")
-    err = (p.stderr or b"").decode("utf-8", "replace")
-    tail = "\n".join((err or out).strip().splitlines()[-8:])
+    for attempt in (1, 2):
+        try:
+            p = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, timeout=1800)
+        except subprocess.TimeoutExpired:
+            return 124, "timed out after 1800 s"
+        out = (p.stdout or b"").decode("utf-8", "replace")
+        err = (p.stderr or b"").decode("utf-8", "replace")
+        tail = "\n".join((err or out).strip().splitlines()[-8:])
+        if p.returncode == 0 or attempt == 2 or not TRANSIENT_LAUNCH_RE.search(tail):
+            if p.returncode == 0 and attempt == 2:
+                print("  [retry] %s recovered on the second attempt" % rule.id, flush=True)
+            return p.returncode, tail
+        print("  [retry] %s: toolchain failed to start, retrying in %ds"
+              % (rule.id, RETRY_PAUSE_S), flush=True)
+        time.sleep(RETRY_PAUSE_S)
     return p.returncode, tail
 
 
