@@ -178,7 +178,7 @@ At a glance:
 | IDA export pipeline | `tools/export_db.ps1`, `tools/ida/export_all.py`, `tools/ida/export_lineinfo.py`, `tools/ida/decompile.py` |
 | Derived ledger builders | `tools/work/build_identity.py`, `tools/work/build_tu_index.py`, `tools/work/build_type_deps.py`, `work seed --deps` |
 | Reconstruction helpers | `tools/work/dossier.py`, `tools/work/gen_stubs.py`, `tools/work/gen_skeleton.py`, `tools/work/auto_draft.py` |
-| Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `progress/verify.config.json`, `progress/review.config.json` |
+| Verification/review | `tools/work/verify.py`, `tools/work/parity.py`, `progress/review.config.json` (gate compile paths live in the canonical build config since `983df68`) |
 | Reference and maintenance | `tools/work/wiki_index.py`, `tools/work/check_vendor_lib.py`, `tools/work/reconcile_from_files.py`, `tools/work/find_local_redefs.py`, `tools/renderware/generate_headers.py` |
 | Optional server coordination | `work sync`, `work server-sync`, `work server-update`, `work resolve-class-homes`, `work server-reset`, `work worker-add`, `work worker-list`, `work worker-revoke` |
 
