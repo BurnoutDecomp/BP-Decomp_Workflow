@@ -574,15 +574,28 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  (24/24 == the sub-10-mph accept-all path; the resting car). Queue [6] feeds the ALREADY-
   rem  LANDED bridge (BridgeContactsToSimulation -> ReadPotentialVehicleWorldContact ->
   rem  DeformationSensor::ValidateAndAddContact) -- real world contacts now reach the car's
-  rem  deformation sensors every frame. WHAT IS LEFT for the wall-stop: the penetration-solver
-  rem  leg -- DeformationManager::Update @? (289) + UpdateContacts (348) absent;
-  rem  AddContactsToPenetrationSolver (443) / SolvePenetration @0x82621B08 (692) /
-  rem  ApplySensorImpulse @0x826078B0 (699) bodied-but-UNMOUNTED in _Contacts.cpp (~19
-  rem  unresolved tail); ApplyLocalImpulse @0x8260E068 (43, wrapper; PS3 0x74D3A0/569 carries
-  rem  the inlined body) -- then the car stops at walls. The swept twins
+  rem  deformation sensors every frame.
+  rem  RUNTIME STATE (walls leg 4, 2026-08-14): THE PENETRATION-SOLVER LEG IS LIVE. The whole
+  rem  deformation conductor runs per frame (mgr Update @0x82649B40 -> obj Update @0x82649160 ->
+  rem  UpdateContacts @0x826478B0 -> ApplyCarWorldImpulse (PS3 0x746D68; X360 hole) ->
+  rem  ApplySensorImpulse; post-physics mgr UpdatePostPhysics @0x82630420 -> SolvePenetration
+  rem  @0x82621B08 with Solve() x2 per BOTH consoles + obj UpdatePostPhysics @0x825DFEB0 +
+  rem  AddArticulatedJointContacts @0x825DB190). Boot witness (log-once): 'penetration solver
+  rem  LIVE: 22 world contact(s); pos ... -> <identical>' == ~zero correction at rest, the
+  rem  invariant the leg was gated on. KA_IMPULSE_DIRECTIONS recovered (PS3 init 22) -- the two
+  rem  flagged-zero direction tables that silently zeroed every impulse are RETIRED.
+  rem  WHAT IS LEFT: DeformationSensor::ApplyLocalImpulse (PS3 0x74D3A0, 569 -- the sensor
+  rem  point-displacement/absorption whale, LOUD GATE; deformation visuals also need the
+  rem  _Output closure) ; obj UpdateWheels @0x826254C0 (1125) + the UpdateGlass leg of
+  rem  UpdateIKAndLocators (both log-once gates); the module-output scene interface is
+  rem  UNPREPARED on PC (SetEntityRadius guarded, [marked deviation]); the detach paths carry
+  rem  named gates (dead at 0 parts). The swept twins
   rem  (ExecuteSweptSphereListWithTriangleListStream 1620 / IntersectTriangle4SweptSphere 896 /
-  rem  Intersect2DCircleWithTriangleSOA 156) are a LATER leg -- the sphere path is the
-  rem  stationary/slow-speed contact a wall-stop needs first.
+  rem  Intersect2DCircleWithTriangleSOA 156) stay a LATER leg. A verified head-on WALL-FACE stop
+  rem  was NOT captured this wave: full-lock drives circle the junkyard floor for 190s with
+  rem  contacts held and NO tunnel-through; straight/loose drives exit via the junkyard's OPEN
+  rem  side into unstreamed world and hit the PRE-EXISTING long-drive fallthrough (streamer
+  rem  asserts), which is NOT a wall tunnel.
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_CollideStreams.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
   rem  ⭐ 2026-08-14 (walls leg 2): the result-record TU mounts -- PrimitiveTestResult::IsValid
@@ -1172,6 +1185,27 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Remove.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsSweptSphere.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\BaseEventQueue_InEventRemoveFromCache_AddEvent.cpp"
+  rem  ⭐⭐ 2026-08-14 (walls leg 4): THE PENETRATION-SOLVER LEG MOUNTS. The manager contact/solve
+  rem  slice (SolvePenetration -- now Solve()x2 per both consoles -- + UpdateTriangleCache +
+  rem  GetDeformedBBox), the DeformableObject home (ApplyCarCarImpulse + the NEW ApplyCarWorld-
+  rem  Impulse from the PS3 0x746D68 body), the object contact slice (AddContactsToPenetration-
+  rem  Solver + GetVehicleWorldRestitution + the world-contact-gen legs), the detach slice
+  rem  (UpdateSpinningDetachment / CheckFor*Detachment), the two detached managers (part: Make/
+  rem  UpdatePostPhysics/NEW UpdateTriangleCache; wheel: Remove*/UpdateTriangleCache/NEW filtered
+  rem  UpdatePostPhysics + the two Emit* hook gates), the pool home (UpdateRWBodies/UpdateJoined-
+  rem  Parts/NEW AddPartsToScene), the part home, and the NEW BrnCollidableBody.cpp (the RECOVERED
+  rem  KA_IMPULSE_DIRECTIONS six-axis table + GetDirectionVector -- retires the two flagged-zero
+  rem  direction tables that silently zeroed every impulse).
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_Contacts.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnCollidableBody.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Contacts.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Detach.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDetachedPartManager.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDetachedWheelManager.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPart.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalWheel.cpp"
   rem ⭐⭐ 2026-08-14 (walls wave): THE DEFORMATION-MANAGER MOUNT WAS TRIAL-LINKED AND MEASURED.
   rem The stale "25 unresolved" note (2026-08-03) below at the Construct leg is RETIRED -- mounting
   rem {BrnDeformationManager.cpp + BrnDeformableObject_{Lifecycle,Update,GlassState}.cpp} at the
