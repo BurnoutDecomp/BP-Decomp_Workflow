@@ -513,6 +513,12 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  UpdateTriangleCache / spatial-query tail carries ~19 unresolved of its own); the four
   rem  bridge callees were split into the _ContactFixups slice below (fold back when it mounts).
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_ContactFixups.cpp"
+  rem  ⭐ 2026-08-14 (walls leg 1): the per-car collision-query slice DoRaceCarWorldContact-
+  rem  Generation needs per frame -- IsUsingSweptSpheres @0x825C2338 + GetSweptSpheresForCar
+  rem  @0x825C22D0 (MOVED out of the still-unmounted _Contacts.cpp, same precedent as the
+  rem  _ContactFixups slice above) + GetSpheresForCar @0x825C2260 (EXPORT HOLE, lifted from the
+  rem  image; returns -1 gracefully, no assert -- NOT the swept sibling's shape).
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_ContactQueries.cpp"
   rem  2026-08-06 (big-five #2, contact-generation wave): the contact-BRIDGE slice consumed by
   rem  PhysicsModule::BridgeContactsToSimulation -- ReadPotentialVehicleWorldContact +
   rem  FindModelIndexByGlobalEntityID (moved out of the still-unmounted _Contacts.cpp),
@@ -529,6 +535,23 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsPrimitivePairList.cpp"
   echo "%SRC%\GameSource\Physics\BrnContactGenerationList.cpp"
   echo "%SRC%\GameShared\GameClasses\Memory\DataStream\CgsSimpleDataStreamProducer_Begin.cpp"
+  rem  ⭐⭐ 2026-08-14 (walls leg 1): THE COLLIDE-STREAM FAMILY IS REAL -- six of the seven
+  rem  StreamStubs retired into CgsCollisionGenerator_CollideStreams.cpp (three Create* proved
+  rem  byte-identical bar assert lines; three Run* dispatchers wiring ContactGeneratorEntry over
+  rem  desc types 6/14/8 whose workers stay LOUD NAMED GATES; the two Add* posters + the
+  rem  PrepareNewPrimitiveTestResultsList result-list carve). StreamStubs keeps ONLY the
+  rem  CollidePrimitivePairList @0x82814138 gate (simple-traffic leg, dead on the junkyard path).
+  rem  DoRaceCarWorldContactGeneration @0x825EB140 is REAL in BrnVehicleManagerContactGeneration
+  rem  .cpp (its log-once gate + Start's null-producer guard both deleted); its query callees
+  rem  live in the new mounted slice BrnDeformationManager_ContactQueries.cpp below.
+  rem  RUNTIME STATE, stated plainly: one sphere command per live car per frame now flows
+  rem  end-to-end (post -> Begin -> dispatch -> Execute case 6) and stops at the named gate
+  rem  "ExecuteSphereListWithTriangleListStream @0x829235C8 not reconstructed" -- contacts are
+  rem  NOT generated until the sphere-vs-Triangle4 kernels land (next leg's list, censused at
+  rem  the walls-wave block: IntersectTriangle4Sphere_HackyBurnoutVersion 497 +
+  rem  IntersectTriangle4SweptSphere 896 + Intersect2DCircleWithTriangleSOA 156 + the two
+  rem  Execute workers 967/1620 + harvest End 661 / Validation 416 / Validate 988 + bridge).
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_CollideStreams.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
   rem  ⭐⭐ 2026-08-10 (cache-fill wave): the BaseCollisionGenerator HOME finally mounts. It has
   rem  been fully reconstructed since 2026-08-06 (Construct / Prepare / Finish / FinishBatch /
