@@ -1932,9 +1932,16 @@ def cmd_bootstrap(args):
         subprocess.run(["git", "submodule", "update", "--init"], cwd=ROOT)
     else:
         print("  b5-decomp already populated — skipping (won't touch local changes)")
+    # Top-level tool submodules (the asset pipeline builds YAP + Volatility from these).
+    for name, marker in (("tools/volatility", "Volatility.sln"), ("tools/yap", "CMakeLists.txt")):
+        if not os.path.exists(os.path.join(ROOT, name.replace("/", os.sep), marker)):
+            subprocess.run(["git", "submodule", "update", "--init", "--", name], cwd=ROOT)
+    # b5-decomp vendor submodules. NB vendor/renderware is a PLAIN TRACKED DIR, not a
+    # submodule -- initing it was a guaranteed git error on fresh clones. FFmpeg IS a
+    # submodule (needed by tools/build/build_ffmpeg.bat); its marker is a file.
     for name, marker in (("EABase", "include/Common"), ("EASTL", "include"),
-                         ("EAThread", "include"), ("renderware", "include")):
-        if not os.path.isdir(os.path.join(b5, "vendor", name, marker)):
+                         ("EAThread", "include"), ("FFmpeg", "configure")):
+        if not os.path.exists(os.path.join(b5, "vendor", name, marker)):
             subprocess.run(["git", "submodule", "update", "--init", "--", f"vendor/{name}"], cwd=b5)
 
     # 2) the committed structure must be present (identity/tu_index are in git)

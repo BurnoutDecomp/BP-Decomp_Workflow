@@ -67,8 +67,9 @@ type-header pointer.
 ## Phase 3 — verification (live)
 
 `work submit` runs the per-TU **compile gate** (`cl /c`, no link;
-[`tools/work/verify.py`](../tools/work/verify.py), configured by
-[`verify.config.json`](verify.config.json)). On a compile failure it prints the
+[`tools/work/verify.py`](../tools/work/verify.py); flags/includes from the canonical
+`tools/build/msvc_flags.txt` + `msvc_includes.txt`, MSVC located by
+`tools/build/msvc_env.bat`). On a compile failure it prints the
 MSVC diagnostics and returns the TU to `in_progress`. On pass it writes a fresh-eyes
 **reviewer packet** to `reviews/<tu>.md` (produced code + dossier, including
 DecFIGS dwarfdump hints when the TU has a matching source path). After a reviewer
@@ -81,5 +82,4 @@ Prereq for non-trivial TUs: check out the EA submodules
 
 | File | Built by | What it is |
 |------|----------|------------|
-| `verify.config.json` | committed | Compile-gate config: vcvars path, compiler, flags, include dirs. |
 | `reviews/` | `work submit` | *Generated, git-ignored.* Per-TU reviewer packets. |

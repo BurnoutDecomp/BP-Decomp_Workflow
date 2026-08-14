@@ -3,7 +3,7 @@
 // editing CgsFont.h / texture.h / CgsResourceBundle2.h.
 //
 // Build (from repo root) with the same include dirs the compile gate uses
-// (progress/verify.config.json -> include_dirs), e.g. under an MSVC dev shell:
+// (tools/build/msvc_includes.txt), e.g. under an MSVC dev shell:
 //   cl /nologo /EHsc /std:c++17 /I b5-decomp/src ^
 //      /I b5-decomp/vendor/EABase/include/Common /I b5-decomp/vendor/renderware/include ^
 //      tools/assets/fonts/dump_offsets.cpp && dump_offsets.exe

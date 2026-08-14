@@ -70,10 +70,13 @@ Required for normal ledger work:
 
 Required for the compile gate:
 
-- Visual Studio/MSVC
-- `progress/verify.config.json` pointing at a real `vcvars64.bat`
+- Visual Studio 2022 (any edition) — MSVC is auto-located by
+  `tools/build/msvc_env.bat` (default install paths, then `vswhere`); set the
+  `VCVARS64` environment variable only if VS lives somewhere non-standard.
+  Flags and include dirs come from the canonical `tools/build/msvc_flags.txt` +
+  `tools/build/msvc_includes.txt` (the same set the shipping exe build uses).
 
-If `vcvars` is missing, `work submit` reports a skipped compile gate and continues;
+If no MSVC is found, `work submit` reports a skipped compile gate and continues;
 that is useful for bookkeeping but does not catch compiler errors.
 
 Required only for regenerating analysis exports or generating new skeletons from IDA:

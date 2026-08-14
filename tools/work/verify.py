@@ -9,57 +9,79 @@ Two tiers, per STRATEGY.md (reconstruction target):
      brief for a FRESH-EYES reviewer sub-agent. The LLM review itself is performed by
      the agent/harness (Task tool, etc.), not here; `work review` records its verdict.
 
-The gate is configured by progress/verify.config.json. If the MSVC environment is
-absent it returns ('skip', reason) so the loop still works.
+The gate compiles with the CANONICAL flag/include lists (tools/build/msvc_flags.txt
++ msvc_includes.txt -- the same set the shipping exe build uses, including /O2 /Gy)
+and locates MSVC via tools/build/msvc_env.bat (VCVARS64 env override supported).
+If no MSVC environment can be found it returns ('skip', reason) so the loop still
+works on compiler-less machines.
 """
 import json, os, re, shutil, subprocess, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CONFIG = os.path.join(ROOT, "progress", "verify.config.json")
+CONFIG = os.path.join(ROOT, "progress", "verify.config.json")  # legacy; soft-read only
 REVIEWS = os.path.join(ROOT, "progress", "reviews")
+FLAGS_TXT = os.path.join(ROOT, "tools", "build", "msvc_flags.txt")
+INCS_TXT = os.path.join(ROOT, "tools", "build", "msvc_includes.txt")
+MSVC_ENV = os.path.join(ROOT, "tools", "build", "msvc_env.bat")
 
 import dossier  # same dir
-
-
-def load_config():
-    if not os.path.exists(CONFIG):
-        return None
-    return json.load(open(CONFIG, encoding="utf-8"))
 
 
 def _abs(p):
     return p if os.path.isabs(p) else os.path.join(ROOT, p)
 
 
+def _read_list(path):
+    """Non-comment, non-blank lines of a canonical tools/build/*.txt list."""
+    out = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                out.append(line)
+    return out
+
+
 def compile_gate(files):
     """Compile-only gate. Returns (status, log) with status in pass|fail|skip."""
-    cfg = load_config()
-    if not cfg:
-        return "skip", "no progress/verify.config.json"
-    vcvars = cfg.get("vcvars", "")
-    if not vcvars or not os.path.exists(vcvars):
-        return "skip", f"vcvars not found: {vcvars!r} (install/point to MSVC)"
+    if not (os.path.exists(FLAGS_TXT) and os.path.exists(INCS_TXT)):
+        return "skip", "canonical flag/include lists missing under tools/build/"
     existing = [f for f in files if os.path.exists(_abs(f))]
     if not existing:
         return "skip", f"no source file(s) on disk: {files}"
 
+    env = dict(os.environ)
+    # Legacy soft-import: an old progress/verify.config.json with a valid custom
+    # "vcvars" still works, via the resolver's VCVARS64 override.
+    if "VCVARS64" not in env and os.path.exists(CONFIG):
+        try:
+            legacy = json.load(open(CONFIG, encoding="utf-8")).get("vcvars", "")
+            if legacy and os.path.exists(legacy):
+                env["VCVARS64"] = os.path.normpath(legacy)
+        except Exception:
+            pass
+
     objdir = tempfile.mkdtemp(prefix="workgate_")
     try:
-        # Run via a temp .bat to avoid cmd.exe nested-quote mangling of the
-        # vcvars path (which contains spaces). Native backslash paths throughout.
+        # Run via a temp .bat to avoid cmd.exe nested-quote mangling of paths
+        # with spaces. Native backslash paths throughout.
         def win(p):
             return os.path.normpath(p)
-        incs = " ".join(f'/I"{win(_abs(d))}"' for d in cfg.get("include_dirs", []))
-        flags = " ".join(cfg.get("flags", ["/nologo", "/c", "/EHsc", "/std:c++17"]))
+        flags = " ".join(sum((ln.split() for ln in _read_list(FLAGS_TXT)), [])) + " /c"
+        incs = " ".join(f'/I"{win(os.path.join(ROOT, d))}"' for d in _read_list(INCS_TXT))
         srcs = " ".join(f'"{win(_abs(f))}"' for f in existing)
         bat = os.path.join(objdir, "gate.bat")
         with open(bat, "w", encoding="utf-8") as fh:
             fh.write("@echo off\n")
-            fh.write(f'call "{win(vcvars)}" >nul 2>&1\n')
-            fh.write(f'{cfg.get("compiler","cl")} {flags} {incs} {srcs}\n')
+            fh.write(f'call "{win(MSVC_ENV)}" >nul 2>&1\n')
+            fh.write("if errorlevel 1 exit /b 200\n")  # 200 = toolchain absent -> skip
+            fh.write(f"cl {flags} {incs} {srcs}\n")
             fh.write("exit /b %ERRORLEVEL%\n")
-        p = subprocess.run(["cmd", "/c", bat], cwd=objdir,
+        p = subprocess.run(["cmd", "/c", bat], cwd=objdir, env=env,
                            capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if p.returncode == 200:
+            return "skip", ("MSVC not found (tools/build/msvc_env.bat; set VCVARS64)\n"
+                            + (p.stdout or ""))
         status = "pass" if p.returncode == 0 else "fail"
         return status, (p.stdout or "") + (p.stderr or "")
     finally:
