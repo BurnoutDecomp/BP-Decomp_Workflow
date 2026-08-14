@@ -86,6 +86,7 @@ or step by step (each with `--force` to rebuild):
 | `build ffmpeg` | `tools/build/build_ffmpeg.bat` (add `--prebuilt` to download instead of compile) | `b5-decomp/vendor/ffmpeg-build/` |
 | `build exe` | `tools/build/build_game_exe.bat` | `build/game/Burnout_PC.exe` |
 | `build data` | `tools/assets/build_game_data.py` (all its flags forwarded — `--dry-run`, `--jobs`, `--out`, `--borrow-dir`, `--only`, …) | the converted data folder + `.build_game_data/report.txt` |
+| `build devdata` | attribsys_schema_port + extract_xex against the ARTIST XEX | refreshes the *generated* assets in the live `build/game` (`schema.vlt`/`schema.bin` + `LOADINGSCREEN/*.dds`) — run it whenever those tools change; stale copies here presented as gibberish loading screens and the "PC schema file missing" assert |
 
 `build data --dry-run` plans everything, writes nothing, and reports every
 missing prerequisite — read its gap report before the first real run.
