@@ -1,4 +1,4 @@
-"""Extract and decode loading-screen textures from references/artist.xex into the
+"""Extract and decode loading-screen textures from the ARTIST XEX into the
 A8R8G8B8 .dds files the PC build loads (build/loadingscreen/*.dds).
 
 The XEX2 is unencrypted + 'basic' compressed, so the loaded image is rebuilt without
@@ -9,8 +9,21 @@ dimensions + format back out of that header via LoadFromDDS).
 """
 import struct, os
 
+# Under build_game_data.py the ARTIST XEX is staged into the worker root as
+# references/artist.xex (manifest rule generate-loadingscreen, stage_in), so that name is
+# tried first and the orchestrated flow keeps following --src.  Run by hand there is no
+# staged copy, so fall back to the retail set in the repo (references/private is
+# gitignored); BRN_X360_ROOT overrides both.
+_REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+_RETAIL = os.environ.get(
+    'BRN_X360_ROOT', os.path.join(_REPO, 'references', 'private', 'Burnout_tcartwright'))
 XEX = 'references/artist.xex'
+if not os.path.isfile(XEX):
+    XEX = os.path.join(_RETAIL, 'BURNOUT_X360_ARTIST.XEX')
 OUT = 'build/loadingscreen'
+if not os.path.isfile(XEX):
+    raise SystemExit('ARTIST XEX not found: put the retail set in %s, set BRN_X360_ROOT, '
+                     'or stage it as references/artist.xex' % _RETAIL)
 d = open(XEX, 'rb').read()
 def u32(o): return struct.unpack_from('>I', d, o)[0]
 def u16(o): return struct.unpack_from('>H', d, o)[0]
@@ -20,6 +33,23 @@ for i in range(u32(0x14)):
     k = u32(0x18+i*8); v = u32(0x18+i*8+4)
     if k == 0x000003FF: ffo = v
     if k == 0x00010001: base = v
+if d[:4] != b'XEX2' or ffo is None:
+    raise SystemExit('%s is not a parsable XEX2 (magic %r, file-format-info %r)'
+                     % (XEX, d[:4], ffo))
+# The block walk below is the UNENCRYPTED + 'basic'-compressed layout only. A raw
+# retail dump's XEX (encrypted and/or LZX-compressed) reads as garbage blocks --
+# name the real problem instead of untiling noise.
+_enc, _comp = u16(ffo+4), u16(ffo+6)
+if _enc != 0 or _comp != 1:
+    raise SystemExit(
+        '%s: XEX2 is %s + %s; this tool needs the UNENCRYPTED, BASIC-compressed '
+        'ARTIST image (the form shipped in references/private). Decrypt/decompress '
+        'the retail XEX first (e.g. xextool -e d -c b) and point the source folder '
+        'at that copy.' % (
+            XEX,
+            {0: 'unencrypted'}.get(_enc, 'ENCRYPTED (type %d)' % _enc),
+            {0: 'uncompressed', 1: 'basic-compressed'}.get(
+                _comp, 'compression type %d (LZX?)' % _comp)))
 isz = u32(ffo)
 blocks = []; o = ffo+8
 while o < ffo+isz: blocks.append((u32(o), u32(o+4))); o += 8

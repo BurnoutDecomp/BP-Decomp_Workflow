@@ -3,8 +3,8 @@
 Slice deliverable for the world-render campaign shader data path (2026-07-27).
 Everything below is measured against `build/game/SHADERS.BNDL` (bnd2 platform 2
 big-endian, 344 resources), the committed b5 consumers, and the nushaders
-toolchain (`D:\Reverse\nushaders`), which is the authority on the container
-formats.
+toolchain (a separate repo; `NUSHADERS_TUB` in build.config.toml points at its
+TUB tree), which is the authority on the container formats.
 
 Companion files:
 
@@ -85,8 +85,8 @@ offsets (as the resource-type FixUp already does), not widen the data.
 
 ## 3. ShaderTechnique blob (type 0x32) -- layout and per-field mapping
 
-32-bit console layout (authority:
-`D:\Reverse\nushaders\Reference\ShaderTechnique_Xbox360.mediawiki`, byte-for-
+32-bit console layout (authority: the nushaders repo's
+`Reference\ShaderTechnique_Xbox360.mediawiki`, byte-for-
 byte confirmed against the committed FixUp and against the retail blobs).
 Fixed 0x98-byte header:
 
@@ -138,7 +138,7 @@ byte-exactly**.
 
 ## 4. ShaderProgramBuffer (type 0x12) -- X360 layout
 
-Authority: `D:\Reverse\nushaders\Source\NuShaders.Formats\Xbox360\
+Authority: the nushaders repo's `Source\NuShaders.Formats\Xbox360\
 Xbox360ShaderProgramBuffer.cs` (byte-validated packer) +
 `programbuffer.h ProgramBufferData`. Primary (`_header.dat`):
 
@@ -182,8 +182,9 @@ the payload replaced:
 | muMicrocodePart3 | 0 -- no Xenos physical block (serialised-descriptor slot2 sizes to zero); `_body.dat` written as 16 zero bytes to keep the bundle shape |
 | descriptor bytes | `{name file-offset, register index, type (CTAB D3DXRS: BOOL->0, INT4->2, FLOAT4->2, SAMPLER->3), register count, 0}` |
 
-Bytecode source: the TUB HLSL (`D:\Reverse\nushaders\Reference\TUB\Bundle\
-gamedb\burnout5\Shaders\*.fx` + `..\Include\`), compiled with the plain
+Bytecode source: the TUB HLSL (`{NUSHADERS_TUB}\Shaders\*.fx` + `..\Include\`,
+where `NUSHADERS_TUB` = the nushaders repo's
+`Reference\TUB\Bundle\gamedb\burnout5`), compiled with the plain
 Windows-SDK `fxc.exe` as raw `vs_3_0`/`ps_3_0` (NOT the fx_2_0 effect profile
 -- the engine wants bare shader blobs). **Verified equivalence**: compiling
 `Diffuse_Opaque_Singlesided.fx` `VS_Main`/`PS_Main` yields a CTAB whose

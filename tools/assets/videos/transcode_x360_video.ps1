@@ -22,8 +22,8 @@
 #
 # Usage:
 #   powershell -File tools\assets\videos\transcode_x360_video.ps1 `
-#       -Src "D:\...\Burnout_tcartwright\VIDEOS\intro.vp6" `
-#       -Dst "D:\Reverse\BP-Decomp_Workflow\build\game\VIDEOS\INTRO.VP6"
+#       -Src "<x360-game-folder>\VIDEOS\intro.vp6" `
+#       -Dst "<repo>\build\game\VIDEOS\INTRO.VP6"
 param(
     [Parameter(Mandatory=$true)][string]$Src,
     [Parameter(Mandatory=$true)][string]$Dst,

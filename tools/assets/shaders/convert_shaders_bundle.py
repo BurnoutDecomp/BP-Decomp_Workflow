@@ -26,7 +26,9 @@ Commands:
       YAP import-sidecar rename fix.
 
 Requires: build/tools/yap/YAP.exe, fxc.exe (env PC_FXC or a Windows 10/11
-SDK), and for the Texture resources build/tools/volatility/Volatility.Cli.exe.
+SDK), the TUB HLSL tree (env NUSHADERS_TUB / build.config.toml
+[inputs].nushaders_tub, or --fxdir), and for the Texture resources
+build/tools/volatility/Volatility.Cli.exe.
 
 Do NOT stage outputs into build/game/ from this tool; write to
 tools/assets/shaders/out/ or a scratch dir and hand over to the build owner.
@@ -53,7 +55,11 @@ import world_type_transcode as wtt               # noqa: E402
 import convert_world_bundle as cwb               # noqa: E402
 
 YAP = os.path.join(ROOT, 'build', 'tools', 'yap', 'YAP.exe')
-NUSHADERS_TUB = r'D:\Reverse\nushaders\Reference\TUB\Bundle\gamedb\burnout5'
+# The nushaders repo's TUB HLSL tree: env NUSHADERS_TUB (fed by build.config.toml
+# [inputs].nushaders_tub via the build driver) > this machine's historical default.
+NUSHADERS_TUB = os.environ.get(
+    'NUSHADERS_TUB',
+    r'D:\Burnout Paradise\Source\NuShaders\Reference\TUB\Bundle\gamedb\burnout5')
 DEFAULT_FX_DIR = os.path.join(NUSHADERS_TUB, 'Shaders')
 DEFAULT_INCLUDE_DIR = os.path.join(NUSHADERS_TUB, 'Include')
 FALLBACK_FX = os.path.join(HERE, 'fallback_world.fx')
@@ -429,9 +435,11 @@ def main():
         raise SystemExit(
             'TUB HLSL source tree not found:\n  %s\n'
             'Every technique would silently compile to fallback_world.fx.\n'
-            'Clone the nushaders repo there, point --fxdir at your copy, or -- if you '
-            'really want the all-fallback diagnostic bundle -- ask for it explicitly with '
-            '`--fallback --fxdir <nonexistent-dir>` (MINIMAL_PATH.md option A).'
+            'Set NUSHADERS_TUB (or [inputs].nushaders_tub in build.config.toml) to your '
+            'nushaders clone\'s Reference/TUB/Bundle/gamedb/burnout5, point --fxdir at '
+            'your copy, or -- if you really want the all-fallback diagnostic bundle -- '
+            'ask for it explicitly with `--fallback --fxdir <nonexistent-dir>` '
+            '(MINIMAL_PATH.md option A).'
             % DEFAULT_FX_DIR)
     if a.cmd == 'inventory':
         inventory(a.in_bundle, fx_dirs)

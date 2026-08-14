@@ -11,8 +11,8 @@ the established tools/assets/bundles/world_type_transcode.py flippers):
       32-bit layout and reads native-endian u32 words at the console byte
       offsets, so the platform-4 form is the identical layout with every
       32-bit word byteswapped (strings and the sampler-count byte stay raw).
-      Layout authority: D:\\Reverse\\nushaders\\Reference\\
-      ShaderTechnique_Xbox360.mediawiki + the committed FixUp code.
+      Layout authority: the nushaders repo (NUSHADERS_TUB in build.config.toml),
+      Reference/ShaderTechnique_Xbox360.mediawiki + the committed FixUp code.
 
   ShaderProgramBuffer (type 0x12)
       Primary = 0x14-byte ProgramBufferData header (renderengine
@@ -27,8 +27,8 @@ the established tools/assets/bundles/world_type_transcode.py flippers):
                                    SM3 bytecode (compiled from the TUB HLSL
                                    sources with fxc) and rebuild the
                                    descriptor table from the bytecode's CTAB.
-      Container authority: D:\\Reverse\\nushaders\\Source\\NuShaders.Formats\\
-      Xbox360\\Xbox360ShaderProgramBuffer.cs (byte-validated round-trip
+      Container authority: the nushaders repo, Source/NuShaders.Formats/
+      Xbox360/Xbox360ShaderProgramBuffer.cs (byte-validated round-trip
       packer) + b5-decomp .../states/programbuffer.h ProgramBufferData.
 """
 import os
