@@ -1009,7 +1009,9 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\VehicleManager\StuntOffences\BrnStuntOffencesManager_Construct.cpp"
   rem  The deformation leg of PhysicsModule::Construct. Each of these is the SPLIT-OUT Construct of a
   rem  TU that cannot be mounted whole; every count below is a MEASURED trial link, not an estimate:
-  rem     BrnDeformationManager.cpp        25 unresolved (Prepare/Release/Destruct/OutputData/Process*)
+  rem     BrnDeformationManager.cpp        (2026-08-14: "25 unresolved" RETIRED -- re-measured 37
+  rem                                       for the 4-TU family; full census at the walls-wave
+  rem                                       block above)
   rem     BrnDeformationDebugComponent.cpp 53 unresolved (25 OnActivate, 12 RenderWorld, ...)
   rem     BrnPhysicalBodyPart.cpp          16 unresolved (TestJointForBreaking/RemoveFromScene/...)
   rem     BrnPhysicalBodyPartPool.cpp       9 unresolved (CreatePart/UpdateRWBodies/UpdateJoinedParts)
@@ -1021,6 +1023,53 @@ rem ---- build the cl response file ----
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPart_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationInputInterface.cpp"
+  rem ⭐⭐ 2026-08-14 (walls wave): THE DEFORMATION-MANAGER MOUNT WAS TRIAL-LINKED AND MEASURED.
+  rem The stale "25 unresolved" note (2026-08-03) below at the Construct leg is RETIRED -- mounting
+  rem {BrnDeformationManager.cpp + BrnDeformableObject_{Lifecycle,Update,GlassState}.cpp} at the
+  rem merged tip gives *** 37 unresolved *** (build\game\trial2_build.log), AFTER this wave fixed
+  rem the two defects the trial surfaced (both committed):
+  rem   * BrnDeformableObject.h fwd-declared the two Detached*Manager + PhysicalBodyPart as
+  rem     `struct` while their homes say `class` -- a PEAU/PEAV mangle fork that made
+  rem     DeformableObject::{Prepare,Release,ResetDeformation,OutputWheelData} defined-but-
+  rem     unmatchable (the shadowing-redeclaration shape; only a link finds it, this one did).
+  rem   * BrnDeformableObject_Update.cpp:456 called the pre-2026-08-02 3-arg
+  rem     ApplyShowtimeContactImpulse (this TU had never compiled).
+  rem THE REMAINING 37 SPLIT (addresses + sizes in the census; PS3 twins named where X360 lacks):
+  rem   MOUNT-CLOSABLE (bodied, unmounted): VehicleRigidBody 2 virtuals (BrnVehicleRigidBody.cpp),
+  rem     IKBodyPart x5 (BrnIKBodyPart.cpp), GetPlayerCarModel (BrnDeformationManager_Contacts.cpp
+  rem     slice-out), TagPoint::Construct / IKDrivenPoint (their TUs).
+  rem   BODIED THIS WAVE in the unmounted TUs (link tonight-ready): PostSceneUpdate @0x82644F40,
+  rem     ProcessValidateDeformationModelEvents @0x825DB0E0, DeformableObject::Prepare's spec
+  rem     resolve + mGlobalEntityId + mpAttachedVehicle binds (were pinned-null/dropped).
+  rem   STILL TO WRITE (the next wave's list, in dependency order):
+  rem     DeformationSensor default ctor (PS3 ClearVariables @0x6B5F28 is the shape),
+  rem     DeformableObject::UpdateIK @0x82608858 (61; PS3 0x6D374C has the names),
+  rem     SetLastLinearVelocity/SetEntitySphereSize/GetNumSensors (tiny),
+  rem     TagPoint accessors x4 + TagPointSpec::IsSkinned (tiny, header-inline on console),
+  rem     GetInitialCompressionScalesAndLimits (PS3 0x6C90C0, 89),
+  rem     ResetJointVelocities (PS3 0x6F8AE8, 330),
+  rem     RemovePhysicalPartsAndJoints @0x82625250 (155, decoded in walls_log) + the
+  rem       PhysicalBodyPartPool::RemovePart @0x8260CA30 (54) + PhysicalBodyPart::RemoveFromScene
+  rem       @0x825E7818 (43) slice pair,
+  rem     ⚠️ ResetSensors @0x82623D60 (718; PS3 0x7446FC) -- THE WHALE: seeds the 20 sensors +
+  rem       spheres from StreamedDeformationSpec::maDeformationSensorSpecs; without it a
+  rem       registered car is a HOLLOW SHELL (no spheres -> no contact tests -> walls stay
+  rem       immaterial even with the table live),
+  rem     UpdateSkinningOffsets' TagPoint closure, then UN-PIN ResetDeformation's tag/driven/IK
+  rem       rebuild loops (the spec accessors EXIST now -- BrnStreamedDeformationSpec.h is
+  rem       complete and shipped-spec-verified; the _Lifecycle "not exposed" FLAGs were stale).
+  rem   DEFERRABLE with a kept gate: OutputData's closure (OutputSensorState @0x82605618 is an
+  rem     X360 EXPORT HOLE, PS3 0x6F3E10; UpdateAndOutputJointStates @0x82609AE8 183;
+  rem     OutputWheelData @0x82608E28 276; DetachedPartManager::OutputEvents -> pool OutputEvents
+  rem     @0x8260DBE8 237) -- split OutputData to an unmounted _Output slice at mount time and
+  rem     keep its conductor gate; likewise the _Update.cpp UpdateLocators leg (UpdateLocator
+  rem     @0x825E0EC8 204; PS3 0x7A8498) via an IKSkinning slice.
+  rem   ⚠️ AND THE MOUNT'S RUNTIME PRECONDITIONS, measured on the live path: degrade the
+  rem     DoRaceCarWorldContactGeneration / DoCarCarContactGeneration TRAP STUBS
+  rem     (BrnVehicleManagerContactGeneration.cpp) to log-once gates FIRST -- the moment the model
+  rem     table != -1 they are REACHED PER FRAME and would assert-storm; and note
+  rem     BrnPhysicsModule.cpp Prepare stage 4's fourteen deferred deformation-IO clears become
+  rem     live the same moment.
   rem  ⛔ BrnVehicleManager.cpp IS STILL NOT MOUNTED. 2026-08-03 (task #110) RE-MEASURED the whole
   rem  closure from a fresh link rather than trusting the previous wave's note, and the numbers here
   rem  REPLACE the "15 unresolved externals" recorded before. Three separate builds:
