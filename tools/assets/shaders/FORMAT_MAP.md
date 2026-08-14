@@ -11,6 +11,10 @@ Companion files:
 - `shader_transcode.py` -- per-resource transcoders (validated, round-trip-proven)
 - `convert_shaders_bundle.py` -- whole-bundle driver (`inventory` / `convert`)
 - `fallback_world.fx` -- minimal bring-up shader (see `MINIMAL_PATH.md`)
+- `xenos.py` -- Xenos microcode disassembler, ground-truth-validated (see
+  section 8)
+- `ctab.py` -- big-endian CTAB reader (register-pinned uniform names for the
+  shader `xenos.py` disassembles)
 - converted output: `tools/assets/shaders/out/SHADERS_PC.BNDL` (do NOT stage
   into `build/game/` from this slice; hand over to the build owner)
 
@@ -265,3 +269,24 @@ D3DDevice_* symbols are honest externs today):
 - **Godray / CarStudio**: no TUB HLSL; fallback-substituted. Godray may need a
   hand port from the Xenos disassembly later (nushaders
   `Reference/XeniaShaderDump` may help).
+
+## 8. Xenos disassembler + the bundle-pair ground-truth oracle (2026-08-14)
+
+`xenos.py` disassembles X360 (Xenos) shader microcode -- the
+`[64-byte literal float4 block][instruction stream]` region of a shader
+package, split per the two dwords at the package header's `+0x18` pointer.
+`ctab.py` reads the same package's big-endian CTAB, giving byte-pinned
+uniform names and register indices for whatever `xenos.py` decodes.
+
+**Validation, and the reusable oracle.** `SHADERS.BNDL` (X360) and
+`out/SHADERS_PC.BNDL` carry the SAME shaders under IDENTICAL resource ids --
+one side Xenos microcode, the other fxc-compiled D3D9 bytecode. Extract both
+sides of any shared resource with `build/tools/yap/YAP.exe`, disassemble the
+X360 side with `xenos.py` and the PC side with `fxc /dumpbin`, and compare
+instruction for instruction. Resource `CC3B3312` was used to prove the
+decoder (including the relative ALU swizzle rule, the scalar-unit src3
+selection, and the literal block mapping to c252..c255 -- details in the
+`xenos.py` docstring). The same procedure decides ANY future Xenos decode
+question in this project: pick a resource present in both bundles and the PC
+bytecode is the answer key. Worked example (the post-fx composite, all 12
+permutations): `scratch/postfx_step2_out/shader/REPORT.md`.
