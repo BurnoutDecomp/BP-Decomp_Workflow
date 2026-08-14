@@ -531,6 +531,15 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  producer Begin slice (home TU still carries DataStreamCommandPoster::Construct demands),
   rem  and the collide-stream trap-stub TU.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerContactGeneration.cpp"
+  rem  ⭐⭐ 2026-08-14 (walls leg 3): THE VALIDATION WHALE -- ValidateRaceCarWorldContact
+  rem  @0x825C6088 (988; PS3 0x70AB20) in its own slice TU (home BrnVehicleManager.cpp still
+  rem  unmounted). Every constant image-read (cull height 0.4 @0x82F2A148; wall-normal
+  rem  threshold 0.5, dynamic-init @0x82C5BBD8; curb 0.25 / wall-Y 0.3 / 25 / 10 mph statics;
+  rem  mph factor @0x8208F820); the two VMX-dense blocks raw-word decoded (the vperm operand
+  rem  trap + the console's local-Y lower-bound quirk live there, both settled from the words).
+  rem  Also carries Vehicle::DebugComponent::SetLastWallTriangle @0x825B4D60 (see its banner:
+  rem  the declared home TU stays unmounted on purpose -- vtable/base-surface risk).
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ValidateRaceCarWorldContact.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsPrimitivePairListBuilder.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsPrimitivePairList.cpp"
   echo "%SRC%\GameSource\Physics\BrnContactGenerationList.cpp"
@@ -549,12 +558,28 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  @0x829226A8 (967) + LoadPrimitives @0x829210F0 / LoadResultList @0x829211E8 are REAL in
   rem  ContactGeneratorJob.cpp, and the kernel IntersectTriangle4Sphere_HackyBurnoutVersion
   rem  @0x8283D2E0 (497) is REAL in CgsTriangleSphere.cpp (mounted at the Intersection block).
-  rem  Boot witness on the resting junkyard car, log-once: "sphere-vs-triangle CONTACTS LIVE: 24
-  rem  PrimitiveTestResult(s) in the command's result list". WHAT IS LEFT for the wall-stop:
-  rem  the harvest -- EndVehicleContactGeneration @0x8261AC38 (661, still a conductor gate) +
-  rem  DoRaceCarWorldContactValidation @0x825EB6C8 (416) + ValidateRaceCarWorldContact (988) --
-  rem  then the bridge into the deformation penetration solver (SolvePenetration /
-  rem  ApplySensorImpulse bodied-unmounted + ApplyLocalImpulse loud-gated). The swept twins
+  rem  ⭐⭐ RUNTIME STATE (walls leg 3, 2026-08-14): THE HARVEST + VALIDATION ARE REAL. Landed:
+  rem  EndVehicleContactGeneration @0x8261AC38 (661; the HIDE_ONLINE network-unhide tail is a
+  rem  loud gate, provably dead offline -- needs Box::Set @0x825E6918 + BoxOverlappingTest) +
+  rem  AddContactResultsToQueue @0x825EB350 (222) + DoRaceCarWorldContactValidation @0x825EB6C8
+  rem  (416) in BrnVehicleManagerContactGeneration.cpp; ValidateRaceCarWorldContact @0x825C6088
+  rem  (988) in its slice TU (see the mount line below); StartPartContactGeneration @0x8262C220
+  rem  PARTIAL (the miFirstPartContactGenEntry boundary stamp the harvest reads is real, the
+  rem  part-contact tail is a named gate); PotentialContactInterface::AddEvent(u32,...)
+  rem  @0x825E73D0; RaceCarPhysics::GetHeightAboveRoad @0x825B3998 signature FIXED (the dropped
+  rem  Vector3 query-point argument -- PS3 mangle + DWARF :310 authority). Boot witnesses,
+  rem  log-once, all three on one boot: "sphere-vs-triangle CONTACTS LIVE: 24" -> "world
+  rem  contacts HARVESTED: 24 PotentialContact(s) in the race-car-vs-world queue [5]" -> "world
+  rem  contacts VALIDATED: 24 of 24 raw contact(s) accepted into the Validated queue [6]"
+  rem  (24/24 == the sub-10-mph accept-all path; the resting car). Queue [6] feeds the ALREADY-
+  rem  LANDED bridge (BridgeContactsToSimulation -> ReadPotentialVehicleWorldContact ->
+  rem  DeformationSensor::ValidateAndAddContact) -- real world contacts now reach the car's
+  rem  deformation sensors every frame. WHAT IS LEFT for the wall-stop: the penetration-solver
+  rem  leg -- DeformationManager::Update @? (289) + UpdateContacts (348) absent;
+  rem  AddContactsToPenetrationSolver (443) / SolvePenetration @0x82621B08 (692) /
+  rem  ApplySensorImpulse @0x826078B0 (699) bodied-but-UNMOUNTED in _Contacts.cpp (~19
+  rem  unresolved tail); ApplyLocalImpulse @0x8260E068 (43, wrapper; PS3 0x74D3A0/569 carries
+  rem  the inlined body) -- then the car stops at walls. The swept twins
   rem  (ExecuteSweptSphereListWithTriangleListStream 1620 / IntersectTriangle4SweptSphere 896 /
   rem  Intersect2DCircleWithTriangleSOA 156) are a LATER leg -- the sphere path is the
   rem  stationary/slow-speed contact a wall-stop needs first.
