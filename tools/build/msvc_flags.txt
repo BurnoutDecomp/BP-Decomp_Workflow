@@ -1,0 +1,12 @@
+# Canonical MSVC compile flags for the b5-decomp PC build (single line below the
+# comments, consumed verbatim as one response-file line). Machine-independent.
+# /c is NOT here: compile-only consumers (tools\_gate_one.bat, tools\work\verify.py)
+# add it themselves.
+# /Gy: function-level linking, so /OPT:REF (link line) can strip the never-called
+#      sibling controller bridges (Director/World/GameState) whose IO callees are
+#      unlinked.
+# /O2: the exe had NO optimisation flag at all until the culling wave measured it --
+#      every per-entity frustum test, every dispatch walk and every VMX-derived math
+#      helper was running unoptimised, which is why culling cost more than the draws
+#      it saved. Gates compile with it too, so "gate green" means "ship-flags green".
+/nologo /EHsc /std:c++17 /permissive- /O2 /Gy /DWIN32 /D_WINDOWS

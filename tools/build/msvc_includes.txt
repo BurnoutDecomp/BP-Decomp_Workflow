@@ -1,0 +1,21 @@
+# Canonical include dirs, REPO-ROOT-RELATIVE, ORDER SIGNIFICANT (cl searches in
+# order). Lines 1-10 are the exe build's historical order -- DO NOT REORDER.
+# Extras are appended at the END so they can never shadow an exe-resolved header.
+# Backslash spelling matches the historical /I lines byte-for-byte: __FILE__ in
+# headers embeds the include-dir spelling, so changing it shifts .rdata strings.
+# An entry must NEVER end in a slash/backslash (a trailing backslash before the
+# closing quote escapes it in the generated /I"..." response-file line).
+b5-decomp\src
+b5-decomp\vendor\EABase\include\Common
+b5-decomp\vendor\EASTL\include
+b5-decomp\vendor\EAThread\include
+b5-decomp\vendor\renderware\include
+b5-decomp\vendor\PPMalloc\include
+b5-decomp\vendor\coreallocator\include
+b5-decomp\vendor\zlib\src
+b5-decomp\vendor\ffmpeg-build\include
+b5-decomp\vendor\lua\src
+# ---- appended extras (gate/verify parity; zlib include==src copies are identical) ----
+b5-decomp\src\GameShared\GameClasses\Development
+b5-decomp\vendor\dirtysdk\include
+b5-decomp\vendor\zlib\include

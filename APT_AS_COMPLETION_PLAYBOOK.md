@@ -161,7 +161,7 @@ just repointing them.
 
 ### 2.4 Build + gate
 
-Run the full `build_game_exe.bat` (and the per-TU gate `tools/_gate_tu.bat` if you
+Run the full `build_game_exe.bat` (and the per-TU gate `tools/_gate_one.bat` if you
 touched signatures). It must compile **and link** with the real Apt objects. Fix
 include fallout here — this is the checkpoint where a missed path shows up.
 

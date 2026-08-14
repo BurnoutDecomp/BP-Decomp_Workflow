@@ -6,68 +6,83 @@ rem
 rem The source list exceeds cmd's ~8191-char command-line limit, so the cl arguments (flags,
 rem include dirs, sources, /Fo, /Fe) are written to a response file and passed via cl @file.
 setlocal
-set ROOT=%~dp0..\..
-set SRC=%ROOT%\b5-decomp\src
-set VEN=%ROOT%\b5-decomp\vendor
-set RES=%ROOT%\b5-decomp\res
-rem FFmpeg (movie player VP6/MP4 decode) - built by tools\build\build_ffmpeg.bat into vendor\ffmpeg-build\.
-set FFM=%ROOT%\b5-decomp\vendor\ffmpeg-build
+rem NB ROOT is deliberately left unnormalized (keeps the historical path spelling in
+rem cl's command line; __FILE__/assert strings and the .map embed that spelling, so
+rem changing it shifts .rdata). Normalize only together with an exe-changing commit.
+set "ROOT=%~dp0..\.."
+set "SRC=%ROOT%\b5-decomp\src"
+set "VEN=%ROOT%\b5-decomp\vendor"
+set "RES=%ROOT%\b5-decomp\res"
+rem FFmpeg (movie player VP6/MP4 decode) - tools\build\build_ffmpeg.bat (or --prebuilt).
+set "FFM=%ROOT%\b5-decomp\vendor\ffmpeg-build"
 rem Game build output lives under build\game\ (build\tools\ holds tool binaries; see tools\build\build_tools.ps1).
-set OUT=%ROOT%\build\game
-set RSP=%OUT%\obj\build.rsp
+set "OUT=%ROOT%\build\game"
+set "RSP=%OUT%\obj\build.rsp"
+set "BASERSP=%OUT%\obj\base.rsp"
+set "FLAGS_TXT=%~dp0msvc_flags.txt"
+set "INCS_TXT=%~dp0msvc_includes.txt"
 
-rem Always initialize the VS 2022 x64 toolchain -- do NOT trust a stray cl already on PATH.
-rem On a machine with the Xbox 360 SDK installed, ITS cl.exe is on PATH (and lacks the
-rem standard/Windows headers), so a "where cl" shortcut picks the wrong compiler and the
-rem build fails on <cstdint>/<Windows.h>. vcvars64 is idempotent + prepends the VS 2022
-rem bin, so cl always resolves to VS 2022's cl, never the 360 SDK's. (Set VCVARS64 to
-rem override which vcvars64.bat is used.)
-rem Exception: if a modern MSVC (cl 19.x) is already on PATH -- e.g. CI ran
-rem ilammy/msvc-dev-cmd -- trust it and skip the vcvars search. The 360 SDK's cl is
-rem 14.x and won't match "Version 19.", so the guard above still holds locally.
-rem IMPORTANT: probe with "where cl" FIRST. Piping a command that is not on PATH
-rem (cl 2>&1 | findstr ...) aborts the whole batch with exit 255 -- and locally there is
-rem NO cl until vcvars runs, so the bare pipe killed the build instantly before setup.
-where cl >nul 2>&1
-if errorlevel 1 goto need_vcvars
-cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
-if not errorlevel 1 goto toolchain_ready
-:need_vcvars
-set "VCVARS="
-if defined VCVARS64 if exist "%VCVARS64%" set "VCVARS=%VCVARS64%"
-for %%P in (
-  "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-  "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-  "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\Build\vcvars64.bat"
-  "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-) do if not defined VCVARS if exist "%%~P" set "VCVARS=%%~P"
-
-if not defined VCVARS (
-  echo ERROR: Visual Studio 2022 vcvars64.bat not found. Set VCVARS64 to its full path.
+rem ---- prerequisites: fail fast with a named cause + the command that fixes it ----
+if not exist "%SRC%\GameSource\Main\BrnMain.cpp" (
+  echo ERROR: b5-decomp sources missing -- "%SRC%\GameSource\Main\BrnMain.cpp" not found.
+  echo        Run: git submodule update --init b5-decomp   then re-run this script.
   exit /b 1
 )
-call "%VCVARS%" >nul 2>&1
-if errorlevel 1 (
-  echo ERROR: Failed to initialize the MSVC toolchain from "%VCVARS%".
+if not exist "%FFM%\include\libavcodec\avcodec.h" (
+  echo ERROR: FFmpeg dev tree missing -- "%FFM%\include\libavcodec\avcodec.h" not found.
+  echo        Run tools\build\build_ffmpeg.bat first, or fetch the CI prebuilt:
+  echo        tools\build\build_ffmpeg.bat --prebuilt
   exit /b 1
 )
+if not exist "%FFM%\bin\avcodec.lib" (
+  echo ERROR: FFmpeg import libs missing -- "%FFM%\bin\avcodec.lib" not found.
+  echo        Run tools\build\build_ffmpeg.bat first ^(or --prebuilt^).
+  exit /b 1
+)
+if not exist "%VEN%\lua\lua515.lib" (
+  echo ERROR: Lua static lib missing -- "%VEN%\lua\lua515.lib" not found.
+  echo        Run tools\build\build_lua.bat first.
+  exit /b 1
+)
+if not exist "%FLAGS_TXT%" ( echo ERROR: missing "%FLAGS_TXT%" & exit /b 1 )
+if not exist "%INCS_TXT%" ( echo ERROR: missing "%INCS_TXT%" & exit /b 1 )
 
-:toolchain_ready
+rem ---- LNK1104 trap: a RUNNING exe holds a write lock the linker will hit at the
+rem very end of the build. Probe by opening for append (writes nothing) -- that is
+rem the exact access the linker needs. NB a running exe CAN be renamed on Windows,
+rem so a rename probe would NOT detect this; a write-open does.
+if exist "%OUT%\Burnout_PC.exe" (
+  2>nul >> "%OUT%\Burnout_PC.exe" (call )
+  if errorlevel 1 (
+    echo ERROR: "%OUT%\Burnout_PC.exe" is locked for writing -- the link would fail with LNK1104.
+    tasklist /FI "IMAGENAME eq Burnout_PC.exe" /NH 2>nul | find /I "Burnout_PC.exe" >nul && echo        Burnout_PC.exe is RUNNING -- close the game and re-run.
+    exit /b 1
+  )
+)
+
+rem ---- toolchain: one shared resolver (fast path when cl 19.x is already live -- CI;
+rem VCVARS64 override; probed/vswhere otherwise). See tools\build\msvc_env.bat.
+call "%~dp0msvc_env.bat"
+if errorlevel 1 exit /b 1
+
 if not exist "%OUT%\obj" mkdir "%OUT%\obj"
 
-echo Using environment: %VCVARS%
-
 rc /fo"%OUT%\\obj\\burnout.res" "%RES%\burnout.rc"
+if errorlevel 1 (
+  echo ERROR: rc failed on "%RES%\burnout.rc" -- burnout.res not produced.
+  exit /b 1
+)
+
+rem ---- canonical flags + include dirs -> base.rsp (shared by the main RSP and the
+rem device.cpp precompile; flag rationale lives in tools\build\msvc_flags.txt) ----
+> "%BASERSP%" (
+  for /f "usebackq eol=# delims=" %%F in ("%FLAGS_TXT%") do echo %%F
+  for /f "usebackq eol=# delims=" %%D in ("%INCS_TXT%") do echo /I"%ROOT%\%%D"
+)
 
 rem ---- build the cl response file ----
-> "%RSP%" (
-  rem /Gy: function-level linking, so /OPT:REF (link line) can strip the never-called
-  rem sibling controller bridges (Director/World/GameState) whose IO callees are unlinked.
-  rem /O2: the exe had NO optimisation flag at all until the culling wave measured it --
-  rem every per-entity frustum test, every dispatch walk and every VMX-derived math helper
-  rem was running unoptimised, which is why culling cost more than the draws it saved.
-  echo /nologo /EHsc /std:c++17 /permissive- /O2 /Gy /DWIN32 /D_WINDOWS
-  echo /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%VEN%\zlib\src" /I"%FFM%\include" /I"%VEN%\lua\src"
+copy /y "%BASERSP%" "%RSP%" >nul
+>> "%RSP%" (
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
   echo "%SRC%\GameSource\BrnBaselineLinkStubs.cpp"
   echo "%VEN%\coreallocator\source\icoreallocator_interface.cpp"
@@ -3114,12 +3129,17 @@ cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDO
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
-if "%BUILD_ERR%"=="0" if exist "%OUT%\Burnout_PC.map" py "%ROOT%\tools\build\make_cgsmap.py" "%OUT%\Burnout_PC.map" "%OUT%\Burnout_PC.cgsmap"
+if "%BUILD_ERR%"=="0" if exist "%OUT%\Burnout_PC.map" (
+  where py >nul 2>&1
+  if not errorlevel 1 (
+    py "%ROOT%\tools\build\make_cgsmap.py" "%OUT%\Burnout_PC.map" "%OUT%\Burnout_PC.cgsmap"
+  ) else (
+    echo WARNING: Python launcher 'py' not found -- Burnout_PC.cgsmap NOT generated.
+    echo          The assert call-stack resolver needs it. Install Python, or run:
+    echo          python "%ROOT%\tools\build\make_cgsmap.py" "%OUT%\Burnout_PC.map" "%OUT%\Burnout_PC.cgsmap"
+  )
+)
 rem Stage the FFmpeg runtime DLLs next to the exe so the movie player loads at runtime.
 if "%BUILD_ERR%"=="0" copy /Y "%FFM%\bin\*.dll" "%OUT%\" >nul
-rem Stage locally converted native-x64 FLApt HUD bundles when present. These are
-rem generated/licensed assets and remain outside source control.
-if "%BUILD_ERR%"=="0" if exist "%OUT%\_staging_uiassets\FLAPTHUD.BUNDLE" copy /Y "%OUT%\_staging_uiassets\FLAPTHUD.BUNDLE" "%OUT%\" >nul
-if "%BUILD_ERR%"=="0" if exist "%OUT%\_staging_uiassets\FLAPTHUDSD.BUNDLE" copy /Y "%OUT%\_staging_uiassets\FLAPTHUDSD.BUNDLE" "%OUT%\" >nul
 
 endlocal & exit /b %BUILD_ERR%

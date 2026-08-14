@@ -2,31 +2,16 @@
 rem Build the vendored Lua 5.1.5 (the scripting VM the GUI/HUD FSMs run -- CgsFsm::ScriptedFsm)
 rem into b5-decomp\vendor\lua\lua515.lib. Vanilla upstream source (lua.org, MIT); the same
 rem Lua 5.1 the X360 ARTIST build statically links. Compiled as C (MSVC /TC).
-rem   - cl : VS2022 vcvars64 (forced first so the Xbox 360 SDK's cl can't shadow it; see build_ffmpeg.bat)
+rem   - cl : resolved by tools\build\msvc_env.bat (VCVARS64 env override supported)
 setlocal
 for %%I in ("%~dp0..\..") do set "ROOT=%%~fI"
 set LUASRC=%ROOT%\b5-decomp\vendor\lua\src
 set OBJ=%ROOT%\b5-decomp\vendor\lua\obj
 set OUT=%ROOT%\b5-decomp\vendor\lua\lua515.lib
 
-rem Probe with "where cl" FIRST: piping a cl that is not on PATH aborts the batch
-rem with exit 255 (no cl locally until vcvars runs), so guard before the version pipe.
-where cl >nul 2>&1
-if errorlevel 1 goto need_vcvars
-cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
-if not errorlevel 1 goto have_cl
-:need_vcvars
-set "VCVARS="
-for %%P in (
-  "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-  "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-  "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\Build\vcvars64.bat"
-  "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-) do if not defined VCVARS if exist "%%~P" set "VCVARS=%%~P"
-if not defined VCVARS ( echo ERROR: VS2022 vcvars64.bat not found. & exit /b 1 )
-call "%VCVARS%" >nul 2>&1
+call "%~dp0msvc_env.bat"
+if errorlevel 1 exit /b 1
 
-:have_cl
 if not exist "%OBJ%" mkdir "%OBJ%"
 rem Object files land in the CWD (avoids the /Fo"dir\" trailing-backslash quote-escape gotcha).
 cd /d "%OBJ%"
