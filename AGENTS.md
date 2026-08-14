@@ -29,6 +29,7 @@ Before compiling code or exporting functions, verify these settings:
 2. **IDA Pro Path:** If you need to generate stubs/skeletons for new functions or run the parallel exporter, make sure `idat.exe` is available. You can pass the path explicitly via the `-IdaPath` parameter to `tools/export_db.ps1`, or set the `IDA_PATH` environment variable.
 3. **Submodules:** The `b5-decomp` EA vendor submodules must be initialized. `work bootstrap` does this, but you can verify them under `b5-decomp/vendor/`.
 4. **Coordination config (only if invited):** If the maintainer gave you a server URL, `cp .env.example .env`, uncomment `WORK_SERVER`, set it to that URL, and set a unique `WORK_AGENT`. With no URL, skip this entirely — you work locally. See "Coordination server" below.
+5. **Building the exe / game data:** follow [BUILD.md](BUILD.md). Machine paths live in `build.config.toml` (copy from `build.config.example.toml`); `build doctor` verifies the whole toolchain and `build all` sequences tools → lua → ffmpeg → exe → data.
 
 ## Read first, in order
 
