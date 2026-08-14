@@ -7,7 +7,7 @@
 set -e
 
 ROOT="$(cygpath -u "$1")"
-FF="$ROOT/b5-decomp/vendor/ffmpeg"
+FF="$ROOT/b5-decomp/vendor/FFmpeg"
 PREFIX="$ROOT/b5-decomp/vendor/ffmpeg-build"
 
 cd "$FF"
