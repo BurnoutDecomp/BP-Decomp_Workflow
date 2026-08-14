@@ -544,15 +544,28 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  DoRaceCarWorldContactGeneration @0x825EB140 is REAL in BrnVehicleManagerContactGeneration
   rem  .cpp (its log-once gate + Start's null-producer guard both deleted); its query callees
   rem  live in the new mounted slice BrnDeformationManager_ContactQueries.cpp below.
-  rem  RUNTIME STATE, stated plainly: one sphere command per live car per frame now flows
-  rem  end-to-end (post -> Begin -> dispatch -> Execute case 6) and stops at the named gate
-  rem  "ExecuteSphereListWithTriangleListStream @0x829235C8 not reconstructed" -- contacts are
-  rem  NOT generated until the sphere-vs-Triangle4 kernels land (next leg's list, censused at
-  rem  the walls-wave block: IntersectTriangle4Sphere_HackyBurnoutVersion 497 +
-  rem  IntersectTriangle4SweptSphere 896 + Intersect2DCircleWithTriangleSOA 156 + the two
-  rem  Execute workers 967/1620 + harvest End 661 / Validation 416 / Validate 988 + bridge).
+  rem  ⭐⭐ RUNTIME STATE (walls leg 2, 2026-08-14): CONTACTS EXIST. The case-6 gate is GONE --
+  rem  ExecuteSphereListWithTriangleListStream @0x829235C8 (100) + ExecuteSphereListWithTriangleList
+  rem  @0x829226A8 (967) + LoadPrimitives @0x829210F0 / LoadResultList @0x829211E8 are REAL in
+  rem  ContactGeneratorJob.cpp, and the kernel IntersectTriangle4Sphere_HackyBurnoutVersion
+  rem  @0x8283D2E0 (497) is REAL in CgsTriangleSphere.cpp (mounted at the Intersection block).
+  rem  Boot witness on the resting junkyard car, log-once: "sphere-vs-triangle CONTACTS LIVE: 24
+  rem  PrimitiveTestResult(s) in the command's result list". WHAT IS LEFT for the wall-stop:
+  rem  the harvest -- EndVehicleContactGeneration @0x8261AC38 (661, still a conductor gate) +
+  rem  DoRaceCarWorldContactValidation @0x825EB6C8 (416) + ValidateRaceCarWorldContact (988) --
+  rem  then the bridge into the deformation penetration solver (SolvePenetration /
+  rem  ApplySensorImpulse bodied-unmounted + ApplyLocalImpulse loud-gated). The swept twins
+  rem  (ExecuteSweptSphereListWithTriangleListStream 1620 / IntersectTriangle4SweptSphere 896 /
+  rem  Intersect2DCircleWithTriangleSOA 156) are a LATER leg -- the sphere path is the
+  rem  stationary/slow-speed contact a wall-stop needs first.
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_CollideStreams.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
+  rem  ⭐ 2026-08-14 (walls leg 2): the result-record TU mounts -- PrimitiveTestResult::IsValid
+  rem  @0x82921378 is REAL (its "unrecoverable rodata threshold" floor fell to the .rdata unlock:
+  rem  unk_821016C0 word 0 == 0x34000000 == 2^-23; the check is finite-xyz + non-degenerate
+  rem  normals) and the sphere contact worker calls it per queued record. Also carries
+  rem  CollisionResultList::SetNumResults @0x8280FFE8 / GetResult @0x828A9EF8.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsCollisionResult.cpp"
   rem  ⭐⭐ 2026-08-10 (cache-fill wave): the BaseCollisionGenerator HOME finally mounts. It has
   rem  been fully reconstructed since 2026-08-06 (Construct / Prepare / Finish / FinishBatch /
   rem  CreateNewBatch / AllocateJob / GetResultList / CreateStreamProducer) but stayed off the
@@ -2185,6 +2198,15 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoup.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupPoly.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Intersection\CgsPolygonSoupTests.cpp"
+  rem  ⭐⭐ 2026-08-14 (walls leg 2): THE SPHERE CONTACT KERNEL --
+  rem  IntersectTriangle4Sphere_HackyBurnoutVersion @0x8283D2E0 (497). Home TU per the DecFIGS
+  rem  dwarfdump (CgsTriangleSphere.cpp:715). Derived by decoding the 497 words from the image
+  rem  (78 IDA "+32" operand misprints corrected) and executing them numerically; the scalar
+  rem  lowering fuzz-matched that execution 2600/2600 (see wallsleg2 log). KF_MIN_PLANE_DIST =
+  rem  0.001f splat (dynamic-init: X360 sub_82C6DCF0, PS3 initializer identical). The sibling
+  rem  IntersectTriangle4Sphere (DWARF :490, PS3 @0xB59F6C) is NOT reconstructed -- no caller
+  rem  on the vehicle path.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Intersection\CgsTriangleSphere.cpp"
   echo "%SRC%\GameShared\Jobs\PolygonSoupTester\PolygonSoupTesterJob.cpp"
   echo "%SRC%\GameShared\Jobs\PolygonSoupTester\PolygonSoupTester.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap_Query.cpp"
