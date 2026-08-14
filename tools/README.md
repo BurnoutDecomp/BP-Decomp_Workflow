@@ -62,6 +62,7 @@ The sequenced entry point is the repo-root driver (see [BUILD.md](../BUILD.md)):
 ```powershell
 .\build doctor      # readiness report; machine paths live in build.config.toml
 .\build all         # tools -> lua -> ffmpeg -> exe -> data
+.\build devdata     # refresh build/game's GENERATED assets (schema.vlt/bin + LOADINGSCREEN)
 ```
 
 Every step also runs standalone:

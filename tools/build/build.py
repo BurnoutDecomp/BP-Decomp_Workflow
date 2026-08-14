@@ -441,6 +441,54 @@ def cmd_all(cfg, args, passthrough):
     return 0 if all(rc == 0 for _, rc, _ in results) else 1
 
 
+def cmd_devdata(cfg, args):
+    """Refresh the GENERATED artifacts in the live dev folder build/game --
+    schema.vlt/schema.bin + LOADINGSCREEN/*.dds. These come from the ARTIST XEX,
+    not from a converted output folder, and the stager refuses --out build/game
+    (shared run dir), so without this they go stale the way the gibberish
+    loading screens and the 'PC schema file missing' assert did."""
+    import tempfile
+    x360, how = resolve_x360_root(cfg)
+    if not x360:
+        print("ERROR: X360 game folder not found (set [inputs].x360_root / BRN_X360_ROOT).")
+        return 2
+    xex = os.path.join(x360, "BURNOUT_X360_ARTIST.XEX")
+    if not os.path.isfile(xex):
+        print(f"ERROR: ARTIST XEX not found: {xex}")
+        return 2
+    env = dict(os.environ)
+    env["BRN_X360_ROOT"] = x360
+    print(f"devdata: XEX = {xex} ({how})")
+    rc = subprocess.run([sys.executable,
+                         os.path.join(REPO, "tools", "assets", "bundles",
+                                      "attribsys_schema_port.py"),
+                         "--xex", xex, "--out", GAME_OUT], env=env).returncode
+    if rc != 0:
+        print(f"*** attribsys_schema_port failed (exit {rc})")
+        return rc
+    work = tempfile.mkdtemp(prefix="devdata_")
+    try:
+        rc = subprocess.run([sys.executable,
+                             os.path.join(REPO, "tools", "assets", "textures",
+                                          "extract_xex.py")],
+                            cwd=work, env=env).returncode
+        if rc != 0:
+            print(f"*** extract_xex failed (exit {rc})")
+            return rc
+        src = os.path.join(work, "build", "loadingscreen")
+        dst = os.path.join(GAME_OUT, "LOADINGSCREEN")
+        os.makedirs(dst, exist_ok=True)
+        n = 0
+        for f in os.listdir(src):
+            shutil.copy2(os.path.join(src, f), os.path.join(dst, f))
+            n += 1
+        print(f"devdata: schema.vlt + schema.bin -> build/game; {n} textures -> "
+              f"build/game/LOADINGSCREEN")
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+    return 0
+
+
 def cmd_run(cfg, args):
     d = args.dir
     if not d:
@@ -487,6 +535,8 @@ def main(argv=None):
     p.add_argument("--dry-run", action="store_true",
                    help="print each step's command line and run nothing "
                         "(data's own plan mode remains `build data --dry-run`)")
+    sub.add_parser("devdata", help="refresh generated dev assets in build/game "
+                                   "(schema.vlt/bin + LOADINGSCREEN, from the ARTIST XEX)")
     p = sub.add_parser("run", help="launch Burnout_PC.exe from its own folder")
     p.add_argument("--dir", help="folder holding the exe (default: [output].game_data "
                                  "if it has one, else build/game)")
@@ -513,6 +563,8 @@ def main(argv=None):
         return step_exe(cfg, args)
     if args.cmd == "data":
         return step_data(cfg, args, passthrough)
+    if args.cmd == "devdata":
+        return cmd_devdata(cfg, args)
     if args.cmd == "all":
         return cmd_all(cfg, args, passthrough)
     if args.cmd == "run":
