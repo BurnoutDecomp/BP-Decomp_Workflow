@@ -74,6 +74,37 @@ IDEMPOTENCE
     re-run recomputes all four and skips anything still current, so adding one converter and
     re-running costs one converter's work, not 3.7 GB.  --force ignores the state.
 
+THE RESOURCE PORT CACHE -- WHY A SECOND, SMALLER CACHE EXISTS
+    state.json caches whole FILES.  Below that, the same resource is re-ported once per
+    bundle that contains it, and the retail set is enormously redundant: of 358,881 resource
+    entries in the 1,626 convertible bundles, 34.0% are byte-identical repeats, and 99.6% of
+    those repeats are CROSS-bundle (so an in-process memo would save nothing).
+
+    Only one resource type is worth caching, because only one is expensive.  Model and
+    InstanceList are ported by spawning Volatility.Cli.exe TWICE per resource, and that exe
+    costs ~217 ms just to start: 34,948 such resources => 69,896 spawns => 4.2 CPU-hours of
+    pure process startup, to transform payloads with a MEDIAN SIZE OF 48 BYTES.  82.6% of
+    those calls are redundant.  Everything else -- the pure-Python endian flips at 0.021 ms
+    a piece, and Texture at 128 MiB/s in-process -- is under a minute of real work in total
+    and would cost more to hash than to redo.
+
+    So bundles/vola_cache.py memoises exactly that one call, keyed on a content hash of the
+    payload (NOT the resource id: the same id carries different bytes in different bundles
+    -- FLAPTHUD vs FLAPTHUDSD ship different pixels under one id -- so an id-keyed cache
+    would silently emit the wrong resource).  The entry also stores the input, which
+    lookup() byte-compares before serving, so a hit is proven rather than inferred from the
+    hash.  The store lives at <repo>/build/portcache, outside every mirrored worker root so
+    all job slots share it, and outside --out so it stays warm across destinations.
+    --no-vola-cache disables it; --verify-cache re-runs the real Volatility path on every
+    hit and fails the build on any mismatch.  Measured: 936s -> 401s cold, 184s warm, over
+    111 world bundles at --jobs 4.
+
+    ⚠️ YAP's packer is NOT byte-reproducible (create.cpp writeRawData is passed the
+    0x80-ALIGNED region length against an unaligned QByteArray, so it writes uninitialised
+    heap into the inter-region padding).  16 packs of one fixed directory produced 5
+    distinct bundles, all differing ONLY in unreferenced alignment slack.  Do not read a
+    byte difference between two runs as a cache fault without checking that first.
+
 VERIFY -- A CONVERTER THAT RAN IS NOT A CONVERTER THAT WORKED
     Every convert rule carries a `verify` expression checked against the product
     (`bnd2_platform=4`, `nonempty`, `min_size=N`, `magic=...`).  A miss is a FAILURE: the
@@ -178,6 +209,18 @@ EMIT_DENY_FILE_RE = re.compile(r"\.x360$|\.log$|\.map$|^desktop\.ini$|\.le_trans
                                r"|\.lane_transcoded$", re.I)
 
 STATE_DIR = ".build_game_data"
+
+# The retail X360 file set this repo works against.  Gitignored (references/private), so a
+# fresh clone must supply it, but every script that reads game content or the XEX defaults
+# here instead of to whatever absolute path happened to work on one machine.
+DEFAULT_X360_ROOT = os.path.join(REPO, "references", "private", "Burnout_tcartwright")
+
+# Content-addressed cache for the Volatility resource port (see bundles/vola_cache.py).
+# Deliberately NOT under tools/assets or build/tools: WorkerRoots copytrees both into a
+# private root per job slot, so a cache placed there would be per-slot and share nothing.
+# Repo-level rather than per-output so a second --out destination starts warm.  build/*
+# is gitignored.
+DEFAULT_VOLA_CACHE = os.path.join(REPO, "build", "portcache")
 
 # The two binaries this repo builds rather than ships.  build/ is gitignored, so a fresh
 # clone has neither until build_tools.ps1 runs -- and WorkerRoots mirrors build/tools only
@@ -504,7 +547,7 @@ TRANSIENT_LAUNCH_RE = re.compile(
 RETRY_PAUSE_S = 5
 
 
-def run_tool(rule, workroot, argv, cwd, log):
+def run_tool(rule, workroot, argv, cwd, log, args=None):
     tool = os.path.join(workroot, "tools", "assets", *rule.tool.split("/"))
     if not os.path.isfile(tool):
         return 127, "converter not found in worker root: %s" % tool
@@ -512,6 +555,12 @@ def run_tool(rule, workroot, argv, cwd, log):
     env = dict(os.environ)
     env["BRN_X360_ROOT"] = log["srcroot"]
     env["PYTHONIOENCODING"] = "utf-8"
+    # The mirrored worker roots make everything exe-adjacent per-slot; the Volatility port
+    # cache must be the one thing they SHARE, so it is passed in by absolute path.  Empty
+    # = disabled, which is also what a hand-run converter sees.
+    env["BRN_VOLA_CACHE"] = getattr(args, "vola_cache_dir", None) or ""
+    env["BRN_VOLA_STATS"] = getattr(args, "vola_stats_dir", None) or ""
+    env["BRN_VOLA_CACHE_VERIFY"] = "1" if getattr(args, "verify_cache", False) else ""
     for attempt in (1, 2):
         try:
             p = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, timeout=1800)
@@ -588,7 +637,7 @@ def do_item(item, srcroot, outroot, workroot, args, state):
                       srcroot, outroot, workroot)
     argv = [expand(a, ctx) for a in r.argv]
     cwd = expand(r.cwd, ctx) if r.cwd else workroot
-    rc, tail = run_tool(r, workroot, argv, cwd, {"srcroot": srcroot})
+    rc, tail = run_tool(r, workroot, argv, cwd, {"srcroot": srcroot}, args)
 
     if r.produces:                                    # tool wrote somewhere else
         made = os.path.join(workroot, *expand(r.produces, ctx).split("/"))
@@ -667,7 +716,7 @@ def do_generate(item, srcroot, outroot, workroot, args, state):
     os.makedirs(ctx["outdir"], exist_ok=True)
     argv = [expand(a, ctx) for a in r.argv]
     cwd = expand(r.cwd, ctx) if r.cwd else workroot
-    rc, tail = run_tool(r, workroot, argv, cwd, {"srcroot": srcroot})
+    rc, tail = run_tool(r, workroot, argv, cwd, {"srcroot": srcroot}, args)
     if rc != 0:
         item.status, item.detail = ST_FAILED, "exit %d: %s" % (rc, tail)
         return item
@@ -811,6 +860,52 @@ def _signature(item, workroot):
 
 # ------------------------------------------------------------------ reporting
 
+# ~217 ms measured median startup for Volatility.Cli.exe, x2 spawns per cached resource.
+VOLA_SPAWN_S = 0.217
+
+
+def read_vola_cache_stats(stats_dir):
+    """Sum the per-process counter files bundles/vola_cache.py drops at exit.
+
+    Reads THIS run's stats dir, which the run wipes on start -- the entry store itself is
+    shared and long-lived, so summing counters beside it would report lifetime totals in a
+    per-run report.
+
+    Deliberately re-implemented here rather than imported: this orchestrator only ever
+    SPAWNS converters, and importing one would pull its whole dependency tree (numpy et al)
+    into the parent for the sake of six integers."""
+    total = {}
+    d = stats_dir or ""
+    for fn in sorted(os.listdir(d)) if os.path.isdir(d) else []:
+        try:
+            with open(os.path.join(d, fn), "r", encoding="utf-8") as fh:
+                for k, v in json.load(fh).items():
+                    if isinstance(v, int):
+                        total[k] = total.get(k, 0) + v
+        except (OSError, ValueError):
+            continue
+    return total
+
+
+def sweep_vola_cache_tmp(cache_root, max_age_s=3600):
+    """Drop *.tmp orphaned by a killed converter.  Readers only ever construct the exact
+    final path, so orphans are invisible -- this is housekeeping, not correctness."""
+    removed = 0
+    now = time.time()
+    for dirpath, _dirs, files in os.walk(cache_root or ""):
+        for fn in files:
+            if not fn.endswith(".tmp"):
+                continue
+            p = os.path.join(dirpath, fn)
+            try:
+                if now - os.stat(p).st_mtime > max_age_s:
+                    os.remove(p)
+                    removed += 1
+            except OSError:
+                pass
+    return removed
+
+
 def group_key(rel):
     d = os.path.dirname(norm(rel)) or "<root>"
     ext = os.path.splitext(rel)[1].upper() or "<none>"
@@ -852,6 +947,31 @@ def build_report(items, gens, args, srcroot, outroot, elapsed):
         % (by_status.get(ST_UNHANDLED, [0, 0])[0],
            human(by_status.get(ST_UNHANDLED, [0, 0])[1]).strip()))
     add("  FAILED           : %d files" % by_status.get(ST_FAILED, [0, 0])[0])
+
+    cache_dir = getattr(args, "vola_cache_dir", None)
+    if cache_dir:
+        c = read_vola_cache_stats(getattr(args, "vola_stats_dir", None))
+        hits, misses = c.get("hits", 0), c.get("misses", 0)
+        looked = hits + misses
+        add("")
+        add("VOLATILITY CACHE  (Model/InstanceList port, content-addressed)")
+        add("  store         : %s" % cache_dir)
+        add("  hits          : %7d  (%5.1f%% of %d)   spawns avoided: %d"
+            % (hits, 100.0 * hits / looked if looked else 0.0, looked, hits * 2))
+        add("  misses        : %7d   published: %s"
+            % (misses, human(c.get("bytes_written", 0)).strip()))
+        add("  bypassed      : %7d   (unexpected input name / imports sidecar present)"
+            % c.get("bypassed", 0))
+        add("  corrupt       : %7d   (recomputed)" % c.get("corrupt", 0))
+        add("  input mismatch: %7d   (sha256 collision -- must be 0)"
+            % c.get("input_mismatch", 0))
+        add("  write errors  : %7d" % c.get("write_errors", 0))
+        if getattr(args, "verify_cache", False):
+            add("  verify        : ON -- %d hit(s) proven against the real path "
+                "(a mismatch FAILS the run, so a clean run is a proof)"
+                % c.get("verify_checked", 0))
+        add("  est. CPU saved: %.2f h of Volatility.Cli.exe startup (%.0f ms x 2 x hits)"
+            % (hits * 2 * VOLA_SPAWN_S / 3600.0, VOLA_SPAWN_S * 1000))
 
     add("")
     add("PER-RULE")
@@ -939,6 +1059,7 @@ def report_json(items, gens, args, srcroot, outroot, elapsed):
                 "detail": it.detail}
     return {"generated": time.strftime("%Y-%m-%dT%H:%M:%S"), "src": srcroot, "out": outroot,
             "dry_run": bool(args.dry_run), "jobs": args.jobs, "elapsed_s": round(elapsed, 1),
+            "vola_cache": read_vola_cache_stats(getattr(args, "vola_stats_dir", None)),
             "items": [row(i) for i in items + gens]}
 
 
@@ -1121,7 +1242,7 @@ def main(argv=None):
         epilog="""\
 TYPICAL USE
   1. Give it the game folder; output defaults beside it as <folder>_decomp:
-       py tools/assets/build_game_data.py "D:/.../Burnout_tcartwright" --dry-run
+       py tools/assets/build_game_data.py --dry-run        # uses references/private/Burnout_tcartwright
   2. Use --dry-run to plan, or --out/--jobs to override the defaults:
        ... --out D:/BurnoutPC --jobs 6
   3. To deploy the runtime, all non-skipped gaps must have converters or known-good
@@ -1167,6 +1288,13 @@ NOTES
     ap.add_argument("--allow-c-drive", action="store_true", help="permit a C: destination")
     ap.add_argument("--keep-work", action="store_true",
                     help="keep the mirrored converter roots for debugging")
+    ap.add_argument("--no-vola-cache", action="store_true",
+                    help="disable the content-addressed Volatility resource cache")
+    ap.add_argument("--vola-cache", metavar="DIR", default=DEFAULT_VOLA_CACHE,
+                    help="shared Volatility port cache (default: %(default)s)")
+    ap.add_argument("--verify-cache", action="store_true",
+                    help="on every cache hit ALSO run the real Volatility path and assert "
+                         "byte equality; any mismatch fails the run (proof mode, ~1.15x)")
     ap.add_argument("--report", help="also write the text report here")
     args = ap.parse_args(argv)
 
@@ -1174,8 +1302,14 @@ NOTES
     if (args.game_folder and args.src and
             os.path.abspath(args.game_folder) != os.path.abspath(args.src)):
         ap.error("give the source once: positional game_folder and --src disagree")
+    if not supplied and os.path.isdir(DEFAULT_X360_ROOT):
+        # The retail set lives in the repo (gitignored) so no caller needs a machine
+        # -specific absolute path.  See DEFAULT_X360_ROOT.
+        supplied = DEFAULT_X360_ROOT
+        print("source: %s (repo default)" % supplied)
     if not supplied:
-        ap.error("game_folder is required (or use --src / BRN_X360_ROOT)")
+        ap.error("game_folder is required (or use --src / BRN_X360_ROOT); the repo default "
+                 "%s does not exist" % DEFAULT_X360_ROOT)
     srcroot = find_game_root(supplied)
     outroot = os.path.abspath(args.out or (srcroot.rstrip("\\/") + "_decomp"))
     if not os.path.isdir(srcroot):
@@ -1219,6 +1353,19 @@ NOTES
 
     workbase = os.path.join(outroot, STATE_DIR, "work")
     roots = WorkerRoots(workbase, args.jobs, quiet=args.dry_run)
+
+    # One store shared by every job slot, reached by absolute path through the converter
+    # environment.  Empty = disabled, which is also what a hand-run converter sees.
+    args.vola_cache_dir = (None if args.no_vola_cache or args.dry_run
+                           else os.path.abspath(args.vola_cache))
+    # Counters are per-RUN and live beside the report; the entry store is shared and warm
+    # across builds, so counters cannot live with it or the report would show lifetime
+    # totals.  Wiped on start.
+    args.vola_stats_dir = None
+    if args.vola_cache_dir:
+        args.vola_stats_dir = os.path.join(outroot, STATE_DIR, "volastats")
+        shutil.rmtree(args.vola_stats_dir, ignore_errors=True)
+        os.makedirs(args.vola_stats_dir, exist_ok=True)
 
     if args.dry_run:
         for it in items:
@@ -1292,6 +1439,10 @@ NOTES
     exit_code = 0
     if not args.dry_run:
         save_state(state_path, state)
+        if args.vola_cache_dir:
+            k = sweep_vola_cache_tmp(args.vola_cache_dir)
+            if k:
+                print("swept %d orphaned Volatility cache temp file(s)" % k)
         n = sweep(outroot)
         if n:
             print("swept %d denied file(s)/dir(s) out of the output" % n)
