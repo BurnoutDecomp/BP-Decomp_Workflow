@@ -151,7 +151,10 @@ class `A::B` declared. Therefore:
 - Leaf-first ordering means most callees are already real when you reach a caller, so
   stubs are the exception, not a prerequisite for every TU.
 - The compile gate is therefore **per-TU**: "this TU compiles against the current
-  global headers," not "the whole game links and runs." Full-link is a later phase.
+  global headers," not "the whole game links and runs." (A full link exists today:
+  `tools/build/build_game_exe.bat` links the shipping `Burnout_PC.exe` from the
+  mounted TU set — see [BUILD.md](BUILD.md); the per-TU gate remains the work-loop
+  gate.)
 - This couples stub generation to **type recovery**: discovering that a param is
   `BrnEntity*` edits a shared header, which may break callers — and that compiler
   error is the desired signal, not drift.

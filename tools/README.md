@@ -57,15 +57,26 @@ python tools/ida/build_source_tree.py
 
 ## Build drivers
 
+The sequenced entry point is the repo-root driver (see [BUILD.md](../BUILD.md)):
+
 ```powershell
-tools/build_game_exe.bat
-tools/build_ffmpeg.bat
-pwsh tools/build_tools.ps1
+.\build doctor      # readiness report; machine paths live in build.config.toml
+.\build all         # tools -> lua -> ffmpeg -> exe -> data
 ```
 
-The implementations are under `tools/build/`. Build products go under
-`build/game/` and `build/tools/`; generated FFmpeg binaries go under
-`b5-decomp/vendor/ffmpeg-build/`.
+Every step also runs standalone:
+
+```powershell
+tools/build/build_game_exe.bat
+tools/build/build_lua.bat
+tools/build/build_ffmpeg.bat        # add --prebuilt to download the CI build
+pwsh tools/build/build_tools.ps1
+```
+
+Build products go under `build/game/` and `build/tools/`; generated FFmpeg and
+Lua binaries go under `b5-decomp/vendor/`. MSVC is located by
+`tools/build/msvc_env.bat`; the canonical compile flags/includes are
+`tools/build/msvc_flags.txt` + `msvc_includes.txt` (shared with the per-TU gate).
 
 ## Building the game data folder
 
@@ -80,17 +91,20 @@ converter is a manifest edit, not a code change**.
 tools\build\build_game_exe.bat
 
 # 1. plan only - writes nothing, prints the UNHANDLED inventory
-py tools\assets\build_game_data.py "D:\...\Burnout_tcartwright" --dry-run
+python tools\assets\build_game_data.py --dry-run          # source: [inputs].x360_root
+                                                          # (or pass the folder explicitly)
 
-# 2. convert for real; output defaults to Burnout_tcartwright_decomp
-py tools\assets\build_game_data.py "D:\...\Burnout_tcartwright" --jobs 6
+# 2. convert for real; output defaults to <x360_root>_decomp
+python tools\assets\build_game_data.py --jobs 6
 
 # 3. optionally choose an output and borrow known-good files for explicit gaps
-py tools\assets\build_game_data.py "D:\...\Burnout_tcartwright" `
-       --out D:\BurnoutPC --jobs 6 --borrow-dir build\game --with-exe
+python tools\assets\build_game_data.py `
+       --out <out-folder> --jobs 6 --borrow-dir build\game --with-exe
 
-# 4. launch  D:\BurnoutPC\Burnout_PC.exe
+# 4. launch  <out-folder>\Burnout_PC.exe   (from its own folder)
 ```
+
+(`.\build data <flags>` is the same thing with build.config.toml defaults applied.)
 
 The report lands in `<out>\.build_game_data\report.txt` (plus `report.json`).
 Re-runs are idempotent: a state sidecar keyed on source size/mtime, rule id and
@@ -108,10 +122,13 @@ Two things worth knowing before you run it:
   `--copy-unhandled` or `--borrow-dir` if you want the folder filled anyway; both
   keep the honest classification in the report. `--with-exe` refuses deployment
   while any non-skipped item remains UNHANDLED.
-* **APT is deliberately excluded.** `GUIAPT` and `GUIAPTSD` are skipped rather than
-  copied or widened here. Supply bundles produced by the real libapt2 pipeline
-  separately. The dry-run report also lists every remaining non-APT resource family
-  that still lacks a proven converter.
+* **APT has no converter yet.** `GUIAPT` and `GUIAPTSD` are classed `UNHANDLED`
+  (which blocks `--with-exe`, by design) until the APT campaign lands manifest
+  rules; the hand-run repair scripts (`bundles/fix_apt_bundle.py`,
+  `bundles/apt8_repair.py`, `bundles/apt_widen_4to8.py`) stay manual until then.
+  Supply known-good platform-4 copies via `--borrow-dir` / `[build].borrow_dir`.
+  The dry-run report also lists every remaining non-APT resource family that
+  still lacks a proven converter.
 
 Every converter runs from a **mirrored worker root** (`tools/assets/**` plus
 `build/tools/{yap,volatility}` copied into a scratch tree). Each tool computes its
@@ -132,7 +149,7 @@ python tools/assets/memory_map/generate_header.py
 Fonts and textures:
 
 ```powershell
-python tools/assets/fonts/convert_x360.py <x360_font.dat> <out_ours.dat>
+python tools/assets/fonts/convert_x360.py <x360_font.dat> <out_ours.dat>   # legacy/standalone; the manifest routes FONTs through bundles/nonapt_transcode.py
 python tools/assets/fonts/carve_vectorfont.py
 python tools/assets/textures/extract_xex.py
 ```

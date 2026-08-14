@@ -47,6 +47,8 @@ Addresses are build-local and must not be treated as stable across binaries.
 | --- | --- |
 | [`AGENTS.md`](AGENTS.md) | Tool-agnostic operating guide: resume behavior, work loop, server coordination, reconstruction rules, review policy, and "don't" rules. |
 | [`STRATEGY.md`](STRATEGY.md) | Design document for the workflow: target, build roles, identity model, TU model, stubs, verification, goals, and phase status. |
+| [`BUILD.md`](BUILD.md) | The canonical build recipe: prerequisites, `build.config.toml`, `build doctor`, `build all`, run. |
+| [`build.config.example.toml`](build.config.example.toml) | Machine-path template; copy to the gitignored `build.config.toml`. |
 | [`IDA Files/`](IDA%20Files/) | IDA Pro databases and RenderWare library/PDB inputs. Some large `.i64` files are intentionally git-ignored and must be supplied locally. |
 | [`.ida-exports/`](.ida-exports/) | Generated per-function JSON exports from IDA: names, prototypes, locals, pseudocode, asm, callers, and callees. Git-ignored. |
 | [`references/`](references/) | Non-disassembly evidence: Feb-2007 source slice, DecFIGS DWARF artifacts, BPR module map, wiki index, and naming conventions. |
@@ -60,6 +62,10 @@ Generated review packets under `progress/reviews/` and vendor Markdown under
 `b5-decomp/vendor/` are artifacts/upstream documentation, not primary workflow docs.
 
 ## Prerequisites
+
+These are the prerequisites for ledger/reconstruction work. **To build the
+playable exe and convert the game data, follow [BUILD.md](BUILD.md)** (one
+config file, `build doctor`, `build all`).
 
 Required for normal ledger work:
 
@@ -120,6 +126,10 @@ For a new local workspace:
    ```powershell
    tools/export_db.ps1
    ```
+
+5. To produce a playable build (exe + converted game data), continue with
+   [BUILD.md](BUILD.md): copy `build.config.example.toml` to `build.config.toml`,
+   then `build doctor` and `build all`.
 
 After that, open an AI coding agent such as Codex or Claude Code in the repository and
 give it a normal work instruction, for example:
