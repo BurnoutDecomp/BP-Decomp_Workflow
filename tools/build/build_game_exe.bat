@@ -6,10 +6,10 @@ rem
 rem The source list exceeds cmd's ~8191-char command-line limit, so the cl arguments (flags,
 rem include dirs, sources, /Fo, /Fe) are written to a response file and passed via cl @file.
 setlocal
-rem NB ROOT is deliberately left unnormalized (keeps the historical path spelling in
-rem cl's command line; __FILE__/assert strings and the .map embed that spelling, so
-rem changing it shifts .rdata). Normalize only together with an exe-changing commit.
-set "ROOT=%~dp0..\.."
+rem Normalized ROOT: cl's command line, __FILE__/assert strings, the .map and the
+rem .cgsmap all embed this spelling -- D:\...\BP-Decomp_Workflow\... instead of the
+rem historical D:\...\tools\build\..\..\... (string-only change; code is identical).
+for %%I in ("%~dp0..\..") do set "ROOT=%%~fI"
 set "SRC=%ROOT%\b5-decomp\src"
 set "VEN=%ROOT%\b5-decomp\vendor"
 set "RES=%ROOT%\b5-decomp\res"
@@ -3120,9 +3120,7 @@ findstr /v /c:"pc\gcm\renderengine\device.cpp" "%RSP%" > "%RSP%.tmp"
 move /y "%RSP%.tmp" "%RSP%" >nul
 findstr /v /c:"rwcore\filesys\device.cpp" "%RSP%" > "%RSP%.tmp"
 move /y "%RSP%.tmp" "%RSP%" >nul
-cl /nologo /EHsc /std:c++17 /permissive- /DWIN32 /D_WINDOWS ^
-  /I"%SRC%" /I"%VEN%\EABase\include\Common" /I"%VEN%\EASTL\include" /I"%VEN%\EAThread\include" /I"%VEN%\renderware\include" /I"%VEN%\PPMalloc\include" /I"%VEN%\coreallocator\include" /I"%FFM%\include" /I"%VEN%\lua\src" ^
-  /c "%SRC%\pc\gcm\renderengine\device.cpp" /Fo"%OUT%\\obj\\renderengine_device.obj"
+cl @"%BASERSP%" /c "%SRC%\pc\gcm\renderengine\device.cpp" /Fo"%OUT%\\obj\\renderengine_device.obj"
 if errorlevel 1 ( echo ERROR: renderengine device.cpp precompile failed. & exit /b 1 )
 
 cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
