@@ -25,7 +25,7 @@ self-contained operating guide for that pass; its state/queue lives in
 ### Environment Checklist (Verify Before Reconstructing)
 
 Before compiling code or exporting functions, verify these settings:
-1. **Visual Studio / MSVC Path:** Check [`progress/verify.config.json`](progress/verify.config.json). Ensure the `"vcvars"` path points to a valid `vcvars64.bat` on the host. If the path does not exist, the compile gate will skip compilation checks, meaning errors won't be caught.
+1. **Visual Studio / MSVC Path:** MSVC is auto-located by [`tools/build/msvc_env.bat`](tools/build/msvc_env.bat) (live `cl` 19.x, then default VS2022 installs, then `vswhere`). Only set the `VCVARS64` environment variable if VS2022 lives somewhere non-standard. If no MSVC is found, the compile gate reports `skip`, meaning errors won't be caught. Compile flags/includes are the canonical `tools/build/msvc_flags.txt` + `msvc_includes.txt` — the same set the shipping exe build uses.
 2. **IDA Pro Path:** If you need to generate stubs/skeletons for new functions or run the parallel exporter, make sure `idat.exe` is available. You can pass the path explicitly via the `-IdaPath` parameter to `tools/export_db.ps1`, or set the `IDA_PATH` environment variable.
 3. **Submodules:** The `b5-decomp` EA vendor submodules must be initialized. `work bootstrap` does this, but you can verify them under `b5-decomp/vendor/`.
 4. **Coordination config (only if invited):** If the maintainer gave you a server URL, `cp .env.example .env`, uncomment `WORK_SERVER`, set it to that URL, and set a unique `WORK_AGENT`. With no URL, skip this entirely — you work locally. See "Coordination server" below.
@@ -167,8 +167,9 @@ the maintainer invited you onto a server or you are running one.
 1. **Compile gate.** `work submit` compiles the TU's `.cpp` (`cl /c`, no link) against
    current headers. On **fail** it prints the diagnostics and returns the TU to
    `in_progress` — fix and re-submit. On **pass** the TU goes `compiled` and a reviewer
-   packet is written to `progress/reviews/<tu>.md`. (If MSVC isn't configured the gate
-   reports `skip` and still proceeds — see `progress/verify.config.json`. The EA
+   packet is written to `progress/reviews/<tu>.md`. (If no MSVC is found the gate
+   reports `skip` and still proceeds — set `VCVARS64` or install VS2022; see
+   `tools/build/msvc_env.bat`. The EA
    submodules must be checked out — `git -C b5-decomp submodule update --init` — for
    anything that includes EASTL/EABase to compile.)
 2. **Automated parity (NO-LLM, advisory).** When `automated_check.enabled`, `work submit`

@@ -1,5 +1,5 @@
 {
-  "_comment": "Verification OPTIONS + POLICY for the decomp workflow. This file does NOT auto-run anything. The reverser agent (the one you chat with) reads it and CHOOSES, per translation unit: (a) whether a fresh-eyes review pass is needed at all, and (b) which provider / model / thinking-level to use — then invokes that choice itself. Compile-gate settings are separate, in verify.config.json. See AGENTS.md > Verification.",
+  "_comment": "Verification OPTIONS + POLICY for the decomp workflow. This file does NOT auto-run anything. The reverser agent (the one you chat with) reads it and CHOOSES, per translation unit: (a) whether a fresh-eyes review pass is needed at all, and (b) which provider / model / thinking-level to use — then invokes that choice itself. Compile-gate settings are separate, in tools/build/msvc_flags.txt + msvc_includes.txt (MSVC located by tools/build/msvc_env.bat). See AGENTS.md > Verification.",
   "providers": {
     "_comment": "Declare only the agentic systems you actually have (have:true). For each, list the models the reverser may pick and, per model, the allowed thinking range. 'invoke' tells the agent HOW to run that provider once it chooses it.",
     "claude-code": {

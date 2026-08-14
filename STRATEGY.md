@@ -224,8 +224,9 @@ per-TU asm-matching for if/when a PPC toolchain is wired up. Not built now.
   callee signatures + DecFIGS dwarfdump declaration/type hints + Feb-2007
   original source into one brief.
 - **Phase 3 — Compile gate + reviewer sub-agent** *(done)*: `work submit` runs the
-  per-TU compile gate (`cl /c` under MSVC, `tools/work/verify.py`,
-  `progress/verify.config.json`) and, on pass, emits a fresh-eyes reviewer packet;
+  per-TU compile gate (`cl /c` under MSVC, `tools/work/verify.py`, canonical
+  flags/includes from `tools/build/msvc_flags.txt` + `msvc_includes.txt`) and,
+  on pass, emits a fresh-eyes reviewer packet;
   `work review --verdict pass|fail` records the verdict. This completes the
   self-verifying loop — Phase 3 is the last infrastructure phase.
 

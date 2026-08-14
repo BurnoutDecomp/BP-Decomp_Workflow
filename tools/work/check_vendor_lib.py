@@ -21,17 +21,20 @@ def main():
         print("PRESENT")
         sys.exit(0)
         
-    # We currently only have rwcore.lib to check against for closed-source middleware
-    lib_path = r"b5-decomp\vendor\renderware\lib\rwcore.lib"
-    vcvars = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-    
+    # We currently only have rwcore.lib to check against for closed-source middleware.
+    # Paths are repo-root-derived (this script used to hardcode a CWD-relative lib and
+    # a Community-only vcvars -- both silently dead on non-Community boxes).
+    root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    lib_path = os.path.join(root, "b5-decomp", "vendor", "renderware", "lib", "rwcore.lib")
+    resolver = os.path.join(root, "tools", "build", "msvc_env.bat")
+
     if not os.path.exists(lib_path):
         print("MISSING")
         sys.exit(0)
-        
-    # Run dumpbin through the MSVC developer command prompt to check for the symbol
-    # We suppress vcvars64.bat output so it doesn't pollute the pipe.
-    cmd = f'cmd.exe /c ""{vcvars}" > NUL && dumpbin /symbols "{lib_path}" | findstr /I "{target}""'
+
+    # Run dumpbin through the shared MSVC resolver (VCVARS64 env override supported).
+    # Resolver output is suppressed so it doesn't pollute the pipe.
+    cmd = f'cmd.exe /c "call "{resolver}" >NUL 2>&1 && dumpbin /symbols "{lib_path}" | findstr /I "{target}""'
     try:
         result = subprocess.run(cmd, capture_output=True, text=True)
         # findstr returns 0 if it finds a match, 1 otherwise

@@ -15,7 +15,7 @@ Run from the repo root inside an environment where `c++filt` is on PATH:
     python tools/work/build_identity.py            # X360 x DecFIGS
     python tools/work/build_identity.py --with-ps3 # also fold in PS3-External
 """
-import argparse, json, os, re, subprocess, sys
+import argparse, json, os, re, shutil, subprocess, sys
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
@@ -30,12 +30,37 @@ PS3EXT = "Burnout_External_PS3.ELF"
 AUTO = re.compile(r"^(sub_|j_|nullsub|unknown|loc_|off_|byte_|dword_|word_|qword_|unk_|Burnout_X360_Artist_)")
 
 # MSVC demangler for the '?'-prefixed X360 names IDA left mangled (C++ function-template
-# instantiations). Override the path via UNDNAME_EXE if VS lives elsewhere.
-UNDNAME = os.environ.get(
-    "UNDNAME_EXE",
-    r"C:\Program Files\Microsoft Visual Studio\2022\Community"
-    r"\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\undname.exe",
-)
+# instantiations). Resolution: UNDNAME_EXE env > PATH (live dev shell) > VCVARS64-derived
+# VS root > standard VS2022 editions, newest toolset first. (Was pinned to one Community
+# toolset version, which broke on every MSVC point release and on non-Community boxes.)
+def _find_undname():
+    env = os.environ.get("UNDNAME_EXE")
+    if env:
+        return env
+    hit = shutil.which("undname")          # live dev shell (vcvars already ran)
+    if hit:
+        return hit
+    roots = []
+    vcv = os.environ.get("VCVARS64")
+    if vcv and os.path.exists(vcv):        # <VS>\VC\Auxiliary\Build\vcvars64.bat -> <VS>
+        roots.append(os.path.abspath(os.path.join(os.path.dirname(vcv), "..", "..", "..")))
+    pf = os.environ.get("ProgramFiles", r"C:\Program Files")
+    roots += [os.path.join(pf, "Microsoft Visual Studio", "2022", e)
+              for e in ("Enterprise", "Professional", "Community", "BuildTools")]
+    for r in roots:
+        msvc = os.path.join(r, "VC", "Tools", "MSVC")
+        if not os.path.isdir(msvc):
+            continue
+        vers = [v for v in os.listdir(msvc) if re.match(r"^\d+(\.\d+)+$", v)]
+        # int-tuple sort: lexical would rank 14.9 above 14.44
+        for v in sorted(vers, key=lambda s: tuple(int(x) for x in s.split(".")), reverse=True):
+            cand = os.path.join(msvc, v, "bin", "Hostx64", "x64", "undname.exe")
+            if os.path.exists(cand):
+                return cand
+    return "undname"   # last resort: hope PATH has it; failure is loud downstream
+
+
+UNDNAME = _find_undname()
 _QQ = " ?? ::"
 
 

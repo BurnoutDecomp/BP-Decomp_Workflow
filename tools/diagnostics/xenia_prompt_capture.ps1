@@ -1,6 +1,7 @@
 # xenia_prompt_capture.ps1 -- boot the ORIGINAL X360 build in Xenia and capture the
 # title -> menu -> autosave-prompt sequence (ground truth for the PC recon).
-param([string]$OutDir = "scratch\xenia_truth", [int]$BootSeconds = 75)
+param([string]$OutDir = "scratch\xenia_truth", [int]$BootSeconds = 75,
+      [string]$XeniaDir = $env:BRN_XENIA_DIR)
 $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $outPath = Join-Path $root $OutDir
@@ -28,7 +29,10 @@ public static class XCap {
   }
 }
 "@
-$dir = "D:\Emulation\Emulators\Xenia\Xenia Burnout 5 v6"
+if (-not $XeniaDir -or -not (Test-Path (Join-Path $XeniaDir "xenia_burnout5.exe"))) {
+  throw "Xenia dir not set/found. Pass -XeniaDir or set BRN_XENIA_DIR (or [inputs].xenia_dir in build.config.toml) to the folder holding xenia_burnout5.exe and Burnout_tcartwright\BURNOUT_X360_ARTIST.XEX (was hardcoded to D:\Emulation\Emulators\Xenia\Xenia Burnout 5 v6)"
+}
+$dir = $XeniaDir
 $xex = Join-Path $dir "Burnout_tcartwright\BURNOUT_X360_ARTIST.XEX"
 Get-Process xenia_burnout5 -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Start-Sleep -Seconds 1
