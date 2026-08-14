@@ -726,6 +726,12 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  ...and its one link dependency, BodyPartBBoxSpec::HackCheckHandedness (called from the
   rem  spec's FixUp). Same story: body committed, never on the list.
   echo "%SRC%\SharedClasses\Physics\Deformation\BrnBodyPartBBoxSpec.cpp"
+  rem  2026-08-14 (deformation-mount wave): the streamed-deformation-spec RESOURCE TYPE handler
+  rem  (0x1001C / 65564, the deformation resource in every Vehicles\VEH_*_AT.bin). It existed,
+  rem  unmounted AND unregistered -- the loader skipped FixUp and the first real spec walk after
+  rem  the manager mount AV'd on an un-rebased serialised offset. Registered in
+  rem  CgsResourceTypeRegistration.cpp with the IdList/ICETake/PlayerCarColours precedents.
+  echo "%SRC%\SharedClasses\Physics\Deformation\Resources\StreamedDeformationSpecResourceType.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleManagerOutputInterface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleOutputInterface.cpp"
   rem  ⭐⭐ 2026-08-09 (CONDUCTOR WAVE): PhysicsModule::Update @0x825B0640 IS REAL
@@ -1038,6 +1044,73 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPart_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationInputInterface.cpp"
+  rem ⭐⭐⭐ 2026-08-14 (deformation-mount wave): THE MOUNT IS EXECUTED. The walls-wave census's
+  rem landing plan, carried out line for line:
+  rem   * the 4-TU family mounts (home manager TU with OutputData SPLIT OUT to the unmounted
+  rem     BrnDeformationManager_Output.cpp -- its conductor gate stays; the PostSceneUpdate gate
+  rem     and the WorldLinkStubs Prepare stub are DELETED with the mount);
+  rem   * the MOUNT-CLOSABLE set mounts (VehicleRigidBody / IKBodyPart / TagPoint / IKDrivenPoint /
+  rem     the whole BrnDeformationSensor.cpp -- whose ctor+Prepare the census's "still to write"
+  rem     row wrongly listed as absent; GetPlayerCarModel MOVED to the home TU from _Contacts);
+  rem   * the STILL-TO-WRITE set is WRITTEN: ResetSensors @0x82623D60 (the whale, both-console
+  rem     decode; sensor mVolInstId promoted at +0x190; J-offset/timestep constants image-read),
+  rem     GetInitialCompressionScalesAndLimits @0x825DF6F8 (export HOLE -- recovered via the BL
+  rem     word + ppcdis; the three KV3P ratio vectors were DYNAMIC-INIT, initializers found
+  rem     @0x82C5D700/740/778: EVENT=(1,1,1,0.8) CAR_SELECT=(0.8,0.7,0.8,0.75) DEFAULT=0),
+  rem     ResetJointVelocities @0x825DF810 (⚠️ the census note "zero xyz keep w" was INVERTED --
+  rem     both consoles zero the W lane == SetJointVelocity(0)), RemovePhysicalPartsAndJoints
+  rem     @0x82625250 + Pool::RemovePart @0x8260CA30 + Part::RemoveFromScene @0x825E7818 (dead at
+  rem     runtime this wave, link-real), the write-side InputBuffer::GetRemoveRigidBodyQueue
+  rem     @0x825BCF58, ImpulsePasser::SetCollidableBodyMap + SweptSphere::Set (new TUs, both
+  rem     inline-attested at their ResetSensors call sites);
+  rem   * the DEFERRABLE set keeps its gates: OutputData conductor gate; UpdateLocator @0x825E0EC8
+  rem     log-once gate in the new IKSkinning slice (dead at runtime -- DeformationManager::Update
+  rem     is still a gate); the two per-frame contact-generation traps DEGRADED to log-once gates.
+  rem  FOLLOW-ON ROWS the mount surfaced (next wave's list, measured not guessed):
+  rem   * DeformationSensor::ApplyLocalImpulse -- PS3 0x74D3A0 (569 insns), X360 export hole;
+  rem     tonight a LOUD log-once gate (vtable satisfied); dead until contacts exist. Write it
+  rem     with the (c) walls wave.
+  rem   * FOUR sensor rodata rows are DYNAMIC-INIT (image-zero, probed): unk_82FB82C0 /
+  rem     unk_82FB9F20 (sensor Prepare's per-direction displacement rows -- (d)'s FIRST missing
+  rem     piece: with them at 0 the seeded sensors sit at REST, so authored initial damage cannot
+  rem     displace a sphere), unk_82FB9680 (hit directions), unk_82FB9560 (absorption rows).
+  rem     RECOVERY METHOD PROVEN TONIGHT: their initializers live in the 0x82C5Bxxx..0x82C5Dxxx
+  rem     static-init region (the three KV3P ratio vectors + KVF_MIN/MAX_IMPULSE precedents were
+  rem     all recovered exactly that way with ppcdis.py + x360rd.py).
+  rem   * (d)'s SECOND missing piece: the damaged look cannot reach the RENDERER until the
+  rem     _Output slice closure lands (OutputData's skinned-model tables are not homed).
+  rem   * StreamedDeformationSpecResourceType.cpp carries a LOCAL 40-byte StreamedDeformationSpec
+  rem     slice (pad+3 locator lists) in namespace Deformation -- a silent ODR fork whose
+  rem     FixUp/FixDown calls happen to link against the real bodies. Retire it onto the real
+  rem     header (the odr-forks-link-silently shape).
+  rem   * PhysicsModule::Prepare stage 4's fourteen deformation-IO clears are STILL the documented
+  rem     drop (no member maps for the two IO interfaces). Fresh-boot-equivalent to zero-init;
+  rem     a REAL dropped clear on re-prepare now that the consumer is live.
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Lifecycle.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Update.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_GlassState.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_IKSkinning.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformationSensor.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnVehicleRigidBody.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnIKBodyPart.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnTagPoint.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnIKDrivenPoint.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnImpulsePasser.cpp"
+  rem  (post-trial closure, 14 unresolved -> 0): the sensor TU's impulse/contact legs need the
+  rem  absorption table + the penetration solver (both bodied, previously unmounted; the solver
+  rem  gained its inline-on-console AddWorldContact/GetNumWorldContacts siblings this wave), and
+  rem  seven console-inline accessors were header-inlined (GetNumSensors == spec count + 4,
+  rem  IKBodyPart::GetNumberOfDrivenPoints, IKBodyPartSpec::GetJointSpec, TagPoint(Spec)::
+  rem  GetDetachThresholdSquared, IKDrivenPoint x4). ImpulsePasser::PassOnImpulse written from the
+  rem  PS3 body @0x6B4FB8; DeformationSensor::ApplyLocalImpulse (PS3 0x74D3A0, 569 insns, X360
+  rem  hole) is a LOUD log-once gate -- dead at runtime until contact generation lands.
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnAbsorptionTable.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPenetrationSolver.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPart_Remove.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Remove.cpp"
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsSweptSphere.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\BaseEventQueue_InEventRemoveFromCache_AddEvent.cpp"
   rem ⭐⭐ 2026-08-14 (walls wave): THE DEFORMATION-MANAGER MOUNT WAS TRIAL-LINKED AND MEASURED.
   rem The stale "25 unresolved" note (2026-08-03) below at the Construct leg is RETIRED -- mounting
   rem {BrnDeformationManager.cpp + BrnDeformableObject_{Lifecycle,Update,GlassState}.cpp} at the
