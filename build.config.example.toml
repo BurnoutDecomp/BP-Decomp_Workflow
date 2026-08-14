@@ -1,0 +1,73 @@
+# build.config.toml -- machine-specific paths for the Burnout Paradise decomp build.
+#
+# Setup:  copy this file to `build.config.toml` (repo root) and fill in what you have:
+#             copy build.config.example.toml build.config.toml
+#         Never commit build.config.toml (it is git-ignored); only this example is tracked.
+#
+# Every key is OPTIONAL: an empty value means "probe the documented default".
+# Precedence everywhere: CLI argument > environment variable > this file > probed default.
+# The `build` driver (tools/build/build.py) loads this once and exports each value as the
+# environment variable named beside it, so every .bat/.ps1/converter stays standalone.
+
+[inputs]
+# Stock Xbox 360 Burnout Paradise game folder (~5,923 files / 3.7 GiB; must contain
+# SHADERS.BNDL, VEHICLES/, TRK_UNIT*_GR.BNDL).             -> env BRN_X360_ROOT
+# Probed default: references/private/Burnout_tcartwright (gitignored, in-repo).
+x360_root = ""
+
+# Burnout Paradise Remastered install -- OPTIONAL oracle for the --verify modes of the
+# vehicle/engine/progression transcoders.                  -> env BRN_BPR_ROOT
+# Probed default: C:/Program Files (x86)/Steam/steamapps/common/BurnoutPR
+bpr_root = ""
+
+# The nushaders repo's TUB HLSL tree, i.e. <clone>/Reference/TUB/Bundle/gamedb/burnout5.
+# Needed only to convert SHADERS.BNDL (without it every technique falls back).
+#                                                          -> env NUSHADERS_TUB
+nushaders_tub = ""
+
+# Xenia install dir holding xenia_burnout5.exe + Burnout_tcartwright\ -- OPTIONAL,
+# only for tools/diagnostics/xenia_prompt_capture.ps1.     -> env BRN_XENIA_DIR
+xenia_dir = ""
+
+[output]
+# Destination folder for the converted game data (build_game_data.py --out).
+# Default when empty: "<x360_root>_decomp" beside the source. Must not be inside
+# build/game, b5-decomp, tools/, or the source; C: is refused without --allow-c-drive.
+game_data = ""
+
+[toolchain]
+# Full path to VS2022's vcvars64.bat.                      -> env VCVARS64
+# Probed default: the four standard VS2022 editions, then vswhere.exe.
+vcvars64 = ""
+
+# Qt6 MSVC x64 prefix, e.g. C:/Qt/6.7.0/msvc2022_64 (YAP). -> env QT6_DIR
+# Probed default: newest C:/Qt/6.*/msvc*_64.
+qt6_dir = ""
+
+# fxc.exe shader compiler (SHADERS.BNDL recompile).        -> env PC_FXC
+# Probed default: newest x64 fxc.exe under C:/Program Files (x86)/Windows Kits/10/bin.
+fxc = ""
+
+# MSYS2 install root (bash + make for the FFmpeg source build; not needed if you
+# fetch the prebuilt: tools\build\build_ffmpeg.bat --prebuilt). -> env MSYS2_ROOT
+# Probed default: C:/msys64
+msys2_root = ""
+
+# Strawberry Perl root (FFmpeg configure).                 -> env STRAWBERRY_ROOT
+# Probed default: C:/Strawberry
+strawberry_root = ""
+
+# IDA Pro install dir (ledger/export tooling only; NOT needed to build the game).
+#                                                          -> env IDA_PATH
+ida_path = ""
+
+# undname.exe override (ledger identity tooling only).     -> env UNDNAME_EXE
+# Probed default: derived from the resolved VS install, newest toolset.
+undname_exe = ""
+
+[build]
+# Default parallel converter count for `build data` (stager default: 4).
+jobs = 4
+# Default --borrow-dir: a known-good build/game to borrow UNHANDLED files from
+# (today: GUIAPT/GUIAPTSD, until the APT campaign lands manifest rules).
+borrow_dir = ""

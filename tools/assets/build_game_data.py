@@ -145,13 +145,14 @@ TO REBUILD THE GAME FOLDER FROM SCRATCH
           Skipping this is the single most common cause of a run that fails 970 times.)
     2. Build the exe:                 tools\\build\\build_game_exe.bat
     3. Plan and read the gap report (writes nothing, and reports missing prerequisites):
-         py tools\\assets\\build_game_data.py "<X360 folder>" --out D:\\BurnoutPC --dry-run
+         py tools\\assets\\build_game_data.py "<X360 folder>" --out <out-folder> --dry-run
     4. Convert:
-         py tools\\assets\\build_game_data.py "<X360 folder>" --out D:\\BurnoutPC --jobs 6
+         py tools\\assets\\build_game_data.py "<X360 folder>" --out <out-folder> --jobs 6
     5. Supply what has no converter yet -- today that is GUIAPT/GUIAPTSD (no BE->LE AptData
        porter exists) and a short tail of sound/particle/postfx bundles.  Point
-       --borrow-dir at a folder that already holds good platform-4 copies:
-         ... --borrow-dir D:\\Reverse\\BP-Decomp_Workflow\\build\\game --with-exe
+       --borrow-dir at a folder that already holds good platform-4 copies (persistent
+       default: [build].borrow_dir in build.config.toml):
+         ... --borrow-dir <known-good-build\\game> --with-exe
        --with-exe refuses while anything is still UNHANDLED or FAILED, so a folder it
        deploys into is a folder every rule actually produced.
     6. Launch  <out>\\Burnout_PC.exe.  Launch it FROM ITS OWN FOLDER: schema.vlt/schema.bin
@@ -192,6 +193,24 @@ except ModuleNotFoundError:                           # pragma: no cover
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 DEFAULT_MANIFEST = os.path.join(HERE, "game_data_manifest.toml")
+
+
+def _load_build_config():
+    """build.config.toml via the shared loader in tools/build/ -- which WorkerRoots
+    does NOT mirror, so inside a worker root this returns {} and the env vars the
+    orchestrator injected rule. Precedence: CLI > env > config > probed default."""
+    try:
+        import importlib.util
+        p = os.path.join(REPO, "tools", "build", "build_config.py")
+        spec = importlib.util.spec_from_file_location("bp_build_config", p)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod.load_config()
+    except Exception:
+        return {}
+
+
+_CFG = _load_build_config()
 
 # The runtime files a launchable folder needs beside the data.  Names come from
 # tools/build/build_game_exe.bat (which links against avformat/avcodec/avutil/swscale/
@@ -1161,7 +1180,12 @@ def preflight(items, gens, srcroot, outroot):
         what no scan can find: today only the out-of-repo nushaders TUB HLSL tree.
 
     Returns [(missing_path, rule_ids, fix)]."""
-    ctx = {"repo": REPO, "srcroot": srcroot, "outroot": outroot}
+    ctx = {"repo": REPO, "srcroot": srcroot, "outroot": outroot,
+           # The one out-of-repo dependency the manifest models ({nushaders_tub} in
+           # the shaders rule's `requires`): env > config > this machine's default.
+           "nushaders_tub": os.environ.get("NUSHADERS_TUB")
+               or (_CFG.get("inputs", {}).get("nushaders_tub") or "").strip()
+               or r"D:\Burnout Paradise\Source\NuShaders\Reference\TUB\Bundle\gamedb\burnout5"}
     planned = {}
     for it in items + gens:
         if it.rule.action in ("convert", "generate"):
@@ -1243,13 +1267,13 @@ def main(argv=None):
 TYPICAL USE
   1. Give it the game folder; output defaults beside it as <folder>_decomp:
        py tools/assets/build_game_data.py --dry-run        # uses references/private/Burnout_tcartwright
-  2. Use --dry-run to plan, or --out/--jobs to override the defaults:
-       ... --out D:/BurnoutPC --jobs 6
+  2. Use --dry-run to plan, or --out/--jobs to override the defaults (persistent
+     defaults live in build.config.toml: [output].game_data, [build].jobs):
+       ... --out <out-folder> --jobs 6
   3. To deploy the runtime, all non-skipped gaps must have converters or known-good
      platform-4 files supplied with --borrow-dir (build the exe first):
-       ... --out D:/BurnoutPC --jobs 6 --borrow-dir D:/Reverse/BP-Decomp_Workflow/build/game \\
-              --with-exe
-  4. launch D:/BurnoutPC/Burnout_PC.exe
+       ... --out <out-folder> --jobs 6 --borrow-dir <known-good-build/game> --with-exe
+  4. launch <out-folder>/Burnout_PC.exe
 
 NOTES
   * --out may not be inside build/game, b5-decomp, tools/, or the source, and may not be on C:
@@ -1302,16 +1326,21 @@ NOTES
     if (args.game_folder and args.src and
             os.path.abspath(args.game_folder) != os.path.abspath(args.src)):
         ap.error("give the source once: positional game_folder and --src disagree")
+    if not supplied:
+        supplied = (_CFG.get("inputs", {}).get("x360_root") or "").strip() or None
+        if supplied:
+            print("source: %s (build.config.toml [inputs].x360_root)" % supplied)
     if not supplied and os.path.isdir(DEFAULT_X360_ROOT):
         # The retail set lives in the repo (gitignored) so no caller needs a machine
         # -specific absolute path.  See DEFAULT_X360_ROOT.
         supplied = DEFAULT_X360_ROOT
         print("source: %s (repo default)" % supplied)
     if not supplied:
-        ap.error("game_folder is required (or use --src / BRN_X360_ROOT); the repo default "
-                 "%s does not exist" % DEFAULT_X360_ROOT)
+        ap.error("game_folder is required (or --src / BRN_X360_ROOT / build.config.toml "
+                 "[inputs].x360_root); the repo default %s does not exist" % DEFAULT_X360_ROOT)
     srcroot = find_game_root(supplied)
-    outroot = os.path.abspath(args.out or (srcroot.rstrip("\\/") + "_decomp"))
+    cfg_out = (_CFG.get("output", {}).get("game_data") or "").strip()
+    outroot = os.path.abspath(args.out or cfg_out or (srcroot.rstrip("\\/") + "_decomp"))
     if not os.path.isdir(srcroot):
         raise SystemExit("game folder is not a directory: %s" % srcroot)
     if not os.path.isfile(os.path.join(srcroot, "SHADERS.BNDL")):

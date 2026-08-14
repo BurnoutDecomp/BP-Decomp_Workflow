@@ -482,7 +482,10 @@ def convert(in_path, out_path, quiet=False):
 # --verify : the per-slot WIDTH CONTEST against the shipped BPR little-endian bundles.
 # ---------------------------------------------------------------------------------------
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-BPR_DIR = r'C:\Program Files (x86)\Steam\steamapps\common\BurnoutPR'
+# Same env override as the sibling oracles (vehicleattrib/engine_transcode):
+# BRN_BPR_ROOT (fed by build.config.toml [inputs].bpr_root via the build driver).
+BPR_DIR = os.environ.get('BRN_BPR_ROOT',
+                         r'C:\Program Files (x86)\Steam\steamapps\common\BurnoutPR')
 
 # Alternative widths each candidate slot is contested against. Every one of these produces
 # DIFFERENT bytes from the committed spec, so agreement with the oracle is a real verdict.

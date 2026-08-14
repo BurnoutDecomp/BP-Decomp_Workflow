@@ -134,6 +134,21 @@ def load_xex_image(path):
             base = v
     if ffo is None:
         raise AssertionError('%s has no file-format-info header' % path)
+    # The block walk below is the UNENCRYPTED + 'basic'-compressed layout only. A raw
+    # retail dump's XEX (encrypted and/or LZX-compressed) would read as garbage blocks
+    # and crash somewhere unrelated -- so name the real problem here instead.
+    enc = struct.unpack_from('>H', d, ffo + 4)[0]
+    comp = struct.unpack_from('>H', d, ffo + 6)[0]
+    if enc != 0 or comp != 1:
+        raise SystemExit(
+            '%s: XEX2 is %s + %s; this tool needs the UNENCRYPTED, BASIC-compressed '
+            'ARTIST image (the form shipped in references/private). Decrypt/decompress '
+            'the retail XEX first (e.g. xextool -e d -c b) and point the source folder '
+            'at that copy.' % (
+                path,
+                {0: 'unencrypted'}.get(enc, 'ENCRYPTED (type %d)' % enc),
+                {0: 'uncompressed', 1: 'basic-compressed'}.get(
+                    comp, 'compression type %d (LZX?)' % comp)))
     img = bytearray()
     src = pe_off
     o = ffo + 8
