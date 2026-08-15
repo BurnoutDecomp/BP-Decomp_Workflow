@@ -227,6 +227,14 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\pc\gcm\renderengine\VertexDescriptorParameters.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\PS3\CgsRwVertexDescResourceType.cpp"
   echo "%SRC%\pc\gcm\renderengine\ImmediateModePCLeaf.cpp"
+  rem ---- RETAINED WORLD GEOMETRY (2026-08-15 perf wave) ----------------------
+  rem The dispatch-path world/car/caster draws used to re-expand DEC3N and re-cut
+  rem every strip run inside DrawIndexedPrimitiveUP, PER DRAW CALL -- measured at
+  rem 36 pct self / 69 pct inclusive of the main thread. This PC leaf mirrors each
+  rem static bundle buffer into a D3D9 vertex/index buffer ONCE and submits with
+  rem SetStreamSource/SetIndices/DrawIndexedPrimitive; CgsResourcePool's free path
+  rem evicts a mirror together with the bundle memory it was built from.
+  echo "%SRC%\pc\gcm\renderengine\WorldGeometryPCLeaf.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkyDomeProgramsPC.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3dSkyDome.cpp"
   echo "%SRC%\GameSource\Graphics\ImmediateMode\BrnIm3d.cpp"
