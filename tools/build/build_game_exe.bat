@@ -735,6 +735,51 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem   * PenetrationSolver::GetWorldContacts / GetVehicleContacts were DECLARED-ONLY with no
   rem     body since the header was written -- no link had ever caught it because no committed
   rem     caller existed. Bodied.
+  rem  ⭐⭐⭐ THE OVERSTEER IS SOLVED (2026-08-15) -- and the culprit was a PLACEHOLDER'S VALUE,
+  rem  not the tyre model. VehiclePhysics::GetSurfaceGrip @0x825D51B8 computes
+  rem  `1 - (1 - gripTable[id]) * blend` -- a LERP FROM 1.0 toward the surface's grip, whose
+  rem  IDENTITY ELEMENT IS 1.0. The per-surface tables are runtime-loaded scratch globals this
+  rem  tree cannot yet recover, and all three of them shared ONE flagged-zero placeholder. For
+  rem  roughness and drag (`table * scale * blend`) zero IS the identity and the stand-in was
+  rem  right; for grip it collapses the expression to `1 - blend` and hands the car's raw
+  rem  surface-sensitivity factor through as a permanent grip CUT -- and that factor is a
+  rem  DIFFERENT LANE PER AXLE (.x SurfaceFrontGripFactor, .y SurfaceRearGripFactor). So the
+  rem  placeholder did not merely reduce grip, it reduced the two axles by different amounts.
+  rem   * MEASURED with a new opt-in BRN_TYRE_PROBE=1 instrument in HandleWheelPairFriction
+  rem     (per-wheel enable/load/lateral speed/lateral+longitudinal force pre- and post-cone/
+  rem     cone latch/arm/yaw moments, plus the body's yaw rate, steering angle and inverse yaw
+  rem     inertia). On the Hunter Cavalry, with the zero placeholder:
+  rem         front wheels   sGrip 0.736000   adhCap 19872.000000
+  rem         rear  wheels   sGrip 0.200000   adhCap  5399.999512
+  rem     -- a 3.68x FRONT/REAR ASYMMETRY IN THE FRICTION CONE. Every capped rear sample landed
+  rem     on 5400.0 N exactly; the front never once reached its own ceiling. Under a held lock
+  rem     the rear cone was exceeded on 95% of frames against the front's 4%, and rear
+  rem     |longitudinal slip| averaged 13.2 -- a permanent burnout. A rear axle spending its
+  rem     whole force budget on drive torque has nothing left to resist yaw.
+  rem   * THE FIX is one value: the grip lookup gets its OWN placeholder returning 1.0, so an
+  rem     un-recovered table is INERT. No maths changed, no term added, no damper, no clamp.
+  rem     Both axles then read sGrip 1.0 / adhCap 27000 and neither binds; the cone falls back to
+  rem     `dynamicFrictionCo * (N + downForce)` ~8767..9120 N, front and rear alike, which is
+  rem     what the console computes on a full-grip surface. DELETE-WHEN unk_82FB8890 is recovered.
+  rem   * CONTROLLED, because "it drives better now" is not evidence. The identical drive script
+  rem     was re-run against a build with the value flipped back to 0.0. Same schedule, one value
+  rem     apart: peak sideslip through the turn 112.6 deg vs 8.9 deg; the control rotated 240 deg
+  rem     while covering 8 m and scrubbed to a standstill, the fixed build tracked a clean 11 m
+  rem     radius arc; and 4 s of full throttle in a straight line reached 11.54 m/s vs 19.83 m/s
+  rem     -- the rear cone was throttling STRAIGHT-LINE traction by 42% as well.
+  rem   * ⇒ leg 5's "the heading rotates a full turn every ~1 s" is now a SETTLED YAW RATE: under
+  rem     a steady lock the probe reads yaw 1.06 / 1.16 / 1.21 / 1.27 / 1.20 / 1.34 / 1.43 / 1.37
+  rem     / 1.29 / 1.19 / 1.09 rad/s -- a plateau that then decays with the speed -- against a
+  rem     pre-fix mean of 1.887 and max 3.526 with no plateau at all. On release the yaw rate
+  rem     falls to -0.0004 and the heading holds -16.3 deg for 250 frames while the car coasts to
+  rem     rest. The car drives straight, turns on an arc, and stops pointing where it was aimed.
+  rem   * CLEARED BY THE SAME PROBE, so nobody re-chases them: the wheel force arms are correct
+  rem     (front local z +1.4237, rear -1.4237 -- opposite signs about the COM); the yaw inertia
+  rem     is real (invYaw 0.000273 => I_yaw 3663 kg m^2 for 1589 kg), built by
+  rem     SimpleVehiclePhysics::SwitchAttribs/SetAttributes from mHalfExtent, not a placeholder;
+  rem     and the per-corner load is real (397.17..397.33 kg, N 3895..3898) via
+  rem     CalculateWeightTransfer. ⚠️ HandleWheelPairFriction's own 18-line "NOTHING IN THIS TREE
+  rem     WRITES massOnWheel" banner is STALE -- that writer landed in the leg-4 wave.
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_CollideStreams.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
   rem  ⭐ 2026-08-14 (walls leg 2): the result-record TU mounts -- PrimitiveTestResult::IsValid
