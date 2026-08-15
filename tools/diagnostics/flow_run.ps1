@@ -86,7 +86,8 @@ param(
   [double]$DriveDelay  = 6.0,    # seconds after the DRIVING mark before any input is applied
   [double]$DriveSeconds= 0,      # 0 = hold until the run ends
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
-  [int]$LogWaitSeconds = 90
+  [int]$LogWaitSeconds = 90,
+  [switch]$MotionProbe           # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
 )
 $ErrorActionPreference = 'Stop'
 
@@ -115,10 +116,20 @@ if (Test-Path $log) { Remove-Item $log -Force }
 
 # --- environment: a DEFAULT run, with every override explicitly cleared -------------------
 $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE')) {
+# ⚠️ BRN_MOTION_PROBE IS IN THIS LIST DELIBERATELY (added 2026-08-15, walls leg 7).  It was the one
+# probe env var this script neither set nor cleared, so a leftover `$env:BRN_MOTION_PROBE` from an
+# earlier command in the same shell rode into the next run -- and that run then announced itself as
+# a "DEFAULT run" while carrying an unrequested instrument.  That is a golden-gate hazard: the
+# goldens are meant to be byte-identical to a probe-free build.  Opt IN with -MotionProbe instead.
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
-Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE all cleared."
+if ($MotionProbe) {
+  $env:BRN_MOTION_PROBE = "1"
+  Write-Host "[flow] MOTION PROBE run: BRN_MOTION_PROBE=1 (opt-in). NOT a default run -- do not gate goldens off this."
+} else {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE all cleared."
+}
 
 $framesOut = $null
 if ($Frames) {
