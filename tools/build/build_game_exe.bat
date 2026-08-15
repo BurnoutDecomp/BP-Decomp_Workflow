@@ -217,6 +217,16 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\EnvironmentManager\BrnEnvironmentManager.cpp"
+  rem ---- POST-FX RUNG 5 "bloom lit" (2026-08-15): the effects-frame chain. BrnEffectsData.cpp
+  rem   (BloomData/VignetteData/BlurData::SetToBlend + the default-constant statics the header declares)
+  rem   and the renderer effects arbitrator (BrnGraphics::EffectsArbitrator: Construct/EndOfFrame/Eval*)
+  rem   were never on the list; EnvironmentManager::GenerateEffects @0x827BE698, BrnEffectsFrame::Construct
+  rem   and BrnRendererModule::Render's apply block all need them.
+  echo "%SRC%\SharedClasses\Graphics\BrnEffectsData.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnEffectsArbitrator.cpp"
+  rem   BrnRendererModulePostFx.cpp = the Render apply block (X360 Render @0x8240BFA8 lines 964-1260) homed
+  rem   in a sibling TU because BrnRendererModule.h still carries the EA::Jobs::Job placeholder (see its banner).
+  echo "%SRC%\GameSource\Graphics\BrnRendererModulePostFx.cpp"
   rem ---- SKY WAVE (2026-07-31): the sky-dome draw path, MOUNTED. ----------------
   rem The closure was measured with dumpbin over the linked object set: the three
   rem sky TUs raise 67 externals / 45 already provided / 22 unresolved; the two
@@ -330,6 +340,16 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  rebuilt for D3D9 and carried as a generated leaf. Data only: four symbols
   rem  defined, zero externals raised.
   echo "%SRC%\pc\gcm\renderengine\PostFxProgramsPC.cpp"
+  rem  The six BLOOM D3D9 programs (down-sample vs/ps, "new" blur vs/ps, "old"
+  rem  separable-blur vs/ps), generated from tools\assets\shaders\brn_postfx_bloom.fx
+  rem  -- the same situation as the composite leaf above: six executable-embedded
+  rem  Xenos microcode packages (X360 0x8203E6F8 / 0x8203E858 / 0x8203EA60 /
+  rem  0x8203EBD0 / 0x8203ED78 / 0x8203EF10) with no SHADERS.BNDL entry and no PC
+  rem  counterpart, so all six are rebuilt for D3D9 and carried as a generated
+  rem  leaf. Data only: twelve symbols defined, zero externals raised. Consumed by
+  rem  BrnPostFxBloom.cpp's six CreateProgram call sites with
+  rem  BRN_POSTFX_BLOOM_PROGRAMS_PC_AVAILABLE at its default 1.
+  echo "%SRC%\pc\gcm\renderengine\PostFxBloomProgramsPC.cpp"
   rem  The post-fx SHADER CLASS (BrnPostFxShader::{Construct,Destruct,Render}, Shader::{Construct,
   rem  Destruct,SetProgram}) with BRN_POSTFX_SHADER_PROGRAMS_AVAILABLE and
   rem  BRN_POSTFX_COMPOSITE_DRAW_AVAILABLE both 1: slot 0 adopts the PostFxProgramsPC pair through
