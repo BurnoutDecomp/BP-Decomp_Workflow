@@ -53,6 +53,22 @@
 #   flow_run.ps1 -Frames -Gates -WriteGoldens       # RE-BANK both goldens (look first!)
 #   flow_run.ps1 -Frames -Drive                     # ... then hold the throttle, dead straight
 #   flow_run.ps1 -Frames -Drive -Steer right        # ... and hold full right lock
+#   flow_run.ps1 -Frames -Drive -SteerScript "0:left,3.5:none"        # AIM, then run straight
+#   flow_run.ps1 -Frames -Drive -ThrottleScript "0:accel,20:brake"    # ... and back off / reverse
+#
+# ⭐ AIMING (2026-08-15, walls leg 5).  -Steer holds ONE lock for the whole run, so a driven car
+#   can only circle: it can never be lined up on a chosen wall FACE and driven into it head-on.
+#   -SteerScript / -ThrottleScript are seconds->token schedules over the SAME manual-reset
+#   channels, so "turn for 3.5 s, then straight" becomes expressible and a head-on wall test
+#   becomes possible.  ⛔ NO new game code and no new channel: the game still sees nothing but
+#   the ordinary pad bits it already reads for -Steer.  The time base for both schedules is
+#   seconds since THE FIRST INPUT IS APPLIED (the DRIVING mark + -DriveDelay), not since launch
+#   and not since the DRIVING mark -- so a schedule is unaffected by boot/stream timing drift,
+#   which is the whole reason marks are anchored to flow states in the first place.
+#   An entry is <seconds>:<token>[+<token>...]; the newest entry whose time has passed wins.
+#     -SteerScript    tokens: none | left | right
+#     -ThrottleScript tokens: none | accel | brake | handbrake   (combine with '+')
+#   A schedule REPLACES the corresponding fixed hold; the other channel keeps its old behaviour.
 #
 # Exit code 0 = the run completed and any requested gates passed; 1 = something failed.
 param(
@@ -65,6 +81,8 @@ param(
   [switch]$Drive,                # hold ACCELERATE once the flow reaches DRIVING
   [ValidateSet('none','left','right')]
   [string]$Steer       = 'none', # hold a steering lock alongside -Drive
+  [string]$SteerScript = "",     # "0:left,3.5:none"      -- overrides -Steer when non-empty
+  [string]$ThrottleScript = "",  # "0:accel,20:brake"     -- overrides the plain throttle hold
   [double]$DriveDelay  = 6.0,    # seconds after the DRIVING mark before any input is applied
   [double]$DriveSeconds= 0,      # 0 = hold until the run ends
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
@@ -141,11 +159,68 @@ $evHandB = New-Object System.Threading.EventWaitHandle($false, [System.Threading
 $evStrL  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_SteerLeft")
 $evStrR  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_SteerRight")
 foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR)) { $e.Reset() | Out-Null }
+
+# ⭐ THE SCHEDULE PARSER (walls leg 5).  Parses "<sec>:<tok>[+<tok>],..." into a time-sorted list.
+#   ⚠️ InvariantCulture ON PURPOSE: this box runs a comma-decimal locale, where [double]::Parse
+#   turns "3.5" into 35 -- a schedule silently 10x too long, which reads as "the car never
+#   turned" rather than as a parse bug.  A bad entry is a hard FAIL, never a silent skip: a
+#   mistyped aim schedule that quietly degrades to "drive straight" would be scored as a wall
+#   test that the car simply drove past.
+function Parse-Schedule([string]$lSpec, [string[]]$lValid, [string]$lWhat) {
+  $lOut = @()
+  if ([string]::IsNullOrWhiteSpace($lSpec)) { return ,$lOut }
+  foreach ($lPair in ($lSpec -split ',')) {
+    $lTrim = $lPair.Trim()
+    if ($lTrim -eq "") { continue }
+    $lKV = $lTrim -split ':', 2
+    if ($lKV.Count -ne 2) {
+      Write-Host "[flow] FAIL: -$lWhat entry '$lTrim' is not <seconds>:<token>."; exit 1
+    }
+    $lSec = 0.0
+    try { $lSec = [double]::Parse($lKV[0].Trim(), [Globalization.CultureInfo]::InvariantCulture) }
+    catch { Write-Host "[flow] FAIL: -$lWhat entry '$lTrim' has a non-numeric time."; exit 1 }
+    if ($lSec -lt 0) { Write-Host "[flow] FAIL: -$lWhat time '$lTrim' is negative."; exit 1 }
+    $lTok = $lKV[1].Trim().ToLower()
+    foreach ($lPiece in ($lTok -split '\+')) {
+      if ($lValid -notcontains $lPiece) {
+        Write-Host ("[flow] FAIL: -$lWhat token '{0}' unknown. Valid: {1}" -f $lPiece, ($lValid -join '|'))
+        exit 1
+      }
+    }
+    $lOut += ,([pscustomobject]@{ t = $lSec; tok = $lTok })
+  }
+  return ,@($lOut | Sort-Object t)
+}
+# The token in force at time $lT: the LAST entry whose time has passed. Before the first entry's
+# time the schedule is not yet in force, so the caller's default (the fixed hold) still applies --
+# reported as $null, never as "none", so "no entry yet" and "an entry saying none" stay distinct.
+function Schedule-At($lSched, [double]$lT) {
+  $lCur = $null
+  foreach ($lE in $lSched) { if ($lT -ge $lE.t) { $lCur = $lE.tok } else { break } }
+  return $lCur
+}
+$steerSched = Parse-Schedule $SteerScript    @('none','left','right')                 'SteerScript'
+$throtSched = Parse-Schedule $ThrottleScript @('none','accel','brake','handbrake')    'ThrottleScript'
+
 if ($Drive) {
   Write-Host ("[flow] DRIVE armed: throttle held from DRIVING+{0:f1}s, steer={1}, hold={2}" -f `
               $DriveDelay, $Steer, $(if ($DriveSeconds -gt 0) { ("{0:f0}s" -f $DriveSeconds) } else { "to end" }))
+  if ($steerSched.Count -gt 0) {
+    Write-Host ("[flow] AIM: SteerScript ({0} entries, t=0 at DRIVING+{1:f1}s) -- overrides -Steer {2}" -f `
+                $steerSched.Count, $DriveDelay, $Steer)
+    foreach ($e in $steerSched) { Write-Host ("[flow]   steer   t+{0,6:f2}s -> {1}" -f $e.t, $e.tok) }
+  }
+  if ($throtSched.Count -gt 0) {
+    Write-Host ("[flow] AIM: ThrottleScript ({0} entries, t=0 at DRIVING+{1:f1}s)" -f `
+                $throtSched.Count, $DriveDelay)
+    foreach ($e in $throtSched) { Write-Host ("[flow]   pedal   t+{0,6:f2}s -> {1}" -f $e.t, $e.tok) }
+  }
 } else {
   Write-Host "[flow] DRIVE not armed: the five driving channels exist but are never signalled."
+  if ($steerSched.Count -gt 0 -or $throtSched.Count -gt 0) {
+    Write-Host "[flow] FAIL: -SteerScript/-ThrottleScript need -Drive (they schedule the drive channels)."
+    exit 1
+  }
 }
 
 # --- launch ------------------------------------------------------------------------------
@@ -212,7 +287,8 @@ $acceptGap = 2.0
 $marks = @{}
 $markFrame = @{}
 $drivingAt = Get-Date    # set for real on the BOOT->...->DRIVING transition
-$driveHeld = $false      # the throttle/steer hold currently asserted on the channels
+$driveHeld = 'none/none' # "<pedal>/<steer>" currently asserted on the channels
+$inputLog  = @()         # every input transition, for marks.txt -- what the car was ACTUALLY told
 
 while ($true) {
   $elapsed = ((Get-Date) - $t0).TotalSeconds
@@ -255,15 +331,33 @@ while ($true) {
   # driving, not the tail of the spawn drop.
   if ($Drive -and $phase -eq 'DRIVING') {
     $sinceDriving = ((Get-Date) - $drivingAt).TotalSeconds
-    $want = ($sinceDriving -ge $DriveDelay) -and `
-            (($DriveSeconds -le 0) -or ($sinceDriving -lt ($DriveDelay + $DriveSeconds)))
-    if ($want -ne $driveHeld) {
-      $driveHeld = $want
-      if ($want) { $evAccel.Set() | Out-Null } else { $evAccel.Reset() | Out-Null }
-      if ($Steer -eq 'left')  { if ($want) { $evStrL.Set() | Out-Null } else { $evStrL.Reset() | Out-Null } }
-      if ($Steer -eq 'right') { if ($want) { $evStrR.Set() | Out-Null } else { $evStrR.Reset() | Out-Null } }
-      Write-Host ("[flow] drive {0} at {1:f1}s (DRIVING+{2:f1}s) steer={3}" -f `
-                  $(if ($want) { "HOLD" } else { "RELEASE" }), $elapsed, $sinceDriving, $Steer)
+    $tIn  = $sinceDriving - $DriveDelay      # THE SCHEDULE TIME BASE: 0 == first input applied
+    $want = ($tIn -ge 0) -and (($DriveSeconds -le 0) -or ($tIn -lt $DriveSeconds))
+
+    # What every channel group should be RIGHT NOW. The fixed holds are the defaults; a schedule
+    # entry whose time has passed replaces its group. Resolving the whole desired state each poll
+    # and applying only on CHANGE keeps the Set/Reset traffic identical in shape to the old
+    # single-transition hold -- a manual-reset event that is re-Set() every 250 ms would still
+    # read as held, but the log would be unreadable and a missed Reset() would be invisible.
+    $curSteer = 'none'; $curPedal = 'none'
+    if ($want) {
+      $curSteer = $Steer; $curPedal = 'accel'
+      $lS = Schedule-At $steerSched $tIn; if ($null -ne $lS) { $curSteer = $lS }
+      $lP = Schedule-At $throtSched $tIn; if ($null -ne $lP) { $curPedal = $lP }
+    }
+
+    $state = "$curPedal/$curSteer"
+    if ($state -ne $driveHeld) {
+      $driveHeld = $state
+      $pedals = @($curPedal -split '\+')
+      if ($pedals -contains 'accel')     { $evAccel.Set() | Out-Null } else { $evAccel.Reset() | Out-Null }
+      if ($pedals -contains 'brake')     { $evBrake.Set() | Out-Null } else { $evBrake.Reset() | Out-Null }
+      if ($pedals -contains 'handbrake') { $evHandB.Set() | Out-Null } else { $evHandB.Reset() | Out-Null }
+      if ($curSteer -eq 'left')  { $evStrL.Set() | Out-Null } else { $evStrL.Reset() | Out-Null }
+      if ($curSteer -eq 'right') { $evStrR.Set() | Out-Null } else { $evStrR.Reset() | Out-Null }
+      Write-Host ("[flow] input {0,-20} at {1,6:f1}s (DRIVING+{2:f1}s, t+{3:f2}s)" -f `
+                  $state, $elapsed, $sinceDriving, $tIn)
+      $inputLog += ("input {0,-20} run={1,6:f1}s t+{2,6:f2}s" -f $state, $elapsed, $tIn)
     }
   }
   Start-Sleep -Milliseconds 250
@@ -289,6 +383,11 @@ $summary += ("END      {0,6:f1}s  frame={1}" -f $endElapsed, $endFrame)
 $summary += ("asserts={0} phase={1}" -f $seenAsserts, $phase)
 $summary += ("drive={0} steer={1} delay={2:f1}s hold={3}" -f `
              [bool]$Drive, $Steer, $DriveDelay, $(if ($DriveSeconds -gt 0) { ("{0:f0}s" -f $DriveSeconds) } else { "to-end" }))
+if ($SteerScript    -ne "") { $summary += ("steerscript    {0}" -f $SteerScript) }
+if ($ThrottleScript -ne "") { $summary += ("throttlescript {0}" -f $ThrottleScript) }
+# ⭐ The transitions that ACTUALLY fired, not the ones requested: an aim schedule whose last leg
+#   never ran (short run, early exit) would otherwise be indistinguishable from one that did.
+$summary += $inputLog
 $marksPath = Join-Path $OutDir "marks.txt"
 $summary | Set-Content $marksPath
 
