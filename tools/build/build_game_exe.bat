@@ -215,6 +215,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
+  rem ---- IO-buffer construction wave (2026-08-15): DestroyIOBuffer<T> now runs T::Destruct like the
+  rem ---- console template; AIModuleIO::InputBuffer_PostPhysics::Construct @0x8277BCD0 / Destruct
+  rem ---- @0x8277BCE8 were already reconstructed in this TU (never mounted; WorldLinkStubs carried a
+  rem ---- memset gate for Construct instead -- retired the same day).
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_PostPhysics.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\EnvironmentManager\BrnEnvironmentManager.cpp"
   rem ---- POST-FX RUNG 5 "bloom lit" (2026-08-15): the effects-frame chain. BrnEffectsData.cpp
@@ -1600,6 +1605,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\BrnWorldModuleIO_UpdateOutputBuffer.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnRaceCarCrash.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_Dispatch.cpp"
+  rem ---- IO-buffer construction wave (2026-08-15): CreateIOBuffer<T> now runs T::Construct like the
+  rem ---- console template, so BrnTrafficIO::InputBuffer_Dispatch::Construct @0x8275CF40 (in this
+  rem ---- already-reconstructed, never-mounted TU) became a hard reference from WorldModule.obj.
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModuleIO_InputBuffer_Dispatch.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_Prepare.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModuleIO.cpp"
   rem ---- PRE-PHYSICS BRIDGE wave (2026-08-10). WorldModule::BridgeEntityModulesToPhysicsModule_ ----
