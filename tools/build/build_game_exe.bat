@@ -702,6 +702,38 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  contacts held and NO tunnel-through; straight/loose drives exit via the junkyard's OPEN
   rem  side into unstreamed world and hit the PRE-EXISTING long-drive fallthrough (streamer
   rem  asserts), which is NOT a wall tunnel.
+  rem  ⭐⭐ RUNTIME STATE CORRECTED (walls leg 5, 2026-08-15) -- MEASURED with a new opt-in
+  rem  BRN_WALL_PROBE=1 instrument in SolvePenetration phase 3 (per-model world/wall contact
+  rem  counts, the solver correction, EDGE-TOUCH/EDGE-CLEAR transitions):
+  rem   * THE SOLVER IS NOT A SILENT ZERO. Driving the car into the wall face at z~-2039 gives
+  rem     the DRIVEN model 21 wall contacts and a real positional correction (corr 0.1707 /
+  rem     0.2399 on separate runs). Solve()'s world arm clamps depth at zero, so the permanent
+  rem     0.000000 seen at rest is the correct "nothing is penetrating" output.
+  rem   * ⚠️ BUT THE WALL TAKES NO MOMENTUM. Through a 14 m/s impact the car's velocity is
+  rem     UNCHANGED (vz -14.09 -> -14.17 -> -14.12 -> -13.87) and it passes through: the full
+  rem     contact face registers for only TWO frames at that speed. The momentum change rides
+  rem     DeformationSensor::ApplyLocalImpulse, which is still the GATED whale below. So leg 4's
+  rem     "zero at-rest correction" invariant was real but CANNOT distinguish a correct idle
+  rem     solver from a silently-zero one -- only a real penetration can, and now one has.
+  rem   * ⚠️ leg 4's "full-lock drives circle the junkyard floor with contacts held and NO
+  rem     tunnel-through" is TRUE BUT NOT EVIDENCE OF THE SOLVER: what holds the car on the
+  rem     floor is the wheel/traction system, the car never met a wall on that path, and the
+  rem     circling is a YAW INSTABILITY (heading rotates a full turn every ~1 s after any
+  rem     steering input is released), not a controlled turn.
+  rem   * MAP (measured): junkyard staging bay at (2987.0, -3.2, -2011.4) with TWO parked
+  rem     deformation models sitting against its walls; the handover TELEPORTS the driven car to
+  rem     the gameplay spawn (3007.97, -2.89, -1945.21) facing +Z. Straight ahead (+Z) is the
+  rem     OPEN side -- it falls out at z~-1842. Straight REVERSE is dead-straight and stable and
+  rem     meets a real wall face at z~-2039 before the world edge at z~-2055.
+  rem   * ⛔ TWO PROBE ARTIFACTS CAUGHT AND FIXED IN THE INSTRUMENT, both of which had produced
+  rem     confident wrong readings: (a) counting the solver's WHOLE GetWorldContacts() array
+  rem     attributed the PARKED car's wall contacts to the driven one (both models printed
+  rem     identical counts -- world contacts are keyed miIndexA == model index); (b) a single
+  rem     shared sample counter ALIASES against the live model count, so with 3 models only one
+  rem     is ever sampled and the others read as absent.
+  rem   * PenetrationSolver::GetWorldContacts / GetVehicleContacts were DECLARED-ONLY with no
+  rem     body since the header was written -- no link had ever caught it because no committed
+  rem     caller existed. Bodied.
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_CollideStreams.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
   rem  ⭐ 2026-08-14 (walls leg 2): the result-record TU mounts -- PrimitiveTestResult::IsValid
