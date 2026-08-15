@@ -339,12 +339,15 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Graphics\BrnRendererMemory.cpp"
   echo "%SRC%\GameSource\Graphics\BrnShadowMapRenderManager.cpp"
   echo "%SRC%\pc\gcm\renderengine\PostFxRenderTargetPCLeaf.cpp"
-  rem  The post-fx composite's D3D9 vertex/pixel program pair (permutation 0),
-  rem  generated from tools\assets\shaders\brn_postfx_composite.fx -- the same
-  rem  situation as SkyDomeProgramsPC.cpp above: executable-embedded Xenos
-  rem  microcode with no SHADERS.BNDL entry and no PC counterpart, so the pair is
-  rem  rebuilt for D3D9 and carried as a generated leaf. Data only: four symbols
-  rem  defined, zero externals raised.
+  rem  The post-fx composite's D3D9 programs -- ALL TWELVE PERMUTATIONS since the
+  rem  step-5 wave: ONE shared vertex image (the twelve X360 vertex packages are
+  rem  byte-identical, md5 a47e7e9943a3570c484e1724d6dff763) plus twelve pixel
+  rem  images, generated from tools\assets\shaders\brn_postfx_composite.fx
+  rem  compiled twelve ways. Same situation as SkyDomeProgramsPC.cpp above:
+  rem  executable-embedded Xenos microcode with no SHADERS.BNDL entry and no PC
+  rem  counterpart, so every program is rebuilt for D3D9 and carried as a
+  rem  generated leaf. Data only: twenty-six symbols defined (thirteen arrays +
+  rem  thirteen sizes), zero externals raised.
   echo "%SRC%\pc\gcm\renderengine\PostFxProgramsPC.cpp"
   rem  The six BLOOM D3D9 programs (down-sample vs/ps, "new" blur vs/ps, "old"
   rem  separable-blur vs/ps), generated from tools\assets\shaders\brn_postfx_bloom.fx
@@ -356,10 +359,24 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  BrnPostFxBloom.cpp's six CreateProgram call sites with
   rem  BRN_POSTFX_BLOOM_PROGRAMS_PC_AVAILABLE at its default 1.
   echo "%SRC%\pc\gcm\renderengine\PostFxBloomProgramsPC.cpp"
+  rem  The four PfxHelper D3D9 programs (the shared quad's vertex program, and the
+  rem  9-tap / 16-tap / 4-tap blur pixel programs) plus the DepthOfField pixel
+  rem  program, generated from tools\assets\shaders\brn_postfx_helper.fx -- the
+  rem  same situation as the composite and bloom leaves above: five
+  rem  executable-embedded Xenos microcode packages (X360 0x82044240 / 0x820444F8
+  rem  / 0x820447A8 / 0x82044360 / 0x82043FB8) with no SHADERS.BNDL entry and no PC
+  rem  counterpart, so all five are rebuilt for D3D9 and carried as a generated
+  rem  leaf. Data only: ten symbols defined, zero externals raised. Consumed by
+  rem  rwgpfxhelper.cpp's four CreateProgram call sites (PfxHelper::PfxHelper) and
+  rem  rwgpfxdof.cpp's one (DepthOfField::DepthOfField); both TUs are already on
+  rem  this list below, and those ten are the ONLY new externals either of them
+  rem  raises.
+  echo "%SRC%\pc\gcm\renderengine\PostFxHelperProgramsPC.cpp"
   rem  The post-fx SHADER CLASS (BrnPostFxShader::{Construct,Destruct,Render}, Shader::{Construct,
   rem  Destruct,SetProgram}) with BRN_POSTFX_SHADER_PROGRAMS_AVAILABLE and
-  rem  BRN_POSTFX_COMPOSITE_DRAW_AVAILABLE both 1: slot 0 adopts the PostFxProgramsPC pair through
-  rem  ProgramBufferPC_Adopt, the other eleven slots are honestly empty. Its callers
+  rem  BRN_POSTFX_COMPOSITE_DRAW_AVAILABLE both 1: ALL TWELVE slots adopt their PostFxProgramsPC
+  rem  image pair through ProgramBufferPC_Adopt -- no slot is empty, and Render no longer refuses
+  rem  any index but 0 (it refuses only a slot whose programs are null). Its callers
   rem  (BrnPostFx::Construct/Render in BrnPostFx.cpp) are NOT mounted yet -- BrnPostFx.cpp's own
   rem  closure (the RenderEngineClub post-fx effect TUs) is the next wave -- so /OPT:REF strips
   rem  every byte of this today. Mounted anyway to ENFORCE the link closure over the flipped arms
