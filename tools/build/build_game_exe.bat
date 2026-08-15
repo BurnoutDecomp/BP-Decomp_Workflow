@@ -222,6 +222,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_PostPhysics.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\EnvironmentManager\BrnEnvironmentManager.cpp"
+  echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvironmentKeyframeBringUp.cpp"
   rem ---- POST-FX RUNG 5 "bloom lit" (2026-08-15): the effects-frame chain. BrnEffectsData.cpp
   rem   (BloomData/VignetteData/BlurData::SetToBlend + the default-constant statics the header declares)
   rem   and the renderer effects arbitrator (BrnGraphics::EffectsArbitrator: Construct/EndOfFrame/Eval*)
