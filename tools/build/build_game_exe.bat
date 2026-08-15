@@ -315,6 +315,72 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Graphics\BrnRendererMemory.cpp"
   echo "%SRC%\GameSource\Graphics\BrnShadowMapRenderManager.cpp"
   echo "%SRC%\pc\gcm\renderengine\PostFxRenderTargetPCLeaf.cpp"
+  rem  The post-fx composite's D3D9 vertex/pixel program pair (permutation 0),
+  rem  generated from tools\assets\shaders\brn_postfx_composite.fx -- the same
+  rem  situation as SkyDomeProgramsPC.cpp above: executable-embedded Xenos
+  rem  microcode with no SHADERS.BNDL entry and no PC counterpart, so the pair is
+  rem  rebuilt for D3D9 and carried as a generated leaf. Data only: four symbols
+  rem  defined, zero externals raised.
+  echo "%SRC%\pc\gcm\renderengine\PostFxProgramsPC.cpp"
+  rem  The post-fx SHADER CLASS (BrnPostFxShader::{Construct,Destruct,Render}, Shader::{Construct,
+  rem  Destruct,SetProgram}) with BRN_POSTFX_SHADER_PROGRAMS_AVAILABLE and
+  rem  BRN_POSTFX_COMPOSITE_DRAW_AVAILABLE both 1: slot 0 adopts the PostFxProgramsPC pair through
+  rem  ProgramBufferPC_Adopt, the other eleven slots are honestly empty. Its callers
+  rem  (BrnPostFx::Construct/Render in BrnPostFx.cpp) are NOT mounted yet -- BrnPostFx.cpp's own
+  rem  closure (the RenderEngineClub post-fx effect TUs) is the next wave -- so /OPT:REF strips
+  rem  every byte of this today. Mounted anyway to ENFORCE the link closure over the flipped arms
+  rem  (LNK2019 resolves before /OPT:REF discards): its dependencies are the two state TUs below
+  rem  (samplerstate.cpp, DepthStencilState.cpp), VertexDescriptor::Release (ImmediateModePCLeaf.cpp),
+  rem  and shadow::Device::SetState(const TextureState*, u32) (shadowingdevice.cpp).
+  echo "%SRC%\GameSource\Graphics\PostFx\BrnPostFxShader.cpp"
+  rem  renderengine::DepthStencilState::{GetResourceDescriptor,Initialize} -- the PC leaf the
+  rem  shader class's Construct builds its ZOFF/ZWRITEOFF state through.
+  echo "%SRC%\pc\gcm\renderengine\DepthStencilState.cpp"
+  rem ---- THE POST-FX DRIVER + THE RENDERENGINECLUB EFFECT TUs (gate-flip wave, 2026-08-15) ----
+  rem  BrnPostFx::{Construct,Destruct,PrepareDownSampleBuffers,Render} + the two PC seams
+  rem  (PCBringUpConstructPostFx / PCBringUpRenderPostFxComposite) BrnRendererModule reaches the
+  rem  composite through, and BrnPostFxBloom. Link-closed by the effect wave below: measured by a
+  rem  full-object-set probe link whose ONLY residue was the seven Xenon shims of the console
+  rem  VertexBuffer.cpp -- which is why VertexBuffer::Release is a PC leaf in ImmediateModePCLeaf.cpp
+  rem  and that TU is NOT mounted (its Initialize would duplicate the leaf's).
+  echo "%SRC%\GameSource\Graphics\PostFx\BrnPostFx.cpp"
+  echo "%SRC%\GameSource\Graphics\PostFx\BrnPostFxBloom.cpp"
+  rem  The five effect TUs (PfxHelper / DepthOfField / Vignette / Tint / B4Blur) + the render-target
+  rem  debugger PfxHelper::PfxHelper builds once. Every embedded-microcode program build is gated
+  rem  honest-EMPTY behind RW_GPFX_PROGRAM_MICROCODE_AVAILABLE (rwgpfxhelper.cpp's CreateProgram is
+  rem  the one funnel) and the helper's quad geometry behind RW_GPFX_HELPER_QUAD_GEOMETRY_AVAILABLE;
+  rem  the vignette / dof / bloom program gates are their TUs' own. None of the effects can DRAW on
+  rem  this build (every m_enabledFx bit is clear); they exist so BrnPostFx::Construct's carves and
+  rem  Destruct's releases run the console's own bodies.
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxhelper.cpp"
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxdof.cpp"
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxvignette.cpp"
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxtint.cpp"
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxb4blur.cpp"
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxrendertargetdebugger.cpp"
+  rem  renderengine::RasterizerState::{GetResourceDescriptor,Initialize} -- moved here out of
+  rem  CgsRasterizerStateFactory.cpp (they were the PC leaf's, defined in the wrong TU) and the
+  rem  file's maState[] rot repaired; zero externals of its own.
+  echo "%SRC%\pc\gcm\renderengine\RasterizerState.cpp"
+  rem  The depth-stencil / rasterizer state factories: their tables are the DWARF's private statics
+  rem  behind a static GetState(slot); BrnPostFx::Render and BrnPostFxBloom::Render read slots
+  rem  saDepthStencilStates[1] / saRasterizerStates[2] (the two the step-2 driver had as undefined
+  rem  gpPostFx* globals -- no such globals exist on the console). CgsStateFactoryLinkStubs supplies
+  rem  both factories' Destruct/Prepare vtable slots. NOTE: nothing CONSTRUCTS either factory on this
+  rem  build yet, so both tables read null and the composite's SetState pushes skip (compare-then-
+  rem  apply on null) -- disclosed at the BrnPostFx.cpp call site.
+  echo "%SRC%\GameShared\GameClasses\Graphics\CgsRasterizerStateFactory.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\CgsDepthStencilStateFactory.cpp"
+  rem  ...and the blend factory (Construct @0x827EB2D8, landed 2026-08-13 from the export hole):
+  rem  all three are REAL by-value members of BrnRendererModule now (the placeholder structs in
+  rem  BrnRendererModule.h are gone), constructed once from the PC bring-up in Render, so their
+  rem  three vtables must resolve -- Construct here, Destruct/Prepare in the link stubs.
+  echo "%SRC%\GameShared\GameClasses\Graphics\CgsBlendStateFactory.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\CgsStateFactoryLinkStubs.cpp"
+  rem  TintBlendEntry @0x82AD2CE8 / TintBlend @0x82AD4860 -- the EA::Jobs entry BrnPostFx::Construct
+  rem  arms (on X360 the PPU pair of what is an SPU ELF on PS3). TintBlend's variant table is BLOCKED
+  rem  (dword_82F7238C undumped) and unreachable while the tint bit is clear.
+  echo "%SRC%\GameShared\Jobs\TintBlend\TintBlend.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsBufferedDispatchFrame.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsMaterialAssembly.cpp"
   echo "%SRC%\pc\gcm\renderengine\VertexProgramState.cpp"
@@ -405,6 +471,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  runs -- SHADERS.BNDL is staged -- and calls renderengine::BlendState::GetParameters
   rem  @0x82B60A50, whose real home is this SDK TU. Its local __debugbreak placeholder is gone.)
   echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\states\blendstate.cpp"
+  rem  renderengine::SamplerState::{GetResourceDescriptor @0x82B63588, Initialize @0x82B62630} --
+  rem  the sibling of blendstate.cpp above; BrnPostFxShader::Construct builds its point / linear /
+  rem  anisotropic sampler states through it (post-fx gate-flip wave, 2026-08-14). The TU has no
+  rem  header of its own yet -- its three consumers (BrnIm3d.cpp, BrnRendererMemory.cpp,
+  rem  BrnPostFxShader.cpp) each carry a byte-identical local declaration block; the mangled names
+  rem  match (measured in the shader-class verify), which is what makes this a link and not a fork.
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\states\samplerstate.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropGraphicsListResourceType.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropInstanceDataResourceType.cpp"
   echo "%SRC%\SharedClasses\Sound\World\BrnStaticSoundMapResourceType.cpp"
