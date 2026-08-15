@@ -6540,6 +6540,12 @@
   "BrnDirector::Camera::TrafficLaneTruck::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Utils::ApplyPitchAboutPointRads": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::CalcNearClipCorners": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::Utils::Camera2DRotationController::Update": {
    "status": "reviewed"
   },
@@ -6558,7 +6564,16 @@
   "BrnDirector::Camera::Utils::CameraSphericalRotationController::Update": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Utils::ConvertFOVDegsToLensLength": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::CreateAdjustedLookAt": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::Utils::CreateLookAt": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::Cycle": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::DebugController::Clear": {
@@ -6579,6 +6594,21 @@
   "BrnDirector::Camera::Utils::DirectionPreservingSLerp": {
    "status": "reviewed"
   },
+  "BrnDirector::Camera::Utils::FindNonParallelNormalisedVectorTo": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::GetFOVDegsFromZoom": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::GetFOVDegsToFitObjectToScreenArea": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::GetFOVDegsToFitObjectToScreenSize": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::GetPitchAboutPointRads": {
+   "status": "reviewed"
+  },
   "BrnDirector::Camera::Utils::GetSizeOnScreen": {
    "status": "reviewed"
   },
@@ -6586,6 +6616,9 @@
    "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::GetSmallestDifferenceBetweenRadAngles": {
+   "status": "reviewed"
+  },
+  "BrnDirector::Camera::Utils::GetZoomFromFOVDegs": {
    "status": "reviewed"
   },
   "BrnDirector::Camera::Utils::Looker::Parameters::Construct": {
@@ -24529,7 +24562,7 @@
    "status": "compiles"
   },
   "BrnParticle::VFXPropCollection>::": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnParticle::VFXPropCollectionResourceType::DeSerialise": {
    "status": "reviewed"
@@ -24589,6 +24622,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::ContactSpy::ContactSpyInterface::Construct": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::ContactSpy::ContactSpyQueue<BrnPhysics::ContactSpy::PropContact,100>::SortAndCreateRunList<100>": {
    "status": "reviewed"
   },
   "BrnPhysics::ContactSpy::ContactSpyRunData,100>::Construct": {
@@ -25500,10 +25536,22 @@
   "BrnPhysics::PhysicsModule::Destruct": {
    "status": "reviewed"
   },
+  "BrnPhysics::PhysicsModule::FixUpVehicleContacts": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::HandleGameActions": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::HandleGameActionsPostScene": {
+   "status": "reviewed"
+  },
   "BrnPhysics::PhysicsModule::HandlePlayerStatsUpdate": {
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::PhysicsModule": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::PostSceneUpdate": {
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::Prepare": {
@@ -25525,6 +25573,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::StoreContact": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::PhysicsModule::Update": {
    "status": "reviewed"
   },
   "BrnPhysics::PhysicsModule::UpdateCachedPositions": {
@@ -26931,6 +26982,9 @@
   "BrnPhysics::Vehicle::VehicleInputInterface::operator": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehicleManager::AddContactResultsToQueue": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehicleManager::AddPlayerStuckInCollisionLineTests": {
    "status": "reviewed"
   },
@@ -27030,6 +27084,9 @@
   "BrnPhysics::Vehicle::VehicleManager::DoRaceCarWorldContactValidation": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehicleManager::DoTrafficWorldContactOrdering": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehicleManager::DoVehicleTractionLineAllocations": {
    "status": "reviewed"
   },
@@ -27037,6 +27094,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::EndImpactTime": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehicleManager::EndPartContactGeneration": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::EndVehicleContactGeneration": {
@@ -27193,6 +27253,9 @@
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::StartPartContactGeneration": {
+   "status": "reviewed"
+  },
+  "BrnPhysics::Vehicle::VehicleManager::StartVehicleContactGeneration": {
    "status": "reviewed"
   },
   "BrnPhysics::Vehicle::VehicleManager::SwitchPlayerAIDonuttingAttribs": {
@@ -36336,13 +36399,106 @@
   "BrnWorld::PropEntityInstance::UpdateConstraints": {
    "status": "reviewed"
   },
+  "BrnWorld::PropEntityModule::BreakPropIntoParts": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::CachePropGraphicsLists": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ChangePropState": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::Construct": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ConstructPostPhysicsPerfMonitors": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ConstructPreScenePerfMonitors": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::GenerateDispatchLists": {
+   "status": "reviewed"
+  },
   "BrnWorld::PropEntityModule::GenerateTargetList": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::GetDesiredState": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::InitializePropPhysicsData": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::LeaveReplay": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::LoadZone": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::PostSceneUpdate": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::PrePhysicsUpdate": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::PreSceneUpdate": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::Prepare": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::PrepareForReplay": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ProcessBrokenProps": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ProcessContacts": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ProcessPotentialContactWithPart": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityModule::ProcessPotentialContactWithProp": {
    "status": "reviewed"
   },
+  "BrnWorld::PropEntityModule::ProcessPotentialContacts": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::PropEntityModule": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::Release": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::RenderModel": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::RenderPropAndCoronas": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::RenderReplayProp": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ReplayPreSceneUpdate": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ReplayUpdatePartsInScene": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::ReplayUpdatePropsInScene": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::RestoreFromReplay": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::UnloadZone": {
+   "status": "reviewed"
+  },
   "BrnWorld::PropEntityModule::UpdateInstanceStreaming": {
+   "status": "reviewed"
+  },
+  "BrnWorld::PropEntityModule::UpdateProps": {
    "status": "reviewed"
   },
   "BrnWorld::PropGraphicsManager::Register": {
@@ -38284,6 +38440,9 @@
    "status": "reviewed"
   },
   "BrnWorldIO::UpdateOutputBuffer::SetWorldEntityStatusInterface": {
+   "status": "reviewed"
+  },
+  "C::ImportContactSpies<BrnPhysics::ContactSpy::ContactSpyQueue<BrnPhysics::ContactSpy::PhysicalCarPartContact,150> >": {
    "status": "reviewed"
   },
   "CAltTablesEncoder::CAltTablesEncoder": {
@@ -41943,6 +42102,12 @@
   "CgsGameTalk::GameTalkProtocol::`scalar deleting destructor'": {
    "status": "reviewed"
   },
+  "CgsGeometric::": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::AxisAlignedBox4::GetAxisAlignedBox": {
+   "status": "reviewed"
+  },
   "CgsGeometric::AxisAlignedBox::ContainsPoint": {
    "status": "reviewed"
   },
@@ -41997,6 +42162,12 @@
   "CgsGeometric::Frustum::VectorToPlane": {
    "status": "reviewed"
   },
+  "CgsGeometric::IntersectLinePolySoupTriangleDoubleSided4": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::IntersectLinePolySoupTriangleSingleSided4": {
+   "status": "reviewed"
+  },
   "CgsGeometric::IntersectLinePolygonSoupSingleSided": {
    "status": "reviewed"
   },
@@ -42010,6 +42181,9 @@
    "status": "reviewed"
   },
   "CgsGeometric::PolySoupAddToTriangleBuffer": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::PolySoupCopyTriangleBufferIntoTriangle4": {
    "status": "reviewed"
   },
   "CgsGeometric::PolySoupFinishTriangleBuffer": {
@@ -42069,7 +42243,13 @@
   "CgsGeometric::Sphere::GetRadius": {
    "status": "reviewed"
   },
+  "CgsGeometric::TestAxisAlignedBoxAxisAlignedBox": {
+   "status": "reviewed"
+  },
   "CgsGeometric::TestLinePolygonSoupDoubleSided": {
+   "status": "reviewed"
+  },
+  "CgsGeometric::TestLineStartEndAxisAlignedBox": {
    "status": "reviewed"
   },
   "CgsGeometric::Triangle4::AOSTriangle::AssertIsValid": {
@@ -53745,6 +53925,57 @@
   "Co::CollisionStateManager::ImportContactSpies<CgsModule::EventQueue<BrnPhysics::ContactSpy::DiscardedContact,20> >": {
    "status": "reviewed"
   },
+  "ContactGeneratorJob::AllocateMemory": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::BuildGPInstance": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::CollideGPInstances": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::Execute": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecuteBoxListWithTriangleList": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecuteLineWithTriangleListStream": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecutePrimitiveListWithTriangleList": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecutePrimitiveListWithTriangleListStream": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecutePrimitivePairList": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecuteSphereListWithSphereList": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecuteSphereListWithTriangleList": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecuteSphereListWithTriangleListStream": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecuteSweptSphereListWithTriangleList": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::ExecuteSweptSphereListWithTriangleListStream": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::LoadPrimitives": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::LoadResultList": {
+   "status": "reviewed"
+  },
+  "ContactGeneratorJob::RestoreMemory": {
+   "status": "reviewed"
+  },
   "Csis::Class::GetRefCount": {
    "status": "reviewed"
   },
@@ -56776,6 +57007,54 @@
    "status": "reviewed"
   },
   "PackedIndex::SetGlobalRaceCarIndex": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::AllocateMemory": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::Execute": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::ExecuteFillTriangleCache": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::ExecuteFillTriangleCacheStream": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::ExecuteLineTest": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::FillTriangleCache": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::LineTestDS": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::LineTestNearestDS": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::LineTestNearestSS": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::LineTestSS": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::LoadPrimitive": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::LoadResultList": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::LoadTriangleListDestination": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::RunBoxQuery": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::RunLineQuery": {
+   "status": "reviewed"
+  },
+  "PolygonSoupTesterJob::SaveResults": {
    "status": "reviewed"
   },
   "QuadDraw": {
@@ -62655,6 +62934,12 @@
   "rw::physics::ComputeFatBoxInertia": {
    "status": "reviewed"
   },
+  "rw::physics::DriveJacobian::Build": {
+   "status": "reviewed"
+  },
+  "rw::physics::DriveJacobian::GetMatIBT": {
+   "status": "reviewed"
+  },
   "rw::physics::Jacobian_RQD::Create": {
    "status": "reviewed"
   },
@@ -62665,6 +62950,9 @@
    "status": "reviewed"
   },
   "rw::physics::JointFrames::SetParentLinearFrame": {
+   "status": "reviewed"
+  },
+  "rw::physics::JointJacobian::Build": {
    "status": "reviewed"
   },
   "rw::physics::PairSet::GetResourceDescriptor": {
@@ -62686,6 +62974,12 @@
    "status": "reviewed"
   },
   "rw::physics::PairSet::UnlinkParts": {
+   "status": "reviewed"
+  },
+  "rw::physics::RigidBody::DynamicUpdate": {
+   "status": "reviewed"
+  },
+  "rw::physics::RigidBody::operator=": {
    "status": "reviewed"
   },
   "rw::physics::Simulation::ActivateRigidBody": {
@@ -63024,6 +63318,369 @@
   "static initializer for BrnSound::ParameterIndexes::AEMS_Class::gaAEMS_ClassParameterNames": {
    "status": "reviewed"
   },
+  "std::_Adjust_heap<BrnPhysics::ContactSpy::PhysicalCarPartContact *,int,BrnPhysics::ContactSpy::PhysicalCarPartContact>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<BrnPhysics::ContactSpy::PropContact *,int,BrnPhysics::ContactSpy::PropContact>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<BrnPhysics::ContactSpy::RaceCarContact *,int,BrnPhysics::ContactSpy::RaceCarContact>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<BrnPhysics::ContactSpy::TrafficContact *,int,BrnPhysics::ContactSpy::TrafficContact>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<BrnPhysics::Deformation::ContactTime *,int,BrnPhysics::Deformation::ContactTime>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<BrnSound::Logic::Collision::OutputCollision * *,int,BrnSound::Logic::Collision::OutputCollision *,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,int,BrnSound::Logic::Traffic::TrafficStateManager::SortResult,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<BrnTraffic::VehicleRenderInfo *,int,BrnTraffic::VehicleRenderInfo,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<BrnWorld::CandidateViewVolumePlane *,int,BrnWorld::CandidateViewVolumePlane>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *,int,CgsGraphics::ModelInstanceCollector::ModelInstanceInfo>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<CgsSceneManager::Interval *,int,CgsSceneManager::Interval>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,int,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Adjust_heap<unsigned short *,int,unsigned short>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort1<BrnPhysics::ContactSpy::PhysicalCarPartContact *,BrnPhysics::ContactSpy::PhysicalCarPartContact>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort1<BrnPhysics::ContactSpy::PropContact *,BrnPhysics::ContactSpy::PropContact>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort1<BrnPhysics::ContactSpy::RaceCarContact *,BrnPhysics::ContactSpy::RaceCarContact>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort1<BrnPhysics::ContactSpy::TrafficContact *,BrnPhysics::ContactSpy::TrafficContact>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort1<BrnPhysics::Deformation::ContactTime *,BrnPhysics::Deformation::ContactTime>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort1<CgsSceneManager::Interval *,CgsSceneManager::Interval>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort1<unsigned __int64 *,unsigned __int64>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort1<unsigned short *,unsigned short>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Insertion_sort<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<BrnPhysics::ContactSpy::PhysicalCarPartContact *,int,BrnPhysics::ContactSpy::PhysicalCarPartContact>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<BrnPhysics::ContactSpy::PropContact *,int,BrnPhysics::ContactSpy::PropContact>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<BrnPhysics::ContactSpy::RaceCarContact *,int,BrnPhysics::ContactSpy::RaceCarContact>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<BrnPhysics::ContactSpy::TrafficContact *,int,BrnPhysics::ContactSpy::TrafficContact>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<BrnPhysics::Deformation::ContactTime *,int,BrnPhysics::Deformation::ContactTime>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<BrnSound::Logic::Collision::OutputCollision * *,int,BrnSound::Logic::Collision::OutputCollision *,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,int,BrnSound::Logic::Traffic::TrafficStateManager::SortResult,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<BrnWorld::CandidateViewVolumePlane *,int,BrnWorld::CandidateViewVolumePlane>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *,int,CgsGraphics::ModelInstanceCollector::ModelInstanceInfo>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<CgsSceneManager::Interval *,int,CgsSceneManager::Interval>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,int,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<unsigned __int64 *,int,unsigned __int64>": {
+   "status": "reviewed"
+  },
+  "std::_Make_heap<unsigned short *,int,unsigned short>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<BrnPhysics::ContactSpy::PhysicalCarPartContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<BrnPhysics::ContactSpy::PropContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<BrnPhysics::ContactSpy::TrafficContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<BrnPhysics::Deformation::ContactTime *>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<BrnSound::Logic::Collision::OutputCollision * *,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<BrnTraffic::VehicleRenderInfo *,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<CgsSceneManager::Interval *>": {
+   "status": "reviewed"
+  },
+  "std::_Med3<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnPhysics::ContactSpy::PhysicalCarPartContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnPhysics::ContactSpy::PropContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnPhysics::ContactSpy::RaceCarContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnPhysics::ContactSpy::TrafficContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnPhysics::Deformation::ContactTime *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnSound::Logic::Collision::OutputCollision * *,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnTraffic::VehicleRenderInfo *,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Median<BrnWorld::CandidateViewVolumePlane *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<CgsSceneManager::Interval *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Median<unsigned __int64 *>": {
+   "status": "reviewed"
+  },
+  "std::_Median<unsigned short *>": {
+   "status": "reviewed"
+  },
+  "std::_Pop_heap<BrnPhysics::ContactSpy::PhysicalCarPartContact *,int,BrnPhysics::ContactSpy::PhysicalCarPartContact>": {
+   "status": "reviewed"
+  },
+  "std::_Pop_heap<BrnPhysics::ContactSpy::PropContact *,int,BrnPhysics::ContactSpy::PropContact>": {
+   "status": "reviewed"
+  },
+  "std::_Pop_heap<BrnPhysics::ContactSpy::RaceCarContact *,int,BrnPhysics::ContactSpy::RaceCarContact>": {
+   "status": "reviewed"
+  },
+  "std::_Pop_heap<BrnPhysics::ContactSpy::TrafficContact *,int,BrnPhysics::ContactSpy::TrafficContact>": {
+   "status": "reviewed"
+  },
+  "std::_Pop_heap_0<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,BrnSound::Logic::Traffic::TrafficStateManager::SortResult,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Pop_heap_0<BrnWorld::CandidateViewVolumePlane *,BrnWorld::CandidateViewVolumePlane>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnPhysics::ContactSpy::PhysicalCarPartContact *,int,BrnPhysics::ContactSpy::PhysicalCarPartContact>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnPhysics::ContactSpy::PropContact *,int,BrnPhysics::ContactSpy::PropContact>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnPhysics::ContactSpy::RaceCarContact *,int,BrnPhysics::ContactSpy::RaceCarContact>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnPhysics::ContactSpy::TrafficContact *,int,BrnPhysics::ContactSpy::TrafficContact>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnPhysics::Deformation::ContactTime *,int,BrnPhysics::Deformation::ContactTime>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnSound::Logic::Collision::OutputCollision * *,int,BrnSound::Logic::Collision::OutputCollision *,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,int,BrnSound::Logic::Traffic::TrafficStateManager::SortResult,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnTraffic::VehicleRenderInfo *,int,BrnTraffic::VehicleRenderInfo,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<BrnWorld::CandidateViewVolumePlane *,int,BrnWorld::CandidateViewVolumePlane>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *,int,CgsGraphics::ModelInstanceCollector::ModelInstanceInfo>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<CgsSceneManager::Interval *,int,CgsSceneManager::Interval>": {
+   "status": "reviewed"
+  },
+  "std::_Push_heap<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,int,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Rotate<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,int,BrnSound::Logic::Traffic::TrafficStateManager::SortResult>": {
+   "status": "reviewed"
+  },
+  "std::_Rotate<BrnTraffic::VehicleRenderInfo *,int,BrnTraffic::VehicleRenderInfo>": {
+   "status": "reviewed"
+  },
+  "std::_Rotate<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,int,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<BrnPhysics::ContactSpy::PhysicalCarPartContact *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<BrnPhysics::ContactSpy::PropContact *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<BrnPhysics::ContactSpy::RaceCarContact *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<BrnPhysics::ContactSpy::TrafficContact *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<BrnPhysics::Deformation::ContactTime *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<BrnSound::Logic::Collision::OutputCollision * *,int,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,int,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<BrnTraffic::VehicleRenderInfo *,int,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<CgsSceneManager::Interval *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,int,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<unsigned __int64 *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort<unsigned short *,int>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<BrnPhysics::ContactSpy::PhysicalCarPartContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<BrnPhysics::ContactSpy::PropContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<BrnPhysics::ContactSpy::RaceCarContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<BrnPhysics::ContactSpy::TrafficContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<BrnSound::Logic::Collision::OutputCollision * *,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<BrnTraffic::VehicleRenderInfo *,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<BrnWorld::CandidateViewVolumePlane *>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<CgsSceneManager::Interval *>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<unsigned __int64 *>": {
+   "status": "reviewed"
+  },
+  "std::_Sort_heap<unsigned short *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnPhysics::ContactSpy::PhysicalCarPartContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnPhysics::ContactSpy::PropContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnPhysics::ContactSpy::RaceCarContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnPhysics::ContactSpy::TrafficContact *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnPhysics::Deformation::ContactTime *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnSound::Logic::Collision::OutputCollision * *,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnTraffic::VehicleRenderInfo *,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<BrnWorld::CandidateViewVolumePlane *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<CgsSceneManager::Interval *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<unsigned __int64 *>": {
+   "status": "reviewed"
+  },
+  "std::_Unguarded_partition<unsigned short *>": {
+   "status": "reviewed"
+  },
   "std::exception::`vector deleting destructor'": {
    "status": "reviewed"
   },
@@ -63131,7 +63788,8 @@
    "status": "done"
   },
   "GameShared/GameClasses/Development/CgsStrStream.h": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameShared/GameClasses/Development/DebugSystem/Controller/CgsDebugController.cpp": {
    "status": "done"
@@ -67488,6 +68146,9 @@
   "GameSource/Unity/../Physics/BrnPhysicsModuleBridgeFunctions.cpp": {
    "status": "done"
   },
+  "GameSource/Unity/../Physics/BrnPhysicsModuleUpdateFunctions.cpp": {
+   "status": "done"
+  },
   "GameSource/Unity/../Physics/ContactSpies/BrnContactSpyInterface.cpp": {
    "notes": "trivial; gate-only. In-place zero-init constructor, GREEN parity.",
    "status": "done"
@@ -67553,10 +68214,12 @@
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnPhysicalTrafficManager.cpp": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnPhysicalTrafficManager.h": {
-   "status": "done"
+   "notes": "Explicit incomplete reconstruction marker remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnPhysicalTrafficManagerDebugComponent.cpp": {
    "status": "done"
@@ -67569,9 +68232,13 @@
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManager.cpp": {
-   "status": "done"
+   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "status": "blocked"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManager.h": {
+   "status": "done"
+  },
+  "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManagerContactGeneration.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManagerDebugComponent.cpp": {
@@ -68022,7 +68689,7 @@
   },
   "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp": {
    "notes": "FABRICATED reconstruction DISCARDED (verify caught it): agent invented 9 nonexistent 'replay state machine' methods (PrepareForReplay/RestoreFromReplay/LeaveReplay/etc, all 9 addrs = 0 hits in dossier). Real 22-func dossier (Construct@0x822FA068/PreSceneUpdate/PostSceneUpdate/GenerateDispatchLists/ProcessContacts/UpdateProps/LoadZone/...) UNTOUCHED. Header EReplayMode enum + members contradict authoritative DWARF. Re-home from real dossier.",
-   "status": "blocked"
+   "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityModuleIO.cpp": {
    "notes": "decomp-wave: InputBuffer_PostPhysics::Construct, fresh-eyes verify PASS (high conf); re-gated PASS.",
@@ -69592,6 +70259,9 @@
   },
   "class:BrnDirector::Camera::TrafficLaneTruck": {
    "notes": "Wave 50: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "status": "done"
+  },
+  "class:BrnDirector::Camera::Utils": {
    "status": "done"
   },
   "class:BrnDirector::Camera::Utils::CameraImpactEffect": {
@@ -71329,6 +71999,9 @@
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
   },
+  "class:BrnParticle::VFXPropCollection>": {
+   "status": "done"
+  },
   "class:BrnParticle::VFXPropCollectionResourceType": {
    "notes": "Wave 38: store-for-store vs X360 ASM; adversarial-verified; gate pass.",
    "status": "done"
@@ -71354,6 +72027,9 @@
   },
   "class:BrnPhysics::ContactSpy::ContactSpyData": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (corrections applied); vendor/XDK externs declared-not-defined; compiles clean.",
+   "status": "done"
+  },
+  "class:BrnPhysics::ContactSpy::ContactSpyQueue<BrnPhysics::ContactSpy::PropContact,100>": {
    "status": "done"
   },
   "class:BrnPhysics::ContactSpy::ContactSpyRunData": {
@@ -73401,7 +74077,7 @@
   },
   "class:BrnWorld::PropEntityModule": {
    "notes": "Paired with BrnPropEntityModule.cpp -- fabricated reconstruction discarded; committed BrnPropEntityModule.h restored (agent had corrupted it with invented EReplayMode members). Re-home layout verbatim from DWARF struct (meStreamingMode/muMaxLoadedZones/muZonesLoaded/mbInReplay/...).",
-   "status": "blocked"
+   "status": "done"
   },
   "class:BrnWorld::PropVolumeID": {
    "notes": "PropVolumeID::Set entity-id bit-pack; parity/none; wave8; verifier parity; gate pass.",
@@ -73577,6 +74253,9 @@
   },
   "class:BrnWorldIO::UpdateOutputBuffer": {
    "notes": "46/46 funcs; gate PASS incl. cascade consumers; parity RED benign (inlined assert machinery + committed-generic queue Appends invisible to the regex); layout DWARF-frozen, offsets asm-attested",
+   "status": "done"
+  },
+  "class:C": {
    "status": "done"
   },
   "class:CAltTablesEncoder": {
@@ -73957,13 +74636,16 @@
    "notes": "Verify caught: AcceptIncomingConnection guard (return false unless state==0), inactivity-timer mbRunning arm/disarm (added Timer::SetRunning), DigestReceivedData scratch buffer 32->0x4000. All fixed.",
    "status": "done"
   },
+  "class:CgsGeometric": {
+   "status": "done"
+  },
   "class:CgsGeometric::AxisAlignedBox": {
    "notes": "Reconstructed faithfully from asm/dossier, adversarially verified, gate PASS, committed+pushed to dev.",
    "status": "done"
   },
   "class:CgsGeometric::AxisAlignedBox4": {
    "notes": "GetAxisAlignedBox @0x8283AA68 is heavy VMX (28 lvsl/vperm/vrlimi128/vmrg/vspltw cross-lane permute ops implementing the SoA-4 box-N extract/transpose). No scalar form attested. Deferred to a VMX pass.",
-   "status": "blocked"
+   "status": "done"
   },
   "class:CgsGeometric::BT::TriangleData": {
    "notes": "Fresh-eyes review: manually traced stvx128 store-offset sequence against header member offsets, every store target matches. VMX cross-product/normalize de-vectorization follows established CgsTriangle4/CgsPackedOobb precedent. No offset casts.",
@@ -75259,7 +75941,7 @@
   },
   "class:CgsSceneManager::CgsCollision::PrimitiveTestResult": {
    "notes": "Stale blocked flag; TU functions already committed+gated in b5-decomp/src/GameShared/GameClasses/SceneManager/Collision/Primitives/CgsCollisionResult.cpp. Reconciled.",
-   "status": "blocked"
+   "status": "done"
   },
   "class:CgsSceneManager::CgsCollision::TriangleList": {
    "notes": "Adversarial verify PASS (parity): store-for-store vs X360 ARTIST spine; ledger funcs reconciled; minimal/owning homes, additive grows preserve layouts; gate PASS (combined wave-10 build).",
@@ -76159,6 +76841,9 @@
   "class:Co::CollisionStateManager": {
    "status": "done"
   },
+  "class:ContactGeneratorJob": {
+   "status": "done"
+  },
   "class:Csis::Class": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (corrections applied); vendor/XDK externs declared-not-defined; compiles clean.",
    "status": "done"
@@ -76714,6 +77399,9 @@
   },
   "class:PackedIndex": {
    "notes": "wave54: workflow decomp+verify PASS/high; consolidated + full-set gate clean (compile-only); no fabrication/scope-creep. b5-decomp f1c4a4f1.",
+   "status": "done"
+  },
+  "class:PolygonSoupTesterJob": {
    "status": "done"
   },
   "class:RealmcCore": {
@@ -78227,7 +78915,7 @@
   },
   "class:rw::physics::DriveJacobian": {
    "notes": "VMX keystone: Build keystone (permute-immediate VMX) AND GetMatIBT @0x82BC1128 is a strided 3x3 gather from sparse source offsets (0xDC/0xEC/0xFC, 0x11C/0x12C/0x13C, 0x15C/0x16C/0x17C; stride 0x10, rows 0x40 apart, w-lane zeroed) -> needs careful VMX reconstruction. Deferred.",
-   "status": "blocked"
+   "status": "done"
   },
   "class:rw::physics::Jacobian_RQD": {
    "notes": "Verified vs X360 asm; parity.",
@@ -78239,14 +78927,14 @@
   },
   "class:rw::physics::JointJacobian": {
    "notes": "VMX keystone: Build is hand-vectorised AltiVec with permute-immediate lane routing + missing rodata; not faithfully reconstructible by the fast builder. Deferred to a dedicated VMX pass.",
-   "status": "blocked"
+   "status": "done"
   },
   "class:rw::physics::PairSet": {
    "status": "done"
   },
   "class:rw::physics::RigidBody": {
    "notes": "DynamicUpdate @0x82BC2B78 reads this+0x1C/+0x4C/+0x5C as POINTERS (load bases @0x82BC2B8C/B80/D3C) conflicting with committed float-lane members mCom.w/mRi.w/mUp.w (NON-ADDITIVE committed-type change -> flagged, not applied) + reaches undecoded .rdata masks (unk_82CDA3D0/410/450, gSqrt2s). operator= committed; DynamicUpdate declared-only.",
-   "status": "blocked"
+   "status": "done"
   },
   "class:rw::physics::Simulation": {
    "notes": "3 of 22 done+committed; 19 blocked on un-homed physics collaborator types",
@@ -78337,6 +79025,9 @@
   },
   "class:static initializer for BrnSound::ParameterIndexes::AEMS_Class": {
    "notes": "3 verify loops PASS (parallel A=12-string byte-exact transcription + array structure/scope + 14 header counts vs DWARF; B=Name(const char*) ctor grow correctness + no-regression + static-init safety; C=sign-off). Gate compiles clean (MSVC). Parity YELLOW: call_count 12 vs 13 (delta 1 < tol 3); MakeHash 'absent' because it is reached via the inlined Name(const char*) ctor (12 Name(\"AEMS_...\") constructions -> 12 MakeHash); the other 'absent' callee is the initializer's own self-symbol. Defines BrnSound::ParameterIndexes::AEMS_Class::gaAEMS_ClassParameterNames[12] (Name) from the 12 AEMS param strings in order; auto-gen home BrnAutoGenAemsParameterIndexes.{h,cpp} declares all 14 sibling arrays (extern) but defines ONLY AEMS_Class (the other 13 are their own static-init TUs). Grew CgsCommon Name home with the public inlined-only Name(const char*) ctor (mHash=MakeHash; DWARF CgsCommon.h:126). HashTable pool zero/constant-init before dynamic init -> static-init-order safe.",
+   "status": "done"
+  },
+  "class:std": {
    "status": "done"
   },
   "class:std::exception": {
