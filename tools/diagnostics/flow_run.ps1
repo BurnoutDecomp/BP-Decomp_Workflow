@@ -286,9 +286,17 @@ $cues = @(
 # is a single bare token ("    BrnGameState::CarSelectManager::UpdateExitState", "    0xB16D2").
 # Matching cues against those makes a crash look like progress -- which is exactly what happened
 # above.  Any cue, not just the removed one, is vulnerable; strip once, centrally.
+#
+# ⚠️ SECOND SHAPE ADDED 2026-08-16.  CgsCrashHandlerPC's WriteReport now emits resolved frames as
+# "    Name + 0xNNN    [rva 0xNNN]" so a player's report pins the statement, not just the function
+# (see CgsMapFileReaderMinimalMemory.h's KI_MAX_STACK_RESULTS banner).  Those lines are NOT bare
+# tokens, so the original pattern let them through -- reopening exactly the hole this function
+# exists to close, and on the CRASH path specifically.  Both shapes are stripped now.
 function Strip-CallstackFrames([string]$t) {
   if ($null -eq $t) { return $t }
-  return ($t -split "`n" | Where-Object { $_ -notmatch '^\s{4}\S+\s*$' }) -join "`n"
+  return ($t -split "`n" | Where-Object {
+    $_ -notmatch '^\s{4}\S+\s*$' -and $_ -notmatch '^\s{4}\S.*\[rva 0x[0-9A-Fa-f]+\]\s*$'
+  }) -join "`n"
 }
 
 $lastAccept = Get-Date
