@@ -87,7 +87,11 @@ param(
   [double]$DriveSeconds= 0,      # 0 = hold until the run ends
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
   [int]$LogWaitSeconds = 90,
-  [switch]$MotionProbe           # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
+  [switch]$MotionProbe,          # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
+  [int]$TriCacheProbe  = 0       # opt IN to the [tricache] world-collision cache trace; the VALUE
+                                 # is the sampling period in frames (1 => the game's default 60).
+                                 # ⚠️ A PERIOD, not a switch: 60 frames is 29 m at this build's top
+                                 # speed, so the default sampling steps straight over an impact.
 )
 $ErrorActionPreference = 'Stop'
 
@@ -121,14 +125,22 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # earlier command in the same shell rode into the next run -- and that run then announced itself as
 # a "DEFAULT run" while carrying an unrequested instrument.  That is a golden-gate hazard: the
 # goldens are meant to be byte-identical to a probe-free build.  Opt IN with -MotionProbe instead.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE')) {
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 if ($MotionProbe) {
   $env:BRN_MOTION_PROBE = "1"
   Write-Host "[flow] MOTION PROBE run: BRN_MOTION_PROBE=1 (opt-in). NOT a default run -- do not gate goldens off this."
-} else {
-  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE all cleared."
+}
+# ⭐ [tricache] -- the world-collision triangle-cache trace (walls/worldcoll wave). CLEARED above for
+# the same reason BRN_MOTION_PROBE is: a leftover env var from an earlier command in the same shell
+# would ride into a run that then announces itself as DEFAULT while carrying an instrument.
+if ($TriCacheProbe -gt 0) {
+  $env:BRN_TRICACHE_PROBE = "$TriCacheProbe"
+  Write-Host "[flow] TRICACHE PROBE run: BRN_TRICACHE_PROBE=$TriCacheProbe (opt-in, period in frames). NOT a default run -- do not gate goldens off this."
+}
+if (-not $MotionProbe -and $TriCacheProbe -le 0) {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE all cleared."
 }
 
 $framesOut = $null
