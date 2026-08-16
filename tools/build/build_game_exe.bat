@@ -243,7 +243,41 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_PostPhysics.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\EnvironmentManager\BrnEnvironmentManager.cpp"
-  echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvironmentKeyframeBringUp.cpp"
+  rem ---- POST-FX RUNG 10 "environment live" (2026-08-16, irradiance group): the ambient-light
+  rem   solver. This TU was never on the list -- it held only GetIrradianceMatrix. ComputeIrradiance
+  rem   / ComputeFrameCoeffs / UpdateCoefficients / ComputeIrradianceMatrix are now real bodies and
+  rem   EnvironmentManager::GenerateShaderConstants @0x827D0098 calls two of them.
+  echo "%SRC%\GameSource\World\EnvironmentManager\BrnGlobalIrradianceManager.cpp"
+
+  rem ---- POST-FX RUNG 10 "environment live" -- envfix round (2026-08-16). THE FIVE
+  rem   ENVIRONMENT-SETTINGS TUs THAT WERE NEVER ON THIS LIST. Until now every symbol they
+  rem   define was served by an inert WorldLinkStubs.cpp gate, which is why PerformBlend was
+  rem   two thirds dead: ScatteringData/LightingData/CloudsData::SetToBlend all returned
+  rem   without writing anything, so mScattering / mLighting / mClouds stayed at whatever
+  rem   EnvironmentManager::Construct zero-seeded and a live GenerateShaderConstants would
+  rem   have read an all-zero lighting block (= the world goes dark). Those 8 gates are
+  rem   DELETED in WorldLinkStubs.cpp in the same step -- leaving one beside a mounted TU is
+  rem   LNK2005 (measured, 8 duplicate definitions).
+  rem   Link cost measured with dumpbin over the five objs + WorldLinkStubs.obj: the set
+  rem   drags in NO new external. Everything it needs is already mounted --
+  rem   CgsCore::SPrintf (CgsStringUtils.cpp, line 102 of this file) and the
+  rem   BrnEffects::{Bloom,Vignette}Data default statics (BrnEffectsData.cpp, line 257) --
+  rem   or is the CRT (fopen/fscanf/fgetc/ungetc/feof/fclose/atoi/strcmp/strncmp/strlen).
+  rem   The 15 `KAF_*` default-template vectors these three TUs read had NO DEFINITION
+  rem   anywhere in the tree (a latent unresolved external `cl /c` cannot see); they are
+  rem   defined in them now, from the shipped image.
+  echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvScatteringData.cpp"
+  echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvLightingData.cpp"
+  echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvCloudsData.cpp"
+  rem   NEW TU: Keyframe::Construct @0x82676298 (the six sub-block Constructs). Its only
+  rem   caller is EnvironmentManager::SetupUpdateFromToolBlend (the dev d:\LightSetup.txt
+  rem   path), but the symbol is link-required because that function is in the mounted
+  rem   BrnEnvironmentManager.cpp.
+  echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvironmentKeyframe.cpp"
+  rem   FindKeyframeInds @0x827B0418 (SetupTimeOfDayBlend calls it every frame), HH_MM_SS,
+  rem   BuildTimeOfDay, ParseTimeOfDay, the six ConsumeFieldValue readers and all five
+  rem   ConsumeFieldValue<T> instantiations, and ParseEnvironmentFile @0x8267CD70.
+  echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvironmentSettings.cpp"
   rem ---- POST-FX RUNG 5 "bloom lit" (2026-08-15): the effects-frame chain. BrnEffectsData.cpp
   rem   (BloomData/VignetteData/BlurData::SetToBlend + the default-constant statics the header declares)
   rem   and the renderer effects arbitrator (BrnGraphics::EffectsArbitrator: Construct/EndOfFrame/Eval*)
@@ -254,6 +288,17 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem   BrnRendererModulePostFx.cpp = the Render apply block (X360 Render @0x8240BFA8 lines 964-1260) homed
   rem   in a sibling TU because BrnRendererModule.h still carries the EA::Jobs::Job placeholder (see its banner).
   echo "%SRC%\GameSource\Graphics\BrnRendererModulePostFx.cpp"
+  rem ---- POST-FX RUNG 10 "motion blur moves" (2026-08-16): the ParticleRenderData PRODUCER.
+  rem   [FLAG PC bring-up] ParticleModuleBringUp.cpp stands in for BrnParticle::ParticleModule::Update
+  rem   @0x822817D8 + ::GenerateRenderRequests @0x82281BD8, whose module (ParticleModule.cpp) and whose
+  rem   driver (EffectsModule::Update / ::GenerateDispatchLists) are BOTH still off this list. Without it
+  rem   DispatchThreadInputBuffer::mParticleRenderData is never written and BrnRendererModule::Render has
+  rem   to pass a NULL to BrnRendererUpdatePostFxMotionBlur -- which is why motion blur was alive but
+  rem   motionless. Its only new link requirements are already mounted: CgsCamera.cpp (Camera::operator=),
+  rem   Camera.cpp (CopyToCgsCamera / GetTransform), BrnDispatchThreadInputBuffer.cpp
+  rem   (GetParticleRenderData) and CgsIOBuffer.cpp / CgsLog.cpp.
+  rem   DELETE this line when ParticleModule.cpp + EffectsModule.cpp land.
+  echo "%SRC%\GameSource\Effects\Particles\ParticleModuleBringUp.cpp"
   rem ---- SKY WAVE (2026-07-31): the sky-dome draw path, MOUNTED. ----------------
   rem The closure was measured with dumpbin over the linked object set: the three
   rem sky TUs raise 67 externals / 45 already provided / 22 unresolved; the two
@@ -277,6 +322,32 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Graphics\ImmediateMode\BrnIm3d.cpp"
   echo "%SRC%\GameSource\Graphics\BrnSkyDomeManager.cpp"
   echo "%SRC%\SharedClasses\World\BrnEnvironmentUtil.cpp"
+  rem ---- NEW TU (envstream wave 2026-08-16). Dictionary::BuildResourceName @0x827B03B8 (the
+  rem  name EnvironmentManager::Prepare hashes to acquire the environment dictionary) plus the
+  rem  BLOCKED TimeLine::BuildResourceName stub. Prepare now REFERENCES the first symbol, so the
+  rem  mount is required for the link, not optional.
+  echo "%SRC%\SharedClasses\World\BrnEnvironmentDictionary.cpp"
+  rem ---- ENVIRONMENT-SETTINGS RESOURCE TYPES (env wave, 2026-08-16) ----------------------
+  rem  The three handlers for build\game\ENVIRONMENTSETTINGS (Keyframe 0x10012, TimeLine
+  rem  0x10013, Dictionary 0x10014) have existed since the post-fx rung-5 wave and were NEVER
+  rem  ON THIS LIST, so the exe carried no code for them at all -- which is the other half of
+  rem  why EnvironmentManager::Prepare had to be stubbed inert. Registered in
+  rem  CgsResourceTypeRegistration.cpp in the same step; BundleLoader::LoadBundle gates FixUp,
+  rem  ResolveImportsForEntry and PostFixUp on `mpResourceType != 0`, so an unmounted /
+  rem  unregistered type leaves the TimeLine's three pointer slots as serialised offsets AND
+  rem  leaves its nine keyframe imports unresolved.
+  rem  Link cost measured with dumpbin over the three objs: ZERO new externals -- their only
+  rem  UNDEFs are CgsDev::Assert::{Begin,Fire,End}Assert (CgsAssert.cpp, line 103 of this
+  rem  file), rw::BaseResourceDescriptor::BaseResourceDescriptor (BaseResourceDescriptor.cpp,
+  rem  line 3530) and CRT memset.
+  echo "%SRC%\SharedClasses\World\BrnEnvironmentKeyframeResourceType.cpp"
+  echo "%SRC%\SharedClasses\World\BrnEnvironmentTimeLineResourceType.cpp"
+  echo "%SRC%\SharedClasses\World\BrnEnvironmentDictionaryResourceType.cpp"
+  rem  ResourcePtr<TimeLine>::GetMemoryResource @0x827C3048 -- the season timeline pointer the
+  rem  EnvironmentManager instances in RequestNextSeason / StreamOut / StreamIn / SetupBlend
+  rem  (maSeasonPtrs). Declared-and-never-defined until now = a latent unresolved external the
+  rem  per-TU `cl /c` gate cannot see.
+  echo "%SRC%\GameSource\World\EnvironmentSettings\CgsResourcePtr_BrnWorld_EnvironmentSettings_TimeLine.cpp"
   echo "%SRC%\GameSource\World\EnvironmentMap\BrnEnvironmentMap.cpp"
   echo "%SRC%\GameSource\World\ShadowMap\BrnShadowMap.cpp"
   echo "%SRC%\GameSource\World\BrnPlaceOnTrackManager.cpp"

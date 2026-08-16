@@ -363,7 +363,16 @@ why    = """These nested bundles contain ColourCube (type 0x2b), not the
 Keyframe/TimeLine/Dictionary resources handled by env_transcode.py.  The schema is a u32
 edge length followed by byte-valued RGB cube data, so nonapt_transcode swaps the length and
 preserves the colour bytes.  The known-good PC PARADISE_INGAME_JUNK bundle confirms this
-separate resource family."""
+separate resource family.
+
+CORRECTION (env wave, 2026-08-16): that description does not match what the tool actually did.
+MEASURED on the shipped pair -- extract ENVIRONMENTSETTINGS/COLOURCUBES/PARADISE_INGAME_JUNK.BUNDLE
+and its .x360 original with YAP and cmp the 8B7E999A.dat payloads -- the two are BYTE-IDENTICAL:
+the 16-byte header (edge length 32, then 16, 0, 0) was never swapped, so the converted file's
+edge-length word reads 0x20000000 on the little-endian host.  The colour cube is inert on the PC
+build for a second reason too: CgsResource::RwColourCubeResourceType is neither on
+tools/build/build_game_exe.bat nor registered in CgsResourceTypeRegistration.cpp, and it does not
+override GetTypeID (so it would register under the base's 0xFFFFFFFF).  Both are open items."""
 
 [[rule]]
 id     = "environment-settings"
@@ -373,9 +382,28 @@ tool   = "bundles/env_transcode.py"
 argv   = ["{src}", "{out}"]
 verify = ["bnd2_platform=4"]
 why    = """env_transcode.py exists because the generic container convert leaves the env
-keyframes big-endian and inert ("that is the data half of 'the sky is black'").  It has a
-2-positional `<in> <out>` mode; --all rewrites build/game/ENVIRONMENTSETTINGS in place and
-leaves .x360 backups, so it is never used."""
+keyframes big-endian and inert ("that is the data half of 'the sky is black'").  It ports all
+three ENVIRONMENTSETTINGS resource types, and only ONE of them is a pure endian swap:
+
+  Keyframe   0x10012  SWAP -- fixed 0x240 record, pointer-free, all 4-byte fields.
+  TimeLine   0x10013  RELAYOUT -- an IN-PLACE resource WITH EMBEDDED POINTERS (DWARF
+             SharedClasses/World/BrnEnvironmentTimeLine.h).  On x64 TimeLine grows 12 -> 16,
+             TimeLine::LocationData 12 -> 24, and its Keyframe* elements 4 -> 8, so the file has
+             to carry the host layout -- the STREETDATA.DAT lesson.
+  Dictionary 0x10014  RELAYOUT -- header 20 -> 32 (muLocationCnt +0x0C -> +0x10, mpLocationDatii
+             +0x10 -> +0x18).  Its SeasonData/LocationData records are pure char arrays and are
+             copied VERBATIM: the old blanket 32-bit swap reversed every four characters, so the
+             shipped converted file read "_VNEP_LTdara_esiagnij_em" for "ENV_TL_Paradise_ingame_junk".
+
+It also carries the bundles' IMPORT tables through the repack (extracting with `YAP -ci` and
+rewriting the combined .imports.yaml), moving each TimeLine keyframe import onto its widened
+8-byte slot.  Without that the repack DROPS every import -- and TimeLineResourceType::FixUp NULLs
+mppKeyframes expecting the import pass to fill it, so the timeline would point at no keyframes at
+all.
+
+--all SKIPS anything already platform 4, so it cannot regenerate the tree in place once the
+old swap-only output is installed; this rule's 2-positional `<in> <out>` form, fed the .x360
+backup, is the path that must be used."""
 
 [[rule]]
 id     = "environment-lighting-text"
