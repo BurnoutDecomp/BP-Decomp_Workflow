@@ -2566,6 +2566,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\JobDescription\CgsPrimitivePairListJobDesc.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\JobDescription\CgsSphereListWithSphereListJobDesc.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\JobDescription\CgsSphereListWithTriangleListJobDesc.cpp"
+  rem  swept leg (2026-08-16): the NON-stream swept descriptor's Prepare @0x828103E0 -- an
+  rem  export HOLE recovered from the image bytes. Needed by the swept stream arm, which builds
+  rem  one of these per command.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\JobDescription\CgsSweptSphereListWithTriangleListJobDesc.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Contactgen\CgsSceneSweeperDebugComponent.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\TriangleCollision\CgsTriangleCollisionDebugComponent.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Zones\Resources\ZoneListResourceType.cpp"
