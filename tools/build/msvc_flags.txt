@@ -9,4 +9,22 @@
 #      every per-entity frustum test, every dispatch walk and every VMX-derived math
 #      helper was running unoptimised, which is why culling cost more than the draws
 #      it saved. Gates compile with it too, so "gate green" means "ship-flags green".
-/nologo /EHsc /std:c++17 /permissive- /O2 /Gy /DWIN32 /D_WINDOWS
+# /w14715 /w14716 /w14703: KEPT DELIBERATELY (2026-08-16, C4715 sweep). There is no /W flag
+#      on this line, so the build runs at MSVC's default /W1 and these three -- all level 4 --
+#      had never once been emitted. Promoting them to level 1 costs nothing and closes the
+#      three ways the compiler can see "the caller reads garbage":
+#        C4715 not all control paths return a value  (falls off the end -> whatever is in rax)
+#        C4716 a non-void function with no return at all
+#        C4703 a potentially uninitialised local POINTER is dereferenced
+#      MEASURED over all 3,443 reconstructed .cpp that reach codegen (mounted + unmounted):
+#      C4715 = 1 (SpatialPartitionManager::Release, fixed), C4716 = 0, C4703 = 0. So this is a
+#      ZERO-NOISE ratchet, not a wall of warnings -- which is exactly why it is worth keeping:
+#      the next one that appears is a new defect, visible the day it lands.
+#      ⛔ NOT /W4, and NOT /we (error): two other contributors build this tree, and a fresh
+#      hard error in the shared build script is a collision, whereas a warning is free.
+#      ⛔ /w14701 was TRIED AND DROPPED: 8 hits, all inspected, all false positives against
+#      faithful code (documented raw stack out-blocks in BrnRendererModulePostFx.cpp, a
+#      path-insensitive miss in CgsRegistry.cpp) plus one TRUE report of UB that is in the
+#      shipped console binary (BrnMomentControllerNewMoment.cpp -- see the note in that file).
+#      A warning nobody can act on trains people to ignore the ones they can.
+/nologo /EHsc /std:c++17 /permissive- /O2 /Gy /DWIN32 /D_WINDOWS /w14715 /w14716 /w14703
