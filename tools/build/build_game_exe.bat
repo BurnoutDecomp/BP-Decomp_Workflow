@@ -113,6 +113,27 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem callees (and those TUs' interface operator= homes) are linked below so the whole
   rem controller-bridge family resolves.
   echo "%SRC%\GameSource\Game\GameBridgeControllerToX.cpp"
+  rem ---- tutorial-ticker leg (2026-08-16): the training-tip STRING-ID MAP. ----------------
+  rem  BrnGame::ConvertTrainingTypeToStringId @0x823AA3B8 turns a BrnProgression::ETrainingType
+  rem  into the GUI string id the bottom-of-screen tutorial ticker looks up in the language
+  rem  data (type 2 -> "TRAINING_START_ENGINE" -> "Okay, let's just check this thing still
+  rem  starts. Hold the accelerator (right trigger) to fire up the engine.").
+  rem  ⭐ IT WAS BLOCKED ON DATA NOBODY HAD: the two rodata tables it indexes (off_82CDBF40 x77
+  rem  and dword_82FAE290 x128) were `extern`-only, banner-marked "UNRECOVERABLE from this TU's
+  rem  dossier". They are recovered now, straight out of the unpacked X360 image, and gated on
+  rem  three independent controls (see the TU banner). MEASURED with cl /c + dumpbin /SYMBOLS
+  rem  against build\game\obj: ZERO new unresolved externals -- the only UNDEFs are the three
+  rem  CgsDev::Assert entry points already in the link.
+  rem  ⛔ NOTHING CALLS IT YET, deliberately. The producer (TrainingManager, which is neither
+  rem  constructed nor updated on PC) and the consumer (BrnGui::InGameMessageRenderer -- 15 X360
+  rem  functions, NONE reconstructed, drawing through a CgsGraphics::TextRenderer that has no
+  rem  home in this tree) are both still absent. Mounted anyway because it is correct, complete
+  rem  and free, and it is the piece that was previously unrecoverable.
+  rem  SIBLING SPLIT: its owning GameBridgeGameStateToX.cpp DOES NOT COMPILE and did not before
+  rem  this leg either (control-measured against HEAD's own copy: an ODR fork on
+  rem  BrnGui::GuiTakedownEvent + a stale mpCgsGuiModule, both inside TranslateTakedownsToGuiEvents).
+  rem  The function was MOVED, not copied, so folding it back later is a delete.
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_TrainingStringIds.cpp"
   rem ---- camera wave (2026-08-01): the WORLD -> DIRECTOR seam. BridgeWorldToDirector --
   rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
   rem ---- without it every camera VehicleRef resolves to a zero transform.             --
