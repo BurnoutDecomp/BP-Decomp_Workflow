@@ -3331,6 +3331,27 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Gui\BrnGuiPerfmons.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBoostBarRenderer.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer.cpp"
+  rem ---- custom-renderer layer (2026-08-16) -------------------------------------------
+  rem  BrnGui::CustomRendererManager -- the GUI custom-renderer SET. It is the single
+  rem  blocker under two separately-reported defects: the licence card's red player-photo
+  rem  slot (the apt movie types it `_type='PlayerImage', _index=1`, and the engine resolves
+  rem  that through gAptFuncs.pfnCustomControlRender -> AptRenderHandler::
+  rem  mpCustomRendererManager -> GetComponentTexture) and the in-game tutorial ticker
+  rem  (GUI event 537 -> RecvEvent -> the InGameMessage component).
+  rem  ⭐ THE "10 COMPONENT VTABLES" BLOCKER WAS ONE DECLARATION BUG, NOT TEN. The base
+  rem  CgsGui::CustomRenderComponentInterface had been grown from the manager's call sites
+  rem  with four INVENTED method names (GetComponentTexture/GetComponentID/
+  rem  GetNumTexturesForComponent/Prepare(void*,void*,void*)); the DWARF names are
+  rem  GetRenderOutput/GetID/GetNumTextures/Prepare(GuiEventQueueSmall*,IResourceAllocator*,
+  rem  IResourceAllocator*), which is what every concrete renderer overrides -- so none of
+  rem  them bound and every component was a hollow shell. Fixed against
+  rem  references/DecFIGS/dwarfdump/.../CgsCustomRenderer.h.
+  rem  ⛔ Only slot 0 (NetworkPlayerImage) is a live component; slots 1..9 are NULL, not
+  rem  stubs -- their renderers are minimal slices that would construct, prepare, report
+  rem  success and draw nothing.
+  echo "%SRC%\GameSource\Gui\CustomRenderer\BrnCustomRenderer.cpp"
+  echo "%SRC%\GameSource\Gui\BrnCustomRendererManager.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnNetworkPlayerImageRenderer.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipInstance.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Overlay\States\BrnCrashNavOkCancelOverlayState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Overlay\States\BrnCrashNavOkOverlayState.cpp"
