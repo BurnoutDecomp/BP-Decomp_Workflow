@@ -60,7 +60,13 @@ GPUFORMAT_INFO = {
     19: (4, 16, 0x33545844),   # DXT2_3      -> FOURCC 'DXT3'
     20: (4, 16, 0x35545844),   # DXT4_5      -> FOURCC 'DXT5'
     2:  (1, 1, 28),            # 8           -> D3DFMT_A8
-    6:  (1, 4, 32),            # 8_8_8_8     -> D3DFMT_A8B8G8R8
+    # 8_8_8_8 -> D3DFMT_A8R8G8B8 (21), per TEXTURE_RESOURCE_SCHEMA.md section 6.  NOT
+    # A8B8G8R8 (32): D3D9 does not advertise 32 as creatable, so CreateTexture returned
+    # D3DERR_INVALIDCALL on both entries that used it.  21 is also the correct CHANNEL
+    # ORDER -- port_pixels' GPUENDIAN_8IN32 dword reversal already turns the X360's
+    # big-endian A,R,G,B into B,G,R,A, which is A8R8G8B8 in memory; 32 would mean R,G,B,A.
+    # The mapping drifted by routing through DXGI 28 (R8G8B8A8) instead of DXGI 87.
+    6:  (1, 4, 21),            # 8_8_8_8     -> D3DFMT_A8R8G8B8
     26: (1, 8, 36),            # 16_16_16_16 -> D3DFMT_A16B16G16R16
 }
 
