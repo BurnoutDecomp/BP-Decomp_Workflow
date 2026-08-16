@@ -86,6 +86,7 @@ param(
   [double]$DriveDelay  = 6.0,    # seconds after the DRIVING mark before any input is applied
   [double]$DriveSeconds= 0,      # 0 = hold until the run ends
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
+  [int]$FrameEvery     = 30,     # dump PERIOD in presents; 1 = every present (see the note below)
   [int]$LogWaitSeconds = 90,
   [switch]$MotionProbe,          # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
   [int]$TriCacheProbe  = 0,      # opt IN to the [tricache] world-collision cache trace; the VALUE
@@ -168,9 +169,21 @@ if ($Frames) {
   New-Item -ItemType Directory -Force $FrameDir | Out-Null
   $framesOut = $FrameDir
   $env:BRN_FRAME_DUMP = $framesOut
-  Write-Host "[flow] BRN_FRAME_DUMP = $framesOut  (emptied; every 30th present lands here)"
+  # ⭐ -FrameEvery: the dump PERIOD in presents (default 30 == the game's own default).
+  #   30 presents is ~0.4 s on an uncapped boot, which is COARSER THAN A UI TRANSITION --
+  #   a licence/menu animation that plays in ~1 s lands in two samples and reads as a pop.
+  #   Judging "does this animate?" off a 30-present dump measures the SAMPLER, not the game.
+  #   Use -FrameEvery 1 for a transition, and expect ~30x the frames (and disk).
+  if ($FrameEvery -gt 0 -and $FrameEvery -ne 30) {
+    $env:BRN_FRAME_DUMP_EVERY = "$FrameEvery"
+  } else {
+    Remove-Item Env:\BRN_FRAME_DUMP_EVERY -ErrorAction SilentlyContinue
+  }
+  $lEvery = if ($FrameEvery -gt 0) { $FrameEvery } else { 30 }
+  Write-Host "[flow] BRN_FRAME_DUMP = $framesOut  (emptied; every ${lEvery}th present lands here)"
 } else {
   Remove-Item Env:\BRN_FRAME_DUMP -ErrorAction SilentlyContinue
+  Remove-Item Env:\BRN_FRAME_DUMP_EVERY -ErrorAction SilentlyContinue
 }
 
 function Newest-Frame {
@@ -410,6 +423,7 @@ $endElapsed = ((Get-Date) - $t0).TotalSeconds
 Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
 Start-Sleep -Milliseconds 500
 Remove-Item Env:\BRN_FRAME_DUMP -ErrorAction SilentlyContinue
+Remove-Item Env:\BRN_FRAME_DUMP_EVERY -ErrorAction SilentlyContinue
 Copy-Item $log (Join-Path $OutDir "BrnGame.log") -ErrorAction SilentlyContinue
 
 # --- marks.txt.  RUNSTART FIRST: it is what the gates use to reject stale dumps. ----------
