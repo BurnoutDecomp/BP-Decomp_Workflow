@@ -512,6 +512,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxdof.cpp"
   echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxvignette.cpp"
   echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxtint.cpp"
+  rem  rw::graphics::postfx::ColourCube::GetResourceDescriptor @0x82402C48 -- the sizing the
+  rem  colour-cube resource-type handler forwards to. Added by the post-fx step-10 tint wave:
+  rem  registering RwColourCubeResourceType makes CgsResourceTypeRegistration.obj reference the
+  rem  handler, and the handler references this. Measured, not assumed -- dumpbin on
+  rem  CgsRwColourCubeResourceType.obj lists exactly one game-side UNDEF:
+  rem    ?GetResourceDescriptor@ColourCube@postfx@graphics@rw@@SAPEAU?$BaseResourceDescriptors@$04@4@...
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxcolourcube.cpp"
   echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxb4blur.cpp"
   echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\postfx\src\rwgpfxrendertargetdebugger.cpp"
   rem  renderengine::RasterizerState::{GetResourceDescriptor,Initialize} -- moved here out of
@@ -2472,6 +2479,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\RenderWare\CgsRwRasterResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\CgsRwTextureStateResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\CgsMaterialStateResourceType.cpp"
+  rem  The post-fx colour-cube (3D tint LUT) resource-type handler, resource type 0x2B. Added by
+  rem  the step-10 tint wave together with its TypeRegistry::Register line in
+  rem  CgsResourceTypeRegistration.cpp -- without it the boot log says
+  rem    [bundle] UNREGISTERED resource type id 43 in 'PostFx/colourcubedictionary.bin'
+  rem  and every colour cube in the game is refused. Defines the two virtuals the registration
+  rem  TU leaves UNDEF (GetTypeID / GetSerialisedResourceDescriptor).
+  echo "%SRC%\GameShared\GameClasses\RenderWare\CgsRwColourCubeResourceType.cpp"
 
   echo "%SRC%\GameShared\GameClasses\RenderWare\cross\CgsModelResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Instances\CgsInstanceListResourceType.cpp"

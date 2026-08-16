@@ -162,6 +162,45 @@ def _language(data, label):
     return bytes(out), "%d strings; u32 offsets widened to u64 and strings aligned to 8" % count
 
 
+def _colour_cube_tiled_offset(x, y, z):
+    """Cell index in the CONSOLE blob for linear coordinate (x, y, z) of an edge-32 cube.
+
+    The X360 stores a colour cube in the SAME order its Xenos lookup VOLUME texture is laid out in,
+    because the blend job is a straight copy: rw::graphics::postfx::SetColour @0x82AD4078 walks the
+    source LINEARLY (48 bytes per 16 texels, cursor never reset) while walking the destination
+    through the locked surface's row/slice strides -- so on the console the two orders cancel. The
+    PC lookup volume is a LINEAR D3DFMT_A8R8G8B8 texture, so the source has to be linear too.
+
+    THE ADDRESS FUNCTION IS MEASURED, NOT ASSUMED. POSTFX/COLOURCUBEDICTIONARY.BIN ships an IDENTITY
+    cube (resource 0x1331EC9D, "rgb_colourcube.tga"); decoding each of its 32,768 cells as
+    (cell[0], cell[1], cell[2]) * 31/255 gives a perfect bijection onto the 32^3 grid, so cell N of
+    the blob IS coordinate (x,y,z). The resulting map is exactly GF(2)-LINEAR -- rebuilding all
+    32,768 addresses as the XOR of these fifteen single-bit basis vectors reproduces the measured
+    table with ZERO mismatches:
+
+        x0 -> 0x0001   y0 -> 0x0004   z0 -> 0x0100
+        x1 -> 0x0002   y1 -> 0x0040   z1 -> 0x0400
+        x2 -> 0x0008   y2 -> 0x0080   z2 -> 0x1220  (bits 12, 9 and 5)
+        x3 -> 0x0010   y3 -> 0x0220   z3 -> 0x2000
+        x4 -> 0x0020         (9 and 5) z4 -> 0x4000
+
+    i.e. bit5 = x4 ^ y3 ^ z2 and bit9 = y3 ^ z2, the parity mixing a Xenos tiled address does.
+
+    CONFIRMED INDEPENDENTLY by the shipped "Black_White.psd" cube (0x4873FB1D): after this
+    de-swizzle it is pure grey AND responds identically along all three axes (0 -> 0, 8 -> 27,
+    16 -> 92, 31 -> 126; (31,31,31) -> 255). Any wrong axis or bit assignment breaks that symmetry.
+    x is red, y green, z blue -- matching the composite's own `tex3D(Sampler3dTint, lComposite).rgb`
+    (tools/assets/shaders/brn_postfx_composite.fx:334), where lComposite.x is red and u is width.
+    """
+    b5 = ((x >> 4) & 1) ^ ((y >> 3) & 1) ^ ((z >> 2) & 1)
+    b9 = ((y >> 3) & 1) ^ ((z >> 2) & 1)
+    return (((x >> 0) & 1) << 0) | (((x >> 1) & 1) << 1) | (((y >> 0) & 1) << 2) | \
+           (((x >> 2) & 1) << 3) | (((x >> 3) & 1) << 4) | (b5 << 5) | \
+           (((y >> 1) & 1) << 6) | (((y >> 2) & 1) << 7) | (((z >> 0) & 1) << 8) | \
+           (b9 << 9) | (((z >> 1) & 1) << 10) | (((y >> 4) & 1) << 11) | \
+           (((z >> 2) & 1) << 12) | (((z >> 3) & 1) << 13) | (((z >> 4) & 1) << 14)
+
+
 def _colour_cube(data, label):
     if len(data) < 16:
         raise PortError("%s: ColourCube is too small" % label)
@@ -170,9 +209,34 @@ def _colour_cube(data, label):
     if expected != len(data):
         raise PortError("%s: edge %d implies %d bytes, payload has %d" %
                         (label, edge, expected, len(data)))
+    if edge != 32:
+        # The de-swizzle above is derived from (and proven against) the shipped edge-32 identity
+        # cube and is only valid there. Every colour cube in the retail data is edge 32 -- all five
+        # entries of ENVIRONMENTSETTINGS/COLOURCUBES/*.BUNDLE and POSTFX/COLOURCUBEDICTIONARY.BIN
+        # carry sizeAndAlignment 0x40018010 == 98,320 bytes == 3*32^3 + 16 -- so refusing is a
+        # louder failure than silently shipping a scrambled grade.
+        raise PortError("%s: ColourCube edge %d is not 32; the de-swizzle is only derived for 32"
+                        % (label, edge))
     out = bytearray(data)
-    struct.pack_into("<I", out, 0, edge)
-    return bytes(out), "%d^3 RGB colour cube; byte-valued volume preserved" % edge
+    # The WHOLE 16-byte header flips, not just the edge word. The old porter flipped word 0 only,
+    # which left word 1 -- the serialised offset of the cell block, 0x00000010 -- reading as
+    # 0x10000000 on the little-endian target. Nothing consumes it today (the PC ColourCube computes
+    # `this + 16`, the same constant ColourCube::GetResourceDescriptor @0x82402C48 spends), but a
+    # half-flipped header is a trap for the next reader. Words 2 and 3 are zero in every shipped
+    # cube, so flipping them is free.
+    for word in range(4):
+        struct.pack_into("<I", out, word * 4, struct.unpack_from(">I", data, word * 4)[0])
+    cells = data[16:]
+    reordered = bytearray(len(cells))
+    for z in range(edge):
+        for y in range(edge):
+            for x in range(edge):
+                src = _colour_cube_tiled_offset(x, y, z) * 3
+                dst = (x + edge * y + edge * edge * z) * 3
+                reordered[dst:dst + 3] = cells[src:src + 3]
+    out[16:] = reordered
+    return bytes(out), ("%d^3 RGB colour cube; header LE, cells de-swizzled from the console's "
+                        "tiled volume order" % edge)
 
 
 def _challenge_list(data, label):
