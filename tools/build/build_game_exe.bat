@@ -372,6 +372,19 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  this list below, and those ten are the ONLY new externals either of them
   rem  raises.
   echo "%SRC%\pc\gcm\renderengine\PostFxHelperProgramsPC.cpp"
+  rem  The SEVEN B4Blur D3D9 programs (the blur quad's vertex program, the shared
+  rem  scatter/radial vertex program, the scatter / radial / texture / down-sample
+  rem  / blur pixel programs), generated from tools\assets\shaders\brn_postfx_b4blur.fx
+  rem  -- the same situation as the composite, bloom and helper leaves above: EIGHT
+  rem  executable-embedded Xenos microcode packages (X360 0x82045148 / 0x82045600 /
+  rem  0x82045748 / 0x82045AC0 / 0x82045C08 / 0x820459B8 / 0x820454E0 / 0x820452A8)
+  rem  with no SHADERS.BNDL entry and no PC counterpart. SEVEN images for EIGHT
+  rem  packages: 0x82045600 and 0x82045AC0 are byte-identical, so one array serves
+  rem  both call sites. Data only: fourteen symbols defined, zero externals raised.
+  rem  Consumed by rwgpfxb4blur.cpp's eight CreateProgram call sites
+  rem  (B4Blur::B4Blur); that TU is already on this list below, and those fourteen
+  rem  are the ONLY new externals it raises.
+  echo "%SRC%\pc\gcm\renderengine\PostFxB4BlurProgramsPC.cpp"
   rem  The post-fx SHADER CLASS (BrnPostFxShader::{Construct,Destruct,Render}, Shader::{Construct,
   rem  Destruct,SetProgram}) with BRN_POSTFX_SHADER_PROGRAMS_AVAILABLE and
   rem  BRN_POSTFX_COMPOSITE_DRAW_AVAILABLE both 1: ALL TWELVE slots adopt their PostFxProgramsPC
