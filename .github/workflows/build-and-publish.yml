@@ -87,3 +87,23 @@ jobs:
             -WorkToken $env:WORK_TOKEN `
             -CommitSha $env:GITHUB_SHA `
             -Branch $env:GITHUB_REF_NAME
+
+      # Keep the exe + Burnout_PC.cgsmap as a run artifact, for triaging crash
+      # reports sent in by players.
+      #
+      # This is not a convenience. A player's report gives a fault RVA, and that RVA
+      # resolves ONLY against the exe CI produced: this runner's MSVC (via
+      # ilammy/msvc-dev-cmd) lays code out differently from any local toolchain, so
+      # rebuilding the same commit locally and reading its map names the WRONG
+      # function -- measured, not theorised: RVA 0x17737C resolved to
+      # BehaviourInterpolate::Update locally and BehaviourGameplayExternal::Update in
+      # the shipped build. Without this artefact the only copy of the right map is
+      # inside the ~3.4 GB game zip the player downloaded.
+      - name: Keep the exe bundle for crash triage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exe-bundle-${{ github.sha }}
+          path: build/exe-bundle.zip
+          retention-days: 30
+          if-no-files-found: warn
