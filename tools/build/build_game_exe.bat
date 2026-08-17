@@ -232,6 +232,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem (pose wave 2026-08-01: RaceCar::Construct/Prepare/AddToWorld/UpdatePositioningData/
   rem  AssignActiveRaceCar/ToBeRenderedDamaged are now called by the real attach chain.)
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCar.cpp"
+  rem  2026-08-17 (ghost-car wave): RemoveRaceCar / DetachActiveRaceCar are the first callers of
+  rem  RaceCarAIInterface::DetachAIControl @0x822FD768 and ::DeactivateRaceCar @0x822FD6E0. Both
+  rem  bodies were already committed in this TU; the TU had simply never been mounted (same shape
+  rem  as the BrnBoostManager line above). dumpbin: 74 DEF / 19 UNDEF, all 19 already resolved.
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnRaceCarAIInterfaces.cpp"
   echo "%SRC%\SharedClasses\World\BrnWorldRegion.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
@@ -2717,6 +2722,8 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsTextFileResource.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\PoolModuleStates\CgsBaseDefragPoolModuleState.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimer.cpp"
+  rem pace wave (b5 dev 261a5303, upstream) landed CgsSystem::FrameInterpolation callers in BrnGameModule/BrnWorldModule without the mount; added here (cars step 1c)
+  echo "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameInterpolation.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimerStatusInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\PS3\CgsDateAndTimePS3.cpp"
   echo "%SRC%\GameShared\GameClasses\World\CgsWorldMap2D.cpp"
