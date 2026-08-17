@@ -11,6 +11,8 @@ Companion files:
 - `shader_transcode.py` -- per-resource transcoders (validated, round-trip-proven)
 - `convert_shaders_bundle.py` -- whole-bundle driver (`inventory` / `convert`)
 - `fallback_world.fx` -- minimal bring-up shader (see `MINIMAL_PATH.md`)
+- `recovered/*.fx` -- shaders decoded from the X360 microcode for techniques the
+  TUB tree lacks (Godray); always searched before the TUB tree
 - `xenos.py` -- Xenos microcode disassembler, ground-truth-validated (see
   section 8)
 - `ctab.py` -- big-endian CTAB reader (register-pinned uniform names for the
@@ -206,9 +208,19 @@ Technique -> HLSL mapping (in `convert_shaders_bundle.py`):
 - standalone `ZOnly*` -> any fx defining that technique (identical bodies);
 - `ZOnly*Instanced` -> the `*_Instanced.fx` files (their ZOnly techniques keep
   the un-suffixed name but use instanced vertex fetch);
-- coverage: **108/110**; only `CarStudio_DoNotShipWithThisInTheGame_Default`
-  (dev-only) and `Godray_Additive_Doublesided_Default` have no TUB source ->
-  `--fallback` substitutes `fallback_world.fx`.
+- coverage: **108/110** from the TUB tree; `Godray_Additive_Doublesided_Default`
+  has no TUB source and is now served by `recovered/Godray_Additive_Doublesided.fx`
+  (decoded from the X360 microcode, see section 9); only
+  `CarStudio_DoNotShipWithThisInTheGame_Default` (dev-only) still needs
+  `--fallback` -> `fallback_world.fx`.  `recovered/` is always searched first.
+- constant contract: after compiling, every technique's INTERNAL and EXTERNAL
+  constant names are checked against the CTAB of the program it imports
+  (`check_constant_contract`; `check <x360> <pc>` re-runs it on a staged bundle).
+  An internal miss is a hard error -- it is the runtime assert
+  `PostFixUpShaderConstants: "Tyring to postfixup a constant not present in the
+  programbuffer"`; an external miss is a warning (the runtime "Missing shader
+  constant from table" log line, today the 19 `*_Instanced` techniques'
+  `InstancingIndexArray`/`InstancingMatrixArray`, a TUB instanced-source gap).
 
 Other types: `Material`/`MaterialState`/`MaterialTechnique`/`TextureState` via
 the boot-proven `world_type_transcode` flippers; `Texture` via the Volatility
@@ -266,9 +278,13 @@ D3DDevice_* symbols are honest externs today):
   float payloads) are flipped and preserved; the runtime handle-binding path
   (technique -> program buffer `GetVariableHandleByName`) is engine-side and
   untested.
-- **Godray / CarStudio**: no TUB HLSL; fallback-substituted. Godray may need a
-  hand port from the Xenos disassembly later (nushaders
-  `Reference/XeniaShaderDump` may help).
+- **Godray**: RECOVERED (2026-08-17) -- `recovered/Godray_Additive_Doublesided.fx`,
+  decoded from the bundle's own X360 programs (VS 0xDFF4FAE8 / PS 0x45ADE07A) with
+  `xenos.py`; the fxc CTAB now matches the X360 CTAB name-for-name (even register
+  for register).  The fallback substitute had been asserting at TRK_UNIT83/379/
+  381/388_GR stream-in because it lacked the technique's internal PS constant
+  `illuminance`.  **CarStudio**: no TUB HLSL; still fallback-substituted (its only
+  internal constant, `materialDiffuse`, is in the fallback).
 
 ## 8. Xenos disassembler + the bundle-pair ground-truth oracle (2026-08-14)
 

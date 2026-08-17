@@ -2163,6 +2163,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowStates.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowInGameState.cpp"
   echo "%SRC%\GameSource\Sound\Module\BrnRootSoundModule.cpp"
+  rem ---- the root sound module IO accessors (b5-decomp 922b2f53, audit F-P6-17/F-P5-10): the
+  rem  four RootInput/OutputBuffer getters LoadingScriptedState::LoadSoundModule + Update call.
+  echo "%SRC%\GameSource\Sound\Module\BrnRootSoundModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\CgsTestBedAllocator.cpp"
   echo "%SRC%\GameSource\Sound\BrnResourceRegistrar.cpp"
   echo "%SRC%\GameSource\Sound\Module\LogicModule\BrnSoundLogicModule.cpp"
@@ -2226,6 +2229,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\EAThread\source\pc\eathread_callstack_win64.cpp"
   echo "%VEN%\EAThread\source\pc\eathread_x360align.cpp"
   echo "%SRC%\GameSource\Graphics\BrnRendererModule.cpp"
+  rem ---- RendererIO PAIR (2026-08-17, boot audit F-P2-4 / b5-decomp 888a6cbf): the OutputBuffer/
+  rem  InputBuffer accessors + both Constructs. BrnRendererModule::Update publishes through them and
+  rem  BrnGameModule::GamePrepare creates the pair (CreateIOBuffer<T> calls T::Construct). NOT
+  rem  BrnRendererModuleIO.cpp beside it -- that older TU defines the same two Constructs (ODR).
+  echo "%SRC%\GameSource\Graphics\BrnRendererModuleIO_OutputBuffer_Accessors.cpp"
   rem ---- BLOBBY SHADOW COLLECTOR (2026-08-12): the AddShadow TU, ledger-`done` since its
   rem  reconstruction but never actually mounted -- so its three data defects (a 0.0f reject
   rem  threshold that dropped every car off the ground, a missing 3 cm mvPos lift, and the
@@ -3426,6 +3434,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem lifecycle the real ViewModule slice references (see the file header audit).
   echo "%SRC%\GameSource\Gui\BrnGuiViewModuleLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiModule.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiColourCalibrationScreen.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiAlwaysAvailableComponentsManager.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnEATraxInGameComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Permanent\Components\BrnAchievementPopupComponent.cpp"
@@ -3698,7 +3707,7 @@ move /y "%RSP%.tmp" "%RSP%" >nul
 cl @"%BASERSP%" /c "%SRC%\pc\gcm\renderengine\device.cpp" /Fo"%OUT%\\obj\\renderengine_device.obj"
 if errorlevel 1 ( echo ERROR: renderengine device.cpp precompile failed. & exit /b 1 )
 
-cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
+cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
