@@ -189,20 +189,37 @@ sampler2D SamplerDepth  : register(s4);
 #define KF_JITTER_SCALE         0.25f           // BLUR,    4x anisotropic
 #endif
 
-// [FLAG PC deviation: the console's per-pixel blur mask is the STENCIL byte]
-// On the X360 the depth-stencil surface is sampled as an A8R8G8B8 texture, so
-// one fetch returns all four bytes of the D24S8 word 0xDDDDDDSS: A = depth
-// high, R = depth mid, G = depth low, B = STENCIL.  The blur programs decode
-// the depth from A/R/G (see the banner on the depth read) and multiply the
-// screen velocity by the B lane -- a per-pixel blur mask living in the stencil
-// buffer (`mul r3.xy, r4.xy, r3.x` in permutation 4, `mul r4.xy, r3.xy, r2.w`
-// in permutation 6, both reading the lane the depth decode does NOT use).
-// A PC raw-depth texture (INTZ / DF24 / DF16, the depthtex group's ladder) has
-// no sampleable stencil lane at all -- D3D9 gives a depth texture's .r and
-// nothing else -- so the mask is 1.0 here, i.e. every pixel blurs.  DELETE
-// WHEN a stencil-readable path exists; until then this is the only motion-blur
-// behaviour a PC composite can have, and it is disclosed rather than hidden.
-#define KF_MOTION_BLUR_STENCIL_MASK 1.0f
+// [FLAG PC deviation: the CARRIER of the per-pixel blur mask, not its value]
+// THE CONSOLE.  On the X360 the depth-stencil surface is sampled as an
+// A8R8G8B8 texture, so one fetch returns all four bytes of the D24S8 word
+// 0xDDDDDDSS: A = depth high, R = depth mid, G = depth low, B = STENCIL.  The
+// blur programs decode the depth from A/R/G (see the banner on the depth read)
+// and multiply the screen velocity by the B lane -- a per-pixel blur mask
+// living in the stencil buffer (`mul r3.xy, r4.xy, r3.x` in permutation 4,
+// `mul r4.xy, r3.xy, r2.w` in permutation 6, both reading the lane the depth
+// decode does NOT use).  The VALUE in that lane is the blur AMOUNT for the
+// pixel, in [0,1]: the frame's stencil CLEAR is (u8)(mfWorldBlurAmount*255)
+// and the two car mesh-list windows REPLACE it with (u8)(mfCarsBlurAmount*255)
+// (BrnRendererModule::Render @0x8240C2C0 / @0x8240CEC4 / @0x8240D338).
+//
+// ON PC the mask rides the SCENE TARGET'S ALPHA LANE instead, because D3D9
+// cannot SAMPLE a depth-stencil surface's stencil at all (INTZ / DF24 / DF16
+// give the depth value in .r and nothing else).  It can still TEST the stencil,
+// and that is how the lane is filled: renderengine::PCStampMotionBlurMask
+// (XenonD3D9Shims.cpp), run after the world passes and before the resolve,
+// draws two full-screen ALPHA-ONLY quads over the scene target while its own
+// D24S8 depth-stencil is still bound -- StencilFunc EQUAL(carsByte) writing
+// carsByte/255, then NOTEQUAL writing worldByte/255.  The two console values
+// therefore reach this fetch UNCHANGED, and the resolve carries the alpha lane
+// out with the colour (StretchRect copies all four lanes).
+//
+// NOT "DELETE-WHEN": this IS the PC mechanism.  What retires it is a different
+// BACKEND (D3D10+ can bind a stencil SRV), not more reconstruction.
+//
+// ⚠ SAMPLED AT THE UNJITTERED uv, like the console, which fetches its
+// depth-stencil at lUv and reuses r3/r2.w from that same fetch -- the jittered
+// coordinate is the SOURCE COLOUR tap's alone.
+#define KF_MOTION_BLUR_MASK_SAMPLE(uv) (tex2D(SamplerSource, (uv)).a)
 #endif  // BRN_POSTFX_BLUR
 
 float4 mainPS(float4 lUv : TEXCOORD0
@@ -251,12 +268,19 @@ float4 mainPS(float4 lUv : TEXCOORD0
     lReprojected.y = dot(lUv.xy, BlurMatrixY.xy) + (BlurMatrixY.z * lDepth) + BlurMatrixY.w;
     lReprojected.z = dot(lUv.xy, BlurMatrixW.xy) + (BlurMatrixW.z * lDepth);
 
+    // THE PER-PIXEL BLUR MASK -- the console's stencil byte, carried in the
+    // scene target's alpha lane on PC (see the banner above the #define).  It
+    // is the blur AMOUNT for this pixel, so it is the ONLY place the requested
+    // amount enters the shader: BrnPostFxShader::Render builds BlurMatrixX/Y/W
+    // from the WVP delta alone and never scales them by mfCarsBlurAmount /
+    // mfWorldBlurAmount (asm 0x824092EC-0x824095CC carries no such multiply).
+    float lMask = KF_MOTION_BLUR_MASK_SAMPLE(lUv.xy);
+
     // `mad r4.xy, -r3.yyyy, r0.xyyy, r1.xzzz` -- the perspective term is
     // MULTIPLIED THROUGH, not divided out: the console never issues a
     // reciprocal here, so the velocity carries the W factor and the CPU-side
     // matrix scale absorbs it.
-    float2 lVelocity = (lReprojected.xy - (lReprojected.z * lUv.xy))
-                     * KF_MOTION_BLUR_STENCIL_MASK;
+    float2 lVelocity = (lReprojected.xy - (lReprojected.z * lUv.xy)) * lMask;
 
     // The screen-space dither, centred: `subsc0 r0.z, 0.5, r0.z`.
     float lScreenHash = (KF_DITHER_WEIGHT_X * abs(lScreenPosition.x))
