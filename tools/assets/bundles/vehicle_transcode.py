@@ -450,7 +450,14 @@ def plan_wheellist(d):
     n = be32(d, 0)
     ptr = be32(d, 4)
     want = WHEEL_HEADER_SIZE + WHEEL_ENTRY_SIZE * n
-    if want != len(d):
+    # The record run does not have to end on the resource system's 16-byte boundary, and
+    # when it doesn't the retail payload carries ZERO padding out to it (the shipped
+    # WHEELLIST is 131 wheels = 9448 bytes of header+records inside a 9456-byte payload).
+    # Accept that tail, but only that: anything non-zero, or bigger than one alignment
+    # step, means the record count and the payload really do disagree -- which is what
+    # this check exists to catch -- so it still fails loudly.
+    pad = len(d) - want
+    if pad < 0 or pad >= 16 or any(d[want:]):
         raise PortError('WheelList: header says %d wheels -> %d bytes, payload is %d'
                         % (n, want, len(d)))
     if ptr != WHEEL_HEADER_SIZE:
@@ -463,6 +470,8 @@ def plan_wheellist(d):
         o = WHEEL_HEADER_SIZE + i * WHEEL_ENTRY_SIZE
         p.field(o + 0x00, 'u64', 'wheel[%d].mId' % i)
         p.raw(o + 0x08, 64, 'wheel[%d].macWheelName' % i)      # char[64]
+    if pad:
+        p.raw(want, pad, 'trailing alignment padding')          # carried through verbatim
     return p.finish()
 
 
