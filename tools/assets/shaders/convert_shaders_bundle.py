@@ -10,13 +10,23 @@ Commands:
 
   py convert_shaders_bundle.py convert <in_x360_bundle> <out_plat4_bundle>
         [--mode d3d9|flip] [--fxdir DIR]... [--fallback] [--keep-work DIR]
+        [--allow-contract-errors]
       d3d9 (default): ShaderTechnique -> structural LE flip (validated,
         round-trip-proven); ShaderProgramBuffer -> REPLACED with D3D9 SM3
         bytecode compiled from the TUB HLSL sources (fxc, base variant, no
         defines) wrapped in the LE ProgramBufferData container, descriptor
         table rebuilt from the bytecode CTAB (see FORMAT_MAP.md section 5).
-        Techniques with no TUB HLSL source (the Vehicle_* set) hard-fail
-        unless --fallback substitutes tools/assets/shaders/fallback_world.fx.
+        Techniques with no TUB HLSL source hard-fail unless --fallback
+        substitutes tools/assets/shaders/fallback_world.fx.  tools/assets/
+        shaders/recovered/*.fx (shaders decoded from the X360 microcode) is
+        always searched FIRST, so a recovered technique never falls back.
+        After compiling, every technique's bound constant names are checked
+        against its programs' CTABs: a missing INTERNAL constant is a hard
+        error (it is a runtime assert in PostFixUpShaderConstants), a
+        missing EXTERNAL one a warning (a runtime "Missing shader constant"
+        log line).  --allow-contract-errors downgrades the hard error to a
+        report, for the deliberate all-fallback diagnostic bundle only.
+
       flip: ShaderProgramBuffer primaries get a structural LE flip but KEEP
         the Xenos microcode -- loader-valid, NOT drawable.  Diagnostic only.
       Both modes: Material / MaterialState / MaterialTechnique / TextureState
@@ -24,6 +34,17 @@ Commands:
       Volatility PortTexture flow (both reused from tools/assets/bundles/
       convert_world_bundle.py), meta platform 2 -> 4 + uncompressed, and the
       YAP import-sidecar rename fix.
+
+  py convert_shaders_bundle.py patch-recovered <pc_bundle> <out_bundle> [--keep-work DIR]
+      For a box WITHOUT the TUB tree: recompile only the recovered/ techniques
+      and swap their ShaderProgramBuffer resources into an already converted
+      platform-4 bundle (everything else carried through untouched).  Same
+      bytes for those resources as a full `convert` would emit.
+
+  py convert_shaders_bundle.py check <in_x360_bundle> <pc_bundle>
+      Read-only: run that same constant-contract check against an already
+      converted PC bundle (e.g. build/game/SHADERS.BNDL) and say, per miss,
+      whether the X360 program had the constant.  Exit 1 on any internal miss.
 
 Requires: build/tools/yap/YAP.exe, fxc.exe (env PC_FXC or a Windows 10/11
 SDK), the TUB HLSL tree (env NUSHADERS_TUB / build.config.toml
@@ -63,6 +84,15 @@ NUSHADERS_TUB = os.environ.get(
 DEFAULT_FX_DIR = os.path.join(NUSHADERS_TUB, 'Shaders')
 DEFAULT_INCLUDE_DIR = os.path.join(NUSHADERS_TUB, 'Include')
 FALLBACK_FX = os.path.join(HERE, 'fallback_world.fx')
+# Shaders RECOVERED from the X360 microcode (xenos.py + ctab.py) for techniques the TUB
+# HLSL tree does not carry.  Always searched FIRST (first fx dir wins in the technique
+# map), so a recovered technique never falls through to --fallback again.  Each file is
+# self-contained (compiles without the TUB Include/ tree).  Currently:
+#   Godray_Additive_Doublesided.fx  (technique Godray_Additive_Doublesided_Default;
+#     the fallback substitute lacked its internal PS constant `illuminance` and fired
+#     PostFixUpShaderConstants' "Tyring to postfixup a constant not present in the
+#     programbuffer" whenever TRK_UNIT83/379/381/388_GR streamed in).
+RECOVERED_FX_DIR = os.path.join(HERE, 'recovered')
 
 # SHADERS.BNDL non-shader types handled by the established world flippers.
 WORLD_FLIP = {
@@ -165,8 +195,11 @@ def compile_entry(fxc, fx_path, entry, profile, include_dir, out_path):
     #   ShadowMap_WorldToLight  12      12         10
     # i.e. /Zpr reproduces the console register counts exactly and the default does not.
     def attempt(src):
-        return subprocess.run([fxc, '/nologo', '/T', profile, '/E', entry,
-                               '/I', include_dir, '/O2', '/Zpr', '/Fo', out_path, src],
+        # The recovered/ shaders are self-contained; the TUB Include/ tree may not
+        # exist on a box that only re-compiles those, so only pass /I when it does.
+        inc = ['/I', include_dir] if os.path.isdir(include_dir) else []
+        return subprocess.run([fxc, '/nologo', '/T', profile, '/E', entry] + inc +
+                              ['/O2', '/Zpr', '/Fo', out_path, src],
                               capture_output=True, text=True)
     r = attempt(fx_path)
     if r.returncode != 0 and "undeclared identifier 'g_verletOffsets'" in (r.stdout + r.stderr):
@@ -251,7 +284,166 @@ def plan_shader_work(techniques, buffers, tech_map, use_fallback):
     return jobs, unmapped
 
 
-def convert(in_bundle, out_bundle, mode, fx_dirs, use_fallback, keep_work):
+def check_constant_contract(techniques, built, technique_le):
+    """Cross-check every technique's bound constant names against the variable
+    tables of the (platform-4) program buffers it imports.
+
+    techniques: {rid: (blob, imports)}; built: {buffer_rid: LE primary bytes}.
+    Returns [(kind, technique_name, stage, name, buffer_rid)] with kind
+    'internal' (a runtime ASSERT in PostFixUpShaderConstants -- hard) or
+    'external' (a runtime "Missing shader constant from table" log line -- soft;
+    the 19 *_Instanced techniques' InstancingIndexArray/InstancingMatrixArray
+    are a KNOWN gap of the TUB instanced sources, logged as such by the engine).
+
+    This is the check that would have caught the Godray fallback defect at
+    conversion time instead of at TRK_UNIT83 stream-in."""
+    problems = []
+    for rid, (blob, imports) in sorted(techniques.items()):
+        tname = st.technique_name(blob, le=technique_le)
+        lists = st.technique_constant_lists(blob, le=technique_le)
+        for stage, slot in (('VS', 0), ('PS', 4)):
+            key = '%08X' % imports.get(slot, 0)
+            prim = built.get(key)
+            if prim is None:
+                continue
+            have = set(v[0] for v in st.pc_program_buffer_variables(prim))
+            for _h, name in lists[stage]['internal']:
+                if name not in have:
+                    problems.append(('internal', tname, stage, name, key))
+            for name in lists[stage]['external']:
+                if name not in have:
+                    problems.append(('external', tname, stage, name, key))
+    return problems
+
+
+def report_contract(problems, strict):
+    hard = [p for p in problems if p[0] == 'internal']
+    soft = [p for p in problems if p[0] == 'external']
+    for kind, tname, stage, name, key in soft:
+        print('WARN  %-60s %s external %-28s absent from program %s'
+              % (tname, stage, name, key))
+    for kind, tname, stage, name, key in hard:
+        print('ERROR %-60s %s INTERNAL %-28s absent from program %s '
+              '(runtime assert: "Tyring to postfixup a constant not present in the '
+              'programbuffer")' % (tname, stage, name, key))
+    if hard and strict:
+        raise SystemExit('%d technique internal constant(s) missing from their compiled '
+                         'program(s) -- the shader source for those techniques must '
+                         'declare AND consume them (see fallback_world.fx header / '
+                         'recovered/).' % len(hard))
+    return len(hard)
+
+
+def check(in_x360_bundle, pc_bundle):
+    """Read-only: report every technique constant the PC bundle's compiled
+    programs cannot satisfy (and, for reference, whether the X360 program had it)."""
+    work = tempfile.mkdtemp(prefix='shaderschk_')
+    try:
+        ex_x, ex_p = os.path.join(work, 'x360'), os.path.join(work, 'pc')
+        run([YAP, 'e', in_x360_bundle, ex_x])
+        run([YAP, 'e', pc_bundle, ex_p])
+        techniques, _buffers = collect(ex_x)          # BE technique blobs + imports
+        pdir = os.path.join(ex_p, 'ShaderProgramBuffer')
+        built = {}
+        for f in os.listdir(pdir):
+            if f.endswith('_header.dat'):
+                built[f[:-len('_header.dat')]] = open(os.path.join(pdir, f), 'rb').read()
+        problems = check_constant_contract(techniques, built, technique_le=False)
+        xdir = os.path.join(ex_x, 'ShaderProgramBuffer')
+        for kind, tname, stage, name, key in problems:
+            xprim = open(os.path.join(xdir, key + '_header.dat'), 'rb').read()
+            xhave = set(v[0] for v in st.program_buffer_variables(xprim))
+            print('%-8s %-60s %s %-28s PC program %s lacks it; X360 program %s'
+                  % (kind.upper(), tname, stage, name, key,
+                     'HAS it' if name in xhave else 'lacks it too'))
+        n = report_contract(problems, strict=False)
+        print('%d internal (assert) / %d external (logged) mismatches'
+              % (n, len(problems) - n))
+        return 1 if n else 0
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+
+
+def patch_recovered(pc_bundle, out_bundle, keep_work):
+    """Recompile ONLY the techniques that have a recovered/ source and swap their
+    ShaderProgramBuffer primaries into an already-converted platform-4 bundle.
+
+    For a box without the TUB HLSL tree (which a full `convert` needs for the
+    other ~108 techniques): the result is byte-for-byte the bundle `convert`
+    would emit for those resources, everything else is carried through the YAP
+    extract -> compile round trip untouched (payload-identical; only the
+    trailing pad bytes of the last resource are re-zeroed).  The constant
+    contract is re-checked on the patched set."""
+    if not os.path.isdir(RECOVERED_FX_DIR):
+        raise SystemExit('no recovered/ shader dir: %s' % RECOVERED_FX_DIR)
+    work = keep_work or tempfile.mkdtemp(prefix='shaderspatch_')
+    os.makedirs(work, exist_ok=True)
+    ex = os.path.join(work, 'ex')
+    if os.path.isdir(ex):
+        shutil.rmtree(ex)
+    run([YAP, 'e', pc_bundle, ex])
+
+    # Techniques in a platform-4 bundle are the LE flip: read them LE.
+    tdir = os.path.join(ex, 'ShaderTechnique')
+    pdir = os.path.join(ex, 'ShaderProgramBuffer')
+    tech_map = build_technique_map([RECOVERED_FX_DIR])
+    fxc = find_fxc()
+    techniques = {}
+    patched = []
+    for f in sorted(os.listdir(tdir)):
+        if not f.endswith('.dat'):
+            continue
+        rid = f[:-4]
+        blob = open(os.path.join(tdir, f), 'rb').read()
+        imports = parse_technique_imports(os.path.join(tdir, f + '_imports.yaml'))
+        techniques[rid] = (blob, imports)
+        # LE technique name: the +0x94 word is flipped, the string is raw.
+        noff = struct.unpack_from('<I', blob, 0x94)[0]
+        name = blob[noff:blob.index(b'\0', noff)].decode('ascii')
+        hit = tech_map.get(name.lower())
+        if hit is None:
+            continue
+        fx, vs_entry, ps_entry = hit
+        for slot, entry, profile in ((0, vs_entry, 'vs_3_0'), (4, ps_entry, 'ps_3_0')):
+            key = '%08X' % imports[slot]
+            out_path = os.path.join(work, '%s_%s.fxo' % (key, profile))
+            bytecode = compile_entry(fxc, fx, entry, profile, DEFAULT_INCLUDE_DIR, out_path)
+            shader_type = 0 if profile.startswith('vs') else 1
+            prim, sec = st.build_pc_program_buffer(bytecode, shader_type)
+            with open(os.path.join(pdir, key + '_header.dat'), 'wb') as fh:
+                fh.write(prim)
+            with open(os.path.join(pdir, key + '_body.dat'), 'wb') as fh:
+                fh.write(sec)
+            patched.append((name, profile, key, os.path.basename(fx)))
+    if not patched:
+        raise SystemExit('no technique in %s matches a recovered/ source' % pc_bundle)
+    for name, profile, key, fx in patched:
+        print('patched %-60s %s -> program %s from %s' % (name, profile, key, fx))
+
+    built = {}
+    for f in os.listdir(pdir):
+        if f.endswith('_header.dat'):
+            built[f[:-len('_header.dat')]] = open(os.path.join(pdir, f), 'rb').read()
+    problems = check_constant_contract(techniques, built, technique_le=True)
+    report_contract(problems, strict=True)
+
+    # YAP writes `<res>.dat_imports.yaml` on extract but reads `<res>_imports.yaml`
+    # on compile -- without the rename every import table is silently dropped.
+    for lroot, _dirs, lfiles in os.walk(ex):
+        for f in lfiles:
+            if f.endswith('.dat_imports.yaml'):
+                base = f[:-len('.dat_imports.yaml')]
+                if base.endswith('_header'):
+                    base = base[:-len('_header')]
+                os.replace(os.path.join(lroot, f), os.path.join(lroot, base + '_imports.yaml'))
+    run([YAP, 'c', ex, out_bundle])
+    if not keep_work:
+        shutil.rmtree(work, ignore_errors=True)
+    return patched
+
+
+def convert(in_bundle, out_bundle, mode, fx_dirs, use_fallback, keep_work,
+            allow_contract_errors=False):
     work = keep_work or tempfile.mkdtemp(prefix='shadersbndl_')
     os.makedirs(work, exist_ok=True)
     ex = os.path.join(work, 'ex')
@@ -296,6 +488,7 @@ def convert(in_bundle, out_bundle, mode, fx_dirs, use_fallback, keep_work):
         cache = {}
         cache_dir = os.path.join(work, 'fxo')
         os.makedirs(cache_dir, exist_ok=True)
+        built = {}
         for rid, (fx, entry, profile, tname) in sorted(jobs.items()):
             ckey = (fx, entry, profile)
             if ckey not in cache:
@@ -318,6 +511,13 @@ def convert(in_bundle, out_bundle, mode, fx_dirs, use_fallback, keep_work):
                 fh.write(prim)
             with open(buffers[rid][1], 'wb') as fh:
                 fh.write(sec)
+            built[rid] = prim
+        # --- constant contract: every name a technique binds must exist in the
+        # compiled program it imports (see check_constant_contract) --------------
+        problems = check_constant_contract(techniques, built, technique_le=False)
+        manifest['contract_errors'] = report_contract(problems,
+                                                      strict=not allow_contract_errors)
+        manifest['contract_warnings'] = len([p for p in problems if p[0] == 'external'])
 
     # --- non-shader types via the established world flows --------------------
     for entry in sorted(os.listdir(ex)):
@@ -422,9 +622,34 @@ def main():
     cv.add_argument('--mode', choices=('d3d9', 'flip'), default='d3d9')
     cv.add_argument('--fxdir', action='append', default=None)
     cv.add_argument('--fallback', action='store_true')
+    cv.add_argument('--allow-contract-errors', action='store_true',
+                    help='report but do not fail on technique INTERNAL constants missing '
+                         'from their compiled programs -- ONLY for the deliberate '
+                         'all-fallback diagnostic bundle (MINIMAL_PATH.md option A), '
+                         'which asserts in PostFixUpShaderConstants for every such '
+                         'material at stream-in')
     cv.add_argument('--keep-work', default=None)
+    ck = sub.add_parser('check', help='report technique constants the PC bundle\'s '
+                                       'programs cannot satisfy (read-only)')
+    ck.add_argument('in_x360_bundle')
+    ck.add_argument('pc_bundle')
+    pr = sub.add_parser('patch-recovered',
+                        help='recompile only the recovered/ techniques and swap their '
+                             'program buffers into an existing platform-4 bundle '
+                             '(no TUB tree needed)')
+    pr.add_argument('pc_bundle')
+    pr.add_argument('out_bundle')
+    pr.add_argument('--keep-work', default=None)
     a = ap.parse_args()
+    if a.cmd == 'check':
+        return check(a.in_x360_bundle, a.pc_bundle)
+    if a.cmd == 'patch-recovered':
+        patch_recovered(a.pc_bundle, a.out_bundle, a.keep_work)
+        return 0
     fx_dirs = a.fxdir or [DEFAULT_FX_DIR]
+    # Recovered-from-microcode shaders always outrank the TUB tree and the fallback.
+    if os.path.isdir(RECOVERED_FX_DIR) and RECOVERED_FX_DIR not in fx_dirs:
+        fx_dirs = [RECOVERED_FX_DIR] + fx_dirs
     if a.fxdir is None and not os.path.isdir(DEFAULT_FX_DIR):
         # An absent TUB tree yields an EMPTY technique map, and --fallback then maps every
         # technique to fallback_world.fx without a word -- a bundle in which nothing is the
@@ -445,7 +670,7 @@ def main():
         inventory(a.in_bundle, fx_dirs)
         return 0
     manifest = convert(a.in_bundle, a.out_bundle, a.mode, fx_dirs,
-                       a.fallback, a.keep_work)
+                       a.fallback, a.keep_work, a.allow_contract_errors)
     print('manifest:', manifest)
     return 0
 

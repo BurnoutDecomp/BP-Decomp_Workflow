@@ -217,8 +217,14 @@ explicit `convert <in> <out>` subcommand.  Default --mode d3d9 recompiles every
 ShaderProgramBuffer from the TUB HLSL with fxc.
 ⚠️ `--fallback` IS A DELIBERATE DEGRADATION and is on because without it the whole bundle
 is unproducible: MEASURED 2026-08-02, a strict run hard-fails with `no TUB HLSL source for
-2 technique(s)` (the Vehicle_* set), so tools/assets/shaders/fallback_world.fx is
-substituted for those two techniques.  Everything else is really recompiled.
+2 technique(s)` (Godray_Additive_Doublesided_Default + CarStudio_DoNotShipWithThisInTheGame_
+Default), so tools/assets/shaders/fallback_world.fx is substituted.  Since 2026-08-17 the
+Godray technique is served by tools/assets/shaders/recovered/Godray_Additive_Doublesided.fx
+(decoded from the X360 microcode; the fallback substitute lacked its internal PS constant
+`illuminance` and asserted "Tyring to postfixup a constant not present in the programbuffer"
+whenever TRK_UNIT83_GR streamed in), so only CarStudio still falls back.  The tool now
+hard-fails if any technique's internal constant is missing from its compiled program.
+Everything else is really recompiled.
 Prerequisites this rule does NOT provide: fxc.exe (env PC_FXC or a Win10/11 SDK) and the
 nushaders repo's TUB HLSL tree (NUSHADERS_TUB, see build.config.toml) -- a separate repo.
 It also uses the Volatility texture flow, hence isolate."""
