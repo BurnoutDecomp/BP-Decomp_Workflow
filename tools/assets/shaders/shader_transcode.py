@@ -209,8 +209,9 @@ def transcode_shader_technique(data, imports_yaml_text=None):
     return plan.apply(data), imports_yaml_text
 
 
-def technique_name(data):
-    off = be32(data, 0x94)
+def technique_name(data, le=False):
+    """Technique name string; le=True for a platform-4 (flipped) blob."""
+    off = struct.unpack_from('<I' if le else '>I', data, 0x94)[0]
     return data[off:data.index(b'\0', off)].decode('ascii')
 
 
@@ -222,6 +223,68 @@ def technique_sampler_names(data):
         noff = be32(data, sarr + 8 * i)
         chan = struct.unpack_from('>h', data, sarr + 8 * i + 4)[0]
         out.append((data[noff:data.index(b'\0', noff)].decode('ascii'), chan))
+    return out
+
+
+def _u32(data, off, le):
+    return struct.unpack_from('<I' if le else '>I', data, off)[0]
+
+
+def _cstr(data, off):
+    return data[off:data.index(b'\0', off)].decode('ascii', 'replace')
+
+
+def technique_constant_lists(data, le=False):
+    """The constant names a technique binds at runtime, per stage.
+
+    Returns {'VS': {'internal': [(hash, name)], 'external': [name]},
+             'PS': {'internal': [(hash, name)], 'external': [name]}}
+    read from the technique blob (BE for the X360 form, LE for the platform-4
+    flip -- pass le=True).  Internal names come from the technique's own
+    ShaderConstantHashTable (+0x80), keyed by the JAMCRC ids the internal blocks
+    carry; external names are the blocks' own name strings.
+
+    This is exactly the set the engine resolves against the technique's
+    program buffers: PostFixUpShaderConstants (CgsMaterialResourceType.cpp)
+    calls ProgramBuffer::GetVariableHandleByName for every INTERNAL id and
+    ASSERTS ("Tyring to postfixup a constant not present in the programbuffer")
+    when the name is missing from the program; ShaderConstantsExternal::FixUp
+    logs "Missing shader constant from table <name>" for a missing EXTERNAL."""
+    n = _u32(data, 0x88, le)
+    keys, names = _u32(data, 0x80, le), _u32(data, 0x84, le)
+    table = {}
+    for i in range(n):
+        table[_u32(data, keys + 4 * i, le)] = _cstr(data, _u32(data, names + 4 * i, le))
+    out = {}
+    for stage, ibase, ebases in (('VS', 0x08, (0x1C, 0x2C)),
+                                 ('PS', 0x3C, (0x50, 0x60))):
+        count = _u32(data, ibase, le)
+        hashes = _u32(data, ibase + 12, le)
+        internal = []
+        for i in range(count):
+            h = _u32(data, hashes + 4 * i, le)
+            internal.append((h, table.get(h)))
+        external = []
+        for eb in ebases:
+            ecount = _u32(data, eb, le)
+            enames = _u32(data, eb + 8, le)
+            for i in range(ecount):
+                external.append(_cstr(data, _u32(data, enames + 4 * i, le)))
+        out[stage] = {'internal': internal, 'external': external}
+    return out
+
+
+def pc_program_buffer_variables(primary):
+    """[(name, register_index, data_type, register_count)] from a platform-4
+    (LE) primary's descriptor table (the CTAB-derived table build_pc_program_buffer
+    writes; see FORMAT_MAP.md section 4 for the byte semantics)."""
+    nvars = struct.unpack_from('<H', primary, 0x04)[0]
+    desc = PB_HEADER_SIZE + struct.unpack_from('<I', primary, 0x08)[0]
+    out = []
+    for i in range(nvars):
+        e = desc + 8 * i
+        noff = struct.unpack_from('<I', primary, e)[0]
+        out.append((_cstr(primary, noff), primary[e + 4], primary[e + 5], primary[e + 6]))
     return out
 
 
