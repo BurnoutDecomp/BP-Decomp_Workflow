@@ -1,17 +1,26 @@
 // Minimal bring-up shader for Burnout Paradise PC world rendering.
 // Used by convert_shaders_bundle.py --fallback for techniques with no TUB
-// HLSL source (Godray_Additive_Doublesided_Default and
-// CarStudio_DoNotShipWithThisInTheGame_Default), and by the MINIMAL_PATH.md
-// single-shader bring-up option.
+// HLSL source and no recovered/ source (today only
+// CarStudio_DoNotShipWithThisInTheGame_Default; Godray_Additive_Doublesided_Default
+// used to be the other one and is now recovered/Godray_Additive_Doublesided.fx),
+// and by the MINIMAL_PATH.md single-shader bring-up option.
 //
 // Constant names deliberately reuse the game's global names so the engine's
 // name/hash-keyed binding (ShaderConstantsExternal::FixUp(const ProgramBuffer*)
 // / the constant hash table) finds whichever of them the owning technique
 // dispatches.  A technique constant that is ABSENT from the compiled shader is
-// not harmless: ShaderConstantsExternal::FixUp fires the console's "Missing
-// shader constant from table <name>" assert for it.  So every global the
-// substituted techniques list is declared AND consumed below (an unused
-// declaration is optimised out of the constant table).
+// not harmless:
+//   * an EXTERNAL one makes ShaderConstantsExternal::FixUp log the console's
+//     "Missing shader constant from table <name>";
+//   * an INTERNAL (material) one makes CgsResource::MaterialResourceType::
+//     PostFixUpShaderConstants ASSERT "Tyring to postfixup a constant not present
+//     in the programbuffer" the moment a material using the technique streams in
+//     (that is exactly what the Godray substitution did on TRK_UNIT83_GR before
+//     `illuminance` was declared+consumed below and Godray got a real shader).
+// So every global AND internal constant the substituted techniques list is
+// declared AND consumed below (an unused declaration is optimised out of the
+// constant table).  convert_shaders_bundle.py now checks this contract after
+// compiling (`check` re-runs it on a staged bundle).
 //
 // MATRIX PACKING: compiled with /Zpr (row-major).  See compile_entry() in
 // convert_shaders_bundle.py -- the engine uploads logical ROWS.
@@ -40,8 +49,9 @@ float3   KeyLightClampedColour;
 float4   ShadowMap_Constants;
 float4   ShadowMap_Constants2;
 
-// ---- material -------------------------------------------------------------
+// ---- material (internal) --------------------------------------------------
 float4 materialDiffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+float  illuminance     = 1.0f;   // Godray_Additive_Doublesided's PS internal
 
 sampler2D DiffuseTextureSampler : register(s0);
 
@@ -98,7 +108,7 @@ float4 PS_Main(VSOut IN) : COLOR0
                     + float4(KeyLightSpecularColour, 0.0f)
                     + float4(KeyLightClampedColour, 0.0f)
                     + ShadowMap_Constants + ShadowMap_Constants2;
-    return texel * IN.shade + lighting * 1e-8f;
+    return texel * IN.shade + (lighting + illuminance) * 1e-8f;
 }
 
 technique Default

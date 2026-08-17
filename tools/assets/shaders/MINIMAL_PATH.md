@@ -13,7 +13,17 @@ buffers are the fallback pair (positions + one texture, vs_3_0/ps_3_0):
 
     py tools/assets/shaders/convert_shaders_bundle.py convert ^
         build/game/SHADERS.BNDL tools/assets/shaders/out/SHADERS_PC_FALLBACK.BNDL ^
-        --fallback --fxdir tools/assets/shaders/does_not_exist_dir
+        --fallback --fxdir tools/assets/shaders/does_not_exist_dir --allow-contract-errors
+
+(`--allow-contract-errors` is REQUIRED for this bundle since 2026-08-17: the
+converter now hard-fails when a technique's INTERNAL constant is missing from
+its compiled program, because CgsResource::MaterialResourceType::
+PostFixUpShaderConstants ASSERTS "Tyring to postfixup a constant not present in
+the programbuffer" for exactly that -- measured against the retail bundle, the
+all-fallback variant carries 192 such misses, i.e. it asserts on nearly every
+material at stream-in.  It stays a bring-up diagnostic, not a runnable bundle.
+Note also that tools/assets/shaders/recovered/ is always searched first, so
+even this "all-fallback" bundle gets the real Godray shader.)
 
 (pointing --fxdir at an empty/nonexistent dir forces zero TUB matches, so with
 --fallback every technique maps to `fallback_world.fx`; techniques keep their
