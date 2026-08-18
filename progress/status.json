@@ -3396,6 +3396,18 @@
   "Attrib::Gen::proceduralshot::proceduralshot": {
    "status": "reviewed"
   },
+  "Attrib::Gen::propscrashbin::mCollisionsLarge": {
+   "status": "reviewed"
+  },
+  "Attrib::Gen::propscrashbin::mCollisionsMedium": {
+   "status": "reviewed"
+  },
+  "Attrib::Gen::propscrashbin::mCollisionsSmall": {
+   "status": "reviewed"
+  },
+  "Attrib::Gen::propscrashbin::mNumCollisionsSmall": {
+   "status": "reviewed"
+  },
   "Attrib::Gen::propscrashbin>::GetSam": {
    "status": "reviewed"
   },
@@ -36429,9 +36441,6 @@
   "BrnWorld::PropEntityModule::InitializePropPhysicsData": {
    "status": "reviewed"
   },
-  "BrnWorld::PropEntityModule::LeaveReplay": {
-   "status": "reviewed"
-  },
   "BrnWorld::PropEntityModule::LoadZone": {
    "status": "reviewed"
   },
@@ -36445,9 +36454,6 @@
    "status": "reviewed"
   },
   "BrnWorld::PropEntityModule::Prepare": {
-   "status": "reviewed"
-  },
-  "BrnWorld::PropEntityModule::PrepareForReplay": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityModule::ProcessBrokenProps": {
@@ -36465,31 +36471,10 @@
   "BrnWorld::PropEntityModule::ProcessPotentialContacts": {
    "status": "reviewed"
   },
-  "BrnWorld::PropEntityModule::PropEntityModule": {
-   "status": "reviewed"
-  },
   "BrnWorld::PropEntityModule::Release": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityModule::RenderModel": {
-   "status": "reviewed"
-  },
-  "BrnWorld::PropEntityModule::RenderPropAndCoronas": {
-   "status": "reviewed"
-  },
-  "BrnWorld::PropEntityModule::RenderReplayProp": {
-   "status": "reviewed"
-  },
-  "BrnWorld::PropEntityModule::ReplayPreSceneUpdate": {
-   "status": "reviewed"
-  },
-  "BrnWorld::PropEntityModule::ReplayUpdatePartsInScene": {
-   "status": "reviewed"
-  },
-  "BrnWorld::PropEntityModule::ReplayUpdatePropsInScene": {
-   "status": "reviewed"
-  },
-  "BrnWorld::PropEntityModule::RestoreFromReplay": {
    "status": "reviewed"
   },
   "BrnWorld::PropEntityModule::UnloadZone": {
@@ -65384,6 +65369,10 @@
   "GameSource/AttribSys/Generated/classes/presentationactionlist.h": {
    "status": "done"
   },
+  "GameSource/AttribSys/Generated/classes/propscrashbin.h": {
+   "notes": "wave Q (2026-08-18): 4 out-of-line accessors return const s32& into the layout block (asm-verified store/branch polarity, DWARF _LayoutStruct walk closes on 3 asm pins); ctor @0x826972D8 declared-not-defined (no IDA export -- add to export set); fresh-eyes Opus verify MUST_FIX on 2 comments -> fixed; consumer defect fixed in the same change: CrashBinUtils::GetSampleIds took free-function ptrs where asm calls the accessors THROUGH the bin (member ptrs); BinLookupCache FLAGs resolved (mMaterialA/B). Parity RED = inlined asserts (advisory).",
+   "status": "done"
+  },
   "GameSource/AttribSys/Generated/classes/sampletags.h": {
    "status": "done"
   },
@@ -68688,7 +68677,7 @@
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp": {
-   "notes": "FABRICATED reconstruction DISCARDED (verify caught it): agent invented 9 nonexistent 'replay state machine' methods (PrepareForReplay/RestoreFromReplay/LeaveReplay/etc, all 9 addrs = 0 hits in dossier). Real 22-func dossier (Construct@0x822FA068/PreSceneUpdate/PostSceneUpdate/GenerateDispatchLists/ProcessContacts/UpdateProps/LoadZone/...) UNTOUCHED. Header EReplayMode enum + members contradict authoritative DWARF. Re-home from real dossier.",
+   "notes": "wave Q (2026-08-18, breakable props/smash gates): all 22 bodied across BrnPropEntityModule.cpp + _PreScene/_Streaming/_Render + PropEntityModule_wQ_01..07 / _wQ2_01..03 partfiles; the break pipeline (ProcessContacts -> ProcessPotentialContact* -> BreakPropIntoParts/ChangePropState -> ProcessBrokenProps -> BrokenPropEvent) is REAL; Opus keystone+impl+fresh-eyes verify+fix rounds; coverage_check 0 missing / 0 ODR; NOT MOUNTED in build_game_exe.bat yet (WorldLinkStubs gates for PrePhysicsUpdate:1179 / PostSceneUpdate:1163 / PostPhysicsUpdate:3171 must be retired in the mount commit).",
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/PropEntityModule/BrnPropEntityModuleIO.cpp": {
@@ -74076,8 +74065,8 @@
    "status": "done"
   },
   "class:BrnWorld::PropEntityModule": {
-   "notes": "Paired with BrnPropEntityModule.cpp -- fabricated reconstruction discarded; committed BrnPropEntityModule.h restored (agent had corrupted it with invented EReplayMode members). Re-home layout verbatim from DWARF struct (meStreamingMode/muMaxLoadedZones/muZonesLoaded/mbInReplay/...).",
-   "status": "done"
+   "notes": "wave Q (2026-08-18): 7/9 bodied (ctor, PrepareForReplay, RestoreFromReplay, LeaveReplay, ReplayPreSceneUpdate, RenderReplayProp, RenderPropAndCoronas [corona tail still parked: BrnParticle VFX-prop payload records un-homed; a corona session owns that]). ReplayUpdatePropsInScene @0x822DB370 + ReplayUpdatePartsInScene @0x822DB900 are COMPLETE and parked at scratchpad/waveQ2/parked/PropEntityModule_01_ReplayUpdate{Props,Parts}InScene.cpp on ONE missing declaration: InSceneUpdateInterface::SetEntityPosition(EntityId, const Vector3&/Matrix44Affine) overload in GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.h (see scratchpad/waveQ2/round2/land-replay-render.md header_requests). Land that, drop the two parked files into a PropEntityModule_wQ3_xx.cpp partfile, coverage_check, close.",
+   "status": "blocked"
   },
   "class:BrnWorld::PropVolumeID": {
    "notes": "PropVolumeID::Set entity-id bit-pack; parity/none; wave8; verifier parity; gate pass.",
