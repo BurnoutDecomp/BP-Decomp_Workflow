@@ -343,6 +343,22 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Graphics\BrnCoronaTypeParams.cpp"
   echo "%SRC%\GameSource\Effects\Curves.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\RwRGBA.cpp"
+  rem ---- CORONAS WAVE (2026-08-18, step 2): THE SUN CORONA. ----
+  rem   BrnSunCorona.cpp was reconstructed but UNMOUNTED (and its two committed bodies were a
+  rem   phantom construction surface -- see the file's own banner). This wave lands the object and
+  rem   its two draw passes. Link closure, measured with dumpbin (wave report section 4):
+  rem     BrnSunCorona.cpp -> ProgramBufferPC_Adopt / ProgramBuffer::GetVariableHandleByName
+  rem       (ImmediateModePCLeaf.cpp + states/programbuffer.cpp), VertexDescriptor::Parameters::
+  rem       Parameters + VertexDescriptor::Initialize / ::Release (VertexDescriptorParameters.cpp +
+  rem       ImmediateModePCLeaf.cpp), the shadow::Device binders (shadowingdevice.cpp),
+  rem       D3DDevice_Begin/EndVertices (XenonD3D9Shims.cpp), CgsRenderTarget::Begin/End
+  rem       (CgsRenderTarget.cpp), RenderTarget::GetDepthTextureState (PostFxRenderTargetPCLeaf.cpp)
+  rem       and the three state factories -- ALL already on this list -- plus the four sun-corona
+  rem       programs below.
+  rem   The four VS/PS programs are AUTHORED for D3D9 (the Xenos blobs at unk_8203E118 / E208 /
+  rem   E438 / E528 cannot execute here) -- the same treatment CoronaProgramsPC.cpp above gets.
+  echo "%SRC%\pc\gcm\renderengine\SunCoronaProgramsPC.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnSunCorona.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3dSkyDome.cpp"
   echo "%SRC%\GameSource\Graphics\ImmediateMode\BrnIm3d.cpp"
   echo "%SRC%\GameSource\Graphics\BrnSkyDomeManager.cpp"
