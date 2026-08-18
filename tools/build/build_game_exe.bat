@@ -203,6 +203,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ---- stayed 0 and the whole MaxIterations chain asserted. Its file-mate            ----
   rem ---- _PrePhysics @0x827AAEC0 is still a gate and stays in WorldLinkStubs.          ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToPhysics.cpp"
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgePropModule.cpp"
   rem ---- physics->output publish wave (2026-08-11): the RETURN direction of the same    ----
   rem ---- handover. WorldModule::BridgePhysicsModuleToRaceCarModule_PostPhysics          ----
   rem ---- @0x827AE9D0 is the ONLY thing in the image that copies the physics module's    ----
