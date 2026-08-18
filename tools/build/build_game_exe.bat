@@ -323,6 +323,26 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem evicts a mirror together with the bundle memory it was built from.
   echo "%SRC%\pc\gcm\renderengine\WorldGeometryPCLeaf.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkyDomeProgramsPC.cpp"
+  rem ---- CORONAS WAVE (2026-08-17, step 1): THE LIGHT-FLARE PASS, MOUNTED. ----
+  rem   BrnCoronaManager + renderengine::CoronaRenderer were reconstructed but UNMOUNTED; this
+  rem   wave lands the whole chain. Link closure, measured with dumpbin (wave report section 4):
+  rem     rwgcoronarenderer.cpp -> ProgramBufferPC_Adopt / ProgramBuffer::GetVariableHandleByName
+  rem       (programbuffer.cpp + ImmediateModePCLeaf.cpp), VertexDescriptor::Parameters::Parameters
+  rem       + VertexDescriptor::Initialize (VertexDescriptorParameters.cpp + ImmediateModePCLeaf
+  rem       .cpp), the shadow::Device binders (shadowingdevice.cpp) and D3DDevice_Begin/EndVertices
+  rem       (XenonD3D9Shims.cpp) -- ALL already on this list -- plus the corona program pair below.
+  rem     BrnCoronaManager.cpp  -> Curves.cpp + RwRGBA.cpp + rwgcoronabufferiterator.cpp +
+  rem       BrnCoronaTypeParams.cpp, which are the four lines added with it.
+  rem   The corona VS/PS pair is AUTHORED for D3D9 (the Xenos blobs at unk_8200F1B8 / unk_8200F2A0
+  rem   cannot execute here) -- the same treatment SkyDomeProgramsPC.cpp on the line above gets.
+  echo "%SRC%\pc\gcm\renderengine\CoronaProgramsPC.cpp"
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\coronas\rwgcoronarenderer.cpp"
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\coronas\rwgcoronabuffer.cpp"
+  echo "%SRC%\SDKs\RenderEngineClub\MAIN\components\src\coronas\rwgcoronabufferiterator.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnCoronaManager.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnCoronaTypeParams.cpp"
+  echo "%SRC%\GameSource\Effects\Curves.cpp"
+  echo "%SRC%\GameShared\GameClasses\RenderWare\RwRGBA.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3dSkyDome.cpp"
   echo "%SRC%\GameSource\Graphics\ImmediateMode\BrnIm3d.cpp"
   echo "%SRC%\GameSource\Graphics\BrnSkyDomeManager.cpp"
