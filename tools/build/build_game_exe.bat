@@ -1721,6 +1721,30 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Physics\ContactSpies\EventQueue_ContactSpyRunData_100.cpp"
   echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_RaceCarContact_AddEventSafe.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager.cpp"
+  rem  2026-08-18 wave Q4: the physics PropManager is MOUNTED (mount option C, smash-first): parts go
+  rem  physical, contacts validated (SetupAndValidatePropContact REAL, its trap stub deleted); wQ_03 and
+  rem  wQ2_02 stay unmounted (their contact-gen legs are parked), so the Begin/End/UpdateTriangleCache
+  rem  gates stay; Prepare/ProcessInputsPreScene/ReadUpdatedBodies gates retired in the same change.
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_01.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_02.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_03.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_03_embed_check.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_04.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_PropInstanceQueries.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_RoutePropVsRaceCarContactToDummyCar.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropPhysics\BrnPropInstance.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropPhysics\BrnPropPartInstance.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ_01.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ_02.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_01.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_03.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_04.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_05.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_06.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_07.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_08.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_09.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityId.cpp"
   rem ---- end contact-spy / prop perf-monitor block -----------------------------------------
   rem ---- PROP MANAGER CONSTRUCT + ITS DEBUG COMPONENT (physics wave 5, 2026-08-02) ---------
   rem  BrnPhysics::Props::PropManager::Construct @0x82627390 is now real, which needed the whole
@@ -1773,6 +1797,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  `cl /c` cannot see unresolved externals, which is exactly why that went unnoticed.
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityInstance.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropCellManager.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropCellManager_wQ4.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropZoneManager.cpp"
   rem  ---- the module itself: lifecycle + streaming (PreScene/render land with their TUs) ----
   rem  PropEntityModule::Construct was THE earliest break in the whole chain: it is the only
@@ -1783,6 +1808,30 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_Streaming.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_PreScene.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_Render.cpp"
+  rem  2026-08-18 breakable-props wave Q: THE BREAK PIPELINE IS MOUNTED -- ProcessContacts,
+  rem  ProcessPotentialContact*, BreakPropIntoParts/ChangePropState, ProcessBrokenProps,
+  rem  BrokenPropEvent, plus PrePhysics/PostPhysics/PostSceneUpdate, the replay set, and the
+  rem  IO buffers those legs read. The WorldLinkStubs gates for PrePhysicsUpdate/PostSceneUpdate/
+  rem  PostPhysicsUpdate/InputBuffer_PostPhysics::Construct/InputBuffer_PrePhysics::Construct
+  rem  are retired in the same change.
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_01.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_02.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_03.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_04.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_05.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_06.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_07.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ2_01.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ2_02.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ2_03.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ3_01.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PostPhysics.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PrePhysics.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PostScene.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame_wQ2_owner.cpp"
+  echo "%SRC%\GameSource\Replays\BrnReplayRequestInterface.cpp"
+  rem  BrnReplayPropSerialiserFrame_wQ2_keyframe.cpp is NOT mounted: KeyFrameRead needs the per-T
+  rem  BrnReplayArray Read instantiations the u32-only generic cannot provide yet; its gate stays.
   rem  ---- the replay serialiser LoadProp threads through the whole load path ----
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropEntitySerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame.cpp"
