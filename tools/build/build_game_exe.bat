@@ -872,8 +872,8 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  StreamStubs retired into CgsCollisionGenerator_CollideStreams.cpp (three Create* proved
   rem  byte-identical bar assert lines; three Run* dispatchers wiring ContactGeneratorEntry over
   rem  desc types 6/14/8 whose workers stay LOUD NAMED GATES; the two Add* posters + the
-  rem  PrepareNewPrimitiveTestResultsList result-list carve). StreamStubs keeps ONLY the
-  rem  CollidePrimitivePairList @0x82814138 gate (simple-traffic leg, dead on the junkyard path).
+  rem  PrepareNewPrimitiveTestResultsList result-list carve). StreamStubs kept ONLY the
+  rem  CollidePrimitivePairList @0x82814138 gate until wave Q7 (2026-08-19) landed it for real (40 insns).
   rem  DoRaceCarWorldContactGeneration @0x825EB140 is REAL in BrnVehicleManagerContactGeneration
   rem  .cpp (its log-once gate + Start's null-producer guard both deleted); its query callees
   rem  live in the new mounted slice BrnDeformationManager_ContactQueries.cpp below.
@@ -998,7 +998,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem     CalculateWeightTransfer. ⚠️ HandleWheelPairFriction's own 18-line "NOTHING IN THIS TREE
   rem     WRITES massOnWheel" banner is STALE -- that writer landed in the leg-4 wave.
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_CollideStreams.cpp"
-  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_StreamStubs.cpp"
+  rem  2026-08-19 (wave Q7, cluster pairlist): CgsCollisionGenerator_StreamStubs.cpp is EMPTY and UNMOUNTED --
+  rem  its last gate, CollidePrimitivePairList @0x82814138 (40 insns, not 92), is a real body in
+  rem  CgsCollisionGenerator.cpp beside CollidePrimitiveListAgainstTriangleList (seven of seven birth
+  rem  stubs retired; dumpbin measures 0 external symbols). Its type-10 worker
+  rem  ContactGeneratorJob::ExecutePrimitivePairList @0x82925798 landed in the same wave (cluster arms).
   rem  ⭐ 2026-08-14 (walls leg 2): the result-record TU mounts -- PrimitiveTestResult::IsValid
   rem  @0x82921378 is REAL (its "unrecoverable rodata threshold" floor fell to the .rdata unlock:
   rem  unk_821016C0 word 0 == 0x34000000 == 2^-23; the check is finite-xyz + non-degenerate
@@ -1116,8 +1120,8 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem      PolygonSoupListSpatialMap::RunQuery -- both of which earlier costings put on this leg.
   rem    ContactGeneratorJob::AllocateMemory               @0x829212A0  (54)
   rem    ContactGeneratorJob::RestoreMemory                @0x82921050  (39)
-  rem  The other ten Execute arms are NAMED one-shot boot gates (nothing posts their descriptor
-  rem  types in this tree). ⚠ NOT WIRED INTO THE CONDUCTOR: StartVehicleTractionLineTests /
+  rem  ALL ELEVEN worker arms are real as of wave Q7 (2026-08-19): nine in ContactGeneratorJob.cpp,
+  rem  two in ContactGeneratorJob_wQ7_01.cpp (no gate left in the TU). ⚠ NOT WIRED INTO THE CONDUCTOR: StartVehicleTractionLineTests /
   rem  EndVehicleTractionLineTests stay gated -- they are lifetime-coupled through
   rem  mpTractionLineStreamProducer and must land together, in a later wave.
   echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGenerator.cpp"
@@ -1126,6 +1130,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  @0x82925908 (849) is a REAL BODY (its BRN_CONTACT_JOB_GATE deleted) and its two callees
   rem  BuildGPInstance @0x829222A0 / CollideGPInstances @0x829253C8 live in the partfile -- mount as a pair.
   echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGeneratorJob_wQ6_01.cpp"
+  rem  2026-08-19 (wave Q7, clusters ss + arms): THE CAR-vs-CAR SPHERE NARROW PHASE -- job types 7 and 8.
+  rem  ExecuteSphereListWithSphereList @0x829215B0 (193) and its Stream twin @0x82923758 (100, export hole
+  rem  closed with headless idat), the last two BRN_CONTACT_JOB_GATE arms. Declared in ContactGeneratorJob.h,
+  rem  defined here; ContactGeneratorJob.cpp has NO gate for them any more, so this line is load-bearing
+  rem  (two LNK2019s without it). The producer VehicleManager::DoCarCarContactGeneration @0x8261BB38 and its
+  rem  poster AddSphereListWithSphereListToStream @0x828119F0 landed in the same wave (cluster carcar).
+  echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGeneratorJob_wQ7_01.cpp"
   rem  ⭐ 2026-08-10 (ground wave): the SimpleDataStreamProducer HOME finally mounts.
   rem  ⭐⭐ 2026-08-10 (cache-fill wave): its one unresolved edge since 2026-08-06 --
   rem  DataStreamCommandPoster::Construct @0x82869E08, an export-set hole -- is now a REAL
@@ -2042,6 +2053,22 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModuleIO_InputBuffer_Getters.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficNetworkOutputInterface.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficSoundInterfaces.cpp"
+  rem  2026-08-19 (wave Q7, cluster traffic): THE TRAFFIC-LIGHT KNOCKDOWN CONSUMER. wQ7_01 = PrePhysicsUpdate
+  rem  @0x8274C690 (documented PARTIAL: PerfMon + lock brackets + SetPlayingShowtime + the 3-way state machine +
+  rem  BitArray<601> + HandlePropModuleRequests REAL; 8 other legs = named one-shot gates inside the body) and
+  rem  HandlePropModuleRequests @0x82720A90 (118, REAL: drains the knock-down + restore rings into
+  rem  TrafficLightManager::TrafficLightGot{Smashed,Restored}). wQ7_02 = the BRING-UP: Prepare @0x8274A578 PARTIAL
+  rem  (stages 0/2/5 real, 1/3/4 gates) + LoadData @0x82746A88 PARTIAL (resource stages 0/1 SEAT mpData via the
+  rem  LoadTrafficLanes GameData round trip; 2..11 one gate) + 3 named DELETE-WHEN bring-up latches (mReceiverQueue
+  rem  Construct relocated from the gated TrafficEntityModule::Construct @0x82740220; meState latched RUNNING).
+  rem  Both WorldLinkStubs gates (PrePhysicsUpdate, Prepare) retired in the same change -- BrnUpdateSet is u16 so the
+  rem  gate signature is token-identical to the real one (LNK2005 cl cannot see). BrnTrafficLightManager.cpp carries
+  rem  GetLightState / TrafficLightGotSmashed @0x827519A0 / TrafficLightGotRestored @0x82751A40 (export hole, idat);
+  rem  it needs TrafficLightCollection::GetInstanceIndexForInstanceID from SharedClasses\Traffic\Junctions (below).
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wQ7_01.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wQ7_02.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLightManager.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLightRuntimeState.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\BrnTriggerEntityModuleIO_QueueAccessors.cpp"
   rem ---- world-IO Construct family (2026-07-27): the trigger pre/post-scene +      ----
   rem ---- pre-physics buffer Constructs (X360 0x822EED48/0x822DA168/0x822DA180/      ----
@@ -2771,6 +2798,12 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  Sphere::GetRadius @0x825BD1F8 and AxisAlignedBox::Set @0x823A6108 to turn the fill
   rem  command's cache sphere into the box the query runs on. Found by the LINK, as always.
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsSphere.cpp"
+  rem  2026-08-19 (wave Q7, cluster box): Box::IsValid @0x825BEB80 (264) + both BoxOverlappingTest overloads
+  rem  (@0x825BEFA0, @0x825BF090) + the inlined GetBoxExtentsAlongAxis. Box::Set is an inline in CgsBox.h that
+  rem  now CALLS IsValid (the console's streamed validity assert restored), and CgsBox.h is reached by 56 TUs
+  rem  including the mounted CgsPrimitivePairListBuilder.cpp -- without this line every one of them is an
+  rem  LNK2019 that cl /c cannot see.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsBox.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsAxisAlignedBox.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsAxisAlignedBox4.cpp"
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\PolygonSoup\CgsPolygonSoupListSpatialMap_Build.cpp"
@@ -3511,6 +3544,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficData.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficPvs.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficSection.cpp"
+  rem  2026-08-19 (wave Q7, cluster traffic): the Junctions TrafficLightCollection TU -- GetInstanceIndexForInstanceID
+  rem  (the id->dense-index hash TrafficLightGot{Smashed,Restored} resolve through), GetCoronaState @0x8274F510 (export
+  rem  hole, idat) and ExpandPosPlusYRotToTransform @0x823610B8. First Junctions TU on the bat.
+  echo "%SRC%\SharedClasses\Traffic\Junctions\BrnTrafficLightCollection.cpp"
   echo "%SRC%\SharedClasses\Trigger\BrnGenericRegion.cpp"
   echo "%SRC%\SharedClasses\Trigger\BrnTriggerData.cpp"
   rem producer wave (2026-08-01): SpawnLocation::GetType/GetJunkyardId -- the junkyard spawn
