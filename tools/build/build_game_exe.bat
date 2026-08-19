@@ -1122,6 +1122,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  mpTractionLineStreamProducer and must land together, in a later wave.
   echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGenerator.cpp"
   echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGeneratorJob.cpp"
+  rem  2026-08-19 (wave Q6 round 3, pvt + gpi): THE PROP NARROW PHASE. ExecutePrimitiveListWithTriangleList
+  rem  @0x82925908 (849) is a REAL BODY (its BRN_CONTACT_JOB_GATE deleted) and its two callees
+  rem  BuildGPInstance @0x829222A0 / CollideGPInstances @0x829253C8 live in the partfile -- mount as a pair.
+  echo "%SRC%\GameShared\Jobs\ContactGenerator\ContactGeneratorJob_wQ6_01.cpp"
   rem  ⭐ 2026-08-10 (ground wave): the SimpleDataStreamProducer HOME finally mounts.
   rem  ⭐⭐ 2026-08-10 (cache-fill wave): its one unresolved edge since 2026-08-06 --
   rem  DataStreamCommandPoster::Construct @0x82869E08, an export-set hole -- is now a REAL
