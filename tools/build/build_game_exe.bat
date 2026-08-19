@@ -225,6 +225,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ---- plus the ActiveRaceCar / RenderParams homes the render leg reads.        ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Render.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar_wQ5_01.cpp"
   rem  2026-08-11 (create-drain wave, conductor): ProcessPlayerVehicleInput calls
   rem  BoostManager::SetBoostEarningEnabled @0x822A33B0 -- the body existed in this TU all along
   rem  but the TU was never on this list (LNK2019 on the wave's first link).
@@ -625,6 +626,15 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  only path by which TriangleCacheManager::mUsedCacheSlots can ever become non-zero.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\BaseEventQueue_InEventAddToCache_AddEvent.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityManager.cpp"
+  rem  ---- wave Q5 cluster A1 (2026-08-18): the scene VOLUME store -- CgsSceneManager::VolumeManager
+  rem  Prepare @0x828CFD38 / RemoveVolume @0x828CFDC8 / ReplaceDynamicVolume @0x828CFEE8 /
+  rem  AddDynamicVolume @0x828D1708 / GetRwVolume @0x828C5E68 -- the WorldLinkStubs Prepare gate is retired.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsVolumeManager.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsVolumeStore.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ObjectPool_VolumeManagerVolume_5048.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ObjectPool_VolumeSlot_4608.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ObjectPool_VolumeInstance_5048.cpp"
+  echo "%SRC%\GameShared\GameClasses\Physics\CgsResourcePtr_CgsPhysics_CollisionMeshData.cpp"
   rem  ---- create-path wave 2026-08-11 ----
   rem  CgsSceneManager::VolumeInstanceId::SetEntityIDOwner @0x822B0E00 /
   rem  ::SetEntityIDEntityIndex @0x822B0E70. Bodied since their own wave, never linked -- no
@@ -635,6 +645,22 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModuleIO.cpp"
+  rem  ---- wave Q5 cluster B1 (2026-08-18): the sweep-and-prune broadphase (keystone: layout +
+  rem  Prepare @0x828C2000 / Clear @0x828B57A0; IntervalList 8 bodies + SweepIntervals @0x828C1328 +
+  rem  SweepAgainstList @0x828C1520; IntervalStack). Mount all three or none.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsSceneSweeper.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsIntervalList.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsIntervalStack.cpp"
+  rem  ---- wave Q5 round 2 (2026-08-18): the sweeper mutators + the OverlapGeneration IO buffers.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsSceneSweeper_wQ5_01.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsIntervalList_wQ5_01.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsSceneSweeper_wQ5_02.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsSceneSweeper_wQ5_03.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapGenerationModuleIO_InputBuffer.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapGenerationModuleIO_OutputBuffer.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\EventQueue_OverlapGenerationInAddBody_16384_Construct.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\EventQueue_OverlapGenerationInUpdateBody_16384_Construct.cpp"
   rem ---- the broad phase (culling wave 2026-07-28): the loose octree + its manager ----
   echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\SpatialPartitions\CgsSpatialPartition.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\SpatialPartitions\CgsLooseOctree.cpp"
@@ -1046,6 +1072,12 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  because its home TU had no mounted caller. Two functions, both already reconstructed
   rem  (SceneQueryInterface::HasData @0x82204E48 is the other).
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModuleIO.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\SharedIO\EventQueue_PotentialContact_2048.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\SharedIO\BaseEventQueue_PotentialContact_AddEvent.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\BaseEventQueue_OutOverlapPair_AddEvent.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\EventQueue_OverlappingPair_128_Construct.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\EventQueue_Contact_16384_Construct.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\EventQueue_ErrorEvent_128_Construct.cpp"
   rem  Its floor: the line-vs-triangle stream factory + the job dispatcher, plus the result-cursor
   rem  slice the harvest walks.
   rem  ⭐⭐⭐ 2026-08-11 (traction-line wave): RunLineWithTriangleListStream @0x82810E80 (89,
@@ -2002,6 +2034,38 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  function the X360 defines, rw::collision::Frustum::IsBoxInFrustum @0x82BA7FA0, which is
   rem  the leaf BrnDirector::Camera::IsLookingAtTarget @0x822331F0 needs.
   echo "%SRC%\vendor\renderware\collision\Frustum.cpp"
+  rem  ---- wave Q5 C1 (2026-08-18): the rw::collision NARROW PHASE (SAT + contact points + volume query) ----
+  echo "%SRC%\vendor\renderware\collision\AABBox.cpp"
+  echo "%SRC%\vendor\renderware\collision\AALineClipper.cpp"
+  echo "%SRC%\vendor\renderware\collision\Aggregate.cpp"
+  echo "%SRC%\vendor\renderware\collision\AggregateVolume.cpp"
+  echo "%SRC%\vendor\renderware\collision\BoxVolume.cpp"
+  echo "%SRC%\vendor\renderware\collision\CapsuleVolume.cpp"
+  echo "%SRC%\vendor\renderware\collision\ClusteredMeshCluster.cpp"
+  echo "%SRC%\vendor\renderware\collision\ClusteredMeshQuery.cpp"
+  echo "%SRC%\vendor\renderware\collision\CylinderVolume.cpp"
+  echo "%SRC%\vendor\renderware\collision\Feature.cpp"
+  echo "%SRC%\vendor\renderware\collision\FeatureEdge.cpp"
+  echo "%SRC%\vendor\renderware\collision\FeaturePrism.cpp"
+  echo "%SRC%\vendor\renderware\collision\GPBox.cpp"
+  echo "%SRC%\vendor\renderware\collision\GPCapsule.cpp"
+  echo "%SRC%\vendor\renderware\collision\GPCylinder.cpp"
+  echo "%SRC%\vendor\renderware\collision\GPSphere.cpp"
+  echo "%SRC%\vendor\renderware\collision\GPTriangle.cpp"
+  echo "%SRC%\vendor\renderware\collision\GPRegistration.cpp"
+  echo "%SRC%\vendor\renderware\collision\KdTreeBBoxQuery.cpp"
+  echo "%SRC%\vendor\renderware\collision\KdTreeLineQuery.cpp"
+  echo "%SRC%\vendor\renderware\collision\LineSegIntersect.cpp"
+  echo "%SRC%\vendor\renderware\collision\PrimitiveIntersect.cpp"
+  echo "%SRC%\vendor\renderware\collision\SeparatingDirection.cpp"
+  echo "%SRC%\vendor\renderware\collision\TriangleVolume.cpp"
+  echo "%SRC%\vendor\renderware\collision\TriangleVolume_wN_01.cpp"
+  echo "%SRC%\vendor\renderware\collision\VolRef.cpp"
+  echo "%SRC%\vendor\renderware\collision\VolumeBBoxQuery.cpp"
+  echo "%SRC%\vendor\renderware\collision\VolumeQuery.cpp"
+  echo "%SRC%\vendor\renderware\collision\CapsuleVolume_embed_check.cpp"
+  echo "%SRC%\vendor\renderware\collision\Feature_embed_check.cpp"
+  echo "%SRC%\vendor\renderware\collision\FeatureEdge_embed_check.cpp"
   echo "%SRC%\GameSource\World\WorldLinkStubs.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraState.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnDepthOfField.cpp"
@@ -2543,7 +2607,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\SDKs\EATech\include\snd\sndo.cpp"
   echo "%SRC%\SDKs\EATech\rw\math\vpu\vecfloat.cpp"
   echo "%SRC%\SDKs\EATech\rw\math\vpu\vector2.cpp"
-  echo "%SRC%\SDKs\EATech\rw\math\vpu\vector3.cpp"
+  rem  (SDKs/EATech/rw/math/vpu/vector3.cpp DROPPED 2026-08-18, wave Q5: it strong-defined the inline Vector3 float ctor and LNK2005s against the mounted collision TUs)
   echo "%SRC%\SDKs\EATech\rw\math\vpu\vector4.cpp"
   echo "%SRC%\SDKs\EATech\rwcollision\volume.cpp"
   echo "%SRC%\SDKs\EATech\rwcollision\volumelinequery.cpp"
