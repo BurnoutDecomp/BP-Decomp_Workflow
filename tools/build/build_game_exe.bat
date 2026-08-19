@@ -1011,9 +1011,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  link, so WorldModule::Update's per-frame generator was carved and never initialised behind
   rem  two WorldLinkStubs gates -- BOTH NOW DELETED. This is a LIVE behaviour change: the frame's
   rem  collision generator is really Construct()ed and Prepare()d from the frame it lands.
-  rem  (CgsCollisionBatch.cpp stays UNMOUNTED: its only body, CollisionBatch::SetupJob, references
-  rem   the absent ContactGeneratorEntry. The generator home needs only the header-inline ctor
-  rem   and WaitOn.)
+  rem  wave Q6 / worldc (2026-08-19): CgsCollisionBatch.cpp MOUNTED -- CollisionGenerator::
+  rem  CollidePrimitiveListAgainstTriangleList (real now) calls CollisionBatch::SetupJob out of line
+  rem  exactly as the console does (bl at 0x82814304).
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionBatch.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator.cpp"
   rem  2026-08-06 (big-five #1, FixUpVehicleContacts wave): the driver's home TU + the
   rem  DeformationManager vehicle-contact fix-up slice (ByInterpolation / WithBoxes /
@@ -1758,6 +1759,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ----  * PropEntityIO::OutputBuffer_PreScene accessors -- the PreScene bridge     ----
   echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyInterface.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BrnPropInputInterface.cpp"
+  rem  ---- wave Q6 / seat (2026-08-19): the PROP OUTPUT seat -- Props::PropOutputInterface::Construct
+  rem  @0x825A9658 + AppendUpdatedProps @0x826153A0, real but never in the build; PhysicsModuleIO::
+  rem  OutputBuffer::Construct now calls it and the +71792 seat is the real type: the unblock for
+  rem  PropManager::OutputUpdatedProps, the sole producer of smashed-prop poses back to the world.
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BrnPropOutputInterface.cpp"
   rem ----  * PropEntityID::AssertIsProp -- the owner tripwire every prop enqueue runs ----
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropEntityID.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_PreScene.cpp"
@@ -1776,8 +1782,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager.cpp"
   rem  2026-08-18 wave Q4: the physics PropManager is MOUNTED (mount option C, smash-first): parts go
   rem  physical, contacts validated (SetupAndValidatePropContact REAL, its trap stub deleted); wQ_03 and
-  rem  wQ2_02 stay unmounted (their contact-gen legs are parked), so the Begin/End/UpdateTriangleCache
-  rem  gates stay; Prepare/ProcessInputsPreScene/ReadUpdatedBodies gates retired in the same change.
+  rem  wQ2_02 stay unmounted -- wave Q6 / worldc landed their contact-gen legs in wQ2_03, what still
+  rem  blocks the mount is the primitive-stream family, Create/RunCollidePrimitiveListWithTriangleListStream,
+  rem  so the Begin/End/UpdateTriangleCache gates stay; Prepare/ProcessInputsPreScene/ReadUpdatedBodies retired.
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_01.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_02.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_03.cpp"
@@ -1786,6 +1793,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  ---- wave Q5 round-3 integration: PropManager::ProcessInputs_Prepare @0x825E3400, the prop-physics
   rem  data handle pickup PhysicsModule::PropPrepareTypes @0x825A14A8 calls (its gate retired).
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ5_01.cpp"
+  rem  ---- wave Q6 / rmall: PropManager::RemoveAllPropsAndParts @0x8260F010 (331), the world-unload
+  rem  teardown; export hole closed with headless idat; its conductor gate retired in this change.
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ6_01.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_PropInstanceQueries.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_RoutePropVsRaceCarContactToDummyCar.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropPhysics\BrnPropInstance.cpp"
@@ -1922,6 +1932,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  (real GetName, inert OnActivate/RenderHUD/RenderWorld) instead. Mount the real TU when
   rem  the debug-render stack lands -- it is dev-menu-only and cannot affect prop spawning.
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\SharedIO\BrnPropToTrafficInterface.cpp"
+  rem  wave Q6 / bridges: TrafficToRaceCarInterface_PreScene::Construct (the traffic OutputBuffer_PreScene
+  rem  seat is the committed type now, not a 544-byte reserved fork).
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficToRaceCarInterface.cpp"
+  rem  BrnTrafficConstants.cpp: MakeTrafficEntityId @0x827048C0 (real, never mounted; AddPotentialStompee calls it).
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficConstants.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_OutputBuffer_PostPhysics.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\FixableVolume.cpp"
   echo "%SRC%\GameSource\Resource\SharedIO\BrnGameDataRequestInterface_1024.cpp"
@@ -2337,6 +2352,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Director\Camera\SharedIO\BrnPlayerInfo.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayStatusInterface.cpp"
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\NetworkInputInterface.cpp"
+  rem  wave Q6 / bridges: BrnWorld::CrashIO::TrafficInputInterface::Construct -- called by the traffic
+  rem  OutputBuffer_PostPhysics::Construct landed this wave.
+  echo "%SRC%\GameSource\World\CrashModule\SharedIO\TrafficInputInterface.cpp"
   echo "%SRC%\GameSource\Network\BrnNetworkModuleIO.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleGameStateIOInterfaces.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleInGamePlayerStatusInterface.cpp"
