@@ -428,6 +428,19 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModuleIO_OutputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule.cpp"
+  rem  ---- wave Q5 round 3 (2026-08-19): the scene-collision middle closes -- the drain legs,
+  rem  the scene manager bridge family and their callees. Mounted in the same commit as the
+  rem  WorldLinkStubs gate retirements for OverlapGenerationModule and the three BridgeOverlap*.
+  rem  CgsSceneManagerModule_wQ5_01.cpp : UpdateCollisionBody @0x828C7528 + the three padding events.
+  rem  CgsSceneManagerBridgeFunctions.cpp : BridgeOverlapGenerationToOverlapCulling @0x828BA538,
+  rem    BridgeOverlapGenerationToOutputBuffer @0x828BA6A0, BridgeOverlapCullerToOutputBuffer
+  rem    @0x828BA8C8 -- the only writer of SceneManagerIO::OutputBuffer mPotentialContactQueue.
+  rem  CgsCullingGroupManager.cpp : SetCullingGroupPair @0x828AA580, the CARS x PROPS adjacency writer.
+  rem  CgsSceneManagerContact.cpp : Contact::Construct @0x828A9E30, called twice by DoPairQuery.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule_wQ5_01.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerBridgeFunctions.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsCullingGroupManager.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerContact.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsCamera.cpp"
   echo "%SRC%\GameSource\Director\Camera\Camera.cpp"
   rem ---- world-fleet link-mount closure (2026-07-26): committed TUs picked by ----
@@ -645,6 +658,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Update.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneUpdate.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModule.cpp"
+  rem  ---- wave Q5 round 3 / E3b: the culler INTERNAL-collision half -- IsInsideEscapeVolume
+  rem  @0x828CB0A8, DoInternalCollision @0x828CB1D8, ProcessInternalCollisions @0x828CB308.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModule_wQ5_01.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapCullingModuleIO.cpp"
   rem  ---- wave Q5 cluster B1 (2026-08-18): the sweep-and-prune broadphase (keystone: layout +
   rem  Prepare @0x828C2000 / Clear @0x828B57A0; IntervalList 8 bodies + SweepIntervals @0x828C1328 +
@@ -661,6 +677,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapGenerationModuleIO_OutputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\EventQueue_OverlapGenerationInAddBody_16384_Construct.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\EventQueue_OverlapGenerationInUpdateBody_16384_Construct.cpp"
+  rem  ---- wave Q5 round 3 / E2: the overlap generator + sweeper driver -- Update @0x828CB878,
+  rem  GenerateOverlaps @0x828D5C08, ProcessForceNoPaddingQueue @0x828B56D8, OutputCollidingPairs
+  rem  @0x828C1F58 + the six Construct/Prepare/Release/Process*BodyQueue bodies. BRN_PROP_DIAG Q5-sweep.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapGenerationModule.cpp"
   rem ---- the broad phase (culling wave 2026-07-28): the loose octree + its manager ----
   echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\SpatialPartitions\CgsSpatialPartition.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\SpatialPartitions\CgsLooseOctree.cpp"
@@ -1927,6 +1947,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  mpTriangleCacheManager on the first live car. Their WorldLinkStubs gates are deleted in the
   rem  same wave (LNK2005 tripwire otherwise).
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToPhysics.cpp"
+  rem  ---- wave Q5 round 3 / F2: the PHYSICS to SCENE direction, BridgePhysicsSceneUpdateToScene
+  rem  @0x827ABA40 -- PhysicsModuleIO::OutputBuffer now seats the real InSceneUpdateInterface.
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToScene.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToOutput.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeToEntityModules.cpp"
   echo "%SRC%\GameSource\World\BrnBaseStreamer.cpp"
@@ -2063,6 +2086,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\vendor\renderware\collision\VolRef.cpp"
   echo "%SRC%\vendor\renderware\collision\VolumeBBoxQuery.cpp"
   echo "%SRC%\vendor\renderware\collision\VolumeQuery.cpp"
+  rem  ---- wave Q5 round 3 / vtbind: the six Volume descriptor RECORDS with their method slots
+  rem  bound. REQUIRED: SDKs rwcollision volume.cpp has six undefined gVolumeHandler_* externals
+  rem  that only this TU defines.
+  echo "%SRC%\vendor\renderware\collision\VolumeVTables.cpp"
   echo "%SRC%\vendor\renderware\collision\CapsuleVolume_embed_check.cpp"
   echo "%SRC%\vendor\renderware\collision\Feature_embed_check.cpp"
   echo "%SRC%\vendor\renderware\collision\FeatureEdge_embed_check.cpp"
