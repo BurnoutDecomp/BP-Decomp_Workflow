@@ -1782,9 +1782,8 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager.cpp"
   rem  2026-08-18 wave Q4: the physics PropManager is MOUNTED (mount option C, smash-first): parts go
   rem  physical, contacts validated (SetupAndValidatePropContact REAL, its trap stub deleted); wQ_03 and
-  rem  wQ2_02 stay unmounted -- wave Q6 / worldc landed their contact-gen legs in wQ2_03, what still
-  rem  blocks the mount is the primitive-stream family, Create/RunCollidePrimitiveListWithTriangleListStream,
-  rem  so the Begin/End/UpdateTriangleCache gates stay; Prepare/ProcessInputsPreScene/ReadUpdatedBodies retired.
+  rem  wQ2_02 are MOUNTED since wave Q6 round 2 (below, after wQ2_03); Prepare/ProcessInputsPreScene/
+  rem  ReadUpdatedBodies/OutputUpdatedProps/Begin/End/UpdateTriangleCache gates all retired.
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_01.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_02.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_03.cpp"
@@ -1796,6 +1795,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  ---- wave Q6 / rmall: PropManager::RemoveAllPropsAndParts @0x8260F010 (331), the world-unload
   rem  teardown; export hole closed with headless idat; its conductor gate retired in this change.
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ6_01.cpp"
+  rem  ---- wave Q6 round 2 / lean: the JOINTED-PROP contact response -- HandleContactWithLeanProp
+  rem  @0x8260FB60 (854) + HandleContactWithTiltProp @0x826108B8 (720); their conductor gates retire
+  rem  in this change. Unblocked by ExternalPhysicsBody::GetLinearMomentum, Wheel::GetRoadLongSpeed
+  rem  and six rw::math::vpu helpers; ExternallySimulatedBody::Translate landed at integration.
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ6_02.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_PropInstanceQueries.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_RoutePropVsRaceCarContactToDummyCar.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropPhysics\BrnPropInstance.cpp"
@@ -1804,6 +1808,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ_02.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_01.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_03.cpp"
+  rem  ---- wave Q6 round 2 / pstream: the PROP-vs-WORLD contact generation pair -- wQ2_02 (Begin/End
+  rem  PropWorldContactGeneration @0x82628CB0/@0x82628E18 + GetTriangleCacheSlotAndRadius) and wQ_03
+  rem  (UpdateTriangleCache @0x826119A0). MOUNT AS A PAIR (wQ_03 alone is an LNK2019). Their three
+  rem  conductor gates retire in this change; the primitive-list-vs-triangle-list STREAM job family
+  rem  (CgsCollisionGenerator.cpp) + AddPrimitive(Volume*) landed this round.
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_02.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ_03.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_04.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_05.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_06.cpp"
