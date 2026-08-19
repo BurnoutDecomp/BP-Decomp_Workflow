@@ -1783,6 +1783,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_03.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_03_embed_check.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_04.cpp"
+  rem  ---- wave Q5 round-3 integration: PropManager::ProcessInputs_Prepare @0x825E3400, the prop-physics
+  rem  data handle pickup PhysicsModule::PropPrepareTypes @0x825A14A8 calls (its gate retired).
+  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ5_01.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_PropInstanceQueries.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_RoutePropVsRaceCarContactToDummyCar.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropPhysics\BrnPropInstance.cpp"
