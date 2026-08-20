@@ -61,7 +61,7 @@ The sequenced entry point is the repo-root driver (see [BUILD.md](../BUILD.md)):
 
 ```powershell
 .\build doctor      # readiness report; machine paths live in build.config.toml
-.\build all         # tools -> lua -> ffmpeg -> exe -> data
+.\build all         # tools -> lua -> ffmpeg -> xaudio2 -> exe -> data
 .\build devdata     # refresh build/game's GENERATED assets (schema.vlt/bin + LOADINGSCREEN)
 ```
 
@@ -71,11 +71,12 @@ Every step also runs standalone:
 tools/build/build_game_exe.bat
 tools/build/build_lua.bat
 tools/build/build_ffmpeg.bat        # add --prebuilt to download the CI build
+tools/build/fetch_xaudio2_redist.bat # Microsoft.XAudio2.Redist (XAudio 2.9 engine)
 pwsh tools/build/build_tools.ps1
 ```
 
 Build products go under `build/game/` and `build/tools/`; generated FFmpeg and
-Lua binaries go under `b5-decomp/vendor/`. MSVC is located by
+Lua binaries, and the fetched XAudio2 redistributable, go under `b5-decomp/vendor/`. MSVC is located by
 `tools/build/msvc_env.bat`; the canonical compile flags/includes are
 `tools/build/msvc_flags.txt` + `msvc_includes.txt` (shared with the per-TU gate).
 

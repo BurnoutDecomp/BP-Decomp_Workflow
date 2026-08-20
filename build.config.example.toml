@@ -20,8 +20,12 @@ x360_root = ""
 # Probed default: C:/Program Files (x86)/Steam/steamapps/common/BurnoutPR
 bpr_root = ""
 
-# The nushaders repo's TUB HLSL tree, i.e. <clone>/Reference/TUB/Bundle/gamedb/burnout5.
-# Needed only to convert SHADERS.BNDL (without it every technique falls back).
+# The nushaders HLSL tree.  LEAVE THIS EMPTY unless you have a reason not to: nushaders is
+# a SUBMODULE (tools/nushaders) since 2026-08-17, and the default resolves inside the
+# checkout -- `git submodule update --init tools/nushaders` is the whole setup.
+# Set it only to build SHADERS.BNDL against a working clone instead; point it at a gamedb
+# root containing Shaders/ (upstream: <clone>/Source/Bundle/gamedb/burnout5; the older
+# layout's <clone>/Reference/TUB/Bundle/gamedb/burnout5 is also accepted).
 #                                                          -> env NUSHADERS_TUB
 nushaders_tub = ""
 

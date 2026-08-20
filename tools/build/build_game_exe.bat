@@ -15,6 +15,9 @@ set "VEN=%ROOT%\b5-decomp\vendor"
 set "RES=%ROOT%\b5-decomp\res"
 rem FFmpeg (movie player VP6/MP4 decode) - tools\build\build_ffmpeg.bat (or --prebuilt).
 set "FFM=%ROOT%\b5-decomp\vendor\ffmpeg-build"
+rem XAudio2 Redistributable (CgsSystem::AudioOutputPC's 2.9 engine, Win7 SP1 and up)
+rem - tools\build\fetch_xaudio2_redist.bat.
+set "XA2=%ROOT%\b5-decomp\vendor\xaudio2redist"
 rem Game build output lives under build\game\ (build\tools\ holds tool binaries; see tools\build\build_tools.ps1).
 set "OUT=%ROOT%\build\game"
 set "RSP=%OUT%\obj\build.rsp"
@@ -42,6 +45,11 @@ if not exist "%FFM%\bin\avcodec.lib" (
 if not exist "%VEN%\lua\lua515.lib" (
   echo ERROR: Lua static lib missing -- "%VEN%\lua\lua515.lib" not found.
   echo        Run tools\build\build_lua.bat first.
+  exit /b 1
+)
+if not exist "%XA2%\include\xaudio2Redist.h" (
+  echo ERROR: XAudio2 redist missing -- "%XA2%\include\xaudio2Redist.h" not found.
+  echo        CgsAudioOutputPC.cpp includes it. Run: tools\build\fetch_xaudio2_redist.bat
   exit /b 1
 )
 if not exist "%FLAGS_TXT%" ( echo ERROR: missing "%FLAGS_TXT%" & exit /b 1 )
@@ -1151,6 +1159,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  (all dead until PhysicsModule::Update lands -- that wave must resolve every stub there).
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateVehiclePhysics.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerLinkStubs.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleConstants.cpp"
   rem  ?????? 2026-08-11 (prepare-chain wave): the DRIVER-CONTROLS CONSUMER, VehicleManager::
   rem  UpdateDrivers @0x82642C68 (120 insns) -- slice TU, home BrnVehicleManager.cpp still
   rem  unmounted. ??? THIS MOUNT IS MANDATORY, NOT OPTIONAL: the same commit DELETES the
@@ -1525,6 +1534,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  precedent as RaceCarPhysics_Construct.cpp / TrafficPhysics_Construct.cpp.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Construct.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\StuntOffences\BrnStuntOffencesManager_Construct.cpp"
+  rem  StuntOffencesManager's per-frame body is now closed over the exact DecFIGS APIs whose
+  rem  inline Breaker sites arbitrate them (GetTimeDrifting/GetSpeed/GetSpeedMPH/GetPosition/
+  rem  GetLinearVelocityDirection/GetPreviousControls/HasAir/GetAllWheelsHaveTraction).
+  echo "%SRC%\GameSource\Physics\VehicleManager\StuntOffences\BrnStuntOffencesManager.cpp"
   rem  The deformation leg of PhysicsModule::Construct. Each of these is the SPLIT-OUT Construct of a
   rem  TU that cannot be mounted whole; every count below is a MEASURED trial link, not an estimate:
   rem     BrnDeformationManager.cpp        (2026-08-14: "25 unresolved" RETIRED -- re-measured 37
@@ -1683,10 +1696,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem    M1  group A only (BrnStuntOffencesManager.cpp + BrnPhysicalTrafficManager.cpp, no
   rem        BrnVehicleManager.cpp)                                   -> 10 unresolved.
   rem        ??? the previous note's "one mount line each" is FALSE: both group-A TUs drag their own
-  rem        closure. BrnStuntOffencesManager wants SEVEN RaceCarPhysics stunt accessors
-  rem        (GetDriftActiveTime / GetDriftLateralSpeed / IsHandbrakeHeld / IsConsideredAirborne /
-  rem        GetStuntReferenceVelocity / GetStuntWorldPosition / GetStuntForwardAxis, all
-  rem        declare-only "ADDITIVE GROW" entries in RaceCarPhysics.h:268-274 with no body anywhere);
+  rem        closure. RETIRED 2026-08-20: the seven apparent RaceCarPhysics stunt accessors were
+  rem        project-only inventions, not DecFIGS declarations. The Breaker inlined loads now use
+  rem        their exact inherited/member APIs, and BrnStuntOffencesManager.cpp is mounted above.
   rem        BrnPhysicalTrafficManager wants TrafficPhysics::Construct, ArticulatedJointPool::
   rem        Construct and ArticulatedJointPool::SendCreateRemoveJointEvents.
   rem
@@ -4041,5 +4053,10 @@ if "%BUILD_ERR%"=="0" if exist "%OUT%\Burnout_PC.map" (
 )
 rem Stage the FFmpeg runtime DLLs next to the exe so the movie player loads at runtime.
 if "%BUILD_ERR%"=="0" copy /Y "%FFM%\bin\*.dll" "%OUT%\" >nul
+rem Stage the XAudio2 redistributable next to the exe. AudioOutputPC::Open LoadLibrary's
+rem xaudio2_9redist.dll by name and the exe directory is searched first, so this copy IS
+rem the audio engine the game runs on (without it it falls back to the in-box xaudio2_9,
+rem and on a pre-1803 Windows to nothing at all -- the game then runs muted).
+if "%BUILD_ERR%"=="0" copy /Y "%XA2%\bin\x64\xaudio2_9redist.dll" "%OUT%\" >nul
 
 endlocal & exit /b %BUILD_ERR%

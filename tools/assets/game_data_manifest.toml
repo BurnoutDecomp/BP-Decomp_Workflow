@@ -204,29 +204,39 @@ id     = "shaders"
 match  = ["SHADERS.BNDL"]
 action = "convert"
 tool   = "shaders/convert_shaders_bundle.py"
-argv    = ["convert", "{src}", "{out}", "--fallback"]
+argv    = ["convert", "{src}", "{out}"]
 verify  = ["bnd2_platform=4"]
 isolate = "volatility"
 # TOML inline tables must each stay on ONE line.
 requires = [
   { path = "build/tools/yap/YAP.exe", fix = "pwsh tools/build/build_tools.ps1" },
-  { path = "{nushaders_tub}/Shaders", fix = "clone the separate nushaders repo and set [inputs].nushaders_tub in build.config.toml (or env NUSHADERS_TUB) to <clone>/Reference/TUB/Bundle/gamedb/burnout5; --fxdir overrides per-run.\nWithout the TUB HLSL every technique would compile to fallback_world.fx, so the tool refuses rather than emit a bundle in which nothing is the real shader." },
+  { path = "{nushaders_tub}/Shaders", fix = "the nushaders HLSL is a submodule -- run `git submodule update --init tools/nushaders`. To build against a working clone instead, set [inputs].nushaders_tub in build.config.toml (or env NUSHADERS_TUB) to a gamedb root containing Shaders/; --fxdir overrides per-run.\nWithout the HLSL every technique would compile to fallback_world.fx, so the tool refuses rather than emit a bundle in which nothing is the real shader." },
 ]
 why     = """convert_shaders_bundle.py is the only tool for SHADERS.BNDL and takes an
 explicit `convert <in> <out>` subcommand.  Default --mode d3d9 recompiles every
-ShaderProgramBuffer from the TUB HLSL with fxc.
-⚠️ `--fallback` IS A DELIBERATE DEGRADATION and is on because without it the whole bundle
-is unproducible: MEASURED 2026-08-02, a strict run hard-fails with `no TUB HLSL source for
-2 technique(s)` (Godray_Additive_Doublesided_Default + CarStudio_DoNotShipWithThisInTheGame_
-Default), so tools/assets/shaders/fallback_world.fx is substituted.  Since 2026-08-17 the
-Godray technique is served by tools/assets/shaders/recovered/Godray_Additive_Doublesided.fx
-(decoded from the X360 microcode; the fallback substitute lacked its internal PS constant
-`illuminance` and asserted "Tyring to postfixup a constant not present in the programbuffer"
-whenever TRK_UNIT83_GR streamed in), so only CarStudio still falls back.  The tool now
-hard-fails if any technique's internal constant is missing from its compiled program.
-Everything else is really recompiled.
-Prerequisites this rule does NOT provide: fxc.exe (env PC_FXC or a Win10/11 SDK) and the
-nushaders repo's TUB HLSL tree (NUSHADERS_TUB, see build.config.toml) -- a separate repo.
+ShaderProgramBuffer from the nushaders HLSL with fxc.
+⭐ STRICT SINCE 2026-08-17 -- `--fallback` IS GONE, and with it the last deliberate
+degradation in this rule.  It used to be mandatory because two techniques had no HLSL
+source and a strict run hard-failed with `no TUB HLSL source for 2 technique(s)`:
+  * Godray_Additive_Doublesided_Default -- served since 2026-08-17 by
+    tools/assets/shaders/recovered/Godray_Additive_Doublesided.fx, decoded from the X360
+    microcode (the fallback substitute lacked its internal PS constant `illuminance` and
+    asserted "Tyring to postfixup a constant not present in the programbuffer" whenever
+    TRK_UNIT83_GR streamed in);
+  * CarStudio_DoNotShipWithThisInTheGame_Default -- served now that nushaders is a
+    SUBMODULE (tools/nushaders): the real shader ships in the repo, one directory over from
+    the ones already used, at Source/Bundle/gamedb/burnout5/Playground/Test_Shaders.
+MEASURED on the X360 bundle after the submodule landed: 110 mapped / 0 unmapped, and a
+strict convert reports compiled 218, fallback 0, contract_errors 0.  If a future technique
+loses its source the rule now FAILS instead of quietly shipping fallback_world.fx in its
+place -- which is the whole point of dropping the flag.  (--fallback still exists on the
+tool for the deliberate all-fallback diagnostic bundle, MINIMAL_PATH.md option A.)
+The tool also hard-fails if any technique's internal constant is missing from its compiled
+program.
+Prerequisites this rule does NOT provide: fxc.exe (env PC_FXC or a Win10/11 SDK).  The
+HLSL itself is no longer an out-of-repo dependency -- `git submodule update --init
+tools/nushaders` is the whole setup, and [inputs].nushaders_tub / NUSHADERS_TUB stay
+available for building against a working clone instead.
 It also uses the Volatility texture flow, hence isolate."""
 
 
