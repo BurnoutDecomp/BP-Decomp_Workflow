@@ -76,22 +76,72 @@ import world_type_transcode as wtt               # noqa: E402
 import convert_world_bundle as cwb               # noqa: E402
 
 YAP = os.path.join(ROOT, 'build', 'tools', 'yap', 'YAP.exe')
-# The nushaders repo's TUB HLSL tree: env NUSHADERS_TUB (fed by build.config.toml
-# [inputs].nushaders_tub via the build driver) > this machine's historical default.
-NUSHADERS_TUB = os.environ.get(
-    'NUSHADERS_TUB',
-    r'D:\Burnout Paradise\Source\NuShaders\Reference\TUB\Bundle\gamedb\burnout5')
+# ---------------------------------------------------------------------------
+# The nushaders HLSL tree.
+#
+# It is a SUBMODULE now -- tools/nushaders, github.com/BurnoutDecomp/NuShaders -- so the
+# default resolves inside this checkout and a clean clone builds SHADERS.BNDL with no
+# machine configuration at all.  Until 2026-08-17 the default was one developer's absolute
+# path, which meant every other box either set NUSHADERS_TUB or silently produced an
+# all-fallback bundle.
+#
+# Resolution order, most specific first:
+#   --fxdir DIR...      explicit, wins outright (repeatable)
+#   env NUSHADERS_TUB   fed by build.config.toml [inputs].nushaders_tub via the build
+#                       driver; still honoured, so an out-of-tree working clone can be
+#                       pointed at without touching the submodule
+#   tools/nushaders     the submodule (the default)
+#
+# NOTE THE LAYOUT DIFFERENCE.  Upstream keeps the burnout5 gamedb under Source/Bundle/,
+# not the Reference/TUB/Bundle/ path the old absolute default used.  Both spellings are
+# probed, so an existing NUSHADERS_TUB aimed at either tree keeps working.
+NUSHADERS_SUBMODULE = os.path.join(ROOT, 'tools', 'nushaders')
+# Candidate gamedb roots, in order.  Each should contain Shaders/ and Include/.
+_NUSHADERS_GAMEDB_CANDIDATES = (
+    os.path.join(NUSHADERS_SUBMODULE, 'Source', 'Bundle', 'gamedb', 'burnout5'),
+    os.path.join(NUSHADERS_SUBMODULE, 'Reference', 'TUB', 'Bundle', 'gamedb', 'burnout5'),
+)
+
+
+def _resolve_nushaders_tub():
+    env = os.environ.get('NUSHADERS_TUB', '').strip()
+    if env:
+        # An explicit setting is honoured even when it does not exist: the "tree not found"
+        # error is a better diagnostic than silently ignoring what the box asked for.
+        return env
+    for cand in _NUSHADERS_GAMEDB_CANDIDATES:
+        if os.path.isdir(os.path.join(cand, 'Shaders')):
+            return cand
+    return _NUSHADERS_GAMEDB_CANDIDATES[0]
+
+
+NUSHADERS_TUB = _resolve_nushaders_tub()
 DEFAULT_FX_DIR = os.path.join(NUSHADERS_TUB, 'Shaders')
 DEFAULT_INCLUDE_DIR = os.path.join(NUSHADERS_TUB, 'Include')
+# Playground/Test_Shaders carries CarStudio_DoNotShipWithThisInTheGame.fx -- the LAST
+# technique still served by fallback_world.fx.  Searched AFTER Shaders/ and never before
+# it: that file also defines a `ZOnlyNull` technique, and three real shaders in Shaders/
+# (Cruciform_1Bit_Doublesided{,_Instanced}, Water_Specular_Opaque_Singlesided) define it
+# too.  build_technique_map is first-dir-wins, so putting the playground first would
+# quietly re-point the shared standalone ZOnly* keys at a do-not-ship test shader.
+DEFAULT_PLAYGROUND_FX_DIR = os.path.join(NUSHADERS_TUB, 'Playground', 'Test_Shaders')
 FALLBACK_FX = os.path.join(HERE, 'fallback_world.fx')
-# Shaders RECOVERED from the X360 microcode (xenos.py + ctab.py) for techniques the TUB
-# HLSL tree does not carry.  Always searched FIRST (first fx dir wins in the technique
-# map), so a recovered technique never falls through to --fallback again.  Each file is
-# self-contained (compiles without the TUB Include/ tree).  Currently:
-#   Godray_Additive_Doublesided.fx  (technique Godray_Additive_Doublesided_Default;
-#     the fallback substitute lacked its internal PS constant `illuminance` and fired
-#     PostFixUpShaderConstants' "Tyring to postfixup a constant not present in the
-#     programbuffer" whenever TRK_UNIT83/379/381/388_GR streamed in).
+# Shaders RECOVERED from the X360 microcode (xenos.py + ctab.py) for techniques the
+# nushaders HLSL tree does not carry.  Searched FIRST, so a recovered technique never
+# falls through to --fallback.  Each file is self-contained (compiles without Include/).
+#
+# CURRENTLY ONE FILE, AND IT IS NOW ALSO UPSTREAM.  Godray_Additive_Doublesided.fx was
+# contributed to the nushaders submodule on 2026-08-17, at the gamedb path the technique
+# itself names (Playground/Test_Shaders/), so the bundle builds correctly from nushaders
+# ALONE -- verified: 110 mapped / 0 unmapped, compiled 218 / fallback 0 with this dir
+# excluded from the search.  The copy here is kept deliberately, for two reasons:
+#   * it is THIS repo's attested artifact -- the annotated microcode listing in its header
+#     is the decode evidence, and it should not depend on another repo's history;
+#   * dropping it would change the emitted bundle's resource LAYOUT (same resources, same
+#     technique sources, ~80 bytes of table ordering), and the layout that has been
+#     boot-tested is the one produced with this dir in the search.
+# The two copies are byte-identical; if they ever diverge, this one is the decode of
+# record and upstream should be re-synced from it.
 RECOVERED_FX_DIR = os.path.join(HERE, 'recovered')
 
 # SHADERS.BNDL non-shader types handled by the established world flippers.
@@ -647,6 +697,11 @@ def main():
         patch_recovered(a.pc_bundle, a.out_bundle, a.keep_work)
         return 0
     fx_dirs = a.fxdir or [DEFAULT_FX_DIR]
+    # The playground dir joins ONLY the default search (an explicit --fxdir means the
+    # caller is choosing its own sources), and always AFTER Shaders/ -- see the banner on
+    # DEFAULT_PLAYGROUND_FX_DIR for the ZOnlyNull collision that ordering avoids.
+    if a.fxdir is None and os.path.isdir(DEFAULT_PLAYGROUND_FX_DIR):
+        fx_dirs = fx_dirs + [DEFAULT_PLAYGROUND_FX_DIR]
     # Recovered-from-microcode shaders always outrank the TUB tree and the fallback.
     if os.path.isdir(RECOVERED_FX_DIR) and RECOVERED_FX_DIR not in fx_dirs:
         fx_dirs = [RECOVERED_FX_DIR] + fx_dirs
@@ -660,11 +715,13 @@ def main():
         raise SystemExit(
             'TUB HLSL source tree not found:\n  %s\n'
             'Every technique would silently compile to fallback_world.fx.\n'
-            'Set NUSHADERS_TUB (or [inputs].nushaders_tub in build.config.toml) to your '
-            'nushaders clone\'s Reference/TUB/Bundle/gamedb/burnout5, point --fxdir at '
-            'your copy, or -- if you really want the all-fallback diagnostic bundle -- '
-            'ask for it explicitly with `--fallback --fxdir <nonexistent-dir>` '
-            '(MINIMAL_PATH.md option A).'
+            'The nushaders HLSL is a SUBMODULE; the usual cause is a checkout that has '
+            'not initialised it:\n'
+            '    git submodule update --init tools/nushaders\n'
+            'Otherwise set NUSHADERS_TUB (or [inputs].nushaders_tub in build.config.toml) '
+            'to a gamedb root containing Shaders/, point --fxdir at your copy, or -- if '
+            'you really want the all-fallback diagnostic bundle -- ask for it explicitly '
+            'with `--fallback --fxdir <nonexistent-dir>` (MINIMAL_PATH.md option A).'
             % DEFAULT_FX_DIR)
     if a.cmd == 'inventory':
         inventory(a.in_bundle, fx_dirs)

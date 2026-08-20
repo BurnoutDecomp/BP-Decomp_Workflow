@@ -19,3 +19,7 @@ b5-decomp\vendor\lua\src
 b5-decomp\src\GameShared\GameClasses\Development
 b5-decomp\vendor\dirtysdk\include
 b5-decomp\vendor\zlib\include
+# XAudio2 Redistributable headers (tools\build\fetch_xaudio2_redist.bat). Only the
+# *Redist.h files are vendored, so this dir cannot shadow the Windows SDK's xaudio2.h /
+# xapo.h / x3daudio.h for any other TU; CgsAudioOutputPC.cpp includes <xaudio2Redist.h>.
+b5-decomp\vendor\xaudio2redist\include

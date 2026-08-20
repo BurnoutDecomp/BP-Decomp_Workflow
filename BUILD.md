@@ -17,7 +17,7 @@ the driver only sequences them and loads your config.)
 
 | Product | Where |
 |---|---|
-| `Burnout_PC.exe` + FFmpeg DLLs + `Burnout_PC.cgsmap` | `build/game/` |
+| `Burnout_PC.exe` + FFmpeg DLLs + `xaudio2_9redist.dll` + `Burnout_PC.cgsmap` | `build/game/` |
 | Converted game data (a launchable folder) | `[output].game_data` (default: `<x360_root>_decomp`) |
 | YAP + Volatility converter binaries | `build/tools/` |
 
@@ -84,6 +84,7 @@ or step by step (each with `--force` to rebuild):
 | `build tools` | `tools/build/build_tools.ps1` | `build/tools/{yap,volatility}` |
 | `build lua` | `tools/build/build_lua.bat` | `b5-decomp/vendor/lua/lua515.lib` |
 | `build ffmpeg` | `tools/build/build_ffmpeg.bat` (add `--prebuilt` to download instead of compile) | `b5-decomp/vendor/ffmpeg-build/` |
+| `build xaudio2` | `tools/build/fetch_xaudio2_redist.bat` (downloads Microsoft.XAudio2.Redist from nuget.org) | `b5-decomp/vendor/xaudio2redist/` — headers for the build, `xaudio2_9redist.dll` staged beside the exe |
 | `build exe` | `tools/build/build_game_exe.bat` | `build/game/Burnout_PC.exe` |
 | `build data` | `tools/assets/build_game_data.py` (all its flags forwarded — `--dry-run`, `--jobs`, `--out`, `--borrow-dir`, `--only`, …) | the converted data folder + `.build_game_data/report.txt` |
 | `build devdata` | attribsys_schema_port + extract_xex against the ARTIST XEX | refreshes the *generated* assets in the live `build/game` (`schema.vlt`/`schema.bin` + `LOADINGSCREEN/*.dds`) — run it whenever those tools change; stale copies here presented as gibberish loading screens and the "PC schema file missing" assert |
@@ -117,6 +118,10 @@ FAILED, by design.
   (the build now detects this up front).
 - **1,145 × `cannot open source file`** — `b5-decomp` submodule not initialized.
 - **`C1083: libavcodec/avcodec.h`** — no FFmpeg dev tree: `build ffmpeg --prebuilt`.
+- **`C1083: xaudio2Redist.h`** — no XAudio2 redist: `build xaudio2`.
+- **`[Audio] XAudio2 unavailable ... running muted` in `BrnGame.log`** — `xaudio2_9redist.dll`
+  is not beside `Burnout_PC.exe` and the OS has no in-box XAudio 2.9/2.8 either. Re-run
+  `build xaudio2` then `build exe` (the exe build stages the DLL).
 - **`LNK1104: lua515.lib`** — `build lua`.
 - **A data run "fails 970 times"** — YAP/Volatility not built: `build tools`.
 - **Wrong compiler picked (Xbox 360 SDK cl on PATH)** — the resolver rejects

@@ -479,24 +479,31 @@ class WorkerRoots:
             return self._ready[slot]
         root = os.path.join(self.base, "w%d" % slot)
         marker = os.path.join(root, ".mirrored")
-        if not os.path.isfile(marker):
-            if not self.quiet:
-                print("  [work] mirroring converter root -> %s" % root, flush=True)
-            os.makedirs(root, exist_ok=True)
-            dst_tools = os.path.join(root, "tools", "assets")
-            if os.path.isdir(dst_tools):
-                shutil.rmtree(dst_tools, ignore_errors=True)
-            shutil.copytree(os.path.join(REPO, "tools", "assets"), dst_tools,
-                            ignore=shutil.ignore_patterns("__pycache__", "out"))
-            for sub in ("yap", "volatility"):
-                s = os.path.join(REPO, "build", "tools", sub)
-                d = os.path.join(root, "build", "tools", sub)
-                if os.path.isdir(s) and not os.path.isdir(d):
-                    shutil.copytree(s, d)
-            os.makedirs(os.path.join(root, "build", "game"), exist_ok=True)
-            os.makedirs(os.path.join(root, "references"), exist_ok=True)
-            with open(marker, "w", encoding="utf-8") as fh:
-                fh.write("mirrored converter root for build_game_data.py\n")
+        # A previous interrupted run (or an intentional --keep-work run) can leave this
+        # root behind.  The marker only proves that *some* version of the converters was
+        # mirrored; treating it as a permanent cache can silently run yesterday's scripts.
+        # Refresh every slot once per invocation.  `_ready` keeps the copy to one time per
+        # live worker, and normal runs remove the whole work tree at exit anyway.
+        if not self.quiet:
+            action = "refreshing" if os.path.isfile(marker) else "mirroring"
+            print("  [work] %s converter root -> %s" % (action, root), flush=True)
+        os.makedirs(root, exist_ok=True)
+        dst_tools = os.path.join(root, "tools", "assets")
+        if os.path.isdir(dst_tools):
+            shutil.rmtree(dst_tools, ignore_errors=True)
+        shutil.copytree(os.path.join(REPO, "tools", "assets"), dst_tools,
+                        ignore=shutil.ignore_patterns("__pycache__", "out"))
+        for sub in ("yap", "volatility"):
+            s = os.path.join(REPO, "build", "tools", sub)
+            d = os.path.join(root, "build", "tools", sub)
+            if os.path.isdir(d):
+                shutil.rmtree(d, ignore_errors=True)
+            if os.path.isdir(s):
+                shutil.copytree(s, d)
+        os.makedirs(os.path.join(root, "build", "game"), exist_ok=True)
+        os.makedirs(os.path.join(root, "references"), exist_ok=True)
+        with open(marker, "w", encoding="utf-8") as fh:
+            fh.write("mirrored converter root for build_game_data.py\n")
         self._ready[slot] = root
         return root
 
@@ -574,6 +581,11 @@ def run_tool(rule, workroot, argv, cwd, log, args=None):
     env = dict(os.environ)
     env["BRN_X360_ROOT"] = log["srcroot"]
     env["PYTHONIOENCODING"] = "utf-8"
+    # Converters execute from a mirrored repo root which intentionally contains only
+    # tools/assets, not the nushaders submodule or tools/build/build_config.py.  Give the
+    # shader converter the gamedb path resolved by this real-root orchestrator; otherwise
+    # its repo-relative fallback points inside the worker and cannot see the HLSL tree.
+    env["NUSHADERS_TUB"] = _resolved_nushaders_tub()
     # The mirrored worker roots make everything exe-adjacent per-slot; the Volatility port
     # cache must be the one thing they SHARE, so it is passed in by absolute path.  Empty
     # = disabled, which is also what a hand-run converter sees.
@@ -1164,6 +1176,27 @@ def tool_binary_needs(tool_rel, _seen=None):
     return needs
 
 
+def _nushaders_submodule_gamedb():
+    """The nushaders submodule's burnout5 gamedb root (the dir holding Shaders/).
+
+    Mirrors convert_shaders_bundle._resolve_nushaders_tub so the precheck and the
+    converter can never disagree about where the HLSL is."""
+    base = os.path.join(REPO, "tools", "nushaders")
+    for rel in (("Source", "Bundle", "gamedb", "burnout5"),
+                ("Reference", "TUB", "Bundle", "gamedb", "burnout5")):
+        cand = os.path.join(base, *rel)
+        if os.path.isdir(os.path.join(cand, "Shaders")):
+            return cand
+    return os.path.join(base, "Source", "Bundle", "gamedb", "burnout5")
+
+
+def _resolved_nushaders_tub():
+    """Resolve the HLSL gamedb once, for both preflight and worker processes."""
+    return ((os.environ.get("NUSHADERS_TUB") or "").strip()
+            or (_CFG.get("inputs", {}).get("nushaders_tub") or "").strip()
+            or _nushaders_submodule_gamedb())
+
+
 def preflight(items, gens, srcroot, outroot):
     """External prerequisites of the rules that actually have work in THIS plan.
 
@@ -1183,9 +1216,11 @@ def preflight(items, gens, srcroot, outroot):
     ctx = {"repo": REPO, "srcroot": srcroot, "outroot": outroot,
            # The one out-of-repo dependency the manifest models ({nushaders_tub} in
            # the shaders rule's `requires`): env > config > this machine's default.
-           "nushaders_tub": os.environ.get("NUSHADERS_TUB")
-               or (_CFG.get("inputs", {}).get("nushaders_tub") or "").strip()
-               or r"D:\Burnout Paradise\Source\NuShaders\Reference\TUB\Bundle\gamedb\burnout5"}
+           # nushaders is a SUBMODULE (tools/nushaders) since 2026-08-17, so the default
+           # resolves inside this checkout; env > config > submodule.  Upstream keeps the
+           # gamedb under Source/Bundle/, the older tree under Reference/TUB/Bundle/ --
+           # both are probed so an existing setting for either keeps working.
+           "nushaders_tub": _resolved_nushaders_tub()}
     planned = {}
     for it in items + gens:
         if it.rule.action in ("convert", "generate"):

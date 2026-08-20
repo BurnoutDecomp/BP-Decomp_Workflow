@@ -69,6 +69,13 @@ jobs:
           unzip -q -o ffmpeg-build.zip -d "$dest"
           test -f "$dest/bin/avcodec.lib" || { echo "prebuilt FFmpeg missing bin/avcodec.lib"; exit 1; }
 
+      # Microsoft's XAudio2 Redistributable (nuget.org). CgsAudioOutputPC.cpp compiles
+      # against its header and build_game_exe.bat stages xaudio2_9redist.dll beside the
+      # exe, so publish-build.ps1's *.dll sweep carries it into the bundle.
+      - name: Fetch XAudio2 redistributable
+        shell: cmd
+        run: tools\build\fetch_xaudio2_redist.bat
+
       # Put MSVC (cl) on PATH so the build .bat files skip their own fragile
       # `call vcvars64 >nul 2>&1` (which died silently with exit 255 on the runner).
       - name: Set up MSVC (x64)

@@ -6,9 +6,10 @@ Sequences the existing workhorse scripts -- it does NOT reimplement any build:
   tools    YAP + Volatility        -> tools/build/build_tools.ps1
   lua      lua515.lib              -> tools/build/build_lua.bat
   ffmpeg   vendor/ffmpeg-build     -> tools/build/build_ffmpeg.bat [--prebuilt]
+  xaudio2  vendor/xaudio2redist     -> tools/build/fetch_xaudio2_redist.bat
   exe      Burnout_PC.exe          -> tools/build/build_game_exe.bat
   data     converted game data     -> tools/assets/build_game_data.py (args forwarded)
-  all      tools -> lua -> ffmpeg -> exe -> data, skip-if-present
+  all      tools -> lua -> ffmpeg -> xaudio2 -> exe -> data, skip-if-present
   run      launch the exe from its own folder (the schema.vlt CWD contract)
 
 Machine paths come from build.config.toml (copy build.config.example.toml); the
@@ -37,6 +38,7 @@ GAME_OUT = os.path.join(REPO, "build", "game")
 EXE = os.path.join(GAME_OUT, "Burnout_PC.exe")
 FFMPEG_BUILD = os.path.join(B5, "vendor", "ffmpeg-build")
 LUA_LIB = os.path.join(B5, "vendor", "lua", "lua515.lib")
+XAUDIO2_REDIST = os.path.join(B5, "vendor", "xaudio2redist")
 YAP_EXE = os.path.join(REPO, "build", "tools", "yap", "YAP.exe")
 VOLA_EXE = os.path.join(REPO, "build", "tools", "volatility", "Volatility.Cli.exe")
 STAGER = os.path.join(REPO, "tools", "assets", "build_game_data.py")
@@ -232,6 +234,11 @@ def cmd_doctor(cfg, args):
         r.row("ok", "Lua static lib (lua515.lib)")
     else:
         r.row("fail", "lua515.lib missing", "exe", "build lua")
+    if os.path.exists(os.path.join(XAUDIO2_REDIST, "include", "xaudio2Redist.h")) and        os.path.exists(os.path.join(XAUDIO2_REDIST, "bin", "x64", "xaudio2_9redist.dll")):
+        r.row("ok", "XAudio2 redist (vendor/xaudio2redist)")
+    else:
+        r.row("fail", "XAudio2 redist missing (vendor/xaudio2redist) -- the audio backend "
+                      "includes its header and ships its DLL", "exe", "build xaudio2")
     if exe_running():
         r.row("warn", "Burnout_PC.exe is RUNNING -- the link would fail with LNK1104; "
                       "close it before `build exe`")
@@ -284,10 +291,20 @@ def cmd_doctor(cfg, args):
     tub = os.environ.get("NUSHADERS_TUB")
     tub_src = "env/config" if tub else None
     if not tub:
-        # convert_shaders_bundle.py's own last-resort default -- honor it here too.
-        legacy = r"D:\Burnout Paradise\Source\NuShaders\Reference\TUB\Bundle\gamedb\burnout5"
-        if os.path.isdir(os.path.join(legacy, "Shaders")):
-            tub, tub_src = legacy, "converter default"
+        # Mirror the converter/stager resolution: the in-repo submodule is the portable
+        # default; the historical external clone remains a final compatibility fallback.
+        candidates = [
+            (os.path.join(REPO, "tools", "nushaders", "Source", "Bundle", "gamedb",
+                          "burnout5"), "repo submodule"),
+            (os.path.join(REPO, "tools", "nushaders", "Reference", "TUB", "Bundle",
+                          "gamedb", "burnout5"), "repo submodule"),
+            (r"D:\Burnout Paradise\Source\NuShaders\Reference\TUB\Bundle\gamedb\burnout5",
+             "legacy external clone"),
+        ]
+        for candidate, source in candidates:
+            if os.path.isdir(os.path.join(candidate, "Shaders")):
+                tub, tub_src = candidate, source
+                break
     if tub and os.path.isdir(os.path.join(tub, "Shaders")):
         r.row("ok", f"nushaders TUB HLSL: {tub} ({tub_src})")
     elif tub:
@@ -297,8 +314,8 @@ def cmd_doctor(cfg, args):
     else:
         r.row("warn", "nushaders TUB HLSL tree not configured -- SHADERS.BNDL conversion "
                       "will refuse (every technique would fall back)",
-              fix="clone the nushaders repo and set [inputs].nushaders_tub to "
-                  "<clone>/Reference/TUB/Bundle/gamedb/burnout5")
+              fix="git submodule update --init tools/nushaders, or set "
+                  "[inputs].nushaders_tub to a gamedb root containing Shaders/")
     fxc, how = resolve_fxc()
     if fxc:
         r.row("ok", f"fxc.exe: {fxc} ({how})")
@@ -387,6 +404,18 @@ def step_ffmpeg(cfg, args, dry=False):
     return run_bat(os.path.join(TOOLS_BUILD, "build_ffmpeg.bat"), *extra, dry=dry)
 
 
+def step_xaudio2(cfg, args, dry=False):
+    """Fetch Microsoft's XAudio2 Redistributable -- the 2.9 engine
+    CgsSystem::AudioOutputPC compiles against and ships beside the exe."""
+    hdr = os.path.join(XAUDIO2_REDIST, "include", "xaudio2Redist.h")
+    dll = os.path.join(XAUDIO2_REDIST, "bin", "x64", "xaudio2_9redist.dll")
+    if os.path.exists(hdr) and os.path.exists(dll) and not getattr(args, "force", False):
+        print("xaudio2: vendor/xaudio2redist already present -- skipping (--force to re-fetch)")
+        return 0
+    extra = ["--force"] if getattr(args, "force", False) else []
+    return run_bat(os.path.join(TOOLS_BUILD, "fetch_xaudio2_redist.bat"), *extra, dry=dry)
+
+
 def step_exe(cfg, args, dry=False):
     if exe_running():
         print("ERROR: Burnout_PC.exe is running -- the link would fail with LNK1104. "
@@ -422,6 +451,7 @@ def cmd_all(cfg, args, passthrough):
         ("lua", lambda: step_lua(cfg, argparse.Namespace(force=args.force_lua), dry)),
         ("ffmpeg", lambda: step_ffmpeg(cfg, argparse.Namespace(force=args.force_ffmpeg,
                                                                prebuilt=args.prebuilt), dry)),
+        ("xaudio2", lambda: step_xaudio2(cfg, argparse.Namespace(force=args.force_xaudio2), dry)),
         ("exe", lambda: step_exe(cfg, args, dry)),
         ("data", lambda: step_data(cfg, args, list(passthrough)
                                    + (["--dry-run"] if dry else []), False)),
@@ -523,13 +553,18 @@ def main(argv=None):
     p.add_argument("--force", action="store_true")
     p.add_argument("--prebuilt", action="store_true",
                    help="download the CI prebuilt instead of compiling (no MSYS2 needed)")
+    p = sub.add_parser("xaudio2", help="fetch vendor/xaudio2redist "
+                                      "(fetch_xaudio2_redist.bat)")
+    p.add_argument("--force", action="store_true")
     sub.add_parser("exe", help="build Burnout_PC.exe (build_game_exe.bat)")
     p = sub.add_parser("data", help="convert the game data (build_game_data.py; "
                                     "unknown args are forwarded verbatim)")
-    p = sub.add_parser("all", help="tools -> lua -> ffmpeg -> exe -> data (skip-if-present)")
+    p = sub.add_parser("all", help="tools -> lua -> ffmpeg -> xaudio2 -> exe -> data "
+                                   "(skip-if-present)")
     p.add_argument("--force-tools", action="store_true")
     p.add_argument("--force-lua", action="store_true")
     p.add_argument("--force-ffmpeg", action="store_true")
+    p.add_argument("--force-xaudio2", action="store_true")
     p.add_argument("--prebuilt", action="store_true",
                    help="if ffmpeg must be built, fetch the CI prebuilt instead")
     p.add_argument("--dry-run", action="store_true",
@@ -559,6 +594,8 @@ def main(argv=None):
         return step_lua(cfg, args)
     if args.cmd == "ffmpeg":
         return step_ffmpeg(cfg, args)
+    if args.cmd == "xaudio2":
+        return step_xaudio2(cfg, args)
     if args.cmd == "exe":
         return step_exe(cfg, args)
     if args.cmd == "data":
