@@ -223,6 +223,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ---- Its WorldLinkStubs gate is DELETED; leaving both = LNK2005.                    ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
+  rem START_PLAYING_MODE's exact boost-enabling arm first puts attached cars in
+  rem racing state through SetAllCarsOnStartLine, homed in this split TU.
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ModeArming.cpp"
   rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
   rem ---- its shared component-streamer base + the five concrete leaves. These ----
   rem ---- are what post the first VEH_ load requests.                          ----
@@ -234,10 +237,39 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Render.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar_wQ5_01.cpp"
-  rem  2026-08-11 (create-drain wave, conductor): ProcessPlayerVehicleInput calls
-  rem  BoostManager::SetBoostEarningEnabled @0x822A33B0 -- the body existed in this TU all along
-  rem  but the TU was never on this list (LNK2019 on the wave's first link).
+  rem ---- non-Showtime boost pipeline: exact base vtable, manager, and all three ----
+  rem ---- concrete ARTIST strategies. BoostManager embeds B2/B3/B5 by value, so ----
+  rem ---- omitting any of these part TUs leaves the selected B5 vtable incomplete. ----
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostStrategy.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostManager.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_01.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_02.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_03.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_04.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_05.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_06.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_11.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_16.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_01.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_02.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_03.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_04.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_06.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_07.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_11.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_15.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_16.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_17.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_01.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_02.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_03.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_04.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_05.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_06.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_11.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_16.cpp"
+  rem ---- source identities restored from the exact ARTIST B2/B3/B5 vtable targets. ----
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostFoldedVirtualBodies.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCarRenderParams.cpp"
   rem (pose wave 2026-08-01: RaceCar::Construct/Prepare/AddToWorld/UpdatePositioningData/
   rem  AssignActiveRaceCar/ToBeRenderedDamaged are now called by the real attach chain.)
