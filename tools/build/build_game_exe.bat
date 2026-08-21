@@ -2113,6 +2113,61 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wQ7_02.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLightManager.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLightRuntimeState.cpp"
+rem  2026-08-21 wave T1 parked traffic cars -- module half. C3 vehicle+param runtime
+rem  incl. the 13 container instantiation TUs; C4 spawn legs in _wT1_01 which retires the
+rem  WorldLinkStubs Construct / EnterTearingDownState / PostPhysicsUpdate gates and the
+rem  wQ7_02 meState bring-up latch; C5 car streamer -- SetAssetList @0x82753A38 is the
+rem  function whose absence the boot log named. BrnTrafficParam.cpp mounts because
+rem  BrnTrafficVehicle.cpp needs Param::GetHistoryEntry. KF_VEHICLE_UPDATE_MATRIX_OLD_
+rem  UP_FACTOR = splat 20.0f recovered from dyn-init thunk @0x82C67830 -- the "no writer
+rem  anywhere" banner was the export-scan blind spot, wave-Q lesson.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_01.cpp"
+rem  R2 round: _wT1_02 = PreSceneUpdate @0x8274A968 (blocker B2, export hole, leak-shaped with
+rem  ship-attested callee inventory; its WorldLinkStubs gate is retired in the same change).
+rem  _wT1_03 = TrafficPhysicsInfo::Construct @0x82751E88 PARTIAL. _Render = the render trio:
+rem  PreDispatchUpdate @0x8274D900, GenerateDispatchLists @0x8273B280 DWARF 10-arg,
+rem  RenderTrafficCar @0x82728B08; both render gates retired with the bodies.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_02.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_03.cpp"
+rem  R3 closure item 1: _wT1_04 = UpdateStreaming @0x82748848 + AddVehiclesToTargetList
+rem  @0x82722470 -- THE STREAMER PUMP that finally requests the VEH_T*_GR bundles.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_04.cpp"
+rem  R4: _wT1_05 = CreateNewVehicleEntities @0x8272FA30 + IsVehiclesParamAZombie -- the
+rem  per-vehicle scene registration. _wT1_06 = UpdateTimers @0x82715858 + UpdateDecision/
+rem  NonDecisionFrame @0x8274E508/@0x8274C1A8 -- the decision-frame steady-state loop
+rem  whose only mbDecisionFrame writer is UpdateTimers. WorldBridgeRaceCarToTrafficModule
+rem  = BridgeRaceCarModuleToTrafficModule_PreScene @0x827A50E0, THE activeHulls==0 fix:
+rem  the sole producer priming the traffic input buffers with race-car state.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_05.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_06.cpp"
+echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToTrafficModule.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp"
+rem  BrnVehicleSoaData.cpp: real Construct body existed unmounted -- Reset calls it.
+echo "%SRC%\GameSource\World\Traffic\BrnVehicleSoaData.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficCarStreamer.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModuleIO_InputBuffer_PostPhysics.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficVehicle.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficParam.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficStaticParam.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficHullRuntime.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficPatternGenerator.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficVehicleTypeRuntime_PickPaintColour.cpp"
+rem  R3 closure item 3: VehicleTypeRuntime::Prepare @0x82761B10 -- the boot fix for the
+rem  90 zero-extent CgsVolumeManager asserts (seats mBBoxHalfSize from the physics spec).
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficVehicleTypeRuntime_Prepare.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_CollidableVehicleInfo4_16.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_CrashingThingData_168.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_FiredKillZoneInfo_8.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_HullChangeInfo_400.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_PhysicalVehicleInfo_33.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_PurgatoryInfo_1.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_PurgatoryInfo_199.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_PurgatoryInfo_400.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_TrafficCrashInfo_160.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_VehicleRenderInfo_64.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_char_16.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_64.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\BrnTriggerEntityModuleIO_QueueAccessors.cpp"
   rem ---- world-IO Construct family (2026-07-27): the trigger pre/post-scene +      ----
   rem ---- pre-physics buffer Constructs (X360 0x822EED48/0x822DA168/0x822DA180/      ----
@@ -3625,6 +3680,22 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  tools/assets/bundles/lane_transcode.py (X360 originals in build/game_x360_world/).
   echo "%SRC%\SharedClasses\Trigger\BrnTriggerResourceType.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficDataResourceType.cpp"
+rem  2026-08-21 wave T1 parked traffic cars -- SharedClasses half. GraphicsStub = resource
+rem  type 65557 / 0x10015 carried by all 42 VEHICLES\VEH_T*_GR.BIN; registered in
+rem  CgsResourceTypeRegistration.cpp in the console slot after TrafficData. Both of the
+rem  record words are BUNDLE IMPORTS -- an unmounted handler skips ResolveImportsForEntry
+rem  and the streamer would hand the renderer NULL specs with no error.
+rem  BrnTrafficGraphicsStub.cpp is a compile-only layout gate, sibling of
+rem  TrafficPhysics_layout_check.cpp. StaticTraffic/VehicleAsset/VehicleType/VehicleTraits/
+rem  SectionFlow = the parked-car data value types, cluster C2.
+echo "%SRC%\SharedClasses\Traffic\BrnTrafficGraphicsStub.cpp"
+echo "%SRC%\SharedClasses\Traffic\BrnTrafficGraphicsStubResourceType.cpp"
+echo "%SRC%\SharedClasses\Traffic\CgsResourcePtr_BrnTraffic_GraphicsStub.cpp"
+echo "%SRC%\SharedClasses\Traffic\BrnTrafficStaticTraffic.cpp"
+echo "%SRC%\SharedClasses\Traffic\BrnTrafficSectionFlow.cpp"
+echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleAsset.cpp"
+echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleType.cpp"
+echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficHull.cpp"
   echo "%SRC%\SharedClasses\AI\AISectionsResourceType.cpp"
   echo "%SRC%\SharedClasses\AI\AISectionsData.cpp"
