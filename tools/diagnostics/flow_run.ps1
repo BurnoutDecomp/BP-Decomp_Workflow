@@ -55,6 +55,7 @@
 #   flow_run.ps1 -Frames -Drive -Steer right        # ... and hold full right lock
 #   flow_run.ps1 -Frames -Drive -SteerScript "0:left,3.5:none"        # AIM, then run straight
 #   flow_run.ps1 -Frames -Drive -ThrottleScript "0:accel,20:brake"    # ... and back off / reverse
+#   flow_run.ps1 -Drive -Teleport "2958,12.5,-1764,90"                # PUT THE CAR THERE, then drive
 #
 # ⭐ AIMING (2026-08-15, walls leg 5).  -Steer holds ONE lock for the whole run, so a driven car
 #   can only circle: it can never be lined up on a chosen wall FACE and driven into it head-on.
@@ -93,10 +94,14 @@ param(
                                  # is the sampling period in frames (1 => the game's default 60).
                                  # ⚠️ A PERIOD, not a switch: 60 frames is 29 m at this build's top
                                  # speed, so the default sampling steps straight over an impact.
-  [int]$TractionProbe  = 0       # opt IN to the [traction] per-WHEEL line trace; also a PERIOD in
+  [int]$TractionProbe  = 0,      # opt IN to the [traction] per-WHEEL line trace; also a PERIOD in
                                  # frames. This is the link BELOW the cache: [tricache] says how
                                  # many triangle batches a car was offered, [traction] says where
                                  # each wheel's probe segment actually went and whether it hit.
+  [string]$Teleport    = "",     # "x,y,z[,headingDeg]" -- put the player car there, ONCE, through
+                                 # the game's own place-on-track path (see the banner below).
+  [double]$TeleportArm = 0       # metres the car must have driven before the teleport fires
+                                 # (0 = leave the game's own default of 8 m).
 )
 $ErrorActionPreference = 'Stop'
 
@@ -153,6 +158,76 @@ if ($TractionProbe -gt 0) {
 if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0) {
   Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE all cleared."
 }
+
+# ⭐⭐ BRN_PROP_DIAG IS INHERITED, NOT MANAGED -- so it is RECORDED (2026-08-20, gateui r7).
+#   It is deliberately NOT in the cleared list above: every prop/gate/UI brief asks for it, and a
+#   run that silently turned it off would answer a different question than the one asked.  But it
+#   is also not set here, so whether it is on depends entirely on the shell that invoked this
+#   script -- and the [prop-diag] / [Q5-*] / [Q6-*] / [UI-gate] families exist or do not exist in
+#   the log accordingly.  That is exactly how defect-B round 7 lost seven runs: they were compared
+#   against dying runs whose shell had it set, so "same code, same harness" was not the same run at
+#   all.  Two logs are only comparable when this line matches, so it is echoed AND written into
+#   marks.txt next to the flow marks.  Same for the other inherited knobs a brief may set.
+# ⭐⭐ -Teleport -- PUT THE CAR AT COORDINATES (2026-08-21, gateui r9 / billboards).
+#   A boot-drive that can only start at the junkyard can only ever test what is within 275 s of
+#   the junkyard.  That is how the SMASH flavour of the gate-UI ladder got proven and the
+#   BILLBOARD flavour did not: all 120 type-12 regions are elsewhere in the city.
+#   ⛔ THIS IS NOT A POSITION POKE.  The env var only ARMS the game's own
+#   ActiveRaceCar::RequestPlaceOnTrack, which is answered by the same 100 m vertical line test
+#   over the shipped world collision that places the car at boot, seated by the same
+#   VehiclePhysics::SetTransformFromPositionOnRoad and re-seeded by the same VehiclePhysics::Reset.
+#   The Y a teleport lands on is a vertex of the shipped collision mesh, never a number typed here
+#   -- so pass the target's APPROXIMATE height and let the game find the ground.
+#   ⚠️ It fires once the car has DRIVEN -TeleportArm metres (default 8), not on a timer: the car
+#   reaches its live state at car select, tens of seconds before the flow reaches DRIVING, and
+#   boot timing drifts run to run -- the same reason every mark in this script is anchored to a
+#   flow state rather than a frame index.
+#   ⚠️ THE STREAMER DOES NOT TELEPORT.  The car lands on collision that is resident whole, so it
+#   never falls through the world, but the visible world and the breakable props around the
+#   destination arrive over the next few seconds.  Give the car time to sit before asking it to
+#   smash anything -- a -ThrottleScript that nudges, holds the handbrake, then accelerates is the
+#   pattern (the nudge is what trips the arm distance).
+#   It is RECORDED in marks.txt next to DIAGENV for the same reason DIAGENV is: two logs are only
+#   comparable when the run carried the same instruments.
+foreach ($v in @('BRN_CAR_TELEPORT','BRN_CAR_TELEPORT_ARM_DISTANCE')) {
+  Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
+}
+$teleportText = '(none)'
+if ($Teleport -ne "") {
+  $lParts = @($Teleport -split ',')
+  if ($lParts.Count -lt 3 -or $lParts.Count -gt 4) {
+    Write-Host "[flow] FAIL: -Teleport '$Teleport' is not `"x,y,z[,headingDeg]`"."
+    exit 1
+  }
+  foreach ($lp in $lParts) {
+    $lNum = 0.0
+    if (-not [double]::TryParse($lp.Trim(), [Globalization.NumberStyles]::Float,
+                                [Globalization.CultureInfo]::InvariantCulture, [ref]$lNum)) {
+      Write-Host "[flow] FAIL: -Teleport component '$lp' is not a number."
+      exit 1
+    }
+  }
+  $env:BRN_CAR_TELEPORT = ($lParts | ForEach-Object { $_.Trim() }) -join ','
+  $teleportText = $env:BRN_CAR_TELEPORT
+  if ($TeleportArm -gt 0) {
+    $env:BRN_CAR_TELEPORT_ARM_DISTANCE = ("{0}" -f $TeleportArm.ToString([Globalization.CultureInfo]::InvariantCulture))
+    $teleportText += (" arm={0}m" -f $env:BRN_CAR_TELEPORT_ARM_DISTANCE)
+  }
+  Write-Host "[flow] TELEPORT armed: BRN_CAR_TELEPORT=$teleportText -- the player car is placed"
+  Write-Host "       there ONCE, through the game's own place-on-track path. NOT a default run."
+  if (-not $Drive) {
+    Write-Host "[flow] NOTE: -Teleport without -Drive will never fire -- the arm waits for the car"
+    Write-Host "       to have MOVED. Pass -Drive (and a -ThrottleScript if you want it to stop again)."
+  }
+}
+
+$diagEnv = @()
+foreach ($v in @('BRN_PROP_DIAG','BRN_HEAP_CHECK','BRN_RENDER_POSTFX','BRN_POSTFX_MASK_TEST')) {
+  $val = [Environment]::GetEnvironmentVariable($v)
+  if (-not [string]::IsNullOrEmpty($val)) { $diagEnv += ("{0}={1}" -f $v, $val) }
+}
+$diagEnvText = if ($diagEnv.Count -gt 0) { $diagEnv -join ' ' } else { '(none set)' }
+Write-Host "[flow] INHERITED diag env: $diagEnvText"
 
 $framesOut = $null
 if ($Frames) {
@@ -420,6 +495,30 @@ foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR)) { $e.Reset() | Out
 
 $endFrame = Newest-Frame
 $endElapsed = ((Get-Date) - $t0).TotalSeconds
+
+# ⭐⭐ THE PROCESS EXIT CODE (added 2026-08-20, gateui r7 / defect B).  It must be read BEFORE
+#   Stop-Process, because Stop-Process overwrites it with the kill code and the one thing worth
+#   knowing is then gone.  This is the ONLY signal that identifies the deaths BrnGame.log cannot
+#   log, because they never run a handler:
+#     0          the game asked to quit (or was killed by the line below -- read the flag)
+#     0xC0000005 access violation      -- and no [EXCEPTION] block means the filter could not run
+#     0xC00000FD stack overflow
+#     0xC0000409 __fastfail: /GS stack-cookie failure or a CRT invalid argument
+#     0xC0000374 heap corruption
+#     3          abort()/_exit(3)
+#   ⚠️ WER is DISABLED on this machine (HKLM ... \Windows Error Reporting\Disabled = 1), so
+#   "no Application event 1000" proves NOTHING about a run.  This does.
+$exitedOnOwn = $p.HasExited
+$exitCode    = $null
+if ($exitedOnOwn) {
+  try { $exitCode = $p.ExitCode } catch { $exitCode = $null }
+  if ($null -ne $exitCode) {
+    Write-Host ("[flow] game exited on its own: exit code {0} (0x{1:X8})" -f $exitCode, ([uint32]($exitCode -band 0xFFFFFFFFL)))
+  } else {
+    Write-Host "[flow] game exited on its own: exit code unavailable"
+  }
+}
+
 Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
 Start-Sleep -Milliseconds 500
 Remove-Item Env:\BRN_FRAME_DUMP -ErrorAction SilentlyContinue
@@ -436,6 +535,23 @@ foreach ($k in @('flyby','carsel','livery','accept','exitjy','strfin')) {
 }
 $summary += ("END      {0,6:f1}s  frame={1}" -f $endElapsed, $endFrame)
 $summary += ("asserts={0} phase={1}" -f $seenAsserts, $phase)
+# DIAGENV: the inherited probe knobs this run actually carried. Two runs are comparable only
+# when this line matches -- see the banner where it is collected.
+$summary += ("DIAGENV  {0}" -f $diagEnvText)
+# TELEPORT: the -Teleport spec this run carried, for the same comparability reason as DIAGENV --
+# a log whose car started 250 m from the junkyard is not comparable with one that did not.
+$summary += ("TELEPORT {0}" -f $teleportText)
+# EXIT: how the process left. "harness-stop" = it was still alive and this script killed it;
+# anything else is the game's own exit code, decoded in the banner next to the read above.
+if ($exitedOnOwn) {
+  if ($null -ne $exitCode) {
+    $summary += ("EXIT     self  code={0} (0x{1:X8})" -f $exitCode, ([uint32]($exitCode -band 0xFFFFFFFFL)))
+  } else {
+    $summary += "EXIT     self  code=unavailable"
+  }
+} else {
+  $summary += "EXIT     harness-stop (process was still alive)"
+}
 $summary += ("drive={0} steer={1} delay={2:f1}s hold={3}" -f `
              [bool]$Drive, $Steer, $DriveDelay, $(if ($DriveSeconds -gt 0) { ("{0:f0}s" -f $DriveSeconds) } else { "to-end" }))
 if ($SteerScript    -ne "") { $summary += ("steerscript    {0}" -f $SteerScript) }
