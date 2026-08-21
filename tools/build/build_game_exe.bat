@@ -3060,6 +3060,12 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  Mounting the real TU is FREE (0 new unresolved) and it makes AllocateBehaviour<
   rem  BehaviourInterpolate> book a bucket for the real size instead of for one byte.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourInterpolate.cpp"
+  rem ---- camera-blend in-between wave (2026-08-20): THE RAMP. BehaviourInterpolate used to
+  rem  CUT at t == 1 because its mInterpolator was a 4-byte opaque stand-in. These two TUs are
+  rem  the real evaluator (CameraInterpolationController::Update @0x822513D8 plus the whole
+  rem  rotate-about-pivot family) and the remembered-axis Interpolater the blends share.
+  echo "%SRC%\GameSource\Director\Shots\ShotControllers\BrnCameraInterpolationController.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnInterpolater.cpp"
   rem (Each cam's Parameters::Serialise<S> visitor stays OUT of the link, in its own
   rem  *Parameters.cpp sibling -- it drags the three camera-tunings serialisers in and none
   rem  of them is on the runtime director path.)
