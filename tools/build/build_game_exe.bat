@@ -1101,6 +1101,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  Its stage-1 arm VehicleManager::PrepareData @0x82633568 (161) stays a NAMED stub -- see
   rem  WorldLinkStubs.cpp for the two measured reasons and exactly what is dropped.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Prepare.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  ?????? 2026-08-10 (create-path wave): THE MAINTENANCE SPINE -- the leg that finally gives the
   rem  create path a caller. VehicleManager::ProcessVehicleMaintenanceEvents @0x8264AB38 (118) is
   rem  real here; its five arms + the traffic twin are NAMED one-shot gates.
@@ -1510,9 +1511,8 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem    TrafficPhysics_Construct.cpp   -- NEW. TrafficPhysics::Construct @0x8262E980 (an
   rem      `.ida-exports` HOLE -- the JSON set jumps 0x8262E848 -> 0x8262EBE8; pulled with headless
   rem      IDA 9.3, 154 instructions) + SetFreakedOut @0x825B8948. Split out of TrafficPhysics.cpp
-  rem      for the same reason as RaceCarPhysics_Construct.cpp: PreparePhysical and Update call
-  rem      VehiclePhysics::Prepare / UpdateShunt / UpdateCrashing, all three still declare-only, so
-  rem      TrafficPhysics.cpp cannot be mounted.
+  rem      for the same reason as RaceCarPhysics_Construct.cpp. TrafficPhysics.cpp itself mounts
+  rem      since wave T3 (VehiclePhysics::Prepare / UpdateShunt / UpdateCrashing are all bodied).
   rem    TrafficPhysics_layout_check.cpp -- NEW, compile-only, and it REPLACES a gate that had gone
   rem      vacuous. BrnVehicleManager_layout_check.cpp used to "check" the 0x1430 stride with
   rem      `static_assert(sizeof(TrafficPhysics) == 5168)` -- a HOST sizeof gate that only ever
@@ -1529,6 +1529,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem      CGS_ASSERT(false) traps, both are dead today, and bodying either one will fail with a
   rem      hard LNK2005 until the stub is deleted -- which is the point.
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\TrafficPhysics_Construct.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\TrafficPhysics.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\TrafficPhysics_layout_check.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\VehiclePhysicsLinkStubs.cpp"
   rem  ?????? 2026-08-03 (task #113, the ArticulatedJointPool de-fork) -- BrnPhysicalTrafficManager.cpp
@@ -1551,6 +1552,23 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  while the DWARF signature is (VehicleOutputRequestInterface*, const ArticulatedJointCreateBuffer*).
   rem  No faithful body could ever have defined the symbol that call site asked for.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager.cpp"
+rem  wave T3 physical traffic: Prepare @0x8262CA48 (the only seater of the 3 arrays),
+rem  create/remove drain, UpdateTrafficPhysics @0x82644418, traction pair, WriteOutVehicleStats
+rem  @0x825F0308 -- each retires its conductor gate in the same change.
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_Prepare.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_Create.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_Remove.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_UpdateTrafficPhysics.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TractionLineTests.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_WriteOutVehicleStats.cpp"
+rem  wave T3 r2: the race-car-vs-physical-traffic response chain -- potential-contact averager,
+rem  DoCrashPrediction @0x82645FE0 (its ConductorGates gate deleted in the same change),
+rem  HandleCrashPredictionForRaceCarAndTrafficVehicle -> HandleRaceCarTrafficCarPotentialContact
+rem  @0x8263FA50 -> the traffic crashing/slammed/checked response arms.
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPotentialContactAverager.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_CrashResponse.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_RaceCarTrafficContact.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DoCrashPrediction.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManagerIO.cpp"
   rem  ????????? 2026-08-03 (task #116) -- UN-STUBBING BrnPhysics::PhysicsModule::Construct @0x825AE308.
   rem  That function had been a LIVE EMPTY STUB in WorldLinkStubs.cpp since 2026-07-26: a quiet
@@ -2148,6 +2166,13 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityM
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_03.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_04.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_05.cpp"
+rem  wave T3 physical traffic: _wT3_00 shared leaves, _wT3_01 world promotion path,
+rem  _wT3_02 GenerateDriverInputs, _wT3_04 publish/readback + physical render arm.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_00.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_01.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_02.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_04.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficMiscRuntimeClasses.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficFuzzyLogicBehaviours.cpp"
 echo "%SRC%\SharedClasses\Traffic\BrnTrafficFuzzyEnvelopeSet.cpp"
 echo "%SRC%\GameSource\Jobs\Traffic\TrafficCommon.cpp"
