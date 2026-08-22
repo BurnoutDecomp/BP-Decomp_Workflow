@@ -2140,6 +2140,20 @@ rem  = BridgeRaceCarModuleToTrafficModule_PreScene @0x827A50E0, THE activeHulls=
 rem  the sole producer priming the traffic input buffers with race-car state.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_05.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_06.cpp"
+rem  wave T2 driving traffic: generation (_wT2_01), param sim (_wT2_02/03), vehicle+scene
+rem  wire (_wT2_04), fuzzy behaviours, and the UpdateVehiclesJob family (the ship moved the
+rem  per-vehicle driving update into an EA::Jobs job: TrafficJobStub + UpdateVehiclesJob).
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_01.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_02.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_03.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_04.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_05.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficFuzzyLogicBehaviours.cpp"
+echo "%SRC%\SharedClasses\Traffic\BrnTrafficFuzzyEnvelopeSet.cpp"
+echo "%SRC%\GameSource\Jobs\Traffic\TrafficCommon.cpp"
+echo "%SRC%\GameSource\Jobs\Traffic\BrnTrafficJob.cpp"
+echo "%SRC%\GameSource\Jobs\Traffic\BrnUpdateVehiclesJob.cpp"
+echo "%SRC%\GameSource\Jobs\Traffic\BrnUpdateVehiclesJob_MoveToTarget.cpp"
 echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToTrafficModule.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp"
 rem  BrnVehicleSoaData.cpp: real Construct body existed unmounted -- Reset calls it.
