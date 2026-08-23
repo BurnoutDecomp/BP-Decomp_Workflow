@@ -168,14 +168,23 @@ class Alu(object):
             two = so in ("adds", "muls", "maxs", "mins", "subs", "seqs",
                          "sgts", "sges", "snes", "setp_eq", "setp_ne",
                          "setp_gt", "setp_ge")
+            # ⚠ THE SCALAR CLAMP MUST BE PRINTED TOO.  w0 bit 25 is the SCALAR unit's
+            # saturate; bit 24 is the vector unit's.  Until 2026-08-23 this method
+            # printed "[clamp]" for the vector half ONLY, so every scalar saturate in
+            # every package this project has ever disassembled was INVISIBLE -- and one
+            # of them was dropped from an authored PC shader as a result (the sun-flare
+            # falloff, brn_suncorona.fx instruction 5, w0=0xBA200000).  A listing that
+            # silently omits a semantic bit is worse than no listing.
+            clamp = " [clamp]" if self.scalar_clamp else ""
             if so == "retain_prev":
-                out.append("%-7s %s.%s   [= PS]" % (so, dst,
-                                                    mask_str(self.scalar_write_mask)))
+                out.append("%-7s %s.%s   [= PS]%s" % (so, dst,
+                                                      mask_str(self.scalar_write_mask),
+                                                      clamp))
             else:
                 note = "" if self.scalar_write_mask else "   (no write: sets PS only)"
-                out.append("%-9s %s.%s, %s%s" % (
+                out.append("%-9s %s.%s, %s%s%s" % (
                     so, dst, mask_str(self.scalar_write_mask),
-                    self.scalar_operand(2 if two else 1), note))
+                    self.scalar_operand(2 if two else 1), clamp, note))
         if self.is_predicated:
             out.append("   (predicated, cond=%d)" % self.pred_condition)
         return out

@@ -260,14 +260,14 @@ SunFlareVertexOut mainSunFlareVS(SunCoronaVertexIn lIn)
 //      2 : sgts    r0.z, -r0'.x, -r0'.x           -- the "set to 0" idiom: r0.z = 0
 //      3 : tfetch  r1.w, r0.zzz, tf0              -- sample OcclusionSource AT (0,0)
 //      4 : dp2add  r0.y, r0.xy, r0.xy, c255.y(0)  -- dot(uv,uv)
-//      5 : subsc0  r0.y, c255.x(1), r0.y          -- 1 - dot(uv,uv)
+//      5 : subsc0  r0.y, c255.x(1), r0.y [clamp] -- saturate(1 - dot(uv,uv))
 //      6 : mulsc0  r0.x, c0.x, r0.y               -- colour.r * that
 //      7 : mul     r1.x, r0.x, r0.y              \ colour.r * that^2
 //      7 : muls    r0.x, r0.y, r0.y              / that^2
 //      8 : mul     r1.yz, r0.x, c0.yz             -- colour.gb * that^2
 //      9 : max     export0.xyzw, r1, r1           -- oC0 = float4(colour.rgb*f2, occlusion)
 //
-// so:  RGB = kColourAndPower.rgb * (1 - dot(uv,uv))^2
+// so:  RGB = kColourAndPower.rgb * saturate(1 - dot(uv,uv))^2
 //      A   = the occlusion buffer's single texel
 //
 // THREE THINGS WORTH SAYING OUT LOUD, all read rather than assumed:
@@ -288,12 +288,31 @@ SunFlareVertexOut mainSunFlareVS(SunCoronaVertexIn lIn)
 //    would emit log/mul/exp; the square is what the console executes and what is
 //    written.  The constant is still published, because the CPU publishes it.
 //
-//  * THERE IS NO SATURATE.  None of instructions 5-9 carries the [clamp] flag, so
-//    outside the unit disc `1 - dot(uv,uv)` goes NEGATIVE and the square brings
-//    it back up: at the quad's four corners (uv = (+-1,+-1), dot = 2) the factor
-//    is 1 again, so the sprite is a bright disc with four bright corners -- a
-//    four-pointed star.  That is the console's picture and it is reproduced
-//    verbatim; a saturate() here would be a silent art change.
+//  * ⚠ THERE *IS* A SATURATE, ON INSTRUCTION 5 -- CORRECTED 2026-08-23 (the
+//    "rectangular artifact" bug wave).  This banner used to claim the opposite
+//    ("None of instructions 5-9 carries the [clamp] flag ... a bright disc with
+//    four bright corners -- a four-pointed star ... reproduced verbatim").  That
+//    claim was an ARTEFACT OF THE DISASSEMBLER, not of the microcode: Alu in
+//    tools/assets/shaders/xenos.py:119-120 parses BOTH clamp bits but
+//    Alu.text() (:163) only ever PRINTS `[clamp]` for the VECTOR half, so a
+//    SCALAR clamp is invisible in every listing this project produced.
+//    Instruction 5 is a SCALAR op (`subsc0`) and its word0 is 0xBA200000, i.e.
+//    bit 25 (scalar_clamp) = 1 and bit 24 (vector_clamp) = 0:
+//        $ py -c "..."   ->  5 w0=BA200000 VCLAMP=0 SCLAMP=1  subsc0 r0._y__, c255.x
+//    It is the ONLY clamp bit set anywhere in the sun-corona/corona program set
+//    (the corona VS's instruction 20 `mul ... [clamp]` is a VECTOR clamp and was
+//    already carried, as saturate(), in brn_corona.fx).
+//
+//    So the console computes `saturate(1 - dot(uv,uv))` and the falloff is ZERO
+//    outside the unit disc: the sprite is a clean disc, NOT a four-pointed star.
+//    Dropping the clamp is what put a bright HARD-EDGED right-angled corner of
+//    the 4*mfSunSize quad on screen -- the user-reported "rectangular artifact"
+//    (frames scratch/flow_frames/bb_002990..bb_003040.bmp: a peak at the quad's
+//    bottom-left corner, e.g. (754,497) in bb_003000, falling off as (1-a)^4
+//    inward with hard clips along the two quad edges that meet there, in exactly
+//    the sun colour the `[suncorona] first flare` log line prints).
+//    Restoring the clamp changes NOTHING inside the unit disc (saturate is the
+//    identity there) and removes only the four corners.
 // ---------------------------------------------------------------------------
 sampler2D OcclusionSource : register(s0);   // the 1x1 sun-corona buffer's colour texture
 
@@ -305,9 +324,10 @@ float4 mainSunFlarePS(float2 lUv : TEXCOORD0) : COLOR0
     // [3] the whole 1x1 occlusion buffer, sampled at its origin.
     float lfOcclusion = tex2D(OcclusionSource, float2(0.0f, 0.0f)).x;
 
-    // [4,5] the radial falloff -- 1 at the centre, 0 on the unit circle,
-    // NEGATIVE outside it (no saturate; see the note).
-    float lfFalloff = 1.0f - dot(lUv, lUv);
+    // [4,5] the radial falloff -- 1 at the centre, 0 on the unit circle, and
+    // CLAMPED TO 0 outside it: instruction 5 (`subsc0`) carries the SCALAR clamp
+    // bit (word0 0xBA200000, bit 25). See the corrected note above.
+    float lfFalloff = saturate(1.0f - dot(lUv, lUv));
 
     // [6,7,8] colour * falloff^2  (the exponent is compiled in, not pow()).
     float3 lColour = kColourAndPower.rgb * (lfFalloff * lfFalloff);
