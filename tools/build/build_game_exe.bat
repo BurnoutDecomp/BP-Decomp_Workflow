@@ -3271,6 +3271,45 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateRoaming.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentSelector.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentController.cpp"
+  rem ---- [momentcam] jump/stunt CUTAWAY-CAMERA wave, 2026-08-23 --------------------------
+  rem  ⭐ NO NEW MOUNTS ARE ADDED BY THIS WAVE, ON PURPOSE. This block exists so the next
+  rem  person to plan a "mount the moments" pass starts from measured numbers instead of the
+  rem  stale "+9 unresolved" note further up.
+  rem
+  rem  WHAT THE WAVE FIXED IN PLACE (already-mounted TUs above; zero new unresolved externals,
+  rem  verified by archiving build\game\obj into one .lib and diffing symbol tables):
+  rem    * MomentSelector::SelectBestMomentWithExclusion @0x82250FC8 and its LRU arm
+  rem      SelectBestLRUMomentWithExclusion @0x8221BE50 are REAL now, in BrnMomentSelector.cpp.
+  rem      Both were `return false` GROUP F stubs sitting on the cutaway path.
+  rem    * BrnMomentParameterBank.cpp was a six-type local fork (the class-vs-struct
+  rem      Moment::Parameters ODR fork). De-forked; every byte it writes is unchanged.
+  rem    * BrnMomentSubclasses.h was an ELEVEN-class ODR fork; ten are retired.
+  rem    * BrnMomentPlayerJumping.cpp and BrnMomentTumbling.cpp now COMPILE (they did not).
+  rem    * The moment pool bucket (AbstractPool 70,20,Vector4 == 1120 B) is TOO SMALL on x64
+  rem      (MomentPlayerJumping is 1296 B). Widened + static_assert-ratcheted in
+  rem      BrnMomentController.h. Inert today; a heap smash the day the closure mounts.
+  rem
+  rem  WHY NOTHING IS MOUNTED (MEASURED 2026-08-23, not estimated):
+  rem    * BrnMomentControllerNewMoment.cpp + BrnMoment.cpp + all 14 Moments\*.cpp costs
+  rem      142 NON-CRT unresolved externals. Trimming NewMoment to only the two cutaway
+  rem      moment types still costs ~50. ~44 of the 142 are the `detail::MomentSharedInfo_*`
+  rem      reach shims -- that record has NO home in this tree and IS the keystone.
+  rem    * ⛔ AND THE MOUNT ALONE WOULD NOT MAKE A CUTAWAY PLAY: nothing in this tree ticks a
+  rem      moment. MomentController::UpdateAllMoments @0x82239DE8 has no body anywhere,
+  rem      MainDirector::UpdateMoments @0x82250268 is declaration-only, and the call is
+  rem      COMMENTED OUT at BrnMainDirector.cpp:1617 (`GATE: UpdateMoments(...)`).
+  rem    * ⛔ BrnMainDirector.h:353 models the MomentController as a fixed 22,416-byte X360
+  rem      span (`u8 maMomentController[0x1CA60 - 0x172D0]`) and reinterpret_casts to it. The
+  rem      host object does not fit that span even before the bucket widening.
+  rem
+  rem  ORDER TO DO IT IN (each step is useless without the ones above it):
+  rem    1. Home the MomentSharedInfo record.  2. Body UpdateAllMoments + UpdateMoments and
+  rem    un-gate BrnMainDirector.cpp:1617.  3. Give MainDirector a real MomentController
+  rem    member.  4. Body the six BehaviourCollection template methods + the ~38 one-liner
+  rem    per-moment virtuals.  5. THEN add the mounts here and delete the GROUP F stubs.
+  rem  Full reasoning: GROUP F at the foot of %SRC%\GameSource\Director\DirectorLinkStubs.cpp
+  rem ---- [momentcam] end ----------------------------------------------------------------
+
   rem  BrnDirectorEffectTrigger.cpp joins the link at last: the note further down claiming it
   rem  costs two real unresolved externals is now STALE -- EffectInterface::HookExists is
   rem  bodied in it (from @0x8221E268) and RegisterStartingBackgroundEffectWithName from the
