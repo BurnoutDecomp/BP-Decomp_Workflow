@@ -132,11 +132,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  three independent controls (see the TU banner). MEASURED with cl /c + dumpbin /SYMBOLS
   rem  against build\game\obj: ZERO new unresolved externals -- the only UNDEFs are the three
   rem  CgsDev::Assert entry points already in the link.
-  rem  ??? NOTHING CALLS IT YET, deliberately. The producer (TrainingManager, which is neither
-  rem  constructed nor updated on PC) and the consumer (BrnGui::InGameMessageRenderer -- 15 X360
-  rem  functions, NONE reconstructed, drawing through a CgsGraphics::TextRenderer that has no
-  rem  home in this tree) are both still absent. Mounted anyway because it is correct, complete
-  rem  and free, and it is the piece that was previously unrecoverable.
+  rem  ??? [tut-ticker] 2026-08-24: IT HAS A CALLER NOW -- TranslateGameActionsToGuiEvents case
+  rem  148 (GameBridgeGameStateToX_StuntGuiEvents.cpp), fed by the mounted TrainingManager's
+  rem  Update; the 537 consumer side is CustomRendererManager::RecvEvent (InGameMessageRenderer
+  rem  itself still pending -- but its old wall, CgsGraphics::TextRenderer, is reconstructed in
+  rem  CgsFontRenderer.cpp since the gateui waves).
   rem  SIBLING SPLIT: its owning GameBridgeGameStateToX.cpp DOES NOT COMPILE and did not before
   rem  this leg either (control-measured against HEAD's own copy: an ODR fork on
   rem  BrnGui::GuiTakedownEvent + a stale mpCgsGuiModule, both inside TranslateTakedownsToGuiEvents).
@@ -2501,6 +2501,14 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  ProcessInputQueue case 73 moves meJunkyardState 0 -> 2.
   echo "%SRC%\GameSource\GameState\CarSelect\BrnCarSelectManager.cpp"
   echo "%SRC%\GameSource\GameState\CarSelect\BrnCarSelectManager_CarChange.cpp"
+  rem ??? [tut-ticker] wave (2026-08-24) -- THE TRAINING-TIP MANAGER, whole. Construct (PS3
+  rem  0x241DE0), Update @0x823937D0 (the FSM that turns a queued tip into GameAction 148 ->
+  rem  GUI event 537 -> the bottom-of-screen tutorial ticker), RequestTraining @0x82365B20,
+  rem  IsTipAllowedInGameMode @0x823590A0, PlayNewAtomikaFreeburnVO @0x82365FC8 + the
+  rem  previously-bodied ticker/pause/follow-on set. Every raw offset it reads is identified
+  rem  against named members (see the TU banner); its tick site is GameStateModule::
+  rem  PreWorldUpdateTrainingBringUp, its request feed is ProcessGameEvents case 113.
+  echo "%SRC%\GameSource\GameState\TrainingManager\BrnTrainingManager.cpp"
   echo "%SRC%\SharedClasses\Progression\BrnProgressionData.cpp"
   rem ??? TRIGGERS wave (2026-08-01) -- THE TRIGGERS.DAT LOADER.
   rem  TriggerQueryManager::Prepare @0x82398218 is the console's own loader: LoadBundle
