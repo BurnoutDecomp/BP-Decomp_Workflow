@@ -1,7 +1,8 @@
 # Build the game exe on a schedule / on demand and upload it to the work server,
 # which merges in the game assets and publishes the download.
 #
-# Runs on a GITHUB-HOSTED windows-latest runner (MSVC via ilammy/msvc-dev-cmd).
+# Runs on a GITHUB-HOSTED windows-2022 runner (MSVC via ilammy/msvc-dev-cmd).
+# The image is PINNED -- see the note on `runs-on` below before changing it.
 # CI compiles ONLY the exe (no ~1 GB asset handling): it uploads a small exe
 # bundle, and the SERVER rclone-syncs the assets and assembles the served zip.
 #
@@ -29,7 +30,18 @@ concurrency:
 
 jobs:
   build:
-    runs-on: windows-latest
+    # PINNED, do not put back to windows-latest. On 2026-08-24 `windows-latest`
+    # resolved to image `windows-2025-vs2026` -> Visual Studio 18 / MSVC 14.51.36231,
+    # a compiler GENERATION newer than the 17.14 / MSVC 14.44 this tree is developed
+    # and tested against. MEASURED, not theorised: the exe that image produced boots
+    # and then dies with EXCEPTION_ACCESS_VIOLATION reading 0x10 (rax=0, a null
+    # dereferenced at +0x10) in BrnDirector::Camera::BehaviourGameplayExternal::Update
+    # +0xA0C, on the SAME game data where the locally built exe reaches gameplay
+    # cleanly -- and that is the same function players' crash reports name.
+    # This tree deliberately preserves the console's undefined behaviour, so a newer
+    # optimiser is free to make different (legal) choices about it. Pin the toolchain;
+    # do not chase the codegen.
+    runs-on: windows-2022
     timeout-minutes: 45
     steps:
       - name: Checkout (repo only)
@@ -82,6 +94,16 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
+
+      # Record the exact toolchain in every run. The VS18 breakage above was invisible
+      # for weeks because nothing in the log said which compiler built the exe.
+      - name: Record toolchain
+        shell: cmd
+        run: |
+          echo === toolchain used for this build ===
+          cl 2>&1 | findstr /i version
+          echo VCToolsVersion=%VCToolsVersion%
+          echo VSINSTALLDIR=%VSINSTALLDIR%
 
       - name: Build exe & upload bundle
         shell: pwsh
