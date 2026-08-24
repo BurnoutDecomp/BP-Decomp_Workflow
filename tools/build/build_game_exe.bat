@@ -1647,6 +1647,12 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DoCrashPredictio
   rem     drop (no member maps for the two IO interfaces). Fresh-boot-equivalent to zero-init;
   rem     a REAL dropped clear on re-prepare now that the consumer is live.
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager.cpp"
+  rem  2026-08-24 (deform-land wave): the OUTPUT slice mounts -- OutputData's real body + the
+  rem  newly-landed OutputSensorState @0x82605618 (export hole, pulled headless); its closure
+  rem  (UpdateAndOutputJointStates @0x82609AE8 in _GlassState.cpp, pool OutputEvents @0x8260DBE8
+  rem  in BrnPhysicalBodyPartPool.cpp, the DetachedPartManager wrapper) landed with it, and the
+  rem  OutputData conductor gate in BrnPhysicsConductorGates.cpp is DELETED by the same commit.
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_Output.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Lifecycle.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Update.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_GlassState.cpp"
