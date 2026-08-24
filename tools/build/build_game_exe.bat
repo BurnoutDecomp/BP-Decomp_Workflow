@@ -2172,6 +2172,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityM
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_03.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_04.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_05.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_KillDyingVehicleEntities.cpp"
 rem  wave T3 physical traffic: _wT3_00 shared leaves, _wT3_01 world promotion path,
 rem  _wT3_02 GenerateDriverInputs, _wT3_04 publish/readback + physical render arm.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_00.cpp"
