@@ -1189,6 +1189,17 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\B5PhysicsHandlingDebugComponent.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnGripCurveDebugGraph.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnGripCurveDebugWindow.cpp"
+  rem  ---- PHYSICS MOUNT-GAP WAVE B3b (2026-08-24): the VehicleManager MONOLITH flip ----
+  rem  BrnVehicleManager.cpp (12 real bodies incl. the 923-insn SetRaceCarCrashing @0x82634C90;
+  rem  the LinkStubs trap is DELETED) + BrnVehicleManager_ImpactHelpers.cpp, the NEW slice with
+  rem  the six declared-only helpers reconstructed from asm (IsPointBetweenTwoParallelPlanes,
+  rem  CheckForVerticalTakedownSituation, CheckForGrindingAndRubbing, GenerateContactSituation,
+  rem  ApplySlam, ApplyShunt) plus their callees (CalculateSlamData/CalculateShuntData/
+  rem  SendImpactMessage, HasRaceCarHadRecentImpact). Both geometry helpers had WRONG inferred
+  rem  signatures in the header; the T-bone and vertical-takedown call sites are rebuilt from
+  rem  the caller asm (@0x8263D480 / @0x8263D728).
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ImpactHelpers.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Engine_embed_check.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\RaceCarPhysics_embed_check.cpp"
   rem  2026-08-06 (PhysicsModule::Update leaves wave): the four small per-frame leaves of
