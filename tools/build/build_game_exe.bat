@@ -1651,6 +1651,42 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DoCrashPredictio
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationConstructShims.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationDebugComponent_Construct.cpp"
+  rem  ---- PHYSICS MOUNT-GAP WAVE B2 (2026-08-24): DeformationManager 22/23 ----
+  rem  The 22 census-clean TUs (SharedIO/instantiation + embed_checks + BrnDeformationState).
+  rem  The intended 23rd (the BrnDeformationDebugComponent.cpp flip) was TRIED and REVERTED --
+  rem  see its measured 39-unresolved banner below; the _Construct.cpp trap stubs stay.
+  rem  ⛔ BrnDeformationDebugComponent.cpp DOES NOT MOUNT (RE-MEASURED 2026-08-24, wave B2): 39
+  rem  unresolved -- 6 Debug3DImmediateRender::Draw* bodies (header-declared only; its .cpp
+  rem  carries just SetDebugFont, the 3D draw path is the render follow-on), 7 of the component
+  rem  OWN private methods (CompressSelectedRig, OnSensorPositionChange, the 3 tuning callbacks,
+  rem  ResetSensors/ResetSelectedRig -- reconstructed NOWHERE), the IKDrivenPoint/TagPoint/
+  rem  IKBodyPart accessors (no bodies anywhere), DeformableObject::GetDeformedBoundingBox +
+  rem  RenderSensors, and 19 BrnPhysics::Deformation k*/gi* tuning globals homed in the
+  rem  UNMOUNTED BrnPhysicalBodyPart.cpp (itself 16-unresolved, see below). The census marker
+  rem  scan called it CLEAN-ish; the LINK says otherwise. The loud vtable trap stubs in
+  rem  _Construct.cpp stay -- exactly the failure mode their banner designed for.
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnBurnoutBodyPartID.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnBurnoutWheelBodyID.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnIKDrivenPoint_embed_check.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicsDeform_embed_check.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_BrokenJointNotificationEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_DetachedPartCurrentPositionEvent_AddEventSafe.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_DetachedPartCurrentPositionEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_DetachedPartNotificationEvent_AddEventSafeAppend.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_SetModelCollisionEvent_AddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BaseEventQueue_SetModelCullingGroupEvent_AddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationState.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_AddDeformationModelEvent_20.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_BrokenJointNotificationEvent_10.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_DeactivateDeformationModelEvent_28.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_DetachedPartCurrentPositionEvent_50.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_DetachedPartNotificationEvent_50.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_DetachedPartRenderEvent_50.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_GlassSmashOrCrackEvent_20.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_JointedPartStateEvent_50.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_RemoveDeformationModelEvent_20.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_SetModelCollisionEvent_28.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\EventQueue_SetModelCullingGroupEvent_28.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPart_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationInputInterface.cpp"
