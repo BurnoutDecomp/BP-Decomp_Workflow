@@ -56,6 +56,8 @@
 #   flow_run.ps1 -Frames -Drive -SteerScript "0:left,3.5:none"        # AIM, then run straight
 #   flow_run.ps1 -Frames -Drive -ThrottleScript "0:accel,20:brake"    # ... and back off / reverse
 #   flow_run.ps1 -Drive -Teleport "2958,12.5,-1764,90"                # PUT THE CAR THERE, then drive
+#   flow_run.ps1 -Frames -Drive -CrashEntry                           # ... and ALLOW the car to crash
+#                                                                     #     (off by default -- see below)
 #
 # ⭐ AIMING (2026-08-15, walls leg 5).  -Steer holds ONE lock for the whole run, so a driven car
 #   can only circle: it can never be lined up on a chosen wall FACE and driven into it head-on.
@@ -89,6 +91,9 @@ param(
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
   [int]$FrameEvery     = 30,     # dump PERIOD in presents; 1 = every present (see the note below)
   [int]$LogWaitSeconds = 90,
+  [switch]$CrashEntry,           # opt IN to CRASH ENTRY (BRN_ENABLE_CRASH_ENTRY=1). OFF by default:
+                                 # crash entry is correct but crash RECOVERY needs
+                                 # BrnAI::ResetOnTrackManager (absent), so a heavy crash pins the car.
   [switch]$MotionProbe,          # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
   [int]$TriCacheProbe  = 0,      # opt IN to the [tricache] world-collision cache trace; the VALUE
                                  # is the sampling period in frames (1 => the game's default 60).
@@ -135,8 +140,18 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # earlier command in the same shell rode into the next run -- and that run then announced itself as
 # a "DEFAULT run" while carrying an unrequested instrument.  That is a golden-gate hazard: the
 # goldens are meant to be byte-identical to a probe-free build.  Opt IN with -MotionProbe instead.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE')) {
+# ⛔⛔ BRN_ENABLE_CRASH_ENTRY IS IN THIS LIST FOR THE SAME REASON, AND IT MATTERS MORE (2026-08-25).
+# It is not an instrument, it is a CAPABILITY: with it set the game can enter the crash state, and
+# a crash today is terminal (crash recovery needs BrnAI::ResetOnTrackManager, which is absent -- see
+# the banner in BrnVehicleManager.cpp::SetRaceCarCrashing).  A leftover shell variable would make a
+# run that calls itself DEFAULT able to pin the car, which is precisely the failure mode this flag
+# exists to keep off the public path.  Opt IN with -CrashEntry.
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_ENABLE_CRASH_ENTRY')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
+}
+if ($CrashEntry) {
+  $env:BRN_ENABLE_CRASH_ENTRY = "1"
+  Write-Host "[flow] CRASH ENTRY ENABLED: BRN_ENABLE_CRASH_ENTRY=1 (opt-in). NOT a default run -- a heavy crash can pin the car until ResetOnTrackManager lands."
 }
 if ($MotionProbe) {
   $env:BRN_MOTION_PROBE = "1"
@@ -155,8 +170,8 @@ if ($TractionProbe -gt 0) {
   $env:BRN_TRACTION_PROBE = "$TractionProbe"
   Write-Host "[flow] TRACTION PROBE run: BRN_TRACTION_PROBE=$TractionProbe (opt-in, period in frames). NOT a default run -- do not gate goldens off this."
 }
-if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0) {
-  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE all cleared."
+if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and -not $CrashEntry) {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / ENABLE_CRASH_ENTRY all cleared."
 }
 
 # ⭐⭐ BRN_PROP_DIAG IS INHERITED, NOT MANAGED -- so it is RECORDED (2026-08-20, gateui r7).
