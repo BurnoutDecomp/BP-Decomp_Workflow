@@ -4024,6 +4024,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- satnav posts).                                                        ----
   echo "%SRC%\GameShared\GameClasses\Gui\View\ParticleSystem2d\CgsBillboardRenderer.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\NearMisses\BrnNearMissManager.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\NearMisses\BrnNearMissData.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeWorldToGui.cpp"
   rem ---- hud H3b tracking slice (2026-08-25): the 207 record type the bridge     ----
   rem ---- Construct()s and the cache consumes (mRaceCarInfo SoA feed).            ----
