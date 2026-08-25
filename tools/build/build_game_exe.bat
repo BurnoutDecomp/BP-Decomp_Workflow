@@ -3293,6 +3293,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\AEMS\CgsAemsFactory.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsCommon.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsRegistry.cpp"
+  rem ---- audio-faithfulness wave 3: the canonical Playback Object home. The CgsContent.h
+  rem  Object fold makes its consumers reference the out-of-line asserting Object dtor 0x826916F0.
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsObject.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\Streaming\internal\sndplayer1.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\Streaming\internal\sndplayer1shared.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsSnrResourceType.cpp"
