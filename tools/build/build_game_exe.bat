@@ -222,6 +222,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ---- _PrePhysics @0x827AAEC0 is still a gate and stays in WorldLinkStubs.          ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToPhysics.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePropModule.cpp"
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeCrashPostScene.cpp"
   rem ---- physics->output publish wave (2026-08-11): the RETURN direction of the same    ----
   rem ---- handover. WorldModule::BridgePhysicsModuleToRaceCarModule_PostPhysics          ----
   rem ---- @0x827AE9D0 is the ONLY thing in the image that copies the physics module's    ----
@@ -2731,6 +2732,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  wave Q6 / bridges: BrnWorld::CrashIO::TrafficInputInterface::Construct -- called by the traffic
   rem  OutputBuffer_PostPhysics::Construct landed this wave.
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\TrafficInputInterface.cpp"
+  echo "%SRC%\GameSource\World\CrashModule\SharedIO\BrnCrashModuleIO_OutputBuffer_PreScene.cpp"
   echo "%SRC%\GameSource\Network\BrnNetworkModuleIO.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleGameStateIOInterfaces.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleInGamePlayerStatusInterface.cpp"
