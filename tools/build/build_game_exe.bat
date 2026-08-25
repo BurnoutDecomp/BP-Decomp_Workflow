@@ -223,6 +223,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToPhysics.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePropModule.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeCrashPostScene.cpp"
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeCrashInputs.cpp"
   rem ---- physics->output publish wave (2026-08-11): the RETURN direction of the same    ----
   rem ---- handover. WorldModule::BridgePhysicsModuleToRaceCarModule_PostPhysics          ----
   rem ---- @0x827AE9D0 is the ONLY thing in the image that copies the physics module's    ----
@@ -234,6 +235,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ---- Its WorldLinkStubs gate is DELETED; leaving both = LNK2005.                    ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_CrashExit.cpp"
   rem START_PLAYING_MODE's exact boost-enabling arm first puts attached cars in
   rem racing state through SetAllCarsOnStartLine, homed in this split TU.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ModeArming.cpp"
@@ -300,6 +302,8 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ---- memset gate for Construct instead -- retired the same day).
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_PostPhysics.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
+  echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule_Lifecycle.cpp"
+  echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule_RaceCarCrashes.cpp"
   echo "%SRC%\GameSource\World\EnvironmentManager\BrnEnvironmentManager.cpp"
   rem ---- POST-FX RUNG 10 "environment live" (2026-08-16, irradiance group): the ambient-light
   rem   solver. This TU was never on the list -- it held only GetIrradianceMatrix. ComputeIrradiance
@@ -2733,6 +2737,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  OutputBuffer_PostPhysics::Construct landed this wave.
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\TrafficInputInterface.cpp"
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\BrnCrashModuleIO_OutputBuffer_PreScene.cpp"
+  echo "%SRC%\GameSource\World\CrashModule\SharedIO\BrnCrashModuleIO_InputBuffers.cpp"
   echo "%SRC%\GameSource\Network\BrnNetworkModuleIO.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleGameStateIOInterfaces.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleInGamePlayerStatusInterface.cpp"
