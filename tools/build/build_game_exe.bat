@@ -142,6 +142,16 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  BrnGui::GuiTakedownEvent + a stale mpCgsGuiModule, both inside TranslateTakedownsToGuiEvents).
   rem  The function was MOVED, not copied, so folding it back later is a delete.
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_TrainingStringIds.cpp"
+  rem ---- P1 sim-pause (2026-08-25): the GUI --to-- GAME-STATE event bridge. -----------------
+  rem  BridgeGuiToGameState @0x823DDB78 was reconstructed but had NO CALLER (the tree FLAGged
+  rem  it "DELETE-WHEN it has a caller"). It has one now -- DoUpdate_GameStatePostWorld -- and
+  rem  it is the ONLY producer of game event 93, the crash-nav pause event that reaches
+  rem  RequestPause/RequestUnpause, actions 86/87, CheckGameActions, the sim timer.
+  rem  SIBLING SPLIT: the parent GameBridgeGUIToX.cpp CANNOT be mounted -- its other two
+  rem  members need six symbols with no home in the linked set (measured: exactly 6 LNK2019,
+  rem  none of them from BridgeGuiToGameState), and TelemetryData::AddParameter has no home
+  rem  at all. The function was MOVED, not copied, so folding it back later is a delete.
+  echo "%SRC%\GameSource\Game\GameBridgeGUIToX_GameState.cpp"
   rem ---- camera wave (2026-08-01): the WORLD -> DIRECTOR seam. BridgeWorldToDirector --
   rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
   rem ---- without it every camera VehicleRef resolves to a zero transform.             --
@@ -4225,6 +4235,12 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_07.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_09.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wH3b.cpp"
+  rem ---- H3c link closure (2026-08-25): the sat-nav icon pass. UpdateSatNavIcons reads the
+  rem  embedded 2D event-icon bank (GetEventIconPositions) for the LARGE-map proximity fade,
+  rem  and GetSatNavIconStateForRival reads GetEventPositionOfRaceCar for the race-mode filter.
+  rem  Both homes were reconstructed and simply never mounted.
+  echo "%SRC%\GameSource\Gui\SatNav\BrnEventIconManager.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_06.cpp"
   echo "%SRC%\SharedClasses\Progression\BrnRaceEventData.cpp"
   echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRoadRuleUpcomingRoads.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipRef.cpp"
