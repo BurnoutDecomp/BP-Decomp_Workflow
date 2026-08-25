@@ -106,6 +106,29 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsAudioOutputPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsMovieAudioPC.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsXboxPlatformPC.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsXmaHardwarePC.cpp"
+  rem rw audio core -- the faithful mix engine. Minimal RWAC-init subset mounted
+  rem 2026-08-25 faithful-audio-engine phase A2. Snd9Service stays unmounted -- its
+  rem SNDSYS driver entries are console-only.
+  echo "%VEN%\renderware\src\rw\audio\core\System.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\PlugIn.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\PlugInRegistry.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Voice.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\TimerManager.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\TimerHandle.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Profiler.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\DecoderRegistry.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Decoder.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\EaXmaDec.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\EaXmaDec_wG_02.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\EaXmaDec_wG_03.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\EaXmaDec_wG_04.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Pcm16BigDec.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Xas1Dec.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\XasDec.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Collection.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Unpack0.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsStreamHeadersPC.cpp"
   echo "%SRC%\GameShared\GameClasses\Core\CgsStringUtils.cpp"
   echo "%SRC%\GameShared\GameClasses\Core\CgsAssert.cpp"
@@ -3285,6 +3308,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\SceneManager\Zones\Zone.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\CgsSoundUtils.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\CgsMemBase.cpp"
+  rem helpers and stay gate-only. Mounted 2026-08-25 faithful-audio-engine phase A1.
+  rem SetAllocator; the handle-family TUs have unreconstructed cross-TU template
+  rem Csis SDK -- only CsisSystem is mounted: the RWAC init needs Lock/Unlock/Init/
+  echo "%SRC%\SDKs\Csis\CsisSystem.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsMicrophone.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsStateManager.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsEnvironment.cpp"
