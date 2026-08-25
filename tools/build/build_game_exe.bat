@@ -4002,9 +4002,20 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- (RenderComponent @0x82466638 + CalculateShardVertices @0x8244B248 ..)   ----
   rem ---- is still to land -- the TU does not link until it does (the H2 wave's   ----
   rem ---- merged build caught it; the bat could not ride the b5 commit).          ----
-  rem ---- REMOUNT with the boost render half.                                     ----
-  rem echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBoostBarRenderer.cpp"
+  rem ---- REMOUNTED (2026-08-25, hud H3b wave): the render half landed upstream   ----
+  rem ---- (b5 6bf9728c "boost bar: the render half + the live slot-4 mount").    ----
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBoostBarRenderer.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer.cpp"
+  rem ---- boost-bar support (2026-08-25, upstream a545ebc9/6bf9728c): the 2D      ----
+  rem ---- billboard renderer + the near-miss tracker + the world->GUI vehicle    ----
+  rem ---- bridge TU (the 206 producer; H3b extends it with the 376/147/199      ----
+  rem ---- satnav posts).                                                        ----
+  echo "%SRC%\GameShared\GameClasses\Gui\View\ParticleSystem2d\CgsBillboardRenderer.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\NearMisses\BrnNearMissManager.cpp"
+  echo "%SRC%\GameSource\Game\GameBridgeWorldToGui.cpp"
+  rem ---- hud H3b tracking slice (2026-08-25): the 207 record type the bridge     ----
+  rem ---- Construct()s and the cache consumes (mRaceCarInfo SoA feed).            ----
+  echo "%SRC%\GameSource\Gui\BrnGuiRaceCarInfoEvent.cpp"
   rem ---- custom-renderer layer (2026-08-16) -------------------------------------------
   rem  BrnGui::CustomRendererManager -- the GUI custom-renderer SET. It is the single
   rem  blocker under two separately-reported defects: the licence card's red player-photo
@@ -4190,6 +4201,31 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptRoadSignIconComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptTimerFieldComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnRoadRuleComponent.cpp"
+  rem ---- HUD H3b 2026-08-25: THE SATNAV MINIMAP -- component + render chain,      ----
+  rem ---- mounted together. SatNavComponent = the id-212 render-payload producer;  ----
+  rem ---- SatNavRenderer = manager slot 1, draws the map quad + mask + icons;      ----
+  rem ---- MapTransform statics recovered off the image; MapIconManager = the owner ----
+  rem ---- handshake + sat-nav info set, its apt icon-pool passes are NAMED GATES;  ----
+  rem ---- plus the road-sign manager slice, the NorthIndicator compass, the        ----
+  rem ---- GuiTracker free-roam positions and the SatNav icon TU whose local        ----
+  rem ---- FlaptIconComponent ODR fork is retired.                                  ----
+  echo "%SRC%\GameSource\Gui\SatNav\BrnSatNavComponent.cpp"
+  echo "%SRC%\GameSource\Gui\SatNav\BrnSatNavIcon.cpp"
+  echo "%SRC%\GameSource\Gui\SatNav\BrnMapIconManager.cpp"
+  echo "%SRC%\GameSource\Gui\SatNav\BrnGuiTracker.cpp"
+  echo "%SRC%\GameSource\Gui\View\BrnRoadSignIconManager.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnSatNavRenderer.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnNorthIndicator.cpp"
+  echo "%SRC%\SharedClasses\Gui\SatNav\BrnMapUtils.cpp"
+  rem ---- H3b link closure: the Im2d mask/boost command writers TU, the GuiCache ----
+  rem ---- accessor legs the renderer/manager link against, and the progression   ----
+  rem ---- event-record accessors.                                                ----
+  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\ImRenderBuffer\CgsIm2dRenderBuffer.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_04.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_07.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_09.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wH3b.cpp"
+  echo "%SRC%\SharedClasses\Progression\BrnRaceEventData.cpp"
   echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRoadRuleUpcomingRoads.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipRef.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptTextFieldRef.cpp"
