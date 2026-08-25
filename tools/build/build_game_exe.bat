@@ -3996,7 +3996,14 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- the GuiPerfmons static counters CgsAptAux's audited Update/Render/          ----
   rem ---- UpdateFlashComponent bodies reference (apt-audit retired the shim path).    ----
   echo "%SRC%\GameSource\Gui\BrnGuiPerfmons.cpp"
-  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBoostBarRenderer.cpp"
+  rem ---- BrnBoostBarRenderer.cpp UNMOUNTED (2026-08-25, per the TU's own          ----
+  rem ---- TODO(boost-render-half) note): b5 f96e48b4 replaced the old minimal      ----
+  rem ---- slice with the faithful lifecycle half, whose RENDER half               ----
+  rem ---- (RenderComponent @0x82466638 + CalculateShardVertices @0x8244B248 ..)   ----
+  rem ---- is still to land -- the TU does not link until it does (the H2 wave's   ----
+  rem ---- merged build caught it; the bat could not ride the b5 commit).          ----
+  rem ---- REMOUNT with the boost render half.                                     ----
+  rem echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBoostBarRenderer.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer.cpp"
   rem ---- custom-renderer layer (2026-08-16) -------------------------------------------
   rem  BrnGui::CustomRendererManager -- the GUI custom-renderer SET. It is the single
@@ -4174,11 +4181,16 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptHelpItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnFlaptButtonIcon.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptInterpolatorComponent.cpp"
-  rem ---- PARKED (link-measured 2026-08-10): BrnGuiFlaptRoadSignIconComponent.cpp      ----
-  rem ---- (DisplayRoad(ERoadIcon,bool) body + gapcRoadIconNames/KAV4_SIGN_TEXT_COLOURS ----
-  rem ---- definitions unreconstructed) and BrnGuiFlaptTimerFieldComponent.cpp          ----
-  rem ---- (TextFieldRef::SetColour / SetLocalisedText(float,int) + SetBoundaries       ----
-  rem ---- unreconstructed). Mount when their closures land.                            ----
+  rem ---- HUD H2 (2026-08-25): the 2026-08-10 park is RETIRED -- the closures landed  ----
+  rem ---- (DisplayRoad(ERoadIcon,bool) + gapcRoadIconNames + the sign-text colours in ----
+  rem ---- the RoadSignIcon TU; SetBoundaries + the colour/mode setters in the timer   ----
+  rem ---- TU; TextFieldRef::SetColour + both bare-value SetLocalisedText forms in the ----
+  rem ---- TextFieldRef TU). The full RoadRuleComponent TU + the road-rule event       ----
+  rem ---- family TU mount with them.                                                  ----
+  echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptRoadSignIconComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\FlaptComponents\BrnGuiFlaptTimerFieldComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnRoadRuleComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRoadRuleUpcomingRoads.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipRef.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptTextFieldRef.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptFileRef.cpp"
