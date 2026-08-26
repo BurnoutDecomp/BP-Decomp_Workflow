@@ -319,6 +319,25 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
+  rem ---- aimodule wave (2026-08-25): the AI MODULE LIFECYCLE. BrnAIModule.cpp above grew the
+  rem   real Construct/Prepare/LoadMapData (the four WorldLinkStubs gates are retired), which
+  rem   is what makes AI.dat load, "WorldMapData" resolve and BrnAI::ResetOnTrackManager get
+  rem   Constructed at last. These are its link closure: the AI output buffer (now carrying
+  rem   real typed members instead of this+offset into a 1-byte object), the reset-on-track
+  rem   manager and its container instantiations. (BrnAStar.cpp is deliberately NOT here: it is
+  rem   not link-complete -- AStarNodePool::FindNode and AStar::IsBlockSection have no body
+  rem   anywhere, and Route::AddNode / Portal::GetLinkSectionIndex need the route TUs. So
+  rem   RouteMapModule::Prepare parks its AStar::Construct call, flagged at the site.)
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_OutputBuffer.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_OutputBuffer_Accessors.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAICarOutputInterface.cpp"
+  echo "%SRC%\GameSource\World\AI\ResetOnTrack\BrnResetOnTrackManager.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\Array_ResetOnTrackRequest_35.cpp"
+  echo "%SRC%\GameSource\World\AI\ResetOnTrack\RingBuffer_RecentResetEntry.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_ResetOnTrackResult_128.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_ResetOnTrackResult_Methods.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_PlaceOnTrackRequest_128.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\EventQueue_RouteResponse_16.cpp"
   rem ---- IO-buffer construction wave (2026-08-15): DestroyIOBuffer<T> now runs T::Destruct like the
   rem ---- console template; AIModuleIO::InputBuffer_PostPhysics::Construct @0x8277BCD0 / Destruct
   rem ---- @0x8277BCE8 were already reconstructed in this TU (never mounted; WorldLinkStubs carried a
@@ -4423,6 +4442,16 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnIdleHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnFBurnMainHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsList.cpp"
+  rem ---- LINK CLOSURE for the friends-list / boost-message landings (added 2026-08-26).
+  rem   MEASURED: origin/dev c0dc4af2 does NOT link -- 15 unresolved externals. Two of its
+  rem   own TUs were on disk but never added to this list (BrnBoostMessageManager.cpp,
+  rem   BrnFriendsListEntry.cpp); the remaining seven symbols have no body anywhere and are
+  rem   gated in BrnFriendsListLinkGates.cpp. See that file's banner.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListEntry.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListLinkGates.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageManager.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageSlot.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListChangeIcon.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnDistrictMarker.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnJunctionInfoComponent.cpp"
