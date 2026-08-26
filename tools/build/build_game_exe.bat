@@ -259,6 +259,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_CrashExit.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ResetPump.cpp"
   rem UpdateRaceCarCollisionTagging + UpdateActiveRaceCarTransforms -- the two per-frame
   rem drivers of ActiveRaceCar::mPrevTransforms (the reset-on-track ring).
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ResetOnTrack.cpp"
@@ -342,6 +343,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAICarOutputInterface.cpp"
   echo "%SRC%\GameSource\World\AI\ResetOnTrack\BrnResetOnTrackManager.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\Array_ResetOnTrackRequest_35.cpp"
+  rem SIXTH unlisted TU, found by the LINK: ResetOnTrackRequest::Construct @0x822A0438 has been
+  rem bodied here since the aicar_reset wave and this file was never on the list. Nothing had
+  rem noticed because its only caller (RCEM::SendResetOnTrackRequests) did not exist yet.
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleRequestInterface.cpp"
   echo "%SRC%\GameSource\World\AI\ResetOnTrack\RingBuffer_RecentResetEntry.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_ResetOnTrackResult_128.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_ResetOnTrackResult_Methods.cpp"
@@ -352,6 +357,19 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ---- @0x8277BCE8 were already reconstructed in this TU (never mounted; WorldLinkStubs carried a
   rem ---- memset gate for Construct instead -- retired the same day).
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_PostPhysics.cpp"
+  rem ---- resetpump wave (2026-08-26): THE RESET-ON-TRACK PUMP, plumbed end to end. Three mounts:
+  rem   * BrnAIModule_ResetPump.cpp -- AIModule::{Update (a minimal-complete SLICE),
+  rem     ProcessRequestInterface, UpdateResetOnTrackManager, GetAICar}. Retires the
+  rem     AIModule::Update boot gate in WorldLinkStubs.cpp.
+  rem   * BrnRaceCarEntityModule_ResetPump.cpp -- RCEM::{WriteUpdatedAIData (which is what sets
+  rem     mbPlayerDataSet, the flag AIModule::Update wraps its ENTIRE body in),
+  rem     SendResetOnTrackRequests, ProcessResetOnTrackResultQueue}.
+  rem   * WorldBridgeEntityModulesToAI.cpp -- ON DISK SINCE THE WORLD-DRIVE WAVE AND NEVER LISTED.
+  rem     Its BridgeRaceCarModuleToAIModule_PreScene has been real, correct and complete all along
+  rem     and the linker took the WorldLinkStubs stub instead. Both its bridges are retired from
+  rem     WorldLinkStubs.cpp by this wave. FIFTH sighting of an unlisted TU in three waves.
+  echo "%SRC%\GameSource\World\AI\BrnAIModule_ResetPump.cpp"
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToAI.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule_Lifecycle.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule_RaceCarCrashes.cpp"

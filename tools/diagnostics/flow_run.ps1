@@ -91,11 +91,12 @@ param(
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
   [int]$FrameEvery     = 30,     # dump PERIOD in presents; 1 = every present (see the note below)
   [int]$LogWaitSeconds = 90,
-  [switch]$CrashEntry,           # opt IN to CRASH ENTRY (BRN_ENABLE_CRASH_ENTRY=1). OFF by default:
-                                 # crash entry is correct but crash RECOVERY needs the
-                                 # BrnAI::ResetOnTrackManager request/result PUMP. Its lifecycle
-                                 # landed 2026-08-26 (AI.dat loads, the manager IS Constructed),
-                                 # but nothing pumps requests through it, so a heavy crash still pins.
+  [switch]$CrashEntry,           # opt IN to CRASH ENTRY (BRN_ENABLE_CRASH_ENTRY=1). OFF by default.
+                                 # UPDATED 2026-08-26 (resetpump): the PUMP IS PLUMBED and a
+                                 # request has traversed it -- a crashed car IS put back on the
+                                 # road and drives away. What still fails is the CRASH STATE:
+                                 # mbCrashing is never cleared, no LEAVE_CRASHED, mfTimeCrashing
+                                 # climbs for ever. So the recovered car keeps the crash bar up.
   [int]$CrashPlayer    = 0,      # opt IN to the deterministic player-crash trigger
                                  # (BRN_CRASH_PLAYER = the UpdateVehiclePhysics call to fire on;
                                  # 0 = off). ⭐ Crashes are STOCHASTIC (2 runs in 5), so a claim
@@ -148,11 +149,12 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # goldens are meant to be byte-identical to a probe-free build.  Opt IN with -MotionProbe instead.
 # ⛔⛔ BRN_ENABLE_CRASH_ENTRY IS IN THIS LIST FOR THE SAME REASON, AND IT MATTERS MORE (2026-08-25).
 # It is not an instrument, it is a CAPABILITY: with it set the game can enter the crash state, and
-# a crash today is terminal (crash recovery needs the BrnAI::ResetOnTrackManager PUMP, which is
-# absent -- its lifecycle landed 2026-08-26 but nothing drives requests through it -- see
-# the banner in BrnVehicleManager.cpp::SetRaceCarCrashing).  A leftover shell variable would make a
-# run that calls itself DEFAULT able to pin the car, which is precisely the failure mode this flag
-# exists to keep off the public path.  Opt IN with -CrashEntry.
+# a crash today leaves the car PERMANENTLY FLAGGED CRASHING (resetpump wave 2026-08-26: the reset
+# pump now puts the car back on the road and it drives away, but nothing clears mbCrashing, so the
+# crash bar stays up and every reader of IsPlayerCarCrashing lies -- see the banner in
+# BrnVehicleManager.cpp::SetRaceCarCrashing).  A leftover shell variable would make a run that
+# calls itself DEFAULT carry that state, which is precisely the failure mode this flag exists to
+# keep off the public path.  Opt IN with -CrashEntry.
 # ⛔ BRN_CRASH_PLAYER JOINED THIS LIST 2026-08-26. It was the one crash-chain knob the script
 # neither set nor cleared, so a leftover shell variable could make a run that calls itself DEFAULT
 # fire a scripted player crash -- exactly the hazard the BRN_MOTION_PROBE note above describes, on
@@ -162,7 +164,7 @@ foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA'
 }
 if ($CrashEntry) {
   $env:BRN_ENABLE_CRASH_ENTRY = "1"
-  Write-Host "[flow] CRASH ENTRY ENABLED: BRN_ENABLE_CRASH_ENTRY=1 (opt-in). NOT a default run -- a heavy crash can pin the car until ResetOnTrackManager lands."
+  Write-Host "[flow] CRASH ENTRY ENABLED: BRN_ENABLE_CRASH_ENTRY=1 (opt-in). NOT a default run -- the car recovers, but nothing clears mbCrashing, so it drives on flagged crashing."
 }
 if ($CrashPlayer -gt 0) {
   $env:BRN_CRASH_PLAYER = "$CrashPlayer"
