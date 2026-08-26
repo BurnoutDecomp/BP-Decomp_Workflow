@@ -164,7 +164,7 @@ foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA'
 }
 if ($CrashEntry) {
   $env:BRN_ENABLE_CRASH_ENTRY = "1"
-  Write-Host "[flow] CRASH ENTRY ENABLED: BRN_ENABLE_CRASH_ENTRY=1 (opt-in). NOT a default run -- the car recovers, but nothing clears mbCrashing, so it drives on flagged crashing."
+  Write-Host "[flow] CRASH ENTRY ENABLED: BRN_ENABLE_CRASH_ENTRY=1 (opt-in). NOT a default run -- the car recovers AND the crash state now clears (crashclear wave, 2026-08-26), but the HUD FSM has no END_CRASH arm, so the HUD does not come back."
 }
 if ($CrashPlayer -gt 0) {
   $env:BRN_CRASH_PLAYER = "$CrashPlayer"
