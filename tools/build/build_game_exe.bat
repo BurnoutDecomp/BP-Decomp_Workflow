@@ -3323,6 +3323,14 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem ---- audio-faithfulness wave 3: the canonical Playback Object home. The CgsContent.h
   rem  Object fold makes its consumers reference the out-of-line asserting Object dtor 0x826916F0.
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsObject.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsSoundLogicModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsEnvironment.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\Module\CgsSoundPlaybackModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\Module\CgsSoundPlaybackModuleIO.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacFactory.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsFactory.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsVoice.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsContentSpec.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\Streaming\internal\sndplayer1.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\Streaming\internal\sndplayer1shared.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsSnrResourceType.cpp"
@@ -4521,7 +4529,21 @@ move /y "%RSP%.tmp" "%RSP%" >nul
 cl @"%BASERSP%" /c "%SRC%\pc\gcm\renderengine\device.cpp" /Fo"%OUT%\\obj\\renderengine_device.obj"
 if errorlevel 1 ( echo ERROR: renderengine device.cpp precompile failed. & exit /b 1 )
 
-cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
+rem ---- OBJECT-NAME COLLISION FIX -- Sound Logic vs Sound Playback basenames --------------------
+rem CgsEnvironment.cpp and CgsVoice.cpp exist in BOTH Sound\Logic and Sound\Playback; with the
+rem single obj dir the second compile clobbers the first and the linker drops one TU entirely.
+rem Same fix as device.cpp above: the Playback pair is filtered out of the RSP and compiled
+rem separately to UNIQUE objects, linked in below.
+findstr /v /c:"Sound\Playback\CgsEnvironment.cpp" "%RSP%" > "%RSP%.tmp"
+move /y "%RSP%.tmp" "%RSP%" >nul
+findstr /v /c:"Sound\Playback\CgsVoice.cpp" "%RSP%" > "%RSP%.tmp"
+move /y "%RSP%.tmp" "%RSP%" >nul
+cl @"%BASERSP%" /c "%SRC%\GameShared\GameClasses\Sound\Playback\CgsEnvironment.cpp" /Fo"%OUT%\\obj\\playback_environment.obj"
+if errorlevel 1 ( echo ERROR: Sound Playback CgsEnvironment.cpp precompile failed. & exit /b 1 )
+cl @"%BASERSP%" /c "%SRC%\GameShared\GameClasses\Sound\Playback\CgsVoice.cpp" /Fo"%OUT%\\obj\\playback_voice.obj"
+if errorlevel 1 ( echo ERROR: Sound Playback CgsVoice.cpp precompile failed. & exit /b 1 )
+
+cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" "%OUT%\\obj\\playback_environment.obj" "%OUT%\\obj\\playback_voice.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
 
 set "BUILD_ERR=%ERRORLEVEL%"
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
