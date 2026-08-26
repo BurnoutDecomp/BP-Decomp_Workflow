@@ -94,9 +94,16 @@ param(
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
   [int]$FrameEvery     = 30,     # dump PERIOD in presents; 1 = every present (see the note below)
   [int]$LogWaitSeconds = 90,
-  [switch]$CrashEntry,           # opt IN to CRASH ENTRY (BRN_ENABLE_CRASH_ENTRY=1). OFF by default:
-                                 # crash entry is correct but crash RECOVERY needs
-                                 # BrnAI::ResetOnTrackManager (absent), so a heavy crash pins the car.
+  [switch]$CrashEntry,           # opt IN to CRASH ENTRY (BRN_ENABLE_CRASH_ENTRY=1). OFF by default.
+                                 # UPDATED 2026-08-26 (resetpump): the PUMP IS PLUMBED and a
+                                 # request has traversed it -- a crashed car IS put back on the
+                                 # road and drives away. What still fails is the CRASH STATE:
+                                 # mbCrashing is never cleared, no LEAVE_CRASHED, mfTimeCrashing
+                                 # climbs for ever. So the recovered car keeps the crash bar up.
+  [int]$CrashPlayer    = 0,      # opt IN to the deterministic player-crash trigger
+                                 # (BRN_CRASH_PLAYER = the UpdateVehiclePhysics call to fire on;
+                                 # 0 = off). ⭐ Crashes are STOCHASTIC (2 runs in 5), so a claim
+                                 # about crash entry/recovery needs this, not a lucky collision.
   [switch]$MotionProbe,          # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
   [int]$TriCacheProbe  = 0,      # opt IN to the [tricache] world-collision cache trace; the VALUE
                                  # is the sampling period in frames (1 => the game's default 60).
@@ -148,10 +155,16 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # goldens are meant to be byte-identical to a probe-free build.  Opt IN with -MotionProbe instead.
 # ⛔⛔ BRN_ENABLE_CRASH_ENTRY IS IN THIS LIST FOR THE SAME REASON, AND IT MATTERS MORE (2026-08-25).
 # It is not an instrument, it is a CAPABILITY: with it set the game can enter the crash state, and
-# a crash today is terminal (crash recovery needs BrnAI::ResetOnTrackManager, which is absent -- see
-# the banner in BrnVehicleManager.cpp::SetRaceCarCrashing).  A leftover shell variable would make a
-# run that calls itself DEFAULT able to pin the car, which is precisely the failure mode this flag
-# exists to keep off the public path.  Opt IN with -CrashEntry.
+# a crash today leaves the car PERMANENTLY FLAGGED CRASHING (resetpump wave 2026-08-26: the reset
+# pump now puts the car back on the road and it drives away, but nothing clears mbCrashing, so the
+# crash bar stays up and every reader of IsPlayerCarCrashing lies -- see the banner in
+# BrnVehicleManager.cpp::SetRaceCarCrashing).  A leftover shell variable would make a run that
+# calls itself DEFAULT carry that state, which is precisely the failure mode this flag exists to
+# keep off the public path.  Opt IN with -CrashEntry.
+# ⛔ BRN_CRASH_PLAYER JOINED THIS LIST 2026-08-26. It was the one crash-chain knob the script
+# neither set nor cleared, so a leftover shell variable could make a run that calls itself DEFAULT
+# fire a scripted player crash -- exactly the hazard the BRN_MOTION_PROBE note above describes, on
+# the one variable whose consequence is a pinned car rather than an extra log family.
 # ⛔⛔ BRN_START_EVENT IS IN THIS LIST FOR EXACTLY THE SAME REASON (2026-08-26, stunt-races wave D).
 # It is the event-start hook: with it set the game calls GameStateModule::
 # HarnessInjectEventStartBringUp (GameStateModule_gUI_00.cpp), which drives StartModeAtLights
@@ -162,12 +175,16 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # script describes free burn.  That is the SEVEN-NON-COMPARABLE-RUNS failure again (the DIAGENV
 # banner below), only louder, because this one changes what the game DOES rather than what it says.
 # Opt IN with -StartEvent.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_ENABLE_CRASH_ENTRY','BRN_START_EVENT')) {
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_ENABLE_CRASH_ENTRY','BRN_CRASH_PLAYER','BRN_START_EVENT')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 if ($CrashEntry) {
   $env:BRN_ENABLE_CRASH_ENTRY = "1"
-  Write-Host "[flow] CRASH ENTRY ENABLED: BRN_ENABLE_CRASH_ENTRY=1 (opt-in). NOT a default run -- a heavy crash can pin the car until ResetOnTrackManager lands."
+  Write-Host "[flow] CRASH ENTRY ENABLED: BRN_ENABLE_CRASH_ENTRY=1 (opt-in). NOT a default run -- the car recovers AND the crash state now clears (crashclear wave, 2026-08-26), but the HUD FSM has no END_CRASH arm, so the HUD does not come back."
+}
+if ($CrashPlayer -gt 0) {
+  $env:BRN_CRASH_PLAYER = "$CrashPlayer"
+  Write-Host "[flow] CRASH PLAYER armed: BRN_CRASH_PLAYER=$CrashPlayer (opt-in, an UpdateVehiclePhysics call index). NOT a default run -- the player car is crashed ONCE, deterministically."
 }
 if ($MotionProbe) {
   $env:BRN_MOTION_PROBE = "1"
@@ -186,8 +203,8 @@ if ($TractionProbe -gt 0) {
   $env:BRN_TRACTION_PROBE = "$TractionProbe"
   Write-Host "[flow] TRACTION PROBE run: BRN_TRACTION_PROBE=$TractionProbe (opt-in, period in frames). NOT a default run -- do not gate goldens off this."
 }
-if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and -not $CrashEntry -and -not $StartEvent) {
-  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / ENABLE_CRASH_ENTRY / START_EVENT all cleared."
+if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and -not $CrashEntry -and $CrashPlayer -le 0 -and -not $StartEvent) {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / ENABLE_CRASH_ENTRY / CRASH_PLAYER / START_EVENT all cleared."
 }
 
 # ⭐⭐ BRN_PROP_DIAG IS INHERITED, NOT MANAGED -- so it is RECORDED (2026-08-20, gateui r7).
@@ -713,6 +730,8 @@ if (-not $ladderDiag) {
 }
 $summary += ("LADDER   {0}/{1} deepest={2} startevent={3}{4}" -f `
              $ladderDepth, $eventLadder.Count, $ladderReached, [bool]$StartEvent, $ladderBlind)
+# CRASHARM: the deterministic crash trigger this run carried, for the same comparability reason.
+$summary += ("CRASHARM crashEntry={0} crashPlayer={1}" -f [bool]$CrashEntry, $CrashPlayer)
 # EXIT: how the process left. "harness-stop" = it was still alive and this script killed it;
 # anything else is the game's own exit code, decoded in the banner next to the read above.
 if ($exitedOnOwn) {

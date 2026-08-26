@@ -262,6 +262,10 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_CrashExit.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ResetPump.cpp"
+  rem UpdateRaceCarCollisionTagging + UpdateActiveRaceCarTransforms -- the two per-frame
+  rem drivers of ActiveRaceCar::mPrevTransforms (the reset-on-track ring).
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ResetOnTrack.cpp"
   rem START_PLAYING_MODE's exact boost-enabling arm first puts attached cars in
   rem racing state through SetAllCarsOnStartLine, homed in this split TU.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ModeArming.cpp"
@@ -322,11 +326,53 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
+  rem ---- aimodule wave (2026-08-25): the AI MODULE LIFECYCLE. BrnAIModule.cpp above grew the
+  rem   real Construct/Prepare/LoadMapData (the four WorldLinkStubs gates are retired), which
+  rem   is what makes AI.dat load, "WorldMapData" resolve and BrnAI::ResetOnTrackManager get
+  rem   Constructed at last. These are its link closure: the AI output buffer (now carrying
+  rem   real typed members instead of this+offset into a 1-byte object), the reset-on-track
+  rem   manager and its container instantiations. (BrnAStar.cpp is deliberately NOT here: it is
+  rem   not link-complete -- AStarNodePool::FindNode and AStar::IsBlockSection have no body
+  rem   anywhere, and Route::AddNode / Portal::GetLinkSectionIndex need the route TUs. So
+  rem   RouteMapModule::Prepare parks its AStar::Construct call, flagged at the site.)
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_OutputBuffer.cpp"
+  rem ResetOnTrackResult / PlaceOnTrackRequest element constructors (the AI RESULT side).
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleResultInterface.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_OutputBuffer_Accessors.cpp"
+  rem ON DISK BUT UNLISTED until 2026-08-26: the AI INPUT buffer's accessors, including its own
+  rem Construct -- which is what points the reset-on-track request queue at its inline storage.
+  rem A source list is a transitive closure and only the LINK walks it.
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_Accessors.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAICarOutputInterface.cpp"
+  echo "%SRC%\GameSource\World\AI\ResetOnTrack\BrnResetOnTrackManager.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\Array_ResetOnTrackRequest_35.cpp"
+  rem SIXTH unlisted TU, found by the LINK: ResetOnTrackRequest::Construct @0x822A0438 has been
+  rem bodied here since the aicar_reset wave and this file was never on the list. Nothing had
+  rem noticed because its only caller (RCEM::SendResetOnTrackRequests) did not exist yet.
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleRequestInterface.cpp"
+  echo "%SRC%\GameSource\World\AI\ResetOnTrack\RingBuffer_RecentResetEntry.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_ResetOnTrackResult_128.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_ResetOnTrackResult_Methods.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_PlaceOnTrackRequest_128.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\EventQueue_RouteResponse_16.cpp"
   rem ---- IO-buffer construction wave (2026-08-15): DestroyIOBuffer<T> now runs T::Destruct like the
   rem ---- console template; AIModuleIO::InputBuffer_PostPhysics::Construct @0x8277BCD0 / Destruct
   rem ---- @0x8277BCE8 were already reconstructed in this TU (never mounted; WorldLinkStubs carried a
   rem ---- memset gate for Construct instead -- retired the same day).
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_PostPhysics.cpp"
+  rem ---- resetpump wave (2026-08-26): THE RESET-ON-TRACK PUMP, plumbed end to end. Three mounts:
+  rem   * BrnAIModule_ResetPump.cpp -- AIModule::{Update (a minimal-complete SLICE),
+  rem     ProcessRequestInterface, UpdateResetOnTrackManager, GetAICar}. Retires the
+  rem     AIModule::Update boot gate in WorldLinkStubs.cpp.
+  rem   * BrnRaceCarEntityModule_ResetPump.cpp -- RCEM::{WriteUpdatedAIData (which is what sets
+  rem     mbPlayerDataSet, the flag AIModule::Update wraps its ENTIRE body in),
+  rem     SendResetOnTrackRequests, ProcessResetOnTrackResultQueue}.
+  rem   * WorldBridgeEntityModulesToAI.cpp -- ON DISK SINCE THE WORLD-DRIVE WAVE AND NEVER LISTED.
+  rem     Its BridgeRaceCarModuleToAIModule_PreScene has been real, correct and complete all along
+  rem     and the linker took the WorldLinkStubs stub instead. Both its bridges are retired from
+  rem     WorldLinkStubs.cpp by this wave. FIFTH sighting of an unlisted TU in three waves.
+  echo "%SRC%\GameSource\World\AI\BrnAIModule_ResetPump.cpp"
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToAI.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule_Lifecycle.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule_RaceCarCrashes.cpp"
@@ -4265,7 +4311,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficLightTrigger.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnChallengeHighScoreEntry.cpp"
   echo "%SRC%\SharedClasses\StreetData\BrnChallengeData.cpp"
-  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAICarOutputInterface.cpp"
+  rem (BrnAICarOutputInterface.cpp mounts with the aimodule slice above -- both
+  rem sessions added it 2026-08-26; the duplicate died in the merge.)
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPositionIndicator.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFreeburnChallengeStartComponent.cpp"
   rem BrnSatNavTile alone (0 new externals standalone): the MapManager ctor gate's member
@@ -4530,17 +4577,22 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnIdleHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnFBurnMainHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsList.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListChangeIcon.cpp"
-  rem Friends-list tranche 1 (2026-08-26 pull): the entry component's landed bodies.
-  rem FriendsListEntry::Select is a link gate in BrnBaselineLinkStubs.cpp until the
-  rem tranche lands the real one.
+  rem ---- LINK CLOSURE for the friends-list / boost-message landings (added 2026-08-26).
+  rem   MEASURED: origin/dev c0dc4af2 does NOT link -- 15 unresolved externals. Two of its
+  rem   own TUs were on disk but never added to this list (BrnBoostMessageManager.cpp,
+  rem   BrnFriendsListEntry.cpp); the remaining seven symbols have no body anywhere and are
+  rem   gated in BrnFriendsListLinkGates.cpp. See that file's banner.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListEntry.cpp"
-  rem BoostMessageManager (2026-08-26 pull): FBurnMainHudState::OnEnter constructs it;
-  rem the 23-body TU landed upstream without its bat mount. Its slot/item children:
-  rem BoostMessageItem was in tree unmounted; BoostMessageSlot bodies landed 2026-08-26.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListLinkGates.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageManager.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageSlot.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageItem.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListChangeIcon.cpp"
+  rem (FriendsListEntry / the BoostMessage trio mount ABOVE with the friends-list
+  rem tranche block -- both sessions added them 2026-08-26; the duplicates died in
+  rem the merge. Select + the six other bodiless symbols live in
+  rem BrnFriendsListLinkGates.cpp; LobbyNameCmp is the REAL vendor body in
+  rem vendor\dirtysdk\src\lobbyname.cpp.)
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnDistrictMarker.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnJunctionInfoComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnOdometerComponent.cpp"
