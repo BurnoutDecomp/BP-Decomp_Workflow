@@ -185,7 +185,9 @@ def cmd_doctor(cfg, args):
     r.row("ok", f"Python {sys.version.split()[0]} ({sys.executable})")
     if not shutil.which("py"):
         r.row("warn", "the 'py' launcher is absent -- build_game_exe.bat warns and skips "
-                      "the .cgsmap (assert call-stack names) when it can't find it")
+                      "the .cgsmap (assert call-stack names) when it can't find it; with "
+                      "no python/python3 either, the exe build loses the incremental "
+                      "compile driver and falls back to a full serial rebuild")
     if os.path.isfile(build_config.CONFIG_PATH):
         unknown = build_config.unknown_keys(cfg)
         if unknown:
@@ -421,6 +423,12 @@ def step_exe(cfg, args, dry=False):
         print("ERROR: Burnout_PC.exe is running -- the link would fail with LNK1104. "
               "Close the game first.")
         return 2
+    # The bat's tail hands compile+link to tools/build/compile_exe.py (incremental,
+    # parallel, warnings/errors summary); these knobs reach it as env vars.
+    if getattr(args, "rebuild", False):
+        os.environ["BRN_EXE_REBUILD"] = "1"
+    if getattr(args, "jobs", None):
+        os.environ["BRN_EXE_JOBS"] = str(args.jobs)
     return run_bat(os.path.join(TOOLS_BUILD, "build_game_exe.bat"), dry=dry)
 
 
@@ -556,7 +564,12 @@ def main(argv=None):
     p = sub.add_parser("xaudio2", help="fetch vendor/xaudio2redist "
                                       "(fetch_xaudio2_redist.bat)")
     p.add_argument("--force", action="store_true")
-    sub.add_parser("exe", help="build Burnout_PC.exe (build_game_exe.bat)")
+    p = sub.add_parser("exe", help="build Burnout_PC.exe (build_game_exe.bat; "
+                                   "incremental -- only changed TUs recompile)")
+    p.add_argument("--rebuild", action="store_true",
+                   help="recompile every TU (ignore the incremental cache)")
+    p.add_argument("--jobs", type=int,
+                   help="parallel cl processes (default: CPU count)")
     p = sub.add_parser("data", help="convert the game data (build_game_data.py; "
                                     "unknown args are forwarded verbatim)")
     p = sub.add_parser("all", help="tools -> lua -> ffmpeg -> xaudio2 -> exe -> data "

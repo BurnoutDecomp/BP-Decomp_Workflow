@@ -5,6 +5,9 @@ rem resource/font subsystem so a loaded Default.font drives the bitmap debug tex
 rem
 rem The source list exceeds cmd's ~8191-char command-line limit, so the cl arguments (flags,
 rem include dirs, sources, /Fo, /Fe) are written to a response file and passed via cl @file.
+rem Compile+link runs through tools\build\compile_exe.py -- incremental per-TU objs with
+rem header-dep tracking, parallel cl, and an end-of-build warnings-and-errors summary --
+rem falling back to the legacy single serial cl @file when no Python is present.
 setlocal
 rem Normalized ROOT: cl's command line, __FILE__/assert strings, the .map and the
 rem .cgsmap all embed this spelling -- D:\...\BP-Decomp_Workflow\... instead of the
@@ -2844,6 +2847,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Windows\CgsLogWindow.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowController.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameRate.cpp"
+  rem  ---- FLAG PC quality-of-life: the 60Hz-simulation / uncapped-render blend layer.
+  rem  CgsFrameRate.cpp publishes the interpolation alpha; this is what the render legs read.
+  echo "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameInterpolation.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\PerfMon\Cpu\CgsPerfMonCpu.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\PerfMon\DebugComponent\CgsDebugComponentPerfMonCpu.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\PerfMon\Gpu\CgsPerfMonGpu.cpp"
@@ -2907,6 +2913,8 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  the buffer (ImRenderer<BasicColouredTexturedVertex> + the PC program pair) is still
   rem  missing. This mounts the COLLECTOR and makes its layout pins real.
   echo "%SRC%\GameSource\Graphics\BrnBlobbyShadowManager.cpp"
+  echo "%SRC%\GameSource\Sound\Module\BrnRootSoundModuleIO.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnRendererModuleIO_OutputBuffer_Accessors.cpp"
   rem  ...and the embed check beside it: never called (discarded by /OPT:REF), but it is the
   rem  only place the ShadowStruct/buffer static_asserts actually execute. Same trap as
   rem  BrnVehicleManager.h's _AssertLayout, which sat in an unmounted TU for ten waves.
@@ -4566,21 +4574,46 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
-rem ---- OBJECT-NAME COLLISION FIX (basename `device.cpp` appears twice) ----------------------
-rem The source list carries two `device.cpp` files with the SAME basename:
-rem   %SRC%\SDKs\EATech\rwcore\filesys\device.cpp   (rw filesys Device)
-rem   %SRC%\pc\gcm\renderengine\device.cpp          (renderengine D3D9 Device)
-rem With /Fo pointing at a single obj dir, cl writes BOTH to obj\device.obj -- the second-compiled
-rem one CLOBBERS the first, so which set of symbols survives depends on compile ORDER (fragile: it
-rem flips when the source list changes, then the link fails with unresolved renderengine::Device*
-rem OR duplicate rw::filesys::Device* symbols). The build was only "passing" because the renderengine
-rem device.obj was clobbering the rw-filesys one (whose rw::core::filesys::Device symbols are provided
-rem by AptRenderLinkStubs.obj + which drags an unlinked EA::Thread::Condition dependency). Fix: keep
-rem the renderengine device.cpp (compiled separately to a UNIQUE object, linked in) and DROP the
-rem rw-filesys device.cpp from the build (its symbols come from AptRenderLinkStubs -- the prior state).
-findstr /v /c:"pc\gcm\renderengine\device.cpp" "%RSP%" > "%RSP%.tmp"
-move /y "%RSP%.tmp" "%RSP%" >nul
+rem ---- deliberate source drop -- BOTH compile paths: rw-filesys device.cpp ------------------
+rem The source list carries %SRC%\SDKs\EATech\rwcore\filesys\device.cpp, but its
+rem rw::core::filesys::Device symbols are provided by AptRenderLinkStubs.obj, and compiling it
+rem would add duplicate symbols plus an unlinked EA::Thread::Condition dependency. So it is
+rem filtered out of the RSP here, before either compile path below runs.
 findstr /v /c:"rwcore\filesys\device.cpp" "%RSP%" > "%RSP%.tmp"
+move /y "%RSP%.tmp" "%RSP%" >nul
+
+rem ---- compile + link: incremental parallel driver when a Python is available ---------------
+rem tools\build\compile_exe.py compiles each TU to its own uniquely-named obj under obj\tu\
+rem -- basename.crc32-of-path.obj, which retires the same-basename obj-clobber class the
+rem legacy path below patches case by case -- tracks header deps via cl /showIncludes, and
+rem recompiles ONLY the TUs whose source, headers or flags changed, in parallel. It then
+rem links -- skipped too when nothing feeding the link changed -- and ends with a summary
+rem repeating every warning and error, so diagnostics are never lost in the scroll.
+rem Knobs: BRN_EXE_REBUILD=1 forces a full recompile. BRN_EXE_JOBS=N caps parallel cl count.
+set "PY_CMD="
+for %%P in (python python3 py) do (
+    if not defined PY_CMD (
+        where %%P >nul 2>nul && set "PY_CMD=%%P"
+    )
+)
+if defined PY_CMD goto driver_compile
+echo WARNING: no Python interpreter found -- using the legacy serial full-rebuild path.
+goto legacy_compile
+
+:driver_compile
+%PY_CMD% "%~dp0compile_exe.py" --base "%BASERSP%" --rsp "%RSP%" --out "%OUT%" -- /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\obj\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
+set "BUILD_ERR=%ERRORLEVEL%"
+goto post_build
+
+:legacy_compile
+rem ---- OBJECT-NAME COLLISION FIX -- basename device.cpp appears twice -----------------------
+rem The source list carried two device.cpp files with the SAME basename -- the rw-filesys one
+rem is dropped above, this one remains:
+rem   %SRC%\pc\gcm\renderengine\device.cpp          -- renderengine D3D9 Device
+rem With /Fo pointing at a single obj dir, cl writes BOTH to obj\device.obj -- the second-compiled
+rem one CLOBBERS the first, so which set of symbols survives depends on compile ORDER. Fix: the
+rem renderengine device.cpp is compiled separately to a UNIQUE object and linked in below.
+findstr /v /c:"pc\gcm\renderengine\device.cpp" "%RSP%" > "%RSP%.tmp"
 move /y "%RSP%.tmp" "%RSP%" >nul
 cl @"%BASERSP%" /c "%SRC%\pc\gcm\renderengine\device.cpp" /Fo"%OUT%\\obj\\renderengine_device.obj"
 if errorlevel 1 ( echo ERROR: renderengine device.cpp precompile failed. & exit /b 1 )
@@ -4602,6 +4635,8 @@ if errorlevel 1 ( echo ERROR: Sound Playback CgsVoice.cpp precompile failed. & e
 cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" "%OUT%\\obj\\playback_environment.obj" "%OUT%\\obj\\playback_voice.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
 
 set "BUILD_ERR=%ERRORLEVEL%"
+
+:post_build
 rem Convert the linker .map into the binary CgsMapFile the assert call-stack resolver reads.
 if "%BUILD_ERR%"=="0" if exist "%OUT%\Burnout_PC.map" (
   where py >nul 2>&1
