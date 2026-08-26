@@ -111,6 +111,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsMovieAudioPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsXboxPlatformPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsXmaHardwarePC.cpp"
+  rem dirtysdk vendor leaves (2026-08-26): LobbyNameCmp @0x82B10050, the table-driven
+  rem name comparator the friends-list tranche promoted to extern "C".
+  echo "%VEN%\dirtysdk\src\lobbyname.cpp"
   rem rw audio core -- the faithful mix engine. Minimal RWAC-init subset mounted
   rem 2026-08-25 faithful-audio-engine phase A2. Snd9Service stays unmounted -- its
   rem SNDSYS driver entries are console-only.
@@ -3407,6 +3410,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem pace wave (b5 dev 261a5303, upstream) landed CgsSystem::FrameInterpolation callers in BrnGameModule/BrnWorldModule without the mount; added here (cars step 1c)
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameInterpolation.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimerStatusInterface.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimerRequestInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Timer\PS3\CgsDateAndTimePS3.cpp"
   echo "%SRC%\GameShared\GameClasses\World\CgsWorldMap2D.cpp"
   echo "%SRC%\GameShared\Jobs\Relocator\CgsRelocator.cpp"
@@ -4221,7 +4225,107 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\Offences\StuntManagerDebugComponent_gUI_00.cpp"
   echo "%SRC%\GameSource\GameState\Offences\BrnStuntManagerDebugComponent_GetTriggerWorldRegion.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_gUI_00.cpp"
+  rem [stuntrace wave D 2026-08-26] the four event-start functions + GetEvent helpers.
+  echo "%SRC%\GameSource\GameState\GameStateModule_gSR_00.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ModeManager_gUI_00.cpp"
+  rem ============================================================================
+  rem [stuntrace wave B 2026-08-26] THE MODEMANAGER MOUNT -- the offline event core.
+  rem ModeManager spine + all 15 game modes + params + the 7 mode states + the
+  rem scoring subsystem (offline scorers full; online scorers partial, remainder in
+  rem BrnBaselineLinkStubs' MUST-STAY block) + the progression event-finish TU.
+  rem DELIBERATELY OUT: ChallengeManager/* (bounded ModeManager layout has no
+  rem embedded member; freeburn challenges are not on the progression-event path),
+  rem BrnBurnoutSkillzManager.cpp (GameActionQueue typedef clash, not a DWARF
+  rem ModeManager member), Debug/* components, Hud/BrnHUDMessageLogic.cpp (its 4
+  rem callers are parked, wave-F item), *_EmbedGate/_AssertLayout/_embed_check
+  rem (compile-scaffolding, gate-only by convention).
+  rem PAIRED EDIT: the 14-line RETIRE list in BrnBaselineLinkStubs.cpp (seam audit
+  rem S7) died in the same change that adds these lines -- the two must never
+  rem coexist (LNK2005) and HasStuntModeEnded's return-true stub would end every
+  rem stunt run on frame 1.
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_Accessors.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_CheckpointSetup.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_Finish.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_IntroPlay.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_Lifecycle.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_Prepare.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_Start.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_TransmitCrash.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_UpdateMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_WorldTick.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnGameMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOfflineGameMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineGameMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnGameModeParams.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnRaceMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnFaceOffMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnCrashMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnRoadRageMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnPursuitMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnBurningRoute.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnStuntAttackMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnSurvivor.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineRaceMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineRoadRageMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineStuntRunMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineBurningHomeRunMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineFreeBurnMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineFreeBurnLobbyMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineShowtimeMode.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnCountdownState.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnInProgressState.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnIntroState.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnOnlineLoadingState.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnOutroState.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnQuitState.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnResultsState.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Finish.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Lifecycle.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Lookup.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Queries.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Standings.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Timer.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_UpdateA.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_UpdateB.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnStuntModeScoring_Combo.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnStuntModeScoring_Lifecycle.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnStuntModeScoring_Queries.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnStuntModeScoring_Register.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnStuntModeScoring_StuntTypes.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnStuntModeScoring_UpdatePass.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnStuntModeScoringOnline.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnBaseOnlineModeScoring.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnOnlineRaceModeScoring.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnOnlineRoadRageModeScoring.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnOnlineStuntRunModeScoring.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnOnlineBurningHomeRunModeScoring.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnCarData.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnBurnoutSkillzData.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnCrashModeScoring.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnRoadRageModeScoringLinkStubs.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\Array_EActiveRaceCarIndex_7.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\Array_RecentCrash_64.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\RingBuffer_CgsID.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\RingBuffer_Vector3.cpp"
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_EventFinish.cpp"
+  echo "%SRC%\GameSource\GameState\NetworkRoundManager\BrnNetworkRoundManager.cpp"
+  rem [stuntrace mount closure 2026-08-26] the measured link-hole closers -- each verified
+  rem 0-new-externals / 0-ODR by the closure verifier's trial link. NOT mounted (refuted):
+  rem BrnMapManager.cpp + BrnSatNavTile.cpp (two undefined hand-declared CRT helpers in
+  rem MapManager's transliteration; ctor gated in BrnHudStatesLinkStubs.cpp instead).
+  echo "%SRC%\GameSource\GameState\SharedIO\BrnGameStateToGuiIOInterfaces.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_OnlineGridStubs.cpp"
+  echo "%SRC%\SharedClasses\Traffic\BrnTrafficLightTrigger.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnChallengeHighScoreEntry.cpp"
+  echo "%SRC%\SharedClasses\StreetData\BrnChallengeData.cpp"
+  rem (BrnAICarOutputInterface.cpp mounts with the aimodule slice above -- both
+  rem sessions added it 2026-08-26; the duplicate died in the merge.)
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPositionIndicator.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFreeburnChallengeStartComponent.cpp"
+  rem BrnSatNavTile alone (0 new externals standalone): the MapManager ctor gate's member
+  rem chain needs SatNavTile::sRect::sRect(); only the MapManager.cpp HALF of the pair is out.
+  echo "%SRC%\SharedClasses\Gui\SatNav\BrnSatNavTile.cpp"
   echo "%SRC%\GameSource\GameState\RoadRules\BrnRoadRulesManager.cpp"
   echo "%SRC%\GameSource\GameState\EventQueue_RecordPropHitEvent_50.cpp"
   echo "%SRC%\GameSource\GameState\BrnGameEvents.cpp"
@@ -4230,6 +4334,10 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SharedClasses\Trigger\BrnKillzone.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\SharedIO\BrnTriggerEntityModuleInputInterface.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_StuntGuiEvents.cpp"
+  rem [stuntrace wave E1 2026-08-26] the event-flow translate arms (23/37/38/39/44/47/200/201
+  rem -> GUI 93/289/321/322/166/234/307/311) + the event score/timer status builds (492/424/428).
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventFlowGuiEvents.cpp"
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventStatusGuiEvents.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_00.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_01.cpp"
@@ -4488,6 +4596,11 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageSlot.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListChangeIcon.cpp"
+  rem (FriendsListEntry / the BoostMessage trio mount ABOVE with the friends-list
+  rem tranche block -- both sessions added them 2026-08-26; the duplicates died in
+  rem the merge. Select + the six other bodiless symbols live in
+  rem BrnFriendsListLinkGates.cpp; LobbyNameCmp is the REAL vendor body in
+  rem vendor\dirtysdk\src\lobbyname.cpp.)
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnDistrictMarker.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnJunctionInfoComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnOdometerComponent.cpp"
