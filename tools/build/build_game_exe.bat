@@ -4703,10 +4703,12 @@ rem recompiles ONLY the TUs whose source, headers or flags changed, in parallel.
 rem links -- skipped too when nothing feeding the link changed -- and ends with a summary
 rem repeating every warning and error, so diagnostics are never lost in the scroll.
 rem Knobs: BRN_EXE_REBUILD=1 forces a full recompile. BRN_EXE_JOBS=N caps parallel cl count.
+rem The probe RUNS each candidate rather than `where`-ing it: the Windows Store python
+rem alias sits on PATH but is not a real interpreter, and `where` would pick it.
 set "PY_CMD="
 for %%P in (python python3 py) do (
     if not defined PY_CMD (
-        where %%P >nul 2>nul && set "PY_CMD=%%P"
+        %%P -c "raise SystemExit(0)" >nul 2>nul && set "PY_CMD=%%P"
     )
 )
 if defined PY_CMD goto driver_compile
