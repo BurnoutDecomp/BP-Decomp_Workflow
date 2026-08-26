@@ -85,12 +85,31 @@ or step by step (each with `--force` to rebuild):
 | `build lua` | `tools/build/build_lua.bat` | `b5-decomp/vendor/lua/lua515.lib` |
 | `build ffmpeg` | `tools/build/build_ffmpeg.bat` (add `--prebuilt` to download instead of compile) | `b5-decomp/vendor/ffmpeg-build/` |
 | `build xaudio2` | `tools/build/fetch_xaudio2_redist.bat` (downloads Microsoft.XAudio2.Redist from nuget.org) | `b5-decomp/vendor/xaudio2redist/` — headers for the build, `xaudio2_9redist.dll` staged beside the exe |
-| `build exe` | `tools/build/build_game_exe.bat` | `build/game/Burnout_PC.exe` |
+| `build exe` | `tools/build/build_game_exe.bat` → `tools/build/compile_exe.py` | `build/game/Burnout_PC.exe` |
 | `build data` | `tools/assets/build_game_data.py` (all its flags forwarded — `--dry-run`, `--jobs`, `--out`, `--borrow-dir`, `--only`, …) | the converted data folder + `.build_game_data/report.txt` |
 | `build devdata` | attribsys_schema_port + extract_xex against the ARTIST XEX | refreshes the *generated* assets in the live `build/game` (`schema.vlt`/`schema.bin` + `LOADINGSCREEN/*.dds`) — run it whenever those tools change; stale copies here presented as gibberish loading screens and the "PC schema file missing" assert |
 
 `build data --dry-run` plans everything, writes nothing, and reports every
 missing prerequisite — read its gap report before the first real run.
+
+### The exe build is incremental
+
+`build exe` compiles each TU to its own object under `build/game/obj/tu/`, with
+per-TU header-dependency tracking (`cl /showIncludes`): a rebuild recompiles
+**only the TUs whose source, included headers, or compile flags changed**, in
+parallel (default: CPU count), then links — and the link itself is skipped when
+nothing feeding it changed. Every run ends with a summary repeating all compiler
+and linker warnings/errors, so diagnostics can't scroll away.
+
+- `build exe --rebuild` — recompile everything (ignore the cache); equivalently
+  set `BRN_EXE_REBUILD=1` when running the bat standalone.
+- `build exe --jobs N` — cap parallel `cl` processes (`BRN_EXE_JOBS` standalone).
+- The bat is still the canonical, documented source list; it writes the same
+  response files as ever and hands them to `tools/build/compile_exe.py`. With no
+  Python on PATH it falls back to the old single serial `cl @rsp` full rebuild.
+- Objects are named `<basename>.<crc32-of-path>.obj`, so two TUs sharing a
+  basename can never silently clobber each other's object (the historical
+  `device.cpp` / Sound Logic-vs-Playback hazard).
 
 ## Run
 
