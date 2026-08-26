@@ -10,10 +10,13 @@
   every CI run stays small and fast.
 
   This repo does NOT build the shippable exe with CMake -- the canonical build is
-  the bespoke `cl` response-file driver tools\build\build_game_exe.bat, which
-  emits build\game\Burnout_PC.exe (the CMake Burnout5 target is not shipped). That
-  driver links a prebuilt FFmpeg (movie player) + Lua (FSM VM), so this script
-  ensures both exist first.
+  tools\build\build_game_exe.bat, which emits build\game\Burnout_PC.exe (the CMake
+  Burnout5 target is not shipped). The bat writes its cl response files and hands
+  compile+link to tools\build\compile_exe.py (parallel per-TU compiles + a
+  warnings/errors summary; the runner's stock Python satisfies its probe, and a
+  Python-less machine falls back to the bat's serial cl path). The build links a
+  prebuilt FFmpeg (movie player) + Lua (FSM VM), so this script ensures both
+  exist first.
 
   Pipeline:
     1. deps       : build vendored Lua + FFmpeg if their outputs are missing
