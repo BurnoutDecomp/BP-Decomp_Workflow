@@ -259,6 +259,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_CrashExit.cpp"
+  rem UpdateRaceCarCollisionTagging + UpdateActiveRaceCarTransforms -- the two per-frame
+  rem drivers of ActiveRaceCar::mPrevTransforms (the reset-on-track ring).
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ResetOnTrack.cpp"
   rem START_PLAYING_MODE's exact boost-enabling arm first puts attached cars in
   rem racing state through SetAllCarsOnStartLine, homed in this split TU.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ModeArming.cpp"
@@ -329,7 +332,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem   anywhere, and Route::AddNode / Portal::GetLinkSectionIndex need the route TUs. So
   rem   RouteMapModule::Prepare parks its AStar::Construct call, flagged at the site.)
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_OutputBuffer.cpp"
+  rem ResetOnTrackResult / PlaceOnTrackRequest element constructors (the AI RESULT side).
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleResultInterface.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_OutputBuffer_Accessors.cpp"
+  rem ON DISK BUT UNLISTED until 2026-08-26: the AI INPUT buffer's accessors, including its own
+  rem Construct -- which is what points the reset-on-track request queue at its inline storage.
+  rem A source list is a transitive closure and only the LINK walks it.
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_Accessors.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAICarOutputInterface.cpp"
   echo "%SRC%\GameSource\World\AI\ResetOnTrack\BrnResetOnTrackManager.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\Array_ResetOnTrackRequest_35.cpp"
