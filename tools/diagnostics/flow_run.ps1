@@ -56,8 +56,6 @@
 #   flow_run.ps1 -Frames -Drive -SteerScript "0:left,3.5:none"        # AIM, then run straight
 #   flow_run.ps1 -Frames -Drive -ThrottleScript "0:accel,20:brake"    # ... and back off / reverse
 #   flow_run.ps1 -Drive -Teleport "2958,12.5,-1764,90"                # PUT THE CAR THERE, then drive
-#   flow_run.ps1 -Frames -Drive -CrashEntry                           # ... and ALLOW the car to crash
-#                                                                     #     (off by default -- see below)
 #   flow_run.ps1 -Drive -Teleport "2641.5,1.3,-1723.8,169" -StartEvent
 #                                     # stand in stunt junction 480897 and ARM the event start
 #                                     # (BRN_START_EVENT=1; off by default -- see the banner below)
@@ -94,12 +92,6 @@ param(
   [string]$FrameDir    = "",     # default: <repo>\scratch\flow_frames  (C: is tight; frames go to D:)
   [int]$FrameEvery     = 30,     # dump PERIOD in presents; 1 = every present (see the note below)
   [int]$LogWaitSeconds = 90,
-  [switch]$CrashEntry,           # opt IN to CRASH ENTRY (BRN_ENABLE_CRASH_ENTRY=1). OFF by default.
-                                 # UPDATED 2026-08-26 (resetpump): the PUMP IS PLUMBED and a
-                                 # request has traversed it -- a crashed car IS put back on the
-                                 # road and drives away. What still fails is the CRASH STATE:
-                                 # mbCrashing is never cleared, no LEAVE_CRASHED, mfTimeCrashing
-                                 # climbs for ever. So the recovered car keeps the crash bar up.
   [int]$CrashPlayer    = 0,      # opt IN to the deterministic player-crash trigger
                                  # (BRN_CRASH_PLAYER = the UpdateVehiclePhysics call to fire on;
                                  # 0 = off). ⭐ Crashes are STOCHASTIC (2 runs in 5), so a claim
@@ -123,7 +115,8 @@ param(
                                  # (0 = leave the game's own default of 8 m).
   [switch]$StartEvent            # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
-                                 # instrument, exactly like -CrashEntry. See the banner below.
+                                 # instrument -- the same discipline -CrashEntry carried until that
+                                 # flag was deleted on 2026-08-27. See the banner below.
 )
 $ErrorActionPreference = 'Stop'
 
@@ -157,14 +150,13 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # earlier command in the same shell rode into the next run -- and that run then announced itself as
 # a "DEFAULT run" while carrying an unrequested instrument.  That is a golden-gate hazard: the
 # goldens are meant to be byte-identical to a probe-free build.  Opt IN with -MotionProbe instead.
-# ⛔⛔ BRN_ENABLE_CRASH_ENTRY IS IN THIS LIST FOR THE SAME REASON, AND IT MATTERS MORE (2026-08-25).
-# It is not an instrument, it is a CAPABILITY: with it set the game can enter the crash state, and
-# a crash today leaves the car PERMANENTLY FLAGGED CRASHING (resetpump wave 2026-08-26: the reset
-# pump now puts the car back on the road and it drives away, but nothing clears mbCrashing, so the
-# crash bar stays up and every reader of IsPlayerCarCrashing lies -- see the banner in
-# BrnVehicleManager.cpp::SetRaceCarCrashing).  A leftover shell variable would make a run that
-# calls itself DEFAULT carry that state, which is precisely the failure mode this flag exists to
-# keep off the public path.  Opt IN with -CrashEntry.
+# ✅ BRN_ENABLE_CRASH_ENTRY WAS IN THIS LIST FROM 2026-08-25 AND IS **DELETED** (2026-08-27).
+# It was never an instrument, it was a CAPABILITY -- with it clear the game could not enter the
+# crash state at all. Its last surviving reason (a crash cost the player their HUD for the
+# session, because BrnGui::CrashedHudState was a hollow shell that never sent END_CRASH) fell
+# with the endcrash wave, so crash entry is now unconditional in the exe and there is nothing
+# left here to set or clear. -CrashEntry is gone with it; a script still passing it will fail
+# loudly on the unknown parameter rather than silently produce a run that is not what it says.
 # ⛔ BRN_CRASH_PLAYER JOINED THIS LIST 2026-08-26. It was the one crash-chain knob the script
 # neither set nor cleared, so a leftover shell variable could make a run that calls itself DEFAULT
 # fire a scripted player crash -- exactly the hazard the BRN_MOTION_PROBE note above describes, on
@@ -179,12 +171,8 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # script describes free burn.  That is the SEVEN-NON-COMPARABLE-RUNS failure again (the DIAGENV
 # banner below), only louder, because this one changes what the game DOES rather than what it says.
 # Opt IN with -StartEvent.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_ENABLE_CRASH_ENTRY','BRN_CRASH_PLAYER','BRN_START_EVENT')) {
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
-}
-if ($CrashEntry) {
-  $env:BRN_ENABLE_CRASH_ENTRY = "1"
-  Write-Host "[flow] CRASH ENTRY ENABLED: BRN_ENABLE_CRASH_ENTRY=1 (opt-in). NOT a default run -- the car recovers AND the crash state now clears (crashclear wave, 2026-08-26), but the HUD FSM has no END_CRASH arm, so the HUD does not come back."
 }
 if ($CrashPlayer -gt 0) {
   $env:BRN_CRASH_PLAYER = "$CrashPlayer"
@@ -207,8 +195,8 @@ if ($TractionProbe -gt 0) {
   $env:BRN_TRACTION_PROBE = "$TractionProbe"
   Write-Host "[flow] TRACTION PROBE run: BRN_TRACTION_PROBE=$TractionProbe (opt-in, period in frames). NOT a default run -- do not gate goldens off this."
 }
-if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and -not $CrashEntry -and $CrashPlayer -le 0 -and -not $StartEvent) {
-  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / ENABLE_CRASH_ENTRY / CRASH_PLAYER / START_EVENT all cleared."
+if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and -not $StartEvent) {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / CRASH_PLAYER / START_EVENT all cleared."
 }
 
 # ⭐⭐ BRN_PROP_DIAG IS INHERITED, NOT MANAGED -- so it is RECORDED (2026-08-20, gateui r7).
@@ -758,7 +746,7 @@ if (-not $ladderDiag) {
 $summary += ("LADDER   {0}/{1} deepest={2} startevent={3}{4}" -f `
              $ladderDepth, $eventLadder.Count, $ladderReached, [bool]$StartEvent, $ladderBlind)
 # CRASHARM: the deterministic crash trigger this run carried, for the same comparability reason.
-$summary += ("CRASHARM crashEntry={0} crashPlayer={1}" -f [bool]$CrashEntry, $CrashPlayer)
+$summary += ("CRASHARM crashEntry=always(flag deleted 2026-08-27) crashPlayer={0}" -f $CrashPlayer)
 # EXIT: how the process left. "harness-stop" = it was still alive and this script killed it;
 # anything else is the game's own exit code, decoded in the banner next to the read above.
 if ($exitedOnOwn) {
