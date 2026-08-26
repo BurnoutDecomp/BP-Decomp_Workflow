@@ -4579,11 +4579,19 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegal.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegalBoundary.cpp"
   rem The in-game HUD states the 14-state pool instantiates: real TUs where they are
-  rem header-homed (Paused/Idle + the TextField component they embed), the link
+  rem header-homed (Paused/Idle/Crashed + the TextField component they embed), the link
   rem scaffold for the rest (see BrnHudStatesLinkStubs.cpp).
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnPausedHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnIdleHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnFBurnMainHudState.cpp"
+  rem ---- ADDED 2026-08-27 (endcrash wave): BrnCrashedHudState.cpp was ON DISK since the
+  rem   impact-time slice landed but was NEVER in this list -- the 8th sighting of that
+  rem   class. It stayed invisible because its three functions were non-virtual helpers
+  rem   nothing called; the moment the state got its OnEnter/OnLeave/Update overrides the
+  rem   link broke with 3 LNK2001s from BrnHudFlow.obj. It is NOT covered by
+  rem   BrnHudStatesLinkStubs.cpp (that file scaffolds RACE_MAIN / FBURN_MAIN /
+  rem   CRASHEDSTNT only), so there was no ODR fork to retire -- just an absent TU.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnCrashedHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsList.cpp"
   rem ---- LINK CLOSURE for the friends-list / boost-message landings (added 2026-08-26).
   rem   MEASURED: origin/dev c0dc4af2 does NOT link -- 15 unresolved externals. Two of its
