@@ -58,6 +58,9 @@
 #   flow_run.ps1 -Drive -Teleport "2958,12.5,-1764,90"                # PUT THE CAR THERE, then drive
 #   flow_run.ps1 -Frames -Drive -CrashEntry                           # ... and ALLOW the car to crash
 #                                                                     #     (off by default -- see below)
+#   flow_run.ps1 -Drive -Teleport "2641.5,1.3,-1723.8,169" -StartEvent
+#                                     # stand in stunt junction 480897 and ARM the event start
+#                                     # (BRN_START_EVENT=1; off by default -- see the banner below)
 #
 # ⭐ AIMING (2026-08-15, walls leg 5).  -Steer holds ONE lock for the whole run, so a driven car
 #   can only circle: it can never be lined up on a chosen wall FACE and driven into it head-on.
@@ -112,8 +115,11 @@ param(
                                  # each wheel's probe segment actually went and whether it hit.
   [string]$Teleport    = "",     # "x,y,z[,headingDeg]" -- put the player car there, ONCE, through
                                  # the game's own place-on-track path (see the banner below).
-  [double]$TeleportArm = 0       # metres the car must have driven before the teleport fires
+  [double]$TeleportArm = 0,      # metres the car must have driven before the teleport fires
                                  # (0 = leave the game's own default of 8 m).
+  [switch]$StartEvent            # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
+                                 # default and CLEARED every run -- it is a CAPABILITY, not an
+                                 # instrument, exactly like -CrashEntry. See the banner below.
 )
 $ErrorActionPreference = 'Stop'
 
@@ -159,7 +165,17 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # neither set nor cleared, so a leftover shell variable could make a run that calls itself DEFAULT
 # fire a scripted player crash -- exactly the hazard the BRN_MOTION_PROBE note above describes, on
 # the one variable whose consequence is a pinned car rather than an extra log family.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_ENABLE_CRASH_ENTRY','BRN_CRASH_PLAYER')) {
+# ⛔⛔ BRN_START_EVENT IS IN THIS LIST FOR EXACTLY THE SAME REASON (2026-08-26, stunt-races wave D).
+# It is the event-start hook: with it set the game calls GameStateModule::
+# HarnessInjectEventStartBringUp (GameStateModule_gUI_00.cpp), which drives StartModeAtLights
+# directly (mechanism SPIN_WHEELS_AT_LIGHTS, bypassing the 0.35 s gesture hold) -- i.e. it
+# STARTS A GAME MODE -- as soon as the player car is standing in a traffic-light region.  A run
+# carrying it is not a free-burn run at all, so a leftover shell variable would make a run that
+# calls itself DEFAULT start a stunt race on its own, and every golden and every phase mark in this
+# script describes free burn.  That is the SEVEN-NON-COMPARABLE-RUNS failure again (the DIAGENV
+# banner below), only louder, because this one changes what the game DOES rather than what it says.
+# Opt IN with -StartEvent.
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_ENABLE_CRASH_ENTRY','BRN_CRASH_PLAYER','BRN_START_EVENT')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 if ($CrashEntry) {
@@ -187,8 +203,8 @@ if ($TractionProbe -gt 0) {
   $env:BRN_TRACTION_PROBE = "$TractionProbe"
   Write-Host "[flow] TRACTION PROBE run: BRN_TRACTION_PROBE=$TractionProbe (opt-in, period in frames). NOT a default run -- do not gate goldens off this."
 }
-if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and -not $CrashEntry -and $CrashPlayer -le 0) {
-  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / ENABLE_CRASH_ENTRY all cleared."
+if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and -not $CrashEntry -and $CrashPlayer -le 0 -and -not $StartEvent) {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / ENABLE_CRASH_ENTRY / CRASH_PLAYER / START_EVENT all cleared."
 }
 
 # ⭐⭐ BRN_PROP_DIAG IS INHERITED, NOT MANAGED -- so it is RECORDED (2026-08-20, gateui r7).
@@ -260,6 +276,42 @@ foreach ($v in @('BRN_PROP_DIAG','BRN_HEAP_CHECK','BRN_RENDER_POSTFX','BRN_POSTF
 }
 $diagEnvText = if ($diagEnv.Count -gt 0) { $diagEnv -join ' ' } else { '(none set)' }
 Write-Host "[flow] INHERITED diag env: $diagEnvText"
+# ⚠️ Whether the LADDER below can see anything at all hangs on this one inherited variable -- see
+# the ladder banner. Captured here, next to the collection that already records it.
+$ladderDiag = (-not [string]::IsNullOrEmpty([Environment]::GetEnvironmentVariable('BRN_PROP_DIAG')))
+
+# ⭐⭐ -StartEvent -- ARM THE EVENT-START HOOK (2026-08-26, stunt-races wave D).
+#   `BRN_START_EVENT=1` is the game-side bring-up hook (NOT this script's -- it is
+#   GameStateModule::HarnessInjectEventStartBringUp in GameStateModule_gUI_00.cpp, which drives
+#   StartModeAtLights directly with mechanism SPIN_WHEELS_AT_LIGHTS, bypassing the 0.35 s
+#   accel+brake hold; it fires only while the player car is inside a traffic-light region).
+#   Standing in a junction is what -Teleport is for; this is what turns standing there
+#   into a STARTED EVENT without a pad.
+#   ⛔ IT IS A CAPABILITY, NOT AN INSTRUMENT, and it is in the CLEARED list above for that reason
+#   (see the banner there). A run carrying it can leave free burn entirely, so it is never a
+#   default run and no golden may be banked or gated through it.
+#   ⚠️ IT IS NOT A SUBSTITUTE FOR STANDING IN A JUNCTION. The hook is gated on the light region,
+#   so -StartEvent on a car parked at the junkyard does nothing at all and is indistinguishable in
+#   the log from a broken hook. Pair it with -Drive -Teleport onto a junction (the usage line at
+#   the top puts the car in stunt junction 480897) or the run answers no question.
+if ($StartEvent) {
+  $env:BRN_START_EVENT = "1"
+  Write-Host "[flow] START EVENT armed: BRN_START_EVENT=1 (opt-in). NOT a default run -- the game"
+  Write-Host "       may leave free burn and start a mode. Do not bank or gate goldens off this."
+  if ($Teleport -eq "") {
+    Write-Host "[flow] NOTE: -StartEvent without -Teleport -- the hook only fires inside a traffic-light"
+    Write-Host "       region, and the drive start (junkyard exit, 2960.9/1.9/-1658.5) is 326 m from the"
+    Write-Host "       nearest one. Nothing will fire unless the car is driven into a junction."
+  }
+  if (-not $ladderDiag) {
+    Write-Host "[flow] WARNING: BRN_PROP_DIAG is NOT set, so the [evt-flow] ladder rungs cannot print"
+    Write-Host "       (their producer is gated on it). The run still happens; the LADDER line will"
+    Write-Host "       read BLIND, and an empty ladder proves NOTHING about the chain. Set it first:"
+    Write-Host "       `$env:BRN_PROP_DIAG=1"
+  }
+}
+$startEventText = '(not armed)'
+if ($StartEvent) { $startEventText = 'BRN_START_EVENT=1' }
 
 $framesOut = $null
 if ($Frames) {
@@ -424,6 +476,57 @@ $cues = @(
   @('strfin',   'signalling StreamingFinished')
 )
 
+# ⭐⭐ THE EVENT-START LADDER (2026-08-26, stunt-races wave D).  Five RUNGS between "the car is
+#   standing in a junction" and "the event is running", each one a line the game prints when it
+#   gets that far.  The whole point is that a run summary answers HOW FAR THE CHAIN GOT rather
+#   than pass/fail: the chain has five independent producers and any of them can be the hole.
+#   Rungs are ordinary cues, so each one is timestamped and frame-anchored like every flow mark --
+#   `e-junc 214.3s frame=bb_000642.bmp` names the bitmap to open to SEE the junction banner.
+#
+#   ⚠️ 'grounded' vs 'contract' IS THE HONEST PART, and it exists because of this file's oldest
+#   lesson (the 'exitst' banner above): a cue that matches nothing because NOTHING EVER PRINTS IT
+#   reads exactly like a chain that stalled, and that misread is a reported regression.  So:
+#     grounded  the emitter is IN THE TREE, IN THE BUILD, and REACHED.  Checked all three, not
+#               just the first: a log line in an unmounted TU, or in a mounted one nothing calls,
+#               is exactly as silent as a line that does not exist.
+#     contract  NO producer prints this yet -- it is the text the producer is ASKED to print.
+#               A '(never)' on one of these is NOT evidence about the game.  It is marked as such
+#               in marks.txt rather than left to be misread.
+#   Grounded rungs, all from GameBridgeGameStateToX_EventFlowGuiEvents.cpp (the action -> GUI
+#   translation seam): action 201 -> gui 311 (:454), action 23 -> gui 93 (:607), action 47 ->
+#   gui 234 (:631).  That TU is mounted (build_game_exe.bat:4282) and reached -- the `default:`
+#   arm of TranslateGameActionsToGuiEvents calls into it
+#   (GameBridgeGameStateToX_StuntGuiEvents.cpp:404).  Re-check those three facts, not just the
+#   text, if a rung ever goes quiet.
+#   Contract rungs, and the exact text asked for:
+#     e-case20  "[start] event 20 ..."  -- the case-20 arm's OWN lines in
+#               GameStateModule_gUI_00.cpp: "[start] event 20 -> StartGameMode mode=" (:917) on
+#               fire and "[start] event 20 IGNORED -- mpCurrentGameMode is live" (:854) on the
+#               reject twin; both gated on gpDebugPrint only, so they print even without
+#               BRN_PROP_DIAG. (The BRN_START_EVENT hook itself bypasses this arm -- it drives
+#               StartModeAtLights directly -- so this rung fires on the GESTURE/event path.)
+#     e-inprog  "... E_GMS_IN_PROGRESS"  -- the enum name spelled out.  No log line in the tree
+#               contains that token today, so it cannot false-positive; nothing else prints it.
+#
+#   ⛔⛔ THE LADDER IS BLIND WITHOUT BRN_PROP_DIAG.  Every [evt-flow] line is guarded by
+#   `static const bool sbDiag = (getenv("BRN_PROP_DIAG") != 0)`
+#   (GameBridgeGameStateToX_EventFlowGuiEvents.cpp:395), and this script deliberately does NOT set
+#   that variable -- it INHERITS and RECORDS it (see the DIAGENV banner).  So on a shell without
+#   it, three of the five rungs physically cannot print no matter how far the chain got.  That is
+#   detected, announced at arm time, and stamped BLIND on the LADDER line; it is never silent.
+#   ⚠️ And the same guard carries a 24-LINE BUDGET shared across ALL the [evt-flow] arms
+#   (siDiagLinesLeft, :396).  Action 201 posts on junction entry/exit, so a run that drives past
+#   several junctions can burn the budget before it reaches the one it was aimed at, and the later
+#   rungs then go quiet mid-run.  Teleport ONTO the target junction rather than driving across town.
+$eventLadder = @(
+  @('e-junc',   '\[evt-flow\] action 201 -> gui 311',            'grounded'),
+  @('e-case20', '\[start\] event 20 ',                            'grounded'),
+  @('e-start',  '\[evt-flow\] action 23 -> gui 93',              'grounded'),
+  @('e-count',  '\[evt-flow\] action 47 -> gui 234',             'grounded'),
+  @('e-inprog', 'E_GMS_IN_PROGRESS',                             'contract')
+)
+foreach ($r in $eventLadder) { $cues += ,@($r[0], $r[1]) }
+
 # ⭐ Cue text with ASSERT CALLSTACK FRAMES STRIPPED.  A callstack frame is 4-space-indented and
 # is a single bare token ("    BrnGameState::CarSelectManager::UpdateExitState", "    0xB16D2").
 # Matching cues against those makes a crash look like progress -- which is exactly what happened
@@ -557,6 +660,31 @@ Remove-Item Env:\BRN_FRAME_DUMP -ErrorAction SilentlyContinue
 Remove-Item Env:\BRN_FRAME_DUMP_EVERY -ErrorAction SilentlyContinue
 Copy-Item $log (Join-Path $OutDir "BrnGame.log") -ErrorAction SilentlyContinue
 
+# --- the LADDER's final sweep ------------------------------------------------------------
+# The poll loop reads the log at the TOP of an iteration and the elapsed check is above that, so
+# the iteration that ends the run never reads -- and the game keeps writing right up to the
+# Stop-Process above.  The last second or so of a run is therefore invisible to the loop.  For the
+# flow marks that has always been harmless (they all fire in the first ninety seconds); for the
+# LADDER it is not, because the rungs this wave cares about are exactly the ones that fire LAST.
+# Sweep the finished, copied log once more -- LADDER RUNGS ONLY.  This can only ADD a rung the
+# game genuinely printed; it can never invent one, and it does not touch a single flow mark, so
+# the gates downstream see the marks.txt they have always seen.
+$ladderLate = @{}
+$finalLog = Join-Path $OutDir "BrnGame.log"
+if (-not (Test-Path $finalLog)) { $finalLog = $log }
+$finalTxt = Get-Content $finalLog -Raw -ErrorAction SilentlyContinue
+if ($null -ne $finalTxt) {
+  $finalCue = Strip-CallstackFrames $finalTxt
+  foreach ($r in $eventLadder) {
+    if ((-not $marks.ContainsKey($r[0])) -and ($finalCue -match $r[1])) {
+      $marks[$r[0]]      = $endElapsed
+      $markFrame[$r[0]]  = $endFrame
+      $ladderLate[$r[0]] = $true
+      Write-Host ("[flow] {0,-8} at {1,6:f1}s  frame={2}  (final sweep)" -f $r[0], $endElapsed, $endFrame)
+    }
+  }
+}
+
 # --- marks.txt.  RUNSTART FIRST: it is what the gates use to reject stale dumps. ----------
 $summary = @()
 $summary += ("RUNSTART {0}" -f $t0.ToString('o'))
@@ -573,6 +701,35 @@ $summary += ("DIAGENV  {0}" -f $diagEnvText)
 # TELEPORT: the -Teleport spec this run carried, for the same comparability reason as DIAGENV --
 # a log whose car started 250 m from the junkyard is not comparable with one that did not.
 $summary += ("TELEPORT {0}" -f $teleportText)
+# STARTEVT: whether this run carried the event-start hook. Same comparability reason as DIAGENV and
+# TELEPORT, and a stronger one: a run carrying it may not have been in free burn at all.
+$summary += ("STARTEVT {0}" -f $startEventText)
+# --- LADDER: how far the event-start chain got.  Rung meanings and the grounded/contract split
+#     are in the banner above the $eventLadder table.
+$ladderDepth = 0
+$ladderIdx   = 0
+foreach ($r in $eventLadder) {
+  $ladderIdx++
+  if ($marks.ContainsKey($r[0])) {
+    $ladderDepth = $ladderIdx
+    $lLate = ""
+    if ($ladderLate.ContainsKey($r[0])) { $lLate = "  (final sweep)" }
+    $summary += ("{0,-8} {1,6:f1}s  frame={2}{3}" -f $r[0], $marks[$r[0]], $markFrame[$r[0]], $lLate)
+  } elseif ($r[2] -eq 'contract') {
+    $summary += ("{0,-8} (never) CUE UNVERIFIED -- nothing in the tree prints this text yet, so this" -f $r[0])
+    $summary += ("         line says nothing about the game. See the ladder banner.")
+  } else {
+    $summary += ("{0,-8} (never)" -f $r[0])
+  }
+}
+$ladderReached = 'none'
+if ($ladderDepth -gt 0) { $ladderReached = $eventLadder[$ladderDepth - 1][0] }
+$ladderBlind = ""
+if (-not $ladderDiag) {
+  $ladderBlind = "  BLIND(BRN_PROP_DIAG unset -- the [evt-flow] rungs cannot print)"
+}
+$summary += ("LADDER   {0}/{1} deepest={2} startevent={3}{4}" -f `
+             $ladderDepth, $eventLadder.Count, $ladderReached, [bool]$StartEvent, $ladderBlind)
 # CRASHARM: the deterministic crash trigger this run carried, for the same comparability reason.
 $summary += ("CRASHARM crashEntry={0} crashPlayer={1}" -f [bool]$CrashEntry, $CrashPlayer)
 # EXIT: how the process left. "harness-stop" = it was still alive and this script killed it;
