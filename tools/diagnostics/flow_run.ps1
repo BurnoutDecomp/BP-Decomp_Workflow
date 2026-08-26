@@ -104,6 +104,10 @@ param(
                                  # (BRN_CRASH_PLAYER = the UpdateVehiclePhysics call to fire on;
                                  # 0 = off). ⭐ Crashes are STOCHASTIC (2 runs in 5), so a claim
                                  # about crash entry/recovery needs this, not a lucky collision.
+  [double]$PauseAt     = -1,     # opt IN: seconds after DRIVING to TAP the offline pause (action 46).
+                                 #   -1 == never. Opens the main map, which IS the offline pause.
+  [double]$UnpauseAt   = -1,     # opt IN: seconds after DRIVING to TAP Accept (action 45) to come
+                                 #   back out of the map. -1 == never. Must be > PauseAt.
   [switch]$MotionProbe,          # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
   [int]$TriCacheProbe  = 0,      # opt IN to the [tricache] world-collision cache trace; the VALUE
                                  # is the sampling period in frames (1 => the game's default 60).
@@ -354,6 +358,11 @@ function Newest-Frame {
 
 $evAccept = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_Accept")
 
+# The offline-pause channel (action 46 == KI_ACTION_PAUSE_MAIN_MAP). AUTO-RESET, like the four
+# menu channels: this is a TAP, not a hold. Created unconditionally so the game always finds it;
+# a channel never Set() is a key never pressed.
+$evPauseMap = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_PauseMap")
+
 # ⭐ THE DRIVING CHANNELS -- MANUAL-RESET (see the banner).  Created unconditionally so the game
 #   always finds them; a channel that is never Set() is a control that is never pressed, which is
 #   exactly the "resting car undisturbed" case.  Named after the EGameInputActions slot each one
@@ -586,6 +595,24 @@ while ($true) {
   if ($pump -and ((Get-Date) - $lastAccept).TotalSeconds -ge $acceptGap) {
     $evAccept.Set() | Out-Null
     $lastAccept = Get-Date
+  }
+
+  # ---- the offline-pause taps (opt-in) -----------------------------------------------------
+  # One TAP each, latched, on the same DRIVING time base the throttle uses. Pause opens the main
+  # map (CrashNavMapMain::OnEnter -> GuiEventActivateCrashNav(false) -> ... -> mbSimPaused = 1);
+  # unpause taps Accept, which the map's Update turns into GO_BACK.
+  if ($phase -eq 'DRIVING') {
+    $sinceDrivingP = ((Get-Date) - $drivingAt).TotalSeconds
+    if ($PauseAt -ge 0 -and -not $script:pauseTapped -and $sinceDrivingP -ge $PauseAt) {
+      $script:pauseTapped = $true
+      $evPauseMap.Set() | Out-Null
+      Write-Host ("[flow] PAUSE tap (action 46) at DRIVING+{0:f1}s" -f $sinceDrivingP)
+    }
+    if ($UnpauseAt -ge 0 -and -not $script:unpauseTapped -and $sinceDrivingP -ge $UnpauseAt) {
+      $script:unpauseTapped = $true
+      $evAccept.Set() | Out-Null
+      Write-Host ("[flow] UNPAUSE tap (action 45 / Accept) at DRIVING+{0:f1}s" -f $sinceDrivingP)
+    }
   }
 
   # ---- the driving hold ------------------------------------------------------------------
