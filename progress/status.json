@@ -13065,10 +13065,58 @@
   "BrnGui::BoostMessageManager::GetNumActiveSlots": {
    "status": "reviewed"
   },
+  "BrnGui::BoostMessageManager::HandleOnCompletedStunt": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::HandleOnInProgressStunt": {
+   "status": "reviewed"
+  },
   "BrnGui::BoostMessageManager::Prepare": {
    "status": "reviewed"
   },
+  "BrnGui::BoostMessageManager::RecvEvent": {
+   "status": "reviewed"
+  },
   "BrnGui::BoostMessageManager::Update": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateAir": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateBarrelRolls": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateChecking": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateDrift": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateHandBrake": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateNearMiss": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateOncoming": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateShowtime": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateSpin": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateStunts": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateStuntsJumpsAndSmashes": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateTailgating": {
+   "status": "reviewed"
+  },
+  "BrnGui::BoostMessageManager::UpdateVehicleImpacts": {
    "status": "reviewed"
   },
   "BrnGui::BoostMessageSlot,3>::Append": {
@@ -66082,6 +66130,10 @@
   },
   "GameSource/Gui/Flow/HUD/Components/BrnBoostMessageItem.cpp": {
    "notes": "Combined batch-14a review: XEX tables + @0x8246D2B0 int-param overload confirmed. Post-review polish: bool mbInTransition (byte-width) + DWARF names + 3-param Construct arity, re-gated PASS.",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/HUD/Components/BrnBoostMessageManager.cpp": {
+   "notes": "complex; 23 bodies incl. 7 repatriated from CgsStrStream.h mis-home. Round-1 FAIL fixed (Tailgating latch arm prev<=0 only; Air 1.0s TTLs at first-contact+fallback; Construct no longer seeds meCurrentBoostType; dead Sprintfs removed). Case-368 qword-compare finding withdrawn vs raw asm 0x824208D4. Parity RED = assert-fold convention.",
    "status": "done"
   },
   "GameSource/Gui/Flow/HUD/Components/BrnBoostMessageSlot.cpp": {
