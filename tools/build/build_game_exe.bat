@@ -4281,6 +4281,14 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\Offences\StuntManagerDebugComponent_gUI_00.cpp"
   echo "%SRC%\GameSource\GameState\Offences\BrnStuntManagerDebugComponent_GetTriggerWorldRegion.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_gUI_00.cpp"
+  rem  ADDED 2026-08-27 (showtime S7b-a): GameStateModule::StartCrashMode @0x8236B580 (80 insns)
+  rem  -- the bottom of the showtime start chain, and what eventually makes PrepareForMode post
+  rem  action 23 with KU_FLAG_USE_SHOWTIME_VEHICLE_BEHAVIOUR. Every callee it needs was already
+  rem  mounted (StartGameModeParams::Construct, ModeManager::StartGameMode, IsOnlineGameMode,
+  rem  IsOnlineFreeBurnLobby, GetPlayerPosition). The TU also carries HarnessInjectShowtimeBringUp,
+  rem  the env-gated (BRN_START_SHOWTIME) one-shot standing in for ShouldStartShowtimeMode
+  rem  @0x82356B18 -- its TRIGGER is the real both-bumpers byte, not an invented input.
+  echo "%SRC%\GameSource\GameState\GameStateModule_Showtime.cpp"
   rem [stuntrace wave D 2026-08-26] the four event-start functions + GetEvent helpers.
   echo "%SRC%\GameSource\GameState\GameStateModule_gSR_00.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ModeManager_gUI_00.cpp"
