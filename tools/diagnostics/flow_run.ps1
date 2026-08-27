@@ -1,4 +1,4 @@
-# flow_run.ps1 -- boot the game, drive the Junkyard flow, mark the FLOW STATES, gate the frames.
+﻿# flow_run.ps1 -- boot the game, drive the Junkyard flow, mark the FLOW STATES, gate the frames.
 #
 # ⛔⛔ WHY THIS FILE IS IN THE REPO (task #139).
 #   For weeks every wave brief said "use scratchpad\dh_run.ps1".  It was never in the repo:
@@ -126,6 +126,14 @@ param(
                                  # maxVerlet (the constant-22 array that actually moves vertices)
                                  # on one line per change, tagged player/crashing/wrecked.
                                  # It also arms the [deform-upload] control at the upload site.
+  [string]$Showtime    = "",     # opt IN to the SHOWTIME gesture: "<at>[:<holdSecs>]" seconds after
+                                 #   the DRIVING mark, HOLD BOTH BUMPERS (rows 54+55 ->
+                                 #   ControllerInput +0x42 mbCrashModePressed). Default hold 5 s.
+                                 #   ⭐ THIS PRESSES THE REAL BUTTON through the ordinary input chain --
+                                 #   it does not poke a game-state flag. It also sets
+                                 #   BRN_START_SHOWTIME=1, which arms the game-side one-shot that
+                                 #   stands in for ShouldStartShowtimeMode @0x82356B18's hold/speed/
+                                 #   facing gate stack. ⛔ NOT a default run: it can leave free burn.
   [switch]$StartEvent            # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
                                  # instrument -- the same discipline -CrashEntry carried until that
@@ -213,7 +221,7 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # ⭐ BRN_DEFORM_TRACE JOINED THIS LIST 2026-08-27 (crashdeform wave), on the ordinary instrument
 # grounds: it is a log family, it is opt-in, and a leftover shell variable must never ride into a
 # run that then calls itself DEFAULT. Opt IN with -DeformTrace <period>.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_DEFORM_TRACE')) {
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 if ($CrashPlayer -gt 0) {
@@ -243,8 +251,8 @@ if ($DeformTrace -gt 0) {
   $env:BRN_DEFORM_TRACE = "$DeformTrace"
   Write-Host "[flow] DEFORM TRACE run: BRN_DEFORM_TRACE=$DeformTrace (opt-in, period in calls). NOT a default run -- do not gate goldens off this."
 }
-if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and $DeformTrace -le 0 -and -not $StartEvent) {
-  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / CRASH_PLAYER / DEFORM_TRACE / START_EVENT all cleared."
+if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and $DeformTrace -le 0 -and -not $StartEvent -and $Showtime -eq "") {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / CRASH_PLAYER / DEFORM_TRACE / START_EVENT / START_SHOWTIME all cleared."
 }
 
 # ⭐⭐ BRN_PROP_DIAG IS INHERITED, NOT MANAGED -- so it is RECORDED (2026-08-20, gateui r7).
@@ -334,6 +342,36 @@ $ladderDiag = (-not [string]::IsNullOrEmpty([Environment]::GetEnvironmentVariabl
 #   so -StartEvent on a car parked at the junkyard does nothing at all and is indistinguishable in
 #   the log from a broken hook. Pair it with -Drive -Teleport onto a junction (the usage line at
 #   the top puts the car in stunt junction 480897) or the run answers no question.
+# ⭐⭐⭐ -Showtime -- PRESS BOTH BUMPERS, FOR REAL (showtime S7b-a, 2026-08-27).
+#   Two halves, and they are different things:
+#     (a) the GESTURE. At DRIVING+<at> this script Set()s both shoulder channels for <holdSecs>.
+#         That travels the ORDINARY input chain -- ConsumeHarnessAction rows 54/55 -> maActionInfo
+#         -> GameStateModuleIO computes ControllerInput::mbCrashModePressed (+0x42) as the AND of
+#         their held bits, exactly as it does for a pad. Nothing here writes a game-state flag.
+#     (b) the GAME-SIDE STAND-IN. BRN_START_SHOWTIME=1 arms
+#         GameStateModule::HarnessInjectShowtimeBringUp, which reads that same real byte and calls
+#         StartCrashMode @0x8236B580 -- substituting for ShouldStartShowtimeMode @0x82356B18 (166
+#         insns) and the DetectModeStarts else arm, and for nothing below them.
+#   ⛔ IT IS A CAPABILITY, NOT AN INSTRUMENT (hence the CLEARED list above): a run carrying it can
+#   leave free burn, so no golden may be banked or gated through it.
+#   ⚠ A -Showtime run with no -Drive parks a stationary car; the console gate this stands in for
+#   has a speed term, so pair it with -Drive if the question is about a moving entry.
+$showtimeAt = -1.0; $showtimeHold = 5.0; $shouldersHeld = $false
+if ($Showtime -ne "") {
+  $parts = $Showtime -split ':'
+  $showtimeAt = [double]::Parse($parts[0], [System.Globalization.CultureInfo]::InvariantCulture)
+  if ($parts.Count -gt 1) { $showtimeHold = [double]::Parse($parts[1], [System.Globalization.CultureInfo]::InvariantCulture) }
+  $env:BRN_START_SHOWTIME = "1"
+  # The witness that answers "did the P6 bounce chain execute" -- gated on the REAL
+  # mbPlayerCarInShowtime, so it cannot print unless the console chain put the car there.
+  $env:BRN_SHOWTIME_WATCH = "1"
+  Write-Host ("[flow] SHOWTIME armed: BOTH BUMPERS held from DRIVING+{0:f1}s for {1:f1}s, and" -f $showtimeAt, $showtimeHold)
+  Write-Host "       BRN_START_SHOWTIME=1 (opt-in). NOT a default run -- the game may leave free burn."
+  if (-not $Drive) {
+    Write-Host "[flow] NOTE: -Showtime without -Drive -- the car will be stationary when the gesture"
+    Write-Host "       fires. The console gate this stands in for has a speed term; pair with -Drive."
+  }
+}
 if ($StartEvent) {
   $env:BRN_START_EVENT = "1"
   Write-Host "[flow] START EVENT armed: BRN_START_EVENT=1 (opt-in). NOT a default run -- the game"
@@ -435,7 +473,13 @@ $evBrake = New-Object System.Threading.EventWaitHandle($false, [System.Threading
 $evHandB = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_HandBrake")
 $evStrL  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_SteerLeft")
 $evStrR  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_SteerRight")
-foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR)) { $e.Reset() | Out-Null }
+# ⭐⭐ THE TWO SHOULDER CHANNELS (showtime S7b-a, 2026-08-27).  MANUAL-RESET, i.e. a HOLD, because
+#   ControllerInput::mbCrashModePressed (+0x42) is `(row 54 HELD) && (row 55 HELD)` -- the game samples
+#   BOTH at once, so a tap channel cannot express the gesture.  Created unconditionally, like the five
+#   above; never Set() unless -Showtime asks for it.
+$evShldL = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_ShoulderL")
+$evShldR = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_ShoulderR")
+foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR)) { $e.Reset() | Out-Null }
 
 # ⭐ THE SCHEDULE PARSER (walls leg 5).  Parses "<sec>:<tok>[+<tok>],..." into a time-sorted list.
 #   ⚠️ InvariantCulture ON PURPOSE: this box runs a comma-decimal locale, where [double]::Parse
@@ -680,6 +724,27 @@ while ($true) {
     }
   }
 
+  # ---- the bumper hold (showtime) --------------------------------------------------------
+  # ⚠⚠ DELIBERATELY OUTSIDE THE -Drive GATE. The first cut of this block sat INSIDE it, which
+  # would have made `-Showtime` with no `-Drive` a SILENT NO-OP -- indistinguishable in the log
+  # from a dead input channel or a broken game-side hook. -Showtime is its own opt-in and must
+  # press the buttons whether or not the throttle is held; the "pair it with -Drive" note in the
+  # arming banner is ADVICE about the console gate, not a precondition of the gesture.
+  # Resolved every poll and applied only on CHANGE, like the pedals below. Both channels move
+  # together because the byte the game computes from them is their AND.
+  if ($phase -eq 'DRIVING' -and $showtimeAt -ge 0) {
+    $sinceDrivingB = ((Get-Date) - $drivingAt).TotalSeconds
+    $wantShoulders = ($sinceDrivingB -ge $showtimeAt) -and ($sinceDrivingB -lt ($showtimeAt + $showtimeHold))
+    if ($wantShoulders -ne $shouldersHeld) {
+      $shouldersHeld = $wantShoulders
+      if ($wantShoulders) { $evShldL.Set()   | Out-Null; $evShldR.Set()   | Out-Null }
+      else                { $evShldL.Reset() | Out-Null; $evShldR.Reset() | Out-Null }
+      $bstate = $(if ($wantShoulders) { "DOWN" } else { "UP" })
+      Write-Host ("[flow] BOTH BUMPERS {0,-5} at {1,6:f1}s (DRIVING+{2:f1}s)" -f $bstate, $elapsed, $sinceDrivingB)
+      $inputLog += ("bumpers {0,-5} run={1,6:f1}s DRIVING+{2:f1}s" -f $bstate, $elapsed, $sinceDrivingB)
+    }
+  }
+
   # ---- the driving hold ------------------------------------------------------------------
   # Set()/Reset() on a MANUAL-RESET event is press-and-hold / release: the game observes the
   # channel as down on EVERY input update in between, which is the only way a throttle means
@@ -718,7 +783,7 @@ while ($true) {
   }
   Start-Sleep -Milliseconds 250
 }
-foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR)) { $e.Reset() | Out-Null }
+foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR)) { $e.Reset() | Out-Null }
 
 $endFrame = Newest-Frame
 $endElapsed = ((Get-Date) - $t0).TotalSeconds
@@ -796,6 +861,12 @@ $summary += ("TELEPORT {0}" -f $teleportText)
 # STARTEVT: whether this run carried the event-start hook. Same comparability reason as DIAGENV and
 # TELEPORT, and a stronger one: a run carrying it may not have been in free burn at all.
 $summary += ("STARTEVT {0}" -f $startEventText)
+# SHOWTIME: whether this run pressed the bumpers, and whether the game-side stand-in was armed.
+# Same comparability reason as STARTEVT: a run that entered showtime is not comparable with a
+# free-burn run, and the summary must say so on its face.
+$showtimeText = 'not armed'
+if ($Showtime -ne "") { $showtimeText = ("BOTH BUMPERS at DRIVING+{0:f1}s for {1:f1}s, BRN_START_SHOWTIME=1" -f $showtimeAt, $showtimeHold) }
+$summary += ("SHOWTIME {0}" -f $showtimeText)
 # --- LADDER: how far the event-start chain got.  Rung meanings and the grounded/contract split
 #     are in the banner above the $eventLadder table.
 $ladderDepth = 0
