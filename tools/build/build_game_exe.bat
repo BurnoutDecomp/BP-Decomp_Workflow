@@ -1634,6 +1634,13 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem    Jacobian.cpp -- Jacobian_RQD::Create @0x82BC0FA8 and DriveJacobian::GetMatIBT
   rem                    @0x82BC1128, plus the 384-byte jacobian RECORD declaration the two
   rem                    constraint builders write into.
+  rem    FatBoxInertia.cpp -- rw::physics::ComputeFatBoxInertia @0x82BC6C80. MOUNTED 2026-08-27
+  rem                    (detach-2 wave). The body has been committed and correct since the
+  rem                    rw::physics landing; it was simply never in this list and had no
+  rem                    declaration in any header, so no caller could reach it. Its first real
+  rem                    caller is PhysicalBodyPart::AddToSim, which needs a shed panel's
+  rem                    diagonal inertia before it can hand the part to the simulation.
+  echo "%SRC%\vendor\renderware\physics\FatBoxInertia.cpp"
   echo "%SRC%\vendor\renderware\physics\Jacobian.cpp"
   rem    The two constraint builders -- the largest functions in the closure and the last
   rem    thing standing between the solver and a real constraint:
