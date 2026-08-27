@@ -1641,6 +1641,48 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem                    caller is PhysicalBodyPart::AddToSim, which needs a shed panel's
   rem                    diagonal inertia before it can hand the part to the simulation.
   echo "%SRC%\vendor\renderware\physics\FatBoxInertia.cpp"
+  rem  ============================================================================
+  rem  MOUNTED 2026-08-27 (detach-2 wave). Twenty-seven one-function TUs -- explicit
+  rem  template instantiations of BaseEventQueue<T>::{AddEvent,AddEventSafe,GetEvent,
+  rem  Append} and EventQueue<T,N>::Construct over the contact-spy and prop event
+  rem  records, plus their three small facade/embed-check TUs.
+  rem  WHY MOUNT THEM AT ALL, stated honestly: /OPT:REF strips every one of them today,
+  rem  because the contact-spy arm is dead (VehicleManager::ProcessContactSpies
+  rem  @0x82646C98 is a boot gate) and nothing calls the prop queue facades yet. They
+  rem  are mounted so the CLOSURE IS CONTINUOUSLY ENFORCED -- a mount is the only thing
+  rem  that can find a shadowing redeclaration or an ODR fork in a header these TUs
+  rem  share, and a link is the only tool that sees either. Do not read "mounted" as
+  rem  "running": this buys a gate, not a behaviour.
+  rem  ============================================================================
+  rem  CONTACT-SPY EVENT-QUEUE CLOSURE (13 TUs)
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_ContactSpyRunData_AddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_DiscardedContact_AddEventSafe.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_DiscardedContact_GetEvent.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_HingedPartContact_AddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_HingedPartContact_GetEvent.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_PhysicalCarPartContact_AddEventSafe.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_PropContact_AddEventSafe.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_PropContact_GetEvent.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_RaceCarContact_GetEvent.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BaseEventQueue_TrafficContact_AddEventSafe.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\BrnContactSpyQueue.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\ContactSpyQueue_RaceCarContact_300_GetBaseContact.cpp"
+  echo "%SRC%\GameSource\Physics\ContactSpies\ContactSpyRunList_GetRunDataWithEntityID_8.cpp"
+  rem  PROP SHARED-IO EVENT-QUEUE CLOSURE (14 TUs)
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_AddPhysicalPartEvent_AddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_AddPhysicalPropEvent_AddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_UpdatePropEvent_AddEvent.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BaseEventQueue_UpdatePropEvent_Append.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BrnPropEvents.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BrnPropEvents_GetEntityId_embed_check.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\BrnPropQueueFacades.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_AddPhysicalPartEvent_50.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_AddPhysicalPropEvent_50.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_PropRaceCarContact_30.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_PropUpdateNotification_200.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_PropUpdateNotification_Append.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_RemovePhysicalPartEvent_100.cpp"
+  echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_RemovePhysicalPropEvent_300.cpp"
   echo "%SRC%\vendor\renderware\physics\Jacobian.cpp"
   rem    The two constraint builders -- the largest functions in the closure and the last
   rem    thing standing between the solver and a real constraint:
