@@ -4289,6 +4289,14 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  the env-gated (BRN_START_SHOWTIME) one-shot standing in for ShouldStartShowtimeMode
   rem  @0x82356B18 -- its TRIGGER is the real both-bumpers byte, not an invented input.
   echo "%SRC%\GameSource\GameState\GameStateModule_Showtime.cpp"
+  rem  ADDED 2026-08-27 (bounce wave): ONE ARM of GameStateModule::UpdateRoadRulesManager
+  rem  @0x82381258 -- the ONLY producer of game action 42 (E_ACTION_IMPACT_TIME_START) in the
+  rem  whole image, and the single missing link that kept the P6 showtime bounce chain from
+  rem  ever executing. Zero new dependencies: every callee (GetCurrentGameModeType,
+  rem  IsOnlineGameMode, mLastActiveRaceCarInterface.IsPlayerCarActive, GameActionQueue::
+  rem  AddEvent) is already mounted, and the consumer arm landed with S3. The function is a
+  rem  STATED PARTIAL -- its four other arms are deferred by name in the TU banner.
+  echo "%SRC%\GameSource\GameState\GameStateModule_RoadRules.cpp"
   rem [stuntrace wave D 2026-08-26] the four event-start functions + GetEvent helpers.
   echo "%SRC%\GameSource\GameState\GameStateModule_gSR_00.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ModeManager_gUI_00.cpp"
