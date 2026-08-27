@@ -2851,6 +2851,41 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem gateui wave 2026-08-20: the full TU adds Construct/UpdateTriggers/accessors; the _Prepare split STAYS (it owns Prepare; 10 shared COMDATs, no LNK2005).
   echo "%SRC%\GameSource\GameState\TriggerQueryManager\BrnTriggerQueryManager.cpp"
   echo "%SRC%\GameSource\GameState\TriggerQueryManager\BrnTriggerQueryManager_Prepare.cpp"
+  rem *** DRIVE-THRU wave (2026-08-27) -- THE GAS STATION / BODY SHOP / PAINT SHOP MANAGER.
+  rem  The 13-unresolved-externals note above lists "DriveThruManager::HandleDriveThru" as one of
+  rem  the reasons ProcessPlayerTriggers' drive-thru arm was parked. That is PAID: the TU compiles
+  rem  (it needed one #include for the GameActionQueue typedef and one `::` on EActiveRaceCarIndex),
+  rem  and its two previously-bodiless callees -- SetPlayerCarDriver @0x823867A0 and
+  rem  PlayAutoRepairTraining @0x82378848, both of which the console's own assert strings place in
+  rem  THIS file -- are bodied in it now, so mounting costs zero new externals.
+  rem  Its Construct/Prepare/Update call sites are GameStateModule's (mDriveThruManager, the
+  rem  console's this+44240); ProcessDriveThru posts action 100, whose consumer chain is
+  rem  BridgeGameStateToWorld -> BridgeActionsToRaceCarModule -> RaceCarEntityModule::
+  rem  HandleGameActions @0x8230BE08 -> boost strategy vtable slot 46 (OnDriveThru ->
+  rem  UpdateMaxBoost(true)) -- every link of which is already mounted.
+  echo "%SRC%\GameSource\GameState\Offences\BrnDriveThruManager.cpp"
+  rem  ---- the achievement hooks the drive-thru chain link-requires ------------------------
+  rem  A SPLIT of BrnGameStateAchievementManagerBase.cpp (the four bodies were MOVED, not
+  rem  copied), so the deliberately-unmounted parent TU above stays unmounted while
+  rem  HandleDriveThru/ProcessDriveThru's OnFindAllCarParks + OnBodyShop and
+  rem  GameStateModule::CheckForAllEventsBeingFound's OnFindAllEvents all resolve.
+  rem  MEASURED: ZERO new unresolved externals -- the only non-virtual callee is
+  rem  ScoringSystem::GetNewlyWreckedCarCount, bodied this wave in BrnScoringSystem_Queries.cpp.
+  echo "%SRC%\GameSource\GameState\AchievementManager\BrnGameStateAchievementManagerBase_DriveThru.cpp"
+  rem  !!!!!! THE LINK IS STILL RED, ON EXACTLY ONE SYMBOL (save-verify wave, 2026-08-27).
+  rem  BrnProgression::ProgressionManager::OnDriveThru @0x82399DD0 -- referenced by
+  rem  DriveThruManager::HandleDriveThru, no body anywhere. It is NOT stubbed: it cascades three
+  rem  functions deep into work with no bodies (OnTrophyUnlock @0x82389740, 379 lines of
+  rem  pseudocode; CheckForSpecialCarUnlocks @0x82396058, 111; SendGameCompletionResults
+  rem  @0x82395C28, 40), and a quiet stub on a path this hot is exactly the defect class
+  rem  STRATEGY.md forbids.
+  rem  MEASURED with a __debugbreak() trap in its place: it fires ~10 s into a plain junkyard ->
+  rem  car-select -> free-burn drive (HandleDriveThru <- ProcessPlayerTriggers), so it is not a
+  rem  cold path -- land the body, do not paper over it.
+  rem  This block took the link from FIVE unresolved DriveThruManager::* externals (the state
+  rem  before it, from the mounted call sites in BrnGameStateModule / BrnTriggerQueryManager /
+  rem  GameStateModule_gUI_00) down to this one. Removing these two echoes puts it back to five;
+  rem  it does NOT make the build green.
   rem intro wave (2026-07-30): the live BrnProgression::Profile TU. Needed by
   rem BrnGuiModule::Prepare (Profile::Construct seeds mbIsNewProfile = true, the
   rem first-boot INTRO gate) and by the licence component (GetLicenceIssuedDate /
