@@ -117,6 +117,15 @@ param(
                                  # the game's own place-on-track path (see the banner below).
   [double]$TeleportArm = 0,      # metres the car must have driven before the teleport fires
                                  # (0 = leave the game's own default of 8 m).
+  [int]$DeformTrace    = 0,      # opt IN to the [deform-trace] PER-FRAME deformation witness
+                                 # (BRN_DEFORM_TRACE = a sampling PERIOD in calls; 1 = every call).
+                                 # ⭐ THE SERIES, not the one-shot. [deform-readback]'s "first
+                                 # non-zero" line fires ONCE, at the junkyard 0.85 preset, and says
+                                 # nothing whatever about whether a crash deforms anything. This
+                                 # prints dispSq (the sim's summed sensor displacement) AND
+                                 # maxVerlet (the constant-22 array that actually moves vertices)
+                                 # on one line per change, tagged player/crashing/wrecked.
+                                 # It also arms the [deform-upload] control at the upload site.
   [switch]$StartEvent            # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
                                  # instrument -- the same discipline -CrashEntry carried until that
@@ -201,7 +210,10 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 # script describes free burn.  That is the SEVEN-NON-COMPARABLE-RUNS failure again (the DIAGENV
 # banner below), only louder, because this one changes what the game DOES rather than what it says.
 # Opt IN with -StartEvent.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT')) {
+# ⭐ BRN_DEFORM_TRACE JOINED THIS LIST 2026-08-27 (crashdeform wave), on the ordinary instrument
+# grounds: it is a log family, it is opt-in, and a leftover shell variable must never ride into a
+# run that then calls itself DEFAULT. Opt IN with -DeformTrace <period>.
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_DEFORM_TRACE')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 if ($CrashPlayer -gt 0) {
@@ -225,8 +237,14 @@ if ($TractionProbe -gt 0) {
   $env:BRN_TRACTION_PROBE = "$TractionProbe"
   Write-Host "[flow] TRACTION PROBE run: BRN_TRACTION_PROBE=$TractionProbe (opt-in, period in frames). NOT a default run -- do not gate goldens off this."
 }
-if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and -not $StartEvent) {
-  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / CRASH_PLAYER / START_EVENT all cleared."
+# ⭐ [deform-trace] -- the per-frame deformation witness (crashdeform wave). Same opt-in discipline
+# and the same CLEARED list as [tricache]/[traction] above, for the same golden-gate reason.
+if ($DeformTrace -gt 0) {
+  $env:BRN_DEFORM_TRACE = "$DeformTrace"
+  Write-Host "[flow] DEFORM TRACE run: BRN_DEFORM_TRACE=$DeformTrace (opt-in, period in calls). NOT a default run -- do not gate goldens off this."
+}
+if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and $DeformTrace -le 0 -and -not $StartEvent) {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / CRASH_PLAYER / DEFORM_TRACE / START_EVENT all cleared."
 }
 
 # ⭐⭐ BRN_PROP_DIAG IS INHERITED, NOT MANAGED -- so it is RECORDED (2026-08-20, gateui r7).
@@ -805,7 +823,7 @@ if (-not $ladderDiag) {
 $summary += ("LADDER   {0}/{1} deepest={2} startevent={3}{4}" -f `
              $ladderDepth, $eventLadder.Count, $ladderReached, [bool]$StartEvent, $ladderBlind)
 # CRASHARM: the deterministic crash trigger this run carried, for the same comparability reason.
-$summary += ("CRASHARM crashEntry=always(flag deleted 2026-08-27) crashPlayer={0}" -f $CrashPlayer)
+$summary += ("CRASHARM crashEntry=always(flag deleted 2026-08-27) crashPlayer={0} deformTrace={1}" -f $CrashPlayer, $DeformTrace)
 # EXIT: how the process left. "harness-stop" = it was still alive and this script killed it;
 # anything else is the game's own exit code, decoded in the banner next to the read above.
 if ($exitedOnOwn) {
