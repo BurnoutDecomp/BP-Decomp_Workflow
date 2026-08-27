@@ -146,7 +146,8 @@ shows it would stub `CgsAssertManager`, the event queues, and `BrnGuiCache`.
 This is how the `boot-trace` goal (925 TUs, 21%) was produced. ~10 minutes end to end.
 
 ### 4.1 Prerequisites
-- The prepared Xenia copy (Adriwin's, set up for this):
+- A prepared Xenia copy set up for this. The path below is one contributor's box —
+  substitute your own:
   `C:\Logiciels\Xbox360\Xenia Burnout 5\Xenia Burnout5 - For Reverse\`
   - emulator: `xenia_burnout5.exe`
   - game: `Burnout_tcartwright\BURNOUT_X360_ARTIST.XEX`

@@ -38,7 +38,7 @@ for a fully private/trusted deployment).
 the direct-DB CLI (no existing admin needed):
 
 ```
-bp-work-server worker add "Adriwin" --admin    # prints WORK_AGENT=… ; this id is admin
+bp-work-server worker add "<contributor-name>" --admin   # prints WORK_AGENT=… ; this id is admin
 bp-work-server worker list
 bp-work-server worker revoke <id>
 ```
