@@ -24,7 +24,9 @@ Usage (from build_game_exe.bat, after msvc_env.bat put cl 19.x on PATH):
 
 Environment:
   BRN_EXE_REBUILD=1   recompile every TU (ignore the incremental cache)
-  BRN_EXE_JOBS=N      parallel cl processes (default: CPU count)
+  BRN_EXE_JOBS=N      parallel cl processes. Default leaves headroom on a developer box
+                      (cpu_count minus max(2, cpu_count/4)); under CI it is cpu_count.
+                      Lower it further when sharing the machine with a game run being measured.
 
 Exit codes: 0 ok, 1 compile/link failure, 2 environment/usage error.
 """
@@ -431,7 +433,17 @@ def main(argv=None):
     tu_dir = os.path.join(args.out, "obj", "tu")
     os.makedirs(tu_dir, exist_ok=True)
 
-    jobs = args.jobs or int(os.environ.get("BRN_EXE_JOBS") or 0) or os.cpu_count() or 4
+    # ⚠️ LEAVE HEADROOM ON A DEVELOPER BOX. This used to default to os.cpu_count(), i.e. every
+    # core. Measured 2026-08-27: builds took the machine to 95% CPU / 90% memory, and a game run
+    # being measured at the same time visibly stuttered. That is not just discomfort -- it
+    # SILENTLY INVALIDATES any timing, frame-rate or stall measurement taken during it, which is
+    # this project's most expensive error class (reproducible but not attributable). The
+    # maintainer also runs interactive work, and sometimes a second agent session, on this same
+    # machine.
+    # CI runners are dedicated (and often small), so there we still take everything.
+    _cpus = os.cpu_count() or 4
+    _default_jobs = _cpus if os.environ.get("CI") else max(1, _cpus - max(2, _cpus // 4))
+    jobs = args.jobs or int(os.environ.get("BRN_EXE_JOBS") or 0) or _default_jobs
     force = os.environ.get("BRN_EXE_REBUILD") == "1"
     env = dict(os.environ)
     env["VSLANG"] = "1033"  # keep /showIncludes' "Note: including file:" English
