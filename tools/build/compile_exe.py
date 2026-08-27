@@ -332,6 +332,79 @@ def run_link(objs, exe, tail, tu_dir, env, diags):
 
 
 # ---------------------------------------------------------------- main
+_BUILD_LOCK_FH = None   # module-global so the handle outlives main() and holds the lock
+
+
+def acquire_build_lock(out_dir, timeout=3600):
+    """Serialize builds that share an output tree.
+
+    build_game_exe.bat points every build at ONE output dir (build\\game): one obj/ tree, one
+    build.rsp, one base.rsp, one Burnout_PC.exe. Two builds running at once therefore interleave
+    their .obj writes and rewrite each other's response files -- and the loser does not fail
+    loudly, it produces a MIXED exe from two source states. That exe then gets measured, and the
+    contradiction is read as a defect in whichever change is under test.
+
+    The .bat already refuses to run when the exe itself is locked for writing (LNK1104), but that
+    check fires only at link time and cannot see a compile-phase race at all.
+
+    This is deliberately NOT the same lock as tools/diagnostics/_box_lock.ps1: that one serializes
+    RUNNING the game, this one serializes BUILDING it, and a wave may legitimately hold one while
+    waiting for the other. Released implicitly when the process exits.
+    """
+    global _BUILD_LOCK_FH
+    if os.environ.get("BRN_NO_BUILD_LOCK"):
+        sys.stderr.write("[build-lock] BRN_NO_BUILD_LOCK set -- NOT serializing; "
+                         "a concurrent build will corrupt this one's objs.\n")
+        return
+
+    # ⛔ A NAMED MUTEX, not msvcrt.locking. The first version of this used
+    # msvcrt.locking(fd, LK_NBLCK, 1) and it DID NOT WORK: a two-process test had the challenger
+    # acquire instantly while the holder still held it. A lock that silently grants is worse than
+    # no lock, because it reads as protection. Named mutexes were measured working cross-process
+    # on this box (they are what tools/diagnostics/_box_lock.ps1 uses), so use the same primitive.
+    announced = False
+    if os.name == "nt":
+        import ctypes
+        k32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        k32.CreateMutexW.restype = ctypes.c_void_p
+        k32.WaitForSingleObject.argtypes = [ctypes.c_void_p, ctypes.c_uint32]
+        h = k32.CreateMutexW(None, False, "Local\\BurnoutPC_Build")
+        if not h:
+            return                              # never let locking itself break a build
+        rc = k32.WaitForSingleObject(h, 0)
+        if rc not in (0, 0x80):                 # 0 = acquired, 0x80 = abandoned (we own it anyway)
+            sys.stderr.write("[build-lock] another build holds %s -- waiting. This is NOT a hang; "
+                             "two builds share one obj/ and would produce a mixed exe.\n" % out_dir)
+            announced = True
+            rc = k32.WaitForSingleObject(h, int(timeout * 1000))
+        if rc not in (0, 0x80):
+            die("another build has held %s for %ds. Refusing to run rather than interleave objs "
+                "into a mixed exe." % (out_dir, timeout))
+        _BUILD_LOCK_FH = h                      # keep the handle alive; exit releases it
+    else:
+        try:
+            os.makedirs(out_dir, exist_ok=True)
+            fh = open(os.path.join(out_dir, ".build.lock"), "a+b")
+            import fcntl
+        except (OSError, ImportError):
+            return
+        deadline = time.time() + timeout
+        while True:
+            try:
+                fcntl.flock(fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                _BUILD_LOCK_FH = fh
+                break
+            except OSError:
+                if not announced:
+                    sys.stderr.write("[build-lock] another build holds %s -- waiting.\n" % out_dir)
+                    announced = True
+                if time.time() > deadline:
+                    die("another build has held %s for %ds." % (out_dir, timeout))
+                time.sleep(2.0)
+    if announced:
+        sys.stderr.write("[build-lock] acquired\n")
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     tail = []
@@ -347,6 +420,8 @@ def main(argv=None):
     args = ap.parse_args(argv)
     if not tail:
         die("no link tail after -- (expected /SUBSYSTEM:... libs ...)")
+
+    acquire_build_lock(args.out)
 
     repo_root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                              "..", ".."))
