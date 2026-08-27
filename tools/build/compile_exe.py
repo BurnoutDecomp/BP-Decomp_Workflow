@@ -41,7 +41,12 @@ import zlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 SRC_EXTS = (".cpp", ".c", ".cc", ".cxx")
-# /showIncludes prefix; child cl runs with VSLANG=1033 so it is always English.
+# /showIncludes prefix. VSLANG=1033 requests English, but that only works when the
+# English language pack is INSTALLED -- on a localized-only MSVC (e.g. German:
+# "Hinweis: Einlesen der Datei:") cl keeps its own language and the English-only
+# match silently records ZERO header deps, so header edits never trigger a rebuild.
+# The prefix is therefore DETECTED at startup by compiling a probe file (see
+# detect_note_prefix); this constant is only the fallback.
 NOTE_PREFIX = "Note: including file:"
 DIAG_RE = re.compile(r"\b(warning|error|fatal error)\s+((?:C|D|LNK|RC|MSB)\d{3,5})\b",
                      re.IGNORECASE)
@@ -135,6 +140,11 @@ def is_stale(obj, flags_hash, statc):
         return True
     if not lines or lines[0] != flags_hash:
         return True
+    if len(lines) < 3:
+        # A .d with no header entries is a poisoned record from the localized-cl
+        # /showIncludes miss (every real TU includes headers) -- treat as stale so
+        # such objects self-heal on the next run.
+        return True
     for dep in lines[1:]:
         dep_t = statc.mtime(dep)
         if dep_t is None or dep_t > obj_t:
@@ -161,7 +171,52 @@ class Diags:
                 self.warnings.append(line.strip())
 
 
-def compile_one(src, obj, flag_args, flags_hash, env):
+def detect_note_prefix(env, tu_dir):
+    """Compile a 2-file probe with /showIncludes and recover THIS cl's localized
+    include-note prefix from the line that names the probe header. Returns the
+    English NOTE_PREFIX if anything about the probe is off."""
+    import tempfile
+    try:
+        with tempfile.TemporaryDirectory(dir=tu_dir) as td:
+            hdr = os.path.join(td, "probe_dep.h")
+            src = os.path.join(td, "probe_dep.cpp")
+            with open(hdr, "w", encoding="ascii") as fh:
+                fh.write("// probe\n")
+            with open(src, "w", encoding="ascii") as fh:
+                fh.write('#include "probe_dep.h"\nint brn_probe_dep;\n')
+            p = subprocess.run(["cl", "/nologo", "/showIncludes", "/Zs", src],
+                               capture_output=True, encoding="oem",
+                               errors="replace", env=env, cwd=td)
+            needle = "probe_dep.h"
+            for ln in (p.stdout or "").splitlines():
+                low = ln.lower()
+                if low.rstrip().endswith(needle) and ":" in ln:
+                    # the prefix is everything up to and including the last ':'
+                    # before the path (the path itself may carry a drive colon).
+                    cut = low.rfind(needle)
+                    head = ln[:cut].rstrip()
+                    # strip the path's leading dir part (if the path was printed
+                    # absolute) back to the prefix's own trailing colon: a DRIVE
+                    # colon is a single alpha token followed by a slash; the prefix
+                    # colon is anything else.
+                    idx = head.rfind(":")
+                    while idx > 1:
+                        is_drive = (idx + 1 < len(head) and head[idx + 1] in "\\/"
+                                    and head[idx - 1].isalpha()
+                                    and (idx < 2 or not head[idx - 2].isalnum()))
+                        if not is_drive:
+                            break
+                        idx = head.rfind(":", 0, idx - 1)
+                    if idx > 0:
+                        prefix = head[:idx + 1]
+                        if prefix.strip():
+                            return prefix
+    except OSError:
+        pass
+    return NOTE_PREFIX
+
+
+def compile_one(src, obj, flag_args, flags_hash, env, note_prefix):
     cmd = ["cl"] + flag_args + ["/showIncludes", "/c", src, "/Fo" + obj]
     try:
         p = subprocess.run(cmd, capture_output=True, encoding="oem",
@@ -171,25 +226,38 @@ def compile_one(src, obj, flag_args, flags_hash, env):
                      "so msvc_env.bat sets the toolchain up"], src
     deps, shown = [], []
     for ln in (p.stdout or "").splitlines():
-        if ln.startswith(NOTE_PREFIX):
-            deps.append(os.path.normpath(ln[len(NOTE_PREFIX):].strip()))
+        if ln.startswith(note_prefix):
+            deps.append(os.path.normpath(ln[len(note_prefix):].strip()))
         elif ln.strip() and ln.strip() != os.path.basename(src):
             shown.append(ln)
     for ln in (p.stderr or "").splitlines():
         if ln.strip():
             shown.append(ln)
     if p.returncode == 0:
-        uniq, seen = [src], {os.path.normcase(src)}
-        for d in deps:
-            k = os.path.normcase(d)
-            if k not in seen:
-                seen.add(k)
-                uniq.append(d)
-        try:
-            with open(obj + ".d", "w", encoding="utf-8") as fh:
-                fh.write(flags_hash + "\n" + "\n".join(uniq) + "\n")
-        except OSError as e:
-            shown.append(f"WARNING: could not write dep file {obj}.d: {e}")
+        if not deps:
+            # Every real TU includes headers; zero parsed deps means the note-prefix
+            # match failed (localized cl). A 2-line .d would freeze the TU against
+            # header edits FOREVER -- write nothing so the TU stays stale (recompiled
+            # every run: slower, never wrong) and say so.
+            shown.append(f"WARNING: no include notes parsed for {src} -- dep file "
+                         "NOT written (TU stays always-stale); check the "
+                         "/showIncludes prefix detection")
+            try:
+                os.remove(obj + ".d")
+            except OSError:
+                pass
+        else:
+            uniq, seen = [src], {os.path.normcase(src)}
+            for d in deps:
+                k = os.path.normcase(d)
+                if k not in seen:
+                    seen.add(k)
+                    uniq.append(d)
+            try:
+                with open(obj + ".d", "w", encoding="utf-8") as fh:
+                    fh.write(flags_hash + "\n" + "\n".join(uniq) + "\n")
+            except OSError as e:
+                shown.append(f"WARNING: could not write dep file {obj}.d: {e}")
     return p.returncode, shown, src
 
 
@@ -302,6 +370,13 @@ def main(argv=None):
     print(f"compile_exe: {len(plan)} TUs -- {len(stale)} to compile, "
           f"{fresh} up to date, jobs={jobs}{why}", flush=True)
 
+    note_prefix = NOTE_PREFIX
+    if stale:
+        note_prefix = detect_note_prefix(env, tu_dir)
+        if note_prefix != NOTE_PREFIX:
+            print(f'compile_exe: localized cl -- include notes match "{note_prefix}"',
+                  flush=True)
+
     # ---- prune objs for TUs no longer in the list (renamed/unmounted sources)
     want = {os.path.normcase(o) for _, o in plan}
     for f in os.listdir(tu_dir):
@@ -322,7 +397,7 @@ def main(argv=None):
         plock = threading.Lock()
         with ThreadPoolExecutor(max_workers=jobs) as pool:
             futs = {pool.submit(compile_one, s, o, flag_args, flags_hash,
-                                env): (s, o) for s, o in stale}
+                                env, note_prefix): (s, o) for s, o in stale}
             try:
                 for fut in as_completed(futs):
                     rc, shown, src = fut.result()
