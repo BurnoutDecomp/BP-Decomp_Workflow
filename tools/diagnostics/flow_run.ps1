@@ -59,6 +59,10 @@
 #   flow_run.ps1 -Drive -Teleport "2641.5,1.3,-1723.8,169" -StartEvent
 #                                     # stand in stunt junction 480897 and ARM the event start
 #                                     # (BRN_START_EVENT=1; off by default -- see the banner below)
+#   flow_run.ps1 -Frames -Drive -Teleport "2641.5,1.3,-1723.8,169" -ThrottleScript "0:accel,10:none" -SkipTrainingTip
+#                                     # ... and let the START HINT show while the boot tutorial tip
+#                                     # is still up (BRN_SKIP_TRAINING_TIP=1; off by default, needs
+#                                     # $env:BRN_PROP_DIAG=1 to be visible in the log)
 #
 # ⭐ AIMING (2026-08-15, walls leg 5).  -Steer holds ONE lock for the whole run, so a driven car
 #   can only circle: it can never be lined up on a chosen wall FACE and driven into it head-on.
@@ -148,8 +152,20 @@ param(
                                  # driving, ~3,178 times each in 400 s, far faster than the ~1 Hz
                                  # poll can release them one at a time.
   [int]$LockTimeoutSec = 1800,   # how long to WAIT for the box before giving up (see the lock below)
-  [switch]$NoLock                # ⛔ escape hatch only. Skips the box lock; two harnesses then kill
+  [switch]$NoLock,               # ⛔ escape hatch only. Skips the box lock; two harnesses then kill
                                  # each other's runs. Do not use it to "get past" a busy box.
+  [switch]$SkipTrainingTip,      # opt IN to the TRAINING-TIP BYPASS (BRN_SKIP_TRAINING_TIP=1). OFF
+                                 # by default and CLEARED every run, on exactly the -StartEvent
+                                 # grounds: it is a CAPABILITY (it changes what the game DOES at a
+                                 # junction), not an instrument. See the banner below.
+  [switch]$EventFsm              # opt IN to the EVENT-HUD FSM HOP (BRN_EVENT_FSM=1). While the
+                                 # PRE_FLY_BY/RACE_MAIN bring-up is verified, the exe gates the
+                                 # console's action-23 RunFsm("BRNEVENTFSM") post behind this env
+                                 # var (GameBridgeGameStateToX_EventFlowGuiEvents.cpp, [FLAG PC
+                                 # bring-up]); without it the HUD stays in FBURN_MAIN through an
+                                 # event. CAPABILITY discipline: off by default, cleared every
+                                 # run. DELETE-WHEN the exe-side gate is deleted (then the hop is
+                                 # unconditional console behaviour and this switch dies with it).
 )
 $ErrorActionPreference = 'Stop'
 
@@ -270,7 +286,15 @@ if ($ReleaseAsserts) {
 # ⭐ BRN_DEFORM_TRACE JOINED THIS LIST 2026-08-27 (crashdeform wave), on the ordinary instrument
 # grounds: it is a log family, it is opt-in, and a leftover shell variable must never ride into a
 # run that then calls itself DEFAULT. Opt IN with -DeformTrace <period>.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE')) {
+# ⛔⛔ BRN_SKIP_TRAINING_TIP IS IN THIS LIST FOR THE BRN_START_EVENT REASON, NOT THE INSTRUMENT ONE.
+# It makes the junction canEnter gate ignore a blocking training tip (GameStateModule_gSR_00.cpp's
+# IsBlockingTrainingTipActiveForCanEnterGate), so with it set the "hold both triggers" start hint
+# appears at a junction where the console would have suppressed it -- i.e. it changes what the game
+# DOES and what the GUI SHOWS, not merely what the log says. A leftover shell variable would make a
+# run that calls itself DEFAULT diverge from the console at every junction it visits, and no golden
+# may be banked or gated through it. Opt IN with -SkipTrainingTip.
+# ⛔⛔ BRN_EVENT_FSM is here for the same reason: it arms the event-HUD FSM hop (a CAPABILITY).
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 if ($CrashPlayer -gt 0) {
@@ -300,8 +324,8 @@ if ($DeformTrace -gt 0) {
   $env:BRN_DEFORM_TRACE = "$DeformTrace"
   Write-Host "[flow] DEFORM TRACE run: BRN_DEFORM_TRACE=$DeformTrace (opt-in, period in calls). NOT a default run -- do not gate goldens off this."
 }
-if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and $DeformTrace -le 0 -and -not $StartEvent -and $Showtime -eq "") {
-  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / CRASH_PLAYER / DEFORM_TRACE / START_EVENT / START_SHOWTIME all cleared."
+if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and $DeformTrace -le 0 -and -not $StartEvent -and $Showtime -eq "" -and -not $SkipTrainingTip -and -not $EventFsm) {
+  Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / CRASH_PLAYER / DEFORM_TRACE / START_EVENT / START_SHOWTIME / SKIP_TRAINING_TIP / EVENT_FSM all cleared."
 }
 
 # ⭐⭐ BRN_PROP_DIAG IS INHERITED, NOT MANAGED -- so it is RECORDED (2026-08-20, gateui r7).
@@ -439,6 +463,57 @@ if ($StartEvent) {
 }
 $startEventText = '(not armed)'
 if ($StartEvent) { $startEventText = 'BRN_START_EVENT=1' }
+
+# ⭐⭐ -SkipTrainingTip -- IGNORE A BLOCKING TRAINING TIP AT THE JUNCTION canEnter GATE.
+#   `BRN_SKIP_TRAINING_TIP=1` is a game-side bring-up flag (NOT this script's -- it is
+#   IsBlockingTrainingTipActiveForCanEnterGate in GameStateModule_gSR_00.cpp, wrapping the tip
+#   term of the TWO canEnter computations inside CheckIfPlayerIsAtJunctionWithAnEvent).
+#   The boot tutorial tip ("Find an Auto-Repair shop...") is a MODAL type, so the console's gate
+#   holds mbCanEnterEvent at 0 for minutes -- most of a 275 s run -- and the junction start-hint
+#   glyphs ("hold both triggers") never appear even when the car is standing in the right place.
+#   With this armed the hint chain can be exercised on the harness's own timescale.
+#   ⛔ IT IS A CAPABILITY, NOT AN INSTRUMENT, and it is in the CLEARED list above for that reason
+#   (see the banner there). It changes what the GUI SHOWS at every junction the run visits, so it
+#   is never a default run and no golden may be banked or gated through it.
+#   ⚠️ IT DOES NOT START ANYTHING. Only canEnter is bypassed; ShouldStartSnapRaceMode's own
+#   blocking-tip pre-gate is deliberately untouched, so the 0.35 s accel+brake hold still refuses
+#   while a tip is up. Starting an event out of a tip-blocked state is -StartEvent's job.
+#   ⚠️ IT IS NOT A SUBSTITUTE FOR STANDING IN A JUNCTION -- same as -StartEvent: pair it with
+#   -Drive -Teleport onto a junction or the run answers no question.
+if ($SkipTrainingTip) {
+  $env:BRN_SKIP_TRAINING_TIP = "1"
+  Write-Host "[flow] SKIP TRAINING TIP armed: BRN_SKIP_TRAINING_TIP=1 (opt-in). NOT a default run --"
+  Write-Host "       the junction canEnter gate ignores a blocking tip, so the start hint can show"
+  Write-Host "       where the console would suppress it. Do not bank or gate goldens off this."
+  if ($Teleport -eq "") {
+    Write-Host "[flow] NOTE: -SkipTrainingTip without -Teleport -- the gate it unblocks is only reached"
+    Write-Host "       inside a traffic-light region, and the drive start (junkyard exit) is 326 m from"
+    Write-Host "       the nearest one. Nothing will change unless the car is driven into a junction."
+  }
+  if (-not $ladderDiag) {
+    Write-Host "[flow] WARNING: BRN_PROP_DIAG is NOT set, so neither the [snap] junction rungs nor the"
+    Write-Host "       one-shot '[snap] BRN_SKIP_TRAINING_TIP ... IGNORED' line can print (their"
+    Write-Host "       producer is gated on it). The run still happens, but the log will not show"
+    Write-Host "       whether the flag suppressed anything. Set it first: `$env:BRN_PROP_DIAG=1"
+  }
+}
+$skipTipText = '(not armed)'
+if ($SkipTrainingTip) { $skipTipText = 'BRN_SKIP_TRAINING_TIP=1' }
+
+# ⭐⭐ -EventFsm (2026-08-27, stunt-race UI wave). Arms the console's event-HUD FSM hop: on game
+#   action 23 the bridge posts RunFsm("BRNEVENTFSM") and the HUD flow leaves FBURN_MAIN for
+#   PRE_FLY_BY -> (BF_PROCEED) -> RACE_MAIN. The exe gates that post behind BRN_EVENT_FSM while
+#   the two destination states are being brought up; without this switch an event runs under the
+#   freeburn HUD. CAPABILITY discipline: cleared list above, never a default run.
+#   DELETE-WHEN the exe-side gate dies (EventFlowGuiEvents.cpp [FLAG PC bring-up]).
+if ($EventFsm) {
+  $env:BRN_EVENT_FSM = "1"
+  Write-Host "[flow] EVENT-HUD FSM armed: BRN_EVENT_FSM=1 (opt-in). NOT a default run -- on mode"
+  Write-Host "       start the HUD flow hops FBURN_MAIN -> PRE_FLY_BY -> RACE_MAIN. Watch for"
+  Write-Host "       [HudFlow] lines; a LogUnreconstructedState hit here is a REGRESSION now."
+}
+$eventFsmText = '(not armed)'
+if ($EventFsm) { $eventFsmText = 'BRN_EVENT_FSM=1' }
 
 $framesOut = $null
 if ($Frames) {
@@ -923,6 +998,12 @@ $summary += ("STARTEVT {0}" -f $startEventText)
 $showtimeText = 'not armed'
 if ($Showtime -ne "") { $showtimeText = ("BOTH BUMPERS at DRIVING+{0:f1}s for {1:f1}s, BRN_START_SHOWTIME=1" -f $showtimeAt, $showtimeHold) }
 $summary += ("SHOWTIME {0}" -f $showtimeText)
+# SKIPTIP: whether this run carried the training-tip bypass. Same comparability reason as STARTEVT
+# -- a run whose junction canEnter gate ignored a blocking tip showed a hint the console would not.
+$summary += ("SKIPTIP  {0}" -f $skipTipText)
+# EVENTFSM: whether the event-HUD FSM hop was armed -- a run that carried it left FBURN_MAIN on
+# mode start (PRE_FLY_BY/RACE_MAIN), so its HUD pixels are not comparable to a default run's.
+$summary += ("EVENTFSM {0}" -f $eventFsmText)
 # --- LADDER: how far the event-start chain got.  Rung meanings and the grounded/contract split
 #     are in the banner above the $eventLadder table.
 $ladderDepth = 0
