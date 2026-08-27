@@ -134,10 +134,22 @@ param(
                                  #   BRN_START_SHOWTIME=1, which arms the game-side one-shot that
                                  #   stands in for ShouldStartShowtimeMode @0x82356B18's hold/speed/
                                  #   facing gate stack. ⛔ NOT a default run: it can leave free burn.
-  [switch]$StartEvent            # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
+  [switch]$StartEvent,           # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
                                  # instrument -- the same discipline -CrashEntry carried until that
                                  # flag was deleted on 2026-08-27. See the banner below.
+  [switch]$ReleaseAsserts,       # opt IN to HOLDING the assert-release event open for the whole run,
+                                 # instead of releasing one assert per detection (the default).
+                                 # ⛔ NOT a default run: `asserts=` stops being comparable, because
+                                 # every assert self-releases whether or not the poll loop saw it.
+                                 # Use it ONLY for the open-world assert STORM -- four sites
+                                 # (BrnSatNavRenderer.cpp:1306/:1307, BrnGuiCache_wH3b.cpp:84,
+                                 # BrnGuiWorldDataController.cpp:374) fire once per frame while
+                                 # driving, ~3,178 times each in 400 s, far faster than the ~1 Hz
+                                 # poll can release them one at a time.
+  [int]$LockTimeoutSec = 1800,   # how long to WAIT for the box before giving up (see the lock below)
+  [switch]$NoLock                # ⛔ escape hatch only. Skips the box lock; two harnesses then kill
+                                 # each other's runs. Do not use it to "get past" a busy box.
 )
 $ErrorActionPreference = 'Stop'
 
@@ -159,6 +171,35 @@ public static class KBFLOW {
   public static void Tap(byte vk) { keybd_event(vk,0,0,IntPtr.Zero); System.Threading.Thread.Sleep(60); keybd_event(vk,0,2,IntPtr.Zero); }
 }
 "@
+
+# ⛔⛔ SERIALIZE THE BOX -- ONE HARNESS AT A TIME (traffic-verify wave, 2026-08-27).
+# This script kills every Burnout_PC on the box and deletes BrnGame.log, so two concurrent runs
+# do not merely contend for the GPU -- they DESTROY each other. Measured, not theorised: on
+# 2026-08-27 two parallel waves cost FOUR runs between them, and one wave's launch killed a run
+# of the other's mid-measurement. The victim does not see an error; it sees a game that vanished
+# and a log that was truncated, which reads exactly like an engine crash in the build under test.
+# ⭐ Same lesson as the stale-instance block below, one level up: a harness that can be destroyed
+# by another copy of itself reports the destruction as a property of the game.
+#
+# The lock is taken BEFORE the kill sweep, because the kill is the destructive act. It is released
+# implicitly on process exit -- Windows abandons a mutex whose owner died, and the next waiter
+# acquires it (AbandonedMutexException still means WE HOLD IT), so no try/finally is needed and no
+# crash of this script can wedge the box permanently.
+$flowLock = $null
+if (-not $NoLock) {
+  $flowLock = New-Object System.Threading.Mutex($false, "Local\BurnoutPC_FlowRun")
+  $gotLock = $false
+  try { $gotLock = $flowLock.WaitOne([TimeSpan]::FromSeconds($LockTimeoutSec)) }
+  catch [System.Threading.AbandonedMutexException] { $gotLock = $true }   # previous holder died; ours now
+  if (-not $gotLock) {
+    Write-Host "[flow] FAIL: another flow_run has held the box for $LockTimeoutSec s."
+    Write-Host "[flow]       Refusing to run: launching now would kill THEIR run and truncate"
+    Write-Host "[flow]       their log, and their wave would report it as a game crash."
+    Write-Host "[flow]       Wait for it to finish, or raise -LockTimeoutSec."
+    exit 1
+  }
+  Write-Host "[flow] box lock acquired"
+}
 
 # ⛔⛔ KILL STALE INSTANCES **AND VERIFY THE KILL** (pauseresume wave, 2026-08-27).
 # This used to be a single fire-and-forget `Stop-Process -Force`, and it silently FAILS on this
@@ -192,6 +233,33 @@ if (Test-Path $log) { Remove-Item $log -Force }
 
 # --- environment: a DEFAULT run, with every override explicitly cleared -------------------
 $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
+
+# ⛔⛔ THE ASSERT RELEASE HAS TO BE AN EVENT, NOT A KEYSTROKE (traffic-verify wave, 2026-08-27).
+# The poll loop below already TRIES to dismiss every assert, by tapping END three times. That tap
+# goes through keybd_event, which delivers to the FOCUSED window -- so on an unattended box, where
+# the game may not hold focus, the harness's own dismissal silently does nothing. The run then
+# freezes: process alive, log frozen at the assert, and the summary blames the build.
+# It cost three runs across two waves on 2026-08-27, all at the junkyard->driving handover
+# (BrnGuiCache_wH3b.cpp:84 via GuiCache::GetProfileEventDisplayInfo <- SatNavRenderer::RecvEvent).
+#
+# CgsAssertManager.cpp:288-303 provides the supported way out: with BRN_INPUT_ALLOW_BACKGROUND set
+# (it is, one line above), the assert screen also releases on the named event
+# "Local\BurnoutPC_Assert_Release". The game OPENS that event -- it never creates it -- so it must
+# exist BEFORE launch, and the handle must stay alive for the whole run or the GC closes it.
+#
+# ⭐ DEFAULT IS AutoReset AND ONE SET PER DETECTED ASSERT, deliberately. That mirrors the existing
+# END-tap intent exactly (dismiss the asserts we saw) and so KEEPS `asserts=` a real measurement.
+# -ReleaseAsserts switches to ManualReset + a single Set, which leaves the gate permanently open:
+# necessary for the open-world storm, but it releases asserts the loop never counted, which is why
+# it is opt-in and why the summary marks the run.
+$assertEventMode = if ($ReleaseAsserts) { [System.Threading.EventResetMode]::ManualReset }
+                   else                 { [System.Threading.EventResetMode]::AutoReset }
+$evAssertRelease = New-Object System.Threading.EventWaitHandle(
+                     $false, $assertEventMode, "Local\BurnoutPC_Assert_Release")
+if ($ReleaseAsserts) {
+  $evAssertRelease.Set() | Out-Null
+  Write-Host "[flow] ⚠️ -ReleaseAsserts: assert gate held OPEN for the whole run -- 'asserts=' is NOT comparable with a default run"
+}
 # ⚠️ BRN_MOTION_PROBE IS IN THIS LIST DELIBERATELY (added 2026-08-15, walls leg 7).  It was the one
 # probe env var this script neither set nor cleared, so a leftover `$env:BRN_MOTION_PROBE` from an
 # earlier command in the same shell rode into the next run -- and that run then announced itself as
@@ -679,7 +747,13 @@ while ($true) {
   if ($null -ne $txt) {
     $n = ([regex]::Matches($txt, '\[ASSERT \d+\]')).Count
     if ($n -gt $seenAsserts) {
+      # Release the event once per NEWLY SEEN assert (AutoReset consumes exactly one wait per Set),
+      # THEN fall back to the END tap. Order matters: the event works whether or not the game holds
+      # focus, the keystroke only works if it does. With -ReleaseAsserts the gate is already open
+      # and these Sets are harmless no-ops.
+      $newAsserts = $n - $seenAsserts
       $seenAsserts = $n
+      for ($k = 0; $k -lt $newAsserts; $k++) { $evAssertRelease.Set() | Out-Null; Start-Sleep -Milliseconds 30 }
       for ($k = 0; $k -lt 3; $k++) { [KBFLOW]::Tap(0x23); Start-Sleep -Milliseconds 120 }
       Write-Host ("[flow] dismissed assert #{0} at {1:f1}s" -f $n, $elapsed)
     }
@@ -851,7 +925,8 @@ foreach ($k in @('flyby','carsel','livery','accept','exitjy','strfin')) {
   else                        { $summary += ("{0,-8} (never)" -f $k) }
 }
 $summary += ("END      {0,6:f1}s  frame={1}" -f $endElapsed, $endFrame)
-$summary += ("asserts={0} phase={1}" -f $seenAsserts, $phase)
+$summary += ("asserts={0} phase={1}{2}" -f $seenAsserts, $phase,
+             $(if ($ReleaseAsserts) { "  [ASSERT GATE HELD OPEN -- asserts= NOT comparable]" } else { "" }))
 # DIAGENV: the inherited probe knobs this run actually carried. Two runs are comparable only
 # when this line matches -- see the banner where it is collected.
 $summary += ("DIAGENV  {0}" -f $diagEnvText)
