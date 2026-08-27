@@ -96,10 +96,14 @@ param(
                                  # (BRN_CRASH_PLAYER = the UpdateVehiclePhysics call to fire on;
                                  # 0 = off). ⭐ Crashes are STOCHASTIC (2 runs in 5), so a claim
                                  # about crash entry/recovery needs this, not a lucky collision.
-  [double]$PauseAt     = -1,     # opt IN: seconds after DRIVING to TAP the offline pause (action 46).
-                                 #   -1 == never. Opens the main map, which IS the offline pause.
-  [double]$UnpauseAt   = -1,     # opt IN: seconds after DRIVING to TAP Accept (action 45) to come
-                                 #   back out of the map. -1 == never. Must be > PauseAt.
+  [string]$PauseAt     = "",     # opt IN: seconds after DRIVING to TAP the offline pause (action 46).
+                                 #   Opens the main map, which IS the offline pause. "" == never.
+                                 #   ⭐ A COMMA-SEPARATED LIST, so a run can pause and resume
+                                 #   REPEATEDLY ("20,40,60") -- one tap per entry, each latched.
+                                 #   A single number still works and means one cycle.
+  [string]$UnpauseAt   = "",     # opt IN: seconds after DRIVING to TAP Accept (action 45) to come
+                                 #   back out of the map. Same list form; entry i must be > PauseAt
+                                 #   entry i, and repeated cycles need one entry per pause.
   [switch]$MotionProbe,          # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
   [int]$TriCacheProbe  = 0,      # opt IN to the [tricache] world-collision cache trace; the VALUE
                                  # is the sampling period in frames (1 => the game's default 60).
@@ -139,7 +143,33 @@ public static class KBFLOW {
 }
 "@
 
-Get-Process Burnout_PC -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+# ⛔⛔ KILL STALE INSTANCES **AND VERIFY THE KILL** (pauseresume wave, 2026-08-27).
+# This used to be a single fire-and-forget `Stop-Process -Force`, and it silently FAILS on this
+# process often enough to matter: every run ends `EXIT harness-stop (process was still alive)`,
+# so a survivor is not an edge case, it is the normal exit path. Two runs of this wave were
+# thrown away to it -- with two and then three game instances sharing the box the flow never
+# reached the flyby inside 275 s, and the summary reported `phase=BOOT` with `asserts=0`, which
+# reads exactly like a boot REGRESSION in the build under test. ⭐ A measurement harness that
+# can be starved by its own leftovers reports the starvation as a property of the game. Escalate
+# to `taskkill /T` and REFUSE TO RUN rather than produce a quietly incomparable run.
+$staleTries = 0
+while ($true) {
+  $stale = @(Get-Process Burnout_PC -ErrorAction SilentlyContinue)
+  if ($stale.Count -eq 0) { break }
+  $staleTries++
+  if ($staleTries -gt 5) {
+    Write-Host "[flow] FAIL: $($stale.Count) stale Burnout_PC process(es) survived 5 kill attempts."
+    Write-Host "[flow]       Refusing to run: a second instance starves the flow and the summary"
+    Write-Host "[flow]       would blame the build. Kill them by hand and re-run."
+    exit 1
+  }
+  Write-Host "[flow] killing $($stale.Count) stale Burnout_PC process(es) (attempt $staleTries)"
+  foreach ($sp in $stale) {
+    Stop-Process -Id $sp.Id -Force -ErrorAction SilentlyContinue
+    if ($staleTries -ge 2) { & taskkill /PID $sp.Id /F /T *>$null }
+  }
+  Start-Sleep -Seconds 2
+}
 Start-Sleep -Seconds 1
 if (Test-Path $log) { Remove-Item $log -Force }
 
@@ -350,6 +380,33 @@ $evAccept = New-Object System.Threading.EventWaitHandle($false, [System.Threadin
 # menu channels: this is a TAP, not a hold. Created unconditionally so the game always finds it;
 # a channel never Set() is a key never pressed.
 $evPauseMap = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_PauseMap")
+
+# ⭐ THE PAUSE/RESUME SCHEDULES. -PauseAt / -UnpauseAt are COMMA-SEPARATED second marks on the
+# DRIVING time base, so one run can exercise the pause REPEATEDLY -- which is the only way to
+# show a resume is durable rather than lucky once. Entries are sorted and each fires once.
+function Parse-TapSchedule([string]$lsSpec, [string]$lsName) {
+  if ([string]::IsNullOrWhiteSpace($lsSpec)) { return @() }
+  $lResult = @()
+  foreach ($lsPart in $lsSpec.Split(',')) {
+    $lsTrim = $lsPart.Trim()
+    if ($lsTrim -eq "") { continue }
+    $lfValue = 0.0
+    if (-not [double]::TryParse($lsTrim, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$lfValue)) {
+      Write-Host "[flow] FAIL: -$lsName entry '$lsTrim' is not a number."; exit 1
+    }
+    if ($lfValue -lt 0) { continue }
+    $lResult += $lfValue
+  }
+  return @($lResult | Sort-Object)
+}
+$script:pauseTimes   = Parse-TapSchedule $PauseAt   'PauseAt'
+$script:unpauseTimes = Parse-TapSchedule $UnpauseAt 'UnpauseAt'
+$script:pauseNext    = 0
+$script:unpauseNext  = 0
+if ($script:pauseTimes.Count -gt 0) {
+  Write-Host ("[flow] PAUSE schedule: {0} tap(s) at DRIVING+[{1}]s; UNPAUSE: {2} tap(s) at DRIVING+[{3}]s" -f `
+    $script:pauseTimes.Count, ($script:pauseTimes -join ','), $script:unpauseTimes.Count, ($script:unpauseTimes -join ','))
+}
 
 # ⭐ THE DRIVING CHANNELS -- MANUAL-RESET (see the banner).  Created unconditionally so the game
 #   always finds them; a channel that is never Set() is a control that is never pressed, which is
@@ -591,15 +648,17 @@ while ($true) {
   # unpause taps Accept, which the map's Update turns into GO_BACK.
   if ($phase -eq 'DRIVING') {
     $sinceDrivingP = ((Get-Date) - $drivingAt).TotalSeconds
-    if ($PauseAt -ge 0 -and -not $script:pauseTapped -and $sinceDrivingP -ge $PauseAt) {
-      $script:pauseTapped = $true
+    while ($script:pauseNext -lt $script:pauseTimes.Count -and
+           $sinceDrivingP -ge $script:pauseTimes[$script:pauseNext]) {
+      $script:pauseNext++
       $evPauseMap.Set() | Out-Null
-      Write-Host ("[flow] PAUSE tap (action 46) at DRIVING+{0:f1}s" -f $sinceDrivingP)
+      Write-Host ("[flow] PAUSE tap #{0} (action 46) at DRIVING+{1:f1}s" -f $script:pauseNext, $sinceDrivingP)
     }
-    if ($UnpauseAt -ge 0 -and -not $script:unpauseTapped -and $sinceDrivingP -ge $UnpauseAt) {
-      $script:unpauseTapped = $true
+    while ($script:unpauseNext -lt $script:unpauseTimes.Count -and
+           $sinceDrivingP -ge $script:unpauseTimes[$script:unpauseNext]) {
+      $script:unpauseNext++
       $evAccept.Set() | Out-Null
-      Write-Host ("[flow] UNPAUSE tap (action 45 / Accept) at DRIVING+{0:f1}s" -f $sinceDrivingP)
+      Write-Host ("[flow] UNPAUSE tap #{0} (action 45 / Accept) at DRIVING+{1:f1}s" -f $script:unpauseNext, $sinceDrivingP)
     }
   }
 
