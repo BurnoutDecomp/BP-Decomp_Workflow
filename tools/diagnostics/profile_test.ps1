@@ -14,6 +14,12 @@ param(
     [switch]$LeaveRunning
 )
 $ErrorActionPreference = 'Stop'
+
+# ⛔ ONE HARNESS AT A TIME. This script kills every Burnout_PC on the box, so running it
+# beside another harness destroys that harness's measurement -- and the victim reads the
+# damage as a crash in the build under test. See _box_lock.ps1 for the measured history.
+. "$PSScriptRoot\_box_lock.ps1"
+Enter-BoxLock -Label "profile_test"
 $root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $exe  = Join-Path $root "build\game\Burnout_PC.exe"
 $log  = Join-Path $root "build\game\BrnGame.log"
