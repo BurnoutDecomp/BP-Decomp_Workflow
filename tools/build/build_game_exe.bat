@@ -877,6 +877,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\SharedClasses\DataLists\VehicleListResourceType.cpp"
   echo "%SRC%\SharedClasses\DataLists\WheelList.cpp"
   echo "%SRC%\SharedClasses\DataLists\WheelListResourceType.cpp"
+  rem  [challenge-list wave 2026-08-27] the THIRD member of the same family, and load-bearing
+  rem  for the same reason: Prepare stage 10 (PrepareFreeburnChallengeList @0x8266C088) streams
+  rem  "OnlineChallenges.bndl" into POOL 26 and acquires "B5ChallengeList". MEASURED against
+  rem  build/game/ONLINECHALLENGES.BNDL: one resource, id 0x0D82D720 == HashString of that name,
+  rem  type 0x1001F (65567), 458 challenges. With no registered handler the pool stores a NULL
+  rem  mpResourceType, skips FixUp, and every record is reached through an un-rebased offset.
+  echo "%SRC%\SharedClasses\DataLists\ChallengeListResourceType.cpp"
   rem  BrnWheelGraphicsSpecResourceType (65546) is the wheel twin of the vehicle spec above,
   rem  mounted by the LoadWheel wave (2026-08-03). Its body was reconstructed long ago and
   rem  simply never linked. It is LOAD-BEARING, not cosmetic: BundleLoader::LoadBundle gates
@@ -4299,6 +4306,10 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_RoadRules.cpp"
   rem [stuntrace wave D 2026-08-26] the four event-start functions + GetEvent helpers.
   echo "%SRC%\GameSource\GameState\GameStateModule_gSR_00.cpp"
+  rem [event-starts wave 2026-08-27] the event-start table producer + the interface it
+  rem fills (AddEventStart/AppendEventStart -- had no callers until now).
+  echo "%SRC%\GameSource\GameState\GameStateModule_SendSetUpAllEventStarts.cpp"
+  echo "%SRC%\GameSource\GameState\Interface_SetUpAllEventStarts.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ModeManager_gUI_00.cpp"
   rem ============================================================================
   rem [stuntrace wave B 2026-08-26] THE MODEMANAGER MOUNT -- the offline event core.
@@ -4410,6 +4421,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem -> GUI 93/289/321/322/166/234/307/311) + the event score/timer status builds (492/424/428).
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventFlowGuiEvents.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventStatusGuiEvents.cpp"
+  rem [event-starts wave 2026-08-27] the event-start table hop (GUI event 203).
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventStartsGuiEvents.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_00.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_01.cpp"
@@ -4507,6 +4520,12 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnSatNavRenderer.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnNorthIndicator.cpp"
   echo "%SRC%\SharedClasses\Gui\SatNav\BrnMapUtils.cpp"
+  rem ---- stunt-race UI wave 2026-08-27: the MainMapComponent bodies the PRE_FLY_BY ----
+  rem ---- mount executes (Construct/Prepare/RecvEvent + the zoom tables), plus the  ----
+  rem ---- FLAG'd gate TU covering its still-unreconstructed siblings (Update/SetZoom/----
+  rem ---- the GuiCache landmark faces/ConstructPatternLiveryList/MapManager::RecvEvent).----
+  echo "%SRC%\GameSource\Gui\SatNav\BrnMainMap.cpp"
+  echo "%SRC%\GameSource\Gui\SatNav\BrnMainMapLinkGates.cpp"
   rem ---- H3b link closure: the Im2d mask/boost command writers TU, the GuiCache ----
   rem ---- accessor legs the renderer/manager link against, and the progression   ----
   rem ---- event-record accessors.                                                ----
@@ -4664,6 +4683,17 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   BrnHudStatesLinkStubs.cpp (that file scaffolds RACE_MAIN / FBURN_MAIN /
   rem   CRASHEDSTNT only), so there was no ODR fork to retire -- just an absent TU.
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnCrashedHudState.cpp"
+  rem ---- stunt-race UI wave 2026-08-27: PRE_FLY_BY becomes REAL. The 7 wJ partfiles
+  rem   (the complete PreRaceFlyByState) mount; the inert PRE_FLY_BY block in
+  rem   BrnHudStatesLinkStubs.cpp was deleted in the same change (LNK2005 otherwise).
+  rem   Their measured closure = BrnMainMap.cpp + BrnMainMapLinkGates.cpp (SatNav block).
+  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_03.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_04.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_05.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_06.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_07.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsList.cpp"
   rem ---- LINK CLOSURE for the friends-list / boost-message landings (added 2026-08-26).
   rem   MEASURED: origin/dev c0dc4af2 does NOT link -- 15 unresolved externals. Two of its
@@ -4684,6 +4714,41 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnDistrictMarker.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnJunctionInfoComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnOdometerComponent.cpp"
+  rem ---- stunt-race UI wave 2026-08-27: the EventInfoComponent (the in-event goal/
+  rem   score/timer readout) -- base TU + two partfiles, mounted together (Construct
+  rem   is the only path into the partfiles; ClearEventSpecificData is in the base).
+  rem   TextFieldRef::GetText landed in the already-mounted BrnFlaptTextFieldRef.cpp.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnEventInfo.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnEventInfo_wS1.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnEventInfo_wS2.cpp"
+  rem ---- stunt-race UI wave 2026-08-27: RoadRuleShotComponent was fully bodied on
+  rem   disk all along; its link residual (the two GuiCache accessors) lives in
+  rem   BrnGuiCache_wS1.cpp. The Construct scaffold in BrnHudStatesLinkStubs.cpp was
+  rem   deleted in the same change.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnRoadRuleShotComponent.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wS1.cpp"
+  rem ---- stunt-race UI wave 2026-08-27: RACE_MAIN becomes REAL. The base TU (the
+  rem   21-entry resource table + OnEnter/OnLeave/UpdateSetupState family) + three
+  rem   partfiles (wS2 Update/WFInit/Permenant/Reveal; wS3 Running/EventInfo/countdown;
+  rem   wS4 ProcessAptEvents/BoostInfo/SatNav + the freeburn-challenge tickers). The
+  rem   RACE_MAIN stub block in BrnHudStatesLinkStubs.cpp was deleted in the same change.
+  rem   ChallengeListEntry.cpp joins for ChallengeListEntryAction::GetTargetValue (bodied
+  rem   on disk, never listed -- the ticker's per-action target values).
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState_wS2.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState_wS3.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState_wS4.cpp"
+  echo "%SRC%\SharedClasses\DataLists\ChallengeListEntry.cpp"
+  rem   RACE_MAIN's measured link closure (2026-08-27 trial links): the online-timeout
+  rem   timer (0 new externals) and the sat-nav zoom cache leg (wB_08; its duplicate
+  rem   assert-less IsRoadRuleActive twin in BrnGuiCache.cpp was retired). The compass
+  rem   TU and the player-position table pair were TRIED and REVERTED -- each opens more
+  rem   holes than it closes (Compass: ShowPositionOnCompass/FormatDirectionLetters/
+  rem   GetNumLocations; table pair: SingleComponent::SetCache/SetTitleText/SetSkillsText/
+  rem   UsernameCompare/GetCurrentSkill) -- their RACE_MAIN-facing symbols are gated in
+  rem   BrnHudStatesLinkStubs.cpp instead, all runtime-dead on the mode-7 path.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnOnlineTimeoutTimerComponent.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_08.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnHudStatesLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextField.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnButtonIcon.cpp"
