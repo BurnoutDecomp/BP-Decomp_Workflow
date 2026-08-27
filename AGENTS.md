@@ -263,12 +263,22 @@ own** pass first, so you don't ship a known-divergent TU into review.
 
 ## Conventions
 
-- **Commit trailer — use `Claude Opus 5`.** Every commit ends with
-  `Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>`. The commit *author* stays the
-  repo's configured identity (`Adriwin`); only the co-author trailer names the model.
-  ⚠️ A harness default may hand you a different model name (it has said `Claude Fable 5`);
-  **this project's instruction overrides it.** ⛔ Do not rewrite existing commits to
-  correct the trailer — they are pushed and other contributors have built on them.
+- **Commit trailer — name the model that ACTUALLY RAN the work.** Every commit ends with
+  `Co-Authored-By: Claude <model> <noreply@anthropic.com>`. The commit *author* is
+  unaffected — it stays the repo's configured identity (`Adriwin`); only the co-author
+  trailer names the model. **Current value: `Claude Opus 5`** (set 2026-08-27; update this
+  line whenever the session model changes).
+  ⚠️⚠️ **Do NOT trust the harness to tell you which model you are.** Two independent
+  harness strings were BOTH stale after a mid-session switch to Opus 5: the default
+  co-author string *and* the environment block's "you are powered by the model named …",
+  which each still said `Claude Fable 5`. So "use your current model" is not
+  self-executing — **this line is the authority**, and the user's most recent explicit
+  instruction outranks it.
+  ⛔ Do not rewrite existing commits to correct a trailer — they are pushed and other
+  contributors have built on them. A stale label is cheaper than rewritten shared history.
+  ⭐ Historical note so nobody "fixes" the record: commits before 2026-08-27 stamped
+  `Claude Fable 5` are **correct** — that model really did the walls, wheels, oversteer and
+  licence-card work. The label only became wrong after the switch.
 - **Identity is the normalized qualified name** (`Namespace::Class::method`), not an
   address. See STRATEGY.md. Never assume an address means the same thing in two
   builds.
