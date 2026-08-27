@@ -1207,6 +1207,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  that owns GetDeformationSphereFromVolumeInstance. All strip under /OPT:REF until
   rem  PhysicsModule::Update lands -- mounted for closure enforcement only.
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleUpdateFunctions.cpp"
+  rem  ADDED 2026-08-27 (showtime S3 wave): PhysicsModule::HandleGameActions @0x825A72F0 (185)
+  rem  -- the physics side of the game-action pipe, and the ONLY console road into
+  rem  VehicleManager::SetPlayerCarToShowtimeMode @0x8259C108. Its conductor gate is deleted in
+  rem  the same commit; its five VehicleManager leaves live in BrnVehicleManagerPlayerStats.cpp
+  rem  (already mounted). HandleGameActionsPostScene @0x825A70C0 stays gated -- zero of its five
+  rem  callees exists; see the boundary note in BrnPhysicsConductorGates.cpp.
+  echo "%SRC%\GameSource\Physics\BrnPhysicsModuleGameActions.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_VehicleContactFixUp.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_BBox.cpp"
