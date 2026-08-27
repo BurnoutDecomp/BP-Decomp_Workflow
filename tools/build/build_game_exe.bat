@@ -2700,6 +2700,17 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  the queue BridgeGameStateToDirector appends into the director every frame.
   echo "%SRC%\GameSource\GameState\BrnGameStateModule.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager.cpp"
+  rem *** DRIVE-THRU LINK CLOSURE (2026-08-27): the two partfiles that close the last
+  rem  unresolved external. BrnProgressionManager_Unlocks.cpp bodies UnlockCarFromTrophy
+  rem  @0x8237B0E8, UnlockSpecialCars @0x8237AF38, OnTrophyUnlock @0x82389740 and OnDriveThru
+  rem  @0x82399DD0; BrnProgressionManager_Completion.cpp bodies the percentage subtree
+  rem  ComputeCompletionPercentage @0x8238A198 + GetPercentageOfEventsCompleted @0x8237B390 +
+  rem  GetNumberOfBeatenRivals @0x8236FBC8 + GetTrueNumberOfRivals @0x8236FB10, plus the two
+  rem  consumers CheckForSpecialCarUnlocks @0x82396058 / SendGameCompletionResults @0x82395C28.
+  rem  They MUST mount together: OnDriveThru calls into the Completion partfile and the
+  rem  Completion partfile calls UnlockSpecialCars back in the Unlocks one.
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Unlocks.cpp"
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Completion.cpp"
   rem ??? PREPARE2 SUB-OBJECT WAVE (2026-08-11) -- the two legs GameStateModule::Prepare2
   rem  @0x8239ED10 left parked. The module now EMBEDS both sub-objects by value, exactly as the
   rem  console does (X360 Construct @0x82380388 / ctor @0x827E44B8): the achievement manager at
