@@ -265,7 +265,8 @@ own** pass first, so you don't ship a known-divergent TU into review.
 
 - **Commit trailer — name the model that ACTUALLY RAN the work.** Every commit ends with
   `Co-Authored-By: Claude <model> <noreply@anthropic.com>`. The commit *author* is
-  unaffected — it stays the repo's configured identity (`Adriwin`); only the co-author
+  unaffected — it stays whatever identity the committing contributor's git is configured
+  with; only the co-author
   trailer names the model. **Current value: `Claude Opus 5`** (set 2026-08-27; update this
   line whenever the session model changes).
   ⚠️⚠️ **Do NOT trust the harness to tell you which model you are.** Two independent
