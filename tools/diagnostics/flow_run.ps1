@@ -135,9 +135,10 @@ param(
                                  #   ControllerInput +0x42 mbCrashModePressed). Default hold 5 s.
                                  #   ⭐ THIS PRESSES THE REAL BUTTON through the ordinary input chain --
                                  #   it does not poke a game-state flag. It also sets
-                                 #   BRN_START_SHOWTIME=1, which arms the game-side one-shot that
-                                 #   stands in for ShouldStartShowtimeMode @0x82356B18's hold/speed/
-                                 #   facing gate stack. ⛔ NOT a default run: it can leave free burn.
+                                 #   BRN_START_SHOWTIME=1, which is now INERT -- the console's own
+                                 #   ShouldStartShowtimeMode @0x82356B18 + the DetectModeStarts else
+                                 #   arm landed 2026-08-27 and the harness hook was deleted with them.
+                                 #   ⛔ NOT a default run: it can leave free burn.
   [switch]$StartEvent,           # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
                                  # instrument -- the same discipline -CrashEntry carried until that
@@ -422,11 +423,22 @@ $ladderDiag = (-not [string]::IsNullOrEmpty([Environment]::GetEnvironmentVariabl
 #         -> GameStateModuleIO computes ControllerInput::mbCrashModePressed (+0x42) as the AND of
 #         their held bits, exactly as it does for a pad. Nothing here writes a game-state flag.
 #     (b) the GAME-SIDE STAND-IN. BRN_START_SHOWTIME=1 arms
-#         GameStateModule::HarnessInjectShowtimeBringUp, which reads that same real byte and calls
-#         StartCrashMode @0x8236B580 -- substituting for ShouldStartShowtimeMode @0x82356B18 (166
-#         insns) and the DetectModeStarts else arm, and for nothing below them.
-#   ⛔ IT IS A CAPABILITY, NOT AN INSTRUMENT (hence the CLEARED list above): a run carrying it can
-#   leave free burn, so no golden may be banked or gated through it.
+#         GameStateModule::HarnessInjectShowtimeBringUp.
+#         ✅ THAT HOOK IS GONE (showtime S7b-b, 2026-08-27). ShouldStartShowtimeMode @0x82356B18
+#         and the DetectModeStarts else arm both landed, so the gesture now drives the CONSOLE's
+#         own gate stack and BRN_START_SHOWTIME is INERT -- nothing reads it. It is still set and
+#         still cleared below so an old run's summary line stays comparable; delete both when the
+#         next person touches this block.
+#   ⛔ A -Showtime RUN CAN STILL LEAVE FREE BURN (that is now the game working, not a hook), so
+#   it is still not a default run and no golden may be banked or gated through it.
+#   ⭐ WHAT THE CONSOLE GATE NOW WANTS, in refusal order (ShouldStartShowtimeMode):
+#     road rules available (Profile medal count >= 4, or one ruled road) | no 2 s post-mode lockout
+#     | no sim-timer request this frame | both bumpers | player car active | sim not paused | no
+#     junkyard flow | any running mode is IN_PROGRESS | meShowtimeBehaviour != OFF | not already
+#     in showtime -- then a 10 ms hold, then >= 10 m/s (or already crashing), then a 0.5 s intro
+#     window that must end with the car having touched the ground.
+#   A refused press prints ONE line: "[showtime] BOTH BUMPERS held, but ShouldStartShowtimeMode
+#   @0x82356B18 refused: <reason>". Read it before concluding anything about the input path.
 #   ⚠ A -Showtime run with no -Drive parks a stationary car; the console gate this stands in for
 #   has a speed term, so pair it with -Drive if the question is about a moving entry.
 $showtimeAt = -1.0; $showtimeHold = 5.0; $shouldersHeld = $false
@@ -713,7 +725,22 @@ $cues = @(
   @('livery',   'CSL : Entering Car Select'),
   @('accept',   'CSM : SendStateEvent\( "ACCEPT" \)'),
   @('exitjy',   'action 4 -> ExitJunkyard'),
-  @('strfin',   'signalling StreamingFinished')
+  @('strfin',   'signalling StreamingFinished'),
+  # ⛔⛔ THE RETURNING-PLAYER PATH (2026-08-28). Profile saving landed on 2026-08-27, and the
+  #   moment a Profile.sav exists the game takes a DIFFERENT boot path: the intro and the whole
+  #   junkyard car-select flow are skipped and the player is dropped straight into free burn.
+  #   MEASURED: on that path 'Entering Car Select' and 'signalling StreamingFinished' fire ZERO
+  #   times, so the CARSELECT->DRIVING promotion below could never happen -- and because the
+  #   throttle is gated on `$phase -eq 'DRIVING'`, **-Drive silently did nothing and the car sat
+  #   in the junkyard for the whole run.** A landed FEATURE broke the harness, and the harness
+  #   reported it as an ordinary quiet run.
+  #   ⭐ 'newprof' is the DISCRIMINATOR, not a milestone: the game prints isNewProfile=1/0 before
+  #   either path diverges (line ~963 fresh, ~850 returning, vs the gameplay cue at ~1024/1045).
+  #   ⚠️ 'ingame' MUST NOT promote on the fresh path: measured, it fires at line 1045 there --
+  #   BEFORE car select at 4458 -- so promoting on it unconditionally would hold the throttle
+  #   down during boot and car select. It is only the gameplay entry when there is no car select.
+  @('newprof',  'isNewProfile=0'),
+  @('ingame',   'InGame: OnEnter -> GUI FSM stage 5')
 )
 
 # ⭐⭐ THE EVENT-START LADDER (2026-08-26, stunt-races wave D).  Five RUNGS between "the car is
@@ -826,6 +853,13 @@ while ($true) {
     if ($phase -eq 'BOOT'      -and $marks.ContainsKey('flyby'))  { $phase = 'FLYBY' }
     if ($phase -eq 'FLYBY'     -and $marks.ContainsKey('carsel')) { $phase = 'CARSELECT'; $acceptGap = 3.0; $lastAccept = Get-Date }
     if ($phase -eq 'CARSELECT' -and $marks.ContainsKey('strfin')) { $phase = 'DRIVING'; $drivingAt = Get-Date }
+    # Returning-player promotion. Gated on BOTH 'newprof' (this boot found a profile) and 'ingame',
+    # so the fresh path's behaviour -- and every golden banked against it -- is bit-for-bit
+    # unchanged. Without this, -Drive is inert on any box that has ever saved a profile.
+    if ($phase -ne 'DRIVING' -and $marks.ContainsKey('newprof') -and $marks.ContainsKey('ingame')) {
+      $phase = 'DRIVING'; $drivingAt = Get-Date
+      Write-Host "[flow] DRIVING via the RETURNING-PLAYER path (profile found; no car select)"
+    }
   }
 
   $pump = ($phase -eq 'BOOT') -or (($phase -eq 'CARSELECT') -and (-not $HoldCarSelect))
@@ -996,7 +1030,7 @@ $summary += ("STARTEVT {0}" -f $startEventText)
 # Same comparability reason as STARTEVT: a run that entered showtime is not comparable with a
 # free-burn run, and the summary must say so on its face.
 $showtimeText = 'not armed'
-if ($Showtime -ne "") { $showtimeText = ("BOTH BUMPERS at DRIVING+{0:f1}s for {1:f1}s, BRN_START_SHOWTIME=1" -f $showtimeAt, $showtimeHold) }
+if ($Showtime -ne "") { $showtimeText = ("BOTH BUMPERS at DRIVING+{0:f1}s for {1:f1}s (console gate; BRN_START_SHOWTIME inert)" -f $showtimeAt, $showtimeHold) }
 $summary += ("SHOWTIME {0}" -f $showtimeText)
 # SKIPTIP: whether this run carried the training-tip bypass. Same comparability reason as STARTEVT
 # -- a run whose junction canEnter gate ignored a blocking tip showed a hint the console would not.
