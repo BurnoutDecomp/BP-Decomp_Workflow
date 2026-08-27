@@ -4319,9 +4319,14 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem DELIBERATELY OUT: ChallengeManager/* (bounded ModeManager layout has no
   rem embedded member; freeburn challenges are not on the progression-event path),
   rem BrnBurnoutSkillzManager.cpp (GameActionQueue typedef clash, not a DWARF
-  rem ModeManager member), Debug/* components, Hud/BrnHUDMessageLogic.cpp (its 4
-  rem callers are parked, wave-F item), *_EmbedGate/_AssertLayout/_embed_check
+  rem ModeManager member), Debug/* components, *_EmbedGate/_AssertLayout/_embed_check
   rem (compile-scaffolding, gate-only by convention).
+  rem [mbRecentStunt wave 2026-08-27] Hud/BrnHUDMessageLogic.cpp JOINS the mount: its
+  rem four callers were un-parked because GenerateStuntMessage's vtable-dispatched
+  rem WasStuntRecentlyPerformed is the image's ONLY drain of StuntModeScoring's
+  rem mbRecentStunt latch -- parked, the second banked stunt of any offline stunt race
+  rem fired the !mbRecentStunt invariant every frame.
+  echo "%SRC%\GameSource\GameState\ModeManager\Hud\BrnHUDMessageLogic.cpp"
   rem PAIRED EDIT: the 14-line RETIRE list in BrnBaselineLinkStubs.cpp (seam audit
   rem S7) died in the same change that adds these lines -- the two must never
   rem coexist (LNK2005) and HasStuntModeEnded's return-true stub would end every
