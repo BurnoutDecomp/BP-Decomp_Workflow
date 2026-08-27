@@ -173,33 +173,14 @@ public static class KBFLOW {
 "@
 
 # ⛔⛔ SERIALIZE THE BOX -- ONE HARNESS AT A TIME (traffic-verify wave, 2026-08-27).
-# This script kills every Burnout_PC on the box and deletes BrnGame.log, so two concurrent runs
-# do not merely contend for the GPU -- they DESTROY each other. Measured, not theorised: on
-# 2026-08-27 two parallel waves cost FOUR runs between them, and one wave's launch killed a run
-# of the other's mid-measurement. The victim does not see an error; it sees a game that vanished
-# and a log that was truncated, which reads exactly like an engine crash in the build under test.
-# ⭐ Same lesson as the stale-instance block below, one level up: a harness that can be destroyed
-# by another copy of itself reports the destruction as a property of the game.
-#
-# The lock is taken BEFORE the kill sweep, because the kill is the destructive act. It is released
-# implicitly on process exit -- Windows abandons a mutex whose owner died, and the next waiter
-# acquires it (AbandonedMutexException still means WE HOLD IT), so no try/finally is needed and no
-# crash of this script can wedge the box permanently.
-$flowLock = $null
-if (-not $NoLock) {
-  $flowLock = New-Object System.Threading.Mutex($false, "Local\BurnoutPC_FlowRun")
-  $gotLock = $false
-  try { $gotLock = $flowLock.WaitOne([TimeSpan]::FromSeconds($LockTimeoutSec)) }
-  catch [System.Threading.AbandonedMutexException] { $gotLock = $true }   # previous holder died; ours now
-  if (-not $gotLock) {
-    Write-Host "[flow] FAIL: another flow_run has held the box for $LockTimeoutSec s."
-    Write-Host "[flow]       Refusing to run: launching now would kill THEIR run and truncate"
-    Write-Host "[flow]       their log, and their wave would report it as a game crash."
-    Write-Host "[flow]       Wait for it to finish, or raise -LockTimeoutSec."
-    exit 1
-  }
-  Write-Host "[flow] box lock acquired"
-}
+# Taken BEFORE the kill sweep below, because the kill is the destructive act: this script ends
+# every Burnout_PC on the box and deletes BrnGame.log, so a concurrent harness's run is not merely
+# slowed, it is destroyed -- and the victim reads the damage as a crash in the build under test.
+# ⭐ Same lesson as the stale-instance block below, one level up: there the hazard is leftovers of
+# THIS script, here it is one of the other eight scripts in this directory that touch the game.
+# The measured history, and the release-on-exit semantics, live in _box_lock.ps1.
+. "$PSScriptRoot\_box_lock.ps1"
+Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:$NoLock -Label "flow_run"
 
 # ⛔⛔ KILL STALE INSTANCES **AND VERIFY THE KILL** (pauseresume wave, 2026-08-27).
 # This used to be a single fire-and-forget `Stop-Process -Force`, and it silently FAILS on this
