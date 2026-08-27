@@ -4688,6 +4688,13 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   BrnHudStatesLinkStubs.cpp (that file scaffolds RACE_MAIN / FBURN_MAIN /
   rem   CRASHEDSTNT only), so there was no ODR fork to retire -- just an absent TU.
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnCrashedHudState.cpp"
+  rem ---- ADDED 2026-08-27 (crashed-stunt HUD wave): CRASHEDSTNT becomes REAL. The real
+  rem   TU carries the recovered 4-entry resource table (.rdata 0x82F26488, count 4 at
+  rem   0x82F264A8 -- the FLAG placeholder is paid off), the 12-entry event table at
+  rem   0x8205B17C, the OnEnter/OnLeave/Update lifecycle and the COMPLETE UpdatePermenant
+  rem   -- including the "END_CSTNT" arm the lua FSM maps back to state 2 RACE_MAIN.
+  rem   The CRASHEDSTNT stub block in BrnHudStatesLinkStubs.cpp died in the same change.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnCrashedStuntHudState.cpp"
   rem ---- stunt-race UI wave 2026-08-27: PRE_FLY_BY becomes REAL. The 7 wJ partfiles
   rem   (the complete PreRaceFlyByState) mount; the inert PRE_FLY_BY block in
   rem   BrnHudStatesLinkStubs.cpp was deleted in the same change (LNK2005 otherwise).
