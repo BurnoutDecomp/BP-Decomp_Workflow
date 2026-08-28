@@ -2585,6 +2585,13 @@ rem  _wT4_02 BuildPotentialCollisionList + HandleHalfPotentialContact (overlap-p
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT4_01.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT4_02.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT5_01.cpp"
+rem  wT6_01 -- NukeTrafficJams @0x827353E8, the traffic-jam relief valve. Marks every
+rem  third param in a stalled run SetShouldBeRemoved; UpdateParams KillParam consumer
+rem  in _wT2_02.cpp is already live, so this closes the valve end to end.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_01.cpp"
+rem  wT6_02 -- HandlePrepareForModeAction @0x827480D8, the per-event arming handler and
+rem  the ONLY non-debug writer of mbPlayingShowtimeMode (+0x717DD).
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_02.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficMiscRuntimeClasses.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficFuzzyLogicBehaviours.cpp"
 echo "%SRC%\SharedClasses\Traffic\BrnTrafficFuzzyEnvelopeSet.cpp"
