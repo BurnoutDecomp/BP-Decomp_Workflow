@@ -189,6 +189,14 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  SIBLING SPLIT of GameBridgeGUIToX.cpp -- BridgeGuiToSound @0x823C0A58 MOVED to its own
   rem  TU so it mounts without the parent TU's six un-homed symbols. Caller: the C4 spine.
   echo "%SRC%\GameSource\Game\GameBridgeGUIToX_Sound.cpp"
+  rem  SIBLING SPLIT of GameBridgeGameStateToX.cpp -- BridgeGameStateToSound @0x823CDE50 MOVED
+  rem  to its own TU, phase C4b: DoUpdate_Sound @0x823DCEC0 is its only console caller and the
+  rem  in-game sound frame now drives it every frame.
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_Sound.cpp"
+  rem  Replay pre-sim OUTPUT buffer IO -- Construct + the GetStatusInterface pair. Mounted
+  rem  for phase C4b: DoUpdate_Sound references the accessor for its replay-status install
+  rem  seam even while the PC passes a null buffer.
+  echo "%SRC%\GameSource\Replays\BrnReplayModuleIO.cpp"
   rem ---- camera wave (2026-08-01): the WORLD -> DIRECTOR seam. BridgeWorldToDirector --
   rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
   rem ---- without it every camera VehicleRef resolves to a zero transform.             --
