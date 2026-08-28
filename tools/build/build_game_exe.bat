@@ -181,6 +181,14 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  none of them from BridgeGuiToGameState), and TelemetryData::AddParameter has no home
   rem  at all. The function was MOVED, not copied, so folding it back later is a delete.
   echo "%SRC%\GameSource\Game\GameBridgeGUIToX_GameState.cpp"
+  rem ---- faithful-audio phase C4 2026-08-28: the sound spine bridges go LIVE. ----------------
+  rem  GameBridgeSoundToX.cpp carries BridgeSoundToTraining @0x823C63C0 and BridgeSoundToWorld
+  rem  @0x823CDC98 -- both called every frame now by the C4 spine wiring in
+  rem  BrnGameMainFlowStates.cpp -- DoPreUpdate_Sound plus DriveWorldUpdateFrame staging.
+  echo "%SRC%\GameSource\Game\GameBridgeSoundToX.cpp"
+  rem  SIBLING SPLIT of GameBridgeGUIToX.cpp -- BridgeGuiToSound @0x823C0A58 MOVED to its own
+  rem  TU so it mounts without the parent TU's six un-homed symbols. Caller: the C4 spine.
+  echo "%SRC%\GameSource\Game\GameBridgeGUIToX_Sound.cpp"
   rem ---- camera wave (2026-08-01): the WORLD -> DIRECTOR seam. BridgeWorldToDirector --
   rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
   rem ---- without it every camera VehicleRef resolves to a zero transform.             --
