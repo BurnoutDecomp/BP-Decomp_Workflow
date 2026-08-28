@@ -356,7 +356,23 @@ def port_pixels(header, body):
                 rows = [img[(y * iw) * bpb:(y * iw + bw) * bpb] for y in range(bh)]
             else:
                 img, iw, ih = tails[face]
-                ox, oy = tail_slot(lvl - base, w, h)
+                if lvl == 0:
+                    # FULLY PACKED texture (packed_mip_base == 0, i.e. min(w,h) <= 16):
+                    # level 0 IS the whole texture, and it sits at the tile ORIGIN -- it is
+                    # not a packed mip nested around a larger sibling, so the tail-slot table
+                    # (which starts at (0,4)/(4,0) blocks == 16 texels, the offset the FIRST
+                    # PACKED mip takes when it is nested behind an unpacked level) does not
+                    # apply to it. Reading it at (0,4) fetched empty tile rows: measured on
+                    # the stock ARTIST GUITEXTURES.BIN, both fully packed entries
+                    # (boostbarmask 256x8 = BFF04731, and B3E5FAA5 32x8) have their ONLY
+                    # non-zero block rows at 0..1 and every other row of the 64x32-block tile
+                    # is zero, so (0,4) ported 2048 bytes of ZEROS. In game that made the
+                    # boost bar's mask texture entirely black, and because the GUI mask
+                    # samples through a COLOUR modulate every masked boost-bar draw
+                    # (background strip, fire body, fire overlay) rendered pure black.
+                    ox, oy = 0, 0
+                else:
+                    ox, oy = tail_slot(lvl - base, w, h)
                 ox = min(ox, max(0, iw - bw))
                 oy = min(oy, max(0, ih - bh))
                 rows = [img[((oy + y) * iw + ox) * bpb:((oy + y) * iw + ox + bw) * bpb]
