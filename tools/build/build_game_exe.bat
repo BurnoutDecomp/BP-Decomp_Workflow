@@ -3586,6 +3586,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  CgsGainArrayPlugin.cpp -- the game-side JGA0 gain-array plug-in; its three
   rem  callbacks are bodied and its descriptor registers with the RWAC pass.
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\GainArray\CgsGainArrayPlugin.cpp"
+  rem  GinsuPlayer.cpp -- the granular engine-sound synthesizer Gns0: the car-engine
+  rem  audio heart. Source-stage plug-in plus its GinsuSynthData content decoder.
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\Ginsu\GinsuPlayer.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsSnrResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Splicer\CgsSplicerFactory.cpp"
   rem  AEMS-cascade slice 3: the SplicerFactory dtor TU + the SpliceManager home -- the
