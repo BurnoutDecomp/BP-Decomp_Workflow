@@ -141,8 +141,8 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem ---- AEMS-cascade wave 2026-08-28: the RWAC factory registration pass plug-ins. ---------
   rem  GenericRwacFactory::GenericRwacFactory @0x826C17A0 registers every runtime plug-in
   rem  descriptor in console order -- these vendor TUs carry the getters plus the plug-in
-  rem  bodies. Absent vendor homes -- Dac, GainFader, LowPassButterworth, SndPlayer1, SubMix
-  rem  and the three custom game descriptors -- are FLAG-skipped at the registration site.
+  rem  bodies. Absent vendor homes -- SndPlayer1 and SubMix -- and the three custom game
+  rem  descriptors are FLAG-skipped at the registration site.
   echo "%VEN%\renderware\src\rw\audio\core\AiffWriter.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Iir2.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\BandPassIir2.cpp"
@@ -156,6 +156,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\renderware\src\rw\audio\core\plugins\HighPassButterworth.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\CompressorLimiter1.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\plugins\Limiter1.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\LowPassButterworth.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\plugins\Pan2D.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\plugins\Pan2D1.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\plugins\Pan2D1_embed_check.cpp"
@@ -183,6 +184,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  CpuLoadBalancer.cpp -- the CPU-load governor the Dac drives every mix frame
   echo "%VEN%\renderware\src\rw\audio\core\CpuLoadBalancer.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\plugins\Dac.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\GainFader.cpp"
   rem  SinePlayer.cpp -- the debug sine source plug-in. It carried the phase-D audible
   rem  probe, since removed after the ear confirmation
   echo "%VEN%\renderware\src\rw\audio\core\plugins\SinePlayer.cpp"
