@@ -4572,12 +4572,12 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnNorthIndicator.cpp"
   echo "%SRC%\SharedClasses\Gui\SatNav\BrnMapUtils.cpp"
   rem ---- stunt-race UI wave 2026-08-27: the MainMapComponent bodies the PRE_FLY_BY ----
-  rem ---- mount executes (Construct/Prepare/RecvEvent + the zoom tables), plus the  ----
-  rem ---- FLAG'd gate TU covering its still-unreconstructed siblings (Update/SetZoom/----
-  rem ---- the GuiCache landmark faces/ConstructPatternLiveryList/MapManager::RecvEvent).----
+  rem ---- mount executes. [map arm 2026-08-27, RE-APPLIED x2 -- keep these three     ----
+  rem ---- lines through merges] BrnMainMapLinkGates.cpp is DELETED from the tree:    ----
+  rem ---- all ten of its stand-ins landed real bodies (MainMap Update/SetZoom +      ----
+  rem ---- helpers; the GuiCache landmark/tracker surface in BrnGuiCache_wMap.cpp;    ----
+  rem ---- MapManager in its own mounted TU; the livery builders in BrnDerivedCars.h).----
   echo "%SRC%\GameSource\Gui\SatNav\BrnMainMap.cpp"
-  rem [map wave 2026-08-27, b5-decomp 8fc3718a] BrnMainMapLinkGates.cpp is DELETED (all ten
-  rem DELETE-WHENs satisfied); its two real homes mount in its place.
   echo "%SRC%\GameSource\Gui\SatNav\BrnMapManager.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wMap.cpp"
   rem ---- H3b link closure: the Im2d mask/boost command writers TU, the GuiCache ----
