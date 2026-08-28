@@ -175,9 +175,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\renderware\src\rw\audio\core\DelayFilter.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\DelayLine.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\SubMixConnector.cpp"
-  rem  SubMix_statics.cpp -- the two SubMix registry statics the Send connect-by-name path
-  rem  walks; the SubMix plug-in itself has no vendor TU yet, this is its minimal home.
-  echo "%VEN%\renderware\src\rw\audio\core\SubMix_statics.cpp"
+  rem  SubMix.cpp -- the real SubMix plug-in home: the named mix bus, its by-name
+  rem  registry statics, and the deferred create handler that pushes into them.
+  echo "%VEN%\renderware\src\rw\audio\core\SubMix.cpp"
   rem  Mixer.cpp -- the mix executive: the per-audio-frame voice walk plus the typed
   rem  StackAllocator seeding. Dac.cpp -- the engine output plug-in, phase D
   echo "%VEN%\renderware\src\rw\audio\core\Mixer.cpp"
@@ -3583,6 +3583,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\CgsContentSpec.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\Streaming\internal\sndplayer1.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\Streaming\internal\sndplayer1shared.cpp"
+  rem  CgsGainArrayPlugin.cpp -- the game-side JGA0 gain-array plug-in; its three
+  rem  callbacks are bodied and its descriptor registers with the RWAC pass.
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\GainArray\CgsGainArrayPlugin.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsSnrResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Splicer\CgsSplicerFactory.cpp"
   rem  AEMS-cascade slice 3: the SplicerFactory dtor TU + the SpliceManager home -- the
