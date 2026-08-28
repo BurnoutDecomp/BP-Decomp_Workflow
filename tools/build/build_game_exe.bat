@@ -2756,6 +2756,31 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSphericalRotationController.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeUpdate.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeICEController.cpp"
+  rem  ---- CRASH-CAMERA WAVE (2026-08-29): THE TWO IMPACT CONTROLLERS ARE NOW LINKABLE. ----
+  rem  BehaviourBystanderCamImpactControllers.cpp is a PARTFILE of
+  rem  Camera\Behaviours\BehaviourBystanderCam.cpp, carrying ImpactSlomoController::Update
+  rem  @0x82227230 (THE CRASH SLOW MOTION -- it writes Camera::mEffects.mfSimTimeScale =
+  rem  0.2857143 for a 2.0 s burst) and ImpactShakeController::Update @0x82243720.
+  rem  ==> IT IS NOT THE PARENT TU. Do NOT "simplify" this by mounting BehaviourBystanderCam.cpp
+  rem  instead. MEASURED, not assumed: that TU reaches every foreign object through a
+  rem  `namespace detail` layer of ~30 free-function shims that are DECLARED AND NEVER DEFINED
+  rem  anywhere in the tree, so mounting it opens ~28 unresolved externals -- and the one that
+  rem  carries the whole feature (Camera_SetTimeScale) is the ONLY observable effect of the
+  rem  slow-motion controller, so a quiet stub for it would link green and produce NO SLOW
+  rem  MOTION. The partfile is written against the real types instead (Camera / AllVehicleData
+  rem  / VehicleTracker / VehicleRef / CameraImpactEffect / CameraShake).
+  rem  MEASURED mount cost: its only project-specific callees are CameraShake::Update
+  rem  (BrnCameraShakeUpdate.cpp, mounted two lines up), CameraImpactEffect::RegisterImpact
+  rem  (BrnCameraImpactEffect.cpp) and Utils::GetZoomFromFOVDegs (CameraUtils.cpp) -- all three
+  rem  already on this list; AllVehicleData::GetPlayer and VehicleRef::Get are header inlines.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourBystanderCamImpactControllers.cpp"
+  rem  ... and its ONE unresolved external: CameraImpactEffect::RegisterImpact @0x821F3648.
+  rem  Split into its own partfile for the SAME reason BrnCameraShakeUpdate.cpp exists -- the
+  rem  parent BrnCameraImpactEffect.cpp carries three explicit Parameters::Serialise<S>
+  rem  instantiations over DebugMenuSerialiser / TextFile{Read,Write}Serialiser, none of which
+  rem  is on this list. MEASURED: with the partfile the link is clean; the partfile includes
+  rem  nothing but its own header.
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraImpactEffectRegisterImpact.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnBoostShakeController.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSmoothMover.cpp"
   rem  Camera::Utils::Tweaker::Construct @0x821F8588 ONLY -- file-split out of
