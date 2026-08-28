@@ -183,6 +183,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  CpuLoadBalancer.cpp -- the CPU-load governor the Dac drives every mix frame
   echo "%VEN%\renderware\src\rw\audio\core\CpuLoadBalancer.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\plugins\Dac.cpp"
+  rem  SinePlayer.cpp -- the debug sine source plug-in. It carried the phase-D audible
+  rem  probe, since removed after the ear confirmation
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\SinePlayer.cpp"
   rem  AEMS-cascade slice 2: the AemsRWSampleFactory MI home + its ctor and the Snd9 AEMS
   rem  layer -- AemsFactory::Create at stage 3 needs all three.
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\AEMS\CgsAemsInterfaceImplementation.cpp"
