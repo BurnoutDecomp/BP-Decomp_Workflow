@@ -105,6 +105,11 @@ param(
                                  #   ⭐ A COMMA-SEPARATED LIST, so a run can pause and resume
                                  #   REPEATEDLY ("20,40,60") -- one tap per entry, each latched.
                                  #   A single number still works and means one cycle.
+  [ValidateSet('map','driver')]
+  [string]$PauseTarget = 'map',  # which offline pause -PauseAt taps: 'map' = action 46 GUI_BACK
+                                 #   (CN_MAP_MAIN, whose base half is parked so nothing draws),
+                                 #   'driver' = action 45 GUI_START (CN_D_DETAIL, the Driver
+                                 #   Details screen -- the console's START-button pause).
   [string]$UnpauseAt   = "",     # opt IN: seconds after DRIVING to TAP Stop (action 50 GUI_CANCEL,
                                  #   i.e. Escape / pad-B) to come back out of the map. Same list
                                  #   form; entry i must be > PauseAt entry i, and repeated cycles
@@ -591,6 +596,15 @@ $evPauseMap = New-Object System.Threading.EventWaitHandle($false, [System.Thread
 #   the old id -- this exit arm was written three days before the repair and nothing re-ran it.
 $evStop = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_Stop")
 
+# ⭐ THE OTHER OFFLINE PAUSE. The console has TWO, and they are different screens:
+#   action 46 GUI_BACK  -> InGame::PauseGame(true, FALSE) -> OpenMainMap()       -> CN_MAP_MAIN
+#   action 45 GUI_START -> InGame::PauseGame(true, TRUE)  -> OpenDriverDetails() -> CN_D_DETAIL
+# Both post the same deactivate pair, so both stop the sim; only the screen differs.
+# -PauseTarget picks which one -PauseAt taps. 'driver' is the START button, i.e. what a
+# player actually presses to pause, and the screen that DRAWS (CN_MAP_MAIN's base half is
+# still parked).
+$evStart = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_Start")
+
 # ⭐ THE PAUSE/RESUME SCHEDULES. -PauseAt / -UnpauseAt are COMMA-SEPARATED second marks on the
 # DRIVING time base, so one run can exercise the pause REPEATEDLY -- which is the only way to
 # show a resume is durable rather than lucky once. Entries are sorted and each fires once.
@@ -929,8 +943,12 @@ while ($true) {
     while ($script:pauseNext -lt $script:pauseTimes.Count -and
            $sinceDrivingP -ge $script:pauseTimes[$script:pauseNext]) {
       $script:pauseNext++
-      $evPauseMap.Set() | Out-Null
-      Write-Host ("[flow] PAUSE tap #{0} (action 46) at DRIVING+{1:f1}s" -f $script:pauseNext, $sinceDrivingP)
+      if ($PauseTarget -eq 'driver') { $evStart.Set()    | Out-Null }
+      else                           { $evPauseMap.Set() | Out-Null }
+      Write-Host ("[flow] PAUSE tap #{0} ({1}) at DRIVING+{2:f1}s" -f $script:pauseNext,
+                  $(if ($PauseTarget -eq 'driver') { "action 45 GUI_START -> CN_D_DETAIL" }
+                    else                           { "action 46 GUI_BACK -> CN_MAP_MAIN" }),
+                  $sinceDrivingP)
     }
     while ($script:unpauseNext -lt $script:unpauseTimes.Count -and
            $sinceDrivingP -ge $script:unpauseTimes[$script:unpauseNext]) {
