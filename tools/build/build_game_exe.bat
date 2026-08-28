@@ -164,6 +164,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\renderware\src\rw\audio\core\Send.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Send_wL_01.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\MixKernels.cpp"
+  rem  Delay.cpp + RawPuller2.cpp -- the ICF-shared GetSize bodies three Iir2 records and
+  rem  the Gain record dispatch through (descriptor-record wave).
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\Delay.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\RawPuller2.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\DelayFilter.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\DelayLine.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\SubMixConnector.cpp"
   rem  SubMix_statics.cpp -- the two SubMix registry statics the Send connect-by-name path
