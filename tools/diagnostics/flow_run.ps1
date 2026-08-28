@@ -105,9 +105,11 @@ param(
                                  #   ⭐ A COMMA-SEPARATED LIST, so a run can pause and resume
                                  #   REPEATEDLY ("20,40,60") -- one tap per entry, each latched.
                                  #   A single number still works and means one cycle.
-  [string]$UnpauseAt   = "",     # opt IN: seconds after DRIVING to TAP Accept (action 45) to come
-                                 #   back out of the map. Same list form; entry i must be > PauseAt
-                                 #   entry i, and repeated cycles need one entry per pause.
+  [string]$UnpauseAt   = "",     # opt IN: seconds after DRIVING to TAP Stop (action 50 GUI_CANCEL,
+                                 #   i.e. Escape / pad-B) to come back out of the map. Same list
+                                 #   form; entry i must be > PauseAt entry i, and repeated cycles
+                                 #   need one entry per pause. ⛔ It taps Stop, NOT Accept -- the
+                                 #   map's exit arm takes 45/50 only. See the $evStop banner.
   [switch]$MotionProbe,          # opt IN to the [motion] pose/velocity trace (BRN_MOTION_PROBE=1)
   [int]$TriCacheProbe  = 0,      # opt IN to the [tricache] world-collision cache trace; the VALUE
                                  # is the sampling period in frames (1 => the game's default 60).
@@ -573,6 +575,22 @@ $evAccept = New-Object System.Threading.EventWaitHandle($false, [System.Threadin
 # a channel never Set() is a key never pressed.
 $evPauseMap = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_PauseMap")
 
+# ⛔⛔ THE RESUME CHANNEL IS *Stop*, NOT *Accept* -- and it was Accept until 2026-08-28, which is
+# why -UnpauseAt silently stopped working and every -PauseAt run since the input-vocabulary
+# repair has been a ONE-WAY pause that ran to the harness timeout still frozen.
+#   The map's own exit arm is CrashNavMapMain::HandleCrashNavInputPressed @0x824CCAE8, whose two
+#   cases are 0x2D (45 GUI_START) and 0x32 (50 GUI_CANCEL) -- it deliberately does NOT take
+#   49 GUI_SELECT, because on the map screen A/Select PICKS AN ICON. That arm is faithful and is
+#   not the bug.
+#   The bug was on this side: b5-decomp d91d7949 ("input vocabulary repair") moved the harness's
+#   Accept channel from action 45 to its correct 49 GUI_SELECT, and this block kept tapping
+#   Accept. So the resume tap became a 49 the map is written to ignore. The channel lookup in
+#   CgsInputPadsPC is BY ACTION ID, so the fix is to tap the channel that carries 50 -- Stop
+#   (Escape / pad-B), the canonical back-out. Tapping Start (45) exits too; Accept (49) never will.
+# ⭐ THE LESSON, again: a vocabulary repair is a repair of a SHARED table. Grep every consumer of
+#   the old id -- this exit arm was written three days before the repair and nothing re-ran it.
+$evStop = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_Stop")
+
 # ⭐ THE PAUSE/RESUME SCHEDULES. -PauseAt / -UnpauseAt are COMMA-SEPARATED second marks on the
 # DRIVING time base, so one run can exercise the pause REPEATEDLY -- which is the only way to
 # show a resume is durable rather than lucky once. Entries are sorted and each fires once.
@@ -748,7 +766,16 @@ $cues = @(
   #   BEFORE car select at 4458 -- so promoting on it unconditionally would hold the throttle
   #   down during boot and car select. It is only the gameplay entry when there is no car select.
   @('newprof',  'isNewProfile=0'),
-  @('ingame',   'InGame: OnEnter -> GUI FSM stage 5')
+  @('ingame',   'InGame: OnEnter -> GUI FSM stage 5'),
+  # ⭐⭐ 2026-08-28 (returning-player wave). The START-OF-GAME JUNKYARD ENTRY actually
+  #   COMPLETING. Before this wave it could only complete on a NEW profile, so a returning boot
+  #   never reached car select and the 'newprof'+'ingame' fallback above was the only way to
+  #   DRIVING. With the entry fixed, a returning boot goes junkyard -> car select -> accept ->
+  #   exit, exactly like a fresh one -- and the fallback would then FIRE FIRST (at 'ingame',
+  #   ~3500 log lines before car select), stop the Accept pump, and park the run at car select
+  #   for ever with the throttle held. This cue is what tells the two apart: it is printed by
+  #   CarSelectManager::StartTransitionInState, i.e. the moment the entry completes.
+  @('jystart',  '=== CarSelectManager: Transition In \[Start\]')
 )
 
 # ⭐⭐ THE EVENT-START LADDER (2026-08-26, stunt-races wave D).  Five RUNGS between "the car is
@@ -859,14 +886,29 @@ while ($true) {
     }
 
     if ($phase -eq 'BOOT'      -and $marks.ContainsKey('flyby'))  { $phase = 'FLYBY' }
-    if ($phase -eq 'FLYBY'     -and $marks.ContainsKey('carsel')) { $phase = 'CARSELECT'; $acceptGap = 3.0; $lastAccept = Get-Date }
+    # ⭐ 2026-08-28: BOOT may go straight to CARSELECT. The fresh path is unaffected -- 'flyby'
+    #   fires thousands of lines before 'carsel' there, so BOOT has always become FLYBY first --
+    #   but a RETURNING boot has no new-profile intro and therefore no flyby, while (since the
+    #   junkyard-entry fix) it does reach car select. Without this arm its car-select screen
+    #   would never promote and the Accept pump would never switch to the 3 s cadence.
+    if (($phase -eq 'BOOT' -or $phase -eq 'FLYBY') -and $marks.ContainsKey('carsel')) { $phase = 'CARSELECT'; $acceptGap = 3.0; $lastAccept = Get-Date }
     if ($phase -eq 'CARSELECT' -and $marks.ContainsKey('strfin')) { $phase = 'DRIVING'; $drivingAt = Get-Date }
-    # Returning-player promotion. Gated on BOTH 'newprof' (this boot found a profile) and 'ingame',
-    # so the fresh path's behaviour -- and every golden banked against it -- is bit-for-bit
-    # unchanged. Without this, -Drive is inert on any box that has ever saved a profile.
-    if ($phase -ne 'DRIVING' -and $marks.ContainsKey('newprof') -and $marks.ContainsKey('ingame')) {
+    # Returning-player promotion -- now a FALLBACK, not the normal path. Gated on 'newprof' (this
+    # boot found a profile) and 'ingame', so the fresh path's behaviour -- and every golden banked
+    # against it -- is bit-for-bit unchanged.
+    # ⛔⛔ AND ON 'jystart' BEING ABSENT (2026-08-28). Once the start-of-game junkyard entry
+    #   completes on a returning boot, the run owes the game an ACCEPT at car select, and the
+    #   Accept pump only runs in BOOT/CARSELECT -- so promoting to DRIVING at 'ingame' (which is
+    #   ~3500 log lines earlier) would silently park the run at car select with the throttle held,
+    #   the exact class of silent-no-op this block was added to fix in the first place.
+    # ⚠️ THE 5 s DWELL IS THE RACE GUARD, not politeness: 'ingame' and 'jystart' land ~20 log
+    #   lines apart, so a single poll can see the first and not yet the second. Waiting until
+    #   'ingame' is 5 s old before honouring the fallback makes the absence of 'jystart' mean
+    #   "the entry is not coming" rather than "the poll was early".
+    if ($phase -ne 'DRIVING' -and $marks.ContainsKey('newprof') -and $marks.ContainsKey('ingame') -and
+        (-not $marks.ContainsKey('jystart')) -and (($elapsed - $marks['ingame']) -ge 5.0)) {
       $phase = 'DRIVING'; $drivingAt = Get-Date
-      Write-Host "[flow] DRIVING via the RETURNING-PLAYER path (profile found; no car select)"
+      Write-Host "[flow] DRIVING via the RETURNING-PLAYER FALLBACK (profile found; no junkyard entry)"
     }
   }
 
@@ -879,7 +921,9 @@ while ($true) {
   # ---- the offline-pause taps (opt-in) -----------------------------------------------------
   # One TAP each, latched, on the same DRIVING time base the throttle uses. Pause opens the main
   # map (CrashNavMapMain::OnEnter -> GuiEventActivateCrashNav(false) -> ... -> mbSimPaused = 1);
-  # unpause taps Accept, which the map's Update turns into GO_BACK.
+  # unpause taps STOP (50 GUI_CANCEL == Escape / pad-B), which the map's Update turns into
+  # GO_BACK. ⛔ NOT Accept -- see the $evStop banner: Accept is 49 GUI_SELECT since d91d7949 and
+  # the map's exit arm takes only 45/50, so tapping Accept resumes NOTHING.
   if ($phase -eq 'DRIVING') {
     $sinceDrivingP = ((Get-Date) - $drivingAt).TotalSeconds
     while ($script:pauseNext -lt $script:pauseTimes.Count -and
@@ -891,8 +935,8 @@ while ($true) {
     while ($script:unpauseNext -lt $script:unpauseTimes.Count -and
            $sinceDrivingP -ge $script:unpauseTimes[$script:unpauseNext]) {
       $script:unpauseNext++
-      $evAccept.Set() | Out-Null
-      Write-Host ("[flow] UNPAUSE tap #{0} (action 45 / Accept) at DRIVING+{1:f1}s" -f $script:unpauseNext, $sinceDrivingP)
+      $evStop.Set() | Out-Null
+      Write-Host ("[flow] UNPAUSE tap #{0} (action 50 GUI_CANCEL / Stop) at DRIVING+{1:f1}s" -f $script:unpauseNext, $sinceDrivingP)
     }
   }
 
@@ -1018,7 +1062,7 @@ if ($null -ne $finalTxt) {
 $summary = @()
 $summary += ("RUNSTART {0}" -f $t0.ToString('o'))
 $summary += ("FRAMEDIR {0}" -f $(if ($framesOut) { $framesOut } else { "-" }))
-foreach ($k in @('flyby','carsel','livery','accept','exitjy','strfin')) {
+foreach ($k in @('flyby','newprof','ingame','jystart','carsel','livery','accept','exitjy','strfin')) {
   if ($marks.ContainsKey($k)) { $summary += ("{0,-8} {1,6:f1}s  frame={2}" -f $k, $marks[$k], $markFrame[$k]) }
   else                        { $summary += ("{0,-8} (never)" -f $k) }
 }
