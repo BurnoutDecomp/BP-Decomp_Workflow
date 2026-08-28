@@ -2592,6 +2592,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityM
 rem  wT6_02 -- HandlePrepareForModeAction @0x827480D8, the per-event arming handler and
 rem  the ONLY non-debug writer of mbPlayingShowtimeMode (+0x717DD).
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_02.cpp"
+rem  wT6_03 -- HandleExternalRequests @0x8274B660, PARTIAL. Only its action-23 arm is
+rem  real, but that arm is the ONLY caller of HandlePrepareForModeAction -- without this
+rem  TU /OPT:REF discards the showtime gate entirely.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_03.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficMiscRuntimeClasses.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficFuzzyLogicBehaviours.cpp"
 echo "%SRC%\SharedClasses\Traffic\BrnTrafficFuzzyEnvelopeSet.cpp"
@@ -3800,6 +3804,30 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  MomentSelector::Update, SelectBestMomentWithExclusion) are the GROUP F stubs at the foot
   rem  of DirectorLinkStubs.cpp, which is where the moment sub-system's DELETE-WHEN lives.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateRoaming.cpp"
+  rem  ---- CRASH-CAMERA WAVE (2026-08-29): THE CRASH CAMERA ITSELF. -------------------------
+  rem  BrnArbStateCrashing.cpp is E_STATE_CRASHING -- the state ArbStateRoaming ENTERS on a
+  rem  crash (it only TESTS crash mode). Its container slot was
+  rem  `class ArbStateCrashing : public ArbitratorState {};`, an empty shell whose inherited
+  rem  Update never wrote meState and had no exit edge, which is why every crash kept the
+  rem  ordinary chase camera and never slowed down.
+  rem  ==> IT IS ATOMIC WITH MainDirector::ProcessInputQueue's mbCrashActive leg, in the same
+  rem  b5-decomp commit. Never mount one without the other: the writer alone hands the first
+  rem  crash to the shell and freezes the camera for the rest of the session.
+  rem  BehaviourSpirallingDeathcam.cpp comes with it: the crash camera allocates the
+  rem  spiralling deathcam when the player has been totalled, so its SetParameters /
+  rem  Start / Parameters::Construct all become live symbols. MEASURED mount cost: zero
+  rem  new unresolved -- that TU includes only its own header plus BrnLooker.h and
+  rem  BrnCameraShake.h, both header-inline.
+  rem  ??? BrnMomentBystanderSeesAction.cpp is deliberately NOT mounted with it, although
+  rem  ArbStateCrashing DOES register BYSTANDER_SEES_ACTION as one of its four crash
+  rem  moments. MEASURED: mounting it opens NINE unresolved externals of its own -- seven
+  rem  `detail::MomentSharedInfo_*` free-function shims that are declared and never
+  rem  defined, plus BehaviourParameterBank::GetBystanderCam{,Close}MomentParams. That is
+  rem  the same shim disease BehaviourBystanderCam.cpp has. Its ONE function this state
+  rem  needs (SetPerceivedDistanceModificationFactor) is trap-stubbed in
+  rem  DirectorLinkStubs.cpp GROUP F instead, with the DELETE-WHEN there.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCrashing.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourSpirallingDeathcam.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentSelector.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentController.cpp"
   rem ---- [momentcam] jump/stunt CUTAWAY-CAMERA wave, 2026-08-23 --------------------------
