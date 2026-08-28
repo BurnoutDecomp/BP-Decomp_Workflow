@@ -148,7 +148,9 @@ This is how the `boot-trace` goal (925 TUs, 21%) was produced. ~10 minutes end t
 ### 4.1 Prerequisites
 - A prepared Xenia copy set up for this. The path below is one contributor's box —
   substitute your own:
-  `C:\Logiciels\Xbox360\Xenia Burnout 5\Xenia Burnout5 - For Reverse\`
+  `D:\Emulation\Emulators\Xenia\Xenia Burnout 5 v6\`
+  ⚠️ CORRECTED 2026-08-28: the old `C:\Logiciels\Xbox360\...` path no longer exists.
+  (`Xenia Burnout5 v5` and `Xenia Debug` are older copies of the same setup.)
   - emulator: `xenia_burnout5.exe`
   - game: `Burnout_tcartwright\BURNOUT_X360_ARTIST.XEX`
   - config: `xenia-burnout5.config.toml`
@@ -178,7 +180,7 @@ Launch the XEX, let it boot, and **stop at the point you want to scope to**. The
 further you go, the larger the scope (window → loading → attract demo → menu → in-race).
 
 ```powershell
-$dir = "C:\Logiciels\Xbox360\Xenia Burnout 5\Xenia Burnout5 - For Reverse"
+$dir = "D:\Emulation\Emulators\Xenia\Xenia Burnout 5 v6"
 $p = Start-Process -FilePath (Join-Path $dir "xenia_burnout5.exe") `
      -ArgumentList "`"$(Join-Path $dir 'Burnout_tcartwright\BURNOUT_X360_ARTIST.XEX')`"" `
      -WorkingDirectory $dir -PassThru
