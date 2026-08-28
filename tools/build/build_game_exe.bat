@@ -4576,7 +4576,10 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- FLAG'd gate TU covering its still-unreconstructed siblings (Update/SetZoom/----
   rem ---- the GuiCache landmark faces/ConstructPatternLiveryList/MapManager::RecvEvent).----
   echo "%SRC%\GameSource\Gui\SatNav\BrnMainMap.cpp"
-  echo "%SRC%\GameSource\Gui\SatNav\BrnMainMapLinkGates.cpp"
+  rem [map wave 2026-08-27, b5-decomp 8fc3718a] BrnMainMapLinkGates.cpp is DELETED (all ten
+  rem DELETE-WHENs satisfied); its two real homes mount in its place.
+  echo "%SRC%\GameSource\Gui\SatNav\BrnMapManager.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wMap.cpp"
   rem ---- H3b link closure: the Im2d mask/boost command writers TU, the GuiCache ----
   rem ---- accessor legs the renderer/manager link against, and the progression   ----
   rem ---- event-record accessors.                                                ----
