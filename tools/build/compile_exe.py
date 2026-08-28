@@ -407,6 +407,55 @@ def acquire_build_lock(out_dir, timeout=3600):
         sys.stderr.write("[build-lock] acquired\n")
 
 
+def write_provenance(exe):
+    """Stamp <exe>.provenance.json beside a freshly linked exe.
+
+    ⛔ WHY THIS EXISTS. `build/game/Burnout_PC.exe` is a CONTESTED path. Waves build in
+    isolated shadow roots and stage their exe here, so the binary sitting at that path is
+    routinely SOMEONE ELSE'S TREE. On 2026-08-28 this bit three times in one day: a wave
+    found no exe at all and staged its own, two other waves then measured against it, and a
+    third had its exe silently replaced mid-session. A correct-looking measurement taken
+    against the wrong binary is the worst kind -- it is reproducible and not attributable.
+
+    Answering "which build produced this number?" was pure discipline (record the SHA256
+    before and after every run). Discipline does not scale across parallel waves, so record
+    it at the only moment it is known for certain: the link.
+
+    Best-effort by design -- never fail a good build over a stamp.
+    """
+    import datetime, hashlib, json, socket, subprocess as _sp
+    def _git(repo, *a):
+        try:
+            return _sp.run(["git", "-C", repo, *a], capture_output=True, text=True,
+                           timeout=15).stdout.strip() or None
+        except Exception:
+            return None
+    try:
+        h = hashlib.sha256()
+        with open(exe, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                h.update(chunk)
+        repo = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        sub = os.path.join(repo, "b5-decomp")
+        rec = {
+            "exe_sha256": h.hexdigest(),
+            "exe_mtime": datetime.datetime.now().isoformat(timespec="seconds"),
+            "built_from_root": repo,
+            "host": socket.gethostname(),
+            "parent_head": _git(repo, "rev-parse", "HEAD"),
+            "parent_dirty": bool(_git(repo, "status", "--porcelain")),
+            "b5_head": _git(sub, "rev-parse", "HEAD"),
+            "b5_dirty": bool(_git(sub, "status", "--porcelain")),
+        }
+        with open(exe + ".provenance.json", "w", encoding="utf-8") as fh:
+            json.dump(rec, fh, indent=2)
+        print(f"compile_exe: provenance -> {rec['exe_sha256'][:12]}  "
+              f"b5={(rec['b5_head'] or '?')[:8]}{'+dirty' if rec['b5_dirty'] else ''}  "
+              f"root={rec['built_from_root']}", flush=True)
+    except Exception as exc:
+        print(f"compile_exe: provenance stamp skipped ({exc})", flush=True)
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     tail = []
@@ -529,6 +578,7 @@ def main(argv=None):
                         fh.write(link_digest(objs, exe, tail))
                 except OSError:
                     pass
+                write_provenance(exe)
             else:
                 link_note = f"FAILED (exit {link_rc})"
                 try:

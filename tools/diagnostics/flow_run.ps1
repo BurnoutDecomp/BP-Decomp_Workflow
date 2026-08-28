@@ -237,6 +237,30 @@ while ($true) {
   Start-Sleep -Seconds 2
 }
 Start-Sleep -Seconds 1
+# ⭐ EXE PROVENANCE (2026-08-28). `build/game/Burnout_PC.exe` is a CONTESTED path: waves build in
+# isolated shadow roots and stage their exe here, so the binary at this path is routinely SOMEONE
+# ELSE'S TREE. That bit three times in one day -- a wave found no exe at all and staged its own, two
+# other waves then measured against it, and a third had its exe replaced mid-session. A measurement
+# taken against the wrong binary is the worst kind: reproducible and NOT attributable.
+# compile_exe.py now stamps <exe>.provenance.json at link time; print it so every run says, in its
+# own log, which build produced the numbers. No stamp = an exe nobody can vouch for -- say so rather
+# than staying silent about it.
+$provPath = "$exe.provenance.json"
+if (Test-Path $provPath) {
+  try {
+    $prov = Get-Content $provPath -Raw | ConvertFrom-Json
+    Write-Host ("[flow] exe {0}  b5={1}{2}  root={3}" -f `
+      $prov.exe_sha256.Substring(0,12), $prov.b5_head.Substring(0,8),
+      $(if ($prov.b5_dirty) { "+dirty" } else { "" }), $prov.built_from_root)
+    if ($prov.built_from_root -ne $root) {
+      Write-Host "[flow] ⚠ THIS EXE WAS BUILT IN ANOTHER TREE -- your numbers are not attributable to this checkout."
+    }
+  } catch { Write-Host "[flow] exe provenance unreadable: $provPath" }
+} else {
+  Write-Host "[flow] ⚠ exe has NO provenance stamp -- it predates stamping or was staged by hand."
+  Write-Host "[flow]   Rebuild before trusting any measurement from this run."
+}
+
 if (Test-Path $log) { Remove-Item $log -Force }
 
 # --- environment: a DEFAULT run, with every override explicitly cleared -------------------
