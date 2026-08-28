@@ -581,8 +581,9 @@ own** pass first, so you don't ship a known-divergent TU into review.
   races/duplicates that work. Leave the parent's ` M b5-decomp` pointer change and any
   `progress/` ledger churn uncommitted. (Deliberately editing a parent doc like this file when
   asked is fine — leave it uncommitted for the maintainer to commit.)
-  - ⛔⛔ **EXCEPTION — `tools/build/build_game_exe.bat` MOUNT LINES ARE PART OF YOUR CHANGE, SO
-    COMMIT THEM.** This rule exists for the *auto-reconciled* state (`progress/status.json`, the
+  - ⛔⛔ **EXCEPTION — BUILD CONFIGURATION AND ASSET-PORTER FIXES ARE PART OF YOUR CHANGE, SO
+    COMMIT THEM.** This covers `tools/build/build_game_exe.bat` **mount lines** and fixes to the
+    **asset porters** under `tools/assets/` that your b5 change depends on.** This rule exists for the *auto-reconciled* state (`progress/status.json`, the
     submodule pointer). A **mount** is neither: it is build configuration paired 1:1 with the
     b5-decomp commit it serves, nothing reconciles it, and leaving it out **takes the shared
     build red for everyone**. Measured: that happened THREE times in 24h on 2026-08-27/28 —
@@ -590,9 +591,16 @@ own** pass first, so you don't ship a known-divergent TU into review.
     `BrnProgressionManager` partfiles (the last unresolved external), and `BrnMapManager.cpp` /
     `BrnGuiCache_wMap.cpp` (paired with a *deletion*, so the tree did not even compile). Each
     cost hours and a later wave's time to rediscover.
-    ⭐ **A mount and its b5 commit are one atomic change.** Land the b5 commit, then commit the
-    parent with ONLY the `.bat` path staged: `git add tools/build/build_game_exe.bat`. Never
+    ⭐ **A mount (or a porter fix) and its b5 commit are one atomic change.** Land the b5 commit,
+    then commit the parent with ONLY that path staged — e.g.
+    `git add tools/build/build_game_exe.bat`, or `git add tools/assets/bundles/x360_tex.py`. Never
     `git add -A` in the parent — that sweeps the pointer and the ledger back in.
+    ⭐⭐ **Why porters count (measured 2026-08-28).** The boost bar rendered as an opaque black slab
+    because `x360_tex.py` read a fully-packed texture from the wrong tile slot, so `boostbarmask`
+    ported as 2048 bytes of zeros — and the same bug shipped `SMALL8X8WHITESQUARE` as pure BLACK.
+    The renderer fix alone was inert: until the porter lands, **every other contributor's
+    `build data` keeps emitting the dead asset**. Nothing reconciles `tools/assets/`, exactly as
+    nothing reconciles a mount.
     ⛔⛔ **NEVER edit a `.bat`/`.cmd` with `sed -i`, `tee`, or any Git-Bash tool that writes LF.**
     `.gitattributes` sets `eol=crlf`, so an LF rewrite hashes identically to the CRLF blob:
     **`git status` reports the file CLEAN while `cmd.exe` cannot parse it**, and the build dies in
