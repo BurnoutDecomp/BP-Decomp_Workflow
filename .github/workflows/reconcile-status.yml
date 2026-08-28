@@ -13,6 +13,8 @@ name: Reconcile status + submodule pointer
 #   3. cross-check the server's `done` set against the committed b5-decomp files
 #      (non-blocking integrity alarm),
 #   4. commit + push the regenerated status.json and the bumped pointer with the bot token.
+#   5. tell the public work server to fetch that committed snapshot and refresh
+#      its dashboard data, including the executable source list.
 #
 # Triggered on every b5-decomp commit: the notifier workflow in b5-decomp
 # (.github/workflows/notify-workflow.yml) fires a repository_dispatch carrying the new
@@ -116,3 +118,21 @@ jobs:
           Automated on a b5-decomp commit: status.json regenerated from the
           coordination server, submodule pointer bumped. No manual push required."
           git push
+
+      - name: Refresh public dashboard snapshot
+        env:
+          # The existing CI publisher credential is an admin worker token, so it
+          # is also authorised to call the server's durable, non-reset sync.
+          WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$WORK_TOKEN" ]; then
+            echo "WORK_PUBLISH_TOKEN is required to refresh the public dashboard."
+            exit 1
+          fi
+          curl --fail --show-error --silent --retry 3 --retry-delay 5 \
+            -X POST \
+            -H "X-Work-Token: $WORK_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"branch":"main","reset":false}' \
+            "${WORK_SERVER%/}/admin/sync"
