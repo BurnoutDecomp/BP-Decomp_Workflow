@@ -727,8 +727,16 @@ $cues = @(
   @('exitjy',   'action 4 -> ExitJunkyard'),
   @('strfin',   'signalling StreamingFinished'),
   # ⛔⛔ THE RETURNING-PLAYER PATH (2026-08-28). Profile saving landed on 2026-08-27, and the
-  #   moment a Profile.sav exists the game takes a DIFFERENT boot path: the intro and the whole
-  #   junkyard car-select flow are skipped and the player is dropped straight into free burn.
+  #   moment a Profile.sav exists the game takes a DIFFERENT boot path.
+  #   ⛔ CORRECTED 2026-08-28: an earlier version of this note said the junkyard flow is "skipped
+  #   by design". IT IS NOT -- that is the DEFECT, measured. The returning path ENTERS the junkyard
+  #   and never LEAVES it: the entry's completion gate is IsNewProfileIntroActive(), a
+  #   new-profile-only signal a returning boot never raises, so the exit reset never runs and
+  #   RaceCarEntityModule::mbInCarSelectScreen stays TRUE all run. That blocks BOTH ignition arms
+  #   of UpdateEngineState @0x822A4F50 (the console's own "the podium never cranks" rule), so the
+  #   engine never starts and no throttle can move the car. The owner's description of what they
+  #   saw -- "as if we controlled the car, but inside the junkyard, never moving" -- was LITERALLY
+  #   accurate. The cues below are still correct and still needed; only the explanation was wrong.
   #   MEASURED: on that path 'Entering Car Select' and 'signalling StreamingFinished' fire ZERO
   #   times, so the CARSELECT->DRIVING promotion below could never happen -- and because the
   #   throttle is gated on `$phase -eq 'DRIVING'`, **-Drive silently did nothing and the car sat
