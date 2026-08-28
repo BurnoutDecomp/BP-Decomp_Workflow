@@ -108,6 +108,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsCrashHandlerPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsHardwareSkuPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsAudioOutputPC.cpp"
+  rem  CgsDacOutputPC.cpp -- the phase-D engine-to-device bridge: the rw Dac plug-in's
+  rem  external fill callback standing in for the console XenonThread packet loop
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsDacOutputPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsMovieAudioPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsXboxPlatformPC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsXmaHardwarePC.cpp"
@@ -174,6 +177,12 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  SubMix_statics.cpp -- the two SubMix registry statics the Send connect-by-name path
   rem  walks; the SubMix plug-in itself has no vendor TU yet, this is its minimal home.
   echo "%VEN%\renderware\src\rw\audio\core\SubMix_statics.cpp"
+  rem  Mixer.cpp -- the mix executive: the per-audio-frame voice walk plus the typed
+  rem  StackAllocator seeding. Dac.cpp -- the engine output plug-in, phase D
+  echo "%VEN%\renderware\src\rw\audio\core\Mixer.cpp"
+  rem  CpuLoadBalancer.cpp -- the CPU-load governor the Dac drives every mix frame
+  echo "%VEN%\renderware\src\rw\audio\core\CpuLoadBalancer.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\Dac.cpp"
   rem  AEMS-cascade slice 2: the AemsRWSampleFactory MI home + its ctor and the Snd9 AEMS
   rem  layer -- AemsFactory::Create at stage 3 needs all three.
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\AEMS\CgsAemsInterfaceImplementation.cpp"
