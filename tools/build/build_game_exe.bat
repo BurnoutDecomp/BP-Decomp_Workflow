@@ -2555,6 +2555,10 @@ rem  = BridgeRaceCarModuleToTrafficModule_PreScene @0x827A50E0, THE activeHulls=
 rem  the sole producer priming the traffic input buffers with race-car state.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_05.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_06.cpp"
+rem  _wT1_07 -- SpawnShowtimeTraffic @0x82743038 (the showtime top-up UpdateDecisionFrame
+rem  calls in _wT1_06) plus its two spacing helpers IsParamTooClose @0x82726470 and
+rem  CountParamsOnSection @0x82723D10.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_07.cpp"
 rem  wave T2 driving traffic: generation (_wT2_01), param sim (_wT2_02/03), vehicle+scene
 rem  wire (_wT2_04), fuzzy behaviours, and the UpdateVehiclesJob family (the ship moved the
 rem  per-vehicle driving update into an EA::Jobs job: TrafficJobStub + UpdateVehiclesJob).
