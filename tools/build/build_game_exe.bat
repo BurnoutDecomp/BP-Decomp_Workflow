@@ -135,6 +135,40 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\renderware\src\rw\audio\core\XasDec.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Collection.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Unpack0.cpp"
+  rem ---- AEMS-cascade wave 2026-08-28: the RWAC factory registration pass plug-ins. ---------
+  rem  GenericRwacFactory::GenericRwacFactory @0x826C17A0 registers every runtime plug-in
+  rem  descriptor in console order -- these vendor TUs carry the getters plus the plug-in
+  rem  bodies. Absent vendor homes -- Dac, GainFader, LowPassButterworth, SndPlayer1, SubMix
+  rem  and the three custom game descriptors -- are FLAG-skipped at the registration site.
+  echo "%VEN%\renderware\src\rw\audio\core\AiffWriter.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Iir2.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\BandPassIir2.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\HighPassIir2.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\HighShelfIir2.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\LowPassIir2.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\LowShelfIir2.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\PeakingIir2.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Gain.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Butterworth.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\HighPassButterworth.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\CompressorLimiter1.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\Limiter1.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\Pan2D.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\Pan2D1.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\Pan2D1_embed_check.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\Pause.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Rechannel.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Resample.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\ReverbFilters.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\ReverbModel1.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Send.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\Send_wL_01.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\MixKernels.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\DelayLine.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\SubMixConnector.cpp"
+  rem  SubMix_statics.cpp -- the two SubMix registry statics the Send connect-by-name path
+  rem  walks; the SubMix plug-in itself has no vendor TU yet, this is its minimal home.
+  echo "%VEN%\renderware\src\rw\audio\core\SubMix_statics.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsStreamHeadersPC.cpp"
   echo "%SRC%\GameShared\GameClasses\Core\CgsStringUtils.cpp"
   echo "%SRC%\GameShared\GameClasses\Core\CgsAssert.cpp"
