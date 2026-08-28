@@ -3567,6 +3567,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Plugins\Streaming\internal\sndplayer1shared.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsSnrResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\Splicer\CgsSplicerFactory.cpp"
+  rem  AEMS-cascade slice 3: the SplicerFactory dtor TU + the SpliceManager home -- the
+  rem  stage-3 create [3/3] constructs the trailing-arena manager.
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\Splicer\CgsSplicerFactoryDtor.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\Splicer\SpliceManager.cpp"
   echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysSchemaResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\System\AttribSys\CgsAttribSysVaultResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\World\Resources\CgsWorldPainter2DResourceType.cpp"
