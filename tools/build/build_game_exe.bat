@@ -169,6 +169,12 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  SubMix_statics.cpp -- the two SubMix registry statics the Send connect-by-name path
   rem  walks; the SubMix plug-in itself has no vendor TU yet, this is its minimal home.
   echo "%VEN%\renderware\src\rw\audio\core\SubMix_statics.cpp"
+  rem  AEMS-cascade slice 2: the AemsRWSampleFactory MI home + its ctor and the Snd9 AEMS
+  rem  layer -- AemsFactory::Create at stage 3 needs all three.
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\AEMS\CgsAemsInterfaceImplementation.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Playback\AEMS\CgsAemsInterfaceImplementationFactoryDtor.cpp"
+  echo "%SRC%\SDKs\EATech\include\snd\sndaems.cpp"
+  echo "%SRC%\SDKs\EATech\include\snd\sndaems_linkclosure.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsStreamHeadersPC.cpp"
   echo "%SRC%\GameShared\GameClasses\Core\CgsStringUtils.cpp"
   echo "%SRC%\GameShared\GameClasses\Core\CgsAssert.cpp"
