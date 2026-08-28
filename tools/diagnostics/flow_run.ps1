@@ -184,7 +184,17 @@ $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $exe  = Join-Path $root "build\game\Burnout_PC.exe"
 $log  = Join-Path $root "build\game\BrnGame.log"
 if ($OutDir   -eq "") { $OutDir   = Join-Path $root ("scratch\flow_run\" + (Get-Date).ToString('yyyyMMdd_HHmmss')) }
-if ($FrameDir -eq "") { $FrameDir = Join-Path $root "scratch\flow_frames" }
+# ⛔ PER-RUN BY DEFAULT (2026-08-29). This used to default to a SHARED scratch\flow_frames,
+# which the block further down EMPTIES at the start of every run -- so each run destroyed the
+# previous run's evidence. Measured: a wave produced 420 frames proving a slow-motion result and
+# the next run wiped them; only the two artefacts it had copied out by hand survived, and it had
+# to say so in its own report.
+# ⭐ The emptying itself is CORRECT and stays: a stale bitmap outranks a fresh one by name, and a
+# mixed directory once let a frame gate score four stale frames out of six. The fix is not to stop
+# clearing, it is to stop SHARING -- a fresh per-run directory is empty by construction, so both
+# properties hold at once, and the frames land beside that run's own log, summary and marks.
+# Disk stays bounded because dumping is opt-in (-Frames): a default run writes none.
+if ($FrameDir -eq "") { $FrameDir = Join-Path $OutDir "frames" }
 
 if (-not (Test-Path $exe)) { Write-Host "[flow] FAIL: no exe at $exe -- build first."; exit 1 }
 if (Test-Path $OutDir) { Remove-Item -Recurse -Force $OutDir }
