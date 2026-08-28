@@ -151,6 +151,41 @@ def bnd2_platform(path):
     return None
 
 
+def missing_mounts():
+    """Mounted TUs in build_game_exe.bat that do not exist on disk.
+
+    ⛔ WHY. On 2026-08-28 the parent working copy went 46 commits stale while still
+    mounting SubMix_statics.cpp, a file that had been DELETED from b5-decomp. Anyone
+    building from the parent got C1083 (and then LNK2019) partway through a long
+    compile -- and it reads as "my change broke it", because the error names a vendor
+    file you never touched. A wave lost time to exactly that.
+
+    A mount is a promise that a path exists. Checking 1,955 promises costs
+    milliseconds; discovering one is broken costs a build. Cheap, decisive, and it
+    names the file instead of leaving cl to.
+    """
+    bat = os.path.join(TOOLS_BUILD, "build_game_exe.bat")
+    roots = {"%SRC%": os.path.join(REPO, "b5-decomp", "src"),
+             "%VEN%": os.path.join(REPO, "b5-decomp", "vendor")}
+    out = []
+    try:
+        text = open(bat, encoding="utf-8", errors="replace").read()
+    except OSError:
+        return out
+    for line in text.splitlines():
+        s = line.strip()
+        if not s.lower().startswith("echo ") or s.count(chr(34)) < 2:
+            continue
+        tok = s.split(chr(34))[1]
+        for key, base in roots.items():
+            if tok.startswith(key + chr(92)):
+                rel = tok[len(key) + 1:].replace(chr(92), os.sep)
+                if not os.path.exists(os.path.join(base, rel)):
+                    out.append(tok)
+                break
+    return out
+
+
 def exe_running():
     """Is ANY Burnout_PC.exe running anywhere on the box?
 
@@ -271,6 +306,12 @@ def cmd_doctor(cfg, args):
     else:
         r.row("fail", "XAudio2 redist missing (vendor/xaudio2redist) -- the audio backend "
                       "includes its header and ships its DLL", "exe", "build xaudio2")
+    gone = missing_mounts()
+    if gone:
+        r.row("fail", f"{len(gone)} mounted TU(s) missing on disk (first: {gone[0]})",
+              "exe", "stale build_game_exe.bat -- fetch the parent and re-sync the mount list")
+    else:
+        r.row("ok", "every mounted TU exists on disk")
     if exe_locked():
         r.row("warn", f"{EXE} is LOCKED -- the link would fail with LNK1104; "
                       "close the game running out of THIS tree before `build exe`")
@@ -452,6 +493,17 @@ def step_xaudio2(cfg, args, dry=False):
 
 
 def step_exe(cfg, args, dry=False):
+    gone = missing_mounts()
+    if gone:
+        print(f"ERROR: {len(gone)} mounted TU(s) do not exist on disk -- the compile would "
+              "fail with C1083 partway through:")
+        for g in gone[:15]:
+            print(f"         {g}")
+        if len(gone) > 15:
+            print(f"         ... and {len(gone) - 15} more")
+        print("       Usually a STALE build_game_exe.bat: a file was deleted or renamed in "
+              "b5-decomp and the mount was not updated. Fetch the parent and re-sync.")
+        return 2
     if exe_locked():
         print(f"ERROR: {EXE} is LOCKED -- the link would fail with LNK1104. "
               "Close the game running out of THIS tree first.")
