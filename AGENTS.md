@@ -581,6 +581,15 @@ own** pass first, so you don't ship a known-divergent TU into review.
   races/duplicates that work. Leave the parent's ` M b5-decomp` pointer change and any
   `progress/` ledger churn uncommitted. (Deliberately editing a parent doc like this file when
   asked is fine — leave it uncommitted for the maintainer to commit.)
+  - ⛔⛔ **FETCH THE PARENT TOO — `git fetch origin` inside `b5-decomp` IS NOT ENOUGH.** The mounts
+    live in the **parent** repo (`tools/build/build_game_exe.bat`); the code lives in the submodule.
+    A stale parent checkout therefore produces **unresolved externals for code that is perfectly
+    fine**, and it looks exactly like someone else broke the build.
+    Measured 2026-08-28: two separate waves reported "`dev` does not link, 22-24 unresolved externals
+    in the sound cascade" and one relayed it onward as a real outage. **It was neither** — the parent
+    was 25 commits behind and every one of those mounts was already on `origin/main`.
+    ⇒ Before diagnosing ANY link failure: `git fetch origin` in the parent, check
+    `git rev-list --count HEAD..origin/main`, and only then believe the symbol list.
   - ⛔⛔ **EXCEPTION — BUILD CONFIGURATION AND ASSET-PORTER FIXES ARE PART OF YOUR CHANGE, SO
     COMMIT THEM.** This covers `tools/build/build_game_exe.bat` **mount lines** and fixes to the
     **asset porters** under `tools/assets/` that your b5 change depends on.** This rule exists for the *auto-reconciled* state (`progress/status.json`, the
