@@ -2485,11 +2485,15 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityM
 rem  wave T2 driving traffic: generation (_wT2_01), param sim (_wT2_02/03), vehicle+scene
 rem  wire (_wT2_04), fuzzy behaviours, and the UpdateVehiclesJob family (the ship moved the
 rem  per-vehicle driving update into an EA::Jobs job: TrafficJobStub + UpdateVehiclesJob).
+rem  _wT2_06 = THE CRASH SURFACE: UpdateParams_BuildListOfCrashingThings (the shared
+rem  producer) plus its two consumers, TryAvoidCrashing (traffic SWERVES) and
+rem  TryStartSympatheticCrashing (chain-reaction crashes). _wT2_02 calls all three.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_01.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_02.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_03.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_04.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_05.cpp"
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_06.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_KillDyingVehicleEntities.cpp"
 rem  wave T3 physical traffic: _wT3_00 shared leaves, _wT3_01 world promotion path,
 rem  _wT3_02 GenerateDriverInputs, _wT3_04 publish/readback + physical render arm.
@@ -4572,12 +4576,12 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnNorthIndicator.cpp"
   echo "%SRC%\SharedClasses\Gui\SatNav\BrnMapUtils.cpp"
   rem ---- stunt-race UI wave 2026-08-27: the MainMapComponent bodies the PRE_FLY_BY ----
-  rem ---- mount executes. [map arm 2026-08-27, RE-APPLIED x2 -- keep these three     ----
-  rem ---- lines through merges] BrnMainMapLinkGates.cpp is DELETED from the tree:    ----
-  rem ---- all ten of its stand-ins landed real bodies (MainMap Update/SetZoom +      ----
-  rem ---- helpers; the GuiCache landmark/tracker surface in BrnGuiCache_wMap.cpp;    ----
-  rem ---- MapManager in its own mounted TU; the livery builders in BrnDerivedCars.h).----
+  rem ---- mount executes (Construct/Prepare/RecvEvent + the zoom tables), plus the  ----
+  rem ---- FLAG'd gate TU covering its still-unreconstructed siblings (Update/SetZoom/----
+  rem ---- the GuiCache landmark faces/ConstructPatternLiveryList/MapManager::RecvEvent).----
   echo "%SRC%\GameSource\Gui\SatNav\BrnMainMap.cpp"
+  rem [map wave 2026-08-27, b5-decomp 8fc3718a] BrnMainMapLinkGates.cpp is DELETED (all ten
+  rem DELETE-WHENs satisfied); its two real homes mount in its place.
   echo "%SRC%\GameSource\Gui\SatNav\BrnMapManager.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wMap.cpp"
   rem ---- H3b link closure: the Im2d mask/boost command writers TU, the GuiCache ----
@@ -4596,6 +4600,12 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_06.cpp"
   echo "%SRC%\SharedClasses\Progression\BrnRaceEventData.cpp"
   echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRoadRuleUpcomingRoads.cpp"
+  rem ---- [driver-details pause wave 2026-08-28] the rank-progress RESPONSE event. Its
+  rem  Construct @0x824F62F8 is the last hop of the START-button pause screen's licence
+  rem  ladder (game action 181 -> GUI 438); GameBridgeGameStateToX_StuntGuiEvents.cpp's
+  rem  case-181 arm calls it, and CrashNavDriverDetails::UpdateSetupLicense calls
+  rem  GetPlayerRank. Reconstructed long ago, never mounted.
+  echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRankProgressResponse.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipRef.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptTextFieldRef.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptFileRef.cpp"
@@ -4661,6 +4671,43 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavOptions.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavColourCalibrate.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnlineMod.cpp"
+  rem ==== [driver-details pause wave 2026-08-28] THE START-BUTTON PAUSE SCREEN ==========
+  rem  MEASURED: pressing START in free burn now draws the real Driver Details screen --
+  rem  the title, the Paradise licence card (player name, issue date, "UPGRADE IN 1 WIN"),
+  rem  the stat panel and "B RETURN TO GAME" -- with the world FROZEN under it (world-region
+  rem  frame delta 0.000 over 15 s while the card keeps animating) and a clean resume on Stop.
+  rem  asserts=0. InGame::HandleControllerInput case 45 -> PauseGame(true,TRUE) ->
+  rem  OpenDriverDetails() -> "TO_D_DETAIL" -> CN_D_DETAIL; all 16 X360 bodies, every .rdata
+  rem  table read from the image. It OWNS maResourcesToLoad (the stand-in in
+  rem  BrnScreenStatesDataLinkStubs.cpp is deleted in the same change).
+  rem
+  rem  #### KNOWN, AND NOT A DEFECT OF THIS SCREEN: THE *SECOND* START PRESS CRASHES. ####
+  rem  Re-entering the screen AVs reading 0x4CF8 in AptCharacterAnimation::IncCharacterList
+  rem  (via MakeCharacterAnimationInst <- AptLinker::Update <- AptAux::Update). It is an APT
+  rem  UNLOAD/RELOAD LIFECYCLE hole, not a defect of this screen: OnLeave releases the
+  rem  licence/photo-booth apt bundles exactly as the console's
+  rem  CrashNavDriverDetails::OnLeave @0x824CEF18 does, and this build had NOTHING behind
+  rem  that release. THREE of its halves were repaired this wave and each one is real:
+  rem    1. CgsGuiResourceModulePC.cpp -- the host lead/attributed registries were
+  rem       APPEND-ONLY, so a re-acquire resolved to a released entry and handed AddAptData
+  rem       a null (that was 'Invalid memory resource in ParseResource' + 'Invalid resource
+  rem       pointer'). Now swept against the live pool on every streamed-apt unload.
+  rem    2. CgsGuiViewModule.cpp -- ProcessIncomingUnloadRequestNotification (X360
+  rem       0x828586E8) was an EMPTY BODY. Reconstructed.
+  rem    3. CgsAptDataHandler.cpp -- AptDataHandler::RemoveAptData (X360 0x8284A338) did not
+  rem       exist at all, and BrnGuiModule's notification bridge forwarded only the type-14
+  rem       LOADS to the view, never the type-15 unload requests, so the removal end of the
+  rem       pair could not run. Both reconstructed/wired.
+  rem  Result: asserts went 2 -> 0 and the failure moved one layer down, but the AV REMAINS.
+  rem  What is still open is inside the Apt engine itself: the linker keeps instantiated
+  rem  characters for a movie whose data has been released (nothing calls an Apt-side
+  rem  unmount/release for the movie when its bundle goes). That is the next wave's target;
+  rem  start at AptLinker::Update / MakeCharacterAnimationInst and at what the console does
+  rem  between StateInterface::PlayAptMovie("", level) and the bundle unload.
+  rem  TO TURN THE PAUSE SCREEN BACK OFF: comment out the ONE echo line below. Nothing else
+  rem  needs changing -- the tree links either way.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavDriverDetails.cpp"
+  rem =====================================================================================
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCredits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnPauseScreen.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnImageGallery.cpp"
