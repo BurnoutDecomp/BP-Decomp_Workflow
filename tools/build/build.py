@@ -152,12 +152,42 @@ def bnd2_platform(path):
 
 
 def exe_running():
+    """Is ANY Burnout_PC.exe running anywhere on the box?
+
+    Informational only -- see exe_locked(). Matching by image name cannot tell whose
+    tree the process belongs to.
+    """
     try:
         out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq Burnout_PC.exe", "/NH"],
                              capture_output=True, text=True).stdout
         return "Burnout_PC.exe" in (out or "")
     except OSError:
         return False
+
+
+def exe_locked(exe_path=EXE):
+    """Is THIS build's target exe actually locked (i.e. would the link really fail)?
+
+    ⛔ This used to be exe_running(), which matches by process IMAGE NAME and so blocked
+    EVERY checkout's link whenever ANY tree's game was running. That is wrong once shadow
+    build roots exist -- and they now do routinely (three of them were live at once on
+    2026-08-28). It cost a wave a build it had every right to run.
+
+    The link fails on LNK1104 when the OUTPUT FILE is locked, not when some unrelated
+    process shares its name. So ask the real question: can we open our own target for
+    writing? Windows refuses write sharing on a file currently mapped as a running image,
+    which is exactly the LNK1104 condition -- and a game running out of a DIFFERENT folder
+    holds no lock on ours.
+
+    Opens for append and writes nothing, so the exe is never modified.
+    """
+    if not os.path.exists(exe_path):
+        return False          # nothing to lock; the link will create it
+    try:
+        with open(exe_path, "ab"):
+            return False
+    except OSError:
+        return True
 
 
 # ---------------------------------------------------------------- doctor
@@ -241,9 +271,12 @@ def cmd_doctor(cfg, args):
     else:
         r.row("fail", "XAudio2 redist missing (vendor/xaudio2redist) -- the audio backend "
                       "includes its header and ships its DLL", "exe", "build xaudio2")
-    if exe_running():
-        r.row("warn", "Burnout_PC.exe is RUNNING -- the link would fail with LNK1104; "
-                      "close it before `build exe`")
+    if exe_locked():
+        r.row("warn", f"{EXE} is LOCKED -- the link would fail with LNK1104; "
+                      "close the game running out of THIS tree before `build exe`")
+    elif exe_running():
+        r.row("info", "a Burnout_PC.exe is running somewhere, but NOT out of this tree -- "
+                      "your link is unaffected (another worktree's game does not lock ours)")
 
     r.section("for the tool build (YAP + Volatility)")
     for name, marker, fix in (
@@ -419,9 +452,11 @@ def step_xaudio2(cfg, args, dry=False):
 
 
 def step_exe(cfg, args, dry=False):
-    if exe_running():
-        print("ERROR: Burnout_PC.exe is running -- the link would fail with LNK1104. "
-              "Close the game first.")
+    if exe_locked():
+        print(f"ERROR: {EXE} is LOCKED -- the link would fail with LNK1104. "
+              "Close the game running out of THIS tree first.")
+        print("       (A game running from another checkout does not lock this one; "
+              "this check tests our own output file, not the process name.)")
         return 2
     # The bat's tail hands compile+link to tools/build/compile_exe.py (incremental,
     # parallel, warnings/errors summary); these knobs reach it as env vars.
