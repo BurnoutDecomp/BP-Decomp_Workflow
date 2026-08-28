@@ -159,6 +159,9 @@ param(
                                  # BrnGuiWorldDataController.cpp:374) fire once per frame while
                                  # driving, ~3,178 times each in 400 s, far faster than the ~1 Hz
                                  # poll can release them one at a time.
+  [int]$MaxLogMB       = 128,    # abort if BrnGame.log exceeds this. A runaway assert cascade can
+                                 # reach 474 MB, at which point the poll loop's whole-file re-read
+                                 # stops progressing and the run holds the box lock forever.
   [int]$LockTimeoutSec = 1800,   # how long to WAIT for the box before giving up (see the lock below)
   [switch]$NoLock,               # ⛔ escape hatch only. Skips the box lock; two harnesses then kill
                                  # each other's runs. Do not use it to "get past" a busy box.
@@ -861,6 +864,7 @@ function Strip-CallstackFrames([string]$t) {
 }
 
 $lastAccept = Get-Date
+$runawayLog = $false
 $seenAsserts = 0
 $phase = 'BOOT'          # BOOT -> FLYBY (quiet) -> CARSELECT (pump again) -> DRIVING
 $acceptGap = 2.0
@@ -874,6 +878,26 @@ while ($true) {
   $elapsed = ((Get-Date) - $t0).TotalSeconds
   if ($elapsed -gt $MaxSeconds) { Write-Host "[flow] max seconds"; break }
   if ($p.HasExited) { Write-Host ("[flow] game exited early at {0:f1}s" -f $elapsed); break }
+
+  # ⛔⛔ RUNAWAY-LOG GUARD (2026-08-28). This loop re-reads the WHOLE log every poll. An assert
+  # cascade can grow BrnGame.log without bound -- measured: one overflow clobbered a component
+  # counter with ASCII text and produced 2,168,776 `Invalid Component Index` lines, a **474 MB**
+  # log. At that size Get-Content -Raw stops making progress, the loop never advances, and the run
+  # HOLDS THE BOX LOCK INDEFINITELY -- stranding every other wave behind a harness that looks busy.
+  # Two harnesses had to be killed by hand for exactly this.
+  # ⭐ A measurement harness must not be destroyable by the thing it is measuring. Fail LOUDLY and
+  # release the lock instead of hanging: an assert cascade is a real finding, and a run that dies
+  # saying so is far more useful than one that wedges the machine.
+  $logLen = 0
+  try { $logLen = (Get-Item $log -ErrorAction SilentlyContinue).Length } catch { $logLen = 0 }
+  if ($logLen -gt $MaxLogMB * 1MB) {
+    Write-Host ("[flow] FAIL: BrnGame.log hit {0:f0} MB (limit {1} MB) at {2:f1}s -- runaway output," -f ($logLen/1MB), $MaxLogMB, $elapsed)
+    Write-Host  "[flow]       almost certainly an ASSERT CASCADE. Aborting so the box lock is released."
+    Write-Host  "[flow]       The log tail names the repeating line; that IS the finding. Raise -MaxLogMB"
+    Write-Host  "[flow]       only if you genuinely expect an enormous log."
+    $runawayLog = $true
+    break
+  }
 
   $txt = Get-Content $log -Raw -ErrorAction SilentlyContinue
   if ($null -ne $txt) {
@@ -1085,6 +1109,7 @@ foreach ($k in @('flyby','newprof','ingame','jystart','carsel','livery','accept'
   else                        { $summary += ("{0,-8} (never)" -f $k) }
 }
 $summary += ("END      {0,6:f1}s  frame={1}" -f $endElapsed, $endFrame)
+if ($runawayLog) { $summary += "RUNAWAY LOG -- aborted on size; this run is NOT comparable" }
 $summary += ("asserts={0} phase={1}{2}" -f $seenAsserts, $phase,
              $(if ($ReleaseAsserts) { "  [ASSERT GATE HELD OPEN -- asserts= NOT comparable]" } else { "" }))
 # DIAGENV: the inherited probe knobs this run actually carried. Two runs are comparable only
