@@ -353,6 +353,11 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem START_PLAYING_MODE's exact boost-enabling arm first puts attached cars in
   rem racing state through SetAllCarsOnStartLine, homed in this split TU.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ModeArming.cpp"
+  rem ---- crash play / Showtime (crash-play wave 2026-08-29). BrnCrashPlayManager.cpp is  ----
+  rem ---- the boost CONSUMER; the debug component is its first member BY VALUE, so its    ----
+  rem ---- vtable has to resolve too or Update cannot call mCrashPlayDebugComponent.Update.----
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\CrashPlay\BrnCrashPlayManager.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\CrashPlay\BrnCrashPlayDebugComponent.cpp"
   rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
   rem ---- its shared component-streamer base + the five concrete leaves. These ----
   rem ---- are what post the first VEH_ load requests.                          ----
