@@ -2837,6 +2837,16 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  Completion partfile calls UnlockSpecialCars back in the Unlocks one.
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Unlocks.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Completion.cpp"
+  rem *** PAUSE-SCREEN STAT PANEL (2026-08-29): the producer of game action 180. Bodies
+  rem  ProgressionManager::GetGameStats @0x8238A6A0 (566 insns) + GetTotalWinsForNextRank
+  rem  @0x82370510, the middle hop of GUI 435 -> event 79 -> action 180 -> GUI 436. Its
+  rem  caller is GameStateModule_gUI_00.cpp's case-79 arm (already mounted); without this
+  rem  partfile that call is an LNK2019 and the Driver Details stat panel stays blank.
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_GameStats.cpp"
+  rem  BrnGameActionData.cpp -- GameStats::Construct @0x82354F38 (+ PlayerInfo::Construct
+  rem  @0x82355038), the record GetGameStats fills. Reconstructed long ago, never mounted
+  rem  because nothing called it until now. A pure leaf (CgsAssert + strncpy).
+  echo "%SRC%\GameSource\GameState\SharedIO\BrnGameActionData.cpp"
   rem ??? PREPARE2 SUB-OBJECT WAVE (2026-08-11) -- the two legs GameStateModule::Prepare2
   rem  @0x8239ED10 left parked. The module now EMBEDS both sub-objects by value, exactly as the
   rem  console does (X360 Construct @0x82380388 / ctor @0x827E44B8): the achievement manager at
