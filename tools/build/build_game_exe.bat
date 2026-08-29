@@ -4454,7 +4454,15 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- REMOUNTED (2026-08-25, hud H3b wave): the render half landed upstream   ----
   rem ---- (b5 6bf9728c "boost bar: the render half + the live slot-4 mount").    ----
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBoostBarRenderer.cpp"
+  rem ---- [map-world 2026-08-29] MANAGER SLOT 2: BrnGui::MainMapRenderer, the class     ----
+  rem ---- that draws the Paradise City map surface itself. Its four embedded            ----
+  rem ---- CgsGui::ParticleSystem2d banks (DWARF h:210) need that class's already-        ----
+  rem ---- reconstructed TU on the link line, which had never been mounted.               ----
+  echo "%SRC%\GameShared\GameClasses\Gui\View\CgsParticleSystem2d.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnMainMapRenderer.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer_wK_01.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnRoadSign.cpp"
   rem ---- boost-bar support (2026-08-25, upstream a545ebc9/6bf9728c): the 2D      ----
   rem ---- billboard renderer + the near-miss tracker + the world->GUI vehicle    ----
   rem ---- bridge TU (the 206 producer; H3b extends it with the 376/147/199      ----
@@ -4672,10 +4680,16 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_EventFinish.cpp"
   echo "%SRC%\GameSource\GameState\NetworkRoundManager\BrnNetworkRoundManager.cpp"
   rem [stuntrace mount closure 2026-08-26] the measured link-hole closers -- each verified
-  rem 0-new-externals / 0-ODR by the closure verifier's trial link. NOT mounted (refuted):
-  rem BrnMapManager.cpp + BrnSatNavTile.cpp (two undefined hand-declared CRT helpers in
-  rem MapManager's transliteration; ctor gated in BrnHudStatesLinkStubs.cpp instead).
+  rem 0-new-externals / 0-ODR by the closure verifier's trial link. (2026-08-29 main-menu
+  rem wave: BrnMapManager.cpp is NOW MOUNTED in the SatNav block -- its fake CRT externals
+  rem were replaced with real construction loops; the HudStatesLinkStubs ctor gate is gone.)
   echo "%SRC%\GameSource\GameState\SharedIO\BrnGameStateToGuiIOInterfaces.cpp"
+  rem [main-menu wave 2026-08-29] BrnDriveThruManager.cpp (b5 3fe6fc62) is deliberately NOT
+  rem mounted: it drags a 13-symbol progression/achievement closure (Profile drive-thru
+  rem discovery set, ProfileEvent/EventJunction accessors, AchievementManagerBase -- itself
+  rem an unmounted 8-cost TU, ProgressionManager::OnDriveThru). The five DriveThruManager
+  rem symbols the mounted call sites reference are stubbed in BrnBaselineLinkStubs.cpp with
+  rem a DELETE-WHEN; mount this + Array_DriveThruInfo_46.cpp + that closure together.
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_OnlineGridStubs.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficLightTrigger.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnChallengeHighScoreEntry.cpp"
@@ -4803,10 +4817,11 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- FLAG'd gate TU covering its still-unreconstructed siblings (Update/SetZoom/----
   rem ---- the GuiCache landmark faces/ConstructPatternLiveryList/MapManager::RecvEvent).----
   echo "%SRC%\GameSource\Gui\SatNav\BrnMainMap.cpp"
-  rem [map wave 2026-08-27, b5-decomp 8fc3718a] BrnMainMapLinkGates.cpp is DELETED (all ten
-  rem DELETE-WHENs satisfied); its two real homes mount in its place.
+  rem [map wave, b5 8fc3718a x main-menu wave, 2026-08-29 reconcile] BrnMainMapLinkGates.cpp
+  rem is DELETED (all its DELETE-WHENs satisfied; the last gate, GuiCache::GetOnlineFinishPoint,
+  rem moved into BrnGuiCache_wJ_01.cpp); BrnGuiCache_wMap.cpp is DELETED too -- the same-day
+  rem convergence dedupe kept the superset partfile BrnGuiCache_wJ_01.cpp (mounted in the Gui block).
   echo "%SRC%\GameSource\Gui\SatNav\BrnMapManager.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wMap.cpp"
   rem ---- H3b link closure: the Im2d mask/boost command writers TU, the GuiCache ----
   rem ---- accessor legs the renderer/manager link against, and the progression   ----
   rem ---- event-record accessors.                                                ----
@@ -4815,6 +4830,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_07.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_09.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wH3b.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wJ_01.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiEventDrawEventIcons.cpp"
+  echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRankProgressResponse.cpp"
   rem ---- H3c link closure (2026-08-25): the sat-nav icon pass. UpdateSatNavIcons reads the
   rem  embedded 2D event-icon bank (GetEventIconPositions) for the LARGE-map proximity fade,
   rem  and GetSatNavIconStateForRival reads GetEventPositionOfRaceCar for the race-mode filter.
@@ -4892,6 +4910,25 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiWorldDataController.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenLoading.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavOptions.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_03.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_04.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_05.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_06.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_07.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_08.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapMain.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapSoundData.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavPanel.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavLegend.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnRoadPanel.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnEventPanel.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnDriveThruMapPanel.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnRivalMapPanel.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCursor.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnAnimationComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavColourCalibrate.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnlineMod.cpp"
   rem ==== [pause soft-lock wave 2026-08-29] CN_SETTINGS, THE PAUSE SCREEN'S RB TAB =====
