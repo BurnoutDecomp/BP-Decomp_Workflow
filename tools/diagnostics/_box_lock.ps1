@@ -1,4 +1,4 @@
-# _box_lock.ps1 -- ONE GAME HARNESS AT A TIME ON THIS BOX.
+﻿# _box_lock.ps1 -- ONE GAME HARNESS AT A TIME ON THIS BOX.
 #
 # Dot-source this and call Enter-BoxLock BEFORE the script's kill sweep:
 #
