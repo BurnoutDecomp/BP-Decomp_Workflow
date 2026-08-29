@@ -630,6 +630,19 @@ own** pass first, so you don't ship a known-divergent TU into review.
     parse garbage with nothing in `git diff`. Use Python preserving the existing endings, then
     verify the file still has one carriage return per line (a CR count equal to its line count). (Repair, if it happens: `rm` the file, then
     `git checkout -- <file>`.)
+- ⛔⛔ **`progress/status.json`'s `reviewed` IS THE DEFAULT, NOT A VERDICT — it is not evidence a
+  body exists.** Measured 2026-08-29: **21,245 of 21,254** function rows are `reviewed` (the other 9
+  are `compiles`). It carries no information about whether anything was written.
+  Marked `reviewed`, with **zero** definitions anywhere in the tree:
+  `BrnGame::BrnGameModule::BridgeDirectorToGui`, `BrnGui::EffectsArbitrator::StartHook`,
+  `BrnGui::EffectsArbitrator::LookupColourCube`.
+  **Five separate waves** read it as evidence and lost time; one shipped a declaration whose
+  definition did not exist and only the exe LINK caught it. A hollow-shell class can declare 1 of 22
+  console methods and every row still reads `reviewed`.
+  ⇒ **Ask the tree, not the ledger:** `python tools/re/hasbody.py <Class::Method> [--status]`.
+  ⚠️ A bare `grep name(` is not a substitute — a wave got a fact backwards this week because
+  `grep | head -5` returned five COMMENT hits and cut off the real definition. The tool separates
+  definitions from mentions for exactly that reason.
 - Don't run global structural matching (Diaphora) as a prerequisite. Names join the
   symbolized builds; structural matching is an optional per-function last resort.
 - Don't chase a whole-program link early. Per-TU compilation is the gate.
