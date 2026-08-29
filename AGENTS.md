@@ -600,6 +600,20 @@ own** pass first, so you don't ship a known-divergent TU into review.
     `BrnProgressionManager` partfiles (the last unresolved external), and `BrnMapManager.cpp` /
     `BrnGuiCache_wMap.cpp` (paired with a *deletion*, so the tree did not even compile). Each
     cost hours and a later wave's time to rediscover.
+    ⛔⛔ **AND VERIFY THE DIFF IS YOURS BEFORE YOU PUSH.** `tools/build/build_game_exe.bat` is a
+    SHARED file that routinely carries other waves' uncommitted mounts, so `git add <file>` — and
+    equally a `git hash-object` of the working-tree file — commits **their** edits along with yours.
+    Measured 2026-08-29: a wave pushed a mount it believed was 4 lines; the commit carried **28**,
+    sweeping in another wave's mount of a TU whose b5 half was not on `dev` yet, so `build exe`
+    refused to start for everyone. It was backed out minutes later, but the shared build was red in
+    between.
+    ⇒ Apply **only your hunk** onto `origin/main`'s blob, and before pushing check that
+    `git diff --stat origin/main <your-tree>` names one file and the line count **you actually
+    wrote**. If the number is bigger than your edit, you are carrying somebody else's work.
+    ⚠️ Related failure from the same incident: `hash-object` on a mismatched path silently produced
+    an **empty commit whose message described a change its diff did not contain**. A commit message
+    is a claim — diff it against its own diff.
+
     ⭐ **A mount (or a porter fix) and its b5 commit are one atomic change.** Land the b5 commit,
     then commit the parent with ONLY that path staged — e.g.
     `git add tools/build/build_game_exe.bat`, or `git add tools/assets/bundles/x360_tex.py`. Never
