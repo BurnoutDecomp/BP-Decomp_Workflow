@@ -2596,6 +2596,12 @@ rem  _wT3_02 GenerateDriverInputs, _wT3_04 publish/readback + physical render ar
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_00.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_01.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_02.cpp"
+rem  2026-08-29 (traffic-crash wave): THE CHAIN CRASH. UpdateSympatheticCrashing @0x8273D378 +
+rem  CrashVehicleForSympatheticCrashState @0x8272BA08 -- the arm that aims a nearby traffic car
+rem  at a wreck and then crashes it. Un-gated in _wT3_02.cpp (the GenerateDriverInputs arm) and
+rem  in _wT3_01.cpp (SafeRequestMakeVehiclePhysical's meSympCrashState seed); without this mount
+rem  both are LNK2019.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_SympatheticCrash.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_04.cpp"
 rem  wave T4 crash-into-traffic: _wT4_01 UpdateCollidableVehicles (collision-volume producer),
 rem  _wT4_02 BuildPotentialCollisionList + HandleHalfPotentialContact (overlap-pair promoter).
