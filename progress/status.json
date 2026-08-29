@@ -35596,52 +35596,52 @@
    "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::Activate": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::GetShowtimeTrafficDensityScale": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::HandlePlayerToVehicleImpact": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::OnBounce": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::OnCarCrash": {
    "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::OnEnterJunction": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::OnEnterRoad": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::OnHitOverheadSign": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::OnVehicleHitConfirmed": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::SetBouncePromptNeeded": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::Update": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::UpdateBounceBoost": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::UpdateCarLeaping": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::UpdateMomentum": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::UpdateNewRoad": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::CrashPlayManager::UpdateTrafficStomp": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnWorld::DetachedPartR": {
    "status": "reviewed"
@@ -68883,6 +68883,10 @@
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/CrashPlay/BrnCrashPlayDebugComponent.cpp": {
    "notes": "batch review pass: Claude sonnet medium; parity RED due assert abstraction and X360-vs-Feb2007 drift reviewed",
+   "status": "done"
+  },
+  "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/CrashPlay/BrnCrashPlayManager.cpp": {
+   "notes": "Fresh-eyes review (Sonnet), 2 MINOR / 0 BLOCKING. (1) the :278 IsValid assert is raised once rather than per frame -- deliberate, measured (7102 fires starved the harness), self-flagged DELETE-WHEN. (2) reviewer doubted OnEnterRoad's mbSendNewRoadMessage=true because Hex-Rays renders it BYTE3(v9); the asm settles it -- li r10,1 @0x822A7DD4 then stb r10,0x108(r31) @0x822A7E0C, a literal 1, exactly as reconstructed. Parity RED is CGS_ASSERT folding (15 assert sites x 3 calls) and is advisory.",
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/NearMisses/BrnNearMissManager.cpp": {
