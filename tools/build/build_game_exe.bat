@@ -3834,6 +3834,19 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  DirectorLinkStubs.cpp GROUP F instead, with the DELETE-WHEN there.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCrashing.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourSpirallingDeathcam.cpp"
+  rem  ---- ...AND THE SIXTH BREAK: THE PLAYER TRACKER (2026-08-29). ------------------------
+  rem  BrnDirectorVehicleTracker.cpp mounts here, and MainDirector::PreSceneQueryUpdate now
+  rem  actually CALLS VehicleTracker::Update (X360 line 5 of its guarded body, gated until now).
+  rem  ==> IT IS THE SLOW MOTION'S DATA SOURCE. ImpactSlomoController::Update decides whether to
+  rem  start a burst from the tracked car's LINEAR-VELOCITY JOURNAL alone, and that journal is
+  rem  written nowhere else. MEASURED with the whole rest of the crash chain already landed: a
+  rem  forced player crash held mbCrashing for 900+ frames and the sim scale never left 1.0.
+  rem  Nothing asserted; the camera simply never slowed down.
+  rem  The TU could not link before because its Update reached a private ODR fork of
+  rem  DirectorIO::InputBuffer whose accessors nothing defined; that fork is retired and the
+  rem  body is re-fitted to the real InputBuffer (GetUsedRaceCars / GetRaceCarInfo /
+  rem  GetTimerStatusInterface). MEASURED mount cost: zero new unresolved.
+  echo "%SRC%\GameSource\Director\Utils\BrnDirectorVehicleTracker.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentSelector.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentController.cpp"
   rem ---- [momentcam] jump/stunt CUTAWAY-CAMERA wave, 2026-08-23 --------------------------
