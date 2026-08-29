@@ -168,6 +168,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\renderware\src\rw\audio\core\Resample.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\ReverbFilters.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\plugins\ReverbModel1.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\StreamPool.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Send.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Send_wL_01.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\MixKernels.cpp"
