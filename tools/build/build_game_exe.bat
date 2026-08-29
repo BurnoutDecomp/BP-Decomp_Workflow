@@ -3913,6 +3913,31 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  BehaviourInterpolate ODR fork was retired, and before the EIGHTH PASS closure set.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCarSelect.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourIceAnim.cpp"
+  rem  ---- DRIVE-THRU CAMERA WAVE (2026-08-29): the drive-thru shop camera. --------------
+  rem  BrnArbStateDriveThru.cpp is E_STATE_DRIVETHRU -- the state ArbStateRoaming enters on
+  rem  mbDriveThruActive (BrnArbStateRoaming.cpp:1059). Its container slot was five stubs in
+  rem  DirectorLinkStubs.cpp whose Prepare returned an unconditional `true` and whose Update
+  rem  was empty -- the same empty-shell shape ArbStateCrashing had. Those five are removed in
+  rem  the same b5-decomp commit; never mount one without the other (LNK2005 x5 otherwise).
+  rem  ==> IT IS ATOMIC WITH BrnBehaviourManager_NewBehaviourFromShot.cpp below. The state's
+  rem  Prepare allocates its camera through BehaviourManager::NewBehaviour @0x82267418, the
+  rem  ATTRIBUTE-DRIVEN factory, which had no body anywhere in the tree -- so the state alone
+  rem  is one unresolved external, and a quiet stub for it would link green and allocate
+  rem  nothing (a drive-thru camera that never moves).
+  rem  MEASURED mount cost: BrnArbStateDriveThru.cpp -> 25 referenced externals, 24 already
+  rem  provided, 1 unresolved (that NewBehaviour); the factory TU -> 19 referenced, 19
+  rem  provided, ZERO new unresolved.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateDriveThru.cpp"
+  rem  BrnBehaviourManager_NewBehaviourFromShot.cpp -- BehaviourManager::NewBehaviour
+  rem  @0x82267418, the shot-attribute behaviour factory: it reads the shot RefSpec's class
+  rem  key and allocates BehaviourIceAnim (authored takes -- every shotgroup shot, which is
+  rem  the drive-thru's arm), or BehaviourAftertouchCam / BehaviourGyroCam. Isolated TU for
+  rem  the same reason BrnBehaviourManager_AllocateBehaviour_IceAnim.cpp is: the real
+  rem  BrnBehaviourIceAnim.h collides with the flat-slice behaviour headers that
+  rem  BrnBehaviourManager.cpp includes. The other two arms are FLAG-gated at their asserts --
+  rem  their Parameters blocks live inside BehaviourParameterBank::maReservedHead and are not
+  rem  carved; see the banner in the TU.
+  echo "%SRC%\GameSource\Director\Camera\BrnBehaviourManager_NewBehaviourFromShot.cpp"
   echo "%SRC%\GameSource\Director\Shots\ShotControllers\BrnKeyAnimController.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraReference.cpp"
   rem ---- ICE-anim de-fork wave (2026-07-30) ------------------------------------------------
