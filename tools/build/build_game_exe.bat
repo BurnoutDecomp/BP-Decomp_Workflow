@@ -2941,6 +2941,20 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_Prepare2.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_SetupParRivals.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_FindRivalsByDistrict.cpp"
+  rem *** PAUSE-SCREEN STAT PANEL (2026-08-29): the three roads-ruled tallies
+  rem  ProgressionManager::GetGameStats reads. wC_05 bodies GetNumberOfParShowTimeRoadsRuled
+  rem  ByLocalPlayer @0x8233F230 + GetNumberOfParTimeTrialRoadsRuledByLocalPlayer @0x8233F2C0
+  rem  (+ GetChallengeParScore); wC_04 bodies GetNumberOfCompleteRoadsRuledByLocalPlayer
+  rem  @0x8233F350 (+ FillInRoadRulesQuery). FindRivalsByDistrict was already split out of
+  rem  wC_04 into its own mounted partfile, so there is no duplicate definition.
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_04.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_05.cpp"
+  rem  wC_06 (NEW) bodies the two predicates all three tallies count with --
+  rem  HasPlayerBeatenParScore @0x823361D0 + HasPlayerBeatenFriendScore @0x823362A0 -- and
+  rem  wB_02 supplies the two score-table fetches they call (GetChallengeUserScore
+  rem  @0x82335E08 / GetChallengeFriendHighScore @0x82335F30). All four MUST mount together.
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_06.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_02.cpp"
   rem  ??? STILL OUT: the rest of BrnGameStateStreetManager.cpp (the two score-entry
   rem  factories), _wC_02.cpp (ProcessScoreRequestEvent) and _wC_04.cpp (the two road-rules
   rem  tallies). Their costs are the measured numbers above; mounting any of them anyway is
