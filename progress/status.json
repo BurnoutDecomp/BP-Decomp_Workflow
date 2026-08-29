@@ -14359,7 +14359,7 @@
    "status": "reviewed"
   },
   "BrnGui::CrashNavProductCodeKeyboardListener::FillString": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavProductCodeKeyboardListener::KeyboardClosed": {
    "status": "reviewed"
@@ -14371,31 +14371,31 @@
    "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::HandleControllerInput": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::HandleGuiCacheEvent": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::HandleTriggers": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::InputSponsorProductCode": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::OnEnter": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::OnInputSponsorProductCode": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::OnLeave": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::ShowMenu": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::SteelWheelsSponsorCode": {
-   "status": "compiles"
+   "status": "reviewed"
   },
   "BrnGui::CrashNavSettings::Update": {
    "status": "reviewed"
@@ -66608,6 +66608,10 @@
   },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavOptions.h": {
    "notes": "3 inlines asm-exact; XEX table {0x8D,4}/1 verified; cache+0xB878 pins; SetUpComponent<4> mangled-confirmed; grows additive",
+   "status": "done"
+  },
+  "GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp": {
+   "notes": "Fresh-eyes review (Sonnet, asm-level, all 11 functions pulled from .ida-exports incl. Update which the packet omitted): no divergence, no invented behaviour, no raw-offset access, no ODR fork. Confirmed the soft-lock claim from the asm itself -- the 45/50 and 54/55 arms dispatch through the FIRST jump table at 0x824D9170, before any meState read, so the screen is leavable from every internal state. Three comment inaccuracies it raised are fixed. PARTIAL BY DESIGN: 9 of 11 bodies landed; SteelWheelsSponsorCode + OnInputSponsorProductCode PARKED on CgsSystem::HardwareSku::GetSku (no PC leaf), and Update's event-142 keyboard arm parked on BrnGuiKeyboard::Show + CgsUnicode::ConvertUtf8ToUtf16 (both declared-but-never-bodied). MEASURED: pause -> RB -> settings screen draws, held 100 s, one B press returns to gameplay.",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.h": {
