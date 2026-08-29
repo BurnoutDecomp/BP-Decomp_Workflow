@@ -68,4 +68,38 @@ function Enter-BoxLock {
 
   $script:BrnBoxLock = $m
   Write-Host "[box] box lock acquired$tag"
+
+  # ⛔⛔ RELEASE ANY STUCK INPUT HOLD -- the box is ours, so nothing legitimate is holding one.
+  #   (showtime cross-run hazard, 2026-08-29.)
+  #   The seven harness input channels are SESSION-GLOBAL, MANUAL-RESET named events in the
+  #   `Local\` namespace -- the game opens them by fixed name, so every process in the session
+  #   shares one object per channel. Manual-reset means SIGNALLED IS A HOLD: it stays down until
+  #   something clears it. flow_run clears them at creation and after its poll loop, but a run
+  #   that is Ctrl+C'd, killed, or dies on a terminating error between Set() and that clear leaves
+  #   the channel DOWN -- and the next harness to launch the game inherits a button that is being
+  #   held by nobody.
+  #   ⚠️ WHY THIS IS NOT COSMETIC. Measured by the pause wave: LB+RB held tips the pause screen
+  #   into CN_SETTINGS, an empty shell whose OnEnter/Update/OnLeave all fall through to the base
+  #   -- a PERMANENT soft-lock that looks exactly like the game silently dying, and it was
+  #   reported as a game defect before the mechanism was found. -Showtime is the only switch that
+  #   holds the two shoulder channels, so it is the one that can strand them.
+  #   ⭐ WHY HERE and not in flow_run: this file is dot-sourced by EVERY harness on the box, and
+  #   the other seven neither create nor clear these events -- so a per-harness fix would leave
+  #   them all exposed. Clearing at LOCK ACQUISITION is also the one instant it is provably safe:
+  #   the lock means no other harness is live, and the caller is about to end every Burnout_PC on
+  #   the box anyway. It cannot cancel a legitimate hold, because a legitimate hold belongs to a
+  #   run that no longer exists.
+  #   [[gates-are-stale-not-dead]] -- state that outlives its owner is the same defect class.
+  foreach ($lsChannel in @('Accelerate','Brake','HandBrake','SteerLeft','SteerRight',
+                           'ShoulderL','ShoulderR')) {
+    try {
+      $lEvent = New-Object System.Threading.EventWaitHandle(
+                  $false, [System.Threading.EventResetMode]::ManualReset,
+                  "Local\BurnoutPC_Input_$lsChannel")
+      $lEvent.Reset() | Out-Null
+      $lEvent.Close()
+    } catch {
+      # A channel we cannot open is a channel nothing can be holding. Never fatal.
+    }
+  }
 }

@@ -743,6 +743,22 @@ $evShldL = New-Object System.Threading.EventWaitHandle($false, [System.Threading
 $evShldR = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_ShoulderR")
 foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR)) { $e.Reset() | Out-Null }
 
+# ⛔⛔ RELEASE THE HOLDS ON A FAILURE PATH TOO (showtime cross-run hazard, 2026-08-29).
+#   These seven are SESSION-GLOBAL manual-reset events: signalled IS a hold, and it survives this
+#   process. The normal path clears them after the poll loop, but $ErrorActionPreference is 'Stop',
+#   so ANY terminating error between a Set() and that line would leave a button held down for the
+#   next harness -- and LB+RB held tips the pause screen into CN_SETTINGS, an empty state shell
+#   that soft-locks and looks exactly like the game dying (measured by the pause wave, which is
+#   how this was found). A `trap` runs on the way out of a terminating error, which is precisely
+#   the gap; the box lock's own release covers the kill/Ctrl+C case for the NEXT run.
+trap {
+  foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR)) {
+    try { $e.Reset() | Out-Null } catch { }
+  }
+  Write-Host "[flow] terminating error -- all seven input holds released before rethrow."
+  break
+}
+
 # ⭐ THE SCHEDULE PARSER (walls leg 5).  Parses "<sec>:<tok>[+<tok>],..." into a time-sorted list.
 #   ⚠️ InvariantCulture ON PURPOSE: this box runs a comma-decimal locale, where [double]::Parse
 #   turns "3.5" into 35 -- a schedule silently 10x too long, which reads as "the car never
