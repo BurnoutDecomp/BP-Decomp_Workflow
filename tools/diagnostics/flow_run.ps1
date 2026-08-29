@@ -159,6 +159,9 @@ param(
                                  # BrnGuiWorldDataController.cpp:374) fire once per frame while
                                  # driving, ~3,178 times each in 400 s, far faster than the ~1 Hz
                                  # poll can release them one at a time.
+  [double]$MinFreeGB   = 25,     # refuse to START a frame dump below this much free space --
+                                 # a dump can reach 16 GB and filling the volume mid-run breaks
+                                 # far more than the run (see the guard below)
   [int]$MaxLogMB       = 128,    # abort if BrnGame.log exceeds this. A runaway assert cascade can
                                  # reach 474 MB, at which point the poll loop's whole-file re-read
                                  # stops progressing and the run holds the box lock forever.
@@ -580,6 +583,23 @@ if ($Frames) {
   if (-not [System.IO.Path]::IsPathRooted($FrameDir)) {
     Write-Host "[flow] FAIL: -FrameDir '$FrameDir' is relative. The game resolves BRN_FRAME_DUMP"
     Write-Host "       against build\game\, not your cwd. Pass an absolute path."
+    exit 1
+  }
+  # ⛔⛔ FREE-SPACE GUARD (2026-08-29). A frame dump can be ENORMOUS: every-2-presents for 130 s
+  # measured 16 GB, and a wave had to prune 5.2 GB after D: hit 100% mid-session. This box runs at
+  # ~1% free with 1.8 TB of the owner's own content on it, so a dump can fill the volume DURING a
+  # measurement -- which does not just lose the run, it can break every other wave's build and the
+  # shared repo's working tree at the same time.
+  # ⭐ Refuse up front instead: a run that declines to start is recoverable, a full disk mid-write is
+  # not. -MinFreeGB overrides for a deliberately large capture.
+  $drv = (Get-Item $FrameDir -ErrorAction SilentlyContinue)
+  $root = if ($drv) { $drv.PSDrive.Name } else { (Split-Path -Qualifier $FrameDir).TrimEnd(':') }
+  $free = try { (Get-PSDrive $root -ErrorAction Stop).Free / 1GB } catch { $null }
+  if ($free -ne $null -and $free -lt $MinFreeGB) {
+    Write-Host ("[flow] FAIL: only {0:f1} GB free on {1}: -- refusing to start a FRAME DUMP." -f $free, $root)
+    Write-Host  "[flow]       A dump can reach 16 GB; filling the volume mid-run can break other"
+    Write-Host  "[flow]       waves' builds and the shared working tree, not just this measurement."
+    Write-Host ("[flow]       Free some space, or pass -MinFreeGB below {0:f0} if you accept the risk." -f $free)
     exit 1
   }
   if (Test-Path $FrameDir) { Remove-Item -Recurse -Force $FrameDir }
