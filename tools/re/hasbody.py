@@ -42,16 +42,29 @@ def find(qname):
         return [], []
     defs, mentions = [], []
     for line in out.splitlines():
-        try:
-            path, _, text = line.split(":", 2)
-        except ValueError:
+        # ⛔ NOT line.split(":", 2) -- SRC is an ABSOLUTE WINDOWS path, so the drive letter's
+        # colon eats the first field: "D:\...\x.cpp:113:body" split into ("D", "\...x.cpp",
+        # "113:body"). The line number then stays GLUED to the front of the text, so the character
+        # preceding a definition that starts at column 0 is ':' -- which no "looks like a definition"
+        # test accepts. Measured 2026-08-29: it reported a real body as NO DEFINITION IN THE TREE.
+        # It only ever bit column-0 definitions, because "void Foo::Bar(" still offers a space.
+        m = re.match(r"^(.*?):(\d+):(.*)$", line)
+        if not m:
             continue
+        path, _, text = m.group(1), m.group(2), m.group(3)
         stripped = text.strip()
         if stripped.startswith(("//", "*", "/*")):
             mentions.append(line)
             continue
         # a definition looks like  <something> Class::Method(   -- not a call, not a declaration
-        if re.search(r"[\w>&*\s]" + re.escape(pat) + r"\s*\(", text) and ";" not in text.split("(")[0]:
+        # ⚠️ the qualified name may start the line, with the return type on the PREVIOUS one:
+        #     bool
+        #     BoostBurnout5::AreWeAllowedToBoost(...)
+        # Requiring a character before it made those read as MENTIONS -- a false negative that
+        # told a wave a real body did not exist (measured 2026-08-29). A qualified CALL never
+        # sits at column 0 (statements are inside a function, hence indented), so anchoring at
+        # ^ strictly removes false negatives without admitting call sites.
+        if re.search(r"(?:^|[\w>&*\s])" + re.escape(pat) + r"\s*\(", text) and ";" not in text.split("(")[0]:
             defs.append(line)
         else:
             mentions.append(line)
