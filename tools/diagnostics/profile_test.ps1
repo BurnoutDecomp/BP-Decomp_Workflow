@@ -1,4 +1,4 @@
-# profile_test.ps1 -- validates the autosave-warning popup + intro-video sequencing.
+﻿# profile_test.ps1 -- validates the autosave-warning popup + intro-video sequencing.
 #
 # With the faithful fix, BF_PROFILE now BLOCKS on the SAVELOAD_AUTOSAVE_WARNING prompt
 # ([BootProfile] stage 3 -> 4 = RUNNING, then it DWELLS instead of going 4 -> 5). The

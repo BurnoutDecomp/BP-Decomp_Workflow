@@ -1,4 +1,4 @@
-# saveicon_capture.ps1 -- drive past the autosave popup (press Continue) and burst-capture
+﻿# saveicon_capture.ps1 -- drive past the autosave popup (press Continue) and burst-capture
 # the top-left corner over the following seconds to catch the SaveIcon_mc spinner while the
 # profile save is in flight (event 355 -> ShowSaveIcon). Reuses popup_capture's PID-window harness.
 param([string]$OutDir = "scratch\saveicon_cap")

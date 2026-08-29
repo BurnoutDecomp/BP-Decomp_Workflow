@@ -1,4 +1,4 @@
-# frame_gate.ps1 -- THE CHECK THAT WOULD HAVE CAUGHT TASK 118.
+﻿# frame_gate.ps1 -- THE CHECK THAT WOULD HAVE CAUGHT TASK 118.
 #
 # Assert counting, exe size, a clean link and a green lint all passed a destroyed world for a
 # full day, across ~15 boot-verified commits, because nothing ever LOOKED AT A FRAME.

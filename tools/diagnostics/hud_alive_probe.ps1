@@ -1,4 +1,4 @@
-# hud_alive_probe.ps1 -- drive the boot to FBURN_MAIN like hud_boot_check.ps1 but take
+﻿# hud_alive_probe.ps1 -- drive the boot to FBURN_MAIN like hud_boot_check.ps1 but take
 # NO screenshots and force NO foreground changes. Instead, sample the process CPU time
 # to prove whether the game loop keeps running in-game; then optionally do ONE
 # foreground+shot cycle and sample again to test whether the FG dance freezes it.

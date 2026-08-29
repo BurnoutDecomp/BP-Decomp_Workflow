@@ -1,4 +1,4 @@
-# boot_test.ps1 -- the scripted boot/menu validation loop.
+﻿# boot_test.ps1 -- the scripted boot/menu validation loop.
 
 #
 # Launches build\game\Burnout_PC.exe, captures foreground pixels at scripted
@@ -14,6 +14,8 @@
 #   * Dev asserts pause the sim ("press END to continue" in the log); the script sends
 #     END a few times after launch so an assert cannot hang the run.
 #   * Verify by SCREENSHOT, not just the log, for menu-render regressions.
+#   * PRESS-START IS NOT ACCEPT. The title takes action 45 (the Start channel); every other
+#     rung here takes 49 (the Accept channel). See the vocabulary banner further down.
 
 param(
     [string]$OutDir = "scratch\boot_shots",
@@ -77,11 +79,32 @@ function Get-GameWindow([System.Diagnostics.Process]$proc) {
     return [BootTestNative]::FindByPid([uint32]$proc.Id)
 }
 
+# ⛔⛔ THE ACCEPT VOCABULARY CHANGED ON 2026-08-29 (main-menu wave). READ BEFORE ADDING A RUNG.
+# The PC input leaf's channel map is now the console's EGameInputActions vocabulary, not the old
+# swapped one (Enter was 45 GUI_START and Escape was 49 GUI_SELECT -- accept and start reversed,
+# and 50 GUI_CANCEL unreachable by any device):
+#     Accept   -> 49 GUI_SELECT   accept / dive in                (A, Enter, Space)
+#     Stop     -> 50 GUI_CANCEL   back                            (B, Escape)
+#     Start    -> 45 GUI_START    press-start / pause / exit map  (P, pad START)   ** NEW **
+#     Next     -> 42 GUI_DOWN     highlight next
+#     Prev     -> 41 GUI_UP       highlight previous
+# ⚠️ THE TITLE SCREEN TAKES 45 AND NOTHING ELSE. BrnGui::BootLegal's `lbStartPressed` latch is set
+# by action 45 (and by the GUI's own KI_EVENT_START), never by 49, so a press-start rung driven off
+# the Accept channel hangs at stage WAIT_START for ever and every later shot captures the title --
+# a boot that looks broken because the harness pressed the wrong button.
+# ⓘ Every OTHER rung in this script is an ordinary menu accept and takes 49: BootLegal's two-row
+# selection menu (which takes 45 or 49), BootProfile's autosave prompt, the Intro photo-booth
+# confirm, car select, livery. Those keep VK_RETURN -> Accept.
+# The keys here are VIRTUAL-KEY CODES only as a lookup handle for Send-Key; the game never sees a
+# keystroke on a mapped code (see Send-Key's double-fire note).
+$VK_START_PRESS = 0x50   # 'P' -- the PC key the leaf now binds to 45 GUI_START. Used ONLY as the
+                         # Send-Key handle for the Start channel; no keystroke is ever synthesised.
 $script:HarnessInputEvents = @{
     0x0D = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Accept")
     0x1B = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Stop")
     0x28 = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Next")
     0x26 = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Prev")
+    0x50 = [BootTestNative]::CreateEvent([IntPtr]::Zero, $false, $false, "Local\BurnoutPC_Input_Start")
 }
 
 # The assert-release channel CgsAssertManager.cpp:207 opens ("Local\BurnoutPC_Assert_Release",
@@ -245,9 +268,19 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
     Settle 6
     Take-Shot $proc "boot_20_title"
 
-    Send-Key $proc $VK_RETURN "ENTER (press start)"
+    # ⛔ THE PRESS-START RUNG USES THE **Start** CHANNEL (action 45), NOT Accept (49). 45 is the id
+    #    BootLegal's press-start latch (lbStartPressed, X360 0x82477270 v38) reads; a 49 also passes
+    #    the title, but only via the START_PRESSED -> MENU_ACTIVE fallthrough (lbBackRequested is set
+    #    by 45 OR 49) -- 45 alone is required for the menu-open branch, so Start is the honest rung.
+    Send-Key $proc $VK_START_PRESS "START (press start, action 45)"
     # The menu blip fires when the selection menu transitions in; accept only after it.
-    Wait-ForLog $proc "'B5MenuItem' -> splice" 20 "menu transin" | Out-Null
+    if (-not (Wait-ForLog $proc "'B5MenuItem' -> splice" 20 "menu transin")) {
+        # One retry, still on Start: a title that has not moved means the 45 never landed. (An Accept
+        # tap would ALSO pass the title via the fallthrough above, but proving the Start channel is
+        # the point of this rung, so the retry stays on Start.)
+        Send-Key $proc $VK_START_PRESS "START (press start retry, action 45)"
+        Wait-ForLog $proc "'B5MenuItem' -> splice" 20 "menu transin (retry)" | Out-Null
+    }
     Settle 4
     Take-Shot $proc "boot_21_menu"
 
@@ -315,10 +348,11 @@ if (Wait-ForLog $proc "\[BootLegal\] stage 1 -> 2" 90 "title requested") {
                 # live, and the accept press is the last player action the user asked for.
                 # ⚠️ Named-event channel ONLY (Send-Key handles that for VK_RETURN): sending
                 # the event AND a raw keystroke double-fires the action.
-                # ⓘ The screen's accept is EGameInputActions 49 (GUI_SELECT) on console; the
-                # PC input bridge delivers the accept key as action 45, which
-                # BrnCarSelectVehicle_Input.cpp now recognises alongside 49 (the same
-                # PC-bridge alias BrnIntro / BrnBootProfile already carry).
+                # ⓘ The screen's accept is EGameInputActions 49 (GUI_SELECT) on console, and since
+                # 2026-08-29 the PC leaf delivers the Accept channel AS 49 -- so this rung now
+                # matches the console exactly. The `case 45` arms that BrnCarSelectVehicle_Input /
+                # BrnCarSelectLivery_Input / BrnBootProfile carried were PC-bridge compensations
+                # for the old swapped vocabulary and are being deleted with it; do not re-add one.
                 if (Wait-ForLog $proc "RG :: CSV : Entering Car Select" 60 "CAR SELECT entered") {
                     Settle 10   # carousel populate + the INT_SHOWCAR voice-over
                     Take-Shot $proc "boot_28_carselect_carousel"

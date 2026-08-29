@@ -1,4 +1,4 @@
-# popup_capture.ps1 -- drive to the autosave popup and capture it by WINDOW TITLE
+﻿# popup_capture.ps1 -- drive to the autosave popup and capture it by WINDOW TITLE
 # (Process.MainWindowHandle reads 0 intermittently; FindWindow by title is robust).
 param([string]$OutDir = "scratch\popup_cap", [switch]$LeaveRunning)
 $ErrorActionPreference = 'Stop'
