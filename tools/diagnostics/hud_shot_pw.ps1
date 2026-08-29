@@ -1,4 +1,4 @@
-# hud_shot_pw.ps1 -- boot to FBURN_MAIN and capture in-game frames with
+﻿# hud_shot_pw.ps1 -- boot to FBURN_MAIN and capture in-game frames with
 # PrintWindow(PW_RENDERFULLCONTENT), NO foreground changes (the ALT+SetForegroundWindow
 # dance deterministically freezes the in-game Present -- proven by CPU probing).
 param([string]$OutDir = "scratch\hud_shots_pw")

@@ -1,4 +1,4 @@
-# carselect_frame_gate.ps1 -- THE CHECK THAT WOULD HAVE CAUGHT TASK 127.
+﻿# carselect_frame_gate.ps1 -- THE CHECK THAT WOULD HAVE CAUGHT TASK 127.
 #
 # frame_gate.ps1 samples exactly ONE moment: the post-handover chase camera. Every wave on
 # 2026-08-03 reported "frame gate PASS" and every one of them was telling the truth -- while

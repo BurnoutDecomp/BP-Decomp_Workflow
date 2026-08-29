@@ -1,4 +1,4 @@
-# hud_boot_check.ps1 -- drive the boot flow to FBURN_MAIN using ONLY the game's
+﻿# hud_boot_check.ps1 -- drive the boot flow to FBURN_MAIN using ONLY the game's
 # harness named-event channel (no synthetic keystrokes, no foreground changes),
 # then verify the free-drive HUD state entered and capture a PrintWindow screenshot.
 param([string]$OutDir = "scratch\hud_shots")

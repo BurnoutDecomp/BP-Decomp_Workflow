@@ -1,4 +1,4 @@
-# frame_gate_common.ps1 -- PROVENANCE + SAMPLING shared by frame_gate.ps1 and
+﻿# frame_gate_common.ps1 -- PROVENANCE + SAMPLING shared by frame_gate.ps1 and
 # carselect_frame_gate.ps1.  Dot-source it: . (Join-Path $PSScriptRoot 'frame_gate_common.ps1')
 #
 # ⛔⛔ WHY THIS FILE EXISTS -- READ BEFORE CHANGING A LINE OF IT.
