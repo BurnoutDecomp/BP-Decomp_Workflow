@@ -53,6 +53,10 @@
 #   flow_run.ps1 -Frames -Gates -WriteGoldens       # RE-BANK both goldens (look first!)
 #   flow_run.ps1 -Frames -Drive                     # ... then hold the throttle, dead straight
 #   flow_run.ps1 -Frames -Drive -Steer right        # ... and hold full right lock
+#   flow_run.ps1 -Frames -Drive -PauseAt 25 -PauseTarget driver -ShoulderAt "30:R:2" -UnpauseAt 45
+#                                     # pause on the DRIVER DETAILS screen, press RB (TOGGLE_RIGHT ->
+#                                     # CN_SETTINGS), then try to back out -- the shoulder-button
+#                                     # soft-lock test.
 #   flow_run.ps1 -Frames -Drive -SteerScript "0:left,3.5:none"        # AIM, then run straight
 #   flow_run.ps1 -Frames -Drive -ThrottleScript "0:accel,20:brake"    # ... and back off / reverse
 #   flow_run.ps1 -Drive -Teleport "2958,12.5,-1764,90"                # PUT THE CAR THERE, then drive
@@ -146,6 +150,16 @@ param(
                                  #   ShouldStartShowtimeMode @0x82356B18 + the DetectModeStarts else
                                  #   arm landed 2026-08-27 and the harness hook was deleted with them.
                                  #   ⛔ NOT a default run: it can leave free burn.
+  [string]$ShoulderAt  = "",     # opt IN: press ONE bumper. "<sec>:<L|R>[:<holdSec>]", comma-
+                                 #   separated for repeats -- e.g. "24:R:1.5,44:L:1.5". Seconds are
+                                 #   on the SAME DRIVING time base as -PauseAt, so a bumper press can
+                                 #   be scheduled INSIDE a pause. Default hold 1.5 s.
+                                 #   ⭐ WHY THIS EXISTS SEPARATELY FROM -Showtime: showtime is the
+                                 #   BOTH-bumpers gesture and holds rows 54+55 together, so it cannot
+                                 #   express LB alone or RB alone -- and on the pause screen the two
+                                 #   are DIFFERENT transitions (54 -> TOGGLE_LEFT -> CN_MAP_MAIN,
+                                 #   55 -> TOGGLE_RIGHT -> CN_SETTINGS). Mutually exclusive with
+                                 #   -Showtime: they drive the same two channels.
   [switch]$StartEvent,           # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
                                  # instrument -- the same discipline -CrashEntry carried until that
@@ -717,6 +731,47 @@ function Parse-TapSchedule([string]$lsSpec, [string]$lsName) {
   }
   return @($lResult | Sort-Object)
 }
+
+# ⭐ THE SINGLE-BUMPER SCHEDULE. Entries are "<sec>:<L|R>[:<holdSec>]" on the DRIVING time base.
+# Parsed here (not in the poll loop) so a typo fails the run at once instead of silently never
+# pressing anything -- a channel that is never Set() is indistinguishable in the log from a dead
+# game-side hook, which is the exact failure mode the pause campaign kept hitting.
+function Parse-ShoulderSchedule([string]$lsSpec) {
+  if ([string]::IsNullOrWhiteSpace($lsSpec)) { return @() }
+  $lResult = @()
+  foreach ($lsPart in $lsSpec.Split(',')) {
+    $lsTrim = $lsPart.Trim()
+    if ($lsTrim -eq "") { continue }
+    $laFields = $lsTrim.Split(':')
+    if ($laFields.Count -lt 2 -or $laFields.Count -gt 3) {
+      Write-Host "[flow] FAIL: -ShoulderAt entry '$lsTrim' is not <sec>:<L|R>[:<holdSec>]."; exit 1
+    }
+    $lfAt = 0.0
+    if (-not [double]::TryParse($laFields[0].Trim(), [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$lfAt)) {
+      Write-Host "[flow] FAIL: -ShoulderAt time '$($laFields[0])' is not a number."; exit 1
+    }
+    $lsSide = $laFields[1].Trim().ToUpperInvariant()
+    if ($lsSide -ne 'L' -and $lsSide -ne 'R') {
+      Write-Host "[flow] FAIL: -ShoulderAt side '$($laFields[1])' is not L or R."; exit 1
+    }
+    $lfHold = 1.5
+    if ($laFields.Count -eq 3 -and
+        -not [double]::TryParse($laFields[2].Trim(), [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$lfHold)) {
+      Write-Host "[flow] FAIL: -ShoulderAt hold '$($laFields[2])' is not a number."; exit 1
+    }
+    $lResult += [pscustomobject]@{ At = $lfAt; Side = $lsSide; Hold = $lfHold }
+  }
+  return @($lResult | Sort-Object At)
+}
+$script:shoulderTaps = Parse-ShoulderSchedule $ShoulderAt
+$script:shoulderDown = ''            # '' | 'L' | 'R' -- which single bumper is currently HELD
+if ($script:shoulderTaps.Count -gt 0) {
+  if ($Showtime -ne "") {
+    Write-Host "[flow] FAIL: -ShoulderAt and -Showtime both drive rows 54/55. Use one or the other."; exit 1
+  }
+  Write-Host ("[flow] BUMPER schedule: {0} press(es) -- {1}" -f $script:shoulderTaps.Count,
+              (($script:shoulderTaps | ForEach-Object { "{0}B@DRIVING+{1:f1}s for {2:f1}s" -f $_.Side, $_.At, $_.Hold }) -join ', '))
+}
 $script:pauseTimes   = Parse-TapSchedule $PauseAt   'PauseAt'
 $script:unpauseTimes = Parse-TapSchedule $UnpauseAt 'UnpauseAt'
 $script:pauseNext    = 0
@@ -1086,6 +1141,28 @@ while ($true) {
       $script:unpauseNext++
       $evStop.Set() | Out-Null
       Write-Host ("[flow] UNPAUSE tap #{0} (action 50 GUI_CANCEL / Stop) at DRIVING+{1:f1}s" -f $script:unpauseNext, $sinceDrivingP)
+    }
+  }
+
+  # ---- the SINGLE-bumper presses (-ShoulderAt) -------------------------------------------
+  # Resolved every poll and applied only on CHANGE, exactly like the showtime pair below. The
+  # channels are MANUAL-RESET, so Set() is press-and-hold and Reset() is release; the desired
+  # state is "the newest entry whose window covers now", which makes overlapping entries
+  # well-defined instead of leaving a button stuck down.
+  if ($phase -eq 'DRIVING' -and $script:shoulderTaps.Count -gt 0) {
+    $sinceDrivingS = ((Get-Date) - $drivingAt).TotalSeconds
+    $lsWant = ''
+    foreach ($lTap in $script:shoulderTaps) {
+      if ($sinceDrivingS -ge $lTap.At -and $sinceDrivingS -lt ($lTap.At + $lTap.Hold)) { $lsWant = $lTap.Side }
+    }
+    if ($lsWant -ne $script:shoulderDown) {
+      $script:shoulderDown = $lsWant
+      $evShldL.Reset() | Out-Null; $evShldR.Reset() | Out-Null
+      if     ($lsWant -eq 'L') { $evShldL.Set() | Out-Null }
+      elseif ($lsWant -eq 'R') { $evShldR.Set() | Out-Null }
+      $lsState = $(if ($lsWant -eq '') { 'BOTH UP' } else { "$($lsWant)B DOWN" })
+      Write-Host ("[flow] BUMPER {0,-8} at {1,6:f1}s (DRIVING+{2:f1}s)" -f $lsState, $elapsed, $sinceDrivingS)
+      $inputLog += ("bumper {0,-8} run={1,6:f1}s DRIVING+{2:f1}s" -f $lsState, $elapsed, $sinceDrivingS)
     }
   }
 

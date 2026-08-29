@@ -4889,6 +4889,18 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavOptions.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavColourCalibrate.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnlineMod.cpp"
+  rem ==== [pause soft-lock wave 2026-08-29] CN_SETTINGS, THE PAUSE SCREEN'S RB TAB =====
+  rem  MEASURED SOFT-LOCK, now closed. The Driver Details pause screen DRAWS LB/RB prompts;
+  rem  its actions 54/55 post TOGGLE_LEFT/TOGGLE_RIGHT (faithful -- X360 @0x824CF3B8 cases
+  rem  '6'/'7' are bare SendStateEvent), and BRNSCREENFSM sends TOGGLE_RIGHT to CN_SETTINGS.
+  rem  CrashNavSettings was a HEADER-ONLY SHELL, so OnEnter/Update/OnLeave were the
+  rem  do-nothing CgsGui::State base: it registered for nothing, received nothing, and never
+  rem  posted the resume the pause screen had already skipped. Baseline on b5 cb80d9b7:
+  rem  after RB, ZERO changed pixels across 16,290 dumped presents (200 s) with the throttle
+  rem  held, and three GUI_CANCEL taps did nothing. This TU lands the nine linkable X360
+  rem  bodies (the 45/50 GO_BACK+resume arm among them); the two SKU/keyboard ones are
+  rem  PARKED on missing PC platform leaves and cannot re-create the lock -- see its banner.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavSettings.cpp"
   rem ==== [driver-details pause wave 2026-08-28] THE START-BUTTON PAUSE SCREEN ==========
   rem  MEASURED: pressing START in free burn now draws the real Driver Details screen --
   rem  the title, the Paradise licence card (player name, issue date, "UPGRADE IN 1 WIN"),
