@@ -138,6 +138,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\renderware\src\rw\audio\core\XasDec.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Collection.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Unpack0.cpp"
+  rem  BitGetter.cpp -- the MSB-first bit reader the packed sample headers are parsed
+  rem  with; its GetBits body was already reconstructed but the TU was never mounted.
+  echo "%VEN%\renderware\src\rw\audio\core\BitGetter.cpp"
   rem ---- AEMS-cascade wave 2026-08-28: the RWAC factory registration pass plug-ins. ---------
   rem  GenericRwacFactory::GenericRwacFactory @0x826C17A0 registers every runtime plug-in
   rem  descriptor in console order -- these vendor TUs carry the getters plus the plug-in
