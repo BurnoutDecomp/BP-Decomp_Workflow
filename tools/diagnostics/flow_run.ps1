@@ -342,7 +342,18 @@ if ($ReleaseAsserts) {
 # run that calls itself DEFAULT diverge from the console at every junction it visits, and no golden
 # may be banked or gated through it. Opt IN with -SkipTrainingTip.
 # ⛔⛔ BRN_EVENT_FSM is here for the same reason: it arms the event-HUD FSM hop (a CAPABILITY).
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM')) {
+# ⛔⛔ THE DEFAULT-RUN GUARANTEE ONLY COVERS WHAT IS LISTED HERE (audited 2026-08-29).
+# Measured: the engine reads 45 BRN_* variables and this list covered 14 of them -- so THIRTY-THREE
+# instruments and capability switches could ride in from an earlier command in the same shell while
+# the run announced itself as DEFAULT. Two of them change behaviour outright:
+#   BRN_TRAFFIC_FAKE_SHOWTIME  -- silently makes a default run a SHOWTIME run (traffic ~95 -> ~167)
+#   BRN_TRAFFIC_NO_JAM_NUKE    -- disables the jam relief valve
+# and BRN_ASSERT_NO_SUPPRESS / BRN_CULL_OFF / BRN_IOBUF_ZERO / the shadow knobs all alter what is
+# rendered or asserted. Goldens are meant to be byte-identical to a probe-free build, so a leftover
+# here is a golden-gate hazard, not a nuisance -- the same reason BRN_MOTION_PROBE was added.
+# ⚠️ BRN_INPUT_ALLOW_BACKGROUND is deliberately NOT cleared: this script sets it.
+# ⭐ If you add a getenv("BRN_...") to the engine, add it here in the same change.
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 if ($CrashPlayer -gt 0) {
