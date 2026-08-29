@@ -150,6 +150,28 @@ param(
                                  #   ShouldStartShowtimeMode @0x82356B18 + the DetectModeStarts else
                                  #   arm landed 2026-08-27 and the harness hook was deleted with them.
                                  #   ⛔ NOT a default run: it can leave free burn.
+  [string]$Boost       = "",     # opt IN: PULSE the boost button. "<sec>[:<periodSec>[:<holdSec>]]",
+                                 #   seconds on the SAME DRIVING time base as -PauseAt/-ShoulderAt;
+                                 #   pulses from <sec> to the end of the run. Default period 1.0 s,
+                                 #   default hold 0.4 s.
+                                 #   IT MUST PULSE, NOT HOLD, AND THAT IS NOT A STYLE CHOICE.
+                                 #   The showtime bounce is driven by PlayerVehicleControls::
+                                 #   mbBoostBounce, and BridgeControllerToWorld builds that byte from
+                                 #   action 3's muStatus BIT 1 (GameBridgeControllerToX.cpp:312,
+                                 #   `(lpActions[3].muStatus >> 1) & 1`). Bit 1 is PRESSED-THIS-FRAME,
+                                 #   not held (CgsInputPadsPC.cpp:548 states the contract, :640 emits
+                                 #   it) -- so a hold, however long, is exactly ONE bounce request.
+                                 #   Bit 0 is the held bit and feeds mbBoost, the ORDINARY boost,
+                                 #   which ProcessPlayerVehicleInput correctly gates off for a
+                                 #   crashing player. A -Boost run that held would measure nothing.
+                                 #   THE DEFAULT PERIOD IS THE CONSOLE'S OWN RE-ARM CADENCE.
+                                 #   CrashPlayManager::UpdateBounceBoost only accepts a new press
+                                 #   once mfBounceBoostTimer has fallen below
+                                 #   KF_MINIMUM_BOUNCE_BOOST_TIME (0.3, flt_82CDB520) from
+                                 #   KF_MAXIMUM_BOUNCE_BOOST_TIME (1.0, flt_82CDB524), i.e. 0.7 s
+                                 #   after the last one. Anything faster is swallowed by the game.
+                                 #   The hold is 2 poll ticks: this loop polls every 200 ms, so a
+                                 #   shorter one can fall between two polls and never be pressed.
   [string]$ShoulderAt  = "",     # opt IN: press ONE bumper. "<sec>:<L|R>[:<holdSec>]", comma-
                                  #   separated for repeats -- e.g. "24:R:1.5,44:L:1.5". Seconds are
                                  #   on the SAME DRIVING time base as -PauseAt, so a bumper press can
@@ -863,6 +885,44 @@ function Parse-ShoulderSchedule([string]$lsSpec) {
   return @($lResult | Sort-Object At)
 }
 $script:shoulderTaps = Parse-ShoulderSchedule $ShoulderAt
+
+# ---- -Boost: <sec>[:<periodSec>[:<holdSec>]] -------------------------------------------
+$script:boostAt     = -1.0
+$script:boostPeriod = 1.0
+$script:boostHold   = 0.4
+$script:boostDown   = $false
+$script:boostCount  = 0
+if ($Boost -ne "") {
+  $laBoost = $Boost.Split(":")
+  # Parse INVARIANT, not with the box locale. This box formats "12,0s", i.e. the current
+  # culture uses a COMMA decimal separator, and a bare [double]::TryParse("1.0") FAILS under
+  # it -- which is exactly how the first -Boost run died. The [double] CAST below is already
+  # invariant; only TryParse needed telling.
+  $lfTmp = 0.0
+  $lNumStyle = [System.Globalization.NumberStyles]::Float
+  $lInv      = [System.Globalization.CultureInfo]::InvariantCulture
+  if (-not [double]::TryParse($laBoost[0], $lNumStyle, $lInv, [ref]$lfTmp)) {
+    Write-Host "[flow] FAIL: -Boost time is not a number."; exit 1
+  }
+  $script:boostAt = [double]$laBoost[0]
+  if ($laBoost.Count -ge 2 -and $laBoost[1] -ne "") {
+    if (-not [double]::TryParse($laBoost[1], $lNumStyle, $lInv, [ref]$lfTmp)) {
+      Write-Host "[flow] FAIL: -Boost period is not a number."; exit 1
+    }
+    $script:boostPeriod = [double]$laBoost[1]
+  }
+  if ($laBoost.Count -ge 3 -and $laBoost[2] -ne "") {
+    if (-not [double]::TryParse($laBoost[2], $lNumStyle, $lInv, [ref]$lfTmp)) {
+      Write-Host "[flow] FAIL: -Boost hold is not a number."; exit 1
+    }
+    $script:boostHold = [double]$laBoost[2]
+  }
+  if ($script:boostPeriod -le 0.0) { Write-Host "[flow] FAIL: -Boost period must be > 0."; exit 1 }
+  if ($script:boostHold -ge $script:boostPeriod) {
+    Write-Host "[flow] FAIL: -Boost hold must be shorter than the period (a permanent hold is ONE press)."; exit 1
+  }
+  Write-Host ("[flow] BOOST pulses armed: from DRIVING+{0:f1}s, every {1:f2}s, held {2:f2}s" -f $script:boostAt, $script:boostPeriod, $script:boostHold)
+}
 $script:shoulderDown = ''            # '' | 'L' | 'R' -- which single bumper is currently HELD
 if ($script:shoulderTaps.Count -gt 0) {
   if ($Showtime -ne "") {
@@ -895,7 +955,10 @@ $evStrR  = New-Object System.Threading.EventWaitHandle($false, [System.Threading
 #   above; never Set() unless -Showtime asks for it.
 $evShldL = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_ShoulderL")
 $evShldR = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_ShoulderR")
-foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR)) { $e.Reset() | Out-Null }
+# MANUAL-RESET like the other driving rows: Set() is press, Reset() is release, and the pressed
+# EDGE between them is what mbBoostBounce is built from. See the -Boost banner in param().
+$evBoost = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_Boost")
+foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
 
 # ⛔⛔ RELEASE THE HOLDS ON A FAILURE PATH TOO (showtime cross-run hazard, 2026-08-29).
 #   These seven are SESSION-GLOBAL manual-reset events: signalled IS a hold, and it survives this
@@ -906,7 +969,7 @@ foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR)) 
 #   how this was found). A `trap` runs on the way out of a terminating error, which is precisely
 #   the gap; the box lock's own release covers the kill/Ctrl+C case for the NEXT run.
 trap {
-  foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR)) {
+  foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$evBoost)) {
     try { $e.Reset() | Out-Null } catch { }
   }
   Write-Host "[flow] terminating error -- all seven input holds released before rethrow."
@@ -1265,6 +1328,27 @@ while ($true) {
     }
   }
 
+  # ---- the BOOST pulses (-Boost) ---------------------------------------------------------
+  # A square wave on the boost channel: down for <hold>, up for the rest of <period>. Applied
+  # only on CHANGE, like the bumpers. Each rising edge is one mbBoostBounce request; the game
+  # swallows any that arrive while mfBounceBoostTimer is still above 0.3.
+  if ($phase -eq 'DRIVING' -and $script:boostAt -ge 0) {
+    $sinceDrivingBo = ((Get-Date) - $drivingAt).TotalSeconds
+    $lbWantBoost = $false
+    if ($sinceDrivingBo -ge $script:boostAt) {
+      $lfInto = ($sinceDrivingBo - $script:boostAt) % $script:boostPeriod
+      $lbWantBoost = ($lfInto -lt $script:boostHold)
+    }
+    if ($lbWantBoost -ne $script:boostDown) {
+      $script:boostDown = $lbWantBoost
+      if ($lbWantBoost) { $evBoost.Set() | Out-Null; $script:boostCount++ }
+      else              { $evBoost.Reset() | Out-Null }
+      $lsBoostState = $(if ($lbWantBoost) { "DOWN" } else { "UP" })
+      Write-Host ("[flow] BOOST {0,-4} #{1,-3} at {2,6:f1}s (DRIVING+{3:f1}s)" -f $lsBoostState, $script:boostCount, $elapsed, $sinceDrivingBo)
+      $inputLog += ("boost {0,-4} #{1,-3} run={2,6:f1}s DRIVING+{3:f1}s" -f $lsBoostState, $script:boostCount, $elapsed, $sinceDrivingBo)
+    }
+  }
+
   # ---- the bumper hold (showtime) --------------------------------------------------------
   # ⚠⚠ DELIBERATELY OUTSIDE THE -Drive GATE. The first cut of this block sat INSIDE it, which
   # would have made `-Showtime` with no `-Drive` a SILENT NO-OP -- indistinguishable in the log
@@ -1324,7 +1408,7 @@ while ($true) {
   }
   Start-Sleep -Milliseconds 250
 }
-foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR)) { $e.Reset() | Out-Null }
+foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
 
 $endFrame = Newest-Frame
 $endElapsed = ((Get-Date) - $t0).TotalSeconds
