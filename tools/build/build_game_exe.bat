@@ -4727,6 +4727,13 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventStatusGuiEvents.cpp"
   rem [event-starts wave 2026-08-27] the event-start table hop (GUI event 203).
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventStartsGuiEvents.cpp"
+  rem [showtime-score wave 2026-08-29] THE SHOWTIME SCORE REACHES THE GUI. This TU is
+  rem BrnGameModule::TranslateShowtimeActionToGuiEvent @0x823E1988, the ONLY producer in the
+  rem image of GUI events 396/394/399/401/400/393/397/402 -- the showtime score update, the
+  rem per-car hit record, the multiplier and crush-combo popups. Its caller arm is in the
+  rem already-mounted GameBridgeGameStateToX_StuntGuiEvents.cpp, so without this mount that
+  rem call is an LNK2019.
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_ShowtimeGuiEvents.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_00.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_01.cpp"
