@@ -1937,6 +1937,12 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPotentialContactAverager.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_CrashResponse.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_RaceCarTrafficContact.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DoCrashPrediction.cpp"
+rem  2026-08-29 (traffic-crash wave): the SET-TRAFFIC-CRASHING EVENT DRAIN. ProcessTrafficEvents
+rem  @0x82643FB0 stops being a conductor gate here; this TU carries it plus the three functions
+rem  under it that had no definition anywhere in the tree (ProcessSetTrafficCrashingEvents,
+rem  ProcessUpdateNetworkTrafficEvents, SetTrafficVehicleNotCrashing). Without this mount the
+rem  un-gated call in BrnVehicleManager_MaintenanceEvents.cpp is an LNK2019.
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficEvents.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManagerIO.cpp"
   rem  ????????? 2026-08-03 (task #116) -- UN-STUBBING BrnPhysics::PhysicsModule::Construct @0x825AE308.
   rem  That function had been a LIVE EMPTY STUB in WorldLinkStubs.cpp since 2026-07-26: a quiet
