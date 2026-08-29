@@ -34,9 +34,17 @@ def find(qname):
     cls = qname.split("::")[-2] if "::" in qname else None
     pat = (cls + "::" + meth) if cls else ("::" + meth)
     try:
+        # ⛔ NOT text=True. A handful of committed sources carry bytes that are not valid in the
+        # console's ANSI code page (a stray 0x90 in one of the ChallengeManager TUs, for one), and
+        # text=True decodes grep's whole output with locale.getpreferredencoding() -- so the
+        # decoder raised UnicodeDecodeError INSIDE subprocess's reader thread and the tool died
+        # with a traceback instead of an answer. Measured 2026-08-29 on
+        # `hasbody.py BrnGameModule::TranslateGameActionsToGuiEvents`: the crash is a bad answer
+        # dressed as a tool failure, and the previous defect in this same function was also
+        # "reports something other than what its name says".
         out = subprocess.run(
             ["grep", "-rn", "--include=*.cpp", "--include=*.h", pat, SRC],
-            capture_output=True, text=True, timeout=180).stdout
+            capture_output=True, timeout=180).stdout.decode("utf-8", "replace")
     except Exception as exc:
         print("grep failed:", exc)
         return [], []
