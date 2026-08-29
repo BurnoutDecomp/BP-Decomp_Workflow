@@ -172,6 +172,21 @@ param(
                                  # by default and CLEARED every run, on exactly the -StartEvent
                                  # grounds: it is a CAPABILITY (it changes what the game DOES at a
                                  # junction), not an instrument. See the banner below.
+  [switch]$ShowtimeIgnoreProgression, # opt IN to BRN_SHOWTIME_IGNORE_PROGRESSION=1 -- stop the
+                                 # console's OWN road-rules gate refusing the showtime gesture.
+                                 # (Off by default, CLEARED every run: it changes what the game DOES.)
+                                 # ShouldStartShowtimeMode @0x82356B18 refuses offline unless
+                                 # AreRoadRulesAvailable @0x82311520 is true (>= 4 medals from the
+                                 # start, or one ruled road). That is CORRECT console behaviour --
+                                 # but NEITHER term is reachable on this build: medals come from
+                                 # finishing an offline event (which does not complete yet) and the
+                                 # two roads-ruled tallies have no writer at all. Without this, the
+                                 # showtime SCORE half of item 6 cannot be observed at all.
+                                 # The flag is scoped to that ONE decision -- it forges no
+                                 # progression value, so completion %, the unlock predicates and the
+                                 # save are untouched, and the nine gates below the road-rules test
+                                 # still run. The game logs one line saying it was used.
+                                 # DELETE-WHEN an offline event can award a medal.
   [switch]$EventFsm              # opt IN to the EVENT-HUD FSM HOP (BRN_EVENT_FSM=1). While the
                                  # PRE_FLY_BY/RACE_MAIN bring-up is verified, the exe gates the
                                  # console's action-23 RunFsm("BRNEVENTFSM") post behind this env
@@ -353,7 +368,7 @@ if ($ReleaseAsserts) {
 # here is a golden-gate hazard, not a nuisance -- the same reason BRN_MOTION_PROBE was added.
 # ⚠️ BRN_INPUT_ALLOW_BACKGROUND is deliberately NOT cleared: this script sets it.
 # ⭐ If you add a getenv("BRN_...") to the engine, add it here in the same change.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX')) {
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_SHOWTIME_IGNORE_PROGRESSION','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 if ($CrashPlayer -gt 0) {
@@ -383,7 +398,7 @@ if ($DeformTrace -gt 0) {
   $env:BRN_DEFORM_TRACE = "$DeformTrace"
   Write-Host "[flow] DEFORM TRACE run: BRN_DEFORM_TRACE=$DeformTrace (opt-in, period in calls). NOT a default run -- do not gate goldens off this."
 }
-if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and $DeformTrace -le 0 -and -not $StartEvent -and $Showtime -eq "" -and -not $SkipTrainingTip -and -not $EventFsm) {
+if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $CrashPlayer -le 0 -and $DeformTrace -le 0 -and -not $StartEvent -and $Showtime -eq "" -and -not $SkipTrainingTip -and -not $EventFsm -and -not $ShowtimeIgnoreProgression) {
   Write-Host "[flow] DEFAULT run: BRN_WORLD_CAMFREE / FORCE_DIRECTOR_CAMERA / DIRECTOR_TRACE / RC_PROBE / MOTION_PROBE / TRICACHE_PROBE / TRACTION_PROBE / CRASH_PLAYER / DEFORM_TRACE / START_EVENT / START_SHOWTIME / SKIP_TRAINING_TIP / EVENT_FSM all cleared."
 }
 
@@ -513,6 +528,17 @@ if ($Showtime -ne "") {
   if (-not $Drive) {
     Write-Host "[flow] NOTE: -Showtime without -Drive -- the car will be stationary when the gesture"
     Write-Host "       fires. The console gate this stands in for has a speed term; pair with -Drive."
+  }
+}
+if ($ShowtimeIgnoreProgression) {
+  $env:BRN_SHOWTIME_IGNORE_PROGRESSION = "1"
+  Write-Host "[flow] SHOWTIME PROGRESSION GATE IGNORED: BRN_SHOWTIME_IGNORE_PROGRESSION=1 (opt-in)."
+  Write-Host "       The console's own AreRoadRulesAvailable @0x82311520 refusal is skipped for that"
+  Write-Host "       ONE decision only -- no progression value is forged and the save is untouched."
+  Write-Host "       NOT a default run and NOT comparable with one. Do not bank or gate goldens off it."
+  if ($Showtime -eq "") {
+    Write-Host "[flow] NOTE: -ShowtimeIgnoreProgression without -Showtime does nothing observable --"
+    Write-Host "       the gate it opens is only reached while BOTH BUMPERS are held."
   }
 }
 if ($StartEvent) {
@@ -1191,6 +1217,7 @@ $summary += ("STARTEVT {0}" -f $startEventText)
 # free-burn run, and the summary must say so on its face.
 $showtimeText = 'not armed'
 if ($Showtime -ne "") { $showtimeText = ("BOTH BUMPERS at DRIVING+{0:f1}s for {1:f1}s (console gate; BRN_START_SHOWTIME inert)" -f $showtimeAt, $showtimeHold) }
+if ($ShowtimeIgnoreProgression) { $showtimeText += "  +PROGRESSION-GATE-IGNORED (BRN_SHOWTIME_IGNORE_PROGRESSION=1)" }
 $summary += ("SHOWTIME {0}" -f $showtimeText)
 # SKIPTIP: whether this run carried the training-tip bypass. Same comparability reason as STARTEVT
 # -- a run whose junction canEnter gate ignored a blocking tip showed a hint the console would not.
