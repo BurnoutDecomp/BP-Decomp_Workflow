@@ -37,9 +37,17 @@ Layout
 Inside the tail tile each packed level sits at a block offset that depends on its
 TAIL-RELATIVE INDEX (not on its size); the table below was recovered empirically
 by matching box-downsamples of the last unpacked level against every block-aligned
-sub-rect of the untiled tail, on DXT1 and DXT5, square / wide / tall, plus fully
-packed (base == 0) textures where the non-zero block map of the whole tile is
-decisive. See the wave log for the per-texture evidence.
+sub-rect of the untiled tail, on DXT1 and DXT5, square / wide / tall. See the wave
+log for the per-texture evidence.
+
+base == 0 and base > 0 chains share ONE tail-slot rule, indexed by the
+tail-relative level (level - base; for base == 0 that is just the mip level).
+The discriminator for "the image sits plainly at the tile origin" is the fetch
+constant's PackedMips bit -- clear exactly when mips == 1 (30,405 retail
+textures, zero exceptions) -- NOT base == 0.  An earlier fix read base == 0
+level 0 from the origin unconditionally; that was right for the two mips == 1
+map masks that motivated it and wrong for every base == 0 chain with mips.
+See packed_level_slot() / tail_slot_packed().
 """
 import struct
 
@@ -202,13 +210,99 @@ def storage_regions(width, height, mips, block_size, bytes_per_block, faces=1):
 
 # Block offset of a packed level inside the tail tile, by TAIL-RELATIVE index.
 # Recovered empirically -- see the module docstring.
+#
+# LEGACY.  This table is retained ONLY for base > 0 chains, so that the ported
+# bytes of every already-shipped world/GUI texture stay identical.  It is known
+# to be WRONG for tail-relative index >= 3 -- see tail_slot_packed() below and
+# scratch/mainmenu_wave/mipslots/report.md for the block-occupancy evidence
+# (138 of 475 sampled base > 0 retail textures have non-zero tail blocks this
+# table never reads, and it reads an always-zero block at index 5).  Flip
+# _LEGACY_BASE_GT0_SLOTS to False to put base > 0 on the derived arithmetic too,
+# but only behind its own regression pass.
 _TAIL_SLOTS_WIDE = [(0, 4), (0, 2), (0, 1), (1, 0), (2, 0), (3, 0), (4, 0)]
 _TAIL_SLOTS_TALL = [(4, 0), (2, 0), (1, 0), (0, 1), (0, 2), (0, 3), (0, 4)]
+
+_LEGACY_BASE_GT0_SLOTS = True
 
 
 def tail_slot(index, width, height):
     slots = _TAIL_SLOTS_WIDE if width > height else _TAIL_SLOTS_TALL
     return slots[index] if index < len(slots) else slots[-1]
+
+
+def tail_slot_packed(index, tail_w, tail_h, block_size):
+    """Block offset of the packed level at TAIL-RELATIVE `index`, derived.
+
+    `tail_w`/`tail_h` are the TEXEL dimensions of the tail level (level `base`).
+
+    The tail tile is one nested mip pyramid.  In TEXELS, measuring along the
+    tail's short axis for the first three levels and along its long axis after
+    that (once the levels are thinner than one 4-texel block and can no longer
+    be stacked on the short axis):
+
+        index 0..2   offset = 16 >> index          on the SHORT axis
+        index >= 3   offset = long >> (index - 2)  on the LONG axis
+
+    where `long` is the tail's long-axis texel size.  Each level therefore
+    starts at exactly its own extent along that axis -- the classic mip nesting
+    -- and the two runs never collide, because a tail always ends at the level
+    whose long-axis offset is 4 texels (one block).
+
+    Evidence (scratch/mainmenu_wave/mipslots/, JSON artifacts + report.md):
+    block-occupancy coverage over 518 retail X360 textures -- all 43 distinct
+    base == 0 rids plus a 475-texture base > 0 sample -- every non-zero block of
+    every tail tile falls inside exactly one predicted level footprint, with
+    zero overlaps and zero out-of-bounds.  The HEADLINE witness is 373AD518 /
+    FFC906C9 (128x128 A8R8G8B8, block size 1, tail 16x16, 341 non-zero blocks):
+    exhaustive enumeration of EVERY disjoint placement of all five tail levels
+    returns exactly ONE solution -- the derived assignment -- and, block size
+    being 1, it also proves the offsets are TEXEL-denominated.  Index 3 is
+    additionally forced in the two long-axis witnesses 4C2E16BA (512x64 DXT1,
+    tail 128x16: a 4x1-block footprint at x=16, unique under exact cover) and
+    31A3B003 (64x1024 DXT1, tail 16x256: 1x8 blocks at y=32, unique; its nine
+    tail levels consume every non-zero block with none left over).
+    AMBIGUITY LEDGER, honest: indices 0..2 are pinned by footprint in every
+    witness shape; 3..4 are pinned in long-axis >= 64 tails and in 373AD518;
+    index >= 5 placements are INHERITED from the arithmetic (exact-cover admits
+    alternatives that permute only 1-2-block footprints -- the visually
+    significant levels never move in any admissible solution).
+    """
+    wide = tail_w > tail_h
+    if index <= 2:
+        p = (16 >> index) // block_size
+        return (0, p) if wide else (p, 0)
+    p = ((tail_w if wide else tail_h) >> (index - 2)) // block_size
+    return (p, 0) if wide else (0, p)
+
+
+def packed_level_slot(level, base, width, height, block_size, packed_mips):
+    """Block offset of `level` inside the tail tile.
+
+    `width`/`height` are the FULL texture dimensions; the tail level's own
+    dimensions are derived from `base`.
+
+    A base == 0 chain has no unpacked levels above the tail, so its level 0 is
+    the tail level and takes tail-relative index 0 -- it does NOT sit at the
+    tile origin.  The one exception is a chain with no mips at all: the fetch
+    constant's PackedMips bit is then clear and the single image is stored
+    plainly at the tile origin.  That bit is the discriminator, straight out of
+    the header -- across all 43 distinct base == 0 rids in retail it is False
+    for exactly the 23 mips == 1 textures (e.g. GUITEXTURES B3E5FAA5 32x8 and
+    BFF04731 256x8, whose only non-zero blocks start at column 0 row 0) and True
+    for exactly the 20 mips > 1 ones.
+
+    base > 0 keeps the legacy _TAIL_SLOTS_* table; see the note there.
+    """
+    if packed_mips is None:
+        raise ValueError("packed_level_slot: packed_mips is required -- omitting it for a "
+                         "mips==1 texture would silently re-read (4,0) instead of the origin "
+                         "(the exact blank-mask bug this module documents)")
+    if base == 0 and packed_mips is False:
+        return (0, 0)
+    if base > 0 and _LEGACY_BASE_GT0_SLOTS:
+        return tail_slot(level - base, width, height)
+    tw, th = level_dims(width, height, base)
+    return tail_slot_packed(level - base, tw, th, block_size)
 
 
 # ---------------------------------------------------------------- untiling
@@ -356,23 +450,8 @@ def port_pixels(header, body):
                 rows = [img[(y * iw) * bpb:(y * iw + bw) * bpb] for y in range(bh)]
             else:
                 img, iw, ih = tails[face]
-                if lvl == 0:
-                    # FULLY PACKED texture (packed_mip_base == 0, i.e. min(w,h) <= 16):
-                    # level 0 IS the whole texture, and it sits at the tile ORIGIN -- it is
-                    # not a packed mip nested around a larger sibling, so the tail-slot table
-                    # (which starts at (0,4)/(4,0) blocks == 16 texels, the offset the FIRST
-                    # PACKED mip takes when it is nested behind an unpacked level) does not
-                    # apply to it. Reading it at (0,4) fetched empty tile rows: measured on
-                    # the stock ARTIST GUITEXTURES.BIN, both fully packed entries
-                    # (boostbarmask 256x8 = BFF04731, and B3E5FAA5 32x8) have their ONLY
-                    # non-zero block rows at 0..1 and every other row of the 64x32-block tile
-                    # is zero, so (0,4) ported 2048 bytes of ZEROS. In game that made the
-                    # boost bar's mask texture entirely black, and because the GUI mask
-                    # samples through a COLOUR modulate every masked boost-bar draw
-                    # (background strip, fire body, fire overlay) rendered pure black.
-                    ox, oy = 0, 0
-                else:
-                    ox, oy = tail_slot(lvl - base, w, h)
+                ox, oy = packed_level_slot(lvl, base, w, h, block_size,
+                                           f['packed_mips'])
                 ox = min(ox, max(0, iw - bw))
                 oy = min(oy, max(0, ih - bh))
                 rows = [img[((oy + y) * iw + ox) * bpb:((oy + y) * iw + ox + bw) * bpb]
