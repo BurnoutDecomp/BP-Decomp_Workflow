@@ -191,6 +191,9 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  SinePlayer.cpp -- the debug sine source plug-in. It carried the phase-D audible
   rem  probe, since removed after the ear confirmation
   echo "%VEN%\renderware\src\rw\audio\core\plugins\SinePlayer.cpp"
+  rem  SndPlayer1.cpp -- the engine sample player: the SOURCE stage of every splice
+  rem  voice. Construction half only; the streaming half waits on the Stream surface.
+  echo "%VEN%\renderware\src\rw\audio\core\plugins\SndPlayer1.cpp"
   rem  AEMS-cascade slice 2: the AemsRWSampleFactory MI home + its ctor and the Snd9 AEMS
   rem  layer -- AemsFactory::Create at stage 3 needs all three.
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\AEMS\CgsAemsInterfaceImplementation.cpp"
