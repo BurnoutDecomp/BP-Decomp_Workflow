@@ -164,6 +164,21 @@ param(
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
                                  # instrument -- the same discipline -CrashEntry carried until that
                                  # flag was deleted on 2026-08-27. See the banner below.
+  [int]$DebugFinishPos = 0,      # opt IN to the DEBUG FINISH POSITION (BRN_DEBUG_FINISH_POS=<n>).
+                                 # OFF by default and CLEARED every run, on exactly the -StartEvent
+                                 # grounds: it is a CAPABILITY, and the loudest one in the list --
+                                 # it ENDS the running event with finish position <n> (1 == first
+                                 # place == the medal path, 4 == the ordinary stunt-run loss).
+                                 # It drives the console's OWN debug member: ModeManager::
+                                 # FinishCurrentModeNextUpdateWithFinishPosition (DWARF :250), the
+                                 # same one FinishCurrentMode already tests at LABEL_39. Nothing is
+                                 # forged -- no score, no completion %, no hand-written medal --
+                                 # but a medal earned this way was awarded THROUGH THE DEBUG FINISH
+                                 # POSITION, not by scoring the 10,000-point target. Never report a
+                                 # result taken through it as a genuine win.
+  [double]$DebugFinishAt = 20,   # seconds of MODE TIME before -DebugFinishPos fires. A harness
+                                 # number, not a console one: it lets the event start render and the
+                                 # scorer initialise first. Ignored unless -DebugFinishPos > 0.
   [switch]$ReleaseAsserts,       # opt IN to HOLDING the assert-release event open for the whole run,
                                  # instead of releasing one assert per detection (the default).
                                  # ⛔ NOT a default run: `asserts=` stops being comparable, because
@@ -390,9 +405,21 @@ if ($ReleaseAsserts) {
 # and BRN_ASSERT_NO_SUPPRESS / BRN_CULL_OFF / BRN_IOBUF_ZERO / the shadow knobs all alter what is
 # rendered or asserted. Goldens are meant to be byte-identical to a probe-free build, so a leftover
 # here is a golden-gate hazard, not a nuisance -- the same reason BRN_MOTION_PROBE was added.
+# ⛔⛔ BRN_DEBUG_FINISH_POS / BRN_DEBUG_FINISH_AT JOINED THIS LIST 2026-08-29 (event-finish round),
+# for the BRN_START_EVENT reason and not the instrument one. BRN_DEBUG_FINISH_POS=<n> makes the game
+# call the console's own ModeManager::FinishCurrentModeNextUpdateWithFinishPosition(<n>) once the
+# running mode has been in progress for BRN_DEBUG_FINISH_AT seconds -- i.e. it ENDS THE EVENT, with
+# the finish position the console's debug member carries (1 == first place == the medal path).
+# A leftover shell variable would therefore make a run that calls itself DEFAULT cut its own event
+# short and bank a WIN, which is the loudest possible version of the seven-non-comparable-runs
+# failure: it does not merely change what the log says, it changes what the PROFILE ON DISK holds.
+# ⛔ Nothing downstream is forged -- no score, no completion percentage and no medal is written by
+# the hook -- but a medal earned with it set was awarded through the DEBUG FINISH POSITION, not by
+# reaching the target score, and no result taken through it may be reported as a genuine win.
+# Opt IN with -DebugFinishPos <n> (and -DebugFinishAt <seconds>).
 # ⚠️ BRN_INPUT_ALLOW_BACKGROUND is deliberately NOT cleared: this script sets it.
 # ⭐ If you add a getenv("BRN_...") to the engine, add it here in the same change.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_SHOWTIME_IGNORE_PROGRESSION','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX')) {
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_DEBUG_FINISH_POS','BRN_DEBUG_FINISH_AT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_SHOWTIME_IGNORE_PROGRESSION','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX')) {
   # ⚠️ SAY SO when we discard something the caller deliberately set. Wiping is right -- it is what
   # makes a DEFAULT run default -- but doing it SILENTLY turns a deliberate `$env:BRN_X=1` into a
   # measurement of nothing. That cost a wave its first instrumented run: it exported BRN_MODEMGR_DIAG
@@ -617,6 +644,34 @@ if ($StartEvent) {
 }
 $startEventText = '(not armed)'
 if ($StartEvent) { $startEventText = 'BRN_START_EVENT=1' }
+
+# ⭐⭐ -DebugFinishPos -- END THE RUNNING EVENT WITH AN EXPLICIT FINISH POSITION.
+#   `BRN_DEBUG_FINISH_POS=<n>` / `BRN_DEBUG_FINISH_AT=<seconds>` are game-side bring-up gates (NOT
+#   this script's -- they are the hook in BrnModeManager_WorldTick.cpp's PreWorldUpdate, which calls
+#   the console's own ModeManager::FinishCurrentModeNextUpdateWithFinishPosition).
+#   ⛔ IT IS A CAPABILITY, NOT AN INSTRUMENT, and it is in the CLEARED list above for that reason.
+#   It is the only knob in this script whose consequence is written to the PROFILE ON DISK: a run
+#   carrying it finishes its event early and, with n == 1, banks a medal. Back up Memcard\Profile.sav
+#   before any run that uses it.
+#   ⚠️ A MEDAL EARNED THIS WAY IS NOT A WIN. The hook forges nothing -- no score, no completion
+#   percentage, no medal is written by it, and every consumer downstream runs for real -- but the
+#   finish position came from the debug member, not from reaching the target score. Say so.
+if ($DebugFinishPos -gt 0) {
+  $env:BRN_DEBUG_FINISH_POS = "$DebugFinishPos"
+  $env:BRN_DEBUG_FINISH_AT  = "$DebugFinishAt"
+  Write-Host "[flow] DEBUG FINISH POSITION armed: BRN_DEBUG_FINISH_POS=$DebugFinishPos at"
+  Write-Host "       BRN_DEBUG_FINISH_AT=$DebugFinishAt s of mode time (opt-in). NOT a default run."
+  Write-Host "       The running event will be ENDED early with that finish position. With 1 this"
+  Write-Host "       banks a medal into Memcard\Profile.sav -- BACK IT UP FIRST. The medal is"
+  Write-Host "       awarded THROUGH THE DEBUG FINISH POSITION, not by scoring the target: it is"
+  Write-Host "       not a genuine win and must never be reported as one."
+  if (-not $StartEvent) {
+    Write-Host "[flow] NOTE: -DebugFinishPos without -StartEvent -- the hook only fires while a game"
+    Write-Host "       mode is actually IN PROGRESS, and nothing in a default run starts one."
+  }
+}
+$debugFinishText = '(not armed)'
+if ($DebugFinishPos -gt 0) { $debugFinishText = "BRN_DEBUG_FINISH_POS=$DebugFinishPos at ${DebugFinishAt}s" }
 
 # ⭐⭐ -SkipTrainingTip -- IGNORE A BLOCKING TRAINING TIP AT THE JUNCTION canEnter GATE.
 #   `BRN_SKIP_TRAINING_TIP=1` is a game-side bring-up flag (NOT this script's -- it is
@@ -1353,6 +1408,7 @@ $summary += ("TELEPORT {0}" -f $teleportText)
 # STARTEVT: whether this run carried the event-start hook. Same comparability reason as DIAGENV and
 # TELEPORT, and a stronger one: a run carrying it may not have been in free burn at all.
 $summary += ("STARTEVT {0}" -f $startEventText)
+$summary += ("DBGFINISH {0}" -f $debugFinishText)
 # SHOWTIME: whether this run pressed the bumpers, and whether the game-side stand-in was armed.
 # Same comparability reason as STARTEVT: a run that entered showtime is not comparable with a
 # free-burn run, and the summary must say so on its face.
