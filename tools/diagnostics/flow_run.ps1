@@ -201,7 +201,7 @@ param(
                                  # save are untouched, and the nine gates below the road-rules test
                                  # still run. The game logs one line saying it was used.
                                  # DELETE-WHEN an offline event can award a medal.
-  [switch]$EventFsm              # opt IN to the EVENT-HUD FSM HOP (BRN_EVENT_FSM=1). While the
+  [switch]$EventFsm,             # opt IN to the EVENT-HUD FSM HOP (BRN_EVENT_FSM=1). While the
                                  # PRE_FLY_BY/RACE_MAIN bring-up is verified, the exe gates the
                                  # console's action-23 RunFsm("BRNEVENTFSM") post behind this env
                                  # var (GameBridgeGameStateToX_EventFlowGuiEvents.cpp, [FLAG PC
@@ -209,6 +209,16 @@ param(
                                  # event. CAPABILITY discipline: off by default, cleared every
                                  # run. DELETE-WHEN the exe-side gate is deleted (then the hop is
                                  # unconditional console behaviour and this switch dies with it).
+  [string]$DiagEnv     = ""      # ⭐ PASS ENGINE DIAG VARS THROUGH THE CLEAR. "A=1,B=2" (or bare
+                                 # "A,B", which means =1). The clearing loop below wipes ALL 49 BRN_*
+                                 # engine variables on purpose, so exporting one in the parent shell
+                                 # CANNOT reach the game -- measured 2026-08-29: a control run set
+                                 # BRN_SHOWTIME_WATCH and BRN_TRAFFIC_DIAG and the game saw NEITHER,
+                                 # which reads in the log EXACTLY like a dead probe. This applies them
+                                 # AFTER the clear and ECHOES them, so a run carrying an instrument
+                                 # still says so. INSTRUMENTS ONLY: a CAPABILITY (something that
+                                 # changes what the game DOES) gets its own named switch, exactly as
+                                 # -StartEvent / -Showtime / -EventFsm do.
 )
 $ErrorActionPreference = 'Stop'
 
@@ -384,6 +394,32 @@ if ($ReleaseAsserts) {
 # ⭐ If you add a getenv("BRN_...") to the engine, add it here in the same change.
 foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_SHOWTIME_IGNORE_PROGRESSION','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
+}
+
+# ⭐ -DiagEnv: re-apply the caller's INSTRUMENT variables AFTER the wipe above (see the
+# parameter's banner for why exporting them in the parent shell cannot work). Parsed strictly so a
+# typo FAILS the run instead of silently measuring nothing -- an unset probe variable and a broken
+# probe are indistinguishable in the log, which is the whole failure this switch exists to stop.
+$diagEnvApplied = @()
+if (-not [string]::IsNullOrWhiteSpace($DiagEnv)) {
+  foreach ($lsPart in $DiagEnv.Split(',')) {
+    $lsTrim = $lsPart.Trim()
+    if ($lsTrim -eq "") { continue }
+    $lsName = $lsTrim
+    $lsValue = "1"
+    $liEq = $lsTrim.IndexOf('=')
+    if ($liEq -ge 0) {
+      $lsName  = $lsTrim.Substring(0, $liEq).Trim()
+      $lsValue = $lsTrim.Substring($liEq + 1).Trim()
+    }
+    if ($lsName -notmatch '^BRN_[A-Z0-9_]+$') {
+      Write-Host "[flow] FAIL: -DiagEnv name '$lsName' is not a BRN_* engine variable."
+      exit 1
+    }
+    Set-Item -Path ("Env:\" + $lsName) -Value $lsValue
+    $diagEnvApplied += ("{0}={1}" -f $lsName, $lsValue)
+  }
+  Write-Host ("[flow] DIAG ENV applied after the clear: {0} -- NOT a default run." -f ($diagEnvApplied -join ' '))
 }
 if ($CrashPlayer -gt 0) {
   $env:BRN_CRASH_PLAYER = "$CrashPlayer"
@@ -1298,7 +1334,11 @@ $summary += ("asserts={0} phase={1}{2}" -f $seenAsserts, $phase,
              $(if ($ReleaseAsserts) { "  [ASSERT GATE HELD OPEN -- asserts= NOT comparable]" } else { "" }))
 # DIAGENV: the inherited probe knobs this run actually carried. Two runs are comparable only
 # when this line matches -- see the banner where it is collected.
-$summary += ("DIAGENV  {0}" -f $diagEnvText)
+# ⚠ -DiagEnv variables are recorded HERE TOO. They are applied AFTER the wipe, so they do
+# not appear in $diagEnvText -- and a run whose instruments are invisible in marks.txt is
+# exactly the non-comparable log this line exists to prevent.
+$summary += ("DIAGENV  {0}{1}" -f $diagEnvText,
+             $(if ($diagEnvApplied.Count -gt 0) { "  [-DiagEnv " + ($diagEnvApplied -join ' ') + "]" } else { "" }))
 # TELEPORT: the -Teleport spec this run carried, for the same comparability reason as DIAGENV --
 # a log whose car started 250 m from the junkyard is not comparable with one that did not.
 $summary += ("TELEPORT {0}" -f $teleportText)
