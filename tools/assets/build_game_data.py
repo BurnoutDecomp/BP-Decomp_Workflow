@@ -527,12 +527,15 @@ CATCHALL = Rule({"id": "catch-all", "action": "unhandled",
 
 def plan(srcroot, outroot, file_rules, gen_rules, only=None, limit=0):
     items, gens = [], []
+    only_patterns = ([only] if isinstance(only, str) else list(only or []))
     for dirpath, dirnames, filenames in os.walk(srcroot):
         dirnames.sort()
         for fn in sorted(filenames):
             src = os.path.join(dirpath, fn)
             rel = norm(os.path.relpath(src, srcroot))
-            if only and not fnmatch.fnmatch(rel.lower(), only.lower()):
+            if only_patterns and not any(
+                    fnmatch.fnmatch(rel.lower(), pattern.lower())
+                    for pattern in only_patterns):
                 continue
             rule = next((r for r in file_rules if r.accepts(rel)), CATCHALL)
             out_rel = rel
@@ -551,7 +554,7 @@ def plan(srcroot, outroot, file_rules, gen_rules, only=None, limit=0):
                 break
         if limit and len(items) >= limit:
             break
-    if not only:
+    if not only_patterns:
         for r in gen_rules:
             gens.append(Item(r, "", "<generated>", "", r.out_subdir or "", 0, kind="generate"))
     return items, gens
@@ -1329,8 +1332,9 @@ NOTES
     ap.add_argument("--dry-run", action="store_true",
                     help="plan and report only; write nothing at all")
     ap.add_argument("--jobs", type=int, default=4, help="parallel converters (default 4)")
-    ap.add_argument("--only", metavar="GLOB",
-                    help="restrict to source-relative paths matching this glob")
+    ap.add_argument("--only", metavar="GLOB", action="append",
+                    help="restrict to source-relative paths matching this glob; "
+                         "repeat to select multiple files/families")
     ap.add_argument("--limit", type=int, default=0, help="stop after N source files")
     ap.add_argument("--force", action="store_true", help="ignore the up-to-date state cache")
     ap.add_argument("--with-exe", action="store_true",

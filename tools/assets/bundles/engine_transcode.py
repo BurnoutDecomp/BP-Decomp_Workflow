@@ -135,8 +135,12 @@ T_RWACWAVE = 'GenericRwacWaveContent'
 T_GINSU = 'GinsuWaveContent'
 T_SPLICER = 'Splicer'
 T_LOOPMODEL = 'LoopModel'
+# The deployed YAP knows this name; the script's no-write bundle reader uses
+# its numeric fallback.  Accept both spellings and apply the same strict porter.
+T_CSIS = 'Csis'
+T_CSIS_NUMERIC = '0xa023'
 
-BINFILE_TYPES = (T_RWACWAVE, T_GINSU, T_SPLICER)
+BINFILE_TYPES = (T_RWACWAVE, T_GINSU, T_SPLICER, T_CSIS, T_CSIS_NUMERIC)
 
 
 # ---------------------------------------------------------------------------
@@ -328,6 +332,55 @@ def check_ginsuwavecontent(out, src):
     if size != len(src) - BINFILE_HEAD:
         raise PortError('%s: emitted mu32DataSize %d != %d' % (T_GINSU, size, len(src) - BINFILE_HEAD))
     return 'Gnsu20 %dHz body %dB passthrough' % (rate_le, len(body))
+
+
+# --- 0xA023 Csis ------------------------------------------------------------
+# The retail CSIS class/interface images use an already-little-endian `MOIR`
+# vendor format inside the ordinary big-endian BinaryFileResource envelope.
+# All eleven resources in SOUND/AEMS/CSIS.BUNDLE have this shape.  As with
+# Ginsu, only the resource envelope is platform-endian; the body is copied.
+
+def plan_csis(d):
+    if len(d) < BINFILE_HEAD:
+        raise PortError('%s: %d bytes, shorter than its 16-byte resource prefix'
+                        % (T_CSIS, len(d)))
+    size, offset = struct.unpack_from('>2I', d, 0)
+    if offset != BINFILE_HEAD or size + offset != len(d):
+        raise PortError('%s: BinaryFileResource size/offset are %d/%d for a %d-byte image'
+                        % (T_CSIS, size, offset, len(d)))
+    p = Plan(len(d), T_CSIS)
+    p.field(0, 'u32', 'mu32DataSize')
+    p.field(4, 'u32', 'mu32DataOffset')
+    # CSIS owns these two prefix words.  Ten retail images leave them zero;
+    # TrafficEngineClass carries two opaque nonzero ids.  No committed consumer
+    # reads them as native integers, so preserve their bytes exactly.
+    p.raw(8, 8, 'CSIS prefix words (opaque)')
+    p.raw(BINFILE_HEAD, len(d) - BINFILE_HEAD,
+          'MOIR body (already little-endian)')
+    return p.finish()
+
+
+def check_csis(out, src):
+    body = out[BINFILE_HEAD:]
+    if len(body) < 0x20 or body[:4] != b'MOIR':
+        raise PortError('%s: body is not a complete MOIR image (%d bytes, magic %r)'
+                        % (T_CSIS, len(body), body[:4]))
+    if body != src[BINFILE_HEAD:]:
+        raise PortError('%s: MOIR body changed; it is already little-endian in retail'
+                        % T_CSIS)
+    size, offset = struct.unpack_from('<2I', out, 0)
+    if size != len(body) or offset != BINFILE_HEAD:
+        raise PortError('%s: emitted BinaryFileResource header is %d/%d, expected %d/%d'
+                        % (T_CSIS, size, offset, len(body), BINFILE_HEAD))
+    # The first format lanes discriminate the body byte order on every retail
+    # resource: little-endian version 0x300 and count 5; swapping produces the
+    # implausible 0x30000 / 0x5000000 pair.
+    version = struct.unpack_from('<I', body, 4)[0]
+    count = body[8]
+    if version != 0x300 or count != 5:
+        raise PortError('%s: MOIR version/count are %#x/%d, expected 0x300/5'
+                        % (T_CSIS, version, count))
+    return 'MOIR v%#x body %dB passthrough' % (version, len(body))
 
 
 # --- 0xA020 GenericRwacWaveContent ------------------------------------------
@@ -843,6 +896,253 @@ def check_registry(out, src):
         n, nonzero_slots, cap, dsz, ssz)
 
 
+# Native-x64 Registry image -------------------------------------------------
+#
+# The flip-plan above remains the Remaster/x86 differential oracle.  The decomp
+# executable is x64, however: Registry's three size_t/pointer pairs, its slot
+# array, and every serialized entity pointer must be eight bytes.  Name remains
+# the original 32-bit Ident.  Rebuild the graph by schema rather than teaching
+# the runtime to consume a console layout.
+
+TYPE_CONTENT_CLASS = 0x1F4F9B6F       # ~ContentClass~
+TYPE_CONTENT_TYPE = 0x9E25A791        # ~ContentType~
+TYPE_PARAMETER_SCHEMA = 0x8D2C6829    # ~ParameterSchema~
+TYPE_SLOT_SCHEMA = 0xEB396D83         # ~SlotSchema~
+TYPE_FEATURE_SCHEMA = 0xCB8B64C5      # ~FeatureSchema~
+TYPE_VOICE_SCHEMA = 0xC7382281        # ~VoiceSchema~
+TYPE_VOICE_SPEC = 0x3597AD9B          # ~VoiceSpec~
+TYPE_GENERIC_RWAC_FEATURE = 0xB8083A05 # ~GenericRwacFeatureImplementation~
+TYPE_AEMS_VOICE_CSIS = 0x12B39DC5     # ~AemsVoiceCsisClass~
+
+REG64_SLOT_OFFSET = 48
+
+
+def _align8(n):
+    return (n + 7) & ~7
+
+
+def _registry_source_records(d):
+    if len(d) < 0x1C:
+        raise PortError('%s: %d bytes, shorter than its seven-word header' %
+                        (T_REGISTRY, len(d)))
+    count, cap, dsz, data_end, ssz, strings_end, mask = struct.unpack_from('>7I', d, 0)
+    slots_end = 0x1C + 4 * cap
+    if not cap or cap & (cap - 1) or mask != cap - 1 or count > cap:
+        raise PortError('%s: invalid count/capacity/mask (%d/%d/%#x)' %
+                        (T_REGISTRY, count, cap, mask))
+    if data_end != slots_end + dsz or strings_end != data_end + ssz or strings_end > len(d):
+        raise PortError('%s: invalid arena/string region arithmetic' % T_REGISTRY)
+
+    slots = [struct.unpack_from('>I', d, 0x1C + 4 * i)[0] for i in range(cap)]
+    starts = sorted(set(x for x in slots if x))
+    if len(starts) != count:
+        raise PortError('%s: %d unique live slots, header count is %d' %
+                        (T_REGISTRY, len(starts), count))
+    if starts and (starts[0] != slots_end or starts[-1] >= data_end):
+        raise PortError('%s: entity offsets do not span the declared data arena' % T_REGISTRY)
+    records = []
+    for i, start in enumerate(starts):
+        end = starts[i + 1] if i + 1 < len(starts) else data_end
+        if start + 8 > end:
+            raise PortError('%s: record %d at %#x is shorter than Entity' %
+                            (T_REGISTRY, i, start))
+        records.append((start, end, struct.unpack_from('>I', d, start + 4)[0]))
+    return (count, cap, dsz, data_end, ssz, strings_end, mask), slots, records
+
+
+def _port_registry_entity64(d, start, end, tname, index):
+    src = d[start:end]
+    n = len(src)
+    name = struct.unpack_from('>I', src, 0)[0]
+
+    def head():
+        return struct.pack('<II', name, tname)
+
+    if tname == TYPE_CONTENT_CLASS:
+        if n != 8:
+            raise PortError('%s: ContentClass record %d is %#x bytes, expected 8' %
+                            (T_REGISTRY, index, n))
+        out = head()
+
+    elif tname in (TYPE_CONTENT_TYPE, TYPE_SLOT_SCHEMA):
+        if n != 12:
+            raise PortError('%s: pointer entity record %d is %#x bytes, expected 12' %
+                            (T_REGISTRY, index, n))
+        out = head() + struct.pack('<Q', struct.unpack_from('>I', src, 8)[0])
+
+    elif tname == TYPE_PARAMETER_SCHEMA:
+        if n != 20:
+            raise PortError('%s: ParameterSchema record %d is %#x bytes, expected 20' %
+                            (T_REGISTRY, index, n))
+        lo, hi, direction = struct.unpack_from('>2fI', src, 8)
+        if direction not in (0, 1):
+            raise PortError('%s: ParameterSchema record %d has direction %d' %
+                            (T_REGISTRY, index, direction))
+        out = head() + struct.pack('<2fI', lo, hi, direction)
+
+    elif tname == TYPE_FEATURE_SCHEMA:
+        if n < 20:
+            raise PortError('%s: FeatureSchema record %d is too short' % (T_REGISTRY, index))
+        np, ns, no = struct.unpack_from('>3I', src, 8)
+        if n != 20 + 4 * (np + ns):
+            raise PortError('%s: FeatureSchema record %d counts imply %#x bytes, has %#x' %
+                            (T_REGISTRY, index, 20 + 4 * (np + ns), n))
+        refs = struct.unpack_from('>%dI' % (np + ns), src, 20) if np + ns else ()
+        out = head() + struct.pack('<3I', np, ns, no) + b'\0' * 4
+        out += b''.join(struct.pack('<Q', x) for x in refs)
+
+    elif tname == TYPE_VOICE_SCHEMA:
+        if n < 24:
+            raise PortError('%s: VoiceSchema record %d is too short' % (T_REGISTRY, index))
+        nf, ns, np, no = struct.unpack_from('>4I', src, 8)
+        if n != 24 + 4 * nf:
+            raise PortError('%s: VoiceSchema record %d count implies %#x bytes, has %#x' %
+                            (T_REGISTRY, index, 24 + 4 * nf, n))
+        refs = struct.unpack_from('>%dI' % nf, src, 24) if nf else ()
+        out = head() + struct.pack('<4I', nf, ns, np, no)
+        out += b''.join(struct.pack('<Q', x) for x in refs)
+
+    elif tname == TYPE_VOICE_SPEC:
+        if n < 16:
+            raise PortError('%s: VoiceSpec record %d is too short' % (T_REGISTRY, index))
+        schema = struct.unpack_from('>I', src, 8)[0]
+        sends, stage, channels, voice_type = struct.unpack_from('>4B', src, 12)
+        if n != 16 + 4 * sends:
+            raise PortError('%s: VoiceSpec record %d count implies %#x bytes, has %#x' %
+                            (T_REGISTRY, index, 16 + 4 * sends, n))
+        send_names = struct.unpack_from('>%dI' % sends, src, 16) if sends else ()
+        out = head() + struct.pack('<Q4B', schema, sends, stage, channels, voice_type)
+        out += b''.join(struct.pack('<I', x) for x in send_names)
+
+    elif tname == CONTENTSPEC_TYPENAME:
+        if n < CONTENTSPEC_FIXED:
+            raise PortError('%s: ContentSpec record %d is too short' % (T_REGISTRY, index))
+        content_type = struct.unpack_from('>I', src, 8)[0]
+        plen = struct.unpack_from('>H', src, 12)[0]
+        method, when = struct.unpack_from('>2B', src, 14)
+        want = CONTENTSPEC_FIXED + _align4(plen + 1)
+        if n != want or src[16 + plen] != 0:
+            raise PortError('%s: ContentSpec record %d path/size is inconsistent' %
+                            (T_REGISTRY, index))
+        out = head() + struct.pack('<QH2B', content_type, plen, method, when)
+        out += src[16:want]
+
+    elif tname == TYPE_GENERIC_RWAC_FEATURE:
+        if n < 24:
+            raise PortError('%s: GenericRwacFeature record %d is too short' %
+                            (T_REGISTRY, index))
+        feature, npi, npm, nsm = struct.unpack_from('>4I', src, 8)
+        want = 24 + 12 * npi + 8 * npm + 12 * nsm
+        if n != want:
+            raise PortError('%s: GenericRwacFeature record %d counts imply %#x bytes, has %#x' %
+                            (T_REGISTRY, index, want, n))
+        out = head() + struct.pack('<4I', feature, npi, npm, nsm)
+        cursor = 24
+        for _ in range(npi):
+            guid, handle, outputs = struct.unpack_from('>3I', src, cursor)
+            out += struct.pack('<I4xQI4x', guid, handle, outputs)
+            cursor += 12
+        for _ in range(npm):
+            pname, plugin_off, attribute = struct.unpack_from('>IHH', src, cursor)
+            out += struct.pack('<IHH', pname, plugin_off, attribute)
+            cursor += 8
+        for _ in range(nsm):
+            sname, runtime_class, plugin_off = struct.unpack_from('>IIH', src, cursor)
+            out += struct.pack('<IIH2x', sname, runtime_class, plugin_off)
+            cursor += 12
+
+    elif tname == TYPE_AEMS_VOICE_CSIS:
+        if n < 24:
+            raise PortError('%s: AemsVoiceCsisClass record %d is too short' %
+                            (T_REGISTRY, index))
+        # ARTIST's serialized record stores the class-name length as one byte
+        # plus a zero pad at +0x0E/+0x0F.  DecFIGS names that storage as a u16,
+        # but interpreting the retail bytes as a BE u16 produces 0x0500..0x1200;
+        # the byte reading exactly matches every trailing C string.
+        parameter_count, user_parameter_start, class_name_length, class_name_pad, \
+            system_crc, class_crc = struct.unpack_from('>IHBBII', src, 8)
+        if class_name_pad != 0:
+            raise PortError('%s: AemsVoiceCsisClass record %d class-name pad is %#x'
+                            % (T_REGISTRY, index, class_name_pad))
+        want = 24 + _align4(class_name_length + 1)
+        if n != want or src[24 + class_name_length] != 0:
+            raise PortError('%s: AemsVoiceCsisClass record %d name/size is inconsistent'
+                            % (T_REGISTRY, index))
+        out = head() + struct.pack('<IHBBII', parameter_count, user_parameter_start,
+                                   class_name_length, class_name_pad, system_crc, class_crc)
+        out += src[24:want]
+
+    else:
+        raise PortError('%s: record %d has unsupported entity type-name %#x' %
+                        (T_REGISTRY, index, tname))
+
+    return out + b'\0' * (_align8(len(out)) - len(out))
+
+
+def port_registry64(d):
+    header, slots, records = _registry_source_records(d)
+    count, cap, _dsz, _data_end, ssz, strings_end, mask = header
+    old_to_new = {}
+    entities = []
+    cursor = REG64_SLOT_OFFSET + 8 * cap
+    type_counts = {}
+    for index, (start, end, tname) in enumerate(records):
+        record = _port_registry_entity64(d, start, end, tname, index)
+        old_to_new[start] = cursor
+        entities.append(record)
+        cursor += len(record)
+        type_counts[tname] = type_counts.get(tname, 0) + 1
+
+    data_start = REG64_SLOT_OFFSET + 8 * cap
+    data_size = cursor - data_start
+    strings = d[strings_end - ssz:strings_end]
+    strings_end64 = cursor + len(strings)
+    out = bytearray(_align8(strings_end64))
+    struct.pack_into('<IIQ', out, 0, count, cap, data_size)
+    struct.pack_into('<Q', out, 16, cursor)
+    struct.pack_into('<Q', out, 24, ssz)
+    struct.pack_into('<Q', out, 32, strings_end64)
+    struct.pack_into('<Q', out, 40, mask)
+    for i, old in enumerate(slots):
+        struct.pack_into('<Q', out, REG64_SLOT_OFFSET + 8 * i,
+                         old_to_new[old] if old else 0)
+    pos = data_start
+    for record in entities:
+        out[pos:pos + len(record)] = record
+        pos += len(record)
+    out[cursor:strings_end64] = strings
+    meta = {'count': count, 'cap': cap, 'data_size': data_size,
+            'string_size': ssz, 'types': type_counts,
+            'data_end': cursor, 'strings_end': strings_end64}
+    return bytes(out), meta, strings_end64
+
+
+def check_registry64(out, src, meta=None, size64=None):
+    if meta is None:
+        raise PortError('%s: native-x64 checker requires rebuild metadata' % T_REGISTRY)
+    count, cap = struct.unpack_from('<II', out, 0)
+    data_size, data_end, string_size, strings_end, mask = struct.unpack_from('<QQQQQ', out, 8)
+    if (count, cap, data_size, data_end, string_size, strings_end, mask) != (
+            meta['count'], meta['cap'], meta['data_size'], meta['data_end'],
+            meta['string_size'], meta['strings_end'], cap - 1):
+        raise PortError('%s: native-x64 header does not match rebuild metadata' % T_REGISTRY)
+    live = [struct.unpack_from('<Q', out, REG64_SLOT_OFFSET + 8 * i)[0]
+            for i in range(cap)]
+    if len(set(x for x in live if x)) != count:
+        raise PortError('%s: native-x64 slot table lost an entity' % T_REGISTRY)
+    if any(x and (x < REG64_SLOT_OFFSET + 8 * cap or x >= data_end or x & 7) for x in live):
+        raise PortError('%s: native-x64 slot points outside/alignment of the entity arena' %
+                        T_REGISTRY)
+    src_header, _src_slots, _src_records = _registry_source_records(src)
+    src_ssz = src_header[4]
+    src_send = src_header[5]
+    if out[data_end:strings_end] != src[src_send - src_ssz:src_send]:
+        raise PortError('%s: string table changed during native-x64 relayout' % T_REGISTRY)
+    kinds = ', '.join('%#x:%d' % x for x in sorted(meta['types'].items()))
+    return ('%d records (cap %d), native-x64 arena %dB, strings %dB; %s' %
+            (count, cap, data_size, string_size, kinds))
+
+
 # ---------------------------------------------------------------------------
 # 0x1C AttribSysVault -- the per-engine `vehicleengine` attribute vault
 #
@@ -1144,11 +1444,13 @@ FLIP_PORTERS = {
     T_GINSU: (plan_ginsuwavecontent, check_ginsuwavecontent),
     T_RWACWAVE: (plan_genericrwacwavecontent, check_genericrwacwavecontent),
     T_SPLICER: (plan_splicer, check_splicer),
-    T_REGISTRY: (plan_registry, check_registry),
     T_VAULT: (plan_attribsysvault, check_attribsysvault),
+    T_CSIS: (plan_csis, check_csis),
+    T_CSIS_NUMERIC: (plan_csis, check_csis),
 }
 REBUILD_PORTERS = {
     T_LOOPMODEL: (port_loopmodel, check_loopmodel),
+    T_REGISTRY: (port_registry64, check_registry64),
 }
 # Types with NO porter yet.  Listed explicitly so the driver's refusal message can say
 # WHY rather than just "unknown type".
