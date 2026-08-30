@@ -3695,6 +3695,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsState.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsStateManager.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsEnvironment.cpp"
+  echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsDynamicMixer.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsVoiceHierarchy.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsVoiceHierarchyResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Playback\AEMS\CgsAemsFactory.cpp"
@@ -4628,7 +4629,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- l2-into-dev merge link closure (dev waves grew shared TUs; their homes join;
   rem      the cascade-heavy waves -- ScreenFlow/HudFlow new states, CgsRegistry schema
   rem      web, Attrib node web -- are reverted-in-merge to l2 pending integration) ----
-  echo "%SRC%\SDKs\EATech\include\NFSMix\NFSMixMapLinkStubs.cpp"
   echo "%VEN%\renderware\src\rw\core\stdc\stdc.cpp"
   rem rw::math::vpu::Inverse @0x825B2628 -- general 4x4 inverse; replaces the
   rem WorldLinkStubs.cpp link stub retired 2026-08-12 (prop-render wave).
