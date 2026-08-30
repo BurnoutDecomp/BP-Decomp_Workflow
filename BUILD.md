@@ -87,17 +87,57 @@ or step by step (each with `--force` to rebuild):
 | `build xaudio2` | `tools/build/fetch_xaudio2_redist.bat` (downloads Microsoft.XAudio2.Redist from nuget.org) | `b5-decomp/vendor/xaudio2redist/` — headers for the build, `xaudio2_9redist.dll` staged beside the exe |
 | `build exe` | `tools/build/build_game_exe.bat` → `tools/build/compile_exe.py` | `build/game/Burnout_PC.exe` |
 | `build data` | `tools/assets/build_game_data.py` (all its flags forwarded — `--dry-run`, `--jobs`, `--out`, `--borrow-dir`, `--only`, …) | the converted data folder + `.build_game_data/report.txt` |
+| `build shaders` | the same stager, restricted to `SHADERS.BNDL` and always forced | the converted `SHADERS.BNDL`; `--install` also drops it into `build/game` |
+| `build file <name>` | the same stager, restricted to the file(s) `<name>` resolves to | those converted files; `--install` also drops them into `build/game` |
 | `build devdata` | attribsys_schema_port + extract_xex against the ARTIST XEX | refreshes the *generated* assets in the live `build/game` (`schema.vlt`/`schema.bin` + `LOADINGSCREEN/*.dds`) — run it whenever those tools change; stale copies here presented as gibberish loading screens and the "PC schema file missing" assert |
 
 `build data --dry-run` plans everything, writes nothing, and reports every
 missing prerequisite — read its gap report before the first real run.
 
+### Build just the shaders
+
+```text
+build shaders                  # nushaders HLSL -> fxc -> platform-4 SHADERS.BNDL (~45 s)
+build shaders --install        # ...and copy it into build/game, ready for `build run`
+build shaders --list           # what it would convert, and under which manifest rule
+build shaders --keep-current   # honour the up-to-date cache instead of re-converting
+```
+
+It goes through the normal stager rather than calling
+`tools/assets/shaders/convert_shaders_bundle.py` directly, so a shader-only
+build keeps everything the manifest rule carries: the isolated worker root
+Volatility needs, the `bnd2_platform=4` verify on the result, and above all the
+preflight that names a missing `YAP.exe` or nushaders HLSL tree *with its fix*
+instead of failing opaquely halfway through the convert.
+
+**It always re-converts.** The up-to-date cache signs the source bundle and the
+converter script — it cannot see the nushaders HLSL tree, which is exactly what
+you edit when you are working on a shader. Without the forced re-convert,
+changing an `.fx` and re-running would report `up-to-date` and change nothing.
+
 ### Rebuild only selected game-data files
 
-The data stager accepts case-insensitive, source-relative globs through
-`--only`. Repeat the flag to select several unrelated files in one run. This
-avoids walking the multi-hour conversion queue when a porter or manifest change
-affects only a few files or data families:
+`build file` converts one data file, named however loosely you like — a
+fragment, the exact source-relative path, or a glob:
+
+```text
+build file carbb1gt_gr                  # a fragment is enough
+build file VEHICLES/VEH_CARBB1GT_GR.BIN # or the exact path
+build file "VEHICLES/*_GR.BIN" --all    # or a glob
+build file soundentity --list           # show the match + its rule, convert nothing
+build file soundentity --install        # convert, then copy into build/game
+```
+
+A name resolves in descending order of precision — whole path, then file name,
+then substring — and the first tier that matches anything wins, so an exact
+spelling is never widened behind your back. It prints what it selected before
+it runs, and refuses a selection broader than `--max-matches` (8) unless you
+pass `--all`: a loose name is a convenience, not a licence to convert a whole
+family by surprise (`build file bndl` is a plausible typing of one file and a
+1,600-file run).
+
+Underneath, both commands are `build data --only`, which takes the same loose
+names and globs directly and can be repeated:
 
 ```text
 build data --only "SOUND/SOUNDENTITY.BUNDLE"
@@ -105,12 +145,21 @@ build data --only "SOUND/AEMS/INAIR.BUNDLE" --force
 build data --only "SOUND/AEMS/CSIS.BUNDLE" --only "SOUND/AEMS/INAIR.BUNDLE" --force
 build data --only "SOUND/*.BUNDLE"
 build data --only "VEHICLES/*/AUDIO/*"
+build data --only carbb1gt_gr --list
 ```
 
-The normal state cache still applies, so current products are checked and
-skipped. Add `--force` to deliberately regenerate the selected matches. The
-same selector can be passed to the full driver (`build all --only "SOUND/*"`),
-although source-only changes should use `build exe` and skip data entirely.
+This avoids walking the multi-hour conversion queue when a porter or manifest
+change affects only a few files or data families. `--list` answers "what would
+this select, and which rule owns it?" without writing anything or needing the
+toolchain to be complete.
+
+The normal state cache still applies through `build data`, so current products
+are checked and skipped; add `--force` to deliberately regenerate the selected
+matches (`build shaders` and `build file` do this for you — pass
+`--keep-current` to opt out). `--force` only invalidates the files in *this*
+selection; the rest of the cache is left standing. The same selector can be
+passed to the full driver (`build all --only "SOUND/*"`), although source-only
+changes should use `build exe` and skip data entirely.
 The AEMS bank rules additionally need `[inputs].xb1_root` (or `BRN_XB1_ROOT`)
 pointing at Xbox One Remastered data: those banks contain pointer-width-dependent
 runtime templates, so the per-file porter imports the matching native-x64

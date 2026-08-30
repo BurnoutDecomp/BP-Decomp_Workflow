@@ -9,6 +9,8 @@ Sequences the existing workhorse scripts -- it does NOT reimplement any build:
   xaudio2  vendor/xaudio2redist     -> tools/build/fetch_xaudio2_redist.bat
   exe      Burnout_PC.exe          -> tools/build/build_game_exe.bat
   data     converted game data     -> tools/assets/build_game_data.py (args forwarded)
+  shaders  SHADERS.BNDL only       -> the same stager, --only SHADERS.BNDL --force
+  file     one named data file     -> the same stager, resolved from a loose name
   all      tools -> lua -> ffmpeg -> xaudio2 -> exe -> data, skip-if-present
   run      launch the exe from its own folder (the schema.vlt CWD contract)
 
@@ -19,6 +21,7 @@ behaves exactly as it would standalone. Precedence: CLI > env > config > probed.
 import argparse
 import ast
 import glob
+import json
 import os
 import shutil
 import subprocess
@@ -54,12 +57,20 @@ def _pwsh():
     return shutil.which("pwsh") or shutil.which("powershell")
 
 
-def run_bat(bat, *args, dry=False):
-    cmd = ["cmd.exe", "/c", bat, *args]
+def _spawn(cmd, dry):
+    """Run a child on our own stdout. The flush is load-bearing: when this driver's
+    output is a pipe rather than a console it is block-buffered, so without it every
+    line the driver printed before the spawn (what it selected, which config it used)
+    surfaces AFTER the child's output and reads as if it happened last."""
     if dry:
         print("  would run:", subprocess.list2cmdline(cmd))
         return 0
+    sys.stdout.flush()
     return subprocess.run(cmd).returncode
+
+
+def run_bat(bat, *args, dry=False):
+    return _spawn(["cmd.exe", "/c", bat, *args], dry)
 
 
 def run_ps1(ps1, *args, dry=False):
@@ -67,19 +78,11 @@ def run_ps1(ps1, *args, dry=False):
     if not sh:
         print("ERROR: neither pwsh nor powershell found on PATH.")
         return 2
-    cmd = [sh, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1, *args]
-    if dry:
-        print("  would run:", subprocess.list2cmdline(cmd))
-        return 0
-    return subprocess.run(cmd).returncode
+    return _spawn([sh, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1, *args], dry)
 
 
 def run_py(script, *args, dry=False):
-    cmd = [sys.executable, script, *args]
-    if dry:
-        print("  would run:", subprocess.list2cmdline(cmd))
-        return 0
-    return subprocess.run(cmd).returncode
+    return _spawn([sys.executable, script, *args], dry)
 
 
 # ---------------------------------------------------------------- probes
@@ -448,6 +451,106 @@ def cmd_doctor(cfg, args):
     return 0
 
 
+# ---------------------------------------------------------------- data selection
+_STAGER = None
+
+
+def stager_module():
+    """The stager imported as a library.
+
+    `build shaders` and `build file` must agree with build_game_data.py about two things
+    exactly: how a loose --only pattern resolves to real files, and which item statuses
+    mean "a product was written". Sharing its code is the only way those cannot drift --
+    a second implementation here would be wrong the first time the stager changed.
+    Importing runs nothing but its own config load (it guards on __main__)."""
+    global _STAGER
+    if _STAGER is None:
+        assets = os.path.join(REPO, "tools", "assets")
+        if assets not in sys.path:
+            sys.path.insert(0, assets)
+        import build_game_data
+        _STAGER = build_game_data
+    return _STAGER
+
+
+def data_roots(cfg, args=None):
+    """(srcroot, outroot) resolved exactly the way the stager resolves them.
+
+    Guessing either would be a bug: find_game_root() accepts the folder ABOVE the data
+    root and descends, so `<x360_root>_decomp` is not always the output folder, and
+    --install has to know precisely where the product it is copying actually landed."""
+    x360, _ = resolve_x360_root(cfg)
+    if not x360 or not os.path.isdir(x360):
+        return None, None
+    srcroot = stager_module().find_game_root(x360)
+    out = getattr(args, "out", None) if args else None
+    out = out or build_config.get(cfg, "output", "game_data")
+    if out:
+        return srcroot, os.path.abspath(out)
+    return srcroot, os.path.abspath(srcroot.rstrip("\\/") + "_decomp")
+
+
+def source_rels(srcroot):
+    """Every source-relative path under the X360 game folder, in the stager's own order."""
+    rels = []
+    for dirpath, dirnames, filenames in os.walk(srcroot):
+        dirnames.sort()
+        for fn in sorted(filenames):
+            rel = os.path.relpath(os.path.join(dirpath, fn), srcroot)
+            rels.append(rel.replace(os.sep, "/"))
+    return rels
+
+
+def install_products(outroot, want_src_rels, dest):
+    """Copy what the run just produced into the live run folder.
+
+    The stager REFUSES --out build/game deliberately, and must never WALK it: its
+    FSM/LANGUAGE/LOADINGSCREEN/SOUND entries are junctions into cloud-throttled storage
+    and a recursive walk drags a gigabyte down one file at a time. This does not lift
+    that rule. The conversion still lands in a real output root; this then copies the
+    handful of files that run reported, each by its own explicit path. build/game is
+    written to, never scanned -- which is the same bargain `build devdata` already makes.
+
+    The run's own report.json is the authority on what was produced, so a rule that
+    renames its output (out_name) or fails verification is handled by asking, not by
+    assuming the product is named after its source."""
+    st = stager_module()
+    report = os.path.join(outroot, st.STATE_DIR, "report.json")
+    try:
+        with open(report, encoding="utf-8") as fh:
+            rows = json.load(fh).get("items", [])
+    except (OSError, ValueError) as e:
+        print("install: cannot read %s (%s) -- nothing copied." % (report, e))
+        return 1
+    if os.path.abspath(dest) == os.path.abspath(outroot):
+        print("install: destination is the output folder itself -- nothing to do.")
+        return 0
+    copied, skipped = [], []
+    for row in rows:
+        if want_src_rels and row.get("src_rel") not in want_src_rels:
+            continue
+        rel = row.get("out_rel") or ""
+        if row.get("status") not in st.GOOD or not rel:
+            skipped.append((row.get("src_rel") or rel, row.get("status") or "?"))
+            continue
+        src = os.path.join(outroot, *rel.split("/"))
+        if not os.path.isfile(src):
+            skipped.append((rel, "product missing in the output folder"))
+            continue
+        dst = os.path.join(dest, *rel.split("/"))
+        os.makedirs(os.path.dirname(dst) or dest, exist_ok=True)
+        shutil.copy2(src, dst)
+        copied.append(rel)
+    for rel in copied:
+        print("install: %s -> %s" % (rel, dest))
+    for rel, why in skipped:
+        print("install: NOT installed: %s (%s)" % (rel, why))
+    if not copied:
+        print("install: nothing was produced to copy.")
+        return 1
+    return 0
+
+
 # ---------------------------------------------------------------- build steps
 def step_tools(cfg, args, dry=False):
     if os.path.exists(YAP_EXE) and os.path.exists(VOLA_EXE) and not getattr(args, "force", False):
@@ -547,6 +650,104 @@ def step_data(cfg, args, passthrough, dry=False):
         if out:
             fwd += ["--out", out]
     return run_py(STAGER, *fwd, dry=dry)
+
+
+def _data_selection_args(args, only, passthrough):
+    """The stager argv shared by `shaders` and `file`.
+
+    --force is the DEFAULT here, and that is the substance of both commands rather than a
+    detail. The stager's currency signature covers the source file, the converter script
+    and the product -- it cannot see the inputs those converters read from elsewhere. For
+    shaders that is the whole nushaders HLSL tree, i.e. precisely the thing you edit when
+    you are working on a shader: without --force, changing an .fx and re-running reports
+    `up-to-date` and changes nothing, which is the most expensive kind of no-op. Anyone
+    who wants the cache honoured asks for it with --keep-current."""
+    fwd = []
+    for pattern in only:
+        fwd += ["--only", pattern]
+    if not getattr(args, "keep_current", False):
+        fwd.append("--force")
+    if getattr(args, "list", False):
+        fwd.append("--list")
+    if getattr(args, "dry_run", False):
+        fwd.append("--dry-run")
+    if getattr(args, "out", None):
+        fwd += ["--out", args.out]
+    if getattr(args, "jobs", None):
+        fwd += ["--jobs", str(args.jobs)]
+    return fwd + list(passthrough)
+
+
+def _post_convert_install(cfg, args, want):
+    dest = getattr(args, "install", None)
+    if not dest or args.list or args.dry_run:
+        return 0
+    _, outroot = data_roots(cfg, args)
+    if not outroot:
+        print("install: cannot resolve the output folder (no X360 source configured).")
+        return 2
+    return install_products(outroot, want, os.path.abspath(dest))
+
+
+def cmd_shaders(cfg, args, passthrough):
+    """Convert SHADERS.BNDL and nothing else.
+
+    Routed through the stager rather than calling convert_shaders_bundle.py directly, so
+    a shader-only build keeps everything the manifest rule carries: the isolated worker
+    root Volatility needs, the preflight that names YAP.exe and the missing nushaders
+    HLSL tree with their fixes instead of failing opaquely mid-convert, the fxc
+    prerequisites, and the bnd2_platform=4 verify on the result."""
+    # Through step_data, not run_py, so a shader-only run still picks up the same
+    # [output].game_data / [build].jobs / [build].borrow_dir defaults as `build data`.
+    rc = step_data(cfg, args, _data_selection_args(args, ["SHADERS.BNDL"], passthrough))
+    if rc:
+        return rc
+    return _post_convert_install(cfg, args, {"SHADERS.BNDL"})
+
+
+def cmd_file(cfg, args, passthrough):
+    """Convert one named data file, resolved from however much of its name you know."""
+    srcroot, _ = data_roots(cfg, args)
+    if not srcroot:
+        print("ERROR: X360 game folder not found -- set [inputs].x360_root in "
+              "build.config.toml (or BRN_X360_ROOT). `build doctor` reports it.")
+        return 2
+    st = stager_module()
+    selected, per_pattern = st.resolve_only(source_rels(srcroot), args.pattern)
+    for pattern, hits in per_pattern:
+        if not hits:
+            print("no data file matches %r" % pattern)
+    if not selected:
+        print("nothing selected under %s." % srcroot)
+        print("Try a fragment of the name (`build file carbb1gt`), a glob "
+              "(`build file \"VEHICLES/*_GR.BIN\"`), or `build data --list` "
+              "to see everything.")
+        return 1
+    picked = sorted(selected)
+    # A LOOSE name is a convenience, not a licence to convert an entire family by
+    # surprise: `build file bndl` is a plausible typing of one file and a 1,600-file run.
+    # Show the match list and make the caller confirm the breadth they actually meant.
+    # --list is exempt: it writes nothing, and discovering how wide a name reaches is the
+    # entire reason to ask for it -- refusing to ANSWER a broad question is just unhelpful.
+    if len(picked) > args.max_matches and not args.all and not args.list:
+        print("%d files match (limit %d):" % (len(picked), args.max_matches))
+        for rel in picked[:40]:
+            print("  %s" % rel)
+        if len(picked) > 40:
+            print("  ... and %d more" % (len(picked) - 40))
+        print("Narrow the name, pass --all to take every match, or add --list to see "
+              "them all with their rules (--max-matches N raises the limit).")
+        return 1
+    if not args.list:                       # under --list the child prints a richer table
+        print("selected %d file(s):" % len(picked))
+        for rel in picked:
+            print("  %s" % rel)
+    # Hand the child EXACT relative paths: its tier-1 resolution is verbatim whole-path
+    # equality, so the selection it acts on is provably the one printed above.
+    rc = step_data(cfg, args, _data_selection_args(args, picked, passthrough))
+    if rc:
+        return rc
+    return _post_convert_install(cfg, args, set(picked))
 
 
 def cmd_all(cfg, args, passthrough):
@@ -671,6 +872,40 @@ def main(argv=None):
                    help="parallel cl processes (default: CPU count)")
     p = sub.add_parser("data", help="convert the game data (build_game_data.py; "
                                     "unknown args are forwarded verbatim)")
+
+    def data_selection_flags(sp, install_help):
+        sp.add_argument("--list", action="store_true",
+                        help="show what would be converted and which manifest rule owns "
+                             "it, then stop -- writes nothing")
+        sp.add_argument("--dry-run", action="store_true",
+                        help="plan the conversion and report; write nothing")
+        sp.add_argument("--keep-current", action="store_true",
+                        help="honour the up-to-date cache instead of forcing a "
+                             "re-convert (see: the converters' inputs are not all in the "
+                             "cache signature)")
+        sp.add_argument("--install", nargs="?", const=GAME_OUT, default=None, metavar="DIR",
+                        help=install_help)
+        sp.add_argument("--out", metavar="DIR",
+                        help="output folder (default: [output].game_data, else "
+                             "<game folder>_decomp beside the source)")
+        sp.add_argument("--jobs", type=int, help="parallel converters")
+
+    p = sub.add_parser("shaders", help="convert SHADERS.BNDL only (nushaders HLSL -> fxc "
+                                       "-> platform-4 bundle); always re-converts")
+    data_selection_flags(p, "after converting, copy SHADERS.BNDL into the live run "
+                            "folder (default: build/game) so `build run` picks it up")
+    p = sub.add_parser("file", help="convert ONE data file, named however loosely "
+                                    "(e.g. `build file gt01`)")
+    p.add_argument("pattern", nargs="+",
+                   help="part of the file's name, its exact source-relative path, or a "
+                        "glob; repeat to select several")
+    p.add_argument("--all", action="store_true",
+                   help="convert every match instead of refusing a broad selection")
+    p.add_argument("--max-matches", type=int, default=8, metavar="N",
+                   help="how many matches count as a single-file request (default: "
+                        "%(default)s)")
+    data_selection_flags(p, "after converting, copy the products into the live run "
+                            "folder (default: build/game) so `build run` picks them up")
     p = sub.add_parser("all", help="tools -> lua -> ffmpeg -> xaudio2 -> exe -> data "
                                    "(skip-if-present)")
     p.add_argument("--force-tools", action="store_true")
@@ -689,7 +924,7 @@ def main(argv=None):
                                  "if it has one, else build/game)")
 
     args, passthrough = ap.parse_known_args(argv)
-    if passthrough and args.cmd not in ("data", "all"):
+    if passthrough and args.cmd not in ("data", "all", "shaders", "file"):
         ap.error(f"unrecognized arguments: {' '.join(passthrough)}")
 
     cfg = build_config.load_config(args.config)
@@ -712,6 +947,10 @@ def main(argv=None):
         return step_exe(cfg, args)
     if args.cmd == "data":
         return step_data(cfg, args, passthrough)
+    if args.cmd == "shaders":
+        return cmd_shaders(cfg, args, passthrough)
+    if args.cmd == "file":
+        return cmd_file(cfg, args, passthrough)
     if args.cmd == "devdata":
         return cmd_devdata(cfg, args)
     if args.cmd == "all":

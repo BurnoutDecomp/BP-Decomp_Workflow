@@ -557,18 +557,19 @@ LE re-walk and byte-exact reverse pass are hard gates.  Keeping this file at pla
 the faithful ResourceRegistrar assert before the vault could register."""
 
 [[rule]]
-id     = "sound-pc-direct-big-endian"
-match  = ["SOUND/SPLICER/PRESENTATIONASSET.BUNDLE",
-          "SOUND/STREAMS/STREAMHEADERS*.BUNDLE"]
-action = "copy"
-verify = ["bnd2_platform=2", "nonempty"]
-why    = """These files are deliberately consumed outside BundleLoader by the current PC
-audio bridges (CgsGuiSoundPC.cpp and CgsStreamHeadersPC.cpp). They read the original X360
-bnd2 headers, Splicer tables, and embedded SNR images with explicit Be16/Be32/Be64 accessors.
-Converting these inputs to platform 4 breaks those direct reads; keep them byte-identical and
-verify platform 2. BurnoutGlobalData is not in this exception: the real sound resource
-registrar loads it through BundleLoader, so the preceding schema-driven rule ports it.
-This is a PC-platform serialized-data leaf, not an unconverted BundleLoader input."""
+id     = "sound-stream-native64-headers"
+match  = ["SOUND/STREAMS/STREAMHEADERS*.BUNDLE"]
+action = "convert"
+tool   = "bundles/engine_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4", "nonempty"]
+why    = """StreamingStateManager loads the selected StreamHeaders bundle through the real
+BundleLoader, so its 768 GenericRwacWaveContent resources need native little-endian
+BinaryFileResource envelopes. engine_transcode.py validates and flips each envelope while
+preserving the EA SNR/EA-XMA body byte-for-byte (that body is big-endian by format on both
+platforms), and round-trips the complete bundle. StreamHeadersPC remains only for the
+platform-specific movie decoder; it now accepts the same native platform-4 container, so the
+engine and movie paths no longer require conflicting files at one pathname."""
 
 [[rule]]
 id     = "sound-proven-binary-resources"
@@ -771,7 +772,7 @@ action = "unhandled"
 reason = """No sound-bundle porter.  These are bnd2 platform-2 containers containing AEMS
 and mixed-entity Registry middleware images.  The generic wave/Splicer/ContentSpec-only
 Registry files are covered by the earlier strict rule, while BURNOUTGLOBALDATA and the
-presentation splice bank are deliberately copied for their direct big-endian PC consumer.
+presentation splice bank are handled by their native platform-4 rules above.
 These remaining resources contain compiled AEMS/CSIS middleware images or non-ContentSpec
 Registry subclasses. Relabelling their containers while preserving BE payloads would be
 corrupt, so they remain explicit blockers."""
