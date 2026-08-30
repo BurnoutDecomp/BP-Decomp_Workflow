@@ -61,6 +61,15 @@ SUPPORTED_BANKS = {
     'TRAFFIC_BANK.BUNDLE',
 }
 
+# Retail 1.0.0.5 carries the native-64 revision of these two banks.  Their
+# ABKC revision byte advanced from 1 to 2; SKIDS also consolidated its two X360
+# bytecode modules into one.  The replacement remains same-name and is still
+# guarded by all native-layout/relocation checks below.
+NATIVE64_REVISIONS = {
+    'SKIDS.BUNDLE': (2, 1),
+    'SURFACE_PATCH_BANK.BUNDLE': (2, 1),
+}
+
 BINFILE_HEAD = 16
 ABKC_HEAD64 = 0x78
 MODULE_FIXED64 = 104
@@ -99,8 +108,14 @@ def _validate_x360(body, label):
     total = _u32(body, 0x14, 'big')
     modules = _u16(body, 0x0A, 'big')
     module_offset = _u32(body, 0x1C, 'big')
-    if total != len(body):
-        raise PortError('%s: ABKC total size %d != body size %d' %
+    # Some retail X360 banks pad the BinaryFileResource payload to its 16-byte
+    # allocation alignment.  ABKC's own total deliberately stops before that
+    # zero-filled tail (SKIDS and SURFACE_PATCH_BANK carry eight bytes).  Treat
+    # only a short all-zero alignment tail as outside the ABKC image; any real
+    # size disagreement remains an error.
+    tail = body[total:] if total <= len(body) else b''
+    if total > len(body) or len(tail) >= 16 or any(tail):
+        raise PortError('%s: ABKC total size %d does not describe body size %d' %
                         (label, total, len(body)))
     if modules == 0 or module_offset < 0x50 or module_offset >= len(body):
         raise PortError('%s: invalid X360 module count/offset %d/%#x' %
@@ -125,8 +140,9 @@ def _validate_native64(body, label):
     pointer_reloc = _u32(body, 0x34, 'little')
     csis_reloc = _u32(body, 0x38, 'little')
 
-    if total_size != len(body):
-        raise PortError('%s: native-64 total size %d != body size %d' %
+    tail = body[total_size:] if total_size <= len(body) else b''
+    if total_size > len(body) or len(tail) >= 16 or any(tail):
+        raise PortError('%s: native-64 total size %d does not describe body size %d' %
                         (label, total_size, len(body)))
     if module_count == 0:
         raise PortError('%s: native-64 bank has no modules' % label)
@@ -214,9 +230,15 @@ def convert(source, output, xb1_root=None):
         native_body = _binary_body(native_resource, 'little', 'Xbox One ' + name)
         x360_modules = _validate_x360(x360_body, 'X360 ' + name)
         native_modules = _validate_native64(native_body, 'Xbox One ' + name)
-        if x360_body[:8] != native_body[:8] or x360_body[9] != native_body[9]:
+        revision = NATIVE64_REVISIONS.get(name)
+        same_family = (x360_body[:7] == native_body[:7] and
+                       x360_body[9] == native_body[9])
+        expected_revision = revision and native_body[7] == revision[0]
+        if not same_family or (x360_body[7] != native_body[7] and
+                               not expected_revision):
             raise PortError('%s: ABKC version family differs between releases' % name)
-        if x360_modules != native_modules:
+        expected_modules = revision and native_modules == revision[1]
+        if x360_modules != native_modules and not expected_modules:
             raise PortError('%s: module count changed X360 %d -> Xbox One %d' %
                             (name, x360_modules, native_modules))
 
