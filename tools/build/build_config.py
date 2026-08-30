@@ -29,6 +29,7 @@ CONFIG_PATH = os.path.join(REPO, "build.config.toml")
 ENV_MAP = [
     ("inputs",    "x360_root",       "BRN_X360_ROOT"),
     ("inputs",    "bpr_root",        "BRN_BPR_ROOT"),
+    ("inputs",    "xb1_root",        "BRN_XB1_ROOT"),
     ("inputs",    "nushaders_tub",   "NUSHADERS_TUB"),
     ("inputs",    "xenia_dir",       "BRN_XENIA_DIR"),
     ("toolchain", "vcvars64",        "VCVARS64"),

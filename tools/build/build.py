@@ -401,6 +401,18 @@ def cmd_doctor(cfg, args):
     bpr = os.environ.get("BRN_BPR_ROOT", r"C:\Program Files (x86)\Steam\steamapps\common\BurnoutPR")
     r.row("info", f"BPR oracle {'present' if os.path.isdir(bpr) else 'absent'} ({bpr}) -- "
                   "optional, only for --verify transcoder modes")
+    xb1 = os.environ.get("BRN_XB1_ROOT")
+    if xb1:
+        xb1_probe = os.path.join(xb1, "SOUND", "AEMS", "INAIR.BUNDLE")
+        if os.path.isfile(xb1_probe):
+            r.row("ok", f"Xbox One native-x64 AEMS banks: {os.path.dirname(xb1_probe)}")
+        else:
+            r.row("fail", f"Xbox One root has no SOUND/AEMS/INAIR.BUNDLE: {xb1}", "data",
+                  "correct [inputs].xb1_root / BRN_XB1_ROOT, or leave it empty when not "
+                  "rebuilding AEMS banks")
+    else:
+        r.row("info", "Xbox One data root unset -- only SOUND/AEMS bank conversions are "
+                      "unavailable (set [inputs].xb1_root / BRN_XB1_ROOT)")
     try:
         ast.parse(open(STAGER, encoding="utf-8").read())
         r.row("ok", "build_game_data.py parses")

@@ -92,6 +92,32 @@ or step by step (each with `--force` to rebuild):
 `build data --dry-run` plans everything, writes nothing, and reports every
 missing prerequisite — read its gap report before the first real run.
 
+### Rebuild only selected game-data files
+
+The data stager accepts case-insensitive, source-relative globs through
+`--only`. Repeat the flag to select several unrelated files in one run. This
+avoids walking the multi-hour conversion queue when a porter or manifest change
+affects only a few files or data families:
+
+```text
+build data --only "SOUND/SOUNDENTITY.BUNDLE"
+build data --only "SOUND/AEMS/INAIR.BUNDLE" --force
+build data --only "SOUND/AEMS/CSIS.BUNDLE" --only "SOUND/AEMS/INAIR.BUNDLE" --force
+build data --only "SOUND/*.BUNDLE"
+build data --only "VEHICLES/*/AUDIO/*"
+```
+
+The normal state cache still applies, so current products are checked and
+skipped. Add `--force` to deliberately regenerate the selected matches. The
+same selector can be passed to the full driver (`build all --only "SOUND/*"`),
+although source-only changes should use `build exe` and skip data entirely.
+The AEMS bank rules additionally need `[inputs].xb1_root` (or `BRN_XB1_ROOT`)
+pointing at Xbox One Remastered data: those banks contain pointer-width-dependent
+runtime templates, so the per-file porter imports the matching native-x64
+templates and AEMS bytecode while retaining the X360 resource identity.
+`EXPLOSIONS_PATCHBANK.BUNDLE` has no such counterpart and remains an explicit
+data gap.
+
 ### The exe build is incremental
 
 `build exe` compiles each TU to its own object under `build/game/obj/tu/`, with

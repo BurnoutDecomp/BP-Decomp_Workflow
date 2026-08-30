@@ -532,17 +532,42 @@ and repacks both resources as platform 4.  Font height/name offsets are taken fr
 retail bytes and the native-x64 struct schema, not the older four-byte-shifted conversion."""
 
 [[rule]]
+id     = "sound-stream-native64-registries"
+match  = ["SOUND/STREAMS/STREAMSREGISTRY*.BUNDLE"]
+action = "convert"
+tool   = "bundles/engine_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """RegistryLoad consumes these ContentSpec tables through the real platform-4
+BundleLoader.  The strict Registry porter rebuilds their pointer-bearing graph for x64.
+The temporary StreamHeadersPC resolver now walks that same native-x64 graph, so it no
+longer requires a conflicting byte-identical platform-2 copy at the engine-facing path."""
+
+[[rule]]
+id     = "sound-global-attribsys"
+match  = ["SOUND/BURNOUTGLOBALDATA.BIN"]
+action = "convert"
+tool   = "bundles/soundglobal_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4", "nonempty"]
+why    = """SoundLogicModule stage 2 loads BurnoutGlobalData through the real BundleLoader
+and registers its AttribSysVault.  soundglobal_transcode.py uses the ARTIST XEX's embedded
+AttribSys schema to port all 825 collections and both sides of the VLT/BIN PtrN graph; its
+LE re-walk and byte-exact reverse pass are hard gates.  Keeping this file at platform 2 made
+the faithful ResourceRegistrar assert before the vault could register."""
+
+[[rule]]
 id     = "sound-pc-direct-big-endian"
-match  = ["SOUND/BURNOUTGLOBALDATA.BIN", "SOUND/SPLICER/PRESENTATIONASSET.BUNDLE",
-          "SOUND/STREAMS/STREAMHEADERS*.BUNDLE", "SOUND/STREAMS/STREAMSREGISTRY*.BUNDLE"]
+match  = ["SOUND/SPLICER/PRESENTATIONASSET.BUNDLE",
+          "SOUND/STREAMS/STREAMHEADERS*.BUNDLE"]
 action = "copy"
 verify = ["bnd2_platform=2", "nonempty"]
-why    = """These two files are deliberately consumed outside BundleLoader by the current
-PC audio bridges (CgsGuiSoundPC.cpp and CgsStreamHeadersPC.cpp). They read the original X360
-bnd2 headers, registry records, Splicer tables, and embedded SNR images with explicit
-Be16/Be32/Be64 accessors. Converting these inputs to platform 4 breaks those direct reads;
-omitting BURNOUTGLOBALDATA disables the presentation-action mapping. Keep them byte-identical
-and verify platform 2.
+why    = """These files are deliberately consumed outside BundleLoader by the current PC
+audio bridges (CgsGuiSoundPC.cpp and CgsStreamHeadersPC.cpp). They read the original X360
+bnd2 headers, Splicer tables, and embedded SNR images with explicit Be16/Be32/Be64 accessors.
+Converting these inputs to platform 4 breaks those direct reads; keep them byte-identical and
+verify platform 2. BurnoutGlobalData is not in this exception: the real sound resource
+registrar loads it through BundleLoader, so the preceding schema-driven rule ports it.
 This is a PC-platform serialized-data leaf, not an unconverted BundleLoader input."""
 
 [[rule]]
@@ -557,6 +582,67 @@ why    = """These bundles contain only resource types already covered and valida
 engine_transcode.py: GenericRwacWaveContent, Splicer, and ContentSpec-only Registry.  The driver
 is strict and refuses an unexpected type or Registry entity subclass, so this cannot silently
 emit a half-converted sound bank."""
+
+[[rule]]
+id     = "sound-native64-registries"
+match  = ["PLAYBACKREGISTRY.BUNDLE", "RWACFEATUREREGISTRY.BUNDLE",
+          "SOUND/SOUNDENTITY.BUNDLE"]
+action = "convert"
+tool   = "bundles/engine_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """The Phase-F playback registries are serialized Entity graphs.  The strict
+Registry porter schema-walks every record class present in these three bundles, endian-maps
+numeric fields, widens genuine pointers and the Registry slot/header offsets to the native
+x64 image, preserves 32-bit Name idents and inline strings, and refuses unknown type names.
+This replaces the old inert platform-2 copies; the runtime RegistryResourceType consumes the
+result directly and fixes its offsets into live pointers."""
+
+[[rule]]
+id     = "sound-csis-native64"
+match  = ["SOUND/AEMS/CSIS.BUNDLE"]
+action = "convert"
+tool   = "bundles/csis_native64_port.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """The Phase-F CSIS bundle contains 33 Registry resources plus 11 Csis
+BinaryFileResources.  Registry graphs are rebuilt from X360 identity/content, while the ten
+MOIR class sets shared with Xbox One import their matching native-64 bodies.  The X360-only
+detonation/tendril descriptor (whose explosion AEMS bank has no Xbox One counterpart) is
+schema-widened field-by-field.  The porter validates every MOIR header, count, native record,
+name offset, id, resource identity, and a byte-exact extract/repack round trip."""
+
+[[rule]]
+id     = "sound-aems-native64-banks"
+match  = ["SOUND/AEMS/BOOST_BANK_EXOTIC.BUNDLE",
+          "SOUND/AEMS/BOOST_BANK_SEDAN.BUNDLE",
+          "SOUND/AEMS/BOOST_BANK_SUPER.BUNDLE",
+          "SOUND/AEMS/BOOST_BANK_TRUCK.BUNDLE",
+          "SOUND/AEMS/BOOST_BANK_TUNER.BUNDLE",
+          "SOUND/AEMS/BOOST_PATCH_BANK.BUNDLE",
+          "SOUND/AEMS/CRUMPLEPATCHBANK.BUNDLE",
+          "SOUND/AEMS/GEARWHINEPATCHBANK.BUNDLE",
+          "SOUND/AEMS/INAIR.BUNDLE",
+          "SOUND/AEMS/PATCH_BANK_HORNS.BUNDLE",
+          "SOUND/AEMS/SCRAPEPATCHBANK.BUNDLE",
+          "SOUND/AEMS/SKIDS.BUNDLE",
+          "SOUND/AEMS/SUPRAAKTURBOPATCHBANK.BUNDLE",
+          "SOUND/AEMS/SURFACE_PATCH_BANK.BUNDLE",
+          "SOUND/AEMS/TRAFFIC_BANK.BUNDLE"]
+action = "convert"
+tool   = "bundles/aems_native64_port.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4", "nonempty"]
+why    = """AEMS ABKC banks contain AEMS bytecode plus pointer-width-dependent module
+templates and relocation tables, so the 32-bit PowerPC payloads cannot be merely endian-swapped
+into the native x64 layout.  The Xbox One Remastered build supplies the same named banks in the exact
+native-64 layout consumed by its x64 AEMS loader.  aems_native64_port.py keeps the X360
+container/resource identity, imports only that same-name native-64 payload, rebuilds the
+BinaryFileResource prefix, walks the 104-byte x64 module records, rejects native-function
+relocations, and requires a byte-exact
+extract/repack round trip.  This is an explicit later-retail ABI substitution, not a claim
+that the content is byte-equivalent.  CSIS uses the preceding data-only porter;
+EXPLOSIONS_PATCHBANK remains unhandled because no native-x64 counterpart exists."""
 
 [[rule]]
 id     = "sound-worldpainter-regions"
@@ -731,13 +817,3 @@ reason = """PARTICLES.BUNDLE is bnd2 platform 2 with no rule, and is present in 
 at platform 2 byte-identical to retail (inert). Its ParticleDescriptionCollection /
 ParticleDescription payloads have no porter in this repo. (PROPS/PROPPHYSICS.BUNDLE was
 split out of this rule and now has a real converter -- see "prop-physics" above.)"""
-
-[[rule]]
-id     = "unhandled-misc-root-bundles"
-match  = ["PLAYBACKREGISTRY.BUNDLE", "RWACFEATUREREGISTRY.BUNDLE",
-          ]
-action = "unhandled"
-reason = """Two small Registry containers remain. Their payloads use Entity subclasses
-outside the proven ContentSpec-only schema. Existing build/game copies are byte-identical
-platform-2 files and therefore inert. They stay UNHANDLED so the report cannot count them as
-success."""
