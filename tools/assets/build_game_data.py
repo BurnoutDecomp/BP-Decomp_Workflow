@@ -525,33 +525,83 @@ CATCHALL = Rule({"id": "catch-all", "action": "unhandled",
                            "tools/assets/game_data_manifest.toml"}, 9999)
 
 
+def has_wildcard(pattern):
+    return any(c in pattern for c in "*?[")
+
+
+def resolve_only(rels, patterns):
+    """The concrete source-relative paths a set of --only patterns selects.
+
+    A pattern containing a wildcard is fnmatch'd against the whole relative path, which is
+    what --only has always done.  A pattern WITHOUT one is resolved LOOSELY, in descending
+    order of precision -- whole path, then file name, then substring anywhere in the path
+    -- and the FIRST tier that matches anything wins.
+
+    That tiering is the whole point.  `--only SHADERS.BNDL` and `--only gt01` both land
+    where the caller obviously meant, so a one-file conversion no longer demands that you
+    know the exact relative spelling or fnmatch syntax; but because an exact reading always
+    wins outright, a precise pattern can never be widened into the substring tier behind
+    the caller's back.  A selection filter on a tool that writes files must never quietly
+    select MORE than it was asked for.
+
+    Returns (selected_rels, [(pattern, hits), ...]) -- the second half so callers can show
+    their work and refuse an ambiguous single-file request instead of converting nine files
+    by surprise."""
+    lowered = [(r, r.lower()) for r in rels]
+    selected, per_pattern = set(), []
+    for pat in patterns:
+        p = pat.lower().replace("\\", "/")
+        # The verbatim whole path is tier 1 for EVERY pattern, wildcard or not, so a
+        # caller that already knows the exact relative path -- which is how the build
+        # driver hands its resolved selection down -- can never have it reinterpreted
+        # as a glob by a literal [ in the name.
+        hits = [r for r, rl in lowered if rl == p]
+        if not hits and has_wildcard(p):
+            hits = [r for r, rl in lowered if fnmatch.fnmatch(rl, p)]
+        elif not hits:
+            hits = [r for r, rl in lowered if rl.rsplit("/", 1)[-1] == p]
+            if not hits:
+                hits = [r for r, rl in lowered if p in rl]
+        per_pattern.append((pat, sorted(hits)))
+        selected.update(hits)
+    return selected, per_pattern
+
+
 def plan(srcroot, outroot, file_rules, gen_rules, only=None, limit=0):
     items, gens = [], []
     only_patterns = ([only] if isinstance(only, str) else list(only or []))
+    found = []
     for dirpath, dirnames, filenames in os.walk(srcroot):
         dirnames.sort()
         for fn in sorted(filenames):
             src = os.path.join(dirpath, fn)
-            rel = norm(os.path.relpath(src, srcroot))
-            if only_patterns and not any(
-                    fnmatch.fnmatch(rel.lower(), pattern.lower())
-                    for pattern in only_patterns):
-                continue
-            rule = next((r for r in file_rules if r.accepts(rel)), CATCHALL)
-            out_rel = rel
-            if rule.out_name:
-                base = os.path.dirname(rel)
-                stem, ext = os.path.splitext(fn)
-                nm = expand(rule.out_name, {"stem": stem, "ext": ext, "name": fn})
-                out_rel = norm(os.path.join(base, nm)) if base else nm
-            try:
-                size = os.path.getsize(src)
-            except OSError:
-                size = 0
-            items.append(Item(rule, src, rel, os.path.join(outroot, *out_rel.split("/")),
-                              out_rel, size))
-            if limit and len(items) >= limit:
-                break
+            found.append((src, norm(os.path.relpath(src, srcroot))))
+    if only_patterns:
+        keep, per_pattern = resolve_only([rel for _, rel in found], only_patterns)
+        # Always show the resolution.  A loose pattern is only safe to offer if what it
+        # resolved to is on screen before the run acts on it.
+        for pat, hits in per_pattern:
+            if not hits:
+                print("  --only %s -> nothing" % pat)
+            else:
+                shown = ", ".join(hits[:6]) + (" ..." if len(hits) > 6 else "")
+                print("  --only %s -> %d file(s): %s" % (pat, len(hits), shown))
+        found = [(src, rel) for src, rel in found if rel in keep]
+    for src, rel in found:
+        fn = os.path.basename(rel)
+        rule = next((r for r in file_rules if r.accepts(rel)), CATCHALL)
+        out_rel = rel
+        if rule.out_name:
+            base = os.path.dirname(rel)
+            stem, ext = os.path.splitext(fn)
+            nm = expand(rule.out_name, {"stem": stem, "ext": ext, "name": fn})
+            out_rel = norm(os.path.join(base, nm)) if base else nm
+        try:
+            size = os.path.getsize(src)
+        except OSError:
+            size = 0
+        items.append(Item(rule, src, rel, os.path.join(outroot, *out_rel.split("/")),
+                          out_rel, size))
         if limit and len(items) >= limit:
             break
     if not only_patterns:
@@ -1313,6 +1363,16 @@ TYPICAL USE
        ... --out <out-folder> --jobs 6 --borrow-dir <known-good-build/game> --with-exe
   4. launch <out-folder>/Burnout_PC.exe
 
+ONE FILE AT A TIME
+  --only takes a loose name, not just a glob: exact relative path if one matches, else
+  file name, else substring.  --list answers "what would this select, and which rule
+  owns it?" without writing anything.
+       ... --only SHADERS.BNDL --list
+       ... --only carbb1gt_gr --list
+       ... --only SHADERS.BNDL --force        # re-convert just that file
+  `build shaders` and `build file <name>` in the top-level build driver are the ergonomic
+  front ends for exactly this, and they add --force for you.
+
 NOTES
   * --out may not be inside build/game, b5-decomp, tools/, or the source, and may not be on C:
     without --allow-c-drive.
@@ -1332,9 +1392,15 @@ NOTES
     ap.add_argument("--dry-run", action="store_true",
                     help="plan and report only; write nothing at all")
     ap.add_argument("--jobs", type=int, default=4, help="parallel converters (default 4)")
-    ap.add_argument("--only", metavar="GLOB", action="append",
-                    help="restrict to source-relative paths matching this glob; "
-                         "repeat to select multiple files/families")
+    ap.add_argument("--only", metavar="PATTERN", action="append",
+                    help="restrict to the source files this selects; repeat to select "
+                         "several. With a wildcard it is a glob over the whole relative "
+                         "path; without one it resolves loosely -- exact path, else file "
+                         "name, else substring -- so --only SHADERS.BNDL and --only carbb1gt "
+                         "both work. The resolution is printed before anything runs")
+    ap.add_argument("--list", action="store_true",
+                    help="print the selected files and the rule that owns each, then "
+                         "exit -- no conversion, no output folder touched")
     ap.add_argument("--limit", type=int, default=0, help="stop after N source files")
     ap.add_argument("--force", action="store_true", help="ignore the up-to-date state cache")
     ap.add_argument("--with-exe", action="store_true",
@@ -1400,6 +1466,29 @@ NOTES
     items, gens = plan(srcroot, outroot, file_rules, gen_rules, args.only, args.limit)
     print("  %d source files" % len(items), flush=True)
 
+    if args.list:
+        # Deliberately ahead of guard_out/preflight: listing is a question about the
+        # manifest, not a request to write anything, and must answer even when the
+        # toolchain is incomplete or --out would be refused.
+        if not items:
+            print()
+            print("nothing selected." + ("" if args.only else
+                  "  (the source folder is empty?)"))
+            return 1
+        print()
+        print("  %-9s %-32s %s" % ("ACTION", "RULE", "SOURCE -> OUTPUT"))
+        for it in sorted(items, key=lambda i: i.src_rel):
+            arrow = it.src_rel if it.out_rel == it.src_rel else "%s -> %s" % (it.src_rel,
+                                                                             it.out_rel)
+            print("  %-9s %-32s %s" % (it.rule.action, it.rule.id, arrow))
+        print()
+        print("%d file(s), %s of source."
+              % (len(items), human(sum(i.size for i in items)).strip()))
+        gaps = preflight(items, [], srcroot, outroot)
+        if gaps:
+            report_preflight(gaps, fatal=False)
+        return 0
+
     need = sum(i.size for i in items
                if i.rule.action in ("convert", "copy")) * 2 + (1 << 30)
     guard_out(outroot, srcroot, args, 0 if args.dry_run else need)
@@ -1412,12 +1501,23 @@ NOTES
     state = {}
     if not args.dry_run:
         os.makedirs(os.path.join(outroot, STATE_DIR), exist_ok=True)
-        if os.path.isfile(state_path) and not args.force:
+        if os.path.isfile(state_path):
             try:
                 with open(state_path, "r", encoding="utf-8") as fh:
                     state = json.load(fh)
             except (OSError, ValueError):
                 state = {}
+        if args.force:
+            # --force means "redo the work in THIS plan", not "forget every other file".
+            # The run rewrites state.json wholesale at the end, so loading nothing under
+            # --force used to truncate the cache down to whatever this run touched.  On a
+            # FULL --force run that is the same thing and nobody noticed.  On a restricted
+            # one -- `--only SHADERS.BNDL --force`, which is now what `build shaders` does
+            # every time -- it discarded 5,922 entries to redo one file, and the next full
+            # run had to re-derive currency for all of them from the filesystem.
+            # So drop exactly the selected entries and leave the rest standing.
+            for it in items:
+                state.pop(it.out_rel, None)
 
     workbase = os.path.join(outroot, STATE_DIR, "work")
     roots = WorkerRoots(workbase, args.jobs, quiet=args.dry_run)
