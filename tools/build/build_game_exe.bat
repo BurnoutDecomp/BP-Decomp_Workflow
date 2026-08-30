@@ -171,6 +171,14 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\renderware\src\rw\audio\core\ReverbFilters.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\plugins\ReverbModel1.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\StreamPool.cpp"
+  rem [main-menu sweep session 2026-08-30] Phase-E streamed-playback closure: both TUs
+  rem existed and compiled but were never mounted (the cross-repo mount gap, audio lane) --
+  rem 4 LNK2019s from SndPlayer1/sndplayer1shared without them.
+  echo "%VEN%\renderware\src\rw\audio\core\SeekTableParser.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsReadStream.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsStreamDeviceDiskRead.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\PackedTableReader.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\PackedColumnReader.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Send.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Send_wL_01.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\MixKernels.cpp"
