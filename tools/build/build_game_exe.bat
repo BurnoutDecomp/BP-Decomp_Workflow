@@ -141,11 +141,13 @@ copy /y "%BASERSP%" "%RSP%" >nul
   rem  BitGetter.cpp -- the MSB-first bit reader the packed sample headers are parsed
   rem  with; its GetBits body was already reconstructed but the TU was never mounted.
   echo "%VEN%\renderware\src\rw\audio\core\BitGetter.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\PackedColumnReader.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\PackedTableReader.cpp"
+  echo "%VEN%\renderware\src\rw\audio\core\SeekTableParser.cpp"
   rem ---- AEMS-cascade wave 2026-08-28: the RWAC factory registration pass plug-ins. ---------
   rem  GenericRwacFactory::GenericRwacFactory @0x826C17A0 registers every runtime plug-in
   rem  descriptor in console order -- these vendor TUs carry the getters plus the plug-in
-  rem  bodies. Absent vendor homes -- SndPlayer1 and SubMix -- and the three custom game
-  rem  descriptors are FLAG-skipped at the registration site.
+  rem  bodies. Phase E completed the full 25-record registration set.
   echo "%VEN%\renderware\src\rw\audio\core\AiffWriter.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\Iir2.cpp"
   echo "%VEN%\renderware\src\rw\audio\core\BandPassIir2.cpp"
@@ -5187,6 +5189,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceBundleLoaderModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceIOEvents.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileSystem.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsReadStream.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsStreamDeviceDiskRead.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsDeviceManager.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsDeviceOperationPool.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileLog.cpp"
