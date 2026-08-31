@@ -100,7 +100,11 @@ Per-type status:
                            mpSubRegions u32 @0x24, numX/numZ @0x28/0x2C,
                            mpEntities u32 @0x30, numEntities @0x34, rootType
                            @0x38 (FixUp @0x826775C8 / descriptor @0x8267AFC0
-                           offsets). Entities 16 bytes {f32 x,y,z, u16, u16}
+                           offsets). Entities are 16 bytes {f32 x,y,z,
+                           u32 packed}, where Construct stores
+                           (type << 16) | radius. The packed W lane must flip
+                           as one u32; treating its halves as two u16 fields
+                           swaps the radius and type in the LE consumer.
                            (GetEntity @0x82675578 16-stride); grid cells
                            {u16 firstEntity (0xFFFF=empty), u16 count}
                            (validated: cell ranges tile [0, numEntities)).
@@ -866,8 +870,11 @@ SSM_ENTITY_STRIDE = 16
 
 def _flip_ssm_entity(out, d, src, dst):
     _u32_flip_range(out, d, src, src + 12, dst - src)          # f32 x, y, z
-    out[dst + 12:dst + 14] = d[src + 12:src + 14][::-1]        # u16
-    out[dst + 14:dst + 16] = d[src + 14:src + 16][::-1]        # u16
+    # StaticSoundEntity::Construct packs the final lane numerically as
+    # (type << 16) | radius. It is one u32 lane, not two independently
+    # serialized u16 fields: reversing the halves separately would make the
+    # LE accessors read type as radius and radius as type.
+    out[dst + 12:dst + 16] = d[src + 12:src + 16][::-1]
 
 
 def _parse_staticsoundmap_be(d):
@@ -955,6 +962,10 @@ def verify_staticsoundmap_le(data):
     assert ent_off == SSM_X64_HEADER, 'entity table offset'
     assert sub_off == ent_off + SSM_ENTITY_STRIDE * num_ent, 'grid offset'
     assert sub_off + 4 * num_x * num_z == len(data), 'grid extent'
+    for i in range(num_ent):
+        packed = struct.unpack_from('<I', data, ent_off + SSM_ENTITY_STRIDE * i + 12)[0]
+        radius = packed & 0xffff
+        assert radius > 0, 'entity radius'
     min_x = struct.unpack_from('<f', data, 0x00)[0]
     max_x = struct.unpack_from('<f', data, 0x10)[0]
     sub_size = struct.unpack_from('<f', data, 0x20)[0]
