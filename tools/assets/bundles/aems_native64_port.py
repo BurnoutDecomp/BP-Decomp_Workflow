@@ -61,11 +61,13 @@ SUPPORTED_BANKS = {
     'TRAFFIC_BANK.BUNDLE',
 }
 
-# Retail 1.0.0.5 carries the native-64 revision of these two banks.  Their
-# ABKC revision byte advanced from 1 to 2; SKIDS also consolidated its two X360
-# bytecode modules into one.  The replacement remains same-name and is still
-# guarded by all native-layout/relocation checks below.
+# Retail 1.0.0.5 carries native-64 revisions of these banks.  Their ABKC revision
+# byte advanced from 1 to 2; SKIDS also consolidated its two X360 bytecode modules
+# into one.  The replacements remain same-name and are still guarded by all
+# native-layout/relocation checks below.  BOOST_PATCH_BANK retains its one-module
+# shape across the revision.
 NATIVE64_REVISIONS = {
+    'BOOST_PATCH_BANK.BUNDLE': (2, 1),
     'SKIDS.BUNDLE': (2, 1),
     'SURFACE_PATCH_BANK.BUNDLE': (2, 1),
 }
