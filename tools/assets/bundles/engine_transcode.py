@@ -53,7 +53,10 @@ THE PORT IS NOT ONE TRANSFORM -- IT IS FIVE, AND THE BODIES DISAGREE WITH EACH O
           LE on the X360 data). The Remastered oracle agrees: 275 of 276 same-size bodies
           are BYTE-IDENTICAL to the X360 ones. A blanket u32 swap would corrupt 56066 of
           56068 dwords in a single resource and look plausible doing it.
-          -> head flips, BODY IS PASSTHROUGH.
+          The u16 at body +0x06 is GinsuSynthData's one-time native-endian marker. X360
+          ships it as zero because its big-endian runtime must swap this little-endian
+          body in place; the PC image is already native and must carry marker 1.
+          -> head flips, native marker becomes 1, ALL OTHER BODY BYTES PASS THROUGH.
 
       GenericRwacWaveContent  body is an EA SNR/EAAC stream header + EA-XMA. It is
           BIG-ENDIAN BY FORMAT, not by platform: read big-endian it yields a sane
@@ -301,18 +304,40 @@ def _binfile_head_plan(d, label, body_name):
 
 
 # --- 0xA021 GinsuWaveContent -------------------------------------------------
-# Body is already little-endian; head flips, body is untouched.
+# Body is already little-endian. The resource head flips and the Ginsu runtime's one-time
+# native-endian marker becomes 1; every other body byte remains untouched.
 
 def plan_ginsuwavecontent(d):
     return _binfile_head_plan(d, T_GINSU, 'Ginsu body (ALREADY LE -- passthrough)').finish()
 
 
+def mark_ginsuwavecontent_native(out, src):
+    src_body = src[BINFILE_HEAD:]
+    if len(src_body) < 8:
+        raise PortError('%s: body is only %d bytes, cannot contain native-endian marker'
+                        % (T_GINSU, len(src_body)))
+    marker = struct.unpack_from('<H', src_body, 6)[0]
+    if marker != 0:
+        raise PortError('%s: X360 source native-endian marker is %d, expected 0; refusing '
+                        'an already-adjusted or unknown body' % (T_GINSU, marker))
+    marked = bytearray(out)
+    struct.pack_into('<H', marked, BINFILE_HEAD + 6, 1)
+    return bytes(marked)
+
+
 def check_ginsuwavecontent(out, src):
     body = out[BINFILE_HEAD:]
+    src_body = src[BINFILE_HEAD:]
     if body[:6] != b'Gnsu20':
         raise PortError('%s: body magic is %r, expected b"Gnsu20"' % (T_GINSU, body[:6]))
     if len(body) < 0x20:
         raise PortError('%s: body is only %d bytes' % (T_GINSU, len(body)))
+    marker = struct.unpack_from('<H', body, 6)[0]
+    if marker != 1:
+        raise PortError('%s: emitted native-endian marker is %d, expected 1' % (T_GINSU, marker))
+    if body[:6] != src_body[:6] or body[8:] != src_body[8:]:
+        raise PortError('%s: bytes other than the native-endian marker changed in the '
+                        'already-little-endian body' % T_GINSU)
     # +0x1C of the body is the sample rate, stored LITTLE-endian inside the big-endian
     # X360 image.  This is a DIFFERENTIAL invariant, not a threshold: the little-endian
     # reading must be a plausible rate AND the big-endian reading of the same word must be
@@ -331,7 +356,7 @@ def check_ginsuwavecontent(out, src):
     size = struct.unpack_from('<I', out, 0)[0]
     if size != len(src) - BINFILE_HEAD:
         raise PortError('%s: emitted mu32DataSize %d != %d' % (T_GINSU, size, len(src) - BINFILE_HEAD))
-    return 'Gnsu20 %dHz body %dB passthrough' % (rate_le, len(body))
+    return 'Gnsu20 %dHz body %dB native-marked, otherwise passthrough' % (rate_le, len(body))
 
 
 # --- 0xA023 Csis ------------------------------------------------------------
@@ -1467,6 +1492,8 @@ def port_payload(folder, data):
         plan = planner(data)
         out = plan.apply(data)
         plan.verify(data, out)          # involution + lane equality + byte fidelity
+        if folder == T_GINSU:
+            out = mark_ginsuwavecontent_native(out, data)
         return out, checker(out, data)
     if folder in REBUILD_PORTERS:
         porter, checker = REBUILD_PORTERS[folder]
@@ -1724,11 +1751,15 @@ def oracle(limit=None, verbose=True):
             src = e['payload']
             # NB the Remaster RE-ENCODED the audio for 0xA020/0xA025, so their mu32DataSize
             # legitimately differs; only the mu32DataOffset lane is comparable there.
-            if e['type'] == 0xA021:              # Ginsu: head flips, body untouched
-                out = plan_ginsuwavecontent(src).apply(src)
+            if e['type'] == 0xA021:              # Ginsu: head flips, marker set, body preserved
+                out, unused_note = port_payload(T_GINSU, src)
                 tally('GinsuWaveContent head (both lanes)', out[:8] == f['payload'][:8])
                 if len(src) == len(f['payload']):
-                    tally('GinsuWaveContent body identical', out[16:] == f['payload'][16:])
+                    # The PC runtime-adjusted marker is a build-time concern. The authored
+                    # Ginsu content on either side must otherwise remain byte-identical.
+                    tally('GinsuWaveContent body identical except native marker',
+                          out[16:22] == f['payload'][16:22] and
+                          out[24:] == f['payload'][24:])
             elif e['type'] == 0xA020:            # SNR: head flips; body re-encoded by BPR
                 out = plan_genericrwacwavecontent(src).apply(src)
                 tally('GenericRwacWaveContent dataOffset lane',
@@ -1852,9 +1883,10 @@ def selftest():
             body[i:i + 4] = body[i:i + 4][::-1]
         g[16:] = body
         swapped = bytes(g)
+        swapped_out = plan_ginsuwavecontent(swapped).apply(swapped)
+        swapped_out = mark_ginsuwavecontent_native(swapped_out, swapped)
         _expect_fail('C3 u32-swapped Ginsu body rejected (permutation control)',
-                     lambda: check_ginsuwavecontent(plan_ginsuwavecontent(swapped).apply(swapped),
-                                                    swapped), ctrl)
+                     lambda: check_ginsuwavecontent(swapped_out, swapped), ctrl)
 
         # C4 the SNR body must NOT be swapped either -- swapping it makes the EAAC header absurd
         r = bytearray(pay[0xA020])
