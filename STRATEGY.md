@@ -28,7 +28,7 @@ Two tiers, decided by how richly each is symbolized (measured, not assumed):
 | `DecFIGS_Burnout_Internal_PS3.ELF` | ~90% | **File/line attribution plus declaration/type hints** (DWARF) — tells us which original `.cpp` each function belongs to and provides C++-shaped declarations, enums, member names, globals, and locals for reconstruction. |
 | `BurnoutPR.exe` (BPR) | ~0% | PC reference, **stripped**. Consulted per-function for platform layers only. Partially hand-RE'd. |
 | `TUB_Burnout_PC_External.exe` | ~6% | PC reference, **stripped**. Same opportunistic role as BPR. |
-| `rwcore_master.obj` + `rwcore.pdb` | 100% | RenderWare type ground truth. PDB → `rw::` vocab via [`tools/renderware/generate_headers.py`](tools/renderware/generate_headers.py); extract layouts with `llvm-pdbutil`. |
+| `rwcore_master.obj.i64` | 100% | Supplemental x64 RenderWare ABI corroboration. ARTIST remains authoritative for Paradise structure and behavior. |
 
 The three **symbolized console builds join by name**. The two **stripped PC builds
 are never the spine** — they are a lookup tool the agent reaches for mid-
@@ -183,21 +183,22 @@ the owning header for each unresolved callee.
 
 ### Middleware and SDKs (RenderWare, EATech, etc.)
 
-RenderWare and other vendor SDKs are **black-box middleware**, but we only have pre-compiled
-PC binaries for *some* of them (e.g., `rwcore.lib`). Additionally, for `EABase`, `EASTL`, and
-`EAThread`, we compile them directly from the original open-source code in `vendor/`.
+RenderWare and other closed vendor SDK binaries are **reference-only middleware evidence**;
+they are never linked into the reconstructed game. For `EABase`, `EASTL`, and `EAThread`,
+we compile directly from the original open-source code in `vendor/`.
 If `work next` or the user assigns an agent a TU belonging to a vendor SDK, the agent must
 first run `python tools/work/check_vendor_lib.py <tu_name>`.
-- If the script outputs **PRESENT**: The agent must skip it and block it in the ledger (`work block <tu> "Vendor code; exists in PC lib or vendor source."`).
-- If the script outputs **MISSING**: The agent must decompile it from the console builds, as no PC equivalent exists.
+- If the script outputs **PRESENT**: original buildable source exists; skip it and block the
+  TU (`work block <tu> "Vendor code; original source is present."`).
+- If the script outputs **MISSING**: reconstruct it from ARTIST, or use a documented platform
+  leaf where the behavior is genuinely host-specific.
 
-**Types vs bodies.** "PRESENT → skip" applies to an SDK's **function bodies** (we link the
-PC lib). Its **types** are still recovered on demand: the `rw::` vocabulary in
-[`b5-decomp/vendor/renderware/`](b5-decomp/vendor/renderware/) is generated from
-`rwcore.pdb` (x64) by [`tools/renderware/generate_headers.py`](tools/renderware/generate_headers.py), and
-handlers use those real types instead of opaque blobs / offset-pokes. The PDB is the x64
-PC build, so it is the right layout for our compile; X360 differences are modelled as
-explicit deltas on that baseline (see AGENTS.md, "`rw::` types come from `rwcore.pdb`").
+**Types vs bodies.** "PRESENT → skip" applies only when original source supplies the SDK's
+**function bodies**. Types are still recovered on demand. The canonical `rw::` vocabulary in
+[`b5-decomp/vendor/renderware/`](b5-decomp/vendor/renderware/) follows ARTIST for Paradise
+behavior and game-facing structure, with DecFIGS declaration evidence and host pointer
+widening where required. Platform implementations use the original `D_PLATFORM_*` flags;
+they may call native host services without changing the Paradise class or resource model.
 
 ## Verification (reconstruction target — two tiers, both local)
 

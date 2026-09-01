@@ -34,7 +34,7 @@ No single binary contains enough information. The workflow triangulates:
 | `Burnout_External_PS3.ELF` | Symbol-rich PS3 corroboration for names and behavior. |
 | `DecFIGS_Burnout_Internal_PS3.ELF` | DWARF source/file attribution plus declaration, type, enum, global, signature, and local-variable hints. |
 | `BurnoutPR.exe` and `TUB_Burnout_PC_External.exe` | Stripped PC references, consulted selectively for platform-specific code paths. |
-| `rwcore.lib` / `rwcore.pdb` / `rwcore_master.obj` | RenderWare core type and layout evidence. |
+| `rwcore_master.obj.i64` | Supplemental x64 RenderWare ABI corroboration; Paradise structure and behavior still come from ARTIST. |
 | `references/Feb-2007/` | A real source-code slice used as the highest-fidelity template where it overlaps. |
 | `references/Wiki/` | burnout.wiki-derived type tables. Use names/types/semantics, never offsets. |
 
@@ -343,9 +343,9 @@ python tools/work/wiki_index.py [--lookup <Type>]
 python tools/work/check_vendor_lib.py <tu>
 ```
 
-Vendor SDK TUs must be checked with `check_vendor_lib.py` before decompiling. If the
-script prints `PRESENT`, block the TU as vendor code already covered by a PC library or
-open-source vendor source. If it prints `MISSING`, reconstruct it normally.
+Vendor SDK TUs must be checked with `check_vendor_lib.py` before decompiling. `PRESENT`
+means original buildable source exists and the TU can be blocked. Otherwise reconstruct
+the body from ARTIST, or use a documented platform leaf where appropriate.
 
 ## Regeneration Pipeline
 

@@ -26,12 +26,9 @@ import sys
 X360 = dict(
     VERSION=0x00, SIZE=0x04, SCALE_X=0x08, SCALE_Y=0x0C, LOWERCASE=0x10, BASELINE=0x14,
     XHEIGHT=0x18, NUMCHARS=0x1C, FONTCHARS_PTR=0x20, FONTCHARIDS_PTR=0x24, HASHOFFSETS=0x28,
-    # The ARTIST retail payload and native-x64 oracle place a 16-byte console
-    # rw::Resource block at 0x134..0x143, then height at 0x14c and names at 0x150/0x1d0.
-    # (An older 12-byte interpretation put these fields four bytes too early,
-    # byte-swapped the family's first four characters into "height", and
-    # truncated family/style by 4 -- runtime log showed family='condiss' instead of
-    # 'b5eacondiss(drop)'.)
+    # ARTIST uses a five-lane rw::Resource at 0x138..0x14B. The preceding
+    # mpTextureState pointer is at 0x134, so height and the two names begin at
+    # 0x14C/0x150/0x1D0 respectively.
     NUMPAGES=0x12C, TEXTURES_PTR=0x130, FONTHEIGHT_PX=0x14C, FAMILY=0x150, STYLE=0x1D0, SIZEOF=0x250,
 )
 # --- Our x64 Font layout (little-endian, 8-byte pointers); offsets dumped via offsetof ---
@@ -39,7 +36,9 @@ OUR = dict(
     VERSION=0x00, SIZE=0x04, SCALE_X=0x08, SCALE_Y=0x0C, LOWERCASE=0x10, BASELINE=0x14,
     XHEIGHT=0x18, NUMCHARS=0x1C, FONTCHARS_PTR=0x20, FONTCHARIDS_PTR=0x28, HASHOFFSETS=0x30,
     NUMPAGES=0x134, TEXTURES_PTR=0x138, TEXTURESTATE_PTR=0x140, TEXTURESTATE_RES=0x148,
-    FONTHEIGHT_PX=0x168, FAMILY=0x16C, STYLE=0x1EC, SIZEOF=0x270,
+    # On x64 the same five lanes occupy 40 bytes. Keep these values in sync with
+    # tools/assets/fonts/dump_offsets.cpp and references/FONT_BUNDLE_SCHEMA.md.
+    FONTHEIGHT_PX=0x170, FAMILY=0x174, STYLE=0x1F4, SIZEOF=0x278,
 )
 HASH_COUNT = 129          # mauHashOffsets[KU_HASH_TABLE_SIZE]
 FONTCHAR_SIZE = 0x20      # 32 bytes, pointer-free -> identical size both platforms
@@ -83,7 +82,7 @@ def convert(src):
     src_fontchars = src[fc_src:fc_end]
     src_fontcharids = src[id_src:id_end]
 
-    # our new array offsets (arrays follow the 0x270 struct; page-ptr array is 8-aligned)
+    # Our arrays follow the 0x278 struct; the page-pointer array is 8-aligned.
     fc_dst = OUR['SIZEOF']
     id_dst = fc_dst + num_chars * FONTCHAR_SIZE
     pp_dst = align(id_dst + num_chars * 2, 8)

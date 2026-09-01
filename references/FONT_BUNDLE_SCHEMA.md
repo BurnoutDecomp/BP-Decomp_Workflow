@@ -92,7 +92,7 @@ A debug font is **one Font resource (type 0x21)** that imports **N atlas-page Te
   *(The import table is appended after these by the packer — see §4.)*
 - **No secondary pools.**
 
-#### `Font` struct — 624 bytes (0x270)
+#### `Font` struct — 632 bytes (0x278)
 
 | off    | type        | field                    | what to write |
 |--------|-------------|--------------------------|---------------|
@@ -110,10 +110,10 @@ A debug font is **one Font resource (type 0x21)** that imports **N atlas-page Te
 | 0x134  | u32         | `muNumTexturePages`      | N (atlas pages = import count) |
 | 0x138  | u64(offset) | `mpapTextures`           | **offset** of the page-pointer array (N × 8B, zero-filled; imports fill it) |
 | 0x140  | u64         | `mpTextureState`         | **0** (fix-up nulls it; created at runtime) |
-| 0x148  | 32 bytes    | `mTextureStateResource`  | **0** (runtime) |
-| 0x168  | u32         | `muFontHeightInPixels`   | nominal pixel height |
-| 0x16C  | char[128]   | `macTypefaceFamilyName`  | NUL-terminated; fix-up lowercases it |
-| 0x1EC  | char[128]   | `macTypefaceStyleName`   | NUL-terminated |
+| 0x148  | 40 bytes    | `mTextureStateResource`  | **0** (runtime; Paradise's five resource lanes widened to x64 pointers) |
+| 0x170  | u32         | `muFontHeightInPixels`   | nominal pixel height |
+| 0x174  | char[128]   | `macTypefaceFamilyName`  | NUL-terminated; fix-up lowercases it |
+| 0x1F4  | char[128]   | `macTypefaceStyleName`   | NUL-terminated |
 
 #### `FontChar` — 32 bytes, the `mpaFontChars[]` element
 
@@ -241,7 +241,7 @@ resources:
 
 `.imports.yaml` (the font's page references; `offset` is the byte offset of `mpapTextures[i]` *within
 the font's main block* = `page_ptr_array_offset + i*8`, where the page-pointer array lives **after** the
-`Font` struct (0x270) + the `FontChar[]` and id[] arrays — i.e. it is always ≥ 0x270, never inside the
+`Font` struct (0x278) + the `FontChar[]` and id[] arrays — i.e. it is always ≥ 0x278, never inside the
 struct). Set `mpapTextures` (Font +0x138) to that same `page_ptr_array_offset`):
 
 ```yaml

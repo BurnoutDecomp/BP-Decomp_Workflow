@@ -1,7 +1,7 @@
 # IDA Files
 
-The IDA Pro databases (`.i64`) for every analyzed Burnout build, plus the RenderWare
-`rwcore` library/PDB used to recover engine types. This is the **primary disassembly
+The IDA Pro databases (`.i64`) for every analyzed Burnout build, plus supplemental
+RenderWare analysis. This is the **primary disassembly
 source** for the whole project — everything in [`../.ida-exports`](../.ida-exports/) and
 the source-attribution maps in [`../references/DecFIGS`](../references/DecFIGS/) is
 derived from these by the scripts in [`../tools`](../tools/).
@@ -18,8 +18,7 @@ truth (symbols, DWARF line info, type layouts). The decomp triangulates between 
 | `Burnout_External_PS3.ELF.i64` | Retail PS3 (external) | Richer symbol table; PS3 function names. *(git-ignored — too large to commit.)* |
 | `BurnoutPR.exe.i64` | Burnout Paradise Remastered / PC | Source of the PC module/offset map in [`../references/BPR`](../references/BPR/). *(git-ignored — too large.)* |
 | `TUB_Burnout_PC_External.exe.i64` | Burnout Paradise: The Ultimate Box (PC, external) | Cross-reference for the PC code paths the decomp targets. |
-| `rwcore_master.obj.i64` | IDB of `rwcore_master.obj` | RenderWare 4 core, analyzed against real PDB symbols — basis for the `rw::` type headers. |
-| `rwcore.lib`, `rwcore.pdb` | Shipped RenderWare core lib + symbols | The highest-fidelity source for `rw::` type layouts; consumed (via Ghidra) by `../tools/renderware/generate_headers.py`. |
+| `rwcore_master.obj.i64` | Supplemental RenderWare 4 analysis | x64 ABI corroboration only; ARTIST defines Paradise structure and behavior. |
 | `ProStreet08Milestone.exe` / `.i64` / `.map` / `.pdb` | **Xbox 360** (PowerPC) NFS ProStreet 08 milestone (Oct-2007) | **Authoritative `rw::audio::core` (`rwaudiocore`) type ground truth** — a *different* EA Black Box game that shares the RenderWare-audio middleware Burnout's `CgsSound::Playback` is built on. Full 62 MB PDB (types/signatures/members) + 121 K-line MAP (symbol→address). Same PPC platform/era as ARTIST. **X360 build → 32-bit pointers** (model PC as x64). Use **only** for the shared `rwaudiocore` vocabulary, not Burnout-specific shape. Extract with `llvm-pdbutil pretty` (`-include-types="rw::audio::core::<regex>"`); cross-ref symbols via the `.map` (mangled tail `@core@audio@rw@@`). |
 
 ## Why it's useful for the decomp
@@ -30,8 +29,8 @@ truth (symbols, DWARF line info, type layouts). The decomp triangulates between 
   which is what lets the disassembly be re-partitioned into the original source files.
   Its `dwarfdump/` companion also gives C++-shaped declarations, enum values, member
   names/types, globals, signatures, and locals for reconstruction hints.
-- **Type ground truth:** `rwcore.pdb` gives exact `rw::` struct layouts, avoiding the
-  per-function layout drift that plagues decomps.
+- **RenderWare structure:** ARTIST and DecFIGS define the Paradise-era game-facing
+  model; host analysis is used only for compatible x64 ABI corroboration.
 - **PC vs. console deltas:** comparing the PC (`BurnoutPR`, `TUB`) and console
   (X360, PS3) databases shows which code is platform-specific — informing what gets
   stubbed/replaced in [`../b5-decomp`](../b5-decomp/).
