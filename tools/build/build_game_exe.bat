@@ -288,6 +288,13 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  for phase C4b: DoUpdate_Sound references the accessor for its replay-status install
   rem  seam even while the PC passes a null buffer.
   echo "%SRC%\GameSource\Replays\BrnReplayModuleIO.cpp"
+  rem ReplayModule::Prepare @0x82652768 + StoreSerialisers @0x8264B600 -- the ONLY place
+  rem in the engine that gives a BaseSerialiser its stream and static buffers. Without it
+  rem EffectsModule::Update returns at its GetStaticLayout() == 0 guard, so no tyre marks.
+  rem Split out of BrnReplayModule.cpp: that TU also defines Update_Dispatch, whose
+  rem GPUDiskWriteStream::Dispatch drags in Stream\BrnReplayGPUDiskWriteStream.cpp, which
+  rem does not compile (u64 -> CgsFileSystem::Handle at :186/:220).
+  echo "%SRC%\GameSource\Replays\BrnReplayModule_Prepare.cpp"
   rem ---- camera wave (2026-08-01): the WORLD -> DIRECTOR seam. BridgeWorldToDirector --
   rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
   rem ---- without it every camera VehicleRef resolves to a zero transform.             --
