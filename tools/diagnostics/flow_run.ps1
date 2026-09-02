@@ -1467,6 +1467,67 @@ if ($null -ne $finalTxt) {
   }
 }
 
+
+# --- DRIVE VERDICT: DID THE CAR ACTUALLY MOVE? -------------------------------------------
+# ⭐⭐ ADDED 2026-09-02 (steering wave).  A -Drive run can reach phase=DRIVING, apply every
+#   scheduled input, exit with asserts=1, and look completely ordinary in marks.txt WHILE THE CAR
+#   NEVER MOVED.  Measured that day: scratch\flow_run\stA_right ran the identical teleport +
+#   throttle + steer schedule as stA_right2 / stA_right3, logged `input accel/right` on time, and
+#   its [motion] trace holds 158 samples that are BIT-IDENTICAL -- pos (3319.977295, -2.232676,
+#   -1832.044800), |v| 0.094 -- from the teleport to the kill.  The car's physics never stepped
+#   (its [drift] counter stops at 60 while [motion] reaches 4740), so every per-frame probe in that
+#   run was faithfully reporting a stationary car, and nothing in the summary said so.
+# ⭐⭐ THAT IS EXACTLY THE SHAPE OF A WRONG CONCLUSION.  The wave before this one reported, from a
+#   run of this kind, that "harness steering did essentially nothing -- 0.7 s of full lock moved the
+#   car 0.03 m laterally over 100 m", and used the teleport heading to aim every test instead.
+#   Steering was fine: on a clean straight the same build yaws +0.90 rad/s LEFT and -0.94 rad/s
+#   RIGHT under full lock, symmetric to ~1% (stA_left / stA_right2 / stA_right3).  A stimulus that
+#   silently did not happen is worse than no stimulus at all.
+# ⭐⭐ IT SAYS UNKNOWN WHEN IT DOES NOT KNOW.  The only witness of the car's position in this log is
+#   the opt-in [motion] probe, so without -MotionProbe this reports UNKNOWN rather than inventing a
+#   pass.  [[harness-answers-the-wrong-question]]: a verification you have not seen FAIL is not a
+#   verification -- this one was written against BOTH logs, the frozen run and a driven one, and it
+#   separates them: 0.5 m of path for the frozen run against 242.3 m / 284.4 m for two driven
+#   ones, over comparable sample counts (145 / 150 / 152).
+# ⭐⭐ THE TELEPORT JUMP IS EXCLUDED BY CONSTRUCTION.  A >20 m step between consecutive samples is a
+#   placement, not driving, so the path length is measured only over the samples AFTER the last
+#   such jump.  Without that, every -Teleport run would score hundreds of metres for standing still.
+# It does NOT change the exit code: other harnesses in this directory branch on $LASTEXITCODE and a
+# new failure mode there would silently re-mean their results.  It reports, loudly, in marks.txt.
+$driveVerdict = "n/a (not a -Drive run)"
+if ($Drive) {
+  $driveVerdict = "UNKNOWN -- no -MotionProbe, so this log carries no car position"
+  if ($MotionProbe -and $null -ne $finalTxt) {
+    $mx = [regex]::Matches($finalTxt, '\[motion\] n \d+ pos (-?[0-9.]+) (-?[0-9.]+) (-?[0-9.]+)')
+    if ($mx.Count -lt 2) {
+      $driveVerdict = ("UNKNOWN -- -MotionProbe armed but the log carries {0} [motion] sample(s)" -f $mx.Count)
+    } else {
+      $px = New-Object 'System.Collections.Generic.List[double]'
+      $py = New-Object 'System.Collections.Generic.List[double]'
+      $pz = New-Object 'System.Collections.Generic.List[double]'
+      foreach ($m in $mx) {
+        $px.Add([double]$m.Groups[1].Value)
+        $py.Add([double]$m.Groups[2].Value)
+        $pz.Add([double]$m.Groups[3].Value)
+      }
+      $seg = { param($a, $b)
+               [math]::Sqrt((($px[$a]-$px[$b]) * ($px[$a]-$px[$b])) +
+                            (($py[$a]-$py[$b]) * ($py[$a]-$py[$b])) +
+                            (($pz[$a]-$pz[$b]) * ($pz[$a]-$pz[$b]))) }
+      $startIdx = 0
+      for ($i = 1; $i -lt $px.Count; $i++) { if ((& $seg $i ($i-1)) -gt 20.0) { $startIdx = $i } }
+      $path = 0.0
+      for ($i = $startIdx + 1; $i -lt $px.Count; $i++) { $path += (& $seg $i ($i-1)) }
+      $net = & $seg ($px.Count - 1) $startIdx
+      $tag = "drove"
+      if     ($path -lt  5.0) { $tag = "*** THE CAR NEVER MOVED ***" }
+      elseif ($path -lt 25.0) { $tag = "*** THE CAR BARELY MOVED ***" }
+      $driveVerdict = ("{0} path={1:f1}m net={2:f1}m over {3} [motion] samples (from sample {4}, after the last >20m placement jump)" -f `
+                       $tag, $path, $net, ($px.Count - $startIdx), $startIdx)
+    }
+  }
+}
+
 # --- marks.txt.  RUNSTART FIRST: it is what the gates use to reject stale dumps. ----------
 $summary = @()
 $summary += ("RUNSTART {0}" -f $t0.ToString('o'))
@@ -1545,6 +1606,8 @@ if ($exitedOnOwn) {
 } else {
   $summary += "EXIT     harness-stop (process was still alive)"
 }
+# DRIVE: whether the car actually moved -- see the DRIVE VERDICT banner above.
+$summary += ("DRIVE    {0}" -f $driveVerdict)
 $summary += ("drive={0} steer={1} delay={2:f1}s hold={3}" -f `
              [bool]$Drive, $Steer, $DriveDelay, $(if ($DriveSeconds -gt 0) { ("{0:f0}s" -f $DriveSeconds) } else { "to-end" }))
 if ($SteerScript    -ne "") { $summary += ("steerscript    {0}" -f $SteerScript) }
