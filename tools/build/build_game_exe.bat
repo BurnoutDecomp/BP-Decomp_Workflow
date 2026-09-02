@@ -5086,6 +5086,17 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  b5-decomp fd0925f4 WITHOUT this mount line -- CarSelectLivery::Update calls it, so the
   rem  exe did not link until this was added here (contributors have no parent-repo access).
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_wJ_01.cpp"
+  rem  ON_CUST_MAT -- the online custom-match screen, 2026-09-02. Wave J's six partfiles had
+  rem  sat unmounted since 2026-08-03 behind three BrnScreenStatesLinkStubs scaffolds; _wJ_07
+  rem  lands the two foreign-TU lifecycle bodies OnLeave @0x824970D0 + Update @0x824AC808 and
+  rem  the scaffolds are deleted. Table::Update @0x824E4890 joins BrnTable.cpp for its slot-5 call.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_03.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_04.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_05.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_06.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_07.cpp"
   echo "%SRC%\GameSource\Gui\Components\BrnCarSelectOnlinePlayerListItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnManufacturerIcon.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnPlayerStatsBar.cpp"
