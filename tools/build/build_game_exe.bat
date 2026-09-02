@@ -545,7 +545,31 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   motionless. Its only new link requirements are already mounted: CgsCamera.cpp (Camera::operator=),
   rem   Camera.cpp (CopyToCgsCamera / GetTransform), BrnDispatchThreadInputBuffer.cpp
   rem   (GetParticleRenderData) and CgsIOBuffer.cpp / CgsLog.cpp.
-  rem   DELETE this line when ParticleModule.cpp + EffectsModule.cpp land.
+  rem   DELETE this line when ParticleModule.cpp + EffectsModule.cpp land. MEASURED 2026-09-02
+  rem   (tyre-mark wave), so nobody re-derives it: EffectsModule.cpp and ParticleModule.cpp both
+  rem   COMPILE CLEAN now, and dumpbin over their two objs raises 166 + 35 undefined externals.
+  rem   All but SEVEN of those already have a body in the tree (checked with tools/re/hasbody.py,
+  rem   not status.json). The seven that do NOT, in the order the mount needs them:
+  rem     BrnParticle::ParticleModule::Construct           @0x82294220  (217 pseudo / 334 asm)
+  rem     BrnParticle::ParticleModule::Prepare             @0x8229BEA0  (240 / 348) -- CONTAINS
+  rem       LoadFXBundle @0x8229C950, the only thing that sets TrailSystem::mbIsReady
+  rem     BrnParticle::ParticleModule::PostPreparePrepare
+  rem     BrnParticle::ParticleModule::Update              @0x822817D8  (67 / 141 -- it is a
+  rem       DISPATCHER, not the Lion sim core; the "~6,650 lines" figure is cLionFX, not this)
+  rem     BrnParticle::ParticleModule::StartLionEffect     @0x822867E0
+  rem     BrnEffects::BrnEffectsGlassManager::Construct
+  rem     BrnEffects::JumpStateMachine::OnTick (+ its OnChangeState / OnDetermineNextState)
+  rem   Also still absent, and needed before anything CALLS EffectsModule::Update at all:
+  rem     BrnGame::BrnGameModule::DoUpdate_Effects         @0x823DD0A8
+  rem     BrnGame::BrnGameModule::BridgeEntityToEffects    @0x823CDF00
+  rem   WARNING: ParticleModule::Update @0x822817D8 has an UNRESOLVED decode: it ASSIGNS +0x8E08 and
+  rem   ACCUMULATES +0x8E0C, which the committed ParticleRenderData names mfCurrentTime and
+  rem   mfCurrentTimeStep respectively -- an accumulating "time step" is suspicious, so decode
+  rem   the raw asm (Hex-Rays renumbers f32 args on PPC) before trusting either lane.
+  rem   NOT a blocker any more: PARTICLES.BUNDLE. It is ported and installed (00564cc); verified
+  rem   2026-09-02 against the shipped X360 file -- fxskid de-tiles 49152 -> 5488 bytes with the
+  rem   SAME 3307 non-zero bytes, the same 252 distinct byte values and the same 343 DXT5 blocks,
+  rem   so the boost-bar "ported as zeros" failure mode is excluded by measurement, not by hope.
   echo "%SRC%\GameSource\Effects\Particles\ParticleModuleBringUp.cpp"
   rem ---- PARTICLES.BUNDLE HANDLERS (2026-09-02, tyre-mark wave): the three resource types
   rem   LoadFXBundle @0x8229C950 needs FIXED UP (registered in CgsResourceTypeRegistration.cpp:
