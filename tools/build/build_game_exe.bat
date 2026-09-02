@@ -1962,6 +1962,17 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPotentialContactAverager.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_CrashResponse.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_RaceCarTrafficContact.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DoCrashPrediction.cpp"
+rem  2026-09-02 (crash wave): THE RACE-CAR-vs-WORLD CRASH ARM. HandleCrashPredictionForRaceCarAndWorld
+rem  @0x82640C28 was bodied but unmountable because its two callees were declare-only; both are now
+rem  bodied in BrnVehicleManager_WorldCrashArm.cpp (HandleRaceCarWorldPotentialContact @0x8263E3B8,
+rem  PredictCarWorldContactTime @0x825B5300), DoCrashPrediction's DELETE-WHEN gate is discharged and
+rem  the call is restored. Without these two mounts the exe has an unresolved external.
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerCrashPrediction.cpp"
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_WorldCrashArm.cpp"
+rem  ...and the impact-time orderer the driver sorts each car's contacts with: PotentialContactOrderer
+rem  (AddContact @0x825C0B30 / SortContacts @0x825B36E8 / GetContact) was bodied since 2026-08 but never
+rem  mounted -- its first ever link is this one.
+echo "%SRC%\GameSource\Physics\PhysicsUtilities\BrnPotentialContactOrderer.cpp"
 rem  2026-08-29 (traffic-crash wave): the SET-TRAFFIC-CRASHING EVENT DRAIN. ProcessTrafficEvents
 rem  @0x82643FB0 stops being a conductor gate here; this TU carries it plus the three functions
 rem  under it that had no definition anywhere in the tree (ProcessSetTrafficCrashingEvents,
