@@ -326,6 +326,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- is what linked and the player index stayed -1 all session. Split into   ---
   rem ---- its own TU and mounted. Fold back when those 3 accessors land.          ---
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToWorldModule.cpp"
+  rem ---- scene-query wave 1 (2026-09-02): BOTH bridges in WorldBridgePhysicsToScene.cpp are real ----
+  rem ---- (BridgePhysicsSceneUpdateToScene @0x827ABA40 since wave Q5/F2, BridgePhysicsSceneQueriesToScene ----
+  rem ---- @0x827A8D20 this wave); its WorldLinkStubs gate is retired -- leaving both = LNK2005.       ----
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToScene.cpp"
   rem ---- feed wave (2026-08-09): the SECOND split-out bridge, same reason as the one ----
   rem ---- above. WorldModule::BridgeInputToPhysicsModule @0x827AB830 (an address that   ----
   rem ---- had to be recovered from the image -- it is a HOLE in the IDA export set) is  ----
@@ -679,6 +683,22 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  CgsCullingGroupManager.cpp : SetCullingGroupPair @0x828AA580, the CARS x PROPS adjacency writer.
   rem  CgsSceneManagerContact.cpp : Contact::Construct @0x828A9E30, called twice by DoPairQuery.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule_wQ5_01.cpp"
+  rem  ---- scene-query wave 1 (2026-09-02): THE SCENE-QUERY PIPELINE -- the race car's above-ground
+  rem  down-ray gets a consumer. ProcessCoarseQueries / ProcessFineQueries / ProcessFineQueriesDirectly /
+  rem  ProcessLineTestNearest / ProcessTriangleCollisionLineTestNearests (+ eleven loud sibling traps),
+  rem  the FULL InputBuffer_Query layout + TriCacheQueryBuffer + their lock-checked getters, the
+  rem  FineIntersectionTestIO buffer, the octree LineTest slot, the fine module's Compute* traps and the
+  rem  ray-vs-world kernel's declaration (CollideLineAgainstPolySoupListNearest, a LOUD trap until the
+  rem  next wave). Mounted together with the WorldLinkStubs retirements of InputBuffer_Query::Destruct
+  rem  and BridgePhysicsSceneQueriesToScene (leaving either = LNK2005).
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule_wSQ1.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Query.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModuleIO.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModule_wSQ1.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\SpatialPartitionModule\SpatialPartitions\CgsLooseOctree_wSQ1.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_wSQ1.cpp"
+  rem  CgsGeometric::Line::IsValid @0x82812370 -- the kernel's entry tripwire; on disk since the ground wave, never mounted.
+  echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsLine.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerBridgeFunctions.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsCullingGroupManager.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerContact.cpp"
