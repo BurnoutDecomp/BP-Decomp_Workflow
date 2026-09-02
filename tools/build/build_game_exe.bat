@@ -326,10 +326,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- is what linked and the player index stayed -1 all session. Split into   ---
   rem ---- its own TU and mounted. Fold back when those 3 accessors land.          ---
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToWorldModule.cpp"
-  rem ---- scene-query wave 1 (2026-09-02): BOTH bridges in WorldBridgePhysicsToScene.cpp are real ----
-  rem ---- (BridgePhysicsSceneUpdateToScene @0x827ABA40 since wave Q5/F2, BridgePhysicsSceneQueriesToScene ----
-  rem ---- @0x827A8D20 this wave); its WorldLinkStubs gate is retired -- leaving both = LNK2005.       ----
-  echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToScene.cpp"
   rem ---- feed wave (2026-08-09): the SECOND split-out bridge, same reason as the one ----
   rem ---- above. WorldModule::BridgeInputToPhysicsModule @0x827AB830 (an address that   ----
   rem ---- had to be recovered from the image -- it is a HOLE in the IDA export set) is  ----
@@ -699,6 +695,9 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator_wSQ1.cpp"
   rem  CgsGeometric::Line::IsValid @0x82812370 -- the kernel's entry tripwire; on disk since the ground wave, never mounted.
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsLine.cpp"
+  rem ---- scene-query wave 1b (2026-09-02): the ray-vs-world kernel under CollideLineAgainstPolySoupListNearest ----
+  rem ---- IntersectLinePolySoupTriangleSingleSided4 @0x8283B520 + IntersectLinePolygonSoupNearestSingleSided @0x8283BC98 ----
+  echo "%SRC%\GameShared\GameClasses\Geometric\Intersection\CgsPolygonSoupTests_LineNearest.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerBridgeFunctions.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsCullingGroupManager.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerContact.cpp"
