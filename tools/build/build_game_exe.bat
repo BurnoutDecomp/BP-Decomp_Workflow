@@ -1988,6 +1988,11 @@ rem  PredictCarWorldContactTime @0x825B5300), DoCrashPrediction's DELETE-WHEN ga
 rem  the call is restored. Without these two mounts the exe has an unresolved external.
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerCrashPrediction.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_WorldCrashArm.cpp"
+rem  2026-09-02 (traffic crash wave): the two TRAFFIC-side arms DoCrashPrediction dispatches --
+rem  HandleTrafficCarTrafficCarPotentialContact @0x8263EC90 (queue [13]) and
+rem  HandleTrafficCarWorldPotentialContact @0x8263F0F0 (queue [9]) -- bodied in
+rem  BrnVehicleManager_TrafficCrashArms.cpp; both DELETE-WHEN gates in DoCrashPrediction discharged.
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_TrafficCrashArms.cpp"
 rem  ...and the impact-time orderer the driver sorts each car's contacts with: PotentialContactOrderer
 rem  (AddContact @0x825C0B30 / SortContacts @0x825B36E8 / GetContact) was bodied since 2026-08 but never
 rem  mounted -- its first ever link is this one.
