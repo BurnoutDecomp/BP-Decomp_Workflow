@@ -2679,6 +2679,11 @@ rem  wT6_03 -- HandleExternalRequests @0x8274B660, PARTIAL. Only its action-23 a
 rem  real, but that arm is the ONLY caller of HandlePrepareForModeAction -- without this
 rem  TU /OPT:REF discards the showtime gate entirely.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_03.cpp"
+rem  2026-09-02 (traffic-deformation wave): ProcessDeformationData @0x8271DEB0 -- the physics ->
+rem  traffic deformation readback (skin offsets, wheels, locators, detached parts, glass) --
+rem  plus BrnTraffic::SetGlassFractureConstants @0x82714848. Its call site in _wT1_01.cpp is
+rem  un-gated; without this mount it is LNK2019.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_ProcessDeformationData.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficMiscRuntimeClasses.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficFuzzyLogicBehaviours.cpp"
 echo "%SRC%\SharedClasses\Traffic\BrnTrafficFuzzyEnvelopeSet.cpp"
