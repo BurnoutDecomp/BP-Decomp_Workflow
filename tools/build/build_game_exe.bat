@@ -571,6 +571,67 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   SAME 3307 non-zero bytes, the same 252 distinct byte values and the same 343 DXT5 blocks,
   rem   so the boost-bar "ported as zeros" failure mode is excluded by measurement, not by hope.
   echo "%SRC%\GameSource\Effects\Particles\ParticleModuleBringUp.cpp"
+
+  rem ---- THE EFFECTS MODULE, MOUNTED (2026-09-02, tyre-mark wave) ------------
+  rem   BrnEffects::EffectsModule and BrnParticle::ParticleModule are on the link at last.
+  rem   BrnGameModule::DoUpdate_Effects @0x823DD0A8 + BridgeEntityToEffects @0x823CDF00 now
+  rem   drive EffectsModule::Update once per sim sub-step, which is what runs
+  rem   ProcessActiveRaceCars -> UpdateActiveRaceCars -> HandleWheels @0x82296C80 ->
+  rem   TrailSystem::AddTrailSegment -- the tyre mark. Before this the module was a 1-byte
+  rem   ODR stub in BrnGameModule.hpp, so nothing could call it at all.
+  rem   ParticleModule_Lifecycle.cpp carries Construct/Prepare/PostPreparePrepare/
+  rem   LoadFXBundle/Update/StartLionEffect/ResetSparkFrameData. LoadFXBundle @0x8229C950 is
+  rem   the ONLY writer of TrailSystem::mbIsReady (raised on the acquire reply whose
+  rem   TextureNameMap entry hashes equal to HashString("fxskid")), and TrailSystem::Render
+  rem   early-outs while that flag is false -- so without it no tyre mark can ever draw.
+  rem   The tail four are the SECOND-ORDER closure this link raised, measured not guessed:
+  rem   the Lion blend half LionParticleRender vtable needs (trap stubs -- the Lion core is
+  rem   not landed), the converted skid shader pair, and the skid immediate-mode PC leaf
+  rem   (ImRendererBase::mgpDevice + D3DDevice_InsertFence, the ring API BrnSkidVertex.cpp
+  rem   draws through). BrnResourceAllocator.cpp (already mounted further down) grew
+  rem   Allocators::GetGlobalGraphicsAllocator, which the five Im3d Constructs take.
+  rem   DELIBERATELY ABSENT: BrnDebrisArray.cpp / BrnDebrisRenderer.cpp -- their Constructs
+  rem   bind _gaDebrisArrayParams, an `extern const` with no definition anywhere in the tree,
+  rem   so ParticleModule::Prepare announces those two rather than calling them.
+  rem   NOTE ParticleModuleBringUp.cpp stays mounted above: it is still the only producer of
+  rem   DispatchThreadInputBuffer::mParticleRenderData (EffectsModule::GenerateDispatchLists
+  rem   is not wired into DoDispatch yet). Delete it when that leg lands, not before.
+  echo "%SRC%\GameSource\Effects\EffectsModule.cpp"
+  echo "%SRC%\GameSource\Effects\ActiveRaceCarData.cpp"
+  echo "%SRC%\GameSource\Effects\EffectsStateMachine.cpp"
+  echo "%SRC%\GameSource\Effects\Boost\BoostStateMachine.cpp"
+  echo "%SRC%\GameSource\Effects\Jump\JumpStateMachine.cpp"
+  echo "%SRC%\GameSource\Effects\Wheel\WheelStateMachine.cpp"
+  echo "%SRC%\GameSource\Effects\BrnCrashTriangleCache.cpp"
+  echo "%SRC%\GameSource\Effects\BrnEffectsGlassManager.cpp"
+  echo "%SRC%\GameSource\Effects\BrnEffectsDebugComponent.cpp"
+  echo "%SRC%\GameSource\Effects\ParticleEffectHelper.cpp"
+  echo "%SRC%\GameSource\Effects\Curves.cpp"
+  echo "%SRC%\GameSource\Effects\SharedIO\BrnEffectsModuleIO_InputBuffer_Accessors.cpp"
+  echo "%SRC%\GameSource\Effects\SharedIO\BrnEffectsModuleIO_OutputBuffer.cpp"
+  echo "%SRC%\GameSource\Effects\SharedIO\BrnEffectsModuleIO_DispatchInputBuffer.cpp"
+  echo "%SRC%\GameSource\Effects\SharedIO\BrnEffectsModuleIO_DispatchInputBuffer_IOHelper.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\ParticleModule.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\ParticleModule_Lifecycle.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\ParticleModuleIO.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\ParticleCpuMonitors.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\BrnParticleDescription.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\LionParticleRender.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\EffectsVertexBufferManager.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\EffectsVertexBuffer.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnTrailSystem.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnTrailRender.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\StackTrailEmitter96_Push.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\StackTrailEmitter96_Pop.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\StackTrailEmitter96_Peek.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnIm3dSkidsRenderer.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnSkidVertex.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnLionBlendRenderer.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\FXBuckets.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiserStaticLayout.cpp"
+  echo "%SRC%\pc\gcm\renderengine\SkidProgramsPC.cpp"
+  echo "%SRC%\pc\gcm\renderengine\SkidImmediateModePCLeaf.cpp"
   rem ---- PARTICLES.BUNDLE HANDLERS (2026-09-02, tyre-mark wave): the three resource types
   rem   LoadFXBundle @0x8229C950 needs FIXED UP (registered in CgsResourceTypeRegistration.cpp:
   rem   TextureNameMap 0x1000B, VFXPropCollection 0x1001B, ParticleDescriptionCollection 0x10008)
