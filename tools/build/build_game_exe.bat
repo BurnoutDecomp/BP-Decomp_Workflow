@@ -1456,6 +1456,13 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  Despite the name neither reads a body back: it is the only place gravity enters a car
   rem  and the only place a car's pose advances.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ReadUpdatedBodies.cpp"
+  rem  2026-09-02 -- props-at-speed fix: THE PER-FRAME EXTERNAL-BODY PUBLISH.
+  rem  VehicleManager::GetUpdatedVehicleBodies @0x82619340 -- was an .ida-exports hole, pulled
+  rem  headless from the IDB -- plus PhysicalTrafficManager::GetUpdatedVehicleBodies @0x825EEF70.
+  rem  Feeds every live car's pose and velocity into the sim's PROP_COLLISION proxy bodies each
+  rem  frame; without it the proxies never left their creation pose and whole props were solved
+  rem  against a body kilometres away. Deletes the conductor gate of the same name.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_GetUpdatedVehicleBodies.cpp"
   rem  ?????? 2026-08-11 (PHYSICS->OUTPUT PUBLISH WAVE): THE LEG THAT PUTS A SIMULATED CAR WHERE
   rem  THE WORLD CAN SEE IT. VehicleManager::WriteOutVehicleStats @0x8263F460 (380, conductor
   rem  gate DELETED) + VehicleManager::IsRaceCarHidden @0x825C2EA0 (104, trap stub DELETED --
