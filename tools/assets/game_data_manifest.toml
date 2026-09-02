@@ -811,10 +811,23 @@ Pinned on the C++ side by BrnPhysicsPropTypeData.h / BrnPropPhysicsDataHeader.h
 _AssertLayout() and the static_asserts in BrnPropPhysicsListResourceType.cpp."""
 
 [[rule]]
-id     = "unhandled-particles"
+id     = "particles"
 match  = ["PARTICLES.BUNDLE"]
-action = "unhandled"
-reason = """PARTICLES.BUNDLE is bnd2 platform 2 with no rule, and is present in build/game
-at platform 2 byte-identical to retail (inert). Its ParticleDescriptionCollection /
-ParticleDescription payloads have no porter in this repo. (PROPS/PROPPHYSICS.BUNDLE was
-split out of this rule and now has a real converter -- see "prop-physics" above.)"""
+action = "convert"
+tool   = "bundles/particles_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """The effects module's ONE FX bundle: BrnParticle::ParticleModule::LoadFXBundle
+@0x8229C950 loads it as bundle 13 "particles.bundle" and resolves every effect raster,
+the texture name map, the VFX prop tables, the .lef collection and the debris meshes out
+of it -- the skid / tyre-mark texture (fxskid, id 0x55AF0DBF) included, which is what
+TrailSystem::mbIsReady waits for. 98 resources: 51 Texture (x360_tex, the real Xenos
+layout), TextureNameMap 0x1000B + VFXPropCollection 0x1001B + ParticleDescriptionCollection
+0x10008 (ENDIAN SWAPS -- their committed FixUps rebase 32-bit words in place, the low-4 GB
+convention), and two families passed through VERBATIM big-endian because their consumers
+are not reconstructed and their types are deliberately unregistered on the PC: the 41
+ParticleDescription .lef (cLionFX::BinLoad is a trap stub) and the 3 VFXMeshCollection
+(debris renderer absent; needs x64 VB/IB). The porter proves its own output: name-map
+offsets inside the payload, collection count == import count, swap involution, and the
+fxskid mip chain NON-ZERO at its modelled size (the 2026-08-28 boostbarmask lesson).
+DELETE-WHEN the LION core / debris renderer land: port + register the two passthroughs."""

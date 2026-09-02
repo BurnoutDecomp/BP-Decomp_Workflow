@@ -547,6 +547,16 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   (GetParticleRenderData) and CgsIOBuffer.cpp / CgsLog.cpp.
   rem   DELETE this line when ParticleModule.cpp + EffectsModule.cpp land.
   echo "%SRC%\GameSource\Effects\Particles\ParticleModuleBringUp.cpp"
+  rem ---- PARTICLES.BUNDLE HANDLERS (2026-09-02, tyre-mark wave): the three resource types
+  rem   LoadFXBundle @0x8229C950 needs FIXED UP (registered in CgsResourceTypeRegistration.cpp:
+  rem   TextureNameMap 0x1000B, VFXPropCollection 0x1001B, ParticleDescriptionCollection 0x10008)
+  rem   plus TextureNameMap::Entry::HashString @0x82277CD0 (the FNV-1a the name lookup keys on).
+  rem   ParticleDescriptionResourceType.cpp also carries the (unregistered) .lef handler, whose
+  rem   cLionFX::BinLoad / BinSave / Content::DoOnPostLoad are __debugbreak stubs in that TU.
+  echo "%SRC%\SharedClasses\Graphics\TextureNameMapResourceType.cpp"
+  echo "%SRC%\SharedClasses\Graphics\TextureNameMapEntry.cpp"
+  echo "%SRC%\SharedClasses\Graphics\VFXPropsResourceType.cpp"
+  echo "%SRC%\SharedClasses\Graphics\ParticleDescriptionResourceType.cpp"
   rem ---- SKY WAVE (2026-07-31): the sky-dome draw path, MOUNTED. ----------------
   rem The closure was measured with dumpbin over the linked object set: the three
   rem sky TUs raise 67 externals / 45 already provided / 22 unresolved; the two
