@@ -32,17 +32,20 @@ HOW EACH ONE IS PORTED -- and why (the deciding fact is always the committed con
                                  (ParticleDescriptionResourceType.cpp) reads the table
                                  pointer and each slot as u32 and GetImportPointer patches
                                  slot i at byte 4*(i+2) -- 32-bit slots on the host too.
-  ParticleDescription (.lef)     PASSTHROUGH, VERBATIM, BIG-ENDIAN. The LION runtime that
-                                 reads a .lef (cLionFX::BinLoad @0x82915xxx, the
-                                 ~6,650-line sim/render core) is NOT reconstructed, and
-                                 ParticleDescriptionResourceType::DeSerialise's BinLoad is
-                                 a __debugbreak stub. The type is therefore left
-                                 UNREGISTERED on the PC (CgsResourceTypeRegistration.cpp):
-                                 the bundle loader creates the resource with its raw bytes
-                                 and skips FixUp/DeSerialise, which is exactly what keeps
-                                 the boot alive. FLAG PC: DELETE-WHEN cLionFX lands -- then
-                                 this needs a real .lef porter (the LION format is
-                                 self-describing big-endian; see the Lion SDK headers).
+  ParticleDescription (.lef)     PORTED (2026-09-03, boost-exhaust wave) by
+                                 lef_transcode.py, which walks the LION effect graph and
+                                 applies the game's OWN endian map -- the four
+                                 cLionTokenTable instances at .rdata 0x82F36A34/38/3C/40
+                                 plus the pointer words each Delocate twiddles by hand.
+                                 It used to be a verbatim big-endian passthrough on the
+                                 grounds that "cLionFX is not reconstructed"; that argument
+                                 was wrong for one word in particular. The FIRST WORD of a
+                                 .lef is the effect-name hash StartLionEffect @0x82289F50
+                                 matches against, so big-endian bytes make every Lion
+                                 effect start -- boost flame, exhaust smoke, boost recharge
+                                 -- miss and take the console's "Couldn't locate lion effect
+                                 description" exit. See lef_transcode.py's banner for the
+                                 map, the two console quirks reproduced, and the checks.
   VFXMeshCollection              PASSTHROUGH, VERBATIM, BIG-ENDIAN. Its consumer is the
                                  debris renderer (BrnDebrisRenderer::RenderDebrisArray
                                  @0x8228B078, absent) and its FixUp wants an x64-ported
@@ -54,10 +57,10 @@ HOW EACH ONE IS PORTED -- and why (the deciding fact is always the committed con
                                  32 f32 + 4 u32) and the VB/IB with renderable_transcode's
                                  vertex-descriptor machinery.
 
-WHY THE TWO PASSTHROUGHS ARE SAFE FOR THE TYRE MARK. LoadFXBundle @0x8229C950 acquires
+WHY THE REMAINING PASSTHROUGH IS SAFE FOR THE TYRE MARK. LoadFXBundle @0x8229C950 acquires
 the collection, the name map, the five mesh collections and every name-map texture; an
 acquire of an unregistered-type resource still RESOLVES (the pool has the raw bytes) --
-only FixUp is skipped, and nothing on the skid path dereferences a mesh or a .lef.
+only FixUp is skipped, and nothing on the skid path dereferences a mesh.
 TrailSystem::Render reads the fxskid Texture through the name map, both of which are
 fully ported here.
 
@@ -96,6 +99,7 @@ ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 YAP = os.path.join(ROOT, 'build', 'tools', 'yap', 'YAP.exe')
 
 sys.path.insert(0, HERE)
+import lef_transcode          # noqa: E402
 import tex_transcode          # noqa: E402
 import vfxprops_transcode     # noqa: E402
 import x360_tex               # noqa: E402
@@ -345,8 +349,45 @@ def convert(in_bundle, out_bundle, verbose=True):
             if verbose:
                 print('  ParticleDescriptionCollection %s: %d import slots swapped' % (p, nimp))
 
-        # -- the two PASSTHROUGH families (see the banner) ------------------------
-        for folder in ('ParticleDescription', 'VFXMeshCollection'):
+        # -- ParticleDescription (.lef) -------------------------------------------
+        # 2026-09-03: no longer a passthrough. lef_transcode walks the LION graph with the
+        # game's own endian map (the four cLionTokenTable instances + the by-hand pointer
+        # words each Delocate twiddles) and swaps every field it names. See its banner.
+        lef_totals = {'descriptors': 0, 'behaviours': 0, 'materials': 0, 'waveforms': 0}
+        nlef = 0
+        for p in sorted(os.listdir(os.path.join(ex, 'ParticleDescription'))):
+            if not p.endswith('.dat'):
+                continue
+            path = os.path.join(ex, 'ParticleDescription', p)
+            raw = open(path, 'rb').read()
+            label = os.path.splitext(p)[0]
+            stats = lef_transcode.check(raw, be=True, label=label)
+            ported = lef_transcode.swap(raw, be=True, label=label)
+            if lef_transcode.swap(ported, be=False, label=label) != raw:
+                raise PortError('%s: .lef swap is not an involution' % p)
+            # The resource id IS the effect-name hash StartLionEffect matches on, so a
+            # ported blob whose first word no longer equals its own bundle id would be
+            # unreachable -- exactly the failure this port exists to remove.
+            rid = int(label.split('_')[0], 16)
+            if stats['hash'] != rid:
+                raise PortError('%s: .lef name hash %08X != bundle id %08X'
+                                % (p, stats['hash'], rid))
+            open(path, 'wb').write(ported)
+            nlef += 1
+            for k in lef_totals:
+                lef_totals[k] += stats[k]
+            if verbose:
+                print('  ParticleDescription %s %08X %r: %d descriptors, %d behaviours, '
+                      '%d materials, %d waveforms'
+                      % (p, stats['hash'], stats['name'], stats['descriptors'],
+                         stats['behaviours'], stats['materials'], stats['waveforms']))
+        counts['ParticleDescription'] = nlef
+        if verbose:
+            print('  ParticleDescription: %d .lef ported, %s'
+                  % (nlef, ', '.join('%d %s' % (v, k) for k, v in sorted(lef_totals.items()))))
+
+        # -- the remaining PASSTHROUGH family (see the banner) --------------------
+        for folder in ('VFXMeshCollection',):
             d = os.path.join(ex, folder)
             # a mesh collection extracts as a header/body PAIR; count resources, not files
             n = len([f for f in os.listdir(d)
@@ -422,6 +463,16 @@ def verify(bundle_path, expect_ids=None, verbose=True):
         raise PortError('%s: collection imports %d != %d .lef resources'
                         % (bundle_path, pc[0]['imports'], len(by_type.get(TYPE_PARTICLE_DESCRIPTION, []))))
 
+    # Every .lef must walk LITTLE-endian, and its first word (the effect-name hash that
+    # StartLionEffect matches on) must equal its own bundle id.
+    lef_stats = {'descriptors': 0, 'behaviours': 0, 'materials': 0, 'waveforms': 0}
+    for e in by_type.get(TYPE_PARTICLE_DESCRIPTION, []):
+        st = lef_transcode.check(payload(b, e), be=False, label='%08X' % e['id'])
+        if st['hash'] != e['id']:
+            raise PortError('%s: .lef %08X carries name hash %08X' % (bundle_path, e['id'], st['hash']))
+        for k in lef_stats:
+            lef_stats[k] += st[k]
+
     vp = by_type.get(TYPE_VFX_PROP_COLLECTION, [])
     if len(vp) != 1:
         raise PortError('%s: %d VFXPropCollection resources, expected 1' % (bundle_path, len(vp)))
@@ -445,6 +496,9 @@ def verify(bundle_path, expect_ids=None, verbose=True):
                  len(by_type.get(TYPE_PARTICLE_DESCRIPTION, [])),
                  len(by_type.get(TYPE_VFX_MESH_COLLECTION, [])), len(names), skid[0],
                  fmt & 0xFFFFFFFF, w, h, mips, len(body)))
+        print('  verify %s: the .lef graph walks little-endian -- %s'
+              % (os.path.basename(bundle_path),
+                 ', '.join('%d %s' % (v, k) for k, v in sorted(lef_stats.items()))))
     return True
 
 
