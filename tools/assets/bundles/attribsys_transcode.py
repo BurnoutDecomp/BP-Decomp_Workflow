@@ -96,8 +96,15 @@ X360 consumers, cross-validated against the BPR LE oracle):
   physicssurface 0xFD61B26B2C485337: 3 x f32 (ReadSurfaceProperties v37[0..2]).
   gameplaysurface 0x92D0095C2A8173B3: u8s (byte reads, 1B data area).
   audiosurface 0x64F8A2D1237050D1 (32B), rumblesurface 0x540C6D1714E37D72
-      (60B), visualfxsurface 0x12B5F62BE1A5AB30 (96B): u32 scalars -- zero
-      u64-inconsistent dwords across every collection vs the BPR oracle.
+      (60B): u32 scalars -- zero u64-inconsistent dwords across every
+      collection vs the BPR oracle.  ⚠️ THAT CHECK ONLY SEPARATES A u64 FROM A
+      PAIR OF u32s.  It is blind to a dword that is really four BYTES or two
+      HALFWORDS, which is exactly the defect visualfxsurface carried below;
+      neither of these two has been re-checked for it.
+  visualfxsurface 0x12B5F62BE1A5AB30 (96B): NOT uniform dwords -- see
+      _schema_visualfxsurface.  Four flag bytes at +0x4C..+0x4F and a halfword
+      pair at +0x58/+0x5A; flipping either as a dword reverses/swaps the fields
+      and cost the tyre mark its last gate (measured 2026-09-03).
 
 CAMERAS.BUNDLE / CameraVault classes (added with that wave). Every payload size
 below is the DefaultDataArea(N) the class's GENERATED CONSTRUCTOR passes, read
@@ -232,6 +239,48 @@ def _fixed_words(count):
     return build
 
 
+def _schema_visualfxsurface(_size):
+    """DefaultDataArea(0x60) -- and it is NOT 24 uniform dwords.
+
+    ⭐⭐ CORRECTED 2026-09-03 (tyre-mark wave). This class was registered as
+    `_schema_words`, i.e. 24 x 4-byte scalars, on the strength of "zero
+    u64-inconsistent dwords vs the BPR oracle" -- a check that can only tell a
+    u64 from a pair of u32s. It cannot see a dword that is really FOUR BYTES or
+    TWO HALFWORDS, and this record has one of each. Flipping those two words as
+    dwords REVERSES four booleans and SWAPS two u16s, and both are load-bearing:
+
+      +0x4C u8 SkidSmokeEnabled    (WheelStateMachine::Update @0x82293EB8 `lbz +76`)
+      +0x4D u8 SkidSmoke2Enabled   (same, `lbz +77`)
+      +0x4E u8 SkidMarksEnabled    (EffectsModule::HandleWheels @0x82296C80 `lbz +78`)
+      +0x4F u8 (fourth flag; 1 on every surface that has any FX at all)
+      +0x58 u16 SkidMarkTypeId     (PostWorldPreparePrepare @0x822902F0
+                                    `lhz r4, 0x58(r11)` into TrailSystem::UpdateTrailType)
+      +0x5A u16 pad (zero in all 11 collections)
+
+    MEASURED, in the game, with the record dumped whole (run skid23): under the
+    dword flip every one of the twenty world surfaces reported SkidMarksEnabled
+    == 0 and SkidMarkTypeId == 0, so the eleven ROAD surfaces could not lay a
+    tyre mark at all and TrailSystem::UpdateTrailType rewrote type 0 twenty
+    times over. Un-reversing the byte quad gives {smoke0=1, smoke1=0,
+    skidmarks=1, flag=1} for those eleven, {1,1,1,1} for surfaces 3/4/11/18,
+    {1,0,1,0} for 9/10/13 and {0,0,0,0} for 15/17 -- a coherent authoring
+    pattern -- and the halfword pair gives type ids 0/1/2/3, which is the only
+    reading under which UpdateTrailType's per-surface colour push means
+    anything.
+
+    ⚠️ audiosurface (32B) and rumblesurface (60B) are still registered as
+    _schema_words on the same u64-only evidence and have NOT been re-checked
+    here; if either carries a byte or halfword field it has the same defect.
+    """
+    return (_scalars(4, 4)      # +0x00 skid-mark START colour (lvx128 v1, r0, r11)
+            + _scalars(4, 4)    # +0x10 skid-mark END colour   (lvx128 v2, r11, 0x10)
+            + _scalars(4, 11)   # +0x20..+0x48 the two smoke layers + the skid threshold
+            + _scalars(1, 4)    # +0x4C..+0x4F the four flag BYTES
+            + _scalars(4, 2)    # +0x50, +0x54
+            + _scalars(2, 2)    # +0x58 SkidMarkTypeId, +0x5A pad
+            + _scalars(4, 1))   # +0x5C (zero in every collection)
+
+
 def _schema_cameradefaults(_size):
     """DefaultDataArea(0x38): one RefSpec (the default camera take -- its classKey
     IS iceanim's and its collectionKey resolves to a real iceanim collection in
@@ -251,7 +300,7 @@ PAYLOAD_CLASS_SCHEMAS = {
     (CLS_GAMEPLAYSURFACE, False): _schema_bytes,
     (CLS_AUDIOSURFACE, False): _schema_words,
     (CLS_RUMBLESURFACE, False): _schema_words,
-    (CLS_VISUALFXSURFACE, False): _schema_words,
+    (CLS_VISUALFXSURFACE, False): _schema_visualfxsurface,
     # -- CameraVault (CAMERAS.BUNDLE); sizes are the generated DefaultDataArea(N)
     (CLS_ICEANIM, False): _fixed_words(4),           # 0x10
     (CLS_PROCEDURALSHOT, False): _fixed_words(4),    # 0x10
