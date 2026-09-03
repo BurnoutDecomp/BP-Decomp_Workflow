@@ -385,6 +385,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem START_PLAYING_MODE's exact boost-enabling arm first puts attached cars in
   rem racing state through SetAllCarsOnStartLine, homed in this split TU.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ModeArming.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Rivals.cpp"
   rem ---- crash play / Showtime (crash-play wave 2026-08-29). BrnCrashPlayManager.cpp is  ----
   rem ---- the boost CONSUMER; the debug component is its first member BY VALUE, so its    ----
   rem ---- vtable has to resolve too or Update cannot call mCrashPlayDebugComponent.Update.----
@@ -1691,6 +1692,9 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  body moved byte-identical from the unmounted BrnVehicleManager.cpp into its own slice
   rem  (RaceCarPhysics_Construct precedent). Its callee SetRaceCarCrashing = the loud LinkStubs trap.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_InstantTakedown.cpp"
+  rem [takedown wave 2026-09-02] the two retired conductor gates, in their own partfiles
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ProcessContactSpies.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateCrashes.cpp"
   rem  ????????? THE CREATE DRAIN MOUNTS (create-drain wave): ProcessCreateEvents @0x82616770 -- the
   rem  ONLY writer of mUsedRaceCars in the XEX. Setting that bit switches on the four already-
   rem  mounted per-frame loops (ReadUpdatedBodies gravity, UpdateVehiclePhysics force path,
@@ -4880,6 +4884,13 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem [stuntrace wave D 2026-08-26] the four event-start functions + GetEvent helpers.
   echo "%SRC%\GameSource\GameState\GameStateModule_gSR_00.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_gRR_00.cpp"
+  echo "%SRC%\GameSource\GameState\GameStateModule_gTD_00.cpp"
+  rem [takedown wave 2026-09-02] the TakedownManager classifier, two halves
+  echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManager.cpp"
+  echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManager_Detect.cpp"
+  echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManagerRaceCarData.cpp"
+  echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManagerDebugComponent.cpp"
+  echo "%SRC%\GameSource\GameState\TakedownManager\EventQueue_TakedownEvent_8.cpp"
   rem [event-starts wave 2026-08-27] the event-start table producer + the interface it
   rem fills (AddEventStart/AppendEventStart -- had no callers until now).
   echo "%SRC%\GameSource\GameState\GameStateModule_SendSetUpAllEventStarts.cpp"
