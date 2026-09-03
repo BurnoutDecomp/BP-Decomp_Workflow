@@ -4839,6 +4839,29 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionSmallAlloc.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionTokeniser.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleWaveForm.cpp"
+  rem ---- THE LION .lef LOAD PATH, MOUNTED (2026-09-03, boost-exhaust wave). ----
+  rem   BrnParticle::ParticleDescription (0x1001D) is now a REGISTERED resource type, so
+  rem   its DeSerialise @0x82675868 runs cLionFX::BinLoad @0x82914388 over every .lef in
+  rem   PARTICLES.BUNDLE, which rebases + builds the effect graph in place. That is what
+  rem   ParticleModule::StartLionEffect @0x82289F50 needs: it matches an effect-name hash
+  rem   against the description collection and then reads the definition's +0x48
+  rem   cLionParticleEffect*. Until this commit StartLionEffect was a loud trap that
+  rem   always returned KU_HANDLE_INVALID, so NO Lion effect could start -- boost flame,
+  rem   exhaust smoke and boost recharge included.
+  rem   These six TUs were reconstructed but UNMOUNTABLE: measured with dumpbin they
+  rem   raised 20 undefined externals, four of which were the member-token TABLES,
+  rem   declared extern under invented names with no definition anywhere in the tree.
+  rem   LionParticleParser.cpp homes all four (transcribed from .rdata 0x82F36A34/38/3C/40)
+  rem   and the same set now raises only CgsAssert + CRT.
+  rem   PAIRED WITH THE ASSET PORTER: tools/assets/bundles/lef_transcode.py. Without it
+  rem   every .lef is still big-endian, BinLoad rejects all 41 on the magic word, and
+  rem   DeSerialise says so once in the log. Run `build data` after pulling this.
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionParticleParser.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionFX.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionParticleEffect.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleDescriptor.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleBehaviour.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleMaterial.cpp"
   echo "%SRC%\SharedClasses\Gui\SatNav\Resources\BrnSatNavTileResourceType.cpp"
 
   echo "%SRC%\GameShared\GameClasses\Graphics\Resources\CgsVideoDataResource.cpp"
