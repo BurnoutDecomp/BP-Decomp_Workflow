@@ -1198,10 +1198,129 @@ $drivingAt = Get-Date    # set for real on the BOOT->...->DRIVING transition
 $driveHeld = 'none/none' # "<pedal>/<steer>" currently asserted on the channels
 $inputLog  = @()         # every input transition, for marks.txt -- what the car was ACTUALLY told
 
+# ⭐⭐⭐ THE POLL LOOP IS THE THING THAT PRESSES THE PEDAL -- SO IT MUST NOT BE O(LOG SIZE).
+#   (2026-09-03, harness wave.  THIS IS THE DEFECT THAT VOIDED AT LEAST SIX RUNS.)
+#   Before this block the loop did `Get-Content $log -Raw` EVERY 250 ms poll and then, on the whole
+#   string: one [regex]::Matches for the assert count, one Strip-CallstackFrames (a full -split
+#   "`n" + Where-Object + -join over every line in the file), and one `-match` per not-yet-seen
+#   cue.  All of that ran BEFORE the throttle/steer schedule at the bottom of the loop body.
+#   ⭐ MEASURED, on runs banked by three different waves:
+#     dv_r5   127.0 MB log, 5100 asserts -> marks.txt carries NO `input` line at all.  The
+#             throttle was never applied; the DRIVE verdict said "*** THE CAR NEVER MOVED ***".
+#     dv_r6    20.5 MB log, 3273 asserts -> `input accel/none ... t+ 54,16s`  (scheduled t+0).
+#     dv_r8    34.6 MB log, 5782 asserts -> `input accel/none ... t+ 43,17s`  (scheduled t+0);
+#             this one still drove 571 m, purely because the run was long enough to survive it.
+#     dv_r2/r3/r4  4359 / 5838 / 4549 asserts -> phase never left CARSELECT: the Accept PUMP is
+#             in the same loop and was starved too, so the boot itself never finished.
+#   The second cost was the assert handler: 30 ms of Start-Sleep per NEWLY SEEN assert plus 3 x
+#   120 ms of END taps, unbounded.  5100 asserts alone is 153 s of sleeping inside the loop that
+#   owes the car a throttle.
+#   ⭐ THE FIX IS THREE PARTS, AND ALL THREE ARE NEEDED:
+#     (1) this reader -- only the bytes appended since the last poll are read and scanned, so the
+#         per-poll cost is proportional to NEW OUTPUT, not to the file;
+#     (2) a per-poll BUDGET on assert dismissal (see the assert block), with the debt carried;
+#     (3) the drive schedule is applied at the TOP of the loop as well as the bottom, so the worst
+#         case lateness is one poll period rather than one poll period plus the whole scan.
+#   ⭐⭐ AND THE POLL PERIOD IS NOW MEASURED AND REPORTED (POLL line in marks.txt).  A harness
+#   that silently voids a run is worse than one that fails loudly: the starvation above was
+#   invisible in every one of those six marks.txt files.
+$script:logPos      = 0     # byte offset already consumed from BrnGame.log
+$script:logCarry    = ''    # tail of the previous chunk, re-prepended for CUE matching only
+$script:assertDebt  = 0     # asserts seen but not yet released (budgeted, never dropped)
+$script:pollCount   = 0
+$script:pollMaxGap  = 0.0
+$script:pollMaxAt   = 0.0
+$script:pollLast    = $null
+
+# Reads BrnGame.log forward from $script:logPos and returns ONLY the complete lines that have
+# appeared since the last call.  FileShare ReadWrite|Delete because the game holds the file open.
+# ⚠️ It stops at the last newline: the game can be mid-write, and half a line would both break a
+# cue regex and be lost for ever (nothing here ever re-reads).  A file that SHRANK is treated as a
+# fresh log (the harness deletes it before Start-Process) and the offset restarts at 0.
+function Read-NewLogText {
+  $lStream = $null
+  try {
+    $lStream = [System.IO.File]::Open($log, [System.IO.FileMode]::Open,
+                                      [System.IO.FileAccess]::Read,
+                                      ([System.IO.FileShare]::ReadWrite -bor [System.IO.FileShare]::Delete))
+  } catch { return '' }
+  try {
+    if ($lStream.Length -lt $script:logPos) { $script:logPos = 0; $script:logCarry = '' }
+    $lLen = $lStream.Length - $script:logPos
+    if ($lLen -le 0) { return '' }
+    $lStream.Position = $script:logPos
+    $lBuf  = New-Object byte[] ([int]$lLen)
+    $lRead = $lStream.Read($lBuf, 0, [int]$lLen)
+    if ($lRead -le 0) { return '' }
+    $lCut = -1
+    for ($i = $lRead - 1; $i -ge 0; $i--) { if ($lBuf[$i] -eq 10) { $lCut = $i; break } }
+    if ($lCut -lt 0) { return '' }      # no complete line yet -- leave it for the next poll
+    $script:logPos += ($lCut + 1)
+    return [System.Text.Encoding]::UTF8.GetString($lBuf, 0, $lCut + 1)
+  } finally {
+    if ($null -ne $lStream) { $lStream.Close() }
+  }
+}
+
+# ⭐ THE DRIVE SCHEDULE, LIFTED OUT OF THE LOOP BODY so it can be applied at the TOP of the poll
+#   as well as at the bottom.  Body unchanged from the in-line version it replaces -- Set()/Reset()
+#   on a MANUAL-RESET event is press-and-hold / release, the desired state is resolved every call
+#   and applied only on CHANGE, and $DriveDelay still leaves the car settled on its springs first.
+#   ⚠️ $script: on driveHeld / inputLog is load-bearing: a bare assignment inside a function makes
+#   a LOCAL, which would make every transition log itself twice and never latch.
+function Apply-DriveSchedule([string]$lsPhase, [datetime]$lDrivingAt, [double]$lfElapsed) {
+  if (-not $Drive -or $lsPhase -ne 'DRIVING') { return }
+  $lfSinceDriving = ((Get-Date) - $lDrivingAt).TotalSeconds
+  $lfIn   = $lfSinceDriving - $DriveDelay     # THE SCHEDULE TIME BASE: 0 == first input applied
+  $lbWant = ($lfIn -ge 0) -and (($DriveSeconds -le 0) -or ($lfIn -lt $DriveSeconds))
+
+  $lsSteer = 'none'; $lsPedal = 'none'
+  if ($lbWant) {
+    $lsSteer = $Steer; $lsPedal = 'accel'
+    $lS = Schedule-At $steerSched $lfIn; if ($null -ne $lS) { $lsSteer = $lS }
+    $lP = Schedule-At $throtSched $lfIn; if ($null -ne $lP) { $lsPedal = $lP }
+  }
+
+  $lsState = "$lsPedal/$lsSteer"
+  if ($lsState -eq $script:driveHeld) { return }
+  $script:driveHeld = $lsState
+  $lPedals = @($lsPedal -split '\+')
+  if ($lPedals -contains 'accel')     { $evAccel.Set() | Out-Null } else { $evAccel.Reset() | Out-Null }
+  if ($lPedals -contains 'brake')     { $evBrake.Set() | Out-Null } else { $evBrake.Reset() | Out-Null }
+  if ($lPedals -contains 'handbrake') { $evHandB.Set() | Out-Null } else { $evHandB.Reset() | Out-Null }
+  if ($lsSteer -eq 'left')  { $evStrL.Set() | Out-Null } else { $evStrL.Reset() | Out-Null }
+  if ($lsSteer -eq 'right') { $evStrR.Set() | Out-Null } else { $evStrR.Reset() | Out-Null }
+  Write-Host ("[flow] input {0,-20} at {1,6:f1}s (DRIVING+{2:f1}s, t+{3:f2}s)" -f `
+              $lsState, $lfElapsed, $lfSinceDriving, $lfIn)
+  $script:inputLog += ("input {0,-20} run={1,6:f1}s t+{2,6:f2}s" -f $lsState, $lfElapsed, $lfIn)
+  # THE LATENESS WITNESS. $lfIn is the schedule time this transition ACTUALLY landed at. The
+  # schedule asked for the FIRST one at t+0 by construction ($lbWant flips at $lfIn == 0), so
+  # anything materially above a poll period here IS the starvation, measured.
+  if ($null -eq $script:driveFirstAt) { $script:driveFirstAt = $lfIn }
+}
+$script:driveFirstAt = $null   # schedule time t+ of the FIRST input transition actually applied
+
 while ($true) {
   $elapsed = ((Get-Date) - $t0).TotalSeconds
+  # ⭐⭐ THE POLL-PERIOD INSTRUMENT. The loop below is the only thing that presses the pedal, so
+  #   its period IS the resolution of every scheduled input in the run. Recorded and reported --
+  #   six runs were voided by a loop that had silently slowed to tens of seconds. A guard that
+  #   cannot fail is not a guard: this one is a MEASUREMENT, and it prints whatever it measures.
+  $script:pollCount++
+  if ($null -ne $script:pollLast) {
+    $lfGap = ((Get-Date) - $script:pollLast).TotalSeconds
+    if ($lfGap -gt $script:pollMaxGap) { $script:pollMaxGap = $lfGap; $script:pollMaxAt = $elapsed }
+  }
+  $script:pollLast = Get-Date
   if ($elapsed -gt $MaxSeconds) { Write-Host "[flow] max seconds"; break }
   if ($p.HasExited) { Write-Host ("[flow] game exited early at {0:f1}s" -f $elapsed); break }
+
+  # ⭐ THE SCHEDULE FIRST, BEFORE ANY LOG WORK. Everything below this line can block -- the log
+  #   read, the assert release, the frame-directory scan -- and when it did, the throttle was
+  #   applied 43-54 s late or never at all (dv_r5/r6/r8). Applying here bounds the lateness at one
+  #   poll period no matter what the rest of the body costs. It is applied at the bottom too, so a
+  #   phase promotion inside this same iteration is still honoured without waiting a poll.
+  Apply-DriveSchedule $phase $drivingAt $elapsed
 
   # ⛔⛔ RUNAWAY-LOG GUARD (2026-08-28). This loop re-reads the WHOLE log every poll. An assert
   # cascade can grow BrnGame.log without bound -- measured: one overflow clobbered a component
@@ -1223,22 +1342,37 @@ while ($true) {
     break
   }
 
-  $txt = Get-Content $log -Raw -ErrorAction SilentlyContinue
-  if ($null -ne $txt) {
-    $n = ([regex]::Matches($txt, '\[ASSERT \d+\]')).Count
+  # ⭐ INCREMENTAL: only what the game has appended since the last poll. See the reader's banner --
+  #   the whole-file read this replaces is the defect that voided dv_r1..r6 / kw6_st1.
+  $txt = Read-NewLogText
+  if (-not [string]::IsNullOrEmpty($txt)) {
+    $n = $seenAsserts + ([regex]::Matches($txt, '\[ASSERT \d+\]')).Count
     if ($n -gt $seenAsserts) {
       # Release the event once per NEWLY SEEN assert (AutoReset consumes exactly one wait per Set),
       # THEN fall back to the END tap. Order matters: the event works whether or not the game holds
       # focus, the keystroke only works if it does. With -ReleaseAsserts the gate is already open
       # and these Sets are harmless no-ops.
-      $newAsserts = $n - $seenAsserts
+      # ⛔⛔ BUDGETED, NOT UNBOUNDED (2026-09-03). This used to sleep 30 ms per new assert plus
+      #   3 x 120 ms, with no cap: 5100 asserts in dv_r5 is 153 s of Start-Sleep inside the loop
+      #   that owes the car a throttle, and that run's marks.txt has no `input` line at all.
+      #   The debt is CARRIED, never dropped, so a storm is still fully released -- just spread
+      #   over polls at a bounded ~360 ms each, which keeps the schedule inside one poll period.
+      $script:assertDebt += ($n - $seenAsserts)
       $seenAsserts = $n
-      for ($k = 0; $k -lt $newAsserts; $k++) { $evAssertRelease.Set() | Out-Null; Start-Sleep -Milliseconds 30 }
-      for ($k = 0; $k -lt 3; $k++) { [KBFLOW]::Tap(0x23); Start-Sleep -Milliseconds 120 }
-      Write-Host ("[flow] dismissed assert #{0} at {1:f1}s" -f $n, $elapsed)
+      $lRelease = [math]::Min($script:assertDebt, 8)
+      for ($k = 0; $k -lt $lRelease; $k++) { $evAssertRelease.Set() | Out-Null; Start-Sleep -Milliseconds 30 }
+      $script:assertDebt -= $lRelease
+      $lTaps = $(if ($script:assertDebt -gt 0) { 1 } else { 3 })
+      for ($k = 0; $k -lt $lTaps; $k++) { [KBFLOW]::Tap(0x23); Start-Sleep -Milliseconds 120 }
+      Write-Host ("[flow] dismissed assert #{0} at {1:f1}s{2}" -f $n, $elapsed,
+                  $(if ($script:assertDebt -gt 0) { " (storm: $($script:assertDebt) release(s) carried)" } else { "" }))
     }
 
-    $cueTxt = Strip-CallstackFrames $txt
+    # Cue matching gets the previous chunk's tail back, so a cue whose line straddled the read
+    # boundary still fires. Marks are one-shot, so the overlap cannot double-count; the ASSERT
+    # count above deliberately does NOT get the carry, for exactly that reason.
+    $cueTxt = Strip-CallstackFrames ($script:logCarry + $txt)
+    $script:logCarry = $(if ($txt.Length -gt 2048) { $txt.Substring($txt.Length - 2048) } else { $txt })
     foreach ($m in $cues) {
       if (-not $marks.ContainsKey($m[0]) -and $cueTxt -match $m[1]) {
         $marks[$m[0]] = $elapsed
@@ -1375,37 +1509,10 @@ while ($true) {
   # channel as down on EVERY input update in between, which is the only way a throttle means
   # anything.  DriveDelay leaves the car settled on its springs first so the run measures
   # driving, not the tail of the spawn drop.
-  if ($Drive -and $phase -eq 'DRIVING') {
-    $sinceDriving = ((Get-Date) - $drivingAt).TotalSeconds
-    $tIn  = $sinceDriving - $DriveDelay      # THE SCHEDULE TIME BASE: 0 == first input applied
-    $want = ($tIn -ge 0) -and (($DriveSeconds -le 0) -or ($tIn -lt $DriveSeconds))
-
-    # What every channel group should be RIGHT NOW. The fixed holds are the defaults; a schedule
-    # entry whose time has passed replaces its group. Resolving the whole desired state each poll
-    # and applying only on CHANGE keeps the Set/Reset traffic identical in shape to the old
-    # single-transition hold -- a manual-reset event that is re-Set() every 250 ms would still
-    # read as held, but the log would be unreadable and a missed Reset() would be invisible.
-    $curSteer = 'none'; $curPedal = 'none'
-    if ($want) {
-      $curSteer = $Steer; $curPedal = 'accel'
-      $lS = Schedule-At $steerSched $tIn; if ($null -ne $lS) { $curSteer = $lS }
-      $lP = Schedule-At $throtSched $tIn; if ($null -ne $lP) { $curPedal = $lP }
-    }
-
-    $state = "$curPedal/$curSteer"
-    if ($state -ne $driveHeld) {
-      $driveHeld = $state
-      $pedals = @($curPedal -split '\+')
-      if ($pedals -contains 'accel')     { $evAccel.Set() | Out-Null } else { $evAccel.Reset() | Out-Null }
-      if ($pedals -contains 'brake')     { $evBrake.Set() | Out-Null } else { $evBrake.Reset() | Out-Null }
-      if ($pedals -contains 'handbrake') { $evHandB.Set() | Out-Null } else { $evHandB.Reset() | Out-Null }
-      if ($curSteer -eq 'left')  { $evStrL.Set() | Out-Null } else { $evStrL.Reset() | Out-Null }
-      if ($curSteer -eq 'right') { $evStrR.Set() | Out-Null } else { $evStrR.Reset() | Out-Null }
-      Write-Host ("[flow] input {0,-20} at {1,6:f1}s (DRIVING+{2:f1}s, t+{3:f2}s)" -f `
-                  $state, $elapsed, $sinceDriving, $tIn)
-      $inputLog += ("input {0,-20} run={1,6:f1}s t+{2,6:f2}s" -f $state, $elapsed, $tIn)
-    }
-  }
+  # ⭐ THE BODY MOVED to Apply-DriveSchedule (see its banner) so that it can also run at the TOP
+  #   of the poll, before anything that can block. This second call keeps the old behaviour of
+  #   honouring a phase promotion made earlier in THIS iteration without waiting a whole poll.
+  Apply-DriveSchedule $phase $drivingAt $elapsed
   Start-Sleep -Milliseconds 250
 }
 foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
@@ -1528,6 +1635,82 @@ if ($Drive) {
   }
 }
 
+# --- WHY THE CAR DID NOT MOVE: THREE WITNESSES THE VERDICT ABOVE CANNOT SEE ---------------
+# ⭐⭐⭐ ADDED 2026-09-03 (harness wave).  "*** THE CAR NEVER MOVED ***" is TRUE ABOUT THE CAR and
+#   says nothing whatever about the game -- and three waves read it as a physics/teleport finding
+#   when it was the harness, twice, and a paused world, once.  Re-measured from the banked logs:
+#     dv_r5/r6/r8, dv_r1..r4 -- the POLL LOOP was starved by an assert cascade (see the reader
+#       banner up the file).  dv_r5 pressed nothing at all; dv_r6 pressed 54.16 s late.  A run
+#       whose stimulus never happened is not a measurement of anything.
+#     stA_right -- the SIM WAS PAUSED.  Its log carries `[sim-pause] action 86 -> PAUSED (sim timer
+#       stopped)` and no matching action 87, so the world froze: 145 BIT-IDENTICAL [motion] samples
+#       with a non-zero |v| of 0.094 m/s frozen into them (a stopped car reads |v| 0, a paused one
+#       keeps whatever it had).  Nothing in its marks.txt said the word "paused".
+#     kw6_st2 -- accel was held for 12 s on time and EVERY [motion] sample still reports gas 0, i.e.
+#       the press never reached maActionInfo[0].  That is a THIRD, still-unexplained failure, and
+#       the point of this line is that it now announces itself instead of being read as physics.
+#   ⭐ Each of the three is reported as its own line, with its own evidence, and only a run that
+#   passes all three is allowed to keep an ordinary DRIVE verdict.  A harness that silently voids a
+#   run is worse than one that fails loudly.
+# ⭐ WHAT THESE LINES CANNOT DISTINGUISH, stated so nobody reads more into them than is there:
+#   GAS is sampled every 30 presents, so a throttle held for less than ~0.5 s can fall between two
+#   samples and read as NEVER-REACHED; SIMPAUSE only sees a pause the game LOGGED (a freeze with no
+#   log line is invisible here -- that is what POLL and the frame gates are for); and POLL measures
+#   this script's own period, not the game's frame time.
+$pollVerdict = ("max period {0:f2}s at {1:f1}s over {2} polls (target 0.25s)" -f `
+                $script:pollMaxGap, $script:pollMaxAt, $script:pollCount)
+if ($script:pollMaxGap -gt 2.0) {
+  $pollVerdict += "  *** THE HARNESS POLL LOOP WAS STARVED -- every scheduled input in this run is late by up to that much ***"
+}
+if ($script:assertDebt -gt 0) {
+  $pollVerdict += ("  [{0} assert release(s) still owed at the kill]" -f $script:assertDebt)
+}
+
+$throttleVerdict = "n/a (not a -Drive run)"
+if ($Drive) {
+  if ($null -eq $script:driveFirstAt) {
+    $throttleVerdict = "*** THE THROTTLE WAS NEVER APPLIED -- the run never reached the schedule, so it measured NOTHING. This run is VOID. ***"
+  } elseif ($script:driveFirstAt -gt 1.0) {
+    $throttleVerdict = ("*** THE THROTTLE WAS APPLIED {0:f2}s LATE (schedule t+0) -- the poll loop was starved; treat every timing in this run as unusable. ***" -f $script:driveFirstAt)
+  } else {
+    $throttleVerdict = ("first input at t+{0:f2}s (on time)" -f $script:driveFirstAt)
+  }
+}
+
+$pauseVerdict = "no [sim-pause] pause in this log"
+if ($null -ne $finalTxt) {
+  $lPaused  = ([regex]::Matches($finalTxt, '\[sim-pause\] action 86 -> PAUSED')).Count
+  $lResumed = ([regex]::Matches($finalTxt, '\[sim-pause\] action 87 -> RESUMED')).Count
+  if ($lPaused -gt 0) {
+    $pauseVerdict = ("{0} pause(s), {1} resume(s)" -f $lPaused, $lResumed)
+    if ($lResumed -lt $lPaused) {
+      $pauseVerdict += "  *** THE SIM WAS PAUSED AND NEVER RESUMED -- the world was frozen for the rest of the run, so the car COULD NOT move whatever the throttle did. This run is VOID. ***"
+    }
+  }
+}
+
+# GAS: the game's own witness that the press arrived. mfGas is the RaceCarState field the [motion]
+# probe prints, and it reads 1.0 on every driven run measured (dv_r8 at 22-49 mph) and 0.0 on every
+# frozen one -- so "accel was held and gas never left 0" is the harness channel failing, not physics.
+$gasVerdict = "n/a (no -MotionProbe, so the game's own throttle witness is absent)"
+if ($Drive -and $MotionProbe -and $null -ne $finalTxt) {
+  $lGasAll  = ([regex]::Matches($finalTxt, '\bgas (-?[0-9.]+)'))
+  $lGasHot  = 0
+  foreach ($g in $lGasAll) { if ([double]::Parse($g.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture) -gt 0.01) { $lGasHot++ } }
+  $gasVerdict = ("{0} of {1} [motion] samples report gas > 0" -f $lGasHot, $lGasAll.Count)
+  if ($lGasAll.Count -gt 0 -and $lGasHot -eq 0 -and $null -ne $script:driveFirstAt) {
+    $gasVerdict += "  *** THE THROTTLE NEVER REACHED THE GAME -- the harness held accel but the car's own mfGas stayed 0 on every sample. This run is VOID. ***"
+  }
+}
+
+# The DRIVE verdict must not out-shout its own cause. If any witness above voided the run, say so
+# on the DRIVE line too -- that is the line every reader greps for.
+if ($driveVerdict -match 'NEVER MOVED|BARELY MOVED') {
+  if     ($throttleVerdict -match '\*\*\*') { $driveVerdict += "  -- but see THROTTLE below: THE STIMULUS DID NOT HAPPEN" }
+  elseif ($pauseVerdict    -match '\*\*\*') { $driveVerdict += "  -- but see SIMPAUSE below: THE WORLD WAS FROZEN" }
+  elseif ($gasVerdict      -match '\*\*\*') { $driveVerdict += "  -- but see GAS below: THE PRESS NEVER REACHED THE CAR" }
+}
+
 # --- marks.txt.  RUNSTART FIRST: it is what the gates use to reject stale dumps. ----------
 $summary = @()
 $summary += ("RUNSTART {0}" -f $t0.ToString('o'))
@@ -1608,6 +1791,13 @@ if ($exitedOnOwn) {
 }
 # DRIVE: whether the car actually moved -- see the DRIVE VERDICT banner above.
 $summary += ("DRIVE    {0}" -f $driveVerdict)
+# ⭐⭐ THE THREE WITNESSES THAT SAY WHY (2026-09-03). See their banner above the DRIVE verdict --
+#   each one names a failure that used to be invisible in marks.txt and was read as a physics
+#   result by the wave that inherited the run.
+$summary += ("POLL     {0}" -f $pollVerdict)
+$summary += ("THROTTLE {0}" -f $throttleVerdict)
+$summary += ("SIMPAUSE {0}" -f $pauseVerdict)
+$summary += ("GAS      {0}" -f $gasVerdict)
 $summary += ("drive={0} steer={1} delay={2:f1}s hold={3}" -f `
              [bool]$Drive, $Steer, $DriveDelay, $(if ($DriveSeconds -gt 0) { ("{0:f0}s" -f $DriveSeconds) } else { "to-end" }))
 if ($SteerScript    -ne "") { $summary += ("steerscript    {0}" -f $SteerScript) }
