@@ -1728,6 +1728,14 @@ if ($driveVerdict -match 'NEVER MOVED|BARELY MOVED') {
   } elseif ($gasNeverHot) {
     $driveVerdict += "  -- but see GAS: THE PRESS NEVER REACHED THE CAR (mfGas 0 on every sample). VOID."
     $gasVerdict   += "  *** THE THROTTLE NEVER REACHED THE GAME -- the harness held accel and the car's own mfGas stayed 0 ***"
+  } elseif ($MotionProbe) {
+    # ⭐ THE FOURTH READING, AND THE ONE THAT MATTERS MOST: everything worked and the car still did
+    #   not move. Measured on run susv1, whose verdict says NEVER MOVED while THROTTLE says t+0.05s
+    #   and GAS says 49 of 422 samples above zero -- the car drove ~10 m, was stopped dead by the
+    #   world at (3384.4, -1709.8), and was placed back before the throttle window closed. Without
+    #   this arm a reader would still be hunting the harness. ⛔ It does NOT say the run is good:
+    #   it says the harness is not the suspect.
+    $driveVerdict += "  -- and the HARNESS IS CLEAR: throttle on time, and the game received it (see GAS). Whatever stopped the car is IN THE GAME."
   }
 } elseif ($pauseUnresumed) {
   $pauseVerdict += "  (the car still drove, so this pause did not void the run -- check WHERE it fell before reading anything into the tail)"
