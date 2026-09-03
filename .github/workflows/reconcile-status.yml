@@ -8,6 +8,9 @@ name: Reconcile status + submodule pointer
 #   1. regenerate progress/status.json from the server (GET /export/status) — the server
 #      is the only full authority: a files-only reconcile recovers `done` but not
 #      `blocked` (a blocked TU leaves no file),
+#   1b. re-resolve progress/class_homes.json (class TU -> the file that holds its
+#      code) from those same committed sources, so class work keeps attributing
+#      to its authors instead of a synthetic path that exists nowhere,
 #   2. advance the b5-decomp submodule pointer to the commit that triggered the run (the
 #      repository_dispatch payload SHA), or the current dev tip for a manual run,
 #   3. cross-check the server's `done` set against the committed b5-decomp files
@@ -87,6 +90,16 @@ jobs:
           git -C b5-decomp checkout -q "$SHA"
           git add b5-decomp
 
+      - name: Refresh the class -> home-file map
+        run: |
+          set -euo pipefail
+          # class: TUs carry no path of their own, so without this map the work
+          # server synthesises a src/classes/<Class>.cpp that exists nowhere and
+          # every one of them drops out of contribution attribution. The map was
+          # only ever refreshed by hand, so it went three weeks stale and left
+          # 633 finished class TUs -- and their functions -- crediting nobody.
+          python tools/work/resolve_class_homes.py --apply
+
       - name: Cross-check server `done` against committed files (non-blocking)
         continue-on-error: true
         run: |
@@ -107,7 +120,7 @@ jobs:
           set -euo pipefail
           git config user.name  "bp-reconcile-bot"
           git config user.email "bp-reconcile-bot@users.noreply.github.com"
-          git add progress/status.json b5-decomp
+          git add progress/status.json progress/class_homes.json b5-decomp
           if git diff --cached --quiet; then
             echo "nothing to reconcile — status.json and submodule pointer already current."
             exit 0
@@ -116,7 +129,8 @@ jobs:
           git commit -m "chore: reconcile status.json + b5-decomp pointer to ${SHA:0:12}
 
           Automated on a b5-decomp commit: status.json regenerated from the
-          coordination server, submodule pointer bumped. No manual push required."
+          coordination server, class homes re-resolved from the committed
+          sources, submodule pointer bumped. No manual push required."
           git push
 
       - name: Refresh public dashboard snapshot
