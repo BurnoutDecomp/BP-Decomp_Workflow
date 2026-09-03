@@ -1677,14 +1677,26 @@ if ($Drive) {
   }
 }
 
+# ⚠️ SIMPAUSE IS A REPORT FIRST AND A VERDICT SECOND, and that distinction was MEASURED, not
+#   assumed. The first cut said VOID on any unresumed pause -- and run hw1 promptly tripped it
+#   while DRIVING 403 m: the game opened its own DRIVER DETAILS screen (`[ddetails] internal
+#   state -> 1`, CrashNavDriverDetails::OnEnter's 191{0}) 150 s AFTER the throttle window, long
+#   past anything the run was measuring. A pause at 96 % of the log voids nothing.
+#   So the position is reported too, and the VOID banner is gated on the car ACTUALLY not having
+#   moved. ⭐ A guard that cannot fire wrongly has not been tested; this one fired wrongly on its
+#   first real run and the reading is now the narrower, true one.
 $pauseVerdict = "no [sim-pause] pause in this log"
+$pauseUnresumed = $false
 if ($null -ne $finalTxt) {
-  $lPaused  = ([regex]::Matches($finalTxt, '\[sim-pause\] action 86 -> PAUSED')).Count
-  $lResumed = ([regex]::Matches($finalTxt, '\[sim-pause\] action 87 -> RESUMED')).Count
-  if ($lPaused -gt 0) {
-    $pauseVerdict = ("{0} pause(s), {1} resume(s)" -f $lPaused, $lResumed)
-    if ($lResumed -lt $lPaused) {
-      $pauseVerdict += "  *** THE SIM WAS PAUSED AND NEVER RESUMED -- the world was frozen for the rest of the run, so the car COULD NOT move whatever the throttle did. This run is VOID. ***"
+  $lPausedM  = [regex]::Matches($finalTxt, '\[sim-pause\] action 86 -> PAUSED')
+  $lResumed  = ([regex]::Matches($finalTxt, '\[sim-pause\] action 87 -> RESUMED')).Count
+  if ($lPausedM.Count -gt 0) {
+    $lFirstPct = 100.0 * $lPausedM[0].Index / [math]::Max(1, $finalTxt.Length)
+    $pauseVerdict = ("{0} pause(s), {1} resume(s); first pause at {2:f0}% of the log" -f `
+                     $lPausedM.Count, $lResumed, $lFirstPct)
+    if ($lResumed -lt $lPausedM.Count) {
+      $pauseUnresumed = $true
+      $pauseVerdict += "  -- and the last one was NEVER RESUMED, so the world was frozen from there to the kill"
     }
   }
 }
@@ -1693,22 +1705,32 @@ if ($null -ne $finalTxt) {
 # probe prints, and it reads 1.0 on every driven run measured (dv_r8 at 22-49 mph) and 0.0 on every
 # frozen one -- so "accel was held and gas never left 0" is the harness channel failing, not physics.
 $gasVerdict = "n/a (no -MotionProbe, so the game's own throttle witness is absent)"
+$gasNeverHot = $false
 if ($Drive -and $MotionProbe -and $null -ne $finalTxt) {
   $lGasAll  = ([regex]::Matches($finalTxt, '\bgas (-?[0-9.]+)'))
   $lGasHot  = 0
   foreach ($g in $lGasAll) { if ([double]::Parse($g.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture) -gt 0.01) { $lGasHot++ } }
   $gasVerdict = ("{0} of {1} [motion] samples report gas > 0" -f $lGasHot, $lGasAll.Count)
-  if ($lGasAll.Count -gt 0 -and $lGasHot -eq 0 -and $null -ne $script:driveFirstAt) {
-    $gasVerdict += "  *** THE THROTTLE NEVER REACHED THE GAME -- the harness held accel but the car's own mfGas stayed 0 on every sample. This run is VOID. ***"
-  }
+  if ($lGasAll.Count -gt 0 -and $lGasHot -eq 0 -and $null -ne $script:driveFirstAt) { $gasNeverHot = $true }
 }
 
-# The DRIVE verdict must not out-shout its own cause. If any witness above voided the run, say so
-# on the DRIVE line too -- that is the line every reader greps for.
+# ⭐ THE ATTRIBUTION. The DRIVE verdict is the primary reading; these witnesses EXPLAIN it, and
+#   only one of them gets to say VOID. THROTTLE-never-applied is a harness fault on its own terms
+#   (no stimulus, no measurement, whatever the car did), so it stands alone. The other two are
+#   only decisive when the car in fact did not move -- see the SIMPAUSE banner for the run that
+#   proved that gate necessary.
 if ($driveVerdict -match 'NEVER MOVED|BARELY MOVED') {
-  if     ($throttleVerdict -match '\*\*\*') { $driveVerdict += "  -- but see THROTTLE below: THE STIMULUS DID NOT HAPPEN" }
-  elseif ($pauseVerdict    -match '\*\*\*') { $driveVerdict += "  -- but see SIMPAUSE below: THE WORLD WAS FROZEN" }
-  elseif ($gasVerdict      -match '\*\*\*') { $driveVerdict += "  -- but see GAS below: THE PRESS NEVER REACHED THE CAR" }
+  if ($throttleVerdict -match '\*\*\*') {
+    $driveVerdict += "  -- but see THROTTLE: THE STIMULUS DID NOT HAPPEN, so this measured nothing"
+  } elseif ($pauseUnresumed) {
+    $driveVerdict += "  -- but see SIMPAUSE: THE WORLD WAS FROZEN, so the car COULD NOT move whatever the throttle did. VOID."
+    $pauseVerdict += "  *** THIS IS WHY THE CAR DID NOT MOVE ***"
+  } elseif ($gasNeverHot) {
+    $driveVerdict += "  -- but see GAS: THE PRESS NEVER REACHED THE CAR (mfGas 0 on every sample). VOID."
+    $gasVerdict   += "  *** THE THROTTLE NEVER REACHED THE GAME -- the harness held accel and the car's own mfGas stayed 0 ***"
+  }
+} elseif ($pauseUnresumed) {
+  $pauseVerdict += "  (the car still drove, so this pause did not void the run -- check WHERE it fell before reading anything into the tail)"
 }
 
 # --- marks.txt.  RUNSTART FIRST: it is what the gates use to reject stale dumps. ----------
