@@ -4908,6 +4908,45 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleDescriptor.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleBehaviour.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleMaterial.cpp"
+  rem ---- THE LION INSTALL PATH, MOUNTED (2026-09-03, boost-exhaust wave). ----
+  rem   cLionFX::Init @0x82914A98 is now reconstructed and ParticleModule::Prepare CALLS it, so
+  rem   the Lion runtime actually gets built: the small-block allocator + its 64 KB main page,
+  rem   the effect-instance manager, the bucket/emitter pools, the locator/scaler/trigger block
+  rem   pools, the waveform tables, and cParticleRender::Instance().AppInit -- which is what
+  rem   publishes gpLionParticleRender. Until this commit that pointer was NULL for the whole
+  rem   run, so cParticleMaterial::Build @0x8290E500 skipped TextureRegister for every material
+  rem   in every .lef and no particle material had a texture handle.
+  rem   Init and cLionFX::Dispatch @0x82912BA8 were EXPORT-SET HOLES -- IDA names both in their
+  rem   callees' xrefs but emits no JSON for either, so neither had a ledger row; they were read
+  rem   out of the packed .i64 with tools/re/x360rd.py.
+  rem   PAIRED 1:1 with b5-decomp commits 574c7264 (the reconstruction) and 1b125b77 (the
+  rem   wiring). Six of these TUs exist only because the console INLINED their functions into
+  rem   cLionFX::Init; each is re-outlined to the name the DecFIGS DWARF gives it.
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleSystem.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionEffectManager.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleBucketManager.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleBucket.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleEmitterManager.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionParticleEffectManager.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleRandomSeed.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\source\ParticleRender\ParticleRender.cpp"
+  rem   ParticleModule's own EA::Allocator::ITaggedAllocator front-end onto CgsMemory::HeapMalloc.
+  rem   It is the allocator EVERY Lion pool is carved through, and its three Alloc overloads had
+  rem   no bodies until this commit (they were declare-only under a note claiming they were
+  rem   unattested -- the vtable at off_82011E14 names them).
+  echo "%SRC%\GameSource\Effects\Particles\ParticleModule_InternalAllocator.cpp"
+  rem   The Lion emitter: its layout is now NAMED (burnout.wiki's cParticleEmitter table,
+  rem   re-checked against cParticleEmitter::Init @0x82913228 on nineteen offsets and on the
+  rem   0x2D0 stride the manager allocates with), and Init is bodied because AppInit runs it
+  rem   256 times on every boot. Its simulation half is NOT bodied and is trapped, loudly, in
+  rem   LionRuntimeLinkStubs.cpp -- read that file before adding to it.
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleEmitter.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionRuntimeLinkStubs.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionBindings.cpp"
+  rem   EA::Allocator::IAllocator::~IAllocator -- the polymorphic base dtor every Lion allocator
+  rem   front-end anchors on. It has had a real out-of-line home all along and was simply never
+  rem   mounted, so BrnParticle::IInternalAllocator could not link.
+  echo "%SRC%\SDKs\Packages\Lion\Final\Allocator\iallocator.cpp"
   echo "%SRC%\SharedClasses\Gui\SatNav\Resources\BrnSatNavTileResourceType.cpp"
 
   echo "%SRC%\GameShared\GameClasses\Graphics\Resources\CgsVideoDataResource.cpp"
