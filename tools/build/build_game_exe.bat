@@ -4885,6 +4885,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionSmallAlloc.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionTokeniser.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleWaveForm.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleLocator.cpp"
+  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleTrigger.cpp"
+  echo "%SRC%\GameSource\Math\CgsQuat.cpp"
   rem ---- THE LION .lef LOAD PATH, MOUNTED (2026-09-03, boost-exhaust wave). ----
   rem   BrnParticle::ParticleDescription (0x1001D) is now a REGISTERED resource type, so
   rem   its DeSerialise @0x82675868 runs cLionFX::BinLoad @0x82914388 over every .lef in
