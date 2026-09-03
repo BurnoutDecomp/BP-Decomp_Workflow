@@ -467,6 +467,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_Accessors.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAICarOutputInterface.cpp"
   echo "%SRC%\GameSource\World\AI\ResetOnTrack\BrnResetOnTrackManager.cpp"
+  echo "%SRC%\GameSource\World\AI\ResetOnTrack\BrnResetOnTrackManager_Strategies.cpp"
+  echo "%SRC%\GameSource\World\AI\ResetOnTrack\BrnResetOnTrackManager_AvoidObstacles.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnHNGTest.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIBoundaryLine.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\Array_ResetOnTrackRequest_35.cpp"
   rem SIXTH unlisted TU, found by the LINK: ResetOnTrackRequest::Construct @0x822A0438 has been
   rem bodied here since the aicar_reset wave and this file was never on the list. Nothing had
@@ -494,6 +498,45 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem     and the linker took the WorldLinkStubs stub instead. Both its bridges are retired from
   rem     WorldLinkStubs.cpp by this wave. FIFTH sighting of an unlisted TU in three waves.
   echo "%SRC%\GameSource\World\AI\BrnAIModule_ResetPump.cpp"
+  rem  ** AI ROUTE CHAIN (aiwave 2026-09-03, lane A5): RouteMapModule::Update @0x82793ED8 real, A* link-complete
+  rem     (FindNode decoded from the image), RouteRequestManager::Update, the AIModule route legs
+  rem     (BrnAIModule_Routes.cpp), GetForwardPortalIndex. The "BrnAStar.cpp is deliberately NOT here" note above is obsolete.
+  echo "%SRC%\GameSource\World\AI\Route\BrnAStar.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\BrnRoute.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModuleIO.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModuleIO_InputBuffer_Accessors.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnRouteRequestManager.cpp"
+  echo "%SRC%\GameSource\World\AI\RacingLine\BrnRacingLineGenerator_GetForwardPortalIndex.cpp"
+  echo "%SRC%\GameSource\World\AI\RacingLine\BrnRacingLineGenerator_Extrapolate.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIModule_Routes.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIModule_Drive.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIModule_Events.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIDriver.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIDriver_Update.cpp"
+  echo "%SRC%\GameSource\World\AI\RacingLine\BrnAISteeringFan.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIUtils.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIUtils_Angles.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIAggression.cpp"
+  echo "%SRC%\GameSource\World\AI\PID\BrnPIDController.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\BrnRacingLine.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAICar.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAICar_Update.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIAggressiveness.cpp"
+  echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIRaceCarInterface.cpp"
+  echo "%SRC%\GameSource\World\AI\RaceBalancing\BrnRaceBalancingManager.cpp"
+  echo "%SRC%\GameSource\World\AI\RaceBalancing\Array_RaceBalancingRoute_7.cpp"
+  echo "%SRC%\GameSource\World\AI\RaceBalancing\BrnRaceBalancingRoute.cpp"
+  echo "%SRC%\GameSource\World\AI\RaceBalancing\BrnRaceBalancingGraph.cpp"
+  echo "%SRC%\GameSource\World\AI\RaceBalancing\Array_RaceBalancingGraph_7.cpp"
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeAIModule.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficAIInterfaces.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIBuzzBy.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\BaseEventQueue_RaceRouteRequest.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\BaseEventQueue_RouteResponse.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\EventQueue_RaceRouteRequest_1.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\EventQueue_ExtrapolatedRouteRequest_12.cpp"
+  echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModuleIO_IOHelpers.cpp"
+
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToAI.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnCrashModule_Lifecycle.cpp"
@@ -1695,6 +1738,8 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem [takedown wave 2026-09-02] the two retired conductor gates, in their own partfiles
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ProcessContactSpies.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateCrashes.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PlayerStuck.cpp"
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_CrashState.cpp"
   rem  ????????? THE CREATE DRAIN MOUNTS (create-drain wave): ProcessCreateEvents @0x82616770 -- the
   rem  ONLY writer of mUsedRaceCars in the XEX. Setting that bit switches on the four already-
   rem  mounted per-frame loops (ReadUpdatedBodies gravity, UpdateVehiclePhysics force path,
@@ -3072,6 +3117,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  Several rem blocks further up in this file assume otherwise; they are about CODE SIZE, not
   rem  about unresolved externals. Mount the base TU when those eight land.
   echo "%SRC%\GameSource\GameState\AchievementManager\X360\BrnGameStateAchievementManagerX360.cpp"
+  echo "%SRC%\GameSource\GameState\AchievementManager\BrnGameStateAchievementManagerBase.cpp"
   echo "%SRC%\GameShared\GameClasses\System\X360\CgsXOverlappedX360.cpp"
   rem  ---- leg 2: the street manager / STREETDATA.DAT loader -------------------------------
   rem  Prepare2 case 2 is `StreetManager::Prepare2(this+284520, out, this+232384, this+42320)`
@@ -4911,6 +4957,11 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem [takedown wave 2026-09-02] the TakedownManager classifier, two halves
   echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManager.cpp"
   echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManager_Detect.cpp"
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Rivals.cpp"
+  echo "%SRC%\GameSource\GameState\DeveloperChallengeManager\BrnDeveloperChallengeManager.cpp"
+  echo "%SRC%\GameSource\GameState\GameStateModule_gDC_00.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Accessors2.cpp"
+  echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkSharedIO_Telemetry.cpp"
   echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManagerRaceCarData.cpp"
   echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManagerDebugComponent.cpp"
   echo "%SRC%\GameSource\GameState\TakedownManager\EventQueue_TakedownEvent_8.cpp"
