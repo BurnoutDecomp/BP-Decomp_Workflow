@@ -10,6 +10,7 @@ for the plan and [`../AGENTS.md`](../AGENTS.md) for how to work against it.
 | File | Built by | What it is |
 |------|----------|------------|
 | `identity.json` | `tools/work/build_identity.py` | Cross-build identity table. One entry per X360 function, keyed by **normalized qualified name**, with its X360 address(es), DecFIGS `primary_file` (if any), and PS3 corroboration. The canonical map between builds. |
+| `unidentified.json` | `tools/work/build_unidentified.py` | The counterpart to `identity.json`: every function IDA found in the X360 binary that has **no name**, so no DWARF file and no RTTI class can claim it. Addresses + instruction counts only — no code. Without it these fall out of the denominator entirely (neither done nor todo), and completion is measured against the part of the binary already named. |
 | `tu_index.json` | `tools/work/build_tu_index.py` | The work-unit list: every function grouped into a translation unit, `source` = `decfigs` (real file, ~43%) or `class` (fallback, ~57%). Each TU has a `status` (todo/in_progress/done/blocked). |
 | `skeletons/` | `tools/work/gen_skeleton.py` | *Generated, git-ignored.* Per-TU reconstruction seeds (signatures + pseudocode + trap stubs). Regenerate on demand. |
 | `ledger.sqlite` | `tools/work/work.py seed` | **The ledger** — live store for per-TU/per-function status, owners, blockers, the TU dependency graph, and an event log. *Git-ignored* (local working store): rebuilt from the committed files below. |
@@ -18,14 +19,18 @@ for the plan and [`../AGENTS.md`](../AGENTS.md) for how to work against it.
 
 ## Current state (Phase 0)
 
-- 27,549 named X360 functions identified.
+- 30,082 functions in the X360 binary: **27,549 named/identified**, **2,533 still unnamed**
+  (~6% of the executable's code — real bodies, median 39 instructions, 320 of them over 100).
 - 11,357 (43%) have real DecFIGS file attribution; the rest are grouped by class.
-- 4,319 translation units (1,655 file-backed, 2,664 class-backed).
+- 4,412 translation units (1,655 file-backed, 2,740 class-backed, plus module/vendor).
+  The unnamed functions belong to none of them: they live in one synthetic bucket that
+  counts toward the *function* totals and never toward the TU totals.
 
 ## Regenerate
 
 ```powershell
 python tools/work/build_identity.py     # -> identity.json
+python tools/work/build_unidentified.py --apply  # -> unidentified.json (needs .ida-exports/)
 python tools/work/build_tu_index.py      # -> tu_index.json  (reads identity.json)
 python tools/work/gen_skeleton.py "<TU key>"   # -> a skeleton on stdout / -o file
 ```
