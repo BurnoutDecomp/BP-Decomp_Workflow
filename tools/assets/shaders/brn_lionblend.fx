@@ -97,6 +97,16 @@
 // saturated: a soft-particle depth fade over `depthRange` world units. That
 // identity is what pins every constant above; nothing here is tuned.
 //
+// ⭐ CORROBORATED INDEPENDENTLY BY THE DWARF. The same six floats reach BeginRendering
+// unchanged from cLionFX::Dispatch @0x82912BA8, whose DWARF declaration (LionFX.h:79)
+// names them afWhiteLevel, afNearPlane, afFarPlane, afDepthFadeDistance,
+// afDepthSamplerOffsetU, afDepthSamplerOffsetV. So f2/f3 really are the projection's
+// near and far planes (which is what makes the constant term vanish), f4 really is a
+// fade DISTANCE, and f5/f6 are the depth sampler's HALF-TEXEL offsets -- confirming
+// oT1.xy is a NORMALISED texture coordinate, not a pixel coordinate. The b5 header had
+// called the last two "half viewport width/height", under which reading
+// ndc*(0.5,-0.5) + (halfW+0.5) would have spanned a single pixel; that name is fixed.
+//
 // FLAG PC-platform leaf: the depth TEXEL packing (channels w / x / y as the
 // 1, 1/256, 1/65536 bytes, with the literal 1.0 in the .z lane paying for the
 // zFar term) is the Xenos depth-surface channel order. The dot product below
