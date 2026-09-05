@@ -269,8 +269,10 @@ param(
                                  # event. CAPABILITY discipline: off by default, cleared every
                                  # run. DELETE-WHEN the exe-side gate is deleted (then the hop is
                                  # unconditional console behaviour and this switch dies with it).
-  [string]$DiagEnv     = ""      # ⭐ PASS ENGINE DIAG VARS THROUGH THE CLEAR. "A=1,B=2" (or bare
-                                 # "A,B", which means =1). The clearing loop below wipes ALL 49 BRN_*
+  [string]$DiagEnv     = ""      # ⭐ PASS ENGINE DIAG VARS THROUGH THE CLEAR. "A=1,B=2" or
+                                 # "A=1 B=2" (or bare "A,B" / "A B", which means =1) -- COMMAS AND
+                                 # SPACES BOTH SEPARATE, see the parser's banner below.
+                                 # The clearing loop below wipes ALL 49 BRN_*
                                  # engine variables on purpose, so exporting one in the parent shell
                                  # CANNOT reach the game -- measured 2026-08-29: a control run set
                                  # BRN_SHOWTIME_WATCH and BRN_TRAFFIC_DIAG and the game saw NEITHER,
@@ -480,9 +482,20 @@ foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA'
 # parameter's banner for why exporting them in the parent shell cannot work). Parsed strictly so a
 # typo FAILS the run instead of silently measuring nothing -- an unset probe variable and a broken
 # probe are indistinguishable in the log, which is the whole failure this switch exists to stop.
+#
+# ⛔⛔ SPACES SEPARATE TOO -- AND THE ECHO USED TO LIE (measured 2026-09-06, traffic wave).
+# This split was `,` ONLY, while the echo below joins the applied list with a SPACE. So
+#     -DiagEnv 'BRN_TRAFFIC_DIAG=1 BRN_IMPULSE_PROBE=1 BRN_CRASH_RESPONSE_DIAG=1'
+# parsed as ONE pair -- name BRN_TRAFFIC_DIAG, value "1 BRN_IMPULSE_PROBE=1 BRN_CRASH_RESPONSE_DIAG=1"
+# -- the name passed the strict regex, the other TWO variables were never set, and the confirmation
+# line printed a string BYTE-IDENTICAL to the one a correct three-variable run prints. A whole 95 s
+# traffic run came back with zero [tanbank] / [absorb] / [impulse] lines and a log that said all
+# three probes were armed; that reads exactly like "the term never fires", which is the conclusion
+# this switch exists to make impossible. The value guard below is the second half of the fix: a
+# value can no longer contain '=' or whitespace, so a mis-split cannot pass silently again.
 $diagEnvApplied = @()
 if (-not [string]::IsNullOrWhiteSpace($DiagEnv)) {
-  foreach ($lsPart in $DiagEnv.Split(',')) {
+  foreach ($lsPart in ($DiagEnv -split '[,\s]+')) {
     $lsTrim = $lsPart.Trim()
     if ($lsTrim -eq "") { continue }
     $lsName = $lsTrim
@@ -494,6 +507,11 @@ if (-not [string]::IsNullOrWhiteSpace($DiagEnv)) {
     }
     if ($lsName -notmatch '^BRN_[A-Z0-9_]+$') {
       Write-Host "[flow] FAIL: -DiagEnv name '$lsName' is not a BRN_* engine variable."
+      exit 1
+    }
+    if ($lsValue -match '[=\s]') {
+      Write-Host "[flow] FAIL: -DiagEnv value for '$lsName' is '$lsValue' -- it contains '=' or whitespace,"
+      Write-Host "[flow]       which means the list did not split. Separate entries with a comma or a space."
       exit 1
     }
     Set-Item -Path ("Env:\" + $lsName) -Value $lsValue
