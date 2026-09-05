@@ -688,6 +688,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiserStaticLayout.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkidProgramsPC.cpp"
+  rem   LionBlendProgramsPC.cpp is the four converted Lion particle blend programs
+  rem   (the guest Xenos blobs unk_8200DD58/DF00/E010/E230 re-authored as D3D9) that
+  rem   BrnGraphics::Im3dBlend::Construct @0x8229B260 uploads -- same job as the skid pair.
+  echo "%SRC%\pc\gcm\renderengine\LionBlendProgramsPC.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkidImmediateModePCLeaf.cpp"
   rem ---- PARTICLES.BUNDLE HANDLERS (2026-09-02, tyre-mark wave): the three resource types
   rem   LoadFXBundle @0x8229C950 needs FIXED UP (registered in CgsResourceTypeRegistration.cpp:
