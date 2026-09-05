@@ -13,6 +13,18 @@ Recovered C++ lives in the [`b5-decomp`](https://github.com/BurnoutDecomp/b5-dec
 - which units are todo, in progress, compiled, reviewed, blocked, or done;
 - how to claim, reconstruct, verify, review, and coordinate work.
 
+## Bugs and public roadmap
+
+Report game bugs and crashes in [b5-decomp issues](https://github.com/BurnoutDecomp/b5-decomp/issues/new/choose).
+Start with its [reporting guide](https://github.com/BurnoutDecomp/b5-decomp/blob/dev/CONTRIBUTING.md)
+for build details, reproduction steps and screenshots. Its
+[milestones](https://github.com/BurnoutDecomp/b5-decomp/milestones) track public outcomes;
+the ledger here continues to track individual TUs and reconstruction claims.
+
+Known workflow CLI, build-script, asset-converter, exporter and CI failures belong in
+[this repository's tracker](https://github.com/BurnoutDecomp/BP-Decomp_Workflow/issues/new/choose).
+If unsure, start in b5-decomp; maintainers can route the report without duplicate issues.
+
 ## Read First
 
 For reconstruction work, read these in order:

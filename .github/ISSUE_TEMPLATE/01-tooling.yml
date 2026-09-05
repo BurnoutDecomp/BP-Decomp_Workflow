@@ -1,0 +1,36 @@
+name: Workflow or tooling problem
+description: Report build-script, converter, exporter, ledger, or CI failures.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For game bugs or uncertain causes, use [b5-decomp issues](https://github.com/BurnoutDecomp/b5-decomp/issues/new/choose).
+        Search existing reports first. Report one problem, and remove credentials/personal details from logs.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Versions and environment
+      description: Give workflow and b5-decomp commit SHAs, local changes, OS and relevant tool versions. For CI, link the failed run.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps and exact commands
+      description: Include working directory and relevant configuration (redacted). Identify input format/platform without uploading game data or reference binaries.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual results
+      description: Explain what should happen and what happened instead. Include frequency and the last working revision if known.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Errors and evidence
+      description: Paste the first error with context, or attach a text log. Include build doctor output for build failures. Add screenshots for visual problems; explain if no output was produced.
+    validations:
+      required: true
