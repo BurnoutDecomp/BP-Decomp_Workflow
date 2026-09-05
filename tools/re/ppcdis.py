@@ -58,6 +58,8 @@ def names():
     extra = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extra_names.json")
     if os.path.exists(extra):
         for a, n in json.load(open(extra)).items():
+            if not a.startswith("0x"):
+                continue          # comment/README keys are allowed in that file
             _names.setdefault(int(a, 16), n)
     return _names
 
@@ -65,6 +67,56 @@ def names():
 def sym(ea):
     n = names().get(ea)
     return n if n else None
+
+
+# ------------------------------------------------------------------------------------------
+# ⭐ VMX128 (2026-09-05, momentum wave). capstone does not know the Xenon VMX128 extension, so
+# every primary-opcode-4/5/6 word used to print as `.long 0x1BC0077C` -- i.e. most of the
+# physics code, which made a hole in that subsystem effectively unreadable and left
+# ApplyCarWorldImpulse @0x82624898 unread for three waves. vmx_table.json is an EMPIRICAL
+# opcode -> mnemonic table harvested from IDA's own printed text across every exported ARTIST
+# function; regenerate it with tools/re/build_vmx_table.py (read its header for the method,
+# the collision measurement, and the two register-field rules that are NOT in the table).
+# ⛔ The table names the OPCODE only. Operand ORDER is per-mnemonic and is where this project
+# loses time -- read tools/re/vmx128.py's header before trusting any operand.
+# ------------------------------------------------------------------------------------------
+_vmx = None
+_VMX_KEY_MASK = 0xFC0007FF          # word & ~(VD128l | VA128l | VB128l)
+
+
+def _vmx_table():
+    global _vmx
+    if _vmx is None:
+        p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vmx_table.json")
+        _vmx = json.load(open(p)) if os.path.exists(p) else {}
+    return _vmx
+
+
+def _bits(w, hi, lo):
+    """PPC bit numbering: bit 0 is the MSB."""
+    return (w >> (31 - lo)) & ((1 << (lo - hi + 1)) - 1)
+
+
+def vmx_text(w):
+    """`mnemonic vD, vA, vB` for a VMX128 word, or None if this is not one we know."""
+    if (w >> 26) not in (4, 5, 6):
+        return None
+    mnem = _vmx_table().get("%08X" % (w & _VMX_KEY_MASK))
+    if mnem is None:
+        return ".long 0x%08X   ; ?VMX%d xo=0x%02X (not in vmx_table.json)" % (w, w >> 26,
+                                                                              _bits(w, 23, 27))
+    if mnem.endswith("128") or mnem.endswith("128."):
+        # true VMX128 form: the high register bits are split across b21/b26/b28..b31.
+        # ⚠️ the LOAD/STORE forms carry PLAIN 5-bit GPR fields instead -- print those as GPRs.
+        vd = _bits(w, 6, 10) | (_bits(w, 28, 29) << 5)
+        vb = _bits(w, 16, 20) | (_bits(w, 30, 31) << 5)
+        if "vx128" in mnem or "vlx128" in mnem or "vrx128" in mnem:   # lvx128/stvx128/lvlx128/...
+            return "%-13s v%d, r%d, r%d" % (mnem, vd, _bits(w, 11, 15), _bits(w, 16, 20))
+        va = _bits(w, 11, 15) | (_bits(w, 26, 26) << 5) | (_bits(w, 21, 21) << 6)
+        return "%-13s vD=%-3d vA=%-3d vB=%-3d" % (mnem, vd, va, vb)
+    # classic VMX inside opcode 4: plain 5-bit fields, printed in RAW FIELD ORDER D,A,B,C.
+    return "%-13s D=%-2d A=%-2d B=%-2d C=%-2d  (raw field order)" % (
+        mnem, _bits(w, 6, 10), _bits(w, 11, 15), _bits(w, 16, 20), _bits(w, 21, 25))
 
 
 def disasm(ea, count=200):
@@ -77,10 +129,11 @@ def disasm(ea, count=200):
         a = ea + 4 * i
         raw = x360rd.rd(a, 4)
         w = struct.unpack('>I', raw)[0]
-        txt = None
-        for ins in md.disasm(raw, a):
-            txt = "%-8s %s" % (ins.mnemonic, ins.op_str)
-            break
+        txt = vmx_text(w)          # VMX128 first -- capstone mis-parses a few of these words
+        if txt is None:
+            for ins in md.disasm(raw, a):
+                txt = "%-8s %s" % (ins.mnemonic, ins.op_str)
+                break
         if txt is None:
             txt = ".long 0x%08X" % w
         note = ""
