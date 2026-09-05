@@ -765,6 +765,18 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   The four VS/PS programs are AUTHORED for D3D9 (the Xenos blobs at unk_8203E118 / E208 /
   rem   E438 / E528 cannot execute here) -- the same treatment CoronaProgramsPC.cpp above gets.
   echo "%SRC%\pc\gcm\renderengine\SunCoronaProgramsPC.cpp"
+  rem ---- QUARTER-RES PARTICLE COMPOSITE CHAIN (2026-09-05). ----
+  rem   BrnRendererMemory::BlitDepth @0x82406EA8 + BlitComposite @0x82406A68 are bodied, and
+  rem   BrnRendererModule::BeginQuarterResBuffer @0x82408C38 / EndRenderAntiAliased @0x82408B00
+  rem   now call them, so the Lion particle pass draws into the CLEARED pool-slot-9 buffer and
+  rem   is composited back over the scene with the console's (1 - alpha) term. The four blit
+  rem   VS/PS programs are AUTHORED for D3D9 (the Xenos blobs at unk_8203DAA8 / DC00 / DCF0 /
+  rem   DE80 cannot execute here) -- the same treatment SunCoronaProgramsPC.cpp above gets, and
+  rem   the only new TU the chain needs: every other symbol it reaches (ProgramBufferPC_Adopt,
+  rem   VertexDescriptor::Initialize, the shadow::Device binders, D3DDevice_Begin/EndVertices,
+  rem   CgsRenderTarget::SetRenderTargetState, RenderTarget::GetDepthTextureState/Resolve and
+  rem   the three state factories) is already on this list.
+  echo "%SRC%\pc\gcm\renderengine\Im2dBlitProgramsPC.cpp"
   echo "%SRC%\GameSource\Graphics\BrnSunCorona.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3dSkyDome.cpp"
   echo "%SRC%\GameSource\Graphics\ImmediateMode\BrnIm3d.cpp"
