@@ -128,6 +128,29 @@ param(
                                  # frames. This is the link BELOW the cache: [tricache] says how
                                  # many triangle batches a car was offered, [traction] says where
                                  # each wheel's probe segment actually went and whether it hit.
+  [string]$CrashSweep  = "",     # opt IN to the DETERMINISTIC CRASH SWEEP: "x,y,z" launch point.
+                                 #   ⭐ THE ANSWER TO "the sim is frame-coupled". -Teleport +
+                                 #   -SteerScript specifies a crash by a WALL-CLOCK drive, so the
+                                 #   frame a steering change lands on moves with the host's frame
+                                 #   rate -- measured 2026-09-05: box_B2/B3 (no frame dump) were
+                                 #   byte-identical to each other and did NOT roll, while box_B1
+                                 #   (same build, same recipe, dumping ON) entered 3 mph slower and
+                                 #   barrel-rolled. This instead places the car AT a chosen speed on
+                                 #   a chosen heading, through the console's own
+                                 #   RequestPlaceOnTrack(pos, dir, SPEED) -- the third argument the
+                                 #   teleport has always passed as 0 -- so impact speed and impact
+                                 #   angle are INPUTS, and the shot cadence is counted in SIM FRAMES.
+                                 #   Needs -Drive (the first shot arms on distance driven, exactly
+                                 #   as -Teleport does); everything after shot 0 is frame-locked.
+  [string]$CrashSweepShots = "", # "h0:s0,h1:s1,..." heading (deg clockwise from +Z) : speed (m/s).
+                                 #   Required with -CrashSweep. Up to 48 shots per boot -- one boot
+                                 #   is a whole sweep, which is what makes a FREQUENCY question
+                                 #   answerable at all inside one 275 s run.
+  [int]$CrashSweepSettle = 0,    # sim frames between shots (0 = the game's default 150 == 2.5 s).
+                                 #   The gate is a STATE gate: the next shot also waits for
+                                 #   ActiveRaceCar::IsCrashing() to go false.
+  [int]$CrashSweepMax  = 0,      # sim frames after which a shot fires anyway (0 = default 900).
+  [double]$CrashSweepArm = 0,    # metres driven before shot 0 (0 = the game's default 8 m).
   [string]$Teleport    = "",     # "x,y,z[,headingDeg]" -- put the player car there, ONCE, through
                                  # the game's own place-on-track path (see the banner below).
   [double]$TeleportArm = 0,      # metres the car must have driven before the teleport fires
@@ -539,7 +562,7 @@ if (-not $MotionProbe -and $TriCacheProbe -le 0 -and $TractionProbe -le 0 -and $
 #   pattern (the nudge is what trips the arm distance).
 #   It is RECORDED in marks.txt next to DIAGENV for the same reason DIAGENV is: two logs are only
 #   comparable when the run carried the same instruments.
-foreach ($v in @('BRN_CAR_TELEPORT','BRN_CAR_TELEPORT_ARM_DISTANCE')) {
+foreach ($v in @('BRN_CAR_TELEPORT','BRN_CAR_TELEPORT_ARM_DISTANCE','BRN_CRASH_SWEEP','BRN_CRASH_SWEEP_SHOTS','BRN_CRASH_SWEEP_SETTLE','BRN_CRASH_SWEEP_MAX','BRN_CRASH_SWEEP_ARM_DISTANCE')) {
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 $teleportText = '(none)'
@@ -568,6 +591,93 @@ if ($Teleport -ne "") {
   if (-not $Drive) {
     Write-Host "[flow] NOTE: -Teleport without -Drive will never fire -- the arm waits for the car"
     Write-Host "       to have MOVED. Pass -Drive (and a -ThrottleScript if you want it to stop again)."
+  }
+}
+
+# ⭐⭐ THE DETERMINISTIC CRASH SWEEP (-CrashSweep, 2026-09-05, roll-frequency wave).
+#   WHY IT IS NOT -Teleport + -SteerScript.  Those two specify a crash by a DRIVE, and a drive is
+#   wall-clock: -SteerScript's entries are seconds, the sim is a fixed 1/60 step, so the frame a
+#   steering change lands on moves with the host frame rate.  Measured on 2026-09-05: box_B2 and
+#   box_B3 (identical, no frame dumping) produced BYTE-IDENTICAL floats and did NOT roll the car,
+#   while box_B1 -- same build, same recipe, frame dumping ON -- entered 3 mph slower and put the
+#   car through a full 360 barrel roll.  Same recipe, different EXPERIMENT.  Note what that pair
+#   also proves: the sim itself is deterministic; the clock was the only stochastic term.
+#   SO THIS REMOVES THE CLOCK.  BRN_CRASH_SWEEP places the car at a launch point AT a chosen speed
+#   on a chosen heading -- one ActiveRaceCar::RequestPlaceOnTrack(pos, dir, speed) per shot, the
+#   console's own call with the console's own third argument -- and counts the shot cadence in
+#   PrePhysicsUpdate calls, i.e. SIM FRAMES.  Impact speed and impact angle stop being emergent and
+#   become inputs, and 48 crashes fit in one boot.
+#   ⛔ WHAT IT CANNOT DO: RequestPlaceOnTrack takes ONE direction, which becomes both the facing and
+#   the velocity, so every shot is a car travelling the way it points.  Angle of incidence: yes.  A
+#   sideways slide or a spinning car meeting a wall: no.  Traffic is not reset between shots either,
+#   so segment the log on the [sweep] shot markers and drop any shot that met a traffic car.
+$sweepText = '(none)'
+if ($CrashSweep -ne "") {
+  $lSw = @($CrashSweep -split ',')
+  if ($lSw.Count -ne 3) {
+    Write-Host "[flow] FAIL: -CrashSweep '$CrashSweep' is not `"x,y,z`"."
+    exit 1
+  }
+  foreach ($lp in $lSw) {
+    $lNum = 0.0
+    if (-not [double]::TryParse($lp.Trim(), [Globalization.NumberStyles]::Float,
+                                [Globalization.CultureInfo]::InvariantCulture, [ref]$lNum)) {
+      Write-Host "[flow] FAIL: -CrashSweep component '$lp' is not a number."
+      exit 1
+    }
+  }
+  if ($CrashSweepShots -eq "") {
+    Write-Host "[flow] FAIL: -CrashSweep needs -CrashSweepShots `"heading:speed,heading:speed,...`"."
+    exit 1
+  }
+  foreach ($lShot in @($CrashSweepShots -split ',')) {
+    $lPair = @($lShot -split ':')
+    if ($lPair.Count -ne 2) {
+      Write-Host "[flow] FAIL: -CrashSweepShots entry '$lShot' is not 'heading:speed' or 'x/y/z/heading:speed'."
+      exit 1
+    }
+    # 'x/y/z/heading' aims THIS shot from its own launch point -- the form that makes an angle
+    # sweep aim every shot at the SAME wall instead of fanning into different world objects.
+    $lPair = @(($lPair[0] -split '/')) + $lPair[1]
+    if ($lPair.Count -ne 2 -and $lPair.Count -ne 5) {
+      Write-Host "[flow] FAIL: -CrashSweepShots entry '$lShot' is not 'heading:speed' or 'x/y/z/heading:speed'."
+      exit 1
+    }
+    foreach ($lp in $lPair) {
+      $lNum = 0.0
+      if (-not [double]::TryParse($lp.Trim(), [Globalization.NumberStyles]::Float,
+                                  [Globalization.CultureInfo]::InvariantCulture, [ref]$lNum)) {
+        Write-Host "[flow] FAIL: -CrashSweepShots component '$lp' is not a number."
+        exit 1
+      }
+    }
+  }
+  $env:BRN_CRASH_SWEEP       = ($lSw | ForEach-Object { $_.Trim() }) -join ','
+  $env:BRN_CRASH_SWEEP_SHOTS = (@($CrashSweepShots -split ',') | ForEach-Object { $_.Trim() }) -join ','
+  $sweepText = "$($env:BRN_CRASH_SWEEP) shots=$($env:BRN_CRASH_SWEEP_SHOTS)"
+  if ($CrashSweepSettle -gt 0) {
+    $env:BRN_CRASH_SWEEP_SETTLE = "$CrashSweepSettle"
+    $sweepText += " settle=$CrashSweepSettle"
+  }
+  if ($CrashSweepMax -gt 0) {
+    $env:BRN_CRASH_SWEEP_MAX = "$CrashSweepMax"
+    $sweepText += " max=$CrashSweepMax"
+  }
+  if ($CrashSweepArm -gt 0) {
+    $env:BRN_CRASH_SWEEP_ARM_DISTANCE = ("{0}" -f $CrashSweepArm.ToString([Globalization.CultureInfo]::InvariantCulture))
+    $sweepText += " arm=$($env:BRN_CRASH_SWEEP_ARM_DISTANCE)m"
+  }
+  Write-Host "[flow] CRASH SWEEP armed: $sweepText"
+  Write-Host "       Each shot is ONE RequestPlaceOnTrack(pos, heading, SPEED) -- the console's own"
+  Write-Host "       call. Shot cadence is counted in SIM FRAMES, so the sweep replays identically"
+  Write-Host "       whatever the host frame rate does. NOT a default run."
+  if (-not $Drive) {
+    Write-Host "[flow] NOTE: -CrashSweep without -Drive will never fire -- shot 0 arms on distance"
+    Write-Host "       driven. Pass -Drive."
+  }
+  if ($Teleport -ne "") {
+    Write-Host "[flow] FAIL: -CrashSweep and -Teleport both place the player car. Pick one."
+    exit 1
   }
 }
 
