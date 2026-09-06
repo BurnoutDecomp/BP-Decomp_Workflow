@@ -693,6 +693,13 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnLionBlendIm3d.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnLionBlendVertex.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\FXBuckets.cpp"
+  rem ---- SPARKS (2026-09-06): the grinding-metal spark family. BrnSparkRenderer.cpp
+  rem   carries SparkArray / SparkArray::SparkBank / SparkRenderer plus the static
+  rem   SparkArray::maTextures table LoadFXBundle publishes into; the two siblings are
+  rem   SparkFrameDataSet::GetFrame and the FXBucket<BrnSpark,4> instantiation.
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnSparkRenderer.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnSparkRenderer_SparkFrameDataSet.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\FXBuckets_BrnSpark.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiserStaticLayout.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkidProgramsPC.cpp"
