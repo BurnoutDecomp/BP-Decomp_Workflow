@@ -42,12 +42,36 @@ Write-Host ("[build] waiting for the box lock{0} ..." -f $(if ($Label) { " ($Lab
 Enter-BoxLock -TimeoutSec $TimeoutSec -Label ("build" + $(if ($Label) { ":$Label" } else { "" }))
 Write-Host "[build] got the box. Building (log -> $log)"
 
+# ⭐⭐ THE EXE STAGING LOCK (2026-09-06, parallel slots -- lane harness2).
+#   WHICH LOCKS A BUILD TAKES, AND WHY IT IS NOT ALL OF THEM.
+#   The box lock above is now PER SLOT (`Local\BurnoutPC_FlowRun[_<n>]`), and this script keeps
+#   taking only SLOT 0's -- deliberately. A slot run executes its OWN COPY of the exe out of
+#   build\game_slots\<n>\, so a link into build\game\Burnout_PC.exe can neither be blocked by it
+#   (the copy holds the lock, not the original) nor disturb it (its bytes are not being written).
+#   Taking every slot lock would only make a build wait for runs it cannot affect.
+#   ⛔ WHAT DOES NEED SERIALISING is the moment a slot COPIES that exe in: a copy taken mid-link
+#   is a slot booting a half-written binary, which fails in ways that look nothing like a build
+#   failure. `slots.ps1` takes this same narrow mutex around its copy, so the two cannot overlap.
+#   Order is box-then-stage in both scripts, so there is no cycle.
+#   ⚠️ CONSEQUENCE, STATED PLAINLY: a slot run that started BEFORE a build keeps running the exe
+#   it started with. That is correct (a measurement must not change under itself) and it is
+#   attributable -- the slot carries the matching Burnout_PC.exe.provenance.json, which flow_run
+#   prints as `[flow] exe <sha> b5=<head>` on every run.
+$lStage = New-Object System.Threading.Mutex($false, "Local\BurnoutPC_ExeStage")
+$lStageGot = $false
+try { $lStageGot = $lStage.WaitOne([TimeSpan]::FromSeconds($TimeoutSec)) }
+catch [System.Threading.AbandonedMutexException] { $lStageGot = $true }
+if (-not $lStageGot) {
+  Write-Host "[build] FAIL: the exe staging lock stayed busy for $TimeoutSec s (a slot is copying the exe in)."
+  exit 1
+}
+
 $t0 = Get-Date
 Push-Location $root
 try {
   & $py (Join-Path $root 'tools\build\build.py') exe *> $log
   $rc = $LASTEXITCODE
-} finally { Pop-Location }
+} finally { Pop-Location; $lStage.ReleaseMutex(); $lStage.Close() }
 $secs = ((Get-Date) - $t0).TotalSeconds
 
 $lines = Get-Content $log

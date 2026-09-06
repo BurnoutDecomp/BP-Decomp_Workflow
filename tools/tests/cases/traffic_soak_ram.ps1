@@ -39,6 +39,36 @@
 # gated again, and 'return 0' has been true the whole time (ReturnPhysicalVehicleToTraffic's
 # 1.5 m target-proximity test still never passes; that is a separate, still-open gap).
 # Run it:   powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case traffic_soak_ram -ExpectFail -Label pre-fix
+#
+# ⭐⭐ SHORTENED 2026-09-06 (lane harness2). WHAT CHANGED AND WHAT DID NOT.
+#   The Run block below now carries `SkipIntro` and `AcceptGap`, and a smaller `MaxSeconds`.
+#   Nothing else about the scenario moved and NO CHECK was touched.
+#     SkipIntro  passes the CONSOLE's own "-skipvideos" command-line latch (BrnMain.cpp:434 ->
+#                BootVideos::Update's soft-reboot exit) so the EA-Franchise and Criterion VP6
+#                logos are not played. It is not a harness bypass and it is not new game code.
+#     AcceptGap  is HARNESS latency, not a game gate: the Accept pump used to press every 3.0 s
+#                at car select, and the junkyard leg of a returning boot was measurably two
+#                consecutive pump periods long (carsel 16.5s -> livery 19.9s -> accept 23.0s).
+#   MEASURED, same build, same scenario: boot-to-DRIVING 23.0 s -> 16.2 s.
+#   MaxSeconds is cut by that saving plus the slack this case's own schedule shows it never used.
+#   ⛔⛔ 60 -> 145, MEASURED: THIS SOAK'S WITNESS IS RARE AND ITS RATE IS PER UNIT OF WORLD TIME.
+#   At MaxSeconds 60 (run 20260906_140916) the case went RED on "world physics-slot occupancy
+#   stays off the 25-slot ceiling" -- not because occupancy climbed, but because
+#   `[T3-demote] ... physSlots <n>` NEVER FIRED, and a LogValue whose witness produced no sample
+#   fails by design rather than passing vacuously. The banked 150 s run got exactly THREE samples
+#   out of ~121 s of driving, i.e. roughly one demote per 40 s of world time. So the budget here
+#   buys samples, and 145 is the number that keeps the banked run's world time while still taking
+#   the whole 6.8 s boot saving off the front.
+#   ⛔⛔ AND THEN 145 FAILED THE SAME WAY (run 20260906_141604, still zero `[T3-demote]`), SO A
+#   CONTROL WAS RUN: this case's ORIGINAL scenario -- MaxSeconds 150, no SkipIntro, no AcceptGap,
+#   slot 0, the exact banked recipe -- run 20260906_141903
+#   under scratch/bugtest/runs/traffic_soak_ram_orig/ . IT FAILS IDENTICALLY -- the witness never
+#   fired, 92 [T4-hit]/[T5-arm]/[T3-demote] lines, DRIVE path 87 m. => THE RED IS NOT THE SHORTENING.
+#   It is either this witness being genuinely rare on the current build or another lane's change
+#   landing after this case was banked at 09:30; either way it belongs to the traffic lane, and
+#   the control run is the evidence that separates the two. The shortening is kept because it
+#   demonstrably changes nothing about the outcome.
+#
 @{
   Name    = 'traffic_soak_ram'
   Area    = 'traffic'
@@ -47,7 +77,9 @@
   Run     = @{
     Drive          = $true
     MotionProbe    = $true
-    MaxSeconds     = 150
+    MaxSeconds     = 145
+    SkipIntro     = $true      # the console -skipvideos latch (see the banner)
+    AcceptGap     = 1.0        # harness pump latency, not a game gate
     Teleport       = '3390.2,0.2,-1620.0,182'
     ThrottleScript = '0:accel'
   }

@@ -269,6 +269,69 @@ param(
                                  # event. CAPABILITY discipline: off by default, cleared every
                                  # run. DELETE-WHEN the exe-side gate is deleted (then the hop is
                                  # unconditional console behaviour and this switch dies with it).
+  [int]$Slot           = 0,      # ⭐⭐ PARALLEL SLOTS (2026-09-06, lane harness2). 0 == today's
+                                 #   behaviour, BYTE FOR BYTE: build\game\Burnout_PC.exe, the log
+                                 #   at build\game\BrnGame.log, the unsuffixed
+                                 #   Local\BurnoutPC_* event names, the unsuffixed box mutex, and
+                                 #   a kill sweep over every Burnout_PC on the box. Any n > 0 runs
+                                 #   build\game_slots\<n>\Burnout_PC.exe -- a COPY of the same
+                                 #   build, refreshed here at launch -- with the working directory
+                                 #   still build\game, so the 5.9 GB data set is shared live and
+                                 #   never duplicated (see tools\tests\slots.ps1's banner).
+                                 #   Everything a second instance would otherwise fight over is
+                                 #   suffixed with the slot id: the game's single-instance mutex
+                                 #   (WITHOUT which a second instance simply quits), the harness
+                                 #   input channels, the assert-release event, the Memcard
+                                 #   directory, this script's box lock, and the kill sweep, which
+                                 #   becomes a match on the process's IMAGE PATH rather than its
+                                 #   name. The game side is BRN_HARNESS_SLOT (CgsHarnessSlot.h).
+                                 #   ⚠️ The slot's exe is refreshed from build\game at launch under
+                                 #   a separate staging mutex that build_exe_locked.ps1 holds for
+                                 #   the whole link, so a slot can never boot a half-written exe.
+  [switch]$SkipIntro,            # ⭐⭐ SKIP THE BOOT BRANDING MOVIES. This is the CONSOLE's own
+                                 #   mechanism, not a harness bypass: TUB's WinMain @0x79D580
+                                 #   latches "-skipvideos" off the command line into the game
+                                 #   module, and BrnGui::BootVideos::Update takes the SAME exit it
+                                 #   already takes for a soft reboot -- post the phase-complete
+                                 #   command 70 and jump to DONE (BrnBootVideos.cpp:215-224). So
+                                 #   this passes "-skipvideos" on the command line and nothing
+                                 #   else; no env var, no new game code, no state the console
+                                 #   does not have. It removes the EA-Franchise and Criterion VP6
+                                 #   logos (~11 s + ~4 s of video) from the boot.
+                                 #   ⛔ It does NOT skip the legal/title screen or the junkyard:
+                                 #   BootLegal still runs its stage machine and the Accept pump
+                                 #   still presses through car select.
+                                 #   ⛔ NOT for a case that is ABOUT the boot UI -- a run that
+                                 #   never plays the logos cannot measure them.
+  [double]$AcceptGap   = 0,      # ⭐ THE ACCEPT-PUMP CADENCE at car select, in seconds. 0 keeps
+                                 #   the historical 3.0 s. MEASURED 2026-09-06: the junkyard leg
+                                 #   of a returning boot is carsel 16.5s -> livery 19.9s ->
+                                 #   accept 23.0s, i.e. two consecutive 3.1-3.4 s gaps that are
+                                 #   the PUMP PERIOD and not the game -- the screen was ready and
+                                 #   the harness was asleep. Lowering it is pure harness latency,
+                                 #   not a game bypass, so a case that shortens this measures the
+                                 #   same junkyard flow with less waiting in it.
+  [switch]$Audio,                # ⭐⭐ LET THIS RUN MAKE NOISE. A harness run is MUTED BY DEFAULT
+                                 #   (BRN_AUDIO_MUTE=1, set in the environment block below beside
+                                 #   BRN_INPUT_ALLOW_BACKGROUND): eleven lanes' worth of cases is
+                                 #   half an hour of Burnout playing out loud over whatever the
+                                 #   box's owner is doing, and none of it is ever listened to.
+                                 #   ⭐ THE MUTE IS ONE SetVolume(0) ON THE XAUDIO2 MASTERING
+                                 #   VOICE (CgsAudioOutputPC.cpp) -- the last gain in the graph.
+                                 #   It does NOT skip audio init, stub XAudio2 or drop a fill:
+                                 #   the device is really opened, every decoder, AEMS program and
+                                 #   engine-note state machine runs exactly as before, and the
+                                 #   sound lanes' witnesses do not move. A muted run and an
+                                 #   audible one differ in one float in the OS mixer, and the
+                                 #   game prints that float on every device open
+                                 #   (`master volume=0.000`), so it is checkable.
+                                 #   -Audio turns the mute OFF for a case that needs to be heard.
+                                 #   ⛔ It is NOT in the wipe list below, for the same reason
+                                 #   BRN_INPUT_ALLOW_BACKGROUND is not: this script SETS it. The
+                                 #   -Audio arm clears it explicitly so a value exported in the
+                                 #   parent shell cannot make a "-Audio" run silent either way.
+                                 #   ⓘ Launching Burnout_PC.exe by hand (Explorer, `build run`)
+                                 #   is unaffected: nothing but the harness sets the variable.
   [string]$DiagEnv     = ""      # ⭐ PASS ENGINE DIAG VARS THROUGH THE CLEAR. "A=1,B=2" or
                                  # "A=1 B=2" (or bare "A,B" / "A B", which means =1) -- COMMAS AND
                                  # SPACES BOTH SEPARATE, see the parser's banner below.
@@ -285,8 +348,23 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
-$exe  = Join-Path $root "build\game\Burnout_PC.exe"
-$log  = Join-Path $root "build\game\BrnGame.log"
+
+# ⭐⭐ THE SLOT (see -Slot's banner). THREE paths come out of it and they are NOT the same
+#   directory once n > 0:
+#     $gameDir  build\game -- ALWAYS. It is the WORKING DIRECTORY every instance is launched
+#               with, because CgsHardwareInitPC.cpp:320 seeds macFOPENPath from
+#               GetCurrentDirectory(): the CWD *is* the data path, so one 5.9 GB data set
+#               serves every slot and nothing is ever duplicated or allowed to go stale.
+#     $exeDir   where THIS instance's binary lives: build\game for slot 0, build\game_slots\<n>
+#               for a slot. A running game holds an exclusive lock on its own image, so a slot
+#               must run a copy or `build exe` could never link while any slot ran.
+#     $log      BrnGame.log NEXT TO THE EXE (CgsLog.cpp:15 uses GetModuleFileName, not the CWD),
+#               which is precisely why a per-slot exe directory yields a per-slot log for free.
+$gameDir = Join-Path $root "build\game"
+$slotTag = if ($Slot -gt 0) { "_$Slot" } else { "" }
+$exeDir  = if ($Slot -gt 0) { Join-Path $root "build\game_slots\$Slot" } else { $gameDir }
+$exe     = Join-Path $exeDir "Burnout_PC.exe"
+$log     = Join-Path $exeDir "BrnGame.log"
 if ($OutDir   -eq "") { $OutDir   = Join-Path $root ("scratch\flow_run\" + (Get-Date).ToString('yyyyMMdd_HHmmss')) }
 # ⛔ PER-RUN BY DEFAULT (2026-08-29). This used to default to a SHARED scratch\flow_frames,
 # which the block further down EMPTIES at the start of every run -- so each run destroyed the
@@ -300,7 +378,12 @@ if ($OutDir   -eq "") { $OutDir   = Join-Path $root ("scratch\flow_run\" + (Get-
 # Disk stays bounded because dumping is opt-in (-Frames): a default run writes none.
 if ($FrameDir -eq "") { $FrameDir = Join-Path $OutDir "frames" }
 
-if (-not (Test-Path $exe)) { Write-Host "[flow] FAIL: no exe at $exe -- build first."; exit 1 }
+# Slot 0 must have its exe now; a SLOT's copy is staged below, after the lock and the kill
+# sweep (slots.ps1 refuses to overwrite a live one, so the order is load-bearing).
+if ($Slot -le 0 -and -not (Test-Path $exe)) { Write-Host "[flow] FAIL: no exe at $exe -- build first."; exit 1 }
+if ($Slot -gt 0 -and -not (Test-Path (Join-Path $gameDir 'Burnout_PC.exe'))) {
+  Write-Host "[flow] FAIL: no exe at $gameDir\Burnout_PC.exe -- build first (a slot is a COPY of it)."; exit 1
+}
 if (Test-Path $OutDir) { Remove-Item -Recurse -Force $OutDir }
 New-Item -ItemType Directory -Force $OutDir | Out-Null
 
@@ -321,7 +404,7 @@ public static class KBFLOW {
 # THIS script, here it is one of the other eight scripts in this directory that touch the game.
 # The measured history, and the release-on-exit semantics, live in _box_lock.ps1.
 . "$PSScriptRoot\_box_lock.ps1"
-Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:$NoLock -Label "flow_run"
+Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:$NoLock -Label "flow_run" -Slot $Slot
 
 # ⛔⛔ KILL STALE INSTANCES **AND VERIFY THE KILL** (pauseresume wave, 2026-08-27).
 # This used to be a single fire-and-forget `Stop-Process -Force`, and it silently FAILS on this
@@ -332,9 +415,31 @@ Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:$NoLock -Label "flow_run"
 # reads exactly like a boot REGRESSION in the build under test. ⭐ A measurement harness that
 # can be starved by its own leftovers reports the starvation as a property of the game. Escalate
 # to `taskkill /T` and REFUSE TO RUN rather than produce a quietly incomparable run.
+#
+# ⭐⭐ AND IT IS PER SLOT NOW (2026-09-06, lane harness2). The sweep below used to be
+# `Get-Process Burnout_PC` -- EVERY game on the box -- which is exactly right when there can only
+# be one, and catastrophic the moment there can be several: slot 2 launching would kill slot 1's
+# live measurement, and slot 1 would report the death as a crash in the build under test. That is
+# the same failure _box_lock.ps1 exists to prevent, one level down, and a lock alone cannot fix it
+# because the slots are DELIBERATELY not serialised against each other.
+# ⛔ A process NAME cannot tell one slot's game from another's; only its IMAGE PATH can
+# (Win32_Process.ExecutablePath). Slot 0 keeps the old, wider behaviour verbatim -- every
+# Burnout_PC on the box -- so a default run still clears leftovers of any kind, including a
+# stranded slot's.
+function Get-RunScopeProcesses {
+  if ($Slot -le 0) { return @(Get-Process Burnout_PC -ErrorAction SilentlyContinue) }
+  $lsDir = $exeDir.TrimEnd('\')
+  try {
+    $lIds = @(Get-CimInstance Win32_Process -Filter "Name='Burnout_PC.exe'" -ErrorAction Stop |
+              Where-Object { $_.ExecutablePath -and
+                             ([IO.Path]::GetDirectoryName($_.ExecutablePath).TrimEnd('\')) -ieq $lsDir } |
+              ForEach-Object { $_.ProcessId })
+    return @($lIds | ForEach-Object { Get-Process -Id $_ -ErrorAction SilentlyContinue })
+  } catch { return @() }
+}
 $staleTries = 0
 while ($true) {
-  $stale = @(Get-Process Burnout_PC -ErrorAction SilentlyContinue)
+  $stale = @(Get-RunScopeProcesses)
   if ($stale.Count -eq 0) { break }
   $staleTries++
   if ($staleTries -gt 5) {
@@ -343,7 +448,7 @@ while ($true) {
     Write-Host "[flow]       would blame the build. Kill them by hand and re-run."
     exit 1
   }
-  Write-Host "[flow] killing $($stale.Count) stale Burnout_PC process(es) (attempt $staleTries)"
+  Write-Host "[flow] killing $($stale.Count) stale Burnout_PC process(es) (attempt $staleTries)$(if ($Slot -gt 0) { " in slot $Slot ($exeDir)" })"
   foreach ($sp in $stale) {
     Stop-Process -Id $sp.Id -Force -ErrorAction SilentlyContinue
     if ($staleTries -ge 2) { & taskkill /PID $sp.Id /F /T *>$null }
@@ -351,6 +456,32 @@ while ($true) {
   Start-Sleep -Seconds 2
 }
 Start-Sleep -Seconds 1
+
+# ⭐ STAGE THE SLOT'S EXE. Only now -- the slot's game is provably dead, so slots.ps1 will not
+#   refuse, and the copy happens under the staging mutex build_exe_locked.ps1 holds for the whole
+#   link, so a slot can never boot half a binary. Slot 0 does none of this.
+if ($Slot -gt 0) {
+  $lSlotsScript = Join-Path $root 'tools\tests\slots.ps1'
+  # ⛔ -NoProfileSeed: staging must NEVER create a Memcard_<n>\Profile.sav. An absent one is a
+  #   deliberate FreshProfile park by run_case, and re-seeding it here silently booted a
+  #   first-boot case as a RETURNING player (see slots.ps1's -NoProfileSeed banner: it cost
+  #   camera_shake_smash two runs, both of which read as a game regression).
+  & powershell -ExecutionPolicy Bypass -File $lSlotsScript -Slot $Slot -NoProfileSeed 2>&1 |
+      ForEach-Object { Write-Host "[flow]   $_" }
+  if (-not (Test-Path $exe)) {
+    Write-Host "[flow] FAIL: slot $Slot has no exe at $exe after staging -- see the [slots] lines above."
+    exit 1
+  }
+  $env:BRN_HARNESS_SLOT = "$Slot"
+  Write-Host "[flow] SLOT ${Slot}: exe=$exe  cwd=$gameDir  log=$log  BRN_HARNESS_SLOT=$Slot"
+  Write-Host "[flow]   every session-global name the game opens carries the '$slotTag' suffix"
+  Write-Host "[flow]   (single-instance mutex, input channels, assert release, Memcard_$Slot)."
+} else {
+  # Slot 0 must run under NO slot id, or the game would suffix its names and this script's
+  # unsuffixed channels would press nothing -- a silent no-op run, the exact failure the
+  # DiagEnv wipe banner below exists to stop.
+  Remove-Item Env:\BRN_HARNESS_SLOT -ErrorAction SilentlyContinue
+}
 # ⭐ EXE PROVENANCE (2026-08-28). `build/game/Burnout_PC.exe` is a CONTESTED path: waves build in
 # isolated shadow roots and stage their exe here, so the binary at this path is routinely SOMEONE
 # ELSE'S TREE. That bit three times in one day -- a wave found no exe at all and staged its own, two
@@ -380,6 +511,17 @@ if (Test-Path $log) { Remove-Item $log -Force }
 # --- environment: a DEFAULT run, with every override explicitly cleared -------------------
 $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 
+# ⭐⭐ SILENT BY DEFAULT (2026-09-06, lane quiet). See the -Audio parameter's banner for what the
+# mute is and, more importantly, what it is not. Set here rather than in the wipe list because
+# this script OWNS the variable; the -Audio arm clears it explicitly so an exported value in the
+# parent shell cannot decide either way.
+if ($Audio) {
+  Remove-Item Env:\BRN_AUDIO_MUTE -ErrorAction SilentlyContinue
+  Write-Host "[flow] AUDIO ON (-Audio): this run will make noise on the box's default output device."
+} else {
+  $env:BRN_AUDIO_MUTE = "1"
+}
+
 # ⛔⛔ THE ASSERT RELEASE HAS TO BE AN EVENT, NOT A KEYSTROKE (traffic-verify wave, 2026-08-27).
 # The poll loop below already TRIES to dismiss every assert, by tapping END three times. That tap
 # goes through keybd_event, which delivers to the FOCUSED window -- so on an unattended box, where
@@ -401,7 +543,7 @@ $env:BRN_INPUT_ALLOW_BACKGROUND = "1"
 $assertEventMode = if ($ReleaseAsserts) { [System.Threading.EventResetMode]::ManualReset }
                    else                 { [System.Threading.EventResetMode]::AutoReset }
 $evAssertRelease = New-Object System.Threading.EventWaitHandle(
-                     $false, $assertEventMode, "Local\BurnoutPC_Assert_Release")
+                     $false, $assertEventMode, ("Local\BurnoutPC_Assert_Release" + $slotTag))
 if ($ReleaseAsserts) {
   $evAssertRelease.Set() | Out-Null
   Write-Host "[flow] ⚠️ -ReleaseAsserts: assert gate held OPEN for the whole run -- 'asserts=' is NOT comparable with a default run"
@@ -928,11 +1070,15 @@ if ($Frames) {
   # shared repo's working tree at the same time.
   # ⭐ Refuse up front instead: a run that declines to start is recoverable, a full disk mid-write is
   # not. -MinFreeGB overrides for a deliberately large capture.
+  # ⚠️ THE LOCAL WAS NAMED $root AND SHADOWED THE REPO ROOT (fixed 2026-09-06, lane harness2).
+  # Every use of $root BELOW this block would have got a drive LETTER instead of the checkout
+  # path -- harmless only because nothing below happened to need it yet. Renamed rather than
+  # left as a trap for the next switch that does.
   $drv = (Get-Item $FrameDir -ErrorAction SilentlyContinue)
-  $root = if ($drv) { $drv.PSDrive.Name } else { (Split-Path -Qualifier $FrameDir).TrimEnd(':') }
-  $free = try { (Get-PSDrive $root -ErrorAction Stop).Free / 1GB } catch { $null }
+  $lsFrameDrive = if ($drv) { $drv.PSDrive.Name } else { (Split-Path -Qualifier $FrameDir).TrimEnd(':') }
+  $free = try { (Get-PSDrive $lsFrameDrive -ErrorAction Stop).Free / 1GB } catch { $null }
   if ($free -ne $null -and $free -lt $MinFreeGB) {
-    Write-Host ("[flow] FAIL: only {0:f1} GB free on {1}: -- refusing to start a FRAME DUMP." -f $free, $root)
+    Write-Host ("[flow] FAIL: only {0:f1} GB free on {1}: -- refusing to start a FRAME DUMP." -f $free, $lsFrameDrive)
     Write-Host  "[flow]       A dump can reach 16 GB; filling the volume mid-run can break other"
     Write-Host  "[flow]       waves' builds and the shared working tree, not just this measurement."
     Write-Host ("[flow]       Free some space, or pass -MinFreeGB below {0:f0} if you accept the risk." -f $free)
@@ -966,12 +1112,12 @@ function Newest-Frame {
   return $f[-1].Name
 }
 
-$evAccept = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_Accept")
+$evAccept = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, ("Local\BurnoutPC_Input_Accept" + $slotTag))
 
 # The offline-pause channel (action 46 == KI_ACTION_PAUSE_MAIN_MAP). AUTO-RESET, like the four
 # menu channels: this is a TAP, not a hold. Created unconditionally so the game always finds it;
 # a channel never Set() is a key never pressed.
-$evPauseMap = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_PauseMap")
+$evPauseMap = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, ("Local\BurnoutPC_Input_PauseMap" + $slotTag))
 
 # ⛔⛔ THE RESUME CHANNEL IS *Stop*, NOT *Accept* -- and it was Accept until 2026-08-28, which is
 # why -UnpauseAt silently stopped working and every -PauseAt run since the input-vocabulary
@@ -987,7 +1133,7 @@ $evPauseMap = New-Object System.Threading.EventWaitHandle($false, [System.Thread
 #   (Escape / pad-B), the canonical back-out. Tapping Start (45) exits too; Accept (49) never will.
 # ⭐ THE LESSON, again: a vocabulary repair is a repair of a SHARED table. Grep every consumer of
 #   the old id -- this exit arm was written three days before the repair and nothing re-ran it.
-$evStop = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_Stop")
+$evStop = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, ("Local\BurnoutPC_Input_Stop" + $slotTag))
 
 # ⭐ THE OTHER OFFLINE PAUSE. The console has TWO, and they are different screens:
 #   action 46 GUI_BACK  -> InGame::PauseGame(true, FALSE) -> OpenMainMap()       -> CN_MAP_MAIN
@@ -996,7 +1142,7 @@ $evStop = New-Object System.Threading.EventWaitHandle($false, [System.Threading.
 # -PauseTarget picks which one -PauseAt taps. 'driver' is the START button, i.e. what a
 # player actually presses to pause, and the screen that DRAWS (CN_MAP_MAIN's base half is
 # still parked).
-$evStart = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, "Local\BurnoutPC_Input_Start")
+$evStart = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::AutoReset, ("Local\BurnoutPC_Input_Start" + $slotTag))
 
 # ⭐ THE PAUSE/RESUME SCHEDULES. -PauseAt / -UnpauseAt are COMMA-SEPARATED second marks on the
 # DRIVING time base, so one run can exercise the pause REPEATEDLY -- which is the only way to
@@ -1108,20 +1254,20 @@ if ($script:pauseTimes.Count -gt 0) {
 #   always finds them; a channel that is never Set() is a control that is never pressed, which is
 #   exactly the "resting car undisturbed" case.  Named after the EGameInputActions slot each one
 #   fills, so the game side's switch and this list can be diffed by eye.
-$evAccel = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_Accelerate")
-$evBrake = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_Brake")
-$evHandB = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_HandBrake")
-$evStrL  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_SteerLeft")
-$evStrR  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_SteerRight")
+$evAccel = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_Accelerate" + $slotTag))
+$evBrake = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_Brake" + $slotTag))
+$evHandB = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_HandBrake" + $slotTag))
+$evStrL  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_SteerLeft" + $slotTag))
+$evStrR  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_SteerRight" + $slotTag))
 # ⭐⭐ THE TWO SHOULDER CHANNELS (showtime S7b-a, 2026-08-27).  MANUAL-RESET, i.e. a HOLD, because
 #   ControllerInput::mbCrashModePressed (+0x42) is `(row 54 HELD) && (row 55 HELD)` -- the game samples
 #   BOTH at once, so a tap channel cannot express the gesture.  Created unconditionally, like the five
 #   above; never Set() unless -Showtime asks for it.
-$evShldL = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_ShoulderL")
-$evShldR = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_ShoulderR")
+$evShldL = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_ShoulderL" + $slotTag))
+$evShldR = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_ShoulderR" + $slotTag))
 # MANUAL-RESET like the other driving rows: Set() is press, Reset() is release, and the pressed
 # EDGE between them is what mbBoostBounce is built from. See the -Boost banner in param().
-$evBoost = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, "Local\BurnoutPC_Input_Boost")
+$evBoost = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_Boost" + $slotTag))
 foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
 
 # ⛔⛔ RELEASE THE HOLDS ON A FAILURE PATH TOO (showtime cross-run hazard, 2026-08-29).
@@ -1205,7 +1351,23 @@ if ($Drive) {
 
 # --- launch ------------------------------------------------------------------------------
 $t0 = Get-Date                      # THE launch instant; the gates' freshness cut-off.
-$p  = Start-Process -FilePath $exe -WorkingDirectory (Split-Path $exe) -PassThru
+# ⭐ THE WORKING DIRECTORY IS THE DATA PATH, NOT THE EXE PATH (see the $gameDir banner up top).
+#   For slot 0 those are the same directory and this line is byte-identical to what it replaced;
+#   for a slot the exe lives in build\game_slots\<n>\ while the CWD stays build\game, which is
+#   what lets every slot read one live 5.9 GB data set.
+# ⭐ -SkipIntro is the CONSOLE's own "-skipvideos" command-line latch (BrnMain.cpp:434 ->
+#   BootVideos::Update's soft-reboot exit). Nothing else is ever put on the command line, so a
+#   default run still launches with none at all.
+$lLaunchArgs = @()
+if ($SkipIntro) { $lLaunchArgs += '-skipvideos' }
+if ($lLaunchArgs.Count -gt 0) {
+  Write-Host ("[flow] SKIP INTRO: launching with {0} -- the console's own boot-video latch; the EA" -f ($lLaunchArgs -join ' '))
+  Write-Host  "       Franchise + Criterion logos are skipped exactly as a soft reboot skips them."
+  Write-Host  "       ⛔ NOT a run that can measure the boot movies or the loading fade into them."
+  $p  = Start-Process -FilePath $exe -WorkingDirectory $gameDir -ArgumentList $lLaunchArgs -PassThru
+} else {
+  $p  = Start-Process -FilePath $exe -WorkingDirectory $gameDir -PassThru
+}
 Write-Host ("[flow] pid={0} frames={1} hold={2} max={3}s  RUNSTART {4}" -f `
             $p.Id, [bool]$Frames, [bool]$HoldCarSelect, $MaxSeconds, $t0.ToString('o'))
 
@@ -1355,7 +1517,23 @@ $lastAccept = Get-Date
 $runawayLog = $false
 $seenAsserts = 0
 $phase = 'BOOT'          # BOOT -> FLYBY (quiet) -> CARSELECT (pump again) -> DRIVING
-$acceptGap = 2.0
+# ⭐ THE ACCEPT-PUMP CADENCE (see -AcceptGap's banner). The two historical values -- 2.0 s while
+#   booting, 3.0 s once car select is up -- are unchanged at the default (-AcceptGap 0), so slot 0
+#   with no switch presses Accept on exactly the beat every banked run was measured on. A non-zero
+#   -AcceptGap replaces BOTH: it is harness latency, not a game gate, and the junkyard leg is
+#   measurably two consecutive pump periods long.
+$acceptGapBoot   = if ($AcceptGap -gt 0) { $AcceptGap } else { 2.0 }
+$acceptGapCarSel = if ($AcceptGap -gt 0) { $AcceptGap } else { 3.0 }
+# ⛔⛔ THE LOOP VARIABLE IS $acceptGapNow, NOT $acceptGap, AND THAT IS NOT COSMETIC.
+#   POWERSHELL VARIABLE NAMES ARE CASE-INSENSITIVE, so the pre-existing poll-loop variable
+#   `$acceptGap` IS the parameter `$AcceptGap`. The loop assigns it 3.0 on the BOOT->CARSELECT
+#   promotion, which SILENTLY REWRITES THE PARAMETER -- and the ACCEPTGAP line at the bottom then
+#   reported `[-AcceptGap 3 -- ...]` on a run that was passed no -AcceptGap at all (measured:
+#   scratch/bugtest/runs/traffic_soak_ram_orig/20260906_141903, a deliberate default-scenario
+#   CONTROL run whose whole purpose was to be comparable with a banked one). The behaviour was
+#   right and the summary was wrong, which is the worse of the two: marks.txt is what a later
+#   reader uses to decide whether two runs are comparable.
+$acceptGapNow = $acceptGapBoot
 $marks = @{}
 $markFrame = @{}
 $drivingAt = Get-Date    # set for real on the BOOT->...->DRIVING transition
@@ -1551,7 +1729,7 @@ while ($true) {
     #   but a RETURNING boot has no new-profile intro and therefore no flyby, while (since the
     #   junkyard-entry fix) it does reach car select. Without this arm its car-select screen
     #   would never promote and the Accept pump would never switch to the 3 s cadence.
-    if (($phase -eq 'BOOT' -or $phase -eq 'FLYBY') -and $marks.ContainsKey('carsel')) { $phase = 'CARSELECT'; $acceptGap = 3.0; $lastAccept = Get-Date }
+    if (($phase -eq 'BOOT' -or $phase -eq 'FLYBY') -and $marks.ContainsKey('carsel')) { $phase = 'CARSELECT'; $acceptGapNow = $acceptGapCarSel; $lastAccept = Get-Date }
     if ($phase -eq 'CARSELECT' -and $marks.ContainsKey('strfin')) { $phase = 'DRIVING'; $drivingAt = Get-Date }
     # Returning-player promotion -- now a FALLBACK, not the normal path. Gated on 'newprof' (this
     # boot found a profile) and 'ingame', so the fresh path's behaviour -- and every golden banked
@@ -1573,7 +1751,7 @@ while ($true) {
   }
 
   $pump = ($phase -eq 'BOOT') -or (($phase -eq 'CARSELECT') -and (-not $HoldCarSelect))
-  if ($pump -and ((Get-Date) - $lastAccept).TotalSeconds -ge $acceptGap) {
+  if ($pump -and ((Get-Date) - $lastAccept).TotalSeconds -ge $acceptGapNow) {
     $evAccept.Set() | Out-Null
     $lastAccept = Get-Date
   }
@@ -1927,6 +2105,19 @@ $summary += ("DIAGENV  {0}{1}" -f $diagEnvText,
 # TELEPORT: the -Teleport spec this run carried, for the same comparability reason as DIAGENV --
 # a log whose car started 250 m from the junkyard is not comparable with one that did not.
 $summary += ("TELEPORT {0}" -f $teleportText)
+# ⭐ SLOT / SKIPINTRO / ACCEPTGAP: the three things a SHORTENED, PARALLEL run carries that a
+#   historical one did not. Same comparability rule as DIAGENV and TELEPORT -- a run whose boot
+#   movies never played, or that shared the GPU with two other games, is not comparable with one
+#   that did not, and marks.txt has to say so on its face rather than leave it to be inferred.
+$summary += ("SLOT     {0}{1}" -f $Slot, $(if ($Slot -gt 0) { "  exe=$exe (a copy; cwd=$gameDir)" } else { "  (build\game, the default path)" }))
+$summary += ("SKIPINTRO {0}" -f $(if ($SkipIntro) { "-skipvideos (console latch; EA + Criterion logos not played)" } else { "(not armed)" }))
+$summary += ("ACCEPTGAP boot={0:f1}s carsel={1:f1}s{2}" -f $acceptGapBoot, $acceptGapCarSel,
+             $(if ($AcceptGap -gt 0) { "  [-AcceptGap $AcceptGap -- harness pump latency, not a game gate]" } else { "  (default)" }))
+# AUDIO: whether this run was audible. It changes nothing the game simulates (the mute is one
+# SetVolume(0) on the mastering voice, after every fill), but a run that made noise on the box is
+# a fact about the run and marks.txt says it on its face, like SLOT and SKIPINTRO above.
+$summary += ("AUDIO    {0}" -f $(if ($Audio) { "ON (-Audio) -- BRN_AUDIO_MUTE cleared; this run made noise" }
+                                 else        { "MUTED (BRN_AUDIO_MUTE=1; mastering voice at 0, audio simulation unchanged)" }))
 # STARTEVT: whether this run carried the event-start hook. Same comparability reason as DIAGENV and
 # TELEPORT, and a stronger one: a run carrying it may not have been in free burn at all.
 $summary += ("STARTEVT {0}" -f $startEventText)
