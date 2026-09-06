@@ -682,6 +682,11 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Effects\Particles\LionParticleRender.cpp"
   echo "%SRC%\GameSource\Effects\Particles\EffectsVertexBufferManager.cpp"
   echo "%SRC%\GameSource\Effects\Particles\EffectsVertexBuffer.cpp"
+  rem ---- SPARK EVENT DRAIN (2026-09-06, spark-producer wave). ParticleModule::ProcessEventQueue
+  rem   @0x8229C418 + ::HandleSpawnSparksAlongLineEvent @0x8229A138 -- the dispatch-thread end of
+  rem   the grinding-spark chain. DispatchThreadUpdate calls the first, which is the only route
+  rem   from EffectsModule::HandleSparkContacts to SparkArray::SpawnSpark.
+  echo "%SRC%\GameSource\Effects\Particles\ParticleModule_SparkEvents.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnTrailSystem.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnTrailRender.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\StackTrailEmitter96_Push.cpp"
