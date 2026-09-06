@@ -148,11 +148,151 @@ def report(name, sv, rows, verbose):
                 w=len(wsum_bad), s=len(ssum_bad), p=len(pair_bad), bad=len(bad))
 
 
+DRIVEN_STRIDE = 32                        # IKDrivenPointSpec (KU_DRIVEN_POINT_STRIDE)
+DRIVEN_CONTROL = ''                       # '' | 'swap' | 'offbyone' | 'tagbase' -- see audit_driven
+
+
+def audit_driven(payload, name, endian):
+    """The OTHER half of the rest pose: the 31-odd IK DRIVEN points, which the tag audit above
+    does not touch.
+
+    ⚠️ WHY IT IS A SEPARATE TEST. UpdateSkinningOffsets packs 128 verlet rows as
+    <skinned tag points> then <IK driven points> (deform_rowmap.py: 97 + 31 on PUSMC01), and only
+    the first group is a two-sensor blend. A driven point is solved instead by
+    IKDrivenPoint::Update, which runs ResolveConstraint TWICE per Update:
+
+        v = pos - endpoint ;  v -= n * min(dot(n, v), 0)      (n = the REST A->B axis, fixed at
+        pos = endpoint + normalize(v) * desiredDistance        Construct and never updated)
+
+    once against tag point A at mfDistanceFromA and once against tag point B at mfDistanceFromB.
+    Both distances are AUTHORED CONSTANTS in IKDrivenPointSpec (+16 / +20), NOT derived at load
+    from the rest geometry. So if an authored distance disagrees with the authored rest positions,
+    the very first Update drags the driven point off its rest pose BEFORE any impact -- the panels
+    it skins are born displaced, which is a smear, and a crash then amplifies it.
+
+    THE IDENTITY, therefore:
+        | mInitialPos - tagA.mInitialPosition |  ==  mfDistanceFromA
+        | mInitialPos - tagB.mInitialPosition |  ==  mfDistanceFromB
+
+    ⚠️ TAUTOLOGY GUARD, same discipline as the tag audit: a row whose two endpoints are the SAME
+    tag point, or whose authored distance is zero, cannot fail informatively. Those are counted
+    separately and the residual is quoted over the rest.
+    """
+    sv = V.Deform(payload, endian, name)
+    # NEGATIVE CONTROLS -- each is a misreading a wave could plausibly make, run so the test is
+    # shown FAILING before its pass is believed. [[harness-answers-the-wrong-question]]
+    tagoff = 0 if DRIVEN_CONTROL == 'tagbase' else 32     # TagPointSpec::mInitialPosition @ +32
+    tags = [vec3(sv, sv.tag_ptr + TAG_STRIDE * i + tagoff) for i in range(sv.n_tag)]
+
+    rows = []
+    for i in range(sv.n_driven):
+        o = sv.driven_at + DRIVEN_STRIDE * i
+        init = vec3(sv, o)
+        dA, dB = sv.f32(o + 16), sv.f32(o + 20)
+        if DRIVEN_CONTROL == 'swap':
+            dA, dB = dB, dA                                # the two distances read the wrong way
+        iA, iB = sv.s16(o + 24), sv.s16(o + 26)
+        if DRIVEN_CONTROL == 'offbyone':
+            iA, iB = iA + 1, iB + 1                        # a 1-based reading of the tag indices
+        if not (0 <= iA < len(tags) and 0 <= iB < len(tags)):
+            rows.append(dict(i=i, bad=True, iA=iA, iB=iB))
+            continue
+        gA = sum((init[k] - tags[iA][k]) ** 2 for k in range(3)) ** 0.5
+        gB = sum((init[k] - tags[iB][k]) ** 2 for k in range(3)) ** 0.5
+        rows.append(dict(i=i, bad=False, iA=iA, iB=iB, dA=dA, dB=dB, gA=gA, gB=gB,
+                         eA=abs(gA - dA), eB=abs(gB - dB),
+                         trivial=(iA == iB or dA <= EPS_ZERO or dB <= EPS_ZERO)))
+    return sv, rows
+
+
+def report_driven(name, sv, rows, verbose):
+    good = [r for r in rows if not r['bad']]
+    bad = [r for r in rows if r['bad']]
+    real = [r for r in good if not r['trivial']]
+    errs = sorted(max(r['eA'], r['eB']) for r in real)
+    print('%-22s driven=%-4d tags=%-4d  informative rows %d/%d'
+          % (name, sv.n_driven, sv.n_tag, len(real), len(good)))
+    if bad:
+        print('   !! %d driven point(s) with an out-of-range tag index' % len(bad))
+    if errs:
+        print('   |authored distance - rest distance|: median %.3e  p95 %.3e  max %.3e m'
+              % (errs[len(errs) // 2], errs[int(len(errs) * 0.95)], errs[-1]))
+    if verbose and real:
+        for r in sorted(real, key=lambda x: -max(x['eA'], x['eB']))[:8]:
+            print('     driven %-3d tagA=%-3d tagB=%-3d  dA %.4f/%.4f  dB %.4f/%.4f  err %.3e'
+                  % (r['i'], r['iA'], r['iB'], r['dA'], r['gA'], r['dB'], r['gB'],
+                     max(r['eA'], r['eB'])))
+    return dict(n=len(good), real=len(real), bad=len(bad),
+                worst=(errs[-1] if errs else 0.0))
+
+
+def main_driven(root, only, verbose):
+    names = [n for n in V.at_files(root) if not only or only.upper() in n.upper()]
+    print('root: %s   cars: %d\n' % (root, len(names)))
+    agg = dict(cars=0, n=0, real=0, bad=0)
+    worst = (0.0, '')
+    show = verbose or len(names) <= 3
+    for n in names:
+        try:
+            payloads, b = V.deform_payloads(os.path.join(root, n))
+        except Exception as e:                                       # noqa: BLE001
+            print('%-22s SKIP (%s)' % (n, e))
+            continue
+        if len(payloads) != 1:
+            continue
+        endian = '<' if b.get('platform', 4) == 4 else '>'
+        try:
+            sv, rows = audit_driven(payloads[0], n, endian)
+        except Exception as e:                                       # noqa: BLE001
+            print('%-22s FAIL (%s)' % (n, e))
+            continue
+        r = report_driven(n, sv, rows, verbose) if show else \
+            report_driven(n, sv, rows, False) if False else None
+        if r is None:
+            r = dict(n=0, real=0, bad=0, worst=0.0)
+            good = [x for x in rows if not x['bad']]
+            real = [x for x in good if not x['trivial']]
+            errs = [max(x['eA'], x['eB']) for x in real]
+            r = dict(n=len(good), real=len(real), bad=len(rows) - len(good),
+                     worst=(max(errs) if errs else 0.0))
+        agg['cars'] += 1
+        for k in ('n', 'real', 'bad'):
+            agg[k] += r[k]
+        if r['worst'] > worst[0]:
+            worst = (r['worst'], n)
+    print('\n=== DRIVEN-POINT SUMMARY ===')
+    print('cars audited                                  : %d' % agg['cars'])
+    print('driven points                                 : %d' % agg['n'])
+    print('informative rows (two distinct tags, both d>0): %d (%.1f%%)'
+          % (agg['real'], 100.0 * agg['real'] / max(agg['n'], 1)))
+    print('worst |authored distance - rest distance|     : %.3e m  (%s)' % worst)
+    print('driven points with an out-of-range tag index  : %d' % agg['bad'])
+    if agg['real'] == 0:
+        print('\n!! NO informative driven rows -- this run proves NOTHING.')
+        return 1
+    return 0
+
+
 def main():
-    root = sys.argv[1] if len(sys.argv) > 1 else 'build/game/VEHICLES'
-    only = sys.argv[2] if len(sys.argv) > 2 else None
+    argv = [a for a in sys.argv[1:] if not a.startswith('--')]
+    flags = set(a for a in sys.argv[1:] if a.startswith('--'))
+    root = argv[0] if argv else 'build/game/VEHICLES'
+    only = argv[1] if len(argv) > 1 else None
     if not os.path.isdir(root):
         raise SystemExit('no such VEHICLES directory: %s' % root)
+    if '--driven' in flags:
+        global DRIVEN_CONTROL
+        if '--controls' in flags:
+            rc = 0
+            for c in ('', 'swap', 'offbyone', 'tagbase'):
+                DRIVEN_CONTROL = c
+                print('=' * 78)
+                print('DRIVEN REST IDENTITY -- %s' % (c or 'AS SHIPPED'))
+                print('=' * 78)
+                rc |= main_driven(root, only, False)
+                print()
+            return rc
+        return main_driven(root, only, '--verbose' in flags)
     names = [n for n in V.at_files(root) if not only or only.upper() in n.upper()]
     if not names:
         raise SystemExit('no VEH_*_AT.BIN under %s' % root)
