@@ -151,6 +151,37 @@ param(
                                  #   ActiveRaceCar::IsCrashing() to go false.
   [int]$CrashSweepMax  = 0,      # sim frames after which a shot fires anyway (0 = default 900).
   [double]$CrashSweepArm = 0,    # metres driven before shot 0 (0 = the game's default 8 m).
+  [switch]$Jump,                 # opt IN: THE JUMP RECIPE. A preset -CrashSweep that launches the
+                                 #   car up a MEASURED ramp, once per shot, so the jump ladder
+                                 #   (VehiclePhysics::UpdateInAirStats -> RaceCarState::mfTimeInAir
+                                 #   -> CarState::mbJumping -> JumpStateMachine) is exercised END TO
+                                 #   END several times in ONE boot.
+                                 #   ⭐ WHY IT EXISTS. A straight or weaving drive is NOT a jump
+                                 #   recipe: runs vfxprod_A and vfxprod_B both peaked at EXACTLY
+                                 #   0.250000 s of air (15 sim frames), which looked like a cap
+                                 #   until vfxprod_C happened to reach 0.95 s and ruled that out --
+                                 #   meaning A and B contained no real jump at all and their
+                                 #   "peak" was 15 frames of suspension chatter. A measurement
+                                 #   that depends on the car luckily meeting a ramp cannot answer a
+                                 #   frequency question. [[diagnostics-that-lie]]
+                                 #   ⭐ THE RAMP, AND WHERE IT CAME FROM. The launch point is the
+                                 #   flat approach to the bridge crest at x~3028 that vfxprod_C
+                                 #   drove over: its [boostloc] car= trace climbs y -9.15 -> +4.12
+                                 #   between z=-272 and z=-208 and drops back to +0.95 by z=-183.
+                                 #   Nothing here is a chosen number -- the coordinates are read
+                                 #   off a banked run, and the Y is only a hint anyway because
+                                 #   RequestPlaceOnTrack snaps every placement to the collision
+                                 #   mesh with its own 100 m vertical line test.
+                                 #   It is -CrashSweep underneath, so the cadence is counted in SIM
+                                 #   FRAMES and the recipe replays identically whatever the host
+                                 #   frame rate does. Override any part with the -CrashSweep* flags;
+                                 #   -Jump only fills in the ones you did not pass. Needs -Drive.
+  [string]$JumpSpeeds  = "",     # override the -Jump speed ladder (m/s, comma separated).
+                                 #   Default "20,26,32,38,44,50,56,62,44,56" -- a rising ladder so
+                                 #   one boot reports air time AS A FUNCTION OF launch speed, plus
+                                 #   two repeats at the end that re-fly earlier speeds. Those
+                                 #   repeats are the control: if shot 8 does not reproduce shot 4,
+                                 #   the run is not measuring the ramp.
   [string]$Teleport    = "",     # "x,y,z[,headingDeg]" -- put the player car there, ONCE, through
                                  # the game's own place-on-track path (see the banner below).
   [double]$TeleportArm = 0,      # metres the car must have driven before the teleport fires
@@ -809,6 +840,33 @@ if ($Teleport -ne "") {
 #   the velocity, so every shot is a car travelling the way it points.  Angle of incidence: yes.  A
 #   sideways slide or a spinning car meeting a wall: no.  Traffic is not reset between shots either,
 #   so segment the log on the [sweep] shot markers and drop any shot that met a traffic car.
+# ⭐⭐ -Jump -- THE JUMP RECIPE (2026-09-06, contact-census wave).
+#   Purely a PRESET over -CrashSweep: it writes the launch point, the shot list and the settle
+#   period and then falls through the ordinary validation below, so there is one placement
+#   mechanism on this box and not two. Anything the caller passed explicitly wins.
+#   ⛔ THE SETTLE PERIOD IS LOAD-BEARING, not a comfort margin. The default sweep settle is 150
+#   sim frames (2.5 s), and at the slow end of the ladder the car needs ~6 s to cover the 120 m
+#   approach, fly and land. A shot re-placed mid-flight would truncate the very air time this
+#   recipe exists to measure, and the truncation would look exactly like a low ceiling.
+$KJumpLaunch = "3027.0,-9.2,-330.0"
+$KJumpSpeeds = "20,26,32,38,44,50,56,62,44,56"
+$KJumpHeading = "0"          # at = (sin h, 0, cos h); h=0 faces +Z, the way the ramp runs
+$KJumpSettle  = 420          # sim frames (7 s) -- approach + flight + landing at the slow end
+if ($Jump) {
+  if ($CrashSweep -eq "") { $CrashSweep = $KJumpLaunch }
+  if ($CrashSweepShots -eq "") {
+    $lSpeeds = if ($JumpSpeeds -ne "") { $JumpSpeeds } else { $KJumpSpeeds }
+    $CrashSweepShots = ((@($lSpeeds -split ',') |
+                         ForEach-Object { "{0}:{1}" -f $KJumpHeading, $_.Trim() }) -join ',')
+  }
+  if ($CrashSweepSettle -le 0) { $CrashSweepSettle = $KJumpSettle }
+  Write-Host "[flow] JUMP RECIPE armed: launch $CrashSweep heading $KJumpHeading deg"
+  Write-Host "       shots $CrashSweepShots settle $CrashSweepSettle sim frames"
+  Write-Host "       Ramp read off scratch\flow_run\vfxprod_C [boostloc]: y -9.15 -> +4.12 over"
+  Write-Host "       z -272 -> -208 at x~3028, dropping to +0.95 by z=-183. Read the air time off"
+  Write-Host "       [vfxfeed] peak= (BRN_VFXFEED_PROBE=1), segmented on the [sweep] shot markers."
+}
+
 $sweepText = '(none)'
 if ($CrashSweep -ne "") {
   $lSw = @($CrashSweep -split ',')
@@ -2107,6 +2165,10 @@ $summary += ("DIAGENV  {0}{1}" -f $diagEnvText,
 # TELEPORT: the -Teleport spec this run carried, for the same comparability reason as DIAGENV --
 # a log whose car started 250 m from the junkyard is not comparable with one that did not.
 $summary += ("TELEPORT {0}" -f $teleportText)
+# ⚠️ SWEEP was computed for the console banner and NEVER RECORDED. A run whose recipe is not in
+# its own marks.txt cannot be compared with another run, which is the entire point of this file --
+# TELEPORT has been recorded since it existed and its sibling placement mechanism was not.
+$summary += ("SWEEP    {0}" -f $sweepText)
 # ⭐ SLOT / SKIPINTRO / ACCEPTGAP: the three things a SHORTENED, PARALLEL run carries that a
 #   historical one did not. Same comparability rule as DIAGENV and TELEPORT -- a run whose boot
 #   movies never played, or that shared the GPU with two other games, is not comparable with one
