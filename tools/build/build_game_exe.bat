@@ -5049,6 +5049,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManager.cpp"
   echo "%SRC%\GameSource\GameState\TakedownManager\BrnTakedownManager_Detect.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Rivals.cpp"
+  rem [issue #10 odometer 2026-09-06] ProgressionManager::PreWorldUpdate + AddDistanceDriven
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_PreWorldUpdate.cpp"
   echo "%SRC%\GameSource\GameState\DeveloperChallengeManager\BrnDeveloperChallengeManager.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_gDC_00.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Accessors2.cpp"
