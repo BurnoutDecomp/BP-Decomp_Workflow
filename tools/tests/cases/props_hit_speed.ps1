@@ -31,6 +31,19 @@
 #
 # RED:   powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case props_hit_speed -ExpectFail -Label pre-fix
 # GREEN: powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case props_hit_speed -Label post-fix
+#
+# ⭐⭐ SHORTENED 2026-09-06 (lane harness2). WHAT CHANGED AND WHAT DID NOT.
+#   The Run block below now carries `SkipIntro` and `AcceptGap`, and a smaller `MaxSeconds`.
+#   Nothing else about the scenario moved and NO CHECK was touched.
+#     SkipIntro  passes the CONSOLE's own "-skipvideos" command-line latch (BrnMain.cpp:434 ->
+#                BootVideos::Update's soft-reboot exit) so the EA-Franchise and Criterion VP6
+#                logos are not played. It is not a harness bypass and it is not new game code.
+#     AcceptGap  is HARNESS latency, not a game gate: the Accept pump used to press every 3.0 s
+#                at car select, and the junkyard leg of a returning boot was measurably two
+#                consecutive pump periods long (carsel 16.5s -> livery 19.9s -> accept 23.0s).
+#   MEASURED, same build, same scenario: boot-to-DRIVING 23.0 s -> 16.2 s.
+#   MaxSeconds is cut by that saving plus the slack this case's own schedule shows it never used.
+#
 @{
   Name    = 'props_hit_speed'
   Area    = 'physics'
@@ -39,7 +52,9 @@
   Run     = @{
     Drive          = $true
     MotionProbe    = $true
-    MaxSeconds     = 110
+    MaxSeconds     = 60
+    SkipIntro     = $true      # the console -skipvideos latch (see the banner)
+    AcceptGap     = 1.0        # harness pump latency, not a game gate
     Teleport       = '2995,1.5,-1750,0'    # 200 m of run-up, facing the type-24 prop cluster
     ThrottleScript = '0:accel'
   }

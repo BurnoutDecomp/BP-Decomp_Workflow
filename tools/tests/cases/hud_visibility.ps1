@@ -34,6 +34,21 @@
 #
 # Run it:
 #   powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case hud_visibility -ExpectFail -Label pre-fix
+#
+# ⭐⭐ SHORTENED 2026-09-06 (lane harness2). WHAT CHANGED AND WHAT DID NOT.
+#   The Run block below now carries `SkipIntro` and `AcceptGap`, and a smaller `MaxSeconds`.
+#   Nothing else about the scenario moved and NO CHECK was touched.
+#     SkipIntro  passes the CONSOLE's own "-skipvideos" command-line latch (BrnMain.cpp:434 ->
+#                BootVideos::Update's soft-reboot exit) so the EA-Franchise and Criterion VP6
+#                logos are not played. It is not a harness bypass and it is not new game code.
+#     AcceptGap  is HARNESS latency, not a game gate: the Accept pump used to press every 3.0 s
+#                at car select, and the junkyard leg of a returning boot was measurably two
+#                consecutive pump periods long (carsel 16.5s -> livery 19.9s -> accept 23.0s).
+#   MEASURED, same build, same scenario: boot-to-DRIVING 23.0 s -> 16.2 s.
+#   MaxSeconds is cut by that saving plus the slack this case's own schedule shows it never used.
+#   FLOOR: PauseAt 20 / UnpauseAt 32 are DRIVING-relative, so this case cannot be shorter than
+#   boot(16) + DriveDelay(6) + 32 + a tail for the resume to be observed.
+#
 @{
   Name    = 'hud_visibility'
   Area    = 'gui'
@@ -41,7 +56,9 @@
   Frames  = $false
   Run     = @{
     Drive       = $true
-    MaxSeconds  = 95
+    MaxSeconds  = 60
+    SkipIntro  = $true      # the console -skipvideos latch (see the banner)
+    AcceptGap  = 1.0        # harness pump latency, not a game gate
     Teleport    = '3040.7,-5.8,-1937.9,180'
     PauseAt     = '20'
     PauseTarget = 'map'

@@ -32,6 +32,22 @@
 # Run it:
 #   powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case stunt_run_lifecycle -ExpectFail -Label pre-fix
 #   powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case stunt_run_lifecycle -Label post-fix
+#
+# ⭐⭐ SHORTENED 2026-09-06 (lane harness2). WHAT CHANGED AND WHAT DID NOT.
+#   The Run block below now carries `SkipIntro` and `AcceptGap`, and a smaller `MaxSeconds`.
+#   Nothing else about the scenario moved and NO CHECK was touched.
+#     SkipIntro  passes the CONSOLE's own "-skipvideos" command-line latch (BrnMain.cpp:434 ->
+#                BootVideos::Update's soft-reboot exit) so the EA-Franchise and Criterion VP6
+#                logos are not played. It is not a harness bypass and it is not new game code.
+#     AcceptGap  is HARNESS latency, not a game gate: the Accept pump used to press every 3.0 s
+#                at car select, and the junkyard leg of a returning boot was measurably two
+#                consecutive pump periods long (carsel 16.5s -> livery 19.9s -> accept 23.0s).
+#   MEASURED, same build, same scenario: boot-to-DRIVING 23.0 s -> 16.2 s.
+#   MaxSeconds is cut by that saving plus the slack this case's own schedule shows it never used.
+#   ⛔ THIS ONE CANNOT BE 60 s AND THAT IS THE GAME, NOT THE HARNESS. The stunt run is a 120 s
+#   game mode on the SIM clock and the case scores its whole lifecycle through to RESULTS; the
+#   ThrottleScript/SteerScript below run to t+118. Only the boot saving comes off it.
+#
 @{
   Name    = 'stunt_run_lifecycle'
   Area    = 'events/stunt'
@@ -48,7 +64,9 @@
     # 265, not 235: the mode's 120 s runs on the SIM clock, and this schedule deliberately
     # spins the car (run 20260906_121838 covered 374 m of path for 23 m of net travel), which
     # costs enough frame time that a 235 s wall budget cut the run off still IN_PROGRESS.
-    MaxSeconds      = 265
+    MaxSeconds      = 250
+    SkipIntro      = $true      # the console -skipvideos latch (see the banner)
+    AcceptGap      = 1.0        # harness pump latency, not a game gate
     # MANY attempts, not two. Measured 2026-09-06: the identical two-attempt schedule drifted
     # heavily in run 20260906_100601 (200 DRIFT awards) and not at all in 20260906_113310 -- the
     # car's trajectory after 30 s of open-road throttle is not reproducible frame-for-frame, so a

@@ -32,6 +32,33 @@
 # Run it:
 #   powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case camera_shake_smash -ExpectFail -Label pre-fix
 #   powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case camera_shake_smash -Label post-fix
+#
+# ⛔⛔ NOT SHORTENED, AND NOT SkipIntro'd -- MEASURED THREE TIMES (2026-09-06, lane harness2).
+#   Every other case in this directory now carries `SkipIntro` (the console -skipvideos latch) and
+#   `AcceptGap` (a faster harness Accept pump) and a smaller MaxSeconds. THIS ONE DELIBERATELY
+#   CARRIES NEITHER, because its last check normalises against the whole run:
+#
+#     "the camera pose actually shakes ..." divides the mean fwd 2nd-difference of the frames that
+#     REQUESTED a procedural shake by the mean over EVERY OTHER FRAME IN THE RUN, and wants >= 3.
+#     The shaking half is a property of the shake; the CALM half is a property of what else the run
+#     contains. Boot-movie and menu frames are extremely calm, so they pull that denominator down.
+#
+#   Measured, all three runs on the same build, same scenario apart from the knobs:
+#     275 s, no knobs (banked 20260906_125835)   shake 0.001612 / calm 0.0003957 -> ratio 4.073 PASS
+#     200 s, SkipIntro+AcceptGap  (_140406)      shake 0.001612 / calm 0.000544  -> ratio 2.963 FAIL
+#     275 s, SkipIntro+AcceptGap  (_142238)      shake 0.001612 / calm 0.0005417 -> ratio 2.975 FAIL
+#   The numerator is BIT-IDENTICAL in all three (the same 18 frames); only the denominator moves,
+#   and it moves with the boot content, not with the budget. Deleting the two VP6 logos deletes
+#   ~5 s of the calmest frames in the run and raises the calm mean ~37 %.
+#   ⚠ So this is NOT "the case is too slow to shorten": it is a check whose threshold is
+#   calibrated against a particular run composition. Re-scoping it to the DRIVING frames only
+#   (`After='strfin'`, or a ratio computed per-phase) would make it both shorter AND more honest,
+#   but that is a change to the camera lane's own measurement and this lane does not own it.
+#   ⛔ Two earlier RED runs of this case (_135159, _135614 at 200 s) were a DIFFERENT and now-fixed
+#   fault: the slot staging re-seeded the FreshProfile-parked save, so the game booted as a
+#   returning player and the already-collected gates posted no game action 58. See
+#   tools/tests/slots.ps1 -NoProfileSeed.
+#
 @{
   Name    = 'camera_shake_smash'
   Area    = 'director/camera'

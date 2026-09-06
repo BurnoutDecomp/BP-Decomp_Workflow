@@ -35,7 +35,20 @@ function Enter-BoxLock {
   param(
     [int]$TimeoutSec = 1800,   # generous: a full flow_run is ~400 s and waves queue behind each other
     [switch]$NoLock,           # ⛔ escape hatch only -- restores the mutually-destructive behaviour
-    [string]$Label = ""        # optional caller name, for the acquired/waiting lines
+    [string]$Label = "",       # optional caller name, for the acquired/waiting lines
+    [int]$Slot = 0             # ⭐ PARALLEL SLOTS (2026-09-06, lane harness2). One lock per game
+                               #   INSTANCE instead of one per box: slot n locks
+                               #   "Local\BurnoutPC_FlowRun_<n>" and clears only slot n's input
+                               #   channels. SLOT 0 IS THE OLD BEHAVIOUR, BYTE FOR BYTE -- the
+                               #   mutex is still "Local\BurnoutPC_FlowRun" and the seven
+                               #   channels still have their unsuffixed names -- and every other
+                               #   harness in this directory passes no -Slot, so nothing that
+                               #   exists today changes. ⚠️ The slots are only DISJOINT because
+                               #   each one runs its own copy of the exe out of
+                               #   build\game_slots\<n>\ and the game suffixes every session-
+                               #   global name it opens with BRN_HARNESS_SLOT
+                               #   (b5-decomp CgsHarnessSlot.h). Passing -Slot without that
+                               #   exe copy would serialise nothing and destroy both runs.
   )
   if ($NoLock) {
     Write-Host "[box] ⛔ -NoLock: NOT serializing. A concurrent harness will kill this run."
@@ -43,8 +56,10 @@ function Enter-BoxLock {
   }
   if ($null -ne $script:BrnBoxLock) { return }   # idempotent: dot-sourced twice is not an error
 
-  $tag = if ($Label -ne "") { " ($Label)" } else { "" }
-  $m = New-Object System.Threading.Mutex($false, "Local\BurnoutPC_FlowRun")
+  $lsSlotSuffix = if ($Slot -gt 0) { "_$Slot" } else { "" }
+  $tag = if ($Label -ne "") { " ($Label" + $(if ($Slot -gt 0) { " slot $Slot" } else { "" }) + ")" }
+         elseif ($Slot -gt 0) { " (slot $Slot)" } else { "" }
+  $m = New-Object System.Threading.Mutex($false, ("Local\BurnoutPC_FlowRun" + $lsSlotSuffix))
 
   # Try once without blocking, so the common case stays silent and a WAIT is announced. A wave that
   # sees nothing for twenty minutes assumes it has hung; tell it what it is actually doing.
@@ -95,7 +110,7 @@ function Enter-BoxLock {
     try {
       $lEvent = New-Object System.Threading.EventWaitHandle(
                   $false, [System.Threading.EventResetMode]::ManualReset,
-                  "Local\BurnoutPC_Input_$lsChannel")
+                  ("Local\BurnoutPC_Input_" + $lsChannel + $lsSlotSuffix))
       $lEvent.Reset() | Out-Null
       $lEvent.Close()
     } catch {

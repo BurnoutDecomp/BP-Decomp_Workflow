@@ -35,7 +35,20 @@ param(
   [switch]$ExpectFail,            # RED mode
   [switch]$NoRun,                 # evaluate an existing -RunDir only
   [int]$LockTimeoutSec  = 7200,
-  [string]$Label        = ""      # free text recorded in result.json (e.g. "pre-fix", "post-fix")
+  [string]$Label        = "",     # free text recorded in result.json (e.g. "pre-fix", "post-fix")
+  [int]$Slot            = 0       # ⭐ PARALLEL SLOTS (2026-09-06, lane harness2). 0 == build\game,
+                                  #   one game on the box, byte for byte what it has always been.
+                                  #   n > 0 runs build\game_slots\<n>\Burnout_PC.exe -- a COPY of
+                                  #   the same build, with its own log, its own harness input
+                                  #   channels, its own box lock and its own Memcard_<n> profile --
+                                  #   so k cases can run at once (run_all.ps1 -Parallel k). The
+                                  #   scenario, the checks and the report are identical; only the
+                                  #   instance moves.
+                                  #   ⚠️ A parallel run SHARES THE GPU AND CPU, so its frame rate is
+                                  #   lower than a solo run's. Every check in tools\tests\cases is a
+                                  #   log line or a pixel, neither of which moves with contention --
+                                  #   but a case whose check is ever a frame-rate or wall-clock
+                                  #   number must be scored on a slot of its own.
 )
 $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
@@ -71,7 +84,10 @@ if ($lCase.Bug)  { Write-Host ("[case] bug:  {0}" -f $lCase.Bug) }
 Write-Host ("[case] run dir: {0}" -f $RunDir)
 
 # --- provenance: which exe, which commits ----------------------------------------------------
-$exe = Join-Path $root 'build\game\Burnout_PC.exe'
+# The exe THIS run will execute -- a slot runs its own copy, and a provenance stamp naming the
+# wrong binary would be worse than none (see flow_run's EXE PROVENANCE banner).
+$exeDir = if ($Slot -gt 0) { Join-Path $root ('build\game_slots\' + $Slot) } else { Join-Path $root 'build\game' }
+$exe = Join-Path $exeDir 'Burnout_PC.exe'
 $prov = @{
   exe_mtime   = $(if (Test-Path $exe) { (Get-Item $exe).LastWriteTime.ToString('o') } else { 'MISSING' })
   exe_size    = $(if (Test-Path $exe) { (Get-Item $exe).Length } else { 0 })
@@ -83,13 +99,20 @@ $prov = @{
 # --- run flow_run ----------------------------------------------------------------------------
 $flowExit = $null
 $profileAside = $null
-$profile = Join-Path $root 'build\game\Memcard\Profile.sav'
+# FreshProfile parks THIS SLOT's save. Slot n's profile is build\game\Memcard_<n>\Profile.sav
+# (the game suffixes the directory from BRN_HARNESS_SLOT), so parking slot 0's would leave slot n
+# on the returning path and quietly measure the wrong boot.
+$profile = if ($Slot -gt 0) { Join-Path $root ('build\game\Memcard_' + $Slot + '\Profile.sav') }
+           else             { Join-Path $root 'build\game\Memcard\Profile.sav' }
 if (-not $NoRun) {
-  if (-not (Test-Path $exe)) { Write-Host "[case] FAIL: no exe at $exe -- build first (tools\tests\build_exe_locked.ps1)"; exit 2 }
+  # A SLOT's exe is staged by flow_run itself (under the lock, after its kill sweep), so only
+  # slot 0 must already have one at this point.
+  if ($Slot -le 0 -and -not (Test-Path $exe)) { Write-Host "[case] FAIL: no exe at $exe -- build first (tools\tests\build_exe_locked.ps1)"; exit 2 }
   $lArgs = @{}
   foreach ($k in $lRun.Keys) { $lArgs[$k] = $lRun[$k] }
   $lArgs['OutDir'] = $flowOut
   $lArgs['LockTimeoutSec'] = $LockTimeoutSec
+  if ($Slot -gt 0) { $lArgs['Slot'] = $Slot }
   if ($lCase.Frames) { $lArgs['Frames'] = $true; $lArgs['FrameDir'] = $frameDir }
   if ($lCase.DiagEnv) { $lArgs['DiagEnv'] = "$($lCase.DiagEnv)" }
   # ⭐ FreshProfile: the game takes a different boot path when Memcard\Profile.sav exists
@@ -101,6 +124,31 @@ if (-not $NoRun) {
     Move-Item $profile $profileAside -Force
     Write-Host "[case] FreshProfile: parked $profile -> $profileAside"
   }
+  # ⭐ Setup: A STIMULUS THAT HAS TO RUN *ALONGSIDE* THE BOOT (2026-09-06, lane quiet).
+  #   Every Check runs after flow_run has returned, which is the right shape for a check and the
+  #   wrong shape for a stimulus that must happen WHILE the game is up -- e.g. holding real keys
+  #   down on the desktop from another window, which is the only honest way to ask "does the game
+  #   read input it was not given?". A case that needed that had to be launched by hand in two
+  #   commands, so it could not be part of a sweep at all, and in a sweep it silently measured
+  #   nothing instead of failing.
+  #   `Setup` is an optional scriptblock on the case. It is called with one context hashtable
+  #   BEFORE flow_run starts and must RETURN either nothing or a System.Diagnostics.Process,
+  #   which is killed here if it outlives the run -- so a stimulus can never leak past its case.
+  #     Root / RunDir / Slot / Case  -- the obvious ones
+  #     GameLog                      -- THIS SLOT's live BrnGame.log (slot n has its own; a
+  #                                     helper that polls build\game\BrnGame.log would watch the
+  #                                     wrong instance in a -Parallel sweep)
+  #   A case with no Setup key behaves exactly as before.
+  $lSetupProc = $null
+  if ($lCase.Setup) {
+    $lSetupCtx = @{ Root = $root; RunDir = $RunDir; Slot = $Slot; Case = $lCase
+                    GameLog = (Join-Path $exeDir 'BrnGame.log') }
+    Write-Host "[case] Setup: running the case's concurrent stimulus"
+    $lSetupProc = & $lCase.Setup $lSetupCtx
+    if ($lSetupProc -is [System.Diagnostics.Process]) {
+      Write-Host ("[case] Setup: started pid {0}; it will be killed if it outlives the run" -f $lSetupProc.Id)
+    } else { $lSetupProc = $null }
+  }
   $argText = ($lArgs.GetEnumerator() | ForEach-Object { if ($_.Value -is [bool] -or $_.Value -is [switch]) { "-$($_.Key)" } else { "-$($_.Key) '$($_.Value)'" } }) -join ' '
   Write-Host "[case] flow_run.ps1 $argText"
   $t0 = Get-Date
@@ -108,6 +156,10 @@ if (-not $NoRun) {
     & (Join-Path $root 'tools\diagnostics\flow_run.ps1') @lArgs *>&1 | Tee-Object -FilePath $consoleLog | ForEach-Object { Write-Host "  | $_" }
     $flowExit = $LASTEXITCODE
   } finally {
+    if ($lSetupProc -and -not $lSetupProc.HasExited) {
+      Write-Host ("[case] Setup: pid {0} outlived the run -- stopping it" -f $lSetupProc.Id)
+      try { $lSetupProc.Kill() } catch { }
+    }
     if ($profileAside -and (Test-Path $profileAside)) {
       if (Test-Path $profile) { Remove-Item $profile -Force }
       Move-Item $profileAside $profile -Force
@@ -166,7 +218,7 @@ Write-Host ("[case] marks: phase={0} asserts={1}  flow_exit={2}" -f $lM.Phase, $
 # --- record ------------------------------------------------------------------------------------
 $result = @{
   case = $lCase.Name; case_path = $casePath; bug = "$($lCase.Bug)"; area = "$($lCase.Area)"
-  label = $Label; when = (Get-Date).ToString('o'); run_dir = $RunDir
+  label = $Label; when = (Get-Date).ToString('o'); run_dir = $RunDir; slot = $Slot
   verdict = $verdict; expected = $expected; as_expected = $asExpected
   phase = $lM.Phase; asserts = $lM.Asserts; flow_exit = $flowExit
   checks = $results; provenance = $prov

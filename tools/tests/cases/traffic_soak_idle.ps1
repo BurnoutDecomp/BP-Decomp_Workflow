@@ -30,6 +30,22 @@
 # gated again, and 'return 0' has been true the whole time (ReturnPhysicalVehicleToTraffic's
 # 1.5 m target-proximity test still never passes; that is a separate, still-open gap).
 # Run it:   powershell -ExecutionPolicy Bypass -File tools\tests\run_case.ps1 -Case traffic_soak_idle -ExpectFail -Label pre-fix
+#
+# ⭐⭐ SHORTENED 2026-09-06 (lane harness2). WHAT CHANGED AND WHAT DID NOT.
+#   The Run block below now carries `SkipIntro` and `AcceptGap`, and a smaller `MaxSeconds`.
+#   Nothing else about the scenario moved and NO CHECK was touched.
+#     SkipIntro  passes the CONSOLE's own "-skipvideos" command-line latch (BrnMain.cpp:434 ->
+#                BootVideos::Update's soft-reboot exit) so the EA-Franchise and Criterion VP6
+#                logos are not played. It is not a harness bypass and it is not new game code.
+#     AcceptGap  is HARNESS latency, not a game gate: the Accept pump used to press every 3.0 s
+#                at car select, and the junkyard leg of a returning boot was measurably two
+#                consecutive pump periods long (carsel 16.5s -> livery 19.9s -> accept 23.0s).
+#   MEASURED, same build, same scenario: boot-to-DRIVING 23.0 s -> 16.2 s.
+#   MaxSeconds is cut by that saving plus the slack this case's own schedule shows it never used.
+#   ⛔ A SOAK BY DESIGN -- the recipe IS ~275 s of idling in traffic (the 2026-08-30 crash took
+#   that long to arrive). Shortening it would delete the measurement, so only the boot saving
+#   comes off: the same world time, 15 s less waiting.
+#
 @{
   Name    = 'traffic_soak_idle'
   Area    = 'traffic'
@@ -38,7 +54,9 @@
   Run     = @{
     Drive          = $true
     MotionProbe    = $true
-    MaxSeconds     = 275
+    MaxSeconds     = 260
+    SkipIntro     = $true      # the console -skipvideos latch (see the banner)
+    AcceptGap     = 1.0        # harness pump latency, not a game gate
     Teleport       = '2641.5,1.3,-1723.8,169'
     ThrottleScript = '0:accel,8:none'
   }
