@@ -698,6 +698,11 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   SparkArray::maTextures table LoadFXBundle publishes into; the two siblings are
   rem   SparkFrameDataSet::GetFrame and the FXBucket<BrnSpark,4> instantiation.
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnSparkRenderer.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnSparkRenderer_Render.cpp"
+  rem   BrnNativeParticleVertex.cpp is the 24-byte particle vertex writer both spark
+  rem   ribbons and the simple-particle quads emit through (X360 0x8291E478); it had
+  rem   never been mounted because it had no caller until RenderBank landed.
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnNativeParticleVertex.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnSparkRenderer_SparkFrameDataSet.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\FXBuckets_BrnSpark.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiser.cpp"
