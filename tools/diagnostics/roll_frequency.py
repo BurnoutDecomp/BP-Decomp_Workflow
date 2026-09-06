@@ -245,7 +245,7 @@ def air_episode(poses):
 RECIPES = (("mj", "jump"), ("rj", "jump"), ("pj", "jump"),
            ("mo", "jump-obl"), ("ro", "jump-obl"),
            ("mw", "wall"), ("rw", "wall"), ("pw", "wall"), ("sc", "wall"),
-           ("mc", "carcar"), ("rc", "carcar"), ("pc", "carcar"),
+           ("mc", "carcar"), ("md", "carcar"), ("rc", "carcar"), ("pc", "carcar"),
            ("ms", "showtime"), ("rs", "showtime"), ("ps", "showtime"))
 
 
@@ -380,8 +380,17 @@ def main():
         frac(lambda r: r["ep"]["maxRgt"] > 0.7071, "POSE past on-its-side (max|right.y| > 0.7071)", "crash")
         frac(lambda r: r["ep"]["rollHalf"] >= 1, "POSE >=1 roll half-turn (onto its roof)", "crash")
         frac(lambda r: r["ep"]["rollHalf"] >= 2, "POSE >=2 roll half-turns (a full tumble)", "crash")
-        frac(lambda r: r["airDeg"] >= KF_ROLL_COMPLETE_DEG, "AIR roll >= 200 deg (console's own gate)", "boot")
-        frac(lambda r: r["airDeg"] >= 360.0, "AIR roll >= 360 deg (a whole barrel roll)", "boot")
+        # ⭐ THE AIRBORNE-ROLL ROWS PREFER THE CONSOLE'S OWN ACCUMULATOR when the build carries the
+        #   [stuntair] probe (conRoll == mvStuntRollInProgress.z in degrees, the exact quantity
+        #   CheckForRollsAndSpins tests) and fall back to the pose integral only when it does not.
+        #   The pose integral is taken from `tick` rows 10 frames apart, so it is a coarse LOWER
+        #   bound; quoting it as if it were the console's number would be the same category error
+        #   this whole scorer exists to stop.
+        def air_deg(r):
+            return r["con_roll"] if r["has_stunt"] else r["airDeg"]
+        frac(lambda r: air_deg(r) > 35.0, "AIRBORNE roll > 35 deg (console's IN-PROGRESS gate)", "boot")
+        frac(lambda r: air_deg(r) >= KF_ROLL_COMPLETE_DEG, "AIRBORNE roll >= 200 deg (console's COMPLETION gate)", "boot")
+        frac(lambda r: air_deg(r) >= 360.0, "AIRBORNE roll >= 360 deg (a whole barrel roll)", "boot")
         if any(r["has_stunt"] for r in sub):
             ns = len([r for r in sub if r["has_stunt"]])
             ks = len([r for r in sub if r["con_rolls"] >= 1])
@@ -396,10 +405,15 @@ def main():
             if vals:
                 print("  %-52s n=%d  min " % (label, len(vals)) + fmt % vals[0]
                       + "  median " + fmt % vals[len(vals) // 2] + "  max " + fmt % vals[-1])
-        vals = sorted(r["airDeg"] for r in sub)
+        vals = sorted((r["con_roll"] if r["has_stunt"] else r["airDeg"]) for r in sub)
         if vals:
             print("  %-52s n=%d  min %.0f  median %.0f  max %.0f"
                   % ("airborne roll accumulated (deg)", len(vals), vals[0], vals[len(vals) // 2], vals[-1]))
+        vals = sorted(r["gate_f"] for r in sub if r["has_stunt"])
+        if vals:
+            print("  %-52s n=%d  min %d  median %d  max %d"
+                  % ("frames airborne WHILE CRASHING (scorer gated off)", len(vals),
+                     vals[0], vals[len(vals) // 2], vals[-1]))
     return 0
 
 
