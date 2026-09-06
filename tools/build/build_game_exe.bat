@@ -708,6 +708,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiserStaticLayout.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkidProgramsPC.cpp"
+  echo "%SRC%\pc\gcm\renderengine\Im3dProgramsPC.cpp"
   rem   LionBlendProgramsPC.cpp is the four converted Lion particle blend programs
   rem   (the guest Xenos blobs unk_8200DD58/DF00/E010/E230 re-authored as D3D9) that
   rem   BrnGraphics::Im3dBlend::Construct @0x8229B260 uploads -- same job as the skid pair.
@@ -791,6 +792,12 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\pc\gcm\renderengine\Im2dBlitProgramsPC.cpp"
   echo "%SRC%\GameSource\Graphics\BrnSunCorona.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3dSkyDome.cpp"
+  rem CgsIm3d.cpp homes CgsGraphics::Im3d::Construct @0x827FC748 and the five attested
+  rem ImRenderer<BasicColouredTexturedVertex> members SparkRenderer::Dispatch drives;
+  rem CgsIm2dUntex.cpp holds the shared BeginRendering template definition and now emits
+  rem that vertex type's instantiation (@0x8227B730) beside its own.
+  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3d.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm2dUntex.cpp"
   echo "%SRC%\GameSource\Graphics\ImmediateMode\BrnIm3d.cpp"
   echo "%SRC%\GameSource\Graphics\BrnSkyDomeManager.cpp"
   echo "%SRC%\SharedClasses\World\BrnEnvironmentUtil.cpp"
