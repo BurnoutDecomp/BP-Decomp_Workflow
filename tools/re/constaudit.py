@@ -98,6 +98,28 @@ which existed only because the first pass's blind spots were mistaken for clean 
    ⇒ Any row whose thunk source is itself a .bss slot, or whose thunk contains fmuls/fsubs/
      vmulfp/vsubfp, needs ppcdis.py before you believe the disagreement.
 
+⛔⛔ 2026-09-06, THIRD PASS -- THE LAZY-CACHE DECODER MANUFACTURED A DEFECT IN A CORRECT
+   ANNOTATION, which is the worst thing an auditing tool can do and the mirror image of the
+   `--symbol wide=False` bug c5dd763b fixed. "The first rodata `lfs` after the site" also
+   matches a site that merely READS the slot, or takes its ADDRESS to hand to a registrar:
+     * dword_82FB7518 (gsiDebugSuppressInAirReset) -- 0x826D5E48 is `addi r4,r11,0x7518 ; bl
+       0x8282D640`, and the nearest following `lfs` belongs to the next statement. The tool
+       printed 6.2831854 for a .bss debug toggle whose tree comment ("no writer anywhere in
+       this tree and no project home ... it is 0 in a ship build") was right all along.
+     * unk_8327F140 -- a vperm CONTROL VECTOR referenced from 33 places program-wide; one of
+       them happens to sit near a branch and an `lfs`, so it "resolved" to 2.0, then to 45.0
+       after the first fix. A read-only control word has no value to recover at all.
+   Three guards now bound the shape, and the SITE COUNT is the sharpest of them:
+     * a lazy first-call cache has ONE reference site. All six slots this tool has published
+       (0x82FBA0F0/A0E0/9FC0/A1C0/A360/A350) have exactly one; the two false positives have
+       4 and 33. A slot with a crowd of readers is not somebody's first-call cache.
+     * the guard's conditional branch must fall between the site and the `lfs`, with no `bl`.
+     * the `lfs` must be within 0x20 of the site (the real ones are +0x10..+0x1C).
+   ⚠️ The guard WRITE-BACK is NOT required, only described: unk_82FBA350's guard word is
+   materialised 0x5F0 bytes before its site (DoCrashPrediction's two halves share one guard
+   register loaded at the top), and demanding it threw away a slot already published
+   correctly. A rule that rejects a true positive to catch a false one is not an improvement.
+
 ⭐ AND THE ONE SHAPE WITH NO THUNK AT ALL: a slot at/above DATA_LO that reads NON-ZERO is
    PLAIN INITIALISED .data -- the image word IS the C++ initialiser and there is nothing to
    chase. Four of the five 2026-09-06 defects were exactly this, carried in the tree as
@@ -126,6 +148,12 @@ DATA_LO = 0x82D40000
 CRT_LO, CRT_HI = 0x82C00000, 0x82D40000
 # Game code / rodata sits below the CRT bank; a lazy-cache writer lives here, not in the bank.
 CODE_LO = 0x82000000
+# How far past the `addi` that names the slot a lazy first-call cache may load its source.
+# The four published cases sit at +0x10..+0x1C; the 2026-09-06 false positive was further out.
+KI_FILL_REACH = 0x20
+# A lazy first-call cache is referenced from ONE site (measured: all six published slots).
+# 2 is the safety margin; the false positives sit at 4 and 33.
+KI_MAX_LAZY_SITES = 2
 
 NUM = re.compile(
     r"=\s*(-?(?:\d+\.\d*(?:[eE][-+]?\d+)?f?|\d+\.?\d*[eE][-+]?\d+f?|\d+\.\d+f?|\d+f))\s*;")
@@ -214,23 +242,51 @@ def lazy_cache_source(site, dest, before=0x40, after=0x40):
 
     `site` is the `addi` naming the slot; the fill block that follows the guard branch does
     `lfs f0, <rdata src>` before splatting it into the slot. Return (source_ea, f32).
+
+    ⚠️⚠️ IT MUST SEE THE GUARD, NOT JUST AN `lfs`. Measured 2026-09-06 on dword_82FB7518
+    (gsiDebugSuppressInAirReset): "the first rodata `lfs` after the site" also matches a site
+    that merely READS the slot, or takes its ADDRESS to hand to a dev-menu registrar --
+    0x826D5E48 is `addi r4, r11, 0x7518 ; bl 0x8282D640`, and the nearest following `lfs`
+    belongs to the NEXT statement entirely. That printed 2*pi for a .bss debug toggle whose
+    tree comment ("no writer anywhere, ships 0") was right all along, i.e. the tool
+    manufactured a defect in a correct annotation -- the same failure mode, in the opposite
+    direction, as the "no CRT writer found" bug c5dd763b fixed.
+
+    So the shape is required, not just its middle. A REAL lazy cache always has all three:
+        lwz rG,<guard> ; clrlwi ; cmplwi ; addi rD,<slot> ; bne skip
+          lfs f0,<rdata src> ; stfs ; lvlx ; stw rG,<guard> ; vspltw ; stvx <slot>
+      1. a CONDITIONAL BRANCH (op 16) between the site and the `lfs` -- the guard test;
+      2. NO `bl` (op 18 with LK) in between -- a call means the fill block was left;
+      3. the `lfs` within KI_FILL_REACH of the site -- a fill block loads its source within a
+         handful of instructions, and "the next rodata `lfs` anywhere in +0x40" is what let a
+         neighbouring statement answer for the slot.
+    ⚠️ The guard WRITE-BACK (`stw rG,<guard>`) is deliberately NOT required, only reported.
+    unk_82FBA350's guard word is materialised 0x5F0 bytes before its site -- the two halves of
+    DoCrashPrediction's cache share one guard register loaded once at the top -- so demanding a
+    resolvable guard store threw away a slot this tool had already published correctly. A rule
+    that rejects a true positive to catch a false one is not an improvement.
     """
     lo = site - before
     try:
         blob = x360rd.rd(lo, before + after)
     except Exception:
         return None
-    hi = {}
+
+    hi, saw_cond = {}, False
     for off in range(0, len(blob) & ~3, 4):
         ea = lo + off
         w = struct.unpack_from(">I", blob, off)[0]
         op, d, a, imm = w >> 26, (w >> 21) & 31, (w >> 16) & 31, w & 0xFFFF
         if op == 15 and a == 0:
             hi[d] = imm
-        elif op == 48:                                   # lfs fD, imm(rA) -- the source read
-            if a in hi:
+        elif op == 16 and ea > site:                      # bc -- the guard test
+            saw_cond = True
+        elif op == 18 and (w & 1) and ea > site:          # bl -- the fill block was left
+            return None
+        elif op == 48:                                    # lfs fD, imm(rA) -- the source read
+            if a in hi and ea > site and (ea - site) <= KI_FILL_REACH and saw_cond:
                 src = (hi[a] << 16) + sx16(imm)
-                if ea > site and src != dest and CODE_LO <= src < DATA_LO:
+                if src != dest and CODE_LO <= src < DATA_LO:
                     return src, f32_at(src)
         elif op in (14, 32):
             hi.pop(d, None)
@@ -252,7 +308,14 @@ def resolve_dyninit(addrs, wide=False):
             r = thunk_source(w, a)
             if r:
                 rows.append((w, r[0], r[1]))
-        if wide and not rows:
+        # ⭐ THE SITE COUNT IS THE SHARPEST GUARD, and it costs nothing. A function-local
+        # `static` lazy first-call cache is referenced from ONE place -- measured 2026-09-06,
+        # all six slots this tool has published (0x82FBA0F0/A0E0/9FC0/A1C0/A360/A350) have
+        # EXACTLY ONE site, while both known false positives are shared data with many:
+        # dword_82FB7518 (a dev toggle, 4 sites) and unk_8327F140 (a vperm control vector used
+        # program-wide, 33 sites, of which one happens to sit near a branch and an `lfs`).
+        # A slot with a crowd of readers is not somebody's first-call cache.
+        if wide and not rows and len(sites) <= KI_MAX_LAZY_SITES:
             for w in (s for s in sites if CODE_LO <= s < CRT_LO):
                 r = lazy_cache_source(w, a)
                 if r and r[1] is not None:
