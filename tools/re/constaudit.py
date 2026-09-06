@@ -310,17 +310,23 @@ def main():
     args = ap.parse_args()
 
     if args.symbol:
+        # ⚠️ ALWAYS wide here. This path used to pass wide=False, so it answered "no CRT writer
+        # found" for a lazy first-call cache that a `--wide` sweep resolves perfectly -- the tool
+        # contradicting itself depending on which way you asked. Caught 2026-09-06 on
+        # unk_82FBA360/82FBA350 (DoCrashPrediction's 0.75 / 0.7, guard dword_82FBA370).
         targets = [int(s, 16) for s in args.symbol]
         direct = {t: f32_at(t) for t in targets}
-        dyn = resolve_dyninit([t for t in targets if direct[t] == 0.0 and t >= DATA_LO])
+        dyn = resolve_dyninit([t for t in targets if direct[t] == 0.0 and t >= DATA_LO], wide=True)
         for t in targets:
             rows = dyn.get(t) or []
             if rows:
                 for w, src, v in rows:
-                    print("0x%08X  <- thunk 0x%08X  <- 0x%08X = %r" % (t, w, src, v))
+                    kind = "thunk" if CRT_LO <= w < CRT_HI else "lazy cache"
+                    print("0x%08X  <- %s 0x%08X  <- 0x%08X = %r" % (t, kind, w, src, v))
             else:
                 print("0x%08X  image = %r%s" % (t, direct[t],
-                      "   (reads 0 and no CRT writer found -- see the banner)"
+                      "   (reads 0, and neither a CRT thunk nor a lazy first-call cache writes "
+                      "it -- see the banner)"
                       if direct[t] == 0.0 and t >= DATA_LO else ""))
         return 0
 
