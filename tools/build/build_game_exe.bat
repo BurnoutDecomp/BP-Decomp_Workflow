@@ -401,6 +401,12 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- race-car RENDER wave (2026-07-31): RenderRaceCar + GenerateDispatchLists ----
   rem ---- plus the ActiveRaceCar / RenderParams homes the render leg reads.        ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Render.cpp"
+  rem ---- CRACKED GLASS (2026-09-06, glassfx wave). BrnWorld::SetGlassFractureConstants  ----
+  rem   @0x822BD280 -- shader constants 30/31/32 (g_glassFractureStrength /
+  rem   ...UVOffsets / ...FresnelRanges). RenderRaceCar calls it once per car as the "no
+  rem   fracture" reset and once per CRACKED pane in the shattered-glass loop; before this
+  rem   mount nothing on the build published those three registers at all.
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_GlassFracture.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar_wQ5_01.cpp"
   rem ---- non-Showtime boost pipeline: exact base vtable, manager, and all three ----
