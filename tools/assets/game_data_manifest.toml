@@ -778,14 +778,32 @@ Registry subclasses. Relabelling their containers while preserving BE payloads w
 corrupt, so they remain explicit blockers."""
 
 [[rule]]
-id     = "unhandled-postfx"
+id     = "postfx-vault"
 match  = ["POSTFX/POSTFXVAULT.BIN"]
-action = "unhandled"
-reason = """COLOURCUBEDICTIONARY.BIN, PFXHOOKS.PFX and POSTFXVAULT.BIN are all bnd2
-platform 2 in retail. ColourCube and PFXHookBundle are handled by the schema-walked rule
-above. POSTFXVAULT is the sole remaining file: its AttribSys PtrN graph differs from the
-vehicle/engine vault schemas, and the strict generic converter rejects it rather than
-silently swapping the wrong pointer-selected block."""
+action = "convert"
+tool   = "bundles/attribsys_transcode.py"
+argv   = ["{src}", "{out}"]
+verify = ["bnd2_platform=4"]
+why    = """The EFFECTS module's own AttribSysVault (rid 627894D7, 84 collections).
+It was listed "unhandled" because the strict walk rejected it -- correctly, on the
+evidence it had: 13 of its 101 PtrN type-3 fixups name offsets that are not
+CollectionLoadData pointer slots. They are not VLT offsets at all. Vault::Initialize
+(attribloadandgo.cpp, X360 @0x8280A660) keeps a CURRENT BASE that its type-2 records
+select, and the field the tool printed as `flag` IS muDepIndex; WORLDVAULT / SURFACELIST /
+CAMERAS each carry exactly ONE type-2 record, so "every type-3 offset is a VLT offset"
+held for them and was never separated out. POSTFXVAULT carries TWO groups, and the second
+one's slots are the 4-byte STRING POINTER fields inside the class payloads (sparkeffect's
+SparkTextureName at payload +0x50 <- "fxspark"; the smoke class's at +0x30 <- "fxsmoke" /
+"surface_grass" / "surface_gravel" / "surface_sand" / "surface_dirt"; junkyardlocators'
+whole 4-byte payload <- the locator text). With the base tracked the walk accepts it and
+all four existing vaults re-convert BYTE-IDENTICALLY.
+
+WHY IT MATTERS BEYOND POSTFX: this vault is where the four `sparkeffect` collections
+(376835 / 376836 / 376837 / 554431) and the three `debrisparams` and `junkyardlocators`
+601979 live -- the ones EffectsModule::PrepareResources builds its instances over. While
+it did not load, EVERY spark array ran on Attrib::DefaultDataArea zeros: zero lifetime,
+zero radius, zero motion-blur window, null texture name. The retail data reads
+gravity -9.81, lifetimes {2.0, 0.6, 1.2, 0.375} and radius 0.014-0.02 m."""
 
 [[rule]]
 id     = "prop-physics"

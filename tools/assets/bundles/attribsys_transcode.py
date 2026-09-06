@@ -201,6 +201,30 @@ CLS_CAMERADEFAULTS = 0x095B375E5F206F31    # cameradefaults.h (low word 0x5F206F
 CLS_AFTERTOUCHCAM = 0x75E62FC1632388D6     # aftertouchcam.h (low word 0x632388D6)
 CLS_SHOTGROUP = 0x38ED2D373887CBC7         # shotgroup.h (low word 0x3887CBC7)
 
+# -- POSTFXVAULT.BIN (rid 627894D7) -------------------------------------------
+# Seven of its nine classes are named by the hash straight out of
+# b5-decomp/src/GameSource/AttribSys/Generated/classes/, and EVERY ONE of the
+# seven has its payload size confirmed twice over: the generated constructor's
+# own DefaultDataArea(N), and the extent the BIN arena tiling measures.
+#   sparkeffect       0x90 = 144  x4   (376835 / 376836 / 376837 / 554431)
+#   debrisparams      0xE0 = 224  x3
+#   junkyardlocators  0x04 =   4  x1
+#   vignetteasset     0x50 =  80  x30
+#   bloomasset        0x20 =  32  x22
+#   b4blurasset       0x60 =  96  x1
+#   depthoffieldasset 0x14 =  20  x1
+# The remaining two have NO generated header in this tree, so their names are
+# NOT recovered; they are registered by hash with the size the tiling measures.
+CLS_SPARKEFFECT = 0xCAF7F032BCD68E9C
+CLS_DEBRISPARAMS = 0x3024A28726D81D5F
+CLS_JUNKYARDLOCATORS = 0x6BE263B8CE99D5A3
+CLS_VIGNETTEASSET = 0x92F96F629C02B73F
+CLS_BLOOMASSET = 0xB632EC178CFDE613
+CLS_B4BLURASSET = 0xEF9F6F047362D8CF
+CLS_DEPTHOFFIELDASSET = 0x9F2F63E81ECD74BA
+CLS_POSTFX_UNNAMED_A = 0x47A154ED2C7CA48A   # 0x10, x10 -- name not recovered
+CLS_POSTFX_UNNAMED_B = 0x43DA904BE836238A   # 0x90, x12 -- name not recovered
+
 REFSPEC = (8, 8, 4, 4)          # {u64 classKey, u64 collectionKey, u32 ptr, u32 pad}
 
 
@@ -291,6 +315,47 @@ def _schema_cameradefaults(_size):
 # (classHash, is_item_payload) -> schema builder (region size -> field widths).
 # The widths tile the region from its start; any remainder is left raw and
 # reported unless it is all zero padding.
+def _capped_words(count):
+    """A DefaultDataArea(4*count) of 4-byte scalars, CLAMPED to the tiled region.
+
+    Same intent as _fixed_words, plus the one thing the POSTFXVAULT arena needs:
+    the LAST payload in the arena can be SHORTER than the class's data area
+    because the exporter trims its trailing zero words (class 0x43DA904B...'s
+    twelve collections tile to 144 bytes each except the last, which ends at 140
+    because depthoffieldasset's payload starts there and the 36th word -- zero in
+    every other collection -- was not written). Emitting the nominal count then
+    would overrun the region and abort the walk; emitting the region's own word
+    count covers every byte that is actually present.
+    """
+    def build(size):
+        return _scalars(4, min(count, size // 4))
+    return build
+
+
+def _schema_postfx_unnamed_b(size):
+    """POSTFXVAULT class 0x43DA904BE836238A (0x90, twelve collections).
+
+    ⚠️ THE ONE WORD IN THIS WHOLE VAULT THAT IS NOT A 4-BYTE SCALAR. An
+    exhaustive scan of every word of all 84 payloads -- rejecting any word that
+    is neither zero, nor a small BE u32 (<= 100000), nor an f32 in
+    [1e-5, 1e7] -- returns EXACTLY ONE: this class's +0x34, which reads
+    0x01000000 in all twelve collections. As a BE u32 that is 16,777,216 and as
+    an f32 a 2.35e-38 denormal; as BYTES it is {1, 0, 0, 0}, i.e. a bool set in
+    the byte the console's `lbz` would read, followed by three pad bytes -- the
+    same shape visualfxsurface's four flag bytes have, and it sits immediately
+    after the class's text-pointer slot at +0x30. Flipping it as a dword moves
+    the 1 to the far end of the word and the flag reads FALSE, which is exactly
+    the defect that cost the tyre mark its last gate (see
+    _schema_visualfxsurface). So it is kept as four bytes and FLAGGED: the
+    field's NAME is not recovered (this class has no generated header in the
+    tree), only its width.
+    """
+    nwords = min(36, size // 4)
+    if nwords <= 13:
+        return _scalars(4, nwords)
+    return _scalars(4, 13) + _scalars(1, 4) + _scalars(4, nwords - 14)
+
+
 PAYLOAD_CLASS_SCHEMAS = {
     (CLS_BOOSTPARAMS, False): _schema_words,
     (CLS_SURFACE, False): _schema_surface,
@@ -308,6 +373,17 @@ PAYLOAD_CLASS_SCHEMAS = {
     (CLS_CAMERADEFAULTS, False): _schema_cameradefaults,  # 0x38
     (CLS_AFTERTOUCHCAM, False): _fixed_words(6),     # 0x18
     (CLS_SHOTGROUP, True): _schema_surface_list_items,
+    # -- POSTFXVAULT.BIN; sizes are the generated DefaultDataArea(N) AND the
+    # arena tiling, which agree for all seven named classes.
+    (CLS_SPARKEFFECT, False): _capped_words(36),          # 0x90
+    (CLS_DEBRISPARAMS, False): _capped_words(56),         # 0xE0
+    (CLS_JUNKYARDLOCATORS, False): _capped_words(1),      # 0x04 -- one text pointer
+    (CLS_VIGNETTEASSET, False): _capped_words(20),        # 0x50
+    (CLS_BLOOMASSET, False): _capped_words(8),            # 0x20
+    (CLS_B4BLURASSET, False): _capped_words(24),          # 0x60
+    (CLS_DEPTHOFFIELDASSET, False): _capped_words(5),     # 0x14
+    (CLS_POSTFX_UNNAMED_A, False): _capped_words(4),      # 0x10
+    (CLS_POSTFX_UNNAMED_B, False): _schema_postfx_unnamed_b,   # 0x90
 }
 
 
@@ -354,13 +430,36 @@ class Walk(object):
 
 
 def _scan_ptr_slots(data, big_endian):
-    """Pre-pass: locate PtrN and collect its type-3 records (needed while
-    walking ExpN item records and to tile the BIN payload arena)."""
+    """Pre-pass: locate PtrN and collect its type-3 records, GROUPED BY THE
+    BLOCK THEIR SLOT OFFSET IS RELATIVE TO.
+
+    ⭐⭐ A type-3 fixup offset is NOT always a VLT offset. Vault::Initialize
+    (attribloadandgo.cpp, X360 @0x8280A660) keeps a CURRENT BASE:
+
+        case 2:  lpCurrentBase = mDepData[record.muDepIndex].GetData();
+        case 3:  *(u32*)(lpCurrentBase + record.muSlotOffset)
+                     = mDepData[record.muDepIndex].GetData() + record.muDataOffset;
+
+    so muSlotOffset is relative to whatever the LAST type-2 record selected,
+    and the field this tool prints as `flag` IS muDepIndex. WORLDVAULT /
+    SURFACELIST / CAMERAS all carry exactly ONE type-2 record, which is why
+    "every type-3 offset is a VLT offset" held for them and was never
+    separated out. POSTFXVAULT carries TWO groups: one whose slots are the
+    collection headers' mLayout words (VLT space) and one whose slots are
+    4-byte STRING POINTER fields inside the class payloads themselves (BIN
+    space -- e.g. sparkeffect's SparkTextureName at payload +0x50, fixed up
+    to "fxspark" at StrE +0x08). Reading the second group as VLT offsets is
+    what made the strict walk reject this vault.
+
+    Returns (groups, ordered) where `groups` maps muDepIndex -> [(ptr, target)]
+    and `ordered` is the flat list in file order (for the entry/array checks).
+    """
     rd = (lambda b: int.from_bytes(b, 'big' if big_endian else 'little'))
     rds = (lambda b: int.from_bytes(b, 'big' if big_endian else 'little', signed=True))
     vlt_off = rd(data[0:4])
     vlt_size = rd(data[4:8])
-    records = []
+    groups = {}
+    ordered = []
     pos = vlt_off
     while pos < vlt_off + vlt_size:
         cc = data[pos:pos + 4]
@@ -371,20 +470,29 @@ def _scan_ptr_slots(data, big_endian):
             raise WalkError('bad chunk size scanning for PtrN at +0x%X' % pos)
         if cc == FOURCC_PTRN:
             at = pos + 8
+            current = None
             for _ in range((size - 8) // 16):
                 ptr = rd(data[at:at + 4])
                 ptype = rds(data[at + 4:at + 6])
+                dep = rds(data[at + 6:at + 8])
                 target = rd(data[at + 8:at + 16])
-                if ptype == 3:
-                    records.append((ptr, target))
+                if ptype == 2:
+                    current = dep
+                elif ptype == 3:
+                    if current is None:
+                        raise WalkError('PtrN type-3 record before any type-2 '
+                                        'base select -- Vault::Initialize would '
+                                        'write through a NULL base')
+                    groups.setdefault(current, []).append((ptr, target))
+                    ordered.append((ptr, target))
                 at += 16
         pos += size
-    return records
+    return groups, ordered
 
 
 def walk_attribsys_vault(data, big_endian):
     w = Walk(data, big_endian)
-    ptr_records = _scan_ptr_slots(data, big_endian)
+    ptr_groups, ptr_all = _scan_ptr_slots(data, big_endian)
 
     vlt_off = w.scalar(0, 4, 'vltOffset')
     vlt_size = w.scalar(4, 4, 'vltSize')
@@ -499,14 +607,27 @@ def walk_attribsys_vault(data, big_endian):
     # how the entry-tail defect shipped (the tool "explained" a fixup that landed
     # on entry+8 by making that slot 8 bytes wide).
     declared = dict(w.slots)
-    for ptr, _target in ptr_records:
-        if ptr not in declared:
-            near = min(declared, key=lambda s: abs(s - ptr)) if declared else -1
-            raise WalkError('PtrN type-3 fixup names VLT+0x%X, which no record '
-                            'shape declares as a 4-byte pointer slot (nearest '
-                            'declared slot VLT+0x%X %s) -- the CollectionLoadData '
-                            'shape is wrong'
-                            % (ptr, near, declared.get(near, '?')))
+
+    # Which type-2 group addresses the VLT block? The one every one of whose
+    # slots IS a declared VLT pointer slot. That is a derivation, not an
+    # assumption about dependency order: it is checked below, and a group that
+    # is neither wholly VLT nor wholly a BIN payload slot raises.
+    vlt_group = None
+    for dep, recs in sorted(ptr_groups.items()):
+        if recs and all(ptr in declared for ptr, _t in recs):
+            if vlt_group is not None:
+                raise WalkError('two PtrN type-2 groups both look like the VLT '
+                                'block (dep %d and dep %d)' % (vlt_group, dep))
+            vlt_group = dep
+    ptr_records = ptr_groups.get(vlt_group, []) if vlt_group is not None else []
+    if not ptr_records:
+        raise WalkError('no PtrN type-2 group addresses the VLT block')
+    # Everything else addresses the BIN block: 4-byte string-pointer fields
+    # INSIDE a class payload. They are checked against the tiled arena below.
+    bin_fixups = []
+    for dep, recs in sorted(ptr_groups.items()):
+        if dep != vlt_group:
+            bin_fixups.extend(recs)
 
     # payload regions: each type-3 PtrN record names one payload; its slot
     # lives inside an attribute header (+40 = the collection payload; any
@@ -555,6 +676,40 @@ def walk_attribsys_vault(data, big_endian):
             if any(rem):
                 w.report.append('NON-ZERO bytes beyond the class %016X schema '
                                 'at BIN+0x%X kept raw' % (cls, off - bin_off))
+
+    # ---- MANDATORY: every BIN-space fixup must be a 4-byte slot inside a
+    # payload, pointing INTO the StrE string table, and reading ZERO on disk.
+    # That is the whole shape of a serialised `const char*` attribute: the
+    # exporter leaves the field empty and Vault::Initialize stores the string's
+    # runtime address into it. A record that fails any of the three is not a
+    # string fixup and the walk must not silently accept it.
+    for ptr, target in bin_fixups:
+        region = None
+        for start in starts:
+            end = starts[starts.index(start) + 1] if start != starts[-1] else bin_size
+            if start <= ptr < end:
+                region = (start, end)
+                break
+        if region is None:
+            raise WalkError('BIN-space PtrN fixup names BIN+0x%X, which is not '
+                            'inside any tiled class payload' % ptr)
+        if ptr % 4 != 0:
+            raise WalkError('BIN-space PtrN fixup slot BIN+0x%X is not 4-aligned'
+                            % ptr)
+        if not (8 <= target < stre_size):
+            raise WalkError('BIN-space PtrN fixup at BIN+0x%X targets BIN+0x%X, '
+                            'which is outside the StrE table (8..0x%X)'
+                            % (ptr, target, stre_size))
+        slot = data[bin_off + ptr:bin_off + ptr + 4]
+        if any(slot):
+            raise WalkError('BIN-space PtrN fixup slot BIN+0x%X is not zero on '
+                            'disk (%s) -- it is not an empty pointer field'
+                            % (ptr, slot.hex()))
+        w.report.append('string fixup: payload slot BIN+0x%X (class payload '
+                        '+0x%X) <- StrE+0x%X %r'
+                        % (ptr, ptr - region[0], target,
+                           data[bin_off + target:data.index(b'\0', bin_off + target)]
+                           .decode('latin1')))
 
     # ---- MANDATORY: the ARRAY flag must agree with the payload it points at ----
     # An entry with mu8Flags bit 0x2 is an array: Node::GetCount (@0x82804610)
