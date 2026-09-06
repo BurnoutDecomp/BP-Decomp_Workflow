@@ -1,0 +1,35 @@
+# known_asserts.txt -- assert FAMILIES that fire on the current tip and are somebody else's lane.
+# One regex per line (PowerShell -match, applied to the `[ASSERT n] <message>` line with the
+# `[ASSERT n] ` prefix and the trailing `(file:line)` / `[repeat ...]` stripped). Lines starting
+# with # are comments.
+#
+# The `NewAsserts` check passes when every assert family in a run matches one of these. It is
+# NOT a licence to ignore asserts: a family listed here still counts in `asserts=` and a lane
+# whose bug IS one of these must check it explicitly with LogCount. Keep this list SHORT and
+# dated; remove a line the day its family stops firing on a baseline run.
+#
+# 2026-09-06 baseline (tip 473ff6f4 + the IsInWorld order fix): the upstream effects/Lion lane.
+^Not locked for writing
+^Can not instance resource pointer - it has no main memory resource
+^ParticleModule: Couldn't locate lion effect description
+# 2026-09-06 also on the tip before this wave (both 09-06 baseline runs, absent on 09-02 runs):
+# the PostFx vault asset does not load on this build ('PostFx/postfxvault.bin' -> pool 7: -1) and
+# the reset-on-track surface-list tripwire (BrnRaceCarEntityModule_ResetPump.cpp) fires once.
+^LoadBundle failed for a request that did not allow failure
+^Surface list appears to be corrupt
+
+# ---------------------------------------------------------------------------------------
+# hud lane addition (2026-09-06). Everything above this block is known_asserts.txt VERBATIM;
+# tools/tests/cases/hud_visibility.ps1 points its NewAsserts check here with `Known`. It is a
+# COPY rather than an edit of the shared list because the family below is SCENARIO-SPECIFIC:
+# hud_visibility is the only case in the wave that taps the offline pause, so no other run can
+# see it and it does not belong on the shared tip-noise list.
+#
+# The family -- the sound lane's voice-slot detach on the pause transition:
+#   [ASSERT n] mVoiceHandle->Detach( lSlotName )  (GameShared/GameClasses/Sound/Logic/CgsVoice.cpp:334)
+# fires exactly ONCE, on the frame the main map opens. FOREIGN to this lane: the hud change
+# touches nothing under GameShared/.../Sound. Measured on the pre-fix run
+# scratch/bugtest/runs/hud_visibility/20260906_104450 and expected to be unchanged by the fix,
+# so it is tolerated HERE and named, rather than absorbed silently into the shared list.
+# DELETE-WHEN the sound lane fixes CgsVoice.cpp:334 (or when this case is retired).
+^mVoiceHandle->Detach\( lSlotName \)

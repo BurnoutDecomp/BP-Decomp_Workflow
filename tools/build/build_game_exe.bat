@@ -4731,6 +4731,13 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
   echo "%SRC%\GameSource\Director\Shots\ShotControllers\BrnInertiaController.cpp"
+  rem  [camera lane 2026-09-06] THE CAMERA-SHAKE CONSUMER. CameraFinaliser::Update step 4
+  rem  is the ONLY reader of Camera::mEffects' shake request (mfShakeAmplitude /
+  rem  mfShakeFrequency / mu8ShakeType) in the whole image, and PerlinShakeController is its
+  rem  callee. Both were unmounted, so every shake in the game -- boost, rival impact,
+  rem  traffic check, landed stunt, smash -- was written and never read.
+  echo "%SRC%\GameSource\Director\Shots\ShotControllers\BrnKeyAnimShakeController.cpp"
+  echo "%SRC%\GameSource\Director\Shots\ShotControllers\BrnPerlinShakeController.cpp"
   rem  The TRAFFIC-LANE graph the fly-by rides. WorldMap::GetLanePositionNearestPoint walks
   rem  Pvs::GetHullIndexForPoint -> TrafficData::GetHull -> the section's rungs, and
   rem  TrafficLaneTruck::Update samples Section::Calc{Position,Direction,Transform}AtParameter.

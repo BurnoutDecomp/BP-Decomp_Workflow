@@ -142,6 +142,21 @@ def is_stale(obj, flags_hash, statc):
         return True
     if not lines or lines[0] != flags_hash:
         return True
+    # THE MID-COMPILE HEADER EDIT (measured 2026-09-06, eleven lanes editing one checkout).
+    # A TU whose cl STARTED before a header was edited and FINISHED after it has an .obj
+    # NEWER than the header, yet was compiled from the OLD text. "dep newer than obj" can
+    # never see that, so the poisoned .obj survived six consecutive builds and every boot
+    # died in MainGameFlowStateInitialLoadingScreen::Update (BrnGameModule.obj carried the
+    # exact mtime of the header edit). So the .d records the compile's START time (line 2,
+    # "@start <ns>") and deps are compared against THAT, with a 2 s slack in the stale
+    # direction. Old .d files without the line fall back to the obj mtime as before.
+    ref_t = obj_t
+    if len(lines) > 1 and lines[1].startswith("@start "):
+        try:
+            ref_t = int(lines[1][7:]) - 2_000_000_000
+        except ValueError:
+            ref_t = obj_t
+        lines = [lines[0]] + lines[2:]
     if len(lines) < 3:
         # A .d with no header entries is a poisoned record from the localized-cl
         # /showIncludes miss (every real TU includes headers) -- treat as stale so
@@ -149,7 +164,7 @@ def is_stale(obj, flags_hash, statc):
         return True
     for dep in lines[1:]:
         dep_t = statc.mtime(dep)
-        if dep_t is None or dep_t > obj_t:
+        if dep_t is None or dep_t > ref_t:
             return True
     return False
 
@@ -220,6 +235,7 @@ def detect_note_prefix(env, tu_dir):
 
 def compile_one(src, obj, flag_args, flags_hash, env, note_prefix):
     cmd = ["cl"] + flag_args + ["/showIncludes", "/c", src, "/Fo" + obj]
+    start_ns = time.time_ns()   # recorded in the .d -- see is_stale
     try:
         p = subprocess.run(cmd, capture_output=True, encoding="oem",
                            errors="replace", env=env)
@@ -257,7 +273,8 @@ def compile_one(src, obj, flag_args, flags_hash, env, note_prefix):
                     uniq.append(d)
             try:
                 with open(obj + ".d", "w", encoding="utf-8") as fh:
-                    fh.write(flags_hash + "\n" + "\n".join(uniq) + "\n")
+                    fh.write(flags_hash + "\n@start " + str(start_ns) + "\n" +
+                             "\n".join(uniq) + "\n")
             except OSError as e:
                 shown.append(f"WARNING: could not write dep file {obj}.d: {e}")
     return p.returncode, shown, src
