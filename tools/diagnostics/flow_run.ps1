@@ -418,7 +418,20 @@ if ($Slot -gt 0 -and -not (Test-Path (Join-Path $gameDir 'Burnout_PC.exe'))) {
 if (Test-Path $OutDir) { Remove-Item -Recurse -Force $OutDir }
 New-Item -ItemType Directory -Force $OutDir | Out-Null
 
-Add-Type @"
+# ⛔⛔ GUARDED, AND THE GUARD IS NOT COSMETIC (measured 2026-09-06, barrel-roll wave).
+#   Add-Type installs KBFLOW into the CALLING PROCESS's AppDomain, and a batch driver invokes this
+#   script with `& flow_run.ps1` -- SAME PROCESS -- once per boot. The second and later calls throw
+#   `Cannot add type. The type name 'KBFLOW' already exists.`, which under $ErrorActionPreference
+#   'Stop' is a TERMINATING error, so the `trap` below fires and the boot dies having printed
+#   nothing but "terminating error -- all seven input holds released". MEASURED COST IN ONE
+#   SESSION: a 16-boot wall sweep stopped after 3 and a 15-boot jump ladder produced 5 logs; the
+#   ten lost boots left EMPTY DIRECTORIES and 154-byte flow logs, and the surviving five still
+#   looked like a corpus. A campaign that silently loses two thirds of its n is worse than one
+#   that fails outright.
+#   ⚠️ It is intermittent by process, not by boot: a driver that spawns a fresh powershell per
+#   boot never sees it, which is why crash_sweep_batch.ps1 has run for weeks without hitting it.
+if (-not ('KBFLOW' -as [type])) {
+  Add-Type @"
 using System;
 using System.Runtime.InteropServices;
 public static class KBFLOW {
@@ -426,6 +439,7 @@ public static class KBFLOW {
   public static void Tap(byte vk) { keybd_event(vk,0,0,IntPtr.Zero); System.Threading.Thread.Sleep(60); keybd_event(vk,0,2,IntPtr.Zero); }
 }
 "@
+}
 
 # ⛔⛔ SERIALIZE THE BOX -- ONE HARNESS AT A TIME (traffic-verify wave, 2026-08-27).
 # Taken BEFORE the kill sweep below, because the kill is the destructive act: this script ends
@@ -669,10 +683,11 @@ foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA'
                   'BRN_IM2D_TRACE','BRN_IMPULSE_PROBE','BRN_INPUT_KEEP_KEYBOARD','BRN_INPUT_MAP_DUMP',
                   'BRN_JUMP_DUMP','BRN_KERB_PROBE','BRN_LATCH_PROBE','BRN_LIONFX_NOCULL',
                   'BRN_LION_NOBLEND','BRN_ODOMETER_DIAG','BRN_PACE_DIAG','BRN_POSTFX_DIAG','BRN_PROP_NOCLAMP',
-                  'BRN_RESTROW_PROBE','BRN_RT_PROBE','BRN_SCENE_QUERY_DIAG','BRN_SHOWTIME_SCORE_DIAG',
+                  'BRN_RESTROW_PROBE','BRN_ROLL_PROBE','BRN_RT_PROBE','BRN_SCENE_QUERY_DIAG','BRN_SHOWTIME_SCORE_DIAG',
                   'BRN_SKID_DISABLE','BRN_SKID_LIFT','BRN_SKID_LOUD','BRN_SKID_PROBE',
                   'BRN_SPARK_DIAG','BRN_SPARK_FILM_VERTS','BRN_SPARK_FORCE','BRN_SPARK_TEST',
-                  'BRN_SPHERE_PROBE','BRN_STRENGTH_STAT_OVERRIDE','BRN_STUNT_DIAG','BRN_SUSV_PROBE',
+                  'BRN_SPHERE_PROBE','BRN_STRENGTH_STAT_OVERRIDE','BRN_STUNT_DIAG',
+                  'BRN_SUSV_PROBE',
                   'BRN_SYMP_LATCH_CONTROL','BRN_TDEF_NO_UPLOAD','BRN_TDEF_SCALE',
                   'BRN_TRAFFIC_EVENTS_CONTROL','BRN_TRAFFIC_TRACK','BRN_VFXFEED_PROBE','BRN_VP_PROBE',
                   'BRN_WHEELRESET_PROBE','BRN_WHEEL_PROBE','BRN_WHEEL_SUS_PROBE','BRN_WORLD_CAMDIST',
