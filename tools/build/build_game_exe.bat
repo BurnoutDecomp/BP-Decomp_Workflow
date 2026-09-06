@@ -5058,6 +5058,24 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Rivals.cpp"
   rem [issue #10 odometer 2026-09-06] ProgressionManager::PreWorldUpdate + AddDistanceDriven
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_PreWorldUpdate.cpp"
+  rem [progression wave 2026-09-06, lane lifecycle] the OUTER lifecycle pair and its callees:
+  rem Construct @0x8237A5F8, Prepare @0x8239DC38 + LoadAIData @0x8239A0D0, ApplyVehicleList
+  rem @0x82359A20, and Prepare2's tail (ComputeLandmarkAISectionIndices @0x82370008,
+  rem ProcessLoadedPresetRaces @0x8236FDF8 + HACK_SetupRaces/HACK_SetupRaceWithLandMarks,
+  rem SetupRoamingSections @0x8236FE60) plus the two preset-race readers.
+  rem ZERO new unresolved externals: every callee is already mounted -- Profile::Construct,
+  rem AISectionsData::BuildAISectionPointMap/FindNearestAISection (SharedClasses\AI\AISectionsData.cpp),
+  rem CgsMemory::LinearMalloc, PerfMonCpu::AddMonitor, RequestInterface<3072>::LoadAILanes/GetAILanes,
+  rem TriggerData::FindLandmark/GetLandmark/GetRoamingLocation, Race::Construct/AddLandmark.
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Lifecycle.cpp"
+  rem [progression wave 2026-09-06, lane medals] the licence / rank-up chain: UpdatePlayerMedals
+  rem @0x8239FE50 + CalculateRankFromMedalTotal / ClearMedalsOnRankUp / UnlockDefaultPlayerCars /
+  rem FixGameModeRanks / DEBUG_ClearMedals, and UnlockToProgressionRank's Q3 + Q4 arms.
+  rem ZERO new unresolved externals: every callee is already mounted (OnTrophyUnlock +
+  rem CheckForSpecialCarUnlocks in the _Unlocks/_Completion partfiles, AchievementManagerBase::
+  rem OnLicenseUpgrade at line 3162, TelemetryData::Construct/AddParameter in
+  rem BrnNetworkSharedIO_Telemetry.cpp, CgsCore::SPrintf in the Cgs core).
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_Medals.cpp"
   echo "%SRC%\GameSource\GameState\DeveloperChallengeManager\BrnDeveloperChallengeManager.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_gDC_00.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnScoringSystem_Accessors2.cpp"
@@ -5328,6 +5346,12 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\SatNav\BrnEventIconManager.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_06.cpp"
   echo "%SRC%\SharedClasses\Progression\BrnRaceEventData.cpp"
+  rem [progression wave 2026-09-06, lane lifecycle] BrnProgression::Race's four bodies
+  rem (Construct @0x826767D8, AddLandmark @0x82354660, GetStartLandmarkIndex @0x823545F0,
+  rem GetFinishLandmarkIndex @0x824EA988). Reconstructed since July and never mounted; the
+  rem preset-race legs (HACK_SetupRaces / GetRacesAtLandmark) are its first callers.
+  rem Includes only BrnRace.h + CgsAssert.h -- no new externals.
+  echo "%SRC%\SharedClasses\Progression\BrnRace.cpp"
   echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRoadRuleUpcomingRoads.cpp"
   rem ---- [driver-details pause wave 2026-08-28] the rank-progress RESPONSE event. Its
   rem  Construct @0x824F62F8 is the last hop of the START-button pause screen's licence

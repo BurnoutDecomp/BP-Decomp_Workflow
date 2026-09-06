@@ -50,7 +50,7 @@
     # placement jump (a post-crash reset truncated it to 175 m of a 586 m drive on the first GREEN
     # run, ratio 3.4, while the whole-run polyline agreed with the odometer to 0.3%).
     # mfSpeedMPH * 0.44704 * simStep against a 10 Hz position polyline: 0.8x..1.25x.
-    @{ Kind = 'Script';     Name = 'odometer agrees with the whole-run motion polyline (0.8x..1.25x)'; Script = {
+    @{ Kind = 'Script';     Name = 'distance booked THIS RUN agrees with the whole-run motion polyline (0.8x..1.25x)'; Script = {
         param($ctx)
         $path = 0.0; $n = 0; $jumps = 0; $px = $null
         foreach ($line in $ctx.LogLines) {
@@ -63,13 +63,20 @@
             $px = $x; $py = $y; $pz = $z; $n++
           }
         }
-        $hud = $null
-        foreach ($line in $ctx.LogLines) { if ($line -match '\[odometer\] hud=(?<m>[\d.]+)') { $hud = [double]$Matches.m } }
-        if ($null -eq $hud) { return @{ Pass = $false; Detail = 'no [odometer] hud= line' } }
+        # THE RUN'S DELTA, not the absolute: LiveryData::mfDistanceDriven PERSISTS in the save, so a
+        # returning profile starts this run at last session's total (107 m on the run that first
+        # tripped this check: hud 536 m vs a 405 m polyline; the per-second increments matched the
+        # probe integral to 1 m). first car= .. last car= is what THIS run booked.
+        $first = $null; $last = $null
+        foreach ($line in $ctx.LogLines) {
+          if ($line -match '\[odometer\] car=(?<m>[\d.]+)') { $v = [double]$Matches.m; if ($null -eq $first) { $first = $v }; $last = $v }
+        }
+        if ($null -eq $last) { return @{ Pass = $false; Detail = 'no [odometer] car= line' } }
+        $booked = $last - $first
         if ($n -lt 2 -or $path -lt 20) { return @{ Pass = $false; Detail = ("car barely moved: polyline={0:N1}m over {1} samples" -f $path, $n) } }
-        $ratio = $hud / $path
+        $ratio = $booked / $path
         return @{ Pass = ($ratio -ge 0.8 -and $ratio -le 1.25)
-                  Detail = ("hud={0:N1}m polyline={1:N1}m over {2} samples ({3} placement jumps skipped) ratio={4:N3}" -f $hud, $path, $n, $jumps, $ratio) }
+                  Detail = ("booked={0:N1}m (car {1:N1} -> {2:N1}) polyline={3:N1}m over {4} samples ({5} placement jumps skipped) ratio={6:N3}" -f $booked, $first, $last, $path, $n, $jumps, $ratio) }
       } }
   )
 }
