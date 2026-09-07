@@ -16,6 +16,8 @@ for the plan and [`../AGENTS.md`](../AGENTS.md) for how to work against it.
 | `ledger.sqlite` | `tools/work/work.py seed` | **The ledger** — live store for per-TU/per-function status, owners, blockers, the TU dependency graph, and an event log. *Git-ignored* (local working store): rebuilt from the committed files below. |
 | `status.json` | committed, auto-written | The mutable progress (which TUs/funcs are done, owners, blockers) — only non-default rows. Committed so a fresh clone resumes where the last commit left off. |
 | `tu_deps.json` | committed, `work seed --deps` | The TU→TU dependency graph (21,548 edges) mirrored from the xref analysis, so leaf-first `next` works after a clone **without** `.ida-exports/` or IDA. |
+| `SILENT_LINK_INVENTORY.md` + `silent_link_inventory.json` | `tools/re/silent_link_sweep.py` | **The silent-link inventory.** A function the console CALLS, declared in our headers, defined nowhere and referenced by nothing links in *complete silence* — no warning, no linker error, no assert. Three player-visible bugs of that shape landed in one session (#17 `c227a165`, #14 `51cd862d`, `2f0e038a`). Every such declaration, cross-referenced against the ARTIST export and classed **A** (a mounted body of ours is the console's caller ⇒ running wrong now) / **B** (latent) / **C** (no direct caller — *not* proof of absence: virtuals have no `xrefs_to`). `--control` replays the sweep against `c227a165^` and must re-find the seed bugs. |
+| `sweep/silent_declarations.json` | *frozen snapshot, no generator* | The declaration-first companion to the above (2026-09-07, b5 `465fa81b`). Kept only for the two axes the tool does not produce: `not-in-console` (2,312 declarations ARTIST has no function for — candidate **inventions**) and `dropped_has_call_site` (1,154 bodiless declarations our tree calls, which link only because the calling TU is unmounted). |
 
 ## Current state (Phase 0)
 
@@ -33,6 +35,8 @@ python tools/work/build_identity.py     # -> identity.json
 python tools/work/build_unidentified.py --apply  # -> unidentified.json (needs .ida-exports/)
 python tools/work/build_tu_index.py      # -> tu_index.json  (reads identity.json)
 python tools/work/gen_skeleton.py "<TU key>"   # -> a skeleton on stdout / -o file
+python tools/re/silent_link_sweep.py     # -> SILENT_LINK_INVENTORY.md + silent_link_inventory.json
+python tools/re/silent_link_sweep.py --control   # prove the sweep still FINDS a known instance
 ```
 
 ## The `work` CLI (Phase 1 — live)
