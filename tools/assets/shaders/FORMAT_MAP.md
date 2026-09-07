@@ -10,15 +10,16 @@ Companion files:
 
 - `shader_transcode.py` -- per-resource transcoders (validated, round-trip-proven)
 - `convert_shaders_bundle.py` -- whole-bundle driver (`inventory` / `convert`)
-- `fallback_world.fx` -- minimal bring-up shader (see `MINIMAL_PATH.md`)
-- `recovered/*.fx` -- shaders decoded from the X360 microcode for techniques the
-  TUB tree lacks (Godray); always searched before the TUB tree
 - `xenos.py` -- Xenos microcode disassembler, ground-truth-validated (see
   section 8)
 - `ctab.py` -- big-endian CTAB reader (register-pinned uniform names for the
   shader `xenos.py` disassembles)
 - converted output: `tools/assets/shaders/out/SHADERS_PC.BNDL` (do NOT stage
   into `build/game/` from this slice; hand over to the build owner)
+
+⭐ **No `.fx` lives here any more (2026-09-07).** Every shader source is in the
+`tools/nushaders` submodule; this directory is the porter and the RE instruments only.
+See [`README.md`](README.md) for the move map.
 
 ## 1. Bundle inventory (X360 SHADERS.BNDL)
 
@@ -208,11 +209,14 @@ Technique -> HLSL mapping (in `convert_shaders_bundle.py`):
 - standalone `ZOnly*` -> any fx defining that technique (identical bodies);
 - `ZOnly*Instanced` -> the `*_Instanced.fx` files (their ZOnly techniques keep
   the un-suffixed name but use instanced vertex fetch);
-- coverage: **108/110** from the TUB tree; `Godray_Additive_Doublesided_Default`
-  has no TUB source and is now served by `recovered/Godray_Additive_Doublesided.fx`
-  (decoded from the X360 microcode, see section 9); only
-  `CarStudio_DoNotShipWithThisInTheGame_Default` (dev-only) still needs
-  `--fallback` -> `fallback_world.fx`.  `recovered/` is always searched first.
+- coverage: **110/110** from the nushaders submodule.  `Godray_Additive_Doublesided_Default`
+  had no source in `Shaders/` and is served by the recovered
+  `Source/Bundle/gamedb/burnout5/Playground/Test_Shaders/Godray_Additive_Doublesided.fx`
+  (decoded from the X360 microcode, see section 9), which the converter's `RECOVERED_FX`
+  list searches FIRST; `CarStudio_DoNotShipWithThisInTheGame_Default` (dev-only) is served
+  by the real playground shader.  Nothing falls back:
+  `Source/Bundle/Fallback/fallback_world.fx` is only reached by the deliberate
+  `--fallback` diagnostic bundle.
 - constant contract: after compiling, every technique's INTERNAL and EXTERNAL
   constant names are checked against the CTAB of the program it imports
   (`check_constant_contract`; `check <x360> <pc>` re-runs it on a staged bundle).
@@ -278,13 +282,15 @@ D3DDevice_* symbols are honest externs today):
   float payloads) are flipped and preserved; the runtime handle-binding path
   (technique -> program buffer `GetVariableHandleByName`) is engine-side and
   untested.
-- **Godray**: RECOVERED (2026-08-17) -- `recovered/Godray_Additive_Doublesided.fx`,
+- **Godray**: RECOVERED (2026-08-17) -- now
+  `tools/nushaders/Source/Bundle/gamedb/burnout5/Playground/Test_Shaders/Godray_Additive_Doublesided.fx`,
   decoded from the bundle's own X360 programs (VS 0xDFF4FAE8 / PS 0x45ADE07A) with
   `xenos.py`; the fxc CTAB now matches the X360 CTAB name-for-name (even register
   for register).  The fallback substitute had been asserting at TRK_UNIT83/379/
   381/388_GR stream-in because it lacked the technique's internal PS constant
-  `illuminance`.  **CarStudio**: no TUB HLSL; still fallback-substituted (its only
-  internal constant, `materialDiffuse`, is in the fallback).
+  `illuminance`.  **CarStudio**: served since the nushaders submodule landed by the real
+  `Playground/Test_Shaders/CarStudio_DoNotShipWithThisInTheGame.fx`, so the production
+  rule no longer passes `--fallback` at all.
 
 ## 8. Xenos disassembler + the bundle-pair ground-truth oracle (2026-08-14)
 

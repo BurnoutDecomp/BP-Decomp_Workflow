@@ -22,8 +22,9 @@ PostFixUpShaderConstants ASSERTS "Tyring to postfixup a constant not present in
 the programbuffer" for exactly that -- measured against the retail bundle, the
 all-fallback variant carries 192 such misses, i.e. it asserts on nearly every
 material at stream-in.  It stays a bring-up diagnostic, not a runnable bundle.
-Note also that tools/assets/shaders/recovered/ is always searched first, so
-even this "all-fallback" bundle gets the real Godray shader.)
+Note also that the converter's `RECOVERED_FX` list -- today just the nushaders
+submodule's Playground/Test_Shaders/Godray_Additive_Doublesided.fx -- is always
+searched first, so even this "all-fallback" bundle gets the real Godray shader.)
 
 (pointing --fxdir at an empty/nonexistent dir forces zero TUB matches, so with
 --fallback every technique maps to `fallback_world.fx`; techniques keep their
@@ -52,8 +53,8 @@ Contract with the engine:
 1. Compile (any Windows SDK fxc, resolved like nushaders
    `Build/Resolve-PC-FXC.ps1`):
 
-       fxc /T vs_3_0 /E VS_Main /O2 /Fo fallback_vs.fxo tools/assets/shaders/fallback_world.fx
-       fxc /T ps_3_0 /E PS_Main /O2 /Fo fallback_ps.fxo tools/assets/shaders/fallback_world.fx
+       fxc /T vs_3_0 /E VS_Main /O2 /Fo fallback_vs.fxo tools/nushaders/Source/Bundle/Fallback/fallback_world.fx
+       fxc /T ps_3_0 /E PS_Main /O2 /Fo fallback_ps.fxo tools/nushaders/Source/Bundle/Fallback/fallback_world.fx
 
 2. Wrap each blob:
 

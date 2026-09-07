@@ -17,9 +17,10 @@ Commands:
         defines) wrapped in the LE ProgramBufferData container, descriptor
         table rebuilt from the bytecode CTAB (see FORMAT_MAP.md section 5).
         Techniques with no TUB HLSL source hard-fail unless --fallback
-        substitutes tools/assets/shaders/fallback_world.fx.  tools/assets/
-        shaders/recovered/*.fx (shaders decoded from the X360 microcode) is
-        always searched FIRST, so a recovered technique never falls back.
+        substitutes the nushaders submodule's Source/Bundle/Fallback/
+        fallback_world.fx.  The shaders DECODED FROM THE X360 MICROCODE
+        (RECOVERED_FX below) are always searched FIRST, so a recovered
+        technique never falls back.
         After compiling, every technique's bound constant names are checked
         against its programs' CTABs: a missing INTERNAL constant is a hard
         error (it is a runtime assert in PostFixUpShaderConstants), a
@@ -36,7 +37,7 @@ Commands:
       YAP import-sidecar rename fix.
 
   py convert_shaders_bundle.py patch-recovered <pc_bundle> <out_bundle> [--keep-work DIR]
-      For a box WITHOUT the TUB tree: recompile only the recovered/ techniques
+      Recompile ONLY the recovered-from-microcode techniques (RECOVERED_FX)
       and swap their ShaderProgramBuffer resources into an already converted
       platform-4 bundle (everything else carried through untouched).  Same
       bytes for those resources as a full `convert` would emit.
@@ -125,24 +126,36 @@ DEFAULT_INCLUDE_DIR = os.path.join(NUSHADERS_TUB, 'Include')
 # too.  build_technique_map is first-dir-wins, so putting the playground first would
 # quietly re-point the shared standalone ZOnly* keys at a do-not-ship test shader.
 DEFAULT_PLAYGROUND_FX_DIR = os.path.join(NUSHADERS_TUB, 'Playground', 'Test_Shaders')
-FALLBACK_FX = os.path.join(HERE, 'fallback_world.fx')
+# ⭐ EVERY .fx NOW LIVES IN THE NUSHADERS SUBMODULE (2026-09-07).  This tool used to carry
+# three shader sources of its own next to itself -- fallback_world.fx, recovered/*.fx, and
+# the brn_*.fx recoveries of the executable-embedded programs.  They are all in
+# tools/nushaders now; this file only names the paths.
+FALLBACK_FX = os.path.join(NUSHADERS_SUBMODULE, 'Source', 'Bundle', 'Fallback',
+                           'fallback_world.fx')
 # Shaders RECOVERED from the X360 microcode (xenos.py + ctab.py) for techniques the
-# nushaders HLSL tree does not carry.  Searched FIRST, so a recovered technique never
-# falls through to --fallback.  Each file is self-contained (compiles without Include/).
+# nushaders HLSL tree did not originally carry.  Searched FIRST -- ahead of Shaders/, the
+# playground and the fallback -- so a recovered technique never falls through to
+# --fallback, and so an explicit --fxdir still gets the decoded shader.
 #
-# CURRENTLY ONE FILE, AND IT IS NOW ALSO UPSTREAM.  Godray_Additive_Doublesided.fx was
-# contributed to the nushaders submodule on 2026-08-17, at the gamedb path the technique
-# itself names (Playground/Test_Shaders/), so the bundle builds correctly from nushaders
-# ALONE -- verified: 110 mapped / 0 unmapped, compiled 218 / fallback 0 with this dir
-# excluded from the search.  The copy here is kept deliberately, for two reasons:
-#   * it is THIS repo's attested artifact -- the annotated microcode listing in its header
-#     is the decode evidence, and it should not depend on another repo's history;
-#   * dropping it would change the emitted bundle's resource LAYOUT (same resources, same
-#     technique sources, ~80 bytes of table ordering), and the layout that has been
-#     boot-tested is the one produced with this dir in the search.
-# The two copies are byte-identical; if they ever diverge, this one is the decode of
-# record and upstream should be re-synced from it.
-RECOVERED_FX_DIR = os.path.join(HERE, 'recovered')
+# ⛔ NAMED AS FILES, NOT AS A DIRECTORY, and that is load-bearing: the directory they now
+# live in (Playground/Test_Shaders) also carries CarStudio_DoNotShipWithThisInTheGame.fx,
+# whose `ZOnlyNull` technique would hijack the shared standalone ZOnly* keys if the whole
+# directory were searched first.  See the DEFAULT_PLAYGROUND_FX_DIR banner above.
+#
+# CURRENTLY ONE FILE.  Godray_Additive_Doublesided.fx was contributed upstream on
+# 2026-08-17 at the gamedb path the technique itself names, and this repo kept a second
+# copy under recovered/ until 2026-09-07.  The two copies had drifted -- ours carried the
+# fuller decode banner -- so the merge promoted OUR banner upstream and deleted the local
+# copy.  MEASURED at the same time, with fxc 10.0.26100: the two copies differed ONLY in
+# comments and compiled to byte-identical vs_3_0 (624 B) and ps_3_0 (500 B) images, and a
+# full convert before/after the move produced all 687 bundle members byte-identical.
+# (The older note here claimed dropping the local dir would move "~80 bytes of table
+# ordering".  It does not: the converter emits resources in `sorted(techniques)` order,
+# independent of which fx dir won.  That ~80 bytes was the run-to-run noise in the
+# bundle's trailing pad -- see the tail note in `convert` -- misattributed to the change.)
+RECOVERED_FX = (
+    os.path.join(DEFAULT_PLAYGROUND_FX_DIR, 'Godray_Additive_Doublesided.fx'),
+)
 
 # SHADERS.BNDL non-shader types handled by the established world flippers.
 WORLD_FLIP = {
@@ -201,8 +214,12 @@ def scan_fx_techniques(fx_path):
     return out
 
 
-def build_technique_map(fx_dirs):
+def build_technique_map(fx_paths):
     """{lowercased X360 technique name: (fx_path, vs_entry, ps_entry)}.
+
+    Each entry of `fx_paths` is either a DIRECTORY (every *.fx in it, alphabetical)
+    or a SINGLE .fx FILE -- the latter so the recovered-from-microcode shaders can
+    outrank everything without dragging in their directory's other techniques.
 
     Three name forms resolve:
       '<FxBaseName>_<Technique>'  (e.g. Diffuse_Opaque_Singlesided_Default)
@@ -216,8 +233,9 @@ def build_technique_map(fx_dirs):
     standalone forms (the ZOnly bodies are per-variant identical copies).
     """
     mapping = {}
-    for d in fx_dirs:
-        for fx in sorted(globmod.glob(os.path.join(d, '*.fx'))):
+    for d in fx_paths:
+        files = [d] if os.path.isfile(d) else sorted(globmod.glob(os.path.join(d, '*.fx')))
+        for fx in files:
             base = os.path.splitext(os.path.basename(fx))[0]
             instanced = base.lower().endswith('_instanced')
             for tech, vs, ps in scan_fx_techniques(fx):
@@ -415,17 +433,19 @@ def check(in_x360_bundle, pc_bundle):
 
 
 def patch_recovered(pc_bundle, out_bundle, keep_work):
-    """Recompile ONLY the techniques that have a recovered/ source and swap their
-    ShaderProgramBuffer primaries into an already-converted platform-4 bundle.
+    """Recompile ONLY the recovered-from-microcode techniques (RECOVERED_FX) and swap
+    their ShaderProgramBuffer primaries into an already-converted platform-4 bundle.
 
-    For a box without the TUB HLSL tree (which a full `convert` needs for the
-    other ~108 techniques): the result is byte-for-byte the bundle `convert`
-    would emit for those resources, everything else is carried through the YAP
-    extract -> compile round trip untouched (payload-identical; only the
-    trailing pad bytes of the last resource are re-zeroed).  The constant
-    contract is re-checked on the patched set."""
-    if not os.path.isdir(RECOVERED_FX_DIR):
-        raise SystemExit('no recovered/ shader dir: %s' % RECOVERED_FX_DIR)
+    For touching just those techniques without re-running the whole convert: the
+    result is byte-for-byte the bundle `convert` would emit for those resources,
+    everything else is carried through the YAP extract -> compile round trip
+    untouched (payload-identical; only the trailing pad bytes of the last resource
+    are re-zeroed).  The constant contract is re-checked on the patched set."""
+    missing = [p for p in RECOVERED_FX if not os.path.isfile(p)]
+    if missing:
+        raise SystemExit('recovered shader source(s) missing -- the nushaders submodule '
+                         'is not checked out (`git submodule update --init '
+                         'tools/nushaders`):\n  %s' % '\n  '.join(missing))
     work = keep_work or tempfile.mkdtemp(prefix='shaderspatch_')
     os.makedirs(work, exist_ok=True)
     ex = os.path.join(work, 'ex')
@@ -436,7 +456,7 @@ def patch_recovered(pc_bundle, out_bundle, keep_work):
     # Techniques in a platform-4 bundle are the LE flip: read them LE.
     tdir = os.path.join(ex, 'ShaderTechnique')
     pdir = os.path.join(ex, 'ShaderProgramBuffer')
-    tech_map = build_technique_map([RECOVERED_FX_DIR])
+    tech_map = build_technique_map(list(RECOVERED_FX))
     fxc = find_fxc()
     techniques = {}
     patched = []
@@ -622,6 +642,14 @@ def convert(in_bundle, out_bundle, mode, fx_dirs, use_fallback, keep_work,
     with open(meta_path, 'w', encoding='utf-8') as fh:
         fh.write(meta)
 
+    # ⚠️ THE EMITTED FILE IS NOT BYTE-REPRODUCIBLE RUN TO RUN, AND THE CONTENT STILL IS.
+    # MEASURED 2026-09-07: two converts of the same X360 bundle from the same sources gave
+    # files of identical length whose LAST 110 BYTES differ in 87 places (0x8C292..0x8C2FF
+    # of 0x8C400) -- YAP does not zero the pad after the final resource's payload, so it
+    # keeps whatever its buffer held.  Bytes 0..0x8C291 were identical, and extracting both
+    # bundles gave all 687 members byte-for-byte equal.
+    # ⇒ NEVER diff two of these bundles by whole-file hash and conclude a source changed.
+    # Compare the YAP-extracted members (or `check`), which is what actually ships.
     run([YAP, 'c', ex, out_bundle])
     if not keep_work:
         shutil.rmtree(work, ignore_errors=True)
@@ -703,8 +731,11 @@ def main():
     if a.fxdir is None and os.path.isdir(DEFAULT_PLAYGROUND_FX_DIR):
         fx_dirs = fx_dirs + [DEFAULT_PLAYGROUND_FX_DIR]
     # Recovered-from-microcode shaders always outrank the TUB tree and the fallback.
-    if os.path.isdir(RECOVERED_FX_DIR) and RECOVERED_FX_DIR not in fx_dirs:
-        fx_dirs = [RECOVERED_FX_DIR] + fx_dirs
+    # Prepended as individual FILES (see RECOVERED_FX): their directory also holds
+    # CarStudio's ZOnlyNull, which must not win the shared standalone ZOnly* keys.
+    for _rec in RECOVERED_FX:
+        if os.path.isfile(_rec) and _rec not in fx_dirs:
+            fx_dirs = [_rec] + fx_dirs
     if a.fxdir is None and not os.path.isdir(DEFAULT_FX_DIR):
         # An absent TUB tree yields an EMPTY technique map, and --fallback then maps every
         # technique to fallback_world.fx without a word -- a bundle in which nothing is the

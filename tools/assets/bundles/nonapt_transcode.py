@@ -190,7 +190,8 @@ def _colour_cube_tiled_offset(x, y, z):
     de-swizzle it is pure grey AND responds identically along all three axes (0 -> 0, 8 -> 27,
     16 -> 92, 31 -> 126; (31,31,31) -> 255). Any wrong axis or bit assignment breaks that symmetry.
     x is red, y green, z blue -- matching the composite's own `tex3D(Sampler3dTint, lComposite).rgb`
-    (tools/assets/shaders/brn_postfx_composite.fx:334), where lComposite.x is red and u is width.
+    (tools/nushaders/Source/Executable/Recovered/brn_postfx_composite.fx:358), where
+    lComposite.x is red and u is width.
     """
     b5 = ((x >> 4) & 1) ^ ((y >> 3) & 1) ^ ((z >> 2) & 1)
     b9 = ((y >> 3) & 1) ^ ((z >> 2) & 1)
