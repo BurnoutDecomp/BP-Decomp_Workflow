@@ -16,6 +16,32 @@ WHY THIS EXISTS
     only show what the code did with the fields; this shows what the ARTISTS put in them, on
     retail bytes, so the two can be compared instead of assumed.
 
+* WHAT mfMaxJointAngle SAYS, ACROSS ALL 430 CARS (measured 2026-09-07, part-box wave)
+    The owner filmed shed panels standing bolt upright, and a hinged panel left at its LIMIT
+    angle reads exactly that way.  UpdateJoint @0x8260B0F8 was audited against the asm the
+    same day and is 1:1 (clamp band, Rodrigues rows, all five integration constants, every
+    store) -- and that audit established the console CLAMPS the angle into [-maxAngle, 0]
+    every frame with a STRICT restitution predicate, so a panel driven to the limit PINS
+    there with no bounce.  Which makes the limit itself the whole answer, and it is data:
+
+      6,458 joints / 423 cars.  meJointType 1 (eHinge) 6,438, type 2 (eBallAndSocket) 20.
+      mfMaxJointAngle is in RADIANS (median 0.1221 == 7.0 deg; as degrees that would be a
+      hinge that cannot move).  233 joints carry a non-positive limit -- 203 at exactly
+      -0.01744 (-1 deg) and 30 at zero -- and ALL 233 also carry detachThresh < 0, i.e. the
+      sentinel is PAIRED and every inert-limit joint is gated shut anyway (0 exceptions).
+
+      Of the 5,112 SHED-CAPABLE joints with a live limit:
+          < 15 deg   3218  (62.9%)   barely moves
+          15-45 deg   294  ( 5.8%)
+          45-75 deg  1458  (28.5%)   a hard 60.0 deg cluster
+          > 75 deg    142  ( 2.8%)   past standing, up to 177.9 deg
+      The 60 deg cluster is not noise: part types 3, 4, 8, 10 -- the PLATE-shaped panels
+      (bonnet / boot / doors, mid/thin 3.9 to 9.7) -- read median 60.0 AND p95 60.0.
+      Types 12/13 reach ~130 deg at p95.
+    => A BODY PANEL HINGED 60 DEG OFF THE CAR IS AUTHORED, and roughly a third of hinged
+    panels are authorised to reach it.  "Standing" is the artists' number, not a defect.
+    Chase a hinge pose only when the observed angle exceeds the limit this table prints.
+
     The structural check the table makes is the useful one: for a hinge, the axis and the
     lever must be PERPENDICULAR unit vectors.  Measured on PUSMC01 (2026-09-05): all 21 joints
     have |axis| == |lever| == 1.00000 and axis . lever == 0.0000, and every axis is +/- a
