@@ -218,11 +218,14 @@ ShaderProgramBuffer from the nushaders HLSL with fxc.
 ⭐ STRICT SINCE 2026-08-17 -- `--fallback` IS GONE, and with it the last deliberate
 degradation in this rule.  It used to be mandatory because two techniques had no HLSL
 source and a strict run hard-failed with `no TUB HLSL source for 2 technique(s)`:
-  * Godray_Additive_Doublesided_Default -- served since 2026-08-17 by
-    tools/assets/shaders/recovered/Godray_Additive_Doublesided.fx, decoded from the X360
-    microcode (the fallback substitute lacked its internal PS constant `illuminance` and
-    asserted "Tyring to postfixup a constant not present in the programbuffer" whenever
-    TRK_UNIT83_GR streamed in);
+  * Godray_Additive_Doublesided_Default -- served since 2026-08-17 by the recovered
+    Godray_Additive_Doublesided.fx, decoded from the X360 microcode (the fallback
+    substitute lacked its internal PS constant `illuminance` and asserted "Tyring to
+    postfixup a constant not present in the programbuffer" whenever TRK_UNIT83_GR streamed
+    in).  Since 2026-09-07 that file lives with every other shader in the nushaders
+    submodule, at the gamedb path the technique itself names
+    (tools/nushaders/Source/Bundle/gamedb/burnout5/Playground/Test_Shaders/); the converter
+    still searches it FIRST, by name, via its RECOVERED_FX list;
   * CarStudio_DoNotShipWithThisInTheGame_Default -- served now that nushaders is a
     SUBMODULE (tools/nushaders): the real shader ships in the repo, one directory over from
     the ones already used, at Source/Bundle/gamedb/burnout5/Playground/Test_Shaders.

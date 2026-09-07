@@ -12,7 +12,8 @@ root unless a section says otherwise.
 | [`build/`](build/) | Game, FFmpeg, and standalone-tool build drivers plus linker-map conversion. |
 | [`assets/build_game_data.py`](assets/build_game_data.py) | **The game-data stager.** Turns a stock X360 game folder into a launchable PC data folder, driven by [`assets/game_data_manifest.toml`](assets/game_data_manifest.toml). See "Building the game data folder" below. |
 | [`assets/bundles/`](assets/bundles/) | Per-format bundle converters (world, vehicles, engines, textures, GUI banks, AttribSys, lanes, Apt). Driven by the stager; each is also usable standalone. |
-| [`assets/shaders/`](assets/shaders/) | `SHADERS.BNDL` X360 -> PC conversion and per-resource shader transcoders. |
+| [`assets/shaders/`](assets/shaders/) | `SHADERS.BNDL` X360 -> PC conversion, per-resource shader transcoders, and the Xenos microcode/CTAB disassemblers. **No shader sources** -- every `.fx` lives in [`nushaders/`](nushaders/); see [`assets/shaders/README.md`](assets/shaders/README.md). |
+| [`nushaders/`](nushaders/) | Shader-source submodule (github.com/BurnoutDecomp/NuShaders): all `.fx`/`.fxh` for the bundle and the executable-embedded programs. |
 | [`assets/memory_map/`](assets/memory_map/) | Extract, export, and generate the X360 memory-map data used by the PC build. |
 | [`assets/textures/`](assets/textures/) | Loading-screen texture extraction and conversion experiments. |
 | [`assets/fonts/`](assets/fonts/) | X360 font conversion, vector-font carving, and layout inspection. |

@@ -958,7 +958,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  The post-fx composite's D3D9 programs -- ALL TWELVE PERMUTATIONS since the
   rem  step-5 wave: ONE shared vertex image (the twelve X360 vertex packages are
   rem  byte-identical, md5 a47e7e9943a3570c484e1724d6dff763) plus twelve pixel
-  rem  images, generated from tools\assets\shaders\brn_postfx_composite.fx
+  rem  images, generated from tools\nushaders\Source\Executable\Recovered\brn_postfx_composite.fx
   rem  compiled twelve ways. Same situation as SkyDomeProgramsPC.cpp above:
   rem  executable-embedded Xenos microcode with no SHADERS.BNDL entry and no PC
   rem  counterpart, so every program is rebuilt for D3D9 and carried as a
@@ -966,7 +966,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  thirteen sizes), zero externals raised.
   echo "%SRC%\pc\gcm\renderengine\PostFxProgramsPC.cpp"
   rem  The six BLOOM D3D9 programs (down-sample vs/ps, "new" blur vs/ps, "old"
-  rem  separable-blur vs/ps), generated from tools\assets\shaders\brn_postfx_bloom.fx
+  rem  separable-blur vs/ps), generated from tools\nushaders\Source\Executable\Recovered\brn_postfx_bloom.fx
   rem  -- the same situation as the composite leaf above: six executable-embedded
   rem  Xenos microcode packages (X360 0x8203E6F8 / 0x8203E858 / 0x8203EA60 /
   rem  0x8203EBD0 / 0x8203ED78 / 0x8203EF10) with no SHADERS.BNDL entry and no PC
@@ -977,7 +977,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\pc\gcm\renderengine\PostFxBloomProgramsPC.cpp"
   rem  The four PfxHelper D3D9 programs (the shared quad's vertex program, and the
   rem  9-tap / 16-tap / 4-tap blur pixel programs) plus the DepthOfField pixel
-  rem  program, generated from tools\assets\shaders\brn_postfx_helper.fx -- the
+  rem  program, generated from tools\nushaders\Source\Executable\Recovered\brn_postfx_helper.fx -- the
   rem  same situation as the composite and bloom leaves above: five
   rem  executable-embedded Xenos microcode packages (X360 0x82044240 / 0x820444F8
   rem  / 0x820447A8 / 0x82044360 / 0x82043FB8) with no SHADERS.BNDL entry and no PC
@@ -990,7 +990,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\pc\gcm\renderengine\PostFxHelperProgramsPC.cpp"
   rem  The SEVEN B4Blur D3D9 programs (the blur quad's vertex program, the shared
   rem  scatter/radial vertex program, the scatter / radial / texture / down-sample
-  rem  / blur pixel programs), generated from tools\assets\shaders\brn_postfx_b4blur.fx
+  rem  / blur pixel programs), generated from tools\nushaders\Source\Executable\Recovered\brn_postfx_b4blur.fx
   rem  -- the same situation as the composite, bloom and helper leaves above: EIGHT
   rem  executable-embedded Xenos microcode packages (X360 0x82045148 / 0x82045600 /
   rem  0x82045748 / 0x82045AC0 / 0x82045C08 / 0x820459B8 / 0x820454E0 / 0x820452A8)
