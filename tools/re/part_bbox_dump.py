@@ -22,7 +22,7 @@ WHY THIS EXISTS
         PhysicalBodyPart::CalcBoundingBox @0x8260ABB0
             half = max(extent * 0.5, KV_MIN_BBOX_HALF_SIZE 0.05)   # &unk_82FB9DD0
 
-    ⭐ THE INSTRUMENT IS CALIBRATED AGAINST THE RUNTIME, not merely plausible.  The
+    * THE INSTRUMENT IS CALIBRATED AGAINST THE RUNTIME, not merely plausible.  The
     2026-09-07 part-rest run measured a pooled part at half (0.050, 0.067, 0.92); this
     reader finds PUSMC01 IK part 8 (type 24) at (0.0500, 0.0671, 0.9251) -- L1 error
     0.0053 m.  Two independent instruments, five millimetres apart.  `--control` re-runs
@@ -30,7 +30,7 @@ WHY THIS EXISTS
 
 WHAT IT MEASURED (430 cars, 11,290 IK part records, 10,860 with a real basis; 2026-09-07)
   * plateness (mid/thin half-extents): median 1.95 over all parts, 2.80 over the
-    SHED-CAPABLE ones -- versus 2.26 measured at runtime on settled parts.  ⇒ THE CONSOLE'S
+    SHED-CAPABLE ones -- versus 2.26 measured at runtime on settled parts.  => THE CONSOLE'S
     OWN PART BOXES ARE CHUNKY.  "No thin-plate box in the pool" is a property of the SHIPPED
     DATA, not of the reconstruction.  A ~3:1 slab has a stable rest state on its narrow
     face, and the drawn sheet metal is an order of magnitude thinner than the box carrying
@@ -45,11 +45,11 @@ WHAT IT MEASURED (430 cars, 11,290 IK part records, 10,860 with a real basis; 20
   * mOrientation is orthonormal (max ||row| - 1| = 3.8e-07) and right-handed in every real
     record, but it is NOT a signed axis permutation: median angle from identity 106 deg,
     and 29% of records have min-over-rows max|component| < 0.90, i.e. genuinely oblique.
-    ⚠️ That does NOT put the box at an angle to the drawn mesh: mOrientation is the INTERIOR
+    ! That does NOT put the box at an angle to the drawn mesh: mOrientation is the INTERIOR
     frame the box's own extents were measured in, and Prepare stores its affine inverse as
     mBBoxOrientation, which GetBoundingBox @0x825E7D28 composes back with the body pose.
 
-⛔ THE METRIC TRAP THIS FILE IS BUILT AROUND
+!! THE METRIC TRAP THIS FILE IS BUILT AROUND
     Do NOT read "smallest half-extent is horizontal" as "the panel is standing up".  The
     pool holds BARS and RODS whose thinnest axis is horizontal BY CONSTRUCTION on an upright
     car -- e.g. type 24/25 at half (0.050, 0.089, 0.958), a 1.9 m rod.  A run's `flat`
