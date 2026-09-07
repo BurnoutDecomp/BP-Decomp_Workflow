@@ -9,7 +9,8 @@
 # dated; remove a line the day its family stops firing on a baseline run.
 #
 # 2026-09-06 baseline (tip 473ff6f4 + the IsInWorld order fix): the upstream effects/Lion lane.
-^Not locked for writing
+# ("Not locked for writing" left this list 2026-09-07: LoadEffectsModule's read-lock forward
+#  used the write-lock accessors; case effects_load_readlock keeps it at zero.)
 ^Can not instance resource pointer - it has no main memory resource
 ^ParticleModule: Couldn't locate lion effect description
 # 2026-09-06 also on the tip before this wave (both 09-06 baseline runs, absent on 09-02 runs):
