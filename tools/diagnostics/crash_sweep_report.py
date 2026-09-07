@@ -3,6 +3,25 @@
 
     python tools/diagnostics/crash_sweep_report.py <BrnGame.log> [<BrnGame.log> ...]
     python tools/diagnostics/crash_sweep_report.py --csv out.csv <BrnGame.log> ...
+    python tools/diagnostics/crash_sweep_report.py --keep-invincible <BrnGame.log> ...
+
+⛔⛔⛔ THE INVINCIBILITY DISCARD (2026-09-07). A shot whose crash frames carry `set 4`
+(E_ABSORPTIONSET_INVINCIBLE) is NOT SCORED into any headline number, and this is a discard, not a
+footnote. In that set the car's whole AbsorptionTable row is 0.0, so lfAbsorbFactor == 0,
+lfAbsorbed == 0 and the deformation route banks nothing -- the car cannot dent BY ARITHMETIC, and
+the deformation-route momentum that tumbles it is not deposited either. The console arms it for
+mfNoDamageTimer == 1.5 s on a type-1 ResetDeformation, and the timer only starts burning when the
+deformable object un-freezes at place-on-track -- so a sweep shot fired from 42 m at 60 m/s
+(0.70 s of travel) hits the wall with ~0.8 s of invincibility still to run, EVERY TIME.
+Measured on the two boots ef38a2e8 published: A1's first contact frame reads
+`noDamageTimer 0.650001` == 1.5 - 51/60 exactly, A2's 0.883317 == 1.5 - 37/60 exactly; both
+impacts produced ZERO [dent] rows and the first [dent] line of the run is 105 log lines after the
+last set-4 line. Depth, roll and keep* taken on such a shot are measurements of the harness.
+`--keep-invincible` pools them back in for a deliberate before/after comparison; the default does
+not, because a corpus you have to remember to filter is one you will forget to filter.
+⭐ To take a corpus that is NOT contaminated, give the car >= 1.5 s of travel before impact:
+crash_sweep_batch.ps1 -MinDamageableSeconds 1.6 raises the launch distance per shot to do exactly
+that, and warns when the geometry cannot.
 
 WHY THIS IS IN THE REPO.  The sweep trigger (BRN_CRASH_SWEEP, BrnPlaceOnTrackManager.cpp) makes a
 crash REPRODUCIBLE; this makes a sweep READABLE.  Before it, the roll question was answered by
@@ -61,6 +80,10 @@ WHAT A ROW MEANS.
    whole 242-frame crash.  A `4` here means "invincible at some point", `0` means "normal at some
    point", `4>0` means the transition was actually observed.  Only `0` alone is proof of the
    owner's situation; use noDamageTimerFirst (in the CSV) to see how much window was left at entry.
+   ⭐ FIXED AT THE EMITTER 2026-09-07: an invincible frame is no longer decimated
+   (BrnDeformableObject_Update.cpp prints every frame the set reads 4, inside the same 900-line
+   cap), so on a log taken after that date a `4` with no `0` really does mean the probe never saw
+   the window close.  On OLDER logs the caveat above still stands -- read the run's date first.
 """
 import math
 import re
@@ -86,6 +109,13 @@ RE_ARRIVE = re.compile(r"\[crash-response\] arrive n=(\d+) "
                        r"world=(\d+) dir=(\d+) mag=([-\d.]+)")
 RE_ABSORB = re.compile(r"\[absorb\] owner (\d+) ent (-?\d+) set (\d+) noDamageTimer ([-\d.eE+]+)")
 RE_DONE = re.compile(r"\[sweep\] done")
+# ⭐ The [dent] ledger and its guard line (BrnDeformationSensor.cpp). `applies`/`nInv` were added
+# 2026-09-07 and are OPTIONAL here for the same reason `v=` is on the pose line: a required group
+# would silently score nothing on every log banked before that date.
+RE_DENT = re.compile(r"\[dent\] present (\d+) owner (-?\d+) .* set (-?\d+) .*"
+                     r" pcApplied ([-\d.eE+]+) pcDisp ([-\d.eE+]+)")
+RE_DENT_APPLIES = re.compile(r" applies (\d+) nInv (\d+)")
+RE_DENT_GUARD = re.compile(r"\[dent-guard\] present (\d+) owner (-?\d+) set (\d+) blindRows (\d+)")
 
 KF_MPS_TO_MPH = 2.2369363
 
@@ -123,6 +153,11 @@ class Shot(object):
         self.last_no_damage_timer = None
         self.arrive_entries = {}     # 'local' / 'passed' -> count
         self.arrive_passed_zero = 0
+        # ---- the [dent] join (2026-09-07). A depth quoted without these is not a depth. ----
+        self.dent_rows_by_set = {}   # absorption set -> number of [dent] rows seen for the player
+        self.dent_max_disp = 0.0     # deepest pcDisp on a row whose set is NOT invincible
+        self.dent_max_disp_inv = 0.0 # deepest pcDisp on a row that IS invincible (expected: 0)
+        self.dent_guard_lines = 0    # [dent-guard] presents inside this shot's crash
 
     def feed_pose(self, tag, f, mph, upy, fwdy, righty, wx, wy, wz, v=None, pos=None):
         # ⭐⭐ SPEED IS |v|, NOT THE `mph=` FIELD, WHENEVER v IS PRESENT -- and the difference is
@@ -199,6 +234,20 @@ class Shot(object):
             self.first_no_damage_timer = timer
         self.last_no_damage_timer = timer
 
+    def feed_dent(self, aset, disp):
+        if self.crash_closed:
+            return
+        self.dent_rows_by_set[aset] = self.dent_rows_by_set.get(aset, 0) + 1
+        if aset == 4:
+            self.dent_max_disp_inv = max(self.dent_max_disp_inv, abs(disp))
+        else:
+            self.dent_max_disp = max(self.dent_max_disp, abs(disp))
+
+    def feed_dent_guard(self):
+        if self.crash_closed:
+            return
+        self.dent_guard_lines += 1
+
     def keep(self, n):
         """Fraction of the entry-frame speed still carried n crash frames later.
 
@@ -237,6 +286,26 @@ class Shot(object):
         commanded = self.speed * KF_MPS_TO_MPH
         return abs(self.approach_mph - commanded) > 0.30 * commanded
 
+    @property
+    def invincible(self):
+        """This shot's crash was (partly) taken in E_ABSORPTIONSET_INVINCIBLE.
+
+        Either the [absorb] line said set 4, or the [dent] ledger produced set-4 rows, or the
+        engine's own [dent-guard] fired. Three independent witnesses, ORed: any one of them is
+        proof, and requiring agreement would let a run whose absorb probe was capped pass."""
+        return (4 in self.absorb_sets
+                or self.dent_rows_by_set.get(4, 0) > 0
+                or self.dent_guard_lines > 0)
+
+    @property
+    def absorb_unlabelled(self):
+        """No [absorb] line at all inside this shot's crash -- the absorption state is UNKNOWN.
+
+        ⚠️ This is NOT the same as "normal". A log taken without BRN_CRASH_RESPONSE_DIAG (or one
+        where the probe's 900-line cap ran out before this shot) cannot certify anything, and the
+        five-run corpus this discard exists for looked exactly like this."""
+        return not self.absorb_sets
+
 
 def parse(path):
     shots = []
@@ -260,12 +329,36 @@ def parse(path):
                 # informational; the shot marker is the only segment boundary.
                 RE_DONE.search(line)
                 continue
-            if cur is not None and '[absorb]' in line:
+            # ⛔⛔ TAGS ARE MATCHED BY PREFIX, NOT BY SUBSTRING, AND THAT IS NOT PEDANTRY
+            # (measured 2026-09-07, on this tool, by this tool's own author).
+            # This branch used to read `'[absorb]' in line`. The engine's new [dent-guard] line
+            # ends with the advice "Read [absorb] for noDamageTimer and DISCARD this crash" -- so
+            # every [dent-guard] line matched HERE, failed RE_ABSORB, and was `continue`d into
+            # oblivion. The report printed `[dent-guard] presents 0` for a run whose log contains
+            # six of them, which is precisely the "diagnostic that lies" this wave exists to stop:
+            # a MISSING guard count and a guard that never fired are indistinguishable.
+            # ⚠️ AND THE SYNTHETIC CONTROL PASSED. It fed a TRUNCATED guard line that stopped
+            # before the prose, so it exercised the regex and not the dispatch. A control built
+            # from a hand-written sample tests the sample; only a real log tests the parser.
+            # A log line's prose must never contain another line's tag either -- the engine text
+            # was changed to say "the absorb line" for the same reason.
+            if cur is not None and line.startswith('[absorb] '):
                 m = RE_ABSORB.search(line)
                 # owner 1 is the race car; owner 2 is traffic, whose own post-reset invincibility
                 # would otherwise be scored as the player's (fdfda858 re-took a run over this).
                 if m and int(m.group(1)) == 1:
                     cur.feed_absorb(int(m.group(3)), float(m.group(4)))
+                continue
+            if cur is not None and line.startswith('[dent'):
+                m = RE_DENT_GUARD.search(line)
+                if m:
+                    if int(m.group(2)) == 1:
+                        cur.feed_dent_guard()
+                    continue
+                m = RE_DENT.search(line)
+                # same owner rule as [absorb]: owner 1 is the player's race car, 2 is traffic.
+                if m and int(m.group(2)) == 1:
+                    cur.feed_dent(int(m.group(3)), float(m.group(5)))
                 continue
             if cur is None or '[crash-response]' not in line:
                 continue
@@ -291,7 +384,68 @@ def parse(path):
     return shots
 
 
-def report(path, shots, csv_rows):
+def scoreable(shots, keep_invincible=False):
+    """The shots a headline number may be computed over.
+
+    ⛔ THE DISCARD IS PART OF THE DEFINITION OF 'clean', not a filter applied afterwards, because
+    every caller of this module that computed its own `clean` list forgot the absorption state.
+    A shot is scoreable when it crashed, its approach matched the recipe, AND its crash was not
+    (partly) taken invincible."""
+    out = [s for s in shots if s.crashed and not s.suspect]
+    if not keep_invincible:
+        out = [s for s in out if not s.invincible]
+    return out
+
+
+def absorption_banner(crashed, clean, keep_invincible):
+    """State the absorption census BEFORE the headline numbers, every time, even when it is boring.
+
+    ⭐ IT PRINTS ON A CLEAN CORPUS TOO ('0 discarded'). A guard that is only visible when it fires
+    teaches the reader nothing about the runs where it did not, and this campaign has twice read a
+    missing warning as an absent problem."""
+    disc = [s for s in crashed if not s.suspect and s.invincible]
+    unlab = [s for s in crashed if not s.suspect and s.absorb_unlabelled and not s.invincible]
+    if disc:
+        print('*** ABSORPTION DISCARD: %d of %d on-recipe crash(es) were (partly) taken in '
+              'E_ABSORPTIONSET_INVINCIBLE.' % (len(disc), len([s for s in crashed if not s.suspect])))
+        for s in disc:
+            print('     shot %d: absorbSets %s  noDamageTimer %s -> %s  dentRows set4=%d set0=%d  '
+                  '[dent-guard] presents %d'
+                  % (s.index,
+                     '/'.join(str(x) for x in sorted(s.absorb_sets, reverse=True)) or '-',
+                     ('%.6f' % s.first_no_damage_timer) if s.first_no_damage_timer is not None else '-',
+                     ('%.6f' % s.last_no_damage_timer) if s.last_no_damage_timer is not None else '-',
+                     s.dent_rows_by_set.get(4, 0), s.dent_rows_by_set.get(0, 0),
+                     s.dent_guard_lines))
+        print('   In set 4 the AbsorptionTable row is 0.0 -> lfAbsorbed == 0 -> the car cannot dent '
+              'and banks no deformation-route momentum.')
+        print('   %s' % ('KEPT anyway (--keep-invincible): these rows are NOT the owner\'s situation.'
+                         if keep_invincible else
+                         'They are EXCLUDED from every number below. Re-take them with '
+                         'crash_sweep_batch.ps1 -MinDamageableSeconds 1.6.'))
+    else:
+        print('absorption: 0 discarded -- no on-recipe crash carried set 4.')
+    if unlab:
+        print('!!! %d on-recipe crash(es) carry NO [absorb] line: the absorption state is UNKNOWN, not '
+              'normal. Arm BRN_CRASH_RESPONSE_DIAG (or BRN_DENT_PROBE, which now arms it).'
+              % len(unlab))
+
+
+def dent_banner(clean):
+    """The [dent] join, restricted to shots the discard let through."""
+    rows0 = sum(s.dent_rows_by_set.get(0, 0) for s in clean)
+    rows4 = sum(s.dent_rows_by_set.get(4, 0) for s in clean)
+    if not rows0 and not rows4:
+        return
+    depths = sorted(s.dent_max_disp for s in clean if s.dent_max_disp > 0.0)
+    print('[dent] rows over scoreable shots: %d absorbing (set 0), %d invincible (set 4)'
+          % (rows0, rows4))
+    if depths:
+        print('deepest pcDisp per scoreable shot, n=%d: min %.3f m  median %.3f m  max %.3f m'
+              % (len(depths), depths[0], depths[len(depths) // 2], depths[-1]))
+
+
+def report(path, shots, csv_rows, keep_invincible=False):
     print('=' * 118)
     print(path)
     print('%3s %7s %7s | %9s %8s %7s | %6s %6s %6s | %8s %7s | %7s | %6s %5s %5s %s'
@@ -307,6 +461,11 @@ def report(path, shots, csv_rows):
             flag = 'NO CRASH'
         elif s.suspect:
             flag = '? off-recipe approach'
+        elif s.invincible:
+            flag = ('DISCARDED: set 4 INVINCIBLE (kept by --keep-invincible)'
+                    if keep_invincible else 'DISCARDED: set 4 INVINCIBLE -- car could not dent')
+        elif s.absorb_unlabelled:
+            flag = '! absorption UNLABELLED (no [absorb] line -- state unknown)'
         k10, k30, k60 = s.keep(10), s.keep(30), s.keep(60)
         pct = lambda v: ('%.1f%%' % (100.0 * v)) if v is not None else '-'
         # 'set' names the absorption sets this shot was seen crashing in: '0' == NORMAL only,
@@ -331,12 +490,16 @@ def report(path, shots, csv_rows):
                          s.arrive_entries.get('local', 0), s.arrive_entries.get('passed', 0),
                          s.arrive_passed_zero,
                          s.entry_pos[0] if s.entry_pos else None,
-                         s.entry_pos[2] if s.entry_pos else None])
-    clean = [s for s in crashed if not s.suspect]
+                         s.entry_pos[2] if s.entry_pos else None,
+                         int(s.invincible), int(s.absorb_unlabelled),
+                         s.dent_rows_by_set.get(0, 0), s.dent_rows_by_set.get(4, 0),
+                         s.dent_max_disp, s.dent_max_disp_inv, s.dent_guard_lines])
+    clean = scoreable(shots, keep_invincible)
     rolled = [s for s in clean if s.rolled90]
     inv = [s for s in clean if s.inverted]
     print('-' * 128)
-    print('shots %d | crashed %d | clean %d | ON ITS SIDE OR PAST: %d (%s) | INVERTED: %d (%s)'
+    absorption_banner(crashed, clean, keep_invincible)
+    print('shots %d | crashed %d | scoreable %d | ON ITS SIDE OR PAST: %d (%s) | INVERTED: %d (%s)'
           % (len(shots), len(crashed), len(clean), len(rolled),
              ('%.0f%%' % (100.0 * len(rolled) / len(clean))) if clean else 'n/a',
              len(inv),
@@ -351,14 +514,7 @@ def report(path, shots, csv_rows):
                 print('SPEED KEPT %2d frames after entry (%.3f s), n=%d: min %.1f%%  median %.1f%%  max %.1f%%'
                       % (n, n / 60.0, len(ks), 100.0 * ks[0],
                          100.0 * ks[len(ks) // 2], 100.0 * ks[-1]))
-        # The absorption census. A campaign that samples only shot 0 of a sweep samples a car that
-        # cannot absorb for the first ~1.5 s of its crash; this line says, per corpus, how many rows
-        # that is -- so nobody has to take it on trust that a re-measurement changed the situation.
-        inv = [s for s in clean if 4 in s.absorb_sets]
-        norm = [s for s in clean if s.absorb_sets and 4 not in s.absorb_sets]
-        if inv or norm:
-            print('absorption: %d clean shot(s) crashed (partly) INVINCIBLE, %d wholly NORMAL, %d unlabelled'
-                  % (len(inv), len(norm), len(clean) - len(inv) - len(norm)))
+        dent_banner(clean)
         loc = sum(s.arrive_entries.get('local', 0) for s in shots)
         pas = sum(s.arrive_entries.get('passed', 0) for s in shots)
         if loc or pas:
@@ -367,10 +523,16 @@ def report(path, shots, csv_rows):
 
 def main(argv):
     csv_out = None
-    args = list(argv)
-    if args and args[0] == '--csv':
-        csv_out = args[1]
-        args = args[2:]
+    keep_invincible = False
+    args = []
+    it = iter(list(argv))
+    for a in it:
+        if a == '--csv':
+            csv_out = next(it, None)
+        elif a == '--keep-invincible':
+            keep_invincible = True
+        else:
+            args.append(a)
     if not args:
         print(__doc__)
         return 2
@@ -379,17 +541,18 @@ def main(argv):
     for path in args:
         shots = parse(path)
         all_shots.extend(shots)
-        report(path, shots, rows)
+        report(path, shots, rows, keep_invincible)
     # ⭐ THE CROSS-LOG ROLL-UP. crash_sweep_batch.ps1 deliberately runs ONE CRASH PER BOOT (a
     # re-placed car keeps the previous shot's dents), so a grid is 16 separate logs and the number
     # the campaign actually quotes -- "median X% of its speed kept", "N of M went past on their
     # side" -- has to be computed ACROSS them. Doing it by hand is how a 16-boot grid turned into
     # a single hand-picked row in a commit message.
     if len(args) > 1:
-        clean = [s for s in all_shots if s.crashed and not s.suspect]
+        clean = scoreable(all_shots, keep_invincible)
         print('\n' + '=' * 118)
-        print('ALL %d LOG(S): %d shot(s), %d crashed, %d clean'
+        print('ALL %d LOG(S): %d shot(s), %d crashed, %d scoreable'
               % (len(args), len(all_shots), len([s for s in all_shots if s.crashed]), len(clean)))
+        absorption_banner([s for s in all_shots if s.crashed], clean, keep_invincible)
         if clean:
             rolled = [s for s in clean if s.rolled90]
             print('ON ITS SIDE OR PAST (max|right.y| > 0.7071): %d of %d  (%.0f%%)'
@@ -400,10 +563,7 @@ def main(argv):
                     print('SPEED KEPT %2d frames (%.3f s) after entry, n=%d: min %.1f%%  median %.1f%%  max %.1f%%'
                           % (n, n / 60.0, len(ks), 100.0 * ks[0],
                              100.0 * ks[len(ks) // 2], 100.0 * ks[-1]))
-            inv = [s for s in clean if 4 in s.absorb_sets]
-            print('absorption: %d clean shot(s) crashed (partly) INVINCIBLE (set 4), %d wholly NORMAL, %d unlabelled'
-                  % (len(inv), len([s for s in clean if s.absorb_sets and 4 not in s.absorb_sets]),
-                     len([s for s in clean if not s.absorb_sets])))
+            dent_banner(clean)
             loc = sum(s.arrive_entries.get('local', 0) for s in all_shots)
             pas = sum(s.arrive_entries.get('passed', 0) for s in all_shots)
             if loc or pas:
@@ -419,7 +579,10 @@ def main(argv):
                         'keep10', 'keep30', 'keep60', 'absorbSets',
                         'noDamageTimerFirst', 'noDamageTimerLast',
                         'arriveLocal', 'arrivePassed', 'arrivePassedZero',
-                        'entryX', 'entryZ'])
+                        'entryX', 'entryZ',
+                        'invincible', 'absorbUnlabelled',
+                        'dentRowsSet0', 'dentRowsSet4',
+                        'maxDentDispSet0', 'maxDentDispSet4', 'dentGuardPresents'])
             w.writerows(rows)
         print('\ncsv -> %s' % csv_out)
     return 0

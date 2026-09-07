@@ -745,6 +745,28 @@ if (-not [string]::IsNullOrWhiteSpace($DiagEnv)) {
   }
   Write-Host ("[flow] DIAG ENV applied after the clear: {0} -- NOT a default run." -f ($diagEnvApplied -join ' '))
 }
+
+# ⭐⭐⭐ THE DENT/ABSORB COUPLING (2026-09-07, reconciliation wave). A `[dent]` depth is
+# UNREADABLE without the `[absorb]` line for the same frames, and this is not style advice: the
+# campaign measured deformation depth on FIVE runs across three waves whose hardest impact landed
+# inside the console's own 1.5 s post-place-on-track E_ABSORPTIONSET_INVINCIBLE window, where
+# lfAbsorbed == 0 and the car cannot dent BY ARITHMETIC. Nothing in those logs said so -- the dent
+# table's own dump filter skips a row whose applied/supply are zero, which is EVERY row while the
+# absorption set is 4, so the impacts produced no rows at all and their silence read as "it barely
+# dented". [absorb] is the line that names the state, and it lives behind a different variable.
+# ⇒ Arming one arms the other. The engine enforces the same coupling at the emitter
+#   (BrnDeformableObject_Update.cpp's [absorb] block also reads BRN_DENT_PROBE) so a launcher that
+#   is not this script still cannot take a blind dent corpus; this half exists so the HUMAN reading
+#   the run banner is told, and so the applied-variable list stays honest.
+if ($env:BRN_DENT_PROBE -and $env:BRN_DENT_PROBE -ne '0' -and
+    (-not $env:BRN_CRASH_RESPONSE_DIAG -or $env:BRN_CRASH_RESPONSE_DIAG -eq '0')) {
+  $env:BRN_CRASH_RESPONSE_DIAG = "1"
+  Write-Host "[flow] DENT GUARD: BRN_DENT_PROBE is armed, so BRN_CRASH_RESPONSE_DIAG=1 has been armed with it."
+  Write-Host "[flow]             A [dent] depth is only meaningful beside the [absorb] line for the SAME frames"
+  Write-Host "[flow]             (set 4 == E_ABSORPTIONSET_INVINCIBLE == zero dent by arithmetic). Score with"
+  Write-Host "[flow]             crash_sweep_report.py, which now DISCARDS any shot whose contact frames read set 4."
+}
+
 if ($CrashPlayer -gt 0) {
   $env:BRN_CRASH_PLAYER = "$CrashPlayer"
   Write-Host "[flow] CRASH PLAYER armed: BRN_CRASH_PLAYER=$CrashPlayer (opt-in, an UpdateVehiclePhysics call index). NOT a default run -- the player car is crashed ONCE, deterministically."
