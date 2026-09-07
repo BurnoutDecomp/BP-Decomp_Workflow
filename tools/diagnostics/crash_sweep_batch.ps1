@@ -53,6 +53,12 @@ param(
   [double]$Distance   = 42.0,
   [double]$MinDamageableSeconds = 0.0,  # >0 raises Distance per shot to speed * this (1.6 clears 1.5 s)
   [int]$MaxSeconds    = 75,
+  # ⭐ 2026-09-07 (part-box witness wave): the engine diagnostics to pass THROUGH flow_run's env
+  #   wipe. The default is EXACTLY the string this script has always hard-coded, so a batch that
+  #   does not pass it behaves byte for byte as before; a batch that needs another instrument
+  #   (BRN_DEFORM_TRACE=<period> for the [detach-*]/[part-rest]/[ubb]/[part-pad] family) no longer
+  #   has to fork the whole script or hand-build flow_run argument lists.
+  [string]$DiagEnv    = 'BRN_CRASH_RESPONSE_DIAG=1',
   [switch]$Frames                       # dump frames (only ever for ONE shot -- see MinFreeGB)
 )
 $ErrorActionPreference = 'Stop'
@@ -121,7 +127,7 @@ foreach ($run in $runs) {
     CrashSweep      = $run.Launch
     CrashSweepShots = $run.Shot
     CrashSweepArm   = 4
-    DiagEnv         = 'BRN_CRASH_RESPONSE_DIAG=1'
+    DiagEnv         = $DiagEnv
     MaxSeconds      = $MaxSeconds
   }
   if ($Frames) { $flowArgs['Frames'] = $true; $flowArgs['FrameEvery'] = 2 }
