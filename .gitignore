@@ -78,3 +78,12 @@ scratch/
 .claude/
 tools/re/artist_i64.raw
 *.i64.raw
+
+# --- bp-work server databases (local copies of live server state; binary) ---
+# Nothing in this repo reads these -- they are pulled from prod (adriwin.fr) for
+# inspection. Committing them would put stale event/user state under version
+# control, and a stale copy has destroyed the server's events before.
+data/*.sqlite3
+
+# Empty sentinel dropped by a harness run; no producer in tools/, no reader.
+armed
