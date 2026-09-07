@@ -15,8 +15,11 @@
 # unported big-endian particles.bundle (every .lef hash read wrong); gone once the staged data
 # carries the ported bundle (case fx_bundles_load).
 # 2026-09-06 also on the tip before this wave (both 09-06 baseline runs, absent on 09-02 runs):
-# the reset-on-track surface-list tripwire (BrnRaceCarEntityModule_ResetPump.cpp) fires once.
-# ("LoadBundle failed" left this list 2026-09-07: PostFx/postfxvault.bin and particles.bundle
-#  were unported platform-2 copies in the staged data; case fx_bundles_load keeps both loads
-#  witnessed.)
-^Surface list appears to be corrupt
+# "LoadBundle failed" (left 2026-09-07: PostFx/postfxvault.bin and particles.bundle were unported
+# platform-2 copies in the staged data; case fx_bundles_load keeps both loads witnessed) and the
+# reset-on-track surface-list tripwire ("Surface list appears to be corrupt", left 2026-09-07:
+# the watchdog's collection key was a CRT-initialised global carried as 0; case
+# surface_list_tripwire keeps it witnessed).
+#
+# 2026-09-07: EMPTY. baseline_boot_drive runs with asserts=0 (run 20260907_111542). A new line
+# here needs a dated reason and a lane that owns it.
