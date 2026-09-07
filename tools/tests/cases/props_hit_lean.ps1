@@ -71,6 +71,18 @@
 #   FLOOR: five CrashSweep shots at 300 sim frames (5 s) of settle each is 25 s of sweep after
 #   the arm, on top of boot(16) + DriveDelay(6).
 #
+# ROOT CAUSE FOUND AND FIXED 2026-09-07 (b5-decomp WorldBridgeEntityModulesToScene.cpp, leg 3/4 of
+# BridgeEntityModulesToScene_PostPhysics). The prop module's POST-PHYSICS scene interface was never
+# merged into the scene input (the leg was a parked `(void)`), so the SetVolumeInstanceTransform a
+# moved prop stages every frame was dropped and its collision volume stayed at the spawn pose. A car
+# resting against a lamppost kept "penetrating" the stale volume; the solver's positional lane
+# re-applied the full penetration every frame ([prop-contact]/[prop-solve] witnesses: identical
+# contact points, 0.31 m penetration, frame after frame, while the COM had moved 2 m) -- the carry
+# that walked props away at 15 m/s and launched fast-hit ones at the 27 m/s clamp. Check (3) below
+# measures that defect directly: RED 4.02 m on 20260907_103034, GREEN 0.00 m on 20260907_103645.
+# The two older checks are kept as they were; the note above about nondeterminism still applies
+# to the SHOT, not to check (3), which is a per-contact invariant.
+#
 @{
   Name    = 'props_hit_lean'
   Area    = 'physics'
@@ -133,6 +145,53 @@
         }
         if ($n -eq 0) { return @{ Pass = $false; Detail = 'no [Q6-world] whole-prop lines' } }
         return @{ Pass = ($worst -le 10.0); Detail = ("samples={0} props={1} maxDisplacement={2:f2} m (prop {3}) maxRaw|linVel|={4:f2} m/s" -f $n, $first.Count, $worst, $worstId, $maxV) }
+      } }
+
+    # (3) THE DEFECT ITSELF, measured at the solver's door (2026-09-07, b5-decomp#2 root cause).
+    #     [prop-contact] (BRN_PROP_DIAG, PhysicsSimulationModule::ProcessAddContactQueue) prints,
+    #     for every prop-vs-car-proxy pair the sim is fed, the contact point on the prop and the
+    #     prop body's centre of mass. A hit prop's collision volume must FOLLOW its body: if the
+    #     contact point stays put (same record slot, same xz within 5 cm, still penetrating) while
+    #     the body's COM travels, the scene is colliding against a volume left behind at the
+    #     prop's spawn pose, and the solver's positional lane re-applies the full penetration
+    #     every frame -- the carry that sent props flying. Pre-fix (run 20260907_103034) the COM
+    #     travelled 4.02 m under one frozen contact point; post-fix 0.00 m. Bound 0.5 m.
+    @{ Kind = 'Script'; Name = 'a hit prop''s collision volume follows its body (no frozen car contact while the COM travels)'; Script = {
+        param($ctx)
+        $num = '([-\d.eE+]+)'; $v3 = '\(' + $num + ',' + $num + ',' + $num + '\)'
+        $rx = [regex]('\[prop-contact\] ci=(\d+) A=(\d+)/(\d+) B=(\d+)/(\d+) pA=' + $v3 + ' pB=' + $v3 + ' n=' + $v3 + ' pen=' + $num + ' comA=' + $v3 + ' comB=' + $v3)
+        $runs = @{}; $worst = 0.0; $worstProp = ''; $worstFrames = 0; $n = 0
+        foreach ($l in $ctx.LogLines) {
+          $m = $rx.Match($l)
+          if (-not $m.Success) { continue }
+          $n++
+          $g = $m.Groups
+          $ci = $g[1].Value; $oA = $g[2].Value; $idA = $g[3].Value; $oB = $g[4].Value; $idB = $g[5].Value
+          $pen = [double]$g[15].Value
+          if ($oA -eq '3' -and ($oB -eq '11' -or $oB -eq '12')) {
+            $prop = $idA; $other = $idB
+            $pt  = @([double]$g[6].Value,  [double]$g[7].Value,  [double]$g[8].Value)
+            $com = @([double]$g[16].Value, [double]$g[17].Value, [double]$g[18].Value)
+          } elseif ($oB -eq '3' -and ($oA -eq '11' -or $oA -eq '12')) {
+            $prop = $idB; $other = $idA
+            $pt  = @([double]$g[9].Value,  [double]$g[10].Value, [double]$g[11].Value)
+            $com = @([double]$g[19].Value, [double]$g[20].Value, [double]$g[21].Value)
+          } else { continue }
+          $key = "$prop/$other/$ci"
+          $r = $runs[$key]
+          if ($null -ne $r) {
+            $dxz = [Math]::Sqrt([Math]::Pow($pt[0]-$r.Pt[0],2) + [Math]::Pow($pt[2]-$r.Pt[2],2))
+            if ($dxz -lt 0.05 -and $pen -gt 0.05) {
+              $r.N++
+              $travel = [Math]::Sqrt([Math]::Pow($com[0]-$r.Com[0],2) + [Math]::Pow($com[1]-$r.Com[1],2) + [Math]::Pow($com[2]-$r.Com[2],2))
+              if ($travel -gt $worst) { $worst = $travel; $worstProp = $prop; $worstFrames = $r.N }
+              continue
+            }
+          }
+          $runs[$key] = @{ Pt = $pt; Com = $com; N = 1 }
+        }
+        if ($n -eq 0) { return @{ Pass = $false; Detail = 'no [prop-contact] lines -- no prop reached the sim as a contact (shot missed, or BRN_PROP_DIAG off)' } }
+        return @{ Pass = ($worst -le 0.5); Detail = ("contacts={0} worst COM travel under a frozen contact point={1:f2} m (prop {2}, {3} frames) limit=0.50" -f $n, $worst, $worstProp, $worstFrames) }
       } }
   )
 }
