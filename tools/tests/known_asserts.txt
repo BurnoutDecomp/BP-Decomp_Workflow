@@ -9,12 +9,14 @@
 # dated; remove a line the day its family stops firing on a baseline run.
 #
 # 2026-09-06 baseline (tip 473ff6f4 + the IsInWorld order fix): the upstream effects/Lion lane.
-# ("Not locked for writing" left this list 2026-09-07: LoadEffectsModule's read-lock forward
-#  used the write-lock accessors; case effects_load_readlock keeps it at zero.)
-^Can not instance resource pointer - it has no main memory resource
-^ParticleModule: Couldn't locate lion effect description
+# ALL THREE LEFT THE LIST 2026-09-07. "Not locked for writing": LoadEffectsModule's read-lock
+# forward used the write-lock accessors (case effects_load_readlock keeps it at zero).
+# "Can not instance resource pointer" + "Couldn't locate lion effect description": both were the
+# unported big-endian particles.bundle (every .lef hash read wrong); gone once the staged data
+# carries the ported bundle (case fx_bundles_load).
 # 2026-09-06 also on the tip before this wave (both 09-06 baseline runs, absent on 09-02 runs):
-# the PostFx vault asset does not load on this build ('PostFx/postfxvault.bin' -> pool 7: -1) and
 # the reset-on-track surface-list tripwire (BrnRaceCarEntityModule_ResetPump.cpp) fires once.
-^LoadBundle failed for a request that did not allow failure
+# ("LoadBundle failed" left this list 2026-09-07: PostFx/postfxvault.bin and particles.bundle
+#  were unported platform-2 copies in the staged data; case fx_bundles_load keeps both loads
+#  witnessed.)
 ^Surface list appears to be corrupt
