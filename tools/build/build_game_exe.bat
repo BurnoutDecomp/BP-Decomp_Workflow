@@ -5097,6 +5097,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem [event-starts wave 2026-08-27] the event-start table producer + the interface it
   rem fills (AddEventStart/AppendEventStart -- had no callers until now).
   echo "%SRC%\GameSource\GameState\GameStateModule_SendSetUpAllEventStarts.cpp"
+  rem [minimap blips, issue #9, 2026-09-07] the drive-thru icon table producer (action 45 ->
+  rem  the bridge's case-45 arm -> GUI 199 drive-thru records -> GuiCache maDriveThroughInfo).
+  echo "%SRC%\GameSource\GameState\GameStateModule_SendSetUpAllDriveThrus.cpp"
   echo "%SRC%\GameSource\GameState\Interface_SetUpAllEventStarts.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ModeManager_gUI_00.cpp"
   rem ============================================================================
