@@ -625,7 +625,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem       DISPATCHER, not the Lion sim core; the "~6,650 lines" figure is cLionFX, not this)
   rem     BrnParticle::ParticleModule::StartLionEffect     @0x822867E0
   rem     BrnEffects::BrnEffectsGlassManager::Construct
-  rem     BrnEffects::JumpStateMachine::OnTick (+ its OnChangeState / OnDetermineNextState)
   rem   Also still absent, and needed before anything CALLS EffectsModule::Update at all:
   rem     BrnGame::BrnGameModule::DoUpdate_Effects         @0x823DD0A8
   rem     BrnGame::BrnGameModule::BridgeEntityToEffects    @0x823CDF00
@@ -660,9 +659,12 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   DELIBERATELY ABSENT: BrnDebrisArray.cpp / BrnDebrisRenderer.cpp -- their Constructs
   rem   bind _gaDebrisArrayParams, an `extern const` with no definition anywhere in the tree,
   rem   so ParticleModule::Prepare announces those two rather than calling them.
-  rem   NOTE ParticleModuleBringUp.cpp stays mounted above: it is still the only producer of
-  rem   DispatchThreadInputBuffer::mParticleRenderData (EffectsModule::GenerateDispatchLists
-  rem   is not wired into DoDispatch yet). Delete it when that leg lands, not before.
+  rem   NOTE ParticleModuleBringUp.cpp stays mounted above. GenerateDispatchLists IS wired into
+  rem   DoDispatch now (2026-09-07), but the stand-in still (a) arms the per-instance latch
+  rem   PCBringUpParticleRenderDataProducedFor that BrnRendererModule gates motion blur on, and
+  rem   (b) writes a NULL mpParticleModule on the frames the real pair does not run, which is
+  rem   what keeps the renderer null test a skipped draw over an UNCLEARED record. Delete it
+  rem   with that renderer gate, not before.
   echo "%SRC%\GameSource\Effects\EffectsModule.cpp"
   echo "%SRC%\GameSource\Effects\ActiveRaceCarData.cpp"
   echo "%SRC%\GameSource\Effects\EffectsStateMachine.cpp"
@@ -2752,6 +2754,11 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToScene.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToOutput.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeToEntityModules.cpp"
+  rem  ---- traffic-to-trigger wave (2026-09-07): the traffic->trigger PreScene and
+  rem  traffic->race-car PrePhysics bridges. Their WorldLinkStubs gates are deleted in the
+  rem  same commit (LNK2005 tripwire otherwise); the one accessor that kept this TU off the
+  rem  list (OutputBuffer_PostScene::GetTrafficToRaceCarInterface_PostScene) is bodied.
+  echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToEntityModules.cpp"
   echo "%SRC%\GameSource\World\BrnBaseStreamer.cpp"
   echo "%SRC%\GameSource\World\BrnWorldModuleIO_DispatchInputBuffer.cpp"
   echo "%SRC%\GameSource\World\BrnWorldModuleIO_DispatchOutputBuffer.cpp"
@@ -3177,6 +3184,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  Several rem blocks further up in this file assume otherwise; they are about CODE SIZE, not
   rem  about unresolved externals. Mount the base TU when those eight land.
   echo "%SRC%\GameSource\GameState\AchievementManager\X360\BrnGameStateAchievementManagerX360.cpp"
+  rem [challenge-manager mount 2026-09-07] the two freeburn-challenge base hooks, MOVED out of the
+  rem  unmounted PS3 TU (bat precedent above).
+  echo "%SRC%\GameSource\GameState\AchievementManager\BrnGameStateAchievementManagerBase_Freeburn.cpp"
   echo "%SRC%\GameSource\GameState\AchievementManager\BrnGameStateAchievementManagerBase.cpp"
   echo "%SRC%\GameShared\GameClasses\System\X360\CgsXOverlappedX360.cpp"
   rem  ---- leg 2: the street manager / STREETDATA.DAT loader -------------------------------
@@ -5101,14 +5111,23 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  the bridge's case-45 arm -> GUI 199 drive-thru records -> GuiCache maDriveThroughInfo).
   echo "%SRC%\GameSource\GameState\GameStateModule_SendSetUpAllDriveThrus.cpp"
   echo "%SRC%\GameSource\GameState\Interface_SetUpAllEventStarts.cpp"
+  rem [challenge-manager mount 2026-09-07] GetActiveRaceCarIndex(NetworkPlayerID), the one
+  rem  ChallengeManager external that had an X360 export and no body.
+  echo "%SRC%\GameSource\GameState\GameStateModule_GetActiveRaceCarIndexFromNetworkPlayer.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ModeManager_gUI_00.cpp"
   rem ============================================================================
   rem [stuntrace wave B 2026-08-26] THE MODEMANAGER MOUNT -- the offline event core.
   rem ModeManager spine + all 15 game modes + params + the 7 mode states + the
   rem scoring subsystem (offline scorers full; online scorers partial, remainder in
   rem BrnBaselineLinkStubs' MUST-STAY block) + the progression event-finish TU.
-  rem DELIBERATELY OUT: ChallengeManager/* (bounded ModeManager layout has no
-  rem embedded member; freeburn challenges are not on the progression-event path),
+  rem [challenge-manager mount 2026-09-07] ChallengeManager/* IS IN, all 27 TUs -- the
+  rem BrnChallengeManagerDebugComponent.cpp one INCLUDED, which is the exception to the
+  rem "Debug/* components stay out" rule below: ModeManager now EMBEDS ChallengeManager by
+  rem value at console +28160, so its implicit ctor sets that component's vptr and the link
+  rem needs GetName/OnActivate (LNK2001 x2 on build 20260907_133427 when the member landed
+  rem without them). The twelve symbols the 27 TUs referenced with no definition anywhere
+  rem are bodied in the same change (roll-call in BrnModeManager.h at +28160).
+  rem STILL OUT:
   rem BrnBurnoutSkillzManager.cpp (GameActionQueue typedef clash, not a DWARF
   rem ModeManager member), Debug/* components, *_EmbedGate/_AssertLayout/_embed_check
   rem (compile-scaffolding, gate-only by convention).
@@ -5122,6 +5141,33 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem S7) died in the same change that adds these lines -- the two must never
   rem coexist (LNK2005) and HasStuntModeEnded's return-true stub would end every
   rem stunt run on frame 1.
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManagerDebugComponent.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_00.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_01.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_02.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_03.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_04.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_05.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_06.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_07.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_08.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_09.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_10.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_11.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_12.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_13.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_14.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_15.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_00.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_01.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_02.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_03.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_04.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_05.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_06.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\ObjectPool_CarLeapingData_7.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\ObjectPool_StoredLeapingData_7.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_Accessors.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_CheckpointSetup.cpp"
