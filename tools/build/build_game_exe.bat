@@ -3277,6 +3277,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  @0x82335E08 / GetChallengeFriendHighScore @0x82335F30). All four MUST mount together.
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_06.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_02.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_00.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_09.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_10.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_01.cpp"
   rem  ??? STILL OUT: the rest of BrnGameStateStreetManager.cpp (the two score-entry
   rem  factories), _wC_02.cpp (ProcessScoreRequestEvent) and _wC_04.cpp (the two road-rules
   rem  tallies). Their costs are the measured numbers above; mounting any of them anyway is
