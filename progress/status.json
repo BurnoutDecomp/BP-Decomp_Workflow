@@ -13833,10 +13833,34 @@
   "BrnGui::CarouselSliderBar::Update": {
    "status": "reviewed"
   },
+  "BrnGui::ChallengeListComponent::Construct": {
+   "status": "reviewed"
+  },
   "BrnGui::ChallengeListComponent::GetChalle": {
    "status": "reviewed"
   },
+  "BrnGui::ChallengeListComponent::GetFilteredChallenge": {
+   "status": "reviewed"
+  },
+  "BrnGui::ChallengeListComponent::GetHighlightedChallengeID": {
+   "status": "reviewed"
+  },
+  "BrnGui::ChallengeListComponent::HandleEveryPlayerCompletionStatus": {
+   "status": "reviewed"
+  },
+  "BrnGui::ChallengeListComponent::HighlightNext": {
+   "status": "reviewed"
+  },
+  "BrnGui::ChallengeListComponent::HighlightPrevious": {
+   "status": "reviewed"
+  },
+  "BrnGui::ChallengeListComponent::Setup": {
+   "status": "reviewed"
+  },
   "BrnGui::ChallengeListComponent::ShowDescriptionInTicker": {
+   "status": "reviewed"
+  },
+  "BrnGui::ChallengeListComponent::Update": {
    "status": "reviewed"
   },
   "BrnGui::ChallengeSelector::Construct": {
@@ -67399,8 +67423,8 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/Components/BrnChallengeListComponent.cpp": {
-   "notes": "5/8 committed 59967ede (Construct/Setup/filter+highlight getters, homed at src/GameSource/Gui/). HighlightNext/HighlightPrevious/Update blocked (un-homed cursor/list-nav collaborators).",
-   "status": "blocked"
+   "notes": "GPT-5.5 fresh review pass against ARTIST; compile and live challenge list scrolling/filter/ticker pass.",
+   "status": "done"
   },
   "GameSource/Gui/Flow/Screen/Components/BrnCrashNavLegend.cpp": {
    "notes": "4 fns asm-exact; tables XEX byte-verified incl. DriveThough typo + empty 9th; unsigned window >7->8 exact",
@@ -67700,6 +67724,7 @@
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineViewChallenges.cpp": {
+   "notes": "GPT-5.5 fresh review pass; 2351 TU build and live EasyDrive challenge browser/filter/ticker/back harness pass.",
    "status": "done"
   },
   "GameSource/Gui/Flow/Screen/States/BrnOnlineViewChallenges.h": {
@@ -68324,7 +68349,7 @@
    "status": "done"
   },
   "GameSource/Resource/BrnGameDataModule.cpp": {
-   "notes": "Scoped junkyard customization changes: independent GPT-5.5 high review PASS; full build and faithfulness gates pass; collision-removal regression passes; harness junkyard-06 verifies 3 model swaps, palette/color changes and exit with zero asserts.",
+   "notes": "Bounded wheel replacement fix reviewed against ARTIST 0x82670AA0: restored WHE_ unload routing and handler. Compile and faithfulness PASS; 2355-TU executable build PASS. Harness wheels-02 passed PEUSR01 default, wheel-only change, shared-wheel PUSCLT02 and return swap without assertions. Review does not cover pre-existing deferred GameData methods.",
    "status": "done"
   },
   "GameSource/Resource/BrnGameDataModule.h": {
