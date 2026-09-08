@@ -656,9 +656,13 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   (ImRendererBase::mgpDevice + D3DDevice_InsertFence, the ring API BrnSkidVertex.cpp
   rem   draws through). BrnResourceAllocator.cpp (already mounted further down) grew
   rem   Allocators::GetGlobalGraphicsAllocator, which the five Im3d Constructs take.
-  rem   DELIBERATELY ABSENT: BrnDebrisArray.cpp / BrnDebrisRenderer.cpp -- their Constructs
-  rem   bind _gaDebrisArrayParams, an `extern const` with no definition anywhere in the tree,
-  rem   so ParticleModule::Prepare announces those two rather than calling them.
+  rem   THE DEBRIS FAMILY IS MOUNTED (2026-09-08). _gaDebrisArrayParams -- the five-entry
+  rem   preset table both Constructs bind -- is defined in BrnDebrisRenderer.cpp, recovered
+  rem   from the console image (its two vector members are CRT dynamic-initialiser writes,
+  rem   not image bytes). ParticleModule::Prepare now runs the five BrnDebrisArray::Construct
+  rem   calls. STILL ANNOUNCED: BrnDebrisRenderer::Construct alone, because its renderer
+  rem   argument mWorldTexRenderer is a ContainedInterface placeholder (Im3dTexPlusLighting
+  rem   has no committed type); that is a rendering dependency, not a debris one.
   rem   NOTE ParticleModuleBringUp.cpp stays mounted above. GenerateDispatchLists IS wired into
   rem   DoDispatch now (2026-09-07), but the stand-in still (a) arms the per-instance latch
   rem   PCBringUpParticleRenderDataProducedFor that BrnRendererModule gates motion blur on, and
@@ -706,6 +710,12 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnLionBlendIm3d.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnLionBlendVertex.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\FXBuckets.cpp"
+  rem ---- DEBRIS (2026-09-08): the five debris arrays plus the renderer that draws them.
+  rem   BrnDebrisArray.cpp carries Construct / FreeExpiredBuckets / ClearAllBuckets /
+  rem   GetNewDebris / SpawnDebris; BrnDebrisRenderer.cpp carries the renderer Construct
+  rem   AND the recovered _gaDebrisArrayParams preset table the arrays bind.
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnDebrisArray.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnDebrisRenderer.cpp"
   rem ---- SPARKS (2026-09-06): the grinding-metal spark family. BrnSparkRenderer.cpp
   rem   carries SparkArray / SparkArray::SparkBank / SparkRenderer plus the static
   rem   SparkArray::maTextures table LoadFXBundle publishes into; the two siblings are
@@ -4205,6 +4215,21 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\SDKs\Packages\ICE\ICEAuthorTakeOps.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugPrinter.cpp"
   echo "%SRC%\GameSource\Director\BrnDirectorResourceManagerICE.cpp"
+  rem ---- P0 WAVE (2026-09-08): the ICE movie PLAYLIST half joins the link. ------------
+  rem  Retires the SharedPlaylists::Construct gate in DirectorLinkStubs.cpp, which ran at
+  rem  boot with an EMPTY body: every director-owned playlist (race intro, post race, the
+  rem  three pause-camera playlists) was left with a zero movie count and an un-Clear()ed
+  rem  movie pool. The 36 seed takes are now really inserted.
+  rem  NOT the whole BrnICEMoviePlayer.cpp: measured, mounting that file opens 24 unresolved
+  rem  externals (the BehaviourInterpolate/BehaviourManager handle overloads, ICEWrapper
+  rem  PlayMovie/IsPlayingMovie, the three camera-tunings serialisers, and
+  rem  ICEMoviePlayer::ApplyFlashHookToCamera, which needs the camera effects layer first).
+  rem  So the playlist bodies were file-split into the _wP0_01 TU, exactly as
+  rem  BrnDirectorICEWrapperPrepare.cpp was split out of BrnDirectorICEWrapper.cpp.
+  rem  MEASURED RESIDUAL: this TU opens ZERO new unresolved externals (the movie pool, the
+  rem  remove-command pool and the Array<s32,20> order array are all header inlines).
+  rem  DELETE-WHEN: BrnICEMoviePlayer.cpp can mount -- then fold the split back into it.
+  echo "%SRC%\GameSource\Director\Utils\BrnICEMoviePlayer_wP0_01.cpp"
   rem  BrnDirectorEffectTrigger.cpp is NOT mounted yet, deliberately. It now DOES define
   rem  Camera::EnsureEffectIsPlaying @0x821F2720 (the note further down claiming otherwise
   rem  is STALE), but mounting it costs two REAL unresolved externals --
@@ -5451,6 +5476,12 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  b5-decomp fd0925f4 WITHOUT this mount line -- CarSelectLivery::Update calls it, so the
   rem  exe did not link until this was added here (contributors have no parent-repo access).
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_wJ_01.cpp"
+  rem  CS_UNLOCK -- the car-unlocked celebration screen, 2026-09-08 (p0 wave). The TU had
+  rem  been reviewed-but-unmounted behind a three-method BrnScreenStatesLinkStubs scaffold
+  rem  (OnEnter/OnLeave/Update), whose bodies AND placeholder class are deleted in the same
+  rem  change; BrnScreenFlow now includes the real header for the pool carve-out. The two
+  rem  members the TU was missing (Update, PlayMovie) land in it. Residual after mount: none.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectUnlock.cpp"
   rem  ON_CUST_MAT -- the online custom-match screen, 2026-09-02. Wave J's six partfiles had
   rem  sat unmounted since 2026-08-03 behind three BrnScreenStatesLinkStubs scaffolds; _wJ_07
   rem  lands the two foreign-TU lifecycle bodies OnLeave @0x824970D0 + Update @0x824AC808 and
@@ -5503,6 +5534,13 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_07.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap_wJ_08.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapMain.cpp"
+  rem [p0 map-event wave 2026-09-08] CN_MAP_EVENT, the event-creation map screen.
+  rem Retires the CrashNavMapEvent placeholder + its escape hatch in
+  rem BrnScreenStatesLinkStubs.{h,cpp} (KAI_HATCH_EVENTS/HatchDrain stay: OnlinePlay uses
+  rem them) and de-forks the keyboard listener out of CgsSaveLoad.cpp. One arm stays
+  rem parked on the system keyboard UI, which has no PC leaf; measured residual: zero
+  rem unresolved externals.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapEvent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapSoundData.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavPanel.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavLegend.cpp"
@@ -5670,6 +5708,34 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageSlot.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListChangeIcon.cpp"
+  rem ---- p0 wave 2026-09-08: the CompassComponent (the race HUD's rotating compass
+  rem   strip) goes REAL. Its three scaffold gates in BrnHudStatesLinkStubs.cpp
+  rem   (Construct, Prepare, SetVisibility) were deleted in the same change -- LNK2005
+  rem   otherwise. Measured residual before mounting was THREE symbols; two of them
+  rem   (ShowPositionOnCompass, FormatDirectionLetters) are now bodied in this TU and
+  rem   the third (ChallengeListEntryAction::GetNumLocations) was homed inline by the
+  rem   challenge-manager mount, so this mount closes with no new gates.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnCompassComponent.cpp"
+  rem ---- p0 wave 2026-09-08: the PlayerPositionTable pair (the in-race position
+  rem   list) goes REAL. Its two scaffold gates in BrnHudStatesLinkStubs.cpp
+  rem   (SetCache, SetupGameMode) were deleted in the same change -- LNK2005
+  rem   otherwise. Measured residual before mounting was FIVE symbols; all five are
+  rem   closed here: SetTitleText + SetSkillsText in the _wP0_01 partfile,
+  rem   SingleComponent::SetCache header-inline in BrnPlayerPositionSingle.h (its
+  rem   console home), BurnoutSkillsManager::GetCurrentSkill in the skills partfile,
+  rem   and CgsNetwork::UsernameCompare in its own CgsNetworkUtils.cpp home.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPlayerPositionTable.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPlayerPositionTable_wP0_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPlayerPositionSingle.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiBurnoutSkillsManager_wP0_01.cpp"
+  echo "%SRC%\GameShared\GameClasses\Network\CgsNetworkUtils.cpp"
+  rem ---- p0 wave 2026-09-08: the PaybackComponent (the in-race "payback available"
+  rem   HUD widget) goes REAL. Its three scaffold gates in BrnHudStatesLinkStubs.cpp
+  rem   (Construct, Initialize, ShowAvailableInstantly) were deleted in the same change
+  rem   -- LNK2005 otherwise. Measured residual before mounting was ONE symbol,
+  rem   PaybackComponent::SendAwardTriggerableEvent, the component's own private leaf;
+  rem   it is now bodied in this TU, so the mount closes with no new gates.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPaybackComponent.cpp"
   rem (FriendsListEntry / the BoostMessage trio mount ABOVE with the friends-list
   rem tranche block -- both sessions added them 2026-08-26; the duplicates died in
   rem the merge. Select + the six other bodiless symbols live in
