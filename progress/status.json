@@ -64783,6 +64783,7 @@
    "status": "blocked"
   },
   "GameShared/GameClasses/Development/DebugSystem/Controller/CgsDebugController.cpp": {
+   "notes": "PC foreground and named-event keyboard leaf reviewed; independent PASS, runtime key-edge and hidden-input harness checks passed.",
    "status": "done"
   },
   "GameShared/GameClasses/Development/DebugSystem/Controller/CgsDebugController.h": {
@@ -64806,6 +64807,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsDebugUI.cpp": {
+   "notes": "Independent final assembly review PASS; harness root/submenu/console/SET/SAVE/EXEC/pin/close and hidden keyboard routing checked; full build and faithfulness pass.",
    "status": "done"
   },
   "GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.cpp": {
@@ -64870,6 +64872,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug2DImmediateRender.cpp": {
+   "notes": "Scoped solid-render state restoration reviewed PASS; screenshot confirms font draws no longer erase menu backgrounds; compile/faithfulness pass.",
    "status": "done"
   },
   "GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug3DImmediateRender.cpp": {
@@ -66964,6 +66967,7 @@
    "status": "done"
   },
   "GameSource/Gui/BrnGuiModule.cpp": {
+   "notes": "Scoped original GuiPerfmons initialization reviewed PASS; compile and faithfulness pass. Reworded obsolete historical comment that falsely triggered format-vocabulary lint.",
    "status": "done"
   },
   "GameSource/Gui/BrnGuiModule.h": {
@@ -66982,7 +66986,7 @@
    "status": "done"
   },
   "GameSource/Gui/BrnGuiPerfmons.cpp": {
-   "notes": "3 verify loops (loop1 transcription PASS - all 33 calls/names/budgets/flags/aliases exact; loop1 caught class-vs-namespace ODR fork of PerfMonCpu -> FIXED by growing the committed CgsPerfMonCpu.h namespace with the X360 6-param AddMonitor overload (additive, regate-clean), .cpp includes the real home; loop3 sign-off PASS). Gate clean. Parity MILD: call delta 4 = PPC prologue/epilogue artifacts (_savefpr/_restfpr/_savegprlr/_restgprlr) dropped; void return. Parent tree indentation-inferred (flagged). Note: committed via a separate fix commit on top of the concurrent ICE commit (orig GuiPerfmons was 8ee4c3b).",
+   "notes": "Five-argument AddMonitor ABI verified against ARTIST assembly; full compile and independent review pass.",
    "status": "done"
   },
   "GameSource/Gui/BrnGuiProfile.cpp": {
@@ -68732,6 +68736,7 @@
    "status": "done"
   },
   "GameSource/Unity/../Game/BrnGameModule.cpp": {
+   "notes": "Scoped branch regression repair reviewed PASS: retain dev pause scheduling until live world streaming status producer exists. Full build passes; harness reaches car selection.",
    "status": "done"
   },
   "GameSource/Unity/../Game/BrnGlobalCpuMonitors.cpp": {
@@ -68860,6 +68865,7 @@
    "status": "done"
   },
   "GameSource/Unity/../GameState/ModeManager/BrnModeManager.cpp": {
+   "notes": "Scoped PC startup initialization of original debug components reviewed PASS. Full compile/faithfulness pass; debug-menu harness no longer asserts in scoring renderer.",
    "status": "done"
   },
   "GameSource/Unity/../GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp": {
@@ -69066,6 +69072,7 @@
    "status": "done"
   },
   "GameSource/Unity/../GameState/TriggerQueryManager/BrnTriggerQueryManager.cpp": {
+   "notes": "Scoped profiling initialization repair only; independent review pass, compile and harness boot pass. Existing partial gameplay reconstruction unchanged.",
    "status": "done"
   },
   "GameSource/Unity/../GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp": {
@@ -69627,6 +69634,7 @@
    "status": "done"
   },
   "GameSource/Unity/../World/AI/RacingLine/BrnRacingLineGenerator.cpp": {
+   "notes": "Six static monitor seeds restored to ARTIST data FFFFFFFF; independent review PASS, compile/faithfulness pass, zero-assert return-to-driving harness.",
    "status": "done"
   },
   "GameSource/Unity/../World/AI/ResetOnTrack/BrnResetOnTrackManager.cpp": {
@@ -69845,6 +69853,7 @@
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp": {
+   "notes": "Scoped original 19 monitor registrations restored; independent assembly review and mounted-part compile pass, no startup perfmon assertions. Existing partial reconstruction unchanged.",
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h": {
