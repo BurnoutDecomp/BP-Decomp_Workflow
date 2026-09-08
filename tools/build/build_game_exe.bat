@@ -2265,6 +2265,7 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationConstructShims.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationDebugComponent_Construct.cpp"
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationDebugComponent.cpp"
   rem  ---- PHYSICS MOUNT-GAP WAVE B2 (2026-08-24): DeformationManager 22/23 ----
   rem  The 22 census-clean TUs (SharedIO/instantiation + embed_checks + BrnDeformationState).
   rem  The intended 23rd (the BrnDeformationDebugComponent.cpp flip) was TRIED and REVERTED --
@@ -3510,6 +3511,20 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\Internal\CgsDebugInternal.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CgsTypes.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CgsDebugUI.cpp"
+  echo "%SRC%\SharedClasses\World\BrnWorldRegion_ToString.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\BrnTriggerEntityModuleDebugComponent.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityDebugComponent.cpp"
+  echo "%SRC%\GameSource\World\DebugComponents\BrnSkyDebugComponent.cpp"
+  echo "%SRC%\GameSource\World\DebugComponents\BrnPVSDebugComponent.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Debug\BrnScoringSystemDebugComponent.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Debug\BrnModeManagerDebugComponent.cpp"
+  echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Console\CgsConsole.cpp"
+  echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CommandWindow\CgsCommandWindow.cpp"
+  echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Menu\CgsMenuWindow.cpp"
+  echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\ScriptInterface\CgsScriptInterface.cpp"
+  echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\ScriptInterface\CgsScriptInterface_part_window_savestate.cpp"
+  echo "%SRC%\..\vendor\renderware\src\rw\core\debug\host.cpp"
+  echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Windows\CgsErrorWindow.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Menu\CgsMenuItem.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Menu\CgsMenu.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Menu\CgsMenuManager.cpp"
