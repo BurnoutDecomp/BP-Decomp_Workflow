@@ -454,6 +454,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\SharedClasses\World\BrnWorldRegion.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
+  rem TriggerEntityModule per-frame stages; retires the PreScene/PrePhysics/PostScene gates (2026-09-09)
+  echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule_wG_Stages.cpp"
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
   rem ---- aimodule wave (2026-08-25): the AI MODULE LIFECYCLE. BrnAIModule.cpp above grew the
   rem   real Construct/Prepare/LoadMapData (the four WorldLinkStubs gates are retired), which
@@ -906,6 +908,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  next wave). Mounted together with the WorldLinkStubs retirements of InputBuffer_Query::Destruct
   rem  and BridgePhysicsSceneQueriesToScene (leaving either = LNK2005).
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule_wSQ1.cpp"
+  rem  external (director) scene-query service point; retires SceneManagerModule::ExternalSceneQueriesUpdate (2026-09-09)
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule_wG_ExternalQueries.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Query.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModule_wSQ1.cpp"
@@ -924,6 +928,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- world-fleet link-mount closure (2026-07-26): committed TUs picked by ----
   rem ---- offline dumpbin closure analysis; leftovers stubbed in WorldLinkStubs ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatcher.cpp"
+  rem  dispatch-bin out-of-room handler; retires DispatchBin::HandleMemoryOverflow (2026-09-09)
+  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatchBin_wG_Overflow.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsGraphicsDispatchList.cpp"
   rem ---- renderer world-pass wave (2026-07-27): the render-dispatch walk ----------
   rem ---- (object->mesh expansion, the sorted mesh walk, the shadowing device) ----
@@ -1378,6 +1384,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  _ContactFixups slice above) + GetSpheresForCar @0x825C2260 (EXPORT HOLE, lifted from the
   rem  image; returns -1 gracefully, no assert -- NOT the swept sibling's shape).
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_ContactQueries.cpp"
+  rem  DeformationManager::VerifyPartIndices; retires its conductor gate (2026-09-09).
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_wG12_VerifyPartIndices.cpp"
   rem  2026-08-06 (big-five #2, contact-generation wave): the contact-BRIDGE slice consumed by
   rem  PhysicsModule::BridgeContactsToSimulation -- ReadPotentialVehicleWorldContact +
   rem  FindModelIndexByGlobalEntityID (moved out of the still-unmounted _Contacts.cpp),
@@ -1566,9 +1574,11 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  -- the physics side of the game-action pipe, and the ONLY console road into
   rem  VehicleManager::SetPlayerCarToShowtimeMode @0x8259C108. Its conductor gate is deleted in
   rem  the same commit; its five VehicleManager leaves live in BrnVehicleManagerPlayerStats.cpp
-  rem  (already mounted). HandleGameActionsPostScene @0x825A70C0 stays gated -- zero of its five
-  rem  callees exists; see the boundary note in BrnPhysicsConductorGates.cpp.
+  rem  (already mounted).
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleGameActions.cpp"
+  rem  The post-scene game-action dispatch; retires the PhysicsModule::HandleGameActionsPostScene
+  rem  gate (2026-09-09). Needs the ProcessResetDeformationModelEvent partfile mounted below.
+  echo "%SRC%\GameSource\Physics\BrnPhysicsModule_wG_GameActionsPostScene.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_VehicleContactFixUp.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_BBox.cpp"
@@ -1780,6 +1790,9 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  (all dead until PhysicsModule::Update lands -- that wave must resolve every stub there).
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateVehiclePhysics.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerLinkStubs.cpp"
+  rem  The per-surface physics bank loader; retires the VehicleManager::ReadSurfaceProperties(u64)
+  rem  gate (2026-09-09). MANDATORY: sole definition of a symbol BrnWorldModule.cpp calls.
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_wG_ReadSurface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleConstants.cpp"
   rem  ?????? 2026-08-11 (prepare-chain wave): the DRIVER-CONTROLS CONSUMER, VehicleManager::
   rem  UpdateDrivers @0x82642C68 (120 insns) -- slice TU, home BrnVehicleManager.cpp still
@@ -1803,6 +1816,9 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  honest state for the horn-cheat edge path.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DriverArms.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_UpdateTrafficDriver.cpp"
+  rem  The articulated tail of UpdateTrafficPhysicsPostSimulation; retires the
+  rem  PhysicalTrafficManager::ResolveArticulatedJoints and ::ProcessJointSpys gates (2026-09-09).
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_wG12_ArticulatedJoints.cpp"
   rem  ...and the InstantTakedown split the note above predicted: the link DID 2019 on it, so the
   rem  body moved byte-identical from the unmounted BrnVehicleManager.cpp into its own slice
   rem  (RaceCarPhysics_Construct precedent). Its callee SetRaceCarCrashing = the loud LinkStubs trap.
@@ -2143,6 +2159,9 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  them and they put ZERO BYTES in the exe. Mounted so the closure stays enforced.
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnArticulatedJoint.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnArticulatedJointPool.cpp"
+  rem  ArticulatedJointPool::GetIndexOfOtherHalf plus the three packed-id readers the console
+  rem  inlines into it; required by the ResolveArticulatedJoints mount above.
+  echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnArticulatedJointPool_wG12_OtherHalf.cpp"
   rem  ?????? 2026-08-03 (task #112, the TrafficPhysics de-fork) -- TWO NEW FILES, BOTH REQUIRED.
   rem  BrnPhysicalTrafficManager.h no longer declares its own opaque `struct TrafficPhysics
   rem  { void Construct(); u8[5168]; }`; it includes the real class and embeds
@@ -2209,6 +2228,9 @@ rem  HandleCrashPredictionForRaceCarAndTrafficVehicle -> HandleRaceCarTrafficCar
 rem  @0x8263FA50 -> the traffic crashing/slammed/checked response arms.
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnPotentialContactAverager.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_CrashResponse.cpp"
+rem  The traffic pass-by stage; retires the PhysicalTrafficManager::
+rem  PassNearbyCrashingTrafficIdsToRaceCarModule link gate (2026-09-09).
+echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_wG_CrashingIds.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_RaceCarTrafficContact.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DoCrashPrediction.cpp"
 rem  2026-09-02 (crash wave): THE RACE-CAR-vs-WORLD CRASH ARM. HandleCrashPredictionForRaceCarAndWorld
@@ -2354,6 +2376,9 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   rem  in BrnPhysicalBodyPartPool.cpp, the DetachedPartManager wrapper) landed with it, and the
   rem  OutputData conductor gate in BrnPhysicsConductorGates.cpp is DELETED by the same commit.
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_Output.cpp"
+  rem  DeformationManager::ProcessResetDeformationModelEvent, the callee the post-scene
+  rem  game-action drain's body-shop arm needs (2026-09-09).
+  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_wG_ResetModelEvent.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Lifecycle.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Update.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_GlassState.cpp"
@@ -2754,6 +2779,8 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModule.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToScene.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToEntityModules.cpp"
+  rem  four WorldModule per-frame bridge seams; retires their four WorldLinkStubs gates (2026-09-09)
+  echo "%SRC%\GameSource\World\BrnWorldModule_wG_Bridges_01.cpp"
   rem  ?????? 2026-08-11 (create-drain wave, triangle-cache wiring): the two bridges that carry the
   rem  scene's TriangleCacheInterface to physics (@0x827A8E88) and to the world output (@0x827A5700)
   rem  -- crash-measured: without them AddRaceCarTractionLineTests dereferences a NULL
@@ -4251,6 +4278,10 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  remove-command pool and the Array<s32,20> order array are all header inlines).
   rem  DELETE-WHEN: BrnICEMoviePlayer.cpp can mount -- then fold the split back into it.
   echo "%SRC%\GameSource\Director\Utils\BrnICEMoviePlayer_wP0_01.cpp"
+  rem ---- ICE sub-object ctors, which run at boot; the two _wG_09 files are splits out of the unmountable ICEManager.cpp / BrnDirectorICEWrapper.cpp
+  echo "%SRC%\GameSource\Director\Camera\ICECameraMover.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEManager_wG_09.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_09.cpp"
   rem  BrnDirectorEffectTrigger.cpp is NOT mounted yet, deliberately. It now DOES define
   rem  Camera::EnsureEffectIsPlaying @0x821F2720 (the note further down claiming otherwise
   rem  is STALE), but mounting it costs two REAL unresolved externals --
@@ -4337,6 +4368,9 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorVehicleTracker.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentSelector.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentController.cpp"
+  rem  the first two Moment-family TUs to join the link; zero new unresolved externals each.
+  echo "%SRC%\GameSource\Director\MomentController\BrnMoment.cpp"
+  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentFailsafe.cpp"
   rem ---- [momentcam] jump/stunt CUTAWAY-CAMERA wave, 2026-08-23 --------------------------
   rem  ⭐ NO NEW MOUNTS ARE ADDED BY THIS WAVE, ON PURPOSE. This block exists so the next
   rem  person to plan a "mount the moments" pass starts from measured numbers instead of the
@@ -4350,16 +4384,15 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem    * BrnMomentParameterBank.cpp was a six-type local fork (the class-vs-struct
   rem      Moment::Parameters ODR fork). De-forked; every byte it writes is unchanged.
   rem    * BrnMomentSubclasses.h was an ELEVEN-class ODR fork; ten are retired.
-  rem    * BrnMomentPlayerJumping.cpp and BrnMomentTumbling.cpp now COMPILE (they did not).
+  rem    * All 14 Moments\*.cpp now compile.
   rem    * The moment pool bucket (AbstractPool 70,20,Vector4 == 1120 B) is TOO SMALL on x64
   rem      (MomentPlayerJumping is 1296 B). Widened + static_assert-ratcheted in
   rem      BrnMomentController.h. Inert today; a heap smash the day the closure mounts.
   rem
   rem  WHY NOTHING IS MOUNTED (MEASURED 2026-08-23, not estimated):
   rem    * BrnMomentControllerNewMoment.cpp + BrnMoment.cpp + all 14 Moments\*.cpp costs
-  rem      142 NON-CRT unresolved externals. Trimming NewMoment to only the two cutaway
-  rem      moment types still costs ~50. ~44 of the 142 are the `detail::MomentSharedInfo_*`
-  rem      reach shims -- that record has NO home in this tree and IS the keystone.
+  rem      147 NON-CRT unresolved externals (re-measured 2026-09-09; it grew). ~49 of them
+  rem      are `detail::MomentSharedInfo_*` reach shims -- that record has NO home here.
   rem    * ⛔ AND THE MOUNT ALONE WOULD NOT MAKE A CUTAWAY PLAY: nothing in this tree ticks a
   rem      moment. MomentController::UpdateAllMoments @0x82239DE8 has no body anywhere,
   rem      MainDirector::UpdateMoments @0x82250268 is declaration-only, and the call is
@@ -4369,6 +4402,10 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem      host object does not fit that span even before the bucket widening.
   rem
   rem  ORDER TO DO IT IN (each step is useless without the ones above it):
+  rem    0. Give BehaviourParameterBank/NamedParameters the moment camera blocks and body
+  rem    their accessors (Camera lane): the four cheapest moment TUs are blocked on nothing
+  rem    else, and each returns a const reference, so none can be stubbed. Homing
+  rem    MomentSharedInfo first closes ~49 externals and still mounts nothing.
   rem    1. Home the MomentSharedInfo record.  2. Body UpdateAllMoments + UpdateMoments and
   rem    un-gate BrnMainDirector.cpp:1617.  3. Give MainDirector a real MomentController
   rem    member.  4. Body the six BehaviourCollection template methods + the ~38 one-liner
@@ -5802,7 +5839,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   BrnHudStatesLinkStubs.cpp instead, all runtime-dead on the mode-7 path.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnOnlineTimeoutTimerComponent.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_08.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnHudStatesLinkStubs.cpp"
+  rem  The ChallengeSelector pair mounts together: the second file is a part-file of the same TU and holds the sole SelectAvailableChallenge body.
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnChallengeSelector.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnChallengeSelector_wL_01.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextField.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnButtonIcon.cpp"
   rem The real title-menu frontend (replaces the retired MenuComponent facade).
