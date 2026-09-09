@@ -2781,6 +2781,8 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToEntityModules.cpp"
   rem  four WorldModule per-frame bridge seams; retires their four WorldLinkStubs gates (2026-09-09)
   echo "%SRC%\GameSource\World\BrnWorldModule_wG_Bridges_01.cpp"
+  rem  BridgeTrafficEntityInfoToOutput_PreScene + BridgeCrashModuleToOutput; retires their two WorldLinkStubs gates (2026-09-09)
+  echo "%SRC%\GameSource\World\BrnWorldModule_wG_Bridges_02.cpp"
   rem  ?????? 2026-08-11 (create-drain wave, triangle-cache wiring): the two bridges that carry the
   rem  scene's TriangleCacheInterface to physics (@0x827A8E88) and to the world output (@0x827A5700)
   rem  -- crash-measured: without them AddRaceCarTractionLineTests dereferences a NULL
@@ -3423,6 +3425,8 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  wave Q6 / bridges: BrnWorld::CrashIO::TrafficInputInterface::Construct -- called by the traffic
   rem  OutputBuffer_PostPhysics::Construct landed this wave.
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\TrafficInputInterface.cpp"
+  rem  NetworkOutputInterface::Construct/Clear, called by the crash and world output buffers' Construct (2026-09-09)
+  echo "%SRC%\GameSource\World\CrashModule\SharedIO\NetworkOutputInterface.cpp"
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\BrnCrashModuleIO_OutputBuffer_PreScene.cpp"
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\BrnCrashModuleIO_InputBuffers.cpp"
   echo "%SRC%\GameSource\Network\BrnNetworkModuleIO.cpp"
