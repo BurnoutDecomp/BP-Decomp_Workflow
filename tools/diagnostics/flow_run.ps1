@@ -236,6 +236,14 @@ param(
                                  #   are DIFFERENT transitions (54 -> TOGGLE_LEFT -> CN_MAP_MAIN,
                                  #   55 -> TOGGLE_RIGHT -> CN_SETTINGS). Mutually exclusive with
                                  #   -Showtime: they drive the same two channels.
+  [string]$MenuTapAt   = "",     # opt IN: TAP a menu channel. "<sec>:<Channel>", comma-separated,
+                                 #   seconds on the SAME DRIVING time base as -PauseAt, so a tap can
+                                 #   be scheduled INSIDE the map. Channels: DPadUp DPadDown DPadLeft
+                                 #   DPadRight (37..40, the crash-nav panel's filter toggles), Next
+                                 #   Prev (42/41 GUI_DOWN/UP), OptionNext OptionPrev (44/43
+                                 #   GUI_RIGHT/LEFT), Accept (49), Stop (50), Start (45). All are the
+                                 #   game's existing AUTO-RESET harness channels (CgsInputPadsPC.cpp);
+                                 #   nothing new is added on the game side.
   [switch]$StartEvent,           # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
                                  # instrument -- the same discipline -CrashEntry carried until that
@@ -1342,6 +1350,37 @@ $script:pauseTimes   = Parse-TapSchedule $PauseAt   'PauseAt'
 $script:unpauseTimes = Parse-TapSchedule $UnpauseAt 'UnpauseAt'
 $script:pauseNext    = 0
 $script:unpauseNext  = 0
+# ---- -MenuTapAt: "<sec>:<Channel>[,...]" -- scheduled menu taps on the DRIVING time base ----
+$script:menuTaps = @()
+$script:menuTapNext = 0
+$script:menuTapHandles = @{}
+if ($MenuTapAt -ne "") {
+  $lNumStyle = [System.Globalization.NumberStyles]::Float
+  $lInv      = [System.Globalization.CultureInfo]::InvariantCulture
+  $laKnown = @{ 'DPadUp'='DPadUp'; 'DPadDown'='DPadDown'; 'DPadLeft'='DPadLeft'; 'DPadRight'='DPadRight';
+                'Next'='Next'; 'Prev'='Prev'; 'OptionNext'='OptionNext'; 'OptionPrev'='OptionPrev';
+                'Accept'='Accept'; 'Stop'='Stop'; 'Start'='Start' }
+  foreach ($lpEntry in $MenuTapAt.Split(",")) {
+    $lpEntry = $lpEntry.Trim(); if ($lpEntry -eq "") { continue }
+    $laParts = $lpEntry.Split(":")
+    $lfTmp = 0.0
+    if ($laParts.Count -ne 2 -or -not [double]::TryParse($laParts[0].Trim(), $lNumStyle, $lInv, [ref]$lfTmp)) {
+      Write-Host ("[flow] FAIL: -MenuTapAt entry '{0}' is not <sec>:<Channel>." -f $lpEntry); exit 1
+    }
+    $lpChan = $laParts[1].Trim()
+    if (-not $laKnown.ContainsKey($lpChan)) {
+      Write-Host ("[flow] FAIL: -MenuTapAt channel '{0}' unknown (DPadUp DPadDown DPadLeft DPadRight Next Prev OptionNext OptionPrev Accept Stop Start)." -f $lpChan); exit 1
+    }
+    $script:menuTaps += [pscustomobject]@{ At = [double]$laParts[0].Trim(); Chan = $lpChan }
+    if (-not $script:menuTapHandles.ContainsKey($lpChan)) {
+      $script:menuTapHandles[$lpChan] = New-Object System.Threading.EventWaitHandle($false,
+        [System.Threading.EventResetMode]::AutoReset, ("Local\BurnoutPC_Input_" + $lpChan + $slotTag))
+    }
+  }
+  $script:menuTaps = @($script:menuTaps | Sort-Object At)
+  Write-Host ("[flow] MENU-TAP schedule: {0} tap(s) -- {1}" -f $script:menuTaps.Count,
+              (($script:menuTaps | ForEach-Object { "{0}@DRIVING+{1:f1}s" -f $_.Chan, $_.At }) -join ', '))
+}
 if ($script:pauseTimes.Count -gt 0) {
   Write-Host ("[flow] PAUSE schedule: {0} tap(s) at DRIVING+[{1}]s; UNPAUSE: {2} tap(s) at DRIVING+[{3}]s" -f `
     $script:pauseTimes.Count, ($script:pauseTimes -join ','), $script:unpauseTimes.Count, ($script:unpauseTimes -join ','))
@@ -1876,6 +1915,13 @@ while ($true) {
       $script:unpauseNext++
       $evStop.Set() | Out-Null
       Write-Host ("[flow] UNPAUSE tap #{0} (action 50 GUI_CANCEL / Stop) at DRIVING+{1:f1}s" -f $script:unpauseNext, $sinceDrivingP)
+    }
+    # ---- the scheduled menu taps (-MenuTapAt): one AUTO-RESET Set() each, latched ----
+    while ($script:menuTapNext -lt $script:menuTaps.Count -and
+           $sinceDrivingP -ge $script:menuTaps[$script:menuTapNext].At) {
+      $lTap = $script:menuTaps[$script:menuTapNext]; $script:menuTapNext++
+      $script:menuTapHandles[$lTap.Chan].Set() | Out-Null
+      Write-Host ("[flow] MENU tap #{0} ({1}) at DRIVING+{2:f1}s" -f $script:menuTapNext, $lTap.Chan, $sinceDrivingP)
     }
   }
 
