@@ -7391,11 +7391,12 @@
  "GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp": {
   "source": "decfigs",
   "status": "todo",
-  "n_funcs": 8,
-  "n_decfigs": 8,
+  "n_funcs": 9,
+  "n_decfigs": 9,
   "functions": [
    "CgsResource::Heap::ExecuteBatchAddressedAllocation",
    "CgsResource::Heap::ExecuteBatchAllocation",
+   "CgsResource::Heap::ExecuteBatchRelocation",
    "CgsResource::Heap::GenerateLinearHeap",
    "CgsResource::Heap::GetFragmentationLevel",
    "CgsResource::Heap::GetLargestFreeBlock",
@@ -19567,8 +19568,8 @@
  "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManager.cpp": {
   "source": "decfigs",
   "status": "todo",
-  "n_funcs": 64,
-  "n_decfigs": 64,
+  "n_funcs": 65,
+  "n_decfigs": 65,
   "functions": [
    "BrnPhysics::Vehicle::PotentialContactAverager::AddContactPair",
    "BrnPhysics::Vehicle::PotentialContactAverager::GetAveragedContactPoint",
@@ -19617,6 +19618,7 @@
    "BrnPhysics::Vehicle::VehicleManager::ProcessAboveGroundLineTestsResults",
    "BrnPhysics::Vehicle::VehicleManager::ProcessAftertouchEvents",
    "BrnPhysics::Vehicle::VehicleManager::ProcessContactSpies",
+   "BrnPhysics::Vehicle::VehicleManager::ProcessCrashingNetworkCars",
    "BrnPhysics::Vehicle::VehicleManager::ProcessNetworkCarDisconnect",
    "BrnPhysics::Vehicle::VehicleManager::ProcessVehicleMaintenanceEvents",
    "BrnPhysics::Vehicle::VehicleManager::ReadSurfaceProperties",
@@ -19860,8 +19862,8 @@
  "GameSource/Unity/../Physics/VehicleManager/VehiclePhysics/VehiclePhysics.cpp": {
   "source": "decfigs",
   "status": "todo",
-  "n_funcs": 50,
-  "n_decfigs": 50,
+  "n_funcs": 51,
+  "n_decfigs": 51,
   "functions": [
    "BrnPhysics::Vehicle::VehiclePhysics::AddAirRam",
    "BrnPhysics::Vehicle::VehiclePhysics::AddShunt",
@@ -19889,6 +19891,7 @@
    "BrnPhysics::Vehicle::VehiclePhysics::LimitDifferential",
    "BrnPhysics::Vehicle::VehiclePhysics::ModifyControlsForDrift",
    "BrnPhysics::Vehicle::VehiclePhysics::Prepare",
+   "BrnPhysics::Vehicle::VehiclePhysics::Reset",
    "BrnPhysics::Vehicle::VehiclePhysics::SetAttributes",
    "BrnPhysics::Vehicle::VehiclePhysics::SetCrashing",
    "BrnPhysics::Vehicle::VehiclePhysics::SetTransformFromPositionOnRoad",
@@ -40115,11 +40118,12 @@
  "class:BrnTraffic::BrnTrafficIO::InputBuffer_PostScene": {
   "source": "class",
   "status": "todo",
-  "n_funcs": 2,
+  "n_funcs": 3,
   "n_decfigs": 0,
   "functions": [
    "BrnTraffic::BrnTrafficIO::InputBuffer_PostScene::SetActiveRaceCarOutputInterface",
-   "BrnTraffic::BrnTrafficIO::InputBuffer_PostScene::SetCrashTrafficOutputInterface"
+   "BrnTraffic::BrnTrafficIO::InputBuffer_PostScene::SetCrashTrafficOutputInterface",
+   "BrnTraffic::BrnTrafficIO::InputBuffer_PostScene::SetRaceCarToTrafficInterface"
   ]
  },
  "class:BrnTraffic::BrnTrafficIO::InputBuffer_PrePhysics": {
@@ -48111,6 +48115,15 @@
   "n_decfigs": 0,
   "functions": [
    "CgsResource::Font>::operator class CgsResource::Font *"
+  ]
+ },
+ "class:CgsResource::Heap": {
+  "source": "class",
+  "status": "todo",
+  "n_funcs": 1,
+  "n_decfigs": 0,
+  "functions": [
+   "CgsResource::Heap::FindFreeNodeContainingAddress"
   ]
  },
  "class:CgsResource::HeapEntry": {
