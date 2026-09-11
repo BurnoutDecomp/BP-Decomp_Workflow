@@ -387,6 +387,9 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ModeArming.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Rivals.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Range.cpp"
+  rem IsPlayerCarTailgatingOtherRaceCars (its WorldLinkStubs gate is DELETED; leaving both
+  rem = LNK2005) + UpdateNearMisses, the only driver of NearMissManager::Update.
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_NearMissTailgate.cpp"
   rem ---- crash play / Showtime (crash-play wave 2026-08-29). BrnCrashPlayManager.cpp is  ----
   rem ---- the boost CONSUMER; the debug component is its first member BY VALUE, so its    ----
   rem ---- vtable has to resolve too or Update cannot call mCrashPlayDebugComponent.Update.----
@@ -662,9 +665,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   preset table both Constructs bind -- is defined in BrnDebrisRenderer.cpp, recovered
   rem   from the console image (its two vector members are CRT dynamic-initialiser writes,
   rem   not image bytes). ParticleModule::Prepare now runs the five BrnDebrisArray::Construct
-  rem   calls. STILL ANNOUNCED: BrnDebrisRenderer::Construct alone, because its renderer
-  rem   argument mWorldTexRenderer is a ContainedInterface placeholder (Im3dTexPlusLighting
-  rem   has no committed type); that is a rendering dependency, not a debris one.
+  rem   calls. STILL ANNOUNCED: BrnDebrisRenderer::Construct alone -- Im3dTexPlusLighting needs
+  rem   its shader program pair converted for PC first (see ParticleModule_Lifecycle.cpp).
   rem   NOTE ParticleModuleBringUp.cpp stays mounted above. GenerateDispatchLists IS wired into
   rem   DoDispatch now (2026-09-07), but the stand-in still (a) arms the per-instance latch
   rem   PCBringUpParticleRenderDataProducedFor that BrnRendererModule gates motion blur on, and
@@ -682,6 +684,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Effects\BrnEffectsDebugComponent.cpp"
   echo "%SRC%\GameSource\Effects\ParticleEffectHelper.cpp"
   echo "%SRC%\GameSource\Effects\BrnEffectsUtils.cpp"
+  echo "%SRC%\GameSource\Effects\BrnEffectsDebrisColourRandomiser.cpp"
   echo "%SRC%\GameSource\Effects\BrnEffectsBuildUVData.cpp"
   echo "%SRC%\GameSource\Effects\Curves.cpp"
   echo "%SRC%\GameSource\Effects\SharedIO\BrnEffectsModuleIO_InputBuffer_Accessors.cpp"
@@ -701,6 +704,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   the grinding-spark chain. DispatchThreadUpdate calls the first, which is the only route
   rem   from EffectsModule::HandleSparkContacts to SparkArray::SpawnSpark.
   echo "%SRC%\GameSource\Effects\Particles\ParticleModule_SparkEvents.cpp"
+  rem ---- DEBRIS PRODUCER (2026-09-11). ParticleModule::SpawnDebris -- the update-thread end of
+  rem   the debris chain, and the reason no debris ever spawned: every other link existed.
+  rem   JumpStateMachine::FireWheelDebris is unparked in the same change and calls it.
+  echo "%SRC%\GameSource\Effects\Particles\ParticleModule_DebrisSpawn.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnTrailSystem.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnTrailRender.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\StackTrailEmitter96_Push.cpp"
@@ -1786,10 +1793,8 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  VehicleManager::UpdateVehiclePhysics @0x82644FA8 (1,038 insns) FULL body + four in-TU
   rem  siblings (IsRaceCarCrashing / ForceRaceCarCrash-5arg==sub_82635B78 / ProcessAboveGround-
   rem  LineTestsResults / ProcessAftertouchEvents) -- slice TU, home BrnVehicleManager.cpp still
-  rem  unmounted. Its honest-closure remainder is NAMED trap stubs in BrnVehicleManagerLinkStubs
-  rem  (all dead until PhysicsModule::Update lands -- that wave must resolve every stub there).
+  rem  unmounted.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateVehiclePhysics.cpp"
-  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerLinkStubs.cpp"
   rem  The per-surface physics bank loader; retires the VehicleManager::ReadSurfaceProperties(u64)
   rem  gate (2026-09-09). MANDATORY: sole definition of a symbol BrnWorldModule.cpp calls.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_wG_ReadSurface.cpp"
@@ -1828,6 +1833,8 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateCrashes.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PlayerStuck.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_CrashState.cpp"
+  rem  The network crash-state stage + its SetNetworkCarCrashing sink; retires the last conductor gate (2026-09-11).
+  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ProcessCrashingNetworkCars.cpp"
   rem  ????????? THE CREATE DRAIN MOUNTS (create-drain wave): ProcessCreateEvents @0x82616770 -- the
   rem  ONLY writer of mUsedRaceCars in the XEX. Setting that bit switches on the four already-
   rem  mounted per-frame loops (ReadUpdatedBodies gravity, UpdateVehiclePhysics force path,
@@ -1889,12 +1896,8 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem      class is retired by the same commit).
   rem    * BrnVehicleManager_ConductorLeaves.cpp -- UpdateCameraMatrix + the
   rem      empty-as-shipped ProcessWheelContacts.
-  rem    * BrnPhysicsConductorGates.cpp -- THE NAMED DEFERRALS: every not-yet-reconstructed
-  rem      direct callee of the conductor as a LOUD one-shot boot gate (symbol + X360
-  rem      address + insn count, once per boot). Reconstruct each and DELETE its gate.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManagerIO.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ConductorLeaves.cpp"
-  echo "%SRC%\GameSource\Physics\BrnPhysicsConductorGates.cpp"
   rem ---- VEHICLE-DYNAMICS CORE (physics wave 3, 2026-08-02) --------------------------------
   rem  The first vehicle-physics translation units ever mounted. Before this the whole domain
   rem  was unmounted: 119 reconstructed bodies, ZERO of them in the build.
@@ -2783,6 +2786,8 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\BrnWorldModule_wG_Bridges_01.cpp"
   rem  BridgeTrafficEntityInfoToOutput_PreScene + BridgeCrashModuleToOutput; retires their two WorldLinkStubs gates (2026-09-09)
   echo "%SRC%\GameSource\World\BrnWorldModule_wG_Bridges_02.cpp"
+  rem  the three scene-query bridge seams; retires their three WorldLinkStubs gates (2026-09-11)
+  echo "%SRC%\GameSource\World\BrnWorldModule_wG_Bridges_03.cpp"
   rem  ?????? 2026-08-11 (create-drain wave, triangle-cache wiring): the two bridges that carry the
   rem  scene's TriangleCacheInterface to physics (@0x827A8E88) and to the world output (@0x827A5700)
   rem  -- crash-measured: without them AddRaceCarTractionLineTests dereferences a NULL
@@ -2944,6 +2949,10 @@ rem  wT6_03 -- HandleExternalRequests @0x8274B660, PARTIAL. Only its action-23 a
 rem  real, but that arm is the ONLY caller of HandlePrepareForModeAction -- without this
 rem  TU /OPT:REF discards the showtime gate entirely.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_03.cpp"
+rem  wG_Stages -- PostSceneUpdate, the per-frame post-scene stage driver.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wG_Stages.cpp"
+rem  wG_PostScene -- its five stage helpers plus CreateTrafficAIEntity.
+echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wG_PostScene.cpp"
 rem  2026-09-02 (traffic-deformation wave): ProcessDeformationData @0x8271DEB0 -- the physics ->
 rem  traffic deformation readback (skin offsets, wheels, locators, detached parts, glass) --
 rem  plus BrnTraffic::SetGlassFractureConstants @0x82714848. Its call site in _wT1_01.cpp is
@@ -3086,15 +3095,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem          that TU to reach it opens more than it closes (it needs the
   rem          Camera2DRotationController::kfDeadZoneRadius static, which has no definition
   rem          anywhere in the tree). MEASURED both ways.
-  rem  ?????? BrnLooker.cpp is deliberately NOT mounted: it DOES NOT COMPILE (BrnLooker.cpp:189
-  rem  calls the three-argument rw::math::vpu::SLerp that was replaced by the four-argument
-  rem  form long ago and never re-fitted -- a stale TU nobody noticed because nothing ever
-  rem  linked it). Looker::Parameters::Construct, the one function this wave needs out of it,
-  rem  moved to BrnLooker.h as an inline. DELETE-WHEN: BrnLooker.cpp is re-fitted.
-  rem  ??? BrnCameraShake.cpp (the Parameters::Serialise<S> slice) is STILL not mounted: its
-  rem  three explicit instantiations drag DebugMenuSerialiser / TextFileWriteSerialiser /
-  rem  TextFileReadSerialiser, whose Serialise(const char*, f32&) are all out-of-line in TUs
-  rem  that are not on this list -- three unresolved externals opened to close one.
+  rem  BrnCameraShake.cpp + BrnCameraImpactEffect.cpp (the Parameters::Serialise<S> slices) stay
+  rem  parked: they need DebugMenuSerialiser / TextFile{Read,Write}Serialiser, whose own TUs open
+  rem  ~50 externals (the whole unmounted camera *Serialise.cpp partfile family + the DebugComponent
+  rem  RegisterVariable/SetStep API). Their live halves are the two partfiles mounted below.
   rem  ??? ROTATE-HELPER WAVE (2026-08-02): CameraShake::Update was file-split OUT of that TU
   rem  into BrnCameraShakeUpdate.cpp and is mounted below, which RETIRES the empty `{}` stub
   rem  DirectorLinkStubs.cpp used to resolve it to. Its three blockers are all closed:
@@ -3117,6 +3121,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  reached it. BehaviourGameplayExternal::Update calls it directly at 0x822422B0.
   rem  MEASURED cascade: the TU includes only its own header, which includes only types.hpp
   rem  and <cstddef>. Zero new unresolved.
+  rem  Looker Track/Zoom/Update (re-fitted 2026-09-11: the TU still called the retired
+  rem  3-arg SLerp and the pre-VecFloat helper signatures). Its one hole,
+  rem  Utils::GetFOVDegsToFitObjectToScreenArea, is BODIED in CameraUtils.cpp; zero new unresolved.
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnLooker.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSphericalRotationController.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeUpdate.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeICEController.cpp"
@@ -4155,6 +4163,9 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsTextFileResource.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\PoolModuleStates\CgsBaseDefragPoolModuleState.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\PoolModuleStates\CgsBaseDefragPoolModuleState_wG_11.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\PoolModuleStates\CgsIntelliFragPoolModuleState.cpp"
+  rem CgsEmergencyFragPoolModuleState.cpp parked: needs Pool::BeginEmergencyDefragmentation -> CgsMemory::Relocator (unreconstructed).
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsTimer.cpp"
   rem pace wave (b5 dev 261a5303, upstream) landed CgsSystem::FrameInterpolation callers in BrnGameModule/BrnWorldModule without the mount; added here (cars step 1c)
   echo "%SRC%\GameShared\GameClasses\System\Timer\CgsFrameInterpolation.cpp"
@@ -4248,6 +4259,8 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorState.cpp"
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorStateContainer.cpp"
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorSharedCameraContainer.cpp"
+  rem  The container's remaining out-of-line body, GetGameplayCameraHelperIndex; measured free (3 undefs, 0 new).
+  echo "%SRC%\GameSource\Director\Camera\BrnSharedCameraContainer.cpp"
   rem  MOUNTED 2026-08-02 (camera parameter-chain wave). BehaviourPassengerCam's four REAL
   rem  virtuals (Construct/Update/Release/GetName, 57 lines, only CgsAssert). Needed because
   rem  BrnBehaviourManager.cpp:965's explicit AllocateBehaviour<BehaviourPassengerCam>() now
@@ -4286,6 +4299,15 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Camera\ICECameraMover.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEManager_wG_09.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_09.cpp"
+  rem ---- ICEWrapper::Construct / ::Destruct (2026-09-11), retiring their two DirectorLinkStubs
+  rem  gates. Splits out of the unmountable ICEWrapper.cpp / ICEManager.cpp / ICEControllerMenus.cpp,
+  rem  same pattern as the _wG_09 pair. MEASURED (dumpbin over these objects against the mounted
+  rem  symbol set): ZERO unresolved externals -- Camera::Construct is in the link via Camera.cpp,
+  rem  and the only hole the chain had, ICEMemory::FreeMemory, is now bodied in the mounted
+  rem  ICEMemory.cpp. DELETE-WHEN: the three parent TUs can mount -- then fold the splits back.
+  echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_11.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEManager_wG_11.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEControllerMenus_wG_11.cpp"
   rem  BrnDirectorEffectTrigger.cpp is NOT mounted yet, deliberately. It now DOES define
   rem  Camera::EnsureEffectIsPlaying @0x821F2720 (the note further down claiming otherwise
   rem  is STALE), but mounting it costs two REAL unresolved externals --
@@ -4347,14 +4369,6 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  Start / Parameters::Construct all become live symbols. MEASURED mount cost: zero
   rem  new unresolved -- that TU includes only its own header plus BrnLooker.h and
   rem  BrnCameraShake.h, both header-inline.
-  rem  ??? BrnMomentBystanderSeesAction.cpp is deliberately NOT mounted with it, although
-  rem  ArbStateCrashing DOES register BYSTANDER_SEES_ACTION as one of its four crash
-  rem  moments. MEASURED: mounting it opens NINE unresolved externals of its own -- seven
-  rem  `detail::MomentSharedInfo_*` free-function shims that are declared and never
-  rem  defined, plus BehaviourParameterBank::GetBystanderCam{,Close}MomentParams. That is
-  rem  the same shim disease BehaviourBystanderCam.cpp has. Its ONE function this state
-  rem  needs (SetPerceivedDistanceModificationFactor) is trap-stubbed in
-  rem  DirectorLinkStubs.cpp GROUP F instead, with the DELETE-WHEN there.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCrashing.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourSpirallingDeathcam.cpp"
   rem  ---- ...AND THE SIXTH BREAK: THE PLAYER TRACKER (2026-08-29). ------------------------
@@ -4375,6 +4389,22 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  the first two Moment-family TUs to join the link; zero new unresolved externals each.
   echo "%SRC%\GameSource\Director\MomentController\BrnMoment.cpp"
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentFailsafe.cpp"
+  rem ---- [momentwall] the moment-camera parameter wall, 2026-09-11 ----------------------
+  rem  The camera parameter record is mapped (RECORD MAP banner in BrnBehaviourParameterBank.h)
+  rem  and the shared-info record is homed, so the two moment TUs ArbStateCrashing actually
+  rem  reaches now link. MEASURED against the whole current object list: all four mounted here
+  rem  are ZERO non-CRT unresolved and add no non-COMDAT duplicate definition; they retire the
+  rem  two trap stubs
+  rem  (MomentBystanderSeesAction::SetPerceivedDistanceModificationFactor,
+  rem  MomentTumbling::SignalIsGoodTimeToPlant) from DirectorLinkStubs.cpp.
+  rem  Still inert at runtime: both call sites are behind HasSelectedMoment() and
+  rem  muValidMoments stays 0 while MomentController::NewMoment allocates nothing.
+  echo "%SRC%\GameSource\Director\MomentController\BrnMomentSharedInfo.cpp"
+  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentBystanderSeesAction.cpp"
+  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentTumbling.cpp"
+  rem  BrnMomentStaticCamImpact.cpp joins them: it retires no gate, but its one blocker was
+  rem  GetStaticCamImpactCamParams and it now measures zero non-CRT unresolved as well.
+  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentStaticCamImpact.cpp"
   rem ---- [momentcam] jump/stunt CUTAWAY-CAMERA wave, 2026-08-23 --------------------------
   rem  ⭐ NO NEW MOUNTS ARE ADDED BY THIS WAVE, ON PURPOSE. This block exists so the next
   rem  person to plan a "mount the moments" pass starts from measured numbers instead of the
@@ -4394,9 +4424,12 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem      BrnMomentController.h. Inert today; a heap smash the day the closure mounts.
   rem
   rem  WHY NOTHING IS MOUNTED (MEASURED 2026-08-23, not estimated):
-  rem    * BrnMomentControllerNewMoment.cpp + BrnMoment.cpp + all 14 Moments\*.cpp costs
-  rem      147 NON-CRT unresolved externals (re-measured 2026-09-09; it grew). ~49 of them
-  rem      are `detail::MomentSharedInfo_*` reach shims -- that record has NO home here.
+  rem    * BrnMomentControllerNewMoment.cpp + BrnMoment.cpp + all 14 Moments\*.cpp cost
+  rem      147 NON-CRT unresolved externals when last measured whole (2026-09-09). The
+  rem      [momentwall] block above has since taken three of those TUs out of the set at
+  rem      zero cost
+  rem      and closed the MomentSharedInfo shims those three need; the rest of the shim
+  rem      family is still declaration-only.
   rem    * ⛔ AND THE MOUNT ALONE WOULD NOT MAKE A CUTAWAY PLAY: nothing in this tree ticks a
   rem      moment. MomentController::UpdateAllMoments @0x82239DE8 has no body anywhere,
   rem      MainDirector::UpdateMoments @0x82250268 is declaration-only, and the call is
@@ -4406,11 +4439,13 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem      host object does not fit that span even before the bucket widening.
   rem
   rem  ORDER TO DO IT IN (each step is useless without the ones above it):
-  rem    0. Give BehaviourParameterBank/NamedParameters the moment camera blocks and body
-  rem    their accessors (Camera lane): the four cheapest moment TUs are blocked on nothing
-  rem    else, and each returns a const reference, so none can be stubbed. Homing
-  rem    MomentSharedInfo first closes ~49 externals and still mounts nothing.
-  rem    1. Home the MomentSharedInfo record.  2. Body UpdateAllMoments + UpdateMoments and
+  rem    0. DONE 2026-09-11 (see [momentwall] above): the camera parameter record is mapped
+  rem    and the four single-block moment accessors are bodied. The two INDEXED ones
+  rem    (player-jumping rig / bystander shots) are not -- their call-site indices are off
+  rem    by one, which the bank header records.
+  rem    1. Finish the MomentSharedInfo record's reach shims (the record is homed in
+  rem    MomentController\BrnMomentSharedInfo.h; 11 of ~49 shims are bodied).
+  rem    2. Body UpdateAllMoments + UpdateMoments and
   rem    un-gate BrnMainDirector.cpp:1617.  3. Give MainDirector a real MomentController
   rem    member.  4. Body the six BehaviourCollection template methods + the ~38 one-liner
   rem    per-moment virtuals.  5. THEN add the mounts here and delete the GROUP F stubs.
@@ -4431,10 +4466,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  E_STATE_CHANGING_TO_CAR_SELECT.
   rem  MEASURED 2026-08-01 (fresh --rescan against the NINTH-PASS object list): these four
   rem  together are NET +4, and TWO of the four are the CRT (atan2, fabs, which the measure
-  rem  script's CRT filter does not cover). The last two:
-  rem    * Utils::CameraShake::Update -- GATED at BrnBehaviourIceAnim.cpp's bystander-space
-  rem      wobble, with the reason and the DELETE-WHEN there. Mounting its real TU
-  rem      (Camera/Utils/BrnCameraShake.cpp) costs +5 today.
+  rem  script's CRT filter does not cover). The last one:
   rem    * BehaviourIceAnim's vector deleting destructor -- a COFF WeakExternal off its own
   rem      vtable.
   rem  ?????? The FOURTH/FIFTH/SIXTH-PASS notes below quoting 54 / 31 / 13 / 12 unresolved for this
@@ -4639,12 +4671,12 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  The old "NOT mounted -- raw console byte offsets, LNK2005" warning further up this
   rem  file is therefore STALE for that TU; only the mount decision still stands.
   rem
-  rem  AND THE SECOND OBVIOUS IDEA IS DEAD TOO: BrnSharedCameraContainer.cpp and
-  rem  BrnDirectorEffectTrigger.cpp also exist unmounted, and adding them to CarSelect takes
-  rem  13 -> 16. They do NOT define ForcePrimaryGameplayBehaviourToFinish /
-  rem  GetSelectedGameplayCamera / EnsureEffectIsPlaying -- those three stay unresolved --
-  rem  and they open three NEW leaves (HookNameStringWrapper::operator==,
-  rem  EffectInterface::{HookExists, RegisterStartingBackgroundEffectWithName}).
+  rem  AND THE SECOND OBVIOUS IDEA IS DEAD TOO: BrnDirectorEffectTrigger.cpp also exists
+  rem  unmounted, and adding it to CarSelect takes 13 -> 16. It does NOT define
+  rem  ForcePrimaryGameplayBehaviourToFinish / GetSelectedGameplayCamera /
+  rem  EnsureEffectIsPlaying -- those three stay unresolved -- and it opens three NEW leaves
+  rem  (HookNameStringWrapper::operator==, EffectInterface::{HookExists,
+  rem  RegisterStartingBackgroundEffectWithName}).
   rem  PATTERN WORTH REMEMBERING: four "the TU already exists, just mount it" candidates were
   rem  measured this wave and ALL FOUR are accessor SLICES whose file name matches the class
   rem  but whose object does not define the function that is missing. Check what an object
@@ -5197,6 +5229,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem [minimap blips, issue #9, 2026-09-07] the drive-thru icon table producer (action 45 ->
   rem  the bridge's case-45 arm -> GUI 199 drive-thru records -> GuiCache maDriveThroughInfo).
   echo "%SRC%\GameSource\GameState\GameStateModule_SendSetUpAllDriveThrus.cpp"
+  echo "%SRC%\GameSource\GameState\Array_DriveThruInfo_46.cpp"
   echo "%SRC%\GameSource\GameState\Interface_SetUpAllEventStarts.cpp"
   rem [challenge-manager mount 2026-09-07] GetActiveRaceCarIndex(NetworkPlayerID), the one
   rem  ChallengeManager external that had an X360 export and no body.
@@ -5215,8 +5248,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem without them). The twelve symbols the 27 TUs referenced with no definition anywhere
   rem are bodied in the same change (roll-call in BrnModeManager.h at +28160).
   rem STILL OUT:
-  rem BrnBurnoutSkillzManager.cpp (GameActionQueue typedef clash, not a DWARF
-  rem ModeManager member), Debug/* components, *_EmbedGate/_AssertLayout/_embed_check
+  rem BrnBurnoutSkillzManager.cpp (compiles now; 5 unresolved externals -- ChallengeHighScoreEntry::Construct(ChallengeData*)/UpdateEntry and BurnoutSkillzData::GetBurnoutSkill have no body anywhere, AchievementManagerBase::OnFreeburnSkillzTotalChange and MugshotManager::ProcessBeatenRoadRuleEvent sit in unmounted TUs).
+  rem Debug/* components, *_EmbedGate/_AssertLayout/_embed_check
   rem (compile-scaffolding, gate-only by convention).
   rem [mbRecentStunt wave 2026-08-27] Hud/BrnHUDMessageLogic.cpp JOINS the mount: its
   rem four callers were un-parked because GenerateStuntMessage's vtable-dispatched
@@ -5329,12 +5362,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem wave: BrnMapManager.cpp is NOW MOUNTED in the SatNav block -- its fake CRT externals
   rem were replaced with real construction loops; the HudStatesLinkStubs ctor gate is gone.)
   echo "%SRC%\GameSource\GameState\SharedIO\BrnGameStateToGuiIOInterfaces.cpp"
-  rem [main-menu wave 2026-08-29] BrnDriveThruManager.cpp (b5 3fe6fc62) is deliberately NOT
-  rem mounted: it drags a 13-symbol progression/achievement closure (Profile drive-thru
-  rem discovery set, ProfileEvent/EventJunction accessors, AchievementManagerBase -- itself
-  rem an unmounted 8-cost TU, ProgressionManager::OnDriveThru). The five DriveThruManager
-  rem symbols the mounted call sites reference are stubbed in BrnBaselineLinkStubs.cpp with
-  rem a DELETE-WHEN; mount this + Array_DriveThruInfo_46.cpp + that closure together.
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_OnlineGridStubs.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficLightTrigger.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnChallengeHighScoreEntry.cpp"
@@ -5865,8 +5892,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  had NEVER been mounted -- the mounted BrnTextField.cpp defines neither (no overlap, so
   rem  no LNK2005). TableCell::SetColourValue is the first mounted caller of SetColour.
   echo "%SRC%\GameSource\Gui\BrnGuiTextField.cpp"
-  rem  GuiCache::GetOnlinePlayerInfoFromPlayerId, split out of BrnGuiCache.cpp for that TU's
-  rem  documented include clash (same reason as BrnGuiCache_GetNumEventStarts.cpp).
+  rem  GuiCache::GetOnlinePlayerInfoFromPlayerId, a partfile split of BrnGuiCache.cpp.
   echo "%SRC%\GameSource\Gui\BrnGuiCache_GetOnlinePlayerInfoFromPlayerId.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiStateInterface.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\State\CgsGuiState.cpp"
