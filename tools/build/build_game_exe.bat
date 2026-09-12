@@ -1076,18 +1076,17 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  The depth-stencil / rasterizer state factories: their tables are the DWARF's private statics
   rem  behind a static GetState(slot); BrnPostFx::Render and BrnPostFxBloom::Render read slots
   rem  saDepthStencilStates[1] / saRasterizerStates[2] (the two the step-2 driver had as undefined
-  rem  gpPostFx* globals -- no such globals exist on the console). CgsStateFactoryLinkStubs supplies
-  rem  both factories' Destruct/Prepare vtable slots. NOTE: nothing CONSTRUCTS either factory on this
-  rem  build yet, so both tables read null and the composite's SetState pushes skip (compare-then-
-  rem  apply on null) -- disclosed at the BrnPostFx.cpp call site.
+  rem  gpPostFx* globals -- no such globals exist on the console). NOTE: nothing CONSTRUCTS
+  rem  either factory on this build yet, so both tables read null and the composite's SetState
+  rem  pushes skip (compare-then-apply on null) -- disclosed at the BrnPostFx.cpp call site.
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsRasterizerStateFactory.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsDepthStencilStateFactory.cpp"
   rem  ...and the blend factory (Construct @0x827EB2D8, landed 2026-08-13 from the export hole):
   rem  all three are REAL by-value members of BrnRendererModule now (the placeholder structs in
   rem  BrnRendererModule.h are gone), constructed once from the PC bring-up in Render, so their
-  rem  three vtables must resolve -- Construct here, Destruct/Prepare in the link stubs.
+  rem  three vtables must resolve -- each factory TU defines its own Construct plus the
+  rem  Destruct/Prepare vtable fillers.
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsBlendStateFactory.cpp"
-  echo "%SRC%\GameShared\GameClasses\Graphics\CgsStateFactoryLinkStubs.cpp"
   rem  TintBlendEntry @0x82AD2CE8 / TintBlend @0x82AD4860 -- the EA::Jobs entry BrnPostFx::Construct
   rem  arms (on X360 the PPU pair of what is an SPU ELF on PS3). TintBlend's variant table is BLOCKED
   rem  (dword_82F7238C undumped) and unreachable while the tint bit is clear.
@@ -4116,6 +4115,9 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModule.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOOutputBuffer.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
+  rem  The director's "Camera" debug page: Construct / GetName / TakePanorama. Retires the
+  rem  DebugComponent::Construct + ::GetName gates in DirectorLinkStubs.cpp GROUP C.
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugCompononent.cpp"
   echo "%SRC%\GameSource\Director\BrnMainDirector.cpp"
   rem  MOUNTED 2026-08-02 (camera parameter-chain wave). BrnDirectorVehicleInputInterface --
   rem  the world -> director "a car entered the simulation" seam (Construct /
@@ -4361,6 +4363,14 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  zero unresolved externals beyond the CRT and the weak vector-deleting-destructor
   rem  aliases that fall back to their scalar defaults.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCrashNav.cpp"
+  rem  Race-intro camera state (2026-09-12): its DirectorLinkStubs macro line is gone; uses the shared Camera::BehaviourHandle<>.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateRaceIntro.cpp"
+  rem  Rank-up camera state (2026-09-12): macro line gone; shared handle; SetPrimaryVehicleRefToRaceCar bodied.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateRankUp.cpp"
+  rem  Post-event camera state (2026-09-12): macro line + Destruct gate gone; PickAppropriateShot reconstructed.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStatePostEvent.cpp"
+  rem  Crash-mode camera state (2026-09-12): Prepare bodied, aftertouch-crash parameter blocks carved in the bank record.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCrashMode.cpp"
   rem  ---- ...AND THE SIXTH BREAK: THE PLAYER TRACKER (2026-08-29). ------------------------
   rem  BrnDirectorVehicleTracker.cpp mounts here, and MainDirector::PreSceneQueryUpdate now
   rem  actually CALLS VehicleTracker::Update (X360 line 5 of its guarded body, gated until now).
@@ -5144,10 +5154,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   The Lion emitter: its layout is now NAMED (burnout.wiki's cParticleEmitter table,
   rem   re-checked against cParticleEmitter::Init @0x82913228 on nineteen offsets and on the
   rem   0x2D0 stride the manager allocates with), and Init is bodied because AppInit runs it
-  rem   256 times on every boot. Its simulation half is NOT bodied and is trapped, loudly, in
-  rem   LionRuntimeLinkStubs.cpp -- read that file before adding to it.
+  rem   256 times on every boot.
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\ParticleEmitter.cpp"
-  echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionRuntimeLinkStubs.cpp"
   echo "%SRC%\SDKs\Packages\Lion\Final\eauk_lion\Dev\LionRuntime\include\LionBindings.cpp"
   rem   EA::Allocator::IAllocator::~IAllocator -- the polymorphic base dtor every Lion allocator
   rem   front-end anchors on. It has had a real out-of-line home all along and was simply never
@@ -5165,9 +5173,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptFileInstance.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptTextFieldInstance.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptRenderer.cpp"
-  rem FLAG link stubs for the un-homed BrnFlapt engine bodies + tiny GUI output-queue
-  rem lifecycle the real ViewModule slice references (see the file header audit).
-  echo "%SRC%\GameSource\Gui\BrnGuiViewModuleLinkStubs.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiEventQueue.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiModule.cpp"
   rem ---- gateui wave 2026-08-20: smash-gate and billboard UI events. GameState StuntManager
   rem ---- embed, world-to-gamestate prop-hit feed, GameState-to-Gui stunt arms, the full HUD
@@ -5369,7 +5375,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem wave: BrnMapManager.cpp is NOW MOUNTED in the SatNav block -- its fake CRT externals
   rem were replaced with real construction loops; the HudStatesLinkStubs ctor gate is gone.)
   echo "%SRC%\GameSource\GameState\SharedIO\BrnGameStateToGuiIOInterfaces.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_OnlineGridStubs.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_OnlineGrid.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficLightTrigger.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnChallengeHighScoreEntry.cpp"
   echo "%SRC%\SharedClasses\StreetData\BrnChallengeData.cpp"
@@ -5798,10 +5804,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- LINK CLOSURE for the friends-list / boost-message landings (added 2026-08-26).
   rem   MEASURED: origin/dev c0dc4af2 does NOT link -- 15 unresolved externals. Two of its
   rem   own TUs were on disk but never added to this list (BrnBoostMessageManager.cpp,
-  rem   BrnFriendsListEntry.cpp); the remaining seven symbols have no body anywhere and are
-  rem   gated in BrnFriendsListLinkGates.cpp. See that file's banner.
+  rem   BrnFriendsListEntry.cpp).
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListEntry.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListLinkGates.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageManager.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageSlot.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageItem.cpp"
@@ -5836,8 +5840,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPaybackComponent.cpp"
   rem (FriendsListEntry / the BoostMessage trio mount ABOVE with the friends-list
   rem tranche block -- both sessions added them 2026-08-26; the duplicates died in
-  rem the merge. Select + the six other bodiless symbols live in
-  rem BrnFriendsListLinkGates.cpp; LobbyNameCmp is the REAL vendor body in
+  rem the merge. LobbyNameCmp is the REAL vendor body in
   rem vendor\dirtysdk\src\lobbyname.cpp.)
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnDistrictMarker.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnJunctionInfoComponent.cpp"
