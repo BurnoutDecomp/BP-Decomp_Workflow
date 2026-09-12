@@ -288,13 +288,12 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  for phase C4b: DoUpdate_Sound references the accessor for its replay-status install
   rem  seam even while the PC passes a null buffer.
   echo "%SRC%\GameSource\Replays\BrnReplayModuleIO.cpp"
-  rem ReplayModule::Prepare @0x82652768 + StoreSerialisers @0x8264B600 -- the ONLY place
-  rem in the engine that gives a BaseSerialiser its stream and static buffers. Without it
-  rem EffectsModule::Update returns at its GetStaticLayout() == 0 guard, so no tyre marks.
-  rem Split out of BrnReplayModule.cpp: that TU also defines Update_Dispatch, whose
-  rem GPUDiskWriteStream::Dispatch drags in Stream\BrnReplayGPUDiskWriteStream.cpp, which
-  rem does not compile (u64 -> CgsFileSystem::Handle at :186/:220).
+  rem ReplayModule::Prepare + StoreSerialisers -- the only place a BaseSerialiser is given its stream and static buffers.
   echo "%SRC%\GameSource\Replays\BrnReplayModule_Prepare.cpp"
+  rem ReplayModule ctor + Update_Dispatch + WaitForSerialiseJobs.
+  echo "%SRC%\GameSource\Replays\BrnReplayModule.cpp"
+  rem The GPU-frunk -> disk write streamer that Update_Dispatch pumps.
+  echo "%SRC%\GameSource\Replays\Stream\BrnReplayGPUDiskWriteStream.cpp"
   rem ---- camera wave (2026-08-01): the WORLD -> DIRECTOR seam. BridgeWorldToDirector --
   rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
   rem ---- without it every camera VehicleRef resolves to a zero transform.             --
@@ -666,8 +665,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   preset table both Constructs bind -- is defined in BrnDebrisRenderer.cpp, recovered
   rem   from the console image (its two vector members are CRT dynamic-initialiser writes,
   rem   not image bytes). ParticleModule::Prepare now runs the five BrnDebrisArray::Construct
-  rem   calls. STILL ANNOUNCED: BrnDebrisRenderer::Construct alone -- Im3dTexPlusLighting needs
-  rem   its shader program pair converted for PC first (see ParticleModule_Lifecycle.cpp).
+  rem   calls and BrnDebrisRenderer::Construct.
   rem   NOTE ParticleModuleBringUp.cpp stays mounted above. GenerateDispatchLists IS wired into
   rem   DoDispatch now (2026-09-07), but the stand-in still (a) arms the per-instance latch
   rem   PCBringUpParticleRenderDataProducedFor that BrnRendererModule gates motion blur on, and
@@ -715,6 +713,11 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\StackTrailEmitter96_Pop.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\StackTrailEmitter96_Peek.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnIm3dSkidsRenderer.cpp"
+  rem   BrnIm3dTexPlusLighting.cpp is the textured-plus-lit renderer the debris arrays
+  rem   draw through; CgsIm3dTexPlusLighting.cpp carries its ImRenderer<WorldTexturedVertex>
+  rem   template bodies.
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnIm3dTexPlusLighting.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3dTexPlusLighting.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnSkidVertex.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnLionBlendRenderer.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnLionBlendIm3d.cpp"
@@ -741,6 +744,9 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiserStaticLayout.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkidProgramsPC.cpp"
+  rem   WorldTexturedProgramsPC.cpp is the converted world-textured program pair
+  rem   Im3dTexPlusLighting::Construct uploads -- same job as the skid pair.
+  echo "%SRC%\pc\gcm\renderengine\WorldTexturedProgramsPC.cpp"
   echo "%SRC%\pc\gcm\renderengine\Im3dProgramsPC.cpp"
   rem   LionBlendProgramsPC.cpp is the four converted Lion particle blend programs
   rem   (the guest Xenos blobs unk_8200DD58/DF00/E010/E230 re-authored as D3D9) that
@@ -767,6 +773,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\pc\gcm\renderengine\VertexDescriptorParameters.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\PS3\CgsRwVertexDescResourceType.cpp"
   echo "%SRC%\pc\gcm\renderengine\ImmediateModePCLeaf.cpp"
+  rem MeshHelper::Dispatch<Device> -- the instanced-mesh bind the DEBRIS pass issues.
+  echo "%SRC%\pc\gcm\renderengine\MeshHelper.cpp"
   rem ---- RETAINED WORLD GEOMETRY (2026-08-15 perf wave) ----------------------
   rem The dispatch-path world/car/caster draws used to re-expand DEC3N and re-cut
   rem every strip run inside DrawIndexedPrimitiveUP, PER DRAW CALL -- measured at
@@ -2637,8 +2645,14 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PostScene.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame_wQ2_owner.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayRequestInterface.cpp"
-  rem  BrnReplayPropSerialiserFrame_wQ2_keyframe.cpp is NOT mounted: KeyFrameRead needs the per-T
-  rem  BrnReplayArray Read instantiations the u32-only generic cannot provide yet; its gate stays.
+  rem  PropSerialiserFrame::KeyFrameRead.
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame_wQ2_keyframe.cpp"
+  rem  PropSerialiserFrame::Read + Write + KeyFrameWrite.
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame_serialise.cpp"
+  rem  BrnReplayArray<T,N>::Read/Write generics + the eight per-T instantiations those four need.
+  echo "%SRC%\GameSource\Replays\BrnReplayArray.cpp"
+  rem  QuantisedQuatPos Pack/UnPack -- the 12-byte quat+pos record the key-frame paths ride.
+  echo "%SRC%\GameSource\Replays\BrnReplayQuantisedQuatPos.cpp"
   rem  ---- the replay serialiser LoadProp threads through the whole load path ----
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropEntitySerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame.cpp"
@@ -3080,13 +3094,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraImpactEffectRegisterImpact.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnBoostShakeController.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSmoothMover.cpp"
-  rem  Camera::Utils::Tweaker::Construct @0x821F8588 ONLY -- file-split out of
-  rem  BrnCameraTweaker.cpp on 2026-08-01 (see that file's banner). MEASURED: mounting the
-  rem  whole tweaker TU closes 1 unresolved and opens 5 (KAAC_AXIS_NAMES / KAAC_CONTROL_NAMES
-  rem  rodata + DebugController::GetControllerInfo + DebugInterface::Get2dRender +
-  rem  DebugRender::Draw2DTextJustified); the Construct body alone touches nothing but its own
-  rem  binding arrays, so this costs zero and pre-closes one of the camera family's 31.
-  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraTweakerConstruct.cpp"
+  rem  The whole camera debug tweaker (the Construct-only split file is gone). MEASURED
+  rem  2026-09-12: ZERO undefined externals absent from the link.
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraTweaker.cpp"
   echo "%SRC%\GameSource\GameState\BrnGameStateModuleIO.cpp"
   rem  BridgeGameStateToWorld wave (2026-08-01): OutputBuffer::Construct now runs the console's
   rem  own RaceCarRaceDistanceInterface::Clear (X360 0x82357470) on its +173196 member, whose
@@ -4145,8 +4155,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  ICEList); those resolve through the existing Director/ICE link stubs.
   echo "%SRC%\GameSource\Director\BrnDirectorResourceManager.cpp"
   rem  MOUNTED 2026-08-01 (ICE-anim transform wave). ?????? ICEWrapper::Prepare @0x8253DD90 -- a
-  rem  FILE SPLIT out of the un-mounted BrnDirectorICEWrapper.cpp (same pattern as
-  rem  BrnCameraTweakerConstruct.cpp above), because that TU still costs the link two
+  rem  FILE SPLIT out of the un-mounted BrnDirectorICEWrapper.cpp, because that TU still costs the link two
   rem  unresolved externals (ICEManager::GetCameraTake / ICECameraMover::Construct) that
   rem  Prepare itself does not need. This retires the `return true` stub that was the ONLY
   rem  thing standing between the ICE take evaluator and its element schedules: Prepare's
@@ -4198,6 +4207,13 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  BrnBehaviourPassengerCam.h slice, so it emits a vtable. Its two declaration-only
   rem  virtuals (Prepare/SetupTweaker) are in DirectorLinkStubs.cpp.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourPassengerCam.cpp"
+  rem  The two dev-menu debug cameras. MEASURED 2026-09-12 (with the full tweaker TU above):
+  rem  ZERO undefined externals absent from the link. Nothing allocates either one -- the
+  rem  arbitrator's two NewBehaviour<> calls are still gated -- so this is a link close, not a
+  rem  behaviour change. BehaviourDebugOrbitPlayer::Update is the one slot still in
+  rem  DirectorLinkStubs.cpp.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourDebugFlyWorld.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourDebugOrbitPlayer.cpp"
   rem ---- EIGHTH PASS (2026-08-01): the camera-family closure set. -----------------------
   rem  Measured against the object list DERIVED FROM THIS BAT, not by scanning
   rem  build\game\obj -- that directory held 43 STALE objects from TUs no longer on the
@@ -4371,6 +4387,10 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStatePostEvent.cpp"
   rem  Crash-mode camera state (2026-09-12): Prepare bodied, aftertouch-crash parameter blocks carved in the bank record.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCrashMode.cpp"
+  rem  Online car-select camera state (2026-09-12): macro line gone; shared handle; Camera::RequestStartEffectHookReset bodied.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateOnlineCarSelect.cpp"
+  rem  Online race-intro camera state (2026-09-12): macro line + Destruct gate gone; shared handle; Release bodied; the four BehaviourIceAnim vehicle-ref setters bodied.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateOnlineRaceIntro.cpp"
   rem  ---- ...AND THE SIXTH BREAK: THE PLAYER TRACKER (2026-08-29). ------------------------
   rem  BrnDirectorVehicleTracker.cpp mounts here, and MainDirector::PreSceneQueryUpdate now
   rem  actually CALLS VehicleTracker::Update (X360 line 5 of its guarded body, gated until now).
@@ -4775,7 +4795,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem      DepthOfField::GetBlurriness / ::SetBlurriness   -> BrnDepthOfField.cpp
   rem      Camera::GetDepthOfField (both overloads)        -> Camera.cpp
   rem      Camera::RequestMotionBlur                       -> Camera.cpp
-  rem      Utils::Tweaker::Construct                       -> NEW BrnCameraTweakerConstruct.cpp
+  rem      Utils::Tweaker::Construct                       -> BrnCameraTweaker.cpp (whole TU mounted 2026-09-12)
   rem                                                         (file split; mounted above)
   rem      SharedCameraContainer::GetSelectedGameplayCamera-> BrnDirectorArbitratorSharedCameraContainer.cpp
   rem      Camera::CreateHeadingSpaceLookAt                -> BrnBehaviourIceAnim.cpp
@@ -5055,6 +5075,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnInGameMessageRenderer.cpp"
   echo "%SRC%\GameSource\Gui\BrnCustomRendererManager.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnNetworkPlayerImageRenderer.cpp"
+  rem  BrnGui::CreditsTextRenderer -- the scrolling end/replay credits column; no manager slot yet.
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCreditsTextRenderer.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipInstance.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Overlay\States\BrnCrashNavOkCancelOverlayState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Overlay\States\BrnCrashNavOkOverlayState.cpp"
@@ -5239,6 +5261,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem [event-starts wave 2026-08-27] the event-start table producer + the interface it
   rem fills (AddEventStart/AppendEventStart -- had no callers until now).
   echo "%SRC%\GameSource\GameState\GameStateModule_SendSetUpAllEventStarts.cpp"
+  rem [preset-races wave 2026-09-12] the map menu's preset-event table producer (game event 28
+  rem  -> SpecificGameModeEventInterface -> GUI event 194 -> GuiCache preset events + mask).
+  echo "%SRC%\GameSource\GameState\GameStateModule_SendSpecificPreSetRacesModes.cpp"
   rem [minimap blips, issue #9, 2026-09-07] the drive-thru icon table producer (action 45 ->
   rem  the bridge's case-45 arm -> GUI 199 drive-thru records -> GuiCache maDriveThroughInfo).
   echo "%SRC%\GameSource\GameState\GameStateModule_SendSetUpAllDriveThrus.cpp"
@@ -5261,7 +5286,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem without them). The twelve symbols the 27 TUs referenced with no definition anywhere
   rem are bodied in the same change (roll-call in BrnModeManager.h at +28160).
   rem STILL OUT:
-  rem BrnBurnoutSkillzManager.cpp (compiles now; 5 unresolved externals -- ChallengeHighScoreEntry::Construct(ChallengeData*)/UpdateEntry and BurnoutSkillzData::GetBurnoutSkill have no body anywhere, AchievementManagerBase::OnFreeburnSkillzTotalChange and MugshotManager::ProcessBeatenRoadRuleEvent sit in unmounted TUs).
   rem Debug/* components, *_EmbedGate/_AssertLayout/_embed_check
   rem (compile-scaffolding, gate-only by convention).
   rem [mbRecentStunt wave 2026-08-27] Hud/BrnHUDMessageLogic.cpp JOINS the mount: its
@@ -5331,6 +5355,10 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineFreeBurnMode.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineFreeBurnLobbyMode.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineShowtimeMode.cpp"
+  rem [skillz mount 2026-09-12] the burnout-skillz manager + the mugshot manager and the achievement gameplay-event hooks its bodies call.
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnBurnoutSkillzManager.cpp"
+  echo "%SRC%\GameSource\GameState\MugshotManager\BrnMugshotManager.cpp"
+  echo "%SRC%\GameSource\GameState\AchievementManager\PS3\BrnGameStateAchievementManagerPS3.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnCountdownState.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnInProgressState.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnIntroState.cpp"
@@ -5525,6 +5553,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_10.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wH3b.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache_wJ_01.cpp"
+  rem map-event exit producer: GuiCache::HandleSpecificPreSetRacesEvent (RecEvent arm 190)
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_13.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiEventDrawEventIcons.cpp"
   echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRankProgressResponse.cpp"
   rem ---- H3c link closure (2026-08-25): the sat-nav icon pass. UpdateSatNavIcons reads the
@@ -5667,6 +5697,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  bodies (the 45/50 GO_BACK+resume arm among them); the two SKU/keyboard ones are
   rem  PARKED on missing PC platform leaves and cannot re-create the lock -- see its banner.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavSettings.cpp"
+  rem [gate wave 2026-09-12b] CN_PROFILE, the offline Save/Load profile screen: all ten recovered bodies; retires the four CrashNavProfile gates in BrnScreenStatesLinkStubs.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavProfile.cpp"
   rem ==== [driver-details pause wave 2026-08-28] THE START-BUTTON PAUSE SCREEN ==========
   rem  MEASURED: pressing START in free burn now draws the real Driver Details screen --
   rem  the title, the Paradise licence card (player name, issue date, "UPGRADE IN 1 WIN"),
