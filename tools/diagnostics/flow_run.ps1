@@ -58,6 +58,7 @@
 #                                     # CN_SETTINGS), then try to back out -- the shoulder-button
 #                                     # soft-lock test.
 #   flow_run.ps1 -Frames -Drive -SteerScript "0:left,3.5:none"        # AIM, then run straight
+#   flow_run.ps1 -Frames -Drive -SteerScript "0:right25,4:none"   # ... a LANE CHANGE, not a spin
 #   flow_run.ps1 -Frames -Drive -ThrottleScript "0:accel,20:brake"    # ... and back off / reverse
 #   flow_run.ps1 -Drive -Teleport "2958,12.5,-1764,90"                # PUT THE CAR THERE, then drive
 #   flow_run.ps1 -Drive -Teleport "2641.5,1.3,-1723.8,169" -StartEvent
@@ -78,9 +79,39 @@
 #   and not since the DRIVING mark -- so a schedule is unaffected by boot/stream timing drift,
 #   which is the whole reason marks are anchored to flow states in the first place.
 #   An entry is <seconds>:<token>[+<token>...]; the newest entry whose time has passed wins.
-#     -SteerScript    tokens: none | left | right
+#     -SteerScript    tokens: none | left | right            (full lock)
+#                             plus  left25|left50|left75 and right25|right50|right75 -- the
+#                             SAME direction at a FRACTION of full stick.
 #     -ThrottleScript tokens: none | accel | brake | handbrake   (combine with '+')
 #   A schedule REPLACES the corresponding fixed hold; the other channel keeps its old behaviour.
+#
+# ⭐ PARTIAL LOCK (harness lane, 2026-09-13).  Full lock under throttle is a SPIN, not a lane
+#   change: measured on this build a held `right` took the car from 11.9 m/s to 0.84 m/s in two
+#   seconds, so every scripted weave was a stab of full lock whose result the steering response
+#   curve decided.  The fraction now travels with the direction.
+#   THE MECHANISM, and it is deliberately the smallest one that fits what is already here: the
+#   two side channels (SteerLeft / SteerRight) are unchanged, and TWO further manual-reset named
+#   events carry the magnitude as a weight the game SUBTRACTS from full deflection --
+#       Local\BurnoutPC_Input_SteerFrac25   held -> -0.25
+#       Local\BurnoutPC_Input_SteerFrac50   held -> -0.50
+#   so neither held is 1.00, Frac25 is 0.75, Frac50 is 0.50 and both is 0.25.  Two kernel objects
+#   for four levels, slot-suffixed like every other channel, and NEITHER-HELD IS THE OLD FULL
+#   LOCK -- every script written before today produces the identical stick value.
+#   ⚠ No new BRN_* variable: the magnitude rides the same named-event channel the direction
+#   already uses, so there is nothing new for the wipe list to clear.
+#   ⚠ The pair is SIDE-INDEPENDENT because a schedule resolves exactly ONE steering token per
+#   poll -- left and right are never signalled together, so one pair covers both sides.
+#
+# ⛔ THE START-LINE CLAMP IS THE GAME'S, NOT THE HARNESS'S -- do not try to steer through it.
+#   In an event the first seconds after the DRIVING mark are clamped: steering reads exactly
+#   0.000000 for the whole clamp and then SNAPS to the limit on the single frame the throttle
+#   goes 0.0999 -> 1.0, with the stick held at one constant value the entire time.  That snap is
+#   the proof the clamp sits BELOW the pad record: the input shim has no notion of events, start
+#   lines or throttle -- it writes the stick every update -- so a shim that dropped the token
+#   could not deliver full lock the instant the clamp lifts.  Consequence for a schedule: the
+#   FIRST frame steering becomes live is the clamp release, not t+0, so a t+0 token is a steering
+#   input applied at full strength the moment the car is free rather than a gentle roll-out.
+#   Script the aim from the release, and use a fraction if the car should change lane, not spin.
 #
 # Exit code 0 = the run completed and any requested gates passed; 1 = something failed.
 param(
@@ -91,7 +122,7 @@ param(
   [switch]$WriteGoldens,         # re-bank both goldens instead of checking them
   [switch]$HoldCarSelect,        # stay at car select instead of accepting through it
   [switch]$Drive,                # hold ACCELERATE once the flow reaches DRIVING
-  [ValidateSet('none','left','right')]
+  [ValidateSet('none','left','left25','left50','left75','right','right25','right50','right75')]
   [string]$Steer       = 'none', # hold a steering lock alongside -Drive
   [string]$SteerScript = "",     # "0:left,3.5:none"      -- overrides -Steer when non-empty
   [string]$ThrottleScript = "",  # "0:accel,20:brake"     -- overrides the plain throttle hold
@@ -685,6 +716,8 @@ foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA'
                   'BRN_COLLISION_AUDIO_DIAG','BRN_CRASHPLAY_TRACE','BRN_CRASH_RESPONSE_DIAG',
                   'BRN_CRASH_VERDICT_DIAG','BRN_CXFORM_TRACE','BRN_CXFORM_TRACE_TEXDIR',
                   'BRN_DEFORM_ROWS','BRN_DENT_PROBE','BRN_DRIFT_PROBE','BRN_DV_PROBE',
+                  'BRN_GLASSFX_DIAG','BRN_RACECAR_LOD_DIAG','BRN_RACECAR_PAINT_DIAG',
+                  'BRN_DEFORMLOC_DIAG','BRN_BOOSTLOC_DIAG','BRN_CORONA_DIAG',
                   'BRN_ENVMAP_30HZ','BRN_ENVMAP_ALLFACES','BRN_ENVMAP_PERF','BRN_ENVMAP_STATS',
                   'BRN_FLAPT_AFTER_DISPATCH','BRN_FONT_DIAG','BRN_FORCE_TAKEDOWN','BRN_GLASS_PROBE',
                   'BRN_HUD_VIS',
@@ -1395,6 +1428,14 @@ $evBrake = New-Object System.Threading.EventWaitHandle($false, [System.Threading
 $evHandB = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_HandBrake" + $slotTag))
 $evStrL  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_SteerLeft" + $slotTag))
 $evStrR  = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_SteerRight" + $slotTag))
+# ⭐⭐ THE TWO PARTIAL-LOCK CHANNELS (harness lane, 2026-09-13).  MANUAL-RESET like the two side
+#   channels they qualify, and read by the game ONLY while a side channel is held: each one is a
+#   WEIGHT SUBTRACTED from full deflection, so neither held is 1.00 (the old full lock), Frac25
+#   is 0.75, Frac50 is 0.50 and both is 0.25.  Created unconditionally like every other channel,
+#   and left clear by every schedule that asks for a plain `left`/`right` -- which is why nothing
+#   written before today changes by a single float.  See the PARTIAL LOCK banner at the top.
+$evStrF25 = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_SteerFrac25" + $slotTag))
+$evStrF50 = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_SteerFrac50" + $slotTag))
 # ⭐⭐ THE TWO SHOULDER CHANNELS (showtime S7b-a, 2026-08-27).  MANUAL-RESET, i.e. a HOLD, because
 #   ControllerInput::mbCrashModePressed (+0x42) is `(row 54 HELD) && (row 55 HELD)` -- the game samples
 #   BOTH at once, so a tap channel cannot express the gesture.  Created unconditionally, like the five
@@ -1404,10 +1445,10 @@ $evShldR = New-Object System.Threading.EventWaitHandle($false, [System.Threading
 # MANUAL-RESET like the other driving rows: Set() is press, Reset() is release, and the pressed
 # EDGE between them is what mbBoostBounce is built from. See the -Boost banner in param().
 $evBoost = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_Boost" + $slotTag))
-foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
+foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evStrF25,$evStrF50,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
 
 # ⛔⛔ RELEASE THE HOLDS ON A FAILURE PATH TOO (showtime cross-run hazard, 2026-08-29).
-#   These seven are SESSION-GLOBAL manual-reset events: signalled IS a hold, and it survives this
+#   These ten are SESSION-GLOBAL manual-reset events: signalled IS a hold, and it survives this
 #   process. The normal path clears them after the poll loop, but $ErrorActionPreference is 'Stop',
 #   so ANY terminating error between a Set() and that line would leave a button held down for the
 #   next harness -- and LB+RB held tips the pause screen into CN_SETTINGS, an empty state shell
@@ -1415,10 +1456,10 @@ foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$e
 #   how this was found). A `trap` runs on the way out of a terminating error, which is precisely
 #   the gap; the box lock's own release covers the kill/Ctrl+C case for the NEXT run.
 trap {
-  foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$evBoost)) {
+  foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evStrF25,$evStrF50,$evShldL,$evShldR,$evBoost)) {
     try { $e.Reset() | Out-Null } catch { }
   }
-  Write-Host "[flow] terminating error -- all seven input holds released before rethrow."
+  Write-Host "[flow] terminating error -- all ten input holds released before rethrow."
   break
 }
 
@@ -1461,7 +1502,7 @@ function Schedule-At($lSched, [double]$lT) {
   foreach ($lE in $lSched) { if ($lT -ge $lE.t) { $lCur = $lE.tok } else { break } }
   return $lCur
 }
-$steerSched = Parse-Schedule $SteerScript    @('none','left','right')                 'SteerScript'
+$steerSched = Parse-Schedule $SteerScript    @('none','left','left25','left50','left75','right','right25','right50','right75') 'SteerScript'
 $throtSched = Parse-Schedule $ThrottleScript @('none','accel','brake','handbrake')    'ThrottleScript'
 
 if ($Drive) {
@@ -1766,8 +1807,37 @@ function Apply-DriveSchedule([string]$lsPhase, [datetime]$lDrivingAt, [double]$l
   if ($lPedals -contains 'accel')     { $evAccel.Set() | Out-Null } else { $evAccel.Reset() | Out-Null }
   if ($lPedals -contains 'brake')     { $evBrake.Set() | Out-Null } else { $evBrake.Reset() | Out-Null }
   if ($lPedals -contains 'handbrake') { $evHandB.Set() | Out-Null } else { $evHandB.Reset() | Out-Null }
-  if ($lsSteer -eq 'left')  { $evStrL.Set() | Out-Null } else { $evStrL.Reset() | Out-Null }
-  if ($lsSteer -eq 'right') { $evStrR.Set() | Out-Null } else { $evStrR.Reset() | Out-Null }
+  # ⭐ THE STEERING TOKEN SPLITS INTO A SIDE AND A MAGNITUDE (partial lock, 2026-09-13).  A bare
+  #   `left`/`right` carries no digits and resolves to 100 -- both fraction channels clear, i.e.
+  #   the exact full-lock stick every earlier script produced.  The two weights the game
+  #   subtracts are 0.25 (Frac25) and 0.50 (Frac50), so 75 == Frac25, 50 == Frac50, 25 == both.
+  $lsSide = 'none'; $liPct = 100
+  if ($lsSteer -match '^(left|right)([0-9]+)?$') {
+    $lsSide = $Matches[1]
+    if ($Matches[2]) { $liPct = [int]$Matches[2] }
+  }
+  $lbF25 = ($lsSide -ne 'none' -and ($liPct -eq 75 -or $liPct -eq 25))
+  $lbF50 = ($lsSide -ne 'none' -and ($liPct -eq 50 -or $liPct -eq 25))
+  # ⛔ THE ORDER OF THESE FOUR SIGNALS IS LOAD-BEARING -- A FRACTION IS RAISED BEFORE ITS SIDE AND
+  #   DROPPED AFTER IT.  The game reads all four channels as an INDEPENDENT LEVEL every input
+  #   update, so any instant in which a side is held with no fraction held reads as 1.00, i.e.
+  #   FULL LOCK -- the very spin partial lock exists to avoid, and one that would land on a
+  #   random update, so a scenario measurement would not even be reproducible.  Two transitions
+  #   make it concrete: `none -> right50` (side up before its weight) and `right75 -> right50`
+  #   (old weight down before the new one is up) both open exactly that window.  Raising every
+  #   wanted weight FIRST and clearing the unwanted ones LAST closes it in both directions: the
+  #   worst any intermediate instant can now read is a WEAKER deflection than either endpoint,
+  #   and on release the side is already gone before the weights are.  Sides are likewise
+  #   released before the new side is pressed, so a left/right flip passes through no-steer
+  #   rather than through both sides held at once.
+  if ($lbF25) { $evStrF25.Set() | Out-Null }
+  if ($lbF50) { $evStrF50.Set() | Out-Null }
+  if ($lsSide -ne 'left')  { $evStrL.Reset() | Out-Null }
+  if ($lsSide -ne 'right') { $evStrR.Reset() | Out-Null }
+  if ($lsSide -eq 'left')  { $evStrL.Set() | Out-Null }
+  if ($lsSide -eq 'right') { $evStrR.Set() | Out-Null }
+  if (-not $lbF25) { $evStrF25.Reset() | Out-Null }
+  if (-not $lbF50) { $evStrF50.Reset() | Out-Null }
   Write-Host ("[flow] input {0,-20} at {1,6:f1}s (DRIVING+{2:f1}s, t+{3:f2}s)" -f `
               $lsState, $lfElapsed, $lfSinceDriving, $lfIn)
   $script:inputLog += ("input {0,-20} run={1,6:f1}s t+{2,6:f2}s" -f $lsState, $lfElapsed, $lfIn)
@@ -2000,7 +2070,7 @@ while ($true) {
   Apply-DriveSchedule $phase $drivingAt $elapsed
   Start-Sleep -Milliseconds 250
 }
-foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
+foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evStrF25,$evStrF50,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
 
 $endFrame = Newest-Frame
 $endElapsed = ((Get-Date) - $t0).TotalSeconds

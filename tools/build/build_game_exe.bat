@@ -3154,19 +3154,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  hence CgsXOverlappedX360.cpp joining right after -- which in turn wanted ONE XDK import,
   rem  XGetOverlappedExtendedError, now a PC leaf beside its twin XGetOverlappedResult in
   rem  BrnBaselineLinkStubs.cpp. Net new unresolved after both: ZERO.
-  rem  ??? BrnGameStateAchievementManagerBase.cpp is deliberately NOT here: mounting it costs EIGHT
-  rem  unresolved externals that have no definition anywhere in the tree (ScoringSystem::
-  rem  GetPlayerScore / GetPlayerModeCrashes / GetPlayerModeTakedowns / GetNewlyWreckedCarCount /
-  rem  GetNumberOfTakedownsAgainst, ProgressionManager::GetCarChallengeWinCount /
-  rem  GetCollectedStuntElementCount / GetProfileTotalTakedowns), all pulled in by the base's
-  rem  gameplay-event hooks. ?????? AND "nothing calls them, /OPT:REF strips them" IS NOT A DEFENCE --
-  rem  VERIFIED this wave with a minimal repro: an unreferenced COMDAT that calls an undefined
-  rem  symbol still fails LNK2019 under /Gy + /OPT:REF (the linker resolves before it discards).
-  rem  Several rem blocks further up in this file assume otherwise; they are about CODE SIZE, not
-  rem  about unresolved externals. Mount the base TU when those eight land.
   echo "%SRC%\GameSource\GameState\AchievementManager\X360\BrnGameStateAchievementManagerX360.cpp"
-  rem [challenge-manager mount 2026-09-07] the two freeburn-challenge base hooks, MOVED out of the
-  rem  unmounted PS3 TU (bat precedent above).
+  rem [challenge-manager mount 2026-09-07] the two freeburn-challenge base hooks, split out of
+  rem  the PS3 TU (the bodies were MOVED, not copied).
   echo "%SRC%\GameSource\GameState\AchievementManager\BrnGameStateAchievementManagerBase_Freeburn.cpp"
   echo "%SRC%\GameSource\GameState\AchievementManager\BrnGameStateAchievementManagerBase.cpp"
   echo "%SRC%\GameShared\GameClasses\System\X360\CgsXOverlappedX360.cpp"
@@ -3323,9 +3313,8 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\GameState\Offences\BrnDriveThruManager.cpp"
   rem  ---- the achievement hooks the drive-thru chain link-requires ------------------------
   rem  A SPLIT of BrnGameStateAchievementManagerBase.cpp (the four bodies were MOVED, not
-  rem  copied), so the deliberately-unmounted parent TU above stays unmounted while
-  rem  HandleDriveThru/ProcessDriveThru's OnFindAllCarParks + OnBodyShop and
-  rem  GameStateModule::CheckForAllEventsBeingFound's OnFindAllEvents all resolve.
+  rem  copied), carrying HandleDriveThru/ProcessDriveThru's OnFindAllCarParks + OnBodyShop and
+  rem  GameStateModule::CheckForAllEventsBeingFound's OnFindAllEvents.
   rem  MEASURED: ZERO new unresolved externals -- the only non-virtual callee is
   rem  ScoringSystem::GetNewlyWreckedCarCount, bodied this wave in BrnScoringSystem_Queries.cpp.
   echo "%SRC%\GameSource\GameState\AchievementManager\BrnGameStateAchievementManagerBase_DriveThru.cpp"
@@ -4180,6 +4169,18 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  this mount the link opens four unresolved externals and the first takedown dispatched slot
   rem  zero through a null vptr.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourAftertouchCrash.cpp"
+  rem  RE-BASED 2026-09-13: BehaviourLooseAttachment derives from Camera::Behaviour and bodies
+  rem  Construct / Prepare / GetCollisionPolicy / SetupTweaker / GetName (plus AttachTo /
+  rem  SetTarget) out of line here, so its vtable needs a home. The shutdown-takedown arm pools
+  rem  four of them per takedown (lookback rig + three zoom beats) and the new-car-joined moment
+  rem  pools one more; without this mount the link opens seven unresolved externals and the first
+  rem  shutdown takedown dispatches slot zero through a null vptr.
+  rem  PositionLag is the loose-attachment rig's embedded position smoother; its Construct is the
+  rem  one out-of-line callee BehaviourLooseAttachment::Construct has. Its parameter-block
+  rem  Serialise<S> visitor was split into BrnPositionLagSerialise.cpp (unmounted, camera-tunings
+  rem  serialisers only), so this TU costs zero serialiser externals.
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnPositionLag.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourLooseAttachment.cpp"
   rem  ---- 2026-08-01, SEVENTH PASS: the BehaviourInterpolate ODR reconcile ------------------
   rem  BrnBehaviourManager.h used to carry a SECOND definition of BehaviourInterpolate -- no
   rem  base, no members, sizeof == 1 -- and because that header is the one every arbitrator
@@ -5372,6 +5373,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem [skillz mount 2026-09-12] the burnout-skillz manager + the mugshot manager and the achievement gameplay-event hooks its bodies call.
   echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnBurnoutSkillzManager.cpp"
   echo "%SRC%\GameSource\GameState\MugshotManager\BrnMugshotManager.cpp"
+  rem [takedown wave F2] the payback manager + its debug component, ticked from the takedown leg beside the mugshot manager.
+  echo "%SRC%\GameSource\GameState\PaybackManager\BrnPaybackManager.cpp"
+  echo "%SRC%\GameSource\GameState\PaybackManager\BrnPaybackDebugComponent.cpp"
   echo "%SRC%\GameSource\GameState\AchievementManager\PS3\BrnGameStateAchievementManagerPS3.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnCountdownState.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModeStates\BrnInProgressState.cpp"
