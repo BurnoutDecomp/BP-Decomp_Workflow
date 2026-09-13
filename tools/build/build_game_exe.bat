@@ -3063,6 +3063,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  four-argument SLerp the Looker above uses; zero non-CRT unresolved, zero hard duplicates.
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnOrientationLag.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSphericalRotationController.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCamera2DRotationController.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeUpdate.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShakeICEController.cpp"
   rem  ---- CRASH-CAMERA WAVE (2026-08-29): THE TWO IMPACT CONTROLLERS ARE NOW LINKABLE. ----
@@ -4181,6 +4182,11 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  serialisers only), so this TU costs zero serialiser externals.
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnPositionLag.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourLooseAttachment.cpp"
+  rem Restored gyro tracking and its visibility-policy state, shared by takedown shots.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGyroCam.cpp"
+  echo "%SRC%\GameSource\Director\Camera\BrnVisibilityCollisionPolicy.cpp"
+  echo "%SRC%\GameSource\Director\Camera\BrnCollisionPolicyAttachedToVehicle.cpp"
+  echo "%SRC%\GameSource\Director\Camera\BrnGeometryCollisionPredictor.cpp"
   rem  ---- 2026-08-01, SEVENTH PASS: the BehaviourInterpolate ODR reconcile ------------------
   rem  BrnBehaviourManager.h used to carry a SECOND definition of BehaviourInterpolate -- no
   rem  base, no members, sizeof == 1 -- and because that header is the one every arbitrator
