@@ -89,11 +89,17 @@
          $laAny    = @($laLines | Where-Object { $_ -match 'HUD MSGS : STARTING MESSAGE NAMED' })
          $laSent   = @($laLines | Where-Object { $_ -match '\[UI-gate\] hud message sent' })
          $lsMissing = @($laLines | Where-Object { $_ -match 'Unable to find message : (TDGd|TDBd|DTGot|DTScalped|AggDr|Pbk)' }) -join ' | '
+         # A run that DIED does not get to report a diagnosis: with the process gone there is no
+         # window left for anything downstream to happen, so '[UI-gate] count 0' would read as
+         # 'the hud message path is dead' when the truth is 'the game crashed first'.
+         $laCrash = @($laLines | Where-Object { $_ -match '\[EXCEPTION\]' })
          if ($laTd.Count -gt 0) {
            return @{ Pass = $true; Detail = ("{0} takedown hud message(s) started; first: {1}" -f $laTd.Count, "$($laTd[0])".Trim()) }
          }
          $lsWhat = if ($laAny.Count -gt 0) { ($laAny | ForEach-Object { "$_".Trim() }) -join ' | ' } else { '(none)' }
-         $lsWhy = if ($lsMissing) {
+         $lsWhy = if ($laCrash.Count -gt 0) {
+           'but the run DIED before anything downstream could run: ' + "$($laCrash[0])".Trim() + ' -- fix the crash before reading this leg'
+         } elseif ($lsMissing) {
            'the message was built but the director REJECTED its id: ' + $lsMissing
          } elseif ($laSent.Count -eq 0) {
            'and NO hud message was published at all ([UI-gate] count 0) -- the whole hud message path is dead, not just the takedown leg (or BRN_PROP_DIAG is unset)'
@@ -112,6 +118,42 @@
     # GameState::mbTakedownActive.
     @{ Kind = 'LogMatch';   Name = 'arbitrator entered the takedown camera state (EState 3)'
        Pattern = '\[crashcam\] container current state -> 3\b'; Expect = $true }
+
+    # LINK 4b -- AND IT IS NOT A ONE-WAY DOOR. Entering state 3 is only half the leg: the
+    # takedown camera must hand the frame BACK to ArbStateRoaming (EState 1) when it is done,
+    # or the run ends stuck behind a camera nobody can drive out of. Ordering is the whole point
+    # here, so this cannot be a bare LogMatch for '-> 1': state 1 is entered on the way IN to the
+    # drive as well, so a plain match is green even when the takedown camera never released. The
+    # check walks the state-switch sequence and demands a switch to 1 AFTER the LAST switch to 3,
+    # and reports how long it held (log lines between the two switches).
+    @{ Kind = 'Script'; Name = 'the takedown camera was left again (3 -> ... -> 1 Roaming)'
+       Script = {
+         param($ctx)
+         $laLines = $ctx.LogLines
+         $laSw = @()
+         for ($i = 0; $i -lt $laLines.Count; $i++) {
+           if ($laLines[$i] -match '\[crashcam\] container current state -> (\d+)') {
+             $laSw += @{ Line = $i; State = [int]$Matches[1] }
+           }
+         }
+         $laCrash = @($laLines | Where-Object { $_ -match '\[EXCEPTION\]' })
+         $la3 = @($laSw | Where-Object { $_.State -eq 3 })
+         if ($la3.Count -eq 0) {
+           $lsSeq = (@($laSw | Select-Object -Last 12 | ForEach-Object { $_.State }) -join ',')
+           # SetCurrentState (the witness) runs only AFTER the target state's Prepare returns true
+           # (ArbUtils::ChangeToState*), so a crash inside ArbStateTakedown::Prepare shows up here
+           # as 'state 3 never entered' -- which is true but blames the wrong rung.
+           $lsCrash = if ($laCrash.Count -gt 0) { ' -- BUT THE RUN DIED: ' + "$($laCrash[0])".Trim() + ' (SetCurrentState only logs after the target state Prepare()s, so a crash inside Prepare reads as "never entered")' } else { '' }
+           return @{ Pass = $false; Detail = ("state 3 was never entered, so it cannot have been left; {0} state switch(es) total, last: {1}{2}" -f $laSw.Count, $(if ($lsSeq) { $lsSeq } else { '(none)' }), $lsCrash) }
+         }
+         $liLast3 = $la3[-1].Line
+         $lBack = @($laSw | Where-Object { $_.Line -gt $liLast3 -and $_.State -eq 1 } | Select-Object -First 1)
+         if ($lBack.Count -eq 0) {
+           $lsAfter = (@($laSw | Where-Object { $_.Line -gt $liLast3 } | ForEach-Object { $_.State }) -join ',')
+           return @{ Pass = $false; Detail = ("entered state 3 {0} time(s) but NEVER went back to 1 (Roaming); states after the last entry: {1}; {2} log line(s) ran after it" -f $la3.Count, $(if ($lsAfter) { $lsAfter } else { '(none -- the takedown camera still owned the frame at the end of the run)' }), ($laLines.Count - $liLast3)) }
+         }
+         return @{ Pass = $true; Detail = ("entered state 3 {0} time(s); after the last entry it went back to 1 (Roaming) {1} log line(s) later" -f $la3.Count, ($lBack[0].Line - $liLast3)) }
+       } }
 
     # The takedown camera must not be a one-way door: whatever state the container ends in, the
     # run must still be DRIVING at the end (the Mark check above) -- recorded here as the count of
