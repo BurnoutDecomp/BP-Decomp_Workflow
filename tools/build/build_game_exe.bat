@@ -257,9 +257,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  Update; the 537 consumer side is CustomRendererManager::RecvEvent (InGameMessageRenderer
   rem  itself still pending -- but its old wall, CgsGraphics::TextRenderer, is reconstructed in
   rem  CgsFontRenderer.cpp since the gateui waves).
-  rem  SIBLING SPLIT: its owning GameBridgeGameStateToX.cpp DOES NOT COMPILE and did not before
-  rem  this leg either (control-measured against HEAD's own copy: an ODR fork on
-  rem  BrnGui::GuiTakedownEvent + a stale mpCgsGuiModule, both inside TranslateTakedownsToGuiEvents).
   rem  The function was MOVED, not copied, so folding it back later is a delete.
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_TrainingStringIds.cpp"
   rem ---- P1 sim-pause (2026-08-25): the GUI --to-- GAME-STATE event bridge. -----------------
@@ -381,6 +378,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- Its WorldLinkStubs gate is DELETED; leaving both = LNK2005.                    ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_embed_check.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_CrashExit.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ResetPump.cpp"
   rem UpdateRaceCarCollisionTagging + UpdateActiveRaceCarTransforms -- the two per-frame
@@ -4912,10 +4910,8 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem      fiction -- every arm boundary is a jump-table entry with its own epilogue.
   rem      ?????? Case 13 (CHANGING_TO_CAR_SELECT, @0x8226548C) MUST be in the slice: if
   rem      ArbStateCarSelect::Prepare declines, meState parks on 0xD and case 13 is the retry.
-  rem    - COST: two unmounted prerequisites are called UNCONDITIONALLY from the DRIVING arm --
-  rem      MomentSelector::Update @0x82239FC0 (425 asm lines, no PC body) and
-  rem      ArbStateRoaming::ProcessPossiblePaybackEffects @0x82208BA8 (117 lines, no PC body;
-  rem      BrnArbStateRoaming.h:82 wrongly records it as "not in this TU's X360 set").
+  rem    - COST: one unmounted prerequisite is called UNCONDITIONALLY from the DRIVING arm --
+  rem      MomentSelector::Update @0x82239FC0 (425 asm lines, no PC body).
   rem    - ??? AND ArbUtils::ChangeToStateWithoutRelease -- the function that performs the
   rem      hand-off -- is a __debugbreak() TRAP STUB in BrnDirectorArbitratorUtils.h:50. Even a
   rem      perfect ladder would trap there. Body it from @0x821FE2B8 FIRST.
@@ -5435,6 +5431,16 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem already-mounted GameBridgeGameStateToX_StuntGuiEvents.cpp, so without this mount that
   rem call is an LNK2019.
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_ShowtimeGuiEvents.cpp"
+  rem [takedown HUD wave 2026-09-13] THE TAKEDOWN GUI EVENTS. The parent TU mounts at last:
+  rem BrnGameModule::TranslateTakedownsToGuiEvents is the ONLY producer in the image of GUI
+  rem events 363 (hard takedown) and 364 (soft takedown) -- the takedown slam and the
+  rem BoostMessageManager popup. Both arms are bodied now; the soft arm was parked on a
+  rem GuiSoftTakedownEvent shape that BrnGuiEventTypeDefs.h now carries in full.
+  rem NO CALLER YET, so nothing reaches the HUD from this mount alone: the console call sits
+  rem immediately after TranslateGameActionsToGuiEvents in BrnGameModule.cpp's GUI leg, and it
+  rem needs the player's active race-car index, which the game-state scoring output interface
+  rem does not expose by name yet.
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_00.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_01.cpp"
