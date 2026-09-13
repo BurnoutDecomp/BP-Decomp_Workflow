@@ -4174,6 +4174,12 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem installed no vtable -- BehaviourHelper::Prepare's slot-0 dispatch then faulted.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGameplayBumper.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGameplayExternal.cpp"
+  rem  RE-BASED 2026-09-13: BehaviourAftertouchCrash derives from Camera::Behaviour and bodies
+  rem  Construct / Prepare / GetCollisionPolicy / GetName out of line here, so its vtable needs a
+  rem  home. The crash-mode and takedown states both pool it through the shared handle; without
+  rem  this mount the link opens four unresolved externals and the first takedown dispatched slot
+  rem  zero through a null vptr.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourAftertouchCrash.cpp"
   rem  ---- 2026-08-01, SEVENTH PASS: the BehaviourInterpolate ODR reconcile ------------------
   rem  BrnBehaviourManager.h used to carry a SECOND definition of BehaviourInterpolate -- no
   rem  base, no members, sizeof == 1 -- and because that header is the one every arbitrator
@@ -4389,6 +4395,18 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateOnlineCarSelect.cpp"
   rem  Online race-intro camera state (2026-09-12): macro line + Destruct gate gone; shared handle; Release bodied; the four BehaviourIceAnim vehicle-ref setters bodied.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateOnlineRaceIntro.cpp"
+  rem  ---- TAKEDOWN CAMERA (2026-09-13): the takedown state stops being an empty shell. ----
+  rem  BrnArbStateTakedown.cpp is E_STATE_TAKEDOWN. Its container slot was
+  rem  `class ArbStateTakedown : public ArbitratorState {};`, the last empty shell in
+  rem  BrnDirectorArbitratorStateContainer.h -- so every takedown drove the do-nothing base
+  rem  Update, which never wrote meState and had no exit edge back to roaming. De-forked with
+  rem  this mount; the state now owns five takedown players, the impact-shake controller and a
+  rem  moment selector, and its CHANGING_TO_ROAMING arm runs ArbUtils::ChangeToState.
+  rem  BrnSimpleIceTakedownPlayer.cpp comes with it and must never be mounted apart: the state
+  rem  embeds SimpleIceTakedownPlayer by value and Prepare calls its SetIceAnim, which lives
+  rem  in that TU alone.
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateTakedown.cpp"
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnSimpleIceTakedownPlayer.cpp"
   rem  ---- ...AND THE SIXTH BREAK: THE PLAYER TRACKER (2026-08-29). ------------------------
   rem  BrnDirectorVehicleTracker.cpp mounts here, and MainDirector::PreSceneQueryUpdate now
   rem  actually CALLS VehicleTracker::Update (X360 line 5 of its guarded body, gated until now).
