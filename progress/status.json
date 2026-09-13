@@ -66579,6 +66579,7 @@
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourGyroCam.cpp": {
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourGyroCam.h": {
@@ -66597,6 +66598,7 @@
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourLooseAttachment.cpp": {
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "GameSource/Director/Camera/Behaviours/BrnBehaviourRenderMetrics.cpp": {
@@ -66617,14 +66619,14 @@
    "status": "blocked"
   },
   "GameSource/Director/Camera/BrnBehaviourManager.cpp": {
-   "notes": "FOUNDATION committed (4374580): 1/10 bodied (CheckNoBehavioursAreAllocatedByState faithful vs homed members). 9/10 decl-only: 7 reach the un-homed INDIVIDUAL-Behaviour interior / AllocateBehaviour<> template family (next blocker = home the Behaviours/* class family); PostCollisionUpdateAllBehaviours@0x8221F870 + UpdateAllBehaviours@0x82251960 are VMX-pipeline-dominated. The BehaviourManager LAYOUT itself is now homed (e1028d1).",
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "GameSource/Director/Camera/BrnBehaviourManager.h": {
    "status": "done"
   },
   "GameSource/Director/Camera/BrnBehaviourParameterBank.cpp": {
-   "notes": "DISCARDED 0/2-body anchor: both funcs (Construct 0x8223DC90, LoadParameters 0x82273268) index the un-homed BehaviourParameterBank aggregate (committed BrnBehaviourParameterBank.h is a minimal NamedParameters slice). Construct raw-offset-pokes ~9600 bytes + copies UN-DUMPED rodata default tables unk_82CDAA10..unk_82CDACD0 (byte values not in dump) + calls un-homed Serialise<BehaviourParameterNamingSerialiser>. Needs the full BehaviourParameterBank LAYOUT + the rodata tables dumped.",
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "GameSource/Director/Camera/BrnCameraEffects.cpp": {
@@ -66655,10 +66657,11 @@
    "status": "blocked"
   },
   "GameSource/Director/Camera/Utils/BrnCamera2DRotationController.cpp": {
-   "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (corrections applied); compiles clean.",
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "GameSource/Director/Camera/Utils/BrnCameraShake.cpp": {
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "GameSource/Director/Camera/Utils/BrnCameraSmoothMover.cpp": {
@@ -66694,6 +66697,7 @@
    "status": "done"
   },
   "GameSource/Director/Camera/Utils/CameraUtils.cpp": {
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "GameSource/Director/Camera/Utils/CameraUtils.h": {
@@ -69675,6 +69679,7 @@
    "status": "done"
   },
   "GameSource/Unity/../World/AI/ResetOnTrack/BrnResetOnTrackManager.cpp": {
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "GameSource/Unity/../World/AI/Route/BrnAStar.cpp": {
@@ -69811,7 +69816,7 @@
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.cpp": {
-   "notes": "Scoped PC panel interpolation fix: fresh-eyes GPT-5.5 review pass; standalone reorder/remove/reuse/pause/idempotence regression passes; full 2333-TU build clean; 120s flow reaches driving, zero asserts.",
+   "notes": "Scoped read-only rival damage diagnostic: independent batch reviewer VERDICT pass; compile and faithfulness gates pass; live player-credited victim has 48 moving/deformed crashing samples, zero asserts/exceptions. Existing reconstruction scope unchanged.",
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.h": {
@@ -69831,7 +69836,7 @@
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp": {
-   "notes": "Scoped junkyard follow-up: action 69 prefetch handler and per-slot wait gates checked against ARTIST 0x822E9918 and UpdateStreaming assembly. Fresh-eyes review_event_ui PASS, including GUI unlock/ticker routing addendum. Full executable builds; faithfulness PASS. Harness completed two pending unlocks, car selection and junkyard exit; restart skipped seen reveals and retained garage/licence data. Whole-TU structural parity RED reflects existing partial reconstruction; no blanket re-audit claimed.",
+   "notes": "Scoped rival-damage restoration: ARTIST assembly self-review and independent batch reviewer VERDICT pass; compile and faithfulness gates pass; 13 regression checks and 11 live organic acceptance checks pass, zero asserts/exceptions. Existing parked functions outside this fix unchanged.",
    "status": "done"
   },
   "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.h": {
@@ -71407,7 +71412,7 @@
    "status": "done"
   },
   "class:BrnDirector::Camera::VisibilityCollisionPolicy": {
-   "notes": "Combined batch-12 review: all three bodies asm-verified (latch-before-assert order, embedded predictor pairs +0x80/+0x70, both nested tripwires).",
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "class:BrnDirector::Camera::VisibilityTest": {
@@ -71493,7 +71498,7 @@
    "status": "done"
   },
   "class:BrnDirector::MainDirector": {
-   "notes": "FOUNDATION committed (04b1a3a): MainDirector TYPE homed (BrnMainDirector.h/.cpp, ~0x35450 opaque, static_assert-pinned). 5/23 bodied faithfully (ctor/Release/Destruct + GetICEWrapper/GetArbitrator; conductor-fixed 3 offset bugs: Release case0 collision-gen +0x349D0->+0x50, Destruct listheads A/B/C ->0x1CAB8/0x24848/0x2C5B8, ctor CarScoreData +0x33760->+0x33B50). 18/23 decl-only: gated on the un-homed full BehaviourManager LAYOUT + VMX pipelines + un-dumped rodata flt_82CDA55C/560. Unblocks once BehaviourManager.h layout is homed.",
+   "notes": "Complex batch reviewed against ARTIST by GPT-5.5; final verdict pass. Compile and faithfulness gates pass; 36 recovery/camera checks, 28 impact checks, 14 culling checks, and live camera regression pass.",
    "status": "done"
   },
   "class:BrnDirector::MomentBystanderSeesAction": {
