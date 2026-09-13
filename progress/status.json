@@ -27576,6 +27576,9 @@
   "BrnPhysics::Vehicle::VehicleManager::ProcessContactSpies": {
    "status": "reviewed"
   },
+  "BrnPhysics::Vehicle::VehicleManager::ProcessCrashingNetworkCars": {
+   "status": "reviewed"
+  },
   "BrnPhysics::Vehicle::VehicleManager::ProcessCreateEvents": {
    "status": "reviewed"
   },
@@ -69235,9 +69238,11 @@
    "status": "done"
   },
   "GameSource/Unity/../Physics/DeformationManager/DeformationPhysics/BrnDeformableObject.cpp": {
+   "notes": "GPT-5.5 high fresh-eyes review passed restored UpdateOutputContactSpies against ARTIST 0x826251E8; correct bare-sensor count and mGlobalEntityId; live collisions and organic takedowns now reach gameplay.",
    "status": "done"
   },
   "GameSource/Unity/../Physics/DeformationManager/DeformationPhysics/BrnDeformationSensor.cpp": {
+   "notes": "GPT-5.5 high fresh-eyes review passed OutputContactSpy against recovered ARTIST 0x8260A508..0x8260A930 and DecFIGS declaration; compile/faithfulness and sensor output regressions pass.",
    "status": "done"
   },
   "GameSource/Unity/../Physics/DeformationManager/DeformationPhysics/BrnDetachedPartManager.cpp": {
@@ -69306,7 +69311,7 @@
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManager.cpp": {
-   "notes": "Explicit reconstruction stub remains in the committed source.",
+   "notes": "GPT-5.5 high fresh-eyes ARTIST review passed seven changed impact functions; compile/faithfulness and all 28 impact/sensor checks pass. Subsequent change only reserves separate opt-in diagnostics for player contacts; no gameplay change. Baseline fails stationary-target regression.",
    "status": "done"
   },
   "GameSource/Unity/../Physics/VehicleManager/BrnVehicleManager.h": {
@@ -69387,6 +69392,7 @@
    "status": "done"
   },
   "GameSource/Unity/../Sound/Collision/BrnCollisionStateManager.cpp": {
+   "notes": "GPT-5.5 high fresh-eyes ARTIST review passed default AddInputCollision, duplicate/playing culls, reverse compaction and UpdateResolver call. Compile/faithfulness pass; 14 culling regression checks pass; live 125-assert overflow no longer occurs.",
    "status": "done"
   },
   "GameSource/Unity/../Sound/Collision/BrnScrapeEffect.cpp": {
