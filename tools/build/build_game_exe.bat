@@ -388,6 +388,12 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem racing state through SetAllCarsOnStartLine, homed in this split TU.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_ModeArming.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Rivals.cpp"
+  rem [boost-ticker wave 2026-09-14] AirTimeManager::Update is the ONLY producer of game event
+  rem 69 (in air) in the whole image, and its TU had a complete committed body, no owning
+  rem member and no caller -- so the boost ticker's AIR line could not exist. The same commit
+  rem gives RaceCarEntityModule the mAirTimeManager seat and the PostPhysicsUpdate tick, which
+  rem is what makes this mount load-bearing (without it that call is an LNK2019).
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\AirTime\BrnAirTimeManager.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Range.cpp"
   rem IsPlayerCarTailgatingOtherRaceCars (its WorldLinkStubs gate is DELETED) + UpdateNearMisses, the only driver of NearMissManager::Update.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_NearMissTailgate.cpp"
