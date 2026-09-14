@@ -68,6 +68,12 @@
 #                                     # ... and let the START HINT show while the boot tutorial tip
 #                                     # is still up (BRN_SKIP_TRAINING_TIP=1; off by default, needs
 #                                     # $env:BRN_PROP_DIAG=1 to be visible in the log)
+#   flow_run.ps1 -Frames -AIDrive -Teleport "2958,12.5,-1764,90"
+#                                     # NO pad at all: the game's OWN AI (the same driver the rivals
+#                                     # use) takes the wheel of the player car as soon as its AI
+#                                     # driver slot is live (BRN_AI_DRIVES_PLAYER=1; off by default
+#                                     # -- see the banner below). -Drive/-Steer/-*Script are inert
+#                                     # with it: the bridge drops the pad record once the AI owns the car.
 #
 # ⭐ AIMING (2026-08-15, walls leg 5).  -Steer holds ONE lock for the whole run, so a driven car
 #   can only circle: it can never be lined up on a chosen wall FACE and driven into it head-on.
@@ -122,6 +128,10 @@ param(
   [switch]$WriteGoldens,         # re-bank both goldens instead of checking them
   [switch]$HoldCarSelect,        # stay at car select instead of accepting through it
   [switch]$Drive,                # hold ACCELERATE once the flow reaches DRIVING
+  [switch]$AIDrive,              # opt IN: the game's OWN AI drives the player car (BRN_AI_DRIVES_PLAYER=1).
+                                 # OFF by default and CLEARED every run. The console's WorldDebugComponent
+                                 # "AI drives player" toggle (@0x827B1FC0) applied from the harness -- see
+                                 # the banner below and WorldModule::HarnessArmAIDrivesPlayer.
   [ValidateSet('none','left','left25','left50','left75','right','right25','right50','right75')]
   [string]$Steer       = 'none', # hold a steering lock alongside -Drive
   [string]$SteerScript = "",     # "0:left,3.5:none"      -- overrides -Steer when non-empty
@@ -711,7 +721,7 @@ if ($ReleaseAsserts) {
 # ⚠️ 'BRN_FORCE_DIRECTOR_CAMERA' and 'BRN_RC_PROBE' are kept although no getenv for either exists
 # in b5-decomp/src today: clearing a name nothing reads costs nothing, and dropping it would
 # silently un-protect the variable if the reader comes back.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_DEBUG_FINISH_POS','BRN_DEBUG_FINISH_AT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_EFFECTS_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_SHOWTIME_IGNORE_PROGRESSION','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_LOCK_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX','BRN_LION_WHITE_PIN','BRN_LION_QRES_OFF','BRN_LION_QRES_SHOW','BRN_LION_QRES_ADD','BRN_CRUMPLE_PROBE','BRN_CRUMPLE_FORCE','BRN_SCRATCH_PROBE','BRN_SCRATCH_FORCE',
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_AI_DRIVES_PLAYER','BRN_DEBUG_FINISH_POS','BRN_DEBUG_FINISH_AT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_EFFECTS_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_SHOWTIME_IGNORE_PROGRESSION','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_LOCK_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX','BRN_LION_WHITE_PIN','BRN_LION_QRES_OFF','BRN_LION_QRES_SHOW','BRN_LION_QRES_ADD','BRN_CRUMPLE_PROBE','BRN_CRUMPLE_FORCE','BRN_SCRATCH_PROBE','BRN_SCRATCH_FORCE',
                   'BRN_AI_MADNESS','BRN_APT_COMPUPD','BRN_BANK_PROBE','BRN_CAMERA_TRACE',
                   'BRN_COLLISION_AUDIO_DIAG','BRN_CRASHPLAY_TRACE','BRN_CRASH_RESPONSE_DIAG',
                   'BRN_CRASH_VERDICT_DIAG','BRN_CXFORM_TRACE','BRN_CXFORM_TRACE_TEXDIR',
@@ -1110,6 +1120,38 @@ if ($StartEvent) {
 }
 $startEventText = '(not armed)'
 if ($StartEvent) { $startEventText = 'BRN_START_EVENT=1' }
+
+# ⭐⭐ -AIDrive -- THE GAME'S OWN AI DRIVES THE PLAYER CAR (2026-09-14, owner goal 2).
+#   `BRN_AI_DRIVES_PLAYER=1` is a game-side harness arm (WorldModule::HarnessArmAIDrivesPlayer,
+#   BrnWorldModule.cpp). It does NOT write a control, a velocity or a route: it flips the console's
+#   OWN debug toggle -- WorldDebugComponent::AIDrivesPlayerChanged @0x827B1FC0 stores
+#   maeCarControls[player]=2 and mbAIPlayerInvulnerable=0 -- once the player's slot is attached
+#   and its AI driver slot is active. From there every link is the console's: AIModule derives
+#   mbIsDrivenByPlayer=0 for the player's AICar, its AIDriver produces a BrnAIDriverControls record
+#   exactly as for a rival, WorldBridgeAIModule forwards it to physics because the control word is
+#   2, and WorldBridgeEntityModulesToPhysics DROPS the pad record because it is not 1. The arm logs
+#   ONE `[ai-drive] ***** HARNESS-ONLY` line when it fires; grep the log for it -- a run without
+#   that line was never AI-driven, whatever this switch says.
+#   ⛔ It is in the wipe list for the BRN_START_EVENT reason: it changes what the game DOES (who
+#   drives), so a leftover would make a run that calls itself DEFAULT drive itself. NOT comparable
+#   with a default run; do not bank or gate goldens off it. -Drive/-Steer/-*Script can still be
+#   passed (they hold pad channels the bridge no longer forwards) but they are INERT once armed --
+#   the throttle the AI applies is the AI's, so `-Drive -AIDrive` is not "AI plus my throttle".
+if ($AIDrive) {
+  $env:BRN_AI_DRIVES_PLAYER = "1"
+  Write-Host "[flow] AI DRIVE armed: BRN_AI_DRIVES_PLAYER=1 (opt-in). The game's OWN AI (the rivals'"
+  Write-Host "       driver) takes the wheel of the player car once its AI driver slot is live -- the"
+  Write-Host "       console's WorldDebugComponent 'AI drives player' toggle (@0x827B1FC0), applied from"
+  Write-Host "       the harness. NOT a default run. Do not bank or gate goldens off this."
+  Write-Host "       Proof it fired: grep the log for '[ai-drive] ***** HARNESS-ONLY'."
+  if ($Drive -or $Steer -ne 'none' -or $SteerScript -ne "" -or $ThrottleScript -ne "") {
+    Write-Host "[flow] NOTE: -Drive/-Steer/-SteerScript/-ThrottleScript were passed WITH -AIDrive. They"
+    Write-Host "       are inert once the AI owns the car (the bridge drops the pad record); the AI's"
+    Write-Host "       own throttle and steering are what the sim sees."
+  }
+}
+$aiDriveText = '(not armed)'
+if ($AIDrive) { $aiDriveText = 'BRN_AI_DRIVES_PLAYER=1 (the game AI drove the player car)' }
 
 # ⭐⭐ -DebugFinishPos -- END THE RUNNING EVENT WITH AN EXPLICIT FINISH POSITION.
 #   `BRN_DEBUG_FINISH_POS=<n>` / `BRN_DEBUG_FINISH_AT=<seconds>` are game-side bring-up gates (NOT
@@ -2338,6 +2380,9 @@ $summary += ("AUDIO    {0}" -f $(if ($Audio) { "ON (-Audio) -- BRN_AUDIO_MUTE cl
 # STARTEVT: whether this run carried the event-start hook. Same comparability reason as DIAGENV and
 # TELEPORT, and a stronger one: a run carrying it may not have been in free burn at all.
 $summary += ("STARTEVT {0}" -f $startEventText)
+# AIDRIVE: whether the game's own AI drove the player car. Same comparability reason as STARTEVT:
+# a run the AI drove is not a pad-driven run, and the summary must say so on its face.
+$summary += ("AIDRIVE  {0}" -f $aiDriveText)
 $summary += ("DBGFINISH {0}" -f $debugFinishText)
 # SHOWTIME: whether this run pressed the bumpers, and whether the game-side stand-in was armed.
 # Same comparability reason as STARTEVT: a run that entered showtime is not comparable with a
