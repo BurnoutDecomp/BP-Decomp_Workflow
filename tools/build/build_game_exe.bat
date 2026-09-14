@@ -2906,6 +2906,7 @@ rem  TrafficTypeResponse, i.e. the only input TakedownManager::GetTakedownTypeFr
 rem  @0x82366288 has for INTO_CAR / INTO_VAN / INTO_BUS ("takedown bus"). Its call site in
 rem  _wT1_01.cpp (PostPhysicsUpdate) is un-gated; without this mount it is LNK2019.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_ProcessTrafficTypeRequests.cpp"
+echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\TrafficCheck\BrnTrafficCheckManager.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficMiscRuntimeClasses.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficFuzzyLogicBehaviours.cpp"
 echo "%SRC%\SharedClasses\Traffic\BrnTrafficFuzzyEnvelopeSet.cpp"
