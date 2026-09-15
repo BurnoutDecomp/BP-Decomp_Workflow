@@ -1390,7 +1390,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  image; returns -1 gracefully, no assert -- NOT the swept sibling's shape).
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_ContactQueries.cpp"
   rem  DeformationManager::VerifyPartIndices; retires its conductor gate (2026-09-09).
-  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_wG12_VerifyPartIndices.cpp"
   rem  2026-08-06 (big-five #2, contact-generation wave): the contact-BRIDGE slice consumed by
   rem  PhysicsModule::BridgeContactsToSimulation -- ReadPotentialVehicleWorldContact +
   rem  FindModelIndexByGlobalEntityID (moved out of the still-unmounted _Contacts.cpp),
@@ -1578,7 +1577,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Physics\BrnPhysicsModuleGameActions.cpp"
   rem  The post-scene game-action dispatch; retires the PhysicsModule::HandleGameActionsPostScene
   rem  gate (2026-09-09). Needs the ProcessResetDeformationModelEvent partfile mounted below.
-  echo "%SRC%\GameSource\Physics\BrnPhysicsModule_wG_GameActionsPostScene.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_VehicleContactFixUp.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Accessors.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_BBox.cpp"
@@ -1788,7 +1786,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_UpdateVehiclePhysics.cpp"
   rem  The per-surface physics bank loader; retires the VehicleManager::ReadSurfaceProperties(u64)
   rem  gate (2026-09-09). MANDATORY: sole definition of a symbol BrnWorldModule.cpp calls.
-  echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_wG_ReadSurface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleConstants.cpp"
   rem  ?????? 2026-08-11 (prepare-chain wave): the DRIVER-CONTROLS CONSUMER, VehicleManager::
   rem  UpdateDrivers (120 insns) -- slice TU; its home TU BrnVehicleManager.cpp is mounted too.
@@ -1813,7 +1810,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_UpdateTrafficDriver.cpp"
   rem  The articulated tail of UpdateTrafficPhysicsPostSimulation; retires the
   rem  PhysicalTrafficManager::ResolveArticulatedJoints and ::ProcessJointSpys gates (2026-09-09).
-  echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_wG12_ArticulatedJoints.cpp"
   rem  ...and the InstantTakedown split the note above predicted: the link DID 2019 on it, so the
   rem  body moved byte-identical out of BrnVehicleManager.cpp into its own slice
   rem  (RaceCarPhysics_Construct precedent). Its callee SetRaceCarCrashing is a real body.
@@ -2212,7 +2208,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPotentialContactAverager.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_CrashResponse.cpp"
 rem  The traffic pass-by stage; retires the PhysicalTrafficManager::
 rem  PassNearbyCrashingTrafficIdsToRaceCarModule link gate (2026-09-09).
-echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_wG_CrashingIds.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_RaceCarTrafficContact.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_DoCrashPrediction.cpp"
 rem  2026-09-02 (crash wave): THE RACE-CAR-vs-WORLD CRASH ARM. HandleCrashPredictionForRaceCarAndWorld
@@ -2360,7 +2355,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_Output.cpp"
   rem  DeformationManager::ProcessResetDeformationModelEvent, the callee the post-scene
   rem  game-action drain's body-shop arm needs (2026-09-09).
-  echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager_wG_ResetModelEvent.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Lifecycle.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_Update.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnDeformableObject_GlassState.cpp"
@@ -5040,7 +5034,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\CgsParticleSystem2d.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnMainMapRenderer.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer.cpp"
-  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCrashNavIconRenderer_wK_01.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnRoadSign.cpp"
   rem ---- boost-bar support (2026-08-25, upstream a545ebc9/6bf9728c): the 2D      ----
   rem ---- billboard renderer + the near-miss tracker + the world->GUI vehicle    ----
