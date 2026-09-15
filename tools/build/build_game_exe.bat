@@ -418,7 +418,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   mount nothing on the build published those three registers at all.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_GlassFracture.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCar_wQ5_01.cpp"
   rem ---- non-Showtime boost pipeline: exact base vtable, manager, and all three ----
   rem ---- concrete ARTIST strategies. BoostManager embeds B2/B3/B5 by value, so ----
   rem ---- omitting any of these part TUs leaves the selected B5 vtable incomplete. ----
@@ -920,7 +919,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- offline dumpbin closure analysis; leftovers stubbed in WorldLinkStubs ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatcher.cpp"
   rem  dispatch-bin out-of-room handler; retires DispatchBin::HandleMemoryOverflow (2026-09-09)
-  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatchBin_wG_Overflow.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsGraphicsDispatchList.cpp"
   rem ---- renderer world-pass wave (2026-07-27): the render-dispatch walk ----------
   rem ---- (object->mesh expansion, the sorted mesh walk, the shadowing device) ----
@@ -2483,43 +2481,24 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   rem  physical, contacts validated (SetupAndValidatePropContact REAL, its trap stub deleted); wQ_03 and
   rem  wQ2_02 are MOUNTED since wave Q6 round 2 (below, after wQ2_03); Prepare/ProcessInputsPreScene/
   rem  ReadUpdatedBodies/OutputUpdatedProps/Begin/End/UpdateTriangleCache gates all retired.
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_01.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_02.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_03.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_03_embed_check.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ4_04.cpp"
   rem  ---- wave Q5 round-3 integration: PropManager::ProcessInputs_Prepare @0x825E3400, the prop-physics
   rem  data handle pickup PhysicsModule::PropPrepareTypes @0x825A14A8 calls (its gate retired).
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ5_01.cpp"
   rem  ---- wave Q6 / rmall: PropManager::RemoveAllPropsAndParts @0x8260F010 (331), the world-unload
   rem  teardown; export hole closed with headless idat; its conductor gate retired in this change.
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ6_01.cpp"
   rem  ---- wave Q6 round 2 / lean: the JOINTED-PROP contact response -- HandleContactWithLeanProp
   rem  @0x8260FB60 (854) + HandleContactWithTiltProp @0x826108B8 (720); their conductor gates retire
   rem  in this change. Unblocked by ExternalPhysicsBody::GetLinearMomentum, Wheel::GetRoadLongSpeed
   rem  and six rw::math::vpu helpers; ExternallySimulatedBody::Translate landed at integration.
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ6_02.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_PropInstanceQueries.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\BrnPropManager_RoutePropVsRaceCarContactToDummyCar.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropPhysics\BrnPropInstance.cpp"
   echo "%SRC%\GameSource\Physics\PropManager\PropPhysics\BrnPropPartInstance.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ_01.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ_02.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_01.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_03.cpp"
   rem  ---- wave Q6 round 2 / pstream: the PROP-vs-WORLD contact generation pair -- wQ2_02 (Begin/End
   rem  PropWorldContactGeneration @0x82628CB0/@0x82628E18 + GetTriangleCacheSlotAndRadius) and wQ_03
   rem  (UpdateTriangleCache @0x826119A0). MOUNT AS A PAIR (wQ_03 alone is an LNK2019). Their three
   rem  conductor gates retire in this change; the primitive-list-vs-triangle-list STREAM job family
   rem  (CgsCollisionGenerator.cpp) + AddPrimitive(Volume*) landed this round.
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_02.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ_03.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_04.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_05.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_06.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_07.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_08.cpp"
-  echo "%SRC%\GameSource\Physics\PropManager\PropManager_wQ2_09.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityId.cpp"
   rem ---- end contact-spy / prop perf-monitor block -----------------------------------------
   rem ---- PROP MANAGER CONSTRUCT + ITS DEBUG COMPONENT (physics wave 5, 2026-08-02) ---------
@@ -2589,17 +2568,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   rem  IO buffers those legs read. The WorldLinkStubs gates for PrePhysicsUpdate/PostSceneUpdate/
   rem  PostPhysicsUpdate/InputBuffer_PostPhysics::Construct/InputBuffer_PrePhysics::Construct
   rem  are retired in the same change.
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_01.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_02.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_03.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_04.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_05.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_06.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ_07.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ2_01.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ2_02.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ2_03.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\PropEntityModule_wQ3_01.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PostPhysics.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PrePhysics.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PostScene.cpp"
