@@ -517,11 +517,16 @@ Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:$NoLock -Label "flow_run" -Slo
 # the same failure _box_lock.ps1 exists to prevent, one level down, and a lock alone cannot fix it
 # because the slots are DELIBERATELY not serialised against each other.
 # ⛔ A process NAME cannot tell one slot's game from another's; only its IMAGE PATH can
-# (Win32_Process.ExecutablePath). Slot 0 keeps the old, wider behaviour verbatim -- every
-# Burnout_PC on the box -- so a default run still clears leftovers of any kind, including a
-# stranded slot's.
+# (Win32_Process.ExecutablePath).
+# ⛔⛔ SLOT 0 IS PATH-SCOPED TOO (2026-09-15). It used to keep the old, wider behaviour -- every
+# Burnout_PC on the box -- "so a default run still clears a stranded slot's leftovers". With
+# several agents on one box that clause was a kill switch: every slot-0 start (an agent's default
+# run) TerminateProcess'd the conductor's LIVE slot-1 measurement at a random second, and the
+# victim's summary read `EXIT self code=-1 (0xFFFFFFFF)` with no [EXCEPTION] and no [exit-diag]
+# loop-left -- which was chased as a crash in the build under test for an hour (three 12-minute
+# black-frame watches lost at 8 s, 80 s and 101 s). A stranded slot's leftover is that slot's next
+# run's business (or `slots.ps1`); it is never a slot-0 run's. Slot 0's own dir is build\game.
 function Get-RunScopeProcesses {
-  if ($Slot -le 0) { return @(Get-Process Burnout_PC -ErrorAction SilentlyContinue) }
   $lsDir = $exeDir.TrimEnd('\')
   try {
     $lIds = @(Get-CimInstance Win32_Process -Filter "Name='Burnout_PC.exe'" -ErrorAction Stop |
