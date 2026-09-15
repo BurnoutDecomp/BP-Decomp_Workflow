@@ -412,6 +412,14 @@ param(
                                  #   parent shell cannot make a "-Audio" run silent either way.
                                  #   ⓘ Launching Burnout_PC.exe by hand (Explorer, `build run`)
                                  #   is unaffected: nothing but the harness sets the variable.
+  [string]$CarSelectTaps = "",  # opt IN: at CAR SELECT, tap a menu channel N times before
+                                 #   accepting -- "<Channel>:<count>", e.g. "DPadRight:2".
+                                 #   ⭐ THE OWNER'S PATH. The junkyard's default car is the
+                                 #   Cavalry (Classic Muscle); every other car is reached by
+                                 #   MOVING the selection here. A defect that only affects
+                                 #   "a car you picked" is invisible to every run that accepts
+                                 #   the default, and invisible to BRN_DEBUG_PLAYER_CAR too,
+                                 #   which swaps the car mid-drive through the harness path.
   [string]$DiagEnv     = ""      # ⭐ PASS ENGINE DIAG VARS THROUGH THE CLEAR. "A=1,B=2" or
                                  # "A=1 B=2" (or bare "A,B" / "A B", which means =1) -- COMMAS AND
                                  # SPACES BOTH SEPARATE, see the parser's banner below.
@@ -1430,6 +1438,23 @@ $script:pauseTimes   = Parse-TapSchedule $PauseAt   'PauseAt'
 $script:unpauseTimes = Parse-TapSchedule $UnpauseAt 'UnpauseAt'
 $script:pauseNext    = 0
 $script:unpauseNext  = 0
+# ---- -CarSelectTaps: "<Channel>:<count>" -- taps fired while parked at CAR SELECT ----------
+$script:csTapChan  = ""
+$script:csTapLeft  = 0
+$script:csTapHandle = $null
+if ($CarSelectTaps -ne "") {
+  $laCsParts = $CarSelectTaps.Split(":")
+  $liCsCount = 0
+  if ($laCsParts.Count -ne 2 -or -not [int]::TryParse($laCsParts[1].Trim(), [ref]$liCsCount) -or $liCsCount -lt 1) {
+    Write-Host ("[flow] FAIL: -CarSelectTaps '{0}' is not <Channel>:<count>." -f $CarSelectTaps); exit 1
+  }
+  $script:csTapChan = $laCsParts[0].Trim()
+  $script:csTapLeft = $liCsCount
+  $script:csTapHandle = New-Object System.Threading.EventWaitHandle($false,
+    [System.Threading.EventResetMode]::AutoReset, ("Local\BurnoutPC_Input_" + $script:csTapChan + $slotTag))
+  Write-Host ("[flow] CAR-SELECT taps: {0} x {1} before the first Accept" -f $script:csTapLeft, $script:csTapChan)
+}
+
 # ---- -MenuTapAt: "<sec>:<Channel>[,...]" -- scheduled menu taps on the DRIVING time base ----
 $script:menuTaps = @()
 $script:menuTapNext = 0
@@ -2005,7 +2030,14 @@ while ($true) {
 
   $pump = ($phase -eq 'BOOT') -or (($phase -eq 'CARSELECT') -and (-not $HoldCarSelect))
   if ($pump -and ((Get-Date) - $lastAccept).TotalSeconds -ge $acceptGapNow) {
-    $evAccept.Set() | Out-Null
+    # -CarSelectTaps: spend the first pump slots MOVING the selection, then accept as usual.
+    if ($phase -eq 'CARSELECT' -and $script:csTapLeft -gt 0 -and $script:csTapHandle -ne $null) {
+      $script:csTapHandle.Set() | Out-Null
+      $script:csTapLeft--
+      Write-Host ("[flow] CAR-SELECT tap {0} ({1} left)" -f $script:csTapChan, $script:csTapLeft)
+    } else {
+      $evAccept.Set() | Out-Null
+    }
     $lastAccept = Get-Date
   }
 
