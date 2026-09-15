@@ -256,7 +256,7 @@ def compile_gate(parent_path):
 # it, because two different definitions under one name is exactly the ODR fork this repo's
 # history warns about, and only a human can say which one the console has.
 # ---------------------------------------------------------------------------------------------
-REDEF_RE = re.compile(r"\((\d+)\): error (C2374|C2086|C2011|C2084|C2371|C2365)\b")
+REDEF_RE = re.compile(r"\((\d+)\): error (C2374|C2086|C2011|C2084|C2371|C2365|C2953|C2995|C2572)\b")
 KEYWORDS = {"const", "static", "struct", "class", "enum", "char", "int", "unsigned", "signed",
             "s32", "u32", "s16", "u16", "s8", "u8", "f32", "f64", "bool", "void", "inline", "extern",
             "namespace", "anonymous"}
@@ -268,7 +268,9 @@ def redef_name(err_line):
         return None
     msg = m.group(1)
     # C2374/C2086/C2011: "'<qualified name>[N]': redefinition ..."; C2084: "function '<name>(<params>)'
-    # already has a body". Cut the tail, then a parameter list, then take the last identifier.
+    # already has a body"; C2953/C2995: "'<name>[(<params>)]': class/function template has already
+    # been defined"; C2572: "'<name>': redefinition of default argument". Cut the tail, then a
+    # parameter list, then take the last identifier.
     msg = re.sub(r"(': |' already has a body).*$", "", msg)
     if "(" in msg:
         msg = msg[:msg.index("(")]
