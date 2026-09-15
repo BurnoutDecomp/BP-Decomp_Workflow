@@ -2728,8 +2728,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   rem  gate signature is token-identical to the real one (LNK2005 cl cannot see). BrnTrafficLightManager.cpp carries
   rem  GetLightState / TrafficLightGotSmashed @0x827519A0 / TrafficLightGotRestored @0x82751A40 (export hole, idat);
   rem  it needs TrafficLightCollection::GetInstanceIndexForInstanceID from SharedClasses\Traffic\Junctions (below).
-  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wQ7_01.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wQ7_02.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLightManager.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLightRuntimeState.cpp"
 rem  2026-08-21 wave T1 parked traffic cars -- module half. C3 vehicle+param runtime
@@ -2740,80 +2738,53 @@ rem  function whose absence the boot log named. BrnTrafficParam.cpp mounts becau
 rem  BrnTrafficVehicle.cpp needs Param::GetHistoryEntry. KF_VEHICLE_UPDATE_MATRIX_OLD_
 rem  UP_FACTOR = splat 20.0f recovered from dyn-init thunk @0x82C67830 -- the "no writer
 rem  anywhere" banner was the export-scan blind spot, wave-Q lesson.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_01.cpp"
 rem  R2 round: _wT1_02 = PreSceneUpdate @0x8274A968 (blocker B2, export hole, leak-shaped with
 rem  ship-attested callee inventory; its WorldLinkStubs gate is retired in the same change).
 rem  _wT1_03 = TrafficPhysicsInfo::Construct @0x82751E88 PARTIAL. _Render = the render trio:
 rem  PreDispatchUpdate @0x8274D900, GenerateDispatchLists @0x8273B280 DWARF 10-arg,
 rem  RenderTrafficCar @0x82728B08; both render gates retired with the bodies.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_02.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_03.cpp"
 rem  R3 closure item 1: _wT1_04 = UpdateStreaming @0x82748848 + AddVehiclesToTargetList
 rem  @0x82722470 -- THE STREAMER PUMP that finally requests the VEH_T*_GR bundles.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_04.cpp"
 rem  R4: _wT1_05 = CreateNewVehicleEntities @0x8272FA30 + IsVehiclesParamAZombie -- the
 rem  per-vehicle scene registration. _wT1_06 = UpdateTimers @0x82715858 + UpdateDecision/
 rem  NonDecisionFrame @0x8274E508/@0x8274C1A8 -- the decision-frame steady-state loop
 rem  whose only mbDecisionFrame writer is UpdateTimers. WorldBridgeRaceCarToTrafficModule
 rem  = BridgeRaceCarModuleToTrafficModule_PreScene @0x827A50E0, THE activeHulls==0 fix:
 rem  the sole producer priming the traffic input buffers with race-car state.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_05.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_06.cpp"
 rem  _wT1_07 -- SpawnShowtimeTraffic @0x82743038 (the showtime top-up UpdateDecisionFrame
 rem  calls in _wT1_06) plus its two spacing helpers IsParamTooClose @0x82726470 and
 rem  CountParamsOnSection @0x82723D10.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT1_07.cpp"
 rem  wave T2 driving traffic: generation (_wT2_01), param sim (_wT2_02/03), vehicle+scene
 rem  wire (_wT2_04), fuzzy behaviours, and the UpdateVehiclesJob family (the ship moved the
 rem  per-vehicle driving update into an EA::Jobs job: TrafficJobStub + UpdateVehiclesJob).
 rem  _wT2_06 = THE CRASH SURFACE: UpdateParams_BuildListOfCrashingThings (the shared
 rem  producer) plus its two consumers, TryAvoidCrashing (traffic SWERVES) and
 rem  TryStartSympatheticCrashing (chain-reaction crashes). _wT2_02 calls all three.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_01.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_02.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_03.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_04.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_05.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT2_06.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_KillDyingVehicleEntities.cpp"
 rem  wave T3 physical traffic: _wT3_00 shared leaves, _wT3_01 world promotion path,
 rem  _wT3_02 GenerateDriverInputs, _wT3_04 publish/readback + physical render arm.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_00.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_01.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_02.cpp"
 rem  2026-08-29 (traffic-crash wave): THE CHAIN CRASH. UpdateSympatheticCrashing @0x8273D378 +
 rem  CrashVehicleForSympatheticCrashState @0x8272BA08 -- the arm that aims a nearby traffic car
 rem  at a wreck and then crashes it. Un-gated in _wT3_02.cpp (the GenerateDriverInputs arm) and
 rem  in _wT3_01.cpp (SafeRequestMakeVehiclePhysical's meSympCrashState seed); without this mount
 rem  both are LNK2019.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_SympatheticCrash.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT3_04.cpp"
 rem  wave T4 crash-into-traffic: _wT4_01 UpdateCollidableVehicles (collision-volume producer),
 rem  _wT4_02 BuildPotentialCollisionList + HandleHalfPotentialContact (overlap-pair promoter).
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT4_01.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT4_02.cpp"
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT5_01.cpp"
 rem  wT6_01 -- NukeTrafficJams @0x827353E8, the traffic-jam relief valve. Marks every
 rem  third param in a stalled run SetShouldBeRemoved; UpdateParams KillParam consumer
 rem  in _wT2_02.cpp is already live, so this closes the valve end to end.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_01.cpp"
 rem  wT6_02 -- HandlePrepareForModeAction @0x827480D8, the per-event arming handler and
 rem  the ONLY non-debug writer of mbPlayingShowtimeMode (+0x717DD).
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_02.cpp"
 rem  wT6_03 -- HandleExternalRequests @0x8274B660, PARTIAL. Only its action-23 arm is
 rem  real, but that arm is the ONLY caller of HandlePrepareForModeAction -- without this
 rem  TU /OPT:REF discards the showtime gate entirely.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wT6_03.cpp"
 rem  wG_Stages -- PostSceneUpdate, the per-frame post-scene stage driver.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wG_Stages.cpp"
 rem  wG_PostScene -- its five stage helpers plus CreateTrafficAIEntity.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wG_PostScene.cpp"
 rem  wG_NearbyTrafficResults -- ProcessNearbyTrafficSceneQueryResults, the post-physics
 rem  drain of that sphere query and the sole producer of the near-miss collections.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wG_NearbyTrafficResults.cpp"
 rem  wG_NearMissOutput -- GenerateNearMissOutput, the pre-scene publish of those two
 rem  collections into the traffic->race-car interface. Called from _wT1_02.cpp.
-echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wG_NearMissOutput.cpp"
 rem  2026-09-02 (traffic-deformation wave): ProcessDeformationData @0x8271DEB0 -- the physics ->
 rem  traffic deformation readback (skin offsets, wheels, locators, detached parts, glass) --
 rem  plus BrnTraffic::SetGlassFractureConstants @0x82714848. Its call site in _wT1_01.cpp is
@@ -5767,9 +5738,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   ChallengeListEntry.cpp joins for ChallengeListEntryAction::GetTargetValue (bodied
   rem   on disk, never listed -- the ticker's per-action target values).
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState_wS2.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState_wS3.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState_wS4.cpp"
   echo "%SRC%\SharedClasses\DataLists\ChallengeListEntry.cpp"
   rem   RACE_MAIN's measured link closure (2026-08-27 trial links): the online-timeout
   rem   timer (0 new externals) and the sat-nav zoom cache leg (wB_08; its duplicate
