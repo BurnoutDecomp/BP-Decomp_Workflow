@@ -564,6 +564,25 @@ own** pass first, so you don't ship a known-divergent TU into review.
 - **Mirror original paths.** A function whose `primary_file` is
   `GameSource/Replays/Foo.cpp` lands at `b5-decomp/src/GameSource/Replays/Foo.cpp`.
 
+- **Wave partfiles are TEMPORARY and get FOLDED BACK (b5-decomp issue #20).** A recovery wave may
+  land its bodies in `<Parent>_w<Wave>_<NN>.cpp` beside `<Parent>.cpp` so parallel waves never edit
+  one giant TU at once -- `Wave` is one capital letter plus optional digits (`B`, `C`, `Q4`, `T1`,
+  `SQ1`), `NN` two digits. That is the ONLY partfile spelling; do not mint `_wB_res`, `_wRR`,
+  `_wH3b`, `_wG_Bridges_01` style variants. The split is bookkeeping, not the shipped layout: the
+  console has ONE `BrnGameStateStreetManager.cpp`, and every partfile is one more hand-written
+  mount line in the shared `.bat`. So the second half of the cycle is mandatory -- once a wave
+  letter has closed on a class, fold it:
+  `python tools/work/fold_partfiles.py fold <Parent>` (concatenates in mount order, keeps every
+  partfile's header comment block verbatim above its bodies, dedupes includes, compile-gates the
+  result, `git rm`s the partfiles, strips their mount lines CRLF-safely; refuses to touch anything
+  when two partfiles define the same file-scope helper -- dedupe by hand first). `scan` lists the
+  parents, `audit` classifies the unmounted partfiles, and `check` is the ratchet against
+  `progress/partfile_baseline.json`: the partfile population may spike during a wave and must come
+  back down, never grow across a landing. Land the fold's b5 commit and its mount-line commit
+  together, then LINK the exe (a fold moves bodies between TUs).
+- ⛔ **Unmounted partfiles are not "parked work", they are invisible work.** `fold_partfiles.py
+  audit` names them; each one is either mounted, folded, or deleted with a reason -- never left.
+
 ## Don't
 
 - **Don't commit or push the parent/superproject repo (`BP-Decomp_Workflow`) — only the
