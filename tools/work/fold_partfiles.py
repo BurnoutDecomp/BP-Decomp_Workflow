@@ -368,6 +368,16 @@ def cmd_fold(args):
     parts = [t for t in find_partfiles() if t[2] == args.parent]
     if not parts:
         sys.exit(f"no partfiles named {args.parent}_w*.cpp under src/")
+    if args.exclude:
+        keep = {(e[:-4] if e.lower().endswith(".cpp") else e) + ".cpp" for e in args.exclude}
+        known = {t[1] for t in parts}
+        for k in keep:
+            if k not in known:
+                sys.exit(f"--exclude {k}: not a {args.parent} partfile")
+        parts = [t for t in parts if t[1] not in keep]
+        print(f"excluded (left as its own TU, mount line kept): {', '.join(sorted(keep))}")
+        if not parts:
+            sys.exit("every partfile was excluded -- nothing to fold")
     dirs = {t[0] for t in parts}
     if len(dirs) != 1:
         sys.exit(f"{args.parent} partfiles live in more than one directory: {sorted(dirs)}")
@@ -620,6 +630,11 @@ def main():
     f.add_argument("--dry-run", action="store_true")
     f.add_argument("--include-unmounted", action="store_true")
     f.add_argument("--no-gate", action="store_true")
+    f.add_argument("--exclude", metavar="FILE", action="append", default=[],
+                   help="a partfile to LEAVE as its own TU (repeatable; basename, .cpp optional). For "
+                        "partfiles whose ISOLATION is the point -- an *_embed_check.cpp layout oracle "
+                        "that includes a header the rest of the family must not see. Its mount line "
+                        "stays.")
     f.add_argument("--parent-file", metavar="BASENAME",
                    help="the parent TU's basename when it is not <Parent>.cpp (e.g. --parent-file "
                         "BrnPropManager for the PropManager_w*.cpp family)")
