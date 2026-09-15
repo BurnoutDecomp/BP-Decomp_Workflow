@@ -31,7 +31,7 @@ suffixes (_wB_res, _wRR, _wH3b, _wG_Bridges_01 ...) are still recognised for fol
 USAGE (from the repo root):
   python tools/work/fold_partfiles.py scan                  # every parent with partfiles
   python tools/work/fold_partfiles.py audit                 # the UNMOUNTED partfiles, classified
-  python tools/work/fold_partfiles.py fold BrnChallengeManager [--dry-run] [--include-unmounted] [--no-gate]
+  python tools/work/fold_partfiles.py fold BrnChallengeManager [--dry-run] [--include-unmounted] [--no-gate] [--dedupe-identical]
   python tools/work/fold_partfiles.py check [--baseline]    # the ratchet: partfile count must not grow
 """
 import argparse
@@ -231,6 +231,123 @@ def compile_gate(parent_path):
     return verify.compile_gate([parent_path])
 
 
+# ---------------------------------------------------------------------------------------------
+# --dedupe-identical: waves copy the same anonymous-namespace constants / records / helpers into
+# several partfiles (KAC_ASSERT_FILE, KI_CHANNEL_*, a GuiEventWrapper payload struct...). Folded
+# into one TU they are C2374/C2086/C2011/C2084 redefinitions. When the later copy is TEXTUALLY
+# IDENTICAL to the first (comments and whitespace ignored) it is dropped and a one-line marker
+# left in its place; a copy that differs in any token is NOT touched -- the fold refuses and names
+# it, because two different definitions under one name is exactly the ODR fork this repo's
+# history warns about, and only a human can say which one the console has.
+# ---------------------------------------------------------------------------------------------
+REDEF_RE = re.compile(r"\((\d+)\): error (C2374|C2086|C2011|C2084|C2371|C2365)\b")
+KEYWORDS = {"const", "static", "struct", "class", "enum", "char", "int", "unsigned", "signed",
+            "s32", "u32", "s16", "u16", "s8", "u8", "f32", "f64", "bool", "void", "inline", "extern",
+            "namespace", "anonymous"}
+
+
+def redef_name(err_line):
+    m = re.search(r"error C\d+: (.*)$", err_line)
+    if not m:
+        return None
+    msg = m.group(1)
+    # C2374/C2086/C2011: "'<qualified name>[N]': redefinition ..."; C2084: "function '<name>(<params>)'
+    # already has a body". Cut the tail, then a parameter list, then take the last identifier.
+    msg = re.sub(r"(': |' already has a body).*$", "", msg)
+    if "(" in msg:
+        msg = msg[:msg.index("(")]
+    idents = [w for w in re.findall(r"[A-Za-z_]\w*", msg) if w not in KEYWORDS]
+    return idents[-1] if idents else None
+
+
+def extract_block(lines, i):
+    """(start, end) inclusive line indices of the definition that begins at line i: contiguous //
+    comment lines directly above are part of it; it ends at the first ';' at brace depth 0, or at
+    the line that closes its outermost brace (struct/function) -- a trailing '};' included."""
+    start = i
+    # A declaration may begin on earlier lines (a return type on its own line: the compiler reports
+    # the line that carries the NAME). Walk up over non-blank, non-comment lines that do not end a
+    # statement or open/close a block, then over the comment lines directly above.
+    while start > 0:
+        prev = re.sub(r"//.*$", "", lines[start - 1]).strip()   # a trailing comment hides the ';'
+        if not prev or prev.endswith((";", "{", "}")) or prev.startswith("#"):
+            break
+        start -= 1
+    while start > 0 and lines[start - 1].strip().startswith("//"):
+        start -= 1
+    depth, seen_brace, j = 0, False, i
+    while j < len(lines):
+        code = re.sub(r"//.*$", "", lines[j])   # a trailing comment hides the ';' and may hold braces
+        for ch in code:
+            if ch == "{":
+                depth += 1
+                seen_brace = True
+            elif ch == "}":
+                depth -= 1
+        if seen_brace and depth == 0:
+            return start, j
+        if not seen_brace and depth == 0 and code.rstrip().endswith(";"):
+            return start, j
+        j += 1
+    return start, min(j, len(lines) - 1)
+
+
+def norm_block(block):
+    out = []
+    for l in block:
+        l = re.sub(r"//.*$", "", l).strip()
+        if l:
+            out.append(re.sub(r"\s+", " ", l))
+    return " ".join(out)
+
+
+def dedupe_identical(parent_path, text, crlf, rounds=8):
+    """Gate, drop identical later copies of every reported redefinition, gate again."""
+    lines = text.split("\n")
+    dropped = []
+    for _round in range(rounds):
+        write_text(parent_path, "\n".join(lines), crlf)
+        status, log = compile_gate(parent_path)
+        if status == "pass":
+            return status, log, "\n".join(lines), dropped
+        hits = {}
+        for l in log.splitlines():
+            m = REDEF_RE.search(l)
+            if m:
+                nm = redef_name(l)
+                if nm:
+                    hits.setdefault(int(m.group(1)), nm)
+        if not hits:
+            return status, log, "\n".join(lines), dropped
+        for ln in sorted(hits, reverse=True):
+            nm = hits[ln]
+            i = ln - 1
+            if i >= len(lines) or not re.search(r"\b" + re.escape(nm) + r"\b", lines[i]):
+                sys.exit(f"dedupe: line {ln} does not name '{nm}' any more -- the folded text drifted; "
+                         f"fold by hand")
+            s, e = extract_block(lines, i)
+            blk = norm_block(lines[s:e + 1])
+            found = None
+            for k in range(0, s):
+                if lines[k].strip().startswith("//") or not re.search(r"\b" + re.escape(nm) + r"\b", lines[k]):
+                    continue
+                ks, ke = extract_block(lines, k)
+                if ke < s and norm_block(lines[ks:ke + 1]) == blk:
+                    found = (ks, ke)
+                    break
+            if found is None:
+                sys.exit(f"dedupe REFUSED: '{nm}' at folded line {ln} is a redefinition but no earlier "
+                         f"IDENTICAL definition exists -- two different bodies under one name; reconcile "
+                         f"by hand (parent restored)\n   later copy (lines {s + 1}-{e + 1}): {blk[:300]}")
+            marker = (f"// (fold: an identical definition of {nm} was dropped here -- this TU defines it "
+                      f"once, above)")
+            lines[s:e + 1] = [marker]
+            dropped.append(nm)
+    write_text(parent_path, "\n".join(lines), crlf)
+    status, log = compile_gate(parent_path)
+    return status, log, "\n".join(lines), dropped
+
+
 def cmd_fold(args):
     parts = [t for t in find_partfiles() if t[2] == args.parent]
     if not parts:
@@ -246,8 +363,18 @@ def cmd_fold(args):
     mounted = mount_order()
     parent_rel = rel_src(parent_path)
     if parent_rel not in mounted:
-        print(f"WARNING: the parent {parent_rel} is not mounted; folding into it changes nothing "
-              f"in the exe until it is")
+        # Folding into a parent the link has never seen puts the PARENT'S OWN bodies into the exe for
+        # the first time -- and a parent left unmounted while its partfiles were mounted was almost
+        # always left out for a measured unresolved-external cost (build_game_exe.bat's rem notes say
+        # which). 2026-09-15: CgsFineIntersectionTestModule + ICEWrapper cost 7 LNK2019 + 2 LNK2005
+        # that way. So this is opt-in.
+        if not args.mount_parent:
+            sys.exit(f"REFUSED: the parent {parent_rel} is not mounted, only its partfiles are. Folding "
+                     f"would mount the parent's own bodies for the first time (a link cost the .bat "
+                     f"notes usually explain). Read those notes; pass --mount-parent to do it anyway, "
+                     f"then LINK before committing.")
+        print(f"WARNING: the parent {parent_rel} is not mounted; --mount-parent given, its mount line "
+              f"will be added in the first partfile's slot -- LINK before you commit")
     ordered, unmounted = [], []
     for dp, f, *_ in parts:
         rel = rel_src(os.path.join(dp, f))
@@ -319,13 +446,27 @@ def cmd_fold(args):
     backup = parent_text
     write_text(parent_path, folded_text, crlf)
     if not args.no_gate:
-        status, log = compile_gate(parent_path)
+        if args.dedupe_identical:
+            try:
+                status, log, folded_text, dropped = dedupe_identical(parent_path, folded_text, crlf)
+            except SystemExit:
+                write_text(parent_path, backup, crlf)
+                raise
+            if dropped:
+                print(f"dedupe: dropped {len(dropped)} identical later definition(s): "
+                      + ", ".join(sorted(set(dropped))))
+        else:
+            status, log = compile_gate(parent_path)
         print(f"compile gate: {status}")
         if status == "fail":
             write_text(parent_path, backup, crlf)
+            failed_out = parent_path + ".gate-failed.txt"
+            write_text(failed_out, folded_text, crlf)
+            print(f"(the text that failed the gate is kept at {failed_out}; delete it when done)")
             print(log[-4000:])
             sys.exit("gate FAILED -- parent restored, partfiles untouched. Dedupe the reported "
-                     "symbols by hand and re-run.")
+                     "symbols by hand (or pass --dedupe-identical for textually identical copies) "
+                     "and re-run.")
 
     # delete the partfiles (tracked -> git rm; untracked -> unlink)
     for f in victims:
@@ -400,6 +541,10 @@ def main():
     f.add_argument("--dry-run", action="store_true")
     f.add_argument("--include-unmounted", action="store_true")
     f.add_argument("--no-gate", action="store_true")
+    f.add_argument("--mount-parent", action="store_true",
+                   help="allow folding into a parent that is not mounted itself (adds its mount line; LINK before committing)")
+    f.add_argument("--dedupe-identical", action="store_true",
+                   help="drop later anonymous-namespace definitions that are textually identical to an earlier one")
     f.set_defaults(fn=cmd_fold)
     c = sub.add_parser("check")
     c.add_argument("--baseline", action="store_true")
