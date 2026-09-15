@@ -90,14 +90,60 @@ KS_ACTIONS_H = os.path.join(
 
 
 def read_console_table(image_path):
-    """The 28 x 4 signed bytes at 0x82CDBEB8, big-endian image, offset = VA - 0x82000000."""
-    off = KU_MAPPING_VA - KU_IMAGE_BASE
-    with open(image_path, "rb") as f:
-        f.seek(off)
-        raw = f.read(KU_MAPPING_CONTROLS * 4)
+    """The 28 x 4 signed bytes at 0x82CDBEB8, big-endian image, offset = VA - 0x82000000.
+
+    image_path == "x360rd" reads them through tools/re/x360rd.py instead (the IDA artist
+    raw beside it, D:/Reverse/IDA_Files/, or $BRN_ARTIST_RAW), for hosts with no flat dump."""
+    if image_path == "x360rd":
+        sys.path.insert(0, os.path.join(ROOT, "tools", "re"))
+        import x360rd  # noqa: E402  (raises SystemExit itself when no image is reachable)
+        raw = x360rd.rd(KU_MAPPING_VA, KU_MAPPING_CONTROLS * 4)
+    else:
+        off = KU_MAPPING_VA - KU_IMAGE_BASE
+        with open(image_path, "rb") as f:
+            f.seek(off)
+            raw = f.read(KU_MAPPING_CONTROLS * 4)
     if len(raw) != KU_MAPPING_CONTROLS * 4:
         raise SystemExit("image too short for 0x%08X" % KU_MAPPING_VA)
     return [list(struct.unpack_from(">4b", raw, i * 4)) for i in range(KU_MAPPING_CONTROLS)]
+
+
+# --- the build's DECLARED PC overrides ------------------------------------------------------
+# CgsInputPadsPC.cpp keeps the console table verbatim and applies KA_PC_PAD_OVERRIDES on top
+# (2026-09-15: 7 RESET, the debug reset / fly-around, off R1 and onto L3 so a song skip no
+# longer lifts the car). The dump declares each edit as
+#     [input-map] override control <n> <NAME> -> remove <a> add <b> -- FLAG PC binding choice: ...
+# and the expectation below is the image WITH those edits applied. An undeclared edit still
+# reads as MISSING/extra, which is the point: the build must say what it changed.
+def overrides_from_log(log_path):
+    if not log_path or not os.path.exists(log_path):
+        return []
+    pat = re.compile(r"\[input-map\]\s+override\s+control\s+(\d+)\s+\S+\s+->\s+remove\s+(-?\d+)"
+                     r"\s+add\s+(-?\d+)")
+    found = []
+    with open(log_path, "r", encoding="utf-8", errors="replace") as f:
+        for line in f:
+            m = pat.search(line)
+            if m:
+                found.append((int(m.group(1)), int(m.group(2)), int(m.group(3))))
+    return found
+
+
+def apply_overrides(console, overrides):
+    """The console rows with the declared edits applied, the way GetPcPadMapping() does it."""
+    rows = [list(r) for r in console]
+    for control, remove, add in overrides:
+        if not 0 <= control < KU_MAPPING_CONTROLS:
+            continue
+        row = rows[control]
+        if remove >= 0:
+            row[:] = [(-1 if a == remove else a) for a in row]
+        if add >= 0 and add not in row:
+            for i, a in enumerate(row):
+                if a == -1:
+                    row[i] = add
+                    break
+    return rows
 
 
 def action_names():
@@ -200,14 +246,15 @@ def main():
                 image = cand
                 break
     if not image or not os.path.exists(image):
-        print("FAIL: no X360 image.bin (set BRN_IMAGE_BIN)")
-        return 2
+        image = "x360rd"   # the IDA artist raw through tools/re/x360rd.py (SystemExit if absent)
 
     console = read_console_table(image)
     names = action_names()
 
     pc, origin = pc_from_log(args.log)
     runtime = pc is not None
+    overrides = overrides_from_log(args.log) if runtime else []
+    expected = apply_overrides(console, overrides)
     if pc is None:
         why = origin
         pc, origin = pc_from_source(args.src)
@@ -218,7 +265,7 @@ def main():
 
     missing, extra = [], []
     for control in range(KU_MAPPING_CONTROLS):
-        want = set(a for a in console[control] if a >= 0)
+        want = set(a for a in expected[control] if a >= 0)
         have = set(a for a in pc[control] if a >= 0)
         for action in sorted(want - have):
             missing.append((control, action))
@@ -244,14 +291,18 @@ def main():
         print(json.dumps({
             "origin": origin, "runtime": runtime, "image": image,
             "console": console, "pc": pc,
+            "overrides": overrides, "expected": expected,
             "missing": missing, "extra": extra, "headline": headline,
             "source_table_matches_image": table_ok,
         }, indent=1))
     else:
         print("[input-map] oracle  0x%08X in %s" % (KU_MAPPING_VA, image))
         print("[input-map] PC side: %s" % origin)
+        for control, remove, add in overrides:
+            print("[input-map] declared PC override: %s(%d) remove %d add %d"
+                  % (KA_CONTROL_NAMES[control], control, remove, add))
         for control in range(KU_MAPPING_CONTROLS):
-            want = [a for a in console[control] if a >= 0]
+            want = [a for a in expected[control] if a >= 0]
             have = [a for a in pc[control] if a >= 0]
             gap = sorted(set(want) - set(have))
             print("  %-32s console %-16s pc %-16s %s"
