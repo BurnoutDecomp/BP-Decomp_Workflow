@@ -424,32 +424,9 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- omitting any of these part TUs leaves the selected B5 vtable incomplete. ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostStrategy.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostManager.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_01.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_02.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_03.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_04.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_05.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_06.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_11.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout2_wP_16.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_01.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_02.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_03.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_04.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_06.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_07.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_11.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_15.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_16.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout3_wP_17.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_01.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_02.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_03.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_04.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_05.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_06.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_11.cpp"
-  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostBurnout5_wP_16.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostBurnout2.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostBurnout3.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostBurnout5.cpp"
   rem ---- source identities restored from the exact ARTIST B2/B3/B5 vtable targets. ----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BoostFoldedVirtualBodies.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnActiveRaceCarRenderParams.cpp"
@@ -4421,15 +4398,13 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  duplicate). Still inert: MomentController::NewMoment allocates nothing.
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentHitTraffic.cpp"
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentStationaryCrash.cpp"
-  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentNewCarJoined_wN_01.cpp"
+  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentNewCarJoined.cpp"
   rem ---- [momentloose] loose-attachment + showtime-flag wave, 2026-09-11: the loose-attachment
   rem  parameter block's +0x08 / +0x1C sub-blocks are carved and its Parameters::Construct is
   rem  bodied, and the last stunt-side shared-info shim reads the showtime-intro flag two mounted
   rem  arbitrator arms already read. Three more moment TUs measure zero non-CRT unresolved (and
   rem  zero non-COMDAT duplicates) against the whole object list. Still inert: NewMoment allocates
   rem  nothing, so no moment's Update runs.
-  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentNewCarJoined_wN_02.cpp"
-  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentNewCarJoined_wO_01.cpp"
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentPassengerSeesAction.cpp"
   rem  BrnMomentHardStop.cpp joins them; it is the only definition of class MomentHardStop.
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentHardStop.cpp"
@@ -5569,13 +5544,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  sat unmounted since 2026-08-03 behind three BrnScreenStatesLinkStubs scaffolds; _wJ_07
   rem  lands the two foreign-TU lifecycle bodies OnLeave @0x824970D0 + Update @0x824AC808 and
   rem  the scaffolds are deleted. Table::Update @0x824E4890 joins BrnTable.cpp for its slot-5 call.
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_01.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_02.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_03.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_04.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_05.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_06.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch_wJ_07.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch.cpp"
   echo "%SRC%\GameSource\Gui\Components\BrnCarSelectOnlinePlayerListItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnManufacturerIcon.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnPlayerStatsBar.cpp"
@@ -5767,13 +5736,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   (the complete PreRaceFlyByState) mount; the inert PRE_FLY_BY block in
   rem   BrnHudStatesLinkStubs.cpp was deleted in the same change (LNK2005 otherwise).
   rem   Their measured closure = BrnMainMap.cpp + BrnMainMapLinkGates.cpp (SatNav block).
-  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_01.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_02.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_03.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_04.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_05.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_06.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy_wJ_07.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsList.cpp"
   rem ---- LINK CLOSURE for the friends-list / boost-message landings (added 2026-08-26).
   rem   MEASURED: origin/dev c0dc4af2 does NOT link -- 15 unresolved externals. Two of its
