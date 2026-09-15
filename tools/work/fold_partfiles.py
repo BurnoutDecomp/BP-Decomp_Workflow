@@ -23,6 +23,20 @@ WHAT A FOLD DOES (one parent per run):
   6. on a pass: writes the parent, `git rm`s the partfiles, strips their mount lines from the .bat
      (CRLF preserved -- never edit that file with LF tools), and prints the two commits to make.
 
+WHEN THERE IS NO PARENT TU. `scan` prints `** NO <Parent>.cpp **` for families whose bodies only
+ever existed in partfiles. Two shapes, two flags:
+  * the class DOES have a home TU under another basename (PropManager's bodies live in
+    BrnPropManager.cpp, DispatchBin's in CgsDispatcher.cpp -- the partfile headers say so):
+    `--parent-file BrnPropManager`. Nothing is created; the fold is the ordinary one.
+  * the class has NO home TU at all (BoostBurnout2, BrnPreRaceFlyBy ...): `--create-parent`
+    synthesises <Parent>.cpp from the partfiles in MOUNT order -- a generated banner plus the
+    first partfile's own header, then the union of every partfile's #include lines (first
+    occurrence wins, order kept), then every partfile's header + body behind the same FOLDED-FROM
+    banner an ordinary fold writes. The compile gate runs on it exactly as it does on a fold, and
+    the .bat gets the parent's mount line in the FIRST partfile's slot (the created TU must be
+    mounted or the bodies leave the exe). --dry-run writes <Parent>.cpp.folded.txt and creates
+    nothing.
+
 CONVENTION (pinned in AGENTS.md by the same change): <Parent>_w<Wave>_<NN>.cpp, Wave = one
 capital letter plus optional digits (B, C, Q4, T1, SQ1 ...), NN = two digits. Older ad-hoc
 suffixes (_wB_res, _wRR, _wH3b, _wG_Bridges_01 ...) are still recognised for folding, and
@@ -32,6 +46,8 @@ USAGE (from the repo root):
   python tools/work/fold_partfiles.py scan                  # every parent with partfiles
   python tools/work/fold_partfiles.py audit                 # the UNMOUNTED partfiles, classified
   python tools/work/fold_partfiles.py fold BrnChallengeManager [--dry-run] [--include-unmounted] [--no-gate] [--dedupe-identical]
+  python tools/work/fold_partfiles.py fold PropManager --parent-file BrnPropManager   # parent TU has another basename
+  python tools/work/fold_partfiles.py fold BrnPreRaceFlyBy --create-parent            # scan printed ** NO <Parent>.cpp **
   python tools/work/fold_partfiles.py check [--baseline]    # the ratchet: partfile count must not grow
 """
 import argparse
@@ -356,13 +372,21 @@ def cmd_fold(args):
     if len(dirs) != 1:
         sys.exit(f"{args.parent} partfiles live in more than one directory: {sorted(dirs)}")
     d = dirs.pop()
-    parent_path = os.path.join(d, args.parent + ".cpp")
+    parent_base = args.parent_file or args.parent
+    parent_path = os.path.join(d, parent_base + ".cpp")
+    created = False
     if not os.path.exists(parent_path):
-        sys.exit(f"no parent TU at {parent_path} -- create it first (or the class has another home)")
+        if not args.create_parent:
+            sys.exit(f"no parent TU at {parent_path} -- the class usually has a home TU under another "
+                     f"basename (read a partfile's header; pass --parent-file <BASENAME>). If it truly "
+                     f"has none, pass --create-parent to synthesise it from the partfiles.")
+        created = True
+        print(f"--create-parent: {rel_src(parent_path)} does not exist; it will be synthesised from "
+              f"the partfiles in mount order")
 
     mounted = mount_order()
     parent_rel = rel_src(parent_path)
-    if parent_rel not in mounted:
+    if parent_rel not in mounted and not created:
         # Folding into a parent the link has never seen puts the PARENT'S OWN bodies into the exe for
         # the first time -- and a parent left unmounted while its partfiles were mounted was almost
         # always left out for a measured unresolved-external cost (build_game_exe.bat's rem notes say
@@ -389,16 +413,46 @@ def cmd_fold(args):
     if not victims:
         sys.exit("nothing to fold")
 
-    parent_text, crlf = read_text(parent_path)
-    plines = parent_text.replace("\r\n", "\n").split("\n")
-    have = {include_key(l) for l in plines if l.strip().startswith("#include")}
-    last_inc_idx = max((i for i, l in enumerate(plines) if l.strip().startswith("#include")), default=-1)
-    if last_inc_idx < 0:
-        sys.exit("the parent has no #include block to extend")
+    stamp = datetime.date.today().isoformat()
+    if created:
+        # The skeleton: a generated banner + the FIRST partfile's own header block. Its includes
+        # (and everyone else's) are unioned below; its body comes in the appendix like the rest, so
+        # the mount-ordered evidence trail reads in one direction.
+        first_text, crlf = read_text(os.path.join(d, victims[0]))
+        first_header, _fi, _fl, _fb = split_partfile(first_text)
+        # Some partfiles open with their #include line and put the commentary after it; there is
+        # then no header block to hoist and the appendix keeps the commentary where it is.
+        hoisted = bool([l for l in first_header if l.strip()])
+        plines = [
+            f"// {parent_rel}",
+            "//",
+            f"// Created {stamp} by tools/work/fold_partfiles.py --create-parent (b5-decomp issue #20).",
+            f"// This family had NO parent TU: its bodies lived in {len(victims)} wave partfile(s), each",
+            "// with its own hand-written mount line in tools/build/build_game_exe.bat. They are folded",
+            "// here in MOUNT ORDER; every partfile's own header comment block is kept verbatim above",
+            "// its bodies (the address annotations are the evidence trail). No body was edited.",
+            "//",
+            "// Folded, in mount order:",
+        ] + [f"//     {f}" for f in victims] + ([
+            "//",
+            f"// The header of the first of them ({victims[0]}) follows verbatim, as this file's own.",
+            "",
+        ] + first_header if hoisted else [""])
+        while plines and plines[-1].strip() == "":
+            plines.pop()
+        have = set()
+        last_inc_idx = len(plines) - 1
+    else:
+        parent_text, crlf = read_text(parent_path)
+        plines = parent_text.replace("\r\n", "\n").split("\n")
+        have = {include_key(l) for l in plines if l.strip().startswith("#include")}
+        last_inc_idx = max((i for i, l in enumerate(plines) if l.strip().startswith("#include")),
+                           default=-1)
+        if last_inc_idx < 0:
+            sys.exit("the parent has no #include block to extend")
 
     new_includes = []
     appendix = []
-    stamp = datetime.date.today().isoformat()
     for f in victims:
         text, _ = read_text(os.path.join(d, f))
         header, includes, leftovers, body = split_partfile(text)
@@ -412,10 +466,14 @@ def cmd_fold(args):
         appendix.append("")
         appendix.append("// " + "=" * 76)
         appendix.append(f"// FOLDED FROM {f} (wave {wave}) on {stamp} by tools/work/fold_partfiles.py.")
-        appendix.append("// The partfile's own header follows verbatim (its address annotations are the")
-        appendix.append("// evidence trail); its bodies come after it.")
-        appendix.append("// " + "=" * 76)
-        appendix.extend(header)
+        if created and f == victims[0] and hoisted:
+            appendix.append("// Its header is THIS FILE'S header, at the top -- not repeated here.")
+            appendix.append("// " + "=" * 76)
+        else:
+            appendix.append("// The partfile's own header follows verbatim (its address annotations are the")
+            appendix.append("// evidence trail); its bodies come after it.")
+            appendix.append("// " + "=" * 76)
+            appendix.extend(header)
         if leftovers:
             appendix.append("// (preprocessor / using lines carried from the partfile's include region)")
             appendix.extend(leftovers)
@@ -426,7 +484,10 @@ def cmd_fold(args):
     folded = plines[:last_inc_idx + 1]
     if new_includes:
         folded.append("")
-        folded.append(f"// includes folded in from the {args.parent}_w*.cpp partfiles ({stamp})")
+        folded.append(
+            f"// the union of the {args.parent}_w*.cpp partfiles' #include lines, first occurrence "
+            f"wins, mount order ({stamp})" if created else
+            f"// includes folded in from the {args.parent}_w*.cpp partfiles ({stamp})")
         folded.extend(new_includes)
     folded.extend(plines[last_inc_idx + 1:])
     while folded and folded[-1].strip() == "":
@@ -443,14 +504,23 @@ def cmd_fold(args):
         print(f"dry run: wrote {out}; nothing else touched")
         return
 
-    backup = parent_text
+    def restore():
+        """Put the tree back exactly as it was: a pre-existing parent gets its text back, a
+        --create-parent one never existed and is removed."""
+        if created:
+            if os.path.exists(parent_path):
+                os.remove(parent_path)
+        else:
+            write_text(parent_path, backup, crlf)
+
+    backup = None if created else parent_text
     write_text(parent_path, folded_text, crlf)
     if not args.no_gate:
         if args.dedupe_identical:
             try:
                 status, log, folded_text, dropped = dedupe_identical(parent_path, folded_text, crlf)
             except SystemExit:
-                write_text(parent_path, backup, crlf)
+                restore()
                 raise
             if dropped:
                 print(f"dedupe: dropped {len(dropped)} identical later definition(s): "
@@ -459,14 +529,20 @@ def cmd_fold(args):
             status, log = compile_gate(parent_path)
         print(f"compile gate: {status}")
         if status == "fail":
-            write_text(parent_path, backup, crlf)
+            restore()
             failed_out = parent_path + ".gate-failed.txt"
             write_text(failed_out, folded_text, crlf)
             print(f"(the text that failed the gate is kept at {failed_out}; delete it when done)")
             print(log[-4000:])
-            sys.exit("gate FAILED -- parent restored, partfiles untouched. Dedupe the reported "
+            sys.exit("gate FAILED -- "
+                     + ("the created parent was removed" if created else "parent restored")
+                     + ", partfiles untouched. Dedupe the reported "
                      "symbols by hand (or pass --dedupe-identical for textually identical copies) "
                      "and re-run.")
+
+    if created:
+        subprocess.run(["git", "-C", B5, "add", "--", os.path.relpath(parent_path, B5)],
+                       capture_output=True, text=True)
 
     # delete the partfiles (tracked -> git rm; untracked -> unlink)
     for f in victims:
@@ -500,9 +576,12 @@ def cmd_fold(args):
     print(f"mount lines removed: {removed}"
           + ("; the parent's mount line ADDED in the first partfile's slot" if parent_added else "")
           + f"; {BAT} now {cr} CRLF lines")
+    if parent_rel not in mounted and not parent_added:
+        print(f"WARNING: {parent_rel} carries the bodies now but has NO mount line (none of the "
+              f"partfiles had one either) -- add it by hand or the link never sees them.")
     print("\nNext:")
     print(f"  git -C b5-decomp add {os.path.relpath(parent_path, B5)}  && commit: "
-          f"'fold: {args.parent} partfiles back into {args.parent}.cpp (issue #20)'")
+          f"'fold: {args.parent} partfiles into {parent_base}.cpp (issue #20)'")
     print("  git add tools/build/build_game_exe.bat  (that file only) && commit the mount change")
     print("  then build the exe -- the fold changed which TU carries the bodies, so LINK it.")
 
@@ -541,6 +620,12 @@ def main():
     f.add_argument("--dry-run", action="store_true")
     f.add_argument("--include-unmounted", action="store_true")
     f.add_argument("--no-gate", action="store_true")
+    f.add_argument("--parent-file", metavar="BASENAME",
+                   help="the parent TU's basename when it is not <Parent>.cpp (e.g. --parent-file "
+                        "BrnPropManager for the PropManager_w*.cpp family)")
+    f.add_argument("--create-parent", action="store_true",
+                   help="the family has no parent TU at all: synthesise <Parent>.cpp from the partfiles "
+                        "(mount order) and mount it in the first partfile's slot")
     f.add_argument("--mount-parent", action="store_true",
                    help="allow folding into a parent that is not mounted itself (adds its mount line; LINK before committing)")
     f.add_argument("--dedupe-identical", action="store_true",
