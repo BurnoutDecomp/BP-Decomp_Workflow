@@ -5013,6 +5013,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  Num_ShotList @0x821F5948 (~20 committed callers, no body and no home before today);
   rem  iceanim.cpp bodies GetAnimGuid (no X360 symbol -- inlined -- but likewise homeless).
   echo "%SRC%\GameSource\AttribSys\Generated\classes\shotgroup.cpp"
+  echo "%SRC%\GameSource\AttribSys\Generated\classes\songlist.cpp"
   echo "%SRC%\GameSource\AttribSys\Generated\classes\iceanim.cpp"
   rem ---- l2-into-dev merge link closure (dev waves grew shared TUs; their homes join;
   rem      the cascade-heavy waves -- ScreenFlow/HudFlow new states, CgsRegistry schema
