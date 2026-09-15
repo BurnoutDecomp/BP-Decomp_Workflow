@@ -4921,7 +4921,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadX360.cpp"
   rem ---- dev merge (2026-08-07): BrnGuiProfile's ProfileManager::CopyImageToBuffer now ----
   rem ---- forwards to the real SaveLoadSystem::CopyImageToBuffer body in wB_03.        ----
-  echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadX360_wB_03.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoad.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuideIntegration.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModuleIO_OutputBuffer.cpp"
