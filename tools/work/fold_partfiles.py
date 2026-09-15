@@ -123,14 +123,52 @@ def cmd_scan(_args):
         print(f"{n:5d} {n_mounted:7d} {odd:3d} {lines:6d}  {parent}  ({d}){flag}")
 
 
-def classify(rel):
+def bat_mentions():
+    """Basenames named in the .bat's `rem` commentary -- a partfile that is talked about but not
+    mounted was EXCLUDED ON PURPOSE (usually a measured unresolved-external cost), not forgotten."""
+    bat, _ = read_text(BAT)
+    out = set()
+    for line in bat.replace("\r\n", "\n").split("\n"):
+        if line.lstrip().lower().startswith("rem"):
+            for m in re.finditer(r"([A-Za-z0-9]+_w[A-Z]+[0-9]*[a-z]?(?:_[A-Za-z0-9]+)?)(?:\.cpp)?", line):
+                out.add(m.group(1).lower())
+    return out
+
+
+# Families the .bat's rem notes exclude ON PURPOSE (a measured unresolved-external cost); the note
+# to read is quoted so the audit does not send anyone re-deriving it.
+DELIBERATE = {
+    "brngamestatestreetmanager": "build_game_exe.bat 'The REST of the StreetManager family stays out' "
+                                 "(score-entry factories / ProcessScoreRequestEvent / road-rules tallies: LNK2019 chains)",
+    "brnstreetmanagerdebugcomponent": "build_game_exe.bat 'the embedded StreetManagerDebugComponent's vtable' "
+                                      "(16 link-measured externals; two vtable slots gated in BrnBaselineLinkStubs.cpp)",
+}
+CONTENT_ONLINE = re.compile(r"dirtysdk|dirtysock|LobbyNameCmp|online", re.I)
+CONTENT_UNHOMED = re.compile(r"not[- ]yet[- ]homed|un-homed|unhomed", re.I)
+
+
+def classify(rel, mentioned=frozenset()):
     low = rel.lower()
-    if "x360" in low or "/sdks/" in low or "massivead" in low or "realmc" in low or "xcam" in low \
-            or "xgraphics" in low:
+    base = os.path.splitext(os.path.basename(rel))[0].lower()
+    parent = re.sub(r"_w[a-z]+[0-9]*[a-z]?(?:_[^.]+)?$", "", base)
+    if parent in DELIBERATE:
+        return "deliberately excluded -- " + DELIBERATE[parent]
+    if base in mentioned or re.sub(r"_[0-9]{2}$", "", base) in mentioned:
+        return "deliberately excluded -- named in build_game_exe.bat's rem notes (read the reason there)"
+    if "x360" in low or low.startswith("sdks/") or "/sdks/" in low or "massivead" in low or "realmc" in low             or "xcam" in low or "xgraphics" in low:
         return "platform-x360/SDK (excluded from the PC build by design)"
-    if "online" in low or "network" in low or "enteronline" in low or "scoreboards" in low \
-            or "playerstats" in low or "gameroom" in low:
+    if "online" in low or "network" in low or "enteronline" in low or "scoreboards" in low             or "playerstats" in low or "gameroom" in low:
         return "online (no PC network layer yet)"
+    # Content sniff of the header comment block (first 40 lines).
+    try:
+        with open(os.path.join(SRC, rel), encoding="utf-8", errors="replace") as fh:
+            head = "".join(fh.readline() for _ in range(40))
+    except OSError:
+        head = ""
+    if CONTENT_ONLINE.search(head):
+        return "online (no PC network layer yet) -- by header comment"
+    if CONTENT_UNHOMED.search(head):
+        return "declares un-homed callees (a link cost) -- home the callees, then mount"
     return "UNCLASSIFIED -- decide: mount it or delete it"
 
 
@@ -140,10 +178,11 @@ def cmd_audit(_args):
     unm = [(dp, f) for dp, f, *_ in parts if rel_src(os.path.join(dp, f)) not in mounted]
     unm.sort(key=lambda t: rel_src(os.path.join(*t)))
     print(f"{len(unm)} of {len(parts)} partfiles are NOT mounted in build_game_exe.bat")
+    mentioned = bat_mentions()
     groups = collections.defaultdict(list)
     for dp, f in unm:
         rel = rel_src(os.path.join(dp, f))
-        groups[classify(rel)].append(rel)
+        groups[classify(rel, mentioned)].append(rel)
     for k in sorted(groups):
         print(f"\n[{k}]  ({len(groups[k])})")
         for rel in groups[k]:
