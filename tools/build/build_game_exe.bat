@@ -1172,10 +1172,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsIntervalList.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsIntervalStack.cpp"
   rem  ---- wave Q5 round 2 (2026-08-18): the sweeper mutators + the OverlapGeneration IO buffers.
-  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsSceneSweeper_wQ5_01.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsIntervalList_wQ5_01.cpp"
-  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsSceneSweeper_wQ5_02.cpp"
-  echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsSceneSweeper_wQ5_03.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapGenerationModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\CgsOverlapGenerationModuleIO_OutputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ContactGen\EventQueue_OverlapGenerationInAddBody_16384_Construct.cpp"
@@ -3191,7 +3188,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  ProgressionManager/OutputBuffer symbols. That is also why GameStateModule::Construct does
   rem  not call StreetManager::Construct yet (its first statement constructs that component) --
   rem  see the DELETE-WHEN block there.
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_01.cpp"
   rem  ---- leg 3: THE DISTRICT MAP (2026-08-11) --------------------------------------------
   rem  GameStateModule::Prepare @0x8239E578 stage 23 (E_PREPARESTAGE_STREET_MANAGER) is
   rem  `StreetManager::Prepare(this+284520, out, this+232384)` @0x82350900 == LoadAIData &&
@@ -3236,6 +3232,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  duplicate-symbol hunt. NET NEW UNRESOLVED FOR THESE THREE TUs: ZERO.
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_Prepare2.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_SetupParRivals.cpp"
+  rem [issue #20 fold 2026-09-15] the parent TU itself: it now carries the bodies of the nine
+  rem wave-B/C partfiles that used to be mounted here one by one.
+  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_FindRivalsByDistrict.cpp"
   rem *** PAUSE-SCREEN STAT PANEL (2026-08-29): the three roads-ruled tallies
   rem  ProgressionManager::GetGameStats reads. wC_05 bodies GetNumberOfParShowTimeRoadsRuled
@@ -3243,18 +3242,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  (+ GetChallengeParScore); wC_04 bodies GetNumberOfCompleteRoadsRuledByLocalPlayer
   rem  @0x8233F350 (+ FillInRoadRulesQuery). FindRivalsByDistrict was already split out of
   rem  wC_04 into its own mounted partfile, so there is no duplicate definition.
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_04.cpp"
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_05.cpp"
   rem  wC_06 (NEW) bodies the two predicates all three tallies count with --
   rem  HasPlayerBeatenParScore @0x823361D0 + HasPlayerBeatenFriendScore @0x823362A0 -- and
   rem  wB_02 supplies the two score-table fetches they call (GetChallengeUserScore
   rem  @0x82335E08 / GetChallengeFriendHighScore @0x82335F30). All four MUST mount together.
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_06.cpp"
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_02.cpp"
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_00.cpp"
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_09.cpp"
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_10.cpp"
-  echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wC_01.cpp"
   rem  ??? STILL OUT: the rest of BrnGameStateStreetManager.cpp (the two score-entry
   rem  factories), _wC_02.cpp (ProcessScoreRequestEvent) and _wC_04.cpp (the two road-rules
   rem  tallies). Their costs are the measured numbers above; mounting any of them anyway is
@@ -5334,29 +5325,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem stunt run on frame 1.
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManagerDebugComponent.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_00.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_01.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_02.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_03.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_04.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_05.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_06.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_07.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_08.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_09.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_10.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_11.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_12.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_13.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_14.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wB_15.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_00.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_01.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_02.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_03.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_04.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_05.cpp"
-  echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager_wC_06.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\ObjectPool_CarLeapingData_7.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\ObjectPool_StoredLeapingData_7.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager.cpp"
@@ -5484,27 +5452,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem does not expose by name yet.
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_00.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_01.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_02.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_03.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_04.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_05.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_06.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_07.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_08.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_09.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_10.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_11.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_12.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wRR.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wB_res.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wC_00.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wC_01.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wC_02.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wC_03.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wO_00.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_wO_01.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_gUI_01.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_gUI_02.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_gUI_03.cpp"
@@ -5512,10 +5459,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageDirector.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageDirector_gUI_00.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageDirector_gUI_01.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_01.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_02.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_03.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_05.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiFreeburnChallengeManager.cpp"
   echo "%SRC%\GameSource\GameState\BrnCgsPlayerName.cpp"
   echo "%SRC%\SharedClasses\DataLists\BrnHudMessageController.cpp"
@@ -5595,14 +5538,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- accessor legs the renderer/manager link against, and the progression   ----
   rem ---- event-record accessors.                                                ----
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\ImRenderBuffer\CgsIm2dRenderBuffer.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_04.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_07.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_09.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_10.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wH3b.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wJ_01.cpp"
   rem map-event exit producer: GuiCache::HandleSpecificPreSetRacesEvent (RecEvent arm 190)
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_13.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiEventDrawEventIcons.cpp"
   echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRankProgressResponse.cpp"
   rem ---- H3c link closure (2026-08-25): the sat-nav icon pass. UpdateSatNavIcons reads the
@@ -5610,7 +5546,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  and GetSatNavIconStateForRival reads GetEventPositionOfRaceCar for the race-mode filter.
   rem  Both homes were reconstructed and simply never mounted.
   echo "%SRC%\GameSource\Gui\SatNav\BrnEventIconManager.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_06.cpp"
   echo "%SRC%\SharedClasses\Progression\BrnRaceEventData.cpp"
   rem [progression wave 2026-09-06, lane lifecycle] BrnProgression::Race's four bodies
   rem (Construct @0x826767D8, AddLandmark @0x82354660, GetStartLandmarkIndex @0x823545F0,
@@ -5938,7 +5873,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   BrnGuiCache_wS1.cpp. The Construct scaffold in BrnHudStatesLinkStubs.cpp was
   rem   deleted in the same change.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnRoadRuleShotComponent.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wS1.cpp"
   rem ---- stunt-race UI wave 2026-08-27: RACE_MAIN becomes REAL. The base TU (the
   rem   21-entry resource table + OnEnter/OnLeave/UpdateSetupState family) + three
   rem   partfiles (wS2 Update/WFInit/Permenant/Reveal; wS3 Running/EventInfo/countdown;
@@ -5960,7 +5894,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   UsernameCompare/GetCurrentSkill) -- their RACE_MAIN-facing symbols are gated in
   rem   BrnHudStatesLinkStubs.cpp instead, all runtime-dead on the mode-7 path.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnOnlineTimeoutTimerComponent.cpp"
-  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_08.cpp"
   rem  The ChallengeSelector pair mounts together: the second file is a part-file of the same TU and holds the sole SelectAvailableChallenge body.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnChallengeSelector.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnChallengeSelector_wL_01.cpp"
