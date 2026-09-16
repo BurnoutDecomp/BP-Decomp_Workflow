@@ -3293,6 +3293,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\Sound\Vehicles\BrnAIVehicleState.cpp"
   echo "%SRC%\GameSource\Sound\Vehicles\Engines\BrnAIPhysicsControl.cpp"
   echo "%SRC%\GameSource\Sound\Vehicles\Wheels\BrnAISkidEffect.cpp"
+  echo "%SRC%\GameSource\Sound\Vehicles\Environment\BrnCarStereoEffect.cpp"
   echo "%SRC%\GameSource\Sound\Vehicles\BrnPlayerVehicleStateManager.cpp"
   echo "%SRC%\GameSource\Sound\Vehicles\BrnPlayerVehicleState.cpp"
   echo "%SRC%\GameSource\Sound\Vehicles\BrnVehicleAudioRegistration.cpp"
