@@ -5497,6 +5497,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  lands the two foreign-TU lifecycle bodies OnLeave @0x824970D0 + Update @0x824AC808 and
   rem  the scaffolds are deleted. Table::Update @0x824E4890 joins BrnTable.cpp for its slot-5 call.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions.cpp"
   echo "%SRC%\GameSource\Gui\Components\BrnCarSelectOnlinePlayerListItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnManufacturerIcon.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnPlayerStatsBar.cpp"
