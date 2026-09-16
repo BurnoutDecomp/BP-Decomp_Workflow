@@ -5527,6 +5527,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiWorldDataController.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenLoading.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavOptions.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavAccountManagement.cpp"
   rem [2026-09-16] CN_STATS, the pause menu's STATS tab. Its bodies have been in the tree
   rem  since the dev wave but the header declared only GetResourcesToLoad, so the TU could
   rem  not compile and was never on this line -- BrnScreenFlow.cpp:303 registers the state
