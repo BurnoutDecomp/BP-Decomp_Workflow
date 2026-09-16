@@ -5454,8 +5454,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- the SCREEN flow container + its committed state set (2026-07-12) ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\BrnScreenFlow.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenStatesLinkStubs.cpp"
-  rem (the dev-wave state TUs -- CarSelectOnlineEnd/CrashNavStats/CrashNavEnterOnlineX360/
-  rem  PreRaceFlyBy -- bind when the ScreenFlow/HudFlow pool growth is integrated)
+  rem (the dev-wave state TUs -- CarSelectOnlineEnd/CrashNavEnterOnlineX360/PreRaceFlyBy --
+  rem  bind when the ScreenFlow/HudFlow pool growth is integrated; CrashNavStats is mounted
+  rem  with the rest of the CrashNav screen states below, 2026-09-16)
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnIntro.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnInGame.cpp"
   rem ---- car-select screen (2026-08-02): CarSelectVehicle derives from CarSelectMain, so the
@@ -5518,6 +5519,13 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiWorldDataController.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenLoading.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavOptions.cpp"
+  rem [2026-09-16] CN_STATS, the pause menu's STATS tab. Its bodies have been in the tree
+  rem  since the dev wave but the header declared only GetResourcesToLoad, so the TU could
+  rem  not compile and was never on this line -- BrnScreenFlow.cpp:303 registers the state
+  rem  and its code never ran. Header grown + Update @0x824D8318 + the three .rdata tables
+  rem  (36 apt field names, the 4 observed event ids, the apt resource id) read out of the
+  rem  image; without the mount the class's out-of-line virtuals have no vtable.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavStats.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapMain.cpp"
   rem [p0 map-event wave 2026-09-08] CN_MAP_EVENT, the event-creation map screen.
