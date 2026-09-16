@@ -1387,7 +1387,16 @@ function Parse-ShoulderSchedule([string]$lsSpec) {
   }
   return @($lResult | Sort-Object At)
 }
-$script:shoulderTaps = Parse-ShoulderSchedule $ShoulderAt
+# ⭐ @(...) AT THE CALL SITE, not just inside the function. PowerShell UNROLLS a
+# one-element array on return, so under Windows PowerShell 5.1 a SINGLE -ShoulderAt
+# entry came back as a bare PSCustomObject whose .Count is $null -- the
+# `.Count -gt 0` guard below then read false and the bumper was NEVER PRESSED, with
+# no schedule line and no failure. (pwsh 7 gives every scalar .Count = 1, which is
+# why this only bites when the harness is driven from Windows PowerShell.) That is
+# precisely the silent-never-press mode Parse-ShoulderSchedule's banner exists to
+# stop. Measured 2026-09-16: two full pause-ring runs reached CN_D_DETAIL and never
+# toggled to CN_SETTINGS because of this.
+$script:shoulderTaps = @(Parse-ShoulderSchedule $ShoulderAt)
 
 # ---- -Boost: <sec>[:<periodSec>[:<holdSec>]] -------------------------------------------
 $script:boostAt     = -1.0
