@@ -3267,6 +3267,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowStates.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowInGameState.cpp"
   echo "%SRC%\GameSource\Sound\Module\BrnRootSoundModule.cpp"
+  rem [2026-09-16] EaTraxHelper -- five X360 symbols that had NO TYPE HOME anywhere in the
+  rem  tree (GetNumSongs / GetSongRefSpec / GetSongName / GetArtistName / GetAlbumName), which
+  rem  is why BrnGuiAlwaysAvailableComponentsManager had to FLAG its in-game EATrax cases.
+  echo "%SRC%\GameSource\Sound\Module\SharedIO\BrnPreUpdateSharedIo.cpp"
   rem ---- the root sound module IO accessors (b5-decomp 922b2f53, audit F-P6-17/F-P5-10): the
   rem  four RootInput/OutputBuffer getters LoadingScriptedState::LoadSoundModule + Update call.
   echo "%SRC%\GameSource\Sound\Module\BrnRootSoundModuleIO.cpp"
@@ -5526,6 +5530,10 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  (36 apt field names, the 4 observed event ids, the apt resource id) read out of the
   rem  image; without the mount the class's out-of-line virtuals have no vtable.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavStats.cpp"
+  rem [2026-09-16] CN_TRAX, the pause menu's EA TRAX tab -- reachable in the shipped flow
+  rem  (BRNSCREENFSM: CN_SETTINGS --"TO_TRAX"--> 94CN_TRAX). It was a header-only shell, so the
+  rem  tab registered for no events and nothing on it worked; 16 console bodies now back it.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavTrax.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapMain.cpp"
   rem [p0 map-event wave 2026-09-08] CN_MAP_EVENT, the event-creation map screen.
@@ -5537,6 +5545,10 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapEvent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapSoundData.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavPanel.cpp"
+  rem [2026-09-16] the EA Trax track list. This TU held only GetTrackMode/SetTrackMode over a
+  rem  reserved byte span and was never mounted; the class now derives from CgsGui::GuiComponent
+  rem  and carries the seven remaining console bodies.
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnEATraxMenuComponent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavLegend.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnRoadPanel.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnEventPanel.cpp"
