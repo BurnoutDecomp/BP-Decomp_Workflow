@@ -5360,6 +5360,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SharedClasses\DataLists\BrnHudMessageController.cpp"
   echo "%SRC%\SharedClasses\DataLists\ChallengeList.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModule_AddGuiEvent_Inst.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiEventTypeDefs.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiHudMessageType.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnInGameMessagesComponent.cpp"
   rem ---- end gateui wave block
