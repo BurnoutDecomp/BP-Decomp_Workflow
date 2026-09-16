@@ -267,6 +267,16 @@ param(
                                  #   after the last one. Anything faster is swallowed by the game.
                                  #   The hold is 2 poll ticks: this loop polls every 200 ms, so a
                                  #   shorter one can fall between two polls and never be pressed.
+  [string]$CamButtonAt = "",     # opt IN: press a CAMERA button. "<sec>:<V|B>[:<holdSec>]",
+                                 #   comma-separated, on the same DRIVING time base as -ShoulderAt.
+                                 #     V = LOOKBACK   (game action 6, the rear-view hold)
+                                 #     B = CHANGEVIEW (game action 5, the camera-cycle button)
+                                 #   These are the GAME actions the DIRECTOR reads, NOT the GUI
+                                 #   shoulder rows -ShoulderAt drives. One physical L1 press emits
+                                 #   BOTH 6 and 54 (KA_DEFAULT_GAME_INPUT_MAPPING row 12), and the
+                                 #   harness could previously only reach 54 -- so no run could ever
+                                 #   exercise the rear-view camera. Default hold 2.0 s; LOOKBACK
+                                 #   needs > 0.1 s to clear its debounce (flt_82CDC074).
   [string]$ShoulderAt  = "",     # opt IN: press ONE bumper. "<sec>:<L|R>[:<holdSec>]", comma-
                                  #   separated for repeats -- e.g. "24:R:1.5,44:L:1.5". Seconds are
                                  #   on the SAME DRIVING time base as -PauseAt, so a bumper press can
@@ -1398,6 +1408,48 @@ function Parse-ShoulderSchedule([string]$lsSpec) {
 # toggled to CN_SETTINGS because of this.
 $script:shoulderTaps = @(Parse-ShoulderSchedule $ShoulderAt)
 
+# -CamButtonAt: same shape and the same 5.1 array-unroll guard as the bumper schedule above
+# (a SINGLE entry must still arrive as a one-element ARRAY, or .Count reads false and the
+# button is never pressed -- the bug that made one-entry -ShoulderAt silently do nothing).
+function Parse-CamButtonSchedule([string]$lsSpec) {
+  $laOut = @()
+  if ([string]::IsNullOrWhiteSpace($lsSpec)) { return $laOut }
+  foreach ($lsEntry in $lsSpec.Split(",")) {
+    $lsTrim = $lsEntry.Trim()
+    if ($lsTrim -eq "") { continue }
+    $laFields = $lsTrim.Split(":")
+    if ($laFields.Count -lt 2 -or $laFields.Count -gt 3) {
+      Write-Host "[flow] FAIL: -CamButtonAt entry '$lsTrim' is not <sec>:<V|B>[:<holdSec>]."; exit 1
+    }
+    $lfAt = 0.0
+    if (-not [double]::TryParse($laFields[0].Trim(), [Globalization.NumberStyles]::Float,
+                                [Globalization.CultureInfo]::InvariantCulture, [ref]$lfAt)) {
+      Write-Host "[flow] FAIL: -CamButtonAt time '$($laFields[0])' is not a number."; exit 1
+    }
+    $lsWhich = $laFields[1].Trim().ToUpper()
+    if ($lsWhich -ne "V" -and $lsWhich -ne "B") {
+      Write-Host "[flow] FAIL: -CamButtonAt kind '$($laFields[1])' is not V (lookback) or B (changeview)."; exit 1
+    }
+    $lfHold = 2.0
+    if ($laFields.Count -eq 3) {
+      if (-not [double]::TryParse($laFields[2].Trim(), [Globalization.NumberStyles]::Float,
+                                  [Globalization.CultureInfo]::InvariantCulture, [ref]$lfHold)) {
+        Write-Host "[flow] FAIL: -CamButtonAt hold '$($laFields[2])' is not a number."; exit 1
+      }
+    }
+    $laOut += ,([pscustomobject]@{ At = $lfAt; Which = $lsWhich; Hold = $lfHold })
+  }
+  return $laOut
+}
+$script:camButtonTaps = @(Parse-CamButtonSchedule $CamButtonAt)
+$script:camButtonDown = ""
+if ($script:camButtonTaps.Count -gt 0) {
+  $lsCamSched = ($script:camButtonTaps | ForEach-Object {
+      $lsName = $(if ($_.Which -eq "V") { "LOOKBACK" } else { "CHANGEVIEW" })
+      ("{0}@DRIVING+{1:f1}s for {2:f1}s" -f $lsName, $_.At, $_.Hold) }) -join ", "
+  Write-Host ("[flow] CAMBUTTON schedule: {0} press(es) -- {1}" -f $script:camButtonTaps.Count, $lsCamSched)
+}
+
 # ---- -Boost: <sec>[:<periodSec>[:<holdSec>]] -------------------------------------------
 $script:boostAt     = -1.0
 $script:boostPeriod = 1.0
@@ -1526,6 +1578,10 @@ $evShldR = New-Object System.Threading.EventWaitHandle($false, [System.Threading
 # MANUAL-RESET like the other driving rows: Set() is press, Reset() is release, and the pressed
 # EDGE between them is what mbBoostBounce is built from. See the -Boost banner in param().
 $evBoost = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_Boost" + $slotTag))
+# The two CAMERA game actions (6 LOOKBACK / 5 CHANGEVIEW). MANUAL-RESET, like the driving
+# rows: lookback is a HOLD with a 0.1 s debounce, so a tap channel could not express it.
+$evLookback   = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_Lookback" + $slotTag))
+$evChangeView = New-Object System.Threading.EventWaitHandle($false, [System.Threading.EventResetMode]::ManualReset, ("Local\BurnoutPC_Input_ChangeView" + $slotTag))
 foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evStrF25,$evStrF50,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
 
 # ⛔⛔ RELEASE THE HOLDS ON A FAILURE PATH TOO (showtime cross-run hazard, 2026-08-29).
@@ -2102,6 +2158,26 @@ while ($true) {
       $lsState = $(if ($lsWant -eq '') { 'BOTH UP' } else { "$($lsWant)B DOWN" })
       Write-Host ("[flow] BUMPER {0,-8} at {1,6:f1}s (DRIVING+{2:f1}s)" -f $lsState, $elapsed, $sinceDrivingS)
       $inputLog += ("bumper {0,-8} run={1,6:f1}s DRIVING+{2:f1}s" -f $lsState, $elapsed, $sinceDrivingS)
+    }
+  }
+
+  # ---- the CAMERA buttons (-CamButtonAt) -------------------------------------------------
+  # Same change-only shape as the bumpers: the desired state is the newest entry whose window
+  # covers now, so overlapping entries are well-defined and no button is left stuck down.
+  if ($phase -eq 'DRIVING' -and $script:camButtonTaps.Count -gt 0) {
+    $sinceDrivingCam = ((Get-Date) - $drivingAt).TotalSeconds
+    $lsWantCam = ''
+    foreach ($lCam in $script:camButtonTaps) {
+      if ($sinceDrivingCam -ge $lCam.At -and $sinceDrivingCam -lt ($lCam.At + $lCam.Hold)) { $lsWantCam = $lCam.Which }
+    }
+    if ($lsWantCam -ne $script:camButtonDown) {
+      $script:camButtonDown = $lsWantCam
+      $evLookback.Reset() | Out-Null; $evChangeView.Reset() | Out-Null
+      if     ($lsWantCam -eq 'V') { $evLookback.Set()   | Out-Null }
+      elseif ($lsWantCam -eq 'B') { $evChangeView.Set() | Out-Null }
+      $lsCamState = $(if ($lsWantCam -eq '') { 'ALL UP' } elseif ($lsWantCam -eq 'V') { 'LOOKBACK DOWN' } else { 'CHANGEVIEW DOWN' })
+      Write-Host ("[flow] CAMBUTTON {0,-16} at {1,6:f1}s (DRIVING+{2:f1}s)" -f $lsCamState, $elapsed, $sinceDrivingCam)
+      $inputLog += ("cambutton {0,-16} run={1,6:f1}s DRIVING+{2:f1}s" -f $lsCamState, $elapsed, $sinceDrivingCam)
     }
   }
 
