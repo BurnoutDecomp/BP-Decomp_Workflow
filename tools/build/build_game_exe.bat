@@ -3894,6 +3894,10 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\SceneManager\Zones\Resources\ZoneListResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Zones\Zone.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\CgsSoundUtils.cpp"
+  rem [2026-09-16] CgsSound::Utils::IntClamp @0x826895D0 lives here and had never been
+  rem  mounted -- the TU had a DEFINITION and no declaration anywhere, so nothing could
+  rem  call it and nothing missed it. The HUD game-mode audio lane calls it twice.
+  echo "%SRC%\GameShared\GameClasses\Numeric\CgsBranchlessOperations.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\CgsMemBase.cpp"
   rem helpers and stay gate-only. Mounted 2026-08-25 faithful-audio-engine phase A1.
   rem SetAllocator; the handle-family TUs have unreconstructed cross-TU template
