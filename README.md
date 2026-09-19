@@ -73,6 +73,31 @@ Addresses are build-local and must not be treated as stable across binaries.
 Generated review packets under `progress/reviews/` and vendor Markdown under
 `b5-decomp/vendor/` are artifacts/upstream documentation, not primary workflow docs.
 
+## Evidence: how close to the console is it?
+
+Every status in the ledger is something a person declared. Three static audits measure
+the reconstruction against the console itself, with no judgement involved; CI runs them
+and the dashboard at <https://decomp.adriwin.fr> draws its **Verified vs Console** panel
+from their output. They are a ratchet, not byte-matching: a function they cannot fault is
+"nothing these tools can name differs", never "identical".
+
+| Tier | Tool | Runs | Compares | Output |
+| --- | --- | --- | --- | --- |
+| Glue audit | [`tools/re/funcaudit.py`](tools/re/funcaudit.py) | every b5-decomp commit | each reconstructed body vs the console's pseudocode: missing bodies, switch case ids, event posts, named callees, asserts; log strings and uncited data as context | `progress/funcaudit.json` |
+| Stub inventory | [`tools/re/stubaudit.py`](tools/re/stubaudit.py) | every b5-decomp commit | every body that is still a stand-in, tiered, with the reconstructed callers that reach it today | `progress/stubs.json` |
+| Instruction shape | [`tools/re/asmaudit.py`](tools/re/asmaudit.py) | every published build | each function of the **built exe** vs the console's machine code: named callees, conditional-branch count, integer and float constants; tiers A same shape / B close / C diverges / T trivial; `[FLAG PC ...]` markers counted, never discounted | `progress/asmaudit.json` |
+
+What they cannot see: argument order, field offsets, the arithmetic between two
+constants, a `<` that should be `<=`, anything the console does through a vtable.
+[`tools/re/asmmatch.py`](tools/re/asmmatch.py) is the exact tier for the functions that
+can take it: PowerPC instruction streams diffed decomp.me-style (`--decfigs` against the
+PS3 rendering; `--compile` with the Xbox 360 SDK, `$XEDK`).
+
+For agents the same evidence is one command away: `work audit <tu>` (also printed by
+`work show <tu>`), `python tools/re/asmaudit.py --func NAME --asm` for one function's
+two instruction streams. The rules for acting on it are in [`AGENTS.md`](AGENTS.md),
+verification rung 2c.
+
 ## Prerequisites
 
 These are the prerequisites for ledger/reconstruction work. **To build the
