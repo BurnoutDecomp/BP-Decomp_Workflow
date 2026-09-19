@@ -146,6 +146,11 @@ jobs:
           set -euo pipefail
           git config user.name  "bp-reconcile-bot"
           git config user.email "bp-reconcile-bot@users.noreply.github.com"
+          # "Init required submodules" added a GLOBAL Authorization extraheader for the
+          # submodule fetch; actions/checkout keeps its own in the repo config. Both on one
+          # request = "Duplicate header: Authorization" -> HTTP 400 on every push (run
+          # 35465193124). The submodules are long fetched: drop the global one.
+          git config --global --unset-all http.https://github.com/.extraheader || true
           git add progress/asmaudit.json
           if git diff --cached --quiet; then
             echo "asmaudit unchanged"
@@ -153,12 +158,23 @@ jobs:
           fi
           git commit -q -m "chore: instruction-shape audit of build ${GITHUB_SHA:0:12}" \
             -m "Automated by build-and-publish: tools/re/asmaudit.py on the exe this run built, against the console's machine code (progress/asmaudit_artist.json.gz)."
-          # main moves under us (reconcile commits); rebase our one file and retry.
+          # main moves under us (reconcile commits, a hand-run audit); rebase our one file
+          # and retry. If the rebase conflicts on the audit itself, this run's is the newer.
           for attempt in 1 2 3 4 5; do
-            if git pull -q --rebase origin main && git push -q origin HEAD:main; then
+            if ! git pull -q --rebase origin main; then
+              if git status --porcelain | grep -q "^UU progress/asmaudit.json"; then
+                git checkout --theirs progress/asmaudit.json
+                git add progress/asmaudit.json
+                GIT_EDITOR=true git rebase --continue || { git rebase --abort; sleep 15; continue; }
+              else
+                git rebase --abort 2>/dev/null || true
+                sleep 15
+                continue
+              fi
+            fi
+            if git push -q origin HEAD:main; then
               echo "pushed"; exit 0
             fi
-            git rebase --abort 2>/dev/null || true
             sleep 15
           done
           echo "::warning title=asmaudit::could not push progress/asmaudit.json after 5 attempts"
