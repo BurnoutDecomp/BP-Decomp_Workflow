@@ -172,8 +172,13 @@ def format_asm(func_names, file=None, max_funcs=20):
             lines.append(f"        constants only on the console: {d['imm_only_console']}")
         if d.get("imm_only_pc"):
             lines.append(f"        constants only in our exe    : {d['imm_only_pc']}")
+        flags = r.get("flags") or {}
+        if flags.get("total"):
+            lines.append("        flagged PC additions in the body (they compile in and are MEANT to differ): "
+                         + ", ".join(f"{n} [FLAG {k}]" for k, n in (flags.get("kinds") or {}).items()))
         for note in r.get("notes") or []:
-            lines.append(f"        note: {note}")
+            if not note.startswith("flagged in source"):
+                lines.append(f"        note: {note}")
     if len(ranked) > max_funcs:
         lines.append(f"    ... +{len(ranked) - max_funcs} more; python tools/re/asmaudit.py --func NAME [--asm] for one function")
     return "\n".join(lines)

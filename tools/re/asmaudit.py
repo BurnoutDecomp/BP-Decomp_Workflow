@@ -761,6 +761,43 @@ def pair_and_score(name, entry, pack, pc):
     return row
 
 
+FLAG_MARK_RE = re.compile(r"\[FLAG([^\]]*)\]")
+
+
+def source_index():
+    """funcaudit's index of every PC definition (body text included), or None without a tree."""
+    try:
+        import funcaudit
+        if not os.path.isdir(funcaudit.SRC):
+            return None
+        return funcaudit.build_pc_index(), funcaudit
+    except Exception as exc:  # the audit must still run on a box without the tree
+        print(f"  (no source index: {exc}; flags will not be counted)")
+        return None
+
+
+def flag_counts(src, name, primary_file):
+    """The `[FLAG ...]` markers inside this function's own body, by kind: the PC additions
+    (bring-up gates, boot gates, witnesses, diagnostics) that compile into the exe and
+    are MEANT to differ from the console. Reported, never discounted."""
+    if src is None:
+        return None
+    idx, _ = src
+    try:
+        d, _ndefs = idx.find(name, primary_file or "")
+    except Exception:
+        return None
+    if d is None:
+        return None
+    kinds = collections.Counter()
+    for m in FLAG_MARK_RE.finditer(d.raw or ""):
+        kind = re.sub(r"\s+", " ", m.group(1)).strip(" :-") or "unmarked"
+        kinds[kind] += 1
+    if not kinds:
+        return None
+    return {"total": sum(kinds.values()), "kinds": dict(sorted(kinds.items()))}
+
+
 def run_audit(args):
     t0 = time.time()
     pack = load_pack(args.pack)
@@ -783,6 +820,7 @@ def run_audit(args):
     for name, entry in ident.items():
         if not audit_file(entry.get("primary_file")) and name in tu_file_of:
             entry["primary_file"] = tu_file_of[name]
+    src = source_index()
     tu = args.tu.replace("\\", "/") if args.tu else None
     results = []
     no_export = 0
@@ -800,16 +838,24 @@ def run_audit(args):
         if row["tier"] == "X" and not args.tu:
             not_in_exe += 1          # counted, not listed: 17k rows the server derives itself
             continue
+        if row["tier"] != "X":
+            flags = flag_counts(src, name, entry.get("primary_file"))
+            if flags:
+                row["flags"] = flags
+                row.setdefault("notes", []).append(
+                    "flagged in source: " + ", ".join(f"{n} {k}" for k, n in flags["kinds"].items()))
         results.append(row)
     results.sort(key=lambda r: (r["file"] or "~", r["name"]))
     tiers = collections.Counter(r["tier"] for r in results)
     tiers["X"] += not_in_exe
+    flagged = sum(1 for r in results if r.get("flags"))
     scoreable = tiers["A"] + tiers["B"] + tiers["C"]
     scores = [r["score"] for r in results if r["score"] is not None and r["tier"] in "ABC"]
     stats = {
         "identity": len(ident), "no_export": no_export, "paired_in_exe": len(results) - (tiers["X"] - not_in_exe),
         "not_in_exe": tiers["X"], "A": tiers["A"], "B": tiers["B"], "C": tiers["C"], "T": tiers["T"],
         "scoreable": scoreable,
+        "flagged": flagged,
         "shape_percent": round(100.0 * tiers["A"] / scoreable, 1) if scoreable else 0.0,
         "mean_score": round(sum(scores) / len(scores), 1) if scores else 0.0,
         "files": len({r["file"] for r in results if r["file"]}),
@@ -890,6 +936,10 @@ def show_func(args):
     print(f"  tier {row['tier']}  score {row['score']}  components {row['components']}")
     for n in row["notes"]:
         print(f"  note: {n}")
+    flags = flag_counts(source_index(), name, entry.get("primary_file"))
+    if flags:
+        print("  flagged PC additions in the source body (they compile in and are MEANT to differ): "
+              + ", ".join(f"{n} [{k}]" for k, n in flags["kinds"].items()))
     cfp, pfp = prepare(pack["functions"][row["addr"]], pc.fingerprint(va))
     c = counts_block(cfp, pfp, full=True)
     print("  counts (console, pc): " + "  ".join(f"{k}={v[0]}/{v[1]}" for k, v in c.items()))
