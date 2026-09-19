@@ -185,6 +185,16 @@ and linker warnings/errors, so diagnostics can't scroll away.
 - Objects are named `<basename>.<crc32-of-path>.obj`, so two TUs sharing a
   basename can never silently clobber each other's object (the historical
   `device.cpp` / Sound Logic-vs-Playback hazard).
+- **Content mode for CI** (`BRN_EXE_HASH_DEPS=1`): staleness is judged by a
+  digest of the *content* of the source and every included header (recorded in
+  each object's `.d`), never by file times. A fresh checkout stamps every file
+  with the checkout time, so the default mtime rule would call a restored object
+  cache stale in full. The build workflow restores `build/game/obj/tu` from the
+  previous run (GitHub Actions cache, ~14 MB compressed) and sets this mode: a
+  run with a handful of changed TUs builds in about 3 minutes instead of 10; a
+  change to a widely included header, or a newer MSVC on the runner image, still
+  costs a full compile, as it should. New `.d` files carry the digest on every
+  box, so a developer checkout can switch modes at any time.
 
 ## Run
 
