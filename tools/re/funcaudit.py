@@ -447,7 +447,10 @@ class PcIndex(object):
     def add_file(self, path):
         rel = os.path.relpath(path, SRC).replace("\\", "/")
         with open(path, "r", encoding="utf-8", errors="replace") as fh:
-            raw = fh.read()
+            # CRLF checkouts (Windows autocrlf) must read exactly like CI's LF checkout, or
+            # the two disagree by a handful of functions (a `\r` inside a `case N:` line or a
+            # string literal is enough) and the per-commit history jumps between platforms.
+            raw = fh.read().replace("\r\n", "\n")
         self.files += 1
         self.add_enum_values(raw)
         code = strip_comments(raw)
@@ -530,8 +533,10 @@ class PcIndex(object):
 
 def build_pc_index():
     idx = PcIndex()
-    for root, _dirs, files in os.walk(SRC):
-        for f in files:
+    # deterministic order on every platform: overload collapse picks "the first definition"
+    for root, dirs, files in os.walk(SRC):
+        dirs.sort()
+        for f in sorted(files):
             if f.endswith((".cpp", ".h", ".hpp", ".inl", ".cxx", ".cc")):
                 try:
                     idx.add_file(os.path.join(root, f))
