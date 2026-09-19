@@ -56,6 +56,7 @@ work next             # read-only PREVIEW of the queue (reserves nothing)
 work show <tu>        # concise overview (functions, signatures, dependency TUs, console audit)
 work audit <tu>       # the per-commit evidence audit for the TU: what the console's functions do
                       #   that our bodies don't (case ids, event posts, callees, asserts, bodies) + stubs
+                      #   + the instruction shape of the BUILT exe vs the console (tier A/B/C per function)
 work show <tu> --full # the full dossier: pseudocode, locals, DecFIGS dwarfdump
                       #   hints, Feb-2007 original source, callee signatures
                       #   (--asm for disasm, -o to a file)
@@ -215,6 +216,17 @@ the maintainer invited you onto a server or you are running one.
    (`progress/funcaudit_features.json.gz`, no IDA exports needed). What it cannot see: inlined
    callees, virtual dispatch, argument ORDER and the VALUE of a cited constant (`tools/re/constaudit.py`
    / `findinit.py` for those) -- a clean audit is "nothing nameable differs", not a match.
+   **The third tier is the machine code.** The build job runs [`tools/re/asmaudit.py`](tools/re/asmaudit.py)
+   on every published exe and commits `progress/asmaudit.json`: each function of the exe we BUILT
+   against the console's own instructions -- the named callees, the conditional-branch count, the
+   integer and float constants. Tier A same shape, B close, C diverges, T trivial. Byte-matching
+   is impossible across the x64 widening, so a C is a diff to read, not a verdict: `python
+   tools/re/asmaudit.py --func NAME` prints which callees and constants exist on one side only
+   (`--asm` prints both streams); a callee MSVC inlined shows as "only on the console", a constant
+   we never load is exactly what it looks like. `work audit <tu>` prints the TU's rows worst-first.
+   For a function whose C++ is portable enough to compile for the console itself,
+   [`tools/re/asmmatch.py`](tools/re/asmmatch.py) diffs PowerPC streams decomp.me-style (`--decfigs`
+   against the PS3 rendering needs only the exports; `--compile` needs the Xbox 360 SDK, `$XEDK`).
 3. **Reviewer pass — YOU choose, per `progress/review.config.json`.** Not every TU
    needs a separate full review; an always-on Opus review per TU is the main quota sink.
    The config is a **menu + policy, not an auto-router**: you (the reverser agent) read

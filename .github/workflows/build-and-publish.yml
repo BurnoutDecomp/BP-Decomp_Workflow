@@ -28,6 +28,10 @@ concurrency:
   group: build-publish
   cancel-in-progress: false
 
+# The instruction-shape audit below commits progress/asmaudit.json back to main.
+permissions:
+  contents: write
+
 jobs:
   build:
     # PINNED, do not put back to windows-latest. On 2026-08-24 `windows-latest`
@@ -116,6 +120,64 @@ jobs:
             -WorkToken $env:WORK_TOKEN `
             -CommitSha $env:GITHUB_SHA `
             -Branch $env:GITHUB_REF_NAME
+
+      # ---- the third evidence tier: the exe this job just built vs the console's machine
+      # code (tools/re/asmaudit.py). It lives here and not in reconcile-status.yml because
+      # only this job has an exe + linker map. The console side comes from the committed
+      # pack progress/asmaudit_artist.json.gz (no IDA exports needed). Best effort: a tool
+      # failure must not turn a good build red.
+      - name: Instruction-shape audit (built exe vs the console)
+        id: asmaudit
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          python -m pip install --quiet capstone pefile
+          $b5 = (git -C b5-decomp rev-parse HEAD).Trim()
+          $author = (git -C b5-decomp log -1 --format=%an).Trim()
+          python tools/re/asmaudit.py --no-md `
+            --meta "b5_commit=$b5" --meta "b5_author=$author" `
+            --meta "exe_commit=$env:GITHUB_SHA" --meta "toolchain=$env:VCToolsVersion"
+
+      - name: Commit the audit
+        if: steps.asmaudit.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name  "bp-reconcile-bot"
+          git config user.email "bp-reconcile-bot@users.noreply.github.com"
+          git add progress/asmaudit.json
+          if git diff --cached --quiet; then
+            echo "asmaudit unchanged"
+            exit 0
+          fi
+          git commit -q -m "chore: instruction-shape audit of build ${GITHUB_SHA:0:12}" \
+            -m "Automated by build-and-publish: tools/re/asmaudit.py on the exe this run built, against the console's machine code (progress/asmaudit_artist.json.gz)."
+          # main moves under us (reconcile commits); rebase our one file and retry.
+          for attempt in 1 2 3 4 5; do
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then
+              echo "pushed"; exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            sleep 15
+          done
+          echo "::warning title=asmaudit::could not push progress/asmaudit.json after 5 attempts"
+
+      - name: Refresh public dashboard snapshot
+        if: steps.asmaudit.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        env:
+          WORK_SERVER: ${{ vars.WORK_SERVER || 'https://decomp.adriwin.fr/' }}
+          WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
+        run: |
+          set -euo pipefail
+          curl --fail --show-error --silent --retry 3 --retry-delay 5 \
+            -X POST \
+            -H "X-Work-Token: $WORK_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"branch":"main","reset":false}' \
+            "${WORK_SERVER%/}/admin/sync"
 
       # Keep the exe + Burnout_PC.cgsmap as a run artifact, for triaging crash
       # reports sent in by players.
