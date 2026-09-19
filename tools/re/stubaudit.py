@@ -90,7 +90,7 @@ class FileCache(object):
         if rel not in self.lines:
             try:
                 with open(os.path.join(SRC, rel), "r", encoding="utf-8", errors="replace") as fh:
-                    self.lines[rel] = fh.read().split("\n")
+                    self.lines[rel] = fh.read().replace("\r\n", "\n").split("\n")
             except OSError:
                 self.lines[rel] = []
         ls = self.lines[rel]
