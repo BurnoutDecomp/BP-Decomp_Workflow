@@ -71,9 +71,19 @@ directory, or a header whose stem names the class. "(N defs)" marks a collapsed 
 CACHE. Extracting features from 27k export JSONs takes minutes on this disk. Features are
 cached in scratch/funcaudit/exports.cache.json keyed by address + export mtime; delete it to
 force a rebuild. The PC index is rebuilt every run (~15 s).
+
+CI MODE (2026-09-19). The audit is what the work server publishes per commit, and CI has no IDA
+exports. It does not need them: everything the comparison reads from the console lives in the
+feature cache, so `--cache progress/funcaudit_features.json.gz` runs the whole audit from that
+file alone (a .gz cache is read-only; features missing from it and without an export on disk
+count as "no export"). `--meta key=value` stamps the JSON header (the b5-decomp commit and its
+author, so the server can attribute the per-commit delta); `--no-md` skips the markdown.
+Regenerate the cache on a box with the exports (`--all` without --cache, then gzip
+scratch/funcaudit/exports.cache.json) whenever the export set changes.
 ==============================================================================================
 """
 import argparse
+import gzip
 import json
 import os
 import posixpath
@@ -83,7 +93,7 @@ import time
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 IDENTITY = os.path.join(REPO, "progress", "identity.json")
-EXPORTS = os.path.join(REPO, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
+EXPORTS = os.environ.get("BP_IDA_EXPORTS") or os.path.join(REPO, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 SRC = os.path.join(REPO, "b5-decomp", "src")
 CACHE_DIR = os.path.join(REPO, "scratch", "funcaudit")
 CACHE = os.path.join(CACHE_DIR, "exports.cache.json")
@@ -209,6 +219,7 @@ def console_features(addr, path):
             continue
         if nm not in callees:
             callees.append(nm)
+    callers = [x.get("name") or "" for x in (d.get("xrefs_to") or []) if x.get("name")]
     cases = sorted(set(int(c, 0) for c in CASE_RE.findall(p)))
     strings = []
     for s in STR_RE.findall(p):
@@ -236,6 +247,7 @@ def console_features(addr, path):
         "name": d.get("name") or "",
         "nparams": nparams,
         "callees": callees,
+        "callers": callers,
         "truncated": truncated,
         "unnamed": unnamed,
         "cases": cases,
@@ -247,22 +259,54 @@ def console_features(addr, path):
     }
 
 
-def load_cache():
-    if os.path.exists(CACHE):
+FEATURE_KEYS = ("callers", "ints", "truncated")   # a cached row missing one of these is stale
+
+
+def load_cache(path=None):
+    path = path or CACHE
+    if os.path.exists(path):
         try:
-            with open(CACHE, "r", encoding="utf-8") as fh:
+            if path.endswith(".gz"):
+                with gzip.open(path, "rt", encoding="utf-8") as fh:
+                    return json.load(fh)
+            with open(path, "r", encoding="utf-8") as fh:
                 return json.load(fh)
-        except Exception:
-            pass
+        except Exception as exc:
+            print("  ! cache %s unreadable (%s); rebuilding" % (path, exc), file=sys.stderr)
     return {}
 
 
-def save_cache(cache):
-    os.makedirs(CACHE_DIR, exist_ok=True)
-    tmp = CACHE + ".tmp"
+def save_cache(cache, path=None):
+    path = path or CACHE
+    if path.endswith(".gz"):
+        return   # a packed cache is a published artefact, never rewritten in place
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    tmp = path + ".tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(cache, fh)
-    os.replace(tmp, CACHE)
+    os.replace(tmp, path)
+
+
+def feature_row(addr, cache, dirty):
+    """The console features for one address: the cache when it is fresh, the export when it is
+    on disk, the stale cache row when it is all there is. None when nothing knows the address."""
+    path = os.path.join(EXPORTS, "%s.json" % addr)
+    feat = cache.get(addr)
+    on_disk = os.path.exists(path)
+    complete = feat is not None and all(k in feat for k in FEATURE_KEYS)
+    if complete and (not on_disk or feat.get("_mtime") == os.path.getmtime(path)):
+        return feat
+    if on_disk:
+        try:
+            feat = console_features(addr, path)
+        except Exception as exc:
+            print("  ! export %s unreadable: %s" % (addr, exc), file=sys.stderr)
+            return None
+        feat["_mtime"] = os.path.getmtime(path)
+        cache[addr] = feat
+        dirty[0] += 1
+        return feat
+    return feat   # stale or None
 
 
 # ------------------------------------------------------------------ PC-side indexing
@@ -606,6 +650,9 @@ def main():
     ap.add_argument("--out", default="", help="report path prefix (default scratch/funcaudit/<stamp>)")
     ap.add_argument("--min-lines", type=int, default=0, help="skip console bodies shorter than this")
     ap.add_argument("--no-info", action="store_true", help="drop INFO_/FEWER_PARAMS findings")
+    ap.add_argument("--cache", default="", help="feature cache to read (a .gz is read-only); default scratch/funcaudit/exports.cache.json")
+    ap.add_argument("--meta", action="append", default=[], help="key=value stamped into the JSON header (repeatable)")
+    ap.add_argument("--no-md", action="store_true", help="write only the JSON report")
     args = ap.parse_args()
     if not (args.all or args.dir or args.tu or args.func):
         ap.print_help(); return 2
@@ -643,29 +690,19 @@ def main():
         sel.append((name, addrs[0], pf))
     print("selected: %d functions" % len(sel))
 
-    cache = load_cache()
-    dirty = 0
+    cache_path = args.cache or CACHE
+    cache = load_cache(cache_path)
+    dirty = [0]
     results = []
-    stats = {"paired": 0, "unpaired_no_file": 0, "no_body": 0, "no_export": 0, "clean": 0}
+    stats = {"selected": len(sel), "paired": 0, "unpaired_no_file": 0, "no_body": 0, "no_export": 0, "clean": 0}
     for name, addr, pf in sel:
-        path = os.path.join(EXPORTS, "%s.json" % addr)
-        if not os.path.exists(path):
+        feat = feature_row(addr, cache, dirty)
+        if feat is None:
             stats["no_export"] += 1
             continue
-        mt = os.path.getmtime(path)
-        feat = cache.get(addr)
-        if not feat or feat.get("_mtime") != mt or "ints" not in feat:
-            try:
-                feat = console_features(addr, path)
-            except Exception as exc:
-                print("  ! export %s unreadable: %s" % (addr, exc), file=sys.stderr)
-                continue
-            feat["_mtime"] = mt
-            cache[addr] = feat
-            dirty += 1
-            if dirty % 1000 == 0:
-                save_cache(cache)
-                print("  cached %d exports (%.0fs)" % (dirty, time.time() - t0), flush=True)
+        if dirty[0] and dirty[0] % 1000 == 0:
+            save_cache(cache, cache_path)
+            print("  cached %d exports (%.0fs)" % (dirty[0], time.time() - t0), flush=True)
         if feat["lines"] < args.min_lines:
             continue
         d, ndefs = idx.find(name, pf)
@@ -687,8 +724,9 @@ def main():
             continue
         results.append({"tu": d.file, "name": name, "addr": addr, "flagged": flagged, "ndefs": ndefs,
                         "file": d.file, "line": d.line, "helpers": nhelpers, "findings": F})
-    if dirty:
-        save_cache(cache)
+    if dirty[0]:
+        save_cache(cache, cache_path)
+    stats["with_findings"] = len(results) - stats["no_body"]
 
     # ---- report
     stamp = time.strftime("%Y%m%d_%H%M%S")
@@ -730,16 +768,26 @@ def main():
             md.append("- **%s** @%s%s -- %s:%d" % (r["name"], r["addr"], tag, r["file"], r["line"]))
             for c in sorted(r["findings"], key=lambda k: (CATEGORY_ORDER.index(k) if k in CATEGORY_ORDER else 99)):
                 md.append("    - %s: %s" % (c, "; ".join(r["findings"][c])))
-    with open(out + ".md", "w", encoding="utf-8") as fh:
-        fh.write("\n".join(md) + "\n")
+    if not args.no_md:
+        with open(out + ".md", "w", encoding="utf-8") as fh:
+            fh.write("\n".join(md) + "\n")
+    meta = {"tool": "funcaudit", "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "scope": "all" if args.all else ", ".join(args.dir + args.tu + args.func)}
+    for kv in args.meta:
+        k, _, v = kv.partition("=")
+        if k:
+            meta[k.strip()] = v.strip()
+    categories = {c: {"items": cats[c], "functions": cat_funcs[c]} for c in cats}
     with open(out + ".json", "w", encoding="utf-8") as fh:
-        json.dump({"stats": stats, "results": results}, fh, indent=1)
+        # compact: this file is committed on every b5-decomp commit and imported by the server
+        json.dump({"meta": meta, "stats": stats, "categories": categories, "results": results}, fh,
+                  separators=(",", ":"), sort_keys=True)
     print("paired %d (clean %d), with findings %d, no_body %d, unpaired %d, no_export %d (%.0fs)" % (
         stats["paired"], stats["clean"], len(results) - stats["no_body"], stats["no_body"],
         stats["unpaired_no_file"], stats["no_export"], time.time() - t0))
     for c in sorted(cats, key=lambda k: (CATEGORY_ORDER.index(k) if k in CATEGORY_ORDER else 99)):
         print("  %-24s %6d items in %5d functions" % (c, cats[c], cat_funcs[c]))
-    print("report: %s.md" % out)
+    print("report: %s%s" % (out, ".json" if args.no_md else ".md"))
     return 0
 
 

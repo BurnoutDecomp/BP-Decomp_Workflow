@@ -6,6 +6,7 @@
     python tools/re/stubaudit.py --file GameSource/Gui/Flow/Screen/States/BrnScreenStatesLinkStubs.cpp
     python tools/re/stubaudit.py --tier high              # only the certain ones
     python tools/re/stubaudit.py --out scratch/funcaudit/stubs
+    python tools/re/stubaudit.py --cache progress/funcaudit_features.json.gz --no-md --meta b5_commit=<sha>   # CI
 
 ==============================================================================================
 WHY (owner, 2026-09-19): "we should do a list of things that are still stubbed in files like
@@ -54,7 +55,6 @@ REPO = funcaudit.REPO
 SRC = funcaudit.SRC
 EXPORTS = funcaudit.EXPORTS
 CACHE_DIR = funcaudit.CACHE_DIR
-STUB_CACHE = os.path.join(CACHE_DIR, "stubs.cache.json")
 
 HIGH_RE = re.compile(
     r"FLAG link scaffold|link scaffold|PC-platform leaf|un-?reconstructed|not (?:yet |fully )?reconstructed"
@@ -105,21 +105,12 @@ class FileCache(object):
         return "\n".join(reversed(out))
 
 
-def load_export(addr, cache):
-    if addr in cache:
-        return cache[addr]
-    path = os.path.join(EXPORTS, "%s.json" % addr)
-    info = {"lines": None, "callers": []}
-    if os.path.exists(path):
-        try:
-            with open(path, "r", encoding="utf-8", errors="replace") as fh:
-                d = json.load(fh)
-            info["lines"] = (d.get("pseudocode") or "").count("\n")
-            info["callers"] = [x.get("name") or "" for x in (d.get("xrefs_to") or [])]
-        except Exception:
-            pass
-    cache[addr] = info
-    return info
+def load_export(addr, cache, dirty):
+    """Console size + callers, from funcaudit's feature cache (CI has no exports)."""
+    feat = funcaudit.feature_row(addr, cache, dirty)
+    if not feat:
+        return {"lines": None, "callers": []}
+    return {"lines": feat.get("lines"), "callers": feat.get("callers") or []}
 
 
 def main():
@@ -128,6 +119,9 @@ def main():
     ap.add_argument("--file", action="append", default=[], help="exact PC file under src (repeatable)")
     ap.add_argument("--tier", default="", help="high | medium | low : lowest tier to report (default all)")
     ap.add_argument("--out", default="", help="report path prefix")
+    ap.add_argument("--cache", default="", help="funcaudit feature cache to read (a .gz is read-only)")
+    ap.add_argument("--meta", action="append", default=[], help="key=value stamped into the JSON header (repeatable)")
+    ap.add_argument("--no-md", action="store_true", help="write only the JSON report")
     args = ap.parse_args()
     t0 = time.time()
 
@@ -183,20 +177,16 @@ def main():
             stub_keys.add(d.key2)
 
     # pass 2: pair with the console
-    cache = {}
-    if os.path.exists(STUB_CACHE):
-        try:
-            with open(STUB_CACHE, "r", encoding="utf-8") as fh:
-                cache = json.load(fh)
-        except Exception:
-            cache = {}
+    cache_path = args.cache or funcaudit.CACHE
+    cache = funcaudit.load_cache(cache_path)
+    dirty = [0]
     rows = []
     for d, tier, why, trivial in stubs:
         name, addr, lines, callers, live = d.qual or d.leaf, None, None, [], []
         ids = ident_by_key2.get(d.key2) if d.key2 else None
         if ids:
             name, addr = ids[0]
-            info = load_export(addr, cache)
+            info = load_export(addr, cache, dirty)
             lines, callers = info["lines"], info["callers"]
             for c in callers:
                 cp = c.split("::")
@@ -211,9 +201,8 @@ def main():
                      "why": "; ".join(why), "trivial": trivial, "console_lines": lines,
                      "callers": len(callers), "live_callers": live[:4],
                      "top": d.file.split("/")[0] + "/" + (d.file.split("/")[1] if d.file.count("/") else "")})
-    os.makedirs(CACHE_DIR, exist_ok=True)
-    with open(STUB_CACHE, "w", encoding="utf-8") as fh:
-        json.dump(cache, fh)
+    if dirty[0]:
+        funcaudit.save_cache(cache, cache_path)
 
     order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
     minimum = order.get(args.tier.upper(), 2) if args.tier else 2
@@ -262,14 +251,23 @@ def main():
                 r["line"], r["name"], (" @" + r["addr"]) if r["addr"] else " (no console function)",
                 r["tier"], r["why"][:60], r["console_lines"] if r["console_lines"] is not None else "",
                 r["callers"]))
-    with open(out + ".md", "w", encoding="utf-8") as fh:
-        fh.write("\n".join(md) + "\n")
+    if not args.no_md:
+        with open(out + ".md", "w", encoding="utf-8") as fh:
+            fh.write("\n".join(md) + "\n")
+    meta = {"tool": "stubaudit", "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    for kv in args.meta:
+        k, _, v = kv.partition("=")
+        if k:
+            meta[k.strip()] = v.strip()
+    stats = {"stubs": len(rows), "high": by_tier.get("HIGH", 0), "medium": by_tier.get("MEDIUM", 0),
+             "low": by_tier.get("LOW", 0), "files": len(by_file), "with_console": len(with_console),
+             "live": len(live_rows), "console_lines": work}
     with open(out + ".json", "w", encoding="utf-8") as fh:
-        json.dump(rows, fh, indent=1)
+        json.dump({"meta": meta, "stats": stats, "rows": rows}, fh, separators=(",", ":"), sort_keys=True)
     print("stubs %d (HIGH %d, MEDIUM %d, LOW %d) in %d files; with console %d; live %d; work %d lines (%.0fs)" % (
         len(rows), by_tier.get("HIGH", 0), by_tier.get("MEDIUM", 0), by_tier.get("LOW", 0), len(by_file),
         len(with_console), len(live_rows), work, time.time() - t0))
-    print("report: %s.md" % out)
+    print("report: %s%s" % (out, ".json" if args.no_md else ".md"))
     return 0
 
 
