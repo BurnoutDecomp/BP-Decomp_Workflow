@@ -18,7 +18,7 @@ Commands:
     work next [-n N]          the next leaf-first ready TU(s) to work on
                               (restricted to the active goal's TUs, if one is set)
     work show <tu>            dossier for a TU (functions, signatures, deps, console audit)
-    work audit <tu>           what the per-commit evidence audit says about a TU (findings + stubs)
+    work audit <tu>           what the evidence audits say about a TU (findings, stubs, instruction shape)
     work start <tu>           claim a TU (todo -> in_progress)
     work claim [<tu>...|-n N]  claim specific TU id(s), or the next N ready ones if none
     work submit <tu>          mark a TU reconstructed (compile/review gates: Phase 3)
