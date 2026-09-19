@@ -15,7 +15,16 @@ name: Reconcile status + submodule pointer
 #      repository_dispatch payload SHA), or the current dev tip for a manual run,
 #   3. cross-check the server's `done` set against the committed b5-decomp files
 #      (non-blocking integrity alarm),
-#   4. commit + push the regenerated status.json and the bumped pointer with the bot token.
+#   3b. run the EVIDENCE audits against the pinned b5-decomp tree: tools/re/funcaudit.py
+#      (every reconstructed body vs the console's own function: missing bodies, case
+#      ids, event posts, callees, asserts, uncited data) and tools/re/stubaudit.py (every
+#      body that is still a stand-in). Neither needs the IDA exports: they read the
+#      committed feature cache progress/funcaudit_features.json.gz. The results land in
+#      progress/funcaudit.json + progress/stubs.json, stamped with the b5 commit and its
+#      author, and the work server imports them on sync -- the one progress number on
+#      the dashboard that nobody declared.
+#   4. commit + push the regenerated status.json, the audits and the bumped pointer
+#      with the bot token.
 #   5. tell the public work server to fetch that committed snapshot and refresh
 #      its dashboard data, including the executable source list.
 #
@@ -100,6 +109,31 @@ jobs:
           # 633 finished class TUs -- and their functions -- crediting nobody.
           python tools/work/resolve_class_homes.py --apply
 
+      - name: Run the evidence audits (glue audit + stub inventory)
+        run: |
+          set -euo pipefail
+          SHA="${{ steps.target.outputs.sha }}"
+          AUTHOR="$(git -C b5-decomp log -1 --format=%an "$SHA")"
+          # No IDA exports on this runner: point the tools at nothing and let the
+          # packed feature cache answer every console-side question.
+          export BP_IDA_EXPORTS=/nonexistent
+          python tools/re/funcaudit.py --all --no-md \
+            --cache progress/funcaudit_features.json.gz \
+            --out progress/funcaudit \
+            --meta "b5_commit=$SHA" --meta "b5_author=$AUTHOR"
+          python tools/re/stubaudit.py --no-md \
+            --cache progress/funcaudit_features.json.gz \
+            --out progress/stubs \
+            --meta "b5_commit=$SHA" --meta "b5_author=$AUTHOR"
+          python - <<'EOF'
+          import json
+          fa = json.load(open("progress/funcaudit.json"))
+          st = json.load(open("progress/stubs.json"))
+          print("funcaudit:", fa["stats"])
+          print("stubs:", st["stats"])
+          assert fa["stats"]["paired"] > 0, "the glue audit paired nothing -- the PC index or identity.json is broken"
+          EOF
+
       - name: Cross-check server `done` against committed files (non-blocking)
         continue-on-error: true
         run: |
@@ -120,17 +154,18 @@ jobs:
           set -euo pipefail
           git config user.name  "bp-reconcile-bot"
           git config user.email "bp-reconcile-bot@users.noreply.github.com"
-          git add progress/status.json progress/class_homes.json b5-decomp
+          git add progress/status.json progress/class_homes.json progress/funcaudit.json progress/stubs.json b5-decomp
           if git diff --cached --quiet; then
-            echo "nothing to reconcile — status.json and submodule pointer already current."
+            echo "nothing to reconcile — status.json, audits and submodule pointer already current."
             exit 0
           fi
           SHA="${{ steps.target.outputs.sha }}"
-          git commit -m "chore: reconcile status.json + b5-decomp pointer to ${SHA:0:12}
+          git commit -m "chore: reconcile status.json + audits + b5-decomp pointer to ${SHA:0:12}
 
           Automated on a b5-decomp commit: status.json regenerated from the
           coordination server, class homes re-resolved from the committed
-          sources, submodule pointer bumped. No manual push required."
+          sources, the glue audit and stub inventory re-run against the tree,
+          submodule pointer bumped. No manual push required."
           git push
 
       - name: Refresh public dashboard snapshot
