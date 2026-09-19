@@ -1,0 +1,79 @@
+# One-off (re-runnable) backfill of the evidence audits against older b5-decomp commits,
+# one point per day, so the dashboard's "Verified over audited commits" line has a past.
+# tools/re/audit_backfill.py runs funcaudit + stubaudit against the last commit of each
+# day since `since`, from the packed console cache (no IDA exports needed), sharded
+# across a matrix. Each shard uploads its runs as an artifact; a maintainer then feeds
+# them to the work server with `bp-work-server import-audits <dir> --imported-at <when>
+# --no-events` in date order (tools/re/audit_backfill.py's docstring has the recipe).
+# Nothing is committed and nothing touches the server: safe to run as often as wanted.
+name: Audit backfill (history)
+
+on:
+  workflow_dispatch:
+    inputs:
+      since:
+        description: "First day to audit (YYYY-MM-DD)"
+        required: false
+        default: "2026-06-10"
+      shards:
+        description: "How many parallel shards"
+        required: false
+        default: "8"
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - id: m
+        shell: bash
+        run: |
+          n="${{ github.event.inputs.shards || '8' }}"
+          echo "matrix=$(python3 -c "import json;print(json.dumps(list(range(int('$n')))))")" >> "$GITHUB_OUTPUT"
+
+  audit:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJson(needs.plan.outputs.matrix) }}
+    steps:
+      - name: Checkout workflow repo
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Clone b5-decomp with its history
+        run: |
+          set -euo pipefail
+          rm -rf b5-decomp
+          git clone --branch dev "https://github.com/${{ github.repository_owner }}/b5-decomp.git" b5-decomp
+
+      - name: Audit one day in ${{ github.event.inputs.shards || '8' }}
+        env:
+          BP_IDA_EXPORTS: /nonexistent
+        run: |
+          set -euo pipefail
+          python tools/re/audit_backfill.py --list --since "${{ github.event.inputs.since || '2026-06-10' }}" \
+            --shard "${{ matrix.shard }}/${{ github.event.inputs.shards || '8' }}"
+          python tools/re/audit_backfill.py --since "${{ github.event.inputs.since || '2026-06-10' }}" \
+            --shard "${{ matrix.shard }}/${{ github.event.inputs.shards || '8' }}" --out backfill
+
+      - name: Upload this shard's runs
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-backfill-${{ matrix.shard }}
+          path: backfill
+          retention-days: 14
+          if-no-files-found: error
