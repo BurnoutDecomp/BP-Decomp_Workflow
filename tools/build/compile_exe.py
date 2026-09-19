@@ -126,13 +126,53 @@ class StatCache:
         return self._c[k]
 
 
+class HashCache:
+    """sha1 of a file's CONTENT, computed once per run (thread-safe).
+
+    CI cannot trust mtimes: every checkout stamps every file with the checkout time, so
+    an object cache restored from the previous run would look stale in full. In
+    BRN_EXE_HASH_DEPS=1 mode a TU is stale only when the flags, or the content of its
+    source or of any header it included, differ from what its .d recorded."""
+    def __init__(self):
+        self._c = {}
+        self._lock = threading.Lock()
+
+    def digest(self, path):
+        k = os.path.normcase(path)
+        with self._lock:
+            if k in self._c:
+                return self._c[k]
+        try:
+            h = hashlib.sha1()
+            with open(path, "rb") as fh:
+                for chunk in iter(lambda: fh.read(1 << 20), b""):
+                    h.update(chunk)
+            v = h.hexdigest()
+        except OSError:
+            v = None
+        with self._lock:
+            self._c[k] = v
+        return v
+
+
+def deps_digest(paths, hashc):
+    """One digest over the content of every dep (source first), None if any is unreadable."""
+    h = hashlib.sha1()
+    for p in paths:
+        d = hashc.digest(p)
+        if d is None:
+            return None
+        h.update((os.path.normcase(p) + "|" + d + "\n").encode("utf-8", "replace"))
+    return h.hexdigest()
+
+
 def obj_path(src, tu_dir):
     key = os.path.normcase(os.path.normpath(src)).encode("utf-8", "replace")
     base = os.path.splitext(os.path.basename(src))[0]
     return os.path.join(tu_dir, f"{base}.{zlib.crc32(key):08x}.obj")
 
 
-def is_stale(obj, flags_hash, statc):
+def is_stale(obj, flags_hash, statc, hashc=None):
     obj_t = statc.mtime(obj)
     if obj_t is None:
         return True
@@ -142,6 +182,13 @@ def is_stale(obj, flags_hash, statc):
         return True
     if not lines or lines[0] != flags_hash:
         return True
+    if hashc is not None:
+        # content mode (CI): the .d must carry the digest this object was compiled from
+        meta = dict(ln[1:].split(" ", 1) for ln in lines[1:] if ln.startswith("@") and " " in ln)
+        deps = [ln for ln in lines[1:] if not ln.startswith("@")]
+        if "digest" not in meta or len(deps) < 2:
+            return True
+        return deps_digest(deps, hashc) != meta["digest"]
     # THE MID-COMPILE HEADER EDIT (measured 2026-09-06, eleven lanes editing one checkout).
     # A TU whose cl STARTED before a header was edited and FINISHED after it has an .obj
     # NEWER than the header, yet was compiled from the OLD text. "dep newer than obj" can
@@ -151,12 +198,13 @@ def is_stale(obj, flags_hash, statc):
     # "@start <ns>") and deps are compared against THAT, with a 2 s slack in the stale
     # direction. Old .d files without the line fall back to the obj mtime as before.
     ref_t = obj_t
-    if len(lines) > 1 and lines[1].startswith("@start "):
-        try:
-            ref_t = int(lines[1][7:]) - 2_000_000_000
-        except ValueError:
-            ref_t = obj_t
-        lines = [lines[0]] + lines[2:]
+    for ln in lines[1:]:
+        if ln.startswith("@start "):
+            try:
+                ref_t = int(ln[7:]) - 2_000_000_000
+            except ValueError:
+                ref_t = obj_t
+    lines = [lines[0]] + [ln for ln in lines[1:] if not ln.startswith("@")]   # @start / @digest
     if len(lines) < 3:
         # A .d with no header entries is a poisoned record from the localized-cl
         # /showIncludes miss (every real TU includes headers) -- treat as stale so
@@ -233,7 +281,7 @@ def detect_note_prefix(env, tu_dir):
     return NOTE_PREFIX
 
 
-def compile_one(src, obj, flag_args, flags_hash, env, note_prefix):
+def compile_one(src, obj, flag_args, flags_hash, env, note_prefix, hashc=None):
     cmd = ["cl"] + flag_args + ["/showIncludes", "/c", src, "/Fo" + obj]
     start_ns = time.time_ns()   # recorded in the .d -- see is_stale
     try:
@@ -271,9 +319,13 @@ def compile_one(src, obj, flag_args, flags_hash, env, note_prefix):
                 if k not in seen:
                     seen.add(k)
                     uniq.append(d)
+            # content digest of source + every included header, for the CI object cache
+            # (is_stale in BRN_EXE_HASH_DEPS mode). Recorded on every box; harmless locally.
+            digest = deps_digest(uniq, hashc) if hashc is not None else None
             try:
                 with open(obj + ".d", "w", encoding="utf-8") as fh:
                     fh.write(flags_hash + "\n@start " + str(start_ns) + "\n" +
+                             (f"@digest {digest}\n" if digest else "") +
                              "\n".join(uniq) + "\n")
             except OSError as e:
                 shown.append(f"WARNING: could not write dep file {obj}.d: {e}")
@@ -516,10 +568,15 @@ def main(argv=None):
 
     # ---- plan
     statc = StatCache()
+    hashc = HashCache()
+    # BRN_EXE_HASH_DEPS=1 (CI): staleness by CONTENT of source + headers, never by mtime.
+    # The digest is always recorded in new .d files, so a developer box can switch modes.
+    hash_mode = os.environ.get("BRN_EXE_HASH_DEPS") == "1"
     plan = [(s, obj_path(s, tu_dir)) for s in sources]
-    stale = [(s, o) for s, o in plan if force or is_stale(o, flags_hash, statc)]
+    stale = [(s, o) for s, o in plan
+             if force or is_stale(o, flags_hash, statc, hashc if hash_mode else None)]
     fresh = len(plan) - len(stale)
-    why = " (BRN_EXE_REBUILD=1)" if force else ""
+    why = " (BRN_EXE_REBUILD=1)" if force else (" (content-hash mode)" if hash_mode else "")
     print(f"compile_exe: {len(plan)} TUs -- {len(stale)} to compile, "
           f"{fresh} up to date, jobs={jobs}{why}", flush=True)
 
@@ -550,7 +607,7 @@ def main(argv=None):
         plock = threading.Lock()
         with ThreadPoolExecutor(max_workers=jobs) as pool:
             futs = {pool.submit(compile_one, s, o, flag_args, flags_hash,
-                                env, note_prefix): (s, o) for s, o in stale}
+                                env, note_prefix, hashc): (s, o) for s, o in stale}
             try:
                 for fut in as_completed(futs):
                     rc, shown, src = fut.result()

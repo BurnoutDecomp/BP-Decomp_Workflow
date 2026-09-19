@@ -109,11 +109,30 @@ jobs:
           echo VCToolsVersion=%VCToolsVersion%
           echo VSINSTALLDIR=%VSINSTALLDIR%
 
+      # ---- incremental builds across runs. compile_exe.py already compiles only the TUs
+      # whose source or headers changed and skips the link when nothing feeding it did;
+      # CI rebuilt everything because every run started without the per-TU objects and
+      # their .d dependency files. Restore them from the previous run (~90 MB for 4.5k
+      # objects; no PDB -- the build uses /O2 without /Zi) and judge staleness by CONTENT
+      # (BRN_EXE_HASH_DEPS=1): a fresh checkout stamps every file with the checkout time,
+      # so the mtime rule would call the whole cache stale. A newer MSVC on the runner
+      # image changes the flags hash / the system headers' content -> full rebuild, as it
+      # should. The key is unique per run so the post-job save always stores this run's
+      # objects; restore-keys picks the newest previous one.
+      - name: Restore the per-TU object cache
+        uses: actions/cache@v4
+        with:
+          path: build/game/obj/tu
+          key: exe-objs-${{ runner.os }}-${{ hashFiles('tools/build/msvc_flags.txt', 'tools/build/msvc_includes.txt') }}-${{ github.run_id }}
+          restore-keys: |
+            exe-objs-${{ runner.os }}-${{ hashFiles('tools/build/msvc_flags.txt', 'tools/build/msvc_includes.txt') }}-
+
       - name: Build exe & upload bundle
         shell: pwsh
         env:
           WORK_SERVER: ${{ vars.WORK_SERVER }}          # e.g. https://decomp.adriwin.fr
           WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}  # an admin X-Work-Token
+          BRN_EXE_HASH_DEPS: "1"                          # staleness by content, not mtime
         run: |
           ./ci/publish-build.ps1 `
             -WorkServer $env:WORK_SERVER `
