@@ -17,7 +17,8 @@ Commands:
                               scope `next` to a membership goal (progress/goals.json)
     work next [-n N]          the next leaf-first ready TU(s) to work on
                               (restricted to the active goal's TUs, if one is set)
-    work show <tu>            dossier for a TU (functions, signatures, deps)
+    work show <tu>            dossier for a TU (functions, signatures, deps, console audit)
+    work audit <tu>           what the per-commit evidence audit says about a TU (findings + stubs)
     work start <tu>           claim a TU (todo -> in_progress)
     work claim [<tu>...|-n N]  claim specific TU id(s), or the next N ready ones if none
     work submit <tu>          mark a TU reconstructed (compile/review gates: Phase 3)
@@ -663,6 +664,8 @@ def cmd_status(args):
             active_goal = data.get("active_goal")
             if active_goal:
                 print(f"active goal: {active_goal}")
+            import audit_view
+            print(audit_view.totals_line())
             if queued:
                 print(f"queued offline op(s): {queued}  (run `work sync`)")
             return
@@ -1084,6 +1087,9 @@ def cmd_show(args):
         import dossier
         funcs = con.execute("SELECT * FROM func WHERE tu_id=? ORDER BY name", (args.tu,)).fetchall()
         text = dossier.assemble(con, t, funcs, with_asm=args.asm)
+        import audit_view
+        text += "\n\n===== CONSOLE AUDIT (progress/funcaudit.json + stubs.json, per commit) =====\n"
+        text += audit_view.format_tu(t["dest_path"], [f["name"] for f in funcs]) + "\n"
         if args.out:
             os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
             open(args.out, "w", encoding="utf-8").write(text)
@@ -1113,8 +1119,47 @@ def cmd_show(args):
         print(f"  [{f['status']:9s}] {f['x360_addr']}  {f['name']}")
         if sig:
             print(f"             {sig[:110]}")
+    # The evidence layer: what the console does that these bodies do not, and which of them
+    # are still stand-ins. Same data the dashboard's "Verified vs Console" ring is built from.
+    import audit_view
+    names = [f["name"] for f in con.execute("SELECT name FROM func WHERE tu_id=?", (args.tu,))]
+    print()
+    print(audit_view.format_tu(t["dest_path"], names, limit_items=4, max_funcs=12))
     print("\n(`work show <tu> --full` for the complete dossier: pseudocode, locals, "
-          "DecFIGS dwarfdump hints, Feb-2007 original source, callee signatures, asm with --asm.)")
+          "DecFIGS dwarfdump hints, Feb-2007 original source, callee signatures, asm with --asm; "
+          "`work audit <tu>` for the whole console audit of this TU.)")
+
+
+def cmd_audit(args):
+    """The per-commit evidence audit for one TU: findings per function + stubs in its file."""
+    import audit_view
+    con = connect()
+    t = con.execute("SELECT * FROM tu WHERE id=?", (args.tu,)).fetchone()
+    if not t:
+        # allow a bare source file too: audit by file only
+        file = args.tu.replace("\\", "/")
+        print(audit_view.format_tu(file, [], limit_items=args.items, max_funcs=200))
+        return
+    names = [f["name"] for f in con.execute("SELECT name FROM func WHERE tu_id=?", (args.tu,))]
+    print(f"TU      : {t['id']}    status: {t['status']}    dest: {t['dest_path'] or '(class TU)'}")
+    print(audit_view.totals_line())
+    print()
+    print(audit_view.format_tu(t["dest_path"], names, limit_items=args.items, max_funcs=200))
+    if args.refresh:
+        file = audit_view.audit_file_for_dest(t["dest_path"])
+        if not file:
+            sys.exit("no destination file to re-audit")
+        print(f"\n== live re-run of funcaudit for {file} ==")
+        env = dict(os.environ)
+        env.setdefault("BP_IDA_EXPORTS", os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX"))
+        out = os.path.join(ROOT, "scratch", "funcaudit", "work_audit")
+        subprocess.run([sys.executable, os.path.join(ROOT, "tools", "re", "funcaudit.py"),
+                        "--tu", file, "--cache", os.path.join(ROOT, "progress", "funcaudit_features.json.gz"),
+                        "--out", out], cwd=ROOT, env=env, check=False)
+        try:
+            print(open(out + ".md", encoding="utf-8").read())
+        except OSError:
+            pass
 
 
 POSTMORTEM_CHECKLIST = """\
@@ -2077,6 +2122,13 @@ def main():
     sh.add_argument("--asm", action="store_true", help="include assembly in --full output")
     sh.add_argument("-o", "--out", help="write dossier to a file instead of stdout")
     sh.set_defaults(fn=cmd_show)
+    ad = sub.add_parser("audit", help="the per-commit console audit for a TU (or a src file): findings per "
+                                      "function + the stub bodies in its file")
+    ad.add_argument("tu")
+    ad.add_argument("--items", type=int, default=8, help="items shown per finding category")
+    ad.add_argument("--refresh", action="store_true",
+                    help="also re-run tools/re/funcaudit.py live for the TU's file (uses the packed cache)")
+    ad.set_defaults(fn=cmd_audit)
     pm = sub.add_parser("postmortem", help="self-review packet: full dossier WITH asm + the "
                         "verify-vs-ARTIST-then-DecFIGS checklist (run before submit/review)")
     pm.add_argument("tu")

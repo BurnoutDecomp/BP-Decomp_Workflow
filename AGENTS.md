@@ -53,7 +53,9 @@ work claim [-n N]     # ...or, with no id, claim the next N ready TUs from the q
                       #   With a coordination server (invite-only, see below) every claim
                       #   is atomic across everyone; without one it claims locally.
 work next             # read-only PREVIEW of the queue (reserves nothing)
-work show <tu>        # concise overview (functions, signatures, dependency TUs)
+work show <tu>        # concise overview (functions, signatures, dependency TUs, console audit)
+work audit <tu>       # the per-commit evidence audit for the TU: what the console's functions do
+                      #   that our bodies don't (case ids, event posts, callees, asserts, bodies) + stubs
 work show <tu> --full # the full dossier: pseudocode, locals, DecFIGS dwarfdump
                       #   hints, Feb-2007 original source, callee signatures
                       #   (--asm for disasm, -o to a file)
@@ -196,6 +198,23 @@ the maintainer invited you onto a server or you are running one.
    blind-regenerate it (that hides fresh invention). Run it repo-wide any time with `work faithfulness`
    (`--all` lists every hit; `--baseline` re-snapshots after you deliberately pay debt down). Configure
    or disable via the `faithfulness` block in `progress/review.config.json`.
+2c. **Evidence audit (NO-LLM, per commit, the dashboard's "Verified vs Console").** CI runs
+   [`tools/re/funcaudit.py`](tools/re/funcaudit.py) and [`tools/re/stubaudit.py`](tools/re/stubaudit.py)
+   against the whole tree on every b5-decomp commit and commits the results as
+   `progress/funcaudit.json` / `progress/stubs.json`; the work server imports them and draws the
+   Verified ring, the Console Evidence section and one Live Event per commit from them. They compare
+   what the console's pseudocode STATES about a function with what our body states: a `case N:` the
+   console has and we do not (`MISSING_CASE`), an `AddEvent` id we never post (`MISSING_EVENT`), a
+   named callee we never call (`MISSING_CALLEE`), an assert expression we dropped (`MISSING_ASSERT`),
+   a function the ledger names with no definition anywhere (`NO_BODY`), and, as context only, missing
+   log strings, uncited data symbols and a parameter-count hint. **Before `work submit`, run
+   `work audit <tu>`** (or read the block `work show <tu>` prints): every high-signal finding on a
+   function you touched is a defect to fix or to explain in the review notes -- the ledger can say
+   `done` while the ring says otherwise, and the ring is the one nobody declared. `work audit <tu>
+   --refresh` re-runs the audit live for the TU's file from the packed feature cache
+   (`progress/funcaudit_features.json.gz`, no IDA exports needed). What it cannot see: inlined
+   callees, virtual dispatch, argument ORDER and the VALUE of a cited constant (`tools/re/constaudit.py`
+   / `findinit.py` for those) -- a clean audit is "nothing nameable differs", not a match.
 3. **Reviewer pass — YOU choose, per `progress/review.config.json`.** Not every TU
    needs a separate full review; an always-on Opus review per TU is the main quota sink.
    The config is a **menu + policy, not an auto-router**: you (the reverser agent) read
