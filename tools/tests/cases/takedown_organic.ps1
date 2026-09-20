@@ -125,11 +125,19 @@
     SteerScript     = '0:none,2.6:left25,3.05:none'
     MaxSeconds      = 120
   }
-  DiagEnv = 'BRN_AI_MADNESS=1,BRN_CRASHCAM_DIAG=1,BRN_TRAFFIC_DIAG=1,BRN_VFXFEED_PROBE=1'
+  DiagEnv = 'BRN_AI_MADNESS=1,BRN_CRASHCAM_DIAG=1,BRN_TRAFFIC_DIAG=1,BRN_VFXFEED_PROBE=1,BRN_SHOWTIME_WATCH=1'
   Checks  = @(
     @{ Kind = 'NewAsserts'; Name = 'no NEW assert families' }
     @{ Kind = 'LogCount';   Name = 'no exceptions'; Pattern = '\[EXCEPTION\]'; Max = 0 }
     @{ Kind = 'Mark';       Name = 'reached DRIVING'; Phase = 'DRIVING' }
+
+    # RUNG -1 -- WAS THE CAR-VS-CAR POTENTIAL-CONTACT QUEUE [7] EVER FED. Informational. The
+    # [bridge-queues] accumulator prints a qN= column only for queues that were ever non-empty,
+    # so no q7= column on a run with rivals means the two car hulls never overlapped at all.
+    @{ Kind = 'LogCount';   Name = 'info: [bridge-queues] lines with a q7= (car/car) column'
+       Pattern = '\[bridge-queues\][^\r\n]* q7=' }
+    @{ Kind = 'LogCount';   Name = 'info: [Q7-carcar] first pair per queue id'
+       Pattern = '\[Q7-carcar\]' }
 
     # RUNG 0 -- the contact-spy queue. Informational: it never fails, it only says whether the
     # race-car contact arm was fed at all this run.
