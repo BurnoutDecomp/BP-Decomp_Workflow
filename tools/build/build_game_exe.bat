@@ -2664,6 +2664,7 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\BrnWorldModuleIO_DispatchOutputBuffer.cpp"
   echo "%SRC%\GameSource\World\BrnWorldModuleIO_UpdateOutputBuffer.cpp"
   echo "%SRC%\GameSource\World\CrashModule\BrnRaceCarCrash.cpp"
+  echo "%SRC%\GameSource\World\CrashModule\BrnTrafficCrash.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_Dispatch.cpp"
   rem ---- IO-buffer construction wave (2026-08-15): CreateIOBuffer<T> now runs T::Construct like the
   rem ---- console template, so BrnTrafficIO::InputBuffer_Dispatch::Construct @0x8275CF40 (in this
