@@ -3256,6 +3256,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  NetworkOutputInterface::Construct/Clear, called by the crash and world output buffers' Construct (2026-09-09)
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\NetworkOutputInterface.cpp"
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\BrnCrashModuleIO_OutputBuffer_PreScene.cpp"
+  echo "%SRC%\GameSource\World\CrashModule\SharedIO\BrnCrashModuleIO_OutputBuffer_PostPhysics.cpp"
   echo "%SRC%\GameSource\World\CrashModule\SharedIO\BrnCrashModuleIO_InputBuffers.cpp"
   echo "%SRC%\GameSource\Network\BrnNetworkModuleIO.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\BrnNetworkModuleGameStateIOInterfaces.cpp"
