@@ -34,6 +34,10 @@ RE_SAMPLE = re.compile(r'\[rival-damage\] slot=(\d+) crashing=(\d) damaged=(\d) 
 RE_ABSORB = re.compile(r'\[absorb\] owner 1 ent (\d+) set (\d+)')
 RE_VERDICT = re.compile(r'\[td-contact\] verdict (\d+) vs (\d+) impact=([a-z-]+)\((-?\d+)\).*?closingSpeed=(' + NUM + r')')
 RE_RIVAL = re.compile(r'\[rival\] slot (\d+) .* agg (-?\d+) .* aggLvl (' + NUM + r')')
+# [td-flight] (b5 2026-09-22): the whole takedown episode, every 6th frame, up to 15 s.
+RE_FLIGHT = re.compile(r'\[td-flight\] slot=(\d+) f=(\d+) crashing=(\d) pos=(' + NUM + r'),(' + NUM + r'),(' + NUM +
+                       r') vel=(' + NUM + r'),(' + NUM + r'),(' + NUM + r') upy=(' + NUM + r') angular=(' + NUM +
+                       r'),(' + NUM + r'),(' + NUM + r') displacement=(' + NUM + r')')
 
 
 def resolve(p):
@@ -57,7 +61,19 @@ def analyse(path):
     absorb = defaultdict(Counter)
     agg_levels = []
     agg_states = Counter()
+    flights = []            # (slot, [samples]) whole-episode [td-flight] series
+    open_fl = {}
     for line in lines:
+        m = RE_FLIGHT.search(line)
+        if m:
+            slot, f = int(m.group(1)), int(m.group(2))
+            v = [float(x) for x in m.groups()[3:]]
+            if f == 0 and open_fl.get(slot):
+                flights.append((slot, open_fl[slot]))
+                open_fl[slot] = []
+            open_fl.setdefault(slot, []).append({'f': f, 'crashing': int(m.group(3)), 'pos': v[0:3],
+                                                 'vel': v[3:6], 'upy': v[6], 'ang': v[7:10], 'disp': v[10]})
+            continue
         m = RE_VICTIM.search(line)
         if m:
             slot = int(m.group(1))
@@ -92,7 +108,23 @@ def analyse(path):
     for slot, samples in open_ep.items():
         if samples:
             episodes.append((slot, samples))
+    for slot, samples in open_fl.items():
+        if samples:
+            flights.append((slot, samples))
+    analyse.flights = flights
     return episodes, verdicts, closing, absorb, agg_levels, agg_states
+
+
+def flight_row(slot, s):
+    y0 = s[0]['pos'][1]
+    ys = [x['pos'][1] for x in s]
+    vy = [x['vel'][1] for x in s]
+    hs = [math.hypot(x['vel'][0], x['vel'][2]) for x in s]
+    ang = [math.sqrt(sum(a * a for a in x['ang'])) for x in s]
+    travel = math.hypot(s[-1]['pos'][0] - s[0]['pos'][0], s[-1]['pos'][2] - s[0]['pos'][2])
+    return {'slot': slot, 'secs': s[-1]['f'] / 60.0, 'crash_secs': sum(6 for x in s if x['crashing']) / 60.0,
+            'rise': max(ys) - y0, 'vy_up': max(vy), 'hspd0': hs[0], 'upy_min': min(x['upy'] for x in s),
+            'ang': max(ang), 'travel': travel, 'disp': max(x['disp'] for x in s)}
 
 
 def episode_row(slot, s):
@@ -131,6 +163,16 @@ def main(argv):
             for key in ('rise', 'vy_up', 'ang', 'disp', 'offs'):
                 vals = [r[key] for r in rows]
                 print(f'   median {key:6s} {median(vals):8.3f}   max {max(vals):8.3f}')
+        frows = [flight_row(slot, s) for slot, s in getattr(analyse, 'flights', [])]
+        if frows:
+            print(f'   [td-flight] whole-episode rows: {len(frows)}')
+            print('   slot  secs crashS  rise_m  vyUpMax  hSpd0  upyMin  |w|max  travel  dispSq')
+            for r in frows:
+                print(f"   {r['slot']:>4} {r['secs']:5.1f} {r['crash_secs']:6.1f}  {r['rise']:6.3f} {r['vy_up']:8.2f} {r['hspd0']:6.1f}"
+                      f"  {r['upy_min']:6.3f}  {r['ang']:6.2f} {r['travel']:7.1f} {r['disp']:7.3f}")
+            for key in ('rise', 'vy_up', 'upy_min', 'ang', 'travel', 'disp'):
+                vals = [r[key] for r in frows]
+                print(f'   flight median {key:7s} {median(vals):8.3f}   max {max(vals):8.3f}   min {min(vals):8.3f}')
         tot = sum(verdicts.values())
         if tot:
             parts = ', '.join(f'{k} {v} (median closing {median(closing[k]):.1f})' for k, v in verdicts.most_common())
