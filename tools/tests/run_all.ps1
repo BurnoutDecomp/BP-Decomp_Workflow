@@ -38,6 +38,12 @@ $root  = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 # fit inside one foreground command.
 $cases = Get-ChildItem (Join-Path $PSScriptRoot 'cases') -Filter '*.ps1' |
          Where-Object { $_.BaseName -like $Filter } | Sort-Object Name
+# PAIR cases (e.g. net_lan_pair) need two slots at once and have their own runner, run_pair.ps1;
+# their no-argument descriptor carries .Pair and no Checks, so run_case would refuse them (exit 2).
+$cases = @($cases | Where-Object {
+  $d = $null; try { $d = & $_.FullName } catch { }
+  if ($d -is [hashtable] -and $d.Pair) { Write-Host "[all] skip $($_.BaseName) (pair case: tools\tests\run_pair.ps1)"; $false } else { $true }
+})
 if ($cases.Count -eq 0) { Write-Host "[all] no cases match '$Filter'"; exit 2 }
 
 $runCase   = (Join-Path $PSScriptRoot 'run_case.ps1')
