@@ -766,7 +766,8 @@ foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA'
                   'BRN_TRAFFIC_EVENTS_CONTROL','BRN_TRAFFIC_TRACK','BRN_VFXFEED_PROBE','BRN_VP_PROBE',
                   'BRN_WHEELRESET_PROBE','BRN_WHEEL_PROBE','BRN_WHEEL_SUS_PROBE','BRN_WORLD_CAMDIST',
                   'BRN_WORLD_CAMSPEED','BRN_WORLD_CAMTRAFFIC','BRN_WORLD_CRASH_DIAG','BRN_WORLD_ONLY',
-                  'BRN_WORLD_UVDEBUG','BRN_ZCMP_PROBE')) {
+                  'BRN_WORLD_UVDEBUG','BRN_ZCMP_PROBE',
+                  'BRN_NET_HOST','BRN_NET_JOIN','BRN_NET_DELAY')) {
   # ⚠️ SAY SO when we discard something the caller deliberately set. Wiping is right -- it is what
   # makes a DEFAULT run default -- but doing it SILENTLY turns a deliberate `$env:BRN_X=1` into a
   # measurement of nothing. That cost a wave its first instrumented run: it exported BRN_MODEMGR_DIAG
