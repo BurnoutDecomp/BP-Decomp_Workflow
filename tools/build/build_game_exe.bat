@@ -3018,6 +3018,11 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  This is what gives the game-state module a REAL GameStateModuleIO::OutputBuffer, i.e.
   rem  the queue BridgeGameStateToDirector appends into the director every frame.
   echo "%SRC%\GameSource\GameState\BrnGameStateModule.cpp"
+  rem  [FX-RUMBLE 2026-09-22, crash-parity G10-D1/D2/D3/D5/D7] the force-feedback manager the
+  rem  GameState module embeds by value (gsm+46680): Construct/Prepare/Update/UpdatePauseState/
+  rem  OnVehicle*Impact/UpdateImpacts/PlayJolt. Its only externals are CRT, the assert trio and
+  rem  the log stream the exe already links.
+  echo "%SRC%\GameSource\GameState\RumbleManager\BrnRumbleManager.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager.cpp"
   rem *** DRIVE-THRU LINK CLOSURE (2026-08-27): the two partfiles that close the last
   rem  unresolved external. BrnProgressionManager_Unlocks.cpp bodies UnlockCarFromTrophy
