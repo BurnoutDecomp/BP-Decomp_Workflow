@@ -264,10 +264,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  it "DELETE-WHEN it has a caller"). It has one now -- DoUpdate_GameStatePostWorld -- and
   rem  it is the ONLY producer of game event 93, the crash-nav pause event that reaches
   rem  RequestPause/RequestUnpause, actions 86/87, CheckGameActions, the sim timer.
-  rem  SIBLING SPLIT: the parent GameBridgeGUIToX.cpp CANNOT be mounted -- its other two
-  rem  members need six symbols with no home in the linked set (measured: exactly 6 LNK2019,
-  rem  none of them from BridgeGuiToGameState), and TelemetryData::AddParameter has no home
-  rem  at all. The function was MOVED, not copied, so folding it back later is a delete.
+  rem  SIBLING SPLIT: the parent GameBridgeGUIToX.cpp (BridgeGuiToReplay_PostSim and
+  rem  TranslateGuiEventsToNetworkEvents) is not mounted yet. The six symbols it once lacked
+  rem  (TelemetryData::AddParameter among them) are homed in mounted TUs since network wave
+  rem  N1. The function was MOVED, not copied, so folding it back later is a delete.
   echo "%SRC%\GameSource\Game\GameBridgeGUIToX_GameState.cpp"
   rem ---- faithful-audio phase C4 2026-08-28: the sound spine bridges go LIVE. ----------------
   rem  GameBridgeSoundToX.cpp carries BridgeSoundToTraining @0x823C63C0 and BridgeSoundToWorld
@@ -275,7 +275,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  BrnGameMainFlowStates.cpp -- DoPreUpdate_Sound plus DriveWorldUpdateFrame staging.
   echo "%SRC%\GameSource\Game\GameBridgeSoundToX.cpp"
   rem  SIBLING SPLIT of GameBridgeGUIToX.cpp -- BridgeGuiToSound @0x823C0A58 MOVED to its own
-  rem  TU so it mounts without the parent TU's six un-homed symbols. Caller: the C4 spine.
+  rem  TU so it could mount before the parent TU's symbols were homed. Caller: the C4 spine.
   echo "%SRC%\GameSource\Game\GameBridgeGUIToX_Sound.cpp"
   rem  SIBLING SPLIT of GameBridgeGameStateToX.cpp -- BridgeGameStateToSound @0x823CDE50 MOVED
   rem  to its own TU, phase C4b: DoUpdate_Sound @0x823DCEC0 is its only console caller and the
