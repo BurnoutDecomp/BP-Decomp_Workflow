@@ -335,6 +335,13 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- BrnRendererModule::Update + the renderer-output accessor bodies.            --
   echo "%SRC%\GameShared\GameClasses\System\Input\CgsInputModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Input\PC\CgsInputPadsPC.cpp"
+  rem ---- crash-parity FX-RUMBLE3 2026-09-24 (G10-D4): the console input module replaces the
+  rem  BrnGameModule.hpp ODR stub -- DoUpdate_InputPreWorld -> InputModule::PreWorldUpdate ->
+  rem  ProcessRumbleRequests -> InputPads::UpdateRumble -> DeviceX360Pad::SetRumble (the rumble chain).
+  echo "%SRC%\GameShared\GameClasses\Input\CgsInputModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Input\CgsInputPads.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Input\CgsInputProcessRumbleQueues.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Input\Devices\X360\CgsInputDeviceX360Pad.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOInputBuffer.cpp"
   echo "%SRC%\GameSource\World\BrnWorldModuleIO.cpp"
   rem ---- world-render campaign: the real WorldModule + streaming producer ----
