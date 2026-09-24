@@ -3021,18 +3021,14 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  Camera\Behaviours\BehaviourBystanderCam.cpp, carrying ImpactSlomoController::Update
   rem  @0x82227230 (THE CRASH SLOW MOTION -- it writes Camera::mEffects.mfSimTimeScale =
   rem  0.2857143 for a 2.0 s burst) and ImpactShakeController::Update @0x82243720.
-  rem  ==> IT IS NOT THE PARENT TU. Do NOT "simplify" this by mounting BehaviourBystanderCam.cpp
-  rem  instead. MEASURED, not assumed: that TU reaches every foreign object through a
-  rem  `namespace detail` layer of ~30 free-function shims that are DECLARED AND NEVER DEFINED
-  rem  anywhere in the tree, so mounting it opens ~28 unresolved externals -- and the one that
-  rem  carries the whole feature (Camera_SetTimeScale) is the ONLY observable effect of the
-  rem  slow-motion controller, so a quiet stub for it would link green and produce NO SLOW
-  rem  MOTION. The partfile is written against the real types instead (Camera / AllVehicleData
-  rem  / VehicleTracker / VehicleRef / CameraImpactEffect / CameraShake).
-  rem  MEASURED mount cost: its only project-specific callees are CameraShake::Update
-  rem  (BrnCameraShakeUpdate.cpp, mounted two lines up), CameraImpactEffect::RegisterImpact
-  rem  (BrnCameraImpactEffect.cpp) and Utils::GetZoomFromFOVDegs (CameraUtils.cpp) -- all three
-  rem  already on this list; AllVehicleData::GetPlayer and VehicleRef::Get are header inlines.
+  rem  2026-09-24 (crash-parity FX-DIRECTOR, b5 c65dea67): the PARENT TU BehaviourBystanderCam.cpp is
+  rem  mounted too now (next to the fixed cam, further down). Its `namespace detail` layer of ~30
+  rem  never-defined free-function shims -- the reason it could not be mounted -- is gone: the
+  rem  three hollow BehaviourBystanderCam definitions are merged into BehaviourBystanderCam.h and the
+  rem  TU is written against the real callees. This partfile stays its own TU (it links next to the
+  rem  parent without duplicates): its callees are CameraShake::Update (BrnCameraShakeUpdate.cpp,
+  rem  mounted two lines up), CameraImpactEffect::RegisterImpact (BrnCameraImpactEffect.cpp) and
+  rem  Utils::GetZoomFromFOVDegs (CameraUtils.cpp).
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourBystanderCamImpactControllers.cpp"
   rem  ... and its ONE unresolved external: CameraImpactEffect::RegisterImpact @0x821F3648.
   rem  Split into its own partfile for the SAME reason BrnCameraShakeUpdate.cpp exists -- the
@@ -4162,6 +4158,11 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  no vtable, which AV'd BehaviourHelper::Prepare the moment a static-impact shot pooled one). Its
   rem  Parameters::Serialise<S> visitor is split into BrnBehaviourFixedCamSerialise.cpp (unmounted).
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourFixedCam.cpp"
+  rem  [FX-DIRECTOR 2026-09-24] the bystander cam is a real Camera::Behaviour now: its three hollow-shell
+  rem  definitions are merged into BehaviourBystanderCam.h and the TU is written against the real callees
+  rem  (the detail:: shim layer that kept it unmounted is gone). Its Update needs the position finder.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourBystanderCam.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnPositionFinder.cpp"
   rem  ---- 2026-08-01, SEVENTH PASS: the BehaviourInterpolate ODR reconcile ------------------
   rem  BrnBehaviourManager.h used to carry a SECOND definition of BehaviourInterpolate -- no
   rem  base, no members, sizeof == 1 -- and because that header is the one every arbitrator
@@ -4438,8 +4439,8 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  @0x82239DE8 and NewMoment @0x82255850 (now in the mounted BrnMomentController.cpp; the split
   rem  BrnMomentControllerNewMoment.cpp is gone), MainDirector holds a real MomentController, and
   rem  BehaviourFixedCam is a real Camera::Behaviour (mounted above). The tick call at 0x82274348
-  rem  (BrnMainDirector.cpp, `GATE: UpdateMoments(...)`) stays gated until BehaviourBystanderCam, the
-  rem  second hollow-shell behaviour, is real -- a vtable-less shell AVs BehaviourHelper::Prepare.
+  rem  (BrnMainDirector.cpp, `GATE: UpdateMoments(...)`) stays gated: BehaviourBystanderCam is real too
+  rem  now (b5 c65dea67, mounted above); the call goes back once a crash run with the tick on is clean.
   rem  The 2026-08-23..09-11 history of this block (mount costs, the order of work) is in git.
   rem ---- [momentcam] end ----------------------------------------------------------------
 
