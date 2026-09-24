@@ -61,22 +61,82 @@ def find(qname):
             continue
         path, _, text = m.group(1), m.group(2), m.group(3)
         stripped = text.strip()
-        if stripped.startswith(("//", "*", "/*")):
+        if stripped.startswith(("//", "*", "/*", "#")):
             mentions.append(line)
             continue
+        # Only the CODE part of the line counts. 2026-09-24: `#include "...BrnMath.h"  // BrnMath::IsNormal(...)`
+        # and `x = y;  // see Foo::Bar(` were read as definitions (a trailing comment after code).
+        code = text.split("//", 1)[0]
         # a definition looks like  <something> Class::Method(   -- not a call, not a declaration
         # ⚠️ the qualified name may start the line, with the return type on the PREVIOUS one:
         #     bool
         #     BoostBurnout5::AreWeAllowedToBoost(...)
         # Requiring a character before it made those read as MENTIONS -- a false negative that
-        # told a wave a real body did not exist (measured 2026-08-29). A qualified CALL never
-        # sits at column 0 (statements are inside a function, hence indented), so anchoring at
-        # ^ strictly removes false negatives without admitting call sites.
-        if re.search(r"(?:^|[\w>&*\s])" + re.escape(pat) + r"\s*\(", text) and ";" not in text.split("(")[0]:
+        # told a wave a real body did not exist (measured 2026-08-29).
+        # ⚠️ 2026-09-24: it may also carry a NAMESPACE qualifier in front of the class,
+        #     void
+        #     CgsSystem::TimerStatusInterface::Clear()
+        # -- the character before the pattern is then ':' and the old class [\w>&*\s] rejected it:
+        # "NO DEFINITION" for a real body (FX-XLANE, crash parity wave 5). The old class also let ANY
+        # word character precede the class name, so `RaceCar::Update` matched `ActiveRaceCar::Update(`
+        # (a suffix hit): now the pattern must follow the line start, whitespace, a return-type
+        # character (> & *) or a `::` qualifier -- and, for a bare `::Method` query, an identifier.
+        before = r"(?:^|(?<=[\s>&*])|(?<=::)" + (r"|(?<=\w)" if not cls else "") + r")"
+        hit = re.search(before + re.escape(pat) + r"\s*\(", code)
+        prefix = code[:hit.start()] if hit else ""
+        # A call or a declaration, not a definition: the statement ends on this line (`;`), or the
+        # text in front of the name is an expression (`= ( , ! ? return new ...`).
+        is_call = (code.rstrip().endswith(";")
+                   or re.search(r"[=(),!?;{}|+\-/%^~\[\]\"']", prefix) is not None
+                   or re.search(r"\b(?:return|new|delete|throw|case|if|while|for|switch)\b", prefix) is not None)
+        if hit and not is_call:
             defs.append(line)
         else:
             mentions.append(line)
     return defs, mentions
+
+
+def find_unqualified(qname):
+    """Fallback for bodies whose definition does not spell `Class::Method` at all: free functions
+    inside a `namespace Ns { ... }` block and bodies written inside the class definition. Search the
+    files that open `namespace <Cls>` / `class <Cls>` / `struct <Cls>` for `[type] Method(` whose
+    statement opens a `{` before it ends with `;`.
+    2026-09-24: `BrnMath::IsNormal` (bodied in a namespace block) only ever read as HAS BODY through
+    a false positive -- a trailing comment on an `#include` line."""
+    if "::" not in qname:
+        return []
+    meth = qname.split("::")[-1]
+    cls = qname.split("::")[-2]
+    try:
+        files = subprocess.run(
+            ["grep", "-rlE", "--include=*.cpp", "--include=*.h", "--include=*.hpp",
+             # POSIX classes, not \s / \b: the grep that Python finds on PATH here matched nothing
+             # with them (measured 2026-09-24), while the same pattern worked from bash.
+             r"(namespace|class|struct)[[:space:]]+" + re.escape(cls) + r"([^[:alnum:]_]|$)", SRC],
+            capture_output=True, timeout=180).stdout.decode("utf-8", "replace").split()
+    except Exception:
+        return []
+    defs = []
+    sig = re.compile(r"^\s*(?:[\w:<>,*&~]+\s+)*[*&]*" + re.escape(meth) + r"\s*\(")
+    for path in files:
+        try:
+            lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+        except OSError:
+            continue
+        for i, text in enumerate(lines):
+            code = text.split("//", 1)[0]
+            if not sig.match(code) or code.lstrip().startswith(("#", "*", "return ", "else ")):
+                continue
+            # the statement must reach a `{` before a `;` (a body, not a declaration or a call)
+            tail = code[code.index("(") :]
+            for nxt in lines[i + 1 : i + 6]:
+                if "{" in tail or ";" in tail:
+                    break
+                tail += " " + nxt.split("//", 1)[0]
+            brace, semi = tail.find("{"), tail.find(";")
+            if brace >= 0 and (semi < 0 or brace < semi):
+                defs.append(f"{path}:{i + 1}:{text}")
+    return defs
 
 
 def ledger(qname):
@@ -103,6 +163,12 @@ def main(argv):
     for qname in names:
         defs, mentions = find(qname)
         verdict = "HAS BODY" if defs else "** NO DEFINITION IN THE TREE **"
+        if not defs:
+            loose = find_unqualified(qname)
+            if loose:
+                defs = loose
+                verdict = ("HAS BODY (unqualified: inside a namespace/class block of that name -- check the "
+                           "scope and the signature, an overload of another class can match too)")
         print(qname + ": " + verdict)
         for d in defs[:3]:
             print("    def: " + d[:140])
