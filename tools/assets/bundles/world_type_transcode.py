@@ -962,10 +962,10 @@ def verify_staticsoundmap_le(data):
     assert ent_off == SSM_X64_HEADER, 'entity table offset'
     assert sub_off == ent_off + SSM_ENTITY_STRIDE * num_ent, 'grid offset'
     assert sub_off + 4 * num_x * num_z == len(data), 'grid extent'
-    for i in range(num_ent):
-        packed = struct.unpack_from('<I', data, ent_off + SSM_ENTITY_STRIDE * i + 12)[0]
-        radius = packed & 0xffff
-        assert radius > 0, 'entity radius'
+    # No per-entity value check: a zero radius is REAL console data.  TRK_UNIT57's passby map
+    # ships an entity whose packed (type << 16) | radius word is 0 on the X360 disc, so the old
+    # `radius > 0` assert refused a faithful port of that bundle (found 2026-09-24 by the
+    # crash-parity FX-EMITTER lane; the port without it is byte-identical to build/game).
     min_x = struct.unpack_from('<f', data, 0x00)[0]
     max_x = struct.unpack_from('<f', data, 0x10)[0]
     sub_size = struct.unpack_from('<f', data, 0x20)[0]
