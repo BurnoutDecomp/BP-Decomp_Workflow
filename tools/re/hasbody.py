@@ -26,6 +26,9 @@ import json, os, re, subprocess, sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(REPO, "b5-decomp", "src")
+# 2026-09-24: bodies also live under b5-decomp/vendor (e.g. rw::physics::Quaternion in
+# vendor/renderware/src/rw/physics/Quaternion.cpp, mounted as %VEN%) -- search both roots.
+ROOTS = [SRC, os.path.join(REPO, "b5-decomp", "vendor")]
 
 
 def find(qname):
@@ -43,7 +46,7 @@ def find(qname):
         # dressed as a tool failure, and the previous defect in this same function was also
         # "reports something other than what its name says".
         out = subprocess.run(
-            ["grep", "-rn", "--include=*.cpp", "--include=*.h", pat, SRC],
+            ["grep", "-rn", "--include=*.cpp", "--include=*.h", "--include=*.hpp", pat] + ROOTS,
             capture_output=True, timeout=180).stdout.decode("utf-8", "replace")
     except Exception as exc:
         print("grep failed:", exc)
@@ -112,7 +115,7 @@ def find_unqualified(qname):
             ["grep", "-rlE", "--include=*.cpp", "--include=*.h", "--include=*.hpp",
              # POSIX classes, not \s / \b: the grep that Python finds on PATH here matched nothing
              # with them (measured 2026-09-24), while the same pattern worked from bash.
-             r"(namespace|class|struct)[[:space:]]+" + re.escape(cls) + r"([^[:alnum:]_]|$)", SRC],
+             r"(namespace|class|struct)[[:space:]]+" + re.escape(cls) + r"([^[:alnum:]_]|$)"] + ROOTS,
             capture_output=True, timeout=180).stdout.decode("utf-8", "replace").split()
     except Exception:
         return []
