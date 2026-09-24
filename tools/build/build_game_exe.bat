@@ -4158,6 +4158,10 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Camera\BrnVisibilityCollisionPolicy.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCollisionPolicyAttachedToVehicle.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnGeometryCollisionPredictor.cpp"
+  rem  [FX-DIRECTOR 2026-09-24] the fixed cam is a real Camera::Behaviour now (it was a hollow shell with
+  rem  no vtable, which AV'd BehaviourHelper::Prepare the moment a static-impact shot pooled one). Its
+  rem  Parameters::Serialise<S> visitor is split into BrnBehaviourFixedCamSerialise.cpp (unmounted).
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourFixedCam.cpp"
   rem  ---- 2026-08-01, SEVENTH PASS: the BehaviourInterpolate ODR reconcile ------------------
   rem  BrnBehaviourManager.h used to carry a SECOND definition of BehaviourInterpolate -- no
   rem  base, no members, sizeof == 1 -- and because that header is the one every arbitrator
@@ -4429,50 +4433,14 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  that sent readers to the unmounted ICEWrapper TU was stale. Still inert: NewMoment
   rem  allocates nothing, so no moment's Update runs.
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentPlayerStunt.cpp"
-  rem ---- [momentcam] jump/stunt CUTAWAY-CAMERA wave, 2026-08-23 --------------------------
-  rem  ⭐ NO NEW MOUNTS ARE ADDED BY THIS WAVE, ON PURPOSE. This block exists so the next
-  rem  person to plan a "mount the moments" pass starts from measured numbers instead of the
-  rem  stale "+9 unresolved" note further up.
-  rem
-  rem  WHAT THE WAVE FIXED IN PLACE (already-mounted TUs above; zero new unresolved externals,
-  rem  verified by archiving build\game\obj into one .lib and diffing symbol tables):
-  rem    * MomentSelector::SelectBestMomentWithExclusion @0x82250FC8 and its LRU arm
-  rem      SelectBestLRUMomentWithExclusion @0x8221BE50 are REAL now, in BrnMomentSelector.cpp.
-  rem      Both were `return false` GROUP F stubs sitting on the cutaway path.
-  rem    * BrnMomentParameterBank.cpp was a six-type local fork (the class-vs-struct
-  rem      Moment::Parameters ODR fork). De-forked; every byte it writes is unchanged.
-  rem    * BrnMomentSubclasses.h was an ELEVEN-class ODR fork; all eleven are retired and
-  rem      that header is deleted (2026-09-11).
-  rem    * All 14 Moments\*.cpp now compile.
-  rem    * The moment pool bucket (AbstractPool 70,20,Vector4 == 1120 B) is TOO SMALL on x64
-  rem      (MomentPlayerJumping is 1296 B). Widened + static_assert-ratcheted in
-  rem      BrnMomentController.h. Inert today; a heap smash the day the closure mounts.
-  rem
-  rem  WHY NOTHING IS MOUNTED (MEASURED 2026-08-23, not estimated):
-  rem    * BrnMomentControllerNewMoment.cpp + the eight Moments\*.cpp still out of the link
-  rem      cost 91 NON-CRT unresolved externals, re-measured 2026-09-11. It was 147 whole on
-  rem      2026-09-09; [momentwall] and [momentshims] above took six TUs out of the set at
-  rem      zero cost each. The shim family that used to dominate the count is down to two.
-  rem    * ⛔ AND THE MOUNT ALONE WOULD NOT MAKE A CUTAWAY PLAY: nothing in this tree ticks a
-  rem      moment. MomentController::UpdateAllMoments @0x82239DE8 has no body anywhere,
-  rem      MainDirector::UpdateMoments @0x82250268 is declaration-only, and the call is
-  rem      COMMENTED OUT at BrnMainDirector.cpp:1617 (`GATE: UpdateMoments(...)`).
-  rem    * ⛔ BrnMainDirector.h:353 models the MomentController as a fixed 22,416-byte X360
-  rem      span (`u8 maMomentController[0x1CA60 - 0x172D0]`) and reinterpret_casts to it. The
-  rem      host object does not fit that span even before the bucket widening.
-  rem
-  rem  ORDER TO DO IT IN (each step is useless without the ones above it):
-  rem    0. DONE 2026-09-11 (see [momentwall] above): the camera parameter record is mapped
-  rem    and the four single-block moment accessors are bodied. The two INDEXED ones
-  rem    (player-jumping rig / bystander shots) are not -- their call-site indices are off
-  rem    by one, which the bank header records.
-  rem    1. DONE 2026-09-11 (see [momentshims] above): the MomentSharedInfo reach shims are
-  rem    bodied. The two left need members this tree has not carved.
-  rem    2. Body UpdateAllMoments + UpdateMoments and
-  rem    un-gate BrnMainDirector.cpp:1617.  3. Give MainDirector a real MomentController
-  rem    member.  4. Body the six BehaviourCollection template methods + the 34 one-liner
-  rem    per-moment virtuals.  5. THEN add the mounts here and delete the GROUP F stubs.
-  rem  Full reasoning: GROUP F at the foot of %SRC%\GameSource\Director\DirectorLinkStubs.cpp
+  rem ---- [momentcam] 2026-09-24 (crash-parity FX-DIRECTOR, b5 cbe64697 / 22091bb2): the moment
+  rem  machinery is REAL -- MainDirector::UpdateMoments @0x82250268, MomentController::UpdateAllMoments
+  rem  @0x82239DE8 and NewMoment @0x82255850 (now in the mounted BrnMomentController.cpp; the split
+  rem  BrnMomentControllerNewMoment.cpp is gone), MainDirector holds a real MomentController, and
+  rem  BehaviourFixedCam is a real Camera::Behaviour (mounted above). The tick call at 0x82274348
+  rem  (BrnMainDirector.cpp, `GATE: UpdateMoments(...)`) stays gated until BehaviourBystanderCam, the
+  rem  second hollow-shell behaviour, is real -- a vtable-less shell AVs BehaviourHelper::Prepare.
+  rem  The 2026-08-23..09-11 history of this block (mount costs, the order of work) is in git.
   rem ---- [momentcam] end ----------------------------------------------------------------
 
   rem  BrnDirectorEffectTrigger.cpp joins the link at last: the note further down claiming it
