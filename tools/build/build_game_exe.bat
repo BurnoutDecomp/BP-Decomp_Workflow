@@ -4438,13 +4438,14 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  that sent readers to the unmounted ICEWrapper TU was stale. Still inert: NewMoment
   rem  allocates nothing, so no moment's Update runs.
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentPlayerStunt.cpp"
-  rem ---- [momentcam] 2026-09-24 (crash-parity FX-DIRECTOR, b5 cbe64697 / 22091bb2): the moment
-  rem  machinery is REAL -- MainDirector::UpdateMoments @0x82250268, MomentController::UpdateAllMoments
-  rem  @0x82239DE8 and NewMoment @0x82255850 (now in the mounted BrnMomentController.cpp; the split
-  rem  BrnMomentControllerNewMoment.cpp is gone), MainDirector holds a real MomentController, and
-  rem  BehaviourFixedCam is a real Camera::Behaviour (mounted above). The tick call at 0x82274348
-  rem  (BrnMainDirector.cpp, `GATE: UpdateMoments(...)`) stays gated: BehaviourBystanderCam is real too
-  rem  now (b5 c65dea67, mounted above); the call goes back once a crash run with the tick on is clean.
+  rem ---- [momentcam] 2026-09-24 (crash-parity FX-DIRECTOR): the crash highlight moments RUN. The
+  rem  machinery is real -- MainDirector::UpdateMoments @0x82250268, MomentController::UpdateAllMoments
+  rem  @0x82239DE8 and NewMoment @0x82255850 (in the mounted BrnMomentController.cpp; the split
+  rem  BrnMomentControllerNewMoment.cpp is gone), MainDirector holds a real MomentController (b5
+  rem  cbe64697), BehaviourFixedCam (22091bb2) and BehaviourBystanderCam (c65dea67) are real
+  rem  Camera::Behaviours (both mounted above), and the tick call at 0x82274348 went back as the
+  rem  console's unconditional UpdateMoments(...) in b5 0d4289ce -- live: crashes filmed by moment
+  rem  cameras (Tumbling, BystanderSeesAction), the reset-on-track sting fires, 0 asserts / 0 AV.
   rem  The 2026-08-23..09-11 history of this block (mount costs, the order of work) is in git.
   rem ---- [momentcam] end ----------------------------------------------------------------
 
