@@ -106,16 +106,22 @@ def find_unqualified(qname):
     statement opens a `{` before it ends with `;`.
     2026-09-24: `BrnMath::IsNormal` (bodied in a namespace block) only ever read as HAS BODY through
     a false positive -- a trailing comment on an `#include` line."""
-    if "::" not in qname:
-        return []
     meth = qname.split("::")[-1]
-    cls = qname.split("::")[-2]
+    cls = qname.split("::")[-2] if "::" in qname else None
+    # A BARE name (no `::`) is looked for in every file that spells `Name(` -- a free function or a
+    # header inline written inside `namespace X { ... }` never carries a `::` at its definition, so
+    # the qualified search above cannot see it. 2026-09-24: `hasbody.py CheckVehicleForPowerPark`
+    # said NO DEFINITION for the inline at BrnPowerParkingManager.h:167 (FX-TRAFFIC3).
+    # POSIX classes, not \s / \b: the grep that Python finds on PATH here matched nothing with
+    # them (measured 2026-09-24), while the same pattern worked from bash.
+    if cls:
+        scope = r"(namespace|class|struct)[[:space:]]+" + re.escape(cls) + r"([^[:alnum:]_]|$)"
+    else:
+        # `[(]`, not `\(`: MSYS grep receives a backslash from Python mangled ("Unmatched ( or \(").
+        scope = r"(^|[^[:alnum:]_])" + re.escape(meth) + r"[[:space:]]*[(]"
     try:
         files = subprocess.run(
-            ["grep", "-rlE", "--include=*.cpp", "--include=*.h", "--include=*.hpp",
-             # POSIX classes, not \s / \b: the grep that Python finds on PATH here matched nothing
-             # with them (measured 2026-09-24), while the same pattern worked from bash.
-             r"(namespace|class|struct)[[:space:]]+" + re.escape(cls) + r"([^[:alnum:]_]|$)"] + ROOTS,
+            ["grep", "-rlE", "--include=*.cpp", "--include=*.h", "--include=*.hpp", scope] + ROOTS,
             capture_output=True, timeout=180).stdout.decode("utf-8", "replace").split()
     except Exception:
         return []
@@ -171,7 +177,10 @@ def main(argv):
             if loose:
                 defs = loose
                 verdict = ("HAS BODY (unqualified: inside a namespace/class block of that name -- check the "
-                           "scope and the signature, an overload of another class can match too)")
+                           "scope and the signature, an overload of another class can match too)"
+                           if "::" in qname else
+                           "HAS BODY (bare name: a free function / inline of that name -- check which scope "
+                           "it is in; another class's method of the same name can match too)")
         print(qname + ": " + verdict)
         for d in defs[:3]:
             print("    def: " + d[:140])
