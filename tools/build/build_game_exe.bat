@@ -1990,7 +1990,10 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  rw::physics SOLVER SPINE (2026-08-04, task #121). Six read-only waves reconstructed the
   rem  EATech RenderWare rigid-body solver; this is where it lands.
   rem    Quaternion.cpp  -- Quaternion::UnitQuaternionToMatrix @0x82BC3EC0 (an EXPORT HOLE,
-  rem                       recovered from the copy inlined into DynamicUpdate).
+  rem                       decoded from its OWN words 2026-09-24, crash parity H2-D1 b5 d5bd258d:
+  rem                       it neither normalises nor writes q back; DynamicUpdate renormalises
+  rem                       mQuat itself. The old note said it was recovered from DynamicUpdate's
+  rem                       inline copy -- that copy is a different builder, the gSqrt2s form).
   rem    Simulation.cpp  -- GetResourceDescriptor / SetWorkspace / BatchIntegrator /
   rem                       Activate / Freeze / RemoveRigidBody.
   rem    RigidBody.cpp   -- now carries DynamicUpdate @0x82BC2B78, the per-body integrator.
