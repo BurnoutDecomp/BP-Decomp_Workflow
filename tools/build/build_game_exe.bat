@@ -3381,6 +3381,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsEffectObjectDtor.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\Logic\CgsEffectControlDtor.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnCollisionStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Collision\BrnBinLookupCache.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnCollisionState.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnCollisionDataStructures.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnCollisionControl.cpp"
