@@ -1870,6 +1870,9 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  ...and its one link dependency, BodyPartBBoxSpec::HackCheckHandedness (called from the
   rem  spec's FixUp). Same story: body committed, never on the list.
   echo "%SRC%\SharedClasses\Physics\Deformation\BrnBodyPartBBoxSpec.cpp"
+  rem  2026-09-24 (crash parity G16-D1, FX-XLANE): HackCheckHandedness now calls
+  rem  BBoxPointSkinData::HackSwapHandedness on its left-handed arm; its body lives here.
+  echo "%SRC%\SharedClasses\Physics\Deformation\BrnBBoxPointSkinData.cpp"
   rem  2026-08-14 (deformation-mount wave): the streamed-deformation-spec RESOURCE TYPE handler
   rem  (0x1001C / 65564, the deformation resource in every Vehicles\VEH_*_AT.bin). It existed,
   rem  unmounted AND unregistered -- the loader skipped FixUp and the first real spec walk after
