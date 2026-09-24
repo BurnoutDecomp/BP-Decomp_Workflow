@@ -764,6 +764,15 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   (impact smoke / crash impact dust / skid smoke) -- Construct, the bank Construct /
   rem   Prepare, Initialize, UpdateParams, SpawnParticle, AcquireTexture + the static tables.
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnSimpleParticleArray.cpp"
+  rem   ...and their RENDER half (2026-09-24, FX-CRASHVFX): CB4ParticleBank::Render +
+  rem   SimpleParticleVertexBufferBuilder::BuildDispatchData (the job side), the quad builder,
+  rem   BrnSimpleParticleRenderer (Construct + Dispatch), and the Im3dSmokeRenderer with its two
+  rem   re-authored program pairs (BrnIm3dSmokeRendererProgramsPC.cpp, a generated PC leaf).
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnSimpleParticleArray_CB4ParticleBank_Render.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\ShadedRotatingRenderMethod.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnSimpleParticleRenderer.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnIm3dSmokeRenderer.cpp"
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnIm3dSmokeRendererProgramsPC.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiserStaticLayout.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkidProgramsPC.cpp"
