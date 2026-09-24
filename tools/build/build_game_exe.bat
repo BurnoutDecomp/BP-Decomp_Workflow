@@ -3388,6 +3388,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\Sound\Collision\BrnCollisionStateManager.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnBinLookupCache.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnRaceCarCache.cpp"
+  echo "%SRC%\GameSource\Sound\Collision\BrnHingeStateCache.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnCollisionState.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnCollisionDataStructures.cpp"
   echo "%SRC%\GameSource\Sound\Collision\BrnCollisionControl.cpp"
