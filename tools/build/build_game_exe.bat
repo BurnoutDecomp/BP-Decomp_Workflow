@@ -3352,6 +3352,8 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\SharedClasses\Sound\World\BrnSoundWorldScene.cpp"
   echo "%SRC%\SharedClasses\Sound\World\BrnStaticSoundMap.cpp"
   echo "%SRC%\GameSource\Sound\Passby\BrnPassbyStateManager.cpp"
+  echo "%SRC%\GameSource\Sound\Passby\BrnPassbyState.cpp"
+  echo "%SRC%\GameSource\Sound\Passby\BrnPassbyEffect.cpp"
   echo "%SRC%\GameSource\Sound\Vehicles\BrnVehicleStateManager.cpp"
   echo "%SRC%\GameSource\Sound\Vehicles\BrnVehicleState.cpp"
   echo "%SRC%\GameSource\Sound\Vehicles\BrnAIVehicleStateManager.cpp"
