@@ -105,6 +105,21 @@ $profileAside = $null
 $profile = if ($Slot -gt 0) { Join-Path $root ('build\game\Memcard_' + $Slot + '\Profile.sav') }
            else             { Join-Path $root 'build\game\Memcard\Profile.sav' }
 if (-not $NoRun) {
+  # ⛔⛔ TAKE THE BOX LOCK HERE, BEFORE ANY SIDE EFFECT (2026-09-24, crash-parity LIVE-VERIFY).
+  #   Everything below touches state another harness is using: FreshProfile PARKS
+  #   build\game\Memcard\Profile.sav, a Setup stimulus starts pressing keys, and the exe check
+  #   reads an exe a locked build may be relinking. Done before the lock, a case queued behind
+  #   another run parked the save while it WAITED -- the run holding the box then booted the
+  #   first-boot path (newprof never, DRIVING at ~71 s of a 75 s budget: sweep cell
+  #   hbsens_ref2_h230_s70_r1 never reached the wall), and this script's finally then deleted the
+  #   save THAT run wrote. Taking the lock first also means a queued case waits out a locked
+  #   build (build_exe_locked.ps1 holds the same mutex) instead of checking for the exe while
+  #   the build is relinking it. flow_run takes the same lock again below;
+  #   that is safe -- it runs on this thread, and a Mutex is re-entrant for its owning thread
+  #   (measured: the child's WaitOne(0) returns True on the same thread id). The lock is released
+  #   when this process exits, after the profile is put back.
+  . (Join-Path $root 'tools\diagnostics\_box_lock.ps1')
+  Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:([bool]$lRun.NoLock) -Label "run_case" -Slot $Slot
   # A SLOT's exe is staged by flow_run itself (under the lock, after its kill sweep), so only
   # slot 0 must already have one at this point.
   if ($Slot -le 0 -and -not (Test-Path $exe)) { Write-Host "[case] FAIL: no exe at $exe -- build first (tools\tests\build_exe_locked.ps1)"; exit 2 }
