@@ -70,7 +70,8 @@ OUTPUT SAFETY -- WHY --out IS FUSSY
 
 IDEMPOTENCE
     <out>/.build_game_data/state.json records, per produced file: the source size + mtime,
-    the rule id, a signature of the converter script, and the product's own size + mtime.  A
+    the rule id, a signature of the converter script AND every local module it imports
+    (tool_import_closure), and the product's own size + mtime.  A
     re-run recomputes all four and skips anything still current, so adding one converter and
     re-running costs one converter's work, not 3.7 GB.  --force ignores the state.
 
@@ -163,6 +164,7 @@ TO REBUILD THE GAME FOLDER FROM SCRATCH
 
 import argparse
 import fnmatch
+import hashlib
 import json
 import os
 import queue
@@ -862,12 +864,14 @@ def looks_current(item):
     except OSError:
         return False
     if item.rule.tool:
-        tp = os.path.join(REPO, "tools", "assets", *item.rule.tool.split("/"))
-        try:
-            if out_m < os.stat(tp).st_mtime_ns:
-                return False
-        except OSError:
-            pass
+        # Every module the converter runs, not just its entry script (see _tool_sig).
+        for rel in tool_import_closure(item.rule.tool):
+            tp = os.path.join(REPO, "tools", "assets", *rel.split("/"))
+            try:
+                if out_m < os.stat(tp).st_mtime_ns:
+                    return False
+            except OSError:
+                pass
     if item.rule.action == "copy":
         try:
             return os.path.getsize(item.out) == os.path.getsize(item.src)
@@ -916,15 +920,32 @@ _TOOL_SIG = {}
 
 
 def _tool_sig(rule, workroot):
+    """The converter half of a product's currency signature: size + mtime of EVERY local
+    module the converter runs (tool_import_closure), not only its entry script.
+
+    ⚠️ Until 2026-09-24 this stat'ed the entry script alone, so a fix in an IMPORTED porter
+    never re-converted anything that was already current.  That is how build/game kept the
+    pre-b81ce4f9 StaticSoundMap word order for a month: b81ce4f9 fixed
+    world_type_transcode.py, the world-units rule runs convert_world_bundle.py, and every
+    TRK_UNIT*_GR.BNDL stayed "up-to-date" -- the game then read each world emitter's radius
+    as its type and asserted (crash-parity lane FX-EMITTER).  The signature changed shape
+    with this fix, so every product re-converts once."""
     if not rule.tool:
         return "-"
     if rule.tool not in _TOOL_SIG:
-        p = os.path.join(REPO, "tools", "assets", *rule.tool.split("/"))
-        try:
-            st = os.stat(p)
-            _TOOL_SIG[rule.tool] = "%d:%d" % (st.st_size, st.st_mtime_ns)
-        except OSError:
+        entry = os.path.join(REPO, "tools", "assets", *rule.tool.split("/"))
+        if not os.path.isfile(entry):
             _TOOL_SIG[rule.tool] = "missing"
+        else:
+            parts = []
+            for rel in sorted(tool_import_closure(rule.tool)):
+                try:
+                    st = os.stat(os.path.join(REPO, "tools", "assets", *rel.split("/")))
+                    parts.append("%s=%d:%d" % (rel, st.st_size, st.st_mtime_ns))
+                except OSError:
+                    parts.append("%s=missing" % rel)
+            _TOOL_SIG[rule.tool] = "closure%d:%s" % (
+                len(parts), hashlib.sha1("|".join(parts).encode("utf-8")).hexdigest()[:16])
     return _TOOL_SIG[rule.tool]
 
 
@@ -1198,8 +1219,57 @@ BUILT_BINARIES = {"YAP.exe": "build/tools/yap/YAP.exe",
                   "Volatility.Cli.exe": "build/tools/volatility/Volatility.Cli.exe"}
 
 
-def tool_binary_needs(tool_rel, _seen=None):
-    """Which built binaries a converter reaches for, following its local imports.
+# `import a, b as c` and `from a import (...)`, at any indentation -- the porters import
+# each other inside functions as well as at the top.
+_IMPORT_RE = re.compile(r"^[ \t]*(?:from[ \t]+(\w+)[ \t]+import\b|import[ \t]+([\w \t,.]+))",
+                        re.M)
+_TOOL_CLOSURE = {}
+
+
+def tool_import_closure(tool_rel):
+    """A converter's entry script plus every LOCAL module it imports, transitively.
+
+    Both spellings count.  vehicledeform_transcode.py reaches vehicle_transcode and
+    vehicleattrib_transcode only through `from x import ...`, which a scan of `import x`
+    lines never saw.  A module resolves beside its importer first, then under bundles/
+    (where the shared porters live); anything else is the standard library and not ours."""
+    if not tool_rel:
+        return set()
+    if tool_rel in _TOOL_CLOSURE:
+        return _TOOL_CLOSURE[tool_rel]
+    seen, todo = set(), [norm(tool_rel)]
+    while todo:
+        rel = todo.pop()
+        if rel in seen:
+            continue
+        seen.add(rel)
+        path = os.path.join(REPO, "tools", "assets", *rel.split("/"))
+        try:
+            with open(path, "r", encoding="utf-8", errors="replace") as fh:
+                text = fh.read()
+        except OSError:
+            continue
+        here = os.path.dirname(rel)
+        mods = []
+        for frm, imp in _IMPORT_RE.findall(text):
+            if frm:
+                mods.append(frm)
+                continue
+            for part in imp.split(","):
+                words = part.split()
+                if words:
+                    mods.append(words[0].split(".")[0])
+        for mod in mods:
+            for cand in (norm(os.path.join(here, mod + ".py")), "bundles/%s.py" % mod):
+                if os.path.isfile(os.path.join(REPO, "tools", "assets", *cand.split("/"))):
+                    todo.append(cand)
+                    break
+    _TOOL_CLOSURE[tool_rel] = seen
+    return seen
+
+
+def tool_binary_needs(tool_rel):
+    """Which built binaries a converter reaches for, anywhere in its tool_import_closure.
 
     convert_shaders_bundle.py never says 'Volatility.Cli.exe' itself -- it imports
     convert_world_bundle, which does; a scan that stopped at the entry file would miss it."""
@@ -1207,25 +1277,16 @@ def tool_binary_needs(tool_rel, _seen=None):
         return set()
     if tool_rel in _TOOL_NEEDS:
         return _TOOL_NEEDS[tool_rel]
-    seen = _seen if _seen is not None else set()
-    if tool_rel in seen:
-        return set()
-    seen.add(tool_rel)
-    path = os.path.join(REPO, "tools", "assets", *tool_rel.split("/"))
-    try:
-        with open(path, "r", encoding="utf-8", errors="replace") as fh:
-            text = fh.read()
-    except OSError:
-        return set()
-    needs = {want for name, want in BUILT_BINARIES.items() if name in text}
-    here = os.path.dirname(tool_rel)
-    for mod in re.findall(r"^\s*import\s+(\w+)", text, re.M):
-        for cand in (norm(os.path.join(here, mod + ".py")), "bundles/%s.py" % mod):
-            if os.path.isfile(os.path.join(REPO, "tools", "assets", *cand.split("/"))):
-                needs |= tool_binary_needs(cand, seen)
-                break
-    if _seen is None:
-        _TOOL_NEEDS[tool_rel] = needs
+    needs = set()
+    for rel in tool_import_closure(tool_rel):
+        path = os.path.join(REPO, "tools", "assets", *rel.split("/"))
+        try:
+            with open(path, "r", encoding="utf-8", errors="replace") as fh:
+                text = fh.read()
+        except OSError:
+            continue
+        needs |= {want for name, want in BUILT_BINARIES.items() if name in text}
+    _TOOL_NEEDS[tool_rel] = needs
     return needs
 
 
