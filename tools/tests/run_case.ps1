@@ -169,6 +169,23 @@ if (-not $NoRun) {
   Write-Host ("[case] flow_run exit={0} after {1:f0}s" -f $flowExit, ((Get-Date) - $t0).TotalSeconds)
 }
 
+# --- which exe actually ran ------------------------------------------------------------------
+# The stamp above was taken BEFORE flow_run waited for the box lock, and with lanes queued that
+# wait is long enough for someone's locked build to replace the exe (2026-09-24: a run stamped
+# 15:48:16 had executed the 15:53:52 exe). Nothing can replace the exe while flow_run holds the
+# lock, so re-stamp it now, and keep flow_run's own `[flow] exe <sha>` line -- printed under the
+# lock from the exe's link-time provenance -- as the authoritative identity.
+if (-not $NoRun) {
+  $prov.exe_mtime_before_lock = $prov.exe_mtime
+  $prov.exe_mtime = $(if (Test-Path $exe) { (Get-Item $exe).LastWriteTime.ToString('o') } else { 'MISSING' })
+  $prov.exe_size  = $(if (Test-Path $exe) { (Get-Item $exe).Length } else { 0 })
+  $lFlowExe = if (Test-Path $consoleLog) { Select-String -Path $consoleLog -Pattern '\[flow\] exe (\S+)\s+b5=(\S+)' | Select-Object -First 1 } else { $null }
+  if ($lFlowExe) {
+    $prov.exe_sha = $lFlowExe.Matches[0].Groups[1].Value
+    $prov.exe_b5  = $lFlowExe.Matches[0].Groups[2].Value
+  }
+}
+
 # --- gather evidence ------------------------------------------------------------------------
 $logPath = Join-Path $flowOut 'BrnGame.log'
 $marksPath = Join-Path $flowOut 'marks.txt'
@@ -231,7 +248,7 @@ $md = @()
 $md += "# $($lCase.Name) -- $verdict" + $(if ($Label) { " ($Label)" } else { "" })
 $md += ""
 if ($lCase.Bug) { $md += "Bug: $($lCase.Bug)"; $md += "" }
-$md += "Run: ``$RunDir``  exe $($prov.exe_mtime)  b5 $($prov.b5_head)  parent $($prov.parent_head)" + $(if ($prov.b5_dirty -gt 0) { "  (b5 tree has $($prov.b5_dirty) uncommitted tracked change(s))" } else { "" })
+$md += "Run: ``$RunDir``  exe $(if ($prov.exe_sha) { "$($prov.exe_sha) (b5=$($prov.exe_b5)) " })$($prov.exe_mtime)  b5 $($prov.b5_head)  parent $($prov.parent_head)" + $(if ($prov.b5_dirty -gt 0) { "  (b5 tree has $($prov.b5_dirty) uncommitted tracked change(s))" } else { "" })
 $md += "Phase: $($lM.Phase)  asserts=$($lM.Asserts)  flow_exit=$flowExit  expected=$expected  as_expected=$asExpected"
 $md += ""
 $md += "| verdict | check | detail |"
