@@ -430,6 +430,11 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- vtable has to resolve too or Update cannot call mCrashPlayDebugComponent.Update.----
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\CrashPlay\BrnCrashPlayManager.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\CrashPlay\BrnCrashPlayDebugComponent.cpp"
+  rem ---- power parking (crash parity FX-RCEM4 2026-09-24): CheckVehicleForPowerPark's callee   ----
+  rem ---- BrnMath::GetPointToInfiniteLineDistance and PowerParkingManager live in this TU; the  ----
+  rem ---- debug component is the manager's member BY VALUE, so its vtable has to resolve too.   ----
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\PowerParking\BrnPowerParkingManager.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\PowerParking\BrnPowerParkingDebugComponent.cpp"
   rem ---- race-car streamer wave (2026-07-31): the per-car asset director +   ----
   rem ---- its shared component-streamer base + the five concrete leaves. These ----
   rem ---- are what post the first VEH_ load requests.                          ----
