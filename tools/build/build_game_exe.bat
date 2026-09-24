@@ -760,6 +760,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnNativeParticleVertex.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnSparkRenderer_SparkFrameDataSet.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\FXBuckets_BrnSpark.cpp"
+  rem ---- SIMPLE PARTICLES (2026-09-24, FX-CRASHVFX): the native simple-particle arrays
+  rem   (impact smoke / crash impact dust / skid smoke) -- Construct, the bank Construct /
+  rem   Prepare, Initialize, UpdateParams, SpawnParticle, AcquireTexture + the static tables.
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnSimpleParticleArray.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayEffectsSerialiserStaticLayout.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkidProgramsPC.cpp"
