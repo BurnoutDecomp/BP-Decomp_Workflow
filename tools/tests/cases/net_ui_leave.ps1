@@ -17,8 +17,8 @@
 #   {4 LEAVE_GAME} -> ON_GAME_ROOM PerformPauseOption(4) -> HandleLeaveGameRequest -> overlay
 #   "CNOnlLvGmQn" -> Accept -> HandleOverlayComplete posts GUI 52 -> StateManager leave -> 53 -> 46
 #   -> 273 -> HandleLeftGameEvent -> back to INGAME; game event 124 cancels the lobby mode.
-# The overlay has no log line of its own (a [netui] overlay witness is requested from lane UB in
-# CONTRACTS.md); the script waits 3 s for it and taps Accept.
+# The overlay is witnessed by `[netui] overlay show <name>` (the request) and, with BRN_OVERLAY_DIAG,
+# `[overlay] start/complete <NAME>` (the overlays director); the script waits 3 s for it and taps Accept.
 #
 # THE ORACLE
 #   Guest  the menu script ran to its end ("left" mark: [net] state ... inGame=0 was seen)
@@ -72,8 +72,12 @@ if ($Role -eq 'Host') {
     if ($null -eq $l2) { return @{ Pass = $false; Detail = 'never saw the Guest in the lobby ([net] state players>=2)' } }
     $l1 = @($laS | Where-Object { $_.Index -gt $l2.Index -and $_.InGame -eq 1 -and $_.Players -eq 1 }) | Select-Object -First 1
     if ($null -eq $l1) { return @{ Pass = $false; Detail = 'players stayed >= 2: the Guest never left the lobby record' } }
-    $lGone = & $NetPair.CarGoneFrame $ctx (& $NetPair.WallTime $l1.Wall (Get-Item $ctx.Log).LastWriteTime)
-    return @{ Pass = $lGone.Pass; Detail = ("players 2 -> 1 at wall={0}; {1}" -f $l1.Wall, $lGone.Detail) }
+    # The car-gone oracle is the Host's own netcar witness (drawn before the removal, never
+    # reported after it), as in net_lan_leave; the frame comparison is info only -- traffic
+    # driving through its two regions around the leave moves both numbers.
+    $lFrame = & $NetPair.CarGoneFrame $ctx (& $NetPair.WallTime $l1.Wall (Get-Item $ctx.Log).LastWriteTime)
+    $lLog   = & $NetPair.CarGoneLog $ctx.LogLines
+    return @{ Pass = $lLog.Pass; Detail = ("players 2 -> 1 at wall={0}; {1} | frames (info): {2}" -f $l1.Wall, $lLog.Detail, $lFrame.Detail) }
   }.GetNewClosure()
   $lChecks += @(
     @{ Kind = 'LogMatch'; Name = 'game: the removed player reached GameState (case 129 -> action 220)'; Pattern = '\[net\] game player removed'; Expect = $true }
@@ -107,6 +111,10 @@ if ($Role -eq 'Host') {
     @{ Kind = 'Script';   Name = 'the menu script ran to its end (left the lobby)'; Script = $lScriptDone }
     @{ Kind = 'Script';   Name = 'Easy Drive was on its last row (LEAVE_GAME) when selected'; Script = $lBottomCheck }
     @{ Kind = 'Script';   Name = 'the lobby membership ended after the Easy Drive selection'; Script = $lLeftCheck }
+    @{ Kind = 'LogMatch'; Name = 'the leave overlay was requested (HandleLeaveGameRequest)'; Pattern = '\[netui\] overlay show (CNOnlLvGmQn|CNOnlLvChaQn)'; Expect = $true }
+    @{ Kind = 'LogMatch'; Name = 'the overlays director started the leave overlay'; Pattern = '\[overlay\] start (CNONLLVGMQN|CNONLLVCHAQN) '; Expect = $true }
+    @{ Kind = 'LogMatch'; Name = 'Accept on the overlay posted the leave (GUI 52)'; Pattern = '\[netui\] leave post 52'; Expect = $true }
+    @{ Kind = 'LogMatch'; Name = 'the game room left the game (GUI 273) -> GO_BACK'; Pattern = '\[netui\] game-room left game .*-> GO_BACK'; Expect = $true }
     @{ Kind = 'LogMatch'; Name = 'the game room handed back to INGAME'; Pattern = "\[screen\] ENTER 'INGAME\s*' \(from 'ON_GAME_ROOM"; Expect = $true }
     @{ Kind = 'LogMatch'; Name = 'game: the local leave reached GameState (case 124)'; Pattern = '\[net\] game local left'; Expect = $true }
   )
@@ -118,7 +126,7 @@ if ($Role -eq 'Host') {
   Bug     = "wave 3 -- the $Role half of net_ui_leave (run it through tools\tests\run_pair.ps1)"
   Frames  = $lR.Frames
   Run     = $lRun
-  DiagEnv = "$($lR.Harness),BRN_NET_DELAY=30,BRN_SCREEN_DIAG=1,BRN_EASYDRIVE_TRACE=1"
+  DiagEnv = "$($lR.Harness),BRN_NET_DELAY=30,BRN_SCREEN_DIAG=1,BRN_EASYDRIVE_TRACE=1,BRN_OVERLAY_DIAG=1"
   Setup   = (& $NetPair.Setup $Role)
   Checks  = $lChecks
 }
