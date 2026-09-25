@@ -292,7 +292,9 @@ param(
                                  #   be scheduled INSIDE the map. Channels: DPadUp DPadDown DPadLeft
                                  #   DPadRight (37..40, the crash-nav panel's filter toggles), Next
                                  #   Prev (42/41 GUI_DOWN/UP), OptionNext OptionPrev (44/43
-                                 #   GUI_RIGHT/LEFT), Accept (49), Stop (50), Start (45). All are the
+                                 #   GUI_RIGHT/LEFT), Accept (49), Stop (50), Start (45), EventDetails
+                                 #   (58, the pad's d-pad-up third action: toggles road rules in free
+                                 #   roam). All are the
                                  #   game's existing AUTO-RESET harness channels (CgsInputPadsPC.cpp);
                                  #   nothing new is added on the game side.
   [string]$MenuScript  = "",     # opt IN: a CUE-GATED menu script (net wave 3, lane H). Steps separated
@@ -1581,7 +1583,7 @@ if ($MenuTapAt -ne "") {
   $lInv      = [System.Globalization.CultureInfo]::InvariantCulture
   $laKnown = @{ 'DPadUp'='DPadUp'; 'DPadDown'='DPadDown'; 'DPadLeft'='DPadLeft'; 'DPadRight'='DPadRight';
                 'Next'='Next'; 'Prev'='Prev'; 'OptionNext'='OptionNext'; 'OptionPrev'='OptionPrev';
-                'Accept'='Accept'; 'Stop'='Stop'; 'Start'='Start' }
+                'Accept'='Accept'; 'Stop'='Stop'; 'Start'='Start'; 'EventDetails'='EventDetails' }
   foreach ($lpEntry in $MenuTapAt.Split(",")) {
     $lpEntry = $lpEntry.Trim(); if ($lpEntry -eq "") { continue }
     $laParts = $lpEntry.Split(":")
@@ -1591,7 +1593,7 @@ if ($MenuTapAt -ne "") {
     }
     $lpChan = $laParts[1].Trim()
     if (-not $laKnown.ContainsKey($lpChan)) {
-      Write-Host ("[flow] FAIL: -MenuTapAt channel '{0}' unknown (DPadUp DPadDown DPadLeft DPadRight Next Prev OptionNext OptionPrev Accept Stop Start)." -f $lpChan); exit 1
+      Write-Host ("[flow] FAIL: -MenuTapAt channel '{0}' unknown (DPadUp DPadDown DPadLeft DPadRight Next Prev OptionNext OptionPrev Accept Stop Start EventDetails)." -f $lpChan); exit 1
     }
     $script:menuTaps += [pscustomobject]@{ At = [double]$laParts[0].Trim(); Chan = $lpChan }
     if (-not $script:menuTapHandles.ContainsKey($lpChan)) {
@@ -1631,7 +1633,7 @@ $script:msSignalDir = $null
 $script:msPeerLog = $env:BP_PAIR_PEER_LOG
 $script:msPairT0 = $null
 if ($env:BP_PAIR_T0) { try { $script:msPairT0 = [datetime]::FromFileTimeUtc([int64]$env:BP_PAIR_T0).ToLocalTime() } catch { $script:msPairT0 = $null } }
-$script:msTapChans  = @('DPadUp','DPadDown','DPadLeft','DPadRight','Next','Prev','OptionNext','OptionPrev','Accept','Stop','Start','PauseMap')
+$script:msTapChans  = @('DPadUp','DPadDown','DPadLeft','DPadRight','Next','Prev','OptionNext','OptionPrev','Accept','Stop','Start','PauseMap','EventDetails')
 $script:msHoldChans = @('Accelerate','Brake','HandBrake','SteerLeft','SteerRight','ShoulderL','ShoulderR','Boost','Lookback','ChangeView')
 function Get-MsHandle([string]$lsChan, [bool]$lbManual) {
   if (-not $script:msHandles.ContainsKey($lsChan)) {
