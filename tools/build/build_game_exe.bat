@@ -962,6 +962,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Query.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModule_wSQ1.cpp"
+  echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModule.cpp"
   rem  CgsGeometric::Line::IsValid @0x82812370 -- the kernel's entry tripwire; on disk since the ground wave, never mounted.
   echo "%SRC%\GameShared\GameClasses\Geometric\Primitives\CgsLine.cpp"
   rem ---- scene-query wave 1b (2026-09-02): the ray-vs-world kernel under CollideLineAgainstPolySoupListNearest ----
@@ -3732,7 +3733,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  (SDKs/EATech/rw/math/vpu/vector3.cpp DROPPED 2026-08-18, wave Q5: it strong-defined the inline Vector3 float ctor and LNK2005s against the mounted collision TUs)
   echo "%SRC%\SDKs\EATech\rw\math\vpu\vector4.cpp"
   echo "%SRC%\SDKs\EATech\rwcollision\volume.cpp"
-  echo "%SRC%\SDKs\EATech\rwcollision\volumelinequery.cpp"
   echo "%SRC%\SDKs\EATech\rwcore\filesys\asyncop.cpp"
   echo "%SRC%\SDKs\EATech\rwcore\filesys\device.cpp"
   echo "%SRC%\SDKs\EATech\rwcore\filesys\devicedriver.cpp"
