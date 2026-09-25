@@ -4186,6 +4186,12 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  no vtable, which AV'd BehaviourHelper::Prepare the moment a static-impact shot pooled one). Its
   rem  Parameters::Serialise<S> visitor is split into BrnBehaviourFixedCamSerialise.cpp (unmounted).
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourFixedCam.cpp"
+  rem  [FX-DIRECTOR2 2026-09-25] the rig camera: Camera::BehaviourRig (every slot re-derived, b5 2c59d16d),
+  rem  Utils::CameraRig::Construct @0x8220B0E8 (a partfile of the unmounted BrnCameraRig.cpp, which holds the
+  rem  Serialise<S> visitors) and the twenty CameraRig presets. MomentTakedownLookback allocates the rig.
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourRig.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraRigConstruct.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraRigParams.cpp"
   rem  [FX-DIRECTOR 2026-09-24] the bystander cam is a real Camera::Behaviour now: its three hollow-shell
   rem  definitions are merged into BehaviourBystanderCam.h and the TU is written against the real callees
   rem  (the detail:: shim layer that kept it unmounted is gone). Its Update needs the position finder.
@@ -4465,6 +4471,9 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  that sent readers to the unmounted ICEWrapper TU was stale. Still inert: NewMoment
   rem  allocates nothing, so no moment's Update runs.
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentPlayerStunt.cpp"
+  rem  [FX-DIRECTOR2 2026-09-25] the takedown look-back (NewMoment case 3, un-gated). No retail selector
+  rem  registers type 3 (MomentSelector::AddMoment @0x82209F80 has three callers, none with a type-3 record).
+  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentTakedownLookback.cpp"
   rem ---- [momentcam] 2026-09-24 (crash-parity FX-DIRECTOR): the crash highlight moments RUN. The
   rem  machinery is real -- MainDirector::UpdateMoments @0x82250268, MomentController::UpdateAllMoments
   rem  @0x82239DE8 and NewMoment @0x82255850 (in the mounted BrnMomentController.cpp; the split
