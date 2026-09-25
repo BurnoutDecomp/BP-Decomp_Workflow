@@ -4175,6 +4175,9 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Camera\BrnVisibilityCollisionPolicy.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCollisionPolicyAttachedToVehicle.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnGeometryCollisionPredictor.cpp"
+  rem  [FX-DIRECTOR2 2026-09-25] VisibilityTest -- GetOffscreenTime @0x821F3718 / IsOnScreen @0x821F3770 and the
+  rem  scene-query pair GenerateSceneQueries @0x822400B0 / ProcessSceneQueryResults @0x8220E290.
+  echo "%SRC%\GameSource\Director\Camera\BrnVisibilityTest.cpp"
   rem  [FX-DIRECTOR 2026-09-24] the fixed cam is a real Camera::Behaviour now (it was a hollow shell with
   rem  no vtable, which AV'd BehaviourHelper::Prepare the moment a static-impact shot pooled one). Its
   rem  Parameters::Serialise<S> visitor is split into BrnBehaviourFixedCamSerialise.cpp (unmounted).
@@ -4421,6 +4424,9 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  body is re-fitted to the real InputBuffer (GetUsedRaceCars / GetRaceCarInfo /
   rem  GetTimerStatusInterface). MEASURED mount cost: zero new unresolved.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorVehicleTracker.cpp"
+  rem  [FX-DIRECTOR2 2026-09-24] CrashAnalyser::Update @0x82209290 -- MainDirector::PreSceneQueryUpdate calls it
+  rem  unconditionally at 0x8225BCDC; the analysis is what MomentHardStop and the shot selector read.
+  echo "%SRC%\GameSource\Director\BrnCrashAnalyser.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentSelector.cpp"
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentController.cpp"
   rem  the first two Moment-family TUs to join the link; zero new unresolved externals each.
