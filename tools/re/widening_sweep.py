@@ -130,6 +130,13 @@ EXPORTS = os.path.join(REPO, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 DEFAULT_ROOTS = [
     "src/GameSource/Physics",
     "src/GameSource/World",
+    # Added 2026-09-25 (crash parity, CHAINCHECK2): WheelStateMachine::Update read ActiveRaceCarData's crash
+    # flag at the X360 seat +0x130 (x64: the low half of mID; mFlags is at +0x138), and this sweep never
+    # reported it because Effects was not a root -- the unchanged pattern flags the pre-fix line. The crash
+    # VFX, the director cameras and the job bodies read the same widened race-car structs.
+    "src/GameSource/Effects",
+    "src/GameSource/Director",
+    "src/GameSource/Jobs",
     "src/SharedClasses/Physics",
     "src/SharedClasses/Traffic",
     "src/GameShared/GameClasses/SceneManager",
