@@ -59,13 +59,26 @@ param(
   #   (BRN_DEFORM_TRACE=<period> for the [detach-*]/[part-rest]/[ubb]/[part-pad] family) no longer
   #   has to fork the whole script or hand-build flow_run argument lists.
   [string]$DiagEnv    = 'BRN_CRASH_RESPONSE_DIAG=1',
-  [switch]$Frames                       # dump frames (only ever for ONE shot -- see MinFreeGB)
+  [switch]$Frames,                      # dump frames (only ever for ONE shot -- see MinFreeGB)
+  # ⭐ 2026-09-25 (FX-DIRECTOR2): hold each boot's shot until the director is back in ArbStateRoaming.
+  #   The drive that arms the sweep is the junkyard exit, and ArbStateCarSelect plays its 3 s OUTRO
+  #   take there; a shot fired at the arm crashes INSIDE the outro, so the crash camera (and the hard
+  #   stop's time scale) only starts when the outro ends -- 82 frames after the impact in
+  #   fxd2trace_h225_s80_r1. Adds BRN_SWEEP_WAIT_ROAMING=1 to -DiagEnv (a harness-only engine gate,
+  #   default off). The switch shifts every shot later, so do not compare a -WaitDirectorRoaming batch
+  #   with one taken without it.
+  [switch]$WaitDirectorRoaming
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $inv  = [Globalization.CultureInfo]::InvariantCulture
 
 $KF_CONSOLE_NO_DAMAGE_SECONDS = 1.5   # ResetDeformation @0x82639D60, flt_820945DC == 3FC00000
+
+if ($WaitDirectorRoaming) {
+  $DiagEnv = ($DiagEnv + ' BRN_SWEEP_WAIT_ROAMING=1').Trim()
+  Write-Host "[batch] -WaitDirectorRoaming: each shot waits for the director to return to ArbStateRoaming (BRN_SWEEP_WAIT_ROAMING=1)"
+}
 
 $runs = @()
 foreach ($r in 1..$Repeats) {
