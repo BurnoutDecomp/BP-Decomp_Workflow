@@ -4964,6 +4964,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SharedClasses\AI\AISection.cpp"
   echo "%SRC%\GameSource\World\AI\BrnAIPortal.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneQueryInterface.cpp"
+  rem  [FX-DIRECTOR2 2026-09-25] the producer's LineTestNearest @0x82216FD0 (its own TU; content = ARTIST
+  rem  store-for-store). BrnDirector::SceneQueryInterface::LineTestNearest @0x82233048 forwards to it.
+  echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneQueryInterface_LineTestNearest.cpp"
   echo "%SRC%\GameSource\Director\DirectorLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiProfile.cpp"
