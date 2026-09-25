@@ -5,7 +5,8 @@ usage: python tools/diagnostics/crash_episode_compare.py <tagA> <tagB>
 
 From the [crash-response] 'pose crash' lines (BRN_CRASH_RESPONSE_DIAG=1) of the FIRST crash episode:
 entry mph, rise (max y - y at entry, m), peak upward v.y (m/s), min up.y (tumble: <0 = inverted),
-frames until mph < 1, and from [detach-part] (BRN_DEFORM_TRACE) the number of parts shed.
+frames until mph < 1, and from [detach-part] (BRN_DEFORM_TRACE) the number of parts shed IN THAT EPISODE
+(shed; the whole-log count is shedLog).
 The sweep recipe is bit-deterministic, so a per-cell difference is a code difference.
 
 VOID (added 2026-09-25, FX-WITNESS): a boot whose car was hit BEFORE its sweep shot fired is not a sample of the
@@ -26,23 +27,36 @@ POSE = re.compile(r'\[crash-response\] pose crash f=(\d+) mph=' + NUM + r' pos=\
 
 
 def episode(log):
+    lines = Path(log).read_text(encoding='utf-8', errors='replace').splitlines()
     rows = []
-    for line in Path(log).read_text(encoding='utf-8', errors='replace').splitlines():
+    end = len(lines)
+    for i, line in enumerate(lines):
         m = POSE.search(line)
         if m:
             f = int(m.group(1))
             if rows and f - rows[-1]['f'] > 30:   # a later, separate crash episode
+                end = i
                 break
             rows.append({'f': f, 'mph': float(m.group(2)), 'y': float(m.group(4)), 'upy': float(m.group(6)),
                          'vy': float(m.group(8))})
-    shed = sum(1 for l in Path(log).read_text(encoding='utf-8', errors='replace').splitlines()
-               if '[detach-part] PART CAME OFF' in l)
     if not rows:
         return None
+    # 'shed' = the PLAYER car's parts that came off in THE FIRST EPISODE: from the boot's first `[sweep] shot` line (the pre-shot
+    # drive is judged separately by pre_shot_damage) to the first pose row of the NEXT episode. Until 2026-09-25 it
+    # counted the whole log, so later re-crashes against wall-clock-dependent traffic made identical episodes look
+    # different (FX-FOLLOWUPS fxfufinemount vs fxfufinebase2: 32 vs 19, the first 10 detachments byte-identical).
+    # 'shedLog' keeps the old whole-log count for comparison with tables printed before the change.
+    start = next((i for i, l in enumerate(lines) if l.startswith('[sweep] shot ')), 0)
+    # Only the SWEPT car's parts: the player's race car, entity id 0x01000000 (race-car type 1, index 0) =
+    # `ent 16777216` on the [detach-part] line. Traffic / AI parts from wall-clock-dependent pile-ups are excluded.
+    player = '[detach-part] PART CAME OFF ent 16777216 '
+    shed = sum(1 for l in lines[start:end] if l.startswith(player))
+    shed_log = sum(1 for l in lines if '[detach-part] PART CAME OFF' in l)
     y0 = rows[0]['y']
     stop = next((r['f'] - rows[0]['f'] for r in rows if abs(r['mph']) < 1.0), None)
     return {'mph0': rows[0]['mph'], 'rise': max(r['y'] for r in rows) - y0, 'vyup': max(r['vy'] for r in rows),
-            'upy': min(r['upy'] for r in rows), 'stop': stop, 'frames': len(rows), 'shed': shed}
+            'upy': min(r['upy'] for r in rows), 'stop': stop, 'frames': len(rows), 'shed': shed,
+            'shedLog': shed_log}
 
 
 PRE_SHOT_DAMAGE = ('[detach-part]', '[td-crash]', '[crash-response] pose crash')
@@ -61,7 +75,7 @@ def pre_shot_damage(log):
 
 def main(a, b):
     root = Path(__file__).resolve().parents[2] / 'scratch' / 'flow_run'
-    print(f"{'cell':12s} {'tag':>14s} {'mph0':>7s} {'rise_m':>7s} {'vyUp':>6s} {'upyMin':>7s} {'stopF':>6s} {'frames':>6s} {'shed':>5s}")
+    print(f"{'cell':12s} {'tag':>14s} {'mph0':>7s} {'rise_m':>7s} {'vyUp':>6s} {'upyMin':>7s} {'stopF':>6s} {'frames':>6s} {'shed':>5s} {'shedLog':>7s}")
     for la in sorted(glob.glob(str(root / (a + '_h*_r1')))):
         cell = Path(la).name[len(a) + 1:]
         for tag, d in ((a, la), (b, str(root / (b + '_' + cell)))):
@@ -76,7 +90,7 @@ def main(a, b):
                 print(f'{cell:12s} {tag:>14s}  (no crash episode)')
                 continue
             print(f"{cell:12s} {tag:>14s} {e['mph0']:7.1f} {e['rise']:7.3f} {e['vyup']:6.2f} {e['upy']:7.3f} "
-                  f"{str(e['stop']):>6s} {e['frames']:6d} {e['shed']:5d}")
+                  f"{str(e['stop']):>6s} {e['frames']:6d} {e['shed']:5d} {e['shedLog']:7d}")
 
 
 if __name__ == '__main__':
