@@ -29,8 +29,9 @@
 #                                                            spot (within 6 m), not our own; on the
 #                                                            Host (whose Guest drives) the LAST one
 #                                                            must have moved > 8 m down the road
-#                                                            (-Z) from it; on the Guest (whose Host
-#                                                            stays put) it must still be there.
+#                                                            (-Z) from it; on the Guest the last
+#                                                            one must be a position the Host sent
+#                                                            (pair check; traffic can shunt the Host).
 param([string]$Role = '')
 
 $lsHostSpot  = '3040.7,-5.8,-1937.9,180'
@@ -41,12 +42,34 @@ $lPairRoles = [ordered]@{
   Guest = @{ Other = 'Host';  Harness = 'BRN_NET_JOIN'; Spot = $lsGuestSpot; OtherSpot = $lsHostSpot;  Frames = $false; Drives = $true;  OtherDrives = $false }
 }
 
+# PAIR CHECK: the last position each half applied for the other player's car is a position the
+# other half really SENT for its own car (within 1.5 m). This replaces "the Host stays at its
+# spot": online traffic runs in the lobby, and a van can shunt the parked Host car.
+$lSentMatches = {
+  param($p)
+  $lRxOut = '\[net\] update-out sent since=\d+ frame=\d+ car=\d+ pos=\(([-0-9.]+), ([-0-9.]+), ([-0-9.]+)\)'
+  $lRxIn  = '\[net\] update-in applied since=\d+ from=\S+ car=\d+ snap=\d pos=\(([-0-9.]+), ([-0-9.]+), ([-0-9.]+)\)'
+  $lInv = [Globalization.CultureInfo]::InvariantCulture
+  $laOut = @()
+  foreach ($ls in $p.Halves['Host'].LogLines) { if ($ls -match $lRxOut) { $laOut += ,@([double]::Parse($Matches[1], $lInv), [double]::Parse($Matches[3], $lInv)) } }
+  $lLast = $null
+  foreach ($ls in $p.Halves['Guest'].LogLines) { if ($ls -match $lRxIn) { $lLast = @([double]::Parse($Matches[1], $lInv), [double]::Parse($Matches[3], $lInv)) } }
+  if ($laOut.Count -eq 0 -or $null -eq $lLast) { return @{ Pass = $false; Detail = "host sent $($laOut.Count), guest applied none" } }
+  $lfBest = 1e9
+  foreach ($lo in $laOut) { $lfD = [Math]::Sqrt(($lo[0] - $lLast[0]) * ($lo[0] - $lLast[0]) + ($lo[1] - $lLast[1]) * ($lo[1] - $lLast[1])); if ($lfD -lt $lfBest) { $lfBest = $lfD } }
+  $lHostLast = $laOut[-1]
+  return @{ Pass = ($lfBest -le 1.5); Detail = ("guest's last applied Host pos ({0:f1}, {1:f1}) is {2:f1} m from the nearest position the Host sent; Host's last sent ({3:f1}, {4:f1})" -f $lLast[0], $lLast[1], $lfBest, $lHostLast[0], $lHostLast[1]) }
+}
+
 if ($Role -eq '') {
   return @{
     Name = 'net_lan_see'
     Area = 'network'
     Bug  = 'none -- LV goal: each of two LAN instances sees the other player''s car, driven by update messages'
-    Pair = @{ Roles = @($lPairRoles.Keys); Slots = @(1, 2) }
+    Pair = @{ Roles = @($lPairRoles.Keys); Slots = @(1, 2)
+              Checks = @(
+                @{ Name = 'the Guest shows the Host car where the Host last sent it'; Script = $lSentMatches }
+              ) }
   }
 }
 if (-not $lPairRoles.Contains($Role)) { throw "net_lan_see: unknown -Role '$Role' (Host or Guest)" }
@@ -95,7 +118,8 @@ $lTrackCheck = {
   $lfDLast = [Math]::Sqrt(($lLast[0] - $laOther[0]) * ($lLast[0] - $laOther[0]) + ($lLast[1] - $laOther[2]) * ($lLast[1] - $laOther[2]))
   $lfAlongMinusZ = $lFirst[1] - $lLast[1]
   $lbPass = ($lfD0 -le 6.0)
-  if ($lbOtherDrives) { $lbPass = $lbPass -and ($lfAlongMinusZ -gt 8.0) } else { $lbPass = $lbPass -and ($lfDLast -le 6.0) }
+  # The non-driving side's last position is checked at pair level (see `$lSentMatches).
+  if ($lbOtherDrives) { $lbPass = $lbPass -and ($lfAlongMinusZ -gt 8.0) }
   $lsDetail = ("{0} applied lines; first ({1:f1}, {2:f1}) is {3:f1} m from {4}'s spot; last ({5:f1}, {6:f1}) moved {7:f1} m along -Z" -f
                $lHits.Count, $lFirst[0], $lFirst[1], $lfD0, $lsOther, $lLast[0], $lLast[1], $lfAlongMinusZ)
   return @{ Pass = $lbPass; Detail = $lsDetail }

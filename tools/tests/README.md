@@ -165,6 +165,40 @@ A case that was never seen RED proves nothing about the fix; a check that cannot
 * `Script` gets `$ctx` (`LogLines`, `Marks`, `MarksText`, `Phase`, `FrameDir`, `RunDir`) and
   returns `@{ Pass; Detail }`.
 
+## Pair cases -- two instances online (`run_pair.ps1`)
+
+A pair case (`cases\net_*.ps1`) returns a descriptor with no `-Role` and one ordinary half per
+`-Role` (see the banner of `net_lan_pair.ps1`); `run_pair.ps1` runs both halves at once on slots 1
+and 2. Shared helpers live in `_net_pair_common.ps1` (outside `cases\`, dot-sourced by the cases).
+
+* **Pair-level checks.** `Pair = @{ Roles; Checks = @( @{ Name; Script = { param($p) ... } } ) }`:
+  the script sees both halves (`$p.Halves.Host.LogLines`, `.Guest.MarksText`, ...). A half's own
+  checks only ever see its own log; "the two hashes agree" needs this.
+* **Cross-half environment.** Each half inherits `BP_PAIR_DIR` (signal files in `<dir>\signals`),
+  `BP_PAIR_ROLE`, `BP_PAIR_PEER_ROLE`, `BP_PAIR_PEER_LOG` (the other slot's live log) and
+  `BP_PAIR_T0` (a peer log older than this is the previous run's and is ignored).
+* **`flow_run -MenuScript`** (any case, not only pairs): a cue-gated step list from the DRIVING
+  mark -- `wait:<regex>` (own log), `waitpeer:<regex>`, `waitfile:<name>`, `signal:<name>`,
+  `tap:<Chan>[x<n>]`, `tapuntil:<Chan>:<regex>` (re-tap until the game reacts; Easy Drive ignores a
+  press while it is still opening), `hold:<Chan>:<sec>`, `sleep:`, `gap:`, `timeout:`, `mark:`.
+  marks.txt gets `MENUSCRIPT done=<k>/<n>` plus one line per step.
+* **Game-side harness** (`BrnNetHarnessPC`, PC only, BP_LAN runs): `BRN_NET_HOST` / `BRN_NET_JOIN`
+  (hybrid join), `BRN_NET_LEAVE_AT=<s>` (GUI 52 leave, `<s>` after first in game),
+  `BRN_NET_SCRIPT=<s>:<gui|net>:<id>[:<w>/<w>...];...` (scheduled channel-40 GUI records), and a
+  bounded `[net] state t= wall= loggedIn= inGame= host= players=` line on every change; `wall=`
+  is the local time of day, which lines a log event up with the dumped frames' file times.
+
+| case | what it proves |
+|---|---|
+| `net_lan_pair` / `net_lan_see` | the hybrid join; each instance sees the other's car |
+| `net_lan_leave` | UI-free leave (Guest `BRN_NET_LEAVE_AT`): the Host removes the car (frame check) |
+| `net_lan_host_leave` | the HOST leaves: the Guest takes the lobby over (PC LAN handover) |
+| `net_lan_traffic` | online traffic restart / hull sync / hash agree (3 pair checks) |
+| `net_lan_traffic_crash` | a Guest-owned traffic crash is played back on the Host |
+| `net_lan_challenge` | the Host starts free-burn challenge 0x8DACC (`BRN_NET_SCRIPT` GUI 573); the Guest sees it |
+| `net_ui_join` | Easy Drive -> FREEBURN -> Create / Quick Match, no harness posts |
+| `net_ui_leave` | Easy Drive -> Leave game -> overlay -> Accept (hybrid join) |
+
 ## Witness lines: the log is the oracle
 
 Most bugs are not visible as an assert. The case needs a **witness**: a log line the game

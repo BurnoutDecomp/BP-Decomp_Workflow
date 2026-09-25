@@ -12,6 +12,20 @@
 #   * called with -Role <r> it returns an ordinary run_case hashtable for that half: its own Run,
 #     DiagEnv, Setup (the place to set non-BRN_* environment such as BP_LAN) and Checks.
 #   See cases\net_lan_pair.ps1.
+#   The descriptor may also carry PAIR-LEVEL checks, which see BOTH halves at once (a half's own
+#   Checks only ever see its own log):
+#     Pair = @{ Roles = @('Host','Guest'); Checks = @( @{ Name = '...'; Script = { param($p) ... } } ) }
+#   $p.Halves.<role> = @{ LogLines; Log; RunDir; MarksText; Verdict; Slot }, $p.RunDir = the pair dir.
+#   The Script returns @{ Pass; Detail }, exactly like a half's Script check; a check that throws
+#   or returns nothing FAILS. The pair verdict is PASS only if both halves AND every pair check pass.
+#
+# CROSS-HALF ENVIRONMENT (for flow_run -MenuScript waitpeer / waitfile / signal). Each half's
+# process inherits, set here just before it is started (none is a BRN_* name, so flow_run's wipe
+# leaves them alone and they reach flow_run by inheritance):
+#   BP_PAIR_DIR        the pair run dir; the halves' signal files live in <dir>\signals (emptied here)
+#   BP_PAIR_ROLE       this half's role;   BP_PAIR_PEER_ROLE  the other half's
+#   BP_PAIR_PEER_LOG   the other half's LIVE log, build\game_slots\<its slot>\BrnGame.log
+#   BP_PAIR_T0         the pair start (FILETIME UTC): a peer log last written before it is stale
 #
 # HOW IT RUNS -- REUSE, NOT A FORK. Each half is `run_case.ps1 -Case <wrapper> -Slot <n>
 # -RunDir <pair dir>\<role>` in its own powershell process, started together. The wrapper is a
@@ -110,13 +124,27 @@ if (-not $NoRun) {
 }
 
 $t0 = Get-Date
+$lsSignalDir = Join-Path $RunDir 'signals'
+if (-not $NoRun) {
+  if (Test-Path $lsSignalDir) { Remove-Item -Recurse -Force $lsSignalDir }
+  New-Item -ItemType Directory -Force $lsSignalDir | Out-Null
+}
 $lProcs = @()
-foreach ($h in $laHalves) {
+for ($i = 0; $i -lt 2; $i++) {
+  $h = $laHalves[$i]
+  $hPeer = $laHalves[1 - $i]
   if (-not $NoRun) { New-Item -ItemType Directory -Force $h.Dir | Out-Null }
+  # the cross-half environment (see the banner); Start-Process copies it into this half's process
+  $env:BP_PAIR_DIR       = $RunDir
+  $env:BP_PAIR_ROLE      = $h.Role
+  $env:BP_PAIR_PEER_ROLE = $hPeer.Role
+  $env:BP_PAIR_PEER_LOG  = Join-Path $root ("build\game_slots\{0}\BrnGame.log" -f $hPeer.Slot)
+  $env:BP_PAIR_T0        = "$($t0.ToFileTimeUtc())"
   $p = Start-Half $h ([bool]$NoRun)
   Write-Host ("[pair] {0} -> slot {1}, run_case pid {2}, console {3}" -f $h.Role, $h.Slot, $p.Id, $h.Console)
   $lProcs += $p
 }
+foreach ($lsVar in @('BP_PAIR_DIR','BP_PAIR_ROLE','BP_PAIR_PEER_ROLE','BP_PAIR_PEER_LOG','BP_PAIR_T0')) { Remove-Item "Env:\$lsVar" -ErrorAction SilentlyContinue }
 $liWait = if ($WaitSeconds -gt 0) { $WaitSeconds } else { $LockTimeoutSec + 1800 }
 $lbTimedOut = $false
 foreach ($p in $lProcs) {
@@ -150,6 +178,32 @@ foreach ($h in $laHalves) {
   if ($lRow.verdict -eq 'NO RESULT') { Write-Host ("[pair]            see {0}" -f $h.Console) }
 }
 
+# --- the pair-level checks (see the banner) -------------------------------------------------------
+$laPairRows = @()
+if ($lDesc.Pair.Checks) {
+  $lPairCtx = @{ RunDir = $RunDir; Halves = @{} }
+  foreach ($h in $laHalves) {
+    $lsLog = Join-Path $h.Dir 'flow\BrnGame.log'
+    $lsMarks = Join-Path $h.Dir 'flow\marks.txt'
+    $lRowH = @($laRows | Where-Object { $_.role -eq $h.Role })[0]
+    $lPairCtx.Halves[$h.Role] = @{
+      Log = $lsLog; RunDir = $h.Dir; Slot = $h.Slot; Verdict = $lRowH.verdict
+      LogLines  = $(if (Test-Path $lsLog) { [IO.File]::ReadAllLines($lsLog) } else { @() })
+      MarksText = $(if (Test-Path $lsMarks) { Get-Content $lsMarks -Raw } else { '' })
+    }
+  }
+  foreach ($lChk in @($lDesc.Pair.Checks)) {
+    $lsName = if ($lChk.Name) { "$($lChk.Name)" } else { 'pair check' }
+    $lR = $null
+    try { $lR = & $lChk.Script $lPairCtx } catch { $lR = @{ Pass = $false; Detail = "threw: $($_.Exception.Message)" } }
+    if ($lR -is [array]) { $lR = @($lR | Where-Object { $_ -is [hashtable] }) | Select-Object -Last 1 }
+    if ($null -eq $lR -or $lR -isnot [hashtable]) { $lR = @{ Pass = $false; Detail = 'the check returned nothing' } }
+    $laPairRows += @{ name = $lsName; pass = [bool]$lR.Pass; detail = "$($lR.Detail)" }
+    if (-not $lR.Pass) { $lbAllPass = $false }
+    Write-Host ("[pair] PAIR     [{0}] {1} -- {2}" -f $(if ($lR.Pass) { 'PASS' } else { 'FAIL' }), $lsName, $lR.Detail)
+  }
+}
+
 $verdict = if ($lbAllPass) { 'PASS' } else { 'FAIL' }
 $expected = if ($ExpectFail) { 'FAIL' } else { 'PASS' }
 $asExpected = ($verdict -eq $expected)
@@ -166,6 +220,7 @@ $result = @{
   when = (Get-Date).ToString('o'); run_dir = $RunDir; slots = $laSlots; timed_out = $lbTimedOut
   verdict = $verdict; expected = $expected; as_expected = $asExpected
   halves = @($laRows | ForEach-Object { @{ role = $_.role; slot = $_.slot; verdict = $_.verdict; phase = $_.phase; failed = $_.failed; run_dir = $_.run_dir } })
+  pair_checks = @($laPairRows)
 }
 $result | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $RunDir 'result.json') -Encoding UTF8
 New-Item -ItemType Directory -Force $caseRoot | Out-Null
@@ -180,6 +235,14 @@ $md += ""
 $md += "| half | slot | verdict | phase | report |"
 $md += "|---|---|---|---|---|"
 foreach ($r in $laRows) { $md += ("| {0} | {1} | {2} | {3} | ``{4}`` |" -f $r.role, $r.slot, $(if ($r.verdict -eq 'PASS') { 'PASS' } else { "**$($r.verdict)**" }), $r.phase, (Join-Path $r.run_dir 'REPORT.md')) }
+if ($laPairRows.Count -gt 0) {
+  $md += ""
+  $md += "## pair checks (both halves)"
+  $md += ""
+  $md += "| verdict | check | detail |"
+  $md += "|---|---|---|"
+  foreach ($c in $laPairRows) { $md += ("| {0} | {1} | {2} |" -f $(if ($c.pass) { 'PASS' } else { '**FAIL**' }), $c.name, ("$($c.detail)" -replace '\|', '\|')) }
+}
 foreach ($r in $laRows) {
   $md += ""
   $md += "## $($r.role)"
