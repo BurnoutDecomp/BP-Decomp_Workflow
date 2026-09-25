@@ -711,6 +711,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Effects\SharedIO\BrnEffectsModuleIO_DispatchInputBuffer_IOHelper.cpp"
   echo "%SRC%\GameSource\Effects\Particles\ParticleModule.cpp"
   echo "%SRC%\GameSource\Effects\Particles\ParticleModule_Lifecycle.cpp"
+  rem   Props\PropCollisions.cpp -- the prop-strike VFX (ParticleModule::mPropCollisions): LoadFXBundle
+  rem   stages 14/17/18 bind it and run Initialise, EffectsModule::Update runs UpdateLocatorVfx
+  rem   (FX-CRASHVFX item 6b, 2026-09-25).
+  echo "%SRC%\GameSource\Effects\Props\PropCollisions.cpp"
   echo "%SRC%\GameSource\Effects\Particles\ParticleModuleIO.cpp"
   echo "%SRC%\GameSource\Effects\Particles\ParticleCpuMonitors.cpp"
   echo "%SRC%\GameSource\Effects\Particles\BrnParticleDescription.cpp"
