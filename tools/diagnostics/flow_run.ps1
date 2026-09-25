@@ -295,7 +295,37 @@ param(
                                  #   GUI_RIGHT/LEFT), Accept (49), Stop (50), Start (45). All are the
                                  #   game's existing AUTO-RESET harness channels (CgsInputPadsPC.cpp);
                                  #   nothing new is added on the game side.
-  [switch]$StartEvent,           # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
+  [string]$MenuScript  = "",     # opt IN: a CUE-GATED menu script (net wave 3, lane H). Steps separated
+                                 #   by ';', run in order from the DRIVING mark, one poll (250 ms) apart
+                                 #   at the fastest. Unlike -MenuTapAt it waits on the GAME, not the clock:
+                                 #     wait:<regex>       until THIS instance's log prints a line matching
+                                 #                        <regex>, counted from where the previous wait
+                                 #                        matched (the first wait scans from launch)
+                                 #     waitpeer:<regex>   the same on the OTHER pair half's live log
+                                 #                        ($env:BP_PAIR_PEER_LOG, set by run_pair.ps1)
+                                 #     waitfile:<name>    until <name> exists (relative names live in the
+                                 #                        pair's signal dir, $env:BP_PAIR_DIR\signals)
+                                 #     signal:<name>      create that file (the other half's waitfile)
+                                 #     tap:<Chan>[x<n>]   n AUTO-RESET taps, -MenuScriptGap apart: DPadUp
+                                 #                        DPadDown DPadLeft DPadRight Next Prev OptionNext
+                                 #                        OptionPrev Accept Stop Start PauseMap
+                                 #     tapuntil:<Chan>:<regex>  tap, then re-tap every max(1 s, gap) until
+                                 #                        THIS log matches <regex> (at most 8 taps, then
+                                 #                        the script STALLS) -- for a menu that ignores a
+                                 #                        press while it is still animating in
+                                 #     hold:<Chan>:<sec>  a MANUAL-RESET hold: Accelerate Brake HandBrake
+                                 #                        SteerLeft SteerRight ShoulderL ShoulderR Boost
+                                 #                        Lookback ChangeView (not with -Drive on the same one)
+                                 #     sleep:<sec>        wall-clock pause
+                                 #     gap:<sec>          change the spacing after each tap
+                                 #     timeout:<sec>      later waits give up after <sec> (0 = never, the
+                                 #                        default); a timed-out wait STALLS the script
+                                 #     mark:<name>        a MENUSCRIPT line in marks.txt (checkable)
+                                 #   Every step prints "[flow] MENUSCRIPT ..." and marks.txt carries
+                                 #   "MENUSCRIPT done=<k>/<n>" plus one line per step, so a case can check
+                                 #   how far the script got. A regex cannot contain ';'.
+  [double]$MenuScriptGap = 0.35, # seconds after each -MenuScript tap (Easy Drive transitions need 250-400 ms)
+  [switch]$StartEvent,          # opt IN to the EVENT-START hook (BRN_START_EVENT=1). OFF by
                                  # default and CLEARED every run -- it is a CAPABILITY, not an
                                  # instrument -- the same discipline -CrashEntry carried until that
                                  # flag was deleted on 2026-08-27. See the banner below.
@@ -767,7 +797,7 @@ foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA'
                   'BRN_WHEELRESET_PROBE','BRN_WHEEL_PROBE','BRN_WHEEL_SUS_PROBE','BRN_WORLD_CAMDIST',
                   'BRN_WORLD_CAMSPEED','BRN_WORLD_CAMTRAFFIC','BRN_WORLD_CRASH_DIAG','BRN_WORLD_ONLY',
                   'BRN_WORLD_UVDEBUG','BRN_ZCMP_PROBE',
-                  'BRN_NET_HOST','BRN_NET_JOIN','BRN_NET_DELAY')) {
+                  'BRN_NET_HOST','BRN_NET_JOIN','BRN_NET_DELAY','BRN_NET_LEAVE_AT','BRN_NET_SCRIPT')) {
   # ⚠️ SAY SO when we discard something the caller deliberately set. Wiping is right -- it is what
   # makes a DEFAULT run default -- but doing it SILENTLY turns a deliberate `$env:BRN_X=1` into a
   # measurement of nothing. That cost a wave its first instrumented run: it exported BRN_MODEMGR_DIAG
@@ -1578,6 +1608,239 @@ if ($script:pauseTimes.Count -gt 0) {
     $script:pauseTimes.Count, ($script:pauseTimes -join ','), $script:unpauseTimes.Count, ($script:unpauseTimes -join ','))
 }
 
+# ---- -MenuScript: the cue-gated step list (see the parameter's banner) ----------------------------
+# ⭐ WHY IT EXISTS (net wave 3). -MenuTapAt fires on the DRIVING wall clock, but sign-in, the LAN
+#   discovery sweep and a join all take a VARIABLE time, and the Guest of a pair must not open the
+#   quick match before the Host's game exists. A step here waits on a log line (this instance's or
+#   the other half's) or on a file the other half creates, so the schedule follows the game.
+# ⚠️ The steps run on the SAME auto-reset / manual-reset named events every other input path uses
+#   (slot-suffixed); nothing new exists on the game side.
+$script:msSteps = @()
+$script:msNext = 0
+$script:msState = 'idle'       # idle | run | done | stalled
+$script:msWaitUntil = $null    # a sleep / tap gap in progress
+$script:msStepStart = $null
+$script:msTimeout = 0.0
+$script:msOwnBuf = ''
+$script:msPeerBuf = ''
+$script:msPeerPos = 0
+$script:msLog = @()
+$script:msHolds = @()          # @{ H = handle; Until = datetime; Chan = name }
+$script:msHandles = @{}
+$script:msSignalDir = $null
+$script:msPeerLog = $env:BP_PAIR_PEER_LOG
+$script:msPairT0 = $null
+if ($env:BP_PAIR_T0) { try { $script:msPairT0 = [datetime]::FromFileTimeUtc([int64]$env:BP_PAIR_T0).ToLocalTime() } catch { $script:msPairT0 = $null } }
+$script:msTapChans  = @('DPadUp','DPadDown','DPadLeft','DPadRight','Next','Prev','OptionNext','OptionPrev','Accept','Stop','Start','PauseMap')
+$script:msHoldChans = @('Accelerate','Brake','HandBrake','SteerLeft','SteerRight','ShoulderL','ShoulderR','Boost','Lookback','ChangeView')
+function Get-MsHandle([string]$lsChan, [bool]$lbManual) {
+  if (-not $script:msHandles.ContainsKey($lsChan)) {
+    $lMode = $(if ($lbManual) { [System.Threading.EventResetMode]::ManualReset } else { [System.Threading.EventResetMode]::AutoReset })
+    $script:msHandles[$lsChan] = New-Object System.Threading.EventWaitHandle($false, $lMode, ("Local\BurnoutPC_Input_" + $lsChan + $slotTag))
+  }
+  return $script:msHandles[$lsChan]
+}
+if ($MenuScript -ne "") {
+  $lInvMs = [System.Globalization.CultureInfo]::InvariantCulture
+  $lNumMs = [System.Globalization.NumberStyles]::Float
+  foreach ($lsRaw in $MenuScript.Split(';')) {
+    $lsStep = $lsRaw.Trim(); if ($lsStep -eq '') { continue }
+    $liColon = $lsStep.IndexOf(':')
+    if ($liColon -le 0) { Write-Host ("[flow] FAIL: -MenuScript step '{0}' is not <verb>:<arg>." -f $lsStep); exit 1 }
+    $lsVerb = $lsStep.Substring(0, $liColon).Trim().ToLowerInvariant()
+    $lsArg  = $lsStep.Substring($liColon + 1).Trim()
+    $lfNum = 0.0
+    switch ($lsVerb) {
+      { $_ -in @('wait','waitpeer') } {
+        try { $null = [regex]::new($lsArg) } catch { Write-Host ("[flow] FAIL: -MenuScript {0} regex '{1}' does not parse." -f $lsVerb, $lsArg); exit 1 }
+        $script:msSteps += [pscustomobject]@{ Verb = $lsVerb; Arg = $lsArg; N = 1; Sec = 0.0; Text = $lsStep }
+      }
+      { $_ -in @('waitfile','signal','mark') } {
+        if ($lsArg -eq '') { Write-Host ("[flow] FAIL: -MenuScript {0} needs a name." -f $lsVerb); exit 1 }
+        $script:msSteps += [pscustomobject]@{ Verb = $lsVerb; Arg = $lsArg; N = 1; Sec = 0.0; Text = $lsStep }
+      }
+      'tap' {
+        $lsChan = $lsArg; $liN = 1
+        if ($lsArg -match '^(\w+)\s*x\s*(\d+)$') { $lsChan = $Matches[1]; $liN = [int]$Matches[2] }
+        if ($script:msTapChans -notcontains $lsChan) { Write-Host ("[flow] FAIL: -MenuScript tap channel '{0}' unknown ({1})." -f $lsChan, ($script:msTapChans -join ' ')); exit 1 }
+        if ($liN -lt 1 -or $liN -gt 50) { Write-Host ("[flow] FAIL: -MenuScript tap count {0} out of 1..50." -f $liN); exit 1 }
+        for ($k = 0; $k -lt $liN; $k++) { $script:msSteps += [pscustomobject]@{ Verb = 'tap'; Arg = $lsChan; N = $k + 1; Sec = 0.0; Text = ("tap:{0} ({1}/{2})" -f $lsChan, ($k + 1), $liN) } }
+      }
+      'tapuntil' {
+        $liC2 = $lsArg.IndexOf(':')
+        $lsChan = $(if ($liC2 -gt 0) { $lsArg.Substring(0, $liC2).Trim() } else { '' })
+        $lsRx = $(if ($liC2 -gt 0) { $lsArg.Substring($liC2 + 1) } else { '' })
+        if ($script:msTapChans -notcontains $lsChan -or $lsRx -eq '') { Write-Host ("[flow] FAIL: -MenuScript tapuntil '{0}' is not tapuntil:<Chan>:<regex> with Chan in ({1})." -f $lsArg, ($script:msTapChans -join ' ')); exit 1 }
+        try { $null = [regex]::new($lsRx) } catch { Write-Host ("[flow] FAIL: -MenuScript tapuntil regex '{0}' does not parse." -f $lsRx); exit 1 }
+        $script:msSteps += [pscustomobject]@{ Verb = 'tapuntil'; Arg = $lsChan; Rx = $lsRx; N = 0; Sec = 0.0; Text = $lsStep }
+      }
+      'hold' {
+        $laH = $lsArg.Split(':')
+        if ($laH.Count -ne 2 -or $script:msHoldChans -notcontains $laH[0].Trim() -or -not [double]::TryParse($laH[1].Trim(), $lNumMs, $lInvMs, [ref]$lfNum) -or $lfNum -le 0) {
+          Write-Host ("[flow] FAIL: -MenuScript hold '{0}' is not hold:<Chan>:<sec> with Chan in ({1})." -f $lsArg, ($script:msHoldChans -join ' ')); exit 1
+        }
+        $script:msSteps += [pscustomobject]@{ Verb = 'hold'; Arg = $laH[0].Trim(); N = 1; Sec = $lfNum; Text = $lsStep }
+      }
+      { $_ -in @('sleep','gap','timeout') } {
+        if (-not [double]::TryParse($lsArg, $lNumMs, $lInvMs, [ref]$lfNum) -or $lfNum -lt 0) { Write-Host ("[flow] FAIL: -MenuScript {0} '{1}' is not a number of seconds." -f $lsVerb, $lsArg); exit 1 }
+        $script:msSteps += [pscustomobject]@{ Verb = $lsVerb; Arg = $lsArg; N = 1; Sec = $lfNum; Text = $lsStep }
+      }
+      default { Write-Host ("[flow] FAIL: -MenuScript verb '{0}' unknown (wait waitpeer waitfile signal tap tapuntil hold sleep gap timeout mark)." -f $lsVerb); exit 1 }
+    }
+  }
+  $script:msSignalDir = $(if ($env:BP_PAIR_DIR) { Join-Path $env:BP_PAIR_DIR 'signals' } else { Join-Path $OutDir 'signals' })
+  New-Item -ItemType Directory -Force $script:msSignalDir | Out-Null
+  $script:msGap = $MenuScriptGap
+  Write-Host ("[flow] MENUSCRIPT armed: {0} step(s) from the DRIVING mark; signals in {1}; peer log {2}" -f `
+              $script:msSteps.Count, $script:msSignalDir, $(if ($script:msPeerLog) { $script:msPeerLog } else { '(none: not a pair half)' }))
+}
+
+# Reads the other half's live log forward (the same shape as Read-NewLogText). ⛔ A log older
+# than the pair's start ($env:BP_PAIR_T0) is the PREVIOUS run's and is never read: the other
+# half's flow_run deletes it before its own launch, but the two halves are not ordered.
+function Read-PeerLogText {
+  if (-not $script:msPeerLog -or -not (Test-Path $script:msPeerLog)) { return '' }
+  if ($null -ne $script:msPairT0) {
+    $lItem = Get-Item $script:msPeerLog -ErrorAction SilentlyContinue
+    if (-not $lItem -or $lItem.LastWriteTime -lt $script:msPairT0) { return '' }
+  }
+  $lStream = $null
+  try {
+    $lStream = [System.IO.File]::Open($script:msPeerLog, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read,
+                                      ([System.IO.FileShare]::ReadWrite -bor [System.IO.FileShare]::Delete))
+  } catch { return '' }
+  try {
+    if ($lStream.Length -lt $script:msPeerPos) { $script:msPeerPos = 0; $script:msPeerBuf = '' }
+    $lLen = $lStream.Length - $script:msPeerPos
+    if ($lLen -le 0) { return '' }
+    if ($lLen -gt 8MB) { $script:msPeerPos = $lStream.Length - 8MB; $lLen = 8MB }
+    $lStream.Position = $script:msPeerPos
+    $lBuf = New-Object byte[] ([int]$lLen)
+    $lRead = $lStream.Read($lBuf, 0, [int]$lLen)
+    if ($lRead -le 0) { return '' }
+    $lCut = -1
+    for ($i = $lRead - 1; $i -ge 0; $i--) { if ($lBuf[$i] -eq 10) { $lCut = $i; break } }
+    if ($lCut -lt 0) { return '' }
+    $script:msPeerPos += ($lCut + 1)
+    return [System.Text.Encoding]::UTF8.GetString($lBuf, 0, $lCut + 1)
+  } finally { if ($null -ne $lStream) { $lStream.Close() } }
+}
+
+# Keeps the unmatched tail of a scan buffer bounded (4 MB); a wait only ever needs what came
+# after the previous match.
+function Add-MsBuf([string]$lsBuf, [string]$lsNew) {
+  $lsAll = $lsBuf + $lsNew
+  if ($lsAll.Length -gt 4MB) { $lsAll = $lsAll.Substring($lsAll.Length - 4MB) }
+  return $lsAll
+}
+
+# Match a wait against a buffer; on a hit, return the buffer cut after the end of the matched
+# line (so the next wait counts from there), else $null.
+function Match-MsBuf([string]$lsBuf, [string]$lsRegex) {
+  $lM = [regex]::Match($lsBuf, $lsRegex, [System.Text.RegularExpressions.RegexOptions]::Multiline)
+  if (-not $lM.Success) { return $null }
+  $liStart = 0
+  if ($lM.Index -gt 0) { $liStart = $lsBuf.LastIndexOf("`n", $lM.Index - 1) + 1 }
+  $liEnd = $lsBuf.IndexOf("`n", $lM.Index + $lM.Length)
+  $liStop = $(if ($liEnd -ge 0) { $liEnd } else { $lsBuf.Length })
+  $script:msMatchedLine = $lsBuf.Substring($liStart, $liStop - $liStart).Trim()
+  if ($liEnd -lt 0) { return '' }
+  return $lsBuf.Substring($liEnd + 1)
+}
+
+function Write-MsLog([string]$lsText, [double]$lfElapsed) {
+  $lsLine = ("MENUSCRIPT run={0,6:f1}s {1}" -f $lfElapsed, $lsText)
+  $script:msLog += $lsLine
+  Write-Host ("[flow] {0}" -f $lsLine)
+}
+
+# One poll of the script: release expired holds, then advance as many steps as are satisfied
+# (a wait that is not yet satisfied, a sleep or a tap gap stops the advance for this poll).
+function Step-MenuScript([double]$lfElapsed) {
+  $lNow = Get-Date
+  foreach ($lH in @($script:msHolds)) {
+    if ($lNow -ge $lH.Until) { $lH.H.Reset() | Out-Null; Write-MsLog ("release {0}" -f $lH.Chan) $lfElapsed }
+  }
+  $script:msHolds = @($script:msHolds | Where-Object { $lNow -lt $_.Until })
+  if ($script:msState -ne 'run') { return }
+  if ($null -ne $script:msWaitUntil) {
+    if ($lNow -lt $script:msWaitUntil) { return }
+    $script:msWaitUntil = $null
+  }
+  $liBudget = 16
+  while ($script:msNext -lt $script:msSteps.Count -and $liBudget -gt 0) {
+    $liBudget--
+    $lStep = $script:msSteps[$script:msNext]
+    if ($null -eq $script:msStepStart) { $script:msStepStart = $lNow }
+    $lbDone = $false
+    switch ($lStep.Verb) {
+      'wait' {
+        $lsRest = Match-MsBuf $script:msOwnBuf $lStep.Arg
+        if ($null -ne $lsRest) { $script:msOwnBuf = $lsRest; $lbDone = $true; Write-MsLog ("step {0} {1} -> matched: {2}" -f ($script:msNext + 1), $lStep.Text, $script:msMatchedLine) $lfElapsed }
+      }
+      'waitpeer' {
+        $lsRest = Match-MsBuf $script:msPeerBuf $lStep.Arg
+        if ($null -ne $lsRest) { $script:msPeerBuf = $lsRest; $lbDone = $true; Write-MsLog ("step {0} {1} -> peer matched: {2}" -f ($script:msNext + 1), $lStep.Text, $script:msMatchedLine) $lfElapsed }
+      }
+      'waitfile' {
+        $lsPath = $(if ([IO.Path]::IsPathRooted($lStep.Arg)) { $lStep.Arg } else { Join-Path $script:msSignalDir $lStep.Arg })
+        if (Test-Path $lsPath) { $lbDone = $true; Write-MsLog ("step {0} {1} -> exists" -f ($script:msNext + 1), $lStep.Text) $lfElapsed }
+      }
+      'signal' {
+        $lsPath = $(if ([IO.Path]::IsPathRooted($lStep.Arg)) { $lStep.Arg } else { Join-Path $script:msSignalDir $lStep.Arg })
+        ("{0} run={1:f1}s slot={2}" -f (Get-Date).ToString('o'), $lfElapsed, $Slot) | Set-Content -Path $lsPath -Encoding ASCII
+        $lbDone = $true; Write-MsLog ("step {0} {1} -> {2}" -f ($script:msNext + 1), $lStep.Text, $lsPath) $lfElapsed
+      }
+      'mark' { $lbDone = $true; Write-MsLog ("step {0} mark {1}" -f ($script:msNext + 1), $lStep.Arg) $lfElapsed }
+      'tap' {
+        (Get-MsHandle $lStep.Arg $false).Set() | Out-Null
+        $lbDone = $true; Write-MsLog ("step {0} {1}" -f ($script:msNext + 1), $lStep.Text) $lfElapsed
+        $script:msWaitUntil = $lNow.AddSeconds($script:msGap)
+      }
+      'tapuntil' {
+        $lsRest = Match-MsBuf $script:msOwnBuf $lStep.Rx
+        if ($null -ne $lsRest -and $lStep.N -gt 0) {
+          $script:msOwnBuf = $lsRest; $lbDone = $true
+          Write-MsLog ("step {0} {1} -> matched after {2} tap(s): {3}" -f ($script:msNext + 1), $lStep.Text, $lStep.N, $script:msMatchedLine) $lfElapsed
+        } elseif ($lStep.N -ge 8) {
+          $script:msState = 'stalled'
+          Write-MsLog ("STALLED at step {0} ({1}): no match after {2} taps" -f ($script:msNext + 1), $lStep.Text, $lStep.N) $lfElapsed
+          return
+        } elseif ($lStep.N -eq 0 -or $null -eq $lStep.LastTap -or ($lNow - $lStep.LastTap).TotalSeconds -ge [Math]::Max(1.0, $script:msGap)) {
+          if ($lStep.N -eq 0) { $script:msOwnBuf = '' }   # only what the game prints AFTER the first tap counts
+          (Get-MsHandle $lStep.Arg $false).Set() | Out-Null
+          $lStep.N++
+          $lStep | Add-Member -NotePropertyName LastTap -NotePropertyValue $lNow -Force
+          Write-MsLog ("step {0} {1} tap #{2}" -f ($script:msNext + 1), $lStep.Arg, $lStep.N) $lfElapsed
+        }
+      }
+      'hold' {
+        $lH = Get-MsHandle $lStep.Arg $true
+        $lH.Set() | Out-Null
+        $script:msHolds += [pscustomobject]@{ H = $lH; Until = $lNow.AddSeconds($lStep.Sec); Chan = $lStep.Arg }
+        $lbDone = $true; Write-MsLog ("step {0} {1} (held {2:f1}s)" -f ($script:msNext + 1), $lStep.Text, $lStep.Sec) $lfElapsed
+      }
+      'sleep' {
+        $lbDone = $true; Write-MsLog ("step {0} {1}" -f ($script:msNext + 1), $lStep.Text) $lfElapsed
+        $script:msWaitUntil = $lNow.AddSeconds($lStep.Sec)
+      }
+      'gap'     { $script:msGap = $lStep.Sec;     $lbDone = $true; Write-MsLog ("step {0} {1}" -f ($script:msNext + 1), $lStep.Text) $lfElapsed }
+      'timeout' { $script:msTimeout = $lStep.Sec; $lbDone = $true; Write-MsLog ("step {0} {1}" -f ($script:msNext + 1), $lStep.Text) $lfElapsed }
+    }
+    if (-not $lbDone) {
+      if ($script:msTimeout -gt 0 -and ($lNow - $script:msStepStart).TotalSeconds -ge $script:msTimeout) {
+        $script:msState = 'stalled'
+        Write-MsLog ("STALLED at step {0} ({1}) after {2:f1}s" -f ($script:msNext + 1), $lStep.Text, ($lNow - $script:msStepStart).TotalSeconds) $lfElapsed
+      }
+      return
+    }
+    $script:msNext++
+    $script:msStepStart = $null
+    if ($script:msNext -ge $script:msSteps.Count) { $script:msState = 'done'; Write-MsLog "done" $lfElapsed; return }
+    if ($null -ne $script:msWaitUntil) { return }
+  }
+}
+
 # ⭐ THE DRIVING CHANNELS -- MANUAL-RESET (see the banner).  Created unconditionally so the game
 #   always finds them; a channel that is never Set() is a control that is never pressed, which is
 #   exactly the "resting car undisturbed" case.  Named after the EGameInputActions slot each one
@@ -1622,6 +1885,7 @@ trap {
   foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evStrF25,$evStrF50,$evShldL,$evShldR,$evBoost)) {
     try { $e.Reset() | Out-Null } catch { }
   }
+  foreach ($lH in @($script:msHolds)) { try { $lH.H.Reset() | Out-Null } catch { } }
   Write-Host "[flow] terminating error -- all ten input holds released before rethrow."
   break
 }
@@ -2056,6 +2320,11 @@ while ($true) {
   # ⭐ INCREMENTAL: only what the game has appended since the last poll. See the reader's banner --
   #   the whole-file read this replaces is the defect that voided dv_r1..r6 / kw6_st1.
   $txt = Read-NewLogText
+  if ($script:msSteps.Count -gt 0) {
+    if (-not [string]::IsNullOrEmpty($txt)) { $script:msOwnBuf = Add-MsBuf $script:msOwnBuf $txt }
+    $lsPeerTxt = Read-PeerLogText
+    if (-not [string]::IsNullOrEmpty($lsPeerTxt)) { $script:msPeerBuf = Add-MsBuf $script:msPeerBuf $lsPeerTxt }
+  }
   if (-not [string]::IsNullOrEmpty($txt)) {
     $n = $seenAsserts + ([regex]::Matches($txt, '\[ASSERT \d+\]')).Count
     if ($n -gt $seenAsserts) {
@@ -2163,6 +2432,11 @@ while ($true) {
       $script:menuTapHandles[$lTap.Chan].Set() | Out-Null
       Write-Host ("[flow] MENU tap #{0} ({1}) at DRIVING+{2:f1}s" -f $script:menuTapNext, $lTap.Chan, $sinceDrivingP)
     }
+    # ---- the cue-gated menu script (-MenuScript) ----
+    if ($script:msSteps.Count -gt 0) {
+      if ($script:msState -eq 'idle') { $script:msState = 'run'; Write-MsLog ("start at DRIVING+{0:f1}s" -f $sinceDrivingP) $elapsed }
+      Step-MenuScript $elapsed
+    }
   }
 
   # ---- the SINGLE-bumper presses (-ShoulderAt) -------------------------------------------
@@ -2261,6 +2535,7 @@ while ($true) {
   Start-Sleep -Milliseconds 250
 }
 foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evStrF25,$evStrF50,$evShldL,$evShldR,$evBoost)) { $e.Reset() | Out-Null }
+foreach ($lH in @($script:msHolds)) { try { $lH.H.Reset() | Out-Null } catch { } }   # -MenuScript holds still down at the end
 
 $endFrame = Newest-Frame
 $endElapsed = ((Get-Date) - $t0).TotalSeconds
@@ -2600,6 +2875,11 @@ if ($ThrottleScript -ne "") { $summary += ("throttlescript {0}" -f $ThrottleScri
 # ⭐ The transitions that ACTUALLY fired, not the ones requested: an aim schedule whose last leg
 #   never ran (short run, early exit) would otherwise be indistinguishable from one that did.
 $summary += $inputLog
+if ($script:msSteps.Count -gt 0) {
+  $summary += ("MENUSCRIPT done={0}/{1} state={2}{3}" -f $script:msNext, $script:msSteps.Count, $script:msState,
+                $(if ($script:msState -ne 'done' -and $script:msNext -lt $script:msSteps.Count) { " next='" + $script:msSteps[$script:msNext].Text + "'" } else { '' }))
+  $summary += $script:msLog
+}
 $marksPath = Join-Path $OutDir "marks.txt"
 $summary | Set-Content $marksPath
 

@@ -2897,6 +2897,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_VehicleRend
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_char_16.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_64.cpp"
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLogger.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\BrnTriggerEntityModuleIO_QueueAccessors.cpp"
   rem ---- world-IO Construct family (2026-07-27): the trigger pre/post-scene +      ----
   rem ---- pre-physics buffer Constructs (X360 0x822EED48/0x822DA168/0x822DA180/      ----
@@ -3236,6 +3237,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  ProcessInputQueue case 73 moves meJunkyardState 0 -> 2.
   echo "%SRC%\GameSource\GameState\CarSelect\BrnCarSelectManager.cpp"
   echo "%SRC%\GameSource\GameState\CarSelect\BrnCarSelectManager_CarChange.cpp"
+  echo "%SRC%\GameSource\GameState\CarSelect\BrnOnlineCarSelectManager_wN3_01.cpp"
   rem ??? [tut-ticker] wave (2026-08-24) -- THE TRAINING-TIP MANAGER, whole. Construct (PS3
   rem  0x241DE0), Update @0x823937D0 (the FSM that turns a queued tip into GameAction 148 ->
   rem  GUI event 537 -> the bottom-of-screen tutorial ticker), RequestTraining @0x82365B20,
@@ -5073,6 +5075,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Network\Managers\BrnNetworkMatchMakingManager.cpp"
   echo "%SRC%\GameSource\Network\Managers\BrnNetworkNotificationManagerBase.cpp"
   echo "%SRC%\GameSource\Network\Managers\BrnNetworkPlayerStats.cpp"
+  echo "%SRC%\GameSource\Network\Managers\BrnNetworkPlayerStats_wN3_00.cpp"
   echo "%SRC%\GameSource\Network\Messages\BrnUpdateMessage.cpp"
   echo "%SRC%\GameSource\Network\Utilities\BrnNetworkRounder.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayBaseSerialiser.cpp"
@@ -5316,6 +5319,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineShowtimeMode.cpp"
   rem [skillz mount 2026-09-12] the burnout-skillz manager + the mugshot manager and the achievement gameplay-event hooks its bodies call.
   echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnBurnoutSkillzManager.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\GameModes\BrnOnlineBurningHomeRunMode_wN3_01.cpp"
   echo "%SRC%\GameSource\GameState\MugshotManager\BrnMugshotManager.cpp"
   rem [takedown wave F2] the payback manager + its debug component, ticked from the takedown leg beside the mugshot manager.
   echo "%SRC%\GameSource\GameState\PaybackManager\BrnPaybackManager.cpp"
@@ -5367,6 +5371,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem were replaced with real construction loops; the HudStatesLinkStubs ctor gate is gone.)
   echo "%SRC%\GameSource\GameState\SharedIO\BrnGameStateToGuiIOInterfaces.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_OnlineGrid.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_wN3_01.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_wN3_02.cpp"
   echo "%SRC%\SharedClasses\Traffic\BrnTrafficLightTrigger.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnChallengeHighScoreEntry.cpp"
   echo "%SRC%\SharedClasses\StreetData\BrnChallengeData.cpp"
@@ -5569,10 +5575,13 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCarSelectOnlinePlayerList.cpp"
   rem ---- dev merge (2026-08-07): dev's restored BrnOnlinePlay.h embeds GuiNetworkPlayerStats
   rem ---- BY VALUE, so the scaffolded OnlinePlay ctor materialises its vtable, which needs the
-  rem ---- real virtuals (dev a1cad009). _wL_01 (FormatNetworkStats) stays OUT: its only caller
-  rem ---- (SetInfo) has no body in the tree, and it pulls four undefined NetworkPlayerStats/
-  rem ---- ChallengeList symbols.
+  rem ---- real virtuals (dev a1cad009).
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnGuiNetworkPlayerStats.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnGuiNetworkPlayerStats_wL_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnGuiNetworkPlayerStats_wN3_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnGuiNetworkRouteInfo.cpp"
+  rem ---- CrashNavBorough: GuiNetworkRouteInfo embeds it BY VALUE (its virtual Construct).
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavBorough.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnComplexBar.cpp"
   rem ---- menu-toggle / colour-picker component cluster (2026-08-02, CarSelectLivery wave).
   rem      BrnGui::CarSelectLivery embeds a MenuToggleGroupVarSize<2> and a ColourMenuToggle
@@ -5726,6 +5735,14 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem FLAG link scaffold: the SCREEN states' unrecovered .rdata tables + partial-state
   rem lifecycle gaps (see the file header audit).
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenStatesDataLinkStubs.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_03.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_04.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_05.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_06.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_07.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsEventObserver.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModuleIO_OutputBuffer.cpp"
@@ -5843,6 +5860,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnOnlineTimeoutTimerComponent.cpp"
   rem  The ChallengeSelector pair mounts together: the second file is a part-file of the same TU and holds the sole SelectAvailableChallenge body.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnChallengeSelector.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPlayerPositionSingle_wN3_01.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnTextField.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnButtonIcon.cpp"
   rem The real title-menu frontend (replaces the retired MenuComponent facade).
@@ -6144,7 +6162,35 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Network\SharedIO\EventQueue_RoadRulesRecvData_14.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\Log\CgsLogChannelOutput.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_wB_03.cpp"
+  echo "%SRC%\GameSource\GameState\BrnGameStateModule_wN3_01.cpp"
   echo "%SRC%\GameSource\Resource\BrnDLCManager.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\X360\BrnCrashNavEnterOnlineX360.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineQuickMatch.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCreateFreeburn.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_03.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_04.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_05.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_06.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_07.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_08.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_09.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_10.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_11.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_12.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_13.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_14.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_15.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_16.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_17.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wH_18.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wN3_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wN3_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wN3_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wN3_03.cpp"
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
