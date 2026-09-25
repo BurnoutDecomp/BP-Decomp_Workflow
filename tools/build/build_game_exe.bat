@@ -4474,6 +4474,10 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  [FX-DIRECTOR2 2026-09-25] the takedown look-back (NewMoment case 3, un-gated). No retail selector
   rem  registers type 3 (MomentSelector::AddMoment @0x82209F80 has three callers, none with a type-3 record).
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentTakedownLookback.cpp"
+  rem  [FX-DIRECTOR2 2026-09-25] the jump moment (NewMoment case 7, un-gated): ArbStateRoaming registers {7, 0},
+  rem  so the console allocates and ticks it every roaming frame. INERT on retail (mbAllowJumpMoment is seeded
+  rem  false @0x8225B97C and never written); the camera side behind that gate is a LOUD trap in the TU.
+  echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentPlayerJumping.cpp"
   rem ---- [momentcam] 2026-09-24 (crash-parity FX-DIRECTOR): the crash highlight moments RUN. The
   rem  machinery is real -- MainDirector::UpdateMoments @0x82250268, MomentController::UpdateAllMoments
   rem  @0x82239DE8 and NewMoment @0x82255850 (in the mounted BrnMomentController.cpp; the split
