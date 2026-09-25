@@ -211,18 +211,13 @@ def storage_regions(width, height, mips, block_size, bytes_per_block, faces=1):
 # Block offset of a packed level inside the tail tile, by TAIL-RELATIVE index.
 # Recovered empirically -- see the module docstring.
 #
-# LEGACY.  This table is retained ONLY for base > 0 chains, so that the ported
-# bytes of every already-shipped world/GUI texture stay identical.  It is known
-# to be WRONG for tail-relative index >= 3 -- see tail_slot_packed() below and
-# scratch/mainmenu_wave/mipslots/report.md for the block-occupancy evidence
-# (138 of 475 sampled base > 0 retail textures have non-zero tail blocks this
-# table never reads, and it reads an always-zero block at index 5).  Flip
-# _LEGACY_BASE_GT0_SLOTS to False to put base > 0 on the derived arithmetic too,
-# but only behind its own regression pass.
+# Legacy helper retained for vehicletex_transcode's separate gather/diagnostic
+# paths. The world/GUI port below uses packed_level_slot, not this table:
+# tail-relative indices >= 3 depend on the tail's long-axis size. In particular,
+# the last mip of 512x256 road asphalt is at block (1, 0), not (3, 0); reading
+# (3, 0) produces a black mip and black road bands at distance.
 _TAIL_SLOTS_WIDE = [(0, 4), (0, 2), (0, 1), (1, 0), (2, 0), (3, 0), (4, 0)]
 _TAIL_SLOTS_TALL = [(4, 0), (2, 0), (1, 0), (0, 1), (0, 2), (0, 3), (0, 4)]
-
-_LEGACY_BASE_GT0_SLOTS = True
 
 
 def tail_slot(index, width, height):
@@ -234,6 +229,10 @@ def tail_slot_packed(index, tail_w, tail_h, block_size):
     """Block offset of the packed level at TAIL-RELATIVE `index`, derived.
 
     `tail_w`/`tail_h` are the TEXEL dimensions of the tail level (level `base`).
+    Corroborated by Xenia's GetPackedMipOffset and the reversed XGraphics
+    GetMipTailLevelOffsetCoords:
+    https://github.com/xenia-project/xenia/blob/master/src/xenia/gpu/texture_util.cc
+    https://gist.github.com/Triang3l/4cc2f5c2901cd4e3ad2926c79c4f6858
 
     The tail tile is one nested mip pyramid.  In TEXELS, measuring along the
     tail's short axis for the first three levels and along its long axis after
@@ -291,7 +290,7 @@ def packed_level_slot(level, base, width, height, block_size, packed_mips):
     BFF04731 256x8, whose only non-zero blocks start at column 0 row 0) and True
     for exactly the 20 mips > 1 ones.
 
-    base > 0 keeps the legacy _TAIL_SLOTS_* table; see the note there.
+    The same packing applies when larger, unpacked levels precede the tail.
     """
     if packed_mips is None:
         raise ValueError("packed_level_slot: packed_mips is required -- omitting it for a "
@@ -299,8 +298,6 @@ def packed_level_slot(level, base, width, height, block_size, packed_mips):
                          "(the exact blank-mask bug this module documents)")
     if base == 0 and packed_mips is False:
         return (0, 0)
-    if base > 0 and _LEGACY_BASE_GT0_SLOTS:
-        return tail_slot(level - base, width, height)
     tw, th = level_dims(width, height, base)
     return tail_slot_packed(level - base, tw, th, block_size)
 
