@@ -45,6 +45,19 @@ copy of the same shader (identical HLSL, our fuller decode banner).
 
 ## Proving a change to the bundle
 
+`python -m unittest discover -s tools/assets/shaders -v` tests the sampler contract
+and compiles the six road/surface shader pairs with the Windows SDK `fxc` when
+available. These sources must use `D_ROAD_X360`: the TUB default road and tunnel
+pixel shaders read normal maps at s3/s4 that ARTIST materials never bind, so they
+sample textures left by preceding draws. The converter selects the recovered
+permutation for these six sources only.
+
+The `check` command and conversion gate now verify both directions of the binding
+contract: technique uniforms must exist in the program, and each compiled sampler
+must match its technique's name and register. Optimized-out technique samplers are
+allowed. Unexpected samplers or changed register indices are errors, including
+persistent samplers such as the shadow map at s15.
+
 ⛔ **Do not compare two emitted `SHADERS.BNDL` files by whole-file hash.** YAP does not
 zero the pad after the final resource, so two converts of the *same* sources produce files
 of identical length whose last ~110 bytes differ (measured 2026-09-07: 87 of them, at

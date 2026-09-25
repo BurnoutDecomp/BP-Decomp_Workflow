@@ -247,6 +247,21 @@ def build_technique_map(fx_paths):
     return mapping
 
 
+# These six sources contain the recovered ARTIST road permutation behind
+# D_ROAD_X360 (NuShaders' x360roads variant). The TUB default road/tunnel PS
+# reads normal maps at s3/s4, but ARTIST's E357DCFD/89C8D9A5 programs and
+# techniques only use s0/s1/s2/s15. Compiling the default makes the road sample
+# whatever unrelated textures the preceding draws left in s3/s4.
+X360_ROAD_SOURCES = frozenset(name.lower() for name in (
+    'Road_Detailmap_Opaque_Singlesided.fx',
+    'Tunnel_Road_Detailmap_Opaque_Singlesided.fx',
+    'Tunnel_Lightmapped_Road_Detailmap_Opaque_Singlesided2.fx',
+    'DriveableSurface_Detailmap_Opaque_Singlesided.fx',
+    'DriveableSurface_DetailMap_Diffuse_Opaque_Singlesided.fx',
+    'Tunnel_DriveableSurface_Detailmap_Opaque_Singlesided.fx',
+))
+
+
 def compile_entry(fxc, fx_path, entry, profile, include_dir, out_path):
     # /Zpr == D3DCOMPILE_PACK_MATRIX_ROW_MAJOR.  MANDATORY, not a preference: the engine
     # uploads a matrix constant as the raw run of float4s the runtime ShaderConstantTable
@@ -266,7 +281,9 @@ def compile_entry(fxc, fx_path, entry, profile, include_dir, out_path):
         # The recovered/ shaders are self-contained; the TUB Include/ tree may not
         # exist on a box that only re-compiles those, so only pass /I when it does.
         inc = ['/I', include_dir] if os.path.isdir(include_dir) else []
-        return subprocess.run([fxc, '/nologo', '/T', profile, '/E', entry] + inc +
+        defines = (['/D', 'D_ROAD_X360=1']
+                   if os.path.basename(fx_path).lower() in X360_ROAD_SOURCES else [])
+        return subprocess.run([fxc, '/nologo', '/T', profile, '/E', entry] + inc + defines +
                               ['/O2', '/Zpr', '/Fo', out_path, src],
                               capture_output=True, text=True)
     r = attempt(fx_path)
@@ -384,6 +401,42 @@ def check_constant_contract(techniques, built, technique_le):
     return problems
 
 
+def check_sampler_contract(techniques, built, technique_le):
+    """Every compiled sampler must have the same name/unit in the technique.
+
+    Check in the reverse direction from the uniform contract: a compiled shader
+    reading an undeclared sampler consumes stale state. Unused technique samplers
+    are fine (e.g. optimized-out shadow taps or a depth-only program).
+    Returns (technique, stage, name, unit, expected_unit, count, buffer_id).
+    """
+    problems = []
+    for blob, imports in techniques.values():
+        expected = dict(st.technique_sampler_names(blob, le=technique_le))
+        for stage, slot in (('VS', 0), ('PS', 4)):
+            key = '%08X' % imports.get(slot, 0)
+            prim = built.get(key)
+            if prim is None:
+                continue
+            for name, unit, datatype, count in st.pc_program_buffer_variables(prim):
+                if datatype == 3 and (expected.get(name) != unit or count != 1):
+                    problems.append((st.technique_name(blob, le=technique_le),
+                                     stage, name, unit, expected.get(name), count, key))
+    return problems
+
+
+def report_sampler_contract(problems, strict):
+    for technique, stage, name, unit, expected, count, key in problems:
+        binding = 'unbound' if expected is None else 's%d' % expected
+        print('ERROR %s %s sampler %s at s%d (count %d) in program %s; '
+              'technique binding: %s' %
+              (technique, stage, name, unit, count, key, binding))
+    if problems and strict:
+        raise SystemExit('%d compiled sampler binding mismatch(es) -- select the '
+                         'shader permutation matching the X360 technique; otherwise '
+                         'draws read stale or unrelated textures.' % len(problems))
+    return len(problems)
+
+
 def report_contract(problems, strict):
     hard = [p for p in problems if p[0] == 'internal']
     soft = [p for p in problems if p[0] == 'external']
@@ -425,9 +478,11 @@ def check(in_x360_bundle, pc_bundle):
                   % (kind.upper(), tname, stage, name, key,
                      'HAS it' if name in xhave else 'lacks it too'))
         n = report_contract(problems, strict=False)
-        print('%d internal (assert) / %d external (logged) mismatches'
-              % (n, len(problems) - n))
-        return 1 if n else 0
+        ns = report_sampler_contract(
+            check_sampler_contract(techniques, built, technique_le=False), strict=False)
+        print('%d internal (assert) / %d external (logged) / %d sampler mismatches'
+              % (n, len(problems) - n, ns))
+        return 1 if n or ns else 0
     finally:
         shutil.rmtree(work, ignore_errors=True)
 
@@ -496,6 +551,8 @@ def patch_recovered(pc_bundle, out_bundle, keep_work):
             built[f[:-len('_header.dat')]] = open(os.path.join(pdir, f), 'rb').read()
     problems = check_constant_contract(techniques, built, technique_le=True)
     report_contract(problems, strict=True)
+    report_sampler_contract(check_sampler_contract(techniques, built, technique_le=True),
+                            strict=True)
 
     # YAP writes `<res>.dat_imports.yaml` on extract but reads `<res>_imports.yaml`
     # on compile -- without the rename every import table is silently dropped.
@@ -588,6 +645,9 @@ def convert(in_bundle, out_bundle, mode, fx_dirs, use_fallback, keep_work,
         manifest['contract_errors'] = report_contract(problems,
                                                       strict=not allow_contract_errors)
         manifest['contract_warnings'] = len([p for p in problems if p[0] == 'external'])
+        manifest['sampler_contract_errors'] = report_sampler_contract(
+            check_sampler_contract(techniques, built, technique_le=False),
+            strict=not allow_contract_errors)
 
     # --- non-shader types via the established world flows --------------------
     for entry in sorted(os.listdir(ex)):
@@ -701,14 +761,14 @@ def main():
     cv.add_argument('--fxdir', action='append', default=None)
     cv.add_argument('--fallback', action='store_true')
     cv.add_argument('--allow-contract-errors', action='store_true',
-                    help='report but do not fail on technique INTERNAL constants missing '
-                         'from their compiled programs -- ONLY for the deliberate '
+                    help='report but do not fail on missing technique INTERNAL constants '
+                         'or compiled sampler binding mismatches -- ONLY for the deliberate '
                          'all-fallback diagnostic bundle (MINIMAL_PATH.md option A), '
                          'which asserts in PostFixUpShaderConstants for every such '
                          'material at stream-in')
     cv.add_argument('--keep-work', default=None)
-    ck = sub.add_parser('check', help='report technique constants the PC bundle\'s '
-                                       'programs cannot satisfy (read-only)')
+    ck = sub.add_parser('check', help='check technique constants and compiled sampler '
+                                       'bindings in the PC bundle (read-only)')
     ck.add_argument('in_x360_bundle')
     ck.add_argument('pc_bundle')
     pr = sub.add_parser('patch-recovered',

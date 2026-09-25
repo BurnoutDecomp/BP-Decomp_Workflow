@@ -215,13 +215,14 @@ def technique_name(data, le=False):
     return data[off:data.index(b'\0', off)].decode('ascii')
 
 
-def technique_sampler_names(data):
+def technique_sampler_names(data, le=False):
     scount = data[0x90]
-    sarr = be32(data, 0x8C)
+    endian = '<' if le else '>'
+    sarr = struct.unpack_from(endian + 'I', data, 0x8C)[0]
     out = []
     for i in range(scount):
-        noff = be32(data, sarr + 8 * i)
-        chan = struct.unpack_from('>h', data, sarr + 8 * i + 4)[0]
+        noff = struct.unpack_from(endian + 'I', data, sarr + 8 * i)[0]
+        chan = struct.unpack_from(endian + 'h', data, sarr + 8 * i + 4)[0]
         out.append((data[noff:data.index(b'\0', noff)].decode('ascii'), chan))
     return out
 
