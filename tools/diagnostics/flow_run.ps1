@@ -779,6 +779,31 @@ foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA'
   Remove-Item "Env:\$v" -ErrorAction SilentlyContinue
 }
 
+# ⛔⛔ CATCH-ALL WIPE (2026-09-25, crash-parity conductor). The fixed list above is only as good as the
+#   last change that remembered to extend it, and 106 of the engine's BRN_* names were missing from it
+#   on 2026-09-25. -DiagEnv writes into THIS process's environment, so the next flow_run in the same
+#   PowerShell process inherited the previous run's opt-ins. Measured: FX-DIRECTOR2's "OFF" sweep batch,
+#   run right after its ON batch in one shell, carried BRN_FXD2_CRASHANALYSER + BRN_ULTRA_SLOMO_SCALE +
+#   BRN_SWEEP_WAIT_ROAMING and ran the hard-stop ultra slo-mo ON (`hardstop ALLOCATED ... ultra 1 scale
+#   0.007500`). Several unlisted names are BEHAVIOUR controls, not prints (BRN_DEBUG_UNLOCK_CARS,
+#   BRN_DEBUG_PLAYER_CAR, BRN_FORCE_PLAYER_TAKEN_DOWN, BRN_TRAFFIC_FORCE_AVOID, BRN_TRAFFIC_FORCE_SYMPCRASH,
+#   BRN_GLASSFX_FORCE, BRN_MUSIC_FORCE_TYPE, BRN_PROGRESSION_*, ...). So every OTHER BRN_* variable is
+#   cleared here too, loudly, BEFORE -DiagEnv is applied below. Kept (inherited by design):
+#     BRN_INPUT_ALLOW_BACKGROUND / BRN_AUDIO_MUTE / BRN_HARNESS_SLOT -- this script sets them above;
+#     BRN_PROP_DIAG / BRN_HEAP_CHECK / BRN_RENDER_POSTFX / BRN_POSTFX_MASK_TEST -- the recorded INHERITED
+#       knobs (see "[flow] INHERITED diag env" below);
+#     BRN_DEBUG_UI_TRACE / BRN_EASYDRIVE_TRACE / BRN_STREET_UI_TRACE -- b5-decomp/tests/run_debug_menu.ps1,
+#       run_easydrive.ps1 and run_street_ui.ps1 export them for the flow_run child they launch.
+#   A new engine variable therefore needs NO list edit to be safe; pass it with -DiagEnv NAME=value.
+$lInheritByDesign = @('BRN_INPUT_ALLOW_BACKGROUND','BRN_AUDIO_MUTE','BRN_HARNESS_SLOT',
+                      'BRN_PROP_DIAG','BRN_HEAP_CHECK','BRN_RENDER_POSTFX','BRN_POSTFX_MASK_TEST',
+                      'BRN_DEBUG_UI_TRACE','BRN_EASYDRIVE_TRACE','BRN_STREET_UI_TRACE')
+foreach ($lItem in @(Get-ChildItem Env: | Where-Object { $_.Name -like 'BRN_*' -and $lInheritByDesign -notcontains $_.Name.ToUpperInvariant() })) {
+  Write-Host "[flow] NOTE: $($lItem.Name) was set in the environment and has been CLEARED (catch-all wipe; this is a DEFAULT run)."
+  Write-Host "[flow]       To pass an engine variable THROUGH the wipe, use:  -DiagEnv $($lItem.Name)=$($lItem.Value)"
+  Remove-Item "Env:\$($lItem.Name)" -ErrorAction SilentlyContinue
+}
+
 # ⭐ -DiagEnv: re-apply the caller's INSTRUMENT variables AFTER the wipe above (see the
 # parameter's banner for why exporting them in the parent shell cannot work). Parsed strictly so a
 # typo FAILS the run instead of silently measuring nothing -- an unset probe variable and a broken
