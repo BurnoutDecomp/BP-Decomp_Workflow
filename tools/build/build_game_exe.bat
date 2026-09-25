@@ -748,6 +748,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   AND the recovered _gaDebrisArrayParams preset table the arrays bind.
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnDebrisArray.cpp"
   echo "%SRC%\GameSource\Effects\Particles\Native\BrnDebrisRenderer.cpp"
+  rem   BrnDebrisArrayLite.cpp (FX-CRASHVFX 2026-09-25) is the debris SIMULATION's job side --
+  rem   DebrisUpdateJob::Execute, BrnDebrisArrayLite::Update and the per-bucket integrator
+  rem   ParticleModule::BeginSimulateDebris runs in place of EA::Jobs::JobScheduler::AddJobs.
+  echo "%SRC%\GameSource\Effects\Particles\Native\BrnDebrisArrayLite.cpp"
   rem ---- SPARKS (2026-09-06): the grinding-metal spark family. BrnSparkRenderer.cpp
   rem   carries SparkArray / SparkArray::SparkBank / SparkRenderer plus the static
   rem   SparkArray::maTextures table LoadFXBundle publishes into; the two siblings are
