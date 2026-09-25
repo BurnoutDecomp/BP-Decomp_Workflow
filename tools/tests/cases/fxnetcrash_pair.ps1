@@ -16,16 +16,39 @@
 #   & tools\tests\run_pair.ps1 -Case fxnetcrash_pair
 #   powershell -ExecutionPolicy Bypass -File tools\tests\run_pair.ps1 -Case fxnetcrash_pair -NoRun -RunDir <pair run dir>
 #
-# THE SET-UP. Same halves as net_lan_see (BP_LAN=1, BRN_NET_HOST / BRN_NET_JOIN, BRN_NET_DELAY=30;
-# the teleport is done at boot, before the lobby exists, and the lobby start keeps each local car
-# where it is):
-#   Host  -> 95 m up the east parking lane from parked car 579 (static, identical on both halves since the
-#            traffic runs in lockstep; (3390.21, 0.17, -1641.10)), heading 180, aimed straight at it. Once
-#            the lobby is up and the traffic restarted (flow_run -Drive, 80 s after DRIVING) the throttle
-#            is pinned for the rest of the run.
-#   Guest -> (3392.0, -1700.0) heading 0, 59 m beyond car 579 in the same lane, never driving.
+# THE SET-UP -- THE FOLLOW LAYOUT, KEYED TO THE ONLINE TRAFFIC RESTART (2026-09-25). Same halves as
+# net_lan_see (BP_LAN=1, BRN_NET_HOST / BRN_NET_JOIN, BRN_NET_DELAY=30; the teleport is done at boot, before
+# the lobby exists, and the lobby start keeps each local car where it is):
+#   Host  -> (3391.0, -1440.0) heading 180, in the east parking lane, 50 m south of the three parked cars at
+#            x 3391.5 (454 / 404 / 556, z -1346..-1389).
+#   Guest -> (3391.0, -1410.0) heading 180: 30 m BEHIND the host on the same line.
+#   BOTH hold the throttle from the same moment: a -MenuScript waits for THIS half's own
+#   "[netcrash] HandleExternalRequests RESTART_TRAFFIC" line (the online traffic restart, printed with
+#   BRN_NETCRASH_DIAG), sleeps 63.4 s and holds Accelerate. flow_run polls at 250 ms, so the drive starts
+#   63.75 s +- ~0.3 s after the restart on both halves (calibration run _161040: sleep 70 -> start 70.35).
+#   The guest drives the host's route ~30 m behind it, so the host's first owned wreck is inside the
+#   guest's 150 m camera cull (below) when the update lands.
+# WHY KEYED TO THE RESTART: the online traffic is DETERMINISTIC from the restart. The lockstep-vehicles dumps
+#   of four runs (_131154 / _132839 / _140405 / _153208) agree bit for bit at upd 19 / 100 / 300 except for
+#   the cars the players touched, whatever the players' spots in hull 144. A drive keyed to the DRIVING mark
+#   (DriveDelay 80, runs _153208 and before) starts at a lobby-dependent time after the restart and meets
+#   different traffic each run; keyed to the restart line it meets the same cars.
+# HOW THE SPOT AND THE DELAY WERE CHOSEN: calibration pair _161040 (sleep 70, a diagonal start) logged the
+#   pinned-throttle profile ([motion], BRN_MOTION_PROBE) and, every second from 30 s to 120 s after the
+#   restart, every traffic car within 300 m of each camera ([netcrash] traffic-near, b5 7585336f). A
+#   planner walked a straight pinned-throttle path from every parking-lane spot / heading / delay against
+#   those dumps; from this spot every delay from 62.0 to 65.3 s passes lane-1 car 362 (11.2 m/s) at
+#   37-40 m/s. In the confirmation runs the host drifts ~1 m east and passes it 3.6 m wide (no near miss),
+#   clears parked 579 on its east side, takes the bend onto the SW-bound road at ~100 mph and makes its first
+#   owned wreck there by a near miss (PhysicalTrafficManager::TestForNearMissFreakOut @0x82637A30: race car
+#   >= 60 mph 0x82637AF0, traffic >= 15 mph 0x82637BAC, the race car beside the car's front half 0x82637BCC):
+#   car 345 at (3271.3, -1904.9) in run _163724, car 360 at (3023.3, -2136.5) in runs _164411 and _164939.
+# RESULT: 3/3 GREEN -- _163724 (the guest had CHECKED 345 itself, so its 345 updates were contentious
+#   posted=0; it consumed the host's next wreck, car 370, 1.2 km on: posted=1, 23 UpdateNetworkTrafficVehicle
+#   lines), _164411 (car 360: 40 posted lines, snapped then slerped 10.3 m) and _164939 (car 360: 40 posted,
+#   car 45 snapped). 0 asserts, 0 AV on every half.
 #
-# WHAT THIS LAYOUT GIVES, AND WHAT NO LAYOUT HAS GIVEN YET (all measured on the wave-3 exe):
+# WHY FOLLOW -- WHAT THE EARLIER LAYOUTS GAVE (all measured on the wave-3 exe):
 #   - The ram at car 579 is a CHECK (~69 mph), and a check makes no crash record with the harness car:
 #     PhysicalTrafficVehicle::OnChecked @0x8261E360 arms the checked BODY's crash only for a checker
 #     strength > 8 (lbz 0x140E @0x8261E3F0 / cmplwi 8 / ble 0x8261E3F8; the harness car is 5), and even
@@ -84,8 +107,8 @@
 param([string]$Role = '')
 
 # See THE SET-UP above for both spots.
-$lsHostSpot  = '3390.2,0.2,-1546.0,180'   # 95 m up the parking lane from parked car 579, aimed at it
-$lsGuestSpot = '3392.0,0.2,-1700.0,0'     # 59 m beyond car 579 (run 20260925_124335's layout)
+$lsHostSpot  = '3391.0,0.2,-1440.0,180'   # east parking lane, 50 m south of the parked cars at x 3391.5
+$lsGuestSpot = '3391.0,0.2,-1410.0,180'   # the FOLLOW layout: 30 m behind the host, same line, same heading
 
 $lPairRoles = [ordered]@{
   Host  = @{ Other = 'Guest'; Harness = 'BRN_NET_HOST'; Spot = $lsHostSpot;  Rams = $true  }
@@ -104,16 +127,16 @@ if (-not $lPairRoles.Contains($Role)) { throw "fxnetcrash_pair: unknown -Role '$
 $lR = $lPairRoles[$Role]
 $lsMe = $Role
 
+# Both halves drive, from the same moment: 63.4 s after THIS half's own online traffic restart line (see
+# THE SET-UP). No -Drive: the MenuScript holds the Accelerate channel itself. The motion probe stays on so
+# a failing run shows where each car went ([motion], every 30 presents).
 $lRun = @{
-  MaxSeconds = 170
-  SkipIntro  = $true
-  AcceptGap  = 1.0
-  Teleport   = $lR.Spot
-}
-if ($lR.Rams) {
-  $lRun['Drive']          = $true
-  $lRun['DriveDelay']     = 80.0
-  $lRun['ThrottleScript'] = '0:accel'
+  MaxSeconds  = 180
+  SkipIntro   = $true
+  AcceptGap   = 1.0
+  Teleport    = $lR.Spot
+  MotionProbe = $true
+  MenuScript  = 'wait:\[netcrash\] HandleExternalRequests RESTART_TRAFFIC;sleep:63.4;hold:Accelerate:150'
 }
 
 $lSetup = {
