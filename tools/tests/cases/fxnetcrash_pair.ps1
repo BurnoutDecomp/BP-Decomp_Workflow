@@ -19,24 +19,63 @@
 # THE SET-UP. Same halves as net_lan_see (BP_LAN=1, BRN_NET_HOST / BRN_NET_JOIN, BRN_NET_DELAY=30;
 # the teleport is done at boot, before the lobby exists, and the lobby start keeps each local car
 # where it is):
-#   Host  -> 150 m up-road of the parked traffic car at (3390.2, 0.17, -1641.1) (traffic_soak_ram's
-#            car 553; its id changes after the online traffic restart, 579 in run 20260925_101502),
-#            on that car's own at-vector (182 deg). Once the lobby is up and the traffic restarted
-#            (flow_run -Drive, 80 s after DRIVING -- net_lan_see's guest drives at 75 s) the throttle
-#            is pinned. The run-up is what decides the outcome:
-#            VehicleManager::DecideOutcomeOfRaceCarTrafficContact CHECKS the traffic car only when
-#            impactSpeed * raceCarMass / trafficMass > 30 (the tail at 0x825C7500), otherwise it
-#            SLAMS it, and only a CHECKED car becomes a crashing traffic car
-#            (eCrashTrafficType_Checked) the host OWNS. Measured: soak_ram's 21 m run-up reaches
-#            36.7 mph and slams (magnitude 17.6, run 20260925_101502); the old claim here that it
-#            gives "SLAMMED then CHECKED" is stale. 150 m buys the ~61 mph a check needs.
-#   Guest -> the same road 30 m BEHIND the host, facing the same way, never driving: close enough
-#            that the parked car's hull is active in the guest's world too, and out of the host's path.
+#   Host  -> 95 m up the east parking lane from parked car 579 (static, identical on both halves since the
+#            traffic runs in lockstep; (3390.21, 0.17, -1641.10)), heading 180, aimed straight at it. Once
+#            the lobby is up and the traffic restarted (flow_run -Drive, 80 s after DRIVING) the throttle
+#            is pinned for the rest of the run.
+#   Guest -> (3392.0, -1700.0) heading 0, 59 m beyond car 579 in the same lane, never driving.
+#
+# WHAT THIS LAYOUT GIVES, AND WHAT NO LAYOUT HAS GIVEN YET (all measured on the wave-3 exe):
+#   - The ram at car 579 is a CHECK (~69 mph), and a check makes no crash record with the harness car:
+#     PhysicalTrafficVehicle::OnChecked @0x8261E360 arms the checked BODY's crash only for a checker
+#     strength > 8 (lbz 0x140E @0x8261E3F0 / cmplwi 8 / ble 0x8261E3F8; the harness car is 5), and even
+#     then SetTrafficVehicleChecked @0x8262D748 posts only the SLAMMED event (li r9, 3 @0x8262D9BC ->
+#     TrafficSlammedEvent::AddEvent 0x8262D9F8), which HandleExternalResponses' loop 2 records with
+#     mbNeedsToBeSentToCrashModule = false. Run 20260925_132839 (BRN_STRENGTH_STAT_OVERRIDE=10):
+#     "[T4-hit] outcome=CHECKED ... checkerStrength=10 trafficCrashingAfter=1" and still no record.
+#   - The host's owned crash records come later, wherever the pinned throttle takes it: mostly
+#     PhysicalTrafficManager::TestForNearMissFreakOut @0x82637A30 (a race car >= 60 mph brushing past
+#     the front of a FULL-physical traffic car doing >= 15 mph -> SetTrafficVehicleCrashing with the
+#     race car as crasher: "[T4-hit] outcome=CRASHING ... crasherOwner=1 crasherIdx=0" then NEARMISS),
+#     hundreds of metres to kilometres on.
+#   - The guest keeps a copy only inside the console's 150 m camera cull:
+#     TrafficEntityModule::TryClearupOffscreenTraffic @0x8273C4C8 (called by GenerateDriverInputs for
+#     every physical traffic car, every frame) RemoveVehicle's (0x8273CAD0) a physical car that was NOT
+#     rendered last frame and is farther than flt_8200D50C = 22500 (150 m, squared) from
+#     mCameraLastFrame (+0x728C0) -- the LOCAL camera.
+#   - So for a far wreck the guest's witness is ONE line, and only when its copy is still alive and not
+#     physical when the first update lands: HandleNetworkCrashingTraffic posts it, the copy is promoted,
+#     UpdateNetworkTrafficVehicle snaps it, and the cull removes it in the same frame chain. Run
+#     20260925_124335 (this layout): car 78, 1.48 km on, "UpdateNetworkTrafficVehicle slot=0
+#     global=78 ... snapped=1" once -> GREEN. When the host's NETWORK car touched the car on the guest
+#     first (slam or check), the copy was physical, far, and culled before the update -> RED: runs
+#     20260925_115458 / _122225 (car 270) and _132839 (car 386: "outcome=CHECKED ... raceCarIdx=1"
+#     then "[T3-demote] ... vehicle 386 ... clearupKills 3" before the first "posted=1").
+#   - Layouts that tried to put the wreck inside 150 m of the guest, and why they failed:
+#     - guest 30 m behind the host's start (runs _115458 / _122225): first wreck ~800 m on;
+#     - host waiting WRONG-WAY in the inner northbound lane for a head-on (run _131154): northbound
+#       cars swerved round the waiting host and crashed on BOTH halves, each owned by its own local
+#       player (UpdateVehiclesJob::UpdateVehicle's swerve promotion targets params+0x74, the local
+#       player, 0x8291DB34..0x8291DC40), so the guest applied none of the host's updates ("posted=0"),
+#       and the host then met no oncoming car in 335 m;
+#     - a strength-10 check of car 579 with the guest 26 m behind the host (run _132839): no record
+#       (above);
+#     - host angled (183) from the parking lane across both southbound lanes into the northbound
+#       ones, guest 180 m down the parking lane (run _140405): no contact at all in that stretch; the
+#       first record (car 260, a near miss at 119 mph) came 360 m from the guest -> culled, RED.
+#   The first owned wrecks of runs _110031, _131154 and _140405 all fell on the SW-bound road at
+#   (3262..3282, -1917..-1889), 480 m down the host's route: that stretch carries traffic both ways.
+#   Re-run of this exact layout on a newer exe (run _135054, b5 335639ce): no owned record at all -> RED.
+#   So this case is GREEN only when the drive happens to make a record whose guest copy survives to
+#   the first update; a layout that keeps the observer within 150 m of the wreck is still open.
+#   This layout also stands the guest on the line the host takes after the check; in run _124335 the
+#   host ran into it and shoved it 50 m. That changes nothing the checks read.
 #
 # THE ORACLE (capped, default-off witness lines; BRN_NETCRASH_DIAG=1 on both halves):
 #   Host   [traffic-crash] added vehicle=V owner=O ...              (BRN_CRASH_ACTION_DIAG) the ram
 #          [netcrash] GenerateOwnedTrafficUpdates owner=O published=N first=V ...  N >= 1
-#   Guest  [netcrash] HandleNetworkCrashingTraffic player=P updates=N ... first=V ...  N >= 1
+#   Guest  [netcrash] HandleNetworkCrashingTraffic player=P updates=N posted=M ... first=V ...  M >= 1
+#                     (posted = the updates accepted for that player; 0 when the guest owns the crash itself)
 #          [netcrash] UpdateNetworkTrafficVehicle slot=S global=V before=(..) target=(..) after=(..)
 #                     snapped=0|1 steps=K        -- the car HandleNetworkCrashingTraffic named MOVED
 #                     (a snap moves it inside the call; otherwise the armed slerp moves it over the
@@ -44,11 +83,9 @@
 #   Both   0 [ASSERT n] lines, 0 [EXCEPTION] lines, DRIVING reached, the lobby game started.
 param([string]$Role = '')
 
-# The host's line: a throttle-only drive holds its 182 deg heading (at = (-0.0349, -0.9994)), so it
-# drifts 0.0349 m in x per metre -- 5.2 m over the run-up, which MISSED the parked car at x 3390.2
-# in run 20260925_105022 (the host passed at x 3384.3, 38 m/s). Start 5.2 m to the right instead.
-$lsHostSpot  = '3395.4,0.2,-1491.1,182'   # 150 m up-road of the parked car (a CHECK needs ~61 mph)
-$lsGuestSpot = '3396.4,0.2,-1461.1,182'   # 30 m behind the host on the same line, out of its path
+# See THE SET-UP above for both spots.
+$lsHostSpot  = '3390.2,0.2,-1546.0,180'   # 95 m up the parking lane from parked car 579, aimed at it
+$lsGuestSpot = '3392.0,0.2,-1700.0,0'     # 59 m beyond car 579 (run 20260925_124335's layout)
 
 $lPairRoles = [ordered]@{
   Host  = @{ Other = 'Guest'; Harness = 'BRN_NET_HOST'; Spot = $lsHostSpot;  Rams = $true  }
@@ -127,17 +164,20 @@ $lConsumeCheck = {
   $lRx = '\[netcrash\] HandleNetworkCrashingTraffic player=(-?\d+) updates=(\d+) posted=(\d+) new=(\d+) cleared=(\d+) first=(\d+)'
   $lHits = @($ctx.LogLines | Where-Object { $_ -match $lRx })
   if ($lHits.Count -eq 0) { return @{ Pass = $false; Detail = 'no HandleNetworkCrashingTraffic line -- no crashing-traffic update reached the crash module' } }
-  $liMax = 0
-  foreach ($lsLine in $lHits) { $null = $lsLine -match $lRx; $liMax = [Math]::Max($liMax, [int]$Matches[2]) }
-  return @{ Pass = ($liMax -ge 1); Detail = ("{0} line(s), max updates {1}; first: {2}" -f $lHits.Count, $liMax, $lHits[0].Trim()) }
+  $laPosted = @($lHits | Where-Object { $null = $_ -match $lRx; [int]$Matches[3] -ge 1 })
+  if ($laPosted.Count -eq 0) {
+    return @{ Pass = $false; Detail = ("{0} line(s), none with posted >= 1 (every update was for a crash this machine owns itself); first: {1}" -f
+                                       $lHits.Count, $lHits[0].Trim()) }
+  }
+  return @{ Pass = $true; Detail = ("{0} line(s), {1} with posted >= 1; first posted: {2}" -f $lHits.Count, $laPosted.Count, $laPosted[0].Trim()) }
 }.GetNewClosure()
 
 $lMoveCheck = {
   param($ctx)
-  $lRxH = '\[netcrash\] HandleNetworkCrashingTraffic player=-?\d+ updates=\d+ posted=\d+ new=\d+ cleared=\d+ first=(\d+)'
+  $lRxH = '\[netcrash\] HandleNetworkCrashingTraffic player=-?\d+ updates=\d+ posted=([1-9]\d*) new=\d+ cleared=\d+ first=(\d+)'
   $lNamed = @{}
-  foreach ($lsLine in $ctx.LogLines) { if ($lsLine -match $lRxH) { $lNamed[$Matches[1]] = $true } }
-  if ($lNamed.Count -eq 0) { return @{ Pass = $false; Detail = 'HandleNetworkCrashingTraffic named no vehicle' } }
+  foreach ($lsLine in $ctx.LogLines) { if ($lsLine -match $lRxH) { $lNamed[$Matches[2]] = $true } }
+  if ($lNamed.Count -eq 0) { return @{ Pass = $false; Detail = 'HandleNetworkCrashingTraffic posted no update for any vehicle' } }
   $lsNum = '(-?[0-9.eE+-]+)'
   $lRxU = '\[netcrash\] UpdateNetworkTrafficVehicle slot=(\d+) global=(\d+) before=\(' + $lsNum + ', ' + $lsNum + ', ' + $lsNum +
           '\) target=\(' + $lsNum + ', ' + $lsNum + ', ' + $lsNum + '\) after=\(' + $lsNum + ', ' + $lsNum + ', ' + $lsNum + '\) snapped=(\d)'
@@ -193,7 +233,7 @@ if ($lR.Rams) {
 }
 
 $lsDiag = "$($lR.Harness)=1,BRN_NET_DELAY=30,BRN_NETCRASH_DIAG=1,BRN_CRASH_ACTION_DIAG=1"
-if ($lR.Rams) { $lsDiag += ',BRN_TRAFFIC_DIAG=1' }
+$lsDiag += ',BRN_TRAFFIC_DIAG=1'   # both halves: the guest's own contact / promotion lines matter too
 
 @{
   Name    = "fxnetcrash_pair_$Role"
