@@ -799,10 +799,14 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   plus TextureNameMap::Entry::HashString @0x82277CD0 (the FNV-1a the name lookup keys on).
   rem   ParticleDescriptionResourceType.cpp also carries the (unregistered) .lef handler, whose
   rem   cLionFX::BinLoad / BinSave / Content::DoOnPostLoad are __debugbreak stubs in that TU.
+  rem   BrnVFXMeshCollectionResourceType.cpp (FX-CRASHVFX C3, 2026-09-25) is the debris meshes'
+  rem   handler, 0x10019: LoadFXBundle stages 5..8 bind its three collections to the five debris
+  rem   arrays (particles_transcode.py ports them); its PC leaf refuses a pre-port bundle's.
   echo "%SRC%\SharedClasses\Graphics\TextureNameMapResourceType.cpp"
   echo "%SRC%\SharedClasses\Graphics\TextureNameMapEntry.cpp"
   echo "%SRC%\SharedClasses\Graphics\VFXPropsResourceType.cpp"
   echo "%SRC%\SharedClasses\Graphics\ParticleDescriptionResourceType.cpp"
+  echo "%SRC%\SharedClasses\Graphics\BrnVFXMeshCollectionResourceType.cpp"
   rem ---- SKY WAVE (2026-07-31): the sky-dome draw path, MOUNTED. ----------------
   rem The closure was measured with dumpbin over the linked object set: the three
   rem sky TUs raise 67 externals / 45 already provided / 22 unresolved; the two

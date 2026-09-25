@@ -46,23 +46,30 @@ HOW EACH ONE IS PORTED -- and why (the deciding fact is always the committed con
                                  -- miss and take the console's "Couldn't locate lion effect
                                  description" exit. See lef_transcode.py's banner for the
                                  map, the two console quirks reproduced, and the checks.
-  VFXMeshCollection              PASSTHROUGH, VERBATIM, BIG-ENDIAN. Its consumer is the
-                                 debris renderer (BrnDebrisRenderer::RenderDebrisArray
-                                 @0x8228B078, absent) and its FixUp wants an x64-ported
-                                 renderengine VertexBuffer/IndexBuffer pair that the
-                                 world's renderable porter models for Renderables, not for
-                                 this MeshHelper container. Left UNREGISTERED on the PC for
-                                 the same reason as the .lef. FLAG PC: DELETE-WHEN the
-                                 debris renderer lands -- port the header (u32 version +
-                                 32 f32 + 4 u32) and the VB/IB with renderable_transcode's
-                                 vertex-descriptor machinery.
+  VFXMeshCollection              PORTED (2026-09-25, FX-CRASHVFX C3): the debris meshes.
+                                 LoadFXBundle stages 5..8 acquire one collection per
+                                 debris array and the texture it names, and
+                                 BrnDebrisRenderer::RenderDebrisArray instances it 32 at a
+                                 time. ENDIAN SWAP, no widening: the registered handler's
+                                 FixUp (BrnVFXMeshCollectionResourceType::FixUp
+                                 @0x82678490) rebases the header's offsets as u32 words in
+                                 place (the low-4 GB convention) and adds the graphics
+                                 lane to the two buffer base words. Header: every 32-bit
+                                 word (version, 32 radii, the four u32 fields, the
+                                 MeshHelper, the 9-word IndexBuffer and 10-word
+                                 VertexBuffer headers) flipped, the texture name's bytes
+                                 untouched. Body: the index data flipped by its width
+                                 (IndexBuffer Common bit 31), the vertex data flipped as
+                                 32-bit lanes (36-byte WorldTexturedVertex = 9 f32). See
+                                 mesh_layout() for the model and its citations.
 
-WHY THE REMAINING PASSTHROUGH IS SAFE FOR THE TYRE MARK. LoadFXBundle @0x8229C950 acquires
-the collection, the name map, the five mesh collections and every name-map texture; an
-acquire of an unregistered-type resource still RESOLVES (the pool has the raw bytes) --
-only FixUp is skipped, and nothing on the skid path dereferences a mesh.
-TrailSystem::Render reads the fxskid Texture through the name map, both of which are
-fully ported here.
+AN UNPORTED (BIG-ENDIAN) MESH COLLECTION IS REFUSED, NOT CRASHED ON. The exe registers
+0x10019 as of FX-CRASHVFX C3, so its FixUp runs on whatever PARTICLES.BUNDLE a player has.
+A bundle converted before this port still carries the three collections big-endian; the
+handler's PC platform leaf recognises the byte-reversed version word, says so ONCE in the
+log with the re-conversion command, and leaves the collection unbound -- the debris stays
+undrawn, as before the port. Re-run this converter (or build_game_data.py --only
+PARTICLES.BUNDLE) to get the debris meshes.
 
 VALIDATION (always on -- a real proof, not a smoke test)
   1. structural   every swapped payload's own model must tile it exactly: the name map's
@@ -77,6 +84,15 @@ VALIDATION (always on -- a real proof, not a smoke test)
   4. the output   re-read as bnd2: platform 4, the same 98 ids, and every Texture /
                   TextureNameMap / VFXPropCollection / collection payload decodes in
                   little-endian with the counts above.
+  5. the meshes   every VFXMeshCollection walks its model in BOTH byte orders (header
+                  words, MeshHelper 1/1, IndexBuffer count == muNumIndices, VertexBuffer
+                  bytes == fetch size == muNumVertices x 36, both data runs inside the
+                  body, every other byte zero), swaps back to the input byte for byte,
+                  and decodes little-endian as the console draws it: every index below
+                  muNumVertices, a whole number of triangles, finite lanes, unit normals,
+                  exactly the 32 instance ids 0.5 .. 31.5. Its +0x90 texture name must
+                  resolve to a Texture of this bundle (stage 7's acquire), and the three
+                  ids must be HashString of the three debris preset names (stage 5's).
 
 Usage:
   py tools/assets/bundles/particles_transcode.py <in_x360.bundle> <out_plat4.bundle>
@@ -85,6 +101,7 @@ Usage:
 from __future__ import print_function
 
 import binascii
+import math
 import os
 import re
 import shutil
@@ -117,6 +134,12 @@ TYPE_PARTICLE_DESCRIPTION = 0x1001D
 # of the gdb name == CRC32 of the lowercased name (bnd2 carries no names).
 FXSKID_GDB_NAME = 'gamedb://burnout5/Burnout/Effects/Textures/fxskid.TextureConfig2d?ID=226049'
 FXSKID_ID = 0x55AF0DBF
+
+# The debris meshes. LoadFXBundle stage 5 (0x8229CEB4..0x8229CF2C) acquires one VFXMeshCollection per debris array
+# by the name in its preset, _gaDebrisArrayParams @0x82CDB250 (stride 0x50, mpMeshCollectionName at +0):
+# 0x82013FD4 "lowres_debris.rf3" (arrays 0..2), 0x82013FE8 "highres_debris_02.rf3" (3), 0x82014000
+# "Glass_debris.rf3" (4). Their ids are HashString of those names.
+DEBRIS_MESH_NAMES = ('lowres_debris.rf3', 'highres_debris_02.rf3', 'Glass_debris.rf3')
 
 
 class PortError(RuntimeError):
@@ -217,6 +240,164 @@ def count_imports(sidecar_path):
         if re.match(r'^\s*-\s*0x[0-9a-fA-F]+\s*:\s*0x[0-9a-fA-F]+\s*$', line):
             n += 1
     return n
+
+
+# ----------------------------------------------------------------------- VFXMeshCollection
+# The serialised BrnParticle::BrnVFXMeshCollection, as BrnVFXMeshCollectionResourceType::FixUp @0x82678490 and its
+# consumers read it. Every field is a 32-bit word:
+#   +0x00 muVersion == 2                        (`cmplwi r11, 2` 0x826784AC)
+#   +0x04 mafRadius[32]                         f32
+#   +0x84 mpMeshHelper       offset, rebased    (0x826784D8 / 0x826784E8)
+#   +0x88 muNumIndices                          the debris draw's index count (RenderDebrisArray)
+#   +0x8C muNumVertices
+#   +0x90 mMaterial.mpTextureName  offset, rebased (0x826784DC / 0x826784EC) -> a NUL-terminated name that
+#                                  LoadFXBundle stage 7 acquires (`lwz r3, 0x90(r3)` 0x8229D060)
+# MeshHelper at mpMeshHelper: numIndexBuffers == 1, numVertexBuffers == 1 (0x826784F0..0x82678504),
+#   m_buffers[0] -> the IndexBuffer header, m_buffers[1] -> the VertexBuffer header (both offsets, rebased).
+# IndexBuffer header, 9 words: the six D3DResource words (Common, ReferenceCount, Fence, ReadFence, Identifier,
+#   BaseFlush), +0x18 Address (a BODY offset -- FixUp adds the graphics lane, 0x82678568..0x82678574),
+#   +0x1C Size in bytes, +0x20 the index count. Common bit 31 selects 32-bit indices (the PC draw path's test).
+# VertexBuffer header, 10 words: the six D3DResource words, +0x18 fetch-constant word 0 (the BODY offset, with
+#   the fetch type 3 in its low two bits, which FixUp keeps: 0x82678540..0x82678554), +0x1C fetch word 1 (the
+#   endian mode in bits 0..1 -- 2, 8-in-32 -- and the size in dwords in bits 2..25), +0x20 the size in bytes,
+#   +0x24 one more word.
+# Body: the index data at the IndexBuffer's Address, the vertex data at the fetch base: muNumVertices
+#   WorldTexturedVertex records of MESH_VERTEX_STRIDE bytes, the declaration
+#   ImRenderer<WorldTexturedVertex>::Construct builds (element words 0x1A23A6 FLOAT4 @0, 0x2A23B9 FLOAT3 @16,
+#   0x2C23A5 FLOAT2 @28) -- nine f32 lanes: the position with the instance index in w, the normal, the uv.
+#   Every mesh bakes MESH_INSTANCES copies of the piece (instance w = i + 0.5), which is why RenderDebrisArray
+#   draws the whole index run once per batch of 32 transforms.
+MESH_VERSION = 2
+MESH_HEADER_WORDS = 37                 # the version, the 32 radii, the four fields
+MESH_OFF_HELPER = 0x84
+MESH_OFF_NUM_INDICES = 0x88
+MESH_OFF_NUM_VERTICES = 0x8C
+MESH_OFF_TEXTURE_NAME = 0x90
+MESH_HELPER_WORDS = 4
+MESH_IB_WORDS = 9
+MESH_VB_WORDS = 10
+MESH_VERTEX_STRIDE = 36                # sizeof(WorldTexturedVertex)
+MESH_INSTANCES = 32                    # Im3dTexPlusLighting::KU_NUM_TRANSFORMS
+MESH_FETCH_TYPE_VERTEX = 3
+MESH_FETCH_ENDIAN_8IN32 = 2
+
+
+def mesh_layout(header, body, be, label):
+    """Walk one serialised collection in the given byte order and return its fields, the header words the
+    port flips and the two body runs. Raises PortError on anything the model does not tile exactly."""
+    E = '>' if be else '<'
+
+    def word(off):
+        return struct.unpack_from(E + 'I', header, off)[0]
+
+    if len(header) < MESH_HEADER_WORDS * 4:
+        raise PortError('%s: header is only %d bytes' % (label, len(header)))
+    version = word(0)
+    if version != MESH_VERSION:
+        raise PortError('%s: muVersion %#x, expected %d (%s-endian read)' % (label, version, MESH_VERSION,
+                                                                            'big' if be else 'little'))
+    helper = word(MESH_OFF_HELPER)
+    nidx = word(MESH_OFF_NUM_INDICES)
+    nvtx = word(MESH_OFF_NUM_VERTICES)
+    name_off = word(MESH_OFF_TEXTURE_NAME)
+    if not (MESH_HEADER_WORDS * 4 <= name_off < len(header)):
+        raise PortError('%s: texture name offset %#x outside the header' % (label, name_off))
+    name_end = header.find(b'\0', name_off)
+    if name_end < 0 or name_end == name_off:
+        raise PortError('%s: texture name at %#x is empty or not NUL-terminated' % (label, name_off))
+    name = header[name_off:name_end].decode('ascii')
+    if helper % 4 or helper <= name_end or helper + 4 * MESH_HELPER_WORDS > len(header):
+        raise PortError('%s: mesh helper at %#x does not follow the name (ends %#x) inside %d bytes'
+                        % (label, helper, name_end, len(header)))
+    n_ib, n_vb, ib, vb = (word(helper + 4 * k) for k in range(MESH_HELPER_WORDS))
+    if (n_ib, n_vb) != (1, 1):
+        raise PortError('%s: mesh helper counts %d/%d, expected 1/1' % (label, n_ib, n_vb))
+    regions = sorted([(0, MESH_HEADER_WORDS * 4), (name_off, name_end + 1), (helper, helper + 4 * MESH_HELPER_WORDS),
+                      (ib, ib + 4 * MESH_IB_WORDS), (vb, vb + 4 * MESH_VB_WORDS)])
+    for (a0, a1), (b0, b1) in zip(regions, regions[1:]):
+        if b0 < a1:
+            raise PortError('%s: header regions overlap: [%#x,%#x) and [%#x,%#x)' % (label, a0, a1, b0, b1))
+    if ib % 4 or vb % 4 or regions[-1][1] > len(header):
+        raise PortError('%s: buffer headers at %#x / %#x misplaced in %d bytes' % (label, ib, vb, len(header)))
+
+    ib_common, ib_addr, ib_size, ib_count = word(ib), word(ib + 0x18), word(ib + 0x1C), word(ib + 0x20)
+    width = 4 if ib_common & 0x80000000 else 2
+    fetch0, fetch1, vb_size = word(vb + 0x18), word(vb + 0x1C), word(vb + 0x20)
+    vb_off = fetch0 & ~3
+    if fetch0 & 3 != MESH_FETCH_TYPE_VERTEX:
+        raise PortError('%s: vertex fetch type %d, expected %d' % (label, fetch0 & 3, MESH_FETCH_TYPE_VERTEX))
+    if fetch1 & 3 != MESH_FETCH_ENDIAN_8IN32:
+        raise PortError('%s: vertex fetch endian %d, expected %d (8in32)' % (label, fetch1 & 3, MESH_FETCH_ENDIAN_8IN32))
+    if ((fetch1 >> 2) & 0xFFFFFF) * 4 != vb_size:
+        raise PortError('%s: fetch size %d dwords != %d bytes' % (label, (fetch1 >> 2) & 0xFFFFFF, vb_size))
+    if ib_count != nidx:
+        raise PortError('%s: IndexBuffer count %d != muNumIndices %d' % (label, ib_count, nidx))
+    if nidx == 0 or nidx * width > ib_size or ib_size % width:
+        raise PortError('%s: %d indices of %d bytes do not fit %d bytes' % (label, nidx, width, ib_size))
+    if nvtx == 0 or nvtx * MESH_VERTEX_STRIDE != vb_size:
+        raise PortError('%s: %d vertices x %d != %d vertex bytes' % (label, nvtx, MESH_VERTEX_STRIDE, vb_size))
+    runs = sorted([(ib_addr, ib_addr + ib_size), (vb_off, vb_off + vb_size)])
+    if runs[0][1] > runs[1][0] or runs[1][1] > len(body):
+        raise PortError('%s: index run [%#x,%#x) / vertex run [%#x,%#x) do not fit a %d-byte body'
+                        % (label, ib_addr, ib_addr + ib_size, vb_off, vb_off + vb_size, len(body)))
+
+    words = list(range(0, MESH_HEADER_WORDS * 4, 4))
+    words += [helper + 4 * k for k in range(MESH_HELPER_WORDS)]
+    words += [ib + 4 * k for k in range(MESH_IB_WORDS)]
+    words += [vb + 4 * k for k in range(MESH_VB_WORDS)]
+    covered = set()
+    for off in words:
+        covered.update(range(off, off + 4))
+    covered.update(range(name_off, name_end + 1))
+    stray = [off for off in range(len(header)) if off not in covered and header[off]]
+    if stray:
+        raise PortError('%s: header byte %#x (%#x) lies outside the model' % (label, stray[0], header[stray[0]]))
+    in_runs = set(range(ib_addr, ib_addr + ib_size)) | set(range(vb_off, vb_off + vb_size))
+    stray = [off for off in range(len(body)) if off not in in_runs and body[off]]
+    if stray:
+        raise PortError('%s: body byte %#x (%#x) lies outside the index / vertex runs' % (label, stray[0], body[stray[0]]))
+    return {'name': name, 'nidx': nidx, 'nvtx': nvtx, 'width': width, 'words': words,
+            'ib_addr': ib_addr, 'ib_size': ib_size, 'vb_off': vb_off, 'vb_size': vb_size,
+            'helper': helper, 'ib': ib, 'vb': vb, 'name_off': name_off}
+
+
+def swap_vfx_mesh_collection(header, body, be=True, label='VFXMeshCollection'):
+    """Flip every header word of the model and both body runs by their lane width; nothing else moves."""
+    m = mesh_layout(header, body, be, label)
+    out_header = bytearray(header)
+    for off in m['words']:
+        out_header[off:off + 4] = out_header[off:off + 4][::-1]
+    out_body = bytearray(body)
+    width = m['width']
+    for off in range(m['ib_addr'], m['ib_addr'] + m['ib_size'], width):
+        out_body[off:off + width] = out_body[off:off + width][::-1]
+    for off in range(m['vb_off'], m['vb_off'] + m['vb_size'], 4):
+        out_body[off:off + 4] = out_body[off:off + 4][::-1]
+    return bytes(out_header), bytes(out_body), m
+
+
+def check_mesh_geometry(header, body, label):
+    """The little-endian collection must decode as the console draws it (see the banner, validation 5)."""
+    m = mesh_layout(header, body, False, label)
+    code = 'H' if m['width'] == 2 else 'I'
+    indices = struct.unpack_from('<%d%s' % (m['nidx'], code), body, m['ib_addr'])
+    if max(indices) >= m['nvtx']:
+        raise PortError('%s: index %d reaches past %d vertices' % (label, max(indices), m['nvtx']))
+    if m['nidx'] % 3:
+        raise PortError('%s: %d indices are not a whole number of triangles' % (label, m['nidx']))
+    instances = set()
+    for v in range(m['nvtx']):
+        lanes = struct.unpack_from('<9f', body, m['vb_off'] + MESH_VERTEX_STRIDE * v)
+        if not all(math.isfinite(x) for x in lanes):
+            raise PortError('%s: vertex %d has a non-finite lane %r' % (label, v, lanes))
+        normal = math.sqrt(lanes[4] * lanes[4] + lanes[5] * lanes[5] + lanes[6] * lanes[6])
+        if abs(normal - 1.0) > 0.05:
+            raise PortError('%s: vertex %d normal length %.4f' % (label, v, normal))
+        instances.add(lanes[3])
+    if instances != set(k + 0.5 for k in range(MESH_INSTANCES)):
+        raise PortError('%s: instance ids %s, expected the %d ids 0.5 .. %.1f'
+                        % (label, sorted(instances)[:6], MESH_INSTANCES, MESH_INSTANCES - 0.5))
+    return m
 
 
 # ----------------------------------------------------------------------------- helpers
@@ -386,16 +567,41 @@ def convert(in_bundle, out_bundle, verbose=True):
             print('  ParticleDescription: %d .lef ported, %s'
                   % (nlef, ', '.join('%d %s' % (v, k) for k, v in sorted(lef_totals.items()))))
 
-        # -- the remaining PASSTHROUGH family (see the banner) --------------------
-        for folder in ('VFXMeshCollection',):
-            d = os.path.join(ex, folder)
-            # a mesh collection extracts as a header/body PAIR; count resources, not files
-            n = len([f for f in os.listdir(d)
-                     if f.endswith('.dat') and not f.endswith('_body.dat')]) if os.path.isdir(d) else 0
-            counts[folder + ' (passthrough BE)'] = n
+        # -- VFXMeshCollection (the debris meshes; see the banner and mesh_layout) --
+        # A collection extracts as a header/body PAIR. Its texture name must resolve to a Texture of this bundle
+        # (stage 7's acquire) and the set of ids must be HashString of the three debris preset names (stage 5's).
+        mesh_dir = os.path.join(ex, 'VFXMeshCollection')
+        texture_ids = set(e['id'] for e in src['entries'] if e['type'] == TYPE_TEXTURE)
+        mesh_ids = []
+        for p in sorted(os.listdir(mesh_dir)):
+            if not p.endswith('_header.dat'):
+                continue
+            rid = int(p[:-len('_header.dat')], 16)
+            label = '%08X' % rid
+            header_path = os.path.join(mesh_dir, p)
+            body_path = os.path.join(mesh_dir, label + '_body.dat')
+            header, body = open(header_path, 'rb').read(), open(body_path, 'rb').read()
+            ported_header, ported_body, m = swap_vfx_mesh_collection(header, body, be=True, label=label)
+            back_header, back_body, _m = swap_vfx_mesh_collection(ported_header, ported_body, be=False, label=label)
+            if back_header != header or back_body != body:
+                raise PortError('%s: mesh collection swap is not an involution' % label)
+            check_mesh_geometry(ported_header, ported_body, label)
+            if resource_id(m['name']) not in texture_ids:
+                raise PortError('%s: texture %r -> id %08X is not a Texture of this bundle'
+                                % (label, m['name'], resource_id(m['name'])))
+            open(header_path, 'wb').write(ported_header)
+            open(body_path, 'wb').write(ported_body)
+            mesh_ids.append(rid)
             if verbose:
-                print('  %s: %d payload(s) passed through VERBATIM (big-endian; type unregistered on PC)'
-                      % (folder, n))
+                print('  VFXMeshCollection %s: texture %r (%08X), %d indices (%d-bit), %d vertices x %d, '
+                      'header %d / body %d bytes ported'
+                      % (label, m['name'], resource_id(m['name']), m['nidx'], 8 * m['width'], m['nvtx'],
+                         MESH_VERTEX_STRIDE, len(header), len(body)))
+        wanted = sorted(set(resource_id(n) for n in DEBRIS_MESH_NAMES))
+        if sorted(mesh_ids) != wanted:
+            raise PortError('mesh collections %s != HashString of the debris presets %s'
+                            % (['%08X' % i for i in sorted(mesh_ids)], ['%08X' % i for i in wanted]))
+        counts['VFXMeshCollection'] = len(mesh_ids)
 
         # -- Texture --------------------------------------------------------------
         skid_hdr = os.path.join(ex, 'Texture', '%08X_header.dat' % FXSKID_ID)
@@ -479,6 +685,20 @@ def verify(bundle_path, expect_ids=None, verbose=True):
     vfxprops_transcode.check(payload(b, vp[0]), be=False, verbose=False)
 
     tex = by_type.get(TYPE_TEXTURE, [])
+    # The debris meshes must walk LITTLE-endian and draw as the console does (validation 5).
+    meshes = by_type.get(TYPE_VFX_MESH_COLLECTION, [])
+    wanted = sorted(set(resource_id(n) for n in DEBRIS_MESH_NAMES))
+    if sorted(e['id'] for e in meshes) != wanted:
+        raise PortError('%s: mesh collections %s != the debris presets %s'
+                        % (bundle_path, ['%08X' % e['id'] for e in meshes], ['%08X' % i for i in wanted]))
+    texture_ids = set(e['id'] for e in tex)
+    mesh_notes = []
+    for e in meshes:
+        m = check_mesh_geometry(payload(b, e, 0), payload(b, e, 1), '%08X' % e['id'])
+        if resource_id(m['name']) not in texture_ids:
+            raise PortError('%s: mesh %08X names texture %r (%08X), not in the bundle'
+                            % (bundle_path, e['id'], m['name'], resource_id(m['name'])))
+        mesh_notes.append('%08X %s %d/%d' % (e['id'], m['name'], m['nidx'], m['nvtx']))
     skid_tex = [e for e in tex if e['id'] == FXSKID_ID]
     if not skid_tex:
         raise PortError('%s: fxskid raster %08X missing' % (bundle_path, FXSKID_ID))
@@ -499,6 +719,8 @@ def verify(bundle_path, expect_ids=None, verbose=True):
         print('  verify %s: the .lef graph walks little-endian -- %s'
               % (os.path.basename(bundle_path),
                  ', '.join('%d %s' % (v, k) for k, v in sorted(lef_stats.items()))))
+        print('  verify %s: the debris meshes walk little-endian (id texture indices/vertices) -- %s'
+              % (os.path.basename(bundle_path), '; '.join(mesh_notes)))
     return True
 
 
