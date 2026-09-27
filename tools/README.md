@@ -11,6 +11,7 @@ root unless a section says otherwise.
 | [`ida/`](ida/) | IDAPython exporters, the parallel export driver, and DecFIGS source-attribution post-processing. |
 | [`build/`](build/) | Game, FFmpeg, and standalone-tool build drivers plus linker-map conversion. |
 | [`assets/build_game_data.py`](assets/build_game_data.py) | **The game-data stager.** Turns a stock X360 game folder into a launchable PC data folder, driven by [`assets/game_data_manifest.toml`](assets/game_data_manifest.toml). See "Building the game data folder" below. |
+| [`assets/converter_ui/`](assets/converter_ui/README.md) | **Browser asset converter.** Launch with root `convert-assets.cmd`; choose files/folders, inspect formats, convert with progress/logs, preserve existing outputs, and resume runs. Uses the existing manifest and converters. |
 | [`assets/bundles/`](assets/bundles/) | Per-format bundle converters (world, vehicles, engines, textures, GUI banks, AttribSys, lanes, Apt). Driven by the stager; each is also usable standalone. |
 | [`assets/shaders/`](assets/shaders/) | `SHADERS.BNDL` X360 -> PC conversion, per-resource shader transcoders, and the Xenos microcode/CTAB disassemblers. **No shader sources** -- every `.fx` lives in [`nushaders/`](nushaders/); see [`assets/shaders/README.md`](assets/shaders/README.md). |
 | [`nushaders/`](nushaders/) | Shader-source submodule (github.com/BurnoutDecomp/NuShaders): all `.fx`/`.fxh` for the bundle and the executable-embedded programs. |

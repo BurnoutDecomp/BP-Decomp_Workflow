@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Asset converter · Paradise</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="m12 3 9 5v8l-9 5-9-5V8zM3 8l9 5 9-5M12 13v8M7.5 5.5l9 5"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7V5h6l2 3h10v12H3V7Z"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M5 3h9l5 5v13H5zM14 3v6h5M9 13h6M9 17h4"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5v16M3 3l9 2 9-2v16l-9 2-9-2z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 8a9 9 0 0 0-16-2M4 6V2m0 4h4M4 16a9 9 0 0 0 16 2m0 0v4m0-4h-4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 17v4h16v-4"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16M8 3v6m8 0v6M9 15v6"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14A9 9 0 0 1 10 3a9 9 0 1 0 10 11Z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 10v7M12 6v1"/></symbol>
+</svg>
+<aside class="sidebar">
+  <a class="brand" href="#workspace" aria-label="Paradise Toolkit home"><span class="brand-mark">P<span>↗</span></span><span>PARADISE<small>DECOMP TOOLKIT</small></span></a>
+  <div class="nav-label">WORKSPACE</div>
+  <nav aria-label="Main navigation">
+    <a class="nav-item active" href="#workspace"><svg><use href="#i-box"/></svg>Asset converter<span class="nav-dot"></span></a>
+    <a class="nav-item" href="#history"><svg><use href="#i-clock"/></svg>Recent runs</a>
+    <button class="nav-item" id="guideButton"><svg><use href="#i-book"/></svg>Format guide<small id="formatCount">—</small></button>
+  </nav>
+  <div class="sidebar-note"><span class="local-dot"></span> Runs on your computer<p>Your game files stay local.<br>No accounts. No uploads to the cloud.</p></div>
+  <div class="sidebar-bottom"><button id="themeButton" class="nav-item" aria-label="Switch to dark theme"><svg><use href="#i-moon"/></svg><span>Switch to dark</span></button><button id="quitButton" class="nav-item" aria-label="Stop local server"><svg><use href="#i-close"/></svg><span>Quit converter</span></button><div class="build-label">X360 → PC x64 <span>v1.0</span></div></div>
+</aside>
+<main id="workspace">
+  <header class="topbar"><div><span class="breadcrumb">TOOLKIT</span><span class="slash">/</span><span>Asset converter</span></div><button id="toolsButton" class="tool-status"><span class="local-dot"></span><span id="toolStatus">Checking tools…</span><svg><use href="#i-settings"/></svg></button></header>
+  <div class="workspace-content">
+    <section class="page-heading"><div><div class="eyebrow">READY FOR PARADISE</div><h1>Asset converter<span class="title-dot">.</span></h1><p>Turn your Xbox 360 game assets into files the PC decomp can use.</p></div><span class="version-badge"><svg><use href="#i-box"/></svg> ORIGINAL DATA → PC FORMAT</span></section>
+    <div class="steps" aria-label="Conversion steps"><span class="step active"><b>1</b>Add your files</span><i></i><span class="step"><b>2</b>Review the queue</span><i></i><span class="step"><b>3</b>Convert &amp; go</span></div>
+    <div id="connectionError" class="notice error" role="alert" hidden></div>
+    <div class="workspace-grid">
+      <div class="main-column">
+        <section class="card source-card" aria-labelledby="sourceTitle">
+          <div class="card-heading"><h2 id="sourceTitle"><span class="section-number">01</span>Source files</h2><span class="quiet">Single files or entire folders</span></div>
+          <div id="dropzone" class="dropzone">
+            <div class="drop-art"><span></span><svg><use href="#i-folder"/></svg><div class="mini-plus">+</div></div>
+            <h3>Good things start with original files.</h3><p>Drop files or folders here. We’ll find the right converters.</p>
+            <div class="drop-actions"><button id="chooseFiles" class="button primary"><svg><use href="#i-file"/></svg>Choose files</button><button id="chooseFolder" class="button"><svg><use href="#i-folder"/></svg>Choose folder</button></div>
+            <div class="drop-caption">BUNDLE, BNDL, BIN, DAT, FONT &amp; more <span>·</span> X360 source data</div>
+          </div>
+          <div id="sourceList" class="source-list" aria-live="polite"></div>
+          <div class="source-toolbar"><button id="pasteToggle" class="text-button">Paste a local path</button><span>or <button id="uploadFiles" class="text-button">use browser upload</button><button id="uploadFolder" class="text-button subtle"> / folder</button></span></div>
+          <div id="pathPanel" class="path-panel" hidden><label for="paths">File or folder paths <small>One per line</small></label><textarea id="paths" rows="2" placeholder="D:\Games\BurnoutParadise&#10;C:\Users\you\Downloads\PARADISE_INGAME_JUNK.BUNDLE"></textarea><button id="addPaths" class="button small">Add paths <svg><use href="#i-arrow"/></svg></button></div>
+          <input type="file" id="fileInput" multiple hidden><input type="file" id="folderInput" webkitdirectory multiple hidden>
+          <div id="uploadStatus" class="notice" hidden aria-live="polite"></div>
+        </section>
+        <section class="card queue-card" aria-labelledby="queueTitle">
+          <div class="card-heading"><h2 id="queueTitle"><span class="section-number">02</span>Conversion queue <span id="queueCount" class="count">0</span></h2><div class="heading-actions"><button id="clearButton" class="text-button" disabled>Clear</button><button id="inspectButton" class="button small" disabled><svg><use href="#i-refresh"/></svg>Inspect files</button></div></div>
+          <div id="scanNotice" class="notice" hidden role="status"></div>
+          <div class="queue-tools"><div class="filters" role="group" aria-label="Filter files"><button class="filter active" data-filter="all">All files</button><button class="filter" data-filter="ready">Ready</button><button class="filter" data-filter="attention">Needs attention</button><button class="filter" data-filter="done">Completed</button></div><label class="search"><svg><use href="#i-search"/></svg><input id="search" type="search" placeholder="Find a file…" aria-label="Find a file"><kbd>/</kbd></label></div>
+          <div id="queueEmpty" class="queue-empty"><svg><use href="#i-box"/></svg><h3>Your next conversion starts here</h3><p>Add files to preview their format, converter, and destination.</p><div class="empty-chips"><span>Automatic detection</span><span>Originals preserved</span><span>Output validation</span></div></div>
+          <div id="tableWrap" class="table-wrap" hidden><table><thead><tr><th class="check-cell"><input id="selectAll" type="checkbox" aria-label="Select all ready files"></th><th>FILE / CONVERTER</th><th>SIZE</th><th>STATUS</th><th></th></tr></thead><tbody id="queueBody"></tbody></table></div>
+          <div class="queue-footer"><span id="selectionInfo">No files selected</span><div class="pagination"><button id="prevPage" class="icon-button" aria-label="Previous page" disabled>‹</button><span id="pageInfo">0 files</span><button id="nextPage" class="icon-button" aria-label="Next page" disabled>›</button><button id="exportPlan" class="text-button" disabled>Export plan</button></div></div>
+        </section>
+        <section id="activityCard" class="card activity-card" hidden><div class="card-heading"><h2><svg><use href="#i-clock"/></svg>Run activity <span id="liveBadge" class="live-badge">LIVE</span></h2><button id="downloadLog" class="text-button">Save log</button></div><pre id="activity" tabindex="0" aria-label="Conversion log"></pre></section>
+        <section id="history" class="history-section"><div class="section-heading"><h2>Recent runs</h2><button id="refreshHistory" class="text-button">Refresh</button></div><div id="historyList" class="history-list"><p class="quiet">Your conversion history will appear here.</p></div></section>
+      </div>
+      <aside class="settings-column">
+        <section class="card destination-card"><div class="card-heading"><h2><span class="section-number">03</span>Output settings</h2><svg class="quiet"><use href="#i-settings"/></svg></div>
+          <div class="settings-content"><label for="output">Destination folder</label><div class="path-input"><input id="output" type="text" spellcheck="false" placeholder="Choose an output folder"><button id="browseOutput" class="icon-button" title="Choose destination folder" aria-label="Choose destination folder"><svg><use href="#i-folder"/></svg></button></div><p class="field-help">Converted files go here. Your source files are preserved.</p>
+            <div class="target-format"><div class="target-icon"><svg><use href="#i-box"/></svg></div><div><strong>Paradise PC decomp</strong><span>x64 · Little endian · Platform 4</span></div><span class="target-check">✓</span></div>
+            <label class="toggle-row"><span><strong>Keep folder layout</strong><small>Preserve game asset paths</small></span><input id="keepLayout" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label>
+            <label class="toggle-row"><span><strong>Skip unchanged files</strong><small>Resume without repeating completed work</small></span><input id="skipCurrent" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label>
+            <label class="toggle-row"><span><strong>Replace existing outputs</strong><small>Keep a backup before each replacement</small></span><input id="replaceExisting" type="checkbox"><span class="switch" aria-hidden="true"></span></label>
+            <details class="advanced"><summary>Advanced settings <span>+</span></summary><label for="jobs">Parallel conversions</label><select id="jobs"><option>1</option><option>2</option><option>3</option><option>4</option><option>6</option><option>8</option></select><p class="field-help">More workers use more memory and disk space.</p><label for="converter">Converter</label><select id="converter"><option value="auto">Automatic detection (recommended)</option></select><label for="sourceRoot">Original game folder <small>Optional</small></label><input id="sourceRoot" spellcheck="false" placeholder="For converters that need companion data"><label for="xb1Root">Xbox One data folder <small>Optional</small></label><input id="xb1Root" spellcheck="false" placeholder="For native AEMS / CSIS sound banks"><label class="check-label"><input id="generate" type="checkbox" checked>Generate support files for full game folders</label></details>
+            <div class="conversion-summary"><div><span>Ready to process</span><strong id="readyCount">0 files</strong></div><div><span>Source size</span><strong id="totalSize">—</strong></div><div><span>Available space</span><strong id="freeSpace">—</strong></div></div>
+            <button id="convertButton" class="button primary convert-button" disabled><svg><use href="#i-arrow"/></svg><span>Convert selected files</span></button><div id="convertHint" class="convert-hint">Add files to get started</div>
+          </div>
+        </section>
+        <section id="progressCard" class="card progress-card" hidden aria-live="polite"><div class="progress-heading"><strong id="progressTitle">Converting your assets</strong><span id="progressPercent">0%</span></div><progress id="progressBar" max="100" value="0"></progress><div class="progress-meta"><span id="progressCount">Preparing…</span><span id="elapsed">0s</span></div><p id="progressDetail" class="field-help"></p><div class="progress-actions"><button id="cancelButton" class="button small danger">Cancel run</button><button id="openOutput" class="button small" hidden><svg><use href="#i-folder"/></svg>Open output</button><button id="downloadReport" class="button small" hidden><svg><use href="#i-download"/></svg>Report</button><button id="retryButton" class="text-button" hidden>Retry failed files</button></div></section>
+        <div class="tip"><svg><use href="#i-info"/></svg><div><strong>No guesswork required.</strong><p>Each file is checked against the project’s converter manifest. Unsupported files get a clear explanation.</p><button id="tipGuide" class="text-button">Explore supported formats <span>↗</span></button></div></div>
+      </aside>
+    </div>
+    <footer class="page-footer"><span>Built for the Burnout Paradise decompilation project.</span><span class="local-dot"></span><span>Local session</span></footer>
+  </div>
+</main>
+<dialog id="modal" aria-labelledby="modalTitle"><div class="modal-header"><h2 id="modalTitle"></h2><button id="closeModal" class="icon-button" aria-label="Close dialog"><svg><use href="#i-close"/></svg></button></div><div id="modalBody"></div></dialog>
+<div id="dropOverlay" class="drop-overlay" hidden><svg><use href="#i-upload"/></svg><h2>Drop to add to your queue</h2><p>Files and folders are welcome.</p></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
