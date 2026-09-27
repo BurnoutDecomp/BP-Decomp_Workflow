@@ -73,6 +73,17 @@ probed default.
 
 ## Build
 
+### Browser asset converter
+
+Double-click **`convert-assets.cmd`** to open the local asset-conversion UI. Choose
+individual files or folders, review the detected formats, and convert to a separate
+output folder. It includes progress, logs, cancellation, backups, resume support,
+and a format guide driven by the existing manifest. Python 3.11+ is required;
+the UI's setup panel can run `build tools` for YAP and Volatility.
+See [`tools/assets/converter_ui/README.md`](tools/assets/converter_ui/README.md).
+
+### Command-line build
+
 ```
 build all              # everything, in order, skipping steps already built
 ```
