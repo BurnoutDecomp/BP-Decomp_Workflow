@@ -35,7 +35,7 @@
     <a class="nav-item" href="#history"><svg><use href="#i-clock"/></svg>Recent runs</a>
     <button class="nav-item" id="guideButton"><svg><use href="#i-book"/></svg>Format guide<small id="formatCount">—</small></button>
   </nav>
-  <div class="sidebar-note"><span class="local-dot"></span> Runs on your computer<p>Your game files stay local.<br>No accounts. No uploads to the cloud.</p></div>
+  <div id="sidebarNote" class="sidebar-note"><span class="local-dot"></span> Runs on your computer<p>Your game files stay local.<br>No accounts. No uploads to the cloud.</p></div>
   <div class="sidebar-bottom"><button id="themeButton" class="nav-item" aria-label="Switch to dark theme"><svg><use href="#i-moon"/></svg><span>Switch to dark</span></button><button id="quitButton" class="nav-item" aria-label="Stop local server"><svg><use href="#i-close"/></svg><span>Quit converter</span></button><div class="build-label">X360 → PC x64 <span>v1.0</span></div></div>
 </aside>
 <main id="workspace">
@@ -44,6 +44,7 @@
     <section class="page-heading"><div><div class="eyebrow">READY FOR PARADISE</div><h1>Asset converter<span class="title-dot">.</span></h1><p>Turn your Xbox 360 game assets into files the PC decomp can use.</p></div><span class="version-badge"><svg><use href="#i-box"/></svg> ORIGINAL DATA → PC FORMAT</span></section>
     <div class="steps" aria-label="Conversion steps"><span class="step active"><b>1</b>Add your files</span><i></i><span class="step"><b>2</b>Review the queue</span><i></i><span class="step"><b>3</b>Convert &amp; go</span></div>
     <div id="connectionError" class="notice error" role="alert" hidden></div>
+    <div id="hostedNotice" class="notice hosted-notice" role="note" hidden></div>
     <div class="workspace-grid">
       <div class="main-column">
         <section class="card source-card" aria-labelledby="sourceTitle">
@@ -55,7 +56,7 @@
             <div class="drop-caption">BUNDLE, BNDL, BIN, DAT, FONT &amp; more <span>·</span> X360 source data</div>
           </div>
           <div id="sourceList" class="source-list" aria-live="polite"></div>
-          <div class="source-toolbar"><button id="pasteToggle" class="text-button">Paste a local path</button><span>or <button id="uploadFiles" class="text-button">use browser upload</button><button id="uploadFolder" class="text-button subtle"> / folder</button></span></div>
+          <div class="source-toolbar" data-local-only><button id="pasteToggle" class="text-button">Paste a local path</button><span>or <button id="uploadFiles" class="text-button">use browser upload</button><button id="uploadFolder" class="text-button subtle"> / folder</button></span></div>
           <div id="pathPanel" class="path-panel" hidden><label for="paths">File or folder paths <small>One per line</small></label><textarea id="paths" rows="2" placeholder="D:\Games\BurnoutParadise&#10;C:\Users\you\Downloads\PARADISE_INGAME_JUNK.BUNDLE"></textarea><button id="addPaths" class="button small">Add paths <svg><use href="#i-arrow"/></svg></button></div>
           <input type="file" id="fileInput" multiple hidden><input type="file" id="folderInput" webkitdirectory multiple hidden>
           <div id="uploadStatus" class="notice" hidden aria-live="polite"></div>
@@ -73,13 +74,13 @@
       </div>
       <aside class="settings-column">
         <section class="card destination-card"><div class="card-heading"><h2><span class="section-number">03</span>Output settings</h2><svg class="quiet"><use href="#i-settings"/></svg></div>
-          <div class="settings-content"><label for="output">Destination folder</label><div class="path-input"><input id="output" type="text" spellcheck="false" placeholder="Choose an output folder"><button id="browseOutput" class="icon-button" title="Choose destination folder" aria-label="Choose destination folder"><svg><use href="#i-folder"/></svg></button></div><p class="field-help">Converted files go here. Your source files are preserved.</p>
+          <div class="settings-content"><div data-local-only><label for="output">Destination folder</label><div class="path-input"><input id="output" type="text" spellcheck="false" placeholder="Choose an output folder"><button id="browseOutput" class="icon-button" title="Choose destination folder" aria-label="Choose destination folder"><svg><use href="#i-folder"/></svg></button></div><p class="field-help">Converted files go here. Your source files are preserved.</p></div><div id="hostedOutput" class="hosted-output" hidden><svg><use href="#i-download"/></svg><div><strong>Download as ZIP</strong><p>Each run gets its own archive. Folder structure is preserved inside your download.</p></div></div>
             <div class="target-format"><div class="target-icon"><svg><use href="#i-box"/></svg></div><div><strong>Paradise PC decomp</strong><span>x64 · Little endian · Platform 4</span></div><span class="target-check">✓</span></div>
             <label class="toggle-row"><span><strong>Keep folder layout</strong><small>Preserve game asset paths</small></span><input id="keepLayout" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label>
-            <label class="toggle-row"><span><strong>Skip unchanged files</strong><small>Resume without repeating completed work</small></span><input id="skipCurrent" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label>
-            <label class="toggle-row"><span><strong>Replace existing outputs</strong><small>Keep a backup before each replacement</small></span><input id="replaceExisting" type="checkbox"><span class="switch" aria-hidden="true"></span></label>
-            <details class="advanced"><summary>Advanced settings <span>+</span></summary><label for="jobs">Parallel conversions</label><select id="jobs"><option>1</option><option>2</option><option>3</option><option>4</option><option>6</option><option>8</option></select><p class="field-help">More workers use more memory and disk space.</p><label for="converter">Converter</label><select id="converter"><option value="auto">Automatic detection (recommended)</option></select><label for="sourceRoot">Original game folder <small>Optional</small></label><input id="sourceRoot" spellcheck="false" placeholder="For converters that need companion data"><label for="xb1Root">Xbox One data folder <small>Optional</small></label><input id="xb1Root" spellcheck="false" placeholder="For native AEMS / CSIS sound banks"><label class="check-label"><input id="generate" type="checkbox" checked>Generate support files for full game folders</label></details>
-            <div class="conversion-summary"><div><span>Ready to process</span><strong id="readyCount">0 files</strong></div><div><span>Source size</span><strong id="totalSize">—</strong></div><div><span>Available space</span><strong id="freeSpace">—</strong></div></div>
+            <label class="toggle-row" data-local-only><span><strong>Skip unchanged files</strong><small>Resume without repeating completed work</small></span><input id="skipCurrent" type="checkbox" checked><span class="switch" aria-hidden="true"></span></label>
+            <label class="toggle-row" data-local-only><span><strong>Replace existing outputs</strong><small>Keep a backup before each replacement</small></span><input id="replaceExisting" type="checkbox"><span class="switch" aria-hidden="true"></span></label>
+            <details class="advanced"><summary>Advanced settings <span>+</span></summary><label for="jobs">Parallel conversions</label><select id="jobs"><option>1</option><option>2</option><option>3</option><option>4</option><option>6</option><option>8</option></select><p class="field-help">More workers use more memory and disk space.</p><label for="converter">Converter</label><select id="converter"><option value="auto">Automatic detection (recommended)</option></select><div data-local-only><label for="sourceRoot">Original game folder <small>Optional</small></label><input id="sourceRoot" spellcheck="false" placeholder="For converters that need companion data"><label for="xb1Root">Xbox One data folder <small>Optional</small></label><input id="xb1Root" spellcheck="false" placeholder="For native AEMS / CSIS sound banks"></div><label class="check-label"><input id="generate" type="checkbox" checked>Generate support files for full game folders</label></details>
+            <div class="conversion-summary"><div><span>Ready to process</span><strong id="readyCount">0 files</strong></div><div><span>Source size</span><strong id="totalSize">—</strong></div><div><span id="spaceLabel">Available space</span><strong id="freeSpace">—</strong></div></div>
             <button id="convertButton" class="button primary convert-button" disabled><svg><use href="#i-arrow"/></svg><span>Convert selected files</span></button><div id="convertHint" class="convert-hint">Add files to get started</div>
           </div>
         </section>
@@ -87,7 +88,7 @@
         <div class="tip"><svg><use href="#i-info"/></svg><div><strong>No guesswork required.</strong><p>Each file is checked against the project’s converter manifest. Unsupported files get a clear explanation.</p><button id="tipGuide" class="text-button">Explore supported formats <span>↗</span></button></div></div>
       </aside>
     </div>
-    <footer class="page-footer"><span>Built for the Burnout Paradise decompilation project.</span><span class="local-dot"></span><span>Local session</span></footer>
+    <footer class="page-footer"><span>Built for the Burnout Paradise decompilation project.</span><span class="local-dot"></span><span id="sessionLabel">Local session</span></footer>
   </div>
 </main>
 <dialog id="modal" aria-labelledby="modalTitle"><div class="modal-header"><h2 id="modalTitle"></h2><button id="closeModal" class="icon-button" aria-label="Close dialog"><svg><use href="#i-close"/></svg></button></div><div id="modalBody"></div></dialog>

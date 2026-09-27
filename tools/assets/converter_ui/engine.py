@@ -27,7 +27,7 @@ REPO = ASSETS.parents[1]
 sys.path.insert(0, str(ASSETS))
 import build_game_data as stager
 
-WORK = REPO / "build" / "converter-ui"
+WORK = Path(os.environ.get("PARADISE_WORK_DIR", str(REPO / "build/converter-ui"))).resolve()
 MAX_FILES = 30000
 RESERVED = ".asset-converter"
 EXECUTABLE_ACTIONS = {"convert", "copy", "generate"}
@@ -310,7 +310,7 @@ def scan(sources, supplied_options):
                     preflight_cache[key] = issues
                 if preflight_cache[key]:
                     row.update(status="blocked", detail="\n".join(preflight_cache[key]))
-            destinations[os.path.normcase(str(target))].append(row)
+            destinations[os.path.normcase(str(target)).casefold()].append(row)
         except (OSError, ValueError, struct.error) as exc:
             row.update(status="blocked", detail=str(exc))
         rows.append(row)
@@ -393,8 +393,9 @@ def run_converter(rule, argv, cwd, root, env, row, log_path):
             timer.start()
             try:
                 for line in p.stdout:
-                    log.write(line)
-                    log.flush()
+                    if log.tell() < 8 * 1024**2:
+                        log.write(line[:16384])
+                        log.flush()
                     line = line.strip()
                     if line:
                         tail.append(line)
@@ -481,7 +482,7 @@ def execute_job(plan, selected, jobdir):
                 env = os.environ.copy()
                 env.update(BRN_X360_ROOT=str(srcroot), PYTHONIOENCODING="utf-8",
                            NUSHADERS_TUB=stager._resolved_nushaders_tub(),
-                           BRN_VOLA_CACHE=str(REPO / "build/vola-cache"))
+                           BRN_VOLA_CACHE=str(WORK / "vola-cache"))
                 if options.get("xb1_root"):
                     env["BRN_XB1_ROOT"] = options["xb1_root"]
                 argv = [stager.expand(a, ctx) for a in rule.argv]
@@ -540,7 +541,7 @@ def execute_job(plan, selected, jobdir):
         finally:
             shutil.rmtree(stage, ignore_errors=True)
             slots.put(slot)
-        emit("row", **{k: row[k] for k in ("id", "status", "detail", "elapsed")})
+        emit("row", **{k: row[k] for k in ("id", "status", "detail", "elapsed", "products") if k in row})
         return row
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=count) as executor:
@@ -555,6 +556,22 @@ if __name__ == "__main__":
     args = parser.parse_args()
     try:
         spec = read_json(args.job, {})
+        if os.environ.get("PARADISE_SANDBOX") == "1":
+            from sandbox import restrict
+            jobdir = Path(args.job).resolve().parent
+            # The public service stores work and output beside each other under
+            # a private session root. Never grant access to all sessions or /data.
+            workspace = WORK.parent
+            if not within(jobdir, WORK / "jobs") or not within(spec["plan"]["options"]["output"], workspace / "output"):
+                raise ValueError("Invalid hosted workspace layout")
+            scratch = jobdir / "tmp"
+            scratch.mkdir(parents=True, exist_ok=True)
+            os.environ.update(TMPDIR=str(scratch), TMP=str(scratch), TEMP=str(scratch),
+                              HOME=str(scratch), DOTNET_EnableDiagnostics="0")
+            import resource
+            ceiling = int(os.environ.get("PARADISE_OUTPUT_FILE_MIB", "2048")) * 1024**2
+            resource.setrlimit(resource.RLIMIT_FSIZE, (ceiling, ceiling))
+            restrict(workspace, REPO)
         execute_job(spec["plan"], spec["selected"], Path(args.job).parent)
     except Exception as exc:
         emit("fatal", message=str(exc))

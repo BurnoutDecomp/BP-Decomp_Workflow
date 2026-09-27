@@ -1,0 +1,19 @@
+{
+    servers {
+        timeouts {
+            read_header 15s
+            read_body 15m
+            idle 2m
+        }
+    }
+}
+
+{$PARADISE_DOMAIN} {
+    encode zstd gzip
+    header Strict-Transport-Security "max-age=31536000"
+    # Application limits may be lower; this is a hard ingress ceiling.
+    request_body {
+        max_size 2GB
+    }
+    reverse_proxy converter:8080
+}
