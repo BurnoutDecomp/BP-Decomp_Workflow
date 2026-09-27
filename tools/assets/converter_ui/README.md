@@ -10,6 +10,14 @@ No Node.js, web framework, pip install, account, or network service is needed.
 The browser interface needs Python; individual conversions still need the same
 tools and input data as the command-line pipeline.
 
+### Hosting on Ubuntu
+
+For a public upload/download website, use **`bash deploy-converter.sh your.hostname`**
+from the repository root. It builds native Linux converters and starts the hosted
+app behind an HTTPS proxy. Each visitor gets a separate workspace and ZIP downloads.
+See [deployment instructions and limits](deploy/README.md). This is a separate entry
+point; the desktop launcher stays local and dependency-free.
+
 ## Use
 
 1. Choose files or a folder, paste local paths, or drop a selection into the page.

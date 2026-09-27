@@ -9,10 +9,10 @@ const doneStates = new Set(["converted", "copied", "generated", "current"]);
 const attentionStates = new Set(["blocked", "unsupported", "failed"]);
 const labels = {ready:"Ready",replace:"Will replace",current:"Up to date",exists:"Output exists",unsupported:"Unsupported",blocked:"Needs setup",skipped:"Not needed",running:"Converting",queued:"Queued",converted:"Converted",copied:"Copied",generated:"Generated",failed:"Failed",cancelled:"Cancelled"};
 const state = {sources:[], plan:null, selected:new Set(), filter:"all", page:0, busy:false,
-  catalog:[], tools:[], job:null, cursor:0, polling:false, logs:[], options:null, dirty:false};
+  catalog:[], tools:[], job:null, cursor:0, polling:false, logs:[], options:null, dirty:false, hosted:false, limits:{}};
 const fragment = location.hash.slice(1);
 const suppliedToken = /^[A-Za-z0-9_-]{40,}$/.test(fragment) ? fragment : "";
-const token = suppliedToken || sessionStorage.getItem("paradise-token") || "";
+let token = suppliedToken || sessionStorage.getItem("paradise-token") || "";
 if (suppliedToken) {
   sessionStorage.setItem("paradise-token", token);
   history.replaceState(null, "", location.pathname);
@@ -40,7 +40,7 @@ function statusBadge(status) {
 }
 async function api(path, data, method = data == null ? "GET" : "POST") {
   const response = await fetch(path, {method, headers:{"X-Asset-Token":token, ...(data != null ? {"Content-Type":"application/json"} : {})}, body:data == null ? undefined : JSON.stringify(data)});
-  const result = await response.json();
+  const result = await response.json().catch(()=>({error:`Server request failed (${response.status}). Try again or contact the operator.`}));
   if (!response.ok) throw new Error(result.error || `Request failed (${response.status})`);
   return result;
 }
@@ -107,7 +107,7 @@ function updateControls() {
   $("exportPlan").disabled = !state.plan;
   $("inspectButton").classList.toggle("busy", state.busy);
   $("selectAll").disabled = locked;
-  $("convertHint").textContent = running() ? "Your conversion is running locally" : state.busy ? "Inspecting your selection…" : state.dirty && state.plan ? "Inspect files to update the preview" : state.selected.size ? `${state.selected.size} selected · Ctrl+Enter to convert` : state.plan ? "Select ready files from the queue" : "Add files to get started";
+  $("convertHint").textContent = running() ? (state.hosted ? "Your conversion is running on the server" : "Your conversion is running locally") : state.busy ? "Preparing your selection…" : state.dirty && state.plan ? "Inspect files to update the preview" : state.selected.size ? `${state.selected.size} selected · Ctrl+Enter to convert` : state.plan ? "Select ready files from the queue" : "Add files to get started";
 }
 function renderSources() {
   $("sourceList").innerHTML = state.sources.map((p,i) => `<div class="source-chip">${icon("file")}<span title="${esc(p)}">${esc(p)}</span><button data-remove="${i}" aria-label="Remove ${esc(p)}" ${running() || state.busy ? "disabled" : ""}>×</button></div>`).join("");
@@ -120,6 +120,10 @@ async function addSources(paths) {
   await inspect();
 }
 async function pick(kind, destination = false) {
+  if (state.hosted) {
+    if (!destination) $(kind === "files" ? "fileInput" : "folderInput").click();
+    return;
+  }
   busy(true);
   toast("Choose a " + (kind === "files" ? "file in the file chooser" : "folder in the folder chooser") + ".");
   try {
@@ -210,6 +214,10 @@ function formatGuide() {
   render();
 }
 function toolDialog() {
+  if (state.hosted) {
+    modal("Server converters", state.tools.map(t => `<div class="tool-row"><span>${esc(t.name)}</span>${statusBadge(t.ready ? "ready" : "blocked")}</div>`).join("") + `<p class="setup-note">Converters are installed by the server operator. Files that need an unavailable converter or companion data show a setup message in the queue. Shader conversion using Windows fxc.exe is available in the desktop tool.</p>`);
+    return;
+  }
   modal("Converter tools", state.tools.map(t => `<div class="tool-row"><span>${esc(t.name)}</span>${statusBadge(t.ready ? "ready" : "blocked")}</div>`).join("") + `<p class="setup-note">The interface needs only Python 3.11+. Asset conversion uses the project’s YAP and Volatility binaries. Build them here if they are missing. The build requires Visual Studio, CMake, Qt6, and the .NET SDK, as described in BUILD.md.</p><button class="button primary" id="buildTools">Build converter tools</button><p class="setup-note">This runs the existing <code>build tools</code> command and shows its output in Run activity.</p>`);
   $("buildTools").disabled = Boolean(running());
   $("buildTools").onclick = async () => {
@@ -289,7 +297,7 @@ async function poll() {
           break;
         }
       } catch (e) {
-        $("connectionError").textContent = "Connection interrupted. Keep the launcher window open. Retrying… " + e.message;
+        $("connectionError").textContent = (state.hosted ? "Connection interrupted. Reconnecting to the server… " : "Connection interrupted. Keep the launcher window open. Retrying… ") + e.message;
         $("connectionError").hidden = false;
       }
       await new Promise(resolve => setTimeout(resolve, 900));
@@ -308,7 +316,7 @@ function renderProgress() {
   $("progressCount").textContent = job.kind === "setup" ? "Converter toolchain" : `${finished} of ${job.total} files processed`;
   $("elapsed").textContent = duration((job.ended || Date.now()/1000) - job.started);
   const failed = counts.failed || 0;
-  $("progressDetail").textContent = job.error || (failed ? `${failed} file${failed===1?"":"s"} failed. Open file details or save the run log for the reason.` : activeStates.has(job.status) ? "Each output is checked before being saved." : "Your source files are preserved. Reports are saved beside the output.");
+  $("progressDetail").textContent = job.error || (failed ? `${failed} file${failed===1?"":"s"} failed. Open file details or save the run log for the reason.` : activeStates.has(job.status) ? "Each output is checked before being saved." : state.hosted ? "Download the converted files as a ZIP. Your originals on this device are unchanged." : "Your source files are preserved. Reports are saved beside the output.");
   $("cancelButton").hidden = !activeStates.has(job.status);
   $("cancelButton").disabled = job.status === "cancelling";
   $("openOutput").hidden = activeStates.has(job.status);
@@ -318,11 +326,21 @@ function renderProgress() {
 async function loadHistory() {
   try {
     const data = await api("/api/history");
-    $("historyList").innerHTML = data.runs.slice(0,10).map(r => `<div class="history-entry">${icon("clock")}<div><strong>${esc(r.label)}</strong><small title="${esc(r.output)}">${esc(new Date(r.started*1000).toLocaleString([], {dateStyle:"medium",timeStyle:"short"}))} · ${esc(r.output)}</small></div>${statusBadge(r.status)}<div class="history-actions"><button class="text-button" data-report="${r.id}">Report</button><button class="text-button" data-open="${r.id}">Open</button></div></div>`).join("") || '<p class="quiet">Your conversion history will appear here.</p>';
+    $("historyList").innerHTML = data.runs.slice(0,10).map(r => `<div class="history-entry">${icon("clock")}<div><strong>${esc(r.label)}</strong><small title="${esc(state.hosted ? "Private to this browser session" : r.output)}">${esc(new Date(r.started*1000).toLocaleString([], {dateStyle:"medium",timeStyle:"short"}))}${state.hosted ? " · Your workspace" : ` · ${esc(r.output)}`}</small></div>${statusBadge(r.status)}<div class="history-actions"><button class="text-button" data-report="${r.id}">Report</button><button class="text-button" data-open="${r.id}" ${activeStates.has(r.status)?"disabled":""}>${state.hosted ? "Download ZIP" : "Open"}</button></div></div>`).join("") || '<p class="quiet">Your conversion history will appear here.</p>';
   } catch(e) { toast(e.message); }
 }
 async function openOutput(id) {
-  try { await api("/api/open-output", {id}); } catch(e) { toast(e.message); }
+  try {
+    if (state.hosted) {
+      toast("Preparing your download…");
+      const data = await api(`/api/archive/${id}`, {});
+      const link = document.createElement("a");
+      link.href = data.url;
+      link.download = `paradise-converted-${id.slice(0,8)}.zip`;
+      link.click();
+      toast("Your download is starting.");
+    } else await api("/api/open-output", {id});
+  } catch(e) { toast(e.message); }
 }
 async function retry() {
   const failedSources = new Set((state.plan?.rows || []).filter(r => r.status === "failed").map(r => r.source));
@@ -338,18 +356,20 @@ async function upload(files) {
   busy(true);
   $("uploadStatus").hidden = false;
   try {
-    if (files.length > 30000) throw new Error("Select fewer than 30,000 files at once.");
+    if (files.length > (state.limits.max_files || 30000)) throw new Error(`Select no more than ${state.limits.max_files || 30000} files at once.`);
+    if (state.hosted && files.some(({file}) => file.size > state.limits.file_bytes)) throw new Error(`A file exceeds the ${bytes(state.limits.file_bytes)} upload limit.`);
+    if (state.hosted && files.reduce((sum,{file})=>sum+file.size,0) > state.limits.upload_bytes) throw new Error(`This selection exceeds the ${bytes(state.limits.upload_bytes)} upload allowance.`);
     const batch = await api("/api/upload-batch", {});
     let total = 0;
     for (let i=0; i<files.length; i++) {
       const {file,path} = files[i];
-      $("uploadStatus").textContent = `Adding ${i+1} of ${files.length}: ${path} (${bytes(total)} staged locally)`;
+      $("uploadStatus").textContent = `Adding ${i+1} of ${files.length}: ${path} (${bytes(total)} ${state.hosted ? "uploaded" : "staged locally"})`;
       const response = await fetch(`/api/upload?batch=${batch.batch}&path=${encodeURIComponent(path)}`, {method:"PUT",headers:{"X-Asset-Token":token},body:file});
-      if (!response.ok) throw new Error((await response.json()).error);
+      if (!response.ok) throw new Error((await response.json().catch(()=>({error:`Upload failed (${response.status}). The server or proxy may have rejected the file.`}))).error);
       total += file.size;
     }
     busy(false);
-    $("uploadStatus").textContent = `${files.length} file(s) added. Browser drops use a temporary local copy. Choose files / Choose folder reads local paths directly.`;
+    $("uploadStatus").textContent = state.hosted ? `${files.length} file(s) uploaded to your workspace. Ready to inspect.` : `${files.length} file(s) added. Browser drops use a temporary local copy. Choose files / Choose folder reads local paths directly.`;
     await addSources([batch.root]);
   } catch(e) { $("uploadStatus").textContent = e.message; toast(e.message); } finally { busy(false); }
 }
@@ -409,6 +429,11 @@ $("guideButton").onclick=$("tipGuide").onclick=formatGuide;
 $("toolsButton").onclick=toolDialog;
 $("themeButton").onclick=()=>theme(document.documentElement.dataset.theme==="dark"?"light":"dark");
 $("quitButton").onclick=()=>{
+  if (state.hosted) {
+    modal("Delete my files", `<p>Delete all uploads, converted files, and reports in this browser's server workspace? Download any results you want to keep first.</p><button id="deleteWorkspace" class="button danger" ${running()?"disabled":""}>Delete my files</button>${running()?"<p>Cancel the active run first.</p>":""}`);
+    $("deleteWorkspace").onclick=async()=>{try{await api("/api/delete-workspace",{});location.reload();}catch(e){toast(e.message);}};
+    return;
+  }
   modal("Quit converter", `<p>Stop the local server${running() ? " and cancel the active run" : ""}? Completed output files and saved reports are kept.</p><button id="stopServer" class="button danger">Stop server</button>`);
   $("stopServer").onclick=async()=>{
     try{
@@ -440,10 +465,29 @@ document.addEventListener("keydown",e=>{if(e.key==="/"&&!/INPUT|TEXTAREA|SELECT/
 window.addEventListener("beforeunload",e=>{if(running()){e.preventDefault();e.returnValue="";}});
 setInterval(()=>{if(running())renderProgress();},1000);
 
+function hostedMode(data) {
+  state.hosted = data.mode === "hosted";
+  if (!state.hosted) return;
+  token = data.token;
+  state.limits = data.limits;
+  document.documentElement.dataset.mode = "hosted";
+  document.querySelectorAll("[data-local-only]").forEach(el=>el.hidden=true);
+  $("sidebarNote").innerHTML = `<span class="local-dot"></span> Your browser's workspace<p>Upload, convert, and download.<br>Files expire after ${data.limits.retention_hours} hours of inactivity.</p>`;
+  $("sessionLabel").textContent = "Hosted session";
+  $("quitButton").setAttribute("aria-label", "Delete my server files");
+  $("quitButton").innerHTML = `${icon("close")}<span>Delete my files</span>`;
+  $("openOutput").innerHTML = `${icon("download")}Download ZIP`;
+  $("hostedNotice").hidden = false;
+  $("hostedNotice").textContent = `Files are uploaded to this server. Up to ${bytes(data.limits.file_bytes)} per file, ${bytes(data.limits.upload_bytes)} of uploads per workspace, and ${data.limits.max_files.toLocaleString()} files. Download your results within ${data.limits.retention_hours} hours of inactivity. No account needed.`;
+  $("hostedOutput").hidden = false;
+  $("spaceLabel").textContent = "Workspace space";
+  for (const option of [...$("jobs").options]) if (Number(option.value) > data.limits.workers) option.remove();
+}
 (async function boot(){
   theme(localStorage.getItem("paradise-theme") || "light");
   try {
     const data=await api("/api/bootstrap");
+    hostedMode(data);
     state.catalog=data.catalog;state.tools=data.tools;
     $("formatCount").textContent=data.catalog.filter(r=>r.action==="convert").length;
     $("converter").insertAdjacentHTML("beforeend",data.catalog.filter(r=>r.action==="convert").map(r=>`<option value="${esc(r.id)}">${esc(r.name)}</option>`).join(""));
@@ -457,5 +501,5 @@ setInterval(()=>{if(running())renderProgress();},1000);
       state.dirty=true;
       await beginJob(job);
     }else if(state.sources.length){toast("Your last source selection is restored. Inspect files when you’re ready.");}
-  }catch(e){$("connectionError").textContent=e.message+" Launch convert-assets.cmd to open a new local session.";$("connectionError").hidden=false;}
+  }catch(e){$("connectionError").textContent=e.message+" Reload the page to reconnect. Desktop users can reopen convert-assets.cmd.";$("connectionError").hidden=false;}
 })();

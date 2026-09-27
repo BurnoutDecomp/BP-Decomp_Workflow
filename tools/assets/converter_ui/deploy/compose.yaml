@@ -1,0 +1,73 @@
+name: paradise-converter
+services:
+  converter:
+    build:
+      context: ../../../..
+      dockerfile: tools/assets/converter_ui/deploy/Dockerfile
+    image: paradise-converter:local
+    restart: unless-stopped
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    cpus: 4
+    mem_limit: 4g
+    pids_limit: 256
+    stop_grace_period: 40s
+    environment:
+      PARADISE_PUBLIC_URL: https://${PARADISE_DOMAIN:?Set PARADISE_DOMAIN in deploy/.env}
+      PARADISE_FILE_MIB: ${PARADISE_FILE_MIB:-512}
+      PARADISE_UPLOAD_GIB: ${PARADISE_UPLOAD_GIB:-2}
+      PARADISE_WORKSPACE_GIB: ${PARADISE_WORKSPACE_GIB:-8}
+      PARADISE_TOTAL_GIB: ${PARADISE_TOTAL_GIB:-40}
+      PARADISE_MAX_FILES: ${PARADISE_MAX_FILES:-5000}
+      PARADISE_MAX_SESSIONS: ${PARADISE_MAX_SESSIONS:-100}
+      PARADISE_MAX_JOBS: ${PARADISE_MAX_JOBS:-2}
+      PARADISE_WORKERS: ${PARADISE_WORKERS:-2}
+      PARADISE_RETENTION_HOURS: ${PARADISE_RETENTION_HOURS:-24}
+      PARADISE_JOB_MINUTES: ${PARADISE_JOB_MINUTES:-30}
+      PARADISE_SESSIONS_PER_HOUR: ${PARADISE_SESSIONS_PER_HOUR:-10}
+    volumes:
+      - converter_data:/data
+    tmpfs:
+      - /tmp:rw,nosuid,noexec,size=512m,uid=10001,gid=10001
+    networks: [backend]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=3).read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '3'}
+
+  proxy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      converter:
+        condition: service_healthy
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    environment:
+      PARADISE_DOMAIN: ${PARADISE_DOMAIN:?Set PARADISE_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [backend, public]
+    logging:
+      driver: json-file
+      options: {max-size: 10m, max-file: '3'}
+
+networks:
+  backend:
+    internal: true
+  public:
+volumes:
+  converter_data:
+  caddy_data:
+  caddy_config:

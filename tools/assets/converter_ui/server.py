@@ -45,7 +45,8 @@ def pick(kind):
 
 
 class Application:
-    def __init__(self):
+    def __init__(self, work=None):
+        self.work = Path(work) if work is not None else engine.WORK
         self.token = secrets.token_urlsafe(32)
         self.lock = threading.RLock()
         self.plans = {}
@@ -55,8 +56,8 @@ class Application:
         self.runner = None
         self.uploads = set()
         self.picker_lock = threading.Lock()
-        self.history_path = engine.WORK / "history.json"
-        self.preferences = engine.read_json(engine.WORK / "preferences.json", {})
+        self.history_path = self.work / "history.json"
+        self.preferences = engine.read_json(self.work / "preferences.json", {})
         self.history = engine.read_json(self.history_path, [])[:50]
         for entry in self.history:
             if entry["status"] in ACTIVE:
@@ -72,15 +73,19 @@ class Application:
             if data["event"] == "row":
                 for row in job["rows"]:
                     if row["id"] == data["id"]:
-                        row.update({k: v for k, v in data.items() if k in {"status", "detail", "elapsed"}})
+                        row.update({k: v for k, v in data.items() if k in {"status", "detail", "elapsed", "products"}})
                         break
             elif data["event"] == "finished":
                 job["result"] = data["status"]
             elif data["event"] == "fatal":
                 job["result"] = "failed"
                 job["error"] = data["message"]
-            with open(engine.WORK / "jobs" / job["id"] / "activity.log", "a", encoding="utf-8") as log:
-                log.write(json.dumps(data, ensure_ascii=False) + "\n")
+            logfile = self.work / "jobs" / job["id"] / "activity.log"
+            if not engine.within(logfile, self.work.parent):
+                raise ValueError("Log path leaves the workspace")
+            if not logfile.exists() or logfile.stat().st_size < 16 * 1024**2:
+                with open(logfile, "a", encoding="utf-8") as log:
+                    log.write(json.dumps(data, ensure_ascii=False) + "\n")
 
     def summary(self, job):
         counts = dict(engine.collections.Counter(r["status"] for r in job["rows"]))
@@ -90,8 +95,10 @@ class Application:
 
     def save(self, job, final=False):
         with self.lock:
+            if not engine.within(self.work / "jobs" / job["id"] / "report.json", self.work.parent):
+                raise ValueError("Report path leaves the workspace")
             report = self.summary(job) | {"files": copy.deepcopy(job["rows"]), "options": job["options"]}
-            engine.write_json(engine.WORK / "jobs" / job["id"] / "report.json", report)
+            engine.write_json(self.work / "jobs" / job["id"] / "report.json", report)
             self.history = [self.summary(job)] + [h for h in self.history if h["id"] != job["id"]]
             self.history = self.history[:50]
             engine.write_json(self.history_path, self.history)
@@ -105,7 +112,7 @@ class Application:
             if self.active and self.jobs[self.active]["status"] in ACTIVE:
                 raise ValueError("A run is already active. Finish or cancel it first.")
             identifier = uuid.uuid4().hex
-            jobdir = engine.WORK / "jobs" / identifier
+            jobdir = self.work / "jobs" / identifier
             jobdir.mkdir(parents=True)
             if plan:
                 selected = set(selected or [])
@@ -143,6 +150,7 @@ class Application:
                     return
                 p = subprocess.Popen(command, cwd=engine.REPO, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                      text=True, encoding="utf-8", errors="replace",
+                                     env=os.environ | {"PARADISE_WORK_DIR": str(self.work)},
                                      creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
                                      start_new_session=os.name != "nt")
                 self.process = p
@@ -175,6 +183,11 @@ class Application:
         finally:
             if p:
                 p.stdout.close()
+                if os.name != "nt":
+                    try:
+                        os.killpg(p.pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
             with self.lock:
                 if job["cancelled"]:
                     job["status"] = "cancelled"
@@ -187,7 +200,7 @@ class Application:
                 self.active = None
             self.save(job, final=True)
             # Only this run's private staging/work directories are removed.
-            directory = engine.WORK / "jobs" / job["id"] / "workers"
+            directory = self.work / "jobs" / job["id"] / "workers"
             shutil.rmtree(directory, ignore_errors=True)
             if job["kind"] == "conversion":
                 directory = Path(job["output"]) / engine.RESERVED / "staging" / job["id"]
@@ -204,7 +217,10 @@ class Application:
             p = self.process
         if p:
             if os.name != "nt" and p.poll() is None:
-                os.killpg(p.pid, signal.SIGTERM)
+                try:
+                    os.killpg(p.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
             else:
                 engine.kill_tree(p)
 
@@ -287,7 +303,7 @@ class Handler(BaseHTTPRequestHandler):
             self.authenticate()
             if method == "GET":
                 if path == "/api/bootstrap":
-                    return self.send({"defaults": engine.defaults(), "catalog": engine.catalog(),
+                    return self.send({"mode": "local", "defaults": engine.defaults(), "catalog": engine.catalog(),
                         "preferences": self.app.preferences,
                         "active": self.app.active, "repo": str(engine.REPO),
                         "tools": [{"name": Path(p).name, "ready": (engine.REPO / p).is_file()}

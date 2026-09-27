@@ -82,6 +82,9 @@ and a format guide driven by the existing manifest. Python 3.11+ is required;
 the UI's setup panel can run `build tools` for YAP and Volatility.
 See [`tools/assets/converter_ui/README.md`](tools/assets/converter_ui/README.md).
 
+For a public Ubuntu server, run `bash deploy-converter.sh your.hostname`; see the
+[hosted converter deployment guide](tools/assets/converter_ui/deploy/README.md).
+
 ### Command-line build
 
 ```
