@@ -346,6 +346,22 @@ param(
   [double]$DebugFinishAt = 20,   # seconds of MODE TIME before -DebugFinishPos fires. A harness
                                  # number, not a console one: it lets the event start render and the
                                  # scorer initialise first. Ignored unless -DebugFinishPos > 0.
+  [double]$WinTeleport = -1,     # opt IN to the GUARANTEED-WIN TELEPORT (BRN_WIN_TELEPORT=<seconds>).
+                                 # OFF by default (-1) and CLEARED every run, on the -DebugFinishPos
+                                 # grounds: it is a CAPABILITY that ends the event (and banks a WIN
+                                 # into the profile). After <seconds> of IN_PROGRESS time the game
+                                 # places the player's car INTO each remaining landmark box through
+                                 # ActiveRaceCar::RequestPlaceOnTrack; the checkpoint and finish
+                                 # credit is the game's own landmark chain. Unlike -DebugFinishPos
+                                 # nothing is forced: the finish position is whatever the game's own
+                                 # scorer computes. See b5 GameSource/Game/BrnHarnessWinTeleport.h.
+  [int]$WinTeleportGap = 0,      # pre-world ticks between hops (BRN_WIN_TELEPORT_GAP; 0 = the game's
+                                 # default, 90). Ignored unless -WinTeleport >= 0.
+  [double]$WinTeleportSpeed = -1, # forward m/s handed to RequestPlaceOnTrack (BRN_WIN_TELEPORT_SPEED;
+                                 # -1 = the game's default, 0). Ignored unless -WinTeleport >= 0.
+  [double]$WinTeleportLead = -1, # offline race only: metres outside the finish box the car is staged
+                                 # before the finish hop (BRN_WIN_TELEPORT_LEAD; -1 = the game's
+                                 # default, 30; 0 = no stage). Ignored unless -WinTeleport >= 0.
   [switch]$ReleaseAsserts,       # opt IN to HOLDING the assert-release event open for the whole run,
                                  # instead of releasing one assert per detection (the default).
                                  # ⛔ NOT a default run: `asserts=` stops being comparable, because
@@ -776,7 +792,7 @@ if ($ReleaseAsserts) {
 # ⚠️ 'BRN_FORCE_DIRECTOR_CAMERA' and 'BRN_RC_PROBE' are kept although no getenv for either exists
 # in b5-decomp/src today: clearing a name nothing reads costs nothing, and dropping it would
 # silently un-protect the variable if the reader comes back.
-foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_AI_DRIVES_PLAYER','BRN_BOOST_TICKER_DIAG','BRN_TD_DIAG','BRN_TD_PROBE','BRN_TD_LADDER','BRN_DEBUG_FINISH_POS','BRN_DEBUG_FINISH_AT','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_EFFECTS_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_SHOWTIME_IGNORE_PROGRESSION','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_LOCK_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX','BRN_LION_WHITE_PIN','BRN_LION_QRES_OFF','BRN_LION_QRES_SHOW','BRN_LION_QRES_ADD','BRN_CRUMPLE_PROBE','BRN_CRUMPLE_FORCE','BRN_SCRATCH_PROBE','BRN_SCRATCH_FORCE',
+foreach ($v in @('BRN_RC_PROBE','BRN_DIRECTOR_TRACE','BRN_FORCE_DIRECTOR_CAMERA','BRN_WORLD_CAMFREE','BRN_MOTION_PROBE','BRN_TRICACHE_PROBE','BRN_TRACTION_PROBE','BRN_CRASH_PLAYER','BRN_START_EVENT','BRN_AI_DRIVES_PLAYER','BRN_BOOST_TICKER_DIAG','BRN_TD_DIAG','BRN_TD_PROBE','BRN_TD_LADDER','BRN_DEBUG_FINISH_POS','BRN_DEBUG_FINISH_AT','BRN_WIN_TELEPORT','BRN_WIN_TELEPORT_GAP','BRN_WIN_TELEPORT_SPEED','BRN_WIN_TELEPORT_LEAD','BRN_EVENT_FINISH_DIAG','BRN_COLLECT_DIAG','BRN_STARTGRID_DIAG','BRN_RACEFLOW_DIAG','BRN_START_SHOWTIME','BRN_SHOWTIME_WATCH','BRN_DEFORM_TRACE','BRN_SKIP_TRAINING_TIP','BRN_EVENT_FSM','BRN_APT_LIFE','BRN_ASSERT_NO_SUPPRESS','BRN_CRASHCAM_DIAG','BRN_CULL_OFF','BRN_DOF_TRACE','BRN_DRIVETHRU_DIAG','BRN_EFFECTS_DIAG','BRN_ENGINE_PROBE','BRN_ENVMAP_DEBUG','BRN_GESTURE_DIAG','BRN_ICE_TIMESCALE_DIAG','BRN_ICE_TRACE','BRN_IOBUF_ZERO','BRN_JUNCTION_DIAG','BRN_MODEMGR_DIAG','BRN_POSTFX_CALIBRATION_TEST','BRN_POSTFX_CALIB_SCREEN_TEST','BRN_QUEUE_WATERMARK','BRN_SHADOW_BIAS','BRN_SHADOW_CULL','BRN_SHADOW_FALLBACKVS','BRN_SHADOW_FORCECWE','BRN_SHADOW_SLOPEBIAS','BRN_SHADOW_ZALWAYS','BRN_SLOMO_DIAG','BRN_SLOMO_LATCH_SKIP','BRN_TRAFFIC_DIAG','BRN_TRAFFIC_FAKE_SHOWTIME','BRN_TRAFFIC_NO_JAM_NUKE','BRN_SHOWTIME_IGNORE_PROGRESSION','BRN_TYRE_PROBE','BRN_WALL_PROBE','BRN_WHEEL_DIAG','BRN_WHEEL_LOCK_DIAG','BRN_WHEEL_ZALWAYS','BRN_FRAME_DUMP_ARM','BRN_FRAME_DUMP_MAX','BRN_LION_WHITE_PIN','BRN_LION_QRES_OFF','BRN_LION_QRES_SHOW','BRN_LION_QRES_ADD','BRN_CRUMPLE_PROBE','BRN_CRUMPLE_FORCE','BRN_SCRATCH_PROBE','BRN_SCRATCH_FORCE',
                   'BRN_AI_MADNESS','BRN_APT_COMPUPD','BRN_BACKDROP_DIAG','BRN_OOBB_DIAG','BRN_BANK_PROBE','BRN_CAMERA_TRACE',
                   'BRN_COLLISION_AUDIO_DIAG','BRN_CRASHPLAY_TRACE','BRN_CRASH_RESPONSE_DIAG',
                   'BRN_CRASH_VERDICT_DIAG','BRN_CXFORM_TRACE','BRN_CXFORM_TRACE_TEXDIR',
@@ -1261,6 +1277,52 @@ if ($DebugFinishPos -gt 0) {
 }
 $debugFinishText = '(not armed)'
 if ($DebugFinishPos -gt 0) { $debugFinishText = "BRN_DEBUG_FINISH_POS=$DebugFinishPos at ${DebugFinishAt}s" }
+
+# -WinTeleport -- THE GUARANTEED-WIN TELEPORT (race wave 2026-09-27, lane H).
+#   `BRN_WIN_TELEPORT=<seconds>` (+ _GAP frames, _SPEED m/s, _LEAD metres) arms the game-side harness
+#   in b5 GameSource/Game/BrnHarnessWinTeleport.cpp: once the running mode has been IN_PROGRESS for
+#   <seconds>, the player's car is placed INTO the next landmark box through the game's own
+#   ActiveRaceCar::RequestPlaceOnTrack, then the next, until none remain. The checkpoint and finish
+#   are credited by the game's own landmark chain (RaceCarTriggersLandmark -> RaceCarFinishes), so a
+#   RESULT taken with it is the game's own verdict on a car that crossed the line -- but the car
+#   did not DRIVE the route, and a report must say it was teleported.
+#   IT IS A CAPABILITY, NOT AN INSTRUMENT, and it is in the CLEARED list above: a run carrying it
+#   ends its event and, on a win, banks a medal into the profile (back up Memcard\Profile.sav).
+#   The game refuses an empty or non-numeric value with a `[win-teleport] FAIL` line; this script
+#   refuses it first.
+$winTeleportText = '(not armed)'
+if ($WinTeleport -ge 0) {
+  $lInv = [Globalization.CultureInfo]::InvariantCulture
+  $env:BRN_WIN_TELEPORT = $WinTeleport.ToString($lInv)
+  $winTeleportText = "BRN_WIN_TELEPORT=$($env:BRN_WIN_TELEPORT)s"
+  if ($WinTeleportGap -gt 0) {
+    $env:BRN_WIN_TELEPORT_GAP = "$WinTeleportGap"
+    $winTeleportText += " gap=$WinTeleportGap"
+  } elseif ($WinTeleportGap -lt 0) {
+    Write-Host "[flow] FAIL: -WinTeleportGap $WinTeleportGap must be >= 1 frames (0 = the game's default)."
+    exit 1
+  }
+  if ($WinTeleportSpeed -ge 0) {
+    $env:BRN_WIN_TELEPORT_SPEED = $WinTeleportSpeed.ToString($lInv)
+    $winTeleportText += " speed=$($env:BRN_WIN_TELEPORT_SPEED)"
+  }
+  if ($WinTeleportLead -ge 0) {
+    $env:BRN_WIN_TELEPORT_LEAD = $WinTeleportLead.ToString($lInv)
+    $winTeleportText += " lead=$($env:BRN_WIN_TELEPORT_LEAD)m"
+  }
+  Write-Host "[flow] WIN TELEPORT armed: $winTeleportText -- after that much IN_PROGRESS time the"
+  Write-Host "       player's car is placed into each remaining landmark box (the game's own"
+  Write-Host "       place-on-track + landmark chain). NOT a default run. A win banks a medal into"
+  Write-Host "       the profile; the car did not drive the route."
+  if (-not $StartEvent) {
+    Write-Host "[flow] NOTE: -WinTeleport without -StartEvent -- it only acts while a game mode is"
+    Write-Host "       IN PROGRESS, and nothing in a default run starts one."
+  }
+  if ($DebugFinishPos -gt 0) {
+    Write-Host "[flow] NOTE: -WinTeleport WITH -DebugFinishPos -- the debug finish position overrides"
+    Write-Host "       whatever the teleported finish scores. Use one or the other."
+  }
+}
 
 # ⭐⭐ -SkipTrainingTip -- IGNORE A BLOCKING TRAINING TIP AT THE JUNCTION canEnter GATE.
 #   `BRN_SKIP_TRAINING_TIP=1` is a game-side bring-up flag (NOT this script's -- it is
@@ -2809,6 +2871,7 @@ $summary += ("STARTEVT {0}" -f $startEventText)
 # a run the AI drove is not a pad-driven run, and the summary must say so on its face.
 $summary += ("AIDRIVE  {0}" -f $aiDriveText)
 $summary += ("DBGFINISH {0}" -f $debugFinishText)
+$summary += ("WINTELE  {0}" -f $winTeleportText)
 # SHOWTIME: whether this run pressed the bumpers, and whether the game-side stand-in was armed.
 # Same comparability reason as STARTEVT: a run that entered showtime is not comparable with a
 # free-burn run, and the summary must say so on its face.

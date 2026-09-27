@@ -323,6 +323,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
   rem ---- without it every camera VehicleRef resolves to a zero transform.             --
   echo "%SRC%\GameSource\Game\GameBridgeWorldToX.cpp"
+  echo "%SRC%\GameSource\Game\BrnHarnessWinTeleport.cpp"
   rem ---- ODR wave 2026-09-11: the NETWORK -> GUI/GAME-STATE and REPLAY -> GUI bridges go in.
   rem  Both were parked on a Gui*Event ODR fork between the bridge headers and the GUI event
   rem  homes; the fork is closed and both measure zero unresolved externals against the set.
@@ -479,6 +480,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnRaceCarAIInterfaces.cpp"
   echo "%SRC%\SharedClasses\World\BrnWorldRegion.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wW_01.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
   rem TriggerEntityModule per-frame stages; retires the PreScene/PrePhysics/PostScene gates (2026-09-09)
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
@@ -5219,6 +5221,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\Offences\StuntManagerDebugComponent_gUI_00.cpp"
   echo "%SRC%\GameSource\GameState\Offences\BrnStuntManagerDebugComponent_GetTriggerWorldRegion.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_gUI_00.cpp"
+  echo "%SRC%\GameSource\GameState\GameStateModule_wW_01.cpp"
   rem  ADDED 2026-08-27 (showtime S7b-a): GameStateModule::StartCrashMode @0x8236B580 (80 insns)
   rem  -- the bottom of the showtime start chain, and what eventually makes PrepareForMode post
   rem  action 23 with KU_FLAG_USE_SHOWTIME_VEHICLE_BEHAVIOUR. Every callee it needs was already
@@ -5315,6 +5318,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\ObjectPool_CarLeapingData_7.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\ObjectPool_StoredLeapingData_7.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_wW_01.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_Accessors.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_CheckpointSetup.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_Finish.cpp"
