@@ -5434,6 +5434,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem [stuntrace wave E1 2026-08-26] the event-flow translate arms (23/37/38/39/44/47/200/201
   rem -> GUI 93/289/321/322/166/234/307/311) + the event score/timer status builds (492/424/428).
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventFlowGuiEvents.cpp"
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventFlowGuiEvents_wZ_00.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventStatusGuiEvents.cpp"
   rem [event-starts wave 2026-08-27] the event-start table hop (GUI event 203).
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_EventStartsGuiEvents.cpp"

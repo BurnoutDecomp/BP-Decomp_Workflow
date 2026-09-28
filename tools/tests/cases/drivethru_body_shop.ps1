@@ -58,7 +58,9 @@
   # prints the take's eyeSpace/lookSpace and the raw -> world projection of both points. That is
   # the measurement that separates "the shot never ran" from "the space it is authored against
   # projects to nothing"; it is what says WHICH of the two the drive-thru camera is.
-  DiagEnv = 'BRN_DRIVETHRU_DIAG=1,BRN_ICE_TRACE=1'
+  # BRN_FREEROAM_DIAG arms the free-roam translator's `[freeroam-gui] action A -> gui G (detail)`
+  # line, one per translated action (junkyard 99 -> 79, drive-thru discovered 104 -> 314, ...).
+  DiagEnv = 'BRN_DRIVETHRU_DIAG=1,BRN_ICE_TRACE=1,BRN_FREEROAM_DIAG=1'
   Checks  = @(
     @{ Kind='Mark';     Name='reached DRIVING'; Phase='DRIVING' }
 
@@ -66,6 +68,31 @@
     @{ Kind='LogMatch'; Name='the body shop drive-thru triggered'; Pattern='\[drivethru\] ENTER type=2' }
     @{ Kind='LogMatch'; Name='the director raised the drive-thru camera gate'; Pattern='\[drivethru\] DIRECTOR action=97 -> active=1' }
     @{ Kind='LogMatch'; Name='a shop-shot behaviour was allocated'; Pattern='\[drivethru\] NewBehaviour shot .* behaviour=1' }
+
+    # ---- the free-roam HUD messages ---------------------------------------------------------
+    # Every boot enters the junkyard (car select), so the junkyard action reaches the GUI.
+    @{ Kind='LogMatch'; Name='junkyard action 99 translated to GUI 79'; Pattern='\[freeroam-gui\] action 99 -> gui 79 ' }
+    # The "discovered" message is posted only the FIRST time the profile finds this shop. The
+    # boot publish (`[drivethru] SETUP rec id=<id>`) lists every drive-thru the profile already
+    # knows, so: a shop published before its ENTER is a known shop and must NOT post 104; a shop
+    # that was not must post 104 -> 314 with type 2 (BODY_SHOP) after the ENTER.
+    @{ Kind='Script'; Name='a first visit posts drive-thru discovered 104 -> GUI 314 (type 2); a known shop does not'; Script = {
+        param($ctx)
+        $lines = $ctx.LogLines
+        $enterAt = -1; $id = ''
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+          if ($lines[$i] -match '\[drivethru\] ENTER type=2 id=(\d+)') { $enterAt = $i; $id = $Matches[1]; break }
+        }
+        if ($enterAt -lt 0) { return @{ Pass = $false; Detail = 'no [drivethru] ENTER type=2 line: the shop never triggered' } }
+        $known = $false
+        for ($i = 0; $i -lt $enterAt; $i++) { if ($lines[$i] -match ('\[drivethru\] SETUP rec id=' + $id + '\b')) { $known = $true; break } }
+        $posted = @()
+        for ($i = $enterAt; $i -lt $lines.Count; $i++) { if ($lines[$i] -match '\[freeroam-gui\] action 104 -> gui 314 \((\d+)\)') { $posted += [int]$Matches[1] } }
+        if ($known) {
+          return @{ Pass = ($posted.Count -eq 0); Detail = ("shop id=$id already known at boot; 104 -> 314 lines after ENTER: {0} (want 0)" -f $posted.Count) }
+        }
+        return @{ Pass = ($posted.Count -ge 1 -and $posted[0] -eq 2); Detail = ("shop id=$id discovered this run; 104 -> 314 lines after ENTER: {0}, first type {1} (want >= 1, type 2)" -f $posted.Count, $(if ($posted.Count) { $posted[0] } else { '-' })) }
+    } }
 
     # ---- (a) the camera ---------------------------------------------------------------------
     # dy: the camera's height RELATIVE TO THE CAR. A shot that frames a car sits within a few
