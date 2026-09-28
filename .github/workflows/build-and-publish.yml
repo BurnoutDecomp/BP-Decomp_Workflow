@@ -140,6 +140,21 @@ jobs:
             -CommitSha $env:GITHUB_SHA `
             -Branch $env:GITHUB_REF_NAME
 
+      # ---- every repo file the compiler opened for this exe: the sources on the compile line
+      # plus each header they #include, read back from compile_exe.py's per-TU .d files. The
+      # work server's "in executable" count reads progress/linked_files.json, because a TU
+      # whose code lives in a header is compiled in without ever being named in the bat.
+      # Best effort: a tool failure must not turn a good build red.
+      - name: Compiled-file inventory
+        id: linkedfiles
+        continue-on-error: true
+        shell: pwsh
+        env:
+          BRN_EXE_HASH_DEPS: "1"
+        run: |
+          python tools/work/build_linked_files.py `
+            --meta "exe_commit=$env:GITHUB_SHA" --meta "toolchain=$env:VCToolsVersion"
+
       # ---- the third evidence tier: the exe this job just built vs the console's machine
       # code (tools/re/asmaudit.py). It lives here and not in reconcile-status.yml because
       # only this job has an exe + linker map. The console side comes from the committed
@@ -157,8 +172,8 @@ jobs:
             --meta "b5_commit=$b5" --meta "b5_author=$author" `
             --meta "exe_commit=$env:GITHUB_SHA" --meta "toolchain=$env:VCToolsVersion"
 
-      - name: Commit the audit
-        if: steps.asmaudit.outcome == 'success'
+      - name: Commit the audit and the file inventory
+        if: steps.asmaudit.outcome == 'success' || steps.linkedfiles.outcome == 'success'
         continue-on-error: true
         shell: bash
         run: |
@@ -170,20 +185,25 @@ jobs:
           # request = "Duplicate header: Authorization" -> HTTP 400 on every push (run
           # 35465193124). The submodules are long fetched: drop the global one.
           git config --global --unset-all http.https://github.com/.extraheader || true
-          git add progress/asmaudit.json
+          files=()
+          [ "${{ steps.asmaudit.outcome }}" = "success" ] && files+=(progress/asmaudit.json)
+          [ "${{ steps.linkedfiles.outcome }}" = "success" ] && files+=(progress/linked_files.json)
+          git add -- "${files[@]}"
           if git diff --cached --quiet; then
-            echo "asmaudit unchanged"
+            echo "audit and file inventory unchanged"
             exit 0
           fi
-          git commit -q -m "chore: instruction-shape audit of build ${GITHUB_SHA:0:12}" \
-            -m "Automated by build-and-publish: tools/re/asmaudit.py on the exe this run built, against the console's machine code (progress/asmaudit_artist.json.gz)."
-          # main moves under us (reconcile commits, a hand-run audit); rebase our one file
-          # and retry. If the rebase conflicts on the audit itself, this run's is the newer.
+          git commit -q -m "chore: instruction-shape audit and compiled-file inventory of build ${GITHUB_SHA:0:12}" \
+            -m "Automated by build-and-publish: tools/re/asmaudit.py on the exe this run built, against the console's machine code (progress/asmaudit_artist.json.gz); tools/work/build_linked_files.py lists every repo file the compiler opened for it (progress/linked_files.json)."
+          # main moves under us (reconcile commits, a hand-run audit); rebase our files and
+          # retry. If the rebase conflicts on one of them, this run's copy is the newer.
           for attempt in 1 2 3 4 5; do
             if ! git pull -q --rebase origin main; then
-              if git status --porcelain | grep -q "^UU progress/asmaudit.json"; then
-                git checkout --theirs progress/asmaudit.json
-                git add progress/asmaudit.json
+              conflicted=$(git diff --name-only --diff-filter=U)
+              if [ -n "$conflicted" ] && ! printf '%s\n' "$conflicted" | grep -qv -e '^progress/asmaudit.json$' -e '^progress/linked_files.json$'; then
+                # during a rebase, --theirs is the commit being replayed: this run's files
+                git checkout --theirs -- $conflicted
+                git add -- $conflicted
                 GIT_EDITOR=true git rebase --continue || { git rebase --abort; sleep 15; continue; }
               else
                 git rebase --abort 2>/dev/null || true
@@ -196,10 +216,10 @@ jobs:
             fi
             sleep 15
           done
-          echo "::warning title=asmaudit::could not push progress/asmaudit.json after 5 attempts"
+          echo "::warning title=asmaudit::could not push ${files[*]} after 5 attempts"
 
       - name: Refresh public dashboard snapshot
-        if: steps.asmaudit.outcome == 'success'
+        if: steps.asmaudit.outcome == 'success' || steps.linkedfiles.outcome == 'success'
         continue-on-error: true
         shell: bash
         env:
