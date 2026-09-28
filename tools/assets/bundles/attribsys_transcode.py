@@ -95,12 +95,12 @@ X360 consumers, cross-validated against the BPR LE oracle):
       GetAttributePointer, elem collection key low word at BE +12).
   physicssurface 0xFD61B26B2C485337: 3 x f32 (ReadSurfaceProperties v37[0..2]).
   gameplaysurface 0x92D0095C2A8173B3: u8s (byte reads, 1B data area).
-  audiosurface 0x64F8A2D1237050D1 (32B), rumblesurface 0x540C6D1714E37D72
-      (60B): u32 scalars -- zero u64-inconsistent dwords across every
-      collection vs the BPR oracle.  ⚠️ THAT CHECK ONLY SEPARATES A u64 FROM A
-      PAIR OF u32s.  It is blind to a dword that is really four BYTES or two
-      HALFWORDS, which is exactly the defect visualfxsurface carried below;
-      neither of these two has been re-checked for it.
+  audiosurface 0x64F8A2D1237050D1 (32B): four f32 fields, SoftLanding byte
+      at+4, CrashMaterial u32 at+0x14 and four signed16 fields at+0x18..+0x1E.
+      X360's baked schema82CD3D88/82CD53B0 pins every offset and width;
+      RoadnoiseEffect826E5D08 loads the road-loop halfword at+0x1E.
+  rumblesurface 0x540C6D1714E37D72 (60B): u32 scalars -- the earlier
+      u64-only comparison did not distinguish bytes/halfwords; still unaudited.
   visualfxsurface 0x12B5F62BE1A5AB30 (96B): NOT uniform dwords -- see
       _schema_visualfxsurface.  Four flag bytes at +0x4C..+0x4F and a halfword
       pair at +0x58/+0x5A; flipping either as a dword reverses/swaps the fields
@@ -292,9 +292,8 @@ def _schema_visualfxsurface(_size):
     reading under which UpdateTrailType's per-surface colour push means
     anything.
 
-    ⚠️ audiosurface (32B) and rumblesurface (60B) are still registered as
-    _schema_words on the same u64-only evidence and have NOT been re-checked
-    here; if either carries a byte or halfword field it has the same defect.
+    audiosurface is now independently typed below. rumblesurface (60B)
+    remains on the earlier u64-only evidence and has not been re-checked here.
     """
     return (_scalars(4, 4)      # +0x00 skid-mark START colour (lvx128 v1, r0, r11)
             + _scalars(4, 4)    # +0x10 skid-mark END colour   (lvx128 v2, r11, 0x10)
@@ -303,6 +302,19 @@ def _schema_visualfxsurface(_size):
             + _scalars(4, 2)    # +0x50, +0x54
             + _scalars(2, 2)    # +0x58 SkidMarkTypeId, +0x5A pad
             + _scalars(4, 1))   # +0x5C (zero in every collection)
+
+
+def _schema_audiosurface(_size):
+    """X360 baked schema:10 definitions,32-byte layout. Preserve field order.
+
+    ARTIST RoadnoiseEffect826E5D08/510 loads and sign-extends the+0x1E
+    road-loop id. A whole-word flip swapped it with the scraping-loop id,
+    leaving every authored road surface at loop0 (silent).
+    """
+    return (_scalars(4, 1)       # SurfaceLoopVolume+0
+            + _scalars(1, 4)    # SoftLanding+4, three padding bytes
+            + _scalars(4, 4)    # EnvelopeVolume/Decay/Attack, CrashMaterial
+            + _scalars(2, 4))   # transition-on/off, scraping-loop, road-loop
 
 
 def _schema_cameradefaults(_size):
@@ -363,7 +375,7 @@ PAYLOAD_CLASS_SCHEMAS = {
     (CLS_SURFACELIST, True): _schema_surface_list_items,
     (CLS_PHYSICSSURFACE, False): _schema_words,
     (CLS_GAMEPLAYSURFACE, False): _schema_bytes,
-    (CLS_AUDIOSURFACE, False): _schema_words,
+    (CLS_AUDIOSURFACE, False): _schema_audiosurface,
     (CLS_RUMBLESURFACE, False): _schema_words,
     (CLS_VISUALFXSURFACE, False): _schema_visualfxsurface,
     # -- CameraVault (CAMERAS.BUNDLE); sizes are the generated DefaultDataArea(N)
