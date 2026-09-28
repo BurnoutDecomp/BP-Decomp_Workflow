@@ -174,12 +174,12 @@ matches (`build shaders` and `build file` do this for you — pass
 selection; the rest of the cache is left standing. The same selector can be
 passed to the full driver (`build all --only "SOUND/*"`), although source-only
 changes should use `build exe` and skip data entirely.
-The AEMS bank rules additionally need `[inputs].xb1_root` (or `BRN_XB1_ROOT`)
-pointing at Xbox One Remastered data: those banks contain pointer-width-dependent
-runtime templates, so the per-file porter imports the matching native-x64
-templates and AEMS bytecode while retaining the X360 resource identity.
-`EXPLOSIONS_PATCHBANK.BUNDLE` has no such counterpart and remains an explicit
-data gap.
+The AEMS and CSIS rules use the original X360 data in `[inputs].x360_root`.
+The porters rebuild the native-x64 runtime records and bytecode offsets while
+preserving the original interfaces and compressed audio samples. All 16 AEMS
+banks are covered, including traffic, horns and explosions; Xbox One data is
+not required. Run `build data --only "SOUND/AEMS/*" --force` to replace older
+later-release bank substitutions with the original game's content.
 
 ### The exe build is incremental
 

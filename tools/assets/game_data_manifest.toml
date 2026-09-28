@@ -606,15 +606,13 @@ result directly and fixes its offsets into live pointers."""
 id     = "sound-csis-native64"
 match  = ["SOUND/AEMS/CSIS.BUNDLE"]
 action = "convert"
-tool   = "bundles/csis_native64_port.py"
+tool   = "bundles/csis_x360_port.py"
 argv   = ["{src}", "{out}"]
 verify = ["bnd2_platform=4"]
-why    = """The Phase-F CSIS bundle contains 33 Registry resources plus 11 Csis
-BinaryFileResources.  Registry graphs are rebuilt from X360 identity/content, while the ten
-MOIR class sets shared with Xbox One import their matching native-64 bodies.  The X360-only
-detonation/tendril descriptor (whose explosion AEMS bank has no Xbox One counterpart) is
-schema-widened field-by-field.  The porter validates every MOIR header, count, native record,
-name offset, id, resource identity, and a byte-exact extract/repack round trip."""
+why    = """All 33 Registry resources and 11 MOIR class sets are rebuilt from the
+original X360 content, including the original traffic-skid and explosion interfaces.
+The verified native-x64 MOIR schema widens every handle/name record and retains its
+system and interface ids. Every resource must survive a byte-exact repack round trip."""
 
 [[rule]]
 id     = "sound-aems-native64-banks"
@@ -625,6 +623,7 @@ match  = ["SOUND/AEMS/BOOST_BANK_EXOTIC.BUNDLE",
           "SOUND/AEMS/BOOST_BANK_TUNER.BUNDLE",
           "SOUND/AEMS/BOOST_PATCH_BANK.BUNDLE",
           "SOUND/AEMS/CRUMPLEPATCHBANK.BUNDLE",
+          "SOUND/AEMS/EXPLOSIONS_PATCHBANK.BUNDLE",
           "SOUND/AEMS/GEARWHINEPATCHBANK.BUNDLE",
           "SOUND/AEMS/INAIR.BUNDLE",
           "SOUND/AEMS/PATCH_BANK_HORNS.BUNDLE",
@@ -634,19 +633,15 @@ match  = ["SOUND/AEMS/BOOST_BANK_EXOTIC.BUNDLE",
           "SOUND/AEMS/SURFACE_PATCH_BANK.BUNDLE",
           "SOUND/AEMS/TRAFFIC_BANK.BUNDLE"]
 action = "convert"
-tool   = "bundles/aems_native64_port.py"
+tool   = "bundles/aems_x360_port.py"
 argv   = ["{src}", "{out}"]
 verify = ["bnd2_platform=4", "nonempty"]
-why    = """AEMS ABKC banks contain AEMS bytecode plus pointer-width-dependent module
-templates and relocation tables, so the 32-bit PowerPC payloads cannot be merely endian-swapped
-into the native x64 layout.  The Xbox One Remastered build supplies the same named banks in the exact
-native-64 layout consumed by its x64 AEMS loader.  aems_native64_port.py keeps the X360
-container/resource identity, imports only that same-name native-64 payload, rebuilds the
-BinaryFileResource prefix, walks the 104-byte x64 module records, rejects native-function
-relocations, and requires a byte-exact
-extract/repack round trip.  This is an explicit later-retail ABI substitution, not a claim
-that the content is byte-equivalent.  CSIS uses the preceding data-only porter;
-EXPLOSIONS_PATCHBANK remains unhandled because no native-x64 counterpart exists."""
+why    = """All 16 original X360 banks contain portable AEMS bytecode. Rebuild the
+native-x64 module records and instance templates, translate every instruction's data
+displacement and assignment, and remap all pointer/CSIS relocations. Retain the original
+S10A/EAAC sample bytes unchanged. Native machine code, unknown record shapes/opcodes,
+unaccounted pointers and nonzero unwalked data are rejected. Container identities and
+byte-exact payload repacks are verified; Xbox One data is not required."""
 
 [[rule]]
 id     = "sound-worldpainter-regions"
