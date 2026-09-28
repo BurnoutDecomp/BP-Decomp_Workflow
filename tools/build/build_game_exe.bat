@@ -5230,6 +5230,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\Offences\StuntManagerDebugComponent_gUI_00.cpp"
   echo "%SRC%\GameSource\GameState\Offences\BrnStuntManagerDebugComponent_GetTriggerWorldRegion.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_gUI_00.cpp"
+  echo "%SRC%\GameSource\GameState\GameStateModule_wX_00.cpp"
   echo "%SRC%\GameSource\GameState\GameStateModule_wW_01.cpp"
   rem  ADDED 2026-08-27 (showtime S7b-a): GameStateModule::StartCrashMode @0x8236B580 (80 insns)
   rem  -- the bottom of the showtime start chain, and what eventually makes PrepareForMode post
