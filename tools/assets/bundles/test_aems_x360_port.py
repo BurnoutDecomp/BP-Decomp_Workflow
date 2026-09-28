@@ -69,6 +69,14 @@ def fixture():
 
 
 class AemsPort(unittest.TestCase):
+    def test_state_generator_byte_count_and_full_state(self):
+        # ARTIST82B70730: u16 trigger offset, u8 count, pad, s32 current.
+        data = struct.pack('>HBB7i', 20, 3, 0, 0x12345678,
+                           70000, -40000, 0, 1, -1, 0)
+        output = port.port_block(12, data).out
+        self.assertEqual(struct.unpack_from('<HBB7i', output),
+                         (20, 3, 0, 0x12345678, 70000, -40000, 0, 1, -1, 0))
+
     def setUp(self):
         self.source = fixture()
         self.output = port.port_body(self.source)
