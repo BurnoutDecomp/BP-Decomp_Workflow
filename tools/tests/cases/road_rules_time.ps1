@@ -10,9 +10,11 @@
 # THE SCENARIO. Teleport onto the road north of road-limit region 388315, accelerate, and tap the
 # pad's d-pad-up third action (58, GUI_EVENT_DETAILS; harness channel EventDetails) one second in:
 # that is the console's road-rule toggle (ControllerInput::mbStartEventPressed ->
-# RoadRulesManager::UpdateActiveRoadRule), NONE -> OFFLINE_TIME. RequestPlaceOnTrack snaps the car
-# onto road 54 facing north; it crosses limit 397701 (exit) and then 397451 (entry) into road 52,
-# which starts the time rule (action 277). The accelerator-only drive never reaches road 52's far
+# RoadRulesManager::UpdateActiveRoadRule), NONE -> OFFLINE_TIME. RequestPlaceOnTrack seats the car
+# at about (3008, -2.5, -1945) facing north, inside a chain of SHORTCUT AI sections with no street
+# span, so the current road index is -1 for the first ~220 m (the shipped data, not a lookup
+# defect); the car reaches road 54 at z ~ -1722, then crosses limit 397701 (exit) and 397451
+# (entry) into road 52, which starts the time rule (action 277). The accelerator-only drive never reaches road 52's far
 # limit, so the attempt ends UNSCORED: measured 2026-09-25, back out through 397451 after 59.7 s
 # (278 valid 0), then a second attempt on road 54 ended by a road change after 14.3 s.
 #
@@ -29,6 +31,7 @@
 #   [roadrules] action N -> gui M ...   the translator (GameBridgeGameStateToX_*GuiEvents.cpp)
 #   [roadrules] limit ...               RoadRulesManager::OnRoadLimit entry
 #   [roadrules] update road ... t ...   RoadRulesManager::Update, on change + every 300th update
+#   [roadrules] player section ...      StreetManager::UpdateUpcomingStreets, on each section change
 @{
   Name    = 'road_rules_time'
   Area    = 'freeroam/road_rules'
@@ -51,6 +54,7 @@
     # ---- the manager runs and the toggle reaches it -------------------------------------------
     @{ Kind='LogMatch'; Name='RoadRulesManager::Update runs';        Pattern='\[roadrules\] update road' }
     @{ Kind='LogMatch'; Name='rule toggled to OFFLINE_TIME (282)';   Pattern='\[roadrules\] action 282 -> gui 343 rule 1' }
+    @{ Kind='LogMatch'; Name='a street section resolves road 54';    Pattern='\[roadrules\] player section \d+ span 213 shortcut 0 road 54' }
     # ---- a road limit starts a time rule ------------------------------------------------------
     @{ Kind='LogMatch'; Name='OnRoadLimit reached with an entry';    Pattern='\[roadrules\] limit \d+ entry 1' }
     @{ Kind='LogMatch'; Name='time rule started (277 -> GUI 335)';   Pattern='\[roadrules\] action 277 -> gui 335 type 0' }
