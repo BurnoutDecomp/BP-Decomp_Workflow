@@ -72,6 +72,13 @@
     # ---- the free-roam HUD messages ---------------------------------------------------------
     # Every boot enters the junkyard (car select), so the junkyard action reaches the GUI.
     @{ Kind='LogMatch'; Name='junkyard action 99 translated to GUI 79'; Pattern='\[freeroam-gui\] action 99 -> gui 79 ' }
+    # ...and the GUI module's inbound dispatch hands that 79 to GuiCache (the in-junkyard byte).
+    @{ Kind='LogMatch'; Name='GUI 79 routed to the GuiCache'; Pattern='\[freeroam-gui\] routed 79 -> cache' }
+    # The drive-thru CLOSE (action 46 -> GUI 201, the cache hiding that shop's map row) is NOT
+    # reachable here: DriveThruManager only closes a body shop when it is used during a Road Rage
+    # or Marked Man event (DriveThroughsCloseOnceActivatedUntilFurtherNotice). A case that starts
+    # one of those events and then drives into this bay would check
+    # `[freeroam-gui] action 46 -> gui 201` and `[freeroam-gui] cache 201 hid drive-thru row`.
     # The "discovered" message is posted only the FIRST time the profile finds this shop. The
     # boot publish (`[drivethru] SETUP rec id=<id>`) lists every drive-thru the profile already
     # knows, so: a shop published before its ENTER is a known shop and must NOT post 104; a shop
