@@ -4183,6 +4183,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem Restored gyro tracking and its visibility-policy state, shared by takedown shots.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGyroCam.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnVisibilityCollisionPolicy.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnVehicleCollisionPredictor.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCollisionPolicyAttachedToVehicle.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnGeometryCollisionPredictor.cpp"
   rem  [FX-DIRECTOR2 2026-09-25] VisibilityTest -- GetOffscreenTime @0x821F3718 / IsOnScreen @0x821F3770 and the
