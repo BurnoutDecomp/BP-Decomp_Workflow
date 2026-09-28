@@ -119,12 +119,19 @@ def port_block(op, data):
         r.words(0, 16)
         r.field(16, 4, raw=True)
         r.words(20, size)
-    elif op in (12, 16):
+    elif op == 12:
+        # ARTIST82B70730..778: byte-sized count at2, full current state at4.
+        r.field(0, 2)
+        r.field(2, 2, raw=True)
+        r.words(4, size)
+        control = number(data, 0, 2)
+        require(control % 4 == 0 and 8 <= control <= size - 4, 'internal control offset')
+    elif op == 16:
         for p in range(0, 8, 2):
             r.field(p, 2)
         r.words(8, size)
         control = number(data, 0, 2)
-        require(control % 4 == 0 and 8 <= control <= size - (8 if op == 16 else 4), 'internal control offset')
+        require(control % 4 == 0 and 8 <= control <= size - 8, 'internal control offset')
     elif op == 14:
         require(size >= 24, 'short envelope')
         r.field(0, 2)
