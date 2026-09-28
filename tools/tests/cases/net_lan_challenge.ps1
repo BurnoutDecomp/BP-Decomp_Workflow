@@ -26,6 +26,15 @@
 #          [net] game fburn select id=<id> sub=0               case 162 (lane GS; MM's HandleLocalStart...)
 #   Guest  [net] game fburn remote start|trigger id=<id>       case 163 / 164 (lane GS; MM's HandleRemote...)
 #   PAIR   both halves name the same challenge id, and it is 0x8DACC
+#
+# THE LOBBY HUD (BRN_PAYBACK_DIAG, both halves). The lobby runs the RACE_MAIN HUD in mode 15,
+# which enables the payback widget and the challenge ticker but NOT the challenge selector:
+# UpdateSetupState clears the selector gate on every mode, on the console too.
+#   [payback] update ...                        PaybackComponent::Update ticks every frame
+#   [payback] ticker completed index/bit ...    the ticker read the local completed-challenge bit
+#   no "[payback] selector" line                the selector arms stay behind their dead gate
+#   no "[RaceMainHud] PaybackComponent::" / "ChallengeSelector::" / "FreeburnChallengeManager::"
+#   deferral line (run 20260925_112431 logged the Update and completed-bit ones on both halves)
 param([string]$Role = '')
 . (Join-Path $PSScriptRoot '..\_net_pair_common.ps1')
 
@@ -72,6 +81,10 @@ $lChecks = @(
   @{ Kind = 'Mark';     Name = 'reached DRIVING'; Phase = 'DRIVING' }
   @{ Kind = 'LogMatch'; Name = 'the lobby game started (mode 15)'; Pattern = '\[net\] game round start -> StartGameMode mode=15'; Expect = $true }
   @{ Kind = 'Script';   Name = "a network race car was spawned for $lsOther"; Script = { param($ctx) & $NetPair.Spawned $ctx.LogLines }.GetNewClosure() }
+  @{ Kind = 'LogCount'; Name = 'hud: no payback/selector/completed-bit deferral lines'; Pattern = '\[RaceMainHud\] (PaybackComponent|ChallengeSelector|FreeburnChallengeManager)::'; Max = 0 }
+  @{ Kind = 'LogMatch'; Name = 'hud: the lobby HUD ticks the payback widget'; Pattern = '\[payback\] update '; Expect = $true }
+  @{ Kind = 'LogMatch'; Name = 'hud: the challenge ticker read the completed-challenge bit'; Pattern = '\[payback\] ticker completed index/bit -?\d+ [01]'; Expect = $true }
+  @{ Kind = 'LogCount'; Name = 'hud: the selector arms stay behind their gate (console: always cleared)'; Pattern = '\[payback\] selector '; Max = 0 }
 )
 if ($Role -eq 'Host') {
   $lChecks += @(
@@ -90,7 +103,7 @@ if ($Role -eq 'Host') {
   Bug     = "wave 3 -- the $Role half of net_lan_challenge (run it through tools\tests\run_pair.ps1)"
   Frames  = $true
   Run     = $lRun
-  DiagEnv = "$($lR.Harness),BRN_NET_DELAY=30"
+  DiagEnv = "$($lR.Harness),BRN_NET_DELAY=30,BRN_PAYBACK_DIAG=1"
   Setup   = (& $NetPair.Setup $Role)
   Checks  = $lChecks
 }

@@ -55,6 +55,17 @@
 #   FLOOR: -Showtime fires at DRIVING+40 s and holds 5 s, so boot(16) + DriveDelay(6) + 45 is
 #   the shortest run that can still press the gesture and watch what it does.
 #
+# SHOWTIME ENDING (gameplay wave GW, 2026-09-28, lane SHOW). ModeManager::SendModeStopMessages
+#   now posts the LEAVING half of action 143 (entering=0, the crash scorer's GetOverallScore),
+#   which the GUI bridge turns into GUI 397 (HudMessageAnalyzer::HandleShowtimeModeSwitch). The
+#   session only ends through CrashModeScoring::HasCrashModeEnded's idle ladder (car still for
+#   3 s, no scoring event for 3 s, boost settled), so the throttle is released two seconds after
+#   the gesture and MaxSeconds leaves ~45 s for the ladder. The ending checks are at the bottom.
+#   PRECONDITION: the slot's profile must have road rules available (four medals or a ruled
+#   road), or ShouldStartShowtimeMode refuses the gesture; the 'showtime started' check names
+#   that failure (every banked run of this case up to 2026-09-08 was refused that way:
+#   the profile then had one medal).
+#
 @{
   Name    = 'traffic_soak_showtime'
   Area    = 'traffic'
@@ -63,15 +74,15 @@
   Run     = @{
     Drive          = $true
     MotionProbe    = $true
-    MaxSeconds     = 75
+    MaxSeconds     = 120        # boot + 46 s to the gesture + ~45 s for the idle ladder to end it
     SkipIntro     = $true      # the console -skipvideos latch (see the banner)
     AcceptGap     = 1.0        # harness pump latency, not a game gate
     Teleport       = '3323.9,-2.4,-1793.2,0'
-    ThrottleScript = '0:accel'
+    ThrottleScript = '0:accel,36:none'   # release 2 s after the gesture (DRIVING+40 == schedule 34)
     SteerScript    = '0:none,6:left,7:none,14:right,15:none'
     Showtime       = '40'
   }
-  DiagEnv = 'BRN_TRAFFIC_DIAG=1'
+  DiagEnv = 'BRN_TRAFFIC_DIAG=1,BRN_SHOWTIME_DIAG=1'
   Checks  = @(
     @{ Kind = 'NewAsserts'; Name = 'no NEW assert families' }
     @{ Kind = 'LogCount';   Name = 'no exceptions'; Pattern = '\[EXCEPTION\]'; Max = 0 }
@@ -100,5 +111,16 @@
     @{ Kind = 'LogCount';   Name = 'traffic promotion happened (else the run proves nothing)'
        Pattern = '\[T4-hit\]|\[T5-arm\]|\[T3-demote\]'
        Min = 1 }
+    # ---- THE SHOWTIME ENDING (lane SHOW) -------------------------------------------------------
+    # Entry: UpdateCurrentMode's unconditional one-shot. Absent == the gesture was refused (read the
+    # '[showtime] BOTH BUMPERS held, but ... refused' line), and nothing below can pass.
+    @{ Kind = 'LogMatch';   Name = 'showtime started (action 143 entering=1)'
+       Pattern = '\[showtime-switch\] action 143 posted: car \d+ entering=1' }
+    # The leaving post itself (BRN_SHOWTIME_DIAG), with the score it hands GUI 397. The GUI
+    # bridge's own 143 witness (BRN_SHOWTIME_SCORE_DIAG) shares a 24-line budget with the
+    # per-frame action 142, so it is spent long before the session ends and cannot gate this.
+    @{ Kind = 'LogValue';   Name = 'leaving 143 posted with finalScore > 0'
+       Pattern = '\[showtime\] leaving: mode (2|16) .* finalScore (?<n>-?\d+)'
+       Group = 'n'; Agg = 'max'; Min = 1 }
   )
 }

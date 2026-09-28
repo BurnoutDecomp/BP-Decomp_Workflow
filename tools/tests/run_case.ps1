@@ -104,6 +104,25 @@ $profileAside = $null
 # on the returning path and quietly measure the wrong boot.
 $profile = if ($Slot -gt 0) { Join-Path $root ('build\game\Memcard_' + $Slot + '\Profile.sav') }
            else             { Join-Path $root 'build\game\Memcard\Profile.sav' }
+# ⭐ ProfileFixture (2026-09-28, lane HUNT): a case that needs a RETURNING player with a known
+#   progression state (medals, unlocked rivals, owned cars) names a pinned .sav here -- an
+#   absolute path, a path relative to the repo root, or a bare file name under
+#   tools\tests\fixtures\. For the run the fixture is COPIED over this slot's Profile.sav (the
+#   fixture file itself is never written); the slot's own save is parked beside the run first and
+#   put back in the finally below, whatever happens -- including when the game autosaved over the
+#   fixture copy mid-run. The save as the game left it is kept as <RunDir>\Profile.sav.after, so a
+#   check can read the post-run profile. FreshProfile and ProfileFixture ask for opposite boots:
+#   a case that sets both is refused.
+$fixturePath = $null
+if (-not $NoRun -and $lCase.ProfileFixture) {
+  if ($lCase.FreshProfile) { Write-Host "[case] FAIL: case '$($lCase.Name)' sets both FreshProfile and ProfileFixture"; exit 2 }
+  $lsFix = "$($lCase.ProfileFixture)"
+  $laTry = @($lsFix, (Join-Path $root $lsFix), (Join-Path $PSScriptRoot ('fixtures\' + $lsFix)))
+  foreach ($t in $laTry) { if ([IO.Path]::IsPathRooted($t) -and (Test-Path $t -PathType Leaf)) { $fixturePath = (Resolve-Path $t).Path; break } }
+  if (-not $fixturePath) { Write-Host "[case] FAIL: ProfileFixture '$lsFix' not found (tried $($laTry -join '; '))"; exit 2 }
+}
+$fixtureAside = $null
+$fixtureHadNoSave = $false
 if (-not $NoRun) {
   # ⛔⛔ TAKE THE BOX LOCK HERE, BEFORE ANY SIDE EFFECT (2026-09-24, crash-parity LIVE-VERIFY).
   #   Everything below touches state another harness is using: FreshProfile PARKS
@@ -130,44 +149,58 @@ if (-not $NoRun) {
   if ($Slot -gt 0) { $lArgs['Slot'] = $Slot }
   if ($lCase.Frames) { $lArgs['Frames'] = $true; $lArgs['FrameDir'] = $frameDir }
   if ($lCase.DiagEnv) { $lArgs['DiagEnv'] = "$($lCase.DiagEnv)" }
-  # ⭐ FreshProfile: the game takes a different boot path when Memcard\Profile.sav exists
-  #   (returning player). A case that needs the first-boot path (the autosave prompt, the new-
-  #   profile junkyard intro) sets FreshProfile = $true; the save is parked beside the run and put
-  #   back afterwards, whatever happens.
-  if ($lCase.FreshProfile -and (Test-Path $profile)) {
-    $profileAside = Join-Path $RunDir 'Profile.sav.aside'
-    Move-Item $profile $profileAside -Force
-    Write-Host "[case] FreshProfile: parked $profile -> $profileAside"
-  }
-  # ⭐ Setup: A STIMULUS THAT HAS TO RUN *ALONGSIDE* THE BOOT (2026-09-06, lane quiet).
-  #   Every Check runs after flow_run has returned, which is the right shape for a check and the
-  #   wrong shape for a stimulus that must happen WHILE the game is up -- e.g. holding real keys
-  #   down on the desktop from another window, which is the only honest way to ask "does the game
-  #   read input it was not given?". A case that needed that had to be launched by hand in two
-  #   commands, so it could not be part of a sweep at all, and in a sweep it silently measured
-  #   nothing instead of failing.
-  #   `Setup` is an optional scriptblock on the case. It is called with one context hashtable
-  #   BEFORE flow_run starts and must RETURN either nothing or a System.Diagnostics.Process,
-  #   which is killed here if it outlives the run -- so a stimulus can never leak past its case.
-  #     Root / RunDir / Slot / Case  -- the obvious ones
-  #     GameLog                      -- THIS SLOT's live BrnGame.log (slot n has its own; a
-  #                                     helper that polls build\game\BrnGame.log would watch the
-  #                                     wrong instance in a -Parallel sweep)
-  #   A case with no Setup key behaves exactly as before.
   $lSetupProc = $null
-  if ($lCase.Setup) {
-    $lSetupCtx = @{ Root = $root; RunDir = $RunDir; Slot = $Slot; Case = $lCase
-                    GameLog = (Join-Path $exeDir 'BrnGame.log') }
-    Write-Host "[case] Setup: running the case's concurrent stimulus"
-    $lSetupProc = & $lCase.Setup $lSetupCtx
-    if ($lSetupProc -is [System.Diagnostics.Process]) {
-      Write-Host ("[case] Setup: started pid {0}; it will be killed if it outlives the run" -f $lSetupProc.Id)
-    } else { $lSetupProc = $null }
-  }
-  $argText = ($lArgs.GetEnumerator() | ForEach-Object { if ($_.Value -is [bool] -or $_.Value -is [switch]) { "-$($_.Key)" } else { "-$($_.Key) '$($_.Value)'" } }) -join ' '
-  Write-Host "[case] flow_run.ps1 $argText"
   $t0 = Get-Date
+  # Everything from the first profile move on sits inside the try, so the finally below puts
+  # the slot's save back even when a fixture copy or a Setup stimulus throws.
   try {
+    # ⭐ FreshProfile: the game takes a different boot path when Memcard\Profile.sav exists
+    #   (returning player). A case that needs the first-boot path (the autosave prompt, the new-
+    #   profile junkyard intro) sets FreshProfile = $true; the save is parked beside the run and put
+    #   back afterwards, whatever happens.
+    if ($lCase.FreshProfile -and (Test-Path $profile)) {
+      $profileAside = Join-Path $RunDir 'Profile.sav.aside'
+      Move-Item $profile $profileAside -Force
+      Write-Host "[case] FreshProfile: parked $profile -> $profileAside"
+    }
+    if ($fixturePath) {
+      if (Test-Path $profile) {
+        $fixtureAside = Join-Path $RunDir 'Profile.sav.aside'
+        Move-Item $profile $fixtureAside -Force
+        Write-Host "[case] ProfileFixture: parked $profile -> $fixtureAside"
+      } else {
+        $fixtureHadNoSave = $true
+        New-Item -ItemType Directory -Force (Split-Path $profile -Parent) | Out-Null
+      }
+      Copy-Item $fixturePath $profile -Force
+      Write-Host ("[case] ProfileFixture: {0} -> {1} (sha1 {2})" -f $fixturePath, $profile, (Get-FileHash $fixturePath -Algorithm SHA1).Hash.Substring(0, 12))
+    }
+    # ⭐ Setup: A STIMULUS THAT HAS TO RUN *ALONGSIDE* THE BOOT (2026-09-06, lane quiet).
+    #   Every Check runs after flow_run has returned, which is the right shape for a check and the
+    #   wrong shape for a stimulus that must happen WHILE the game is up -- e.g. holding real keys
+    #   down on the desktop from another window, which is the only honest way to ask "does the game
+    #   read input it was not given?". A case that needed that had to be launched by hand in two
+    #   commands, so it could not be part of a sweep at all, and in a sweep it silently measured
+    #   nothing instead of failing.
+    #   `Setup` is an optional scriptblock on the case. It is called with one context hashtable
+    #   BEFORE flow_run starts and must RETURN either nothing or a System.Diagnostics.Process,
+    #   which is killed here if it outlives the run -- so a stimulus can never leak past its case.
+    #     Root / RunDir / Slot / Case  -- the obvious ones
+    #     GameLog                      -- THIS SLOT's live BrnGame.log (slot n has its own; a
+    #                                     helper that polls build\game\BrnGame.log would watch the
+    #                                     wrong instance in a -Parallel sweep)
+    #   A case with no Setup key behaves exactly as before.
+    if ($lCase.Setup) {
+      $lSetupCtx = @{ Root = $root; RunDir = $RunDir; Slot = $Slot; Case = $lCase
+                      GameLog = (Join-Path $exeDir 'BrnGame.log') }
+      Write-Host "[case] Setup: running the case's concurrent stimulus"
+      $lSetupProc = & $lCase.Setup $lSetupCtx
+      if ($lSetupProc -is [System.Diagnostics.Process]) {
+        Write-Host ("[case] Setup: started pid {0}; it will be killed if it outlives the run" -f $lSetupProc.Id)
+      } else { $lSetupProc = $null }
+    }
+    $argText = ($lArgs.GetEnumerator() | ForEach-Object { if ($_.Value -is [bool] -or $_.Value -is [switch]) { "-$($_.Key)" } else { "-$($_.Key) '$($_.Value)'" } }) -join ' '
+    Write-Host "[case] flow_run.ps1 $argText"
     & (Join-Path $root 'tools\diagnostics\flow_run.ps1') @lArgs *>&1 | Tee-Object -FilePath $consoleLog | ForEach-Object { Write-Host "  | $_" }
     $flowExit = $LASTEXITCODE
   } finally {
@@ -179,6 +212,18 @@ if (-not $NoRun) {
       if (Test-Path $profile) { Remove-Item $profile -Force }
       Move-Item $profileAside $profile -Force
       Write-Host "[case] FreshProfile: restored $profile"
+    }
+    if ($fixturePath) {
+      if (Test-Path $profile) {
+        Copy-Item $profile (Join-Path $RunDir 'Profile.sav.after') -Force
+        Remove-Item $profile -Force
+      }
+      if ($fixtureAside -and (Test-Path $fixtureAside)) {
+        Move-Item $fixtureAside $profile -Force
+        Write-Host "[case] ProfileFixture: restored $profile"
+      } elseif ($fixtureHadNoSave) {
+        Write-Host "[case] ProfileFixture: removed the fixture copy (the slot had no save before the run)"
+      }
     }
   }
   Write-Host ("[case] flow_run exit={0} after {1:f0}s" -f $flowExit, ((Get-Date) - $t0).TotalSeconds)

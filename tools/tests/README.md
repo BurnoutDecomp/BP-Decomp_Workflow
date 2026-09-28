@@ -138,6 +138,7 @@ A case that was never seen RED proves nothing about the fix; a check that cannot
   Bug     = 'BurnoutDecomp/b5-decomp#2 -- props sent flying way too much at medium/high speed'
   Frames  = $false                            # $true -> BRN_FRAME_DUMP into <run>\frames (needed by Frame checks)
   FreshProfile = $false                       # $true -> park Memcard\Profile.sav for this run (first-boot path)
+  ProfileFixture = ''                         # a .sav (bare name under tools\tests\fixtures\, or a path) copied over Profile.sav for the run; the original is restored
   Run     = @{ Drive = $true; MaxSeconds = 150; Teleport = '3389.2,0.2,-1620.0,180'; ThrottleScript = '0:accel' }
   DiagEnv = 'BRN_PROP_DIAG=1'                 # engine instruments, "A=1,B=2" (flow_run clears every BRN_* first)
   Checks  = @(
