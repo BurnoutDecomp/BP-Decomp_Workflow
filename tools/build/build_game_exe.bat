@@ -4270,6 +4270,9 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Camera\ICECameraMover.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_09.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_11.cpp"
+  rem ---- THE PAUSE / CRASH-NAV ICE CAMERA, OWNERLIST 2026-09-27 lane L5: the SDK ICECameraMover per-frame update - Update, UpdateFrameBegin, UpdateFrameEnd @0x8253D988 and its eight sub-updates - and MainDirector::UpdateICE @0x82238FC0, which ICEWrapper::Update feeds.
+  echo "%SRC%\SDKs\Packages\ICE\ICECameraMover.cpp"
+  echo "%SRC%\GameSource\Director\BrnMainDirector_wM_01.cpp"
   rem ---- ICEWrapper::Construct / ::Destruct / ::PlayMovie / ::GetCurrentMovie / ::IsPlayingMovie (2026-09-11), retiring seven DirectorLinkStubs gates; splits out of ICEWrapper.cpp / ICEManager.cpp / ICEControllerMenus.cpp, zero unresolved. Only ICEWrapper.cpp still cannot mount (its Update / UpdateAction pair indexes two unhomed dev-tools converter tables). DELETE-WHEN: that pair is homed.
   rem ---- THE ICE EDITOR GROUP (2026-09-11, G04 wave) --------------------------------------
   rem  23 of the 29 unmounted SDKs\Packages\ICE TUs, measured together at ZERO unresolved.
