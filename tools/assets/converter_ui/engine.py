@@ -303,8 +303,6 @@ def scan(sources, supplied_options):
                 if key not in preflight_cache:
                     gaps = stager.preflight([make_item(row, target)], [], row["source_root"], str(dest))
                     issues = [str(Path(p).name) + " is missing. " + fix for p, _, fix in gaps]
-                    if row["rule"] in {"sound-aems-native64-banks", "sound-csis-native64"} and not Path(options["xb1_root"] or "__missing__").is_dir():
-                        issues.append("Choose the Xbox One data folder in Advanced settings for the native sound banks")
                     if row["rule"] == "sound-global-attribsys" and not (Path(row["source_root"]) / "BURNOUT_X360_ARTIST.XEX").is_file():
                         issues.append("Choose the original game folder containing BURNOUT_X360_ARTIST.XEX in Advanced settings")
                     preflight_cache[key] = issues
