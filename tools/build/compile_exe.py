@@ -35,8 +35,10 @@ import hashlib
 import itertools
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 import zlib
@@ -385,7 +387,7 @@ def quote(a):
     return '"' + a + '"' if (" " in a and not a.startswith('"')) else a
 
 
-def run_link(objs, exe, tail, tu_dir, env, diags):
+def _run_link(objs, exe, tail, tu_dir, env, diags):
     link_rsp = os.path.join(tu_dir, "link.rsp")
     with open(link_rsp, "w", encoding="utf-8") as fh:
         for o in objs:
@@ -400,6 +402,93 @@ def run_link(objs, exe, tail, tu_dir, env, diags):
             print("  " + ln, flush=True)
             diags.scan(ln)
     return p.returncode
+
+
+def _link_outputs(exe, tail, stage_dir):
+    """Keep all linker-owned outputs in staging, including explicitly named ones."""
+    exe = os.path.abspath(exe)
+    stem = os.path.splitext(exe)[0]
+    stage_stem = os.path.join(stage_dir, os.path.basename(stem))
+    destinations = {"PDB": stem + ".pdb", "IMPLIB": stem + ".lib",
+                    "ILK": stem + ".ilk"}
+    extensions = {"MAP": ".map", "PDB": ".pdb", "IMPLIB": ".lib",
+                  "ILK": ".ilk", "PDBSTRIPPED": ".stripped.pdb"}
+    rewritten = []
+    for arg in tail:
+        option, sep, value = arg.partition(":")
+        key = option.lstrip("/-").upper()
+        if key == "OUT":
+            if not sep or os.path.normcase(os.path.abspath(value.strip('"'))) != os.path.normcase(exe):
+                raise ValueError("/OUT must match the executable named by /Fe")
+        elif key in extensions:
+            if key == "PDB" and value.upper() == "NONE":
+                destinations.pop(key, None)
+                rewritten.append(arg)
+            elif sep:
+                destinations[key] = os.path.abspath(value.strip('"'))
+            elif key == "MAP":
+                destinations[key] = stem + ".map"
+            else:
+                raise ValueError(f"missing output filename in {arg}")
+        else:
+            rewritten.append(arg)
+    outputs = []
+    for key, destination in destinations.items():
+        staged = stage_stem + extensions[key]
+        rewritten.append(f"/{key}:{staged}")
+        outputs.append((staged, destination))
+    # LINK derives the .exp path from /IMPLIB, not /OUT.
+    outputs.append((stage_stem + ".exp",
+                    os.path.splitext(destinations["IMPLIB"])[0] + ".exp"))
+    staged_exe = stage_stem + os.path.splitext(exe)[1]
+    # Publish the exe last. It is the only output that must exist on every link.
+    outputs.append((staged_exe, exe))
+    return staged_exe, rewritten, outputs
+
+
+def _publish_link_outputs(outputs, stage_dir):
+    """Replace completed outputs, rolling back if an output is locked/unwritable."""
+    backups = {}
+    ready = [(src, dst) for src, dst in outputs if os.path.isfile(src)]
+    for index, (_, destination) in enumerate(ready):
+        backup = os.path.join(stage_dir, f"previous-{index}")
+        if os.path.exists(destination):
+            shutil.copy2(destination, backup)
+            backups[destination] = backup
+        else:
+            backups[destination] = None
+    published = []
+    try:
+        for staged, destination in ready:
+            os.replace(staged, destination)
+            published.append(destination)
+    except OSError:
+        for destination in reversed(published):
+            backup = backups[destination]
+            if backup is None:
+                os.remove(destination)
+            else:
+                os.replace(backup, destination)
+        raise
+
+
+def run_link(objs, exe, tail, tu_dir, env, diags):
+    # LINK may truncate maps and delete its /OUT file on an unresolved symbol.
+    # Never point it at the last playable build. A failed or interrupted link
+    # only leaves disposable staging files; provenance/cgsmap stay with the exe.
+    try:
+        with tempfile.TemporaryDirectory(prefix=".link-", dir=os.path.dirname(os.path.abspath(exe))) as stage:
+            staged_exe, staged_tail, outputs = _link_outputs(exe, tail, stage)
+            rc = _run_link(objs, staged_exe, staged_tail, tu_dir, env, diags)
+            if rc:
+                return rc
+            if not os.path.isfile(staged_exe) or os.path.getsize(staged_exe) == 0:
+                raise OSError("linker reported success without producing an executable")
+            _publish_link_outputs(outputs, stage)
+        return 0
+    except (OSError, ValueError) as exc:
+        print(f"compile_exe: link output could not be published: {exc}", flush=True)
+        return 1
 
 
 # ---------------------------------------------------------------- main

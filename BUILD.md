@@ -199,6 +199,9 @@ and linker warnings/errors, so diagnostics can't scroll away.
 - Objects are named `<basename>.<crc32-of-path>.obj`, so two TUs sharing a
   basename can never silently clobber each other's object (the historical
   `device.cpp` / Sound Logic-vs-Playback hazard).
+- The incremental driver links into a temporary directory and publishes the
+  executable and linker outputs only after success. A failed link keeps the
+  last working `build/game/Burnout_PC.exe` and its maps and provenance intact.
 - **Content mode for CI** (`BRN_EXE_HASH_DEPS=1`): staleness is judged by a
   digest of the *content* of the source and every included header (recorded in
   each object's `.d`), never by file times. A fresh checkout stamps every file
