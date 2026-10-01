@@ -991,6 +991,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- renderer world-pass wave (2026-07-27): the render-dispatch walk ----------
   rem ---- (object->mesh expansion, the sorted mesh walk, the shadowing device) ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatcherCommands.cpp"
+  echo "%SRC%\GameShared\Jobs\ObjectToMesh\ObjectToMesh.cpp"
+  echo "%SRC%\GameShared\Jobs\ObjectToMesh\ObjectToMeshJob.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDrawRenderableFrustumTest.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsPackedOobb.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsOcclusionCullManager.cpp"
