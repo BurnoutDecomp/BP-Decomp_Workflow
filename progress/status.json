@@ -57969,6 +57969,9 @@
   "QuadDraw": {
    "status": "reviewed"
   },
+  "RadixSortJob::Execute": {
+   "status": "reviewed"
+  },
   "RealmcCore::IRunnableTask::IRunnableTask": {
    "status": "reviewed"
   },
@@ -78872,6 +78875,10 @@
    "status": "done"
   },
   "class:PolygonSoupTesterJob": {
+   "status": "done"
+  },
+  "class:RadixSortJob": {
+   "notes": "Complex renderer integration reviewed by performance_review; source PASS after joining both prepared sort banks in EndFramesPC before scheduler/owner teardown. Actual native sort121/121, mesh preparation25/25, frame recorder47/47; omission/count/reuse/owner/reset/shutdown negatives fail. Original Execute assembly and DWARF record checked; whole-record unsigned std::sort, native worker-index leaf, full native pointers and PC overflow-count leaf. Default remains off; repaired live measurement still pending.",
    "status": "done"
   },
   "class:RealmcCore": {
