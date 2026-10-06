@@ -5096,8 +5096,11 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnInGameMessageRenderer.cpp"
   echo "%SRC%\GameSource\Gui\BrnCustomRendererManager.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnNetworkPlayerImageRenderer.cpp"
-  rem  BrnGui::CreditsTextRenderer -- the scrolling end/replay credits column; no manager slot yet.
+  rem  BrnGui::CreditsTextRenderer -- the mounted scrolling end/replay credits column.
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCreditsTextRenderer.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBlackBarRenderer.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnAboveCarRenderer.cpp"
+  echo "%SRC%\GameSource\Replays\BrnGuiModuleAboveCarObjectLayout.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipInstance.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Overlay\States\BrnCrashNavOkCancelOverlayState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Overlay\States\BrnCrashNavOkOverlayState.cpp"
@@ -5556,6 +5559,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- accessor legs the renderer/manager link against, and the progression   ----
   rem ---- event-record accessors.                                                ----
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\ImRenderBuffer\CgsIm2dRenderBuffer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\ImRenderBuffer\CgsIm3dRenderBuffer.cpp"
   rem map-event exit producer: GuiCache::HandleSpecificPreSetRacesEvent (RecEvent arm 190)
   echo "%SRC%\GameSource\Gui\BrnGuiEventDrawEventIcons.cpp"
   echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRankProgressResponse.cpp"
