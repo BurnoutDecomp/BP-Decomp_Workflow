@@ -262,6 +262,18 @@ X360_ROAD_SOURCES = frozenset(name.lower() for name in (
 ))
 
 
+# ARTIST's three audited Default colour programs blend indirect toward key
+# light; the later TUB sources add key light to indirect. Opt in only their
+# base PS_Main entry, not VS_Main or the shared ZOnlyOpaqueSingleSided programs.
+# Original PS resources: 5F41C551, EE305EDD, A0820F91, respectively. NuShaders'
+# other platform/variant builds retain their existing opt-out behaviour.
+X360_WORLD_LIGHT_BLEND_PROGRAMS = {
+    'diffuse_opaque_singlesided.fx': '5F41C551',
+    'specular_opaque_singlesided.fx': 'EE305EDD',
+    'building_opaque_singlesided.fx': 'A0820F91',
+}
+
+
 def compile_entry(fxc, fx_path, entry, profile, include_dir, out_path):
     # /Zpr == D3DCOMPILE_PACK_MATRIX_ROW_MAJOR.  MANDATORY, not a preference: the engine
     # uploads a matrix constant as the raw run of float4s the runtime ShaderConstantTable
@@ -283,6 +295,9 @@ def compile_entry(fxc, fx_path, entry, profile, include_dir, out_path):
         inc = ['/I', include_dir] if os.path.isdir(include_dir) else []
         defines = (['/D', 'D_ROAD_X360=1']
                    if os.path.basename(fx_path).lower() in X360_ROAD_SOURCES else [])
+        if (profile == 'ps_3_0' and entry == 'PS_Main'
+                and os.path.basename(fx_path).lower() in X360_WORLD_LIGHT_BLEND_PROGRAMS):
+            defines += ['/D', 'D_ARTIST_WORLD_LIGHT_BLEND=1']
         return subprocess.run([fxc, '/nologo', '/T', profile, '/E', entry] + inc + defines +
                               ['/O2', '/Zpr', '/Fo', out_path, src],
                               capture_output=True, text=True)
@@ -365,6 +380,12 @@ def plan_shader_work(techniques, buffers, tech_map, use_fallback):
             if key not in buffers:
                 raise SystemExit('technique %s (%s): imported program buffer '
                                  '%s not in bundle' % (rid, name, key))
+            if profile == 'ps_3_0' and entry == 'PS_Main':
+                expected = X360_WORLD_LIGHT_BLEND_PROGRAMS.get(os.path.basename(fx).lower())
+                if expected is not None and key != expected:
+                    raise SystemExit('ARTIST light blend: technique %s (%s) maps %s to '
+                                     'unreviewed program %s (expected %s)'
+                                     % (rid, name, os.path.basename(fx), key, expected))
             jobs[key] = (fx, entry, profile, name)
     return jobs, unmapped
 
