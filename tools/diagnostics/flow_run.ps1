@@ -1696,7 +1696,7 @@ $script:msPeerLog = $env:BP_PAIR_PEER_LOG
 $script:msPairT0 = $null
 if ($env:BP_PAIR_T0) { try { $script:msPairT0 = [datetime]::FromFileTimeUtc([int64]$env:BP_PAIR_T0).ToLocalTime() } catch { $script:msPairT0 = $null } }
 $script:msTapChans  = @('DPadUp','DPadDown','DPadLeft','DPadRight','Next','Prev','OptionNext','OptionPrev','Accept','Stop','Start','PauseMap','EventDetails')
-$script:msHoldChans = @('Accelerate','Brake','HandBrake','SteerLeft','SteerRight','ShoulderL','ShoulderR','Boost','Lookback','ChangeView')
+$script:msHoldChans = @('Accelerate','Brake','HandBrake','SteerLeft','SteerRight','ShoulderL','ShoulderR','Boost','Lookback','ChangeView','StickUp','StickDown','GuiZoom','GuiInspect','CameraLeft','CameraRight','CameraUp','CameraDown')
 function Get-MsHandle([string]$lsChan, [bool]$lbManual) {
   if (-not $script:msHandles.ContainsKey($lsChan)) {
     $lMode = $(if ($lbManual) { [System.Threading.EventResetMode]::ManualReset } else { [System.Threading.EventResetMode]::AutoReset })
