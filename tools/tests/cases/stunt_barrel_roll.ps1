@@ -36,6 +36,7 @@
   Area    = 'events/stunt'
   Bug     = 'issue #23 -- a barrel roll in a Stunt Run stays in progress and never banks for the multiplier'
   Frames  = $false
+  ProfileFixture = 'scratch\gameplay_wave\profile_backup\Profile.sav.pose250700'
   Run     = @{
     Drive           = $true
     MotionProbe     = $true
@@ -44,13 +45,13 @@
     SkipTrainingTip = $true
     SkipIntro       = $true
     AcceptGap       = 1.0
-    MaxSeconds      = 230
+    MaxSeconds      = 100
     CrashSweep      = '2641.5,1.3,-1723.8'
-    CrashSweepShots = '2641.5/1.3/-1723.8/169:0,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44'
+    CrashSweepShots = '2641.5/1.3/-1723.8/169:0,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44,3027/-9.2/-330/0:44'
     CrashSweepSettle = 720
     CrashSweepMax    = 1200
   }
-  DiagEnv = 'BRN_PROP_DIAG=1,BRN_STUNT_DIAG=1,BRN_ROLL_PROBE=1'
+  DiagEnv = 'BRN_PROP_DIAG=1,BRN_STUNT_DIAG=1,BRN_ROLL_PROBE=1,BRN_STUNT23_DIAG=1'
   Checks  = @(
     @{ Kind='NewAsserts'; Name='no NEW assert families' }
     @{ Kind='LogCount'; Name='no exceptions'; Pattern='\[EXCEPTION\]'; Max=0 }
@@ -62,6 +63,8 @@
        Pattern='\[stuntair\] land .* rolls=[1-9]\d* complete=\S+ crashing=0'; Min=1 }
     # The scorer saw the roll (the landing pass rated it).
     @{ Kind='LogMatch'; Name='the scorer awarded BARREL_ROLL'; Pattern='\[stunt\] award type=1 BARREL_ROLL' }
+    # The scorer's in-air rotation must clear after every touchdown (StuntModeScoring::Update rung).
+    @{ Kind='LogCount'; Name='never HELD: no live roll rotation 90 frames after a touchdown'; Pattern='\[stunt23\] HELD'; Max=0 }
 
     # THE BUG: every clean roll landing must be followed, before the next shot re-places the car,
     # by the combo closing with a score -- i.e. the roll banked instead of being held open.

@@ -15,8 +15,9 @@
 # BrnGuiTracker_wY_00.cpp, off by default) takes the landmarks at positions a and b of the
 # trigger data's landmark list, turns each into its LandmarkIndex (the landmark's trigger-REGION
 # index, which is what GetLandmarkInfoFromIndex matches) and publishes the pair through the real
-# GuiCache::UpdateTrackerInfo once the trigger data is loaded: the offline RefreshMapState
-# publisher with a two-landmark list.
+# GuiCache::UpdateTrackerInfo once the free-roam HUD is up (+~2 s): the offline RefreshMapState
+# publisher with a two-landmark list. (Published during loading, as the first cut did, the 494 is
+# cleared before BrnGameModule's in-game-only DoUpdate_GameStatePostWorld ever bridges it.)
 #
 # THE DATA (retail TRIGGERS.DAT, 105 landmarks, regions 4670..4774 in list order):
 #   list 0 -> region 4670, CgsID 557321   list 1 -> region 4671, CgsID 557289
@@ -24,17 +25,21 @@
 # or 1, every lookup missed ("Unable to find landmark with index: 0"), and the route carried
 # residue ids.
 #
-# WITNESSES (BRN_SATNAV_DIAG):
+# THE REPLY: GameStateModule::ProcessGameEvents case 84 (ProcessGameEventsLandmarkRouteRequestBringUp)
+# hands event 84 to SendRouteRequestAction with owner E_OWNER_GUI (1), which resolves both ends to AI
+# sections and posts action 50; the AI module queues it for the route planner; the E_OWNER_GUI
+# route response comes back in the world output, and BrnGameModule::BridgeWorldRouteInformationToGui
+# turns it into a 211 route record handed straight to GuiTracker::RecEvent. A two-landmark set owes
+# one leg, so that one record completes it: GenerateRouteData raises mbHasRoute and
+# IsRouteInfoAvailable() goes true (a route of >= 2 points). No second leg is ever requested.
+#
+# WITNESSES (BRN_SATNAV_DIAG, plus BRN_ROUTE_INFO_DIAG for the section pair):
 #   [satnav] TEST HOOK list positions <a>,<b> publishes landmarks <region a>,<region b>
 #   [satnav-tracker] GuiCache::UpdateTrackerInfo -> GuiTracker::RecEvent(232) items=2 ...
 #   [satnav] route requested leg <n> types <t0>,<t1> landmarks <id0>,<id1> junctions <j0>,<j1>
-#
-# NOT YET PROVABLE (the route REPLY): game event 84 needs GameStateModule::ProcessGameEvents
-# case 84 (owner E_OWNER_GUI -> SendRouteRequestAction) and the answer needs
-# BrnGameModule::BridgeWorldRouteInformationToGui (the only producer of GUI 211, a direct
-# GuiTracker::RecEvent call). Neither has a body on this build. When both land, add a check that
-# the 211 reply arrives (GenerateRouteData raises mbHasRoute); a two-landmark set owes one leg
-# only, so `route requested leg 1` must still never appear.
+#   [satnav] event 84 -> SendRouteRequestAction owner GUI leg <n>
+#   [route-info] SendRouteRequestAction owner 1 event <n> sections <s0> -> <s1>
+#   [satnav] route reply 211 leg <n> points <p> distance <d> routeInfoAvailable <0|1>
 @{
   Name    = 'satnav_route'
   Area    = 'ui/satnav'
@@ -49,7 +54,7 @@
     Teleport    = '3040.7,-5.8,-1937.9,180'   # the road outside the junkyard exit (baseline's)
     ThrottleScript = '0:accel'
   }
-  DiagEnv = 'BRN_SATNAV_DIAG=1,BRN_SATNAV_ROUTE_TEST=0:1'
+  DiagEnv = 'BRN_SATNAV_DIAG=1,BRN_SATNAV_ROUTE_TEST=0:1,BRN_ROUTE_INFO_DIAG=1'
   Checks  = @(
     @{ Kind = 'NewAsserts'; Name = 'no NEW assert families' }
     @{ Kind = 'LogCount';   Name = 'no exceptions'; Pattern = '\[EXCEPTION\]'; Max = 0 }
@@ -59,9 +64,10 @@
     @{ Kind = 'LogCount';   Name = 'every landmark lookup hit'; Pattern = 'Unable to find landmark with index'; Max = 0 }
     @{ Kind = 'LogMatch';   Name = 'the two-landmark set reached GuiTracker::RecEvent(232)';
        Pattern = '\[satnav-tracker\] GuiCache::UpdateTrackerInfo -> GuiTracker::RecEvent\(232\) items=2 current=0 entireRoute=1' }
-    # THE FIX: GuiTracker::Update requests leg 0 of the set exactly once (the pending flag drops
-    # after the post and only a 211 reply re-arms it; no reply producer exists yet).
+    # GuiTracker::Update requests leg 0 of the set exactly once (the pending flag drops after the
+    # post; the one 211 reply completes a two-landmark set instead of re-arming it).
     @{ Kind = 'LogCount';   Name = 'GUI 494 posted once for leg 0'; Pattern = '\[satnav\] route requested leg 0 '; Min = 1; Max = 1 }
+    @{ Kind = 'LogCount';   Name = 'no second leg is ever requested'; Pattern = '\[satnav\] route requested leg 1 '; Max = 0 }
     @{ Kind = 'Script';     Name = 'both ends are LANDMARK ends with two distinct non-zero landmark ids'; Script = {
         param($ctx)
         foreach ($line in $ctx.LogLines) {
@@ -76,5 +82,32 @@
       } }
     @{ Kind = 'LogMatch';   Name = 'leg 0 runs from landmark 557321 to landmark 557289';
        Pattern = '\[satnav\] route requested leg 0 types 0,0 landmarks 557321,557289 junctions 0,0' }
+    # THE REPLY. Case 84 reaches SendRouteRequestAction once, with the GUI as owner.
+    @{ Kind = 'LogCount';   Name = 'event 84 -> SendRouteRequestAction (owner GUI) once for leg 0';
+       Pattern = '\[satnav\] event 84 -> SendRouteRequestAction owner GUI leg 0\s*$'; Min = 1; Max = 1 }
+    @{ Kind = 'Script';     Name = 'the GUI route question resolved both landmarks to valid AI sections'; Script = {
+        param($ctx)
+        foreach ($line in $ctx.LogLines) {
+          if ($line -match '\[route-info\] SendRouteRequestAction owner 1 event 0 sections (?<s0>\d+) -> (?<s1>\d+)') {
+            $ok = ([int]$Matches.s0 -ne 32767) -and ([int]$Matches.s1 -ne 32767)
+            return @{ Pass = $ok; Detail = ("sections {0} -> {1}" -f $Matches.s0, $Matches.s1) }
+          }
+        }
+        return @{ Pass = $false; Detail = 'no [route-info] SendRouteRequestAction owner 1 line' }
+      } }
+    # BridgeWorldRouteInformationToGui hands the tracker one 211 record for leg 0 and the route
+    # becomes available (GenerateRouteData ran: >= 2 points, mbHasRoute raised).
+    @{ Kind = 'LogCount';   Name = 'exactly one 211 route reply'; Pattern = '\[satnav\] route reply 211 leg '; Min = 1; Max = 1 }
+    @{ Kind = 'Script';     Name = 'the leg-0 reply carries a real route and IsRouteInfoAvailable() is true'; Script = {
+        param($ctx)
+        foreach ($line in $ctx.LogLines) {
+          if ($line -match '\[satnav\] route reply 211 leg (?<leg>\d+) points (?<p>\d+) distance (?<d>[-0-9.eE+]+) routeInfoAvailable (?<a>\d)') {
+            $lfD = [double]::Parse($Matches.d, [System.Globalization.CultureInfo]::InvariantCulture)
+            $ok = ($Matches.leg -eq '0') -and ([int]$Matches.p -ge 2) -and ($lfD -gt 0.0) -and ($Matches.a -eq '1')
+            return @{ Pass = $ok; Detail = ("leg {0} points {1} distance {2} available {3}" -f $Matches.leg, $Matches.p, $Matches.d, $Matches.a) }
+          }
+        }
+        return @{ Pass = $false; Detail = 'no [satnav] route reply 211 line' }
+      } }
   )
 }

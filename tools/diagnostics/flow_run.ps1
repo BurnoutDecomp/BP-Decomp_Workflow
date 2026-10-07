@@ -1813,7 +1813,9 @@ function Match-MsBuf([string]$lsBuf, [string]$lsRegex) {
 }
 
 function Write-MsLog([string]$lsText, [double]$lfElapsed) {
-  $lsLine = ("MENUSCRIPT run={0,6:f1}s {1}" -f $lfElapsed, $lsText)
+  # `(log line <n>)` = complete BrnGame.log lines this script had read when the step ran (GW4
+  # PROOF, 2026-10-06), so a case can attribute a game line to the tap before or after it.
+  $lsLine = ("MENUSCRIPT run={0,6:f1}s {1} (log line {2})" -f $lfElapsed, $lsText, $script:logLineCount)
   $script:msLog += $lsLine
   Write-Host ("[flow] {0}" -f $lsLine)
 }
@@ -2235,6 +2237,7 @@ $inputLog  = @()         # every input transition, for marks.txt -- what the car
 #   that silently voids a run is worse than one that fails loudly: the starvation above was
 #   invisible in every one of those six marks.txt files.
 $script:logPos      = 0     # byte offset already consumed from BrnGame.log
+$script:logLineCount = 0    # complete lines consumed so far (GW4 PROOF: MENUSCRIPT lines carry it as `log line <n>`)
 $script:logCarry    = ''    # tail of the previous chunk, re-prepended for CUE matching only
 $script:assertDebt  = 0     # asserts seen but not yet released (budgeted, never dropped)
 $script:pollCount   = 0
@@ -2255,7 +2258,7 @@ function Read-NewLogText {
                                       ([System.IO.FileShare]::ReadWrite -bor [System.IO.FileShare]::Delete))
   } catch { return '' }
   try {
-    if ($lStream.Length -lt $script:logPos) { $script:logPos = 0; $script:logCarry = '' }
+    if ($lStream.Length -lt $script:logPos) { $script:logPos = 0; $script:logCarry = ''; $script:logLineCount = 0 }
     $lLen = $lStream.Length - $script:logPos
     if ($lLen -le 0) { return '' }
     $lStream.Position = $script:logPos
@@ -2384,6 +2387,7 @@ while ($true) {
   # ⭐ INCREMENTAL: only what the game has appended since the last poll. See the reader's banner --
   #   the whole-file read this replaces is the defect that voided dv_r1..r6 / kw6_st1.
   $txt = Read-NewLogText
+  if (-not [string]::IsNullOrEmpty($txt)) { $script:logLineCount += ($txt.Length - $txt.Replace("`n", '').Length) }
   if ($script:msSteps.Count -gt 0) {
     if (-not [string]::IsNullOrEmpty($txt)) { $script:msOwnBuf = Add-MsBuf $script:msOwnBuf $txt }
     $lsPeerTxt = Read-PeerLogText
@@ -2681,15 +2685,17 @@ if ($null -ne $finalTxt) {
 #   separates them: 0.5 m of path for the frozen run against 242.3 m / 284.4 m for two driven
 #   ones, over comparable sample counts (145 / 150 / 152).
 # ⭐⭐ THE TELEPORT JUMP IS EXCLUDED BY CONSTRUCTION.  A >20 m step between consecutive samples is a
-#   placement, not driving, so the path length is measured only over the samples AFTER the last
-#   such jump.  Without that, every -Teleport run would score hundreds of metres for standing still.
+#   placement, not driving, so the path length is measured from the teleport seat up to the first
+#   respawn (see the 2026-10-06 note in the body).  Without that, every -Teleport run would score
+#   hundreds of metres for standing still.
 # It does NOT change the exit code: other harnesses in this directory branch on $LASTEXITCODE and a
 # new failure mode there would silently re-mean their results.  It reports, loudly, in marks.txt.
 $driveVerdict = "n/a (not a -Drive run)"
 if ($Drive) {
   $driveVerdict = "UNKNOWN -- no -MotionProbe, so this log carries no car position"
   if ($MotionProbe -and $null -ne $finalTxt) {
-    $mx = [regex]::Matches($finalTxt, '\[motion\] n \d+ pos (-?[0-9.]+) (-?[0-9.]+) (-?[0-9.]+)')
+    $mx = [regex]::Matches($finalTxt, '\[motion\] n \d+ pos (-?[0-9.]+) (-?[0-9.]+) (-?[0-9.]+)(?:[^
+]*? gas (-?[0-9.]+))?')
     if ($mx.Count -lt 2) {
       $driveVerdict = ("UNKNOWN -- -MotionProbe armed but the log carries {0} [motion] sample(s)" -f $mx.Count)
     } else {
@@ -2705,16 +2711,54 @@ if ($Drive) {
                [math]::Sqrt((($px[$a]-$px[$b]) * ($px[$a]-$px[$b])) +
                             (($py[$a]-$py[$b]) * ($py[$a]-$py[$b])) +
                             (($pz[$a]-$pz[$b]) * ($pz[$a]-$pz[$b]))) }
+      # ⭐ 2026-10-06 (GW4 PROOF): measured from the TELEPORT SEAT up to the FIRST RESPAWN. The old
+      #   reading started after the LAST >20 m jump, so a wreck + respawn late in the window scored
+      #   0..13 m for a 300 m drive (five baseline false reds 09-08..09-23, each with a GAMEWRECKED
+      #   hud message right before the second jump). The seat is the first jump at or after the
+      #   `[teleport] car ->` line; with no teleport line the segment starts at sample 0. Later
+      #   jumps are respawns, counted and reported, never folded into path=.
+      #   The seat is the first jump after the teleport line that LANDS within 10 m (x/z) of the
+      #   teleport target: the sample right after the line can still carry the junkyard-exit
+      #   placement the teleport waited for (baseline 20261006_191957: 69.5 m to (3008,-1945),
+      #   then 33.5 m to the seat). Fallbacks: the first jump after the line, then the first sample.
+      $lTeleM = [regex]::Match($finalTxt, '\[teleport\] car -> \((-?[0-9.]+), (-?[0-9.]+), (-?[0-9.]+)\)')
+      #   Without a teleport line the segment starts at the last placement jump BEFORE the
+      #   throttle first reached the car (a returning boot's junkyard-exit placement), else at 0.
       $startIdx = 0
-      for ($i = 1; $i -lt $px.Count; $i++) { if ((& $seg $i ($i-1)) -gt 20.0) { $startIdx = $i } }
+      $lFirstGas = -1
+      for ($i = 0; $i -lt $mx.Count; $i++) {
+        if ($mx[$i].Groups[4].Success -and [double]::Parse($mx[$i].Groups[4].Value, [Globalization.CultureInfo]::InvariantCulture) -gt 0.01) { $lFirstGas = $i; break }
+      }
+      for ($i = 1; $i -le $lFirstGas; $i++) { if ((& $seg $i ($i-1)) -gt 20.0) { $startIdx = $i } }
+      if ($lTeleM.Success) {
+        $lfTx = [double]::Parse($lTeleM.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture)
+        $lfTz = [double]::Parse($lTeleM.Groups[3].Value, [Globalization.CultureInfo]::InvariantCulture)
+        $lFirstAfter = $mx.Count - 1
+        for ($i = 0; $i -lt $mx.Count; $i++) { if ($mx[$i].Index -gt $lTeleM.Index) { $lFirstAfter = $i; break } }
+        $startIdx = $lFirstAfter
+        $lFirstJump = -1
+        for ($i = [math]::Max(1, $lFirstAfter); $i -lt $px.Count; $i++) {
+          if ((& $seg $i ($i-1)) -le 20.0) { continue }
+          if ($lFirstJump -lt 0) { $lFirstJump = $i }
+          if ([math]::Sqrt(($px[$i]-$lfTx)*($px[$i]-$lfTx) + ($pz[$i]-$lfTz)*($pz[$i]-$lfTz)) -le 10.0) { $lFirstJump = $i; break }
+        }
+        if ($lFirstJump -ge 0) { $startIdx = $lFirstJump }
+      }
+      $endIdx = $px.Count - 1
+      $respawns = 0
+      for ($i = $startIdx + 1; $i -lt $px.Count; $i++) {
+        if ((& $seg $i ($i-1)) -gt 20.0) { if ($respawns -eq 0) { $endIdx = $i - 1 }; $respawns++ }
+      }
       $path = 0.0
-      for ($i = $startIdx + 1; $i -lt $px.Count; $i++) { $path += (& $seg $i ($i-1)) }
-      $net = & $seg ($px.Count - 1) $startIdx
+      for ($i = $startIdx + 1; $i -le $endIdx; $i++) { $path += (& $seg $i ($i-1)) }
+      $net = & $seg $endIdx $startIdx
+      $wrecks = ([regex]::Matches($finalTxt, 'STARTING MESSAGE NAMED "GAMEWRECKED')).Count
       $tag = "drove"
       if     ($path -lt  5.0) { $tag = "*** THE CAR NEVER MOVED ***" }
       elseif ($path -lt 25.0) { $tag = "*** THE CAR BARELY MOVED ***" }
-      $driveVerdict = ("{0} path={1:f1}m net={2:f1}m over {3} [motion] samples (from sample {4}, after the last >20m placement jump)" -f `
-                       $tag, $path, $net, ($px.Count - $startIdx), $startIdx)
+      $driveVerdict = ("{0} path={1:f1}m net={2:f1}m over {3} [motion] samples (samples {4}..{5}: {6} up to the first respawn; later respawns={7} GAMEWRECKED={8})" -f `
+                       $tag, $path, $net, ($endIdx - $startIdx + 1), $startIdx, $endIdx,
+                       $(if ($lTeleM.Success) { "teleport seat" } else { "last placement before the throttle" }), $respawns, $wrecks)
     }
   }
 }

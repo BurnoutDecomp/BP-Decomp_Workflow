@@ -60,6 +60,76 @@ function Parse-Marks([string]$lsMarksPath) {
   return @{ Marks = $lMarks; Phase = $lsPhase; Asserts = $liAsserts; Text = ($laLines -join "`n") }
 }
 
+# Get-DriveSegment -- the driven distance of a -Drive -MotionProbe run, measured from the
+# teleport seat (or, with no `[teleport] car ->` line, from the last placement before the throttle
+# reached the car) UP TO THE FIRST RESPAWN. A >20 m step between consecutive [motion] samples is a placement, not driving.
+# Returns @{ Path; Net; Samples; FromSample; ToSample; Respawns; Wrecks; Known }.
+# Why not marks.txt's old figure: that one measured only AFTER THE LAST placement jump, so a run
+# that wrecked at the drop past (2650,-2290) and respawned scored 0..13 m for a 300 m drive (five
+# baseline false reds between 09-08 and 09-23, every one with a GAMEWRECKED hud message right
+# before the second jump). A wreck is gameplay; it is reported in Wrecks, not folded into Path.
+function Get-DriveSegment([string[]]$laLogLines) {
+  $lPts = New-Object 'System.Collections.Generic.List[double[]]'
+  $liFirstGas = -1                         # index of the first sample with gas > 0.01
+  $liTeleportAt = -1
+  $liWrecks = 0
+  foreach ($lsLine in $laLogLines) {
+    if ($lsLine -match '\[motion\] n \d+ pos (-?[0-9.]+) (-?[0-9.]+) (-?[0-9.]+)(?:.*? gas (-?[0-9.]+))?') {
+      $lPts.Add([double[]]@([double]::Parse($Matches[1], [Globalization.CultureInfo]::InvariantCulture),
+                            [double]::Parse($Matches[2], [Globalization.CultureInfo]::InvariantCulture),
+                            [double]::Parse($Matches[3], [Globalization.CultureInfo]::InvariantCulture)))
+      if ($liFirstGas -lt 0 -and $Matches[4] -and [double]::Parse($Matches[4], [Globalization.CultureInfo]::InvariantCulture) -gt 0.01) { $liFirstGas = $lPts.Count - 1 }
+    } elseif ($liTeleportAt -lt 0 -and $lsLine -match '^\[teleport\] car -> \((?<x>-?[0-9.]+), (?<y>-?[0-9.]+), (?<z>-?[0-9.]+)\)') {
+      $liTeleportAt = $lPts.Count          # index of the first sample logged after the teleport
+      $lfTx = [double]::Parse($Matches.x, [Globalization.CultureInfo]::InvariantCulture)
+      $lfTz = [double]::Parse($Matches.z, [Globalization.CultureInfo]::InvariantCulture)
+    } elseif ($lsLine -match 'STARTING MESSAGE NAMED "GAMEWRECKED') {
+      $liWrecks++
+    }
+  }
+  if ($lPts.Count -lt 2) { return @{ Known = $false; Samples = $lPts.Count; Wrecks = $liWrecks } }
+  $lSeg = { param($a, $b)
+    $dx = $lPts[$a][0] - $lPts[$b][0]; $dy = $lPts[$a][1] - $lPts[$b][1]; $dz = $lPts[$a][2] - $lPts[$b][2]
+    [math]::Sqrt($dx * $dx + $dy * $dy + $dz * $dz) }
+  # Without a teleport, the segment starts at the last placement jump BEFORE the throttle first
+  # reached the car (the junkyard-exit placement of a returning boot, returning_player_spawn
+  # 20261006_201051: an 82.5 m jump at sample 22, gas from sample 52), else at sample 0.
+  $liStart = 0
+  if ($liFirstGas -gt 0) {
+    for ($i = 1; $i -le $liFirstGas; $i++) { if ((& $lSeg $i ($i - 1)) -gt 20.0) { $liStart = $i } }
+  }
+  if ($liTeleportAt -ge 0) {
+    # The seat is the first >20 m jump at or after the teleport line that LANDS within 10 m (x/z)
+    # of the teleport target. The first jump after the line is not always it: the sample right
+    # after the line can still carry the junkyard-exit placement the teleport was waiting for
+    # (baseline 20261006_191957: 69.5 m to the exit at (3008,-1945), THEN 33.5 m to the seat).
+    # With no such jump, the first jump after the line; with no jump at all (a teleport shorter
+    # than 20 m), the first post-teleport sample.
+    $liStart = [math]::Min($liTeleportAt, $lPts.Count - 1)
+    $liFirstJump = -1
+    for ($i = [math]::Max(1, $liTeleportAt); $i -lt $lPts.Count; $i++) {
+      if ((& $lSeg $i ($i - 1)) -le 20.0) { continue }
+      if ($liFirstJump -lt 0) { $liFirstJump = $i }
+      $dx = $lPts[$i][0] - $lfTx; $dz = $lPts[$i][2] - $lfTz
+      if ([math]::Sqrt($dx * $dx + $dz * $dz) -le 10.0) { $liFirstJump = $i; break }
+    }
+    if ($liFirstJump -ge 0) { $liStart = $liFirstJump }
+  }
+  $liEnd = $lPts.Count - 1
+  $liRespawns = 0
+  for ($i = $liStart + 1; $i -lt $lPts.Count; $i++) {
+    if ((& $lSeg $i ($i - 1)) -gt 20.0) {
+      if ($liRespawns -eq 0) { $liEnd = $i - 1 }
+      $liRespawns++
+    }
+  }
+  $lfPath = 0.0
+  for ($i = $liStart + 1; $i -le $liEnd; $i++) { $lfPath += (& $lSeg $i ($i - 1)) }
+  return @{ Known = $true; Path = $lfPath; Net = (& $lSeg $liEnd $liStart); Samples = ($liEnd - $liStart + 1)
+            FromSample = $liStart; ToSample = $liEnd; Respawns = $liRespawns; Wrecks = $liWrecks
+            Teleported = ($liTeleportAt -ge 0) }
+}
+
 function Get-FrameFiles([string]$lsFrameDir) {
   if (-not $lsFrameDir -or -not (Test-Path $lsFrameDir)) { return @() }
   return @(Get-ChildItem $lsFrameDir -Filter 'bb_*.bmp' | Sort-Object Name)

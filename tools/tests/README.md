@@ -165,6 +165,11 @@ A case that was never seen RED proves nothing about the fix; a check that cannot
   (`max|min|mean|first|last|any|all`); `After='<cue>'` restricts to lines after that cue.
 * `Script` gets `$ctx` (`LogLines`, `Marks`, `MarksText`, `Phase`, `FrameDir`, `RunDir`) and
   returns `@{ Pass; Detail }`.
+* "The car moved": call `Get-DriveSegment $ctx.LogLines` (`_checks.ps1`). It measures the
+  [motion] path from the teleport seat (or, with no teleport, the last placement before the
+  throttle) UP TO THE FIRST RESPAWN, and reports `Respawns` / `Wrecks` (GAMEWRECKED hud messages)
+  separately. marks.txt's `DRIVE path=` uses the same rule since 2026-10-06; before that it
+  measured after the LAST >20 m jump, so a wreck + respawn scored ~0 m.
 
 ## Pair cases -- two instances online (`run_pair.ps1`)
 
@@ -182,7 +187,13 @@ and 2. Shared helpers live in `_net_pair_common.ps1` (outside `cases\`, dot-sour
   mark -- `wait:<regex>` (own log), `waitpeer:<regex>`, `waitfile:<name>`, `signal:<name>`,
   `tap:<Chan>[x<n>]`, `tapuntil:<Chan>:<regex>` (re-tap until the game reacts; Easy Drive ignores a
   press while it is still opening), `hold:<Chan>:<sec>`, `sleep:`, `gap:`, `timeout:`, `mark:`.
-  marks.txt gets `MENUSCRIPT done=<k>/<n>` plus one line per step.
+  marks.txt gets `MENUSCRIPT done=<k>/<n>` plus one line per step; each step line ends in
+  `(log line <n>)`, the BrnGame.log lines read when it ran, so a check can attribute a game line
+  to the tap before it (`cases\pause_event_intro.ps1`).
+* **PROOF helpers** (`tools	ests	ools\PROOF_*.ps1`): `PROOF_run.ps1 -Case <c> [-Repeat n]`
+  restores the pinned box save around a run while HOLDING the box lock; `PROOF_batch.ps1 -Cases
+  "a,b,b"` runs a list through it into a progress file; `PROOF_boxfree` / `PROOF_waitbox` /
+  `PROOF_waitexe` / `PROOF_waitfile` poll the lock, the exe, or a file.
 * **Game-side harness** (`BrnNetHarnessPC`, PC only, BP_LAN runs): `BRN_NET_HOST` / `BRN_NET_JOIN`
   (hybrid join), `BRN_NET_LEAVE_AT=<s>` (GUI 52 leave, `<s>` after first in game),
   `BRN_NET_SCRIPT=<s>:<gui|net>:<id>[:<w>/<w>...];...` (scheduled channel-40 GUI records), and a
