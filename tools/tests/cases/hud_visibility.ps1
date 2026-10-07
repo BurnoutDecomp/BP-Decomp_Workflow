@@ -49,6 +49,22 @@
 #   FLOOR: PauseAt 20 / UnpauseAt 32 are DRIVING-relative, so this case cannot be shorter than
 #   boot(16) + DriveDelay(6) + 32 + a tail for the resume to be observed.
 #
+# ROAD SIGNS ON THE MAP (GW4 PROOF, 2026-10-06; witness BRN_MAPICON_DIAG, BrnRoadSignIconManager.cpp):
+#   [mapicon] road signs prepared: 64 components, controllers registered
+#                    RoadSignIconManager::Prepare (MapIconManager::Prepare), at GUI boot.
+#   [mapicon] road signs set up: 64 sign0 world=<x>,<y>
+#                    RoadSignIconManager::SetupComponent. It runs only when the map's road-sign
+#                    filter is ON: MapIconManager::SetupComponent forwards it under mbUseRoadSigns,
+#                    and SetUseRoadSigns(true) runs it on a filter change. So the scenario taps
+#                    DPadRight twice inside the pause (the crash-nav panel's first filter row:
+#                    EVENT -> DRIVETHRU -> ROAD RULES), witnessed by BRN_SATNAV_DIAG's
+#                    `[cnav-diag] SetFilterFromPanel: panel=2 ... roadSigns=1`.
+#   THE HANG RISK this gates: opening the map appends all 64 sign apt components to the expected
+#   list (MapIconManager::AppendExpectedAptComponents, unconditional), and the map's load only
+#   completes once every expected component reported ONLOAD. A sign that never loads hangs the map
+#   load: the main map never goes SHOW, the HUD never comes back. The console-table Script check
+#   below already fails on that; the road-sign checks name it.
+#
 @{
   Name    = 'hud_visibility'
   Area    = 'gui'
@@ -63,8 +79,9 @@
     PauseAt     = '20'
     PauseTarget = 'map'
     UnpauseAt   = '32'
+    MenuTapAt   = '25:DPadRight,27:DPadRight'   # inside the pause: filter EVENT -> DRIVETHRU -> ROAD RULES
   }
-  DiagEnv = 'BRN_HUD_VIS=1'
+  DiagEnv = 'BRN_HUD_VIS=1,BRN_MAPICON_DIAG=1,BRN_SATNAV_DIAG=1'
   Checks  = @(
     # `Known` = the shared known_asserts.txt VERBATIM plus ONE pause-only family this case is
     # the only run in the wave to reach (the sound lane's CgsVoice.cpp:334 voice detach). See
@@ -221,6 +238,41 @@
         $detail = ($note -join '; ')
         if ($fail.Count -gt 0) { $detail = ($fail -join ' | ') + '  [seen: ' + $detail + ']' }
         return @{ Pass = ($fail.Count -eq 0); Detail = $detail }
+      } }
+
+    # ---- road signs on the map (BRN_MAPICON_DIAG; see the banner) ----
+    @{ Kind = 'LogMatch'; Name = 'road-sign pool prepared (64 components, controllers registered)';
+       Pattern = '\[mapicon\] road signs prepared: 64 components, controllers registered' }
+    @{ Kind = 'LogMatch'; Name = 'the road-rules map filter was selected (panel 2, roadSigns=1)';
+       Pattern = '\[cnav-diag\] SetFilterFromPanel: panel=2 .*roadSigns=1' }
+    @{ Kind = 'Script';   Name = 'road signs set up: 64, sign 0 off the world origin'; Script = {
+        param($ctx)
+        foreach ($l in $ctx.LogLines) {
+          if ($l -match '\[mapicon\] road signs set up: (?<n>\d+) sign0 world=(?<x>[-0-9.eE+]+),(?<y>[-0-9.eE+]+)') {
+            $lfX = [double]::Parse($Matches.x, [Globalization.CultureInfo]::InvariantCulture)
+            $lfY = [double]::Parse($Matches.y, [Globalization.CultureInfo]::InvariantCulture)
+            $ok = ($Matches.n -eq '64') -and (([math]::Abs($lfX) -gt 1.0) -or ([math]::Abs($lfY) -gt 1.0))
+            return @{ Pass = $ok; Detail = ("set up {0} sign0 world={1},{2}" -f $Matches.n, $Matches.x, $Matches.y) }
+          }
+        }
+        return @{ Pass = $false; Detail = 'no [mapicon] road signs set up line (filter never reached ROAD RULES, or SetupComponent never ran)' }
+      } }
+    # The map load finished and the run came back out of it: the main map went SHOW after the
+    # pause (the expected-component wait, 64 signs included, completed) and the HUD-up command
+    # that closes the map arrived after that.
+    @{ Kind = 'Script';   Name = 'the map load did not hang (mainmap SHOW, then HUD back up)'; Script = {
+        param($ctx)
+        $liOff = -1; $liShow = -1; $liBack = -1
+        for ($i = 0; $i -lt $ctx.LogLines.Count; $i++) {
+          $l = $ctx.LogLines[$i]
+          if ($l -match '\[hud-vis\] cmd 148 flag=0') { $liOff = $i; $liShow = -1; $liBack = -1 }
+          elseif ($liOff -ge 0 -and $liShow -lt 0 -and $l -match '\[hud-vis\] mainmap show') { $liShow = $i }
+          elseif ($liShow -ge 0 -and $liBack -lt 0 -and $l -match '\[hud-vis\] cmd 148 flag=1') { $liBack = $i }
+        }
+        if ($liOff -lt 0) { return @{ Pass = $false; Detail = 'the map was never opened (no cmd 148 flag=0)' } }
+        if ($liShow -lt 0) { return @{ Pass = $false; Detail = ("map opened at log line {0} but mainmap never went SHOW: the load HUNG" -f ($liOff + 1)) } }
+        if ($liBack -lt 0) { return @{ Pass = $false; Detail = ("mainmap SHOW at line {0}, but the HUD never came back up" -f ($liShow + 1)) } }
+        return @{ Pass = $true; Detail = ("map opened line {0}, mainmap SHOW line {1}, HUD up again line {2}" -f ($liOff + 1), ($liShow + 1), ($liBack + 1)) }
       } }
   )
 }

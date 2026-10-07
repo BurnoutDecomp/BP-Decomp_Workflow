@@ -40,13 +40,19 @@
     @{ Kind = 'LogCount';   Name = 'assert lines (info: known noise counts too)'; Pattern = '\[ASSERT \d+\]'; Max = 200 }
     @{ Kind = 'LogCount';   Name = 'no exceptions';  Pattern = '\[EXCEPTION\]'; Max = 0 }
     @{ Kind = 'Mark';     Name = 'reached DRIVING'; Phase = 'DRIVING' }
-    @{ Kind = 'Script';   Name = 'the car moved';  Script = {
+    # The car moved: path from the teleport seat UP TO THE FIRST RESPAWN (Get-DriveSegment in
+    # _checks.ps1). Until 2026-10-06 this read marks.txt's DRIVE path=, which was measured after
+    # the LAST >20 m placement jump: a wreck + respawn late in the window scored 0..13 m for a
+    # 300 m drive (5 false reds 09-08..09-23, each with a GAMEWRECKED right before the respawn).
+    @{ Kind = 'Script';   Name = 'the car moved (teleport seat -> first respawn, > 20 m)';  Script = {
         param($ctx)
-        # marks.txt: "DRIVE    <verdict>" -- "MOVED path=123.4m net=..." or UNKNOWN/n-a/STATIONARY
-        $l = ($ctx.MarksText -split "`n") | Where-Object { $_ -match '^DRIVE\s+' } | Select-Object -First 1
-        if (-not $l) { return @{ Pass = $false; Detail = 'no DRIVE line in marks.txt' } }
-        $ok = ($l -match 'path=(?<p>[\d.,]+)m') -and ([double](($Matches.p) -replace ',', '.') -gt 20)
-        return @{ Pass = $ok; Detail = $l.Trim() }
+        $s = Get-DriveSegment $ctx.LogLines
+        if (-not $s.Known) { return @{ Pass = $false; Detail = ("{0} [motion] sample(s): no car position in this log" -f $s.Samples) } }
+        return @{ Pass = ($s.Path -gt 20.0); Detail = ("path={0:f1}m net={1:f1}m samples {2}..{3} teleported={4} later respawns={5}" -f `
+                  $s.Path, $s.Net, $s.FromSample, $s.ToSample, $s.Teleported, $s.Respawns) }
       } }
+    # A wreck is gameplay, not a red: reported on its own line so a red 'car moved' is never
+    # confused with a respawn, and a wreck-heavy run is visible at a glance.
+    @{ Kind = 'LogCount'; Name = 'info: GAMEWRECKED hud messages (gameplay, never fails)'; Pattern = 'STARTING MESSAGE NAMED "GAMEWRECKED' }
   )
 }
