@@ -95,7 +95,6 @@ rem ---- build the cl response file ----
 copy /y "%BASERSP%" "%RSP%" >nul
 >> "%RSP%" (
   echo "%SRC%\GameSource\Main\BrnMain.cpp"
-  echo "%SRC%\GameSource\BrnBaselineLinkStubs.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsXboxLivePC.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsPcNetIdentity.cpp"
   echo "%VEN%\coreallocator\source\icoreallocator_interface.cpp"
@@ -350,22 +349,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\BrnWorldEntityModule.cpp"
   echo "%SRC%\GameSource\World\BrnWorldGraphicsStreamer.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToOutput.cpp"
-  rem ---- world-drive wave (2026-07-27): the six sibling bridge TUs with REAL   ----
-  rem ---- bodies (WorldBridgeEntityModulesToEntityModules / ...ToAI / ...ToCrash ---
-  rem ---- / WorldBridgeCrashToEntityModules / WorldBridgeInputToEntityModules    ---
-  rem ---- [MOUNTED 2026-08-11, see the driving-input wave note below] /           ---
-  rem ---- WorldBridgePhysicsToScene) are NOT mounted: each drags 1-23 unresolved  ---
-  rem ---- module-IO accessors/setters that are declaration-only (cost rule), so   ---
-  rem ---- their bridges stay boot-gated in WorldLinkStubs.cpp. Mount them with    ---
-  rem ---- the entity-module IO pass that lands those accessors.                   ---
-  rem ---- car-select hand-off wave (2026-08-01): ONE of those six bridges is      ---
-  rem ---- fully closed on its own -- BridgeRaceCarModuleToWorldModule_PreScene    ---
-  rem ---- @0x827A52B0, the ONLY producer of WorldModule::                         ---
-  rem ---- meLocalPlayerActiveRaceCarIndex. It shared a TU with two bridges that   ---
-  rem ---- need 3 declaration-only IO accessors (MEASURED: +3 unresolved for the   ---
-  rem ---- whole TU, 0 for this function alone), so the inert WorldLinkStubs copy  ---
-  rem ---- is what linked and the player index stayed -1 all session. Split into   ---
-  rem ---- its own TU and mounted. Fold back when those 3 accessors land.          ---
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeRaceCarToWorldModule.cpp"
   rem ---- feed wave (2026-08-09): the SECOND split-out bridge, same reason as the one ----
   rem ---- above. WorldModule::BridgeInputToPhysicsModule @0x827AB830 (an address that   ----
@@ -376,39 +359,13 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- (2026-08-11: it now IS mounted -- see the next block. The two are still split ----
   rem ----  TUs; folding them back into one DWARF-home TU is a follow-up.)               ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeInputToPhysicsModule.cpp"
-  rem ---- driving-input wave (2026-08-11): the DWARF file-mate above is now MOUNTED WHOLE. ----
-  rem ---- WorldModule::BridgeInputToEntityModules @0x827ADF88 is the ONLY caller in the    ----
-  rem ---- image of RaceCarEntityModuleIO::InputBuffer_PreScene::SetPlayerVehicleControls,  ----
-  rem ---- i.e. the last hop between the wired keyboard/pad input and the player car; while ----
-  rem ---- it was a WorldLinkStubs gate the controls stopped at the world input buffer.     ----
-  rem ---- MEASURED closure (dumpbin over the linked obj set): the TU raised 21 unresolved  ----
-  rem ---- project externals; all 21 are bodied this wave (4 BrnWorldIO::UpdateInputBuffer  ----
-  rem ---- const getters, 15 RaceCarEntityModuleIO PreScene/PrePhysics setters -- 6 of them ----
-  rem ---- X360 header-inlines, now header-inline here too -- the prop replay-status setter ----
-  rem ---- in its new home TU below, and TriggerEntityModuleIO::InputBuffer_PreScene::      ----
-  rem ---- GetInputInterface, which was already committed in a TU nobody had mounted.       ----
-  rem ---- The WorldLinkStubs gate is retired (tombstoned there); leaving both = LNK2005.   ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeInputToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PreScene.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TriggerEntityModule\BrnTriggerEntityModuleIO_Accessors.cpp"
-  rem ---- root-cause wave (2026-08-10): the PRE-SCENE entity-modules -> physics bridge  ----
-  rem ---- @0x827AADB8. It is the ONLY caller in the image of InputBuffer::              ----
-  rem ---- SetSolverMaxIterations, so while it was a boot gate the solver iteration cap  ----
-  rem ---- stayed 0 and the whole MaxIterations chain asserted. Its file-mate            ----
-  rem ---- _PrePhysics @0x827AAEC0 is still a gate and stays in WorldLinkStubs.          ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToPhysics.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePropModule.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeCrashPostScene.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeCrashInputs.cpp"
-  rem ---- physics->output publish wave (2026-08-11): the RETURN direction of the same    ----
-  rem ---- handover. WorldModule::BridgePhysicsModuleToRaceCarModule_PostPhysics          ----
-  rem ---- @0x827AE9D0 is the ONLY thing in the image that copies the physics module's    ----
-  rem ---- output buffer into the race-car module's post-physics INPUT buffer, so while   ----
-  rem ---- it was a WorldLinkStubs gate the landed readback (ReadUpdatedActiveRaceCar-    ----
-  rem ---- DataFromPhysics) could never see a set mUsedRaceCars bit and every active car  ----
-  rem ---- fell through to the bring-up pose stand-in. Two of its six legs are live; the  ----
-  rem ---- other four are parked LOUDLY in the TU (opaque physics-output seats).          ----
-  rem ---- Its WorldLinkStubs gate is DELETED; leaving both = LNK2005.                    ----
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToEntityModules.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_embed_check.cpp"
@@ -428,7 +385,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem is what makes this mount load-bearing (without it that call is an LNK2019).
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\AirTime\BrnAirTimeManager.cpp"
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_Range.cpp"
-  rem IsPlayerCarTailgatingOtherRaceCars (its WorldLinkStubs gate is DELETED) + UpdateNearMisses, the only driver of NearMissManager::Update.
   echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_NearMissTailgate.cpp"
   rem ---- crash play / Showtime (crash-play wave 2026-08-29). BrnCrashPlayManager.cpp is  ----
   rem ---- the boost CONSUMER; the debug component is its first member BY VALUE, so its    ----
@@ -481,15 +437,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\World\Trigger\BrnTriggerEntityModule.cpp"
   rem TriggerEntityModule per-frame stages; retires the PreScene/PrePhysics/PostScene gates (2026-09-09)
   echo "%SRC%\GameSource\World\AI\BrnAIModule.cpp"
-  rem ---- aimodule wave (2026-08-25): the AI MODULE LIFECYCLE. BrnAIModule.cpp above grew the
-  rem   real Construct/Prepare/LoadMapData (the four WorldLinkStubs gates are retired), which
-  rem   is what makes AI.dat load, "WorldMapData" resolve and BrnAI::ResetOnTrackManager get
-  rem   Constructed at last. These are its link closure: the AI output buffer (now carrying
-  rem   real typed members instead of this+offset into a 1-byte object), the reset-on-track
-  rem   manager and its container instantiations. (BrnAStar.cpp is deliberately NOT here: it is
-  rem   not link-complete -- AStarNodePool::FindNode and AStar::IsBlockSection have no body
-  rem   anywhere, and Route::AddNode / Portal::GetLinkSectionIndex need the route TUs. So
-  rem   RouteMapModule::Prepare parks its AStar::Construct call, flagged at the site.)
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_OutputBuffer.cpp"
   rem ResetOnTrackResult / PlaceOnTrackRequest element constructors (the AI RESULT side).
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleResultInterface.cpp"
@@ -514,22 +461,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_ResetOnTrackResult_Methods.cpp"
   echo "%SRC%\GameSource\World\AI\SharedIO\EventQueue_PlaceOnTrackRequest_128.cpp"
   echo "%SRC%\GameSource\World\AI\Route\EventQueue_RouteResponse_16.cpp"
-  rem ---- IO-buffer construction wave (2026-08-15): DestroyIOBuffer<T> now runs T::Destruct like the
-  rem ---- console template; AIModuleIO::InputBuffer_PostPhysics::Construct @0x8277BCD0 / Destruct
-  rem ---- @0x8277BCE8 were already reconstructed in this TU (never mounted; WorldLinkStubs carried a
-  rem ---- memset gate for Construct instead -- retired the same day).
   echo "%SRC%\GameSource\World\AI\SharedIO\BrnAIModuleIO_InputBuffer_PostPhysics.cpp"
-  rem ---- resetpump wave (2026-08-26): THE RESET-ON-TRACK PUMP, plumbed end to end. Three mounts:
-  rem   * BrnAIModule_ResetPump.cpp -- AIModule::{Update (a minimal-complete SLICE),
-  rem     ProcessRequestInterface, UpdateResetOnTrackManager, GetAICar}. Retires the
-  rem     AIModule::Update boot gate in WorldLinkStubs.cpp.
-  rem   * BrnRaceCarEntityModule_ResetPump.cpp -- RCEM::{WriteUpdatedAIData (which is what sets
-  rem     mbPlayerDataSet, the flag AIModule::Update wraps its ENTIRE body in),
-  rem     SendResetOnTrackRequests, ProcessResetOnTrackResultQueue}.
-  rem   * WorldBridgeEntityModulesToAI.cpp -- ON DISK SINCE THE WORLD-DRIVE WAVE AND NEVER LISTED.
-  rem     Its BridgeRaceCarModuleToAIModule_PreScene has been real, correct and complete all along
-  rem     and the linker took the WorldLinkStubs stub instead. Both its bridges are retired from
-  rem     WorldLinkStubs.cpp by this wave. FIFTH sighting of an unlisted TU in three waves.
   echo "%SRC%\GameSource\World\AI\BrnAIModule_ResetPump.cpp"
   rem  ** AI ROUTE CHAIN (aiwave 2026-09-03, lane A5): RouteMapModule::Update @0x82793ED8 real, A* link-complete
   rem     (FindNode decoded from the image), RouteRequestManager::Update, the AIModule route legs
@@ -590,23 +522,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   EnvironmentManager::GenerateShaderConstants @0x827D0098 calls two of them.
   echo "%SRC%\GameSource\World\EnvironmentManager\BrnGlobalIrradianceManager.cpp"
 
-  rem ---- POST-FX RUNG 10 "environment live" -- envfix round (2026-08-16). THE FIVE
-  rem   ENVIRONMENT-SETTINGS TUs THAT WERE NEVER ON THIS LIST. Until now every symbol they
-  rem   define was served by an inert WorldLinkStubs.cpp gate, which is why PerformBlend was
-  rem   two thirds dead: ScatteringData/LightingData/CloudsData::SetToBlend all returned
-  rem   without writing anything, so mScattering / mLighting / mClouds stayed at whatever
-  rem   EnvironmentManager::Construct zero-seeded and a live GenerateShaderConstants would
-  rem   have read an all-zero lighting block (= the world goes dark). Those 8 gates are
-  rem   DELETED in WorldLinkStubs.cpp in the same step -- leaving one beside a mounted TU is
-  rem   LNK2005 (measured, 8 duplicate definitions).
-  rem   Link cost measured with dumpbin over the five objs + WorldLinkStubs.obj: the set
-  rem   drags in NO new external. Everything it needs is already mounted --
-  rem   CgsCore::SPrintf (CgsStringUtils.cpp, line 102 of this file) and the
-  rem   BrnEffects::{Bloom,Vignette}Data default statics (BrnEffectsData.cpp, line 257) --
-  rem   or is the CRT (fopen/fscanf/fgetc/ungetc/feof/fclose/atoi/strcmp/strncmp/strlen).
-  rem   The 15 `KAF_*` default-template vectors these three TUs read had NO DEFINITION
-  rem   anywhere in the tree (a latent unresolved external `cl /c` cannot see); they are
-  rem   defined in them now, from the shipped image.
   echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvScatteringData.cpp"
   echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvLightingData.cpp"
   echo "%SRC%\GameSource\World\EnvironmentSettings\BrnEnvCloudsData.cpp"
@@ -949,24 +864,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModuleIO_OutputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Physics\CgsPhysicsSimulationModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerModule.cpp"
-  rem  ---- wave Q5 round 3 (2026-08-19): the scene-collision middle closes -- the drain legs,
-  rem  the scene manager bridge family and their callees. Mounted in the same commit as the
-  rem  WorldLinkStubs gate retirements for OverlapGenerationModule and the three BridgeOverlap*.
-  rem  CgsSceneManagerModule_wQ5_01.cpp : UpdateCollisionBody @0x828C7528 + the three padding events.
-  rem  CgsSceneManagerBridgeFunctions.cpp : BridgeOverlapGenerationToOverlapCulling @0x828BA538,
-  rem    BridgeOverlapGenerationToOutputBuffer @0x828BA6A0, BridgeOverlapCullerToOutputBuffer
-  rem    @0x828BA8C8 -- the only writer of SceneManagerIO::OutputBuffer mPotentialContactQueue.
-  rem  CgsCullingGroupManager.cpp : SetCullingGroupPair @0x828AA580, the CARS x PROPS adjacency writer.
-  rem  CgsSceneManagerContact.cpp : Contact::Construct @0x828A9E30, called twice by DoPairQuery.
-  rem  ---- scene-query wave 1 (2026-09-02): THE SCENE-QUERY PIPELINE -- the race car's above-ground
-  rem  down-ray gets a consumer. ProcessCoarseQueries / ProcessFineQueries / ProcessFineQueriesDirectly /
-  rem  ProcessLineTestNearest / ProcessTriangleCollisionLineTestNearests (+ eleven loud sibling traps),
-  rem  the FULL InputBuffer_Query layout + TriCacheQueryBuffer + their lock-checked getters, the
-  rem  FineIntersectionTestIO buffer, the octree LineTest slot, the fine module's Compute* traps and the
-  rem  ray-vs-world kernel's declaration (CollideLineAgainstPolySoupListNearest, a LOUD trap until the
-  rem  next wave). Mounted together with the WorldLinkStubs retirements of InputBuffer_Query::Destruct
-  rem  and BridgePhysicsSceneQueriesToScene (leaving either = LNK2005).
-  rem  external (director) scene-query service point; retires SceneManagerModule::ExternalSceneQueriesUpdate (2026-09-09)
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_InputBuffer_Query.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\FineIntersectionTestModule\CgsFineIntersectionTestModule_wSQ1.cpp"
@@ -981,8 +878,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerContact.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsCamera.cpp"
   echo "%SRC%\GameSource\Director\Camera\Camera.cpp"
-  rem ---- world-fleet link-mount closure (2026-07-26): committed TUs picked by ----
-  rem ---- offline dumpbin closure analysis; leftovers stubbed in WorldLinkStubs ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatcher.cpp"
   rem  dispatch-bin out-of-room handler; retires DispatchBin::HandleMemoryOverflow (2026-09-09)
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsGraphicsDispatchList.cpp"
@@ -1148,32 +1043,11 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\pc\gcm\renderengine\VertexProgramState.cpp"
   echo "%SRC%\pc\gcm\renderengine\XenonD3D9Shims.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager.cpp"
-  rem  ????????? 2026-08-10 (fill-worker wave): CachedTriangleList::Prepare @0x828BE520 (79) -- THE
-  rem  SHARED TRIANGLE ARENA'S ALLOCATION. Its WorldLinkStubs gate returned true WITHOUT
-  rem  allocating, so mpaTriangleCache was NULL and every one of the 298 slot windows indexed
-  rem  off a null base. Found by forcing the console's own mbDEBUGForceAllDirty for one
-  rem  instrumented boot, which fired the never-before-executed shipped tripwire
-  rem  "mpaTriangleCache != NULL" (CgsTriangleCacheManager.h:172) 862 times.
-  rem  ??? 0x828BE520 is an X360 export HOLE; name from the caller's xrefs_from, signature from
-  rem  the PS3 DWARF mangle @0xC7B30C. Allocates 13112 * sizeof(Triangle4) == 2,937,088 bytes.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsCachedTriangleList.cpp"
-  rem  Triangle-cache SLOT BOOKKEEPING (triangle-cache wave 2026-08-10): the write side of
-  rem  the cache's 298-slot table -- ProcessRemoveFromCacheEvents @0x828B2710 /
-  rem  ProcessAddToCacheEvents @0x828B2C78 / ProcessUpdateCachedPositionEvents @0x828BE898 /
-  rem  CacheSlot::UpdateCachedObject @0x828BE660. UNREACHABLE today: their only caller,
-  rem  SceneManagerModule::StartUpdateTriangleCache, is still a WorldLinkStubs gate, so
-  rem  /OPT:REF strips every byte. Mounted anyway to enforce the link closure over them.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_Events.cpp"
   rem  ...and its layout gate, which was UNMOUNTED until this wave -- i.e. every
   rem  static_assert in it was submit-time only and had never run in a build.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_embed_check.cpp"
-  rem  ?????? 2026-08-10 (cache-fill wave): THE FILL HALF -- StartUpdateTriangleCaches @0x828BECF8
-  rem  (278) + EndUpdateTriangleCaches @0x828BF150 (475). Both WorldLinkStubs gates DELETED.
-  rem  ??? ASYMMETRIC REACHABILITY: End is LIVE from the frame it lands (SceneManagerModule::
-  rem  EndUpdateTriangleCache @0x828C7500 is real and WorldModule::Update calls it every frame)
-  rem  and takes its own null guard; Start is still only reached through SceneManagerModule::
-  rem  StartUpdateTriangleCache, which stays gated because TriangleCollisionManager::Prepare
-  rem  @0x828D0C40 is inert and BuildSpacialPartition @0x82841740 (2,255 insns) is absent.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\CgsTriangleCacheManager_Update.cpp"
   rem  ?????? 2026-08-10 (producer wave): the InEventAddToCache queue APPEND instantiation
   rem  (BaseEventQueue<InEventAddToCache>::AddEvent @0x825E4620). Reconstructed long ago and
@@ -1182,9 +1056,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  only path by which TriangleCacheManager::mUsedCacheSlots can ever become non-zero.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CacheManager\BaseEventQueue_InEventAddToCache_AddEvent.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsEntityManager.cpp"
-  rem  ---- wave Q5 cluster A1 (2026-08-18): the scene VOLUME store -- CgsSceneManager::VolumeManager
-  rem  Prepare @0x828CFD38 / RemoveVolume @0x828CFDC8 / ReplaceDynamicVolume @0x828CFEE8 /
-  rem  AddDynamicVolume @0x828D1708 / GetRwVolume @0x828C5E68 -- the WorldLinkStubs Prepare gate is retired.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsVolumeManager.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsVolumeStore.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\ObjectPool_VolumeManagerVolume_5048.cpp"
@@ -1597,15 +1468,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  normals) and the sphere contact worker calls it per queued record. Also carries
   rem  CollisionResultList::SetNumResults @0x8280FFE8 / GetResult @0x828A9EF8.
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\Primitives\CgsCollisionResult.cpp"
-  rem  ?????? 2026-08-10 (cache-fill wave): the BaseCollisionGenerator HOME finally mounts. It has
-  rem  been fully reconstructed since 2026-08-06 (Construct / Prepare / Finish / FinishBatch /
-  rem  CreateNewBatch / AllocateJob / GetResultList / CreateStreamProducer) but stayed off the
-  rem  link, so WorldModule::Update's per-frame generator was carved and never initialised behind
-  rem  two WorldLinkStubs gates -- BOTH NOW DELETED. This is a LIVE behaviour change: the frame's
-  rem  collision generator is really Construct()ed and Prepare()d from the frame it lands.
-  rem  wave Q6 / worldc (2026-08-19): CgsCollisionBatch.cpp MOUNTED -- CollisionGenerator::
-  rem  CollidePrimitiveListAgainstTriangleList (real now) calls CollisionBatch::SetupJob out of line
-  rem  exactly as the console does (bl at 0x82814304).
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionBatch.cpp"
   echo "%SRC%\GameShared\GameClasses\SceneManager\Collision\ContactGenerator\CgsCollisionGenerator.cpp"
   rem  2026-08-06 (big-five #1, FixUpVehicleContacts wave): the driver's home TU + the
@@ -1737,11 +1599,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  SetRaceCarHidden / SetWheelTransform). It was ABSENT FROM THE TREE ALTOGETHER -- not
   rem  gated, not stubbed, not declared -- which is why the readback had nothing to read.
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleOutputInterface_UpdateRaceCarState.cpp"
-  rem  ?????? 2026-08-10 (producer wave): THE LEG THAT REGISTERS A CAR WITH THE TRIANGLE CACHE.
-  rem  VehicleManager::Prepare @0x8263C688 (75, WorldLinkStubs gate DELETED) + VehicleManager::
-  rem  PrepareTriangleCache. Slice TU; its home TU BrnVehicleManager.cpp is mounted too.
-  rem  Its stage-1 arm VehicleManager::PrepareData is a real body in the TU mounted on the next
-  rem  line (re-measured 2026-09-11 -- this rem used to call it a NAMED stub in WorldLinkStubs.cpp).
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Prepare.cpp"
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_PrepareData.cpp"
   rem  ?????? 2026-08-10 (create-path wave): THE MAINTENANCE SPINE -- the leg that finally gives the
@@ -2285,18 +2142,6 @@ rem  ProcessUpdateNetworkTrafficEvents, SetTrafficVehicleNotCrashing). Without t
 rem  un-gated call in BrnVehicleManager_MaintenanceEvents.cpp is an LNK2019.
 echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficEvents.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManagerIO.cpp"
-  rem  ????????? 2026-08-03 (task #116) -- UN-STUBBING BrnPhysics::PhysicsModule::Construct @0x825AE308.
-  rem  That function had been a LIVE EMPTY STUB in WorldLinkStubs.cpp since 2026-07-26: a quiet
-  rem  no-op reached every boot by the WorldModule::Construct cascade, so NOTHING in the physics
-  rem  module was ever constructed -- every physics Construct this campaign landed hung off it.
-  rem  Its X360 xrefs_from is a CLOSED set of ten callees, ALL of which already had bodies; only
-  rem  three TUs were unmounted. The four lines below are the whole cost.
-  rem
-  rem  ?????? THE PREVIOUS PLAN ("mount BrnVehicleManager.cpp, close its 14 unresolved externals") WAS
-  rem  NOT THE STEP. VehicleManager::Construct @0x8263B7C8 calls only SIX functions, five of them
-  rem  already mounted; the 14 belong to the REST of BrnVehicleManager.cpp (HandleRaceCarRaceCar-
-  rem  Contact / ApplySlam / ApplyShunt / SetRaceCarCrashing). Split-TU instead -- the same
-  rem  precedent as RaceCarPhysics_Construct.cpp / TrafficPhysics_Construct.cpp.
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_Construct.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\StuntOffences\BrnStuntOffencesManager_Construct.cpp"
   rem  StuntOffencesManager's per-frame body is now closed over the exact DecFIGS APIs whose
@@ -2356,48 +2201,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPartPool_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\DeformationPhysics\BrnPhysicalBodyPart_Construct.cpp"
   echo "%SRC%\GameSource\Physics\DeformationManager\SharedIO\BrnDeformationInputInterface.cpp"
-  rem ????????? 2026-08-14 (deformation-mount wave): THE MOUNT IS EXECUTED. The walls-wave census's
-  rem landing plan, carried out line for line:
-  rem   * the 4-TU family mounts (home manager TU with OutputData SPLIT OUT to
-  rem     BrnDeformationManager_Output.cpp, itself mounted since; the PostSceneUpdate gate and the
-  rem     WorldLinkStubs Prepare stub are DELETED with the mount);
-  rem   * the MOUNT-CLOSABLE set mounts (VehicleRigidBody / IKBodyPart / TagPoint / IKDrivenPoint /
-  rem     the whole BrnDeformationSensor.cpp -- whose ctor+Prepare the census's "still to write"
-  rem     row wrongly listed as absent; GetPlayerCarModel MOVED to the home TU from _Contacts);
-  rem   * the STILL-TO-WRITE set is WRITTEN: ResetSensors @0x82623D60 (the whale, both-console
-  rem     decode; sensor mVolInstId promoted at +0x190; J-offset/timestep constants image-read),
-  rem     GetInitialCompressionScalesAndLimits @0x825DF6F8 (export HOLE -- recovered via the BL
-  rem     word + ppcdis; the three KV3P ratio vectors were DYNAMIC-INIT, initializers found
-  rem     @0x82C5D700/740/778: EVENT=(1,1,1,0.8) CAR_SELECT=(0.8,0.7,0.8,0.75) DEFAULT=0),
-  rem     ResetJointVelocities @0x825DF810 (?????? the census note "zero xyz keep w" was INVERTED --
-  rem     both consoles zero the W lane == SetJointVelocity(0)), RemovePhysicalPartsAndJoints
-  rem     @0x82625250 + Pool::RemovePart @0x8260CA30 + Part::RemoveFromScene @0x825E7818 (dead at
-  rem     runtime this wave, link-real), the write-side InputBuffer::GetRemoveRigidBodyQueue
-  rem     @0x825BCF58, ImpulsePasser::SetCollidableBodyMap + SweptSphere::Set (new TUs, both
-  rem     inline-attested at their ResetSensors call sites);
-  rem   * the DEFERRABLE set keeps its gates: OutputData conductor gate; UpdateLocator @0x825E0EC8
-  rem     log-once gate in the new IKSkinning slice (dead at runtime -- DeformationManager::Update
-  rem     is still a gate); the two per-frame contact-generation traps DEGRADED to log-once gates.
-  rem  FOLLOW-ON ROWS the mount surfaced (next wave's list, measured not guessed):
-  rem   * DeformationSensor::ApplyLocalImpulse -- PS3 0x74D3A0 (569 insns), X360 export hole;
-  rem     tonight a LOUD log-once gate (vtable satisfied); dead until contacts exist. Write it
-  rem     with the (c) walls wave.
-  rem   * FOUR sensor rodata rows are DYNAMIC-INIT (image-zero, probed): unk_82FB82C0 /
-  rem     unk_82FB9F20 (sensor Prepare's per-direction displacement rows -- (d)'s FIRST missing
-  rem     piece: with them at 0 the seeded sensors sit at REST, so authored initial damage cannot
-  rem     displace a sphere), unk_82FB9680 (hit directions), unk_82FB9560 (absorption rows).
-  rem     RECOVERY METHOD PROVEN TONIGHT: their initializers live in the 0x82C5Bxxx..0x82C5Dxxx
-  rem     static-init region (the three KV3P ratio vectors + KVF_MIN/MAX_IMPULSE precedents were
-  rem     all recovered exactly that way with ppcdis.py + x360rd.py).
-  rem   * (d)'s SECOND missing piece: the damaged look cannot reach the RENDERER until the
-  rem     _Output slice closure lands (OutputData's skinned-model tables are not homed).
-  rem   * StreamedDeformationSpecResourceType.cpp carries a LOCAL 40-byte StreamedDeformationSpec
-  rem     slice (pad+3 locator lists) in namespace Deformation -- a silent ODR fork whose
-  rem     FixUp/FixDown calls happen to link against the real bodies. Retire it onto the real
-  rem     header (the odr-forks-link-silently shape).
-  rem   * PhysicsModule::Prepare stage 4's fourteen deformation-IO clears are STILL the documented
-  rem     drop (no member maps for the two IO interfaces). Fresh-boot-equivalent to zero-init;
-  rem     a REAL dropped clear on re-prepare now that the consumer is live.
   echo "%SRC%\GameSource\Physics\DeformationManager\BrnDeformationManager.cpp"
   rem  2026-08-24 (deform-land wave): the OUTPUT slice mounts -- OutputData's real body + the
   rem  newly-landed OutputSensorState @0x82605618 (export hole, pulled headless); its closure
@@ -2598,28 +2401,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\Physics\PropManager\SharedIO\EventQueue_UpdatePropEvent_15.cpp"
   rem ---- end prop-manager construct block ---------------------------------------------------
 
-  rem ==== PROP SPAWN WAVE (2026-08-12) =======================================================
-  rem  WHY THIS BLOCK EXISTS: no prop had ever spawned in the PC build. Props are SCENE
-  rem  ENTITIES emitted by BrnWorld::PropEntityModule, and that module was a shell -- every
-  rem  entry point was a one-shot inert gate in WorldLinkStubs.cpp, and BrnPropEntityModule.cpp
-  rem  did not exist at all. Worse, a large amount of REAL prop code (PropZoneManager 821
-  rem  lines, PropCellManager, PropEntityInstance) was already committed but had never been
-  rem  added to this file, so it was dead source rather than link stubs -- `Burnout_PC.map`
-  rem  carried ZERO PropZoneManager / PropCellManager / PropEntityInstance symbols. The world
-  rem  octree took 10,752 entities last run and not one of them was a prop.
-  rem
-  rem  The data side was never the problem and is untouched: 396 TRK_UNIT<n>_GR.BNDL each carry
-  rem  one PropGraphicsList (0x10010) + one PropInstanceData (0x10011), 24,047 prop instances
-  rem  total, correctly transcoded to platform 4 / x64, all 11,616 Model imports resolving, and
-  rem  demonstrably loaded + fixed-up at runtime. It was sitting in pool 3 with no reader.
-  rem
-  rem  The one real data defect WAS PROPS\PROPPHYSICS.BUNDLE -- still a raw big-endian X360
-  rem  platform-2 file with no transcoder and no registered handler. PropZoneManager::LoadZone
-  rem  takes a `const PropPhysicsDataHeader*`, so that was a CO-REQUISITE of the code work, not
-  rem  a follow-up. It now has a real transcoder + manifest rule and a regenerated platform-4
-  rem  file, and its resource type (0x1000F) is registered in CgsResourceTypeRegistration.cpp.
-  rem
-  rem  ---- the prop type table + its resource type (0x1000F) ----
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropPhysicsListResourceType.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropPhysicsDataHeader.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPhysicsPropTypeData.cpp"
@@ -2639,12 +2420,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_Streaming.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_PreScene.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_Render.cpp"
-  rem  2026-08-18 breakable-props wave Q: THE BREAK PIPELINE IS MOUNTED -- ProcessContacts,
-  rem  ProcessPotentialContact*, BreakPropIntoParts/ChangePropState, ProcessBrokenProps,
-  rem  BrokenPropEvent, plus PrePhysics/PostPhysics/PostSceneUpdate, the replay set, and the
-  rem  IO buffers those legs read. The WorldLinkStubs gates for PrePhysicsUpdate/PostSceneUpdate/
-  rem  PostPhysicsUpdate/InputBuffer_PostPhysics::Construct/InputBuffer_PrePhysics::Construct
-  rem  are retired in the same change.
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PostPhysics.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PrePhysics.cpp"
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModuleIO_InputBuffer_PostScene.cpp"
@@ -2680,15 +2455,6 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropVolumeID.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPropVolumeInstanceID.cpp"
   echo "%SRC%\SharedClasses\Physics\Props\BrnPhysicsPropZoneData.cpp"
-  rem  NOT MOUNTED -- BrnPropEntityDebugComponent.cpp. Measured 2026-08-12: mounting it
-  rem  RAISED the unresolved count, because its Render{HUD,World} bodies drag in the whole
-  rem  CgsDev debug-render stack (Debug3DImmediateRender::DrawBox/DrawSphere/DrawText/...,
-  rem  Debug2DImmediateRender::DrawCircle, rw::RGBA's ctor, Volume::GetRelativeTransform),
-  rem  none of which is reconstructed. The component is embedded BY VALUE at PropEntityModule
-  rem  +0xCD900 so its VTABLE is still required; per the precedent set by the 2026-08-11
-  rem  baseline wave, the four out-of-line virtuals are served as gates in WorldLinkStubs.cpp
-  rem  (real GetName, inert OnActivate/RenderHUD/RenderWorld) instead. Mount the real TU when
-  rem  the debug-render stack lands -- it is dev-menu-only and cannot affect prop spawning.
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\SharedIO\BrnPropToTrafficInterface.cpp"
   rem  wave Q6 / bridges: TrafficToRaceCarInterface_PreScene::Construct (the traffic OutputBuffer_PreScene
   rem  seat is the committed type now, not a 544-byte reserved fork).
@@ -2717,24 +2483,12 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\AI\Route\BrnRouteMapModule.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToScene.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToEntityModules.cpp"
-  rem  four WorldModule per-frame bridge seams; retires their four WorldLinkStubs gates (2026-09-09)
-  rem  BridgeTrafficEntityInfoToOutput_PreScene + BridgeCrashModuleToOutput; retires their two WorldLinkStubs gates (2026-09-09)
-  rem  the three scene-query bridge seams; retires their three WorldLinkStubs gates (2026-09-11)
-  rem  ?????? 2026-08-11 (create-drain wave, triangle-cache wiring): the two bridges that carry the
-  rem  scene's TriangleCacheInterface to physics (@0x827A8E88) and to the world output (@0x827A5700)
-  rem  -- crash-measured: without them AddRaceCarTractionLineTests dereferences a NULL
-  rem  mpTriangleCacheManager on the first live car. Their WorldLinkStubs gates are deleted in the
-  rem  same wave (LNK2005 tripwire otherwise).
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToPhysics.cpp"
   rem  ---- wave Q5 round 3 / F2: the PHYSICS to SCENE direction, BridgePhysicsSceneUpdateToScene
   rem  @0x827ABA40 -- PhysicsModuleIO::OutputBuffer now seats the real InSceneUpdateInterface.
   echo "%SRC%\GameSource\World\Bridges\WorldBridgePhysicsToScene.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeSceneToOutput.cpp"
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeToEntityModules.cpp"
-  rem  ---- traffic-to-trigger wave (2026-09-07): the traffic->trigger PreScene and
-  rem  traffic->race-car PrePhysics bridges. Their WorldLinkStubs gates are deleted in the
-  rem  same commit (LNK2005 tripwire otherwise); the one accessor that kept this TU off the
-  rem  list (OutputBuffer_PostScene::GetTrafficToRaceCarInterface_PostScene) is bodied.
   echo "%SRC%\GameSource\World\Bridges\WorldBridgeEntityModulesToEntityModules.cpp"
   echo "%SRC%\GameSource\World\BrnBaseStreamer.cpp"
   echo "%SRC%\GameSource\World\BrnWorldModuleIO_DispatchInputBuffer.cpp"
@@ -2795,50 +2549,8 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModuleIO_InputBuffer_Getters.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficNetworkOutputInterface.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\SharedIO\BrnTrafficSoundInterfaces.cpp"
-  rem  2026-08-19 (wave Q7, cluster traffic): THE TRAFFIC-LIGHT KNOCKDOWN CONSUMER. wQ7_01 = PrePhysicsUpdate
-  rem  @0x8274C690 (documented PARTIAL: PerfMon + lock brackets + SetPlayingShowtime + the 3-way state machine +
-  rem  BitArray<601> + HandlePropModuleRequests REAL; 8 other legs = named one-shot gates inside the body) and
-  rem  HandlePropModuleRequests @0x82720A90 (118, REAL: drains the knock-down + restore rings into
-  rem  TrafficLightManager::TrafficLightGot{Smashed,Restored}). wQ7_02 = the BRING-UP: Prepare @0x8274A578 PARTIAL
-  rem  (stages 0/2/5 real, 1/3/4 gates) + LoadData @0x82746A88 PARTIAL (resource stages 0/1 SEAT mpData via the
-  rem  LoadTrafficLanes GameData round trip; 2..11 one gate) + 3 named DELETE-WHEN bring-up latches (mReceiverQueue
-  rem  Construct relocated from the gated TrafficEntityModule::Construct @0x82740220; meState latched RUNNING).
-  rem  Both WorldLinkStubs gates (PrePhysicsUpdate, Prepare) retired in the same change -- BrnUpdateSet is u16 so the
-  rem  gate signature is token-identical to the real one (LNK2005 cl cannot see). BrnTrafficLightManager.cpp carries
-  rem  GetLightState / TrafficLightGotSmashed @0x827519A0 / TrafficLightGotRestored @0x82751A40 (export hole, idat);
-  rem  it needs TrafficLightCollection::GetInstanceIndexForInstanceID from SharedClasses\Traffic\Junctions (below).
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLightManager.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficLightRuntimeState.cpp"
-rem  2026-08-21 wave T1 parked traffic cars -- module half. C3 vehicle+param runtime
-rem  incl. the 13 container instantiation TUs; C4 spawn legs in _wT1_01 which retires the
-rem  WorldLinkStubs Construct / EnterTearingDownState / PostPhysicsUpdate gates and the
-rem  wQ7_02 meState bring-up latch; C5 car streamer -- SetAssetList @0x82753A38 is the
-rem  function whose absence the boot log named. BrnTrafficParam.cpp mounts because
-rem  BrnTrafficVehicle.cpp needs Param::GetHistoryEntry. KF_VEHICLE_UPDATE_MATRIX_OLD_
-rem  UP_FACTOR = splat 20.0f recovered from dyn-init thunk @0x82C67830 -- the "no writer
-rem  anywhere" banner was the export-scan blind spot, wave-Q lesson.
-rem  R2 round: _wT1_02 = PreSceneUpdate @0x8274A968 (blocker B2, export hole, leak-shaped with
-rem  ship-attested callee inventory; its WorldLinkStubs gate is retired in the same change).
-rem  _wT1_03 = TrafficPhysicsInfo::Construct @0x82751E88 PARTIAL. _Render = the render trio:
-rem  PreDispatchUpdate @0x8274D900, GenerateDispatchLists @0x8273B280 DWARF 10-arg,
-rem  RenderTrafficCar @0x82728B08; both render gates retired with the bodies.
-rem  R3 closure item 1: _wT1_04 = UpdateStreaming @0x82748848 + AddVehiclesToTargetList
-rem  @0x82722470 -- THE STREAMER PUMP that finally requests the VEH_T*_GR bundles.
-rem  R4: _wT1_05 = CreateNewVehicleEntities @0x8272FA30 + IsVehiclesParamAZombie -- the
-rem  per-vehicle scene registration. _wT1_06 = UpdateTimers @0x82715858 + UpdateDecision/
-rem  NonDecisionFrame @0x8274E508/@0x8274C1A8 -- the decision-frame steady-state loop
-rem  whose only mbDecisionFrame writer is UpdateTimers. WorldBridgeRaceCarToTrafficModule
-rem  = BridgeRaceCarModuleToTrafficModule_PreScene @0x827A50E0, THE activeHulls==0 fix:
-rem  the sole producer priming the traffic input buffers with race-car state.
-rem  _wT1_07 -- SpawnShowtimeTraffic @0x82743038 (the showtime top-up UpdateDecisionFrame
-rem  calls in _wT1_06) plus its two spacing helpers IsParamTooClose @0x82726470 and
-rem  CountParamsOnSection @0x82723D10.
-rem  wave T2 driving traffic: generation (_wT2_01), param sim (_wT2_02/03), vehicle+scene
-rem  wire (_wT2_04), fuzzy behaviours, and the UpdateVehiclesJob family (the ship moved the
-rem  per-vehicle driving update into an EA::Jobs job: TrafficJobStub + UpdateVehiclesJob).
-rem  _wT2_06 = THE CRASH SURFACE: UpdateParams_BuildListOfCrashingThings (the shared
-rem  producer) plus its two consumers, TryAvoidCrashing (traffic SWERVES) and
-rem  TryStartSympatheticCrashing (chain-reaction crashes). _wT2_02 calls all three.
 echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_KillDyingVehicleEntities.cpp"
 rem  wave T3 physical traffic: _wT3_00 shared leaves, _wT3_01 world promotion path,
 rem  _wT3_02 GenerateDriverInputs, _wT3_04 publish/readback + physical render arm.
@@ -2926,12 +2638,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\BrnWorldEntityModuleIO_OutputBuffer_PreScene.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\BrnWorldEntityModuleIO_OutputBuffer_Prepare.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\PVSModule\BrnPVSModule.cpp"
-  rem ---- world-module mount (2026-07-26): WorldDebugComponent::GetName home TU     ----
-  rem ---- (vtable-pulled by the mounted by-value fleet; tiny, no closure drag).     ----
-  rem ---- BrnPVSDebugComponent.cpp / BrnTriggerEntityModuleDebugComponent.cpp were  ----
-  rem ---- tried and REVERTED: they drag Debug2D/3DImmediateRender draw primitives + ----
-  rem ---- rw::RGBA + partial PVS bodies (RenderPVS/RenderPvsCentrePosition          ----
-  rem ---- unrecovered) -- stubbed at the vtable seam in WorldLinkStubs instead.     ----
   echo "%SRC%\GameSource\World\DebugComponents\BrnWorldDebugComponent.cpp"
   echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\PVSModule\BrnPVSModuleIO.cpp"
   rem ---- PVS wave (2026-07-27): the real BrnWorld::PVSModule::Update/Prepare pulls  ----
@@ -2995,7 +2701,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\vendor\renderware\collision\CapsuleVolume_embed_check.cpp"
   echo "%SRC%\vendor\renderware\collision\Feature_embed_check.cpp"
   echo "%SRC%\vendor\renderware\collision\FeatureEdge_embed_check.cpp"
-  echo "%SRC%\GameSource\World\WorldLinkStubs.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraState.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnDepthOfField.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraValidityAccount.cpp"
@@ -3119,25 +2824,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  @0x82355038), the record GetGameStats fills. Reconstructed long ago, never mounted
   rem  because nothing called it until now. A pure leaf (CgsAssert + strncpy).
   echo "%SRC%\GameSource\GameState\SharedIO\BrnGameActionData.cpp"
-  rem ??? PREPARE2 SUB-OBJECT WAVE (2026-08-11) -- the two legs GameStateModule::Prepare2
-  rem  @0x8239ED10 left parked. The module now EMBEDS both sub-objects by value, exactly as the
-  rem  console does (X360 Construct @0x82380388 / ctor @0x827E44B8): the achievement manager at
-  rem  this+181680 and the street manager at this+284520.
-  rem
-  rem  ---- leg 1: the achievement manager ------------------------------------------------
-  rem  ProgressionManager::Prepare2's faithful console assert `lpAchievementManager`
-  rem  (BrnProgressionManager.cpp:265) fired every boot because GameStateModule::Prepare2 passed
-  rem  0 where the X360 passes r8 = this+181680. The concrete type is the X360 leaf, attested four
-  rem  ways in the asm (Prepare @0x8239E578 -> AchievementManagerX360::Prepare, Release
-  rem  @0x823756A8 -> ::Release, PreWorldUpdate @0x823A5328 -> ::Update, and the ctor stores that
-  rem  class's vtable off_820CE768 at +181680). PC reuses the X360 leaf -- the same precedent as
-  rem  CgsSaveLoadX360.cpp below and CgsNetwork::BuddyManagerX360 standing in as the platform
-  rem  buddy leaf; no build has an AchievementManagerPC.
-  rem  MEASURED (cl /c + dumpbin /SYMBOLS): this TU costs exactly ONE new symbol,
-  rem  CgsSystem::CgsXOverlapped::Construct (the embedded XOVERLAPPED its Prepare/Release build),
-  rem  hence CgsXOverlappedX360.cpp joining right after -- which in turn wanted ONE XDK import,
-  rem  XGetOverlappedExtendedError, now a PC leaf beside its twin XGetOverlappedResult in
-  rem  BrnBaselineLinkStubs.cpp. Net new unresolved after both: ZERO.
   echo "%SRC%\GameSource\GameState\AchievementManager\X360\BrnGameStateAchievementManagerX360.cpp"
   rem [challenge-manager mount 2026-09-07] the two freeburn-challenge base hooks, split out of
   rem  the PS3 TU (the bodies were MOVED, not copied).
@@ -3209,32 +2895,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem wave-B/C partfiles that used to be mounted here one by one.
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager.cpp"
   echo "%SRC%\GameSource\GameState\StreetData\BrnGameStateStreetManager_FindRivalsByDistrict.cpp"
-  rem *** PAUSE-SCREEN STAT PANEL (2026-08-29): the three roads-ruled tallies
-  rem  ProgressionManager::GetGameStats reads. wC_05 bodies GetNumberOfParShowTimeRoadsRuled
-  rem  ByLocalPlayer @0x8233F230 + GetNumberOfParTimeTrialRoadsRuledByLocalPlayer @0x8233F2C0
-  rem  (+ GetChallengeParScore); wC_04 bodies GetNumberOfCompleteRoadsRuledByLocalPlayer
-  rem  @0x8233F350 (+ FillInRoadRulesQuery). FindRivalsByDistrict was already split out of
-  rem  wC_04 into its own mounted partfile, so there is no duplicate definition.
-  rem  wC_06 (NEW) bodies the two predicates all three tallies count with --
-  rem  HasPlayerBeatenParScore @0x823361D0 + HasPlayerBeatenFriendScore @0x823362A0 -- and
-  rem  wB_02 supplies the two score-table fetches they call (GetChallengeUserScore
-  rem  @0x82335E08 / GetChallengeFriendHighScore @0x82335F30). All four MUST mount together.
-  rem  ??? STILL OUT: the rest of BrnGameStateStreetManager.cpp (the two score-entry
-  rem  factories), _wC_02.cpp (ProcessScoreRequestEvent) and _wC_04.cpp (the two road-rules
-  rem  tallies). Their costs are the measured numbers above; mounting any of them anyway is
-  rem  LNK2019, not a stripped COMDAT (/OPT:REF resolves before it discards -- see the
-  rem  achievement-manager note above).
-  rem ---- (2026-08-11) the embedded StreetManagerDebugComponent's vtable is emitted by ----
-  rem ---- BrnGameModule.obj's implicit ctor chain; its real TUs stay UNMOUNTED (they   ----
-  rem ---- close over the road-rules cheat set: StreetManager score setters, ScoreList  ----
-  rem ---- tables, ProgressionManager trophy hooks -- 16 link-measured externals). The  ----
-  rem ---- two vtable slots are gated in BrnBaselineLinkStubs.cpp until that wave.      ----
-  rem  ...and the resource type STREETDATA.DAT's one resource carries (id 0xBC9CC502 ==
-  rem  HashString("StreetData"), type 0x10018 == 65560, measured on the shipped bundle). Newly
-  rem  REGISTERED in CgsResourceTypeRegistration.cpp: without a handler the pool stores a null
-  rem  mpResourceType, BundleLoader skips FixUp, and the acquire hands back a record whose table
-  rem  bases are still file offsets -- the same defect that made ProgressionData/PlayerCarColours
-  rem  look loaded but read as garbage.
   echo "%SRC%\SharedClasses\StreetData\BrnStreetDataResourceType.cpp"
   echo "%SRC%\SharedClasses\StreetData\BrnStreetData.cpp"
   rem ??? FINAL PRODUCER WAVE (2026-08-01) -- THE JUNKYARD CAR-SELECT FSM ITSELF.
@@ -3570,7 +3230,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiShared.cpp"
   echo "%SRC%\SDKs\EATech\include\Apt\AptRenderHooks.cpp"
   rem ---- EATech Apt engine: re-added to LINK BootLegal's title_screen02 Apt render ----
-  echo "%SRC%\SDKs\EATech\AptRenderLinkStubs.cpp"
   echo "%SRC%\SDKs\EATech\AptGlobals.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptActionDefineFunction2.cpp"
   echo "%SRC%\SDKs\EATech\Apt\AptActionTryCatchFinallyBlock.cpp"
@@ -4323,23 +3982,6 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\SDKs\Packages\ICE\ICEWidget\ICEWidgetTargetBox.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWidget\ICEWidgetTimeBar.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWidget\ICEWidgetWideScrMarker.cpp"
-  rem ---- EA::GameTalk + the ICE take-save chain (2026-09-11) ----------------------------
-  rem  The tool-protocol stack the ICE editor ships a saved take over. Three symbols that
-  rem  were bodied nowhere in the tree now have real bodies: GameTalkMessage::
-  rem  AllocateDataBuffer, GameTalkManager::ReceiverCallback and the block-only
-  rem  AttribSysPackageAllocator::Free (the size-carrying spellings fold onto it). Two more
-  rem  came with them -- GameTalkMessage::GetNumKeys and ::GetKeyContent -- which retires all
-  rem  four GameTalk accessor link stubs (GetKey / GetNumKeys in BrnBaselineLinkStubs.cpp,
-  rem  GetChannel / GetKeyContent in WorldLinkStubs.cpp): GetKey and GetChannel would have
-  rem  been LNK2005 against the real bodies.
-  rem  SILENT-ZERO FIXED with them: GameTalkMessage::KsDataBufferCapacity, the shared entry-
-  rem  table capacity, was seeded 0 where the console seeds it 25. At 0, AllocateDataBuffer
-  rem  asks for nothing, AddKeyContent doubling stays 0 forever, and every message writes its
-  rem  entries through a null table.
-  rem  GameTalk is a live-edit / network SDK and NOTHING on the boot path enters it: its only
-  rem  in-tree entry is ICEFileHandler::FileClose, reached only from ICEAuthor::SaveTake,
-  rem  and the CgsGameTalk transport that would construct the manager is not on this list at
-  rem  all. ICEManager::Construct stays gated out in BrnDirectorICEWrapperPrepare.cpp.
   echo "%SRC%\SDKs\EA\GameTalk\GameTalk.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEAuthorSaveTake.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEAuthorAssemblyOps.cpp"
@@ -5021,12 +4663,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiProfile.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadPS3.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\PC\CgsSaveLoadPC.cpp"
-  rem (2026-07-28: SaveLoadSystem::Save now builds the real Realmc records, so the two
-  rem  self-contained RealmcIface record TUs that own those ctors/operators join the link.
-  rem  RealmcIfaceSaveCheckParams.cpp stays OUT -- it calls the RealmcCore allocator
-  rem  primitives, and RealmcCore.cpp brings the whole Message/RefCount/RealmcString
-  rem  vendor closure with it; the two SaveCheckParams symbols are stubbed in
-  rem  BrnBaselineLinkStubs.cpp until that closure is added.)
   echo "%SRC%\SDKs\Realmc\RealmcLoadEntryInfo.cpp"
   echo "%SRC%\SDKs\Realmc\RealmcTitleInfo.cpp"
   rem ---- ProfileManager link closure (2026-07-12): the committed save/load + profile ----
@@ -5141,8 +4777,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem      the cascade-heavy waves -- ScreenFlow/HudFlow new states, CgsRegistry schema
   rem      web, Attrib node web -- are reverted-in-merge to l2 pending integration) ----
   echo "%VEN%\renderware\src\rw\core\stdc\stdc.cpp"
-  rem rw::math::vpu::Inverse @0x825B2628 -- general 4x4 inverse; replaces the
-  rem WorldLinkStubs.cpp link stub retired 2026-08-12 (prop-render wave).
   echo "%VEN%\renderware\src\rw\math\vpu\Matrix44Operation.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEMemory.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEPoint.cpp"
@@ -5308,31 +4942,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  ChallengeManager external that had an X360 export and no body.
   echo "%SRC%\GameSource\GameState\GameStateModule_GetActiveRaceCarIndexFromNetworkPlayer.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ModeManager_gUI_00.cpp"
-  rem ============================================================================
-  rem [stuntrace wave B 2026-08-26] THE MODEMANAGER MOUNT -- the offline event core.
-  rem ModeManager spine + all 15 game modes + params + the 7 mode states + the
-  rem scoring subsystem (offline scorers full; online scorers partial, remainder in
-  rem BrnBaselineLinkStubs' MUST-STAY block) + the progression event-finish TU.
-  rem [challenge-manager mount 2026-09-07] ChallengeManager/* IS IN, all 27 TUs -- the
-  rem BrnChallengeManagerDebugComponent.cpp one INCLUDED, which is the exception to the
-  rem "Debug/* components stay out" rule below: ModeManager now EMBEDS ChallengeManager by
-  rem value at console +28160, so its implicit ctor sets that component's vptr and the link
-  rem needs GetName/OnActivate (LNK2001 x2 on build 20260907_133427 when the member landed
-  rem without them). The twelve symbols the 27 TUs referenced with no definition anywhere
-  rem are bodied in the same change (roll-call in BrnModeManager.h at +28160).
-  rem STILL OUT:
-  rem Debug/* components, *_EmbedGate/_AssertLayout/_embed_check
-  rem (compile-scaffolding, gate-only by convention).
-  rem [mbRecentStunt wave 2026-08-27] Hud/BrnHUDMessageLogic.cpp JOINS the mount: its
-  rem four callers were un-parked because GenerateStuntMessage's vtable-dispatched
-  rem WasStuntRecentlyPerformed is the image's ONLY drain of StuntModeScoring's
-  rem mbRecentStunt latch -- parked, the second banked stunt of any offline stunt race
-  rem fired the !mbRecentStunt invariant every frame.
   echo "%SRC%\GameSource\GameState\ModeManager\Hud\BrnHUDMessageLogic.cpp"
-  rem PAIRED EDIT: the 14-line RETIRE list in BrnBaselineLinkStubs.cpp (seam audit
-  rem S7) died in the same change that adds these lines -- the two must never
-  rem coexist (LNK2005) and HasStuntModeEnded's return-true stub would end every
-  rem stunt run on frame 1.
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManager.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\BrnChallengeManagerDebugComponent.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\ChallengeManager\ObjectPool_CarLeapingData_7.cpp"
@@ -5590,7 +5200,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptFileRef.cpp"
   rem ---- the SCREEN flow container + its committed state set (2026-07-12) ----
   echo "%SRC%\GameSource\Gui\Flow\Screen\BrnScreenFlow.cpp"
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenStatesLinkStubs.cpp"
   rem (the dev-wave state TUs -- CarSelectOnlineEnd/CrashNavEnterOnlineX360/PreRaceFlyBy --
   rem  bind when the ScreenFlow/HudFlow pool growth is integrated; CrashNavStats is mounted
   rem  with the rest of the CrashNav screen states below, 2026-09-16)
@@ -5605,25 +5214,10 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle_Components.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectVehicle_Input.cpp"
-  rem  CarSelectLivery -- the CS_LIVERY screen, RECONSTRUCTED 2026-08-02 (it was a
-  rem  three-method shell in BrnScreenStatesLinkStubs). Three partfiles: statics+FSM /
-  rem  the screen build / input+events. This is the ACCEPT PATH of the Junkyard handover.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_Components.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectLivery_Input.cpp"
-  rem  wave-J partfile 04 (2026-08-03): HandleLobbyPlayerList @0x824B5190. Landed by Niaz in
-  rem  b5-decomp fd0925f4 WITHOUT this mount line -- CarSelectLivery::Update calls it, so the
-  rem  exe did not link until this was added here (contributors have no parent-repo access).
-  rem  CS_UNLOCK -- the car-unlocked celebration screen, 2026-09-08 (p0 wave). The TU had
-  rem  been reviewed-but-unmounted behind a three-method BrnScreenStatesLinkStubs scaffold
-  rem  (OnEnter/OnLeave/Update), whose bodies AND placeholder class are deleted in the same
-  rem  change; BrnScreenFlow now includes the real header for the pool carve-out. The two
-  rem  members the TU was missing (Update, PlayMovie) land in it. Residual after mount: none.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectUnlock.cpp"
-  rem  ON_CUST_MAT -- the online custom-match screen, 2026-09-02. Wave J's six partfiles had
-  rem  sat unmounted since 2026-08-03 behind three BrnScreenStatesLinkStubs scaffolds; _wJ_07
-  rem  lands the two foreign-TU lifecycle bodies OnLeave @0x824970D0 + Update @0x824AC808 and
-  rem  the scaffolds are deleted. Table::Update @0x824E4890 joins BrnTable.cpp for its slot-5 call.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineCustomMatch.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions.cpp"
   echo "%SRC%\GameSource\Gui\Components\BrnCarSelectOnlinePlayerListItem.cpp"
@@ -5674,12 +5268,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavTrax.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMap.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapMain.cpp"
-  rem [p0 map-event wave 2026-09-08] CN_MAP_EVENT, the event-creation map screen.
-  rem Retires the CrashNavMapEvent placeholder + its escape hatch in
-  rem BrnScreenStatesLinkStubs.{h,cpp} (KAI_HATCH_EVENTS/HatchDrain stay: OnlinePlay uses
-  rem them) and de-forks the keyboard listener out of CgsSaveLoad.cpp. One arm stays
-  rem parked on the system keyboard UI, which has no PC leaf; measured residual: zero
-  rem unresolved externals.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapEvent.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavMapSoundData.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavPanel.cpp"
@@ -5708,43 +5296,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  bodies (the 45/50 GO_BACK+resume arm among them); the two SKU/keyboard ones are
   rem  PARKED on missing PC platform leaves and cannot re-create the lock -- see its banner.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavSettings.cpp"
-  rem [gate wave 2026-09-12b] CN_PROFILE, the offline Save/Load profile screen: all ten recovered bodies; retires the four CrashNavProfile gates in BrnScreenStatesLinkStubs.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavProfile.cpp"
-  rem ==== [driver-details pause wave 2026-08-28] THE START-BUTTON PAUSE SCREEN ==========
-  rem  MEASURED: pressing START in free burn now draws the real Driver Details screen --
-  rem  the title, the Paradise licence card (player name, issue date, "UPGRADE IN 1 WIN"),
-  rem  the stat panel and "B RETURN TO GAME" -- with the world FROZEN under it (world-region
-  rem  frame delta 0.000 over 15 s while the card keeps animating) and a clean resume on Stop.
-  rem  asserts=0. InGame::HandleControllerInput case 45 -> PauseGame(true,TRUE) ->
-  rem  OpenDriverDetails() -> "TO_D_DETAIL" -> CN_D_DETAIL; all 16 X360 bodies, every .rdata
-  rem  table read from the image. It OWNS maResourcesToLoad (the stand-in in
-  rem  BrnScreenStatesDataLinkStubs.cpp is deleted in the same change).
-  rem
-  rem  #### KNOWN, AND NOT A DEFECT OF THIS SCREEN: THE *SECOND* START PRESS CRASHES. ####
-  rem  Re-entering the screen AVs reading 0x4CF8 in AptCharacterAnimation::IncCharacterList
-  rem  (via MakeCharacterAnimationInst <- AptLinker::Update <- AptAux::Update). It is an APT
-  rem  UNLOAD/RELOAD LIFECYCLE hole, not a defect of this screen: OnLeave releases the
-  rem  licence/photo-booth apt bundles exactly as the console's
-  rem  CrashNavDriverDetails::OnLeave @0x824CEF18 does, and this build had NOTHING behind
-  rem  that release. THREE of its halves were repaired this wave and each one is real:
-  rem    1. CgsGuiResourceModulePC.cpp -- the host lead/attributed registries were
-  rem       APPEND-ONLY, so a re-acquire resolved to a released entry and handed AddAptData
-  rem       a null (that was 'Invalid memory resource in ParseResource' + 'Invalid resource
-  rem       pointer'). Now swept against the live pool on every streamed-apt unload.
-  rem    2. CgsGuiViewModule.cpp -- ProcessIncomingUnloadRequestNotification (X360
-  rem       0x828586E8) was an EMPTY BODY. Reconstructed.
-  rem    3. CgsAptDataHandler.cpp -- AptDataHandler::RemoveAptData (X360 0x8284A338) did not
-  rem       exist at all, and BrnGuiModule's notification bridge forwarded only the type-14
-  rem       LOADS to the view, never the type-15 unload requests, so the removal end of the
-  rem       pair could not run. Both reconstructed/wired.
-  rem  Result: asserts went 2 -> 0 and the failure moved one layer down, but the AV REMAINS.
-  rem  What is still open is inside the Apt engine itself: the linker keeps instantiated
-  rem  characters for a movie whose data has been released (nothing calls an Apt-side
-  rem  unmount/release for the movie when its bundle goes). That is the next wave's target;
-  rem  start at AptLinker::Update / MakeCharacterAnimationInst and at what the console does
-  rem  between StateInterface::PlayAptMovie("", level) and the bundle unload.
-  rem  TO TURN THE PAUSE SCREEN BACK OFF: comment out the ONE echo line below. Nothing else
-  rem  needs changing -- the tree links either way.
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavDriverDetails.cpp"
   rem =====================================================================================
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCredits.cpp"
@@ -5795,7 +5347,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayGuiModuleStaticLayout.cpp"
   rem FLAG link scaffold: the SCREEN states' unrecovered .rdata tables + partial-state
   rem lifecycle gaps (see the file header audit).
-  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnScreenStatesDataLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_01.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCrashNavEnterOnline_wI_02.cpp"
@@ -6279,16 +5830,146 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wN3_01.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wN3_02.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameRoomPlayerInfo_wN3_03.cpp"
+  echo "%SRC%\GameSource\GameState\StreetData\BrnStreetManagerDebugComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlinePause.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\OnlineYouWin.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\PostEvent\States\Online\BrnOnlineInstantResults.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\renderablemesh.cpp"
+  echo "%SRC%\pc\gcm\renderengine\IndexBuffer.cpp"
+  echo "%SRC%\pc\gcm\renderengine\VertexBuffer.cpp"
+  echo "%VEN%\EAThread\source\eathread_storage.cpp"
+  echo "%SRC%\GameSource\World\AI\BrnAIModule_wS34_00.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wS34_00.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficDebugComponent_wS34_00.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityModule_wS34_00.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\BrnRaceCarEntityModule_wS34_00.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\AirTime\BrnAirTimeManager_wS34_00.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\TrafficCheck\BrnTrafficCheckManager_wS34_00.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcIfaceSaveCheckParams.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlinePlay.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcSaveReq.cpp"
+  echo "%SRC%\GameSource\Gui\Events\BrnGuiEventNetworkPlayerStats.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcEntryContentName.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsXboxLivePC_wS34_00.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcCore.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiOptionsDataProfile_wS34_00.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcMemcardState.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcMemcardState_wL_02.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcAllocator64.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcContainers.cpp"
+  echo "%SRC%\SDKs\Realmc\RealmcMemcardInterface.cpp"
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugCompononent_wS34_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineRivals.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineStats.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlinePreEvent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnOnlinePreEventMessages.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineQuickCustomCreate.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineSelectRoute.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineTeamSelection.cpp"
+  echo "%SRC%\GameSource\Massive\BrnMassive.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\Replays\BrnReplayClips.cpp"
+  echo "%SRC%\GameSource\Massive\BrnMassiveSubscriber.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\Replays\BrnReplayClipsOnline.cpp"
+  echo "%SRC%\GameSource\Massive\BrnMassiveDebugComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\Replays\BrnReplayOptions.cpp"
+  echo "%SRC%\SharedClasses\Massive\MassiveLookupTable.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\Replays\BrnReplayIntro.cpp"
+  echo "%SRC%\SharedClasses\Massive\Resources\MassiveLookupTableResourceType.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\Replays\BrnReplayCredits.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ClientCore.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Subscriber_wS34_00.cpp"
+  echo "%SRC%\GameSource\World\EntityModules\WorldEntityModule\BrnWorldEntityModule_wS34_00.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_11.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiCache_wB_12.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineNews.cpp"
+  echo "%SRC%\GameSource\Gui\BrnGuiOptionsDataProfile_wS34_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnCarSelectOnlineEnd.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnHelpBar.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnAnimator.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnAnimator_wS34_00.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimator.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimator_wS34_00.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimChannel.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimChannel_wS34_00.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptInterpolator_wS34_00.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptAnimData_wS34_00.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptObjectController_wS34_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineLoading.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnOnlineLoadingPlayer.cpp"
+  echo "%SRC%\GameSource\Gui\Events\BrnGuiEventNetworkGameParams.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_03.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_04.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_05.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_06.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_07.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_08.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wI_09.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptions_wS34_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wI_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wI_01.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wI_02.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wI_03.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wI_04.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wI_05.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wI_06.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wI_07.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineScoreboards_wS34_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnLeaderboardTableComponent.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnLeaderboardColumnComponent.cpp"
+  echo "%SRC%\GameSource\Network\Managers\BrnNetworkScoreboard_wS34_00.cpp"
+  echo "%SRC%\SharedClasses\DataLists\VehicleList_wS34_00.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnOnlineGameOptionsSummary.cpp"
+  echo "%SRC%\GameShared\GameClasses\Language\CgsLanguageManager_wS34_00.cpp"
+  echo "%SRC%\SDKs\Packages\AttribSys\1.2.1.2\AttribSys\runtime\common\attriblivelink.cpp"
+  echo "%VEN%\EASTL\source\red_black_tree.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Asset.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Benchmark.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Crypto.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3NetworkManager.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectAudioDynamic.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectModelDynamic.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectModelDynamic_wO_01.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectModelDynamic_wO_02.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectTexture.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectVideo.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Objects.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Random.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Record.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RecordImpression.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Request.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestBuilder.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestCloseSession.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestDownloadBinary.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestExitZone.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestHeartbeat.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestImpressionUpdate.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestLocateService.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestManager.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestOpenSession.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestOpenSession_wO_01.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Request_wL_01.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Socket.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Subscriber.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3Transaction.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ZoneManager.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\LibTomCrypt\burn_stack.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\LibTomCrypt\crypt_argchk.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\LibTomCrypt\md5.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\LibTomCrypt\zeromem.cpp"
+  echo "%SRC%\GameSource\Game\X360\BrnSystemHWX360.cpp"
+  echo "%SRC%\GameSource\Game\X360\BrnSystemHWX360Massive.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3AdObject.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectTextureDynamic.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectVideoDynamic.cpp"
+  echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestEnterZone.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\PC\CgsXboxLivePC_wS34_01.cpp"
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
-rem ---- deliberate source drop -- BOTH compile paths: rw-filesys device.cpp ------------------
-rem The source list carries %SRC%\SDKs\EATech\rwcore\filesys\device.cpp, but its
-rem rw::core::filesys::Device symbols are provided by AptRenderLinkStubs.obj, and compiling it
-rem would add duplicate symbols plus an unlinked EA::Thread::Condition dependency. So it is
-rem filtered out of the RSP here, before either compile path below runs.
-findstr /v /c:"rwcore\filesys\device.cpp" "%RSP%" > "%RSP%.tmp"
-move /y "%RSP%.tmp" "%RSP%" >nul
 
 rem ---- compile + link: incremental parallel driver when a Python is available ---------------
 rem tools\build\compile_exe.py compiles each TU to its own uniquely-named obj under obj\tu\
@@ -6317,9 +5998,8 @@ goto post_build
 
 :legacy_compile
 rem ---- OBJECT-NAME COLLISION FIX -- basename device.cpp appears twice -----------------------
-rem The source list carried two device.cpp files with the SAME basename -- the rw-filesys one
-rem is dropped above, this one remains:
-rem   %SRC%\pc\gcm\renderengine\device.cpp          -- renderengine D3D9 Device
+rem The source list carries two device.cpp files with the SAME basename (rwcore\filesys and
+rem pc\gcm\renderengine).
 rem With /Fo pointing at a single obj dir, cl writes BOTH to obj\device.obj -- the second-compiled
 rem one CLOBBERS the first, so which set of symbols survives depends on compile ORDER. Fix: the
 rem renderengine device.cpp is compiled separately to a UNIQUE object and linked in below.
