@@ -329,11 +329,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  homes; the fork is closed and both measure zero unresolved externals against the set.
   echo "%SRC%\GameSource\Game\GameBridgeNetworkToX.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeReplayToX.cpp"
-  rem ---- world-drive wave (2026-07-27): GameBridgeRendererToX.cpp carries the REAL --
-  rem ---- BridgeRendererToWorld @0x823CDD20 (renderer-output -> world-dispatch-input --
-  rem ---- handle copy) but is NOT mounted: the seven RendererIO::OutputBuffer getters --
-  rem ---- it reads are declaration-only in the linked set (cost rule). Mount it with  --
-  rem ---- BrnRendererModule::Update + the renderer-output accessor bodies.            --
+  rem Original renderer-output bridges; the RendererIO accessors and consumers are mounted.
+  echo "%SRC%\GameSource\Game\GameBridgeRendererToX.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Input\CgsInputModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Input\PC\CgsInputPadsPC.cpp"
   rem ---- crash-parity FX-RUMBLE3 2026-09-24 (G10-D4): the console input module replaces the
@@ -884,6 +881,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem CgsIm2dUntex.cpp holds the shared BeginRendering template definition and now emits
   rem that vertex type's instantiation (@0x8227B730) beside its own.
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3d.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm3dUntex.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm2dUntex.cpp"
   echo "%SRC%\GameSource\Graphics\ImmediateMode\BrnIm3d.cpp"
   echo "%SRC%\GameSource\Graphics\BrnSkyDomeManager.cpp"
@@ -991,6 +989,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem ---- renderer world-pass wave (2026-07-27): the render-dispatch walk ----------
   rem ---- (object->mesh expansion, the sorted mesh walk, the shadowing device) ----
   echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsDispatcherCommands.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\Dispatch\CgsTextureScopeTable.cpp"
   echo "%SRC%\GameShared\Jobs\ObjectToMesh\ObjectToMesh.cpp"
   echo "%SRC%\GameShared\Jobs\ObjectToMesh\ObjectToMeshJob.cpp"
   echo "%SRC%\GameShared\Jobs\RadixSort\RadixSort.cpp"
@@ -5104,9 +5103,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnNetworkPlayerImageRenderer.cpp"
   rem  BrnGui::CreditsTextRenderer -- the mounted scrolling end/replay credits column.
   echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnCreditsTextRenderer.cpp"
-  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnBlackBarRenderer.cpp"
-  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnAboveCarRenderer.cpp"
-  echo "%SRC%\GameSource\Replays\BrnGuiModuleAboveCarObjectLayout.cpp"
   echo "%SRC%\GameSource\Gui\Flapt\BrnFlaptMovieClipInstance.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Overlay\States\BrnCrashNavOkCancelOverlayState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Overlay\States\BrnCrashNavOkOverlayState.cpp"
@@ -5565,7 +5561,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem ---- accessor legs the renderer/manager link against, and the progression   ----
   rem ---- event-record accessors.                                                ----
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\ImRenderBuffer\CgsIm2dRenderBuffer.cpp"
-  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\ImRenderBuffer\CgsIm3dRenderBuffer.cpp"
   rem map-event exit producer: GuiCache::HandleSpecificPreSetRacesEvent (RecEvent arm 190)
   echo "%SRC%\GameSource\Gui\BrnGuiEventDrawEventIcons.cpp"
   echo "%SRC%\GameSource\Gui\Events\BrnGuiEventRankProgressResponse.cpp"
