@@ -54,6 +54,9 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install evidence audit parser
+        run: python -m pip install -r tools/re/requirements.txt
+
       - name: Clone b5-decomp with its history
         run: |
           set -euo pipefail

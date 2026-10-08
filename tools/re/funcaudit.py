@@ -63,10 +63,11 @@ dispatch (vcallsites.py / vdispatch_audit.py), argument ORDER, the VALUE of a ci
 "nothing this tool can name differs", not "matches".
 
 PAIRING. progress/identity.json maps a canonical qualified name to its X360 address and PC
-primary_file (spelled through GameSource/Unity/.., normalised here). The PC definition is found
-by `Class::Method(` in that file first, then anywhere under b5-decomp/src; a leaf-name match
-(free function or an in-class inline definition) is accepted from the primary file, its
-directory, or a header whose stem names the class. "(N defs)" marks a collapsed overload set.
+primary_file (spelled through GameSource/Unity/.., normalised here). Tree-sitter indexes actual
+C++ function definitions with their lexical namespace/class, including header inlines and
+global functions without primary_file. Only an exact qualified name is accepted; a matching
+leaf in a neighbouring class/file is not evidence. "(N defs)" marks a collapsed overload set.
+Install the parser with `python -m pip install -r tools/re/requirements.txt`.
 
 CACHE. Extracting features from 27k export JSONs takes minutes on this disk. Features are
 cached in scratch/funcaudit/exports.cache.json keyed by address + export mtime; delete it to
@@ -90,6 +91,11 @@ import posixpath
 import re
 import sys
 import time
+
+from tree_sitter import Language, Parser
+import tree_sitter_cpp
+
+AUDIT_VERSION = 2
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 IDENTITY = os.path.join(REPO, "progress", "identity.json")
@@ -401,17 +407,19 @@ class Def(object):
     def __init__(self, file, line, code, raw, nparams, qual, leaf):
         self.file, self.line, self.code, self.raw, self.nparams = file, line, code, raw, nparams
         self.qual, self.leaf = qual, leaf
-        self.key2 = "::".join(qual.split("::")[-2:]) if qual else None
+        self.key2 = "::".join(qual.split("::")[-2:]) if qual and "::" in qual else None
 
 
 class PcIndex(object):
     def __init__(self):
         self.by_qual = {}    # "Class::Method" -> [Def]
+        self.by_exact = {}   # lexical namespace + class + method (also global functions)
         self.by_leaf = {}    # "Method" -> [Def]  (every definition, qualified or free)
         self.by_file = {}    # relfile -> [Def]
         self.enums = {}      # enumerator/const leaf -> set(values)
         self.class_names = set()   # every "Class" seen in a Class::Method definition
         self.files = 0
+        self.parser = Parser(Language(tree_sitter_cpp.language()))
 
     def add_enum_values(self, raw):
         for blk in ENUM_BLOCK_RE.findall(raw):
@@ -438,6 +446,8 @@ class PcIndex(object):
             self.enums.setdefault(m.group(1), set()).add(int(m.group(2), 0))
 
     def _add(self, d):
+        if d.qual:
+            self.by_exact.setdefault(d.qual, []).append(d)
         if d.key2:
             self.by_qual.setdefault(d.key2, []).append(d)
             self.class_names.add(d.key2.split("::")[0])
@@ -453,52 +463,50 @@ class PcIndex(object):
             raw = fh.read().replace("\r\n", "\n")
         self.files += 1
         self.add_enum_values(raw)
-        code = strip_comments(raw)
-        raw_lines = raw.split("\n")
-        seen = set()
+        source = raw.encode("utf-8")
 
-        def make(m_start, qual, leaf, o, c):
-            line = code.count("\n", 0, m_start) + 1
-            params = code[code.find("(", m_start):o]
-            inner = params[params.find("(") + 1:params.rfind(")")] if ")" in params else ""
-            nparams = len([a for a in split_args(inner) if a and a != "void"])
-            l0 = code.count("\n", 0, o)
-            l1 = code.count("\n", 0, c)
-            return Def(rel, line, code[o:c + 1], "\n".join(raw_lines[l0:l1 + 1]), nparams, qual, leaf)
+        def text(node):
+            return source[node.start_byte:node.end_byte].decode("utf-8")
 
-        for m in DEF_RE.finditer(code):
-            span = body_span(code, m.start())
-            if not span or span in seen:
-                continue
-            seen.add(span)
-            qual = (m.group(1) + m.group(2)).strip(":")
-            self._add(make(m.start(), qual, m.group(2), span[0], span[1]))
-        for m in FREE_DEF_RE.finditer(code):
-            name = m.group(1)
-            if name in KEYWORDS:
-                continue
-            span = body_span(code, m.start())
-            if not span or span in seen:
-                continue
-            seen.add(span)
-            self._add(make(m.start(), None, name, span[0], span[1]))
+        def visit(node, scope=()):
+            if node.type in ("namespace_definition", "class_specifier", "struct_specifier", "union_specifier"):
+                name = node.child_by_field_name("name")
+                if name is not None:
+                    scope += (re.sub(r"\s+", "", text(name)),)
+            if node.type == "function_definition":
+                body = node.child_by_field_name("body")
+                declarator = node.child_by_field_name("declarator")
+                while declarator is not None and declarator.type != "function_declarator":
+                    declarator = (declarator.child_by_field_name("declarator") or
+                                  next((c for c in declarator.named_children
+                                        if c.type.endswith("declarator")), None))
+                if body is None or body.type != "compound_statement" or declarator is None:
+                    return
+                name = declarator.child_by_field_name("declarator")
+                params = declarator.child_by_field_name("parameters")
+                if name is None or params is None:
+                    return
+                spelling = re.sub(r"\s+", "", text(name))
+                # Fully qualified definitions may appear inside a namespace too.
+                prefix = "::".join(scope)
+                qual = spelling.lstrip(":")
+                if prefix and not spelling.startswith("::") and not qual.startswith(prefix + "::"):
+                    qual = prefix + "::" + qual
+                if qual.split("::")[-1] in KEYWORDS:
+                    return
+                inner = text(params)[1:-1]
+                nparams = len([a for a in split_args(inner) if a and a != "void"])
+                body_raw = text(body)
+                self._add(Def(rel, node.start_point.row + 1, strip_comments(body_raw),
+                              body_raw, nparams, qual, qual.split("::")[-1]))
+                return  # calls, lambdas and local classes are not top-level definitions
+            for child in node.named_children:
+                visit(child, scope)
+
+        visit(self.parser.parse(source).root_node)
 
     def find(self, qualified, primary_file):
-        parts = qualified.split("::")
-        cls = parts[-2] if len(parts) >= 2 else None
-        cands = self.by_qual.get("::".join(parts[-2:]), []) if cls else []
-        if not cands:
-            # a free function or an in-class inline definition: leaf match, but only where it
-            # plausibly belongs -- the primary file, its directory, or a header naming the class
-            pdir = posixpath.dirname(primary_file) if primary_file else None
-            for d in self.by_leaf.get(parts[-1], []):
-                if d.qual and cls and not d.qual.endswith(cls + "::" + parts[-1]):
-                    continue
-                stem = posixpath.basename(d.file).split(".")[0]
-                if (primary_file and d.file == primary_file) \
-                        or (pdir is not None and posixpath.dirname(d.file) == pdir) \
-                        or (cls and cls in stem):
-                    cands.append(d)
+        cands = self.by_exact.get(qualified, [])
         if not cands:
             return None, 0
         if primary_file:
@@ -776,7 +784,8 @@ def main():
     if not args.no_md:
         with open(out + ".md", "w", encoding="utf-8") as fh:
             fh.write("\n".join(md) + "\n")
-    meta = {"tool": "funcaudit", "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    meta = {"tool": "funcaudit", "audit_version": AUDIT_VERSION,
+            "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "scope": "all" if args.all else ", ".join(args.dir + args.tu + args.func)}
     for kv in args.meta:
         k, _, v = kv.partition("=")

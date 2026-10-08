@@ -127,13 +127,11 @@ def main():
 
     with open(funcaudit.IDENTITY, "r", encoding="utf-8") as fh:
         identity = json.load(fh)
-    ident_by_key2 = {}
+    ident_by_name = {}
     for name, row in identity.items():
         if not isinstance(row, dict) or not row.get("x360_addrs"):
             continue
-        parts = name.split("::")
-        key2 = "::".join(parts[-2:]) if len(parts) >= 2 else name
-        ident_by_key2.setdefault(key2, []).append((name, row["x360_addrs"][0]))
+        ident_by_name[name] = row["x360_addrs"][0]
     print("indexing PC tree ...", end=" ", flush=True)
     idx = funcaudit.build_pc_index()
     print("%d files (%.0fs)" % (idx.files, time.time() - t0))
@@ -173,8 +171,7 @@ def main():
         if tier is None:
             continue
         stubs.append((d, tier, why, trivial))
-        if d.key2:
-            stub_keys.add(d.key2)
+        stub_keys.add(d.qual)
 
     # pass 2: pair with the console
     cache_path = args.cache or funcaudit.CACHE
@@ -183,15 +180,13 @@ def main():
     rows = []
     for d, tier, why, trivial in stubs:
         name, addr, lines, callers, live = d.qual or d.leaf, None, None, [], []
-        ids = ident_by_key2.get(d.key2) if d.key2 else None
-        if ids:
-            name, addr = ids[0]
+        addr = ident_by_name.get(d.qual)
+        if addr:
+            name = d.qual
             info = load_export(addr, cache, dirty)
             lines, callers = info["lines"], info["callers"]
             for c in callers:
-                cp = c.split("::")
-                ck = "::".join(cp[-2:]) if len(cp) >= 2 else c
-                if ck in idx.by_qual and ck not in stub_keys:
+                if c in idx.by_exact and c not in stub_keys:
                     live.append(c)
         if tier == "LOW":
             # an unmarked trivial body is only worth listing when the console does real work
@@ -254,7 +249,8 @@ def main():
     if not args.no_md:
         with open(out + ".md", "w", encoding="utf-8") as fh:
             fh.write("\n".join(md) + "\n")
-    meta = {"tool": "stubaudit", "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    meta = {"tool": "stubaudit", "audit_version": funcaudit.AUDIT_VERSION,
+            "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     for kv in args.meta:
         k, _, v = kv.partition("=")
         if k:
