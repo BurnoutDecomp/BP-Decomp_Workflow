@@ -1557,15 +1557,6 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\B5PhysicsHandlingDebugComponent.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnGripCurveDebugGraph.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\BrnGripCurveDebugWindow.cpp"
-  rem  ---- PHYSICS MOUNT-GAP WAVE B3b (2026-08-24): the VehicleManager MONOLITH flip ----
-  rem  BrnVehicleManager.cpp (12 real bodies incl. the 923-insn SetRaceCarCrashing @0x82634C90;
-  rem  the LinkStubs trap is DELETED) + BrnVehicleManager_ImpactHelpers.cpp, the NEW slice with
-  rem  the six declared-only helpers reconstructed from asm (IsPointBetweenTwoParallelPlanes,
-  rem  CheckForVerticalTakedownSituation, CheckForGrindingAndRubbing, GenerateContactSituation,
-  rem  ApplySlam, ApplyShunt) plus their callees (CalculateSlamData/CalculateShuntData/
-  rem  SendImpactMessage, HasRaceCarHadRecentImpact). Both geometry helpers had WRONG inferred
-  rem  signatures in the header; the T-bone and vertical-takedown call sites are rebuilt from
-  rem  the caller asm (@0x8263D480 / @0x8263D728).
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\BrnVehicleManager_ImpactHelpers.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\VehiclePhysics\Engine_embed_check.cpp"
@@ -2705,46 +2696,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\Director\Camera\BrnDepthOfField.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraValidityAccount.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\CameraUtils.cpp"
-  rem ---- ORBIT-CAMERA WAVE (2026-08-01): the free-look stick the car-select camera reads ----
-  rem  BehaviourRotateAboutVehicle::Update calls CameraSphericalRotationController::Update
-  rem  every frame (the stick-driven yaw/pitch the player spins the car with). Its body
-  rem  already existed in a TU nothing had ever mounted; mounting it also makes
-  rem  CameraSphericalRotationController::Construct real, retiring the EMPTY STUB that used to
-  rem  stand in for it in DirectorLinkStubs.cpp. It drags exactly two callees, both of which
-  rem  are bodied and are mounted with it:
-  rem      SmoothMover::Update                    -> Utils\BrnCameraSmoothMover.cpp (mounted below)
-  rem      GetSmallestDifferenceBetweenDegsAngles -> BODIED this wave in CameraUtils.cpp. It was
-  rem          declaration-only; BrnCamera2DRotationController.cpp only CALLS it, and mounting
-  rem          that TU to reach it opens more than it closes (it needs the
-  rem          Camera2DRotationController::kfDeadZoneRadius static, which has no definition
-  rem          anywhere in the tree). MEASURED both ways.
-  rem  BrnCameraShake.cpp + BrnCameraImpactEffect.cpp (the Parameters::Serialise<S> slices) stay
-  rem  parked: they need DebugMenuSerialiser / TextFile{Read,Write}Serialiser, whose own TUs open
-  rem  ~50 externals (the whole unmounted camera *Serialise.cpp partfile family + the DebugComponent
-  rem  RegisterVariable/SetStep API). Their live halves are the two partfiles mounted below.
-  rem  ??? ROTATE-HELPER WAVE (2026-08-02): CameraShake::Update was file-split OUT of that TU
-  rem  into BrnCameraShakeUpdate.cpp and is mounted below, which RETIRES the empty `{}` stub
-  rem  DirectorLinkStubs.cpp used to resolve it to. Its three blockers are all closed:
-  rem      Utils::RotateMatrix44AffineByEulerAnglesZXY  -> BODIED in CameraUtils.cpp
-  rem      CgsNumeric::Random::RandomFloat(f32,f32)     -> BODIED in Numeric\CgsRandom.cpp
-  rem      CgsNumeric::Random::RandomVector(V3,V3)      -> BODIED in Numeric\CgsRandom.cpp
-  rem  (both of those TUs are already on this list, so the mount cost is this ONE file).
-  rem  ?????? ICE-SHAKE WAVE (2026-08-02): the SAME split again, for the other class in that
-  rem  header -- BrnCameraShakeICEController.cpp carries CameraShakeICEController::Construct
-  rem  (COMPLETE) and ::Update (head + the three gates; the authored-take arm is a documented,
-  rem  self-announcing partial). It RETIRES the second and last DirectorLinkStubs.cpp group-E
-  rem  stub, and that one was ARMED: Construct's job is to set mMatrix to the IDENTITY, and
-  rem  BehaviourGameplayExternal::Update inlines GetMatrix() into a post-multiply on the camera
-  rem  transform -- the zero-initialised matrix the stub left behind would have ANNIHILATED it.
-  rem  Everything it calls was already on this list (shotgroup.cpp, CgsRandom.cpp,
-  rem  BrnDirectorResourceManager*.cpp), so the mount cost is this ONE file.
-  rem  ??? AND WITH IT, BrnBoostShakeController.cpp -- the FIFTH "body exists, nothing links it"
-  rem  in this cluster. BoostShakeController::Update @0x8220E548 has been bodied at
-  rem  Camera\BrnBoostShakeController.cpp:47 all along; the link was green only because nothing
-  rem  reached it. BehaviourGameplayExternal::Update calls it directly at 0x822422B0.
-  rem  MEASURED cascade: the TU includes only its own header, which includes only types.hpp
-  rem  and <cstddef>. Zero new unresolved.
-  rem  Looker Track/Zoom/Update, re-fitted 2026-09-11 to the current SLerp / VecFloat signatures; zero new unresolved.
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnLooker.cpp"
   rem  OrientationLag Update/SetParameters/GetTransform, re-fitted 2026-09-11 to the same
   rem  four-argument SLerp the Looker above uses; zero non-CRT unresolved, zero hard duplicates.
@@ -2767,12 +2718,6 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  mounted two lines up), CameraImpactEffect::RegisterImpact (BrnCameraImpactEffect.cpp) and
   rem  Utils::GetZoomFromFOVDegs (CameraUtils.cpp).
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourBystanderCamImpactControllers.cpp"
-  rem  ... and its ONE unresolved external: CameraImpactEffect::RegisterImpact @0x821F3648.
-  rem  Split into its own partfile for the SAME reason BrnCameraShakeUpdate.cpp exists -- the
-  rem  parent BrnCameraImpactEffect.cpp carries three explicit Parameters::Serialise<S>
-  rem  instantiations over DebugMenuSerialiser / TextFile{Read,Write}Serialiser, none of which
-  rem  is on this list. MEASURED: with the partfile the link is clean; the partfile includes
-  rem  nothing but its own header.
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraImpactEffectRegisterImpact.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnBoostShakeController.cpp"
   echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraSmoothMover.cpp"
@@ -3780,8 +3725,6 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModule.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOOutputBuffer.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
-  rem  The director's "Camera" debug page: Construct / GetName / TakePanorama. Retires the
-  rem  DebugComponent::Construct + ::GetName gates in DirectorLinkStubs.cpp GROUP C.
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugCompononent.cpp"
   echo "%SRC%\GameSource\Director\BrnMainDirector.cpp"
   rem  MOUNTED 2026-08-02 (camera parameter-chain wave). BrnDirectorVehicleInputInterface --
@@ -3801,24 +3744,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  ProcessInputQueue. Self-contained: DataJournal<T,N> is header-only and the TU's only
   rem  other dependencies are memset/memcpy. Measured link cost: ZERO new unresolved.
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorGameState.cpp"
-  rem  MOUNTED 2026-08-01. This TU was the reverted raw-console-offset ctor over a LOCAL
-  rem  re-declaration of the class; the shot-group wave rewrote it against named members and
-  rem  this wave added the real DirectorResourceManager::Prepare @0x8225CA08 (the 65
-  rem  shot-group slot builds + the CameraVault register). Its DirectorLinkStubs `return true`
-  rem  stub is deleted with it. It carries five ICE-cone leaves (GetKeyAnim x2 /
-  rem  GetShakeTakes / GetICEAuthor / GetKeyAnimFromGuid reach ICEWrapper + ICEAuthor +
-  rem  ICEList); those resolve through the existing Director/ICE link stubs.
   echo "%SRC%\GameSource\Director\BrnDirectorResourceManager.cpp"
-  rem  MOUNTED 2026-08-01 (ICE-anim transform wave). ?????? ICEWrapper::Prepare @0x8253DD90 -- a
-  rem  FILE SPLIT out of the un-mounted BrnDirectorICEWrapper.cpp, because that TU still costs the link two
-  rem  unresolved externals (ICEManager::GetCameraTake / ICECameraMover::Construct) that
-  rem  Prepare itself does not need. This retires the `return true` stub that was the ONLY
-  rem  thing standing between the ICE take evaluator and its element schedules: Prepare's
-  rem  stage 0 is the whole image's single caller of ICE::InitICEDescriptions(), so without it
-  rem  gaICEElementChannels stayed empty, ICETake::SetParameter evaluated zero elements and
-  rem  every authored ICE camera value read 0. Self-contained: it reaches only
-  rem  ICEElementDescription::Prepare + InitICEDescriptions, both already in the link via
-  rem  ICEData.cpp / ICEDataEnums.cpp. Measured link cost: ZERO new unresolved.
   echo "%SRC%\GameSource\Director\BrnDirectorICEWrapperPrepare.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraFinaliser.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnBehaviourManager.cpp"
@@ -3897,18 +3823,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Arbitrator\BrnDirectorArbitratorSharedCameraContainer.cpp"
   rem  The container's remaining out-of-line body, GetGameplayCameraHelperIndex; measured free (3 undefs, 0 new).
   echo "%SRC%\GameSource\Director\Camera\BrnSharedCameraContainer.cpp"
-  rem  MOUNTED 2026-08-02 (camera parameter-chain wave). BehaviourPassengerCam's four REAL
-  rem  virtuals (Construct/Update/Release/GetName, 57 lines, only CgsAssert). Needed because
-  rem  BrnBehaviourManager.cpp:965's explicit AllocateBehaviour<BehaviourPassengerCam>() now
-  rem  binds to the DWARF-verbatim class instead of the stale 0x18-byte
-  rem  BrnBehaviourPassengerCam.h slice, so it emits a vtable. Its two declaration-only
-  rem  virtuals (Prepare/SetupTweaker) are in DirectorLinkStubs.cpp.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourPassengerCam.cpp"
-  rem  The two dev-menu debug cameras. MEASURED 2026-09-12 (with the full tweaker TU above):
-  rem  ZERO undefined externals absent from the link. Nothing allocates either one -- the
-  rem  arbitrator's two NewBehaviour<> calls are still gated -- so this is a link close, not a
-  rem  behaviour change. BehaviourDebugOrbitPlayer::Update is the one slot still in
-  rem  DirectorLinkStubs.cpp.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourDebugFlyWorld.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourDebugOrbitPlayer.cpp"
   rem ---- EIGHTH PASS (2026-08-01): the camera-family closure set. -----------------------
@@ -3923,42 +3838,13 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\SDKs\Packages\ICE\ICEAuthorTakeOps.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugPrinter.cpp"
   echo "%SRC%\GameSource\Director\BrnDirectorResourceManagerICE.cpp"
-  rem ---- THE ICE MOVIE PLAYER (2026-09-11): the whole family joins the link. -------------
-  rem  Retires the SharedPlaylists::Construct gate in DirectorLinkStubs.cpp, which ran at
-  rem  boot with an EMPTY body: every director-owned playlist (race intro, post race, the
-  rem  three pause-camera playlists) was left with a zero movie count and an un-Clear()ed
-  rem  movie pool. The 36 seed takes are now really inserted. The _wP0_01 playlist split that
-  rem  carried those bodies on its own since 2026-09-08 is folded back in and deleted, now
-  rem  that its parent mounts.
-  rem  What still cannot mount is the SERIALISATION half, split off into
-  rem  BrnICEMoviePlayerSerialise.cpp: the three Serialise<S> instantiation sets open the
-  rem  Camera serialisers own scalar and nested-block overloads, and DebugMenuNewMovie opens
-  rem  the dev-tools menu registration callee. None of that is anything the player needs.
-  rem  MEASURED: this TU now opens ZERO unresolved externals.
   echo "%SRC%\GameSource\Director\Utils\BrnICEMoviePlayer.cpp"
-  rem ---- ICE sub-object ctors, which run at boot; the two _wG_09 files carry the ctors their parents (ICEManager.cpp, BrnDirectorICEWrapper.cpp) do not. FOLLOW-UP: ICEManager.cpp mounts now, so its two splits can be folded back into it.
   echo "%SRC%\GameSource\Director\Camera\ICECameraMover.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_09.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_11.cpp"
   rem ---- THE PAUSE / CRASH-NAV ICE CAMERA, OWNERLIST 2026-09-27 lane L5: the SDK ICECameraMover per-frame update - Update, UpdateFrameBegin, UpdateFrameEnd @0x8253D988 and its eight sub-updates - and MainDirector::UpdateICE @0x82238FC0, which ICEWrapper::Update feeds.
   echo "%SRC%\SDKs\Packages\ICE\ICECameraMover.cpp"
   echo "%SRC%\GameSource\Director\BrnMainDirector_wM_01.cpp"
-  rem ---- ICEWrapper::Construct / ::Destruct / ::PlayMovie / ::GetCurrentMovie / ::IsPlayingMovie (2026-09-11), retiring seven DirectorLinkStubs gates; splits out of ICEWrapper.cpp / ICEManager.cpp / ICEControllerMenus.cpp, zero unresolved. Only ICEWrapper.cpp still cannot mount (its Update / UpdateAction pair indexes two unhomed dev-tools converter tables). DELETE-WHEN: that pair is homed.
-  rem ---- THE ICE EDITOR GROUP (2026-09-11, G04 wave) --------------------------------------
-  rem  23 of the 29 unmounted SDKs\Packages\ICE TUs, measured together at ZERO unresolved.
-  rem  Nothing here is on a live path: ICEController::Construct / ::Update are reached only
-  rem  through ICEManager::Construct / ::Update, and the single call site of each is gated
-  rem  out of ICEWrapper::Prepare / MainDirector::UpdateICE. Mounting them adds definitions,
-  rem  not behaviour. The group needed four small bodies, all landed with it: the six
-  rem  channel-forwarding ICETake interval accessors (ICEDataICETake.cpp), ICEMath::Sqrt
-  rem  (ICEMath.cpp) and rwcore's StringCopy / Vsnprintf (added to the already-mounted
-  rem  vendor rw\core\stdc\stdc.cpp, which declared both and bodied neither).
-  rem  CgsDev::DebugRender::Draw2DBox / ::Draw2DText were never holes -- both Vector2
-  rem  overloads are bodied in the mounted CgsDebugRender.cpp; they only look missing
-  rem  against the stale build\game\obj.
-  rem  Five of the six that used to stay out joined the link with the EA::GameTalk wave
-  rem  below. ICECameraMover.cpp is still out, for an unrelated reason: 18 leaves of its own
-  rem  (ICECamera setters, ICECameraAnchor queries, Cubic1D setters, four ICEMath entry points).
   echo "%SRC%\SDKs\Packages\ICE\ICEActionQueue.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEAuthor.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEAuthorKeyElementOps.cpp"
@@ -3987,50 +3873,8 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\SDKs\Packages\ICE\ICEAuthorAssemblyOps.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEControllerInput.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEManager.cpp"
-  rem  BrnDirectorEffectTrigger.cpp is NOT mounted yet, deliberately. It now DOES define
-  rem  Camera::EnsureEffectIsPlaying @0x821F2720 (the note further down claiming otherwise
-  rem  is STALE), but mounting it costs two REAL unresolved externals --
-  rem  EffectInterface::HookExists and RegisterStartingBackgroundEffectWithName, both
-  rem  declaration-only in BrnDirectorEffectTrigger.h with no body anywhere in the tree.
-  rem  They are reached only by BackgroundEffectRequest::RegisterAndUpdateRequest, which is
-  rem  off the camera path. The camera TUs are not mounted either, so EnsureEffectIsPlaying
-  rem  is not needed for today's link: mount this TU together with them, once those two
-  rem  leaves are recovered from asm. Bodying them by guess would have been the wrong trade.
-  rem      %SRC%\GameSource\Director\Utils\BrnDirectorEffectTrigger.cpp
-  rem  Adds ZERO new unresolved: every callee is a header inline and
-  rem  mRotationController.Construct() resolves against the existing DirectorLinkStubs symbol.
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourRotateAboutVehicle.cpp"
-  rem  BrnDirectorResourceManagerICEWrapper.cpp is NOT mounted: its one remaining body,
-  rem  GetShakeTakes, needs ICEWrapper::GetShakeGroup out of BrnDirectorICEWrapper.cpp.
-  rem      %SRC%\GameSource\Director\BrnDirectorResourceManagerICEWrapper.cpp
-  rem  ONLY the attract-mode state is mounted here -- it is the DJ fly-by's own state, and the
-  rem  one the arbitrator drives on this path. Eight of the other nine states (CrashMode /
-  rem  DriveThru / OnlineCarSelect / OnlineRaceIntro / PostEvent / RaceIntro / RankUp /
-  rem  Roaming) are RECONSTRUCTED but each drags a different un-landed sub-system with it
-  rem  (ICEMoviePlayer, MomentSelector, BehaviourIceAnim, BehaviourInterpolate, the
-  rem  DirectorResourceManager shot-group getters, the Attrib shot vault, ...) -- mounting all
-  rem  ten took the link from 47 to 137 unresolved externals, most of them functions that
-  rem  return REFERENCES and therefore cannot be honestly stubbed. Their vtables are stubbed
-  rem  in DirectorLinkStubs.cpp instead (void/bool/const char* only), so the state container
-  rem  still builds and the arbitrator can still refuse to enter them.
-  rem  DELETE-WHEN: each state's own sub-system lands; mount the state and drop its stubs.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateAttractMode.cpp"
-  rem ---- NINTH PASS (2026-08-01): ArbStateRoaming -- THE DIRECTOR'S ENTRY GATE ------------
-  rem  ??? ArbStateRoaming::Update @0x822643A0 is now WRITTEN (it did not exist anywhere in the
-  rem  tree, and BrnArbStateRoaming.h deliberately omitted the override, so vtable slot 2 fell
-  rem  through to ArbitratorState::Update's empty body -- meState froze at E_STATE_PREPARING
-  rem  for the whole session and ProcessPossibleStateChanges, the ONLY writer of
-  rem  E_STATE_CHANGING_TO_CAR_SELECT, was never called). Its four LNK2005 stubs are gone from
-  rem  DirectorLinkStubs.cpp.
-  rem  ?????? BrnArbStateRoaming.cpp DID NOT COMPILE before this wave (its Construct called a
-  rem  two-argument MomentSelector::AddMoment that does not exist and its Prepare passed a
-  rem  GameState where a BehaviourManager& is required) -- the ledger said `reviewed`.
-  rem  MEASURED with scratchpad\ice5_list.py + ice5_net.py against the object list DERIVED FROM
-  rem  THIS BAT: these four together are NET +0 unresolved. The order matters --
-  rem  BrnArbStateRoaming alone is +7, +MomentSelector/+MomentController/+EffectTrigger is +4,
-  rem  and the last 4 (MomentController::NewMoment, MomentHandle::Release,
-  rem  MomentSelector::Update, SelectBestMomentWithExclusion) are the GROUP F stubs at the foot
-  rem  of DirectorLinkStubs.cpp, which is where the moment sub-system's DELETE-WHEN lives.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateRoaming.cpp"
   rem  ---- CRASH-CAMERA WAVE (2026-08-29): THE CRASH CAMERA ITSELF. -------------------------
   rem  BrnArbStateCrashing.cpp is E_STATE_CRASHING -- the state ArbStateRoaming ENTERS on a
@@ -4048,18 +3892,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  BrnCameraShake.h, both header-inline.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCrashing.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourSpirallingDeathcam.cpp"
-  rem  ---- CRASH-NAV (2026-09-11): the picture-paradise fly-by state joins the link. -------
-  rem  BrnArbStateCrashNav.cpp was fully reconstructed and parked; its container slot was five
-  rem  silent-drop stubs in DirectorLinkStubs.cpp, so Update did nothing and Release always
-  rem  succeeded -- entering the state would have published a camera nothing ever writes.
-  rem  All five stubs are deleted with this mount (they always had to come out together).
-  rem  What unblocked it, in order: the EA::GameTalk wave above -> ICEManager.cpp and the take-
-  rem  save chain -> ICEWrapper::PlayMovie / ::GetCurrentMovie / ::IsPlayingMovie (moved into
-  rem  the ICEWrapper_wG_11 split) -> the ICE movie player TU. MEASURED over the whole set:
-  rem  zero unresolved externals beyond the CRT and the weak vector-deleting-destructor
-  rem  aliases that fall back to their scalar defaults.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCrashNav.cpp"
-  rem  Race-intro camera state (2026-09-12): its DirectorLinkStubs macro line is gone; uses the shared Camera::BehaviourHandle<>.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateRaceIntro.cpp"
   rem  Rank-up camera state (2026-09-12): macro line gone; shared handle; SetPrimaryVehicleRefToRaceCar bodied.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateRankUp.cpp"
@@ -4104,7 +3937,6 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  the first two Moment-family TUs to join the link; zero new unresolved externals each.
   echo "%SRC%\GameSource\Director\MomentController\BrnMoment.cpp"
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentFailsafe.cpp"
-  rem ---- [momentwall] the moment-camera parameter wall, closed 2026-09-11: these four link clean and retire two DirectorLinkStubs traps, but stay inert while muValidMoments is 0.
   echo "%SRC%\GameSource\Director\MomentController\BrnMomentSharedInfo.cpp"
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentBystanderSeesAction.cpp"
   echo "%SRC%\GameSource\Director\MomentController\Moments\BrnMomentTumbling.cpp"
@@ -4162,36 +3994,8 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  only home of ShotSelector::GetCrashShot -- the crash-shot picker the hard-stop moment
   rem  needs. It had no rem here and no recorded reason for staying out.
   echo "%SRC%\GameSource\Director\Utils\BrnShotSelector.cpp"
-  rem ---- TENTH PASS (2026-08-01): ArbStateCarSelect -- THE REAL CAMERAS --------------------
-  rem  ?????? The state that owns the junkyard shot-group setup, the three authored ICE intro
-  rem  shots off mGameIntroGroup ("606002") and the rotate-about-car orbit camera. Its four
-  rem  LNK2005 stubs are gone from DirectorLinkStubs.cpp. It only becomes REACHABLE because of
-  rem  the NINTH PASS above -- ArbStateRoaming::Update is the only path that ever writes
-  rem  E_STATE_CHANGING_TO_CAR_SELECT.
-  rem  MEASURED 2026-08-01 (fresh --rescan against the NINTH-PASS object list): these four
-  rem  together are NET +4, and TWO of the four are the CRT (atan2, fabs, which the measure
-  rem  script's CRT filter does not cover). The last one:
-  rem    * BehaviourIceAnim's vector deleting destructor -- a COFF WeakExternal off its own
-  rem      vtable.
-  rem  ?????? The FOURTH/FIFTH/SIXTH-PASS notes below quoting 54 / 31 / 13 / 12 unresolved for this
-  rem  same set are ALL STALE: that was before CameraReference::Setup was bodied, before the
-  rem  BehaviourInterpolate ODR fork was retired, and before the EIGHTH PASS closure set.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateCarSelect.cpp"
   echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourIceAnim.cpp"
-  rem  ---- DRIVE-THRU CAMERA WAVE (2026-08-29): the drive-thru shop camera. --------------
-  rem  BrnArbStateDriveThru.cpp is E_STATE_DRIVETHRU -- the state ArbStateRoaming enters on
-  rem  mbDriveThruActive (BrnArbStateRoaming.cpp:1059). Its container slot was five stubs in
-  rem  DirectorLinkStubs.cpp whose Prepare returned an unconditional `true` and whose Update
-  rem  was empty -- the same empty-shell shape ArbStateCrashing had. Those five are removed in
-  rem  the same b5-decomp commit; never mount one without the other (LNK2005 x5 otherwise).
-  rem  ==> IT IS ATOMIC WITH BrnBehaviourManager_NewBehaviourFromShot.cpp below. The state's
-  rem  Prepare allocates its camera through BehaviourManager::NewBehaviour @0x82267418, the
-  rem  ATTRIBUTE-DRIVEN factory, which had no body anywhere in the tree -- so the state alone
-  rem  is one unresolved external, and a quiet stub for it would link green and allocate
-  rem  nothing (a drive-thru camera that never moves).
-  rem  MEASURED mount cost: BrnArbStateDriveThru.cpp -> 25 referenced externals, 24 already
-  rem  provided, 1 unresolved (that NewBehaviour); the factory TU -> 19 referenced, 19
-  rem  provided, ZERO new unresolved.
   echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateDriveThru.cpp"
   rem  BrnBehaviourManager_NewBehaviourFromShot.cpp -- BehaviourManager::NewBehaviour
   rem  @0x82267418, the shot-attribute behaviour factory: it reads the shot RefSpec's class
@@ -4203,389 +4007,6 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Camera\BrnBehaviourManager_NewBehaviourFromShot.cpp"
   echo "%SRC%\GameSource\Director\Shots\ShotControllers\BrnKeyAnimController.cpp"
   echo "%SRC%\GameSource\Director\Camera\BrnCameraReference.cpp"
-  rem ---- ICE-anim de-fork wave (2026-07-30) ------------------------------------------------
-  rem  ArbStateCarSelect (the retail GAME-INTRO state -- it walks PREPARING ->
-  rem  GAME_INTRO_PART_ONE/TWO/THREE off the DirectorResourceManager's mGameIntroGroup, vault
-  rem  name key "606002") now COMPILES: the six CollisionPolicy / Utils C2011 forks inside
-  rem  Behaviours/BrnBehaviourIceAnim.h are retired, and so do its six sibling ICE-anim states.
-  rem  ---- 2026-07-31 UPDATE: the camera code itself is DONE. ----
-  rem  BrnDirector::KeyAnimController (the ICE take evaluator: Prepare, Update,
-  rem  UpdateCameraFromICE, UpdateTransformationMatrix, UpdateFocus, UpdateLens,
-  rem  Get/SetParametricTime0To1 + the four accessors) is fully reconstructed in
-  rem  Shots/ShotControllers/BrnKeyAnimController.cpp, and the ten declaration-only
-  rem  BrnDirector::Camera::IceAnimCameraOps placeholders are RETIRED onto the real APIs
-  rem  (Camera::operator=, Camera::RequestMotionBlur, Camera::Set/GetFOV,
-  rem  DepthOfField::SetParams, Looker::Update, CameraShake::Update,
-  rem  Behaviour::SetCantSwitchToMeNow, CollisionPolicyAttachedToVehicle::SetVehicleRef).
-  rem  CAMERAS.BUNDLE is ported to platform 4 as well, so the data is there too.
-  rem
-  rem  The three TUs are STILL NOT MOUNTED, and the reason has changed again. Measured today
-  rem  with all three in the link (BrnKeyAnimController.cpp + BrnBehaviourIceAnim.cpp +
-  rem  BrnArbStateCarSelect.cpp): 0 compile errors, 54 unique unresolved externals --
-  rem      17  DirectorResourceManager accessors (14 shot-group getters + GetICEAuthor /
-  rem          GetICEList / GetKeyAnimFromGuid). These are the FORK's accessors in
-  rem          Behaviours/BrnBehaviourIceAnim.h; retiring that fork needs the manager's 65
-  rem          shot-group members DECLARED, which in turn needs Attrib::FindCollection's real
-  rem          (classKey, collectionKey) signature and Attrib::Instance::operator= -- see the
-  rem          recon map at the top of GameSource/Director/BrnDirectorResourceManager.h.
-  rem       8  BehaviourInterpolate / BehaviourRotateAboutVehicle (two un-landed behaviours).
-  rem       6  the ICE SDK take runtime (ICETake::Construct / SetDataPointers / SetParameter /
-  rem          GetValueInt / GetValueFloat, CameraSpaceHandler::TransformToWorld).
-  rem      the rest: Camera::RequestMotionBlur / GetDepthOfField, DepthOfField::GetBlurriness,
-  rem          CameraShake::Update, Tweaker::Construct, VehicleRef::Get, ICEAuthor /
-  rem          ICEList guid lookups, Attrib::Gen::{iceanim::GetAnimGuid, shotgroup::Num_ShotList},
-  rem          SharedCameraContainer / AllVehicleData / DebugPrinter leaves.
-  rem  None of that is camera code any more -- it is the surrounding subsystems.
-  rem
-  rem  ---- 2026-07-31, SECOND PASS: "just not in this source list" was WRONG. ----------------
-  rem  The 6 ICE entries used to be annotated "all RECONSTRUCTED under SDKs/Packages/ICE/, just
-  rem  not in this source list", and the DirectorResourceManager block above called that the
-  rem  cheapest next win. It is not a packaging problem. MEASURED, four builds:
-  rem      three camera TUs alone .......................... 54 unresolved   (baseline, confirmed)
-  rem      + ICEData.cpp + ICECameraSpaceHandler.cpp ....... 64  (closes 5, opens 15)
-  rem      + ICEDataICETake/ICEDataEnums/ICEMath/ICEFile/
-  rem        ICECameraSpaceHandlerCtor ..................... 67  (closes 5 more, opens 8)
-  rem      three camera TUs + BrnCameraTweaker + ICEList ... 58  (closes 2, opens 6)
-  rem  Every candidate mount is NET NEGATIVE. ICEData.cpp is not self-consistent: its own
-  rem  reconstructed bodies call ~11 siblings that have no body anywhere --
-  rem      ICETake::SetParameter(f32,bool,bool)   <- the PUBLIC take-level driver KeyAnimController
-  rem                                                calls; only the PRIVATE per-channel
-  rem                                                SetParameter(s32,f32,bool) is bodied
-  rem      ICETake::GetValueFloat(s32,u16) / GetValueInt(s32,u16) / GetParameterData / GetKeyData
-  rem      ICETake::GetNumKeys(s32) / GetNumIntervals(s32) / IsEditable
-  rem      ICEChannel::GetKeyIndex(u16) / GetIntervalBracket(f32*,f32*)
-  rem      CameraSpaceHandler::GetTransformToWorld
-  rem      the globals ICE::ICE_EPSILON and ICE::spICEMemory
-  rem  and ICEFile.cpp drags EA::GameTalk's message API + rw::core::stdc::Vsprintf behind it.
-  rem  Of the 32 non-DirectorResourceManager leaves, exactly THREE have a real body that is
-  rem  merely unmounted -- ICEAuthorTakeOps.cpp (ICEAuthor::FindEditedTakeFromGuid),
-  rem  SharedClasses/DataLists/ICEList.cpp (ICEList::GetICETakeDataFromGuid) and
-  rem  Camera/Utils/BrnCameraTweaker.cpp (Tweaker::Construct); each still opens 2-4 new ones.
-  rem  Everything else is declaration-only. The frontier is genuinely open, so nothing is
-  rem  mounted here and no camera-adjacent symbol is stubbed to fake it.
-  rem
-  rem  ?????? THE "no body anywhere" LIST ABOVE IS RETRACTED (2026-08-01, ICE take-runtime wave).
-  rem  It was a NAME search, and the X360 export set does not carry these under a name. Every
-  rem  entry on it is now bodied and the whole ICE data layer is MOUNTED (see the take-runtime
-  rem  block near the top of this file for the recovery). ??? THE LESSON, which generalises far
-  rem  past ICE: `sub_XXXXXXXX` entries in .ida-exports ARE bodies. When a symbol "does not
-  rem  exist", search the CALLERS' xref lists for unnamed subs and identify them by their
-  rem  caller set and their asserts' __FILE__/__LINE__ strings -- ICETake::SetSubTake was
-  rem  pinned to ICEData.cpp:2575 by its own assert. Two of the entries above were not even
-  rem  missing: ICEChannel::GetIntervalBracket(f32*,f32*) and GetIntervalStart() were bodied
-  rem  all along, attached to their interval-ARGUMENT overloads by mistake, because their only
-  rem  real callers were not in the tree yet.
-  rem
-  rem  Two further notes for whoever picks this up:
-  rem   * BehaviourIceAnim::ClearBaseFirstFrameGate is declared (BrnBehaviourIceAnim.h:476) and
-  rem     never defined -- a hole in BrnBehaviourIceAnim.cpp itself, not in a dependency.
-  rem   * DebugPrinter::ActualPrint is NOT a missing body: BrnBehaviourIceAnim.cpp:91 re-declares
-  rem     a local `struct DebugPrinter` with a 3-arg STATIC ActualPrint, while the real body
-  rem     (DirectorModule/BrnDirectorModuleDebugPrinter.cpp:52) is a 2-arg member. Different
-  rem     mangling -- mounting that TU will not resolve it; drop the local re-declaration.
-  rem
-  rem  DELETE-WHEN: the DirectorResourceManager fork is retired and the ICE take runtime's own
-  rem  ~11 missing bodies are reconstructed (then the SDKs/Packages/ICE data-layer TUs can join
-  rem  this source list as a unit).
-  rem
-  rem  ---- 2026-07-31, THIRD PASS: the C2011 blocker is GONE; the number is now 27. ---------
-  rem  Re-measured with dumpbin /SYMBOLS over build\game\obj (the linked object set) rather
-  rem  than by trial builds, so the split is exact. FIRST: all three ArbState TUs now COMPILE
-  rem  CLEAN -- 0 errors, real objects. The six C2011 redefinitions the old note (and the .cpp's
-  rem  own banner) blamed on Behaviours/BrnBehaviourIceAnim.h are stale: that header now
-  rem  #includes all six canonical homes. The AttribSys wave also closed the attribinstance.h
-  rem  failure the previous probe hit.
-  rem
-  rem  What is left is pure LINK closure, and it still says DO NOT MOUNT:
-  rem      BrnArbStateCarSelect.cpp alone .. 63 referenced / 26 provided / 10 CRT / 27 UNRESOLVED
-  rem      + RaceIntro + OnlineCarSelect ... 81 referenced / 33 provided / 11 CRT / 37 UNRESOLVED
-  rem  (The old '54' above was a different set -- three CAMERA TUs, not these -- so it is not
-  rem  comparable; it is left in place as the record of that experiment.)
-  rem
-  rem  The 27 for CarSelect break down as:
-  rem      14  DirectorResourceManager::GetCarSelect*Shots / GetCarUnlockShots /
-  rem          GetGameIntroShots. Declaration-only in Behaviours/BrnBehaviourIceAnim.h, and NO
-  rem          body exists anywhere: the fourteen mCarSelect*/mCarUnlock/mGameIntroGroup members
-  rem          live only in the recon-map COMMENT in BrnDirectorResourceManager.h (they are not
-  rem          declared), and that TU is not mounted. This is the dominant block and the one
-  rem          real next step -- Attrib::FindCollection / Instance::operator= /
-  rem          GetAttributePointer / shotgroup::Num_ShotList are all real now, so declaring the
-  rem          member set and bodying Prepare is finally unblocked.
-  rem       6  Camera::BehaviourInterpolate::{Setup, SetupDuration, SetupCameraAFromHelper,
-  rem          SetupCameraBFromHelper, SetParameters, HasFinished}  -- un-landed behaviour.
-  rem       2  Camera::BehaviourRotateAboutVehicle::{BecomeSimilarTo, SetParameters} -- ditto.
-  rem       5  BehaviourIceAnim::ClearBaseFirstFrameGate (the known hole noted above),
-  rem          Camera::EnsureEffectIsPlaying, SharedCameraContainer::
-  rem          {ForcePrimaryGameplayBehaviourToFinish, GetSelectedGameplayCamera}, and
-  rem          CgsDev::StrStreamBase's vector-deleting destructor.
-  rem  Reproduce with scratchpad w10_unres2.py (dumpbin diff, seconds, no rebuild).
-  rem
-  rem  WARNING -- AND BEFORE MOUNTING: BrnBehaviourIceAnim.h typedefs ShotReference to
-  rem  Attrib::Gen::iceanim, but SetParameters is handed the raw Attrib::RefSpec ShotList
-  rem  element. The console wraps it in a TEMPORARY iceanim and reads that temporary's resolved
-  rem  layout at +0xC; the committed C++ calls GetAnimGuid() straight on the RefSpec. Latent
-  rem  only while these TUs stay unmounted. See Attrib::Gen::iceanim::GetAnimGuid.
-  rem
-  rem  ---- 2026-07-31, FOURTH PASS: the 14 shot-group accessors LANDED. 27 -> 13. --------
-  rem  BrnDirectorResourceManager.h now declares all 65 shot-group members (64 shotgroup +
-  rem  1 cameradefaults) plus the DWARF head members, and carries the whole public accessor
-  rem  bank as header inlines under the DWARF NAMES. The second definition of
-  rem  BrnDirector::DirectorResourceManager that lived in Behaviours/BrnBehaviourIceAnim.h is
-  rem  DELETED (that header now includes the real one), and every call site was migrated --
-  rem  GetCarSelectMotorCityShots -> GetCarSelect_MotorCity, GetGameIntroShots ->
-  rem  GetGameIntro, GetTumblingCrashShots -> GetAfterCrash, and so on.
-  rem
-  rem  Re-measured with the same dumpbin diff (scratchpad w10_unres2.py), same method:
-  rem      BrnArbStateCarSelect.cpp alone .. 49 referenced / 26 provided / 10 CRT / 13 UNRESOLVED
-  rem      + RaceIntro + OnlineCarSelect ... 66 referenced / 33 provided / 11 CRT / 22 UNRESOLVED
-  rem  (was 27 and 37.) All fourteen DirectorResourceManager symbols are gone from the set --
-  rem  they are inlines over real members now, so they cost nothing at all.
-  rem
-  rem  VERDICT: STILL DO NOT MOUNT, and the reason is now a short, specific list.
-  rem  The 13 left for CarSelect are:
-  rem       6  Camera::BehaviourInterpolate::{Setup, SetupDuration, SetupCameraAFromHelper,
-  rem          SetupCameraBFromHelper, SetParameters, HasFinished}
-  rem       2  Camera::BehaviourRotateAboutVehicle::{BecomeSimilarTo, SetParameters}
-  rem       1  BehaviourIceAnim::ClearBaseFirstFrameGate  (a hole in BrnBehaviourIceAnim.cpp)
-  rem       1  Camera::EnsureEffectIsPlaying
-  rem       2  SharedCameraContainer::{ForcePrimaryGameplayBehaviourToFinish,
-  rem                                  GetSelectedGameplayCamera}   <- returns a REFERENCE
-  rem       1  CgsDev::StrStreamBase's vector-deleting destructor
-  rem
-  rem  MEASURED, and it kills the obvious next idea: BrnBehaviourInterpolate.cpp and
-  rem  BrnBehaviourRotateAboutVehicle.cpp DO exist and are self-contained (0 unresolved
-  rem  each), but mounting them closes NONE of the 8 above. dumpbin says those two TUs
-  rem  define only BehaviourInterpolate::{GetCollisionPolicy, GetParametricTime} and
-  rem  BehaviourRotateAboutVehicle::{GetEmbeddedSubObject + its anchor helper} -- they are
-  rem  accessor slices, not the behaviours. The 8 really are un-landed.
-  rem  Measured combination: CarSelect + both behaviour TUs + BrnDirectorResourceManager.cpp
-  rem  = 19 unresolved (the manager TU adds its own 5 ICE leaves; see below).
-  rem
-  rem  BrnDirectorResourceManager.cpp was REWRITTEN in the same wave (it used to be the
-  rem  reverted raw-console-offset ctor; the ctor is now the compiler-generated one, member
-  rem  by member, so that TU had nothing left to do). It now holds the manager's real
-  rem  out-of-line bodies: GetKeyAnim x2, GetShakeTakes, GetICEAuthor, GetKeyAnimFromGuid
-  rem  and -- fully reconstructed from the export's jump table -- GetEventIntroShots
-  rem  @0x821F6AB8. It is STILL NOT MOUNTED: it costs 5 unresolved ICE leaves
-  rem  (ICEWrapper::{GetICETakeData, GetShakeGroup, GetAuthor},
-  rem  ICEAuthor::FindEditedTakeFromGuid, BrnResource::MakeICEMovieId), i.e. exactly the ICE
-  rem  take-runtime group this note already says has to go in as a unit.
-  rem  The old "NOT mounted -- raw console byte offsets, LNK2005" warning further up this
-  rem  file is therefore STALE for that TU; only the mount decision still stands.
-  rem
-  rem  AND THE SECOND OBVIOUS IDEA IS DEAD TOO: BrnDirectorEffectTrigger.cpp also exists
-  rem  unmounted, and adding it to CarSelect takes 13 -> 16. It does NOT define
-  rem  ForcePrimaryGameplayBehaviourToFinish / GetSelectedGameplayCamera /
-  rem  EnsureEffectIsPlaying -- those three stay unresolved -- and it opens three NEW leaves
-  rem  (HookNameStringWrapper::operator==, EffectInterface::{HookExists,
-  rem  RegisterStartingBackgroundEffectWithName}).
-  rem  PATTERN WORTH REMEMBERING: four "the TU already exists, just mount it" candidates were
-  rem  measured this wave and ALL FOUR are accessor SLICES whose file name matches the class
-  rem  but whose object does not define the function that is missing. Check what an object
-  rem  DEFINES (dumpbin /SYMBOLS, filter out UNDEF) before assuming a mount closes anything.
-  rem
-  rem  ---- 2026-08-01, FIFTH PASS: the ICE take runtime LANDED; the camera set is 31. -------
-  rem  RE-MEASURED against the current source list (which now carries the whole ICE data layer
-  rem  and BrnDirectorResourceManager.cpp), by trial build:
-  rem      KeyAnimController + BehaviourIceAnim + ArbStateCarSelect = 31 UNRESOLVED, 0 compile
-  rem      errors. (41 before the ICE runtime went in -- so it closed 10 outright: ICETake's
-  rem      ctor / Construct / SetDataPointers / SetParameter / GetValueFloat / GetValueInt and
-  rem      ICETakeData::FixUp/FixDown among them.)
-  rem  ?????? The "13" in the FOURTH PASS above is ArbStateCarSelect ALONE; 31 is all three camera
-  rem  TUs together, which is what actually has to go in for the retail intro camera. Not
-  rem  comparable -- both are kept as the record.
-  rem
-  rem  THE 31 ARE A WAVE OF THEIR OWN, and the shape is now clear: ~15 of them have NO
-  rem  definition anywhere in the tree (checked file by file), i.e. they need reconstruction,
-  rem  not mounting --
-  rem      Camera::{IsLookingAtTarget, GetDepthOfField, RequestMotionBlur,
-  rem               CreateHeadingSpaceLookAt, GetVehicleWorldPosition, EnsureEffectIsPlaying}
-  rem      DepthOfField::GetBlurriness,  BehaviourSharedInfo::{GetEyeTarget, GetLookTarget}
-  rem      SharedCameraContainer::GetSelectedGameplayCamera  <- returns a const Camera& and
-  rem                                                           CANNOT be honestly stubbed
-  rem      AllVehicleData::GetNearestRaceCarIndexToPlayer
-  rem      BehaviourIceAnim::ClearBaseFirstFrameGate  (still the hole in its own .cpp)
-  rem      BehaviourInterpolate::{SetupCameraAFromHelper, SetupCameraBFromHelper, SetupDuration}
-  rem      BehaviourRotateAboutVehicle::BecomeSimilarTo
-  rem      CollisionPolicyAttachedToVehicle::SetVehicleRef
-  rem  The remainder are real bodies in unmounted TUs (BrnDirectorResourceManagerICE.cpp,
-  rem  ICEAuthorTakeOps.cpp, ICECameraSpaceHandler.cpp, BrnDirectorModuleDebugPrinter.cpp,
-  rem  BrnCameraTweaker.cpp), each of which opens its own leaves.
-  rem  The WARNING above about the iceanim ShotReference temporary still stands and must be
-  rem  settled BEFORE that wave mounts anything.
-  rem
-  rem  ---- 2026-08-01, SIXTH PASS: 31 CONFIRMED -- and link closure is NOT the last blocker. --
-  rem  Re-measured independently (scratchpad ice_measure.ps1 -Tag CAMW1): the three camera TUs
-  rem  together are 31 unresolved / 0 compile errors, exactly as the FIFTH PASS says. One
-  rem  correction to that list: CgsDev::StrStreamBase's vector-deleting destructor is NOT in the
-  rem  set any more (the FOURTH PASS bullet is stale on it).
-  rem
-  rem  ?????? THE BIGGER FINDING: ArbStateCarSelect can never leave E_STATE_INACTIVE on this build,
-  rem  at 31 unresolved OR at 0. Its Update's INACTIVE arm returns immediately; the state only
-  rem  starts when something calls Prepare(), and the ONLY writer of E_STATE_CAR_SELECT in the
-  rem  whole tree is ArbStateRoaming::ProcessActiveDrivingTransitions
-  rem  (BrnArbStateRoaming.cpp:551, `meJunkyardState != E_JY_INACTIVE` -> ChangeToStateWithoutRelease).
-  rem  THREE independent reasons that never runs today:
-  rem    (a) BrnArbStateRoaming.cpp is NOT mounted -- Construct/Prepare/Release/GetName come from
-  rem        DirectorLinkStubs.cpp:151-154;
-  rem    (b) ArbStateRoaming::Update is not even an override in the linked set (its header
-  rem        records Update/Destruct as living in their own X360 TUs), so roaming inherits
-  rem        ArbitratorState::Update, which drives nothing;
-  rem    (c) GameState::meJunkyardState has EXACTLY ONE writer in the tree -- GameState::Clear()
-  rem        setting it to E_JY_INACTIVE (BrnDirectorGameState.cpp:87). Nothing makes it active.
-  rem  mbNewProfileIntroActive (bridge 476) IS live and reaches GameState, but it is only read
-  rem  INSIDE ArbStateCarSelect::Update's PREPARING arm -- i.e. downstream of that gate.
-  rem  => Finishing the 31 is necessary but NOT sufficient. Budget the entry gate as a second,
-  rem  independent blocker of comparable size.
-  rem
-  rem  MEASURED (CAMW2, same method): mounting the six "the TU exists, just mount it" candidates
-  rem  the FIFTH PASS lists takes 31 -> 46. Closed 5, opened 20. Per-TU, from the diff:
-  rem      BrnCameraTweaker.cpp            closes Tweaker::Construct;   opens 5 (KAAC_AXIS_NAMES,
-  rem                                      KAAC_CONTROL_NAMES, DebugController::GetControllerInfo,
-  rem                                      DebugInterface::Get2dRender, DebugRender::Draw2DTextJustified)
-  rem      BrnDirectorModuleDebugPrinter   closes 0;  opens 6 (DebugLog::ActualAppend,
-  rem                                      DebugPrinter::Print, DebugInterface::{En,Dis}ableConsole, ...)
-  rem      BrnDirectorResourceManagerICE   closes 2;  opens 3 (MakeICEMovieId,
-  rem                                      ICEWrapper::GetShakeGroup, ICEWrapper::GetICETakeData)
-  rem      ICEAuthorTakeOps.cpp            closes 1;  opens 5 (bList::EndOfList,
-  rem                                      ICEController::{EditorOn,SetState}, ICEFileHandler::FileClose)
-  rem      ICECameraSpaceHandler.cpp       closes 1;  opens 1 (CameraSpaceHandler::GetTransformToWorld)
-  rem      BrnDirectorICEWrapper.cpp       closes 1;  opens 2 (ICEManager::GetCameraTake,
-  rem                                      ICECameraMover::Construct)
-  rem  That is now SEVEN, EIGHT, NINE, TEN, ELEVEN and TWELVE measured mount candidates that are
-  rem  net-negative. Treat "the TU exists, just mount it" as false by default in this subsystem.
-  rem
-  rem  WHAT THIS WAVE ACTUALLY LANDED against the 31 (all in TUs that are ALREADY mounted or
-  rem  that mount WITH the camera family, so they cost zero, and all boot-verified):
-  rem      DepthOfField::GetBlurriness / ::SetBlurriness   -> BrnDepthOfField.cpp
-  rem      Camera::GetDepthOfField (both overloads)        -> Camera.cpp
-  rem      Camera::RequestMotionBlur                       -> Camera.cpp
-  rem      Utils::Tweaker::Construct                       -> BrnCameraTweaker.cpp (whole TU mounted 2026-09-12)
-  rem                                                         (file split; mounted above)
-  rem      SharedCameraContainer::GetSelectedGameplayCamera-> BrnDirectorArbitratorSharedCameraContainer.cpp
-  rem      Camera::CreateHeadingSpaceLookAt                -> BrnBehaviourIceAnim.cpp
-  rem      Camera::GetVehicleWorldPosition                 -> BrnBehaviourIceAnim.cpp
-  rem  RE-MEASURED after landing them (CAMW3, same method): **31 -> 24**. Eight symbols left
-  rem  the set and ONE joined it -- the DebugPrinter fix below SWAPS an unresolvable symbol for
-  rem  a resolvable one (the fabricated `static ActualPrint(void*, const char*, s32)` is gone;
-  rem  the real `private: ActualPrint(const char*, unsigned int)` takes its place and is bodied
-  rem  in BrnDirectorModuleDebugPrinter.cpp, waiting only on that TU's debug-render leaves).
-  rem  ?????? Do not read "-8" as "-8 net": count the SET, not the closures.
-  rem  ??? GetSelectedGameplayCamera -- the one the FIFTH PASS singled out as un-stubbable
-  rem  because it returns a const Camera& -- has NO standalone X360 symbol: it is inlined at
-  rem  every site (ArbStateCarSelect::Prepare @0x8226EFA0, ArbStateRaceIntro::Update
-  rem  @0x8226E5B0 case 4, Arbitrator::Update @0x8226ADA0), all three emitting the same
-  rem  select-bit + handle-resolve pair. The two callees are UNNAMED subs (sub_82212288 /
-  rem  sub_82212438) and were pinned by their own assert -- "IsAllocated()",
-  rem  BrnBehaviourManager.h, line 610 -- which is BehaviourHandle::GetProducedCamera's
-  rem  tripwire; their sibling sub_821FD3E8 asserts at :589 and is GetBehaviour. That is the
-  rem  seventh and eighth time an unnamed sub, not missing code, was the actual blocker.
-  rem  ALSO FIXED, and it is a defect species worth naming: BrnBehaviourIceAnim.cpp declared its
-  rem  own `struct DebugPrinter { static void ActualPrint(void*, const char*, s32); };`. The real
-  rem  @0x821F71D8 is a NON-static PRIVATE member `ActualPrint(const char*, CgsDev::RGBA)` -- the
-  rem  console's r3 there is the printer, not an argument. The forked spelling mangles to a symbol
-  rem  NO TU CAN EVER DEFINE, so it would have sat in the unresolved list for ever looking like it
-  rem  just needed its home mounted. Now goes through BehaviourSharedInfo::GetDebugPrinter() and
-  rem  the public Print(text, colour) forwarder (bodied in the home header, which is what the
-  rem  console inlines). ARITY/STATICNESS forks only ever surface as LNK2019 -- check the
-  rem  signature, not just the name.
-  rem
-  rem  ???????????? A LIVE ODR FORK found on the way, NOT fixed: there are TWO
-  rem  BrnDirector::Camera::BehaviourInterpolate. BrnBehaviourManager.h:114 is a slice with NO
-  rem  base and NO members (sizeof == 1) -- the one ArbStateCarSelect reaches -- and
-  rem  Behaviours/BrnBehaviourInterpolate.h:93 is the real one (: public Behaviour, with
-  rem  mFromCamera/mToCamera/mfDuration/mbSetup/mbHasFinished and header-inline bodies for
-  rem  SetupDuration/Setup/HasFinished). BrnBehaviourManager.cpp:755 explicitly instantiates
-  rem  AllocateBehaviour<BehaviourInterpolate> over the EMPTY one: it books a 1600-byte small-pool
-  rem  bucket by sizeof, placement-news a ONE-BYTE object into it, and BehaviourHelper::Prepare
-  rem  then static_casts that to Behaviour* and dispatches vtable slot 0. Inert only because
-  rem  nothing in the linked set allocates one. BehaviourRotateAboutVehicle (line 759) is the same
-  rem  shape. Retiring the manager slice in favour of the real home is the highest-value next step
-  rem  on the link side: it closes 3 of the 6 interpolate symbols outright (already header inlines
-  rem  there) and removes the hazard. NOTE the real home ALSO carries its own local `class
-  rem  Behaviour` fork (line 71), so the reconcile has to retire that too.
-  rem
-  rem  ??? AND ClearBaseFirstFrameGate IS MIS-NAMED. The store IS verified -- ArbStateCarSelect::
-  rem  Prepare emits `stb r23, 0x28(behaviour)` at 0x8226F0C4 and 0x8226F1A8 (pseudocode
-  rem  `*(GetBehaviour(handle) + 40) = 0`). But BehaviourIceAnim's canonical Behaviour base ends
-  rem  well before +0x28 (vptr, meTimestepType @+4, five flag bytes @+8..+0xC, mpcDebugParametersName
-  rem  @+0x10) and GetCollisionPolicy returns `this + 0x20`, so byte +0x28 is mCollisionPolicy
-  rem  +0x08 -- a VisibilityCollisionPolicy field, inside maReservedToVehiclePredictor
-  rem  [+0x08, +0x70). It is NOT a base gate. Name it on the POLICY when that span is carved.
-  rem
-  rem  ??? THE iceanim ShotReference HAZARD IS NOW SETTLED (what the right answer is, not the fix):
-  rem  Camera.h:83-84 carries the DWARF-attested `typedef const Attrib::RefSpec ShotReference;`
-  rem  (DWARF Camera.h:43) and Camera::mpSourceShot @+0x54 uses it. BrnBehaviourIceAnim.h:278's
-  rem  `typedef Attrib::Gen::iceanim ShotReference;` is simply the WRONG one for the SAME console
-  rem  field role (behaviour +0x0E24). The fix is to point the behaviour's typedef at
-  rem  Camera::ShotReference and have SetParameters build the TEMPORARY iceanim over the RefSpec
-  rem  the way @0x8220F5C0 does. COST, so the next wave budgets it: Attrib::Gen::iceanim's
-  rem  RefSpec ctor (iceanim.h:34) is DECLARATION-ONLY, so doing this ADDS one unresolved until
-  rem  that generated ctor is bodied. Not done here -- it cannot be boot-verified while the TU is
-  rem  unmounted, and guessing the generated ctor's body is exactly the kind of fabrication this
-  rem  file exists to prevent.
-  rem
-  rem  ---- 2026-08-01, SEVENTH PASS: 24 -> 12, and the entry gate is now MAPPED. -------------
-  rem  RE-MEASURED baseline for KeyAnimController + BehaviourIceAnim + ArbStateCarSelect:
-  rem  24 unresolved / 0 compile errors (the "30" in an earlier brief was stale; the SIXTH
-  rem  PASS's 24 was right). After this wave: 12 unresolved / 0 compile errors, measured with
-  rem  the same three TUs plus Frustum.cpp and BrnBehaviourInterpolate.cpp (both now mounted
-  rem  for real, see their own notes above).
-  rem
-  rem  ?????? MOUNTING THE THREE CAMERA TUs IS STILL BLOCKED. Twelve is not zero, and an exe does
-  rem  not link at twelve. DirectorLinkStubs.cpp also still defines ArbStateCarSelect's four
-  rem  virtuals, so mounting the TU is an LNK2005 until those four stubs come out. Both are
-  rem  next wave's first two jobs.
-  rem
-  rem  CLOSED THIS WAVE (12):
-  rem    * the six BehaviourInterpolate symbols -- by RETIRING the member-less slice this
-  rem      header used to carry (see the BrnBehaviourInterpolate.cpp mount note above) and
-  rem      bodying SetParameters / SetupCameraA|BFromHelper against the real members. All three
-  rem      are X360 HEADER-INLINES (their assert-file string is the .h, not the .cpp) recovered
-  rem      from twelve identical call sites.
-  rem    * VehicleRef::Get, AllVehicleData::{GetPlayer, GetRaceCar, GetNearestRaceCarIndexToPlayer},
-  rem      NearestCarInfo::operator> -- all five are HEADER INLINES on the console (every assert
-  rem      in them cites BrnDirectorAllVehicleData.h / BrnVehicleRef.h, and a function whose
-  rem      asserts cite a header was defined in that header). GetNearestRaceCarIndexToPlayer had
-  rem      been bodied out-of-line in a .cpp that is NOT on this build list, so every consumer
-  rem      saw an unresolved external for code that was already written.
-  rem    * BehaviourSharedInfo::{GetEyeTarget, GetLookTarget} -- the FLAG blocking them (a
-  rem      SuspensionSpring ODR fork) was STALE; there is exactly one struct SuspensionSpring in
-  rem      the tree now, so mPlayerInfo is embedded by value and both resolve to named members.
-  rem    * Camera::IsLookingAtTarget -- bodied; Frustum.cpp mounted for its one leaf.
-  rem    * CollisionPolicyAttachedToVehicle::{Construct, SetVehicleRef}.
-  rem
-  rem  ?????? AND THE REAL NEWS, WHICH IS NOT ABOUT LINK CLOSURE:
-  rem  ArbStateCarSelect STILL CANNOT LEAVE E_STATE_INACTIVE AT ZERO UNRESOLVED. The SIXTH
-  rem  PASS said so; this wave mapped the gate exactly, and it is SHALLOWER than feared:
-  rem    - ArbitratorStateContainer::UpdateAll calls Update on ALL ELEVEN states every frame
-  rem      (vtable slot 2, verified @0x821F5E70), so ArbStateCarSelect::Update runs regardless
-  rem      of which state is current. The gate is purely that nothing calls its Prepare().
-  rem    - The only writer of E_STATE_CAR_SELECT is ArbStateRoaming::ProcessPossibleStateChanges
-  rem      @0x82219C58 (already reconstructed), whose only caller is ArbStateRoaming::Update
-  rem      @0x822643A0 -- which has NO BODY ANYWHERE IN THE TREE (the ledger says `reviewed`;
-  rem      that is the same drift that bit three functions last wave).
-  rem    - Its critical path is ONE guard deep: `meState == E_STATE_PREPARING` -> the virtual
-  rem      Prepare() returns true -> meState = E_STATE_DRIVING and the arm FALLS THROUGH into
-  rem      the DRIVING body in the same frame, which reaches ProcessPossibleStateChanges
-  rem      UNCONDITIONALLY (@0x8226464C). Then H1..H9 in that function, ending on
-  rem      `meJunkyardState != E_JY_INACTIVE` -- which this build already satisfies (0 -> 2).
-  rem    - Update is a flat 16-arm jump-table switch on meState. Arms 0/1/2 + the nine
-  rem      CHANGING_TO_* arms + default are 41%% of the instructions and 100%% of the
-  rem      transition-out paths; the four Picture-Paradise/idle arms are the other 59%% and are
-  rem      unreachable in the junkyard scenario. A T2 slice is a recognisable SUBSET, not a
-  rem      fiction -- every arm boundary is a jump-table entry with its own epilogue.
-  rem      ?????? Case 13 (CHANGING_TO_CAR_SELECT, @0x8226548C) MUST be in the slice: if
-  rem      ArbStateCarSelect::Prepare declines, meState parks on 0xD and case 13 is the retry.
-  rem    - COST: one unmounted prerequisite is called UNCONDITIONALLY from the DRIVING arm --
-  rem      MomentSelector::Update @0x82239FC0 (425 asm lines, no PC body).
-  rem    - ??? AND ArbUtils::ChangeToStateWithoutRelease -- the function that performs the
-  rem      hand-off -- is a __debugbreak() TRAP STUB in BrnDirectorArbitratorUtils.h:50. Even a
-  rem      perfect ladder would trap there. Body it from @0x821FE2B8 FIRST.
-  rem      ?????? Its console parameter order is INVERTED vs the committed declaration: the console
-  rem      passes whenBlocked in r6 and whenSwitched in r7; the header declares
-  rem      leFromStateWhenSwitched 4th and leFromStateWhenBlocked 5th, and every call site in
-  rem      the tree matches the header. Consistent today only because the body traps.
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorWorldMap.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnSceneQueryInterface.cpp"
   echo "%SRC%\GameSource\Director\Utils\BrnDirectorTimestep.cpp"
@@ -4658,7 +4079,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  [FX-DIRECTOR2 2026-09-25] the producer's LineTestNearest @0x82216FD0 (its own TU; content = ARTIST
   rem  store-for-store). BrnDirector::SceneQueryInterface::LineTestNearest @0x82233048 forwards to it.
   echo "%SRC%\GameShared\GameClasses\SceneManager\CgsSceneManagerIO_SceneQueryInterface_LineTestNearest.cpp"
-  echo "%SRC%\GameSource\Director\DirectorLinkStubs.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiCache.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiProfile.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsSaveLoadPS3.cpp"
@@ -5018,7 +4438,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnCarData.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnBurnoutSkillzData.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnCrashModeScoring.cpp"
-  rem [road-rage wave 2026-09-02] LinkStubs RETIRED: the real RoadRageModeScoring TU is mounted below.
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\BrnRoadRageModeScoring.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\Array_EActiveRaceCarIndex_7.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\Array_RecentCrash_64.cpp"
@@ -5026,10 +4445,6 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Scoring\RingBuffer_Vector3.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager_EventFinish.cpp"
   echo "%SRC%\GameSource\GameState\NetworkRoundManager\BrnNetworkRoundManager.cpp"
-  rem [stuntrace mount closure 2026-08-26] the measured link-hole closers -- each verified
-  rem 0-new-externals / 0-ODR by the closure verifier's trial link. (2026-08-29 main-menu
-  rem wave: BrnMapManager.cpp is NOW MOUNTED in the SatNav block -- its fake CRT externals
-  rem were replaced with real construction loops; the HudStatesLinkStubs ctor gate is gone.)
   echo "%SRC%\GameSource\GameState\SharedIO\BrnGameStateToGuiIOInterfaces.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_OnlineGrid.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\BrnModeManager_wN3_01.cpp"
@@ -5372,31 +4787,11 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLoading.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegal.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnBootLegalBoundary.cpp"
-  rem The in-game HUD states the 14-state pool instantiates: real TUs where they are
-  rem header-homed (Paused/Idle/Crashed + the TextField component they embed), the link
-  rem scaffold for the rest (see BrnHudStatesLinkStubs.cpp).
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnPausedHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnIdleHudState.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnFBurnMainHudState.cpp"
-  rem ---- ADDED 2026-08-27 (endcrash wave): BrnCrashedHudState.cpp was ON DISK since the
-  rem   impact-time slice landed but was NEVER in this list -- the 8th sighting of that
-  rem   class. It stayed invisible because its three functions were non-virtual helpers
-  rem   nothing called; the moment the state got its OnEnter/OnLeave/Update overrides the
-  rem   link broke with 3 LNK2001s from BrnHudFlow.obj. It is NOT covered by
-  rem   BrnHudStatesLinkStubs.cpp (that file scaffolds RACE_MAIN / FBURN_MAIN /
-  rem   CRASHEDSTNT only), so there was no ODR fork to retire -- just an absent TU.
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnCrashedHudState.cpp"
-  rem ---- ADDED 2026-08-27 (crashed-stunt HUD wave): CRASHEDSTNT becomes REAL. The real
-  rem   TU carries the recovered 4-entry resource table (.rdata 0x82F26488, count 4 at
-  rem   0x82F264A8 -- the FLAG placeholder is paid off), the 12-entry event table at
-  rem   0x8205B17C, the OnEnter/OnLeave/Update lifecycle and the COMPLETE UpdatePermenant
-  rem   -- including the "END_CSTNT" arm the lua FSM maps back to state 2 RACE_MAIN.
-  rem   The CRASHEDSTNT stub block in BrnHudStatesLinkStubs.cpp died in the same change.
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnCrashedStuntHudState.cpp"
-  rem ---- stunt-race UI wave 2026-08-27: PRE_FLY_BY becomes REAL. The 7 wJ partfiles
-  rem   (the complete PreRaceFlyByState) mount; the inert PRE_FLY_BY block in
-  rem   BrnHudStatesLinkStubs.cpp was deleted in the same change (LNK2005 otherwise).
-  rem   Their measured closure = BrnMainMap.cpp + BrnMainMapLinkGates.cpp (SatNav block).
   echo "%SRC%\GameSource\Gui\Flow\PreEvent\States\BrnPreRaceFlyBy.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsList.cpp"
   rem ---- LINK CLOSURE for the friends-list / boost-message landings (added 2026-08-26).
@@ -5408,32 +4803,11 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageSlot.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnBoostMessageItem.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnFriendsListChangeIcon.cpp"
-  rem ---- p0 wave 2026-09-08: the CompassComponent (the race HUD's rotating compass
-  rem   strip) goes REAL. Its three scaffold gates in BrnHudStatesLinkStubs.cpp
-  rem   (Construct, Prepare, SetVisibility) were deleted in the same change -- LNK2005
-  rem   otherwise. Measured residual before mounting was THREE symbols; two of them
-  rem   (ShowPositionOnCompass, FormatDirectionLetters) are now bodied in this TU and
-  rem   the third (ChallengeListEntryAction::GetNumLocations) was homed inline by the
-  rem   challenge-manager mount, so this mount closes with no new gates.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnCompassComponent.cpp"
-  rem ---- p0 wave 2026-09-08: the PlayerPositionTable pair (the in-race position
-  rem   list) goes REAL. Its two scaffold gates in BrnHudStatesLinkStubs.cpp
-  rem   (SetCache, SetupGameMode) were deleted in the same change -- LNK2005
-  rem   otherwise. Measured residual before mounting was FIVE symbols; all five are
-  rem   closed here: SetTitleText + SetSkillsText in the _wP0_01 partfile,
-  rem   SingleComponent::SetCache header-inline in BrnPlayerPositionSingle.h (its
-  rem   console home), BurnoutSkillsManager::GetCurrentSkill in the skills partfile,
-  rem   and CgsNetwork::UsernameCompare in its own CgsNetworkUtils.cpp home.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPlayerPositionTable.cpp"
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPlayerPositionSingle.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiBurnoutSkillsManager.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\CgsNetworkUtils.cpp"
-  rem ---- p0 wave 2026-09-08: the PaybackComponent (the in-race "payback available"
-  rem   HUD widget) goes REAL. Its three scaffold gates in BrnHudStatesLinkStubs.cpp
-  rem   (Construct, Initialize, ShowAvailableInstantly) were deleted in the same change
-  rem   -- LNK2005 otherwise. Measured residual before mounting was ONE symbol,
-  rem   PaybackComponent::SendAwardTriggerableEvent, the component's own private leaf;
-  rem   it is now bodied in this TU, so the mount closes with no new gates.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnPaybackComponent.cpp"
   rem (FriendsListEntry / the BoostMessage trio mount ABOVE with the friends-list
   rem tranche block -- both sessions added them 2026-08-26; the duplicates died in
@@ -5447,28 +4821,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem   is the only path into the partfiles; ClearEventSpecificData is in the base).
   rem   TextFieldRef::GetText landed in the already-mounted BrnFlaptTextFieldRef.cpp.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnEventInfo.cpp"
-  rem ---- stunt-race UI wave 2026-08-27: RoadRuleShotComponent was fully bodied on
-  rem   disk all along; its link residual (the two GuiCache accessors) lives in
-  rem   BrnGuiCache_wS1.cpp. The Construct scaffold in BrnHudStatesLinkStubs.cpp was
-  rem   deleted in the same change.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnRoadRuleShotComponent.cpp"
-  rem ---- stunt-race UI wave 2026-08-27: RACE_MAIN becomes REAL. The base TU (the
-  rem   21-entry resource table + OnEnter/OnLeave/UpdateSetupState family) + three
-  rem   partfiles (wS2 Update/WFInit/Permenant/Reveal; wS3 Running/EventInfo/countdown;
-  rem   wS4 ProcessAptEvents/BoostInfo/SatNav + the freeburn-challenge tickers). The
-  rem   RACE_MAIN stub block in BrnHudStatesLinkStubs.cpp was deleted in the same change.
-  rem   ChallengeListEntry.cpp joins for ChallengeListEntryAction::GetTargetValue (bodied
-  rem   on disk, never listed -- the ticker's per-action target values).
   echo "%SRC%\GameSource\Gui\Flow\HUD\States\BrnRaceMainHudState.cpp"
   echo "%SRC%\SharedClasses\DataLists\ChallengeListEntry.cpp"
-  rem   RACE_MAIN's measured link closure (2026-08-27 trial links): the online-timeout
-  rem   timer (0 new externals) and the sat-nav zoom cache leg (wB_08; its duplicate
-  rem   assert-less IsRoadRuleActive twin in BrnGuiCache.cpp was retired). The compass
-  rem   TU and the player-position table pair were TRIED and REVERTED -- each opens more
-  rem   holes than it closes (Compass: ShowPositionOnCompass/FormatDirectionLetters/
-  rem   GetNumLocations; table pair: SingleComponent::SetCache/SetTitleText/SetSkillsText/
-  rem   UsernameCompare/GetCurrentSkill) -- their RACE_MAIN-facing symbols are gated in
-  rem   BrnHudStatesLinkStubs.cpp instead, all runtime-dead on the mode-7 path.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnOnlineTimeoutTimerComponent.cpp"
   rem  The ChallengeSelector pair mounts together: the second file is a part-file of the same TU and holds the sole SelectAvailableChallenge body.
   echo "%SRC%\GameSource\Gui\Flow\HUD\Components\BrnChallengeSelector.cpp"
@@ -5967,6 +5322,39 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3ObjectVideoDynamic.cpp"
   echo "%SRC%\SDKs\Packages\MassiveAd\MassiveAdClient3RequestEnterZone.cpp"
   echo "%SRC%\GameShared\GameClasses\System\PC\CgsXboxLivePC_wS34_01.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnDebugMenuSerialiser.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnTextFileReadSerialiser.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnTextFileWriteSerialiser.cpp"
+  echo "%SRC%\GameSource\Director\Camera\BrnBehaviourParameterBank.cpp"
+  echo "%SRC%\GameSource\Director\Arbitrator\States\BrnArbStateTestbed.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnLookerSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnPositionLagSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnOrientationLagSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraShake.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraImpactEffect.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Utils\BrnCameraRig.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourHeliCamSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourLooseAttachmentParameters.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourRigSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourFixedCamSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BehaviourPassengerCam_wS34_00.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGameplayExternalParameters.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGyroCamSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourFailsafeSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourAftertouchCamParameters.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourAftertouchCrashParameters.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourBystanderCamSerialise.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourGameplayBumperParameters.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnAttachmentTruck.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourHeliCam.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourFailsafe.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourAftertouchCam.cpp"
+  echo "%SRC%\GameSource\Director\Camera\BrnBehaviourManager_wS34_00.cpp"
+  echo "%SRC%\GameSource\Director\Utils\BrnICEMoviePlayerSerialise.cpp"
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugCompononent_wS34_01.cpp"
+  echo "%SRC%\GameSource\Director\BrnDirectorICEWrapper.cpp"
+  echo "%SRC%\GameSource\Director\Camera\Behaviours\BrnBehaviourHeliCam_wS34_05.cpp"
+  echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugCompononent_wS34_02.cpp"
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 
