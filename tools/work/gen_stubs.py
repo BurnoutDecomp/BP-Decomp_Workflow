@@ -29,7 +29,7 @@ OUT_DIR = os.path.join(ROOT, "progress", "stubs")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_skeleton import load_export, signature_from_pseudocode
 
-DONE = ("compiles", "reviewed")
+DONE = ("compiles", "reviewed", "external")
 CC = re.compile(r"\b__(fastcall|cdecl|thiscall|stdcall|usercall|userpurge)\b|"
                 r"__(return_ptr|struct_ptr|hidden|noreturn)\b")
 # Hex-Rays pseudo-types -> the project's types.hpp aliases. Order matters

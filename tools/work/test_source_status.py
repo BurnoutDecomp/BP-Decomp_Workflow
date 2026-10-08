@@ -33,3 +33,11 @@ def test_unsupported_or_partial_tus_and_vendor_buckets_are_not_completed():
            "empty": {"functions": []}}
     result = build_evidence(tus, identity, [], index, "a" * 40)
     assert result["functions"] and result["tus"] == {}
+
+
+def test_attested_rename_cannot_hide_a_stub_under_its_cpp_name():
+    index = SimpleNamespace(by_exact={"Ledger::EventEvent": [definition("Actual::Event")]})
+    identity = {"Ledger::EventEvent": {"x360_addrs": ["0x82000000"]}}
+    tus = {"A": {"functions": ["Ledger::EventEvent"]}}
+    result = build_evidence(tus, identity, [{"name": "Actual::Event"}], index, "a" * 40)
+    assert result["functions"] == result["tus"] == {}

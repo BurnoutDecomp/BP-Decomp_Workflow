@@ -58,7 +58,7 @@ jobs:
                   base = os.environ['WORK_SERVER'].rstrip('/')
                   state = json.load(urllib.request.urlopen(base + '/api/source-status', timeout=30))
                   audit = json.load(urllib.request.urlopen(base + '/api/audit/summary', timeout=30))
-                  inputs = ('progress/tu_index.json', 'progress/identity.json', 'tools/work/source_status.py',
+                  inputs = ('progress/tu_index.json', 'progress/identity.json', 'progress/source_aliases.json', 'tools/work/source_status.py',
                             'tools/re/funcaudit.py', 'tools/re/stubaudit.py', 'tools/re/requirements.txt')
                   digest = hashlib.sha256(b''.join(pathlib.Path(p).read_bytes() for p in inputs)).hexdigest()
                   durable = json.load(urllib.request.urlopen(base + '/export/status', timeout=30))
@@ -171,7 +171,7 @@ jobs:
           WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
         run: |
           set -euo pipefail
-          python -m pytest tools/re/test_funcaudit.py tools/work/test_source_status.py -q
+          python -m pytest tools/re/test_funcaudit.py tools/work/test_source_status.py tools/work/test_external_status.py tools/work/test_reconcile_from_files.py -q
           python tools/work/source_status.py --server "$WORK_SERVER" --publish
 
       - name: Export the reconciled durable ledger

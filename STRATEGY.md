@@ -13,6 +13,16 @@ decomp — there is no asm-diff gate. A function is "done" when it is reconstruc
 in [`b5-decomp`](b5-decomp/), the project compiles, and a reviewer pass confirms
 the C++ does what the source build's pseudocode/asm does.
 
+`external` is a separate durable TU status for existing vendor source or a host
+platform implementation that supplies a subsystem without reconstructing its
+console internals. Record the provider and scope with `work external <tu> "reason"`.
+It satisfies dependency availability and is not claimable, including forced
+claims; use `work unblock` to explicitly return it to reconstruction. External
+TUs do not count as `done`. Otherwise-unrecorded functions in them are `external`,
+separate from recovered/compiled/reviewed reconstruction coverage. Actual
+reconstructed functions retain their evidence and status. This classification
+does not certify console feature parity or runtime coverage of every SDK entry.
+
 New owned C/C++ follows the project naming convention in
 [`references/CXX_NAMING_CONVENTIONS.md`](references/CXX_NAMING_CONVENTIONS.md) — the
 single source of truth for style, derived from the project's own code.

@@ -77,7 +77,8 @@ TU_DEPS_JSON = os.path.join(ROOT, "progress", "tu_deps.json")
 GOALS_JSON = os.path.join(ROOT, "progress", "goals.json")
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 
-TU_STATUS = ("todo", "in_progress", "compiled", "done", "blocked")
+TU_STATUS = ("todo", "in_progress", "compiled", "done", "blocked", "external")
+SATISFIED_STATUSES = ("done", "external")
 
 
 def load_dotenv(path=None):
@@ -532,7 +533,7 @@ def sync_status(con):
     durable = server_enabled()
     tu = {}
     for r in con.execute("SELECT id,status,owner,notes FROM tu WHERE status!='todo'"):
-        if durable and r["status"] not in ("done", "blocked"):
+        if durable and r["status"] not in ("done", "blocked", "external"):
             continue
         keys = ("status", "notes") if durable else ("status", "owner", "notes")
         tu[r["id"]] = {k: r[k] for k in keys if r[k]}
@@ -903,7 +904,7 @@ def cmd_goal(args):
         ext = Counter()
         st = {r["id"]: r["status"] for r in con.execute("SELECT id,status FROM tu")}
         for r in con.execute("SELECT tu_id,dep_id,weight FROM tu_dep"):
-            if r["tu_id"] in sel and r["dep_id"] not in sel and st.get(r["dep_id"]) != "done":
+            if r["tu_id"] in sel and r["dep_id"] not in sel and st.get(r["dep_id"]) not in SATISFIED_STATUSES:
                 ext[r["dep_id"]] += r["weight"]
         print(f"\n  boundary: {len(ext)} out-of-scope TUs are called from in-scope code "
               f"(trap-stubbed until you widen the globs or reach them).")
@@ -976,7 +977,7 @@ def ranked_todo(con, n=None):
         q = """
         SELECT t.id, t.source, t.n_funcs, t.dest_path,
           (SELECT COUNT(*) FROM tu_dep d JOIN tu dt ON dt.id=d.dep_id
-            WHERE d.tu_id=t.id AND dt.status NOT IN ('done')) AS unresolved
+            WHERE d.tu_id=t.id AND dt.status NOT IN ('done','external')) AS unresolved
         FROM tu t WHERE t.status='todo'
         ORDER BY unresolved ASC, (t.source='decfigs') DESC, t.n_funcs ASC"""
     else:
@@ -993,7 +994,7 @@ def ranked_todo(con, n=None):
                 deps[d["tu_id"]].add(d["dep_id"])
             for r in ranked:
                 r["unresolved"] = sum(1 for x in deps.get(r["id"], ())
-                                      if x in gset and status.get(x) != "done")
+                                      if x in gset and status.get(x) not in SATISFIED_STATUSES)
             ranked.sort(key=lambda r: (r["unresolved"], r["source"] != "decfigs", r["n_funcs"]))
     return ranked[:n] if n else ranked
 
@@ -1032,7 +1033,7 @@ def cmd_next(args):
         q = """
         SELECT t.id, t.source, t.n_funcs, t.dest_path,
           (SELECT COUNT(*) FROM tu_dep d JOIN tu dt ON dt.id=d.dep_id
-            WHERE d.tu_id=t.id AND dt.status NOT IN ('done')) AS unresolved
+            WHERE d.tu_id=t.id AND dt.status NOT IN ('done','external')) AS unresolved
         FROM tu t WHERE t.status='todo'
         ORDER BY unresolved ASC, (t.source='decfigs') DESC, t.n_funcs ASC"""
     else:
@@ -1059,7 +1060,7 @@ def cmd_next(args):
             ranked = [dict(r) for r in ranked]
             for r in ranked:
                 r["unresolved"] = sum(1 for x in deps.get(r["id"], ())
-                                      if x in gset and status.get(x) != "done")
+                                      if x in gset and status.get(x) not in SATISFIED_STATUSES)
             ranked.sort(key=lambda r: (r["unresolved"], r["source"] != "decfigs", r["n_funcs"]))
     rows = ranked[:args.n]
     if not rows:
@@ -1212,9 +1213,17 @@ def cmd_postmortem(args):
 def set_tu(con, tu, status, owner=None, notes=None):
     if status not in TU_STATUS:
         sys.exit(f"status must be one of {TU_STATUS}")
-    r = con.execute("SELECT id FROM tu WHERE id=?", (tu,)).fetchone()
+    r = con.execute("SELECT id,status,owner FROM tu WHERE id=?", (tu,)).fetchone()
     if not r:
         sys.exit(f"unknown TU: {tu!r}")
+    if r["status"] == "external" and status == "in_progress":
+        sys.exit("External TUs are supplied; explicitly unblock before reconstructing one")
+    if status == "external":
+        if r["status"] in ("in_progress", "compiled") or r["owner"]:
+            sys.exit("Cannot reclassify active or compiled work as external")
+        con.execute("UPDATE func SET status='external' WHERE tu_id=? AND status='todo'", (tu,))
+    elif r["status"] == "external":
+        con.execute("UPDATE func SET status='todo' WHERE tu_id=? AND status='external'", (tu,))
     con.execute("UPDATE tu SET status=?, owner=COALESCE(?,owner), notes=COALESCE(?,notes), updated_at=? WHERE id=?",
                 (status, owner, notes, now(), tu))
     log(con, status, tu_id=tu, detail=notes)
@@ -1607,6 +1616,26 @@ def cmd_unblock(args):
             "agent": server_agent(),
         }, args.tu)
     print(f"unblocked {args.tu}")
+
+
+def cmd_external(args):
+    """Record a vendor/platform provider, without calling it reconstructed."""
+    con = connect()
+    row = con.execute("SELECT status,owner FROM tu WHERE id=?", (args.tu,)).fetchone()
+    if not row:
+        sys.exit(f"unknown TU: {args.tu}")
+    if row["status"] in ("in_progress", "compiled") or row["owner"]:
+        sys.exit("Cannot reclassify active or compiled work as external")
+    if not args.reason.strip():
+        sys.exit("An external implementation needs a provider/source explanation")
+    if server_enabled():
+        flush_pending(con)
+        server_mutate(con, "external", "POST", f"/tu/{server_tu_path(args.tu)}/external", {
+            "agent": server_agent(), "reason": args.reason,
+        }, args.tu)
+    con.execute("UPDATE func SET status='external' WHERE tu_id=? AND status='todo'", (args.tu,))
+    set_tu(con, args.tu, "external", notes=args.reason)
+    print(f"external {args.tu}: {args.reason}")
 
 
 def cmd_set(args):
@@ -2163,6 +2192,8 @@ def main():
     au.add_argument("-n", type=int, default=25, help="max TUs to land in a --run sweep")
     au.set_defaults(fn=cmd_auto)
     b = sub.add_parser("block"); b.add_argument("tu"); b.add_argument("reason"); b.set_defaults(fn=cmd_block)
+    e = sub.add_parser("external", help="supplied by vendor source or the host platform; explain the provider")
+    e.add_argument("tu"); e.add_argument("reason"); e.set_defaults(fn=cmd_external)
     u = sub.add_parser("unblock"); u.add_argument("tu"); u.set_defaults(fn=cmd_unblock)
     rt = sub.add_parser("reset-tu", help="delete produced files and return a TU/functions to todo locally and server-side")
     rt.add_argument("tu")

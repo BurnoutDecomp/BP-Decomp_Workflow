@@ -1,0 +1,545 @@
+{
+ "version": 1,
+ "audited_at": "2026-10-08",
+ "source_commit": "305ca7d9bb8ce1f922e530e49887f6f329250176",
+ "scope": "All 76 live blocked TUs; exact definitions, explicit instantiations/renames, current partial-body flags and shipping providers. No new semantic review verdict or gameplay validation.",
+ "counts": {
+  "blocked": 48,
+  "done": 13,
+  "external": 15
+ },
+ "tus": [
+  {
+   "tu": "GameShared/GameClasses/Development/CgsStrStream.h",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: This 953-function DWARF inline-attribution bucket spans many real game owners. The pass found 845 exact scoped source identities and 108 without indexed bodies, plus genuine partial bodies. A populated CgsStrStream header cannot complete this whole bucket; remaining identities need owner/body review.",
+   "n_funcs": 953
+  },
+  {
+   "tu": "GameShared/GameClasses/Geometric/Intersection/CgsPolygonSoupTests.cpp",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Five of six named identities have scoped bodies. TestLinePolygonSoupDoubleSided still has no located definition; the old four-missing-functions note is obsolete, but the remaining query prevents completing the TU.",
+   "n_funcs": 6
+  },
+  {
+   "tu": "GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Sixteen of seventeen named identities have scoped bodies. InterpretOcclusionQuery still explicitly traps on its unreconstructed VMX render path; ShaderConstantsExternal::AddToDispatchBinFromStatePointers has no located body. Keep the actual remaining gaps visible.",
+   "n_funcs": 17
+  },
+  {
+   "tu": "GameShared/GameClasses/SceneManager/CgsSceneManagerBridgeFunctions.cpp",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All ten identities have definitions, but several are genuine traps/partial implementations: ProcessFineVolumeTest, ProcessLineTestFastDoubleSided and ProcessSphereTestFast are named reconstruction gates; the triangle collision path also retains a missing kernel. Source presence alone cannot complete this TU.",
+   "n_funcs": 10
+  },
+  {
+   "tu": "GameShared/GameClasses/SceneManager/FineIntersectionTestModule/CgsFineIntersectionTestModule.cpp",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The lifecycle bodies are present and ComputeLineTestFine is partially implemented, but its ClusteredMesh fast path still explicitly traps as not reconstructed. The old eight-function count does not match this four-function ledger bucket; this remaining core branch is the current blocker.",
+   "n_funcs": 4
+  },
+  {
+   "tu": "GameShared/GameClasses/Sound/Playback/Splicer/internal/SpliceObjects.cpp",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All 12 named functions are present, including SpliceSample::Update and the StereoSpliceSample StartVoice specialization. The old voice-start/rodata blocker is retired in the current implementation.",
+   "n_funcs": 12
+  },
+  {
+   "tu": "GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All 14 named functions have actual scoped bodies in CgsBundleLoaderModule.cpp and CgsResourceBundleLoaderModule.cpp. The prior note already recorded a passed review; the stub-inventory hits inspected here are ordinary error/stage assertions.",
+   "n_funcs": 14
+  },
+  {
+   "tu": "GameSource/Director/Arbitrator/States/BrnArbStateRenderMetrics.cpp",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The base ArbitratorState and BehaviourManager framework now exists, so the old \"none reconstructed\" note is obsolete. ArbStateRenderMetrics itself still has no located bodies, and BehaviourRenderMetrics remains a nominal receiver-only slice without the full virtual behaviour surface. State update/camera dependencies need a focused pass.",
+   "n_funcs": 5
+  },
+  {
+   "tu": "GameSource/Director/Camera/Behaviours/Serialisation.h",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All five named functions are implemented. ARTIST 0x82219A50 identifies the Vector3 DebugMenuSerialiser overload (three Process<float>/SetStep pairs), not the unrelated empty VersionNumber overload. TextFileWriteSerialiser Vector3 is also bodied; both former missing serializer dependencies are present.",
+   "n_funcs": 5
+  },
+  {
+   "tu": "GameSource/Gui/BrnGuiEventTypeDefs.h",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Eighteen of twenty-one ledger names have scoped bodies. The two GuiNetworkRemotePlayerDisconnectEvent setters and OnlineInstantResultsState::FillOutTicker remain without located definitions; keep this aggregate partial rather than declaring the header complete.",
+   "n_funcs": 21
+  },
+  {
+   "tu": "GameSource/Physics/VehicleManager/BrnPhysicalTrafficVehicle.h",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Confirmed semantic gap: all three names have bodies and AddArticulatedJointContacts is implemented. SetTrafficVehicleChecked still explicitly omits the articulated other-half recursion at 0x8262D8B8, replacing it with HasNonBrokenJoint only. The old entirely-unhomed note is obsolete; this specific missing branch remains.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "GameSource/Unity/../Graphics/PostFx/BrnPostFx.cpp",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All six named PostFx functions now have scoped implementations, including Construct, Render, PrepareDownSampleBuffers and both tint-blend operations. The old constructor-only Wave35 note is obsolete. Existing PC bring-up flags remain disclosed in source.",
+   "n_funcs": 6
+  },
+  {
+   "tu": "GameSource/Unity/../World/AI/RacingLine/BrnHardNoGoMap.cpp",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Ten of eleven named identities have scoped bodies. HardNoGoMap::Render at ARTIST 0x82783740 remains explicitly parked/declared-only in BrnHardNoGoMap.cpp/.h. The gameplay grid is reconstructed, but this TU still has a genuine debug-render gap.",
+   "n_funcs": 11
+  },
+  {
+   "tu": "GameSource/Unity/../World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleDebugComponent.cpp",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: No bodies for the thirteen RaceCarEntityModuleDebugComponent identities were located. SIMD vocabulary has grown since the old note, but the specific debug component and its CgsCore speed-constant/dependency surface are not homed. Do not infer completion from other per-file MPH constants.",
+   "n_funcs": 13
+  },
+  {
+   "tu": "SDKs/EATech/include/rw/audio/core/system.h",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The ledger EventEvent name at ARTIST 0x826C3498 is GinsuPlayer::Event in the committed source. Its deferred queue play and stop records, cursor advances and handlers are implemented. The exact alias is recorded for future source audits.",
+   "n_funcs": 1
+  },
+  {
+   "tu": "SDKs/EATech/include/rw/math/fpu/scalar.h",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Misattributed scalar-math DWARF bucket, not seven scalar helpers. Six actual owning functions now have scoped bodies; CgsDev::_InterpolateColour remains unresolved. Repair that owner/identity instead of inventing a scalar-header implementation.",
+   "n_funcs": 7
+  },
+  {
+   "tu": "SDKs/EATech/include/rw/math/vpu/detail/vector3_operation_inline.h",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Twenty-five of thirty named identities have scoped bodies including RenderWare vocabulary. PointsWillPassEachOther, DrawOffsetArrow, ClipBoxEdgeAgainstTriangle, IntersectionOf3Planes and IntersectTriangleSweptSphere remain without located definitions. This is a cross-owner inline-attribution bucket, not just vector operators.",
+   "n_funcs": 30
+  },
+  {
+   "tu": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribloadandgo.cpp",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Ten of eleven names now have scoped bodies, so the old six-of-eleven AssetID blocker is stale. Attrib::Vault::ClearExport remains without a located definition; resolve that final member before completion.",
+   "n_funcs": 11
+  },
+  {
+   "tu": "class:ArrayMembersIndex",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: ArrayMembersIndex::in_word_set has no located body. The gperf association/wordlist/dispatch data are not present in the current implementation; the old un-recovered-table blocker cannot be cleared by a different Apt hash-table implementation.",
+   "n_funcs": 1
+  },
+  {
+   "tu": "class:BrnDirector::Camera",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: This Camera bucket still contains truncated template/behaviour identities. Several have now landed (documented in Camera.cpp and BrnBehaviourManager.h), but other pool/slot/math entries remain declared-only or ambiguous. A prefix match across behaviour types would falsely complete the bucket.",
+   "n_funcs": 34
+  },
+  {
+   "tu": "class:BrnGameState::AchievementManagerX360",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Four of seven named AchievementManagerX360 methods have scoped bodies. GetAchievementsFromX360Api, Update and WriteAchievements remain unbodied; game-specific achievement orchestration and the controller interface are still missing. Supplying the platform SDK does not reconstruct this game logic.",
+   "n_funcs": 7
+  },
+  {
+   "tu": "class:BrnGameState::GameStateModule",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Seven of eight names now have bodies, including Prepare2. GetControllerToGameStateInterface remains without a located implementation; the old two-missing-functions count is stale, but this accessor is still a real dependency.",
+   "n_funcs": 8
+  },
+  {
+   "tu": "class:BrnGameState::RichPresenceManagerX360",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: No scoped bodies for the eleven named RichPresenceManagerX360 functions were located. The former discarded seven-function draft is not completion evidence; the game-specific presence thread/context logic remains unresolved.",
+   "n_funcs": 11
+  },
+  {
+   "tu": "class:BrnGui::CrashNavEnterOnlineX360",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All four CrashNavEnterOnlineX360 methods are bodied. Update performs the base update and handles sign-in notifications; the invite-notification assert is the original invalid-event branch, not a missing implementation.",
+   "n_funcs": 4
+  },
+  {
+   "tu": "class:BrnNetwork::TrafficManager",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: TrafficManager still has two exact identities and two unresolved truncated member names. The committed namespace/aggregate attribution conflict is not resolved by similarly named free helpers; retain the flag until the owning object and buffered-message members are attested.",
+   "n_funcs": 4
+  },
+  {
+   "tu": "class:BrnPhysics::Deformation::RemoveDeformationModelEvent>",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The truncated RemoveDeformationModelEvent AddEvent identity has no located body. Its queue element/layout contract still requires explicit attestation in the shared deformation event type; do not mark a generic queue or a constructor as this AddEvent implementation.",
+   "n_funcs": 1
+  },
+  {
+   "tu": "class:BrnResource::LinearResourceAllocator",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: No scoped bodies for the three LinearResourceAllocator getters were located. BrnResourceAllocator.h still models a minimal allocator slice; it is not the complete named linear allocator hierarchy. The old forked draft is not present evidence.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:BrnSound::Vehicles",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The three Vehicles names remain truncated owner fragments (AIVeh, E, Playe), not a real class surface. Other AIVehicle/PlayerVehicle/ResourcePtr code is present, but these identities are not yet safely attributed. Keep an explicit metadata/owner blocker instead of inventing namespace methods.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:BrnSound::Vehicles::Environment",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Environment::Cra remains an un-attributed folded/mis-bucketed leaf with no located owning definition. The old warning against fabricating an Environment member still applies; a generic return-this-plus-offset match is insufficient.",
+   "n_funcs": 1
+  },
+  {
+   "tu": "class:BrnWorld::EnvironmentSettings::EnvironmentManager",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Confirmed semantic gap: all seven named methods now have bodies. SetupBlend still explicitly omits the DebugInterface registration/clamp in its override-season arm, with a FLAG BLOCKED comment. The old three-unhomed-functions note is stale; the remaining debug branch is the current completeness gap.",
+   "n_funcs": 7
+  },
+  {
+   "tu": "class:BrnWorld::RaceCarRenderParams",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: RaceCarRenderParams::operator= remains without a located body or a fully attested aggregate layout. The large VMX struct-copy / detached-part payload contract has not been supplied by an unrelated renderer struct.",
+   "n_funcs": 1
+  },
+  {
+   "tu": "class:CWMVideoPerceptionModel",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Two of seven CWMVideoPerceptionModel identities have bodies. Constructor, texture-classification/shift and quantization-selection methods remain without located definitions; the WMV model/rodata work is not complete.",
+   "n_funcs": 7
+  },
+  {
+   "tu": "class:CgsGraphics::Im2d",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All four Im2d mask/boost-color helpers remain without located scoped bodies. A separate ImRenderBuffer mask path exists, but it is not proof of these four method identities.",
+   "n_funcs": 4
+  },
+  {
+   "tu": "class:CgsSceneManager::CgsCollision",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: This seven-entry CgsCollision catch-all contains truncated owning class/accessor names. Several real result/cache helpers are present, but two LineWithPolySoup descriptor identities remain unresolved. Re-attribute per address; do not complete the catch-all from a neighbouring accessor.",
+   "n_funcs": 7
+  },
+  {
+   "tu": "class:CgsSceneManager::CgsCollision::BaseCollisionGenerator",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Many former blockers have landed: Add*/Run* stream dispatchers, PrepareNewPrimitiveTestResultsList and the nearest/primitive/swept collision bodies are present under full names. RunCollideLineAgainstPolySoupList and TestLineAgainstPolySoupListDouble remain unhomed, and the truncated Crea identity is ambiguous. The old two-of-fifteen note is obsolete.",
+   "n_funcs": 15
+  },
+  {
+   "tu": "class:CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: GetTestNearest/GetTestDoubleSided still have no located bodies for this LineWithPolySoupStreamJobDesc type. A different triangle-list stream descriptor is not the same attested accessor; keep the unresolved descriptor/layout dependency.",
+   "n_funcs": 2
+  },
+  {
+   "tu": "class:CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult,10>",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The truncated D entry at ARTIST 0x8222D558 is PostOffice<OutEventSphereTestFastResult,10>::Deliver. The actual generic Deliver body now checks index/non-null and calls TakePackage; BrnPostOffice.h is present. Explicit attested alias recorded.",
+   "n_funcs": 1
+  },
+  {
+   "tu": "class:CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult>",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The truncated TakePac entry at ARTIST 0x821FF238 is PostBox<OutEventSphereTestFastResult>::TakePackage. The actual generic body checks WAITING, copies the two-word result payload and publishes GOT_PACKAGE. Explicit attested alias recorded.",
+   "n_funcs": 1
+  },
+  {
+   "tu": "class:CgsSound::Playback",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: CgsSound::Playback is a namespace catch-all with nineteen unresolved truncated names and one exact identity. Several underlying owners are now implemented (AemsFactory, Environment, generic handles), but other entries are ICF/mis-attribution collisions. Requires per-address ownership repair; blanket completion would falsely credit unrelated functions.",
+   "n_funcs": 20
+  },
+  {
+   "tu": "class:D3D",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: this is Xbox XDK D3D/Xenos runtime code. The PC shipping build uses Windows d3d9.lib and src/pc/gcm/renderengine, including XenonD3D9Shims.cpp. Console GPU command/capture internals are outside the PC reconstruction target. This does not certify all Xbox SDK features on PC; existing reconstructed bodies retain their statuses.",
+   "n_funcs": 188
+  },
+  {
+   "tu": "class:D3D::CCapture",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: this is Xbox XDK D3D/Xenos runtime code. The PC shipping build uses Windows d3d9.lib and src/pc/gcm/renderengine, including XenonD3D9Shims.cpp. Console GPU command/capture internals are outside the PC reconstruction target. This does not certify all Xbox SDK features on PC; existing reconstructed bodies retain their statuses.",
+   "n_funcs": 11
+  },
+  {
+   "tu": "class:MassiveAdClient3::CMassiveAdObjectTexture",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The texture constructor has the real base/member initializer list, and GetBestImpression is implemented in MassiveAdClient3AdObject.cpp. The destructor is declared/defined; deleting-destructor emission belongs to the compiler. All non-thunk ledger functions are accounted for.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:MassiveAdClient3::CMassiveAdObjectVideo",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The video constructor and GetBestImpression are implemented; the destructor is declared/defined and the deleting thunk is compiler-generated. The old GetBestImpression blocker is obsolete.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:RealmcCore",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: RealmcCore still mixes real methods with truncated MessagePtr/ResponsePtr/ThrFunction/allocator identities. Three exact names are present; the remaining queue/allocator/template identities are not fully homed or attested. Do not substitute a namespace-level fake implementation.",
+   "n_funcs": 15
+  },
+  {
+   "tu": "class:RealmcIface::MessageLoadDone",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Apply and destruction are supplied, but MessageLoadDone construction remains declared-only in RealmcIfaceMessageLoadDone.h and has no located scoped body. The EASTL/string allocator initialization is still unresolved.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:RealmcIface::XenonRunnableTask",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: XenonRunnableTask has three exact non-thunk bodies; SelectDevice and the truncated GetCa identity remain declared-only/unresolved in RealmcXenonRunnableTask.h. Game save-device orchestration is distinct from supplying Windows APIs.",
+   "n_funcs": 6
+  },
+  {
+   "tu": "class:Snd",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Five of eight Snd codec helpers have bodies. readsamples, decodemut and decodexac remain without located definitions; the MicroTalk/XA tables/decoding work is not complete.",
+   "n_funcs": 8
+  },
+  {
+   "tu": "class:Snd9::AemsStandardSamplePlayer",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Five of six named non-thunk AemsStandardSamplePlayer identities have bodies. GetOutputs remains explicitly BLOCKED/declaration-only in sndaemssampleplayer.h. The compiler deleting-destructor count is not an additional missing C++ body.",
+   "n_funcs": 7
+  },
+  {
+   "tu": "class:Snd::CMpegLayer3Base",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All six CMpegLayer3Base methods remain without located scoped bodies. A separate host codec library is not evidence that this named game/middleware decode path is wired to it; retain the implementation/data blocker.",
+   "n_funcs": 6
+  },
+  {
+   "tu": "class:XAUDIO::CEngine",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: the Xbox XAUDIO engine/voice/effect internals are supplied on PC by CgsSystem::AudioOutputPC and Microsoft XAudio2 2.9 (vendor/xaudio2redist, xaudio2_9redist.dll). The shipping build mounts CgsAudioOutputPC.cpp and ships that runtime. Game/rwaudio mixing and DSP remain reconstruction work; this is not a console feature-parity verdict.",
+   "n_funcs": 18
+  },
+  {
+   "tu": "class:XAUDIO::CReverbEffect",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: the Xbox XAUDIO engine/voice/effect internals are supplied on PC by CgsSystem::AudioOutputPC and Microsoft XAudio2 2.9 (vendor/xaudio2redist, xaudio2_9redist.dll). The shipping build mounts CgsAudioOutputPC.cpp and ships that runtime. Game/rwaudio mixing and DSP remain reconstruction work; this is not a console feature-parity verdict.",
+   "n_funcs": 9
+  },
+  {
+   "tu": "class:XAUDIO::CRoutedVoice",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: the Xbox XAUDIO engine/voice/effect internals are supplied on PC by CgsSystem::AudioOutputPC and Microsoft XAudio2 2.9 (vendor/xaudio2redist, xaudio2_9redist.dll). The shipping build mounts CgsAudioOutputPC.cpp and ships that runtime. Game/rwaudio mixing and DSP remain reconstruction work; this is not a console feature-parity verdict.",
+   "n_funcs": 11
+  },
+  {
+   "tu": "class:XCAM::CRemoteConsole",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Four of seven CRemoteConsole methods have bodies. GetEncodedPacket, ReInitialize and SubmitEncodedPacket remain unbodied, and no replacement PC camera/stream/QoS provider was identified. Keep this blocked rather than claiming an external implementation exists.",
+   "n_funcs": 7
+  },
+  {
+   "tu": "class:XGRAPHICS::CFG",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: Xbox XGRAPHICS shader-compiler internals are replaced by the Windows D3D shader compiler and host shader programs. XenonD3D9Shims.cpp loads D3DCompile and creates host D3D9 shaders. These original Xenos compiler internals are not PC game-source reconstruction work.",
+   "n_funcs": 5
+  },
+  {
+   "tu": "class:XGRAPHICS::IRAlu",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: Xbox XGRAPHICS shader-compiler internals are replaced by the Windows D3D shader compiler and host shader programs. XenonD3D9Shims.cpp loads D3DCompile and creates host D3D9 shaders. These original Xenos compiler internals are not PC game-source reconstruction work.",
+   "n_funcs": 7
+  },
+  {
+   "tu": "class:XGRAPHICS::IRLoadConst",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: Xbox XGRAPHICS shader-compiler internals are replaced by the Windows D3D shader compiler and host shader programs. XenonD3D9Shims.cpp loads D3DCompile and creates host D3D9 shaders. These original Xenos compiler internals are not PC game-source reconstruction work.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:princeton_digital::stereo_room_t<float>",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The stereo_room_t setters/destruction have source evidence, but process, properties_set and construction remain unbodied/declared-only. The filter-bank/coefficient/state contract is still unresolved; an unrelated audio output runtime does not provide this DSP.",
+   "n_funcs": 6
+  },
+  {
+   "tu": "class:rw::audio::core::Encoder",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Encoder::GetDataRateOverhead and Release have no located bodies. The Release thunk depends on the concrete encoders, which remain unimplemented. No checked-in provider or host XAS encoder was identified; deferred encoder reconstruction remains blocked.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:rw::audio::core::FastFirEngine",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: FastFirEngine Configure/Filter/Reset/SetChannels and the explicit ctor/dtor helpers are present under vendor/renderware. EstimateLoad, LoadDistributionCalc and MultiplyAccumulateComplex remain declared-only/undecoded; the old six-of-nine partial state remains substantively valid.",
+   "n_funcs": 9
+  },
+  {
+   "tu": "class:rw::audio::core::Limiter1",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Confirmed semantic gap: Limiter1 Configure and its formerly missing rodata are now implemented, and the deleting-destructor helper is present. However CreateInstance still explicitly reproduces only part of PlugIn::Initialize and omits the owning system/voice wiring (flag documented immediately above it). Keep the actual remaining initialization gap, not the retired rodata blocker.",
+   "n_funcs": 5
+  },
+  {
+   "tu": "class:rw::audio::core::Pcm16BigEnc",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: No named Pcm16BigEnc encoder bodies were located. The encoder remains deferred and no source/host replacement for this specific path was demonstrated. Do not classify it external just because it is middleware.",
+   "n_funcs": 4
+  },
+  {
+   "tu": "class:rw::audio::core::Xas1Enc",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: No named Xas1Enc compression/interleave/flush bodies were located, and no supplied XAS1 encoder provider was demonstrated. Keep the genuine encoder reconstruction gap.",
+   "n_funcs": 6
+  },
+  {
+   "tu": "class:rw::audio::core::XasEnc",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: XasEnc Encode/Flush remain unbodied; no supplied replacement XAS encoder was identified. These are distinct from decoding or Windows audio output.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:rw::core::arena::DefaultRuntimeAtomFixup",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The truncated DefaultRuntimeAtomFixup::At forwarding identity still has no located body or safely homed singleton/return contract. Compiler deleting-destructor emission alone cannot complete it.",
+   "n_funcs": 2
+  },
+  {
+   "tu": "class:rw::core::arena::DefaultRuntimeUnfixRefixAtoms",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: The truncated DefaultRuntimeUnfixRefixAtoms::At identity still has no located body or safely attested StaticAtomTable singleton/member type. Keep the real atom-runtime attribution/type dependency.",
+   "n_funcs": 2
+  },
+  {
+   "tu": "class:rw::graphics::postfx",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Blend2Cubes through Blend6Cubes call the real templated blend kernel; SetColour and TintBlend are bodied. The truncated ColourCub at ARTIST 0x824FBE78 is the explicitly emitted ResourcePtr<ColourCube>::GetMemoryResource accessor, with the correct non-const overload selected. All eight ledger identities are accounted for.",
+   "n_funcs": 8
+  },
+  {
+   "tu": "class:rw::math::vpu::Vector3>",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All three truncated Vector3 identities have real owners and bodies: RingBuffer<Vector3>::Push/operator[] (explicit instantiation) and Average<9,Vector3>::Record (explicit specialization). The latter is now present in CgsSoundUtils.h. Exact attested mappings replace the old misattribution blocker.",
+   "n_funcs": 3
+  },
+  {
+   "tu": "class:rw::math::vpu::Vector4>",
+   "before": "blocked",
+   "after": "blocked",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: Vector4>::FreeObject remains a truncated ObjectPool ownership identity without a located attested implementation. The Vector3 ring/average fixes do not resolve this separate pooled-template member.",
+   "n_funcs": 1
+  },
+  {
+   "tu": "class:rw::physics::Simulation",
+   "before": "blocked",
+   "after": "done",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: All 22 Simulation functions are reconstructed in vendor/renderware/src/rw/physics/Simulation.cpp, including initialization, list management, batch builders, solver pipelines and spies. Source explicitly retires the old dependency blocker; shipping build mounts this file. Reconstruction coverage does not by itself prove every solver is reached at runtime.",
+   "n_funcs": 22
+  },
+  {
+   "tu": "vendor:compiler-rt",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External compiler runtime: the MSVC x64 toolchain supplies compiler support, unwinding and register-save equivalents. X360 PPC prologue/epilogue and compiler intrinsics are not game-source reconstruction targets (tools/build/msvc_flags.txt and the shipping MSVC link).",
+   "n_funcs": 176
+  },
+  {
+   "tu": "vendor:crt",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External C/C++ runtime: supplied by the MSVC/Windows runtime selected by the shipping build, rather than reconstructing the statically linked Xbox CRT. This classification is separate from game-function reconstruction.",
+   "n_funcs": 324
+  },
+  {
+   "tu": "vendor:crypto",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External vendor/platform crypto layer: the PC target uses checked-in DirtySDK/platform implementations and the mounted MassiveAd LibTomCrypt crypto sources plus Windows services. Original Xbox/retired-online cryptographic service internals are outside the game-source target. No claim that all original online services or crypto APIs are functional.",
+   "n_funcs": 28
+  },
+  {
+   "tu": "vendor:ea-dirtysdk",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External vendor/platform networking: the shipping build mounts vendor/dirtysdk/src and its PC/LAN implementations (build_game_exe.bat). This is distinct from reconstruction of game networking. Some original online-service operations intentionally report unavailable on PC; external does not mean online feature parity.",
+   "n_funcs": 393
+  },
+  {
+   "tu": "vendor:lua",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External vendor source: Lua 5.1.5 is checked in under vendor/lua/src, built by tools/build/build_lua.bat and linked as vendor/lua/lua515.lib by the shipping build. The Lua runtime does not require game-source reconstruction.",
+   "n_funcs": 224
+  },
+  {
+   "tu": "vendor:xbox-d3d",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External platform implementation: this is Xbox XDK D3D/Xenos runtime code. The PC shipping build uses Windows d3d9.lib and src/pc/gcm/renderengine, including XenonD3D9Shims.cpp. Console GPU command/capture internals are outside the PC reconstruction target. This does not certify all Xbox SDK features on PC; existing reconstructed bodies retain their statuses.",
+   "n_funcs": 284
+  },
+  {
+   "tu": "vendor:xbox-xdk",
+   "before": "blocked",
+   "after": "external",
+   "notes": "Blocked TU audit 2026-10-08 at b5 305ca7d9bb8c: External host platform: Windows kernel/user/input/network APIs and the checked-in PC platform leaves supply the host equivalents of Xbox XDK services. The shipping link names kernel32, user32, ntdll, ws2_32 and related Windows libraries. Xbox-only services can be unavailable; this does not claim all original SDK APIs are implemented.",
+   "n_funcs": 745
+  }
+ ]
+}

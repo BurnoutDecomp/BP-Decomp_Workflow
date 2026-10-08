@@ -608,8 +608,10 @@ def target_for_tu(
 
     # These buckets intentionally have no reconstructed home under src/. Keeping
     # them explicit makes status.json/server inventory match the full TU index.
+    if current_status == "external":
+        return "external", current_notes or VENDOR_BLOCKED_NOTE, []
     if source == "vendor" or tu_id.startswith("vendor:"):
-        return "blocked", current_notes or VENDOR_BLOCKED_NOTE, []
+        return "external", current_notes or VENDOR_BLOCKED_NOTE, []
 
     # Durable notes with an explicit partial count or a deliberately shipped
     # reconstruction floor override mere file/symbol presence.  Keep the reason:
@@ -816,6 +818,10 @@ def build_reconciled_status(
 
         if target == "done":
             set_functions(new_func, functions, "reviewed", no_demote=no_demote)
+        elif target == "external":
+            for name in functions:
+                if new_func.get(name, {}).get("status", "todo") == "todo":
+                    new_func[name] = {"status": "external"}
         elif target in ("in_progress", "blocked") and old_status == "done":
             set_functions(new_func, functions, "recovered", no_demote=no_demote)
 
@@ -835,6 +841,7 @@ def status_rank(status: str) -> int:
         "done": 3,
         "reviewed": 3,
         "blocked": 3,
+        "external": 3,
     }.get(status, 0)
 
 
@@ -846,9 +853,11 @@ def transition_is_demotion(old_status: str, target: str) -> bool:
     promote blocked -> done, but the reverse is never a promote-only transition.
     """
     if old_status == "done":
-        return target != "done"
+        return target not in ("done", "external")
+    if old_status == "external":
+        return target != "external"
     if old_status == "blocked":
-        return target not in ("blocked", "done")
+        return target not in ("blocked", "done", "external")
     return status_rank(target) < status_rank(old_status)
 
 
