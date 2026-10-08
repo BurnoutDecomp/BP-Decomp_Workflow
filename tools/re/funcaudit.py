@@ -95,12 +95,13 @@ import time
 from tree_sitter import Language, Parser
 import tree_sitter_cpp
 
-AUDIT_VERSION = 2
+AUDIT_VERSION = 3
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 IDENTITY = os.path.join(REPO, "progress", "identity.json")
 EXPORTS = os.environ.get("BP_IDA_EXPORTS") or os.path.join(REPO, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
 SRC = os.path.join(REPO, "b5-decomp", "src")
+SOURCE_ALIASES = os.path.join(REPO, "progress", "source_aliases.json")
 CACHE_DIR = os.path.join(REPO, "scratch", "funcaudit")
 CACHE = os.path.join(CACHE_DIR, "exports.cache.json")
 
@@ -402,11 +403,12 @@ def body_span(code, def_start):
 
 
 class Def(object):
-    __slots__ = ("file", "line", "code", "raw", "nparams", "qual", "key2", "leaf")
+    __slots__ = ("file", "line", "code", "raw", "nparams", "qual", "key2", "leaf", "is_const")
 
-    def __init__(self, file, line, code, raw, nparams, qual, leaf):
+    def __init__(self, file, line, code, raw, nparams, qual, leaf, is_const=False):
         self.file, self.line, self.code, self.raw, self.nparams = file, line, code, raw, nparams
         self.qual, self.leaf = qual, leaf
+        self.is_const = is_const
         self.key2 = "::".join(qual.split("::")[-2:]) if qual and "::" in qual else None
 
 
@@ -414,6 +416,7 @@ class PcIndex(object):
     def __init__(self):
         self.by_qual = {}    # "Class::Method" -> [Def]
         self.by_exact = {}   # lexical namespace + class + method (also global functions)
+        self.aliases = set()  # explicitly attested ledger names mapped to real C++ symbols
         self.by_leaf = {}    # "Method" -> [Def]  (every definition, qualified or free)
         self.by_file = {}    # relfile -> [Def]
         self.enums = {}      # enumerator/const leaf -> set(values)
@@ -498,7 +501,9 @@ class PcIndex(object):
                 nparams = len([a for a in split_args(inner) if a and a != "void"])
                 body_raw = text(body)
                 self._add(Def(rel, node.start_point.row + 1, strip_comments(body_raw),
-                              body_raw, nparams, qual, qual.split("::")[-1]))
+                              body_raw, nparams, qual, qual.split("::")[-1],
+                              any(c.type == "type_qualifier" and text(c) == "const"
+                                  for c in declarator.named_children)))
                 return  # calls, lambdas and local classes are not top-level definitions
             for child in node.named_children:
                 visit(child, scope)
@@ -542,15 +547,45 @@ class PcIndex(object):
 def build_pc_index():
     idx = PcIndex()
     # deterministic order on every platform: overload collapse picks "the first definition"
-    for root, dirs, files in os.walk(SRC):
-        dirs.sort()
-        for f in sorted(files):
-            if f.endswith((".cpp", ".h", ".hpp", ".inl", ".cxx", ".cc")):
-                try:
-                    idx.add_file(os.path.join(root, f))
-                except Exception as exc:  # never let one odd file kill the audit
-                    print("  ! index skipped %s: %s" % (f, exc), file=sys.stderr)
+    # RenderWare's shared type vocabulary also owns ARTIST-derived bodies which
+    # the shipping build mounts from vendor/renderware. It is reconstruction,
+    # unlike upstream libraries such as Lua, and belongs in the same exact index.
+    roots = (SRC, os.path.join(os.path.dirname(SRC), "vendor", "renderware"))
+    for directory in roots:
+        for root, dirs, files in os.walk(directory):
+            dirs.sort()
+            for f in sorted(files):
+                if f.endswith((".cpp", ".h", ".hpp", ".inl", ".cxx", ".cc")):
+                    try:
+                        idx.add_file(os.path.join(root, f))
+                    except Exception as exc:  # never let one odd file kill the audit
+                        print("  ! index skipped %s: %s" % (f, exc), file=sys.stderr)
+    if os.path.isfile(SOURCE_ALIASES):
+        with open(SOURCE_ALIASES, encoding="utf-8") as fh:
+            aliases = json.load(fh).get("functions", {})
+        with open(IDENTITY, encoding="utf-8") as fh:
+            identity = json.load(fh)
+        apply_source_aliases(idx, aliases, identity)
     return idx
+
+
+def apply_source_aliases(idx, aliases, identity=None):
+    """Curated ARTIST-attested renames, never a leaf/prefix matching fallback.
+
+    Both the full C++ symbol and its actual body file must match. Keep Def.qual
+    as the C++ name, so callers and stub detection retain the real source identity.
+    Overloaded families remain ambiguous to conservative automatic status updates.
+    """
+    for canonical, proof in aliases.items():
+        if canonical in idx.by_exact:
+            continue
+        if identity is not None and proof.get("x360_address") not in identity.get(canonical, {}).get("x360_addrs", []):
+            continue
+        definitions = [d for d in idx.by_exact.get(proof["symbol"], [])
+                       if d.file == proof["file"] and ("const" not in proof or d.is_const == proof["const"])]
+        if definitions:
+            idx.by_exact[canonical] = definitions
+            idx.aliases.add(canonical)
 
 
 # ------------------------------------------------------------------ comparison

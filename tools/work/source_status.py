@@ -28,10 +28,11 @@ def build_evidence(tu_index, identity, stub_rows, index, commit, base_commit=Non
     members = {name for row in tu_index.values() for name in row.get("functions", [])}
     functions = {}
     for name, row in identity.items():
-        if name not in members or not NAME.fullmatch(name) or not row.get("x360_addrs") or name in blocked:
+        supported = NAME.fullmatch(name) or name in getattr(index, "aliases", set())
+        if name not in members or not supported or not row.get("x360_addrs") or name in blocked:
             continue
         definitions = index.by_exact.get(name, [])
-        if len(definitions) != 1:
+        if len(definitions) != 1 or any(d.qual in blocked for d in definitions):
             continue
         # Canonical identities collapse overloads. Ambiguous families remain with
         # manual review; never pair a leaf from a neighbouring class/namespace.
@@ -95,7 +96,7 @@ def main():
     print("Indexing committed definitions for source status...", flush=True)
     evidence = build_evidence(load("tu_index.json"), load("identity.json"), stubs["rows"],
                               funcaudit.build_pc_index(), commit, base)
-    inputs = ("progress/tu_index.json", "progress/identity.json", "tools/work/source_status.py",
+    inputs = ("progress/tu_index.json", "progress/identity.json", "progress/source_aliases.json", "tools/work/source_status.py",
               "tools/re/funcaudit.py", "tools/re/stubaudit.py", "tools/re/requirements.txt")
     evidence["inputs_hash"] = hashlib.sha256(b"".join((ROOT / name).read_bytes() for name in inputs)).hexdigest()
     Path(args.out).write_text(json.dumps(evidence, sort_keys=True, separators=(",", ":")), encoding="utf-8")

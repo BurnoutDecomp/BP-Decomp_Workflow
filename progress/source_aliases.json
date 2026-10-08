@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "description": "Explicitly reviewed source identities for truncated or renamed ARTIST symbols. Exact C++ symbol and body file only; no prefix/leaf inference.",
+  "functions": {
+    "rw::audio::core::GinsuPlayer::EventEvent": {
+      "symbol": "rw::audio::core::GinsuPlayer::Event",
+      "file": "GameShared/GameClasses/Sound/Playback/Plugins/Ginsu/GinsuPlayer.cpp",
+      "x360_address": "0x826C3498",
+      "evidence": "GinsuPlayer.h and cpp identify vt[1] at this address; Event queues play/stop handlers with host-sized deferred records. EventEvent is the ledger spelling."
+    },
+    "rw::graphics::postfx::ColourCub": {
+      "symbol": "CgsResource::ResourcePtr::GetMemoryResource",
+      "const": false,
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr.h",
+      "x360_address": "0x824FBE78",
+      "evidence": "CgsResourcePtr_rw_graphics_postfx_ColourCube.cpp explicitly instantiates GetMemoryResource; baked assertion line 581 identifies the accessor, rather than operator-> or operator*."
+    },
+    "rw::math::vpu::Vector3>::Push": {
+      "symbol": "CgsContainers::RingBuffer::Push",
+      "file": "GameShared/GameClasses/Containers/CgsRingBuffer.h",
+      "x360_address": "0x823194C0",
+      "evidence": "RingBuffer_Vector3.cpp explicitly instantiates the generic body and documents ARTIST offsets, 16-byte element stride, cursor advance and full-buffer handling."
+    },
+    "rw::math::vpu::Vector3>::operator[]": {
+      "symbol": "CgsContainers::RingBuffer::operator[]",
+      "const": false,
+      "file": "GameShared/GameClasses/Containers/CgsRingBuffer.h",
+      "x360_address": "0x823195C0",
+      "evidence": "RingBuffer_Vector3.cpp explicitly instantiates the non-const accessor; ARTIST range assertion, modulo indexing and 16-byte stride match the generic body."
+    },
+    "rw::math::vpu::Vector3>::Record": {
+      "symbol": "CgsSound::Utils::Average<9u,Vector3>::Record",
+      "file": "GameShared/GameClasses/Sound/CgsSoundUtils.h",
+      "x360_address": "0x8268F1A0",
+      "evidence": "Explicit vector specialization documents this exact truncated IDA name and AIPhysicsControl caller; writes sample, wraps modulo 9, sums lanes and scales by 1/9."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult,10>::D": {
+      "symbol": "BrnDirector::PostOffice::Deliver",
+      "file": "GameSource/Director/Utils/BrnPostOffice.h",
+      "x360_address": "0x8222D558",
+      "evidence": "PostOffice header enumerates this emitted Deliver instantiation; ARTIST asserts slot bounds/non-null then calls TakePackage."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult>::TakePac": {
+      "symbol": "BrnDirector::PostBox::TakePackage",
+      "file": "GameSource/Director/Utils/BrnPostBox.h",
+      "x360_address": "0x821FF238",
+      "evidence": "SceneManagerModuleIO.h pins the two-word sphere-result payload from this exact TakePackage address; generic PostBox checks WAITING, copies payload and sets GOT_PACKAGE."
+    }
+  }
+}

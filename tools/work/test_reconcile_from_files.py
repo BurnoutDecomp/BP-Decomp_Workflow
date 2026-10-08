@@ -40,14 +40,15 @@ class ReconcileFromFilesTests(unittest.TestCase):
         self.assertEqual("done", result["tu"][tu]["status"])
         self.assertEqual("reviewed", result["func"]["Foo::Bar"]["status"])
 
-    def test_vendor_buckets_are_explicitly_blocked(self):
+    def test_vendor_buckets_are_external_not_reconstruction(self):
         tu = "vendor:lua"
         status = {"tu": {}, "func": {}}
         index = {tu: {"source": "vendor", "functions": ["lua_call"]}}
 
         result, _, _ = self.build(status, index, [], {})
 
-        self.assertEqual("blocked", result["tu"][tu]["status"])
+        self.assertEqual("external", result["tu"][tu]["status"])
+        self.assertEqual("external", result["func"]["lua_call"]["status"])
         self.assertIn("Vendor/runtime code", result["tu"][tu]["notes"])
 
     def test_class_tu_uses_resolved_home(self):

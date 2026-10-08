@@ -89,6 +89,7 @@ def main() -> int:
     tu = status.get("tu", {})
     done = sum(1 for v in tu.values() if v.get("status") == "done")
     blocked = sum(1 for v in tu.values() if v.get("status") == "blocked")
+    external = sum(1 for v in tu.values() if v.get("status") == "external")
     rendered = serialize(status)
 
     current = None
@@ -98,7 +99,7 @@ def main() -> int:
             current = fh.read().replace(b"\r\n", b"\n").decode("utf-8")
 
     changed = current != rendered
-    print(f"server status: {done} done, {blocked} blocked, {len(status.get('func', {}))} func rows")
+    print(f"server status: {done} done, {external} external, {blocked} blocked, {len(status.get('func', {}))} func rows")
 
     if args.check:
         if changed:
