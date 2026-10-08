@@ -1,36 +1,13 @@
 name: Reconcile status + submodule pointer
 
-# Keep the committed progress/status.json and the b5-decomp submodule pointer in step
-# with the coordination server, automatically — so the people doing the decompilation
-# only ever push to b5-decomp and never need write access to this workflow repo.
+# Every pushed b5 commit is queued. Audit that exact source snapshot, recover
+# unambiguous non-stub functions, and reconcile complete named TU sets through the
+# admin publisher API. The server preserves claims, compiled work and explicit
+# review decisions. Export its resulting durable ledger before publishing.
 #
-# What it does on each run (one per b5-decomp commit):
-#   1. regenerate progress/status.json from the server (GET /export/status) — the server
-#      is the only full authority: a files-only reconcile recovers `done` but not
-#      `blocked` (a blocked TU leaves no file),
-#   1b. re-resolve progress/class_homes.json (class TU -> the file that holds its
-#      code) from those same committed sources, so class work keeps attributing
-#      to its authors instead of a synthetic path that exists nowhere,
-#   2. advance the b5-decomp submodule pointer to the commit that triggered the run (the
-#      repository_dispatch payload SHA), or the current dev tip for a manual run,
-#   3. cross-check the server's `done` set against the committed b5-decomp files
-#      (non-blocking integrity alarm),
-#   3b. run the EVIDENCE audits against the pinned b5-decomp tree: tools/re/funcaudit.py
-#      (every reconstructed body vs the console's own function: missing bodies, case
-#      ids, event posts, callees, asserts, uncited data) and tools/re/stubaudit.py (every
-#      body that is still a stand-in). Neither needs the IDA exports: they read the
-#      committed feature cache progress/funcaudit_features.json.gz. The results land in
-#      progress/funcaudit.json + progress/stubs.json, stamped with the b5 commit and its
-#      author, and the work server imports them on sync -- the one progress number on
-#      the dashboard that nobody declared.
-#   4. commit + push the regenerated status.json, the audits and the bumped pointer
-#      with the bot token.
-#   5. tell the public work server to fetch that committed snapshot and refresh
-#      its dashboard data, including the executable source list.
-#
-# Triggered on every b5-decomp commit: the notifier workflow in b5-decomp
-# (.github/workflows/notify-workflow.yml) fires a repository_dispatch carrying the new
-# commit SHA. workflow_dispatch is kept for manual runs / backfills.
+# An hourly freshness check repairs a missed trigger, a failed publication, or
+# changed identity/parser inputs. Replays are idempotent and superseded snapshots
+# cannot roll the live dashboard back. Builds publish their own executable audit.
 
 on:
   repository_dispatch:
@@ -40,11 +17,14 @@ on:
       b5_sha:
         description: "b5-decomp commit to pin (default: current dev tip)"
         required: false
+  schedule:
+    - cron: "17 * * * *"  # repair a missed/failed notification; healthy snapshots skip work
 
 # Never let two reconciles race on a push to main.
 concurrency:
   group: reconcile-status
   cancel-in-progress: false
+  queue: max
 
 permissions:
   contents: write
@@ -62,16 +42,46 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: false   # we manage the b5-decomp pointer explicitly below
+          ref: main           # queued runs must start from the latest published progress
+
+      - name: Check scheduled repair freshness
+        id: freshness
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, subprocess, urllib.request
+          needed = True
+          if os.environ['EVENT_NAME'] == 'schedule':
+              try:
+                  tip = subprocess.check_output(['git', 'ls-remote', os.environ['B5_REPO'], 'refs/heads/dev'], text=True).split()[0]
+                  base = os.environ['WORK_SERVER'].rstrip('/')
+                  state = json.load(urllib.request.urlopen(base + '/api/source-status', timeout=30))
+                  audit = json.load(urllib.request.urlopen(base + '/api/audit/summary', timeout=30))
+                  inputs = ('progress/tu_index.json', 'progress/identity.json', 'tools/work/source_status.py',
+                            'tools/re/funcaudit.py', 'tools/re/stubaudit.py', 'tools/re/requirements.txt')
+                  digest = hashlib.sha256(b''.join(pathlib.Path(p).read_bytes() for p in inputs)).hexdigest()
+                  durable = json.load(urllib.request.urlopen(base + '/export/status', timeout=30))
+                  committed = json.loads(pathlib.Path('progress/status.json').read_text())
+                  needed = state.get('source_commit') != tip or state.get('inputs_hash') != digest or audit.get('funcaudit', {}).get('commit') != tip or durable != committed
+              except Exception as exc:
+                  print('Freshness check failed; attempting repair:', exc)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('needed=' + str(needed).lower() + '\n')
+          PY
 
       - name: Set up Python
+        if: steps.freshness.outputs.needed == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install evidence audit parser
-        run: python -m pip install -r tools/re/requirements.txt
+        if: steps.freshness.outputs.needed == 'true'
+        run: python -m pip install -r tools/re/requirements.txt pytest
 
       - name: Resolve target b5-decomp commit
+        if: steps.freshness.outputs.needed == 'true'
         id: target
         run: |
           set -euo pipefail
@@ -85,10 +95,20 @@ jobs:
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
           echo "Target b5-decomp commit: $SHA"
 
-      - name: Regenerate status.json from the server
-        run: python tools/work/fetch_server_status.py --server "$WORK_SERVER"
+      - name: Refresh ledger membership without replaying stale statuses
+        if: steps.freshness.outputs.needed == 'true'
+        env:
+          WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$WORK_TOKEN" || { echo 'WORK_PUBLISH_TOKEN is required'; exit 1; }
+          curl --fail --show-error --silent --retry 3 --retry-delay 5 \
+            -X POST -H "X-Work-Token: $WORK_TOKEN" -H "Content-Type: application/json" \
+            --data '{"branch":"main","reset":false,"metadata_only":true}' \
+            "${WORK_SERVER%/}/admin/sync"
 
       - name: Advance b5-decomp submodule pointer
+        if: steps.freshness.outputs.needed == 'true'
         run: |
           set -euo pipefail
           SHA="${{ steps.target.outputs.sha }}"
@@ -97,12 +117,15 @@ jobs:
           # than `submodule update` when the recorded pointer isn't fetchable at depth 1.
           # The contents are needed for the cross-check; `git add` records the new gitlink.
           rm -rf b5-decomp
-          git clone --depth 1 --branch "$B5_BRANCH" "$B5_REPO" b5-decomp
-          git -C b5-decomp fetch --depth 1 origin "$SHA"
+          # Keep commit ancestry to reject out-of-order snapshots; fetch source
+          # blobs only for the actual checkout, not for the whole history.
+          git clone --filter=blob:none --no-checkout --branch "$B5_BRANCH" "$B5_REPO" b5-decomp
+          git -C b5-decomp fetch origin "$SHA"
           git -C b5-decomp checkout -q "$SHA"
           git add b5-decomp
 
       - name: Refresh the class -> home-file map
+        if: steps.freshness.outputs.needed == 'true'
         run: |
           set -euo pipefail
           # class: TUs carry no path of their own, so without this map the work
@@ -113,6 +136,7 @@ jobs:
           python tools/work/resolve_class_homes.py --apply
 
       - name: Run the evidence audits (glue audit + stub inventory)
+        if: steps.freshness.outputs.needed == 'true'
         run: |
           set -euo pipefail
           SHA="${{ steps.target.outputs.sha }}"
@@ -137,41 +161,52 @@ jobs:
           assert fa["stats"]["paired"] > 0, "the glue audit paired nothing -- the PC index or identity.json is broken"
           EOF
 
-      - name: Cross-check server `done` against committed files (non-blocking)
-        continue-on-error: true
+      - name: Reconcile source coverage into the live ledger
+        if: steps.freshness.outputs.needed == 'true'
+        id: source
+        env:
+          WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
         run: |
-          set -uo pipefail
-          # Seed the ledger from the just-fetched status.json (no IDA needed) and let
-          # reconcile_from_files report any TU the server calls `done` whose committed
-          # file is missing or still a trap-stub/partial. Advisory only.
-          python tools/work/work.py seed
-          echo "=== reconcile (server status.json vs b5-decomp files) ==="
-          OUT="$(python tools/work/reconcile_from_files.py)"
-          echo "$OUT"
-          if echo "$OUT" | grep -qE 'done +-> +(todo|in_progress)'; then
-            echo "::warning title=status drift::Server marks TUs done that lack a complete committed file — see the reconcile table above."
-          fi
+          set -euo pipefail
+          python -m pytest tools/re/test_funcaudit.py tools/work/test_source_status.py -q
+          python tools/work/source_status.py --server "$WORK_SERVER" --publish
+
+      - name: Export the reconciled durable ledger
+        if: steps.freshness.outputs.needed == 'true' && steps.source.outputs.superseded != 'true'
+        run: python tools/work/fetch_server_status.py --server "$WORK_SERVER"
 
       - name: Commit + push if anything changed
+        if: steps.freshness.outputs.needed == 'true' && steps.source.outputs.superseded != 'true'
         run: |
           set -euo pipefail
           git config user.name  "bp-reconcile-bot"
           git config user.email "bp-reconcile-bot@users.noreply.github.com"
-          git add progress/status.json progress/class_homes.json progress/funcaudit.json progress/stubs.json b5-decomp
-          if git diff --cached --quiet; then
-            echo "nothing to reconcile — status.json, audits and submodule pointer already current."
-            exit 0
-          fi
           SHA="${{ steps.target.outputs.sha }}"
-          git commit -m "chore: reconcile status.json + audits + b5-decomp pointer to ${SHA:0:12}
+          cat > "$RUNNER_TEMP/reconcile-message.txt" <<EOF
+          chore: reconcile source status + audits + b5-decomp pointer to ${SHA:0:12}
 
-          Automated on a b5-decomp commit: status.json regenerated from the
-          coordination server, class homes re-resolved from the committed
-          sources, the glue audit and stub inventory re-run against the tree,
-          submodule pointer bumped. No manual push required."
-          git push
+          Automatic committed-source evidence and durable ledger export.
+          Recovered functions are recorded without inventing review passes.
+          EOF
+          # Overlay only generated inputs onto the newest parent tree. Builds can
+          # publish asm/linked-file results while this job runs; preserve those.
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            python tools/work/fetch_server_status.py --server "$WORK_SERVER"
+            git read-tree origin/main
+            git add progress/status.json progress/class_homes.json progress/funcaudit.json progress/stubs.json progress/source_status.json b5-decomp
+            if git diff --cached --quiet origin/main; then
+              echo "snapshot already published"; exit 0
+            fi
+            TREE="$(git write-tree)"
+            COMMIT="$(git commit-tree "$TREE" -p origin/main -F "$RUNNER_TEMP/reconcile-message.txt")"
+            if git push origin "$COMMIT:refs/heads/main"; then exit 0; fi
+            sleep 3
+          done
+          echo "could not publish after five attempts"; exit 1
 
       - name: Refresh public dashboard snapshot
+        if: steps.freshness.outputs.needed == 'true' && steps.source.outputs.superseded != 'true'
         env:
           # The existing CI publisher credential is an admin worker token, so it
           # is also authorised to call the server's durable, non-reset sync.
@@ -186,5 +221,5 @@ jobs:
             -X POST \
             -H "X-Work-Token: $WORK_TOKEN" \
             -H "Content-Type: application/json" \
-            --data '{"branch":"main","reset":false}' \
+            --data '{"branch":"main","reset":false,"metadata_only":true}' \
             "${WORK_SERVER%/}/admin/sync"
