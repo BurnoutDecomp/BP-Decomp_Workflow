@@ -115,8 +115,15 @@ int main(int argc, char** argv)
           "naming pass: Fixed Cam Default");
     Check(lrA.mPassengerDefault.GetDebugName() == NULL, "naming pass: Passenger (not in the version-5 walk) stays unnamed");
     Check(lrA.mRoadRunnerDefault.GetType() == 16u, "road runner tag 16");
-    Check(lrA.mFailsafe.meType == eBehaviourFailsafe, "failsafe tag 12");
-    Check(lrA.mHeliCamDefaultParams.meType == eBehaviourHeliCam, "helicam tag 6");
+    Check(lrA.mFailsafe.GetType() == eBehaviourFailsafe, "failsafe tag 12");
+    Check(lrA.mHeliCamDefaultParams.GetType() == eBehaviourHeliCam, "helicam tag 6");
+    Check(lrA.mAftertouchCamDefault.GetDebugName() != NULL && std::strcmp(lrA.mAftertouchCamDefault.GetDebugName(), "Aftertouch") == 0,
+          "naming pass: Aftertouch");
+    Check(lrA.mGyroCamDriveByRParams.GetDebugName() != NULL && std::strcmp(lrA.mGyroCamDriveByRParams.GetDebugName(), "GyroCam DriveBy R") == 0,
+          "naming pass: GyroCam DriveBy R");
+    Check(lrA.maSpirallingDeathcamParameters.GetDebugName() != NULL && std::strcmp(lrA.maSpirallingDeathcamParameters.GetDebugName(), "Spiralling Deathcam Default") == 0,
+          "naming pass: Spiralling Deathcam Default");
+    Check(lrA.mLooseAttachmentTakedown1.GetDebugName() == NULL, "naming pass: Loose Attachment Takedown1 (not in the version-5 walk) stays unnamed");
 
     size_t luLines = 0;
     for (char lc : lTextA)
