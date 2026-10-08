@@ -68,6 +68,9 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install evidence audit parser
+        run: python -m pip install -r tools/re/requirements.txt
+
       - name: Resolve target b5-decomp commit
         id: target
         run: |
