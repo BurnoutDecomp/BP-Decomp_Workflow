@@ -295,6 +295,10 @@ def compile_entry(fxc, fx_path, entry, profile, include_dir, out_path):
         inc = ['/I', include_dir] if os.path.isdir(include_dir) else []
         defines = (['/D', 'D_ROAD_X360=1']
                    if os.path.basename(fx_path).lower() in X360_ROAD_SOURCES else [])
+        if profile == 'vs_3_0':
+            # The native receiver leaf supplies main-camera cascade depth at c255.
+            # Keep face projection independent; pixel programs consume interpolated depth.
+            defines += ['/D', 'D_PC_REFLECTION_SHADOW_DEPTH=1']
         if (profile == 'ps_3_0' and entry == 'PS_Main'
                 and os.path.basename(fx_path).lower() in X360_WORLD_LIGHT_BLEND_PROGRAMS):
             defines += ['/D', 'D_ARTIST_WORLD_LIGHT_BLEND=1']
