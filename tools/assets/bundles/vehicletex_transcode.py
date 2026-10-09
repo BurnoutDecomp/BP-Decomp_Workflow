@@ -340,7 +340,8 @@ def gather_map(rid, f):
                                     % (rid, lvl))
                 roff, fp, abw, abh = tail
                 order = untile_order_checked(rid, abw, abh, bpb) if f['tiled'] else None
-                ox, oy = x360_tex.tail_slot(lvl - base, w, h)
+                ox, oy = x360_tex.packed_level_slot(lvl, base, w, h, bs,
+                                                    f['packed_mips'])
                 ox = min(ox, max(0, abw - bw))
                 oy = min(oy, max(0, abh - bh))
                 iw = abw
@@ -529,7 +530,8 @@ def _variant_pixels(header, body, f, untile=True, endian=True, u32=False):
             rows = [img[(y * iw) * bpb:(y * iw + bwq) * bpb] for y in range(bhq)]
         else:
             img, iw, ih = tail
-            ox, oy = x360_tex.tail_slot(lvl - base, w, h)
+            ox, oy = x360_tex.packed_level_slot(lvl, base, w, h, bs,
+                                                g['packed_mips'])
             ox, oy = min(ox, max(0, iw - bwq)), min(oy, max(0, ih - bhq))
             rows = [img[((oy + y) * iw + ox) * bpb:((oy + y) * iw + ox + bwq) * bpb]
                     for y in range(bhq)]
