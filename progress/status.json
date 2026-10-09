@@ -63054,6 +63054,9 @@
   "SleepEx": {
    "status": "external"
   },
+  "SmoothLoopAnimation::OnCalculateOffset": {
+   "status": "reviewed"
+  },
   "Snd9::Aems::BeginRemoveModuleBank": {
    "status": "reviewed"
   },
@@ -63346,6 +63349,9 @@
    "status": "reviewed"
   },
   "SpriteMembersIndex::in_word_set": {
+   "status": "reviewed"
+  },
+  "SteppedGridLoopAnimation::OnCalculateOffset": {
    "status": "reviewed"
   },
   "StereoSpliceSample::StartVoice": {
@@ -63704,6 +63710,9 @@
   },
   "TlsGetValue": {
    "status": "external"
+  },
+  "UVOffsetAnimationShader::Execute": {
+   "status": "reviewed"
   },
   "UnhandledExceptionFilter": {
    "status": "external"
@@ -73916,6 +73925,10 @@
   },
   "GameShared/GameClasses/Graphics/Dispatch/CgsMaterialAnimation.cpp": {
    "notes": "verify pass 4/4: ShaderConstantsCPU FixUp/GetValue/GetSizeOf/ShouldSerialise, <256 assert. gate x64 pass",
+   "status": "done"
+  },
+  "GameShared/GameClasses/Graphics/Dispatch/CgsMaterialAnimation.h": {
+   "notes": "Independent combined review VERDICT pass; ARTIST assembly and DecFIGS declarations checked. Whole-file structural RED includes factory, binding and diagnostics beyond three TU entries. GetValue calls present through lpConstants. Source and runtime tests recorded in scratch/ANIMATED_SIGNS_1009/REVIEW.md.",
    "status": "done"
   },
   "GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp": {
