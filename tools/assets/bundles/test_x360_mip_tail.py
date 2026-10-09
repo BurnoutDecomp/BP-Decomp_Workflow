@@ -3,6 +3,7 @@ import unittest
 from unittest.mock import patch
 
 import x360_tex as xt
+import vehicletex_transcode as vt
 
 
 class PackedMipOffsets(unittest.TestCase):
@@ -70,6 +71,17 @@ class PackedMipOffsets(unittest.TestCase):
         self.assertEqual(total, stored)
         self.assertEqual(bytes(expected), pixels)
         self.assertNotEqual(bytes(16), pixels[-16:])
+
+        # The vehicle verifier and its diagnostic controls must read the same
+        # authored tail. The old fixed slots read mip 9 at mip 7 and padding at 9.
+        entries, tight, stored = vt.gather_map('synthetic_vehicle', fetch)
+        gathered = b''.join(xt._swap_words(body[source:source + size], 2)
+                            for _, source, size in entries)
+        self.assertEqual(total, stored)
+        self.assertEqual(len(expected), tight)
+        self.assertEqual(bytes(expected), gathered)
+        self.assertEqual(bytes(expected),
+                         vt._variant_pixels(b'', bytes(body), fetch, untile=False))
 
 
 if __name__ == '__main__':
