@@ -45,6 +45,642 @@
       "file": "GameSource/Director/Utils/BrnPostBox.h",
       "x360_address": "0x821FF238",
       "evidence": "SceneManagerModuleIO.h pins the two-word sphere-result payload from this exact TakePackage address; generic PostBox checks WAITING, copies payload and sets GOT_PACKAGE."
+    },
+    "BrnDirector::Camera::B": {
+      "symbol": "BrnDirector::BehaviourCollection<TBehaviour,TParameters,N>::GetCamera",
+      "file": "GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.h",
+      "x360_address": "0x8222CBD8",
+      "evidence": "BehaviourCollection<BehaviourBystanderCam,Parameters,2>::GetCamera const: asserts mbAllocatedShots (+0x41, h:97) and mbHasCurrentCamera (+0x40, h:98), maShots[miCurrentCamera (+0x3C)] via Array const operator[], then the handle's IsAllocated() + pool[key] + 0x10 (BehaviourHelper::mCamera); callers MomentPlayerJumping::UpdateCamera x2."
+    },
+    "BrnDirector::Camera::Beha": {
+      "symbol": "Array::operator[]",
+      "const": true,
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x82200460",
+      "evidence": "Array<BehaviourCollection<BehaviourRig,..,4>::Shot,4>::operator[] const: CgsArray.h:556/557 asserts (the const accessor's lines), count at +0x60, 24-byte stride; callers are the N=4 collection's GetCamera/Release/Prepare helpers under MomentPlayerJumping::UpdateCamera/Release/PrepareCameras."
+    },
+    "BrnDirector::Camera::Behav": {
+      "symbol": "Array::operator[]",
+      "const": true,
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x821FFF30",
+      "evidence": "Array<BehaviourHelperIndex,28>::operator[] const: CgsArray.h:556/557 asserts, count at +0x70, 4-byte stride; callers BehaviourManager::GenerateSceneQueries/ProcessSceneQueryResults/PostCollisionUpdateAllBehaviours/UpdateAllBehaviours/CheckNoBehavioursAreAllocatedByState iterating mBehaviourHelperIndexArray."
+    },
+    "BrnDirector::Camera::BehaviourAfterto": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsReadyToPrepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x8222D0E8",
+      "evidence": "BehaviourHandle<BehaviourAftertouchCam>::IsBehaviourPrepared (tree name IsReadyToPrepare): mbIsAllocated assert (h:517), IsBehaviourWaitingToPrepare(key) then the cntlzw/extrwi boolean negation; caller ArbStateCrashMode::Prepare."
+    },
+    "BrnDirector::Camera::BehaviourB": {
+      "symbol": "Array::Append",
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x8222F740",
+      "evidence": "Array<BehaviourCollection<BehaviourBystanderCam,Parameters,2>::Shot,2>::Append: CgsArray.h:225/226 asserts (unconstructed / out of space, capacity 2), 24-byte element copy (byte + five words), count at +0x30; caller the N=2 collection's AddShot ('can't add shots' assert at +0x41) from MomentPlayerJumping::Prepare."
+    },
+    "BrnDirector::Camera::BehaviourBystand": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x8222F688",
+      "evidence": "BehaviourHandle<BehaviourBystanderCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourBystanderCam>."
+    },
+    "BrnDirector::Camera::BehaviourDebugFl": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::AttachTweaker",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82213AD0",
+      "evidence": "BehaviourHandle<BehaviourDebugFlyWorld>::AttachTweaker: asserts IsAllocated() (h:623), forwards +0x04 key to BehaviourManager::AttachTweaker on the +0x0C manager; byte-identical to the other two siblings; caller Arbitrator::UpdateDebugCameras."
+    },
+    "BrnDirector::Camera::BehaviourDebugOr": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::AttachTweaker",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82213998",
+      "evidence": "BehaviourHandle<BehaviourDebugOrbitPlayer>::AttachTweaker: asserts IsAllocated() (h:623), forwards +0x04 key to BehaviourManager::AttachTweaker on the +0x0C manager; byte-identical to the other two siblings; caller Arbitrator::UpdateDebugCameras."
+    },
+    "BrnDirector::Camera::BehaviourFailsaf": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x822302F8",
+      "evidence": "BehaviourHandle<BehaviourFailsafe>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourFailsafe>."
+    },
+    "BrnDirector::Camera::BehaviourFixedCa": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::AttachTweaker",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82212970",
+      "evidence": "BehaviourHandle<BehaviourFixedCam>::AttachTweaker: asserts IsAllocated() (h:623), forwards +0x04 key to BehaviourManager::AttachTweaker on the +0x0C manager; byte-identical to the other two siblings; caller ArbStateTestbed::Update."
+    },
+    "BrnDirector::Camera::BehaviourGamepla": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::SetUpdatesDuringPause",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82212360",
+      "evidence": "BehaviourHandle<BehaviourGameplayExternal>::SetUpdatesDuringPause (caller ArbStateTestbed::Update): asserts IsAllocated() (h:676), forwards +0x04 key and the flag to BehaviourManager::SetBehaviourUpdatesDuringPause on the +0x0C manager."
+    },
+    "BrnDirector::Camera::BehaviourGyroCam": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82212510",
+      "evidence": "BehaviourHandle<BehaviourGyroCam>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+    },
+    "BrnDirector::Camera::BehaviourHeliCam": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82230240",
+      "evidence": "BehaviourHandle<BehaviourHeliCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourHeliCam>."
+    },
+    "BrnDirector::Camera::BehaviourHelperIndex,28": {
+      "symbol": "Array::Append",
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x82212008",
+      "evidence": "Array<Array<BehaviourHelperIndex,28>,28>::Append: CgsArray.h:225/226 asserts, capacity 28, 0x74-byte element (28 words + count) copy, outer count at +0xCB0; sole caller BehaviourManager::Construct (mDebugBehaviourRefCountIndexLog)."
+    },
+    "BrnDirector::Camera::BehaviourHelperIndex,28>,28>": {
+      "symbol": "Array::Array",
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x827DE450",
+      "evidence": "Array<Array<BehaviourHelperIndex,28>,28>::Array, the generic default constructor: 28 times _vector_constructor_iterator over the 28 BehaviourHelperIndex elements (count 0x1C, size 4, empty element ctor) then stw -1 to the inner count (+0x70, stride 0x74), finally stw -1 to the outer count (+0xCB0); sole caller BehaviourManager::BehaviourManager (the mDebugBehaviourRefCountIndexLog member)."
+    },
+    "BrnDirector::Camera::BehaviourI": {
+      "symbol": "Array::Append",
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x8222FBE8",
+      "evidence": "Array<BehaviourCollection<BehaviourIceAnim,const RefSpec,5>::Shot,5>::Append: CgsArray.h:225/226 asserts (unconstructed / out of space, capacity 5), 24-byte element copy (byte + five words), count at +0x78; caller MomentPlayerJumping::Prepare (ice shot loop)."
+    },
+    "BrnDirector::Camera::BehaviourIceAnim": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x822128A0",
+      "evidence": "BehaviourHandle<BehaviourIceAnim>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+    },
+    "BrnDirector::Camera::BehaviourInterpo": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82212150",
+      "evidence": "BehaviourHandle<BehaviourInterpolate>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+    },
+    "BrnDirector::Camera::BehaviourLooseAt": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82212A68",
+      "evidence": "BehaviourHandle<BehaviourLooseAttachment>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+    },
+    "BrnDirector::Camera::BehaviourPasseng": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x8222F5D0",
+      "evidence": "BehaviourHandle<BehaviourPassengerCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourPassengerCam>."
+    },
+    "BrnDirector::Camera::BehaviourR": {
+      "symbol": "Array::Append",
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x8222F890",
+      "evidence": "Array<BehaviourCollection<BehaviourRig,Parameters,4>::Shot,4>::Append: CgsArray.h:225/226 asserts (unconstructed / out of space, capacity 4), 24-byte element copy (byte + five words), count at +0x60; caller the N=4 collection's AddShot ('can't add shots' assert at +0x71) from MomentPlayerJumping::Prepare."
+    },
+    "BrnDirector::Camera::BehaviourRenderM": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x822303B0",
+      "evidence": "Only caller is NewBehaviour<BehaviourRenderMetrics> (0x82258B90, right after lrHelper.Prepare) passing (handle, helperID, &helperPool, manager); body is the BehaviourHandle::Prepare shape (UnSet if allocated, store key/pool/manager, SetBehaviourUsedByHandle, IsAllocated assert at BrnBehaviourManager.h:589, mpBehaviour = helper slot word) - the BehaviourHandle<BehaviourRenderMetrics> instantiation of the generic body, like the BehaviourFailsaf/BehaviourHeliCam siblings."
+    },
+    "BrnDirector::Camera::BehaviourRenderMe": {
+      "symbol": "BrnDirector::Camera::BehaviourRenderMetrics::GetParameters",
+      "file": "GameSource/Director/Camera/Behaviours/BrnBehaviourRenderMetrics.cpp",
+      "x360_address": "0x821FB280",
+      "evidence": "Slot 9 of the BehaviourRenderMetrics vtable at 0x82007790 (slot 0 Construct 0x8222BE28, slot 7 GetName 0x821FB2F0, slot 8 SetParameters 0x821FB288); body lwz r3,0xB8(r3) returns the +0xB8 word SetParameters stores (mpParameters), matching DWARF's virtual GetParameters() const."
+    },
+    "BrnDirector::Camera::BehaviourRoadRun": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82212AC8",
+      "evidence": "BehaviourHandle<BehaviourRoadRunner>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+    },
+    "BrnDirector::Camera::BehaviourRotateA": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82212B98",
+      "evidence": "BehaviourHandle<BehaviourRotateAboutVehicle>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+    },
+    "BrnDirector::Camera::BehaviourRotateAb": {
+      "symbol": "BrnDirector::Camera::BehaviourRotateAboutVehicle::GetParameters",
+      "file": "GameSource/Director/Camera/Behaviours/BrnBehaviourRotateAboutVehicle.cpp",
+      "x360_address": "0x821FB418",
+      "evidence": "Vtable slot 9 of the BehaviourRotateAboutVehicle table (slot 0 Construct, 2 Update, 7 GetName, 8 the tag-18 virtual SetParameters quoting BrnBehaviourRotateAboutVehicle.cpp:299); body is lwz +0x374 (mpParameters); class shape lists the virtual GetParameters."
+    },
+    "BrnDirector::Camera::BehaviourSpirall": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x8222FF60",
+      "evidence": "BehaviourHandle<BehaviourSpirallingDeathcam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourSpirallingDeathcam>."
+    },
+    "BrnDirector::Camera::BehaviourSpiralli": {
+      "symbol": "BrnDirector::Camera::BehaviourSpirallingDeathcam::GetParameters",
+      "file": "GameSource/Director/Camera/Behaviours/BehaviourSpirallingDeathcam.cpp",
+      "x360_address": "0x821FB590",
+      "evidence": "Vtable slot 9 of the BehaviourSpirallingDeathcam table (slot 0 Construct, 2 Update, 7 GetName, 8 the tag-19 virtual SetParameters quoting BrnBehaviourSpirallingDeathCam.cpp:254); body is lwz +0x2D0 (mpParameters)."
+    },
+    "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::BehaviourParameterNamingSerialiser>": {
+      "symbol": "BrnDirector::Camera::SerialiseBehaviourParameters",
+      "file": "GameSource/Director/Camera/BrnBehaviourParameterBank.cpp",
+      "x360_address": "0x822144A8",
+      "evidence": "SerialiseBehaviourParameters<BehaviourParameterNamingSerialiser>: full mangled name in the IDB; 15-case type switch (0,1,2,5,6,7,9,10,11,12,13,15,16,18,19) dispatching the serialiser's Serialise<T>, default streams 'Params type needs to be added to Serialise: ' + debug name (Serialisation.h:958). Every case folds to the SetDebugName store at +4; callers BehaviourParameterBank::Serialise<BehaviourParameterNamingSerialiser>."
+    },
+    "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::DebugMenuSerialiser>": {
+      "symbol": "BrnDirector::Camera::SerialiseBehaviourParameters",
+      "file": "GameSource/Director/Camera/BrnBehaviourParameterBank.cpp",
+      "x360_address": "0x82263108",
+      "evidence": "SerialiseBehaviourParameters<DebugMenuSerialiser>: full mangled name in the IDB; 15-case type switch (0,1,2,5,6,7,9,10,11,12,13,15,16,18,19) dispatching the serialiser's Serialise<T>, default streams 'Params type needs to be added to Serialise: ' + debug name (Serialisation.h:958). Callers ArbStateTestbed::RegisterParameters/UnregisterParameters."
+    },
+    "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::TestbedSetupSerialiser>": {
+      "symbol": "BrnDirector::Camera::SerialiseBehaviourParameters",
+      "file": "GameSource/Director/Camera/BrnBehaviourParameterBank.cpp",
+      "x360_address": "0x82275828",
+      "evidence": "SerialiseBehaviourParameters<TestbedSetupSerialiser>: full mangled name in the IDB; 15-case type switch (0,1,2,5,6,7,9,10,11,12,13,15,16,18,19) dispatching the serialiser's Serialise<T>, default streams 'Params type needs to be added to Serialise: ' + debug name (Serialisation.h:958). Every case folds to RegisterFunction(GenericActivateCam, block, 'Testbed', debug name); callers BehaviourParameterBank::Serialise<TestbedSetupSerialiser>."
+    },
+    "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::TextFileReadSerialiser>": {
+      "symbol": "BrnDirector::Camera::SerialiseBehaviourParameters",
+      "file": "GameSource/Director/Camera/BrnBehaviourParameterBank.cpp",
+      "x360_address": "0x82263590",
+      "evidence": "SerialiseBehaviourParameters<TextFileReadSerialiser>: full mangled name in the IDB; 15-case type switch (0,1,2,5,6,7,9,10,11,12,13,15,16,18,19) dispatching the serialiser's Serialise<T>, default streams 'Params type needs to be added to Serialise: ' + debug name (Serialisation.h:958). Cases 16/18/19 fold to the read serialiser's name-line fscanf (their Parameters walk nothing)."
+    },
+    "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::TextFileWriteSerialiser>": {
+      "symbol": "BrnDirector::Camera::SerialiseBehaviourParameters",
+      "file": "GameSource/Director/Camera/BrnBehaviourParameterBank.cpp",
+      "x360_address": "0x822637E0",
+      "evidence": "SerialiseBehaviourParameters<TextFileWriteSerialiser>: full mangled name in the IDB; 15-case type switch (0,1,2,5,6,7,9,10,11,12,13,15,16,18,19) dispatching the serialiser's Serialise<T>, default streams 'Params type needs to be added to Serialise: ' + debug name (Serialisation.h:958). Callers BehaviourParameterBank::Serialise<TextFileWriteSerialiser>."
+    },
+    "BrnGameState::GameStateModule::GetControllerToGameStateInterface": {
+      "symbol": "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::GetControllerToGameStateInterface",
+      "file": "GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "x360_address": "0x82362820",
+      "evidence": "The export mis-owns it: the body is the PreWorldInputBuffer read-lock accessor shape (status-byte read bit, 'Not locked for reading' at gamestate/BrnGameStateModuleIO.h:143, return this+0x2BE8 == the DWARF member mControllerToGameStateInterface after the 0x2438-byte NetworkToGameStateInterface at +0x7B0), and all four callers pass their PreWorldInputBuffer and assert 'lpPreWorldInputBuffer->GetControllerToGameStateInterface()' / 'lpInput->GetControllerToGameStateInterface()'."
+    },
+    "BrnNetwork::TrafficManager::GetTrafficSyncDataEntr": {
+      "symbol": "BrnNetwork::TrafficManager::GetTrafficSyncDataEntry",
+      "file": "GameSource/Network/Managers/BrnNetworkTrafficManager.cpp",
+      "x360_address": "0x82545A38",
+      "evidence": "The ARTIST name is cut at 'Entr'; the body asserts 'lPlayerID != CgsNetwork::K_INVALID_PLAYER_ID' (BrnNetworkTrafficManager.cpp:659), walks the 7 TrafficSyncData slots of stride 4448 from this+67760 comparing the player id, streams 'No entry for this player: ' (:669) and returns the slot; sole caller TrafficManager::RemovePlayer. The tree body is the same loop/asserts."
+    },
+    "BrnNetwork::TrafficManager::RetrieveBufferedMessag": {
+      "symbol": "BrnNetwork::TrafficManager::RetrieveBufferedMessage",
+      "file": "GameSource/Network/Managers/BrnNetworkTrafficManager.cpp",
+      "x360_address": "0x825461B8",
+      "evidence": "The ARTIST name is cut at 'Messag'; the body walks miNumMessagesBuffered (this+98916) buffered crashing-traffic messages of stride 1936, skips an invalid owning player id, returns the first whose frame passes CgsNetwork::UInt16IsLargerOrEqualWrapped(frame, msg frame), else null; sole caller TrafficManager::ReceiveCrashingTrafficMessages. The tree body is the same walk."
+    },
+    "BrnPhysics::Deformation::RemoveDeformationModelEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue::AddEvent",
+      "file": "GameShared/GameClasses/Module/CgsBaseEventQueue.h",
+      "x360_address": "0x825E5480",
+      "evidence": "The overflow assert at 0x825E5518 streams the baked rodata string at 0x82096A30 'CgsModule::BaseEventQueue<class BrnPhysics::Deformation::RemoveDeformationModelEvent>::AddEvent', with the mpEvents != NULL assert at CgsBaseEventQueue.h:312; body is the generic unconditional append (8-byte element = one RigidBodyId, slwi 3 stride matching the EventQueue<RemoveDeformationModelEvent,20> Construct at 0x825A7EA8 and the 176-byte queue span +3216..+3392 in DeformationInputInterface); explicitly instantiated in GameSource/Physics/DeformationManager/SharedIO/BaseEventQueue_RemoveDeformationModelEvent_AddEvent.cpp."
+    },
+    "BrnSound::Vehicles::AIVeh": {
+      "symbol": "BrnSound::Vehicles::AIVehicleState::GetTypeInfo",
+      "file": "GameSource/Sound/Vehicles/BrnAIVehicleState.cpp",
+      "x360_address": "0x826840B8",
+      "evidence": "Slot 1 of the AIVehicleState vtable 0x820B3A3C (installed by AIVehicleState::CreateObject; slot 0 scalar deleting dtor, slot 2 GetTypeName); returns &descriptor 0x82F2E89C {0x20000, AIVehicleState}, the same descriptor GetStaticTypeInfo builds."
+    },
+    "BrnSound::Vehicles::E": {
+      "symbol": "CgsResource::ResourcePtr::operator->",
+      "const": false,
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr.h",
+      "x360_address": "0x826A82A8",
+      "evidence": "Body asserts mpResourceMemory with the streamed message 'Can not instance resource pointer - it has no main memory resource' at baked CgsResourcePtr.h line 544 (the non-const operator-> site) and returns it; callers AIVehicleStateManager::PrepareAIEngineLoading and DualGinsuEffect::Attach/UpdateLoopModelParams dereference a vehicle-audio ResourcePtr."
+    },
+    "BrnSound::Vehicles::Environment::Cra": {
+      "symbol": "BrnSound::Vehicles::Environment::CrashStreamEffect::GetCreateParams",
+      "file": "GameSource/Sound/Vehicles/Environment/BrnCrashStreamEffect.cpp",
+      "x360_address": "0x82584D40",
+      "evidence": "Slot 0 (IStreamUser::GetCreateParams) of the IStreamUser sub-object vtables 0x820B204C (CrashStreamEffect ctor stores it at this+0x38), 0x820B1F40 (AmbienceEffect) and 0x820B20D0 (SpeedStreamEffect); 'addi r3,r3,4' returns mParams right after the interface vptr; identical-code fold named after CrashStreamEffect."
+    },
+    "BrnSound::Vehicles::Playe": {
+      "symbol": "BrnSound::Vehicles::PlayerVehicleState::GetTypeInfo",
+      "file": "GameSource/Sound/Vehicles/BrnPlayerVehicleState.cpp",
+      "x360_address": "0x82683FD8",
+      "evidence": "Slot 1 of the PlayerVehicleState vtable 0x820B3944 (installed by PlayerVehicleState::CreateObject; slot 2 GetTypeName); returns &descriptor 0x82F2E86C {0x10000, PlayerVehicleState}."
+    },
+    "BrnWorld::RaceCarRenderParams::operator=": {
+      "symbol": "BrnWorld::ActiveRaceCar::RenderParams::operator=",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCarRenderParams.cpp",
+      "x360_address": "0x822E6AD8",
+      "evidence": "0x822E6AD8 is the 0x14A0-byte member-wise copy that BrnReplays::RaceCarSerialiserFrame::operator= calls 8 times at stride 0x14A0 over its maRenderParams[8] (DWARF type BrnWorld::ActiveRaceCar::RenderParams[8]); its stores walk exactly the ActiveRaceCar::RenderParams member offsets (24-word maLightLocatorType loop at +0xD20, six mabWheelExists bytes at +0xD80, DetachedPartRenderQueue Append at +0xDB0, mLOD at +0x1400, glass arrays to +0x1497). No RaceCarRenderParams type exists in the DWARF; the name is the inline-bucket owner label."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGe": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::GetResultList",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator.cpp",
+      "x360_address": "0x825B2AE0",
+      "evidence": "Asserts 'luIndex < mu16NumUsedResultLists' against the halfword at +0x123BC, then copies the 16-byte list header from mapCollisionResultLists[luIndex] (+0x12080) into the sret buffer: the by-value GetResultList(u16) const."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::AddSphereListWithSphereListToStre": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::AddSphereListWithSphereListToStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator_CollideStreams.cpp",
+      "x360_address": "0x828119F0",
+      "evidence": "Calls PrepareNewPrimitiveTestResultsList then posts a stream command; sole caller VehicleManager::DoCarCarContactGeneration (the sphere-sphere family), the truncated name's only completion in the class declaration."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::AddSphereListWithTriangleListToSt": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::AddSphereListWithTriangleListToStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator_CollideStreams.cpp",
+      "x360_address": "0x82811340",
+      "evidence": "Posts into the sphere-triangle stream from DoRaceCarWorldContactGeneration / DoTrafficCarWorldContactGeneration; the truncated name's only completion in the class declaration (h:93)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::AddSweptSphereListWithTriangleLis": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::AddSweptSphereListWithTriangleListToStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator_CollideStreams.cpp",
+      "x360_address": "0x82811698",
+      "evidence": "Posts into the swept-sphere stream from DoRaceCarWorldContactGeneration; the truncated name's only completion in the class declaration (h:105)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::CollideLineAgainstPolySoupListNea": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::CollideLineAgainstPolySoupListNearest",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator.cpp",
+      "x360_address": "0x828131C0",
+      "evidence": "The 'Invalid line' assert at :1023, PrepareNewPrimitiveTestResultsList(1, ...) and the nearest-hit copy; callers ProcessLineTestNearest / ProcessTriangleCollisionLineTestNearests: CollideLineAgainstPolySoupListNearest (h:81)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::CollidePrimitiveListAgainstTriang": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::CollidePrimitiveListAgainstTriangleList",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator.cpp",
+      "x360_address": "0x828141D8",
+      "evidence": "Asserts 'lpPrimitiveList != NULL' / 'lpTriangleList != NULL' and prepares the type-11 descriptor; callers are the deformation/prop/traffic world-contact generators: CollidePrimitiveListAgainstTriangleList (h:129)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::CollideSweptSphereListWithTriangl": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::CollideSweptSphereListWithTriangleList",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator.cpp",
+      "x360_address": "0x82814080",
+      "evidence": "Prepares the type-13 swept-sphere descriptor for VehicleManager::DoTrafficCarWorldContactGeneration: CollideSweptSphereListWithTriangleList (SweptSphereList overload, the only one in the tree)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Crea": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::CreateFillTriangleCacheStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator.cpp",
+      "x360_address": "0x828109F8",
+      "evidence": "Sole caller TriangleCacheManager::StartUpdateTriangleCaches, which stores the producer it returns as mpUpdateTriangleCacheStream and runs it with RunFillTriangleCacheStream: CreateFillTriangleCacheStream(int32_t) (h:60)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::PrepareNewPrimitiveTestResultsLi": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::PrepareNewPrimitiveTestResultsList",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator_CollideStreams.cpp",
+      "x360_address": "0x82810798",
+      "evidence": "Called by every Collide*/Add*/Test* driver; asserts 'Ran out of result lists' and seats the list header: PrepareNewPrimitiveTestResultsList (h:163)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollideLineAgainstPolyS": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollideLineAgainstPolySoupStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator_LineStream.cpp",
+      "x360_address": "0x82811198",
+      "evidence": "Six arguments (map, producer, s32, bool, bool) stored into a type-4 descriptor wired to PolygonSoupTesterEntry; caller ProcessTriangleCollisionLineTestNearests: RunCollideLineAgainstPolySoupStream (h:78)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollidePrimitiveListWit": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollidePrimitiveListWithTriangleListStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator.cpp",
+      "x360_address": "0x82811F58",
+      "evidence": "Dispatcher writing descriptor type 12; callers PropManager::BeginPropWorldContactGeneration / VehicleManager::StartPartContactGeneration: RunCollidePrimitiveListWithTriangleListStream (h:138)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollideSphereListWithSp": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollideSphereListWithSphereListStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator_CollideStreams.cpp",
+      "x360_address": "0x82811C00",
+      "evidence": "Dispatcher writing descriptor type 8 (sphere-sphere stream); caller VehicleManager::StartVehicleContactGeneration: RunCollideSphereListWithSphereListStream (h:123)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollideSphereListWithTr": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollideSphereListWithTriangleListStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator_CollideStreams.cpp",
+      "x360_address": "0x82811550",
+      "evidence": "Dispatcher writing descriptor type 6 (sphere-triangle stream); caller StartVehicleContactGeneration: RunCollideSphereListWithTriangleListStream (h:99)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollideSweptSphereListW": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::RunCollideSweptSphereListWithTriangleListStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator_CollideStreams.cpp",
+      "x360_address": "0x828118A8",
+      "evidence": "Dispatcher writing descriptor type 14 (swept-sphere stream); caller StartVehicleContactGeneration: RunCollideSweptSphereListWithTriangleListStream (h:111)."
+    },
+    "CgsSceneManager::CgsCollision::BaseCollisionGenerator::TestLineAgainstPolySoupListDouble": {
+      "symbol": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::TestLineAgainstPolySoupListDoubleSided",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/CgsCollisionGenerator.cpp",
+      "x360_address": "0x82813978",
+      "evidence": "The 'Invalid line' assert at :1193 and two calls of CgsGeometric::TestLinePolygonSoupDoubleSided; caller ProcessLineTestFastDoubleSided: TestLineAgainstPolySoupListDoubleSided (h:84)."
+    },
+    "CgsSceneManager::CgsCollision::CollisionJobD": {
+      "symbol": "CgsSceneManager::CgsCollision::CollisionJobDescription::GetResultsList",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsCollisionJobDescription.h",
+      "x360_address": "0x82916EB0",
+      "evidence": "Four instructions, `lwz r3, 0xF0(this)`: returns the CollisionJobDescription's results-list pointer at +0xF0; its callers are PolygonSoupTesterJob::ExecuteFillTriangleCache."
+    },
+    "CgsSceneManager::CgsCollision::CollisionResu": {
+      "symbol": "CgsSceneManager::CgsCollision::CollisionResultList::GetResult",
+      "file": "GameShared/GameClasses/SceneManager/Collision/Primitives/CgsCollisionResult.cpp",
+      "x360_address": "0x828A9EF8",
+      "evidence": "Asserts 'lu16Index < mu16NumResults' (halfword +0xC) and returns mpResults + 0x70 * index: CollisionResultList::GetResult."
+    },
+    "CgsSceneManager::CgsCollision::FillTriangleCacheS": {
+      "symbol": "CgsSceneManager::CgsCollision::FillTriangleCacheStreamJobDesc::GetSpatialMapPointer",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsFillTriangleCacheStreamJobDesc.h",
+      "x360_address": "0x82916F78",
+      "evidence": "GetData() shim then `lwz r3, 0(r3)`; called only by PolygonSoupTesterJob::ExecuteFillTriangleCacheStream for the 'No spacial map' check and LoadPrimitive: the descriptor's GetSpatialMapPointer() const (+0x00)."
+    },
+    "CgsSceneManager::CgsCollision::FillTriangleCacheStreamJobDe": {
+      "symbol": "CgsSceneManager::CgsCollision::FillTriangleCacheStreamJobDesc::GetDataStreamProducer",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsFillTriangleCacheStreamJobDesc.h",
+      "x360_address": "0x82916FA8",
+      "evidence": "Non-const GetData() shim (folded with the empty blr) then `lwz r3, 4(r3)`; called by ExecuteFillTriangleCacheStream for the 'No stream producer' check and the consumer: GetDataStreamProducer() (+0x04)."
+    },
+    "CgsSceneManager::CgsCollision::LineWithPolySoupSt": {
+      "symbol": "CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc::GetSpatialMapPointer",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsLineWithPolySoupListJobDesc.h",
+      "x360_address": "0x82917028",
+      "evidence": "GetData() shim then `lwz r3, 0(r3)`; PolygonSoupTesterJob::ExecuteLineTest calls it for the 'No spacial map' check and LoadPrimitive: GetSpatialMapPointer() const (+0x00), the map RunCollideLineAgainstPolySoupStream stores first."
+    },
+    "CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDes": {
+      "symbol": "CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc::GetStream",
+      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsLineWithPolySoupListJobDesc.h",
+      "x360_address": "0x82917058",
+      "evidence": "GetData() shim then `lwz r3, 4(r3)`; ExecuteLineTest hands the result to SimpleDataStreamConsumer::Construct: GetStream() const (+0x04)."
+    },
+    "CgsSound::Playback::Aem": {
+      "symbol": "CgsSound::Playback::EntityFixer<T>::DoGetTypeName",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsDataStructures.h",
+      "x360_address": "0x8268DD38",
+      "evidence": "Slot 0 of vtable 0x820AD9E4 whose slots 4-5 are EntityFixer<AemsVoiceCsisClass>::DoFixUp/DoFixDown; returns AemsVoiceCsisClass::SK_TYPE_NAME (the word GetEntity<AemsVoiceCsisClass> keys on)."
+    },
+    "CgsSound::Playback::Aems": {
+      "symbol": "CgsSound::Playback::AemsFactory::Create",
+      "file": "GameShared/GameClasses/Sound/Playback/AEMS/CgsAemsFactory.cpp",
+      "x360_address": "0x826DAC28",
+      "evidence": "Allocates 4*(entities+0x162)+data+strings through the environment allocator tagged 'AemsFactory', runs AemsFactory::AemsFactory(env, spec), stores the sret handle and bumps the +8 refcount; Module::Prepare's mhAemsFactory create."
+    },
+    "CgsSound::Playback::AemsFactor": {
+      "symbol": "CgsSound::Playback::Handle::operator->",
+      "const": false,
+      "file": "GameShared/GameClasses/Sound/Playback/CgsHandle.h",
+      "x360_address": "0x8268E718",
+      "evidence": "Handle<AemsFactory>::operator->: asserts 'mpObject' at baked CgsHandle.h:287 (operator-> declared at :285) and returns it; Module::AddRegistry calls it on mhAemsFactory (+0x2260) to reach the factory registry."
+    },
+    "CgsSound::Playback::AemsPl": {
+      "symbol": "CgsSound::Playback::Handle::operator*",
+      "const": false,
+      "file": "GameShared/GameClasses/Sound/Playback/CgsHandle.h",
+      "x360_address": "0x8268FE30",
+      "evidence": "Handle<T>::operator* for the player-voice handle: asserts 'mpObject' at baked CgsHandle.h:305 (operator* declared at :303) and returns the pointee; AemsRWSampleFactory::CreateInstance passes the result to the AemsRWSamplePlayer ctor."
+    },
+    "CgsSound::Playback::Con": {
+      "symbol": "CgsSound::Playback::EntityFixer<T>::DoGetTypeName",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsDataStructures.h",
+      "x360_address": "0x8268DB80",
+      "evidence": "Slot 0 of vtable 0x820AD5F8 whose slots 1-5 are EntityFixer<ContentType>::DoUnresolve..DoFixDown; returns by value the word every ContentType>:: fixer compares against (ContentType::SK_TYPE_NAME)."
+    },
+    "CgsSound::Playback::Envi": {
+      "symbol": "CgsSound::Playback::Environment::Create",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsEnvironment.cpp",
+      "x360_address": "0x826C7948",
+      "evidence": "Environment::operator new(0x70, spec) + Environment::Environment(spec), 'lpNewEnvironment' assert at CgsEnvironment.h:528, sret handle store + refcount increment; Module::Prepare's stage-2 create feeding mhEnvironment."
+    },
+    "CgsSound::Playback::Environmen": {
+      "symbol": "CgsSound::Playback::Handle::operator->",
+      "const": false,
+      "file": "GameShared/GameClasses/Sound/Playback/CgsHandle.h",
+      "x360_address": "0x8268E280",
+      "evidence": "Handle<Environment>::operator->: asserts 'mpObject' at baked CgsHandle.h:287 and returns it; Module::Prepare calls it on mhEnvironment (+0x2258) for the environment size print."
+    },
+    "CgsSound::Playback::Fea": {
+      "symbol": "CgsSound::Playback::EntityFixer<T>::DoGetTypeName",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsDataStructures.h",
+      "x360_address": "0x8268DBB0",
+      "evidence": "Slot 0 of vtable 0x820AD678 whose slots 1-5 are EntityFixer<FeatureSchema>::DoUnresolve..DoFixDown; returns FeatureSchema::SK_TYPE_NAME (the word GetEntity<FeatureSchema> keys on)."
+    },
+    "CgsSound::Playback::Gen": {
+      "symbol": "CgsSound::Playback::EntityFixer<T>::DoGetTypeName",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsDataStructures.h",
+      "x360_address": "0x8268DBF0",
+      "evidence": "Slot 0 of vtable 0x820AD7C8 whose slot 1 asserts 'GenericRwacFeatureImplementation::SK_TYPE_NAME == lEntity.GetTypeName()'; returns the word GetEntity<GenericRwacFeatureImplementation> keys on."
+    },
+    "CgsSound::Playback::GenericRwacFact": {
+      "symbol": "CgsSound::Playback::GenericRwacFactory::GetFeatureImplementation",
+      "file": "GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacFactory.cpp",
+      "x360_address": "0x82694058",
+      "evidence": "Reads the factory registry (+0x401C), calls Registry::GetEntity<GenericRwacFeatureImplementation>(name) and on a miss fires 'Rwac Factory: Can't find implementation for ' << name at CgsGenericRwacFactory.h:939 (DWARF declares GetFeatureImplementation(Name) at :932); called only from GenericRwacFactory::SetupConfig."
+    },
+    "CgsSound::Playback::GenericRwacFeatureImplementat": {
+      "symbol": "CgsSound::Playback::EntityFixer<GenericRwacFeatureImplementation>::DoUnresolve",
+      "file": "GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacFactory.cpp",
+      "x360_address": "0x82689D60",
+      "evidence": "Slot 1 (DoUnresolve) of the GenericRwacFeatureImplementation fixer vtable 0x820AD7C8; baked assert 'GenericRwacFeatureImplementation::SK_TYPE_NAME == lEntity.GetTypeName()' (CgsGenericRwacDataStructures.h:418) then zeroes each PluginInfo mHandle under the 'lu32I < mu32PluginInfoCount' accessor assert."
+    },
+    "CgsSound::Playback::GenericRwacMasterVoice": {
+      "symbol": "CgsSound::Playback::GenericRwacMasterVoice::GetProfileVoiceType",
+      "file": "GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacMasterVoice.cpp",
+      "x360_address": "0x827DF718",
+      "evidence": "Slot 4 (GetProfileVoiceType, after dtor/DoDispose/GetCpuTicks/DisplayVoiceCpu) of the GenericRwacMasterVoice vtable 0x820B5234 installed by FactoryNew<GenericRwacMasterVoice>; 'li r3,2' == E_VOICETYPE_GENERICRWACMASTER; widely folded return-2 body."
+    },
+    "CgsSound::Playback::GenericRwacSubmixVoice": {
+      "symbol": "CgsSound::Playback::GenericRwacSubmixVoice::GetProfileVoiceType",
+      "file": "GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacSubmixVoice.cpp",
+      "x360_address": "0x826D7F68",
+      "evidence": "Slot 4 (GetProfileVoiceType) of the GenericRwacSubmixVoice vtable 0x820B5210 installed by FactoryNew<GenericRwacSubmixVoice>; 'li r3,3' == E_VOICETYPE_GENERICRWACSUBMIX; widely folded return-3 body."
+    },
+    "CgsSound::Playback::Ha": {
+      "symbol": "CgsSound::Playback::Handle::operator=",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsHandle.h",
+      "x360_address": "0x826A7868",
+      "evidence": "Handle<GenericRwacFactory>::operator=: Module::Prepare assigns the GenericRwacFactory::Create temp into mhRwacFactory (+0x225C, DWARF SplicerFactory::GenericRwacFactoryHandle) and Module::Release null-assigns it; body increments the source object's +4 count, Object::Release on the old pointer, stores, returns this."
+    },
+    "CgsSound::Playback::Handle": {
+      "symbol": "CgsSound::Playback::Handle::operator=",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsHandle.h",
+      "x360_address": "0x826A7A80",
+      "evidence": "Handle<SplicerFactory>::operator=: Module::Prepare assigns the SplicerFactory::Create temp into mhSplicerFactory (+0x2264, DWARF Module::SplicerFactoryHandle) and Module::Release null-assigns it; acquire source, release old, store."
+    },
+    "CgsSound::Playback::Handle<cl": {
+      "symbol": "CgsSound::Playback::Handle::operator=",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsHandle.h",
+      "x360_address": "0x826A76A8",
+      "evidence": "Handle<Environment>::operator=: Module::Prepare assigns the Environment::Create temp into mhEnvironment (+0x2258, DWARF Module::EnvironmentHandle) and Module::Release null-assigns it; acquire source, release old, store."
+    },
+    "CgsSound::Playback::Par": {
+      "symbol": "CgsSound::Playback::EntityFixer<T>::DoGetTypeName",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsDataStructures.h",
+      "x360_address": "0x8268DB90",
+      "evidence": "Slot 0 of vtable 0x820AD610 whose slots 4-5 are EntityFixer<ParameterSchema>::DoFixUp/DoFixDown; returns ParameterSchema::SK_TYPE_NAME (the word GetEntity<ParameterSchema> keys on)."
+    },
+    "CgsSound::Playback::S": {
+      "symbol": "CgsSound::Playback::SplicerFactory::Create",
+      "file": "GameShared/GameClasses/Sound/Playback/Splicer/CgsSplicerFactory.cpp",
+      "x360_address": "0x826DB130",
+      "evidence": "Allocates 4*(entities+0x1C0)+data+strings through the environment allocator tagged 'SplicerFactory', runs SplicerFactory::SplicerFactory(env, spec), stores the sret handle and bumps the +4 refcount; Module::Prepare's mhSplicerFactory create."
+    },
+    "CgsSound::Playback::Slo": {
+      "symbol": "CgsSound::Playback::EntityFixer<T>::DoGetTypeName",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsDataStructures.h",
+      "x360_address": "0x8268DBA0",
+      "evidence": "Slot 0 of vtable 0x820AD660 whose slots 1-5 are EntityFixer<SlotSchema>::DoUnresolve..DoFixDown; returns SlotSchema::SK_TYPE_NAME (the word GetEntity<SlotSchema> keys on)."
+    },
+    "RealmcCore::MessagePtr,clas": {
+      "symbol": "RealmcCore::MessageList::DoCreateNode",
+      "file": "SDKs/Realmc/RealmcContainers.cpp",
+      "x360_address": "0x82C45BA8",
+      "evidence": "Truncated eastl::list<MessagePtr,RealmcCore::allocator> member; sole caller MessageQueue::SendMessage; body allocates 0x10 bytes via the backend slot +8 with tag 'RealmcCore::allocator' and placement-copies a MessagePtr (vtable off_821BA2F4 + AddRef) at node+8 = EASTL DoCreateNode."
+    },
+    "RealmcCore::ResponsePtr>,": {
+      "symbol": "RealmcCore::ResponseList::DoClear",
+      "file": "SDKs/Realmc/RealmcContainers.cpp",
+      "x360_address": "0x82C46AF8",
+      "evidence": "Truncated eastl::list<pair<MessagePtr,ResponsePtr>> member; sole caller MessageQueue::~MessageQueue; walks sentinel->next until the sentinel, destroying ResponsePtr (off_821BA308 + ~MessagePtr) at node+16 then MessagePtr at node+8 and freeing 0x18 bytes = EASTL DoClear."
+    },
+    "RealmcCore::ResponsePtr>,clas": {
+      "symbol": "RealmcCore::ResponseList::DoErase",
+      "file": "SDKs/Realmc/RealmcContainers.cpp",
+      "x360_address": "0x82C46B70",
+      "evidence": "Truncated list<pair<MessagePtr,ResponsePtr>> member; sole caller is 0x82C46D90 (erase); unlinks the node (prev->next = next, next->prev = prev), destroys node+16 ResponsePtr then node+8 MessagePtr, frees 0x18 bytes = EASTL DoErase."
+    },
+    "RealmcCore::ResponsePtr>,struc": {
+      "symbol": "RealmcCore::ResponseList::erase",
+      "file": "SDKs/Realmc/RealmcContainers.cpp",
+      "x360_address": "0x82C46D90",
+      "evidence": "Truncated list<pair<MessagePtr,ResponsePtr>> member; sole caller MessageQueue::_ExtractResponse; sret iterator: position = position->next, DoErase(position->prev) via 0x82C46B70, return position = EASTL list::erase(iterator)."
+    },
+    "RealmcCore::ThrFunction<RealmcIface::BootupCheckTask>": {
+      "symbol": "RealmcCore::ThrFunction",
+      "file": "SDKs/Realmc/RealmcCore.h",
+      "x360_address": "0x82B521B8",
+      "evidence": "IDA name ??$ThrFunction@VBootupCheckTask@RealmcIface@@@RealmcCore@@YAHPAX@Z = int ThrFunction<BootupCheckTask>(void*); referenced only by RunAsync<BootupCheckTask> as the EA::Thread::Thread::Begin entry; body IRunnableTask::operator()(arg), RefCount::Release(arg), return 0 = the generic template."
+    },
+    "RealmcCore::ThrFunction<RealmcIface::CheckCardTask>": {
+      "symbol": "RealmcCore::ThrFunction",
+      "file": "SDKs/Realmc/RealmcCore.h",
+      "x360_address": "0x82B52180",
+      "evidence": "IDA name ??$ThrFunction@VCheckCardTask@RealmcIface@@@RealmcCore@@YAHPAX@Z; referenced only by RunAsync<CheckCardTask> as the Thread::Begin entry; body operator()(arg), Release(arg), return 0 = the generic template."
+    },
+    "RealmcCore::ThrFunction<RealmcIface::LoadTask>": {
+      "symbol": "RealmcCore::ThrFunction",
+      "file": "SDKs/Realmc/RealmcCore.h",
+      "x360_address": "0x82B52298",
+      "evidence": "IDA name ??$ThrFunction@VLoadTask@RealmcIface@@@RealmcCore@@YAHPAX@Z; referenced only by RunAsync<LoadTask> as the Thread::Begin entry; body operator()(arg), Release(arg), return 0 = the generic template."
+    },
+    "RealmcCore::ThrFunction<RealmcIface::SaveCheckTask>": {
+      "symbol": "RealmcCore::ThrFunction",
+      "file": "SDKs/Realmc/RealmcCore.h",
+      "x360_address": "0x82B521F0",
+      "evidence": "IDA name ??$ThrFunction@VSaveCheckTask@RealmcIface@@@RealmcCore@@YAHPAX@Z; referenced only by RunAsync<SaveCheckTask> as the Thread::Begin entry; body operator()(arg), Release(arg), return 0 = the generic template."
+    },
+    "RealmcCore::ThrFunction<RealmcIface::SaveTask>": {
+      "symbol": "RealmcCore::ThrFunction",
+      "file": "SDKs/Realmc/RealmcCore.h",
+      "x360_address": "0x82B52228",
+      "evidence": "IDA name ??$ThrFunction@VSaveTask@RealmcIface@@@RealmcCore@@YAHPAX@Z; referenced only by RunAsync<SaveTask> as the Thread::Begin entry; body operator()(arg), Release(arg), return 0 = the generic template."
+    },
+    "RealmcCore::ThrFunction<RealmcIface::SetActiveCardTask>": {
+      "symbol": "RealmcCore::ThrFunction",
+      "file": "SDKs/Realmc/RealmcCore.h",
+      "x360_address": "0x82B52148",
+      "evidence": "IDA name ??$ThrFunction@VSetActiveCardTask@RealmcIface@@@RealmcCore@@YAHPAX@Z; referenced only by RunAsync<SetActiveCardTask> as the Thread::Begin entry (addi r4 of the symbol before bl Thread::Begin); body operator()(arg), Release(arg), return 0 = the generic template."
+    },
+    "RealmcCore::ThrFunction<RealmcIface::SetAutosaveTask>": {
+      "symbol": "RealmcCore::ThrFunction",
+      "file": "SDKs/Realmc/RealmcCore.h",
+      "x360_address": "0x82B52260",
+      "evidence": "IDA name ??$ThrFunction@VSetAutosaveTask@RealmcIface@@@RealmcCore@@YAHPAX@Z; referenced only by RunAsync<SetAutosaveTask> as the Thread::Begin entry; body operator()(arg), Release(arg), return 0 = the generic template."
+    },
+    "RealmcCore::alloca": {
+      "symbol": "RealmcCore::String16::String16",
+      "file": "SDKs/Realmc/RealmcContainers.cpp",
+      "x360_address": "0x82B558F0",
+      "evidence": "Truncated basic_string<char16_t,RealmcCore::allocator> member: zeroes begin/end/capEnd, copies the allocator at +0xC (empty shared body), halfword-scans the source to its 0 and calls RangeInitialize (0x82B55580) = the C-string constructor; callers GetCa (passes state+0x20, the device name) and the Trc value ctor."
+    },
+    "RealmcIface::XenonRunnableTask::GetCa": {
+      "symbol": "RealmcIface::XenonRunnableTask::GetCardName",
+      "file": "SDKs/Realmc/RealmcXenonRunnableTask.cpp",
+      "x360_address": "0x82B57CE8",
+      "evidence": "Export name cut after 'GetCa'; the body (sret String16, this) builds an empty basic_string<char16_t> and, when mpState->mCardData DeviceID (+8) is non-zero, assigns String16(mpState+0x20) = the XDEVICE_DATA wide friendly name at block+0x18; the 'Name' suffix is inferred from that behaviour."
+    },
+    "WorldModule::CalculateVehicleLODs": {
+      "symbol": "BrnWorld::WorldModule::CalculateVehicleLODs",
+      "file": "GameSource/World/BrnWorldModule.cpp",
+      "x360_address": "0x827C3778",
+      "evidence": "0x827C3778's only caller is WorldModule::GenerateDispatchLists (0x827D1CE8), the BrnWorld::WorldModule member; the bucket export dropped the BrnWorld namespace and the tree body's banner and per-instruction notes cite 0x827C3778..0x827C3BAC."
+    },
+    "WorldModule::FilterFrustumTestResults": {
+      "symbol": "BrnWorld::WorldModule::FilterFrustumTestResults",
+      "file": "GameSource/World/BrnWorldModule.cpp",
+      "x360_address": "0x827BDA60",
+      "evidence": "0x827BDA60's callers are WorldModule::GenerateDispatchLists (0x827D1CE8) and GenerateShadowMapDispatchLists (0x827C96D8), both BrnWorld::WorldModule members; the bucket export dropped the namespace and the tree body's banner cites 0x827BDA60."
+    },
+    "WorldModule::LoadAttribSysVault": {
+      "symbol": "BrnWorld::WorldModule::LoadAttribSysVault",
+      "file": "GameSource/World/BrnWorldModule.cpp",
+      "x360_address": "0x827D3D08",
+      "evidence": "0x827D3D08's only caller is WorldModule::Prepare (0x827D53B0), the BrnWorld::WorldModule member; the bucket export dropped the namespace and the tree body's banner cites 0x827D3D08."
+    },
+    "WorldModule::PrepareWorldCollision": {
+      "symbol": "BrnWorld::WorldModule::PrepareWorldCollision",
+      "file": "GameSource/World/BrnWorldModule.cpp",
+      "x360_address": "0x827C9478",
+      "evidence": "0x827C9478's only caller is LoadingScriptedState::LoadWorldCollision (0x823E73E0), which calls the BrnWorld::WorldModule member (not WorldEntityModule::PrepareWorldCollision); the bucket export dropped the namespace and the tree body's banner cites 0x827C9478."
+    },
+    "princeton_digital::stereo_room_t<float>::input_mode_set": {
+      "symbol": "princeton_digital::stereo_room_t::input_mode_set",
+      "file": "SDKs/XAudio/princeton_digital.h",
+      "x360_address": "0x82965688",
+      "evidence": "Export name princeton_digital::stereo_room_t<float>::input_mode_set; the two-instruction body stores r4 to this+0x64 and returns this, which is the in-class template body; stereo_room_t<f32> is explicitly instantiated in princeton_digital.cpp."
+    },
+    "princeton_digital::stereo_room_t<float>::process": {
+      "symbol": "princeton_digital::stereo_room_t<T>::process",
+      "file": "SDKs/XAudio/princeton_digital.cpp",
+      "x360_address": "0x829610D0",
+      "evidence": "Export name princeton_digital::stereo_room_t<float>::process, sole caller XAUDIO::CStereoRoomFloat::Process; the generic body is explicitly instantiated for float and reproduces the console block output to ~6e-8 under a PPC interpreter of the image code."
+    },
+    "princeton_digital::stereo_room_t<float>::properties_set": {
+      "symbol": "princeton_digital::stereo_room_t<T>::properties_set",
+      "file": "SDKs/XAudio/princeton_digital.cpp",
+      "x360_address": "0x829656A8",
+      "evidence": "Export name princeton_digital::stereo_room_t<float>::properties_set, called by stereo_room_3dl2_t<float>::set and CStereoRoomFloat::Process; the float instantiation of the generic body leaves the room state bit-identical to the interpreted console function."
+    },
+    "princeton_digital::stereo_room_t<float>::stereo_room_t<float>": {
+      "symbol": "princeton_digital::stereo_room_t<T>::stereo_room_t",
+      "file": "SDKs/XAudio/princeton_digital.cpp",
+      "x360_address": "0x829664D8",
+      "evidence": "Export name princeton_digital::stereo_room_t<float>::stereo_room_t<float>, called from XAUDIO::CReverbEffect::CReverbEffect and the stereo_room_3dl2_t<float> ctor; the float instantiation builds a room state bit-identical to the interpreted console ctor."
+    },
+    "princeton_digital::stereo_room_t<float>::wet_dry_mix_set": {
+      "symbol": "princeton_digital::stereo_room_t::wet_dry_mix_set",
+      "file": "SDKs/XAudio/princeton_digital.h",
+      "x360_address": "0x82965690",
+      "evidence": "Export name princeton_digital::stereo_room_t<float>::wet_dry_mix_set; body multiplies f1 by the dumped 0.0099999998 and stores this+0x5C, called from XAUDIO::CStereoRoomFloat::Process; generic in-class body instantiated for float."
+    },
+    "rw::math::vpu::Vector4>::FreeObject": {
+      "symbol": "BrnDirector::AbstractPool::FreeObject",
+      "file": "GameSource/Director/Utils/BrnAbstractPool.h",
+      "x360_address": "0x827DE4A8",
+      "evidence": "AbstractPool<250,8,rw::math::vpu::Vector4>::FreeObject: sole slot of its one-word free-interface vtable; body adds +0x10 (the embedded ObjectPool) and tail-calls ObjectPool<Vector4[250],8,int>::FreeObject (IDB callee name '_250__8_int___FreeObject')."
     }
   }
 }

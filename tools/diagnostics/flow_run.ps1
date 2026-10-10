@@ -631,8 +631,15 @@ if ($Slot -gt 0) {
   #   deliberate FreshProfile park by run_case, and re-seeding it here silently booted a
   #   first-boot case as a RETURNING player (see slots.ps1's -NoProfileSeed banner: it cost
   #   camera_shake_smash two runs, both of which read as a game regression).
+  # Opt-in snapshot runs: BPH_KEEP_SLOT_EXE=1 keeps the exe already staged in the slot (a frozen
+  #   build for regression sweeps while build\game keeps moving). The provenance banner still
+  #   names the exe that actually ran.
+  if ($env:BPH_KEEP_SLOT_EXE -eq '1' -and (Test-Path $exe)) {
+    Write-Host "[flow]   [slots] slot $Slot KEPT (BPH_KEEP_SLOT_EXE=1): $exe ($((Get-Item $exe).LastWriteTime))"
+  } else {
   & powershell -ExecutionPolicy Bypass -File $lSlotsScript -Slot $Slot -NoProfileSeed 2>&1 |
       ForEach-Object { Write-Host "[flow]   $_" }
+  }
   if (-not (Test-Path $exe)) {
     Write-Host "[flow] FAIL: slot $Slot has no exe at $exe after staging -- see the [slots] lines above."
     exit 1
