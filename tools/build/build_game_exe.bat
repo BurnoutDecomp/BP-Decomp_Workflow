@@ -706,7 +706,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   (the guest Xenos blobs unk_8200DD58/DF00/E010/E230 re-authored as D3D9) that
   rem   BrnGraphics::Im3dBlend::Construct @0x8229B260 uploads -- same job as the skid pair.
   echo "%SRC%\pc\gcm\renderengine\LionBlendProgramsPC.cpp"
-  echo "%SRC%\pc\gcm\renderengine\SkidImmediateModePCLeaf.cpp"
+  echo "%SRC%\pc\gcm\renderengine\SkidImmediateMode.cpp"
   rem ---- PARTICLES.BUNDLE HANDLERS (2026-09-02, tyre-mark wave): the three resource types
   rem   LoadFXBundle @0x8229C950 needs FIXED UP (registered in CgsResourceTypeRegistration.cpp:
   rem   TextureNameMap 0x1000B, VFXPropCollection 0x1001B, ParticleDescriptionCollection 0x10008)
@@ -725,12 +725,12 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem The closure was measured with dumpbin over the linked object set: the three
   rem sky TUs raise 67 externals / 45 already provided / 22 unresolved; the two
   rem existing renderengine TUs below resolve 2 and drag nothing, and
-  rem ImmediateModePCLeaf.cpp (a new PC leaf) defines the other 20. Mounting the
+  rem ImmediateMode.cpp (a new PC leaf) defines the other 20. Mounting the
   rem existing VertexBuffer.cpp / IndexBuffer.cpp / CgsImRenderer.cpp instead makes
   rem it WORSE (29 / 23 unresolved + an LNK2005 against the linked CgsIm2d.cpp).
   echo "%SRC%\pc\gcm\renderengine\VertexDescriptorParameters.cpp"
   echo "%SRC%\GameShared\GameClasses\RenderWare\PS3\CgsRwVertexDescResourceType.cpp"
-  echo "%SRC%\pc\gcm\renderengine\ImmediateModePCLeaf.cpp"
+  echo "%SRC%\pc\gcm\renderengine\ImmediateMode.cpp"
   rem MeshHelper::Dispatch<Device> -- the instanced-mesh bind the DEBRIS pass issues.
   echo "%SRC%\pc\gcm\renderengine\MeshHelper.cpp"
   rem ---- RETAINED WORLD GEOMETRY (2026-08-15 perf wave) ----------------------
@@ -740,14 +740,14 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem static bundle buffer into a D3D9 vertex/index buffer ONCE and submits with
   rem SetStreamSource/SetIndices/DrawIndexedPrimitive; CgsResourcePool's free path
   rem evicts a mirror together with the bundle memory it was built from.
-  echo "%SRC%\pc\gcm\renderengine\WorldGeometryPCLeaf.cpp"
+  echo "%SRC%\pc\gcm\renderengine\WorldGeometry.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkyDomeProgramsPC.cpp"
   rem ---- CORONAS WAVE (2026-08-17, step 1): THE LIGHT-FLARE PASS, MOUNTED. ----
   rem   BrnCoronaManager + renderengine::CoronaRenderer were reconstructed but UNMOUNTED; this
   rem   wave lands the whole chain. Link closure, measured with dumpbin (wave report section 4):
   rem     rwgcoronarenderer.cpp -> ProgramBufferPC_Adopt / ProgramBuffer::GetVariableHandleByName
-  rem       (programbuffer.cpp + ImmediateModePCLeaf.cpp), VertexDescriptor::Parameters::Parameters
-  rem       + VertexDescriptor::Initialize (VertexDescriptorParameters.cpp + ImmediateModePCLeaf
+  rem       (programbuffer.cpp + ImmediateMode.cpp), VertexDescriptor::Parameters::Parameters
+  rem       + VertexDescriptor::Initialize (VertexDescriptorParameters.cpp + ImmediateMode
   rem       .cpp), the shadow::Device binders (shadowingdevice.cpp) and D3DDevice_Begin/EndVertices
   rem       (XenonD3D9Shims.cpp) -- ALL already on this list -- plus the corona program pair below.
   rem     BrnCoronaManager.cpp  -> Curves.cpp + RwRGBA.cpp + rwgcoronabufferiterator.cpp +
@@ -767,11 +767,11 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem   phantom construction surface -- see the file's own banner). This wave lands the object and
   rem   its two draw passes. Link closure, measured with dumpbin (wave report section 4):
   rem     BrnSunCorona.cpp -> ProgramBufferPC_Adopt / ProgramBuffer::GetVariableHandleByName
-  rem       (ImmediateModePCLeaf.cpp + states/programbuffer.cpp), VertexDescriptor::Parameters::
+  rem       (ImmediateMode.cpp + states/programbuffer.cpp), VertexDescriptor::Parameters::
   rem       Parameters + VertexDescriptor::Initialize / ::Release (VertexDescriptorParameters.cpp +
-  rem       ImmediateModePCLeaf.cpp), the shadow::Device binders (shadowingdevice.cpp),
+  rem       ImmediateMode.cpp), the shadow::Device binders (shadowingdevice.cpp),
   rem       D3DDevice_Begin/EndVertices (XenonD3D9Shims.cpp), CgsRenderTarget::Begin/End
-  rem       (CgsRenderTarget.cpp), RenderTarget::GetDepthTextureState (PostFxRenderTargetPCLeaf.cpp)
+  rem       (CgsRenderTarget.cpp), RenderTarget::GetDepthTextureState (PostFxRenderTarget.cpp)
   rem       and the three state factories -- ALL already on this list -- plus the four sun-corona
   rem       programs below.
   rem   The four VS/PS programs are AUTHORED for D3D9 (the Xenos blobs at unk_8203E118 / E208 /
@@ -902,7 +902,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  Get,SetSectionRenderTargetState / GetRenderTargetState), postfx::gpDefaultRenderTargetState
   rem  and renderengine::Device::SetState(const RenderTargetState*) were declared everywhere and
   rem  DEFINED NOWHERE (the only Device::SetState in the tree was shadow::Device::SetState(void*,
-  rem  u32), a different class). PostFxRenderTargetPCLeaf.cpp is the new PC leaf that defines all
+  rem  u32), a different class). PostFxRenderTarget.cpp is the new PC leaf that defines all
   rem  of them over Direct3D 9: a real depth-sampleable INTZ texture (1280x1920 = the 1x3 cascade
   rem  atlas the recovered ShadowMap_* constants encode) bound as the depth-stencil surface.
   rem
@@ -925,7 +925,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\CgsRenderTarget.cpp"
   echo "%SRC%\GameSource\Graphics\BrnRendererMemory.cpp"
   echo "%SRC%\GameSource\Graphics\BrnShadowMapRenderManager.cpp"
-  echo "%SRC%\pc\gcm\renderengine\PostFxRenderTargetPCLeaf.cpp"
+  echo "%SRC%\pc\gcm\renderengine\PostFxRenderTarget.cpp"
   rem  The post-fx composite's D3D9 programs -- ALL TWELVE PERMUTATIONS since the
   rem  step-5 wave: ONE shared vertex image (the twelve X360 vertex packages are
   rem  byte-identical, md5 a47e7e9943a3570c484e1724d6dff763) plus twelve pixel
@@ -981,7 +981,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  closure (the RenderEngineClub post-fx effect TUs) is the next wave -- so /OPT:REF strips
   rem  every byte of this today. Mounted anyway to ENFORCE the link closure over the flipped arms
   rem  (LNK2019 resolves before /OPT:REF discards): its dependencies are the two state TUs below
-  rem  (samplerstate.cpp, DepthStencilState.cpp), VertexDescriptor::Release (ImmediateModePCLeaf.cpp),
+  rem  (samplerstate.cpp, DepthStencilState.cpp), VertexDescriptor::Release (ImmediateMode.cpp),
   rem  and shadow::Device::SetState(const TextureState*, u32) (shadowingdevice.cpp).
   echo "%SRC%\GameSource\Graphics\PostFx\BrnPostFxShader.cpp"
   rem  renderengine::DepthStencilState::{GetResourceDescriptor,Initialize} -- the PC leaf the
@@ -992,7 +992,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem  (PCBringUpConstructPostFx / PCBringUpRenderPostFxComposite) BrnRendererModule reaches the
   rem  composite through, and BrnPostFxBloom. Link-closed by the effect wave below: measured by a
   rem  full-object-set probe link whose ONLY residue was the seven Xenon shims of the console
-  rem  VertexBuffer.cpp -- which is why VertexBuffer::Release is a PC leaf in ImmediateModePCLeaf.cpp
+  rem  VertexBuffer.cpp -- which is why VertexBuffer::Release is a PC leaf in ImmediateMode.cpp
   rem  and that TU is NOT mounted (its Initialize would duplicate the leaf's).
   echo "%SRC%\GameSource\Graphics\PostFx\BrnPostFx.cpp"
   echo "%SRC%\GameSource\Graphics\PostFx\BrnPostFxBloom.cpp"

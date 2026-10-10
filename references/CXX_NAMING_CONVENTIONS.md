@@ -69,6 +69,21 @@ enough ownership context.
 Generated files may follow generator or schema names, including lowercase names.
 Do not copy generated naming into hand-written code.
 
+Host implementations belong under `src/pc/<subsystem>/` or an established
+subsystem `PC` directory. Name support files after their module or primary type
+(for example `WindowPresentation.h` and `WorldGeometry.cpp`); do not append
+`PCLeaf`. Add directories for useful subsystem boundaries, such as
+`pc/gcm/renderengine/reflections` and `pc/debug`. Future target implementations
+can follow the same `src/<platform>/<subsystem>/` convention and must be selected
+explicitly by that target's build.
+
+Directories do not create C++ namespaces. Give new support types ordinary names
+inside their owning namespace; preserve recovered class and method identities.
+Keep `// FLAG PC-platform leaf: <reason>` comments and their evidence: this marker
+identifies provenance for the faithfulness checker independently of filenames.
+An original reference-attributed filename (such as `CgsHardwareInitPS3.cpp`) is
+provenance, not proof that the current implementation supports that platform.
+
 ## Types
 
 Use PascalCase for classes, structs, typedefs, aliases, and template parameters:
