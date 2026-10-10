@@ -741,6 +741,10 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem SetStreamSource/SetIndices/DrawIndexedPrimitive; CgsResourcePool's free path
   rem evicts a mirror together with the bundle memory it was built from.
   echo "%SRC%\pc\gcm\renderengine\WorldGeometry.cpp"
+  echo "%SRC%\pc\gcm\renderengine\reflections\SceneCapture.cpp"
+  echo "%SRC%\pc\gcm\renderengine\reflections\SceneRender.cpp"
+  echo "%SRC%\pc\gcm\renderengine\reflections\SceneParticles.cpp"
+  echo "%SRC%\pc\gcm\renderengine\shadows\SceneRender.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkyDomeProgramsPC.cpp"
   rem ---- CORONAS WAVE (2026-08-17, step 1): THE LIGHT-FLARE PASS, MOUNTED. ----
   rem   BrnCoronaManager + renderengine::CoronaRenderer were reconstructed but UNMOUNTED; this
