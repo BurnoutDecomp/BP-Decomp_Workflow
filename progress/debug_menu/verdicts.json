@@ -53,5 +53,32 @@
       "b5-decomp/tests/run_pc_im3d_buffer.py",
       "tools/tests/cases/debug_menu_reset_history.ps1"
     ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0010": {
+    "state": "original-noop",
+    "notes": "Apply Ram: Its original callback only latches mbAirRam; no original physics consumer exists. Original state behavior is restored and witnessed; no ram effect is invented.",
+    "evidence": [
+      "progress/debug_menu/FORCE_SPAWN_RAM_20261011.md",
+      "b5-decomp/tests/run_race_car_debug_spawn.py",
+      "tools/tests/cases/debug_menu_racecar_spawn.ps1"
+    ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0011": {
+    "state": "original-noop",
+    "notes": "Magnitude: Its original writable 0..100 value has no gameplay consumer. Original state behavior is restored and witnessed; no ram effect is invented.",
+    "evidence": [
+      "progress/debug_menu/FORCE_SPAWN_RAM_20261011.md",
+      "b5-decomp/tests/run_race_car_debug_spawn.py",
+      "tools/tests/cases/debug_menu_racecar_spawn.ps1"
+    ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0057": {
+    "state": "verified",
+    "notes": "Force Online Freeburn Spawn Position: both original lobby consumers read the registered bool; forced and default runs verify respawn/retention and actual player physics placement.",
+    "evidence": [
+      "progress/debug_menu/FORCE_SPAWN_RAM_20261011.md",
+      "b5-decomp/tests/run_race_car_debug_spawn.py",
+      "tools/tests/cases/debug_menu_racecar_spawn.ps1"
+    ]
   }
 }
