@@ -22,3 +22,7 @@ review_vehicle_props_147_repair. Handling is separately pushed through b5d927fb:
 registration, observer, traction leaves and grip windows/graphs are recovered,
 but RenderWorld/HUD and listed helpers remain incomplete. Its 28 sites remain
 outside the source-covered union and no test or runtime verdict is claimed.
+
+The repair supplement now passes and 35 focused CPU checks pass. Both old-error
+negative controls fail as expected. See VEHICLE_MATH_20261012.md for exact scope,
+compile results and remaining hardware/runtime limits.
