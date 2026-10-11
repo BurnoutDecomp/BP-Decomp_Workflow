@@ -744,6 +744,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\pc\gcm\renderengine\reflections\SceneCapture.cpp"
   echo "%SRC%\pc\gcm\renderengine\reflections\SceneRender.cpp"
   echo "%SRC%\pc\gcm\renderengine\reflections\SceneParticles.cpp"
+  echo "%SRC%\pc\gcm\renderengine\reflections\LionSimulation.cpp"
   echo "%SRC%\pc\gcm\renderengine\shadows\SceneRender.cpp"
   echo "%SRC%\pc\gcm\renderengine\SkyDomeProgramsPC.cpp"
   rem ---- CORONAS WAVE (2026-08-17, step 1): THE LIGHT-FLARE PASS, MOUNTED. ----
