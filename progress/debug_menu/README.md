@@ -26,18 +26,19 @@ Regenerate with `python tools/re/debug_menu_inventory.py`. Parser checks:
 | Batch | Scope | Evidence |
 | --- | --- | --- |
 | 1 | Five Race Car Entity / Tailgate... tunables | [Tailgate repair](TAILGATE_20261011.md) |
+| 2 | Race Car Entity / Show place on track info; shared 3D debug buffer and original sphere mesh | [Reset overlay repair](RESET_HISTORY_20261011.md) |
 
-Five sites are verified in this campaign. The other 1,349 sites and the expanded
+Six sites are verified in this campaign. The other 1,348 sites and the expanded
 dynamic rows remain pending. Previously delivered presentation/navigation repairs
 are documented in `b5-decomp/docs/DEBUG_MENU_REPORT.md`; import their behavioral
 verdicts only after checking their actual evidence.
 
 ## Continue
 
-1. Finish the race-car page: restore its original embedded diagnostic owner and
-   the line-test/intersection/reset-transform producers; remove the read-only
-   restriction only after the overlay is witnessed live. Audit the forced online
-   spawn readers and establish whether Apply Ram has any original consumer.
+1. Finish the race-car page: audit the forced online spawn readers and establish
+   whether Apply Ram has any original consumer. Reset history, embedded ownership
+   and its visible sphere geometry are connected and witnessed. Other primitive
+   algorithms and text remain pending, despite sharing the repaired command path.
 2. Work through the missing Sound, AI, Renderer, GameData/DLC, Game State, GUI,
    Replays and physics diagnostic lifecycles. Use the original registration sites
    to prevent silently omitting controls.
