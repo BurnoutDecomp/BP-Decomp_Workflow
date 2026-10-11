@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Debug menu finder · Burnout Paradise</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%23191e21'/%3E%3Cpath d='M12 11h10a6 6 0 010 12H12m0-12v20m10-8 7 8' fill='none' stroke='%238ee6cc' stroke-width='3'/%3E%3C/svg%3E">
+  <style>
+    :root { color-scheme: dark; --bg:#101416; --panel:#191e21; --border:#30393d; --text:#e7efee; --muted:#a3b3b5; --accent:#8ee6cc; --warn:#e8c286; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 "Segoe UI",system-ui,sans-serif; }
+    main { max-width:1060px; margin:auto; padding:46px 28px 60px; }
+    .brand { font-size:11px; font-weight:700; letter-spacing:.18em; color:var(--accent); text-transform:uppercase; }
+    h1 { margin:12px 0 6px; font-size:clamp(27px,4vw,39px); letter-spacing:-.04em; line-height:1.2; font-weight:650; }
+    .intro { margin:0 0 26px; color:var(--muted); font-size:16px; }
+    .search-panel { padding:20px; background:var(--panel); border:1px solid var(--border); border-radius:12px; }
+    .search-label { display:block; font-size:13px; margin-bottom:8px; font-weight:600; }
+    .search-box { display:flex; gap:12px; align-items:center; background:#101416; border:1px solid #50615f; border-radius:8px; padding:0 14px; }
+    .search-box:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px #8ee6cc17; }
+    .search-icon { color:var(--accent); font-size:23px; }
+    input[type=search] { width:100%; min-width:0; padding:15px 0; border:0; outline:0; background:transparent; color:var(--text); font:inherit; font-size:19px; }
+    input[type=search]::-webkit-search-cancel-button { -webkit-appearance:none; }
+    input::placeholder { color:#7f9294; }
+    button,select { font:inherit; }
+    button { cursor:pointer; }
+    button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .clear { border:0; background:transparent; color:var(--muted); font-size:23px; padding:4px 6px; }
+    .examples { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:12px; color:var(--muted); font-size:12px; }
+    .example { border:1px solid var(--border); color:#c4d5d3; background:transparent; padding:3px 9px; border-radius:5px; font-size:12px; }
+    .example:hover { border-color:#617a75; color:var(--accent); }
+    .filters { display:flex; flex-wrap:wrap; gap:12px 20px; align-items:center; margin-top:20px; padding-top:16px; border-top:1px solid var(--border); font-size:13px; }
+    .filter-label { display:flex; align-items:center; gap:8px; color:var(--muted); }
+    select { max-width:220px; border:1px solid #455154; border-radius:5px; padding:5px 8px; color:var(--text); background:#111719; font-size:13px; }
+    input[type=checkbox] { accent-color:var(--accent); width:16px; height:16px; margin:0; }
+    .reference-filter { display:flex; align-items:center; gap:8px; cursor:pointer; margin-left:auto; }
+    .how { display:flex; flex-wrap:wrap; gap:6px 20px; margin:18px 2px 24px; color:var(--muted); font-size:13px; }
+    kbd { border:1px solid #3a484b; border-bottom-width:2px; border-radius:4px; background:#1c2528; padding:1px 5px; color:#d3e3df; font:11px/1.4 "Cascadia Code",Consolas,monospace; }
+    .result-bar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; font-size:13px; color:var(--muted); }
+    #count { color:var(--text); font-weight:600; }
+    .reference-note { color:var(--warn); font-size:13px; margin:0 0 14px; padding:10px 14px; border:1px solid #66543a; border-radius:7px; background:#241e16; }
+    [hidden] { display:none !important; }
+    #results { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+    .result { padding:18px 20px; border:1px solid var(--border); border-radius:9px; background:var(--panel); }
+    .result-top { display:flex; align-items:flex-start; gap:12px; justify-content:space-between; }
+    h2 { font-size:17px; line-height:1.4; margin:0; font-weight:600; overflow-wrap:anywhere; }
+    .badges { display:flex; gap:7px; align-items:center; flex-wrap:wrap; margin-top:5px; }
+    .badge { font-size:10px; text-transform:uppercase; letter-spacing:.06em; border:1px solid #38494a; border-radius:4px; padding:1px 6px; color:var(--muted); }
+    .badge.pc { color:var(--accent); border-color:#365a50; }
+    .badge.warning { color:var(--warn); border-color:#66543a; }
+    .copy { flex-shrink:0; border:1px solid #445954; background:#202e2a; color:#b6e8d8; border-radius:5px; padding:6px 10px; font-size:12px; }
+    .copy:hover { border-color:var(--accent); }
+    .copy:disabled { cursor:default; color:#849595; border-color:#374245; background:transparent; }
+    .route { display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 8px; margin-top:15px; font-size:14px; color:#b8ccc8; }
+    .separator { color:#617873; }
+    .leaf { color:var(--text); font-weight:600; }
+    .unresolved { color:var(--warn); }
+    mark { background:#8ee6cc24; color:#b5ffe9; border-radius:2px; padding:0 1px; }
+    .hint { color:var(--muted); margin:10px 0 0; font-size:12px; }
+    details { color:var(--muted); font-size:12px; }
+    .evidence { margin-top:11px; }
+    summary { cursor:pointer; width:fit-content; }
+    .source { margin-top:8px; border-left:2px solid #3c4c4b; padding-left:10px; overflow-wrap:anywhere; }
+    code { font:11px/1.5 "Cascadia Code",Consolas,monospace; }
+    .source p { margin:3px 0; }
+    .empty { padding:44px 20px; text-align:center; border:1px dashed #47575a; border-radius:9px; color:var(--muted); }
+    .empty strong { display:block; color:var(--text); font-size:19px; margin-bottom:5px; }
+    #more { display:block; margin:18px auto; padding:9px 22px; border:1px solid #50615f; border-radius:6px; color:var(--text); background:var(--panel); }
+    footer { margin-top:30px; padding-top:18px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; }
+    footer p { margin:8px 0; }
+    @media(max-width:640px) { main { padding:26px 16px 40px; } .search-panel,.result { padding:15px; } .reference-filter { margin-left:0; } .result-bar { align-items:flex-start; } .result-top { gap:8px; } .copy { padding:5px 8px; } }
+  </style>
+</head>
+<body>
+<main>
+  <div class="brand">Burnout Paradise / Development tools</div>
+  <h1>Find a debug menu entry</h1>
+  <p class="intro">Search a name. Follow the path from Development.</p>
+  <section class="search-panel" aria-label="Search and filters">
+    <label class="search-label" for="query">Entry name or part of its menu path</label>
+    <div class="search-box">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input id="query" type="search" placeholder="Try “tailgate cone” or “resolution”…" autocomplete="off" spellcheck="false" autofocus>
+      <button class="clear" id="clear" aria-label="Clear search" title="Clear search (Escape)">×</button>
+    </div>
+    <div class="examples"><span>Try</span><button class="example">Tailgate</button><button class="example">Resolution</button><button class="example">End Current Event</button><button class="example">Traffic</button></div>
+    <div class="filters">
+      <label class="filter-label" for="category">Menu <select id="category"><option value="">All menus</option></select></label>
+      <label class="filter-label" for="kind">Type <select id="kind"><option value="">All entries</option><option value="variable">Variables</option><option value="function">Actions</option></select></label>
+      <label class="reference-filter"><input id="reference" type="checkbox"> Include original ARTIST entries</label>
+    </div>
+  </section>
+  <div class="how"><span><kbd>Ctrl</kbd> + <kbd>Space</kbd> opens the menu</span><span>Follow each submenu in the path</span><span>Select a component to reveal its controls</span></div>
+  <div class="result-bar"><span id="count" role="status" aria-live="polite"></span><span id="coverage"></span></div>
+  <p class="reference-note" id="reference-note" hidden>ARTIST references include original entries that may be absent from the PC menu. Incomplete paths are marked.</p>
+  <ul id="results" aria-label="Matching debug menu entries"></ul>
+  <div class="empty" id="empty" hidden><strong>No matching entries</strong>Try fewer words, another menu, or include original ARTIST entries.</div>
+  <button id="more" hidden>Show more results</button>
+  <footer>
+    <p>Run <code>debug-menu.cmd</code> again to refresh after source changes. Press <kbd>/</kbd> to search, <kbd>Esc</kbd> to clear.</p>
+    <details><summary>About this index</summary><p>Paths come from static registrations in the current PC source and the existing ARTIST inventory. Visibility depends on the build, game state, and component activation. Computed captions and runtime-generated rows are not fully enumerated; a source registration does not verify its behavior.</p><p id="index-info"></p></details>
+  </footer>
+</main>
+<script id="menu-index" type="application/json">__MENU_INDEX__</script>
+<script>
+"use strict";
+const index = JSON.parse(document.getElementById("menu-index").textContent);
+const $ = id => document.getElementById(id);
+const query = $("query"), category = $("category"), kind = $("kind"), reference = $("reference");
+let matches = [], visible = 60;
+const state = new URLSearchParams(location.hash.slice(1));
+query.value = state.get("q") || "";
+reference.checked = state.get("reference") === "1";
+kind.value = ["variable", "function"].includes(state.get("kind")) ? state.get("kind") : "";
+let categories = [];
+function syncCategories() {
+  const selected = category.value;
+  categories = [...new Set(index.entries.filter(r => reference.checked || r.origins.includes("pc")).map(r => r.menus[1]).filter(Boolean))].sort((a,b) => a.localeCompare(b));
+  category.replaceChildren();
+  const all = document.createElement("option"); all.value = ""; all.textContent = "All menus"; category.append(all);
+  for (const name of categories) { const option = document.createElement("option"); option.value = name; option.textContent = name; category.append(option); }
+  category.value = categories.includes(selected) ? selected : "";
+}
+syncCategories();
+category.value = categories.includes(state.get("menu")) ? state.get("menu") : "";
+$("coverage").textContent = `${index.summary.pc.toLocaleString()} PC entries indexed`;
+$("index-info").textContent = `Generated ${index.generated}. ${index.summary.unresolved_pc} PC paths unresolved; ${index.summary.symbolic_pc} PC registration sites and ${index.summary.symbolic_reference} ARTIST sites have computed captions. ${index.summary.reference.toLocaleString()} additional ARTIST references.`;
+
+function element(tag, className, text) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined) el.textContent = text;
+  return el;
+}
+function terms() { return query.value.toLocaleLowerCase().match(/[\p{L}\p{N}_]+/gu) || []; }
+function highlighted(text, words) {
+  const span = element("span");
+  if (!words.length) { span.textContent = text; return span; }
+  const lower = text.toLocaleLowerCase();
+  const ranges = [];
+  for (const word of words) {
+    let start = lower.indexOf(word);
+    while (start !== -1) { ranges.push([start,start+word.length]); start = lower.indexOf(word,start+word.length); }
+  }
+  ranges.sort((a,b) => a[0]-b[0]);
+  const merged = [];
+  for (const range of ranges) {
+    if (merged.length && range[0] <= merged[merged.length-1][1]) merged[merged.length-1][1] = Math.max(merged[merged.length-1][1],range[1]);
+    else merged.push(range);
+  }
+  let cursor = 0;
+  for (const [start,end] of merged) { span.append(document.createTextNode(text.slice(cursor,start)),element("mark","",text.slice(start,end))); cursor = end; }
+  span.append(document.createTextNode(text.slice(cursor)));
+  return span;
+}
+async function copyPath(entry, button) {
+  const text = [...entry.menus,entry.caption].join(" > ");
+  try {
+    let copied = false;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try { await navigator.clipboard.writeText(text); copied = true; } catch (_) { /* Use the local-file fallback below. */ }
+    }
+    if (!copied) {
+      const area = element("textarea","",text);
+      area.style.cssText = "position:fixed;left:-9999px;top:0";
+      document.body.append(area); area.select();
+      copied = document.execCommand("copy"); area.remove();
+      if (!copied) throw new Error("Copy unavailable");
+    }
+    button.textContent = "Copied";
+  } catch (_) { button.textContent = "Select path to copy"; }
+  setTimeout(() => { button.textContent = "Copy path"; },1800);
+}
+function render() {
+  const words = terms();
+  const list = $("results"); list.replaceChildren();
+  const fragment = document.createDocumentFragment();
+  for (const entry of matches.slice(0,visible)) {
+    const item = element("li","result"), top = element("div","result-top"), title = element("div");
+    const heading = element("h2"); heading.append(highlighted(entry.caption,words)); title.append(heading);
+    const badges = element("div","badges");
+    badges.append(element("span","badge " + (entry.origins.includes("pc") ? "pc" : "warning"),entry.origins.includes("pc") ? "PC source" : "ARTIST reference"));
+    badges.append(element("span","badge",entry.kind === "function" ? "Action" : "Variable"));
+    if (!entry.resolved) badges.append(element("span","badge warning","Path incomplete"));
+    if (entry.notes.includes("Read-only in source.")) badges.append(element("span","badge","Read-only"));
+    title.append(badges);
+    const copy = element("button","copy","Copy path"); copy.disabled = !entry.resolved;
+    copy.setAttribute("aria-label","Copy path to " + entry.caption);
+    if (!entry.resolved) copy.title = "A complete path has not been resolved for this entry.";
+    copy.addEventListener("click",() => copyPath(entry,copy)); top.append(title,copy); item.append(top);
+    const route = element("div","route");
+    const path = [...entry.menus, ...(!entry.resolved ? ["[path unresolved]"] : []),entry.caption];
+    path.forEach((part,i) => {
+      if (i) route.append(element("span","separator","›"));
+      const segment = highlighted(part,words);
+      if (i === path.length-1) segment.classList.add("leaf");
+      if (part === "[path unresolved]") segment.classList.add("unresolved");
+      route.append(segment);
+    }); item.append(route);
+    if (entry.notes.includes("Hidden in source; runtime code may change visibility.")) item.append(element("p","hint","Hidden in source; runtime code may change visibility."));
+    const details = element("details","evidence"); details.append(element("summary","","Source details"));
+    for (const note of entry.notes) details.append(element("p","hint",note));
+    for (const source of entry.sources) {
+      const line = element("div","source");
+      line.append(element("code","",`${source.path}:${source.line}`),element("p","",source.function)); details.append(line);
+    }
+    item.append(details); fragment.append(item);
+  }
+  list.append(fragment);
+  $("count").textContent = `${matches.length.toLocaleString()} ${matches.length === 1 ? "match" : "matches"}${matches.length > visible ? ` · showing ${visible}` : ""}`;
+  $("empty").hidden = matches.length !== 0;
+  $("more").hidden = matches.length <= visible;
+}
+function update() {
+  visible = 60;
+  const words = terms();
+  matches = index.entries.filter(entry => {
+    if (!reference.checked && !entry.origins.includes("pc")) return false;
+    if (category.value && entry.menus[1] !== category.value) return false;
+    if (kind.value && entry.kind !== kind.value) return false;
+    const haystack = [entry.caption,...entry.menus].join(" ").toLocaleLowerCase();
+    return words.every(word => haystack.includes(word));
+  });
+  const score = entry => {
+    const caption = entry.caption.toLocaleLowerCase();
+    return [(caption === query.value.trim().toLocaleLowerCase() ? 0 : words.every(w => caption.includes(w)) ? 1 : 2),entry.origins.includes("pc") ? 0 : 1,entry.resolved ? 0 : 1];
+  };
+  matches.sort((a,b) => { const aa = score(a),bb = score(b); for(let i=0;i<aa.length;i++) if(aa[i] !== bb[i]) return aa[i]-bb[i]; return a.caption.localeCompare(b.caption); });
+  $("reference-note").hidden = !reference.checked;
+  const params = new URLSearchParams();
+  if (query.value) params.set("q",query.value);
+  if (reference.checked) params.set("reference","1");
+  if (category.value) params.set("menu",category.value);
+  if (kind.value) params.set("kind",kind.value);
+  history.replaceState(null,"",params.size ? "#"+params.toString() : location.pathname + location.search);
+  render();
+}
+query.addEventListener("input",update);
+for (const el of [category,kind]) el.addEventListener("change",update);
+reference.addEventListener("change",() => { syncCategories(); update(); });
+$("clear").addEventListener("click",() => { query.value = ""; query.focus(); update(); });
+for (const button of document.querySelectorAll(".example")) button.addEventListener("click",() => { query.value = button.textContent; query.focus(); update(); });
+$("more").addEventListener("click",() => { visible += 60; render(); });
+document.addEventListener("keydown",event => {
+  const editing = ["INPUT","SELECT","TEXTAREA"].includes(document.activeElement.tagName);
+  if (event.key === "/" && !editing) { event.preventDefault(); query.focus(); }
+  if (event.key === "Escape" && document.activeElement === query) { query.value = ""; update(); }
+});
+window.addEventListener("hashchange",() => {
+  const params = new URLSearchParams(location.hash.slice(1));
+  query.value = params.get("q") || "";
+  reference.checked = params.get("reference") === "1";
+  kind.value = ["variable","function"].includes(params.get("kind")) ? params.get("kind") : "";
+  syncCategories();
+  category.value = categories.includes(params.get("menu")) ? params.get("menu") : "";
+  update();
+});
+update();
+</script>
+</body>
+</html>
