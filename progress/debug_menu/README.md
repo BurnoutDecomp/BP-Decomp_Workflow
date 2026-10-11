@@ -17,23 +17,27 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-Source recovery/audit packets now cover **605 of 1,354 static sites**: the earlier
-310-site scope, VehicleManager/Deformation 131, Physics Props 16 and
-Environment/Graphics 148. These packets include unresolved consumer/backend
-work; this is source progress, not a claim that all605 controls work in game.
-The earlier310 sites are source-reviewed,147 are under combined review, and148
-await review/integration. **749 sites remain outside those source packets.**
+Source recovery/audit packets cover **631 of 1,354 static sites**: the earlier
+310-site scope, VehicleManager/Deformation 131, Physics Props 16,
+Environment/Graphics 148, Power Parking 18 and Reset Player 8.
+These packets include unfinished consumer/backend work. They are source progress,
+not a claim that 631 controls work in game. **723 sites remain outside the packets.**
 
-Another28 handling/window registrations are committed, with known render/HUD
-consumer bodies missing; that registration-only checkpoint is outside the605.
-Final behavior verdicts remain **25 verified and two original no-ops**.
-The remaining1,327 static sites and expanded dynamic rows need final dispositions.
-All these counts overlap and must not be added.
+The earlier 310 sites are source-reviewed. The combined 147-site vehicle/props
+review found three defects; the repairs are pushed and their independent review
+and grouped validation are underway. The 148-site Environment/Graphics and
+26-site existing-body audits await review. Handling has another 28 committed
+registrations with partial consumer recovery; known render/HUD gaps keep those
+outside the 631-site count.
 
-The150-site Traffic/AI checkpoint passes737 grouped checks. Its final native
-Traffic case passes7/7 checks with14 retained phases; Physical/Route passes8/9,
-including507 saved-value reads and13 retained phases, with visual/conditional
-consumer review still open. Registry/boot/clean logs do not certify every control.
+Final dispositions are **25 verified and three original no-ops**, including the
+original empty Reset Sensors action. **1,326 static sites** and the expanded
+dynamic rows still need final dispositions. These stages overlap; do not add them.
+
+The 150-site Traffic/AI checkpoint passes 737 grouped checks. Its native Traffic
+case passes 7/7 automatic checks; Physical/Route passes 8/9, including 507 saved
+value reads. Visual and conditional consumer proof remains open. Registry,
+boot and clean logs do not certify every control.
 
 ## Published batches
 

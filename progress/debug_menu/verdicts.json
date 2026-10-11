@@ -255,5 +255,13 @@
       "b5-decomp/tests/run_rw_audio_core_clock_rate_regression.py",
       "tools/tests/cases/debug_menu_sound_clock.ps1"
     ]
+  },
+  "BrnPhysics::Deformation::DeformationDebugComponent::OnActivate#0019": {
+    "state": "original-noop",
+    "notes": "Reset Sensors: original OnActivate registers the folded target 8284CB38, whose entire body is blr. The recovered registered ResetSensors callback is empty. The combined source review independently confirms this original empty action.",
+    "evidence": [
+      "progress/debug_menu/DEFORMATION_NOOP_20261012.md",
+      "b5-decomp/src/GameSource/Physics/DeformationManager/BrnDeformationDebugComponent.cpp"
+    ]
   }
 }
