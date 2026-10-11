@@ -21,3 +21,7 @@ Known consumer/backend gaps remain explicit; source coverage is not gameplay
 completion. Handling's incomplete 28-site page is excluded. Final dispositions
 are 25 verified and three original no-ops. See README.md, batches.json and
 verdicts.json for non-overlapping sets and supported states.
+
+57b12968 adds the 35-check production fixture and renderer enum typing fix. The
+147 repair supplement passes; canonical compile and both negative controls have
+the expected results. This does not add any native working-entry verdict.

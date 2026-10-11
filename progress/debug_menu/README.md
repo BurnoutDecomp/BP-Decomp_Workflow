@@ -23,10 +23,12 @@ Environment/Graphics 148, Power Parking 18 and Reset Player 8.
 These packets include unfinished consumer/backend work. They are source progress,
 not a claim that 631 controls work in game. **723 sites remain outside the packets.**
 
-The earlier 310 sites are source-reviewed. The combined 147-site vehicle/props
-review found three defects; the repairs are pushed and their independent review
-and grouped validation are underway. The 148-site Environment/Graphics and
-26-site existing-body audits await review. Handling has another 28 committed
+The earlier 310 sites and combined 147-site vehicle/props source scope are
+reviewed. Three physics discrepancies were repaired; the independent supplement
+and 35 focused CPU checks pass. Native and hardware-seed limits remain open.
+The 148-site Environment/Graphics and
+26-site existing-body audits await review. All four changed Graphics C++ TUs
+compile after the enum typing fix. Handling has another 28 committed
 registrations with partial consumer recovery; known render/HUD gaps keep those
 outside the 631-site count.
 

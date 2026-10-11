@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "b5_commit": "57b1296854a07be688fc7de872c724bdb3de1535",
+  "review": {
+    "verdict": "pass",
+    "scope": "three repairs to previously reviewed 147-site batch; declared seed-model/source limits remain",
+    "artifact": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\review_vehicle_props_147_repair\\SOURCE_REVIEW.md",
+    "sha256": "37eb70273592f23d41f62e6ebd5a49f7de876f6c3bef70c0f972e987887151f5"
+  },
+  "compile": {
+    "canonical_cpp_count": 3,
+    "status": "pass",
+    "new_faithfulness_findings": 0
+  },
+  "numeric": {
+    "runner": "b5-decomp/tests/run_debug_menu_vehicle_math.py",
+    "checks": 35,
+    "failures": 0,
+    "scope": "extracted takeoff ramp/helper block, actual wheelie threshold/bleed block and preset callback"
+  },
+  "negative_controls": {
+    "--as-std": {
+      "checks": 35,
+      "failures": 5,
+      "exit_code": 1
+    },
+    "--preset-rev 21ad74ad": {
+      "checks": 35,
+      "failures": 2,
+      "exit_code": 1
+    }
+  },
+  "environment_compile": {
+    "initial_result": "one C2675 enum-increment error; three other TUs compiled",
+    "repair": "explicit ERendererPrepareStage increment cast",
+    "recheck": "renderer canonical compile pass",
+    "changed_cpp_tus_total": 4
+  },
+  "source_sha256": {
+    "src/SDKs/XboxMath/XMVectorSin.h": "370b8acc29cc2d460ca09f54e9911c8d6505f521d4eb967c675c024b481a8e47",
+    "src/GameSource/Physics/VehicleManager/VehiclePhysics/VehiclePhysics.cpp": "9dc7d6a5a39d9009f99e55480e55a41caa1f537d2205dc6ab216c3b43565c210",
+    "src/GameSource/Physics/DeformationManager/BrnDeformationDebugComponent.cpp": "d6342e5593bceee5e79df6937ffca2f024e5d60e9c5fff057b114614e134703e",
+    "src/GameSource/Graphics/BrnRendererModule.cpp": "ace80a01f75c79b6703226498e2f44a0f6c9012ab3f69d332599234b2197c71e",
+    "tests/DebugMenuVehicleMath.cpp": "c83e1e1bf9c41f6b686e04010ccce8cfd18955d2d4e446861cc959d861ece44a",
+    "tests/run_debug_menu_vehicle_math.py": "ea4aec6fd5b7cc5bed301c78af3e3569766369e514e67b1496e4350f0183df57"
+  },
+  "native": "not run for these repairs",
+  "remaining_limits": [
+    "hardware reciprocal estimate bits and NaN payload/status behavior",
+    "complete reader/producer attribution",
+    "live vehicle controls/actions",
+    "environment query/backend and startup dependencies"
+  ]
+}

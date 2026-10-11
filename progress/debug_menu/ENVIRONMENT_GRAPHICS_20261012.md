@@ -19,3 +19,8 @@ behavior verdicts or proof that all148 entries currently work.
 The frozen packet is scratch/DEBUG_MENU_1011/recovery_lanes/environment_packet.
 Original GameModule Prepare/support helpers are separately pushed at6c911139;
 resource-core bodies, optional callbacks and PC startup migration remain open.
+
+Compile update: all four changed C++ TUs compile across the initial group and
+renderer recheck. The initial sole C2675 enum increment error is corrected at
+57b12968 by an explicit ERendererPrepareStage cast; original stage behavior is
+preserved. Source review, shipping link/native and known dependencies remain open.
