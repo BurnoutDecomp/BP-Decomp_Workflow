@@ -20,11 +20,11 @@ registration, saved settings or a clean boot alone do not establish behavior.
 The large Sound batch covers **137 original sites** plus eight Marked Man/Takedown
 sites: **145 sites source-reviewed** in this checkpoint. Nine grouped regressions
 pass **2,330 checks**, the shipping game links, and two shared native scenarios
-pass. Four Sound actions/readouts, four Marked Man tunables and the vulnerability
+pass. Seven Sound actions/readouts, four Marked Man tunables and the vulnerability
 path now have supported behavior verdicts. Details and limits are in the report.
 
-Across the campaign, **22 sites are verified and two are original no-ops**;
-1,330 static sites and expanded dynamic rows still need final dispositions.
+Across the campaign, **25 sites are verified and two are original no-ops**;
+1,327 static sites and expanded dynamic rows still need final dispositions.
 The 145 source-reviewed sites overlap those final verdicts; do not add the counts.
 Unwitnessed Sound branches and original leftover classifications remain open.
 
@@ -38,6 +38,7 @@ Unwitnessed Sound branches and original leftover classifications remain open.
 | 4 | Six race-car HUD/statistics entries and shared text/2D rendering | [Race-car HUD](RACECAR_HUD_20261011.md) |
 | 5 | Initial Sound source recovery and Challenge latch; Challenge runtime pending | [Initial recovery](SOUND_CHALLENGE_20261011.md) |
 | 6 | Entire Sound page, Marked Man tuning and Takedown diagnostics | [Large batch](SOUND_BATCH_20261011.md) |
+| 7 | Original audio clock units; statistics/held-reset/graph follow-up | [Clock and history](SOUND_CLOCK_20261011.md) |
 
 Earlier presentation/navigation work is in `b5-decomp/docs/DEBUG_MENU_REPORT.md`;
 import its behavior verdicts only after checking the evidence.
@@ -48,8 +49,9 @@ The user explicitly requests large page/subsystem batches (around 130 sites),
 parallel recovery, then one grouped validation round. Next traffic/AI scope is
 150 sites: Traffic 108, physical traffic 18 and route-map diagnostics 24.
 
-- Correct Sound's confirmed PC clock-unit mismatch before accepting CPU timing
-  percentages. Preserve the original coefficient and CPU-balancer units.
+Sound clock calibration is repaired and witnessed; the original coefficients
+and balancer units remain intact. Remaining work:
+
 - Resolve remaining Sound no-reader/leftover findings and targeted behavior gaps;
   hold/spin did not visibly affect the captured player car, and revenge/last-
   takedown data was not populated. Do not invent effects to satisfy a caption.
