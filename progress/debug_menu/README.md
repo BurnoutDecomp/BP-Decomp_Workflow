@@ -29,6 +29,7 @@ Regenerate with `python tools/re/debug_menu_inventory.py`. Parser checks:
 | 2 | Race Car Entity / Show place on track info; shared 3D debug buffer and original sphere mesh | [Reset overlay repair](RESET_HISTORY_20261011.md) |
 | 3 | Forced online lobby spawn; original dormant Apply Ram and Magnitude rows | [Spawn and dormant controls](FORCE_SPAWN_RAM_20261011.md) |
 | 4 | Six race-car HUD/statistics controls; shared original text setup and 2D batching | [HUD repair and captures](RACECAR_HUD_20261011.md) |
+| 5 | Sound source recovery and Challenge latch repair; runtime pending, no new verified verdicts | [Source recovery](SOUND_CHALLENGE_20261011.md) |
 
 Thirteen sites are verified; two retain their original no-op behavior. The other
 1,339 sites and the expanded

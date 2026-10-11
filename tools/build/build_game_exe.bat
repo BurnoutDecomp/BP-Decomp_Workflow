@@ -263,6 +263,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\MapFile\Reader\CgsMapFileReaderMinimalMemory.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\CgsStrStream.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\Log\CgsLog.cpp"
+  echo "%SRC%\GameShared\GameClasses\Development\Log\CgsLogOutput.cpp"
   echo "%SRC%\GameSource\Game\BrnGameModule.cpp"
   rem GameBridgeControllerToX also carries the Director/World/GameState bridges; their IO
   rem callees (and those TUs' interface operator= homes) are linked below so the whole
