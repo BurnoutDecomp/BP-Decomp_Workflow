@@ -26439,14 +26439,21 @@
       "pseudocode_line": 265,
       "original_call": "sub_8282D640(v0, &byte_82FFB93D, \"Statistics\", \"Main Screen Turn On\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0132",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Main Screen Turn On: Real native allocator/object and calibrated timing rows draw while enabled and disappear on hide.",
+      "evidence": [
+        "progress/debug_menu/SOUND_CLOCK_20261011.md",
+        "b5-decomp/tests/run_sound_statistics_batch.py",
+        "b5-decomp/tests/run_rw_audio_core_clock_rate_regression.py",
+        "tools/tests/cases/debug_menu_sound_clock.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -26466,14 +26473,21 @@
       "pseudocode_line": 266,
       "original_call": "sub_8282D640(v0, &byte_82FFB93E, \"Statistics\", \"Main Screen Reset\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0133",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Main Screen Reset: Original held reset clears voice/mixer/PPU history while retaining memory/object high-water marks; native graph collapses, maxima clear and history refills after release.",
+      "evidence": [
+        "progress/debug_menu/SOUND_CLOCK_20261011.md",
+        "b5-decomp/tests/run_sound_statistics_batch.py",
+        "b5-decomp/tests/run_rw_audio_core_clock_rate_regression.py",
+        "tools/tests/cases/debug_menu_sound_clock.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -26493,14 +26507,21 @@
       "pseudocode_line": 267,
       "original_call": "sub_8282D640(v0, &byte_82FFB93F, \"Statistics\", \"Draw Mixer Graph\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0134",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Draw Mixer Graph: Original 128-sample curve renders in the calibrated original timebase; native enable/reset/refill/hide captures match the history producer.",
+      "evidence": [
+        "progress/debug_menu/SOUND_CLOCK_20261011.md",
+        "b5-decomp/tests/run_sound_statistics_batch.py",
+        "b5-decomp/tests/run_rw_audio_core_clock_rate_regression.py",
+        "tools/tests/cases/debug_menu_sound_clock.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -37401,8 +37422,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1330,
-      "verified": 22,
+      "pending": 1327,
+      "verified": 25,
       "original-noop": 2
     }
   }

@@ -109,3 +109,7 @@ Reproduce the grouped checks with the nine `b5-decomp/tests/run_*debug_menu.py`
 maps, PCM measurements, review packets and timing audit are under
 `scratch/DEBUG_MENU_1011/sound_batch/`; the committed batch manifest records
 reviewed site IDs independently of final verdicts.
+
+Clock follow-up: [batch 7](SOUND_CLOCK_20261011.md) corrects the platform timebase
+and verifies statistics, held reset and the graph. Clock calibration was pending
+at the source/runtime checkpoint described above; that specific gap is now closed.

@@ -225,5 +225,35 @@
       "b5-decomp/tests/run_takedown_debug_menu.py",
       "tools/tests/cases/debug_menu_markedman_takedown.ps1"
     ]
+  },
+  "BrnSound::Debug::DebugComponent::OnActivate#0132": {
+    "state": "verified",
+    "notes": "Main Screen Turn On: Real native allocator/object and calibrated timing rows draw while enabled and disappear on hide.",
+    "evidence": [
+      "progress/debug_menu/SOUND_CLOCK_20261011.md",
+      "b5-decomp/tests/run_sound_statistics_batch.py",
+      "b5-decomp/tests/run_rw_audio_core_clock_rate_regression.py",
+      "tools/tests/cases/debug_menu_sound_clock.ps1"
+    ]
+  },
+  "BrnSound::Debug::DebugComponent::OnActivate#0133": {
+    "state": "verified",
+    "notes": "Main Screen Reset: Original held reset clears voice/mixer/PPU history while retaining memory/object high-water marks; native graph collapses, maxima clear and history refills after release.",
+    "evidence": [
+      "progress/debug_menu/SOUND_CLOCK_20261011.md",
+      "b5-decomp/tests/run_sound_statistics_batch.py",
+      "b5-decomp/tests/run_rw_audio_core_clock_rate_regression.py",
+      "tools/tests/cases/debug_menu_sound_clock.ps1"
+    ]
+  },
+  "BrnSound::Debug::DebugComponent::OnActivate#0134": {
+    "state": "verified",
+    "notes": "Draw Mixer Graph: Original 128-sample curve renders in the calibrated original timebase; native enable/reset/refill/hide captures match the history producer.",
+    "evidence": [
+      "progress/debug_menu/SOUND_CLOCK_20261011.md",
+      "b5-decomp/tests/run_sound_statistics_batch.py",
+      "b5-decomp/tests/run_rw_audio_core_clock_rate_regression.py",
+      "tools/tests/cases/debug_menu_sound_clock.ps1"
+    ]
   }
 }
