@@ -140,5 +140,90 @@
       "b5-decomp/tests/run_pc_im2d_buffer.py",
       "tools/tests/cases/debug_menu_racecar_hud.ps1"
     ]
+  },
+  "BrnSound::Debug::DebugComponent::OnActivate#0001": {
+    "state": "verified",
+    "notes": "Max Rpm Display: Original display reads the monitored zero cell; native MAX RPM [0] appears and disappears on cleanup.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_sound_debug_menu.py",
+      "b5-decomp/tests/run_sound_root_debug_menu.py",
+      "tools/tests/cases/debug_menu_sound_batch.ps1"
+    ]
+  },
+  "BrnSound::Debug::DebugComponent::OnActivate#0118": {
+    "state": "verified",
+    "notes": "Master Gain: Original shared master-gain consumer reaches captured engine-fill PCM: nine stable windows at zero gain have zero RMS/peak, with nonzero output before and after at gain 4. Speaker output was muted by the harness.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_sound_debug_menu.py",
+      "b5-decomp/tests/run_sound_root_debug_menu.py",
+      "tools/tests/cases/debug_menu_sound_batch.ps1"
+    ]
+  },
+  "BrnSound::Debug::DebugComponent::OnActivate#0135": {
+    "state": "verified",
+    "notes": "Memory Dump: Real menu action emits allocator records and original DebugAudioMemoryDump footer; its one-shot cell clears.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_sound_debug_menu.py",
+      "b5-decomp/tests/run_sound_root_debug_menu.py",
+      "tools/tests/cases/debug_menu_sound_batch.ps1"
+    ]
+  },
+  "BrnSound::Debug::DebugComponent::OnActivate#0136": {
+    "state": "verified",
+    "notes": "Splice Stats Dump: Real menu action emits five live bank sections, 775 indexed play-count rows and 11 nonzero counts; its one-shot cell clears.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_sound_debug_menu.py",
+      "b5-decomp/tests/run_sound_root_debug_menu.py",
+      "tools/tests/cases/debug_menu_sound_batch.ps1"
+    ]
+  },
+  "BrnGameState::ModeManagerDebugComponent::OnActivate#0005": {
+    "state": "verified",
+    "notes": "Min opponent count: menu and SurvivorMode share original tunables; 49 production-body boundary/formula checks pass, and a configured native Marked Man start consumes edited 1/1/11/17 settings with one rival, two grid locations and ramp limit 17. Live rank ratio is zero; other ranks are covered by numeric checks. Defaults restore afterward.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_mode_survivor_debug_menu.py",
+      "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+    ]
+  },
+  "BrnGameState::ModeManagerDebugComponent::OnActivate#0006": {
+    "state": "verified",
+    "notes": "Max opponent count: menu and SurvivorMode share original tunables; 49 production-body boundary/formula checks pass, and a configured native Marked Man start consumes edited 1/1/11/17 settings with one rival, two grid locations and ramp limit 17. Live rank ratio is zero; other ranks are covered by numeric checks. Defaults restore afterward.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_mode_survivor_debug_menu.py",
+      "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+    ]
+  },
+  "BrnGameState::ModeManagerDebugComponent::OnActivate#0007": {
+    "state": "verified",
+    "notes": "Min ramp time: menu and SurvivorMode share original tunables; 49 production-body boundary/formula checks pass, and a configured native Marked Man start consumes edited 1/1/11/17 settings with one rival, two grid locations and ramp limit 17. Live rank ratio is zero; other ranks are covered by numeric checks. Defaults restore afterward.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_mode_survivor_debug_menu.py",
+      "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+    ]
+  },
+  "BrnGameState::ModeManagerDebugComponent::OnActivate#0008": {
+    "state": "verified",
+    "notes": "Max ramp time: menu and SurvivorMode share original tunables; 49 production-body boundary/formula checks pass, and a configured native Marked Man start consumes edited 1/1/11/17 settings with one rival, two grid locations and ramp limit 17. Live rank ratio is zero; other ranks are covered by numeric checks. Defaults restore afterward.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_mode_survivor_debug_menu.py",
+      "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+    ]
+  },
+  "BrnGameState::TakedownManagerDebugComponent::OnActivate#0002": {
+    "state": "verified",
+    "notes": "Show vulnerability: original cached active-car/contact predicates, radius and packed red/yellow geometry are restored. Production bodies pass 43 checks; native recent-contact masks produce actual queued sphere submissions with the toggle enabled. Revenge and populated last-takedown witnesses remain separate and pending.",
+    "evidence": [
+      "progress/debug_menu/SOUND_BATCH_20261011.md",
+      "b5-decomp/tests/run_takedown_debug_menu.py",
+      "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+    ]
   }
 }

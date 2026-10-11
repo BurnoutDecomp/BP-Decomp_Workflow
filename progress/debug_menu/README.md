@@ -1,64 +1,72 @@
 # Debug-menu behavior campaign
 
 Match every entry to ARTIST, including original no-ops and broken leftovers.
-Do not revive removed features in this campaign. The active user goal also
-authorizes commits and pushes in both repositories after meaningful progress.
-Stage only owned files; leave the general status mirror and submodule pointers
-to their existing reconciliation workflow.
+Do not revive removed features. The user authorizes commits and pushes in both
+repositories after meaningful progress. Stage only owned files; leave the general
+status mirror and submodule pointers to their existing reconciliation workflow.
 
-`entries.json` records 1,354 original registration call sites in 91 functions,
-plus all 64 named debug activation functions. This is a starting inventory, not
-an expanded count of visible rows: loops and delegated serialisers can generate
-many rows, 15 captions are symbolic, and two registration wrapper exports are
-missing. Those uncertainties are retained in the data. PC-specific menu additions
-also need their own consumer audit as each page is visited.
+`entries.json` inventories 1,354 original static registration sites in 91 functions
+and all 64 named debug activation functions. Loops/delegated serialisers generate
+additional rows; 15 captions are symbolic and two wrapper exports are missing.
+PC additions require their own consumer audits. This is not a final visible-row count.
 
-`verdicts.json` holds manually reviewed verdicts separately from generated evidence.
-States are `pending`, `verified`, `original-noop` and `original-broken`. A final
-state requires notes and evidence. An existing body, a registered label or a clean
-boot does not qualify by itself.
+`verdicts.json` holds final behavior dispositions: `pending`, `verified`,
+`original-noop` or `original-broken`. Final states need notes and evidence.
+`batches.json` separately records source-reviewed site sets. Existing code,
+registration, saved settings or a clean boot alone do not establish behavior.
 
-Regenerate with `python tools/re/debug_menu_inventory.py`. Parser checks:
-`python -m unittest discover -s tools/re -p test_debug_menu_inventory.py`.
+## Current progress
+
+The large Sound batch covers **137 original sites** plus eight Marked Man/Takedown
+sites: **145 sites source-reviewed** in this checkpoint. Nine grouped regressions
+pass **2,330 checks**, the shipping game links, and two shared native scenarios
+pass. Four Sound actions/readouts, four Marked Man tunables and the vulnerability
+path now have supported behavior verdicts. Details and limits are in the report.
+
+Across the campaign, **22 sites are verified and two are original no-ops**;
+1,330 static sites and expanded dynamic rows still need final dispositions.
+The 145 source-reviewed sites overlap those final verdicts; do not add the counts.
+Unwitnessed Sound branches and original leftover classifications remain open.
 
 ## Published batches
 
 | Batch | Scope | Evidence |
 | --- | --- | --- |
-| 1 | Five Race Car Entity / Tailgate... tunables | [Tailgate repair](TAILGATE_20261011.md) |
-| 2 | Race Car Entity / Show place on track info; shared 3D debug buffer and original sphere mesh | [Reset overlay repair](RESET_HISTORY_20261011.md) |
-| 3 | Forced online lobby spawn; original dormant Apply Ram and Magnitude rows | [Spawn and dormant controls](FORCE_SPAWN_RAM_20261011.md) |
-| 4 | Six race-car HUD/statistics controls; shared original text setup and 2D batching | [HUD repair and captures](RACECAR_HUD_20261011.md) |
-| 5 | Sound source recovery and Challenge latch repair; runtime pending, no new verified verdicts | [Source recovery](SOUND_CHALLENGE_20261011.md) |
+| 1 | Five Tailgate tunables | [Tailgate](TAILGATE_20261011.md) |
+| 2 | Track-position overlay and shared 3D buffer/sphere | [Reset history](RESET_HISTORY_20261011.md) |
+| 3 | Forced lobby spawn; original Apply Ram/Magnitude no-ops | [Spawn and dormant controls](FORCE_SPAWN_RAM_20261011.md) |
+| 4 | Six race-car HUD/statistics entries and shared text/2D rendering | [Race-car HUD](RACECAR_HUD_20261011.md) |
+| 5 | Initial Sound source recovery and Challenge latch; Challenge runtime pending | [Initial recovery](SOUND_CHALLENGE_20261011.md) |
+| 6 | Entire Sound page, Marked Man tuning and Takedown diagnostics | [Large batch](SOUND_BATCH_20261011.md) |
 
-Thirteen sites are verified; two retain their original no-op behavior. The other
-1,339 sites and the expanded
-dynamic rows remain pending. Previously delivered presentation/navigation repairs
-are documented in `b5-decomp/docs/DEBUG_MENU_REPORT.md`; import their behavioral
-verdicts only after checking their actual evidence.
+Earlier presentation/navigation work is in `b5-decomp/docs/DEBUG_MENU_REPORT.md`;
+import its behavior verdicts only after checking the evidence.
 
 ## Continue
 
-1. Finish the race-car page's remaining visual controls. Reset history and forced
-   online spawn are connected and witnessed. Apply Ram and Magnitude retain their
-   original dormant state writes. Six HUD/statistics controls now have a shared
-   source/assembly review and one live scenario. Other primitive algorithms remain
-   pending, despite sharing the repaired command path.
-2. Work through the missing Sound, AI, Renderer, GameData/DLC, Game State, GUI,
-   Replays and physics diagnostic lifecycles. Use the original registration sites
-   to prevent silently omitting controls.
-3. Resolve computed captions, enumerate loop-generated entries, and compare the
-   complete native registry. Trace every remaining scalar/action to its consumer,
-   including actions whose original behavior is no effect or a failure.
+The user explicitly requests large page/subsystem batches (around 130 sites),
+parallel recovery, then one grouped validation round. Next traffic/AI scope is
+150 sites: Traffic 108, physical traffic 18 and route-map diagnostics 24.
 
-For each batch: original assembly and declaration evidence, production regression,
-shipping build, isolated in-game witness, one fresh-eyes review, narrow b5 commit
-and push, then its parent tooling/evidence commit and push. The campaign is complete
-only when every original and native entry has a supported disposition.
+- Correct Sound's confirmed PC clock-unit mismatch before accepting CPU timing
+  percentages. Preserve the original coefficient and CPU-balancer units.
+- Resolve remaining Sound no-reader/leftover findings and targeted behavior gaps;
+  hold/spin did not visibly affect the captured player car, and revenge/last-
+  takedown data was not populated. Do not invent effects to satisfy a caption.
+- Continue race-car, AI, renderer/environment, game data, state, GUI, replays and
+  physics pages. Enumerate symbolic/loop-generated rows and native additions.
 
-The user authorized parallel specialists and model selection on2026-10-11, with
-no Astra use. Luna handles bounded page/consumer work; Sol handles larger shared
-systems and reviews. Root coordinates exclusive file ownership, shared builds,
-runtime scenarios and publication. Batch related controls by page and reuse shared
-evidence without counting unexercised controls as verified. Current Sound,
-Challenge and Takedown work is in flight and excluded from the counts above.
+Use ARTIST assembly for behavior, DecFIGS for declarations and old source for
+style. Assign exclusive files to specialists, collect complete page maps, and
+use one combined source reviewer. Group related CPU tests and native scenarios
+after integration; shared render/audio primitives do not certify every caller.
+Publish reviewed code, reproducible tests and evidence narrowly to both repos.
+The goal is complete only when every original and native entry has a supported
+disposition. The active user goal remains open.
+
+The user authorized model routing and parallel workers on 2026-10-11: no Astra.
+Luna handles bounded page/consumer recovery; Sol handles shared systems and
+combined reviews. Root owns integration, shared build/run locks and publication.
+
+Regenerate: `python tools/re/debug_menu_inventory.py`.
+Parser checks: `python -m unittest discover -s tools/re -p test_debug_menu_inventory.py`.
