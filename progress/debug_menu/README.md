@@ -17,17 +17,23 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-The Sound/Marked Man/Takedown batches cover **145 sites**. The next recovered batch
-covers **150 sites**: Traffic 108, Physical traffic 18 and Route Map 24. Including
-earlier work, **310 of 1,354 static sites are covered by source recovery**; 1,044
-still need that pass. Shared renderer, route storage and physics recovery supports
-these pages. [Traffic batch evidence](TRAFFIC_BATCH_20261011.md) records its checks
-and remaining native gaps.
+Source recovery/audit packets now cover **605 of 1,354 static sites**: the earlier
+310-site scope, VehicleManager/Deformation 131, Physics Props 16 and
+Environment/Graphics 148. These packets include unresolved consumer/backend
+work; this is source progress, not a claim that all605 controls work in game.
+The earlier310 sites are source-reviewed,147 are under combined review, and148
+await review/integration. **749 sites remain outside those source packets.**
 
-Final behavior verdicts remain **25 verified and two original no-ops**. The other
-**283 recovered sites need final dispositions**, alongside the 1,044 remaining
-source sites and expanded dynamic rows. Recovery, source review and native proof
-are separate stages; their overlapping counts must not be added.
+Another28 handling/window registrations are committed, with known render/HUD
+consumer bodies missing; that registration-only checkpoint is outside the605.
+Final behavior verdicts remain **25 verified and two original no-ops**.
+The remaining1,327 static sites and expanded dynamic rows need final dispositions.
+All these counts overlap and must not be added.
+
+The150-site Traffic/AI checkpoint passes737 grouped checks. Its final native
+Traffic case passes7/7 checks with14 retained phases; Physical/Route passes8/9,
+including507 saved-value reads and13 retained phases, with visual/conditional
+consumer review still open. Registry/boot/clean logs do not certify every control.
 
 ## Published batches
 
@@ -62,10 +68,11 @@ systems or the combined review. No Astra. Only one combined reviewer per batch.
 Freeze each handed-off source set while its worker moves to a distinct next slice.
 Keep source-ready, reviewed, compiled and native-verified states separate.
 
-Active source lanes are Environment/Graphics **148** sites and
-VehicleManager/Deformation **131** sites. These **279 in-flight sites are not yet
-included in the recovered total**. Next independent slices include ShadowMap and
-Vehicle debug; missing owner preparation chains are separate integration work.
+Active page lanes now cover ShadowMap/Effects/SceneManager **138** new sites and
+RaceCar/GameState/Progression/PowerParking/ResetPlayer **116** new sites. Original
+source-only preparation helpers are separately checkpointed, with unresolved
+resource-core/startup links. Handling consumer recovery and the shared PC LOD
+registration follow-up remain explicit integration work.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:
