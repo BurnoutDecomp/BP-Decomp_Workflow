@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "policy": "Commit and push coherent source increments on separate branches before full-page validation; keep recovery moving during review/tests. Counts are planned until source-ready evidence covers the complete site set.",
+  "lanes": [
+    {
+      "id": "traffic-physical-route-150",
+      "branch": "codex/debug-menu-traffic-physical-route-150",
+      "source_commit": "e334f93fb2cb1056547bc0211f6c4e81a913ff87",
+      "planned_static_sites": 150,
+      "state": "source-reviewed; full native evidence pending"
+    },
+    {
+      "id": "vehicle-deformation-131",
+      "branch": "codex/debug-menu-vehicle-deformation-131",
+      "source_commit": "829e1d44",
+      "planned_static_sites": 131,
+      "state": "partial source recovery; compile/review/runtime pending",
+      "checkpoint": "VehiclePhysics in-air tuning storage and UpdateInAirBehaviour consumer; menu registration and remaining consumers pending"
+    },
+    {
+      "id": "environment-148",
+      "branch": "codex/debug-menu-environment-148",
+      "source_commit": null,
+      "planned_static_sites": 148,
+      "state": "source recovery in progress; checkpoint requested",
+      "integration_dependencies": [
+        "BrnGameModule::Prepare caller chain"
+      ]
+    }
+  ]
+}

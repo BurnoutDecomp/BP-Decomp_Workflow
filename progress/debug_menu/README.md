@@ -12,21 +12,22 @@ PC additions require their own consumer audits. This is not a final visible-row 
 
 `verdicts.json` holds final behavior dispositions: `pending`, `verified`,
 `original-noop` or `original-broken`. Final states need notes and evidence.
-`batches.json` separately records source-reviewed site sets. Existing code,
+`batches.json` separately records recovered/source-reviewed site sets. Existing code,
 registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-The large Sound batch covers **137 original sites** plus eight Marked Man/Takedown
-sites: **145 sites source-reviewed** in this checkpoint. Nine grouped regressions
-pass **2,330 checks**, the shipping game links, and two shared native scenarios
-pass. Seven Sound actions/readouts, four Marked Man tunables and the vulnerability
-path now have supported behavior verdicts. Details and limits are in the report.
+The Sound/Marked Man/Takedown batches cover **145 sites**. The next recovered batch
+covers **150 sites**: Traffic 108, Physical traffic 18 and Route Map 24. Including
+earlier work, **310 of 1,354 static sites are covered by source recovery**; 1,044
+still need that pass. Shared renderer, route storage and physics recovery supports
+these pages. [Traffic batch evidence](TRAFFIC_BATCH_20261011.md) records its checks
+and remaining native gaps.
 
-Across the campaign, **25 sites are verified and two are original no-ops**;
-1,327 static sites and expanded dynamic rows still need final dispositions.
-The 145 source-reviewed sites overlap those final verdicts; do not add the counts.
-Unwitnessed Sound branches and original leftover classifications remain open.
+Final behavior verdicts remain **25 verified and two original no-ops**. The other
+**283 recovered sites need final dispositions**, alongside the 1,044 remaining
+source sites and expanded dynamic rows. Recovery, source review and native proof
+are separate stages; their overlapping counts must not be added.
 
 ## Published batches
 
@@ -39,15 +40,32 @@ Unwitnessed Sound branches and original leftover classifications remain open.
 | 5 | Initial Sound source recovery and Challenge latch; Challenge runtime pending | [Initial recovery](SOUND_CHALLENGE_20261011.md) |
 | 6 | Entire Sound page, Marked Man tuning and Takedown diagnostics | [Large batch](SOUND_BATCH_20261011.md) |
 | 7 | Original audio clock units; statistics/held-reset/graph follow-up | [Clock and history](SOUND_CLOCK_20261011.md) |
+| 8 | Traffic, Physical traffic and Route Map source recovery; native verification in progress | [Traffic/AI batch](TRAFFIC_BATCH_20261011.md) |
 
 Earlier presentation/navigation work is in `b5-decomp/docs/DEBUG_MENU_REPORT.md`;
 import its behavior verdicts only after checking the evidence.
 
 ## Continue
 
-The user explicitly requests large page/subsystem batches (around 130 sites),
-parallel recovery, then one grouped validation round. Next traffic/AI scope is
-150 sites: Traffic 108, physical traffic 18 and route-map diagnostics 24.
+The user's latest instruction is a continuous recovery pipeline: **keep agents
+recovering new systems while completed batches are reviewed and tested**. Do not
+make the recovery workers wait for a validation round. Large page/subsystem batches
+of roughly 130 sites are preferred; unverified recovery may accumulate for later
+checks. Commit and push coherent consumer/page increments frequently to separate recovery
+branches, including unverified work; do not wait for a whole page or its tests.
+Keep the reviewed integration branch separate until its required checks pass.
+Publish meaningful progress to both repos with its actual validation state.
+
+With the current four-agent limit, root integrates/publishes, two Luna Max workers
+recover in exclusive b5 checkouts, and one Sol slot handles difficult shared
+systems or the combined review. No Astra. Only one combined reviewer per batch.
+Freeze each handed-off source set while its worker moves to a distinct next slice.
+Keep source-ready, reviewed, compiled and native-verified states separate.
+
+Active source lanes are Environment/Graphics **148** sites and
+VehicleManager/Deformation **131** sites. These **279 in-flight sites are not yet
+included in the recovered total**. Next independent slices include ShadowMap and
+Vehicle debug; missing owner preparation chains are separate integration work.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:
@@ -62,7 +80,8 @@ Use ARTIST assembly for behavior, DecFIGS for declarations and old source for
 style. Assign exclusive files to specialists, collect complete page maps, and
 use one combined source reviewer. Group related CPU tests and native scenarios
 after integration; shared render/audio primitives do not certify every caller.
-Publish reviewed code, reproducible tests and evidence narrowly to both repos.
+Publish recovered code, reproducible tests and evidence narrowly to both repos;
+state pending review/build/runtime work plainly rather than inflating completion.
 The goal is complete only when every original and native entry has a supported
 disposition. The active user goal remains open.
 
