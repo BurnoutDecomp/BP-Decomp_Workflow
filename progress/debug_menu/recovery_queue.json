@@ -12,20 +12,30 @@
     {
       "id": "vehicle-deformation-131",
       "branch": "codex/debug-menu-vehicle-deformation-131",
-      "source_commit": "829e1d44",
+      "source_commit": "4be7f005",
       "planned_static_sites": 131,
-      "state": "partial source recovery; compile/review/runtime pending",
-      "checkpoint": "VehiclePhysics in-air tuning storage and UpdateInAirBehaviour consumer; menu registration and remaining consumers pending"
+      "state": "VehicleManager page and selected consumers recovered; Deformation audit and all validation pending",
+      "checkpoint": "83 exact registrations; contact threshold, in-air/wheelie, forced acceleration and crash-clamp consumers; earlier checkpoint829e1d44",
+      "recovered_registration_sites": 83
     },
     {
       "id": "environment-148",
       "branch": "codex/debug-menu-environment-148",
-      "source_commit": null,
+      "source_commit": "7ba57f72",
       "planned_static_sites": 148,
-      "state": "source recovery in progress; checkpoint requested",
+      "state": "Graphics page and selected consumers recovered; Prepare registration, GPU/query backend, Environment audit and all validation pending",
       "integration_dependencies": [
         "BrnGameModule::Prepare caller chain"
-      ]
+      ],
+      "recovered_registration_sites": 51,
+      "checkpoint": "51 exact registrations, owner construction, corona override and occlusion threshold consumer; GPU/query constructor remains queued"
+    },
+    {
+      "id": "game-prepare-chain",
+      "branch": "codex/debug-menu-game-prepare",
+      "source_commit": null,
+      "state": "source recovery in progress; source-only dependency lane",
+      "checkpoint": "Original eight-stage Prepare, five-stack signature, data/HW/AutoTest dependencies; top-level PC caller integration pending"
     }
   ]
 }
