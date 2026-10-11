@@ -27,18 +27,20 @@ Regenerate with `python tools/re/debug_menu_inventory.py`. Parser checks:
 | --- | --- | --- |
 | 1 | Five Race Car Entity / Tailgate... tunables | [Tailgate repair](TAILGATE_20261011.md) |
 | 2 | Race Car Entity / Show place on track info; shared 3D debug buffer and original sphere mesh | [Reset overlay repair](RESET_HISTORY_20261011.md) |
+| 3 | Forced online lobby spawn; original dormant Apply Ram and Magnitude rows | [Spawn and dormant controls](FORCE_SPAWN_RAM_20261011.md) |
 
-Six sites are verified in this campaign. The other 1,348 sites and the expanded
+Seven sites are verified; two retain their original no-op behavior. The other
+1,345 sites and the expanded
 dynamic rows remain pending. Previously delivered presentation/navigation repairs
 are documented in `b5-decomp/docs/DEBUG_MENU_REPORT.md`; import their behavioral
 verdicts only after checking their actual evidence.
 
 ## Continue
 
-1. Finish the race-car page: audit the forced online spawn readers and establish
-   whether Apply Ram has any original consumer. Reset history, embedded ownership
-   and its visible sphere geometry are connected and witnessed. Other primitive
-   algorithms and text remain pending, despite sharing the repaired command path.
+1. Finish the race-car page's visual/statistics controls. Reset history and forced
+   online spawn are connected and witnessed. Apply Ram and Magnitude retain their
+   original dormant state writes. Other primitive algorithms and text remain
+   pending, despite sharing the repaired command path.
 2. Work through the missing Sound, AI, Renderer, GameData/DLC, Game State, GUI,
    Replays and physics diagnostic lifecycles. Use the original registration sites
    to prevent silently omitting controls.

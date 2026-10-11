@@ -6395,14 +6395,20 @@
       "pseudocode_line": 23,
       "original_call": "sub_8282F720(this, BrnWorld::RaceCarEntityModuleDebugComponent::AirRamAddNew, this, \"Apply Ram\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0010",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Apply Ram: Its original callback only latches mbAirRam; no original physics consumer exists. Original state behavior is restored and witnessed; no ram effect is invented.",
+      "evidence": [
+        "progress/debug_menu/FORCE_SPAWN_RAM_20261011.md",
+        "b5-decomp/tests/run_race_car_debug_spawn.py",
+        "tools/tests/cases/debug_menu_racecar_spawn.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -6421,14 +6427,20 @@
       "pseudocode_line": 24,
       "original_call": "sub_8282D6B0(this, this->gap24, \"Magnitude\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0011",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Magnitude: Its original writable 0..100 value has no gameplay consumer. Original state behavior is restored and witnessed; no ram effect is invented.",
+      "evidence": [
+        "progress/debug_menu/FORCE_SPAWN_RAM_20261011.md",
+        "b5-decomp/tests/run_race_car_debug_spawn.py",
+        "tools/tests/cases/debug_menu_racecar_spawn.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -7688,14 +7700,20 @@
       "pseudocode_line": 175,
       "original_call": "sub_8282D800(this, &this->byte16, \"Force Online Freeburn Spawn Position\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0057",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Force Online Freeburn Spawn Position: both original lobby consumers read the registered bool; forced and default runs verify respawn/retention and actual player physics placement.",
+      "evidence": [
+        "progress/debug_menu/FORCE_SPAWN_RAM_20261011.md",
+        "b5-decomp/tests/run_race_car_debug_spawn.py",
+        "tools/tests/cases/debug_menu_racecar_spawn.ps1"
+      ]
     },
     {
       "kind": "function",
@@ -37283,8 +37301,9 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1348,
-      "verified": 6
+      "pending": 1345,
+      "verified": 7,
+      "original-noop": 2
     }
   }
 }
