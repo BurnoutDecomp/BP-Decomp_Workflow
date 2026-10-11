@@ -6204,14 +6204,21 @@
       "pseudocode_line": 12,
       "original_call": "sub_8282D800(this, &this->byte12, \"Show place on track info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0003",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Show place on track info: original embedded owner and producers, queued debug render path and sphere mesh restored; real show/hide/restore and visible geometry witnessed.",
+      "evidence": [
+        "progress/debug_menu/RESET_HISTORY_20261011.md",
+        "b5-decomp/tests/run_race_car_reset_history.py",
+        "b5-decomp/tests/run_pc_im3d_buffer.py",
+        "tools/tests/cases/debug_menu_reset_history.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -37276,8 +37283,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1349,
-      "verified": 5
+      "pending": 1348,
+      "verified": 6
     }
   }
 }
