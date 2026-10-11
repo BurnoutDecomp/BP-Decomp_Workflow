@@ -6152,14 +6152,21 @@
       "pseudocode_line": 10,
       "original_call": "sub_8282D800(this, &this->byte10, \"Render car damage state\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0001",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Render car damage state: original eight-slot active/render-damage and persistent-damage reader; original text object repaired; live readable active/inactive rows and show/hide witnessed.",
+      "evidence": [
+        "progress/debug_menu/RACECAR_HUD_20261011.md",
+        "b5-decomp/tests/run_debug_2d_text.py",
+        "b5-decomp/tests/run_pc_im2d_buffer.py",
+        "tools/tests/cases/debug_menu_racecar_hud.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -6178,14 +6185,21 @@
       "pseudocode_line": 11,
       "original_call": "sub_8282D800(this, &this->byte11, \"Render car streaming state\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0002",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Render car streaming state: original eight-slot model/active/loaded/unused reader; original text object repaired; live readable slot states and show/hide witnessed.",
+      "evidence": [
+        "progress/debug_menu/RACECAR_HUD_20261011.md",
+        "b5-decomp/tests/run_debug_2d_text.py",
+        "b5-decomp/tests/run_pc_im2d_buffer.py",
+        "tools/tests/cases/debug_menu_racecar_hud.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -6263,14 +6277,21 @@
       "pseudocode_line": 14,
       "original_call": "sub_8282D800(this, this->gap144, \"Show average speed\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0005",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Show average speed: original running mean and mph conversion audited; real nonzero driving samples, visible readout, hide and restore witnessed.",
+      "evidence": [
+        "progress/debug_menu/RACECAR_HUD_20261011.md",
+        "b5-decomp/tests/run_debug_2d_text.py",
+        "b5-decomp/tests/run_pc_im2d_buffer.py",
+        "tools/tests/cases/debug_menu_racecar_hud.ps1"
+      ]
     },
     {
       "kind": "function",
@@ -6290,14 +6311,21 @@
       "pseudocode_line": 15,
       "original_call": "sub_8282F720( this, BrnWorld::RaceCarEntityModuleDebugComponent::ResetAverageSpeedCallback, this, \"Reset average speed\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0006",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Reset average speed: original callback clears both mean and sample count; real console binding reset after2769 samples and subsequent fresh accumulation witnessed.",
+      "evidence": [
+        "progress/debug_menu/RACECAR_HUD_20261011.md",
+        "b5-decomp/tests/run_debug_2d_text.py",
+        "b5-decomp/tests/run_pc_im2d_buffer.py",
+        "tools/tests/cases/debug_menu_racecar_hud.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -6342,14 +6370,21 @@
       "pseudocode_line": 21,
       "original_call": "sub_8282D800(this, &this->byte142, \"Show player engine state\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0008",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Show player engine state: original enum-to-text/position/colour path audited; real ENGINE RUNNING glyphs and readable green overlay witnessed.",
+      "evidence": [
+        "progress/debug_menu/RACECAR_HUD_20261011.md",
+        "b5-decomp/tests/run_debug_2d_text.py",
+        "b5-decomp/tests/run_pc_im2d_buffer.py",
+        "tools/tests/cases/debug_menu_racecar_hud.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -6368,14 +6403,21 @@
       "pseudocode_line": 22,
       "original_call": "sub_8282D800(this, &this->byte150, \"Traffic Related\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0009",
       "function": "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate",
       "original_address": "0x822C2538",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822C2538.json",
       "component": "BrnWorld::RaceCarEntityModuleDebugComponent",
       "component_name": "Race Car Entity",
-      "component_path": null
+      "component_path": null,
+      "notes": "Traffic Related: original valid-ground heading and collision-tag reader audited; real player heading and No Lanes readout glyphs/pixels witnessed.",
+      "evidence": [
+        "progress/debug_menu/RACECAR_HUD_20261011.md",
+        "b5-decomp/tests/run_debug_2d_text.py",
+        "b5-decomp/tests/run_pc_im2d_buffer.py",
+        "tools/tests/cases/debug_menu_racecar_hud.ps1"
+      ]
     },
     {
       "kind": "function",
@@ -37301,8 +37343,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1345,
-      "verified": 7,
+      "pending": 1339,
+      "verified": 13,
       "original-noop": 2
     }
   }
