@@ -25,3 +25,8 @@ verdicts.json for non-overlapping sets and supported states.
 57b12968 adds the 35-check production fixture and renderer enum typing fix. The
 147 repair supplement passes; canonical compile and both negative controls have
 the expected results. This does not add any native working-entry verdict.
+
+The LOD original-registration/PC duplicate follow-up is complete at de73da21.
+The production INI fixture passes 79 checks and three affected TUs compile.
+Handling source has advanced through 92f4127d and 8ee01f13; Scene cached drawing
+is checkpointed at a4cc1d40. Their remaining helpers and validation are explicit.

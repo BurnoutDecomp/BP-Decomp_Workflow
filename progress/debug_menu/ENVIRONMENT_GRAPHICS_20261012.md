@@ -24,3 +24,8 @@ Compile update: all four changed C++ TUs compile across the initial group and
 renderer recheck. The initial sole C2675 enum increment error is corrected at
 57b12968 by an explicit ERendererPrepareStage cast; original stage behavior is
 preserved. Source review, shipping link/native and known dependencies remain open.
+
+Dependency correction: the global graphics allocator accessor already has a
+flagged PC implementation in BrnResourceAllocator.cpp:236. Its old declaration-
+only notes are stale; original initialization/capacity/query behavior remains
+unverified. See LOD_INI_20261012.md for the direct inspection finding.
