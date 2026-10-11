@@ -20,6 +20,7 @@ root unless a section says otherwise.
 | [`assets/fonts/`](assets/fonts/) | X360 font conversion, vector-font carving, and layout inspection. |
 | [`renderware/`](renderware/) | RenderWare type-header generation from the offline `rwcore` symbol export. |
 | [`diagnostics/`](diagnostics/) | Small inspection utilities that do not belong to a production pipeline. |
+| [`debug_menu/`](debug_menu/README.md) | Search debug-menu entry names and see their navigation paths. Launch `debug-menu.cmd` for the browser, or add `--query "tailgate cone"` for terminal results. |
 | [`volatility/`](volatility/) | Resource-tooling submodule. |
 | [`yap/`](yap/) | Bundle-tooling submodule. |
 
