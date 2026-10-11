@@ -60,3 +60,7 @@ not certify audible behavior or profile completion.
 Source commit: `b5-decomp e9a1ad21`. Verified inventory remains 13; original-noop
 remains 2; pending remains 1,339 static registration sites. Dynamic rows remain
 additional enumeration work.
+
+Sound follow-up: the complete 137-site page, grouped checks and shared native
+witnesses are now published in [batch 6](SOUND_BATCH_20261011.md). The counts
+and unresolved Sound bodies above describe this earlier source checkpoint.

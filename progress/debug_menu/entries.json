@@ -9239,14 +9239,20 @@
       "pseudocode_line": 7,
       "original_call": "sub_8282D560(a1, &dword_82CDB7BC, \"Marked man tweaks\", \"Min opponent count\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGameState::ModeManagerDebugComponent::OnActivate#0005",
       "function": "BrnGameState::ModeManagerDebugComponent::OnActivate",
       "original_address": "0x82329C18",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82329C18.json",
       "component": "BrnGameState::ModeManagerDebugComponent",
       "component_name": "Mode Manager",
-      "component_path": null
+      "component_path": null,
+      "notes": "Min opponent count: menu and SurvivorMode share original tunables; 49 production-body boundary/formula checks pass, and a configured native Marked Man start consumes edited 1/1/11/17 settings with one rival, two grid locations and ramp limit 17. Live rank ratio is zero; other ranks are covered by numeric checks. Defaults restore afterward.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_mode_survivor_debug_menu.py",
+        "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -9266,14 +9272,20 @@
       "pseudocode_line": 8,
       "original_call": "sub_8282D560(a1, &dword_82CDB7C0, \"Marked man tweaks\", \"Max opponent count\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGameState::ModeManagerDebugComponent::OnActivate#0006",
       "function": "BrnGameState::ModeManagerDebugComponent::OnActivate",
       "original_address": "0x82329C18",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82329C18.json",
       "component": "BrnGameState::ModeManagerDebugComponent",
       "component_name": "Mode Manager",
-      "component_path": null
+      "component_path": null,
+      "notes": "Max opponent count: menu and SurvivorMode share original tunables; 49 production-body boundary/formula checks pass, and a configured native Marked Man start consumes edited 1/1/11/17 settings with one rival, two grid locations and ramp limit 17. Live rank ratio is zero; other ranks are covered by numeric checks. Defaults restore afterward.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_mode_survivor_debug_menu.py",
+        "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -9293,14 +9305,20 @@
       "pseudocode_line": 9,
       "original_call": "CgsDev::DebugComponent::RegisterVariable(a1, &unk_82CDB7C4, \"Marked man tweaks\", \"Min ramp time\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGameState::ModeManagerDebugComponent::OnActivate#0007",
       "function": "BrnGameState::ModeManagerDebugComponent::OnActivate",
       "original_address": "0x82329C18",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82329C18.json",
       "component": "BrnGameState::ModeManagerDebugComponent",
       "component_name": "Mode Manager",
-      "component_path": null
+      "component_path": null,
+      "notes": "Min ramp time: menu and SurvivorMode share original tunables; 49 production-body boundary/formula checks pass, and a configured native Marked Man start consumes edited 1/1/11/17 settings with one rival, two grid locations and ramp limit 17. Live rank ratio is zero; other ranks are covered by numeric checks. Defaults restore afterward.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_mode_survivor_debug_menu.py",
+        "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -9320,14 +9338,20 @@
       "pseudocode_line": 10,
       "original_call": "CgsDev::DebugComponent::RegisterVariable(a1, &unk_82CDB7C8, \"Marked man tweaks\", \"Max ramp time\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGameState::ModeManagerDebugComponent::OnActivate#0008",
       "function": "BrnGameState::ModeManagerDebugComponent::OnActivate",
       "original_address": "0x82329C18",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82329C18.json",
       "component": "BrnGameState::ModeManagerDebugComponent",
       "component_name": "Mode Manager",
-      "component_path": null
+      "component_path": null,
+      "notes": "Max ramp time: menu and SurvivorMode share original tunables; 49 production-body boundary/formula checks pass, and a configured native Marked Man start consumes edited 1/1/11/17 settings with one rival, two grid locations and ramp limit 17. Live rank ratio is zero; other ranks are covered by numeric checks. Defaults restore afterward.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_mode_survivor_debug_menu.py",
+        "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -10056,14 +10080,20 @@
       "pseudocode_line": 4,
       "original_call": "sub_8282D800(a1, a1 + 28, \"Show vulnerability\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGameState::TakedownManagerDebugComponent::OnActivate#0002",
       "function": "BrnGameState::TakedownManagerDebugComponent::OnActivate",
       "original_address": "0x82366378",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82366378.json",
       "component": "BrnGameState::TakedownManagerDebugComponent",
       "component_name": "TakedownManager",
-      "component_path": null
+      "component_path": null,
+      "notes": "Show vulnerability: original cached active-car/contact predicates, radius and packed red/yellow geometry are restored. Production bodies pass 43 checks; native recent-contact masks produce actual queued sphere submissions with the toggle enabled. Revenge and populated last-takedown witnesses remain separate and pending.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_takedown_debug_menu.py",
+        "tools/tests/cases/debug_menu_markedman_takedown.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -22858,14 +22888,21 @@
       "pseudocode_line": 12,
       "original_call": "sub_8282D640(v0, &dword_82FFB864, \"Engines\", \"Max Rpm Display\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0001",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Max Rpm Display: Original display reads the monitored zero cell; native MAX RPM [0] appears and disappears on cleanup.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_sound_debug_menu.py",
+        "b5-decomp/tests/run_sound_root_debug_menu.py",
+        "tools/tests/cases/debug_menu_sound_batch.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -26017,14 +26054,21 @@
       "pseudocode_line": 229,
       "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, &flt_82F2CE94, \"Global\", \"Master Gain\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0118",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Master Gain: Original shared master-gain consumer reaches captured engine-fill PCM: nine stable windows at zero gain have zero RMS/peak, with nonzero output before and after at gain 4. Speaker output was muted by the harness.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_sound_debug_menu.py",
+        "b5-decomp/tests/run_sound_root_debug_menu.py",
+        "tools/tests/cases/debug_menu_sound_batch.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -26476,14 +26520,21 @@
       "pseudocode_line": 268,
       "original_call": "sub_8282D560(v0, &dword_82FFB814, \"Statistics\", \"Memory Dump\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0135",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Memory Dump: Real menu action emits allocator records and original DebugAudioMemoryDump footer; its one-shot cell clears.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_sound_debug_menu.py",
+        "b5-decomp/tests/run_sound_root_debug_menu.py",
+        "tools/tests/cases/debug_menu_sound_batch.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -26503,14 +26554,21 @@
       "pseudocode_line": 269,
       "original_call": "sub_8282D560(v0, &dword_82FFB950, \"Statistics\", \"Splice Stats Dump\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0136",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Splice Stats Dump: Real menu action emits five live bank sections, 775 indexed play-count rows and 11 nonzero counts; its one-shot cell clears.",
+      "evidence": [
+        "progress/debug_menu/SOUND_BATCH_20261011.md",
+        "b5-decomp/tests/run_sound_debug_menu.py",
+        "b5-decomp/tests/run_sound_root_debug_menu.py",
+        "tools/tests/cases/debug_menu_sound_batch.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -37343,8 +37401,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1339,
-      "verified": 13,
+      "pending": 1330,
+      "verified": 22,
       "original-noop": 2
     }
   }
