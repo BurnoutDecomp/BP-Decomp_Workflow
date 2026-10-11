@@ -80,5 +80,65 @@
       "b5-decomp/tests/run_race_car_debug_spawn.py",
       "tools/tests/cases/debug_menu_racecar_spawn.ps1"
     ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0001": {
+    "state": "verified",
+    "notes": "Render car damage state: original eight-slot active/render-damage and persistent-damage reader; original text object repaired; live readable active/inactive rows and show/hide witnessed.",
+    "evidence": [
+      "progress/debug_menu/RACECAR_HUD_20261011.md",
+      "b5-decomp/tests/run_debug_2d_text.py",
+      "b5-decomp/tests/run_pc_im2d_buffer.py",
+      "tools/tests/cases/debug_menu_racecar_hud.ps1"
+    ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0002": {
+    "state": "verified",
+    "notes": "Render car streaming state: original eight-slot model/active/loaded/unused reader; original text object repaired; live readable slot states and show/hide witnessed.",
+    "evidence": [
+      "progress/debug_menu/RACECAR_HUD_20261011.md",
+      "b5-decomp/tests/run_debug_2d_text.py",
+      "b5-decomp/tests/run_pc_im2d_buffer.py",
+      "tools/tests/cases/debug_menu_racecar_hud.ps1"
+    ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0005": {
+    "state": "verified",
+    "notes": "Show average speed: original running mean and mph conversion audited; real nonzero driving samples, visible readout, hide and restore witnessed.",
+    "evidence": [
+      "progress/debug_menu/RACECAR_HUD_20261011.md",
+      "b5-decomp/tests/run_debug_2d_text.py",
+      "b5-decomp/tests/run_pc_im2d_buffer.py",
+      "tools/tests/cases/debug_menu_racecar_hud.ps1"
+    ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0006": {
+    "state": "verified",
+    "notes": "Reset average speed: original callback clears both mean and sample count; real console binding reset after2769 samples and subsequent fresh accumulation witnessed.",
+    "evidence": [
+      "progress/debug_menu/RACECAR_HUD_20261011.md",
+      "b5-decomp/tests/run_debug_2d_text.py",
+      "b5-decomp/tests/run_pc_im2d_buffer.py",
+      "tools/tests/cases/debug_menu_racecar_hud.ps1"
+    ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0008": {
+    "state": "verified",
+    "notes": "Show player engine state: original enum-to-text/position/colour path audited; real ENGINE RUNNING glyphs and readable green overlay witnessed.",
+    "evidence": [
+      "progress/debug_menu/RACECAR_HUD_20261011.md",
+      "b5-decomp/tests/run_debug_2d_text.py",
+      "b5-decomp/tests/run_pc_im2d_buffer.py",
+      "tools/tests/cases/debug_menu_racecar_hud.ps1"
+    ]
+  },
+  "BrnWorld::RaceCarEntityModuleDebugComponent::OnActivate#0009": {
+    "state": "verified",
+    "notes": "Traffic Related: original valid-ground heading and collision-tag reader audited; real player heading and No Lanes readout glyphs/pixels witnessed.",
+    "evidence": [
+      "progress/debug_menu/RACECAR_HUD_20261011.md",
+      "b5-decomp/tests/run_debug_2d_text.py",
+      "b5-decomp/tests/run_pc_im2d_buffer.py",
+      "tools/tests/cases/debug_menu_racecar_hud.ps1"
+    ]
   }
 }
