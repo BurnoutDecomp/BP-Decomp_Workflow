@@ -82,3 +82,11 @@ PreWorldUpdate/EmmPreWorldUpdate caller/writer are missing. No count promotion i
 made for that partial page. Source union remains711/1354; final dispositions
 remain25 verified+3 original no-ops. Sol continues the renderer repair and both
 Luna lanes continue recovery.
+
+## Resumed:6cba4b3a / d62fe25b GameState source checkpoints
+
+The saved GameState cohort and EMM/paused-mode increment are committed and pushed
+on a separate branch. Three import TUs and two update TUs compile with zero new
+faithfulness findings. The full PreWorldUpdate caller remains in progress; no
+page-count or final-verdict promotion. GAMESTATE_UPDATE_CHAIN_20261012.md records
+the versioned evidence. Both Luna recovery lanes and Sol renderer checks resumed.
