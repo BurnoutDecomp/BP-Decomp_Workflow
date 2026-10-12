@@ -194,3 +194,19 @@ compile, and the complete logger plus StrStream passes36 checks against real
 temporary Win32 files. Substituting only the old char sink into the same recovered
 lifecycle fails7 checks. This is backend evidence, not native-game or final-entry
 verification. The remaining Resource window rendering/update bodies stay open.
+
+## 0fafee10: Heap controls and the completed World review
+
+Resource Heap Reset/AddHeap/Update/CalculateColour are pushed with typed Pool
+access. Three production TUs compile;24 whole-body state/math checks pass. The
+postmortem records the private-source distinction and hardware-model limits.
+Rendering, source review, linking and native-game checks stay open. Sol takes
+the four TypeList/Histogram paths on a separate source branch while Root repairs
+World; both Luna workers continue their existing source/GUI scopes.
+
+World's complete130-site source review fails with17 actionable findings; report
+SHA-25607080c78e5c528a74011c7c0126def0585655c2cdf4e88f307bfe5455ce75d03.
+The frozen source and review stay unchanged. Root's separate compile/Boost
+repair branch remains a candidate; further source repairs and the same combined
+reviewer's repair pass are pending. Prop cell-grid missing passes are explicit
+source gaps, not approved shared-backend exceptions.

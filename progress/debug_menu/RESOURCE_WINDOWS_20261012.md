@@ -1,6 +1,6 @@
 # Resource debug windows
 
-Root source branch `codex/debug-menu-resource-windows` is pushed at `0e6dcdc1`,
+Root source branch `codex/debug-menu-resource-windows` is pushed at `0fafee10`,
 based on the separate GUI/Replay candidate `ab80240c`. It remains outside the
 primary source union and has no native or final-entry verdict.
 
@@ -32,14 +32,24 @@ Three production TUs compile. The complete production logger and StrStream pass
 36 checks using real temporary Win32 files. A focused negative control retains
 the recovered lifecycle but substitutes only the old char sink;7 checks fail.
 This proves that backend regression, not the original in-game action.
+
+The0fafee10 increment adds Heap window Reset/AddHeap/Update/CalculateColour.
+It preserves both original heap records, segment-size thresholds, input clamps,
+scroll wrapping, scalar trig/rounding and packed colours. Three affected TUs
+compile with zero new faithfulness;24 whole-body state/math checks pass, including
+the64-bit-to-low-word scrolling counterexample. Render and RenderHeap are still
+absent. The postmortem records remaining hardware-model boundaries; these checks
+do not certify window rendering or gameplay.
 Resource destruction, the remaining window render/update bodies,
 shared-window source review, linking and native checks remain pending. The
 planned scope is 20 static registration sites; none is promoted by this partial
 construction checkpoint.
 
-The exclusive manifest now contains24 paths, adding only the named buffered-log
+The manifest now contains26 paths, adding only the named buffered-log
 seam, its compile anchor/tests, and a manifested Pool friendship for the next
-window increment. The original function/address map, compile records
+window increment and its input/math fixture files. TypeList and Histogram's four
+paths are now leased to the separate Sol source lane at0fafee10; Root keeps the
+other22 paths. The original function/address map, compile records
 and constructor postmortem are under
 `scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet`.
 ARTIST constructors `827E08D0`, `827DF8E8` and `821F05C8` arbitrate initialization;
