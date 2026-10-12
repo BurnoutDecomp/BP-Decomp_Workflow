@@ -237,10 +237,128 @@
           "bytes": 1916
         }
       ]
+    },
+    {
+      "run": "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_002157",
+      "result": {
+        "expected": "PASS",
+        "case": "debug_ini_vehicle_startup_final",
+        "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\start_crash_final_100.ps1",
+        "phase": "DRIVING",
+        "when": "2026-10-13T00:23:55.0574085+02:00",
+        "flow_exit": 0,
+        "bug": "INI-activated Race Car diagnostics read velocity before player attachment",
+        "asserts": 0,
+        "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\bugtest\\runs\\debug_ini_vehicle_startup_final\\20261013_002157",
+        "label": "user-start-crash-final-41afefeab",
+        "area": "debug-menu",
+        "as_expected": true,
+        "verdict": "PASS",
+        "slot": 23,
+        "checks": [
+          {
+            "detail": "0 assert family(ies), all known (0 lines)",
+            "pass": true,
+            "name": "no NEW assert families",
+            "kind": "NewAsserts"
+          },
+          {
+            "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+            "pass": true,
+            "name": "assert lines (info: known noise counts too)",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+            "pass": true,
+            "name": "no exceptions",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "final phase DRIVING, want DRIVING",
+            "pass": true,
+            "name": "reached DRIVING",
+            "kind": "Mark"
+          },
+          {
+            "detail": "path=2184,9m net=581,4m samples 22..342 teleported=True later respawns=0",
+            "pass": true,
+            "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+            "kind": "Script"
+          },
+          {
+            "detail": "1 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+            "pass": true,
+            "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "1 line(s) match /\\[debug-component\\] path=\"/?Race Car Entity\" request=engine controls=1/, want [1, +inf]",
+            "pass": true,
+            "name": "Race Car page was activated by startup settings",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "5 line(s) match /\\[debug-ini\\] applied graphics/vehicles\\.\\.\\./lods\\.\\.\\./quality lod [0-4]=/, want [5, +inf]",
+            "pass": true,
+            "name": "all five configured vehicle LODs were applied",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "0 line(s) match /\\[ASSERT \\d+\\].*(leActiveRaceCarIndex|IsAttached\\(\\))/, want [-inf, 0]",
+            "pass": true,
+            "name": "no invalid-player or unattached-car assertion",
+            "kind": "LogCount"
+          }
+        ],
+        "provenance": {
+          "b5_dirty": 0,
+          "exe_size": 10882560,
+          "exe_mtime_before_lock": "2026-10-13T00:11:06.0039595+02:00",
+          "exe_sha": "37b62391c378",
+          "b5_head": "41afefeab",
+          "exe_b5": "41afefea",
+          "parent_head": "81a59ed9",
+          "exe_mtime": "2026-10-13T00:18:17.7648612+02:00"
+        }
+      },
+      "pins": [
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_002157/result.json",
+          "sha256": "76113c61cf6fd2785e7666645f843dcb174fd6f3152d9c3f2df744bc73def6da",
+          "bytes": 4021
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_002157/REPORT.md",
+          "sha256": "b47f89f6053e7978c485988d22eba3a1c53737782063d3acaa1499ecd36190b5",
+          "bytes": 3462
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_002157/config.used.ini",
+          "sha256": "2164f7a561262d840a9d74db0644c1980eeb55fc7b6dfb5d2388e5d3fe5caabf",
+          "bytes": 4581
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_002157/flow/BrnGame.log",
+          "sha256": "cab64a3212b6961c6fe0e1c82c1668125de853734ae6798c9ab2e7b45bb88abe",
+          "bytes": 7848141
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_002157/flow/marks.txt",
+          "sha256": "e5430c830558b576e4df8f81abf1883051ae0296624dfe743dfb990ea0b89644",
+          "bytes": 1915
+        }
+      ]
     }
   ],
-  "final_exact_build_native": "running in scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_002157",
-  "independent_review": "pending final41af combined verdict; earlier2f15 fail retained",
+  "final_exact_build_native": "PASS,9/9,41afefeab,2184.9m,all5LODs applied,0asserts/exceptions",
+  "independent_review": {
+    "state": "pass",
+    "candidate": "41afefeab847eff15e00b78792ca0a3e1773c5fc",
+    "report": "scratch/DEBUG_MENU_1011/crashes/user_start_20261012_235410/review_41afefeab/SOURCE_REVIEW.md",
+    "sha256": "762699a24d06de6a0b52bad9fc74e32c22272b60a8353289ef1d884541f168c9",
+    "scope": "Combined source review of INI startup/alias/real menu handoff and supporting texture-usage chain. Later exact-build native evidence recorded separately; native manual-menu traversal/full diagnostic behavior not claimed."
+  },
   "focused_checks": {
     "initial_startup": 21,
     "old_update_failures": 13,

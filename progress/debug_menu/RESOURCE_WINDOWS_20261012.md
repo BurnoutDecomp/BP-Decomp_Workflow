@@ -20,7 +20,10 @@ The exposed Model/Renderable/Material texture-usage chain is now recovered at
 The original empty Material state operation and its null-query quirk are
 preserved. This closes the named link dependency, not native Texture Window
 behavior or the remaining lifecycle/backend/consumer gaps. The supporting
-source chain is included in the separate startup-fix combined review.
+source chain passes the separate startup-fix combined source review at
+`41afefeab` (SHA256
+`762699a24d06de6a0b52bad9fc74e32c22272b60a8353289ef1d884541f168c9`).
+That source verdict adds no native Texture Window approval.
 
 ## Earlier implementation checkpoints
 

@@ -267,7 +267,10 @@ alias repairs are pushed; the copied-config3d3ce67d7 native case passes9/9 with
 all five LOD values applied,2736.9m motion and zero asserts/exceptions.
 The41afefeab followup repairs ordinary materialized-menu navigation, passes24
 whole-method checks (old Open fails2), and builds/links all2967 production TUs.
-Its exact-head native run and combined independent review are in progress.
+Its exact-head native run passes9/9 with2184.9m, all five LOD values applied and
+zero asserts/exceptions. The combined independent source review passes both
+startup findings and the supporting texture chain; native manual-menu traversal
+and full diagnostic behavior remain open.
 The latest artifact and limits are in [START_CRASH_20261013.md](START_CRASH_20261013.md).
 
 Another130-site candidate is saved/pushed at0f40e7b7f on a separate branch.

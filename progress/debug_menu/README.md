@@ -43,7 +43,8 @@ remains open. See the
 The reported Start crash with vehicle INI settings is repaired. A copied-config
 native case passes nine checks, including all five LOD overrides and driving
 with zero asserts/exceptions. The latest executable also includes the real menu
-handoff repair; exact-build validation and independent review are finishing.
+handoff repair; its exact-build nine-check run and combined independent source
+review both pass. Native manual-menu traversal remains open.
 See [the startup-crash checkpoint](START_CRASH_20261013.md).
 
 The primary recovery/audit packets cover **1,092 static sites**; **263 remain
