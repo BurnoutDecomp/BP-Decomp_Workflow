@@ -14,9 +14,13 @@ against the previous `2c65134ab` source and fail 14. They do not cover serialize
 texture pointers, full Resource lifecycle or native UI behavior. The same fresh
 reviewer passes all six repairs; report SHA256 is
 1119913f9cb8c43d26476b02e219a34b14db8e95a4cee04ddb1d3973d9a473da.
-The normal build compiles 2,966 TUs, but linking exposes the missing Model
-texture-usage predicate. The original Model/Renderable/Material chain is under
-supporting recovery. This is remaining implementation work, not a native pass.
+The exposed Model/Renderable/Material texture-usage chain is now recovered at
+`2f15d6683`; four affected TUs compile with zero new faithfulness. The normal
+2,967-TU build links through `41afefeab`, including the existing Renderable TU.
+The original empty Material state operation and its null-query quirk are
+preserved. This closes the named link dependency, not native Texture Window
+behavior or the remaining lifecycle/backend/consumer gaps. The supporting
+source chain is included in the separate startup-fix combined review.
 
 ## Earlier implementation checkpoints
 

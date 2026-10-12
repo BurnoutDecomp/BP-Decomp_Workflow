@@ -1,0 +1,257 @@
+{
+  "schema": 1,
+  "reported": "Crash after pressing Start, black screen",
+  "evidence_receipt": "scratch/DEBUG_MENU_1011/crashes/user_start_20261012_235410/receipt.json",
+  "cause": "PC INI materializes Race Car page before a player is attached; original Update reads invalid player slot/velocity. Separate absolute vehicle alias mismatch prevented values applying.",
+  "primary_commit": "41afefeab847eff15e00b78792ca0a3e1773c5fc",
+  "shipping_build": {
+    "state": "pass",
+    "total_tus": 2967,
+    "compiled_tus": 3,
+    "current_tus": 2964,
+    "failed_tus": 0,
+    "log": "scratch/DEBUG_MENU_1011/build/20261013_001806_start-crash-menu-handoff-41afefeab.log",
+    "exe_sha256": "37b62391c3782e96db84dbcc54cdef6f7597fb4e2d8c2b0347f91e6af7c29f62"
+  },
+  "native_runs": [
+    {
+      "run": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_000457",
+      "result": {
+        "expected": "PASS",
+        "case": "debug_ini_vehicle_startup",
+        "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\tools\\tests\\cases\\debug_ini_vehicle_startup.ps1",
+        "phase": "DRIVING",
+        "when": "2026-10-13T00:08:22.4266861+02:00",
+        "flow_exit": 0,
+        "bug": "INI-activated Race Car diagnostics read velocity before player attachment",
+        "asserts": 0,
+        "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\bugtest\\runs\\debug_ini_vehicle_startup\\20261013_000457",
+        "label": "user-start-crash-ini-2f15d6683",
+        "area": "debug-menu",
+        "as_expected": false,
+        "verdict": "FAIL",
+        "slot": 23,
+        "checks": [
+          {
+            "detail": "0 assert family(ies), all known (0 lines)",
+            "pass": true,
+            "name": "no NEW assert families",
+            "kind": "NewAsserts"
+          },
+          {
+            "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+            "pass": true,
+            "name": "assert lines (info: known noise counts too)",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+            "pass": true,
+            "name": "no exceptions",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "final phase DRIVING, want DRIVING",
+            "pass": true,
+            "name": "reached DRIVING",
+            "kind": "Mark"
+          },
+          {
+            "detail": "path=2148,8m net=563,4m samples 201..576 teleported=True later respawns=2",
+            "pass": true,
+            "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+            "kind": "Script"
+          },
+          {
+            "detail": "2 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+            "pass": true,
+            "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "1 line(s) match /\\[debug-component\\] path=\"/?Race Car Entity\" request=engine controls=1/, want [1, +inf]",
+            "pass": true,
+            "name": "Race Car page was activated by startup settings",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "0 line(s) match /\\[debug-ini\\] applied graphics/vehicles\\.\\.\\./lods\\.\\.\\./quality lod [0-4]=/, want [5, +inf]",
+            "pass": false,
+            "name": "all five configured vehicle LODs were applied",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "0 line(s) match /\\[ASSERT \\d+\\].*(leActiveRaceCarIndex|IsAttached\\(\\))/, want [-inf, 0]",
+            "pass": true,
+            "name": "no invalid-player or unattached-car assertion",
+            "kind": "LogCount"
+          }
+        ],
+        "provenance": {
+          "b5_dirty": 2,
+          "exe_size": 10881536,
+          "exe_mtime_before_lock": "MISSING",
+          "exe_sha": "689904f5125b",
+          "b5_head": "2f15d6683",
+          "exe_b5": "2f15d668",
+          "parent_head": "81a59ed9",
+          "exe_mtime": "2026-10-13T00:03:30.3053536+02:00"
+        }
+      },
+      "pins": [
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_000457/result.json",
+          "sha256": "e76b08db8615efe2360c18f30cba5571d4a3ee0b89b8ca15c601ad8f4493b7da",
+          "bytes": 3983
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_000457/REPORT.md",
+          "sha256": "ba08140f74eea40139e6439775127bc37dc2a6069c0cc7e7909c365e58a5505a",
+          "bytes": 3502
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_000457/config.used.ini",
+          "sha256": "2164f7a561262d840a9d74db0644c1980eeb55fc7b6dfb5d2388e5d3fe5caabf",
+          "bytes": 4581
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_000457/flow/BrnGame.log",
+          "sha256": "7c3f112f55d911e438bbbfb5b875a04dcdbd0c7c9bef065f842e67f44e1dfcfa",
+          "bytes": 13801978
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_000457/flow/marks.txt",
+          "sha256": "ea401b9c65967740d1f55ad9ced37065e162a5463f5bb27ddab174b08d990fe8",
+          "bytes": 1916
+        }
+      ]
+    },
+    {
+      "run": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_001137",
+      "result": {
+        "expected": "PASS",
+        "case": "debug_ini_vehicle_startup",
+        "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\tools\\tests\\cases\\debug_ini_vehicle_startup.ps1",
+        "phase": "DRIVING",
+        "when": "2026-10-13T00:15:00.6144122+02:00",
+        "flow_exit": 0,
+        "bug": "INI-activated Race Car diagnostics read velocity before player attachment",
+        "asserts": 0,
+        "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\bugtest\\runs\\debug_ini_vehicle_startup\\20261013_001137",
+        "label": "user-start-crash-ini-alias-3d3ce67d7",
+        "area": "debug-menu",
+        "as_expected": true,
+        "verdict": "PASS",
+        "slot": 23,
+        "checks": [
+          {
+            "detail": "0 assert family(ies), all known (0 lines)",
+            "pass": true,
+            "name": "no NEW assert families",
+            "kind": "NewAsserts"
+          },
+          {
+            "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+            "pass": true,
+            "name": "assert lines (info: known noise counts too)",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+            "pass": true,
+            "name": "no exceptions",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "final phase DRIVING, want DRIVING",
+            "pass": true,
+            "name": "reached DRIVING",
+            "kind": "Mark"
+          },
+          {
+            "detail": "path=2736,9m net=983,7m samples 201..653 teleported=True later respawns=1",
+            "pass": true,
+            "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+            "kind": "Script"
+          },
+          {
+            "detail": "2 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+            "pass": true,
+            "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "1 line(s) match /\\[debug-component\\] path=\"/?Race Car Entity\" request=engine controls=1/, want [1, +inf]",
+            "pass": true,
+            "name": "Race Car page was activated by startup settings",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "5 line(s) match /\\[debug-ini\\] applied graphics/vehicles\\.\\.\\./lods\\.\\.\\./quality lod [0-4]=/, want [5, +inf]",
+            "pass": true,
+            "name": "all five configured vehicle LODs were applied",
+            "kind": "LogCount"
+          },
+          {
+            "detail": "0 line(s) match /\\[ASSERT \\d+\\].*(leActiveRaceCarIndex|IsAttached\\(\\))/, want [-inf, 0]",
+            "pass": true,
+            "name": "no invalid-player or unattached-car assertion",
+            "kind": "LogCount"
+          }
+        ],
+        "provenance": {
+          "b5_dirty": 0,
+          "exe_size": 10882048,
+          "exe_mtime_before_lock": "2026-10-13T00:03:30.3053536+02:00",
+          "exe_sha": "705fb4cf3810",
+          "b5_head": "3d3ce67d7",
+          "exe_b5": "3d3ce67d",
+          "parent_head": "81a59ed9",
+          "exe_mtime": "2026-10-13T00:11:06.0039595+02:00"
+        }
+      },
+      "pins": [
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_001137/result.json",
+          "sha256": "cfbc8b6883baaf583ecbdd3b9a1a74a290283968d89e1db0827f33cb07d0c3de",
+          "bytes": 4013
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_001137/REPORT.md",
+          "sha256": "efc983d46400c863d6887218da1599a1683d96fc07d4ca60b2e79e96ba047f37",
+          "bytes": 3456
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_001137/config.used.ini",
+          "sha256": "2164f7a561262d840a9d74db0644c1980eeb55fc7b6dfb5d2388e5d3fe5caabf",
+          "bytes": 4581
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_001137/flow/BrnGame.log",
+          "sha256": "6f2ad2eafee280a084e8eab13cabe779a34db99d4aec892faab1548a471f148f",
+          "bytes": 15239219
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_ini_vehicle_startup/20261013_001137/flow/marks.txt",
+          "sha256": "0e07c187ca7df8db1783db7b49f4a47e469cf4e194c66e4c489fe8db2233e22b",
+          "bytes": 1916
+        }
+      ]
+    }
+  ],
+  "final_exact_build_native": "running in scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_002157",
+  "independent_review": "pending final41af combined verdict; earlier2f15 fail retained",
+  "focused_checks": {
+    "initial_startup": 21,
+    "old_update_failures": 13,
+    "final_update_and_real_menu_open": 24,
+    "old_menu_open_failures": 2,
+    "component_activation": 41,
+    "variable_ini": 82
+  },
+  "final_entry_dispositions_unchanged": {
+    "verified": 25,
+    "original_noop": 3,
+    "pending": 1327
+  }
+}

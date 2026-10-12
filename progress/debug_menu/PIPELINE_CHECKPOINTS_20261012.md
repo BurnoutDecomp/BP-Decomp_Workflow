@@ -258,3 +258,22 @@ predicate and original callee chain. Sol recovers that exact dependency scope.
 Both Luna recovery lanes
 continue TriangleBox queries and the final BrnResource producer/counter chain.
 The1351-site examined-scope union and final-entry counters are unchanged.
+
+## Start crash and continued recovery
+
+The supplied normal-launch crash is traced to PC INI activation of Race Car
+diagnostics before player attachment. The narrow startup guard and vehicle-key
+alias repairs are pushed; the copied-config3d3ce67d7 native case passes9/9 with
+all five LOD values applied,2736.9m motion and zero asserts/exceptions.
+The41afefeab followup repairs ordinary materialized-menu navigation, passes24
+whole-method checks (old Open fails2), and builds/links all2967 production TUs.
+Its exact-head native run and combined independent review are in progress.
+The latest artifact and limits are in [START_CRASH_20261013.md](START_CRASH_20261013.md).
+
+Another130-site candidate is saved/pushed at0f40e7b7f on a separate branch.
+All64 production TUs compile;0 lint findings are introduced versus its primary
+base. One inherited historical-comment finding remains visible; no baseline
+was changed. Its combined source packet is frozen with140 Git source/dependency
+pins and165 evidence files. It is not a primary or final-entry promotion.
+Both Luna lanes continue the canonical TriangleBox/query chain and the actual
+MemoryMap/allocator/statistics chain. The goal remains active.
