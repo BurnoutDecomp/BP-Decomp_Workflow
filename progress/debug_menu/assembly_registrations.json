@@ -1,0 +1,30 @@
+[
+  {
+    "function": "BrnDirector::DebugComponent::OnActivate",
+    "export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6",
+    "call_address": "0x82275FA8",
+    "assembly_callee": "CgsDev__DebugComponent__RegisterFunction",
+    "kind": "function",
+    "registration_api": "CgsDev::DebugComponent::RegisterFunction",
+    "caption": "Save",
+    "path": "",
+    "arguments": [
+      "a1",
+      "BrnDirector::Camera::BehaviourParameterBank::SaveParameters",
+      "*(a1 + 12) + 195392",
+      "\"\"",
+      "\"Save\""
+    ],
+    "evidence": {
+      "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+      "instruction_range": "0x82275F78..0x82275FA8",
+      "r3": "unchanged DebugComponent receiver from entry",
+      "r4": "SaveParameters symbol at 0x82275F9C/FA4",
+      "r5": "module pointer + 0x2FB40 (195392) at 0x82275F90..FA0",
+      "r6": "0x820046A7; raw first byte is NUL, empty path",
+      "r7": "Save string at 0x82275F78/F80",
+      "recovery_packet": "scratch/DEBUG_MENU_1011/recovery_lanes/vehicle_campaign_20261012/director_debug/director55_page_map_c9925074.json",
+      "id_policy": "Append as #0055 to preserve every existing Director ID; IDs are stable identifiers, not original call order."
+    }
+  }
+]

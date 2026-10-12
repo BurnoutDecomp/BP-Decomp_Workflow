@@ -35,8 +35,8 @@ draw and numeric findings are being repaired on a separate branch; see
 The junkyard implementation explicitly models the reciprocal-square-root seed
 and scalar dot product. Exact hardware seed bits, dot-product rounding, NaN
 payloads and floating status remain unverified. Native behavior, query/backend
-and caller gaps remain separate. Source packet coverage is now 787/1354; final
-entry dispositions stay 25 verified plus 3 original no-ops, with 1326 pending.
+and caller gaps remain separate. That checkpoint covered 787/1354 source sites. Current coverage is 917/1355;
+final dispositions remain 25 verified plus 3 original no-ops, with 1327 pending.
 
 The production-body environment/grip fixture passes54/54 checks. Extracting the
 pre-repair5ef9611d bodies and declarations with the same fixture fails28 checks,

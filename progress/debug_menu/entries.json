@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "original_build": "BURNOUT_X360_ARTIST.XEX",
-  "source_digest": "8b7043813e7eed5033a6ba98b7f6d4b2cbe10db3f563ce230bd2256ac7bb8608",
+  "source_digest": "7f39888c021f173e4a5cdf55bbdc0b828716ae577bafa9a2f1a29774cfbc1e12",
   "scope": "Static registration call sites, plus every named debug OnActivate. Loop-generated rows and symbolic captions require further enumeration; no behavioral verdict is inferred from registration.",
   "registration_apis": {
     "CgsDev::DebugUI::VariableManager::RegisterVariable": {
@@ -117,7 +117,7 @@
     {
       "name": "BrnDirector::DebugComponent::OnActivate",
       "address": "0x82275F68",
-      "registration_sites": 54
+      "registration_sites": 55
     },
     {
       "name": "BrnEffects::EffectsDebugComponent::SetupLionMenu",
@@ -560,7 +560,7 @@
       "addresses": [
         "0x82275F68"
       ],
-      "registration_sites": 54,
+      "registration_sites": 55,
       "state": "pending"
     },
     {
@@ -2848,6 +2848,46 @@
       "caption_resolution": "literal",
       "state": "pending",
       "id": "BrnDirector::DebugComponent::OnActivate#0054",
+      "function": "BrnDirector::DebugComponent::OnActivate",
+      "original_address": "0x82275F68",
+      "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+      "component": "BrnDirector::DebugComponent",
+      "component_name": "Camera",
+      "component_path": null
+    },
+    {
+      "kind": "function",
+      "registration_api": "CgsDev::DebugComponent::RegisterFunction",
+      "caption": "Save",
+      "caption_expression": "\"Save\"",
+      "path": "",
+      "path_expression": "\"\"",
+      "uses_component_path": false,
+      "path_resolution": "assembly-overload",
+      "arguments": [
+        "a1",
+        "BrnDirector::Camera::BehaviourParameterBank::SaveParameters",
+        "*(a1 + 12) + 195392",
+        "\"\"",
+        "\"Save\""
+      ],
+      "pseudocode_line": null,
+      "original_call": "0x82275FA8  bl        CgsDev__DebugComponent__RegisterFunction",
+      "original_call_address": "0x82275FA8",
+      "caption_resolution": "assembly",
+      "state": "pending",
+      "assembly_evidence": {
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "instruction_range": "0x82275F78..0x82275FA8",
+        "r3": "unchanged DebugComponent receiver from entry",
+        "r4": "SaveParameters symbol at 0x82275F9C/FA4",
+        "r5": "module pointer + 0x2FB40 (195392) at 0x82275F90..FA0",
+        "r6": "0x820046A7; raw first byte is NUL, empty path",
+        "r7": "Save string at 0x82275F78/F80",
+        "recovery_packet": "scratch/DEBUG_MENU_1011/recovery_lanes/vehicle_campaign_20261012/director_debug/director55_page_map_c9925074.json",
+        "id_policy": "Append as #0055 to preserve every existing Director ID; IDs are stable identifiers, not original call order."
+      },
+      "id": "BrnDirector::DebugComponent::OnActivate#0055",
       "function": "BrnDirector::DebugComponent::OnActivate",
       "original_address": "0x82275F68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
@@ -21733,14 +21773,19 @@
       "pseudocode_line": 89,
       "original_call": "sub_8282F720(v1, CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct, v1, \"Reset Sensors\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnPhysics::Deformation::DeformationDebugComponent::OnActivate#0019",
       "function": "BrnPhysics::Deformation::DeformationDebugComponent::OnActivate",
       "original_address": "0x82623198",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82623198.json",
       "component": "BrnPhysics::Deformation::DeformationDebugComponent",
       "component_name": null,
-      "component_path": null
+      "component_path": null,
+      "notes": "Reset Sensors: original OnActivate registers the folded target 8284CB38, whose entire body is blr. The recovered registered ResetSensors callback is empty. The combined source review independently confirms this original empty action.",
+      "evidence": [
+        "progress/debug_menu/DEFORMATION_NOOP_20261012.md",
+        "b5-decomp/src/GameSource/Physics/DeformationManager/BrnDeformationDebugComponent.cpp"
+      ]
     },
     {
       "kind": "function",
@@ -37417,14 +37462,14 @@
     }
   ],
   "summary": {
-    "registration_sites": 1354,
+    "registration_sites": 1355,
     "registration_functions": 91,
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
       "pending": 1327,
       "verified": 25,
-      "original-noop": 2
+      "original-noop": 3
     }
   }
 }

@@ -89,7 +89,40 @@ def registrations(body: str, apis: dict) -> list[dict]:
     return rows
 
 
-def build_inventory(export_dir: Path, identity: dict) -> dict:
+def assembly_registrations(data: dict, raw: bytes, supplements: list[dict]) -> list[dict]:
+    """Recover explicitly evidenced calls whose pseudocode lost its arguments.
+
+    Append these after parsed rows so existing ordinal IDs/verdicts stay stable.
+    Every supplement is pinned to the exact export and an actual bl instruction;
+    caption, arguments and callback require a reviewed assembly evidence record.
+    """
+    rows = []
+    for supplement in supplements:
+        if supplement['function'] != data['name']:
+            continue
+        if hashlib.sha256(raw).hexdigest() != supplement['export_sha256']:
+            raise ValueError('assembly registration export changed: ' + data['name'])
+        address = supplement['call_address']
+        instruction = next((line for line in (data.get('assembly') or '').splitlines()
+                            if line.split(maxsplit=1)[0].upper() == address.upper()), None)
+        expected = supplement['assembly_callee']
+        if instruction is None or not re.search(r'\bbl\s+' + re.escape(expected) + r'(?:\s|$)', instruction):
+            raise ValueError('assembly registration call changed: ' + address)
+        rows.append({
+            'kind': supplement['kind'], 'registration_api': supplement['registration_api'],
+            'caption': supplement['caption'], 'caption_expression': json.dumps(supplement['caption']),
+            'path': supplement['path'], 'path_expression': json.dumps(supplement['path']),
+            'uses_component_path': False, 'path_resolution': 'assembly-overload',
+            'arguments': supplement['arguments'], 'pseudocode_line': None,
+            'original_call': instruction, 'original_call_address': address,
+            'caption_resolution': 'assembly', 'state': 'pending',
+            'assembly_evidence': supplement['evidence'],
+        })
+    return rows
+
+
+def build_inventory(export_dir: Path, identity: dict, supplements: list[dict] | None = None) -> dict:
+    supplements = supplements or []
     cache, missing = {}, set()
 
     def read(address):
@@ -142,6 +175,12 @@ def build_inventory(export_dir: Path, identity: dict) -> dict:
             continue
         body = data.get('pseudocode') or ''
         found = registrations(body, apis)
+        recovered = assembly_registrations(data, raw, supplements)
+        for row in recovered:
+            if any(old['registration_api'] == row['registration_api']
+                   and old['arguments'] == row['arguments'] for old in found):
+                raise ValueError('assembly registration is now parsed; migrate its stable ID: ' + row['original_call_address'])
+        found.extend(recovered)
         if not found:
             continue
         name = data['name']
@@ -165,6 +204,13 @@ def build_inventory(export_dir: Path, identity: dict) -> dict:
             rows.append(row)
         functions.append({'name': name, 'address': address, 'registration_sites': len(found)})
 
+    if supplements:
+        seen = {row.get('original_call_address') for row in rows}
+        missing_supplements = [s['call_address'] for s in supplements if s['call_address'] not in seen]
+        if missing_supplements:
+            raise ValueError('assembly supplements were not found: ' + ', '.join(missing_supplements))
+        digest.update(json.dumps(supplements, sort_keys=True).encode('utf-8'))
+
     # Include all original activation entry points even when their bodies register
     # nothing directly (delegation, a HUD-only page, missing export or a true no-op).
     activations = []
@@ -184,9 +230,12 @@ def main():
     parser.add_argument('--exports', type=Path, default=ROOT / '.ida-exports' / BUILD)
     parser.add_argument('--output', type=Path, default=ROOT / 'progress/debug_menu/entries.json')
     parser.add_argument('--verdicts', type=Path, default=ROOT / 'progress/debug_menu/verdicts.json')
+    parser.add_argument('--assembly-supplements', type=Path,
+                        default=ROOT / 'progress/debug_menu/assembly_registrations.json')
     args = parser.parse_args()
     identity = json.loads((ROOT / 'progress/identity.json').read_text(encoding='utf-8-sig'))
-    inventory = build_inventory(args.exports, identity)
+    supplements = json.loads(args.assembly_supplements.read_text(encoding='utf-8')) if args.assembly_supplements.is_file() else []
+    inventory = build_inventory(args.exports, identity, supplements)
     verdicts = json.loads(args.verdicts.read_text(encoding='utf-8-sig')) if args.verdicts.is_file() else {}
     by_id = {row['id']: row for row in inventory['entries']}
     unknown = sorted(set(verdicts) - set(by_id))

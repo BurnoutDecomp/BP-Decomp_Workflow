@@ -5,7 +5,7 @@ Do not revive removed features. The user authorizes commits and pushes in both
 repositories after meaningful progress. Stage only owned files; leave the general
 status mirror and submodule pointers to their existing reconciliation workflow.
 
-`entries.json` inventories 1,354 original static registration sites in 91 functions
+`entries.json` inventories 1,355 original static registration sites in 91 functions
 and all 64 named debug activation functions. Loops/delegated serialisers generate
 additional rows; 15 captions are symbolic and two wrapper exports are missing.
 PC additions require their own consumer audits. This is not a final visible-row count.
@@ -17,22 +17,23 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-Source recovery/audit packets cover **787 of 1,354 static sites**; **567 remain
-outside those packets**. The exact, non-overlapping IDs are in `batches.json`.
-RaceCar57 adds 42 newly audited sites and records 15 previously carried sites;
-ShadowMap adds 34. These packets include unresolved readers and backend work.
-They measure source coverage, not working controls.
+Source recovery/audit packets cover **917 of 1,355 static sites**; **438 remain
+outside those packets**. All 917 IDs are distinct and match the current inventory.
+The latest 130-site cohort adds Effects75 and Director55. These packets include
+unclassified readers and incomplete backend/caller work; they measure source
+coverage, not working controls. See [the 130-site checkpoint](EFFECTS_DIRECTOR_130_20261012.md).
 
-One Sol reviewer is checking the combined **319-site batch**: the 199-site
-Environment/Graphics, Progression and Handling repairs, plus SceneManager29,
-ShadowMap34 and RaceCar57. Changed groups compile. The prior199 review failed
-eight findings; its repair candidates pass 54 environment/grip and 143 renderer
-checks, with negative controls. The current review has found additional draw
-and numeric discrepancies; repairs are pushed separately while it continues.
-See [the current checkpoint](SOURCE_BATCH_319_20261012.md).
+The 319-site source review closed the previous eight fixes and found twelve new
+discrepancies. Its first repair supplement passes ten findings; guide/cone
+follow-up 968519ac addresses the remaining two and is with the same reviewer.
+Changed production groups compile. Focused checks pass 30 draw/numeric, 54
+environment/grip and 143 renderer checks; old-source regression controls fail as
+expected. The shipping build links after the recovered page mounts, shared
+threshold namespace and five Progression helper fixes. The latest 130-site cohort
+compiles but still needs its source review and shipping/native checks.
 
 Final dispositions are **25 verified and three original no-ops**, including the
-original empty Reset Sensors action. **1,326 static sites** and the expanded
+original empty Reset Sensors action. **1,327 static sites** and the expanded
 dynamic rows still need final dispositions. These stages overlap; do not add them.
 
 The 150-site Traffic/AI checkpoint passes 737 grouped checks. Its native Traffic
@@ -73,11 +74,11 @@ systems or the combined review. No Astra. Only one combined reviewer per batch.
 Freeze each handed-off source set while its worker moves to a distinct next slice.
 Keep source-ready, reviewed, compiled and native-verified states separate.
 
-The Luna lanes are recovering Director/Replay consumers and original occlusion
-query construction. Effects75 is frozen separately, awaiting integration and
-review; it is excluded from 787. The original GameState update chain is committed
-on its own branch, with full PreWorldUpdate and native caller work still pending.
-Root repairs, integrates and runs grouped checks while those lanes continue.
+One Luna lane now recovers GUI, SceneTriangle/Sweeper and Resource debug132;
+its previous Effects/occlusion checkpoints are frozen. The other recovers the
+original Replay update chain after Director55. The GameState update branch is
+committed separately; full PreWorldUpdate/native caller work remains pending.
+Root keeps integration, grouped checks and publication moving in parallel.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:
