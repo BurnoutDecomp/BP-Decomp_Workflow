@@ -46,3 +46,9 @@ Handling28 is integrated through5ef9611d, with all four changed C++ TUs compilin
 and no new faithfulness findings. One combined199-site Sol review is underway;
 both Luna source lanes continue. The source packet union is682/1354; final
 working/no-op dispositions remain25/3.
+
+SceneManager29 is frozen/pushed at cd9f99bf, with five source pins independently
+verified and archived. It remains separate from the frozen199-site review and
+awaits integration/compile/review/native. Packet coverage is now711/1354; this
+is source recovery/audit coverage, not711 working controls. The ongoing199 review
+has raised four renderer/environment discrepancies; no pass is claimed.

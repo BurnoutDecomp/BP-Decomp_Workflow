@@ -17,19 +17,22 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-Source recovery/audit packets cover **682 of 1,354 static sites**: the earlier
+Source recovery/audit packets cover **711 of 1,354 static sites**: the earlier
 310-site scope, VehicleManager/Deformation 131, Physics Props 16,
 Environment/Graphics 148, Power Parking 18, Reset Player 8, Progression 23 and
-Handling 28.
+Handling 28 and SceneManager 29.
 These packets include unfinished consumer/backend work. They are source progress,
-not a claim that 682 controls work in game. **672 sites remain outside the packets.**
+not a claim that 711 controls work in game. **643 sites remain outside the packets.**
 
 The earlier 310 sites and combined 147-site vehicle/props scope are source-reviewed.
 Three physics discrepancies were repaired; the independent supplement and
 35 focused CPU checks pass. One Sol reviewer is now checking the combined
 **199-site Environment/Graphics, Progression and Handling batch**. Its changed
 C++ groups compile (four per family), with native and explicit reader/backend/
-hardware-model limits still open. The 26-site existing-body audits await review.
+hardware-model limits still open. The 26-site existing-body audits await review. SceneManager29 is frozen and
+pushed separately, pending integration/compile/review/native. The199-site review
+has raised renderer-cache/default and environment-vector discrepancies; its
+combined verdict is still pending and repairs remain open.
 
 Final dispositions are **25 verified and three original no-ops**, including the
 original empty Reset Sensors action. **1,326 static sites** and the expanded
