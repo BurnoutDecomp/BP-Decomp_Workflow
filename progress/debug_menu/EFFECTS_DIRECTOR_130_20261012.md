@@ -84,3 +84,12 @@ compiles with zero new faithfulness;28 checks pass, while13eb97ce runs the same
 28 and fails exactly E10. The new41-path frozen ZIP SHA-256 is
 4c8a9bd37d688ef4b73e9ae63498428c55d7cb7deb59a7fa13b7b8f2e10e1ed0.
 Its versioned supplement is queued for the same reviewer; primary is unchanged.
+
+The66a41d8d follow-up now passes Effects, Director and the combined source review.
+The report SHA-256 is
+a304531ae77df4a56ad6dd3980bbc26c58d368ce41db7da78d4b041f3cfdeb7a.
+The complete repair branch is fast-forwarded/pushed into the primary recovery
+branch. Locked shipping build
+`20261012_185002_debug-effects-director-reviewed.log` passes2957 TUs (seven
+compiled,2950 current), zero failures and a successful link. Native behavior,
+hardware-model limits, unknown readers and final entry dispositions remain open.

@@ -124,3 +124,12 @@ faithfulness findings. It remains partial/unreviewed/unlinked and outside the
 worker has already pushed/frozen Boost16 atc00a6f3e and continues Reset/World;
 the other worker repairs shared GUI events. Root takes Resource20 construction
 and window consumers while GameState recovery continues.
+
+## 66a41d8d integrated: reviewed repairs ship; recovery remains active
+
+The same reviewer passes the midpoint follow-up and complete bounded130 cohort.
+The source report hashes toa304531ae77df4a56ad6dd3980bbc26c58d368ce41db7da78d4b041f3cfdeb7a.
+Primary is fast-forwarded/pushed to66a41d8d. The locked shipping build succeeds
+with2957 TU statuses, seven compiled and zero failures; native/final control
+verdicts are unchanged. Both Luna source lanes and Sol GameState recovery remain
+active. Root has manifested18 Resource/Window paths for the20-site source chain.
