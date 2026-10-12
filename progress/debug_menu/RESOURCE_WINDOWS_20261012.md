@@ -1,8 +1,24 @@
 # Resource debug windows
 
-Root source branch `codex/debug-menu-resource-windows` is pushed at `4083e12b`,
-based on the separate GUI/Replay candidate `ab80240c`. It remains outside the
-primary source union and has no native or final-entry verdict.
+Root source branch `codex/debug-menu-resource-windows` is pushed at `72497ef14`,
+based on the separate GUI/Replay candidate `ab80240c`. The owned Resource paths
+are now integrated in primary `2d16df915`; the unrelated GUI/Replay branch was
+not merged. Resource20 joins the 1,092-site primary source/audit packet union.
+It has no native or final-entry verdict.
+
+Current production repairs are frozen at `964e30c7`: all six findings have source
+candidates, seven affected production TUs compile, and no new faithfulness
+findings are reported. Test-only `72497ef14` adds 35 whole-method draw/math
+witnesses for Window chrome/alpha and Texture thumbnails. The same checks run
+against the previous `2c65134ab` source and fail 14. They do not cover serialized
+texture pointers, full Resource lifecycle or native UI behavior. The same fresh
+reviewer passes all six repairs; report SHA256 is
+1119913f9cb8c43d26476b02e219a34b14db8e95a4cee04ddb1d3973d9a473da.
+The normal build compiles 2,966 TUs, but linking exposes the missing Model
+texture-usage predicate. The original Model/Renderable/Material chain is under
+supporting recovery. This is remaining implementation work, not a native pass.
+
+## Earlier implementation checkpoints
 
 The first checkpoint restores all five original embedded window types, the
 four-window pointer table, texture-entry allocation, and Histogram/TypeList
@@ -72,8 +88,10 @@ failed the complete Resource candidate with6 findings: serialized InstanceList
 reads, shared Window colour/position/scaling, thumbnail gap/inset, stat text size,
 legal native type-mode termination, and Resource base-constructor stores.
 Report SHA256:81143496d0a7bd2f0aab502d8df7bb618533af4501d914261ef783652e5bc0de.
-Sol has pushed repair candidates through964e30c7 and is freezing the handoff.
-Root compile/tests and the same fresh repair reviewer are still pending. The
+Sol has frozen the repair handoff at964e30c7. Root verified its31 raw Git pins,
+archive and six-path diff, fast-forwarded the private integration branch, and
+compiled seven affected TUs with zero new faithfulness. The same fresh repair
+reviewer passes all six source findings. The
 31-path campaign now includes a narrowly allocated private Resource-only base
 constructor selector; existing default lifecycle and other components stay unchanged.
 These are code repairs, not merely unverified controls.

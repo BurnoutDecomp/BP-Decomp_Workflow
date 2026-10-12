@@ -61,3 +61,8 @@ The25 original registrations now join the primary packet pipeline. World130
 and GameState source are integrated through0a42189ca and the normal2962-TU
 executable compiles/links. IO staging/lifetime, Prepare and PC-pump activation
 remain implementation/integration work. No native menu verdict is added.
+
+The integrated0a42189ca executable passes a140-second fresh-boot baseline:
+DRIVING, applied throttle,1662.8m motion and zero asserts/exceptions. This does
+not witness the recovered PreWorldUpdate chain or its individual debug entries;
+the caller/IO/control gaps above remain open.

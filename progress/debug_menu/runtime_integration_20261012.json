@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "scope": "Baseline integration health only. No debug-menu entry or full GameState/World behavior is certified.",
+  "b5_source": "0a42189ca72670f9b0705f5efcc5f1c36f8c1b66",
+  "parent_source": "54691dc6a1768d9fda20dd3c4f00f5de0cf52790",
+  "runs": [
+    {
+      "name": "50_second_fresh_profile",
+      "verdict": "FAIL",
+      "phase": "FLYBY",
+      "asserts": 0,
+      "checks": [
+        {
+          "detail": "0 assert family(ies), all known (0 lines)",
+          "pass": true,
+          "name": "no NEW assert families",
+          "kind": "NewAsserts"
+        },
+        {
+          "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+          "pass": true,
+          "name": "assert lines (info: known noise counts too)",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no exceptions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "final phase FLYBY, want DRIVING",
+          "pass": false,
+          "name": "reached DRIVING",
+          "kind": "Mark"
+        },
+        {
+          "detail": "path=3,9m net=3,8m samples 0..130 teleported=False later respawns=0",
+          "pass": false,
+          "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+          "kind": "Script"
+        },
+        {
+          "detail": "0 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+          "pass": true,
+          "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+          "kind": "LogCount"
+        }
+      ],
+      "provenance": {
+        "b5_dirty": 0,
+        "exe_size": 10848256,
+        "exe_mtime_before_lock": "2026-10-10T22:27:08.9425571+02:00",
+        "exe_sha": "34c29de8edd0",
+        "b5_head": "0a42189ca",
+        "exe_b5": "0a42189c",
+        "parent_head": "54691dc6",
+        "exe_mtime": "2026-10-12T22:52:45.6489909+02:00"
+      },
+      "artifacts": [
+        {
+          "path": "scratch/bugtest/runs/baseline_boot_drive/20261012_232423/result.json",
+          "sha256": "7ad8ad3e937c41b3452c7eddd76113f1c4a7d8dfc1b831b8f0f91c47b13e1150",
+          "bytes": 2859
+        },
+        {
+          "path": "scratch/bugtest/runs/baseline_boot_drive/20261012_232423/REPORT.md",
+          "sha256": "b9301bc2fb2861b92bdb1cf3cdf76a6b1da75db99646398ec3c41aa5f51ada23",
+          "bytes": 2967
+        },
+        {
+          "path": "scratch/bugtest/runs/baseline_boot_drive/20261012_232423/flow/marks.txt",
+          "sha256": "96c766c828ccb8eca83e5a3fc72a9bc11c6ef282f4f60a5e70aa3ec25db14f2e",
+          "bytes": 1981
+        },
+        {
+          "path": "scratch/bugtest/runs/baseline_boot_drive/20261012_232423/flow/BrnGame.log",
+          "sha256": "9c0530cfa1d22f536f1e4a0fdfe1b4d3b3e5899fb0be06596292206c3ae697d3",
+          "bytes": 4025046
+        }
+      ]
+    },
+    {
+      "name": "140_second_fresh_profile",
+      "verdict": "PASS",
+      "phase": "DRIVING",
+      "asserts": 0,
+      "checks": [
+        {
+          "detail": "0 assert family(ies), all known (0 lines)",
+          "pass": true,
+          "name": "no NEW assert families",
+          "kind": "NewAsserts"
+        },
+        {
+          "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+          "pass": true,
+          "name": "assert lines (info: known noise counts too)",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no exceptions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "final phase DRIVING, want DRIVING",
+          "pass": true,
+          "name": "reached DRIVING",
+          "kind": "Mark"
+        },
+        {
+          "detail": "path=1662,8m net=323,3m samples 201..498 teleported=True later respawns=0",
+          "pass": true,
+          "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+          "kind": "Script"
+        },
+        {
+          "detail": "0 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+          "pass": true,
+          "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+          "kind": "LogCount"
+        }
+      ],
+      "provenance": {
+        "b5_dirty": 0,
+        "exe_size": 10848256,
+        "exe_mtime_before_lock": "2026-10-12T22:52:45.6489909+02:00",
+        "exe_sha": "34c29de8edd0",
+        "b5_head": "0a42189ca",
+        "exe_b5": "0a42189c",
+        "parent_head": "54691dc6",
+        "exe_mtime": "2026-10-12T22:52:45.6489909+02:00"
+      },
+      "artifacts": [
+        {
+          "path": "scratch/bugtest/runs/debug_menu_baseline_fresh_boot_140/20261012_233007/result.json",
+          "sha256": "4b9475c2c6ddbf14d7ebfc1640f90fd710ddb9526eeaae635c238a5e4b72f1a8",
+          "bytes": 2914
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_menu_baseline_fresh_boot_140/20261012_233007/REPORT.md",
+          "sha256": "4ed44ce532c1c1c30bd85bd94a51a8dac3f86ea01ea6074d51b279c0348116a5",
+          "bytes": 2906
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_menu_baseline_fresh_boot_140/20261012_233007/flow/marks.txt",
+          "sha256": "b938055f1547a8869026b40277582e7bd72c204dbf6114796cce961d3cded997",
+          "bytes": 1881
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_menu_baseline_fresh_boot_140/20261012_233007/flow/BrnGame.log",
+          "sha256": "9ee890f3eaad1d5ed37eba3bcb14e62f828caceb5c36a9674c81932f43dddc2e",
+          "bytes": 16160598
+        }
+      ]
+    }
+  ],
+  "fresh_profile_reason": "The 50-second case reached FLYBY at49.2 seconds; it ended before throttle. The same checks with140 seconds reached DRIVING at65.9 and applied throttle at72.0 seconds.",
+  "scenario_override": {
+    "path": "scratch/DEBUG_MENU_1011/baseline_fresh_boot_140.ps1",
+    "sha256": "be446f4d058e66e677493f5b42c4a720a12fcab24968d957f7472aba02467511",
+    "text": "# The unchanged baseline checks, with time for slot 1's fresh-profile startup.\n# The 50-second run reached FLYBY at 49.2 seconds without applying throttle.\n$lCase = & (Join-Path $PSScriptRoot '../../tools/tests/cases/baseline_boot_drive.ps1')\n$lCase.Name = 'debug_menu_baseline_fresh_boot_140'\n$lCase.Run.MaxSeconds = 140\nreturn $lCase\n"
+  },
+  "resource_parallel_checkpoint": {
+    "production": "964e30c7c571411a20e5ad3c89ee1d3a44b29ade",
+    "test_commit": "72497ef146ae371c5a49e8bca46deb853501c90b",
+    "compile": "7 affected TUs pass,0 new faithfulness",
+    "draw_math_checks": "35 pass; previous2c65134ab compiles and fails14",
+    "independent_review": "pass; six source findings closed, native/lifetime/backend limits retained",
+    "review_sha256": "1119913f9cb8c43d26476b02e219a34b14db8e95a4cee04ddb1d3973d9a473da",
+    "integration_commit": "2d16df915cfd4240b19b5ea8ab29d61537e997a9",
+    "shipping_link": "pending missing texture-usage predicate/callee recovery"
+  },
+  "final_dispositions_unchanged": {
+    "verified": 25,
+    "original_noop": 3,
+    "pending": 1327
+  }
+}
