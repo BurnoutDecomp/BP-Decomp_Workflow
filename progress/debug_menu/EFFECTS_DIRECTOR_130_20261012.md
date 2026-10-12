@@ -35,7 +35,9 @@ and the Save assembly evidence. Packets live under
 
 The preceding 319-site review closed the eight earlier findings and reported
 twelve new defects. Its first supplement passes ten; the guide/cone follow-up
-968519ac is committed, integrated and under the same reviewer. Its production
+968519ac is committed, integrated and passes the same reviewer. All twelve
+concrete findings are closed at source level. The next 130-site source review is
+running against the 34-path frozen 28d96636 snapshot. Its production
 groups compile and 30 extracted-body witnesses pass; frozen 43fbf001 executes
 the same fixture and fails 26 checks. Environment/grip54 and renderer143 checks
 also pass with their recorded negative controls. Hardware estimate/dot/trig

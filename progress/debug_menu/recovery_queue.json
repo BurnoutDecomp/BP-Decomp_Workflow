@@ -90,7 +90,7 @@
     }
   ],
   "integration_branch": "codex/debug-menu-recovery-pipeline",
-  "integration_commit": "28d96636",
+  "integration_commit": "d8c4bf6f4a3bb2211ad7433d4d33c4e22dab31e0",
   "source_packet_union_sites": 917,
   "primary_workflow_checkout": "D:/Reverse/BP-Decomp_Workflow on codex/debug-menu-recovery-pipeline; previous publication worktree clean/detached at 36060d6e",
   "combined_review": {
@@ -106,12 +106,14 @@
     "frozen_b5_commit": "43fbf001cd0c16670125ffa2c2bdb6cfb07a3208",
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_319/REVIEW_PACKET.md",
     "source_zip_sha256": "b1cd2728504f12c0b7a84aac8ef53ba521cea77980b9df29b64ea15cc013addb",
-    "state": "sealed VERDICT fail, twelve findings; prior199 repairs pass. First supplement passes10 findings,5/7 partially fail; guide/cone followup968519ac committed and under same reviewer",
+    "state": "complete bounded source pass through original319 review and two immutable repair supplements; native/final entry verdicts remain pending",
     "report": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_319/SOURCE_REVIEW.md",
     "report_sha256": "436c6a7da50e7a5bd709649db95498042a24c16aebb56791b140fc3bb930b9b4",
     "finding_count": 12,
     "first_supplement": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_319/repair_supplement_0d29a7b4",
-    "guide_cone_followup": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_319/guide_cone_followup_968519ac"
+    "guide_cone_followup": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_319/guide_cone_followup_968519ac",
+    "final_followup_report": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_319/guide_cone_followup_968519ac/SOURCE_REVIEW.md",
+    "final_followup_sha256": "314729cfc4d1216ebb55a10a7b80420641d19aa12ffdbd869c38d0a711cc93db"
   },
   "review_repairs": {
     "branch": "codex/debug-menu-renderer-environment-fixes",
@@ -132,13 +134,13 @@
     "renderer_integration_commit": "76049dc8",
     "draw_repair_branch": "codex/debug-menu-scene-shadow-review-fixes",
     "draw_repair_commit": "968519ac",
-    "draw_repair_state": "integrated candidates; production groups compile;30 extracted-body checks pass; original43fbf001 executes and fails26; same-reviewer followup pending"
+    "draw_repair_state": "integrated and source-reviewed; changed production groups compile;30 checks pass, original43fbf001 fails26; native/hardware model limits remain"
   },
   "gamestate_update_chain": {
     "branch": "codex/debug-menu-gamestate-update-chain",
-    "source_commit": "d62fe25bbc5e6903909b017badd142d5a11fae94",
+    "source_commit": "c32614a4",
     "import_commit": "6cba4b3aacbdb6f7edb0b3d85cb527b266b7c97a",
-    "state": "EMM/paused-mode bodies and lifecycle tail compile; full PreWorldUpdate caller in progress; fresh review/native pending",
+    "state": "EMM/paused-mode compile; OnlineCarSelect Update prerequisite imported; full PreWorldUpdate/private dependency recovery continues",
     "integrated_into_primary": false,
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/gamestate_update_chain_packet"
   },
@@ -162,5 +164,23 @@
     "vehicle": "Replay Construct/Prepare/PreSim/Stop Recording chain",
     "occlusion": "a86d27f3 constructor/brackets compile,0 new faithfulness; full manager handoff frozen; primary integration/pool capacity/caller/backend pending"
   },
-  "inventory_static_sites": 1355
+  "inventory_static_sites": 1355,
+  "combined_review_130": {
+    "scope_sites": 130,
+    "families": [
+      "Effects75",
+      "Director55"
+    ],
+    "frozen_b5_commit": "28d966361fbf74723d8605c921c7531bea97366c",
+    "source_paths": 34,
+    "source_zip_sha256": "5d6ad57ded11af86974e05a1572614976c7abad8d1ff1bf77576baa681fae26a",
+    "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/review_effects_director_130/REVIEW_PACKET.md",
+    "state": "one fresh Sol review running; source recovery continues",
+    "git_pin_correction": "scratch/DEBUG_MENU_1011/recovery_lanes/review_effects_director_130/GIT_BLOB_PINS_CORRECTION.json",
+    "git_pin_correction_sha256": "800a6cd9ca89da82af0c94a99826420a05c429937cf2502e645c00175e50029b"
+  },
+  "shipping_build_917": {
+    "state": "2957 TUs compile; sole new unresolved DebugLog::Update recovered and compiled; relink next",
+    "log": "scratch/DEBUG_MENU_1011/build/20261012_162724_debug-pipeline-917.log"
+  }
 }
