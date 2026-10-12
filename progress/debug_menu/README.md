@@ -17,13 +17,13 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-Source/audit work or partial recovery has reached **1,265 of 1,355 static sites**;
-**90 have not yet been reached**. Of those 1,265 distinct IDs, **917 are in the
-primary packet pipeline and 348 are on separate recovery branches**: World130,
-GUI/Scene112, Replay8, GameState25, Resource20 and Network53. This broader count
-includes incomplete consumers and source audits of existing code; it is not
-1,265 working controls. The remaining90 are in the active Director/GameState/
-utilities recovery lane.
+Saved source recovery or audit scopes cover **1,304 of 1,355 static sites**;
+**51 remain outside those saved scopes**. Of those distinct IDs, **917 are in the
+primary packet pipeline and 387 are on separate recovery branches**. The latter
+include World130, GUI/Scene112, Replay8, GameState25, Resource20, Network53 and
+39 additional Game/GameState rows. The [exact union](remaining_source_checkpoint_20261012.json)
+includes existing code audited and incomplete consumers. Integration, supporting
+systems, source review and native verification remain substantial work.
 
 The primary recovery/audit packets still cover **917 static sites**; **438 remain
 outside those packets**. All 917 IDs are distinct and match the current inventory.
