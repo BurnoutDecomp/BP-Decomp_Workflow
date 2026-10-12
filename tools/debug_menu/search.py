@@ -430,6 +430,7 @@ def reference_entries(inventory: dict, identities: dict) -> list[dict]:
         entries.append({"caption": row["caption"], "menus": menus, "resolved": known,
             "kind": row["kind"], "origins": ["artist"], "notes": notes,
             "sources": [{"path": row["original_export"], "line": row["pseudocode_line"],
+                         "address": row.get("original_call_address"),
                          "function": row["function"], "origin": "artist"}]})
     return entries
 

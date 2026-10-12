@@ -201,7 +201,8 @@ function render() {
     for (const note of entry.notes) details.append(element("p","hint",note));
     for (const source of entry.sources) {
       const line = element("div","source");
-      line.append(element("code","",`${source.path}:${source.line}`),element("p","",source.function)); details.append(line);
+      const location = source.address ? `${source.path} @ ${source.address}` : source.line ? `${source.path}:${source.line}` : source.path;
+      line.append(element("code","",location),element("p","",source.function)); details.append(line);
     }
     item.append(details); fragment.append(item);
   }
