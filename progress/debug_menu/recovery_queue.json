@@ -58,18 +58,20 @@
       "branch": "codex/debug-menu-vehicle-deformation-131",
       "source_commit": "02a0f88903c2da3431a10a9e2199b62df2803336",
       "planned_static_sites": 116,
-      "state": "Progression23 integrated/compiled; PowerParking18/ResetPlayer8 audited. GameState25 registration/render packet atbfd81989 has12 complete typed chains,11 unresolved and separate update writer/caller gaps; RaceCar42 consumers continue.",
+      "state": "Progression23 integrated/compiled; PowerParking18/ResetPlayer8 audited. GameState source cohort6cba4b3a compiled, EMM/paused-mode d62fe25b compiled; full caller/unknown consumers pending. RaceCar position consumer/defaults9a2c65ec pushed, other42-site consumers continue.",
       "source_ready_sites": 49,
-      "inflight_gamestate_checkpoint": "bfd81989d35d1a81f094341e51793cf92103b24b"
+      "inflight_gamestate_checkpoint": "bfd81989d35d1a81f094341e51793cf92103b24b",
+      "inflight_racecar_checkpoint": "9a2c65ec1fa8b359f6fd855df345eece0ad75fcf"
     },
     {
       "id": "shadow-effects-scene-138",
       "branch": "codex/debug-menu-environment-148",
       "planned_static_sites": 138,
-      "state": "Scene29 integrated67de01e7; all5 source pins match, two C++ TUs compile, 0 new faithfulness; review/native pending. Effects75/ShadowMap34 source continues, including shared frustum helpers.",
+      "state": "Scene29 integrated67de01e7 and two TUs compile. Frustum helper checkpoint17f022da pushed; ShadowMap DebugRender saved WIP resumed. Effects75/ShadowMap34 recovery continues; reviews/native and original missing backends pending.",
       "source_commit": "cd9f99bfc3e30014bc8954a9d121badce04be5eb",
       "source_ready_sites": 29,
-      "integration_commit": "67de01e7ce7505ba1803d36639b960cd979ffdbc"
+      "integration_commit": "67de01e7ce7505ba1803d36639b960cd979ffdbc",
+      "inflight_frustum_checkpoint": "17f022da"
     }
   ],
   "integration_branch": "codex/debug-menu-recovery-pipeline",
@@ -104,7 +106,15 @@
       8
     ],
     "renderer_branch": "codex/debug-menu-renderer-state-chain",
-    "renderer_checkpoint": "88137095",
-    "renderer_state": "packed-color/early-threshold and canonical Basic2d active/cache bracket checkpoints pushed; typed preview resource and fixtures continue; integration/mount/link pending"
+    "renderer_checkpoint": "1b599f062f245f657321f578b4150785a4a1fe14",
+    "renderer_state": "typed preview resource, Basic2d owner/cache chain and writer placement checkpoints pushed; executable fixture and frozen packet in progress; primary integration/mount/link pending"
+  },
+  "gamestate_update_chain": {
+    "branch": "codex/debug-menu-gamestate-update-chain",
+    "source_commit": "d62fe25bbc5e6903909b017badd142d5a11fae94",
+    "import_commit": "6cba4b3aacbdb6f7edb0b3d85cb527b266b7c97a",
+    "state": "EMM/paused-mode bodies and lifecycle tail compile; full PreWorldUpdate caller in progress; fresh review/native pending",
+    "integrated_into_primary": false,
+    "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/gamestate_update_chain_packet"
   }
 }
