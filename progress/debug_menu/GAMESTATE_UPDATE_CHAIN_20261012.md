@@ -1,5 +1,15 @@
 # GameState update-chain recovery
 
+Current source checkpoint: **bbac56ac**, clean and pushed. The full original
+PreWorldUpdate823A5328 and direct typed prerequisites are now present, with
+canonical compile passes and zero new faithfulness. All31 changed owned paths
+are frozen as raw Git blobs in `gamestate_update_chain_packet`; ZIP SHA-256 is
+7a5d738cb7a7b81c6ec0f7fb845fd453cf3266e61ecaccc1572436fa0514ca86.
+One fresh Sol reviewer is inspecting the complete packet independently of its
+author. Shipping link, real IO staging/lifetimes, Prepare/PC pump activation,
+required legacy callee debt and native behavior remain open. No25-site or final
+verdict promotion is made. Earlier checkpoints below are retained as history.
+
 Source branch: codex/debug-menu-gamestate-update-chain.
 6cba4b3a checkpoints the complete eleven-path GameState binding/HUD/arrow cohort
 throughbfd81989, with canonical math-header and BoxRegion-accessor compile fixes.
