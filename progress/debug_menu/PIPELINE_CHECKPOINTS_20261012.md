@@ -67,3 +67,18 @@ The immutable report and versioned repair snapshots are recorded in
 REVIEW_REPAIRS_20261012.md. Both Luna recovery lanes continue. These candidates
 have not received the combined repair review or native verdicts; counts remain
 711 source-packet sites and 28 final dispositions.
+
+## 235701ca / 67de01e7: root repairs tested; SceneManager integrated
+
+Five root source repairs and the extracted-body fixture are integrated and
+pushed. The focused group passes54/54; pre-repair5ef9611d fails28 with the same
+fixture. SceneManager29 is imported from the pinnedcd9f99bf cohort: all5 source
+pins match, both changed C++ TUs compile and no new faithfulness findings exist.
+Its review/native checks and two unclassified non-cached flags remain pending.
+
+GameState renderers are separately pushed atbfd81989 and frozen in a5-path ZIP;
+12 chains are complete,11 candidates remain unresolved, and the original
+PreWorldUpdate/EmmPreWorldUpdate caller/writer are missing. No count promotion is
+made for that partial page. Source union remains711/1354; final dispositions
+remain25 verified+3 original no-ops. Sol continues the renderer repair and both
+Luna lanes continue recovery.

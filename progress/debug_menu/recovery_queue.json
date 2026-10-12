@@ -58,20 +58,22 @@
       "branch": "codex/debug-menu-vehicle-deformation-131",
       "source_commit": "02a0f88903c2da3431a10a9e2199b62df2803336",
       "planned_static_sites": 116,
-      "state": "Progression23 integrated/compiled; PowerParking18/ResetPlayer8 existing-body audits ready; RaceCar42 and GameState25 consumers continue",
-      "source_ready_sites": 49
+      "state": "Progression23 integrated/compiled; PowerParking18/ResetPlayer8 audited. GameState25 registration/render packet atbfd81989 has12 complete typed chains,11 unresolved and separate update writer/caller gaps; RaceCar42 consumers continue.",
+      "source_ready_sites": 49,
+      "inflight_gamestate_checkpoint": "bfd81989d35d1a81f094341e51793cf92103b24b"
     },
     {
       "id": "shadow-effects-scene-138",
       "branch": "codex/debug-menu-environment-148",
       "planned_static_sites": 138,
-      "state": "Scene29 frozen/source-ready; five source pins verified and snapshotted; separate integration/compile/review/native pending; Effects75/ShadowMap34 continue",
+      "state": "Scene29 integrated67de01e7; all5 source pins match, two C++ TUs compile, 0 new faithfulness; review/native pending. Effects75/ShadowMap34 source continues, including shared frustum helpers.",
       "source_commit": "cd9f99bfc3e30014bc8954a9d121badce04be5eb",
-      "source_ready_sites": 29
+      "source_ready_sites": 29,
+      "integration_commit": "67de01e7ce7505ba1803d36639b960cd979ffdbc"
     }
   ],
   "integration_branch": "codex/debug-menu-recovery-pipeline",
-  "integration_commit": "5ef9611d167bb67dd6d7445a71dc57aa5247a9c2",
+  "integration_commit": "67de01e7ce7505ba1803d36639b960cd979ffdbc",
   "source_packet_union_sites": 711,
   "primary_workflow_checkout": "D:/Reverse/BP-Decomp_Workflow on codex/debug-menu-recovery-pipeline; previous publication worktree clean/detached at 36060d6e",
   "combined_review": {
@@ -90,10 +92,10 @@
   },
   "review_repairs": {
     "branch": "codex/debug-menu-renderer-environment-fixes",
-    "source_commit": "8743b279011bb94739c19955c951b472619c05ef",
-    "state": "five root source candidates pushed; Sky/grip canonical compile pass and 0 new faithfulness; grouped checks and fresh combined supplement pending",
+    "source_commit": "235701ca33ed8c1a6477b4d3659139bb3213b789",
+    "state": "five root source candidates integrated; two C++ TUs compile, 0 new faithfulness, 54/54 focused checks pass and old5ef fails28; fresh supplement pending",
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/renderer_environment_repair_packet",
-    "integrated_into_primary": false,
+    "integrated_into_primary": true,
     "root_findings": [
       3,
       5,
@@ -102,7 +104,7 @@
       8
     ],
     "renderer_branch": "codex/debug-menu-renderer-state-chain",
-    "renderer_checkpoint": "d2a25d16",
-    "renderer_state": "packed color and early threshold candidates pushed; full typed active/cache bracket in progress"
+    "renderer_checkpoint": "88137095",
+    "renderer_state": "packed-color/early-threshold and canonical Basic2d active/cache bracket checkpoints pushed; typed preview resource and fixtures continue; integration/mount/link pending"
   }
 }
