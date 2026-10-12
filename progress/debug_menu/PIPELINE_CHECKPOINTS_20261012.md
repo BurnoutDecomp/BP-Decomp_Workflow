@@ -1,5 +1,9 @@
 # Continuous recovery checkpoints
 
+Current totals and validation state are in [the 319-site checkpoint](SOURCE_BATCH_319_20261012.md):
+787 distinct static sites have source/audit packets; final dispositions remain
+25 verified plus 3 original no-ops. The chronology below records earlier states.
+
 Coherent source increments are committed and pushed before full-page validation.
 Both repositories use codex/debug-menu-recovery-pipeline for the current integration
 log/code. Unverified source remains off main/dev. Recovery continues during checks.

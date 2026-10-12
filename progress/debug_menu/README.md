@@ -17,22 +17,19 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-Source recovery/audit packets cover **711 of 1,354 static sites**: the earlier
-310-site scope, VehicleManager/Deformation 131, Physics Props 16,
-Environment/Graphics 148, Power Parking 18, Reset Player 8, Progression 23 and
-Handling 28 and SceneManager 29.
-These packets include unfinished consumer/backend work. They are source progress,
-not a claim that 711 controls work in game. **643 sites remain outside the packets.**
+Source recovery/audit packets cover **787 of 1,354 static sites**; **567 remain
+outside those packets**. The exact, non-overlapping IDs are in `batches.json`.
+RaceCar57 adds 42 newly audited sites and records 15 previously carried sites;
+ShadowMap adds 34. These packets include unresolved readers and backend work.
+They measure source coverage, not working controls.
 
-The earlier 310 sites and combined 147-site vehicle/props scope are source-reviewed.
-Three physics discrepancies were repaired; the independent supplement and
-35 focused CPU checks pass. One Sol reviewer is now checking the combined
-**199-site Environment/Graphics, Progression and Handling batch**. Its changed
-C++ groups compile (four per family), with native and explicit reader/backend/
-hardware-model limits still open. The 26-site existing-body audits await review. SceneManager29 is frozen and
-pushed separately, pending integration/compile/review/native. The199-site review
-has raised renderer-cache/default and environment-vector discrepancies; its
-combined verdict is still pending and repairs remain open.
+One Sol reviewer is checking the combined **319-site batch**: the 199-site
+Environment/Graphics, Progression and Handling repairs, plus SceneManager29,
+ShadowMap34 and RaceCar57. Changed groups compile. The prior199 review failed
+eight findings; its repair candidates pass 54 environment/grip and 143 renderer
+checks, with negative controls. The current review has found additional draw
+and numeric discrepancies; repairs are pushed separately while it continues.
+See [the current checkpoint](SOURCE_BATCH_319_20261012.md).
 
 Final dispositions are **25 verified and three original no-ops**, including the
 original empty Reset Sensors action. **1,326 static sites** and the expanded
@@ -76,11 +73,11 @@ systems or the combined review. No Astra. Only one combined reviewer per batch.
 Freeze each handed-off source set while its worker moves to a distinct next slice.
 Keep source-ready, reviewed, compiled and native-verified states separate.
 
-Active page lanes now cover ShadowMap/Effects/SceneManager **138** new sites and
-RaceCar/GameState/Progression/PowerParking/ResetPlayer **116** new sites. Original
-source-only preparation helpers are separately checkpointed, with unresolved
-resource-core/startup links. Handling consumers are integrated and under combined review. The original LOD
-registration/PC duplicate follow-up is compiled and CPU-tested; native proof remains open.
+The Luna lanes are recovering Director/Replay consumers and original occlusion
+query construction. Effects75 is frozen separately, awaiting integration and
+review; it is excluded from 787. The original GameState update chain is committed
+on its own branch, with full PreWorldUpdate and native caller work still pending.
+Root repairs, integrates and runs grouped checks while those lanes continue.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:
