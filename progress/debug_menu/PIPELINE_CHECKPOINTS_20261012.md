@@ -184,3 +184,13 @@ continue in the second Luna lane. The first Luna now repairs the shared GUI120
 compile backlog: its frozen110-TU gate fails, with zero new faithfulness. Initial
 original payload/wrapper corrections are pushed at6abe672d. Final dispositions
 remain25 verified plus3 original no-ops, with1,327 pending.
+
+## 0e6dcdc1: Resource stats dump and real buffered logger
+
+The Resource stats action now has its original allocation, filename, pool walk,
+report and free chain. The actual buffered logger Open/Flush/Close/Append bodies
+are recovered; the old char sink dropped text at capacity. Three production TUs
+compile, and the complete logger plus StrStream passes36 checks against real
+temporary Win32 files. Substituting only the old char sink into the same recovered
+lifecycle fails7 checks. This is backend evidence, not native-game or final-entry
+verification. The remaining Resource window rendering/update bodies stay open.

@@ -103,9 +103,10 @@ The full original GameState PreWorldUpdate and prerequisites are pushed, with
 three fresh-review HUD findings repaired in3a59f7c1. The combined source review
 passes;13 focused checks pass and the previous source fails9. IO staging,
 Prepare/PC pump activation, linking and native behavior remain open.
-Resource1237d59d adds the window-selection/update chain to its20 registrations,
-callback/reset bodies; affected groups compile, while window rendering and
-buffered stats-dump logging remain open.
+Resource0e6dcdc1 adds the window-selection/update chain and stats-dump logger to
+its20 registrations and callback/reset bodies. Affected groups compile;36 real
+Win32 file checks pass and the previous char sink fails7. Window rendering and
+the remaining per-window consumers stay open.
 See [Resource windows](RESOURCE_WINDOWS_20261012.md).
 
 World130 is frozen ated232a94. Its20 TUs compile after two renderer type fixes;
