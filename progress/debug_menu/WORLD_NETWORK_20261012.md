@@ -37,3 +37,8 @@ review does not retrospectively cover new lines. World130 joins the1,072 primary
 packet union. Native dispositions and the listed implementation gaps remain pending.
 Known unclassified flag readers, startup initializer reachability, collision
 render traversal and shared PC backends remain explicitly open in the packet.
+
+Integrated0a42189ca also passes the140-second fresh-boot baseline (driving,
+throttle,1662.8m motion; zero asserts/exceptions). The shorter50-second attempt
+timed out at the opening flyby before throttle. This checks baseline integration
+only and closes none of the listed per-control/query implementation gaps.

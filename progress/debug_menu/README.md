@@ -24,13 +24,24 @@ but unverified entries has not yet been established.
 The first source/inventory pass covers **1,351 of 1,355 static registration sites**;
 **four remain outside its saved scopes**. This includes existing code audited and
 incomplete consumer chains. It measures examined scope, not finished recovery.
-The [exact union](remaining_source_checkpoint_20261012.json) separates1,072 primary
-packet IDs from279 on separate branches. World130 and GameState25 have now joined
+The [exact union](remaining_source_checkpoint_20261012.json) separates1,092 primary
+packet IDs from259 on separate branches. World130, GameState25 and Resource20 have joined
 the primary pipeline after bounded source review. Collision/query helpers,
 Resource/debug-UI repairs and other explicit supporting gaps remain code work.
 
-The primary recovery/audit packets cover **1,072 static sites**; **283 remain
-outside those packets**. All 1,072 IDs are distinct and match the current inventory.
+The integrated executable at `0a42189ca` passes a fresh-boot baseline: driving,
+throttle and 1.66 km of motion, with zero asserts/exceptions. This checks general
+integration, not individual menu controls. Resource repairs at `964e30c7` compile
+in seven affected TUs; 35 render-argument checks pass and the old source fails 14.
+The same independent Resource reviewer passes those repairs. Resource20 is
+integrated at `2d16df915`; its normal build compiles 2,966 TUs but linking needs
+the missing Model texture-usage predicate and original callee chain, now under
+recovery. See the
+[runtime receipt](runtime_integration_20261012.json) and
+[Resource checkpoint](RESOURCE_WINDOWS_20261012.md).
+
+The primary recovery/audit packets cover **1,092 static sites**; **263 remain
+outside those packets**. All 1,092 IDs are distinct and match the current inventory.
 The latest 130-site cohort adds Effects75 and Director55. These packets include
 unclassified readers and incomplete backend/caller work; they measure source
 coverage, not working controls. See [the 130-site checkpoint](EFFECTS_DIRECTOR_130_20261012.md).
@@ -93,33 +104,18 @@ systems or the combined review. No Astra. Only one combined reviewer per batch.
 Freeze each handed-off source set while its worker moves to a distinct next slice.
 Keep source-ready, reviewed, compiled and native-verified states separate.
 
-One Luna lane has frozen a partial 69-site GUI/Scene checkpoint from its planned
-132 sites, then started the shared GUI event-layout repair needed by those
-consumers. The other has frozen the original Replay PreSim/PostSim chains at
-554a3709 and moved directly to a new 130-site World/AI/network batch. Both
-frozen cohorts now compile in the separate ab80240c candidate and remain outside
-the917 union. See [the77-site partial checkpoint](GUI_REPLAY_77_20261012.md).
-GameState prerequisites are pushed at75d19d61; full PreWorldUpdate/native caller
-work remains pending. Root takes the Resource20 window chain; recovery continues
-during grouped checks and review.
+One Luna lane continues TriangleCollision traversal/query recovery, including
+the missing TriangleBox helper chain. Its shared GUI/event source checkpoint at
+918f55f7 has the earlier 114-TU group and three later changed TUs compiling;
+independent shared-event review and native activation remain open.
+The other Luna lane recovers the final four BrnResource bindings and their real
+GameData allocator/statistics producers. Their scope is not a finished packet.
 
-The full original GameState PreWorldUpdate and prerequisites are pushed, with
-three fresh-review HUD findings repaired in3a59f7c1. The combined source review
-passes;13 focused checks pass and the previous source fails9. IO staging,
-Prepare/PC pump activation, linking and native behavior remain open.
-Resource0e6dcdc1 adds the window-selection/update chain and stats-dump logger to
-its20 registrations and callback/reset bodies. Affected groups compile;36 real
-Win32 file checks pass and the previous char sink fails7. Window rendering and
-the remaining per-window consumers stay open.
-See [Resource windows](RESOURCE_WINDOWS_20261012.md).
-
-World130 is frozen ated232a94. Its20 TUs compile after two renderer type fixes;
-two Boost defects are repaired atad62bcf8. The combined reviewer has further
-Reset/Collision/Prop findings, so no source pass is claimed.
-The shared GUI event-layout repair has a120-path frozen checkpoint at01eed468;
-its110-TU compile fails and original record repairs continue at6abe672d. GUI/
-Scene43 and Network53 are now frozen. Both Luna workers continue source recovery
-and GUI repairs while Root validates completed cohorts.
+World130 and GameState25 are integrated after their bounded source reviews and
+47 focused checks. Their remaining initializer, caller, IO and native-control
+gaps remain listed in the packets. Resource20 repairs pass independent review
+and are integrated; Root and Sol resolve the exposed texture-usage link chain. The 259
+separate source/audit IDs still need appropriate integration and verification.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:

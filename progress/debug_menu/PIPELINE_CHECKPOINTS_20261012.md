@@ -234,3 +234,27 @@ with2962 TUs. Five missing source mounts, one forward class-key and two original
 getter/accessor followups close the link. Resource20 fresh review fails6 findings
 and its repair lane continues. Triangle/query and the final BrnResource producer
 chains continue in parallel. Final dispositions remain25 verified+3 original no-ops.
+
+## Native integration and Resource repair witnesses
+
+The integrated0a42189ca executable passes the unchanged baseline checks with a
+140-second fresh-profile budget: DRIVING, throttle,1662.8m motion, zero asserts
+and exceptions. The original50-second run reached FLYBY at49.2s and timed out
+before throttle; it remains a failed/void driving measurement. This is baseline
+integration evidence, not a menu-entry verdict. The portable artifact/hash
+receipt is [runtime_integration_20261012.json](runtime_integration_20261012.json).
+
+Resource964e30c7 contains six source repair candidates. Seven affected TUs
+compile with zero new faithfulness. Test-only72497ef14 passes35 whole-method
+Window/thumbnail witnesses; previous2c65134ab compiles and fails14 with the same
+fixture. Its initial negative fixture compile failure is retained separately;
+the final negative comparison includes the complete production caption helper.
+The same independent Resource reviewer now passes all six repairs, report
+SHA2561119913f9cb8c43d26476b02e219a34b14db8e95a4cee04ddb1d3973d9a473da.
+The owned source/test paths are integrated at2d16df915; primary source/audit
+packets cover1092 IDs in19 batches, with259 separate. The2966-TU normal build
+has zero compile failures, but linking requires the missing Model texture-usage
+predicate and original callee chain. Sol recovers that exact dependency scope.
+Both Luna recovery lanes
+continue TriangleBox queries and the final BrnResource producer/counter chain.
+The1351-site examined-scope union and final-entry counters are unchanged.

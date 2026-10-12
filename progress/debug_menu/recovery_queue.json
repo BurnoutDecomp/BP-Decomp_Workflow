@@ -109,8 +109,8 @@
     }
   ],
   "integration_branch": "codex/debug-menu-recovery-pipeline",
-  "integration_commit": "0a42189ca72670f9b0705f5efcc5f1c36f8c1b66",
-  "source_packet_union_sites": 1072,
+  "integration_commit": "2d16df915cfd4240b19b5ea8ab29d61537e997a9",
+  "source_packet_union_sites": 1092,
   "primary_workflow_checkout": "D:/Reverse/BP-Decomp_Workflow on codex/debug-menu-recovery-pipeline; previous publication worktree clean/detached at 36060d6e",
   "combined_review": {
     "scope_sites": 319,
@@ -185,7 +185,7 @@
     "report_sha256": "99e4ce96d059aace57feb3fb46142de5b5846d58ced260a7ccde025a254986dd",
     "finding_count": 8
   },
-  "sites_outside_source_packets": 283,
+  "sites_outside_source_packets": 263,
   "active_source_lanes": {
     "environment": "GUI114 compile passes at6a15708f and3 later producer TUs pass918f55f7; Triangle traversal/query recovery atc12b1ba9; SetupBoostJump9 audited",
     "vehicle": "remaining143 through CgsDev14 cf6f01f4, TriggerQuery11 andDirector13 0a041acd frozen; final4 BrnResource rows and their typed producer/reader chain active",
@@ -248,8 +248,8 @@
     "sites": 20,
     "owned_paths": 31,
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet",
-    "state": "TypeList/Histogram/Heap plus Resource HUD recovered; affected groups compile; fresh20-site source review fails6 concrete findings; Sol repair lane active; no source/native approval",
-    "source_commit": "2c65134ab3a89f4f26b2e25b2c129d89fb04ae61",
+    "state": "Six source findings independently closed; scoped owned paths integrated. Seven affected private TUs compile,35 render-argument checks pass. Normal build compiles2966 TUs but needs missing Model/Material texture-usage chain before linking; native/lifetime/consumer gaps open.",
+    "source_commit": "964e30c7c571411a20e5ad3c89ee1d3a44b29ade",
     "evidence": "progress/debug_menu/RESOURCE_WINDOWS_20261012.md",
     "buffered_log_checks": {
       "positive": 36,
@@ -270,17 +270,26 @@
       "source_commit": "4083e12be7f1359171abb2da24aa6eb0407e8a89"
     },
     "review_sha256": "81143496d0a7bd2f0aab502d8df7bb618533af4501d914261ef783652e5bc0de",
-    "review_report": "scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet/review_2c65134ab/SOURCE_REVIEW.md"
+    "review_report": "scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet/review_2c65134ab/SOURCE_REVIEW.md",
+    "integration_commit": "2d16df915cfd4240b19b5ea8ab29d61537e997a9",
+    "test_commit": "72497ef146ae371c5a49e8bca46deb853501c90b",
+    "repair_review_sha256": "1119913f9cb8c43d26476b02e219a34b14db8e95a4cee04ddb1d3973d9a473da",
+    "repair_review_report": "scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet/repair_supplement_964e30c7/SOURCE_REVIEW.md",
+    "repair_checks": {
+      "positive": 35,
+      "negative_failures": 14,
+      "negative_revision": "2c65134ab",
+      "scope": "Complete production Window ScaleColour/CalcCaptionHeight/Render and Texture RenderThumbnails with typed renderer spies; no native verdict"
+    }
   },
   "source_audit_reached": {
     "distinct_static_sites": 1351,
-    "primary_packet_sites": 1072,
-    "separate_partial_or_audit_sites": 279,
+    "primary_packet_sites": 1092,
+    "separate_partial_or_audit_sites": 259,
     "not_yet_reached_sites": 4,
     "separate_scopes": {
       "gui_scene": 112,
       "replay": 8,
-      "resource": 20,
       "remaining_network": 53,
       "game_module": 6,
       "crash_score": 2,
@@ -340,8 +349,8 @@
     "state": "unknown count; first-pass source/audit coverage is not recovery completion",
     "active_code_work": [
       "Triangle collision/query/soup helper bodies",
-      "Resource20 six-finding repairs and remaining explicit consumers",
-      "BrnResource/DLC typed component producer/reader chains",
+      "Resource texture-usage predicate/callee link recovery and remaining lifetime/backend/consumer gaps",
+      "BrnResource/DLC typed component and actual MemoryMap allocator/statistics producer chain",
       "Other recorded renderer/resource/IO/startup consumer gaps"
     ],
     "native_final_dispositions": {
@@ -349,5 +358,22 @@
       "original_noop": 3,
       "pending": 1327
     }
+  },
+  "native_baseline_integration": {
+    "source_commit": "0a42189ca72670f9b0705f5efcc5f1c36f8c1b66",
+    "state": "pass",
+    "checks": 6,
+    "scope": "Fresh-profile140-second baseline; DRIVING/throttle/1662.8m motion, zero asserts/exceptions. No per-entry or recovered-chain verdict.",
+    "evidence": "progress/debug_menu/runtime_integration_20261012.json"
+  },
+  "shipping_build_resource": {
+    "source_commit": "2d16df915cfd4240b19b5ea8ab29d61537e997a9",
+    "state": "link-failed",
+    "total_tus": 2966,
+    "compiled_tus": 1,
+    "current_tus": 2965,
+    "failed_tus": 0,
+    "log": "scratch/DEBUG_MENU_1011/build/20261012_234236_debug-resource-texture-mount-2d16df915.log",
+    "unresolved": "CgsGraphics::Model::UsesTexture; original Model/Renderable/Material dependency chain under recovery"
   }
 }
