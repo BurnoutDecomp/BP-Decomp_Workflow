@@ -30,3 +30,14 @@ The LOD original-registration/PC duplicate follow-up is complete at de73da21.
 The production INI fixture passes 79 checks and three affected TUs compile.
 Handling source has advanced through 92f4127d and 8ee01f13; Scene cached drawing
 is checkpointed at a4cc1d40. Their remaining helpers and validation are explicit.
+
+Progression23 is source-ready at 02a0f889, integrated at 5c7655a1; four C++ TUs
+compile with no new faithfulness findings. Source packet union is now 654/1354;
+fresh review/native remain pending. Handling is complete at e0a0779a for its
+ARTIST-attested consumer scope and is being frozen for integration/review.
+
+The primary workflow checkout now uses the pushed recovery branch. Eleven old
+owned dirty copies were verified as exact blobs in published ancestry, backed up
+under parent_owned_checkpoint_backup, and replaced by committed branch contents.
+Unrelated tracked WIP and the gameplay HEAD were checked unchanged. The previous
+publication worktree is clean/detached at 36060d6e.

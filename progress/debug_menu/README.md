@@ -17,20 +17,21 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-Source recovery/audit packets cover **631 of 1,354 static sites**: the earlier
+Source recovery/audit packets cover **654 of 1,354 static sites**: the earlier
 310-site scope, VehicleManager/Deformation 131, Physics Props 16,
-Environment/Graphics 148, Power Parking 18 and Reset Player 8.
+Environment/Graphics 148, Power Parking 18, Reset Player 8 and Progression 23.
 These packets include unfinished consumer/backend work. They are source progress,
-not a claim that 631 controls work in game. **723 sites remain outside the packets.**
+not a claim that 654 controls work in game. **700 sites remain outside the packets.**
 
 The earlier 310 sites and combined 147-site vehicle/props source scope are
 reviewed. Three physics discrepancies were repaired; the independent supplement
 and 35 focused CPU checks pass. Native and hardware-seed limits remain open.
 The 148-site Environment/Graphics and
-26-site existing-body audits await review. All four changed Graphics C++ TUs
+26-site existing-body audits and 23-site Progression recovery await review.
+Progression passes its four-TU compile gate. All four changed Graphics C++ TUs
 compile after the enum typing fix. Handling has another 28 committed
 registrations with partial consumer recovery; known render/HUD gaps keep those
-outside the 631-site count.
+outside the 654-site count.
 
 Final dispositions are **25 verified and three original no-ops**, including the
 original empty Reset Sensors action. **1,326 static sites** and the expanded
@@ -77,8 +78,8 @@ Keep source-ready, reviewed, compiled and native-verified states separate.
 Active page lanes now cover ShadowMap/Effects/SceneManager **138** new sites and
 RaceCar/GameState/Progression/PowerParking/ResetPlayer **116** new sites. Original
 source-only preparation helpers are separately checkpointed, with unresolved
-resource-core/startup links. Handling consumer recovery and the shared PC LOD
-registration follow-up remain explicit integration work.
+resource-core/startup links. Handling consumers are ready for frozen integration/review. The original LOD
+registration/PC duplicate follow-up is compiled and CPU-tested; native proof remains open.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:
