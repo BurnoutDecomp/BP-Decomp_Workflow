@@ -49,3 +49,14 @@ predates the latest guide/cone and 130-site integration; it does not certify
 these controls. Recovery continues on GUI/Scene/Resource132 and the original
 Replay state machine. GameState PreWorldUpdate, renderer-pool/occlusion capacity,
 startup integration and the remaining native witnesses are still open.
+
+The source review has identified additional Effects/Director consumer defects.
+Repair candidates are committed separately on
+`codex/debug-menu-effects-director-review-fixes`: original Jump/Props defaults,
+QA point8/placement, junkyard angle polynomial/axes/readback, jump/boost blend
+stages, timer expiry, corona scaling and WorldMap additions. Seven changed
+production TUs compile with zero new faithfulness. The polynomial constants
+come from seven pinned CRT initializer bodies; their initial image globals are
+zero and cannot establish the live values. Grouped witnesses and the same
+reviewer's combined repair supplement remain pending. No final behavior
+verdicts or source-site totals have changed.
