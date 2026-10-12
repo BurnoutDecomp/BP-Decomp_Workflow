@@ -56,3 +56,14 @@ has raised four renderer/environment discrepancies; no pass is claimed.
 fdc74c9b checkpoints the first two199-review source repairs on a separate branch:
 full environment color W stores and original occlusion defaults. The primary
 review snapshot stays frozen; further findings and validation remain open.
+
+## 8743b279 / d2a25d16: review repairs while recovery continues
+
+The combined199 source review failed with eight bounded findings. Root pushed
+five default/math source candidates in fdc74c9b and 8743b279; Sky/grip canonical
+compile and zero-new faithfulness checks pass. Sol pushed preview color and early
+threshold candidates in d2a25d16 and continues the full typed rendering bracket.
+The immutable report and versioned repair snapshots are recorded in
+REVIEW_REPAIRS_20261012.md. Both Luna recovery lanes continue. These candidates
+have not received the combined repair review or native verdicts; counts remain
+711 source-packet sites and 28 final dispositions.

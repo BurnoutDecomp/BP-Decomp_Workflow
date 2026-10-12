@@ -1,19 +1,34 @@
 # Repairs from the 199-site source review
 
-The combined review is still running against frozen integration 5ef9611d.
-Source corrections are being checkpointed on codex/debug-menu-renderer-environment-fixes
-in a separate checkout, so its reviewed snapshot remains unchanged.
+The frozen 5ef9611d batch received VERDICT: fail with eight concrete source
+findings. All 29 source pins and the snapshot matched. The read-only report is
+scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_199/SOURCE_REVIEW.md;
+SHA-256 99e4ce96d059aace57feb3fb46142de5b5846d58ced260a7ccde025a254986dd.
 
-fdc74c9b restores two original contracts: sixteen sky/scattering/lighting/cloud
-color writes now set the fourth lane to positive zero, and occlusion defaults
-are immediate=false, conditional=true. ARTIST DebugToManager827B3B28 stores each
-RGB vector with zero W; Construct827F1E00 sets those flags at1E68/1E6C after
-loading r30=0 and r25=1. The two-path source checkpoint is pushed and pinned under
-renderer_environment_repair_packet. It is unverified pending the combined review
-supplement and grouped checks.
+Recovery continues in both Luna lanes during these repairs. Source candidates
+are committed and pushed separately before grouped checks or final entry verdicts.
 
-Other findings raised during review remain open: the render-target preview's
-active-renderer/shadow-state chain, junkyard normalization refinements/full lanes,
-index threshold publication before shadow/environment passes and VMX grip-range
-flush behavior. These are findings under review, not the final combined verdict.
-Native behavior and documented missing query/backend/caller work remain separate.
+| Review finding | Pushed source candidate | Remaining check |
+|---|---|---|
+| Preview shadow-state / active-renderer bracket | Sol renderer-state-chain lane in progress | Full typed bracket, mount/link, focused checks and review |
+| Preview packed RGBA lanes | d2a25d16 | Compile, grouped checks and review |
+| Occlusion immediate / conditional defaults | fdc74c9b | Grouped checks and review |
+| Threshold visible before shadow / environment passes | d2a25d16 | Compile, grouped checks and review |
+| Sixteen transferred color W lanes | fdc74c9b | Grouped checks and review |
+| Junkyard unconditional refinements and full lanes | 8743b279 | Grouped checks and review; numeric model limits remain |
+| Unordered clock-delta sign choice | 8743b279 | Grouped checks and review |
+| Grip ranges: VMX flush versus scalar initial scale | 8743b279 | Grouped checks and review |
+
+Root branch codex/debug-menu-renderer-environment-fixes at 8743b279011bb94739c19955c951b472619c05ef
+has the five default/math source candidates. The changed Sky and grip C++ TUs
+pass the canonical compile gate, with zero new faithfulness findings. Their
+three-path versioned snapshot is renderer_environment_repair_packet/checkpoint_8743b279.
+Sol branch codex/debug-menu-renderer-state-chain continues the three renderer
+findings; d2a25d16 checkpoints the packed-color and threshold-publication fixes.
+Neither repair branch has been merged into the frozen primary integration yet.
+
+The junkyard implementation explicitly models the reciprocal-square-root seed
+and scalar dot product. Exact hardware seed bits, dot-product rounding, NaN
+payloads and floating status remain unverified. Native behavior, query/backend
+and caller gaps remain separate. Source packet coverage stays 711/1354; final
+entry dispositions stay 25 verified plus 3 original no-ops, with 1326 pending.
