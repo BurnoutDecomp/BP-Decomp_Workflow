@@ -23,8 +23,13 @@ all five configured LODs applied, zero asserts and exceptions. The earlier
 `2f15d6683` run drove successfully but failed the LOD-application check; it is
 retained as an intermediate failure. The latest `41afefeab` menu handoff passes
 24 complete-method checks; the old Open body fails two. Existing activation and
-Variable/INI groups pass 41 and 82 checks respectively. An exact latest-build
-native run and combined independent repair review are in progress.
+Variable/INI groups pass 41 and 82 checks respectively. The exact latest-build
+native run at `41afefeab` also passes all nine checks: 2,184.9 m, all five LOD
+overrides applied, zero asserts/exceptions. The combined independent source
+review passes both repairs and the supporting texture chain; report SHA256:
+`762699a24d06de6a0b52bad9fc74e32c22272b60a8353289ef1d884541f168c9`.
+Native manual-menu traversal and complete diagnostic/Texture Window behavior
+remain outside this startup verdict.
 
 The earlier isolated baseline did not copy `config.ini`. The new regression
 case explicitly copies it into its isolated slot, records the used bytes, and
