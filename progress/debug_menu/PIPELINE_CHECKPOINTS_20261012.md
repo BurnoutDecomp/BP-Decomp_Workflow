@@ -41,3 +41,8 @@ owned dirty copies were verified as exact blobs in published ancestry, backed up
 under parent_owned_checkpoint_backup, and replaced by committed branch contents.
 Unrelated tracked WIP and the gameplay HEAD were checked unchanged. The previous
 publication worktree is clean/detached at 36060d6e.
+
+Handling28 is integrated through5ef9611d, with all four changed C++ TUs compiling
+and no new faithfulness findings. One combined199-site Sol review is underway;
+both Luna source lanes continue. The source packet union is682/1354; final
+working/no-op dispositions remain25/3.
