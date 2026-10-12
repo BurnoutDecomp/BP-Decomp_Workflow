@@ -1,9 +1,29 @@
 """Parser checks for inventory evidence: nested calls, escaping and repeated rows."""
 import unittest
-from debug_menu_inventory import call_arguments, registrations
+import hashlib
+from debug_menu_inventory import assembly_registrations, call_arguments, registrations
 
 
 class RegistrationTests(unittest.TestCase):
+    def test_assembly_supplement_requires_pinned_export_and_real_call(self):
+        raw = b'original export'
+        data = {'name': 'Debug::OnActivate', 'assembly': '0x82275FA8  bl        RegisterFunction'}
+        evidence = {'function': data['name'], 'export_sha256': hashlib.sha256(raw).hexdigest(),
+                    'call_address': '0x82275FA8', 'assembly_callee': 'RegisterFunction',
+                    'kind': 'function', 'registration_api': 'Debug::RegisterFunction',
+                    'caption': 'Save', 'path': '', 'arguments': ['this', 'Save', '""', '"Save"'],
+                    'evidence': {'registers': 'verified'}}
+        row = assembly_registrations(data, raw, [evidence])[0]
+        self.assertEqual(row['caption'], 'Save')
+        self.assertIsNone(row['pseudocode_line'])
+        self.assertEqual(row['state'], 'pending')
+        self.assertEqual(row['original_call_address'], '0x82275FA8')
+        with self.assertRaisesRegex(ValueError, 'export changed'):
+            assembly_registrations(data, b'changed export', [evidence])
+        data['assembly'] = '0x82275FA8  bl        OtherFunction'
+        with self.assertRaisesRegex(ValueError, 'call changed'):
+            assembly_registrations(data, raw, [evidence])
+
     def test_nested_arguments(self):
         source = 'Register(this, Foo(a, b[2]), "Menu", "A, (B)")'
         args, end = call_arguments(source, source.index('('))
