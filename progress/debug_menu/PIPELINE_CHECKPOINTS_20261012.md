@@ -52,3 +52,7 @@ verified and archived. It remains separate from the frozen199-site review and
 awaits integration/compile/review/native. Packet coverage is now711/1354; this
 is source recovery/audit coverage, not711 working controls. The ongoing199 review
 has raised four renderer/environment discrepancies; no pass is claimed.
+
+fdc74c9b checkpoints the first two199-review source repairs on a separate branch:
+full environment color W stores and original occlusion defaults. The primary
+review snapshot stays frozen; further findings and validation remain open.
