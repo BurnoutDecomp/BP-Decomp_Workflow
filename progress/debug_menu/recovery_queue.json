@@ -109,7 +109,7 @@
     }
   ],
   "integration_branch": "codex/debug-menu-recovery-pipeline",
-  "integration_commit": "2d16df915cfd4240b19b5ea8ab29d61537e997a9",
+  "integration_commit": "41afefeab847eff15e00b78792ca0a3e1773c5fc",
   "source_packet_union_sites": 1092,
   "primary_workflow_checkout": "D:/Reverse/BP-Decomp_Workflow on codex/debug-menu-recovery-pipeline; previous publication worktree clean/detached at 36060d6e",
   "combined_review": {
@@ -248,7 +248,7 @@
     "sites": 20,
     "owned_paths": 31,
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet",
-    "state": "Six source findings independently closed; scoped owned paths integrated. Seven affected private TUs compile,35 render-argument checks pass. Normal build compiles2966 TUs but needs missing Model/Material texture-usage chain before linking; native/lifetime/consumer gaps open.",
+    "state": "Six source findings closed; owned paths integrated; texture-usage Model/Material chain recovered and normal2967-TU build links. Native/lifetime/backend/consumer gaps retained.",
     "source_commit": "964e30c7c571411a20e5ad3c89ee1d3a44b29ade",
     "evidence": "progress/debug_menu/RESOURCE_WINDOWS_20261012.md",
     "buffered_log_checks": {
@@ -280,7 +280,8 @@
       "negative_failures": 14,
       "negative_revision": "2c65134ab",
       "scope": "Complete production Window ScaleColour/CalcCaptionHeight/Render and Texture RenderThumbnails with typed renderer spies; no native verdict"
-    }
+    },
+    "texture_usage_support_commit": "2f15d6683aa63f9dfb1f21b3b680d91ebc7fb5d1"
   },
   "source_audit_reached": {
     "distinct_static_sites": 1351,
@@ -349,7 +350,7 @@
     "state": "unknown count; first-pass source/audit coverage is not recovery completion",
     "active_code_work": [
       "Triangle collision/query/soup helper bodies",
-      "Resource texture-usage predicate/callee link recovery and remaining lifetime/backend/consumer gaps",
+      "Resource remaining lifetime/backend/consumer gaps; texture-usage link chain recovered",
       "BrnResource/DLC typed component and actual MemoryMap allocator/statistics producer chain",
       "Other recorded renderer/resource/IO/startup consumer gaps"
     ],
@@ -367,13 +368,28 @@
     "evidence": "progress/debug_menu/runtime_integration_20261012.json"
   },
   "shipping_build_resource": {
-    "source_commit": "2d16df915cfd4240b19b5ea8ab29d61537e997a9",
-    "state": "link-failed",
-    "total_tus": 2966,
-    "compiled_tus": 1,
-    "current_tus": 2965,
+    "state": "pass",
+    "total_tus": 2967,
+    "compiled_tus": 3,
+    "current_tus": 2964,
     "failed_tus": 0,
-    "log": "scratch/DEBUG_MENU_1011/build/20261012_234236_debug-resource-texture-mount-2d16df915.log",
-    "unresolved": "CgsGraphics::Model::UsesTexture; original Model/Renderable/Material dependency chain under recovery"
+    "log": "scratch/DEBUG_MENU_1011/build/20261013_001806_start-crash-menu-handoff-41afefeab.log",
+    "exe_sha256": "37b62391c3782e96db84dbcc54cdef6f7597fb4e2d8c2b0347f91e6af7c29f62",
+    "source_commit": "41afefeab847eff15e00b78792ca0a3e1773c5fc",
+    "scope": "Normal compile/link; Texture usage recovered, native Texture Window remains open."
+  },
+  "start_crash_fix": {
+    "source_commit": "41afefeab847eff15e00b78792ca0a3e1773c5fc",
+    "state": "Copied-config3d3 native9/9 pass; final41af normal build pass, exact-head native/review pending",
+    "evidence": "progress/debug_menu/START_CRASH_20261013.md"
+  },
+  "remaining130_candidate": {
+    "commit": "0f40e7b7f52282b8141e112d76a41d7cba457080",
+    "branch": "codex/debug-menu-remaining130-candidate",
+    "sites": 130,
+    "compile": "64 TUs pass",
+    "faithfulness": "0 introduced versus primary base;1 unchanged inherited comment finding retained",
+    "state": "Frozen combined source review pending; no primary/final promotion",
+    "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/remaining143_20261012/root_remaining130_candidate/review_0f40e7b7f/REVIEW_PACKET.md"
   }
 }

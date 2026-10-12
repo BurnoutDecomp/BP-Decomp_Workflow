@@ -34,11 +34,17 @@ throttle and 1.66 km of motion, with zero asserts/exceptions. This checks genera
 integration, not individual menu controls. Resource repairs at `964e30c7` compile
 in seven affected TUs; 35 render-argument checks pass and the old source fails 14.
 The same independent Resource reviewer passes those repairs. Resource20 is
-integrated at `2d16df915`; its normal build compiles 2,966 TUs but linking needs
-the missing Model texture-usage predicate and original callee chain, now under
-recovery. See the
+integrated at `2d16df915`. Its texture-usage predicate/callee chain is now
+recovered and the normal 2,967-TU build links. Native Texture Window behavior
+remains open. See the
 [runtime receipt](runtime_integration_20261012.json) and
 [Resource checkpoint](RESOURCE_WINDOWS_20261012.md).
+
+The reported Start crash with vehicle INI settings is repaired. A copied-config
+native case passes nine checks, including all five LOD overrides and driving
+with zero asserts/exceptions. The latest executable also includes the real menu
+handoff repair; exact-build validation and independent review are finishing.
+See [the startup-crash checkpoint](START_CRASH_20261013.md).
 
 The primary recovery/audit packets cover **1,092 static sites**; **263 remain
 outside those packets**. All 1,092 IDs are distinct and match the current inventory.
@@ -114,7 +120,7 @@ GameData allocator/statistics producers. Their scope is not a finished packet.
 World130 and GameState25 are integrated after their bounded source reviews and
 47 focused checks. Their remaining initializer, caller, IO and native-control
 gaps remain listed in the packets. Resource20 repairs pass independent review
-and are integrated; Root and Sol resolve the exposed texture-usage link chain. The 259
+and are integrated; its exposed texture-usage chain now links. The 259
 separate source/audit IDs still need appropriate integration and verification.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
