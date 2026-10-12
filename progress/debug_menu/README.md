@@ -24,8 +24,9 @@ unclassified readers and incomplete backend/caller work; they measure source
 coverage, not working controls. See [the 130-site checkpoint](EFFECTS_DIRECTOR_130_20261012.md).
 
 The 319-site source review closed the previous eight fixes and found twelve new
-discrepancies. Its first repair supplement passes ten findings; guide/cone
-follow-up 968519ac addresses the remaining two and is with the same reviewer.
+discrepancies. Both immutable repair supplements now close all twelve findings; the combined
+319-site bounded source review passes. One fresh review of Effects75/Director55
+is running against the 34-path snapshot at 28d96636.
 Changed production groups compile. Focused checks pass 30 draw/numeric, 54
 environment/grip and 143 renderer checks; old-source regression controls fail as
 expected. The shipping build links after the recovered page mounts, shared
