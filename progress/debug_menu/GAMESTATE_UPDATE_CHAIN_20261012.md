@@ -22,3 +22,10 @@ bring-up pump remain in progress. This is a pushed source checkpoint, not a
 fresh reviewer/native verdict or a complete25-entry page. GameState's existing
 unclassified fields remain unresolved. Source packet union stays711/1354;
 final dispositions stay25 verified+3 original no-ops,1326 pending.
+
+Private prerequisite checkpoint 3ab5932cde6d5384c6764d25133ca7888eadf12e homes the original takedown output
+queue as its real EventQueue member and adds action 193 with two native-width
+pointers plus its availability byte. The OnlineCarSelect controller snapshot
+type is correctly qualified. Changed production groups compile, with 0 new
+faithfulness findings. Full PreWorldUpdate, independent review and native caller
+integration remain pending; GameState25 is not promoted into source totals.
