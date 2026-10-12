@@ -91,6 +91,12 @@ GameState prerequisites are pushed at75d19d61; full PreWorldUpdate/native caller
 work remains pending. Root takes the Resource20 window chain; recovery continues
 during grouped checks and review.
 
+The full original GameState PreWorldUpdate and prerequisites are now pushed at
+bbac56ac:31 frozen changed paths, canonical compile passes, and a fresh Sol
+reviewer is checking them independently. The Resource window construction
+checkpoint b308393b also compiles; its remaining render/menu/update bodies stay
+open. See [Resource windows](RESOURCE_WINDOWS_20261012.md).
+
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:
 

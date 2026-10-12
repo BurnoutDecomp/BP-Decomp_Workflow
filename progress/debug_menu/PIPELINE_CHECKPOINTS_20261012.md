@@ -133,3 +133,15 @@ Primary is fast-forwarded/pushed to66a41d8d. The locked shipping build succeeds
 with2957 TU statuses, seven compiled and zero failures; native/final control
 verdicts are unchanged. Both Luna source lanes and Sol GameState recovery remain
 active. Root has manifested18 Resource/Window paths for the20-site source chain.
+
+## b308393b / bbac56ac: Resource construction and full GameState caller
+
+Root pushed the Resource window construction checkpoint b308393b; six affected
+TUs compile with zero new faithfulness. Remaining menu/render/update bodies and
+native work stay open, with no20-site promotion. The full original GameState
+PreWorldUpdate and typed prerequisites are pushed atbbac56ac and frozen in31 raw
+Git files. A new Sol reviewer checks that author's complete source chain; the
+author's own compile/postmortem is not independent review. Both Luna source
+workers continue. The GUI event checkpoint56393403 preserves119 changed files;
+World Boost/Reset source is pushed through465ce1ab. Primary remains66a41d8d and
+the917-site executable, with25 verified and3 original no-op final dispositions.
