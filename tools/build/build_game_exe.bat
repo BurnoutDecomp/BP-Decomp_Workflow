@@ -2759,6 +2759,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem  the log stream the exe already links.
   echo "%SRC%\GameSource\GameState\RumbleManager\BrnRumbleManager.cpp"
   echo "%SRC%\GameSource\GameState\Progression\BrnProgressionManager.cpp"
+  echo "%SRC%\GameSource\GameState\Progression\BrnProgressionDebugComponent.cpp"
   rem *** DRIVE-THRU LINK CLOSURE (2026-08-27): the two partfiles that close the last
   rem  unresolved external. BrnProgressionManager_Unlocks.cpp bodies UnlockCarFromTrophy
   rem  @0x8237B0E8, UnlockSpecialCars @0x8237AF38, OnTrophyUnlock @0x82389740 and OnDriveThru
@@ -3140,6 +3141,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%VEN%\EAThread\source\pc\eathread_callstack_win64.cpp"
   echo "%VEN%\EAThread\source\pc\eathread_x360align.cpp"
   echo "%SRC%\GameSource\Graphics\BrnRendererModule.cpp"
+  echo "%SRC%\GameSource\Graphics\BrnRendererModuleDebugComponent.cpp"
   rem ---- RendererIO PAIR (2026-08-17, boot audit F-P2-4 / b5-decomp 888a6cbf): the OutputBuffer/
   rem  InputBuffer accessors + both Constructs. BrnRendererModule::Update publishes through them and
   rem  BrnGameModule::GamePrepare creates the pair (CreateIOBuffer<T> calls T::Construct). NOT

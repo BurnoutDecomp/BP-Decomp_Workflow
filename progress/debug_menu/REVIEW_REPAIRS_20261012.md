@@ -10,10 +10,10 @@ are committed and pushed separately before grouped checks or final entry verdict
 
 | Review finding | Pushed source candidate | Remaining check |
 |---|---|---|
-| Preview shadow-state / active-renderer bracket | Sol renderer-state-chain lane in progress | Full typed bracket, mount/link, focused checks and review |
-| Preview packed RGBA lanes | d2a25d16 | Compile, grouped checks and review |
+| Preview shadow-state / active-renderer bracket | 21c2be1c, integrated 76049dc8 | Four TUs compile, 143 bounded checks and six regression controls pass; source review/link/native pending |
+| Preview packed RGBA lanes | d2a25d16, integrated 76049dc8 | Grouped checks pass; source review/native pending |
 | Occlusion immediate / conditional defaults | fdc74c9b | Focused checks pass; review pending |
-| Threshold visible before shadow / environment passes | d2a25d16 | Compile, grouped checks and review |
+| Threshold visible before shadow / environment passes | d2a25d16, integrated 76049dc8 | Grouped checks pass; source review/native pending |
 | Sixteen transferred color W lanes | fdc74c9b | Focused checks pass; review pending |
 | Junkyard unconditional refinements and full lanes | 8743b279 | Focused checks pass; review and numeric model limits remain |
 | Unordered clock-delta sign choice | 8743b279 | Focused checks pass; review pending |
@@ -23,15 +23,19 @@ Root branch codex/debug-menu-renderer-environment-fixes at 8743b279011bb94739c19
 has the five default/math source candidates. The changed Sky and grip C++ TUs
 pass the canonical compile gate, with zero new faithfulness findings. Their
 three-path versioned snapshot is renderer_environment_repair_packet/checkpoint_8743b279.
-Sol branch codex/debug-menu-renderer-state-chain continues the three renderer
-findings; d2a25d16 checkpoints the packed-color and threshold-publication fixes.
+Sol branch codex/debug-menu-renderer-state-chain completed the three renderer
+repair candidates through 21c2be1c. They are integrated at 76049dc8, and parent
+mount f005a45d includes CgsImRenderer.cpp in the shipping build.
 Root repairs and fixture235701ca are integrated and pushed on the feature branch.
-The frozen review ZIP retains5ef9611d; the renderer branch remains separate.
+The frozen review ZIP retains 5ef9611d. One fresh combined 319-site review now
+checks all eight candidates plus SceneManager, ShadowMap and RaceCar. Additional
+draw and numeric findings are being repaired on a separate branch; see
+[the current checkpoint](SOURCE_BATCH_319_20261012.md).
 
 The junkyard implementation explicitly models the reciprocal-square-root seed
 and scalar dot product. Exact hardware seed bits, dot-product rounding, NaN
 payloads and floating status remain unverified. Native behavior, query/backend
-and caller gaps remain separate. Source packet coverage stays 711/1354; final
+and caller gaps remain separate. Source packet coverage is now 787/1354; final
 entry dispositions stay 25 verified plus 3 original no-ops, with 1326 pending.
 
 The production-body environment/grip fixture passes54/54 checks. Extracting the

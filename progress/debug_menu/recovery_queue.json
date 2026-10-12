@@ -58,8 +58,8 @@
       "branch": "codex/debug-menu-vehicle-deformation-131",
       "source_commit": "02a0f88903c2da3431a10a9e2199b62df2803336",
       "planned_static_sites": 116,
-      "state": "Progression23 integrated/compiled; PowerParking18/ResetPlayer8 audited. GameState source cohort6cba4b3a compiled, EMM/paused-mode d62fe25b compiled; full caller/unknown consumers pending. RaceCar position consumer/defaults9a2c65ec pushed, other42-site consumers continue.",
-      "source_ready_sites": 49,
+      "state": "Progression23, PowerParking18, ResetPlayer8 and42 new RaceCar sites mapped; RaceCar57 includes15 carried sites. GameState25 caller chain remains private/unreviewed. Director54/Replay8 recovery continues.",
+      "source_ready_sites": 91,
       "inflight_gamestate_checkpoint": "bfd81989d35d1a81f094341e51793cf92103b24b",
       "inflight_racecar_checkpoint": "9a2c65ec1fa8b359f6fd855df345eece0ad75fcf"
     },
@@ -67,30 +67,31 @@
       "id": "shadow-effects-scene-138",
       "branch": "codex/debug-menu-environment-148",
       "planned_static_sites": 138,
-      "state": "Scene29 integrated67de01e7 and two TUs compile. Frustum helper checkpoint17f022da pushed; ShadowMap DebugRender saved WIP resumed. Effects75/ShadowMap34 recovery continues; reviews/native and original missing backends pending.",
-      "source_commit": "cd9f99bfc3e30014bc8954a9d121badce04be5eb",
-      "source_ready_sites": 29,
+      "state": "Scene29 and ShadowMap34 integrated/compiled and under combined319 review; Effects75 frozen separately with unclassified reader gaps, excluded from published787; occlusion Construct recovery continues",
+      "source_commit": "348a759ff5a4719acc7c05a5748b49e2bf4d6e00",
+      "source_ready_sites": 63,
       "integration_commit": "67de01e7ce7505ba1803d36639b960cd979ffdbc",
       "inflight_frustum_checkpoint": "17f022da"
     }
   ],
   "integration_branch": "codex/debug-menu-recovery-pipeline",
-  "integration_commit": "67de01e7ce7505ba1803d36639b960cd979ffdbc",
-  "source_packet_union_sites": 711,
+  "integration_commit": "43fbf001cd0c16670125ffa2c2bdb6cfb07a3208",
+  "source_packet_union_sites": 787,
   "primary_workflow_checkout": "D:/Reverse/BP-Decomp_Workflow on codex/debug-menu-recovery-pipeline; previous publication worktree clean/detached at 36060d6e",
   "combined_review": {
-    "scope_sites": 199,
+    "scope_sites": 319,
     "families": [
       "Environment/Graphics148",
       "Progression23",
-      "Handling28"
+      "Handling28",
+      "SceneManager29",
+      "ShadowMap34",
+      "RaceCar57"
     ],
-    "frozen_b5_commit": "5ef9611d167bb67dd6d7445a71dc57aa5247a9c2",
-    "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_199/REVIEW_PACKET.md",
-    "state": "VERDICT: fail; eight source findings; immutable 29-path snapshot retained; repairs continue in parallel",
-    "report": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_199/SOURCE_REVIEW.md",
-    "report_sha256": "99e4ce96d059aace57feb3fb46142de5b5846d58ced260a7ccde025a254986dd",
-    "finding_count": 8
+    "frozen_b5_commit": "43fbf001cd0c16670125ffa2c2bdb6cfb07a3208",
+    "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_319/REVIEW_PACKET.md",
+    "source_zip_sha256": "b1cd2728504f12c0b7a84aac8ef53ba521cea77980b9df29b64ea15cc013addb",
+    "state": "review running; confirmed Scene/Shadow/RaceCar findings; draw repair0a9f89f3 pushed separately; numeric repairs continue"
   },
   "review_repairs": {
     "branch": "codex/debug-menu-renderer-environment-fixes",
@@ -106,8 +107,12 @@
       8
     ],
     "renderer_branch": "codex/debug-menu-renderer-state-chain",
-    "renderer_checkpoint": "1b599f062f245f657321f578b4150785a4a1fe14",
-    "renderer_state": "typed preview resource, Basic2d owner/cache chain and writer placement checkpoints pushed; executable fixture and frozen packet in progress; primary integration/mount/link pending"
+    "renderer_checkpoint": "21c2be1c76cadf99afab79c15ef3ea69df437865",
+    "renderer_state": "integrated; four production TUs compile, 0 new faithfulness;143 bounded checks and six negative controls pass; shipping link found11 unresolved symbols; two mounts and threshold extern scope fixes in progress",
+    "renderer_integration_commit": "76049dc8",
+    "draw_repair_branch": "codex/debug-menu-scene-shadow-review-fixes",
+    "draw_repair_commit": "0a9f89f3",
+    "draw_repair_state": "three C++ TUs compile; 0 new faithfulness; separate from frozen319; numeric repairs/source review pending"
   },
   "gamestate_update_chain": {
     "branch": "codex/debug-menu-gamestate-update-chain",
@@ -116,5 +121,25 @@
     "state": "EMM/paused-mode bodies and lifecycle tail compile; full PreWorldUpdate caller in progress; fresh review/native pending",
     "integrated_into_primary": false,
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/gamestate_update_chain_packet"
+  },
+  "previous_combined_review_199": {
+    "scope_sites": 199,
+    "families": [
+      "Environment/Graphics148",
+      "Progression23",
+      "Handling28"
+    ],
+    "frozen_b5_commit": "5ef9611d167bb67dd6d7445a71dc57aa5247a9c2",
+    "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_199/REVIEW_PACKET.md",
+    "state": "VERDICT: fail; eight source findings; immutable 29-path snapshot retained; repairs continue in parallel",
+    "report": "scratch/DEBUG_MENU_1011/recovery_lanes/review_pipeline_199/SOURCE_REVIEW.md",
+    "report_sha256": "99e4ce96d059aace57feb3fb46142de5b5846d58ced260a7ccde025a254986dd",
+    "finding_count": 8
+  },
+  "sites_outside_source_packets": 567,
+  "active_source_lanes": {
+    "environment": "Original occlusion manager/query construction; allocator capacity and renderer-pool caller pending",
+    "vehicle": "Director54 and Replay8; pushed Director consumer checkpointa8d68bee",
+    "effects75": "Frozen348a759f packet; integration/compile/review/native pending; not included in787"
   }
 }
