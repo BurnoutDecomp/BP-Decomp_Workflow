@@ -50,3 +50,14 @@ pointers plus its availability byte. The OnlineCarSelect controller snapshot
 type is correctly qualified. Changed production groups compile, with 0 new
 faithfulness findings. Full PreWorldUpdate, independent review and native caller
 integration remain pending; GameState25 is not promoted into source totals.
+
+## Reviewed integration checkpoint
+
+The complete PreWorldUpdate/source chain and three HUD repairs pass the same
+independent review at3a59f7c1 (report SHA256
+9d3aa18cd3c810d251958fd4ad7d639960c9220f757f4fd6febe7bf0d7b391e2).
+All14 private production TUs compile;13 focused checks pass and oldbbac fails9.
+The25 original registrations now join the primary packet pipeline. World130
+and GameState source are integrated through0a42189ca and the normal2962-TU
+executable compiles/links. IO staging/lifetime, Prepare and PC-pump activation
+remain implementation/integration work. No native menu verdict is added.

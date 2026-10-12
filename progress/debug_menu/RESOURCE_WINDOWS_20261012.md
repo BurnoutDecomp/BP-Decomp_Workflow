@@ -63,3 +63,17 @@ and constructor postmortem are under
 ARTIST constructors `827E08D0`, `827DF8E8` and `821F05C8` arbitrate initialization;
 DecFIGS supplies the declaration shapes. No raw-offset/vtable workaround or
 duplicate window family is introduced.
+
+## Fresh review and repair lane
+
+Root2c65134ab adds the original share-test/loader-queue HUD and named GetEntry
+helper;4 affected production TUs compile. A separate fresh20-site reviewer
+failed the complete Resource candidate with6 findings: serialized InstanceList
+reads, shared Window colour/position/scaling, thumbnail gap/inset, stat text size,
+legal native type-mode termination, and Resource base-constructor stores.
+Report SHA256:81143496d0a7bd2f0aab502d8df7bb618533af4501d914261ef783652e5bc0de.
+Sol has pushed repair candidates through964e30c7 and is freezing the handoff.
+Root compile/tests and the same fresh repair reviewer are still pending. The
+31-path campaign now includes a narrowly allocated private Resource-only base
+constructor selector; existing default lifecycle and other components stay unchanged.
+These are code repairs, not merely unverified controls.

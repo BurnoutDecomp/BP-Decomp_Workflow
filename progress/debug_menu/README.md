@@ -17,16 +17,20 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-Saved source recovery or audit scopes cover **1,304 of 1,355 static sites**;
-**51 remain outside those saved scopes**. Of those distinct IDs, **917 are in the
-primary packet pipeline and 387 are on separate recovery branches**. The latter
-include World130, GUI/Scene112, Replay8, GameState25, Resource20, Network53 and
-39 additional Game/GameState rows. The [exact union](remaining_source_checkpoint_20261012.json)
-includes existing code audited and incomplete consumers. Integration, supporting
-systems, source review and native verification remain substantial work.
+**Overall recovery is incomplete.** Implementation work remains alongside
+integration, review and native verification. A reliable count of fully implemented
+but unverified entries has not yet been established.
 
-The primary recovery/audit packets still cover **917 static sites**; **438 remain
-outside those packets**. All 917 IDs are distinct and match the current inventory.
+The first source/inventory pass covers **1,351 of 1,355 static registration sites**;
+**four remain outside its saved scopes**. This includes existing code audited and
+incomplete consumer chains. It measures examined scope, not finished recovery.
+The [exact union](remaining_source_checkpoint_20261012.json) separates1,072 primary
+packet IDs from279 on separate branches. World130 and GameState25 have now joined
+the primary pipeline after bounded source review. Collision/query helpers,
+Resource/debug-UI repairs and other explicit supporting gaps remain code work.
+
+The primary recovery/audit packets cover **1,072 static sites**; **283 remain
+outside those packets**. All 1,072 IDs are distinct and match the current inventory.
 The latest 130-site cohort adds Effects75 and Director55. These packets include
 unclassified readers and incomplete backend/caller work; they measure source
 coverage, not working controls. See [the 130-site checkpoint](EFFECTS_DIRECTOR_130_20261012.md).
