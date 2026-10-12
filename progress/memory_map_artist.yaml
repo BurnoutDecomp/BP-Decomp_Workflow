@@ -363,3 +363,87 @@ allocators:
     - { bank: 24, name: Rwac, parent: 4, desc: [ { type: 0, size: 0x0035C000, align: 16 } ] }
     - { bank: 25, name: Logic, parent: 4, desc: [ { type: 0, size: 0x0003BC00, align: 16 } ] }
     - { bank: 31, name: 2D Immediate Heap, parent: 8, desc: [ { type: 0, size: 0x003FC000, align: 16 } ] }
+
+# Canonical typed image rows from the same ARTIST unk_82F2A788 raw map. The normalized
+# pools/allocators above remain the PC pool setup data; these rows preserve the exact
+# original typed producer records for MemoryMap -> GameData -> allocator statistics.
+
+# Canonical typed image rows from the same ARTIST unk_82F2A788 raw map. The normalized
+# pools/allocators above remain the PC pool setup data; these rows preserve the exact
+# original typed producer records for MemoryMap -> GameData -> allocator statistics.
+memory_map_image:
+  banks:
+    - {"index":0,"name":"Root Bank","parent_bank_id":-1,"bank_id":0,"sizes":[117440512,0,212860928,0,0],"blocks":[896,1,1624,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":1,"name":"OpenWorld","parent_bank_id":0,"bank_id":1,"sizes":[37224448,0,90308608,0,0],"blocks":[284,1,689,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":2,"name":"Physics","parent_bank_id":0,"bank_id":2,"sizes":[11927552,0,0,0,0],"blocks":[91,1,0,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":3,"name":"Cars","parent_bank_id":0,"bank_id":3,"sizes":[6291456,0,89653248,0,0],"blocks":[96,1,684,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":4,"name":"Sound","parent_bank_id":0,"bank_id":4,"sizes":[22675456,0,131072,0,0],"blocks":[173,1,1,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":5,"name":"GUI","parent_bank_id":0,"bank_id":5,"sizes":[9306112,0,18350080,0,0],"blocks":[568,1,140,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":6,"name":"GameData","parent_bank_id":0,"bank_id":6,"sizes":[6946816,0,0,0,0],"blocks":[53,1,0,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":7,"name":"Misc","parent_bank_id":0,"bank_id":8,"sizes":[4194304,0,0,0,0],"blocks":[128,1,0,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":8,"name":"AttribSys","parent_bank_id":0,"bank_id":10,"sizes":[1310720,0,0,0,0],"blocks":[80,1,0,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":9,"name":"Network","parent_bank_id":0,"bank_id":26,"sizes":[7864320,0,2097152,0,0],"blocks":[120,1,16,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":10,"name":"Cameras","parent_bank_id":0,"bank_id":29,"sizes":[524288,0,0,0,0],"blocks":[128,1,0,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":11,"name":"VFX","parent_bank_id":0,"bank_id":33,"sizes":[4063232,0,7995392,0,0],"blocks":[31,1,61,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":12,"name":"Global Textures","parent_bank_id":0,"bank_id":35,"sizes":[2097152,0,3670016,0,0],"blocks":[16,1,28,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":13,"name":"Replays","parent_bank_id":0,"bank_id":47,"sizes":[2097152,0,0,0,0],"blocks":[16,1,0,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":14,"name":"Player Physics","parent_bank_id":2,"bank_id":50,"sizes":[786432,0,0,0,0],"blocks":[8,1,0,1,1],"is_leaf":false,"allow_fragmentation":true}
+    - {"index":15,"name":"Massive","parent_bank_id":0,"bank_id":62,"sizes":[131072,0,0,0,0],"blocks":[1,1,0,1,1],"is_leaf":false,"allow_fragmentation":true}
+  pools:
+    - {"index":0,"event_user_offset":0,"event_id":-1,"pool_id":0,"name":"Fonts","deletion_delay_frames":3,"max_resources":64,"max_imports":0,"descriptor":[[103088,16],[2097152,4096],[0,1]],"max_resources_by_type":[32,32,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":7,"parent_bank_id":5,"allow_defragmentation":false}
+    - {"index":1,"event_user_offset":0,"event_id":-1,"pool_id":1,"name":"Physics","deletion_delay_frames":3,"max_resources":300,"max_imports":0,"descriptor":[[983040,16],[0,1],[0,1]],"max_resources_by_type":[300,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":11,"parent_bank_id":2,"allow_defragmentation":false}
+    - {"index":2,"event_user_offset":0,"event_id":-1,"pool_id":2,"name":"OpenWorldPhy","deletion_delay_frames":3,"max_resources":1000,"max_imports":0,"descriptor":[[24379392,16],[0,1],[0,1]],"max_resources_by_type":[1000,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":12,"parent_bank_id":1,"allow_defragmentation":false}
+    - {"index":3,"event_user_offset":0,"event_id":-1,"pool_id":5,"name":"GameData","deletion_delay_frames":3,"max_resources":500,"max_imports":0,"descriptor":[[6845120,16],[0,1],[0,1]],"max_resources_by_type":[500,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":15,"parent_bank_id":6,"allow_defragmentation":false}
+    - {"index":4,"event_user_offset":0,"event_id":-1,"pool_id":6,"name":"Sound","deletion_delay_frames":3,"max_resources":1024,"max_imports":0,"descriptor":[[17360896,64],[0,1],[0,1]],"max_resources_by_type":[1024,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":16,"parent_bank_id":4,"allow_defragmentation":false}
+    - {"index":5,"event_user_offset":0,"event_id":-1,"pool_id":7,"name":"AttribSysPool","deletion_delay_frames":3,"max_resources":100,"max_imports":0,"descriptor":[[235520,16],[0,1],[0,1]],"max_resources_by_type":[100,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":17,"parent_bank_id":10,"allow_defragmentation":false}
+    - {"index":6,"event_user_offset":0,"event_id":-1,"pool_id":8,"name":"Gui_Persistent_Apt_Pool","deletion_delay_frames":3,"max_resources":180,"max_imports":0,"descriptor":[[3578608,16],[8519680,4096],[0,1]],"max_resources_by_type":[180,64,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":18,"parent_bank_id":5,"allow_defragmentation":false}
+    - {"index":7,"event_user_offset":0,"event_id":-1,"pool_id":9,"name":"Apt_Streaming_Data","deletion_delay_frames":3,"max_resources":128,"max_imports":0,"descriptor":[[595904,16],[4194304,4096],[0,1]],"max_resources_by_type":[128,48,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":28,"parent_bank_id":5,"allow_defragmentation":false}
+    - {"index":8,"event_user_offset":0,"event_id":-1,"pool_id":10,"name":"Global Textures","deletion_delay_frames":3,"max_resources":500,"max_imports":0,"descriptor":[[1981440,16],[3670016,4096],[0,1]],"max_resources_by_type":[500,500,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":36,"parent_bank_id":35,"allow_defragmentation":false}
+    - {"index":9,"event_user_offset":0,"event_id":-1,"pool_id":3,"name":"OpenWorldGr","deletion_delay_frames":3,"max_resources":8500,"max_imports":0,"descriptor":[[10215424,16],[90308608,4096],[0,1]],"max_resources_by_type":[8500,6000,0],"num_dependencies":1,"dependency_ids":[10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":13,"parent_bank_id":1,"allow_defragmentation":false}
+    - {"index":10,"event_user_offset":0,"event_id":-1,"pool_id":11,"name":"Gui_Lang_Fsm_Data_Pool","deletion_delay_frames":3,"max_resources":64,"max_imports":0,"descriptor":[[511680,16],[0,1],[0,1]],"max_resources_by_type":[64,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":37,"parent_bank_id":5,"allow_defragmentation":false}
+    - {"index":11,"event_user_offset":0,"event_id":-1,"pool_id":12,"name":"Gui_Sat_Nav_Textures","deletion_delay_frames":3,"max_resources":256,"max_imports":0,"descriptor":[[17344,16],[3538944,4096],[0,1]],"max_resources_by_type":[64,128,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":39,"parent_bank_id":5,"allow_defragmentation":false}
+    - {"index":12,"event_user_offset":0,"event_id":-1,"pool_id":13,"name":"VFX Pool","deletion_delay_frames":3,"max_resources":120,"max_imports":0,"descriptor":[[358400,16],[3670016,4096],[0,1]],"max_resources_by_type":[120,75,0],"num_dependencies":1,"dependency_ids":[10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":40,"parent_bank_id":33,"allow_defragmentation":false}
+    - {"index":13,"event_user_offset":0,"event_id":-1,"pool_id":14,"name":"ICE Pool","deletion_delay_frames":3,"max_resources":150,"max_imports":0,"descriptor":[[168496,16],[0,1],[0,1]],"max_resources_by_type":[150,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":43,"parent_bank_id":29,"allow_defragmentation":false}
+    - {"index":14,"event_user_offset":0,"event_id":-1,"pool_id":16,"name":"Environment","deletion_delay_frames":3,"max_resources":100,"max_imports":0,"descriptor":[[501760,16],[0,1],[0,1]],"max_resources_by_type":[100,0,0],"num_dependencies":1,"dependency_ids":[10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":46,"parent_bank_id":1,"allow_defragmentation":false}
+    - {"index":15,"event_user_offset":0,"event_id":-1,"pool_id":17,"name":"Car0 Physics","deletion_delay_frames":3,"max_resources":5,"max_imports":0,"descriptor":[[97280,16],[0,1],[0,1]],"max_resources_by_type":[5,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":51,"parent_bank_id":50,"allow_defragmentation":false}
+    - {"index":16,"event_user_offset":0,"event_id":-1,"pool_id":18,"name":"Car1 Physics","deletion_delay_frames":3,"max_resources":5,"max_imports":0,"descriptor":[[97280,16],[0,1],[0,1]],"max_resources_by_type":[5,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":52,"parent_bank_id":50,"allow_defragmentation":false}
+    - {"index":17,"event_user_offset":0,"event_id":-1,"pool_id":19,"name":"Car2 Physics","deletion_delay_frames":3,"max_resources":5,"max_imports":0,"descriptor":[[97280,16],[0,1],[0,1]],"max_resources_by_type":[5,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":53,"parent_bank_id":50,"allow_defragmentation":false}
+    - {"index":18,"event_user_offset":0,"event_id":-1,"pool_id":20,"name":"Car3 Physics","deletion_delay_frames":3,"max_resources":5,"max_imports":0,"descriptor":[[97280,16],[0,1],[0,1]],"max_resources_by_type":[5,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":54,"parent_bank_id":50,"allow_defragmentation":false}
+    - {"index":19,"event_user_offset":0,"event_id":-1,"pool_id":21,"name":"Car4 Physics","deletion_delay_frames":3,"max_resources":5,"max_imports":0,"descriptor":[[97280,16],[0,1],[0,1]],"max_resources_by_type":[5,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":55,"parent_bank_id":50,"allow_defragmentation":false}
+    - {"index":20,"event_user_offset":0,"event_id":-1,"pool_id":22,"name":"Car5 Physics","deletion_delay_frames":3,"max_resources":5,"max_imports":0,"descriptor":[[97280,16],[0,1],[0,1]],"max_resources_by_type":[5,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":56,"parent_bank_id":50,"allow_defragmentation":false}
+    - {"index":21,"event_user_offset":0,"event_id":-1,"pool_id":23,"name":"Car6 Physics","deletion_delay_frames":3,"max_resources":5,"max_imports":0,"descriptor":[[97280,16],[0,1],[0,1]],"max_resources_by_type":[5,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":57,"parent_bank_id":50,"allow_defragmentation":false}
+    - {"index":22,"event_user_offset":0,"event_id":-1,"pool_id":24,"name":"Car7 Physics","deletion_delay_frames":3,"max_resources":5,"max_imports":0,"descriptor":[[97280,16],[0,1],[0,1]],"max_resources_by_type":[5,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":58,"parent_bank_id":50,"allow_defragmentation":false}
+    - {"index":23,"event_user_offset":0,"event_id":-1,"pool_id":25,"name":"CarSharedPool","deletion_delay_frames":3,"max_resources":100,"max_imports":0,"descriptor":[[39936,16],[4456448,4096],[0,1]],"max_resources_by_type":[100,100,0],"num_dependencies":1,"dependency_ids":[10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":59,"parent_bank_id":3,"allow_defragmentation":false}
+    - {"index":24,"event_user_offset":0,"event_id":-1,"pool_id":4,"name":"CarPool","deletion_delay_frames":3,"max_resources":3500,"max_imports":0,"descriptor":[[2097152,16],[43515904,4096],[0,1]],"max_resources_by_type":[3500,3500,0],"num_dependencies":2,"dependency_ids":[10,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":14,"parent_bank_id":3,"allow_defragmentation":false}
+    - {"index":25,"event_user_offset":0,"event_id":-1,"pool_id":15,"name":"Traffic","deletion_delay_frames":3,"max_resources":5000,"max_imports":0,"descriptor":[[2193408,16],[41680896,4096],[0,1]],"max_resources_by_type":[5000,5000,0],"num_dependencies":2,"dependency_ids":[10,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":45,"parent_bank_id":3,"allow_defragmentation":false}
+    - {"index":26,"event_user_offset":0,"event_id":-1,"pool_id":26,"name":"Freeburn Challenges","deletion_delay_frames":3,"max_resources":20,"max_imports":0,"descriptor":[[258048,16],[0,1],[0,1]],"max_resources_by_type":[20,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":64,"parent_bank_id":26,"allow_defragmentation":false}
+  allocator_events:
+    raw_resources:
+      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":6,"name":"Ice","bank_id":34,"parent_bank_id":29}
+    linear:
+      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":4,"name":"AttribSysLinAlloc","bank_id":22,"parent_bank_id":10,"resource_type":0,"request_size":278528,"heap_pointer":0,"linear_pointer":0}
+      - {"index":1,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Behaviours","bank_id":30,"parent_bank_id":29,"resource_type":0,"request_size":65536,"heap_pointer":0,"linear_pointer":0}
+      - {"index":2,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Gui_State_Allocator","bank_id":44,"parent_bank_id":5,"resource_type":0,"request_size":983040,"heap_pointer":0,"linear_pointer":0}
+      - {"index":3,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Replays Allocator","bank_id":48,"parent_bank_id":47,"resource_type":0,"request_size":2097152,"heap_pointer":0,"linear_pointer":0}
+      - {"index":4,"event_user_offset":0,"event_id":0,"event_type":4,"name":"SP Allocator","bank_id":61,"parent_bank_id":2,"resource_type":0,"request_size":4296704,"heap_pointer":0,"linear_pointer":0}
+      - {"index":5,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Mugshots","bank_id":65,"parent_bank_id":5,"resource_type":0,"request_size":1048576,"heap_pointer":0,"linear_pointer":0}
+      - {"index":6,"event_user_offset":0,"event_id":0,"event_type":4,"name":"FLAPT_Allocator","bank_id":66,"parent_bank_id":5,"resource_type":0,"request_size":921600,"heap_pointer":0,"linear_pointer":0}
+    heap:
+      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":4,"name":"AttrSysHeap","bank_id":19,"parent_bank_id":10,"resource_type":0,"request_size":606208,"heap_pointer":0,"linear_pointer":0}
+      - {"index":1,"event_user_offset":0,"event_id":0,"event_type":4,"name":"GameTalkAlloc","bank_id":20,"parent_bank_id":10,"resource_type":0,"request_size":147456,"heap_pointer":0,"linear_pointer":0}
+      - {"index":2,"event_user_offset":0,"event_id":0,"event_type":4,"name":"EAStl","bank_id":21,"parent_bank_id":10,"resource_type":0,"request_size":16384,"heap_pointer":0,"linear_pointer":0}
+      - {"index":3,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Network Memory","bank_id":27,"parent_bank_id":26,"resource_type":0,"request_size":7274496,"heap_pointer":0,"linear_pointer":0}
+      - {"index":4,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Apt_Heap_Allocator","bank_id":32,"parent_bank_id":5,"resource_type":0,"request_size":851968,"heap_pointer":0,"linear_pointer":0}
+      - {"index":5,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Gui_FSM_Lang_Alloc","bank_id":38,"parent_bank_id":5,"resource_type":0,"request_size":524288,"heap_pointer":0,"linear_pointer":0}
+      - {"index":6,"event_user_offset":0,"event_id":0,"event_type":4,"name":"VFX Heap","bank_id":41,"parent_bank_id":33,"resource_type":0,"request_size":3407872,"heap_pointer":0,"linear_pointer":0}
+      - {"index":7,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Massive Heap","bank_id":63,"parent_bank_id":62,"resource_type":0,"request_size":131072,"heap_pointer":0,"linear_pointer":0}
+    rw_linear:
+      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":2,"name":"PhysicsAlloc","bank_id":23,"parent_bank_id":2}
+      - {"index":1,"event_user_offset":0,"event_id":0,"event_type":2,"name":"Network Image Allocator","bank_id":42,"parent_bank_id":26}
+      - {"index":2,"event_user_offset":0,"event_id":0,"event_type":2,"name":"Scene Manager","bank_id":49,"parent_bank_id":2}
+      - {"index":3,"event_user_offset":0,"event_id":0,"event_type":2,"name":"VFX Graphics Allocator","bank_id":60,"parent_bank_id":33}
+    rw_general:
+      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Playback","bank_id":9,"parent_bank_id":4}
+      - {"index":1,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Rwac","bank_id":24,"parent_bank_id":4}
+      - {"index":2,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Logic","bank_id":25,"parent_bank_id":4}
+      - {"index":3,"event_user_offset":0,"event_id":0,"event_type":3,"name":"2D Immediate Heap","bank_id":31,"parent_bank_id":8}
