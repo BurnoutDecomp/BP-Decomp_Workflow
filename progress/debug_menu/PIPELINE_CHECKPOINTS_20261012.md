@@ -109,3 +109,18 @@ consumers. Replay is frozen at554a3709 with10 owned paths and explicit missing
 start/state/flag producers; its worker has moved to World/AI/network130.
 GameState prerequisites are pushed at75d19d61; full PreWorldUpdate continues
 after the combined review. These private cohorts are outside the917 source union.
+
+## 66a41d8d / ab80240c: midpoint repair and compiled partial source checkpoint
+
+All eleven original Effects/Director findings close in the13eb97ce source review;
+Director passes, while Effects fails an additional scalar midpoint FMA finding.
+The66a41d8d follow-up passes28 checks and the previous source fails exactly the
+new counterexample. Its immutable follow-up awaits the same source reviewer.
+
+The25-path GUI/Scene69 plus Replay8 candidate is committed/pushed atab80240c.
+Its10 production TUs compile after two-unit typed API corrections, with zero new
+faithfulness findings. It remains partial/unreviewed/unlinked and outside the
+917 primary packet union. Both original frozen inputs are preserved. The World
+worker has already pushed/frozen Boost16 atc00a6f3e and continues Reset/World;
+the other worker repairs shared GUI events. Root takes Resource20 construction
+and window consumers while GameState recovery continues.
