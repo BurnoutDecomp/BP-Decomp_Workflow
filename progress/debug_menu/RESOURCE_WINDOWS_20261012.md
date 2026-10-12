@@ -1,6 +1,6 @@
 # Resource debug windows
 
-Root source branch `codex/debug-menu-resource-windows` is pushed at `b308393b`,
+Root source branch `codex/debug-menu-resource-windows` is pushed at `8799da15`,
 based on the separate GUI/Replay candidate `ab80240c`. It remains outside the
 primary source union and has no native or final-entry verdict.
 
@@ -14,7 +14,12 @@ category slot is retained. Window construction leaves its data untouched until
 the original Prepare path sets it.
 
 Six affected production TUs compile with zero new faithfulness findings.
-Resource menu/update/destruction, the remaining window render/update bodies,
+The8799da15 increment restores all20 registrations, pool-option generation,
+texture/page and bundle callbacks, and the original texture reset. Its four
+production TUs also compile with zero new faithfulness. The original reset
+leaves texture byte sizes and the total-texture field untouched; it initializes
+the attested pointers, indices, model/instance sentinels and selection state.
+Resource update/destruction, the remaining window render/update bodies,
 shared-window source review, linking and native checks remain pending. The
 planned scope is 20 static registration sites; none is promoted by this partial
 construction checkpoint.
