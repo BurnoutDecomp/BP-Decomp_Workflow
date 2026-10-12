@@ -1,6 +1,6 @@
 # Resource debug windows
 
-Root source branch `codex/debug-menu-resource-windows` is pushed at `0fafee10`,
+Root source branch `codex/debug-menu-resource-windows` is pushed at `4083e12b`,
 based on the separate GUI/Replay candidate `ab80240c`. It remains outside the
 primary source union and has no native or final-entry verdict.
 
@@ -40,16 +40,24 @@ compile with zero new faithfulness;24 whole-body state/math checks pass, includi
 the64-bit-to-low-word scrolling counterexample. Render and RenderHeap are still
 absent. The postmortem records remaining hardware-model boundaries; these checks
 do not certify window rendering or gameplay.
-Resource destruction, the remaining window render/update bodies,
+
+Sol's394a15fb/4083e12b increments recover TypeList Update/RenderRaw/RenderByType/
+RenderByCategory/DrawType, Histogram Update/Render/DrawBar and Heap Render/
+RenderHeap/AddTextLine, plus the two declared Heap statistics bodies. Root
+verified the10 raw Git source pins and frozen archive, then fast-forwarded the
+isolated integration branch. All5 affected production TUs compile with zero new
+faithfulness findings. The existing36+24 checks preceded these new render bodies;
+they do not cover the newly recovered rendering. A fresh independent Resource
+source review is still required because its author cannot review its own work.
+
+Resource DebugComponent HUD/destruction, the Texture window audit,
 shared-window source review, linking and native checks remain pending. The
 planned scope is 20 static registration sites; none is promoted by this partial
 construction checkpoint.
 
-The manifest now contains26 paths, adding only the named buffered-log
-seam, its compile anchor/tests, and a manifested Pool friendship for the next
-window increment and its input/math fixture files. TypeList and Histogram's four
-paths are now leased to the separate Sol source lane at0fafee10; Root keeps the
-other22 paths. The original function/address map, compile records
+The manifest contains29 paths. The frozen Sol lane used10 explicitly leased
+paths, including narrow Pool/PoolModule/Heap friendship and the two named Heap
+statistics methods. Root kept the other19 paths. The original function/address map, compile records
 and constructor postmortem are under
 `scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet`.
 ARTIST constructors `827E08D0`, `827DF8E8` and `821F05C8` arbitrate initialization;

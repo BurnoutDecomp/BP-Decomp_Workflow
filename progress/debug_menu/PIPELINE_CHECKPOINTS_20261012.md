@@ -1,8 +1,9 @@
 # Continuous recovery checkpoints
 
-Current totals and validation state are in [the 319-site checkpoint](SOURCE_BATCH_319_20261012.md):
-917 of 1355 distinct static sites have source/audit packets; final dispositions remain
-25 verified plus 3 original no-ops. The chronology below records earlier states.
+Current saved source/audit scopes cover1,304 of1,355 distinct static sites:
+917 primary packet sites plus387 on separate branches. The [exact union](remaining_source_checkpoint_20261012.json)
+includes partial consumers and existing code audited. Final dispositions remain
+25 verified plus3 original no-ops. The chronology below records earlier states.
 
 Coherent source increments are committed and pushed before full-page validation.
 Both repositories use codex/debug-menu-recovery-pipeline for the current integration
@@ -210,3 +211,13 @@ The frozen source and review stay unchanged. Root's separate compile/Boost
 repair branch remains a candidate; further source repairs and the same combined
 reviewer's repair pass are pending. Prop cell-grid missing passes are explicit
 source gaps, not approved shared-backend exceptions.
+
+## Parallel source and repair checkpoint
+
+Saved source/audit scopes now cover1,304/1,355 exact IDs, including the latest
+39 Game/GameState rows;51 remain outside those scopes. Final dispositions stay
+25 verified+3 original no-ops. World17 repairs are pushed at8fc5f2ec; the same
+reviewer provisionally closes the first16 and awaits the cell-grid/test supplement.
+Resource394a15fb/4083e12b is integrated and5 TUs compile. GUI113 compile errors
+are cleared at164e87b1; the new Effects QA handler needs one typed-access fix.
+Both Luna source lanes continue while Sol reviews World and Root integrates/tests.
