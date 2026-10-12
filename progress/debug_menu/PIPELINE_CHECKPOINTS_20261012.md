@@ -145,3 +145,22 @@ author's own compile/postmortem is not independent review. Both Luna source
 workers continue. The GUI event checkpoint56393403 preserves119 changed files;
 World Boost/Reset source is pushed through465ce1ab. Primary remains66a41d8d and
 the917-site executable, with25 verified and3 original no-op final dispositions.
+
+## 3a59f7c1 / 8799da15: reviewed GameState repair and Resource callbacks
+
+GameState's independent review found three HUD defects. Root's3a59f7c1 repair
+closes them, passes canonical compile and13 grouped checks; frozenbbac56ac fails9
+with the same fixture. The same reviewer passes the full repaired source chain.
+Private360cecec merges it with primary66a41d8d for later integration; actual
+Prepare/PC pump activation and native IO staging remain open.
+
+Resource8799da15 restores20 registrations, option generation, callbacks and
+texture reset. Four affected TUs compile with zero new faithfulness. The remaining
+window render/update/destruction bodies remain open; this is partial source work.
+
+The distinct broader source/audit total is1,169:917 primary plus252 separate
+(World130, GUI/Scene69, Replay8, GameState25, Resource20). Remaining186 are
+GUI/Scene43 and other143. World130 is sealed ated232a94 and one combined source
+review is active. GUI event01eed468 freezes120 changed production paths. Both
+workers have moved to the remaining scopes; early source repairs are already
+pushed atdaea72be and6899f77f. None of these counts certifies working controls.

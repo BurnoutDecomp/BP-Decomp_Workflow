@@ -88,12 +88,12 @@
       "branch": "codex/debug-menu-large132",
       "planned_static_sites": 132,
       "source_ready_sites": 0,
-      "state": "69-site partial compiles in ab80240c; shared event119-path unverified checkpoint pushed/frozen; remaining record-family correction continues; Root Resource20; no primary coverage promotion",
+      "state": "69-site partial compiles in ab80240c; shared event120-path checkpoint frozen; remaining43 source recovery active; Root Resource20; no primary coverage promotion",
       "source_commit": "0dc654df",
       "frozen_partial_sites": 69,
       "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/environment_packet/large132_partial_0dc654df",
-      "event_checkpoint": "56393403271b4c3ac30b2890cd0314546c87ca81",
-      "event_changed_paths": 119
+      "event_checkpoint": "01eed468",
+      "event_changed_paths": 120
     },
     {
       "id": "world-ai-network-130",
@@ -101,9 +101,10 @@
       "base_commit": "d8c4bf6f",
       "planned_static_sites": 130,
       "source_ready_sites": 0,
-      "state": "Boost16 and Reset9 source subgroups pushed/frozen, collision registry dependency pushed; remaining World/AI/network recovery continues; review/compile/native pending",
-      "source_commit": "465ce1ab",
-      "frozen_partial_sites": 25
+      "state": "complete frozen 130-site source/audit packet; one combined reviewer active; compile/link/native pending",
+      "source_commit": "ed232a940f3f3657289bc324dd25d7c9b1ed8907",
+      "frozen_partial_sites": 130,
+      "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/world_network_20261012/REVIEW_PACKET.md"
     }
   ],
   "integration_branch": "codex/debug-menu-recovery-pipeline",
@@ -155,13 +156,17 @@
   },
   "gamestate_update_chain": {
     "branch": "codex/debug-menu-gamestate-update-chain",
-    "source_commit": "bbac56ac60581ad01d12c89b492f6dc4a336a11f",
+    "source_commit": "3a59f7c1bc92cb3518a32a143c7296e602b9f07c",
     "import_commit": "6cba4b3aacbdb6f7edb0b3d85cb527b266b7c97a",
-    "state": "full original PreWorldUpdate and typed prerequisites pushed;31 raw-Git paths frozen; canonical compile pass; one fresh Sol reviewer active; shipping/IO staging/Prepare/PC pump/native pending",
+    "state": "three fresh-review HUD findings repaired; same independent reviewer passes full source chain; production compile and13/13 checks pass; oldbbac fails9; link/IO staging/Prepare/PC pump/native pending",
     "integrated_into_primary": false,
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/gamestate_update_chain_packet",
     "source_zip_sha256": "7a5d738cb7a7b81c6ec0f7fb845fd453cf3266e61ecaccc1572436fa0514ca86",
-    "review_packet": "scratch/DEBUG_MENU_1011/recovery_lanes/gamestate_update_chain_packet/REVIEW_PACKET_bbac56ac.md"
+    "review_packet": "scratch/DEBUG_MENU_1011/recovery_lanes/gamestate_update_chain_packet/REVIEW_PACKET_bbac56ac.md",
+    "repair_branch": "codex/debug-menu-gamestate-review-repairs",
+    "private_integration_commit": "360cececab80fd19a66dcccd2083c9cad433e886",
+    "review_report": "scratch/DEBUG_MENU_1011/recovery_lanes/gamestate_update_chain_packet/repair_supplement_3a59f7c1/SOURCE_REVIEW.md",
+    "review_sha256": "9d3aa18cd3c810d251958fd4ad7d639960c9220f757f4fd6febe7bf0d7b391e2"
   },
   "previous_combined_review_199": {
     "scope_sites": 199,
@@ -179,9 +184,10 @@
   },
   "sites_outside_source_packets": 438,
   "active_source_lanes": {
-    "environment": "GUI/SceneTriangle/SceneSweeper/Resource debug132; source recovery continues",
-    "vehicle": "Replay Construct/Prepare/PreSim/Stop Recording chain",
-    "occlusion": "a86d27f3 constructor/brackets compile,0 new faithfulness; full manager handoff frozen; primary integration/pool capacity/caller/backend pending"
+    "environment": "GUI/Scene43; frozen GUI event120 paths at01eed468; EffectsArbitrator repair pushed atdaea72be",
+    "vehicle": "other143 on codex/debug-menu-remaining143 at695c53cd; World130 sealed ated232a94",
+    "occlusion": "a86d27f3 constructor/brackets compile,0 new faithfulness; full manager handoff frozen; primary integration/pool capacity/caller/backend pending",
+    "root": "Resource20 callbacks/reset at8799da15; remaining window consumers and grouped integration checks"
   },
   "inventory_static_sites": 1355,
   "combined_review_130": {
@@ -194,7 +200,7 @@
     "source_paths": 34,
     "source_zip_sha256": "5d6ad57ded11af86974e05a1572614976c7abad8d1ff1bf77576baa681fae26a",
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/review_effects_director_130/REVIEW_PACKET.md",
-    "state": "one fresh Sol review running; source recovery continues",
+    "state": "bounded combined source pass through66a41d8d; integrated; shipping build passes; native/final dispositions pending",
     "git_pin_correction": "scratch/DEBUG_MENU_1011/recovery_lanes/review_effects_director_130/GIT_BLOB_PINS_CORRECTION.json",
     "git_pin_correction_sha256": "800a6cd9ca89da82af0c94a99826420a05c429937cf2502e645c00175e50029b"
   },
@@ -238,8 +244,26 @@
     "sites": 20,
     "owned_paths": 18,
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet",
-    "state": "five typed embedded windows, original construction/table/allocation and two reset bodies pushed; six TUs compile,0 new faithfulness; remaining menu/render/update and review/link/native pending; no coverage promotion",
-    "source_commit": "b308393bcf301ed272aaf186e43cb8d375e37a96",
+    "state": "five typed windows, construction/table/allocation,20 registrations, callbacks and texture reset pushed; affected groups compile with0 new faithfulness; remaining render/update/destruction, review/link/native pending",
+    "source_commit": "8799da15073151718f3af082f6022bb9e7d6cc01",
     "evidence": "progress/debug_menu/RESOURCE_WINDOWS_20261012.md"
+  },
+  "source_audit_reached": {
+    "distinct_static_sites": 1169,
+    "primary_packet_sites": 917,
+    "separate_partial_or_audit_sites": 252,
+    "not_yet_reached_sites": 186,
+    "separate_scopes": {
+      "world_ai_network": 130,
+      "gui_scene": 69,
+      "replay": 8,
+      "gamestate": 25,
+      "resource": 20
+    },
+    "remaining_scopes": {
+      "gui_scene": 43,
+      "other": 143
+    },
+    "state": "source or audit coverage, including incomplete consumers; not working-entry or final-verdict count"
   }
 }

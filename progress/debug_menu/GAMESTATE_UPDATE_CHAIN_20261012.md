@@ -1,14 +1,25 @@
 # GameState update-chain recovery
 
-Current source checkpoint: **bbac56ac**, clean and pushed. The full original
+Current repaired source checkpoint: **3a59f7c1**, clean and pushed. The full original
 PreWorldUpdate823A5328 and direct typed prerequisites are now present, with
 canonical compile passes and zero new faithfulness. All31 changed owned paths
 are frozen as raw Git blobs in `gamestate_update_chain_packet`; ZIP SHA-256 is
 7a5d738cb7a7b81c6ec0f7fb845fd453cf3266e61ecaccc1572436fa0514ca86.
-One fresh Sol reviewer is inspecting the complete packet independently of its
-author. Shipping link, real IO staging/lifetimes, Prepare/PC pump activation,
-required legacy callee debt and native behavior remain open. No25-site or final
-verdict promotion is made. Earlier checkpoints below are retained as history.
+One fresh Sol review found three HUD defects: mirrored/zero-side landmark arrows,
+eager road-resource lookup, and a timer read from the wrong owner. Root repaired
+all three and the same reviewer passes the complete source chain. The source
+report SHA-256 is9d3aa18cd3c810d251958fd4ad7d639960c9220f757f4fd6febe7bf0d7b391e2.
+The three whole-body fixture groups pass13/13; frozenbbac56ac fails9 with the
+same tests. The production TU compiles with zero new faithfulness findings.
+The immutable repair supplement is `repair_supplement_3a59f7c1` in the packet
+directory below; its35-file ZIP SHA-256 is
+a567f98640628e6af1cc54864f49015c56a780dda69c6f9e23e5b34b27e59706.
+
+Private integration360cecec combines that exact repaired source with primary
+66a41d8d. Shipping link, real IO staging/lifetimes, Prepare/PC pump activation,
+required legacy callee debt and native behavior remain open. The25 sites count
+as separate partial source coverage, not primary packet or final dispositions.
+Earlier checkpoints below are retained as history.
 
 Source branch: codex/debug-menu-gamestate-update-chain.
 6cba4b3a checkpoints the complete eleven-path GameState binding/HUD/arrow cohort

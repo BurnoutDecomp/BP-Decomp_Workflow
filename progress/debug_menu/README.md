@@ -17,7 +17,14 @@ registration, saved settings or a clean boot alone do not establish behavior.
 
 ## Current progress
 
-Source recovery/audit packets cover **917 of 1,355 static sites**; **438 remain
+Source/audit work or partial recovery has reached **1,169 of 1,355 static sites**;
+**186 have not yet been reached**. Of those 1,169 distinct IDs, **917 are in the
+primary packet pipeline and 252 are on separate recovery branches**: World130,
+GUI/Scene69, Replay8, GameState25 and Resource20. This broader count includes
+incomplete consumers and source audits of existing code; it is not 1,169 working
+controls. The remaining 186 are split into GUI/Scene43 and another143.
+
+The primary recovery/audit packets still cover **917 static sites**; **438 remain
 outside those packets**. All 917 IDs are distinct and match the current inventory.
 The latest 130-site cohort adds Effects75 and Director55. These packets include
 unclassified readers and incomplete backend/caller work; they measure source
@@ -91,11 +98,18 @@ GameState prerequisites are pushed at75d19d61; full PreWorldUpdate/native caller
 work remains pending. Root takes the Resource20 window chain; recovery continues
 during grouped checks and review.
 
-The full original GameState PreWorldUpdate and prerequisites are now pushed at
-bbac56ac:31 frozen changed paths, canonical compile passes, and a fresh Sol
-reviewer is checking them independently. The Resource window construction
-checkpoint b308393b also compiles; its remaining render/menu/update bodies stay
-open. See [Resource windows](RESOURCE_WINDOWS_20261012.md).
+The full original GameState PreWorldUpdate and prerequisites are pushed, with
+three fresh-review HUD findings repaired in3a59f7c1. The combined source review
+passes;13 focused checks pass and the previous source fails9. IO staging,
+Prepare/PC pump activation, linking and native behavior remain open.
+Resource8799da15 adds all20 menu registrations and their callback/reset bodies;
+the affected groups compile, while window rendering/update work remains open.
+See [Resource windows](RESOURCE_WINDOWS_20261012.md).
+
+World130 is frozen ated232a94 and its one combined reviewer is active. The shared
+GUI event-layout repair has a120-path frozen checkpoint at01eed468. Both remain
+unreviewed/unlinked source work. The two Luna workers now recover the remaining
+GUI/Scene43 and other143 sites while Root validates completed cohorts.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:
