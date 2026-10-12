@@ -88,7 +88,7 @@
       "branch": "codex/debug-menu-large132",
       "planned_static_sites": 132,
       "source_ready_sites": 0,
-      "state": "69-site partial compiles in ab80240c; shared event120-path checkpoint frozen; remaining43 source recovery active; Root Resource20; no primary coverage promotion",
+      "state": "69-site partial compiles in ab80240c; remaining43 source/audit frozen at33692b31; shared event120-path compile failed and original record repairs continue at6abe672d; Root Resource20; no primary coverage promotion",
       "source_commit": "0dc654df",
       "frozen_partial_sites": 69,
       "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/environment_packet/large132_partial_0dc654df",
@@ -101,7 +101,7 @@
       "base_commit": "d8c4bf6f",
       "planned_static_sites": 130,
       "source_ready_sites": 0,
-      "state": "complete frozen 130-site source/audit packet; one combined reviewer active; compile/link/native pending",
+      "state": "complete frozen 130-site source/audit packet; combined reviewer has preliminary findings;20 TUs compile after typed-colour fixes; two Boost repairs pushed; final review/link/native pending",
       "source_commit": "ed232a940f3f3657289bc324dd25d7c9b1ed8907",
       "frozen_partial_sites": 130,
       "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/world_network_20261012/REVIEW_PACKET.md"
@@ -166,7 +166,8 @@
     "repair_branch": "codex/debug-menu-gamestate-review-repairs",
     "private_integration_commit": "360cececab80fd19a66dcccd2083c9cad433e886",
     "review_report": "scratch/DEBUG_MENU_1011/recovery_lanes/gamestate_update_chain_packet/repair_supplement_3a59f7c1/SOURCE_REVIEW.md",
-    "review_sha256": "9d3aa18cd3c810d251958fd4ad7d639960c9220f757f4fd6febe7bf0d7b391e2"
+    "review_sha256": "9d3aa18cd3c810d251958fd4ad7d639960c9220f757f4fd6febe7bf0d7b391e2",
+    "integration_compiled_tus": 14
   },
   "previous_combined_review_199": {
     "scope_sites": 199,
@@ -184,10 +185,10 @@
   },
   "sites_outside_source_packets": 438,
   "active_source_lanes": {
-    "environment": "GUI/Scene43; frozen GUI event120 paths at01eed468; EffectsArbitrator repair pushed atdaea72be",
-    "vehicle": "other143 on codex/debug-menu-remaining143 at695c53cd; World130 sealed ated232a94",
+    "environment": "GUI event120 compile/source repair at6abe672d; GUI/Scene43 frozen at33692b31",
+    "vehicle": "remaining143: Network53 frozen at9149f9f0; Director/GameState/utilities source work continues; World130 sealed ated232a94",
     "occlusion": "a86d27f3 constructor/brackets compile,0 new faithfulness; full manager handoff frozen; primary integration/pool capacity/caller/backend pending",
-    "root": "Resource20 callbacks/reset at8799da15; remaining window consumers and grouped integration checks"
+    "root": "Resource20 update dispatch at1237d59d; World compile/Boost repairs atad62bcf8; grouped integration checks"
   },
   "inventory_static_sites": 1355,
   "combined_review_130": {
@@ -244,26 +245,40 @@
     "sites": 20,
     "owned_paths": 18,
     "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/resource_windows_packet",
-    "state": "five typed windows, construction/table/allocation,20 registrations, callbacks and texture reset pushed; affected groups compile with0 new faithfulness; remaining render/update/destruction, review/link/native pending",
-    "source_commit": "8799da15073151718f3af082f6022bb9e7d6cc01",
+    "state": "five typed windows, construction/table/allocation,20 registrations, callbacks/reset and update dispatch pushed; affected groups compile with0 new faithfulness; remaining render/update/destruction/logging, review/link/native pending",
+    "source_commit": "1237d59d",
     "evidence": "progress/debug_menu/RESOURCE_WINDOWS_20261012.md"
   },
   "source_audit_reached": {
-    "distinct_static_sites": 1169,
+    "distinct_static_sites": 1265,
     "primary_packet_sites": 917,
-    "separate_partial_or_audit_sites": 252,
-    "not_yet_reached_sites": 186,
+    "separate_partial_or_audit_sites": 348,
+    "not_yet_reached_sites": 90,
     "separate_scopes": {
       "world_ai_network": 130,
-      "gui_scene": 69,
+      "gui_scene": 112,
       "replay": 8,
       "gamestate": 25,
-      "resource": 20
+      "resource": 20,
+      "remaining_network": 53
     },
     "remaining_scopes": {
-      "gui_scene": 43,
-      "other": 143
+      "other": 90
     },
     "state": "source or audit coverage, including incomplete consumers; not working-entry or final-verdict count"
+  },
+  "world_source_repairs": {
+    "branch": "codex/debug-menu-world130-compile-repairs",
+    "source_commit": "ad62bcf8",
+    "compiled_tus": 20,
+    "new_faithfulness": 0,
+    "state": "typed colour/ADL compile corrections and two Boost source repairs pushed; independent full130 source review has further preliminary findings; not a source pass",
+    "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/world_network_20261012/root_compile_repairs"
+  },
+  "remaining143_network53": {
+    "source_commit": "9149f9f0",
+    "site_count": 53,
+    "state": "frozen source/audit only; compile/review/native pending",
+    "packet": "scratch/DEBUG_MENU_1011/recovery_lanes/remaining143_20261012/network_pages_source_checkpoint_9149f9f0.json"
   }
 }

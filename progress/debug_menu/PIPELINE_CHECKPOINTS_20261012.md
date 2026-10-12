@@ -164,3 +164,23 @@ GUI/Scene43 and other143. World130 is sealed ated232a94 and one combined source
 review is active. GUI event01eed468 freezes120 changed production paths. Both
 workers have moved to the remaining scopes; early source repairs are already
 pushed atdaea72be and6899f77f. None of these counts certifies working controls.
+
+## 1237d59d / ad62bcf8: dispatch recovery and continued batch checks
+
+Resource window selection/reset/update dispatch is pushed; three affected TUs
+compile with zero new faithfulness. Buffered stats logging and the remaining
+window render/update bodies stay open. The reviewed GameState private integration
+360cecec also compiles all14 changed production TUs with zero new faithfulness.
+
+World's frozen130-site batch initially fails compile in two new renderers. Typed
+packed-colour and ADL corrections are pushed at3e8d831f. Two independent Boost
+findings are repaired atad62bcf8; all20 owned production TUs now compile. The same
+full-batch reviewer has further preliminary Reset/Collision/Prop findings and
+continues; no source pass or native result is claimed.
+
+The source/audit total is now1,265 distinct sites:917 primary plus348 separate.
+GUI/Scene43 is frozen at33692b31 and Network53 at9149f9f0. Remaining90 source sites
+continue in the second Luna lane. The first Luna now repairs the shared GUI120
+compile backlog: its frozen110-TU gate fails, with zero new faithfulness. Initial
+original payload/wrapper corrections are pushed at6abe672d. Final dispositions
+remain25 verified plus3 original no-ops, with1,327 pending.
