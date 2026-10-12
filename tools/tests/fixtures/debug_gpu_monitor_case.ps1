@@ -10,7 +10,7 @@ $lCase.GpuVisible = $Visible
 $lCase.Run.MaxSeconds = 100
 $lCase.Run.FrameEvery = 180
 $lCase.Frames = $true
-$lCase.DiagEnv = 'BRN_DEBUG_UI_TRACE=1;BRN_GPU_MONITOR_TRACE=1'
+$lCase.DiagEnv = 'BRN_DEBUG_UI_TRACE=1,BRN_GPU_MONITOR_TRACE=1'
 $lCase.ProfileFixture = 'build/game/Memcard/Profile.sav'
 $lCase.Setup = {
     param($ctx)
