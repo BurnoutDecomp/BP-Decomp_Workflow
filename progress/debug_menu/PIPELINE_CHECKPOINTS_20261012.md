@@ -280,3 +280,14 @@ was changed. Its combined source packet is frozen with140 Git source/dependency
 pins and165 evidence files. It is not a primary or final-entry promotion.
 Both Luna lanes continue the canonical TriangleBox/query chain and the actual
 MemoryMap/allocator/statistics chain. The goal remains active.
+
+
+### 2026-10-13: remaining130 review repairs (source only)
+
+The frozen0f40 combined review failed five findings. Payback's fourth label was
+fixed in2997e9046;21de354ba fixes Trigger base-state mutation and active-list
+coloring, int20 array overload/assertion routing and unsigned length formatting,
+and Stunt district sampling in the x/z plane. Four changed TUs compile with zero
+new scoped faithfulness findings. Re-review and native effects remain pending;
+the earlier whole-batch inherited lint finding remains separately attributed.
+No entry was promoted to behavior-verified by these source repairs.
