@@ -1,8 +1,9 @@
 # Continuous recovery checkpoints
 
-Current saved source/audit scopes cover1,304 of1,355 distinct static sites:
-917 primary packet sites plus387 on separate branches. The [exact union](remaining_source_checkpoint_20261012.json)
-includes partial consumers and existing code audited. Final dispositions remain
+Current saved source/audit scopes cover1,351 of1,355 distinct static sites:
+1,072 primary packet sites plus279 on separate branches. The [exact union](remaining_source_checkpoint_20261012.json)
+includes partial consumers and existing code audited. Implementation gaps remain;
+this is an inventory-pass metric. Final dispositions remain
 25 verified plus3 original no-ops. The chronology below records earlier states.
 
 Coherent source increments are committed and pushed before full-page validation.
@@ -221,3 +222,15 @@ reviewer provisionally closes the first16 and awaits the cell-grid/test suppleme
 Resource394a15fb/4083e12b is integrated and5 TUs compile. GUI113 compile errors
 are cleared at164e87b1; the new Effects QA handler needs one typed-access fix.
 Both Luna source lanes continue while Sol reviews World and Root integrates/tests.
+
+## Integrated World130 and GameState25
+
+The primary source/audit pipeline is1,072 IDs in18 batches; broader first-pass
+coverage is1,351/1,355, leaving4 BrnResource rows. Fully implemented/unverified
+entry totals remain unknown because saved audits include incomplete consumers.
+World17 findings and GameState3 findings have bounded source passes;47 focused
+checks pass across those repairs. The normal executable builds at0a42189ca
+with2962 TUs. Five missing source mounts, one forward class-key and two original
+getter/accessor followups close the link. Resource20 fresh review fails6 findings
+and its repair lane continues. Triangle/query and the final BrnResource producer
+chains continue in parallel. Final dispositions remain25 verified+3 original no-ops.

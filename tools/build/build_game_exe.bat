@@ -5465,6 +5465,12 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\GameState\CarSelect\BrnOnlineCarSelectManager_wBT_01.cpp"
   echo "%SRC%\GameSource\GameState\ImageManager\BrnGameStateImageManagerBase.cpp"
   echo "%SRC%\GameSource\GameState\CarSelect\BrnOnlineCarSelectManager.cpp"
+  rem Reviewed debug-menu World130/GameState source consumers (2026-10-12).
+  echo "%SRC%\GameSource\World\EntityModules\RaceCarEntityModule\Boost\BrnBoostDebugComponent.cpp"
+  echo "%SRC%\GameSource\World\DebugComponents\BrnCollisionDebugComponent.cpp"
+  echo "%SRC%\GameSource\World\AI\ResetOnTrack\BrnResetOnTrackDebugComponent.cpp"
+  echo "%SRC%\GameSource\GameState\BrnGameStateDebugComponent.cpp"
+  echo "%SRC%\GameSource\GameState\InviteManager\BrnGameStateInviteManager.cpp"
   echo /Fo"%OUT%\\obj\\" /Fe"%OUT%\\Burnout_PC.exe"
 )
 

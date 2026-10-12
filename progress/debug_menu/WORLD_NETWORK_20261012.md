@@ -24,8 +24,16 @@ counterexamples. The8fc5f2ec increment restores loaded-cell quads, used-slot
 prop markers and the final player marker, plus the VMX projector and the original
 cell-ID helper call shape/assertions/low-halfword division. Its3 affected TUs
 compile with zero new faithfulness findings. Grouped regression checks and the
-final combined repair review remain pending. These are source candidates,
-not a source pass, linked executable or native behavior verdict. The cohort stays
-outside the917 primary packet union and all its inventory entries stay pending.
+final combined repair review then followed. The same independent reviewer now
+passes all17 findings at6231f3d8; report SHA-256 is
+ac33f23e01bcbd7fdaee743fb2856b2a097156bf23e226f7469e2aa63711ad62.
+The34 focused checks pass; compile-cleanad62bcf8 fails24 of the same34.
+World130 and the reviewed GameState chain are integrated through0a42189ca.
+The shipping source list now mounts five missing consumers, the TriggerQuery
+forward class-key matches its canonical definition, and the original surface
+getter/typed track-data access chain link. The normal2962-TU build passes.
+These narrow link followups are separately original-backed; the frozen source
+review does not retrospectively cover new lines. World130 joins the1,072 primary
+packet union. Native dispositions and the listed implementation gaps remain pending.
 Known unclassified flag readers, startup initializer reachability, collision
 render traversal and shared PC backends remain explicitly open in the packet.
