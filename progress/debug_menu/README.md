@@ -26,18 +26,18 @@ coverage, not working controls. See [the 130-site checkpoint](EFFECTS_DIRECTOR_1
 The 319-site source review closed the previous eight fixes and found twelve new
 discrepancies. Both immutable repair supplements now close all twelve findings; the combined
 319-site bounded source review passes. The Effects75/Director55 review at
-28d96636 failed with eleven concrete findings. Repair candidates are pushed at
-13eb97ce and frozen in a 41-path supplement for the same combined reviewer.
+28d96636 failed with eleven concrete findings. The repaired130-site cohort now
+passes the same combined reviewer through the66a41d8d follow-up.
 Changed production groups compile. Focused checks pass 30 draw/numeric, 54
 environment/grip and 143 renderer checks; old-source regression controls fail as
 expected. The shipping build links after the recovered page mounts, shared
 threshold namespace and five Progression helper fixes. The 917-site source
 checkpoint builds and links at d8c4bf6f. The separate Effects/Director repairs
 pass 27 grouped checks; the earlier source runs the same checks and fails 19.
-Those repairs closed all eleven original findings at source level. A later
-review found one further Boost midpoint issue; its repair at66a41d8d passes28
-checks and the previous13eb97ce source fails only the new counterexample. The
-narrow follow-up review, integration and native evidence remain pending.
+The reviewed66a41d8d repair is integrated and the shipping executable builds and
+links:2957 TUs, zero compile failures. Its28 grouped checks pass; previous13eb97ce
+fails only the new Boost midpoint counterexample. Native evidence and final
+per-entry dispositions remain pending.
 
 Final dispositions are **25 verified and three original no-ops**, including the
 original empty Reset Sensors action. **1,327 static sites** and the expanded
