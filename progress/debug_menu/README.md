@@ -34,7 +34,10 @@ expected. The shipping build links after the recovered page mounts, shared
 threshold namespace and five Progression helper fixes. The 917-site source
 checkpoint builds and links at d8c4bf6f. The separate Effects/Director repairs
 pass 27 grouped checks; the earlier source runs the same checks and fails 19.
-Those repairs still need fresh source review, integration and native evidence.
+Those repairs closed all eleven original findings at source level. A later
+review found one further Boost midpoint issue; its repair at66a41d8d passes28
+checks and the previous13eb97ce source fails only the new counterexample. The
+narrow follow-up review, integration and native evidence remain pending.
 
 Final dispositions are **25 verified and three original no-ops**, including the
 original empty Reset Sensors action. **1,327 static sites** and the expanded
@@ -82,9 +85,11 @@ One Luna lane has frozen a partial 69-site GUI/Scene checkpoint from its planned
 132 sites, then started the shared GUI event-layout repair needed by those
 consumers. The other has frozen the original Replay PreSim/PostSim chains at
 554a3709 and moved directly to a new 130-site World/AI/network batch. Both
-frozen cohorts await root compilation/integration and are outside the 917 union.
+frozen cohorts now compile in the separate ab80240c candidate and remain outside
+the917 union. See [the77-site partial checkpoint](GUI_REPLAY_77_20261012.md).
 GameState prerequisites are pushed at75d19d61; full PreWorldUpdate/native caller
-work remains pending. Recovery continues during grouped checks and review.
+work remains pending. Root takes the Resource20 window chain; recovery continues
+during grouped checks and review.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:

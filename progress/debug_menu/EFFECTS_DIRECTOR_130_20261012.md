@@ -74,3 +74,13 @@ f95c1ffad9e1283943c76337ac24b8207b9b4cc97a6cf7980fb39d813d18a1e8.
 Actual Git objects are pinned separately from live CRLF hashes. The same
 combined reviewer is reviewing this supplement; primary integration is pending.
 No final behavior verdicts or source-site totals have changed.
+
+The13eb97ce supplement is now sealed: Director passes and Effects fails only
+the additional E10 Boost midpoint finding; all eleven original findings close.
+Its immutable report SHA-256 is
+a493aded38208514a9a216378476e4f374b43edbcf6fe2ad887ceed0407f9f4b.
+Follow-up66a41d8d restores the scalar fused midpoint at ARTIST822883D4. Boost
+compiles with zero new faithfulness;28 checks pass, while13eb97ce runs the same
+28 and fails exactly E10. The new41-path frozen ZIP SHA-256 is
+4c8a9bd37d688ef4b73e9ae63498428c55d7cb7deb59a7fa13b7b8f2e10e1ed0.
+Its versioned supplement is queued for the same reviewer; primary is unchanged.
