@@ -94,3 +94,18 @@ on a separate branch. Three import TUs and two update TUs compile with zero new
 faithfulness findings. The full PreWorldUpdate caller remains in progress; no
 page-count or final-verdict promotion. GAMESTATE_UPDATE_CHAIN_20261012.md records
 the versioned evidence. Both Luna recovery lanes and Sol renderer checks resumed.
+
+## 13eb97ce: Effects/Director repair witnesses; source lanes continue
+
+The separate Effects/Director repair branch is pushed through13eb97ce. Seven
+production TUs compile with zero new faithfulness findings;27 grouped checks
+pass and the frozen28d96636 source executes the same27 checks with19 failures.
+A41-path immutable supplement is with the same combined reviewer. The primary
+917-site checkpoint builds/links atd8c4bf6f; neither result certifies native entries.
+
+GUI/Scene/Resource132 has a frozen69-site partial source checkpoint0dc654df;
+the worker now repairs the original empty GUI-event base and affected payload
+consumers. Replay is frozen at554a3709 with10 owned paths and explicit missing
+start/state/flag producers; its worker has moved to World/AI/network130.
+GameState prerequisites are pushed at75d19d61; full PreWorldUpdate continues
+after the combined review. These private cohorts are outside the917 source union.

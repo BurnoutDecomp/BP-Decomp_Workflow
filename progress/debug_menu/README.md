@@ -25,13 +25,16 @@ coverage, not working controls. See [the 130-site checkpoint](EFFECTS_DIRECTOR_1
 
 The 319-site source review closed the previous eight fixes and found twelve new
 discrepancies. Both immutable repair supplements now close all twelve findings; the combined
-319-site bounded source review passes. One fresh review of Effects75/Director55
-is running against the 34-path snapshot at 28d96636.
+319-site bounded source review passes. The Effects75/Director55 review at
+28d96636 failed with eleven concrete findings. Repair candidates are pushed at
+13eb97ce and frozen in a 41-path supplement for the same combined reviewer.
 Changed production groups compile. Focused checks pass 30 draw/numeric, 54
 environment/grip and 143 renderer checks; old-source regression controls fail as
 expected. The shipping build links after the recovered page mounts, shared
-threshold namespace and five Progression helper fixes. The latest 130-site cohort
-compiles but still needs its source review and shipping/native checks.
+threshold namespace and five Progression helper fixes. The 917-site source
+checkpoint builds and links at d8c4bf6f. The separate Effects/Director repairs
+pass 27 grouped checks; the earlier source runs the same checks and fails 19.
+Those repairs still need fresh source review, integration and native evidence.
 
 Final dispositions are **25 verified and three original no-ops**, including the
 original empty Reset Sensors action. **1,327 static sites** and the expanded
@@ -75,11 +78,13 @@ systems or the combined review. No Astra. Only one combined reviewer per batch.
 Freeze each handed-off source set while its worker moves to a distinct next slice.
 Keep source-ready, reviewed, compiled and native-verified states separate.
 
-One Luna lane now recovers GUI, SceneTriangle/Sweeper and Resource debug132;
-its previous Effects/occlusion checkpoints are frozen. The other recovers the
-original Replay update chain after Director55. The GameState update branch is
-committed separately; full PreWorldUpdate/native caller work remains pending.
-Root keeps integration, grouped checks and publication moving in parallel.
+One Luna lane has frozen a partial 69-site GUI/Scene checkpoint from its planned
+132 sites, then started the shared GUI event-layout repair needed by those
+consumers. The other has frozen the original Replay PreSim/PostSim chains at
+554a3709 and moved directly to a new 130-site World/AI/network batch. Both
+frozen cohorts await root compilation/integration and are outside the 917 union.
+GameState prerequisites are pushed at75d19d61; full PreWorldUpdate/native caller
+work remains pending. Recovery continues during grouped checks and review.
 
 Sound clock calibration is repaired and witnessed; the original coefficients
 and balancer units remain intact. Remaining work:
