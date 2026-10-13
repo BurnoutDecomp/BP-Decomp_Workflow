@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "state": "REPAIR_SOURCE_REVIEW_RUNNING; integration/native behavior pending",
+  "original_review": {
+    "verdict": "fail",
+    "path": "scratch/DEBUG_MENU_1011/supporting_systems_review_20261013/SOURCE_REVIEW.md",
+    "sha256": "adfdc72355fa6c2db81b970a68d98b9e112870664c30269dd6de4f280f486b55"
+  },
+  "geometry_head": "588959ab9284743b62245c849fad937c524fc08f",
+  "memory_head": "2f194161468bdd1d3beffe536feaf95cdceb9548",
+  "repairs": [
+    "G1-G10 callback ABI, clipping candidate/sign semantics, sphere radius/padding, frustum lanes/quirks, colors/SinCos, constructor/HUD and preservation of newer VMX helpers.",
+    "M1 bank31 zero-size physical-lane alignment4096, raw45-lane cross-check and generator drift rejection.",
+    "Explicit owning seams for six-plane Frustum, TriangleCollisionManager/SceneManager constructor, and original DrawDataSize export hole."
+  ],
+  "clipping_checks": {
+    "current_pass": 8,
+    "old_pass": 3,
+    "total": 8,
+    "old_source": "09d2522b96a79bb08165fb2125eee26dc24eb08f"
+  },
+  "generator_checks": 4,
+  "compile_receipts": [
+    {
+      "path": "scratch/DEBUG_MENU_1011/supporting_systems_repairs_20261013/geometry_compile/canonical_private_compile.json",
+      "sha256": "704f1b708017366936273fd0bf399b6a3a83d6b0f8c73a2a15457dd9d4be0edb"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/supporting_systems_repairs_20261013/scene_owner_compile/canonical_private_compile.json",
+      "sha256": "148e84f04bdcc943adf0c1e725e60820c36e1cb1b617c207704572e7c551a59c"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/supporting_systems_repairs_20261013/memory_compile/canonical_private_compile.json",
+      "sha256": "9cfaac61382192cb36f503c2a68991be01340923e01a83ea5b3a605c15355744"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/supporting_systems_repairs_20261013/draw_data_size_compile/canonical_private_compile.json",
+      "sha256": "e8d1308d7d140500e7c9b890cfc79306f2d6a8c238e18fc8beddf04bbaa6649d"
+    }
+  ],
+  "review_packet": "scratch/DEBUG_MENU_1011/supporting_systems_repairs_20261013/review_supplement/REVIEW_PACKET.md",
+  "inputs_sha256": "016ea6d97e831344ff5bd596cc758791a8f1a97e006ab2db0dcf59bc891df6ab",
+  "zip_sha256": "60e72b7c16ba92f05dcae85070e8e08a69f528d4804d4af8c70d563a10cc1df4",
+  "owned_paths": {
+    "geometry": 21,
+    "memory": 20
+  },
+  "recursive_source_pins": 1568,
+  "final_entry_promotions": 0,
+  "limits": [
+    "No primary integration/native entry effects from these repairs.",
+    "Typed allocator request/response consumers/order remain incomplete.",
+    "Occlusion activation/shared state/query backend/capacity/lifetime remain unfinished.",
+    "Later DLC/device/coarse-query work is a separate batch."
+  ]
+}
