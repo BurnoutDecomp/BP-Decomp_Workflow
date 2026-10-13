@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "state": "PRIVATE_SOURCE_INTEGRATION_COMPILED; missing shipping TU mounted, full link retry pending",
-  "head": "32de5913b42bed0bf885d14875b276d810d0bf12",
+  "state": "PRIVATE_CPU_STREAM_REPAIR_COMPILED; native retest and combined source review pending",
+  "head": "30ec871f45fe860bf4ea4d74ca99d889ec4d84be",
   "branch": "codex/debug-menu-native-sdk-scene-integration",
   "pushed": true,
   "base": "888cfd13157dca78d957eb3b71a0afd671305698",
-  "owned_paths": 9,
+  "owned_paths": 12,
   "compile_tus": 7,
   "compile": "pass",
   "new_faithfulness": 0,
@@ -48,7 +48,15 @@
     "compile_tus": 3,
     "compile": "pass",
     "new_faithfulness": 0,
-    "review_and_runtime": "pending"
+    "review_and_runtime": "source review FAIL; repairs in progress; activation off",
+    "review": {
+      "path": "scratch/DEBUG_MENU_1011/occlusion_provider_review_20261013/SOURCE_REVIEW.md",
+      "sha256": "d230fbbfab38be09b0a86a6fdff95812e764633074e4c52c72aa7b4efa3460e7"
+    },
+    "defects": [
+      "Generic/native presentation fixture compile/link integration is incomplete.",
+      "A skipped or failed survey box submission must be unavailable rather than a valid zero-sample occlusion."
+    ]
   },
   "allocator_creation_source": {
     "head": "9e70738a9514b6ef1d6502ede424e2411b0e9686",
@@ -80,6 +88,76 @@
     "repair_compile": "pass",
     "new_faithfulness": 0,
     "original_evidence": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827ED118.json",
-    "retry": "pending"
+    "retry": "pass;2973 source TUs linked after canonical mount"
+  },
+  "native_before_repair": {
+    "state": "FAIL; renderer command storage unavailable during BOOT",
+    "exe_sha256": "28bfe629b402747c1d4228bb158714abc29c1ef887d75e2c6b402aaefa0f4f4b",
+    "result": {
+      "path": "scratch/bugtest/runs/debug_sdk_scene_startup_20261013/20261013_212404/result.json",
+      "sha256": "22078815ccdc9ae90c5c4a17cfe66119167bc20d15c7e8880d7429a87de3e988"
+    },
+    "root_cause": "Native CPU stream adapter duplicated PS3 lane-one requests into a main-only WorldDispatch arena; transactional RW correctly rejected them."
+  },
+  "cpu_stream_repair": {
+    "head": "30ec871f45fe860bf4ea4d74ca99d889ec4d84be",
+    "pushed": true,
+    "scope": "Main-only CPU staging descriptor; production stream/RW/EA storage fixture and runner.",
+    "compile_tus": 1,
+    "compile": "pass",
+    "new_faithfulness": 0,
+    "numeric_before": "6/18 pass;12 fail",
+    "numeric_after": "18/18 pass;0 fail",
+    "evidence": [
+      {
+        "path": "scratch/DEBUG_MENU_1011/native_sdk_scene_integration_20261013/cpu_stream_red_numeric.stdout.log",
+        "sha256": "fb6942a1641fdd12a860b150caaca557c54df93feaab8051d41973fb3e135114"
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/native_sdk_scene_integration_20261013/cpu_stream_green.stdout.log",
+        "sha256": "de41cc12d506f1844299848d9c86ef72aa752f75b5f063d70f987ff485fd8ed8"
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/native_sdk_scene_integration_20261013/cpu_stream_compile/canonical_private_compile.json",
+        "sha256": "fc6c87f2476ad4bba436a3bb3275e87df976684f8fb58738f0e6cac4cfd390b5"
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/native_sdk_scene_integration_20261013/full_build_cpu_stream.receipt.json",
+        "sha256": "0f719f2d9bfc15b2a8802a2a38d9ee317842f7ce48d89d03ed1b60a5a1b389dc"
+      }
+    ],
+    "full_link": "pass;2973 shipping TUs",
+    "exe_sha256": "c732f067eceac898c2946a3f5d9518955883ffa314a66609f7c016a1c00267a0",
+    "native_retest": "in progress; isolated slot3"
+  },
+  "resource_followon": {
+    "head": "47e2db95b1cac0bbd1763a7ea330289e7801830b",
+    "owned_paths": 17,
+    "compile_tus": 8,
+    "compile": "pass",
+    "new_faithfulness": 0,
+    "activation": "pending; active NativePC startup retained",
+    "scope": "Banks/root/resource construction,76 registrations/type IDs, callback/transform/debug render, typed allocator handlers and IO shapes.",
+    "compile_receipt": {
+      "path": "scratch/DEBUG_MENU_1011/resource_followon_validation_20261013/compile_repaired/canonical_private_compile.json",
+      "sha256": "18ac589290d2689a33894522d42c91eba6d7cfe65642fd34b7bdf602813e2d57"
+    }
+  },
+  "combined_review": {
+    "state": "in progress",
+    "owned_source_paths": 20,
+    "parent_mount_paths": 1,
+    "packet": "scratch/DEBUG_MENU_1011/resource_cpu_review_20261013/REVIEW_PACKET.md",
+    "inputs": {
+      "path": "scratch/DEBUG_MENU_1011/resource_cpu_review_20261013/review_inputs.json",
+      "sha256": "1246202a1925c583b3d6834ba22055e415c523853a7f337de2f06c1b4ab694ec"
+    }
+  },
+  "sampler_provider": {
+    "head": "06c7410c04538c3d4577245dd8c3e474d28cd551",
+    "pushed": true,
+    "compile": "in progress",
+    "review_runtime": "pending",
+    "limits": "Unsupported Xenos mip/Z/bias/enum cases remain explicit; no activation or parity claim."
   }
 }
