@@ -336,6 +336,8 @@ def emit_memory_map_image(L, image, allocators, version, platform):
                 L.append('                lrRequest.SetDescriptor(&lrDescriptor);')
             L.append('            }')
     L.append('        }')
+    L.append('    };')
+
 def main():
     text = open(YAML, encoding='latin1').read()
     pools = parse_pools(text)
