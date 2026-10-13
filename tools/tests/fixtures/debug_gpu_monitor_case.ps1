@@ -8,9 +8,11 @@ $lCase.Bug = 'GPU switches had no registered or measured render passes'
 $lCase.GpuGraph = $AsGraph
 $lCase.GpuVisible = $Visible
 $lCase.Run.MaxSeconds = 100
-$lCase.Run.FrameEvery = 180
+$lCase.Run.FrameEvery = 360
+# The native writer caps this capture at 24 frames, even if rendering is uncapped.
+$lCase.Run.MinFreeGB = 8
 $lCase.Frames = $true
-$lCase.DiagEnv = 'BRN_DEBUG_UI_TRACE=1,BRN_GPU_MONITOR_TRACE=1'
+$lCase.DiagEnv = 'BRN_DEBUG_UI_TRACE=1,BRN_GPU_MONITOR_TRACE=1,BRN_FRAME_DUMP_MAX=24'
 $lCase.ProfileFixture = 'build/game/Memcard/Profile.sav'
 $lCase.Setup = {
     param($ctx)
@@ -25,14 +27,30 @@ $lCase.Setup = {
     $lConfig = $lConfig -replace '(?m)^Width=.*$', 'Width=1280'
     $lConfig = $lConfig -replace '(?m)^Height=.*$', 'Height=720'
     $lConfig = $lConfig -replace '(?m)^Fullscreen=.*$', 'Fullscreen=0'
-    $lConfig = $lConfig -replace '(?m)^VSync=.*$', 'VSync=0'
+    $lConfig = $lConfig -replace '(?m)^VSync=.*$', 'VSync=1'
     $lVisible = "$($ctx.Case.GpuVisible)".ToLowerInvariant()
     $lGraph = "$($ctx.Case.GpuGraph)".ToLowerInvariant()
-    $lConfig += "`r`n[Debug]`r`nCore/Debug/Performance/GPU Monitors/Draw GPU monitors=$lVisible`r`nCore/Debug/Performance/GPU Monitors/Draw As Graph=$lGraph`r`n"
+    $lConfig = $lConfig -replace '(?im)^Core/Debug/Performance/GPU Monitors/(Draw GPU monitors|Draw As Graph)=.*\r?\n?', ''
+    $lSettings = "Core/Debug/Performance/GPU Monitors/Draw GPU monitors=$lVisible`r`nCore/Debug/Performance/GPU Monitors/Draw As Graph=$lGraph`r`n"
+    $lDebugHeader = New-Object Text.RegularExpressions.Regex('(?im)^\[Debug\][ \t]*\r?$')
+    if ($lDebugHeader.IsMatch($lConfig)) {
+        # GetPrivateProfileSection reads the existing section; a duplicate header
+        # would leave these settings outside the section the game actually sees.
+        $lConfig = $lDebugHeader.Replace($lConfig, "[Debug]`r`n$lSettings", 1)
+    } else {
+        $lConfig += "`r`n[Debug]`r`n$lSettings"
+    }
     [IO.File]::WriteAllText($lPath, $lConfig, (New-Object Text.UTF8Encoding($false)))
     Copy-Item -LiteralPath $lPath -Destination (Join-Path $ctx.RunDir 'config.used.ini')
 }
 $lCase.Checks += @(
+    @{ Kind='Script'; Name='bounded frame capture produced evidence'; Script={
+        param($ctx)
+        $lFrames = @(Get-ChildItem -LiteralPath $ctx.FrameDir -Filter 'bb_*.bmp' -File -ErrorAction SilentlyContinue)
+        $lBytes = ($lFrames | Measure-Object -Property Length -Sum).Sum
+        return @{ Pass=($lFrames.Count -ge 1 -and $lFrames.Count -le 24);
+                  Detail=("{0} frames, {1:N1} MiB; native maximum 24" -f $lFrames.Count, ($lBytes / 1MB)) }
+    } }
     @{ Kind='LogCount'; Name='no engine assertions'; Pattern='\[ASSERT \d+\]'; Max=0 }
     @{ Kind='LogCount'; Name='GPU settings applied through real debug bindings';
        Pattern='\[debug-ini\] applied core/debug/performance/gpu monitors/(draw gpu monitors|draw as graph)='; Min=2 }

@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "created_utc": "2026-10-13T12:10:13.560075+00:00",
+  "scope": [
+    "CgsDev::DebugComponentPerfMonGpu::OnActivate#0001",
+    "CgsDev::DebugComponentPerfMonGpu::OnActivate#0002"
+  ],
+  "gameplay_commit": "8c779e4f890f0901cd5938838de8490259bc4ea4",
+  "source_review_candidate": "749a190a14a87207ddb19b6ed8cf4945eb16b87a",
+  "successor_scope": "8c779e4f8 differs from749a only in comments; executable tokens were checked before integration.",
+  "source_review": "scratch/DEBUG_MENU_1011/gpu_monitor_recovery_20261013/review_749a190a1/SOURCE_REVIEW.md",
+  "source_review_sha256": "8bf5664aec7d0dc93347e498546fe171859814cc689acc00efb7c960464a51e3",
+  "source_review_verdict": "PASS",
+  "exe_sha256": "9c1c81401cc8f62cdad50d6607e0c7d68f81719182a041dd501988e6b4842fb3",
+  "build_log": "scratch/DEBUG_MENU_1011/build/20261013_015002_gpu-monitors-8c779e4f8.log",
+  "checks": {
+    "monitor_transport_and_registry": 26,
+    "whole_frame_regression": 16,
+    "production_graph_and_callbacks": 12,
+    "native_game": 39
+  },
+  "runs": [
+    {
+      "mode": "graph",
+      "case": "debug_gpu_monitors_graph",
+      "run_dir": "scratch/bugtest/runs/debug_gpu_monitors_graph/20261013_140121",
+      "verdict": "PASS",
+      "checks": 13,
+      "asserts": 0,
+      "exceptions": 0,
+      "phase": "DRIVING",
+      "result_sha256": "b2ad9bdae615f628f0900af764ea384e3a07a3643bfb6acc24435b42f319d8ce",
+      "log_sha256": "974dc1bd295494a8ca33b3380318d94a327a71a710265eabd3c215e247936372",
+      "config_sha256": "ae5e27f22979745d3468f5144e7e0eea0f95ecf0bf3de538a0d22f62c95189be",
+      "native_valid_packets": 66,
+      "inspected_frame": "scratch/bugtest/runs/debug_gpu_monitors_graph/20261013_140121/frames/bb_006840.bmp",
+      "inspected_frame_sha256": "f0f13199ebdecc19d86bc51aae855e13892b476a3ae7e18b48682daf1fdfcbef",
+      "visual_observation": "Measured opaque-white stacked bar and original0/50/100/150/200 grid are visible."
+    },
+    {
+      "mode": "table",
+      "case": "debug_gpu_monitors_table",
+      "run_dir": "scratch/bugtest/runs/debug_gpu_monitors_table/20261013_140121",
+      "verdict": "PASS",
+      "checks": 13,
+      "asserts": 0,
+      "exceptions": 0,
+      "phase": "DRIVING",
+      "result_sha256": "586310b163178462598c42e9dddfbd5c9e4e9dfea00c3bd9c1b011f5b70d3789",
+      "log_sha256": "fd26dc03b935b5f89532fef9687f7e07f1c868b3fa8f34d562c9ecc78edfe8e8",
+      "config_sha256": "5a397c4dddc1b49fe7d2f7c014935c59fa12fcc00989e888f44d6dc3f64288de",
+      "native_valid_packets": 77,
+      "inspected_frame": "scratch/bugtest/runs/debug_gpu_monitors_table/20261013_140121/frames/bb_008280.bmp",
+      "inspected_frame_sha256": "81c7390e67e3e5f0950964361450f9c7b45b80b19e214e5fc152c508994f9589",
+      "visual_observation": "GPU Render Cost title, twenty category rows, nonzero WorldOpaque and totals are readable."
+    },
+    {
+      "mode": "hidden",
+      "case": "debug_gpu_monitors_hidden",
+      "run_dir": "scratch/bugtest/runs/debug_gpu_monitors_hidden/20261013_140121",
+      "verdict": "PASS",
+      "checks": 13,
+      "asserts": 0,
+      "exceptions": 0,
+      "phase": "DRIVING",
+      "result_sha256": "6b6d32e8245bfd388bd09221d2375bdc1de2ee11001f05a851a154cb732a76c3",
+      "log_sha256": "6af040c071634917ac82d6db099633268bc6e404ad4e840dd813929d6875c905",
+      "config_sha256": "ab52553db2e786bb3c87c4fa51b958bd220005db576a68113d883add227e2d83",
+      "native_valid_packets": 66,
+      "inspected_frame": "scratch/bugtest/runs/debug_gpu_monitors_hidden/20261013_140121/frames/bb_006840.bmp",
+      "inspected_frame_sha256": "9a7eda28f69c51bbfde8de805dfedf755eb1d18110bf43792d95b5b311b299f7",
+      "visual_observation": "Driving scene contains neither GPU graph nor GPU table."
+    }
+  ],
+  "limits": [
+    "Cases apply the exact registered settings from isolated INI copies; interactive manual menu traversal was not part of these runs.",
+    "Runs share the GPU/CPU; measured times prove real values, not standalone performance.",
+    "Other menu entries and dynamic row expansions receive no verdict from these checks."
+  ],
+  "previous_attempts": [
+    {
+      "timestamp": "20261013_015502 / 015613",
+      "state": "SETUP_FAIL",
+      "reason": "Diagnostic env delimiter; game not launched."
+    },
+    {
+      "timestamp": "20261013_020003",
+      "state": "SETUP_FAIL",
+      "reason": "Default capture free-space guard; game not launched."
+    },
+    {
+      "timestamp": "20261013_134843",
+      "state": "FAIL",
+      "reason": "Fixture duplicated the Debug section; two requested settings did not bind. Native timings and driving passed, overlay was not exercised."
+    }
+  ]
+}

@@ -35088,14 +35088,24 @@
       "pseudocode_line": 16,
       "original_call": "CgsDev::DebugUI::VariableManager::RegisterVariable(v2, &v5, v7, \"Draw GPU monitors\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsDev::DebugComponentPerfMonGpu::OnActivate#0001",
       "function": "CgsDev::DebugComponentPerfMonGpu::OnActivate",
       "original_address": "0x8282F488",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282F488.json",
       "component": "CgsDev::DebugComponentPerfMonGpu",
       "component_name": "GPU Monitors",
-      "component_path": "Core/Debug/Performance"
+      "component_path": "Core/Debug/Performance",
+      "notes": "Draw GPU monitors: original renderer registry/pass brackets and native D3D9 timer producer restored. Exact registered setting enables a readable measured table/graph and disables both; all three isolated full-game modes pass, actual frames inspected, independent source review passes.",
+      "evidence": [
+        "progress/debug_menu/GPU_MONITORS_20261013.md",
+        "progress/debug_menu/gpu_monitors_native_20261013.json",
+        "b5-decomp/tests/run_pc_gpu_monitor_timing.py",
+        "b5-decomp/tests/run_pc_gpu_monitor_graph.py",
+        "tools/tests/cases/debug_gpu_monitors_graph.ps1",
+        "tools/tests/cases/debug_gpu_monitors_table.ps1",
+        "tools/tests/cases/debug_gpu_monitors_hidden.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -35115,14 +35125,24 @@
       "pseudocode_line": 21,
       "original_call": "CgsDev::DebugUI::VariableManager::RegisterVariable(v3, &v5, v8, \"Draw As Graph\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsDev::DebugComponentPerfMonGpu::OnActivate#0002",
       "function": "CgsDev::DebugComponentPerfMonGpu::OnActivate",
       "original_address": "0x8282F488",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282F488.json",
       "component": "CgsDev::DebugComponentPerfMonGpu",
       "component_name": "GPU Monitors",
-      "component_path": "Core/Debug/Performance"
+      "component_path": "Core/Debug/Performance",
+      "notes": "Draw As Graph: original layout and callback-total/high-water semantics restored. True draws measured graph segments; false draws readable twenty-category GPU table. Full-game graph/table/hidden checks and inspected frames pass, with production graph and old-source regression controls.",
+      "evidence": [
+        "progress/debug_menu/GPU_MONITORS_20261013.md",
+        "progress/debug_menu/gpu_monitors_native_20261013.json",
+        "b5-decomp/tests/run_pc_gpu_monitor_timing.py",
+        "b5-decomp/tests/run_pc_gpu_monitor_graph.py",
+        "tools/tests/cases/debug_gpu_monitors_graph.ps1",
+        "tools/tests/cases/debug_gpu_monitors_table.ps1",
+        "tools/tests/cases/debug_gpu_monitors_hidden.ps1"
+      ]
     },
     {
       "kind": "variable",
@@ -37467,8 +37487,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1327,
-      "verified": 25,
+      "pending": 1325,
+      "verified": 27,
       "original-noop": 3
     }
   }
