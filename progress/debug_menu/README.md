@@ -59,6 +59,9 @@ Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json)
 [scene queries](scene_query_source_20261013.json). Source recovery continues on
 isolated branches while review and integration continue. The normal executable
 is the tested `058f17072` build, with a byte-exact healthy backup and provenance.
+The next [combined source review](loading_scene_review_20261013.json) covers
+50 files across loading/filesystem and scene/renderer work; it is running while
+new allocator-constructor and native occlusion investigations continue.
 
 ## Pipeline
 
