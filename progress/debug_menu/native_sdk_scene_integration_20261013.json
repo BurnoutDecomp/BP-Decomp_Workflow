@@ -1,11 +1,11 @@
 {
   "schema": 1,
-  "state": "PRIVATE_CPU_STREAM_REPAIR_COMPILED; native retest and combined source review pending",
-  "head": "30ec871f45fe860bf4ea4d74ca99d889ec4d84be",
+  "state": "NORMAL_BUILD_DELIVERED; bounded source and native gates pass; campaign active",
+  "head": "8cbd95c6da44d35cd5c0e886a1588b80acbec46b",
   "branch": "codex/debug-menu-native-sdk-scene-integration",
   "pushed": true,
   "base": "888cfd13157dca78d957eb3b71a0afd671305698",
-  "owned_paths": 12,
+  "owned_paths": 13,
   "compile_tus": 7,
   "compile": "pass",
   "new_faithfulness": 0,
@@ -56,7 +56,29 @@
     "defects": [
       "Generic/native presentation fixture compile/link integration is incomplete.",
       "A skipped or failed survey box submission must be unavailable rather than a valid zero-sample occlusion."
-    ]
+    ],
+    "repair_head": "10ede13daa1b1f4063e5bef3e5c586b740ae0c16",
+    "repair_compile": "pass;4 selected production TUs;0 new faithfulness",
+    "presentation_reset_fixture": {
+      "checks": "46/46 pass; real provider linked",
+      "evidence": {
+        "path": "scratch/DEBUG_MENU_1011/query_repair_validation_20261013/flip.stdout.log",
+        "sha256": "b75f23ed359c8dbd2748e3acc2b9a6f5160f6e31e3fa8da05525158d5d1aff5e"
+      }
+    },
+    "direct_query_fixture": {
+      "head": "fb6ae0ff83cd4da7103539f542e584a4cd94fe87",
+      "state": "FAIL; invalid test index pointer crashed D3D9 memcpy; test repair in progress",
+      "output": {
+        "path": "scratch/DEBUG_MENU_1011/query_repair_validation_20261013/native_queries.stdout.log",
+        "sha256": "14499d0b4892f570af7c2ec66059a80ee28c3f408a179ff73cbf28d41c3fd282"
+      },
+      "dump_analysis": {
+        "path": "scratch/DEBUG_MENU_1011/query_repair_validation_20261013/fixture_dump.stdout.log",
+        "sha256": "e2eaf51b82133f4c88ceeb33fd97b7bd3614a6a11a1f0f99aba229b88ea422fe"
+      },
+      "qualification": "No provider/game behavior verdict or original-polarity proof from this failed setup."
+    }
   },
   "allocator_creation_source": {
     "head": "9e70738a9514b6ef1d6502ede424e2411b0e9686",
@@ -64,11 +86,10 @@
     "compile_review_activation": "pending"
   },
   "limits": [
-    "Normal source and executable remain at058f17072.",
-    "The native unified debug backing is retained; the full original constructor is unactivated.",
-    "The current native resource startup adapter is retained; the recovered DLC stage machine is unactivated.",
-    "Physical-lane backing, texture fallback, shared-state lifetime and reset require native witnesses.",
-    "Source paths and support checks are not menu-entry completion counts."
+    "Normal source/executable are8cbd; newer original resource, sampler and occlusion follow-on source is not promoted.",
+    "Full original global/resource startup remains unactivated; existing native debug backing is retained.",
+    "Native procedural low-address payload arena remains process lifetime; repeated lifetime/exhaustion is unverified.",
+    "Regressions and source/path counts are not menu-entry completion or complete console-parity proof."
   ],
   "final_entry_promotions": 0,
   "entry_totals": {
@@ -128,7 +149,7 @@
     ],
     "full_link": "pass;2973 shipping TUs",
     "exe_sha256": "c732f067eceac898c2946a3f5d9518955883ffa314a66609f7c016a1c00267a0",
-    "native_retest": "in progress; isolated slot3"
+    "native_retest": "Prepare failures resolved;30ec8/9 exposed separate SkyDome allocation mismatch"
   },
   "resource_followon": {
     "head": "47e2db95b1cac0bbd1763a7ea330289e7801830b",
@@ -144,20 +165,90 @@
     }
   },
   "combined_review": {
-    "state": "in progress",
+    "state": "pass;20 source paths plus shipping mount",
     "owned_source_paths": 20,
     "parent_mount_paths": 1,
     "packet": "scratch/DEBUG_MENU_1011/resource_cpu_review_20261013/REVIEW_PACKET.md",
     "inputs": {
       "path": "scratch/DEBUG_MENU_1011/resource_cpu_review_20261013/review_inputs.json",
       "sha256": "1246202a1925c583b3d6834ba22055e415c523853a7f337de2f06c1b4ab694ec"
+    },
+    "report": {
+      "path": "scratch/DEBUG_MENU_1011/resource_cpu_review_20261013/SOURCE_REVIEW.md",
+      "sha256": "695d62d13fd1a4ddb172783572ecf3e0a8a69f88b4c49392e96214bdaaeb60a0"
     }
   },
   "sampler_provider": {
     "head": "06c7410c04538c3d4577245dd8c3e474d28cd551",
     "pushed": true,
-    "compile": "in progress",
+    "compile": "pass;8 selected production TUs;0 new faithfulness",
     "review_runtime": "pending",
     "limits": "Unsupported Xenos mip/Z/bias/enum cases remain explicit; no activation or parity claim."
+  },
+  "promoted_paths_since058": 34,
+  "sky_adapter": {
+    "head": "8cbd95c6da44d35cd5c0e886a1588b80acbec46b",
+    "scope": "Native procedural header allocation only; shared/imported descriptors unchanged",
+    "compile_tus": 1,
+    "compile": "pass",
+    "new_faithfulness": 0,
+    "review": {
+      "path": "scratch/DEBUG_MENU_1011/sky_native_adapter_review_20261013/SOURCE_REVIEW.md",
+      "sha256": "5c072f0d1a2eafa97ffd2e240307bfab7d66db60937e2d793f621a07590eb7d2"
+    }
+  },
+  "private_native_checks": {
+    "head": "8cbd95c6da44d35cd5c0e886a1588b80acbec46b",
+    "checks": "22/22 pass;0 asserts/exceptions",
+    "startup": {
+      "path": "scratch/bugtest/runs/debug_sdk_scene_startup_20261013/20261013_215328/result.json",
+      "sha256": "ce4d661a9c8109e278be432d8e80434e9200d9628f4ab4fcf2d224197dd223de"
+    },
+    "gpu_graph": {
+      "path": "scratch/bugtest/runs/debug_gpu_monitors_graph/20261013_215328/result.json",
+      "sha256": "653aa14e7a403dcc4a3deecdd6f5a61418a59e69fd548a9882880b010c75dc53"
+    },
+    "gpu_packets": 93,
+    "frames": 24,
+    "last_frame_viewed": true,
+    "qualification": "Parallel isolated runs establish no timing-performance comparison or all-entry proof."
+  },
+  "normal_delivery": {
+    "b5_head": "8cbd95c6da44d35cd5c0e886a1588b80acbec46b",
+    "b5_clean": true,
+    "pushed": true,
+    "compiled_tus": 680,
+    "cached_tus": 2293,
+    "total_tus": 2973,
+    "link": "pass",
+    "exe_sha256": "33ea8b3b569196535190e5a56dfc7bff551981c81ee90a1ae1d423878c8a0404",
+    "artifacts": {
+      "Burnout_PC.exe": "33ea8b3b569196535190e5a56dfc7bff551981c81ee90a1ae1d423878c8a0404",
+      "Burnout_PC.map": "2edcd50bbb40bd8a4111f84e19760a4b9d913bd8ed6bb971e82a81543e325636",
+      "Burnout_PC.cgsmap": "be174ff0f9fc1806ff062998de94d8daec4d4afc90e35801496be8a62e47801c",
+      "Burnout_PC.exe.provenance.json": "13613ade4a8927b88b2e4d87140cbe6732ab0a09189cf057ff10bbbe594f8198"
+    },
+    "native": {
+      "path": "scratch/bugtest/runs/debug_sdk_scene_normal_delivery_20261013/20261013_221131/result.json",
+      "sha256": "70f25c964b1221aad6d62e1a7c0892ef9bd5af7932f9673e0eebc73017d5d796"
+    },
+    "native_checks": "10/10 pass;0 asserts/exceptions",
+    "healthy_backup": "scratch/DEBUG_MENU_1011/integration_startup_20261013/healthy_8cbd95c6d",
+    "receipt": {
+      "path": "scratch/DEBUG_MENU_1011/native_sdk_scene_integration_20261013/normal_delivery.receipt.json",
+      "sha256": "57680449a98501eba6b5efd6155beab546ef9f2585a33bc7fc4f1ddc06d60de8"
+    }
+  },
+  "resource_followon_latest": {
+    "head": "9a7f5d9b142cfe5ac43a4a92ea6acc75a578f8fa",
+    "scope": "Original24 allocator/27 pool sequences, capacity/init declarations and raw/wrapper memory handlers.",
+    "compile": "pass;5 selected production TUs;0 new faithfulness",
+    "review": "pending",
+    "activation": "off; NativePC producers/dispatch retained",
+    "limits": [
+      "LinearMalloc borrowed/owned and last-allocation provider drift remains explicit.",
+      "Native audio wrapper reset/publication has no active backing producer; original768KiB constructor is unactivated.",
+      "Original root0/2, pool protocol/replies, bank/index diagnostics and full pipeline activation remain open."
+    ]
   }
 }
