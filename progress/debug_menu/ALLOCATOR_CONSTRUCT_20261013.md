@@ -1,10 +1,15 @@
 # Allocator recovery checkpoint
 
 Original allocator construction is recovered on the source branch through
-`0bdeb3617`; it remains unactivated and awaits fresh source review. Native budgets
+`0bdeb3617`; it remains unactivated. The combined source review through Root's
+`b4611add1` passes with explicit native limits. Native budgets
 stay unchanged. This is supporting-system progress, with no entry promotion.
 Root's controller repair and production fixtures are pushed at `b4611add1` on
 `codex/debug-menu-allocator-startup-validation`.
+
+The source pass explicitly qualifies ARTIST's Linear failure-tail access beyond
+its established five-lane objects. Native code preserves the owned fields and
+omits that surplus read/store; the PS3 six-lane shape is not imported.
 
 The recovered code restores the original global/child setup and typed wrappers,
 placement initialization with actual native object storage, five-lane heap
