@@ -70,7 +70,7 @@ goal is complete only when every original/native entry has a supported dispositi
   [Effects/Director](EFFECTS_DIRECTOR_130_20261012.md), [remaining 130](REMAINING130_20261013.md),
   [GameState caller gaps](GAMESTATE_UPDATE_CHAIN_20261012.md),
   [Resource windows](RESOURCE_WINDOWS_20261012.md).
-- [CPU allocator](CPU_ALLOCATOR_20261013.md), [memory map](MEMORY_MAP_STARTUP_20261013.md), [scene manager](SCENE_MANAGER_20261012.md),
+- [Supporting systems](SUPPORTING_SYSTEMS_20261013.md), [CPU allocator](CPU_ALLOCATOR_20261013.md), [memory map](MEMORY_MAP_STARTUP_20261013.md), [scene manager](SCENE_MANAGER_20261012.md),
   [environment/graphics](ENVIRONMENT_GRAPHICS_20261012.md),
   [pipeline checkpoints](PIPELINE_CHECKPOINTS_20261012.md).
 
