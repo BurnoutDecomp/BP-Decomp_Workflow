@@ -94,6 +94,17 @@
           "sha256": "2b4cfad714be9269c6b8019c16e0e0e9dec338a00bd231dc754a2890e8699bf5"
         },
         "next": "Remove unsafe invalid-state draw and classify real failed-HRESULT witness unavailable; retain ordinary valid-state cases."
+      },
+      "valid_state_attempt": {
+        "head": "287ec2e2733a78c415b30b7a6f6edd8043107b43",
+        "state": "PARTIAL;47/47 checks pass;real failed-HRESULT draw witness unavailable",
+        "output": {
+          "path": "scratch/DEBUG_MENU_1011/query_repair_validation_20261013/native_queries_valid_state.stdout.log",
+          "sha256": "9fba59f962d1fd3c3f41662d9fbc3879afaca23dd8f3a93e05c33fd0be56e7e1"
+        },
+        "reset_recovery": "successful ResetEx subcase ran",
+        "failed_submission": "explicit injected Finish(false) production seam with valid token;no native failed-HRESULT proof",
+        "limits": "Direct provider only;renderer activation,WorldDraw end-to-end observer wiring,Xenos polarity,ordinary teardown and gameplay performance remain unproven."
       }
     }
   },
@@ -200,7 +211,43 @@
     "pushed": true,
     "compile": "pass;8 selected production TUs;0 new faithfulness",
     "review_runtime": "pending",
-    "limits": "Unsupported Xenos mip/Z/bias/enum cases remain explicit; no activation or parity claim."
+    "limits": "Unsupported Xenos mip/Z/bias/enum cases remain explicit; no activation or parity claim.",
+    "type_bind_repair": {
+      "head": "aac454c2559dc511286f8119aa3ce8e981bf6e6b",
+      "owned_paths": 2,
+      "pushed": true,
+      "compile": {
+        "path": "scratch/DEBUG_MENU_1011/sampler_type_bind_validation_20261013/compile/canonical_private_compile.json",
+        "sha256": "55fbf7c8a30c8e4248f7149f37288155329f998269495b590ba15a73a04f50ab"
+      },
+      "state": "three production TUs compile;0newfaith;source repair review pending;not delivered",
+      "scope": "Only texture-dependent min/mag/MAXANISOTROPY replay after successful bind;independent raw MaxMip preserved."
+    },
+    "optional_native_filter_compatibility": {
+      "state": "integration blocker;bounded opt-in coexistence repair authorized",
+      "removal_head": "06c7410c04538c3d4577245dd8c3e474d28cd551",
+      "before": {
+        "source": "delivered8cbd",
+        "checks": "8/8 pass;actual mip markers154->58 at anisotropy16",
+        "output": {
+          "path": "scratch/DEBUG_MENU_1011/sampler_type_bind_validation_20261013/optional_filter_before.stdout.log",
+          "sha256": "77f067575f083a932e45849f4634e6926ad26224fe27b5944e151b406aae0cf4"
+        }
+      },
+      "after": {
+        "source": "287ec2e27",
+        "state": "existing fixture does not compile on removed API;no numeric behavior execution",
+        "output": {
+          "path": "scratch/DEBUG_MENU_1011/sampler_type_bind_validation_20261013/optional_filter_after.stdout.log",
+          "sha256": "a3901ce9026915642bac4da65d90f5703453f85fac8a8dd448312be86990a45e"
+        }
+      },
+      "investigation": {
+        "path": "scratch/DEBUG_MENU_1011/anisotropic_filter_compatibility_addendum_20261013/COMPATIBILITY_ADDENDUM.md",
+        "sha256": "dd90920ec3c610c47da07d3c33cd0000be383163a861d570bce4171b220090bb"
+      },
+      "authorized_policy": "Default1 preserves raw blocks. Explicit higher native setting may enhance only supported authored LINEAR minification on2D textures;preserve authored POINT/ANISO and unrelated fields. Update actual raw-path native pixel fixture."
+    }
   },
   "promoted_paths_since058": 34,
   "sky_adapter": {
@@ -308,7 +355,7 @@
       "path": "scratch/DEBUG_MENU_1011/recovery_lanes/vehicle-deformation-131/scratch/linearborrow1013/source_preservation.json",
       "sha256": "bf07ba0052a30450848c0bda77d976f8a572b878df7e76440f32c0e0afeb73f5"
     },
-    "compile_review_runtime": "four production TUs compile;38/38 focused checks pass;fresh source review in progress;not delivered",
+    "compile_review_runtime": "source review PASS;four production TUs compile;38/38 focused checks pass;executable validation pending;not delivered",
     "limits": "Owned-release/RW hooks and an owned backing producer remain separate; only file-static first-use scratch initialization is traced.",
     "validation_head": "623f44942cd3296d8b578d7fc9eb583270ce1c78",
     "fixture_paths": 2,
@@ -345,6 +392,30 @@
     "review_inputs": {
       "path": "scratch/DEBUG_MENU_1011/linear_borrowed_review_20261013/review_inputs.json",
       "sha256": "01c3ef98613889a3ce8178c1e77f8f7ab54fe8481ad33be577f64c83ca9e3db1"
+    },
+    "review": {
+      "path": "scratch/DEBUG_MENU_1011/linear_borrowed_review_20261013/SOURCE_REVIEW.md",
+      "sha256": "99f9e7efb7f48526ea2f42045cc74760bad055e490e0211f247fedcb33b6714f"
     }
+  },
+  "sampler_query_repairs_review": {
+    "state": "in progress",
+    "owned_paths": 4,
+    "pinned_files": 62,
+    "base": "b8cad5071fd5391f237d3f0dc6db4c34f28b0354",
+    "head": "287ec2e2733a78c415b30b7a6f6edd8043107b43",
+    "inputs": {
+      "path": "scratch/DEBUG_MENU_1011/sampler_query_repairs_review_20261013/review_inputs.json",
+      "sha256": "77a7e97edad52bbfe75491e9ceaf6941fe92d00721b0318c32957c9537128839"
+    }
+  },
+  "linear_lifetime_followon": {
+    "state": "exact four-owner source recovery authorized;commit/compile/review pending",
+    "scope": "ARTIST Destruct,Stop,class statics,typed global RW table and three real lazy CRT stubs;Start/owning producers excluded.",
+    "evidence": {
+      "path": "scratch/DEBUG_MENU_1011/recovery_lanes/vehicle-deformation-131/scratch/linearhooks1013/DEPENDENCY_REPORT.md",
+      "sha256": "c4f599dc388c0850296e48703506780145ad90d728804bb64780707d6ea91a57"
+    },
+    "qualification": "No nonzero owned/active producer found in audited target lifecycle closure;vendor cpp home is an organization choice."
   }
 }
