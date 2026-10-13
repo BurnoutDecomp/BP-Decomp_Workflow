@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "state": "PRIVATE_SOURCE_INTEGRATION_COMPILED; full link and native witnesses pending",
+  "state": "PRIVATE_SOURCE_INTEGRATION_COMPILED; missing shipping TU mounted, full link retry pending",
   "head": "32de5913b42bed0bf885d14875b276d810d0bf12",
   "branch": "codex/debug-menu-native-sdk-scene-integration",
   "pushed": true,
@@ -68,5 +68,18 @@
     "original_noop": 3,
     "unresolved_registration_sites": 1325,
     "total": 1355
+  },
+  "initial_full_build": {
+    "compiled_tus": 2972,
+    "compile_failures": 0,
+    "link": "fail",
+    "reason": "ConstructBlendState definition exists but its TU was absent from the shipping BAT source list.",
+    "receipt": "scratch/DEBUG_MENU_1011/native_sdk_scene_integration_20261013/full_build.receipt.json",
+    "receipt_sha256": "9918a3b11c29fcee9edd2efe369fbd538b8be4681a54289f15b10e3461ff35df",
+    "repair": "Mount existing CgsImRendererBlendState.cpp in the canonical shipping BAT.",
+    "repair_compile": "pass",
+    "new_faithfulness": 0,
+    "original_evidence": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827ED118.json",
+    "retry": "pending"
   }
 }

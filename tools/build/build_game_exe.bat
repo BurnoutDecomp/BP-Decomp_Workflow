@@ -3177,6 +3177,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\Game\BrnDispatchThreadInputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsIm2d.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsImRenderer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\CgsImRendererBlendState.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\ImmediateMode\ImRenderBuffer\CgsImRenderBufferTemplate.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptRenderHandler.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\View\AptInterface\CgsAptCallbackRender.cpp"
