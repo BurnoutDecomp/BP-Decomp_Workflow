@@ -2,7 +2,7 @@
   "schema": 1,
   "branch": "codex/debug-menu-cpu-allocator",
   "source_commit": "e4acac75f4c00a77909282e7c7473edc1eabbf11",
-  "state": "SOURCE_COMPILED; independent review/integration/native pending",
+  "state": "SOURCE_REVIEW_PASS; integrated and shipping build passed; Start/GPU integration regressions passed; CPU menu/HUD verdict pending",
   "original": "ARTIST CgsDev::PerfMonCpu::Construct82824B10",
   "changes": [
     "Use supplied RW allocator for96-byte records,16-byte aligned, with original five-lane descriptor.",
@@ -15,5 +15,32 @@
   "old_source_failures": 4,
   "old_source": "d6da1305648e6b11c93833acdb0e1f821947154e",
   "evidence": "scratch/DEBUG_MENU_1011/cpu_allocator_recovery_20261013/REVIEW_PACKET.md",
-  "final_entry_promotions": 0
+  "final_entry_promotions": 0,
+  "source_review": {
+    "path": "scratch/DEBUG_MENU_1011/cpu_allocator_recovery_20261013/SOURCE_REVIEW.md",
+    "sha256": "5ba2e97d69ce82c85f0ebabe8c919262639efd66890da500829d8bc0ac86963c",
+    "verdict": "pass"
+  },
+  "build": {
+    "log": "scratch/DEBUG_MENU_1011/build/20261013_164944_cpu-allocator-e4acac75f.log",
+    "tus": 2971,
+    "compiled": 330,
+    "failed": 0,
+    "link": "pass",
+    "exe_sha256": "61c7f64e4c1e5ca933e509acd1bbf8afd3481e7a2d981aab34df9d4338a78f1a"
+  },
+  "native_regressions": [
+    {
+      "path": "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_165051",
+      "checks": 9,
+      "verdict": "pass",
+      "result_sha256": "81f3fae9aa593c5c9c5cd4960d0003f4e1bc601ebf8eb1947937595076a8e8ad"
+    },
+    {
+      "path": "scratch/bugtest/runs/debug_gpu_monitors_graph/20261013_165051",
+      "checks": 13,
+      "verdict": "pass",
+      "result_sha256": "4aa6e9f125f14a2cd170cefa765b1c1dcc5e2f713b50d2a1aa6f8374c1f91800"
+    }
+  ]
 }

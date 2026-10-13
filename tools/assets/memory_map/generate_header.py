@@ -162,6 +162,14 @@ def validate_memory_map_image(image, allocators):
                     raise ValueError('%s request size diverges from allocator definition %d' % (family, index))
                 if row['heap_pointer'] != 0 or row['linear_pointer'] != 0:
                     raise ValueError('%s raw allocator pointers are non-zero at row %d' % (family, index))
+            else:
+                descriptor = row.get('descriptor')
+                if not isinstance(descriptor, list) or len(descriptor) != 5 or \
+                   any(not isinstance(lane, list) or len(lane) != 2 for lane in descriptor):
+                    raise ValueError('%s descriptor must retain all five X360 size/alignment lanes at row %d' % (family, index))
+                expected_descriptor = [list(lane) for lane in zip(definition['size'], definition['align'])]
+                if descriptor != expected_descriptor:
+                    raise ValueError('%s descriptor diverges from allocator definition %d' % (family, index))
     if any(row['event_user_offset'] != 0 for row in image['pools']):
         raise ValueError('non-null raw pool event user is not mapped to a native pointer')
     for row in image['banks']:

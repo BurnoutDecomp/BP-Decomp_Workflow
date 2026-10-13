@@ -1,7 +1,8 @@
 # Memory map and statistics checkpoint - 2026-10-13
 
-**Eight production files compile; independent review, integration and native
-behavior remain pending. No debug-menu entry is promoted by this checkpoint.**
+**Eight production files compile. Independent review found one data mismatch;
+its repair is pushed and compiles, awaiting supplement review. Integration and
+native behavior remain pending. No debug-menu entry is promoted.**
 
 Source `b020144557` restores InitMemoryMap -> FixUp -> initial default allocator ->
 GameData map handoff. The native image contains all seven typed tables: 16 banks,
@@ -17,6 +18,13 @@ Six affected files plus MemoryModule/MemoryModuleIO compile with zero new
 faithfulness findings. Exact commits, output hash and compile receipts are in the
 [compile checkpoint](memory_map_compile_20261013.json). The normal game source and
 executable have not adopted this memory-map change yet.
+
+Review found that bank 31's zero-size physical lane had lost its original 4096
+alignment. Candidate `0261379d0` regenerates that value from repaired YAML. All
+nine descriptor-bearing rows now retain all five original size/alignment pairs;
+the generator rejects drift, including unused lanes. Four checks pass against
+captured ARTIST records, and both affected consumers compile with zero new
+faithfulness findings. See the [repair receipt](memory_map_review_repair_20261013.json).
 
 PrintConsoleMemory's original filter/lines and native host memory query are saved
 separately at `e72b07de`. DLC owner/Prepare and canonical async-file frontend work

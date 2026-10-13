@@ -362,7 +362,7 @@ allocators:
     - { bank: 9, name: Playback, parent: 4, desc: [ { type: 0, size: 0x0013BC00, align: 16 } ] }
     - { bank: 24, name: Rwac, parent: 4, desc: [ { type: 0, size: 0x0035C000, align: 16 } ] }
     - { bank: 25, name: Logic, parent: 4, desc: [ { type: 0, size: 0x0003BC00, align: 16 } ] }
-    - { bank: 31, name: 2D Immediate Heap, parent: 8, desc: [ { type: 0, size: 0x003FC000, align: 16 } ] }
+    - { bank: 31, name: 2D Immediate Heap, parent: 8, desc: [ { type: 0, size: 0x003FC000, align: 16 }, { type: 2, size: 0x00000000, align: 4096 } ] }
 
 # Canonical typed image rows from the same ARTIST unk_82F2A788 raw map. The normalized
 # pools/allocators above remain the PC pool setup data; these rows preserve the exact
@@ -419,7 +419,7 @@ memory_map_image:
     - {"index":26,"event_user_offset":0,"event_id":-1,"pool_id":26,"name":"Freeburn Challenges","deletion_delay_frames":3,"max_resources":20,"max_imports":0,"descriptor":[[258048,16],[0,1],[0,1]],"max_resources_by_type":[20,0,0],"num_dependencies":0,"dependency_ids":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bank_id":64,"parent_bank_id":26,"allow_defragmentation":false}
   allocator_events:
     raw_resources:
-      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":6,"name":"Ice","bank_id":34,"parent_bank_id":29}
+      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":6,"name":"Ice","bank_id":34,"parent_bank_id":29,"descriptor":[[262144,16],[0,1],[0,1],[0,1],[0,1]]}
     linear:
       - {"index":0,"event_user_offset":0,"event_id":0,"event_type":4,"name":"AttribSysLinAlloc","bank_id":22,"parent_bank_id":10,"resource_type":0,"request_size":278528,"heap_pointer":0,"linear_pointer":0}
       - {"index":1,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Behaviours","bank_id":30,"parent_bank_id":29,"resource_type":0,"request_size":65536,"heap_pointer":0,"linear_pointer":0}
@@ -438,12 +438,12 @@ memory_map_image:
       - {"index":6,"event_user_offset":0,"event_id":0,"event_type":4,"name":"VFX Heap","bank_id":41,"parent_bank_id":33,"resource_type":0,"request_size":3407872,"heap_pointer":0,"linear_pointer":0}
       - {"index":7,"event_user_offset":0,"event_id":0,"event_type":4,"name":"Massive Heap","bank_id":63,"parent_bank_id":62,"resource_type":0,"request_size":131072,"heap_pointer":0,"linear_pointer":0}
     rw_linear:
-      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":2,"name":"PhysicsAlloc","bank_id":23,"parent_bank_id":2}
-      - {"index":1,"event_user_offset":0,"event_id":0,"event_type":2,"name":"Network Image Allocator","bank_id":42,"parent_bank_id":26}
-      - {"index":2,"event_user_offset":0,"event_id":0,"event_type":2,"name":"Scene Manager","bank_id":49,"parent_bank_id":2}
-      - {"index":3,"event_user_offset":0,"event_id":0,"event_type":2,"name":"VFX Graphics Allocator","bank_id":60,"parent_bank_id":33}
+      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":2,"name":"PhysicsAlloc","bank_id":23,"parent_bank_id":2,"descriptor":[[4118528,16],[0,1],[0,1],[0,1],[0,1]]}
+      - {"index":1,"event_user_offset":0,"event_id":0,"event_type":2,"name":"Network Image Allocator","bank_id":42,"parent_bank_id":26,"descriptor":[[262144,16],[0,1],[2097152,128],[0,1],[0,1]]}
+      - {"index":2,"event_user_offset":0,"event_id":0,"event_type":2,"name":"Scene Manager","bank_id":49,"parent_bank_id":2,"descriptor":[[1550336,16],[0,1],[0,1],[0,1],[0,1]]}
+      - {"index":3,"event_user_offset":0,"event_id":0,"event_type":2,"name":"VFX Graphics Allocator","bank_id":60,"parent_bank_id":33,"descriptor":[[245760,16],[0,1],[4194304,128],[0,1],[0,1]]}
     rw_general:
-      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Playback","bank_id":9,"parent_bank_id":4}
-      - {"index":1,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Rwac","bank_id":24,"parent_bank_id":4}
-      - {"index":2,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Logic","bank_id":25,"parent_bank_id":4}
-      - {"index":3,"event_user_offset":0,"event_id":0,"event_type":3,"name":"2D Immediate Heap","bank_id":31,"parent_bank_id":8}
+      - {"index":0,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Playback","bank_id":9,"parent_bank_id":4,"descriptor":[[1293312,16],[0,1],[0,1],[0,1],[0,1]]}
+      - {"index":1,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Rwac","bank_id":24,"parent_bank_id":4,"descriptor":[[3522560,16],[0,1],[0,1],[0,1],[0,1]]}
+      - {"index":2,"event_user_offset":0,"event_id":0,"event_type":3,"name":"Logic","bank_id":25,"parent_bank_id":4,"descriptor":[[244736,16],[0,1],[0,1],[0,1],[0,1]]}
+      - {"index":3,"event_user_offset":0,"event_id":0,"event_type":3,"name":"2D Immediate Heap","bank_id":31,"parent_bank_id":8,"descriptor":[[4177920,16],[0,1],[0,4096],[0,1],[0,1]]}
