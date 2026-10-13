@@ -61,16 +61,26 @@ Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json)
 isolated branches while review and integration continue. The normal executable
 remains the tested `8cbd95c6d` build, with a healthy byte-exact backup and provenance.
 The allocator/sampler/query follow-on is pushed on
-`codex/debug-menu-native-followon-integration` at `c3778b7ff`; its full integration
-build and native gates remain pending. Source/test/path counts are not menu verdicts.
+`codex/debug-menu-native-followon-integration` at `bec73c5ce`. Its 2,974-file
+shipping build links, and private startup/GPU regressions pass 22 checks with
+zero assertions/exceptions. Combined review is running before normal delivery.
 
-The 42-site Physical Traffic/Route Map native batch reaches driving and activates
-both pages. Its global `SAVE` then encounters DLC feature24's NULL caption. ARTIST
-also registers that unnamed row and dereferences it in `SAVE`; preserve this original
-broken behavior. A targeted alias/value-query readback is replacing global snapshots.
-The missing DLC manager construction separately changes grouping/defaults and is
-being adopted without activating DLC enumeration/monitoring. No final site count
-changes follow from this diagnosis alone.
+Native batches have now exercised **149 bindings** across Physical Traffic,
+Route Map and Traffic: 141 literal variables and eight action paths, with 1,937
+actual path/value reads across 27 phases. These are registry/storage observations;
+the final behavior count above remains separate. Four Route Map effects have
+retained visible witnesses under review. Physical/conditional effects and the
+Traffic page's dynamic-caption row still need suitable evidence.
+
+Global `SAVE` hits DLC feature24's original NULL caption; an independent original
+assembly review confirms this broken expansion and it remains preserved. Targeted
+alias queries avoid that unrelated row. The private candidate also initializes
+the real DLC manager/table without activating DLC enumeration/monitoring.
+
+Recovery continues on the original GameState PreWorld caller/controller transport
+and PoolModule create/FIFO/descriptor/host-layout family in separate branches.
+The GameState transport checkpoint is pushed at `5c51095e`; neither family is
+claimed integrated or behavior-verified.
 
 ## Pipeline
 

@@ -25,14 +25,16 @@ if ($laProblems.Count -eq 0) {
     $laPlan = Get-Content -LiteralPath $PlanPath -Raw | ConvertFrom-Json
     $laSourceLines = [IO.File]::ReadAllLines($LogPath)
     $laFilteredLines = [System.Collections.Generic.List[string]]::new()
-    # These two native renderer diagnostics can interleave on another thread.
-    # Neither grammar is a possible value of this case's bool/numeric/enum cells.
+    # These native renderer diagnostics can interleave on another thread.
+    # Their grammars are not values of this case's bool/numeric/enum cells.
     # Keep their raw line positions and reject every other unexpected output.
     $lsRendererDiagnostic = '^\[lionfx\] Render: emitters live=\d+ cell=\d+ inactive=\d+ culled=\d+ \(range=\d+ frustum=\d+ near=\d+\) drawn=\d+ particles=\d+ nocull=[01]$'
     $lsMeshDiagnostic = '^\[FLAG PC bring-up\] MESH lists:(?: \[\d+\]=\d+)+$'
+    $lsDispatchDiagnostic = '^\[lionfx\] Dispatch: batches=\d+ vb=[0-9A-Fa-f]{16} white=\d+\.\d{3}$'
     for ($liSourceLine = 0; $liSourceLine -lt $laSourceLines.Count; ++$liSourceLine) {
         $lsSourceLine = $laSourceLines[$liSourceLine]
-        if ($lsSourceLine -match $lsRendererDiagnostic -or $lsSourceLine -match $lsMeshDiagnostic) {
+        if ($lsSourceLine -match $lsRendererDiagnostic -or $lsSourceLine -match $lsMeshDiagnostic -or
+            $lsSourceLine -match $lsDispatchDiagnostic) {
             $laIgnoredDiagnosticLines.Add($liSourceLine + 1)
         } else {
             $laFilteredLines.Add($lsSourceLine)
