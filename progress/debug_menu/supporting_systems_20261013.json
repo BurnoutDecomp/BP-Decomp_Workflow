@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "state": "COMPILED_SOURCE; combined independent review/repairs in progress; integration/native pending",
+  "source_lanes": [
+    {
+      "name": "geometry",
+      "head": "5698a5a5437b37b3991a46485b92b0bdbee2dbaa",
+      "owned_paths": 16
+    },
+    {
+      "name": "memory",
+      "head": "a0a9454df2fef12fd15c9c29884ad51c189d9ffe",
+      "owned_paths": 18
+    }
+  ],
+  "frozen_inputs_sha256": "938a9453a7630d10422a58395ef827adaf9d52e78289a9126205e7b195db7c4e",
+  "frozen_zip_sha256": "23ffacb74a913125bb1564fea8d1bd23a50a05903d1dffa6836c4d182429835a",
+  "original_compiled_tus": 12,
+  "original_registration_ids": [
+    "BrnResource::DebugComponent::OnActivate#0001",
+    "BrnResource::DebugComponent::OnActivate#0002",
+    "BrnResource::DebugComponent::OnActivate#0003",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0001",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0002",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0003",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0004",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0005",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0006",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0007",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0008",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0009",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0010",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0011",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0012",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0013",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0014",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0015",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0016",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0017"
+  ],
+  "review_packet": "scratch/DEBUG_MENU_1011/supporting_systems_review_20261013/REVIEW_PACKET.md",
+  "path_aliases_sha256": "c464dcccce57d7977c9451e261b3e777bf6f012d13cff5621fbec27549507762",
+  "renderer_header_repair": {
+    "source_commit": "c92b1556c",
+    "after_sha256": "1efb80b82879a716b1f50a307d13f81d1817e16fa1ad78afc83615c46b0239c1",
+    "reason": "Remove unrelated private GPU0 reset; carry only canonical Im3dZOnly seam while preserving current primary -1 IDs.",
+    "compile_tus": 2,
+    "new_faithfulness": 0
+  },
+  "triangle_manager_construct": {
+    "source_commit": "d7800739a1f038e21b6fdea6ea5ece4467cef5ef",
+    "repair_branch_commit": "09d2522b9",
+    "compile_tus": 1,
+    "new_faithfulness": 0,
+    "evidence": "scratch/DEBUG_MENU_1011/recovery_lanes/environment_packet/triangle_manager_construct_preedit_20261013/manifest.json"
+  },
+  "host_capacity_proposal": {
+    "existing_bytes": 262144,
+    "required_matrix_bytes": 524288,
+    "recommended_host_bytes": 589824,
+    "applied": false,
+    "evidence": "scratch/DEBUG_MENU_1011/recovery_lanes/environment_packet/occlusion_global_graphics_capacity_audit_20261013/capacity_proposal.json"
+  },
+  "final_entry_promotions": 0,
+  "limits": [
+    "Renderer/query activation/backend/lifetime remain incomplete or unverified.",
+    "Memory and geometry source must be integrated narrowly, preserving newer primary changes.",
+    "Unknown private dependency differences must be reviewed and explicitly carried if necessary.",
+    "Complete implementation count remains unknown."
+  ]
+}
