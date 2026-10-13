@@ -46,8 +46,8 @@ procedural sky allocation repairs are included. See the
 | Resource memory map and statistics | Descriptor repair, 45-lane validation and DrawDataSize owner are integrated. Heap reporting passed source review and 18 production-allocator checks. Typed allocator consumers and resource HUD effects remain. |
 | CPU profiler allocator | Reviewed, integrated and pushed. Whole-production checks 12/12; shipping build and 22 Start/GPU integration checks pass. CPU menu/HUD witness remains. |
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
-| Coarse scene queries and shared renderer state | Reviewed scene integration is delivered at `8cbd95c6d`. Separate query-provider checks pass 47/47, with a real failed-draw witness unavailable. The texture-switch filtering repair compiles and is under review; optional native anisotropic-filter compatibility needs reconciliation. Renderer activation and original query polarity remain open. |
-| Original allocator construction | Reviewed native storage is delivered; 14 production checks pass. Original resource, 24-allocator and 27-pool creation sequences pass bounded source review and remain unactivated. The borrowed LinearMalloc repair passes source review and 38 focused checks; executable validation remains. Owned/RW lifecycle recovery, full constructor activation and GPU/DMA behavior remain open. |
+| Coarse scene queries and shared renderer state | Reviewed scene integration is delivered at `8cbd95c6d`. Separate query-provider checks pass 47/47, with a real failed-draw witness unavailable. The texture-switch filtering and optional anisotropic-filter coexistence repair passes bounded source review and 20 native checks; follow-on integration is pushed separately. Renderer activation and original query polarity remain open. |
+| Original allocator construction | Reviewed native storage is delivered; 14 production checks pass. Original resource, 24-allocator and 27-pool creation sequences pass bounded source review and remain unactivated. The borrowed LinearMalloc repair passes source review and 38 focused checks; executable validation remains. Owned/RW lifecycle recovery passes source review and 58 focused checks in a separate pushed integration branch. Full constructor activation and GPU/DMA behavior remain open. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)
@@ -59,12 +59,18 @@ Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json)
 [resource Prepare](resource_prepare_source_20261013.json), and
 [scene queries](scene_query_source_20261013.json). Source recovery continues on
 isolated branches while review and integration continue. The normal executable
-is the tested `058f17072` build, with a byte-exact healthy backup and provenance.
-The next [combined source review](loading_scene_review_20261013.json) covers
-50 files across loading/filesystem and scene/renderer work. Its first verdict is
-fail on five source defects; all five repairs now pass bounded source review while
-allocator recovery, native boundary audits and integration preparation continue. The tested normal
-executable remains `058f17072` until the next coherent batch passes its gates.
+remains the tested `8cbd95c6d` build, with a healthy byte-exact backup and provenance.
+The allocator/sampler/query follow-on is pushed on
+`codex/debug-menu-native-followon-integration` at `c3778b7ff`; its full integration
+build and native gates remain pending. Source/test/path counts are not menu verdicts.
+
+The 42-site Physical Traffic/Route Map native batch reaches driving and activates
+both pages. Its global `SAVE` then encounters DLC feature24's NULL caption. ARTIST
+also registers that unnamed row and dereferences it in `SAVE`; preserve this original
+broken behavior. A targeted alias/value-query readback is replacing global snapshots.
+The missing DLC manager construction separately changes grouping/defaults and is
+being adopted without activating DLC enumeration/monitoring. No final site count
+changes follow from this diagnosis alone.
 
 ## Pipeline
 

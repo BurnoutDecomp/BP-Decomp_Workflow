@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "state": "Normal8cbd startup gates passed;broader42-entry behavior gate exposes SAVE crash;campaign active",
+  "state": "Normal8cbd startup gates passed;follow-on source pushed separately;42-entry harness avoids an original broken DLC SAVE row;campaign active",
   "head": "8cbd95c6da44d35cd5c0e886a1588b80acbec46b",
   "branch": "codex/debug-menu-native-sdk-scene-integration",
   "pushed": true,
@@ -423,7 +423,7 @@
     }
   },
   "linear_lifetime_followon": {
-    "state": "pushed;four production TUs compile;58 focused checks pass;fresh review pending;not delivered",
+    "state": "pushed;four production TUs compile;58 focused checks and bounded fresh source review pass;not delivered",
     "scope": "ARTIST Destruct,Stop,class statics,typed global RW table and three real lazy CRT stubs;Start/owning producers excluded.",
     "evidence": {
       "path": "scratch/DEBUG_MENU_1011/recovery_lanes/vehicle-deformation-131/scratch/linearhooks1013/DEPENDENCY_REPORT.md",
@@ -452,11 +452,15 @@
     }
   },
   "release_sampler_combined_review": {
-    "state": "in progress",
+    "state": "pass;exact ten-path source/fixture scope;no final menu-entry promotion",
     "owned_paths": 10,
     "packet": {
       "path": "scratch/DEBUG_MENU_1011/release_sampler_combined_review_20261013/REVIEW_PACKET.md",
       "sha256": "e0cb3486b2a87388b358ce8d25e0b7115a238fd975c92a6121e0c0b0d492e13d"
+    },
+    "report": {
+      "path": "scratch/DEBUG_MENU_1011/release_sampler_combined_review_20261013/SOURCE_REVIEW.md",
+      "sha256": "4f53777e6dd480eea08d9752e2710c97dd9c8e24864f0aee9d3b93327bc1351f"
     }
   },
   "physical_route_behavior_batch": {
@@ -468,7 +472,7 @@
       "sha256": "3e567fdc69a26c6a3bac0ed57e6fe9789e68a3cf9cb38765084c35ffc0870073"
     },
     "second_run": "scratch/bugtest/runs/debug_menu_physical_route_configured_20261013/20261013_232648",
-    "state": "FAIL;configured run reaches DRIVING then SAVE crashes after both pages activate;precise null value producer under investigation",
+    "state": "Configured run exposes original broken DLC caption24 during global SAVE;targeted ALIAS/value-query harness repair in progress",
     "qualification": "Do not infer missing registrations/failed consumers from the first loading-prerequisite failure.",
     "second_result": {
       "path": "scratch/bugtest/runs/debug_menu_physical_route_configured_20261013/20261013_232648/result.json",
@@ -478,12 +482,52 @@
       "path": "scratch/DEBUG_MENU_1011/physical_route_validation_20261013/configured_crash_dump.receipt.json",
       "sha256": "9f998a68e386231d10e859b8fcbc8e9a172037f38feed6369801c9e8938cb06a"
     },
-    "confirmed_failure": "StrCat reads null source inside ScriptInterface::SaveState;no destination overflow established;not proof of original-leftover behavior.",
+    "confirmed_failure": "Native NULL Variable::GetName reaches StrCat. ARTIST Construct clears25 names and writes only0..23; OnActivate registers25; original SaveState82832A04 dereferences the NULL name.",
     "preliminary_source_map": {
       "path": "scratch/DEBUG_MENU_1011/physical_route_behavior_audit_20261013/REPORT.md",
       "sha256": "f7fd386deb9e3ce13b4cd69bce4b0689ce27efa520b2b636652f94699c195e70"
     },
-    "source_map_limits": "42 exact IDs:38 mapped to source consumers/callbacks,4 joint-break readers unclassified;this is not implemented/working-entry certification."
+    "source_map_limits": "42 exact IDs:38 mapped to source consumers/callbacks,4 joint-break readers unclassified;this is not implemented/working-entry certification.",
+    "original_behavior": {
+      "state": "Matched original assembly;expanded-row classification awaiting combined evidence review, no whole-site disposition recorded.",
+      "row": "DLCDebugComponent feature expansion24, NULL caption",
+      "preserved": true,
+      "initialization_gap": "Missing manager construction separately changes pack grouping and enabled defaults;it does not cause or fix the original NULL-caption crash.",
+      "original_exports": [
+        {
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826627F8.json",
+          "sha256": "4c3d5d18f63bb8e4af407663c69c3a9ec6a634dc398900b42a315245fc9ccb7e"
+        },
+        {
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82662B40.json",
+          "sha256": "86df9d4152e611689946e361d7a6c7e3c2faa129a4196f82afcedfd210c27c29"
+        },
+        {
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282D640.json",
+          "sha256": "21d77aa7714fe69a3f49f9044c40c682d0b2705873b62a5f536d5efdec9bef3a"
+        },
+        {
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82832660.json",
+          "sha256": "e2b366f7b62b564dc2a4dbbb9d231c3d98c77b5aeef9eb44d254700052cf6673"
+        }
+      ],
+      "native_dump_node": {
+        "path": "scratch/DEBUG_MENU_1011/physical_route_validation_20261013/configured_crash_node.stdout.log",
+        "sha256": "86f955dac32da5963dc7691c8f82ad027db4c3a3fc559f3326fe4fb4ad562b59"
+      }
+    }
   },
-  "new_menu_entry_verdicts_this_checkpoint": 0
+  "new_menu_entry_verdicts_this_checkpoint": 0,
+  "native_followon_integration": {
+    "base": "8cbd95c6da44d35cd5c0e886a1588b80acbec46b",
+    "head": "c3778b7ff9a677ae64dc9c00f6af91b5c9c8be24",
+    "branch": "codex/debug-menu-native-followon-integration",
+    "pushed": true,
+    "changed_paths": 22,
+    "scope": "Borrowed LinearMalloc, release/RW table, native query provider, sampler replay/coexistence, and real provider fixtures/runners.",
+    "state": "Clean source checkpoint pushed;full integration build/native tests pending;normal8cbd retained.",
+    "planned_mount": "The new OcclusionQueryProviderPC.cpp requires one shipping source-list addition when source is promoted.",
+    "constructor_followon": "Real DLCManager constructor/provider and GameData ownership adoption being reconciled;full DLC Prepare/monitor remain unactivated.",
+    "menu_entry_promotions": 0
+  }
 }
