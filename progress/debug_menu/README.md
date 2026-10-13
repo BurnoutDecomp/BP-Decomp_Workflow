@@ -45,8 +45,9 @@ and bounded native-provider repairs pass review and those regressions. See
 | Triangle collision and occlusion | Reviewed 42-path integration and dependency/startup repairs are built and pushed at `058f17072`; startup/GPU regressions pass. Clipping passes 8 checks and frustum predicates pass 6. Renderer activation/backend/capacity/lifetime and collision menu effects remain open. |
 | Resource memory map and statistics | Descriptor repair, 45-lane validation and DrawDataSize owner are integrated. Heap reporting passed source review and 18 production-allocator checks. Typed allocator consumers and resource HUD effects remain. |
 | CPU profiler allocator | Reviewed, integrated and pushed. Whole-production checks 12/12; shipping build and 22 Start/GPU integration checks pass. CPU menu/HUD witness remains. |
-| DLC owner and asynchronous file operations | Full original Prepare, callbacks and PC directory overrides compile across 17 TUs at `a2446b2b1`. Source review/integration/native checks remain. Directory operations do not provide XContent discovery; full PC startup Prepare remains separate. |
-| Coarse scene queries and shared renderer state | Coarse consumers, shared state/caller guards, native SM3 pairs and Untex wrapper compile across 16 TUs; the later ZOnly wrapper/adoption also compiles. Source review/integration/native checks pending; predication shims remain no-ops. |
+| DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
+| Coarse scene queries and shared renderer state | Coarse consumers, shared state/caller guards, native SM3 pairs and wrappers compile. White-texture format and sampler-store repairs pass source review. Native sampler application and predication remain no-ops. |
+| Original allocator construction | Canonical globals/wrappers and RW placement/adoption are recovered on a source branch, with no startup activation. Six production TUs compile; 14 storage/ownership/rollback checks pass. Fresh source review remains. See [allocator recovery](ALLOCATOR_CONSTRUCT_20261013.md). |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)
@@ -60,8 +61,10 @@ Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json)
 isolated branches while review and integration continue. The normal executable
 is the tested `058f17072` build, with a byte-exact healthy backup and provenance.
 The next [combined source review](loading_scene_review_20261013.json) covers
-50 files across loading/filesystem and scene/renderer work; it is running while
-new allocator-constructor and native occlusion investigations continue.
+50 files across loading/filesystem and scene/renderer work. Its first verdict is
+fail on five source defects; all five repairs now pass bounded source review while
+allocator recovery, native boundary audits and integration preparation continue. The tested normal
+executable remains `058f17072` until the next coherent batch passes its gates.
 
 ## Pipeline
 

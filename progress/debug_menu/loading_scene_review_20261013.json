@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "state": "COMBINED_SOURCE_REVIEW_RUNNING; integration and entry behavior pending",
+  "state": "BOUNDED_SOURCE_REVIEW_PASS; startup and renderer native integration pending",
   "owned_paths": 50,
   "resource": {
     "base": "d4bfb68f5e9334983ffd19c8588ee9ed6f8ad3be",
@@ -23,6 +23,55 @@
   "review_inputs": "scratch/DEBUG_MENU_1011/loading_scene_review_20261013_v2/review_inputs.json",
   "review_inputs_sha256": "0b81422122743ccfc1d3248dc1031213ce46b08746b756a072f4c641ae398bed",
   "file_pins": 1187,
+  "review": {
+    "verdict": "fail",
+    "report": "scratch/DEBUG_MENU_1011/loading_scene_review_20261013_v2/SOURCE_REVIEW.md",
+    "sha256": "8378aed7fd1dddfd6f7b370b2846ac8c86df16ac56d038e2320e4733b6aea397",
+    "findings": [
+      "Translate the raw white-texture format at the native D3D9 creation boundary.",
+      "Restore sampler parameter words +0x18=0 and +0x20=13.",
+      "Yield after selecting the next GameData patch request.",
+      "Yield between DLC VERSION.TXT packages.",
+      "Clear the monitor-started flag after its thread completes."
+    ]
+  },
+  "repair_checkpoints": [
+    {
+      "commit": "2ee7808198e157c2106e5c9c47dffc75bee96a80",
+      "scope": "Native texture creation maps only Xenos 0x18280086 to D3DFMT_A8R8G8B8; engine format stays intact.",
+      "state": "pushed; repair review and integration pending"
+    },
+    {
+      "commit": "f7699822605fe2f3a3f0952708903defcb2e49a5",
+      "scope": "Restore the two attested sampler stores.",
+      "state": "pushed; downstream native enum audit and repair review pending"
+    },
+    {
+      "commit": "5173bb677f22b4835bfde7b4c059e070d8a124e9",
+      "scope": "GameData stage18 returns after selecting stage17 for the next package.",
+      "state": "pushed; canonical TU compile passes; repair review pending"
+    },
+    {
+      "commit": "5a431848ff616e00e33c6c1b3919e599e17914a9",
+      "scope": "Clear completed-monitor flag and preserve nonfinal DLC package yield.",
+      "state": "pushed; two canonical TUs compile with zero new faithfulness findings; repair review pending"
+    }
+  ],
+  "repair_review": {
+    "state": "pass",
+    "packet": "scratch/DEBUG_MENU_1011/loading_scene_repairs_20261013/review_supplement/REVIEW_PACKET.md",
+    "inputs_sha256": "00fab4eddd6c17c153dd1be51cddfadd092c9dedc716ed8a369a66289232fc27",
+    "file_pins": 32,
+    "compile_tus": 4,
+    "compile": "pass",
+    "new_faithfulness": 0,
+    "resource_validation_head": "ab98308c2",
+    "scene_validation_head": "f4caf689c9a64ade6f3c261d36790e5f0312d703",
+    "report": "scratch/DEBUG_MENU_1011/loading_scene_repairs_20261013/review_supplement/SOURCE_REVIEW.md",
+    "report_sha256": "61931be024a0fdd00cf850089287ff8a54f902debbd2763bc00f23302aa2774e",
+    "additional_provider_paths": 1,
+    "limits": "Source repair review only; resource startup activation still reaches a missing DLC producer."
+  },
   "copied_evidence_files": 556,
   "evidence_format": "Byte-exact short SHA256 aliases plus original-path index; exact Git trees pin dependencies.",
   "supersedes_incomplete_packet": "scratch/DEBUG_MENU_1011/loading_scene_review_20261013 (Windows long-path failure; no final manifest)",
@@ -31,7 +80,8 @@
     "File and compile counts are source scope, not recovered or verified menu-entry totals.",
     "Native XContent discovery, full five-stack PC startup caller and dirty-disc UI remain open.",
     "Renderer activation, shared-state capacity/lifetime and native predication remain open.",
-    "Root's newer reviewed startup and ZOnly cache/entry hunks must be preserved during integration.",
+    "Root's newer reviewed startup and PositionOnly cache/entry hunks must be preserved during integration.",
+    "The retained two-buffer GameData adapter forwards to recovered Prepare; DLC reachability must be resolved before shipping this batch.",
     "Later allocator-constructor/root-bank recovery is outside this frozen batch."
   ]
 }
