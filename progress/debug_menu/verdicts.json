@@ -289,5 +289,38 @@
       "tools/tests/cases/debug_gpu_monitors_table.ps1",
       "tools/tests/cases/debug_gpu_monitors_hidden.ps1"
     ]
+  },
+  "BrnAI::RouteMapDebugComponent::OnActivate#0001": {
+    "state": "verified",
+    "notes": "Draw AI section map: original registered master gate and full render chain match; native show/hide/default restoration and actual map pixels independently reviewed.",
+    "evidence": [
+      "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+      "progress/debug_menu/native_sdk_scene_integration_20261013.json",
+      "scratch/DEBUG_MENU_1011/native_followon_integration_20261014/review/SOURCE_REVIEW.md",
+      "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+      "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+    ]
+  },
+  "BrnAI::RouteMapDebugComponent::OnActivate#0002": {
+    "state": "verified",
+    "notes": "High detail map: original local-line limit/filter/geometry chain matches; the same native7639-section data draws2334 low-detail versus11236 high-detail local lines.",
+    "evidence": [
+      "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+      "progress/debug_menu/native_sdk_scene_integration_20261013.json",
+      "scratch/DEBUG_MENU_1011/native_followon_integration_20261014/review/SOURCE_REVIEW.md",
+      "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+      "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+    ]
+  },
+  "BrnAI::RouteMapDebugComponent::OnActivate#0021": {
+    "state": "verified",
+    "notes": "Show AI section info: original gate/low16 index dispatch and text/circle consumer match; native index1 shows ID177737,links127 and0 and position; hide/default restoration reviewed.",
+    "evidence": [
+      "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+      "progress/debug_menu/native_sdk_scene_integration_20261013.json",
+      "scratch/DEBUG_MENU_1011/native_followon_integration_20261014/review/SOURCE_REVIEW.md",
+      "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+      "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+    ]
   }
 }

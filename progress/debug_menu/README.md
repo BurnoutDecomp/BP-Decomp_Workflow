@@ -11,7 +11,7 @@ are all still in progress.** The count of fully implemented but unverified entri
 is unknown. Source coverage must never be reported as implementation completion.
 
 The inventory contains **1,355 static registration sites**. Final dispositions are
-**27 verified, three original no-ops and 1,325 pending**. Loop-generated rows,
+**30 verified, three original no-ops and 1,322 pending**. Loop-generated rows,
 fifteen symbolic captions, two missing wrapper exports and native additions also
 need explicit accounting; 1,355 is not the final visible-row count.
 
@@ -62,14 +62,16 @@ isolated branches while review and integration continue. The normal executable
 remains the tested `8cbd95c6d` build, with a healthy byte-exact backup and provenance.
 The allocator/sampler/query follow-on is pushed on
 `codex/debug-menu-native-followon-integration` at `bec73c5ce`. Its 2,974-file
-shipping build links, and private startup/GPU regressions pass 22 checks with
-zero assertions/exceptions. Combined review is running before normal delivery.
+shipping build links, private startup/GPU regressions pass22 checks with zero
+assertions/exceptions, and bounded source review passes. Primary source is
+pushed; the normal rebuild/delivery gate is pending.
 
 Native batches have now exercised **149 bindings** across Physical Traffic,
 Route Map and Traffic: 141 literal variables and eight action paths, with 1,937
 actual path/value reads across 27 phases. These are registry/storage observations;
-the final behavior count above remains separate. Four Route Map effects have
-retained visible witnesses under review. Physical/conditional effects and the
+the final behavior count above remains separate. Three Route Map effects now have final verified dispositions; see the
+[native checkpoint](PHYSICAL_ROUTE_NATIVE_20261014.md). Colour-mode proof remains
+under its separate primary-data review. Physical/conditional effects and the
 Traffic page's dynamic-caption row still need suitable evidence.
 
 Global `SAVE` hits DLC feature24's original NULL caption; an independent original
