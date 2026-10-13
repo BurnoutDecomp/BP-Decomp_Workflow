@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "branch": "codex/debug-menu-cpu-allocator",
+  "source_commit": "e4acac75f4c00a77909282e7c7473edc1eabbf11",
+  "state": "SOURCE_COMPILED; independent review/integration/native pending",
+  "original": "ARTIST CgsDev::PerfMonCpu::Construct82824B10",
+  "changes": [
+    "Use supplied RW allocator for96-byte records,16-byte aligned, with original five-lane descriptor.",
+    "Restore original line71 null-allocation assertion and full registry memset.",
+    "Preserve native QPC/completed-count sidecars; host-only teardown returns the Resource to its producer."
+  ],
+  "production_compile": "pass",
+  "new_faithfulness": 0,
+  "grouped_checks": 12,
+  "old_source_failures": 4,
+  "old_source": "d6da1305648e6b11c93833acdb0e1f821947154e",
+  "evidence": "scratch/DEBUG_MENU_1011/cpu_allocator_recovery_20261013/REVIEW_PACKET.md",
+  "final_entry_promotions": 0
+}

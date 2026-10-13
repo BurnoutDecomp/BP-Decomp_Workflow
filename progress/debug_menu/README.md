@@ -33,6 +33,7 @@ checks without asserts/exceptions. See [startup repair](START_CRASH_20261013.md)
 | Remaining 130-site source batch | Combined source review passes; integrated at `d6da13056`, normal build links, Start/GPU regressions pass. Per-entry native/backend work remains. |
 | Triangle collision and occlusion | Component, geometry, manager and dispatcher source checkpoints pushed and compile. Combined review running; missing owner/backend work continues. Original matrix request is 512 KiB; host allocator remains too small if wired. |
 | Resource memory map and statistics | Typed map and statistics/HUD checkpoints pushed; generator/header repairs compile. Combined source review running; integration/native checks remain. |
+| CPU profiler allocator | Registry allocation and host teardown source checkpoint pushed; production compile and 12 grouped checks pass. Review/integration/native checks pending. |
 | DLC owner and asynchronous file operations | Original owner/init/Prepare chain and canonical async frontend being reconstructed. Missing discovery/backend paths remain explicit. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
 
@@ -69,7 +70,7 @@ goal is complete only when every original/native entry has a supported dispositi
   [Effects/Director](EFFECTS_DIRECTOR_130_20261012.md), [remaining 130](REMAINING130_20261013.md),
   [GameState caller gaps](GAMESTATE_UPDATE_CHAIN_20261012.md),
   [Resource windows](RESOURCE_WINDOWS_20261012.md).
-- [Memory map](MEMORY_MAP_STARTUP_20261013.md), [scene manager](SCENE_MANAGER_20261012.md),
+- [CPU allocator](CPU_ALLOCATOR_20261013.md), [memory map](MEMORY_MAP_STARTUP_20261013.md), [scene manager](SCENE_MANAGER_20261012.md),
   [environment/graphics](ENVIRONMENT_GRAPHICS_20261012.md),
   [pipeline checkpoints](PIPELINE_CHECKPOINTS_20261012.md).
 
