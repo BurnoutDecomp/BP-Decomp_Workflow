@@ -17,7 +17,7 @@ need explicit accounting; 1,355 is not the final visible-row count.
 
 The latest verified repair is the GPU monitor chain: original twenty categories,
 real native GPU timings, graph/table drawing and visibility. Three full-game cases
-pass39 checks with inspected frames and zero asserts/exceptions. Gameplay source
+pass 39 checks with inspected frames and zero asserts/exceptions. Gameplay source
 `8c779e4f8` is pushed and the normal executable builds. See
 [GPU monitors](GPU_MONITORS_20261013.md) and the
 [exact native receipt](gpu_monitors_native_20261013.json).
@@ -30,22 +30,22 @@ checks without asserts/exceptions. See [startup repair](START_CRASH_20261013.md)
 
 | Work | State and next gate |
 | --- | --- |
-| Remaining 130-site source batch | Five review findings repaired; fresh combined source review of21de354ba running. Integration must preserve later Start/INI/menu/GPU fixes. |
-| Triangle collision and occlusion | Query, geometry and constructor source checkpoints pushed. Component API compile repairs and missing consumers are still code work. Original matrix request is512 KiB; current host allocator capacity is insufficient if wired. |
-| Resource memory map and statistics | Typed map and producer/HUD source checkpoints pushed; parent generator published. Group compile exposed header/integration debt; source review and native checks remain. |
+| Remaining 130-site source batch | Combined source review passes; integrated at `d6da13056`, normal build links, Start/GPU regressions pass. Per-entry native/backend work remains. |
+| Triangle collision and occlusion | Component, geometry, manager and dispatcher source checkpoints pushed and compile. Combined review running; missing owner/backend work continues. Original matrix request is 512 KiB; host allocator remains too small if wired. |
+| Resource memory map and statistics | Typed map and statistics/HUD checkpoints pushed; generator/header repairs compile. Combined source review running; integration/native checks remain. |
 | DLC owner and asynchronous file operations | Original owner/init/Prepare chain and canonical async frontend being reconstructed. Missing discovery/backend paths remain explicit. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)
-records1,351 examined sites. It includes existing code and incomplete chains and
-is retained for provenance only. It does not mean1,351 recovered controls.
+records 1,351 examined sites. It includes existing code and incomplete chains and
+is retained for provenance only. It does not mean 1,351 recovered controls.
 
 ## Pipeline
 
 Keep two Luna Max source workers recovering exclusive subsystem slices while
 Root integrates/tests/publishes and one Sol reviewer handles a combined batch.
 No Astra. Do not make source workers wait for review or native checks. Prefer
-large page/subsystem batches around130 sites; commit/push smaller coherent
+large page/subsystem batches around 130 sites; commit/push smaller coherent
 increments frequently, including source that is explicitly unverified.
 
 Use ARTIST assembly for behavior and ABI, DecFIGS for declaration shape, and old
@@ -66,7 +66,7 @@ goal is complete only when every original/native entry has a supported dispositi
 - [Sound](SOUND_BATCH_20261011.md), [audio clock/history](SOUND_CLOCK_20261011.md),
   [Traffic/AI](TRAFFIC_BATCH_20261011.md).
 - [319-site source review](SOURCE_BATCH_319_20261012.md),
-  [Effects/Director](EFFECTS_DIRECTOR_130_20261012.md),
+  [Effects/Director](EFFECTS_DIRECTOR_130_20261012.md), [remaining 130](REMAINING130_20261013.md),
   [GameState caller gaps](GAMESTATE_UPDATE_CHAIN_20261012.md),
   [Resource windows](RESOURCE_WINDOWS_20261012.md).
 - [Memory map](MEMORY_MAP_STARTUP_20261013.md), [scene manager](SCENE_MANAGER_20261012.md),
