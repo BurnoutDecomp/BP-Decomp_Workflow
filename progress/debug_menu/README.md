@@ -35,10 +35,10 @@ its own witness. See [CPU allocator](CPU_ALLOCATOR_20261013.md).
 | Work | State and next gate |
 | --- | --- |
 | Remaining 130-site source batch | Combined source review passes; integrated at `d6da13056`, normal build links, Start/GPU regressions pass. Per-entry native/backend work remains. |
-| Triangle collision and occlusion | Original review failed. G1-G10 repairs, explicit owner seams and constructor calls are pushed and compile; repair review runs alongside recovery. Clipping passes 8 checks; old source fails 5. Renderer state/backend/capacity/lifetime remain open. |
-| Resource memory map and statistics | Original review found one descriptor mismatch. Regenerated repair, 45-lane validation and exact DrawDataSize owner compile; supplement review running. Typed allocator consumers and native checks remain. |
+| Triangle collision and occlusion | Repairs passed combined source review and joined the 42-path integration at `66ee49a71`. Clipping passes 8 checks and frustum predicates pass 6, including unordered inputs. Shipping compilation passes; two missing link dependencies are being recovered. Renderer state/backend/capacity/lifetime remain open. |
+| Resource memory map and statistics | Descriptor repair, 45-lane validation and exact DrawDataSize owner passed source review and joined `66ee49a71`. Heap reporting recovery compiles and is under review. Typed allocator consumers and native checks remain. |
 | CPU profiler allocator | Reviewed, integrated and pushed. Whole-production checks 12/12; shipping build and 22 Start/GPU integration checks pass. CPU menu/HUD witness remains. |
-| DLC owner and asynchronous file operations | Owner/Prepare, canonical AsyncOp, typed patch events, repeated pump and disk-status chain compile across 8 TUs. Source review and missing discovery/backend/full Prepare work remain. |
+| DLC owner and asynchronous file operations | Device callback chain compiles across 12 TUs. Full original GameModule Prepare and its helper dependencies are pushed separately, awaiting compilation/review. Discovery/backend and PC startup integration remain open. |
 | Coarse scene queries | Line/Volume/Frustum consumers, payloads, backend entry and event IDs pushed; 4 TUs compile. Source review/native checks pending. Unattested plain producer APIs were not invented. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
 
@@ -47,9 +47,12 @@ records 1,351 examined sites. It includes existing code and incomplete chains an
 is retained for provenance only. It does not mean 1,351 recovered controls.
 
 Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json),
+[link dependencies](link_dependencies_20261013.json),
 [resource Prepare](resource_prepare_source_20261013.json), and
 [scene queries](scene_query_source_20261013.json). Source recovery continues on
-isolated branches while the combined repair review runs.
+isolated branches while dependency review and integration continue. The normal
+executable remains the working `e4acac75f` build; the 2,972-file supporting build
+compiled cleanly but could not link before those dependencies were recovered.
 
 ## Pipeline
 
