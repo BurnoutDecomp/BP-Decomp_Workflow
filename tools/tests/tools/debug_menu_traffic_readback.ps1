@@ -26,13 +26,15 @@ if ($laProblems.Count -eq 0) {
     $laSourceLines = [IO.File]::ReadAllLines($LogPath)
     $laFilteredLines = [System.Collections.Generic.List[string]]::new()
     # These exact native renderer diagnostics can interleave on another thread.
-    # Neither grammar is a possible value of the traffic case's bool/numeric/enum
+    # These grammars are not values of the traffic case's bool/numeric/enum
     # cells. Keep their original log positions and reject other unexpected output.
     $lsRendererDiagnostic = '^\[lionfx\] Render: emitters live=\d+ cell=\d+ inactive=\d+ culled=\d+ \(range=\d+ frustum=\d+ near=\d+\) drawn=\d+ particles=\d+ nocull=[01]$'
     $lsMeshDiagnostic = '^\[FLAG PC bring-up\] MESH lists:(?: \[\d+\]=\d+)+$'
+    $lsDispatchDiagnostic = '^\[lionfx\] Dispatch: batches=\d+ vb=[0-9A-Fa-f]{16} white=\d+\.\d{3}$'
     for ($liSourceLine = 0; $liSourceLine -lt $laSourceLines.Count; ++$liSourceLine) {
         $lsSourceLine = $laSourceLines[$liSourceLine]
-        if ($lsSourceLine -match $lsRendererDiagnostic -or $lsSourceLine -match $lsMeshDiagnostic) {
+        if ($lsSourceLine -match $lsRendererDiagnostic -or $lsSourceLine -match $lsMeshDiagnostic -or
+            $lsSourceLine -match $lsDispatchDiagnostic) {
             $laIgnoredDiagnosticLines.Add($liSourceLine + 1)
         } else {
             $laFilteredLines.Add($lsSourceLine)
@@ -219,6 +221,7 @@ if ($laProblems.Count -eq 0) {
                 probe_key = $lrPlanProbe.probe_key
                 phase = $lrPlanProbe.phase
                 role = $lrPlanProbe.role
+                is_readout = [bool]$lrPlanProbe.is_readout
                 id = $lrPlanProbe.id
                 caption = $lrPlanProbe.caption
                 lookup_path = $lrPlanProbe.lookup_path
