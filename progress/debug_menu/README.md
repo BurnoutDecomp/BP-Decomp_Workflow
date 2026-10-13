@@ -30,12 +30,12 @@ The reported Start crash with vehicle INI settings is also repaired. The exact
 normal-build case reaches driving, applies all five LOD overrides and passes nine
 checks without asserts/exceptions. See [startup repair](START_CRASH_20261013.md).
 
-The normal executable includes the reviewed supporting integration and repairs
-at `058f17072`. All 2,972 shipping files compile and link; Start and GPU graph
-integration regressions pass 22 checks with zero assertions/exceptions. The
-first integration exposed a startup allocator handoff bug; its original caller
-and bounded native-provider repairs pass review and those regressions. See
-[latest integration](SUPPORTING_INTEGRATION_20261013.md).
+The normal executable now includes the reviewed scene and allocator integration
+at `8cbd95c6d`. All 2,973 shipping files compile and link. Private Start/GPU graph
+regressions pass 22 checks; the exact normal executable passes its ten-check
+startup case, all with zero assertions/exceptions. CPU command storage and
+procedural sky allocation repairs are included. See the
+[current delivery receipt](native_sdk_scene_integration_20261013.json).
 
 ## Active work
 
@@ -46,8 +46,8 @@ and bounded native-provider repairs pass review and those regressions. See
 | Resource memory map and statistics | Descriptor repair, 45-lane validation and DrawDataSize owner are integrated. Heap reporting passed source review and 18 production-allocator checks. Typed allocator consumers and resource HUD effects remain. |
 | CPU profiler allocator | Reviewed, integrated and pushed. Whole-production checks 12/12; shipping build and 22 Start/GPU integration checks pass. CPU menu/HUD witness remains. |
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
-| Coarse scene queries and shared renderer state | Repairs pass source review. A [21-path private integration](scene_source_integration_20261013.json) at `888cfd131` compiles all 15 changed TUs and preserves the newer entry/cache bodies. Native sampler application and predication remain no-ops; native gates remain. |
-| Original allocator construction | The [12-path source review](allocator_construct_review_20261013.json) passes at pushed `b4611add1`. Six TUs compile and 14 production checks pass. Full constructor activation, GPU/DMA and native effects remain unverified. See [allocator recovery](ALLOCATOR_CONSTRUCT_20261013.md). |
+| Coarse scene queries and shared renderer state | Reviewed scene integration is delivered at `8cbd95c6d`. New sampler/query providers compile on a separate branch. Query repairs pass bounded source review; a texture-switch filtering defect is being repaired. Native query behavior and renderer activation remain open. |
+| Original allocator construction | Reviewed native storage is delivered; 14 production checks pass. Original resource, 24-allocator and 27-pool creation sequences pass bounded source review and remain unactivated. The borrowed LinearMalloc repair passes 38 focused checks and is under review. Full constructor activation, owned/RW lifecycle and GPU/DMA behavior remain open. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)

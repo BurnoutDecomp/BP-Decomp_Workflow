@@ -77,7 +77,24 @@
         "path": "scratch/DEBUG_MENU_1011/query_repair_validation_20261013/fixture_dump.stdout.log",
         "sha256": "e2eaf51b82133f4c88ceeb33fd97b7bd3614a6a11a1f0f99aba229b88ea422fe"
       },
-      "qualification": "No provider/game behavior verdict or original-polarity proof from this failed setup."
+      "qualification": "No provider/game behavior verdict or original-polarity proof from this failed setup.",
+      "second_attempt": {
+        "head": "b8cad5071fd5391f237d3f0dc6db4c34f28b0354",
+        "state": "FAIL; invalid vertex-input negative test crashed d3d9 UpdateVShader reading null+0x40; no numeric provider verdict",
+        "output": {
+          "path": "scratch/DEBUG_MENU_1011/query_repair_validation_20261013/native_queries_repaired.stdout.log",
+          "sha256": "51d653a23b7226517f9fb7dab46ec9320e36f542a6290403aa2956260495acc4"
+        },
+        "dump": {
+          "path": "scratch/DEBUG_MENU_1011/query_repair_validation_20261013/fixture_vertex_input_dump.stdout.log",
+          "sha256": "363b68352c9f56e7cc29751440788b574928faefdd231480ff76ddb1bb4d2ffe"
+        },
+        "artifacts": {
+          "path": "scratch/DEBUG_MENU_1011/query_repair_validation_20261013/fixture_vertex_input_dump.receipt.json",
+          "sha256": "2b4cfad714be9269c6b8019c16e0e0e9dec338a00bd231dc754a2890e8699bf5"
+        },
+        "next": "Remove unsafe invalid-state draw and classify real failed-HRESULT witness unavailable; retain ordinary valid-state cases."
+      }
     }
   },
   "allocator_creation_source": {
@@ -256,7 +273,7 @@
     }
   },
   "followon_combined_review": {
-    "state": "in progress; sampler texture-type bind defect identified; frozen report pending",
+    "state": "fail; one supported sampler texture-type bind defect",
     "owned_paths": 19,
     "pinned_files": 428,
     "resource_head": "9a7f5d9b142cfe5ac43a4a92ea6acc75a578f8fa",
@@ -267,7 +284,16 @@
     },
     "packet": "scratch/DEBUG_MENU_1011/resource_sampler_query_review_20261013/REVIEW_PACKET.md",
     "sampler_defect": "Incoming texture is bound after sampler block translation; texture-type capability decisions remain based on the previous texture. Repair pending.",
-    "activation": "off; normal8cbd delivery unchanged"
+    "activation": "off; normal8cbd delivery unchanged",
+    "report": {
+      "path": "scratch/DEBUG_MENU_1011/resource_sampler_query_review_20261013/SOURCE_REVIEW.md",
+      "sha256": "70305c6908f73f566f382088f7d0de42f41fc77c78fcb21e88beca4e780a4d62"
+    },
+    "bounded_source_passes": [
+      "six-path resource slice",
+      "prior query repair slice"
+    ],
+    "repair": "Recompute only texture-dependent filters after incoming bind; preserve independent raw MaxMip replay and original caller order."
   },
   "linear_borrowed_followon": {
     "head": "43aa1faaec7724b730d002698a4c4338f9bf6723",
@@ -282,7 +308,43 @@
       "path": "scratch/DEBUG_MENU_1011/recovery_lanes/vehicle-deformation-131/scratch/linearborrow1013/source_preservation.json",
       "sha256": "bf07ba0052a30450848c0bda77d976f8a572b878df7e76440f32c0e0afeb73f5"
     },
-    "compile_review_runtime": "pending independent checks",
-    "limits": "Owned-release/RW hooks and an owned backing producer remain separate; only file-static first-use scratch initialization is traced."
+    "compile_review_runtime": "four production TUs compile;38/38 focused checks pass;fresh source review in progress;not delivered",
+    "limits": "Owned-release/RW hooks and an owned backing producer remain separate; only file-static first-use scratch initialization is traced.",
+    "validation_head": "623f44942cd3296d8b578d7fc9eb583270ce1c78",
+    "fixture_paths": 2,
+    "compile": {
+      "path": "scratch/DEBUG_MENU_1011/linear_borrowed_validation_20261013/compile/canonical_private_compile.json",
+      "sha256": "3cb6a8eefadc6365b4258525792aa0d2a3ee66fe7b87400704d1d0dc4c368889"
+    },
+    "checks": {
+      "before": {
+        "checks": 10,
+        "failures": 6,
+        "output": {
+          "path": "scratch/DEBUG_MENU_1011/linear_borrowed_validation_20261013/borrowed_before.stdout.log",
+          "sha256": "1ab2725b5cd6b7c3478102323d1187624ca6579cda828364211f2307e1e65e2a"
+        }
+      },
+      "after": {
+        "checks": 10,
+        "failures": 0,
+        "output": {
+          "path": "scratch/DEBUG_MENU_1011/linear_borrowed_validation_20261013/borrowed_after.stdout.log",
+          "sha256": "8fa4cc1dab13f889cf98b736daa074736083c578033afa9fb3dd6fd5e0d407ff"
+        }
+      },
+      "scratch": {
+        "checks": 28,
+        "failures": 0,
+        "output": {
+          "path": "scratch/DEBUG_MENU_1011/linear_borrowed_validation_20261013/scratch.stdout.log",
+          "sha256": "20969e5335f012db9265f2f4f3acf6e56f7f1e34b594c4c3e90b9bd9e5db669d"
+        }
+      }
+    },
+    "review_inputs": {
+      "path": "scratch/DEBUG_MENU_1011/linear_borrowed_review_20261013/review_inputs.json",
+      "sha256": "01c3ef98613889a3ce8178c1e77f8f7ab54fe8481ad33be577f64c83ca9e3db1"
+    }
   }
 }
