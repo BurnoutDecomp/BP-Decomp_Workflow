@@ -1,12 +1,12 @@
 {
   "schema": 1,
-  "state": "REPAIR_SOURCE_REVIEW_RUNNING; integration/native behavior pending",
+  "state": "REPAIR_SOURCE_REVIEW_PASS; exact 42-path integration compiled; shipping link blocked by two missing dependency bodies; native pending",
   "original_review": {
     "verdict": "fail",
     "path": "scratch/DEBUG_MENU_1011/supporting_systems_review_20261013/SOURCE_REVIEW.md",
     "sha256": "adfdc72355fa6c2db81b970a68d98b9e112870664c30269dd6de4f280f486b55"
   },
-  "geometry_head": "588959ab9284743b62245c849fad937c524fc08f",
+  "geometry_head": "bbcbc7dcf7344288c3cbe6d2cbe6305c4bb6620e",
   "memory_head": "2f194161468bdd1d3beffe536feaf95cdceb9548",
   "repairs": [
     "G1-G10 callback ABI, clipping candidate/sign semantics, sphere radius/padding, frustum lanes/quirks, colors/SinCos, constructor/HUD and preservation of newer VMX helpers.",
@@ -48,9 +48,41 @@
   "recursive_source_pins": 1568,
   "final_entry_promotions": 0,
   "limits": [
-    "No primary integration/native entry effects from these repairs.",
+    "Reviewed source is integrated locally at66ee49a71 and pushed on its supporting branch. The recovery-pipeline remote and normal executable remain at e4acac75f until a repaired shipping link and regressions pass.",
     "Typed allocator request/response consumers/order remain incomplete.",
     "Occlusion activation/shared state/query backend/capacity/lifetime remain unfinished.",
     "Later DLC/device/coarse-query work is a separate batch."
-  ]
+  ],
+  "repair_review": {
+    "verdict": "pass",
+    "path": "scratch/DEBUG_MENU_1011/supporting_systems_repairs_20261013/review_supplement/SOURCE_REVIEW.md",
+    "sha256": "aff12c0b55a7e2ebdd4f9ac0e2e266614d64678da799b41fe9a50245e23489bc"
+  },
+  "integration": {
+    "head": "66ee49a71243bfcf110bca7e91a02be7b8674a77",
+    "pushed_branch": "codex/debug-menu-supporting-integration",
+    "owned_paths": 42,
+    "compile_tus": 17,
+    "new_faithfulness": 0,
+    "manifest": "scratch/DEBUG_MENU_1011/supporting_systems_integration_20261013/staged_source_manifest.json",
+    "compile_receipt": "scratch/DEBUG_MENU_1011/supporting_systems_integration_20261013/compile/canonical_private_compile.json"
+  },
+  "shipping_attempt": {
+    "path": "scratch/DEBUG_MENU_1011/build/20261013_175634_supporting-reviewed-66ee49a71.log",
+    "tus": 2972,
+    "compiled": 783,
+    "already_current": 2189,
+    "compile_failures": 0,
+    "link": "fail",
+    "missing": [
+      "ImRenderer<PositionOnlyVertex>::BeginRendering()",
+      "GeneralAllocator::ReportHeap(...)"
+    ],
+    "working_executable_preserved": "e4acac75f4c00a77909282e7c7473edc1eabbf11"
+  },
+  "frustum_unordered_checks": {
+    "current_pass": 6,
+    "old_pass": 4,
+    "total": 6
+  }
 }
