@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "state": "SOURCE_COMPILED; combined fresh review running; integration and behavior pending",
+  "state": "SOURCE_REVIEW_PASS; integrated/built at058f17072; startup/GPU regressions pass; subsystem effects pending",
   "position_only_begin": {
     "head": "f917783e1",
     "branch": "codex/debug-menu-supporting-integration",
@@ -20,5 +20,29 @@
   "new_faithfulness": 0,
   "review_packet": "scratch/DEBUG_MENU_1011/link_dependencies_20261013/REVIEW_PACKET.md",
   "review_inputs": "scratch/DEBUG_MENU_1011/link_dependencies_20261013/review_inputs.json",
-  "final_entry_promotions": 0
+  "final_entry_promotions": 0,
+  "source_reviews": [
+    {
+      "path": "scratch/DEBUG_MENU_1011/link_dependencies_20261013/SOURCE_REVIEW.md",
+      "sha256": "f24fba6e04fb8b67992c29cc999eff88cb0e7c5e165a1880cd61c909ea6e8efe",
+      "verdict": "pass"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/link_dependencies_20261013/position_cache_repair/SOURCE_REVIEW.md",
+      "sha256": "2a9e8e691140fb775c8f2dbefa7441455006f932459818d2fad26561d73b4e8d",
+      "verdict": "pass"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/integration_startup_20261013/handoff_repair/SOURCE_REVIEW.md",
+      "sha256": "0e8559fee890ffa259320ffafd0deab4c2f5f66ec8690926bc649619009fef6d",
+      "verdict": "pass"
+    }
+  ],
+  "heap_checks": 18,
+  "cache_checks": {
+    "current_pass": 6,
+    "old_pass": 4,
+    "total": 6
+  },
+  "latest_runtime_receipt": "progress/debug_menu/supporting_runtime_integration_20261013.json"
 }

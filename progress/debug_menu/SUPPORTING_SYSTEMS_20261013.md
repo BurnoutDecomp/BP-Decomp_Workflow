@@ -1,8 +1,8 @@
 # Collision, occlusion and memory source checkpoint - 2026-10-13
 
-**The combined repair source review passes. The exact 42-path integration
-compiles; shipping link dependencies and native behavior remain pending.
-No final entry verdict is added.**
+**The combined source reviews pass. The 42-path integration and its dependencies
+are built and pushed at `058f17072`; startup/GPU regressions pass 22 checks.
+Specific collision/resource menu effects remain pending. No final entry verdict is added.**
 
 The frozen geometry lane covers collision query/draw helpers, the occlusion
 manager and its dispatch walker. The memory lane covers the typed map, initial
@@ -20,10 +20,13 @@ the host GlobalGraphics arena has 256 KiB. No arena increase is applied. Capacit
 must account for the complete shared renderer state and query allocation lifetime;
 the earlier 576 KiB proposal is not an accepted budget or working-query claim.
 
-The repaired source is integrated at `66ee49a71` and pushed on the supporting
-branch. All 2,972 shipping files compile. Linking exposed the missing position-only
-BeginRendering and allocator ReportHeap bodies; their recoveries compile and are
-under a separate combined review. The healthy `e4acac75f` executable is preserved.
+The exact source integration began at `66ee49a71`. Missing position-only
+BeginRendering and heap reporting bodies were recovered and reviewed, followed
+by a shared program-cache repair. Native checks then caught an omitted startup
+allocator handoff. The original debug-wrapper caller and explicit existing native
+system-provider handoff are repaired and reviewed; scratch sizes are unchanged.
+All 2,972 shipping files compile and link at `058f17072`. See the
+[runtime integration](SUPPORTING_INTEGRATION_20261013.md) for the checks and limits.
 
 Exact candidates, hashes, compile states and limits are in the
 [original source receipt](supporting_systems_20261013.json) and

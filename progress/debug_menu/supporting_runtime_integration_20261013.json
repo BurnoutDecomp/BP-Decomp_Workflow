@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "state": "REVIEWED_INTEGRATION_BUILT; startup/GPU regressions pass; per-entry native effects pending",
+  "head": "058f170727a18a2dc7654c48505b613868392df9",
+  "branch": "codex/debug-menu-recovery-pipeline",
+  "pushed": true,
+  "integration_source": "66ee49a71243bfcf110bca7e91a02be7b8674a77",
+  "integration_owned_paths": 42,
+  "dependency_repairs": [
+    "Position-only BeginRendering export hole",
+    "Heap report/snapshot API over the approved PC engine",
+    "Canonical position-only program cache",
+    "Typed debug allocator and native system-provider startup handoffs"
+  ],
+  "source_reviews": [
+    {
+      "path": "scratch/DEBUG_MENU_1011/supporting_systems_repairs_20261013/review_supplement/SOURCE_REVIEW.md",
+      "sha256": "aff12c0b55a7e2ebdd4f9ac0e2e266614d64678da799b41fe9a50245e23489bc",
+      "verdict": "pass"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/link_dependencies_20261013/SOURCE_REVIEW.md",
+      "sha256": "f24fba6e04fb8b67992c29cc999eff88cb0e7c5e165a1880cd61c909ea6e8efe",
+      "verdict": "pass"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/link_dependencies_20261013/position_cache_repair/SOURCE_REVIEW.md",
+      "sha256": "2a9e8e691140fb775c8f2dbefa7441455006f932459818d2fad26561d73b4e8d",
+      "verdict": "pass"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/integration_startup_20261013/handoff_repair/SOURCE_REVIEW.md",
+      "sha256": "0e8559fee890ffa259320ffafd0deab4c2f5f66ec8690926bc649619009fef6d",
+      "verdict": "pass"
+    }
+  ],
+  "numeric_checks": {
+    "heap_reporting": {
+      "pass": 18,
+      "total": 18
+    },
+    "position_only_cache": {
+      "current_pass": 6,
+      "old_pass": 4,
+      "total": 6
+    },
+    "triangle_clipping": {
+      "current_pass": 8,
+      "old_pass": 3,
+      "total": 8
+    },
+    "frustum_unordered": {
+      "current_pass": 6,
+      "old_pass": 4,
+      "total": 6
+    }
+  },
+  "build": {
+    "tus": 2972,
+    "compile_failures": 0,
+    "link": "pass",
+    "log": "scratch/DEBUG_MENU_1011/build/20261013_184928_startup-handoff-058f17072.log",
+    "exe_sha256": "be7956b2ce3d5120aa7b3863ec4ccb54d19ba4ff24b62c544268f7c5149a28c2",
+    "provenance": {
+      "exe_sha256": "be7956b2ce3d5120aa7b3863ec4ccb54d19ba4ff24b62c544268f7c5149a28c2",
+      "exe_mtime": "2026-10-13T18:49:37",
+      "built_from_root": "D:\\Reverse\\BP-Decomp_Workflow",
+      "host": "Laptop-Adrien",
+      "parent_head": "696a4d0db88b3eb51ce3f7a4dd11583be5eb215d",
+      "parent_dirty": true,
+      "b5_head": "058f170727a18a2dc7654c48505b613868392df9",
+      "b5_dirty": false
+    }
+  },
+  "native_regressions": [
+    {
+      "path": "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_185125/result.json",
+      "sha256": "cf224652b3a746dd4de613b0654a76ba912cee613b29072229ce305c72ff9f16",
+      "verdict": "PASS",
+      "checks": 9,
+      "assertions": 0,
+      "exceptions": 0
+    },
+    {
+      "path": "scratch/bugtest/runs/debug_gpu_monitors_graph/20261013_185125/result.json",
+      "sha256": "6e0bb621f221b4166dc1b71a528774f46a557895d05f8de7689945725e832af7",
+      "verdict": "PASS",
+      "checks": 13,
+      "assertions": 0,
+      "exceptions": 0
+    }
+  ],
+  "native_checks": 22,
+  "inspected_gpu_frame": "scratch/bugtest/runs/debug_gpu_monitors_graph/20261013_185125/frames/bb_008280.bmp",
+  "failed_pre_repair_runs": [
+    "scratch/bugtest/runs/debug_ini_vehicle_startup_final/20261013_183952/result.json",
+    "scratch/bugtest/runs/debug_gpu_monitors_graph/20261013_183952/result.json"
+  ],
+  "healthy_backup": "scratch/DEBUG_MENU_1011/integration_startup_20261013/healthy_058f17072",
+  "final_entry_promotions": 0,
+  "limits": [
+    "Startup and retained GPU behavior are verified here; collision/resource HUD/CPU menu effects need their own witnesses.",
+    "Full engine Allocators::Construct remains unrecovered on the native adapter; the handoff uses the existing five-lane host system provider.",
+    "Occlusion activation, native predication backend, complete shared-state budget and lifetime remain open.",
+    "Later Prepare, directory, scene/state/program candidates are separately frozen and unreviewed/unintegrated."
+  ]
+}

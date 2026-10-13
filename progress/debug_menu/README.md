@@ -15,6 +15,11 @@ The inventory contains **1,355 static registration sites**. Final dispositions a
 fifteen symbolic captions, two missing wrapper exports and native additions also
 need explicit accounting; 1,355 is not the final visible-row count.
 
+"Pending" means an unresolved registration site. It may still need source
+recovery, integration, a fix, review, behavior testing, or classification as an
+original leftover. It does not mean finished code awaiting a separate manual
+in-game check. Related controls can share tests, and one site can create many rows.
+
 The latest verified repair is the GPU monitor chain: original twenty categories,
 real native GPU timings, graph/table drawing and visibility. Three full-game cases
 pass 39 checks with inspected frames and zero asserts/exceptions. See
@@ -25,21 +30,23 @@ The reported Start crash with vehicle INI settings is also repaired. The exact
 normal-build case reaches driving, applies all five LOD overrides and passes nine
 checks without asserts/exceptions. See [startup repair](START_CRASH_20261013.md).
 
-The normal executable now includes the reviewed CPU allocator repair at
-`e4acac75f`. Its shipping build passes; Start and GPU graph integration regressions
-pass 22 checks with zero assertions/exceptions. CPU menu/HUD behavior still needs
-its own witness. See [CPU allocator](CPU_ALLOCATOR_20261013.md).
+The normal executable includes the reviewed supporting integration and repairs
+at `058f17072`. All 2,972 shipping files compile and link; Start and GPU graph
+integration regressions pass 22 checks with zero assertions/exceptions. The
+first integration exposed a startup allocator handoff bug; its original caller
+and bounded native-provider repairs pass review and those regressions. See
+[latest integration](SUPPORTING_INTEGRATION_20261013.md).
 
 ## Active work
 
 | Work | State and next gate |
 | --- | --- |
 | Remaining 130-site source batch | Combined source review passes; integrated at `d6da13056`, normal build links, Start/GPU regressions pass. Per-entry native/backend work remains. |
-| Triangle collision and occlusion | Repairs passed combined source review and joined the 42-path integration at `66ee49a71`. Clipping passes 8 checks and frustum predicates pass 6, including unordered inputs. Shipping compilation passes; two missing link dependencies are being recovered. Renderer state/backend/capacity/lifetime remain open. |
-| Resource memory map and statistics | Descriptor repair, 45-lane validation and exact DrawDataSize owner passed source review and joined `66ee49a71`. Heap reporting recovery compiles and is under review. Typed allocator consumers and native checks remain. |
+| Triangle collision and occlusion | Reviewed 42-path integration and dependency/startup repairs are built and pushed at `058f17072`; startup/GPU regressions pass. Clipping passes 8 checks and frustum predicates pass 6. Renderer activation/backend/capacity/lifetime and collision menu effects remain open. |
+| Resource memory map and statistics | Descriptor repair, 45-lane validation and DrawDataSize owner are integrated. Heap reporting passed source review and 18 production-allocator checks. Typed allocator consumers and resource HUD effects remain. |
 | CPU profiler allocator | Reviewed, integrated and pushed. Whole-production checks 12/12; shipping build and 22 Start/GPU integration checks pass. CPU menu/HUD witness remains. |
-| DLC owner and asynchronous file operations | Device callback chain compiles across 12 TUs. Full original GameModule Prepare and its helper dependencies are pushed separately, awaiting compilation/review. Discovery/backend and PC startup integration remain open. |
-| Coarse scene queries | Line/Volume/Frustum consumers, payloads, backend entry and event IDs pushed; 4 TUs compile. Source review/native checks pending. Unattested plain producer APIs were not invented. |
+| DLC owner and asynchronous file operations | Full original Prepare, callbacks and PC directory overrides compile across 17 TUs at `a2446b2b1`. Source review/integration/native checks remain. Directory operations do not provide XContent discovery; full PC startup Prepare remains separate. |
+| Coarse scene queries and shared renderer state | Coarse consumers, shared state/caller guards, native SM3 pairs and Untex wrapper compile across 16 TUs; the later ZOnly wrapper/adoption also compiles. Source review/integration/native checks pending; predication shims remain no-ops. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)
@@ -50,9 +57,8 @@ Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json)
 [link dependencies](link_dependencies_20261013.json),
 [resource Prepare](resource_prepare_source_20261013.json), and
 [scene queries](scene_query_source_20261013.json). Source recovery continues on
-isolated branches while dependency review and integration continue. The normal
-executable remains the working `e4acac75f` build; the 2,972-file supporting build
-compiled cleanly but could not link before those dependencies were recovered.
+isolated branches while review and integration continue. The normal executable
+is the tested `058f17072` build, with a byte-exact healthy backup and provenance.
 
 ## Pipeline
 
