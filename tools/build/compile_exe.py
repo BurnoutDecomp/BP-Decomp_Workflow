@@ -565,7 +565,7 @@ def acquire_build_lock(out_dir, timeout=3600):
         sys.stderr.write("[build-lock] acquired\n")
 
 
-def write_provenance(exe):
+def write_provenance(exe, source_root=None):
     """Stamp <exe>.provenance.json beside a freshly linked exe.
 
     ⛔ WHY THIS EXISTS. `build/game/Burnout_PC.exe` is a CONTESTED path. Waves build in
@@ -594,7 +594,7 @@ def write_provenance(exe):
             for chunk in iter(lambda: fh.read(1 << 20), b""):
                 h.update(chunk)
         repo = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        sub = os.path.join(repo, "b5-decomp")
+        sub = os.path.abspath(source_root) if source_root else os.path.join(repo, "b5-decomp")
         rec = {
             "exe_sha256": h.hexdigest(),
             "exe_mtime": datetime.datetime.now().isoformat(timespec="seconds"),
@@ -604,6 +604,7 @@ def write_provenance(exe):
             "parent_dirty": bool(_git(repo, "status", "--porcelain")),
             "b5_head": _git(sub, "rev-parse", "HEAD"),
             "b5_dirty": bool(_git(sub, "status", "--porcelain")),
+            "b5_root": sub,
         }
         with open(exe + ".provenance.json", "w", encoding="utf-8") as fh:
             json.dump(rec, fh, indent=2)
@@ -626,7 +627,10 @@ def main(argv=None):
     ap.add_argument("--rsp", required=True, help="build.rsp (sources + /Fe)")
     ap.add_argument("--out", required=True, help="build output dir (build\\game)")
     ap.add_argument("--jobs", type=int, default=0)
+    ap.add_argument("--source-root", help="b5-decomp checkout used by the response files, for build attribution")
     args = ap.parse_args(argv)
+    if args.source_root and not os.path.isdir(os.path.join(args.source_root, "src")):
+        die("--source-root must name a b5-decomp checkout containing src")
     if not tail:
         die("no link tail after -- (expected /SUBSYSTEM:... libs ...)")
 
@@ -741,7 +745,7 @@ def main(argv=None):
                         fh.write(link_digest(objs, exe, tail))
                 except OSError:
                     pass
-                write_provenance(exe)
+                write_provenance(exe, args.source_root)
             else:
                 link_note = f"FAILED (exit {link_rc})"
                 try:
