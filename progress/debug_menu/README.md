@@ -17,8 +17,7 @@ need explicit accounting; 1,355 is not the final visible-row count.
 
 The latest verified repair is the GPU monitor chain: original twenty categories,
 real native GPU timings, graph/table drawing and visibility. Three full-game cases
-pass 39 checks with inspected frames and zero asserts/exceptions. Gameplay source
-`8c779e4f8` is pushed and the normal executable builds. See
+pass 39 checks with inspected frames and zero asserts/exceptions. See
 [GPU monitors](GPU_MONITORS_20261013.md) and the
 [exact native receipt](gpu_monitors_native_20261013.json).
 
@@ -26,20 +25,31 @@ The reported Start crash with vehicle INI settings is also repaired. The exact
 normal-build case reaches driving, applies all five LOD overrides and passes nine
 checks without asserts/exceptions. See [startup repair](START_CRASH_20261013.md).
 
+The normal executable now includes the reviewed CPU allocator repair at
+`e4acac75f`. Its shipping build passes; Start and GPU graph integration regressions
+pass 22 checks with zero assertions/exceptions. CPU menu/HUD behavior still needs
+its own witness. See [CPU allocator](CPU_ALLOCATOR_20261013.md).
+
 ## Active work
 
 | Work | State and next gate |
 | --- | --- |
 | Remaining 130-site source batch | Combined source review passes; integrated at `d6da13056`, normal build links, Start/GPU regressions pass. Per-entry native/backend work remains. |
-| Triangle collision and occlusion | Component, geometry, manager and dispatcher source checkpoints pushed and compile. Combined review running; missing owner/backend work continues. Original matrix request is 512 KiB; host allocator remains too small if wired. |
-| Resource memory map and statistics | Typed map and statistics/HUD checkpoints pushed; generator/header repairs compile. Combined source review running; integration/native checks remain. |
-| CPU profiler allocator | Registry allocation and host teardown source checkpoint pushed; production compile and 12 grouped checks pass. Review/integration/native checks pending. |
-| DLC owner and asynchronous file operations | Original owner/init/Prepare chain and canonical async frontend being reconstructed. Missing discovery/backend paths remain explicit. |
+| Triangle collision and occlusion | Original review failed. G1-G10 repairs, explicit owner seams and constructor calls are pushed and compile; repair review runs alongside recovery. Clipping passes 8 checks; old source fails 5. Renderer state/backend/capacity/lifetime remain open. |
+| Resource memory map and statistics | Original review found one descriptor mismatch. Regenerated repair, 45-lane validation and exact DrawDataSize owner compile; supplement review running. Typed allocator consumers and native checks remain. |
+| CPU profiler allocator | Reviewed, integrated and pushed. Whole-production checks 12/12; shipping build and 22 Start/GPU integration checks pass. CPU menu/HUD witness remains. |
+| DLC owner and asynchronous file operations | Owner/Prepare, canonical AsyncOp, typed patch events, repeated pump and disk-status chain compile across 8 TUs. Source review and missing discovery/backend/full Prepare work remain. |
+| Coarse scene queries | Line/Volume/Frustum consumers, payloads, backend entry and event IDs pushed; 4 TUs compile. Source review/native checks pending. Unattested plain producer APIs were not invented. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)
 records 1,351 examined sites. It includes existing code and incomplete chains and
 is retained for provenance only. It does not mean 1,351 recovered controls.
+
+Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json),
+[resource Prepare](resource_prepare_source_20261013.json), and
+[scene queries](scene_query_source_20261013.json). Source recovery continues on
+isolated branches while the combined repair review runs.
 
 ## Pipeline
 
