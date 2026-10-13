@@ -14,6 +14,8 @@ $laActionObservations = @()
 $laMarkerObservations = @()
 $laProbeObservations = @()
 $laLogLines = @()
+$laSourceLineNumbers = [System.Collections.Generic.List[int]]::new()
+$laIgnoredDiagnosticLines = [System.Collections.Generic.List[int]]::new()
 $laPlan = $null
 
 if (!(Test-Path -LiteralPath $LogPath)) { $laProblems.Add("missing game log: $LogPath") }
@@ -21,7 +23,23 @@ if (!(Test-Path -LiteralPath $PlanPath)) { $laProblems.Add("missing readback pla
 
 if ($laProblems.Count -eq 0) {
     $laPlan = Get-Content -LiteralPath $PlanPath -Raw | ConvertFrom-Json
-    $laLogLines = [IO.File]::ReadAllLines($LogPath)
+    $laSourceLines = [IO.File]::ReadAllLines($LogPath)
+    $laFilteredLines = [System.Collections.Generic.List[string]]::new()
+    # These two native renderer diagnostics can interleave on another thread.
+    # Neither grammar is a possible value of this case's bool/numeric/enum cells.
+    # Keep their raw line positions and reject every other unexpected output.
+    $lsRendererDiagnostic = '^\[lionfx\] Render: emitters live=\d+ cell=\d+ inactive=\d+ culled=\d+ \(range=\d+ frustum=\d+ near=\d+\) drawn=\d+ particles=\d+ nocull=[01]$'
+    $lsMeshDiagnostic = '^\[FLAG PC bring-up\] MESH lists:(?: \[\d+\]=\d+)+$'
+    for ($liSourceLine = 0; $liSourceLine -lt $laSourceLines.Count; ++$liSourceLine) {
+        $lsSourceLine = $laSourceLines[$liSourceLine]
+        if ($lsSourceLine -match $lsRendererDiagnostic -or $lsSourceLine -match $lsMeshDiagnostic) {
+            $laIgnoredDiagnosticLines.Add($liSourceLine + 1)
+        } else {
+            $laFilteredLines.Add($lsSourceLine)
+            $laSourceLineNumbers.Add($liSourceLine + 1)
+        }
+    }
+    $laLogLines = $laFilteredLines.ToArray()
 
     $laActionAliases = @($laPlan.action_alias_queries)
     $laActionNames = @($laActionAliases | ForEach-Object { [string]$_.alias })
@@ -130,7 +148,8 @@ if ($laProblems.Count -eq 0) {
         }
     }
 
-    $laAllMarkerRows = @($laAllMarkerRows | Sort-Object LineIndex)
+    # PS5.1 Sort-Object's named-property adapter does not sort Hashtable keys.
+    $laAllMarkerRows = @($laAllMarkerRows | Sort-Object { [int]$_.LineIndex })
     $laExpectedMarkerSequence = @()
     foreach ($lrMarker in $laPhaseMarkers) {
         $laExpectedMarkerSequence += [string]$lrMarker.alias
@@ -262,10 +281,25 @@ if ($laProblems.Count -eq 0) {
     foreach ($lsError in $laCommandErrors) { $laProblems.Add("script command error: $lsError") }
 }
 
+# Parsing uses filtered positions internally; exported evidence always points at
+# the original, unchanged game log, including diagnostics between probe outputs.
+foreach ($lrAction in $laActionObservations) {
+    if ($lrAction.log_line) { $lrAction.log_line = $laSourceLineNumbers[[int]$lrAction.log_line - 1] }
+}
+foreach ($lrMarker in $laMarkerObservations) {
+    if ($lrMarker.begin_log_line) { $lrMarker.begin_log_line = $laSourceLineNumbers[[int]$lrMarker.begin_log_line - 1] }
+    if ($lrMarker.end_log_line) { $lrMarker.end_log_line = $laSourceLineNumbers[[int]$lrMarker.end_log_line - 1] }
+}
+foreach ($lrProbe in $laProbeObservations) {
+    if ($lrProbe.path_log_line) { $lrProbe.path_log_line = $laSourceLineNumbers[[int]$lrProbe.path_log_line - 1] }
+    if ($lrProbe.value_log_line) { $lrProbe.value_log_line = $laSourceLineNumbers[[int]$lrProbe.value_log_line - 1] }
+}
 $lsStatus = if ($laProblems.Count -eq 0) { 'pass' } else { 'fail' }
 $loObservation = [ordered]@{
     case = 'debug_menu_physical_route_batch'
     source_log = $LogPath
+    source_log_sha256 = if (Test-Path -LiteralPath $LogPath) { (Get-FileHash -LiteralPath $LogPath -Algorithm SHA256).Hash.ToLowerInvariant() } else { $null }
+    ignored_native_diagnostic_lines = @($laIgnoredDiagnosticLines)
     plan_file = $PlanPath
     status = $lsStatus
     alias_capacity = if ($laPlan) { $laPlan.alias_capacity } else { $null }
