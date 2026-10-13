@@ -2895,6 +2895,8 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   rem gateui wave 2026-08-20: the full TU adds Construct/UpdateTriggers/accessors; the _Prepare split STAYS (it owns Prepare; 10 shared COMDATs, no LNK2005).
   echo "%SRC%\GameSource\GameState\TriggerQueryManager\BrnTriggerQueryManager.cpp"
   echo "%SRC%\GameSource\GameState\TriggerQueryManager\BrnTriggerQueryManager_Prepare.cpp"
+  echo "%SRC%\GameSource\GameState\TriggerQueryManager\BrnTriggerQueryManagerDebugComponent.cpp"
+  echo "%SRC%\GameSource\GameState\TriggerQueryManager\BrnTriggerQueryManagerDebugComponent_RenderWorld.cpp"
   rem *** DRIVE-THRU wave (2026-08-27) -- THE GAS STATION / BODY SHOP / PAINT SHOP MANAGER.
   rem  The 13-unresolved-externals note above lists "DriveThruManager::HandleDriveThru" as one of
   rem  the reasons ProcessPlayerTriggers' drive-thru arm was parked. That is PAID: the TU compiles
@@ -3102,6 +3104,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\World\DebugComponents\BrnSkyDebugComponent.cpp"
   echo "%SRC%\GameSource\World\DebugComponents\BrnPVSDebugComponent.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Debug\BrnScoringSystemDebugComponent.cpp"
+  echo "%SRC%\GameSource\GameState\ModeManager\Debug\BrnCrashScoreDebugComponent.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Debug\BrnModeManagerDebugComponent.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Console\CgsConsole.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\CommandWindow\CgsCommandWindow.cpp"
@@ -3128,6 +3131,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Module\CgsModuleSingleBuffered.cpp"
   echo "%SRC%\GameShared\GameClasses\Module\CgsBaseEventReceiverQueue.cpp"
   echo "%SRC%\GameShared\GameClasses\Containers\CgsPriorityQueue.cpp"
+  echo "%SRC%\GameShared\GameClasses\Containers\CgsArrayInt20.cpp"
   echo "%SRC%\GameShared\GameClasses\Containers\CgsLinkedList.cpp"
   echo "%SRC%\GameShared\GameClasses\Containers\CgsHashTableTextureState25.cpp"
   echo "%SRC%\GameShared\GameClasses\Module\CgsDataBuffer.cpp"
