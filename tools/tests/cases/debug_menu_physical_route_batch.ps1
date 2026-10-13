@@ -189,7 +189,8 @@ $laPhases = @(
             $lsExpected=Join-Path $ctx.RunDir 'expected-states.json'
             if(!(Test-Path $lsExpected)){return @{Pass=$false;Detail='missing expected snapshot plan'}}
             $laMissing=@();$liChecked=0
-            foreach($lrSnapshot in @(Get-Content $lsExpected -Raw | ConvertFrom-Json)) {
+            $laExpectedSnapshots=Get-Content $lsExpected -Raw | ConvertFrom-Json
+            foreach($lrSnapshot in $laExpectedSnapshots) {
                 $lsFile=Join-Path $ctx.RunDir $lrSnapshot.File
                 $lsText=if(Test-Path $lsFile){Get-Content $lsFile -Raw}else{''}
                 foreach($lrValue in $lrSnapshot.Values.PSObject.Properties) {
