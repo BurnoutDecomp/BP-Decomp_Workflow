@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "state": "NORMAL_BUILD_DELIVERED; bounded source and native gates pass; campaign active",
+  "state": "Normal8cbd startup gates passed;broader42-entry behavior gate exposes SAVE crash;campaign active",
   "head": "8cbd95c6da44d35cd5c0e886a1588b80acbec46b",
   "branch": "codex/debug-menu-native-sdk-scene-integration",
   "pushed": true,
@@ -468,8 +468,22 @@
       "sha256": "3e567fdc69a26c6a3bac0ed57e6fe9789e68a3cf9cb38765084c35ffc0870073"
     },
     "second_run": "scratch/bugtest/runs/debug_menu_physical_route_configured_20261013/20261013_232648",
-    "state": "second attributable run started;copy actual user config omitted by slot staging;checker repaired for PowerShell5 array enumeration;result pending",
-    "qualification": "Do not infer missing registrations/failed consumers from the first loading-prerequisite failure."
+    "state": "FAIL;configured run reaches DRIVING then SAVE crashes after both pages activate;precise null value producer under investigation",
+    "qualification": "Do not infer missing registrations/failed consumers from the first loading-prerequisite failure.",
+    "second_result": {
+      "path": "scratch/bugtest/runs/debug_menu_physical_route_configured_20261013/20261013_232648/result.json",
+      "sha256": "d67006838a148e78afa526c94ec4dec053f78e0d60006439f8c25b0faac58d64"
+    },
+    "crash_diagnostic": {
+      "path": "scratch/DEBUG_MENU_1011/physical_route_validation_20261013/configured_crash_dump.receipt.json",
+      "sha256": "9f998a68e386231d10e859b8fcbc8e9a172037f38feed6369801c9e8938cb06a"
+    },
+    "confirmed_failure": "StrCat reads null source inside ScriptInterface::SaveState;no destination overflow established;not proof of original-leftover behavior.",
+    "preliminary_source_map": {
+      "path": "scratch/DEBUG_MENU_1011/physical_route_behavior_audit_20261013/REPORT.md",
+      "sha256": "f7fd386deb9e3ce13b4cd69bce4b0689ce27efa520b2b636652f94699c195e70"
+    },
+    "source_map_limits": "42 exact IDs:38 mapped to source consumers/callbacks,4 joint-break readers unclassified;this is not implemented/working-entry certification."
   },
   "new_menu_entry_verdicts_this_checkpoint": 0
 }
