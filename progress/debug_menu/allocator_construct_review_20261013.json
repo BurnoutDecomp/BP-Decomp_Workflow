@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "state": "BOUNDED_SOURCE_REVIEW_PASS; global constructor remains unactivated",
+  "base": "a2446b2b15ea418d0614425ae42c5ade18dbed9f",
+  "head": "b4611add19a5c6e90744511ad86668b1230cc8c1",
+  "branch": "codex/debug-menu-allocator-startup-validation",
+  "pushed": true,
+  "owned_paths": 12,
+  "file_pins": 126,
+  "review_packet": "scratch/DEBUG_MENU_1011/allocator_construct_review_20261013/REVIEW_PACKET.md",
+  "review_inputs_sha256": "c2823e2f6360d751428a09389a7d09c246262ff7a31d0ec2ebaa26c87ab60f8b",
+  "review": {
+    "verdict": "pass",
+    "report": "scratch/DEBUG_MENU_1011/allocator_construct_review_20261013/SOURCE_REVIEW.md",
+    "sha256": "2986126f4d927a32eb0215545a30eb2b0587e00c833f5afad31183a42f641503",
+    "qualification": "Original Linear failure tail reads/writes past the established five-lane objects. Native code preserves all in-contract fields and omits that surplus access; no sixth field is invented."
+  },
+  "compile_tus": 6,
+  "compile": "pass",
+  "new_faithfulness": 0,
+  "production_checks": {
+    "current": "14/14 pass",
+    "preceding_implementation": "2/9 shared cases pass;7 fail",
+    "owners": "Whole RW, EA, CoreAllocator and descriptor production owners.",
+    "scope": "Storage extents/canaries, placement, lane ownership, rollback, absolute alignment and atomic Linear failure."
+  },
+  "limits": [
+    "No global Construct activation or GPU/DMA equivalence is claimed.",
+    "Later CreateBanks/root-routing/callback/virtual-declaration checkpoints are outside this frozen review.",
+    "No source count or numeric check promotes a debug-menu entry."
+  ],
+  "final_entry_promotions": 0
+}
