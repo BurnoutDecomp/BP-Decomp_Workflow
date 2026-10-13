@@ -224,7 +224,7 @@
       "scope": "Only texture-dependent min/mag/MAXANISOTROPY replay after successful bind;independent raw MaxMip preserved."
     },
     "optional_native_filter_compatibility": {
-      "state": "integration blocker;bounded opt-in coexistence repair authorized",
+      "state": "repair pushed;20 whole-header checks pass;three production TUs compile;fresh review pending;not delivered",
       "removal_head": "06c7410c04538c3d4577245dd8c3e474d28cd551",
       "before": {
         "source": "delivered8cbd",
@@ -246,7 +246,16 @@
         "path": "scratch/DEBUG_MENU_1011/anisotropic_filter_compatibility_addendum_20261013/COMPATIBILITY_ADDENDUM.md",
         "sha256": "dd90920ec3c610c47da07d3c33cd0000be383163a861d570bce4171b220090bb"
       },
-      "authorized_policy": "Default1 preserves raw blocks. Explicit higher native setting may enhance only supported authored LINEAR minification on2D textures;preserve authored POINT/ANISO and unrelated fields. Update actual raw-path native pixel fixture."
+      "authorized_policy": "Default1 preserves raw blocks. Explicit higher native setting may enhance only supported authored LINEAR minification on2D textures;preserve authored POINT/ANISO and unrelated fields. Update actual raw-path native pixel fixture.",
+      "repair_head": "594365bd0ade92cd3e6b06abf8c44ce5fafb85fa",
+      "native": {
+        "path": "scratch/DEBUG_MENU_1011/sampler_type_bind_validation_20261013/optional_filter_coexistence.stdout.log",
+        "sha256": "1608983f3ad9a0e6d406fcc7f3d502640cbe1f93d34390f773182e50598e1d93"
+      },
+      "compile": {
+        "path": "scratch/DEBUG_MENU_1011/sampler_type_bind_validation_20261013/compile_coexistence/canonical_private_compile.json",
+        "sha256": "55fbf7c8a30c8e4248f7149f37288155329f998269495b590ba15a73a04f50ab"
+      }
     }
   },
   "promoted_paths_since058": 34,
@@ -399,7 +408,7 @@
     }
   },
   "sampler_query_repairs_review": {
-    "state": "in progress",
+    "state": "pass;bounded four-path replay/query-fixture review;compatibility follow-on reviewed separately",
     "owned_paths": 4,
     "pinned_files": 62,
     "base": "b8cad5071fd5391f237d3f0dc6db4c34f28b0354",
@@ -407,15 +416,60 @@
     "inputs": {
       "path": "scratch/DEBUG_MENU_1011/sampler_query_repairs_review_20261013/review_inputs.json",
       "sha256": "77a7e97edad52bbfe75491e9ceaf6941fe92d00721b0318c32957c9537128839"
+    },
+    "report": {
+      "path": "scratch/DEBUG_MENU_1011/sampler_query_repairs_review_20261013/SOURCE_REVIEW.md",
+      "sha256": "04297f9918974131ddbbe0dd347b5262a1729f6c6ddac3f6c7e3f619e4dc2cef"
     }
   },
   "linear_lifetime_followon": {
-    "state": "exact four-owner source recovery authorized;commit/compile/review pending",
+    "state": "pushed;four production TUs compile;58 focused checks pass;fresh review pending;not delivered",
     "scope": "ARTIST Destruct,Stop,class statics,typed global RW table and three real lazy CRT stubs;Start/owning producers excluded.",
     "evidence": {
       "path": "scratch/DEBUG_MENU_1011/recovery_lanes/vehicle-deformation-131/scratch/linearhooks1013/DEPENDENCY_REPORT.md",
       "sha256": "c4f599dc388c0850296e48703506780145ad90d728804bb64780707d6ea91a57"
     },
-    "qualification": "No nonzero owned/active producer found in audited target lifecycle closure;vendor cpp home is an organization choice."
-  }
+    "qualification": "Defensive owned/active states are injected only in the fixture;no original producer or Start is certified.",
+    "author_head": "59e591293ad5dc86b5b3baf232c9a91dda90a626",
+    "validation_head": "55790e71bac80b6a3e23d20d8addcb5430b1b24f",
+    "compile": {
+      "path": "scratch/DEBUG_MENU_1011/linear_release_validation_20261013/compile/canonical_private_compile.json",
+      "sha256": "f94ed0ffbdcf295ad09691d85c6aad7edfc60403bdbb5f8974c500be581d3457"
+    },
+    "checks": {
+      "lifecycle20": {
+        "path": "scratch/DEBUG_MENU_1011/linear_release_validation_20261013/lifecycle.stdout.log",
+        "sha256": "5dc3a86b14ffdfa4a462c6513a8869f9f6e52796af47b83fe90cd1d8b0a62d1c"
+      },
+      "borrowed10": {
+        "path": "scratch/DEBUG_MENU_1011/linear_release_validation_20261013/borrowed_linked.stdout.log",
+        "sha256": "41dcdf231f0026977de7e7d3633f6dc8e81ef3b4f07598db8280bb4a461adf50"
+      },
+      "scratch28": {
+        "path": "scratch/DEBUG_MENU_1011/linear_release_validation_20261013/scratch_linked.stdout.log",
+        "sha256": "99ede79d9c43252a30b7d1759df6c3ffe70ea9bda81c73dda36b0481c44f965a"
+      }
+    }
+  },
+  "release_sampler_combined_review": {
+    "state": "in progress",
+    "owned_paths": 10,
+    "packet": {
+      "path": "scratch/DEBUG_MENU_1011/release_sampler_combined_review_20261013/REVIEW_PACKET.md",
+      "sha256": "e0cb3486b2a87388b358ce8d25e0b7115a238fd975c92a6121e0c0b0d492e13d"
+    }
+  },
+  "physical_route_behavior_batch": {
+    "sites": 42,
+    "first_run": "scratch/bugtest/runs/debug_menu_physical_route_behavior_20261013/20261013_231316",
+    "first_result": "VOID;stalled during loading with no scene witness;0 final entry verdicts",
+    "failed_setup": {
+      "path": "scratch/DEBUG_MENU_1011/physical_route_validation_20261013/failed_setup_manifest.json",
+      "sha256": "3e567fdc69a26c6a3bac0ed57e6fe9789e68a3cf9cb38765084c35ffc0870073"
+    },
+    "second_run": "scratch/bugtest/runs/debug_menu_physical_route_configured_20261013/20261013_232648",
+    "state": "second attributable run started;copy actual user config omitted by slot staging;checker repaired for PowerShell5 array enumeration;result pending",
+    "qualification": "Do not infer missing registrations/failed consumers from the first loading-prerequisite failure."
+  },
+  "new_menu_entry_verdicts_this_checkpoint": 0
 }
