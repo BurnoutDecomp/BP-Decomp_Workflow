@@ -31,10 +31,14 @@ if ($laProblems.Count -eq 0) {
     $lsRendererDiagnostic = '^\[lionfx\] Render: emitters live=\d+ cell=\d+ inactive=\d+ culled=\d+ \(range=\d+ frustum=\d+ near=\d+\) drawn=\d+ particles=\d+ nocull=[01]$'
     $lsMeshDiagnostic = '^\[FLAG PC bring-up\] MESH lists:(?: \[\d+\]=\d+)+$'
     $lsDispatchDiagnostic = '^\[lionfx\] Dispatch: batches=\d+ vb=[0-9A-Fa-f]{16} white=\d+\.\d{3}$'
+    $lsBlendDiagnostic = '^\[lionblend\] call=\d+ layer=-?\d+->-?\d+ t=-?\d+\.\d{4} diff\(s12/v4/c3\)=\d+/\d+/\d+' +
+        ' life=-?\d+\.\d{4}\|-?\d+\.\d{4}->-?\d+\.\d{4} size=-?\d+\.\d{4}\|-?\d+\.\d{4}->-?\d+\.\d{4}' +
+        ' rate=-?\d+\.\d{3}\|-?\d+\.\d{3}->-?\d+\.\d{3} vel\.y=-?\d+\.\d{4}\|-?\d+\.\d{4}->-?\d+\.\d{4}' +
+        ' col0=[0-9A-Fa-f]{8}\|[0-9A-Fa-f]{8}->[0-9A-Fa-f]{8} flags=[0-9A-Fa-f]{8}\|[0-9A-Fa-f]{8}->[0-9A-Fa-f]{8}$'
     for ($liSourceLine = 0; $liSourceLine -lt $laSourceLines.Count; ++$liSourceLine) {
         $lsSourceLine = $laSourceLines[$liSourceLine]
         if ($lsSourceLine -match $lsRendererDiagnostic -or $lsSourceLine -match $lsMeshDiagnostic -or
-            $lsSourceLine -match $lsDispatchDiagnostic) {
+            $lsSourceLine -match $lsDispatchDiagnostic -or $lsSourceLine -match $lsBlendDiagnostic) {
             $laIgnoredDiagnosticLines.Add($liSourceLine + 1)
         } else {
             $laFilteredLines.Add($lsSourceLine)

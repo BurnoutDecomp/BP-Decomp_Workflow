@@ -49,9 +49,9 @@ Road Rules retain both saved score types and the reset epoch. See the
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
 | Coarse scene queries and shared renderer state | Sampler/query/Stack follow-on is delivered in AC3. The canonical packed sampler producer and Font flags repair pass source review, a 16-check native fixture and inspected game frames. Query-provider checks pass 47/47, with a real failed-draw witness unavailable. Renderer activation and original query polarity remain open. |
 | Original allocator construction | Reviewed native storage and LinearMalloc/RW lifecycle repairs are delivered. Original resource, 24-allocator and 27-pool sequences remain unactivated. Full constructor activation and GPU/DMA behavior remain open. |
-| Original GameState path | Original caller, all28 Prepare cases, canonical Flyby providers and selected snapshot repair pass bounded source review at `bcfa1c992`. The combined integration build found a missing Flyby mount and a class/struct declaration mismatch; Root is fixing those. Original lifecycle activation remains open. |
-| Original Pool create path | All four protocol/layout/worker-assert review findings are repaired at `005fa61ec`; source review and 41 focused production checks pass. Current-primary reconciliation is in the combined integration gate. Original startup remains inactive. |
-| ImmediateMode and Traffic readers | ImmediateMode member-instantiation ownership and Vector3 boost-bar API are pushed at `6f76d337`, with canonical compile checks. Traffic's Anarchy-distance initializer is recovered separately. Combined review/integration and the 23-site unresolved-reader closure continue. |
+| Original GameState path | Original caller, all28 Prepare cases, canonical Flyby providers and selected snapshot repair are integrated at `f98a8cb5b`. Reviewed link repairs and a private 2,975-TU build pass; native integration passes. Normal rebuild and original lifecycle activation remain separate gates. |
+| Original Pool create path | All four protocol/layout/worker-assert findings are repaired and integrated at `f98a8cb5b`; source review and 41 current-canonical production checks pass. NativePC routing remains selected; original startup remains inactive. |
+| ImmediateMode and Traffic readers | Member-instantiation ownership, Vector3 boost-bar API and Anarchy-distance initializer are integrated at `f98a8cb5b`. The private follow-on links without warnings. All52 recorded Traffic scalar candidates are false aliases; indirect/dynamic uses remain unresolved. Graphics query callers are the next source slice. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)
@@ -92,8 +92,9 @@ GameState/Pool lifecycle integration, selected GameState debug consumers and the
 Correction to earlier warning descriptions: the C4661 messages came from
 whole-class explicit instantiation requests whose bodies live in other TUs, plus
 an unattested overload request. They did not establish eight missing bodies.
-The separate ImmediateMode checkpoint repairs that ownership; AC3 retains the
-eight warnings pending its integration.
+The ImmediateMode repair is now integrated; the AC3 normal executable retains
+the eight warnings until the pending normal rebuild. See the
+[runtime-owner checkpoint](RUNTIME_OWNERS_20261015.md).
 
 ## Pipeline
 
