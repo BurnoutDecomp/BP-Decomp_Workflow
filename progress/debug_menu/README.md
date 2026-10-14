@@ -11,7 +11,7 @@ are all still in progress.** The count of fully implemented but unverified entri
 is unknown. Source coverage must never be reported as implementation completion.
 
 The inventory contains **1,355 static registration sites**. Final dispositions are
-**30 verified, three original no-ops and 1,322 pending**. Loop-generated rows,
+**31 verified, seven original no-ops and 1,317 pending**. Loop-generated rows,
 fifteen symbolic captions, two missing wrapper exports and native additions also
 need explicit accounting; 1,355 is not the final visible-row count.
 
@@ -48,7 +48,9 @@ procedural sky allocation repairs are included. See the
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
 | Coarse scene queries and shared renderer state | Reviewed scene integration is delivered at `8cbd95c6d`. Separate query-provider checks pass 47/47, with a real failed-draw witness unavailable. The texture-switch filtering and optional anisotropic-filter coexistence repair passes bounded source review and 20 native checks; follow-on integration is pushed separately. Renderer activation and original query polarity remain open. |
 | Original allocator construction | Reviewed native storage is delivered; 14 production checks pass. Original resource, 24-allocator and 27-pool creation sequences pass bounded source review and remain unactivated. The borrowed LinearMalloc repair passes source review and 38 focused checks; executable validation remains. Owned/RW lifecycle recovery passes source review and 58 focused checks in a separate pushed integration branch. Full constructor activation and GPU/DMA behavior remain open. |
-| Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. GameState's recovered full update still needs the PC caller integration. |
+| Original GameState path | Original caller, all28 Prepare cases and canonical Flyby providers are pushed at `df336bbff`; seven TUs compile and native bodies remain preserved. Fresh review/integration and initialization/activation gates remain. |
+| Original Pool create path | Nine-owner source checkpoint is pushed at `0eced16a`. Review found four protocol/layout/worker-assert defects; a separate repair worker is fixing them. Original startup remains inactive. |
+| Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)
 records 1,351 examined sites. It includes existing code and incomplete chains and
@@ -60,18 +62,19 @@ Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json)
 [scene queries](scene_query_source_20261013.json). Source recovery continues on
 isolated branches while review and integration continue. The normal executable
 remains the tested `8cbd95c6d` build, with a healthy byte-exact backup and provenance.
-The allocator/sampler/query follow-on is pushed on
-`codex/debug-menu-native-followon-integration` at `bec73c5ce`. Its 2,974-file
-shipping build links, private startup/GPU regressions pass22 checks with zero
-assertions/exceptions, and bounded source review passes. Primary source is
-pushed; the normal rebuild/delivery gate is pending.
+The allocator/sampler/query/Stack follow-on is pushed in primary source at
+`5ad64d67f`. Its 2,974-file shipping build links and three native cases pass34
+checks with zero assertions/exceptions. **Inspected frames expose a texture
+regression, so the tested8cbd normal artifacts were restored.** Root is isolating
+the rendering change before delivery; see [delivery gate](FOLLOWON_DELIVERY_20261014.md).
 
 Native batches have now exercised **149 bindings** across Physical Traffic,
 Route Map and Traffic: 141 literal variables and eight action paths, with 1,937
 actual path/value reads across 27 phases. These are registry/storage observations;
-the final behavior count above remains separate. Three Route Map effects now have final verified dispositions; see the
-[native checkpoint](PHYSICAL_ROUTE_NATIVE_20261014.md). Colour-mode proof remains
-under its separate primary-data review. Physical/conditional effects and the
+the final behavior count above remains separate. Four Route Map effects now have
+final verified dispositions, and four dormant Physical Traffic settings are
+classified original no-ops within the original valid-object/index domain; see the
+[native checkpoint](PHYSICAL_ROUTE_NATIVE_20261014.md). Physical/conditional effects and the
 Traffic page's dynamic-caption row still need suitable evidence.
 
 Global `SAVE` hits DLC feature24's original NULL caption; an independent original
@@ -81,8 +84,10 @@ the real DLC manager/table without activating DLC enumeration/monitoring.
 
 Recovery continues on the original GameState PreWorld caller/controller transport
 and PoolModule create/FIFO/descriptor/host-layout family in separate branches.
-The GameState transport checkpoint is pushed at `5c51095e`; neither family is
-claimed integrated or behavior-verified.
+The GameState provider checkpoint is pushed at `df336bbff`; neither GameState nor
+Pool family is claimed integrated or behavior-verified. The four Traffic Stats
+readouts pass the rebuilt candidate's56 actual reads, including nonempty
+purgatory and full cleanup; final recording waits for corrected delivery.
 
 ## Pipeline
 
