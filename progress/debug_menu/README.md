@@ -30,12 +30,13 @@ The reported Start crash with vehicle INI settings is also repaired. The exact
 normal-build case reaches driving, applies all five LOD overrides and passes ten
 checks without asserts/exceptions. See [startup repair](START_CRASH_20261013.md).
 
-The normal executable is now built from clean, pushed `ac3f202d6`. All 2,974
-shipping files compile and link. Start/GPU/Traffic cases pass 34 checks; two Road
-Rules login/save/cold-restart runs pass another 26. All have zero assertions and
-exceptions. Inspected native frames show the magenta texture regression repaired.
-Road Rules retain both saved score types and the reset epoch. See the
-[delivery receipt](native_delivery_20261014.json) and
+The normal executable is now built from clean, pushed `f98a8cb5b`. All 2,975
+shipping files compile and link. The same-production-source private integration
+passes 60 checks across Start/GPU/Traffic and Road Rules login/save/cold restart;
+the exact normal executable then passes 23 Start/GPU checks. All have zero
+assertions and exceptions. Inspected native frames show the magenta texture
+regression repaired. Road Rules retain both saved score types and the reset epoch.
+See the [delivery receipt](runtime_owners_20261015.json) and
 [Road Rules fix](../road_rules_persistence_20261014.md).
 
 ## Active work
@@ -49,7 +50,7 @@ Road Rules retain both saved score types and the reset epoch. See the
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
 | Coarse scene queries and shared renderer state | Sampler/query/Stack follow-on is delivered in AC3. The canonical packed sampler producer and Font flags repair pass source review, a 16-check native fixture and inspected game frames. Query-provider checks pass 47/47, with a real failed-draw witness unavailable. Renderer activation and original query polarity remain open. |
 | Original allocator construction | Reviewed native storage and LinearMalloc/RW lifecycle repairs are delivered. Original resource, 24-allocator and 27-pool sequences remain unactivated. Full constructor activation and GPU/DMA behavior remain open. |
-| Original GameState path | Original caller, all28 Prepare cases, canonical Flyby providers and selected snapshot repair are integrated at `f98a8cb5b`. Reviewed link repairs and a private 2,975-TU build pass; native integration passes. Normal rebuild and original lifecycle activation remain separate gates. |
+| Original GameState path | Original caller, all28 Prepare cases, canonical Flyby providers and selected snapshot repair are delivered at `f98a8cb5b`. Reviewed link repairs, shipping build and bounded native integration pass. Original full lifecycle activation remains open. |
 | Original Pool create path | All four protocol/layout/worker-assert findings are repaired and integrated at `f98a8cb5b`; source review and 41 current-canonical production checks pass. NativePC routing remains selected; original startup remains inactive. |
 | ImmediateMode and Traffic readers | Member-instantiation ownership, Vector3 boost-bar API and Anarchy-distance initializer are integrated at `f98a8cb5b`. The private follow-on links without warnings. All52 recorded Traffic scalar candidates are false aliases; indirect/dynamic uses remain unresolved. Graphics query callers are the next source slice. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. |
@@ -64,8 +65,8 @@ Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json)
 [scene queries](scene_query_source_20261013.json). Source recovery continues on
 isolated branches while review and integration continue. The earlier5ad build
 passed automated checks but failed actual frame inspection, so its normal
-artifacts were restored while the regression was isolated. The repaired AC3
-normal build now passes both checks and bounded visual inspection; the failed
+artifacts were restored while the regression was isolated. The repaired AC3 and
+subsequent F98 normal builds pass checks and bounded visual inspection; the failed
 candidate, comparison runs and backup remain retained. See
 [delivery gate](FOLLOWON_DELIVERY_20261014.md).
 
@@ -92,8 +93,9 @@ GameState/Pool lifecycle integration, selected GameState debug consumers and the
 Correction to earlier warning descriptions: the C4661 messages came from
 whole-class explicit instantiation requests whose bodies live in other TUs, plus
 an unattested overload request. They did not establish eight missing bodies.
-The ImmediateMode repair is now integrated; the AC3 normal executable retains
-the eight warnings until the pending normal rebuild. See the
+The ImmediateMode repair is delivered and its eight warnings are gone. The broad
+normal rebuild still records 74 warnings in existing code outside that family,
+including three Sound queue instantiation warnings. See the
 [runtime-owner checkpoint](RUNTIME_OWNERS_20261015.md).
 
 ## Pipeline

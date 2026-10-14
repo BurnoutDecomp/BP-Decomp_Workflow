@@ -107,10 +107,71 @@
     "unknown_and_malformed_output": "rejected"
   },
   "normal_delivery": {
-    "state": "pending normal rebuild",
-    "current_source": "ac3f202d6b44ba9f266268d1b665f1c41ec621b0",
-    "current_exe_sha256": "6a6ff89b5e76678414dd679c9846c0c57715e7368cee2288fa7892a13c6dea5b",
-    "planned_packet": "scratch/DEBUG_MENU_1011/runtime_owners_normal_delivery_20261015"
+    "state": "delivered",
+    "source_head": "f98a8cb5b7868e8a06563c0b4ea4a75cf352e103",
+    "source_clean": true,
+    "exe_sha256": "df3677771ddf7bdb15c5bd76b640595ffe3877fcfa6da0ddb480c3b17621332c",
+    "build": {
+      "path": "scratch/DEBUG_MENU_1011/runtime_owners_normal_delivery_20261015/receipt.json",
+      "sha256": "c5706d713bf8afcae9ee71137657c6d676d65954a333d730723e1e0cdebb9cd7"
+    },
+    "build_log": {
+      "path": "scratch/DEBUG_MENU_1011/runtime_owners_normal_delivery_20261015/build/20261015_011914_debug-menu-runtime-owners-20261015.log",
+      "sha256": "d1083a4fa21e295029bc5ff5d8f65825b94ad5b865e003b9ccaec2eb66c3de4d"
+    },
+    "shipping_tus": 2975,
+    "rebuilt": 2308,
+    "cached": 667,
+    "compile_failures": 0,
+    "link": "pass",
+    "warnings": 74,
+    "warning_scope": "Existing debt outside the repaired ImmediateMode family, including three Sound queue C4661 requests. No ImmediateMode C4661 remains.",
+    "native": {
+      "startup": {
+        "result": {
+          "path": "scratch/bugtest/runs/debug_runtime_owners_normal_startup_20261015/20261015_012443/result.json",
+          "sha256": "a0f714c7572ee9f08a85406e8ab1094403f237ec967ad6df01104538967a0eb4"
+        },
+        "wrapper": {
+          "path": "scratch/DEBUG_MENU_1011/runtime_owners_normal_delivery_20261015/native_startup/receipt.json",
+          "sha256": "94a4a192c6a84a07bde635d8d0af77089dc61071d0998ca28d32dfca12894af4"
+        },
+        "checks": 10
+      },
+      "gpu": {
+        "result": {
+          "path": "scratch/bugtest/runs/debug_runtime_owners_normal_gpu_20261015/20261015_012443/result.json",
+          "sha256": "792f3912963cd429ad0318ac82bc84d455e929fbc97431b5806adb4340625ee3"
+        },
+        "wrapper": {
+          "path": "scratch/DEBUG_MENU_1011/runtime_owners_normal_delivery_20261015/native_gpu/receipt.json",
+          "sha256": "037a57172fc82e7e9b0a6afadfc10b8ca5f504758ab764e293816c8b0c2a9886"
+        },
+        "checks": 13
+      }
+    },
+    "native_checks": 23,
+    "assertions": 0,
+    "exceptions": 0,
+    "visual": {
+      "state": "pass for inspected native scenes",
+      "frames": [
+        {
+          "path": "scratch/bugtest/runs/debug_runtime_owners_normal_gpu_20261015/20261015_012443/frames/bb_003600.bmp",
+          "sha256": "6de4cb72b6c151d51f04238ab66fe71ea8326d77b67157c05d616b4c64c42a78"
+        },
+        {
+          "path": "scratch/bugtest/runs/debug_runtime_owners_normal_gpu_20261015/20261015_012443/frames/bb_005040.bmp",
+          "sha256": "4707631d94bb4b66efb4337eb10a85ae9f536ac8755530ec87503bf6d51716ec"
+        }
+      ],
+      "limit": "world/car/effects corruption inspection; not whole-renderer or online-intro certification"
+    },
+    "original_user_profile_config_logs": "hashes and modification times unchanged; see wrappers",
+    "healthy_ac3_backup": {
+      "path": "scratch/DEBUG_MENU_1011/runtime_owners_normal_delivery_20261015/normal_before/manifest.json",
+      "sha256": "3a1657898bfc8697b8b18cdfdf97ac0f4ba9ab16b75882239cb742471d329441"
+    }
   },
   "activation_limits": [
     "original GameState Prepare/PreWorld remains unselected",

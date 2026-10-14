@@ -3,14 +3,21 @@
 Primary source is clean and pushed at **`f98a8cb5b`**. The final 41-path source
 delta combines GameState caller/Prepare/Flyby recovery, Pool create/layout/assert
 repairs, ImmediateMode member ownership/Vector3 API and Traffic's original
-Anarchy-distance initializer. The normal executable is still the tested AC3
-build while the normal shipping rebuild runs.
+Anarchy-distance initializer. The normal executable is delivered from this
+source, SHA256 `df3677771ddf7bdb15c5bd76b640595ffe3877fcfa6da0ddb480c3b17621332c`.
 
 The private build mounts all 2,975 shipping TUs and links successfully. Its
 follow-on rebuild reports no warnings. Fresh source review and 41 Pool protocol,
 layout and concurrency checks pass. The original first link failure is retained:
 one online Flyby owner was unmounted, and a VehicleList class/struct declaration
 mismatch emitted a different symbol. Both repairs pass independent review.
+
+The normal shipping build compiles 2,308 affected TUs, reuses 667 and links all
+2,975. It retains 74 existing warnings, including three Sound queue instantiation
+warnings; the eight ImmediateMode warnings are gone. The exact normal executable
+passes 23 Start/GPU checks with zero assertions/exceptions. Its inspected frames
+show the world and car without magenta corruption. User profile/config/log hashes
+and modification times remain unchanged.
 
 Private Start/GPU/Traffic/login/cold-restart integration passes 60 bounded checks,
 with zero assertions/exceptions and inspected GPU/Traffic frames without magenta
