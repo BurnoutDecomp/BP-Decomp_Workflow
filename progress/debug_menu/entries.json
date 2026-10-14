@@ -20281,7 +20281,15 @@
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8261C678.json",
       "component": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent",
       "component_name": "Physical traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Allow breaking joints: original valid traffic/joint ownership chain has no break-policy reader; native FALSE/TRUE/FALSE binding and restoration witnessed. Original invalid-index assertion continuation remains unchanged; no claim for corrupted objects/indices.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/DEBUG_MENU_1011/physical_pool_alias_color_20261014/manifest.json",
+        "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+        "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+      ]
     },
     {
       "kind": "variable",
@@ -20411,7 +20419,15 @@
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8261C678.json",
       "component": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent",
       "component_name": "Physical traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Joint swing break velocity: same complete original valid-domain closure; native2/3/2 storage is preserved without inventing a break policy.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/DEBUG_MENU_1011/physical_pool_alias_color_20261014/manifest.json",
+        "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+        "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+      ]
     },
     {
       "kind": "variable",
@@ -20437,7 +20453,15 @@
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8261C678.json",
       "component": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent",
       "component_name": "Physical traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Joint twist break velocity: same complete original valid-domain closure; native2/3.5/2 storage is preserved without inventing a break policy.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/DEBUG_MENU_1011/physical_pool_alias_color_20261014/manifest.json",
+        "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+        "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+      ]
     },
     {
       "kind": "variable",
@@ -20463,7 +20487,15 @@
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8261C678.json",
       "component": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent",
       "component_name": "Physical traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Joint linear break speed: same complete original valid-domain closure; native10/15/10 storage is preserved without inventing a break policy.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/DEBUG_MENU_1011/physical_pool_alias_color_20261014/manifest.json",
+        "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+        "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+      ]
     },
     {
       "kind": "variable",
@@ -26708,14 +26740,22 @@
       "pseudocode_line": 43,
       "original_call": "sub_8282D560(v1, v1 + 88, \"Stats\", \"Active params\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnTraffic::DebugComponent::OnActivate#0003",
       "function": "BrnTraffic::DebugComponent::OnActivate",
       "original_address": "0x82762530",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
       "component": "BrnTraffic::DebugComponent",
       "component_name": "Traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Active params: the original live 400-free-purgatory consumer now uses the repaired Stack accessor. Corrected normal AC3 delivery has 56 reads across14 phases, four with nonempty purgatory, changing counts and final0/400/0/0.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "progress/debug_menu/native_delivery_20261014.json",
+        "tools/tests/cases/debug_menu_traffic_counters.ps1",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json"
+      ]
     },
     {
       "kind": "variable",
@@ -26735,14 +26775,22 @@
       "pseudocode_line": 45,
       "original_call": "sub_8282D560(v1, v1 + 96, \"Stats\", \"Free params\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnTraffic::DebugComponent::OnActivate#0004",
       "function": "BrnTraffic::DebugComponent::OnActivate",
       "original_address": "0x82762530",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
       "component": "BrnTraffic::DebugComponent",
       "component_name": "Traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Free params: actual free-stack length changes as traffic is populated and returns to400 at cleanup. Shared Stack assertion contract is repaired/reviewed; corrected normal AC3 delivery and native accounting checks pass.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "progress/debug_menu/native_delivery_20261014.json",
+        "tools/tests/cases/debug_menu_traffic_counters.ps1",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json"
+      ]
     },
     {
       "kind": "variable",
@@ -26762,14 +26810,22 @@
       "pseudocode_line": 47,
       "original_call": "sub_8282D560(v1, v1 + 92, \"Stats\", \"Purgatory params\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnTraffic::DebugComponent::OnActivate#0005",
       "function": "BrnTraffic::DebugComponent::OnActivate",
       "original_address": "0x82762530",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
       "component": "BrnTraffic::DebugComponent",
       "component_name": "Traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Purgatory params: actual readonly-array length includes0,1 and2 in corrected normal AC3 delivery and returns to0 at cleanup. Every refreshed phase preserves active+free+purgatory=400.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "progress/debug_menu/native_delivery_20261014.json",
+        "tools/tests/cases/debug_menu_traffic_counters.ps1",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json"
+      ]
     },
     {
       "kind": "variable",
@@ -26789,14 +26845,22 @@
       "pseudocode_line": 49,
       "original_call": "sub_8282D560(v1, v1 + 100, \"Stats\", \"Active hulls\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnTraffic::DebugComponent::OnActivate#0006",
       "function": "BrnTraffic::DebugComponent::OnActivate",
       "original_address": "0x82762530",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
       "component": "BrnTraffic::DebugComponent",
       "component_name": "Traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Active hulls: actual readonly-set count is4 during populated phases and0 after teardown. Corrected normal AC3 delivery passes scoped counter checks and inspected rendered-frame regression checks.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "progress/debug_menu/native_delivery_20261014.json",
+        "tools/tests/cases/debug_menu_traffic_counters.ps1",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json"
+      ]
     },
     {
       "kind": "variable",
@@ -29623,7 +29687,15 @@
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8277FE50.json",
       "component": "BrnAI::RouteMapDebugComponent",
       "component_name": "Route Map",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw AI section map: original registered master gate and full render chain match; native show/hide/default restoration and actual map pixels independently reviewed.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "progress/debug_menu/native_sdk_scene_integration_20261013.json",
+        "scratch/DEBUG_MENU_1011/native_followon_integration_20261014/review/SOURCE_REVIEW.md",
+        "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+        "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+      ]
     },
     {
       "kind": "variable",
@@ -29649,7 +29721,15 @@
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8277FE50.json",
       "component": "BrnAI::RouteMapDebugComponent",
       "component_name": "Route Map",
-      "component_path": null
+      "component_path": null,
+      "notes": "High detail map: original local-line limit/filter/geometry chain matches; the same native7639-section data draws2334 low-detail versus11236 high-detail local lines.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "progress/debug_menu/native_sdk_scene_integration_20261013.json",
+        "scratch/DEBUG_MENU_1011/native_followon_integration_20261014/review/SOURCE_REVIEW.md",
+        "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+        "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+      ]
     },
     {
       "kind": "variable",
@@ -29675,7 +29755,15 @@
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8277FE50.json",
       "component": "BrnAI::RouteMapDebugComponent",
       "component_name": "Route Map",
-      "component_path": null
+      "component_path": null,
+      "notes": "Map colour mode: original initialized FF00FFFF datum, full dispatch/constants and packed channels match the delivered8cbd consumer; actual Plain/Type/Speed frames/readbacks/restoration independently reviewed.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+        "scratch/DEBUG_MENU_1011/physical_pool_alias_color_20261014/manifest.json",
+        "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+        "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+      ]
     },
     {
       "kind": "variable",
@@ -30143,7 +30231,15 @@
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8277FE50.json",
       "component": "BrnAI::RouteMapDebugComponent",
       "component_name": "Route Map",
-      "component_path": null
+      "component_path": null,
+      "notes": "Show AI section info: original gate/low16 index dispatch and text/circle consumer match; native index1 shows ID177737,links127 and0 and position; hide/default restoration reviewed.",
+      "evidence": [
+        "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+        "progress/debug_menu/native_sdk_scene_integration_20261013.json",
+        "scratch/DEBUG_MENU_1011/native_followon_integration_20261014/review/SOURCE_REVIEW.md",
+        "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
+        "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
+      ]
     },
     {
       "kind": "variable",
@@ -37487,8 +37583,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1317,
-      "verified": 31,
+      "pending": 1313,
+      "verified": 35,
       "original-noop": 7
     }
   }

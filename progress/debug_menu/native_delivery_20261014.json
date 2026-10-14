@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "state": "delivered; broader debug-menu recovery remains incomplete",
+  "source_head": "ac3f202d6b44ba9f266268d1b665f1c41ec621b0",
+  "source_clean": true,
+  "branch": "codex/debug-menu-recovery-pipeline",
+  "pushed": true,
+  "exe_sha256": "6a6ff89b5e76678414dd679c9846c0c57715e7368cee2288fa7892a13c6dea5b",
+  "build": {
+    "path": "scratch/DEBUG_MENU_1011/normal_fixed_delivery_20261014/receipt.json",
+    "sha256": "19c6f172650a3dd9c4222bb554745d6a3e6e5cdf9610a7f9328b5a39a52f9d73"
+  },
+  "shipping_tus": 2974,
+  "compile_failures": 0,
+  "link": "pass",
+  "warnings": 8,
+  "warning_scope": "C4661 cross-TU whole-class explicit instantiation requests and one unattested overload request; not evidence of eight missing bodies. Separate ImmediateMode repair pending integration.",
+  "native": {
+    "startup": {
+      "result": {
+        "path": "scratch/bugtest/runs/debug_native_fixed_normal_startup_20261014/20261014_202202/result.json",
+        "sha256": "31b8adfb3fda5b0c8812479943db62152e2c1e92b9616efbd85538b93090a31a"
+      },
+      "wrapper": {
+        "path": "scratch/DEBUG_MENU_1011/normal_fixed_delivery_20261014/native_startup/receipt.json",
+        "sha256": "a6f112436e58ef6a593c877bb9b42a7fe3564295c23d0579b06ab383ad4082a7"
+      },
+      "checks_pass": 10,
+      "assertions": 0,
+      "exceptions": 0
+    },
+    "gpu": {
+      "result": {
+        "path": "scratch/bugtest/runs/debug_native_fixed_normal_gpu_20261014/20261014_202202/result.json",
+        "sha256": "3e8f9a6ead4448c0d2b9913ecb912f495fe4e057538ebd9649f4e63cbf688be8"
+      },
+      "wrapper": {
+        "path": "scratch/DEBUG_MENU_1011/normal_fixed_delivery_20261014/native_gpu/receipt.json",
+        "sha256": "5e1708100c9018db258a42f4ea863a6cf3762a6cdcb0ad1cc75e73783d05aaf8"
+      },
+      "checks_pass": 13,
+      "assertions": 0,
+      "exceptions": 0
+    },
+    "traffic": {
+      "result": {
+        "path": "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/result.json",
+        "sha256": "c5663e31abd093e7d633233229268ac79225d462a8155f06be1aad46852b69ed"
+      },
+      "wrapper": {
+        "path": "scratch/DEBUG_MENU_1011/normal_fixed_delivery_20261014/native_traffic/receipt.json",
+        "sha256": "71f5c6bed110e0acd70d2c21fd0dc16d41419ff457b5148033e272dec961d9b2"
+      },
+      "checks_pass": 11,
+      "assertions": 0,
+      "exceptions": 0
+    }
+  },
+  "native_checks": {
+    "start_gpu_traffic": 34,
+    "road_rules": 26,
+    "assertions": 0,
+    "exceptions": 0
+  },
+  "visual_gate": {
+    "state": "pass for inspected native scenes",
+    "evidence": [
+      {
+        "path": "scratch/bugtest/runs/debug_native_fixed_normal_gpu_20261014/20261014_202202/frames/bb_003600.bmp",
+        "sha256": "b7f93f50f3881a2571cb2bfd6b0a9c83cf493a89e1dde2a072f43557624f84c9"
+      },
+      {
+        "path": "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/cleanup.bmp",
+        "sha256": "252a9a3ddf8ea2941ca1af87f7d16c40b93254a13e6ff34522636438a8ceff8e"
+      },
+      {
+        "path": "scratch/ROAD_RULES_1014/normal_delivery_20261014/native_frame_inspection.json",
+        "sha256": "088ddeb1e2ca02f942a40b9b13ee2065d76361fd0ce9c2af9737124b34a9fb48"
+      }
+    ],
+    "limitation": "bounded corruption comparison, not full renderer parity"
+  },
+  "counter_witness": {
+    "path": "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json",
+    "sha256": "9a0ce626c3859c85947dc6102fd68a9dffb02d4f860517995ccfbaf9016c96ae"
+  },
+  "counter_sites": [
+    "BrnTraffic::DebugComponent::OnActivate#0003",
+    "BrnTraffic::DebugComponent::OnActivate#0004",
+    "BrnTraffic::DebugComponent::OnActivate#0005",
+    "BrnTraffic::DebugComponent::OnActivate#0006"
+  ],
+  "counter_verdicts_promoted": 4,
+  "whole_traffic108_verdict": "not claimed",
+  "road_rules": {
+    "normal_report": {
+      "path": "scratch/ROAD_RULES_1014/normal_delivery_20261014/REPORT.md",
+      "sha256": "9fa4fb006785ce0c2f332918e203748e25d21bd0f712165f9824967d2c2b6b80"
+    },
+    "normal_manifest": {
+      "path": "scratch/ROAD_RULES_1014/normal_delivery_20261014/manifest.json",
+      "sha256": "6bb8fc6151fa18196e215439a8886b55a524a803a30e18d52d6054e90c389bba"
+    },
+    "source_handoff": {
+      "path": "scratch/ROAD_RULES_1014/HANDOFF.md",
+      "sha256": "20ce2b3daacbbb33ea536a6fd0de6a5dbcd6e78198f9ac653acc878f09f91657"
+    },
+    "checks": 26,
+    "cold_restart": true,
+    "time_score": 3933,
+    "time_plate": "Silver",
+    "driver_details_time": "1/64",
+    "showtime_score": 16550,
+    "reset_epoch": 1791996687,
+    "new_showtime_medal": "not claimed"
+  },
+  "source_reviews": {
+    "sampler_and_font": {
+      "path": "scratch/DEBUG_MENU_1011/integration_repairs_review_20261014/FONT_FOLLOWON_REVIEW.md",
+      "sha256": "23ed14932ee19db184ffa96b2b91562a0a0277699fc7e121fffba5ef1e10f54c"
+    },
+    "stack_and_counters": {
+      "path": "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+      "sha256": "fd83d97b6b2fbc606ca088685235b403260dd0f70b98bd39f908106206c911b0"
+    }
+  },
+  "original_user_files": "hashes and mtimes unchanged; exact states retained in native wrapper and Road Rules receipts",
+  "counts": {
+    "verified": 35,
+    "original-noop": 7,
+    "pending": 1313,
+    "registration_sites": 1355
+  },
+  "next_integration": {
+    "branch": "codex/debug-menu-reviewed-runtime-owners",
+    "base": "ac3f202d6b44ba9f266268d1b665f1c41ec621b0",
+    "source_paths": 40,
+    "first_head": "5998091101907bee0d54de686da8fd5d69e9b542",
+    "first_review": {
+      "path": "scratch/DEBUG_MENU_1011/runtime_owners_integration_20261014/SOURCE_REVIEW.md",
+      "sha256": "84eea091a4d032426f6ed55f2b940bd81a46dd3b35f0906071a8c5233322051e"
+    },
+    "first_build": {
+      "path": "scratch/DEBUG_MENU_1011/runtime_owners_integration_20261014/shipping_599809110/receipt.json",
+      "sha256": "1723fd25b30d59afc4b429bad4914f421be2f2cb976a20184dde14fc89377fee"
+    },
+    "repairs_head": "7965cc331181675a23a659b73f4382800bf4b9af",
+    "state": "two required link repairs under additive build/review; no normal promotion or startup activation"
+  }
+}

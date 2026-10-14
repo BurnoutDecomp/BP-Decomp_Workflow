@@ -11,7 +11,7 @@ are all still in progress.** The count of fully implemented but unverified entri
 is unknown. Source coverage must never be reported as implementation completion.
 
 The inventory contains **1,355 static registration sites**. Final dispositions are
-**31 verified, seven original no-ops and 1,317 pending**. Loop-generated rows,
+**35 verified, seven original no-ops and 1,313 pending**. Loop-generated rows,
 fifteen symbolic captions, two missing wrapper exports and native additions also
 need explicit accounting; 1,355 is not the final visible-row count.
 
@@ -20,22 +20,23 @@ recovery, integration, a fix, review, behavior testing, or classification as an
 original leftover. It does not mean finished code awaiting a separate manual
 in-game check. Related controls can share tests, and one site can create many rows.
 
-The latest verified repair is the GPU monitor chain: original twenty categories,
+The GPU monitor repair supplies the original twenty categories,
 real native GPU timings, graph/table drawing and visibility. Three full-game cases
 pass 39 checks with inspected frames and zero asserts/exceptions. See
 [GPU monitors](GPU_MONITORS_20261013.md) and the
 [exact native receipt](gpu_monitors_native_20261013.json).
 
 The reported Start crash with vehicle INI settings is also repaired. The exact
-normal-build case reaches driving, applies all five LOD overrides and passes nine
+normal-build case reaches driving, applies all five LOD overrides and passes ten
 checks without asserts/exceptions. See [startup repair](START_CRASH_20261013.md).
 
-The normal executable now includes the reviewed scene and allocator integration
-at `8cbd95c6d`. All 2,973 shipping files compile and link. Private Start/GPU graph
-regressions pass 22 checks; the exact normal executable passes its ten-check
-startup case, all with zero assertions/exceptions. CPU command storage and
-procedural sky allocation repairs are included. See the
-[current delivery receipt](native_sdk_scene_integration_20261013.json).
+The normal executable is now built from clean, pushed `ac3f202d6`. All 2,974
+shipping files compile and link. Start/GPU/Traffic cases pass 34 checks; two Road
+Rules login/save/cold-restart runs pass another 26. All have zero assertions and
+exceptions. Inspected native frames show the magenta texture regression repaired.
+Road Rules retain both saved score types and the reset epoch. See the
+[delivery receipt](native_delivery_20261014.json) and
+[Road Rules fix](../road_rules_persistence_20261014.md).
 
 ## Active work
 
@@ -46,10 +47,11 @@ procedural sky allocation repairs are included. See the
 | Resource memory map and statistics | Descriptor repair, 45-lane validation and DrawDataSize owner are integrated. Heap reporting passed source review and 18 production-allocator checks. Typed allocator consumers and resource HUD effects remain. |
 | CPU profiler allocator | Reviewed, integrated and pushed. Whole-production checks 12/12; shipping build and 22 Start/GPU integration checks pass. CPU menu/HUD witness remains. |
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
-| Coarse scene queries and shared renderer state | Reviewed scene integration is delivered at `8cbd95c6d`. Separate query-provider checks pass 47/47, with a real failed-draw witness unavailable. The texture-switch filtering and optional anisotropic-filter coexistence repair passes bounded source review and 20 native checks; follow-on integration is pushed separately. Renderer activation and original query polarity remain open. |
-| Original allocator construction | Reviewed native storage is delivered; 14 production checks pass. Original resource, 24-allocator and 27-pool creation sequences pass bounded source review and remain unactivated. The borrowed LinearMalloc repair passes source review and 38 focused checks; executable validation remains. Owned/RW lifecycle recovery passes source review and 58 focused checks in a separate pushed integration branch. Full constructor activation and GPU/DMA behavior remain open. |
-| Original GameState path | Original caller, all28 Prepare cases and canonical Flyby providers are pushed at `df336bbff`; seven TUs compile and native bodies remain preserved. Fresh review/integration and initialization/activation gates remain. |
-| Original Pool create path | Nine-owner source checkpoint is pushed at `0eced16a`. Review found four protocol/layout/worker-assert defects; a separate repair worker is fixing them. Original startup remains inactive. |
+| Coarse scene queries and shared renderer state | Sampler/query/Stack follow-on is delivered in AC3. The canonical packed sampler producer and Font flags repair pass source review, a 16-check native fixture and inspected game frames. Query-provider checks pass 47/47, with a real failed-draw witness unavailable. Renderer activation and original query polarity remain open. |
+| Original allocator construction | Reviewed native storage and LinearMalloc/RW lifecycle repairs are delivered. Original resource, 24-allocator and 27-pool sequences remain unactivated. Full constructor activation and GPU/DMA behavior remain open. |
+| Original GameState path | Original caller, all28 Prepare cases, canonical Flyby providers and selected snapshot repair pass bounded source review at `bcfa1c992`. The combined integration build found a missing Flyby mount and a class/struct declaration mismatch; Root is fixing those. Original lifecycle activation remains open. |
+| Original Pool create path | All four protocol/layout/worker-assert review findings are repaired at `005fa61ec`; source review and 41 focused production checks pass. Current-primary reconciliation is in the combined integration gate. Original startup remains inactive. |
+| ImmediateMode and Traffic readers | ImmediateMode member-instantiation ownership and Vector3 boost-bar API are pushed at `6f76d337`, with canonical compile checks. Traffic's Anarchy-distance initializer is recovered separately. Combined review/integration and the 23-site unresolved-reader closure continue. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. |
 
 The historical [source-scope union](remaining_source_checkpoint_20261012.json)
@@ -60,13 +62,12 @@ Current receipts: [supporting repairs](supporting_systems_repairs_20261013.json)
 [link dependencies](link_dependencies_20261013.json),
 [resource Prepare](resource_prepare_source_20261013.json), and
 [scene queries](scene_query_source_20261013.json). Source recovery continues on
-isolated branches while review and integration continue. The normal executable
-remains the tested `8cbd95c6d` build, with a healthy byte-exact backup and provenance.
-The allocator/sampler/query/Stack follow-on is pushed in primary source at
-`5ad64d67f`. Its 2,974-file shipping build links and three native cases pass34
-checks with zero assertions/exceptions. **Inspected frames expose a texture
-regression, so the tested8cbd normal artifacts were restored.** Root is isolating
-the rendering change before delivery; see [delivery gate](FOLLOWON_DELIVERY_20261014.md).
+isolated branches while review and integration continue. The earlier5ad build
+passed automated checks but failed actual frame inspection, so its normal
+artifacts were restored while the regression was isolated. The repaired AC3
+normal build now passes both checks and bounded visual inspection; the failed
+candidate, comparison runs and backup remain retained. See
+[delivery gate](FOLLOWON_DELIVERY_20261014.md).
 
 Native batches have now exercised **149 bindings** across Physical Traffic,
 Route Map and Traffic: 141 literal variables and eight action paths, with 1,937
@@ -79,20 +80,26 @@ Traffic page's dynamic-caption row still need suitable evidence.
 
 Global `SAVE` hits DLC feature24's original NULL caption; an independent original
 assembly review confirms this broken expansion and it remains preserved. Targeted
-alias queries avoid that unrelated row. The private candidate also initializes
+alias queries avoid that unrelated row. The normal build also initializes
 the real DLC manager/table without activating DLC enumeration/monitoring.
 
-Recovery continues on the original GameState PreWorld caller/controller transport
-and PoolModule create/FIFO/descriptor/host-layout family in separate branches.
-The GameState provider checkpoint is pushed at `df336bbff`; neither GameState nor
-Pool family is claimed integrated or behavior-verified. The four Traffic Stats
-readouts pass the rebuilt candidate's56 actual reads, including nonempty
-purgatory and full cleanup; final recording waits for corrected delivery.
+The four Traffic Stats readouts now have final verified dispositions. Corrected
+normal delivery retains56 actual reads across14 phases, including four phases
+with nonempty purgatory and cleanup0/400/0/0. Other Traffic controls remain pending.
+GameState/Pool lifecycle integration, selected GameState debug consumers and the
+23 unresolved Traffic reader sites continue in separate branches.
+
+Correction to earlier warning descriptions: the C4661 messages came from
+whole-class explicit instantiation requests whose bodies live in other TUs, plus
+an unattested overload request. They did not establish eight missing bodies.
+The separate ImmediateMode checkpoint repairs that ownership; AC3 retains the
+eight warnings pending its integration.
 
 ## Pipeline
 
-Keep two Luna Max source workers recovering exclusive subsystem slices while
-Root integrates/tests/publishes and one Sol reviewer handles a combined batch.
+Keep two source workers recovering exclusive subsystem slices while Root
+integrates/tests/publishes and one Sol reviewer handles a combined batch.
+Use Luna Max for suitable recovery work and Sol for the more complex chains.
 No Astra. Do not make source workers wait for review or native checks. Prefer
 large page/subsystem batches around 130 sites; commit/push smaller coherent
 increments frequently, including source that is explicitly unverified.

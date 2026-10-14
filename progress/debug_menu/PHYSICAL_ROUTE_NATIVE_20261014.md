@@ -31,12 +31,16 @@ continuation and its documented aliases remain preserved, without invented guard
 
 The separate Traffic108 run completed14 phases,77 frames,0 assertions/exceptions,
 1,428 native reads and546 control comparisons. It resolves107 bindings; one
-dynamic-caption row remains pending. A new5ad candidate run passes11 scoped
-checks with56 actual counter reads, five nonempty-purgatory phases and cleanup
+dynamic-caption row remains pending. The corrected normal AC3 run passes11 scoped
+checks with56 actual counter reads, four nonempty-purgatory phases and cleanup
 0/400/0/0. The shared Stack assertion repair passes source review and12 production
 behavior checks; the same fixture fails five checks on the old header.
-Four counter conclusions await corrected native delivery because frame inspection
-caught a separate texture regression. This is not108 final verdicts.
+The four counter conclusions now have final verified dispositions after corrected
+native delivery and frame inspection. The earlier5ad visual failure is retained.
+The final run is
+`scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424`.
+Its actual container reads include purgatory1 and2, changing active/free counts,
+four active hulls and final teardown. This is not108 final verdicts.
 
 The original NULL DLC caption24/SAVE crash remains preserved. Targeted alias
 queries replace global SAVE in both batch harnesses. Parser repairs preserve
@@ -50,5 +54,6 @@ Its30-path source/harness scopes pass; its overall fail retained specific
 unsupported proposals. The additive review at
 `scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md`
 passes the bounded Stack/five original-entry follow-on and conditionally supports
-four counters after corrected delivery. Current totals:31 verified,7 original
-no-ops,1317 pending. See [delivery gate](FOLLOWON_DELIVERY_20261014.md).
+four counters after corrected delivery. That condition is now met. Current
+totals:35 verified,7 original no-ops,1313 pending. See
+[delivery gate](FOLLOWON_DELIVERY_20261014.md).

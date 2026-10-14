@@ -377,5 +377,49 @@
       "scratch/bugtest/runs/debug_menu_physical_route_readback_20261014/20261014_001313/phase-frames.json",
       "scratch/DEBUG_MENU_1011/traffic108_readback_repair_20261014/physical-route.reparsed.json"
     ]
+  },
+  "BrnTraffic::DebugComponent::OnActivate#0003": {
+    "state": "verified",
+    "notes": "Active params: the original live 400-free-purgatory consumer now uses the repaired Stack accessor. Corrected normal AC3 delivery has 56 reads across14 phases, four with nonempty purgatory, changing counts and final0/400/0/0.",
+    "evidence": [
+      "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+      "progress/debug_menu/native_delivery_20261014.json",
+      "tools/tests/cases/debug_menu_traffic_counters.ps1",
+      "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+      "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json"
+    ]
+  },
+  "BrnTraffic::DebugComponent::OnActivate#0004": {
+    "state": "verified",
+    "notes": "Free params: actual free-stack length changes as traffic is populated and returns to400 at cleanup. Shared Stack assertion contract is repaired/reviewed; corrected normal AC3 delivery and native accounting checks pass.",
+    "evidence": [
+      "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+      "progress/debug_menu/native_delivery_20261014.json",
+      "tools/tests/cases/debug_menu_traffic_counters.ps1",
+      "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+      "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json"
+    ]
+  },
+  "BrnTraffic::DebugComponent::OnActivate#0005": {
+    "state": "verified",
+    "notes": "Purgatory params: actual readonly-array length includes0,1 and2 in corrected normal AC3 delivery and returns to0 at cleanup. Every refreshed phase preserves active+free+purgatory=400.",
+    "evidence": [
+      "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+      "progress/debug_menu/native_delivery_20261014.json",
+      "tools/tests/cases/debug_menu_traffic_counters.ps1",
+      "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+      "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json"
+    ]
+  },
+  "BrnTraffic::DebugComponent::OnActivate#0006": {
+    "state": "verified",
+    "notes": "Active hulls: actual readonly-set count is4 during populated phases and0 after teardown. Corrected normal AC3 delivery passes scoped counter checks and inspected rendered-frame regression checks.",
+    "evidence": [
+      "progress/debug_menu/PHYSICAL_ROUTE_NATIVE_20261014.md",
+      "progress/debug_menu/native_delivery_20261014.json",
+      "tools/tests/cases/debug_menu_traffic_counters.ps1",
+      "scratch/DEBUG_MENU_1011/entry_followon_review_20261014/SOURCE_REVIEW.md",
+      "scratch/bugtest/runs/debug_native_fixed_normal_traffic_20261014/20261014_202424/counter-witness.json"
+    ]
   }
 }
