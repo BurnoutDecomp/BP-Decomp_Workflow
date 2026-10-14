@@ -19,7 +19,7 @@
 # the proof frame is one taken after the "[net] update-in applied" lines start.
 #
 # THE ORACLE (bounded "[net] ..." witness lines, printed only on a LAN run):
-#   [net] game round start -> StartGameMode mode=15 ...     ProcessGameEvents case 18 started the lobby
+#   [net] state ... loggedIn=1 inGame=1 ... players=2       both players joined the session
 #   [net] world grid car <n> ... type=2 ...                  the world spawned the other player's car
 #     or [net] world network car spawned for net=...         (joiner: at lobby start; host: action 219)
 #   [net] update-out sent since=n ... pos=(x, y, z)          this instance's car state went out
@@ -146,7 +146,8 @@ $lSpawnCheck = {
   Checks  = @(
     @{ Kind = 'LogCount'; Name = 'no exceptions'; Pattern = '\[EXCEPTION\]'; Max = 0 }
     @{ Kind = 'Mark';     Name = 'reached DRIVING'; Phase = 'DRIVING' }
-    @{ Kind = 'LogMatch'; Name = 'the lobby game started (case 18 -> StartGameMode mode 15)'; Pattern = '\[net\] game round start -> StartGameMode mode=15'; Expect = $true }
+    @{ Kind = 'LogMatch'; Name = 'the game has two connected players'; Pattern = '\[net\] state .*loggedIn=1 inGame=1 host=[01] players=2'; Expect = $true }
+    @{ Kind = 'LogCount'; Name = 'the peer connection remains alive'; Pattern = '\[net\] (pclan .*dropped:|connapi .* lost)'; Max = 0 }
     @{ Kind = 'Script';   Name = "a network race car was spawned for $lsOther"; Script = $lSpawnCheck }
     @{ Kind = 'LogMatch'; Name = 'update messages sent'; Pattern = '\[net\] update-out sent since=\d+'; Expect = $true }
     @{ Kind = 'Script';   Name = "received updates drive $lsOther's car where $lsOther is"; Script = $lTrackCheck }
