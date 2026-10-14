@@ -19,5 +19,5 @@ $lCase.Setup = {
     $env:BP_LAN_PORT = if ($lsRole -eq 'Host') { '27830' } else { '27850' }
 }.GetNewClosure()
 $lCase.Checks += @{ Kind = 'LogMatch'; Name = 'authenticated online relay connected';
-    Pattern = '\[net\] online server connected: authenticated encrypted relay, protocol=1'; Expect = $true }
+    Pattern = '\[net\] online server connected: authenticated encrypted relay, protocol=2'; Expect = $true }
 return $lCase
