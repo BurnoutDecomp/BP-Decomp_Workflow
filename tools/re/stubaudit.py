@@ -22,11 +22,14 @@ into a tier:
     HIGH    the file is a *Stub* file, the body traps (CGS_ASSERT(false ...)/__debugbreak), or
             the body/comment says so explicitly (link scaffold, PC-platform leaf, un-/not
             reconstructed, NOT an X360 function, DELIBERATELY NOT BODIED, comment-only stub,
-            left unbodied, honest stub/floor, LogUnreconstructed...).
-    MEDIUM  the body is TRIVIAL (empty, or a bare constant return, or only (void) casts) and a
-            softer marker sits on it (stand-in, placeholder, bring-up, DELETE-WHEN, [FLAG]).
+            left unbodied, honest stub/floor, LogUnreconstructed, TODO: Implement...).
+    MEDIUM  the body is TRIVIAL (empty, or a bare constant return, or only (void) casts, or HOLLOW:
+            it only latches a function-local static) and a softer marker sits on it (stand-in,
+            placeholder, bring-up, DELETE-WHEN, [FLAG]).
     LOW     the body is trivial, unmarked, and the console's own function is NOT trivial
             (pseudocode >= 8 lines) -- a stub nobody labelled, or a legitimately empty default.
+            In a host-platform file (PC/, Win32/, *PC.cpp) a trivial body with NO console
+            function is kept too: nothing else would ever list it (b5-decomp issue #42).
 Then it pairs each stub with the console: X360 address, pseudocode size (the work left), the
 console's named callers, and whether one of those callers is a body WE have reconstructed
 (not itself a stub) -- i.e. the stub is on a live path right now. That last column is the
@@ -59,13 +62,23 @@ CACHE_DIR = funcaudit.CACHE_DIR
 HIGH_RE = re.compile(
     r"FLAG link scaffold|link scaffold|PC-platform leaf|un-?reconstructed|not (?:yet |fully )?reconstructed"
     r"|NOT an X360 function|DELIBERATELY NOT BODIED|comment-only stub|left unbodied|honest (?:no-op )?(?:stub|floor|placeholder)"
-    r"|LogUnreconstructed|link stub|LINK STUB|\bstub body\b|\bstubbed\b|\bno-op stand-in\b|body intentionally", re.I)
+    r"|LogUnreconstructed|link stub|LINK STUB|\bstub body\b|\bstubbed\b|\bno-op stand-in\b|body intentionally"
+    r"|\bTODO\b\W{0,3}implement", re.I)
 TRAP_RE = re.compile(r"CGS_ASSERT\s*\(\s*false\b|__debugbreak\s*\(|__builtin_trap\s*\(|\bstd::abort\s*\(")
 SOFT_RE = re.compile(r"stand-in|placeholder|bring-up|DELETE-WHEN|\[FLAG|FLAG PC|\bFLAG\b", re.I)
 TRIVIAL_STMT_RE = re.compile(
     r"^\s*(?:return\s*(?:0|1|false|true|nullptr|NULL|-?\d+(?:\.\d+)?f?|\"[^\"]*\"|\{\s*\}|[A-Za-z_]\w*::[A-Z_]+)?\s*;"
     r"|\(void\)\s*[A-Za-z_]\w*\s*;)\s*$")
 CONSOLE_TRIVIAL_LINES = 8
+# Host-platform files: code the PC build compiles with no console counterpart (the TUB PC
+# release is its reference, not ARTIST), so a trivial body there has no console size to judge by.
+HOST_FILE_RE = re.compile(r"(?:^|/)(?:PC|Win32|Windows)/|PC\.(?:cpp|h|hpp|inl)$")
+# A function-local static, and a constant stored into one: the latch in a hollow body.
+# Same rule as tools/work/faithfulness_lint.py's hollow_body (this tool ships without tools/work).
+LOCAL_STATIC_RE = re.compile(
+    r"\bstatic\s+(?:(?:const|volatile)\s+)*[A-Za-z_][\w:]*(?:\s*<[^;{}]*>)?[\s*&]+([A-Za-z_]\w*)\s*(?:=\s*[^;{}]+)?;")
+LATCH_RE = re.compile(r"([A-Za-z_]\w*)\s*=\s*(?:true|false|nullptr|-?\d+)")
+RETURN_RE = re.compile(r"^return\b\s*(.*)$")
 
 
 def trivial_body(code):
@@ -79,6 +92,52 @@ def trivial_body(code):
         return True
     stmts = [s.strip() for s in re.split(r";\s*", inner) if s.strip()]
     return all(TRIVIAL_STMT_RE.match(s + ";") for s in stmts)
+
+
+def hollow_body(code):
+    """A body whose only effect is latching a function-local static: `static bool done; if (!done)
+    { done = true; }` around nothing. Branches on plain conditions are allowed; a condition that
+    calls or assigns is real work, and so is returning a different constant per branch (that
+    makes the latch observable, e.g. a run-once guard returning true then false)."""
+    inner = code.strip()
+    if inner.startswith("{"):
+        inner = inner[1:]
+    if inner.endswith("}"):
+        inner = inner[:-1]
+    latches = set(LOCAL_STATIC_RE.findall(inner))
+    if not latches:
+        return False
+    rest = LOCAL_STATIC_RE.sub(";", inner)
+    out, i = [], 0
+    for m in re.finditer(r"\bif\s*\(", rest):
+        if m.start() < i:
+            continue
+        depth, j = 1, m.end()
+        while j < len(rest) and depth:
+            depth += {"(": 1, ")": -1}.get(rest[j], 0)
+            j += 1
+        if re.search(r"[A-Za-z_]\w*\s*\(|\+\+|--|[^=!<>]=[^=]", rest[m.end():j - 1]):
+            return False
+        out += [rest[i:m.start()], ";"]
+        i = j
+    out.append(rest[i:])
+    stmts = [s.strip() for s in re.split(r"\belse\b|[{};]", "".join(out)) if s.strip()]
+    returned = set()
+    for s in stmts:
+        m = LATCH_RE.fullmatch(s)
+        if m and m.group(1) in latches:
+            continue
+        if not TRIVIAL_STMT_RE.match(s + ";"):
+            return False
+        m = RETURN_RE.match(s)
+        if m:
+            returned.add(m.group(1).strip())
+    return len(returned) <= 1
+
+
+def is_ctor_or_dtor(qual):
+    parts = (qual or "").split("::")
+    return parts[-1].startswith("~") or (len(parts) > 1 and parts[-1] == parts[-2])
 
 
 class FileCache(object):
@@ -154,6 +213,8 @@ def main():
         above = files.above(rel, d.line)
         text = above + "\n" + d.raw
         trivial = trivial_body(d.code)
+        hollow = not trivial and hollow_body(d.code)
+        trivial = trivial or hollow
         tier, why = None, []
         if in_stub_file:
             tier = "HIGH"; why.append("stub file")
@@ -163,11 +224,12 @@ def main():
         if m:
             tier = "HIGH"; why.append(m.group(0))
         if tier is None and trivial:
+            kind = "hollow body (only latches a local static)" if hollow else "trivial body"
             m = SOFT_RE.search(text)
             if m:
-                tier = "MEDIUM"; why.append("trivial body + " + m.group(0))
+                tier = "MEDIUM"; why.append(kind + " + " + m.group(0))
             else:
-                tier = "LOW"; why.append("trivial body, unmarked")
+                tier = "LOW"; why.append(kind + ", unmarked")
         if tier is None:
             continue
         stubs.append((d, tier, why, trivial))
@@ -189,8 +251,13 @@ def main():
                 if c in idx.by_exact and c not in stub_keys:
                     live.append(c)
         if tier == "LOW":
-            # an unmarked trivial body is only worth listing when the console does real work
-            if lines is None or lines < CONSOLE_TRIVIAL_LINES:
+            # an unmarked trivial body is only worth listing when the console does real work --
+            # or, in a host-platform file, when there is no console function to ask at all
+            if addr is None:
+                if not HOST_FILE_RE.search(d.file) or is_ctor_or_dtor(d.qual):
+                    continue
+                why.append("host-only, no console function")
+            elif lines is None or lines < CONSOLE_TRIVIAL_LINES:
                 continue
         rows.append({"file": d.file, "line": d.line, "name": name, "addr": addr, "tier": tier,
                      "why": "; ".join(why), "trivial": trivial, "console_lines": lines,
