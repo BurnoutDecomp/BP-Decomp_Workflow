@@ -6,8 +6,8 @@ using separate branches for unverified recovery and staging only owned paths.
 
 ## Current state
 
-**Recovery is incomplete. Implementation, integration, review and behavior checks
-are all still in progress.** The count of fully implemented but unverified entries
+**Recovery is incomplete and paused at the user's request. Implementation,
+integration, review and behavior checks remain unfinished.** The count of fully implemented but unverified entries
 is unknown. Source coverage must never be reported as implementation completion.
 
 The inventory contains **1,355 static registration sites**. Final dispositions are
@@ -89,9 +89,11 @@ normal delivery retains56 actual reads across14 phases, including four phases
 with nonempty purgatory and cleanup0/400/0/0. Other Traffic controls remain pending.
 The next [integration of selected consumers](SELECTED_CONSUMERS_20261015.md) combines
 the eight-file GameState and three-file graphics checkpoints at `5b4d44e90`.
-It is pushed on an isolated branch and its full build is running. The delivered
-normal executable remains the inspected `f98a8cb5b` build. Original lifecycle
-activation and the 23 unresolved Traffic reader sites remain open.
+The repaired 14-file checkpoint at `66613d8d3` compiles and links, but native
+Start/GPU checks freeze in the junkyard: the public world-streaming status copy
+is missing. The candidate was not delivered. Work and agents are paused at the
+user's request; the normal executable remains the inspected `f98a8cb5b` build.
+Original lifecycle activation and the 23 unresolved Traffic reader sites remain open.
 
 Correction to earlier warning descriptions: the C4661 messages came from
 whole-class explicit instantiation requests whose bodies live in other TUs, plus
