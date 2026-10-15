@@ -75539,6 +75539,7 @@
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Logic/Cgs3dEffectControl.cpp": {
+   "notes": "complex; combined fresh-eyes audio review passed 2026-10-15; changed batch verified, existing unrelated debt remains; see progress/audio_faithfulness/REVIEW_AUDIO_FIXES_2026-10-15.md",
    "status": "done"
   },
   "GameShared/GameClasses/Sound/Logic/Cgs3dEffectControl.h": {
@@ -78444,7 +78445,7 @@
    "status": "done"
   },
   "GameSource/Unity/../Game/BrnGameModule.cpp": {
-   "notes": "Scoped branch regression repair reviewed PASS: retain dev pause scheduling until live world streaming status producer exists. Full build passes; harness reaches car selection.",
+   "notes": "complex; combined native reviewer pass; ARTIST assembly checked; UI production-body regression and muted live drive reproduce pre-fix silence and verify nonzero UI/engine gain; user confirms both audible",
    "status": "done"
   },
   "GameSource/Unity/../Game/BrnGlobalCpuMonitors.cpp": {
@@ -78504,7 +78505,7 @@
    "status": "done"
   },
   "GameSource/Unity/../GameFlowController/TopLevel/BrnGameMainFlowInGameState.cpp": {
-   "notes": "verify pass 4/4: OnEnter/OnLeave abs-offset stores into GetMainGameModule + Render/Update; empty stubs removed for ODR. gate x64 pass",
+   "notes": "complex; combined native reviewer pass; ARTIST assembly checked; UI production-body regression and muted live drive reproduce pre-fix silence and verify nonzero UI/engine gain; user confirms both audible",
    "status": "done"
   },
   "GameSource/Unity/../GameFlowController/TopLevel/BrnGameMainFlowInitialLoadingScreenState.cpp": {
@@ -79105,12 +79106,14 @@
    "status": "done"
   },
   "GameSource/Unity/../Sound/Global/BrnHUDEffect.cpp": {
+   "notes": "complex; combined native reviewer pass; ARTIST assembly checked; UI production-body regression and muted live drive reproduce pre-fix silence and verify nonzero UI/engine gain; user confirms both audible",
    "status": "done"
   },
   "GameSource/Unity/../Sound/Global/BrnMixerControl.cpp": {
    "status": "done"
   },
   "GameSource/Unity/../Sound/Global/BrnMusicEffect.cpp": {
+   "notes": "complex; combined fresh-eyes audio review passed 2026-10-15; changed batch verified, existing unrelated debt remains; see progress/audio_faithfulness/REVIEW_AUDIO_FIXES_2026-10-15.md",
    "status": "done"
   },
   "GameSource/Unity/../Sound/Global/BrnPresentationEffect.cpp": {
@@ -79199,6 +79202,7 @@
    "status": "done"
   },
   "GameSource/Unity/../Sound/Vehicles/Engines/BrnDualGinsuEffect.cpp": {
+   "notes": "complex; native reviewer pass; ARTIST826B3908/826B3B68 and DecFIGS86FC4C checked; 32 finite-valued pitch boundary checks pass, previous implementation fails 8; integrated current dev listener helpers and exact timebase retained",
    "status": "done"
   },
   "GameSource/Unity/../Sound/Vehicles/Engines/BrnEngineControl.cpp": {
@@ -83991,7 +83995,7 @@
    "status": "done"
   },
   "class:BrnSound::Logic::MusicStream": {
-   "notes": "Wave 48: store-for-store vs X360 ASM; adversarial-verified; claim-locked; gate pass.",
+   "notes": "complex; combined fresh-eyes audio review passed 2026-10-15; changed batch verified, existing unrelated debt remains; see progress/audio_faithfulness/REVIEW_AUDIO_FIXES_2026-10-15.md",
    "status": "done"
   },
   "class:BrnSound::Logic::Passby": {
@@ -84179,6 +84183,7 @@
    "status": "done"
   },
   "class:BrnSound::Vehicles::Engines::DualGinsuExhaustEffect": {
+   "notes": "complex; combined fresh-eyes audio review passed 2026-10-15; changed batch verified, existing unrelated debt remains; see progress/audio_faithfulness/REVIEW_AUDIO_FIXES_2026-10-15.md",
    "status": "done"
   },
   "class:BrnSound::Vehicles::Engines::EngineControl": {
@@ -87402,7 +87407,7 @@
    "status": "done"
   },
   "class:CgsSound::Logic::VoiceWrapper": {
-   "notes": "Opus decomp+verify; gate PASS; pushed dev 5ca93e1",
+   "notes": "complex; combined fresh-eyes audio review passed 2026-10-15; changed batch verified, existing unrelated debt remains; see progress/audio_faithfulness/REVIEW_AUDIO_FIXES_2026-10-15.md",
    "status": "done"
   },
   "class:CgsSound::MemBase": {
@@ -89319,9 +89324,11 @@
    "status": "done"
   },
   "class:rw::audio::core::CpuLoadBalancer": {
+   "notes": "complex; combined fresh-eyes audio review passed 2026-10-15; changed batch verified, existing unrelated debt remains; see progress/audio_faithfulness/REVIEW_AUDIO_FIXES_2026-10-15.md",
    "status": "done"
   },
   "class:rw::audio::core::Dac": {
+   "notes": "complex; combined fresh-eyes audio review passed 2026-10-15; changed batch verified, existing unrelated debt remains; see progress/audio_faithfulness/REVIEW_AUDIO_FIXES_2026-10-15.md",
    "status": "done"
   },
   "class:rw::audio::core::Decoder": {
@@ -89513,7 +89520,7 @@
    "status": "done"
   },
   "class:rw::audio::core::System": {
-   "notes": "wave F: ExecuteCommands @0x82B6F6D0 bodied -- the ring pump that was DECLARED but defined nowhere, which is why I refused to close this TU last wave. Reconstructed store-for-store over 131 lines of asm: 4 phases (timer-A locked, expel phase UNLOCKED, ring replay locked, timer-B locked + TimerManager::Defragment). 8 inlined hook-or-mutex lock sites reversed to System::Lock/Unlock. Three X360-literal traps defused: the ring stride now uses host sizeof via a named SystemCommandHeader, the container-of  routes through ITask::GetITaskFromNode, and Defragment's 0x1C Collection stride is indexed as maCollections[i]. TimerManager::Defragment verified instruction-for-instruction by headless IDA and landed as an additive grow on the done TimerManager TU. Verifier walked both functions against the asm and found NO divergence. Ctor is System_ctor per this vendor tree's placement-construction convention. NOT link-clean and knowingly so: GetCpuCycle (declared in 4 .cpp, defined nowhere -- committed precedent) and EaXmaDec::DeallocateResources (blocked sibling TU) are pre-existing cross-TU externals that cl /c cannot see.",
+   "notes": "complex; combined fresh-eyes audio review passed 2026-10-15; changed batch verified, existing unrelated debt remains; see progress/audio_faithfulness/REVIEW_AUDIO_FIXES_2026-10-15.md",
    "status": "done"
   },
   "class:rw::audio::core::TimerHandle": {
