@@ -1,41 +1,44 @@
-# Selected GameState and graphics consumers
+# Selected GameState and graphics consumers — paused
 
-The next checkpoint restores runtime connections needed by the debug controls.
-It is committed and pushed on an isolated branch; the delivered normal executable
-is still the visually inspected `f98a8cb5b` build. Final totals remain
+Work stopped at the user's request. All agents and owned build/test processes
+are stopped. The normal executable remains the visually checked F98 build
+(`df3677771ddf`); the failed candidate was never delivered. Final totals remain
 35 verified, seven original no-ops and 1,313 pending sites.
 
-## Checkpoint
+## Saved checkpoint
 
-`codex/debug-menu-selected-consumer-integration` at
-`5b4d44e905ad5f3a6bfd90a4d83436debf1119a9` combines 11 changed files over
-`f98a8cb5b7868e8a06563c0b4ea4a75cf352e103`:
+The pushed isolated branch `codex/debug-menu-selected-consumer-integration` is
+clean at `66613d8d31cee93059221e7ba68246f0566040f4`: eight GameState consumer
+files, three reviewed graphics caller files and three dispatcher declaration
+repairs. All 2,975 shipping TUs compile and link. The final incremental attempt
+rebuilt 39 files and recorded no warnings or failures; earlier link failures and
+objects remain retained.
 
-- GameState: poll native pad output before the original frame-step query; reuse
-  that snapshot in the GUI; connect pause/step and streaming-pause events,
-  live world-streaming status, player pose and landmark drawing, loading-event
-  translations, the wait countdown and the mode preparation/finish latch.
-- Graphics: restore the original occlusion construction, query batching and
-  conditional draw callers, plus dispatch continuation. These callers remain
-  behind a disabled host selection while their allocator provider is recovered.
+Native Start and GPU tests both FAIL: the game freezes in the junkyard after a
+streaming pause, never reaching driving. They record zero assertions/exceptions.
+The prepared landmark/Step/Play case was not launched after that failure.
 
-The GameState source checkpoint is `de53dc62ea165a11fcbcd5b250d9d8231d9cdcc9`.
-Its author reports canonical compilation and 19 input, 84 consumer and 81 preparation
-fixture checks. The aggregate evidence is being frozen for a fresh combined
-review. These selected GameState consumers affect the running route; the complete
-original Construct/Prepare/PreWorld lifecycle remains unactivated.
+An independent reviewer traced the missing dependency: the real WorldEntity
+PostPhysics update writes residency, but `BridgeEntityModulesToOutput_PostPhysics`
+does not copy that status into the public World UpdateOutputBuffer. The public
+member starts zero; the newly connected consumer reads it and requests a
+permanent stall. ARTIST `0x827AEEB0` has the missing transfer at `0x827AF174`.
+No repair or bypass was applied before stopping. The combined review was
+interrupted; its full final report must not be assumed complete.
 
-The graphics source checkpoint is `b49d37a5c730c8b0a39fd0ed82198e7509f01072`.
-Its fresh source review passes and two canonical TUs compile. Capacity, provider
-compatibility, lifetime, native activation and menu effects remain open.
+## Resume here
 
-## Next gates
+Recover the attested status transfer, review its full bridge/locking/lifetime
+contract, then rerun the failed native gates before any normal delivery.
+The original full GameState lifecycle and native occlusion remain inactive.
 
-One full private build is running against the unchanged 2,975-file shipping list.
-Fresh GameState review and behavior-specific native checks must pass before
-normal delivery. A clean build or startup alone will not promote entry verdicts.
+The 25-entry Game State page worker was interrupted with no tracked source edits.
+The allocator worker completed its frozen prerequisite packet: the original
+GlobalGraphics provider already exists in the isolated `55790e71` recovery lane,
+and still needs reviewed startup integration. No duplicate provider or capacity
+increase was added. Its packet is
+`scratch/DEBUG_MENU_1011/graphics_allocator_provider_20261015/REPORT.md`.
 
-Frozen source preimages, postimages and cherry-pick identities are retained in
-`scratch/DEBUG_MENU_1011/selected_consumers_integration_20261015/source_manifest.json`.
-The [machine-readable checkpoint](selected_consumers_20261015.json) records the
-exact identities and review boundaries.
+The [machine-readable checkpoint](selected_consumers_20261015.json) records exact
+source, build and failed-run identities. Raw evidence remains in
+`scratch/DEBUG_MENU_1011/selected_consumers_integration_20261015/`.
