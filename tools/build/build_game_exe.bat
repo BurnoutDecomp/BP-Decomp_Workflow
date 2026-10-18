@@ -3097,6 +3097,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\World\EntityModules\PropEntityModule\BrnPropEntityDebugComponent.cpp"
   echo "%SRC%\GameSource\World\DebugComponents\BrnSkyDebugComponent.cpp"
   echo "%SRC%\GameSource\World\DebugComponents\BrnPVSDebugComponent.cpp"
+  echo "%SRC%\GameSource\World\DebugComponents\BrnCollisionDebugComponent.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Debug\BrnScoringSystemDebugComponent.cpp"
   echo "%SRC%\GameSource\GameState\ModeManager\Debug\BrnModeManagerDebugComponent.cpp"
   echo "%SRC%\GameShared\GameClasses\Development\DebugSystem\Core\UI\Console\CgsConsole.cpp"
