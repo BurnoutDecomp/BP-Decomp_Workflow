@@ -89406,7 +89406,7 @@
    "status": "done"
   },
   "class:rw::audio::core::Iir2": {
-   "notes": "1 func (2nd-order IIR filter); gate pass.",
+   "notes": "Landed b5-decomp dev 4634c169b. Complex numeric fidelity correction: independent fresh-eyes reviewer PASS against raw ARTIST 0x82B69DD0 assembly. Restored fmadds/fnmsubs single-rounding, eight-slot feedforward order, source preloads and histories including negative zero. Production trace regression 1083/1083; old source fails 426. MSVC, faithfulness and funcaudit 1/1 clean; full exe link zero warnings/errors. Muted live slot-1 run 20261018_170548 passed 6/6: DRIVING, zero asserts/exceptions, 61 RPM observations, GUI route correct, four engine sends nonzero PCM. Initial PCM check used slot directory; NoRun correctly archived the same-run shared-CWD trace by timestamp and rescored PASS. Exe SHA256 216a82ba1a4200b5ccb6649d00caf4f7ffa3736397c860862c1fd0a3613fef8e. Structural parity RED explained by explicit fused calls/grouped loops. Next audio fidelity target: audit coefficient-design float widths, starting LowPassIir2 cos/frsp and single-precision arithmetic; full console PCM parity remains unproven.",
    "status": "done"
   },
   "class:rw::audio::core::Limiter1": {
