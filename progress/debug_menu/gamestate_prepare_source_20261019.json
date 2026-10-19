@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-10-19",
-  "status": "source_review_pass_current_compile_failed_native_pending",
+  "status": "source_review_and_current_integration_link_pass_native_pending",
   "head": "8884fe163c3534c33d8267bb6c47951cecaeed72",
   "baseline": "bae1a8910d4df3e1b9875bb6dffe6bc24ccd3d13",
   "dev_base": "37735c71de125f873e8d404d2c0dd7f42b8f56cd",
@@ -64,25 +64,35 @@
     "The original base allocation route and external flag initialization remain under audit; do not call the PC allocation site original.",
     "Resource ordering, pointer ownership and reply timing pass source review; non-null backing memory and allocator success remain native-unverified.",
     "Full DLC Prepare remains unselected; PC XContent discovery/mount backend remains missing or unverified.",
-    "Selected GUI65 unpause stand-in, stepped GUI action retirement and full GameState PreWorldUpdate activation remain unresolved."
+    "GUI65 fake unpause is removed in the later GUI follow-on; loading-screen presentation and full GameState PreWorldUpdate activation remain open."
   ],
   "current_compile_link": {
-    "source": "8884fe163c3534c33d8267bb6c47951cecaeed72",
-    "run_url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39296536237",
+    "source": "3e0cbea6644577cba98c9af8d28a298101ee0c8e",
+    "workflow": "485934685a2ca1986d3783c5dea2d326aedf6155",
+    "run_url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39301731490",
     "compile": {
-      "compiled": 694,
+      "translation_units": 2976,
+      "compiled": 695,
       "up_to_date": 2281,
-      "failed": 1
+      "failed": 0,
+      "seconds": 97.5,
+      "jobs": 4
     },
-    "link": "skipped",
-    "failure": "EA::Thread declaration/include redefinitions in BrnDLCManager.cpp; source repair under investigation."
+    "link": {
+      "verdict": "pass",
+      "seconds": 2.7
+    },
+    "runner": "GitHub-hosted windows-2022",
+    "private_exe_sha256": "a0428a432f42a4038688d7530e3c33e33d46f1b44441b119e42661280c66705f",
+    "receipt_sha256": "3be0183ff220f7b47baa8a63dd57b339246652e31d85a753abeb271d0b722bc8",
+    "coverage_limit": "Canonical shipping TU list; the deliberately unmounted monitor/X360 SDK bodies are not part of this build."
   },
   "native_checks": "not_run",
   "planned_build": {
     "workflow": ".github/workflows/build-candidate.yml",
     "runner": "GitHub-hosted windows-2022",
     "jobs": 4,
-    "dispatch_status": "completed_compile_failed",
+    "dispatch_status": "current_integration_pass",
     "local_fallback_limits": {
       "jobs": 1,
       "priority": "Idle",
@@ -113,5 +123,17 @@
     "path": "scratch/DEBUG_MENU_1011/gamestate_prepare_review_repair_20261019/source_inputs.json",
     "sha256": "12599238cc365b85dff26a4ce49b154b5157e6479aeab683b97e781a1447e0aa"
   },
-  "normal_delivery": "progress/debug_menu/playable_dev_20261019.json"
+  "normal_delivery": "progress/debug_menu/playable_dev_20261019.json",
+  "historical_compile_failure": {
+    "source": "8884fe163c3534c33d8267bb6c47951cecaeed72",
+    "run_url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39296536237",
+    "compile": {
+      "compiled": 694,
+      "up_to_date": 2281,
+      "failed": 1
+    },
+    "link": "skipped",
+    "failure": "EA::Thread declaration/include redefinitions in BrnDLCManager.cpp; source repair under investigation."
+  },
+  "gui_followon": "progress/debug_menu/gui_queue_source_20261019.json"
 }

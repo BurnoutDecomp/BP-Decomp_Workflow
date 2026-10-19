@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "status": "source_reviews_and_hosted_link_pass_native_pending",
+  "head": "3e0cbea6644577cba98c9af8d28a298101ee0c8e",
+  "dev_base": "37735c71de125f873e8d404d2c0dd7f42b8f56cd",
+  "branch": "codex/debug-menu-gamestate-source-integration-20261019",
+  "merged_to_dev": false,
+  "gui_checkpoint": "40cd85c98beb4b6f6eff0f5f7f511232d0c7ecd2",
+  "combined_source_paths_over_dev": [
+    "src/GameShared/GameClasses/Input/CgsInputModule.cpp",
+    "src/GameSource/Game/BrnGameModule.cpp",
+    "src/GameSource/Game/BrnGameModule.hpp",
+    "src/GameSource/Game/GameBridgeGameStateToX_StuntGuiEvents.cpp",
+    "src/GameSource/GameState/AchievementManager/X360/BrnGameStateAchievementManagerX360.cpp",
+    "src/GameSource/GameState/AchievementManager/X360/BrnGameStateAchievementManagerX360.h",
+    "src/GameSource/GameState/BrnGameStateModule.cpp",
+    "src/GameSource/GameState/BrnGameStateModule.h",
+    "src/GameSource/GameState/GameStateModule_gUI_00.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager.h",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_Lifecycle.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_Prepare.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_WorldTick.cpp",
+    "src/GameSource/GameState/ModeManager/GameModes/BrnBurnoutSkillzManager.h",
+    "src/GameSource/GameState/ModeManager/ModeManager_gUI_00.cpp",
+    "src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoring.h",
+    "src/GameSource/Gui/BrnGuiMovieAllocator.cpp",
+    "src/GameSource/Gui/BrnGuiWorldDataController.cpp",
+    "src/GameSource/Resource/BrnDLCManager.cpp",
+    "src/GameSource/Resource/BrnDLCManager.h",
+    "src/GameSource/Resource/BrnDLCManagerMonitor.cpp",
+    "src/GameSource/World/Bridges/WorldBridgeEntityModulesToOutput.cpp",
+    "src/GameSource/World/BrnWorldModule.cpp",
+    "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+    "src/SDKs/EATech/eathread/BrnEAThreadX360.cpp",
+    "src/SDKs/EATech/eathread/BrnEAThreadX360.h",
+    "src/SDKs/Realmc/RealmcXenonUtil.h"
+  ],
+  "source_manifest": {
+    "path": "scratch/DEBUG_MENU_1011/link_followon_integration_20261019/source_inputs.json",
+    "sha256": "41aaab77f93c458cc15a0579b04bc5214a20cd796f09907122a08e9538082775"
+  },
+  "gui_source_review": {
+    "verdict": "pass",
+    "path": "scratch/DEBUG_MENU_1011/gui_queue_unpause_integration_20261019/REVIEW.md",
+    "sha256": "0c15e4a111c3fb6aa638f7abcaa828cadd036596d124b5b15dddede9d08690f5"
+  },
+  "selected_effects": [
+    "Retire the persistent GUI output after its existing sound/network snapshot, before current producers; skipped GUI updates cannot replay a previous135.",
+    "Remove the GUI65 fake unpause latch; reason1 release uses the real four-reply FinishStreaming chain.",
+    "Align stale SkillzManager forward declarations with the canonical StreetManager/MugshotManager structs; the current hosted link resolves the constructor."
+  ],
+  "dlc_provider": {
+    "repair": "3d8804e10dd2be25c3cb94e5ec76efffa32cef72",
+    "selected": "Forked vendor EAThread declarations and PC thread implementation; Futex/AutoFutex inline native provider.",
+    "vendor_revision": "38576cbe30e9cd674ad0caa67898fd5ab6450c14",
+    "source_evidence": "scratch/DEBUG_MENU_1011/dlc_vendor_provider_integration_20261019/source_inputs.json",
+    "source_evidence_sha256": "37c67474c5b96fe69d701a67fb28025cd01b6c7194940d523245a90bf8b61bc9",
+    "abi_audit": "scratch/DEBUG_MENU_1011/dlc_include_repair_20261019/FINDINGS.md",
+    "abi_audit_sha256": "fe3bd9844f41028c30872d195c1154b04e69f4a1117057cad740087edc33b6d3",
+    "unmounted": "src/SDKs/EATech/eathread/BrnEAThreadX360.cpp; its getter/Futex work is recovery source, not runtime delivery.",
+    "suspend_mapping": "Vendor Begin applies settings then resumes; no start-suspended field is needed for the original false request."
+  },
+  "inactive_dlc_boundary": {
+    "path": "src/GameSource/Resource/BrnDLCManagerMonitor.cpp",
+    "mounted": false,
+    "full_dlc_prepare_selected": false,
+    "monitor_bodies_exact_moves": true,
+    "selected_construct_and_typed_owners_preserved": true,
+    "missing_backend": [
+      "XContentCreateEnumerator",
+      "XContentGetDeviceData",
+      "XContentCreate"
+    ],
+    "audit": "scratch/DEBUG_MENU_1011/dlc_monitor_mount_boundary_20261019/REPORT.md",
+    "audit_sha256": "e618c4df13c4e4cb7fed5fc6172e79c02f3c7b76b566bdd81926a95369e1e421",
+    "completion_claim": false
+  },
+  "current_build": {
+    "source": "3e0cbea6644577cba98c9af8d28a298101ee0c8e",
+    "workflow": "485934685a2ca1986d3783c5dea2d326aedf6155",
+    "run_url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39301731490",
+    "compile": {
+      "translation_units": 2976,
+      "compiled": 695,
+      "up_to_date": 2281,
+      "failed": 0,
+      "seconds": 97.5,
+      "jobs": 4
+    },
+    "link": {
+      "verdict": "pass",
+      "seconds": 2.7
+    },
+    "runner": "GitHub-hosted windows-2022",
+    "private_exe_sha256": "a0428a432f42a4038688d7530e3c33e33d46f1b44441b119e42661280c66705f",
+    "receipt_sha256": "3be0183ff220f7b47baa8a63dd57b339246652e31d85a753abeb271d0b722bc8",
+    "coverage_limit": "Canonical shipping TU list; the deliberately unmounted monitor/X360 SDK bodies are not part of this build."
+  },
+  "native_checks": "not_run",
+  "remaining": [
+    "Witness genuine0/1/2/3 replies, FinishStreaming reason1 release and coexistence with another pause reason.",
+    "Witness current GUI batch once in GameState and retained sound/network snapshot once across multiple substeps.",
+    "ARTIST can lose one-shot192 when stepping skips GUI; preserve this source-supported edge without claiming a native console classification.",
+    "GUI65 loading-screen-hide presentation stand-in remains; full GameState PreWorldUpdate/base-flag route and native memory/allocator readiness remain open.",
+    "Recover the genuine DLC discovery/mount backend and worker/owner lifetime before mounting its monitor or selecting full DLC Prepare."
+  ],
+  "normal_delivery": "progress/debug_menu/playable_dev_20261019.json",
+  "normal_executable_changed_by_this_candidate": false,
+  "final_entry_dispositions_changed": false,
+  "final_dispositions": {
+    "verified": 35,
+    "original_noop": 7,
+    "pending": 1313,
+    "static_sites": 1355,
+    "implementation_complete_unverified": "unknown"
+  }
+}
