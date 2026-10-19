@@ -130,6 +130,7 @@ copy /y "%BASERSP%" "%RSP%" >nul
   echo "%VEN%\dirtysdk\src\pc\gamemanagerpc.cpp"
   echo "%VEN%\dirtysdk\src\pc\hlbudapipc.cpp"
   echo "%VEN%\dirtysdk\src\pc\lan\pclan_core.cpp"
+  echo "%VEN%\dirtysdk\src\pc\online\OnlineTransport.cpp"
   echo "%VEN%\dirtysdk\src\pc\lan\pclan_link.cpp"
   echo "%VEN%\dirtysdk\src\pc\lan\pclan_lobby.cpp"
   echo "%VEN%\dirtysdk\src\pc\lobbyapipc.cpp"
