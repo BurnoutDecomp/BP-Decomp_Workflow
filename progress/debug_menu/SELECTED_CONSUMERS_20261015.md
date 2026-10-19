@@ -8,7 +8,7 @@ Current-tree linking and native behavior remain unverified.
 
 A five-file constructor/type follow-on is pushed separately at `5e9928a06`.
 Its [receipt](gamestate_lifecycle_20261019.json) pins the original manager calls,
-X360 achievement initialization and scorer alias; its source review is pending.
+X360 achievement initialization and scorer alias; its source review passes.
 The combined candidate changes fourteen production paths over `7107bbb8c`.
 It is not yet merged to dev, linked or tested in-game.
 

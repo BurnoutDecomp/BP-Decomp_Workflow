@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-10-19",
-  "status": "pushed_source_checkpoint_review_pending_link_native_deferred",
+  "status": "source_review_pass_current_link_native_deferred",
   "dev_head": "7107bbb8c22db3aaa8268cd461ea48817709c3d4",
   "baseline": "2aadf4362005479c23a6c8b7c8d245ad8c5b7a54",
   "head": "5e9928a06d84daaee160b46502e2d7040ffc2ebd",
@@ -20,9 +20,10 @@
     "sha256": "a6d008a02dc16504a9262ea5c498e903aea3629b55661ee12c86ee07e671827b"
   },
   "source_review": {
-    "verdict": "pending",
+    "verdict": "pass",
     "packet": "scratch/DEBUG_MENU_1011/gamestate_constructor_integration_20261019/REVIEW_PACKET.md",
-    "report": "scratch/DEBUG_MENU_1011/gamestate_constructor_integration_20261019/REVIEW.md"
+    "report": "scratch/DEBUG_MENU_1011/gamestate_constructor_integration_20261019/REVIEW.md",
+    "sha256": "95d726bc77c80349d537250063305e72e1b2db8dedbf31b08a77e008d07faf07"
   },
   "original_evidence": [
     "GameStateModule::Construct 82380388: OnlineCarSelect call 823805F0, offline Flyby call 82380628 and bitset clear 82380634",
@@ -39,5 +40,10 @@
   "native_checks": "not_run",
   "normal_executable_changed": false,
   "final_entry_dispositions_changed": false,
-  "deferred_reason": "Keep the user's PC responsive; source-only work. Future local builds use one compiler, Idle priority and two logical CPUs; game tests remain stopped."
+  "deferred_reason": "Keep the user's PC responsive; source-only work. Future local builds use one compiler, Idle priority and two logical CPUs; game tests remain stopped.",
+  "next_constructor_selection": {
+    "status": "source_recovery_in_progress",
+    "scope": "Replace the partial ModeManager constructor helper with its original typed caller; full Prepare/PreWorldUpdate selection stays separate.",
+    "audit": "scratch/DEBUG_MENU_1011/mode_manager_construct_activation_20261019/REPORT.md"
+  }
 }
