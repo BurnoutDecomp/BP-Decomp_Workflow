@@ -1,10 +1,10 @@
 {
   "date": "2026-10-19",
-  "status": "isolated_merge_checkpoint_native_unverified",
+  "status": "reviewed_source_integration_native_partial",
   "game_ours": "f98a8cb5b7868e8a06563c0b4ea4a75cf352e103",
-  "game_theirs": "8edbf14501d4edc34e2d23ef595d8ce404097c11",
-  "game_source_checkpoint": "8aa86256bd2109776fc499d6da7a96a80cdbe254",
-  "workflow_theirs_main": "1327db43b53f9e84168164a3a717804f58135a44",
+  "game_theirs": "e5b82665ca127c4f84e6b1ae1e334bc70baea6b4",
+  "game_source_checkpoint": "7107bbb8c22db3aaa8268cd461ea48817709c3d4",
+  "workflow_theirs_main": "b11ce69beeb579d9953e07f164601332cf74ab3d",
   "paired_workflow_collision_mount": "ee8b7602",
   "overlap": {
     "author_login": "JeBobs",
@@ -42,9 +42,26 @@
     "audio_hardware_suites": 9,
     "audio_hardware_status": "pass"
   },
-  "full_build": "pending",
-  "combined_source_review": "pending",
-  "native_checks": "pending",
+  "full_build": {
+    "exe_sha256": "ef1a332b53913ee0c1437a8f1996e5f8e9b8359634b54bf5cf276470361a003a",
+    "production_unchanged_after_build": true,
+    "source": "8aa86256bd2109776fc499d6da7a96a80cdbe254",
+    "status": "pass",
+    "translation_units": 2976
+  },
+  "combined_source_review": {
+    "report": "scratch/DEBUG_MENU_1011/dev_sync_20261019/SOURCE_REVIEW.md",
+    "sha256": "db51df4cc797ce9d2676a46099c3f5f389c81e060e60cd2fbff5d672cf99f1d5",
+    "verdict": "pass"
+  },
+  "native_checks": {
+    "startup": "pass 10 checks",
+    "gpu": "interrupted for desktop key report; no new verdict",
+    "audio": "5 checks pass; PCM missing witness, harness fix mock-verified only",
+    "collision": "pass 4 checks, 25 registry probes; visible effect unverified",
+    "attract": "3 of 4 checks pass; 3 LinearMalloc assertions unresolved",
+    "root": "scratch/DEBUG_MENU_1011/dev_sync_20261019/native"
+  },
   "normal_delivery_unchanged": {
     "source": "f98a8cb5b7868e8a06563c0b4ea4a75cf352e103",
     "exe_sha256": "df3677771ddf7bdb15c5bd76b640595ffe3877fcfa6da0ddb480c3b17621332c"
@@ -57,5 +74,13 @@
     "static_sites": 1355,
     "implementation_complete_unverified": "unknown"
   },
-  "next_recovery": "world post-physics status transfer; earlier failed candidate remains separate"
+  "next_recovery": "Review/build/native-check separate 12ca37be7/4d202a016 world-status/accessor repairs; continue 25-site Game State source pass. No-op promotion withheld for Traffic timer readers.",
+  "global_input_fix": {
+    "active_harness_matches_review": true,
+    "all_owned_games_stopped": true,
+    "global_end_injection_removed": true,
+    "workflow_commit": "306583c7",
+    "review": "scratch/DEBUG_MENU_1011/dev_sync_20261019/global_input_fix/REVIEW.md",
+    "combined_harness_checks": 40
+  }
 }
