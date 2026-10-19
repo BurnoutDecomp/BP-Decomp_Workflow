@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "date": "2026-10-19",
-  "status": "pushed_source_checkpoint_review_build_native_pending",
-  "head": "b7f777504818bfa3ae2cd1427afaf3d497b7fe19",
+  "status": "source_review_pass_current_compile_failed_native_pending",
+  "head": "8884fe163c3534c33d8267bb6c47951cecaeed72",
   "baseline": "bae1a8910d4df3e1b9875bb6dffe6bc24ccd3d13",
-  "dev_base": "2ec6963eeddc788ba9bfaaa66c64c7240fd09a97",
+  "dev_base": "37735c71de125f873e8d404d2c0dd7f42b8f56cd",
   "branch": "codex/debug-menu-gamestate-source-integration-20261019",
   "merged_to_dev": false,
   "new_production_paths": [
@@ -46,9 +46,11 @@
     "sha256": "e30ba3861d26737cd12eec09851a1f4d4065f769167e20f66d7324466c86457b"
   },
   "source_review": {
-    "verdict": "pending",
-    "packet": "scratch/DEBUG_MENU_1011/gamestate_prepare_integration_20261019/REVIEW_PACKET.md",
-    "report": "scratch/DEBUG_MENU_1011/gamestate_prepare_integration_20261019/REVIEW.md"
+    "verdict": "pass",
+    "packet": "scratch/DEBUG_MENU_1011/gamestate_prepare_review_repair_20261019/REVIEW_PACKET.md",
+    "report": "scratch/DEBUG_MENU_1011/gamestate_prepare_review_repair_20261019/REVIEW.md",
+    "sha256": "bcf756e04b9bc96c6bba2b3880ceaf5b3fc4330b707981d4e6493b5f7e0c0ed1",
+    "scope": "Five-path Prepare selection plus comment-only provenance repair; host base route remains explicit."
   },
   "prior_batch": "progress/debug_menu/mode_dlc_source_20261019.json",
   "recovery_source": "879254e9d3260983aafa61a60dcbf59c85d722b3",
@@ -60,17 +62,27 @@
   "retained_boundaries": [
     "Stage 1 keeps the old PC adapter mbIsNewModule=true prerequisite; this flag store is absent from ARTIST GameState Construct/Prepare.",
     "The original base allocation route and external flag initialization remain under audit; do not call the PC allocation site original.",
-    "Source review must assess actual resource-memory readiness as well as queue lifetime and reply order.",
+    "Resource ordering, pointer ownership and reply timing pass source review; non-null backing memory and allocator success remain native-unverified.",
     "Full DLC Prepare remains unselected; PC XContent discovery/mount backend remains missing or unverified.",
     "Selected GUI65 unpause stand-in, stepped GUI action retirement and full GameState PreWorldUpdate activation remain unresolved."
   ],
-  "current_compile_link": "not_run",
+  "current_compile_link": {
+    "source": "8884fe163c3534c33d8267bb6c47951cecaeed72",
+    "run_url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39296536237",
+    "compile": {
+      "compiled": 694,
+      "up_to_date": 2281,
+      "failed": 1
+    },
+    "link": "skipped",
+    "failure": "EA::Thread declaration/include redefinitions in BrnDLCManager.cpp; source repair under investigation."
+  },
   "native_checks": "not_run",
   "planned_build": {
     "workflow": ".github/workflows/build-candidate.yml",
     "runner": "GitHub-hosted windows-2022",
     "jobs": 4,
-    "dispatch_status": "not_dispatched",
+    "dispatch_status": "completed_compile_failed",
     "local_fallback_limits": {
       "jobs": 1,
       "priority": "Idle",
@@ -86,5 +98,20 @@
     "pending": 1313,
     "static_sites": 1355,
     "implementation_complete_unverified": "unknown"
-  }
+  },
+  "recovered_head": "b7f777504818bfa3ae2cd1427afaf3d497b7fe19",
+  "source_review_history": [
+    {
+      "head": "b7f777504818bfa3ae2cd1427afaf3d497b7fe19",
+      "verdict": "fail",
+      "reason": "Unsupported console flag/buffer provenance claim; no newly shown behavior regression.",
+      "report": "scratch/DEBUG_MENU_1011/gamestate_prepare_integration_20261019/REVIEW.md",
+      "sha256": "df1d72b16c2fb364332672e2db73fec318599cb5f510173b6ab7bc03f6498eb6"
+    }
+  ],
+  "repair_manifest": {
+    "path": "scratch/DEBUG_MENU_1011/gamestate_prepare_review_repair_20261019/source_inputs.json",
+    "sha256": "12599238cc365b85dff26a4ce49b154b5157e6479aeab683b97e781a1447e0aa"
+  },
+  "normal_delivery": "progress/debug_menu/playable_dev_20261019.json"
 }

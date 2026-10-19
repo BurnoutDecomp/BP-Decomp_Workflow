@@ -30,14 +30,21 @@ The reported Start crash with vehicle INI settings is also repaired. The exact
 normal-build case reaches driving, applies all five LOD overrides and passes ten
 checks without asserts/exceptions. See [startup repair](START_CRASH_20261013.md).
 
-The normal executable is now built from clean, pushed `f98a8cb5b`. All 2,975
-shipping files compile and link. The same-production-source private integration
+The earlier F98 delivery was built from clean, pushed `f98a8cb5b`. All 2,975
+shipping files compiled and linked. The same-production-source private integration
 passes 60 checks across Start/GPU/Traffic and Road Rules login/save/cold restart;
 the exact normal executable then passes 23 Start/GPU checks. All have zero
 assertions and exceptions. Inspected native frames show the magenta texture
 regression repaired. Road Rules retain both saved score types and the reset epoch.
 See the [delivery receipt](runtime_owners_20261015.json) and
 [Road Rules fix](../road_rules_persistence_20261014.md).
+
+**The playable `build/game` folder was refreshed on 19 October from dev
+`37735c71d`.** Its hosted build compiles all 2,976 TUs and links without errors.
+The executable, crash symbols and eight matching runtime DLLs are installed;
+the previous F98 build is backed up. Config and save paths were preserved.
+This new version has not been launched for gameplay checks. See the
+[exact delivery receipt](playable_dev_20261019.json).
 
 ## Active work
 
@@ -48,8 +55,8 @@ readbacks pass; remaining native checks and the selected GameState repair remain
 separate from normal delivery. The global END-key fallback was removed from the
 active harness after the user reported interference; input helpers are stopped.
 The main recovery batch is merged and pushed to gameplay `dev` at `7107bbb8c`.
-The paired workflow fixes and reports are on `main`; the normal F98 executable
-is unchanged. New source follow-ons remain on recovery branches until their
+The paired workflow fixes and reports are on `main`; the normal folder now has
+the October 19 dev build above. New source follow-ons remain on recovery branches until their
 source review and current-tree build checks pass. They do not wait for all
 1,355 behavior dispositions before merging.
 
@@ -62,12 +69,14 @@ passes; compile/link, full lifecycle activation and native behavior remain open.
 The later [ModeManager/DLC batch](mode_dlc_source_20261019.json) at `bae1a8910`
 also passes combined source review. It selects the full ModeManager constructor,
 recovers the DLC monitor worker and fixes the Win64 Futex storage size. The
-[current candidate](gamestate_prepare_source_20261019.json) at `b7f777504` selects
+[current candidate](gamestate_prepare_source_20261019.json) at `8884fe163` selects
 the original 28-stage GameState Prepare and retires the duplicate PC adapter.
-It changes 25 runtime paths over current dev `2ec6963ee`; its source review and
-current build/native checks are pending. The base-module allocation/flag seam
+It changes 25 runtime paths over current dev `37735c71d`; its source review passes.
+Hosted compilation exposed one DLC thread-header conflict; linking and native
+checks remain open. The base-module allocation/flag seam
 remains explicitly host-specific, and DLC discovery still lacks a verified PC
-provider. Neither checkpoint changes final entry dispositions or normal delivery.
+provider. These recovery checkpoints change no final entry dispositions and are
+separate from the normal dev delivery above.
 
 [Branch cleanup](branch_cleanup_20261019.json) removed 23 retired campaign
 branches locally and on GitHub. Their exact tips remain recorded and reachable
@@ -75,7 +84,7 @@ from dev/main. Retire merged, unused branches as work lands; keep active or
 unmerged work and reuse current branches for later checkpoints.
 
 The user needs responsive browsing and YouTube during this campaign. Heavy
-workers and game tests are currently stopped. The locked build wrapper defaults
+local workers and game tests are currently stopped. The locked build wrapper defaults
 to one compiler, Idle priority and two logical CPUs, with the private integration
 builder using the same limits. Keep one expensive local job at a time; source
 reasoning/review may run in parallel. Do not run game tests alongside compilation
@@ -85,9 +94,10 @@ test must use only the instance-scoped input events.
 Full candidate builds can instead use the manual **Check Candidate Build**
 workflow with an exact 40-hex `b5_commit`. It runs the canonical shipping build
 on GitHub-hosted Windows 2022, checks toolchain/source/output attribution and
-keeps a one-day build artifact. It does not publish a game or launch one locally.
-Its first hosted run is still pending; build success will not establish gameplay
-parity. Reuse the current integration branches rather than creating checkpoints.
+keeps a one-day artifact with matching runtime DLLs. Its current-dev run passed;
+build success does not establish gameplay parity. Refresh the playable folder
+after meaningful dev merges, preserving a previous build. Reuse current integration
+branches rather than creating checkpoints.
 
 | Work | State and next gate |
 | --- | --- |
@@ -98,7 +108,7 @@ parity. Reuse the current integration branches rather than creating checkpoints.
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
 | Coarse scene queries and shared renderer state | Sampler/query/Stack follow-on is delivered in AC3. The canonical packed sampler producer and Font flags repair pass source review, a 16-check native fixture and inspected game frames. Query-provider checks pass 47/47, with a real failed-draw witness unavailable. Renderer activation and original query polarity remain open. |
 | Original allocator construction | Reviewed native storage and LinearMalloc/RW lifecycle repairs are delivered. Original resource, 24-allocator and 27-pool sequences remain unactivated. Full constructor activation and GPU/DMA behavior remain open. |
-| Original GameState path | Original caller, all28 Prepare cases, Flyby providers and earlier snapshot repair are delivered. Selected consumers, World status, movie arena and constructor/ModeManager/DLC follow-ons pass source review. The 25-path candidate at `b7f777504` selects full Prepare; its fresh review and current-tree build/native gates remain open. The [25-row source matrix](gamestate_source_matrix_20261019.json) records 9 existing paths, 5 recovered renderer paths and 11 unresolved rows, all native-unverified. Full original lifecycle activation remains open. |
+| Original GameState path | Original caller, all28 Prepare cases, Flyby providers and earlier snapshot repair are delivered. Selected consumers, World status, movie arena and constructor/ModeManager/DLC follow-ons pass source review. The 25-path candidate at `8884fe163` selects full Prepare and passes fresh source review; current compilation has one DLC header failure, with link/native gates still open. The [25-row source matrix](gamestate_source_matrix_20261019.json) records 9 existing paths, 5 recovered renderer paths and 11 unresolved rows, all native-unverified. Full original lifecycle activation remains open. |
 | Original Pool create path | All four protocol/layout/worker-assert findings are repaired and integrated at `f98a8cb5b`; source review and 41 current-canonical production checks pass. NativePC routing remains selected; original startup remains inactive. |
 | ImmediateMode and Traffic readers | Member-instantiation ownership, Vector3 boost-bar API and Anarchy-distance initializer are integrated at `f98a8cb5b`. All52 recorded Traffic scalar candidates are false aliases; indirect/dynamic uses remain unresolved. Graphics query callers at `b49d37a5c` pass fresh source review; their host selection remains disabled while the original allocator provider is recovered. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. |

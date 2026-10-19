@@ -2,7 +2,7 @@
 
 Work resumed on 19 October. The ten-file selected-consumer and World-status
 checkpoint `ca5a6592f` passes combined source review. It is pushed separately
-from dev; the F98 normal executable is unchanged. The one-file PC movie allocation
+from dev; the normal folder separately has the October 19 dev refresh. The one-file PC movie allocation
 boundary also passes source review in the combined eleven-file `2aadf4362` tree.
 Current-tree linking and native behavior remain unverified.
 
@@ -14,10 +14,13 @@ It is not yet merged to dev, linked or tested in-game.
 
 The next [ModeManager/DLC follow-on](mode_dlc_source_20261019.json) at `bae1a8910`
 passes source review across twelve changed paths. The current
-[Prepare selection](gamestate_prepare_source_20261019.json) at `b7f777504`
+[Prepare selection](gamestate_prepare_source_20261019.json) at `8884fe163`
 changes five further paths and replaces the duplicate PC Prepare adapter with
 the original 28-stage body. The combined candidate changes 25 runtime paths over
-dev `2ec6963ee`. Its fresh review, build and native behavior remain pending.
+dev `37735c71d`. Its fresh source review passes after correcting an unsupported
+console flag/buffer claim. Hosted compilation reports one DLC thread-header
+conflict; linking and native behavior remain pending. The earlier failed source
+review is preserved in the receipt.
 
 ## What changed
 
@@ -54,8 +57,10 @@ the original failed logs and verdicts remain intact.
 
 ## Next gates
 
-Current-tree linking is planned through the new manual GitHub-hosted candidate
-build; native behavior checks remain deferred while the PC is in use.
+Current-tree linking requires repairing the hosted build's DLC header conflict;
+native behavior checks remain deferred while the PC is in use. The separate
+[current-dev playable refresh](playable_dev_20261019.json) passes its full hosted
+build and is installed for user playtesting; it does not include this recovery candidate.
 The World transfer fixture previously passed 47 source-boundary checks;
 the page fixture passed 13 checks. Neither establishes a current integrated run.
 Validate residency-to-stall/unpause, real input edges, all four module replies,
