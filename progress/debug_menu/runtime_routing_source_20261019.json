@@ -4,7 +4,7 @@
   "source": "4bbefd59b53dc8dc3b86cb46a6e97801d311ece9",
   "branch": "codex/debug-menu-gamestate-source-integration-20261019",
   "prior_source": "3e0cbea6644577cba98c9af8d28a298101ee0c8e",
-  "status": "committed_and_pushed_fresh_review_compile_native_pending",
+  "status": "isolated_source_build_passed_fresh_review_and_caller_recovery_pending",
   "changes": [
     "Restore original new-module flag store in GameState Construct; remove the later stage1 workaround.",
     "Select the full original GameState PreWorld helper for the network-backed main cascade.",
@@ -40,11 +40,10 @@
     "corrected_flag_manifest_sha256": "8174da98ef95351ee66c76b44d264b35a88a6d448cf9bd67a7f4082d33c44312"
   },
   "remaining": [
-    "Fresh integrated review and compile/link of4bb; last passing hosted build remains3e0.",
+    "Fresh integrated review and regression rerun; shipping compile/link passed for 4c2, profile fixture passed 22 checks, GUI fixture compilation exposed a stale test-double type now corrected in 18942d41c.",
     "Native startup, real four-reply streaming completion, pause reasons and per-entry effects.",
-    "Below-stage8 partial-loading PreWorld and the complete GameState-to-GUI output consumer.",
-    "Persistent PC output lifetime/queue transport and actual allocator/resource readiness.",
-    "Retire unused extracted event8 helper and adapt the legacy profile-delivery source fixture to the full chain."
+    "Distinct Boot/normal/partial-loading clock, World and Input caller seats, plus GUI resource-only phase.",
+    "Persistent PC output lifetime/queue transport and actual allocator/resource readiness."
   ],
   "native_checked": false,
   "normal_delivery_changed": false,
