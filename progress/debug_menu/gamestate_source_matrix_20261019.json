@@ -12,9 +12,9 @@
     "functions": 3,
     "source_registration_exact_order": true,
     "source_behavior_counts": {
-      "existing": 9,
       "recovered": 5,
-      "unresolved": 11
+      "existing": 12,
+      "unresolved": 8
     },
     "confirmed_missing_bodies": 0,
     "native_unverified": 25
@@ -512,19 +512,21 @@
       "default": "KI_INVALID_ROAD_INDEX",
       "range": "none",
       "callback": "",
-      "behavior": "unclassified road-index producer/reader candidate pending full ARTIST cross-reference",
+      "behavior": "Computed newest road candidate -> hopeful tuple stability -> stable left/right sign consumers",
       "original_arguments": [
         "a1",
         "*(a1 + 12) + 291996",
         "\"LEFT road index\""
       ],
       "source_registration": "present; exact caption/order match",
-      "source_behavior_status": "unresolved",
+      "source_behavior_status": "existing",
       "native_status": "unverified",
       "fixture_coverage": "no page-row fixture",
-      "current_evidence": "The source has newest-left candidate writes and a hopeful/stable path, but the matching original ARTIST producer/consumer chain is not yet fully cross-referenced.",
+      "current_evidence": "Original and pinned source confirm the computed newest-road reset/producer -> hopeful stability tuple -> left/right sign consumers. Newest left -> hopeful+0x1D28 -> stable left+0x1D80 -> roads/sign output and optional debug text. No missing forward writer, callback or new range is justified.",
       "storage_display": "miNewestLeftPlayerRoadIndex StreetManager +0x1D34",
-      "missing_status": "unresolved; absence not established"
+      "missing_status": "no confirmed missing body or wiring in the mapped field-access chain; native behavior unverified",
+      "source_reader_evidence": "progress/debug_menu/gamestate_reader_source_20261019.json",
+      "source_commit_inspected": "3e0cbea6644577cba98c9af8d28a298101ee0c8e"
     },
     {
       "id": "BrnGameState::GameStateDebugComponent::OnActivate#0022",
@@ -536,19 +538,21 @@
       "default": "KI_INVALID_ROAD_INDEX",
       "range": "none",
       "callback": "",
-      "behavior": "unclassified road-index producer/reader candidate pending full ARTIST cross-reference",
+      "behavior": "Newest forward invalid reset -> hopeful tuple comparison/copy; original forward walk case does not assign",
       "original_arguments": [
         "a1",
         "*(a1 + 12) + 291992",
         "\"FORWARD road index\""
       ],
       "source_registration": "present; exact caption/order match",
-      "source_behavior_status": "unresolved",
+      "source_behavior_status": "existing",
       "native_status": "unverified",
       "fixture_coverage": "no page-row fixture",
-      "current_evidence": "The source initializes/resets and compares miNewestForwardPlayerRoadIndex but no writer is confirmed in this source scan. The original registration-to-consumer mapping remains unresolved.",
+      "current_evidence": "Original and pinned source confirm the computed newest-road reset/producer -> hopeful stability tuple -> left/right sign consumers. Newest forward is positively loaded at0x8234EE4C, compared with hopeful forward, and copied to hopeful forward at0x8234EE8C. It participates in tuple/timer stability, not a third sign. No missing forward writer, callback or new range is justified.",
       "storage_display": "miNewestForwardPlayerRoadIndex StreetManager +0x1D30",
-      "missing_status": "unresolved; absence not established"
+      "missing_status": "no confirmed missing body or wiring in the mapped field-access chain; native behavior unverified",
+      "source_reader_evidence": "progress/debug_menu/gamestate_reader_source_20261019.json",
+      "source_commit_inspected": "3e0cbea6644577cba98c9af8d28a298101ee0c8e"
     },
     {
       "id": "BrnGameState::GameStateDebugComponent::OnActivate#0023",
@@ -560,19 +564,21 @@
       "default": "KI_INVALID_ROAD_INDEX",
       "range": "none",
       "callback": "",
-      "behavior": "unclassified road-index producer/reader candidate pending full ARTIST cross-reference",
+      "behavior": "Computed newest road candidate -> hopeful tuple stability -> stable left/right sign consumers",
       "original_arguments": [
         "a1",
         "*(a1 + 12) + 292000",
         "\"RIGHT road index\""
       ],
       "source_registration": "present; exact caption/order match",
-      "source_behavior_status": "unresolved",
+      "source_behavior_status": "existing",
       "native_status": "unverified",
       "fixture_coverage": "no page-row fixture",
-      "current_evidence": "The source has newest-right candidate writes and a hopeful/stable path, but the matching original ARTIST producer/consumer chain is not yet fully cross-referenced.",
+      "current_evidence": "Original and pinned source confirm the computed newest-road reset/producer -> hopeful stability tuple -> left/right sign consumers. Newest right -> hopeful+0x1D2C -> stable right+0x1D84 -> roads/sign output and optional debug text. No missing forward writer, callback or new range is justified.",
       "storage_display": "miNewestRightPlayerRoadIndex StreetManager +0x1D38",
-      "missing_status": "unresolved; absence not established"
+      "missing_status": "no confirmed missing body or wiring in the mapped field-access chain; native behavior unverified",
+      "source_reader_evidence": "progress/debug_menu/gamestate_reader_source_20261019.json",
+      "source_commit_inspected": "3e0cbea6644577cba98c9af8d28a298101ee0c8e"
     },
     {
       "id": "BrnGameState::GameStateDebugComponent::OnActivate#0024",
@@ -637,9 +643,10 @@
     "combined integrated source review",
     "current-tree build/link",
     "25-row native behavior coverage, including real callbacks/renderers",
-    "original reader disposition for the 11 unresolved rows"
+    "original reader disposition for the 8 unresolved rows"
   ],
   "new_local_compile_or_native_run": false,
   "final_verdicts_changed": false,
-  "lookup_bound_note": "The original matcher compares 66 IDs and uses the 67th name as fallback; the unused last ID word is not an unresolved source-recovery defect."
+  "lookup_bound_note": "The original matcher compares 66 IDs and uses the 67th name as fallback; the unused last ID word is not an unresolved source-recovery defect.",
+  "reader_followon": "progress/debug_menu/gamestate_reader_source_20261019.json"
 }
