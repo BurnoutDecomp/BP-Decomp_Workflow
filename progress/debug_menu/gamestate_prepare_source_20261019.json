@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "status": "pushed_source_checkpoint_review_build_native_pending",
+  "head": "b7f777504818bfa3ae2cd1427afaf3d497b7fe19",
+  "baseline": "bae1a8910d4df3e1b9875bb6dffe6bc24ccd3d13",
+  "dev_base": "2ec6963eeddc788ba9bfaaa66c64c7240fd09a97",
+  "branch": "codex/debug-menu-gamestate-source-integration-20261019",
+  "merged_to_dev": false,
+  "new_production_paths": [
+    "src/GameSource/Game/BrnGameModule.cpp",
+    "src/GameSource/GameState/BrnGameStateModule.cpp",
+    "src/GameSource/GameState/BrnGameStateModule.h",
+    "src/GameSource/Gui/BrnGuiWorldDataController.cpp",
+    "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp"
+  ],
+  "combined_runtime_paths_over_dev": [
+    "src/GameShared/GameClasses/Input/CgsInputModule.cpp",
+    "src/GameSource/Game/BrnGameModule.cpp",
+    "src/GameSource/Game/GameBridgeGameStateToX_StuntGuiEvents.cpp",
+    "src/GameSource/GameState/AchievementManager/X360/BrnGameStateAchievementManagerX360.cpp",
+    "src/GameSource/GameState/AchievementManager/X360/BrnGameStateAchievementManagerX360.h",
+    "src/GameSource/GameState/BrnGameStateModule.cpp",
+    "src/GameSource/GameState/BrnGameStateModule.h",
+    "src/GameSource/GameState/GameStateModule_gUI_00.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager.h",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_Lifecycle.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_Prepare.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_WorldTick.cpp",
+    "src/GameSource/GameState/ModeManager/ModeManager_gUI_00.cpp",
+    "src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoring.h",
+    "src/GameSource/Gui/BrnGuiMovieAllocator.cpp",
+    "src/GameSource/Gui/BrnGuiWorldDataController.cpp",
+    "src/GameSource/Resource/BrnDLCManager.cpp",
+    "src/GameSource/Resource/BrnDLCManager.h",
+    "src/GameSource/World/Bridges/WorldBridgeEntityModulesToOutput.cpp",
+    "src/GameSource/World/BrnWorldModule.cpp",
+    "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+    "src/SDKs/EATech/eathread/BrnEAThreadX360.cpp",
+    "src/SDKs/EATech/eathread/BrnEAThreadX360.h",
+    "src/SDKs/Realmc/RealmcXenonUtil.h"
+  ],
+  "source_manifest": {
+    "path": "scratch/DEBUG_MENU_1011/gamestate_prepare_integration_20261019/source_inputs.json",
+    "sha256": "e30ba3861d26737cd12eec09851a1f4d4065f769167e20f66d7324466c86457b"
+  },
+  "source_review": {
+    "verdict": "pending",
+    "packet": "scratch/DEBUG_MENU_1011/gamestate_prepare_integration_20261019/REVIEW_PACKET.md",
+    "report": "scratch/DEBUG_MENU_1011/gamestate_prepare_integration_20261019/REVIEW.md"
+  },
+  "prior_batch": "progress/debug_menu/mode_dlc_source_20261019.json",
+  "recovery_source": "879254e9d3260983aafa61a60dcbf59c85d722b3",
+  "selected_source_effects": [
+    "GamePrepare now selects the existing full 28-stage GameStateModule::Prepare, replacing the duplicate NativePC adapter.",
+    "Restores the original ModeManager vehicle-list apply, Payback/Flyby/RichPresence/achievement prepares, stage-19 queue clear, DeveloperChallenge resets and terminal Release-stage reset.",
+    "Keeps the stable PC output buffer and its per-pass request forwarding; separate Prepare2 and PreWorldUpdate selections are unchanged."
+  ],
+  "retained_boundaries": [
+    "Stage 1 keeps the old PC adapter mbIsNewModule=true prerequisite; this flag store is absent from ARTIST GameState Construct/Prepare.",
+    "The original base allocation route and external flag initialization remain under audit; do not call the PC allocation site original.",
+    "Source review must assess actual resource-memory readiness as well as queue lifetime and reply order.",
+    "Full DLC Prepare remains unselected; PC XContent discovery/mount backend remains missing or unverified.",
+    "Selected GUI65 unpause stand-in, stepped GUI action retirement and full GameState PreWorldUpdate activation remain unresolved."
+  ],
+  "current_compile_link": "not_run",
+  "native_checks": "not_run",
+  "planned_build": {
+    "workflow": ".github/workflows/build-candidate.yml",
+    "runner": "GitHub-hosted windows-2022",
+    "jobs": 4,
+    "dispatch_status": "not_dispatched",
+    "local_fallback_limits": {
+      "jobs": 1,
+      "priority": "Idle",
+      "logical_cpus": 2
+    },
+    "local_game_concurrency": 0
+  },
+  "normal_executable_changed": false,
+  "final_entry_dispositions_changed": false,
+  "final_dispositions": {
+    "verified": 35,
+    "original_noop": 7,
+    "pending": 1313,
+    "static_sites": 1355,
+    "implementation_complete_unverified": "unknown"
+  }
+}

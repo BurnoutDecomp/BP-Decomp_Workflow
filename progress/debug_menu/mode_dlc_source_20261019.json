@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "status": "source_review_pass_current_build_native_pending",
+  "head": "bae1a8910d4df3e1b9875bb6dffe6bc24ccd3d13",
+  "baseline": "a6c438424ac0e4279a8e76e0ec686e024f8de784",
+  "dev_base": "2ec6963eeddc788ba9bfaaa66c64c7240fd09a97",
+  "branch": "codex/debug-menu-gamestate-source-integration-20261019",
+  "merged_to_dev": false,
+  "new_production_paths": [
+    "src/GameSource/GameState/BrnGameStateModule.cpp",
+    "src/GameSource/GameState/BrnGameStateModule.h",
+    "src/GameSource/GameState/ModeManager/BrnModeManager.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager.h",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_Lifecycle.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_WorldTick.cpp",
+    "src/GameSource/GameState/ModeManager/ModeManager_gUI_00.cpp",
+    "src/GameSource/Resource/BrnDLCManager.cpp",
+    "src/GameSource/Resource/BrnDLCManager.h",
+    "src/SDKs/EATech/eathread/BrnEAThreadX360.cpp",
+    "src/SDKs/EATech/eathread/BrnEAThreadX360.h",
+    "src/SDKs/Realmc/RealmcXenonUtil.h"
+  ],
+  "combined_runtime_paths_over_dev": [
+    "src/GameShared/GameClasses/Input/CgsInputModule.cpp",
+    "src/GameSource/Game/BrnGameModule.cpp",
+    "src/GameSource/Game/GameBridgeGameStateToX_StuntGuiEvents.cpp",
+    "src/GameSource/GameState/AchievementManager/X360/BrnGameStateAchievementManagerX360.cpp",
+    "src/GameSource/GameState/AchievementManager/X360/BrnGameStateAchievementManagerX360.h",
+    "src/GameSource/GameState/BrnGameStateModule.cpp",
+    "src/GameSource/GameState/BrnGameStateModule.h",
+    "src/GameSource/GameState/GameStateModule_gUI_00.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager.h",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_Lifecycle.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_Prepare.cpp",
+    "src/GameSource/GameState/ModeManager/BrnModeManager_WorldTick.cpp",
+    "src/GameSource/GameState/ModeManager/ModeManager_gUI_00.cpp",
+    "src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoring.h",
+    "src/GameSource/Gui/BrnGuiMovieAllocator.cpp",
+    "src/GameSource/Resource/BrnDLCManager.cpp",
+    "src/GameSource/Resource/BrnDLCManager.h",
+    "src/GameSource/World/Bridges/WorldBridgeEntityModulesToOutput.cpp",
+    "src/GameSource/World/BrnWorldModule.cpp",
+    "src/SDKs/EATech/eathread/BrnEAThreadX360.cpp",
+    "src/SDKs/EATech/eathread/BrnEAThreadX360.h",
+    "src/SDKs/Realmc/RealmcXenonUtil.h"
+  ],
+  "source_manifest": {
+    "path": "scratch/DEBUG_MENU_1011/mode_dlc_integration_20261019/source_inputs.json",
+    "sha256": "2944798678b6058484be26d2f6197d1bd1fdd9753f9461e26e741e88c51c07dc"
+  },
+  "source_review": {
+    "verdict": "pass",
+    "packet": "scratch/DEBUG_MENU_1011/mode_dlc_integration_20261019/REVIEW_PACKET.md",
+    "report": "scratch/DEBUG_MENU_1011/mode_dlc_integration_20261019/REVIEW.md",
+    "sha256": "c04d25ab7a81be70cbbfc47548f176a7802cf2859361dc01644d6744398b62c0"
+  },
+  "recovery_sources": {
+    "mode_constructor": "2fefa14699d29355cabc5878d441be189113c6b7",
+    "dlc_worker": "a9d0895a2571ed5f8b8a34b78c35d7b66af5b277"
+  },
+  "selected_source_effects": [
+    "Full ModeManager::Construct replaces the sole partial helper with the original eight-owner tuple.",
+    "Original aliased mode dispatches, landmark/finish-line reset and both CPU monitor registrations are reached.",
+    "DLC monitor start and one-shot enumeration callback are recovered with the attested seven-argument API setup, record stride, count publication and lock owner.",
+    "Win64 Futex storage grows from32 to40 bytes; compile-time size/alignment checks guard the host ABI."
+  ],
+  "retained_boundaries": [
+    "PC XContent discovery/mount provider is missing or unverified; existing empty XEnumerate leaf is not discovery.",
+    "Full DLC Prepare remains unselected; no fake package path, empty provider, successful mount or teardown join was introduced.",
+    "Actual C++ destruction while the one-shot DLC worker is in flight remains unobserved.",
+    "Full GameState Prepare/PreWorldUpdate route selection remains separate; Prepare prerequisite recovery is in progress.",
+    "Selected GUI65 unpause stand-in and stepped GUI action-retirement gap remain."
+  ],
+  "incoming_dev_metadata": {
+    "head": "2ec6963eeddc788ba9bfaaa66c64c7240fd09a97",
+    "merge": "a6c438424ac0e4279a8e76e0ec686e024f8de784",
+    "scope": "25 CMake/gitmodule metadata paths; no incoming gameplay C++ body change.",
+    "cmake_validation": "not_run"
+  },
+  "current_compile_link": "not_run",
+  "native_checks": "not_run",
+  "next_build_limits": {
+    "jobs": 1,
+    "priority": "Idle",
+    "logical_cpus": 2,
+    "game_concurrency": 0
+  },
+  "normal_executable_changed": false,
+  "final_entry_dispositions_changed": false,
+  "final_dispositions": {
+    "verified": 35,
+    "original_noop": 7,
+    "pending": 1313,
+    "static_sites": 1355,
+    "implementation_complete_unverified": "unknown"
+  },
+  "later_prepare_selection": "progress/debug_menu/gamestate_prepare_source_20261019.json"
+}

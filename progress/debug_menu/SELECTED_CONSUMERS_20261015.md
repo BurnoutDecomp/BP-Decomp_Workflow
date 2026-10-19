@@ -12,6 +12,13 @@ X360 achievement initialization and scorer alias; its source review passes.
 The combined candidate changes fourteen production paths over `7107bbb8c`.
 It is not yet merged to dev, linked or tested in-game.
 
+The next [ModeManager/DLC follow-on](mode_dlc_source_20261019.json) at `bae1a8910`
+passes source review across twelve changed paths. The current
+[Prepare selection](gamestate_prepare_source_20261019.json) at `b7f777504`
+changes five further paths and replaces the duplicate PC Prepare adapter with
+the original 28-stage body. The combined candidate changes 25 runtime paths over
+dev `2ec6963ee`. Its fresh review, build and native behavior remain pending.
+
 ## What changed
 
 The original World post-physics bridge now copies all five producer status
@@ -22,7 +29,10 @@ pushed as `12ca37be7` and `4d202a016`.
 
 The eight earlier selected input, Step/Play, streaming and landmark changes are
 staged on the current dev base in these separate branches.
-The original full Construct/Prepare/PreWorldUpdate lifecycle is still inactive.
+The full ModeManager constructor and first-pass GameState Prepare are now selected
+in the current source candidate. Full GameState PreWorldUpdate remains separate.
+Prepare retains the earlier host-only base-module flag and stable output-buffer
+allocation; the ARTIST allocation/flag path is still under audit.
 The retained PC GUI-65 unpause stand-in is not evidence of all four streaming
 replies. Stepped GUI delivery/action retirement also remains a material boundary.
 
@@ -44,8 +54,9 @@ the original failed logs and verdicts remain intact.
 
 ## Next gates
 
-Current-tree linking and native behavior checks are deferred while the PC is in
-use. The World transfer fixture previously passed 47 source-boundary checks;
+Current-tree linking is planned through the new manual GitHub-hosted candidate
+build; native behavior checks remain deferred while the PC is in use.
+The World transfer fixture previously passed 47 source-boundary checks;
 the page fixture passed 13 checks. Neither establishes a current integrated run.
 Validate residency-to-stall/unpause, real input edges, all four module replies,
 GUI loading events, step/action lifetime and landmark pixels before delivery.
