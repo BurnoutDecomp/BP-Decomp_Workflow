@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "status": "pushed_source_checkpoint_review_pending_link_native_deferred",
+  "dev_head": "7107bbb8c22db3aaa8268cd461ea48817709c3d4",
+  "baseline": "2aadf4362005479c23a6c8b7c8d245ad8c5b7a54",
+  "head": "5e9928a06d84daaee160b46502e2d7040ffc2ebd",
+  "branch": "codex/debug-menu-gamestate-source-integration-20261019",
+  "merged_to_dev": false,
+  "new_production_paths": [
+    "src/GameSource/GameState/AchievementManager/X360/BrnGameStateAchievementManagerX360.cpp",
+    "src/GameSource/GameState/AchievementManager/X360/BrnGameStateAchievementManagerX360.h",
+    "src/GameSource/GameState/BrnGameStateModule.cpp",
+    "src/GameSource/GameState/BrnGameStateModule.h",
+    "src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoring.h"
+  ],
+  "combined_paths_over_dev": 14,
+  "source_manifest": {
+    "path": "scratch/DEBUG_MENU_1011/gamestate_constructor_integration_20261019/source_inputs.json",
+    "sha256": "a6d008a02dc16504a9262ea5c498e903aea3629b55661ee12c86ee07e671827b"
+  },
+  "source_review": {
+    "verdict": "pending",
+    "packet": "scratch/DEBUG_MENU_1011/gamestate_constructor_integration_20261019/REVIEW_PACKET.md",
+    "report": "scratch/DEBUG_MENU_1011/gamestate_constructor_integration_20261019/REVIEW.md"
+  },
+  "original_evidence": [
+    "GameStateModule::Construct 82380388: OnlineCarSelect call 823805F0, offline Flyby call 82380628 and bitset clear 82380634",
+    "GameStateModule::Construct 82380738..82380764: achievement base, derived user/state/handle fields, overlapped and both bitsets",
+    "GameStateModule::Construct 823804DC -> ModeManager::Construct 82340008 -> ScoringSystem::Construct 82337FE0 -> both stunt scorers: actual X360 achievement owner pointer"
+  ],
+  "retained_boundaries": [
+    "full ModeManager::Construct caller remains replaced by the earlier selected PC helper",
+    "full original Prepare and PreWorldUpdate routes remain unselected",
+    "existing selected GUI65 unpause stand-in and stepped GUI action-retirement gap remain",
+    "no restoration of the original folded no-op OnStuntRunMultiplier"
+  ],
+  "current_compile_link": "not_run",
+  "native_checks": "not_run",
+  "normal_executable_changed": false,
+  "final_entry_dispositions_changed": false,
+  "deferred_reason": "Keep the user's PC responsive; source-only work. Future local builds use one compiler, Idle priority and two logical CPUs; game tests remain stopped."
+}
