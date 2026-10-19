@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-10-19",
-  "status": "user_retest_failed_new_apt_import_lifetime_crash_under_recovery",
+  "status": "reviewed_repair_pushed_isolated_hosted_rerun_pending",
   "source": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
   "exe_sha256": "b8fde9b007eb0a2b6bc713e0afe371dac8de83ef2408b6fc1ea9ebffef2558d2",
   "trigger": "Create Match from Freeburn freezes, then black-screen crash after prior hotfix",
@@ -16,5 +16,69 @@
   "native_retest_result": "fail",
   "agent_game_launched": false,
   "local_compilation": false,
-  "normal_build_replaced": false
+  "normal_build_replaced": false,
+  "repair_source": "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af",
+  "repair_commits": [
+    "06e46fab12d582f54d756719301c43f5def6696b",
+    "273a149755edcc97a8b02c65dc30c74d471b31d4",
+    "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af"
+  ],
+  "repairs": [
+    "Balance resident bundle member/list references across each AptFile load and native Unresolve/FreeAnimation lifetime.",
+    "Use native x64 AptDataHeader state at0x2C; restore callback state and preserve active registrations.",
+    "Restore the GUI lead/acquire path when a retained bundle reload succeeds with zero newly allocated resources.",
+    "Include the canonical native header in the view notification owner after the first hosted compile exposed its forward-only declaration."
+  ],
+  "review": {
+    "status": "source_pass_with_zero_reload_delta",
+    "history": [
+      {
+        "report": "scratch/DEBUG_MENU_1011/freeburn_apt_init_crash_20261019/proposal/combined/REVIEW.md",
+        "verdict": "fail",
+        "sha256": "efb4d343e8d7e0890ab43aa93c48f97af8cda3be229fab8965b34f9972e61033"
+      },
+      {
+        "report": "scratch/DEBUG_MENU_1011/freeburn_apt_init_crash_20261019/proposal/zero_reload_gui_gate/REVIEW.md",
+        "verdict": "pass",
+        "sha256": "197dd3bf677e310a1d34ac7d00c5ce744e7525429d3ec962d1ab99b6d5c9b7e9"
+      }
+    ],
+    "native_limit": "No Create Match success witness; the existing in-game retest failed on older c240."
+  },
+  "build_history": [
+    {
+      "run_id": 39332984714,
+      "source": "273a149755edcc97a8b02c65dc30c74d471b31d4",
+      "verdict": "compile_fail",
+      "scope": "One TU lacked the now-required complete AptDataHeader include; no link or regression execution.",
+      "receipt_sha256": "47d3d9099fbe7060cd59cd716354b479ecc7cbe6ba64ae883a23b0c28f264c41"
+    }
+  ],
+  "build": {
+    "run_id": 39334063194,
+    "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39334063194",
+    "source": "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af",
+    "workflow": "e6df92ff1b15fb101489bb5945da982c172ac47d",
+    "status": "pending",
+    "runner": "GitHub-hosted windows-2022",
+    "jobs": 4,
+    "expected_regressions": {
+      "profile_interface": 45,
+      "bundle_numeric": 81,
+      "bundle_wiring": 6
+    },
+    "negative_controls": [
+      "--omit-apt-retain",
+      "--require-new-apt-resources"
+    ],
+    "scope_limit": "Production loader/GUI registry helpers execute with IO/heap doubles; callback checks remain source wiring in this revision."
+  },
+  "callback_followon": {
+    "packet": "scratch/DEBUG_MENU_1011/freeburn_apt_init_crash_20261019/proposal/callback_boundary_regression/FINDINGS.md",
+    "status": "unapplied_test_only_proposal",
+    "expected_numeric": 97,
+    "expected_wiring": 6,
+    "executed": false
+  },
+  "dev_delivery": false
 }
