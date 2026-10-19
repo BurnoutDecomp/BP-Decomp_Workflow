@@ -533,29 +533,6 @@ if ($Slot -gt 0 -and -not (Test-Path (Join-Path $gameDir 'Burnout_PC.exe'))) {
 if (Test-Path $OutDir) { Remove-Item -Recurse -Force $OutDir }
 New-Item -ItemType Directory -Force $OutDir | Out-Null
 
-# ⛔⛔ GUARDED, AND THE GUARD IS NOT COSMETIC (measured 2026-09-06, barrel-roll wave).
-#   Add-Type installs KBFLOW into the CALLING PROCESS's AppDomain, and a batch driver invokes this
-#   script with `& flow_run.ps1` -- SAME PROCESS -- once per boot. The second and later calls throw
-#   `Cannot add type. The type name 'KBFLOW' already exists.`, which under $ErrorActionPreference
-#   'Stop' is a TERMINATING error, so the `trap` below fires and the boot dies having printed
-#   nothing but "terminating error -- all seven input holds released". MEASURED COST IN ONE
-#   SESSION: a 16-boot wall sweep stopped after 3 and a 15-boot jump ladder produced 5 logs; the
-#   ten lost boots left EMPTY DIRECTORIES and 154-byte flow logs, and the surviving five still
-#   looked like a corpus. A campaign that silently loses two thirds of its n is worse than one
-#   that fails outright.
-#   ⚠️ It is intermittent by process, not by boot: a driver that spawns a fresh powershell per
-#   boot never sees it, which is why crash_sweep_batch.ps1 has run for weeks without hitting it.
-if (-not ('KBFLOW' -as [type])) {
-  Add-Type @"
-using System;
-using System.Runtime.InteropServices;
-public static class KBFLOW {
-  [DllImport("user32.dll")] public static extern void keybd_event(byte vk, byte scan, uint flags, IntPtr extra);
-  public static void Tap(byte vk) { keybd_event(vk,0,0,IntPtr.Zero); System.Threading.Thread.Sleep(60); keybd_event(vk,0,2,IntPtr.Zero); }
-}
-"@
-}
-
 # ⛔⛔ SERIALIZE THE BOX -- ONE HARNESS AT A TIME (traffic-verify wave, 2026-08-27).
 # Taken BEFORE the kill sweep below, because the kill is the destructive act: this script ends
 # every Burnout_PC on the box and deletes BrnGame.log, so a concurrent harness's run is not merely
@@ -695,10 +672,9 @@ if ($Audio) {
 }
 
 # ⛔⛔ THE ASSERT RELEASE HAS TO BE AN EVENT, NOT A KEYSTROKE (traffic-verify wave, 2026-08-27).
-# The poll loop below already TRIES to dismiss every assert, by tapping END three times. That tap
-# goes through keybd_event, which delivers to the FOCUSED window -- so on an unattended box, where
-# the game may not hold focus, the harness's own dismissal silently does nothing. The run then
-# freezes: process alive, log frozen at the assert, and the summary blames the build.
+# Assert dismissal uses only the slot-scoped event below. Global END injection
+# reaches the user's focused application and must never be used as a fallback.
+# The game supports this event independently of keyboard focus.
 # It cost three runs across two waves on 2026-08-27, all at the junkyard->driving handover
 # (BrnGuiCache_wH3b.cpp:84 via GuiCache::GetProfileEventDisplayInfo <- SatNavRenderer::RecvEvent).
 #
@@ -2403,22 +2379,18 @@ while ($true) {
   if (-not [string]::IsNullOrEmpty($txt)) {
     $n = $seenAsserts + ([regex]::Matches($txt, '\[ASSERT \d+\]')).Count
     if ($n -gt $seenAsserts) {
-      # Release the event once per NEWLY SEEN assert (AutoReset consumes exactly one wait per Set),
-      # THEN fall back to the END tap. Order matters: the event works whether or not the game holds
-      # focus, the keystroke only works if it does. With -ReleaseAsserts the gate is already open
-      # and these Sets are harmless no-ops.
+      # Release only this slot's named event for newly observed asserts.
+      # With -ReleaseAsserts the gate is already open and Sets are harmless.
       # ⛔⛔ BUDGETED, NOT UNBOUNDED (2026-09-03). This used to sleep 30 ms per new assert plus
       #   3 x 120 ms, with no cap: 5100 asserts in dv_r5 is 153 s of Start-Sleep inside the loop
       #   that owes the car a throttle, and that run's marks.txt has no `input` line at all.
       #   The debt is CARRIED, never dropped, so a storm is still fully released -- just spread
-      #   over polls at a bounded ~360 ms each, which keeps the schedule inside one poll period.
+      #   over polls at a bounded 240 ms each, which keeps the schedule inside one poll period.
       $script:assertDebt += ($n - $seenAsserts)
       $seenAsserts = $n
       $lRelease = [math]::Min($script:assertDebt, 8)
       for ($k = 0; $k -lt $lRelease; $k++) { $evAssertRelease.Set() | Out-Null; Start-Sleep -Milliseconds 30 }
       $script:assertDebt -= $lRelease
-      $lTaps = $(if ($script:assertDebt -gt 0) { 1 } else { 3 })
-      for ($k = 0; $k -lt $lTaps; $k++) { [KBFLOW]::Tap(0x23); Start-Sleep -Milliseconds 120 }
       Write-Host ("[flow] dismissed assert #{0} at {1:f1}s{2}" -f $n, $elapsed,
                   $(if ($script:assertDebt -gt 0) { " (storm: $($script:assertDebt) release(s) carried)" } else { "" }))
     }
