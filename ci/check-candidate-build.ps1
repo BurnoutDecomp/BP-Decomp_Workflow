@@ -7,7 +7,8 @@ The parent gitlink override is intentional, recorded and never committed.
 param(
     [Parameter(Mandatory)] [string] $B5Commit,
     [Parameter(Mandatory)] [string] $WorkflowSha,
-    [ValidateRange(1, 8)] [int] $Jobs = 4
+    [ValidateRange(1, 8)] [int] $Jobs = 4,
+    [switch] $RunRegressions
 )
 
 Set-StrictMode -Version Latest
@@ -35,6 +36,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
+    regressions = @{ requested = [bool]$RunRegressions; status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -191,9 +193,28 @@ try {
         throw 'Provenance does not match the candidate, workflow, clean source and actual exe.'
     }
     Assert-CleanTrees
+    if ($RunRegressions) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.coverage = 'Existing production-body profile and GUI-interface fixtures; no game or end-to-end parity claim.'
+        $Receipt.regressions.inputs = @{}
+        foreach ($relative in @('tests/run_profile_delivery.py', 'tests/ProfileDelivery.cpp',
+                                'tests/run_fxgs2_gui_iface.py', 'tests/FxGs2GuiIface.cpp',
+                                'tests/fxgs_common.py')) {
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+        }
+        # The fixture executables live in temporary directories and must resolve
+        # their own current directory. Nothing invokes the game or window input.
+        Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+        foreach ($runner in @('tests/run_profile_delivery.py', 'tests/run_fxgs2_gui_iface.py')) {
+            Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot $runner)) 'regressions.log'
+        }
+        Assert-CleanTrees
+        $Receipt.regressions.status = 'pass'
+    }
     $Receipt.validated = $true
     $ExitCode = 0
 } catch {
+    if ($Receipt.regressions.status -eq 'running') { $Receipt.regressions.status = 'fail' }
     if ($NativeFailureCode -ne 0) { $ExitCode = $NativeFailureCode }
     $Receipt.failure = $_.Exception.Message
     Write-Warning $Receipt.failure
