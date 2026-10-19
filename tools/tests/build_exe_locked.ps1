@@ -2,6 +2,8 @@
 # a harness run is live.
 #
 #   powershell -ExecutionPolicy Bypass -File tools\tests\build_exe_locked.ps1 [-Label <lane>]
+#   Interactive default: one compiler, Idle priority, two logical CPUs. Jobs and
+#   CpuLimit may be raised explicitly for an unattended build.
 #
 # Why a wrapper: the exe is shared by every lane on this box. The link needs the exe unlocked
 # (a running game locks it), and a harness run needs the exe it started with to stay put. Both
@@ -22,7 +24,9 @@
 param(
   [string]$Label = "",
   [int]$TimeoutSec = 7200,
-  [string]$LogDir = ""
+  [string]$LogDir = "",
+  [ValidateRange(1,64)][int]$Jobs = 1,
+  [ValidateRange(1,64)][int]$CpuLimit = 2
 )
 $ErrorActionPreference = 'Stop'
 $root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
@@ -67,11 +71,33 @@ if (-not $lStageGot) {
 }
 
 $t0 = Get-Date
+$buildProcess = [Diagnostics.Process]::GetCurrentProcess()
+$previousPriority = $buildProcess.PriorityClass
+$previousAffinity = $buildProcess.ProcessorAffinity
 Push-Location $root
 try {
-  & $py (Join-Path $root 'tools\build\build.py') exe *> $log
+  # Native children inherit this affinity and Idle priority. Bound linking as
+  # well as compilation, while preserving the caller's settings on every exit.
+  $allowed = [BitConverter]::ToUInt64([BitConverter]::GetBytes($previousAffinity.ToInt64()),0)
+  $mask = [uint64]0
+  $selected = 0
+  for ($cpu = 0; $cpu -lt 64 -and $selected -lt $CpuLimit; ++$cpu) {
+    $bit = [uint64]1 -shl $cpu
+    if (($allowed -band $bit) -ne 0) { $mask = $mask -bor $bit; ++$selected }
+  }
+  $signedMask = [BitConverter]::ToInt64([BitConverter]::GetBytes($mask),0)
+  $buildProcess.PriorityClass = [Diagnostics.ProcessPriorityClass]::Idle
+  $buildProcess.ProcessorAffinity = [IntPtr]$signedMask
+  Write-Host "[build] interactive limits: jobs=$Jobs priority=Idle logicalCPUs=$selected"
+  & $py (Join-Path $root 'tools\build\build.py') exe --jobs $Jobs *> $log
   $rc = $LASTEXITCODE
-} finally { Pop-Location; $lStage.ReleaseMutex(); $lStage.Close() }
+} finally {
+  $buildProcess.ProcessorAffinity = $previousAffinity
+  $buildProcess.PriorityClass = $previousPriority
+  Pop-Location
+  $lStage.ReleaseMutex()
+  $lStage.Close()
+}
 $secs = ((Get-Date) - $t0).TotalSeconds
 
 $lines = Get-Content $log

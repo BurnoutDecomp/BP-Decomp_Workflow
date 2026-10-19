@@ -47,6 +47,16 @@ Its full build and combined source review pass. Startup and 25 collision control
 readbacks pass; remaining native checks and the selected GameState repair remain
 separate from normal delivery. The global END-key fallback was removed from the
 active harness after the user reported interference; input helpers are stopped.
+The recovery checkpoint is now on gameplay `dev` at `7107bbb8c`, with paired
+workflow changes on `main` at `1f2b3c67`; the normal F98 executable is unchanged.
+
+The user needs responsive browsing and YouTube during this campaign. Heavy
+workers and game tests are currently stopped. The locked build wrapper defaults
+to one compiler, Idle priority and two logical CPUs, with the private integration
+builder using the same limits. Keep one expensive local job at a time; source
+reasoning/review may run in parallel. Do not run game tests alongside compilation
+or multiple game instances together while the PC is in use. Any resumed game
+test must use only the instance-scoped input events.
 
 | Work | State and next gate |
 | --- | --- |
