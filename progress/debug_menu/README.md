@@ -47,8 +47,17 @@ Its full build and combined source review pass. Startup and 25 collision control
 readbacks pass; remaining native checks and the selected GameState repair remain
 separate from normal delivery. The global END-key fallback was removed from the
 active harness after the user reported interference; input helpers are stopped.
-The recovery checkpoint is now on gameplay `dev` at `7107bbb8c`, with paired
-workflow changes on `main` at `1f2b3c67`; the normal F98 executable is unchanged.
+The main recovery batch is merged and pushed to gameplay `dev` at `7107bbb8c`.
+The paired workflow fixes and reports are on `main`; the normal F98 executable
+is unchanged. New source follow-ons remain on recovery branches until their
+source review and current-tree build checks pass. They do not wait for all
+1,355 behavior dispositions before merging.
+
+The five-file [GameState constructor follow-on](gamestate_lifecycle_20261019.json)
+is pushed at `5e9928a06` on top of the reviewed World/movie integration. It restores
+OnlineCarSelect and offline Flyby initialization, the X360 achievement-owner
+initialization and the scorer's concrete pointer type. Combined source review is
+pending; compile/link, full lifecycle activation and native behavior remain open.
 
 The user needs responsive browsing and YouTube during this campaign. Heavy
 workers and game tests are currently stopped. The locked build wrapper defaults
