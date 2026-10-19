@@ -43,7 +43,10 @@ See the [delivery receipt](runtime_owners_20261015.json) and
 
 The [dev synchronization checkpoint](DEV_SYNC_20261019.md) reconciles the
 overlapping collision recovery and current audio, hardware and online changes.
-It is isolated from normal delivery while review/build/native gates run.
+Its full build and combined source review pass. Startup and 25 collision control
+readbacks pass; remaining native checks and the selected GameState repair remain
+separate from normal delivery. The global END-key fallback was removed from the
+active harness after the user reported interference; input helpers are stopped.
 
 | Work | State and next gate |
 | --- | --- |
