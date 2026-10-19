@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "source": "4bbefd59b53dc8dc3b86cb46a6e97801d311ece9",
+  "branch": "codex/debug-menu-gamestate-source-integration-20261019",
+  "prior_source": "3e0cbea6644577cba98c9af8d28a298101ee0c8e",
+  "status": "committed_and_pushed_fresh_review_compile_native_pending",
+  "changes": [
+    "Restore original new-module flag store in GameState Construct; remove the later stage1 workaround.",
+    "Select the full original GameState PreWorld helper for the network-backed main cascade.",
+    "Pair stage8 PostWorld so active-car snapshots and GUI carry events have their producer.",
+    "Use one captured update set for NetworkPreSim, GameState PreWorld and paired PostWorld; retire the NativePC caller/body."
+  ],
+  "original_flag_writer": {
+    "function": "BrnGameState::GameStateModule::Construct0x82380388",
+    "trace": [
+      "8238039C mr r31,r3",
+      "823803A0 li r24,1",
+      "823803AC stw r31,0x160+arg_14(r1)",
+      "82380934 lwz r11,0x160+arg_14(r1)",
+      "82380938 clrlwi r8,r24,24",
+      "82380944 stb r8,4(r11)"
+    ],
+    "value": true,
+    "member": "ModuleSingleBuffered::mbIsNewModule",
+    "volatile_alias_note": "The saved-this reload is load-bearing; searching only direct r31+4 stores missed it."
+  },
+  "review_history": {
+    "report": "scratch/DEBUG_MENU_1011/reader_source_review_20261019/REVIEW.md",
+    "sha256": "1fbd0aad6a083c2479a42821b9536ad41f492f1722a33e659fb1d122afc6e8cf",
+    "overall_verdict": "fail",
+    "reader_chains": "independently supported for0021/0022/0023",
+    "rejected_claim": "No original base-flag writer; corrected original writer is82380944",
+    "repair": "progress/debug_menu/runtime_routing_source_20261019.json"
+  },
+  "source_matrix": "progress/debug_menu/gamestate_source_matrix_20261019.json",
+  "source_evidence": {
+    "packet": "scratch/DEBUG_MENU_1011/full_preworld_activation_20261019",
+    "corrected_flag_manifest": "scratch/DEBUG_MENU_1011/base_module_flag_repair_20261019/source_inputs.json",
+    "corrected_flag_manifest_sha256": "8174da98ef95351ee66c76b44d264b35a88a6d448cf9bd67a7f4082d33c44312"
+  },
+  "remaining": [
+    "Fresh integrated review and compile/link of4bb; last passing hosted build remains3e0.",
+    "Native startup, real four-reply streaming completion, pause reasons and per-entry effects.",
+    "Below-stage8 partial-loading PreWorld and the complete GameState-to-GUI output consumer.",
+    "Persistent PC output lifetime/queue transport and actual allocator/resource readiness.",
+    "Retire unused extracted event8 helper and adapt the legacy profile-delivery source fixture to the full chain."
+  ],
+  "native_checked": false,
+  "normal_delivery_changed": false,
+  "final_entry_dispositions_changed": false,
+  "final_dispositions": {
+    "verified": 35,
+    "original_noop": 7,
+    "pending": 1313,
+    "static_sites": 1355
+  },
+  "current_priority": "User-reported normal-dev Freeburn Create Match crash; fix the movie zero-lane assertion and actual OnlineGameOptions null-cache exception separately from this runtime checkpoint."
+}

@@ -1,0 +1,447 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "source": "3e0cbea6644577cba98c9af8d28a298101ee0c8e",
+  "scope": "Source/ARTIST reader mappings only; no production or native behavior change",
+  "rows_reviewed": 11,
+  "source_readers_resolved": 3,
+  "source_effects_unresolved": 8,
+  "source_counts": {
+    "recovered": 5,
+    "existing": 12,
+    "unresolved": 8
+  },
+  "native_unverified": 25,
+  "original_contract": "The menu passes typed owner-member pointers, with no row-specific range or callbacks for these eleven rows. Display and edit access the same storage; that does not establish advertised engine effects.",
+  "reader_chains": [
+    {
+      "id": "BrnGameState::GameStateDebugComponent::OnActivate#0021",
+      "storage": "StreetManager::miNewestLeftPlayerRoadIndex +0x1D34",
+      "chain": "newest-left candidate -> hopeful-left +0x1D28 -> timer/latch -> stable-left +0x1D80 -> action276 / optional debug text"
+    },
+    {
+      "id": "BrnGameState::GameStateDebugComponent::OnActivate#0022",
+      "storage": "StreetManager::miNewestForwardPlayerRoadIndex +0x1D30",
+      "chain": "reset -> tuple comparison/copy to hopeful-forward +0x1D24 -> timer/latch",
+      "original_quirk": "WalkAISection forward case2 falls through without storing a candidate. No third stable-sign payload exists in this path; adding a forward assignment is not justified."
+    },
+    {
+      "id": "BrnGameState::GameStateDebugComponent::OnActivate#0023",
+      "storage": "StreetManager::miNewestRightPlayerRoadIndex +0x1D38",
+      "chain": "newest-right candidate -> hopeful-right +0x1D2C -> timer/latch -> stable-right +0x1D84 -> action276 / optional debug text"
+    }
+  ],
+  "recomputation": "Manual newest-road edits may be overwritten by the original update. A writable menu pointer is not a persistent override.",
+  "engine_consumer": "SendUpcomingRoadMessage action276,size368 -> TranslateGameActionsToGuiEvents case276 -> AddGuiEvent GUI341. DrawUpcomingRoads separately consumes stable left/right signs.",
+  "caller_limit": "Both the original full PreWorld body and the selected extracted pump contain StreetManager::Update. This mapping is not proof of whole-body parity or native activation/effects.",
+  "unresolved_rows": [
+    "BrnGameState::GameStateDebugComponent::OnActivate#0007",
+    "BrnGameState::GameStateDebugComponent::OnActivate#0010",
+    "BrnGameState::GameStateDebugComponent::OnActivate#0011",
+    "BrnGameState::GameStateDebugComponent::OnActivate#0012",
+    "BrnGameState::GameStateDebugComponent::OnActivate#0013",
+    "BrnGameState::GameStateDebugComponent::OnActivate#0014",
+    "BrnGameState::GameStateDebugComponent::OnActivate#0015",
+    "BrnGameState::GameStateDebugComponent::OnActivate#0016"
+  ],
+  "cache_limit": "The signed RoadIndex helper0x8282D720 lacks a standalone cached body; its call arguments and signed32 declaration/source overload are available. Feature-index absence is not complete member-xref evidence.",
+  "packet": "scratch/DEBUG_MENU_1011/gamestate_unresolved_readers_20261019",
+  "author_report_sha256": "4c3a87b59ee513990773eeefbf17d3ec612a617b49c03e199b4535a6fb8885e6",
+  "evidence_sha256": "92dab173714958c0496519e28e42f1bbec1f28f4ce0e6596b225c4f52b036e6d",
+  "row_evidence_sha256": "4f3184bebeca5928ba802b6182c28d338d1012bd086c5be9747cc118f63c2eac",
+  "source_files": [
+    {
+      "path": "src/GameSource/GameState/BrnGameStateDebugComponent.cpp",
+      "blob": "0b51abf7d3af6e3c234e029de1c23afb75279df6",
+      "pinned_sha256": "c8c37aab3db977c8b505601134ed99da01123acdbadd24027e2a4c1f8925d37d",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/BrnGameStateDebugComponent.h",
+      "blob": "1df2280acdfab43277f6b9e6204440ec56fba0b7",
+      "pinned_sha256": "41dcebc1df3c06c42cdbf858378645d57fe11708d7e0c27fa17b57443d2c1275",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/BrnGameStateModule.cpp",
+      "blob": "71bc84393aadf7f770013cd53a91fc2b2c30fdf4",
+      "pinned_sha256": "b99b60d0c4e9d16770fc3e359c9e8679f0e779fc617d618b0686017c0a8fb541",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/BrnGameStateModule.h",
+      "blob": "b6a2da36332993dbffcedffe6a129239eee80609",
+      "pinned_sha256": "a507848898d8f9ddf79f7696ba000eef884cdf5380f6309b05ac6f434e20f9e4",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/GameStateModule_gUI_00.cpp",
+      "blob": "594db76497fcb6ac143062eeb443026a3db3665f",
+      "pinned_sha256": "e8e8c257437af97ad204acd02312d1881900e73da9849b6a15abbd37617ecaa1",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/GameStateModule_gSR_00.cpp",
+      "blob": "e03ccffc0ed91d34ef93c6a19a4e4275c099993a",
+      "pinned_sha256": "f5103ad0d83ad76b5eed0ac450c1c3001f0e445ba9f55a924d681b219dfdadbe",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/GameStateModule_wW_01.cpp",
+      "blob": "cd1a787383fe5a04406f590212e0334352c5fbc0",
+      "pinned_sha256": "a05fc60de18c0e32b679405cee551045966c3d6f77b9f4b99631485737418a7b",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/TakedownManager/BrnTakedownManager.cpp",
+      "blob": "d30a5d7dee43d27242c955b3d4a8ab19ea30fd4f",
+      "pinned_sha256": "4b4cf096024e456055fc320884850e88f6035a57b0f48752cb28c496fdf219f8",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/StreetData/BrnGameStateStreetManager.cpp",
+      "blob": "3aaeeab6d509a4eb57f78819783e6b740232ef14",
+      "pinned_sha256": "0616765fb4bee548bb42e94fde2120eb3801f3b6d07afd591d87469a3df9f303",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/StreetData/BrnGameStateStreetManager.h",
+      "blob": "f2acd1ae48c9fc1c2cbfc15bbe3e6120b6c538bc",
+      "pinned_sha256": "760b055d1ae3fa8ffbda5f072ddfb27e1c29fb8d7ad6eb16469d18d7169ca2ec",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/StreetData/BrnGameStateStreetManager_wR_01.cpp",
+      "blob": "767a98eb1205ee3209c5685a61d05fd654e8b69d",
+      "pinned_sha256": "61f796aba59f421ed5205936259b0bbce9a74e0d6af45c7eca486633621670a8",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "blob": "d52303b959c43c8e892415d7fca2397bab68c9d1",
+      "pinned_sha256": "8a832206e32b97824c346f6e4eb2bf6da9d1593eb672447321f9577cf05a184c",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/GameState/BrnGameStateModuleIO.h",
+      "blob": "f34db72c14665a5dbeb2f9bc97896137d26d1198",
+      "pinned_sha256": "cff7109882a88ffa7df8c0cc33cee88df75be71ba7e8d9521618d2f22520ef3d",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/Game/GameBridgeGameStateToX_EventFlowGuiEvents.cpp",
+      "blob": "5cfb2d77415334becc39b8eb14d01dd96e84ec99",
+      "pinned_sha256": "dd35f1da96bba9624f018ad5ad7c468cf5a90503079c6b320bc6aa982af62f40",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiEventTypeDefs.h",
+      "blob": "7a7e96dc432c5aeccd5d72e19ffbaaa22dc4600a",
+      "pinned_sha256": "2b8784fa5af5b05a85673be5ac74640bec60e8c194ecf92524bc279a354edfa2",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/SharedClasses/StreetData/BrnStreetData.cpp",
+      "blob": "82845bdb8cd5dec8db137fc0cee86cb929044321",
+      "pinned_sha256": "c565b9018629bda09bd230831b5e17f629467ccf23c98939b18f4f8282212004",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/SharedClasses/StreetData/BrnStreetData.h",
+      "blob": "06bbb2d81bed969984bfe033345a61daa7436485",
+      "pinned_sha256": "941847b325a2a446eb7e39405e53712045d862d65af5423a21ed104029d93370",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "blob": "e3c380da4b3d123ba3274979384bce81dc7d770c",
+      "pinned_sha256": "a6649d4804db384e480db6bd1267c2bcaed497b5285cbef959ccaa73c55cd03b",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h",
+      "blob": "c1e4f42ebaab8ddf1b835c658224caf68d1625c8",
+      "pinned_sha256": "854dacfd3b9eed046508cee2280337a252d4c5fda44e70433f5d200860eac8d4",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariable.cpp",
+      "blob": "57ef21e60ca586eb45bce85ecbc8bef4aa0733d5",
+      "pinned_sha256": "982574202a385b10f23a5d762f8b013882a968398b03040e072004e0741ab052",
+      "working_matches_pin_after_newline_normalization": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariable.h",
+      "blob": "cb1d8c145ffaabdff55c2db13c208886c4675475",
+      "pinned_sha256": "6c94bcf6ffc2a1d3b10c4221730ddece2ebea5afc553dd195c7cd1fb9db9e20e",
+      "working_matches_pin_after_newline_normalization": true
+    }
+  ],
+  "original_exports": [
+    {
+      "address": "0x823574A0",
+      "name": "BrnGameState::GameStateDebugComponent::Construct",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823574A0.json",
+      "sha256": "c7d25dea2630dcce9f545b4bfc4d96fd6e9417304e70643c87e974fe45131eed",
+      "assembly_lines": 34,
+      "pseudocode_lines": 25
+    },
+    {
+      "address": "0x82380388",
+      "name": "BrnGameState::GameStateModule::Construct",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82380388.json",
+      "sha256": "bfbabcfb07f283da540b1829c356096a085daafb3b5f97bc63761156a17e4b68",
+      "assembly_lines": 731,
+      "pseudocode_lines": 361
+    },
+    {
+      "address": "0x82376AA8",
+      "name": "BrnGameState::GameStateDebugComponent::OnActivate",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82376AA8.json",
+      "sha256": "ba3cd8f91ce31140ebc049ba3f743250d26facec80657ca84df3d1af410937c3",
+      "assembly_lines": 176,
+      "pseudocode_lines": 29
+    },
+    {
+      "address": "0x82376D68",
+      "name": "BrnGameState::GameStateDebugComponent::RenderHUD",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82376D68.json",
+      "sha256": "20072cac979603c3eee0d4dbc3f85ab03ac09b4077b623550da9ad92916d4b45",
+      "assembly_lines": 134,
+      "pseudocode_lines": 153
+    },
+    {
+      "address": "0x8236C840",
+      "name": "BrnGameState::GameStateDebugComponent::RenderLandmarkDebug",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8236C840.json",
+      "sha256": "2c5d63eff69a8d36184db2ae021a971eefe81e630d438f88b295bebda0286fb4",
+      "assembly_lines": 68,
+      "pseudocode_lines": 34
+    },
+    {
+      "address": "0x8236C040",
+      "name": "BrnGameState::GameStateDebugComponent::RenderCurrentLandmarkInfo",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8236C040.json",
+      "sha256": "6e1c49ac1c18c8362f73d17888ad5a05c68197c01a332a234417fb411af8c636",
+      "assembly_lines": 219,
+      "pseudocode_lines": 181
+    },
+    {
+      "address": "0x8236C3B0",
+      "name": "BrnGameState::GameStateDebugComponent::RenderNextLandmarkInfo",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8236C3B0.json",
+      "sha256": "0cc16caa9dd11aea607e856e6ec90aa8def94a7566fcd12cb1b334ca72bb6bfe",
+      "assembly_lines": 291,
+      "pseudocode_lines": 279
+    },
+    {
+      "address": "0x8236C950",
+      "name": "BrnGameState::GameStateDebugComponent::DrawUpcomingRoads",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8236C950.json",
+      "sha256": "c89c29a45e091b8afc989ccfe9e2fe102fbe57c5f218ffdf122c61004e1c150b",
+      "assembly_lines": 90,
+      "pseudocode_lines": 123
+    },
+    {
+      "address": "0x82363700",
+      "name": "BrnGameState::GameStateModule::ShouldStartSnapRaceMode",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82363700.json",
+      "sha256": "baed16764479d51f18d0117f9243b5558cac2d1cdf408b9b1bd155fbf47678bd",
+      "assembly_lines": 158,
+      "pseudocode_lines": 94
+    },
+    {
+      "address": "0x8239A428",
+      "name": "BrnGameState::GameStateModule::DetectModeStarts",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8239A428.json",
+      "sha256": "9f562fc65800494d7fcc93a401ae881cae3cf0a4b16aec017d9700bb36ab24b4",
+      "assembly_lines": 315,
+      "pseudocode_lines": 211
+    },
+    {
+      "address": "0x8238FC50",
+      "name": "BrnGameState::GameStateModule::ProcessTakedownEvents",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8238FC50.json",
+      "sha256": "4877128e9c89238c61366f9520af7f8bdd248237a3c515ff46658b85c889bb6f",
+      "assembly_lines": 294,
+      "pseudocode_lines": 248
+    },
+    {
+      "address": "0x8238F358",
+      "name": "BrnGameState::GameStateModule::PostWorldUpdate",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8238F358.json",
+      "sha256": "3f050ff1fe12c749cbd3becd23bf58a40bd29324507f09c4eff5b32f66e2bdc3",
+      "assembly_lines": 506,
+      "pseudocode_lines": 312
+    },
+    {
+      "address": "0x823A5328",
+      "name": "BrnGameState::GameStateModule::PreWorldUpdate",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823A5328.json",
+      "sha256": "65fb3700c2cdae89319416c1a2b7c62684499eb92b4c24b06aea6efd346e4b35",
+      "assembly_lines": 772,
+      "pseudocode_lines": 428
+    },
+    {
+      "address": "0x8236BC68",
+      "name": "BrnGameState::GameStateModule::ProcessContacts",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8236BC68.json",
+      "sha256": "6c1da6c32ff0d2146f5cc8f8a8dda910c31bdda998d7c260ca88cdeca8e8552c",
+      "assembly_lines": 184,
+      "pseudocode_lines": 140
+    },
+    {
+      "address": "0x8238EF50",
+      "name": "BrnGameState::GameStateModule::EmmPreWorldUpdate",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8238EF50.json",
+      "sha256": "f450a482bbfaffd43bfa4804621bc1f7c9806cf183b178e2e0989d73e9a4d296",
+      "assembly_lines": 257,
+      "pseudocode_lines": 234
+    },
+    {
+      "address": "0x82335978",
+      "name": "BrnGameState::StreetManager::Construct",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82335978.json",
+      "sha256": "8f4dc823bec3bf9a00c83339fb25f4157b720c98a1a1b1bd29c91e72b6d8313b",
+      "assembly_lines": 242,
+      "pseudocode_lines": 180
+    },
+    {
+      "address": "0x8233EAE8",
+      "name": "BrnGameState::StreetManager::WalkAISection",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8233EAE8.json",
+      "sha256": "c68c1a154f8f16183074a11174c7af77403898cf6be47f860ef73c12a05360bf",
+      "assembly_lines": 461,
+      "pseudocode_lines": 387
+    },
+    {
+      "address": "0x8234E8C8",
+      "name": "BrnGameState::StreetManager::FindUpcomingStreetsByRecursiveWalking",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8234E8C8.json",
+      "sha256": "be88fe574de101102a187811217f16637edd73b7e7711cbca6a9cf4fa0a4f86c",
+      "assembly_lines": 434,
+      "pseudocode_lines": 319
+    },
+    {
+      "address": "0x8234EF90",
+      "name": "BrnGameState::StreetManager::FindUpcomingStreetsFromRoute",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8234EF90.json",
+      "sha256": "4be439e7e4e15f55ef78f9a7ac2fed40c65b04f3755248480b699ba1a9d4fda8",
+      "assembly_lines": 424,
+      "pseudocode_lines": 323
+    },
+    {
+      "address": "0x82350A88",
+      "name": "BrnGameState::StreetManager::UpdateUpcomingStreets",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82350A88.json",
+      "sha256": "17f79fe81ff50e1df686d100ce15f09e0a55ae0d6efc6c5b1f637b9d339c7259",
+      "assembly_lines": 214,
+      "pseudocode_lines": 157
+    },
+    {
+      "address": "0x82348798",
+      "name": "BrnGameState::StreetManager::SendUpcomingRoadMessage",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82348798.json",
+      "sha256": "1f14f4a8d3f8c5ee9bfd9ca5e4cd9e6c9f74407d7f2480fd7fadcc4a363a5aea",
+      "assembly_lines": 314,
+      "pseudocode_lines": 261
+    },
+    {
+      "address": "0x82352E90",
+      "name": "BrnGameState::StreetManager::Update",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82352E90.json",
+      "sha256": "03bccd565f1545367deb17320f46ca6ca0dfd56aaf1280664bfcaee8ec99900f",
+      "assembly_lines": 94,
+      "pseudocode_lines": 95
+    },
+    {
+      "address": "0x8282D800",
+      "name": "sub_8282D800",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282D800.json",
+      "sha256": "cd74c841426478df85cb2a23fbe889b8e2348c6127302a07bb344a9ba703bb31",
+      "assembly_lines": 27,
+      "pseudocode_lines": 12
+    },
+    {
+      "address": "0x8282D790",
+      "name": "sub_8282D790",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282D790.json",
+      "sha256": "4b1cadb2550b97802678007a260bcb796c284d8ea6a53df8f018555f8daede8e",
+      "assembly_lines": 27,
+      "pseudocode_lines": 12
+    },
+    {
+      "address": "0x82822FC0",
+      "name": "CgsDev::DebugUI::Variable::GetValueAsString",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82822FC0.json",
+      "sha256": "51cbcaa5857a8ed60b183022b6a2a16cf155ff2c196dce49d24de3ff98ba34ec",
+      "assembly_lines": 59,
+      "pseudocode_lines": 43
+    },
+    {
+      "address": "0x828230B0",
+      "name": "CgsDev::DebugUI::Variable::SetValueFromString",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828230B0.json",
+      "sha256": "f6dd3542bee02a52fd313da3af393b7d6157dbf905c79dff033394c943a3406d",
+      "assembly_lines": 86,
+      "pseudocode_lines": 76
+    },
+    {
+      "address": "0x828161C8",
+      "name": "CgsDev::DebugUI::Variant::ConvertFromString",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828161C8.json",
+      "sha256": "6bd6e125cc97d7aaeb7f8eb79b66df1fd5f9ef4db9289b8a746d8c47e7d4c748",
+      "assembly_lines": 74,
+      "pseudocode_lines": 28
+    },
+    {
+      "address": "0x828192A0",
+      "name": "CgsDev::DebugUI::Variant::ConvertToString",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828192A0.json",
+      "sha256": "6a95a6d7a7c0009e922d1b41c6d0434db306034bf1e7d779f7e5ebdb0ce9b546",
+      "assembly_lines": 582,
+      "pseudocode_lines": 390
+    },
+    {
+      "address": "0x82829A80",
+      "name": "CgsDev::DebugUI::VariableManager::RegisterVariable",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82829A80.json",
+      "sha256": "806658ebb915634d64077baea41cc9c942679c8fae05690188b49a817e4063ee",
+      "assembly_lines": 84,
+      "pseudocode_lines": 49
+    },
+    {
+      "address": "0x823E9CE0",
+      "name": "BrnGame::BrnGameModule::TranslateGameActionsToGuiEvents",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823E9CE0.json",
+      "sha256": "97553d5502047cdacc96d841674350bedac92972ccb1b9784fe7246445a3bc2d",
+      "assembly_lines": 3787,
+      "pseudocode_lines": 3042
+    },
+    {
+      "address": "0x823D6E40",
+      "name": "??$AddGuiEvent@VGuiEventRoadRuleUpcomingRoads@BrnGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventRoadRuleUpcomingRoads@BrnGui@@P",
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823D6E40.json",
+      "sha256": "456bb33ef9d8d1194b9850d5b458b3b5fbadb40afcefdd7dd7637cf563de15a5",
+      "assembly_lines": 45,
+      "pseudocode_lines": 32
+    }
+  ],
+  "fresh_review": {
+    "report": "scratch/DEBUG_MENU_1011/reader_source_review_20261019/REVIEW.md",
+    "sha256": "1fbd0aad6a083c2479a42821b9536ad41f492f1722a33e659fb1d122afc6e8cf",
+    "overall_verdict": "fail",
+    "reader_chains": "independently supported for0021/0022/0023",
+    "rejected_claim": "No original base-flag writer; corrected original writer is82380944",
+    "repair": "progress/debug_menu/runtime_routing_source_20261019.json"
+  },
+  "production_changed": false,
+  "compile_or_game_run": false,
+  "final_site_verdicts_changed": false,
+  "final_dispositions": {
+    "verified": 35,
+    "original_noop": 7,
+    "pending": 1313,
+    "static_sites": 1355
+  }
+}

@@ -60,8 +60,8 @@
     "Keeps the stable PC output buffer and its per-pass request forwarding; separate Prepare2 and PreWorldUpdate selections are unchanged."
   ],
   "retained_boundaries": [
-    "Stage 1 keeps the old PC adapter mbIsNewModule=true prerequisite; this flag store is absent from ARTIST GameState Construct/Prepare.",
-    "The original base allocation route and external flag initialization remain under audit; do not call the PC allocation site original.",
+    "The prior no-writer claim was wrong: ARTIST Construct82380944 writes the base flag through a stack-restored this alias. Recovery4bb restores that original store and removes stage1 workaround.",
+    "Persistent PC output allocation/lifetime remains a separate host adaptation; original flag initialization is now established, with the correction awaiting integrated review/build/native checks.",
     "Resource ordering, pointer ownership and reply timing pass source review; non-null backing memory and allocator success remain native-unverified.",
     "Full DLC Prepare remains unselected; PC XContent discovery/mount backend remains missing or unverified.",
     "GUI65 fake unpause is removed in the later GUI follow-on; loading-screen presentation and full GameState PreWorldUpdate activation remain open."
@@ -135,5 +135,6 @@
     "link": "skipped",
     "failure": "EA::Thread declaration/include redefinitions in BrnDLCManager.cpp; source repair under investigation."
   },
-  "gui_followon": "progress/debug_menu/gui_queue_source_20261019.json"
+  "gui_followon": "progress/debug_menu/gui_queue_source_20261019.json",
+  "runtime_followon": "progress/debug_menu/runtime_routing_source_20261019.json"
 }

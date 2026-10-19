@@ -74,10 +74,18 @@ the original 28-stage GameState Prepare and retires the duplicate PC adapter.
 The [current integration](gui_queue_source_20261019.json) at `3e0cbea66` changes
 28 source paths over dev `37735c71d`. Source review and the hosted shipping build
 pass: 2,976 TUs compile or validate from cache, and the executable links. Native
-startup and streaming checks remain open. The base-module allocation/flag seam
-remains explicitly host-specific, and DLC discovery still lacks a verified PC
-provider. These recovery checkpoints change no final entry dispositions and are
+startup and streaming checks remain open. Its persistent output lifetime remains host-specific, and DLC discovery still
+lacks a verified PC provider. The flag initialization is corrected in the later
+runtime checkpoint below. These recovery checkpoints change no final entry dispositions and are
 separate from the normal dev delivery above.
+
+The [runtime follow-on](runtime_routing_source_20261019.json) at `4bbefd59b`
+restores the original GameState constructor flag and selects full main-route
+PreWorld with paired stage-8 PostWorld. Fresh review found the original flag write
+through a stack-restored `this`; the earlier no-writer claim was wrong. This
+four-path checkpoint is committed and pushed, with integrated review, build and
+native checks still pending. The lower loading spine and complete GUI bridge
+remain open. The normal playable folder still contains dev `37735c71d`.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
@@ -119,7 +127,7 @@ branches rather than creating checkpoints.
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. The real XContent backend and worker lifetime remain unresolved. Monitor bodies are preserved in an unmounted TU; full DLC Prepare remains unselected. |
 | Coarse scene queries and shared renderer state | Sampler/query/Stack follow-on is delivered in AC3. The canonical packed sampler producer and Font flags repair pass source review, a 16-check native fixture and inspected game frames. Query-provider checks pass 47/47, with a real failed-draw witness unavailable. Renderer activation and original query polarity remain open. |
 | Original allocator construction | Reviewed native storage and LinearMalloc/RW lifecycle repairs are delivered. Original resource, 24-allocator and 27-pool sequences remain unactivated. Full constructor activation and GPU/DMA behavior remain open. |
-| Original GameState path | Original caller, all28 Prepare cases, Flyby providers and earlier snapshot repair are delivered. Selected consumers, World status, movie arena, constructor/ModeManager, Prepare and GUI handoff follow-ons pass source review. The 28-source-path integration at `3e0cbea66` passes hosted compile/link; native startup/streaming remains open. DLC monitor and X360 thread implementation stay unmounted. The [25-row source matrix](gamestate_source_matrix_20261019.json) records 9 existing paths, 5 recovered renderer paths and 11 unresolved rows, all native-unverified. Full original lifecycle activation remains open. |
+| Original GameState path | Original caller, all28 Prepare cases, Flyby providers and earlier snapshot repair are delivered. Selected consumers, World status, movie arena, constructor/ModeManager, Prepare and GUI handoff follow-ons pass source review. The 28-source-path integration at `3e0cbea66` passes hosted compile/link; native startup/streaming remains open. DLC monitor and X360 thread implementation stay unmounted. The [25-row source matrix](gamestate_source_matrix_20261019.json) records 12 existing paths, 5 recovered renderer paths and 8 unresolved rows, all native-unverified. The later4bb runtime checkpoint above remains unverified; full lifecycle activation is still open. |
 | Original Pool create path | All four protocol/layout/worker-assert findings are repaired and integrated at `f98a8cb5b`; source review and 41 current-canonical production checks pass. NativePC routing remains selected; original startup remains inactive. |
 | ImmediateMode and Traffic readers | Member-instantiation ownership, Vector3 boost-bar API and Anarchy-distance initializer are integrated at `f98a8cb5b`. All52 recorded Traffic scalar candidates are false aliases; indirect/dynamic uses remain unresolved. Graphics query callers at `b49d37a5c` pass fresh source review; their host selection remains disabled while the original allocator provider is recovered. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. |
@@ -208,3 +216,11 @@ goal is complete only when every original/native entry has a supported dispositi
 
 Regenerate inventory: `python tools/re/debug_menu_inventory.py`.
 Parser checks: `python -m unittest discover -s tools/re -p test_debug_menu_inventory.py`.
+
+The reported Freeburn Create Match failure is now a priority repair. The normal
+dev build first asserts on a null zero-capacity movie graphics arena, then crashes
+in OnlineGameOptions while handling car info with a null GuiCache. The reviewed
+movie guard is extracted and pushed at `fc89cc1de` on the recovery branch; the
+cache initialization/event-order chain is under repair. Neither is claimed fixed
+in the installed executable yet. Logs and exact source/executable attribution are
+preserved in `scratch/DEBUG_MENU_1011/freeburn_create_match_crash_20261019`.
