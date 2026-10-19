@@ -1,0 +1,80 @@
+name: Check Candidate Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      b5_commit:
+        description: Exact 40-hex commit in BurnoutDecomp/b5-decomp
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-candidate
+  cancel-in-progress: false
+
+jobs:
+  candidate:
+    runs-on: windows-2022
+    timeout-minutes: 90
+    steps:
+      - name: Checkout the workflow's exact revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.workflow_sha }}
+          submodules: false
+          persist-credentials: false
+
+      - name: Set up MSVC (x64, Windows 2022)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      # Reuse only candidate objects from the same MSVC toolset and build flags.
+      # compile_exe.py checks source/header contents with BRN_EXE_HASH_DEPS=1.
+      - name: Restore compiler objects
+        id: objects
+        uses: actions/cache/restore@v4
+        with:
+          path: build/game/obj/tu
+          key: candidate-exe-objs-${{ runner.os }}-${{ hashFiles('tools/build/msvc_flags.txt', 'tools/build/msvc_includes.txt') }}-${{ env.VCToolsVersion }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            candidate-exe-objs-${{ runner.os }}-${{ hashFiles('tools/build/msvc_flags.txt', 'tools/build/msvc_includes.txt') }}-${{ env.VCToolsVersion }}-
+
+      - name: Build and check candidate (no publish or game)
+        shell: pwsh
+        env:
+          CANDIDATE_B5_SHA: ${{ inputs.b5_commit }}
+          CANDIDATE_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          CANDIDATE_WORKFLOW_REF: ${{ github.workflow_ref }}
+          CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
+          GH_TOKEN: ${{ github.token }}
+          BRN_EXE_HASH_DEPS: "1"
+          BRN_EXE_JOBS: "4"
+        run: |
+          ./ci/check-candidate-build.ps1 -B5Commit $env:CANDIDATE_B5_SHA `
+            -WorkflowSha $env:CANDIDATE_WORKFLOW_SHA -Jobs 4
+
+      - name: Save successful candidate objects
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: build/game/obj/tu
+          key: ${{ steps.objects.outputs.cache-primary-key }}
+
+      - name: Upload build outputs and receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: candidate-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            build/candidate/artifacts/Burnout_PC.exe
+            build/candidate/artifacts/Burnout_PC.map
+            build/candidate/artifacts/Burnout_PC.cgsmap
+            build/candidate/artifacts/Burnout_PC.exe.provenance.json
+            build/candidate/artifacts/*.log
+            build/candidate/artifacts/input-receipt.json
+          if-no-files-found: error
+          retention-days: 1

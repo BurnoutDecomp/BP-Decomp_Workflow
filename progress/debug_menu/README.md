@@ -59,6 +59,16 @@ OnlineCarSelect and offline Flyby initialization, the X360 achievement-owner
 initialization and the scorer's concrete pointer type. Combined source review
 passes; compile/link, full lifecycle activation and native behavior remain open.
 
+The later [ModeManager/DLC batch](mode_dlc_source_20261019.json) at `bae1a8910`
+also passes combined source review. It selects the full ModeManager constructor,
+recovers the DLC monitor worker and fixes the Win64 Futex storage size. The
+[current candidate](gamestate_prepare_source_20261019.json) at `b7f777504` selects
+the original 28-stage GameState Prepare and retires the duplicate PC adapter.
+It changes 25 runtime paths over current dev `2ec6963ee`; its source review and
+current build/native checks are pending. The base-module allocation/flag seam
+remains explicitly host-specific, and DLC discovery still lacks a verified PC
+provider. Neither checkpoint changes final entry dispositions or normal delivery.
+
 [Branch cleanup](branch_cleanup_20261019.json) removed 23 retired campaign
 branches locally and on GitHub. Their exact tips remain recorded and reachable
 from dev/main. Retire merged, unused branches as work lands; keep active or
@@ -72,6 +82,13 @@ reasoning/review may run in parallel. Do not run game tests alongside compilatio
 or multiple game instances together while the PC is in use. Any resumed game
 test must use only the instance-scoped input events.
 
+Full candidate builds can instead use the manual **Check Candidate Build**
+workflow with an exact 40-hex `b5_commit`. It runs the canonical shipping build
+on GitHub-hosted Windows 2022, checks toolchain/source/output attribution and
+keeps a one-day build artifact. It does not publish a game or launch one locally.
+Its first hosted run is still pending; build success will not establish gameplay
+parity. Reuse the current integration branches rather than creating checkpoints.
+
 | Work | State and next gate |
 | --- | --- |
 | Remaining 130-site source batch | Combined source review passes; integrated at `d6da13056`, normal build links, Start/GPU regressions pass. Per-entry native/backend work remains. |
@@ -81,7 +98,7 @@ test must use only the instance-scoped input events.
 | DLC owner and asynchronous file operations | Full Prepare, callbacks and PC directory overrides compile across 17 TUs. The missing yields and monitor flag clear are repaired and pass source review. Native startup would reach the missing XContent producer, so this batch remains unactivated. |
 | Coarse scene queries and shared renderer state | Sampler/query/Stack follow-on is delivered in AC3. The canonical packed sampler producer and Font flags repair pass source review, a 16-check native fixture and inspected game frames. Query-provider checks pass 47/47, with a real failed-draw witness unavailable. Renderer activation and original query polarity remain open. |
 | Original allocator construction | Reviewed native storage and LinearMalloc/RW lifecycle repairs are delivered. Original resource, 24-allocator and 27-pool sequences remain unactivated. Full constructor activation and GPU/DMA behavior remain open. |
-| Original GameState path | Original caller, all28 Prepare cases, Flyby providers and earlier snapshot repair are delivered. The selected consumer/status/accessor batch and PC movie arena boundary at `2aadf4362` pass source review across 11 files; current-tree link/native gates are deferred. The [25-row source matrix](gamestate_source_matrix_20261019.json) records 9 existing paths, 5 recovered renderer paths and 11 unresolved rows, all native-unverified. Full original lifecycle activation remains open. |
+| Original GameState path | Original caller, all28 Prepare cases, Flyby providers and earlier snapshot repair are delivered. Selected consumers, World status, movie arena and constructor/ModeManager/DLC follow-ons pass source review. The 25-path candidate at `b7f777504` selects full Prepare; its fresh review and current-tree build/native gates remain open. The [25-row source matrix](gamestate_source_matrix_20261019.json) records 9 existing paths, 5 recovered renderer paths and 11 unresolved rows, all native-unverified. Full original lifecycle activation remains open. |
 | Original Pool create path | All four protocol/layout/worker-assert findings are repaired and integrated at `f98a8cb5b`; source review and 41 current-canonical production checks pass. NativePC routing remains selected; original startup remains inactive. |
 | ImmediateMode and Traffic readers | Member-instantiation ownership, Vector3 boost-bar API and Anarchy-distance initializer are integrated at `f98a8cb5b`. All52 recorded Traffic scalar candidates are false aliases; indirect/dynamic uses remain unresolved. Graphics query callers at `b49d37a5c` pass fresh source review; their host selection remains disabled while the original allocator provider is recovered. |
 | Earlier integrated pages | Targeted consumer, lifetime, backend and native proofs remain. |
