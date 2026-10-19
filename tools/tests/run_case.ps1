@@ -148,7 +148,6 @@ if (-not $NoRun) {
   $lArgs['LockTimeoutSec'] = $LockTimeoutSec
   if ($Slot -gt 0) { $lArgs['Slot'] = $Slot }
   if ($lCase.Frames) { $lArgs['Frames'] = $true; $lArgs['FrameDir'] = $frameDir }
-  if ($lCase.DiagEnv) { $lArgs['DiagEnv'] = "$($lCase.DiagEnv)" }
   $lSetupProc = $null
   $t0 = Get-Date
   # Everything from the first profile move on sits inside the try, so the finally below puts
@@ -199,6 +198,9 @@ if (-not $NoRun) {
         Write-Host ("[case] Setup: started pid {0}; it will be killed if it outlives the run" -f $lSetupProc.Id)
       } else { $lSetupProc = $null }
     }
+    # Setup can choose run-owned diagnostic paths. Read its final DiagEnv only
+    # after Setup, otherwise flow_run receives the case's stale initial value.
+    if ($lCase.DiagEnv) { $lArgs['DiagEnv'] = "$($lCase.DiagEnv)" }
     $argText = ($lArgs.GetEnumerator() | ForEach-Object { if ($_.Value -is [bool] -or $_.Value -is [switch]) { "-$($_.Key)" } else { "-$($_.Key) '$($_.Value)'" } }) -join ' '
     Write-Host "[case] flow_run.ps1 $argText"
     & (Join-Path $root 'tools\diagnostics\flow_run.ps1') @lArgs *>&1 | Tee-Object -FilePath $consoleLog | ForEach-Object { Write-Host "  | $_" }
