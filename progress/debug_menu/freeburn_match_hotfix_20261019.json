@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "status": "source_review_and_build_pass_installed_native_retest_pending",
+  "trigger": "Create a match from Freeburn on the normal October19 dev build",
+  "crash_source": "37735c71de125f873e8d404d2c0dd7f42b8f56cd",
+  "crash_exe_sha256": "92e6b0c16893958659c0207c178fed2edd8dc49127450a082317c0b1a10038d7",
+  "source": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
+  "dev_merged_and_pushed": true,
+  "commits": [
+    "fc89cc1ded26278beb73d4f4ce6b5783f3d0d48e",
+    "c2400d4f3e59ff11fc2f4afd778b4deca294c059"
+  ],
+  "fixes": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiMovieAllocator.cpp",
+      "problem": "PC descriptors have no graphics arena, yet Prepare called LinearMalloc::Create with its null base and zero capacity.",
+      "change": "Create graphics arena only for nonzero capacity. D3D owns PC pixel storage; positive-capacity/null still reaches the original assertion."
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "problem": "A new state registered for cache64 during OnEnter after the early cache fan-out. The subscription was installed later, so next-frame car-info412 could be queued before cache64 and dereference null GuiCache.",
+      "change": "Route flow cache64 after draining registration outputs, ahead of next-frame inbound responses. Keep the original cache-event setter and early direct custom-renderer delivery."
+    }
+  ],
+  "source_review": {
+    "verdict": "pass",
+    "report": "scratch/DEBUG_MENU_1011/freeburn_create_match_crash_20261019/review/REVIEW.md",
+    "sha256": "6662409a88829159177cd24bd9083ea8252c415542a056aa169e6018cdf5ea71"
+  },
+  "evidence": {
+    "crash": "scratch/DEBUG_MENU_1011/freeburn_create_match_crash_20261019/crash_inputs.json",
+    "crash_sha256": "d31db1d574bc78cbb5e99fcf88a385c74f33e3396ae09bfc3cc8eecdf08c815e",
+    "queue_report_sha256": "2092791c4e84127b6c904a160f9475679814ba5e931be390b8c8c5e69eca18c7"
+  },
+  "workflow": "89b1754a92f0be6be2682253d79d8bfa2aa09f44",
+  "run_url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39313328354",
+  "compile": {
+    "translation_units": 2976,
+    "compiled": 694,
+    "up_to_date": 2282,
+    "failed": 0,
+    "seconds": 183.0,
+    "jobs": 4,
+    "location": "GitHub-hosted windows-2022"
+  },
+  "link": {
+    "verdict": "pass",
+    "seconds": 5.3
+  },
+  "exe_sha256": "b8fde9b007eb0a2b6bc713e0afe371dac8de83ef2408b6fc1ea9ebffef2558d2",
+  "outputs": {
+    "avfilter-12.dll": {
+      "sha256": "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276",
+      "bytes": 234496
+    },
+    "swresample-7.dll": {
+      "sha256": "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c",
+      "bytes": 201728
+    },
+    "avdevice-63.dll": {
+      "sha256": "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9",
+      "bytes": 109056
+    },
+    "Burnout_PC.exe.provenance.json": {
+      "sha256": "5a2b44ed5049c1d4016226e4c4e4af4b1a70dd0114b6318099d9fab52af45af6",
+      "bytes": 467
+    },
+    "avformat-63.dll": {
+      "sha256": "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c",
+      "bytes": 644608
+    },
+    "swscale-10.dll": {
+      "sha256": "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de",
+      "bytes": 955904
+    },
+    "Burnout_PC.exe": {
+      "sha256": "b8fde9b007eb0a2b6bc713e0afe371dac8de83ef2408b6fc1ea9ebffef2558d2",
+      "bytes": 11053568
+    },
+    "Burnout_PC.map": {
+      "sha256": "c8636761312b09d7560103eae4511251a3105097ac5d2eeb323afa9042eb0d00",
+      "bytes": 17508692
+    },
+    "xaudio2_9redist.dll": {
+      "sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+      "bytes": 997400
+    },
+    "avutil-61.dll": {
+      "sha256": "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb",
+      "bytes": 978944
+    },
+    "avcodec-63.dll": {
+      "sha256": "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b",
+      "bytes": 2179072
+    },
+    "Burnout_PC.cgsmap": {
+      "sha256": "62f08aaee4ae295cfe94ea46e4896e85eacfb2a3672c12b8d7744d912599a5ec",
+      "bytes": 2996112
+    }
+  },
+  "symbols": 23407,
+  "installed_files": [
+    "Burnout_PC.cgsmap",
+    "Burnout_PC.exe",
+    "Burnout_PC.exe.provenance.json",
+    "Burnout_PC.map",
+    "avcodec-63.dll",
+    "avdevice-63.dll",
+    "avfilter-12.dll",
+    "avformat-63.dll",
+    "avutil-61.dll",
+    "swresample-7.dll",
+    "swscale-10.dll",
+    "xaudio2_9redist.dll"
+  ],
+  "installation": "build/game",
+  "previous_build_backup": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_crash_20261019\\previous_game_39313328354",
+  "config_unchanged": true,
+  "mutation_scope": "Only the four executable/support files and eight validated runtime DLLs; no save or asset paths opened for writing.",
+  "native_game_checks": "not_run; user Create Match retest remains necessary",
+  "local_compilation": false,
+  "private_gamestate_recovery_included": false,
+  "final_entry_dispositions_changed": false
+}

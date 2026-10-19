@@ -39,12 +39,14 @@ regression repaired. Road Rules retain both saved score types and the reset epoc
 See the [delivery receipt](runtime_owners_20261015.json) and
 [Road Rules fix](../road_rules_persistence_20261014.md).
 
-**The playable `build/game` folder was refreshed on 19 October from dev
-`37735c71d`.** Its hosted build compiles all 2,976 TUs and links without errors.
-The executable, crash symbols and eight matching runtime DLLs are installed;
-the previous F98 build is backed up. Config and save paths were preserved.
-This new version has not been launched for gameplay checks. See the
-[exact delivery receipt](playable_dev_20261019.json).
+**The playable `build/game` folder now contains the Freeburn match hotfix from
+dev `c2400d4f3`.** It repairs the zero-capacity PC movie graphics arena assertion
+and the cache-event ordering that crashed OnlineGameOptions on car-info replies.
+Fresh combined source review and the hosted shipping build pass. Matching symbols
+and runtime DLLs are installed, with the previous build backed up and configuration
+and saves preserved. Match creation has not yet been replayed on this executable.
+See the [exact hotfix receipt](freeburn_match_hotfix_20261019.json). The earlier
+[dev delivery](playable_dev_20261019.json) remains recorded for attribution.
 
 ## Active work
 
@@ -85,7 +87,7 @@ PreWorld with paired stage-8 PostWorld. Fresh review found the original flag wri
 through a stack-restored `this`; the earlier no-writer claim was wrong. This
 four-path checkpoint is committed and pushed, with integrated review, build and
 native checks still pending. The lower loading spine and complete GUI bridge
-remain open. The normal playable folder still contains dev `37735c71d`.
+remain open. The normal folder contains the separate dev hotfix `c2400d4f3` above.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
@@ -216,11 +218,3 @@ goal is complete only when every original/native entry has a supported dispositi
 
 Regenerate inventory: `python tools/re/debug_menu_inventory.py`.
 Parser checks: `python -m unittest discover -s tools/re -p test_debug_menu_inventory.py`.
-
-The reported Freeburn Create Match failure is now a priority repair. The normal
-dev build first asserts on a null zero-capacity movie graphics arena, then crashes
-in OnlineGameOptions while handling car info with a null GuiCache. The reviewed
-movie guard is extracted and pushed at `fc89cc1de` on the recovery branch; the
-cache initialization/event-order chain is under repair. Neither is claimed fixed
-in the installed executable yet. Logs and exact source/executable attribution are
-preserved in `scratch/DEBUG_MENU_1011/freeburn_create_match_crash_20261019`.
