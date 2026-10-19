@@ -1,19 +1,20 @@
 {
   "schema": 1,
   "date": "2026-10-19",
-  "source": "18942d41c88488d5efc383769b09f3640d3c1515",
+  "source": "3f847ca769f86e875d0e1078c552617156aa45f2",
   "branch": "codex/debug-menu-gamestate-source-integration-20261019",
   "dev": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
-  "status": "pushed_isolated_source_fresh_review_and_hosted_rerun_pending",
+  "status": "isolated_review_repairs_pushed_newer_build_native_and_caller_recovery_pending",
   "commits": [
     "782f31560a69ea935df1b8b35e2d1959360a943a",
     "a301e09418b4d4a72496ae79879641bb56073c6d",
     "4c2bc973e59fafcdecac7e8c1689f0ddb2626d69",
-    "18942d41c88488d5efc383769b09f3640d3c1515"
+    "18942d41c88488d5efc383769b09f3640d3c1515",
+    "3f847ca769f86e875d0e1078c552617156aa45f2"
   ],
   "source_paths_over_dev": {
-    "total_paths": 40,
-    "production_source_paths": 37,
+    "total_paths": 41,
+    "production_source_paths": 38,
     "existing_regression_paths": 3
   },
   "new_source_since_previous_review": 19,
@@ -43,15 +44,30 @@
     "profile": 8,
     "gui_interface": 2,
     "failed": 0,
-    "numeric_or_native_run": false
+    "numeric_or_native_run": true,
+    "numeric_checked_on": "18942d41c88488d5efc383769b09f3640d3c1515",
+    "native_game_run": false
   },
   "review": {
-    "packet": "scratch/DEBUG_MENU_1011/gui_runtime_core_integration_20261019/REVIEW_PACKET.md",
-    "status": "in_progress",
-    "source": "4c2bc973e59fafcdecac7e8c1689f0ddb2626d69"
+    "status": "source_findings_repaired_and_followup_review_passed",
+    "history": [
+      {
+        "source": "4c2bc973e59fafcdecac7e8c1689f0ddb2626d69",
+        "verdict": "fail",
+        "report": "scratch/DEBUG_MENU_1011/gui_runtime_core_integration_20261019/REVIEW.md",
+        "sha256": "f6bad0ac17aebd914608e3e9235ea1c3800f153b554c8d291a7e11acf84bdba0"
+      },
+      {
+        "source": "3f847ca769f86e875d0e1078c552617156aa45f2",
+        "verdict": "pass",
+        "report": "scratch/DEBUG_MENU_1011/gui_runtime_lifetime_repair_20261019/REVIEW.md",
+        "sha256": "951fc62512b1a0ea28419debdcfc185a5954c8547f8262ff2907736cd18133ba"
+      }
+    ],
+    "limits": "No native witness; distinct caller/clock and resource phases remain under recovery."
   },
   "build": {
-    "status": "hosted_rerun_queued",
+    "status": "pass_for_18942d41c_before_lifetime_repair",
     "workflow": ".github/workflows/build-candidate.yml",
     "runner": "GitHub-hosted windows-2022",
     "jobs": 4,
@@ -86,7 +102,18 @@
     "run_id": 39324468814,
     "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39324468814",
     "source": "18942d41c88488d5efc383769b09f3640d3c1515",
-    "workflow_sha": "8bb427cdc9df8dcb5cb3ce1a45effdb82b2a29aa"
+    "workflow_sha": "8bb427cdc9df8dcb5cb3ce1a45effdb82b2a29aa",
+    "receipt_sha256": "79ece008c35242c519884aeb13ff47797dcef7022eb769aa4f09f6375bcece24",
+    "profile_fixture": {
+      "source_checks": 8,
+      "numeric_checks": 14,
+      "failed": 0
+    },
+    "gui_interface_fixture": {
+      "source_checks": 2,
+      "numeric_checks": 21,
+      "failed": 0
+    }
   },
   "retained_limits": [
     "No current candidate startup/gameplay witness; normal build remains devc240.",
@@ -111,5 +138,16 @@
     "path": "tests/FxGs2GuiIface.cpp",
     "change": "Match the existing CgsLog.h extern: StrStreamBase*, replacing the stale DebugPrint* test double.",
     "production_changes": false
+  },
+  "review_repairs": [
+    "Retire raw GUI output and event-start/preset validity flags after all frame consumers in the persistent PC output.",
+    "Selectively deliver restored GUI194 and318 to existing cache consumers; preserve cache64 ordering."
+  ],
+  "input_followon": {
+    "source": "63cf4d3a8323cc28b97f4ca83e2635f552674839",
+    "paths": 11,
+    "packet": "scratch/DEBUG_MENU_1011/input_postworld_recovery_20261019/FINDINGS.md",
+    "status": "pushed_isolated_source_mount_caller_review_and_build_pending",
+    "scope": "Typed post-world input, bind/unbind request/results, initial mapping and wheel spring."
   }
 }

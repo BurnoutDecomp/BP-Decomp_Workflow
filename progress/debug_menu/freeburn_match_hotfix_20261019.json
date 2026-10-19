@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-10-19",
-  "status": "source_review_and_build_pass_installed_native_retest_pending",
+  "status": "installed_user_retest_reaches_new_apt_import_crash",
   "trigger": "Create a match from Freeburn on the normal October19 dev build",
   "crash_source": "37735c71de125f873e8d404d2c0dd7f42b8f56cd",
   "crash_exe_sha256": "92e6b0c16893958659c0207c178fed2edd8dc49127450a082317c0b1a10038d7",
@@ -118,8 +118,9 @@
   "previous_build_backup": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_crash_20261019\\previous_game_39313328354",
   "config_unchanged": true,
   "mutation_scope": "Only the four executable/support files and eight validated runtime DLLs; no save or asset paths opened for writing.",
-  "native_game_checks": "not_run; user Create Match retest remains necessary",
+  "native_game_checks": "User retest failed in AptCharacterAnimation::ExecuteInitActions on c240; the latest stack differs from the earlier GuiCache null-this failure.",
   "local_compilation": false,
   "private_gamestate_recovery_included": false,
-  "final_entry_dispositions_changed": false
+  "final_entry_dispositions_changed": false,
+  "followup": "progress/debug_menu/freeburn_apt_init_crash_20261019.json"
 }

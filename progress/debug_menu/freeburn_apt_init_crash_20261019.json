@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "status": "user_retest_failed_new_apt_import_lifetime_crash_under_recovery",
+  "source": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
+  "exe_sha256": "b8fde9b007eb0a2b6bc713e0afe371dac8de83ef2408b6fc1ea9ebffef2558d2",
+  "trigger": "Create Match from Freeburn freezes, then black-screen crash after prior hotfix",
+  "observed_exception": "AptCharacterAnimation::ExecuteInitActions+0xB6, module+0x438F16, reading0x60",
+  "decoded_fault": "RVA438F16 movsxd rdx,[r15+0x60]; inlined GetIDFromImportFile loads null AptFile::mpData into r15, then reads exportCount.",
+  "prior_crash_different": true,
+  "packet": "scratch/DEBUG_MENU_1011/freeburn_apt_init_crash_20261019/crash_inputs.json",
+  "packet_sha256": "7d2e4bee284b1946666522226d19ecc7f6daee6ce56d4d1b07e8c75ad3983527",
+  "hypothesis": "A surviving ON_CREA import references B5NetworkRouteInfo after the logged resource unload/reload. Ownership of the live import and resource payload is being traced against native x64.",
+  "hypothesis_confirmed_as_complete_cause": false,
+  "repair": "pending_faithful_lifetime_recovery",
+  "native_retest_result": "fail",
+  "agent_game_launched": false,
+  "local_compilation": false,
+  "normal_build_replaced": false
+}
