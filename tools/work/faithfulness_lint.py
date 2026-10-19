@@ -21,9 +21,11 @@ Categories (each tunable / separately baselined):
                 real `Class::method` -- AGENTS.md calls this an AUDIT FAILURE, not
                 a leaf. (Real Apt C API -- AptUpdate, AptRender, AptCreateTargetInstance
                 -- has no `<Class>_` underscore, so the underscore is the tell.)
-  engine_stub   A trivial body ({} / return null|0|false|{} / (void)x;) that CALLS
-                ITSELF a stub in a nearby comment (stub / link-stub / no-op / TODO /
-                placeholder / deferred / not implemented) and is NOT marked
+  engine_stub   A trivial body ({} / return null|0|false|{} / (void)x;), or a hollow one
+                that only latches a function-local static, that CALLS ITSELF a stub in a
+                comment around its signature (stub / link-stub / no-op / TODO / placeholder /
+                deferred / not implemented) or anywhere inside it (the same minus stub / no-op,
+                which body comments use to describe the console) and is NOT marked
                 `// FLAG PC-platform leaf: <reason>`.
   offset_hack   Raw offset member access -- *(T*)(p + N) / *reinterpret_cast<T*>(p + N)
                 -- outside the documented serialized-blob exception (a line mentioning
@@ -104,6 +106,12 @@ STUB_COMMENT_RE = re.compile(
     r"todo|fixme|deferred|bring-?up)\b",
     re.I,
 )
+# Inside a body, comments mostly DESCRIBE the console ("the X360 Destruct is empty", "X360
+# FixDown is a stub (no-op)", "bl STUB"), so only an explicit confession counts there.
+BODY_STUB_COMMENT_RE = re.compile(
+    r"\b(?:link-stub|not\s+implemented|unimplemented|placeholder|todo|fixme|deferred|bring-?up)\b",
+    re.I,
+)
 
 # empty, or any sequence of trivial returns / (void)x; ignores
 TRIVIAL_BODY_RE = re.compile(
@@ -112,6 +120,49 @@ TRIVIAL_BODY_RE = re.compile(
     r"\(\s*void\s*\)\s*[A-Za-z_]\w*\s*;\s*"
     r")*\Z"
 )
+
+# A function-local static, and a constant stored into one: the latch in a hollow body.
+# tools/re/stubaudit.py carries the same rule (it ships without tools/work).
+LOCAL_STATIC_RE = re.compile(
+    r"\bstatic\s+(?:(?:const|volatile)\s+)*[A-Za-z_][\w:]*(?:\s*<[^;{}]*>)?[\s*&]+([A-Za-z_]\w*)\s*(?:=\s*[^;{}]+)?;")
+LATCH_RE = re.compile(r"([A-Za-z_]\w*)\s*=\s*(?:true|false|nullptr|-?\d+)")
+RETURN_RE = re.compile(r"\Areturn\b\s*(.*)\Z")
+
+
+def hollow_body(body: str) -> bool:
+    """A body whose only effect is latching a function-local static: `static bool done; if (!done)
+    { done = true; }` around nothing. Branches on plain conditions are allowed; a condition that
+    calls or assigns is real work, and so is returning a different constant per branch (that
+    makes the latch observable, e.g. a run-once guard returning true then false)."""
+    latches = set(LOCAL_STATIC_RE.findall(body))
+    if not latches:
+        return False
+    rest = LOCAL_STATIC_RE.sub(";", body)
+    out, i = [], 0
+    for m in re.finditer(r"\bif\s*\(", rest):
+        if m.start() < i:
+            continue
+        depth, j = 1, m.end()
+        while j < len(rest) and depth:
+            depth += {"(": 1, ")": -1}.get(rest[j], 0)
+            j += 1
+        if re.search(r"[A-Za-z_]\w*\s*\(|\+\+|--|[^=!<>]=[^=]", rest[m.end():j - 1]):
+            return False
+        out += [rest[i:m.start()], ";"]
+        i = j
+    out.append(rest[i:])
+    stmts = [s.strip() for s in re.split(r"\belse\b|[{};]", "".join(out)) if s.strip()]
+    returned = set()
+    for s in stmts:
+        m = LATCH_RE.fullmatch(s)
+        if m and m.group(1) in latches:
+            continue
+        if not TRIVIAL_BODY_RE.match(s + ";"):
+            return False
+        m = RETURN_RE.match(s)
+        if m:
+            returned.add(m.group(1).strip())
+    return len(returned) <= 1
 
 DEF_HEAD_RE = re.compile(
     r"(?P<name>(?:[A-Za-z_]\w*\s*::\s*)*~?[A-Za-z_]\w*)\s*"
@@ -219,7 +270,7 @@ def _context(text: str, starts: list[int], line: int, before: int = 1, after: in
 
 
 def _iter_defs(masked: str):
-    """Yield (name, header_offset, body_text) for each function definition."""
+    """Yield (name, header_offset, body_offset, body_text) for each function definition."""
     n = len(masked)
     for m in DEF_HEAD_RE.finditer(masked):
         name = re.sub(r"\s+", "", m.group("name"))
@@ -237,7 +288,7 @@ def _iter_defs(masked: str):
                 if depth == 0:
                     break
             j += 1
-        yield name, m.start(), masked[i + 1 : j]
+        yield name, m.start(), i + 1, masked[i + 1 : j]
 
 
 def scan_text(rel_path: str, text: str) -> list[Finding]:
@@ -266,7 +317,7 @@ def scan_text(rel_path: str, text: str) -> list[Finding]:
 
     # apt_shim + engine_stub -- from real function definitions.
     shim_lines: set[int] = set()
-    for name, hoff, body in _iter_defs(masked):
+    for name, hoff, boff, body in _iter_defs(masked):
         short = name.split("::")[-1]
         ln = _lineno(starts, hoff)
         ctx = _context(text, starts, ln, before=2, after=1)
@@ -276,7 +327,14 @@ def scan_text(rel_path: str, text: str) -> list[Finding]:
             findings.append(Finding(rel_path, ln, "apt_shim", short))
             shim_lines.add(ln)
             continue
-        if TRIVIAL_BODY_RE.match(body) and STUB_COMMENT_RE.search(ctx) and ln not in shim_lines:
+        if ln in shim_lines or not (TRIVIAL_BODY_RE.match(body) or hollow_body(body)):
+            continue
+        # A trivial body is short by definition, so read all of it: a `// TODO: Implement`
+        # two lines into the body sits outside the signature context above.
+        inside = text[boff : boff + len(body)]
+        if PC_LEAF_MARKER in inside:
+            continue
+        if STUB_COMMENT_RE.search(ctx) or BODY_STUB_COMMENT_RE.search(inside):
             findings.append(Finding(rel_path, ln, "engine_stub", short))
     return findings
 

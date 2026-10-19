@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-19",
+  "status": "isolated_merge_checkpoint_native_unverified",
+  "game_ours": "f98a8cb5b7868e8a06563c0b4ea4a75cf352e103",
+  "game_theirs": "8edbf14501d4edc34e2d23ef595d8ce404097c11",
+  "game_source_checkpoint": "8aa86256bd2109776fc499d6da7a96a80cdbe254",
+  "workflow_theirs_main": "1327db43b53f9e84168164a3a717804f58135a44",
+  "paired_workflow_collision_mount": "ee8b7602",
+  "overlap": {
+    "author_login": "JeBobs",
+    "changed_files": 17,
+    "files_modified_on_both_branches": 11,
+    "method_examples": [
+      "CollisionDebugComponent::OnActivate",
+      "CollisionDebugComponent::GetPolyColour",
+      "CollisionDebugComponent::DrawCollisionPolyCallback",
+      "TriangleCollisionDebugComponent::DrawPolySoups",
+      "TriangleCollisionDebugComponent::UpdateViewFrustum"
+    ],
+    "new_useful_work": [
+      "shared packed vertex decoding",
+      "soup accessors",
+      "regression and native console tests"
+    ],
+    "preserved_our_work": [
+      "sphere/box/swept query methods",
+      "HUD and counters",
+      "full control metadata",
+      "original per-pass visibility counter",
+      "original constructor and spatial allocator order"
+    ]
+  },
+  "fixtures": {
+    "world_visualizer": {
+      "checks": 26,
+      "failures": 0
+    },
+    "dev_visibility_negative": {
+      "checks": 26,
+      "expected_failures": 1
+    },
+    "audio_hardware_suites": 9,
+    "audio_hardware_status": "pass"
+  },
+  "full_build": "pending",
+  "combined_source_review": "pending",
+  "native_checks": "pending",
+  "normal_delivery_unchanged": {
+    "source": "f98a8cb5b7868e8a06563c0b4ea4a75cf352e103",
+    "exe_sha256": "df3677771ddf7bdb15c5bd76b640595ffe3877fcfa6da0ddb480c3b17621332c"
+  },
+  "primary_wip_preserved": true,
+  "final_dispositions": {
+    "verified": 35,
+    "original_noop": 7,
+    "pending": 1313,
+    "static_sites": 1355,
+    "implementation_complete_unverified": "unknown"
+  },
+  "next_recovery": "world post-physics status transfer; earlier failed candidate remains separate"
+}
