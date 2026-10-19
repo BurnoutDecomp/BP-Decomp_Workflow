@@ -1,44 +1,53 @@
-# Selected GameState and graphics consumers — paused
+# Selected GameState consumers and World status
 
-Work stopped at the user's request. All agents and owned build/test processes
-are stopped. The normal executable remains the visually checked F98 build
-(`df3677771ddf`); the failed candidate was never delivered. Final totals remain
-35 verified, seven original no-ops and 1,313 pending sites.
+Work resumed on 19 October. The ten-file selected-consumer and World-status
+checkpoint `ca5a6592f` passes combined source review. It is pushed separately
+from dev; the F98 normal executable is unchanged. A one-file PC movie allocation
+boundary is combined at `2aadf4362` for a separate source review.
 
-## Saved checkpoint
+## What changed
 
-The pushed isolated branch `codex/debug-menu-selected-consumer-integration` is
-clean at `66613d8d31cee93059221e7ba68246f0566040f4`: eight GameState consumer
-files, three reviewed graphics caller files and three dispatcher declaration
-repairs. All 2,975 shipping TUs compile and link. The final incremental attempt
-rebuilt 39 files and recorded no warnings or failures; earlier link failures and
-objects remain retained.
+The original World post-physics bridge now copies all five producer status
+values into the public output. Its destination write lock, source read lock,
+const accessor and value lifetime are preserved. The separate boot-video path
+uses write accessors under its existing write lock. These repairs are originally
+pushed as `12ca37be7` and `4d202a016`.
 
-Native Start and GPU tests both FAIL: the game freezes in the junkyard after a
-streaming pause, never reaching driving. They record zero assertions/exceptions.
-The prepared landmark/Step/Play case was not launched after that failure.
+The eight earlier selected input, Step/Play, streaming and landmark changes are
+staged on the current dev base in these separate branches.
+The original full Construct/Prepare/PreWorldUpdate lifecycle is still inactive.
+The retained PC GUI-65 unpause stand-in is not evidence of all four streaming
+replies. Stepped GUI delivery/action retirement also remains a material boundary.
 
-An independent reviewer traced the missing dependency: the real WorldEntity
-PostPhysics update writes residency, but `BridgeEntityModulesToOutput_PostPhysics`
-does not copy that status into the public World UpdateOutputBuffer. The public
-member starts zero; the newly connected consumer reads it and requests a
-permanent stall. ARTIST `0x827AEEB0` has the missing transfer at `0x827AF174`.
-No repair or bypass was applied before stopping. The combined review was
-interrupted; its full final report must not be assumed complete.
+The [25-row source matrix](gamestate_source_matrix_20261019.json) records nine
+existing typed paths, five recovered renderer paths and eleven unresolved rows.
+All 25 are native-unverified. These source classes are not implementation-complete
+or final gameplay verdicts. The original road-name matcher deliberately compares
+66 IDs and uses the 67th name as fallback; its unused last ID is not a missing
+source-recovery item.
 
-## Resume here
+## Preserved failed candidate
 
-Recover the attested status transfer, review its full bridge/locking/lifetime
-contract, then rerun the failed native gates before any normal delivery.
-The original full GameState lifecycle and native occlusion remain inactive.
+The October 15 branch `codex/debug-menu-selected-consumer-integration` remains at
+`66613d8d3`: eight GameState files plus six graphics/dispatcher paths. Its 2,975-TU
+build links, but both native Start and GPU cases freeze after a streaming pause.
+No landmark/Step/Play case ran after that failure. It was never delivered.
+The missing public World-status transfer was identified from that investigation;
+the original failed logs and verdicts remain intact.
 
-The 25-entry Game State page worker was interrupted with no tracked source edits.
-The allocator worker completed its frozen prerequisite packet: the original
-GlobalGraphics provider already exists in the isolated `55790e71` recovery lane,
-and still needs reviewed startup integration. No duplicate provider or capacity
-increase was added. Its packet is
-`scratch/DEBUG_MENU_1011/graphics_allocator_provider_20261015/REPORT.md`.
+## Next gates
 
-The [machine-readable checkpoint](selected_consumers_20261015.json) records exact
-source, build and failed-run identities. Raw evidence remains in
-`scratch/DEBUG_MENU_1011/selected_consumers_integration_20261015/`.
+Current-tree linking and native behavior checks are deferred while the PC is in
+use. The World transfer fixture previously passed 47 source-boundary checks;
+the page fixture passed 13 checks. Neither establishes a current integrated run.
+Validate residency-to-stall/unpause, real input edges, all four module replies,
+GUI loading events, step/action lifetime and landmark pixels before delivery.
+
+The original lifecycle and native occlusion still need their complete providers.
+The existing GlobalGraphics allocator recovery at `55790e71` must be reused;
+its ownership/capacity/startup work is not solved by this checkpoint.
+
+See the [current source receipt](selected_status_20261019.json) and
+[historical failed-run receipt](selected_consumers_20261015.json). Raw evidence
+is retained under `scratch/DEBUG_MENU_1011/selected_status_integration_20261019/`
+and `scratch/DEBUG_MENU_1011/selected_consumers_integration_20261015/`.
