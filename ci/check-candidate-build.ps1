@@ -8,7 +8,8 @@ param(
     [Parameter(Mandatory)] [string] $B5Commit,
     [Parameter(Mandatory)] [string] $WorkflowSha,
     [ValidateRange(1, 8)] [int] $Jobs = 4,
-    [switch] $RunRegressions
+    [switch] $RunRegressions,
+    [switch] $RunAptLifetime
 )
 
 Set-StrictMode -Version Latest
@@ -36,7 +37,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]$RunRegressions; status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime); status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -193,9 +194,9 @@ try {
         throw 'Provenance does not match the candidate, workflow, clean source and actual exe.'
     }
     Assert-CleanTrees
-    if ($RunRegressions) {
+    if ($RunRegressions -or $RunAptLifetime) {
         $Receipt.regressions.status = 'running'
-        $Receipt.regressions.coverage = 'Existing production-body profile and GUI-interface fixtures; no game or end-to-end parity claim.'
+        $Receipt.regressions.coverage = 'Selected production-body fixtures with IO/heap doubles; callback wiring is source-only. No game or end-to-end parity claim.'
         $Receipt.regressions.inputs = @{}
         foreach ($relative in @('tests/run_profile_delivery.py', 'tests/ProfileDelivery.cpp',
                                 'tests/run_fxgs2_gui_iface.py', 'tests/FxGs2GuiIface.cpp',
@@ -205,8 +206,33 @@ try {
         # The fixture executables live in temporary directories and must resolve
         # their own current directory. Nothing invokes the game or window input.
         Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
-        foreach ($runner in @('tests/run_profile_delivery.py', 'tests/run_fxgs2_gui_iface.py')) {
-            Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot $runner)) 'regressions.log'
+        if ($RunRegressions) {
+            foreach ($runner in @('tests/run_profile_delivery.py', 'tests/run_fxgs2_gui_iface.py')) {
+                Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot $runner)) 'regressions.log'
+            }
+        }
+        if ($RunAptLifetime) {
+            foreach ($relative in @('tests/run_pc_bundle_ownership.py', 'tests/PCBundleOwnership.cpp')) {
+                $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+            }
+            $aptRunner = Join-Path $SourceRoot 'tests/run_pc_bundle_ownership.py'
+            Invoke-Native py @('-3', '-B', $aptRunner) 'regressions.log'
+            $Receipt.regressions.negative_controls = @{}
+            foreach ($control in @(
+                @{ flag = '--omit-apt-retain'; witness = 'FAIL\s+(Apt pin holds every member|logical unload preserves)' },
+                @{ flag = '--require-new-apt-resources'; witness = 'FAIL[^\r\n]*(reload|lead|acquire)' }
+            )) {
+                $logName = 'apt-negative' + $control.flag + '.log'
+                $logPath = Join-Path $ArtifactRoot $logName
+                & py -3 -B $aptRunner $control.flag 2>&1 | Tee-Object -FilePath $logPath | Out-Host
+                $controlCode = $LASTEXITCODE
+                $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', $aptRunner, $control.flag); exit_code = $controlCode; expected_failure = $true })
+                $controlLog = Get-Content -Raw -LiteralPath $logPath
+                if ($controlCode -eq 0 -or $controlLog -notmatch $control.witness) {
+                    throw "APT negative control $($control.flag) did not expose its intended runtime ownership/GUI failure."
+                }
+                $Receipt.regressions.negative_controls[$control.flag] = @{ status = 'expected_behavior_failure'; exit_code = $controlCode; log = $logName }
+            }
         }
         Assert-CleanTrees
         $Receipt.regressions.status = 'pass'
