@@ -2,8 +2,9 @@
 
 Work resumed on 19 October. The ten-file selected-consumer and World-status
 checkpoint `ca5a6592f` passes combined source review. It is pushed separately
-from dev; the F98 normal executable is unchanged. A one-file PC movie allocation
-boundary is combined at `2aadf4362` for a separate source review.
+from dev; the F98 normal executable is unchanged. The one-file PC movie allocation
+boundary also passes source review in the combined eleven-file `2aadf4362` tree.
+Current-tree linking and native behavior remain unverified.
 
 ## What changed
 
