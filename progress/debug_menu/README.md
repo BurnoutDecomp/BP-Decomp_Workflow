@@ -56,8 +56,13 @@ source review and current-tree build checks pass. They do not wait for all
 The five-file [GameState constructor follow-on](gamestate_lifecycle_20261019.json)
 is pushed at `5e9928a06` on top of the reviewed World/movie integration. It restores
 OnlineCarSelect and offline Flyby initialization, the X360 achievement-owner
-initialization and the scorer's concrete pointer type. Combined source review is
-pending; compile/link, full lifecycle activation and native behavior remain open.
+initialization and the scorer's concrete pointer type. Combined source review
+passes; compile/link, full lifecycle activation and native behavior remain open.
+
+[Branch cleanup](branch_cleanup_20261019.json) removed 23 retired campaign
+branches locally and on GitHub. Their exact tips remain recorded and reachable
+from dev/main. Retire merged, unused branches as work lands; keep active or
+unmerged work and reuse current branches for later checkpoints.
 
 The user needs responsive browsing and YouTube during this campaign. Heavy
 workers and game tests are currently stopped. The locked build wrapper defaults

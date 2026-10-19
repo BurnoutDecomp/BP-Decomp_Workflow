@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "status": "complete",
+  "repositories": [
+    {
+      "name": "gameplay",
+      "published_branch": "dev",
+      "published_anchor": "2ec6963eeddc788ba9bfaaa66c64c7240fd09a97",
+      "retired": {
+        "codex/debug-menu-delivery-fixes": {
+          "tip": "ac3f202d6b44ba9f266268d1b665f1c41ec621b0",
+          "remote": true
+        },
+        "codex/debug-menu-dev-sync-20261019": {
+          "tip": "7107bbb8c22db3aaa8268cd461ea48817709c3d4",
+          "remote": true
+        },
+        "codex/debug-menu-effects-director-review-fixes": {
+          "tip": "66a41d8d3ef82f663a6afd68891a3692eebc1e44",
+          "remote": true
+        },
+        "codex/debug-menu-gamestate-integration": {
+          "tip": "360cececab80fd19a66dcccd2083c9cad433e886",
+          "remote": true
+        },
+        "codex/debug-menu-gamestate-review-repairs": {
+          "tip": "3a59f7c1bc92cb3518a32a143c7296e602b9f07c",
+          "remote": true
+        },
+        "codex/debug-menu-gamestate-update-chain": {
+          "tip": "bbac56ac60581ad01d12c89b492f6dc4a336a11f",
+          "remote": true
+        },
+        "codex/debug-menu-gpu-monitors": {
+          "tip": "8c779e4f890f0901cd5938838de8490259bc4ea4",
+          "remote": true
+        },
+        "codex/debug-menu-handling-consumers": {
+          "tip": "e0a0779a5cdf8abb4a4b5da90f2ebc81952faad7",
+          "remote": true
+        },
+        "codex/debug-menu-native-followon-integration": {
+          "tip": "bec73c5ce6e4317da858e39ce1df5750f7000f2a",
+          "remote": true
+        },
+        "codex/debug-menu-native-sdk-scene-integration": {
+          "tip": "8cbd95c6da44d35cd5c0e886a1588b80acbec46b",
+          "remote": true
+        },
+        "codex/debug-menu-remaining130-integration": {
+          "tip": "d6da1305648e6b11c93833acdb0e1f821947154e",
+          "remote": true
+        },
+        "codex/debug-menu-renderer-environment-fixes": {
+          "tip": "235701ca33ed8c1a6477b4d3659139bb3213b789",
+          "remote": true
+        },
+        "codex/debug-menu-renderer-state-chain": {
+          "tip": "21c2be1c76cadf99afab79c15ef3ea69df437865",
+          "remote": true
+        },
+        "codex/debug-menu-reviewed-runtime-owners": {
+          "tip": "f98a8cb5b7868e8a06563c0b4ea4a75cf352e103",
+          "remote": true
+        },
+        "codex/debug-menu-sampler-producer-repair": {
+          "tip": "2bdcd5597bdef3b9602f72fbdda4bbfae0b2b83a",
+          "remote": true
+        },
+        "codex/debug-menu-scene-shadow-review-fixes": {
+          "tip": "968519acc1a97c59bc2e170445477529cdc4cb02",
+          "remote": true
+        },
+        "codex/debug-menu-scene-source-integration": {
+          "tip": "888cfd13157dca78d957eb3b71a0afd671305698",
+          "remote": true
+        },
+        "codex/debug-menu-stack-length": {
+          "tip": "5ad64d67f184bacf7795c9328d0e3109bbe6d4d0",
+          "remote": true
+        },
+        "codex/debug-menu-supporting-integration": {
+          "tip": "058f170727a18a2dc7654c48505b613868392df9",
+          "remote": true
+        },
+        "codex/debug-menu-traffic-physical-route-150": {
+          "tip": "e334f93fb2cb1056547bc0211f6c4e81a913ff87",
+          "remote": true
+        },
+        "codex/debug-menu-traffic-readers-20261019": {
+          "tip": "8aa86256bd2109776fc499d6da7a96a80cdbe254",
+          "remote": true
+        },
+        "codex/debug-menu-world-network130": {
+          "tip": "ed232a940f3f3657289bc324dd25d7c9b1ed8907",
+          "remote": true
+        }
+      },
+      "local_deleted": 22,
+      "remote_deleted": 22,
+      "local_count_after": 49,
+      "all_tips_reachable_from_published_anchor": true,
+      "worktrees_and_unmerged_refs_retained": true
+    },
+    {
+      "name": "workflow",
+      "published_branch": "main",
+      "published_anchor": "3fb5d6d6e4ab1fe7d512fdfa2d62f74ed1134f8d",
+      "retired": {
+        "codex/debug-menu-traffic-physical-route-150": {
+          "tip": "7fb598e12408960d679c9975626fb73f526b09ed",
+          "remote": true
+        }
+      },
+      "local_deleted": 1,
+      "remote_deleted": 1,
+      "local_count_after": 3,
+      "all_tips_reachable_from_published_anchor": true,
+      "worktrees_and_unmerged_refs_retained": true
+    }
+  ],
+  "policy": "Retire owned campaign branches after their commits reach the published integration branch, when no worktree, agent or open PR needs them. Preserve active and unmerged branches. Save exact branch tips; use exact leases for remote deletion. Reuse active branches rather than creating a new one for every checkpoint.",
+  "checks": {
+    "open_prs_checked_in_both_repositories": true,
+    "attached_worktrees_excluded": true,
+    "local_and_remote_tips_matched_before_deletion": true,
+    "remote_absence_confirmed_after_deletion": true,
+    "worktrees_or_files_removed": false
+  }
+}
