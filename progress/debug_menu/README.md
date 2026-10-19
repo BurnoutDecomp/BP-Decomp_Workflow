@@ -89,6 +89,14 @@ four-path checkpoint is committed and pushed, with integrated review, build and
 native checks still pending. The lower loading spine and complete GUI bridge
 remain open. The normal folder contains the separate dev hotfix `c2400d4f3` above.
 
+The [GUI/runtime core](gui_runtime_core_20261019.json) at `4c2bc973e` is now pushed
+on the same recovery branch: 37 production source paths and three existing
+regression files differ from dev. It recovers the full GUI wrapper/direct builders,
+the player-count output seat, component teardown and 23 missing action branches.
+The translator represents 130/188 explicit original action IDs; this is separate
+from debug registrations and native behavior. Further proposals reach137/188 but
+are still unapplied. Review, hosted build/fixtures and native checks remain open.
+
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
 removed; real completion requires Traffic, RaceCar, WorldGraphics and GUI replies.
@@ -114,7 +122,8 @@ test must use only the instance-scoped input events.
 
 Full candidate builds can instead use the manual **Check Candidate Build**
 workflow with an exact 40-hex `b5_commit`. It runs the canonical shipping build
-on GitHub-hosted Windows 2022, checks toolchain/source/output attribution and
+on GitHub-hosted Windows 2022, can optionally run the existing profile/GUI
+production fixtures, checks toolchain/source/output attribution and
 keeps a one-day artifact with matching runtime DLLs. Its current-dev run passed;
 build success does not establish gameplay parity. Refresh the playable folder
 after meaningful dev merges, preserving a previous build. Reuse current integration

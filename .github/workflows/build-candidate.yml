@@ -7,6 +7,11 @@ on:
         description: Exact 40-hex commit in BurnoutDecomp/b5-decomp
         required: true
         type: string
+      run_regressions:
+        description: Run the existing profile-delivery and GUI-interface production fixtures
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -50,12 +55,14 @@ jobs:
           CANDIDATE_WORKFLOW_SHA: ${{ github.workflow_sha }}
           CANDIDATE_WORKFLOW_REF: ${{ github.workflow_ref }}
           CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
+          CANDIDATE_RUN_REGRESSIONS: ${{ inputs.run_regressions }}
           GH_TOKEN: ${{ github.token }}
           BRN_EXE_HASH_DEPS: "1"
           BRN_EXE_JOBS: "4"
         run: |
           ./ci/check-candidate-build.ps1 -B5Commit $env:CANDIDATE_B5_SHA `
-            -WorkflowSha $env:CANDIDATE_WORKFLOW_SHA -Jobs 4
+            -WorkflowSha $env:CANDIDATE_WORKFLOW_SHA -Jobs 4 `
+            -RunRegressions:($env:CANDIDATE_RUN_REGRESSIONS -eq 'true')
 
       - name: Save successful candidate objects
         if: success()
