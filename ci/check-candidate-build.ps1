@@ -25,6 +25,7 @@ $ArtifactRoot = Join-Path $WorkRoot 'artifacts'
 $GameOut = Join-Path $Root 'build/game'
 New-Item -ItemType Directory -Force -Path $ArtifactRoot | Out-Null
 $NativeCommands = [System.Collections.Generic.List[object]]::new()
+$RuntimeOutputs = @{}
 $ExitCode = 1
 $NativeFailureCode = 0
 $Receipt = [ordered]@{
@@ -103,8 +104,11 @@ try {
     $Receipt.required_submodules = Get-GitText @('-C', $SourceRoot, 'submodule', 'status', '--', 'vendor/EABase', 'vendor/EASTL', 'vendor/EAThread')
     Assert-CleanTrees
 
-    $clPath = (Get-Command cl.exe -CommandType Application).Source
-    $linkPath = (Get-Command link.exe -CommandType Application).Source
+    $clPath = (Get-Command cl.exe -CommandType Application -All | Select-Object -First 1).Source
+    $linkPath = Join-Path (Split-Path -Parent $clPath) 'link.exe'
+    if ((Get-Command link.exe -CommandType Application -All | Select-Object -First 1).Source -ne $linkPath) {
+        throw 'The linker on PATH must belong to the selected MSVC compiler.'
+    }
     $clVersion = [Diagnostics.FileVersionInfo]::GetVersionInfo($clPath)
     if ($env:VSCMD_ARG_TGT_ARCH -ne 'x64' -or $env:VSINSTALLDIR -notmatch '\\2022\\' -or $clVersion.FileMajorPart -ne 19) {
         throw 'Expected the Windows 2022 / Visual Studio 2022 MSVC x64 toolchain.'
@@ -139,6 +143,16 @@ try {
         xaudio2_version = (Get-Content -LiteralPath (Join-Path $SourceRoot 'vendor/xaudio2redist/VERSION.txt') -Raw).Trim()
         xaudio2_header = Get-FileRecord (Join-Path $SourceRoot 'vendor/xaudio2redist/include/xaudio2Redist.h')
     }
+    # Match the shipping bat's two runtime staging sources. Include exactly these
+    # DLLs in the build artifact so a playable install has the matching binaries.
+    $ffmpegDlls = @(Get-ChildItem -LiteralPath (Join-Path $ffmpeg 'bin') -Filter '*.dll' -File)
+    if ($ffmpegDlls.Count -eq 0) { throw 'Prebuilt FFmpeg runtime DLLs are missing.' }
+    $runtimeFiles = @($ffmpegDlls) + @(Get-Item -LiteralPath (Join-Path $SourceRoot 'vendor/xaudio2redist/bin/x64/xaudio2_9redist.dll'))
+    foreach ($file in $runtimeFiles) {
+        if ($RuntimeOutputs.ContainsKey($file.Name)) { throw "Duplicate runtime name: $($file.Name)" }
+        $RuntimeOutputs[$file.Name] = Get-FileRecord $file.FullName
+    }
+    $Receipt.expected_runtime_outputs = $RuntimeOutputs
     Assert-CleanTrees
 
     # Never accept a cached or prior exe/map/stamp as proof of this link.
@@ -152,6 +166,13 @@ try {
     foreach ($name in $OutputNames) {
         $path = Join-Path $GameOut $name
         if (-not (Test-Path -LiteralPath $path) -or (Get-Item -LiteralPath $path).Length -eq 0) { throw "Build output is missing or empty: $name" }
+    }
+    foreach ($name in $RuntimeOutputs.Keys) {
+        $path = Join-Path $GameOut $name
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or
+            (Get-FileRecord $path).sha256 -ne $RuntimeOutputs[$name].sha256) {
+            throw "Staged runtime DLL does not match its dependency: $name"
+        }
     }
     $cgsmap = Join-Path $GameOut 'Burnout_PC.cgsmap'
     $reader = [IO.BinaryReader]::new([IO.File]::OpenRead($cgsmap))
@@ -181,7 +202,7 @@ try {
     $Receipt.exit_code = $ExitCode
     $Receipt.finished_utc = [DateTime]::UtcNow.ToString('o')
     $Receipt.outputs = @{}
-    foreach ($name in $OutputNames) {
+    foreach ($name in (@($OutputNames) + @($RuntimeOutputs.Keys))) {
         $path = Join-Path $GameOut $name
         if (Test-Path -LiteralPath $path -PathType Leaf) {
             Copy-Item -LiteralPath $path -Destination (Join-Path $ArtifactRoot $name)
