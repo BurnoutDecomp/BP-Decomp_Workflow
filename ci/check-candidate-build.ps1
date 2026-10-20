@@ -14,7 +14,8 @@ param(
     [switch] $RunResourceRegressions,
     [switch] $RunGuiIORegressions,
     [switch] $RunGuiAnimationRegressions,
-    [switch] $RunStartupIORegressions
+    [switch] $RunStartupIORegressions,
+    [switch] $RunGuiLicenseRegressions
 )
 
 Set-StrictMode -Version Latest
@@ -42,7 +43,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -274,6 +275,45 @@ try {
         }
         $Receipt.regressions.negative_controls['gui-animation-omit-channel-construct'] = @{ status = 'expected_behavior_failure'; exit_code = $code; log = $logName }
         $Receipt.regressions.gui_animation_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+        Assert-CleanTrees
+    }
+
+    # Actual production event-order fixture; native startup and gameplay remain separate.
+    if ($RunGuiLicenseRegressions) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.gui_license_status = 'running'
+        Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+        foreach ($relative in @('tests/run_gui_license_intro_handoff.py', 'tests/GuiLicenseIntroHandoff.cpp')) {
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+        }
+        $licenseRunner = Join-Path $SourceRoot 'tests/run_gui_license_intro_handoff.py'
+        $licenseRoot = Join-Path $ArtifactRoot 'gui-license-regressions'
+        $positiveDir = Join-Path $licenseRoot 'positive'
+        Invoke-Native py @('-3', '-B', $licenseRunner, '--output-dir', $positiveDir) 'regressions.log'
+        $positive = Get-Content -Raw -LiteralPath (Join-Path $positiveDir 'result.json') | ConvertFrom-Json
+        $positiveLog = Get-Content -Raw -LiteralPath (Join-Path $positiveDir 'run.stdout.txt')
+        if ($positive.process_exit_code -ne 0 -or $null -eq $positive.numeric -or
+            $positive.numeric.checks -ne 64 -or $positive.numeric.failures -ne 0 -or
+            -not $positiveLog.Contains('GUI_LICENSE_INTRO_HANDOFF: 64 checks, 0 failures')) {
+            throw 'GUI licence handoff positive fixture did not execute its expected64 numeric checks.'
+        }
+        $negativeDir = Join-Path $licenseRoot 'old-tail-cache'
+        $logName = 'gui-license-negative-old-tail-cache.log'
+        & py -3 -B $licenseRunner --old-tail-cache --output-dir $negativeDir 2>&1 |
+            Tee-Object -FilePath (Join-Path $ArtifactRoot $logName) | Out-Host
+        $code = $LASTEXITCODE
+        $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', $licenseRunner, '--old-tail-cache', '--output-dir', $negativeDir); exit_code = $code; expected_failure = $true })
+        $negative = Get-Content -Raw -LiteralPath (Join-Path $negativeDir 'result.json') | ConvertFrom-Json
+        $negativeLog = (Get-Content -Raw -LiteralPath (Join-Path $negativeDir 'run.stdout.txt')) +
+            (Get-Content -Raw -LiteralPath (Join-Path $negativeDir 'run.stderr.txt'))
+        if ($code -ne 1 -or $negative.process_exit_code -ne 1 -or $null -eq $negative.numeric -or
+            $negative.numeric.checks -ne 64 -or $negative.numeric.failures -lt 1 -or
+            -not $negativeLog.Contains('FAIL license profile bound before cache use')) {
+            throw 'GUI licence handoff old-tail control failed before its intended profile-binding witness.'
+        }
+        $Receipt.regressions.negative_controls['gui-license-old-tail-cache'] = @{ status = 'expected_behavior_failure'; exit_code = $code; log = $logName }
+        $Receipt.regressions.gui_license_status = 'pass'
         $Receipt.regressions.status = 'partial_selected_fixtures_pass'
         Assert-CleanTrees
     }
@@ -519,6 +559,7 @@ try {
     if ($Receipt.regressions.gui_io_status -eq 'running') { $Receipt.regressions.gui_io_status = 'fail' }
     if ($Receipt.regressions.gui_animation_status -eq 'running') { $Receipt.regressions.gui_animation_status = 'fail' }
     if ($Receipt.regressions.startup_io_status -eq 'running') { $Receipt.regressions.startup_io_status = 'fail' }
+    if ($Receipt.regressions.gui_license_status -eq 'running') { $Receipt.regressions.gui_license_status = 'fail' }
     if ($Receipt.regressions.hud_status -eq 'running') { $Receipt.regressions.hud_status = 'fail' }
     if ($Receipt.regressions.remaining_status -eq 'running') { $Receipt.regressions.remaining_status = 'fail' }
     if ($Receipt.regressions.status -eq 'running') { $Receipt.regressions.status = 'fail' }
