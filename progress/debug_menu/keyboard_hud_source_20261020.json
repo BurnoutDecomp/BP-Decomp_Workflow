@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-20",
+  "source": "4ad790750fbf8495161823f977580137c0368b85",
+  "source_paths": 12,
+  "new_action_ids": [
+    252,
+    253,
+    254,
+    256,
+    257,
+    258,
+    259,
+    260,
+    266,
+    267,
+    268,
+    269,
+    270,
+    271
+  ],
+  "source_patch_sha256": "c546be0b9cf2403c9237e442ac9994543f58dcad08d94e679148febbb23c95bb",
+  "source_review": {
+    "verdict": "scoped_pass",
+    "path": "scratch/DEBUG_MENU_1011/keyboard_hud_integration_20261020/REVIEW.md",
+    "sha256": "4ca7def74f939cfa21e4f60f7f66c5a70fad91781727cc7e567f57c0d1fb490e"
+  },
+  "dev_delivery": false,
+  "native_gui_phases_selected": false,
+  "normal_package_changed": false,
+  "final_debug_entry_dispositions_changed": false,
+  "independent_gui_io_run": {
+    "run_id": 39408530723,
+    "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39408530723",
+    "source": "4ad790750fbf8495161823f977580137c0368b85",
+    "workflow": "b1bc65ae7d5fe56166c4c929ec6acd48c590fe46",
+    "checks_passed": 546,
+    "controls_passed": 4,
+    "results": {
+      "interpreter": {
+        "process_exit_code": 0,
+        "numeric": {
+          "checks": 169,
+          "failures": 0
+        },
+        "receipt_sha256": "c35afccef85f92ae01377ffc71518d4474ffebc548dd248a59f2ccf175ab657d",
+        "executable_sha256": "400478dba134b81c545556d1aa2b39e4849dc79d99544c4c7be690bf95fd0eae"
+      },
+      "interpreter-clear-input": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 169,
+          "failures": 8
+        },
+        "receipt_sha256": "c320263b887d422f1e09d80426ff2b585fa4322b053a74cf2cffd0acc0217821",
+        "executable_sha256": "42befbff842634bc977b874e26578040c5f610161f1b4cfe373d4b9877d082d1"
+      },
+      "interpreter-old-capacity": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 169,
+          "failures": 8
+        },
+        "receipt_sha256": "dc583ae04a0e5d13589ba67c61317dc80d9535824859f2324ec8d4eaeac56ff1",
+        "executable_sha256": "f57ffbc49f29673673eeb70a7ffa1f5ff4b57244091782a4e715f00e3119b0d7"
+      },
+      "model": {
+        "process_exit_code": 0,
+        "numeric": {
+          "checks": 377,
+          "failures": 0
+        },
+        "receipt_sha256": "3e97027ba60461702ec179f45e377759615a4683a2360f2e003619e1bb7b22ab",
+        "executable_sha256": "2c5d9e0a08b2121929df03b301211222d84fc9262d8120dd7061b1ea1c9cd34f"
+      },
+      "model-base-only": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 65,
+          "failures": 24
+        },
+        "receipt_sha256": "7a4600833c170b82e8382cc245772ced43842166c757a2c28eaa6e87b31a7e7f",
+        "executable_sha256": "4e08d28d45fa3c2c74cfa8ec18972671fc99058ed7fb43619a2b2b9adf6ebd6f"
+      },
+      "model-retain-view": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 377,
+          "failures": 12
+        },
+        "receipt_sha256": "0d11dc6de244dddf8d166cbd312607f8c541aeb2b4f728567be6d77f3881399f",
+        "executable_sha256": "cfaddb4a47a6e87607dca47fc4737238075d3b12d0691ecd0eb2e8c43f738f50"
+      }
+    },
+    "receipt_sha256": "1ac02e575dfc842702544379c12faeefbc104d9c49a5776277f10bc50d4fc031",
+    "overall_candidate_validated": false,
+    "shipping_compile": {
+      "translation_units": 2985,
+      "compiled": 678,
+      "cached": 2307,
+      "failed": 0
+    },
+    "shipping_link": "fail",
+    "link_boundaries": [
+      "HardwareSku class-static GetSku/FindLanguage provider/API",
+      "BrnGuiKeyboard Construct/Destruct TUs not yet selected"
+    ],
+    "native": "not_run",
+    "normal_package_changed": false
+  },
+  "limits": [
+    "HardwareSku PC backend/API remains unresolved.",
+    "Native GUI activation, keyboard Show backend and replay buffer/registration readiness remain separate gates.",
+    "Source arms and isolated IO checks do not verify debug-menu behavior."
+  ]
+}
