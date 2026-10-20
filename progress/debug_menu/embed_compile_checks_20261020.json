@@ -1,0 +1,177 @@
+{
+  "date": "2026-10-20",
+  "status": "reviewed_and_hosted_compiled_private_candidate",
+  "source": "c68fc7279b85eaa5701120eb757ce0dd851ab83d",
+  "workflow": "8f31e67e5cef0f8222a9e597767e74b1a1cc9611",
+  "source_paths": 3,
+  "parent_paths": 1,
+  "runtime_body_changes": 0,
+  "repair": [
+    "Remove obsolete reserved CPU handle hole and assert actual Network/Replay offsets",
+    "Bind the staged PreWorldInputBuffer/OutputBuffer/bool controller bridge signature",
+    "Compile both probes in CMake and shipping build list"
+  ],
+  "review": "pass",
+  "review_sha256": "7bca94c529ee845033e5e01e0f857a3e1935b649fe5ce17dd4f456d93f9d43dd",
+  "hosted": {
+    "source": "c68fc7279b85eaa5701120eb757ce0dd851ab83d",
+    "workflow": "8f31e67e5cef0f8222a9e597767e74b1a1cc9611",
+    "run_id": 39456428693,
+    "input_receipt_sha256": "ced51ef99c8257e7f1d6b6691709141f69be8702ac5c3657cb1e007c57d679b9",
+    "build_and_selected_fixtures_pass": true,
+    "total_checks": 447,
+    "numeric_checks": 416,
+    "wiring_checks": 31,
+    "behavior_controls": 10,
+    "positive_summaries": [
+      {
+        "checks": 75,
+        "wiring": 7,
+        "summary": "run_gui_animation_initialization: wiring 7/7, numeric 68/68; total 75/75 pass (0 fail)"
+      },
+      {
+        "checks": 70,
+        "wiring": 8,
+        "summary": "run_startup_io_ownership: wiring 8/8, numeric 62/62; total 70/70 pass (0 fail)"
+      },
+      {
+        "checks": 22,
+        "wiring": 8,
+        "summary": "run_profile_delivery: wiring 8/8, numeric 14/14; total 22/22 pass (0 fail)"
+      },
+      {
+        "checks": 23,
+        "wiring": 2,
+        "summary": "run_fxgs2_gui_iface: wiring 2/2, numeric 21/21; total 23/23 pass (0 fail)"
+      },
+      {
+        "checks": 103,
+        "wiring": 6,
+        "summary": "run_pc_bundle_ownership: wiring 6/6, numeric 97/97; total 103/103 pass (0 fail)"
+      },
+      {
+        "checks": 14,
+        "wiring": 0,
+        "summary": "run_pc_resource_shuttle: wiring 0/0, numeric 14/14; total 14/14 pass (0 fail)"
+      },
+      {
+        "checks": 27,
+        "wiring": 0,
+        "summary": "run_pc_gui_pool_acquire: wiring 0/0, numeric 27/27; total 27/27 pass (0 fail)"
+      },
+      {
+        "checks": 24,
+        "wiring": 0,
+        "summary": "PoolCreateProtocol: 24 checks, 0 failures; mode=protocol"
+      },
+      {
+        "checks": 22,
+        "wiring": 0,
+        "summary": "PoolCreateProtocol: 22 checks, 0 failures; mode=layout"
+      },
+      {
+        "checks": 67,
+        "wiring": 0,
+        "summary": "GameDataPoolHierarchy: 67 checks, 0 failures"
+      }
+    ],
+    "startup_fixtures": {
+      "positive": {
+        "numeric": {
+          "checks": 62,
+          "failures": 0
+        },
+        "process_exit_code": 0,
+        "executable_sha256": "1e7f30e7705a14187026073aadaa72505e1e61c68acfb943a3be10065e5ff363",
+        "receipt_sha256": "820111cd5b0990f22d379e2a9c0d179c738b2fa00446a4b8ec660460718ae896",
+        "production_inputs_verified": 18
+      },
+      "base-only-postworld": {
+        "numeric": {
+          "checks": 62,
+          "failures": 22
+        },
+        "process_exit_code": 1,
+        "executable_sha256": "15e33228138786d9f334fa5ec5817673dd05c702d7680b7668d2d979c969c790",
+        "receipt_sha256": "ff4d95756ddca43799485a5ae7a59e1cba660ab55869986799012b5d59860c59",
+        "production_inputs_verified": 18
+      },
+      "legacy-gui-write-lock": {
+        "numeric": {
+          "checks": 62,
+          "failures": 6
+        },
+        "process_exit_code": 1,
+        "executable_sha256": "f2cd68d21bb6df1174186f49916c2086d31fde14361ce6b886806e3f90f24462",
+        "receipt_sha256": "3ec9258307c2d4db75ba36d02f11484e568d46680d0a44a966109e0ba529b129",
+        "production_inputs_verified": 18
+      }
+    },
+    "shipping_compile": {
+      "selected_tus": 2979,
+      "compiled": 2,
+      "cached": 2977,
+      "failed": 0
+    },
+    "shipping_link": "pass",
+    "outputs": {
+      "Burnout_PC.cgsmap": {
+        "bytes": 3011344,
+        "sha256": "dfbc392ed16fb00a77d89b757af60bd9fcc4f8404f1a5a75c8b156f23d53c299"
+      },
+      "swresample-7.dll": {
+        "bytes": 201728,
+        "sha256": "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c"
+      },
+      "swscale-10.dll": {
+        "bytes": 955904,
+        "sha256": "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de"
+      },
+      "Burnout_PC.exe": {
+        "bytes": 11089920,
+        "sha256": "c29a3cf60c53559665d67f99410b0f1c18e4e2a004004e9a3937107ffb157d8a"
+      },
+      "avdevice-63.dll": {
+        "bytes": 109056,
+        "sha256": "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9"
+      },
+      "avutil-61.dll": {
+        "bytes": 978944,
+        "sha256": "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb"
+      },
+      "avcodec-63.dll": {
+        "bytes": 2179072,
+        "sha256": "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b"
+      },
+      "Burnout_PC.map": {
+        "bytes": 17562317,
+        "sha256": "8b29477d65880ebfb7ac00d86c8507ef3fd8e675f2a458cf67e4d0c67c6aa17d"
+      },
+      "avfilter-12.dll": {
+        "bytes": 234496,
+        "sha256": "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276"
+      },
+      "Burnout_PC.exe.provenance.json": {
+        "bytes": 467,
+        "sha256": "d0adee0ff47b3cce4bc767d0cc3ad035d1ed0aa1d4b84f510cc20eb8f4cf980a"
+      },
+      "xaudio2_9redist.dll": {
+        "bytes": 997400,
+        "sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c"
+      },
+      "avformat-63.dll": {
+        "bytes": 644608,
+        "sha256": "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c"
+      }
+    },
+    "symbols": 23526,
+    "native_startup": "not_run",
+    "normal_package_changed": false
+  },
+  "whole_cmake_build_run": false,
+  "dev_merge": "pending",
+  "source_branch": "codex/freeburn-animation-initialization-20261020",
+  "parent_branch": "codex/startup-compile-checks-20261020",
+  "normal_package_changed": false,
+  "final_debug_dispositions_changed": 0
+}

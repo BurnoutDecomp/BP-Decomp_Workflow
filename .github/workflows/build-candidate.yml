@@ -27,6 +27,11 @@ on:
         required: false
         default: false
         type: boolean
+      run_gui_license_regressions:
+        description: Run fresh-profile licence handoff checks and the old event-order control
+        required: false
+        default: false
+        type: boolean
       run_startup_io_regressions:
         description: Run input-buffer initialization and GUI GameData lock ownership checks
         required: false
@@ -92,6 +97,7 @@ jobs:
           CANDIDATE_RUN_GUI_IO_REGRESSIONS: ${{ inputs.run_gui_io_regressions }}
           CANDIDATE_RUN_GUI_ANIMATION_REGRESSIONS: ${{ inputs.run_gui_animation_regressions }}
           CANDIDATE_RUN_STARTUP_IO_REGRESSIONS: ${{ inputs.run_startup_io_regressions }}
+          CANDIDATE_RUN_GUI_LICENSE_REGRESSIONS: ${{ inputs.run_gui_license_regressions }}
           GH_TOKEN: ${{ github.token }}
           BRN_EXE_HASH_DEPS: "1"
           BRN_EXE_JOBS: "4"
@@ -104,7 +110,8 @@ jobs:
             -RunResourceRegressions:($env:CANDIDATE_RUN_RESOURCE_REGRESSIONS -eq 'true') `
             -RunGuiIORegressions:($env:CANDIDATE_RUN_GUI_IO_REGRESSIONS -eq 'true') `
             -RunGuiAnimationRegressions:($env:CANDIDATE_RUN_GUI_ANIMATION_REGRESSIONS -eq 'true') `
-            -RunStartupIORegressions:($env:CANDIDATE_RUN_STARTUP_IO_REGRESSIONS -eq 'true')
+            -RunStartupIORegressions:($env:CANDIDATE_RUN_STARTUP_IO_REGRESSIONS -eq 'true') `
+            -RunGuiLicenseRegressions:($env:CANDIDATE_RUN_GUI_LICENSE_REGRESSIONS -eq 'true')
 
       - name: Save successful candidate objects
         if: success()
@@ -130,6 +137,7 @@ jobs:
             build/candidate/artifacts/gui-io-regressions/**
             build/candidate/artifacts/gui-animation-regressions/**
             build/candidate/artifacts/startup-io-regressions/**
+            build/candidate/artifacts/gui-license-regressions/**
             build/candidate/artifacts/hud-regressions/**
           if-no-files-found: error
           retention-days: 1
