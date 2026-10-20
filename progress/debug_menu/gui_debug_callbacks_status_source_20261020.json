@@ -2,7 +2,7 @@
   "date": "2026-10-20",
   "source": "60d1ef740a4dc6f15bc8ed8d346c4e2df10bbcfb",
   "source_paths": 8,
-  "status": "private_checkpoint_combined_source_review_in_progress",
+  "status": "source_reviewed_with_passing_followup",
   "patch_sha256": "6a3373adf8ed11b7dfc523716505fe383261671d150885c8a89b792daaf894c6",
   "recovered": [
     "14primitive callbacks and12attested inline helpers",
@@ -11,10 +11,25 @@
     "Typed complete StateLoadingHelper snapshots",
     "Actual SatNav/Cache queue-only C++constructors and teardown; original empty base calls de-inlined"
   ],
-  "review_finding_in_progress": "Cache status renderer missing native NULLSTRING fallback; additional rendering predicates are still being reviewed.",
   "compiled": false,
   "native_game_run": false,
   "native_phase_or_owner_containment_selected": false,
   "normal_package_changed": false,
-  "final_debug_dispositions_changed": 0
+  "final_debug_dispositions_changed": 0,
+  "original_review": {
+    "verdict": "fail",
+    "path": "scratch/DEBUG_MENU_1011/gui_debug_providers_lifecycle_integration_20261020/REVIEW.md",
+    "sha256": "6d96d5da92f734ecb51c2e85295397af507c2e3c4d418777e3fece806801daac",
+    "sole_finding": "P3 Loading filter accepted negative values; native accepts exactly0/1/3."
+  },
+  "followup_review": {
+    "verdict": "pass",
+    "source": "700e49635f6f4caca0582988e4e66db452947977",
+    "path": "scratch\\DEBUG_MENU_1011\\gui_debug_actions_profile_followup_20261020\\REVIEW.md",
+    "sha256": "0f2e539fa0234e81f8a24d4907f6c8d963295da9a756e0d4302e46a8dee4ad55",
+    "paths": 13,
+    "preliminary_null_finding": "withdrawn: canonical lookup returns a nonnull name or Unknown"
+  },
+  "hosted_selected_compile_report": "gui_callbacks_hosted_20261020.json",
+  "all_changed_provider_tus_compiled": false
 }
