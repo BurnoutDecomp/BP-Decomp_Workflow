@@ -40,7 +40,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_io_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_io_status = 'not_requested'; hud_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -184,6 +184,57 @@ try {
         Assert-CleanTrees
     }
 
+    # HUD fixtures are independent of native GUI platform linking. Preserve
+    # execution receipts before the exe gate, without validating a partial candidate.
+    if ($RunHudRegressions) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.hud_status = 'running'
+        Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+        foreach ($relative in @('tests/run_fxgs_hud_crashes.py', 'tests/FxGsHudCrashes.cpp',
+                                'tests/run_fxgs_online_roadrage_hud.py', 'tests/FxGsOnlineRoadRageHud.cpp',
+                                'tests/fxgs_common.py')) {
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+        }
+        $hudRoot = Join-Path $ArtifactRoot 'hud-regressions'
+        $hudFixtures = @(
+            @{ name = 'crashes'; runner = 'tests/run_fxgs_hud_crashes.py'; tag = 'FxGsHudCrashes'; checks = 38 },
+            @{ name = 'road-rage'; runner = 'tests/run_fxgs_online_roadrage_hud.py'; tag = 'FxGsOnlineRoadRageHud'; checks = 19 }
+        )
+        foreach ($fixture in $hudFixtures) {
+            $fixtureDir = Join-Path $hudRoot $fixture.name
+            Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot $fixture.runner), '--output-dir', $fixtureDir) 'regressions.log'
+            $result = Get-Content -Raw -LiteralPath (Join-Path $fixtureDir 'result.json') | ConvertFrom-Json
+            $log = Get-Content -Raw -LiteralPath (Join-Path $fixtureDir 'run.stdout.txt')
+            $witness = [regex]::Escape($fixture.tag) + ':\s+' + $fixture.checks + ' checks, 0 failures'
+            if ($result.process_exit_code -ne 0 -or $null -eq $result.numeric -or
+                $result.numeric.checks -ne $fixture.checks -or $result.numeric.failures -ne 0 -or $log -notmatch $witness) {
+                throw "HUD fixture $($fixture.name) did not execute its expected numeric checks."
+            }
+        }
+        $hudControls = @(
+            @{ name = 'legacy-team-predicate'; runner = 'tests/run_fxgs_online_roadrage_hud.py'; flag = '--legacy-team-predicate'; checks = 19; witness = 'FAIL: 164 first team != 1 remains eligible' },
+            @{ name = 'omit-team-tail'; runner = 'tests/run_fxgs_hud_crashes.py'; flag = '--omit-team-tail'; checks = 38; witness = 'FAIL: team-change tail posts ordered 254 records outside mode-specific arms' }
+        )
+        foreach ($control in $hudControls) {
+            $controlDir = Join-Path $hudRoot $control.name
+            $logName = 'hud-negative-' + $control.name + '.log'
+            & py -3 -B (Join-Path $SourceRoot $control.runner) $control.flag --output-dir $controlDir 2>&1 |
+                Tee-Object -FilePath (Join-Path $ArtifactRoot $logName) | Out-Host
+            $code = $LASTEXITCODE
+            $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', (Join-Path $SourceRoot $control.runner), $control.flag, '--output-dir', $controlDir); exit_code = $code; expected_failure = $true })
+            $result = Get-Content -Raw -LiteralPath (Join-Path $controlDir 'result.json') | ConvertFrom-Json
+            $log = Get-Content -Raw -LiteralPath (Join-Path $controlDir 'run.stderr.txt')
+            if ($code -eq 0 -or $result.process_exit_code -eq 0 -or $null -eq $result.numeric -or
+                $result.numeric.checks -ne $control.checks -or $result.numeric.failures -lt 1 -or -not $log.Contains($control.witness)) {
+                throw "HUD negative control $($control.name) failed before its intended behavior witness."
+            }
+            $Receipt.regressions.negative_controls['hud-' + $control.name] = @{ status = 'expected_behavior_failure'; exit_code = $code; log = $logName }
+        }
+        $Receipt.regressions.hud_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+        Assert-CleanTrees
+    }
+
     # Proven publisher prerequisites: release FFmpeg, NuGet XAudio2, vendored Lua.
     $ffmpeg = Join-Path $SourceRoot 'vendor/ffmpeg-build'
     $archive = Join-Path $WorkRoot 'ffmpeg-build.zip'
@@ -297,30 +348,6 @@ try {
                 $Receipt.regressions.negative_controls[$control.flag] = @{ status = 'expected_behavior_failure'; exit_code = $controlCode; log = $logName }
             }
         }
-        if ($RunHudRegressions) {
-            foreach ($relative in @('tests/run_fxgs_hud_crashes.py', 'tests/FxGsHudCrashes.cpp',
-                                    'tests/run_fxgs_online_roadrage_hud.py', 'tests/FxGsOnlineRoadRageHud.cpp')) {
-                $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
-            }
-            foreach ($runner in @('tests/run_fxgs_hud_crashes.py', 'tests/run_fxgs_online_roadrage_hud.py')) {
-                Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot $runner)) 'regressions.log'
-            }
-            # Change only the team predicate in the extracted body. A compiler/setup
-            # failure cannot satisfy the numeric summary and specific behavior witness.
-            $hudRunner = Join-Path $SourceRoot 'tests/run_fxgs_online_roadrage_hud.py'
-            $hudLogName = 'hud-negative-legacy-team-predicate.log'
-            $hudLogPath = Join-Path $ArtifactRoot $hudLogName
-            & py -3 -B $hudRunner --legacy-team-predicate 2>&1 | Tee-Object -FilePath $hudLogPath | Out-Host
-            $hudCode = $LASTEXITCODE
-            $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', $hudRunner, '--legacy-team-predicate'); exit_code = $hudCode; expected_failure = $true })
-            $hudLog = Get-Content -Raw -LiteralPath $hudLogPath
-            if ($hudCode -eq 0 -or
-                $hudLog -notmatch 'FxGsOnlineRoadRageHud:\s+19 checks, (?:[1-9]|1[0-8]) failures' -or
-                -not $hudLog.Contains('FAIL: 164 first team != 1 remains eligible')) {
-                throw 'HUD negative control did not expose the intended team-selection behavior failure.'
-            }
-            $Receipt.regressions.negative_controls['--legacy-team-predicate'] = @{ status = 'expected_behavior_failure'; exit_code = $hudCode; log = $hudLogName }
-        }
         if ($RunResourceRegressions) {
             foreach ($relative in @('tests/run_pool_create_protocol.py', 'tests/PoolCreateProtocol.cpp',
                                     'tests/run_pc_resource_shuttle.py', 'tests/PCResourceShuttle.cpp',
@@ -394,6 +421,7 @@ try {
     $ExitCode = 0
 } catch {
     if ($Receipt.regressions.gui_io_status -eq 'running') { $Receipt.regressions.gui_io_status = 'fail' }
+    if ($Receipt.regressions.hud_status -eq 'running') { $Receipt.regressions.hud_status = 'fail' }
     if ($Receipt.regressions.status -eq 'running') { $Receipt.regressions.status = 'fail' }
     if ($NativeFailureCode -ne 0) { $ExitCode = $NativeFailureCode }
     $Receipt.failure = $_.Exception.Message
