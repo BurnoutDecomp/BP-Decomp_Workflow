@@ -4,7 +4,7 @@
   "source": "3f847ca769f86e875d0e1078c552617156aa45f2",
   "branch": "codex/debug-menu-gamestate-source-integration-20261019",
   "dev": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
-  "status": "isolated_resource_integration_source_and_shipping_checks_pass_resource_fixture_execution_pending",
+  "status": "private_gui_owner_source_checkpoint_review_in_progress_previous_resource_suite_pass",
   "commits": [
     "782f31560a69ea935df1b8b35e2d1959360a943a",
     "a301e09418b4d4a72496ae79879641bb56073c6d",
@@ -253,27 +253,24 @@
       "sha256": "5b8b59c418df5aa190e102db1465fa733348b00f35993fd4658eb8861bac9439"
     }
   },
-  "updated_utc": "2026-10-20T08:39:42.224659+00:00",
-  "current_source": "dadb525906a32f58e5d9abeb4a7e1f79262c7a40",
+  "updated_utc": "2026-10-20T09:19:02.900932+00:00",
+  "current_source": "3f57bf01f209003c628815a024d09cd43ee85eda",
   "current_translator_inventory": {
-    "source": "dadb525906a32f58e5d9abeb4a7e1f79262c7a40",
+    "source": "3f57bf01f209003c628815a024d09cd43ee85eda",
     "original_explicit_ids": 188,
-    "unique_routed_ids": 155,
+    "unique_routed_ids": 165,
     "direct_case_labels": {
-      "main": 102,
+      "main": 112,
       "event_flow": 41,
       "free_roam": 13,
-      "total": 156
+      "total": 166
     },
     "duplicate_routed_ids": [
       2
     ],
-    "missing_unique_ids": 33,
+    "missing_unique_ids": 23,
     "missing_explicit_ids": [
       178,
-      213,
-      214,
-      219,
       222,
       223,
       224,
@@ -287,7 +284,6 @@
       258,
       259,
       260,
-      261,
       266,
       267,
       268,
@@ -295,14 +291,8 @@
       270,
       271,
       288,
-      289,
-      290,
-      291,
-      292,
-      293,
       294,
-      295,
-      298
+      295
     ],
     "new_unique_ids_since_a690": [
       162,
@@ -316,10 +306,20 @@
       189,
       211,
       212,
+      213,
+      214,
       215,
-      216
+      216,
+      219,
+      261,
+      289,
+      290,
+      291,
+      292,
+      293,
+      298
     ],
-    "counting_correction": "The earlier parser omitted inline case30. The independent token/brace parser includes it and excludes nested switches:155 unique IDs/156 labels,33 missing. a690 had142 unique IDs/143 labels; action2 is duplicated across routes.",
+    "counting_correction": "Independent token/brace parser includes inline case30, excludes nested switches and counts routed action2 once. Current checkpoint165 unique/166 labels,23 missing; source review and runtime remain separate.",
     "not_a_debug_registration_or_behavior_count": true,
     "scope": "Represented direct source routes only; producer, receiver, source review and native parity are separate claims.",
     "independent_audit": "gui_action_route_audit_20261020.json"
@@ -473,8 +473,148 @@
       "native": "not_run",
       "normal_package_changed": false
     },
-    "full_resource_suite": "pending_new_optional_hosted_selection",
+    "full_resource_suite": {
+      "source": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb",
+      "workflow": "871d3a988bec37b2369b28b6a764c6684d126e23",
+      "run_id": 39398332776,
+      "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39398332776",
+      "compile": {
+        "translation_units": 2977,
+        "compiled": 0,
+        "cached": 2977,
+        "failed": 0
+      },
+      "link": "pass",
+      "selected_checks_passed": 363,
+      "check_totals": {
+        "profile": 22,
+        "gui_interface": 23,
+        "apt_ownership": 103,
+        "hud_crashes": 39,
+        "online_roadrage_hud": 22,
+        "pool_protocol": 24,
+        "pool_layout": 22,
+        "resource_shuttle": 14,
+        "gui_pool_acquire": 27,
+        "game_data_pool_hierarchy": 67
+      },
+      "negative_controls": {
+        "pool-event-sentinel": {
+          "exit_code": 1,
+          "log": "pool-negative-event-sentinel.log",
+          "status": "expected_behavior_failure"
+        },
+        "--require-new-apt-resources": {
+          "exit_code": 1,
+          "log": "apt-negative--require-new-apt-resources.log",
+          "status": "expected_behavior_failure"
+        },
+        "pool-tag10": {
+          "exit_code": 1,
+          "log": "pool-negative-tag10.log",
+          "status": "expected_behavior_failure"
+        },
+        "pool-batch-count": {
+          "exit_code": 1,
+          "log": "pool-negative-batch-count.log",
+          "status": "expected_behavior_failure"
+        },
+        "--omit-apt-retain": {
+          "exit_code": 1,
+          "log": "apt-negative--omit-apt-retain.log",
+          "status": "expected_behavior_failure"
+        },
+        "--legacy-team-predicate": {
+          "exit_code": 1,
+          "log": "hud-negative-legacy-team-predicate.log",
+          "status": "expected_behavior_failure"
+        },
+        "pool-shared-buffer": {
+          "exit_code": 1,
+          "log": "pool-negative-shared-buffer.log",
+          "status": "expected_behavior_failure"
+        },
+        "--legacy-free-state-offset": {
+          "exit_code": 1,
+          "log": "apt-negative--legacy-free-state-offset.log",
+          "status": "expected_behavior_failure"
+        }
+      },
+      "receipt_sha256": "87fb61123c91a06473035c4eb554ddd1bce7e7adb695866605a69da26cc350de",
+      "executable": {
+        "sha256": "0458365a239075e28c48094cf0137ad5fba6540681b681b24e255245afb2501e",
+        "bytes": 11089408
+      },
+      "output_hashes_verified": 12,
+      "scope": "Production-body fixtures with explicit IO/heap doubles; source wiring checks included. No game or end-to-end parity claim.",
+      "native": "not_run",
+      "normal_package_changed": false
+    },
     "dev_delivery": false,
-    "native": "not_run"
+    "native": "not_run",
+    "fixture_link_repair_source": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb"
+  },
+  "gui_owner_action_followon_20261020": {
+    "date": "2026-10-20",
+    "source": "3f57bf01f209003c628815a024d09cd43ee85eda",
+    "base": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb",
+    "branch": "codex/debug-menu-gamestate-source-integration-20261019",
+    "source_paths": 34,
+    "source_patch_sha256": "444760f54de2e201bd2197df3bdebf0faec51a47460882d0f4273e05c4f5cc7e",
+    "packet": "scratch/DEBUG_MENU_1011/gui_action_owner_integration_20261020_02",
+    "recovered_source": [
+      "Canonical shared GUI/Model/Interpreter ownership, lifecycle and queues",
+      "Original monitor-owner bindings and pointer-bearing observer subscriptions",
+      "Ten additional image-gallery, mugshot, online-player, crash-skip and developer-challenge action routes"
+    ],
+    "new_unique_action_ids": [
+      213,
+      214,
+      219,
+      261,
+      289,
+      290,
+      291,
+      292,
+      293,
+      298
+    ],
+    "unique_routed_action_ids": 165,
+    "missing_action_ids": [
+      178,
+      222,
+      223,
+      224,
+      240,
+      241,
+      252,
+      253,
+      254,
+      256,
+      257,
+      258,
+      259,
+      260,
+      266,
+      267,
+      268,
+      269,
+      270,
+      271,
+      288,
+      294,
+      295
+    ],
+    "review": "in_progress_findings_require_followup",
+    "known_review_findings": [
+      "AAC setter does not override the newly declared observer method; coupled binding proposal exists separately.",
+      "New original assertion file literals need correct backslash escaping.",
+      "GUI tag523 needs an original one-byte representation."
+    ],
+    "hosted_build": "not_run_for_this_checkpoint",
+    "native_gui_phase_selected": false,
+    "dev_delivery": false,
+    "normal_package_changed": false,
+    "final_entry_dispositions_changed": false
   }
 }

@@ -95,24 +95,22 @@ TUs compile or validate from cache, and the executable links. These fixtures do
 not establish native GUI or debug-entry behavior. Full native GUI resource
 activation, normal InputPostWorld/START progression and startup/streaming checks
 remain open; the playable folder retains the separate Create Match repair above.
-The later action checkpoint `0c60cc363` passes its shipping build, **193 selected
-checks and three behavior negative controls**. It adds 13 missing translator arms,
-three Road Rage producers and both Road Rules message payload repairs. The new
-19-check generator fixture detects the old team-selection bug. The independent
-[route audit](gui_action_route_audit_20261020.json) counts **155/188 unique IDs,
-with 33 missing**. The previously reported 154 omitted an existing inline case;
-the older 142 unique-ID count was correct. These are source routes, separate from
-debug registrations and native behavior.
 
-The [resource integration](resource_owner_source_20261020.json) is pushed in
-`1ddb53090`: 26 source paths plus the existing acquire fixture. It restores the
-canonical pool owner chain, map-derived requests, real reply waits, queue append
-provider and original boot-mode transition. Source review passes. Its `84664079c`
-checkpoint also builds and passes the existing 193 checks. Dedicated protocol,
-transport, acquire and hierarchy fixtures now pass source review after their log
-types and retained receipts were repaired; their hosted execution is next. Current
-dev's callback tests are merged into this isolated candidate. Native GUI preparation
-remains unselected. No final debug-entry dispositions changed.
+The action checkpoint `0c60cc363` passed its shipping build, 193 selected checks
+and three behavior controls. The [new 34-file GUI owner/action checkpoint](gui_owner_action_checkpoint_20261020.json)
+is committed at `3f57bf01f` and under combined source review. It adds ten routes:
+the independent [route audit](gui_action_route_audit_20261020.json) now counts
+**165/188 unique action IDs, with 23 missing**. Review has already found observer
+signature, assertion-path and one-byte payload defects to repair. These are source
+routes, not verified debug entries; this checkpoint has no build/native verdict.
+
+The [resource integration](resource_owner_source_20261020.json) passes source review
+and the full hosted run at `2b2fd8eee`: **363 selected checks and eight behavior
+controls**, covering profile, GUI interface, APT ownership, Road Rage, pool
+protocol/layout, resource transport/acquisition and delayed GameData bank/pool
+initialization. The artifact receipt and all 12 output hashes are verified. These
+fixtures use explicit IO/heap doubles; native resource and gameplay behavior remain
+unverified. Both follow-ons remain on the recovery branch.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
