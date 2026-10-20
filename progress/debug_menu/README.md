@@ -6,7 +6,7 @@ using separate branches for unverified recovery and staging only owned paths.
 
 ## Current state
 
-**Recovery resumed on 19 October. Implementation, integration, review and
+**Recovery is active on 20 October. Implementation, integration, review and
 behavior checks remain unfinished.** The count of fully implemented but unverified entries
 is unknown. Source coverage must never be reported as implementation completion.
 
@@ -82,21 +82,21 @@ lacks a verified PC provider. The flag initialization is corrected in the later
 runtime checkpoint below. These recovery checkpoints change no final entry dispositions and are
 separate from the normal dev delivery above.
 
-The [runtime follow-on](runtime_routing_source_20261019.json) at `4bbefd59b`
-restores the original GameState constructor flag and selects full main-route
-PreWorld with paired stage-8 PostWorld. Fresh review found the original flag write
-through a stack-restored `this`; the earlier no-writer claim was wrong. This
-four-path checkpoint is committed and pushed, with integrated review, build and
-native checks still pending. The lower loading spine and complete GUI bridge
-remain open. The normal folder contains the separate dev hotfix `c2400d4f3` above.
+The [current GUI/runtime candidate](gui_runtime_core_20261019.json) is pushed at
+`a69001f71`, separately from dev. It contains the full GameState Prepare and main
+GUI wrapper, distinct loading/normal caller clocks, typed InputPostWorld wiring,
+the original constructor flag and 142/188 explicit translator action IDs. Source
+review found a missing banking store and an incorrect diagnostic; both are
+repaired. The existing debug-pad accessor is now in its mounted owner.
 
-The [GUI/runtime core](gui_runtime_core_20261019.json) at `4c2bc973e` is now pushed
-on the same recovery branch: 37 production source paths and three existing
-regression files differ from dev. It recovers the full GUI wrapper/direct builders,
-the player-count output seat, component teardown and 23 missing action branches.
-The translator represents 130/188 explicit original action IDs; this is separate
-from debug registrations and native behavior. Further proposals reach137/188 but
-are still unapplied. Review, hosted build/fixtures and native checks remain open.
+The exact candidate passes the hosted shipping build and **132 selected checks**
+(22 profile, 23 GUI interface, 87 APT), plus both APT negative controls. All 2,977
+TUs compile or validate from cache, and the executable links. These fixtures do
+not establish native GUI or debug-entry behavior. Full native GUI resource
+activation, normal InputPostWorld/START progression and startup/streaming checks
+remain open; the playable folder retains the separate Create Match repair above.
+Further action/resource proposals are being integrated in batches. No final entry
+dispositions changed.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is

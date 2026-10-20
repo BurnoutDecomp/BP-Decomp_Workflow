@@ -163,10 +163,10 @@
     "translator_source_ids": 142,
     "original_translator_ids": 188,
     "source_wiring_passed": 10,
-    "numeric_executed_for_this_followon": false,
+    "numeric_executed_for_this_followon": true,
     "review_packet": "scratch/DEBUG_MENU_1011/runtime_followon_review_20261020/REVIEW_PACKET.md",
     "review": "original_f7_fail; alias-backed tail stores and original case185 diagnostic now repaired in separate commits",
-    "build": "hosted_rerun_after_link_owner_fold",
+    "build": "hosted_compile_link_and_selected_regressions_pass",
     "native": "not_run",
     "baseline": "10e27b3f6bcb036879fcf85ce42e6de65c932f76",
     "paths_over_baseline": 57,
@@ -197,7 +197,47 @@
       "run_id": 39381621897,
       "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39381621897",
       "workflow": "d4d6016e8df30a7b79ea807e07a22b500acecfb5",
-      "source": "a69001f71391d87edf5cf2fb281cced189151209"
+      "source": "a69001f71391d87edf5cf2fb281cced189151209",
+      "status": "pass",
+      "compile": {
+        "translation_units": 2977,
+        "compiled": 808,
+        "cached": 2169,
+        "failed": 0,
+        "seconds": 113.8
+      },
+      "link": {
+        "status": "pass",
+        "seconds": 3.9
+      },
+      "checks": {
+        "profile_numeric": 14,
+        "profile_wiring": 8,
+        "gui_interface_numeric": 21,
+        "gui_interface_wiring": 2,
+        "apt_numeric": 81,
+        "apt_wiring": 6,
+        "total": 132,
+        "failed": 0
+      },
+      "negative_controls": {
+        "--omit-apt-retain": {
+          "exit_code": 1,
+          "log": "apt-negative--omit-apt-retain.log",
+          "status": "expected_behavior_failure"
+        },
+        "--require-new-apt-resources": {
+          "exit_code": 1,
+          "log": "apt-negative--require-new-apt-resources.log",
+          "status": "expected_behavior_failure"
+        }
+      },
+      "receipt_sha256": "64253038a40ccd62038b586370d62e0b60099babe70a07eb687b71b9b43af7e4",
+      "executable": {
+        "bytes": 11082240,
+        "sha256": "03fb3a6147296fe629235e878ca04fbb5dae17fcad8d0553557e2572bf7ef7be"
+      },
+      "scope": "Shipping compile/link and selected production-body fixtures with explicit IO/heap doubles; no native GUI, streaming or debug-entry parity verdict."
     },
     "paired_mount_branch": "codex/debug-menu-runtime-candidate-20261020",
     "dev_delivery": false,
@@ -205,5 +245,6 @@
       "Normal InputPostWorld/START-bind progression is still incomplete.",
       "Full native GUI resource phase is still under separate owner/producer recovery."
     ]
-  }
+  },
+  "updated_utc": "2026-10-20T06:58:45.347428+00:00"
 }
