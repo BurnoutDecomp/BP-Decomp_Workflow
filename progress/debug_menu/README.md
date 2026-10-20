@@ -21,7 +21,10 @@ The input-buffer lifecycle and GUI lock repair now passes hosted checks.
 The user's exact 740 test reaches title readiness and InGame stage 5 with zero
 asserts, then crashes in the fresh-profile licence introduction.
 The cause is the PC event handoff: stale cache 64 precedes the current profile 350.
-A focused event-order repair is under review; startup/intro and Create Match
+The focused event-order repair and its failure control now pass source/hosted
+checks. A native attempt stalled because its observer disabled input on routine
+diagnostics; it produced no Intro result. A corrected observer is being staged.
+Startup/intro and Create Match
 are **not verified**. See [the crash, repair and rollback evidence](startup_regression_20261020.json).
 
 The separate [animation initialization repair](freeburn_animation_init_20261020.json)
@@ -31,14 +34,15 @@ native Create Match run is still required before calling that issue fixed.
 ## Source and validation lanes
 
 - Gameplay dev is db73ba838; its latest normal-folder candidate was rolled back.
-- The private startup/compile-check candidate is c68fc7279. Its shipping build
+- The private startup/compile-check candidate is 7d66267f5. Its shipping build
   passes all 2,979 selected TUs, including both newly repaired embed checks,
-  plus 447 focused checks and 10 intentional failure controls. This does not
+  plus 519 focused checks and 11 intentional failure controls. This does not
   establish gameplay. [Compile-check repair](embed_compile_checks_20261020.json).
 - The broader debug source is pushed at **90211a8f2**. Its newest 11-path batch
   restores WorstCase HUD events, typed movie preparation and resource handshakes.
-  Combined source review passes after one vector correction; this newest tree
-  has not compiled. Native GUI phases/registration remain held.
+  Combined source review passes after one vector correction. All 2,991 selected
+  TUs compile; linking still lacks the three platform providers below. Native
+  GUI phases/registration remain held. [Batch receipt](gui_worstcase_movie_source_20261020.json).
 - The preceding a2 tree compiled all 2,991 selected TUs and passed 916 focused
   checks/13 controls, but linking still lacks the real SKU/language and keyboard
   providers. [Runtime/source details](gui_runtime_core_20261019.json).

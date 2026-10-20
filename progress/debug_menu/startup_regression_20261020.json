@@ -240,5 +240,210 @@
     "source_cause": "Stale post-update cache 64 precedes the following frame profile 350 in a newly entered Intro observer",
     "repair": "one-path current-frame event ordering proposal; review and regression in progress"
   },
-  "automatic_native_windows_authorized": true
+  "automatic_native_windows_authorized": true,
+  "license_event_order_repair": {
+    "source": "2011742a74641b9fcdf443b0916b177843c371a1",
+    "review": "pass",
+    "review_sha256": "eb9b93d7d9f984d875a165ea7a2806d059df0b8e819474258990d66c7415644f",
+    "tests_source": "7d66267f51558a9f6a2cf549662cc9aa657b5272",
+    "hosted": {
+      "source": "7d66267f51558a9f6a2cf549662cc9aa657b5272",
+      "workflow": "4ab9165c99582657866c7ced0e02f74fe3926082",
+      "run_id": 39466642772,
+      "input_receipt_sha256": "dc0e1a3c28f672a806fbde1baa1c6f99426424f954fdfcf66b519de5bb70039a",
+      "build_and_selected_fixtures_pass": true,
+      "total_checks": 519,
+      "numeric_checks": 480,
+      "wiring_checks": 39,
+      "behavior_controls": 11,
+      "positive_summaries": [
+        {
+          "checks": 75,
+          "wiring": 7,
+          "summary": "run_gui_animation_initialization: wiring 7/7, numeric 68/68; total 75/75 pass (0 fail)"
+        },
+        {
+          "checks": 70,
+          "wiring": 8,
+          "summary": "run_startup_io_ownership: wiring 8/8, numeric 62/62; total 70/70 pass (0 fail)"
+        },
+        {
+          "checks": 22,
+          "wiring": 8,
+          "summary": "run_profile_delivery: wiring 8/8, numeric 14/14; total 22/22 pass (0 fail)"
+        },
+        {
+          "checks": 23,
+          "wiring": 2,
+          "summary": "run_fxgs2_gui_iface: wiring 2/2, numeric 21/21; total 23/23 pass (0 fail)"
+        },
+        {
+          "checks": 103,
+          "wiring": 6,
+          "summary": "run_pc_bundle_ownership: wiring 6/6, numeric 97/97; total 103/103 pass (0 fail)"
+        },
+        {
+          "checks": 14,
+          "wiring": 0,
+          "summary": "run_pc_resource_shuttle: wiring 0/0, numeric 14/14; total 14/14 pass (0 fail)"
+        },
+        {
+          "checks": 27,
+          "wiring": 0,
+          "summary": "run_pc_gui_pool_acquire: wiring 0/0, numeric 27/27; total 27/27 pass (0 fail)"
+        },
+        {
+          "checks": 24,
+          "wiring": 0,
+          "summary": "PoolCreateProtocol: 24 checks, 0 failures; mode=protocol"
+        },
+        {
+          "checks": 22,
+          "wiring": 0,
+          "summary": "PoolCreateProtocol: 22 checks, 0 failures; mode=layout"
+        },
+        {
+          "checks": 67,
+          "wiring": 0,
+          "summary": "GameDataPoolHierarchy: 67 checks, 0 failures"
+        },
+        {
+          "checks": 72,
+          "wiring": 8,
+          "summary": "GUI_LICENSE_INTRO_HANDOFF: 64 numeric and 8 wiring checks pass"
+        }
+      ],
+      "startup_fixtures": {
+        "positive": {
+          "numeric": {
+            "checks": 62,
+            "failures": 0
+          },
+          "process_exit_code": 0,
+          "executable_sha256": "94ce6585d58f809095d6aabfa4826c63c7645dbad9b15cd446687097a4d2c9bd",
+          "receipt_sha256": "eda44623c064f7b9c9f70d47d2593c9c451645e2021e3a5178a97094b931731e",
+          "production_inputs_verified": 18
+        },
+        "base-only-postworld": {
+          "numeric": {
+            "checks": 62,
+            "failures": 22
+          },
+          "process_exit_code": 1,
+          "executable_sha256": "a96d06dd40f4cd868adb3b8296e1fe231933859744847fd2f29fcc725df90dc1",
+          "receipt_sha256": "1a7e66faac5dd18d0841357ec2f3110d036702ccbf9d93e13907d6ef73ed9081",
+          "production_inputs_verified": 18
+        },
+        "legacy-gui-write-lock": {
+          "numeric": {
+            "checks": 62,
+            "failures": 6
+          },
+          "process_exit_code": 1,
+          "executable_sha256": "ec7804ecacc249f9ca2fd3026f754b9e540ae25470551b8b10706a0227ecce9f",
+          "receipt_sha256": "6ad615e64876b5801c3f67615bb1e581d7361c6eb4b7e2572709512d3a209faf",
+          "production_inputs_verified": 18
+        }
+      },
+      "license_fixtures": {
+        "positive": {
+          "numeric": {
+            "checks": 64,
+            "failures": 0
+          },
+          "wiring": 8,
+          "process_exit_code": 0,
+          "production_inputs_verified": 15,
+          "executable_sha256": "9367493eae88e3f2e3be5f708ae13b1d5b56d559e760c0c2aca9cd20aa0add2b"
+        },
+        "old-tail-cache": {
+          "numeric": {
+            "checks": 64,
+            "failures": 13
+          },
+          "wiring": 8,
+          "process_exit_code": 1,
+          "production_inputs_verified": 15,
+          "executable_sha256": "bb3558e911e5366c47fd6aa1548363549fb1f204541faf7355bb3ab0e3956fdd"
+        }
+      },
+      "shipping_compile": {
+        "selected_tus": 2979,
+        "compiled": 0,
+        "cached": 2979,
+        "failed": 0
+      },
+      "shipping_link": "pass",
+      "outputs": {
+        "avfilter-12.dll": {
+          "sha256": "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276",
+          "bytes": 234496
+        },
+        "avutil-61.dll": {
+          "sha256": "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb",
+          "bytes": 978944
+        },
+        "Burnout_PC.cgsmap": {
+          "sha256": "dfbc392ed16fb00a77d89b757af60bd9fcc4f8404f1a5a75c8b156f23d53c299",
+          "bytes": 3011344
+        },
+        "Burnout_PC.map": {
+          "sha256": "4cbc9e3eeb9b1dd57e2c7fb407be1fafbc7a0a46ce8063bb01356782dc2a1084",
+          "bytes": 17562317
+        },
+        "avdevice-63.dll": {
+          "sha256": "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9",
+          "bytes": 109056
+        },
+        "avformat-63.dll": {
+          "sha256": "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c",
+          "bytes": 644608
+        },
+        "swresample-7.dll": {
+          "sha256": "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c",
+          "bytes": 201728
+        },
+        "avcodec-63.dll": {
+          "sha256": "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b",
+          "bytes": 2179072
+        },
+        "Burnout_PC.exe.provenance.json": {
+          "sha256": "ba0667281f0d5a6dacb732c97a636605e97400501822add9ea8955ed51556582",
+          "bytes": 467
+        },
+        "Burnout_PC.exe": {
+          "sha256": "248e71c9d375469d0f7121a77858ce5732f79d4fc044c15cfaab9346652feb0e",
+          "bytes": 11089920
+        },
+        "xaudio2_9redist.dll": {
+          "sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+          "bytes": 997400
+        },
+        "swscale-10.dll": {
+          "sha256": "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de",
+          "bytes": 955904
+        }
+      },
+      "symbols": 23526,
+      "native_startup": "not_run",
+      "normal_package_changed": false
+    },
+    "native_intro": "pending"
+  },
+  "latest_native_attempt": {
+    "source": "2011742a74641b9fcdf443b0916b177843c371a1",
+    "exe_sha256": "70cbaa2150a706bf665a14f94031041759b208b4e886c670a870d8cc167eea74",
+    "status": "setup_input_witness_missing",
+    "native_game_crash": false,
+    "asserts": 0,
+    "exceptions": 0,
+    "native_exit_code": 0,
+    "forced_stop": false,
+    "input_events": 0,
+    "normal_state_unchanged": true,
+    "receipt": "scratch/DEBUG_MENU_1011/startup_regression_20261020/native_intro_observer_followup_02/observations/20261020_173817_4900/RUN.json",
+    "receipt_sha256": "ce16ac707ac90d5e687a4d52834a6063f4e750b7e7b681f67904119debb6c11c",
+    "cause": "Observer broad exit-diag prescan treated routine memory/stack diagnostics as faults and disabled input before Start",
+    "repair": "narrow FIRST-CHANCE matcher and a fresh private stage; no game production change"
+  }
 }
