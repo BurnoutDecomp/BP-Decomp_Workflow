@@ -270,6 +270,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   rem callees (and those TUs' interface operator= homes) are linked below so the whole
   rem controller-bridge family resolves.
   echo "%SRC%\GameSource\Game\GameBridgeControllerToX.cpp"
+  echo "%SRC%\GameSource\Game\GameBridgeControllerToX_embed_check.cpp"
   rem ---- tutorial-ticker leg (2026-08-16): the training-tip STRING-ID MAP. ----------------
   rem  BrnGame::ConvertTrainingTypeToStringId @0x823AA3B8 turns a BrnProgression::ETrainingType
   rem  into the GUI string id the bottom-of-screen tutorial ticker looks up in the language
@@ -2971,6 +2972,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\BrnVehicleInputInterface.cpp"
   echo "%SRC%\GameSource\Physics\VehicleManager\SharedIO\CreateRaceCarEvent.cpp"
   echo "%SRC%\GameSource\Game\BrnGlobalCpuMonitors.cpp"
+  echo "%SRC%\GameSource\Game\BrnGlobalCpuMonitors_embed_check.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowStates.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowInGameState.cpp"
   echo "%SRC%\GameSource\Sound\Module\BrnRootSoundModule.cpp"
