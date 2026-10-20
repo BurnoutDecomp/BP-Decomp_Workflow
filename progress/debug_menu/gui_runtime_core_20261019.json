@@ -4,7 +4,7 @@
   "source": "3f847ca769f86e875d0e1078c552617156aa45f2",
   "branch": "codex/debug-menu-gamestate-source-integration-20261019",
   "dev": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
-  "status": "isolated_review_repairs_pushed_newer_build_native_and_caller_recovery_pending",
+  "status": "newer_isolated_action_batch_source_review_passed_hosted_execution_pending",
   "commits": [
     "782f31560a69ea935df1b8b35e2d1959360a943a",
     "a301e09418b4d4a72496ae79879641bb56073c6d",
@@ -32,7 +32,9 @@
     "current_represented": 130,
     "new_arms": 23,
     "remaining": 58,
-    "not_a_debug_registration_count": true
+    "not_a_debug_registration_count": true,
+    "status": "historical_label_counts_superseded_by_unique_route_audit",
+    "counting_limit": "Earlier represented counts counted direct case labels and could double-count routed IDs. Use current_translator_inventory."
   },
   "unapplied_followon": {
     "packet": "scratch/DEBUG_MENU_1011/game_action_gui_recovery_20261019/checkpoint_03",
@@ -151,23 +153,230 @@
     "scope": "Typed post-world input, bind/unbind request/results, initial mapping and wheel spring."
   },
   "latest_isolated_followon": {
-    "source": "f7ced35c80d397e5ed676c9e2f25e4425c59d6b2",
+    "source": "a69001f71391d87edf5cf2fb281cced189151209",
     "commits": [
       "63cf4d3a8323cc28b97f4ca83e2635f552674839",
       "c14c9e6e224b279c171a3f4ecbd2f2d6791e3f96",
       "f7ced35c80d397e5ed676c9e2f25e4425c59d6b2"
     ],
-    "paths_over_c240": 55,
-    "production_paths": 52,
+    "production_paths": 54,
     "regression_paths": 3,
     "scope": "Typed InputPostWorld chain, twelve more GUI action arms and distinct loading/normal callers and clocks.",
-    "translator_source_ids": 142,
+    "translator_source_ids": 141,
     "original_translator_ids": 188,
     "source_wiring_passed": 10,
-    "numeric_executed_for_this_followon": false,
+    "numeric_executed_for_this_followon": true,
     "review_packet": "scratch/DEBUG_MENU_1011/runtime_followon_review_20261020/REVIEW_PACKET.md",
-    "review": "in_progress",
-    "build": "pending_paired_controller_mount",
-    "native": "not_run"
+    "review": "scoped_source_followup_pass_for_banking_diagnostic_and_accessor_owner_repairs",
+    "build": "hosted_compile_link_and_selected_regressions_pass",
+    "native": "not_run",
+    "baseline": "10e27b3f6bcb036879fcf85ce42e6de65c932f76",
+    "paths_over_baseline": 57,
+    "repair_commits": [
+      "e2a361f5fd30a9512c2d3d54cb360e3a067ebd25",
+      "ec494b80b5095e1dd79fad9c69788b0f105935ec"
+    ],
+    "current_dev_merged": "10e27b3f6bcb036879fcf85ce42e6de65c932f76",
+    "first_build": {
+      "run_id": 39380536649,
+      "source": "2fa5b57595d40d75d8e2d4ed496b44eb64b05fe8",
+      "compile": {
+        "translation_units": 2977,
+        "compiled": 808,
+        "cached": 2169,
+        "failed": 0,
+        "seconds": 197.6
+      },
+      "link": "fail_only_unmounted_GetDebugGamePad",
+      "regressions": "not_run"
+    },
+    "link_repair": {
+      "commit": "a69001f71391d87edf5cf2fb281cced189151209",
+      "body_changed": false,
+      "scope": "Move the existing ARTIST-matching accessor into its mounted InputPads owner and delete the unmounted split file."
+    },
+    "current_run": {
+      "run_id": 39381621897,
+      "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39381621897",
+      "workflow": "d4d6016e8df30a7b79ea807e07a22b500acecfb5",
+      "source": "a69001f71391d87edf5cf2fb281cced189151209",
+      "status": "pass",
+      "compile": {
+        "translation_units": 2977,
+        "compiled": 808,
+        "cached": 2169,
+        "failed": 0,
+        "seconds": 113.8
+      },
+      "link": {
+        "status": "pass",
+        "seconds": 3.9
+      },
+      "checks": {
+        "profile_numeric": 14,
+        "profile_wiring": 8,
+        "gui_interface_numeric": 21,
+        "gui_interface_wiring": 2,
+        "apt_numeric": 81,
+        "apt_wiring": 6,
+        "total": 132,
+        "failed": 0
+      },
+      "negative_controls": {
+        "--omit-apt-retain": {
+          "exit_code": 1,
+          "log": "apt-negative--omit-apt-retain.log",
+          "status": "expected_behavior_failure"
+        },
+        "--require-new-apt-resources": {
+          "exit_code": 1,
+          "log": "apt-negative--require-new-apt-resources.log",
+          "status": "expected_behavior_failure"
+        }
+      },
+      "receipt_sha256": "64253038a40ccd62038b586370d62e0b60099babe70a07eb687b71b9b43af7e4",
+      "executable": {
+        "bytes": 11082240,
+        "sha256": "03fb3a6147296fe629235e878ca04fbb5dae17fcad8d0553557e2572bf7ef7be"
+      },
+      "scope": "Shipping compile/link and selected production-body fixtures with explicit IO/heap doubles; no native GUI, streaming or debug-entry parity verdict."
+    },
+    "paired_mount_branch": "codex/debug-menu-runtime-candidate-20261020",
+    "dev_delivery": false,
+    "selection_limits": [
+      "Normal InputPostWorld/START-bind progression is still incomplete.",
+      "Full native GUI resource phase is still under separate owner/producer recovery."
+    ],
+    "translator_case_labels": 142,
+    "repair_followup_review": {
+      "path": "scratch/DEBUG_MENU_1011/action_batch_integration_20261020_06/RUNTIME_REPAIR_FOLLOWUP.md",
+      "sha256": "5b8b59c418df5aa190e102db1465fa733348b00f35993fd4658eb8861bac9439"
+    }
+  },
+  "updated_utc": "2026-10-20T07:49:09.910957+00:00",
+  "current_source": "019d8c52822a82534d840bb52774cdad8634ede1",
+  "current_translator_inventory": {
+    "source": "019d8c52822a82534d840bb52774cdad8634ede1",
+    "original_explicit_ids": 188,
+    "unique_routed_ids": 154,
+    "direct_case_labels": {
+      "main": 102,
+      "event_flow": 40,
+      "free_roam": 13,
+      "total": 155
+    },
+    "duplicate_routed_ids": [
+      2
+    ],
+    "missing_unique_ids": 34,
+    "missing_explicit_ids": [
+      30,
+      178,
+      213,
+      214,
+      219,
+      222,
+      223,
+      224,
+      240,
+      241,
+      252,
+      253,
+      254,
+      256,
+      257,
+      258,
+      259,
+      260,
+      261,
+      266,
+      267,
+      268,
+      269,
+      270,
+      271,
+      288,
+      289,
+      290,
+      291,
+      292,
+      293,
+      294,
+      295,
+      298
+    ],
+    "new_unique_ids_since_a690": [
+      162,
+      163,
+      164,
+      165,
+      166,
+      168,
+      169,
+      188,
+      189,
+      211,
+      212,
+      215,
+      216
+    ],
+    "counting_correction": "a690 had142 direct labels but141 unique IDs, because action2 appears in both main and fallback. Current155 labels represent154 unique IDs.",
+    "not_a_debug_registration_or_behavior_count": true,
+    "scope": "Represented direct source routes only; producer, receiver, source review and native parity are separate claims."
+  },
+  "action_followon_20261020": {
+    "source": "019d8c52822a82534d840bb52774cdad8634ede1",
+    "base": "a69001f71391d87edf5cf2fb281cced189151209",
+    "commits": [
+      "02fc055bf259419120cb79379f6c952daf65f5a7",
+      "d445e93f40f929bea6c92eda73476311065bf20f",
+      "019d8c52822a82534d840bb52774cdad8634ede1"
+    ],
+    "paths_since_a690": 13,
+    "production_paths": 9,
+    "test_paths": 4,
+    "recovery": [
+      "Road Rage action162/163/164 producers and162..166 GUI consumers",
+      "Skillz168/169 GUI records and both real169 producer payloads",
+      "Payback211/212/215/216 and rivalry188/189 GUI consumers",
+      "Existing crash fixture contract repair and separate real-generator19-check fixture"
+    ],
+    "review": "composed_source_pass_with_separate_immutable_fail_and_repair_reports",
+    "reviews": [
+      {
+        "path": "scratch/DEBUG_MENU_1011/action_batch_integration_20261020_06/REVIEW.md",
+        "sha256": "9dd5e18d5e41ece8527c7020667a34c7c9d0476b9b336ad4ee3229183da6c445"
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/action_batch_repairs_20261020/REVIEW.md",
+        "sha256": "10107c8e6cf8af08d8151bdb070af282b7537285970784e4206c9d6721cf9b4d"
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/action_batch_repairs_20261020/TEST_FOLLOWUP.md",
+        "sha256": "c87c0b77189d1874e85cb79e75488aee1640f6a687d2ccde4150ef86f90223d3"
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/hud_fixture_repairs_20261020/REVIEW.md",
+        "sha256": "52b629746953dd50a9bfe83cbc415e0c5d84784b348ff5115493780a3b023273"
+      }
+    ],
+    "first_build": {
+      "run_id": 39385260865,
+      "source": "02fc055bf259419120cb79379f6c952daf65f5a7",
+      "compile": {
+        "translation_units": 2977,
+        "compiled": 648,
+        "cached": 2328,
+        "failed": 1,
+        "seconds": 166.2
+      },
+      "failure": "Four newly added typed HUD calls used the three-argument Event pointer API; repaired with the existing typed overload in d445.",
+      "link": "not_run",
+      "regressions": "not_run"
+    },
+    "next_hosted_validation": "pending_shipping_plus_existing_profile_GUI_APT_and_new_HUD_numeric_negative_controls",
+    "native": "not_run",
+    "dev_delivery": false,
+    "normal_package_replaced": false
   }
 }

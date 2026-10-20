@@ -9,7 +9,8 @@ param(
     [Parameter(Mandatory)] [string] $WorkflowSha,
     [ValidateRange(1, 8)] [int] $Jobs = 4,
     [switch] $RunRegressions,
-    [switch] $RunAptLifetime
+    [switch] $RunAptLifetime,
+    [switch] $RunHudRegressions
 )
 
 Set-StrictMode -Version Latest
@@ -37,7 +38,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime); status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions); status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -194,10 +195,11 @@ try {
         throw 'Provenance does not match the candidate, workflow, clean source and actual exe.'
     }
     Assert-CleanTrees
-    if ($RunRegressions -or $RunAptLifetime) {
+    if ($RunRegressions -or $RunAptLifetime -or $RunHudRegressions) {
         $Receipt.regressions.status = 'running'
         $Receipt.regressions.coverage = 'Selected production-body fixtures with IO/heap doubles; callback wiring is source-only. No game or end-to-end parity claim.'
         $Receipt.regressions.inputs = @{}
+        $Receipt.regressions.negative_controls = @{}
         foreach ($relative in @('tests/run_profile_delivery.py', 'tests/ProfileDelivery.cpp',
                                 'tests/run_fxgs2_gui_iface.py', 'tests/FxGs2GuiIface.cpp',
                                 'tests/fxgs_common.py')) {
@@ -217,7 +219,6 @@ try {
             }
             $aptRunner = Join-Path $SourceRoot 'tests/run_pc_bundle_ownership.py'
             Invoke-Native py @('-3', '-B', $aptRunner) 'regressions.log'
-            $Receipt.regressions.negative_controls = @{}
             $controls = @(
                 @{ flag = '--omit-apt-retain'; witness = 'FAIL\s+(Apt pin holds every member|logical unload preserves)' },
                 @{ flag = '--require-new-apt-resources'; witness = 'FAIL[^\r\n]*(reload|lead|acquire)' }
@@ -243,6 +244,30 @@ try {
                 }
                 $Receipt.regressions.negative_controls[$control.flag] = @{ status = 'expected_behavior_failure'; exit_code = $controlCode; log = $logName }
             }
+        }
+        if ($RunHudRegressions) {
+            foreach ($relative in @('tests/run_fxgs_hud_crashes.py', 'tests/FxGsHudCrashes.cpp',
+                                    'tests/run_fxgs_online_roadrage_hud.py', 'tests/FxGsOnlineRoadRageHud.cpp')) {
+                $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+            }
+            foreach ($runner in @('tests/run_fxgs_hud_crashes.py', 'tests/run_fxgs_online_roadrage_hud.py')) {
+                Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot $runner)) 'regressions.log'
+            }
+            # Change only the team predicate in the extracted body. A compiler/setup
+            # failure cannot satisfy the numeric summary and specific behavior witness.
+            $hudRunner = Join-Path $SourceRoot 'tests/run_fxgs_online_roadrage_hud.py'
+            $hudLogName = 'hud-negative-legacy-team-predicate.log'
+            $hudLogPath = Join-Path $ArtifactRoot $hudLogName
+            & py -3 -B $hudRunner --legacy-team-predicate 2>&1 | Tee-Object -FilePath $hudLogPath | Out-Host
+            $hudCode = $LASTEXITCODE
+            $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', $hudRunner, '--legacy-team-predicate'); exit_code = $hudCode; expected_failure = $true })
+            $hudLog = Get-Content -Raw -LiteralPath $hudLogPath
+            if ($hudCode -eq 0 -or
+                $hudLog -notmatch 'FxGsOnlineRoadRageHud:\s+19 checks, (?:[1-9]|1[0-8]) failures' -or
+                -not $hudLog.Contains('FAIL: 164 first team != 1 remains eligible')) {
+                throw 'HUD negative control did not expose the intended team-selection behavior failure.'
+            }
+            $Receipt.regressions.negative_controls['--legacy-team-predicate'] = @{ status = 'expected_behavior_failure'; exit_code = $hudCode; log = $hudLogName }
         }
         Assert-CleanTrees
         $Receipt.regressions.status = 'pass'
