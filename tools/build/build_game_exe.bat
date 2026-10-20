@@ -3552,6 +3552,11 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModuleIO_InputBuffer.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsEventInterpreterModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModuleIO.cpp"
+  rem Canonical shared GUI, Model and Interpreter owner chain.
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModuleBridges.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsModelModule.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsEventInterpreterModule.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsAptDataHeaderType.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiGeometryObjects.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiHudMessage.cpp"
