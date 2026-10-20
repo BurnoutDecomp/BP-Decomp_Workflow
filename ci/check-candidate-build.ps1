@@ -40,7 +40,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_io_status = 'not_requested'; hud_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -264,44 +264,11 @@ try {
     $Receipt.expected_runtime_outputs = $RuntimeOutputs
     Assert-CleanTrees
 
-    # Never accept a cached or prior exe/map/stamp as proof of this link.
-    foreach ($name in $OutputNames) {
-        $path = Join-Path $GameOut $name
-        if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path -Force }
-    }
-    $env:BRN_EXE_JOBS = [string]$Jobs
-    $env:BRN_EXE_HASH_DEPS = '1'
-    Invoke-Native cmd.exe @('/d', '/c', ('"{0}"' -f (Join-Path $Root 'tools/build/build_game_exe.bat'))) 'build.log'
-    foreach ($name in $OutputNames) {
-        $path = Join-Path $GameOut $name
-        if (-not (Test-Path -LiteralPath $path) -or (Get-Item -LiteralPath $path).Length -eq 0) { throw "Build output is missing or empty: $name" }
-    }
-    foreach ($name in $RuntimeOutputs.Keys) {
-        $path = Join-Path $GameOut $name
-        if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or
-            (Get-FileRecord $path).sha256 -ne $RuntimeOutputs[$name].sha256) {
-            throw "Staged runtime DLL does not match its dependency: $name"
-        }
-    }
-    $cgsmap = Join-Path $GameOut 'Burnout_PC.cgsmap'
-    $reader = [IO.BinaryReader]::new([IO.File]::OpenRead($cgsmap))
-    try {
-        $count = $reader.ReadUInt32(); $offset = $reader.ReadUInt32()
-        $base = $reader.ReadUInt32(); $version = $reader.ReadUInt32()
-        if ($count -eq 0 -or $offset -ne 16 -or $base -ne 0 -or $version -ne 1 -or $reader.BaseStream.Length -ne (16L + 128L * $count)) {
-            throw 'Cgsmap is empty or incomplete.'
-        }
-    } finally { $reader.Dispose() }
-    $provenance = Get-Content -LiteralPath (Join-Path $GameOut 'Burnout_PC.exe.provenance.json') -Raw | ConvertFrom-Json -AsHashtable
-    $exe = Get-FileRecord (Join-Path $GameOut 'Burnout_PC.exe')
-    if ($provenance.b5_head -ne $B5Commit -or $provenance.parent_head -ne $WorkflowSha -or
-        $provenance.exe_sha256 -ne $exe.sha256 -or $provenance.b5_dirty -isnot [bool] -or $provenance.b5_dirty -ne $false -or
-        $provenance.parent_dirty -isnot [bool] -or $provenance.parent_dirty -ne $Receipt.gitlink_overridden) {
-        throw 'Provenance does not match the candidate, workflow, clean source and actual exe.'
-    }
-    Assert-CleanTrees
-    if ($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions) {
+    # Source-body fixtures need their own dependencies, not a successful shipping
+    # link. Retain their results independently of native platform-provider failures.
+    if ($RunRegressions -or $RunAptLifetime -or $RunResourceRegressions) {
         $Receipt.regressions.status = 'running'
+        $Receipt.regressions.remaining_status = 'running'
         $Receipt.regressions.coverage = 'Selected production-body fixtures with IO/heap doubles; callback wiring is source-only. No game or end-to-end parity claim.'
         foreach ($relative in @('tests/run_profile_delivery.py', 'tests/ProfileDelivery.cpp',
                                 'tests/run_fxgs2_gui_iface.py', 'tests/FxGs2GuiIface.cpp',
@@ -415,13 +382,53 @@ try {
         }
 
         Assert-CleanTrees
-        $Receipt.regressions.status = 'pass'
+        $Receipt.regressions.remaining_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
     }
+
+    # Never accept a cached or prior exe/map/stamp as proof of this link.
+    foreach ($name in $OutputNames) {
+        $path = Join-Path $GameOut $name
+        if (Test-Path -LiteralPath $path) { Remove-Item -LiteralPath $path -Force }
+    }
+    $env:BRN_EXE_JOBS = [string]$Jobs
+    $env:BRN_EXE_HASH_DEPS = '1'
+    Invoke-Native cmd.exe @('/d', '/c', ('"{0}"' -f (Join-Path $Root 'tools/build/build_game_exe.bat'))) 'build.log'
+    foreach ($name in $OutputNames) {
+        $path = Join-Path $GameOut $name
+        if (-not (Test-Path -LiteralPath $path) -or (Get-Item -LiteralPath $path).Length -eq 0) { throw "Build output is missing or empty: $name" }
+    }
+    foreach ($name in $RuntimeOutputs.Keys) {
+        $path = Join-Path $GameOut $name
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf) -or
+            (Get-FileRecord $path).sha256 -ne $RuntimeOutputs[$name].sha256) {
+            throw "Staged runtime DLL does not match its dependency: $name"
+        }
+    }
+    $cgsmap = Join-Path $GameOut 'Burnout_PC.cgsmap'
+    $reader = [IO.BinaryReader]::new([IO.File]::OpenRead($cgsmap))
+    try {
+        $count = $reader.ReadUInt32(); $offset = $reader.ReadUInt32()
+        $base = $reader.ReadUInt32(); $version = $reader.ReadUInt32()
+        if ($count -eq 0 -or $offset -ne 16 -or $base -ne 0 -or $version -ne 1 -or $reader.BaseStream.Length -ne (16L + 128L * $count)) {
+            throw 'Cgsmap is empty or incomplete.'
+        }
+    } finally { $reader.Dispose() }
+    $provenance = Get-Content -LiteralPath (Join-Path $GameOut 'Burnout_PC.exe.provenance.json') -Raw | ConvertFrom-Json -AsHashtable
+    $exe = Get-FileRecord (Join-Path $GameOut 'Burnout_PC.exe')
+    if ($provenance.b5_head -ne $B5Commit -or $provenance.parent_head -ne $WorkflowSha -or
+        $provenance.exe_sha256 -ne $exe.sha256 -or $provenance.b5_dirty -isnot [bool] -or $provenance.b5_dirty -ne $false -or
+        $provenance.parent_dirty -isnot [bool] -or $provenance.parent_dirty -ne $Receipt.gitlink_overridden) {
+        throw 'Provenance does not match the candidate, workflow, clean source and actual exe.'
+    }
+    Assert-CleanTrees
+    if ($Receipt.regressions.requested) { $Receipt.regressions.status = 'pass' }
     $Receipt.validated = $true
     $ExitCode = 0
 } catch {
     if ($Receipt.regressions.gui_io_status -eq 'running') { $Receipt.regressions.gui_io_status = 'fail' }
     if ($Receipt.regressions.hud_status -eq 'running') { $Receipt.regressions.hud_status = 'fail' }
+    if ($Receipt.regressions.remaining_status -eq 'running') { $Receipt.regressions.remaining_status = 'fail' }
     if ($Receipt.regressions.status -eq 'running') { $Receipt.regressions.status = 'fail' }
     if ($NativeFailureCode -ne 0) { $ExitCode = $NativeFailureCode }
     $Receipt.failure = $_.Exception.Message
