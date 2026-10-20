@@ -36,17 +36,23 @@ native Create Match run is still required before calling that issue fixed.
   plus 519 focused checks and 11 intentional failure controls. This does not
   establish all gameplay. Both repaired probes are now mounted on main/dev.
   [Compile-check repair](embed_compile_checks_20261020.json).
-- The broader debug source is pushed at **90211a8f2**. Its newest 11-path batch
+- The broader debug source is pushed at **c511b3466**. Its newest 11-path batch
   restores WorstCase HUD events, typed movie preparation and resource handshakes.
   Combined source review passes after one vector correction. All 2,991 selected
   TUs compile; linking still lacks the three platform providers below. Native
-  GUI phases/registration remain held. [Batch receipt](gui_worstcase_movie_source_20261020.json).
+  GUI phases/registration remain held. The next two-path movie queue/PC idle
+  repair is reviewed and compiled with the same link gaps.
+  [Movie followup](movie_queue_source_20261020.json). [Batch receipt](gui_worstcase_movie_source_20261020.json).
 - The preceding a2 tree compiled all 2,991 selected TUs and passed 916 focused
   checks/13 controls, but linking still lacks the real SKU/language and keyboard
   providers. [Runtime/source details](gui_runtime_core_20261019.json).
 - [HUD/profile owners](gui_render_profile_source_20261020.json) and
   [activation/keyboard source](gui_activation_keyboard_source_20261020.json)
   now have passing scoped source reviews.
+
+The [isolated Create Match diagnostics](freeburn_create_match_diagnostics_20261020.json)
+are reviewed, compiled and staged at 0c8f3d7f6. They passed 519 checks/11 controls;
+the returning-profile native case is pending and the normal package is unchanged.
 
 The action translator covers 188 unique IDs across 189 labels. That is source
 coverage, not 188 verified debug controls or a complete native GUI pipeline.
