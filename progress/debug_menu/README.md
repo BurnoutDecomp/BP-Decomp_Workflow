@@ -16,16 +16,13 @@ The normal build/game folder contains the restored playable **9c15dfff8**
 package, with matching DLLs/symbols and preserved config/saves.
 It still has the reported online Create Match crash.
 
-The newer db73 candidate failed in marketing-screen input dispatch.
-The input-buffer lifecycle and GUI lock repair now passes hosted checks.
-The user's exact 740 test reaches title readiness and InGame stage 5 with zero
-asserts, then crashes in the fresh-profile licence introduction.
-The cause is the PC event handoff: stale cache 64 precedes the current profile 350.
-The focused event-order repair and its failure control now pass source/hosted
-checks. A native attempt stalled because its observer disabled input on routine
-diagnostics; it produced no Intro result. A corrected observer is being staged.
-Startup/intro and Create Match
-are **not verified**. See [the crash, repair and rollback evidence](startup_regression_20261020.json).
+The input-buffer lifecycle, GUI lock ownership and profile/cache event-order
+repairs are now merged into **gameplay dev at 7d66267f5**. The exact production
+candidate passed a native fresh-profile run through the autosave prompt,
+photomaton, licence, flyby and CarSelectVehicle UI: zero assertions/exceptions,
+normal exit and unchanged ordinary config/saves. Hosted checks total 519 plus
+11 intentional failure controls. Returning-profile driving and Create Match
+remain **unverified**. See [the crash and repair evidence](startup_regression_20261020.json).
 
 The separate [animation initialization repair](freeburn_animation_init_20261020.json)
 is committed on dev and passes its focused positive/omission checks. A successful
@@ -33,11 +30,12 @@ native Create Match run is still required before calling that issue fixed.
 
 ## Source and validation lanes
 
-- Gameplay dev is db73ba838; its latest normal-folder candidate was rolled back.
-- The private startup/compile-check candidate is 7d66267f5. Its shipping build
+- Gameplay dev is **7d66267f5**; the normal folder still has the restored 9c15 package pending the remaining delivery checks.
+- The merged startup/compile-check source is 7d66267f5. Its shipping build
   passes all 2,979 selected TUs, including both newly repaired embed checks,
   plus 519 focused checks and 11 intentional failure controls. This does not
-  establish gameplay. [Compile-check repair](embed_compile_checks_20261020.json).
+  establish all gameplay. Both repaired probes are now mounted on main/dev.
+  [Compile-check repair](embed_compile_checks_20261020.json).
 - The broader debug source is pushed at **90211a8f2**. Its newest 11-path batch
   restores WorstCase HUD events, typed movie preparation and resource handshakes.
   Combined source review passes after one vector correction. All 2,991 selected
