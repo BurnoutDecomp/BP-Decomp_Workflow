@@ -27,6 +27,11 @@ on:
         required: false
         default: false
         type: boolean
+      run_gui_io_regressions:
+        description: Run original GUI Model and Interpreter IO lifecycle fixtures
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -74,6 +79,7 @@ jobs:
           CANDIDATE_RUN_APT_LIFETIME: ${{ inputs.run_apt_lifetime }}
           CANDIDATE_RUN_HUD_REGRESSIONS: ${{ inputs.run_hud_regressions }}
           CANDIDATE_RUN_RESOURCE_REGRESSIONS: ${{ inputs.run_resource_regressions }}
+          CANDIDATE_RUN_GUI_IO_REGRESSIONS: ${{ inputs.run_gui_io_regressions }}
           GH_TOKEN: ${{ github.token }}
           BRN_EXE_HASH_DEPS: "1"
           BRN_EXE_JOBS: "4"
@@ -83,7 +89,8 @@ jobs:
             -RunRegressions:($env:CANDIDATE_RUN_REGRESSIONS -eq 'true') `
             -RunAptLifetime:($env:CANDIDATE_RUN_APT_LIFETIME -eq 'true') `
             -RunHudRegressions:($env:CANDIDATE_RUN_HUD_REGRESSIONS -eq 'true') `
-            -RunResourceRegressions:($env:CANDIDATE_RUN_RESOURCE_REGRESSIONS -eq 'true')
+            -RunResourceRegressions:($env:CANDIDATE_RUN_RESOURCE_REGRESSIONS -eq 'true') `
+            -RunGuiIORegressions:($env:CANDIDATE_RUN_GUI_IO_REGRESSIONS -eq 'true')
 
       - name: Save successful candidate objects
         if: success()
@@ -106,5 +113,6 @@ jobs:
             build/candidate/artifacts/*.log
             build/candidate/artifacts/input-receipt.json
             build/candidate/artifacts/resource-regressions/**
+            build/candidate/artifacts/gui-io-regressions/**
           if-no-files-found: error
           retention-days: 1
