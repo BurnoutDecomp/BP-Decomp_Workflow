@@ -11,7 +11,8 @@ param(
     [switch] $RunRegressions,
     [switch] $RunAptLifetime,
     [switch] $RunHudRegressions,
-    [switch] $RunResourceRegressions
+    [switch] $RunResourceRegressions,
+    [switch] $RunGuiIORegressions
 )
 
 Set-StrictMode -Version Latest
@@ -39,7 +40,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions); status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions); status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -196,7 +197,7 @@ try {
         throw 'Provenance does not match the candidate, workflow, clean source and actual exe.'
     }
     Assert-CleanTrees
-    if ($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions) {
+    if ($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions) {
         $Receipt.regressions.status = 'running'
         $Receipt.regressions.coverage = 'Selected production-body fixtures with IO/heap doubles; callback wiring is source-only. No game or end-to-end parity claim.'
         $Receipt.regressions.inputs = @{}
@@ -333,6 +334,49 @@ try {
                     throw "Pool negative control $($control.name) did not expose its intended behavior failure."
                 }
                 $Receipt.regressions.negative_controls['pool-' + $control.name] = @{ status = 'expected_behavior_failure'; exit_code = $controlCode; log = $controlLogName }
+            }
+        }
+        if ($RunGuiIORegressions) {
+            foreach ($relative in @('tests/run_gui_model_io.py', 'tests/GuiModelIO.cpp',
+                                    'tests/run_gui_interpreter_io.py', 'tests/GuiInterpreterIO.cpp')) {
+                $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+            }
+            $guiIORoot = Join-Path $ArtifactRoot 'gui-io-regressions'
+            $guiIOFixtures = @(
+                @{ name = 'model'; runner = 'tests/run_gui_model_io.py'; tag = 'GuiModelIO'; checks = 377 },
+                @{ name = 'interpreter'; runner = 'tests/run_gui_interpreter_io.py'; tag = 'GuiInterpreterIO'; checks = 169 }
+            )
+            foreach ($fixture in $guiIOFixtures) {
+                $fixtureDir = Join-Path $guiIORoot $fixture.name
+                Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot $fixture.runner), '--output-dir', $fixtureDir) 'regressions.log'
+                $result = Get-Content -Raw -LiteralPath (Join-Path $fixtureDir 'result.json') | ConvertFrom-Json
+                $log = Get-Content -Raw -LiteralPath (Join-Path $fixtureDir 'run.stdout.txt')
+                $witness = [regex]::Escape($fixture.tag) + ':\s+' + $fixture.checks + ' checks, 0 failures'
+                if ($result.process_exit_code -ne 0 -or $null -eq $result.numeric -or
+                    $result.numeric.checks -ne $fixture.checks -or $result.numeric.failures -ne 0 -or $log -notmatch $witness) {
+                    throw "GUI IO fixture $($fixture.name) did not execute its expected numeric checks."
+                }
+            }
+            $guiIOControls = @(
+                @{ name = 'model-base-only'; runner = 'tests/run_gui_model_io.py'; flag = '--base-only'; witness = 'FAIL queue is constructed, empty and aligned' },
+                @{ name = 'model-retain-view'; runner = 'tests/run_gui_model_io.py'; flag = '--retain-view-events'; witness = 'FAIL queue is constructed, empty and aligned' },
+                @{ name = 'interpreter-old-capacity'; runner = 'tests/run_gui_interpreter_io.py'; flag = '--old-capacity'; witness = 'FAIL (ARTIST output event capacity|event record beyond the old)' },
+                @{ name = 'interpreter-clear-input'; runner = 'tests/run_gui_interpreter_io.py'; flag = '--clear-input-on-destruct'; witness = 'FAIL input Destruct leaves its complete populated queue unchanged' }
+            )
+            foreach ($control in $guiIOControls) {
+                $controlDir = Join-Path $guiIORoot $control.name
+                $logName = 'gui-io-negative-' + $control.name + '.log'
+                & py -3 -B (Join-Path $SourceRoot $control.runner) $control.flag --output-dir $controlDir 2>&1 |
+                    Tee-Object -FilePath (Join-Path $ArtifactRoot $logName) | Out-Host
+                $code = $LASTEXITCODE
+                $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', (Join-Path $SourceRoot $control.runner), $control.flag, '--output-dir', $controlDir); exit_code = $code; expected_failure = $true })
+                $result = Get-Content -Raw -LiteralPath (Join-Path $controlDir 'result.json') | ConvertFrom-Json
+                $log = Get-Content -Raw -LiteralPath (Join-Path $controlDir 'run.stdout.txt')
+                if ($code -eq 0 -or $result.process_exit_code -eq 0 -or $null -eq $result.numeric -or
+                    $result.numeric.checks -lt 1 -or $result.numeric.failures -lt 1 -or $log -notmatch $control.witness) {
+                    throw "GUI IO negative control $($control.name) failed before its intended behavior witness."
+                }
+                $Receipt.regressions.negative_controls['gui-io-' + $control.name] = @{ status = 'expected_behavior_failure'; exit_code = $code; log = $logName }
             }
         }
         Assert-CleanTrees
