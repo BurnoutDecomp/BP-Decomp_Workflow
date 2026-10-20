@@ -3,8 +3,8 @@
   "date": "2026-10-19",
   "source": "3f847ca769f86e875d0e1078c552617156aa45f2",
   "branch": "codex/debug-menu-gamestate-source-integration-20261019",
-  "dev": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
-  "status": "private_gui_owner_source_checkpoint_review_in_progress_previous_resource_suite_pass",
+  "dev": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb",
+  "status": "reviewed_resource_action_batch_on_dev_newer_gui_source_and_io_pass_shipping_link_pending",
   "commits": [
     "782f31560a69ea935df1b8b35e2d1959360a943a",
     "a301e09418b4d4a72496ae79879641bb56073c6d",
@@ -254,45 +254,27 @@
     }
   },
   "updated_utc": "2026-10-20T09:19:02.900932+00:00",
-  "current_source": "3f57bf01f209003c628815a024d09cd43ee85eda",
+  "current_source": "4ad790750fbf8495161823f977580137c0368b85",
   "current_translator_inventory": {
-    "source": "3f57bf01f209003c628815a024d09cd43ee85eda",
+    "source": "4ad790750fbf8495161823f977580137c0368b85",
     "original_explicit_ids": 188,
-    "unique_routed_ids": 165,
+    "unique_routed_ids": 183,
     "direct_case_labels": {
-      "main": 112,
+      "main": 130,
       "event_flow": 41,
       "free_roam": 13,
-      "total": 166
+      "total": 184
     },
     "duplicate_routed_ids": [
       2
     ],
-    "missing_unique_ids": 23,
+    "missing_unique_ids": 5,
     "missing_explicit_ids": [
       178,
       222,
       223,
       224,
-      240,
-      241,
-      252,
-      253,
-      254,
-      256,
-      257,
-      258,
-      259,
-      260,
-      266,
-      267,
-      268,
-      269,
-      270,
-      271,
-      288,
-      294,
-      295
+      294
     ],
     "new_unique_ids_since_a690": [
       162,
@@ -311,15 +293,33 @@
       215,
       216,
       219,
+      240,
+      241,
+      252,
+      253,
+      254,
+      256,
+      257,
+      258,
+      259,
+      260,
       261,
+      266,
+      267,
+      268,
+      269,
+      270,
+      271,
+      288,
       289,
       290,
       291,
       292,
       293,
+      295,
       298
     ],
-    "counting_correction": "Independent token/brace parser includes inline case30, excludes nested switches and counts routed action2 once. Current checkpoint165 unique/166 labels,23 missing; source review and runtime remain separate.",
+    "counting_correction": "Balanced token/brace audit includes inline labels, excludes nested switches, resolves scoped static/HUD IDs and counts duplicate action2 once:183 unique/184 labels,5 missing.",
     "not_a_debug_registration_or_behavior_count": true,
     "scope": "Represented direct source routes only; producer, receiver, source review and native parity are separate claims.",
     "independent_audit": "gui_action_route_audit_20261020.json"
@@ -550,9 +550,10 @@
       "native": "not_run",
       "normal_package_changed": false
     },
-    "dev_delivery": false,
+    "dev_delivery": true,
     "native": "not_run",
-    "fixture_link_repair_source": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb"
+    "fixture_link_repair_source": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb",
+    "dev_delivery_source": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb"
   },
   "gui_owner_action_followon_20261020": {
     "date": "2026-10-20",
@@ -616,5 +617,115 @@
     "dev_delivery": false,
     "normal_package_changed": false,
     "final_entry_dispositions_changed": false
+  },
+  "dev_resource_action_promotion_20261020": {
+    "date": "2026-10-20",
+    "previous_dev": "b3d2833e348e77f6310be82187b7c66a23e7e27d",
+    "source": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb",
+    "status": "pushed_to_dev_and_matching_workflow_main",
+    "validated_candidate": {
+      "run_id": 39398332776,
+      "workflow": "871d3a988bec37b2369b28b6a764c6684d126e23",
+      "checks": 363,
+      "behavior_controls": 8,
+      "receipt_sha256": "87fb61123c91a06473035c4eb554ddd1bce7e7adb695866605a69da26cc350de"
+    },
+    "build_list_matches_passing_candidate": true,
+    "source_review_reports": [
+      "scratch/DEBUG_MENU_1011/action_batch_repairs_20261020/REVIEW.md",
+      "scratch/DEBUG_MENU_1011/action_batch_integration_20261020_06/RUNTIME_REPAIR_FOLLOWUP.md",
+      "scratch/DEBUG_MENU_1011/resource_owner_integration_review_20261020/REVIEW.md",
+      "scratch/DEBUG_MENU_1011/resource_fixture_repairs_20261020/REVIEW.md"
+    ],
+    "changed_paths": {
+      "total": 95,
+      "production": 79,
+      "tests": 16
+    },
+    "newer_gui_owner_batches_included": false,
+    "native_gameplay_verified": false,
+    "normal_package_changed": false,
+    "final_debug_entry_dispositions_changed": false,
+    "workflow_mount_commit": "540515b873e535083f3f2148877e375ed61e2f34",
+    "source_head_verified": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb"
+  },
+  "independent_gui_io_20261020": {
+    "run_id": 39408530723,
+    "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39408530723",
+    "source": "4ad790750fbf8495161823f977580137c0368b85",
+    "workflow": "b1bc65ae7d5fe56166c4c929ec6acd48c590fe46",
+    "checks_passed": 546,
+    "controls_passed": 4,
+    "results": {
+      "interpreter": {
+        "process_exit_code": 0,
+        "numeric": {
+          "checks": 169,
+          "failures": 0
+        },
+        "receipt_sha256": "c35afccef85f92ae01377ffc71518d4474ffebc548dd248a59f2ccf175ab657d",
+        "executable_sha256": "400478dba134b81c545556d1aa2b39e4849dc79d99544c4c7be690bf95fd0eae"
+      },
+      "interpreter-clear-input": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 169,
+          "failures": 8
+        },
+        "receipt_sha256": "c320263b887d422f1e09d80426ff2b585fa4322b053a74cf2cffd0acc0217821",
+        "executable_sha256": "42befbff842634bc977b874e26578040c5f610161f1b4cfe373d4b9877d082d1"
+      },
+      "interpreter-old-capacity": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 169,
+          "failures": 8
+        },
+        "receipt_sha256": "dc583ae04a0e5d13589ba67c61317dc80d9535824859f2324ec8d4eaeac56ff1",
+        "executable_sha256": "f57ffbc49f29673673eeb70a7ffa1f5ff4b57244091782a4e715f00e3119b0d7"
+      },
+      "model": {
+        "process_exit_code": 0,
+        "numeric": {
+          "checks": 377,
+          "failures": 0
+        },
+        "receipt_sha256": "3e97027ba60461702ec179f45e377759615a4683a2360f2e003619e1bb7b22ab",
+        "executable_sha256": "2c5d9e0a08b2121929df03b301211222d84fc9262d8120dd7061b1ea1c9cd34f"
+      },
+      "model-base-only": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 65,
+          "failures": 24
+        },
+        "receipt_sha256": "7a4600833c170b82e8382cc245772ced43842166c757a2c28eaa6e87b31a7e7f",
+        "executable_sha256": "4e08d28d45fa3c2c74cfa8ec18972671fc99058ed7fb43619a2b2b9adf6ebd6f"
+      },
+      "model-retain-view": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 377,
+          "failures": 12
+        },
+        "receipt_sha256": "0d11dc6de244dddf8d166cbd312607f8c541aeb2b4f728567be6d77f3881399f",
+        "executable_sha256": "cfaddb4a47a6e87607dca47fc4737238075d3b12d0691ecd0eb2e8c43f738f50"
+      }
+    },
+    "receipt_sha256": "1ac02e575dfc842702544379c12faeefbc104d9c49a5776277f10bc50d4fc031",
+    "overall_candidate_validated": false,
+    "shipping_compile": {
+      "translation_units": 2985,
+      "compiled": 678,
+      "cached": 2307,
+      "failed": 0
+    },
+    "shipping_link": "fail",
+    "link_boundaries": [
+      "HardwareSku class-static GetSku/FindLanguage provider/API",
+      "BrnGuiKeyboard Construct/Destruct TUs not yet selected"
+    ],
+    "native": "not_run",
+    "normal_package_changed": false
   }
 }

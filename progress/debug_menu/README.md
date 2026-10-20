@@ -96,21 +96,25 @@ not establish native GUI or debug-entry behavior. Full native GUI resource
 activation, normal InputPostWorld/START progression and startup/streaming checks
 remain open; the playable folder retains the separate Create Match repair above.
 
-The action checkpoint `0c60cc363` passed its shipping build, 193 selected checks
-and three behavior controls. The [new 34-file GUI owner/action checkpoint](gui_owner_action_checkpoint_20261020.json)
-is committed at `3f57bf01f` and under combined source review. It adds ten routes:
-the independent [route audit](gui_action_route_audit_20261020.json) now counts
-**165/188 unique action IDs, with 23 missing**. Review has already found observer
-signature, assertion-path and one-byte payload defects to repair. These are source
-routes, not verified debug entries; this checkpoint has no build/native verdict.
+The reviewed [resource/action checkpoint](dev_resource_action_promotion_20261020.json)
+is now **merged and pushed to gameplay dev at `2b2fd8eee`**: 79 production source
+paths and 16 test paths. The matching controller-bridge build selection is on
+workflow main. Its exact hosted build passed **363 selected checks and eight
+behavior controls**; this promotion does not claim native gameplay parity.
 
-The [resource integration](resource_owner_source_20261020.json) passes source review
-and the full hosted run at `2b2fd8eee`: **363 selected checks and eight behavior
-controls**, covering profile, GUI interface, APT ownership, Road Rage, pool
-protocol/layout, resource transport/acquisition and delayed GameData bank/pool
-initialization. The artifact receipt and all 12 output hashes are verified. These
-fixtures use explicit IO/heap doubles; native resource and gameplay behavior remain
-unverified. Both follow-ons remain on the recovery branch.
+Newer GUI work remains isolated. The [shared GUI owner](gui_owner_action_checkpoint_20261020.json),
+[11-file access/image batch](gui_access_image_source_20261020.json) and
+[12-file keyboard/HUD batch](keyboard_hud_source_20261020.json) pass their scoped
+source reviews. The independent [route audit](gui_action_route_audit_20261020.json)
+now finds **183/188 unique action IDs, with five missing**. Upstream generators,
+consumers and activation remain separate from source-route presence.
+
+The current isolated source passes **546 GUI IO checks and four behavior controls**
+on the hosted runner. All 2,985 selected shipping TUs compile or validate from
+cache, but linking still needs the hardware-SKU backend/API and selected keyboard
+providers. The candidate is not validated or delivered. Native GUI preparation,
+keyboard Show and replay readiness remain open. The playable folder keeps the
+separate Create Match repair described above; its config and saves are unchanged.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
