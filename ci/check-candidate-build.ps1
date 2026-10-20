@@ -13,7 +13,8 @@ param(
     [switch] $RunHudRegressions,
     [switch] $RunResourceRegressions,
     [switch] $RunGuiIORegressions,
-    [switch] $RunGuiAnimationRegressions
+    [switch] $RunGuiAnimationRegressions,
+    [switch] $RunStartupIORegressions
 )
 
 Set-StrictMode -Version Latest
@@ -41,7 +42,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -277,6 +278,53 @@ try {
         Assert-CleanTrees
     }
 
+    # Independent production-body startup ownership checks. These do not prove boot.
+    if ($RunStartupIORegressions) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.startup_io_status = 'running'
+        Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+        foreach ($relative in @('tests/run_startup_io_ownership.py', 'tests/StartupIOOwnership.cpp')) {
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+        }
+        $startupRunner = Join-Path $SourceRoot 'tests/run_startup_io_ownership.py'
+        $startupRoot = Join-Path $ArtifactRoot 'startup-io-regressions'
+        $positiveDir = Join-Path $startupRoot 'positive'
+        Invoke-Native py @('-3', '-B', $startupRunner, '--output-dir', $positiveDir) 'regressions.log'
+        $positive = Get-Content -Raw -LiteralPath (Join-Path $positiveDir 'result.json') | ConvertFrom-Json
+        $positiveLog = Get-Content -Raw -LiteralPath (Join-Path $positiveDir 'run.stdout.txt')
+        if ($positive.process_exit_code -ne 0 -or $null -eq $positive.numeric -or
+            $positive.numeric.checks -ne 62 -or $positive.numeric.failures -ne 0 -or
+            -not $positiveLog.Contains('STARTUP_IO_OWNERSHIP: 62 checks, 0 failures')) {
+            throw 'Startup IO positive fixture did not execute its expected62 numeric checks.'
+        }
+        $startupControls = @(
+            @{ name = 'base-only-postworld'; flag = '--base-only-postworld'; witnesses = @('FAIL postworld bind queue owns inline backing', 'FAIL postworld mapping queue owns inline backing') },
+            @{ name = 'legacy-gui-write-lock'; flag = '--legacy-gui-write-lock'; witnesses = @('ASSERT Already locked for write', 'FAIL initial-loading caller retains GameData locks') }
+        )
+        foreach ($control in $startupControls) {
+            $controlDir = Join-Path $startupRoot $control.name
+            $logName = 'startup-io-negative-' + $control.name + '.log'
+            & py -3 -B $startupRunner $control.flag --output-dir $controlDir 2>&1 |
+                Tee-Object -FilePath (Join-Path $ArtifactRoot $logName) | Out-Host
+            $code = $LASTEXITCODE
+            $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', $startupRunner, $control.flag, '--output-dir', $controlDir); exit_code = $code; expected_failure = $true })
+            $result = Get-Content -Raw -LiteralPath (Join-Path $controlDir 'result.json') | ConvertFrom-Json
+            $log = (Get-Content -Raw -LiteralPath (Join-Path $controlDir 'run.stdout.txt')) +
+                (Get-Content -Raw -LiteralPath (Join-Path $controlDir 'run.stderr.txt'))
+            if ($code -ne 1 -or $result.process_exit_code -ne 1 -or $null -eq $result.numeric -or
+                $result.numeric.checks -ne 62 -or $result.numeric.failures -lt 1) {
+                throw "Startup IO control $($control.name) failed before numeric execution."
+            }
+            foreach ($witness in $control.witnesses) {
+                if (-not $log.Contains($witness)) { throw "Startup IO control $($control.name) missed witness: $witness" }
+            }
+            $Receipt.regressions.negative_controls['startup-io-' + $control.name] = @{ status = 'expected_behavior_failure'; exit_code = $code; log = $logName }
+        }
+        $Receipt.regressions.startup_io_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+        Assert-CleanTrees
+    }
+
     # Proven publisher prerequisites: release FFmpeg, NuGet XAudio2, vendored Lua.
     $ffmpeg = Join-Path $SourceRoot 'vendor/ffmpeg-build'
     $archive = Join-Path $WorkRoot 'ffmpeg-build.zip'
@@ -470,6 +518,7 @@ try {
 } catch {
     if ($Receipt.regressions.gui_io_status -eq 'running') { $Receipt.regressions.gui_io_status = 'fail' }
     if ($Receipt.regressions.gui_animation_status -eq 'running') { $Receipt.regressions.gui_animation_status = 'fail' }
+    if ($Receipt.regressions.startup_io_status -eq 'running') { $Receipt.regressions.startup_io_status = 'fail' }
     if ($Receipt.regressions.hud_status -eq 'running') { $Receipt.regressions.hud_status = 'fail' }
     if ($Receipt.regressions.remaining_status -eq 'running') { $Receipt.regressions.remaining_status = 'fail' }
     if ($Receipt.regressions.status -eq 'running') { $Receipt.regressions.status = 'fail' }
