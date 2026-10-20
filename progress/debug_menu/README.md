@@ -106,15 +106,22 @@ Newer GUI work remains isolated. The [shared GUI owner](gui_owner_action_checkpo
 [11-file access/image batch](gui_access_image_source_20261020.json) and
 [12-file keyboard/HUD batch](keyboard_hud_source_20261020.json) pass their scoped
 source reviews. The independent [route audit](gui_action_route_audit_20261020.json)
-now finds **183/188 unique action IDs, with five missing**. Upstream generators,
-consumers and activation remain separate from source-route presence.
+now finds **188/188 unique action IDs across 189 direct labels** in committed source.
+The [10-file Prepare/BHR checkpoint](prepare_bhr_source_20261020.json) and
+[11-file final-route/debug checkpoint](final_route_debug_source_20261020.json) are
+pushed on the private branch. Three source-review findings have follow-up repairs;
+the production corrections await fresh review. The [HUD fixture repair](hud_fixture_context_20261020.json)
+passes source review and will retain independent execution receipts before linking.
+Upstream generators, consumers and activation remain separate from source-route presence.
+Final behavior outcomes remain 35 verified, seven original no-ops and 1,313 pending.
 
-The current isolated source passes **546 GUI IO checks and four behavior controls**
-on the hosted runner. All 2,985 selected shipping TUs compile or validate from
-cache, but linking still needs the hardware-SKU backend/API and selected keyboard
-providers. The candidate is not validated or delivered. Native GUI preparation,
-keyboard Show and replay readiness remain open. The playable folder keeps the
-separate Create Match repair described above; its config and saves are unchanged.
+The earlier `4ad790750` source passed **546 GUI IO checks and four behavior controls**
+on the hosted runner. All 2,985 selected shipping TUs compiled or validated from
+cache, but linking still needed the hardware-SKU backend/API and selected keyboard
+providers. The newer `e7ac72734` checkpoint has not been compiled or executed.
+The candidate is not validated or delivered. Native GUI preparation, keyboard Show
+and replay readiness remain open. The playable folder keeps the separate Create
+Match repair described above; its config and saves are unchanged.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
