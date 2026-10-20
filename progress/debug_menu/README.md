@@ -109,19 +109,26 @@ source reviews. The independent [route audit](gui_action_route_audit_20261020.js
 now finds **188/188 unique action IDs across 189 direct labels** in committed source.
 The [10-file Prepare/BHR checkpoint](prepare_bhr_source_20261020.json) and
 [11-file final-route/debug checkpoint](final_route_debug_source_20261020.json) are
-pushed on the private branch. Three source-review findings have follow-up repairs;
-the production corrections await fresh review. The [HUD fixture repair](hud_fixture_context_20261020.json)
-passes source review and will retain independent execution receipts before linking.
+pushed on the private branch. Fresh source review confirms the production corrections
+and the [HUD fixture repair](hud_fixture_context_20261020.json). The original failed
+review records remain preserved with their passing follow-ups.
 Upstream generators, consumers and activation remain separate from source-route presence.
 Final behavior outcomes remain 35 verified, seven original no-ops and 1,313 pending.
 
-The earlier `4ad790750` source passed **546 GUI IO checks and four behavior controls**
-on the hosted runner. All 2,985 selected shipping TUs compiled or validated from
-cache, but linking still needed the hardware-SKU backend/API and selected keyboard
-providers. The newer `e7ac72734` checkpoint has not been compiled or executed.
-The candidate is not validated or delivered. Native GUI preparation, keyboard Show
-and replay readiness remain open. The playable folder keeps the separate Create
-Match repair described above; its config and saves are unchanged.
+The exact `e7ac72734` source now passes **614 selected checks** (603 numeric and
+11 source-wiring checks), plus six behavior controls, on the hosted runner.
+All 2,987 selected shipping TUs compiled or validated from cache. Linking still
+needs HardwareSku's two providers and the actual keyboard UI backend. Other
+selected suites did not execute after that link failure. See the
+[attributed hosted results](gui_hud_hosted_20261020.json).
+
+The [keyboard ownership correction](keyboard_canonical_owner_20261020.json) passes
+source/mount review. A newer [15-file PFX/debug/listener checkpoint](pfx_debug_listener_source_20261020.json)
+is pushed and under review; identified replay Cache offset readers are being
+repaired. These latest changes have not compiled. The candidate is not validated
+or delivered. Native GUI preparation, keyboard Show and replay readiness remain
+open. The playable folder keeps the separate Create Match repair described above;
+its config and saves are unchanged.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
