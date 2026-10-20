@@ -6,7 +6,7 @@
     "ci/check-candidate-build.ps1",
     ".github/workflows/build-candidate.yml"
   ],
-  "status": "source_review_pass_execution_pending",
+  "status": "hosted_numeric_and_wiring_pass",
   "review_sha256": "e9aadb8364c62b0ae2a589f5e03d15b20fe715e1657f64e4ae9b61fde957aa3b",
   "recovered": [
     "Crash fixture uses actual ten-argument PostWorld context and production team-change tail",
@@ -27,7 +27,55 @@
     "Source counts are expectations; no execution yet",
     "Partial fixture success never validates the full candidate"
   ],
-  "hosted_run": null,
+  "hosted_run": {
+    "run_id": 39416192477,
+    "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39416192477",
+    "source": "e7ac72734485055710bf4ba565f6508308b5f9e0",
+    "workflow": "dd0467f489a213bb66ec6099fc8428c5c8ddca87",
+    "receipt_sha256": "cf3070e2202e08de4d413f22b989c5760be7ea3eeeecce17bd1bb7da3efc11ae",
+    "numeric_checks": 57,
+    "wiring_checks": 11,
+    "negative_controls": 2,
+    "fixture_receipts": {
+      "hud-regressions\\crashes": {
+        "process_exit_code": 0,
+        "numeric": {
+          "checks": 38,
+          "failures": 0
+        },
+        "receipt_sha256": "38c674ef987bc35aa793e5ff14e6f34cd99fa35611e640c83a3125b0c2654538",
+        "executable_sha256": "a9f1863158c0a86304b208f9943f8d3af6246f2f7b4523ee15334c474ff41d35"
+      },
+      "hud-regressions\\legacy-team-predicate": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 19,
+          "failures": 5
+        },
+        "receipt_sha256": "2ae7ad5215f161a83e813d5a9e5c1648e424e30f094ccd97eecfb77747ec8de1",
+        "executable_sha256": "18bdf63ee9cd488c9a252e6d654c2838543f21532033c2e6b70bff44f904cea9"
+      },
+      "hud-regressions\\omit-team-tail": {
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 38,
+          "failures": 4
+        },
+        "receipt_sha256": "8b56bc7dd4a77b9581fffce2a42269bfc3e193c502c3c783b46be1298a42b631",
+        "executable_sha256": "d9d52b7c0ca76aeba93d2994ce24accc71f2718312daecfe4ec9232c11a73286"
+      },
+      "hud-regressions\\road-rage": {
+        "process_exit_code": 0,
+        "numeric": {
+          "checks": 19,
+          "failures": 0
+        },
+        "receipt_sha256": "01921b499352fc20737eb600d84e82c70c133e4cbfbcb57bd074896055e9855b",
+        "executable_sha256": "8473d0d01cbf1a1a2a5edab26aba25f28b3f384ff136300a67555044575a2190"
+      }
+    },
+    "candidate_validated": false
+  },
   "final_dispositions": {
     "verified": 35,
     "original_no_op": 7,
