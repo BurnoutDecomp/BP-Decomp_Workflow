@@ -17,6 +17,11 @@ on:
         required: false
         default: false
         type: boolean
+      run_hud_regressions:
+        description: Run recovered Road Rage producers and existing HUD crash fixtures
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -62,6 +67,7 @@ jobs:
           CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
           CANDIDATE_RUN_REGRESSIONS: ${{ inputs.run_regressions }}
           CANDIDATE_RUN_APT_LIFETIME: ${{ inputs.run_apt_lifetime }}
+          CANDIDATE_RUN_HUD_REGRESSIONS: ${{ inputs.run_hud_regressions }}
           GH_TOKEN: ${{ github.token }}
           BRN_EXE_HASH_DEPS: "1"
           BRN_EXE_JOBS: "4"
@@ -69,7 +75,8 @@ jobs:
           ./ci/check-candidate-build.ps1 -B5Commit $env:CANDIDATE_B5_SHA `
             -WorkflowSha $env:CANDIDATE_WORKFLOW_SHA -Jobs 4 `
             -RunRegressions:($env:CANDIDATE_RUN_REGRESSIONS -eq 'true') `
-            -RunAptLifetime:($env:CANDIDATE_RUN_APT_LIFETIME -eq 'true')
+            -RunAptLifetime:($env:CANDIDATE_RUN_APT_LIFETIME -eq 'true') `
+            -RunHudRegressions:($env:CANDIDATE_RUN_HUD_REGRESSIONS -eq 'true')
 
       - name: Save successful candidate objects
         if: success()
