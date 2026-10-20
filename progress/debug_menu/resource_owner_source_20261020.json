@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "status": "integrated_source_review_and_shipping_existing193_checks_passed_resource_suite_pending",
+  "status": "source_review_shipping_and_full_selected_resource_suite_passed_native_pending",
   "integration_packet": "scratch/DEBUG_MENU_1011/gui_resource_recovery_20261020/resource_integration_checkpoint_12",
   "base": "02fc055bf259419120cb79379f6c952daf65f5a7",
   "patch_sha256": "1409916a50a9627ecae204dfe7d1035fa651d87b6cbdef7cfb5fdb1ab6e1d568",
@@ -44,7 +44,7 @@
     "Serialized two-argument host ResourceModule transport remains.",
     "Native GUI preparation/validators and original IO stack/monitor/filesystem owner chain remain unselected.",
     "PC synchronous GUI pool bindings and APT resource lifetimes are preserved as separate owners.",
-    "Shipping build and existing193 selected checks pass; dedicated resource fixtures and native behavior remain separate gates."
+    "The full selected363-check suite and eight behavior controls pass; native resource/gameplay behavior remains unverified."
   ],
   "dev_delivery": false,
   "final_entry_dispositions_changed": false,
@@ -100,5 +100,85 @@
     "native": "not_run",
     "normal_package_changed": false
   },
-  "full_resource_suite": "pending_pool_protocol_layout_transport_acquire_hierarchy_plus_four_behavior_controls"
+  "full_resource_suite": {
+    "source": "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb",
+    "workflow": "871d3a988bec37b2369b28b6a764c6684d126e23",
+    "run_id": 39398332776,
+    "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39398332776",
+    "compile": {
+      "translation_units": 2977,
+      "compiled": 0,
+      "cached": 2977,
+      "failed": 0
+    },
+    "link": "pass",
+    "selected_checks_passed": 363,
+    "check_totals": {
+      "profile": 22,
+      "gui_interface": 23,
+      "apt_ownership": 103,
+      "hud_crashes": 39,
+      "online_roadrage_hud": 22,
+      "pool_protocol": 24,
+      "pool_layout": 22,
+      "resource_shuttle": 14,
+      "gui_pool_acquire": 27,
+      "game_data_pool_hierarchy": 67
+    },
+    "negative_controls": {
+      "pool-event-sentinel": {
+        "exit_code": 1,
+        "log": "pool-negative-event-sentinel.log",
+        "status": "expected_behavior_failure"
+      },
+      "--require-new-apt-resources": {
+        "exit_code": 1,
+        "log": "apt-negative--require-new-apt-resources.log",
+        "status": "expected_behavior_failure"
+      },
+      "pool-tag10": {
+        "exit_code": 1,
+        "log": "pool-negative-tag10.log",
+        "status": "expected_behavior_failure"
+      },
+      "pool-batch-count": {
+        "exit_code": 1,
+        "log": "pool-negative-batch-count.log",
+        "status": "expected_behavior_failure"
+      },
+      "--omit-apt-retain": {
+        "exit_code": 1,
+        "log": "apt-negative--omit-apt-retain.log",
+        "status": "expected_behavior_failure"
+      },
+      "--legacy-team-predicate": {
+        "exit_code": 1,
+        "log": "hud-negative-legacy-team-predicate.log",
+        "status": "expected_behavior_failure"
+      },
+      "pool-shared-buffer": {
+        "exit_code": 1,
+        "log": "pool-negative-shared-buffer.log",
+        "status": "expected_behavior_failure"
+      },
+      "--legacy-free-state-offset": {
+        "exit_code": 1,
+        "log": "apt-negative--legacy-free-state-offset.log",
+        "status": "expected_behavior_failure"
+      }
+    },
+    "receipt_sha256": "87fb61123c91a06473035c4eb554ddd1bce7e7adb695866605a69da26cc350de",
+    "executable": {
+      "sha256": "0458365a239075e28c48094cf0137ad5fba6540681b681b24e255245afb2501e",
+      "bytes": 11089408
+    },
+    "output_hashes_verified": 12,
+    "scope": "Production-body fixtures with explicit IO/heap doubles; source wiring checks included. No game or end-to-end parity claim.",
+    "native": "not_run",
+    "normal_package_changed": false
+  },
+  "fixture_link_repairs": [
+    "aa3171f1871dc4af34081d0c37ae77e68fbf602f",
+    "2b2fd8eee039c69c9337bc64fb8c2dc18f8a0fbb"
+  ]
 }
