@@ -3562,6 +3562,9 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Gui\View\CgsGuiViewModule_AddViewState_Inst.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsHashTable_EventInterpreterModule_sMapEntry7.cpp"
   echo "%SRC%\GameShared\GameClasses\Language\CgsSku.cpp"
+  rem Original keyboard lifecycle owners; platform UI readiness remains separate.
+  echo "%SRC%\GameSource\Gui\BrnGuiKeyboard.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiKeyboard.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsAptDataHeaderType.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiGeometryObjects.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsGuiHudMessage.cpp"
