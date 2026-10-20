@@ -12,9 +12,10 @@ Source coverage and fixture checks are not final debug-entry dispositions.
 
 ## Playable package and current crash
 
-The normal build/game folder contains the restored playable **9c15dfff8**
-package, with matching DLLs/symbols and preserved config/saves.
-It still has the reported online Create Match crash.
+The normal `build/game` folder now contains the startup-tested **2011742a7**
+package, with matching DLLs/symbols and preserved config/saves. Launch
+`build/game/Burnout_PC.exe`. The online Create Match crash remains under
+investigation. [Installed package](startup_normal_delivery_20261020.json).
 
 The input-buffer lifecycle, GUI lock ownership and profile/cache event-order
 repairs are now merged into **gameplay dev at 7d66267f5**. The exact production
@@ -30,7 +31,7 @@ native Create Match run is still required before calling that issue fixed.
 
 ## Source and validation lanes
 
-- Gameplay dev is **7d66267f5**; the normal folder still has the restored 9c15 package pending the remaining delivery checks.
+- Gameplay dev is **7d66267f5**; the normal folder has startup-tested201 (the same production sources; 7d adds regression fixtures).
 - The merged startup/compile-check source is 7d66267f5. Its shipping build
   passes all 2,979 selected TUs, including both newly repaired embed checks,
   plus 519 focused checks and 11 intentional failure controls. This does not
@@ -52,7 +53,8 @@ native Create Match run is still required before calling that issue fixed.
 
 The [isolated Create Match diagnostics](freeburn_create_match_diagnostics_20261020.json)
 are reviewed, compiled and staged at 0c8f3d7f6. They passed 519 checks/11 controls;
-the returning-profile native case is pending and the normal package is unchanged.
+the returning-profile native case is pending. Two setup failures sent zero inputs
+and did not reach Create Match; they are not gameplay verdicts.
 
 The action translator covers 188 unique IDs across 189 labels. That is source
 coverage, not 188 verified debug controls or a complete native GUI pipeline.
