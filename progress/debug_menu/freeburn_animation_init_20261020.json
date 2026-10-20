@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-20",
+  "source": "db73ba838af4763f9fec04f592383b4459b51835",
+  "dev_source": "db73ba838af4763f9fec04f592383b4459b51835",
+  "production_paths": 4,
+  "test_paths": 2,
+  "recovered": [
+    "Original AnimChannel two-phase initialization and initialized template copies",
+    "Original Interpolator initialization and canonical getter owner"
+  ],
+  "review": {
+    "verdict": "pass",
+    "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261020/proposal_animator_init/REVIEW.md",
+    "sha256": "fbc709582045af1d9d33bd577460139e46191a95ee39a42c8a8debd9056e8c0d"
+  },
+  "hosted": {
+    "source": "db73ba838af4763f9fec04f592383b4459b51835",
+    "workflow": "6e6bf9869aafdc25fb52463d19981283de17b068",
+    "run_id": 39438812986,
+    "input_receipt_sha256": "cd29d2bfec323e1b2a7f76581c3f667d170990169c1f7045e925c132de462208",
+    "validated": true,
+    "total_checks": 377,
+    "numeric_checks": 354,
+    "wiring_checks": 23,
+    "behavior_controls": 8,
+    "positive_summaries": [
+      {
+        "checks": 75,
+        "wiring": 7,
+        "summary": "run_gui_animation_initialization: wiring 7/7, numeric 68/68; total 75/75 pass (0 fail)"
+      },
+      {
+        "checks": 22,
+        "wiring": 8,
+        "summary": "run_profile_delivery: wiring 8/8, numeric 14/14; total 22/22 pass (0 fail)"
+      },
+      {
+        "checks": 23,
+        "wiring": 2,
+        "summary": "run_fxgs2_gui_iface: wiring 2/2, numeric 21/21; total 23/23 pass (0 fail)"
+      },
+      {
+        "checks": 103,
+        "wiring": 6,
+        "summary": "run_pc_bundle_ownership: wiring 6/6, numeric 97/97; total 103/103 pass (0 fail)"
+      },
+      {
+        "checks": 14,
+        "wiring": 0,
+        "summary": "run_pc_resource_shuttle: wiring 0/0, numeric 14/14; total 14/14 pass (0 fail)"
+      },
+      {
+        "checks": 27,
+        "wiring": 0,
+        "summary": "run_pc_gui_pool_acquire: wiring 0/0, numeric 27/27; total 27/27 pass (0 fail)"
+      },
+      {
+        "checks": 24,
+        "wiring": 0,
+        "summary": "PoolCreateProtocol: 24 checks, 0 failures; mode=protocol"
+      },
+      {
+        "checks": 22,
+        "wiring": 0,
+        "summary": "PoolCreateProtocol: 22 checks, 0 failures; mode=layout"
+      },
+      {
+        "checks": 67,
+        "wiring": 0,
+        "summary": "GameDataPoolHierarchy: 67 checks, 0 failures"
+      }
+    ],
+    "animation_results": {
+      "positive": {
+        "numeric": {
+          "checks": 68,
+          "failures": 0
+        },
+        "process_exit_code": 0,
+        "executable_sha256": "726f959a2acaa5787ee6c21ff93d8b64c5d3b206a1c0767ff2d19da68827df39",
+        "production_input_count": 19,
+        "receipt_sha256": "0611800ea96653d043808159935dd30a64316a1296deffe059ebbe704b8c4df7"
+      },
+      "omit-channel-construct": {
+        "numeric": {
+          "checks": 68,
+          "failures": 39
+        },
+        "process_exit_code": 1,
+        "executable_sha256": "33981418aadd7b746bf1ec8685ffbab60dfc4a4c7a0d2b2b21bcdb0145c47aa0",
+        "production_input_count": 19,
+        "receipt_sha256": "2aa12bf8ab08b3b6f5614ee4808d98fbda813faba7fab0d5da8f7849d0e1e601"
+      }
+    },
+    "shipping_compile": {
+      "translation_units": 2977,
+      "compiled": 886,
+      "cached": 2091,
+      "failed": 0
+    },
+    "shipping_link": "pass",
+    "outputs": {
+      "Burnout_PC.map": {
+        "sha256": "c81a3327735ee825238fc9a537d0dc31ba3b461e24511be1746a4ef70da3ade9",
+        "bytes": 17560137
+      },
+      "xaudio2_9redist.dll": {
+        "sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+        "bytes": 997400
+      },
+      "swresample-7.dll": {
+        "sha256": "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c",
+        "bytes": 201728
+      },
+      "avfilter-12.dll": {
+        "sha256": "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276",
+        "bytes": 234496
+      },
+      "Burnout_PC.cgsmap": {
+        "sha256": "f5d6c72905aa4b606f3358e30719bb2131f57a0198b938c00a5287a0fc780f2f",
+        "bytes": 3010960
+      },
+      "Burnout_PC.exe": {
+        "sha256": "f7b744308fb4a219ace29b54a04f7d921ee3d3a56c83a9e3146a0ee4f689ddd9",
+        "bytes": 11089408
+      },
+      "swscale-10.dll": {
+        "sha256": "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de",
+        "bytes": 955904
+      },
+      "avdevice-63.dll": {
+        "sha256": "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9",
+        "bytes": 109056
+      },
+      "avcodec-63.dll": {
+        "sha256": "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b",
+        "bytes": 2179072
+      },
+      "Burnout_PC.exe.provenance.json": {
+        "sha256": "80d3a578b2c37cd3867dd7685b778336fe3f0a00e1eb04548d49a82dc537d247",
+        "bytes": 467
+      },
+      "avutil-61.dll": {
+        "sha256": "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb",
+        "bytes": 978944
+      },
+      "avformat-63.dll": {
+        "sha256": "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c",
+        "bytes": 644608
+      }
+    },
+    "symbols": 23523,
+    "native_create_match": "not_run",
+    "compiled_locally": false
+  },
+  "delivery_status": "installed_then_rolled_back_after_native_startup_failure",
+  "native_create_match": "not_reached_on_candidate",
+  "startup_regression_report": "startup_regression_20261020.json",
+  "current_normal_source": "9c15dfff8123b14a4991fb76f3f591ff15a4f21b",
+  "current_normal_executable_sha256": "8ca0067a8227d55ed14af28627562c950f3d312297ac59cd3655c1f12be36ab1",
+  "claims": "Animation initializer source and focused fixture pass; this does not certify native Create Match or startup."
+}

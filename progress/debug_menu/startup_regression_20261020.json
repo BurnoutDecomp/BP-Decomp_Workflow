@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-20",
+  "status": "failed_package_rolled_back_startup_repair_in_progress",
+  "failing_source": "db73ba838af4763f9fec04f592383b4459b51835",
+  "failing_executable_sha256": "f7b744308fb4a219ace29b54a04f7d921ee3d3a56c83a9e3146a0ee4f689ddd9",
+  "failing_run_id": 39438812986,
+  "hosted_build_and_fixtures_passed": true,
+  "native_startup": "fail_user_report_and_matching_log",
+  "failure": {
+    "exception": "C0000005",
+    "operation": "write_null",
+    "rva": "0x721C6",
+    "function": "CgsInput::InputIO::PostWorldInputBuffer::PostMappingRequest",
+    "caller_chain": [
+      "DoUpdate_InputPostWorld",
+      "LoadingScriptedState::Update",
+      "MainGameFlowStateMarketingScreens::Update"
+    ],
+    "preceding_log": "Nested/absent write locks and null EventQueue backing during initial loading"
+  },
+  "source_findings_under_repair": [
+    "Missing actual derived PostWorldInputBuffer Construct/Destruct",
+    "Existing no-arg GUI calibration path relocks a GameData pair already held by restored loading callers"
+  ],
+  "evidence": {
+    "scratch\\DEBUG_MENU_1011\\startup_regression_20261020\\capture_20261020_144411\\BrnCrash.png": "0fd43a9cbb27007636cd2917778b12a3a6f6254b93277fa040ddf822751a33a0",
+    "scratch\\DEBUG_MENU_1011\\startup_regression_20261020\\capture_20261020_144411\\BrnGame.emergency.log": "50c6150fb50b2a911e0c24d093a54c5f01c6f2021389bb649ffd7194d01ed098",
+    "scratch\\DEBUG_MENU_1011\\startup_regression_20261020\\capture_20261020_144411\\BrnGame.log": "5098cdd3090bb9e227dcb94507771274acaaa839c73ee8e4def246dc5ae104c0",
+    "scratch\\DEBUG_MENU_1011\\startup_regression_20261020\\capture_20261020_144411\\Burnout_PC.exe.provenance.json": "80d3a578b2c37cd3867dd7685b778336fe3f0a00e1eb04548d49a82dc537d247",
+    "scratch\\DEBUG_MENU_1011\\startup_regression_20261020\\capture_20261020_144411\\config.ini": "2164f7a561262d840a9d74db0644c1980eeb55fc7b6dfb5d2388e5d3fe5caabf",
+    "scratch\\DEBUG_MENU_1011\\startup_regression_20261020\\capture_20261020_144411\\dump_inventory.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "rollback": {
+    "restored_source": "9c15dfff8123b14a4991fb76f3f591ff15a4f21b",
+    "restored_exe_sha256": "8ca0067a8227d55ed14af28627562c950f3d312297ac59cd3655c1f12be36ab1",
+    "failed_source": "db73ba838af4763f9fec04f592383b4459b51835",
+    "failed_exe_sha256": "f7b744308fb4a219ace29b54a04f7d921ee3d3a56c83a9e3146a0ee4f689ddd9",
+    "restored_files": [
+      "Burnout_PC.cgsmap",
+      "Burnout_PC.exe",
+      "Burnout_PC.exe.provenance.json",
+      "Burnout_PC.map",
+      "avcodec-63.dll",
+      "avdevice-63.dll",
+      "avfilter-12.dll",
+      "avformat-63.dll",
+      "avutil-61.dll",
+      "swresample-7.dll",
+      "swscale-10.dll",
+      "xaudio2_9redist.dll"
+    ],
+    "previous_exe_mtime_restored": true,
+    "config_unchanged": true,
+    "save_or_asset_paths_written": false,
+    "failed_package_preserved": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\startup_regression_20261020\\failed_package_before_rollback",
+    "game_launched": false
+  },
+  "next_delivery_gate": "Fresh source review, hosted build/fixtures and actual startup witness before replacing the playable copy",
+  "local_game_or_compiler_launched_by_agent": false,
+  "final_debug_dispositions_changed": 0
+}
