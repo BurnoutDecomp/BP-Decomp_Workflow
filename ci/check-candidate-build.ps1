@@ -218,10 +218,20 @@ try {
             $aptRunner = Join-Path $SourceRoot 'tests/run_pc_bundle_ownership.py'
             Invoke-Native py @('-3', '-B', $aptRunner) 'regressions.log'
             $Receipt.regressions.negative_controls = @{}
-            foreach ($control in @(
+            $controls = @(
                 @{ flag = '--omit-apt-retain'; witness = 'FAIL\s+(Apt pin holds every member|logical unload preserves)' },
                 @{ flag = '--require-new-apt-resources'; witness = 'FAIL[^\r\n]*(reload|lead|acquire)' }
-            )) {
+            )
+            $helpArguments = @('-3', '-B', $aptRunner, '--help')
+            $aptHelp = & py @helpArguments 2>&1
+            $helpCode = $LASTEXITCODE
+            $NativeCommands.Add(@{ command = 'py'; arguments = $helpArguments; exit_code = $helpCode })
+            if ($helpCode -ne 0) { throw 'APT runner capability check failed.' }
+            if (($aptHelp -join "`n") -match '--legacy-free-state-offset') {
+                $Receipt.regressions.inputs['tests/pc_apt_callback_fixture.h'] = Get-FileRecord (Join-Path $SourceRoot 'tests/pc_apt_callback_fixture.h')
+                $controls += @{ flag = '--legacy-free-state-offset'; witness = 'FAIL[^\r\n]*(FreeAnimation|state|offset|const)' }
+            }
+            foreach ($control in $controls) {
                 $logName = 'apt-negative' + $control.flag + '.log'
                 $logPath = Join-Path $ArtifactRoot $logName
                 & py -3 -B $aptRunner $control.flag 2>&1 | Tee-Object -FilePath $logPath | Out-Host
