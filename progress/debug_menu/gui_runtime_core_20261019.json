@@ -151,14 +151,13 @@
     "scope": "Typed post-world input, bind/unbind request/results, initial mapping and wheel spring."
   },
   "latest_isolated_followon": {
-    "source": "f7ced35c80d397e5ed676c9e2f25e4425c59d6b2",
+    "source": "a69001f71391d87edf5cf2fb281cced189151209",
     "commits": [
       "63cf4d3a8323cc28b97f4ca83e2635f552674839",
       "c14c9e6e224b279c171a3f4ecbd2f2d6791e3f96",
       "f7ced35c80d397e5ed676c9e2f25e4425c59d6b2"
     ],
-    "paths_over_c240": 55,
-    "production_paths": 52,
+    "production_paths": 54,
     "regression_paths": 3,
     "scope": "Typed InputPostWorld chain, twelve more GUI action arms and distinct loading/normal callers and clocks.",
     "translator_source_ids": 142,
@@ -166,8 +165,45 @@
     "source_wiring_passed": 10,
     "numeric_executed_for_this_followon": false,
     "review_packet": "scratch/DEBUG_MENU_1011/runtime_followon_review_20261020/REVIEW_PACKET.md",
-    "review": "in_progress",
-    "build": "pending_paired_controller_mount",
-    "native": "not_run"
+    "review": "original_f7_fail; alias-backed tail stores and original case185 diagnostic now repaired in separate commits",
+    "build": "hosted_rerun_after_link_owner_fold",
+    "native": "not_run",
+    "baseline": "10e27b3f6bcb036879fcf85ce42e6de65c932f76",
+    "paths_over_baseline": 57,
+    "repair_commits": [
+      "e2a361f5fd30a9512c2d3d54cb360e3a067ebd25",
+      "ec494b80b5095e1dd79fad9c69788b0f105935ec"
+    ],
+    "current_dev_merged": "10e27b3f6bcb036879fcf85ce42e6de65c932f76",
+    "first_build": {
+      "run_id": 39380536649,
+      "source": "2fa5b57595d40d75d8e2d4ed496b44eb64b05fe8",
+      "compile": {
+        "translation_units": 2977,
+        "compiled": 808,
+        "cached": 2169,
+        "failed": 0,
+        "seconds": 197.6
+      },
+      "link": "fail_only_unmounted_GetDebugGamePad",
+      "regressions": "not_run"
+    },
+    "link_repair": {
+      "commit": "a69001f71391d87edf5cf2fb281cced189151209",
+      "body_changed": false,
+      "scope": "Move the existing ARTIST-matching accessor into its mounted InputPads owner and delete the unmounted split file."
+    },
+    "current_run": {
+      "run_id": 39381621897,
+      "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39381621897",
+      "workflow": "d4d6016e8df30a7b79ea807e07a22b500acecfb5",
+      "source": "a69001f71391d87edf5cf2fb281cced189151209"
+    },
+    "paired_mount_branch": "codex/debug-menu-runtime-candidate-20261020",
+    "dev_delivery": false,
+    "selection_limits": [
+      "Normal InputPostWorld/START-bind progression is still incomplete.",
+      "Full native GUI resource phase is still under separate owner/producer recovery."
+    ]
   }
 }
