@@ -82,10 +82,10 @@ lacks a verified PC provider. The flag initialization is corrected in the later
 runtime checkpoint below. These recovery checkpoints change no final entry dispositions and are
 separate from the normal dev delivery above.
 
-The [last built GUI/runtime candidate](gui_runtime_core_20261019.json) is pushed at
+The earlier [GUI/runtime candidate](gui_runtime_core_20261019.json) is pushed at
 `a69001f71`, separately from dev. It contains the full GameState Prepare and main
 GUI wrapper, distinct loading/normal caller clocks, typed InputPostWorld wiring,
-the original constructor flag and 141 unique translator action IDs across 142 direct labels. Source
+the original constructor flag and 142 unique translator action IDs across 143 direct labels. Source
 review found a missing banking store and an incorrect diagnostic; both are
 repaired. The existing debug-pad accessor is now in its mounted owner.
 
@@ -95,19 +95,24 @@ TUs compile or validate from cache, and the executable links. These fixtures do
 not establish native GUI or debug-entry behavior. Full native GUI resource
 activation, normal InputPostWorld/START progression and startup/streaming checks
 remain open; the playable folder retains the separate Create Match repair above.
-The newer source checkpoint `019d8c528` adds 13 genuinely missing action branches,
-the three Road Rage producers and both Road Rules message payload repairs. Its
-combined source review passes after three findings were repaired, including the
-existing test caller. Hosted execution of the new fixtures is pending. An exact
-recount gives **154/188 unique routed action IDs, with 34 missing**; the older 142
-count included the duplicated action 2 route. These are source routes within one
-GUI translator, separate from debug registrations and native behavior.
+The later action checkpoint `0c60cc363` passes its shipping build, **193 selected
+checks and three behavior negative controls**. It adds 13 missing translator arms,
+three Road Rage producers and both Road Rules message payload repairs. The new
+19-check generator fixture detects the old team-selection bug. The independent
+[route audit](gui_action_route_audit_20261020.json) counts **155/188 unique IDs,
+with 33 missing**. The previously reported 154 omitted an existing inline case;
+the older 142 unique-ID count was correct. These are source routes, separate from
+debug registrations and native behavior.
 
-The [22-file resource batch](resource_owner_source_20261020.json) is frozen for
-review. It restores canonical pool ownership, map-derived bank/pool requests and
-real response waits. Its fixture audit found a missing queue-append provider;
-that original body is now frozen separately, and fixture updates continue. Native GUI
-preparation remains unselected. No final entry dispositions changed.
+The [resource integration](resource_owner_source_20261020.json) is pushed in
+`1ddb53090`: 26 source paths plus the existing acquire fixture. It restores the
+canonical pool owner chain, map-derived requests, real reply waits, queue append
+provider and original boot-mode transition. Source review passes. Its `84664079c`
+checkpoint also builds and passes the existing 193 checks. Dedicated protocol,
+transport, acquire and hierarchy fixtures now pass source review after their log
+types and retained receipts were repaired; their hosted execution is next. Current
+dev's callback tests are merged into this isolated candidate. Native GUI preparation
+remains unselected. No final debug-entry dispositions changed.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
