@@ -45,11 +45,22 @@ The repair keeps imported movie resources alive and restores the native header
 state and retained-reload GUI registration. Source review, shipping build,
 81 numeric checks, six wiring checks and both negative controls pass. The package
 has matching symbols/DLLs; the previous build is backed up and config/saves are
-preserved. **Create Match still needs an in-game retest on this package.** See the
+preserved. **The user retested on20October and Create Match still crashes.** The matching dump traces a null virtual call through HelpBar animation channels; the missing original channel/interpolator initialization is being recovered in parallel. See the
 [delivery and its limits](freeburn_apt_init_crash_20261019.json). Earlier deliveries
 remain recorded for attribution.
 
 ## Active work
+
+The latest reviewed callback/results/ProfileHost source is pushed at `700e49635`.
+[Hosted checks](gui_callbacks_hosted_20261020.json) pass916selected checks and13failure
+controls; all2,987selected shipping TUs compile. Linking still needs the actual
+SKU/language providers and keyboard backend. Unselected providers are not compiled
+by that receipt. Newer committed [HUD/profile ownership](gui_render_profile_source_20261020.json)
+and [activation/keyboard source](gui_activation_keyboard_source_20261020.json) are
+under source review and hosted checking. They restore the full high-level renderer,
+real profile owner,23activation callbacks and the original keyboard wrapper. Native
+GUI phase/registration and actual keyboard UI remain open. No final entry count changes.
+
 
 The [dev synchronization checkpoint](DEV_SYNC_20261019.md) reconciles the
 overlapping collision recovery and current audio, hardware and online changes.
