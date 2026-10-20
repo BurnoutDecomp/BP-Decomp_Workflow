@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-20",
+  "status": "bounded_evidence_no_complete_policy_attested",
+  "source_paths": 0,
+  "evidence_manifest_sha256": "3fc10477885724e4de4942b84ef6e3d038e0beceb65e23b3bcdb855b7d54ab5e",
+  "findings_sha256": "a4448f93a9f30be1951c1e3d8645e21612546d05bc76d215a5a88b1e31ab0a8d",
+  "scope": [
+    "Original installed BPR direct PE imports",
+    "Activation DLL registry/locale callers",
+    "Named cached TUB WinMain/ERGC/Party-version callers",
+    "Existing project baseline distinguished from original PC game"
+  ],
+  "unresolved": [
+    "Original PC SKU getter/policy and fallback/cache behavior",
+    "Installer locale to ELanguage mapping/failure semantics",
+    "Actual native keyboard backend or import contract"
+  ],
+  "limits": [
+    "Direct import absence does not prove a local implementation is absent",
+    "Activation/ERGC helper behavior is not game SKU policy",
+    "No fixed6/English7 adapter or replacement dialog was introduced"
+  ],
+  "new_implementation": false
+}

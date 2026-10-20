@@ -115,20 +115,25 @@ review records remain preserved with their passing follow-ups.
 Upstream generators, consumers and activation remain separate from source-route presence.
 Final behavior outcomes remain 35 verified, seven original no-ops and 1,313 pending.
 
-The exact `e7ac72734` source now passes **614 selected checks** (603 numeric and
-11 source-wiring checks), plus six behavior controls, on the hosted runner.
+The exact `f0e1be44d` source passes **916 selected checks** (889 numeric and
+27 source-wiring checks), plus 13 behavior controls, on the hosted runner.
 All 2,987 selected shipping TUs compiled or validated from cache. Linking still
-needs HardwareSku's two providers and the actual keyboard UI backend. Other
-selected suites did not execute after that link failure. See the
-[attributed hosted results](gui_hud_hosted_20261020.json).
+needs HardwareSku's two providers and the actual keyboard UI backend. Every
+requested existing fixture group ran before the link gate. See the
+[full attributed results](gui_full_fixture_hosted_20261020.json); the earlier
+[614-check GUI/HUD result](gui_hud_hosted_20261020.json) retains its own source pin.
 
-The [keyboard ownership correction](keyboard_canonical_owner_20261020.json) passes
-source/mount review. A newer [15-file PFX/debug/listener checkpoint](pfx_debug_listener_source_20261020.json)
-is pushed and under review; identified replay Cache offset readers are being
-repaired. These latest changes have not compiled. The candidate is not validated
-or delivered. Native GUI preparation, keyboard Show and replay readiness remain
-open. The playable folder keeps the separate Create Match repair described above;
-its config and saves are unchanged.
+The [PFX/debug/listener checkpoint](pfx_debug_listener_source_20261020.json),
+[replay/HUD correction](replay_debug_followon_20261020.json) and
+[keyboard ownership correction](keyboard_canonical_owner_20261020.json) have passing
+scoped source follow-ups. A [six-file constructor/access batch](gui_debug_constructor_access_source_20261020.json)
+also passes source review. The newer [eight-file callback/status/lifecycle batch](gui_debug_callbacks_status_source_20261020.json)
+is pushed and under review, including a rendering correction. These latest debug
+owner changes have not compiled or activated. Native GUI preparation, keyboard
+Show and replay readiness remain open; the [bounded PC backend lookup](platform_backend_evidence_20261020.json)
+does not establish the missing platform policy. The candidate is not validated or
+delivered. The playable folder keeps the separate Create Match repair described
+above; its config and saves are unchanged.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is

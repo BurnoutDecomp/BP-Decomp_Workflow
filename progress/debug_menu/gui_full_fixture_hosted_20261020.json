@@ -1,0 +1,197 @@
+{
+  "source": "f0e1be44d8b633d5646652370ccb0bfe1bfbb297",
+  "workflow": "0a1d75c70c338b0160dc76a6a379adce7237ae5a",
+  "run_id": 39423097200,
+  "input_receipt_sha256": "f6b1f3de021fb6befdb959c9400f9dce515f9c5df58c0073d2b398bce95b11d0",
+  "status": "partial_selected_fixtures_pass",
+  "group_status": {
+    "gui_io_status": "pass",
+    "hud_status": "pass",
+    "remaining_status": "pass"
+  },
+  "numeric_checks": 889,
+  "wiring_checks": 27,
+  "total_checks": 916,
+  "positive_summaries": {
+    "run_gui_model_io": {
+      "checks": 377,
+      "log": "run_gui_model_io: 377/377 pass (0 fail)"
+    },
+    "run_gui_interpreter_io": {
+      "checks": 169,
+      "log": "run_gui_interpreter_io: 169/169 pass (0 fail)"
+    },
+    "run_fxgs_hud_crashes": {
+      "checks": 46,
+      "log": "run_fxgs_hud_crashes: wiring 8/8, numeric 38/38; total 46/46 pass (0 fail)"
+    },
+    "run_fxgs_online_roadrage_hud": {
+      "checks": 22,
+      "log": "run_fxgs_online_roadrage_hud: wiring 3/3, numeric 19/19; total 22/22 pass (0 fail)"
+    },
+    "run_profile_delivery": {
+      "checks": 22,
+      "log": "run_profile_delivery: wiring 8/8, numeric 14/14; total 22/22 pass (0 fail)"
+    },
+    "run_fxgs2_gui_iface": {
+      "checks": 23,
+      "log": "run_fxgs2_gui_iface: wiring 2/2, numeric 21/21; total 23/23 pass (0 fail)"
+    },
+    "run_pc_bundle_ownership": {
+      "checks": 103,
+      "log": "run_pc_bundle_ownership: wiring 6/6, numeric 97/97; total 103/103 pass (0 fail)"
+    },
+    "run_pc_resource_shuttle": {
+      "checks": 14,
+      "log": "run_pc_resource_shuttle: wiring 0/0, numeric 14/14; total 14/14 pass (0 fail)"
+    },
+    "run_pc_gui_pool_acquire": {
+      "checks": 27,
+      "log": "run_pc_gui_pool_acquire: wiring 0/0, numeric 27/27; total 27/27 pass (0 fail)"
+    },
+    "pool-protocol": {
+      "checks": 24,
+      "wiring": 0,
+      "log": "PoolCreateProtocol: 24 checks, 0 failures; mode=protocol"
+    },
+    "pool-layout": {
+      "checks": 22,
+      "wiring": 0,
+      "log": "PoolCreateProtocol: 22 checks, 0 failures; mode=layout"
+    },
+    "game-data-hierarchy": {
+      "checks": 67,
+      "wiring": 0
+    }
+  },
+  "negative_controls": {
+    "--omit-apt-retain": {
+      "log": "apt-negative--omit-apt-retain.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "gui-io-model-base-only": {
+      "log": "gui-io-negative-model-base-only.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "hud-legacy-team-predicate": {
+      "log": "hud-negative-legacy-team-predicate.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "hud-omit-team-tail": {
+      "log": "hud-negative-omit-team-tail.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "--legacy-free-state-offset": {
+      "log": "apt-negative--legacy-free-state-offset.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "--require-new-apt-resources": {
+      "log": "apt-negative--require-new-apt-resources.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "pool-batch-count": {
+      "log": "pool-negative-batch-count.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "pool-shared-buffer": {
+      "log": "pool-negative-shared-buffer.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "gui-io-interpreter-old-capacity": {
+      "log": "gui-io-negative-interpreter-old-capacity.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "gui-io-interpreter-clear-input": {
+      "log": "gui-io-negative-interpreter-clear-input.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "pool-tag10": {
+      "log": "pool-negative-tag10.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "gui-io-model-retain-view": {
+      "log": "gui-io-negative-model-retain-view.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    },
+    "pool-event-sentinel": {
+      "log": "pool-negative-event-sentinel.log",
+      "status": "expected_behavior_failure",
+      "exit_code": 1
+    }
+  },
+  "retained_executables_sha256": {
+    "gui-io-regressions\\interpreter\\regression.exe": "f001c48d71eef9765a682866e60acb56482d7cdd4b6ff1a921af3442f260db42",
+    "gui-io-regressions\\interpreter-clear-input\\regression.exe": "f36295071ee319060837b4fc870d81276bd7d3261c28ee5786cae6de558b7166",
+    "gui-io-regressions\\interpreter-old-capacity\\regression.exe": "f67163565c04b9430c3650909090bd4aa9391e0626d96c9feefa2729bc96a571",
+    "gui-io-regressions\\model\\regression.exe": "bc008b5a6a724b67285bd78307a383c6d50c5d1339ca169d9882eecc25a16f81",
+    "gui-io-regressions\\model-base-only\\regression.exe": "0307353ce5526c68c105b64c16f348d5611ea03eae0c1df4431b23a17015661f",
+    "gui-io-regressions\\model-retain-view\\regression.exe": "fd20957eb447fc80ef01c088f76983157cea689df55f0dc0f1295637efac397e",
+    "hud-regressions\\crashes\\regression.exe": "434e875c0c5edbc05e36b7a6360a46c36bb0c5eb0440a3a7339000df691be7cb",
+    "hud-regressions\\legacy-team-predicate\\regression.exe": "fbd305773940fe8074ea3c7fd6a12a1c098dae366ca3d80cd17ac6d0c3b4c5f3",
+    "hud-regressions\\omit-team-tail\\regression.exe": "c772aa873352324d3e9d437004f70647465bdd3da0aa97c6bb60267da699ca22",
+    "hud-regressions\\road-rage\\regression.exe": "5be3ac489338a6b5848e5575c8d523d2b8d85bbeae138b86d2db31f5eff83486",
+    "resource-regressions\\game-data-hierarchy\\GameDataPoolHierarchy.exe": "bbe8fa709dfe351cf2e131dd7dc72d2f21ff50994f9726b25a110adbf931a44c",
+    "resource-regressions\\gui-acquire\\regression.exe": "a244c89b8f15a5efcdd3e9f34277694ee2fc372caea1816f04a35abedbdd1c60",
+    "resource-regressions\\shuttle\\regression.exe": "d8ab4ba874d98e6e3cf0b56cfe3deac53257f4b4d93019bd41e6f75b1b0f2849",
+    "resource-regressions\\pool-negative-batch-count\\layout\\PoolCreateProtocol.exe": "92d27eb1e4a08e045a74fb86841306eb525afda56c054ab5df8f474f7dd933ad",
+    "resource-regressions\\pool-negative-event-sentinel\\protocol\\PoolCreateProtocol.exe": "79226213b8bbb6121533f27496bbe653512a06606ec9718387913b18810b1de5",
+    "resource-regressions\\pool-negative-shared-buffer\\protocol\\PoolCreateProtocol.exe": "5c0fdef61bd05f26a3758177f9709f769f71912deb7df83dde9933643dc57516",
+    "resource-regressions\\pool-negative-tag10\\protocol\\PoolCreateProtocol.exe": "eeb075ae16c520712156aa622071e082400e54ab06245d1aafbb2712647452e8",
+    "resource-regressions\\pool-positive\\layout\\PoolCreateProtocol.exe": "bc3302b1a66f50741a3e73dad77f00b8e1c2195443a4e1eb8ac1ca94f63b827a",
+    "resource-regressions\\pool-positive\\protocol\\PoolCreateProtocol.exe": "eab9a26107c1bcdabca13c1ffd8c0b64694bdd13034de4fb9df22cfd7dd5fc4c"
+  },
+  "retained_receipts_sha256": {
+    "gui-io-regressions\\interpreter\\result.json": "a2f850ae48dc5ad11aeadaa872337c8dd7a52bc4488660cce734f967b7fbe4d9",
+    "gui-io-regressions\\interpreter-clear-input\\result.json": "6b83df9642eac9d6869ae7a69764cff51606953d7cafd151383bf1bd7d69bd9e",
+    "gui-io-regressions\\interpreter-old-capacity\\result.json": "005fd1a888a16d5cddd6ec9fea8d34d75300a28b34280dcdb289f0b9e5aa1c7e",
+    "gui-io-regressions\\model\\result.json": "7f56eaf2655ac569d3ecd10b6433144cd01bb87fd32818cff6db55323b34b9b5",
+    "gui-io-regressions\\model-base-only\\result.json": "148c6fe1e8abbd2631625be0b1de5564c7fa1ef406fb9cf2f138d0d8559c53f5",
+    "gui-io-regressions\\model-retain-view\\result.json": "d71cf12bc60367de1e524bebc2f55461b86ed1614ee9030b7bd30d2240a2c07a",
+    "hud-regressions\\crashes\\result.json": "e52004ff52cacbafc175123ad97126d622a4206f3497a75313412073077016eb",
+    "hud-regressions\\legacy-team-predicate\\result.json": "bc617ede9e5c0e59557843af02cfad45c9dde0591f7fd63fa377611c58325190",
+    "hud-regressions\\omit-team-tail\\result.json": "c67033c5a608fc6ae781419236cea69cc6f2fa948926606d90d43efd5704edc6",
+    "hud-regressions\\road-rage\\result.json": "ec6fb233e03a2f001ef63044e70c494eaf7a46d7f7217f99bd845eed73cf79f2",
+    "resource-regressions\\game-data-hierarchy\\result.json": "fbe42e469140c59f18da52d526578f160d262700ed42cfaa2b5a54689834275c",
+    "resource-regressions\\gui-acquire\\result.json": "ae92794bcd4539276846ccb7d5397feb71d8591178f4b56498674ea01dbbfef8",
+    "resource-regressions\\pool-negative-batch-count\\result.json": "442e29248dba08f62c7a217acdb294d88488b405e46a0e8a446e212f5cea3e8b",
+    "resource-regressions\\pool-negative-event-sentinel\\result.json": "5551cc33aa18517457cc6eef03d641574b684f14f7c030ace313f452f79939aa",
+    "resource-regressions\\pool-negative-shared-buffer\\result.json": "253290cb2419d3828daeedb767bd38eb4026347f4a8d9fc88607629d44b42466",
+    "resource-regressions\\pool-negative-tag10\\result.json": "e4e927cd3165b58b6d2042a687afa3c0a8ba2d3e22a3906d44adf4eef42be552",
+    "resource-regressions\\pool-positive\\result.json": "7929590dc7db5a1dfe3d96356f5992fb3a04cec3e6bffe367de82416c4c43f4b",
+    "resource-regressions\\shuttle\\result.json": "deb4fd661bf25e5e74b6d57b5f8ee5460633419950f95a32de92560ae41a58ce"
+  },
+  "candidate_validated": false,
+  "exit_code": 1,
+  "shipping_compile": {
+    "translation_units": 2987,
+    "compiled": 704,
+    "cached": 2283,
+    "failed": 0,
+    "seconds": 184.7
+  },
+  "shipping_link": {
+    "status": "fail",
+    "unresolved": [
+      "CgsSystem::HardwareSku::GetSku class-static API",
+      "CgsSystem::HardwareSku::FindLanguage class-static API",
+      "XShowKeyboardUI"
+    ]
+  },
+  "normal_package_changed": false,
+  "native_game_run": false,
+  "date": "2026-10-20",
+  "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39423097200",
+  "final_debug_dispositions_changed": 0
+}
