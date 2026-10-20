@@ -39,14 +39,15 @@ regression repaired. Road Rules retain both saved score types and the reset epoc
 See the [delivery receipt](runtime_owners_20261015.json) and
 [Road Rules fix](../road_rules_persistence_20261014.md).
 
-**The playable `build/game` folder now contains the Freeburn match hotfix from
-dev `c2400d4f3`.** It repairs the zero-capacity PC movie graphics arena assertion
-and the cache-event ordering that crashed OnlineGameOptions on car-info replies.
-Fresh combined source review and the hosted shipping build pass. Matching symbols
-and runtime DLLs are installed, with the previous build backed up and configuration
-and saves preserved. Match creation has not yet been replayed on this executable.
-See the [exact hotfix receipt](freeburn_match_hotfix_20261019.json). The earlier
-[dev delivery](playable_dev_20261019.json) remains recorded for attribution.
+**The playable `build/game` folder contains the APT Create Match repair**, built
+from `9c15dfff8` and merged into dev `10e27b3f6` alongside the new CMake files.
+The repair keeps imported movie resources alive and restores the native header
+state and retained-reload GUI registration. Source review, shipping build,
+81 numeric checks, six wiring checks and both negative controls pass. The package
+has matching symbols/DLLs; the previous build is backed up and config/saves are
+preserved. **Create Match still needs an in-game retest on this package.** See the
+[delivery and its limits](freeburn_apt_init_crash_20261019.json). Earlier deliveries
+remain recorded for attribution.
 
 ## Active work
 
