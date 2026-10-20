@@ -4522,6 +4522,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem needs the player's active race-car index, which the game-state scoring output interface
   rem does not expose by name yet.
   echo "%SRC%\GameSource\Game\GameBridgeGameStateToX.cpp"
+  rem InputPostWorld's GameState->controller bind/unbind request bridge; its typed queues and
+  rem PostWorldInput request posts are now mounted with the original per-frame input leg.
+  echo "%SRC%\GameSource\Game\GameBridgeGameStateToX_Controller.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_gUI_01.cpp"
   echo "%SRC%\GameSource\Gui\BrnGuiHudMessageAnalyzer_gUI_02.cpp"
