@@ -12,18 +12,16 @@ Source coverage and fixture checks are not final debug-entry dispositions.
 
 ## Playable package and current crash
 
-The normal `build/game` folder now contains the startup-tested **2011742a7**
-package, with matching DLLs/symbols and preserved config/saves. Launch
-`build/game/Burnout_PC.exe`. The online Create Match crash remains under
-investigation. [Installed package](startup_normal_delivery_20261020.json).
+The previous playable **9c15dfff8** package is restored in `build/game`, with
+matching DLLs/symbols and unchanged config/saves. The newer201 package was
+withdrawn: its existing-save junkyard stayed black. A fresh-profile state-chain
+check had passed, but that was insufficient for a playable delivery.
+[Black-screen and rollback evidence](black_junkyard_rollback_20261020.json).
 
-The input-buffer lifecycle, GUI lock ownership and profile/cache event-order
-repairs are now merged into **gameplay dev at 7d66267f5**. The exact production
-candidate passed a native fresh-profile run through the autosave prompt,
-photomaton, licence, flyby and CarSelectVehicle UI: zero assertions/exceptions,
-normal exit and unchanged ordinary config/saves. Hosted checks total 519 plus
-11 intentional failure controls. Returning-profile driving and Create Match
-remain **unverified**. See [the crash and repair evidence](startup_regression_20261020.json).
+The immediate priority is one build that passes visible junkyard, car selection,
+measured driving, owned online Freeburn and Create Match. The old package still
+has the reported Create Match issue. The missing traffic completion bridge is
+under repair; no fixed online build is claimed yet.
 
 The separate [animation initialization repair](freeburn_animation_init_20261020.json)
 is committed on dev and passes its focused positive/omission checks. A successful
@@ -31,7 +29,7 @@ native Create Match run is still required before calling that issue fixed.
 
 ## Source and validation lanes
 
-- Gameplay dev is **7d66267f5**; the normal folder has startup-tested201 (the same production sources; 7d adds regression fixtures).
+- Gameplay dev is **7d66267f5**; the normal folder is restored9c while the junkyard regression is repaired.
 - The merged startup/compile-check source is 7d66267f5. Its shipping build
   passes all 2,979 selected TUs, including both newly repaired embed checks,
   plus 519 focused checks and 11 intentional failure controls. This does not
