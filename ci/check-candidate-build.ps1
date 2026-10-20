@@ -12,7 +12,8 @@ param(
     [switch] $RunAptLifetime,
     [switch] $RunHudRegressions,
     [switch] $RunResourceRegressions,
-    [switch] $RunGuiIORegressions
+    [switch] $RunGuiIORegressions,
+    [switch] $RunGuiAnimationRegressions
 )
 
 Set-StrictMode -Version Latest
@@ -40,7 +41,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -231,6 +232,47 @@ try {
             $Receipt.regressions.negative_controls['hud-' + $control.name] = @{ status = 'expected_behavior_failure'; exit_code = $code; log = $logName }
         }
         $Receipt.regressions.hud_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+        Assert-CleanTrees
+    }
+
+    # Actual animation bodies run independently of shipping linkage. This is
+    # a deterministic initializer regression, not a game/Create Match success verdict.
+    if ($RunGuiAnimationRegressions) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.gui_animation_status = 'running'
+        Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+        foreach ($relative in @('tests/run_gui_animation_initialization.py', 'tests/GuiAnimationInitialization.cpp')) {
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+        }
+        $animationRunner = Join-Path $SourceRoot 'tests/run_gui_animation_initialization.py'
+        $animationRoot = Join-Path $ArtifactRoot 'gui-animation-regressions'
+        $positiveDir = Join-Path $animationRoot 'positive'
+        Invoke-Native py @('-3', '-B', $animationRunner, '--output-dir', $positiveDir) 'regressions.log'
+        $positive = Get-Content -Raw -LiteralPath (Join-Path $positiveDir 'result.json') | ConvertFrom-Json
+        $positiveLog = Get-Content -Raw -LiteralPath (Join-Path $positiveDir 'run.stdout.txt')
+        if ($positive.process_exit_code -ne 0 -or $null -eq $positive.numeric -or
+            $positive.numeric.checks -ne 68 -or $positive.numeric.failures -ne 0 -or
+            -not $positiveLog.Contains('GUI_ANIMATION_INITIALIZATION: 68 checks, 0 failures')) {
+            throw 'GUI animation positive fixture did not execute its expected68 numeric checks.'
+        }
+        $negativeDir = Join-Path $animationRoot 'omit-channel-construct'
+        $logName = 'gui-animation-negative-omit-channel-construct.log'
+        & py -3 -B $animationRunner --omit-channel-construct --output-dir $negativeDir 2>&1 |
+            Tee-Object -FilePath (Join-Path $ArtifactRoot $logName) | Out-Host
+        $code = $LASTEXITCODE
+        $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', $animationRunner, '--omit-channel-construct', '--output-dir', $negativeDir); exit_code = $code; expected_failure = $true })
+        $negative = Get-Content -Raw -LiteralPath (Join-Path $negativeDir 'result.json') | ConvertFrom-Json
+        $negativeLog = (Get-Content -Raw -LiteralPath (Join-Path $negativeDir 'run.stdout.txt')) +
+            (Get-Content -Raw -LiteralPath (Join-Path $negativeDir 'run.stderr.txt'))
+        if ($code -ne 1 -or $negative.process_exit_code -ne 1 -or $null -eq $negative.numeric -or
+            $negative.numeric.checks -ne 68 -or $negative.numeric.failures -lt 1 -or
+            -not $negativeLog.Contains('FAIL channel[0] null binding') -or
+            -not $negativeLog.Contains('FAIL channel[0] inactive')) {
+            throw 'GUI animation omission control failed before its intended channel-initialization witnesses.'
+        }
+        $Receipt.regressions.negative_controls['gui-animation-omit-channel-construct'] = @{ status = 'expected_behavior_failure'; exit_code = $code; log = $logName }
+        $Receipt.regressions.gui_animation_status = 'pass'
         $Receipt.regressions.status = 'partial_selected_fixtures_pass'
         Assert-CleanTrees
     }
@@ -427,6 +469,7 @@ try {
     $ExitCode = 0
 } catch {
     if ($Receipt.regressions.gui_io_status -eq 'running') { $Receipt.regressions.gui_io_status = 'fail' }
+    if ($Receipt.regressions.gui_animation_status -eq 'running') { $Receipt.regressions.gui_animation_status = 'fail' }
     if ($Receipt.regressions.hud_status -eq 'running') { $Receipt.regressions.hud_status = 'fail' }
     if ($Receipt.regressions.remaining_status -eq 'running') { $Receipt.regressions.remaining_status = 'fail' }
     if ($Receipt.regressions.status -eq 'running') { $Receipt.regressions.status = 'fail' }
