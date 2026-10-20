@@ -39,15 +39,21 @@ regression repaired. Road Rules retain both saved score types and the reset epoc
 See the [delivery receipt](runtime_owners_20261015.json) and
 [Road Rules fix](../road_rules_persistence_20261014.md).
 
-**The playable `build/game` folder contains the APT Create Match repair**, built
-from `9c15dfff8` and merged into dev `10e27b3f6` alongside the new CMake files.
-The repair keeps imported movie resources alive and restores the native header
-state and retained-reload GUI registration. Source review, shipping build,
-81 numeric checks, six wiring checks and both negative controls pass. The package
-has matching symbols/DLLs; the previous build is backed up and config/saves are
-preserved. **The user retested on20October and Create Match still crashes.** The matching dump traces a null virtual call through HelpBar animation channels; the missing original channel/interpolator initialization is being recovered in parallel. See the
-[delivery and its limits](freeburn_apt_init_crash_20261019.json). Earlier deliveries
-remain recorded for attribution.
+**The normal `build/game` package is restored to the previous playable `9c15dfff8` build.**
+The newer `db73ba838` candidate passed its shipping build, 377 selected checks and
+eight failure controls, but the user hit a startup crash. It was rolled back with
+matching symbols/DLLs; config and saves were preserved. The log identifies an
+input-event queue failure during marketing screens, preceded by GameData lock
+errors. The missing input-buffer lifecycle and conflicting GUI lock ownership are
+being repaired. Hosted fixtures were insufficient to certify boot. See the
+[startup regression and rollback](startup_regression_20261020.json).
+
+The separate [animation initializer repair](freeburn_animation_init_20261020.json)
+is committed on dev. It addresses the null call in Create Match's HelpBar animator
+and passes 68 numeric checks, seven wiring checks and its omission control.
+The broader candidate's startup failure prevented a real Create Match retest.
+The current restored package still has the earlier reported Create Match crash;
+neither issue is being counted as gameplay verified.
 
 ## Active work
 
