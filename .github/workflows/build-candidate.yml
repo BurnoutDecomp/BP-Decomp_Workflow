@@ -22,6 +22,11 @@ on:
         required: false
         default: false
         type: boolean
+      run_resource_regressions:
+        description: Run recovered pool protocol, transport and GameData hierarchy fixtures
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -68,6 +73,7 @@ jobs:
           CANDIDATE_RUN_REGRESSIONS: ${{ inputs.run_regressions }}
           CANDIDATE_RUN_APT_LIFETIME: ${{ inputs.run_apt_lifetime }}
           CANDIDATE_RUN_HUD_REGRESSIONS: ${{ inputs.run_hud_regressions }}
+          CANDIDATE_RUN_RESOURCE_REGRESSIONS: ${{ inputs.run_resource_regressions }}
           GH_TOKEN: ${{ github.token }}
           BRN_EXE_HASH_DEPS: "1"
           BRN_EXE_JOBS: "4"
@@ -76,7 +82,8 @@ jobs:
             -WorkflowSha $env:CANDIDATE_WORKFLOW_SHA -Jobs 4 `
             -RunRegressions:($env:CANDIDATE_RUN_REGRESSIONS -eq 'true') `
             -RunAptLifetime:($env:CANDIDATE_RUN_APT_LIFETIME -eq 'true') `
-            -RunHudRegressions:($env:CANDIDATE_RUN_HUD_REGRESSIONS -eq 'true')
+            -RunHudRegressions:($env:CANDIDATE_RUN_HUD_REGRESSIONS -eq 'true') `
+            -RunResourceRegressions:($env:CANDIDATE_RUN_RESOURCE_REGRESSIONS -eq 'true')
 
       - name: Save successful candidate objects
         if: success()
@@ -98,5 +105,6 @@ jobs:
             build/candidate/artifacts/*.dll
             build/candidate/artifacts/*.log
             build/candidate/artifacts/input-receipt.json
+            build/candidate/artifacts/resource-regressions/**
           if-no-files-found: error
           retention-days: 1

@@ -10,7 +10,8 @@ param(
     [ValidateRange(1, 8)] [int] $Jobs = 4,
     [switch] $RunRegressions,
     [switch] $RunAptLifetime,
-    [switch] $RunHudRegressions
+    [switch] $RunHudRegressions,
+    [switch] $RunResourceRegressions
 )
 
 Set-StrictMode -Version Latest
@@ -38,7 +39,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions); status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions); status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -195,7 +196,7 @@ try {
         throw 'Provenance does not match the candidate, workflow, clean source and actual exe.'
     }
     Assert-CleanTrees
-    if ($RunRegressions -or $RunAptLifetime -or $RunHudRegressions) {
+    if ($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions) {
         $Receipt.regressions.status = 'running'
         $Receipt.regressions.coverage = 'Selected production-body fixtures with IO/heap doubles; callback wiring is source-only. No game or end-to-end parity claim.'
         $Receipt.regressions.inputs = @{}
@@ -268,6 +269,71 @@ try {
                 throw 'HUD negative control did not expose the intended team-selection behavior failure.'
             }
             $Receipt.regressions.negative_controls['--legacy-team-predicate'] = @{ status = 'expected_behavior_failure'; exit_code = $hudCode; log = $hudLogName }
+        }
+        if ($RunResourceRegressions) {
+            foreach ($relative in @('tests/run_pool_create_protocol.py', 'tests/PoolCreateProtocol.cpp',
+                                    'tests/run_pc_resource_shuttle.py', 'tests/PCResourceShuttle.cpp',
+                                    'tests/run_game_data_pool_hierarchy.py', 'tests/GameDataPoolHierarchy.cpp',
+                                    'tests/run_pc_gui_pool_acquire.py', 'tests/PCGuiPoolAcquire.cpp')) {
+                $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+            }
+            $resourceRoot = Join-Path $ArtifactRoot 'resource-regressions'
+            $poolRunner = Join-Path $SourceRoot 'tests/run_pool_create_protocol.py'
+            $poolPositive = Join-Path $resourceRoot 'pool-positive'
+            Invoke-Native py @('-3', '-B', $poolRunner, '--output-dir', $poolPositive) 'regressions.log'
+            $poolResult = Get-Content -Raw -LiteralPath (Join-Path $poolPositive 'result.json') | ConvertFrom-Json
+            if (@($poolResult.results).Count -ne 2) { throw 'Pool fixture must execute both protocol and layout modes.' }
+            foreach ($mode in @('protocol', 'layout')) {
+                $modeResult = @($poolResult.results | Where-Object mode -eq $mode)
+                $modeLog = Get-Content -Raw -LiteralPath (Join-Path $poolPositive "$mode/run.stdout.txt")
+                if ($modeResult.Count -ne 1 -or -not $modeResult[0].compiled -or $modeResult[0].exit_code -ne 0 -or
+                    $modeLog -notmatch 'PoolCreateProtocol:\s+[1-9][0-9]* checks, 0 failures; mode=') {
+                    throw "Pool positive fixture did not execute successfully in $mode mode."
+                }
+            }
+            $resourceFixtures = @(
+                @{ runner = 'tests/run_pc_resource_shuttle.py'; tag = 'PCResourceShuttle'; name = 'shuttle'; checks = 14 },
+                @{ runner = 'tests/run_pc_gui_pool_acquire.py'; tag = 'PCGuiPoolAcquire'; name = 'gui-acquire'; checks = 27 }
+            )
+            foreach ($fixture in $resourceFixtures) {
+                $fixtureDir = Join-Path $resourceRoot $fixture.name
+                Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot $fixture.runner), '--output-dir', $fixtureDir) 'regressions.log'
+                $fixtureResult = Get-Content -Raw -LiteralPath (Join-Path $fixtureDir 'result.json') | ConvertFrom-Json
+                $fixtureLog = Get-Content -Raw -LiteralPath (Join-Path $fixtureDir 'run.stdout.txt')
+                $fixtureWitness = [regex]::Escape($fixture.tag) + ':\s+' + $fixture.checks + ' checks, 0 failures'
+                if ($fixtureResult.process_exit_code -ne 0 -or $null -eq $fixtureResult.numeric -or
+                    $fixtureResult.numeric.checks -ne $fixture.checks -or $fixtureResult.numeric.failures -ne 0 -or
+                    $fixtureLog -notmatch $fixtureWitness) {
+                    throw "Resource fixture $($fixture.name) did not execute its expected positive numeric checks."
+                }
+            }
+            Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot 'tests/run_game_data_pool_hierarchy.py'),
+                '--output-dir', (Join-Path $resourceRoot 'game-data-hierarchy')) 'regressions.log'
+            $poolControls = @(
+                @{ name = 'tag10'; mode = 'protocol'; witness = 'FAIL[^\r\n]*tag10' },
+                @{ name = 'event-sentinel'; mode = 'protocol'; witness = 'FAIL[^\r\n]*(tag.?-1|unacquire|sentinel)' },
+                @{ name = 'batch-count'; mode = 'layout'; witness = 'FAIL[^\r\n]*(Entry carve|guard|batch)' },
+                @{ name = 'shared-buffer'; mode = 'protocol'; witness = 'FAIL[^\r\n]*(formatting buffers|isolated message|shared buffer)' }
+            )
+            foreach ($control in $poolControls) {
+                $controlDir = Join-Path $resourceRoot ('pool-negative-' + $control.name)
+                $controlLogName = 'pool-negative-' + $control.name + '.log'
+                & py -3 -B $poolRunner --negative $control.name --output-dir $controlDir 2>&1 |
+                    Tee-Object -FilePath (Join-Path $ArtifactRoot $controlLogName) | Out-Host
+                $controlCode = $LASTEXITCODE
+                $NativeCommands.Add(@{ command = 'py'; arguments = @('-3', '-B', $poolRunner, '--negative', $control.name, '--output-dir', $controlDir); exit_code = $controlCode; expected_failure = $true })
+                $controlResult = Get-Content -Raw -LiteralPath (Join-Path $controlDir 'result.json') | ConvertFrom-Json
+                if (@($controlResult.results).Count -ne 1 -or -not $controlResult.results[0].compiled) {
+                    throw "Pool negative control $($control.name) failed before behavioral execution."
+                }
+                $controlLog = Get-Content -Raw -LiteralPath (Join-Path $controlDir ($control.mode + '/run.stdout.txt'))
+                if ($controlCode -eq 0 -or $controlResult.results[0].exit_code -eq 0 -or
+                    $controlLog -notmatch 'PoolCreateProtocol:\s+[1-9][0-9]* checks, [1-9][0-9]* failures; mode=' -or
+                    $controlLog -notmatch $control.witness) {
+                    throw "Pool negative control $($control.name) did not expose its intended behavior failure."
+                }
+                $Receipt.regressions.negative_controls['pool-' + $control.name] = @{ status = 'expected_behavior_failure'; exit_code = $controlCode; log = $controlLogName }
+            }
         }
         Assert-CleanTrees
         $Receipt.regressions.status = 'pass'
