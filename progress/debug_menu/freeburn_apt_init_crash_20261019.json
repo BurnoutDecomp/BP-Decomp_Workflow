@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-10-19",
-  "status": "reviewed_repair_pushed_isolated_hosted_rerun_pending",
+  "status": "reviewed_built_targeted_checks_passed_merged_dev_installed_native_retest_pending",
   "source": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
   "exe_sha256": "b8fde9b007eb0a2b6bc713e0afe371dac8de83ef2408b6fc1ea9ebffef2558d2",
   "trigger": "Create Match from Freeburn freezes, then black-screen crash after prior hotfix",
@@ -12,16 +12,17 @@
   "packet_sha256": "7d2e4bee284b1946666522226d19ecc7f6daee6ce56d4d1b07e8c75ad3983527",
   "hypothesis": "A surviving ON_CREA import references B5NetworkRouteInfo after the logged resource unload/reload. Ownership of the live import and resource payload is being traced against native x64.",
   "hypothesis_confirmed_as_complete_cause": false,
-  "repair": "pending_faithful_lifetime_recovery",
+  "repair": "delivered_native_header_state_and_balanced_live_import_bundle_ownership",
   "native_retest_result": "fail",
   "agent_game_launched": false,
   "local_compilation": false,
-  "normal_build_replaced": false,
-  "repair_source": "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af",
+  "normal_build_replaced": true,
+  "repair_source": "9c15dfff8123b14a4991fb76f3f591ff15a4f21b",
   "repair_commits": [
     "06e46fab12d582f54d756719301c43f5def6696b",
     "273a149755edcc97a8b02c65dc30c74d471b31d4",
-    "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af"
+    "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af",
+    "9c15dfff8123b14a4991fb76f3f591ff15a4f21b"
   ],
   "repairs": [
     "Balance resident bundle member/list references across each AptFile load and native Unresolve/FreeAnimation lifetime.",
@@ -52,26 +53,62 @@
       "verdict": "compile_fail",
       "scope": "One TU lacked the now-required complete AptDataHeader include; no link or regression execution.",
       "receipt_sha256": "47d3d9099fbe7060cd59cd716354b479ecc7cbe6ba64ae883a23b0c28f264c41"
+    },
+    {
+      "run_id": 39334063194,
+      "source": "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af",
+      "shipping": "pass",
+      "profile_numeric": "14/14 pass",
+      "profile_wiring": "6/8 pass",
+      "limit": "Two wiring failures are identical on c240 and0f28; APT fixture did not execute after this early failure."
+    },
+    {
+      "run_id": 39334884290,
+      "source": "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af",
+      "shipping": "pass",
+      "apt_wiring": "6/6 pass",
+      "apt_numeric": "not_run_fixture_compile_failed",
+      "limit": "Fixture resolver conditional needed explicit common-base upcasts; corrected in9c15dfff8."
     }
   ],
   "build": {
-    "run_id": 39334063194,
-    "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39334063194",
-    "source": "0f28f9e1ed303b92c03a120bffc3f3c9d73b08af",
-    "workflow": "e6df92ff1b15fb101489bb5945da982c172ac47d",
-    "status": "pending",
+    "run_id": 39336919223,
+    "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39336919223",
+    "source": "9c15dfff8123b14a4991fb76f3f591ff15a4f21b",
+    "workflow": "8110e5f6856b69937aa1fb43355b1433b5a9b0b2",
+    "status": "pass",
     "runner": "GitHub-hosted windows-2022",
     "jobs": 4,
-    "expected_regressions": {
-      "profile_interface": 45,
-      "bundle_numeric": 81,
-      "bundle_wiring": 6
+    "compile": {
+      "translation_units": 2976,
+      "compiled": 702,
+      "up_to_date": 2274,
+      "failed": 0,
+      "seconds": 159.9
     },
-    "negative_controls": [
-      "--omit-apt-retain",
-      "--require-new-apt-resources"
-    ],
-    "scope_limit": "Production loader/GUI registry helpers execute with IO/heap doubles; callback checks remain source wiring in this revision."
+    "link": {
+      "status": "pass",
+      "seconds": 3.9
+    },
+    "targeted_regressions": {
+      "numeric": 81,
+      "wiring": 6,
+      "failed": 0
+    },
+    "negative_controls": {
+      "--require-new-apt-resources": {
+        "log": "apt-negative--require-new-apt-resources.log",
+        "status": "expected_behavior_failure",
+        "exit_code": 1
+      },
+      "--omit-apt-retain": {
+        "log": "apt-negative--omit-apt-retain.log",
+        "status": "expected_behavior_failure",
+        "exit_code": 1
+      }
+    },
+    "receipt_sha256": "25c60f6909aa90d326d966ecdddb825f3d2b253ceab98f7b6b2ab7b95c526577",
+    "scope_limit": "Real extracted loader/registry/acquire code with IO and heap doubles. Callback order remains wiring-only in this build; no native Create Match witness."
   },
   "callback_followon": {
     "packet": "scratch/DEBUG_MENU_1011/freeburn_apt_init_crash_20261019/proposal/callback_boundary_regression/FINDINGS.md",
@@ -80,5 +117,93 @@
     "expected_wiring": 6,
     "executed": false
   },
-  "dev_delivery": false
+  "dev_delivery": true,
+  "updated_utc": "2026-10-20T06:17:46.847269+00:00",
+  "dev_merge": "10e27b3f6bcb036879fcf85ce42e6de65c932f76",
+  "current_native_retest": "pending_on_new_package; previous c240 failure retained as historical evidence",
+  "shipping_source_equivalence": {
+    "built_source": "9c15dfff8123b14a4991fb76f3f591ff15a4f21b",
+    "merged_dev": "10e27b3f6bcb036879fcf85ce42e6de65c932f76",
+    "only_merged_differences": "45 CMakeLists.txt files; shipping bat/compile_exe inputs unchanged"
+  },
+  "installation": {
+    "installed": true,
+    "b5_head": "9c15dfff8123b14a4991fb76f3f591ff15a4f21b",
+    "workflow_head": "8110e5f6856b69937aa1fb43355b1433b5a9b0b2",
+    "run_url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39336919223",
+    "exe_sha256": "8ca0067a8227d55ed14af28627562c950f3d312297ac59cd3655c1f12be36ab1",
+    "symbols": 23415,
+    "installed_files": [
+      "Burnout_PC.cgsmap",
+      "Burnout_PC.exe",
+      "Burnout_PC.exe.provenance.json",
+      "Burnout_PC.map",
+      "avcodec-63.dll",
+      "avdevice-63.dll",
+      "avfilter-12.dll",
+      "avformat-63.dll",
+      "avutil-61.dll",
+      "swresample-7.dll",
+      "swscale-10.dll",
+      "xaudio2_9redist.dll"
+    ],
+    "backup": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_apt_init_crash_20261019\\previous_game_39336919223",
+    "config_unchanged": true,
+    "mutation_scope": "Only the four executable/support files and eight validated runtime DLLs; no save or asset paths opened for writing.",
+    "native_game_checks": "not_run",
+    "compiled_locally": false
+  },
+  "outputs": {
+    "Burnout_PC.exe.provenance.json": {
+      "sha256": "91a6d03b99bd8cb2df1ec0ada408f3b61351618c31daedcbb22f61e04cfd3cc3",
+      "bytes": 467
+    },
+    "Burnout_PC.cgsmap": {
+      "sha256": "9e37e33207a5ed219ad3c86cc215f10cba3a18175e0d722093ef04e759384af4",
+      "bytes": 2997136
+    },
+    "Burnout_PC.exe": {
+      "sha256": "8ca0067a8227d55ed14af28627562c950f3d312297ac59cd3655c1f12be36ab1",
+      "bytes": 11056128
+    },
+    "swscale-10.dll": {
+      "sha256": "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de",
+      "bytes": 955904
+    },
+    "Burnout_PC.map": {
+      "sha256": "53cb454a97cee63620e40244cc5a50d68ab89dd35f5879a4df7c78e422e84532",
+      "bytes": 17511211
+    },
+    "avcodec-63.dll": {
+      "sha256": "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b",
+      "bytes": 2179072
+    },
+    "avutil-61.dll": {
+      "sha256": "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb",
+      "bytes": 978944
+    },
+    "xaudio2_9redist.dll": {
+      "sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+      "bytes": 997400
+    },
+    "avfilter-12.dll": {
+      "sha256": "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276",
+      "bytes": 234496
+    },
+    "swresample-7.dll": {
+      "sha256": "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c",
+      "bytes": 201728
+    },
+    "avformat-63.dll": {
+      "sha256": "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c",
+      "bytes": 644608
+    },
+    "avdevice-63.dll": {
+      "sha256": "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9",
+      "bytes": 109056
+    }
+  },
+  "baseline_profile_limit": "The existing c240 profile runner has the same two source-wiring failures on9c15; no profile/game-state production code changed in this hotfix. Separate private runtime recovery addresses that chain.",
+  "native_game_launched": false,
+  "final_entry_dispositions_changed": false
 }
