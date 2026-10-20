@@ -82,10 +82,10 @@ lacks a verified PC provider. The flag initialization is corrected in the later
 runtime checkpoint below. These recovery checkpoints change no final entry dispositions and are
 separate from the normal dev delivery above.
 
-The [current GUI/runtime candidate](gui_runtime_core_20261019.json) is pushed at
+The [last built GUI/runtime candidate](gui_runtime_core_20261019.json) is pushed at
 `a69001f71`, separately from dev. It contains the full GameState Prepare and main
 GUI wrapper, distinct loading/normal caller clocks, typed InputPostWorld wiring,
-the original constructor flag and 142/188 explicit translator action IDs. Source
+the original constructor flag and 141 unique translator action IDs across 142 direct labels. Source
 review found a missing banking store and an incorrect diagnostic; both are
 repaired. The existing debug-pad accessor is now in its mounted owner.
 
@@ -95,8 +95,19 @@ TUs compile or validate from cache, and the executable links. These fixtures do
 not establish native GUI or debug-entry behavior. Full native GUI resource
 activation, normal InputPostWorld/START progression and startup/streaming checks
 remain open; the playable folder retains the separate Create Match repair above.
-Further action/resource proposals are being integrated in batches. No final entry
-dispositions changed.
+The newer source checkpoint `019d8c528` adds 13 genuinely missing action branches,
+the three Road Rage producers and both Road Rules message payload repairs. Its
+combined source review passes after three findings were repaired, including the
+existing test caller. Hosted execution of the new fixtures is pending. An exact
+recount gives **154/188 unique routed action IDs, with 34 missing**; the older 142
+count included the duplicated action 2 route. These are source routes within one
+GUI translator, separate from debug registrations and native behavior.
+
+The [22-file resource batch](resource_owner_source_20261020.json) is frozen for
+review. It restores canonical pool ownership, map-derived bank/pool requests and
+real response waits. Its fixture audit found a missing queue-append provider;
+that original body is now frozen separately, and fixture updates continue. Native GUI
+preparation remains unselected. No final entry dispositions changed.
 
 The GUI output now retires after its sound/network snapshot, preventing old
 streaming replies from being reused while stepping. GUI65's fake unpause is
