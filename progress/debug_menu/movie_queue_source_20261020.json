@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-20",
+  "status": "reviewed_and_compiled_private_source",
+  "source_paths": 2,
+  "source_review": "pass_original_plus_separate_idle_prerequisite",
+  "initial_review": "failed_finished_player_dependency",
+  "closed_by_review_sha256": "640d061cfa5c8d45ec85e154b3b36a7e7ee604f247c105ef55d91d5b99e90857",
+  "hosted": {
+    "source": "c511b346646294ba51be7a29438daf5fb1b12816",
+    "workflow": "04b914cb39899905c6a231e814de33e4f6a1ae98",
+    "run_id": 39478435998,
+    "input_receipt_sha256": "435cc21933a97c97ab47730b8d5f793263489d37307d184ac7a8b31903c54183",
+    "selected_checks": 916,
+    "numeric_checks": 889,
+    "wiring_checks": 27,
+    "behavior_controls": 13,
+    "compile": {
+      "selected_tus": 2991,
+      "compiled": 987,
+      "cached": 2004,
+      "failed": 0
+    },
+    "link": "fail_three_unrecovered_platform_providers",
+    "missing": [
+      "HardwareSku::GetSku",
+      "HardwareSku::FindLanguage",
+      "XShowKeyboardUI"
+    ],
+    "validated": false,
+    "native": false,
+    "normal_package_changed": false,
+    "positive_summaries": [
+      {
+        "checks": 46,
+        "wiring": 8,
+        "summary": "run_fxgs_hud_crashes: wiring 8/8, numeric 38/38; total 46/46 pass (0 fail)"
+      },
+      {
+        "checks": 22,
+        "wiring": 3,
+        "summary": "run_fxgs_online_roadrage_hud: wiring 3/3, numeric 19/19; total 22/22 pass (0 fail)"
+      },
+      {
+        "checks": 22,
+        "wiring": 8,
+        "summary": "run_profile_delivery: wiring 8/8, numeric 14/14; total 22/22 pass (0 fail)"
+      },
+      {
+        "checks": 23,
+        "wiring": 2,
+        "summary": "run_fxgs2_gui_iface: wiring 2/2, numeric 21/21; total 23/23 pass (0 fail)"
+      },
+      {
+        "checks": 103,
+        "wiring": 6,
+        "summary": "run_pc_bundle_ownership: wiring 6/6, numeric 97/97; total 103/103 pass (0 fail)"
+      },
+      {
+        "checks": 14,
+        "wiring": 0,
+        "summary": "run_pc_resource_shuttle: wiring 0/0, numeric 14/14; total 14/14 pass (0 fail)"
+      },
+      {
+        "checks": 27,
+        "wiring": 0,
+        "summary": "run_pc_gui_pool_acquire: wiring 0/0, numeric 27/27; total 27/27 pass (0 fail)"
+      },
+      {
+        "checks": 377,
+        "wiring": 0,
+        "summary": "GuiModelIO: 377 checks, 0 failures"
+      },
+      {
+        "checks": 169,
+        "wiring": 0,
+        "summary": "GuiInterpreterIO: 169 checks, 0 failures"
+      },
+      {
+        "checks": 24,
+        "wiring": 0,
+        "summary": "PoolCreateProtocol: 24 checks, 0 failures; mode=protocol"
+      },
+      {
+        "checks": 22,
+        "wiring": 0,
+        "summary": "PoolCreateProtocol: 22 checks, 0 failures; mode=layout"
+      },
+      {
+        "checks": 67,
+        "wiring": 0,
+        "summary": "GameDataPoolHierarchy: 67 checks, 0 failures"
+      }
+    ],
+    "coverage_limit": "Existing selected IO/HUD/resource fixtures; recovered QueueNextMovie and PC idle mapping have source review and compile evidence only."
+  },
+  "limits": [
+    "Native GUI phase activation still held",
+    "Concrete localized video/audio and bundle rows unverified",
+    "Separate pool-lifecycle followup remains unintegrated"
+  ]
+}
