@@ -3559,6 +3559,7 @@ echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\Array_short_9.cpp
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsEventInterpreterModule.cpp"
   rem Real Interpreter output, override-map specialization and SKU providers.
   echo "%SRC%\GameShared\GameClasses\Gui\Model\CgsEventInterpreterModuleIO_OutputBuffer.cpp"
+  echo "%SRC%\GameShared\GameClasses\Gui\View\CgsGuiViewModule_AddViewState_Inst.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsHashTable_EventInterpreterModule_sMapEntry7.cpp"
   echo "%SRC%\GameShared\GameClasses\Language\CgsSku.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\Model\Resources\CgsAptDataHeaderType.cpp"
