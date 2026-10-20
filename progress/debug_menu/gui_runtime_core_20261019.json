@@ -4,7 +4,7 @@
   "source": "3f847ca769f86e875d0e1078c552617156aa45f2",
   "branch": "codex/debug-menu-gamestate-source-integration-20261019",
   "dev": "c2400d4f3e59ff11fc2f4afd778b4deca294c059",
-  "status": "newer_isolated_action_batch_source_review_passed_hosted_execution_pending",
+  "status": "isolated_resource_integration_source_and_shipping_checks_pass_resource_fixture_execution_pending",
   "commits": [
     "782f31560a69ea935df1b8b35e2d1959360a943a",
     "a301e09418b4d4a72496ae79879641bb56073c6d",
@@ -162,7 +162,7 @@
     "production_paths": 54,
     "regression_paths": 3,
     "scope": "Typed InputPostWorld chain, twelve more GUI action arms and distinct loading/normal callers and clocks.",
-    "translator_source_ids": 141,
+    "translator_source_ids": 142,
     "original_translator_ids": 188,
     "source_wiring_passed": 10,
     "numeric_executed_for_this_followon": true,
@@ -247,30 +247,29 @@
       "Normal InputPostWorld/START-bind progression is still incomplete.",
       "Full native GUI resource phase is still under separate owner/producer recovery."
     ],
-    "translator_case_labels": 142,
+    "translator_case_labels": 143,
     "repair_followup_review": {
       "path": "scratch/DEBUG_MENU_1011/action_batch_integration_20261020_06/RUNTIME_REPAIR_FOLLOWUP.md",
       "sha256": "5b8b59c418df5aa190e102db1465fa733348b00f35993fd4658eb8861bac9439"
     }
   },
-  "updated_utc": "2026-10-20T07:49:09.910957+00:00",
-  "current_source": "019d8c52822a82534d840bb52774cdad8634ede1",
+  "updated_utc": "2026-10-20T08:39:42.224659+00:00",
+  "current_source": "dadb525906a32f58e5d9abeb4a7e1f79262c7a40",
   "current_translator_inventory": {
-    "source": "019d8c52822a82534d840bb52774cdad8634ede1",
+    "source": "dadb525906a32f58e5d9abeb4a7e1f79262c7a40",
     "original_explicit_ids": 188,
-    "unique_routed_ids": 154,
+    "unique_routed_ids": 155,
     "direct_case_labels": {
       "main": 102,
-      "event_flow": 40,
+      "event_flow": 41,
       "free_roam": 13,
-      "total": 155
+      "total": 156
     },
     "duplicate_routed_ids": [
       2
     ],
-    "missing_unique_ids": 34,
+    "missing_unique_ids": 33,
     "missing_explicit_ids": [
-      30,
       178,
       213,
       214,
@@ -320,12 +319,13 @@
       215,
       216
     ],
-    "counting_correction": "a690 had142 direct labels but141 unique IDs, because action2 appears in both main and fallback. Current155 labels represent154 unique IDs.",
+    "counting_correction": "The earlier parser omitted inline case30. The independent token/brace parser includes it and excludes nested switches:155 unique IDs/156 labels,33 missing. a690 had142 unique IDs/143 labels; action2 is duplicated across routes.",
     "not_a_debug_registration_or_behavior_count": true,
-    "scope": "Represented direct source routes only; producer, receiver, source review and native parity are separate claims."
+    "scope": "Represented direct source routes only; producer, receiver, source review and native parity are separate claims.",
+    "independent_audit": "gui_action_route_audit_20261020.json"
   },
   "action_followon_20261020": {
-    "source": "019d8c52822a82534d840bb52774cdad8634ede1",
+    "source": "0c60cc363b10148702ee6f44b039367e09c7cb3f",
     "base": "a69001f71391d87edf5cf2fb281cced189151209",
     "commits": [
       "02fc055bf259419120cb79379f6c952daf65f5a7",
@@ -374,9 +374,107 @@
       "link": "not_run",
       "regressions": "not_run"
     },
-    "next_hosted_validation": "pending_shipping_plus_existing_profile_GUI_APT_and_new_HUD_numeric_negative_controls",
+    "next_hosted_validation": "passed_shipping_all193_selected_checks_and3_behavior_negative_controls",
     "native": "not_run",
     "dev_delivery": false,
-    "normal_package_replaced": false
+    "normal_package_replaced": false,
+    "hosted_pass": {
+      "source": "0c60cc363b10148702ee6f44b039367e09c7cb3f",
+      "workflow": "a0c6916a0c8f35859673a9e5c44da33e914fc8ee",
+      "run_id": 39390472252,
+      "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39390472252",
+      "compile": {
+        "translation_units": 2977,
+        "compiled": 649,
+        "cached": 2328,
+        "failed": 0,
+        "seconds": 169.1
+      },
+      "link": "pass",
+      "selected_checks_passed": 193,
+      "negative_controls": {
+        "--omit-apt-retain": {
+          "exit_code": 1,
+          "status": "expected_behavior_failure",
+          "log": "apt-negative--omit-apt-retain.log"
+        },
+        "--require-new-apt-resources": {
+          "exit_code": 1,
+          "status": "expected_behavior_failure",
+          "log": "apt-negative--require-new-apt-resources.log"
+        },
+        "--legacy-team-predicate": {
+          "exit_code": 1,
+          "status": "expected_behavior_failure",
+          "log": "hud-negative-legacy-team-predicate.log"
+        }
+      },
+      "receipt_sha256": "117a58656aed50d118cb88ddbbb968da1ce01f30bb6cac7c1430313fa669cbf8",
+      "executable": {
+        "sha256": "3459a3fe20514aa2f0a492eb4f349b79abf004b6df9ef6f091bc31839c5008b7",
+        "bytes": 11085824
+      },
+      "resource_suite_selected": false,
+      "native": "not_run",
+      "normal_package_changed": false
+    }
+  },
+  "resource_followon_20261020": {
+    "source": "dadb525906a32f58e5d9abeb4a7e1f79262c7a40",
+    "production_commit": "1ddb5309060d9a1b69f49f836b4ff0c41ffe9898",
+    "fixture_commit": "84664079c90a36fd82545216f958bec5f37c6244",
+    "fixture_receipt_repair_commit": "b0d6f6158c9bbe16d77bf6d141865d6b760b9110",
+    "current_dev_test_only_merge": "b3d2833e348e77f6310be82187b7c66a23e7e27d",
+    "source_review": {
+      "path": "scratch/DEBUG_MENU_1011/resource_owner_integration_review_20261020/REVIEW.md",
+      "sha256": "4951652f7a7ef23fd2a4e184e7ef00cab755c70e7d5886591d5712edccf181e2"
+    },
+    "fixture_followup_review": {
+      "path": "scratch/DEBUG_MENU_1011/resource_fixture_repairs_20261020/REVIEW.md",
+      "sha256": "15275ff8c603c429b9120549bf64c2e0bd719c568213fccbc1a6cfee28963522"
+    },
+    "shipping_and_existing_suite_pass": {
+      "source": "84664079c90a36fd82545216f958bec5f37c6244",
+      "workflow": "a0c6916a0c8f35859673a9e5c44da33e914fc8ee",
+      "run_id": 39392383764,
+      "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39392383764",
+      "compile": {
+        "translation_units": 2977,
+        "compiled": 179,
+        "cached": 2798,
+        "failed": 0,
+        "seconds": 50.8
+      },
+      "link": "pass",
+      "selected_checks_passed": 193,
+      "negative_controls": {
+        "--legacy-team-predicate": {
+          "status": "expected_behavior_failure",
+          "exit_code": 1,
+          "log": "hud-negative-legacy-team-predicate.log"
+        },
+        "--omit-apt-retain": {
+          "status": "expected_behavior_failure",
+          "exit_code": 1,
+          "log": "apt-negative--omit-apt-retain.log"
+        },
+        "--require-new-apt-resources": {
+          "status": "expected_behavior_failure",
+          "exit_code": 1,
+          "log": "apt-negative--require-new-apt-resources.log"
+        }
+      },
+      "receipt_sha256": "773134722628d281b37e612808a582e70b211af04ade3d2b26fbc9c651d0d074",
+      "executable": {
+        "bytes": 11089408,
+        "sha256": "8cbb7e9bbfe3ce836f4f17e14c7698c0e66cd77af67626ee0ecfc5cf33e8de20"
+      },
+      "resource_suite_selected": false,
+      "native": "not_run",
+      "normal_package_changed": false
+    },
+    "full_resource_suite": "pending_new_optional_hosted_selection",
+    "dev_delivery": false,
+    "native": "not_run"
   }
 }

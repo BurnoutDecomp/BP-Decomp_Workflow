@@ -1,6 +1,6 @@
 {
   "date": "2026-10-20",
-  "status": "frozen_source_only_composition_with_append_provider_pending_review",
+  "status": "integrated_source_review_and_shipping_existing193_checks_passed_resource_suite_pending",
   "integration_packet": "scratch/DEBUG_MENU_1011/gui_resource_recovery_20261020/resource_integration_checkpoint_12",
   "base": "02fc055bf259419120cb79379f6c952daf65f5a7",
   "patch_sha256": "1409916a50a9627ecae204dfe7d1035fa651d87b6cbdef7cfb5fdb1ab6e1d568",
@@ -29,7 +29,7 @@
     },
     "profile_upgrade_followon_in_CP12": false
   },
-  "missing_provider_found_by_fixture_audit": "ResourceIO::InputBuffer::AppendResourceQueue was declaration-only. Its actual void ARTIST8266BFD8 body is now frozen separately as append_queue_provider_checkpoint_13; unmounted and unreviewed, not substituted in tests.",
+  "missing_provider_found_by_fixture_audit": "Original void AppendResourceQueue provider is integrated in the reviewed production commit; the original sealed CP12 packet retains its historical missing-provider finding.",
   "fixture_assessment": {
     "path": "scratch/DEBUG_MENU_1011/gui_resource_recovery_20261020/resource_integration_checkpoint_12/FIXTURE_ASSESSMENT.md",
     "sha256": "c75164d2ce3b5b794925c0f09d0fbc7cb32f8feb5a65893e2e4cf31e930a71c6"
@@ -37,14 +37,68 @@
   "optional_boot_owner": {
     "paths": 3,
     "source": "Original CompleteLoading::OnLeave clears the exact GUI boot flag initialized by Construct.",
-    "selected": false
+    "selected": true,
+    "scope": "Only the original Construct/CompleteLoading flag owner; native GUI preparation remains unselected."
   },
   "retained_limits": [
     "Serialized two-argument host ResourceModule transport remains.",
     "Native GUI preparation/validators and original IO stack/monitor/filesystem owner chain remain unselected.",
     "PC synchronous GUI pool bindings and APT resource lifetimes are preserved as separate owners.",
-    "No compile, link, fixture execution or native behavior verdict for this batch."
+    "Shipping build and existing193 selected checks pass; dedicated resource fixtures and native behavior remain separate gates."
   ],
   "dev_delivery": false,
-  "final_entry_dispositions_changed": false
+  "final_entry_dispositions_changed": false,
+  "current_source": "dadb525906a32f58e5d9abeb4a7e1f79262c7a40",
+  "production_commit": "1ddb5309060d9a1b69f49f836b4ff0c41ffe9898",
+  "integrated_source_paths": 26,
+  "integrated_existing_fixture_paths": 1,
+  "source_review": {
+    "path": "scratch/DEBUG_MENU_1011/resource_owner_integration_review_20261020/REVIEW.md",
+    "sha256": "4951652f7a7ef23fd2a4e184e7ef00cab755c70e7d5886591d5712edccf181e2"
+  },
+  "fixture_followup_review": {
+    "path": "scratch/DEBUG_MENU_1011/resource_fixture_repairs_20261020/REVIEW.md",
+    "sha256": "15275ff8c603c429b9120549bf64c2e0bd719c568213fccbc1a6cfee28963522"
+  },
+  "hosted_shipping_and_existing_suite": {
+    "source": "84664079c90a36fd82545216f958bec5f37c6244",
+    "workflow": "a0c6916a0c8f35859673a9e5c44da33e914fc8ee",
+    "run_id": 39392383764,
+    "url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39392383764",
+    "compile": {
+      "translation_units": 2977,
+      "compiled": 179,
+      "cached": 2798,
+      "failed": 0,
+      "seconds": 50.8
+    },
+    "link": "pass",
+    "selected_checks_passed": 193,
+    "negative_controls": {
+      "--legacy-team-predicate": {
+        "status": "expected_behavior_failure",
+        "exit_code": 1,
+        "log": "hud-negative-legacy-team-predicate.log"
+      },
+      "--omit-apt-retain": {
+        "status": "expected_behavior_failure",
+        "exit_code": 1,
+        "log": "apt-negative--omit-apt-retain.log"
+      },
+      "--require-new-apt-resources": {
+        "status": "expected_behavior_failure",
+        "exit_code": 1,
+        "log": "apt-negative--require-new-apt-resources.log"
+      }
+    },
+    "receipt_sha256": "773134722628d281b37e612808a582e70b211af04ade3d2b26fbc9c651d0d074",
+    "executable": {
+      "bytes": 11089408,
+      "sha256": "8cbb7e9bbfe3ce836f4f17e14c7698c0e66cd77af67626ee0ecfc5cf33e8de20"
+    },
+    "resource_suite_selected": false,
+    "native": "not_run",
+    "normal_package_changed": false
+  },
+  "full_resource_suite": "pending_pool_protocol_layout_transport_acquire_hierarchy_plus_four_behavior_controls"
 }
