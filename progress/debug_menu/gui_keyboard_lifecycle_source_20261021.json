@@ -1,0 +1,147 @@
+{
+  "date": "2026-10-21",
+  "status": "private_source_review_and_compile_pass_link_missing_three_providers",
+  "source": "eb192ccdd10235543edf582ebc7e26c49f1da135",
+  "base": "65b9f5f8315e93c187de812c15d8fe424beb0f5b",
+  "branch": "refs/heads/codex/debug-menu-gamestate-source-integration-20261019",
+  "files": [
+    {
+      "path": "src/GameShared/GameClasses/Gui/CgsGuideIntegration.cpp",
+      "before_sha256": "ec964f0744994193456e4cd535b378a625b011e178467c7728f778e5d76f626c",
+      "approved_sha256": "04eec59d1eaced243071f5aac98a99da33f0c8a83601ef7c33bd3146d70da371",
+      "published_sha256": "04eec59d1eaced243071f5aac98a99da33f0c8a83601ef7c33bd3146d70da371",
+      "line_endings_normalized_only": false
+    },
+    {
+      "path": "src/GameShared/GameClasses/Gui/CgsGuideIntegration.h",
+      "before_sha256": "c8e806e0919ac6df26692c6435877ab7329b5e7c4173f26590314f117b2e66a7",
+      "approved_sha256": "3ac91d7639654ad94911d309dee46e69e67dc57c4c2c0b999c196f5b5e975715",
+      "published_sha256": "3ac91d7639654ad94911d309dee46e69e67dc57c4c2c0b999c196f5b5e975715",
+      "line_endings_normalized_only": false
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "before_sha256": "a969e29e8ea3983e605c9921ed408b40f292f81f8b7a48ca4cc25991f72a7ecf",
+      "approved_sha256": "9ac2d64791476d2ac873165483d05ef7aa14c6684a2ef4ac27fa7976fcc13076",
+      "published_sha256": "9ac2d64791476d2ac873165483d05ef7aa14c6684a2ef4ac27fa7976fcc13076",
+      "line_endings_normalized_only": false
+    }
+  ],
+  "reviews": [
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/keyboard_lifecycle_recovery/REVIEW.md",
+      "sha256": "03c7c66454035f383f5ee7efacd7ba15dbe8f2deb66efbc8f53d033aa56e5ddd"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/gui_module_event143_recovery/REVIEW.md",
+      "sha256": "a951e3d61af6e449124c15803b60d9e5a8ea1ad9b67093da2dc265f46f98ac18"
+    }
+  ],
+  "recovered": [
+    "SystemUserProfile original three-store Construct",
+    "GuiModule profile/keyboard/host Prepare calls and original assertions",
+    "Profile and keyboard Update pumps before SLS",
+    "Profile/keyboard/host Release calls and original assertions",
+    "Inbound event143 u32 selected-user assignment and original sign-in refresh"
+  ],
+  "hosted_run": 39595382063,
+  "workflow": "04b914cb39899905c6a231e814de33e4f6a1ae98",
+  "build_url": "https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39595382063",
+  "build_status": "compile_and_selected_fixtures_pass_link_fail",
+  "build_verification": {
+    "status": "compile_and_selected_fixtures_pass_link_missing_three_providers",
+    "source": "eb192ccdd10235543edf582ebc7e26c49f1da135",
+    "workflow": "04b914cb39899905c6a231e814de33e4f6a1ae98",
+    "run_id": 39595382063,
+    "input_receipt_sha256": "a186d60548b16bd05f556224a82e36603b9f3ed0db0730d3574296cc4b1fd53e",
+    "build_log_sha256": "e783e69c92bb7fb9a82866a97f917478d9e1006c6ef7fb653bde8567d22fa76d",
+    "compile": {
+      "selected_tus": 2991,
+      "compiled": 987,
+      "cached": 2004,
+      "failed": 0
+    },
+    "selected_checks": 591,
+    "intentional_failure_controls": 4,
+    "gui_io_results": [
+      {
+        "case": "interpreter",
+        "positive": true,
+        "numeric": {
+          "checks": 169,
+          "failures": 0
+        },
+        "receipt_sha256": "46bc2ea6e48ee29eb73ed3e775fe493b03eeaee47b999ae9768e0b4d9d9202d8"
+      },
+      {
+        "case": "interpreter-clear-input",
+        "positive": false,
+        "numeric": {
+          "checks": 169,
+          "failures": 8
+        },
+        "receipt_sha256": "01a96d5559bfd85d5e2493f335680729b8fb00e2f88aef873719591ce054caf7"
+      },
+      {
+        "case": "interpreter-old-capacity",
+        "positive": false,
+        "numeric": {
+          "checks": 169,
+          "failures": 8
+        },
+        "receipt_sha256": "8be4c02adb4d872043d65896af89a4d08b69ae9a3a96785a5113e5337d5c0e2a"
+      },
+      {
+        "case": "model",
+        "positive": true,
+        "numeric": {
+          "checks": 377,
+          "failures": 0
+        },
+        "receipt_sha256": "53cf8f171dbb84b454e9a91e330dce69af2092b1c9af896176fd055afdde83c4"
+      },
+      {
+        "case": "model-base-only",
+        "positive": false,
+        "numeric": {
+          "checks": 65,
+          "failures": 24
+        },
+        "receipt_sha256": "fa3c56e99923024a8c11f5d659e8e678d20888a436f6fb68154d1e6027bfeccd"
+      },
+      {
+        "case": "model-retain-view",
+        "positive": false,
+        "numeric": {
+          "checks": 377,
+          "failures": 12
+        },
+        "receipt_sha256": "aef02f110b04dec02a7c542f6b091a5aa00a6a96ca6860ad9f703265ebd5e8e0"
+      }
+    ],
+    "link": "fail",
+    "missing_providers": [
+      "\"public: static int __cdecl CgsSystem::HardwareSku::FindLanguage(void)\" (?FindLanguage@HardwareSku@CgsSystem@@SAHXZ)",
+      "\"public: static int __cdecl CgsSystem::HardwareSku::GetSku(void)\" (?GetSku@HardwareSku@CgsSystem@@SAHXZ)",
+      "XShowKeyboardUI"
+    ],
+    "game_executable_produced": false,
+    "native": "not_run_private_source_only"
+  },
+  "native": "not_run_private_source_only",
+  "remaining": [
+    "PC HardwareSku GetSku/FindLanguage providers",
+    "PC XShowKeyboardUI provider",
+    "actual event143 producer"
+  ],
+  "normal_package_changed": false,
+  "current_normal_source": "b823505348af025a784fc3ac171cfd0e7f0c1f99",
+  "debug_site_dispositions_changed": 0,
+  "source_receipt": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/keyboard_lifecycle_event143_publication/receipt.json",
+  "source_receipt_sha256": "2182a57f500537310bd089a3f5c6cf4e7fe3ffc2100e4b0eadfe50841ab164e8",
+  "merged_playable_candidate_branch_cleanup": {
+    "status": "merged_candidate_branch_removed",
+    "source_preserved_on_dev": "b823505348af025a784fc3ac171cfd0e7f0c1f99",
+    "no_worktree_removed": true
+  }
+}
