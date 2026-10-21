@@ -16,7 +16,8 @@ param(
     [switch] $RunGuiAnimationRegressions,
     [switch] $RunStartupIORegressions,
     [switch] $RunGuiLicenseRegressions,
-    [switch] $RunKeyboardUIContract
+    [switch] $RunKeyboardUIContract,
+    [switch] $RunRwacCommandCapacity
 )
 
 Set-StrictMode -Version Latest
@@ -44,7 +45,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -364,6 +365,288 @@ try {
         $Receipt.regressions.startup_io_status = 'pass'
         $Receipt.regressions.status = 'partial_selected_fixtures_pass'
         Assert-CleanTrees
+    }
+
+    # Hosted bounded RWAC capacity fixture plus the original-source negative control.
+    if ($RunRwacCommandCapacity) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.rwac_command_capacity_status = 'running'
+        if ($Jobs -ne 4 -or $Receipt.runner_label -cne 'windows-2022') {
+            throw 'RWAC command-capacity fixture is limited to hosted Windows 2022 with four build jobs.'
+        }
+
+        $rwacRunner = Join-Path $SourceRoot 'tests/run_rwac_command_capacity.py'
+        $rwacPinPath = Join-Path $SourceRoot 'tests/evidence/rwac_command_capacity/source_pins.json'
+        $rwacOut = Join-Path $ArtifactRoot 'rwac-capacity'
+        if ((Test-Path -LiteralPath $rwacOut -PathType Container) -and
+            @(Get-ChildItem -LiteralPath $rwacOut -Force).Count -ne 0) {
+            throw 'RWAC command-capacity output directory already contains a prior receipt.'
+        }
+
+        $expectedRwacSources = @(
+            'src/GameShared/GameClasses/System/PC/CgsAudioOutputPC.cpp',
+            'src/GameShared/GameClasses/System/PC/CgsDacOutputPC.cpp',
+            'src/GameShared/GameClasses/System/PC/CgsRwacCommandTracePC.h',
+            'src/GameSource/Sound/Module/BrnRootSoundModule.cpp',
+            'vendor/renderware/src/rw/audio/core/PlugIn.cpp',
+            'tests/RwacCommandCapacity.cpp',
+            'tests/run_rwac_command_capacity.py',
+            'tests/evidence/rwac_command_capacity/PlugIn_b823.cpp'
+        )
+        foreach ($relative in $expectedRwacSources) {
+            $path = Join-Path $SourceRoot $relative
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+                throw "RWAC source-pinned input is missing: $relative"
+            }
+            $Receipt.regressions.inputs['rwac-capacity/' + $relative] = Get-FileRecord $path
+        }
+        foreach ($tool in @(
+            @{ relative = 'tools/build/msvc_flags.txt'; path = (Join-Path $Root 'tools/build/msvc_flags.txt') },
+            @{ relative = 'tools/build/msvc_includes.txt'; path = (Join-Path $Root 'tools/build/msvc_includes.txt') }
+        )) {
+            if (-not (Test-Path -LiteralPath $tool.path -PathType Leaf)) {
+                throw "RWAC canonical build input is missing: $($tool.relative)"
+            }
+            $Receipt.regressions.inputs['parent/' + $tool.relative] = Get-FileRecord $tool.path
+        }
+        $Receipt.regressions.inputs['rwac-capacity/tests/evidence/rwac_command_capacity/source_pins.json'] =
+            Get-FileRecord $rwacPinPath
+
+        $pins = Get-Content -Raw -LiteralPath $rwacPinPath | ConvertFrom-Json
+        if ($pins.schema_version -ne 2 -or $pins.normalization -cne 'crlf_to_lf_only' -or
+            $pins.base_head -cne 'b823505348af025a784fc3ac171cfd0e7f0c1f99') {
+            throw 'RWAC source pins are not the reviewed schema-2 LF-content contract.'
+        }
+        $pinNames = @($pins.files.PSObject.Properties | ForEach-Object { $_.Name } | Sort-Object -CaseSensitive)
+        $expectedPinNames = @($expectedRwacSources | Sort-Object -CaseSensitive)
+        if ($pinNames.Count -ne $expectedPinNames.Count -or
+            [string]::Join("`n", $pinNames) -cne [string]::Join("`n", $expectedPinNames)) {
+            throw 'RWAC pin manifest does not contain the exact eight production/test/control inputs.'
+        }
+
+        & py -3 -B $rwacRunner --workflow-root $Root --out $rwacOut --run 2>&1 |
+            Tee-Object -FilePath (Join-Path $ArtifactRoot 'rwac-capacity.log') | Out-Host
+        $rwacCode = $LASTEXITCODE
+        $rwacArguments = @('-3', '-B', $rwacRunner, '--workflow-root', $Root,
+                           '--out', $rwacOut, '--run')
+        $NativeCommands.Add(@{ command = 'py'; arguments = $rwacArguments; exit_code = $rwacCode })
+        if ($rwacCode -ne 0) { $NativeFailureCode = $rwacCode }
+
+        $rwacResultPath = Join-Path $rwacOut 'result.json'
+        if (-not (Test-Path -LiteralPath $rwacResultPath -PathType Leaf)) {
+            throw 'RWAC runner did not retain result.json.'
+        }
+        $rwacResult = Get-Content -Raw -LiteralPath $rwacResultPath | ConvertFrom-Json
+        if (-not [string]::Equals([IO.Path]::GetFullPath([string]$rwacResult.runner),
+                [IO.Path]::GetFullPath($rwacRunner), [StringComparison]::OrdinalIgnoreCase) -or
+            -not [string]::Equals([IO.Path]::GetFullPath([string]$rwacResult.source_checkout),
+                [IO.Path]::GetFullPath($SourceRoot), [StringComparison]::OrdinalIgnoreCase) -or
+            -not [string]::Equals([IO.Path]::GetFullPath([string]$rwacResult.workflow_root),
+                [IO.Path]::GetFullPath($Root), [StringComparison]::OrdinalIgnoreCase)) {
+            throw 'RWAC result does not identify this exact candidate source and workflow checkout.'
+        }
+        if ($rwacResult.sources.schema_version -ne 2 -or
+            $rwacResult.sources.normalization -cne 'crlf_to_lf_only' -or
+            $rwacResult.sources.base_head -cne $pins.base_head -or
+            @($rwacResult.sources.mismatches).Count -ne 0 -or
+            @($rwacResult.sources.files.PSObject.Properties).Count -ne 8) {
+            throw 'RWAC source receipt reports a schema, normalization, coverage, or pin mismatch.'
+        }
+        $pinsFileRecord = Get-FileRecord $rwacPinPath
+        if ($rwacResult.sources.pins_file.actual_raw_sha256 -cne $pinsFileRecord.sha256 -or
+            $rwacResult.sources.pins_file.actual_raw_bytes -ne $pinsFileRecord.bytes) {
+            throw 'RWAC result source-pins file record does not match the actual manifest bytes.'
+        }
+        foreach ($relative in $expectedRwacSources) {
+            $pinProperty = $pins.files.PSObject.Properties[$relative]
+            $sourceProperty = $rwacResult.sources.files.PSObject.Properties[$relative]
+            if ($null -eq $pinProperty -or $null -eq $sourceProperty) {
+                throw "RWAC source receipt is missing a pin row: $relative"
+            }
+            $pin = $pinProperty.Value
+            $sourceRow = $sourceProperty.Value
+            $actualSource = Get-FileRecord (Join-Path $SourceRoot $relative)
+            if ($sourceRow.expected_lf_sha256 -cne $pin.expected_lf_sha256 -or
+                $sourceRow.expected_lf_bytes -ne $pin.expected_lf_bytes -or
+                $sourceRow.actual_lf_sha256 -cne $pin.expected_lf_sha256 -or
+                $sourceRow.actual_lf_bytes -ne $pin.expected_lf_bytes -or
+                $sourceRow.matches_lf_content -isnot [bool] -or -not $sourceRow.matches_lf_content -or
+                $sourceRow.actual_raw_sha256 -cne $actualSource.sha256 -or
+                $sourceRow.actual_raw_bytes -ne $actualSource.bytes) {
+                throw "RWAC source-content or raw-byte receipt mismatch: $relative"
+            }
+        }
+        $baselineIdentity = $rwacResult.sources.baseline_evidence
+        if ($baselineIdentity.path -cne 'tests/evidence/rwac_command_capacity/PlugIn_b823.cpp' -or
+            $baselineIdentity.original_git_lf_blob_sha1 -cne 'd1c98a807112e3052d8e9c8701cb3464e7619f7c' -or
+            $baselineIdentity.original_git_lf_sha256 -cne 'e28e6fd1463b76ddc71d5dd51404787f225034014da99b67cdfdd1882a6a27c8' -or
+            $baselineIdentity.original_git_lf_bytes -ne 8921 -or
+            $baselineIdentity.matches_original_git_lf_blob -isnot [bool] -or
+            -not $baselineIdentity.matches_original_git_lf_blob -or
+            $baselineIdentity.actual_checkout_lf_git_blob_sha1 -cne $baselineIdentity.original_git_lf_blob_sha1) {
+            throw 'RWAC original-source negative control does not match its retained original Git blob.'
+        }
+        foreach ($tool in @(
+            @{ relative = 'tools/build/msvc_flags.txt'; path = (Join-Path $Root 'tools/build/msvc_flags.txt') },
+            @{ relative = 'tools/build/msvc_includes.txt'; path = (Join-Path $Root 'tools/build/msvc_includes.txt') }
+        )) {
+            $toolProperty = $rwacResult.sources.canonical_tool_files.PSObject.Properties[$tool.relative]
+            if ($null -eq $toolProperty) { throw "RWAC receipt omitted canonical build input: $($tool.relative)" }
+            $actualTool = Get-FileRecord $tool.path
+            if ($toolProperty.Value.actual_raw_sha256 -cne $actualTool.sha256 -or
+                $toolProperty.Value.actual_raw_bytes -ne $actualTool.bytes) {
+                throw "RWAC canonical build input hash mismatch: $($tool.relative)"
+            }
+        }
+        if ($null -eq $rwacResult.toolchain -or
+            @($rwacResult.toolchain.files.PSObject.Properties).Count -lt 2) {
+            throw 'RWAC result omitted compiler/linker toolchain hashes.'
+        }
+        if ($rwacResult.toolchain.environment.VSCMD_ARG_TGT_ARCH -cne 'x64' -or
+            $rwacResult.toolchain.environment.CL -or $rwacResult.toolchain.environment._CL_) {
+            throw 'RWAC toolchain receipt does not identify an unmodified x64 MSVC environment.'
+        }
+        $rwacToolchainRecords = @{}
+        foreach ($toolchainFile in $rwacResult.toolchain.files.PSObject.Properties) {
+            $toolchainPath = [string]$toolchainFile.Name
+            if (-not (Test-Path -LiteralPath $toolchainPath -PathType Leaf)) {
+                throw "RWAC hashed toolchain file is missing: $toolchainPath"
+            }
+            $actualToolchainFile = Get-FileRecord $toolchainPath
+            if ($toolchainFile.Value -cnotmatch '\A[0-9a-f]{64}\z' -or
+                $toolchainFile.Value -cne $actualToolchainFile.sha256) {
+                throw "RWAC compiler/linker input hash mismatch: $toolchainPath"
+            }
+            $rwacToolchainRecords[$toolchainPath] = $actualToolchainFile
+        }
+
+        if ($rwacCode -ne 0 -or $rwacResult.state -cne 'pass' -or
+            $rwacResult.fixture_failures -ne 0 -or
+            $rwacResult.intentional_failure_controls -ne 1 -or
+            $rwacResult.intentional_failure_checks -ne 6 -or
+            @($rwacResult.runs).Count -ne 2) {
+            throw 'RWAC fixture result did not pass its positive and original-source control gates.'
+        }
+        $expectedNames = @('candidate', 'baseline_control')
+        $expectedFailureLabels = @(
+            'overflow stops before fifth record',
+            'overflow leaves cursor untouched',
+            'overflow leaves full backing and canaries untouched',
+            'overflow has explicit synchronous record',
+            'record contains actual pending/capacity/stride/highwater/frame',
+            'record is bounded and complete'
+        )
+        $rwacRows = @()
+        for ($index = 0; $index -lt 2; $index++) {
+            $row = $rwacResult.runs[$index]
+            $isBaseline = $index -eq 1
+            if ($row.name -cne $expectedNames[$index] -or
+                $row.intentional_failure_control -isnot [bool] -or
+                $row.intentional_failure_control -ne $isBaseline -or
+                $row.pass -isnot [bool] -or -not $row.pass -or
+                $null -eq $row.checks -or $row.checks -le 0 -or
+                $null -eq $row.failures -or
+                $row.run.timed_out -isnot [bool] -or $row.run.timed_out -or
+                $row.compile.timed_out -isnot [bool] -or $row.compile.timed_out -or
+                $row.compile.exit_code -ne 0 -or
+                $row.compile.timeout_seconds -ne 120 -or
+                $row.run.timeout_seconds -ne 20 -or
+                $row.compile.owned_job -isnot [bool] -or -not $row.compile.owned_job -or
+                $row.run.owned_job -isnot [bool] -or -not $row.run.owned_job) {
+                throw "RWAC $($expectedNames[$index]) run is missing a successful bounded execution receipt."
+            }
+            if ($row.compile.exit_code -ne 0) { throw "RWAC $($row.name) compilation failed." }
+            $expectedRunExit = if ($isBaseline) { 1 } else { 0 }
+            if ($row.run.exit_code -ne $expectedRunExit) {
+                throw "RWAC $($row.name) executable returned an unexpected exit code."
+            }
+            foreach ($childName in @('compile', 'run')) {
+                $child = $row.$childName
+                $cleanup = $child.cleanup
+                if ($cleanup.complete -isnot [bool] -or -not $cleanup.complete -or
+                    $cleanup.cleanup_timeout_seconds -ne 5 -or
+                    $cleanup.job_termination_requested -isnot [bool] -or
+                    $cleanup.child_wait_complete -isnot [bool] -or -not $cleanup.child_wait_complete -or
+                    $cleanup.job_handle_closed -isnot [bool] -or -not $cleanup.job_handle_closed -or
+                    $cleanup.process_handles_closed -isnot [bool] -or -not $cleanup.process_handles_closed -or
+                    $cleanup.stdio_handles_closed -isnot [bool] -or -not $cleanup.stdio_handles_closed -or
+                    $cleanup.job_active_processes_after_cleanup -ne 0 -or
+                    $child.transcript_hash_after_cleanup -isnot [bool] -or -not $child.transcript_hash_after_cleanup) {
+                    throw "RWAC $($row.name) child cleanup or transcript-sealing receipt is incomplete."
+                }
+                $expectedLogName = $row.name + '_' + $childName + '.log'
+                $expectedLogPath = Join-Path $rwacOut $expectedLogName
+                if (-not [string]::Equals([IO.Path]::GetFullPath([string]$child.log),
+                    [IO.Path]::GetFullPath($expectedLogPath), [StringComparison]::OrdinalIgnoreCase) -or
+                    -not (Test-Path -LiteralPath $expectedLogPath -PathType Leaf)) {
+                    throw "RWAC $($row.name) child transcript path is unexpected or missing."
+                }
+                $actualLog = Get-FileRecord $expectedLogPath
+                if ($child.log_raw_sha256 -cnotmatch '\A[0-9a-f]{64}\z' -or
+                    $child.log_raw_sha256 -cne $actualLog.sha256 -or
+                    $child.log_sha256 -cne $actualLog.sha256 -or
+                    $child.log_bytes -ne $actualLog.bytes) {
+                    throw "RWAC $($row.name) transcript hash/size does not match bytes after cleanup."
+                }
+            }
+
+            $exePath = Join-Path $rwacOut ($row.name + '.exe')
+            if (-not (Test-Path -LiteralPath $exePath -PathType Leaf)) {
+                throw "RWAC $($row.name) executable was not retained."
+            }
+            $actualExe = Get-FileRecord $exePath
+            if ($row.fixture_exe_sha256 -cnotmatch '\A[0-9a-f]{64}\z' -or
+                $row.fixture_exe_sha256 -cne $actualExe.sha256 -or
+                $row.fixture_exe_bytes -ne $actualExe.bytes -or $actualExe.bytes -le 0) {
+                throw "RWAC $($row.name) executable hash/size differs from its receipt."
+            }
+
+            $runLogPath = Join-Path $rwacOut ($row.name + '_run.log')
+            $runTextForParsing = (Get-Content -Raw -LiteralPath $runLogPath).Replace(([string][char]13 + [char]10), [string][char]10)
+            $summaries = [regex]::Matches($runTextForParsing, '(?m)^RWAC_CAPACITY checks=(\d+) failures=(\d+)$')
+            if ($summaries.Count -ne 1 -or
+                [int]$summaries[0].Groups[1].Value -ne $row.checks -or
+                [int]$summaries[0].Groups[2].Value -ne $row.failures) {
+                throw "RWAC $($row.name) result counts differ from its actual retained transcript."
+            }
+            $actualLabels = @([regex]::Matches($runTextForParsing, '(?m)^FAIL (.+)$') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -CaseSensitive)
+            if ($isBaseline) {
+                $expectedSortedLabels = @($expectedFailureLabels | Sort-Object -CaseSensitive)
+                $rowLabels = @($row.failure_labels | ForEach-Object { [string]$_ } | Sort-Object -CaseSensitive)
+                if ($row.checks -le 0 -or $row.failures -ne 6 -or
+                    [string]::Join("`n", $rowLabels) -cne [string]::Join("`n", $expectedSortedLabels) -or
+                    [string]::Join("`n", $actualLabels) -cne [string]::Join("`n", $expectedSortedLabels)) {
+                    throw 'RWAC original-source control did not expose exactly its six expected failures.'
+                }
+            } else {
+                if ($row.checks -le 0 -or $row.failures -ne 0 -or $actualLabels.Count -ne 0 -or
+                    -not $runTextForParsing.Contains('TRACE_BURST ') -or
+                    -not $runTextForParsing.Contains('TRACE_STARVATION ')) {
+                    throw 'RWAC candidate did not produce positive checks, zero failures, and both trace witnesses.'
+                }
+            }
+            $rwacRows += @{ name = $row.name; checks = $row.checks; failures = $row.failures;
+                exit_code = $row.run.exit_code; executable = $actualExe;
+                compile_log = $(Get-FileRecord (Join-Path $rwacOut ($row.name + '_compile.log')));
+                run_log = $(Get-FileRecord $runLogPath) }
+        }
+        if ($rwacResult.fixture_checks -ne $rwacRows[0].checks -or
+            $rwacResult.fixture_failures -ne 0 -or
+            $rwacResult.intentional_failure_checks -ne $rwacRows[1].failures) {
+            throw 'RWAC top-level numeric counts do not match the two actual executable transcripts.'
+        }
+        $Receipt.regressions.rwac_command_capacity = @{
+            result = $(Get-FileRecord $rwacResultPath)
+            runner_log = $(Get-FileRecord (Join-Path $ArtifactRoot 'rwac-capacity.log'))
+            runs = $rwacResult.runs
+            verified_runs = $rwacRows
+            source_receipt = $rwacResult.sources
+            toolchain = $rwacResult.toolchain
+            verified_toolchain_files = $rwacToolchainRecords
+        }
+        Assert-CleanTrees
+        $Receipt.regressions.rwac_command_capacity_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
     }
 
     # Hosted native PC keyboard provider contract; independent of the shipping exe link.
@@ -710,6 +993,7 @@ try {
     if ($Receipt.regressions.startup_io_status -eq 'running') { $Receipt.regressions.startup_io_status = 'fail' }
     if ($Receipt.regressions.gui_license_status -eq 'running') { $Receipt.regressions.gui_license_status = 'fail' }
     if ($Receipt.regressions.keyboard_ui_contract_status -eq 'running') { $Receipt.regressions.keyboard_ui_contract_status = 'fail' }
+    if ($Receipt.regressions.rwac_command_capacity_status -eq 'running') { $Receipt.regressions.rwac_command_capacity_status = 'fail' }
     if ($Receipt.regressions.hud_status -eq 'running') { $Receipt.regressions.hud_status = 'fail' }
     if ($Receipt.regressions.remaining_status -eq 'running') { $Receipt.regressions.remaining_status = 'fail' }
     if ($Receipt.regressions.status -eq 'running') { $Receipt.regressions.status = 'fail' }
