@@ -446,6 +446,10 @@ param(
                                  #   still presses through car select.
                                  #   ⛔ NOT for a case that is ABOUT the boot UI -- a run that
                                  #   never plays the logos cannot measure them.
+  [switch]$TitleStart,           # Send one scoped Start after fresh BootLegal stage7, before
+                                 #   automatic BOOT Accept. The recovered input lifecycle binds
+                                 #   player0 from action8; Accept49 does not select a controller.
+                                 #   Opt-in stimulus only. Car-select and MenuScript stay unchanged.
   [double]$AcceptGap   = 0,      # ⭐ THE ACCEPT-PUMP CADENCE at car select, in seconds. 0 keeps
                                  #   the historical 3.0 s. MEASURED 2026-09-06: the junkyard leg
                                  #   of a returning boot is carsel 16.5s -> livery 19.9s ->
@@ -2315,6 +2319,8 @@ function Strip-CallstackFrames([string]$t) {
 }
 
 $lastAccept = Get-Date
+$titleStartReady = $false
+$titleStartSentAt = $null
 $runawayLog = $false
 $assertStop = $false
 $assertStopAt = $null
@@ -2577,6 +2583,15 @@ while ($true) {
     # boundary still fires. Marks are one-shot, so the overlap cannot double-count; the ASSERT
     # count above deliberately does NOT get the carry, for exactly that reason.
     $cueTxt = Strip-CallstackFrames ($script:logCarry + $txt)
+    # This reader accepts only the owned process's fresh, complete log lines.
+    # Stage7 is BootLegal's original START/accept state, reached after GUI90
+    # armed selection. Sending Start here lets InputPreWorld select its real
+    # port and InputPostWorld request the bind; the harness writes no game state.
+    if ($TitleStart -and -not $titleStartReady -and
+        $cueTxt -match '(?m)^\[BootLegal\] stage -?\d+ -> 7\r?$') {
+      $titleStartReady = $true
+      Write-Host ("[flow] TITLESTART ready at {0:f1}s (fresh BootLegal stage7; log line {1})" -f $elapsed,$script:logLineCount)
+    }
     $script:logCarry = $(if ($txt.Length -gt 2048) { $txt.Substring($txt.Length - 2048) } else { $txt })
     foreach ($m in $cues) {
       if (-not $marks.ContainsKey($m[0]) -and $cueTxt -match $m[1]) {
@@ -2614,9 +2629,19 @@ while ($true) {
   }
 
   $pump = ($phase -eq 'BOOT') -or (($phase -eq 'CARSELECT') -and (-not $HoldCarSelect))
+  # With -TitleStart, prevent an earlier Accept49 from leaving the title
+  # before the one real Start has reached the ordinary input provider.
+  if ($TitleStart -and $phase -eq 'BOOT' -and $null -eq $titleStartSentAt) {
+    $pump = $titleStartReady
+  }
   if ($pump -and ((Get-Date) - $lastAccept).TotalSeconds -ge $acceptGapNow) {
     # -CarSelectTaps: spend the first pump slots MOVING the selection, then accept as usual.
-    if ($phase -eq 'CARSELECT' -and $script:csTapLeft -gt 0 -and $script:csTapHandle -ne $null) {
+    if ($TitleStart -and $phase -eq 'BOOT' -and $null -eq $titleStartSentAt) {
+      $evStart.Set() | Out-Null
+      $titleStartSentAt = $elapsed
+      Write-Host ("[flow] TITLESTART tap:Start at {0:f1}s (one scoped tap; actions8+45; log line {1})" -f $elapsed,$script:logLineCount)
+      $inputLog += ("title-start tap:Start run={0:f1}s actions=8+45" -f $elapsed)
+    } elseif ($phase -eq 'CARSELECT' -and $script:csTapLeft -gt 0 -and $script:csTapHandle -ne $null) {
       $script:csTapHandle.Set() | Out-Null
       $script:csTapLeft--
       Write-Host ("[flow] CAR-SELECT tap {0} ({1} left)" -f $script:csTapChan, $script:csTapLeft)
@@ -3070,6 +3095,8 @@ $summary += ("SWEEP    {0}" -f $sweepText)
 #   that did not, and marks.txt has to say so on its face rather than leave it to be inferred.
 $summary += ("SLOT     {0}{1}" -f $Slot, $(if ($Slot -gt 0) { "  exe=$exe (a copy; cwd=$gameDir)" } else { "  (build\game, the default path)" }))
 $summary += ("SKIPINTRO {0}" -f $(if ($SkipIntro) { "-skipvideos (console latch; EA + Criterion logos not played)" } else { "(not armed)" }))
+$summary += ("TITLESTART requested={0} ready-observed={1} sent-at={2}; stimulus receipt only" -f [bool]$TitleStart,$titleStartReady,
+             $(if ($null -ne $titleStartSentAt) { ("{0:f1}s" -f $titleStartSentAt) } else { "never" }))
 $summary += ("ACCEPTGAP boot={0:f1}s carsel={1:f1}s{2}" -f $acceptGapBoot, $acceptGapCarSel,
              $(if ($AcceptGap -gt 0) { "  [-AcceptGap $AcceptGap -- harness pump latency, not a game gate]" } else { "  (default)" }))
 # AUDIO: whether this run was audible. It changes nothing the game simulates (the mute is one
@@ -3217,6 +3244,7 @@ exit $rc
     first_assert_stop=[bool]$assertStop;first_assert_at=$assertStopAt;observed_asserts=$seenAsserts;
     foreign_game=[bool]$foreignGameAppeared;runaway_log_abort=[bool]$runawayLog;owned_cleanup_complete=[bool]$cleanupComplete;
     input_reset_complete=$inputResetOk;game_exited_on_own=$exitedOnOwn;game_exit=$exitCode;
+    title_start_requested=[bool]$TitleStart;title_start_ready_observed=$titleStartReady;title_start_sent_at=$titleStartSentAt;
     success=[bool]$terminalSuccess} | ConvertTo-Json -Depth 4 |
     Set-Content -LiteralPath (Join-Path $OutDir 'terminal-status.json') -Encoding UTF8
   if (-not $cleanupComplete) { throw 'Owned game exit was not confirmed; profile restoration is forbidden' }
