@@ -4682,6 +4682,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnGuiNetworkRouteInfo.cpp"
   rem ---- CrashNavBorough: GuiNetworkRouteInfo embeds it BY VALUE (its virtual Construct).
   echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnCrashNavBorough.cpp"
+  echo "%SRC%\GameSource\Gui\Flow\Screen\Components\BrnSelectRoutes.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Shared\Components\BrnComplexBar.cpp"
   rem ---- menu-toggle / colour-picker component cluster (2026-08-02, CarSelectLivery wave).
   rem      BrnGui::CarSelectLivery embeds a MenuToggleGroupVarSize<2> and a ColourMenuToggle

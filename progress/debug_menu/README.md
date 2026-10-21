@@ -34,9 +34,11 @@ native Create Match run is still required before calling that issue fixed.
 ## Source and validation lanes
 
 - Shared dev and the source checkout include **70511989c**; its two new commits add CMake files. The normal folder remains9c.
-- Private checkpoint **6ca3a63af** adds twenty reviewed SelectRoutes methods.
-  The full route screen has a corrected source proposal under combined review;
-  compilation and native Create Match submission remain pending.
+- Private checkpoint **12ed103bf** contains the reviewed route component and
+  full route screen, the options publisher repair, and current dev changes.
+  The first integration build exposed type/access errors, now repaired; the next
+  compiled all2,979 selected TUs but omitted the route component from linking.
+  The explicit shipping-TU mount is now added. Native Create Match remains pending.
 - The merged startup/compile-check source is 7d66267f5. Its shipping build
   passes all 2,979 selected TUs, including both newly repaired embed checks,
   plus 519 focused checks and 11 intentional failure controls. This does not
