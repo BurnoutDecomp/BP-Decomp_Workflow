@@ -122,6 +122,8 @@
 # Exit code 0 = the run completed and any requested gates passed; 1 = something failed.
 param(
   [string]$OutDir      = "",     # default: <repo>\scratch\flow_run\<timestamp>
+  [string]$GameDir     = "",     # optional private directory containing this run's exe/config/log
+  [string]$WorkingDirectory = "", # paired private data root used as the game's current directory
   [int]$MaxSeconds     = 275,
   [switch]$Frames,
   [switch]$Gates,                # run frame_gate.ps1 + carselect_frame_gate.ps1 at the end
@@ -371,6 +373,9 @@ param(
                                  # BrnGuiWorldDataController.cpp:374) fire once per frame while
                                  # driving, ~3,178 times each in 400 s, far faster than the ~1 Hz
                                  # poll can release them one at a time.
+  [switch]$NoAssertRelease,     # leave the assert event unsignalled; stop after the first observed [ASSERT]
+  [switch]$BelowNormal,         # set only this owned process to BelowNormal immediately after launch
+  [switch]$StrictGameOwnership, # refuse existing/foreign games; cleanup only this run's PID/path/start time
   [double]$MinFreeGB   = 25,     # refuse to START a frame dump below this much free space --
                                  # a dump can reach 16 GB and filling the volume mid-run breaks
                                  # far more than the run (see the guard below)
@@ -497,18 +502,38 @@ $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 
 # ⭐⭐ THE SLOT (see -Slot's banner). THREE paths come out of it and they are NOT the same
 #   directory once n > 0:
-#     $gameDir  build\game -- ALWAYS. It is the WORKING DIRECTORY every instance is launched
-#               with, because CgsHardwareInitPC.cpp:320 seeds macFOPENPath from
+#     $gameDir  build\game by default; a strict private run pairs <stage>\slot and <stage>\data.
+#               CgsHardwareInitPC.cpp:320 seeds macFOPENPath from the selected current directory.
 #               GetCurrentDirectory(): the CWD *is* the data path, so one 5.9 GB data set
 #               serves every slot and nothing is ever duplicated or allowed to go stale.
-#     $exeDir   where THIS instance's binary lives: build\game for slot 0, build\game_slots\<n>
-#               for a slot. A running game holds an exclusive lock on its own image, so a slot
+#     $exeDir   where THIS instance's binary lives: build\game for slot 0 and build\game_slots\<n>
+#               for default slots; private runs use their staged <stage>\slot directory.
+#               A running game holds an exclusive lock on its own image, so a slot
 #               must run a copy or `build exe` could never link while any slot ran.
 #     $log      BrnGame.log NEXT TO THE EXE (CgsLog.cpp:15 uses GetModuleFileName, not the CWD),
 #               which is precisely why a per-slot exe directory yields a per-slot log for free.
-$gameDir = Join-Path $root "build\game"
+$sourceGameDir = Join-Path $root "build\game"
+$usingCustomGameDirs = ($GameDir -ne "" -or $WorkingDirectory -ne "")
+if ($usingCustomGameDirs) {
+  if ($GameDir -eq "" -or $WorkingDirectory -eq "" -or $Slot -le 0 -or -not $StrictGameOwnership) {
+    Write-Host "[flow] FAIL: private paths require both -GameDir and -WorkingDirectory, a positive -Slot, and -StrictGameOwnership."; exit 1
+  }
+  try {
+    $exeDir = (Resolve-Path -LiteralPath $GameDir -ErrorAction Stop).Path
+    $gameDir = (Resolve-Path -LiteralPath $WorkingDirectory -ErrorAction Stop).Path
+  } catch {
+    Write-Host "[flow] FAIL: private GameDir/WorkingDirectory must already exist."; exit 1
+  }
+  $exeParent = [IO.Path]::GetFullPath((Split-Path -Parent $exeDir)).TrimEnd('\')
+  $dataParent = [IO.Path]::GetFullPath((Split-Path -Parent $gameDir)).TrimEnd('\')
+  if ((Split-Path -Leaf $exeDir) -ine 'slot' -or (Split-Path -Leaf $gameDir) -ine 'data' -or $exeParent -ine $dataParent) {
+    Write-Host "[flow] FAIL: private paths must be sibling <stage>\slot and <stage>\data directories."; exit 1
+  }
+} else {
+  $gameDir = $sourceGameDir
+  $exeDir  = if ($Slot -gt 0) { Join-Path $root "build\game_slots\$Slot" } else { $gameDir }
+}
 $slotTag = if ($Slot -gt 0) { "_$Slot" } else { "" }
-$exeDir  = if ($Slot -gt 0) { Join-Path $root "build\game_slots\$Slot" } else { $gameDir }
 $exe     = Join-Path $exeDir "Burnout_PC.exe"
 $log     = Join-Path $exeDir "BrnGame.log"
 if ($OutDir   -eq "") { $OutDir   = Join-Path $root ("scratch\flow_run\" + (Get-Date).ToString('yyyyMMdd_HHmmss')) }
@@ -527,8 +552,14 @@ if ($FrameDir -eq "") { $FrameDir = Join-Path $OutDir "frames" }
 # Slot 0 must have its exe now; a SLOT's copy is staged below, after the lock and the kill
 # sweep (slots.ps1 refuses to overwrite a live one, so the order is load-bearing).
 if ($Slot -le 0 -and -not (Test-Path $exe)) { Write-Host "[flow] FAIL: no exe at $exe -- build first."; exit 1 }
-if ($Slot -gt 0 -and -not (Test-Path (Join-Path $gameDir 'Burnout_PC.exe'))) {
-  Write-Host "[flow] FAIL: no exe at $gameDir\Burnout_PC.exe -- build first (a slot is a COPY of it)."; exit 1
+if ($Slot -gt 0 -and -not $usingCustomGameDirs -and -not (Test-Path (Join-Path $sourceGameDir 'Burnout_PC.exe'))) {
+  Write-Host "[flow] FAIL: no exe at $sourceGameDir\Burnout_PC.exe -- build first (a slot is a COPY of it)."; exit 1
+}
+if ($usingCustomGameDirs -and -not (Test-Path -LiteralPath $exe -PathType Leaf)) {
+  Write-Host "[flow] FAIL: private staged exe not found at $exe."; exit 1
+}
+if ($NoAssertRelease -and $ReleaseAsserts) {
+  Write-Host "[flow] FAIL: -NoAssertRelease and -ReleaseAsserts are mutually exclusive."; exit 1
 }
 if (Test-Path $OutDir) { Remove-Item -Recurse -Force $OutDir }
 New-Item -ItemType Directory -Force $OutDir | Out-Null
@@ -543,6 +574,22 @@ New-Item -ItemType Directory -Force $OutDir | Out-Null
 . "$PSScriptRoot\_box_lock.ps1"
 Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:$NoLock -Label "flow_run" -Slot $Slot
 
+function Get-OtherGameProcesses {
+  @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe'" -ErrorAction Stop)
+}
+if ($StrictGameOwnership) {
+  # A strict Traffic run never kills a pre-existing game, even if its image path is the target.
+  # The private staging contract is one owned game only; ambiguity refuses the run.
+  try { $lOtherGames = @(Get-OtherGameProcesses) }
+  catch { Write-Host "[flow] FAIL: could not enumerate existing game processes; strict run refused."; exit 1 }
+  if ($lOtherGames.Count -gt 0) {
+    Write-Host "[flow] FAIL: strict ownership refuses to start while any Burnout/TUB game is already running; none was stopped."
+    foreach ($lForeign in $lOtherGames) {
+      Write-Host ("[flow]   pid={0} name={1} path={2}" -f $lForeign.ProcessId,$lForeign.Name,$lForeign.ExecutablePath)
+    }
+    exit 1
+  }
+} else {
 # ⛔⛔ KILL STALE INSTANCES **AND VERIFY THE KILL** (pauseresume wave, 2026-08-27).
 # This used to be a single fire-and-forget `Stop-Process -Force`, and it silently FAILS on this
 # process often enough to matter: every run ends `EXIT harness-stop (process was still alive)`,
@@ -597,12 +644,16 @@ while ($true) {
   }
   Start-Sleep -Seconds 2
 }
+}
 Start-Sleep -Seconds 1
 
 # ⭐ STAGE THE SLOT'S EXE. Only now -- the slot's game is provably dead, so slots.ps1 will not
 #   refuse, and the copy happens under the staging mutex build_exe_locked.ps1 holds for the whole
 #   link, so a slot can never boot half a binary. Slot 0 does none of this.
 if ($Slot -gt 0) {
+  if ($usingCustomGameDirs) {
+    Write-Host ("[flow] SLOT {0}: using the already pinned private <stage>\slot executable; staging copy skipped." -f $Slot)
+  } else {
   $lSlotsScript = Join-Path $root 'tools\tests\slots.ps1'
   # ⛔ -NoProfileSeed: staging must NEVER create a Memcard_<n>\Profile.sav. An absent one is a
   #   deliberate FreshProfile park by run_case, and re-seeding it here silently booted a
@@ -616,6 +667,7 @@ if ($Slot -gt 0) {
   } else {
   & powershell -ExecutionPolicy Bypass -File $lSlotsScript -Slot $Slot -NoProfileSeed 2>&1 |
       ForEach-Object { Write-Host "[flow]   $_" }
+  }
   }
   if (-not (Test-Path $exe)) {
     Write-Host "[flow] FAIL: slot $Slot has no exe at $exe after staging -- see the [slots] lines above."
@@ -687,7 +739,8 @@ if ($Audio) {
 # END-tap intent exactly (dismiss the asserts we saw) and so KEEPS `asserts=` a real measurement.
 # -ReleaseAsserts switches to ManualReset + a single Set, which leaves the gate permanently open:
 # necessary for the open-world storm, but it releases asserts the loop never counted, which is why
-# it is opt-in and why the summary marks the run.
+# it is opt-in and why the summary marks the run. -NoAssertRelease leaves this event unsignalled,
+# breaks the poll loop at the first observed [ASSERT], and lets owned-process cleanup stop the run.
 $assertEventMode = if ($ReleaseAsserts) { [System.Threading.EventResetMode]::ManualReset }
                    else                 { [System.Threading.EventResetMode]::AutoReset }
 $evAssertRelease = New-Object System.Threading.EventWaitHandle(
@@ -2003,11 +2056,77 @@ if ($Drive) {
 }
 
 # --- launch ------------------------------------------------------------------------------
+if ($StrictGameOwnership) {
+  try { $lOtherGames = @(Get-OtherGameProcesses) }
+  catch { Write-Host "[flow] FAIL: could not recheck game processes before launch."; exit 1 }
+  if ($lOtherGames.Count -gt 0) {
+    Write-Host "[flow] FAIL: a game appeared before launch; strict run refused and did not stop it."
+    foreach ($lForeign in $lOtherGames) {
+      Write-Host ("[flow]   pid={0} name={1} path={2}" -f $lForeign.ProcessId,$lForeign.Name,$lForeign.ExecutablePath)
+    }
+    exit 1
+  }
+}
+function Test-OwnedGameProcess {
+  try {
+    $p.Refresh()
+    if ($p.HasExited) { return $false }
+    $lCurrent = Get-CimInstance Win32_Process -Filter "ProcessId=$($p.Id)" -ErrorAction Stop
+    if ($null -eq $lCurrent -or -not $lCurrent.ExecutablePath -or
+        [IO.Path]::GetFullPath($lCurrent.ExecutablePath) -ine $ownedImagePath) { return $false }
+    $p.Refresh()
+    if ($p.HasExited) { return $false }
+    return ($p.StartTime.ToUniversalTime().Ticks -eq $ownedStartTime.Ticks)
+  } catch { return $false }
+}
+function Stop-OwnedGame([string]$Reason) {
+  if (-not $script:ownedProcessStarted) { $script:ownedCleanupOk = $true; return $true }
+  if ($script:ownedCleanupAttempted) { return $script:ownedCleanupOk }
+  $script:ownedCleanupAttempted = $true
+  try {
+    # Direct Process.Start retains the creation handle. Never reopen a PID for cleanup,
+    # including when later CIM/path/start-time pinning fails.
+    if (-not [object]::ReferenceEquals($p, $script:ownedLaunchProcess)) {
+      throw 'Original launch Process object was not retained'
+    }
+    $p.Refresh()
+    if ($p.HasExited) { $script:ownedCleanupOk = $true; return $true }
+    $p.Kill()
+    if (-not $p.WaitForExit(2000)) {
+      Write-Host ("[flow] FAIL: owned game pid={0} did not exit within 2s after cleanup." -f $p.Id)
+      $script:ownedCleanupOk = $false
+      return $false
+    }
+    $script:ownedCleanupOk = $true
+    return $true
+  } catch {
+    Write-Host ("[flow] FAIL: could not stop owned game pid={0}: {1}" -f $p.Id,$_.Exception.Message)
+    $script:ownedCleanupOk = $false
+    return $false
+  }
+}
+$script:ownedProcessStarted = $false
+$script:ownedLaunchProcess = $null
+$script:ownedCleanupAttempted = $false
+$script:ownedCleanupOk = $false
+$ownedImagePath = [IO.Path]::GetFullPath($exe)
+$ownedStartTime = $null
+$ownedLaunchHandle = $null
+$flowRequestedExit = 1
+$flowBodyCompleted = $false
+$flowTerminatingError = $null
+$assertStop = $false
+$assertStopAt = $null
+$foreignGameAppeared = $false
+$seenAsserts = 0
+$exitedOnOwn = $false
+$exitCode = $null
 $t0 = Get-Date                      # THE launch instant; the gates' freshness cut-off.
+try {
 # ⭐ THE WORKING DIRECTORY IS THE DATA PATH, NOT THE EXE PATH (see the $gameDir banner up top).
-#   For slot 0 those are the same directory and this line is byte-identical to what it replaced;
-#   for a slot the exe lives in build\game_slots\<n>\ while the CWD stays build\game, which is
-#   what lets every slot read one live 5.9 GB data set.
+#   For default slot 0 those are the same directory; default slot exes live in build\game_slots\<n>\
+#   while the CWD stays build\game, so the 5.9 GB data set is shared. A private run uses its paired
+#   GameDir/WorkingDirectory.
 # ⭐ -SkipIntro is the CONSOLE's own "-skipvideos" command-line latch (BrnMain.cpp:434 ->
 #   BootVideos::Update's soft-reboot exit). Nothing else is ever put on the command line, so a
 #   default run still launches with none at all.
@@ -2017,10 +2136,40 @@ if ($lLaunchArgs.Count -gt 0) {
   Write-Host ("[flow] SKIP INTRO: launching with {0} -- the console's own boot-video latch; the EA" -f ($lLaunchArgs -join ' '))
   Write-Host  "       Franchise + Criterion logos are skipped exactly as a soft reboot skips them."
   Write-Host  "       ⛔ NOT a run that can measure the boot movies or the loading fade into them."
-  $p  = Start-Process -FilePath $exe -WorkingDirectory $gameDir -ArgumentList $lLaunchArgs -PassThru
-} else {
-  $p  = Start-Process -FilePath $exe -WorkingDirectory $gameDir -PassThru
 }
+$p = New-Object System.Diagnostics.Process
+$p.StartInfo = New-Object System.Diagnostics.ProcessStartInfo
+$p.StartInfo.FileName = $exe
+$p.StartInfo.WorkingDirectory = $gameDir
+$p.StartInfo.Arguments = $lLaunchArgs -join ' '
+$p.StartInfo.UseShellExecute = $false
+$script:ownedLaunchProcess = $p
+if (-not $p.Start()) { throw 'Direct game process creation returned false' }
+$script:ownedProcessStarted = $true
+$ownedLaunchHandle = $p.Handle
+try {
+  $p.Refresh()
+  $ownedStartTime = $p.StartTime.ToUniversalTime()
+  $lOwnedCim = Get-CimInstance Win32_Process -Filter "ProcessId=$($p.Id)" -ErrorAction Stop
+  if ($null -eq $lOwnedCim -or -not $lOwnedCim.ExecutablePath -or
+      [IO.Path]::GetFullPath($lOwnedCim.ExecutablePath) -ine $ownedImagePath) {
+    throw "PID $($p.Id) does not resolve to the launched image path"
+  }
+} catch {
+  throw "Launched process PID/path/start-time identity could not be pinned; original launch handle cleanup follows: $($_.Exception.Message)"
+}
+if ($BelowNormal) {
+  try {
+    $p.PriorityClass = [Diagnostics.ProcessPriorityClass]::BelowNormal
+    $p.Refresh()
+    if ($p.PriorityClass -ne [Diagnostics.ProcessPriorityClass]::BelowNormal) { throw "Priority readback was $($p.PriorityClass)" }
+  } catch {
+    Write-Host "[flow] FAIL: could not set/read back BelowNormal priority on the owned game."
+    throw 'BelowNormal priority set/readback failed'
+  }
+  $processPriority = 'BelowNormal'
+} else { $processPriority = 'inherited' }
+Write-Host ("[flow] OWNED_PROCESS pid={0} image={1} start={2} priority={3}" -f $p.Id,$ownedImagePath,$ownedStartTime.ToString('o'),$processPriority)
 Write-Host ("[flow] pid={0} frames={1} hold={2} max={3}s  RUNSTART {4}" -f `
             $p.Id, [bool]$Frames, [bool]$HoldCarSelect, $MaxSeconds, $t0.ToString('o'))
 
@@ -2040,8 +2189,7 @@ function Wait-ForOwnLog {
 }
 if (-not (Wait-ForOwnLog)) {
   Write-Host "[flow] FAIL: no log written by THIS run within ${LogWaitSeconds}s (stale log ignored on purpose)."
-  Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
-  exit 1
+  throw 'No fresh game log'
 }
 Write-Host "[flow] log confirmed fresh (mtime >= launch) -- previous-run marks are impossible."
 
@@ -2168,6 +2316,10 @@ function Strip-CallstackFrames([string]$t) {
 
 $lastAccept = Get-Date
 $runawayLog = $false
+$assertStop = $false
+$assertStopAt = $null
+$foreignGameAppeared = $false
+$nextForeignGameCheck = (Get-Date).AddSeconds(2)
 $seenAsserts = 0
 $phase = 'BOOT'          # BOOT -> FLYBY (quiet) -> CARSELECT (pump again) -> DRIVING
 # ⭐ THE ACCEPT-PUMP CADENCE (see -AcceptGap's banner). The two historical values -- 2.0 s while
@@ -2339,6 +2491,24 @@ while ($true) {
   $script:pollLast = Get-Date
   if ($elapsed -gt $MaxSeconds) { Write-Host "[flow] max seconds"; break }
   if ($p.HasExited) { Write-Host ("[flow] game exited early at {0:f1}s" -f $elapsed); break }
+  if ($StrictGameOwnership -and (Get-Date) -ge $nextForeignGameCheck) {
+    if (-not (Test-OwnedGameProcess)) { throw 'Owned game PID/path/start-time recheck failed' }
+    try { $lForeignGames = @(Get-OtherGameProcesses | Where-Object { $_.ProcessId -ne $p.Id }) }
+    catch {
+      Write-Host "[flow] FAIL: game-process enumeration failed during strict run; aborting owned process only."
+      $foreignGameAppeared = $true
+      break
+    }
+    if ($lForeignGames.Count -gt 0) {
+      Write-Host "[flow] FAIL: another game appeared during strict run; aborting owned process only."
+      foreach ($lForeign in $lForeignGames) {
+        Write-Host ("[flow]   pid={0} name={1} path={2}" -f $lForeign.ProcessId,$lForeign.Name,$lForeign.ExecutablePath)
+      }
+      $foreignGameAppeared = $true
+      break
+    }
+    $nextForeignGameCheck = (Get-Date).AddSeconds(2)
+  }
 
   # ⭐ THE SCHEDULE FIRST, BEFORE ANY LOG WORK. Everything below this line can block -- the log
   #   read, the assert release, the frame-directory scan -- and when it did, the throttle was
@@ -2377,7 +2547,8 @@ while ($true) {
     if (-not [string]::IsNullOrEmpty($lsPeerTxt)) { $script:msPeerBuf = Add-MsBuf $script:msPeerBuf $lsPeerTxt }
   }
   if (-not [string]::IsNullOrEmpty($txt)) {
-    $n = $seenAsserts + ([regex]::Matches($txt, '\[ASSERT \d+\]')).Count
+    $lsAssertPattern = if ($NoAssertRelease) { '\[ASSERT(?:\s+\d+)?\]' } else { '\[ASSERT \d+\]' }
+    $n = $seenAsserts + ([regex]::Matches($txt, $lsAssertPattern)).Count
     if ($n -gt $seenAsserts) {
       # Release only this slot's named event for newly observed asserts.
       # With -ReleaseAsserts the gate is already open and Sets are harmless.
@@ -2386,6 +2557,13 @@ while ($true) {
       #   that owes the car a throttle, and that run's marks.txt has no `input` line at all.
       #   The debt is CARRIED, never dropped, so a storm is still fully released -- just spread
       #   over polls at a bounded 240 ms each, which keeps the schedule inside one poll period.
+      if ($NoAssertRelease) {
+        $seenAsserts = $n
+        $assertStop = $true
+        $assertStopAt = $elapsed
+        Write-Host ("[flow] ASSERT_STOP: first observed [ASSERT] #{0} at {1:f1}s; assert-release event remains unsignalled." -f $n,$elapsed)
+        break
+      }
       $script:assertDebt += ($n - $seenAsserts)
       $seenAsserts = $n
       $lRelease = [math]::Min($script:assertDebt, 8)
@@ -2610,7 +2788,7 @@ if ($exitedOnOwn) {
   }
 }
 
-Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+if (-not (Stop-OwnedGame 'run-finished')) { throw 'Owned game cleanup failed; live profile must remain parked' }
 Start-Sleep -Milliseconds 500
 Remove-Item Env:\BRN_FRAME_DUMP -ErrorAction SilentlyContinue
 Remove-Item Env:\BRN_FRAME_DUMP_EVERY -ErrorAction SilentlyContinue
@@ -2629,6 +2807,14 @@ $ladderLate = @{}
 $finalLog = Join-Path $OutDir "BrnGame.log"
 if (-not (Test-Path $finalLog)) { $finalLog = $log }
 $finalTxt = Get-Content $finalLog -Raw -ErrorAction SilentlyContinue
+if ($NoAssertRelease -and $null -ne $finalTxt) {
+  $finalAssertCount = ([regex]::Matches($finalTxt, '\[ASSERT(?:\s+\d+)?\]')).Count
+  if ($finalAssertCount -gt 0) {
+    if (-not $assertStop) { $assertStopAt = $endElapsed }
+    $assertStop = $true
+    $seenAsserts = [math]::Max($seenAsserts, $finalAssertCount)
+  }
+}
 if ($null -ne $finalTxt) {
   $finalCue = Strip-CallstackFrames $finalTxt
   foreach ($r in $eventLadder) {
@@ -2851,6 +3037,7 @@ if ($driveVerdict -match 'NEVER MOVED|BARELY MOVED') {
 # --- marks.txt.  RUNSTART FIRST: it is what the gates use to reject stale dumps. ----------
 $summary = @()
 $summary += ("RUNSTART {0}" -f $t0.ToString('o'))
+$summary += ("PROCESS pid={0} image={1} start={2} priority={3}" -f $p.Id,$ownedImagePath,$ownedStartTime.ToString('o'),$processPriority)
 $summary += ("FRAMEDIR {0}" -f $(if ($framesOut) { $framesOut } else { "-" }))
 foreach ($k in @('flyby','newprof','ingame','jystart','carsel','livery','accept','exitjy','strfin')) {
   if ($marks.ContainsKey($k)) { $summary += ("{0,-8} {1,6:f1}s  frame={2}" -f $k, $marks[$k], $markFrame[$k]) }
@@ -2860,6 +3047,9 @@ $summary += ("END      {0,6:f1}s  frame={1}" -f $endElapsed, $endFrame)
 if ($runawayLog) { $summary += "RUNAWAY LOG -- aborted on size; this run is NOT comparable" }
 $summary += ("asserts={0} phase={1}{2}" -f $seenAsserts, $phase,
              $(if ($ReleaseAsserts) { "  [ASSERT GATE HELD OPEN -- asserts= NOT comparable]" } else { "" }))
+if ($NoAssertRelease) { $summary += "ASSERT_RELEASE=disabled (NoAssertRelease)" }
+if ($assertStop) { $summary += ("ASSERT_STOP first-observed-at={0:f1}s; process stopped without release" -f $assertStopAt) }
+if ($foreignGameAppeared) { $summary += "FOREIGN_GAME=appeared-or-process-enumeration-failed; only owned process cleanup attempted" }
 # DIAGENV: the inherited probe knobs this run actually carried. Two runs are comparable only
 # when this line matches -- see the banner where it is collected.
 # ⚠ -DiagEnv variables are recorded HERE TOO. They are applied AFTER the wipe, so they do
@@ -2980,7 +3170,9 @@ if ($framesOut) {
 Write-Host "[flow] out -> $OutDir"
 
 # --- gates -------------------------------------------------------------------------------
-if (-not $Gates -and -not $WriteGoldens) { exit 0 }
+$flowBodyCompleted = $true
+if ($assertStop -or $foreignGameAppeared -or $runawayLog) { $flowRequestedExit = 1; exit 1 }
+if (-not $Gates -and -not $WriteGoldens) { $flowRequestedExit = 0; exit 0 }
 if (-not $framesOut) { Write-Host "[flow] FAIL: -Gates needs -Frames."; exit 1 }
 
 $rc = 0
@@ -2998,4 +3190,34 @@ else               { & (Join-Path $PSScriptRoot 'carselect_frame_gate.ps1') -Fra
 if ($LASTEXITCODE -ne 0) { $rc = 1 }
 
 Write-Host ("`n[flow] {0}" -f $(if ($rc -eq 0) { "ALL GATES PASS" } else { "*** GATES FAILED ***" }))
+$flowRequestedExit = $rc
 exit $rc
+} catch {
+  $flowTerminatingError = $_.Exception.Message
+  throw
+} finally {
+  $inputResetOk = $true
+  foreach ($e in @($evAccel,$evBrake,$evHandB,$evStrL,$evStrR,$evStrF25,$evStrF50,$evShldL,$evShldR,$evBoost,$evLookback,$evChangeView)) {
+    try { $e.Reset() | Out-Null } catch { $inputResetOk = $false }
+  }
+  foreach ($lH in @($script:msHolds)) {
+    try { $lH.H.Reset() | Out-Null } catch { $inputResetOk = $false }
+  }
+  $cleanupComplete = Stop-OwnedGame 'postlaunch-finally'
+  # Preserve the original terminal outcome for the strict runner and NoRun.
+  $terminalSuccess = $flowBodyCompleted -and $flowRequestedExit -eq 0 -and
+      -not $flowTerminatingError -and -not $assertStop -and -not $foreignGameAppeared -and -not $runawayLog -and
+      $cleanupComplete -and $inputResetOk -and
+      (-not $exitedOnOwn -or ($null -ne $exitCode -and $exitCode -eq 0))
+  [ordered]@{schema=1;launch_utc=$t0.ToUniversalTime().ToString('o');
+    launched=[bool]$script:ownedProcessStarted;owned_pid=$(if($script:ownedProcessStarted){$p.Id}else{$null});
+    owned_image=$ownedImagePath;owned_start_utc=$(if($ownedStartTime){$ownedStartTime.ToString('o')}else{$null});
+    direct_creation_handle_retained=($null -ne $ownedLaunchHandle);
+    completed=[bool]$flowBodyCompleted;requested_exit=$flowRequestedExit;error=$flowTerminatingError;
+    first_assert_stop=[bool]$assertStop;first_assert_at=$assertStopAt;observed_asserts=$seenAsserts;
+    foreign_game=[bool]$foreignGameAppeared;runaway_log_abort=[bool]$runawayLog;owned_cleanup_complete=[bool]$cleanupComplete;
+    input_reset_complete=$inputResetOk;game_exited_on_own=$exitedOnOwn;game_exit=$exitCode;
+    success=[bool]$terminalSuccess} | ConvertTo-Json -Depth 4 |
+    Set-Content -LiteralPath (Join-Path $OutDir 'terminal-status.json') -Encoding UTF8
+  if (-not $cleanupComplete) { throw 'Owned game exit was not confirmed; profile restoration is forbidden' }
+}
