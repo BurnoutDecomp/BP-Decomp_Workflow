@@ -36,6 +36,8 @@ param(
   [switch]$NoRun,                 # evaluate an existing -RunDir only
   [int]$LockTimeoutSec  = 7200,
   [string]$Label        = "",     # free text recorded in result.json (e.g. "pre-fix", "post-fix")
+  [string]$GameDir      = "",     # paired private <stage>\slot executable/config/log directory
+  [string]$WorkingDirectory = "", # paired private <stage>\data asset and profile directory
   [int]$Slot            = 0       # ⭐ PARALLEL SLOTS (2026-09-06, lane harness2). 0 == build\game,
                                   #   one game on the box, byte for byte what it has always been.
                                   #   n > 0 runs build\game_slots\<n>\Burnout_PC.exe -- a COPY of
@@ -86,7 +88,27 @@ Write-Host ("[case] run dir: {0}" -f $RunDir)
 # --- provenance: which exe, which commits ----------------------------------------------------
 # The exe THIS run will execute -- a slot runs its own copy, and a provenance stamp naming the
 # wrong binary would be worse than none (see flow_run's EXE PROVENANCE banner).
-$exeDir = if ($Slot -gt 0) { Join-Path $root ('build\game_slots\' + $Slot) } else { Join-Path $root 'build\game' }
+$usingCustomGameDirs = ($GameDir -ne "" -or $WorkingDirectory -ne "")
+if ($usingCustomGameDirs) {
+  if ($GameDir -eq "" -or $WorkingDirectory -eq "" -or $Slot -le 0 -or -not $lRun.StrictGameOwnership) {
+    Write-Host "[case] FAIL: private paths require both -GameDir and -WorkingDirectory, a positive -Slot, and StrictGameOwnership in the case run."; exit 2
+  }
+  try {
+    $GameDir = (Resolve-Path -LiteralPath $GameDir -ErrorAction Stop).Path
+    $WorkingDirectory = (Resolve-Path -LiteralPath $WorkingDirectory -ErrorAction Stop).Path
+  } catch {
+    Write-Host "[case] FAIL: private GameDir/WorkingDirectory must already exist."; exit 2
+  }
+  $exeParent = [IO.Path]::GetFullPath((Split-Path -Parent $GameDir)).TrimEnd('\')
+  $dataParent = [IO.Path]::GetFullPath((Split-Path -Parent $WorkingDirectory)).TrimEnd('\')
+  if ((Split-Path -Leaf $GameDir) -ine 'slot' -or (Split-Path -Leaf $WorkingDirectory) -ine 'data' -or $exeParent -ine $dataParent) {
+    Write-Host "[case] FAIL: private paths must be sibling <stage>\slot and <stage>\data directories."; exit 2
+  }
+  $exeDir = $GameDir
+} else {
+  $WorkingDirectory = Join-Path $root 'build\game'
+  $exeDir = if ($Slot -gt 0) { Join-Path $root ('build\game_slots\' + $Slot) } else { $WorkingDirectory }
+}
 $exe = Join-Path $exeDir 'Burnout_PC.exe'
 $prov = @{
   exe_mtime   = $(if (Test-Path $exe) { (Get-Item $exe).LastWriteTime.ToString('o') } else { 'MISSING' })
@@ -98,12 +120,24 @@ $prov = @{
 
 # --- run flow_run ----------------------------------------------------------------------------
 $flowExit = $null
+$flowTerminalPath = Join-Path $RunDir 'flow-terminal.json'
+$flowStatusPath = Join-Path $flowOut 'terminal-status.json'
+$flowInvocationAttempted = $false
+$flowInvocationError = $null
+$flowStatus = $null
+$flowStatusHash = $null
+$profileRestoreSafe = $true
+$profileRestorationComplete = $false
+$setupCleanupOk = $true
+$postFlowForeignGame = $false
+$profileRestoreError = $null
 $profileAside = $null
 # FreshProfile parks THIS SLOT's save. Slot n's profile is build\game\Memcard_<n>\Profile.sav
 # (the game suffixes the directory from BRN_HARNESS_SLOT), so parking slot 0's would leave slot n
 # on the returning path and quietly measure the wrong boot.
-$profile = if ($Slot -gt 0) { Join-Path $root ('build\game\Memcard_' + $Slot + '\Profile.sav') }
-           else             { Join-Path $root 'build\game\Memcard\Profile.sav' }
+$profile = if ($usingCustomGameDirs) { Join-Path $WorkingDirectory ('Memcard_' + $Slot + '\Profile.sav') }
+           elseif ($Slot -gt 0) { Join-Path $root ('build\game\Memcard_' + $Slot + '\Profile.sav') }
+           else { Join-Path $root 'build\game\Memcard\Profile.sav' }
 # ⭐ ProfileFixture (2026-09-28, lane HUNT): a case that needs a RETURNING player with a known
 #   progression state (medals, unlocked rivals, owned cars) names a pinned .sav here -- an
 #   absolute path, a path relative to the repo root, or a bare file name under
@@ -120,6 +154,13 @@ if (-not $NoRun -and $lCase.ProfileFixture) {
   $laTry = @($lsFix, (Join-Path $root $lsFix), (Join-Path $PSScriptRoot ('fixtures\' + $lsFix)))
   foreach ($t in $laTry) { if ([IO.Path]::IsPathRooted($t) -and (Test-Path $t -PathType Leaf)) { $fixturePath = (Resolve-Path $t).Path; break } }
   if (-not $fixturePath) { Write-Host "[case] FAIL: ProfileFixture '$lsFix' not found (tried $($laTry -join '; '))"; exit 2 }
+  if ($lCase.ProfileFixtureSha256) {
+    $fixtureHash = (Get-FileHash -LiteralPath $fixturePath -Algorithm SHA256).Hash.ToLowerInvariant()
+    $expectedFixtureHash = ([string]$lCase.ProfileFixtureSha256).ToLowerInvariant()
+    if ($fixtureHash -cne $expectedFixtureHash) {
+      Write-Host "[case] FAIL: ProfileFixture SHA256 mismatch; expected $($lCase.ProfileFixtureSha256), got $fixtureHash"; exit 2
+    }
+  }
 }
 $fixtureAside = $null
 $fixtureHadNoSave = $false
@@ -139,6 +180,13 @@ if (-not $NoRun) {
   #   when this process exits, after the profile is put back.
   . (Join-Path $root 'tools\diagnostics\_box_lock.ps1')
   Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:([bool]$lRun.NoLock) -Label "run_case" -Slot $Slot
+  if ($lRun.StrictGameOwnership) {
+    # Refuse before the FIRST profile move/copy, under the same runner lock.
+    # Keep Setup's pre-helper and flow's prelaunch checks for later races.
+    $lExistingGames = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe'" -ErrorAction Stop)
+    if ($lExistingGames.Count -gt 0) { throw 'Strict run refused before profile mutation: an existing Burnout/TUB game is alive' }
+    if (Test-Path -LiteralPath $flowTerminalPath) { throw 'Strict run refuses to overwrite an original terminal receipt; use NoRun to rerate' }
+  }
   # A SLOT's exe is staged by flow_run itself (under the lock, after its kill sweep), so only
   # slot 0 must already have one at this point.
   if ($Slot -le 0 -and -not (Test-Path $exe)) { Write-Host "[case] FAIL: no exe at $exe -- build first (tools\tests\build_exe_locked.ps1)"; exit 2 }
@@ -147,8 +195,13 @@ if (-not $NoRun) {
   $lArgs['OutDir'] = $flowOut
   $lArgs['LockTimeoutSec'] = $LockTimeoutSec
   if ($Slot -gt 0) { $lArgs['Slot'] = $Slot }
+  if ($usingCustomGameDirs) {
+    $lArgs['GameDir'] = $GameDir
+    $lArgs['WorkingDirectory'] = $WorkingDirectory
+  }
   if ($lCase.Frames) { $lArgs['Frames'] = $true; $lArgs['FrameDir'] = $frameDir }
   $lSetupProc = $null
+  $lSetupIdentity = $null
   $t0 = Get-Date
   # Everything from the first profile move on sits inside the try, so the finally below puts
   # the slot's save back even when a fixture copy or a Setup stimulus throws.
@@ -182,8 +235,8 @@ if (-not $NoRun) {
     #   commands, so it could not be part of a sweep at all, and in a sweep it silently measured
     #   nothing instead of failing.
     #   `Setup` is an optional scriptblock on the case. It is called with one context hashtable
-    #   BEFORE flow_run starts and must RETURN either nothing or a System.Diagnostics.Process,
-    #   which is killed here if it outlives the run -- so a stimulus can never leak past its case.
+    #   BEFORE flow_run starts and must RETURN either nothing or a System.Diagnostics.Process.
+    #   A surviving helper is stopped only when its PID, image path and start time still match.
     #     Root / RunDir / Slot / Case  -- the obvious ones
     #     GameLog                      -- THIS SLOT's live BrnGame.log (slot n has its own; a
     #                                     helper that polls build\game\BrnGame.log would watch the
@@ -191,11 +244,22 @@ if (-not $NoRun) {
     #   A case with no Setup key behaves exactly as before.
     if ($lCase.Setup) {
       $lSetupCtx = @{ Root = $root; RunDir = $RunDir; Slot = $Slot; Case = $lCase
+                      GameDir = $exeDir; WorkingDirectory = $WorkingDirectory
+                      UsesPrivateStage = $usingCustomGameDirs
+                      SlotCommandRoot = $(if ($usingCustomGameDirs) { '../slot' } else { '../game_slots/' + $Slot })
                       GameLog = (Join-Path $exeDir 'BrnGame.log') }
       Write-Host "[case] Setup: running the case's concurrent stimulus"
       $lSetupProc = & $lCase.Setup $lSetupCtx
       if ($lSetupProc -is [System.Diagnostics.Process]) {
-        Write-Host ("[case] Setup: started pid {0}; it will be killed if it outlives the run" -f $lSetupProc.Id)
+        try {
+          $lSetupProc.Refresh()
+          $lSetupCim = Get-CimInstance Win32_Process -Filter "ProcessId=$($lSetupProc.Id)" -ErrorAction Stop
+          if ($lSetupCim.ExecutablePath) {
+            $lSetupIdentity = @{ Path = [IO.Path]::GetFullPath($lSetupCim.ExecutablePath)
+                                 StartTime = $lSetupProc.StartTime.ToUniversalTime() }
+          }
+        } catch { $lSetupIdentity = $null }
+        Write-Host ("[case] Setup: started pid {0}; bounded helper will be stopped only if path/start time still match" -f $lSetupProc.Id)
       } else { $lSetupProc = $null }
     }
     # Setup can choose run-owned diagnostic paths. Read its final DiagEnv only
@@ -203,13 +267,59 @@ if (-not $NoRun) {
     if ($lCase.DiagEnv) { $lArgs['DiagEnv'] = "$($lCase.DiagEnv)" }
     $argText = ($lArgs.GetEnumerator() | ForEach-Object { if ($_.Value -is [bool] -or $_.Value -is [switch]) { "-$($_.Key)" } else { "-$($_.Key) '$($_.Value)'" } }) -join ' '
     Write-Host "[case] flow_run.ps1 $argText"
+    $flowInvocationAttempted = $true
     & (Join-Path $root 'tools\diagnostics\flow_run.ps1') @lArgs *>&1 | Tee-Object -FilePath $consoleLog | ForEach-Object { Write-Host "  | $_" }
     $flowExit = $LASTEXITCODE
+  } catch {
+    $flowInvocationError = $_.Exception.Message
+    throw
   } finally {
-    if ($lSetupProc -and -not $lSetupProc.HasExited) {
-      Write-Host ("[case] Setup: pid {0} outlived the run -- stopping it" -f $lSetupProc.Id)
-      try { $lSetupProc.Kill() } catch { }
+    if ($lSetupProc) {
+      try {
+        $lSetupProc.Refresh()
+        if (-not $lSetupProc.HasExited) {
+          $lSetupCim = Get-CimInstance Win32_Process -Filter "ProcessId=$($lSetupProc.Id)" -ErrorAction Stop
+          $lSetupProc.Refresh()
+          $lSetupSame = ($null -ne $lSetupIdentity -and $null -ne $lSetupCim -and
+              $lSetupCim.ExecutablePath -and
+              [IO.Path]::GetFullPath($lSetupCim.ExecutablePath) -ieq $lSetupIdentity.Path -and
+              $lSetupProc.StartTime.ToUniversalTime().Ticks -eq $lSetupIdentity.StartTime.Ticks)
+          if ($lSetupSame -and -not $lSetupProc.HasExited) {
+            Write-Host ("[case] Setup: owned helper pid {0} outlived the bounded run -- stopping its original process handle" -f $lSetupProc.Id)
+            $lSetupProc.Kill()
+            if (-not $lSetupProc.WaitForExit(2000)) {
+              $setupCleanupOk = $false
+              Write-Host ("[case] Setup: owned helper pid {0} exceeded the 2s cleanup bound" -f $lSetupProc.Id)
+            }
+          } else {
+            $setupCleanupOk = $false
+            Write-Host ("[case] Setup: refused PID {0} cleanup because path/start-time identity was not preserved" -f $lSetupProc.Id)
+          }
+        }
+      } catch { $setupCleanupOk = $false; Write-Host ("[case] Setup: cleanup check failed; no PID-only kill attempted: {0}" -f $_.Exception.Message) }
     }
+    if ($lRun.StrictGameOwnership) {
+      # A missing cleanup receipt or failed enumeration never authorizes changing
+      # a possibly live game's profile. Preserve the fixture and parked original.
+      try {
+        if ($flowInvocationAttempted) {
+          $flowStatus = Get-Content -LiteralPath $flowStatusPath -Raw -ErrorAction Stop | ConvertFrom-Json
+          $flowStatusHash = (Get-FileHash -LiteralPath $flowStatusPath -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($flowStatus.owned_cleanup_complete -ne $true) { $profileRestoreSafe = $false }
+        }
+        $lRemainingGames = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe'" -ErrorAction Stop)
+        if ($lRemainingGames.Count -gt 0) {
+          $profileRestoreSafe = $false
+          $postFlowForeignGame = $true
+          $profileRestoreError = 'A game is still alive after flow; profile restoration deferred'
+        }
+      } catch {
+        $profileRestoreSafe = $false
+        $profileRestoreError = $_.Exception.Message
+      }
+    }
+    try {
+    if ($profileRestoreSafe) {
     if ($profileAside -and (Test-Path $profileAside)) {
       if (Test-Path $profile) { Remove-Item $profile -Force }
       Move-Item $profileAside $profile -Force
@@ -225,6 +335,26 @@ if (-not $NoRun) {
         Write-Host "[case] ProfileFixture: restored $profile"
       } elseif ($fixtureHadNoSave) {
         Write-Host "[case] ProfileFixture: removed the fixture copy (the slot had no save before the run)"
+      }
+    }
+    $profileRestorationComplete = $true
+    } else {
+      Write-Host "[case] FAIL: game exit is unconfirmed; private fixture/profile and parked original retained without restoration."
+    }
+    } finally {
+      if ($lRun.StrictGameOwnership) {
+        $terminalPass = $flowInvocationAttempted -and $null -ne $flowExit -and $flowExit -eq 0 -and
+            -not $flowInvocationError -and $setupCleanupOk -and $profileRestorationComplete -and
+            $null -ne $flowStatus -and $flowStatus.success -eq $true -and
+            $flowStatus.first_assert_stop -eq $false -and $flowStatus.foreign_game -eq $false
+        # NoRun reads this original receipt; it never manufactures a new flow result.
+        [ordered]@{schema=1;case=$lCase.Name;run_dir=$RunDir;slot=$Slot;
+          flow_invoked=$flowInvocationAttempted;flow_exit=$flowExit;error=$flowInvocationError;
+          flow_status_sha256=$flowStatusHash;flow_status=$flowStatus;
+          helper_cleanup_complete=$setupCleanupOk;profile_restoration_complete=$profileRestorationComplete;
+          post_flow_foreign_game=$postFlowForeignGame;profile_restore_error=$profileRestoreError;
+          success=[bool]$terminalPass} | ConvertTo-Json -Depth 6 |
+          Set-Content -LiteralPath $flowTerminalPath -Encoding UTF8
       }
     }
   }
@@ -269,6 +399,31 @@ $ctx = @{
 # --- evaluate ----------------------------------------------------------------------------------
 $results = @()
 $allPass = $true
+if ($lRun.StrictGameOwnership) {
+  $terminalPass = $false
+  $terminalDetail = 'missing or unsuccessful original terminal receipt'
+  try {
+    $originalTerminal = Get-Content -LiteralPath $flowTerminalPath -Raw -ErrorAction Stop | ConvertFrom-Json
+    $originalFlowStatusHash = (Get-FileHash -LiteralPath $flowStatusPath -Algorithm SHA256 -ErrorAction Stop).Hash.ToLowerInvariant()
+    $flowExit = $originalTerminal.flow_exit
+    $terminalPass = $originalTerminal.schema -eq 1 -and $originalTerminal.case -ceq $lCase.Name -and
+        $originalTerminal.run_dir -ceq $RunDir -and $originalTerminal.slot -eq $Slot -and
+        $originalTerminal.flow_invoked -eq $true -and $originalTerminal.success -eq $true -and
+        $null -ne $flowExit -and $flowExit -eq 0 -and -not $originalTerminal.error -and
+        $originalTerminal.flow_status_sha256 -ceq $originalFlowStatusHash -and
+        $originalTerminal.flow_status.success -eq $true -and
+        $originalTerminal.flow_status.first_assert_stop -eq $false -and
+        $originalTerminal.flow_status.foreign_game -eq $false -and
+        $originalTerminal.flow_status.owned_cleanup_complete -eq $true -and
+        $originalTerminal.helper_cleanup_complete -eq $true -and
+        $originalTerminal.profile_restoration_complete -eq $true -and
+        $originalTerminal.post_flow_foreign_game -eq $false
+    $terminalDetail = "original flow_exit=$flowExit success=$($originalTerminal.success) assert_stop=$($originalTerminal.flow_status.first_assert_stop) foreign_game=$($originalTerminal.flow_status.foreign_game) cleanup=$($originalTerminal.flow_status.owned_cleanup_complete)"
+  } catch { $terminalDetail = "original terminal receipt unavailable or invalid: $($_.Exception.Message)" }
+  $results += @{name='original strict flow completed and owned game exited';kind='TerminalFlow';pass=[bool]$terminalPass;detail=$terminalDetail}
+  if (-not $terminalPass) { $allPass = $false }
+  Write-Host ("  [{0}] original strict terminal outcome: {1}" -f $(if($terminalPass){'PASS'}else{'FAIL'}),$terminalDetail)
+}
 Write-Host ""
 Write-Host ("[case] ---- checks ({0}) ----" -f $lCase.Checks.Count)
 $i = 0
@@ -284,8 +439,11 @@ foreach ($chk in $lCase.Checks) {
 $verdict = if ($allPass) { 'PASS' } else { 'FAIL' }
 $expected = if ($ExpectFail) { 'FAIL' } else { 'PASS' }
 $asExpected = ($verdict -eq $expected)
+if ($lRun.StrictGameOwnership -and -not $terminalPass) { $asExpected = $false }
 Write-Host ""
-if ($ExpectFail) {
+if ($lRun.StrictGameOwnership -and -not $terminalPass) {
+  Write-Host "[case] RUN INVALID: original strict flow/cleanup outcome failed."
+} elseif ($ExpectFail) {
   if ($asExpected) { Write-Host "[case] RED confirmed: '$($lCase.Name)' FAILS on this build -- the case reproduces the bug." }
   else             { Write-Host "[case] *** NOT RED: '$($lCase.Name)' PASSES on this build -- the case does NOT reproduce the bug. ***" }
 } else {

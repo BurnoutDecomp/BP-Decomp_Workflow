@@ -7,10 +7,10 @@ Recovery, integration, review and behavior checks remain active.
 
 Launch `build/game/Burnout_PC.exe`. The tested **b82350534** package is installed
 there and merged/pushed to dev. All twelve matching executable/DLL/symbol files
-are present; config, saves and their modification times are unchanged. The
+are present; delivery preserved config, saves and their modification times. The
 previous package is backed up. [Delivery and evidence](playable_delivery_20261021.json).
 
-Native checks now pass:
+The delivery checks passed:
 
 - Returning-save junkyard, default car/livery acceptance and exit to the world.
 - Measured throttle response: 5.4 metres and 19.8 mph in the final confirmation.
@@ -26,6 +26,11 @@ Peer joining, a complete race, custom route editing and further mode/preset
 variants remain to test. This delivery does not certify every debug control.
 [Earlier crash and recovery evidence](playable_candidate_progress_20261021.json).
 
+A later user session exposed **RWAC sound allocation corruption**. The installed
+executable is unchanged. The corruption and secondary diagnostic crash are
+being traced; the short delivery checks did not establish long-session stability.
+[Latest crash, Traffic run and cleanup](traffic_cleanup_crash_checkpoint_20261021.json).
+
 ## Campaign counts
 
 There are **1,355 static registration sites: 35 verified, seven original no-ops,
@@ -35,21 +40,22 @@ This online repair does not change those final debug-site dispositions.
 
 ## Continuing source work
 
-The broad GUI/action/movie recovery is pushed privately at **a10961ed5** and
+The broad GUI/action/movie recovery is pushed privately at **0990a8ebd** and
 now includes the tested playable dev work. Source review passes for the composed
 code, real Start selection/binding, keyboard lifecycle/request seats and explicit
 PC language adapter. The adapter keeps ARTIST's original supported-language filter.
 Fresh hosted compile/link and native behavior are still separate gates.
 
-The regression follow-up stopped in an outdated licence-test extractor before
-production compilation. It is being adapted without dropping its assertions;
-a build-only hosted check runs in parallel. This private source is not installed
-in the playable package. [Source, policy and current checks](gui_dev_language_checkpoint_20261021.json).
+The licence extractor repair and native keyboard contract pass source review
+and are pushed privately. Hosted execution remains pending. The build-only
+check identified fourteen missing private GUI owner mounts; their exact source
+closure passes review. This private source is not installed in the normal package. [Source, policy and current checks](gui_dev_language_checkpoint_20261021.json).
 
 Traffic's original fifteen-hull `Running Worst Case` branch at **898e3d1be**
-passes hosted compile/link and payload verification. Its grouped 74-site native
-follow-up is privately staged. Review found cleanup and false-pass risks in the
-test harness; a combined repair must pass before execution.
+passes hosted compile/link and payload verification. The grouped follow-up
+completed with zero game asserts/exceptions and fifteen retained phase frames.
+The case failed on script defects and missing manual consumer review; no new
+debug entries are counted as verified from that run.
 [Earlier source receipts](traffic_keyboard_followup_20261021.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source
@@ -68,3 +74,6 @@ The harness's global END fallback was removed. Compilation/fixtures use hosted
 CI. Native windows use isolated profiles, mute, low priority and scoped inputs.
 
 [Earlier checkpoint history](HISTORY_BEFORE_INTRO_REPAIR_20261020.md)
+
+Scratch cleanup removed 19,080 redundant old frames (105.1 GB), keeping five
+samples per old run plus the active debug-menu and Road Rules evidence.
