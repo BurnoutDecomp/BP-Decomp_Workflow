@@ -15,7 +15,8 @@ param(
     [switch] $RunGuiIORegressions,
     [switch] $RunGuiAnimationRegressions,
     [switch] $RunStartupIORegressions,
-    [switch] $RunGuiLicenseRegressions
+    [switch] $RunGuiLicenseRegressions,
+    [switch] $RunKeyboardUIContract
 )
 
 Set-StrictMode -Version Latest
@@ -43,7 +44,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 
@@ -365,6 +366,154 @@ try {
         Assert-CleanTrees
     }
 
+    # Hosted native PC keyboard provider contract; independent of the shipping exe link.
+    if ($RunKeyboardUIContract) {
+        if ($Jobs -ne 4 -or $Receipt.runner_label -cne 'windows-2022') {
+            throw 'Keyboard UI contract is limited to hosted Windows 2022 with four build jobs.'
+        }
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.keyboard_ui_contract_status = 'running'
+        Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+
+        $keyboardInputSpecs = @(
+            @{ path = (Join-Path $SourceRoot 'tests/run_cgs_keyboard_pc_contract.py'); kind = 'runner' },
+            @{ path = (Join-Path $SourceRoot 'tests/CgsKeyboardPCContract.cpp'); kind = 'source' },
+            @{ path = (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp'); kind = 'source' },
+            @{ path = (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/X360/CgsXOverlappedX360.cpp'); kind = 'source' },
+            @{ path = (Join-Path $SourceRoot 'tests/fxgs_common.py'); kind = 'toolchain' },
+            @{ path = (Join-Path $Root 'tools/build/msvc_flags.txt'); kind = 'toolchain' },
+            @{ path = (Join-Path $Root 'tools/build/msvc_includes.txt'); kind = 'toolchain' },
+            @{ path = (Join-Path $Root 'tools/build/msvc_env.bat'); kind = 'toolchain' }
+        )
+        foreach ($keyboardInputSpec in $keyboardInputSpecs) {
+            if ($keyboardInputSpec.path.StartsWith($SourceRoot, [StringComparison]::OrdinalIgnoreCase)) {
+                $relative = $keyboardInputSpec.path.Substring($SourceRoot.Length).TrimStart([char[]]@([char]92, [char]47)).Replace('\', '/')
+            } else {
+                $relative = 'parent/' + $keyboardInputSpec.path.Substring($Root.Length).TrimStart([char[]]@([char]92, [char]47)).Replace('\', '/')
+            }
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord $keyboardInputSpec.path
+        }
+
+        $keyboardRunner = Join-Path $SourceRoot 'tests/run_cgs_keyboard_pc_contract.py'
+        $keyboardRoot = Join-Path $ArtifactRoot 'keyboard-ui-contract'
+        $keyboardPositive = Join-Path $keyboardRoot 'positive'
+        if ((Test-Path -LiteralPath $keyboardPositive -PathType Container) -and
+            @(Get-ChildItem -LiteralPath $keyboardPositive -Force).Count -ne 0) {
+            throw 'Keyboard UI contract output directory already contains a prior receipt.'
+        }
+        & py -3 -B $keyboardRunner --output-dir $keyboardPositive 2>&1 |
+            Tee-Object -FilePath (Join-Path $ArtifactRoot 'keyboard-ui-contract.log') | Out-Host
+        $keyboardCode = $LASTEXITCODE
+        $keyboardArguments = @('-3', '-B', $keyboardRunner, '--output-dir', $keyboardPositive)
+        $NativeCommands.Add(@{ command = 'py'; arguments = $keyboardArguments; exit_code = $keyboardCode })
+        if ($keyboardCode -ne 0) { $NativeFailureCode = $keyboardCode }
+
+        $keyboardResultPath = Join-Path $keyboardPositive 'result.json'
+        if (-not (Test-Path -LiteralPath $keyboardResultPath -PathType Leaf)) {
+            throw 'Keyboard UI runner did not write result.json.'
+        }
+        $keyboardResult = Get-Content -Raw -LiteralPath $keyboardResultPath | ConvertFrom-Json
+        $keyboardStdoutPath = Join-Path $keyboardPositive 'run.stdout.txt'
+        $keyboardStderrPath = Join-Path $keyboardPositive 'run.stderr.txt'
+        if (-not (Test-Path -LiteralPath $keyboardStdoutPath -PathType Leaf) -or
+            -not (Test-Path -LiteralPath $keyboardStderrPath -PathType Leaf)) {
+            throw 'Keyboard UI runner did not retain both run transcripts.'
+        }
+        $keyboardOutput = (Get-Content -Raw -LiteralPath $keyboardStdoutPath) +
+            (Get-Content -Raw -LiteralPath $keyboardStderrPath)
+        if ($keyboardResult.ui_unavailable -isnot [bool] -or $keyboardResult.ui_unavailable -or
+            $keyboardOutput.Contains('UI_UNAVAILABLE')) {
+            throw 'Keyboard UI contract reported UI_UNAVAILABLE.'
+        }
+        if ($keyboardCode -ne 0 -or $keyboardResult.status -cne 'pass' -or
+            $keyboardResult.process_exit_code -ne 0 -or $keyboardResult.build_exit_code -ne 0 -or
+            $keyboardResult.run_exit_code -ne 0 -or $keyboardResult.run_timed_out -isnot [bool] -or
+            $keyboardResult.run_timed_out -or $keyboardResult.run_timeout_seconds -ne 30 -or
+            $keyboardResult.numeric_expected -ne 157 -or $null -eq $keyboardResult.numeric -or
+            $keyboardResult.numeric.checks -ne 157 -or $keyboardResult.numeric.failures -ne 0 -or
+            @($keyboardResult.failures).Count -ne 0 -or
+            $keyboardOutput -notmatch 'CgsKeyboardPCContract:\s+157 checks, 0 failures') {
+            throw 'Keyboard UI contract did not produce its bounded 157-check, zero-failure result.'
+        }
+
+        $keyboardExecutablePath = Join-Path $keyboardPositive 'regression.exe'
+        if ($null -eq $keyboardResult.executable -or
+            -not (Test-Path -LiteralPath $keyboardExecutablePath -PathType Leaf)) {
+            throw 'Keyboard UI result is missing its actual fixture executable.'
+        }
+        $keyboardExecutable = Get-FileRecord $keyboardExecutablePath
+        $reportedExecutablePath = [IO.Path]::GetFullPath([string]$keyboardResult.executable.path)
+        $expectedExecutablePath = [IO.Path]::GetFullPath($keyboardExecutablePath)
+        if (-not [string]::Equals($reportedExecutablePath, $expectedExecutablePath, [StringComparison]::OrdinalIgnoreCase) -or
+            $keyboardResult.executable.bytes -ne $keyboardExecutable.bytes -or
+            $keyboardResult.executable.sha256 -cnotmatch '\A[0-9a-f]{64}\z' -or
+            $keyboardResult.executable.sha256 -cne $keyboardExecutable.sha256 -or
+            $keyboardExecutable.bytes -le 0) {
+            throw 'Keyboard UI receipt does not match the actual fixture executable SHA-256 and size.'
+        }
+
+        $keyboardInputs = @($keyboardResult.input_hashes)
+        $expectedKeyboardInputCount = $keyboardInputSpecs.Count + 1
+        if ($keyboardInputs.Count -ne $expectedKeyboardInputCount) {
+            throw 'Keyboard UI receipt is missing runner, source, toolchain, or generated build-script hashes.'
+        }
+        $allKeyboardInputSpecs = @($keyboardInputSpecs) + @(
+            @{ path = (Join-Path $keyboardPositive 'build.cmd'); kind = 'generated_build_script' }
+        )
+        foreach ($keyboardInputSpec in $allKeyboardInputSpecs) {
+            if (-not (Test-Path -LiteralPath $keyboardInputSpec.path -PathType Leaf)) {
+                throw "Keyboard UI hashed input is missing: $($keyboardInputSpec.path)"
+            }
+            $expectedPath = [IO.Path]::GetFullPath($keyboardInputSpec.path)
+            $matchingRecords = @($keyboardInputs | Where-Object { $_.path } | Where-Object {
+                [string]::Equals([IO.Path]::GetFullPath([string]$_.path), $expectedPath,
+                    [StringComparison]::OrdinalIgnoreCase)
+            })
+            if ($matchingRecords.Count -ne 1) {
+                throw "Keyboard UI receipt has a missing or duplicate input hash: $($keyboardInputSpec.path)"
+            }
+            $actualInput = Get-FileRecord $keyboardInputSpec.path
+            $reportedInput = $matchingRecords[0]
+            if ($reportedInput.kind -cne $keyboardInputSpec.kind -or
+                $reportedInput.bytes -ne $actualInput.bytes -or
+                $reportedInput.sha256 -cnotmatch '\A[0-9a-f]{64}\z' -or
+                $reportedInput.sha256 -cne $actualInput.sha256) {
+                throw "Keyboard UI runner/toolchain input hash mismatch: $($keyboardInputSpec.path)"
+            }
+        }
+
+        foreach ($retained in @(
+            @{ name = 'build_stdout'; file = 'build.stdout.txt' },
+            @{ name = 'build_stderr'; file = 'build.stderr.txt' },
+            @{ name = 'run_stdout'; file = 'run.stdout.txt' },
+            @{ name = 'run_stderr'; file = 'run.stderr.txt' },
+            @{ name = 'build_script'; file = 'build.cmd' }
+        )) {
+            $retainedName = [string]$retained.name
+            $retainedPath = $keyboardResult.retained_outputs.PSObject.Properties[$retainedName].Value
+            if ($retainedPath -cne $retained.file -or
+                -not (Test-Path -LiteralPath (Join-Path $keyboardPositive $retained.file) -PathType Leaf)) {
+                throw "Keyboard UI runner did not retain its $retainedName output."
+            }
+        }
+
+        $Receipt.regressions.keyboard_ui_contract = @{
+            result = Get-FileRecord $keyboardResultPath
+            executable = @{ path = $expectedExecutablePath; bytes = $keyboardExecutable.bytes; sha256 = $keyboardExecutable.sha256 }
+            numeric = $keyboardResult.numeric
+            numeric_expected = $keyboardResult.numeric_expected
+            input_hashes = $keyboardInputs
+            process_exit_code = $keyboardResult.process_exit_code
+            build_exit_code = $keyboardResult.build_exit_code
+            run_exit_code = $keyboardResult.run_exit_code
+            run_timeout_seconds = $keyboardResult.run_timeout_seconds
+            run_timed_out = $keyboardResult.run_timed_out
+            ui_unavailable = $keyboardResult.ui_unavailable
+        }
+        $Receipt.regressions.keyboard_ui_contract_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+        Assert-CleanTrees
+    }
     # Proven publisher prerequisites: release FFmpeg, NuGet XAudio2, vendored Lua.
     $ffmpeg = Join-Path $SourceRoot 'vendor/ffmpeg-build'
     $archive = Join-Path $WorkRoot 'ffmpeg-build.zip'
@@ -560,6 +709,7 @@ try {
     if ($Receipt.regressions.gui_animation_status -eq 'running') { $Receipt.regressions.gui_animation_status = 'fail' }
     if ($Receipt.regressions.startup_io_status -eq 'running') { $Receipt.regressions.startup_io_status = 'fail' }
     if ($Receipt.regressions.gui_license_status -eq 'running') { $Receipt.regressions.gui_license_status = 'fail' }
+    if ($Receipt.regressions.keyboard_ui_contract_status -eq 'running') { $Receipt.regressions.keyboard_ui_contract_status = 'fail' }
     if ($Receipt.regressions.hud_status -eq 'running') { $Receipt.regressions.hud_status = 'fail' }
     if ($Receipt.regressions.remaining_status -eq 'running') { $Receipt.regressions.remaining_status = 'fail' }
     if ($Receipt.regressions.status -eq 'running') { $Receipt.regressions.status = 'fail' }
