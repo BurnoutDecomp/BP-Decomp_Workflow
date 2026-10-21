@@ -47,7 +47,12 @@ The source/audit checkpoint covers 1,351/1,355 sites (99.7%), including unresolv
 
 ## Continuing source work
 
-**Private GUI/action/movie and online recovery:** The private B5 checkpoint is **f38246844c7723db3f53cb29875621ff083328e3**, based on the normal installed source **b823505348af025a784fc3ac171cfd0e7f0c1f99**. Selected GUI components have source-review passes, and the combined online round/results/return source review passes for 15 paths (sealed review SHA-256 `9454453018a001ceb40e899138aa07aef1dd926090fad4663116d0376847c32d`). Hosted compile/link and native multiplayer behavior remain pending. The private source is not installed in the normal package and adds no final debug-site dispositions. The licence extractor, keyboard contract and fourteen missing private GUI owner mounts have their own source-review evidence; hosted execution remains pending. [Source, policy and current checks](gui_dev_language_checkpoint_20261021.json).
+**Private GUI/action/movie and online recovery:** Checkpoint **bef9346f9**
+passes hosted compile/link for all2,994 selected files, the157-check native
+keyboard contract and73 licence-handoff checks plus its failure control.
+The private game reaches the world, but its HUD is missing and Easy Drive
+does not respond. That handoff is being traced before promotion. The normal
+package remains6b66e598. [Integration evidence](gui_online_integration_checkpoint_20261021.json).
 
 **Route snap capacity checkpoint:** The 289-bound one-file source commit **6b66e5984f6f21ea47d1fa62a2ec61c9511640c9** passed hosted build run [39654339193](https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39654339193). Native placement/movement and Back passed; the matching normal package is installed and merged to dev. Done/save persistence and a complete multiplayer race remain unverified. This supporting-flow repair adds no verified debug-site dispositions.
 
