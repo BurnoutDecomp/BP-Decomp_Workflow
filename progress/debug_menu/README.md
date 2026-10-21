@@ -37,9 +37,12 @@ This online repair does not change those final debug-site dispositions.
 
 The separate broad GUI/action/movie recovery is committed on a private branch.
 Its last 2,991-TU build compiled but still lacked the real SKU/language and
-keyboard platform providers. Reviewed profile/keyboard lifecycle and selected-user
-event recovery are prepared for its next checkpoint; they are not in this
-playable package. [Held source details](gui_runtime_core_20261019.json).
+keyboard platform providers. The reviewed profile/keyboard lifecycle and selected-user
+event consumer are now pushed at **eb192ccdd** on that private branch. All 2,991
+TUs compile, with 591 selected checks and four omission controls; linking still
+lacks those three providers. They are not in the playable package.
+[New source checkpoint](gui_keyboard_lifecycle_source_20261021.json).
+[Held source details](gui_runtime_core_20261019.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source
 coverage, not 188 verified debug controls. Coherent checkpoints are committed
