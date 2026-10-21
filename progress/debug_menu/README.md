@@ -20,8 +20,12 @@ check had passed, but that was insufficient for a playable delivery.
 
 The immediate priority is one build that passes visible junkyard, car selection,
 measured driving, owned online Freeburn and Create Match. The old package still
-has the reported Create Match issue. The missing traffic completion bridge is
-under repair; no fixed online build is claimed yet.
+has the reported Create Match issue. The traffic completion bridge is now
+recovered in private candidate28734. Its returning-profile native test renders
+the junkyard, selects the car/livery, drives and hosts visible Freeburn. The next
+run reproduced a null-cache crash on entering Create Match options. Event-order
+repair is active; no fixed online build is claimed yet.
+[Native progress and exact failure](playable_candidate_progress_20261021.json).
 
 The separate [animation initialization repair](freeburn_animation_init_20261020.json)
 is committed on dev and passes its focused positive/omission checks. A successful
@@ -29,7 +33,10 @@ native Create Match run is still required before calling that issue fixed.
 
 ## Source and validation lanes
 
-- Gameplay dev is **7d66267f5**; the normal folder is restored9c while the junkyard regression is repaired.
+- Shared dev and the source checkout include **70511989c**; its two new commits add CMake files. The normal folder remains9c.
+- Private checkpoint **6ca3a63af** adds twenty reviewed SelectRoutes methods.
+  The full route screen has a corrected source proposal under combined review;
+  compilation and native Create Match submission remain pending.
 - The merged startup/compile-check source is 7d66267f5. Its shipping build
   passes all 2,979 selected TUs, including both newly repaired embed checks,
   plus 519 focused checks and 11 intentional failure controls. This does not
@@ -49,10 +56,10 @@ native Create Match run is still required before calling that issue fixed.
   [activation/keyboard source](gui_activation_keyboard_source_20261020.json)
   now have passing scoped source reviews.
 
-The [isolated Create Match diagnostics](freeburn_create_match_diagnostics_20261020.json)
-are reviewed, compiled and staged at 0c8f3d7f6. They passed 519 checks/11 controls;
-the returning-profile native case is pending. Two setup failures sent zero inputs
-and did not reach Create Match; they are not gameplay verdicts.
+The isolated candidate28734 passes its hosted 2,979-TU build and 519 focused
+checks/11 omission controls. Those checks do not cover the reproduced options
+cache-order crash. The normal package remains protected until complete native
+delivery. The older setup-only attempts are retained as diagnostic history.
 
 The action translator covers 188 unique IDs across 189 labels. That is source
 coverage, not 188 verified debug controls or a complete native GUI pipeline.
