@@ -1,0 +1,104 @@
+{
+  "date": "2026-10-21",
+  "status": "partial_native_progress_create_match_crash_reproduced",
+  "source": "28734c88f7b47b7e51628f5e67735b6655184e33",
+  "exe_sha256": "df8a8b00fc6586045ea7d505faab82cd04a13c10f8553cc29dd92ee2ef8a468c",
+  "hosted_run": 39501352939,
+  "normal_source": "9c15dfff8123b14a4991fb76f3f591ff15a4f21b",
+  "normal_package_changed": false,
+  "source_checkpoint": "6ca3a63afbc412880f6f8981a14bdcdcd7a4d664",
+  "component_methods_added": 20,
+  "component_review": "pass_static_only",
+  "component_compiled": false,
+  "normal_config_saves_unchanged": true,
+  "global_os_input": false,
+  "assert_dismissal": false,
+  "native_progress": {
+    "run": "scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261020\\playable_case_04\\attempts\\03\\observations\\20261021_073838_009\\RUN.json",
+    "run_sha256": "5806c62c1a7b7b78ee2dd91b7b03485fb1358439063dfbc19479944360b48759",
+    "log_sha256": "d2a17b437c7e79cc5500b84b89ce360fcfb6828acd18eeaf690de792802a8618",
+    "visible_junkyard": true,
+    "vehicle_and_livery_selection": true,
+    "junkyard_exit": true,
+    "motion": {
+      "first_gas": {
+        "line": 6895,
+        "sample": 1350,
+        "position": [
+          3007.972168,
+          -2.422451,
+          -1945.138794
+        ],
+        "speed_mps": 0.589606,
+        "mph": 1.320693,
+        "gas": 1.0
+      },
+      "last_gas": {
+        "line": 7471,
+        "sample": 1470,
+        "position": [
+          3007.980469,
+          -2.424557,
+          -1940.860596
+        ],
+        "speed_mps": 7.871756,
+        "mph": 17.611439,
+        "gas": 1.0
+      },
+      "pre_gas": {
+        "line": 6716,
+        "sample": 1320,
+        "position": [
+          3007.972168,
+          -2.422076,
+          -1945.166992
+        ],
+        "speed_mps": 0.0,
+        "mph": -1e-06,
+        "gas": 0.0
+      },
+      "gas_samples": 5,
+      "pre_gas_to_last_gas_distance_m": 4.3064047151629365
+    },
+    "freeburn_host": {
+      "logged_in": true,
+      "in_game": true,
+      "host": true,
+      "players": 1,
+      "mode": 15,
+      "visible": true
+    },
+    "inspected_frame": "scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261020\\playable_case_04\\attempts\\03\\frames\\bb_010800.bmp",
+    "frame_sha256": "89ec49fce964bbdbabdffa22d0f314f7e7fed303ddda80345bf1c899e4d3ac07",
+    "assertions": 0,
+    "exceptions": 0,
+    "exit": 0,
+    "whole_run_verdict": "incomplete_online_hud_gate_needed_correction"
+  },
+  "create_match": {
+    "fixed": false,
+    "reached_options": true,
+    "event_submission": false,
+    "run": "scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261020\\playable_case_04\\attempts\\04\\observations\\20261021_081732_859\\RUN.json",
+    "run_sha256": "90234c6ca7d0f7f693af10dde3f5aa19c5ca3b2f3138485a18da74b7c97a5b2b",
+    "log_sha256": "301d0f774f3fb5d60392bb647b96142a27c46ad9202bcfbdd3bef6fb4b1c7eb1",
+    "first_assert": "mpGuiCache in OnlineGameOptions::HandleCarInfoResponseEvent",
+    "fault": "Null GuiCache::GetWorldDataController read at address0x4728",
+    "call_chain": [
+      "OnlineGameOptions::HandleCarInfoResponseEvent",
+      "OnlineGameOptions::Update",
+      "GuiModule::Update"
+    ],
+    "first_fault_trace": [
+      "[ASSERT 1] mpGuiCache (D:\\a\\BP-Decomp_Workflow\\BP-Decomp_Workflow\\b5-decomp\\src\\GameSource\\Gui\\Flow\\Screen\\States\\BrnOnlineGameOptions_wS34_00.cpp:284)",
+      "[exit-diag] FIRST-CHANCE EXCEPTION_ACCESS_VIOLATION (0xC0000005) at 0x00007FF729D92906 (module+0x522906) thread 26800 stack-used 160 KB"
+    ],
+    "event_order_repair": "source investigation active; no null guard or dropped response accepted"
+  },
+  "route_screen": "fourteen static review findings have repair proposals; corrected combined review pending",
+  "debug_dispositions_changed": 0,
+  "delivery_gate_remaining": [
+    "Create_Match_options_and_event_submission",
+    "matching_integrated_build_native_validation"
+  ]
+}
