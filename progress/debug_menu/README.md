@@ -36,12 +36,18 @@ This online repair does not change those final debug-site dispositions.
 ## Continuing source work
 
 The separate broad GUI/action/movie recovery is committed on a private branch.
-Its last 2,991-TU build compiled but still lacked the real SKU/language and
-keyboard platform providers. The reviewed profile/keyboard lifecycle and selected-user
-event consumer are now pushed at **eb192ccdd** on that private branch. All 2,991
-TUs compile, with 591 selected checks and four omission controls; linking still
-lacks those three providers. They are not in the playable package.
-[New source checkpoint](gui_keyboard_lifecycle_source_20261021.json).
+The native Unicode keyboard provider and original selected-user producer are
+pushed at **cbf85fc1e**: all 2,991 TUs compile, with 591 selected checks and four
+omission controls. Linking now lacks only two SKU/language methods. Eight
+reviewed keyboard request/conversion call sites are pushed at **9816012fd**;
+their compilation and native behavior are pending. Normal PC boot selection
+also needs integration. These private checkpoints are not in the playable package.
+
+Traffic's original fifteen-hull `Running Worst Case` branch is recovered at
+**898e3d1be** and passes its hosted compile/link. A grouped follow-up targets
+74 body-backed sites, with per-entry effect and restoration witnesses; it has
+not run yet. [Current source and check receipts](traffic_keyboard_followup_20261021.json).
+[Earlier GUI checkpoint](gui_keyboard_lifecycle_source_20261021.json).
 [Held source details](gui_runtime_core_20261019.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source
