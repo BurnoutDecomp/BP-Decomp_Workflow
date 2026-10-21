@@ -35,20 +35,22 @@ This online repair does not change those final debug-site dispositions.
 
 ## Continuing source work
 
-The separate broad GUI/action/movie recovery is committed on a private branch.
-The native Unicode keyboard provider and original selected-user producer are
-pushed at **cbf85fc1e**: all 2,991 TUs compile, with 591 selected checks and four
-omission controls. Linking now lacks only two SKU/language methods. Eight
-reviewed keyboard request/conversion call sites are pushed at **9816012fd**;
-their compilation and native behavior are pending. Normal PC boot selection
-also needs integration. These private checkpoints are not in the playable package.
+The broad GUI/action/movie recovery is pushed privately at **a10961ed5** and
+now includes the tested playable dev work. Source review passes for the composed
+code, real Start selection/binding, keyboard lifecycle/request seats and explicit
+PC language adapter. The adapter keeps ARTIST's original supported-language filter.
+Fresh hosted compile/link and native behavior are still separate gates.
 
-Traffic's original fifteen-hull `Running Worst Case` branch is recovered at
-**898e3d1be** and passes its hosted compile/link. A grouped follow-up targets
-74 body-backed sites, with per-entry effect and restoration witnesses; it has
-not run yet. [Current source and check receipts](traffic_keyboard_followup_20261021.json).
-[Earlier GUI checkpoint](gui_keyboard_lifecycle_source_20261021.json).
-[Held source details](gui_runtime_core_20261019.json).
+The regression follow-up stopped in an outdated licence-test extractor before
+production compilation. It is being adapted without dropping its assertions;
+a build-only hosted check runs in parallel. This private source is not installed
+in the playable package. [Source, policy and current checks](gui_dev_language_checkpoint_20261021.json).
+
+Traffic's original fifteen-hull `Running Worst Case` branch at **898e3d1be**
+passes hosted compile/link and payload verification. Its grouped 74-site native
+follow-up is privately staged. Review found cleanup and false-pass risks in the
+test harness; a combined repair must pass before execution.
+[Earlier source receipts](traffic_keyboard_followup_20261021.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source
 coverage, not 188 verified debug controls. Coherent checkpoints are committed
