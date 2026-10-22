@@ -13511,14 +13511,24 @@
       "pseudocode_line": 3,
       "original_call": "sub_8282D800(a1, a1 + 16, \"Show Custom Renderer Status\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0001",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Custom-renderer status text visibility follows TRUE then FALSE. Limits: Visibility only; clipped/overlapping rows and numeric counts are not certified.",
+      "evidence": [
+        "progress/debug_menu/gui12_retained_native_subset_20261023/REVIEW.md",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/CHECKPOINT.json"
+      ],
+      "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+      "native_case": 62049,
+      "original_aggregate_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent, not same-frame"
     },
     {
       "kind": "variable",
@@ -13563,14 +13573,24 @@
       "pseudocode_line": 5,
       "original_call": "sub_8282D800(a1, a1 + 17, \"Sat Nav Render\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0003",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Explicit SatNav TRUE/FALSE controls the forced map patch within the override interval. Limits: Initial override-entry absence is a visual precondition, not an independently sampled FALSE alias. Baseline b006 is actually TRUE; final FALSE is not restoration of that baseline. Only the controlled map on/off effect and return to entry visual absence pass.",
+      "evidence": [
+        "progress/debug_menu/gui12_retained_native_subset_20261023/REVIEW.md",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/CHECKPOINT.json"
+      ],
+      "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+      "native_case": 62049,
+      "original_aggregate_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent, not same-frame"
     },
     {
       "kind": "variable",
@@ -13615,14 +13635,24 @@
       "pseudocode_line": 7,
       "original_call": "sub_8282D800(a1, a1 + 19, \"Enable Custom Renderer\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0005",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Master TRUE/FALSE/TRUE gates the forced map patch while override/SatNav requests remain enabled. Limits: Only the observed map component under override is certified; not every renderer/component.",
+      "evidence": [
+        "progress/debug_menu/gui12_retained_native_subset_20261023/REVIEW.md",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/CHECKPOINT.json"
+      ],
+      "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+      "native_case": 62049,
+      "original_aggregate_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent, not same-frame"
     },
     {
       "kind": "variable",
@@ -14728,14 +14758,24 @@
       "pseudocode_line": 10,
       "original_call": "sub_8282D800(a1, a1 + 16, \"Render GUI Objects\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiDebugComponent::OnActivate#0001",
       "function": "BrnGui::GuiDebugComponent::OnActivate",
       "original_address": "0x8252A3B8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
       "component": "BrnGui::GuiDebugComponent",
       "component_name": "Gui Module",
-      "component_path": null
+      "component_path": null,
+      "notes": "Local GUI-object visibility off/on works in the initial HUD interval. Limits: Only the initial local hide/re-show interval is accepted; later/final ordinary HUD restoration is not established.",
+      "evidence": [
+        "progress/debug_menu/gui12_retained_native_subset_20261023/REVIEW.md",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/CHECKPOINT.json"
+      ],
+      "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+      "native_case": 62049,
+      "original_aggregate_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent, not same-frame"
     },
     {
       "kind": "variable",
@@ -15071,14 +15111,24 @@
       "pseudocode_line": 25,
       "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::MiniMapSwitchCallback, a1, \"Toggle MiniMap Visibility\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiDebugComponent::OnActivate#0014",
       "function": "BrnGui::GuiDebugComponent::OnActivate",
       "original_address": "0x8252A3B8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
       "component": "BrnGui::GuiDebugComponent",
       "component_name": "Gui Module",
-      "component_path": null
+      "component_path": null,
+      "notes": "MiniMap callback hides and re-shows map tile/icons. Limits: Read-only row 0015 corroborates this callback and gets no separate credit; header/miles text need not disappear.",
+      "evidence": [
+        "progress/debug_menu/gui12_retained_native_subset_20261023/REVIEW.md",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/CHECKPOINT.json"
+      ],
+      "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+      "native_case": 62049,
+      "original_aggregate_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent, not same-frame"
     },
     {
       "kind": "variable",
@@ -15123,14 +15173,24 @@
       "pseudocode_line": 28,
       "original_call": "sub_8282D800(a1, a1 + 17, \"Speedo Visibility: \")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiDebugComponent::OnActivate#0016",
       "function": "BrnGui::GuiDebugComponent::OnActivate",
       "original_address": "0x8252A3B8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
       "component": "BrnGui::GuiDebugComponent",
       "component_name": "Gui Module",
-      "component_path": null
+      "component_path": null,
+      "notes": "Debug SPEED/RPM/GEAR text is visible when enabled and absent after disable. Limits: Only stationary displayed values 0 mph/1000 RPM/gear 1 are observed; data accuracy and ordinary-HUD loss are not certified.",
+      "evidence": [
+        "progress/debug_menu/gui12_retained_native_subset_20261023/REVIEW.md",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/CHECKPOINT.json"
+      ],
+      "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+      "native_case": 62049,
+      "original_aggregate_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent, not same-frame"
     },
     {
       "kind": "function",
@@ -15150,14 +15210,24 @@
       "pseudocode_line": 29,
       "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::ToggleShow43AreaCallback, a1, \"Show/Hide 4:3 Area\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiDebugComponent::OnActivate#0017",
       "function": "BrnGui::GuiDebugComponent::OnActivate",
       "original_address": "0x8252A3B8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
       "component": "BrnGui::GuiDebugComponent",
       "component_name": "Gui Module",
-      "component_path": null
+      "component_path": null,
+      "notes": "F4 callback produces a green central 4:3 frame and removes it on the second call. Limits: Callback-only flag has no alias readback; scoped key/script bindings, source toggle and direct image contrast provide the evidence.",
+      "evidence": [
+        "progress/debug_menu/gui12_retained_native_subset_20261023/REVIEW.md",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/gui12_retained_native_subset_20261023/CHECKPOINT.json"
+      ],
+      "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+      "native_case": 62049,
+      "original_aggregate_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent, not same-frame"
     },
     {
       "kind": "function",
@@ -37610,8 +37680,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1309,
-      "verified": 39,
+      "pending": 1302,
+      "verified": 46,
       "original-noop": 7
     }
   }
