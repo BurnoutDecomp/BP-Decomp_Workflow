@@ -584,13 +584,18 @@ try {
             $controlProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${flowBaseline}:$relative")
             if ($candidateProvider -cne $controlProvider) { throw 'Flowtype fixture provider differs from exact control.' }
         }
+        $flowNoDefaultWasPresent = Test-Path -LiteralPath Env:NoDefaultCurrentDirectoryInExePath
         $flowNoDefault = [Environment]::GetEnvironmentVariable('NoDefaultCurrentDirectoryInExePath', 'Process')
         try {
-            [Environment]::SetEnvironmentVariable('NoDefaultCurrentDirectoryInExePath', $null, 'Process')
+            Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
             Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot 'tests/run_traffic_flowtype_override.py'),
                 '--rev', $B5Commit, '--output-dir', $flowOut) 'regressions.log'
         } finally {
-            [Environment]::SetEnvironmentVariable('NoDefaultCurrentDirectoryInExePath', $flowNoDefault, 'Process')
+            if ($flowNoDefaultWasPresent) {
+                Set-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -Value ([string]$flowNoDefault)
+            } else {
+                Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+            }
         }
         $flowVariants = @{
             candidate = Assert-TrafficFlowtypeVariant (Join-Path $flowOut 'candidate') $B5Commit $false
