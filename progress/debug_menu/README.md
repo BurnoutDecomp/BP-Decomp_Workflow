@@ -34,24 +34,38 @@ hosted capacity checks and its original-source failure control; the short delive
 
 ## Campaign counts
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **35 verified, seven original no-ops and 1,313 pending**. That is 42/1,355 (3.1%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **36 verified, seven original no-ops and 1,312 pending**. That is 43/1,355 (3.2%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Recorded source-progress coverage is separate from behavior completion:
 
 - **1,196 sites (88.3%)** are in recorded bounded source-review cohorts and repair supplements. This is reviewed-source-cohort coverage, not proof of a complete consumer chain or a current-head re-review.
 - **26 additional sites** have existing registration/consumer bodies audited in the integration checkout; compile, fresh review and native evidence remain pending.
 - **129 sites** are covered only by broader source/audit scope outside those batches: nine have explicit audit-only packet IDs, while 120 appear in the coverage set without a per-site packet reference.
-- **Four sites** are outside the saved source/audit scope.
+- **Four sites** were outside that saved snapshot. All four now have source audits; one shared DLC reader needed repair. Its private hosted build passed, while native DLC behavior remains pending.
 
 The source/audit checkpoint covers 1,351/1,355 sites (99.7%), including unresolved consumers. The 1,196 reviewed sites plus 26 existing-body audits give 1,222/1,355 (90.2%) with source/body evidence, not a completed-control count. Neither 10% nor 90% is a defensible actual implementation percentage; the actual count remains unknown. See the [source coverage checkpoint](source_coverage_checkpoint_20261021.json) for the count definitions and evidence limits.
 
 ## Continuing source work
 
-**Private GUI/action/movie and online recovery:** The private B5 checkpoint is **f38246844c7723db3f53cb29875621ff083328e3**, based on the normal installed source **b823505348af025a784fc3ac171cfd0e7f0c1f99**. Selected GUI components have source-review passes, and the combined online round/results/return source review passes for 15 paths (sealed review SHA-256 `9454453018a001ceb40e899138aa07aef1dd926090fad4663116d0376847c32d`). Hosted compile/link and native multiplayer behavior remain pending. The private source is not installed in the normal package and adds no final debug-site dispositions. The licence extractor, keyboard contract and fourteen missing private GUI owner mounts have their own source-review evidence; hosted execution remains pending. [Source, policy and current checks](gui_dev_language_checkpoint_20261021.json).
+**GUI/action/movie and online recovery:** Exact predecessor **787764f5** passed
+the hosted build, all82 profile checks and both original-code failure controls.
+The native check used real Start/sign-in, showed the world/HUD, measured70.5m
+of driving, entered online Freeburn/Create Event, then added, moved and placed
+a checkpoint and returned with Back. Captured screens and cleanup were reviewed.
+The current-dev composition **8fec93bd** adds Traffic, the shared DLC
+reader and layout checks; its hosted/native delivery gates are pending.
+The normal package remains **6b66e598**. No new debug-site dispositions, peer
+race, custom-route save or audio-stability claim. [Evidence](gui_profile_runtime_20261022/CHECKPOINT.json).
 
 **Route snap capacity checkpoint:** The 289-bound one-file source commit **6b66e5984f6f21ea47d1fa62a2ec61c9511640c9** passed hosted build run [39654339193](https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39654339193). Native placement/movement and Back passed; the matching normal package is installed and merged to dev. Done/save persistence and a complete multiplayer race remain unverified. This supporting-flow repair adds no verified debug-site dispositions.
 
-**Traffic follow-up:** Source commit **898e3d1be433571993e2e6f9d1be86d27d2d9585** restores the original fifteen-hull `Running Worst Case` branch. Hosted build/link and payload checks pass. The grouped native case retained fifteen phase frames and had zero game asserts/exceptions, but failed on script defects and still needs manual consumer review; no new debug entries are counted as verified. [Earlier source receipts](traffic_keyboard_followup_20261021.json).
+**Traffic follow-up:** **d9de0ab1** is merged/pushed to dev. The original
+fifteen-hull branch now has reviewed source plus actual4 ->15 ->4 decision,
+drawing and restoration evidence, with matching visible PVS cells. This
+adds one verified control. The repeated grouped run retained all15 captures,
+but the remaining Traffic74 effects still need manual review; that case is
+not a pass. The normal package remains6b66e598 while the separate GUI
+sign-in repair is being checked. [Evidence](traffic_worst_case_evidence_20261022/CHECKPOINT.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source coverage, not 188 verified debug controls. Coherent checkpoints are committed and pushed frequently; reviewed work merges in batches.
 
