@@ -50,9 +50,9 @@ $Receipt = [ordered]@{
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 $SystemUserProfileSourceBase = 'bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7'
-$SystemUserProfilePinsLfSha256 = '551a441f61f558bc2b776601102dac8fc0a1ec91c17bc5362fbe16959d4bef59'
+$SystemUserProfilePinsLfSha256 = '98ac5c8d9678be7827b74be96536e3328646a7757b6554d3cc00dc9d4c970d80'
 $SystemUserProfilePlanLfSha256 = 'b922bc45991763901be63194b7824ae1aae83d309f10dce457988c1a82833686'
-$SystemUserProfileRunnerLfSha256 = '3389e72d1af863892078904e632d65dd269754232b5ad74a93b26aa05b6959d7'
+$SystemUserProfileRunnerLfSha256 = '2eee426e6e0f540311c15943b77c4f5a5dc4b3defc8d57e6b32e66aa606716a3'
 
 function Invoke-Native([string] $Command, [string[]] $Arguments, [string] $LogName) {
     & $Command @Arguments 2>&1 | Tee-Object -FilePath (Join-Path $ArtifactRoot $LogName) -Append | Out-Host
@@ -195,7 +195,7 @@ function Assert-SystemUserProfileReceipt(
     $pinIdentity = $source.pins_file
     if ($pinIdentity.actual_raw_sha256 -cne $pinRaw.sha256 -or $pinIdentity.actual_raw_bytes -ne $pinRaw.bytes -or
         $pinIdentity.actual_lf_sha256 -cne $SystemUserProfilePinsLfSha256 -or $pinIdentity.actual_lf_bytes -ne 4543) {
-        throw 'System-user-profile receipt is not bound to the updated delta02 source pins and raw checkout bytes.'
+        throw 'System-user-profile receipt is not bound to the updated delta04 source pins and raw checkout bytes.'
     }
     $pins = Get-Content -Raw -LiteralPath $pinPath | ConvertFrom-Json -AsHashtable
     if ($pins.schema_version -ne 2 -or $pins.normalization -cne 'crlf_to_lf_only' -or
@@ -220,7 +220,7 @@ function Assert-SystemUserProfileReceipt(
         }
     }
     if ($pins.files['tests/run_system_user_profile_pc.py'].expected_lf_sha256 -cne $SystemUserProfileRunnerLfSha256 -or
-        $pins.files['tests/run_system_user_profile_pc.py'].expected_lf_bytes -ne 27047 -or
+        $pins.files['tests/run_system_user_profile_pc.py'].expected_lf_bytes -ne 29458 -or
         $pins.files['tests/evidence/system_user_profile_pc/test_plan.json'].expected_lf_sha256 -cne $SystemUserProfilePlanLfSha256 -or
         $pins.files['tests/evidence/system_user_profile_pc/test_plan.json'].expected_lf_bytes -ne 3468) {
         throw 'System-user-profile runner or ordered test-plan pin differs from the reviewed packet.'
@@ -298,10 +298,65 @@ function Assert-SystemUserProfileReceipt(
             $consumer = 'tests/evidence/system_user_profile_pc/CgsGuideIntegration_bef9346f9.cpp'
             $expectedModes = 'baseline_api|baseline_consumer'
         }
+        $wrapper = $variant.consumer_wrapper
+        $expectedWrapperPrelude = (
+            "#define WIN32_LEAN_AND_MEAN`n" +
+            "#define NOMINMAX`n" +
+            "#include <Windows.h>`n" +
+            "#include <array>`n" +
+            "#include <cstddef>`n" +
+            "#include <cstdio>`n" +
+            "#include <cstring>`n" +
+            "#include <exception>`n" +
+            "#include <fstream>`n" +
+            "#include <stdexcept>`n" +
+            "#include <string>`n" +
+            "#include <vector>`n" +
+            '#include "types.hpp"' + "`n" +
+            '#include "GameShared/GameClasses/Core/CgsAssert.h"' + "`n`n" +
+            "#define private public`n" +
+            '#include "GameShared/GameClasses/Gui/CgsGuideIntegration.h"' + "`n" +
+            "#undef private`n`n"
+        )
+        $expectedWrapperMarker = "// Generated test-only consumer wrapper; exact pinned consumer source is included below: $consumer`n"
+        $consumerIncludePath = ([IO.Path]::GetFullPath((Join-Path $SourceRoot $consumer))).Replace('\', '/')
+        $expectedConsumerInclude = '#include "' + $consumerIncludePath + '"'
+        if ($wrapper.wrapper_relative_path -cne 'SystemUserProfilePC_consumer_wrapper.cpp' -or
+            $wrapper.recipe -cne 'fixture-matched standard/Windows prelude + private-public owning header + exact consumer source include' -or
+            $wrapper.prelude -cne $expectedWrapperPrelude -or
+            $wrapper.marker -cne $expectedWrapperMarker -or
+            $wrapper.include_directive -ine $expectedConsumerInclude) {
+            throw "System-user-profile $variantName consumer-wrapper recipe/include differs from the pinned fixture contract."
+        }
+        $wrapperConsumer = $wrapper.consumer_source
+        $pinnedConsumer = $source.files[$consumer]
+        if ($wrapperConsumer.repository_path -cne $consumer -or $null -eq $pinnedConsumer -or
+            $wrapperConsumer.actual_raw_sha256 -cne $pinnedConsumer.actual_raw_sha256 -or
+            $wrapperConsumer.actual_raw_bytes -ne $pinnedConsumer.actual_raw_bytes -or
+            $wrapperConsumer.actual_lf_sha256 -cne $pinnedConsumer.actual_lf_sha256 -or
+            $wrapperConsumer.actual_lf_bytes -ne $pinnedConsumer.actual_lf_bytes) {
+            throw "System-user-profile $variantName wrapper consumer identity differs from its pinned source."
+        }
+        $wrapperPath = Join-Path $variantRoot 'SystemUserProfilePC_consumer_wrapper.cpp'
+        $expectedWrapperText = $expectedWrapperPrelude + $expectedWrapperMarker + [string]$wrapper.include_directive + "`n"
+        $expectedWrapperBytes = [Text.Encoding]::UTF8.GetBytes($expectedWrapperText)
+        $actualWrapperBytes = [IO.File]::ReadAllBytes($wrapperPath)
+        if ([Convert]::ToBase64String($actualWrapperBytes) -cne [Convert]::ToBase64String($expectedWrapperBytes)) {
+            throw "System-user-profile $variantName wrapper bytes do not match the validated prelude and exact consumer include."
+        }
+        $wrapperFile = Get-FileRecord $wrapperPath
+        if ($wrapper.wrapper.actual_raw_sha256 -cne $wrapperFile.sha256 -or
+            $wrapper.wrapper.actual_raw_bytes -ne $wrapperFile.bytes -or
+            $wrapper.wrapper.actual_lf_sha256 -cne $wrapperFile.sha256 -or
+            $wrapper.wrapper.actual_lf_bytes -ne $wrapperFile.bytes -or
+            $wrapper.wrapper.actual_raw_crlf_pairs -ne 0 -or $wrapper.wrapper.actual_raw_bare_cr -ne 0 -or
+            $wrapper.wrapper.actual_raw_eol_variant -cne 'lf') {
+            throw "System-user-profile $variantName generated consumer wrapper hash/line endings differ from its receipt."
+        }
         $expectedSources = @(
             (Join-Path $SourceRoot 'tests/SystemUserProfilePC.cpp'),
             (Join-Path $SourceRoot $provider),
-            (Join-Path $SourceRoot $consumer),
+            $wrapperPath,
             (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/PC/CgsPcNetIdentity.cpp'),
             (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/X360/CgsXOverlappedX360.cpp'),
             (Join-Path $variantRoot 'SPrintfProvider.cpp')
@@ -309,6 +364,18 @@ function Assert-SystemUserProfileReceipt(
         $recordedSources = [string[]]@($variant.source_paths | ForEach-Object { [IO.Path]::GetFullPath([string]$_) })
         if ([string]::Join("`n", [string[]]$expectedSources) -cne [string]::Join("`n", $recordedSources)) {
             throw "System-user-profile $variantName compiler source path/order differs from the approved runner."
+        }
+        $commandArguments = [string[]]@($variant.compile_command | ForEach-Object { [string]$_ })
+        $firstSourceIndex = [Array]::IndexOf($commandArguments, [string]$expectedSources[0])
+        $lastSourceIndex = $firstSourceIndex + $expectedSources.Count - 1
+        if ($firstSourceIndex -lt 0 -or $lastSourceIndex -ge $commandArguments.Count) {
+            throw "System-user-profile $variantName command receipt omits the expected compiler source sequence."
+        }
+        $commandSources = [string[]]@($commandArguments[$firstSourceIndex..$lastSourceIndex])
+        $afterSourcesIndex = $lastSourceIndex + 1
+        if ([string]::Join("`n", [string[]]$expectedSources) -cne [string]::Join("`n", $commandSources) -or
+            $afterSourcesIndex -ge $commandArguments.Count -or $commandArguments[$afterSourcesIndex] -notmatch '\A/Fe:') {
+            throw "System-user-profile $variantName compiler command source order/termination differs from its receipt."
         }
         $compileLog = Join-Path $variantRoot 'compile.log'
         $null = Assert-SystemUserProfileRunRecord $variant.compile $compileLog 120 0
