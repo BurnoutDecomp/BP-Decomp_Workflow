@@ -37,7 +37,7 @@ hosted capacity checks and its original-source failure control; the short delive
 
 ## Campaign counts
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **36 verified, seven original no-ops and 1,312 pending**. That is 43/1,355 (3.2%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **39 verified, seven original no-ops and 1,309 pending**. That is 46/1,355 (3.4%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Recorded source-progress coverage is separate from behavior completion:
 
@@ -65,10 +65,18 @@ is committed/pushed but is absent from this package and still needs its gates.
 **Traffic follow-up:** **d9de0ab1** is merged/pushed to dev. The original
 fifteen-hull branch now has reviewed source plus actual4 ->15 ->4 decision,
 drawing and restoration evidence, with matching visible PVS cells. This
-adds one verified control. The repeated grouped run retained all15 captures,
-but the remaining Traffic74 effects still need manual review; that case is
-not a pass. The source is included in installed8fec93bd; the grouped Traffic
-manual review continues separately. [Evidence](traffic_worst_case_evidence_20261022/CHECKPOINT.json).
+is the existing #0086 disposition. A separate retained run04 review passes
+exactly #0001 Turn traffic off, #0057 Draw active hulls and #0088 Render
+special perfmons against exact B5 source d9de0ab1d395425eb39d0fdbb5e70f93235d601a
+(hosted run 39736578561). Its flag reads, population samples, completed PVS
+consumer receipt and reviewed pixels are phase-adjacent, not same-frame
+correlation. The historical Traffic74 aggregate remains **FAIL**, all 74 CSV
+`pre_run_status` rows remain `PENDING_NOT_RUN`, and `runtime_consumer_verified`
+remains 0. Sites #0045/#0046/#0047/#0050 stay excluded/pending; this adds no
+new #0086 or extra 15-hull-cycle credit. The source is included in installed
+8fec93bd; a newer private Flowtype source commit 0bfa585e is not represented as
+part of that package. [Three-control evidence](traffic_three_control_evidence_20261022/CHECKPOINT.md).
+[Existing #0086 evidence](traffic_worst_case_evidence_20261022/CHECKPOINT.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source coverage, not 188 verified debug controls. Coherent checkpoints are committed and pushed frequently; reviewed work merges in batches.
 

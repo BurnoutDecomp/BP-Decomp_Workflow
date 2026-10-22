@@ -1,0 +1,1672 @@
+{
+  "schema": 1,
+  "verdict": "pass",
+  "scope": "three bounded source/ARTIST/native evidence interpretations; no execution or tracked changes",
+  "review_utc": "2026-10-22T09:56:54.700065+00:00",
+  "source": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+  "exe_sha256": "932a7f98668990c34a64a9885f0bba8dafaf1eabd1ba1b2447ed41258cf3f604",
+  "historical_workspace_metadata": {
+    "b5_dirty": 0,
+    "exe_size": 11140096,
+    "exe_mtime_before_lock": "2026-10-22T08:59:21.1964375+02:00",
+    "exe_sha": "932a7f986689",
+    "b5_head": "6b66e5984",
+    "exe_b5": "d9de0ab1",
+    "parent_head": "dfa326e3",
+    "exe_mtime": "2026-10-22T08:59:21.1964375+02:00"
+  },
+  "historical_executable_provenance": {
+    "exe_sha256": "932a7f98668990c34a64a9885f0bba8dafaf1eabd1ba1b2447ed41258cf3f604",
+    "exe_mtime": "2026-10-22T06:52:47",
+    "built_from_root": "D:\\a\\BP-Decomp_Workflow\\BP-Decomp_Workflow",
+    "host": "runnervmgnbhw",
+    "parent_head": "552a8e2225c12e9ce6818d809369afbd9d8b0e1f",
+    "parent_dirty": true,
+    "b5_head": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+    "b5_dirty": false,
+    "b5_root": "D:\\a\\BP-Decomp_Workflow\\BP-Decomp_Workflow\\b5-decomp"
+  },
+  "inputs": {
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_three_control_review_packet_20261022\\CLAIMS.json": {
+      "sha256": "26e5a3f17f20567a20843c0dae5c6066f50739c21224e15f8cc6e1c1c793df22",
+      "bytes": 2208,
+      "mtime_ns_at_review": 1792661896337247100,
+      "role": "three-site claim scope"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_three_control_review_packet_20261022\\INPUTS.json": {
+      "sha256": "99c8e1bb801d23c21cb903538e655d23d74359560a2157995a1b9de0aedb6d3f",
+      "bytes": 3958,
+      "mtime_ns_at_review": 1792661896337247100,
+      "role": "requested exact inputs"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_three_control_review_packet_20261022\\REVIEW_REQUEST.md": {
+      "sha256": "5e30627f475751883ec5cefcad1ad4f787c77c690f17f072408db0b3ce830a29",
+      "bytes": 709,
+      "mtime_ns_at_review": 1792661896338239900,
+      "role": "review scope"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\REPORT.md": {
+      "sha256": "c55fee5008412c1077013f389c3c7b495d3d7298865f45e25f74add3857e4421",
+      "bytes": 5456,
+      "mtime_ns_at_review": 1792661224752485600,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\BINDINGS.json": {
+      "sha256": "4f69f55258ffc112c63f8dba35e02df010f2296ae19cf1f40b5fa0aa48d74478",
+      "bytes": 21667,
+      "mtime_ns_at_review": 1792661224753484500,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\MANIFEST.json": {
+      "sha256": "cf43dc3c2fa3a8705ed6f5f5617c1a1193caaf931b190670069203f25fec3db6",
+      "bytes": 6975,
+      "mtime_ns_at_review": 1792661224769937600,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-pvs-phase-receipts.json": {
+      "sha256": "beb4ceac21488cd222244d92cb03acdd209d9dfd0d0d58f61118886e889e3f7a",
+      "bytes": 38067,
+      "mtime_ns_at_review": 1792655245511790400,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\phase-frames.json": {
+      "sha256": "fc17f6640c2e99ea19105191489077bc3d094b4a79dfea2cca08a74155384624",
+      "bytes": 7364,
+      "mtime_ns_at_review": 1792655252073766600,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\result.json": {
+      "sha256": "358a398ab6d6c6ffcc670e431aeabffb6f4ed2c3bc1d34e8303beeff8dcbb3f7",
+      "bytes": 7929,
+      "mtime_ns_at_review": 1792655252090765700,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-staging-receipt.json": {
+      "sha256": "0cccf3b420ae207e7e179e8f634c12c6d7b84aeb44dc842d04295744874f17cb",
+      "bytes": 10676,
+      "mtime_ns_at_review": 1792652548123856900,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-exe-provenance.json": {
+      "sha256": "909badd454d01606704a8c532853a95ffa29dba548b19a6122f9088c456fab47",
+      "bytes": 467,
+      "mtime_ns_at_review": 1792652361196437500,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\native-readback.json": {
+      "sha256": "9f44a599cf764893dd9f6b9a6d06689a4ab54b1b2d8421d2aaea089dfe2b5238",
+      "bytes": 1399762,
+      "mtime_ns_at_review": 1792655245522788800,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\flow\\BrnGame.log": {
+      "sha256": "c89c95f81f6b7be386106f2b66068e843721f451752151abde8880838d6cc083",
+      "bytes": 12947320,
+      "mtime_ns_at_review": 1792655240582110000,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\baseline-off.bmp": {
+      "sha256": "caecdddfc5ee49174f7bc8d30eddf72b228bbf46dda6624853e3cc664caddd1c",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655126586941700,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\hud.bmp": {
+      "sha256": "ec14c88df8fd6d59752853d50b649a42086eb8287e8ce8149f15360c641f51d0",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655132815741900,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\lanes.bmp": {
+      "sha256": "b94eaac869367451e8fe690b06c838b2c772919bf81e554284242b26d62c85a3",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655137661144200,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\off.bmp": {
+      "sha256": "474e2fe960f539499b123e3b09ed9f95b7394a7967d319d364aea424d6390d5d",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655197019155500,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\cleanup.bmp": {
+      "sha256": "8756920ac9d90262698b816ff6ee9ceae06f0b2d74890d6f2c24f8a95447b77b",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655201401545600,
+      "role": "requested external input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x82708168.json": {
+      "sha256": "a7e88cfe780af3a28679eca82b4cfee7b2bd21a154bf5c8b22f3587419f98a36",
+      "bytes": 2851,
+      "mtime_ns_at_review": 1792661133327002000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x82728B08.json": {
+      "sha256": "4c16f1cbcf2a36a4459c7432c2622055dff6cc7c922c4bcaf03def0478e5bf61",
+      "bytes": 284078,
+      "mtime_ns_at_review": 1792661133324997900,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x8274B660.json": {
+      "sha256": "8005dcfd4bc8f7c8b25be5475c47eab4bd49575df90473ff0f7df76ae2d65114",
+      "bytes": 48434,
+      "mtime_ns_at_review": 1792661133327002000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x8274E6D0.json": {
+      "sha256": "a847e0fccdcdadb51b8060f376ec44674fe708880efa2bf3798ee1bf97b540ef",
+      "bytes": 54259,
+      "mtime_ns_at_review": 1792661133325993900,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x82754038.json": {
+      "sha256": "6ae3f5bcf62f48d5e9c2fe9b9fa530ba1c5373ee35a7da757dc3ac045c7bf966",
+      "bytes": 15072,
+      "mtime_ns_at_review": 1792661133322491100,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x8275A538.json": {
+      "sha256": "654fff524d9df0d773d12a2e356adb1f4da1516867e1a346c9d761b3cd8f4418",
+      "bytes": 12205,
+      "mtime_ns_at_review": 1792661133319471500,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x8275A6F0.json": {
+      "sha256": "6a30d46c342ba6b9858d36df11c5d667abf50c9b3070cc11435a7628bd3fb085",
+      "bytes": 11216,
+      "mtime_ns_at_review": 1792661133320471400,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x8275A870.json": {
+      "sha256": "a5a29b9b2a9ac3b776277a08445817907c1680d5f7edb884af5cb2d88fe9933a",
+      "bytes": 11731,
+      "mtime_ns_at_review": 1792661133321470800,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x8275B2E8.json": {
+      "sha256": "c2f01818737c37f83e7dd4bff180fba85d3a421e08939a258d72c3395989cb4a",
+      "bytes": 25575,
+      "mtime_ns_at_review": 1792661133322491100,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x82760AB0.json": {
+      "sha256": "2e11f8757b5431b16250ab14c099ccf5a0beced494cc4a7967e6f63dcf539f0c",
+      "bytes": 3950,
+      "mtime_ns_at_review": 1792661133319471500,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x82762530.json": {
+      "sha256": "6553c3a00a931c983286c0db5daa5dd4dda72154322cd12af57ab623f8818b37",
+      "bytes": 67283,
+      "mtime_ns_at_review": 1792661133317471100,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\artist\\0x82763E78.json": {
+      "sha256": "fe1c1bda0f1eac972b913dd8d2b202eeb86f72233bb5db4e09879f5a18b1cd05",
+      "bytes": 19767,
+      "mtime_ns_at_review": 1792661133318471600,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\NATIVE_CONTROL_READS.csv": {
+      "sha256": "7d57fcec469e99b6778f70682929d78851cf2ec5942a5e87e224bbf9f756cd8e",
+      "bytes": 18914,
+      "mtime_ns_at_review": 1792661133398295800,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\NATIVE_READ_EXCERPTS.txt": {
+      "sha256": "e72e7094a91424a42e3251d229b30add9d4ac653c5ad470b00f73956ba8e4831",
+      "bytes": 3936,
+      "mtime_ns_at_review": 1792661133399290200,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\native-readback-plan.json": {
+      "sha256": "ced24a8b5ae498f158c9bd469934400fd069270d60c2a610734984715fdd77cb",
+      "bytes": 853720,
+      "mtime_ns_at_review": 1792661133332002000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\native-readback.json": {
+      "sha256": "9f44a599cf764893dd9f6b9a6d06689a4ab54b1b2d8421d2aaea089dfe2b5238",
+      "bytes": 1399762,
+      "mtime_ns_at_review": 1792661133330001200,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\phase-frames.json": {
+      "sha256": "fc17f6640c2e99ea19105191489077bc3d094b4a79dfea2cca08a74155384624",
+      "bytes": 7364,
+      "mtime_ns_at_review": 1792661133334512000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\REPORT.md": {
+      "sha256": "7b6d9635c23563135bdd078e83ed89a85eecbd54ddabfe0a935bdfd40bb418be",
+      "bytes": 6327,
+      "mtime_ns_at_review": 1792661133328003300,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\result.json": {
+      "sha256": "358a398ab6d6c6ffcc670e431aeabffb6f4ed2c3bc1d34e8303beeff8dcbb3f7",
+      "bytes": 7929,
+      "mtime_ns_at_review": 1792661133328003300,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-cleanup.txt": {
+      "sha256": "f80e89b91fa37ee6fa072104ea57987cb86c2d357b341cfd570e36d36ae8d81e",
+      "bytes": 8749,
+      "mtime_ns_at_review": 1792661133341523300,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-exe-provenance.json": {
+      "sha256": "909badd454d01606704a8c532853a95ffa29dba548b19a6122f9088c456fab47",
+      "bytes": 467,
+      "mtime_ns_at_review": 1792661133335521000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-hud.txt": {
+      "sha256": "ee7a84acd2b5bcb095863c71abebbd45ac4abaf6fab602aba23710f4812a1d19",
+      "bytes": 8789,
+      "mtime_ns_at_review": 1792661133336526800,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-lanes.txt": {
+      "sha256": "a659d0ae7cf0813a2e681646447eb5acf36b188b4b21e7200468a4ee9b96ecd2",
+      "bytes": 8779,
+      "mtime_ns_at_review": 1792661133336526800,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-off.txt": {
+      "sha256": "0d6ff91f38dfaeb7e3a4c83dc975949eada03ed54320acc96b36400233949267",
+      "bytes": 8843,
+      "mtime_ns_at_review": 1792661133340522000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-param-fuzzy.txt": {
+      "sha256": "d791e13dd46500da39ed8eedb1ed364b1d3112f67b45514e93c10ec0dc1ed04a",
+      "bytes": 8793,
+      "mtime_ns_at_review": 1792661133339523300,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-param-links.txt": {
+      "sha256": "aa0d536df9f259f89e6bed28a4fc3fac52022f1aea7a711b9ff89f0644ef66fd",
+      "bytes": 9042,
+      "mtime_ns_at_review": 1792661133339523300,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-params.txt": {
+      "sha256": "d7c00a25595cc8d554230b41384c0dc50945f0f7cf24500aef9a897033479903",
+      "bytes": 8993,
+      "mtime_ns_at_review": 1792661133338523400,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-pvs-phase-receipts.json": {
+      "sha256": "beb4ceac21488cd222244d92cb03acdd209d9dfd0d0d58f61118886e889e3f7a",
+      "bytes": 38067,
+      "mtime_ns_at_review": 1792661133334512000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-vehicle-details.txt": {
+      "sha256": "c0bdaefb831d7f493695d519940597b11875ede57167aafa9645a4d07d7a4529",
+      "bytes": 9029,
+      "mtime_ns_at_review": 1792661133337523500,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic-vehicles.txt": {
+      "sha256": "93bd4c598d8da8cfeadc95373efa832b9a862b4b7a547b1eec86e6788c9b5a6e",
+      "bytes": 8900,
+      "mtime_ns_at_review": 1792661133337523500,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic74-site-gates.csv": {
+      "sha256": "5f2205a9db7c0feab87798924aaa97d802479946ef60bbeb9b3961c8612e7be5",
+      "bytes": 83756,
+      "mtime_ns_at_review": 1792661133332999000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\run04\\traffic_case_delta07_PINS.json": {
+      "sha256": "4404aecd7688c04322d44c394f3696cad63301fda4e80e32ce26389935eb1fc1",
+      "bytes": 622,
+      "mtime_ns_at_review": 1792661133757579600,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\SITE_ROWS.csv": {
+      "sha256": "e8efb5e3225ce6de240293eb139a993c7e81514a10db208a8a0851ca72be8998",
+      "bytes": 7627,
+      "mtime_ns_at_review": 1792661133409806100,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\source\\BrnTrafficDebugComponent.cpp": {
+      "sha256": "ca93eeb6353363555b71eeabff6d2ecd815b12594c4ff5d8577e504b5a1e8d0e",
+      "bytes": 114966,
+      "mtime_ns_at_review": 1792661132135715300,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\source\\BrnTrafficDebugComponent.h": {
+      "sha256": "a8fa3b97cb9d34b5ec2b3aa6c23a91eb2675fb60731f1b8c9d50145984a36a08",
+      "bytes": 18938,
+      "mtime_ns_at_review": 1792661132431615800,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\source\\BrnTrafficEntityModule.cpp": {
+      "sha256": "c44b8540b07c0774d35caf20aec35c0ad3a24571b8fb526854bfbe69a9bbaa8a",
+      "bytes": 1193228,
+      "mtime_ns_at_review": 1792661132733503000,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\source\\BrnTrafficEntityModule.h": {
+      "sha256": "11dfc2783b250b1d2f4c071a1288741a491436d8624f1b66bffcc207c58848be",
+      "bytes": 135112,
+      "mtime_ns_at_review": 1792661133017657800,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\source\\BrnTrafficEntityModule_Render.cpp": {
+      "sha256": "db3b7ae2f2009526041ba896e469c428c28f3843012f1405a55b0a4efcf697b7",
+      "bytes": 95620,
+      "mtime_ns_at_review": 1792661133316468600,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\STATIC_VALIDATION.md": {
+      "sha256": "117929cc018d66ee5ac3d38d4208939660c2dd1d2d9c46bb09ab5c149e648d13",
+      "bytes": 1248,
+      "mtime_ns_at_review": 1792661224754484200,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\traffic_run04_control_witness_packet_20261022\\TRAFFIC_TRACK_EXCERPTS.txt": {
+      "sha256": "592097516569c5aea48ab618789218c2bd6eca0a02abd781b9152e532afe5005",
+      "bytes": 2319,
+      "mtime_ns_at_review": 1792661133407805500,
+      "role": "sealed author evidence input"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82762530.json": {
+      "sha256": "6553c3a00a931c983286c0db5daa5dd4dda72154322cd12af57ab623f8818b37",
+      "bytes": 67283,
+      "mtime_ns_at_review": 1781196996660307400,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82763E78.json": {
+      "sha256": "fe1c1bda0f1eac972b913dd8d2b202eeb86f72233bb5db4e09879f5a18b1cd05",
+      "bytes": 19767,
+      "mtime_ns_at_review": 1781196975277101500,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82760AB0.json": {
+      "sha256": "2e11f8757b5431b16250ab14c099ccf5a0beced494cc4a7967e6f63dcf539f0c",
+      "bytes": 3950,
+      "mtime_ns_at_review": 1781196996486528900,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8275A538.json": {
+      "sha256": "654fff524d9df0d773d12a2e356adb1f4da1516867e1a346c9d761b3cd8f4418",
+      "bytes": 12205,
+      "mtime_ns_at_review": 1781196999306653400,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8275A6F0.json": {
+      "sha256": "6a30d46c342ba6b9858d36df11c5d667abf50c9b3070cc11435a7628bd3fb085",
+      "bytes": 11216,
+      "mtime_ns_at_review": 1781196999406722500,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8275A870.json": {
+      "sha256": "a5a29b9b2a9ac3b776277a08445817907c1680d5f7edb884af5cb2d88fe9933a",
+      "bytes": 11731,
+      "mtime_ns_at_review": 1781196996287982600,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8275B2E8.json": {
+      "sha256": "c2f01818737c37f83e7dd4bff180fba85d3a421e08939a258d72c3395989cb4a",
+      "bytes": 25575,
+      "mtime_ns_at_review": 1781196991421683800,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82754038.json": {
+      "sha256": "6ae3f5bcf62f48d5e9c2fe9b9fa530ba1c5373ee35a7da757dc3ac045c7bf966",
+      "bytes": 15072,
+      "mtime_ns_at_review": 1781196986655216100,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82728B08.json": {
+      "sha256": "4c16f1cbcf2a36a4459c7432c2622055dff6cc7c922c4bcaf03def0478e5bf61",
+      "bytes": 284078,
+      "mtime_ns_at_review": 1781196998875680200,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8274E6D0.json": {
+      "sha256": "a847e0fccdcdadb51b8060f376ec44674fe708880efa2bf3798ee1bf97b540ef",
+      "bytes": 54259,
+      "mtime_ns_at_review": 1781196987821853500,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8274B660.json": {
+      "sha256": "8005dcfd4bc8f7c8b25be5475c47eab4bd49575df90473ff0f7df76ae2d65114",
+      "bytes": 48434,
+      "mtime_ns_at_review": 1781196998776233000,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82708168.json": {
+      "sha256": "a7e88cfe780af3a28679eca82b4cfee7b2bd21a154bf5c8b22f3587419f98a36",
+      "bytes": 2851,
+      "mtime_ns_at_review": 1781196967281315200,
+      "role": "original static ARTIST export"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\REPORT.md": {
+      "sha256": "7b6d9635c23563135bdd078e83ed89a85eecbd54ddabfe0a935bdfd40bb418be",
+      "bytes": 6327,
+      "mtime_ns_at_review": 1792655252104767300,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\native-readback-plan.json": {
+      "sha256": "ced24a8b5ae498f158c9bd469934400fd069270d60c2a610734984715fdd77cb",
+      "bytes": 853720,
+      "mtime_ns_at_review": 1792655093738111200,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic74-site-gates.csv": {
+      "sha256": "5f2205a9db7c0feab87798924aaa97d802479946ef60bbeb9b3961c8612e7be5",
+      "bytes": 83756,
+      "mtime_ns_at_review": 1792594334268215600,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-hud.txt": {
+      "sha256": "ee7a84acd2b5bcb095863c71abebbd45ac4abaf6fab602aba23710f4812a1d19",
+      "bytes": 8789,
+      "mtime_ns_at_review": 1792655093621187000,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-lanes.txt": {
+      "sha256": "a659d0ae7cf0813a2e681646447eb5acf36b188b4b21e7200468a4ee9b96ecd2",
+      "bytes": 8779,
+      "mtime_ns_at_review": 1792655093630188100,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-vehicles.txt": {
+      "sha256": "93bd4c598d8da8cfeadc95373efa832b9a862b4b7a547b1eec86e6788c9b5a6e",
+      "bytes": 8900,
+      "mtime_ns_at_review": 1792655093653194700,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-vehicle-details.txt": {
+      "sha256": "c0bdaefb831d7f493695d519940597b11875ede57167aafa9645a4d07d7a4529",
+      "bytes": 9029,
+      "mtime_ns_at_review": 1792655093659399800,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-params.txt": {
+      "sha256": "d7c00a25595cc8d554230b41384c0dc50945f0f7cf24500aef9a897033479903",
+      "bytes": 8993,
+      "mtime_ns_at_review": 1792655093667489800,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-param-fuzzy.txt": {
+      "sha256": "d791e13dd46500da39ed8eedb1ed364b1d3112f67b45514e93c10ec0dc1ed04a",
+      "bytes": 8793,
+      "mtime_ns_at_review": 1792655093674403000,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-param-links.txt": {
+      "sha256": "aa0d536df9f259f89e6bed28a4fc3fac52022f1aea7a711b9ff89f0644ef66fd",
+      "bytes": 9042,
+      "mtime_ns_at_review": 1792655093680409400,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-off.txt": {
+      "sha256": "0d6ff91f38dfaeb7e3a4c83dc975949eada03ed54320acc96b36400233949267",
+      "bytes": 8843,
+      "mtime_ns_at_review": 1792655093701411300,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-cleanup.txt": {
+      "sha256": "f80e89b91fa37ee6fa072104ea57987cb86c2d357b341cfd570e36d36ae8d81e",
+      "bytes": 8749,
+      "mtime_ns_at_review": 1792655093721556500,
+      "role": "original historical run04 artifact"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-target-binding.json": {
+      "sha256": "bbbc101e1bd8626688e95e0f230fb92f5ec24087b9fbe7e97006bfdb93df8442",
+      "bytes": 1491,
+      "mtime_ns_at_review": 1792655093187732300,
+      "role": "exact historical private payload/config/profile binding"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\flow\\terminal-status.json": {
+      "sha256": "fbbdc339510f80361d70e10ec26747c9473d6f738e5d9952766af21989b56b79",
+      "bytes": 898,
+      "mtime_ns_at_review": 1792655242146456300,
+      "role": "historical native ownership/cleanup"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\flow-terminal.json": {
+      "sha256": "e2066e353c77682f3875d7cb1b0ecd8536950fcec5c2ec2bed3f0a889682bd32",
+      "bytes": 1989,
+      "mtime_ns_at_review": 1792655242299943800,
+      "role": "historical helper/profile cleanup"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\flow\\marks.txt": {
+      "sha256": "6bde0aaa3d3650d27b33bfa0c625e8beea53be72779d5215678572ac1cb76e2c",
+      "bytes": 2546,
+      "mtime_ns_at_review": 1792655242101229500,
+      "role": "historical native marks"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\flow_run.console.log": {
+      "sha256": "22b893b2aabfc10bdd1d62331d9960478e119e345f2f759192a36165f5053d36",
+      "bytes": 12522,
+      "mtime_ns_at_review": 1792655242143453600,
+      "role": "historical controller transcript"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\steps.txt": {
+      "sha256": "97117516ef8c65e52a0122ae204e1c1192adc5edb5ea7631dfe4ed3c3fc6280a",
+      "bytes": 871,
+      "mtime_ns_at_review": 1792655093741113700,
+      "role": "historical command/sleep/note sequence"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\expected-states.json": {
+      "sha256": "37ad75a564ea4a4b8d492bdebb328c4390926a238a395dae58e5dcf2194981a6",
+      "bytes": 43763,
+      "mtime_ns_at_review": 1792655093723564400,
+      "role": "historical phase expectations"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\normal-protected.before.json": {
+      "sha256": "911c489bf67d862f908cb31b670d521c45c77b078afd3213ff908c8c9a89d8e3",
+      "bytes": 2405,
+      "mtime_ns_at_review": 1792655093225818500,
+      "role": "historical normal file fingerprints only, intentionally not compared to installed replacement"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\traffic-config.txt": {
+      "sha256": "f671059b309e31361fcb87c73bb5be7680cf379ce07517bb1bbbd6960f1071e6",
+      "bytes": 3046,
+      "mtime_ns_at_review": 1792655093608276200,
+      "role": "historical control script, read only"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39736578561\\artifact\\candidate-build-39736578561-1\\input-receipt.json": {
+      "sha256": "a3cd33398a3ee6a7a63f0611422c9c1e3d9e492131c44412afb3196b37efcadd",
+      "bytes": 14718,
+      "mtime_ns_at_review": 1792652361233845900,
+      "role": "historical hosted candidate build receipt"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39736578561\\artifact\\candidate-build-39736578561-1\\Burnout_PC.exe": {
+      "sha256": "932a7f98668990c34a64a9885f0bba8dafaf1eabd1ba1b2447ed41258cf3f604",
+      "bytes": 11140096,
+      "mtime_ns_at_review": 1792652361196437500,
+      "role": "historical hosted game executable, hash only"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_004800.bmp": {
+      "sha256": "caecdddfc5ee49174f7bc8d30eddf72b228bbf46dda6624853e3cc664caddd1c",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655126586941700,
+      "role": "original captured BMP, hash equals selected copy"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_005760.bmp": {
+      "sha256": "ec14c88df8fd6d59752853d50b649a42086eb8287e8ce8149f15360c641f51d0",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655132815741900,
+      "role": "original captured BMP, hash equals selected copy"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_006480.bmp": {
+      "sha256": "b94eaac869367451e8fe690b06c838b2c772919bf81e554284242b26d62c85a3",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655137661144200,
+      "role": "original captured BMP, hash equals selected copy"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_012720.bmp": {
+      "sha256": "474e2fe960f539499b123e3b09ed9f95b7394a7967d319d364aea424d6390d5d",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655197019155500,
+      "role": "original captured BMP, hash equals selected copy"
+    },
+    "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_013200.bmp": {
+      "sha256": "8756920ac9d90262698b816ff6ee9ceae06f0b2d74890d6f2c24f8a95447b77b",
+      "bytes": 3686454,
+      "mtime_ns_at_review": 1792655201401545600,
+      "role": "original captured BMP, hash equals selected copy"
+    }
+  },
+  "immutable_git_source_objects": {
+    "d9de0ab1d395425eb39d0fdbb5e70f93235d601a:src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp": {
+      "blob": "44027c0dd3ac700f21ce8b7e33250c58621f32fd",
+      "sha256": "ca93eeb6353363555b71eeabff6d2ecd815b12594c4ff5d8577e504b5a1e8d0e",
+      "bytes": 114966
+    },
+    "d9de0ab1d395425eb39d0fdbb5e70f93235d601a:src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.h": {
+      "blob": "53a3365cb5598e0af5cdd6d9846b2c7875797a46",
+      "sha256": "a8fa3b97cb9d34b5ec2b3aa6c23a91eb2675fb60731f1b8c9d50145984a36a08",
+      "bytes": 18938
+    },
+    "d9de0ab1d395425eb39d0fdbb5e70f93235d601a:src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp": {
+      "blob": "fd28917c2517dae0c304154c9e68b512e79d6940",
+      "sha256": "c44b8540b07c0774d35caf20aec35c0ad3a24571b8fb526854bfbe69a9bbaa8a",
+      "bytes": 1193228
+    },
+    "d9de0ab1d395425eb39d0fdbb5e70f93235d601a:src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h": {
+      "blob": "cf4827049834359190c7a0c66cf14b8e3456ab68",
+      "sha256": "11dfc2783b250b1d2f4c071a1288741a491436d8624f1b66bffcc207c58848be",
+      "bytes": 135112
+    },
+    "d9de0ab1d395425eb39d0fdbb5e70f93235d601a:src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp": {
+      "blob": "1f5054fc8b37990dc56bc34808e0749ff3a79647",
+      "sha256": "db3b7ae2f2009526041ba896e469c428c28f3843012f1405a55b0a4efcf697b7",
+      "bytes": 95620
+    },
+    "d9de0ab1d395425eb39d0fdbb5e70f93235d601a:src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficPvsDiag.h": {
+      "blob": "42cdb79e648f54da6e125f309de6cc70e5d0e9db",
+      "sha256": "a808fb5d7f19f45fb3838d0ec0d9542a731faf338ff7eea97b8e4d37dc943090",
+      "bytes": 4511
+    }
+  },
+  "manifest_verified_files": 42,
+  "selected_native_probes_checked_against_actual_log": [
+    {
+      "probe_key": "hud|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "hud",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 13644,
+      "value_log_line": 13645
+    },
+    {
+      "probe_key": "hud|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "hud",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "TRUE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 13754,
+      "value_log_line": 13755
+    },
+    {
+      "probe_key": "hud|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "hud",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "TRUE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 13812,
+      "value_log_line": 13813
+    },
+    {
+      "probe_key": "lanes|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "lanes",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 17230,
+      "value_log_line": 17231
+    },
+    {
+      "probe_key": "lanes|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "lanes",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 17340,
+      "value_log_line": 17341
+    },
+    {
+      "probe_key": "lanes|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "lanes",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 17398,
+      "value_log_line": 17399
+    },
+    {
+      "probe_key": "lane-curves|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "lane-curves",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 20737,
+      "value_log_line": 20738
+    },
+    {
+      "probe_key": "lane-curves|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "lane-curves",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 20847,
+      "value_log_line": 20848
+    },
+    {
+      "probe_key": "lane-curves|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "lane-curves",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 20905,
+      "value_log_line": 20906
+    },
+    {
+      "probe_key": "lane-links|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "lane-links",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 23877,
+      "value_log_line": 23878
+    },
+    {
+      "probe_key": "lane-links|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "lane-links",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 23987,
+      "value_log_line": 23988
+    },
+    {
+      "probe_key": "lane-links|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "lane-links",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 24045,
+      "value_log_line": 24046
+    },
+    {
+      "probe_key": "lane-junctions|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "lane-junctions",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 26397,
+      "value_log_line": 26398
+    },
+    {
+      "probe_key": "lane-junctions|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "lane-junctions",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 26507,
+      "value_log_line": 26508
+    },
+    {
+      "probe_key": "lane-junctions|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "lane-junctions",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 26565,
+      "value_log_line": 26566
+    },
+    {
+      "probe_key": "vehicles|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "vehicles",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 28913,
+      "value_log_line": 28914
+    },
+    {
+      "probe_key": "vehicles|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "vehicles",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 29023,
+      "value_log_line": 29024
+    },
+    {
+      "probe_key": "vehicles|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "vehicles",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 29081,
+      "value_log_line": 29082
+    },
+    {
+      "probe_key": "vehicle-details|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "vehicle-details",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 32159,
+      "value_log_line": 32160
+    },
+    {
+      "probe_key": "vehicle-details|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "vehicle-details",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 32269,
+      "value_log_line": 32270
+    },
+    {
+      "probe_key": "vehicle-details|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "vehicle-details",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 32327,
+      "value_log_line": 32328
+    },
+    {
+      "probe_key": "params|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "params",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 34719,
+      "value_log_line": 34720
+    },
+    {
+      "probe_key": "params|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "params",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "TRUE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 34829,
+      "value_log_line": 34830
+    },
+    {
+      "probe_key": "params|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "params",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 34887,
+      "value_log_line": 34888
+    },
+    {
+      "probe_key": "param-fuzzy|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "param-fuzzy",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 37471,
+      "value_log_line": 37472
+    },
+    {
+      "probe_key": "param-fuzzy|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "param-fuzzy",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "TRUE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 37581,
+      "value_log_line": 37582
+    },
+    {
+      "probe_key": "param-fuzzy|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "param-fuzzy",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 37639,
+      "value_log_line": 37640
+    },
+    {
+      "probe_key": "param-links|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "param-links",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 40150,
+      "value_log_line": 40151
+    },
+    {
+      "probe_key": "param-links|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "param-links",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 40260,
+      "value_log_line": 40261
+    },
+    {
+      "probe_key": "param-links|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "param-links",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 40318,
+      "value_log_line": 40319
+    },
+    {
+      "probe_key": "picking|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "picking",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 42722,
+      "value_log_line": 42723
+    },
+    {
+      "probe_key": "picking|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "picking",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 42832,
+      "value_log_line": 42833
+    },
+    {
+      "probe_key": "picking|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "picking",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 42890,
+      "value_log_line": 42891
+    },
+    {
+      "probe_key": "killzones|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "killzones",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 45282,
+      "value_log_line": 45283
+    },
+    {
+      "probe_key": "killzones|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "killzones",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 45392,
+      "value_log_line": 45393
+    },
+    {
+      "probe_key": "killzones|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "killzones",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 45450,
+      "value_log_line": 45451
+    },
+    {
+      "probe_key": "off|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "off",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "TRUE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 47820,
+      "value_log_line": 47821
+    },
+    {
+      "probe_key": "off|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "off",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 47930,
+      "value_log_line": 47931
+    },
+    {
+      "probe_key": "off|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "off",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 47988,
+      "value_log_line": 47989
+    },
+    {
+      "probe_key": "cleanup|field|BrnTraffic::DebugComponent::OnActivate#0001",
+      "phase": "cleanup",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "caption": "Turn traffic off",
+      "lookup_path": "Traffic/Turn traffic off",
+      "expected_resolved_path": "/Traffic/Turn traffic off",
+      "observed_resolved_path": "/Traffic/Turn traffic off",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 50927,
+      "value_log_line": 50928
+    },
+    {
+      "probe_key": "cleanup|field|BrnTraffic::DebugComponent::OnActivate#0057",
+      "phase": "cleanup",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "caption": "Draw active hulls",
+      "lookup_path": "Traffic/DRAWING 2/Draw active hulls",
+      "expected_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "observed_resolved_path": "/Traffic/DRAWING 2/Draw active hulls",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 51037,
+      "value_log_line": 51038
+    },
+    {
+      "probe_key": "cleanup|field|BrnTraffic::DebugComponent::OnActivate#0088",
+      "phase": "cleanup",
+      "role": "field",
+      "is_readout": false,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "caption": "Render special perfmons",
+      "lookup_path": "Traffic/Performance/Render special perfmons",
+      "expected_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "observed_resolved_path": "/Traffic/Performance/Render special perfmons",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 51095,
+      "value_log_line": 51096
+    }
+  ],
+  "off_cleanup_expected_state_difference": {
+    "Traffic/Turn traffic off": [
+      "TRUE",
+      "FALSE"
+    ]
+  },
+  "actual_baseline_completed_consumer": {
+    "set": {
+      "kind": "SET",
+      "phase": "baseline",
+      "epoch": 143,
+      "set_call": 143,
+      "decision_frame": 1,
+      "frames_since_decision": 0,
+      "running_worst_case": 0,
+      "data_ready": 1,
+      "pvs_present": 1,
+      "consumed_by_draw_seq": 1,
+      "active_count": 4,
+      "active_ids": [
+        101,
+        102,
+        122,
+        123
+      ],
+      "added_ids": [],
+      "removed_ids": [],
+      "source_line": 13853,
+      "raw_line": "[PC-PVS-DIAG][SET] phase=baseline epoch=143 set_call=143 decision_frame=1 frames_since_decision=0 running_worst_case=0 data_ready=1 pvs_present=1 consumed_by_draw_seq=1 active_count=4 active_ids=[101,102,122,123] added_ids=[] removed_ids=[]"
+    },
+    "draw": {
+      "kind": "DRAW",
+      "phase": "baseline",
+      "epoch": 143,
+      "draw_seq": 1,
+      "decision_frame": 0,
+      "frames_since_decision": 4,
+      "running_worst_case": 0,
+      "draw_toggle": 1,
+      "data_ready": 1,
+      "pvs_present": 1,
+      "cells_x": 21,
+      "cells_z": 15,
+      "total_cells": 315,
+      "draw_rows": 15,
+      "box_calls": 4,
+      "mapping_count": 4,
+      "box_origin_x": 80,
+      "box_origin_y": 80,
+      "box_size_x": 8.095238,
+      "box_size_y": 11.333333,
+      "id_cell": [
+        {
+          "hull_id": 101,
+          "column": 17,
+          "row": 4
+        },
+        {
+          "hull_id": 102,
+          "column": 18,
+          "row": 4
+        },
+        {
+          "hull_id": 122,
+          "column": 17,
+          "row": 5
+        },
+        {
+          "hull_id": 123,
+          "column": 18,
+          "row": 5
+        }
+      ],
+      "source_line": 13854,
+      "raw_line": "[PC-PVS-DIAG][DRAW] phase=baseline epoch=143 draw_seq=1 decision_frame=0 frames_since_decision=4 running_worst_case=0 draw_toggle=1 data_ready=1 pvs_present=1 cells_x=21 cells_z=15 total_cells=315 draw_rows=15 box_calls=4 mapping_count=4 box_origin=80,80 box_size=8.095238,11.333333 id_cell=[101:17,4;102:18,4;122:17,5;123:18,5]"
+    },
+    "same_frame_pixels_verified": false
+  },
+  "actual_population_samples_checked": [
+    {
+      "phase": "hud",
+      "phase_log_lines": [
+        13643,
+        13848
+      ],
+      "before_sample": {
+        "line": 13445,
+        "text": "[traffic-track] SAMPLE t=15.333271 alive=60 near=7 printed=7 player=(3040.708984, -2.729863, -1937.996948) cam=(3040.709473, -1.604653, -1932.195923)"
+      },
+      "after_sample": {
+        "line": 13980,
+        "text": "[traffic-track] SAMPLE t=15.849930 alive=61 near=7 printed=7 player=(3040.708984, -2.729863, -1937.996948) cam=(3040.709473, -1.604653, -1932.195923)"
+      }
+    },
+    {
+      "phase": "off",
+      "phase_log_lines": [
+        47819,
+        48024
+      ],
+      "before_sample": {
+        "line": 47761,
+        "text": "[traffic-track] SAMPLE t=79.902588 alive=99 near=17 printed=17 player=(3036.951416, -2.256530, -1916.883545) cam=(3037.235840, -1.118741, -1911.092041)"
+      },
+      "after_sample": {
+        "line": 48197,
+        "text": "[traffic-track] SAMPLE t=80.402695 alive=0 near=0 printed=0 player=(3036.951416, -2.256530, -1916.883545) cam=(3037.235840, -1.118741, -1911.092041)"
+      }
+    },
+    {
+      "phase": "cleanup",
+      "phase_log_lines": [
+        50926,
+        51131
+      ],
+      "before_sample": {
+        "line": 50905,
+        "text": "[traffic-track] SAMPLE t=85.403763 alive=0 near=0 printed=0 player=(3036.951416, -2.256530, -1916.883545) cam=(3037.235840, -1.118741, -1911.092041)"
+      },
+      "after_sample": {
+        "line": 51390,
+        "text": "[traffic-track] SAMPLE t=85.903870 alive=112 near=12 printed=12 player=(3036.951416, -2.256530, -1916.883545) cam=(3037.235840, -1.118741, -1911.092041)"
+      }
+    }
+  ],
+  "selected_bmps_independently_viewed": [
+    {
+      "phase": "baseline-off",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\baseline-off.bmp",
+      "source_frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_004800.bmp",
+      "sha256": "caecdddfc5ee49174f7bc8d30eddf72b228bbf46dda6624853e3cc664caddd1c",
+      "bytes": 3686454,
+      "width": 1280,
+      "stored_signed_height": -720,
+      "source_frame_mtime_ns": 1792655126586941700,
+      "pixels_independently_viewed": true
+    },
+    {
+      "phase": "hud",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\hud.bmp",
+      "source_frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_005760.bmp",
+      "sha256": "ec14c88df8fd6d59752853d50b649a42086eb8287e8ce8149f15360c641f51d0",
+      "bytes": 3686454,
+      "width": 1280,
+      "stored_signed_height": -720,
+      "source_frame_mtime_ns": 1792655132815741900,
+      "pixels_independently_viewed": true
+    },
+    {
+      "phase": "lanes",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\lanes.bmp",
+      "source_frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_006480.bmp",
+      "sha256": "b94eaac869367451e8fe690b06c838b2c772919bf81e554284242b26d62c85a3",
+      "bytes": 3686454,
+      "width": 1280,
+      "stored_signed_height": -720,
+      "source_frame_mtime_ns": 1792655137661144200,
+      "pixels_independently_viewed": true
+    },
+    {
+      "phase": "off",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\off.bmp",
+      "source_frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_012720.bmp",
+      "sha256": "474e2fe960f539499b123e3b09ed9f95b7394a7967d319d364aea424d6390d5d",
+      "bytes": 3686454,
+      "width": 1280,
+      "stored_signed_height": -720,
+      "source_frame_mtime_ns": 1792655197019155500,
+      "pixels_independently_viewed": true
+    },
+    {
+      "phase": "cleanup",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\cleanup.bmp",
+      "source_frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_04\\frames\\bb_013200.bmp",
+      "sha256": "8756920ac9d90262698b816ff6ee9ceae06f0b2d74890d6f2c24f8a95447b77b",
+      "bytes": 3686454,
+      "width": 1280,
+      "stored_signed_height": -720,
+      "source_frame_mtime_ns": 1792655201401545600,
+      "pixels_independently_viewed": true
+    }
+  ],
+  "sites": [
+    {
+      "site_id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "verdict": "pass",
+      "disposition": "bounded native traffic removal and restoration verified",
+      "registration": "ARTIST OnActivate0x82762530/module+0x7287E; d9 debug CPP251",
+      "consumer": "ARTIST PostPhysicsUpdate0x8274E6D0 RUNNING/!paused test and EnterTearingDownState0x82708168; d9 module CPP3962..3964,4228..4246",
+      "native_reads": {
+        "hud": {
+          "value": "FALSE",
+          "lines": [
+            13644,
+            13645
+          ]
+        },
+        "off": {
+          "value": "TRUE",
+          "lines": [
+            47820,
+            47821
+          ]
+        },
+        "cleanup": {
+          "value": "FALSE",
+          "lines": [
+            50927,
+            50928
+          ]
+        }
+      },
+      "population_samples": [
+        {
+          "line": 47761,
+          "alive": 99,
+          "near": 17
+        },
+        {
+          "line": 48197,
+          "alive": 0,
+          "near": 0
+        },
+        {
+          "line": 50905,
+          "alive": 0,
+          "near": 0
+        },
+        {
+          "line": 51390,
+          "alive": 112,
+          "near": 12
+        }
+      ],
+      "pixels": [
+        "off.bmp empty road apart from player",
+        "cleanup.bmp traffic vehicles visible"
+      ],
+      "limits": [
+        "Internal state entry not directly logged.",
+        "Adjacent phase evidence, not same-frame correlation."
+      ]
+    },
+    {
+      "site_id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "verdict": "pass",
+      "disposition": "bounded native active-hull grid show/hide verified",
+      "registration": "ARTIST debug+0x2B at0x82762DA0; d9 debug CPP344",
+      "consumer": "ARTIST RenderHUD0x82760AB0/DrawActiveHulls0x8275B2E8; d9 debug CPP241..242,2098..2198",
+      "native_reads": {
+        "hud": {
+          "value": "TRUE",
+          "lines": [
+            13754,
+            13755
+          ]
+        },
+        "lanes": {
+          "value": "FALSE",
+          "lines": [
+            17340,
+            17341
+          ]
+        }
+      },
+      "completed_consumer": {
+        "set_line": 13853,
+        "draw_line": 13854,
+        "epoch": 143,
+        "draw_seq": 1,
+        "worst_case": false,
+        "dimensions": [
+          21,
+          15
+        ],
+        "box_calls": 4,
+        "active_ids": [
+          101,
+          102,
+          122,
+          123
+        ]
+      },
+      "pixels": [
+        "baseline-off.bmp no grid",
+        "hud.bmp black grid/cyan active cells upper left",
+        "lanes.bmp grid removed"
+      ],
+      "limits": [
+        "No screenshot/receipt same-frame proof.",
+        "No new0086 or additional worst-case15-hull-cycle credit."
+      ]
+    },
+    {
+      "site_id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "verdict": "pass",
+      "disposition": "bounded native special-perfmon table show/hide verified",
+      "registration": "ARTIST module+0x72A48 at0x82763308; d9 debug CPP400..401",
+      "consumer": "ARTIST independent RenderHUD byte0x82760B28..0x82760B48 to RenderPerformanceTable0x82754038; d9 debug CPP243..244,2077..2094",
+      "native_reads": {
+        "hud": {
+          "value": "TRUE",
+          "lines": [
+            13812,
+            13813
+          ]
+        },
+        "lanes": {
+          "value": "FALSE",
+          "lines": [
+            17398,
+            17399
+          ]
+        },
+        "cleanup": {
+          "value": "FALSE",
+          "lines": [
+            51095,
+            51096
+          ]
+        }
+      },
+      "pixels": [
+        "baseline-off.bmp no table",
+        "hud.bmp Traffic [special] table/title/columns/sections/numbers",
+        "lanes.bmp table removed"
+      ],
+      "limits": [
+        "Individual counter values, monitor lifecycle and timing accuracy not independently numerically validated.",
+        "No same-frame correlation."
+      ]
+    }
+  ],
+  "aggregate_case_verdict_unchanged": "FAIL",
+  "historical_csv_rows": {
+    "count": 74,
+    "pre_run_status": "PENDING_NOT_RUN"
+  },
+  "excluded_sites": [
+    "0045",
+    "0046",
+    "0047",
+    "0050"
+  ],
+  "existing0086_new_credit": false,
+  "normal_protection_interpretation": "Historical run04 only; current normal EXE intentionally replaced after authorized delivery; no current-state comparison."
+}
