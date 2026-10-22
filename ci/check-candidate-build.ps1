@@ -673,13 +673,19 @@ try {
         $Receipt.regressions.gui_io_status = 'running'
         Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
         foreach ($relative in @('tests/run_gui_model_io.py', 'tests/GuiModelIO.cpp',
-                                'tests/run_gui_interpreter_io.py', 'tests/GuiInterpreterIO.cpp')) {
+                                'tests/run_gui_interpreter_io.py', 'tests/GuiInterpreterIO.cpp',
+                                'tests/run_apt_textformat_binding.py', 'tests/AptTextFormatBinding.cpp',
+                                'src/SDKs/EATech/include/Apt/AptTextFormat.cpp',
+                                'src/SDKs/EATech/include/Apt/AptTextFormat.h',
+                                'src/SDKs/EATech/Apt/AptTextFormatMembersIndex.cpp',
+                                'src/SDKs/EATech/Apt/AptTextFormatMembersIndex.h')) {
             $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
         }
         $guiIORoot = Join-Path $ArtifactRoot 'gui-io-regressions'
         $guiIOFixtures = @(
             @{ name = 'model'; runner = 'tests/run_gui_model_io.py'; tag = 'GuiModelIO'; checks = 377 },
-            @{ name = 'interpreter'; runner = 'tests/run_gui_interpreter_io.py'; tag = 'GuiInterpreterIO'; checks = 169 }
+            @{ name = 'interpreter'; runner = 'tests/run_gui_interpreter_io.py'; tag = 'GuiInterpreterIO'; checks = 169 },
+            @{ name = 'text-format'; runner = 'tests/run_apt_textformat_binding.py'; tag = 'AptTextFormatBinding'; checks = 78 }
         )
         foreach ($fixture in $guiIOFixtures) {
             $fixtureDir = Join-Path $guiIORoot $fixture.name
@@ -696,7 +702,8 @@ try {
             @{ name = 'model-base-only'; runner = 'tests/run_gui_model_io.py'; flag = '--base-only'; witness = 'FAIL queue is constructed, empty and aligned' },
             @{ name = 'model-retain-view'; runner = 'tests/run_gui_model_io.py'; flag = '--retain-view-events'; witness = 'FAIL queue is constructed, empty and aligned' },
             @{ name = 'interpreter-old-capacity'; runner = 'tests/run_gui_interpreter_io.py'; flag = '--old-capacity'; witness = 'FAIL (ARTIST output event capacity|event record beyond the old)' },
-            @{ name = 'interpreter-clear-input'; runner = 'tests/run_gui_interpreter_io.py'; flag = '--clear-input-on-destruct'; witness = 'FAIL input Destruct leaves its complete populated queue unchanged' }
+            @{ name = 'interpreter-clear-input'; runner = 'tests/run_gui_interpreter_io.py'; flag = '--clear-input-on-destruct'; witness = 'FAIL input Destruct leaves its complete populated queue unchanged' },
+            @{ name = 'text-format-old-setter'; runner = 'tests/run_apt_textformat_binding.py'; flag = '--old-setter'; witness = 'FAIL captured font-fit loop progresses and terminates before its test bound' }
         )
         foreach ($control in $guiIOControls) {
             $controlDir = Join-Path $guiIORoot $control.name

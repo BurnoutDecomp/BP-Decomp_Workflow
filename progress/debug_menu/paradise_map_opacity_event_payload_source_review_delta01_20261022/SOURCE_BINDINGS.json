@@ -1,0 +1,41 @@
+{
+  "schema": "source-review-bindings-v1",
+  "packet": "paradise_map_opacity_event_payload_source_review_delta01_20261022",
+  "verdict": "pass",
+  "target_b5": {
+    "commit": "5093cdb07f74fe0cfa6a6a32283fb6195be790ab",
+    "tree": "684d10b1b878200cdebf1b6fab29ce03646ea828",
+    "current_validation_checkout_commit": "b6dc5da5f4484894659bb85c4591ee20bd95a947",
+    "current_validation_checkout_tree": "45957f73f7964127dbd241e4967088c04ba79a11"
+  },
+  "source": {
+    "path": "src/GameSource/Gui/SatNav/BrnMainMap.h",
+    "preimage_git_blob": "8bc348416edaa90381b572d18a496a724a2f36ca",
+    "preimage_sha256": "8127f5fb1bb74f4827da3057ebff8f8f844fd5ab130492071d9513612ecdf45a",
+    "preimage_bytes": 21414,
+    "postimage_sha256": "a89deda96b977771cbcd9be1661a593ab1b7f63806a5f70d0e78b39b2b61a8bc",
+    "postimage_bytes": 21467,
+    "patch_sha256": "e083cd492db63f2b9ab4ea9e6cdd36032f00b38ffe02681726bb7a5d86b4de46",
+    "b6_source_blob_matches_5093": true,
+    "pinned_support_source_inputs_verified_by_git_object": 12
+  },
+  "artist": {
+    "MainMapComponent::Construct": {"address": "0x8245E228", "sha256": "27970ef14929cae88cdf4de518c5135b5e542c2913ee8f4117600648043a125c"},
+    "MainMapComponent::Prepare": {"address": "0x8244F4A8", "sha256": "f923e6de6de6c75385b9f0827ca71aaccbe7959c25d211c928ef2d156b861449"},
+    "MainMapComponent::RecvEvent": {"address": "0x82458370", "sha256": "57ac65a7316acff944db1d5c6183a550fcff573dbc2d25bbed4dfb9ade250d44"},
+    "MainMapComponent::Update": {"address": "0x824696E8", "sha256": "8cfd13f77154d870cd99629ff6d17df4eabb6ca7c7b0542ca1848dd15b2d0067"},
+    "OutputViewState<GuiEventRenderMainMap>": {"address": "0x82465E50", "sha256": "db8403df8c4e3f73ae595652cd5b68cdbc0199c3616c5f6d2902346867178ebe7"},
+    "CustomRendererManager::RecvEvent": {"address": "0x824443D0", "sha256": "854534b5183e184bd3d6399eb2fc58275264ecbfee845b4507ce64526413b76c"},
+    "MainMapRenderer::RecvEvent": {"address": "0x82449E98", "sha256": "e6880f357cdba7c43b3661e829065138a784af516d7b4ab69aaa1cea94d8c3a0"},
+    "MainMapRenderer::RenderComponent": {"address": "0x82460130", "sha256": "aa78b1863093f92fb5e509643dded87d19a7036be287b8d3ab52262562d9cb2c"},
+    "MainMapRenderer::UpdateAlphaForFadeState": {"address": "0x824465E8", "sha256": "324cb01c2549166308400422abf8af07eeccb5eb35b8dcab01cb6f184b8958a3"},
+    "GuiModule::AddGuiEvent<GuiEventSetBlackBars>": {"address": "0x823CEE50", "sha256": "4a4381a8739db124bbd9eb2f1f5a9d7468023c490e2f5662e86c087607c4a940"}
+  },
+  "decfigs": {
+    "declaration_path": "references/DecFIGS/dwarfdump/GameSource/Gui/SatNav/BrnMainMap.h",
+    "sha256": "f9f46c35da0086e3f30a919de0594211b9e1c86dfcc729918f0a0f0a8486922d",
+    "declared_base": "GuiEvent<221>",
+    "behavior_resolution": "ARTIST OutputViewState emitter and renderer dispatch/copy use id 223"
+  },
+  "limits": {"opacity_cause_claim": false, "runtime_behavior_credit": false, "host_byte_size_claim": false}
+}
