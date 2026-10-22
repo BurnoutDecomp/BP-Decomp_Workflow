@@ -47,16 +47,22 @@ The source/audit checkpoint covers 1,351/1,355 sites (99.7%), including unresolv
 
 ## Continuing source work
 
-**Private GUI/action/movie and online recovery:** Checkpoint **bef9346f9**
-passes hosted compile/link for all2,994 selected files, the157-check native
-keyboard contract and73 licence-handoff checks plus its failure control.
-The private game reaches the world, but its HUD is missing and Easy Drive
-does not respond. That handoff is being traced before promotion. The normal
-package remains6b66e598. [Integration evidence](gui_online_integration_checkpoint_20261021.json).
+**Private GUI/action/movie and online recovery:** **dd3002b8** passes hosted
+compile/link for all 2,994 selected files, 157 keyboard checks and 73 licence
+checks plus the original-order failure control. A real title Start exposed a
+missing PC profile-settings API and stale 32-bit consumer offsets. The typed
+repair is reviewed and committed; its 82-check fixture and another native
+sign-in/HUD/EasyDrive check are next. The normal package remains **6b66e598**.
+[Current repair checkpoint](profile_traffic_checkpoint_20261022.json);
+[earlier integration evidence](gui_online_integration_checkpoint_20261021.json).
 
 **Route snap capacity checkpoint:** The 289-bound one-file source commit **6b66e5984f6f21ea47d1fa62a2ec61c9511640c9** passed hosted build run [39654339193](https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39654339193). Native placement/movement and Back passed; the matching normal package is installed and merged to dev. Done/save persistence and a complete multiplayer race remain unverified. This supporting-flow repair adds no verified debug-site dispositions.
 
-**Traffic follow-up:** Source commit **898e3d1be433571993e2e6f9d1be86d27d2d9585** restores the original fifteen-hull `Running Worst Case` branch. Hosted build/link and payload checks pass. The grouped native case retained fifteen phase frames and had zero game asserts/exceptions, but failed on script defects and still needs manual consumer review; no new debug entries are counted as verified. [Earlier source receipts](traffic_keyboard_followup_20261021.json).
+**Traffic follow-up:** **d9de0ab1** combines the reviewed original fifteen-hull
+branch with bounded, default-off decision/draw witnesses. Hosted build/link
+and all twelve payload hashes pass. A fresh private stage is ready for the
+repaired Traffic74 case; consumer/effect checks are still pending.
+[Current checkpoint](profile_traffic_checkpoint_20261022.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source coverage, not 188 verified debug controls. Coherent checkpoints are committed and pushed frequently; reviewed work merges in batches.
 
