@@ -26686,14 +26686,21 @@
       "pseudocode_line": 40,
       "original_call": "sub_8282D640(v1, *(v1 + 12) + 469118, &unk_820046A7, \"Turn traffic off\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnTraffic::DebugComponent::OnActivate#0001",
       "function": "BrnTraffic::DebugComponent::OnActivate",
       "original_address": "0x82762530",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
       "component": "BrnTraffic::DebugComponent",
       "component_name": "Traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Turn traffic off: bounded run04 removal/restoration passes against exact B5 d9de0ab1d395425eb39d0fdbb5e70f93235d601a, hosted run 39736578561. HUD/off/cleanup reads FALSE/TRUE/FALSE; live population falls 99/17 to 0/0 and later returns to 112/12 with reviewed off/cleanup pixels. Teardown entry is not directly logged; evidence is phase-adjacent, not same-frame.",
+      "evidence": [
+        "progress/debug_menu/traffic_three_control_evidence_20261022/CHECKPOINT.md",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/REVIEW.md",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/SOURCE_BINDINGS.json"
+      ]
     },
     {
       "kind": "variable",
@@ -28231,14 +28238,21 @@
       "pseudocode_line": 123,
       "original_call": "sub_8282D640(v1, v1 + 43, \"DRAWING 2\", \"Draw active hulls\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnTraffic::DebugComponent::OnActivate#0057",
       "function": "BrnTraffic::DebugComponent::OnActivate",
       "original_address": "0x82762530",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
       "component": "BrnTraffic::DebugComponent",
       "component_name": "Traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw active hulls: bounded run04 show/hide passes against exact B5 d9de0ab1d395425eb39d0fdbb5e70f93235d601a, hosted run 39736578561. The completed SET/DRAW receipt records epoch 143/sequence 1 and hull IDs 101,102,122,123 mapped to four boxes; reviewed frames show the grid. No same-frame image correlation or new #0086/15-hull-cycle credit.",
+      "evidence": [
+        "progress/debug_menu/traffic_three_control_evidence_20261022/CHECKPOINT.md",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/REVIEW.md",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/SOURCE_BINDINGS.json"
+      ]
     },
     {
       "kind": "variable",
@@ -29070,14 +29084,21 @@
       "pseudocode_line": 184,
       "original_call": "sub_8282D640(v1, *(v1 + 12) + 469576, \"Performance\", \"Render special perfmons\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnTraffic::DebugComponent::OnActivate#0088",
       "function": "BrnTraffic::DebugComponent::OnActivate",
       "original_address": "0x82762530",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
       "component": "BrnTraffic::DebugComponent",
       "component_name": "Traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Render special perfmons: bounded run04 show/hide passes against exact B5 d9de0ab1d395425eb39d0fdbb5e70f93235d601a, hosted run 39736578561. HUD is TRUE, lanes/cleanup FALSE and reviewed pixels show the table present/absent. Individual counter accuracy, monitor lifecycle and timing remain unverified; phase-adjacent only.",
+      "evidence": [
+        "progress/debug_menu/traffic_three_control_evidence_20261022/CHECKPOINT.md",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/REVIEW.md",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/traffic_three_control_evidence_20261022/SOURCE_BINDINGS.json"
+      ]
     },
     {
       "kind": "variable",
@@ -37589,8 +37610,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1312,
-      "verified": 36,
+      "pending": 1309,
+      "verified": 39,
       "original-noop": 7
     }
   }

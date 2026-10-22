@@ -1,0 +1,162 @@
+{
+  "verdict": "pass",
+  "sites": [
+    {
+      "site_id": "BrnTraffic::DebugComponent::OnActivate#0001",
+      "verdict": "pass",
+      "disposition": "bounded native traffic removal and restoration verified",
+      "registration": "ARTIST OnActivate0x82762530/module+0x7287E; d9 debug CPP251",
+      "consumer": "ARTIST PostPhysicsUpdate0x8274E6D0 RUNNING/!paused test and EnterTearingDownState0x82708168; d9 module CPP3962..3964,4228..4246",
+      "native_reads": {
+        "hud": {
+          "value": "FALSE",
+          "lines": [
+            13644,
+            13645
+          ]
+        },
+        "off": {
+          "value": "TRUE",
+          "lines": [
+            47820,
+            47821
+          ]
+        },
+        "cleanup": {
+          "value": "FALSE",
+          "lines": [
+            50927,
+            50928
+          ]
+        }
+      },
+      "population_samples": [
+        {
+          "line": 47761,
+          "alive": 99,
+          "near": 17
+        },
+        {
+          "line": 48197,
+          "alive": 0,
+          "near": 0
+        },
+        {
+          "line": 50905,
+          "alive": 0,
+          "near": 0
+        },
+        {
+          "line": 51390,
+          "alive": 112,
+          "near": 12
+        }
+      ],
+      "pixels": [
+        "off.bmp empty road apart from player",
+        "cleanup.bmp traffic vehicles visible"
+      ],
+      "limits": [
+        "Internal state entry not directly logged.",
+        "Adjacent phase evidence, not same-frame correlation."
+      ]
+    },
+    {
+      "site_id": "BrnTraffic::DebugComponent::OnActivate#0057",
+      "verdict": "pass",
+      "disposition": "bounded native active-hull grid show/hide verified",
+      "registration": "ARTIST debug+0x2B at0x82762DA0; d9 debug CPP344",
+      "consumer": "ARTIST RenderHUD0x82760AB0/DrawActiveHulls0x8275B2E8; d9 debug CPP241..242,2098..2198",
+      "native_reads": {
+        "hud": {
+          "value": "TRUE",
+          "lines": [
+            13754,
+            13755
+          ]
+        },
+        "lanes": {
+          "value": "FALSE",
+          "lines": [
+            17340,
+            17341
+          ]
+        }
+      },
+      "completed_consumer": {
+        "set_line": 13853,
+        "draw_line": 13854,
+        "epoch": 143,
+        "draw_seq": 1,
+        "worst_case": false,
+        "dimensions": [
+          21,
+          15
+        ],
+        "box_calls": 4,
+        "active_ids": [
+          101,
+          102,
+          122,
+          123
+        ]
+      },
+      "pixels": [
+        "baseline-off.bmp no grid",
+        "hud.bmp black grid/cyan active cells upper left",
+        "lanes.bmp grid removed"
+      ],
+      "limits": [
+        "No screenshot/receipt same-frame proof.",
+        "No new0086 or additional worst-case15-hull-cycle credit."
+      ]
+    },
+    {
+      "site_id": "BrnTraffic::DebugComponent::OnActivate#0088",
+      "verdict": "pass",
+      "disposition": "bounded native special-perfmon table show/hide verified",
+      "registration": "ARTIST module+0x72A48 at0x82763308; d9 debug CPP400..401",
+      "consumer": "ARTIST independent RenderHUD byte0x82760B28..0x82760B48 to RenderPerformanceTable0x82754038; d9 debug CPP243..244,2077..2094",
+      "native_reads": {
+        "hud": {
+          "value": "TRUE",
+          "lines": [
+            13812,
+            13813
+          ]
+        },
+        "lanes": {
+          "value": "FALSE",
+          "lines": [
+            17398,
+            17399
+          ]
+        },
+        "cleanup": {
+          "value": "FALSE",
+          "lines": [
+            51095,
+            51096
+          ]
+        }
+      },
+      "pixels": [
+        "baseline-off.bmp no table",
+        "hud.bmp Traffic [special] table/title/columns/sections/numbers",
+        "lanes.bmp table removed"
+      ],
+      "limits": [
+        "Individual counter values, monitor lifecycle and timing accuracy not independently numerically validated.",
+        "No same-frame correlation."
+      ]
+    }
+  ],
+  "aggregate_case_verdict": "FAIL; unchanged",
+  "new0086_credit": false,
+  "excluded": [
+    "0045",
+    "0046",
+    "0047",
+    "0050"
+  ]
+}
