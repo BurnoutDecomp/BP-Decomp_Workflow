@@ -58,6 +58,11 @@ on:
         required: false
         default: false
         type: boolean
+      run_traffic_flowtype_override:
+        description: Run the 44-check Traffic flowtype fixture and exact old-return control
+        required: false
+        default: false
+        type: boolean
       run_system_user_profile:
         description: Run the native SystemUserProfile API and legacy failure controls
         required: false
@@ -116,6 +121,7 @@ jobs:
           CANDIDATE_RUN_GUI_LICENSE_REGRESSIONS: ${{ inputs.run_gui_license_regressions }}
           CANDIDATE_RUN_KEYBOARD_UI_CONTRACT: ${{ inputs.run_keyboard_ui_contract }}
           CANDIDATE_RUN_RWAC_COMMAND_CAPACITY: ${{ inputs.run_rwac_command_capacity }}
+          CANDIDATE_RUN_TRAFFIC_FLOWTYPE_OVERRIDE: ${{ inputs.run_traffic_flowtype_override }}
           CANDIDATE_RUN_SYSTEM_USER_PROFILE: ${{ inputs.run_system_user_profile }}
           GH_TOKEN: ${{ github.token }}
           BRN_EXE_HASH_DEPS: "1"
@@ -133,7 +139,8 @@ jobs:
             -RunGuiLicenseRegressions:($env:CANDIDATE_RUN_GUI_LICENSE_REGRESSIONS -eq 'true') `
             -RunKeyboardUIContract:($env:CANDIDATE_RUN_KEYBOARD_UI_CONTRACT -eq 'true') `
             -RunRwacCommandCapacity:($env:CANDIDATE_RUN_RWAC_COMMAND_CAPACITY -eq 'true') `
-            -RunSystemUserProfile:($env:CANDIDATE_RUN_SYSTEM_USER_PROFILE -eq 'true')
+            -RunSystemUserProfile:($env:CANDIDATE_RUN_SYSTEM_USER_PROFILE -eq 'true') `
+            -RunTrafficFlowtypeOverride:($env:CANDIDATE_RUN_TRAFFIC_FLOWTYPE_OVERRIDE -eq 'true')
 
       - name: Save successful candidate objects
         if: success()
@@ -164,5 +171,6 @@ jobs:
             build/candidate/artifacts/rwac-capacity/**
             build/candidate/artifacts/hud-regressions/**
             build/candidate/artifacts/system-user-profile/**
+            build/candidate/artifacts/traffic-flowtype-override/**
           if-no-files-found: error
           retention-days: 1
