@@ -1,0 +1,7 @@
+VERDICT: pass
+
+Exact5093 executable442 completed all57 ordered steps and all10 case checks plus the original strict terminal check. The150second private run reached Start/world/HUD/EasyDrive, drove73.2395m with eight positive-gas samples, entered local Freeburn, added the first checkpoint, moved/placed it, and returned with Back. Root directly viewed eight original frames, including EDIT CHECKPOINT1/1, changed target/map distance, retained placed point and later CREATE EVENT. No assert or exception occurred. The former073 LOADING/current-state assertion is retained as a failed control and was not disabled by this recovery.
+
+All12 payloads, raw log-copy hashes, original creation-handle cleanup/input-reset/profile-restoration terminals, private config/profile/seed bytes+mtimes and protected normal executable/config/main+emergency logs/nine profiles match. The complete original structural receipt stays manual-pending; this separate record supplies actual pixel interpretation.
+
+This passes the bounded delivery smoke for the recovered Replay lifecycle, additional GUI consumer wiring and FSM lookup composition. It does not verify their individual debug controls, all streaming modes, peers/full race, custom-route save/reload, every help/UI detail or long-session RWAC sound stability. Overlay memory text is retained as an observation, without an OS measurement or leak verdict. No new debug-menu final dispositions are awarded.
