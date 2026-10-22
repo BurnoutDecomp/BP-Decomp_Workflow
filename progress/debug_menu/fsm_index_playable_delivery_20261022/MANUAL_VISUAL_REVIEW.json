@@ -1,0 +1,76 @@
+{
+  "verdict": "pass",
+  "scope": "bounded gameplay/pixel smoke after original Lua state-name lookup recovery",
+  "source": "5093cdb07f74fe0cfa6a6a32283fb6195be790ab",
+  "exe_sha256": "4422c2c4ed6d526eaf44c9b270c222c9d9557ca6d77126ede1af1e3bb00f89b8",
+  "run": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\fsm_state_index_native_probe_delta01_20261022\\runs\\native_20261022_161454_8080451b",
+  "elapsed_seconds": 161.696,
+  "menu_steps": 57,
+  "drive_path_metres": 73.239451651776,
+  "positive_gas_samples": 8,
+  "observed_checkpoint_operation": "added a new first checkpoint, moved it, placed it and returned with Back",
+  "checkpoint_count_visible": 1,
+  "visual_review": "Root directly viewed eight original BMPs with view_image",
+  "viewed_frames": [
+    {
+      "frame": "bb_004080.bmp",
+      "sha256": "22b460b20146e060cab12616cb196eea2772cd42b89cc99c271db5a702a1aab6",
+      "observed_pixels": "Visible world/car/HUD/EasyDrive after Start and measured drive; the former LOADING assertion did not occur."
+    },
+    {
+      "frame": "bb_005280.bmp",
+      "sha256": "edff9935aeeb375b50532ce0c5227538e67c4c200891f51db14185455e411954",
+      "observed_pixels": "Visible Freeburn with Slot62037(Open), entering-room overlay, car, world and HUD."
+    },
+    {
+      "frame": "bb_007920.bmp",
+      "sha256": "7d5ccdff01ecd36ba19a1e30ce59f1beefda6051999b3f20d6cfeb09bb02da22",
+      "observed_pixels": "Edit Route has ADD CHECKPOINT selected and no existing checkpoint row; map, finish marker and ADD/INSERT/BACK help are visible."
+    },
+    {
+      "frame": "bb_008400.bmp",
+      "sha256": "a9347b73ebddf4fbe38c2de2e0d9d4d6425b3817233f192fd356a20eace867e6",
+      "observed_pixels": "New EDIT CHECKPOINT1/1 editor with snap-point markers, PLACE/SCROLL/BACK hints; distance10.4mi."
+    },
+    {
+      "frame": "bb_009120.bmp",
+      "sha256": "65cdea260748eecec07fada7fd1613e7975002403f82da5f328b96b3187a023e",
+      "observed_pixels": "Checkpoint1/1 target visibly moved; distance9.5mi and PLACE prompt retained."
+    },
+    {
+      "frame": "bb_009840.bmp",
+      "sha256": "ddc48b93eccb4fccd66f1061792af3fc998692f777507a6bd4812a9fdbbbd943",
+      "observed_pixels": "Placement closed to ADD CHECKPOINT; EDIT CHECKPOINT1/1 and new yellow map point retained."
+    },
+    {
+      "frame": "bb_010800.bmp",
+      "sha256": "82ad55383cd4d62f943646e08e8742946462dba4385ada0a5b0aa4000f8bd588",
+      "observed_pixels": "Back reached CREATE EVENT with event/round/carlock/carlimit/traffic options and CONTINUE/BACK help; animated car background visible."
+    },
+    {
+      "frame": "bb_016320.bmp",
+      "sha256": "73130f6d0c3c26b34080ed4c3d07d2c2856e1fefa286a3c488c3a0c6380ca1ff",
+      "observed_pixels": "Later CREATE EVENT frame remains rendered; no terminal black screen or assertion shown."
+    }
+  ],
+  "normal_protected_unchanged": true,
+  "private_state_restored": true,
+  "raw_probe_receipt_sha256": "e54b7872ac1cfba746bfd968a8832f30bd8c3a1eb4ace17dbf46574844299b46",
+  "raw_case_result_sha256": "ddfb9ae521c235d3aa182cd069f71a048e96b8597b8f7b4e8b500a3ab153264e",
+  "marks_sha256": "d30d20a527ae63a12e4a99a48717dc8ab22292a776f58c1dbc92b3eeab8d8875",
+  "flow_terminal_sha256": "a969956baabb7bb9c629dcec7e2fdc2528d521c9df4d982372ccdf274c4d7afd",
+  "negative_control": {
+    "source": "073412e11f5173123b56715b2382c9e718bc491e",
+    "native": "failed at LOADING current-state equality assertion; original failure retained"
+  },
+  "overlay_memory_text_observation": "Viewed frames include48MB at early world,4072MB at room entry and3854MB in a late Create Event frame; these are overlay readouts, not an independent OS memory measurement or leak verdict.",
+  "new_debug_behavior_dispositions": 0,
+  "not_verified": [
+    "all84 debug controls",
+    "Replay controls",
+    "saved route persistence",
+    "peer joining or a full race",
+    "long-session audio stability",
+    "every UI/help hint or streaming mode"
+  ]
+}

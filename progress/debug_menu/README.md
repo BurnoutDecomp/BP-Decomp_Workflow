@@ -5,23 +5,22 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-Launch `build/game/Burnout_PC.exe`. The installed **ced5e065** build adds
-shared GUI debug wiring for67 registration sites, the custom-renderer owner
-and controls for17 more, the original flow-preload parser and Traffic
-Flowtype repair. Source review, hosted compile/link and all eight selected
-regression groups passed. The exact executable passed real Start, visible
-world/HUD/EasyDrive,83.7m of driving, local Freeburn, adding the first
-checkpoint, moving/placing it and Back to Create Event. Root viewed the
-actual frames: this run used a new checkpoint1/1, rather than the prior
-seven-point preset. No asserts/exceptions; config, nine profiles and logs
-kept their bytes and modification times. Twelve matching outputs were
-verified; four changed files were installed with a recoverable backup.
-[Delivery and limits](gui84_playable_delivery_20261022/DELIVERY.json).
+Launch `build/game/Burnout_PC.exe`. The installed **5093cdb0** build includes
+the GUI84 wiring, Replay lifecycle, GUI rendering/streaming consumers and
+the original Lua state lookup repair. Source review, hosted compile/link
+(2,998 TUs, zero failed) and all eight selected regression groups passed.
+The exact executable passed Start, visible world/HUD/EasyDrive, 73.2 metres
+of driving, local Freeburn, adding the first checkpoint, moving/placing it
+and Back to Create Event. Root viewed the actual checkpoint1/1 and later
+menu frames. No asserts or exceptions occurred. Twelve matching outputs
+were verified; four changed files were installed with a recoverable backup.
+Settings, nine profiles and both logs kept their bytes and modification
+times. [Delivery and limits](fsm_index_playable_delivery_20261022/DELIVERY.json).
 
-The newer Replay/GUI consumer candidate **073412e1** passed hosted checks
-but hit a streaming-state assert in its private startup check. It was
-caught before delivery and remains off dev; the original Lua-index/name
-lookup is being recovered. [Retained failure](replay_gui_native_failure_20261022.json).
+The earlier private **073412e1** startup failure remains recorded as a
+failure. Its Lua numeric IDs were incorrectly treated as object-table
+positions. The original name lookup is restored in installed 5093; its
+assertion remains active. [Failure and resolution](replay_gui_native_failure_20261022.json).
 
 The earlier **b82350534** delivery checks passed:
 
@@ -58,24 +57,25 @@ The dated source/audit checkpoint recorded 1,351/1,355 sites (99.7%), including 
 
 ## Continuing source work
 
-**GUI84 source batch:** **ced5e065** is installed and merged to dev after
-source, hosted and bounded native delivery checks. That smoke does not
-certify the84 debug controls, which remain pending. The separate Replay
-lifecycle and additional GUI render/streaming consumers are committed on
-private073412e1; its native startup failure is being fixed. Vehicle Manager
-render helpers and the RWAC sound corruption are active recovery work.
+**GUI84, Replay and FSM batch:** **5093cdb0** is installed and merged to
+dev after source, hosted and bounded native delivery checks. The 84 GUI
+controls and Replay controls still need their own behavior checks. A
+12-control GUI batch has 24 change/restore phases; MiniMap readback alone
+will receive no behavior credit. Corrected VehicleManager recorders are
+committed privately on 82682; rendering helpers and the RWAC sound
+corruption remain active work.
 [Source scope](source_recovery_129_evidence_20261022/CANDIDATE.json).
 
 **Previous-build GPU refresh:** the preceding8fec executable passed four separate cold-launch frontend phases in115.421s: hidden, measured graph, readable20-category table, hidden again. Actual pixels, query packets, original bool readbacks and cleanup were independently checked; normal config/saves/log/exe fingerprints stayed unchanged. These are two already-verified sites, so the count does not increase. This does not test changing modes inside one running process. [Exact refresh evidence](gpu_current_build_refresh_20261022/REVIEW.md).
 
 **Earlier GUI/action/movie and online delivery:** **8fec93bd** preceded
-installedced5 and remains available in the delivery history. Its exact2,994-file hosted build and selected profile,
+installed5093 and remains available in the delivery history. Its exact2,994-file hosted build and selected profile,
 keyboard, licence, GUI lifecycle, HUD and delivery fixtures passed, including
 original-code failure controls. Independent review checked the native pixels,
 57 inputs, motion and cleanup. [Exact native evidence](gui_dev_playable_delivery_20261022/REVIEW.md).
 This supporting-flow delivery adds no debug-site dispositions and does not
 certify peer races, route save/reload, every UI hint, native DLC behavior or
-long-session audio. The Flowtype override recovery is included in installedced5; its44-check
+long-session audio. The Flowtype override recovery is included in installed5093; its44-check
 fixture and exact old-return control passed. Native #0081 remains pending.
 
 **Route snap capacity checkpoint:** The 289-bound one-file source commit **6b66e5984f6f21ea47d1fa62a2ec61c9511640c9** passed hosted build run [39654339193](https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39654339193). Native placement/movement and Back passed; the matching normal package is installed and merged to dev. Done/save persistence and a complete multiplayer race remain unverified. This supporting-flow repair adds no verified debug-site dispositions.
@@ -92,7 +92,7 @@ correlation. The historical Traffic74 aggregate remains **FAIL**, all 74 CSV
 `pre_run_status` rows remain `PENDING_NOT_RUN`, and `runtime_consumer_verified`
 remains 0. Sites #0045/#0046/#0047/#0050 stay excluded/pending; this adds no
 new #0086 or extra 15-hull-cycle credit. The source is included in installed
-8fec93bd; the newer Flowtype recovery is included in installedced5, with native
+8fec93bd; the newer Flowtype recovery is included in installed5093, with native
 #0081 still pending. [Three-control evidence](traffic_three_control_evidence_20261022/CHECKPOINT.md).
 [Existing #0086 evidence](traffic_worst_case_evidence_20261022/CHECKPOINT.json).
 
