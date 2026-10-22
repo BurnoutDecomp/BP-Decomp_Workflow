@@ -1,0 +1,1282 @@
+{
+  "schema": 1,
+  "verdict": "pass",
+  "verdict_scope": "only the eight proposed bounded native visual sites",
+  "original_aggregate_verdict": "FAIL",
+  "original_aggregate_changed": false,
+  "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+  "exe_sha256": "6fa903ebd3200ec46104b47bda8eb0e81d835d0ce6e003da370c11deb14c203a",
+  "run": "scratch/DEBUG_MENU_1011/gui_behavior_batch_62049_native_20261023/runs/native_20261022_224327_cc3d2d0d",
+  "counts": {
+    "pass": 8,
+    "insufficient": 0,
+    "fail": 0,
+    "pending": 4,
+    "paired_readback_only": 1
+  },
+  "sites": [
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0001",
+      "caption": "Render GUI Objects",
+      "candidate": true,
+      "disposition": "pass",
+      "bounded_claim": "Local GUI-object visibility off/on works in the initial HUD interval.",
+      "limits": "Only the initial local hide/re-show interval is accepted; later/final ordinary HUD restoration is not established.",
+      "readbacks": [
+        {
+          "phase": "baseline",
+          "note": "baseline",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0001",
+          "alias": "b000",
+          "control_path": "Gui Module/Render GUI Objects",
+          "target": "Gui/Gui Module/Render GUI Objects",
+          "definition_path": "/Gui/Gui Module/Render GUI Objects",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 17069,
+          "value_line": 17070,
+          "closing_definition_line": 17071,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "g001_hidden",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0001",
+          "alias": "r000",
+          "control_path": "Gui Module/Render GUI Objects",
+          "target": "Gui/Gui Module/Render GUI Objects",
+          "definition_path": "/Gui/Gui Module/Render GUI Objects",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 18362,
+          "value_line": 18363,
+          "closing_definition_line": 18364,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "g001_restored",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0001",
+          "alias": "r001",
+          "control_path": "Gui Module/Render GUI Objects",
+          "target": "Gui/Gui Module/Render GUI Objects",
+          "definition_path": "/Gui/Gui Module/Render GUI Objects",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 19065,
+          "value_line": 19066,
+          "closing_definition_line": 19067,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "final-restored",
+          "note": "final-restored",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0001",
+          "alias": "f000",
+          "control_path": "Gui Module/Render GUI Objects",
+          "target": "Gui/Gui Module/Render GUI Objects",
+          "definition_path": "/Gui/Gui Module/Render GUI Objects",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 49100,
+          "value_line": 49101,
+          "closing_definition_line": 49102,
+          "raw_triplet_verified": true
+        }
+      ],
+      "frames": [
+        {
+          "note": "baseline",
+          "helper_line": "00:44:18.162 step 7 note:baseline (log line 18342)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006120.bmp",
+          "frame_name": "bb_006120.bmp",
+          "age_seconds": 0.883598,
+          "frame_mtime_ns": "1792709057278401600",
+          "sha256": "878a1916edada9a3115975c4517cd5bf4f4cbb132403f09fc5c4c1f14e3350cf",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Ordinary HUD is visible: bottom-left boost/flame and x2, lower-right River City map and labels. No debug speed text, 4:3 frame or SatNav outline.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g001_hidden",
+          "helper_line": "00:44:21.554 step 10 note:g001_hidden (log line 19044)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006240.bmp",
+          "frame_name": "bb_006240.bmp",
+          "age_seconds": 0.954976,
+          "frame_mtime_ns": "1792709060599023500",
+          "sha256": "0532a77e62917e2c0f9f5e9988c6ee68600bf82faa0a94cc87b1f057620d35ba",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Ordinary boost/flame/x2 and lower-right map/labels disappear; world/car and independent diagnostic overlays remain.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g001_restored",
+          "helper_line": "00:44:24.892 step 13 note:g001_restored (log line 19912)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006360.bmp",
+          "frame_name": "bb_006360.bmp",
+          "age_seconds": 1.161017,
+          "frame_mtime_ns": "1792709063730982800",
+          "sha256": "190c6a0204ea4a0f6b1ca6765bd69b3bb986eba77beb135a773b14358531b7ec",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Boost/flame/x2 and lower-right map/labels reappear locally.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0014",
+      "caption": "Toggle MiniMap Visibility",
+      "candidate": true,
+      "disposition": "pass",
+      "bounded_claim": "MiniMap callback hides and re-shows map tile/icons.",
+      "limits": "Read-only row 0015 corroborates this callback and gets no separate credit; header/miles text need not disappear.",
+      "readbacks": [
+        {
+          "phase": "baseline",
+          "note": "baseline",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0015",
+          "alias": "b001",
+          "control_path": "Gui Module/   MiniMap Visibility: ",
+          "target": "Gui/Gui Module/   MiniMap Visibility: ",
+          "definition_path": "/Gui/Gui Module/   MiniMap Visibility: ",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 17072,
+          "value_line": 17073,
+          "closing_definition_line": 17074,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "g014_hidden",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0014",
+          "alias": "r002",
+          "control_path": "Gui Module/   MiniMap Visibility: ",
+          "target": "Gui/Gui Module/   MiniMap Visibility: ",
+          "definition_path": "/Gui/Gui Module/   MiniMap Visibility: ",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 21256,
+          "value_line": 21257,
+          "closing_definition_line": 21258,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "g014_restored",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0014",
+          "alias": "r003",
+          "control_path": "Gui Module/   MiniMap Visibility: ",
+          "target": "Gui/Gui Module/   MiniMap Visibility: ",
+          "definition_path": "/Gui/Gui Module/   MiniMap Visibility: ",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 22895,
+          "value_line": 22896,
+          "closing_definition_line": 22897,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "final-restored",
+          "note": "final-restored",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0015",
+          "alias": "f001",
+          "control_path": "Gui Module/   MiniMap Visibility: ",
+          "target": "Gui/Gui Module/   MiniMap Visibility: ",
+          "definition_path": "/Gui/Gui Module/   MiniMap Visibility: ",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 49103,
+          "value_line": 49104,
+          "closing_definition_line": 49105,
+          "raw_triplet_verified": true
+        }
+      ],
+      "frames": [
+        {
+          "note": "g001_restored",
+          "helper_line": "00:44:24.892 step 13 note:g001_restored (log line 19912)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006360.bmp",
+          "frame_name": "bb_006360.bmp",
+          "age_seconds": 1.161017,
+          "frame_mtime_ns": "1792709063730982800",
+          "sha256": "190c6a0204ea4a0f6b1ca6765bd69b3bb986eba77beb135a773b14358531b7ec",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Boost/flame/x2 and lower-right map/labels reappear locally.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g014_hidden",
+          "helper_line": "00:44:29.435 step 18 note:g014_hidden (log line 21711)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006720.bmp",
+          "frame_name": "bb_006720.bmp",
+          "age_seconds": 1.324917,
+          "frame_mtime_ns": "1792709068110083300",
+          "sha256": "ff41b18c16d91752c0567df27e4ce65db300cdeed86421025b40ac5a1727ee2b",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The map tile/icons disappear while River City header and miles-driven text remain.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g014_restored",
+          "helper_line": "00:44:34.013 step 23 note:g014_restored (log line 23383)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007080.bmp",
+          "frame_name": "bb_007080.bmp",
+          "age_seconds": 0.932031,
+          "frame_mtime_ns": "1792709073080968900",
+          "sha256": "4dc08d31687173eccc33e362eb8ef90ed4182ee0adf09a45b3c1ecfe3b0f9de0",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Map tile/icons reappear in the same lower-right HUD region.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0016",
+      "caption": "Speedo Visibility: ",
+      "candidate": true,
+      "disposition": "pass",
+      "bounded_claim": "Debug SPEED/RPM/GEAR text is visible when enabled and absent after disable.",
+      "limits": "Only stationary displayed values 0 mph/1000 RPM/gear 1 are observed; data accuracy and ordinary-HUD loss are not certified.",
+      "readbacks": [
+        {
+          "phase": "baseline",
+          "note": "baseline",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0016",
+          "alias": "b002",
+          "control_path": "Gui Module/Speedo Visibility: ",
+          "target": "Gui/Gui Module/Speedo Visibility: ",
+          "definition_path": "/Gui/Gui Module/Speedo Visibility: ",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 17075,
+          "value_line": 17076,
+          "closing_definition_line": 17077,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "g016_visible",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0016",
+          "alias": "r004",
+          "control_path": "Gui Module/Speedo Visibility: ",
+          "target": "Gui/Gui Module/Speedo Visibility: ",
+          "definition_path": "/Gui/Gui Module/Speedo Visibility: ",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 23409,
+          "value_line": 23410,
+          "closing_definition_line": 23411,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "g016_restored",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0016",
+          "alias": "r005",
+          "control_path": "Gui Module/Speedo Visibility: ",
+          "target": "Gui/Gui Module/Speedo Visibility: ",
+          "definition_path": "/Gui/Gui Module/Speedo Visibility: ",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 24348,
+          "value_line": 24349,
+          "closing_definition_line": 24350,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "final-restored",
+          "note": "final-restored",
+          "site_id": "BrnGui::GuiDebugComponent::OnActivate#0016",
+          "alias": "f002",
+          "control_path": "Gui Module/Speedo Visibility: ",
+          "target": "Gui/Gui Module/Speedo Visibility: ",
+          "definition_path": "/Gui/Gui Module/Speedo Visibility: ",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 49106,
+          "value_line": 49107,
+          "closing_definition_line": 49108,
+          "raw_triplet_verified": true
+        }
+      ],
+      "frames": [
+        {
+          "note": "g014_restored",
+          "helper_line": "00:44:34.013 step 23 note:g014_restored (log line 23383)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007080.bmp",
+          "frame_name": "bb_007080.bmp",
+          "age_seconds": 0.932031,
+          "frame_mtime_ns": "1792709073080968900",
+          "sha256": "4dc08d31687173eccc33e362eb8ef90ed4182ee0adf09a45b3c1ecfe3b0f9de0",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Map tile/icons reappear in the same lower-right HUD region.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g016_visible",
+          "helper_line": "00:44:37.379 step 26 note:g016_visible (log line 24321)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007320.bmp",
+          "frame_name": "bb_007320.bmp",
+          "age_seconds": 0.731178,
+          "frame_mtime_ns": "1792709076647821900",
+          "sha256": "d3b45fcd8c9e0fda4dea26c47671bc61f64529e92ff0d5473a227184d3d307b7",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Upper-left SPEED:0mph, RPM:1000, GEAR:1 text appears. Ordinary boost/map HUD is now absent; cause is not established.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g016_restored",
+          "helper_line": "00:44:40.743 step 29 note:g016_restored (log line 25283)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007560.bmp",
+          "frame_name": "bb_007560.bmp",
+          "age_seconds": 0.287164,
+          "frame_mtime_ns": "1792709080455835800",
+          "sha256": "d9f54989445b1bec5fa88d0cb09472da3be8f02ff8d8e793e468fd9d792b58df",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The three upper-left speed/RPM/gear lines disappear. Ordinary HUD remains absent.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0017",
+      "caption": "Show/Hide 4:3 Area",
+      "candidate": true,
+      "disposition": "pass",
+      "bounded_claim": "F4 callback produces a green central 4:3 frame and removes it on the second call.",
+      "limits": "Callback-only flag has no alias readback; scoped key/script bindings, source toggle and direct image contrast provide the evidence.",
+      "readbacks": [],
+      "frames": [
+        {
+          "note": "g016_restored",
+          "helper_line": "00:44:40.743 step 29 note:g016_restored (log line 25283)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007560.bmp",
+          "frame_name": "bb_007560.bmp",
+          "age_seconds": 0.287164,
+          "frame_mtime_ns": "1792709080455835800",
+          "sha256": "d9f54989445b1bec5fa88d0cb09472da3be8f02ff8d8e793e468fd9d792b58df",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The three upper-left speed/RPM/gear lines disappear. Ordinary HUD remains absent.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g017_visible",
+          "helper_line": "00:44:45.373 step 34 note:g017_visible (log line 26697)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007800.bmp",
+          "frame_name": "bb_007800.bmp",
+          "age_seconds": 1.363589,
+          "frame_mtime_ns": "1792709084009411000",
+          "sha256": "9c3d9be9d95c6c494bff3f01ca24d8b73eb354c6b008da4989a4f742ec776441",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "A green central 4:3 rectangular frame appears, spanning the image height.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g017_restored",
+          "helper_line": "00:44:49.993 step 39 note:g017_restored (log line 28269)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_008160.bmp",
+          "frame_name": "bb_008160.bmp",
+          "age_seconds": 1.281904,
+          "frame_mtime_ns": "1792709088711096200",
+          "sha256": "c9ffd1264eeeaf96f26166986d415cd1f4ac84f5b4db26c48bac9bfe4cbf9fa6",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Green 4:3 frame is absent again; ordinary HUD remains absent.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0001",
+      "caption": "Show Custom Renderer Status",
+      "candidate": true,
+      "disposition": "pass",
+      "bounded_claim": "Custom-renderer status text visibility follows TRUE then FALSE.",
+      "limits": "Visibility only; clipped/overlapping rows and numeric counts are not certified.",
+      "readbacks": [
+        {
+          "phase": "baseline",
+          "note": "baseline",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0001",
+          "alias": "b004",
+          "control_path": "Gui Custom Renderer/Show Custom Renderer Status",
+          "target": "Gui/Gui Custom Renderer/Show Custom Renderer Status",
+          "definition_path": "/Gui/Gui Custom Renderer/Show Custom Renderer Status",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 17081,
+          "value_line": 17082,
+          "closing_definition_line": 17083,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c001_visible",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0001",
+          "alias": "r008",
+          "control_path": "Gui Custom Renderer/Show Custom Renderer Status",
+          "target": "Gui/Gui Custom Renderer/Show Custom Renderer Status",
+          "definition_path": "/Gui/Gui Custom Renderer/Show Custom Renderer Status",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 34054,
+          "value_line": 34055,
+          "closing_definition_line": 34056,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c001_restored",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0001",
+          "alias": "r009",
+          "control_path": "Gui Custom Renderer/Show Custom Renderer Status",
+          "target": "Gui/Gui Custom Renderer/Show Custom Renderer Status",
+          "definition_path": "/Gui/Gui Custom Renderer/Show Custom Renderer Status",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 35355,
+          "value_line": 35356,
+          "closing_definition_line": 35357,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "final-restored",
+          "note": "final-restored",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0001",
+          "alias": "f004",
+          "control_path": "Gui Custom Renderer/Show Custom Renderer Status",
+          "target": "Gui/Gui Custom Renderer/Show Custom Renderer Status",
+          "definition_path": "/Gui/Gui Custom Renderer/Show Custom Renderer Status",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 49112,
+          "value_line": 49113,
+          "closing_definition_line": 49114,
+          "raw_triplet_verified": true
+        }
+      ],
+      "frames": [
+        {
+          "note": "g018_restored",
+          "helper_line": "00:45:05.874 step 55 note:g018_restored (log line 34020)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_009480.bmp",
+          "frame_name": "bb_009480.bmp",
+          "age_seconds": 1.167205,
+          "frame_mtime_ns": "1792709104706795500",
+          "sha256": "685a92d077707c8cb286c100e08f7e6158ded5e7af80a874efbe1e79eeb7d388",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Safe-area outline disappears; ordinary HUD remains absent.",
+          "directly_viewed": true
+        },
+        {
+          "note": "c001_visible",
+          "helper_line": "00:45:09.232 step 58 note:c001_visible (log line 35323)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_009840.bmp",
+          "frame_name": "bb_009840.bmp",
+          "age_seconds": 0.534743,
+          "frame_mtime_ns": "1792709108697256900",
+          "sha256": "9b241b6f2fa99bc96421f9ecaff11719ae65dc54fbf3fb57aeb0150187ba2b61",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Upper-left custom-renderer status heading/rows appear. Top rows are clipped/overlapping; counts and complete-row readability are not certified.",
+          "directly_viewed": true
+        },
+        {
+          "note": "c001_restored",
+          "helper_line": "00:45:12.587 step 61 note:c001_restored (log line 36601)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_010080.bmp",
+          "frame_name": "bb_010080.bmp",
+          "age_seconds": 1.19745,
+          "frame_mtime_ns": "1792709111389550200",
+          "sha256": "ab22b3419be6e5812dbab5bb5523775374c49adf60e26b70187b973d639ee806",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The custom-renderer status overlay is absent again.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0003",
+      "caption": "Sat Nav Render",
+      "candidate": true,
+      "disposition": "pass",
+      "bounded_claim": "Explicit SatNav TRUE/FALSE controls the forced map patch within the override interval.",
+      "limits": "Initial override-entry absence is a visual precondition, not an independently sampled FALSE alias. Baseline b006 is actually TRUE; final FALSE is not restoration of that baseline. Only the controlled map on/off effect and return to entry visual absence pass.",
+      "readbacks": [
+        {
+          "phase": "baseline",
+          "note": "baseline",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0003",
+          "alias": "b006",
+          "control_path": "Gui Custom Renderer/Sat Nav Render",
+          "target": "Gui/Gui Custom Renderer/Sat Nav Render",
+          "definition_path": "/Gui/Gui Custom Renderer/Sat Nav Render",
+          "value": "FALSE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": false,
+          "definition_line": 17087,
+          "value_line": 17088,
+          "closing_definition_line": 17089,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c002_enabled",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0002",
+          "alias": "r010",
+          "control_path": "Gui Custom Renderer/Override what game is telling to render",
+          "target": "Gui/Gui Custom Renderer/Override what game is telling to render",
+          "definition_path": "/Gui/Gui Custom Renderer/Override what game is telling to render",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 36636,
+          "value_line": 36637,
+          "closing_definition_line": 36638,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c003_enabled",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0003",
+          "alias": "r011",
+          "control_path": "Gui Custom Renderer/Sat Nav Render",
+          "target": "Gui/Gui Custom Renderer/Sat Nav Render",
+          "definition_path": "/Gui/Gui Custom Renderer/Sat Nav Render",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 37890,
+          "value_line": 37891,
+          "closing_definition_line": 37892,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c005_restored",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0005",
+          "alias": "r013",
+          "control_path": "Gui Custom Renderer/Enable Custom Renderer",
+          "target": "Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "definition_path": "/Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 40385,
+          "value_line": 40386,
+          "closing_definition_line": 40387,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c003_restored",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0003",
+          "alias": "r014",
+          "control_path": "Gui Custom Renderer/Sat Nav Render",
+          "target": "Gui/Gui Custom Renderer/Sat Nav Render",
+          "definition_path": "/Gui/Gui Custom Renderer/Sat Nav Render",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 41617,
+          "value_line": 41618,
+          "closing_definition_line": 41619,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c002_restored",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0002",
+          "alias": "r015",
+          "control_path": "Gui Custom Renderer/Override what game is telling to render",
+          "target": "Gui/Gui Custom Renderer/Override what game is telling to render",
+          "definition_path": "/Gui/Gui Custom Renderer/Override what game is telling to render",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 42780,
+          "value_line": 42781,
+          "closing_definition_line": 42782,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "final-restored",
+          "note": "final-restored",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0003",
+          "alias": "f006",
+          "control_path": "Gui Custom Renderer/Sat Nav Render",
+          "target": "Gui/Gui Custom Renderer/Sat Nav Render",
+          "definition_path": "/Gui/Gui Custom Renderer/Sat Nav Render",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 49118,
+          "value_line": 49119,
+          "closing_definition_line": 49120,
+          "raw_triplet_verified": true
+        }
+      ],
+      "frames": [
+        {
+          "note": "c002_enabled",
+          "helper_line": "00:45:15.960 step 64 note:c002_enabled (log line 37860)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_010440.bmp",
+          "frame_name": "bb_010440.bmp",
+          "age_seconds": 0.407869,
+          "frame_mtime_ns": "1792709115552131500",
+          "sha256": "23bfdc9fb277587252a0d0770d36fd7523fe8b237ccc595ddc04a9a5f1126eff",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Override-phase entry image has no map. This alone is not an isolated visible effect of override mode.",
+          "directly_viewed": true
+        },
+        {
+          "note": "c003_enabled",
+          "helper_line": "00:45:19.357 step 67 note:c003_enabled (log line 39083)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_010680.bmp",
+          "frame_name": "bb_010680.bmp",
+          "age_seconds": 0.964825,
+          "frame_mtime_ns": "1792709118392175400",
+          "sha256": "e5ae7d34b642edd76d579c1408a4fe5b03ebae867bd8602150b294cb540f6ee8",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "A forced map tile/icons patch appears at lower right, without the ordinary River City header/boost HUD.",
+          "directly_viewed": true
+        },
+        {
+          "note": "c005_restored",
+          "helper_line": "00:45:26.129 step 73 note:c005_restored (log line 41576)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011280.bmp",
+          "frame_name": "bb_011280.bmp",
+          "age_seconds": 0.615063,
+          "frame_mtime_ns": "1792709125513936500",
+          "sha256": "fa0fe651c2e1a1622b077b72faaed6a14938d529840b18a689f14bdc902ad6ac",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The forced map patch reappears.",
+          "directly_viewed": true
+        },
+        {
+          "note": "c003_restored",
+          "helper_line": "00:45:29.588 step 76 note:c003_restored (log line 42747)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011520.bmp",
+          "frame_name": "bb_011520.bmp",
+          "age_seconds": 0.995405,
+          "frame_mtime_ns": "1792709128592595300",
+          "sha256": "51400fc5f697a17fb758fd33c7fde1dffc0153ba7c83a5242adeaee8bd4eb2b5",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The forced map patch disappears after the explicit SatNav FALSE request.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0005",
+      "caption": "Enable Custom Renderer",
+      "candidate": true,
+      "disposition": "pass",
+      "bounded_claim": "Master TRUE/FALSE/TRUE gates the forced map patch while override/SatNav requests remain enabled.",
+      "limits": "Only the observed map component under override is certified; not every renderer/component.",
+      "readbacks": [
+        {
+          "phase": "baseline",
+          "note": "baseline",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0005",
+          "alias": "b007",
+          "control_path": "Gui Custom Renderer/Enable Custom Renderer",
+          "target": "Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "definition_path": "/Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 17090,
+          "value_line": 17091,
+          "closing_definition_line": 17092,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c002_enabled",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0002",
+          "alias": "r010",
+          "control_path": "Gui Custom Renderer/Override what game is telling to render",
+          "target": "Gui/Gui Custom Renderer/Override what game is telling to render",
+          "definition_path": "/Gui/Gui Custom Renderer/Override what game is telling to render",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 36636,
+          "value_line": 36637,
+          "closing_definition_line": 36638,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c003_enabled",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0003",
+          "alias": "r011",
+          "control_path": "Gui Custom Renderer/Sat Nav Render",
+          "target": "Gui/Gui Custom Renderer/Sat Nav Render",
+          "definition_path": "/Gui/Gui Custom Renderer/Sat Nav Render",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 37890,
+          "value_line": 37891,
+          "closing_definition_line": 37892,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c005_disabled",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0005",
+          "alias": "r012",
+          "control_path": "Gui Custom Renderer/Enable Custom Renderer",
+          "target": "Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "definition_path": "/Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 39114,
+          "value_line": 39115,
+          "closing_definition_line": 39116,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "c005_restored",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0005",
+          "alias": "r013",
+          "control_path": "Gui Custom Renderer/Enable Custom Renderer",
+          "target": "Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "definition_path": "/Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 40385,
+          "value_line": 40386,
+          "closing_definition_line": 40387,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "final-restored",
+          "note": "final-restored",
+          "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0005",
+          "alias": "f007",
+          "control_path": "Gui Custom Renderer/Enable Custom Renderer",
+          "target": "Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "definition_path": "/Gui/Gui Custom Renderer/Enable Custom Renderer",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 49121,
+          "value_line": 49122,
+          "closing_definition_line": 49123,
+          "raw_triplet_verified": true
+        }
+      ],
+      "frames": [
+        {
+          "note": "c003_enabled",
+          "helper_line": "00:45:19.357 step 67 note:c003_enabled (log line 39083)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_010680.bmp",
+          "frame_name": "bb_010680.bmp",
+          "age_seconds": 0.964825,
+          "frame_mtime_ns": "1792709118392175400",
+          "sha256": "e5ae7d34b642edd76d579c1408a4fe5b03ebae867bd8602150b294cb540f6ee8",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "A forced map tile/icons patch appears at lower right, without the ordinary River City header/boost HUD.",
+          "directly_viewed": true
+        },
+        {
+          "note": "c005_disabled",
+          "helper_line": "00:45:22.738 step 70 note:c005_disabled (log line 40351)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011040.bmp",
+          "frame_name": "bb_011040.bmp",
+          "age_seconds": 0.136124,
+          "frame_mtime_ns": "1792709122601876100",
+          "sha256": "e9ad21ecc5642b338bd11b85c1576edf86cb61f8ab085cf9738c848f6f916645",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The forced map patch disappears.",
+          "directly_viewed": true
+        },
+        {
+          "note": "c005_restored",
+          "helper_line": "00:45:26.129 step 73 note:c005_restored (log line 41576)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011280.bmp",
+          "frame_name": "bb_011280.bmp",
+          "age_seconds": 0.615063,
+          "frame_mtime_ns": "1792709125513936500",
+          "sha256": "fa0fe651c2e1a1622b077b72faaed6a14938d529840b18a689f14bdc902ad6ac",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The forced map patch reappears.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0006",
+      "caption": "SatNav: Show Sat Nav Rect outline",
+      "candidate": true,
+      "disposition": "pass",
+      "bounded_claim": "SatNav rectangle outline is visible when enabled and absent after disable.",
+      "limits": "Only outline visibility/placement is certified. The ordinary map is absent, and source describes white as a PC approximation; no original colour or normal-map alignment claim.",
+      "readbacks": [
+        {
+          "phase": "baseline",
+          "note": "baseline",
+          "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0006",
+          "alias": "b008",
+          "control_path": "Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "target": "Gui/Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "definition_path": "/Gui/Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 17093,
+          "value_line": 17094,
+          "closing_definition_line": 17095,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "s006_visible",
+          "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0006",
+          "alias": "r016",
+          "control_path": "Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "target": "Gui/Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "definition_path": "/Gui/Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "value": "TRUE",
+          "actual_value": "TRUE",
+          "matches_original_case_expectation": true,
+          "definition_line": 43983,
+          "value_line": 43984,
+          "closing_definition_line": 43985,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "operation",
+          "note": "s006_restored",
+          "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0006",
+          "alias": "r017",
+          "control_path": "Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "target": "Gui/Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "definition_path": "/Gui/Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 45307,
+          "value_line": 45308,
+          "closing_definition_line": 45309,
+          "raw_triplet_verified": true
+        },
+        {
+          "phase": "final-restored",
+          "note": "final-restored",
+          "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0006",
+          "alias": "f008",
+          "control_path": "Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "target": "Gui/Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "definition_path": "/Gui/Sat Nav/SatNav: Show Sat Nav Rect outline",
+          "value": "FALSE",
+          "actual_value": "FALSE",
+          "matches_original_case_expectation": true,
+          "definition_line": 49124,
+          "value_line": 49125,
+          "closing_definition_line": 49126,
+          "raw_triplet_verified": true
+        }
+      ],
+      "frames": [
+        {
+          "note": "c002_restored",
+          "helper_line": "00:45:32.977 step 79 note:c002_restored (log line 43949)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011760.bmp",
+          "frame_name": "bb_011760.bmp",
+          "age_seconds": 1.27928,
+          "frame_mtime_ns": "1792709131697720000",
+          "sha256": "7321cc35a1c4e0053f3ee6cf57d6a5817e4961373c43b370f9b5fcc53509764e",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "No map patch; no isolated visual difference from override entry.",
+          "directly_viewed": true
+        },
+        {
+          "note": "s006_visible",
+          "helper_line": "00:45:36.413 step 82 note:s006_visible (log line 45271)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_012120.bmp",
+          "frame_name": "bb_012120.bmp",
+          "age_seconds": 0.699666,
+          "frame_mtime_ns": "1792709135713333900",
+          "sha256": "c49e70b3af48eaa3e293c9013ec3dfc41fdaace2211c82fbda65872bae2106de",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "A white rectangle outline appears over the lower-right map region, without a map texture.",
+          "directly_viewed": true
+        },
+        {
+          "note": "s006_restored",
+          "helper_line": "00:45:39.812 step 85 note:s006_restored (log line 46588)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_012360.bmp",
+          "frame_name": "bb_012360.bmp",
+          "age_seconds": 1.406661,
+          "frame_mtime_ns": "1792709138405338900",
+          "sha256": "11296999dde13ae07d2b42398eb653715a938414641decf0a496fe19e7385aaa",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "The white rectangle outline disappears.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0018",
+      "caption": "Show/Hide Safe Area",
+      "candidate": false,
+      "disposition": "pending",
+      "reason": "Safe-area toggle: visible outline is red while roster says blue; packed-colour contract unresolved.",
+      "behavior_credit": false,
+      "frames": [
+        {
+          "note": "g018_visible",
+          "helper_line": "00:44:54.599 step 44 note:g018_visible (log line 29899)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_008520.bmp",
+          "frame_name": "bb_008520.bmp",
+          "age_seconds": 1.397707,
+          "frame_mtime_ns": "1792709093201292900",
+          "sha256": "2fd9f89d8a714013d6c679018cd7fbf0ffb7379d53ef3cf9f6e42dea505bb713",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Red safe-area outline is visible. The roster calls for blue, so no positive colour-contract disposition.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g018_restored",
+          "helper_line": "00:45:05.874 step 55 note:g018_restored (log line 34020)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_009480.bmp",
+          "frame_name": "bb_009480.bmp",
+          "age_seconds": 1.167205,
+          "frame_mtime_ns": "1792709104706795500",
+          "sha256": "685a92d077707c8cb286c100e08f7e6158ded5e7af80a874efbe1e79eeb7d388",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Safe-area outline disappears; ordinary HUD remains absent.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0019",
+      "caption": "   Safe Area:",
+      "candidate": false,
+      "disposition": "pending",
+      "reason": "Safe-area percentage: geometric 70/85 contrast is visible, but the withheld safe-area colour contract remains unresolved.",
+      "behavior_credit": false,
+      "frames": [
+        {
+          "note": "g019_70",
+          "helper_line": "00:44:57.917 step 47 note:g019_70 (log line 31076)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_008880.bmp",
+          "frame_name": "bb_008880.bmp",
+          "age_seconds": 0.297078,
+          "frame_mtime_ns": "1792709097619921800",
+          "sha256": "63d91d228a90e58aeb616e03f3873d04d17f75c8fb04a1732ee1fa6e9ab46b4e",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Red safe-area outline is visibly smaller/inset relative to the 85-percent phase.",
+          "directly_viewed": true
+        },
+        {
+          "note": "g019_85",
+          "helper_line": "00:45:01.238 step 50 note:g019_85 (log line 32372)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_009120.bmp",
+          "frame_name": "bb_009120.bmp",
+          "age_seconds": 0.875476,
+          "frame_mtime_ns": "1792709100362523900",
+          "sha256": "dc3e5005eb079c60af3e206837c086e4328665be832ad9c754dea70d7c523c3c",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Red safe-area outline expands again. Colour contract remains unresolved.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0002",
+      "caption": "Override what game is telling to render",
+      "candidate": false,
+      "disposition": "pending",
+      "reason": "Override mode: readback changes, but entry/exit images have no isolated mode-only visual contrast.",
+      "behavior_credit": false,
+      "frames": [
+        {
+          "note": "c002_enabled",
+          "helper_line": "00:45:15.960 step 64 note:c002_enabled (log line 37860)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_010440.bmp",
+          "frame_name": "bb_010440.bmp",
+          "age_seconds": 0.407869,
+          "frame_mtime_ns": "1792709115552131500",
+          "sha256": "23bfdc9fb277587252a0d0770d36fd7523fe8b237ccc595ddc04a9a5f1126eff",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "Override-phase entry image has no map. This alone is not an isolated visible effect of override mode.",
+          "directly_viewed": true
+        },
+        {
+          "note": "c002_restored",
+          "helper_line": "00:45:32.977 step 79 note:c002_restored (log line 43949)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011760.bmp",
+          "frame_name": "bb_011760.bmp",
+          "age_seconds": 1.27928,
+          "frame_mtime_ns": "1792709131697720000",
+          "sha256": "7321cc35a1c4e0053f3ee6cf57d6a5817e4961373c43b370f9b5fcc53509764e",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "No map patch; no isolated visual difference from override entry.",
+          "directly_viewed": true
+        }
+      ]
+    },
+    {
+      "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0011",
+      "caption": "SatNav: Alpha",
+      "candidate": false,
+      "disposition": "pending",
+      "reason": "Alpha 40/90: no map texture in either phase, so effect and restoration are not evaluable.",
+      "behavior_credit": false,
+      "frames": [
+        {
+          "note": "s011_40",
+          "helper_line": "00:45:43.242 step 88 note:s011_40 (log line 47793)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_012720.bmp",
+          "frame_name": "bb_012720.bmp",
+          "age_seconds": 0.538834,
+          "frame_mtime_ns": "1792709142703166100",
+          "sha256": "28d17115015194a56aef1a148d7939eb3a08c0e0de2b873cd5f767e70648849c",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "No map texture is visible; cannot evaluate alpha from this image.",
+          "directly_viewed": true
+        },
+        {
+          "note": "s011_90",
+          "helper_line": "00:45:46.672 step 91 note:s011_90 (log line 49059)",
+          "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_012960.bmp",
+          "frame_name": "bb_012960.bmp",
+          "age_seconds": 1.108006,
+          "frame_mtime_ns": "1792709145563993400",
+          "sha256": "c96b5c2f5deb34744762a8076e440b4a5e24ac2a2f14523df0e62002033ce28d",
+          "manual_observation": "pending",
+          "behavior_credit": false,
+          "reviewer_observation": "No map texture is visible; cannot evaluate alpha restoration.",
+          "directly_viewed": true
+        }
+      ]
+    }
+  ],
+  "paired_readback_only": {
+    "site_id": "BrnGui::GuiDebugComponent::OnActivate#0015",
+    "caption": "   MiniMap Visibility: ",
+    "separate_behavior_credit": false,
+    "supports_site_id": "BrnGui::GuiDebugComponent::OnActivate#0014"
+  },
+  "global_limits": [
+    "Earlier source approval is separate and does not grant native approval of newer private Replay/GUI sources.",
+    "All images are phase-adjacent, not proven same-frame with the readbacks.",
+    "Original b006 expectedFALSE/actualTRUE mismatch and finalFALSE remain visible; original aggregate remains FAIL.",
+    "Ordinary gameplay HUD is absent by speed-text phase and in final image; cause is unestablished.",
+    "Report-script errors and incomplete original archive/receipt receive no evidence-completion credit."
+  ],
+  "all_phase_image_observations": [
+    {
+      "note": "baseline",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006120.bmp",
+      "sha256": "878a1916edada9a3115975c4517cd5bf4f4cbb132403f09fc5c4c1f14e3350cf",
+      "observation": "Ordinary HUD is visible: bottom-left boost/flame and x2, lower-right River City map and labels. No debug speed text, 4:3 frame or SatNav outline."
+    },
+    {
+      "note": "g001_hidden",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006240.bmp",
+      "sha256": "0532a77e62917e2c0f9f5e9988c6ee68600bf82faa0a94cc87b1f057620d35ba",
+      "observation": "Ordinary boost/flame/x2 and lower-right map/labels disappear; world/car and independent diagnostic overlays remain."
+    },
+    {
+      "note": "g001_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006360.bmp",
+      "sha256": "190c6a0204ea4a0f6b1ca6765bd69b3bb986eba77beb135a773b14358531b7ec",
+      "observation": "Boost/flame/x2 and lower-right map/labels reappear locally."
+    },
+    {
+      "note": "g014_hidden",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_006720.bmp",
+      "sha256": "ff41b18c16d91752c0567df27e4ce65db300cdeed86421025b40ac5a1727ee2b",
+      "observation": "The map tile/icons disappear while River City header and miles-driven text remain."
+    },
+    {
+      "note": "g014_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007080.bmp",
+      "sha256": "4dc08d31687173eccc33e362eb8ef90ed4182ee0adf09a45b3c1ecfe3b0f9de0",
+      "observation": "Map tile/icons reappear in the same lower-right HUD region."
+    },
+    {
+      "note": "g016_visible",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007320.bmp",
+      "sha256": "d3b45fcd8c9e0fda4dea26c47671bc61f64529e92ff0d5473a227184d3d307b7",
+      "observation": "Upper-left SPEED:0mph, RPM:1000, GEAR:1 text appears. Ordinary boost/map HUD is now absent; cause is not established."
+    },
+    {
+      "note": "g016_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007560.bmp",
+      "sha256": "d9f54989445b1bec5fa88d0cb09472da3be8f02ff8d8e793e468fd9d792b58df",
+      "observation": "The three upper-left speed/RPM/gear lines disappear. Ordinary HUD remains absent."
+    },
+    {
+      "note": "g017_visible",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_007800.bmp",
+      "sha256": "9c3d9be9d95c6c494bff3f01ca24d8b73eb354c6b008da4989a4f742ec776441",
+      "observation": "A green central 4:3 rectangular frame appears, spanning the image height."
+    },
+    {
+      "note": "g017_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_008160.bmp",
+      "sha256": "c9ffd1264eeeaf96f26166986d415cd1f4ac84f5b4db26c48bac9bfe4cbf9fa6",
+      "observation": "Green 4:3 frame is absent again; ordinary HUD remains absent."
+    },
+    {
+      "note": "g018_visible",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_008520.bmp",
+      "sha256": "2fd9f89d8a714013d6c679018cd7fbf0ffb7379d53ef3cf9f6e42dea505bb713",
+      "observation": "Red safe-area outline is visible. The roster calls for blue, so no positive colour-contract disposition."
+    },
+    {
+      "note": "g019_70",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_008880.bmp",
+      "sha256": "63d91d228a90e58aeb616e03f3873d04d17f75c8fb04a1732ee1fa6e9ab46b4e",
+      "observation": "Red safe-area outline is visibly smaller/inset relative to the 85-percent phase."
+    },
+    {
+      "note": "g019_85",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_009120.bmp",
+      "sha256": "dc3e5005eb079c60af3e206837c086e4328665be832ad9c754dea70d7c523c3c",
+      "observation": "Red safe-area outline expands again. Colour contract remains unresolved."
+    },
+    {
+      "note": "g018_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_009480.bmp",
+      "sha256": "685a92d077707c8cb286c100e08f7e6158ded5e7af80a874efbe1e79eeb7d388",
+      "observation": "Safe-area outline disappears; ordinary HUD remains absent."
+    },
+    {
+      "note": "c001_visible",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_009840.bmp",
+      "sha256": "9b241b6f2fa99bc96421f9ecaff11719ae65dc54fbf3fb57aeb0150187ba2b61",
+      "observation": "Upper-left custom-renderer status heading/rows appear. Top rows are clipped/overlapping; counts and complete-row readability are not certified."
+    },
+    {
+      "note": "c001_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_010080.bmp",
+      "sha256": "ab22b3419be6e5812dbab5bb5523775374c49adf60e26b70187b973d639ee806",
+      "observation": "The custom-renderer status overlay is absent again."
+    },
+    {
+      "note": "c002_enabled",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_010440.bmp",
+      "sha256": "23bfdc9fb277587252a0d0770d36fd7523fe8b237ccc595ddc04a9a5f1126eff",
+      "observation": "Override-phase entry image has no map. This alone is not an isolated visible effect of override mode."
+    },
+    {
+      "note": "c003_enabled",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_010680.bmp",
+      "sha256": "e5ae7d34b642edd76d579c1408a4fe5b03ebae867bd8602150b294cb540f6ee8",
+      "observation": "A forced map tile/icons patch appears at lower right, without the ordinary River City header/boost HUD."
+    },
+    {
+      "note": "c005_disabled",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011040.bmp",
+      "sha256": "e9ad21ecc5642b338bd11b85c1576edf86cb61f8ab085cf9738c848f6f916645",
+      "observation": "The forced map patch disappears."
+    },
+    {
+      "note": "c005_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011280.bmp",
+      "sha256": "fa0fe651c2e1a1622b077b72faaed6a14938d529840b18a689f14bdc902ad6ac",
+      "observation": "The forced map patch reappears."
+    },
+    {
+      "note": "c003_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011520.bmp",
+      "sha256": "51400fc5f697a17fb758fd33c7fde1dffc0153ba7c83a5242adeaee8bd4eb2b5",
+      "observation": "The forced map patch disappears after the explicit SatNav FALSE request."
+    },
+    {
+      "note": "c002_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_011760.bmp",
+      "sha256": "7321cc35a1c4e0053f3ee6cf57d6a5817e4961373c43b370f9b5fcc53509764e",
+      "observation": "No map patch; no isolated visual difference from override entry."
+    },
+    {
+      "note": "s006_visible",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_012120.bmp",
+      "sha256": "c49e70b3af48eaa3e293c9013ec3dfc41fdaace2211c82fbda65872bae2106de",
+      "observation": "A white rectangle outline appears over the lower-right map region, without a map texture."
+    },
+    {
+      "note": "s006_restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_012360.bmp",
+      "sha256": "11296999dde13ae07d2b42398eb653715a938414641decf0a496fe19e7385aaa",
+      "observation": "The white rectangle outline disappears."
+    },
+    {
+      "note": "s011_40",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_012720.bmp",
+      "sha256": "28d17115015194a56aef1a148d7939eb3a08c0e0de2b873cd5f767e70648849c",
+      "observation": "No map texture is visible; cannot evaluate alpha from this image."
+    },
+    {
+      "note": "s011_90",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_012960.bmp",
+      "sha256": "c96b5c2f5deb34744762a8076e440b4a5e24ac2a2f14523df0e62002033ce28d",
+      "observation": "No map texture is visible; cannot evaluate alpha restoration."
+    },
+    {
+      "note": "final-restored",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d\\frames\\bb_013320.bmp",
+      "sha256": "5019023897058ca63b49dce7e35f5a9f8a055a9cc7e2717654c762180fbde2d7",
+      "observation": "No debug speed text, green/red/white outline or forced map patch. Ordinary initial HUD is still absent; not a full-HUD restoration image."
+    }
+  ]
+}

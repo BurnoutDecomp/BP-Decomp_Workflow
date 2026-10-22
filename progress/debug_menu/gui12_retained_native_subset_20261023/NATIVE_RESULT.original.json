@@ -1,0 +1,100 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "gui_native_behavior_batch_62049",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\Case.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-23T00:46:38.6133088+02:00",
+    "flow_exit":  0,
+    "bug":  "Recovered GUI controls must reach their original visual/readback consumers and restore their pinned baseline.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_behavior_batch_62049_native_20261023\\runs\\native_20261022_224327_cc3d2d0d",
+    "label":  "GuiBehavior12 / hosted39855395071 / 24 phases / 10-second HUD settle / separately attributed local harness",
+    "area":  "debug-menu",
+    "as_expected":  false,
+    "verdict":  "FAIL",
+    "slot":  62049,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "post-FSM candidate reaches DRIVING",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no assertion",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no native exception",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /(?m)^(?:Variable(?: .+)? (?:not found|is read only)|Function not found|Component not found|Unknown command|Unknown alias value|Alias not found|Too many aliases|Alias too long\\. Max \\d+|Invalid alias name - no spaces|expecting at least 1 parameter|Cannot open .*|line too long or missing LF at end of file\\. aborting!)\\r?$/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no failed debug script command",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "Harness receipts are setup/ownership checks, not control behavior proof.",
+                       "pass":  true,
+                       "name":  "scoped, muted, BelowNormal, no-assert-release launch receipts",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "missing ordered helper notes: ; actual pixels remain pending manual review.",
+                       "pass":  true,
+                       "name":  "all 24 original-control phases completed in order",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "generated scripts scanned; forbidden SAVE commands: ",
+                       "pass":  true,
+                       "name":  "generated scripts contain no engine SAVE command",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "missing or mismatched exact ALIAS definition/value/end blocks: b006 value-count=0; callback-only flags still require manual frame review.",
+                       "pass":  false,
+                       "name":  "all baseline, operation, MiniMap, and final-restored alias readbacks match",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "frames=144, cap=160; cadence=120 frames; dimensions and selected images still require manual inspection.",
+                       "pass":  true,
+                       "name":  "capped 1280x720 frames retained for manual consumer inspection",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "helper_notes=26 (25 phase candidates plus final-restored), frames=144, cap=160, cadence=120, max_candidate_age_seconds=3, stale_or_missing=; pixel interpretation still requires manual review.",
+                       "pass":  true,
+                       "name":  "all helper notes have a recent preceding frame candidate",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "normal/private protected fingerprints and staged payloads; private Profile.sav restored by run_case; generated slot scripts removed only after hash match; raw private logs retained.",
+                       "pass":  true,
+                       "name":  "normal inputs, private payloads/config/profile, and owned scripts restored",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11284480,
+                       "exe_mtime_before_lock":  "2026-10-22T23:15:53.5330398+02:00",
+                       "exe_sha":  "6fa903ebd320",
+                       "b5_head":  "91a0ed564",
+                       "exe_b5":  "91a0ed56",
+                       "parent_head":  "ef86501b",
+                       "exe_mtime":  "2026-10-22T23:15:53.5330398+02:00"
+                   }
+}
