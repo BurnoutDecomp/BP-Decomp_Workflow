@@ -319,6 +319,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayModule_Prepare.cpp"
   rem ReplayModule ctor + Update_Dispatch + WaitForSerialiseJobs.
   echo "%SRC%\GameSource\Replays\BrnReplayModule.cpp"
+  echo "%SRC%\GameSource\Replays\Stream\BrnReplayStreamHeader.cpp"
   rem The GPU-frunk -> disk write streamer that Update_Dispatch pumps.
   echo "%SRC%\GameSource\Replays\Stream\BrnReplayGPUDiskWriteStream.cpp"
   rem ReplayModule's typed embedded playback streams and original Construct calls.
@@ -4926,6 +4927,7 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceBundleLoaderModule.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceIOEvents.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileSystem.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsReadStream.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsStreamDeviceDiskRead.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsDeviceManager.cpp"
