@@ -50,7 +50,7 @@ $Receipt = [ordered]@{
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 $SystemUserProfileSourceBase = 'bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7'
-$SystemUserProfilePinsLfSha256 = '98ac5c8d9678be7827b74be96536e3328646a7757b6554d3cc00dc9d4c970d80'
+$SystemUserProfilePinsLfSha256 = '3a6965215e4fa23d6831f8ed035d9d33490090245e93d95c5f1d6904b8b06465'
 $SystemUserProfilePlanLfSha256 = 'b922bc45991763901be63194b7824ae1aae83d309f10dce457988c1a82833686'
 $SystemUserProfileRunnerLfSha256 = '2eee426e6e0f540311c15943b77c4f5a5dc4b3defc8d57e6b32e66aa606716a3'
 
