@@ -37,7 +37,9 @@ hosted capacity checks and its original-source failure control; the short delive
 
 ## Campaign counts
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **39 verified, seven original no-ops and 1,309 pending**. That is 46/1,355 (3.4%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **46 verified, seven original no-ops and 1,302 pending**. That is 53/1,355 (3.9%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+
+Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four inconclusive controls stay pending. A separately observed SatNav outline remains pending because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
 Recorded source-progress coverage is separate from behavior completion:
 
