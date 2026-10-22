@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "family": "BrnReplays::DebugComponent::OnActivate",
+  "target_b5_commit": "8fec93bd4d2806ca9b60fb53dc272fe28081f8b8",
+  "cohort_roster_sha256": "8e3dbeb7f11ec30858106c8a16bd93d2d636f620d62f26c2bfdf6691171fa553",
+  "site_count": 8,
+  "claim_scope": "source registration/writer/consumer mapping only; no runtime behavior credit",
+  "source_delta": null,
+  "sites": [
+    {
+      "site_id": "BrnReplays::DebugComponent::OnActivate#0001",
+      "caption": "Show HUD",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 8, \"Show HUD\")",
+      "field": "DebugComponent::mbShowHud (+0x20 on X360)",
+      "source_registration_line": 672,
+      "source_writer": "registered bool; current source writes the pointer through RegisterVariable",
+      "artist_writer": "0x8264F9F8 passes this+0x20 to RegisterVariable",
+      "current_reader": "DebugComponent::RenderHUD reads mbShowHud before drawing the overlay (BrnReplayDebugComponent.cpp:148-153)",
+      "reader_export": "0x8265A848",
+      "status": "Registration, writer, and source reader bodies exist; the missing module lifecycle call path still prevents a source-completeness claim. Runtime remains unverified."
+    },
+    {
+      "site_id": "BrnReplays::DebugComponent::OnActivate#0002",
+      "caption": "Enable auto-start",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1[3] + 23621, \"Enable auto-start\")",
+      "field": "ReplayModule::mbAutoStart (+0x5C45 on X360)",
+      "source_registration_line": 673,
+      "source_writer": "registered bool pointer returned by ReplayModule::GetAutoStartFlagPtr",
+      "artist_writer": "0x8264F9F8 passes ReplayModule+0x5C45 to RegisterVariable",
+      "current_reader": "No reader identified in current ReplayModule source; source Construct body that initializes this field is also absent.",
+      "status": "Pointer binding is source-attested; downstream use and runtime effect remain unresolved."
+    },
+    {
+      "site_id": "BrnReplays::DebugComponent::OnActivate#0003",
+      "caption": "Start Playing",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnReplays::DebugComponent::StartPlayingCB, a1, \"Start Playing\")",
+      "field": "ReplayModule::mbStartPlaying (+0x5C3F on X360)",
+      "source_registration_line": 675,
+      "source_writer": "StartPlayingCB forwards to ReplayModule::RequestStartPlaying(), which sets this bool (BrnReplayDebugComponent.cpp:691; BrnReplayModule.h:165-170)",
+      "artist_writer": "0x8264BFF0 sets the corresponding request byte at +0x5C3F; 0x8264F9F8 registers this callback and user data",
+      "current_reader": "No matching reader was found in the current ReplayModule source. ARTIST 0x82660E78 clears the six request bytes after dispatch; 0x82660430 reads Stop Recording in the recording-state branch. The other action effects are not established by this source map.",
+      "status": "Callback and one-shot writer bodies exist; current consumer closure is incomplete or unresolved. No behavior credit."
+    },
+    {
+      "site_id": "BrnReplays::DebugComponent::OnActivate#0004",
+      "caption": "Stop Playing",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnReplays::DebugComponent::StopPlayingCB, a1, \"Stop Playing\")",
+      "field": "ReplayModule::mbStopPlaying (+0x5C40 on X360)",
+      "source_registration_line": 676,
+      "source_writer": "StopPlayingCB forwards to ReplayModule::RequestStopPlaying(), which sets this bool (BrnReplayDebugComponent.cpp:692; BrnReplayModule.h:165-170)",
+      "artist_writer": "0x8264C000 sets the corresponding request byte at +0x5C40; 0x8264F9F8 registers this callback and user data",
+      "current_reader": "No matching reader was found in the current ReplayModule source. ARTIST 0x82660E78 clears the six request bytes after dispatch; 0x82660430 reads Stop Recording in the recording-state branch. The other action effects are not established by this source map.",
+      "status": "Callback and one-shot writer bodies exist; current consumer closure is incomplete or unresolved. No behavior credit."
+    },
+    {
+      "site_id": "BrnReplays::DebugComponent::OnActivate#0005",
+      "caption": "Start Recording",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnReplays::DebugComponent::StartRecordingCB, a1, \"Start Recording\")",
+      "field": "ReplayModule::mbStartRecording (+0x5C41 on X360)",
+      "source_registration_line": 677,
+      "source_writer": "StartRecordingCB forwards to ReplayModule::RequestStartRecording(), which sets this bool (BrnReplayDebugComponent.cpp:693; BrnReplayModule.h:165-170)",
+      "artist_writer": "0x8264C010 sets the corresponding request byte at +0x5C41; 0x8264F9F8 registers this callback and user data",
+      "current_reader": "No matching reader was found in the current ReplayModule source. ARTIST 0x82660E78 clears the six request bytes after dispatch; 0x82660430 reads Stop Recording in the recording-state branch. The other action effects are not established by this source map.",
+      "status": "Callback and one-shot writer bodies exist; current consumer closure is incomplete or unresolved. No behavior credit."
+    },
+    {
+      "site_id": "BrnReplays::DebugComponent::OnActivate#0006",
+      "caption": "Stop Recording",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnReplays::DebugComponent::StopRecordingCB, a1, \"Stop Recording\")",
+      "field": "ReplayModule::mbStopRecording (+0x5C42 on X360)",
+      "source_registration_line": 678,
+      "source_writer": "StopRecordingCB forwards to ReplayModule::RequestStopRecording(), which sets this bool (BrnReplayDebugComponent.cpp:694; BrnReplayModule.h:165-170)",
+      "artist_writer": "0x8264C020 sets the corresponding request byte at +0x5C42; 0x8264F9F8 registers this callback and user data",
+      "current_reader": "No matching reader was found in the current ReplayModule source. ARTIST 0x82660E78 clears the six request bytes after dispatch; 0x82660430 reads Stop Recording in the recording-state branch. The other action effects are not established by this source map.",
+      "status": "Callback and one-shot writer bodies exist; current consumer closure is incomplete or unresolved. No behavior credit."
+    },
+    {
+      "site_id": "BrnReplays::DebugComponent::OnActivate#0007",
+      "caption": "Mark Action Replay",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnReplays::DebugComponent::MarkActionReplayCB, a1, \"Mark Action Replay\")",
+      "field": "ReplayModule::mbMarkActionReplay (+0x5C43 on X360)",
+      "source_registration_line": 679,
+      "source_writer": "MarkActionReplayCB forwards to ReplayModule::RequestMarkActionReplay(), which sets this bool (BrnReplayDebugComponent.cpp:695; BrnReplayModule.h:165-170)",
+      "artist_writer": "0x8264C030 sets the corresponding request byte at +0x5C43; 0x8264F9F8 registers this callback and user data",
+      "current_reader": "No matching reader was found in the current ReplayModule source. ARTIST 0x82660E78 clears the six request bytes after dispatch; 0x82660430 reads Stop Recording in the recording-state branch. The other action effects are not established by this source map.",
+      "status": "Callback and one-shot writer bodies exist; current consumer closure is incomplete or unresolved. No behavior credit."
+    },
+    {
+      "site_id": "BrnReplays::DebugComponent::OnActivate#0008",
+      "caption": "Start/Stop Action Replay",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnReplays::DebugComponent::StartActionReplayCB, a1, \"Start/Stop Action Replay\")",
+      "field": "ReplayModule::mbStartActionReplay (+0x5C44 on X360)",
+      "source_registration_line": 680,
+      "source_writer": "StartActionReplayCB forwards to ReplayModule::RequestStartActionReplay(), which sets this bool (BrnReplayDebugComponent.cpp:696; BrnReplayModule.h:165-170)",
+      "artist_writer": "0x8264C040 sets the corresponding request byte at +0x5C44; 0x8264F9F8 registers this callback and user data",
+      "current_reader": "No matching reader was found in the current ReplayModule source. ARTIST 0x82660E78 clears the six request bytes after dispatch; 0x82660430 reads Stop Recording in the recording-state branch. The other action effects are not established by this source map.",
+      "status": "Callback and one-shot writer bodies exist; current consumer closure is incomplete or unresolved. No behavior credit."
+    }
+  ],
+  "family_findings": [
+    "ARTIST OnActivate registers exactly two variables and six action callbacks. The current OnActivate body at BrnReplayDebugComponent.cpp:668-685 mirrors those expressions and clears the three graphs.",
+    "ARTIST ReplayModule::Construct @0x82656E20 calls DebugComponent::Construct(this+0x6264, this, &off_82F2C7DC). The current B5 ReplayModule declares no Construct override; BrnGameModule.cpp:457 therefore resolves to the inherited ModuleSingleBuffered::Construct. The current DebugComponent::Construct body has no B5 call site, leaving mpReplayModule, mpAllocator, serialiser records, and graph buffers uninitialized through this path.",
+    "ARTIST ReplayModule::Prepare @0x82652768 calls ModuleSingleBuffered::Prepare, then DebugComponent::Register(this+0x6264), then allocates its linear buffers. Current BrnReplayModule_Prepare.cpp:90-102 explicitly skips Register and logs that the component is not modeled at that offset, although BrnReplayModule.h embeds mDebugComponent at +0x6264. The current Prepare body also omits the base Prepare call.",
+    "A standalone Register call would be unsafe because the current module construction path does not call DebugComponent::Construct first. A safe source repair needs the missing ReplayModule::Construct initialization and the ARTIST-ordered base Prepare/Register sequence; this packet does not invent a partial replacement.",
+    "Show HUD has a current source reader in DebugComponent::RenderHUD. The six action callback writers set named module booleans; the present source has no corresponding readers. ARTIST Update_PreSim clears all six after state dispatch and UpdateRecording_PreSim reads the Stop Recording byte. The remaining control consumers are unresolved in the current B5 tree.",
+    "All eight roster rows remain behavior_disposition=pending. A registration, body, or lifecycle source path is not a native behavior verdict."
+  ]
+}

@@ -1,0 +1,2153 @@
+{
+  "phases": [
+    {
+      "phase": "baseline_off",
+      "verdict": "pass",
+      "pid": 53640,
+      "owned_start_utc": "2026-10-22T11:46:19.0317653Z",
+      "real_title_start_at_seconds": 9.6299128,
+      "carselect_at_seconds": 21.3,
+      "native_end_seconds": 24.1,
+      "valid_query_packets": 37,
+      "valid_frequency_set": [
+        100000000
+      ],
+      "valid_total_ms_min": 2.16167,
+      "valid_total_ms_max": 181.35245,
+      "overlay_readbacks": 13,
+      "bar_callbacks": 0,
+      "row_callbacks": 0,
+      "positive_frontend_callbacks": 0,
+      "captures": 15,
+      "actual_last_capture": "bb_003360.bmp",
+      "config_hash": "e62aac3930f3f9f551de03a1c21106f2c3c891dbe116f76710d1e5e20f71a82d",
+      "profile_after": {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\baseline_off\\Profile.sav.after",
+        "bytes": 1223256,
+        "sha256": "9387be51fdeae0edfad3061379bc60db1d3d82c33f53b12822f36a9f164aa668"
+      },
+      "strict_flow_status": {
+        "schema": 1,
+        "launch_utc": "2026-10-22T11:46:19.0167633Z",
+        "launched": true,
+        "owned_pid": 53640,
+        "owned_image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\stage\\slot\\Burnout_PC.exe",
+        "owned_start_utc": "2026-10-22T11:46:19.0317653Z",
+        "direct_creation_handle_retained": true,
+        "completed": true,
+        "requested_exit": 0,
+        "error": null,
+        "first_assert_stop": false,
+        "first_assert_at": null,
+        "observed_asserts": 0,
+        "foreign_game": false,
+        "runaway_log_abort": false,
+        "owned_cleanup_complete": true,
+        "input_reset_complete": true,
+        "game_exited_on_own": false,
+        "game_exit": null,
+        "title_start_requested": true,
+        "title_start_ready_observed": true,
+        "title_start_sent_at": 9.6299128,
+        "success": true
+      },
+      "checks": [
+        {
+          "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+          "pass": true,
+          "name": "original strict flow completed and owned game exited",
+          "kind": "TerminalFlow"
+        },
+        {
+          "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no exceptions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "15 frames, 52,7 MiB; native maximum 24",
+          "pass": true,
+          "name": "bounded frame capture produced evidence",
+          "kind": "Script"
+        },
+        {
+          "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no engine assertions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "2 line(s) match /\\[debug-ini\\] applied core/debug/performance/gpu monitors/(draw gpu monitors|draw as graph)=/, want [2, +inf]",
+          "pass": true,
+          "name": "GPU settings applied through real debug bindings",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "37 line(s) match /\\[gpu-monitors\\].*status=valid/, want [3, +inf]",
+          "pass": true,
+          "name": "native GPU query packets completed",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "max of 37 value(s) = 181,352, want [1E-06, +inf]",
+          "pass": true,
+          "name": "GPU frame has a measured nonzero cost",
+          "kind": "LogValue"
+        },
+        {
+          "detail": "13 line(s) match /\\[gpu-overlay\\] visible=0/, want [1, +inf]",
+          "pass": true,
+          "name": "visibility switch disabled the overlay",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "0 line(s) match /\\[gpu-overlay-(bar|row)\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "hidden overlay emitted no graph or table callbacks",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "final phase CARSELECT, want CARSELECT",
+          "pass": true,
+          "name": "reached the returning-player frontend",
+          "kind": "Mark"
+        },
+        {
+          "detail": "TitleStart readiness was observed and one scoped Start was sent",
+          "pass": true,
+          "name": "real TitleStart readiness and scoped send were observed",
+          "kind": "Script"
+        },
+        {
+          "detail": "1 line(s) match /^\\[debug-component\\] path=\"Core/Debug/Performance/GPU Monitors\" request=engine controls=1$/, want [1, 1]",
+          "pass": true,
+          "name": "GPU component registered at original path with controls",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "private config and engine readback visible=false graph=false; 1280x720 windowed",
+          "pass": true,
+          "name": "private config and exact runtime readbacks match this phase",
+          "kind": "Script"
+        },
+        {
+          "detail": "mode=table visible=false; graph-grid probes=0/5; graph grid exclusion for hidden phase; zero callback check is separate; last frontend frame=bb_003360.bmp",
+          "pass": true,
+          "name": "graph grid presence or exclusion matches the phase",
+          "kind": "Script"
+        },
+        {
+          "detail": "audio muted, owned process BelowNormal, assert release disabled",
+          "pass": true,
+          "name": "muted BelowNormal run kept assert release disabled",
+          "kind": "Script"
+        }
+      ]
+    },
+    {
+      "phase": "graph_true",
+      "verdict": "pass",
+      "pid": 19788,
+      "owned_start_utc": "2026-10-22T11:46:47.5442930Z",
+      "real_title_start_at_seconds": 9.0422476,
+      "carselect_at_seconds": 20.9,
+      "native_end_seconds": 24.2,
+      "valid_query_packets": 38,
+      "valid_frequency_set": [
+        100000000
+      ],
+      "valid_total_ms_min": 0.4352,
+      "valid_total_ms_max": 164.84557,
+      "overlay_readbacks": 15,
+      "bar_callbacks": 315,
+      "row_callbacks": 0,
+      "positive_frontend_callbacks": 30,
+      "captures": 16,
+      "actual_last_capture": "bb_003600.bmp",
+      "config_hash": "f5e26467c4ccc2bdcb30f70b505ec59e6615f98ae5a93fd99df80146ccb71b47",
+      "profile_after": {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\graph_true\\Profile.sav.after",
+        "bytes": 1223256,
+        "sha256": "9387be51fdeae0edfad3061379bc60db1d3d82c33f53b12822f36a9f164aa668"
+      },
+      "strict_flow_status": {
+        "schema": 1,
+        "launch_utc": "2026-10-22T11:46:47.5337423Z",
+        "launched": true,
+        "owned_pid": 19788,
+        "owned_image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\stage\\slot\\Burnout_PC.exe",
+        "owned_start_utc": "2026-10-22T11:46:47.5442930Z",
+        "direct_creation_handle_retained": true,
+        "completed": true,
+        "requested_exit": 0,
+        "error": null,
+        "first_assert_stop": false,
+        "first_assert_at": null,
+        "observed_asserts": 0,
+        "foreign_game": false,
+        "runaway_log_abort": false,
+        "owned_cleanup_complete": true,
+        "input_reset_complete": true,
+        "game_exited_on_own": false,
+        "game_exit": null,
+        "title_start_requested": true,
+        "title_start_ready_observed": true,
+        "title_start_sent_at": 9.0422476,
+        "success": true
+      },
+      "checks": [
+        {
+          "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+          "pass": true,
+          "name": "original strict flow completed and owned game exited",
+          "kind": "TerminalFlow"
+        },
+        {
+          "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no exceptions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "16 frames, 56,3 MiB; native maximum 24",
+          "pass": true,
+          "name": "bounded frame capture produced evidence",
+          "kind": "Script"
+        },
+        {
+          "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no engine assertions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "2 line(s) match /\\[debug-ini\\] applied core/debug/performance/gpu monitors/(draw gpu monitors|draw as graph)=/, want [2, +inf]",
+          "pass": true,
+          "name": "GPU settings applied through real debug bindings",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "38 line(s) match /\\[gpu-monitors\\].*status=valid/, want [3, +inf]",
+          "pass": true,
+          "name": "native GPU query packets completed",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "max of 38 value(s) = 164,846, want [1E-06, +inf]",
+          "pass": true,
+          "name": "GPU frame has a measured nonzero cost",
+          "kind": "LogValue"
+        },
+        {
+          "detail": "15 line(s) match /\\[gpu-overlay\\] visible=1 mode=graph monitored=/, want [1, +inf]",
+          "pass": true,
+          "name": "selected graph overlay executed",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "final phase CARSELECT, want CARSELECT",
+          "pass": true,
+          "name": "reached the returning-player frontend",
+          "kind": "Mark"
+        },
+        {
+          "detail": "TitleStart readiness was observed and one scoped Start was sent",
+          "pass": true,
+          "name": "real TitleStart readiness and scoped send were observed",
+          "kind": "Script"
+        },
+        {
+          "detail": "1 line(s) match /^\\[debug-component\\] path=\"Core/Debug/Performance/GPU Monitors\" request=engine controls=1$/, want [1, 1]",
+          "pass": true,
+          "name": "GPU component registered at original path with controls",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "private config and engine readback visible=true graph=true; 1280x720 windowed",
+          "pass": true,
+          "name": "private config and exact runtime readbacks match this phase",
+          "kind": "Script"
+        },
+        {
+          "detail": "mode=graph visible=true; graph-grid probes=5/5; graph grid presence required; last frontend frame=bb_003600.bmp",
+          "pass": true,
+          "name": "graph grid presence or exclusion matches the phase",
+          "kind": "Script"
+        },
+        {
+          "detail": "audio muted, owned process BelowNormal, assert release disabled",
+          "pass": true,
+          "name": "muted BelowNormal run kept assert release disabled",
+          "kind": "Script"
+        },
+        {
+          "detail": "actual bar callback had 30 positive MenusAndHud/Debug2d duration(s); no WorldOpaque/DRIVING requirement",
+          "pass": true,
+          "name": "visible frontend callback carried a measured GPU duration",
+          "kind": "Script"
+        }
+      ]
+    },
+    {
+      "phase": "table_false",
+      "verdict": "pass",
+      "pid": 41724,
+      "owned_start_utc": "2026-10-22T11:47:16.0298974Z",
+      "real_title_start_at_seconds": 9.048242799999999,
+      "carselect_at_seconds": 20.8,
+      "native_end_seconds": 24.1,
+      "valid_query_packets": 38,
+      "valid_frequency_set": [
+        100000000
+      ],
+      "valid_total_ms_min": 0.82432,
+      "valid_total_ms_max": 164.19124,
+      "overlay_readbacks": 15,
+      "bar_callbacks": 0,
+      "row_callbacks": 345,
+      "positive_frontend_callbacks": 30,
+      "captures": 16,
+      "actual_last_capture": "bb_003600.bmp",
+      "config_hash": "7a6e1fd70d1f50176e10ef2edc7090f87e58287454c53736004d6d8a71930598",
+      "profile_after": {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\table_false\\Profile.sav.after",
+        "bytes": 1223256,
+        "sha256": "9387be51fdeae0edfad3061379bc60db1d3d82c33f53b12822f36a9f164aa668"
+      },
+      "strict_flow_status": {
+        "schema": 1,
+        "launch_utc": "2026-10-22T11:47:16.0196332Z",
+        "launched": true,
+        "owned_pid": 41724,
+        "owned_image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\stage\\slot\\Burnout_PC.exe",
+        "owned_start_utc": "2026-10-22T11:47:16.0298974Z",
+        "direct_creation_handle_retained": true,
+        "completed": true,
+        "requested_exit": 0,
+        "error": null,
+        "first_assert_stop": false,
+        "first_assert_at": null,
+        "observed_asserts": 0,
+        "foreign_game": false,
+        "runaway_log_abort": false,
+        "owned_cleanup_complete": true,
+        "input_reset_complete": true,
+        "game_exited_on_own": false,
+        "game_exit": null,
+        "title_start_requested": true,
+        "title_start_ready_observed": true,
+        "title_start_sent_at": 9.048242799999999,
+        "success": true
+      },
+      "checks": [
+        {
+          "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+          "pass": true,
+          "name": "original strict flow completed and owned game exited",
+          "kind": "TerminalFlow"
+        },
+        {
+          "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no exceptions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "16 frames, 56,3 MiB; native maximum 24",
+          "pass": true,
+          "name": "bounded frame capture produced evidence",
+          "kind": "Script"
+        },
+        {
+          "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no engine assertions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "2 line(s) match /\\[debug-ini\\] applied core/debug/performance/gpu monitors/(draw gpu monitors|draw as graph)=/, want [2, +inf]",
+          "pass": true,
+          "name": "GPU settings applied through real debug bindings",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "38 line(s) match /\\[gpu-monitors\\].*status=valid/, want [3, +inf]",
+          "pass": true,
+          "name": "native GPU query packets completed",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "max of 38 value(s) = 164,191, want [1E-06, +inf]",
+          "pass": true,
+          "name": "GPU frame has a measured nonzero cost",
+          "kind": "LogValue"
+        },
+        {
+          "detail": "15 line(s) match /\\[gpu-overlay\\] visible=1 mode=table monitored=/, want [1, +inf]",
+          "pass": true,
+          "name": "selected table overlay executed",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "final phase CARSELECT, want CARSELECT",
+          "pass": true,
+          "name": "reached the returning-player frontend",
+          "kind": "Mark"
+        },
+        {
+          "detail": "TitleStart readiness was observed and one scoped Start was sent",
+          "pass": true,
+          "name": "real TitleStart readiness and scoped send were observed",
+          "kind": "Script"
+        },
+        {
+          "detail": "1 line(s) match /^\\[debug-component\\] path=\"Core/Debug/Performance/GPU Monitors\" request=engine controls=1$/, want [1, 1]",
+          "pass": true,
+          "name": "GPU component registered at original path with controls",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "private config and engine readback visible=true graph=false; 1280x720 windowed",
+          "pass": true,
+          "name": "private config and exact runtime readbacks match this phase",
+          "kind": "Script"
+        },
+        {
+          "detail": "mode=table visible=true; graph-grid probes=0/5; graph grid exclusion only; table visual verdict pending hash-bound manual review; last frontend frame=bb_003600.bmp",
+          "pass": true,
+          "name": "graph grid presence or exclusion matches the phase",
+          "kind": "Script"
+        },
+        {
+          "detail": "audio muted, owned process BelowNormal, assert release disabled",
+          "pass": true,
+          "name": "muted BelowNormal run kept assert release disabled",
+          "kind": "Script"
+        },
+        {
+          "detail": "actual row callback had 30 positive MenusAndHud/Debug2d duration(s); no WorldOpaque/DRIVING requirement",
+          "pass": true,
+          "name": "visible frontend callback carried a measured GPU duration",
+          "kind": "Script"
+        }
+      ]
+    },
+    {
+      "phase": "restored_off",
+      "verdict": "pass",
+      "pid": 52136,
+      "owned_start_utc": "2026-10-22T11:47:44.6562650Z",
+      "real_title_start_at_seconds": 9.0177458,
+      "carselect_at_seconds": 20.9,
+      "native_end_seconds": 24.3,
+      "valid_query_packets": 37,
+      "valid_frequency_set": [
+        100000000
+      ],
+      "valid_total_ms_min": 0.98406,
+      "valid_total_ms_max": 162.27431,
+      "overlay_readbacks": 13,
+      "bar_callbacks": 0,
+      "row_callbacks": 0,
+      "positive_frontend_callbacks": 0,
+      "captures": 15,
+      "actual_last_capture": "bb_003360.bmp",
+      "config_hash": "e62aac3930f3f9f551de03a1c21106f2c3c891dbe116f76710d1e5e20f71a82d",
+      "profile_after": {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\restored_off\\Profile.sav.after",
+        "bytes": 1223256,
+        "sha256": "9387be51fdeae0edfad3061379bc60db1d3d82c33f53b12822f36a9f164aa668"
+      },
+      "strict_flow_status": {
+        "schema": 1,
+        "launch_utc": "2026-10-22T11:47:44.6460585Z",
+        "launched": true,
+        "owned_pid": 52136,
+        "owned_image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\stage\\slot\\Burnout_PC.exe",
+        "owned_start_utc": "2026-10-22T11:47:44.6562650Z",
+        "direct_creation_handle_retained": true,
+        "completed": true,
+        "requested_exit": 0,
+        "error": null,
+        "first_assert_stop": false,
+        "first_assert_at": null,
+        "observed_asserts": 0,
+        "foreign_game": false,
+        "runaway_log_abort": false,
+        "owned_cleanup_complete": true,
+        "input_reset_complete": true,
+        "game_exited_on_own": false,
+        "game_exit": null,
+        "title_start_requested": true,
+        "title_start_ready_observed": true,
+        "title_start_sent_at": 9.0177458,
+        "success": true
+      },
+      "checks": [
+        {
+          "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+          "pass": true,
+          "name": "original strict flow completed and owned game exited",
+          "kind": "TerminalFlow"
+        },
+        {
+          "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no exceptions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "15 frames, 52,7 MiB; native maximum 24",
+          "pass": true,
+          "name": "bounded frame capture produced evidence",
+          "kind": "Script"
+        },
+        {
+          "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "no engine assertions",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "2 line(s) match /\\[debug-ini\\] applied core/debug/performance/gpu monitors/(draw gpu monitors|draw as graph)=/, want [2, +inf]",
+          "pass": true,
+          "name": "GPU settings applied through real debug bindings",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "37 line(s) match /\\[gpu-monitors\\].*status=valid/, want [3, +inf]",
+          "pass": true,
+          "name": "native GPU query packets completed",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "max of 37 value(s) = 162,274, want [1E-06, +inf]",
+          "pass": true,
+          "name": "GPU frame has a measured nonzero cost",
+          "kind": "LogValue"
+        },
+        {
+          "detail": "13 line(s) match /\\[gpu-overlay\\] visible=0/, want [1, +inf]",
+          "pass": true,
+          "name": "visibility switch disabled the overlay",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "0 line(s) match /\\[gpu-overlay-(bar|row)\\]/, want [-inf, 0]",
+          "pass": true,
+          "name": "hidden overlay emitted no graph or table callbacks",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "final phase CARSELECT, want CARSELECT",
+          "pass": true,
+          "name": "reached the returning-player frontend",
+          "kind": "Mark"
+        },
+        {
+          "detail": "TitleStart readiness was observed and one scoped Start was sent",
+          "pass": true,
+          "name": "real TitleStart readiness and scoped send were observed",
+          "kind": "Script"
+        },
+        {
+          "detail": "1 line(s) match /^\\[debug-component\\] path=\"Core/Debug/Performance/GPU Monitors\" request=engine controls=1$/, want [1, 1]",
+          "pass": true,
+          "name": "GPU component registered at original path with controls",
+          "kind": "LogCount"
+        },
+        {
+          "detail": "private config and engine readback visible=false graph=false; 1280x720 windowed",
+          "pass": true,
+          "name": "private config and exact runtime readbacks match this phase",
+          "kind": "Script"
+        },
+        {
+          "detail": "mode=table visible=false; graph-grid probes=0/5; graph grid exclusion for hidden phase; zero callback check is separate; last frontend frame=bb_003360.bmp",
+          "pass": true,
+          "name": "graph grid presence or exclusion matches the phase",
+          "kind": "Script"
+        },
+        {
+          "detail": "audio muted, owned process BelowNormal, assert release disabled",
+          "pass": true,
+          "name": "muted BelowNormal run kept assert release disabled",
+          "kind": "Script"
+        }
+      ]
+    }
+  ],
+  "selected_log_witnesses": [
+    {
+      "phase": "baseline_off",
+      "valid_query_rows": [
+        {
+          "line": 250,
+          "frame": 1,
+          "frequency": 100000000,
+          "total_ms": 181.35245
+        },
+        {
+          "line": 252,
+          "frame": 2,
+          "frequency": 100000000,
+          "total_ms": 2.74535
+        },
+        {
+          "line": 253,
+          "frame": 3,
+          "frequency": 100000000,
+          "total_ms": 3.57376
+        },
+        {
+          "line": 255,
+          "frame": 4,
+          "frequency": 100000000,
+          "total_ms": 2.16167
+        },
+        {
+          "line": 256,
+          "frame": 5,
+          "frequency": 100000000,
+          "total_ms": 6.06413
+        },
+        {
+          "line": 257,
+          "frame": 6,
+          "frequency": 100000000,
+          "total_ms": 6.29965
+        },
+        {
+          "line": 258,
+          "frame": 7,
+          "frequency": 100000000,
+          "total_ms": 5.888
+        },
+        {
+          "line": 259,
+          "frame": 8,
+          "frequency": 100000000,
+          "total_ms": 6.23718
+        },
+        {
+          "line": 345,
+          "frame": 120,
+          "frequency": 100000000,
+          "total_ms": 6.03751
+        },
+        {
+          "line": 430,
+          "frame": 240,
+          "frequency": 100000000,
+          "total_ms": 6.61402
+        },
+        {
+          "line": 461,
+          "frame": 360,
+          "frequency": 100000000,
+          "total_ms": 6.09895
+        },
+        {
+          "line": 475,
+          "frame": 480,
+          "frequency": 100000000,
+          "total_ms": 5.91872
+        },
+        {
+          "line": 492,
+          "frame": 600,
+          "frequency": 100000000,
+          "total_ms": 5.90131
+        },
+        {
+          "line": 499,
+          "frame": 720,
+          "frequency": 100000000,
+          "total_ms": 5.79276
+        },
+        {
+          "line": 592,
+          "frame": 840,
+          "frequency": 100000000,
+          "total_ms": 6.38055
+        },
+        {
+          "line": 593,
+          "frame": 960,
+          "frequency": 100000000,
+          "total_ms": 6.52698
+        },
+        {
+          "line": 594,
+          "frame": 1080,
+          "frequency": 100000000,
+          "total_ms": 5.74873
+        },
+        {
+          "line": 595,
+          "frame": 1200,
+          "frequency": 100000000,
+          "total_ms": 6.3744
+        },
+        {
+          "line": 599,
+          "frame": 1320,
+          "frequency": 100000000,
+          "total_ms": 5.98119
+        },
+        {
+          "line": 614,
+          "frame": 1440,
+          "frequency": 100000000,
+          "total_ms": 5.63814
+        },
+        {
+          "line": 648,
+          "frame": 1560,
+          "frequency": 100000000,
+          "total_ms": 5.98937
+        },
+        {
+          "line": 794,
+          "frame": 1680,
+          "frequency": 100000000,
+          "total_ms": 5.84396
+        },
+        {
+          "line": 897,
+          "frame": 1800,
+          "frequency": 100000000,
+          "total_ms": 6.64064
+        },
+        {
+          "line": 971,
+          "frame": 1920,
+          "frequency": 100000000,
+          "total_ms": 6.17472
+        },
+        {
+          "line": 1026,
+          "frame": 2040,
+          "frequency": 100000000,
+          "total_ms": 5.76717
+        },
+        {
+          "line": 1149,
+          "frame": 2160,
+          "frequency": 100000000,
+          "total_ms": 6.00678
+        },
+        {
+          "line": 1416,
+          "frame": 2280,
+          "frequency": 100000000,
+          "total_ms": 20.12979
+        },
+        {
+          "line": 1879,
+          "frame": 2400,
+          "frequency": 100000000,
+          "total_ms": 5.79788
+        },
+        {
+          "line": 2386,
+          "frame": 2520,
+          "frequency": 100000000,
+          "total_ms": 6.19418
+        },
+        {
+          "line": 2974,
+          "frame": 2640,
+          "frequency": 100000000,
+          "total_ms": 6.1655
+        },
+        {
+          "line": 3372,
+          "frame": 2760,
+          "frequency": 100000000,
+          "total_ms": 7.083
+        },
+        {
+          "line": 3900,
+          "frame": 2880,
+          "frequency": 100000000,
+          "total_ms": 9.37677
+        },
+        {
+          "line": 4405,
+          "frame": 3000,
+          "frequency": 100000000,
+          "total_ms": 6.08153
+        },
+        {
+          "line": 4937,
+          "frame": 3120,
+          "frequency": 100000000,
+          "total_ms": 10.48166
+        },
+        {
+          "line": 5616,
+          "frame": 3240,
+          "frequency": 100000000,
+          "total_ms": 6.613
+        },
+        {
+          "line": 6127,
+          "frame": 3360,
+          "frequency": 100000000,
+          "total_ms": 7.28985
+        },
+        {
+          "line": 6627,
+          "frame": 3480,
+          "frequency": 100000000,
+          "total_ms": 6.42867
+        }
+      ],
+      "mode_rows": [
+        {
+          "line": 1048,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=0.386673"
+        },
+        {
+          "line": 1232,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=0.141219"
+        },
+        {
+          "line": 1236,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=0.147273"
+        },
+        {
+          "line": 1717,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=12.993793"
+        },
+        {
+          "line": 2223,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=16.142500"
+        },
+        {
+          "line": 2809,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=15.706796"
+        },
+        {
+          "line": 3346,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=23.593943"
+        },
+        {
+          "line": 3719,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=48.679367"
+        },
+        {
+          "line": 4251,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=35.286556"
+        },
+        {
+          "line": 4743,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=56.959366"
+        },
+        {
+          "line": 5431,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=63.262886"
+        },
+        {
+          "line": 5968,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=36.489609"
+        },
+        {
+          "line": 6472,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=37.355030"
+        }
+      ],
+      "positive_frontend_callbacks": [],
+      "binding_rows": [
+        {
+          "line": 25,
+          "text": "[debug-component] path=\"Core/Debug/Performance/GPU Monitors\" request=engine controls=1"
+        },
+        {
+          "line": 26,
+          "text": "[debug-ini] applied core/debug/performance/gpu monitors/draw gpu monitors=false"
+        },
+        {
+          "line": 27,
+          "text": "[debug-ini] applied core/debug/performance/gpu monitors/draw as graph=false"
+        }
+      ]
+    },
+    {
+      "phase": "graph_true",
+      "valid_query_rows": [
+        {
+          "line": 250,
+          "frame": 1,
+          "frequency": 100000000,
+          "total_ms": 164.84557
+        },
+        {
+          "line": 252,
+          "frame": 2,
+          "frequency": 100000000,
+          "total_ms": 2.27328
+        },
+        {
+          "line": 253,
+          "frame": 3,
+          "frequency": 100000000,
+          "total_ms": 0.4352
+        },
+        {
+          "line": 255,
+          "frame": 4,
+          "frequency": 100000000,
+          "total_ms": 1.02502
+        },
+        {
+          "line": 256,
+          "frame": 5,
+          "frequency": 100000000,
+          "total_ms": 6.07437
+        },
+        {
+          "line": 257,
+          "frame": 6,
+          "frequency": 100000000,
+          "total_ms": 6.17472
+        },
+        {
+          "line": 258,
+          "frame": 7,
+          "frequency": 100000000,
+          "total_ms": 6.0754
+        },
+        {
+          "line": 259,
+          "frame": 8,
+          "frequency": 100000000,
+          "total_ms": 6.07027
+        },
+        {
+          "line": 345,
+          "frame": 120,
+          "frequency": 100000000,
+          "total_ms": 6.2464
+        },
+        {
+          "line": 430,
+          "frame": 240,
+          "frequency": 100000000,
+          "total_ms": 6.44403
+        },
+        {
+          "line": 461,
+          "frame": 360,
+          "frequency": 100000000,
+          "total_ms": 5.52039
+        },
+        {
+          "line": 475,
+          "frame": 480,
+          "frequency": 100000000,
+          "total_ms": 6.49318
+        },
+        {
+          "line": 492,
+          "frame": 600,
+          "frequency": 100000000,
+          "total_ms": 6.31501
+        },
+        {
+          "line": 499,
+          "frame": 720,
+          "frequency": 100000000,
+          "total_ms": 5.89927
+        },
+        {
+          "line": 592,
+          "frame": 840,
+          "frequency": 100000000,
+          "total_ms": 5.72518
+        },
+        {
+          "line": 593,
+          "frame": 960,
+          "frequency": 100000000,
+          "total_ms": 6.20339
+        },
+        {
+          "line": 594,
+          "frame": 1080,
+          "frequency": 100000000,
+          "total_ms": 5.95456
+        },
+        {
+          "line": 595,
+          "frame": 1200,
+          "frequency": 100000000,
+          "total_ms": 6.10918
+        },
+        {
+          "line": 599,
+          "frame": 1320,
+          "frequency": 100000000,
+          "total_ms": 5.10874
+        },
+        {
+          "line": 614,
+          "frame": 1440,
+          "frequency": 100000000,
+          "total_ms": 5.84294
+        },
+        {
+          "line": 671,
+          "frame": 1560,
+          "frequency": 100000000,
+          "total_ms": 6.4983
+        },
+        {
+          "line": 828,
+          "frame": 1680,
+          "frequency": 100000000,
+          "total_ms": 6.18292
+        },
+        {
+          "line": 913,
+          "frame": 1800,
+          "frequency": 100000000,
+          "total_ms": 5.86547
+        },
+        {
+          "line": 987,
+          "frame": 1920,
+          "frequency": 100000000,
+          "total_ms": 6.52902
+        },
+        {
+          "line": 1028,
+          "frame": 2040,
+          "frequency": 100000000,
+          "total_ms": 6.07028
+        },
+        {
+          "line": 1170,
+          "frame": 2160,
+          "frequency": 100000000,
+          "total_ms": 6.34676
+        },
+        {
+          "line": 1572,
+          "frame": 2280,
+          "frequency": 100000000,
+          "total_ms": 6.08256
+        },
+        {
+          "line": 2063,
+          "frame": 2400,
+          "frequency": 100000000,
+          "total_ms": 6.08256
+        },
+        {
+          "line": 2589,
+          "frame": 2520,
+          "frequency": 100000000,
+          "total_ms": 5.87571
+        },
+        {
+          "line": 3199,
+          "frame": 2640,
+          "frequency": 100000000,
+          "total_ms": 6.17267
+        },
+        {
+          "line": 3585,
+          "frame": 2760,
+          "frequency": 100000000,
+          "total_ms": 9.57542
+        },
+        {
+          "line": 4122,
+          "frame": 2880,
+          "frequency": 100000000,
+          "total_ms": 6.23002
+        },
+        {
+          "line": 4667,
+          "frame": 3000,
+          "frequency": 100000000,
+          "total_ms": 6.58227
+        },
+        {
+          "line": 5179,
+          "frame": 3120,
+          "frequency": 100000000,
+          "total_ms": 8.13158
+        },
+        {
+          "line": 5880,
+          "frame": 3240,
+          "frequency": 100000000,
+          "total_ms": 9.08698
+        },
+        {
+          "line": 6449,
+          "frame": 3360,
+          "frequency": 100000000,
+          "total_ms": 5.9136
+        },
+        {
+          "line": 6966,
+          "frame": 3480,
+          "frequency": 100000000,
+          "total_ms": 6.51571
+        },
+        {
+          "line": 7479,
+          "frame": 3600,
+          "frequency": 100000000,
+          "total_ms": 6.16448
+        }
+      ],
+      "mode_rows": [
+        {
+          "line": 1048,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=0.386673"
+        },
+        {
+          "line": 1253,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=0.141219"
+        },
+        {
+          "line": 1278,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=0.147333"
+        },
+        {
+          "line": 1775,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=13.675133"
+        },
+        {
+          "line": 2301,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=21.457983"
+        },
+        {
+          "line": 2908,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=14.681763"
+        },
+        {
+          "line": 3503,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=17.185999"
+        },
+        {
+          "line": 3832,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=41.105228"
+        },
+        {
+          "line": 4380,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=47.482426"
+        },
+        {
+          "line": 4901,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=31.978228"
+        },
+        {
+          "line": 5480,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=53.706169"
+        },
+        {
+          "line": 6150,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=34.003719"
+        },
+        {
+          "line": 6680,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=35.783760"
+        },
+        {
+          "line": 7204,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=34.181805"
+        },
+        {
+          "line": 7710,
+          "text": "[gpu-overlay] visible=1 mode=graph monitored=32.794548"
+        }
+      ],
+      "positive_frontend_callbacks": [
+        {
+          "line": 1066,
+          "name": "MenusAndHud",
+          "value": 0.374385
+        },
+        {
+          "line": 1068,
+          "name": "Debug2d",
+          "value": 0.012288
+        },
+        {
+          "line": 1271,
+          "name": "MenusAndHud",
+          "value": 0.122757
+        },
+        {
+          "line": 1273,
+          "name": "Debug2d",
+          "value": 0.018462
+        },
+        {
+          "line": 1296,
+          "name": "MenusAndHud",
+          "value": 0.128931
+        },
+        {
+          "line": 1298,
+          "name": "Debug2d",
+          "value": 0.018402
+        },
+        {
+          "line": 1793,
+          "name": "MenusAndHud",
+          "value": 0.110469
+        },
+        {
+          "line": 1795,
+          "name": "Debug2d",
+          "value": 0.110469
+        },
+        {
+          "line": 2319,
+          "name": "MenusAndHud",
+          "value": 0.104356
+        },
+        {
+          "line": 2321,
+          "name": "Debug2d",
+          "value": 0.116643
+        },
+        {
+          "line": 2926,
+          "name": "MenusAndHud",
+          "value": 0.104356
+        },
+        {
+          "line": 2928,
+          "name": "Debug2d",
+          "value": 0.098242
+        },
+        {
+          "line": 3521,
+          "name": "MenusAndHud",
+          "value": 0.098182
+        },
+        {
+          "line": 3523,
+          "name": "Debug2d",
+          "value": 0.098242
+        },
+        {
+          "line": 3850,
+          "name": "MenusAndHud",
+          "value": 0.030689
+        },
+        {
+          "line": 3852,
+          "name": "Debug2d",
+          "value": 0.110529
+        },
+        {
+          "line": 4398,
+          "name": "MenusAndHud",
+          "value": 0.042977
+        },
+        {
+          "line": 4400,
+          "name": "Debug2d",
+          "value": 0.104296
+        },
+        {
+          "line": 4919,
+          "name": "MenusAndHud",
+          "value": 0.036803
+        },
+        {
+          "line": 4921,
+          "name": "Debug2d",
+          "value": 0.098242
+        },
+        {
+          "line": 5498,
+          "name": "MenusAndHud",
+          "value": 0.153446
+        },
+        {
+          "line": 5500,
+          "name": "Debug2d",
+          "value": 0.122757
+        },
+        {
+          "line": 6168,
+          "name": "MenusAndHud",
+          "value": 1.104814
+        },
+        {
+          "line": 6170,
+          "name": "Debug2d",
+          "value": 0.110469
+        },
+        {
+          "line": 6698,
+          "name": "MenusAndHud",
+          "value": 1.12939
+        },
+        {
+          "line": 6700,
+          "name": "Debug2d",
+          "value": 0.104356
+        },
+        {
+          "line": 7222,
+          "name": "MenusAndHud",
+          "value": 1.313525
+        },
+        {
+          "line": 7224,
+          "name": "Debug2d",
+          "value": 0.116643
+        },
+        {
+          "line": 7728,
+          "name": "MenusAndHud",
+          "value": 1.227571
+        },
+        {
+          "line": 7730,
+          "name": "Debug2d",
+          "value": 0.202537
+        }
+      ],
+      "binding_rows": [
+        {
+          "line": 25,
+          "text": "[debug-component] path=\"Core/Debug/Performance/GPU Monitors\" request=engine controls=1"
+        },
+        {
+          "line": 26,
+          "text": "[debug-ini] applied core/debug/performance/gpu monitors/draw gpu monitors=true"
+        },
+        {
+          "line": 27,
+          "text": "[debug-ini] applied core/debug/performance/gpu monitors/draw as graph=true"
+        }
+      ]
+    },
+    {
+      "phase": "table_false",
+      "valid_query_rows": [
+        {
+          "line": 250,
+          "frame": 1,
+          "frequency": 100000000,
+          "total_ms": 164.19124
+        },
+        {
+          "line": 252,
+          "frame": 2,
+          "frequency": 100000000,
+          "total_ms": 2.38899
+        },
+        {
+          "line": 253,
+          "frame": 3,
+          "frequency": 100000000,
+          "total_ms": 0.82432
+        },
+        {
+          "line": 255,
+          "frame": 4,
+          "frequency": 100000000,
+          "total_ms": 2.5856
+        },
+        {
+          "line": 256,
+          "frame": 5,
+          "frequency": 100000000,
+          "total_ms": 6.06516
+        },
+        {
+          "line": 257,
+          "frame": 6,
+          "frequency": 100000000,
+          "total_ms": 6.1143
+        },
+        {
+          "line": 258,
+          "frame": 7,
+          "frequency": 100000000,
+          "total_ms": 6.01088
+        },
+        {
+          "line": 259,
+          "frame": 8,
+          "frequency": 100000000,
+          "total_ms": 6.07232
+        },
+        {
+          "line": 345,
+          "frame": 120,
+          "frequency": 100000000,
+          "total_ms": 5.9945
+        },
+        {
+          "line": 430,
+          "frame": 240,
+          "frequency": 100000000,
+          "total_ms": 6.28327
+        },
+        {
+          "line": 461,
+          "frame": 360,
+          "frequency": 100000000,
+          "total_ms": 5.69447
+        },
+        {
+          "line": 475,
+          "frame": 480,
+          "frequency": 100000000,
+          "total_ms": 6.89767
+        },
+        {
+          "line": 492,
+          "frame": 600,
+          "frequency": 100000000,
+          "total_ms": 4.98074
+        },
+        {
+          "line": 499,
+          "frame": 720,
+          "frequency": 100000000,
+          "total_ms": 6.33754
+        },
+        {
+          "line": 592,
+          "frame": 840,
+          "frequency": 100000000,
+          "total_ms": 6.15936
+        },
+        {
+          "line": 593,
+          "frame": 960,
+          "frequency": 100000000,
+          "total_ms": 5.71597
+        },
+        {
+          "line": 594,
+          "frame": 1080,
+          "frequency": 100000000,
+          "total_ms": 6.35085
+        },
+        {
+          "line": 595,
+          "frame": 1200,
+          "frequency": 100000000,
+          "total_ms": 6.32934
+        },
+        {
+          "line": 599,
+          "frame": 1320,
+          "frequency": 100000000,
+          "total_ms": 6.00678
+        },
+        {
+          "line": 614,
+          "frame": 1440,
+          "frequency": 100000000,
+          "total_ms": 5.93408
+        },
+        {
+          "line": 649,
+          "frame": 1560,
+          "frequency": 100000000,
+          "total_ms": 5.98324
+        },
+        {
+          "line": 794,
+          "frame": 1680,
+          "frequency": 100000000,
+          "total_ms": 6.34573
+        },
+        {
+          "line": 901,
+          "frame": 1800,
+          "frequency": 100000000,
+          "total_ms": 5.53267
+        },
+        {
+          "line": 976,
+          "frame": 1920,
+          "frequency": 100000000,
+          "total_ms": 6.17677
+        },
+        {
+          "line": 1027,
+          "frame": 2040,
+          "frequency": 100000000,
+          "total_ms": 6.38668
+        },
+        {
+          "line": 1172,
+          "frame": 2160,
+          "frequency": 100000000,
+          "total_ms": 6.39693
+        },
+        {
+          "line": 1486,
+          "frame": 2280,
+          "frequency": 100000000,
+          "total_ms": 1.24211
+        },
+        {
+          "line": 1992,
+          "frame": 2400,
+          "frequency": 100000000,
+          "total_ms": 7.19872
+        },
+        {
+          "line": 2520,
+          "frame": 2520,
+          "frequency": 100000000,
+          "total_ms": 5.83475
+        },
+        {
+          "line": 3124,
+          "frame": 2640,
+          "frequency": 100000000,
+          "total_ms": 6.09689
+        },
+        {
+          "line": 3572,
+          "frame": 2760,
+          "frequency": 100000000,
+          "total_ms": 2.8713
+        },
+        {
+          "line": 4054,
+          "frame": 2880,
+          "frequency": 100000000,
+          "total_ms": 5.37395
+        },
+        {
+          "line": 4604,
+          "frame": 3000,
+          "frequency": 100000000,
+          "total_ms": 5.78355
+        },
+        {
+          "line": 5122,
+          "frame": 3120,
+          "frequency": 100000000,
+          "total_ms": 6.52595
+        },
+        {
+          "line": 5693,
+          "frame": 3240,
+          "frequency": 100000000,
+          "total_ms": 7.47212
+        },
+        {
+          "line": 6350,
+          "frame": 3360,
+          "frequency": 100000000,
+          "total_ms": 6.40819
+        },
+        {
+          "line": 6906,
+          "frame": 3480,
+          "frequency": 100000000,
+          "total_ms": 6.53415
+        },
+        {
+          "line": 7433,
+          "frame": 3600,
+          "frequency": 100000000,
+          "total_ms": 6.12762
+        }
+      ],
+      "mode_rows": [
+        {
+          "line": 1048,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=0.386733"
+        },
+        {
+          "line": 1255,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=0.147273"
+        },
+        {
+          "line": 1282,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=0.141159"
+        },
+        {
+          "line": 1789,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=18.051468"
+        },
+        {
+          "line": 2317,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=12.846520"
+        },
+        {
+          "line": 2926,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=14.338007"
+        },
+        {
+          "line": 3523,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=31.702028"
+        },
+        {
+          "line": 3855,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=34.414909"
+        },
+        {
+          "line": 4402,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=37.741634"
+        },
+        {
+          "line": 4925,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=30.922565"
+        },
+        {
+          "line": 5445,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=33.555729"
+        },
+        {
+          "line": 6124,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=44.002312"
+        },
+        {
+          "line": 6710,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=32.438568"
+        },
+        {
+          "line": 7229,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=37.440926"
+        },
+        {
+          "line": 7751,
+          "text": "[gpu-overlay] visible=1 mode=table monitored=48.728401"
+        }
+      ],
+      "positive_frontend_callbacks": [
+        {
+          "line": 1066,
+          "name": "MenusAndHud",
+          "value": 0.374445
+        },
+        {
+          "line": 1068,
+          "name": "Debug2d",
+          "value": 0.012288
+        },
+        {
+          "line": 1273,
+          "name": "MenusAndHud",
+          "value": 0.122757
+        },
+        {
+          "line": 1275,
+          "name": "Debug2d",
+          "value": 0.024515
+        },
+        {
+          "line": 1300,
+          "name": "MenusAndHud",
+          "value": 0.122757
+        },
+        {
+          "line": 1302,
+          "name": "Debug2d",
+          "value": 0.018402
+        },
+        {
+          "line": 1807,
+          "name": "MenusAndHud",
+          "value": 0.110469
+        },
+        {
+          "line": 1809,
+          "name": "Debug2d",
+          "value": 0.135045
+        },
+        {
+          "line": 2335,
+          "name": "MenusAndHud",
+          "value": 0.110469
+        },
+        {
+          "line": 2337,
+          "name": "Debug2d",
+          "value": 0.153446
+        },
+        {
+          "line": 2944,
+          "name": "MenusAndHud",
+          "value": 0.092068
+        },
+        {
+          "line": 2946,
+          "name": "Debug2d",
+          "value": 0.128871
+        },
+        {
+          "line": 3541,
+          "name": "MenusAndHud",
+          "value": 0.098242
+        },
+        {
+          "line": 3543,
+          "name": "Debug2d",
+          "value": 0.141159
+        },
+        {
+          "line": 3873,
+          "name": "MenusAndHud",
+          "value": 0.036803
+        },
+        {
+          "line": 3875,
+          "name": "Debug2d",
+          "value": 0.141159
+        },
+        {
+          "line": 4420,
+          "name": "MenusAndHud",
+          "value": 0.030689
+        },
+        {
+          "line": 4422,
+          "name": "Debug2d",
+          "value": 0.147273
+        },
+        {
+          "line": 4943,
+          "name": "MenusAndHud",
+          "value": 0.036803
+        },
+        {
+          "line": 4945,
+          "name": "Debug2d",
+          "value": 0.122757
+        },
+        {
+          "line": 5463,
+          "name": "MenusAndHud",
+          "value": 0.030689
+        },
+        {
+          "line": 5465,
+          "name": "Debug2d",
+          "value": 0.128931
+        },
+        {
+          "line": 6142,
+          "name": "MenusAndHud",
+          "value": 1.074125
+        },
+        {
+          "line": 6144,
+          "name": "Debug2d",
+          "value": 0.141159
+        },
+        {
+          "line": 6728,
+          "name": "MenusAndHud",
+          "value": 1.09864
+        },
+        {
+          "line": 6730,
+          "name": "Debug2d",
+          "value": 0.141219
+        },
+        {
+          "line": 7247,
+          "name": "MenusAndHud",
+          "value": 1.092586
+        },
+        {
+          "line": 7249,
+          "name": "Debug2d",
+          "value": 0.128871
+        },
+        {
+          "line": 7769,
+          "name": "MenusAndHud",
+          "value": 1.203056
+        },
+        {
+          "line": 7771,
+          "name": "Debug2d",
+          "value": 0.245514
+        }
+      ],
+      "binding_rows": [
+        {
+          "line": 25,
+          "text": "[debug-component] path=\"Core/Debug/Performance/GPU Monitors\" request=engine controls=1"
+        },
+        {
+          "line": 26,
+          "text": "[debug-ini] applied core/debug/performance/gpu monitors/draw gpu monitors=true"
+        },
+        {
+          "line": 27,
+          "text": "[debug-ini] applied core/debug/performance/gpu monitors/draw as graph=false"
+        }
+      ]
+    },
+    {
+      "phase": "restored_off",
+      "valid_query_rows": [
+        {
+          "line": 250,
+          "frame": 1,
+          "frequency": 100000000,
+          "total_ms": 162.27431
+        },
+        {
+          "line": 252,
+          "frame": 2,
+          "frequency": 100000000,
+          "total_ms": 2.63987
+        },
+        {
+          "line": 253,
+          "frame": 3,
+          "frequency": 100000000,
+          "total_ms": 0.98406
+        },
+        {
+          "line": 255,
+          "frame": 4,
+          "frequency": 100000000,
+          "total_ms": 4.17997
+        },
+        {
+          "line": 256,
+          "frame": 5,
+          "frequency": 100000000,
+          "total_ms": 6.09587
+        },
+        {
+          "line": 257,
+          "frame": 6,
+          "frequency": 100000000,
+          "total_ms": 6.11635
+        },
+        {
+          "line": 258,
+          "frame": 7,
+          "frequency": 100000000,
+          "total_ms": 6.0672
+        },
+        {
+          "line": 259,
+          "frame": 8,
+          "frequency": 100000000,
+          "total_ms": 6.02317
+        },
+        {
+          "line": 345,
+          "frame": 120,
+          "frequency": 100000000,
+          "total_ms": 5.92179
+        },
+        {
+          "line": 430,
+          "frame": 240,
+          "frequency": 100000000,
+          "total_ms": 6.71744
+        },
+        {
+          "line": 461,
+          "frame": 360,
+          "frequency": 100000000,
+          "total_ms": 5.60844
+        },
+        {
+          "line": 475,
+          "frame": 480,
+          "frequency": 100000000,
+          "total_ms": 6.89972
+        },
+        {
+          "line": 492,
+          "frame": 600,
+          "frequency": 100000000,
+          "total_ms": 5.84397
+        },
+        {
+          "line": 499,
+          "frame": 720,
+          "frequency": 100000000,
+          "total_ms": 6.528
+        },
+        {
+          "line": 592,
+          "frame": 840,
+          "frequency": 100000000,
+          "total_ms": 5.89721
+        },
+        {
+          "line": 593,
+          "frame": 960,
+          "frequency": 100000000,
+          "total_ms": 5.29817
+        },
+        {
+          "line": 594,
+          "frame": 1080,
+          "frequency": 100000000,
+          "total_ms": 6.26893
+        },
+        {
+          "line": 595,
+          "frame": 1200,
+          "frequency": 100000000,
+          "total_ms": 5.61869
+        },
+        {
+          "line": 599,
+          "frame": 1320,
+          "frequency": 100000000,
+          "total_ms": 6.59865
+        },
+        {
+          "line": 614,
+          "frame": 1440,
+          "frequency": 100000000,
+          "total_ms": 5.77945
+        },
+        {
+          "line": 653,
+          "frame": 1560,
+          "frequency": 100000000,
+          "total_ms": 6.44915
+        },
+        {
+          "line": 801,
+          "frame": 1680,
+          "frequency": 100000000,
+          "total_ms": 6.03444
+        },
+        {
+          "line": 906,
+          "frame": 1800,
+          "frequency": 100000000,
+          "total_ms": 5.90746
+        },
+        {
+          "line": 981,
+          "frame": 1920,
+          "frequency": 100000000,
+          "total_ms": 5.76615
+        },
+        {
+          "line": 1028,
+          "frame": 2040,
+          "frequency": 100000000,
+          "total_ms": 6.22489
+        },
+        {
+          "line": 1149,
+          "frame": 2160,
+          "frequency": 100000000,
+          "total_ms": 6.06618
+        },
+        {
+          "line": 1489,
+          "frame": 2280,
+          "frequency": 100000000,
+          "total_ms": 8.90675
+        },
+        {
+          "line": 1948,
+          "frame": 2400,
+          "frequency": 100000000,
+          "total_ms": 6.08871
+        },
+        {
+          "line": 2452,
+          "frame": 2520,
+          "frequency": 100000000,
+          "total_ms": 6.31808
+        },
+        {
+          "line": 3042,
+          "frame": 2640,
+          "frequency": 100000000,
+          "total_ms": 6.06106
+        },
+        {
+          "line": 3419,
+          "frame": 2760,
+          "frequency": 100000000,
+          "total_ms": 9.80173
+        },
+        {
+          "line": 3945,
+          "frame": 2880,
+          "frequency": 100000000,
+          "total_ms": 8.60263
+        },
+        {
+          "line": 4456,
+          "frame": 3000,
+          "frequency": 100000000,
+          "total_ms": 8.20634
+        },
+        {
+          "line": 5017,
+          "frame": 3120,
+          "frequency": 100000000,
+          "total_ms": 8.77773
+        },
+        {
+          "line": 5669,
+          "frame": 3240,
+          "frequency": 100000000,
+          "total_ms": 8.83098
+        },
+        {
+          "line": 6185,
+          "frame": 3360,
+          "frequency": 100000000,
+          "total_ms": 8.41933
+        },
+        {
+          "line": 6676,
+          "frame": 3480,
+          "frequency": 100000000,
+          "total_ms": 8.84224
+        }
+      ],
+      "mode_rows": [
+        {
+          "line": 1048,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=0.405075"
+        },
+        {
+          "line": 1232,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=0.135045"
+        },
+        {
+          "line": 1236,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=0.141159"
+        },
+        {
+          "line": 1716,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=13.331433"
+        },
+        {
+          "line": 2223,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=24.907406"
+        },
+        {
+          "line": 2809,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=19.923456"
+        },
+        {
+          "line": 3354,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=18.646793"
+        },
+        {
+          "line": 3696,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=42.191650"
+        },
+        {
+          "line": 4233,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=42.381897"
+        },
+        {
+          "line": 4727,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=49.937572"
+        },
+        {
+          "line": 5401,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=53.755333"
+        },
+        {
+          "line": 5955,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=50.164730"
+        },
+        {
+          "line": 6459,
+          "text": "[gpu-overlay] visible=0 mode=table monitored=44.665188"
+        }
+      ],
+      "positive_frontend_callbacks": [],
+      "binding_rows": [
+        {
+          "line": 25,
+          "text": "[debug-component] path=\"Core/Debug/Performance/GPU Monitors\" request=engine controls=1"
+        },
+        {
+          "line": 26,
+          "text": "[debug-ini] applied core/debug/performance/gpu monitors/draw gpu monitors=false"
+        },
+        {
+          "line": 27,
+          "text": "[debug-ini] applied core/debug/performance/gpu monitors/draw as graph=false"
+        }
+      ]
+    }
+  ],
+  "independently_viewed_frames": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\baseline_off\\frames\\bb_003360.bmp",
+      "bytes": 3686454,
+      "sha256": "cc6988b403351644e6839eafca02b898922832a05d0246919658ccfea3039137",
+      "phase": "baseline_off",
+      "width": 1280,
+      "signed_height": -720,
+      "bits_per_pixel": 32,
+      "direct_view_image_inspected": true,
+      "observation": "No GPU graph or GPU table visible; car-selection frontend and content-update notice remain."
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\graph_true\\frames\\bb_003360.bmp",
+      "bytes": 3686454,
+      "sha256": "9a8ac2f31b946c324c57d4198467973814bdc2ce2572ac4a9352979873e981d0",
+      "phase": "graph_true",
+      "width": 1280,
+      "signed_height": -720,
+      "bits_per_pixel": 32,
+      "direct_view_image_inspected": true,
+      "observation": "Horizontal GPU performance graph with labeled percentage scale is visible."
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\table_false\\frames\\bb_003600.bmp",
+      "bytes": 3686454,
+      "sha256": "9da7eb6d4af0aa4bf96e69aa4b660d4c7335f98daac3196ecdc2ee351570e698",
+      "phase": "table_false",
+      "width": 1280,
+      "signed_height": -720,
+      "bits_per_pixel": 32,
+      "direct_view_image_inspected": true,
+      "observation": "GPU Render Cost heading and labeled monitor/value rows including MenusAndHud and Debug2d are visibly present."
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\restored_off\\frames\\bb_003360.bmp",
+      "bytes": 3686454,
+      "sha256": "a1db66f7570da2fdcb4bdacdee09344d576eba1b340a2bcaebe4eb5cd3924984",
+      "phase": "restored_off",
+      "width": 1280,
+      "signed_height": -720,
+      "bits_per_pixel": 32,
+      "direct_view_image_inspected": true,
+      "observation": "GPU graph and GPU table absent again in the frontend."
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gpu_monitor_phase_probe_delta05\\runs\\native_sequence_20261022_134615\\graph_true\\frames\\bb_003600.bmp",
+      "bytes": 3686454,
+      "sha256": "5ae0205ee8842051e96119bfe879a14f4f66c0115367bfc01daf0a3938d383dc",
+      "phase": "graph_true",
+      "width": 1280,
+      "signed_height": -720,
+      "bits_per_pixel": 32,
+      "direct_view_image_inspected": true,
+      "observation": "Horizontal GPU performance graph with labeled percentage scale is visible."
+    }
+  ]
+}

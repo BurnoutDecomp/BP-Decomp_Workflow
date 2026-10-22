@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "family": "BrnGui::EffectsArbitrator::Construct",
+  "target_b5_commit": "8fec93bd4d2806ca9b60fb53dc272fe28081f8b8",
+  "cohort_roster_sha256": "8e3dbeb7f11ec30858106c8a16bd93d2d636f620d62f26c2bfdf6691171fa553",
+  "site_count": 8,
+  "claim_scope": "source registration-to-writer/consumer map; no runtime behavior credit",
+  "sites": [
+    {
+      "site_id": "BrnGui::EffectsArbitrator::Construct#0001",
+      "caption": "ForceTime",
+      "registration_api": "sub_8282E400",
+      "original_call": "sub_8282E400(&v3, a1 + 14528, \"PFX\", \"ForceTime\")",
+      "source_registration_line": 105,
+      "field": "mbForceTime",
+      "offset": "+0x38C0",
+      "current_reader": "EffectsArbitrator::UpdateHooks checks mbForceTime and, when true, calls mpCurrent->ForceTime(mfForcedTime) (BrnGuiEffectsArbitrator.cpp:536-557)",
+      "artist_reader": "0x82502E38 reads the force-time toggle and forwards the registered time to the active blender",
+      "writer": "CgsDev::DebugInterface::RegisterVariable(&mbForceTime, 'PFX','ForceTime') at Construct line 105",
+      "status": "Writer and concrete consumer source present; no per-site behavior tested."
+    },
+    {
+      "site_id": "BrnGui::EffectsArbitrator::Construct#0002",
+      "caption": "Time",
+      "registration_api": "CgsDev::DebugInterface::RegisterVariable",
+      "original_call": "CgsDev::DebugInterface::RegisterVariable(&v3, a1 + 14532, \"PFX\", \"Time\")",
+      "source_registration_line": 106,
+      "field": "mfForcedTime",
+      "offset": "+0x38C4",
+      "current_reader": "UpdateHooks uses mfForcedTime only when mbForceTime is true (BrnGuiEffectsArbitrator.cpp:554-557)",
+      "artist_reader": "0x82502E38 consumes the force-time value when the toggle is set",
+      "writer": "registered at line 106; range [0,100], step 0.0099999998 at lines 107-108",
+      "status": "Writer, bounds and gated consumer present; no behavior tested."
+    },
+    {
+      "site_id": "BrnGui::EffectsArbitrator::Construct#0003",
+      "caption": "Background Weight",
+      "registration_api": "CgsDev::DebugInterface::RegisterVariable",
+      "original_call": "CgsDev::DebugInterface::RegisterVariable(&v3, a1 + 14536, \"PFX\", \"Background Weight\")",
+      "source_registration_line": 109,
+      "field": "mfBackgroundWeight",
+      "offset": "+0x38C8",
+      "current_reader": "Debug_StartHook and Debug_StartBackgroundHook read mfBackgroundWeight to populate the corresponding hook event maximum weight (BrnGuiEffectsArbitrator.cpp:1112-1138); the background blender consumes event weights in the same TU",
+      "artist_reader": "0x82512550 and 0x825124F8 read the registered weight for the start-hook commands",
+      "writer": "registered at line 109; range [0,1], step 0.1 at lines 110-111",
+      "status": "Writer, bounds and callback consumers present; no behavior tested."
+    },
+    {
+      "site_id": "BrnGui::EffectsArbitrator::Construct#0004",
+      "caption": "Hook",
+      "registration_api": "sub_8282E3B8",
+      "original_call": "sub_8282E3B8(&v3, a1 + 14540, \"PFX\", \"Hook\")",
+      "source_registration_line": 112,
+      "field": "miPfxHookIndex",
+      "offset": "+0x38CC",
+      "current_reader": "Acquire3dTints fills maPfxHookList from the loaded PFX bundle and sets the range; Debug_StartHook/Debug_StartBackgroundHook select maPfxHookList[miPfxHookIndex] (BrnGuiEffectsArbitrator.cpp:224-255,1112-1138)",
+      "artist_reader": "0x82512AA8 fills hook options after bundle load; debug start callbacks use the selected index",
+      "writer": "registered at line 112, options at 113, initial range [0,0] at 114",
+      "status": "Option list producer, selected-value consumer and current source are present; no behavior tested."
+    },
+    {
+      "site_id": "BrnGui::EffectsArbitrator::Construct#0005",
+      "caption": "Start Hook",
+      "registration_api": "CgsDev::DebugInterface::RegisterFunction",
+      "original_call": "CgsDev::DebugInterface::RegisterFunction(&v3, BrnGui::EffectsArbitrator::Debug_StartHook, a1, \"PFX\", \"Start Hook\")",
+      "source_registration_line": 115,
+      "callback": "Debug_StartHook",
+      "current_reader": "Debug_StartHook validates the selected hook, packs the start event and calls StartHook (BrnGuiEffectsArbitrator.cpp:1112-1127)",
+      "artist_reader": "0x82512550 routes selected name/weight to StartHook @0x8250B618",
+      "writer": "RegisterFunction at Construct line 115",
+      "status": "Callback and downstream source bodies present; no behavior tested."
+    },
+    {
+      "site_id": "BrnGui::EffectsArbitrator::Construct#0006",
+      "caption": "Stop Hook",
+      "registration_api": "CgsDev::DebugInterface::RegisterFunction",
+      "original_call": "CgsDev::DebugInterface::RegisterFunction(&v3, BrnGui::EffectsArbitrator::Debug_StopHook, a1, \"PFX\", \"Stop Hook\")",
+      "source_registration_line": 116,
+      "callback": "Debug_StopHook",
+      "current_reader": "Debug_StopHook resolves the selected hook and calls StopHook (BrnGuiEffectsArbitrator.cpp:1140+)",
+      "artist_reader": "0x824FB330 routes stop to StopHook @0x824FB398",
+      "writer": "RegisterFunction at Construct line 116",
+      "status": "Callback and downstream source bodies present; no behavior tested."
+    },
+    {
+      "site_id": "BrnGui::EffectsArbitrator::Construct#0007",
+      "caption": "Start As Background Hook",
+      "registration_api": "CgsDev::DebugInterface::RegisterFunction",
+      "original_call": "CgsDev::DebugInterface::RegisterFunction( &v3, BrnGui::EffectsArbitrator::Debug_StartBackgroundHook, a1, \"PFX\", \"Start As Background Hook\")",
+      "source_registration_line": 117,
+      "callback": "Debug_StartBackgroundHook",
+      "current_reader": "Debug_StartBackgroundHook uses selected hook and mfBackgroundWeight to start the background transition (BrnGuiEffectsArbitrator.cpp:1129-1138)",
+      "artist_reader": "0x825124F8 routes to StartBackgroundHook @0x8250B1F0",
+      "writer": "RegisterFunction at Construct line 117",
+      "status": "Callback and downstream source bodies present; no behavior tested."
+    },
+    {
+      "site_id": "BrnGui::EffectsArbitrator::Construct#0008",
+      "caption": "Stop Background Hook",
+      "registration_api": "CgsDev::DebugInterface::RegisterFunction",
+      "original_call": "CgsDev::DebugInterface::RegisterFunction( &v3, BrnGui::EffectsArbitrator::Debug_StopBackgroundHook, a1, \"PFX\", \"Stop Background Hook\")",
+      "source_registration_line": 118,
+      "callback": "Debug_StopBackgroundHook",
+      "current_reader": "Debug_StopBackgroundHook stops the current background hook (BrnGuiEffectsArbitrator.cpp:1149+)",
+      "artist_reader": "0x824FB2C8 routes to StopBackgroundHook @0x8250B478",
+      "writer": "RegisterFunction at Construct line 118",
+      "status": "Callback and downstream source bodies present; no behavior tested."
+    }
+  ],
+  "family_findings": [
+    "All eight Construct registrations occur in the shipped source in ARTIST order and are called from GuiModule::Construct (current source BrnGuiModule.cpp:886; ARTIST GuiModule::Construct @0x82518028 calls EffectsArbitrator::Construct @0x825175A0).",
+    "Unlike the four CgsDev::DebugComponent owners, this owner registers directly through CgsDev::DebugInterface during Construct; it does not depend on PrepareNativeDebugComponents or the shared 67-site hook.",
+    "The ForceTime, Time, Background Weight and Hook fields have direct current readers; all four action callbacks have current bodies and matching ARTIST call chains.",
+    "This source checkpoint identifies no missing body or disconnected source consumer. All eight behavior dispositions remain pending."
+  ]
+}
