@@ -1,0 +1,294 @@
+{
+  "packet": "replay_game_state_postworld_event_producers_delta01_20261023",
+  "purpose": "source-only recovery proposal for GameState PostWorld events 43 and 10",
+  "base_commit": "568fc5fe498ffc261cbadf35de5440c6988ec862",
+  "base_tree": "d39afbc60cd2850e73841bf9eddb93cf4bd2706f",
+  "base_parent": "c1b0e7ef6a181c3cc92f45ac9481a9cbaaeb01db",
+  "lineage_c1": "c1b0e7ef6a181c3cc92f45ac9481a9cbaaeb01db",
+  "production_checkout_head_observed": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+  "production_checkout_status_observed": "clean",
+  "current_checkout_relation": "composition base is not an ancestor of the observed production checkout; packet is bound directly to base_commit",
+  "scope": [
+    "recover event 43 and event 10 in DoUpdate_GameStatePostWorld",
+    "add typed DirectorOutputInterface access contracts",
+    "add owned controller-disconnect latch and source-backed initialization",
+    "do not wire GameMain, GUI PreWorld, Replay lifecycle, or late update-set producers"
+  ],
+  "changed_source_bindings": [
+    {
+      "path": "src/GameSource/Game/BrnGameModule.hpp",
+      "c1_blob": "a872a0311ba2665f926c35e3f998c6d3d92bb6ad",
+      "c1_sha256": "a9ef7e82370913f60c8dd4629a85cc469c01a8613387c2626caf803e288fdc94",
+      "composition_blob": "a872a0311ba2665f926c35e3f998c6d3d92bb6ad",
+      "composition_sha256": "a9ef7e82370913f60c8dd4629a85cc469c01a8613387c2626caf803e288fdc94",
+      "postimage_sha256": "f20b5565cf07ff9f055c60880ef951cd866bd0d4262be96cba3faa274717b7f2",
+      "c1_bytes": 106426,
+      "composition_bytes": 106426,
+      "postimage_bytes": 106513
+    },
+    {
+      "path": "src/GameSource/Game/BrnGameModule.cpp",
+      "c1_blob": "f2d73de31159f56c0f2ea498b96ce73d6eb2f73d",
+      "c1_sha256": "4b0d29208323919933f7638cc82734b378df6f798d5eae83efefc7adb15a1d6b",
+      "composition_blob": "f5b172967d0bce495acc0e6f2c55c0c178eb5dbb",
+      "composition_sha256": "2bd06339b1d539f03f55ca82aa296ac5b6f715bfad2ae2af99dc081a9fd0391d",
+      "postimage_sha256": "cdde690ad876bab5cb5f6231be631869d685166aedb876cbdca7b996a17c1d62",
+      "c1_bytes": 362652,
+      "composition_bytes": 363178,
+      "postimage_bytes": 364447
+    },
+    {
+      "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.hpp",
+      "c1_blob": "b3e8c17b474f48f525d4a25a8fc7199e4e075983",
+      "c1_sha256": "f8ae10de5bcbb1c883a27e84ccb2f9ddacda3099f7edd3ae7eb4869590c8f331",
+      "composition_blob": "b3e8c17b474f48f525d4a25a8fc7199e4e075983",
+      "composition_sha256": "f8ae10de5bcbb1c883a27e84ccb2f9ddacda3099f7edd3ae7eb4869590c8f331",
+      "postimage_sha256": "09536e086ffbdbfa5d4380d222aebd1483303a2213bd3a19c8b19c75977e3d7c",
+      "c1_bytes": 13296,
+      "composition_bytes": 13296,
+      "postimage_bytes": 13855
+    },
+    {
+      "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.cpp",
+      "c1_blob": "e546d91f8a09f4ffe14b0ecac8e1401cfb10f65c",
+      "c1_sha256": "1f0ca4433eae06e9dfb2cc56c50cece2226ee66d4a34601eb8dec811c8720ca8",
+      "composition_blob": "e546d91f8a09f4ffe14b0ecac8e1401cfb10f65c",
+      "composition_sha256": "1f0ca4433eae06e9dfb2cc56c50cece2226ee66d4a34601eb8dec811c8720ca8",
+      "postimage_sha256": "652cdd0468599407f526ed299546334ae88f0c23ccf2b5d2b02b7b48c98b077e",
+      "c1_bytes": 9321,
+      "composition_bytes": 9321,
+      "postimage_bytes": 9900
+    },
+    {
+      "path": "src/GameSource/Director/SharedIO/BrnDirectorOutputInterface.h",
+      "c1_blob": "7843886a85ca10919d7a0b9e90601d8fb39e0150",
+      "c1_sha256": "939dca2d92fe2db716f8a32c9808181dc8779352c789be5694664ac2229cbf66",
+      "composition_blob": "7843886a85ca10919d7a0b9e90601d8fb39e0150",
+      "composition_sha256": "939dca2d92fe2db716f8a32c9808181dc8779352c789be5694664ac2229cbf66",
+      "postimage_sha256": "336cb8cc6021a7f46bac71f14e4ae5228962fcd3fff72ce64c5723078a3ce676",
+      "c1_bytes": 2028,
+      "composition_bytes": 2028,
+      "postimage_bytes": 2253
+    }
+  ],
+  "evidence_bindings": [
+    {
+      "path": "evidence/artist/DoUpdate_GameStatePostWorld_823E92A8.json",
+      "origin": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823E92A8.json",
+      "sha256": "88000060b731ce74c2cbdeb2bc027c9ec45501b2f33a5d06c56180f7c2282937",
+      "bytes": 17407
+    },
+    {
+      "path": "evidence/artist/Construct_823C9EA8.json",
+      "origin": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823C9EA8.json",
+      "sha256": "3f4af6d4f0208f7e7745d6da9e7ecf78aff365c6db8578dc604e4c2dddcfd898",
+      "bytes": 86405
+    },
+    {
+      "path": "evidence/artist/DirectorOutput_ReadGetter_823B3458.json",
+      "origin": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823B3458.json",
+      "sha256": "300b42393587effe29f45239a578ae33283bcd2e518c1c797dd8fb0afb8750d5",
+      "bytes": 4385
+    },
+    {
+      "path": "evidence/artist/DirectorOutput_WriteGetter_82207848.json",
+      "origin": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82207848.json",
+      "sha256": "a203ec1767afd1aa1fadc2e9aa84dc5e5eb54f4a68972817789993db81687fa3",
+      "bytes": 4385
+    },
+    {
+      "path": "evidence/decfigs/GameStatePostWorld_30E848.json",
+      "origin": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0x30E848.json",
+      "sha256": "a88cab75c8a1e9eaa6f8e2d02685e769e6c597b7c91476229b24f2bc55e1daad",
+      "bytes": 46356
+    },
+    {
+      "path": "evidence/decfigs/DirectorOutputGetter_33E0D0.json",
+      "origin": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0x33E0D0.json",
+      "sha256": "67aaa420ace239d75f2dbceb757369e5a6cb6476e21e300c70384dc49279dcdb",
+      "bytes": 5780
+    },
+    {
+      "path": "evidence/decfigs/ControllerDisconnectedEventAdd_345DFC.json",
+      "origin": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0x345DFC.json",
+      "sha256": "47b6d5dbb01a75e29c5faff2036a083c82fe9679578d034b5371f2b223005daa",
+      "bytes": 2452
+    },
+    {
+      "path": "evidence/source_types/BrnGameEvents.h",
+      "origin": "568fc5fe498ffc261cbadf35de5440c6988ec862:src/GameSource/GameState/BrnGameEvents.h",
+      "git_blob": "7a535c3dd7855deba6a2ef681a05182316d57a10",
+      "sha256": "ee208ff1c221593baee41448cd2db9faa96639e4bf3ad18b07bb927255f22c29",
+      "bytes": 90421
+    },
+    {
+      "path": "evidence/source_shapes/active_update_set_boundary.txt",
+      "origin": "568fc5fe498ffc261cbadf35de5440c6988ec862:src/GameSource/Game/BrnGameModule.cpp",
+      "sha256": "8ee42f5aca6fb07bafae54c51d589a6b02a6b64a6b317cc64b390c8468a95cb1",
+      "bytes": 2954
+    }
+  ],
+  "previous_dependency": {
+    "packet_path": "scratch/DEBUG_MENU_1011/replay_active_gamemain_source_delta01_20261023",
+    "commit": "568fc5fe498ffc261cbadf35de5440c6988ec862",
+    "review_source_only_seal": "435da132748a783d3ce303a5e59146c9ce6f19449dd92990c5c7f181c74a4144",
+    "dependency_note": "BrnGameModule.cpp composition preimage is the exact prior prerequisite postimage at base_commit"
+  },
+  "limitations": [
+    "source-only review candidate; no runtime or behavior credit",
+    "event10 consumes incoming update-set bit 0x4, which the active early-set caller does not supply",
+    "Replay PostSim output remains null at the active caller",
+    "no C++ compilation, fixtures, CI, native game, or IDA execution"
+  ],
+  "payload_files": [
+    {
+      "path": "DEPENDENCIES.md",
+      "sha256": "35dc1c754f0dcba0ee6722b90fc1593a0af870babf03e260336b545464efc0f6",
+      "bytes": 1938
+    },
+    {
+      "path": "evidence/artist/Construct_823C9EA8.json",
+      "sha256": "3f4af6d4f0208f7e7745d6da9e7ecf78aff365c6db8578dc604e4c2dddcfd898",
+      "bytes": 86405
+    },
+    {
+      "path": "evidence/artist/DirectorOutput_ReadGetter_823B3458.json",
+      "sha256": "300b42393587effe29f45239a578ae33283bcd2e518c1c797dd8fb0afb8750d5",
+      "bytes": 4385
+    },
+    {
+      "path": "evidence/artist/DirectorOutput_WriteGetter_82207848.json",
+      "sha256": "a203ec1767afd1aa1fadc2e9aa84dc5e5eb54f4a68972817789993db81687fa3",
+      "bytes": 4385
+    },
+    {
+      "path": "evidence/artist/DoUpdate_GameStatePostWorld_823E92A8.json",
+      "sha256": "88000060b731ce74c2cbdeb2bc027c9ec45501b2f33a5d06c56180f7c2282937",
+      "bytes": 17407
+    },
+    {
+      "path": "evidence/decfigs/ControllerDisconnectedEventAdd_345DFC.json",
+      "sha256": "47b6d5dbb01a75e29c5faff2036a083c82fe9679578d034b5371f2b223005daa",
+      "bytes": 2452
+    },
+    {
+      "path": "evidence/decfigs/DirectorOutputGetter_33E0D0.json",
+      "sha256": "67aaa420ace239d75f2dbceb757369e5a6cb6476e21e300c70384dc49279dcdb",
+      "bytes": 5780
+    },
+    {
+      "path": "evidence/decfigs/GameStatePostWorld_30E848.json",
+      "sha256": "a88cab75c8a1e9eaa6f8e2d02685e769e6c597b7c91476229b24f2bc55e1daad",
+      "bytes": 46356
+    },
+    {
+      "path": "evidence/source_shapes/active_update_set_boundary.txt",
+      "sha256": "8ee42f5aca6fb07bafae54c51d589a6b02a6b64a6b317cc64b390c8468a95cb1",
+      "bytes": 2954
+    },
+    {
+      "path": "evidence/source_types/BrnGameEvents.h",
+      "sha256": "ee208ff1c221593baee41448cd2db9faa96639e4bf3ad18b07bb927255f22c29",
+      "bytes": 90421
+    },
+    {
+      "path": "PATCH.diff",
+      "sha256": "47d9b083095bd37bedd21419b3d20e4520671469e9c8ae32eb16ed9b354b0eef",
+      "bytes": 11999
+    },
+    {
+      "path": "postimage/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.cpp",
+      "sha256": "652cdd0468599407f526ed299546334ae88f0c23ccf2b5d2b02b7b48c98b077e",
+      "bytes": 9900
+    },
+    {
+      "path": "postimage/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.hpp",
+      "sha256": "09536e086ffbdbfa5d4380d222aebd1483303a2213bd3a19c8b19c75977e3d7c",
+      "bytes": 13855
+    },
+    {
+      "path": "postimage/src/GameSource/Director/SharedIO/BrnDirectorOutputInterface.h",
+      "sha256": "336cb8cc6021a7f46bac71f14e4ae5228962fcd3fff72ce64c5723078a3ce676",
+      "bytes": 2253
+    },
+    {
+      "path": "postimage/src/GameSource/Game/BrnGameModule.cpp",
+      "sha256": "cdde690ad876bab5cb5f6231be631869d685166aedb876cbdca7b996a17c1d62",
+      "bytes": 364447
+    },
+    {
+      "path": "postimage/src/GameSource/Game/BrnGameModule.hpp",
+      "sha256": "f20b5565cf07ff9f055c60880ef951cd866bd0d4262be96cba3faa274717b7f2",
+      "bytes": 106513
+    },
+    {
+      "path": "preimage/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.cpp",
+      "sha256": "1f0ca4433eae06e9dfb2cc56c50cece2226ee66d4a34601eb8dec811c8720ca8",
+      "bytes": 9321
+    },
+    {
+      "path": "preimage/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.hpp",
+      "sha256": "f8ae10de5bcbb1c883a27e84ccb2f9ddacda3099f7edd3ae7eb4869590c8f331",
+      "bytes": 13296
+    },
+    {
+      "path": "preimage/src/GameSource/Director/SharedIO/BrnDirectorOutputInterface.h",
+      "sha256": "939dca2d92fe2db716f8a32c9808181dc8779352c789be5694664ac2229cbf66",
+      "bytes": 2028
+    },
+    {
+      "path": "preimage/src/GameSource/Game/BrnGameModule.cpp",
+      "sha256": "2bd06339b1d539f03f55ca82aa296ac5b6f715bfad2ae2af99dc081a9fd0391d",
+      "bytes": 363178
+    },
+    {
+      "path": "preimage/src/GameSource/Game/BrnGameModule.hpp",
+      "sha256": "a9ef7e82370913f60c8dd4629a85cc469c01a8613387c2626caf803e288fdc94",
+      "bytes": 106426
+    },
+    {
+      "path": "preimage_c1/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.cpp",
+      "sha256": "1f0ca4433eae06e9dfb2cc56c50cece2226ee66d4a34601eb8dec811c8720ca8",
+      "bytes": 9321
+    },
+    {
+      "path": "preimage_c1/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.hpp",
+      "sha256": "f8ae10de5bcbb1c883a27e84ccb2f9ddacda3099f7edd3ae7eb4869590c8f331",
+      "bytes": 13296
+    },
+    {
+      "path": "preimage_c1/src/GameSource/Director/SharedIO/BrnDirectorOutputInterface.h",
+      "sha256": "939dca2d92fe2db716f8a32c9808181dc8779352c789be5694664ac2229cbf66",
+      "bytes": 2028
+    },
+    {
+      "path": "preimage_c1/src/GameSource/Game/BrnGameModule.cpp",
+      "sha256": "4b0d29208323919933f7638cc82734b378df6f798d5eae83efefc7adb15a1d6b",
+      "bytes": 362652
+    },
+    {
+      "path": "preimage_c1/src/GameSource/Game/BrnGameModule.hpp",
+      "sha256": "a9ef7e82370913f60c8dd4629a85cc469c01a8613387c2626caf803e288fdc94",
+      "bytes": 106426
+    },
+    {
+      "path": "REVIEW_REQUEST.md",
+      "sha256": "c8c120732faf480db5591ae73a6e8280b0b30c91227eee8d06a6af4e84571bc2",
+      "bytes": 1443
+    },
+    {
+      "path": "SOURCE_POSTMORTEM.md",
+      "sha256": "60f7b7e68fa3122b9d5244dcf67eddd1aa078bdb8845e7e81a7898eb2eab90a8",
+      "bytes": 1940
+    }
+  ],
+  "integrity": {
+    "algorithm": "SHA-256",
+    "payload_canonicalization": "sorted UTF-8 paths, one line per file: path<TAB>sha256<LF>",
+    "payload_digest_sha256": "dd6728b23d92068380cba6863e40dd32b655c14aa2b9e456d907b074abaf2f9a",
+    "excluded_from_payload_digest": [
+      "MANIFEST.json",
+      "SEAL.sha256"
+    ]
+  }
+}
