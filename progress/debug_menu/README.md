@@ -5,15 +5,23 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-Launch `build/game/Burnout_PC.exe`. The installed **8fec93bd** build combines
-the GUI/action/movie and profile repair with current-dev Traffic and the shared
-DLC reader. It passed hosted compile/link and all selected GUI/profile checks.
-The exact executable passed real Start/sign-in, junkyard/world/HUD,68.7m of
-driving, local online Freeburn/Create Event, editing/moving/placing checkpoint1
-in a seven-checkpoint preset and returning with Back. No asserts/exceptions.
-The predecessor separately added a new checkpoint. All twelve matching build
-files are installed; config, nine profiles and their modification times were
-preserved at delivery, with a backup of the old build. [Delivery and limits](gui_dev_playable_delivery_20261022/DELIVERY.json).
+Launch `build/game/Burnout_PC.exe`. The installed **ced5e065** build adds
+shared GUI debug wiring for67 registration sites, the custom-renderer owner
+and controls for17 more, the original flow-preload parser and Traffic
+Flowtype repair. Source review, hosted compile/link and all eight selected
+regression groups passed. The exact executable passed real Start, visible
+world/HUD/EasyDrive,83.7m of driving, local Freeburn, adding the first
+checkpoint, moving/placing it and Back to Create Event. Root viewed the
+actual frames: this run used a new checkpoint1/1, rather than the prior
+seven-point preset. No asserts/exceptions; config, nine profiles and logs
+kept their bytes and modification times. Twelve matching outputs were
+verified; four changed files were installed with a recoverable backup.
+[Delivery and limits](gui84_playable_delivery_20261022/DELIVERY.json).
+
+The newer Replay/GUI consumer candidate **073412e1** passed hosted checks
+but hit a streaming-state assert in its private startup check. It was
+caught before delivery and remains off dev; the original Lua-index/name
+lookup is being recovered. [Retained failure](replay_gui_native_failure_20261022.json).
 
 The earlier **b82350534** delivery checks passed:
 
@@ -50,19 +58,25 @@ The dated source/audit checkpoint recorded 1,351/1,355 sites (99.7%), including 
 
 ## Continuing source work
 
-**Next source batch:** private **56370603b** repairs shared GUI wiring used by67 registrations and the typed custom-renderer owner/controls for17 more, plus the original flow-preload parser. All13 source/test paths and both parent build/gate changes are committed/pushed. Source review passes; hosted39775606230 and new native behavior checks remain pending at this checkpoint. These84 sites stay pending. [Source scope and limits](source_recovery_129_evidence_20261022/CANDIDATE.json).
+**GUI84 source batch:** **ced5e065** is installed and merged to dev after
+source, hosted and bounded native delivery checks. That smoke does not
+certify the84 debug controls, which remain pending. The separate Replay
+lifecycle and additional GUI render/streaming consumers are committed on
+private073412e1; its native startup failure is being fixed. Vehicle Manager
+render helpers and the RWAC sound corruption are active recovery work.
+[Source scope](source_recovery_129_evidence_20261022/CANDIDATE.json).
 
-**Current-build GPU refresh:** the installed8fec executable passed four separate cold-launch frontend phases in115.421s: hidden, measured graph, readable20-category table, hidden again. Actual pixels, query packets, original bool readbacks and cleanup were independently checked; normal config/saves/log/exe fingerprints stayed unchanged. These are two already-verified sites, so the count does not increase. This does not test changing modes inside one running process. [Exact refresh evidence](gpu_current_build_refresh_20261022/REVIEW.md).
+**Previous-build GPU refresh:** the preceding8fec executable passed four separate cold-launch frontend phases in115.421s: hidden, measured graph, readable20-category table, hidden again. Actual pixels, query packets, original bool readbacks and cleanup were independently checked; normal config/saves/log/exe fingerprints stayed unchanged. These are two already-verified sites, so the count does not increase. This does not test changing modes inside one running process. [Exact refresh evidence](gpu_current_build_refresh_20261022/REVIEW.md).
 
-**GUI/action/movie and online recovery:** **8fec93bd** is installed and
-merged/pushed to dev. Its exact2,994-file hosted build and selected profile,
+**Earlier GUI/action/movie and online delivery:** **8fec93bd** preceded
+installedced5 and remains available in the delivery history. Its exact2,994-file hosted build and selected profile,
 keyboard, licence, GUI lifecycle, HUD and delivery fixtures passed, including
 original-code failure controls. Independent review checked the native pixels,
 57 inputs, motion and cleanup. [Exact native evidence](gui_dev_playable_delivery_20261022/REVIEW.md).
 This supporting-flow delivery adds no debug-site dispositions and does not
 certify peer races, route save/reload, every UI hint, native DLC behavior or
-long-session audio. A newer private Flowtype override recovery **0bfa585e**
-is committed/pushed but is absent from this package and still needs its gates.
+long-session audio. The Flowtype override recovery is included in installedced5; its44-check
+fixture and exact old-return control passed. Native #0081 remains pending.
 
 **Route snap capacity checkpoint:** The 289-bound one-file source commit **6b66e5984f6f21ea47d1fa62a2ec61c9511640c9** passed hosted build run [39654339193](https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39654339193). Native placement/movement and Back passed; the matching normal package is installed and merged to dev. Done/save persistence and a complete multiplayer race remain unverified. This supporting-flow repair adds no verified debug-site dispositions.
 
@@ -78,8 +92,8 @@ correlation. The historical Traffic74 aggregate remains **FAIL**, all 74 CSV
 `pre_run_status` rows remain `PENDING_NOT_RUN`, and `runtime_consumer_verified`
 remains 0. Sites #0045/#0046/#0047/#0050 stay excluded/pending; this adds no
 new #0086 or extra 15-hull-cycle credit. The source is included in installed
-8fec93bd; a newer private Flowtype source commit 0bfa585e is not represented as
-part of that package. [Three-control evidence](traffic_three_control_evidence_20261022/CHECKPOINT.md).
+8fec93bd; the newer Flowtype recovery is included in installedced5, with native
+#0081 still pending. [Three-control evidence](traffic_three_control_evidence_20261022/CHECKPOINT.md).
 [Existing #0086 evidence](traffic_worst_case_evidence_20261022/CHECKPOINT.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source coverage, not 188 verified debug controls. Coherent checkpoints are committed and pushed frequently; reviewed work merges in batches.

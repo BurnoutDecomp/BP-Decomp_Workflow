@@ -4190,6 +4190,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   rem  stubs -- their renderers are minimal slices that would construct, prepare, report
   rem  success and draw nothing.
   echo "%SRC%\GameSource\Gui\CustomRenderer\BrnCustomRenderer.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\BrnGuiCustRendererDebugComponent.cpp"
+  echo "%SRC%\GameSource\Gui\CustomRenderer\Renderers\BrnGuiCustRendererDebugComponent.cpp"
   rem ??? [tut-ticker] wave (2026-08-24) -- THE BOTTOM-OF-SCREEN TICKER, whole (manager slot 8).
   rem  The consumer of GUI event 537: queues the training/custom lines, scrolls them with the
   rem  B5DotMat face over the fading black band (TextRenderer/Im2d substrate, gateui waves').

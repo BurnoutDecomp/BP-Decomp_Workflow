@@ -18,7 +18,8 @@ param(
     [switch] $RunGuiLicenseRegressions,
     [switch] $RunKeyboardUIContract,
     [switch] $RunRwacCommandCapacity,
-    [switch] $RunSystemUserProfile
+    [switch] $RunSystemUserProfile,
+    [switch] $RunTrafficFlowtypeOverride
 )
 
 Set-StrictMode -Version Latest
@@ -46,7 +47,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity -or $RunSystemUserProfile); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; system_user_profile_status = $(if ($RunSystemUserProfile) { 'running' } else { 'not_requested' }); system_user_profile = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity -or $RunSystemUserProfile -or $RunTrafficFlowtypeOverride); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; system_user_profile_status = $(if ($RunSystemUserProfile) { 'running' } else { 'not_requested' }); system_user_profile = @{}; traffic_flowtype_override_status = $(if ($RunTrafficFlowtypeOverride) { 'running' } else { 'not_requested' }); traffic_flowtype_override = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 $SystemUserProfileSourceBase = 'bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7'
@@ -401,6 +402,82 @@ function Assert-SystemUserProfileReceipt(
     return $variantSummaries
 }
 
+# Validate the existing fxgs_common retained-output contract; never execute receipt commands.
+function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision, [bool] $Baseline) {
+    $row = Get-Content -Raw -LiteralPath (Join-Path $VariantRoot 'result.json') | ConvertFrom-Json -AsHashtable
+    $extraction = Get-Content -Raw -LiteralPath (Join-Path $VariantRoot 'extraction.json') | ConvertFrom-Json -AsHashtable
+    $stdout = [IO.File]::ReadAllText((Join-Path $VariantRoot 'run.stdout.txt'))
+    $summary = [regex]::Matches($stdout, '(?m)^TrafficFlowtypeOverride: (\d+) checks, (\d+) failures\r?$')
+    $failures = [regex]::Matches($stdout, '(?m)^FAIL [^\r\n]+\r?$').Count
+    $exit = if ($Baseline) { 1 } else { 0 }
+    if ($row.tag -cne 'TrafficFlowtypeOverride' -or $row.process_exit_code -ne $exit -or
+        $null -eq $row.numeric -or $row.numeric.checks -ne 44 -or $summary.Count -ne 1 -or
+        [int]$summary[0].Groups[1].Value -ne 44 -or
+        [int]$summary[0].Groups[2].Value -ne $row.numeric.failures -or
+        $failures -ne $row.numeric.failures -or $failures -gt 44 -or
+        ($Baseline -and $failures -lt 1) -or (-not $Baseline -and $failures -ne 0)) {
+        throw 'Traffic flowtype variant did not execute exactly 44 checks with its expected exit/result.'
+    }
+    $exePath = Join-Path $VariantRoot 'regression.exe'
+    $exe = Get-FileRecord $exePath
+    if ($exe.bytes -le 0 -or $row.executable_sha256 -cne $exe.sha256) {
+        throw 'Traffic flowtype retained executable hash differs from the process receipt.'
+    }
+    $expectedInputs = @(
+        (Join-Path $SourceRoot 'tests/TrafficFlowtypeOverride.cpp'),
+        (Join-Path $VariantRoot 'traffic_flowtype_override.inc'),
+        (Join-Path $VariantRoot 'run.cmd'),
+        (Join-Path $Root 'tools/build/msvc_flags.txt'),
+        (Join-Path $Root 'tools/build/msvc_includes.txt'),
+        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp'),
+        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp'),
+        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')
+    )
+    $seen = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    if (@($row.inputs).Count -ne $expectedInputs.Count) { throw 'Traffic flowtype input set differs.' }
+    foreach ($compiledInput in $row.inputs) {
+        $full = [IO.Path]::GetFullPath([string]$compiledInput.path)
+        if ($full -notin $expectedInputs -or -not $seen.Add($full) -or
+            $compiledInput.sha256 -cne (Get-FileRecord $full).sha256) {
+            throw 'Traffic flowtype compiled input path/hash differs or is duplicated.'
+        }
+    }
+    $scriptText = [IO.File]::ReadAllText((Join-Path $VariantRoot 'run.cmd')).Replace("`r`n", "`n")
+    $envScript = Join-Path $Root 'tools/build/msvc_env.bat'
+    $expectedScript = "@echo off`ncall `"$envScript`" >nul 2>&1`nif errorlevel 1 exit /b 1`n" +
+        $row.command + "`nif errorlevel 1 exit /b 90`nregression.exe`nexit /b %ERRORLEVEL%`n"
+    if ($row.command -notmatch '\Acl ' -or $row.command -match '[\r\n]' -or $scriptText -cne $expectedScript) {
+        throw 'Traffic flowtype retained command script differs from the helper contract.'
+    }
+    if ($extraction.schema -ne 1 -or $extraction.source_revision -cne $Revision -or
+        $extraction.include_name -cne 'traffic_flowtype_override.inc' -or $extraction.source_objects.Count -ne 5) {
+        throw 'Traffic flowtype extraction revision/shape differs.'
+    }
+    foreach ($relative in @(
+        'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp',
+        'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp',
+        'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
+        'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
+        'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')) {
+        $expectedBlob = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${Revision}:$relative")
+        if ($extraction.source_objects[$relative] -cne $expectedBlob) { throw 'Traffic flowtype source blob differs.' }
+    }
+    $includeText = [IO.File]::ReadAllText((Join-Path $VariantRoot 'traffic_flowtype_override.inc')).Replace("`r`n", "`n")
+    $includeHash = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData(
+        [Text.Encoding]::UTF8.GetBytes($includeText))).ToLowerInvariant()
+    if ($extraction.generated_include_lf_sha256 -cne $includeHash) { throw 'Traffic flowtype generated body hash differs.' }
+    return @{
+        status = $(if ($Baseline) { 'expected_failure_observed' } else { 'pass' })
+        revision = $Revision; checks = 44; failures = $failures; process_exit_code = $row.process_exit_code
+        executable = @{ path = $exePath; bytes = $exe.bytes; sha256 = $exe.sha256 }
+        stdout = Get-FileRecord (Join-Path $VariantRoot 'run.stdout.txt')
+        stderr = Get-FileRecord (Join-Path $VariantRoot 'run.stderr.txt')
+        result = Get-FileRecord (Join-Path $VariantRoot 'result.json')
+        extraction = Get-FileRecord (Join-Path $VariantRoot 'extraction.json')
+        compiled_inputs = $row.inputs; source_objects = $extraction.source_objects
+    }
+}
+
 Push-Location $Root
 try {
     foreach ($sha in @($B5Commit, $WorkflowSha)) {
@@ -451,6 +528,92 @@ try {
         $Receipt.build_inputs[$path] = Get-FileRecord (Join-Path $Root $path)
     }
     Invoke-Native py @('-3', '--version') 'toolchain.log'
+
+    if ($RunTrafficFlowtypeOverride) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.traffic_flowtype_override_status = 'running'
+        if ($Jobs -ne 4 -or $env:ImageOS -ne 'win22') { throw 'Traffic flowtype requires hosted Windows 2022 / Jobs=4.' }
+        # Fix the reviewed harness while allowing the requested production revision to vary.
+        $flowHarnessPins = @{
+            'tests/TrafficFlowtypeOverride.cpp' = 'ca57fb44af73b7ffdc6903484dc7648def57dd9e07ae2e396f565bd8c4b61158'
+            'tests/run_traffic_flowtype_override.py' = 'f5b8bb80a80aa1b0ef8044b3459eee71d9d5ea26d17a0980d6bae31ea0a028b6'
+            'tests/fxgs_common.py' = '6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033'
+        }
+        foreach ($relative in $flowHarnessPins.Keys) {
+            $rawText = [Text.Encoding]::UTF8.GetString([IO.File]::ReadAllBytes((Join-Path $SourceRoot $relative)))
+            $lfHash = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData(
+                [Text.Encoding]::UTF8.GetBytes($rawText.Replace("`r`n", "`n")))).ToLowerInvariant()
+            if ($lfHash -cne $flowHarnessPins[$relative]) { throw 'Traffic flowtype reviewed harness content differs.' }
+        }
+        $flowOut = Join-Path $ArtifactRoot 'traffic-flowtype-override'
+        if (Test-Path -LiteralPath $flowOut) { throw 'Traffic flowtype artifact directory must be fresh.' }
+        $flowInputs = @{}
+        foreach ($relative in @(
+            'tests/run_traffic_flowtype_override.py', 'tests/TrafficFlowtypeOverride.cpp', 'tests/fxgs_common.py',
+            'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp',
+            'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h',
+            'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp',
+            'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.h',
+            'src/GameSource/World/BrnBaseStreamer.h', 'src/SharedClasses/Traffic/BrnTrafficDataResourceType.h',
+            'src/SharedClasses/Traffic/BrnTrafficFlowType.h', 'src/SharedClasses/Traffic/BrnTrafficVehicleType.h',
+            'src/SharedClasses/Traffic/BrnTrafficHull.h', 'src/SharedClasses/Traffic/BrnTrafficSharedConstants.h',
+            'src/GameShared/GameClasses/Containers/CgsArray.h', 'src/GameShared/GameClasses/Core/CgsAssert.h',
+            'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.h',
+            'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.h',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceBasePool.h', 'src/types.hpp')) {
+            $flowInputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+        }
+        foreach ($relative in @('tools/build/msvc_flags.txt', 'tools/build/msvc_includes.txt', 'tools/build/msvc_env.bat')) {
+            $flowInputs['parent/' + $relative] = Get-FileRecord (Join-Path $Root $relative)
+        }
+        $Receipt.regressions.traffic_flowtype_override = @{
+            status = 'running'; inputs = $flowInputs; harness_lf_pins = $flowHarnessPins
+            coverage = '44 production-body checks with exact old-return control; high bytes capture only; native #0081 unverified.'
+        }
+        $flowBaseline = '8fec93bd4d2806ca9b60fb53dc272fe28081f8b8'
+        Invoke-Native git @('-C', $SourceRoot, 'fetch', '--recurse-submodules=no', '--no-tags', '--depth=1', 'origin', $flowBaseline) 'source.log'
+        # These real compiled providers are shared by both variants; require exact control blobs.
+        foreach ($relative in @(
+            'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')) {
+            $candidateProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${B5Commit}:$relative")
+            $controlProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${flowBaseline}:$relative")
+            if ($candidateProvider -cne $controlProvider) { throw 'Flowtype fixture provider differs from exact control.' }
+        }
+        $flowNoDefaultWasPresent = Test-Path -LiteralPath Env:NoDefaultCurrentDirectoryInExePath
+        $flowNoDefault = [Environment]::GetEnvironmentVariable('NoDefaultCurrentDirectoryInExePath', 'Process')
+        try {
+            Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+            Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot 'tests/run_traffic_flowtype_override.py'),
+                '--rev', $B5Commit, '--output-dir', $flowOut) 'regressions.log'
+        } finally {
+            if ($flowNoDefaultWasPresent) {
+                Set-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -Value ([string]$flowNoDefault)
+            } else {
+                Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+            }
+        }
+        $flowVariants = @{
+            candidate = Assert-TrafficFlowtypeVariant (Join-Path $flowOut 'candidate') $B5Commit $false
+            baseline = Assert-TrafficFlowtypeVariant (Join-Path $flowOut 'baseline') $flowBaseline $true
+        }
+        foreach ($key in $flowInputs.Keys) {
+            $inputPath = if ($key.StartsWith('parent/')) { Join-Path $Root $key.Substring(7) } else { Join-Path $SourceRoot $key }
+            $now = Get-FileRecord $inputPath
+            if ($now.sha256 -cne $flowInputs[$key].sha256 -or $now.bytes -ne $flowInputs[$key].bytes) {
+                throw 'Traffic flowtype source/helper/toolchain input changed while running.'
+            }
+        }
+        Assert-CleanTrees
+        $Receipt.regressions.traffic_flowtype_override.variants = $flowVariants
+        $Receipt.regressions.traffic_flowtype_override.status = 'pass'
+        $Receipt.regressions.traffic_flowtype_override_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+    }
 
     # Optional, source-pinned PC profile fixture with the exact old API/consumer controls.
     if ($RunSystemUserProfile) {
@@ -1360,6 +1523,10 @@ try {
             $Receipt.regressions.system_user_profile.status -eq 'running') {
             $Receipt.regressions.system_user_profile.status = 'fail'
         }
+    }
+    if ($Receipt.regressions.traffic_flowtype_override_status -eq 'running') {
+        $Receipt.regressions.traffic_flowtype_override_status = 'fail'
+        if ($Receipt.regressions.traffic_flowtype_override.Contains('status')) { $Receipt.regressions.traffic_flowtype_override.status = 'fail' }
     }
     if ($Receipt.regressions.gui_io_status -eq 'running') { $Receipt.regressions.gui_io_status = 'fail' }
     if ($Receipt.regressions.gui_animation_status -eq 'running') { $Receipt.regressions.gui_animation_status = 'fail' }
