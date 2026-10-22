@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "family": "BrnGui::GuiCacheDebugComponent::OnActivate",
+  "target_b5_commit": "8fec93bd4d2806ca9b60fb53dc272fe28081f8b8",
+  "cohort_roster_sha256": "8e3dbeb7f11ec30858106c8a16bd93d2d636f620d62f26c2bfdf6691171fa553",
+  "site_count": 3,
+  "claim_scope": "registration-to-source-writer/consumer mapping only; no behavior credit",
+  "source_delta": null,
+  "shared_registration_packet": "../shared/native_gui_debug_registration_update_20261022/",
+  "sites": [
+    {
+      "site_id": "BrnGui::GuiCacheDebugComponent::OnActivate#0001",
+      "caption": "Show Gui Cache Status",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiCacheDebugComponent::ShowGuiCacheStatusCallback, a1, \"Show Gui Cache Status\")",
+      "field": "mbShowGuiCacheStatus at component +0x14",
+      "writer": "ShowGuiCacheStatusCallback toggles the bool; the registered action passes this as user-data",
+      "consumer": "RenderHUD checks it and calls ShowGuiCacheStatus; the reader snapshots mpGuiModule->mGuiCache.mStateLoadingHelper and appends each resource row before filtering by Display Mode",
+      "source_writer_chain": "StateLoadingHelper::EnsureResourceIsLoaded/EnsureResourcesAreLoaded and OnLoadNotification/OnUnloadNotification update the resource state consumed by AppendResourceInfo",
+      "artist": "OnActivate 0x824F8060; callback 0x824ED368 toggles this+0x14; RenderHUD 0x82505800 gates ShowGuiCacheStatus 0x824FD6B0; source-state methods pinned separately",
+      "status": "Registration, callback writer, HUD consumer and cache-state source paths are present in current B5; no missing owner body is identified. Behavior remains unverified."
+    },
+    {
+      "site_id": "BrnGui::GuiCacheDebugComponent::OnActivate#0002",
+      "caption": "Display Mode",
+      "registration_api": "sub_8282D720",
+      "original_call": "sub_8282D720(a1, a1 + 16, \"Display Mode\")",
+      "field": "miDisplayMode at component +0x10",
+      "writer": "OnActivate registers the field address; generic debug-variable UI writes the registered integer. Original choices are All, Loading+Unloading, Loaded+Unloaded, Loaded+Loading, Unloaded+Unloading; range 0..4.",
+      "consumer": "ShowGuiCacheStatus uses miDisplayMode to choose which state rows are displayed; ShowAptComponentGuiCacheStatus does not use it.",
+      "artist": "OnActivate 0x824F8060 registers a1+16, writes five string-list entries, SetRange(0,4) and SetOptions; ShowGuiCacheStatus 0x824FD6B0 reads the mode in the row filter.",
+      "status": "Registration, generic field writer and resource-status reader are source-connected. Behavior remains unverified."
+    },
+    {
+      "site_id": "BrnGui::GuiCacheDebugComponent::OnActivate#0003",
+      "caption": "Show Apt Component Gui Cache Status",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720( a1, BrnGui::GuiCacheDebugComponent::ShowAptComponentGuiCacheStatusCallback, a1, \"Show Apt Component Gui Cache Status\")",
+      "field": "mbShowAptComponentGuiCacheStatus at component +0x15",
+      "writer": "ShowAptComponentGuiCacheStatusCallback toggles the bool; the registered action passes this as user-data.",
+      "consumer": "RenderHUD checks it and calls ShowAptComponentGuiCacheStatus; the reader walks SCREEN/HUD/OVERLAY expected component IDs and loaded flags in the GuiCache StateLoadingHelper snapshot, resolving component names through the Apt communicator path.",
+      "source_writer_chain": "AppendExpectedAptComponent/AppendExpectedAptComponentList fill IDs and clear loaded flags; MarkAptComponentInitialised marks matching IDs loaded from Apt trigger notifications.",
+      "artist": "OnActivate 0x824F8060; callback 0x824ED410 toggles this+0x15; RenderHUD 0x82505800 gates reader 0x824F8148; writer exports 0x824F85D8, 0x824ED920 and 0x824EDEC8 are pinned.",
+      "status": "Registration, callback writer, HUD consumer and watcher-state writers are present in current B5. Behavior remains unverified."
+    }
+  ],
+  "family_findings": [
+    "The current GuiModule constructs and registers GuiCacheDebugComponent; its OnActivate body contains all three exact frozen registrations. Shared lifecycle registration reachability is covered by the separate 67-site proposal.",
+    "Two function actions toggle independent bools; RenderHUD gates their corresponding status readers. The display mode integer is registered by address, has five options and range 0..4, and filters only the resource-status panel.",
+    "The Apt panel reads per-flow expected component IDs and loaded flags; StateLoadingHelper source writers append expected IDs and mark matching entries loaded on Apt trigger notification. The resource panel reads each resource state through AppendResourceInfo; state-transition and load/unload notification writers are pinned.",
+    "No missing writer/reader body is identified for these three registrations in current source. All three original inventory behavior dispositions remain pending; this mapping is not a runtime verdict."
+  ]
+}

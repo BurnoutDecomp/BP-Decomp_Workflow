@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "family": "CgsSceneManager::SceneSweeperDebugComponent::OnActivate",
+  "target_b5_commit": "8fec93bd4d2806ca9b60fb53dc272fe28081f8b8",
+  "cohort_roster_sha256": "8e3dbeb7f11ec30858106c8a16bd93d2d636f620d62f26c2bfdf6691171fa553",
+  "site_count": 3,
+  "claim_scope": "registration-to-field-writer/consumer mapping only; no behavior credit",
+  "source_delta": null,
+  "sites": [
+    {
+      "site_id": "CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0001",
+      "caption": "Render scene sweeper boxes for dynamic objects",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 20, \"Render scene sweeper boxes for dynamic objects\")",
+      "field": "mbRenderDynamicBoxes at component +0x14",
+      "writer": "registered bool variable address; generic debug menu edits the field",
+      "consumer": "SceneSweeperDebugComponent::RenderWorld checks the field and passes SceneSweeper::GetDynamicIntervalList() to RenderIntervalList; the helper applies mfDrawDistance and emits DrawBox for selected intervals",
+      "artist": "OnActivate 0x828AC240 registers a1+20; RenderWorld 0x828B6708 reads this+20 and calls RenderIntervalList 0x828AC2A0",
+      "status": "Owner registration, mutable field, consumer and interval source are present; behavior remains unverified."
+    },
+    {
+      "site_id": "CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0002",
+      "caption": "Render scene sweeper boxes for frozen objects",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 21, \"Render scene sweeper boxes for frozen objects\")",
+      "field": "mbRenderInactiveBoxes at component +0x15",
+      "writer": "registered bool variable address; generic debug menu edits the field",
+      "consumer": "RenderWorld checks the field and passes SceneSweeper::GetInactiveIntervalList() to RenderIntervalList; the helper applies mfDrawDistance and emits DrawBox for selected intervals",
+      "artist": "OnActivate 0x828AC240 registers a1+21; RenderWorld 0x828B6708 reads this+21 and calls RenderIntervalList 0x828AC2A0",
+      "status": "Owner registration, mutable field, consumer and interval source are present; behavior remains unverified."
+    },
+    {
+      "site_id": "CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0003",
+      "caption": "Scene sweeper render draw distance",
+      "registration_api": "sub_8282D6B0",
+      "original_call": "sub_8282D6B0(a1, a1 + 16, \"Scene sweeper render draw distance\")",
+      "field": "mfDrawDistance at component +0x10",
+      "writer": "registered f32 variable address through the base debug-component variable API",
+      "consumer": "RenderIntervalList squares this value, computes camera-to-min-endpoint squared distance, and skips when distance squared is greater than or equal to the limit; accepted min/max interval bounds are passed to DrawBox",
+      "artist": "OnActivate 0x828AC240 registers a1+16 through float variable helper sub_8282D6B0; RenderIntervalList 0x828AC2A0 reads this+16 and performs the distance test before the draw call",
+      "status": "Owner registration, mutable field, filter consumer and interval source are present; behavior remains unverified."
+    }
+  ],
+  "family_findings": [
+    "SceneSweeper::Construct calls the component Construct and Register; Construct binds the SceneSweeper owner, initializes draw distance to 50.0 and clears both display toggles. The existing component OnActivate registers exactly these three fields in the frozen ARTIST order.",
+    "RenderWorld connects the two booleans to the Dynamic and Inactive interval-list getters. RenderIntervalList consumes the draw-distance field, camera position, interval endpoints and object-index assertion before calling the 3D DrawBox path. SceneSweeper source owns the interval lists and their sweep/build updates.",
+    "The current CgsSceneSweeper.h has an older FLAG comment saying the component is opaque and its body absent; the current header/cpp instead embeds the named component and defines its body. The included vendor rwcore_structs.h defines rw::RGBA, so the same stale comment claim that the type has no home is no longer true in this source tree.",
+    "The four-channel rw::RGBA constructor is declared in the pinned vendor header. A bounded text search of b5-decomp/vendor/renderware found the declaration but no matching definition; unrelated source trees and binary libraries were not searched. The external link provider is therefore unknown because compile/link was prohibited. This does not establish a missing owner body for the three registrations.",
+    "All three original behavior dispositions remain pending. This map is not a native/runtime parity verdict."
+  ]
+}

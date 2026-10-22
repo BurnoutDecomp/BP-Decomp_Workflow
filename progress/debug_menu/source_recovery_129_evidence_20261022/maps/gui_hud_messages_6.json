@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "family": "BrnGui::GuiHudMessagesDebugComponent::OnActivate",
+  "target_b5_commit": "8fec93bd4d2806ca9b60fb53dc272fe28081f8b8",
+  "cohort_roster_sha256": "8e3dbeb7f11ec30858106c8a16bd93d2d636f620d62f26c2bfdf6691171fa553",
+  "site_count": 6,
+  "claim_scope": "source registration/writer/consumer mapping only; no runtime behavior credit",
+  "source_delta": null,
+  "shared_registration_packet": "../shared/native_gui_debug_registration_update_20261022/",
+  "sites": [
+    {
+      "site_id": "BrnGui::GuiHudMessagesDebugComponent::OnActivate#0001",
+      "caption": "Message Id to send",
+      "registration_api": "sub_8282D720",
+      "original_call": "sub_8282D720(a1, a1 + 20, \"Message Id to send\")",
+      "field": "miMessageId (+0x14 in GuiHudMessagesDebugComponent)",
+      "source_registration_line": 66,
+      "writer": "read-only variable; SelectNextMessage and SelectPreviousMessage callbacks update it from the controller's group search",
+      "current_reader": "TriggerMessage uses miMessageId to obtain the selected message hash and parameter schema (BrnGuiHudMessagesDebugComponent.cpp:82-93, 173-207)",
+      "artist_edge": "0x824FD540 / 0x824FD5F8 write a1[5]; 0x82517CE8 reads a1[5] to query the message hash and params",
+      "status": "Registration, current writer and reader bodies exist; the controller pointer writer is missing in current B5 source, so callbacks are not source-connected yet."
+    },
+    {
+      "site_id": "BrnGui::GuiHudMessagesDebugComponent::OnActivate#0002",
+      "caption": "Group Of Messages",
+      "registration_api": "sub_8282D720",
+      "original_call": "sub_8282D720(a1, a1 + 24, \"Group Of Messages\")",
+      "field": "miMessageGroup (+0x18)",
+      "source_registration_line": 68,
+      "writer": "debug menu edits the registered integer; range 0..3 and `KAC_HUD_MESSAGE_GROUP_NAMES` options are set at OnActivate",
+      "current_reader": "SelectNextMessage and SelectPreviousMessage pass miMessageGroup to HudMessageController group searches (BrnGuiHudMessagesDebugComponent.cpp:82-93)",
+      "artist_edge": "0x82523B90 registers a1+0x18, range [0,3], options; the two callback exports read a1[6] as the group",
+      "status": "Registration and current reader bodies exist; the controller pointer writer is missing in current B5 source."
+    },
+    {
+      "site_id": "BrnGui::GuiHudMessagesDebugComponent::OnActivate#0003",
+      "caption": "Select the next message",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiHudMessagesDebugComponent::SelectNextMessageCallback, a1, \"Select the next message\")",
+      "field": "SelectNextMessageCallback -> miMessageId",
+      "source_registration_line": 71,
+      "writer": "callback forwards to SelectNextMessage; with a valid controller it stores GetNextMessageIdInGroup(miMessageId, miMessageGroup)",
+      "current_reader": "the selected id is consumed by TriggerMessage to construct and post the message",
+      "artist_edge": "0x824FD540 calls HudMessageController::GetNextMessageIdInGroup(a1[4], a1[5], a1[6]) and stores into a1[5]",
+      "status": "Callback body is present; current `mpMessageController` remains null because the source module omits the ARTIST-pinned lazy assignment."
+    },
+    {
+      "site_id": "BrnGui::GuiHudMessagesDebugComponent::OnActivate#0004",
+      "caption": "Trigger the current message",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiHudMessagesDebugComponent::TriggerMessageCallback, a1, \"Trigger the current message\")",
+      "field": "TriggerMessageCallback -> HudMessageDirector::AddMessage(force=false)",
+      "source_registration_line": 73,
+      "writer": "callback forwards to TriggerMessage(false)",
+      "current_reader": "TriggerMessage builds the current message using the controller's hash, three strings' parameter counts/types, and ARTIST stand-ins (`param`, `4`, `PLACEHOLDER_TEMP_STRING`, `Unrecognized Param`), then calls HudMessageDirector::AddMessage",
+      "artist_edge": "0x82517E00 calls TriggerMessage(a1,0); 0x82517CE8 follows the same typed-parameter loop and calls AddMessage(a1[3], message, a2)",
+      "status": "Current body matches ARTIST's stand-in values; trigger remains unreachable through the debug component while its controller pointer is null."
+    },
+    {
+      "site_id": "BrnGui::GuiHudMessagesDebugComponent::OnActivate#0005",
+      "caption": "Trigger the current message ignoring time",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720( a1, BrnGui::GuiHudMessagesDebugComponent::TriggerMessageWithoutTimerCallback, a1, \"Trigger the current message ignoring time\")",
+      "field": "TriggerMessageWithoutTimerCallback -> HudMessageDirector::AddMessage(force=true)",
+      "source_registration_line": 75,
+      "writer": "callback forwards to TriggerMessage(true)",
+      "current_reader": "same current-id/hash/parameter path as TriggerMessageCallback, with the force flag passed to HudMessageDirector::AddMessage",
+      "artist_edge": "0x82517EA8 calls TriggerMessage(a1,1); 0x82517CE8 forwards its second argument to AddMessage",
+      "status": "Current body matches the ARTIST path; trigger remains unreachable while the source controller pointer is null."
+    },
+    {
+      "site_id": "BrnGui::GuiHudMessagesDebugComponent::OnActivate#0006",
+      "caption": "Select the previous message",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720( a1, BrnGui::GuiHudMessagesDebugComponent::SelectPreviousMessageCallback, a1, \"Select the previous message\")",
+      "field": "SelectPreviousMessageCallback -> miMessageId",
+      "source_registration_line": 77,
+      "writer": "callback forwards to SelectPreviousMessage; with a valid controller it stores GetPreviousMessageIdInGroup(miMessageId, miMessageGroup)",
+      "current_reader": "the selected id is consumed by TriggerMessage",
+      "artist_edge": "0x824FD5F8 calls HudMessageController::GetPreviousMessageIdInGroup(a1[4], a1[5], a1[6]) and stores into a1[5]",
+      "status": "Callback body is present; current controller pointer writer is missing."
+    }
+  ],
+  "family_findings": [
+    "The source `OnActivate` body matches all six registrations and the two variable options/ranges. Current TriggerMessage stand-in values match ARTIST exactly.",
+    "ARTIST GuiModule::Construct @0x82518028 constructs the embedded component at +968296 and clears `this+968312` (component+0x10, mpMessageController). ARTIST GuiModule::Update @0x82527A58 lazily obtains the controller from GuiCache and stores it to the same field at 0x82529880-0x825298A8 before setting HudMessageDirector's controller.",
+    "Current `GuiHudMessagesDebugComponent::Construct` initializes `mpMessageController` to null; the current `GuiModule::Update` updates only the director's controller and has no component `SetController` call. Consequently current source callback bodies short-circuit on an invalid controller. Root owns the shared GuiModule follow-up; this packet proposes no overlapping patch.",
+    "The common registration hook for the component is covered by the separate shared 67-site GUI lifecycle proposal. Registration/source bodies do not grant behavior credit; all six inventory behavior dispositions remain pending."
+  ]
+}

@@ -1,0 +1,909 @@
+{
+  "schema_version": 1,
+  "owner": "BrnGui::GuiDebugComponent::OnActivate",
+  "artist_address": "0x8252A3B8",
+  "source_function_lines": [
+    461,
+    533
+  ],
+  "source_path": "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+  "site_count": 43,
+  "sites": [
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0001",
+      "original_caption": "Render GUI Objects",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 16, \"Render GUI Objects\")",
+      "source_writer_target": "mbRenderGui",
+      "source_writer_line": 463,
+      "source_expression": "RegisterVariable(&mbRenderGui, \"Render GUI Objects\");",
+      "artist_member_offset": "0x10",
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0002",
+      "original_caption": "Debug Offline Results Screen",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 624, \"Debug Offline Results Screen\")",
+      "source_writer_target": "mbDebugOfflineInstantResults",
+      "source_writer_line": 464,
+      "source_expression": "RegisterVariable(&mbDebugOfflineInstantResults, \"Debug Offline Results Screen\");",
+      "artist_member_offset": "0x270",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::RenderHUD",
+          "address": "0x824FD010",
+          "instruction": "0x824FD2CC  lbz       r11, 0x270(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::RenderHUD"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0003",
+      "original_caption": "Debug Online Results Screen",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 625, \"Debug Online Results Screen\")",
+      "source_writer_target": "mbDebugOnlineInstantResults",
+      "source_writer_line": 465,
+      "source_expression": "RegisterVariable(&mbDebugOnlineInstantResults, \"Debug Online Results Screen\");",
+      "artist_member_offset": "0x271",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::RenderHUD",
+          "address": "0x824FD010",
+          "instruction": "0x824FD2A0  lbz       r11, 0x271(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::RenderHUD"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0004",
+      "original_caption": "Trigger Car Select",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::EnterCarSelectCallback, a1, \"Trigger Car Select\")",
+      "source_writer_target": "EnterCarSelectCallback",
+      "source_writer_line": 466,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::EnterCarSelectCallback, this, \"Trigger Car Select\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::EnterCarSelectCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0005",
+      "original_caption": "Trigger Intro",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::TriggerIntroCallback, a1, \"Trigger Intro\")",
+      "source_writer_target": "TriggerIntroCallback",
+      "source_writer_line": 467,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::TriggerIntroCallback, this, \"Trigger Intro\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::TriggerIntroCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0006",
+      "original_caption": "Trigger Offline Post Event",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::TriggerPostEventCallback, a1, \"Trigger Offline Post Event\")",
+      "source_writer_target": "TriggerPostEventCallback",
+      "source_writer_line": 468,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::TriggerPostEventCallback, this, \"Trigger Offline Post Event\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::TriggerPostEventCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0007",
+      "original_caption": "    Finish position:",
+      "registration_api": "sub_8282D720",
+      "original_call": "sub_8282D720(a1, a1 + 616, \" Finish position:\")",
+      "source_writer_target": "miDebugFinishPos",
+      "source_writer_line": 469,
+      "source_expression": "RegisterVariable(&miDebugFinishPos, \"    Finish position:\");",
+      "artist_member_offset": "0x268",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::TriggerPostEvent",
+          "address": "0x82512F80",
+          "instruction": "0x82512FDC  lwz       r11, 0x268(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::TriggerPostEvent"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0008",
+      "original_caption": "    Do rank-up in post-event:",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 620, \" Do rank-up in post-event:\")",
+      "source_writer_target": "mbDebugFinishRankup",
+      "source_writer_line": 471,
+      "source_expression": "RegisterVariable(&mbDebugFinishRankup, \"    Do rank-up in post-event:\");",
+      "artist_member_offset": "0x26c",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::TriggerPostEvent",
+          "address": "0x82512F80",
+          "instruction": "0x82513094  lbz       r10, 0x26C(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::TriggerPostEvent"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0009",
+      "original_caption": "    Rank at start of post-event:",
+      "registration_api": "sub_8282D720",
+      "original_call": "sub_8282D720(a1, a1 + 612, \" Rank at start of post-event:\")",
+      "source_writer_target": "miDebugPlayerRank",
+      "source_writer_line": 472,
+      "source_expression": "RegisterVariable(&miDebugPlayerRank, \"    Rank at start of post-event:\");",
+      "artist_member_offset": "0x264",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::TriggerPostEvent",
+          "address": "0x82512F80",
+          "instruction": "0x825130B8  lwz       r11, 0x264(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::TriggerPostEvent"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0010",
+      "original_caption": "    Do unlock livery car (BR end):",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 622, \" Do unlock livery car (BR end):\")",
+      "source_writer_target": "mbDebugFinishUnlockNormalCar",
+      "source_writer_line": 474,
+      "source_expression": "RegisterVariable(&mbDebugFinishUnlockNormalCar, \"    Do unlock livery car (BR end):\");",
+      "artist_member_offset": "0x26e",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::TriggerPostEvent",
+          "address": "0x82512F80",
+          "instruction": "0x8251302C  lbz       r11, 0x26E(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::TriggerPostEvent"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0011",
+      "original_caption": "    Do unlock free car (rank up):",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 621, \" Do unlock free car (rank up):\")",
+      "source_writer_target": "mbDebugFinishUnlockFreeCar",
+      "source_writer_line": 475,
+      "source_expression": "RegisterVariable(&mbDebugFinishUnlockFreeCar, \"    Do unlock free car (rank up):\");",
+      "artist_member_offset": "0x26d",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::TriggerPostEvent",
+          "address": "0x82512F80",
+          "instruction": "0x82513074  lbz       r11, 0x26D(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::TriggerPostEvent"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0012",
+      "original_caption": "    Do unlock rival:",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 623, \" Do unlock rival:\")",
+      "source_writer_target": "mbDebugFinishUnlockRival",
+      "source_writer_line": 476,
+      "source_expression": "RegisterVariable(&mbDebugFinishUnlockRival, \"    Do unlock rival:\");",
+      "artist_member_offset": "0x26f",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::TriggerPostEvent",
+          "address": "0x82512F80",
+          "instruction": "0x82513098  lbz       r11, 0x26F(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::TriggerPostEvent"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0013",
+      "original_caption": "Trigger crash nav",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::OpenCrashNavCallback, a1, \"Trigger crash nav\")",
+      "source_writer_target": "OpenCrashNavCallback",
+      "source_writer_line": 477,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::OpenCrashNavCallback, this, \"Trigger crash nav\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::OpenCrashNavCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0014",
+      "original_caption": "Toggle MiniMap Visibility",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::MiniMapSwitchCallback, a1, \"Toggle MiniMap Visibility\")",
+      "source_writer_target": "MiniMapSwitchCallback",
+      "source_writer_line": 478,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::MiniMapSwitchCallback, this, \"Toggle MiniMap Visibility\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::MiniMapSwitchCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0015",
+      "original_caption": "   MiniMap Visibility: ",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 32, \" MiniMap Visibility: \")",
+      "source_writer_target": "mbMiniMapVisible",
+      "source_writer_line": 479,
+      "source_expression": "RegisterVariable(&mbMiniMapVisible, \"   MiniMap Visibility: \");",
+      "artist_member_offset": "0x20",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::MiniMapSwitchCallback",
+          "address": "0x8250D428",
+          "instruction": "0x8250D4B8  lbz       r11, 0x20(r28)"
+        }
+      ],
+      "artist_member_writers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::MiniMapSwitchCallback",
+          "address": "0x8250D428",
+          "instruction": "0x8250D4D8  stb       r11, 0x20(r28)"
+        }
+      ],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::MiniMapSwitchCallback"
+        ],
+        "writer_functions": [
+          "BrnGui::GuiDebugComponent::MiniMapSwitchCallback"
+        ]
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0016",
+      "original_caption": "Speedo Visibility: ",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 17, \"Speedo Visibility: \")",
+      "source_writer_target": "mbSpeedoVisible",
+      "source_writer_line": 481,
+      "source_expression": "RegisterVariable(&mbSpeedoVisible, \"Speedo Visibility: \");",
+      "artist_member_offset": "0x11",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::RenderHUD",
+          "address": "0x824FD010",
+          "instruction": "0x824FD2E0  lbz       r11, 0x11(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::RenderHUD"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0017",
+      "original_caption": "Show/Hide 4:3 Area",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::ToggleShow43AreaCallback, a1, \"Show/Hide 4:3 Area\")",
+      "source_writer_target": "ToggleShow43AreaCallback",
+      "source_writer_line": 482,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::ToggleShow43AreaCallback, this, \"Show/Hide 4:3 Area\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::ToggleShow43AreaCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0018",
+      "original_caption": "Show/Hide Safe Area",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::ToggleShowSafeAreaCallback, a1, \"Show/Hide Safe Area\")",
+      "source_writer_target": "ToggleShowSafeAreaCallback",
+      "source_writer_line": 483,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::ToggleShowSafeAreaCallback, this, \"Show/Hide Safe Area\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::ToggleShowSafeAreaCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0019",
+      "original_caption": "   Safe Area:",
+      "registration_api": "sub_8282D6B0",
+      "original_call": "sub_8282D6B0(a1, a1 + 36, \" Safe Area:\")",
+      "source_writer_target": "mfSafePercent",
+      "source_writer_line": 484,
+      "source_expression": "RegisterVariable(&mfSafePercent, \"   Safe Area:\");",
+      "artist_member_offset": "0x24",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::RenderHUD",
+          "address": "0x824FD010",
+          "instruction": "0x824FD134  lfs       f13, 0x24(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::RenderHUD"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0020",
+      "original_caption": "Change Font Spacing",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::ChangeFontSpacingCallback, a1, \"Change Font Spacing\")",
+      "source_writer_target": "ChangeFontSpacingCallback",
+      "source_writer_line": 486,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::ChangeFontSpacingCallback, this, \"Change Font Spacing\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::ChangeFontSpacingCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0021",
+      "original_caption": "   Spacing percentage:",
+      "registration_api": "sub_8282D6B0",
+      "original_call": "sub_8282D6B0(a1, a1 + 44, \" Spacing percentage:\")",
+      "source_writer_target": "mfFontSpacing",
+      "source_writer_line": 487,
+      "source_expression": "RegisterVariable(&mfFontSpacing, \"   Spacing percentage:\");",
+      "artist_member_offset": "0x2c",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::ChangeFontSpacingCallback",
+          "address": "0x8250D160",
+          "instruction": "0x8250D1F4  lfs       f13, 0x2C(r28)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::ChangeFontSpacingCallback"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0022",
+      "original_caption": "Update Flash",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, *(*(a1 + 12) + 111616) + 552, \"Update Flash\")",
+      "source_writer_target": "mpGuiModule",
+      "source_writer_line": 490,
+      "source_expression": "RegisterVariable(&mpGuiModule->mpGuiView->mbUpdateFlash, \"Update Flash\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": null
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0023",
+      "original_caption": "Bootup Load/Save Profile",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::BootupProfileCallback, a1, \"Bootup Load/Save Profile\")",
+      "source_writer_target": "BootupProfileCallback",
+      "source_writer_line": 491,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::BootupProfileCallback, this, \"Bootup Load/Save Profile\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::BootupProfileCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0024",
+      "original_caption": "Autosave Profile",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::AutosaveProfileCallback, a1, \"Autosave Profile\")",
+      "source_writer_target": "AutosaveProfileCallback",
+      "source_writer_line": 492,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::AutosaveProfileCallback, this, \"Autosave Profile\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::AutosaveProfileCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0025",
+      "original_caption": "Save Profile",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::SaveProfileCallback, a1, \"Save Profile\")",
+      "source_writer_target": "SaveProfileCallback",
+      "source_writer_line": 493,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::SaveProfileCallback, this, \"Save Profile\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::SaveProfileCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0026",
+      "original_caption": "Load Profile",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::LoadProfileCallback, a1, \"Load Profile\")",
+      "source_writer_target": "LoadProfileCallback",
+      "source_writer_line": 494,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::LoadProfileCallback, this, \"Load Profile\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::LoadProfileCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0027",
+      "original_caption": "Show Keyboard",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::ShowKeyboardCallback, a1, \"Show Keyboard\")",
+      "source_writer_target": "ShowKeyboardCallback",
+      "source_writer_line": 495,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::ShowKeyboardCallback, this, \"Show Keyboard\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::ShowKeyboardCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0028",
+      "original_caption": "Toggle Audio Trigger Debug Spew",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, &byte_82FB5098, \"Toggle Audio Trigger Debug Spew\")",
+      "source_writer_target": "gbLogGuiAudioTriggers",
+      "source_writer_line": 496,
+      "source_expression": "RegisterVariable(&::gbLogGuiAudioTriggers, \"Toggle Audio Trigger Debug Spew\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": null
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0029",
+      "original_caption": "Play/stop test movie",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::PlayMovieCallback, a1, \"Play/stop test movie\")",
+      "source_writer_target": "PlayMovieCallback",
+      "source_writer_line": 497,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::PlayMovieCallback, this, \"Play/stop test movie\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::PlayMovieCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0030",
+      "original_caption": "Select next font as default",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::RotateThroughFontsCallback, a1, \"Select next font as default\")",
+      "source_writer_target": "RotateThroughFontsCallback",
+      "source_writer_line": 498,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::RotateThroughFontsCallback, this, \"Select next font as default\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::RotateThroughFontsCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0031",
+      "original_caption": "Select next font effect",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::RotateThroughFontEffectsCallback, a1, \"Select next font effect\")",
+      "source_writer_target": "RotateThroughFontEffectsCallback",
+      "source_writer_line": 499,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::RotateThroughFontEffectsCallback, this, \"Select next font effect\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::RotateThroughFontEffectsCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0032",
+      "original_caption": null,
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::TriggerPFXCallback, a1, a1 + 484)",
+      "source_writer_target": "TriggerPFXCallback",
+      "source_writer_line": 500,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::TriggerPFXCallback, this, macCurrentPFXHookName);",
+      "artist_member_offset": "0x1e4",
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::TriggerPFXCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0033",
+      "original_caption": "  Current Hook",
+      "registration_api": "sub_8282D720",
+      "original_call": "sub_8282D720(a1, a1 + 480, \" Current Hook\")",
+      "source_writer_target": "miCurrentPFXHookIndex",
+      "source_writer_line": 501,
+      "source_expression": "RegisterVariable(&miCurrentPFXHookIndex, \"  Current Hook\");",
+      "artist_member_offset": "0x1e0",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::TriggerPFX",
+          "address": "0x8250D2E0",
+          "instruction": "0x8250D2F0  lwz       r11, 0x1E0(r27)"
+        },
+        {
+          "function": "BrnGui::GuiDebugComponent::Update",
+          "address": "0x8250C998",
+          "instruction": "0x8250CA5C  lwz       r10, 0x1E0(r30)"
+        },
+        {
+          "function": "BrnGui::GuiDebugComponent::Update",
+          "address": "0x8250C998",
+          "instruction": "0x8250CAAC  lwz       r11, 0x1E0(r30)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::TriggerPFX",
+          "BrnGui::GuiDebugComponent::Update"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0034",
+      "original_caption": "Trigger PFX CloseMenu",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::TriggerClosePFXCallback, a1, \"Trigger PFX CloseMenu\")",
+      "source_writer_target": "TriggerClosePFXCallback",
+      "source_writer_line": 503,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::TriggerClosePFXCallback, this, \"Trigger PFX CloseMenu\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::TriggerClosePFXCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0035",
+      "original_caption": "Toggle Generic HUD Priority Event Overrides",
+      "registration_api": "sub_8282F720",
+      "original_call": "sub_8282F720( a1, BrnGui::GuiDebugComponent::ToggleGenericHUDPriorityOverrideCallback, a1, \"Toggle Generic HUD Priority Event Overrides\")",
+      "source_writer_target": "ToggleGenericHUDPriorityOverrideCallback",
+      "source_writer_line": 504,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::ToggleGenericHUDPriorityOverrideCallback, this, \"Toggle Generic HUD Priority Event Overrides\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::ToggleGenericHUDPriorityOverrideCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0036",
+      "original_caption": "Priority Overrides On",
+      "registration_api": "sub_8282D800",
+      "original_call": "sub_8282D800(a1, a1 + 40, \"Priority Overrides On\")",
+      "source_writer_target": "mbPriEventOverride",
+      "source_writer_line": 506,
+      "source_expression": "RegisterVariable(&mbPriEventOverride, \"Priority Overrides On\");",
+      "artist_member_offset": "0x28",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::ToggleGenericHUDPriorityOverrideCallback",
+          "address": "0x8250D220",
+          "instruction": "0x8250D2B0  lbz       r11, 0x28(r28)"
+        }
+      ],
+      "artist_member_writers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::ToggleGenericHUDPriorityOverrideCallback",
+          "address": "0x8250D220",
+          "instruction": "0x8250D2CC  stb       r11, 0x28(r28)"
+        }
+      ],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::ToggleGenericHUDPriorityOverrideCallback"
+        ],
+        "writer_functions": [
+          "BrnGui::GuiDebugComponent::ToggleGenericHUDPriorityOverrideCallback"
+        ]
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0037",
+      "original_caption": "Screen Flow Streaming",
+      "registration_api": "sub_8282D720",
+      "original_call": "sub_8282D720(a1, a1 + 48, \"Screen Flow Streaming\")",
+      "source_writer_target": "miScreenFlowStreamingMode",
+      "source_writer_line": 507,
+      "source_expression": "RegisterVariable(&miScreenFlowStreamingMode, \"Screen Flow Streaming\");",
+      "artist_member_offset": "0x30",
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0038",
+      "original_caption": "Trigger EA Trax Component",
+      "registration_api": "CgsDev::DebugComponent::RegisterFunction",
+      "original_call": "CgsDev::DebugComponent::RegisterFunction( a1, BrnGui::GuiDebugComponent::TriggerEATraxComponentCallback, a1, \"Components\", \"Trigger EA Trax Component\")",
+      "source_writer_target": "TriggerEATraxComponentCallback",
+      "source_writer_line": 510,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::TriggerEATraxComponentCallback, this, \"Components\", \"Trigger EA Trax Component\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::TriggerEATraxComponentCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0039",
+      "original_caption": "Trigger Receive Online Invite",
+      "registration_api": "CgsDev::DebugComponent::RegisterFunction",
+      "original_call": "CgsDev::DebugComponent::RegisterFunction( a1, BrnGui::GuiDebugComponent::TriggerOnlineInviteCallback, a1, \"Components\", \"Trigger Receive Online Invite\")",
+      "source_writer_target": "TriggerOnlineInviteCallback",
+      "source_writer_line": 512,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::TriggerOnlineInviteCallback, this, \"Components\", \"Trigger Receive Online Invite\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::TriggerOnlineInviteCallback"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0040",
+      "original_caption": "Trigger Payback Component",
+      "registration_api": "CgsDev::DebugComponent::RegisterFunction",
+      "original_call": "CgsDev::DebugComponent::RegisterFunction( a1, BrnGui::GuiDebugComponent::TriggerPaybackComponent, a1, \"Components\", \"Trigger Payback Component\")",
+      "source_writer_target": "TriggerPaybackComponent",
+      "source_writer_line": 514,
+      "source_expression": "RegisterFunction(&GuiDebugComponent::TriggerPaybackComponent, this, \"Components\", \"Trigger Payback Component\");",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "registered callback",
+        "function": "BrnGui::GuiDebugComponent::TriggerPaybackComponent"
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0041",
+      "original_caption": "Enable Worst Case HUD",
+      "registration_api": "sub_8282D640",
+      "original_call": "sub_8282D640(a1, a1 + 626, \"Race HUD Toggling\", \"Enable Worst Case HUD\")",
+      "source_writer_target": "mbWorstCaseHudActive",
+      "source_writer_line": 516,
+      "source_expression": "RegisterVariable(&mbWorstCaseHudActive, \"Race HUD Toggling\", \"Enable Worst Case HUD\");",
+      "artist_member_offset": "0x272",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::UpdateWorstCaseHUD",
+          "address": "0x8250CBC8",
+          "instruction": "0x8250CC0C  lbz       r11, 0x272(r24)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::UpdateWorstCaseHUD"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0042",
+      "original_caption": "Enable Toggling Race HUD",
+      "registration_api": "sub_8282D640",
+      "original_call": "sub_8282D640(a1, a1 + 632, \"Race HUD Toggling\", \"Enable Toggling Race HUD\")",
+      "source_writer_target": "mbToggleableRaceHUDEnabled",
+      "source_writer_line": 517,
+      "source_expression": "RegisterVariable(&mbToggleableRaceHUDEnabled, \"Race HUD Toggling\", \"Enable Toggling Race HUD\");",
+      "artist_member_offset": "0x278",
+      "artist_member_readers": [
+        {
+          "function": "BrnGui::GuiDebugComponent::ToggleRaceHudComponentsCallback",
+          "address": "0x824ED288",
+          "instruction": "0x824ED2DC  lbz       r11, 0x278(r11)"
+        }
+      ],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": {
+        "kind": "member offset references",
+        "reader_functions": [
+          "BrnGui::GuiDebugComponent::ToggleRaceHudComponentsCallback"
+        ],
+        "writer_functions": []
+      }
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0043",
+      "original_caption": null,
+      "registration_api": "sub_8282D640",
+      "original_call": "sub_8282D640(a1, v3, \"Race HUD Toggling\", *v4)",
+      "source_writer_target": "mabTogglableRaceHUDElementsState",
+      "source_writer_line": 523,
+      "source_expression": "RegisterVariable(&mabTogglableRaceHUDElementsState[liItem],",
+      "artist_member_offset": null,
+      "artist_member_readers": [],
+      "artist_member_writers": [],
+      "immediate_consumer_binding": null
+    }
+  ],
+  "bounded_global_byte_82FB5098_reads": [
+    {
+      "name": "sub_824F64B0",
+      "address": "0x824F64B0",
+      "instructions": [
+        "0x824F6510  lbz       r11, byte_82FB5098@l(r11)"
+      ],
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824F64B0.json",
+      "sha256": "35bd3d99328b0722ba8a5524a93a12bd84422222402a8866344a44ec90f17bb3"
+    },
+    {
+      "name": "BrnGui::GuiAudioTriggerEvent::Construct",
+      "address": "0x824F6350",
+      "instructions": [
+        "0x824F63F0  lbz       r11, byte_82FB5098@l(r11)"
+      ],
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824F6350.json",
+      "sha256": "23fd440fe62b73a76fb19b96785d7f5867caa4ccb800ea73219060197edf5849"
+    },
+    {
+      "name": "sub_824FB9A8",
+      "address": "0x824FB9A8",
+      "instructions": [
+        "0x824FBA80  lbz       r11, byte_82FB5098@l(r11)"
+      ],
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FB9A8.json",
+      "sha256": "301c4aca24d83c53ec87cb0742ace97fd5034fec7bcf8bb9e072d42124eb6069"
+    },
+    {
+      "name": "CgsGui::AptCommunicator::sMethod_SendAptSoundEvent",
+      "address": "0x8285C9B8",
+      "instructions": [
+        "0x8285CCAC  lbz       r11, byte_82FB5098@l(r18)",
+        "0x8285D030  lbz       r11, byte_82FB5098@l(r18)"
+      ],
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8285C9B8.json",
+      "sha256": "89c9d2845c4f056bd917eb2744ffcb39122063c070f0effc9db3a941c3f42345"
+    }
+  ],
+  "interpretation_limits": [
+    "The writer/callback binding is exact for all 43 static IDs. Offset reader evidence only covers exported GuiDebugComponent member methods; it is not a full whole-program consumer proof.",
+    "No runtime behavior or final debug-menu disposition is claimed.",
+    "No additional effect is added for a control with no original reader; #0028 action-label log mapping remains open."
+  ]
+}

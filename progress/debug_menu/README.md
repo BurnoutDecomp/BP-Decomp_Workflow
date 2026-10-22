@@ -43,12 +43,16 @@ Recorded source-progress coverage is separate from behavior completion:
 
 - **1,196 sites (88.3%)** are in recorded bounded source-review cohorts and repair supplements. This is reviewed-source-cohort coverage, not proof of a complete consumer chain or a current-head re-review.
 - **26 additional sites** have existing registration/consumer bodies audited in the integration checkout; compile, fresh review and native evidence remain pending.
-- **129 sites** are covered only by broader source/audit scope outside those batches: nine have explicit audit-only packet IDs, while 120 appear in the coverage set without a per-site packet reference.
+- **129 sites** now have ten explicit source maps covering the entire former broad-audit-only cohort. The maps identify existing paths, missing integration and unresolved consumers; they do not certify completed bodies or behavior. [Maps and current shared repair](source_recovery_129_evidence_20261022/CHECKPOINT.md).
 - **Four sites** were outside that saved snapshot. All four now have source audits; one shared DLC reader needed repair. Its private hosted build passed, while native DLC behavior remains pending.
 
-The source/audit checkpoint covers 1,351/1,355 sites (99.7%), including unresolved consumers. The 1,196 reviewed sites plus 26 existing-body audits give 1,222/1,355 (90.2%) with source/body evidence, not a completed-control count. Neither 10% nor 90% is a defensible actual implementation percentage; the actual count remains unknown. See the [source coverage checkpoint](source_coverage_checkpoint_20261021.json) for the count definitions and evidence limits.
+The dated source/audit checkpoint recorded 1,351/1,355 sites (99.7%), including unresolved consumers; the four later source audits are separate from that saved snapshot. The 1,196 reviewed sites plus 26 existing-body audits give 1,222/1,355 (90.2%) with source/body evidence, not a completed-control count. Neither 10% nor 90% is a defensible actual implementation percentage; the actual count remains unknown. See the [source coverage checkpoint](source_coverage_checkpoint_20261021.json) for the count definitions and evidence limits.
 
 ## Continuing source work
+
+**Next source batch:** private **56370603b** repairs shared GUI wiring used by67 registrations and the typed custom-renderer owner/controls for17 more, plus the original flow-preload parser. All13 source/test paths and both parent build/gate changes are committed/pushed. Source review passes; hosted39775606230 and new native behavior checks remain pending at this checkpoint. These84 sites stay pending. [Source scope and limits](source_recovery_129_evidence_20261022/CANDIDATE.json).
+
+**Current-build GPU refresh:** the installed8fec executable passed four separate cold-launch frontend phases in115.421s: hidden, measured graph, readable20-category table, hidden again. Actual pixels, query packets, original bool readbacks and cleanup were independently checked; normal config/saves/log/exe fingerprints stayed unchanged. These are two already-verified sites, so the count does not increase. This does not test changing modes inside one running process. [Exact refresh evidence](gpu_current_build_refresh_20261022/REVIEW.md).
 
 **GUI/action/movie and online recovery:** **8fec93bd** is installed and
 merged/pushed to dev. Its exact2,994-file hosted build and selected profile,
