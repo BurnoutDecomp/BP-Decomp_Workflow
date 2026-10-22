@@ -1,0 +1,28 @@
+{
+  "status": "link_integration_fix_hosted_pending",
+  "source": "c1b0e7ef6a181c3cc92f45ac9481a9cbaaeb01db",
+  "source_unchanged": true,
+  "workflow_base": "363b3bb901c18c257ea3884038db9db1e1a87bbd",
+  "failed_hosted_run": 39863935919,
+  "compile_tus": 3001,
+  "compile_failures": 0,
+  "link_failure": "Unresolved GameModuleSerialiser::Construct",
+  "change": "Mount the existing original GameModule serialiser translation unit",
+  "build_list": {
+    "path": "tools/build/build_game_exe.bat",
+    "before_sha256": "cfbb008eea5ab8f5635ebe5b452150bca606556e3d6db06f5e93e53e38c384cb",
+    "after_sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792"
+  },
+  "mounted_tu": {
+    "path": "src/GameSource/Replays/Serialisers/BrnReplayGameModuleSerialiser.cpp",
+    "sha256": "d65d4e8142e7b776ab1744ad84777888e1a8394e8018f23658b2aa40b89374a2"
+  },
+  "original_evidence": {
+    "address": "0x8264C6A0",
+    "sha256": "7e3d3103c9c626da55e9de4bfeb7be72220c7ab8a577e0b362a224299c78b34c"
+  },
+  "review": "Root bounded mechanical mount review: exact one-line build-list addition; existing body agrees with original eight-instruction tail call and prior bridge review",
+  "native_replay": "not run",
+  "normal_build_changed": false,
+  "new_debug_behavior_dispositions": 0
+}
