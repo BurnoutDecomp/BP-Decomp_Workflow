@@ -17,7 +17,8 @@ param(
     [switch] $RunStartupIORegressions,
     [switch] $RunGuiLicenseRegressions,
     [switch] $RunKeyboardUIContract,
-    [switch] $RunRwacCommandCapacity
+    [switch] $RunRwacCommandCapacity,
+    [switch] $RunSystemUserProfile
 )
 
 Set-StrictMode -Version Latest
@@ -45,9 +46,13 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity -or $RunSystemUserProfile); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; system_user_profile_status = $(if ($RunSystemUserProfile) { 'running' } else { 'not_requested' }); system_user_profile = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
+$SystemUserProfileSourceBase = 'bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7'
+$SystemUserProfilePinsLfSha256 = '551a441f61f558bc2b776601102dac8fc0a1ec91c17bc5362fbe16959d4bef59'
+$SystemUserProfilePlanLfSha256 = 'b922bc45991763901be63194b7824ae1aae83d309f10dce457988c1a82833686'
+$SystemUserProfileRunnerLfSha256 = '3389e72d1af863892078904e632d65dd269754232b5ad74a93b26aa05b6959d7'
 
 function Invoke-Native([string] $Command, [string[]] $Arguments, [string] $LogName) {
     & $Command @Arguments 2>&1 | Tee-Object -FilePath (Join-Path $ArtifactRoot $LogName) -Append | Out-Host
@@ -84,6 +89,249 @@ function Assert-CleanTrees {
 }
 function Get-FileRecord([string] $Path) {
     return @{ bytes = (Get-Item -LiteralPath $Path).Length; sha256 = (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
+}
+function Assert-SystemUserProfilePath([string] $Observed, [string] $Expected, [string] $Label) {
+    $observedFull = [IO.Path]::GetFullPath($Observed)
+    $expectedFull = [IO.Path]::GetFullPath($Expected)
+    if (-not [string]::Equals($observedFull, $expectedFull, [StringComparison]::OrdinalIgnoreCase)) {
+        throw "System-user-profile $Label path mismatch: $observedFull"
+    }
+}
+function Assert-SystemUserProfileRunRecord(
+    [System.Collections.IDictionary] $RunRecord,
+    [string] $ExpectedLog,
+    [int] $TimeoutSeconds,
+    [int] $ExpectedExitCode
+) {
+    if ($RunRecord.exit_code -ne $ExpectedExitCode -or $RunRecord.timed_out -ne $false -or
+        $RunRecord.timeout_seconds -ne $TimeoutSeconds -or $RunRecord.owned_job -ne $true -or
+        $RunRecord.transcript_hash_after_cleanup -ne $true) {
+        throw 'System-user-profile compile/run exit, timeout, job or transcript state is invalid.'
+    }
+    Assert-SystemUserProfilePath ([string]$RunRecord.log) $ExpectedLog 'log'
+    $cleanup = $RunRecord.cleanup
+    if ($cleanup.complete -ne $true -or $cleanup.job_handle_closed -ne $true -or
+        $cleanup.process_handles_closed -ne $true -or $cleanup.stdio_handles_closed -ne $true -or
+        $cleanup.child_wait_complete -ne $true -or $cleanup.job_active_processes_after_cleanup -ne 0) {
+        throw 'System-user-profile owned child cleanup was incomplete; log hash is not accepted.'
+    }
+    if (-not (Test-Path -LiteralPath $ExpectedLog -PathType Leaf)) { throw "System-user-profile log is missing: $ExpectedLog" }
+    $actualLog = Get-FileRecord $ExpectedLog
+    if ($RunRecord.log_raw_sha256 -cnotmatch '\A[0-9a-f]{64}\z' -or
+        $RunRecord.log_sha256 -cne $RunRecord.log_raw_sha256.ToLowerInvariant() -or
+        $RunRecord.log_bytes -ne $actualLog.bytes -or $RunRecord.log_raw_sha256 -cne $actualLog.sha256) {
+        throw 'System-user-profile log hash/size changed after owned-child cleanup.'
+    }
+    $logText = [IO.File]::ReadAllText($ExpectedLog)
+    return $logText.Replace("`r`n", "`n").Replace("`r", "`n")
+}
+function Assert-SystemUserProfileMode(
+    [System.Collections.IDictionary] $ModeRecord,
+    [string] $Variant,
+    [string] $ModeName,
+    [string] $OutputRoot,
+    [int] $TimeoutSeconds,
+    [int] $ExitCode,
+    [int] $Checks,
+    [int] $Failures,
+    [int] $Assertions,
+    [string[]] $ExpectedCheckIds,
+    [string[]] $ExpectedFailureIds = @(),
+    [string] $AssertSubstring = ''
+) {
+    $expectedStatus = if ($Failures) { 'expected_failure_observed' } else { 'pass' }
+    if ($ModeRecord.status -cne $expectedStatus -or $ModeRecord.expected.checks -ne $Checks -or
+        $ModeRecord.expected.failures -ne $Failures -or $ModeRecord.expected.assertions -ne $Assertions) {
+        throw "System-user-profile $Variant/$ModeName result classification differs from its contract."
+    }
+    $logPath = Join-Path (Join-Path $OutputRoot $Variant) ($ModeName + '.log')
+    $log = Assert-SystemUserProfileRunRecord $ModeRecord.run $logPath $TimeoutSeconds $ExitCode
+    $summaries = [regex]::Matches($log, '(?m)^SYSTEM_USER_PROFILE checks=(\d+) failures=(\d+) assertions=(\d+)$')
+    if ($summaries.Count -ne 1 -or [int]$summaries[0].Groups[1].Value -ne $Checks -or
+        [int]$summaries[0].Groups[2].Value -ne $Failures -or [int]$summaries[0].Groups[3].Value -ne $Assertions) {
+        throw "System-user-profile $Variant/$ModeName numeric summary is not the expected actual execution."
+    }
+    $checkRows = [regex]::Matches($log, '(?m)^CHECK (\S+) (PASS|FAIL)$')
+    $observedIds = [string[]]@($checkRows | ForEach-Object { $_.Groups[1].Value })
+    $failureIds = [string[]]@($checkRows | Where-Object { $_.Groups[2].Value -eq 'FAIL' } | ForEach-Object { $_.Groups[1].Value })
+    if ([string]::Join("`n", $observedIds) -cne [string]::Join("`n", $ExpectedCheckIds) -or
+        [string]::Join("`n", [string[]]@($ModeRecord.observed_check_ids)) -cne [string]::Join("`n", $observedIds) -or
+        [string]::Join("`n", $failureIds) -cne [string]::Join("`n", $ExpectedFailureIds) -or
+        [string]::Join("`n", [string[]]@($ModeRecord.observed_failure_ids)) -cne [string]::Join("`n", $failureIds)) {
+        throw "System-user-profile $Variant/$ModeName check order or failure identities differ."
+    }
+    $assertLines = [regex]::Matches($log, '(?m)^LEGACY_ASSERT (.*)$')
+    if ($assertLines.Count -ne $Assertions -or ($AssertSubstring -and
+        ($assertLines.Count -ne 1 -or -not $assertLines[0].Groups[1].Value.Contains($AssertSubstring)))) {
+        throw "System-user-profile $Variant/$ModeName assertion witness differs."
+    }
+    return @{
+        status = $ModeRecord.status; checks = $Checks; failures = $Failures; assertions = $Assertions
+        observed_check_ids = $observedIds; observed_failure_ids = $failureIds
+        exit_code = $ModeRecord.run.exit_code; timed_out = $ModeRecord.run.timed_out
+        log_raw_sha256 = $ModeRecord.run.log_raw_sha256; log_bytes = $ModeRecord.run.log_bytes
+        transcript_hash_after_cleanup = $ModeRecord.run.transcript_hash_after_cleanup
+    }
+}
+function Assert-SystemUserProfileReceipt(
+    [System.Collections.IDictionary] $ProfileResult,
+    [string] $OutputRoot,
+    [string] $SourceRoot,
+    [string] $WorkflowRoot
+) {
+    if ($ProfileResult.schema_version -ne 1 -or $ProfileResult.fixture -cne 'SYSTEM_USER_PROFILE' -or
+        $ProfileResult.executed -ne $true -or $ProfileResult.success -ne $true -or $ProfileResult.status -cne 'pass') {
+        throw 'System-user-profile receipt is not an executed passing fixture result.'
+    }
+    Assert-SystemUserProfilePath $ProfileResult.b5_root $SourceRoot 'B5 root'
+    Assert-SystemUserProfilePath $ProfileResult.workflow_root $WorkflowRoot 'workflow root'
+    Assert-SystemUserProfilePath $ProfileResult.artifact_root $OutputRoot 'artifact root'
+    $source = $ProfileResult.sources
+    if ($source.base_head -cne $SystemUserProfileSourceBase -or @($source.mismatches).Count -ne 0) {
+        throw 'System-user-profile source receipt has the wrong pinned base or source mismatches.'
+    }
+    $pinPath = Join-Path $SourceRoot 'tests/evidence/system_user_profile_pc/source_pins.json'
+    $pinRaw = Get-FileRecord $pinPath
+    $pinIdentity = $source.pins_file
+    if ($pinIdentity.actual_raw_sha256 -cne $pinRaw.sha256 -or $pinIdentity.actual_raw_bytes -ne $pinRaw.bytes -or
+        $pinIdentity.actual_lf_sha256 -cne $SystemUserProfilePinsLfSha256 -or $pinIdentity.actual_lf_bytes -ne 4543) {
+        throw 'System-user-profile receipt is not bound to the updated delta02 source pins and raw checkout bytes.'
+    }
+    $pins = Get-Content -Raw -LiteralPath $pinPath | ConvertFrom-Json -AsHashtable
+    if ($pins.schema_version -ne 2 -or $pins.normalization -cne 'crlf_to_lf_only' -or
+        $pins.base_head -cne $SystemUserProfileSourceBase -or @($pins.files.Keys).Count -ne 20) {
+        throw 'System-user-profile source-pin contract differs from the approved fixture packet.'
+    }
+    $pinKeys = [string[]]@($pins.files.Keys | Sort-Object)
+    $receiptKeys = [string[]]@($source.files.Keys | Sort-Object)
+    if ([string]::Join("`n", $pinKeys) -cne [string]::Join("`n", $receiptKeys)) {
+        throw 'System-user-profile source receipt does not cover the exact pinned file set.'
+    }
+    foreach ($relative in $pinKeys) {
+        $expected = $pins.files[$relative]
+        $row = $source.files[$relative]
+        $path = Join-Path $SourceRoot $relative.Replace('/', [IO.Path]::DirectorySeparatorChar)
+        $raw = Get-FileRecord $path
+        if ($row.matches_lf_content -ne $true -or $row.expected_lf_sha256 -cne $expected.expected_lf_sha256 -or
+            $row.expected_lf_bytes -ne $expected.expected_lf_bytes -or $row.actual_lf_sha256 -cne $expected.expected_lf_sha256 -or
+            $row.actual_lf_bytes -ne $expected.expected_lf_bytes -or $row.actual_raw_sha256 -cne $raw.sha256 -or
+            $row.actual_raw_bytes -ne $raw.bytes -or $row.actual_raw_sha256 -cnotmatch '\A[0-9a-f]{64}\z') {
+            throw "System-user-profile source pin/raw identity mismatch: $relative"
+        }
+    }
+    if ($pins.files['tests/run_system_user_profile_pc.py'].expected_lf_sha256 -cne $SystemUserProfileRunnerLfSha256 -or
+        $pins.files['tests/run_system_user_profile_pc.py'].expected_lf_bytes -ne 27047 -or
+        $pins.files['tests/evidence/system_user_profile_pc/test_plan.json'].expected_lf_sha256 -cne $SystemUserProfilePlanLfSha256 -or
+        $pins.files['tests/evidence/system_user_profile_pc/test_plan.json'].expected_lf_bytes -ne 3468) {
+        throw 'System-user-profile runner or ordered test-plan pin differs from the reviewed packet.'
+    }
+    $expectedBaselines = @{
+        'tests/evidence/system_user_profile_pc/CgsGuideIntegration_bef9346f9.cpp' = 'dbf6f7a8a47889c3358f30787676ad994e2f9494'
+        'tests/evidence/system_user_profile_pc/CgsXboxLivePC_bef9346f9.cpp' = '46218b2dc5ca92b78668faf71b0318996dbaa3e0'
+    }
+    if (@($source.baseline_evidence).Count -ne 2 -or
+        [string]::Join('|', [string[]]@($source.baseline_evidence.path | Sort-Object)) -cne [string]::Join('|', [string[]]@($expectedBaselines.Keys | Sort-Object))) {
+        throw 'System-user-profile original API/consumer baseline path set changed.'
+    }
+    foreach ($baseline in $source.baseline_evidence) {
+        if ($baseline.matches_original_git_lf_blob -ne $true -or
+            $baseline.original_git_lf_blob_sha1 -cne $expectedBaselines[[string]$baseline.path] -or
+            $baseline.actual_checkout_lf_git_blob_sha1 -cne $expectedBaselines[[string]$baseline.path]) {
+            throw "System-user-profile baseline source identity mismatch: $($baseline.path)"
+        }
+    }
+    foreach ($relative in @('tools/build/msvc_flags.txt','tools/build/msvc_includes.txt','tools/build/msvc_env.bat')) {
+        $tool = $source.canonical_tool_files[$relative]
+        $raw = Get-FileRecord (Join-Path $WorkflowRoot $relative)
+        if ($tool.actual_raw_sha256 -cne $raw.sha256 -or $tool.actual_raw_bytes -ne $raw.bytes) {
+            throw "System-user-profile workflow tool path/raw identity mismatch: $relative"
+        }
+    }
+    $planPath = Join-Path $SourceRoot 'tests/evidence/system_user_profile_pc/test_plan.json'
+    $plan = Get-Content -Raw -LiteralPath $planPath | ConvertFrom-Json -AsHashtable
+    $expectedIds = [string[]]@($plan.candidate_check_ids)
+    $resultIds = [string[]]@($ProfileResult.test_plan.candidate_check_ids)
+    if ($plan.expected_candidate_checks -ne 82 -or $plan.expected_candidate_failures -ne 0 -or
+        $expectedIds.Count -ne 82 -or @($expectedIds | Select-Object -Unique).Count -ne 82 -or
+        [string]::Join("`n", $expectedIds) -cne [string]::Join("`n", $resultIds) -or
+        $ProfileResult.test_plan.expected_candidate_checks -ne 82 -or $ProfileResult.test_plan.expected_candidate_failures -ne 0 -or
+        $plan.baseline_api.checks -ne 9 -or $plan.baseline_api.failures -ne 1 -or $plan.baseline_api.assertions -ne 0 -or
+        $plan.baseline_api.failure_id -cne 'default_actual_api_success' -or
+        $plan.baseline_consumer.checks -ne 3 -or $plan.baseline_consumer.failures -ne 1 -or
+        $plan.baseline_consumer.assertions -ne 1 -or
+        $plan.baseline_consumer.failure_id -cne 'legacy_consumer_selected_user_settings_callback' -or
+        $plan.baseline_consumer.assert_substring -cne 'problem reading user settings') {
+        throw 'System-user-profile candidate/control test-plan numeric or ordered-ID contract changed.'
+    }
+    if ($ProfileResult.test_plan.baseline_api.checks -ne 9 -or $ProfileResult.test_plan.baseline_api.failures -ne 1 -or
+        $ProfileResult.test_plan.baseline_api.assertions -ne 0 -or $ProfileResult.test_plan.baseline_api.failure_id -cne 'default_actual_api_success' -or
+        $ProfileResult.test_plan.baseline_consumer.checks -ne 3 -or $ProfileResult.test_plan.baseline_consumer.failures -ne 1 -or
+        $ProfileResult.test_plan.baseline_consumer.assertions -ne 1 -or
+        $ProfileResult.test_plan.baseline_consumer.failure_id -cne 'legacy_consumer_selected_user_settings_callback' -or
+        $ProfileResult.test_plan.baseline_consumer.assert_substring -cne 'problem reading user settings') {
+        throw 'System-user-profile result test plan differs from the exact pinned source plan.'
+    }
+    $variantKeys = [string[]]@($ProfileResult.variants.Keys | Sort-Object)
+    if ([string]::Join('|', $variantKeys) -cne 'baseline|candidate') {
+        throw 'System-user-profile receipt must contain exactly candidate and original baseline variants.'
+    }
+    $variantSummaries = @{}
+    foreach ($variantName in @('candidate','baseline')) {
+        $variant = $ProfileResult.variants[$variantName]
+        if ($variant.status -cne 'pass') { throw "System-user-profile $variantName variant did not pass." }
+        $variantRoot = Join-Path $OutputRoot $variantName
+        $exePath = Join-Path $variantRoot 'regression.exe'
+        if (-not (Test-Path -LiteralPath $exePath -PathType Leaf) -or
+            $variant.executable_sha256 -cnotmatch '\A[0-9a-f]{64}\z' -or $variant.executable_bytes -le 0) {
+            throw "System-user-profile $variantName executable/hash is missing."
+        }
+        $exe = Get-FileRecord $exePath
+        if ($exe.sha256 -cne $variant.executable_sha256 -or $exe.bytes -ne $variant.executable_bytes) {
+            throw "System-user-profile $variantName executable hash/size differs from the runner receipt."
+        }
+        if ($variantName -eq 'candidate') {
+            $provider = 'src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp'
+            $consumer = 'src/GameShared/GameClasses/Gui/CgsGuideIntegration.cpp'
+            $expectedModes = 'candidate'
+        } else {
+            $provider = 'tests/evidence/system_user_profile_pc/CgsXboxLivePC_bef9346f9.cpp'
+            $consumer = 'tests/evidence/system_user_profile_pc/CgsGuideIntegration_bef9346f9.cpp'
+            $expectedModes = 'baseline_api|baseline_consumer'
+        }
+        $expectedSources = @(
+            (Join-Path $SourceRoot 'tests/SystemUserProfilePC.cpp'),
+            (Join-Path $SourceRoot $provider),
+            (Join-Path $SourceRoot $consumer),
+            (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/PC/CgsPcNetIdentity.cpp'),
+            (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/X360/CgsXOverlappedX360.cpp'),
+            (Join-Path $variantRoot 'SPrintfProvider.cpp')
+        ) | ForEach-Object { [IO.Path]::GetFullPath($_) }
+        $recordedSources = [string[]]@($variant.source_paths | ForEach-Object { [IO.Path]::GetFullPath([string]$_) })
+        if ([string]::Join("`n", [string[]]$expectedSources) -cne [string]::Join("`n", $recordedSources)) {
+            throw "System-user-profile $variantName compiler source path/order differs from the approved runner."
+        }
+        $compileLog = Join-Path $variantRoot 'compile.log'
+        $null = Assert-SystemUserProfileRunRecord $variant.compile $compileLog 120 0
+        $modeKeys = [string[]]@($variant.modes.Keys | Sort-Object)
+        if ([string]::Join('|', $modeKeys) -cne $expectedModes) {
+            throw "System-user-profile $variantName run modes differ from the candidate/control contract."
+        }
+        $modeSummaries = @{}
+        if ($variantName -eq 'candidate') {
+            $modeSummaries['candidate'] = Assert-SystemUserProfileMode $variant.modes['candidate'] 'candidate' 'candidate' $OutputRoot 25 0 82 0 0 $expectedIds
+        } else {
+            $apiIds = [string[]]@($expectedIds | Select-Object -First 9)
+            $consumerIds = [string[]]@('legacy_consumer_selected_user_settings_callback','legacy_consumer_preserves_signin_name_before_settings','legacy_consumer_actual_error87_assert')
+            $modeSummaries['baseline_api'] = Assert-SystemUserProfileMode $variant.modes['baseline_api'] 'baseline' 'baseline_api' $OutputRoot 25 1 9 1 0 $apiIds @('default_actual_api_success')
+            $modeSummaries['baseline_consumer'] = Assert-SystemUserProfileMode $variant.modes['baseline_consumer'] 'baseline' 'baseline_consumer' $OutputRoot 25 1 3 1 1 $consumerIds @('legacy_consumer_selected_user_settings_callback') 'problem reading user settings'
+        }
+        $variantSummaries[$variantName] = @{
+            status = $variant.status; executable = @{ path = $exePath; bytes = $exe.bytes; sha256 = $exe.sha256 }
+            compile = @{ exit_code = $variant.compile.exit_code; timed_out = $variant.compile.timed_out; log_raw_sha256 = $variant.compile.log_raw_sha256; log_bytes = $variant.compile.log_bytes }
+            modes = $modeSummaries
+        }
+    }
+    return $variantSummaries
 }
 
 Push-Location $Root
@@ -136,6 +384,57 @@ try {
         $Receipt.build_inputs[$path] = Get-FileRecord (Join-Path $Root $path)
     }
     Invoke-Native py @('-3', '--version') 'toolchain.log'
+
+    # Optional, source-pinned PC profile fixture with the exact old API/consumer controls.
+    if ($RunSystemUserProfile) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.system_user_profile_status = 'running'
+        if ($Jobs -ne 4 -or $Receipt.runner_label -cne 'windows-2022' -or
+            $env:RUNNER_OS -cne 'Windows' -or $env:CANDIDATE_RUNNER_ENVIRONMENT -cne 'github-hosted') {
+            throw 'System-user-profile fixture is limited to GitHub-hosted Windows 2022 with four build jobs.'
+        }
+        Assert-CleanTrees
+        Remove-Item -LiteralPath Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+        foreach ($relative in @('tests/run_system_user_profile_pc.py',
+                                'tests/evidence/system_user_profile_pc/source_pins.json',
+                                'tests/evidence/system_user_profile_pc/test_plan.json')) {
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+        }
+        $profileRunner = Join-Path $SourceRoot 'tests/run_system_user_profile_pc.py'
+        $profileOut = Join-Path $ArtifactRoot 'system-user-profile'
+        if (Test-Path -LiteralPath $profileOut) {
+            if (@(Get-ChildItem -LiteralPath $profileOut -Force).Count -ne 0) {
+                throw 'System-user-profile output directory must be fresh and empty.'
+            }
+        } else {
+            New-Item -ItemType Directory -Path $profileOut | Out-Null
+        }
+        Invoke-Native py @('-3', '-B', $profileRunner, '--workflow-root', $Root,
+                           '--out', $profileOut, '--run') 'regressions.log'
+        $profileResultPath = Join-Path $profileOut 'result.json'
+        if (-not (Test-Path -LiteralPath $profileResultPath -PathType Leaf)) {
+            throw 'System-user-profile runner did not retain result.json.'
+        }
+        $profileResult = Get-Content -Raw -LiteralPath $profileResultPath | ConvertFrom-Json -AsHashtable
+        $Receipt.regressions.system_user_profile = @{
+            status = 'running'
+            result = Get-FileRecord $profileResultPath
+            runner = Get-FileRecord $profileRunner
+            source_pins = Get-FileRecord (Join-Path $SourceRoot 'tests/evidence/system_user_profile_pc/source_pins.json')
+            test_plan = Get-FileRecord (Join-Path $SourceRoot 'tests/evidence/system_user_profile_pc/test_plan.json')
+            source_base_head = $profileResult.sources.base_head
+            b5_head = $Receipt.b5_head
+        }
+        $profileVariants = Assert-SystemUserProfileReceipt $profileResult $profileOut $SourceRoot $Root
+        Assert-CleanTrees
+        $Receipt.regressions.system_user_profile.status = 'pass'
+        $Receipt.regressions.system_user_profile.source_receipt = $profileResult.sources
+        $Receipt.regressions.system_user_profile.source_status = $Receipt.source_status
+        $Receipt.regressions.system_user_profile.parent_status = $Receipt.parent_status
+        $Receipt.regressions.system_user_profile.variants = $profileVariants
+        $Receipt.regressions.system_user_profile_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+    }
 
     # Independent IO fixtures run before the exe gate; their receipts survive
     # a separate compile/link failure and cannot mark the candidate validated.
@@ -988,6 +1287,13 @@ try {
     $Receipt.validated = $true
     $ExitCode = 0
 } catch {
+    if ($Receipt.regressions.system_user_profile_status -eq 'running') {
+        $Receipt.regressions.system_user_profile_status = 'fail'
+        if ($Receipt.regressions.system_user_profile.Contains('status') -and
+            $Receipt.regressions.system_user_profile.status -eq 'running') {
+            $Receipt.regressions.system_user_profile.status = 'fail'
+        }
+    }
     if ($Receipt.regressions.gui_io_status -eq 'running') { $Receipt.regressions.gui_io_status = 'fail' }
     if ($Receipt.regressions.gui_animation_status -eq 'running') { $Receipt.regressions.gui_animation_status = 'fail' }
     if ($Receipt.regressions.startup_io_status -eq 'running') { $Receipt.regressions.startup_io_status = 'fail' }
