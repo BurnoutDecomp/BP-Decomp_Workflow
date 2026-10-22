@@ -5,12 +5,15 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-Launch `build/game/Burnout_PC.exe`. The **6b66e598** checkpoint-editor fix is installed
-there and merged/pushed to dev. It restores the original 289-position cursor
-buffer. Native checks added, moved and placed a checkpoint, observed distance/time
-recalculation, and returned to Create Event without an assert or exception.
-All twelve matching build files are present; config, saves and modification times
-were preserved. [Checkpoint fix and delivery](checkpoint_editor_hotfix_20261021.json).
+Launch `build/game/Burnout_PC.exe`. The installed **8fec93bd** build combines
+the GUI/action/movie and profile repair with current-dev Traffic and the shared
+DLC reader. It passed hosted compile/link and all selected GUI/profile checks.
+The exact executable passed real Start/sign-in, junkyard/world/HUD,68.7m of
+driving, local online Freeburn/Create Event, editing/moving/placing checkpoint1
+in a seven-checkpoint preset and returning with Back. No asserts/exceptions.
+The predecessor separately added a new checkpoint. All twelve matching build
+files are installed; config, nine profiles and their modification times were
+preserved at delivery, with a backup of the old build. [Delivery and limits](gui_dev_playable_delivery_20261022/DELIVERY.json).
 
 The earlier **b82350534** delivery checks passed:
 
@@ -47,15 +50,15 @@ The source/audit checkpoint covers 1,351/1,355 sites (99.7%), including unresolv
 
 ## Continuing source work
 
-**GUI/action/movie and online recovery:** Exact predecessor **787764f5** passed
-the hosted build, all82 profile checks and both original-code failure controls.
-The native check used real Start/sign-in, showed the world/HUD, measured70.5m
-of driving, entered online Freeburn/Create Event, then added, moved and placed
-a checkpoint and returned with Back. Captured screens and cleanup were reviewed.
-The current-dev composition **8fec93bd** adds Traffic, the shared DLC
-reader and layout checks; its hosted/native delivery gates are pending.
-The normal package remains **6b66e598**. No new debug-site dispositions, peer
-race, custom-route save or audio-stability claim. [Evidence](gui_profile_runtime_20261022/CHECKPOINT.json).
+**GUI/action/movie and online recovery:** **8fec93bd** is installed and
+merged/pushed to dev. Its exact2,994-file hosted build and selected profile,
+keyboard, licence, GUI lifecycle, HUD and delivery fixtures passed, including
+original-code failure controls. Independent review checked the native pixels,
+57 inputs, motion and cleanup. [Exact native evidence](gui_dev_playable_delivery_20261022/REVIEW.md).
+This supporting-flow delivery adds no debug-site dispositions and does not
+certify peer races, route save/reload, every UI hint, native DLC behavior or
+long-session audio. A newer private Flowtype override recovery **0bfa585e**
+is committed/pushed but is absent from this package and still needs its gates.
 
 **Route snap capacity checkpoint:** The 289-bound one-file source commit **6b66e5984f6f21ea47d1fa62a2ec61c9511640c9** passed hosted build run [39654339193](https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39654339193). Native placement/movement and Back passed; the matching normal package is installed and merged to dev. Done/save persistence and a complete multiplayer race remain unverified. This supporting-flow repair adds no verified debug-site dispositions.
 
@@ -64,8 +67,8 @@ fifteen-hull branch now has reviewed source plus actual4 ->15 ->4 decision,
 drawing and restoration evidence, with matching visible PVS cells. This
 adds one verified control. The repeated grouped run retained all15 captures,
 but the remaining Traffic74 effects still need manual review; that case is
-not a pass. The normal package remains6b66e598 while the separate GUI
-sign-in repair is being checked. [Evidence](traffic_worst_case_evidence_20261022/CHECKPOINT.json).
+not a pass. The source is included in installed8fec93bd; the grouped Traffic
+manual review continues separately. [Evidence](traffic_worst_case_evidence_20261022/CHECKPOINT.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source coverage, not 188 verified debug controls. Coherent checkpoints are committed and pushed frequently; reviewed work merges in batches.
 
