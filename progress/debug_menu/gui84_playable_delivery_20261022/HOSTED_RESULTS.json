@@ -1,0 +1,84 @@
+{
+  "status": "hosted_build_all_selected_gates_and_payloads_pass_native_pending",
+  "source": "ced5e065d3e0891b3d888a3ad5e77a2bbcc49cd0",
+  "source_tree": "dabe2046eaf20e1b6fefb3ae46e713f80ffbd4d8",
+  "workflow": "33395961efb20e2513559c0dedc7cbcc6106b97f",
+  "run_id": 39781461728,
+  "exe_sha256": "851c281790ed2c80624f6a92d48455b0e66222875d4bf39cd25b622472909e0d",
+  "payload_count": 12,
+  "passed_gates": [
+    "gui_io_status",
+    "system_user_profile_status",
+    "hud_status",
+    "traffic_flowtype_override_status",
+    "startup_io_status",
+    "gui_license_status",
+    "keyboard_ui_contract_status",
+    "gui_animation_status"
+  ],
+  "compile_summary": "compile: 2996 TUs -- 56 compiled, 2940 up to date, 0 failed  (44.2s, jobs=4)",
+  "receipt_sha256": "4bc5d7b6ed4d4bc7771f4e0e4d9183a5f692499f2d6c6c18e55bfd38ea06351e",
+  "build_log_sha256": "4cba1becaa734a13f717da13783825a20bc0c5e70a5829618ebfb3b8a3676be3",
+  "profile_fixture_result_sha256": "909f11ec04f50e8b873648777c9ad9b90a015768b5509e9ab0aa090f33c3f2c4",
+  "retained_fixture_executions": [
+    {
+      "variant": "traffic-flowtype-override/candidate",
+      "checks": 44,
+      "failures": 0,
+      "process_exit_code": 0,
+      "result_sha256": "43f09fbf107848701328348a3eec37d8a2b39a76dd7314d7be8172a2c3b20db7",
+      "exe_sha256": "c192dc6edc2a36c840e3d11f1bf55453f91493232cbbdfe7d83f088cc0042f1b"
+    },
+    {
+      "variant": "traffic-flowtype-override/baseline",
+      "checks": 44,
+      "failures": 14,
+      "process_exit_code": 1,
+      "result_sha256": "79eafb75084e43d063338ab8a0c8dec30623fb9d5e517c47b79867f4f5fe4ea4",
+      "exe_sha256": "20858302845be9b4f598f037de5f321ce57d2f7ff8917f058bd0c3881f624807"
+    },
+    {
+      "variant": "gui-license-regressions/positive",
+      "checks": 64,
+      "failures": 0,
+      "process_exit_code": 0,
+      "result_sha256": "25af6218fa51c3dce4b1261a3a447612114dafe0a0f578d750cb46f188ce2b23",
+      "exe_sha256": "3dc783cacd577bc2071a872d578628578d2a4abc87d3944f416ac9cbc8f5ee96"
+    },
+    {
+      "variant": "gui-license-regressions/old-tail-cache",
+      "checks": 64,
+      "failures": 13,
+      "process_exit_code": 1,
+      "result_sha256": "3810f088f9d4c76b0687308ddc05849b6715dbf0cfd71580412125320347ace7",
+      "exe_sha256": "c9bd9dbbab5b05a7cad97739980ec21dd0c6888f4b804c6cfaa4981affc948ce"
+    },
+    {
+      "variant": "gui-animation-regressions/positive",
+      "checks": 68,
+      "failures": 0,
+      "process_exit_code": 0,
+      "result_sha256": "fdd7a91cbc87373b39e66d43e5530440ecd6ab064295233ebbde047a30975e44",
+      "exe_sha256": "e8f0798f538911618caa527fded8325c8405291373f2750349c5f7c803e8c08c"
+    },
+    {
+      "variant": "gui-animation-regressions/omit-channel-construct",
+      "checks": 68,
+      "failures": 39,
+      "process_exit_code": 1,
+      "result_sha256": "d407c793c22d5310caa28719f330a048d3f1eb2bb8eca161e414f102912f2db8",
+      "exe_sha256": "8eb81c6015216c6da01927af65650ca43bb502ca15355165301f36ce9870317e"
+    },
+    {
+      "variant": "startup-io-regressions/positive",
+      "checks": 62,
+      "failures": 0,
+      "process_exit_code": 0,
+      "result_sha256": "a8eb2e9c45c7a5cbe2c536ed584822ab10627d382569cd4849456470858659d3",
+      "exe_sha256": "b82cf83270cd3954e8601e342afb472cee4b4f14c714f7334a2691d780b20b57"
+    }
+  ],
+  "normal_package_changed": false,
+  "native_executed": false,
+  "new_behavior_dispositions": 0
+}
