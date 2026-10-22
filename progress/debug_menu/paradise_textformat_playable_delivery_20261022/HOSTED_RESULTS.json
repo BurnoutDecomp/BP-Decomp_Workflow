@@ -1,0 +1,66 @@
+{
+  "status": "hosted_build_all_selected_gates_and_payloads_pass_native_pending",
+  "source": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+  "source_tree": "152be7fd5db9c3c367c7b739e01075744dba8fb5",
+  "workflow": "82e446bc90bb63beb0e910ed969f31f8ba687ec5",
+  "run_id": 39855395071,
+  "exe_sha256": "6fa903ebd3200ec46104b47bda8eb0e81d835d0ce6e003da370c11deb14c203a",
+  "payload_count": 12,
+  "passed_gates": [
+    "gui_io_status",
+    "system_user_profile_status",
+    "hud_status",
+    "traffic_flowtype_override_status",
+    "startup_io_status",
+    "gui_license_status",
+    "keyboard_ui_contract_status",
+    "gui_animation_status",
+    "rwac_command_capacity_status"
+  ],
+  "rwac_legacy_checks": 16427,
+  "rwac_first_pass_checks": 6,
+  "rwac_expected_baseline_failures": 6,
+  "rwac_variants": [
+    {
+      "name": "candidate",
+      "checks": 16427,
+      "failures": 0,
+      "exit_code": 0,
+      "run_log_sha256": "09e0e25d5abce168fa27c30629b14f6f1d57d6f475e04c2b398ab942b449a24d"
+    },
+    {
+      "name": "baseline_control",
+      "checks": 25,
+      "failures": 6,
+      "exit_code": 1,
+      "run_log_sha256": "6d55b4952b78268b1249f3b3e0eeab7af5483cc124b3ae06379e09d29a9dfe13"
+    }
+  ],
+  "receipt_sha256": "bb03fe3073df43d4d950e59b459bb387abc7bcb27280bf434640e308b889a7c5",
+  "build_log_sha256": "c864f478f4ff4539c951af8f18ae076d5e2a9a8e962e6a2fa9a6ba8c252a9014",
+  "rwac_result_sha256": "10578996e89c189ad3ca17b99096f89a6271f42f3db56350a1bf7a9fa494a2b9",
+  "normal_package_changed": false,
+  "native_executed": false,
+  "new_behavior_dispositions": 0,
+  "freeze_fix_claim": false,
+  "text_format_binding": [
+    {
+      "variant": "text-format",
+      "checks": 78,
+      "failures": 0,
+      "exit_code": 0,
+      "result_sha256": "54ba31068156d8a2bf8cfa4f3df15b017fda1f605e723456b2bee76a3882df64",
+      "stdout_sha256": "03ef136f8c2ecb3b016b87d9b2053e6d314c03c134be0ddc8e7b7b7917cd998d",
+      "source_binding_sha256": "f647abfa6adc4fd3c78a3927b340f380da6cb5cf3085ecb39e7d468618841429"
+    },
+    {
+      "variant": "text-format-old-setter",
+      "checks": 78,
+      "failures": 57,
+      "exit_code": 1,
+      "result_sha256": "2ae084128a5e05f1b9116dddfd0a2b81d65b99bd763a601eceb66b489a3dffff",
+      "stdout_sha256": "7fb27785e1e54f44c27d389141ee7500acaaf5111cd916147f22775a8b0e861e",
+      "source_binding_sha256": "d329eb72517709de9d35d277a8e8cf05a9a20213b98a6aebaae435ea159e0eee"
+    }
+  ]
+}

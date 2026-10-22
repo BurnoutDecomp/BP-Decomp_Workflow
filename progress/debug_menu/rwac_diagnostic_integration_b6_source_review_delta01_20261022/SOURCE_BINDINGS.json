@@ -1,0 +1,238 @@
+{
+  "schema": "rwac-diagnostic-source-review-bindings-v1",
+  "packet": "rwac_diagnostic_integration_b6_20261022",
+  "verdict": "pass",
+  "review_base": {
+    "commit": "b6dc5da5f4484894659bb85c4591ee20bd95a947",
+    "tree": "45957f73f7964127dbd241e4967088c04ba79a11",
+    "branch": "codex/debug-menu-gamestate-source-integration-20261019",
+    "authoring_primary_commit": "5093cdb07f74fe0cfa6a6a32283fb6195be790ab",
+    "authoring_primary_tree": "684d10b1b878200cdebf1b6fab29ce03646ea828"
+  },
+  "source_delta": {
+    "sha256": "33a6d7bd1b7fed5086e8b3797c5511740ddb80ca34171933adae8bfcd02db621",
+    "bytes": 81059,
+    "changed_path_count": 10,
+    "paths": [
+      "src/GameShared/GameClasses/System/PC/CgsAudioOutputPC.cpp",
+      "src/GameShared/GameClasses/System/PC/CgsDacOutputPC.cpp",
+      "src/GameShared/GameClasses/System/PC/CgsRwacCommandTracePC.h",
+      "src/GameShared/GameClasses/Sound/Playback/CgsEnvironment.cpp",
+      "src/GameSource/Sound/Module/BrnRootSoundModule.cpp",
+      "vendor/renderware/src/rw/audio/core/PlugIn.cpp",
+      "tests/RwacCommandCapacity.cpp",
+      "tests/run_rwac_command_capacity.py",
+      "tests/evidence/rwac_command_capacity/PlugIn_b823.cpp",
+      "tests/evidence/rwac_command_capacity/source_pins.json"
+    ],
+    "unrelated_b6_paths_touched": []
+  },
+  "b6_preimages": [
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsAudioOutputPC.cpp",
+      "exists_at_b6": true,
+      "git_blob": "4b98533ab376775800f5d5253ee7789b295dfcf6",
+      "sha256": "c612945893592526511acba135647c422b86b7fa70c512ae8eeaeb2ceaaeb98d",
+      "bytes": 31045
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsDacOutputPC.cpp",
+      "exists_at_b6": true,
+      "git_blob": "bedc991f2465e75ed0ea1ff480444a8dbfe74ecb",
+      "sha256": "c81e1cb95958d959e6334b9c06325a3fbfbef149673aec5c9dbae59c427529fc",
+      "bytes": 5228
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsRwacCommandTracePC.h",
+      "exists_at_b6": false,
+      "git_blob": null,
+      "sha256": null,
+      "bytes": 0
+    },
+    {
+      "path": "src/GameShared/GameClasses/Sound/Playback/CgsEnvironment.cpp",
+      "exists_at_b6": true,
+      "git_blob": "c27d49344156a7170cd0c873be2d0e691d24523a",
+      "sha256": "75ee1a862fcc33d7fe69b9d50f0111354813aea02bdfc603864b9abebe7b0b79",
+      "bytes": 26146
+    },
+    {
+      "path": "src/GameSource/Sound/Module/BrnRootSoundModule.cpp",
+      "exists_at_b6": true,
+      "git_blob": "98365fa064de150dcdfb3e44aeb66cbe9b409756",
+      "sha256": "5ae421e73d4d3880c8e2e22aeafd33b717d68cc44c51bcea44bd18271c1fdc39",
+      "bytes": 42018
+    },
+    {
+      "path": "vendor/renderware/src/rw/audio/core/PlugIn.cpp",
+      "exists_at_b6": true,
+      "git_blob": "d1c98a807112e3052d8e9c8701cb3464e7619f7c",
+      "sha256": "e28e6fd1463b76ddc71d5dd51404787f225034014da99b67cdfdd1882a6a27c8",
+      "bytes": 8921
+    },
+    {
+      "path": "tests/RwacCommandCapacity.cpp",
+      "exists_at_b6": false,
+      "git_blob": null,
+      "sha256": null,
+      "bytes": 0
+    },
+    {
+      "path": "tests/run_rwac_command_capacity.py",
+      "exists_at_b6": false,
+      "git_blob": null,
+      "sha256": null,
+      "bytes": 0
+    },
+    {
+      "path": "tests/evidence/rwac_command_capacity/PlugIn_b823.cpp",
+      "exists_at_b6": false,
+      "git_blob": null,
+      "sha256": null,
+      "bytes": 0
+    },
+    {
+      "path": "tests/evidence/rwac_command_capacity/source_pins.json",
+      "exists_at_b6": false,
+      "git_blob": null,
+      "sha256": null,
+      "bytes": 0
+    }
+  ],
+  "postimages": [
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsAudioOutputPC.cpp",
+      "sha256": "736acfd2eb11baa93bb1e952e2d86f4637642d1e11aee760f2adfd4892511348",
+      "bytes": 32696,
+      "git_blob": "4bebe0eb512919f66622a60e6c27412f4f3819af",
+      "source": "source731"
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsDacOutputPC.cpp",
+      "sha256": "0043d62c6661ecdf82b405ec6613c9e790c899ca3494bf1802bbc3c0b4c0e70b",
+      "bytes": 6148,
+      "git_blob": "3f254df1a71d84591a92e81dfcad44acba94615e",
+      "source": "source731"
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsRwacCommandTracePC.h",
+      "sha256": "07aabff48550e7bc10fc30dafa2bc0de5d173e6c7f8b69af20abcad7e0ba5171",
+      "bytes": 20398,
+      "git_blob": "820cf8c68bd74a3bb4990d52f84181232bfbb611",
+      "source": "delta04"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Sound/Playback/CgsEnvironment.cpp",
+      "sha256": "6194a6ced5c7a7d58da3c3fb35fba480584e76a4af7582f8cd21e6f08c60827c",
+      "bytes": 27094,
+      "git_blob": "339b3f85930548d8eb5411d0bbb0886b1fba487f",
+      "source": "delta04"
+    },
+    {
+      "path": "src/GameSource/Sound/Module/BrnRootSoundModule.cpp",
+      "sha256": "55daf2e155a5a9b1e22317d10d93526ba1fc81327aa0c77ac555a36f1d09435b",
+      "bytes": 42580,
+      "git_blob": "bacc0e0c19e2150fa6dd1b6c1c5df7c0c61f8bf6",
+      "source": "delta04"
+    },
+    {
+      "path": "vendor/renderware/src/rw/audio/core/PlugIn.cpp",
+      "sha256": "46b1aa0cc1013647e0b0ba48b1a1ccef7a916d3fae9babf82d95983cc08b7ad4",
+      "bytes": 9754,
+      "git_blob": "9e03e619d73b4db3bdc90dfaf477c6f9270fd115",
+      "source": "source731"
+    },
+    {
+      "path": "tests/RwacCommandCapacity.cpp",
+      "sha256": "256b02ff626f2fe52216c4385c02019851d2764800d3a4ca33a4cb5d1802bb70",
+      "bytes": 8924,
+      "git_blob": "b9ea3ed69e5e03731916ff26e770f3ff7e94aadf",
+      "source": "delta04"
+    },
+    {
+      "path": "tests/run_rwac_command_capacity.py",
+      "sha256": "217f650696cfee3a6de4428241d98132020bd0c0b770ecc8763f279787d73a44",
+      "bytes": 24181,
+      "git_blob": "c14060db32e9c1cd5a3c89480442251fac80ca68",
+      "source": "source731"
+    },
+    {
+      "path": "tests/evidence/rwac_command_capacity/PlugIn_b823.cpp",
+      "sha256": "e28e6fd1463b76ddc71d5dd51404787f225034014da99b67cdfdd1882a6a27c8",
+      "bytes": 8921,
+      "git_blob": "d1c98a807112e3052d8e9c8701cb3464e7619f7c",
+      "source": "source731"
+    },
+    {
+      "path": "tests/evidence/rwac_command_capacity/source_pins.json",
+      "sha256": "9d8524ee50e60d882ca973cbd49ba7886e4b578641dfb8c7aa033943b85a84bc",
+      "bytes": 2537,
+      "git_blob": "279940f41021e5d8deb5c1c83d22f57801ab74fa",
+      "source": "delta04"
+    }
+  ],
+  "history": {
+    "source731": {
+      "commit": "731a6c1c95f494ef1509820f2624482283b9409f",
+      "tree": "fbb35f22326ad029b928681a3c962d900c68bc30",
+      "source731_exact_postimage_paths": [
+        "src/GameShared/GameClasses/System/PC/CgsAudioOutputPC.cpp",
+        "src/GameShared/GameClasses/System/PC/CgsDacOutputPC.cpp",
+        "vendor/renderware/src/rw/audio/core/PlugIn.cpp",
+        "tests/run_rwac_command_capacity.py",
+        "tests/evidence/rwac_command_capacity/PlugIn_b823.cpp"
+      ]
+    },
+    "delta03": {
+      "source_patch_sha256": "9c49229e05fe65e4d5edb514a147286e870571648bb245e403f94d15fc70ef0d",
+      "integrity_sha256": "57c4e5638d6780255deb800f272cebd55973e3bf01c31018f482629ff2d86906",
+      "review_sha256": "90713856d0bf40e0868a270e633c0b7e18a1fbd9b3d37c59fc239e980c72c9bc",
+      "verdict": "fail_preserved",
+      "review_file_unchanged": true
+    },
+    "delta04": {
+      "source_patch_sha256": "225d7bd6704d83fba258b4e8a22cfd11f1562ce5d8b885dcce53b8707918add5",
+      "integrity_sha256": "faf1a7e63ecb10e4d9282504a4692c3d322bb59e9aefa33135f6c61652654b76",
+      "review_sha256": "99642fdb1f691d220bd54325a74ba564a2220fbc7e185ffdeee2a19c74e7efaa",
+      "verdict": "pass",
+      "review_file_unchanged": true
+    }
+  },
+  "runner_pins": {
+    "schema_version": 2,
+    "normalization": "crlf_to_lf_only",
+    "count": 8,
+    "all_final_files_match": true,
+    "paths": [
+      "src/GameShared/GameClasses/System/PC/CgsAudioOutputPC.cpp",
+      "src/GameShared/GameClasses/System/PC/CgsDacOutputPC.cpp",
+      "src/GameShared/GameClasses/System/PC/CgsRwacCommandTracePC.h",
+      "src/GameSource/Sound/Module/BrnRootSoundModule.cpp",
+      "vendor/renderware/src/rw/audio/core/PlugIn.cpp",
+      "tests/RwacCommandCapacity.cpp",
+      "tests/run_rwac_command_capacity.py",
+      "tests/evidence/rwac_command_capacity/PlugIn_b823.cpp"
+    ],
+    "unpinned_production_path": "src/GameShared/GameClasses/Sound/Playback/CgsEnvironment.cpp",
+    "baseline_blob": "d1c98a807112e3052d8e9c8701cb3464e7619f7c"
+  },
+  "parent_ci": {
+    "commit": "227b0518b1ba52ed9a33da802ffc25353ae97de3",
+    "tree": "bce1fbc07c23df908932a6512347eaacf51c66d0",
+    "proposed_changed_paths": [],
+    "gate02_review_sha256": "887430ee97056aa204fb06cfc11f84c7b0f4dc591c6570087a4e8d1e9591f2c0",
+    "workflow_sha256": "bc2674c385d5360cbf60d1b057c9332aa03f7c631515419ba9ce3d57e3930624",
+    "checker_sha256": "b207e095a778403fce7106f676cf2b36c8af89f7e00fe82f5312276b370f4e4d",
+    "gate02_fixes_present": true,
+    "newer_traffic_and_profile_gates_preserved": true
+  },
+  "limits": {
+    "source_only": true,
+    "fixture_or_build_or_ci_or_game_or_ida_run": false,
+    "runtime_behavior_credit": false,
+    "audio_fix_claim": false,
+    "crash_cause_claim": false,
+    "active_witness_process_one_shot": true,
+    "process_global_callback_device_context": true
+  }
+}

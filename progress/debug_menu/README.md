@@ -5,17 +5,27 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-Launch `build/game/Burnout_PC.exe`. The installed **5093cdb0** build includes
-the GUI84 wiring, Replay lifecycle, GUI rendering/streaming consumers and
-the original Lua state lookup repair. Source review, hosted compile/link
-(2,998 TUs, zero failed) and all eight selected regression groups passed.
-The exact executable passed Start, visible world/HUD/EasyDrive, 73.2 metres
-of driving, local Freeburn, adding the first checkpoint, moving/placing it
-and Back to Create Event. Root viewed the actual checkpoint1/1 and later
-menu frames. No asserts or exceptions occurred. Twelve matching outputs
-were verified; four changed files were installed with a recoverable backup.
-Settings, nine profiles and both logs kept their bytes and modification
-times. [Delivery and limits](fsm_index_playable_delivery_20261022/DELIVERY.json).
+Launch `build/game/Burnout_PC.exe`. The installed **91a0ed56** build fixes
+the reproduced Paradise Drives freeze after checkpoint editing. Its missing
+TextFormat setter prevented the original label-fitting script from reducing
+font size. The setter is recovered from original assembly; the script is unchanged.
+
+The exact hosted executable passed both the 67-step checkpoint-edit sequence
+and 46-step direct-entry sequence, including route navigation and Back. Root
+viewed changing presets, readable fitted labels, start and finish markers, and
+the return to Select Route. The active map is opaque; half opacity on the inactive
+map is original behavior. Both 210-second runs had zero asserts/exceptions.
+
+Source review, hosted compile/link (2,998 TUs, zero failed), nine selected groups
+and all twelve output hashes passed. The 78-check binding test also rejects the
+old setter. Settings, saves and both logs retain their bytes and modification
+times. Only matching build outputs were installed with a recoverable backup.
+[Delivery and limits](paradise_textformat_playable_delivery_20261022/DELIVERY.json).
+
+The previous **5093cdb0** delivery covered Start, visible world/HUD/EasyDrive,
+driving, local Freeburn and checkpoint movement/placement. Its recorded evidence
+is retained in [the earlier delivery](fsm_index_playable_delivery_20261022/DELIVERY.json).
+The new, incomplete Replay composition remains on its private branch.
 
 The earlier private **073412e1** startup failure remains recorded as a
 failure. Its Lua numeric IDs were incorrectly treated as object-table

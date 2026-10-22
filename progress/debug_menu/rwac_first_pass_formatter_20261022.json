@@ -1,0 +1,54 @@
+{
+  "source": "a0f9b2cb9e8ac35d08dd9b39397ee823447f6a47",
+  "source_parent": "9683347ca74e3564986e19cf7bf43f46b5c7c05e",
+  "review_sha256": "8e4df60a1cf6d057fc067102cd8bc2e687e7e2bf34fb29c64c5730eb895fc386",
+  "files": [
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsRwacCommandTracePC.h",
+      "b6_git_blob_at_968": "820cf8c68bd74a3bb4990d52f84181232bfbb611",
+      "preimage_sha256": "07aabff48550e7bc10fc30dafa2bc0de5d173e6c7f8b69af20abcad7e0ba5171",
+      "preimage_bytes": 20398,
+      "postimage_sha256": "d9c24a0ba6a3fcd3fb368803c5740f38a34b4382592b2d93b3ae67fccad2455e",
+      "postimage_bytes": 20522,
+      "change": "add DeviceOpened and DeviceClosed Count arguments to FIRST_PASS_WITNESS only"
+    },
+    {
+      "path": "tests/RwacCommandCapacity.cpp",
+      "b6_git_blob_at_968": "b9ea3ed69e5e03731916ff26e770f3ff7e94aadf",
+      "preimage_sha256": "256b02ff626f2fe52216c4385c02019851d2764800d3a4ca33a4cb5d1802bb70",
+      "preimage_bytes": 8924,
+      "postimage_sha256": "09aff733a8d23336a23f7524ff47ee3616a98b210cf4ef6979c651dab85cb027",
+      "postimage_bytes": 11976,
+      "change": "exercise real EmitFirstActiveOccupancy with deterministic State transitions; six checks use a separate counter"
+    },
+    {
+      "path": "tests/run_rwac_command_capacity.py",
+      "b6_git_blob_at_968": "c14060db32e9c1cd5a3c89480442251fac80ca68",
+      "preimage_sha256": "217f650696cfee3a6de4428241d98132020bd0c0b770ecc8763f279787d73a44",
+      "preimage_bytes": 24181,
+      "postimage_sha256": "e67e25288b2c6c62aa827e68510027e926906442a70f4343f49565bfe171976a",
+      "postimage_bytes": 25334,
+      "change": "parse candidate-only FIRST_PASS summary and fail the fixture on C4473/C4477 warnings"
+    },
+    {
+      "path": "tests/evidence/rwac_command_capacity/source_pins.json",
+      "b6_git_blob_at_968": "279940f41021e5d8deb5c1c83d22f57801ab74fa",
+      "preimage_sha256": "9d8524ee50e60d882ca973cbd49ba7886e4b578641dfb8c7aa033943b85a84bc",
+      "preimage_bytes": 2537,
+      "postimage_sha256": "826888f88d3264d5d946c4b3338692a9ed881fc4d574c1f60a6395ab9a1543f2",
+      "postimage_bytes": 2589,
+      "change": "refresh LF pins for the header, fixture, and runner; retain baseline producer pin"
+    }
+  ],
+  "hosted": "pending",
+  "native": "pending",
+  "capacity_positive_expected": 16427,
+  "first_pass_positive_expected": 6,
+  "baseline_capacity_checks_expected": 25,
+  "baseline_failures_expected": 6,
+  "prior_witness_tail": "invalid:27 conversions/25 args; C4473/C4477 were warnings in hosted39841063013",
+  "paradise_freeze": "reproduced privately on preset entry/cursor; original reports retained; thread dump pending",
+  "normal_installed_source": "5093cdb07f74fe0cfa6a6a32283fb6195be790ab",
+  "normal_package_changed": false,
+  "new_debug_credit": 0
+}
