@@ -429,7 +429,9 @@ function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision
         (Join-Path $VariantRoot 'run.cmd'),
         (Join-Path $Root 'tools/build/msvc_flags.txt'),
         (Join-Path $Root 'tools/build/msvc_includes.txt'),
-        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp')
+        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp'),
+        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp'),
+        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')
     )
     $seen = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     if (@($row.inputs).Count -ne $expectedInputs.Count) { throw 'Traffic flowtype input set differs.' }
@@ -448,12 +450,15 @@ function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision
         throw 'Traffic flowtype retained command script differs from the helper contract.'
     }
     if ($extraction.schema -ne 1 -or $extraction.source_revision -cne $Revision -or
-        $extraction.include_name -cne 'traffic_flowtype_override.inc' -or $extraction.source_objects.Count -ne 2) {
+        $extraction.include_name -cne 'traffic_flowtype_override.inc' -or $extraction.source_objects.Count -ne 5) {
         throw 'Traffic flowtype extraction revision/shape differs.'
     }
     foreach ($relative in @(
         'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp',
-        'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp')) {
+        'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp',
+        'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
+        'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
+        'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')) {
         $expectedBlob = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${Revision}:$relative")
         if ($extraction.source_objects[$relative] -cne $expectedBlob) { throw 'Traffic flowtype source blob differs.' }
     }
@@ -530,8 +535,8 @@ try {
         if ($Jobs -ne 4 -or $env:ImageOS -ne 'win22') { throw 'Traffic flowtype requires hosted Windows 2022 / Jobs=4.' }
         # Fix the reviewed harness while allowing the requested production revision to vary.
         $flowHarnessPins = @{
-            'tests/TrafficFlowtypeOverride.cpp' = '704d1c3a500a97ecdab0547f27cca56f68012596b84f04c4f39cd1b7448507f8'
-            'tests/run_traffic_flowtype_override.py' = '85108122077eb7e693b45a9c90024ee60a96878f7bba23529a44aa697da62205'
+            'tests/TrafficFlowtypeOverride.cpp' = 'ca57fb44af73b7ffdc6903484dc7648def57dd9e07ae2e396f565bd8c4b61158'
+            'tests/run_traffic_flowtype_override.py' = 'f5b8bb80a80aa1b0ef8044b3459eee71d9d5ea26d17a0980d6bae31ea0a028b6'
             'tests/fxgs_common.py' = '6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033'
         }
         foreach ($relative in $flowHarnessPins.Keys) {
@@ -554,7 +559,11 @@ try {
             'src/SharedClasses/Traffic/BrnTrafficHull.h', 'src/SharedClasses/Traffic/BrnTrafficSharedConstants.h',
             'src/GameShared/GameClasses/Containers/CgsArray.h', 'src/GameShared/GameClasses/Core/CgsAssert.h',
             'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.h',
-            'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp', 'src/types.hpp')) {
+            'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.h',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceBasePool.h', 'src/types.hpp')) {
             $flowInputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
         }
         foreach ($relative in @('tools/build/msvc_flags.txt', 'tools/build/msvc_includes.txt', 'tools/build/msvc_env.bat')) {
@@ -566,6 +575,15 @@ try {
         }
         $flowBaseline = '8fec93bd4d2806ca9b60fb53dc272fe28081f8b8'
         Invoke-Native git @('-C', $SourceRoot, 'fetch', '--recurse-submodules=no', '--no-tags', '--depth=1', 'origin', $flowBaseline) 'source.log'
+        # These real compiled providers are shared by both variants; require exact control blobs.
+        foreach ($relative in @(
+            'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')) {
+            $candidateProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${B5Commit}:$relative")
+            $controlProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${flowBaseline}:$relative")
+            if ($candidateProvider -cne $controlProvider) { throw 'Flowtype fixture provider differs from exact control.' }
+        }
         $flowNoDefault = [Environment]::GetEnvironmentVariable('NoDefaultCurrentDirectoryInExePath', 'Process')
         try {
             [Environment]::SetEnvironmentVariable('NoDefaultCurrentDirectoryInExePath', $null, 'Process')
