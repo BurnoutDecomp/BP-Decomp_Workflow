@@ -1,0 +1,1152 @@
+{
+  "verdict": "pass",
+  "review_packet": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_native_review_packet_20261022",
+  "reviewed_at_utc": "2026-10-22T08:59:47.232768+00:00",
+  "scope": "Bounded hosted-profile and private native supporting-flow evidence interpretation; earlier source reviews separate, no normal promotion or new debug dispositions.",
+  "findings": [],
+  "candidate": {
+    "source": "787764f51a086a3b1fe02968b71135b0978287d4",
+    "hosted_workflow": "a405f11637242f0d203c0b653684b499d06f5392",
+    "hosted_run_id": 39748249518,
+    "exe_sha256": "23475de1e949846623d441e6c220260687f59e7865617627631fbd32ff0be29a",
+    "private_slot": 62030,
+    "owned_pid": 34284,
+    "payload_count": 12,
+    "all_hosted_and_slot_payload_hashes_match": true
+  },
+  "packet_inputs": {
+    "declared_external_bindings": 9,
+    "selected_BMP_hashes": 8,
+    "all_match": true
+  },
+  "native_plan": {
+    "actual_run_script_sha256": "e0e0cb5e42f5b35ae626b04a871e6d7a6fac2aba6620681dde6f35b00a569e64",
+    "older_verified_result_script_sha256": "af362287ec377b686d4e92fc0ec8e57c85622c10fe155d66880b41f6cae541e8",
+    "single_reverse_literal_FrameEvery240_to90_reproduces_old_script_hash": true,
+    "plan_binding_sha256": "b60dc6940bb3cda5b5cbaa3a1823d5513a7a11005ab222320c98a454473bbd4d"
+  },
+  "fixture_modes": [
+    {
+      "variant": "candidate",
+      "mode": "candidate",
+      "status": "pass",
+      "summary": [
+        82,
+        0,
+        0
+      ],
+      "failure_ids": [],
+      "executable_sha256": "b35d3bebd35c64d5867107d2132c82c50321cf07602564f68bfbcd6411910395",
+      "raw_log_sha256": "0352f02ae292312b5f61d1e976097dc6aa767a33f25f16d9ed1776f4467eef67",
+      "exit_code": 0,
+      "timeout": false,
+      "owned_cleanup_complete": true
+    },
+    {
+      "variant": "baseline",
+      "mode": "baseline_api",
+      "status": "expected_failure_observed",
+      "summary": [
+        9,
+        1,
+        0
+      ],
+      "failure_ids": [
+        "default_actual_api_success"
+      ],
+      "executable_sha256": "9b64bed2f0087d9d84fc2ce87afe16afe60a7fdaf8ae61c948cae3399bd5d132",
+      "raw_log_sha256": "92a6ae85ea9e2138069eb45dde8d3068db053fb7ec3a07310b8c6bca46f07ab9",
+      "exit_code": 1,
+      "timeout": false,
+      "owned_cleanup_complete": true
+    },
+    {
+      "variant": "baseline",
+      "mode": "baseline_consumer",
+      "status": "expected_failure_observed",
+      "summary": [
+        3,
+        1,
+        1
+      ],
+      "failure_ids": [
+        "legacy_consumer_selected_user_settings_callback"
+      ],
+      "executable_sha256": "9b64bed2f0087d9d84fc2ce87afe16afe60a7fdaf8ae61c948cae3399bd5d132",
+      "raw_log_sha256": "3e6e3a83c7ee27fc81345c4e4e097bb2edff2cf682e9aa0f8d5222e71c813088",
+      "exit_code": 1,
+      "timeout": false,
+      "owned_cleanup_complete": true
+    }
+  ],
+  "original_baseline_bindings": [
+    {
+      "candidate_snapshot": "tests/evidence/system_user_profile_pc/CgsXboxLivePC_bef9346f9.cpp",
+      "original_commit": "bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7",
+      "original_path": "src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp",
+      "exact_lf_snapshot": true
+    },
+    {
+      "candidate_snapshot": "tests/evidence/system_user_profile_pc/CgsGuideIntegration_bef9346f9.cpp",
+      "original_commit": "bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7",
+      "original_path": "src/GameShared/GameClasses/Gui/CgsGuideIntegration.cpp",
+      "exact_lf_snapshot": true
+    }
+  ],
+  "native_evidence": {
+    "menu_steps_completed": 57,
+    "all_steps_1_through57_present_once_in_order": true,
+    "raw_game_log_assert_exception_records": 0,
+    "sequence": [
+      {
+        "line": 13897,
+        "text": "[screen] ENTER 'ON_GAME_ROOM' (from 'ON_CREATE_FB') seq 9"
+      },
+      {
+        "line": 16789,
+        "text": "[screen] ENTER 'INVISIBLE   ' (from 'IGO_ENTER_ON') seq 9"
+      },
+      {
+        "line": 22118,
+        "text": "[screen] ENTER 'ON_GAME_OPT ' (from 'ON_GAME_ROOM') seq 10"
+      },
+      {
+        "line": 22870,
+        "text": "[create-match-trace] helpbar completed tick=1 substate=2 round-seq=0 time=48.049988 stored=48.049988 used=2 completed=2 info=1 widths=1"
+      },
+      {
+        "line": 23187,
+        "text": "[create-match-trace] route ready epoch=1 substate=2 round=0 rounds=1 highlighted-id=3 route-info=1 distance=8185.41259765625"
+      },
+      {
+        "line": 23791,
+        "text": "[create-match-trace] route ready epoch=1 substate=2 round=0 rounds=1 highlighted-id=1 route-info=1 distance=8185.41259765625"
+      },
+      {
+        "line": 37132,
+        "text": "[screen] ENTER 'ON_GAME_OPT ' (from 'ON_SEL_ROUTE') seq 12"
+      }
+    ],
+    "motion_samples_total": 542,
+    "selected_motion_samples": 504,
+    "selected_motion_indices": [
+      38,
+      541
+    ],
+    "path_metres": 70.51933126499547,
+    "net_metres": 70.35521381858601,
+    "terminal": {
+      "schema": 1,
+      "launch_utc": "2026-10-22T08:40:54.4550478Z",
+      "launched": true,
+      "owned_pid": 34284,
+      "owned_image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\Burnout_PC.exe",
+      "owned_start_utc": "2026-10-22T08:40:54.4696331Z",
+      "direct_creation_handle_retained": true,
+      "completed": true,
+      "requested_exit": 0,
+      "error": null,
+      "first_assert_stop": false,
+      "first_assert_at": null,
+      "observed_asserts": 0,
+      "foreign_game": false,
+      "runaway_log_abort": false,
+      "owned_cleanup_complete": true,
+      "input_reset_complete": true,
+      "game_exited_on_own": false,
+      "game_exit": null,
+      "title_start_requested": true,
+      "title_start_ready_observed": true,
+      "title_start_sent_at": 9.279285699999999,
+      "success": true
+    },
+    "frames_retained_total": 71,
+    "audio_muted": true
+  },
+  "frames": [
+    {
+      "label": "hud_and_easydrive",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_004320.bmp",
+      "sha256": "5afb6e1dcab75ed44f52cec834e17566f108865abe221db5fdb0e4148bbc36cb",
+      "seconds_since_launch": 28.655104,
+      "root_visual_observation": "Visible car/world, boost/minimap and Paradise City Live EasyDrive; vehicle speed is nonzero.",
+      "reviewer_observation": "Car/world, boost bar, minimap and Paradise City Live EasyDrive are visible; debug linear velocity is nonzero.",
+      "view_image_inspected": true,
+      "mtime_ns": 1792658483110150500,
+      "mtime_seconds_from_terminal_launch": 28.65510368347168
+    },
+    {
+      "label": "online_room",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_005760.bmp",
+      "sha256": "d90f3acc853199b7ea2826ca382fc7487699c4b152779440739603454db0e336",
+      "seconds_since_launch": 38.811405,
+      "root_visual_observation": "Visible FREEBURN WITH Slot62030 (Open) and online player score HUD; one local participant only.",
+      "reviewer_observation": "FREEBURN WITH Slot62030 (Open), Welcome to Freeburn Online and one Slot62030 score row are visible. No peer is established.",
+      "view_image_inspected": true,
+      "mtime_ns": 1792658493266451800,
+      "mtime_seconds_from_terminal_launch": 38.81140494346619
+    },
+    {
+      "label": "select_route",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_007200.bmp",
+      "sha256": "0dfd1980c81e2e6973d5a983a62048ddcfd55d5d2b2b272bf7d3c5f7e31992c7",
+      "seconds_since_launch": 51.671062,
+      "root_visual_observation": "SELECT ROUTE map, original preset, round1 of1, route distance/time and SELECT/BACK help.",
+      "reviewer_observation": "SELECT ROUTE, Round 1 of 1, highlighted PARADISE DRIVES, map, 5.0mi/4:10 and SELECT/BACK help are visible.",
+      "view_image_inspected": true,
+      "mtime_ns": 1792658506126108800,
+      "mtime_seconds_from_terminal_launch": 51.671061992645264
+    },
+    {
+      "label": "add_checkpoint",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_007920.bmp",
+      "sha256": "07c7be7e2b234b40b0da62b8577eaf8cbe6dfa8cdea5c5d3fe09457fbd000726",
+      "seconds_since_launch": 59.660239,
+      "root_visual_observation": "ADD CHECKPOINT selected, ADD/INSERT/BACK help and original start/finish map.",
+      "reviewer_observation": "EDIT ROUTE with ADD CHECKPOINT selected, start/finish map markers, 5.0mi/4:10 and ADD/INSERT/BACK help are visible.",
+      "view_image_inspected": true,
+      "mtime_ns": 1792658514115285300,
+      "mtime_seconds_from_terminal_launch": 59.66023850440979
+    },
+    {
+      "label": "checkpoint_editor",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_008400.bmp",
+      "sha256": "5c087b2d5309a2a5cddf489b026c8c7a3397c160f13e2aac39ee254602845d92",
+      "seconds_since_launch": 64.731709,
+      "root_visual_observation": "EDIT CHECKPOINT1/1, junction dots, PLACE/SCROLL/BACK help, distance6.0mi/time4:50.",
+      "reviewer_observation": "EDIT CHECKPOINT 1/1 with junction dots, cursor near the finish side, 6.0mi/4:50 and PLACE/SCROLL/BACK help are visible.",
+      "view_image_inspected": true,
+      "mtime_ns": 1792658519186755800,
+      "mtime_seconds_from_terminal_launch": 64.73170900344849
+    },
+    {
+      "label": "checkpoint_moved",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_009120.bmp",
+      "sha256": "5ceb2ee5eba2c97d37dd5d9baa68809fda62a92fec84c47cf9e8959588f22424",
+      "seconds_since_launch": 72.037125,
+      "root_visual_observation": "Checkpoint cursor moved northeast after two scoped Right taps; distance7.4mi/time6:00.",
+      "reviewer_observation": "Checkpoint cursor is northeast of its previous position after two scoped Right taps; displayed totals change to 7.4mi/6:00.",
+      "view_image_inspected": true,
+      "mtime_ns": 1792658526492171500,
+      "mtime_seconds_from_terminal_launch": 72.03712463378906
+    },
+    {
+      "label": "checkpoint_placed",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_009840.bmp",
+      "sha256": "818f94fac1546ff1ebeb58e230bfc7cf2a2c186d5d2a1785ceb6b88ee436fc4c",
+      "seconds_since_launch": 78.303904,
+      "root_visual_observation": "Returned to ADD CHECKPOINT; moved checkpoint remains visible and7.4mi/6:00 retained.",
+      "reviewer_observation": "ADD CHECKPOINT is selected again; the moved checkpoint position and 7.4mi/6:00 remain visible in this session.",
+      "view_image_inspected": true,
+      "mtime_ns": 1792658532758951300,
+      "mtime_seconds_from_terminal_launch": 78.30390429496765
+    },
+    {
+      "label": "create_event_returned",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_010560.bmp",
+      "sha256": "407afd7cb06959838a30e5f393d4e6a06c5bb2158bb4ec6efcf6564ddf81c274",
+      "seconds_since_launch": 84.604695,
+      "root_visual_observation": "Returned to CREATE EVENT; event type/rounds/car/traffic options and CONTINUE/BACK help visible.",
+      "reviewer_observation": "CREATE EVENT shows Event Type Race, Rounds 1, Host Car Lock Open, Car Limit Burnout, Traffic On and CONTINUE/BACK help.",
+      "view_image_inspected": true,
+      "mtime_ns": 1792658539059741400,
+      "mtime_seconds_from_terminal_launch": 84.60469460487366
+    }
+  ],
+  "normal_files_verified": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.exe",
+      "sha256": "89b7ce9b202ecd5b7408e194651cb09001dbdeaa42b2cde91bd86b248ce67c8e",
+      "bytes": 11132416,
+      "mtime_ns": 1792607990894102600,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\config.ini",
+      "sha256": "1530b57fea7ea7b6eb8ce1f0f9b3b40a03529f7ef431c6f2f172f00874d08e85",
+      "bytes": 4702,
+      "mtime_ns": 1792598473542970500,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard\\Profile.sav",
+      "sha256": "9387be51fdeae0edfad3061379bc60db1d3d82c33f53b12822f36a9f164aa668",
+      "bytes": 1223256,
+      "mtime_ns": 1792605307853780900,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_1\\Profile.sav",
+      "sha256": "dbaa53b367deb6149497e8e6b50edb02e426b8f38959a911ed0e074eadb9e81a",
+      "bytes": 1223256,
+      "mtime_ns": 1791910356156898700,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_20\\Profile.sav",
+      "sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+      "bytes": 1223256,
+      "mtime_ns": 1791910544617135100,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_21\\Profile.sav",
+      "sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+      "bytes": 1223256,
+      "mtime_ns": 1791910544617135100,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_22\\Profile.sav",
+      "sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+      "bytes": 1223256,
+      "mtime_ns": 1791910544617135100,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_23\\Profile.sav",
+      "sha256": "09a8611e8e6981075ad87ace4378f3af99ff84ca68a26c4c91272643a638eab0",
+      "bytes": 1223256,
+      "mtime_ns": 1791896384713752800,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_3\\Profile.sav",
+      "sha256": "4d2ac0876d96d2652d108c1cfa50795edf565f2e098e4e685cefdfef7bdec8e7",
+      "bytes": 1223256,
+      "mtime_ns": 1791930311152643400,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_4\\Profile.sav",
+      "sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+      "bytes": 1223256,
+      "mtime_ns": 1791910544617135100,
+      "verified_at_review": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_7\\Profile.sav",
+      "sha256": "2aacf0c1916e3173015390e58067fe2b13f3b2d7b518c0d351afd644e48cdcfc",
+      "bytes": 1223256,
+      "mtime_ns": 1791573284970391000,
+      "verified_at_review": true
+    }
+  ],
+  "normal_exe_provenance": {
+    "exe_sha256": "89b7ce9b202ecd5b7408e194651cb09001dbdeaa42b2cde91bd86b248ce67c8e",
+    "exe_mtime": "2026-10-21T18:38:26",
+    "built_from_root": "D:\\a\\BP-Decomp_Workflow\\BP-Decomp_Workflow",
+    "host": "runnervmgnbhw",
+    "parent_head": "d8c08c938856a9c34f897e2904bddaea04943814",
+    "parent_dirty": true,
+    "b5_head": "6b66e5984f6f21ea47d1fa62a2ec61c9511640c9",
+    "b5_dirty": false,
+    "b5_root": "D:\\a\\BP-Decomp_Workflow\\BP-Decomp_Workflow\\b5-decomp"
+  },
+  "harness_context_boundary": {
+    "current_flow_run_raw_sha256": "792528705acea80ca4085e88a7bd2a407496f2f1d2248ba6a7b35fa3eeab9780",
+    "hosted_workflow_flow_run_raw_sha256": "f55e7b441ccbd501ff25a533e429ec5f7fd0f9749358eeaa8333deac7fb498aa",
+    "normalized_equal": false,
+    "note": "Current helper source was context only; hosted workflow identity is build provenance. Retained native terminal/console/steps and separately bound Run.ps1 support the native interpretation; no historical helper-version equivalence is claimed."
+  },
+  "inputs": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_native_review_packet_20261022\\CHECKPOINT.json",
+      "bytes": 7850,
+      "raw_sha256": "28af97f7b5b55cf9264c9f4922fd469391980f7a39d30678f0dd7a199158a751",
+      "roles": [
+        "native_review_packet"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_native_review_packet_20261022\\REVIEW_REQUEST.md",
+      "bytes": 680,
+      "raw_sha256": "f18f5a1fe83f0e638e16448ddf63afab84a35b2004792811f23ad35d7c67936e",
+      "roles": [
+        "native_review_packet"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_native_review_packet_20261022\\SOURCE_BINDINGS.json",
+      "bytes": 2402,
+      "raw_sha256": "8617f95ab705a905cddb0feba8820ca7a6da06e4637a5c297f6a4455f6c20c34",
+      "roles": [
+        "native_review_packet"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\STAGING.delta02.json",
+      "bytes": 5601,
+      "raw_sha256": "301373897beec02437f1ee5099125d5de957d5c763afe6ed0b73b36db98a3394",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\Run.ps1",
+      "bytes": 2408,
+      "raw_sha256": "e0e0cb5e42f5b35ae626b04a871e6d7a6fac2aba6620681dde6f35b00a569e64",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\NATIVE_PLAN_BINDING.delta03.json",
+      "bytes": 821,
+      "raw_sha256": "b60dc6940bb3cda5b5cbaa3a1823d5513a7a11005ab222320c98a454473bbd4d",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\terminal-status.json",
+      "bytes": 915,
+      "raw_sha256": "1911131d2fc8ae4937a32474a5a6573b1b344a06e2235b3e1848db107e53946f",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\marks.txt",
+      "bytes": 8415,
+      "raw_sha256": "61268319fe003e501dc6f8fe6b7ba8224f92a17b6922f0854c398bfcfc3ea461",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\BrnGame.log",
+      "bytes": 13016118,
+      "raw_sha256": "7e68a25add446a94b06a12f95dd421fd16dbb6bad33d5153b959b2dc5c2624a7",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\verified_results.json",
+      "bytes": 731,
+      "raw_sha256": "1fdd9bc64d9b87cac73eb5e086f3ed77e71a5a077cb7496f0f9a93f10522f380",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\input-receipt.json",
+      "bytes": 44174,
+      "raw_sha256": "e78c495f2d7370addaf05fcfd350b4aafc66336bf3ec377b6237c13ac4ddaeb6",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\result.json",
+      "bytes": 45760,
+      "raw_sha256": "da165325e7cab0bf0fdc2abfae94224721c15e2c694d6f8906242c4f8e9ce58a",
+      "roles": [
+        "packet_declared_external_input"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\xaudio2_9redist.dll",
+      "bytes": 997400,
+      "raw_sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\xaudio2_9redist.dll",
+      "bytes": 997400,
+      "raw_sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\avformat-63.dll",
+      "bytes": 644608,
+      "raw_sha256": "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\avformat-63.dll",
+      "bytes": 644608,
+      "raw_sha256": "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\Burnout_PC.exe.provenance.json",
+      "bytes": 467,
+      "raw_sha256": "dd202acb56688438feebc348fa995a674d263133ccd8c23cf51d194fe540f9e0",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\Burnout_PC.exe.provenance.json",
+      "bytes": 467,
+      "raw_sha256": "dd202acb56688438feebc348fa995a674d263133ccd8c23cf51d194fe540f9e0",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\swresample-7.dll",
+      "bytes": 201728,
+      "raw_sha256": "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\swresample-7.dll",
+      "bytes": 201728,
+      "raw_sha256": "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\avcodec-63.dll",
+      "bytes": 2179072,
+      "raw_sha256": "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\avcodec-63.dll",
+      "bytes": 2179072,
+      "raw_sha256": "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\avdevice-63.dll",
+      "bytes": 109056,
+      "raw_sha256": "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\avdevice-63.dll",
+      "bytes": 109056,
+      "raw_sha256": "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\avutil-61.dll",
+      "bytes": 978944,
+      "raw_sha256": "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\avutil-61.dll",
+      "bytes": 978944,
+      "raw_sha256": "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\Burnout_PC.map",
+      "bytes": 17826834,
+      "raw_sha256": "8c6e9be2e441b4e91ea0178827e1677309b0a67a9c9bab3df0b1dfed3a5008b5",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\Burnout_PC.map",
+      "bytes": 17826834,
+      "raw_sha256": "8c6e9be2e441b4e91ea0178827e1677309b0a67a9c9bab3df0b1dfed3a5008b5",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\swscale-10.dll",
+      "bytes": 955904,
+      "raw_sha256": "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\swscale-10.dll",
+      "bytes": 955904,
+      "raw_sha256": "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\Burnout_PC.cgsmap",
+      "bytes": 3054736,
+      "raw_sha256": "11a04e9f068970fd6ab399cb136bc76c78f45f1e96b803d6a2118585792958bb",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\Burnout_PC.cgsmap",
+      "bytes": 3054736,
+      "raw_sha256": "11a04e9f068970fd6ab399cb136bc76c78f45f1e96b803d6a2118585792958bb",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\avfilter-12.dll",
+      "bytes": 234496,
+      "raw_sha256": "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\avfilter-12.dll",
+      "bytes": 234496,
+      "raw_sha256": "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\slot\\Burnout_PC.exe",
+      "bytes": 11249152,
+      "raw_sha256": "23475de1e949846623d441e6c220260687f59e7865617627631fbd32ff0be29a",
+      "roles": [
+        "native_slot_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\Burnout_PC.exe",
+      "bytes": 11249152,
+      "raw_sha256": "23475de1e949846623d441e6c220260687f59e7865617627631fbd32ff0be29a",
+      "roles": [
+        "hosted_payload"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.exe",
+      "bytes": 11132416,
+      "raw_sha256": "89b7ce9b202ecd5b7408e194651cb09001dbdeaa42b2cde91bd86b248ce67c8e",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\config.ini",
+      "bytes": 4702,
+      "raw_sha256": "1530b57fea7ea7b6eb8ce1f0f9b3b40a03529f7ef431c6f2f172f00874d08e85",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "9387be51fdeae0edfad3061379bc60db1d3d82c33f53b12822f36a9f164aa668",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_1\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "dbaa53b367deb6149497e8e6b50edb02e426b8f38959a911ed0e074eadb9e81a",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_20\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_21\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_22\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_23\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "09a8611e8e6981075ad87ace4378f3af99ff84ca68a26c4c91272643a638eab0",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_3\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "4d2ac0876d96d2652d108c1cfa50795edf565f2e098e4e685cefdfef7bdec8e7",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_4\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_7\\Profile.sav",
+      "bytes": 1223256,
+      "raw_sha256": "2aacf0c1916e3173015390e58067fe2b13f3b2d7b518c0d351afd644e48cdcfc",
+      "roles": [
+        "protected_normal_file"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.exe.provenance.json",
+      "bytes": 467,
+      "raw_sha256": "992379ed6025f95ed75304f6ac97f05c1eb6cd9e44cb7cbb13c35b84635dbb7e",
+      "roles": [
+        "normal_package_provenance"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\candidate\\compile.log",
+      "bytes": 472,
+      "raw_sha256": "2eb43ffb3260cf8346ee62d6c1790a4f57ab5c3728aedc15dc8a4cb758595e97",
+      "roles": [
+        "retained_fixture_compile_transcript"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\candidate\\regression.exe",
+      "bytes": 285696,
+      "raw_sha256": "b35d3bebd35c64d5867107d2132c82c50321cf07602564f68bfbcd6411910395",
+      "roles": [
+        "retained_fixture_executable_not_executed"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\candidate\\SystemUserProfilePC_consumer_wrapper.cpp",
+      "bytes": 671,
+      "raw_sha256": "faddf846dc9383252d6a9c9cfce1649344cae6a641d85739fea098d64e88cdd3",
+      "roles": [
+        "retained_generated_fixture_source"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\candidate\\SPrintfDefinition.inc",
+      "bytes": 436,
+      "raw_sha256": "ca8ec6863b82da887387d5f211a63e3d36593f3bde74fd0ec3387362e2bf69c7",
+      "roles": [
+        "retained_generated_fixture_source"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\candidate\\SPrintfProvider.cpp",
+      "bytes": 127,
+      "raw_sha256": "2cdfd9431e8607fc30f88fd197faeffc4d21f29bccf5d44566299f840ec36e82",
+      "roles": [
+        "retained_generated_fixture_source"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\candidate\\candidate.log",
+      "bytes": 3487,
+      "raw_sha256": "0352f02ae292312b5f61d1e976097dc6aa767a33f25f16d9ed1776f4467eef67",
+      "roles": [
+        "retained_fixture_mode_transcript"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\baseline\\compile.log",
+      "bytes": 499,
+      "raw_sha256": "a82c87760fc280cc7905dd72c716204cd1819c75a92112e38f8e99faca630f78",
+      "roles": [
+        "retained_fixture_compile_transcript"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\baseline\\regression.exe",
+      "bytes": 284672,
+      "raw_sha256": "9b64bed2f0087d9d84fc2ce87afe16afe60a7fdaf8ae61c948cae3399bd5d132",
+      "roles": [
+        "retained_fixture_executable_not_executed"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\baseline\\SystemUserProfilePC_consumer_wrapper.cpp",
+      "bytes": 705,
+      "raw_sha256": "219331c354f00e3df082956fd941e3c1bafcf15d776175f6485406e0eeb1aa16",
+      "roles": [
+        "retained_generated_fixture_source"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\baseline\\SPrintfDefinition.inc",
+      "bytes": 436,
+      "raw_sha256": "ca8ec6863b82da887387d5f211a63e3d36593f3bde74fd0ec3387362e2bf69c7",
+      "roles": [
+        "retained_generated_fixture_source"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\baseline\\SPrintfProvider.cpp",
+      "bytes": 127,
+      "raw_sha256": "2cdfd9431e8607fc30f88fd197faeffc4d21f29bccf5d44566299f840ec36e82",
+      "roles": [
+        "retained_generated_fixture_source"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\baseline\\baseline_api.log",
+      "bytes": 392,
+      "raw_sha256": "92a6ae85ea9e2138069eb45dde8d3068db053fb7ec3a07310b8c6bca46f07ab9",
+      "roles": [
+        "retained_fixture_mode_transcript"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\hosted_39748249518\\artifact\\candidate-build-39748249518-1\\system-user-profile\\baseline\\baseline_consumer.log",
+      "bytes": 298,
+      "raw_sha256": "3e6e3a83c7ee27fc81345c4e4e097bb2edff2cf682e9aa0f8d5222e71c813088",
+      "roles": [
+        "retained_fixture_mode_transcript"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01.console.log",
+      "bytes": 38194,
+      "raw_sha256": "26d4d4d2abb767b02795c9daf43154be4b3357079e36dec7fe50c1562b2ba785",
+      "roles": [
+        "retained_native_console_utf16"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\tools\\diagnostics\\flow_run.ps1",
+      "bytes": 230967,
+      "raw_sha256": "792528705acea80ca4085e88a7bd2a407496f2f1d2248ba6a7b35fa3eeab9780",
+      "roles": [
+        "current_harness_source_context_only"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_004320.bmp",
+      "bytes": 3686454,
+      "raw_sha256": "5afb6e1dcab75ed44f52cec834e17566f108865abe221db5fdb0e4148bbc36cb",
+      "roles": [
+        "actual_BMP_pixels_viewed_with_view_image"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_005760.bmp",
+      "bytes": 3686454,
+      "raw_sha256": "d90f3acc853199b7ea2826ca382fc7487699c4b152779440739603454db0e336",
+      "roles": [
+        "actual_BMP_pixels_viewed_with_view_image"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_007200.bmp",
+      "bytes": 3686454,
+      "raw_sha256": "0dfd1980c81e2e6973d5a983a62048ddcfd55d5d2b2b272bf7d3c5f7e31992c7",
+      "roles": [
+        "actual_BMP_pixels_viewed_with_view_image"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_007920.bmp",
+      "bytes": 3686454,
+      "raw_sha256": "07c7be7e2b234b40b0da62b8577eaf8cbe6dfa8cdea5c5d3fe09457fbd000726",
+      "roles": [
+        "actual_BMP_pixels_viewed_with_view_image"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_008400.bmp",
+      "bytes": 3686454,
+      "raw_sha256": "5c087b2d5309a2a5cddf489b026c8c7a3397c160f13e2aac39ee254602845d92",
+      "roles": [
+        "actual_BMP_pixels_viewed_with_view_image"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_009120.bmp",
+      "bytes": 3686454,
+      "raw_sha256": "5ceb2ee5eba2c97d37dd5d9baa68809fda62a92fec84c47cf9e8959588f22424",
+      "roles": [
+        "actual_BMP_pixels_viewed_with_view_image"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_009840.bmp",
+      "bytes": 3686454,
+      "raw_sha256": "818f94fac1546ff1ebeb58e230bfc7cf2a2c186d5d2a1785ceb6b88ee436fc4c",
+      "roles": [
+        "actual_BMP_pixels_viewed_with_view_image"
+      ]
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\gui_profile_candidate_case_01\\run_01\\frames\\bb_010560.bmp",
+      "bytes": 3686454,
+      "raw_sha256": "407afd7cb06959838a30e5f393d4e6a06c5bb2158bb4ec6efcf6564ddf81c274",
+      "roles": [
+        "actual_BMP_pixels_viewed_with_view_image"
+      ]
+    }
+  ],
+  "git_objects": [
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "config.ini.example",
+      "blob": "9b7f9da35d3c4a9d1f14959a8de05e6e778c1ba7",
+      "bytes": 7416,
+      "raw_sha256": "a0219b42ce08d907b263d75d0bafb92345ca5d5ea7dcc02bd98f7b38d72f6886",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/Core/CgsAssert.h",
+      "blob": "42100162fec0e6fee96d9991692422398739583d",
+      "bytes": 4328,
+      "raw_sha256": "df42ae34e232097e60d85c2abf7125fea0406d6be6aefcfb414539769baf4458",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/Core/CgsStringUtils.cpp",
+      "blob": "6ebbc73f726859607152a6ef579463cf81174931",
+      "bytes": 2276,
+      "raw_sha256": "ca7e654bd6ce0fd7d21d62eb21f06b7291a2bdb169e6ac847830c8c305aca936",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/Core/CgsStringUtils.h",
+      "blob": "4209bd1d1a3cdb5ea25b7b5bede4f126c8be6182",
+      "bytes": 1337,
+      "raw_sha256": "90d56aac0566feeb993a92545409640d18f6cfe20e7387f2f7a9d486a31b2825",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuideIntegration.cpp",
+      "blob": "9f1593bb272843f38291fc0f4a8948d4c7f7e0ed",
+      "bytes": 11367,
+      "raw_sha256": "df3d9bd06c18b166ececd0b169b2da3d0694c2e8a999006f17dd47c99e697ed4",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuideIntegration.h",
+      "blob": "46d9eee240e493f021d1bf1597ffea22ad9d2c2d",
+      "bytes": 5937,
+      "raw_sha256": "3ac91d7639654ad94911d309dee46e69e67dc57c4c2c0b999c196f5b5e975715",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/System/CgsHarnessSlot.h",
+      "blob": "8422b2249fd7d5831c532a8eb39e0660932b11ef",
+      "bytes": 3484,
+      "raw_sha256": "baf97ca1d235c4d0bee3f0f4d7e29a452aa240fa40b39c0139d786c0127a611e",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/System/CgsXOverlapped.h",
+      "blob": "05321f1f535622039593bd9b6dd73cbc8255429d",
+      "bytes": 3940,
+      "raw_sha256": "4f1e549f60c0872b958de55b0bc4e4fec982cf20260c3389c8b7ea8aa2215518",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/System/PC/CgsPcNetIdentity.cpp",
+      "blob": "f6c9902de3e4171ddeae12015fc98c485db75c75",
+      "bytes": 5586,
+      "raw_sha256": "2743e497e0c99b8ec923e3a4dec34e2ba156d48242ecc5494a608329aca5bc71",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/System/PC/CgsPcNetIdentity.h",
+      "blob": "ddbc8919b0894718a4814274e25266b9ea93807e",
+      "bytes": 1783,
+      "raw_sha256": "731ab9a39f149e63ec1725e3fb5cc30d2490e03328ac24a944ea344e25f529df",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/System/PC/CgsXUserProfileSettings.h",
+      "blob": "521ed60a6e364e286cdf983a1f0767cd09e5d724",
+      "bytes": 2422,
+      "raw_sha256": "d4c79f02f1575cdcd6b05f620bf1ffc44b9282e48de259953a28284f33672477",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp",
+      "blob": "639f86188a39171677b8832522f27f53f475fe4e",
+      "bytes": 39963,
+      "raw_sha256": "72b76aada372ed4b1f0ef2bce5b39a4807e8e18f70593f571d71cd69ee2a2b05",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/GameShared/GameClasses/System/X360/CgsXOverlappedX360.cpp",
+      "blob": "beacb2e3b7f434d8517486eb08cd9bead530c06f",
+      "bytes": 3520,
+      "raw_sha256": "7f08804d3aa8bf82c1d35b8ecb5662c22cc32a01901c3e11a27d24f439c16757",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "src/types.hpp",
+      "blob": "54db6f0d35c40eab5fd21f7934f078b03d5b5e20",
+      "bytes": 273,
+      "raw_sha256": "89b8022b07bab80fb0522f9a57e412761b0b787c6887f45b2653aa897b3aa308",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "tests/SystemUserProfilePC.cpp",
+      "blob": "e6e61595954b662581cf7a6b41e9f46ed870a2ea",
+      "bytes": 21111,
+      "raw_sha256": "af04f45a7b42fecab140acfa41c55666770fe457db34492e437ebb872e94ce25",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "tests/evidence/system_user_profile_pc/CgsGuideIntegration_bef9346f9.cpp",
+      "blob": "dbf6f7a8a47889c3358f30787676ad994e2f9494",
+      "bytes": 11603,
+      "raw_sha256": "04eec59d1eaced243071f5aac98a99da33f0c8a83601ef7c33bd3146d70da371",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "tests/evidence/system_user_profile_pc/CgsXboxLivePC_bef9346f9.cpp",
+      "blob": "46218b2dc5ca92b78668faf71b0318996dbaa3e0",
+      "bytes": 35560,
+      "raw_sha256": "53a7718c1889d1a2b539f25cccff7f5ca0f15774ab3d53810fc48053308362b9",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "tests/evidence/system_user_profile_pc/test_plan.json",
+      "blob": "2ef14e69bed20f35a2c0fa60a2ad37431303297c",
+      "bytes": 3468,
+      "raw_sha256": "b922bc45991763901be63194b7824ae1aae83d309f10dce457988c1a82833686",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "tests/fxgs_common.py",
+      "blob": "25fd753de3e4bf0f8755afcd8bcc8cbc19db5d0b",
+      "bytes": 8364,
+      "raw_sha256": "6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "tests/run_system_user_profile_pc.py",
+      "blob": "8b6b5eed60fe0bea3ae6846e59120bcc937ae3fd",
+      "bytes": 29458,
+      "raw_sha256": "2eee426e6e0f540311c15943b77c4f5a5dc4b3defc8d57e6b32e66aa606716a3",
+      "role": "fixture_input_at_exact_private_candidate"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "787764f51a086a3b1fe02968b71135b0978287d4",
+      "path": "tests/evidence/system_user_profile_pc/source_pins.json",
+      "blob": "babe5976a75afdde2cc39e38f1f7b8e9c94ff587",
+      "bytes": 4543,
+      "raw_sha256": "3a6965215e4fa23d6831f8ed035d9d33490090245e93d95c5f1d6904b8b06465",
+      "role": "fixture_pin_manifest"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7",
+      "path": "src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp",
+      "blob": "46218b2dc5ca92b78668faf71b0318996dbaa3e0",
+      "bytes": 35560,
+      "raw_sha256": "53a7718c1889d1a2b539f25cccff7f5ca0f15774ab3d53810fc48053308362b9",
+      "role": "original_failure_control_source"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "commit": "bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuideIntegration.cpp",
+      "blob": "dbf6f7a8a47889c3358f30787676ad994e2f9494",
+      "bytes": 11603,
+      "raw_sha256": "04eec59d1eaced243071f5aac98a99da33f0c8a83601ef7c33bd3146d70da371",
+      "role": "original_failure_control_source"
+    },
+    {
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow",
+      "commit": "a405f11637242f0d203c0b653684b499d06f5392",
+      "path": "tools/diagnostics/flow_run.ps1",
+      "blob": "f58e43b193621a3bdeb005de50c326e105e591e5",
+      "bytes": 225687,
+      "raw_sha256": "f55e7b441ccbd501ff25a533e429ec5f7fd0f9749358eeaa8333deac7fb498aa",
+      "role": "hosted_workflow_harness_source_context_only"
+    }
+  ],
+  "limits": {
+    "new_execution": false,
+    "tracked_files_edited": false,
+    "normal_package_promoted": false,
+    "full_source_review": false,
+    "debug_site_dispositions_added": 0,
+    "peer_join_verified": false,
+    "full_race_verified": false,
+    "Done_save_persistence_verified": false,
+    "audio_fix_verified": false,
+    "other_private_GUI_debug_behavior_certified": false
+  }
+}
