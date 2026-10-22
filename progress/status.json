@@ -9309,8 +9309,14 @@
   "BrnGame::BrnGameModule::DoUpdate_GameStatePreWorld": {
    "status": "recovered"
   },
+  "BrnGame::BrnGameModule::DoUpdate_GuiPreWorld": {
+   "status": "recovered"
+  },
   "BrnGame::BrnGameModule::DoUpdate_InputPostWorld": {
    "status": "reviewed"
+  },
+  "BrnGame::BrnGameModule::DoUpdate_InputPreWorld": {
+   "status": "recovered"
   },
   "BrnGame::BrnGameModule::DoUpdate_NetworkPostSim": {
    "status": "recovered"
@@ -16482,6 +16488,27 @@
   "BrnGui::GuiCacheDebugComponent::Construct": {
    "status": "reviewed"
   },
+  "BrnGui::GuiCacheDebugComponent::GetName": {
+   "status": "recovered"
+  },
+  "BrnGui::GuiCacheDebugComponent::OnActivate": {
+   "status": "recovered"
+  },
+  "BrnGui::GuiCacheDebugComponent::RenderHUD": {
+   "status": "recovered"
+  },
+  "BrnGui::GuiCacheDebugComponent::ShowAptComponentGuiCacheStatus": {
+   "status": "recovered"
+  },
+  "BrnGui::GuiCacheDebugComponent::ShowAptComponentGuiCacheStatusCallback": {
+   "status": "recovered"
+  },
+  "BrnGui::GuiCacheDebugComponent::ShowGuiCacheStatus": {
+   "status": "recovered"
+  },
+  "BrnGui::GuiCacheDebugComponent::ShowGuiCacheStatusCallback": {
+   "status": "recovered"
+  },
   "BrnGui::GuiCacheDebugComponent::Update": {
    "status": "reviewed"
   },
@@ -16568,6 +16595,9 @@
   },
   "BrnGui::GuiDebugComponent::Construct": {
    "status": "reviewed"
+  },
+  "BrnGui::GuiDebugComponent::DrawDebugFrame1280": {
+   "status": "recovered"
   },
   "BrnGui::GuiDebugComponent::EnterCarSelectCallback": {
    "status": "reviewed"
@@ -16803,6 +16833,9 @@
   "BrnGui::GuiModule::FlaptSoundTriggerCallback": {
    "status": "reviewed"
   },
+  "BrnGui::GuiModule::GameTalkMsgHandler": {
+   "status": "recovered"
+  },
   "BrnGui::GuiModule::GuiModule": {
    "status": "reviewed"
   },
@@ -16817,6 +16850,9 @@
   },
   "BrnGui::GuiModule::Prepare": {
    "status": "reviewed"
+  },
+  "BrnGui::GuiModule::Prepare2": {
+   "status": "recovered"
   },
   "BrnGui::GuiModule::Release": {
    "status": "reviewed"
@@ -18879,14 +18915,53 @@
   "BrnGui::OnlineGameRoomPlayerInfo::UpdateSoundSettings": {
    "status": "reviewed"
   },
+  "BrnGui::OnlineInstantResultsState::CheckForCompletedLoads": {
+   "status": "recovered"
+  },
   "BrnGui::OnlineInstantResultsState::FillOutTicker": {
    "status": "reviewed"
   },
   "BrnGui::OnlineInstantResultsState::GetResourcesToLoad": {
    "status": "reviewed"
   },
+  "BrnGui::OnlineInstantResultsState::HandleControllerInputFinalStandingsSubState": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::HandleControllerInputPressed": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::HandleDisconnectedEvent": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::LeaveScreen": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::OnEnter": {
+   "status": "recovered"
+  },
   "BrnGui::OnlineInstantResultsState::OnLeave": {
    "status": "reviewed"
+  },
+  "BrnGui::OnlineInstantResultsState::PopulateNameAndTimeTableCells": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::RenderDebug": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::ReorderResultsTable": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::SetAptData": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::SetRoundText": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::UpdateCurrentScreenDisplay": {
+   "status": "recovered"
+  },
+  "BrnGui::OnlineInstantResultsState::UpdateDirtyFlags": {
+   "status": "recovered"
   },
   "BrnGui::OnlineInviteMessageComponent::AllowMessages": {
    "status": "reviewed"
@@ -46601,6 +46676,9 @@
   },
   "CgsGui::GuiModule::Release": {
    "status": "reviewed"
+  },
+  "CgsGui::GuiModule::Render": {
+   "status": "recovered"
   },
   "CgsGui::GuiModule::Update": {
    "status": "reviewed"
@@ -76852,6 +76930,10 @@
   "GameSource/Gui/BrnGuiFsmController.cpp": {
    "status": "done"
   },
+  "GameSource/Gui/BrnGuiGuiCacheDebugComponent.cpp": {
+   "notes": "Source reconciliation at b5 8fec93bd4d28: all 7 named non-thunk functions have scoped definitions; no stub candidates.",
+   "status": "done"
+  },
   "GameSource/Gui/BrnGuiHudMessageAnalyzer.cpp": {
    "notes": "Wave-B/C keystone close: 38/38 funcs. Fable layout freeze (full DWARF member tail + 26 event payloads upgraded to real structs at preserved id/size + GuiCache carves + rodata via headless IDA: 5 floats, 7 string tables, KA_SKILLZ_MESSAGE_IDS[4][14]) + 17 Opus impl groups, each fresh-eyes verified pass; joint selfcheck+faithfulness 0-new.",
    "status": "done"
@@ -82339,6 +82421,10 @@
   },
   "class:BrnGui::GuiHudMessage": {
    "notes": "Reconstructed vs X360 asm+DWARF, adversarially verified (verifier corrections applied); .data tables flagged attested-vs-reconstructed; compiles clean.",
+   "status": "done"
+  },
+  "class:BrnGui::GuiModule": {
+   "notes": "Source reconciliation at b5 8fec93bd4d28: all 2 named non-thunk functions have scoped definitions; no stub candidates.",
    "status": "done"
   },
   "class:BrnGui::GuiNetworkRouteInfo": {
