@@ -29010,14 +29010,20 @@
       "pseudocode_line": 181,
       "original_call": "sub_8282D640(v1, *(v1 + 12) + 469488, \"Performance\", \"Running Worst Case\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnTraffic::DebugComponent::OnActivate#0086",
       "function": "BrnTraffic::DebugComponent::OnActivate",
       "original_address": "0x82762530",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
       "component": "BrnTraffic::DebugComponent",
       "component_name": "Traffic",
-      "component_path": null
+      "component_path": null,
+      "notes": "Running Worst Case: original decision branch and actual PVS drawing consumer show4->15->4, with exact source IDs/cell maps and matching phase pixels. Verified on d9de0ab1; promoted to dev, normal package refresh pending. No same-frame pixel/trace or aggregate Traffic74 claim.",
+      "evidence": [
+        "progress/debug_menu/traffic_worst_case_evidence_20261022/REVIEW.md",
+        "progress/debug_menu/traffic_worst_case_evidence_20261022/CHECKPOINT.json",
+        "progress/debug_menu/traffic_worst_case_evidence_20261022/SOURCE_BINDINGS.json"
+      ]
     },
     {
       "kind": "variable",
@@ -37583,8 +37589,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1313,
-      "verified": 35,
+      "pending": 1312,
+      "verified": 36,
       "original-noop": 7
     }
   }

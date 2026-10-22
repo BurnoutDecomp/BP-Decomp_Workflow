@@ -34,7 +34,7 @@ hosted capacity checks and its original-source failure control; the short delive
 
 ## Campaign counts
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **35 verified, seven original no-ops and 1,313 pending**. That is 42/1,355 (3.1%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **36 verified, seven original no-ops and 1,312 pending**. That is 43/1,355 (3.2%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Recorded source-progress coverage is separate from behavior completion:
 
@@ -58,11 +58,13 @@ sign-in/HUD/EasyDrive check are next. The normal package remains **6b66e598**.
 
 **Route snap capacity checkpoint:** The 289-bound one-file source commit **6b66e5984f6f21ea47d1fa62a2ec61c9511640c9** passed hosted build run [39654339193](https://github.com/BurnoutDecomp/BP-Decomp_Workflow/actions/runs/39654339193). Native placement/movement and Back passed; the matching normal package is installed and merged to dev. Done/save persistence and a complete multiplayer race remain unverified. This supporting-flow repair adds no verified debug-site dispositions.
 
-**Traffic follow-up:** **d9de0ab1** combines the reviewed original fifteen-hull
-branch with bounded, default-off decision/draw witnesses. Hosted build/link
-and all twelve payload hashes pass. A fresh private stage is ready for the
-repaired Traffic74 case; consumer/effect checks are still pending.
-[Current checkpoint](profile_traffic_checkpoint_20261022.json).
+**Traffic follow-up:** **d9de0ab1** is merged/pushed to dev. The original
+fifteen-hull branch now has reviewed source plus actual4 ->15 ->4 decision,
+drawing and restoration evidence, with matching visible PVS cells. This
+adds one verified control. The repeated grouped run retained all15 captures,
+but the remaining Traffic74 effects still need manual review; that case is
+not a pass. The normal package remains6b66e598 while the separate GUI
+sign-in repair is being checked. [Evidence](traffic_worst_case_evidence_20261022/CHECKPOINT.json).
 
 The action translator covers 188 unique IDs across 189 labels. That is source coverage, not 188 verified debug controls. Coherent checkpoints are committed and pushed frequently; reviewed work merges in batches.
 

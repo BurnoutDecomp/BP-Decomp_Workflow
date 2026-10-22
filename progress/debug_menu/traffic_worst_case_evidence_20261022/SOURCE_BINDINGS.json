@@ -1,0 +1,1125 @@
+{
+  "schema_version": 1,
+  "review_kind": "independent bounded source plus retained native and pixel evidence review",
+  "created_at_utc": "2026-10-22T07:42:34.364499+00:00",
+  "verdict": "pass",
+  "candidate_site": "BrnTraffic::DebugComponent::OnActivate#0086",
+  "bounded_disposition": "verified_on_exact_private_candidate_for_one_enable_disable_cycle",
+  "source_commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+  "executable_sha256": "932a7f98668990c34a64a9885f0bba8dafaf1eabd1ba1b2447ed41258cf3f604",
+  "whole_case_verdict": "FAIL_unchanged",
+  "aggregate74_site_credit": 0,
+  "other_control_credit": [],
+  "material_missing_evidence_for_bounded_disposition": [],
+  "source_objects": [
+    {
+      "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "sha256": "c44b8540b07c0774d35caf20aec35c0ad3a24571b8fb526854bfbe69a9bbaa8a",
+      "git_blob": "fd28917c2517dae0c304154c9e68b512e79d6940",
+      "bytes": 1193228,
+      "candidate_object_matches_retained_image": true
+    },
+    {
+      "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "sha256": "ca93eeb6353363555b71eeabff6d2ecd815b12594c4ff5d8577e504b5a1e8d0e",
+      "git_blob": "44027c0dd3ac700f21ce8b7e33250c58621f32fd",
+      "bytes": 114966,
+      "candidate_object_matches_retained_image": true
+    },
+    {
+      "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficPvsDiag.h",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "sha256": "a808fb5d7f19f45fb3838d0ec0d9542a731faf338ff7eea97b8e4d37dc943090",
+      "git_blob": "42cdb79e648f54da6e125f309de6cc70e5d0e9db",
+      "bytes": 4511,
+      "candidate_object_matches_retained_image": true
+    }
+  ],
+  "unchanged_closure_objects": [
+    {
+      "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "git_blob": "cf4827049834359190c7a0c66cf14b8e3456ab68",
+      "sha256": "11dfc2783b250b1d2f4c071a1288741a491436d8624f1b66bffcc207c58848be",
+      "bytes": 135112,
+      "unchanged_from_original_closure": true
+    },
+    {
+      "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.h",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "git_blob": "53a3365cb5598e0af5cdd6d9846b2c7875797a46",
+      "sha256": "a8fa3b97cb9d34b5ec2b3aa6c23a91eb2675fb60731f1b8c9d50145984a36a08",
+      "bytes": 18938,
+      "unchanged_from_original_closure": true
+    },
+    {
+      "path": "src/SharedClasses/Traffic/BrnTrafficPvs.h",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "git_blob": "0bc81f8fe4a5d1d23af114bcc95702f892131c61",
+      "sha256": "d5935c678d3f415819a5617aad1ba708e041bf45351124f63623931e07cd8e9d",
+      "bytes": 4250,
+      "unchanged_from_original_closure": true
+    },
+    {
+      "path": "src/SharedClasses/Traffic/BrnTrafficPvs.cpp",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "git_blob": "84e9296cd6c5cac45301b534329d97b5e2a64cc2",
+      "sha256": "715821acdc6f1bf53c3dfa40f354cbc1f288e74cecb97810d5e00867160a636e",
+      "bytes": 6554,
+      "unchanged_from_original_closure": true
+    },
+    {
+      "path": "src/SharedClasses/Traffic/BrnTrafficDataResourceType.h",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "git_blob": "2e90202d1d6fae3530874ccb055c58313b616912",
+      "sha256": "0554d4e440b285a9f9dd2f9129f5b66973591ca245cfbcbb1162852c786ce62f",
+      "bytes": 13496,
+      "unchanged_from_original_closure": true
+    },
+    {
+      "path": "src/SharedClasses/Traffic/BrnTrafficDataResourceType.cpp",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "git_blob": "809cc0782cca370fd181d6c3f2a11c478b5e4824",
+      "sha256": "3370e722052820982e2a02e3e6b5f60aaa6e812e184d1dc7c611fe3959e7de6e",
+      "bytes": 3572,
+      "unchanged_from_original_closure": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug2DImmediateRender.cpp",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "git_blob": "a36d656a911a9f680abd531985728798e3b405ef",
+      "sha256": "8debefe4a47915814b2ab423bb0fe50f445d977f72250bb002d7f8e158ce5f81",
+      "bytes": 24946,
+      "unchanged_from_original_closure": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp",
+      "commit": "d9de0ab1d395425eb39d0fdbb5e70f93235d601a",
+      "git_blob": "ae15eea7da9a3a1ffee14b80f4bdad27c49839c9",
+      "sha256": "c2b0e85663a8a82c509cdac1f185417e4d783081d072231e72b80e8e06cf10f9",
+      "bytes": 38863,
+      "unchanged_from_original_closure": true
+    }
+  ],
+  "original_artist_exports": [
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8274C870.json",
+      "sha256": "D635A91D6D271CAF8B2059812534CB0C59F2505DC6772EBB7A8C099AB1CFCB56",
+      "symbol": "BrnTraffic::TrafficEntityModule::RecalculateActiveHulls"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82760AB0.json",
+      "sha256": "2E11F8757B5431B16250AB14C099CCF5A0BECED494CC4A7967E6F63DCF539F0C",
+      "symbol": "BrnTraffic::DebugComponent::RenderHUD"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8275B2E8.json",
+      "sha256": "C2F01818737C37F83E7DD4BFF180FBA85D3A421E08939A258D72C3395989CB4A",
+      "symbol": "BrnTraffic::DebugComponent::DrawActiveHulls"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282F770.json",
+      "sha256": "623A328FC7F1090685B5D1CF9EC705D09714CC1B2EB7D2C7F71CCC14D80A7940",
+      "symbol": "CgsDev::DebugManager::Render"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282E108.json",
+      "sha256": "82EE4DDEAEECAF644DCE9F62024F8B0EA1EFAC84F6664A9E54AB272D3EF748D8",
+      "symbol": "CgsDev::DebugManager::RenderHUD"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8281C2A0.json",
+      "sha256": "AE2A8C88121EAFFEF5EC39007A8B2CBC23A5D327220F621DB83BE5A80F787225",
+      "symbol": "CgsDev::Debug2DImmediateRender::DrawBox"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82208090.json",
+      "sha256": "1CB52EB455C514641F58BC421C24855ACA009C952993C7CF9227635F8268273C",
+      "symbol": "BrnTraffic::Pvs::GetHullIndexForPoint"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82715858.json",
+      "sha256": "97258E5B90B309039F6A1CA44E938A00A890BD29E7BA126588C3FC8040423B44",
+      "symbol": "BrnTraffic::TrafficEntityModule::UpdateTimers"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827074E0.json",
+      "sha256": "3F83D3C56F0F808B6219C0117126189529D52F5A61BD0C1A796886A21F5BEB8B",
+      "symbol": "BrnTraffic::TrafficEntityModule::IsDecisionFrame"
+    }
+  ],
+  "producer_consumer_pairs": [
+    {
+      "phase": "baseline",
+      "epoch": 144,
+      "set_call": 144,
+      "draw_seq": 1,
+      "set_source_line": 13866,
+      "draw_source_line": 13867,
+      "set": {
+        "kind": "SET",
+        "phase": "baseline",
+        "epoch": 144,
+        "set_call": 144,
+        "decision_frame": 1,
+        "frames_since_decision": 0,
+        "running_worst_case": 0,
+        "data_ready": 1,
+        "pvs_present": 1,
+        "consumed_by_draw_seq": 1,
+        "active_count": 4,
+        "active_ids": [
+          101,
+          102,
+          122,
+          123
+        ],
+        "added_ids": [],
+        "removed_ids": [],
+        "source_line": 13866,
+        "raw_line": "[PC-PVS-DIAG][SET] phase=baseline epoch=144 set_call=144 decision_frame=1 frames_since_decision=0 running_worst_case=0 data_ready=1 pvs_present=1 consumed_by_draw_seq=1 active_count=4 active_ids=[101,102,122,123] added_ids=[] removed_ids=[]"
+      },
+      "draw": {
+        "kind": "DRAW",
+        "phase": "baseline",
+        "epoch": 144,
+        "draw_seq": 1,
+        "decision_frame": 0,
+        "frames_since_decision": 5,
+        "running_worst_case": 0,
+        "draw_toggle": 1,
+        "data_ready": 1,
+        "pvs_present": 1,
+        "cells_x": 21,
+        "cells_z": 15,
+        "total_cells": 315,
+        "draw_rows": 15,
+        "box_calls": 4,
+        "mapping_count": 4,
+        "box_origin_x": 80,
+        "box_origin_y": 80,
+        "box_size_x": 8.095238,
+        "box_size_y": 11.333333,
+        "id_cell": [
+          {
+            "hull_id": 101,
+            "column": 17,
+            "row": 4
+          },
+          {
+            "hull_id": 102,
+            "column": 18,
+            "row": 4
+          },
+          {
+            "hull_id": 122,
+            "column": 17,
+            "row": 5
+          },
+          {
+            "hull_id": 123,
+            "column": 18,
+            "row": 5
+          }
+        ],
+        "source_line": 13867,
+        "raw_line": "[PC-PVS-DIAG][DRAW] phase=baseline epoch=144 draw_seq=1 decision_frame=0 frames_since_decision=5 running_worst_case=0 draw_toggle=1 data_ready=1 pvs_present=1 cells_x=21 cells_z=15 total_cells=315 draw_rows=15 box_calls=4 mapping_count=4 box_origin=80,80 box_size=8.095238,11.333333 id_cell=[101:17,4;102:18,4;122:17,5;123:18,5]"
+      },
+      "status": "pass",
+      "problems": []
+    },
+    {
+      "phase": "on",
+      "epoch": 145,
+      "set_call": 517,
+      "draw_seq": 2,
+      "set_source_line": 34052,
+      "draw_source_line": 34053,
+      "set": {
+        "kind": "SET",
+        "phase": "on",
+        "epoch": 145,
+        "set_call": 517,
+        "decision_frame": 1,
+        "frames_since_decision": 0,
+        "running_worst_case": 1,
+        "data_ready": 1,
+        "pvs_present": 1,
+        "consumed_by_draw_seq": 2,
+        "active_count": 15,
+        "active_ids": [
+          98,
+          99,
+          100,
+          101,
+          102,
+          119,
+          120,
+          121,
+          122,
+          123,
+          140,
+          141,
+          142,
+          143,
+          144
+        ],
+        "added_ids": [
+          98,
+          99,
+          100,
+          119,
+          120,
+          121,
+          140,
+          141,
+          142,
+          143,
+          144
+        ],
+        "removed_ids": [],
+        "source_line": 34052,
+        "raw_line": "[PC-PVS-DIAG][SET] phase=on epoch=145 set_call=517 decision_frame=1 frames_since_decision=0 running_worst_case=1 data_ready=1 pvs_present=1 consumed_by_draw_seq=2 active_count=15 active_ids=[98,99,100,101,102,119,120,121,122,123,140,141,142,143,144] added_ids=[98,99,100,119,120,121,140,141,142,143,144] removed_ids=[]"
+      },
+      "draw": {
+        "kind": "DRAW",
+        "phase": "on",
+        "epoch": 145,
+        "draw_seq": 2,
+        "decision_frame": 1,
+        "frames_since_decision": 0,
+        "running_worst_case": 1,
+        "draw_toggle": 1,
+        "data_ready": 1,
+        "pvs_present": 1,
+        "cells_x": 21,
+        "cells_z": 15,
+        "total_cells": 315,
+        "draw_rows": 15,
+        "box_calls": 15,
+        "mapping_count": 15,
+        "box_origin_x": 80,
+        "box_origin_y": 80,
+        "box_size_x": 8.095238,
+        "box_size_y": 11.333333,
+        "id_cell": [
+          {
+            "hull_id": 98,
+            "column": 14,
+            "row": 4
+          },
+          {
+            "hull_id": 99,
+            "column": 15,
+            "row": 4
+          },
+          {
+            "hull_id": 100,
+            "column": 16,
+            "row": 4
+          },
+          {
+            "hull_id": 101,
+            "column": 17,
+            "row": 4
+          },
+          {
+            "hull_id": 102,
+            "column": 18,
+            "row": 4
+          },
+          {
+            "hull_id": 119,
+            "column": 14,
+            "row": 5
+          },
+          {
+            "hull_id": 120,
+            "column": 15,
+            "row": 5
+          },
+          {
+            "hull_id": 121,
+            "column": 16,
+            "row": 5
+          },
+          {
+            "hull_id": 122,
+            "column": 17,
+            "row": 5
+          },
+          {
+            "hull_id": 123,
+            "column": 18,
+            "row": 5
+          },
+          {
+            "hull_id": 140,
+            "column": 14,
+            "row": 6
+          },
+          {
+            "hull_id": 141,
+            "column": 15,
+            "row": 6
+          },
+          {
+            "hull_id": 142,
+            "column": 16,
+            "row": 6
+          },
+          {
+            "hull_id": 143,
+            "column": 17,
+            "row": 6
+          },
+          {
+            "hull_id": 144,
+            "column": 18,
+            "row": 6
+          }
+        ],
+        "source_line": 34053,
+        "raw_line": "[PC-PVS-DIAG][DRAW] phase=on epoch=145 draw_seq=2 decision_frame=1 frames_since_decision=0 running_worst_case=1 draw_toggle=1 data_ready=1 pvs_present=1 cells_x=21 cells_z=15 total_cells=315 draw_rows=15 box_calls=15 mapping_count=15 box_origin=80,80 box_size=8.095238,11.333333 id_cell=[98:14,4;99:15,4;100:16,4;101:17,4;102:18,4;119:14,5;120:15,5;121:16,5;122:17,5;123:18,5;140:14,6;141:15,6;142:16,6;143:17,6;144:18,6]"
+      },
+      "status": "pass",
+      "problems": []
+    },
+    {
+      "phase": "off",
+      "epoch": 146,
+      "set_call": 572,
+      "draw_seq": 3,
+      "set_source_line": 36714,
+      "draw_source_line": 36715,
+      "set": {
+        "kind": "SET",
+        "phase": "off",
+        "epoch": 146,
+        "set_call": 572,
+        "decision_frame": 1,
+        "frames_since_decision": 0,
+        "running_worst_case": 0,
+        "data_ready": 1,
+        "pvs_present": 1,
+        "consumed_by_draw_seq": 3,
+        "active_count": 4,
+        "active_ids": [
+          101,
+          102,
+          122,
+          123
+        ],
+        "added_ids": [],
+        "removed_ids": [
+          98,
+          99,
+          100,
+          119,
+          120,
+          121,
+          140,
+          141,
+          142,
+          143,
+          144
+        ],
+        "source_line": 36714,
+        "raw_line": "[PC-PVS-DIAG][SET] phase=off epoch=146 set_call=572 decision_frame=1 frames_since_decision=0 running_worst_case=0 data_ready=1 pvs_present=1 consumed_by_draw_seq=3 active_count=4 active_ids=[101,102,122,123] added_ids=[] removed_ids=[98,99,100,119,120,121,140,141,142,143,144]"
+      },
+      "draw": {
+        "kind": "DRAW",
+        "phase": "off",
+        "epoch": 146,
+        "draw_seq": 3,
+        "decision_frame": 1,
+        "frames_since_decision": 0,
+        "running_worst_case": 0,
+        "draw_toggle": 1,
+        "data_ready": 1,
+        "pvs_present": 1,
+        "cells_x": 21,
+        "cells_z": 15,
+        "total_cells": 315,
+        "draw_rows": 15,
+        "box_calls": 4,
+        "mapping_count": 4,
+        "box_origin_x": 80,
+        "box_origin_y": 80,
+        "box_size_x": 8.095238,
+        "box_size_y": 11.333333,
+        "id_cell": [
+          {
+            "hull_id": 101,
+            "column": 17,
+            "row": 4
+          },
+          {
+            "hull_id": 102,
+            "column": 18,
+            "row": 4
+          },
+          {
+            "hull_id": 122,
+            "column": 17,
+            "row": 5
+          },
+          {
+            "hull_id": 123,
+            "column": 18,
+            "row": 5
+          }
+        ],
+        "source_line": 36715,
+        "raw_line": "[PC-PVS-DIAG][DRAW] phase=off epoch=146 draw_seq=3 decision_frame=1 frames_since_decision=0 running_worst_case=0 draw_toggle=1 data_ready=1 pvs_present=1 cells_x=21 cells_z=15 total_cells=315 draw_rows=15 box_calls=4 mapping_count=4 box_origin=80,80 box_size=8.095238,11.333333 id_cell=[101:17,4;102:18,4;122:17,5;123:18,5]"
+      },
+      "status": "pass",
+      "problems": []
+    }
+  ],
+  "targeted_menu_probes": [
+    {
+      "probe_key": "hud|field|BrnTraffic::DebugComponent::OnActivate#0006",
+      "phase": "hud",
+      "role": "field",
+      "is_readout": true,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0006",
+      "caption": "Active hulls",
+      "lookup_path": "Traffic/Stats/Active hulls",
+      "expected_resolved_path": "/Traffic/Stats/Active hulls",
+      "observed_resolved_path": "/Traffic/Stats/Active hulls",
+      "actual_value": "4",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 13667,
+      "value_log_line": 13668
+    },
+    {
+      "probe_key": "hud|field|BrnTraffic::DebugComponent::OnActivate#0086",
+      "phase": "hud",
+      "role": "field",
+      "is_readout": true,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0086",
+      "caption": "Running Worst Case",
+      "lookup_path": "Traffic/Performance/Running Worst Case",
+      "expected_resolved_path": "/Traffic/Performance/Running Worst Case",
+      "observed_resolved_path": "/Traffic/Performance/Running Worst Case",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 13821,
+      "value_log_line": 13822
+    },
+    {
+      "probe_key": "params|field|BrnTraffic::DebugComponent::OnActivate#0006",
+      "phase": "params",
+      "role": "field",
+      "is_readout": true,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0006",
+      "caption": "Active hulls",
+      "lookup_path": "Traffic/Stats/Active hulls",
+      "expected_resolved_path": "/Traffic/Stats/Active hulls",
+      "observed_resolved_path": "/Traffic/Stats/Active hulls",
+      "actual_value": "4",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 33829,
+      "value_log_line": 33830
+    },
+    {
+      "probe_key": "params|field|BrnTraffic::DebugComponent::OnActivate#0086",
+      "phase": "params",
+      "role": "field",
+      "is_readout": true,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0086",
+      "caption": "Running Worst Case",
+      "lookup_path": "Traffic/Performance/Running Worst Case",
+      "expected_resolved_path": "/Traffic/Performance/Running Worst Case",
+      "observed_resolved_path": "/Traffic/Performance/Running Worst Case",
+      "actual_value": "TRUE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 33983,
+      "value_log_line": 33984
+    },
+    {
+      "probe_key": "param-fuzzy|field|BrnTraffic::DebugComponent::OnActivate#0006",
+      "phase": "param-fuzzy",
+      "role": "field",
+      "is_readout": true,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0006",
+      "caption": "Active hulls",
+      "lookup_path": "Traffic/Stats/Active hulls",
+      "expected_resolved_path": "/Traffic/Stats/Active hulls",
+      "observed_resolved_path": "/Traffic/Stats/Active hulls",
+      "actual_value": "15",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 36490,
+      "value_log_line": 36491
+    },
+    {
+      "probe_key": "param-fuzzy|field|BrnTraffic::DebugComponent::OnActivate#0086",
+      "phase": "param-fuzzy",
+      "role": "field",
+      "is_readout": true,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0086",
+      "caption": "Running Worst Case",
+      "lookup_path": "Traffic/Performance/Running Worst Case",
+      "expected_resolved_path": "/Traffic/Performance/Running Worst Case",
+      "observed_resolved_path": "/Traffic/Performance/Running Worst Case",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 36644,
+      "value_log_line": 36645
+    },
+    {
+      "probe_key": "cleanup|field|BrnTraffic::DebugComponent::OnActivate#0006",
+      "phase": "cleanup",
+      "role": "field",
+      "is_readout": true,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0006",
+      "caption": "Active hulls",
+      "lookup_path": "Traffic/Stats/Active hulls",
+      "expected_resolved_path": "/Traffic/Stats/Active hulls",
+      "observed_resolved_path": "/Traffic/Stats/Active hulls",
+      "actual_value": "0",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 49690,
+      "value_log_line": 49691
+    },
+    {
+      "probe_key": "cleanup|field|BrnTraffic::DebugComponent::OnActivate#0086",
+      "phase": "cleanup",
+      "role": "field",
+      "is_readout": true,
+      "id": "BrnTraffic::DebugComponent::OnActivate#0086",
+      "caption": "Running Worst Case",
+      "lookup_path": "Traffic/Performance/Running Worst Case",
+      "expected_resolved_path": "/Traffic/Performance/Running Worst Case",
+      "observed_resolved_path": "/Traffic/Performance/Running Worst Case",
+      "actual_value": "FALSE",
+      "path_matches": true,
+      "value_present": true,
+      "path_log_line": 49844,
+      "value_log_line": 49845
+    }
+  ],
+  "visual_inspections": [
+    {
+      "phase": "hud",
+      "image_sha256": "a414a0f5f8392ff03acf09698f505b6f9b852b0fb0265190928dc07abde5dda3",
+      "inspection_method": "view_image on original unmodified BMP",
+      "observation": "A cyan 2-column by 2-row block appears at columns17-18, rows4-5 of the 21x15 upper-left grid.",
+      "hull_id_interpretation": [
+        101,
+        102,
+        122,
+        123
+      ],
+      "id_interpretation_basis": "original modulo/division mapping plus completed SET/DRAW records; no numeric IDs are printed in the image",
+      "expected_region_pixels": {
+        "left": 217.61904761904762,
+        "right": 233.8095238095238,
+        "top": 125.33333333333334,
+        "bottom": 148.0
+      }
+    },
+    {
+      "phase": "params",
+      "image_sha256": "c46a62889e7111b0e8d3bc7b8061885ed17b14c8f92e126b4e2824327dd91b31",
+      "inspection_method": "view_image on original unmodified BMP",
+      "observation": "The same grid displays a cyan 5-column by 3-row block at columns14-18, rows4-6.",
+      "hull_id_interpretation": [
+        98,
+        99,
+        100,
+        101,
+        102,
+        119,
+        120,
+        121,
+        122,
+        123,
+        140,
+        141,
+        142,
+        143,
+        144
+      ],
+      "id_interpretation_basis": "original modulo/division mapping plus completed SET/DRAW records; no numeric IDs are printed in the image",
+      "expected_region_pixels": {
+        "left": 193.33333333333331,
+        "right": 233.8095238095238,
+        "top": 125.33333333333334,
+        "bottom": 159.33333333333331
+      }
+    },
+    {
+      "phase": "param-fuzzy",
+      "image_sha256": "e302aa05b16817aed99c54584b206a6103b70f12700aa8aab12d321671153a20",
+      "inspection_method": "view_image on original unmodified BMP",
+      "observation": "The cyan block returns to columns17-18, rows4-5, the original 2x2 map.",
+      "hull_id_interpretation": [
+        101,
+        102,
+        122,
+        123
+      ],
+      "id_interpretation_basis": "original modulo/division mapping plus completed SET/DRAW records; no numeric IDs are printed in the image",
+      "expected_region_pixels": {
+        "left": 217.61904761904762,
+        "right": 233.8095238095238,
+        "top": 125.33333333333334,
+        "bottom": 148.0
+      }
+    }
+  ],
+  "phase_image_bindings": {
+    "hud": {
+      "phase": "hud",
+      "source_frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_03\\frames\\bb_005760.bmp",
+      "sha256": "A414A0F5F8392FF03ACF09698F505B6F9B852B0FB0265190928DC07ABDE5DDA3",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_03\\hud.bmp"
+    },
+    "params": {
+      "phase": "params",
+      "source_frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_03\\frames\\bb_009720.bmp",
+      "sha256": "C46A62889E7111B0E8D3BC7B8061885ED17B14C8F92E126B4E2824327DD91B31",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_03\\params.bmp"
+    },
+    "param-fuzzy": {
+      "phase": "param-fuzzy",
+      "source_frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_03\\frames\\bb_010200.bmp",
+      "sha256": "E302AA05B16817AED99C54584B206A6103B70F12700AA8AAB12D321671153A20",
+      "frame": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_create_match_20261021\\traffic_followup_case_01\\run_traffic74_03\\param-fuzzy.bmp"
+    }
+  },
+  "actual_return_to_baseline_ids": [
+    101,
+    102,
+    122,
+    123
+  ],
+  "grid": {
+    "cells_x": 21,
+    "cells_z": 15,
+    "total_cells": 315,
+    "origin": [
+      80,
+      80
+    ]
+  },
+  "same_frame_trace_pixel_correlation_verified": false,
+  "case_failed_checks": [
+    "supplemental #0086 Running Worst Case on/off and 15-hull restoration",
+    "retain grouped behavior captures",
+    "manual Traffic consumer and visual witness review required"
+  ],
+  "evidence_consistency_checks": {
+    "manifest_rows": 6,
+    "pinned_external_input_rows": 20,
+    "all_hashes_and_sizes_match": true,
+    "source_images_equal_candidate_git_objects": true,
+    "six_raw_diagnostic_lines_equal_receipt_and_original_log": true,
+    "readback_probe_paths_values_and_original_lines_match": true,
+    "retained_images_equal_hashed_original_backbuffers": true,
+    "three_pairs_order_phase_epoch_draw_join_and_full_ids_match": true,
+    "completed_transition": "4->15->4",
+    "readiness_and_draw_toggle_true": true,
+    "ordered_map_ids_modulo_division_and_grid_counts_match": true,
+    "zero_asserts_and_exceptions_in_retained_log": true,
+    "owned_terminal_and_helper_profile_cleanup_receipts_complete": true,
+    "whole_case_failure_preserved": true
+  },
+  "packet_manifest_sha256": "b63f13511b683e1cf816123295a0eb176da710441d43fb08fae3bb6d448f3997",
+  "packet_inputs": [
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82208090.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 5382,
+      "sha256": "1cb52eb455c514641f58bc421c24855aca009c952993c7cf9227635f8268273c"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827074E0.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 5019,
+      "sha256": "3f83d3c56f0f808b6219c0117126189529d52f5a61bd0c1a796886a21f5beb8b"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82715858.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 8732,
+      "sha256": "97258e5b90b309039f6a1ca44e938a00a890bd29e7ba126588c3fc8040423b44"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8274C870.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 90397,
+      "sha256": "d635a91d6d271caf8b2059812534cb0c59f2505dc6772ebb7a8c099ab1cfcb56"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8275B2E8.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 25575,
+      "sha256": "c2f01818737c37f83e7dd4bff180fba85d3a421e08939a258d72c3395989cb4a"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82760AB0.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 3950,
+      "sha256": "2e11f8757b5431b16250ab14c099ccf5a0beced494cc4a7967e6f63dcf539f0c"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82762530.json",
+      "roles": [
+        "original_ARTIST_registration"
+      ],
+      "bytes": 67283,
+      "sha256": "6553c3a00a931c983286c0db5daa5dd4dda72154322cd12af57ab623f8818b37"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8281C2A0.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 16259,
+      "sha256": "ae2a8c88121eaffef5ec39007a8b2cbc23a5d327220f621db83be5a80f787225"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282E108.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 4595,
+      "sha256": "82ee4ddeaeecaf644dce9f62024f8b0ea1efac84f6664a9e54ab272d3ef748d8"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8282F770.json",
+      "roles": [
+        "original_ARTIST_chain"
+      ],
+      "bytes": 9116,
+      "sha256": "623a328fc7f1090685b5d1cf9ec705d09714cc1b2eb7d2c7f71ccc14d80a7940"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/hosted_39736578561/artifact/candidate-build-39736578561-1/input-receipt.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 14718,
+      "sha256": "a3cd33398a3ee6a7a63f0611422c9c1e3d9e492131c44412afb3196b37efcadd"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/hosted_39736578561/verified_results.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 740,
+      "sha256": "df58fd4a5f72b66134dacb836001e801ec5872cb3b18efa8029cfdba69f663d5"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic86_runtime_review_packet_01/EVIDENCE.json",
+      "roles": [
+        "review_packet",
+        "packet_manifest_payload"
+      ],
+      "bytes": 17751,
+      "sha256": "a1bd840133dbc9b4508644601d16b4ec6a1e3395d894b6416eda872d241ad4db"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic86_runtime_review_packet_01/INPUTS.json",
+      "roles": [
+        "review_packet",
+        "packet_manifest_payload"
+      ],
+      "bytes": 5530,
+      "sha256": "0420bdaf0cf04acbb665286500686f744fa2b50725d01d6f4ac8c4357a363e27"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic86_runtime_review_packet_01/MANIFEST.json",
+      "roles": [
+        "review_packet"
+      ],
+      "bytes": 1109,
+      "sha256": "b63f13511b683e1cf816123295a0eb176da710441d43fb08fae3bb6d448f3997"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic86_runtime_review_packet_01/REVIEW_REQUEST.md",
+      "roles": [
+        "review_packet",
+        "packet_manifest_payload"
+      ],
+      "bytes": 2196,
+      "sha256": "d8e7adb2868b71cc580d000ed8a73fb4e85a29c6b7389b622f0ec44c83c47e26"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic86_runtime_review_packet_01/source/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+      "roles": [
+        "review_packet",
+        "packet_manifest_payload"
+      ],
+      "bytes": 114966,
+      "sha256": "ca93eeb6353363555b71eeabff6d2ecd815b12594c4ff5d8577e504b5a1e8d0e"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic86_runtime_review_packet_01/source/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "roles": [
+        "review_packet",
+        "packet_manifest_payload"
+      ],
+      "bytes": 1193228,
+      "sha256": "c44b8540b07c0774d35caf20aec35c0ad3a24571b8fb526854bfbe69a9bbaa8a"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic86_runtime_review_packet_01/source/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficPvsDiag.h",
+      "roles": [
+        "review_packet",
+        "packet_manifest_payload"
+      ],
+      "bytes": 4511,
+      "sha256": "a808fb5d7f19f45fb3838d0ec0d9542a731faf338ff7eea97b8e4d37dc943090"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_case_native_review_delta06/REVIEW.md",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 4008,
+      "sha256": "9ff49d3bbf0d1928cac884ff9d5a1ca5d8be06c120d746a93fa21c9ad2aaa942"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_consumer_closure_01/PACKET.md",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 8445,
+      "sha256": "e3322b743fe658c380b13a23466dae88b6c29d9dffb785316db8a7b0543757b1"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_consumer_closure_01/manifest.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 8426,
+      "sha256": "9a023ed554a634ad28871f9dc3f66f9c5def3fdbb40c3a89d0d062fa71190daa"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/STAGING.delta02.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 10676,
+      "sha256": "0cccf3b420ae207e7e179e8f634c12c6d7b84aeb44dc842d04295744874f17cb"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/profile_seed/Profile.sav",
+      "roles": [
+        "private_fixture_seed"
+      ],
+      "bytes": 1223256,
+      "sha256": "7066c0d47fb007022a75bfea7d92e752cbafdc4d30ef10116fb238a3df781884"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/REPORT.md",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 6310,
+      "sha256": "6f7f60f204e8ad72c1d64d87ebcc29b327cbc3a18a42c7ae88bd41d40941d553"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/flow-terminal.json",
+      "roles": [
+        "run_candidate_or_cleanup_binding"
+      ],
+      "bytes": 1989,
+      "sha256": "e97c05682f38e6d02383131b8b5503da0a55d947974a6e96e486715b655a6134"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/flow/BrnGame.log",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 12777378,
+      "sha256": "be34d5a40fabe3d667445f053522821135d081ddd86716a02482450d53e5b09c"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/flow/marks.txt",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 2545,
+      "sha256": "cbed8f9ca20168789d61b03e113e910c0878f5f19e87df4e7409038005c73ae5"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/flow/terminal-status.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 898,
+      "sha256": "2c92da62271fcf21dd9705e366c842914404ca37bd5bdc053ef3519d51d64546"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/frames/bb_005760.bmp",
+      "roles": [
+        "original_backbuffer_image"
+      ],
+      "bytes": 3686454,
+      "sha256": "a414a0f5f8392ff03acf09698f505b6f9b852b0fb0265190928dc07abde5dda3"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/frames/bb_009720.bmp",
+      "roles": [
+        "original_backbuffer_image"
+      ],
+      "bytes": 3686454,
+      "sha256": "c46a62889e7111b0e8d3bc7b8061885ed17b14c8f92e126b4e2824327dd91b31"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/frames/bb_010200.bmp",
+      "roles": [
+        "original_backbuffer_image"
+      ],
+      "bytes": 3686454,
+      "sha256": "e302aa05b16817aed99c54584b206a6103b70f12700aa8aab12d321671153a20"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/hud.bmp",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 3686454,
+      "sha256": "a414a0f5f8392ff03acf09698f505b6f9b852b0fb0265190928dc07abde5dda3"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/native-readback.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 1393731,
+      "sha256": "29022ebe46214af03e66d4970dfbd124d4d61f4a73824fc51b3d7c895f09fe1e"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/param-fuzzy.bmp",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 3686454,
+      "sha256": "e302aa05b16817aed99c54584b206a6103b70f12700aa8aab12d321671153a20"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/params.bmp",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 3686454,
+      "sha256": "c46a62889e7111b0e8d3bc7b8061885ed17b14c8f92e126b4e2824327dd91b31"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/phase-frames.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 6398,
+      "sha256": "7ed25e523f5221a63070002471f125d54ba78a05017e0d79c37ecd7697c47ad0"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/result.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 7910,
+      "sha256": "36b839cbf17bfbbac0646270875f74aedaa458132338b17649f73b493adab29f"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/traffic-exe-provenance.json",
+      "roles": [
+        "run_candidate_or_cleanup_binding"
+      ],
+      "bytes": 467,
+      "sha256": "909badd454d01606704a8c532853a95ffa29dba548b19a6122f9088c456fab47"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/traffic-pvs-phase-receipts.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 38067,
+      "sha256": "1c09e0cf5f24d301e02e0fa7cba4d4ed80225b65b91cb2f57e02ff8ab3c66c9d"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/traffic-target-binding.json",
+      "roles": [
+        "run_candidate_or_cleanup_binding"
+      ],
+      "bytes": 1491,
+      "sha256": "bbbc101e1bd8626688e95e0f230fb92f5ec24087b9fbe7e97006bfdb93df8442"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/run_traffic74_03/vw_deform_keys.log",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 2994,
+      "sha256": "d45507e900bad0a1ef5fc7d0e28ae8f6cd624041cca1dd54ed8f5e14f81b0af6"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/slot/Burnout_PC.exe",
+      "roles": [
+        "actual_staged_executable"
+      ],
+      "bytes": 11140096,
+      "sha256": "932a7f98668990c34a64a9885f0bba8dafaf1eabd1ba1b2447ed41258cf3f604"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_followup_case_01/slot/config.ini",
+      "roles": [
+        "private_config"
+      ],
+      "bytes": 4575,
+      "sha256": "8017ab56482068335a91022ed93aa5329c1510c0fbbbc4274fbcb04c396f818f"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_pvs_witness_03/PINS.json",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 8093,
+      "sha256": "b1e2ebdba6c74472e4d00fa9e6305e1b2c5a0ff7f701f096e8cec8baa7ccbc73"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_create_match_20261021/traffic_pvs_witness_review_03/REVIEW.md",
+      "roles": [
+        "pinned_native_or_source_evidence"
+      ],
+      "bytes": 6627,
+      "sha256": "21c9ad8aaecec34ad125f5862c1ebcd9bf0c1457920440f5051ab28399a4155f"
+    }
+  ],
+  "limitations": [
+    "Phase images are not tied to individual diagnostic records by a shared engine/render frame ID.",
+    "Same-console-batch Active hulls values4 at TRUE and15 at FALSE are early pre-decision snapshots and do not prove completed consumption.",
+    "Whole run result remains FAIL; no gate or historical result is rewritten.",
+    "Only13 of15 phase captures exist; off and cleanup images are absent after the96-frame cap.",
+    "Full74-site manual effect/restoration/eligibility review remains absent; no aggregate or other-control credit is granted.",
+    "This is one private candidate, one location and one enable/disable cycle, not long-session/general-world or normal/public validation."
+  ],
+  "scope_of_actions": "No new compiler/build, fixture/helper/case, game/UI, hosted workflow, IDA, installer, commit, push, ledger or tracked edit was executed. Only this new sibling review directory was written."
+}
