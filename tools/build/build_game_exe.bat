@@ -321,6 +321,9 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayModule.cpp"
   rem The GPU-frunk -> disk write streamer that Update_Dispatch pumps.
   echo "%SRC%\GameSource\Replays\Stream\BrnReplayGPUDiskWriteStream.cpp"
+  rem ReplayModule's typed embedded playback streams and original Construct calls.
+  echo "%SRC%\GameSource\Replays\Stream\BrnReplayReadStream.cpp"
+  echo "%SRC%\GameSource\Replays\Stream\BrnReplayDiskReadStream.cpp"
   rem ---- camera wave (2026-08-01): the WORLD -> DIRECTOR seam. BridgeWorldToDirector --
   rem ---- @0x823E3AB0 is the only caller of InputBuffer::SetRaceCarInfo in the image;  --
   rem ---- without it every camera VehicleRef resolves to a zero transform.             --
