@@ -1,0 +1,211 @@
+{
+  "schema": "rwac-first-pass-formatter-review-delta01-v1",
+  "verdict": "pass",
+  "review_scope": "exact four-file source/design patch; no execution",
+  "candidate_base": {
+    "checkout": "scratch/DEBUG_MENU_1011/recovery_lanes/remaining130-validation",
+    "commit": "9683347ca74e3564986e19cf7bf43f46b5c7c05e",
+    "tree": "186a6377871f872535deb2cd3421e74b62ae74e8",
+    "parent": "a2732dafc1b99e459774e593b37c5b296296c1a8",
+    "working_tree_clean": true
+  },
+  "packet": {
+    "path": "scratch/DEBUG_MENU_1011/rwac_first_pass_formatter_delta01_20261022",
+    "inputs": [
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\REVIEW_REQUEST.md",
+        "bytes": 1368,
+        "sha256": "2fd1f6d5b774872300652ba430c0c6b23aa0bf1d7f0951168d7ee1525a93f396"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\OVERLAP.md",
+        "bytes": 1213,
+        "sha256": "9bbefb25f6e10738a8e58d304884897e046f312594fbcfc966ce7725ee8046f6"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\FINDING.md",
+        "bytes": 4131,
+        "sha256": "9f3e984ff5139f2fa3d6b4be40d3638d965f9c9e093cee42a85760319d5af1a0"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\SOURCE_BINDINGS.json",
+        "bytes": 9384,
+        "sha256": "ff768279b549d7bcd98b61720a5a3d743c5ff4f0fe8250b2e5514ebbffa1ba36"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\SOURCE_DELTA.patch",
+        "bytes": 12102,
+        "sha256": "1aa25a2a2b401b2d23d2b169ca66c77ecd70c23c707b1e820b73417b3657274e"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\INTEGRITY.sha256",
+        "bytes": 2204,
+        "sha256": "ae159a65a7327936650115bb97896965e7e37f29d6ece9182a7dc4a2c1635c32"
+      }
+    ],
+    "preimages": [
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\preimage\\src\\GameShared\\GameClasses\\System\\PC\\CgsRwacCommandTracePC.h",
+        "bytes": 20398,
+        "sha256": "07aabff48550e7bc10fc30dafa2bc0de5d173e6c7f8b69af20abcad7e0ba5171"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\preimage\\tests\\RwacCommandCapacity.cpp",
+        "bytes": 8924,
+        "sha256": "256b02ff626f2fe52216c4385c02019851d2764800d3a4ca33a4cb5d1802bb70"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\preimage\\tests\\run_rwac_command_capacity.py",
+        "bytes": 24181,
+        "sha256": "217f650696cfee3a6de4428241d98132020bd0c0b770ecc8763f279787d73a44"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\preimage\\tests\\evidence\\rwac_command_capacity\\source_pins.json",
+        "bytes": 2537,
+        "sha256": "9d8524ee50e60d882ca973cbd49ba7886e4b578641dfb8c7aa033943b85a84bc"
+      }
+    ],
+    "postimages": [
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\postimage\\src\\GameShared\\GameClasses\\System\\PC\\CgsRwacCommandTracePC.h",
+        "bytes": 20522,
+        "sha256": "d9c24a0ba6a3fcd3fb368803c5740f38a34b4382592b2d93b3ae67fccad2455e"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\postimage\\tests\\RwacCommandCapacity.cpp",
+        "bytes": 11976,
+        "sha256": "09aff733a8d23336a23f7524ff47ee3616a98b210cf4ef6979c651dab85cb027"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\postimage\\tests\\run_rwac_command_capacity.py",
+        "bytes": 25334,
+        "sha256": "e67e25288b2c6c62aa827e68510027e926906442a70f4343f49565bfe171976a"
+      },
+      {
+        "path": "scratch\\DEBUG_MENU_1011\\rwac_first_pass_formatter_delta01_20261022\\postimage\\tests\\evidence\\rwac_command_capacity\\source_pins.json",
+        "bytes": 2589,
+        "sha256": "826888f88d3264d5d946c4b3338692a9ed881fc4d574c1f60a6395ab9a1543f2"
+      }
+    ],
+    "patch_sha256": "1aa25a2a2b401b2d23d2b169ca66c77ecd70c23c707b1e820b73417b3657274e",
+    "source_delta_paths": [
+      "src/GameShared/GameClasses/System/PC/CgsRwacCommandTracePC.h",
+      "tests/RwacCommandCapacity.cpp",
+      "tests/run_rwac_command_capacity.py",
+      "tests/evidence/rwac_command_capacity/source_pins.json"
+    ]
+  },
+  "format_review": {
+    "format_conversion_count": 27,
+    "preimage_argument_count": 25,
+    "postimage_argument_count": 27,
+    "added_arguments": [
+      "Count(DeviceOpened)",
+      "Count(DeviceClosed)"
+    ],
+    "added_argument_order": "after muDeviceOpen, before SubmitCount",
+    "type_cast": "unsigned long long",
+    "stop_before_write_formatter_unchanged": true,
+    "state_abi_changed": false,
+    "counter_ownership_changed": false,
+    "event_enum_changed": false,
+    "producer_consumer_or_queue_changed": false,
+    "capacity_or_overflow_changed": false
+  },
+  "fixture_review": {
+    "calls_real_EmitFirstActiveOccupancy": true,
+    "matching_epoch_driven_with_real_helpers": true,
+    "assertions": 6,
+    "separate_first_pass_counters": true,
+    "baseline_first_pass_summary_absent": true,
+    "baseline_failure_labels_preserved": true,
+    "compiler_flags": [
+      "/we4473",
+      "/we4477"
+    ],
+    "flags_fixture_only": true,
+    "fixture_compiled_or_run": false
+  },
+  "source_pins": {
+    "normalization": "CRLF to LF only",
+    "entries": [
+      {
+        "path": "src/GameShared/GameClasses/System/PC/CgsAudioOutputPC.cpp",
+        "expected_lf_sha256": "736acfd2eb11baa93bb1e952e2d86f4637642d1e11aee760f2adfd4892511348",
+        "expected_lf_bytes": 32696,
+        "verified_against": "clean 968 candidate LF bytes",
+        "matches": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/System/PC/CgsDacOutputPC.cpp",
+        "expected_lf_sha256": "0043d62c6661ecdf82b405ec6613c9e790c899ca3494bf1802bbc3c0b4c0e70b",
+        "expected_lf_bytes": 6148,
+        "verified_against": "clean 968 candidate LF bytes",
+        "matches": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/System/PC/CgsRwacCommandTracePC.h",
+        "expected_lf_sha256": "d9c24a0ba6a3fcd3fb368803c5740f38a34b4382592b2d93b3ae67fccad2455e",
+        "expected_lf_bytes": 20522,
+        "verified_against": "packet postimage LF bytes",
+        "matches": true
+      },
+      {
+        "path": "src/GameSource/Sound/Module/BrnRootSoundModule.cpp",
+        "expected_lf_sha256": "55daf2e155a5a9b1e22317d10d93526ba1fc81327aa0c77ac555a36f1d09435b",
+        "expected_lf_bytes": 42580,
+        "verified_against": "clean 968 candidate LF bytes",
+        "matches": true
+      },
+      {
+        "path": "vendor/renderware/src/rw/audio/core/PlugIn.cpp",
+        "expected_lf_sha256": "46b1aa0cc1013647e0b0ba48b1a1ccef7a916d3fae9babf82d95983cc08b7ad4",
+        "expected_lf_bytes": 9754,
+        "verified_against": "clean 968 candidate LF bytes",
+        "matches": true
+      },
+      {
+        "path": "tests/RwacCommandCapacity.cpp",
+        "expected_lf_sha256": "09aff733a8d23336a23f7524ff47ee3616a98b210cf4ef6979c651dab85cb027",
+        "expected_lf_bytes": 11976,
+        "verified_against": "packet postimage LF bytes",
+        "matches": true
+      },
+      {
+        "path": "tests/run_rwac_command_capacity.py",
+        "expected_lf_sha256": "e67e25288b2c6c62aa827e68510027e926906442a70f4343f49565bfe171976a",
+        "expected_lf_bytes": 25334,
+        "verified_against": "packet postimage LF bytes",
+        "matches": true
+      },
+      {
+        "path": "tests/evidence/rwac_command_capacity/PlugIn_b823.cpp",
+        "expected_lf_sha256": "e28e6fd1463b76ddc71d5dd51404787f225034014da99b67cdfdd1882a6a27c8",
+        "expected_lf_bytes": 8921,
+        "verified_against": "clean 968 candidate LF bytes",
+        "matches": true
+      }
+    ],
+    "count": 8,
+    "baseline_git_lf_blob_expected": "d1c98a807112e3052d8e9c8701cb3464e7619f7c",
+    "baseline_git_lf_blob_verified": "d1c98a807112e3052d8e9c8701cb3464e7619f7c",
+    "matches_original_git_lf_blob": true
+  },
+  "prior_evidence": {
+    "hosted_run_id": 39841063013,
+    "native_slot": 62040,
+    "interpreted_as_proof_of_proposed_delta": false,
+    "interpreted_as_audio_health_or_cause": false
+  },
+  "reviewer_actions": {
+    "build": false,
+    "fixture_run": false,
+    "test": false,
+    "ci": false,
+    "game": false,
+    "native": false,
+    "ida": false,
+    "source_edit": false,
+    "commit": false
+  }
+}
