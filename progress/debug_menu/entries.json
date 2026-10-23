@@ -14118,14 +14118,24 @@
       "pseudocode_line": 13,
       "original_call": "sub_8282D800(this, &this->mbDrawSatNavOutline, \"SatNav: Show Sat Nav Rect outline\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::SatNavDebugComponent::OnActivate#0006",
       "function": "BrnGui::SatNavDebugComponent::OnActivate",
       "original_address": "0x82513280",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82513280.json",
       "component": "BrnGui::SatNavDebugComponent",
       "component_name": "Sat Nav",
-      "component_path": null
+      "component_path": null,
+      "notes": "Original blue outline visibly off/on/off, confirmed by exact FALSE/TRUE/FALSE/final FALSE aliases and pinned registration/render source. Scope: outline visibility, original blue channel contract, local outline-off restoration. Excludes map geometry, map alpha and whole-HUD/map restoration.",
+      "evidence": [
+        "progress/debug_menu/satnav62050_retained_native_20261023/REVIEW.md",
+        "progress/debug_menu/satnav62050_retained_native_20261023/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/satnav62050_retained_native_20261023/CHECKPOINT.json"
+      ],
+      "source_commit": "8b2940d40e76fd6a88a37615f6163a99c2d5e3b8",
+      "native_case": 62050,
+      "original_aggregate_verdict": "case PASS; wrapper INCOMPLETE_EVIDENCE_RETAINED",
+      "phase_synchronization": "phase-adjacent, not same-frame"
     },
     {
       "kind": "variable",
@@ -37702,8 +37712,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1300,
-      "verified": 48,
+      "pending": 1299,
+      "verified": 49,
       "original-noop": 7
     }
   }
