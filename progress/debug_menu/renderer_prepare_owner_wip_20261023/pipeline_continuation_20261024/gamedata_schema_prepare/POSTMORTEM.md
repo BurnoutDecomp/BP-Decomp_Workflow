@@ -1,0 +1,13 @@
+# Source self-review
+
+ARTIST82673258 preserves this/input-stack/output-stack/Attrib-input inr3/r4/r5/r6. The DecFIGS original bool three-explicit-argument declaration agrees. The proposal keeps those actual typed owners and the two original assertions, including invalid negative stages because they are unsigned-above2 in the primary control flow. It does not forward to the native one-argument helper.
+
+The control-flow detail at82673334..44 is preserved: observing a response stores2 and joins the pending tail, rather than returning success immediately. Stage2 alone reaches82673300..1C and skips both Resource Update and Attrib ProcessInputs. Resource input is created and locked before any stage branch; all paths unlock and destroy it. The Attrib input is locked only while building the schema request, and ProcessInputs runs after the Resource input is destroyed.
+
+The canonical global owner is attested by DecFIGS BrnAttribSchema.h:37..41: two signed int sizes and two mutable char arrays. The PS3 data-TU declarations attest5664/20352 extents; ARTIST size words independently confirm those values. No PS3 payload bytes are imported. Global definitions are native signed32 size values plus exact X360 byte arrays; they preserve writable char storage required by RegisterSchema.
+
+The initial old-address BIN window was rejected as the provider before source generation. Raw3D6082CD +3B8B53B0 decodes the actual BIN pointer;3D6082CD+3B6B3D88 decodes VLT. Each generated array is independently reconstructed from its C++ hex character literals and compared byte for byte with the matching primary `_from_caller.bin`. The53AC prefix is excluded, preserving the final four Definition bytes. Exact raw/data/source hashes are in DATA_PROVIDER_BINDINGS.
+
+Current canonical Attrib IO and ProcessInputs/RegisterSchema bodies are frozen at source2ce. This packet supplies their original caller and data definitions, not a blanket review of the entire Attrib SDK, native pointer widening, schema endian conversion or vault lifecycle. No new skip or fake successful reply is added. The existing PC helper remains unchanged, and the X360 data CPPs remain unmounted until Root approves a platform provider choice.
+
+Removing the new method and canonical include reproduces the exact seventh-packet CPP postimage. The source2ce base, seventh overlay and new-file absence are all checked. Every earlier source packet remains immutable. Two sequential short BelowNormal reads reused the same owned IDB copy, with analysis disabled and no decompilation API; the original hash is unchanged. No cleanup, compile/link, activation or native verification was attempted.

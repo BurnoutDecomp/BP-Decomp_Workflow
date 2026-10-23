@@ -1,0 +1,662 @@
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp
+@@ -6,6 +6,9 @@
+ #include "GameShared/GameClasses/Module/CgsBaseEventReceiverQueue.h" // receiver-queue forward target
+ #include "GameShared/GameClasses/System/Resource/CgsResourceTypeRegistry.h" // ResolveResourceType (bundle FixUp resolver)
+ #include "GameShared/GameClasses/System/Resource/CgsResourceIOEvents.h"     // Events::PoolEvent (pool response routing)
++#include "GameShared/GameClasses/Development/PerfMon/Cpu/CgsPerfMonCpu.h"
++#include "GameShared/GameClasses/Module/CgsModuleIOHelper.h"
++#include "GameShared/GameClasses/Module/CgsModuleUtils.h"
+ #include "pc/gcm/renderengine/FrameProfile.h"
+ #include <cstring>                                    // memset (InitOptions zero-init)
+ 
+@@ -13,6 +16,15 @@
+ // Update preserves the loader -> pool -> memory order and delayed pool replies.
+ namespace CgsResource
+ {
++    // ARTIST 82F34004..1C raw initial words are all -1.
++    s32 ResourceModule::_miResourceUpdatePerfMon = -1;
++    s32 ResourceModule::_miProcessResourceRequestsPerfMon = -1;
++    s32 ResourceModule::_miUpdateBundleLoaderPerfMon = -1;
++    s32 ResourceModule::_miUpdatePoolPerfMon = -1;
++    s32 ResourceModule::_miUpdateMemoryPerfMon = -1;
++    s32 ResourceModule::_miUpdateFileSystemPerfMon = -1;
++    s32 ResourceModule::_miUpdateOutputPerfMon = -1;
++
+     // ResourceModule::InitOptions ctor - zero-init. The X360 ConstructResourceModule constructs this
+     // then memset(0)s the whole 1216B block before filling fields, so a zero-init is the faithful net
+     // state. (memset over the already-constructed members matches that ctor-then-memset sequence.)
+@@ -191,7 +203,7 @@
+ 
+     // ARTIST82907268: native event sizes are carried by the queue. Pool and
+     // memory tags below are the original switch values, not resource tags.
+-    void ResourceModule::ProcessResourceRequests(ResourceIO::InputBuffer* lpResIn,
++    void ResourceModule::ProcessResourceRequests(const ResourceIO::InputBuffer* lpResIn,
+         CgsMemory::MemoryIO::InputBuffer* lpMemIn,
+         BundleLoaderIO::InputBuffer_Update* lpLoaderIn, PoolIO::InputBuffer* lpPoolIn)
+     {
+@@ -251,7 +263,7 @@
+ 
+     // ARTIST828EC788: bundle replies precede externally addressed pool replies.
+     void ResourceModule::ProcessResourceResponses(const BundleLoaderIO::OutputBuffer* lpLoaderOut,
+-                                                  PoolIO::OutputBuffer* lpPoolOut)
++                                                  const PoolIO::OutputBuffer* lpPoolOut)
+     {
+         const auto* lpLoads = lpLoaderOut->GetLoadBundleResponseQueue();
+         for (s32 li = 0; li < lpLoads->GetLength(); ++li)
+@@ -456,6 +468,117 @@
+ 
+     // ARTIST82907948: pump loader, pool and memory in order. Allocation/fixup
+     // responses are retained until the next update, as in the original pipeline.
++    // ARTIST 82907948: the original stack-backed resource dispatcher.
++    ResourceModule::EUpdateResult ResourceModule::Update(
++        CgsModule::IOBufferStack* lpInputStack, CgsModule::IOBufferStack* lpOutputStack,
++        const ResourceIO::InputBuffer* lpInputBuffer, ResourceIO::OutputBuffer* lpOutputBuffer)
++    {
++        const s32 liResourceMonitor = _miResourceUpdatePerfMon;
++        if (liResourceMonitor >= 0)
++            CgsDev::PerfMonCpu::StartMonitor(liResourceMonitor);
++        EUpdateResult leResult = E_RESULT_OK;
++        {
++            CgsModule::IOHelper<CgsMemory::MemoryIO::InputBuffer> lMemoryInput(lpInputStack, "Memory");
++            CgsModule::IOHelper<BundleLoaderIO::InputBuffer_Update> lLoaderInput(lpInputStack, "BundleLoader");
++            CgsModule::IOHelper<PoolIO::InputBuffer> lPoolInput(lpInputStack, "Pool");
++            CgsModule::IOHelper<CgsMemory::MemoryIO::OutputBuffer> lMemoryOutput(lpOutputStack, "Memory");
++            CgsModule::IOHelper<BundleLoaderIO::OutputBuffer> lLoaderOutput(lpOutputStack, "BundleLoader");
++            CgsModule::IOHelper<PoolIO::OutputBuffer> lPoolOutput(lpOutputStack, "Pool");
++            CgsMemory::MemoryIO::InputBuffer* const lpMemoryInput = lMemoryInput;
++            BundleLoaderIO::InputBuffer_Update* const lpLoaderInput = lLoaderInput;
++            PoolIO::InputBuffer* const lpPoolInput = lPoolInput;
++            CgsMemory::MemoryIO::OutputBuffer* const lpMemoryOutput = lMemoryOutput;
++            BundleLoaderIO::OutputBuffer* const lpLoaderOutput = lLoaderOutput;
++            PoolIO::OutputBuffer* const lpPoolOutput = lPoolOutput;
++
++            const s32 liFileMonitor = _miUpdateFileSystemPerfMon;
++            if (liFileMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liFileMonitor);
++            ProcessPendingFileSystemResponses();
++            if (liFileMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liFileMonitor);
++
++            const s32 liRequestMonitor = _miProcessResourceRequestsPerfMon;
++            if (liRequestMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liRequestMonitor);
++            lpInputBuffer->LockForRead();
++            lpMemoryInput->LockForWrite();
++            lpLoaderInput->LockForWrite();
++            lpPoolInput->LockForWrite();
++            ProcessResourceRequests(lpInputBuffer, lpMemoryInput, lpLoaderInput, lpPoolInput);
++            lpPoolInput->UnlockForWrite();
++            lpLoaderInput->UnlockForWrite();
++            lpMemoryInput->UnlockForWrite();
++            lpInputBuffer->UnlockForRead();
++            if (liRequestMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liRequestMonitor);
++
++            const s32 liLoaderMonitor = _miUpdateBundleLoaderPerfMon;
++            if (liLoaderMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liLoaderMonitor);
++            mBundleLoaderModule.Update(lpInputStack, lpOutputStack, lpLoaderInput, lpLoaderOutput);
++            lpLoaderOutput->LockForRead();
++            ProcessBundleLoaderStreamRequests(lpLoaderOutput);
++            lpLoaderOutput->UnlockForRead();
++            if (liLoaderMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liLoaderMonitor);
++
++            const s32 liPoolMonitor = _miUpdatePoolPerfMon;
++            if (liPoolMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liPoolMonitor);
++            CgsModule::LockBuffersForIO(lpPoolInput, lpLoaderOutput);
++            lpPoolInput->GetPoolInputQueue()->Append(
++                *static_cast<const BundleLoaderIO::OutputBuffer*>(lpLoaderOutput)->GetPoolSendQueue());
++            CgsModule::UnlockBuffersForIO(lpPoolInput, lpLoaderOutput);
++            if (mPoolModule.Update(lpInputStack, lpOutputStack, lpPoolInput, lpPoolOutput)
++                == PoolModule::E_RESULT_REQUIRE_STALL)
++                leResult = E_RESULT_REQUIRE_STALL;
++            if (liPoolMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liPoolMonitor);
++
++            {
++                CgsModule::IOHelper<BundleLoaderIO::InputBuffer_Record> lLoaderRecord(lpInputStack, "BundleLoaderRecord");
++                BundleLoaderIO::InputBuffer_Record* const lpLoaderRecord = lLoaderRecord;
++                CgsModule::LockBuffersForIO(lpLoaderRecord, lpPoolOutput);
++                lpLoaderRecord->GetPoolReceiveQueue()->Append(
++                    *static_cast<const PoolIO::OutputBuffer*>(lpPoolOutput)->GetPoolOutputQueue());
++                CgsModule::UnlockBuffersForIO(lpLoaderRecord, lpPoolOutput);
++                mBundleLoaderModule.RecordPostUpdateEvents(lpLoaderRecord);
++            }
++
++            const s32 liMemoryMonitor = _miUpdateMemoryPerfMon;
++            if (liMemoryMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liMemoryMonitor);
++            CgsModule::LockBuffersForIO(lpMemoryInput, lpPoolOutput);
++            ProcessPoolResourceRequests(lpMemoryInput, lpPoolOutput);
++            CgsModule::UnlockBuffersForIO(lpMemoryInput, lpPoolOutput);
++            mMemoryModule.Update(lpInputStack, lpOutputStack, lpMemoryInput, lpMemoryOutput);
++            if (liMemoryMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liMemoryMonitor);
++
++            const s32 liOutputMonitor = _miUpdateOutputPerfMon;
++            if (liOutputMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liOutputMonitor);
++            lpMemoryOutput->LockForRead();
++            ProcessMemoryResponses(lpMemoryOutput);
++            lpMemoryOutput->UnlockForRead();
++            lpPoolOutput->LockForRead();
++            lpLoaderOutput->LockForRead();
++            ProcessResourceResponses(lpLoaderOutput, lpPoolOutput);
++            lpLoaderOutput->UnlockForRead();
++            lpPoolOutput->UnlockForRead();
++            lpOutputBuffer->LockForWrite();
++            lpOutputBuffer->GetFileSystemStatusInterface()->SetDiskErrorOccured(mFileSystem.HasDiskErrorOccured());
++            lpOutputBuffer->UnlockForWrite();
++            if (liOutputMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liOutputMonitor);
++        }
++        if (liResourceMonitor >= 0)
++            CgsDev::PerfMonCpu::StopMonitor(liResourceMonitor);
++        return leResult;
++    }
++
++
+     bool ResourceModule::Update(void* lpInputBuffer, void* /*lpOutputBuffer*/)
+     {
+         auto* lpResIn = static_cast<ResourceIO::InputBuffer*>(lpInputBuffer);
+@@ -526,7 +649,7 @@
+     // request (queue tag 1). [X360 hardcodes the per-type size 92/16; we use the recorded event size so
+     // the x64-width CreateResourceRequest copies whole.]
+     void ResourceModule::ProcessPoolResourceRequests(CgsMemory::MemoryIO::InputBuffer* lpMemInput,
+-                                                     PoolIO::OutputBuffer* lpPoolOutput)
++                                                     const PoolIO::OutputBuffer* lpPoolOutput)
+     {
+         const PoolIO::OutputBuffer::PoolResourceRequestQueue* lpQ =
+             static_cast<const PoolIO::OutputBuffer&>(*lpPoolOutput).GetPoolResourceRequestQueue();
+@@ -551,7 +674,7 @@
+     // @ 0x828EC6F0 - route each MemoryModule response to its originating receiver queue (the request's
+     // reply target, response->GetUser()) tagged for that response type. The X360 indexes a static table
+     // dword_820F71D0[meEventType]; the pool-create flow carries only CREATE_RESOURCE(6) -> CreatePool(10).
+-    void ResourceModule::ProcessMemoryResponses(CgsMemory::MemoryIO::OutputBuffer* lpMemOutput)
++    void ResourceModule::ProcessMemoryResponses(const CgsMemory::MemoryIO::OutputBuffer* lpMemOutput)
+     {
+         const CgsMemory::MemoryIO::OutputBuffer::MemoryResponseQueue* lpQ =
+             static_cast<const CgsMemory::MemoryIO::OutputBuffer&>(*lpMemOutput).GetMemoryResponseQueue();
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceModule.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceModule.h
+@@ -50,6 +50,15 @@
+     public:
+         // DecFIGS h:134; ARTIST 82907948 preserves this enum result through the helper.
+         enum EUpdateResult { E_RESULT_OK = 0, E_RESULT_REQUIRE_STALL = 1 };
++
++        // DecFIGS cpp26..32; ARTIST 82F34004..1C, registered by original Construct.
++        static s32 _miResourceUpdatePerfMon;
++        static s32 _miProcessResourceRequestsPerfMon;
++        static s32 _miUpdateBundleLoaderPerfMon;
++        static s32 _miUpdatePoolPerfMon;
++        static s32 _miUpdateMemoryPerfMon;
++        static s32 _miUpdateFileSystemPerfMon;
++        static s32 _miUpdateOutputPerfMon;
+ 
+         static const s32 KI_MAX_PENDING_FILE_SYSTEM_RESPONSES = 16;
+ 
+@@ -104,7 +113,7 @@
+         bool Prepare();    // 0x828F4140
+         bool Release();    // 0x82906570
+         void Destruct();   // deferred
+-        // Original API; its body remains a distinct unresolved engine dependency.
++        // Original stack-backed API, distinct from the retained native adapter.
+         EUpdateResult Update(CgsModule::IOBufferStack* lpInputStack,
+                              CgsModule::IOBufferStack* lpOutputStack,
+                              const ResourceIO::InputBuffer* lpInputBuffer,
+@@ -116,20 +125,20 @@
+         // resource-request queue) into the MemoryModule input queue. Caller holds memInput write-locked +
+         // poolOutput read-locked (as ResourceModule::Update does).
+         void ProcessPoolResourceRequests(CgsMemory::MemoryIO::InputBuffer* lpMemInput,
+-                                         PoolIO::OutputBuffer* lpPoolOutput);
++                                         const PoolIO::OutputBuffer* lpPoolOutput);
+         // @ 0x828EC6F0 - forward each MemoryModule response to its originating receiver queue
+         // (response->GetUser()) tagged for that response type. Caller holds memOutput read-locked.
+-        void ProcessMemoryResponses(CgsMemory::MemoryIO::OutputBuffer* lpMemOutput);
++        void ProcessMemoryResponses(const CgsMemory::MemoryIO::OutputBuffer* lpMemOutput);
+ 
+         // @ 0x82907268 - route the module's inbound resource requests to the sub-module inputs. Pool-create
+         // slice: CreatePool (id 0) -> pool input. Caller holds resIn read-locked + poolIn write-locked.
+         void ProcessResourceRequests(ResourceIO::InputBuffer* lpResIn, PoolIO::InputBuffer* lpPoolIn);
+-        void ProcessResourceRequests(ResourceIO::InputBuffer* lpResIn,
++        void ProcessResourceRequests(const ResourceIO::InputBuffer* lpResIn,
+             CgsMemory::MemoryIO::InputBuffer* lpMemIn,
+             BundleLoaderIO::InputBuffer_Update* lpLoaderIn, PoolIO::InputBuffer* lpPoolIn);
+         void ProcessBundleLoaderStreamRequests(const BundleLoaderIO::OutputBuffer* lpLoaderOut);
+         void ProcessResourceResponses(const BundleLoaderIO::OutputBuffer* lpLoaderOut,
+-                                      PoolIO::OutputBuffer* lpPoolOut);
++                                      const PoolIO::OutputBuffer* lpPoolOut);
+ 
+         // Drain the pool module's output queue (acquire/etc. responses) and route each to its requester
+         // (response->mpUser). The pool-response slice of the X360 ProcessResourceResponses shuttle. Caller
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.cpp
+@@ -1,4 +1,5 @@
+ #include "GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.h"
++#include "GameShared/GameClasses/Development/PerfMon/Cpu/CgsPerfMonCpu.h"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"   // CGS_ASSERT
+ #include "GameShared/GameClasses/System/Resource/CgsResourcePoolModule.h"  // PoolModule::GetPool (resolve poolId)
+ #include "GameShared/GameClasses/Development/Log/CgsLog.h"                  // [stream] trace
+@@ -9,6 +10,8 @@
+ // protocol in CgsBundleLoaderModule.cpp with allocator-backed stream buffers.
+ namespace CgsResource
+ {
++    s32 BundleLoaderModule::_miUpdatePerfMon = -1; // ARTIST raw82F33FD4
++
+     // FLAG PC-platform leaf: resource destinations must outlive native workers.
+     void BundleLoaderModule::CancelStreamPC()
+     {
+@@ -165,6 +168,27 @@
+         QueryPerformanceCounter(&lTicks);
+         muTimerTrace = static_cast<u64>(lTicks.QuadPart);
+     }
++    // ARTIST 82907638: stacks belong to the caller; this module consumes the supplied IO.
++    void BundleLoaderModule::Update(CgsModule::IOBufferStack* /*lpInputStack*/,
++                                     CgsModule::IOBufferStack* /*lpOutputStack*/,
++                                     const BundleLoaderIO::InputBuffer_Update* lpInput,
++                                     BundleLoaderIO::OutputBuffer* lpOutput)
++    {
++        if (_miUpdatePerfMon >= 0)
++            CgsDev::PerfMonCpu::StartMonitor(_miUpdatePerfMon);
++        lpOutput->LockForWrite();
++        lpInput->LockForRead();
++        ProcessReceiverQueue();
++        ProcessBundleLoadRequests(lpInput, lpOutput);
++        ProcessPoolResponses();
++        lpInput->UnlockForRead();
++        UpdateStream(lpOutput);
++        lpOutput->UnlockForWrite();
++        if (_miUpdatePerfMon >= 0)
++            CgsDev::PerfMonCpu::StopMonitor(_miUpdatePerfMon);
++    }
++
++
+     bool BundleLoaderModule::Update(void* lpInputBuffer, void* lpOutputBuffer)
+     {
+         // ARTIST82907638; the legacy native adapter has a bool return, unused
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.h
+@@ -8,6 +8,8 @@
+ #include "GameShared/GameClasses/System/Resource/CgsResourceBundleLoader.h"
+ #include "GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO.h"
+ #include "GameShared/Jobs/DecompressionJob/DecompressionJobInterface.h"
++
++namespace CgsModule { struct IOBufferStack; }
+ 
+ namespace CgsResource {
+ class PoolModule;
+@@ -27,6 +29,7 @@
+ class BundleLoaderModule : public CgsModule::ModuleSingleBuffered {
+     friend class DebugComponent;
+ public:
++    static s32 _miUpdatePerfMon; // DecFIGS cpp32; ARTIST82F33FD4
+     enum EStage { E_STAGE_START=0, E_STAGE_RUNNING=1, E_STAGE_DONE=2 };
+     enum EStreamStage {
+         STREAMSTAGE_IDLE=0, STREAMSTAGE_STREAMHEADER, STREAMSTAGE_STREAMDEBUGDATA,
+@@ -53,6 +56,8 @@
+     bool Release();
+     void Destruct();
+     void CancelStreamPC();
++    void Update(CgsModule::IOBufferStack* lpInputStack, CgsModule::IOBufferStack* lpOutputStack,
++                const BundleLoaderIO::InputBuffer_Update* lpInput, BundleLoaderIO::OutputBuffer* lpOutput);
+     bool Update(void* lpInputBuffer, void* lpOutputBuffer);
+     void ProcessReceiverQueue();
+     void ProcessPoolResponses();
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourcePoolModule.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourcePoolModule.cpp
+@@ -1,4 +1,5 @@
+ #include "GameShared/GameClasses/System/Resource/CgsResourcePoolModule.h"
++#include "GameShared/GameClasses/Development/PerfMon/Cpu/CgsPerfMonCpu.h"
+ #include "GameShared/GameClasses/System/PC/CgsResourcePoolBindingsPC.h"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"   // CGS_ASSERT
+ #include "GameShared/GameClasses/Development/CgsStrStream.h" // original formatted pool assertions
+@@ -340,6 +341,97 @@
+     }
+     // The existing host update transport now drives the original typed request and
+     // receiver processors, then the same state machines and owned maPools sweep.
++    // ARTIST 829076D8: original state dispatch and live-pool sweep.
++    PoolModule::EUpdateResult PoolModule::Update(
++        CgsModule::IOBufferStack* /*lpInputStack*/, CgsModule::IOBufferStack* /*lpOutputStack*/,
++        const PoolIO::InputBuffer* lpInput, PoolIO::OutputBuffer* lpOutput)
++    {
++        lpOutput->LockForWrite();
++        lpInput->LockForRead();
++        ProcessInputBuffer(lpInput, lpOutput);
++        lpInput->UnlockForRead();
++        ProcessReceiverQueue(lpOutput);
++        if (Pool::_miPoolModuleStatePerfMon >= 0)
++            CgsDev::PerfMonCpu::StartMonitor(Pool::_miPoolModuleStatePerfMon);
++        if (mProcessState == E_UPDATESTATE_IDLE)
++        {
++            const s32 liMonitor = Pool::_miPoolModuleIdle;
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liMonitor);
++            Events::AllocateResourceListRequest lRequest;
++            if (mPendingAllocationRequests.Pop(&lRequest))
++                DoAllocateResourceListRequest(&lRequest);
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liMonitor);
++        }
++
++        switch (mProcessState)
++        {
++        case E_UPDATESTATE_ALLOCATING_LIST:
++        {
++            const s32 liMonitor = Pool::_miPoolModuleAllocating;
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liMonitor);
++            UpdateAllocating(lpOutput);
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liMonitor);
++            break;
++        }
++        case E_UPDATESTATE_DEALLOCATING_LIST:
++        {
++            const s32 liMonitor = Pool::_miPoolModuleDeallocating;
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liMonitor);
++            UpdateDeAllocating(lpOutput);
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liMonitor);
++            break;
++        }
++        case E_UPDATESTATE_LIVEUPDATE:
++        {
++            const s32 liMonitor = Pool::_miPoolModuleLiveupdate;
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liMonitor);
++            UpdateLiveUpdate(lpOutput);
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liMonitor);
++            break;
++        }
++        }
++
++        if (mProcessState == E_UPDATESTATE_INTELLIFRAG)
++        {
++            const s32 liMonitor = Pool::_miPoolModuleIntellifrag;
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liMonitor);
++            UpdateIntelliFrag(lpOutput);
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liMonitor);
++        }
++        if (mProcessState == E_UPDATESTATE_EMERGENCYFRAG)
++        {
++            const s32 liMonitor = Pool::_miPoolModuleEmergencyFrag;
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StartMonitor(liMonitor);
++            UpdateEmergencyFrag(lpOutput);
++            if (liMonitor >= 0)
++                CgsDev::PerfMonCpu::StopMonitor(liMonitor);
++        }
++        if (Pool::_miPoolModuleStatePerfMon >= 0)
++            CgsDev::PerfMonCpu::StopMonitor(Pool::_miPoolModuleStatePerfMon);
++        lpOutput->UnlockForWrite();
++
++        if (Pool::_miPoolUpdatePerfMon >= 0)
++            CgsDev::PerfMonCpu::StartMonitor(Pool::_miPoolUpdatePerfMon);
++        for (s32 liPool = 0; liPool < KI_MAX_POOLS; ++liPool)
++            if (maPools[liPool].GetId() != -1)
++                maPools[liPool].Update();
++        if (Pool::_miPoolUpdatePerfMon >= 0)
++            CgsDev::PerfMonCpu::StopMonitor(Pool::_miPoolUpdatePerfMon);
++        return mProcessState == E_UPDATESTATE_EMERGENCYFRAG ? E_RESULT_REQUIRE_STALL : E_RESULT_OK;
++    }
++
++
+     bool PoolModule::Update(void* lpInputBuffer, void* lpOutputBuffer)
+     {
+         PoolIO::InputBuffer*  lpIn  = static_cast<PoolIO::InputBuffer*>(lpInputBuffer);
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourcePoolModule.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourcePoolModule.h
+@@ -16,6 +16,8 @@
+ #include "GameShared/GameClasses/System/Resource/PoolModuleStates/CgsEmergencyFragPoolModuleState.h"// mEmergencyFragState / EmergencyFragParams
+ #include "GameShared/Jobs/Relocator/CgsRelocator.h"                      // mRelocator / mRelocationParams
+ #include "rw/rwcore_structs.h"                                          // rw::Resource / ResourceDescriptor (InitOptions)
++
++namespace CgsModule { struct IOBufferStack; }
+ 
+ // Async pool-create dispatch (CreateResourceRequest -> MemoryModule -> CreateResourceResponse).
+ namespace CgsMemory { namespace MemoryIO { struct InputBuffer; struct CreateResourceResponse; struct DestroyBankResponse; } }
+@@ -59,6 +61,8 @@
+         static const u16 KU_MAX_LINEAR_HEAP_LENGTH    = 65535;   // :63
+         static const u16 KU_MAX_DISTRIBUTION_COMMANDS = 65535;   // :64
+ 
++        enum EUpdateResult { E_RESULT_OK = 0, E_RESULT_REQUIRE_STALL = 1 }; // DecFIGS h101
++
+         // PoolModule's own prepare/release stage machine (distinct from the base module's).
+         enum EPoolPrepareStage { E_POOLPREPARE_START = 0, E_POOLPREPARE_BASE = 1, E_POOLPREPARE_POOLS = 2, E_POOLPREPARE_DONE = 3 };
+         enum EPoolReleaseStage { E_POOLRELEASE_START = 0, E_POOLRELEASE_POOLS = 1, E_POOLRELEASE_BASE = 2, E_POOLRELEASE_DONE = 3 };
+@@ -160,6 +164,9 @@
+         // (WorldEntityModule::PrepareZoneCollision's "TRK_CLIL<n>" acquires).
+         void DoAcquireResourceListRequest(const Events::AcquireResourceListRequest* lpRequest,
+                                           PoolIO::OutputBuffer* lpOutput);
++
++        EUpdateResult Update(CgsModule::IOBufferStack* lpInputStack, CgsModule::IOBufferStack* lpOutputStack,
++                             const PoolIO::InputBuffer* lpInput, PoolIO::OutputBuffer* lpOutput);
+ 
+         // ---- current two-argument native adapter ---------------------------------------
+         // The full ARTIST four-argument Update/Construct activation remains a separate boundary.
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourcePool.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourcePool.h
+@@ -78,6 +78,16 @@
+         friend class DebugPoolTypeList; //ARTIST828EEB28..48 reads the named heap capacities
+ 
+     public:
++        // DecFIGS h135..142; ARTIST raw82F34044..60, original Construct owns registration.
++        static s32 _miPoolUpdatePerfMon;
++        static s32 _miPoolModuleStatePerfMon;
++        static s32 _miPoolModuleIdle;
++        static s32 _miPoolModuleAllocating;
++        static s32 _miPoolModuleDeallocating;
++        static s32 _miPoolModuleLiveupdate;
++        static s32 _miPoolModuleIntellifrag;
++        static s32 _miPoolModuleEmergencyFrag;
++
+         // :179
+         enum EPrepareStage { E_PREPARESTAGE_START = 0, E_PREPARESTAGE_DONE = 1 };
+         // :186
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourcePool.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourcePool.cpp
+@@ -40,6 +40,15 @@
+ 
+ namespace CgsResource
+ {
++    s32 Pool::_miPoolUpdatePerfMon = -1;
++    s32 Pool::_miPoolModuleStatePerfMon = -1;
++    s32 Pool::_miPoolModuleIdle = -1;
++    s32 Pool::_miPoolModuleAllocating = -1;
++    s32 Pool::_miPoolModuleDeallocating = -1;
++    s32 Pool::_miPoolModuleLiveupdate = -1;
++    s32 Pool::_miPoolModuleIntellifrag = -1;
++    s32 Pool::_miPoolModuleEmergencyFrag = -1;
++
+     namespace
+     {
+         // [FLAG PC diagnostic] one heap-FULL report per pool id (see the report site below).
+--- a/src/GameShared/GameClasses/Memory/CgsMemoryModuleIO.cpp
++++ b/src/GameShared/GameClasses/Memory/CgsMemoryModuleIO.cpp
+@@ -14,11 +14,11 @@
+ {
+     // Lifecycle (DWARF :746/:750 + :897/:901): construct the IOBuffer base (sets the constructed
+     // status bit so the lock asserts pass) and the embedded request/response event queue. Destruct
+-    // clears the queue. (The X360 inlines the base Construct + the queue Construct here.)
++    // destructs the IOBuffer base and queue. ARTIST8286BB18/BB68 attest this order.
+     void InputBuffer::Construct()  { CgsModule::IOBuffer::Construct(); mMemoryRequestQueue.Construct(); }
+-    void InputBuffer::Destruct()   { mMemoryRequestQueue.Clear(); }
++    void InputBuffer::Destruct()   { CgsModule::IOBuffer::Destruct(); mMemoryRequestQueue.Destruct(); }
+     void OutputBuffer::Construct() { CgsModule::IOBuffer::Construct(); mMemoryResponseQueue.Construct(); }
+-    void OutputBuffer::Destruct()  { mMemoryResponseQueue.Clear(); }
++    void OutputBuffer::Destruct()  { CgsModule::IOBuffer::Destruct(); mMemoryResponseQueue.Destruct(); }
+ 
+     // X360 0x82869248 (const): assert read-locked (status bit 4), then hand back the queue.
+     const InputBuffer::MemoryRequestQueue* InputBuffer::GetMemoryRequestQueue() const
+--- a/src/GameShared/GameClasses/System/Resource/CgsPoolModuleIO_OutputBuffer.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsPoolModuleIO_OutputBuffer.cpp
+@@ -27,7 +27,7 @@
+ {
+     // InputBuffer lifecycle + accessors (mirror of OutputBuffer; one embedded request queue at +4).
+     void InputBuffer::Construct() { CgsModule::IOBuffer::Construct(); mPoolInputQueue.Construct(); }
+-    void InputBuffer::Destruct()  { mPoolInputQueue.Clear(); }
++    void InputBuffer::Destruct()  { CgsModule::IOBuffer::Destruct(); mPoolInputQueue.Destruct(); }
+     const InputBuffer::PoolInputQueue* InputBuffer::GetPoolInputQueue() const
+     {
+         CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading\n");
+@@ -56,8 +56,9 @@
+     }
+     void OutputBuffer::Destruct()
+     {
+-        mPoolOutputQueue.Clear();
+-        mPoolResourceRequestQueue.Clear();
++        CgsModule::IOBuffer::Destruct();
++        mPoolResourceRequestQueue.Destruct();
++        mPoolOutputQueue.Destruct();
+     }
+ 
+     // X360 0x828E1AA8: read-lock; return this + 4.
+--- a/src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_InputBuffer.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_InputBuffer.cpp
+@@ -27,7 +27,12 @@
+         mUnloadBundleRequestQueue.Construct();
+     }
+ 
+-    void InputBuffer_Update::Destruct() { IOBuffer::Destruct(); }
++    void InputBuffer_Update::Destruct()
++    {
++        IOBuffer::Destruct();
++        mLoadBundleRequestQueue.Destruct();
++        mUnloadBundleRequestQueue.Destruct();
++    }
+ 
+     const InputBuffer_Update::LoadBundleRequestQueue* InputBuffer_Update::GetLoadBundleRequestQueue() const
+     {
+--- a/src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_InputBuffer_Record.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_InputBuffer_Record.cpp
+@@ -26,7 +26,7 @@
+         mPoolReceiveQueue.Construct();
+     }
+ 
+-    void InputBuffer_Record::Destruct() { IOBuffer::Destruct(); }
++    void InputBuffer_Record::Destruct() { IOBuffer::Destruct(); mPoolReceiveQueue.Destruct(); }
+ 
+     const InputBuffer_Record::PoolReceiveQueue* InputBuffer_Record::GetPoolReceiveQueue() const
+     {
+--- a/src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_OutputBuffer.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_OutputBuffer.cpp
+@@ -32,7 +32,14 @@
+         mStreamRequestQueue.Construct();
+     }
+ 
+-    void OutputBuffer::Destruct() { IOBuffer::Destruct(); }
++    void OutputBuffer::Destruct()
++    {
++        IOBuffer::Destruct();
++        mStreamRequestQueue.Destruct();
++        mLoadBundleResponseQueue.Destruct();
++        mUnloadBundleResponseQueue.Destruct();
++        mPoolSendQueue.Destruct();
++    }
+ 
+     const OutputBuffer::PoolSendQueue* OutputBuffer::GetPoolSendQueue() const
+     {
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceModuleIO.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceModuleIO.cpp
+@@ -73,7 +73,7 @@
+             CgsModule::IOBuffer::Construct();
+             mResourceQueue.Construct();
+         }
+-        void InputBuffer::Destruct() { mResourceQueue.Clear(); }
++        void InputBuffer::Destruct() { CgsModule::IOBuffer::Destruct(); mResourceQueue.Destruct(); }
+ 
+         // -------- InputBuffer::GetResourceQueue() const @ 0x828E1190 (THIS TU) --------
+         // Read-lock gate, then return the embedded request queue (X360 this+4).
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.h
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include "types.hpp"
++#include <eathread/eathread_atomic.h>
+ // Real instance layout: the 16 file handles, the 8 read-stream engines, the embedded log + lock.
+ #include "GameShared/GameClasses/System/FileSystem/CgsFile.h"
+ // Complete CgsFileSystem::File definition — maFiles[16] is embedded by value below.
+@@ -103,7 +104,14 @@
+         static StreamDeviceDiskRead::EReadStreamStatus
+             GetEffectiveStreamStatus(const StreamDeviceDiskRead* lpStream);
+ 
++    public:
++        bool HasDiskErrorOccured() const; // DecFIGS h246; ARTIST82907948 reads the same static word.
++
++    private:
+         // ---- DWARF CgsFileSystem.h:308/317 (private) ----
++        static EA::Thread::AtomicInt32 mDiskErrorOccured; // DecFIGS h262, ARTIST830EA574
++        static bool RWDiskErrorHandler(s32 liError); // ARTIST828E8B20 ignores its argument
++
+         // The actual file I/O primitives, called under mFileSystemFutex by FileHandle::Read/Write.
+         // DECLARE-ONLY here: bodies are their own TUs (ReadInternal @0x828E8B50-region /
+         // WriteInternal @0x828E8B50, homed in CgsFileSystem.cpp).
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.cpp
+@@ -7,6 +7,19 @@
+ // EnsureDeviceManagerUp(); the rw filesys layer + BaseFile stream machinery are follow-on.
+ namespace CgsFileSystem
+ {
++    EA::Thread::AtomicInt32 FileSystem::mDiskErrorOccured(0); // primary raw830EA574
++
++    bool FileSystem::HasDiskErrorOccured() const
++    {
++        return mDiskErrorOccured.GetValue() != 0;
++    }
++
++    bool FileSystem::RWDiskErrorHandler(s32 /*liError*/)
++    {
++        mDiskErrorOccured.SetValue(1);
++        return false;
++    }
++
+     // Marked PC sentinel allocator. The X360 passed the GameData allocator to
+     // InitializeDeviceManager (which only stores it; DeviceManager::operator new mallocs on PC),
+     // so any non-null value satisfies the "Allocator required" assert. Routing the manager through
+--- a/src/GameShared/GameClasses/Module/CgsModuleUtils.h
++++ b/src/GameShared/GameClasses/Module/CgsModuleUtils.h
+@@ -1,5 +1,7 @@
+ #ifndef CGS_MODULE_UTILS_H
+ #define CGS_MODULE_UTILS_H
++
++#include "GameShared/GameClasses/Core/CgsAssert.h"
+ 
+ // ============================================================================
+ // GameShared/GameClasses/Module/CgsModuleUtils.h  (original-source home: the
+@@ -18,6 +20,8 @@
+     template <typename TDest, typename TSource>
+     inline void LockBuffersForIO( TDest* lpDestBuffer, TSource* lpSourceBuffer )
+     {
++        CGS_ASSERT(lpDestBuffer, "lpInputBuffer");
++        CGS_ASSERT(lpSourceBuffer, "lpOutputBuffer0");
+         lpDestBuffer->LockForWrite();
+         lpSourceBuffer->LockForRead();
+     }
+@@ -25,6 +29,8 @@
+     template <typename TDest, typename TSource>
+     inline void UnlockBuffersForIO( TDest* lpDestBuffer, TSource* lpSourceBuffer )
+     {
++        CGS_ASSERT(lpDestBuffer, "lpInputBuffer");
++        CGS_ASSERT(lpSourceBuffer, "lpOutputBuffer0");
+         lpSourceBuffer->UnlockForRead();
+         lpDestBuffer->UnlockForWrite();
+     }
+--- a/src/GameShared/GameClasses/Memory/CgsMemoryModule.h
++++ b/src/GameShared/GameClasses/Memory/CgsMemoryModule.h
+@@ -9,7 +9,7 @@
+ 
+ // Pointer/parameter-only types -> forward declarations.
+ namespace rw { struct IResourceAllocator; struct Resource; }
+-namespace CgsModule { class IOBufferStack; }
++namespace CgsModule { struct IOBufferStack; }
+ 
+ // CgsMemory::MemoryModule -- the engine's memory-bank manager (one of the four sub-modules embedded by
+ // value in CgsResource::ResourceModule, which the GameDataModule embeds; see [[gamedatamodule-scoping]]).
