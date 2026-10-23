@@ -1,0 +1,69 @@
+{
+  "status": "hosted_build_all_selected_gates_and_payloads_pass_native_pending",
+  "source": "8b2940d40e76fd6a88a37615f6163a99c2d5e3b8",
+  "source_tree": "e9809ca6ef98e7a88d66c24de701f45f4caf3901",
+  "workflow": "15af0f3165aa0529dc35dec63212b12905644d75",
+  "run_id": 39944677851,
+  "exe_sha256": "95c120dc8b2f20123ec28d86873ba5e5bb5a4c2d3fdb7d922d51d927ea9e1cbd",
+  "payload_count": 12,
+  "passed_gates": [
+    "gui_io_status",
+    "system_user_profile_status",
+    "hud_status",
+    "traffic_flowtype_override_status",
+    "startup_io_status",
+    "gui_license_status",
+    "keyboard_ui_contract_status",
+    "gui_animation_status",
+    "rwac_command_capacity_status"
+  ],
+  "rwac_legacy_checks": 16427,
+  "rwac_first_pass_checks": 6,
+  "rwac_expected_baseline_failures": 6,
+  "rwac_variants": [
+    {
+      "name": "candidate",
+      "checks": 16427,
+      "failures": 0,
+      "exit_code": 0,
+      "run_log_sha256": "2241b6a6de78576ddbbefcb1b334105e80be5820c6cc53f110dc0c8cfb8f86ca"
+    },
+    {
+      "name": "baseline_control",
+      "checks": 25,
+      "failures": 6,
+      "exit_code": 1,
+      "run_log_sha256": "6d55b4952b78268b1249f3b3e0eeab7af5483cc124b3ae06379e09d29a9dfe13"
+    }
+  ],
+  "receipt_sha256": "75b7f5f1aa62ea1fe07a3a56c59129556d65c6ca3c9cb5c03e864c8c9145acc2",
+  "build_log_sha256": "f21fc8fdc68a9261195279f95fc72d7b2f74a27a5e2cb0d456dcdec51127f8d0",
+  "rwac_result_sha256": "d55c0b1544013e76b704dc9326b8ecb9401ee677b2869e10d947d054ccee38fb",
+  "normal_package_changed": false,
+  "native_executed": false,
+  "new_behavior_dispositions": 0,
+  "freeze_fix_claim": false,
+  "verified_input_paths": 65,
+  "run_attempt": 1,
+  "active_replay_frame_wiring": "pending",
+  "text_format_binding": [
+    {
+      "variant": "text-format",
+      "checks": 78,
+      "failures": 0,
+      "exit_code": 0,
+      "result_sha256": "c32373a74e24a8c48f5de07239b54ad3fd5161264706ed03c242a6c3bd090866",
+      "stdout_sha256": "03ef136f8c2ecb3b016b87d9b2053e6d314c03c134be0ddc8e7b7b7917cd998d",
+      "source_binding_sha256": "f647abfa6adc4fd3c78a3927b340f380da6cb5cf3085ecb39e7d468618841429"
+    },
+    {
+      "variant": "text-format-old-setter",
+      "checks": 78,
+      "failures": 57,
+      "exit_code": 1,
+      "result_sha256": "b786057c88bd39bbec8afee306bca7df9537c19118ec68f724ab1cdfd3f0ade3",
+      "stdout_sha256": "7fb27785e1e54f44c27d389141ee7500acaaf5111cd916147f22775a8b0e861e",
+      "source_binding_sha256": "d329eb72517709de9d35d277a8e8cf05a9a20213b98a6aebaae435ea159e0eee"
+    }
+  ]
+}
