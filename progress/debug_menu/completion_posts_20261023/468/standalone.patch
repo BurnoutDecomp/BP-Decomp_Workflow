@@ -1,0 +1,60 @@
+--- a/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp
++++ b/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp
+@@ -457,6 +457,15 @@
+ // an autosave.
+ void CompletedGame::UpdateEliteLicensePresentation()
+ {
++    typedef CgsGui::GuiEventWrapper<GuiEventAudioGenericSequence, 40>
++        GuiAudioGenericSequenceRecord40;
++    static_assert(sizeof(GuiEventAudioGenericSequence) == 4,
++                  "ARTIST 0x824C2DA8 copies one four-byte payload");
++    static_assert(offsetof(GuiAudioGenericSequenceRecord40, mOutEvent) == 12,
++                  "ARTIST 0x824C2DA8 payload offset is 12");
++    static_assert(sizeof(GuiAudioGenericSequenceRecord40) == 16,
++                  "ARTIST 0x824C2DA8 channel-40 record is 16 bytes");
++
+     switch (meEliteSubstate)
+     {
+     case E_ELITE_CAR_PRESENTATION_LOAD_RESOURCES:
+@@ -483,7 +492,11 @@
+             GuiEventAudioGenericSequence lAudioEvent;
+             *reinterpret_cast<u32*>(lAudioEvent.maData) =
+                 static_cast<u32>(CgsSound::Playback::Name::MakeHash("GoldAward"));
+-            mpStateInterface->OutputGuiEvent(lAudioEvent);
++            // ARTIST 0x824C2DA8 builds {4,468,12}+4 on channel 40 (16 bytes).
++            GuiAudioGenericSequenceRecord40 lAudioRecord(lAudioEvent);
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lAudioRecord), 40,
++                static_cast<s32>(sizeof(lAudioRecord)));
+ 
+             mpGuiCache->ClearExpectedAptComponentList(E_GUIFLOW_SCREEN);
+             mRewardCarsStateAnimator.AddOutputAptViewState(KAC_APT_TRANSITION,
+@@ -748,6 +761,15 @@
+ // ZERO payload byte this time, against part one's 1).
+ void CompletedGame::UpdateOneHundredPercentPartTwoPresentation()
+ {
++    typedef CgsGui::GuiEventWrapper<GuiEventAudioGenericSequence, 40>
++        GuiAudioGenericSequenceRecord40;
++    static_assert(sizeof(GuiEventAudioGenericSequence) == 4,
++                  "ARTIST 0x824C2DA8 copies one four-byte payload");
++    static_assert(offsetof(GuiAudioGenericSequenceRecord40, mOutEvent) == 12,
++                  "ARTIST 0x824C2DA8 payload offset is 12");
++    static_assert(sizeof(GuiAudioGenericSequenceRecord40) == 16,
++                  "ARTIST 0x824C2DA8 channel-40 record is 16 bytes");
++
+     switch (meSecondFinishedSubstate)
+     {
+     case E_FINISHED_SECOND_PRESENTATION_LOAD_RESOURCES:
+@@ -774,7 +796,11 @@
+             GuiEventAudioGenericSequence lAudioEvent;
+             *reinterpret_cast<u32*>(lAudioEvent.maData) =
+                 static_cast<u32>(CgsSound::Playback::Name::MakeHash("PlatinumAward"));
+-            mpStateInterface->OutputGuiEvent(lAudioEvent);
++            // ARTIST 0x824C2DA8 builds {4,468,12}+4 on channel 40 (16 bytes).
++            GuiAudioGenericSequenceRecord40 lAudioRecord(lAudioEvent);
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lAudioRecord), 40,
++                static_cast<s32>(sizeof(lAudioRecord)));
+ 
+             mpGuiCache->ClearExpectedAptComponentList(E_GUIFLOW_SCREEN);
+             mRewardCarsStateAnimator.AddOutputAptViewState(KAC_APT_TRANSITION,

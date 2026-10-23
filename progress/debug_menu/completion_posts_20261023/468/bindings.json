@@ -1,0 +1,63 @@
+{
+  "status": "source-only proposal; not applied to production",
+  "base_commit": "7e455d8854a32df1ca1934a54cc279c1e268a103",
+  "owned_source_files": [
+    "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp"
+  ],
+  "base_source_blobs": {
+    "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp": "5b43d5a425715031a6ddfd3dc35fffd492dd4ad6",
+    "src/GameSource/Gui/BrnGuiDemangledEventTypes.h": "67f298c757a6cb6463c80a0149134141afeb4725",
+    "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h": "118bbf75b320ca5f0c94d23173be613303d1d957",
+    "src/GameSource/Gui/BrnGuiModule.cpp": "d3c6e8f3f189f9f3611b8a9d90013594b16723be",
+    "src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp": "6629200b634b141c58d8c1fca0c5d17512cb14f2"
+  },
+  "artist_exports_sha256": {
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824C2DA8.json": "4233e1459c51f974fd5ec7534eb8507c46fef373115e0abaf278fefeeafee54b",
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824D2078.json": "b0eed833aa0842982f1fa20c31df0bbf8898af633e102ba4117ee12fa2c8a9ef",
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824D2978.json": "e1b4a3886db984cb80a675147de6bda23b0f89d69630ab95cdec413325a1ca39"
+  },
+  "decfigs_source_sha256": {
+    "references/DecFIGS/dwarfdump/GameSource/Gui/BrnGuiEventTypeDefs.h": "1b202fa27b6b50c9888df9782b7d649697aa8722df9009a162df8ac54607faba",
+    "references/DecFIGS/dwarfdump/GameShared/GameClasses/Gui/CgsGuiEvent.h": "4a947e5dbcc8e51f3e97aacb19be0e906c093aa7965367f95dac5f96750b4919",
+    "references/DecFIGS/dwarfdump/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h": "b74443cd60df5a77453ef8c8b2b8add08e9d8c4c6534ad90b15f9c2fea262984"
+  },
+  "proposal": {
+    "current_misrouted_calls": 2,
+    "event_id_artist": 468,
+    "event_id_decfigs": 463,
+    "decfigs_id_disposition": "differs from ARTIST; use ARTIST event id 468",
+    "record": {
+      "payload_bytes": 4,
+      "payload_offset": 12,
+      "header": [
+        4,
+        468,
+        12
+      ],
+      "channel": 40,
+      "record_bytes": 16
+    },
+    "payload": "four-byte sound-name hash already constructed at both callers",
+    "receiver": "SoundLogicModule::ProcessGuiEvents case468 exists; raw channel468 currently falls through DrainFlowOutputQueue default",
+    "change": "two function-local GuiEventWrapper posts around existing payloads; no generic template, decoder, or consumer change",
+    "composition_note": "same TU as independent event469 packet; function-local assertions and distinct callsite/function-local hunks preserve exact 7e preimage for root composition",
+    "not_changed": [
+      "event23 packet paths",
+      "scoreboard packet paths",
+      "508/509",
+      "GuiModule/BaseOverlayState",
+      "RootRenderer/Provider"
+    ]
+  },
+  "site_map": "site_map.tsv",
+  "preimage_sha256": "c5c4c6e125a78ba8c7ee4ba00ddf3039f35cc0eda276ea6d937cffec2100fed1",
+  "postimage_sha256": "c02dee431923ea25b66d87a609efd38ab4ad18d299d2b823153258c40753364c",
+  "proposal_artifact_sha256": {
+    "README.md": "fd6c4e704b32e9d3d589a8f4e56a4776a37b2077822c03044c86e53f4a705edb",
+    "patch.diff": "64a7318b278e82657d96042ce2556256d03d7c6c671efdfaa15300e423c4e93e",
+    "site_map.tsv": "36b0ba91e6c9a1707785cf8e078a70918480f5f7bb391de12d5ac9ba5ecfdd76",
+    "evidence/artist_full_function_bindings.json": "554ff07aa342febb6063aaa3afc8362e790b146ae642fac9ba71f4271b7d9e9f",
+    "evidence/DecFIGS/type_wrapper_and_instantiation_excerpt.txt": "ecacb632cae8abd6341d81d3e275f81471933175f44403488d048dfdaa62a1b1",
+    "evidence/current_source/event468_path.txt": "56a1654e99f51b9262b3d9c170c3240d587240a87fb7a2224af2d1cd864a0f04"
+  }
+}
