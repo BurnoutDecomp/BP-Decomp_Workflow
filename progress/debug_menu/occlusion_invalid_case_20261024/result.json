@@ -1,0 +1,58 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "occlusion_native_edca_off_on_off",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\occlusion_native_edca_execution_20261024\\Case.proposed.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-24T01:01:43.9444618+02:00",
+    "flow_exit":  1,
+    "bug":  "The original world-opaque query and conditional-draw chain must consume the live debug controls and preserve the ordinary world image when restored.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\occlusion_native_edca_execution_20261024\\run",
+    "label":  "Original world-opaque occlusion off/on/off; source=edca934dc502f71f64ad873cdd386afe5e3eeeb2",
+    "area":  "graphics-occlusion",
+    "as_expected":  false,
+    "verdict":  "FAIL",
+    "slot":  62060,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=1 success=False assert_stop=False foreign_game=True cleanup=True",
+                       "pass":  false,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 assert family(ies), all known (0 lines)",
+                       "pass":  true,
+                       "name":  "no new assert families",
+                       "kind":  "NewAsserts"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  false,
+                       "name":  "no game exceptions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "ordinary free-roam phase reached",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "debug-key helper did not complete the bounded sequence | baseline.txt does not read back FALSE for Renderer/OcclusionCull/Occlusion enabled | baseline.txt does not read back FALSE for Renderer/OcclusionCull/Cull world opaque | enabled.txt does not read back TRUE for Renderer/OcclusionCull/Occlusion enabled | enabled.txt does not read back TRUE for Renderer/OcclusionCull/Cull world opaque | enabled-ready.txt does not read back TRUE for Renderer/OcclusionCull/Occlusion enabled | enabled-ready.txt does not read back TRUE for Renderer/OcclusionCull/Cull world opaque | restored.txt does not read back FALSE for Renderer/OcclusionCull/Occlusion enabled | restored.txt does not read back FALSE for Renderer/OcclusionCull/Cull world opaque | no live [occ-state] enabled=1 ready=1 world_opaque=1 witness | no off/on/off state transition was recorded by the renderer | no complete pre-cap list-11 frame with total\u003e64, contiguous 64-index query/draw cursors, and final -1 | no same-batch, same-id/serial ended + S_OK result + decision provider triple for a selected list-11 frame | missing helper phase boundary note baseline-end | missing helper phase boundary note enabled-start | missing helper phase boundary note enabled-end | missing helper phase boundary note restored-start | missing helper phase boundary note restored-end | missing retained phase image(s): baseline.bmp, enabled.bmp, restored.bmp | flags: initial/baseline=off, enabled+ready=on, restored=off; frames=11/96 | no complete selected list11 frame | no provider result/decision triple | retained images= | manual pixel inspection remains required; D3D9 query polarity is not Xenos parity",
+                       "pass":  false,
+                       "name":  "complete off-on-off query and retained-frame evidence",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11355136,
+                       "exe_mtime_before_lock":  "2026-10-24T00:46:36.5380296+02:00",
+                       "exe_sha":  "0c55f39a7a5c",
+                       "b5_head":  "b3300e0e8",
+                       "exe_b5":  "edca934d",
+                       "parent_head":  "cc54c12e",
+                       "exe_mtime":  "2026-10-24T00:46:36.5380296+02:00"
+                   }
+}
