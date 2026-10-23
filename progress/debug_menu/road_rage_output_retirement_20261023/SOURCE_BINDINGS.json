@@ -1,0 +1,49 @@
+{
+  "packet": "Road Rage persistent takedown-output retirement proposal",
+  "status": "proposal only; source-only; no production/index/refs mutation",
+  "installed_runtime_revision": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+  "proposal_base_revision": "3966e936bbc7a4c16afe7ec48527ccf7dab90758",
+  "proposal_source": {
+    "path": "src/GameSource/Game/BrnGameModule.cpp",
+    "base_git_blob": "ec2a7640ab3102a5f582841148cc7f3f29215c83",
+    "base_sha256": "cdde690ad876bab5cb5f6231be631869d685166aedb876cbdca7b996a17c1d62",
+    "postimage_sha256": "b1892a1ba9a84909e5515ea2b9ea340d6acffd2ae8788df06da0a9f0b36a1ec7",
+    "insertion_line_postimage": 5103,
+    "retire_block_starts_postimage_line": 5047,
+    "difference": "one late write-locked queue Clear plus two explanatory comment lines"
+  },
+  "active_route_history": {
+    "commit": "4bbefd59b53dc8dc3b86cb46a6e97801d311ece9",
+    "subject": "Checkpoint original GameState runtime routing",
+    "date": "2026-10-19T21:22:12+02:00",
+    "diff_artifact": "history_4bbefd_BrnGameModule.diff",
+    "diff_sha256": "ca807c19fbf027ce3e414b4e788de062fa42aa4f47e85aa9463a606ffbff12f6"
+  },
+  "original_artist_exports": [
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F0AF8.json",
+      "sha256": "c4c717dc6e58699c81537f0b8056eba2a027be12cf4b0dd6994f673d882d4b8a"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82382940.json",
+      "sha256": "6d22d49d2e3080549e4cd9be003c39b0b872d7625805d85ce849466dbe5734c1"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823A5328.json",
+      "sha256": "65fb3700c2cdae89319416c1a2b7c62684499eb92b4c24b06aea6efd346e4b35"
+    }
+  ],
+  "independent_lifetime_evidence": {
+    "path": "scratch/DEBUG_MENU_1011/offline_road_rage_active_output_lifetime_triage_20261023_sol01/REPORT.md",
+    "sha256": "1394845373ad3fb2e75b01d3d2ebded08a6c5243e26fad257a2194ade036f71e",
+    "integrity_path": "scratch/DEBUG_MENU_1011/offline_road_rage_active_output_lifetime_triage_20261023_sol01/INTEGRITY.sha256",
+    "integrity_sha256": "049208927c0ec7adffb3b9ddc8212145738220b4635917bc40a72ad35dfcfd10",
+    "parent_reported_integrity_sha256": "049208927c0ec7adffb3b9ddc8212145738220b4635917bc40a72ad35dfcfd10"
+  },
+  "postimage_diff_sha256": "f53400a4eae401b4bed042c9eee2a5672ecbcbadb2bb9700b10417887fedcae7",
+  "decfigs_shape": {
+    "path": "references/DecFIGS/dwarfdump/GameSource/GameState/BrnGameStateModuleIO.h",
+    "sha256": "19c7987224653de63c5f5e82f48c2649be7c085645564c37fc9e8c67d99276dc",
+    "evidence": "OutputBuffer::mTakedownEventOutputQueue is a typed TakedownEventQueue member"
+  }
+}
