@@ -1,0 +1,126 @@
+{
+  "purpose": "Source-only proposal replacing X360 GuiModule offsets with the named native PC owner chain.",
+  "b5_base_commit": "b9e6a93e43948aae1e2e187ce5957d84db2d2e37",
+  "b5_base_tree": "a8bc5a8ce4ad9d9505fb8a06f079caff82a926ca",
+  "physical_b5_head_at_capture": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+  "physical_b5_tree_at_capture": "152be7fd5db9c3c367c7b739e01075744dba8fb5",
+  "physical_b5_worktree_clean_at_capture": true,
+  "physical_b5_worktree_status_at_capture": [],
+  "parent_repo_dirty_path_count_at_capture": 9,
+  "changed_paths": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiSatNavDebugComponent.cpp",
+      "base_git_blob": "7e803da4a5ec03ca714fdc7f5dea74fd149e87f4",
+      "base_sha256": "b40b11913e4c8b214aab61ea9648a21721a665a2d7d8b3a50c3231ac89d8ab8a",
+      "post_git_blob_computed_no_write": "e735a30a14f0bda23cc46ea8ad28e6560f64e01e",
+      "post_sha256": "0742d9e8b4bf388ec32d9b5ad902c742557b22a8ca0b2419d149a3e76b1aa96d"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiSatNavDebugComponent.h",
+      "base_git_blob": "a7a8e0f1f7e29a66b3ea579b250582d41324eda4",
+      "base_sha256": "4c4ddcc488a023673ce4356a85be70746d6534c28d85267a80c9f5746931deef",
+      "post_git_blob_computed_no_write": "fdcaeb02bcd4e7757a83a902b2ada13162f01d35",
+      "post_sha256": "83080e269c92741c18488b5d2637544935bfcfd3f258d07d83825d8c69dab549"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnCustomRendererManager.h",
+      "base_git_blob": "298dbfecb9e54326b1e2aa631129cea7b201f558",
+      "base_sha256": "484550ea6855a293d7e98fa6553edea503d4dad5cf6ccb8dbc4cec6e20b8ef3a",
+      "post_git_blob_computed_no_write": "3cd0351e8eb7f0347c2a3d778dbedc3e983038e7",
+      "post_sha256": "221b0e4a17039fdb9ea5ff5f8659e19de8dc186e7bbd9533e001ad29e2b8b930"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.h",
+      "git_blob": "0badd4228cea0dbf5ef3c9213c2a1c74d679f451",
+      "sha256": "8c642127bbbf87731d87d1b0f70b63cbd083ecffd8c35016b228f3d31742a255",
+      "packet_path": "dependencies/src/GameSource/Gui/BrnGuiModule.h"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnCustomRendererManager.h",
+      "git_blob": "298dbfecb9e54326b1e2aa631129cea7b201f558",
+      "sha256": "484550ea6855a293d7e98fa6553edea503d4dad5cf6ccb8dbc4cec6e20b8ef3a",
+      "packet_path": "dependencies/src/GameSource/Gui/BrnCustomRendererManager.h"
+    },
+    {
+      "path": "src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.h",
+      "git_blob": "8b17ed17a94d1d8e7ee81a01d7b2ed4085ec1cac",
+      "sha256": "dc141c53a289353b8644490b24223c9b6bff1b7ad5182d2693438e6c426c0d2c",
+      "packet_path": "dependencies/src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.h"
+    },
+    {
+      "path": "src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.cpp",
+      "git_blob": "3b4f645c379231e32a0695a4f29af142e8276007",
+      "sha256": "3e294234ec33d2ffba6ac91eb8d726da2c1f2f26e2c17ec42c4bd0fba34a4d21",
+      "packet_path": "dependencies/src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.cpp"
+    },
+    {
+      "path": "src/SharedClasses/Gui/SatNav/BrnMapUtils.h",
+      "git_blob": "bb8f55d60f79e59ae1b1db5c000ab7fe6352d6f4",
+      "sha256": "489d0fc50358a90ad49a41d1f3754b25ff5300586f34103256caad890b9ee4ab",
+      "packet_path": "dependencies/src/SharedClasses/Gui/SatNav/BrnMapUtils.h"
+    },
+    {
+      "path": "src/SharedClasses/Gui/SatNav/BrnMapUtils.cpp",
+      "git_blob": "5029baa51af026575a53452e0515be3f12c0670d",
+      "sha256": "3ac39789834d6987196dca4295436c0112896022ab7f085179e6a0ca9368d3cf",
+      "packet_path": "dependencies/src/SharedClasses/Gui/SatNav/BrnMapUtils.cpp"
+    }
+  ],
+  "original_evidence": [
+    {
+      "source_path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8250DA58.json",
+      "sha256": "da7042fb3d38364455eb064e67cdb7e9bd117b549c854e82e49d7e54a024f5b7",
+      "packet_path": "evidence/artist/0x8250DA58.json",
+      "role": "ARTIST pseudocode and assembly for TriggerSatNavPositionUpdate"
+    },
+    {
+      "source_path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8245F4D8.json",
+      "sha256": "194b9c995ea6304466adb5665d46a69976f0f5b08b6b2a78b82a2c4b2cbf11cf",
+      "packet_path": "evidence/artist/0x8245F4D8.json",
+      "role": "ARTIST pseudocode and assembly for SatNavRenderer::UpdateRendererTransform"
+    },
+    {
+      "source_path": "references/DecFIGS/dwarfdump/GameSource/Gui/BrnGuiSatNavDebugComponent.h",
+      "sha256": "dfd71424518393c39a8425d300c91a214ae5f56299ce2797553bc9d147da1d90",
+      "packet_path": "evidence/decfigs/GameSource/Gui/BrnGuiSatNavDebugComponent.h",
+      "role": "DecFIGS member and method declaration shape for SatNavDebugComponent"
+    },
+    {
+      "source_path": "references/DecFIGS/dwarfdump/GameSource/Gui/BrnGuiModule.h",
+      "sha256": "cf3cf65a44ac135fa961481d5f1a3edefb61b619af0e46916e712ccf09272809",
+      "packet_path": "evidence/decfigs/GameSource/Gui/BrnGuiModule.h",
+      "role": "DecFIGS by-value GuiModule manager member shape"
+    },
+    {
+      "source_path": "references/DecFIGS/dwarfdump/GameSource/Gui/CustomRenderer/BrnCustomRenderer.h",
+      "sha256": "4256324936311a39d1312e399ab98ec3285871d9fd8b8ec03c838f0e30d591c0",
+      "packet_path": "evidence/decfigs/GameSource/Gui/CustomRenderer/BrnCustomRenderer.h",
+      "role": "DecFIGS private by-value SatNav renderer member shape"
+    },
+    {
+      "source_path": "references/DecFIGS/dwarfdump/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.h",
+      "sha256": "ccfe99ddafb830d150901f93a88ddf556c0f4edced8d983946e482470341c2ab",
+      "packet_path": "evidence/decfigs/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.h",
+      "role": "DecFIGS SatNavRenderer member and method declaration shape"
+    }
+  ],
+  "base_offset_constant_search_hits": [
+    "b9e6a93e43948aae1e2e187ce5957d84db2d2e37:src/GameSource/Gui/BrnGuiSatNavDebugComponent.cpp:278:            reinterpret_cast<SatNavRenderer*>(lpGuiModuleBytes + KU_OFF_SATNAV_RENDERER);",
+    "b9e6a93e43948aae1e2e187ce5957d84db2d2e37:src/GameSource/Gui/BrnGuiSatNavDebugComponent.cpp:284:        *reinterpret_cast<u32*>(lpGuiModuleBytes + KU_OFF_SATNAV_ICON_COLOUR) = luColour;",
+    "b9e6a93e43948aae1e2e187ce5957d84db2d2e37:src/GameSource/Gui/BrnGuiSatNavDebugComponent.h:105:    static const u32 KU_OFF_SATNAV_RENDERER    = 0x4D2E0;",
+    "b9e6a93e43948aae1e2e187ce5957d84db2d2e37:src/GameSource/Gui/BrnGuiSatNavDebugComponent.h:106:    static const u32 KU_OFF_SATNAV_ICON_COLOUR = 0x4D2E8;"
+  ],
+  "scope": {
+    "behavior_or_compilation_credit": false,
+    "render_hud_changed": false,
+    "guest_offset_constants_removed_after_tracked_source_search": true,
+    "tests_or_compilation_run": false,
+    "fixtures_run": false,
+    "native_or_game_run": false,
+    "ida_or_ci_run": false,
+    "production_or_index_mutation": false,
+    "commit_created": false
+  }
+}
