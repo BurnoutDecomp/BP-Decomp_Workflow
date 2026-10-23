@@ -1,0 +1,7 @@
+Review `source/renderer_prepare_owner.patch` and its exact full pre/post files against `SOURCE_MANIFEST.json`, the frozen ARTIST/DecFIGS evidence, and `POSTMORTEM.md`.
+
+Check all eight outer Prepare states, five-stack register order, actual embedded renderer and GameData pair ownership, virtual versus zero-argument template/base dispatch, both allocator lock brackets, failure/default disk tail, ThreadLayout interface adjustment/monitor order/60 Hz/50 percent, loading write-buffer command, callback context, and completion resets. Review the bounded filesystem-status/Construct consumer corrections, Massive ABI and AutoTest initialization/table order. Check the exporter limitation: direct-call xrefs alone do not enumerate virtual/function-pointer callers.
+
+Treat original four-argument GameData Prepare and seven AutoTest shipping callback targets as explicit unresolved original link dependencies. There are no new quiet bodies for them. Do not treat this as an activation or merge-ready linkable patch; native bank ownership/capacity and sky-dome reuse require the separate integration in `INTEGRATION_PLAN.md`. Do not grant compile/link/runtime, inventory, verified-site, or gameplay credit.
+
+Return an explicit `VERDICT: pass` or `VERDICT: fail` for the bounded owner/source recovery, with findings and the continuing integration boundary. Root owns composition and the one existing fresh reviewer; no agents are to be spawned by this packet.
