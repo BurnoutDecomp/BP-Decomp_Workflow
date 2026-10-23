@@ -1,0 +1,34 @@
+param([string]$Source,[string]$OutputDir)
+$ErrorActionPreference='Stop'
+Write-Output ('HOST_VERSION '+$PSVersionTable.PSVersion.ToString()+' '+$PSVersionTable.PSEdition)
+$tokens=$null;$parseErrors=$null
+$ast=[Management.Automation.Language.Parser]::ParseFile($Source,[ref]$tokens,[ref]$parseErrors)
+if($parseErrors.Count){throw 'Postimage parse failed'}
+$nodes=@($ast.FindAll({param($node) $node -is [Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq 'Write-FallbackReceipt'},$true))
+if($nodes.Count -ne 1){throw 'Expected one exact fallback function'}
+Invoke-Expression $nodes[0].Extent.Text
+$cases=@(
+    @{name='long_preflight';run=('x'*1000);reporter='REPORTER_FAILURE_LONG_PREFLIGHT';attempted=$false},
+    @{name='oversized_preflight';run=('y'*1500);reporter=('REPORTER_LONG_'+('z'*1200));attempted=$false},
+    @{name='launched_failure';run=('q'*1000);reporter='REPORTER_FAILURE_AFTER_LAUNCH';attempted=$true},
+    @{name='empty_preflight';run='';reporter='REPORTER_FAILURE_WITH_EMPTY_RUN_ERROR';attempted=$false})
+foreach($case in $cases){
+    $runError=$case.run;$attempted=$case.attempted;$caseExit=$null;$result=$null
+    $receiptPath=Join-Path $OutputDir ($case.name+'.json')
+    $emitted=@(Write-FallbackReceipt 'synthetic_reporter_failure' $case.reporter)
+    if($emitted.Count -ne 1){throw 'Expected one fallback output'}
+    Write-Output $emitted[0]
+    $prefix='[gui-wrapper-fallback] '
+    if(-not $emitted[0].StartsWith($prefix)){throw 'Missing structured prefix'}
+    $stdoutValue=$emitted[0].Substring($prefix.Length)|ConvertFrom-Json
+    $fileValue=Get-Content -LiteralPath $receiptPath -Raw|ConvertFrom-Json
+    $expected=$case.reporter.Substring(0,[Math]::Min(1000,$case.reporter.Length))
+    foreach($value in @($stdoutValue,$fileValue)){
+        if($value.reporter_error -cne $expected){throw 'Reporter field was lost or modified'}
+        if($value.behavior_credit -ne $false -or $value.classification -cne 'INCOMPLETE_EVIDENCE_RETAINED'){throw 'Incorrect credit/classification'}
+        if($value.run_error.Length -gt 1000){throw 'Unbounded run error'}
+        if($case.attempted){if($null -ne $value.preflight_error){throw 'Invented preflight error after launch'}}
+        elseif($value.preflight_error.Length -gt 1000){throw 'Unbounded preflight error'}
+    }
+    Write-Output ($case.name+' PASS reporter_error_chars='+$fileValue.reporter_error.Length)
+}
