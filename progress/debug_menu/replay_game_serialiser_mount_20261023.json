@@ -1,0 +1,46 @@
+{
+  "status": "hosted_compile_link_and_selected_groups_pass_active_frame_wiring_pending",
+  "source": "c1b0e7ef6a181c3cc92f45ac9481a9cbaaeb01db",
+  "source_unchanged": true,
+  "workflow_base": "363b3bb901c18c257ea3884038db9db1e1a87bbd",
+  "failed_hosted_run": 39863935919,
+  "compile_tus": 3002,
+  "compile_failures": 0,
+  "link_failure": "Unresolved GameModuleSerialiser::Construct",
+  "change": "Mount the existing original GameModule serialiser translation unit",
+  "build_list": {
+    "path": "tools/build/build_game_exe.bat",
+    "before_sha256": "cfbb008eea5ab8f5635ebe5b452150bca606556e3d6db06f5e93e53e38c384cb",
+    "after_sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792"
+  },
+  "mounted_tu": {
+    "path": "src/GameSource/Replays/Serialisers/BrnReplayGameModuleSerialiser.cpp",
+    "sha256": "d65d4e8142e7b776ab1744ad84777888e1a8394e8018f23658b2aa40b89374a2"
+  },
+  "original_evidence": {
+    "address": "0x8264C6A0",
+    "sha256": "7e3d3103c9c626da55e9de4bfeb7be72220c7ab8a577e0b362a224299c78b34c"
+  },
+  "review": "Root bounded mechanical mount review: exact one-line build-list addition; existing body agrees with original eight-instruction tail call and prior bridge review",
+  "native_replay": "not run",
+  "normal_build_changed": false,
+  "new_debug_behavior_dispositions": 0,
+  "hosted_run": 39864612826,
+  "verified_input_paths": 65,
+  "verified_payloads": 12,
+  "compile_failed": 0,
+  "selected_regression_groups": [
+    "gui_io_status",
+    "system_user_profile_status",
+    "hud_status",
+    "traffic_flowtype_override_status",
+    "startup_io_status",
+    "gui_license_status",
+    "keyboard_ui_contract_status",
+    "gui_animation_status",
+    "rwac_command_capacity_status"
+  ],
+  "verified_result_sha256": "db3532668ed61ace8a3234be9c0a3722da70a46c7f141d9b2f55c0a4e852823e",
+  "executable_sha256": "b86e406c283ada6e4bc561968d68e023ca9426429184f073819e4fb275fd0547",
+  "active_replay_frame_wiring": "pending; original GUI model pre-world output and downstream Replay consumers still need recovery/integration"
+}

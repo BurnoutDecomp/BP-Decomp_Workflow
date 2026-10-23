@@ -1,0 +1,5 @@
+Root bounded source check: pass for the two FileSystem method bodies and the single existing-file build mount.
+
+Root read the original ARTIST WriteInternal assembly and the paired ReadInternal/caller/declaration evidence. Both preserve the unsigned file-id range assertion, original expression/path/lines481/500, continuation after assert, named maFiles access, buffer/u64-position/u64-size ordering and unconditional true return after discarding File's bool. There is no new stub, offset accommodation or early return. The24 packet seal entries and exact pre/post source bytes verify. This small assertion/forwarding increment is reviewed directly by Root while both Luna workers own unrelated in-flight source; it does not substitute for the still-failed wider Replay frame review.
+
+The existing File::Read/Write definitions live in CgsFileRW.cpp, absent from the canonical response list. Add that one existing source path; no FileRW body is changed or newly certified here. Compilation/link closure and runtime remain pending, as do the separate PostSim construction and lock-assertion repairs. No native/C++ fixture was run locally. Normal user package remains91a.

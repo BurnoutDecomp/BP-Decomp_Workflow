@@ -1,0 +1,94 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "online_freeburn_oneplayer_host_leave",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_leave_fixed_aa6_execution_20261023\\Case.proposed.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-23T21:03:25.5198305+02:00",
+    "flow_exit":  0,
+    "bug":  "Locate the first missing original leave-completion boundary; existing endpoint checks are separate from manual Leaving/return pixels and uninstrumented intermediate callbacks.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\freeburn_leave_fixed_aa6_execution_20261023\\run",
+    "label":  "Original GUI one-player host leave; source=aa6b7ec4f9af54230bc2e04622b1d9c75c26700b",
+    "area":  "gui-network-leave",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62056,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no engine assertion",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no native exception",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[overlay\\] start OnHostLvQn\\b/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "one original host leave question",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[overlay\\] complete OnHostLvQn 1\\b/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "original host confirmation accepted",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[netui\\] leave post 52 method=1\\b/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "one original GUI52 leave request",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[netui\\] game-room left game \\(GUI 273\\) reason=0 -\u003e GO_BACK/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "existing GUI273 endpoint observed",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[overlay\\] complete CNONLLVGGAME 1\\b/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "original Leaving overlay completed",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "2 line(s) match /\\[screen\\] ENTER \u0027INVISIBLE   \u0027 \\(from \u0027IGO_WAIT    \u0027\\)/, want [2, +inf]",
+                       "pass":  true,
+                       "name":  "wait overlay returned to invisible",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[screen\\] ENTER \u0027ON_GAME_OPT \u0027/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "Create Event never entered",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "status=gui273_seen_visual_review_pending; intermediate POST_DEL/NetOut24 unavailable in current game log; visual review required",
+                       "pass":  true,
+                       "name":  "existing endpoint order, clean owned close and normal24",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11334656,
+                       "exe_mtime_before_lock":  "2026-10-23T20:58:00.6520903+02:00",
+                       "exe_sha":  "dd5148ef6dba",
+                       "b5_head":  "91a0ed564",
+                       "exe_b5":  "aa6b7ec4",
+                       "parent_head":  "8d67d4c0",
+                       "exe_mtime":  "2026-10-23T20:58:00.6520903+02:00"
+                   }
+}

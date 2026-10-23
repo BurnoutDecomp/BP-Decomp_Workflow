@@ -1,0 +1,441 @@
+param([string]$RepoRoot = 'D:\Reverse\BP-Decomp_Workflow', [string]$RunDir = '')
+$ErrorActionPreference='Stop'
+try {
+    $wrapperProcess=Get-Process -Id $PID -ErrorAction Stop
+    if($wrapperProcess.PriorityClass -ne 'BelowNormal'){$wrapperProcess.PriorityClass='BelowNormal'}
+    if($wrapperProcess.PriorityClass -ne 'BelowNormal'){throw 'priority class did not apply'}
+} catch { throw 'Could not place the GUI wrapper below normal priority before preflight.' }
+$packetRoot=$PSScriptRoot
+$pins=Get-Content -LiteralPath (Join-Path $packetRoot 'WRAPPER_PINS.json') -Raw|ConvertFrom-Json
+$RepoRoot=(Resolve-Path -LiteralPath $RepoRoot).Path
+$b5Root=Join-Path $RepoRoot 'b5-decomp'
+$hostedBuild=Join-Path $RepoRoot $pins.hosted_artifact.artifact_root
+$stageDir=Join-Path $packetRoot 'stage'
+$stageReceiptPath=Join-Path $stageDir 'STAGING.json'
+$slotDir=Join-Path $stageDir 'slot'
+$dataDir=Join-Path $stageDir 'data'
+$slotConfig=Join-Path $slotDir 'config.ini'
+$configSeed=Join-Path $stageDir 'config.seed.ini'
+$profileSeed=Join-Path $stageDir 'profile_seed/Profile.sav'
+$privateProfile=Join-Path $dataDir 'Memcard_62049/Profile.sav'
+$casePath=Join-Path $packetRoot 'Case.ps1'
+$runCasePath=Join-Path $RepoRoot 'tools/tests/run_case.ps1'
+$reporterPath=Join-Path $packetRoot 'report_run.py'
+$expectedSource=[string]$pins.candidate.b5_head
+$localSource=$null; $localStatus=$null
+$expectedExeSha=[string]$pins.hosted_artifact.exe_sha256
+$started=Get-Date
+if([string]::IsNullOrWhiteSpace($RunDir)){throw 'Run.ps1 must be launched by launch_watchdog.py with an owned RunDir.'}
+$runsRoot=[IO.Path]::GetFullPath((Join-Path $packetRoot 'runs')).TrimEnd('\')
+$runDir=[IO.Path]::GetFullPath($RunDir)
+$runsPrefix=$runsRoot+[IO.Path]::DirectorySeparatorChar
+if(-not $runDir.StartsWith($runsPrefix,[StringComparison]::OrdinalIgnoreCase) -or $runDir -ieq $runsRoot){throw 'Watchdog RunDir must be a child of this packet runs directory.'}
+if(Test-Path -LiteralPath $runDir -PathType Leaf){throw 'Watchdog RunDir is occupied by a file.'}
+if(-not (Test-Path -LiteralPath $runDir -PathType Container)){New-Item -ItemType Directory -Path $runDir|Out-Null}
+$receiptPath=Join-Path $runDir 'probe_receipt.json'
+$stageReceipt=$null; $result=$null; $terminal=$null; $flowStatus=$null; $caseExit=$null; $runError=$null
+$attempted=$false; $actualParent=$null; $remaining=@(); $payloadsAfter=@(); $rawLogs=@(); $scriptCleanup=@(); $ownedScriptsClean=$false
+$coveragePass=$false; $boundedComplete=$false; $evidenceComplete=$false; $archiveExit=$null
+$maxWrapperMemoryBytes=536870912; $maxOuterSeconds=240; $postRunReportSeconds=45
+$pythonExe=$null
+$configRestored=$false; $profileRestored=$false; $seedsUnchanged=$false; $normalProtectedUnchanged=$false
+$cleanupVerified=$false; $processCheckSucceeded=$false
+$privateBefore=$null; $privateAfter=$null; $normalBefore=$null; $normalAfter=$null
+function Assert-WrapperBudget([string]$Where) {
+    $proc=Get-Process -Id $PID -ErrorAction Stop
+    if([long]$proc.WorkingSet64 -gt $maxWrapperMemoryBytes){throw "Wrapper working-set cap exceeded at $Where."}
+    if(((Get-Date)-$started).TotalSeconds -gt $maxOuterSeconds){throw "Wrapper 240-second accounting limit exceeded at $Where."}
+}
+function Get-Sha256([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { throw "Pinned file is missing: $Path" }
+    Assert-WrapperBudget 'before file hash'
+    $hash=(Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+    Assert-WrapperBudget 'after file hash'
+    return $hash
+}
+function Get-ActiveGames {
+    return @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe'" -ErrorAction Stop)
+}
+function Assert-RecordedFingerprints([object]$Protected) {
+    foreach ($entry in $Protected.PSObject.Properties) {
+        $path = [string]$entry.Name
+        $expected = $entry.Value
+        $exists = Test-Path -LiteralPath $path -PathType Leaf
+        if ([bool]$expected.exists -ne $exists) { throw "Protected path existence changed: $path" }
+        if ($exists) {
+            $item = Get-Item -LiteralPath $path
+            $hash = Get-Sha256 $path
+            $expectedTicks = [long]([decimal]::Parse([string]$expected.mtime_ns) / 100) + 621355968000000000
+            if ($item.Length -ne [long]$expected.bytes -or $hash -cne [string]$expected.sha256 -or
+                $item.LastWriteTimeUtc.Ticks -ne $expectedTicks) {
+                throw "Protected path changed after private staging: $path"
+            }
+        }
+    }
+}
+function Assert-NormalSlotPathsAbsent {
+    $paths = @(
+        (Join-Path $RepoRoot 'build/game/Memcard_62049'),
+        (Join-Path $RepoRoot 'build/game_slots/62049')
+    )
+    foreach ($path in $paths) {
+        if (Test-Path -LiteralPath $path -PathType Container) {
+            throw "Normal slot-62049 path exists; this run must use only the private stage: $path"
+        }
+    }
+}
+
+
+function Get-Fingerprint([string]$Path) {
+    $exists=Test-Path -LiteralPath $Path -PathType Leaf
+    if(-not $exists){return [ordered]@{path=$Path;exists=$false}}
+    $file=Get-Item -LiteralPath $Path
+    return [ordered]@{path=$Path;exists=$true;bytes=$file.Length;sha256=(Get-Sha256 $Path);
+        mtime_utc=$file.LastWriteTimeUtc.ToString('o');mtime_utc_ticks=$file.LastWriteTimeUtc.Ticks.ToString();
+        mtime_ns=(([decimal]$file.LastWriteTimeUtc.Ticks-621355968000000000)*100).ToString('0',[Globalization.CultureInfo]::InvariantCulture)}
+}
+function Same-Fingerprint($Expected,$Actual) {
+    if($null -eq $Expected -or $null -eq $Actual -or [bool]$Expected.exists -ne [bool]$Actual.exists){return $false}
+    if(-not $Expected.exists){return $true}
+    return [long]$Expected.bytes -eq [long]$Actual.bytes -and [string]$Expected.sha256 -ceq [string]$Actual.sha256 -and
+        [string]$Expected.mtime_utc_ticks -ceq [string]$Actual.mtime_utc_ticks
+}
+function Get-PrivateState {
+    return [ordered]@{config=(Get-Fingerprint $slotConfig);config_seed=(Get-Fingerprint $configSeed);
+        profile=(Get-Fingerprint $privateProfile);profile_fixture=(Get-Fingerprint $profileSeed);
+        main_log=(Get-Fingerprint (Join-Path $slotDir 'BrnGame.log'));
+        emergency_log=(Get-Fingerprint (Join-Path $slotDir 'BrnGame.emergency.log'))}
+}
+function Get-NormalState($Baseline) {
+    $state=[ordered]@{}
+    foreach($entry in $Baseline.PSObject.Properties){$state[$entry.Name]=Get-Fingerprint ([string]$entry.Name)}
+    return $state
+}
+function Assert-NormalStateMatchesBaseline([object]$Baseline,[object]$Actual) {
+    foreach($entry in $Baseline.PSObject.Properties) {
+        $path=[string]$entry.Name
+        if(-not $Actual.Contains($path)){throw "Normal protected state is missing: $path"}
+        $expected=$entry.Value;$actualFingerprint=$Actual[$path]
+        if([bool]$expected.exists -ne [bool]$actualFingerprint.exists){throw "Protected path existence changed: $path"}
+        if($actualFingerprint.exists) {
+            $expectedTicks=[long]([decimal]::Parse([string]$expected.mtime_ns)/100)+621355968000000000
+            if([long]$expected.bytes -ne [long]$actualFingerprint.bytes -or
+               [string]$expected.sha256 -cne [string]$actualFingerprint.sha256 -or
+               [long]$actualFingerprint.mtime_utc_ticks -ne $expectedTicks) {
+                throw "Protected path changed after private staging: $path"
+            }
+        }
+    }
+    if(@($Actual.Keys).Count -ne @($Baseline.PSObject.Properties).Count){throw 'Normal protected inventory count changed.'}
+}
+
+function Assert-NormalProfileSet {
+    $current=@(Get-ChildItem -LiteralPath (Join-Path $RepoRoot 'build/game') -Directory -Filter 'Memcard*' |
+        ForEach-Object {Join-Path $_.FullName 'Profile.sav'} | Where-Object {Test-Path -LiteralPath $_ -PathType Leaf} | Sort-Object)
+    $expected=@($stageReceipt.normal_profile_paths | Sort-Object)
+    if(@(Compare-Object $expected $current).Count -ne 0){throw 'Normal Profile.sav membership changed.'}
+}
+function Invoke-RunReporter([string]$Mode,[string]$Phase) {
+    $caseVerdict=if($result){[string]$result.verdict}else{'unavailable'}
+    $caseAsserts=if($result){[int]$result.asserts}else{0}
+    $flowExitCode=if($terminal){[int]$terminal.flow_exit}else{-1}
+    $caseExitCode=if($null -ne $caseExit){[int]$caseExit}else{-1}
+    $elapsedNow=((Get-Date)-$started).TotalSeconds
+    $reportArgs=@($reporterPath,$Mode,'--run-dir',$runDir,'--slot-dir',$slotDir,
+        '--source',$expectedSource,'--hosted-run-id',[string]$pins.hosted_artifact.run_id,
+        '--exe-sha256',$expectedExeSha,'--phase',$Phase,
+        '--launched',([string][int]$attempted),'--case-exit',[string]$caseExitCode,
+        '--case-verdict',$caseVerdict,'--asserts',[string]$caseAsserts,
+        '--flow-exit',[string]$flowExitCode,'--coverage-pass',([string][int]$coveragePass),
+        '--cleanup-verified',([string][int]$cleanupVerified),
+        '--config-restored',([string][int]$configRestored),
+        '--profile-restored',([string][int]$profileRestored),
+        '--seeds-unchanged',([string][int]$seedsUnchanged),
+        '--normal-protected-unchanged',([string][int]$normalProtectedUnchanged),
+        '--normal-fingerprints-rechecked',[string]$(if($stageReceipt){@($stageReceipt.normal_protected.PSObject.Properties).Count}else{0}),
+        '--payload-count-rechecked',[string]$payloadsAfter.Count,
+        '--scripts-clean',([string][int]$ownedScriptsClean),
+        '--elapsed-before-archive',[string]$elapsedNow,
+        ('--run-error='+[string]$runError),
+        '--max-seconds',[string]$postRunReportSeconds,
+        '--max-memory-bytes',[string]$maxWrapperMemoryBytes,
+        '--max-frames',[string]$pins.plan.max_frames,
+        '--max-files','220','--max-total-bytes','805306368','--max-frame-bytes','4000000','--max-log-bytes','67108864')
+    & $pythonExe @reportArgs | Out-Null
+    return [int]$LASTEXITCODE
+}
+function Write-FallbackReceipt([string]$ReportStatus,[string]$ReporterError='') {
+    $preflightErrorValue=$null
+    if(-not $attempted){$preflightErrorValue=[string]$runError}
+    $safeRunError=[string]$runError
+    if(-not [string]::IsNullOrWhiteSpace($ReporterError)) {
+        $safeRunError=$(if($safeRunError){$safeRunError+'; '}else{''})+'reporter: '+$ReporterError
+    }
+    if($safeRunError.Length -gt 1000){$safeRunError=$safeRunError.Substring(0,1000)}
+    if($null -ne $preflightErrorValue -and $preflightErrorValue.Length -gt 1000){$preflightErrorValue=$preflightErrorValue.Substring(0,1000)}
+    $safeReporterError=[string]$ReporterError
+    if($safeReporterError.Length -gt 1000){$safeReporterError=$safeReporterError.Substring(0,1000)}
+    $caseExitValue=-1
+    if($null -ne $caseExit){$caseExitValue=[int]$caseExit}
+    $caseVerdictValue=if($result){[string]$result.verdict}else{'unavailable'}
+    $fallback=[ordered]@{
+        schema=1;packet='gui_behavior_batch_62049';classification='INCOMPLETE_EVIDENCE_RETAINED'
+        report_status=$ReportStatus;launch_attempted=[bool]$attempted;case_exit=$caseExitValue
+        case_verdict=$caseVerdictValue;preflight_error=$preflightErrorValue;run_error=$safeRunError
+        reporter_error=$safeReporterError
+        manual_visual_review='pending';behavior_credit=$false
+    }
+    $compact=ConvertTo-Json -InputObject $fallback -Depth 3 -Compress
+    Write-Output ('[gui-wrapper-fallback] '+$compact)
+    [IO.File]::WriteAllText($receiptPath,$compact+[Environment]::NewLine,(New-Object Text.UTF8Encoding($false)))
+}
+
+try {
+    foreach ($pair in @(@{Path=$MyInvocation.MyCommand.Path;Hash=$pins.packet_files.run_ps1_sha256},
+        @{Path=(Join-Path $packetRoot 'Stage.py');Hash=$pins.packet_files.stage_py_sha256},
+        @{Path=$reporterPath;Hash=$pins.packet_files.reporter_py_sha256},
+        @{Path=(Join-Path $packetRoot 'launch_watchdog.py');Hash=$pins.packet_files.watchdog_py_sha256})) {
+        if ((Get-Sha256 $pair.Path) -cne [string]$pair.Hash) { throw 'Reviewed proposal script hash drifted.' }
+    }
+    $rootBindingPath=Join-Path $packetRoot 'ROOT_BINDING.json'
+    $caseBindingPath=Join-Path $stageDir 'CASE_BINDING.json'
+    $runtimeCasePinsPath=Join-Path $packetRoot 'PINS.json'
+    $rootBinding=Get-Content -LiteralPath $rootBindingPath -Raw|ConvertFrom-Json
+    $caseBinding=Get-Content -LiteralPath $caseBindingPath -Raw|ConvertFrom-Json
+    if($rootBinding.status -cne 'approved_for_this_case' -or $rootBinding.case_review_verdict -cne 'pass' -or
+        $rootBinding.wrapper_review_verdict -cne 'pass' -or -not $rootBinding.case_review_reference -or -not $rootBinding.wrapper_review_reference -or
+        (Get-Sha256 (Join-Path $packetRoot 'INTEGRITY.sha256')) -cne [string]$rootBinding.wrapper_integrity_sha256 -or
+        [string]$caseBinding.wrapper_integrity_sha256 -cne [string]$rootBinding.wrapper_integrity_sha256 -or
+        (Get-Sha256 $rootBindingPath) -cne [string]$caseBinding.root_binding_sha256 -or
+        (Get-Sha256 $stageReceiptPath) -cne [string]$caseBinding.stage_receipt_sha256 -or
+        (Get-Sha256 $runtimeCasePinsPath) -cne [string]$caseBinding.runtime_case_pins_sha256 -or
+        [string]$rootBinding.candidate_source -cne $expectedSource -or [string]$rootBinding.candidate_tree -cne [string]$pins.candidate.tree -or
+        [string]$rootBinding.workflow_sha -cne [string]$pins.hosted_artifact.workflow_sha -or
+        [long]$rootBinding.hosted_run_id -ne [long]$pins.hosted_artifact.run_id -or [string]$rootBinding.exe_sha256 -cne $expectedExeSha -or
+        [string]$rootBinding.case_base_sha256 -cne [string]$pins.frozen_case.case_sha256 -or
+        [string]$rootBinding.case_sha256 -notmatch '^[a-f0-9]{64}$' -or [string]$rootBinding.case_sha256 -ceq [string]$pins.frozen_case.case_sha256 -or
+        (Get-Sha256 $casePath) -cne [string]$rootBinding.case_sha256 -or
+        [string]$caseBinding.case_sha256 -cne [string]$rootBinding.case_sha256 -or
+        [string]$rootBinding.controls_sha256 -cne [string]$pins.frozen_case.controls_sha256){throw 'Missing or stale independent Root case/wrapper binding.'}
+    foreach($line in Get-Content -LiteralPath (Join-Path $packetRoot 'INTEGRITY.sha256')) {
+        if($line -notmatch '^([a-f0-9]{64})  (.+)$'){throw 'Malformed wrapper seal.'}
+        $expectedHash=$Matches[1];$boundPath=[IO.Path]::GetFullPath((Join-Path $packetRoot $Matches[2]))
+        if(-not $boundPath.StartsWith($packetRoot.TrimEnd('\')+'\',[StringComparison]::OrdinalIgnoreCase) -or
+            (Get-Sha256 $boundPath) -cne $expectedHash){throw 'Reviewed wrapper input changed.'}
+    }
+    $frozenRoot=Join-Path $RepoRoot $pins.frozen_case.path
+    if((Get-Sha256 (Join-Path $frozenRoot 'INTEGRITY.sha256')) -cne [string]$pins.frozen_case.integrity_sha256){throw 'Frozen case seal changed.'}
+    foreach($row in $pins.frozen_case.files){if((Get-Sha256 (Join-Path $frozenRoot $row.name)) -cne [string]$row.sha256){throw 'Frozen case input changed.'}}
+    $pythonExe=(Get-Command python.exe -ErrorAction Stop).Source
+    Assert-WrapperBudget 'preflight'
+    $localSource=(git -C $b5Root rev-parse HEAD).Trim()
+    if($LASTEXITCODE -ne 0 -or $localSource -notmatch '^[a-f0-9]{40}$'){throw 'Cannot attribute current local B5 HEAD.'}
+    $localStatus=@(git -C $b5Root status --porcelain=v1 --untracked-files=all)
+    if($LASTEXITCODE -ne 0){throw 'Cannot record current local B5 status.'}
+    $actualParent = (git -C $RepoRoot rev-parse HEAD).Trim()
+    if ($LASTEXITCODE -ne 0 -or $actualParent.Length -ne 40) { throw 'Could not attribute the local parent HEAD.' }
+    if ((git -C $b5Root rev-parse ($expectedSource + '^{tree}')).Trim() -cne [string]$pins.candidate.tree) { throw 'Candidate tree drifted.' }
+    foreach ($row in $pins.source_files) {
+        if ((Get-Sha256 (Join-Path $RepoRoot $row.path)) -cne [string]$row.sha256) { throw "Pinned local source/harness drift: $($row.path)" }
+    }
+    foreach ($row in $pins.stage_inputs.files) {
+        if ((Get-Sha256 (Join-Path $RepoRoot $row.path)) -cne [string]$row.sha256) { throw "Pinned staging input drift: $($row.path)" }
+    }
+    $artifactReceipt = Get-Content -LiteralPath (Join-Path $hostedBuild 'input-receipt.json') -Raw | ConvertFrom-Json
+    $verified = Get-Content -LiteralPath (Join-Path $RepoRoot $pins.hosted_artifact.verified_results_path) -Raw | ConvertFrom-Json
+    $provenance = Get-Content -LiteralPath (Join-Path $hostedBuild 'Burnout_PC.exe.provenance.json') -Raw | ConvertFrom-Json
+    if ([string]$artifactReceipt.b5_head -cne $expectedSource -or $artifactReceipt.validated -ne $true -or
+        [string]$artifactReceipt.workflow_sha -cne [string]$pins.hosted_artifact.workflow_sha -or
+        @($artifactReceipt.outputs.PSObject.Properties).Count -ne 12 -or
+        [long]$verified.run_id -ne [long]$pins.hosted_artifact.run_id -or [string]$verified.source -cne $expectedSource -or
+        [string]$verified.exe_sha256 -cne $expectedExeSha -or [string]$verified.source_tree -cne [string]$pins.candidate.tree -or
+        [string]$verified.workflow -cne [string]$pins.hosted_artifact.workflow_sha -or [string]$verified.status -cne [string]$pins.hosted_artifact.status -or
+        [string]$provenance.b5_head -cne $expectedSource -or $provenance.b5_dirty -ne $false -or [string]$provenance.exe_sha256 -cne $expectedExeSha) { throw 'Hosted GUI12 target identity/validation mismatch.' }
+    $stageReceipt = Get-Content -LiteralPath $stageReceiptPath -Raw | ConvertFrom-Json
+    if ($stageReceipt.status -cne 'staged_not_run' -or [string]$stageReceipt.packet -cne [string]$pins.packet -or
+        [string]$stageReceipt.source -cne $expectedSource -or [string]$stageReceipt.exe_sha256 -cne $expectedExeSha -or
+        [string]$stageReceipt.workflow_sha -cne [string]$pins.hosted_artifact.workflow_sha -or
+        [string]$stageReceipt.local_harness_b5_source -cne $localSource -or [long]$stageReceipt.hosted_run_id -ne [long]$pins.hosted_artifact.run_id -or
+        [long]$stageReceipt.slot -ne 62049 -or [string]$stageReceipt.root_binding_sha256 -cne [string]$caseBinding.root_binding_sha256 -or
+        [string]$stageReceipt.stage_script_sha256 -cne [string]$pins.packet_files.stage_py_sha256 -or
+        [string]$stageReceipt.game_dir -ine [IO.Path]::GetFullPath($slotDir) -or
+        [string]$stageReceipt.working_directory -ine [IO.Path]::GetFullPath($dataDir) -or [int]$stageReceipt.payload_count -ne 12) { throw 'Private stage receipt mismatch.' }
+    foreach ($row in $pins.hosted_artifact.payloads) {
+        foreach ($path in @((Join-Path $hostedBuild $row.name),(Join-Path $slotDir $row.name))) {
+            if ((Get-Sha256 $path) -cne [string]$row.sha256 -or (Get-Item -LiteralPath $path).Length -ne [long]$row.bytes) { throw "Candidate payload drift: $($row.name)" }
+        }
+    }
+    foreach ($path in @($slotConfig,$configSeed)) { if ((Get-Sha256 $path) -cne [string]$pins.stage_inputs.private_config_seed_sha256) { throw 'Private config seed drifted.' } }
+    foreach ($path in @($privateProfile,$profileSeed)) { if ((Get-Sha256 $path) -cne [string]$pins.stage_inputs.profile_seed_sha256) { throw 'Private profile seed drifted.' } }
+    Assert-RecordedFingerprints $stageReceipt.private_staged_fingerprints
+    if((Get-Sha256 (Join-Path $packetRoot 'CONTROLS.json')) -cne [string]$pins.frozen_case.controls_sha256 -or
+        (Get-Sha256 (Join-Path $packetRoot 'CASE_PINS.template.json')) -cne [string]$pins.frozen_case.pins_template_sha256){throw 'Frozen case data drifted.'}
+    Assert-NormalProfileSet
+    foreach($name in @(0..23|ForEach-Object {'behavior-{0:D3}.txt' -f $_})+@('behavior-final.txt','behavior-activate.txt')) {
+        if(Test-Path -LiteralPath (Join-Path $slotDir $name)){throw 'Private generated-script path is already occupied.'}
+    }
+    Assert-NormalSlotPathsAbsent
+    $normalBefore=Get-NormalState $stageReceipt.normal_protected
+    Assert-NormalStateMatchesBaseline $stageReceipt.normal_protected $normalBefore
+    $normalProtectedUnchanged=$true
+    if (@(Get-ActiveGames).Count -gt 0) { throw 'Strict ownership refused an existing game; none was stopped.' }
+    if ((Test-Path -LiteralPath (Join-Path $slotDir 'BrnGame.log')) -or (Test-Path -LiteralPath (Join-Path $slotDir 'BrnGame.emergency.log'))) { throw 'Private slot log already exists; refuse a second/stale launch.' }
+    $privateBefore = Get-PrivateState
+    Copy-Item -LiteralPath $slotConfig -Destination (Join-Path $runDir 'private_slot_config.original.ini')
+    if (((Get-Date) - $started).TotalSeconds -gt 20) { throw 'Preflight exhausted the 240-second accounting reserve; no game was launched.' }
+    # CreateNew is the one-shot boundary. Never automatically remove this marker or retry.
+    $attemptPath = Join-Path $stageDir 'RUN_ATTEMPTED.json'
+    $stream = [IO.File]::Open($attemptPath, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    try {
+        $attemptText = [ordered]@{source=$expectedSource;exe_sha256=$expectedExeSha;run_dir=$runDir;requested_utc=(Get-Date).ToUniversalTime().ToString('o');single_attempt=$true} | ConvertTo-Json
+        $bytes = (New-Object Text.UTF8Encoding($false)).GetBytes($attemptText)
+        $stream.Write($bytes,0,$bytes.Length)
+    } finally { $stream.Dispose() }
+    $powershellExe = (Get-Command powershell.exe -ErrorAction Stop).Source
+    $argsForCase = @('-NoProfile','-ExecutionPolicy','Bypass','-File',$runCasePath,
+        '-Case',$casePath,'-RunDir',$runDir,'-RunsRoot',(Join-Path $packetRoot 'runs'),
+        '-Slot','62049','-GameDir',$slotDir,'-WorkingDirectory',$dataDir,'-LockTimeoutSec','2',
+        '-Label',('GuiBehavior12 / hosted39855395071 / 24 phases / 10-second HUD settle / separately attributed local harness'))
+    $attempted=$true
+    $savedErrorPreference=$ErrorActionPreference
+    try {
+        # Native stderr is retained as data; the actual exit/result/terminal gates decide success.
+        $ErrorActionPreference='Continue'
+        $caseArgumentsPath=Join-Path $runDir 'case-arguments.json'
+        $caseArgumentsJson=ConvertTo-Json -InputObject @($argsForCase) -Depth 2 -Compress
+        [IO.File]::WriteAllText($caseArgumentsPath,$caseArgumentsJson,(New-Object Text.UTF8Encoding($false)))
+        $launchArgs=@($reporterPath,'launch-case','--run-dir',$runDir,'--powershell',$powershellExe,'--cwd',$RepoRoot,'--argv-json',$caseArgumentsPath)
+        & $pythonExe @launchArgs | Out-Null
+        $launcherExit=$LASTEXITCODE
+        $launchResultPath=Join-Path $runDir 'case-launch-result.json'
+        if($launcherExit -ne 0 -or -not (Test-Path -LiteralPath $launchResultPath -PathType Leaf)){throw 'Raw-stream case launcher failed; any native result remains retained.'}
+        $launchResult=Get-Content -LiteralPath $launchResultPath -Raw | ConvertFrom-Json
+        if($launchResult.launch_failed){throw ('Raw-stream case launcher error: '+[string]$launchResult.error)}
+        $caseExit=[int]$launchResult.exit_code
+    } finally {$ErrorActionPreference=$savedErrorPreference}
+    foreach($item in @(@{Name='result.json';Var='result'},@{Name='flow-terminal.json';Var='terminal'},@{Name='flow/terminal-status.json';Var='flowStatus'})) {
+        $path=Join-Path $runDir $item.Name
+        if(Test-Path -LiteralPath $path -PathType Leaf){Set-Variable -Name $item.Var -Value (Get-Content -LiteralPath $path -Raw|ConvertFrom-Json)}
+    }
+    if($result -and ([string]$result.provenance.exe_sha -cne $expectedExeSha.Substring(0,12) -or
+        [string]$result.provenance.exe_b5 -cne $expectedSource.Substring(0,8))){throw 'Actual case executable attribution differs from exact hosted GUI12 target.'}
+} catch {
+    $runError=$_.Exception.Message
+} finally {
+    # Record terminal status before optional archive hashing or receipt serialization.
+    try {
+        Write-FallbackReceipt 'post-case-finalization-pending'
+        $earlyReportExit=Invoke-RunReporter 'terminal' 'post-case-finalization-pending'
+        if($earlyReportExit -ne 0){throw "Python terminal reporter exited $earlyReportExit."}
+    } catch {
+        $reporterFailure=$_.Exception.Message
+        $runError=$(if($runError){$runError+'; '}else{''})+'terminal receipt write failed: '+$reporterFailure
+        try { Write-FallbackReceipt 'terminal-reporter-failed' $reporterFailure }
+        catch { Write-Output ('[gui-wrapper-fallback] '+$runError.Substring(0,[Math]::Min(1000,$runError.Length))) }
+    }
+    # run_case already retained raw-private copies; validate its manifest without making a duplicate raw-log copy.
+    try {
+        if($attempted) {
+            $rawManifestPath=Join-Path $runDir 'raw-private-logs.json'
+            if(-not (Test-Path -LiteralPath $rawManifestPath -PathType Leaf)){throw 'run_case raw-private log manifest is missing.'}
+            $rawRows=@(Get-Content -LiteralPath $rawManifestPath -Raw | ConvertFrom-Json)
+            if($rawRows.Count -gt 2){throw 'Raw-private log channel count exceeds two.'}
+            foreach($row in $rawRows) {
+                $source=[IO.Path]::GetFullPath([string]$row.source)
+                $copy=[IO.Path]::GetFullPath([string]$row.copy)
+                if(-not $source.StartsWith($slotDir.TrimEnd('\')+'\',[StringComparison]::OrdinalIgnoreCase) -or
+                   -not $copy.StartsWith($runDir.TrimEnd('\')+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Raw-private log manifest path escaped its owned directory.'}
+                if(-not (Test-Path -LiteralPath $source -PathType Leaf) -or -not (Test-Path -LiteralPath $copy -PathType Leaf)){throw 'Raw-private log source or retained copy is missing.'}
+                $sourceFingerprint=Get-Fingerprint $source
+                if([long]$sourceFingerprint.bytes -ne [long]$row.bytes -or [string]$sourceFingerprint.sha256 -cne [string]$row.sha256 -or
+                   (Get-Item -LiteralPath $copy).Length -ne [long]$row.bytes){throw 'Retained raw-private log does not match its source manifest.'}
+                $rawLogs += [ordered]@{source=$sourceFingerprint;retained_path=$copy;retained_bytes=[long]$row.bytes;retained_sha256=[string]$row.sha256}
+            }
+        }
+    } catch {$runError=$(if($runError){$runError+'; '}else{''})+'raw log manifest verification failed: '+$_.Exception.Message}
+    try {
+        $remaining=@(Get-ActiveGames); $processCheckSucceeded=$true
+        if($remaining.Count -eq 0 -and $stageReceipt -and $privateBefore) {
+            $backup=Join-Path $runDir 'private_slot_config.original.ini'
+            if(-not (Test-Path -LiteralPath $backup -PathType Leaf)){throw 'Original private config backup is missing.'}
+            Copy-Item -LiteralPath $backup -Destination $slotConfig -Force
+            [IO.File]::SetLastWriteTimeUtc($slotConfig,[datetime]::new([long]$privateBefore.config.mtime_utc_ticks,[DateTimeKind]::Utc))
+            $privateAfter=Get-PrivateState
+            $configRestored=Same-Fingerprint $privateBefore.config $privateAfter.config
+            # Only run_case owns the parked original/profile fixture lifecycle. Do not rewrite it here.
+            $profileRestored=Same-Fingerprint $privateBefore.profile $privateAfter.profile
+            $seedsUnchanged=(Same-Fingerprint $privateBefore.config_seed $privateAfter.config_seed) -and
+                (Same-Fingerprint $privateBefore.profile_fixture $privateAfter.profile_fixture)
+            if(-not $configRestored -or -not $profileRestored -or -not $seedsUnchanged){throw 'Private config/profile/seed bytes or mtimes were not restored.'}
+        } elseif($attempted){throw 'A game is active or private baseline unavailable; private state/parked save retained without restoration.'}
+        if($remaining.Count -eq 0 -and $attempted) {
+            $ownedScriptsClean=$true
+            foreach($name in @(0..23|ForEach-Object {'behavior-{0:D3}.txt' -f $_})+@('behavior-final.txt','behavior-activate.txt')) {
+                $target=Join-Path $slotDir $name
+                if(Test-Path -LiteralPath $target -PathType Leaf) {
+                    $runCopy=Join-Path $runDir $name
+                    if(-not (Test-Path -LiteralPath $runCopy -PathType Leaf) -or (Get-Sha256 $target) -cne (Get-Sha256 $runCopy)) {
+                        $ownedScriptsClean=$false;$scriptCleanup += [ordered]@{path=$target;status='retained_hash_or_source_mismatch'}
+                    } else {
+                        $beforeRemoval=Get-Fingerprint $target
+                        Remove-Item -LiteralPath $target
+                        $scriptCleanup += [ordered]@{path=$target;status='removed_matching_owned_copy';before=$beforeRemoval}
+                    }
+                }
+            }
+            if(-not $ownedScriptsClean){throw 'A generated private script was changed; it was retained.'}
+        }
+        if($stageReceipt) {
+            $normalAfter=Get-NormalState $stageReceipt.normal_protected
+            Assert-NormalSlotPathsAbsent
+            Assert-NormalProfileSet
+            Assert-NormalStateMatchesBaseline $stageReceipt.normal_protected $normalAfter
+            $normalProtectedUnchanged=$true
+        }
+        foreach($row in $pins.hosted_artifact.payloads) {
+            $path=Join-Path $slotDir $row.name;$hash=Get-Sha256 $path
+            if($hash -cne [string]$row.sha256 -or (Get-Item -LiteralPath $path).Length -ne [long]$row.bytes){throw "Private payload drift: $($row.name)"}
+            $payloadsAfter += [ordered]@{name=$row.name;sha256=$hash;bytes=(Get-Item -LiteralPath $path).Length}
+        }
+        $cleanupVerified=$processCheckSucceeded -and $remaining.Count -eq 0 -and $terminal -and $terminal.success -eq $true -and
+            $terminal.helper_cleanup_complete -eq $true -and $terminal.profile_restoration_complete -eq $true -and
+            $flowStatus -and $flowStatus.owned_cleanup_complete -eq $true -and $flowStatus.input_reset_complete -eq $true
+        if($terminal -and (Get-Sha256 (Join-Path $runDir 'flow/terminal-status.json')) -cne [string]$terminal.flow_status_sha256){throw 'Original flow terminal hash mismatch.'}
+    } catch {$normalProtectedUnchanged=$false;$runError=$(if($runError){$runError+'; '}else{''})+$_.Exception.Message}
+    # Capture actual private/normal state even if the independent checks failed.
+    try {
+        if(-not $privateAfter -and (Test-Path -LiteralPath $slotDir -PathType Container)){$privateAfter=Get-PrivateState}
+        if($stageReceipt -and -not $normalAfter){$normalAfter=Get-NormalState $stageReceipt.normal_protected}
+    } catch {$runError=$(if($runError){$runError+'; '}else{''})+'state fingerprint capture failed: '+$_.Exception.Message}
+    $elapsed=((Get-Date)-$started).TotalSeconds
+    $coveragePass=$result -and $result.verdict -ceq 'PASS' -and $caseExit -eq 0
+    try {
+        Assert-WrapperBudget 'before terminal receipt'
+        $terminalReportExit=Invoke-RunReporter 'terminal' 'safety-checks-complete-before-archive'
+        if($terminalReportExit -ne 0){throw 'Could not update the small terminal receipt.'}
+        Assert-WrapperBudget 'before evidence archive'
+        $archiveExit=Invoke-RunReporter 'archive' 'safety-checks-complete-before-archive'
+        $evidenceComplete=$archiveExit -eq 0
+        if(-not $evidenceComplete){
+            $runError=$(if($runError){$runError+'; '}else{''})+'bounded evidence archive incomplete; see probe_receipt.json'
+            if(-not (Test-Path -LiteralPath (Join-Path $runDir 'evidence-archive.json') -PathType Leaf)) {
+                $reporterFailure='archive reporter did not create evidence-archive.json; inspect raw wrapper stderr'
+                $runError+='; '+$reporterFailure
+                try { Write-FallbackReceipt 'archive-reporter-unavailable' $reporterFailure }
+                catch { Write-Output ('[gui-wrapper-fallback] '+$runError.Substring(0,[Math]::Min(1000,$runError.Length))) }
+            }
+        }
+    } catch {
+        $evidenceComplete=$false
+        $reporterFailure=$_.Exception.Message
+        $runError=$(if($runError){$runError+'; '}else{''})+'bounded evidence reporting failed: '+$reporterFailure
+        try { Write-FallbackReceipt 'final-reporter-failed' $reporterFailure }
+        catch { Write-Output ('[gui-wrapper-fallback] '+$runError.Substring(0,[Math]::Min(1000,$runError.Length))) }
+    }
+    $elapsed=((Get-Date)-$started).TotalSeconds
+    $boundedComplete=$coveragePass -and $cleanupVerified -and $configRestored -and $profileRestored -and $seedsUnchanged -and
+        $normalProtectedUnchanged -and $ownedScriptsClean -and $evidenceComplete -and -not $runError -and $elapsed -le $maxOuterSeconds
+}
+if(-not $boundedComplete){Write-Host "[gui-behavior-probe] incomplete evidence retained at $runDir";exit 1}
+Write-Host "[gui-behavior-probe] structural case complete; actual frame interpretation remains pending: $runDir"
+exit 0

@@ -1,0 +1,253 @@
+param(
+    [Parameter(Mandatory=$true)][ValidateSet('case-a','case-b')][string]$Phase,
+    [Parameter(Mandatory=$true)][string]$RepoRoot,
+    [Parameter(Mandatory=$true)][string]$RunDir,
+    [Parameter(Mandatory=$true)][string]$ProfilePath,
+    [Parameter(Mandatory=$true)][string]$GameLog,
+    [Parameter(Mandatory=$true)][string]$GameImagePath,
+    [Parameter(Mandatory=$true)][string]$PythonExe,
+    [Parameter(Mandatory=$true)][string]$ProbePath,
+    [Parameter(Mandatory=$true)][int]$TargetCount,
+    [Parameter(Mandatory=$true)][int]$TargetIndex,
+    [Parameter(Mandatory=$true)][string]$InitialSlotSha256,
+    [int]$SaveTimeoutSeconds = 120,
+    [int]$CloseTimeoutSeconds = 30
+)
+
+$ErrorActionPreference = 'Stop'
+$packetRoot = [IO.Path]::GetFullPath($PSScriptRoot)
+$runsRoot = [IO.Path]::GetFullPath((Join-Path $packetRoot 'runs')).TrimEnd('\') + '\'
+$stageRoot = [IO.Path]::GetFullPath((Join-Path $packetRoot 'stage')).TrimEnd('\') + '\'
+if (-not [IO.Path]::GetFullPath($RunDir).StartsWith($runsRoot,[StringComparison]::OrdinalIgnoreCase) -or
+    -not [IO.Path]::GetFullPath($ProfilePath).StartsWith($stageRoot,[StringComparison]::OrdinalIgnoreCase) -or
+    -not [IO.Path]::GetFullPath($GameImagePath).StartsWith($stageRoot,[StringComparison]::OrdinalIgnoreCase) -or
+    -not [IO.Path]::GetFullPath($GameLog).StartsWith($stageRoot,[StringComparison]::OrdinalIgnoreCase) -or
+    -not [IO.Path]::GetFullPath($ProbePath).StartsWith($packetRoot.TrimEnd('\') + '\',[StringComparison]::OrdinalIgnoreCase)) {
+    throw 'Observer paths escaped the packet-owned private stage/run roots.'
+}
+$runObserver = Join-Path $RunDir 'observer'
+$flowTerminal = Join-Path $RunDir 'flow/terminal-status.json'
+New-Item -ItemType Directory -Path $runObserver -Force | Out-Null
+
+function Write-JsonNew([string]$Path, [object]$Value) {
+    $json = $Value | ConvertTo-Json -Depth 12
+    $bytes = (New-Object Text.UTF8Encoding($false)).GetBytes($json + "`n")
+    $stream = [IO.File]::Open($Path, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    try { $stream.Write($bytes, 0, $bytes.Length); $stream.Flush($true) } finally { $stream.Dispose() }
+}
+
+function Write-MarkerNew([string]$Path, [string]$Text) {
+    $bytes = (New-Object Text.UTF8Encoding($false)).GetBytes($Text + "`n")
+    $stream = [IO.File]::Open($Path, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    try { $stream.Write($bytes, 0, $bytes.Length); $stream.Flush($true) } finally { $stream.Dispose() }
+}
+
+function Invoke-ProfileInspect {
+    $text = & $PythonExe $ProbePath inspect --repo-root $RepoRoot --profile $ProfilePath --slot-index $TargetIndex 2>&1
+    $code = $LASTEXITCODE
+    if ($code -ne 0) { throw "Profile probe returned $code`: $($text -join ' ')" }
+    return ($text -join "`n") | ConvertFrom-Json
+}
+
+function Read-NewLogLines([ref]$Offset) {
+    if (-not (Test-Path -LiteralPath $GameLog -PathType Leaf)) { return @() }
+    $stream = $null
+    try {
+        $share = [IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete
+        $stream = [IO.File]::Open($GameLog, [IO.FileMode]::Open, [IO.FileAccess]::Read, $share)
+        if ($stream.Length -lt [long]$Offset.Value) { throw 'The live game log shrank after a save request was armed.' }
+        $stream.Position = [long]$Offset.Value
+        $remaining = [int]($stream.Length - $stream.Position)
+        if ($remaining -le 0) { return @() }
+        $buffer = New-Object byte[] $remaining
+        $read = $stream.Read($buffer, 0, $remaining)
+        if ($read -le 0) { return @() }
+        $lastNewline = -1
+        for ($i = $read - 1; $i -ge 0; $i--) { if ($buffer[$i] -eq 10) { $lastNewline = $i; break } }
+        if ($lastNewline -lt 0) { return @() }
+        $Offset.Value = [long]$Offset.Value + $lastNewline + 1
+        $text = [Text.Encoding]::UTF8.GetString($buffer, 0, $lastNewline + 1)
+        return @($text -split "`r?`n" | Where-Object { $_.Length -gt 0 })
+    } finally { if ($null -ne $stream) { $stream.Dispose() } }
+}
+
+function Wait-ForRequestSignal([string]$Name, [int]$WaitSeconds = 300) {
+    $requestPath = Join-Path $runObserver ($Name + '.requested')
+    $deadline = (Get-Date).AddSeconds($WaitSeconds)
+    while ((Get-Date) -lt $deadline) {
+        if (Test-Path -LiteralPath $requestPath -PathType Leaf) { return $requestPath }
+        if (Test-Path -LiteralPath $flowTerminal -PathType Leaf) {
+            throw "Flow ended before observer request '$Name'."
+        }
+        Start-Sleep -Milliseconds 200
+    }
+    throw "Timed out waiting for flow request '$Name'."
+}
+
+function Wait-ForSave([string]$Name, [int]$ExpectedCount, [string]$PriorSlotSha256) {
+    $requestPath = Wait-ForRequestSignal $Name
+    $offset = 0L
+    if (Test-Path -LiteralPath $GameLog -PathType Leaf) { $offset = (Get-Item -LiteralPath $GameLog).Length }
+    $armedPath = Join-Path $runObserver ($Name + '.armed')
+    Write-JsonNew $armedPath ([ordered]@{
+        phase=$Phase;request_signal=$requestPath;request_signal_utc=(Get-Item -LiteralPath $requestPath).LastWriteTimeUtc.ToString('o')
+        log_path=$GameLog;log_start_offset=$offset;armed_utc=(Get-Date).ToUniversalTime().ToString('o')
+        target_count=$ExpectedCount;slot_index=$TargetIndex;prior_slot_sha256=$PriorSlotSha256
+    })
+
+    $requestSeen = $false
+    $writeSeen = $false
+    $writeFailed = $false
+    $stableCount = 0
+    $stableKey = $null
+    $lastProbe = $null
+    $newLogEvidence = New-Object 'System.Collections.Generic.List[string]'
+    $deadline = (Get-Date).AddSeconds($SaveTimeoutSeconds)
+    while ((Get-Date) -lt $deadline) {
+        foreach ($line in (Read-NewLogLines ([ref]$offset))) {
+            $newLogEvidence.Add($line)
+            if ($line -match '\[profile-save\] autosave requested \(t=') { $requestSeen = $true }
+            if ($line -match "\[SaveLoadPC\] profile container WRITTEN name='Profile'") { $writeSeen = $true }
+            if ($line -match "\[SaveLoadPC\] profile container write FAILED name='Profile'") { $writeFailed = $true }
+        }
+        if ($writeFailed) { throw "The live profile writer reported failure after '$Name'." }
+        if ($requestSeen -and $writeSeen) {
+            try {
+                $probe = Invoke-ProfileInspect
+                $lastProbe = $probe
+                $qualifies = ([int]$probe.created_count -eq $ExpectedCount) -and
+                    ([string]$probe.slot_sha256 -cne $PriorSlotSha256)
+                if ($qualifies) {
+                    $key = [string]$probe.file_sha256 + ':' + [string]$probe.slot_sha256
+                    if ($key -ceq $stableKey) { $stableCount++ } else { $stableKey = $key; $stableCount = 1 }
+                    if ($stableCount -ge 3) {
+                        $receiptPath = Join-Path $runObserver ($Name + '.json')
+                        Write-JsonNew $receiptPath ([ordered]@{
+                            schema=1;success=$true;phase=$Phase;request=$Name
+                            request_log_seen=$requestSeen;write_completion_log_seen=$writeSeen
+                            writer_lines=@($newLogEvidence.ToArray());stable_samples=$stableCount
+                            stable_interval_seconds=1;profile=$probe;expected_count=$ExpectedCount
+                            slot_index=$TargetIndex;prior_slot_sha256=$PriorSlotSha256
+                            completed_utc=(Get-Date).ToUniversalTime().ToString('o')
+                        })
+                        Write-MarkerNew (Join-Path $runObserver ($Name + '.verified')) $receiptPath
+                        return $probe
+                    }
+                } else {
+                    $stableCount = 0
+                    $stableKey = $null
+                }
+            } catch {
+                # A torn/in-progress container is retried. Only a validated stable payload passes.
+                $stableCount = 0
+                $stableKey = $null
+            }
+        }
+        Start-Sleep -Seconds 1
+    }
+    $failurePath = Join-Path $runObserver ($Name + '.json')
+    Write-JsonNew $failurePath ([ordered]@{
+        schema=1;success=$false;phase=$Phase;request=$Name;request_log_seen=$requestSeen
+        write_completion_log_seen=$writeSeen;writer_lines=@($newLogEvidence.ToArray())
+        last_valid_probe=$lastProbe;expected_count=$ExpectedCount;slot_index=$TargetIndex
+        prior_slot_sha256=$PriorSlotSha256;timeout_seconds=$SaveTimeoutSeconds
+        completed_utc=(Get-Date).ToUniversalTime().ToString('o')
+    })
+    Write-MarkerNew (Join-Path $runObserver ($Name + '.failed')) $failurePath
+    throw "Timed out waiting for valid stable Profile.sav payload after '$Name'."
+}
+
+function Get-ExactGameProcess {
+    $wanted = [IO.Path]::GetFullPath($GameImagePath)
+    $rows = @(Get-CimInstance Win32_Process -Filter "Name='Burnout_PC.exe'" -ErrorAction Stop |
+        Where-Object { $_.ExecutablePath -and [IO.Path]::GetFullPath($_.ExecutablePath) -ieq $wanted })
+    if ($rows.Count -ne 1) { throw "Expected one exact owned image '$wanted'; found $($rows.Count)." }
+    $process = Get-Process -Id ([int]$rows[0].ProcessId) -ErrorAction Stop
+    $retainedProcessHandle = $process.Handle
+    $process.Refresh()
+    $start = $process.StartTime.ToUniversalTime()
+    $again = Get-CimInstance Win32_Process -Filter "ProcessId=$($process.Id)" -ErrorAction Stop
+    if (-not $again.ExecutablePath -or [IO.Path]::GetFullPath($again.ExecutablePath) -ine $wanted -or
+        $process.StartTime.ToUniversalTime().Ticks -ne $start.Ticks) {
+        throw 'Exact game PID/path/start-time identity changed before WM_CLOSE.'
+    }
+    return @{Process=$process;Path=$wanted;StartUtc=$start;Cim=$again}
+}
+
+function Close-ExactGame {
+    $requestPath = Wait-ForRequestSignal 'close.ready' 300
+    if ($Phase -eq 'case-a') {
+        $profile = Invoke-ProfileInspect
+        $expectedSlot = $script:lastSaveSlotHash
+        if ([int]$profile.created_count -ne $TargetCount -or [string]$profile.slot_sha256 -cne $expectedSlot) {
+            throw 'Final private profile payload changed after the verified overwrite.'
+        }
+    } else {
+        $profile = Invoke-ProfileInspect
+        if ([int]$profile.created_count -ne $TargetCount -or [string]$profile.slot_sha256 -cne $InitialSlotSha256) {
+            throw 'Cold-load run changed the selected slot payload before clean close.'
+        }
+    }
+    Write-JsonNew (Join-Path $runObserver 'close-profile.json') ([ordered]@{
+        success=$true;profile=$profile;request_signal=$requestPath;captured_utc=(Get-Date).ToUniversalTime().ToString('o')
+    })
+
+    $identity = Get-ExactGameProcess
+    $mainWindow = [long]$identity.Process.MainWindowHandle
+    if ($mainWindow -eq 0) { throw 'Exact owned game process has no main window for the supported WM_CLOSE path.' }
+    $sent = $identity.Process.CloseMainWindow()
+    if (-not $sent) { throw 'CloseMainWindow did not accept WM_CLOSE for the exact owned game window.' }
+    $sentPath = Join-Path $runObserver 'close.sent'
+    Write-MarkerNew $sentPath ('pid=' + $identity.Process.Id + ' image=' + $identity.Path + ' start=' + $identity.StartUtc.ToString('o'))
+
+    $exited = $identity.Process.WaitForExit($CloseTimeoutSeconds * 1000)
+    $exitCode = $null
+    if ($exited) { $exitCode = $identity.Process.ExitCode }
+    $receiptPath = Join-Path $runObserver 'close.json'
+    Write-JsonNew $receiptPath ([ordered]@{
+        schema=1;success=([bool]$exited -and $exitCode -eq 0);phase=$Phase
+        close_main_window_returned=[bool]$sent;main_window_handle=('0x{0:X}' -f $mainWindow)
+        pid=$identity.Process.Id;image_path=$identity.Path;start_utc=$identity.StartUtc.ToString('o')
+        exit_confirmed=[bool]$exited;exit_code=$exitCode;timeout_seconds=$CloseTimeoutSeconds
+        close_ready_signal=$requestPath;closed_utc=(Get-Date).ToUniversalTime().ToString('o')
+        policy='bounded CloseMainWindow/WM_CLOSE to exact process image and start-time; no force termination'
+    })
+    if ($exited -and $exitCode -eq 0) {
+        Write-MarkerNew (Join-Path $runObserver 'close.exited') $receiptPath
+    } else {
+        Write-MarkerNew (Join-Path $runObserver 'close.failed') $receiptPath
+        throw "Exact owned game did not exit cleanly within $CloseTimeoutSeconds seconds after WM_CLOSE."
+    }
+}
+
+try {
+    $RepoRoot = [IO.Path]::GetFullPath($RepoRoot)
+    $RunDir = [IO.Path]::GetFullPath($RunDir)
+    $ProfilePath = [IO.Path]::GetFullPath($ProfilePath)
+    $GameLog = [IO.Path]::GetFullPath($GameLog)
+    $GameImagePath = [IO.Path]::GetFullPath($GameImagePath)
+    if (-not (Test-Path -LiteralPath $ProfilePath -PathType Leaf)) { throw "Private profile is missing: $ProfilePath" }
+    if ($Phase -eq 'case-a') {
+        $first = Wait-ForSave 'save1' $TargetCount $InitialSlotSha256
+        $script:lastSaveSlotHash = [string]$first.slot_sha256
+        $second = Wait-ForSave 'save2' $TargetCount $script:lastSaveSlotHash
+        $script:lastSaveSlotHash = [string]$second.slot_sha256
+        if ([string]$second.slot_sha256 -ceq [string]$first.slot_sha256) {
+            throw 'Overwrite content hash equals the first saved route; changed checkpoint was not persisted.'
+        }
+    }
+    Close-ExactGame
+    exit 0
+} catch {
+    $message = $_.Exception.Message
+    try {
+        $failurePath = Join-Path $runObserver 'observer.failed.json'
+        if (-not (Test-Path -LiteralPath $failurePath -PathType Leaf)) {
+            Write-JsonNew $failurePath ([ordered]@{
+                schema=1;success=$false;phase=$Phase;error=$message;utc=(Get-Date).ToUniversalTime().ToString('o')
+            })
+        }
+    } catch { }
+    Write-Error $message
+    exit 1
+}

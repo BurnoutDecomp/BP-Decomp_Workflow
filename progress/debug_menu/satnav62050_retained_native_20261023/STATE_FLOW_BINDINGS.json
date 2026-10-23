@@ -1,0 +1,203 @@
+{
+  "schema": 1,
+  "packet_scope": "bounded source diagnosis of retained 62050 capture; no repair proposal",
+  "source_commit": "8b2940d40e76fd6a88a37615f6163a99c2d5e3b8",
+  "private_descendant": {
+    "ref": "refs/heads/codex/replay-module-recovery-20261022",
+    "commit": "17ab0a96e27bed5e60ffc55cb81dcf0a653b1e4e",
+    "relevant_gui_paths_unchanged_vs_source_commit": true
+  },
+  "executable": {
+    "sha256": "95c120dc8b2f20123ec28d86873ba5e5bb5a4c2d3fdb7d922d51d927ea9e1cbd",
+    "case_result_sha256": "3abb6b1c8dfc2000ef772b0665d558e681ae8f1fd6682d56e08f5a664b5de9c4"
+  },
+  "raw_evidence": {
+    "log_path": "scratch/DEBUG_MENU_1011/gui_satnav_viewport_native_62050_execution_20261023/runs/native_20261023_120115_750b0313/raw-private-BrnGame.log",
+    "sha256": "2647508e41297c9a79fa45e7cddb7f2b3aa520659809025bce47b27371bd7710",
+    "excerpts": [
+      {
+        "lines": "1376",
+        "meaning": "map(199) and mask(201) resources non-null"
+      },
+      {
+        "lines": "14774-14780",
+        "meaning": "engine-on event, event-213 show, first logged SatNav draw"
+      },
+      {
+        "lines": "25780-25782",
+        "meaning": "r004 command sets override TRUE"
+      },
+      {
+        "lines": "26215-26217",
+        "meaning": "engine-off event, event-213 hide while SatNav was enabled, HUD transout"
+      },
+      {
+        "lines": "26228",
+        "meaning": "ignition state 3, carInGameMode 0, accel/brake 0"
+      }
+    ]
+  },
+  "source_blobs": [
+    {
+      "path": "src/GameSource/Game/GameBridgeWorldToGui.cpp",
+      "git_blob_sha1": "43632515cc77783b17e76e1c25a9f7e08183cb35",
+      "lines": "245-276",
+      "role": "engine state edge to GUI event 379"
+    },
+    {
+      "path": "src/GameSource/Gui/Flow/HUD/States/BrnFBurnMainHudState.cpp",
+      "git_blob_sha1": "b5500b2473729e0fb18b3260163c15c316a15d60",
+      "lines": "1154-1181",
+      "role": "event 379 transout and SatNav hide event"
+    },
+    {
+      "path": "src/GameSource/Gui/CustomRenderer/BrnCustomRenderer.cpp",
+      "git_blob_sha1": "97da76ef49d0224420ffded78b2c541aec88b458",
+      "lines": "581-620,667-724",
+      "role": "event 213, override Update, enabled render gate"
+    },
+    {
+      "path": "src/GameSource/Gui/CustomRenderer/BrnGuiCustRendererDebugComponent.cpp",
+      "git_blob_sha1": "5ba0208ce848cd4e6684a079dd15e775b05f0ff9",
+      "lines": "52-68,115-122",
+      "role": "debug defaults and registered controls"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnCustomRendererManager.h",
+      "git_blob_sha1": "3cd0351e8eb7f0347c2a3d778dbedc3e983038e7",
+      "lines": "173-176,206-211",
+      "role": "typed SatNav ownership and debug subobject"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.h",
+      "git_blob_sha1": "0badd4228cea0dbf5ef3c9213c2a1c74d679f451",
+      "lines": "463-473",
+      "role": "typed GuiModule manager ownership"
+    },
+    {
+      "path": "src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.cpp",
+      "git_blob_sha1": "3b4f645c379231e32a0695a4f29af142e8276007",
+      "lines": "1233-1252,1357-1383",
+      "role": "payload texture checks, lazy states, map draw"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Controller/CgsDebugController.cpp",
+      "git_blob_sha1": "b1cdef4bdf86a89375987e5916f3bd76113c9e2f",
+      "lines": "239-246,248-259",
+      "role": "F2 key to special-key/debug UI route"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsDebugUI.cpp",
+      "git_blob_sha1": "855a2e4a9c657bbd9fcc0dd5c566e897b5447bd6",
+      "lines": "362",
+      "role": "special key forwarded to script interface"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp",
+      "git_blob_sha1": "d891abb03ae349161bbdb486037c08eb37161347",
+      "lines": "83-89",
+      "role": "F-key binding executes command"
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/Input/PC/CgsInputPadsPC.cpp",
+      "git_blob_sha1": "bb45e3b4029f3abf3b253ce5a4007875237a8da8",
+      "lines": "874-879",
+      "role": "game keyboard suppressed while debug UI owns it"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "git_blob_sha1": "eee391b23fc3e4b0c0e1406394489d2db596e1cc",
+      "lines": "2819-2840,4473-4508",
+      "role": "module event routing and per-frame manager update"
+    }
+  ],
+  "artist_exports": [
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82450908.json",
+      "address": "0x82450908",
+      "sha256": "b52dca971303757e4855dda024cd1a2dcbc163134555973fc0bb24072f466a1c",
+      "role": "ARTIST manager Update"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82450848.json",
+      "address": "0x82450848",
+      "sha256": "1a43b810ddf84172bfe803eaf766456ca8ddef9b58f489572fe534ba0a9d23d8",
+      "role": "ARTIST manager Render"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8247C710.json",
+      "address": "0x8247C710",
+      "sha256": "c84b42c9e7bdd487e040b2c346b80330e6bfc155b4a03f76f5f5501e258cfbb9",
+      "role": "ARTIST HUD initialization/engine gate"
+    }
+  ],
+  "retained_artifacts": [
+    {
+      "path": "scratch/DEBUG_MENU_1011/satnav_62050_native_analysis_20261023/SUMMARY.json",
+      "sha256": "d7b7ded62a1333a8605e0085e926a345ed65f401331483e101ef01d2325a054b"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/satnav_62050_native_analysis_20261023/READBACKS.json",
+      "sha256": "75d6ed8415ca4b2496f4d1389fce2e852f506e0b1fd247840448fbdfb131989f"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/satnav_62050_native_analysis_20261023/PHASE_FRAMES.json",
+      "sha256": "98b8f3474e3d4d234a51ef2ddb84481aada16daec3758397fd18906d32a21535"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/satnav_62050_native_analysis_20261023/NORMAL_AND_PRIVATE_RECHECK.json",
+      "sha256": "4c811942aeeb6229e0ca8974e82173ff964e28c859d3eb7e4f6d850db6e594c9"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/satnav_62050_native_independent_review_20261023_sol01/REPORT.md",
+      "sha256": "646dae0d1d08e9a823be802f01ca932580fce997b7ff4c8e6af565d228ffc124"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/gui_satnav_viewport_native_62050_execution_20261023/runs/native_20261023_120115_750b0313/raw-private-BrnGame.log",
+      "sha256": "2647508e41297c9a79fa45e7cddb7f2b3aa520659809025bce47b27371bd7710"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/gui_satnav_viewport_native_62050_execution_20261023/runs/native_20261023_120115_750b0313/result.json",
+      "sha256": "3abb6b1c8dfc2000ef772b0665d558e681ae8f1fd6682d56e08f5a664b5de9c4"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/gui_satnav_viewport_native_62050_execution_20261023/runs/native_20261023_120115_750b0313/debug-menu-steps.txt",
+      "sha256": "677236c8dc79c549cceab1abf4141c8c659f41807fc9667f094f303b5988ccf0"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/gui_satnav_viewport_native_62050_execution_20261023/runs/native_20261023_120115_750b0313/behavior-004.txt",
+      "sha256": "0059fd6c977c9515b0ee0f3836524348cb48c04317a0a5c5bcdd275ba01830fd"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/gui_satnav_viewport_native_62050_execution_20261023/runs/native_20261023_120115_750b0313/frames/bb_008040.bmp",
+      "sha256": "6413ab7e9c699e3e33bf0648fe0b9ce5d1af6b19694d8b0591c8051fb351f47a"
+    }
+  ],
+  "original_dispositions": {
+    "case": "PASS",
+    "wrapper": "INCOMPLETE_EVIDENCE_RETAINED",
+    "wrapper_exit_code": 1,
+    "wrapper_error": "unexpected frame file: frames.csv",
+    "prior_site_counts": {
+      "pass": 1,
+      "insufficient": 6,
+      "fail": 0
+    },
+    "passed_site": "SatNav outline only",
+    "insufficient_sites": [
+      "override",
+      "top-left X",
+      "top-left Y",
+      "bottom-right X",
+      "bottom-right Y",
+      "alpha"
+    ],
+    "new_behavior_credit": 0
+  },
+  "causal_limits": [
+    "Engine-off 379, follow-on event 213, and transout explain the broad HUD/map loss in the selected positive-override phase.",
+    "Why the world entered raw engine state 3 is unresolved.",
+    "The positive override branch, viewport geometry, and alpha remain unverified.",
+    "No source repair, source edit, build, fixture, game run, CI, or IDA invocation is included."
+  ]
+}

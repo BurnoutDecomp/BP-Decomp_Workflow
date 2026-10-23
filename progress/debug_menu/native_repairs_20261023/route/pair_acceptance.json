@@ -1,0 +1,723 @@
+{
+    "schema":  1,
+    "packet":  "route_save_gui_executable_packet_20261023_delta02",
+    "status":  "incomplete_or_failed_evidence",
+    "pass":  false,
+    "scope":  "GUI Save empty slot -\u003e wait/read back autosave -\u003e GUI checkpoint edit -\u003e same-slot overwrite -\u003e second autosave/readback -\u003e cold GUI Option0 load -\u003e semantic trace compare -\u003e exact owned WM_CLOSE",
+    "candidate":  {
+                      "b5_head":  "af18caf8a9e02428cfaa4705599e2b1ca9ea7377",
+                      "tree":  "bdb516c986f9ffe2f16e6d1390bcb81c2a80f78f",
+                      "required_change_ids":  [
+                                                  "route_transfer_fix: reviewed source commit 17ab0a96e27bed5e60ffc55cb81dcf0a653b1e4e",
+                                                  "option0_action51: reviewed full composition seal 1e032bd2dc9096bcb184c07ca0c916f4fc71900ba9fcb1feb2e5115c12005e65",
+                                                  "road_rage_late_retire: hosted candidate commit 9af6a868959578f4eafa9af0d69ccd27081667a0",
+                                                  "GUI autosave356 return path: independently reviewed af18caf8, hosted40004041852 pass; native persistence pending"
+                                              ],
+                      "exact_change_source_objects":  [
+                                                          {
+                                                              "feature":  "route_transfer_fix",
+                                                              "path":  "src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp",
+                                                              "blob":  "419402df9925e126ef8bee4c82ff62affda2c42b",
+                                                              "sha256":  "24e5c47cdbcf3018ab669a71df5bbafe324adccc4abe5d4b64b32255edcf9e80"
+                                                          },
+                                                          {
+                                                              "feature":  "route_transfer_fix",
+                                                              "path":  "src/GameSource/Gui/BrnGuiOptionsDataProfile.h",
+                                                              "blob":  "a7c39d6276bd66a23b7ab5ccb86ae12b47bb2367",
+                                                              "sha256":  "51553ee0e1d4a7a8214c93b7be91c58852441ae3c310e355c6de88f7bd2bc1ce"
+                                                          },
+                                                          {
+                                                              "feature":  "option0_action51",
+                                                              "path":  "src/GameShared/GameClasses/System/Input/PC/CgsInputPadsPC.cpp",
+                                                              "blob":  "5166007d911e92136ed2cd8471251014a63b7c50",
+                                                              "sha256":  "87a23f4a40f89b9ad8496effd57a42916016c0d88221ca2f812254b91e7810c9"
+                                                          },
+                                                          {
+                                                              "feature":  "road_rage_late_retire",
+                                                              "path":  "src/GameSource/Game/BrnGameModule.cpp",
+                                                              "blob":  "87360a3936ae15410eb16d49ed01a0fda184faa2",
+                                                              "sha256":  "b1892a1ba9a84909e5515ea2b9ea340d6acffd2ae8788df06da0a9f0b36a1ec7"
+                                                          }
+                                                      ]
+                  },
+    "hosted_artifact":  {
+                            "run_id":  40004041852,
+                            "workflow_sha":  "dc741345e8b6ee1af426199c9789f91dbac208df",
+                            "artifact_root":  "scratch/DEBUG_MENU_1011/hosted_40004041852_attempt1",
+                            "verified_results_path":  "scratch/DEBUG_MENU_1011/hosted_40004041852_attempt1/verified_results.json",
+                            "verified_results_sha256":  "477789aece63e673fce01b9a2904bd7a3d0fb3882896fa3a1e26280925fe9b99",
+                            "status":  "hosted_build_all_selected_gates_and_payloads_pass_native_pending",
+                            "required_passed_gates":  [
+                                                          "gui_io_status",
+                                                          "system_user_profile_status",
+                                                          "hud_status",
+                                                          "traffic_flowtype_override_status",
+                                                          "startup_io_status",
+                                                          "gui_license_status",
+                                                          "keyboard_ui_contract_status",
+                                                          "gui_animation_status",
+                                                          "rwac_command_capacity_status",
+                                                          "online_save_route_status"
+                                                      ],
+                            "input_receipt_sha256":  "d7299229fa796daebf619e65c934fef4dfcc143a5b2c9b65d147549ac0831cb2",
+                            "provenance_sha256":  "3c2ed39fb29235346f64fd44390477352ceef1b09dedafd0c036c40cfac0ba5a",
+                            "exe_sha256":  "e9fc6246dece8c45fb52371f9eb25d21f353e8ddd31cae4cbace6e76ee2addbe",
+                            "payloads":  [
+                                             {
+                                                 "name":  "Burnout_PC.cgsmap",
+                                                 "sha256":  "0201a776e72630b9ced3ce09cb0cf35749a8afa513f58c81cb1f65e0df429bf6",
+                                                 "bytes":  3074960
+                                             },
+                                             {
+                                                 "name":  "Burnout_PC.map",
+                                                 "sha256":  "91ee6aec3a038062f48ab1a5b9ade07eec27d94f46360ab22f53df5591b8f1f9",
+                                                 "bytes":  17931983
+                                             },
+                                             {
+                                                 "name":  "swresample-7.dll",
+                                                 "sha256":  "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c",
+                                                 "bytes":  201728
+                                             },
+                                             {
+                                                 "name":  "avfilter-12.dll",
+                                                 "sha256":  "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276",
+                                                 "bytes":  234496
+                                             },
+                                             {
+                                                 "name":  "xaudio2_9redist.dll",
+                                                 "sha256":  "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+                                                 "bytes":  997400
+                                             },
+                                             {
+                                                 "name":  "avcodec-63.dll",
+                                                 "sha256":  "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b",
+                                                 "bytes":  2179072
+                                             },
+                                             {
+                                                 "name":  "Burnout_PC.exe",
+                                                 "sha256":  "e9fc6246dece8c45fb52371f9eb25d21f353e8ddd31cae4cbace6e76ee2addbe",
+                                                 "bytes":  11334656
+                                             },
+                                             {
+                                                 "name":  "avformat-63.dll",
+                                                 "sha256":  "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c",
+                                                 "bytes":  644608
+                                             },
+                                             {
+                                                 "name":  "avutil-61.dll",
+                                                 "sha256":  "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb",
+                                                 "bytes":  978944
+                                             },
+                                             {
+                                                 "name":  "avdevice-63.dll",
+                                                 "sha256":  "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9",
+                                                 "bytes":  109056
+                                             },
+                                             {
+                                                 "name":  "Burnout_PC.exe.provenance.json",
+                                                 "sha256":  "3c2ed39fb29235346f64fd44390477352ceef1b09dedafd0c036c40cfac0ba5a",
+                                                 "bytes":  467
+                                             },
+                                             {
+                                                 "name":  "swscale-10.dll",
+                                                 "sha256":  "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de",
+                                                 "bytes":  955904
+                                             }
+                                         ]
+                        },
+    "stage_receipt_sha256":  "da35cad986c46e140653169c0df126da69064f15d467bc193fba51050aa587f2",
+    "normal_protected_manifest_sha256":  "abc32ee3bb26802332fe08ae6d233870460a6523c21add51ad42cf9d57f088bc",
+    "case_a":  {
+                   "schema":  1,
+                   "case":  "route_save_empty_overwrite_case_a",
+                   "slot":  62052,
+                   "completed":  true,
+                   "outer_timed_out":  false,
+                   "outer_limit_seconds":  450,
+                   "elapsed_seconds":  200.348,
+                   "wrapper_exit":  null,
+                   "result":  {
+                                  "expected":  "PASS",
+                                  "case":  "route_save_empty_overwrite_case_a",
+                                  "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\GuiRouteSaveCaseA.ps1",
+                                  "phase":  "DRIVING",
+                                  "when":  "2026-10-23T20:49:49.2993369+02:00",
+                                  "flow_exit":  0,
+                                  "bug":  "Real GUI save into an empty custom-route slot, overwrite that exact slot with one moved checkpoint, and prove both autosave payloads before clean close.",
+                                  "asserts":  0,
+                                  "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a",
+                                  "label":  "RouteSave Case A / source=af18caf8a9e02428cfaa4705599e2b1ca9ea7377 / workflow=dc741345e8b6ee1af426199c9789f91dbac208df",
+                                  "area":  "gui-profile-persistence",
+                                  "as_expected":  true,
+                                  "verdict":  "PASS",
+                                  "slot":  62052,
+                                  "checks":  [
+                                                 {
+                                                     "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                                                     "pass":  true,
+                                                     "name":  "original strict flow completed and owned game exited",
+                                                     "kind":  "TerminalFlow"
+                                                 },
+                                                 {
+                                                     "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                                                     "pass":  true,
+                                                     "name":  "no engine assertion",
+                                                     "kind":  "LogCount"
+                                                 },
+                                                 {
+                                                     "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                                                     "pass":  true,
+                                                     "name":  "no native exception",
+                                                     "kind":  "LogCount"
+                                                 },
+                                                 {
+                                                     "detail":  "1 line(s) match /\\[overlay\\] start CNOnlOvGOQn/, want [1, 1]",
+                                                     "pass":  true,
+                                                     "name":  "exact overwrite-question overlay requested",
+                                                     "kind":  "LogCount"
+                                                 },
+                                                 {
+                                                     "detail":  "1 line(s) match /\\[overlay\\] complete CNOnlOvGOQn 1/, want [1, 1]",
+                                                     "pass":  true,
+                                                     "name":  "exact overwrite-question overlay completed",
+                                                     "kind":  "LogCount"
+                                                 },
+                                                 {
+                                                     "detail":  "1 line(s) match /\\[exit-diag\\] WM_CLOSE received \\(external close request/, want [1, 1]",
+                                                     "pass":  true,
+                                                     "name":  "external WM_CLOSE reached the game window handler",
+                                                     "kind":  "LogCount"
+                                                 },
+                                                 {
+                                                     "detail":  "menuscript_done=True; prefix_route_ready_highlight_1=True; overwrite_route_main_after_edit=True; required_route_and_overlay_marks=True; save1_and_overwrite_payloads=True; wm_close_receipt_and_flow_self_exit=True; Profile.sav.after_payload_matches_overwrite=True; summary_trace_settings_and_single_checkpoint_change=True; final_summary_trace_saved=True; bounded_log_and_frame_archive=True frames=79",
+                                                     "pass":  true,
+                                                     "name":  "complete GUI path, two autosave payloads, changed checkpoint, clean close and final profile agree",
+                                                     "kind":  "Script"
+                                                 }
+                                             ],
+                                  "provenance":  {
+                                                     "b5_dirty":  0,
+                                                     "exe_size":  11334656,
+                                                     "exe_mtime_before_lock":  "2026-10-23T20:34:48.0365113+02:00",
+                                                     "exe_sha":  "e9fc6246dece",
+                                                     "b5_head":  "91a0ed564",
+                                                     "exe_b5":  "af18caf8",
+                                                     "parent_head":  "8d67d4c0",
+                                                     "exe_mtime":  "2026-10-23T20:34:48.0365113+02:00"
+                                                 }
+                              },
+                   "terminal":  {
+                                    "schema":  1,
+                                    "case":  "route_save_empty_overwrite_case_a",
+                                    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a",
+                                    "slot":  62052,
+                                    "flow_invoked":  true,
+                                    "flow_exit":  0,
+                                    "error":  null,
+                                    "flow_status_sha256":  "93ba732e4fa8ce59996ebe286e27fa9824e8ec587591c21abefa1242843690db",
+                                    "flow_status":  {
+                                                        "schema":  1,
+                                                        "launch_utc":  "2026-10-23T18:46:33.1769865Z",
+                                                        "launched":  true,
+                                                        "owned_pid":  33784,
+                                                        "owned_image":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_a\\slot\\Burnout_PC.exe",
+                                                        "owned_start_utc":  "2026-10-23T18:46:33.1922397Z",
+                                                        "direct_creation_handle_retained":  true,
+                                                        "completed":  true,
+                                                        "requested_exit":  0,
+                                                        "error":  null,
+                                                        "first_assert_stop":  false,
+                                                        "first_assert_at":  null,
+                                                        "observed_asserts":  0,
+                                                        "foreign_game":  false,
+                                                        "runaway_log_abort":  false,
+                                                        "owned_cleanup_complete":  true,
+                                                        "input_reset_complete":  true,
+                                                        "game_exited_on_own":  true,
+                                                        "game_exit":  0,
+                                                        "title_start_requested":  true,
+                                                        "title_start_ready_observed":  true,
+                                                        "title_start_sent_at":  9.0190387,
+                                                        "success":  true
+                                                    },
+                                    "helper_cleanup_complete":  true,
+                                    "profile_restoration_complete":  true,
+                                    "post_flow_foreign_game":  false,
+                                    "profile_restore_error":  null,
+                                    "success":  true
+                                },
+                   "flow_status":  {
+                                       "schema":  1,
+                                       "launch_utc":  "2026-10-23T18:46:33.1769865Z",
+                                       "launched":  true,
+                                       "owned_pid":  33784,
+                                       "owned_image":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_a\\slot\\Burnout_PC.exe",
+                                       "owned_start_utc":  "2026-10-23T18:46:33.1922397Z",
+                                       "direct_creation_handle_retained":  true,
+                                       "completed":  true,
+                                       "requested_exit":  0,
+                                       "error":  null,
+                                       "first_assert_stop":  false,
+                                       "first_assert_at":  null,
+                                       "observed_asserts":  0,
+                                       "foreign_game":  false,
+                                       "runaway_log_abort":  false,
+                                       "owned_cleanup_complete":  true,
+                                       "input_reset_complete":  true,
+                                       "game_exited_on_own":  true,
+                                       "game_exit":  0,
+                                       "title_start_requested":  true,
+                                       "title_start_ready_observed":  true,
+                                       "title_start_sent_at":  9.0190387,
+                                       "success":  true
+                                   },
+                   "normal_protected_unchanged":  true,
+                   "private_config_restored":  true,
+                   "private_profile_restored":  true,
+                   "private_slot_preflight":  {
+                                                  "checked_before_run_case_setup":  true,
+                                                  "slot_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_a\\slot",
+                                                  "slot_file_names":  [
+                                                                          "avcodec-63.dll",
+                                                                          "avdevice-63.dll",
+                                                                          "avfilter-12.dll",
+                                                                          "avformat-63.dll",
+                                                                          "avutil-61.dll",
+                                                                          "Burnout_PC.cgsmap",
+                                                                          "Burnout_PC.exe",
+                                                                          "Burnout_PC.exe.provenance.json",
+                                                                          "Burnout_PC.map",
+                                                                          "config.ini",
+                                                                          "swresample-7.dll",
+                                                                          "swscale-10.dll",
+                                                                          "xaudio2_9redist.dll"
+                                                                      ],
+                                                  "hosted_payloads":  [
+                                                                          {
+                                                                              "name":  "Burnout_PC.cgsmap",
+                                                                              "bytes":  3074960,
+                                                                              "sha256":  "0201a776e72630b9ced3ce09cb0cf35749a8afa513f58c81cb1f65e0df429bf6"
+                                                                          },
+                                                                          {
+                                                                              "name":  "Burnout_PC.map",
+                                                                              "bytes":  17931983,
+                                                                              "sha256":  "91ee6aec3a038062f48ab1a5b9ade07eec27d94f46360ab22f53df5591b8f1f9"
+                                                                          },
+                                                                          {
+                                                                              "name":  "swresample-7.dll",
+                                                                              "bytes":  201728,
+                                                                              "sha256":  "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avfilter-12.dll",
+                                                                              "bytes":  234496,
+                                                                              "sha256":  "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276"
+                                                                          },
+                                                                          {
+                                                                              "name":  "xaudio2_9redist.dll",
+                                                                              "bytes":  997400,
+                                                                              "sha256":  "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avcodec-63.dll",
+                                                                              "bytes":  2179072,
+                                                                              "sha256":  "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b"
+                                                                          },
+                                                                          {
+                                                                              "name":  "Burnout_PC.exe",
+                                                                              "bytes":  11334656,
+                                                                              "sha256":  "e9fc6246dece8c45fb52371f9eb25d21f353e8ddd31cae4cbace6e76ee2addbe"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avformat-63.dll",
+                                                                              "bytes":  644608,
+                                                                              "sha256":  "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avutil-61.dll",
+                                                                              "bytes":  978944,
+                                                                              "sha256":  "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avdevice-63.dll",
+                                                                              "bytes":  109056,
+                                                                              "sha256":  "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9"
+                                                                          },
+                                                                          {
+                                                                              "name":  "Burnout_PC.exe.provenance.json",
+                                                                              "bytes":  467,
+                                                                              "sha256":  "3c2ed39fb29235346f64fd44390477352ceef1b09dedafd0c036c40cfac0ba5a"
+                                                                          },
+                                                                          {
+                                                                              "name":  "swscale-10.dll",
+                                                                              "bytes":  955904,
+                                                                              "sha256":  "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de"
+                                                                          }
+                                                                      ],
+                                                  "config_sha256":  "8017ab56482068335a91022ed93aa5329c1510c0fbbbc4274fbcb04c396f818f",
+                                                  "staged_profile_sha256":  "1d8360f829a7ab5e1b8b42536455e0786ea21b97eacc677911591cc3562f28e8",
+                                                  "profile_fixture":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_a\\profile_seed\\Profile.sav",
+                                                  "profile_fixture_sha256":  "1d8360f829a7ab5e1b8b42536455e0786ea21b97eacc677911591cc3562f28e8"
+                                              },
+                   "private_config_before":  {
+                                                 "exists":  true,
+                                                 "bytes":  4575,
+                                                 "sha256":  "8017ab56482068335a91022ed93aa5329c1510c0fbbbc4274fbcb04c396f818f",
+                                                 "mtime_ns":  "1792581958598483400"
+                                             },
+                   "private_config_after":  {
+                                                "exists":  true,
+                                                "bytes":  4575,
+                                                "sha256":  "8017ab56482068335a91022ed93aa5329c1510c0fbbbc4274fbcb04c396f818f",
+                                                "mtime_ns":  "1792581958598483400"
+                                            },
+                   "private_profile_before":  {
+                                                  "exists":  true,
+                                                  "bytes":  1223256,
+                                                  "sha256":  "1d8360f829a7ab5e1b8b42536455e0786ea21b97eacc677911591cc3562f28e8",
+                                                  "mtime_ns":  "1792682410471674400"
+                                              },
+                   "private_profile_after":  {
+                                                 "exists":  true,
+                                                 "bytes":  1223256,
+                                                 "sha256":  "1d8360f829a7ab5e1b8b42536455e0786ea21b97eacc677911591cc3562f28e8",
+                                                 "mtime_ns":  "1792682410471674400"
+                                             },
+                   "stdout":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a\\run_case.stdout.txt",
+                   "stderr":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a\\run_case.stderr.txt"
+               },
+    "case_b_profile_copy":  {
+                                "copied":  {
+                                               "container_valid":  true,
+                                               "created_count":  1,
+                                               "created_count_offset":  177528,
+                                               "file_bytes":  1223256,
+                                               "file_mtime_ns_observation_only":  "1792781375693776100",
+                                               "file_sha256":  "eec5ee52b5cb0d3138105edf005f6697e083f976758c33db3ee8ba2b731577c1",
+                                               "image_bytes":  262144,
+                                               "image_sha256":  "e8ed1f856e2eac42cc1581546d9a14da1de92455f63be46c26cd6a391a619e2b",
+                                               "mugshot_bytes":  960800,
+                                               "options_base":  148080,
+                                               "path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_b\\profile_input\\Profile.sav",
+                                               "profile_validation":  {
+                                                                          "cars":  255,
+                                                                          "distance_offline_m":  6106746.5,
+                                                                          "distance_online_m":  157948.90625,
+                                                                          "driving_time_seconds":  135019.515625,
+                                                                          "events":  120,
+                                                                          "freeburn_challenges":  6,
+                                                                          "liveries":  250,
+                                                                          "mugshot_gallery_counts":  [
+                                                                                                         0,
+                                                                                                         0,
+                                                                                                         0,
+                                                                                                         5,
+                                                                                                         0
+                                                                                                     ],
+                                                                          "rank":  6,
+                                                                          "rivals":  29,
+                                                                          "spawn_car_id":  "A7E60D52A2218000"
+                                                                      },
+                                               "received_count":  0,
+                                               "slot_bytes":  1472,
+                                               "slot_index_zero_based":  0,
+                                               "slot_offset":  148088,
+                                               "slot_sha256":  "3049c14faab68b3ce666c4f19dc9fccff646da978a7731130df93d0f12f9a8aa"
+                                           },
+                                "differences":  [
+
+                                                ],
+                                "pass":  true,
+                                "source":  {
+                                               "container_valid":  true,
+                                               "created_count":  1,
+                                               "created_count_offset":  177528,
+                                               "file_bytes":  1223256,
+                                               "file_mtime_ns_observation_only":  "1792781375693776100",
+                                               "file_sha256":  "eec5ee52b5cb0d3138105edf005f6697e083f976758c33db3ee8ba2b731577c1",
+                                               "image_bytes":  262144,
+                                               "image_sha256":  "e8ed1f856e2eac42cc1581546d9a14da1de92455f63be46c26cd6a391a619e2b",
+                                               "mugshot_bytes":  960800,
+                                               "options_base":  148080,
+                                               "path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a\\Profile.sav.after",
+                                               "profile_validation":  {
+                                                                          "cars":  255,
+                                                                          "distance_offline_m":  6106746.5,
+                                                                          "distance_online_m":  157948.90625,
+                                                                          "driving_time_seconds":  135019.515625,
+                                                                          "events":  120,
+                                                                          "freeburn_challenges":  6,
+                                                                          "liveries":  250,
+                                                                          "mugshot_gallery_counts":  [
+                                                                                                         0,
+                                                                                                         0,
+                                                                                                         0,
+                                                                                                         5,
+                                                                                                         0
+                                                                                                     ],
+                                                                          "rank":  6,
+                                                                          "rivals":  29,
+                                                                          "spawn_car_id":  "A7E60D52A2218000"
+                                                                      },
+                                               "received_count":  0,
+                                               "slot_bytes":  1472,
+                                               "slot_index_zero_based":  0,
+                                               "slot_offset":  148088,
+                                               "slot_sha256":  "3049c14faab68b3ce666c4f19dc9fccff646da978a7731130df93d0f12f9a8aa"
+                                           }
+                            },
+    "case_b":  {
+                   "schema":  1,
+                   "case":  "route_save_cold_reload_case_b",
+                   "slot":  62053,
+                   "completed":  true,
+                   "outer_timed_out":  false,
+                   "outer_limit_seconds":  330,
+                   "elapsed_seconds":  219.017,
+                   "wrapper_exit":  null,
+                   "result":  {
+                                  "expected":  "PASS",
+                                  "case":  "route_save_cold_reload_case_b",
+                                  "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\GuiRouteSaveCaseB.ps1",
+                                  "phase":  "DRIVING",
+                                  "when":  "2026-10-23T20:53:28.7564312+02:00",
+                                  "flow_exit":  0,
+                                  "bug":  "Cold-launch an independent copy of Case A Profile.sav.after, load the overwritten route through GUI Option0, and compare route/settings/ordered markers.",
+                                  "asserts":  0,
+                                  "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_b",
+                                  "label":  "RouteSave Case B / cold load slot=1 / source=af18caf8a9e02428cfaa4705599e2b1ca9ea7377",
+                                  "area":  "gui-profile-persistence",
+                                  "as_expected":  false,
+                                  "verdict":  "FAIL",
+                                  "slot":  62053,
+                                  "checks":  [
+                                                 {
+                                                     "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                                                     "pass":  true,
+                                                     "name":  "original strict flow completed and owned game exited",
+                                                     "kind":  "TerminalFlow"
+                                                 },
+                                                 {
+                                                     "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                                                     "pass":  true,
+                                                     "name":  "no engine assertion",
+                                                     "kind":  "LogCount"
+                                                 },
+                                                 {
+                                                     "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                                                     "pass":  true,
+                                                     "name":  "no native exception",
+                                                     "kind":  "LogCount"
+                                                 },
+                                                 {
+                                                     "detail":  "0 line(s) match /\\[exit-diag\\] WM_CLOSE received \\(external close request/, want [1, 1]",
+                                                     "pass":  false,
+                                                     "name":  "external WM_CLOSE reached the game window handler",
+                                                     "kind":  "LogCount"
+                                                 },
+                                                 {
+                                                     "detail":  "script_done=True; ordinary_option0_list_select=True; trace_equal=False; profile_payload_unchanged=False; close_self_exit=False; frames=87; bounded=True",
+                                                     "pass":  false,
+                                                     "name":  "Option0 GUI load, actual route reload, semantic payload comparison and clean close",
+                                                     "kind":  "Script"
+                                                 }
+                                             ],
+                                  "provenance":  {
+                                                     "b5_dirty":  0,
+                                                     "exe_size":  11334656,
+                                                     "exe_mtime_before_lock":  "2026-10-23T20:34:48.0365113+02:00",
+                                                     "exe_sha":  "e9fc6246dece",
+                                                     "b5_head":  "91a0ed564",
+                                                     "exe_b5":  "af18caf8",
+                                                     "parent_head":  "8d67d4c0",
+                                                     "exe_mtime":  "2026-10-23T20:34:48.0365113+02:00"
+                                                 }
+                              },
+                   "terminal":  {
+                                    "schema":  1,
+                                    "case":  "route_save_cold_reload_case_b",
+                                    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_b",
+                                    "slot":  62053,
+                                    "flow_invoked":  true,
+                                    "flow_exit":  0,
+                                    "error":  null,
+                                    "flow_status_sha256":  "d35491fcfda7d0dbc061b6133060a6184488b6d1f7b76ef0562dd99017152d2b",
+                                    "flow_status":  {
+                                                        "schema":  1,
+                                                        "launch_utc":  "2026-10-23T18:49:53.8145899Z",
+                                                        "launched":  true,
+                                                        "owned_pid":  7528,
+                                                        "owned_image":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_b\\slot\\Burnout_PC.exe",
+                                                        "owned_start_utc":  "2026-10-23T18:49:53.8344810Z",
+                                                        "direct_creation_handle_retained":  true,
+                                                        "completed":  true,
+                                                        "requested_exit":  0,
+                                                        "error":  null,
+                                                        "first_assert_stop":  false,
+                                                        "first_assert_at":  null,
+                                                        "observed_asserts":  0,
+                                                        "foreign_game":  false,
+                                                        "runaway_log_abort":  false,
+                                                        "owned_cleanup_complete":  true,
+                                                        "input_reset_complete":  true,
+                                                        "game_exited_on_own":  false,
+                                                        "game_exit":  null,
+                                                        "title_start_requested":  true,
+                                                        "title_start_ready_observed":  true,
+                                                        "title_start_sent_at":  9.0066414,
+                                                        "success":  true
+                                                    },
+                                    "helper_cleanup_complete":  true,
+                                    "profile_restoration_complete":  true,
+                                    "post_flow_foreign_game":  false,
+                                    "profile_restore_error":  null,
+                                    "success":  true
+                                },
+                   "flow_status":  {
+                                       "schema":  1,
+                                       "launch_utc":  "2026-10-23T18:49:53.8145899Z",
+                                       "launched":  true,
+                                       "owned_pid":  7528,
+                                       "owned_image":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_b\\slot\\Burnout_PC.exe",
+                                       "owned_start_utc":  "2026-10-23T18:49:53.8344810Z",
+                                       "direct_creation_handle_retained":  true,
+                                       "completed":  true,
+                                       "requested_exit":  0,
+                                       "error":  null,
+                                       "first_assert_stop":  false,
+                                       "first_assert_at":  null,
+                                       "observed_asserts":  0,
+                                       "foreign_game":  false,
+                                       "runaway_log_abort":  false,
+                                       "owned_cleanup_complete":  true,
+                                       "input_reset_complete":  true,
+                                       "game_exited_on_own":  false,
+                                       "game_exit":  null,
+                                       "title_start_requested":  true,
+                                       "title_start_ready_observed":  true,
+                                       "title_start_sent_at":  9.0066414,
+                                       "success":  true
+                                   },
+                   "normal_protected_unchanged":  true,
+                   "private_config_restored":  true,
+                   "private_profile_restored":  true,
+                   "private_slot_preflight":  {
+                                                  "checked_before_run_case_setup":  true,
+                                                  "slot_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_b\\slot",
+                                                  "slot_file_names":  [
+                                                                          "avcodec-63.dll",
+                                                                          "avdevice-63.dll",
+                                                                          "avfilter-12.dll",
+                                                                          "avformat-63.dll",
+                                                                          "avutil-61.dll",
+                                                                          "Burnout_PC.cgsmap",
+                                                                          "Burnout_PC.exe",
+                                                                          "Burnout_PC.exe.provenance.json",
+                                                                          "Burnout_PC.map",
+                                                                          "config.ini",
+                                                                          "swresample-7.dll",
+                                                                          "swscale-10.dll",
+                                                                          "xaudio2_9redist.dll"
+                                                                      ],
+                                                  "hosted_payloads":  [
+                                                                          {
+                                                                              "name":  "Burnout_PC.cgsmap",
+                                                                              "bytes":  3074960,
+                                                                              "sha256":  "0201a776e72630b9ced3ce09cb0cf35749a8afa513f58c81cb1f65e0df429bf6"
+                                                                          },
+                                                                          {
+                                                                              "name":  "Burnout_PC.map",
+                                                                              "bytes":  17931983,
+                                                                              "sha256":  "91ee6aec3a038062f48ab1a5b9ade07eec27d94f46360ab22f53df5591b8f1f9"
+                                                                          },
+                                                                          {
+                                                                              "name":  "swresample-7.dll",
+                                                                              "bytes":  201728,
+                                                                              "sha256":  "205c937cd2330599d3b85ded7623562b49b0471e207bf1bf8646bce6362bce2c"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avfilter-12.dll",
+                                                                              "bytes":  234496,
+                                                                              "sha256":  "019478bb94a356afa68c23b3ab7059c06dbfe18d8fd4d73c8efe61487387e276"
+                                                                          },
+                                                                          {
+                                                                              "name":  "xaudio2_9redist.dll",
+                                                                              "bytes":  997400,
+                                                                              "sha256":  "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avcodec-63.dll",
+                                                                              "bytes":  2179072,
+                                                                              "sha256":  "879057bd54198730f36ab05491fe414b5ba4ee261d6760efc0a0722e1f566c9b"
+                                                                          },
+                                                                          {
+                                                                              "name":  "Burnout_PC.exe",
+                                                                              "bytes":  11334656,
+                                                                              "sha256":  "e9fc6246dece8c45fb52371f9eb25d21f353e8ddd31cae4cbace6e76ee2addbe"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avformat-63.dll",
+                                                                              "bytes":  644608,
+                                                                              "sha256":  "9800686ca045fa355934aa3978f1a2ba84a74c38ed07de1b7ec08eaf7c07cd7c"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avutil-61.dll",
+                                                                              "bytes":  978944,
+                                                                              "sha256":  "cc45579c780cbb06d34b2a4659465dd5382f28a02294445bfae5dbd3681f7cbb"
+                                                                          },
+                                                                          {
+                                                                              "name":  "avdevice-63.dll",
+                                                                              "bytes":  109056,
+                                                                              "sha256":  "fbcac628aa87d34d0e824c361efb603ec03c3a7e1771e328b4c376a33cb183a9"
+                                                                          },
+                                                                          {
+                                                                              "name":  "Burnout_PC.exe.provenance.json",
+                                                                              "bytes":  467,
+                                                                              "sha256":  "3c2ed39fb29235346f64fd44390477352ceef1b09dedafd0c036c40cfac0ba5a"
+                                                                          },
+                                                                          {
+                                                                              "name":  "swscale-10.dll",
+                                                                              "bytes":  955904,
+                                                                              "sha256":  "c0d417f6e17163894bb374bd621e32dd55ea920bee957901c208667884bbf8de"
+                                                                          }
+                                                                      ],
+                                                  "config_sha256":  "8017ab56482068335a91022ed93aa5329c1510c0fbbbc4274fbcb04c396f818f",
+                                                  "staged_profile_sha256":  "1d8360f829a7ab5e1b8b42536455e0786ea21b97eacc677911591cc3562f28e8",
+                                                  "profile_fixture":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\stage\\case_b\\profile_input\\Profile.sav",
+                                                  "profile_fixture_sha256":  "eec5ee52b5cb0d3138105edf005f6697e083f976758c33db3ee8ba2b731577c1"
+                                              },
+                   "private_config_before":  {
+                                                 "exists":  true,
+                                                 "bytes":  4575,
+                                                 "sha256":  "8017ab56482068335a91022ed93aa5329c1510c0fbbbc4274fbcb04c396f818f",
+                                                 "mtime_ns":  "1792581958598483400"
+                                             },
+                   "private_config_after":  {
+                                                "exists":  true,
+                                                "bytes":  4575,
+                                                "sha256":  "8017ab56482068335a91022ed93aa5329c1510c0fbbbc4274fbcb04c396f818f",
+                                                "mtime_ns":  "1792581958598483400"
+                                            },
+                   "private_profile_before":  {
+                                                  "exists":  true,
+                                                  "bytes":  1223256,
+                                                  "sha256":  "1d8360f829a7ab5e1b8b42536455e0786ea21b97eacc677911591cc3562f28e8",
+                                                  "mtime_ns":  "1792682410471674400"
+                                              },
+                   "private_profile_after":  {
+                                                 "exists":  true,
+                                                 "bytes":  1223256,
+                                                 "sha256":  "1d8360f829a7ab5e1b8b42536455e0786ea21b97eacc677911591cc3562f28e8",
+                                                 "mtime_ns":  "1792682410471674400"
+                                             },
+                   "stdout":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_b\\run_case.stdout.txt",
+                   "stderr":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_b\\run_case.stderr.txt"
+               },
+    "manual_visual_review":  "pending Root comparison of retained Case A initial/final route map and Case B cold-loaded map frames",
+    "no_engine_console_save":  true,
+    "no_direct_gui_queue_injection":  true,
+    "no_global_end_or_assert_release":  true,
+    "no_force_termination_as_pass":  true,
+    "elapsed_seconds":  421.741,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821"
+}

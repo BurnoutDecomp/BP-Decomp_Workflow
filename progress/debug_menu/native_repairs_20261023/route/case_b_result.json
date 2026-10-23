@@ -1,0 +1,58 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "route_save_cold_reload_case_b",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\GuiRouteSaveCaseB.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-23T20:53:28.7564312+02:00",
+    "flow_exit":  0,
+    "bug":  "Cold-launch an independent copy of Case A Profile.sav.after, load the overwritten route through GUI Option0, and compare route/settings/ordered markers.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_b",
+    "label":  "RouteSave Case B / cold load slot=1 / source=af18caf8a9e02428cfaa4705599e2b1ca9ea7377",
+    "area":  "gui-profile-persistence",
+    "as_expected":  false,
+    "verdict":  "FAIL",
+    "slot":  62053,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no engine assertion",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no native exception",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[exit-diag\\] WM_CLOSE received \\(external close request/, want [1, 1]",
+                       "pass":  false,
+                       "name":  "external WM_CLOSE reached the game window handler",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "script_done=True; ordinary_option0_list_select=True; trace_equal=False; profile_payload_unchanged=False; close_self_exit=False; frames=87; bounded=True",
+                       "pass":  false,
+                       "name":  "Option0 GUI load, actual route reload, semantic payload comparison and clean close",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11334656,
+                       "exe_mtime_before_lock":  "2026-10-23T20:34:48.0365113+02:00",
+                       "exe_sha":  "e9fc6246dece",
+                       "b5_head":  "91a0ed564",
+                       "exe_b5":  "af18caf8",
+                       "parent_head":  "8d67d4c0",
+                       "exe_mtime":  "2026-10-23T20:34:48.0365113+02:00"
+                   }
+}

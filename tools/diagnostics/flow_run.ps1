@@ -1685,7 +1685,7 @@ if ($MenuTapAt -ne "") {
   $lInv      = [System.Globalization.CultureInfo]::InvariantCulture
   $laKnown = @{ 'DPadUp'='DPadUp'; 'DPadDown'='DPadDown'; 'DPadLeft'='DPadLeft'; 'DPadRight'='DPadRight';
                 'Next'='Next'; 'Prev'='Prev'; 'OptionNext'='OptionNext'; 'OptionPrev'='OptionPrev';
-                'Accept'='Accept'; 'Stop'='Stop'; 'Start'='Start'; 'EventDetails'='EventDetails' }
+                'Accept'='Accept'; 'Stop'='Stop'; 'Start'='Start'; 'EventDetails'='EventDetails'; 'Option0'='Option0' }
   foreach ($lpEntry in $MenuTapAt.Split(",")) {
     $lpEntry = $lpEntry.Trim(); if ($lpEntry -eq "") { continue }
     $laParts = $lpEntry.Split(":")
@@ -1695,7 +1695,7 @@ if ($MenuTapAt -ne "") {
     }
     $lpChan = $laParts[1].Trim()
     if (-not $laKnown.ContainsKey($lpChan)) {
-      Write-Host ("[flow] FAIL: -MenuTapAt channel '{0}' unknown (DPadUp DPadDown DPadLeft DPadRight Next Prev OptionNext OptionPrev Accept Stop Start EventDetails)." -f $lpChan); exit 1
+      Write-Host ("[flow] FAIL: -MenuTapAt channel '{0}' unknown (DPadUp DPadDown DPadLeft DPadRight Next Prev OptionNext OptionPrev Accept Stop Start EventDetails Option0)." -f $lpChan); exit 1
     }
     $script:menuTaps += [pscustomobject]@{ At = [double]$laParts[0].Trim(); Chan = $lpChan }
     if (-not $script:menuTapHandles.ContainsKey($lpChan)) {
@@ -1735,7 +1735,7 @@ $script:msSignalDir = $null
 $script:msPeerLog = $env:BP_PAIR_PEER_LOG
 $script:msPairT0 = $null
 if ($env:BP_PAIR_T0) { try { $script:msPairT0 = [datetime]::FromFileTimeUtc([int64]$env:BP_PAIR_T0).ToLocalTime() } catch { $script:msPairT0 = $null } }
-$script:msTapChans  = @('DPadUp','DPadDown','DPadLeft','DPadRight','Next','Prev','OptionNext','OptionPrev','Accept','Stop','Start','PauseMap','EventDetails')
+$script:msTapChans  = @('DPadUp','DPadDown','DPadLeft','DPadRight','Next','Prev','OptionNext','OptionPrev','Accept','Stop','Start','PauseMap','EventDetails','Option0')
 $script:msHoldChans = @('Accelerate','Brake','HandBrake','SteerLeft','SteerRight','ShoulderL','ShoulderR','Boost','Lookback','ChangeView','StickUp','StickDown','GuiZoom','GuiInspect','CameraLeft','CameraRight','CameraUp','CameraDown')
 function Get-MsHandle([string]$lsChan, [bool]$lbManual) {
   if (-not $script:msHandles.ContainsKey($lsChan)) {

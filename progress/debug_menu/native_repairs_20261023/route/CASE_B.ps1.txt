@@ -1,0 +1,192 @@
+$ErrorActionPreference = 'Stop'
+$packetRoot = $PSScriptRoot
+$probePath = Join-Path $packetRoot 'ProfilePayloadProbe.py'
+$menuPrefixPath = Join-Path $packetRoot 'MENU_SEQUENCE_LOAD_ENTRY_PREFIX.txt'
+$repoRoot = [IO.Path]::GetFullPath($env:ROUTE_SAVE_REPO_ROOT)
+$pythonExe = [IO.Path]::GetFullPath($env:ROUTE_SAVE_PYTHON)
+$profileInput = [IO.Path]::GetFullPath($env:ROUTE_SAVE_CASE_B_PROFILE_FIXTURE)
+$profileInputSha = ([string]$env:ROUTE_SAVE_CASE_B_PROFILE_SHA256).ToLowerInvariant()
+$referenceSummary = [IO.Path]::GetFullPath($env:ROUTE_SAVE_EXPECTED_SUMMARY)
+$targetIndex = [int]$env:ROUTE_SAVE_TARGET_INDEX
+$targetCount = [int]$env:ROUTE_SAVE_TARGET_COUNT
+$expectedSlotSha = ([string]$env:ROUTE_SAVE_EXPECTED_SLOT_SHA256).ToLowerInvariant()
+
+foreach ($path in @($profileInput, $referenceSummary, $probePath, $menuPrefixPath)) {
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Case B input is missing: $path" }
+}
+
+$case = @{
+    Name = 'route_save_cold_reload_case_b'
+    Area = 'gui-profile-persistence'
+    Bug = 'Cold-launch an independent copy of Case A Profile.sav.after, load the overwritten route through GUI Option0, and compare route/settings/ordered markers.'
+    Frames = $true
+    ProfileFixture = $profileInput
+    ProfileFixtureSha256 = $profileInputSha
+    FreshProfile = $false
+    DiagEnv = 'BRN_EASYDRIVE_TRACE=1,BRN_CREATE_MATCH_TRACE=1,BRN_SCREEN_DIAG=1,BRN_OVERLAY_DIAG=1,BRN_FRAME_DUMP_MAX=96'
+    RepoRoot = $repoRoot
+    PythonExe = $pythonExe
+    ProbePath = $probePath
+    MenuPrefixPath = $menuPrefixPath
+    ReferenceSummaryPath = $referenceSummary
+    TargetIndex = $targetIndex
+    TargetCount = $targetCount
+    ExpectedSlotSha256 = $expectedSlotSha
+    Run = @{
+        TitleStart = $true; SkipIntro = $true; AcceptGap = 1
+        Drive = $true; DriveDelay = 0; DriveSeconds = 3
+        MaxSeconds = 210; StrictGameOwnership = $true; NoAssertRelease = $true; BelowNormal = $true
+        FrameEvery = 240; MinFreeGB = 20; MaxLogMB = 64
+        MenuScript = 'timeout:60;gap:0.8;signal:case_b_script_armed'
+    }
+}
+
+$case.Setup = {
+    param($ctx)
+    if (-not $ctx.UsesPrivateStage -or $ctx.Slot -ne 62053 -or
+        [IO.Path]::GetFileName([IO.Path]::GetFullPath($ctx.GameDir)) -ine 'slot' -or
+        [IO.Path]::GetFileName([IO.Path]::GetFullPath($ctx.WorkingDirectory)) -ine 'data' -or
+        [IO.Path]::GetFullPath((Split-Path -Parent $ctx.GameDir)) -ine [IO.Path]::GetFullPath((Split-Path -Parent $ctx.WorkingDirectory))) {
+        throw 'Case B requires only the paired private case_b\slot and case_b\data roots on fresh slot 62053.'
+    }
+    if (-not (Test-Path -LiteralPath $ctx.Case.ProfileFixture -PathType Leaf) -or
+        (Get-Item -LiteralPath $ctx.Case.ProfileFixture).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw 'Case B requires an ordinary independent copy of Case A Profile.sav.after.'
+    }
+    $fixtureHash = (Get-FileHash -LiteralPath $ctx.Case.ProfileFixture -Algorithm SHA256).Hash.ToLowerInvariant()
+    if ($fixtureHash -cne $ctx.Case.ProfileFixtureSha256) { throw 'Case B independent profile-copy hash differs from Case A Profile.sav.after.' }
+    $profilePath = Join-Path $ctx.WorkingDirectory ('Memcard_' + $ctx.Slot + '\Profile.sav')
+    if (-not (Test-Path -LiteralPath $profilePath -PathType Leaf) -or
+        (Get-Item -LiteralPath $profilePath).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw 'Case B requires an ordinary private Profile.sav file in the case data root.'
+    }
+    $profileArgs = @($ctx.Case.ProbePath, 'compare-profile', '--repo-root', $ctx.Case.RepoRoot,
+        '--source', $ctx.Case.ProfileFixture, '--copied', $profilePath, '--slot-index', [string]$ctx.Case.TargetIndex)
+    $profileText = & $ctx.Case.PythonExe @profileArgs
+    if ($LASTEXITCODE -ne 0) { throw 'B5SV reader found a mismatch between Case A output and Case B staged profile.' }
+    $profileCopy = ($profileText -join "`n") | ConvertFrom-Json
+    if (-not $profileCopy.pass -or $profileCopy.source.created_count -ne $ctx.Case.TargetCount -or
+        $profileCopy.source.slot_sha256 -cne $ctx.Case.ExpectedSlotSha256) {
+        throw 'Case B copied profile does not contain the pinned overwritten route payload.'
+    }
+    $ctx.Case.ProfilePath = $profilePath
+    $ctx.Case.InputReceiptPath = Join-Path $ctx.RunDir 'case-input.json'
+    $ctx.Case.ObserverDir = Join-Path $ctx.RunDir 'observer'
+    New-Item -ItemType Directory -Path $ctx.Case.ObserverDir -Force | Out-Null
+    [ordered]@{
+        schema=1;phase='case-b';slot=$ctx.Slot;profile_copy_check=$profileCopy
+        expected_count=$ctx.Case.TargetCount;target_index=$ctx.Case.TargetIndex
+        expected_slot_sha256=$ctx.Case.ExpectedSlotSha256;reference_summary=$ctx.Case.ReferenceSummaryPath
+        profile_fixture_sha256=$fixtureHash;fixture_matches_run_a_copy=$true
+        created_utc=(Get-Date).ToUniversalTime().ToString('o')
+    } | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $ctx.Case.InputReceiptPath -Encoding UTF8
+
+    $observer = [IO.Path]::GetFullPath((Join-Path (Split-Path -Parent $ctx.Case.ProbePath) 'AutosaveObserver.ps1'))
+    $psExe = (Get-Command powershell.exe -ErrorAction Stop).Source
+    $args = @('-NoProfile','-ExecutionPolicy','Bypass','-File',$observer,
+        '-Phase','case-b','-RepoRoot',$ctx.Case.RepoRoot,'-RunDir',$ctx.RunDir,
+        '-ProfilePath',$profilePath,'-GameLog',$ctx.GameLog,
+        '-GameImagePath',(Join-Path $ctx.GameDir 'Burnout_PC.exe'),
+        '-PythonExe',$ctx.Case.PythonExe,'-ProbePath',$ctx.Case.ProbePath,
+        '-TargetCount',[string]$ctx.Case.TargetCount,'-TargetIndex',[string]$ctx.Case.TargetIndex,
+        '-InitialSlotSha256',[string]$ctx.Case.ExpectedSlotSha256,'-CloseTimeoutSeconds','30')
+    $quoted = @($args | ForEach-Object { '"' + ([string]$_).Replace('"','\"') + '"' }) -join ' '
+    $observerProcess = Start-Process -FilePath $psExe -ArgumentList $quoted -PassThru -WindowStyle Hidden
+
+    $signal = { param([string]$name) (Join-Path $ctx.RunDir ('observer\' + $name)) }.GetNewClosure()
+    $menu = (Get-Content -LiteralPath $ctx.Case.MenuPrefixPath -Raw).Trim()
+    $suffix = @(
+        'mark:option0_load_helpbar_visible',
+        'tap:Option0',
+        'sleep:3',
+        'mark:saved_route_list_visible',
+        $(if ($ctx.Case.TargetIndex -gt 0) { 'tap:Nextx' + $ctx.Case.TargetIndex } else { 'sleep:1' }),
+        'sleep:3',
+        ('mark:load_slot_' + ($ctx.Case.TargetIndex + 1) + '_selected_by_visible_order'),
+        'tap:Accept',
+        'sleep:2',
+        'mark:created_options_loaded',
+        'tap:Accept',
+        'wait:\[create-match-trace\] route ready .*round=0 rounds=1 highlighted-id=3 route-info=1',
+        'mark:cold_loaded_route_ready',
+        'tap:Accept',
+        'wait:ENTER ''ON_GAME_SUM ''',
+        'wait:\[create-match-trace\] params stage=summary-ready .*bounds-valid=1',
+        'mark:cold_loaded_summary',
+        'sleep:3',
+        ('signal:' + (& $signal 'close.ready.requested'))
+    )
+    $ctx.Case.Run.MenuScript = $menu + ';' + ($suffix -join ';')
+    return $observerProcess
+}.GetNewClosure()
+
+$case.Checks = @(
+    @{Kind='LogCount';Name='no engine assertion';Pattern='\[ASSERT(?:\s+\d+)?\]';Max=0},
+    @{Kind='LogCount';Name='no native exception';Pattern='\[EXCEPTION\]';Max=0},
+    @{Kind='LogCount';Name='external WM_CLOSE reached the game window handler';Pattern='\[exit-diag\] WM_CLOSE received \(external close request';Min=1;Max=1},
+    @{Kind='Script';Name='Option0 GUI load, actual route reload, semantic payload comparison and clean close';Script={
+        param($ctx)
+        $case = $ctx.Case
+        $runDir = $ctx.RunDir
+        $observer = Join-Path $runDir 'observer'
+        $closePath = Join-Path $observer 'close.json'
+        $close = if (Test-Path -LiteralPath $closePath) { Get-Content -LiteralPath $closePath -Raw | ConvertFrom-Json } else { $null }
+        $terminal = Get-Content -LiteralPath (Join-Path $runDir 'flow/terminal-status.json') -Raw | ConvertFrom-Json
+        $cleanClose = $close -and $close.success -and $close.close_main_window_returned -and $close.exit_confirmed -and $close.exit_code -eq 0 -and
+            $terminal.success -and $terminal.game_exited_on_own -and $terminal.game_exit -eq 0 -and
+            $terminal.owned_cleanup_complete -and -not $terminal.foreign_game
+        $scriptDone = $ctx.MarksText -match '(?m)^MENUSCRIPT done=\d+/\d+ state=done$'
+        $inputPathUsed = $ctx.MarksText -match 'tap:Option0' -and $ctx.MarksText -match 'mark saved_route_list_visible' -and
+            $ctx.MarksText -match ('mark load_slot_' + ($case.TargetIndex + 1) + '_selected_by_visible_order') -and
+            $ctx.MarksText -match 'mark created_options_loaded' -and $ctx.MarksText -match 'mark cold_loaded_summary'
+        $passed = [bool]$cleanClose -and [bool]$scriptDone -and [bool]$inputPathUsed
+
+        $profileAfterPath = Join-Path $runDir 'Profile.sav.after'
+        $afterPass = $false
+        if (Test-Path -LiteralPath $profileAfterPath -PathType Leaf) {
+            $afterText = & $case.PythonExe $case.ProbePath inspect --repo-root $case.RepoRoot --profile $profileAfterPath --slot-index $case.TargetIndex
+            $afterCode = $LASTEXITCODE
+            if ($afterCode -eq 0) {
+                $after = ($afterText -join "`n") | ConvertFrom-Json
+                $afterPass = $after.created_count -eq $case.TargetCount -and $after.slot_sha256 -ceq $case.ExpectedSlotSha256
+            }
+        }
+        $passed = $passed -and $afterPass
+
+        $comparePath = Join-Path $runDir 'cold-load-trace-compare.json'
+        & $case.PythonExe $case.ProbePath compare-trace --reference $case.ReferenceSummaryPath --log $ctx.Log --output $comparePath | Out-Null
+        $traceCode = $LASTEXITCODE
+        $tracePass = $traceCode -eq 0 -and (Test-Path -LiteralPath $comparePath -PathType Leaf) -and
+            (Get-Content -LiteralPath $comparePath -Raw | ConvertFrom-Json).pass
+        $passed = $passed -and $tracePass
+        $compareRecord = $null
+        if (Test-Path -LiteralPath $comparePath -PathType Leaf) { $compareRecord = Get-Content -LiteralPath $comparePath -Raw | ConvertFrom-Json }
+        $afterRecord = $null
+        if ($afterPass) { $afterRecord = $after }
+
+        $frames = @(Get-ChildItem -LiteralPath $ctx.FrameDir -Filter 'bb_*.bmp' -File -ErrorAction SilentlyContinue)
+        $frameRows = @($frames | ForEach-Object { [ordered]@{path=$_.FullName;bytes=$_.Length;sha256=(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()} })
+        $noteRows = @()
+        foreach ($line in Get-Content -LiteralPath (Join-Path $runDir 'flow/marks.txt')) {
+            if ($line -match '^MENUSCRIPT run=\s*(?<seconds>[0-9.,]+)s step (?<step>\d+) mark (?<note>\w+) \(log line (?<line>\d+)\)$') {
+                $seconds = [double]::Parse($Matches.seconds.Replace(',','.'),[Globalization.CultureInfo]::InvariantCulture)
+                $noteRows += [ordered]@{note=$Matches.note;step=[int]$Matches.step;run_seconds=$seconds;log_line=[int]$Matches.line}
+            }
+        }
+        [ordered]@{status='pending_root_visual_review';phase='case-b';notes=$noteRows;frames=$frameRows;
+            required_notes=@('option0_load_helpbar_visible','saved_route_list_visible','load_slot_*_selected_by_visible_order','created_options_loaded','cold_loaded_route_ready','cold_loaded_summary');
+            instructions='Review the visible Load helpbar, exact selected saved-slot label/preview, and cold-loaded route-map marker count/positions against Case A final route frames. Trace equality does not replace pixel review.'} |
+            ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $runDir 'manual_visual_manifest.json') -Encoding UTF8
+        $log = Get-Item -LiteralPath $ctx.Log -ErrorAction SilentlyContinue
+        $boundedEvidence = $null -ne $log -and $log.Length -le 64MB -and $frames.Count -ge 1 -and $frames.Count -le 96
+        $passed = $passed -and $boundedEvidence
+        $details = "script_done=$scriptDone; ordinary_option0_list_select=$inputPathUsed; trace_equal=$tracePass; profile_payload_unchanged=$afterPass; close_self_exit=$cleanClose; frames=$($frames.Count); bounded=$boundedEvidence"
+        [ordered]@{schema=1;pass=[bool]$passed;phase='case-b';case_input=(Get-Content -LiteralPath (Join-Path $runDir 'case-input.json') -Raw|ConvertFrom-Json);
+            close=$close;flow_terminal=$terminal;after_profile=$afterRecord;trace_compare=$compareRecord;
+            manual_route_map_review='pending Root visual comparison of Case A final and cold-loaded route/map frames';details=$details} |
+            ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $runDir 'native_acceptance.json') -Encoding UTF8
+        return @{Pass=[bool]$passed;Detail=$details}
+    }}
+)
+
+return $case

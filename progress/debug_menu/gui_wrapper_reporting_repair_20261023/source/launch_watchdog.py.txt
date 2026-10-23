@@ -1,0 +1,237 @@
+#!/usr/bin/env python3
+"""External BelowNormal supervisor for the GUI12 Run.ps1 wrapper."""
+from __future__ import annotations
+import argparse
+import ctypes
+from ctypes import wintypes
+import datetime as dt
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+import uuid
+
+BELOW_NORMAL_PRIORITY_CLASS = 0x00004000
+MAX_WORKING_SET_BYTES = 536870912
+MAX_WALL_SECONDS = 240.0
+POLL_SECONDS = 0.1
+
+class PROCESS_MEMORY_COUNTERS(ctypes.Structure):
+    _fields_ = [
+        ("cb", wintypes.DWORD), ("PageFaultCount", wintypes.DWORD),
+        ("PeakWorkingSetSize", ctypes.c_size_t), ("WorkingSetSize", ctypes.c_size_t),
+        ("QuotaPeakPagedPoolUsage", ctypes.c_size_t), ("QuotaPagedPoolUsage", ctypes.c_size_t),
+        ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t), ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+        ("PagefileUsage", ctypes.c_size_t), ("PeakPagefileUsage", ctypes.c_size_t),
+    ]
+
+if os.name == "nt":
+    _KERNEL32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    _PSAPI = ctypes.WinDLL("psapi", use_last_error=True)
+    _GET_CURRENT_PROCESS = _KERNEL32.GetCurrentProcess
+    _GET_CURRENT_PROCESS.restype = wintypes.HANDLE
+    _SET_PRIORITY_CLASS = _KERNEL32.SetPriorityClass
+    _SET_PRIORITY_CLASS.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+    _SET_PRIORITY_CLASS.restype = wintypes.BOOL
+    _GET_PRIORITY_CLASS = _KERNEL32.GetPriorityClass
+    _GET_PRIORITY_CLASS.argtypes = [wintypes.HANDLE]
+    _GET_PRIORITY_CLASS.restype = wintypes.DWORD
+    _GET_PROCESS_MEMORY_INFO = _PSAPI.GetProcessMemoryInfo
+    _GET_PROCESS_MEMORY_INFO.argtypes = [wintypes.HANDLE, ctypes.POINTER(PROCESS_MEMORY_COUNTERS), wintypes.DWORD]
+    _GET_PROCESS_MEMORY_INFO.restype = wintypes.BOOL
+else:
+    _KERNEL32 = _PSAPI = None
+
+def utc_now():
+    return dt.datetime.now(dt.timezone.utc).isoformat()
+
+def atomic_json(path, value):
+    path = Path(path)
+    tmp = path.with_name(path.name + ".tmp")
+    with tmp.open("w", encoding="utf-8", newline="\n") as stream:
+        json.dump(value, stream, ensure_ascii=False, separators=(",", ":"))
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.replace(tmp, path)
+
+def sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+def working_set(handle):
+    if os.name != "nt":
+        raise RuntimeError("Windows process-memory query unavailable; fail closed")
+    counters = PROCESS_MEMORY_COUNTERS()
+    counters.cb = ctypes.sizeof(counters)
+    if not _GET_PROCESS_MEMORY_INFO(handle, ctypes.byref(counters), counters.cb):
+        raise ctypes.WinError(ctypes.get_last_error())
+    return int(counters.WorkingSetSize)
+
+def set_below_normal(handle):
+    if os.name != "nt":
+        raise RuntimeError("Windows priority control unavailable; fail closed")
+    if not _SET_PRIORITY_CLASS(handle, BELOW_NORMAL_PRIORITY_CLASS):
+        raise ctypes.WinError(ctypes.get_last_error())
+    if int(_GET_PRIORITY_CLASS(handle)) != BELOW_NORMAL_PRIORITY_CLASS:
+        raise RuntimeError("BelowNormal priority did not apply")
+
+def receipt(path, run_dir, status, **fields):
+    value = {
+        "schema": 1,
+        "packet": "gui_behavior_batch_62049",
+        "classification": "INCOMPLETE_EVIDENCE_RETAINED",
+        "status": status,
+        "recorded_utc": utc_now(),
+        "run_dir": str(run_dir),
+        "manual_visual_review": "pending",
+        "behavior_credit": False,
+        "restoration_status": "unverified_by_external_watchdog",
+        "descendant_cleanup": "not_attempted; Root must inspect after a guard trip",
+    }
+    value.update(fields)
+    atomic_json(path, value)
+
+def owned_terminate(proc):
+    """Terminate only the exact process handle created by this launcher."""
+    attempted = False
+    error = None
+    if proc.poll() is None:
+        attempted = True
+        try:
+            proc.terminate()
+        except Exception as exc:
+            error = str(exc)[:500]
+    try:
+        code = proc.wait(timeout=5.0)
+        confirmed = True
+    except subprocess.TimeoutExpired:
+        code = None
+        confirmed = False
+        error = error or "exact wrapper did not exit within the five-second termination wait"
+    return attempted, confirmed, code, error
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo-root", default=r"D:\Reverse\BP-Decomp_Workflow")
+    parser.add_argument("--powershell", default="powershell.exe")
+    args = parser.parse_args()
+    if os.name != "nt":
+        raise SystemExit("launch_watchdog is Windows-only; refusing to launch")
+    packet = Path(__file__).resolve().parent
+    repo = Path(args.repo_root).resolve(strict=True)
+    system_root = os.environ.get("SystemRoot") or os.environ.get("SYSTEMROOT")
+    if not system_root:
+        raise SystemExit("SystemRoot is unavailable; Desktop PowerShell will not be launched")
+    desktop_module_root = Path(system_root) / "System32" / "WindowsPowerShell" / "v1.0" / "Modules"
+    if not desktop_module_root.is_dir():
+        raise SystemExit("Desktop PowerShell module root is missing: " + str(desktop_module_root))
+    child_env = os.environ.copy()
+    child_env["PSModulePath"] = str(desktop_module_root)
+    pins_path = packet / "WRAPPER_PINS.json"
+    pins = json.loads(pins_path.read_text(encoding="utf-8-sig"))
+    watchdog_path = Path(__file__).resolve()
+    run_script = packet / "Run.ps1"
+    expected_watchdog = str(pins.get("packet_files", {}).get("watchdog_py_sha256", ""))
+    expected_run = str(pins.get("packet_files", {}).get("run_ps1_sha256", ""))
+    if len(expected_watchdog) != 64 or sha256(watchdog_path) != expected_watchdog:
+        raise SystemExit("watchdog script hash does not match the bound packet pin")
+    if len(expected_run) != 64 or sha256(run_script) != expected_run:
+        raise SystemExit("Run.ps1 hash does not match the bound packet pin")
+
+    runs = packet / "runs"
+    runs.mkdir(parents=True, exist_ok=True)
+    run_id = "native_" + dt.datetime.now(dt.timezone.utc).strftime("%Y%m%d_%H%M%S") + "_" + uuid.uuid4().hex[:8]
+    run_dir = (runs / run_id).resolve()
+    run_dir.relative_to(runs.resolve())
+    run_dir.mkdir(parents=False, exist_ok=False)
+    sidecar = runs / (run_id + ".watchdog.json")
+    stdout_path = runs / (run_id + ".wrapper.stdout.bin")
+    stderr_path = runs / (run_id + ".wrapper.stderr.bin")
+
+    own_handle = _GET_CURRENT_PROCESS()
+    set_below_normal(own_handle)
+    argv = [
+        args.powershell, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(run_script),
+        "-RepoRoot", str(repo), "-RunDir", str(run_dir),
+    ]
+    started = time.monotonic()
+    proc = None
+    try:
+        with stdout_path.open("wb") as stdout_stream, stderr_path.open("wb") as stderr_stream:
+            proc = subprocess.Popen(
+                argv, cwd=str(repo), stdin=subprocess.DEVNULL, stdout=stdout_stream, stderr=stderr_stream,
+                env=child_env, shell=False, close_fds=True, creationflags=BELOW_NORMAL_PRIORITY_CLASS,
+            )
+            process_handle = wintypes.HANDLE(int(proc._handle))
+            priority = int(_GET_PRIORITY_CLASS(process_handle))
+            if priority != BELOW_NORMAL_PRIORITY_CLASS:
+                violation = "priority_class_not_below_normal"
+                maximum = 0
+            else:
+                violation = ""
+                maximum = 0
+            while not violation:
+                code = proc.poll()
+                if code is not None:
+                    receipt(sidecar, run_dir, "wrapper_exited", wrapper_pid=proc.pid,
+                            wrapper_exit_code=int(code), elapsed_seconds=round(time.monotonic()-started, 3),
+                            max_observed_working_set_bytes=maximum, memory_cap_bytes=MAX_WORKING_SET_BYTES,
+                            deadline_seconds=MAX_WALL_SECONDS, poll_interval_seconds=POLL_SECONDS,
+                            priority_class="BELOW_NORMAL", powershell_module_root=str(desktop_module_root), stdout=str(stdout_path), stderr=str(stderr_path),
+                            termination_attempted=False, termination_confirmed=False)
+                    return int(code)
+                elapsed = time.monotonic() - started
+                if elapsed >= MAX_WALL_SECONDS:
+                    violation = "240_second_wall_deadline"
+                    break
+                try:
+                    current = working_set(process_handle)
+                except Exception as exc:
+                    code = proc.poll()
+                    if code is not None:
+                        receipt(sidecar, run_dir, "wrapper_exited_memory_sample_raced_exit", wrapper_pid=proc.pid,
+                                wrapper_exit_code=int(code), elapsed_seconds=round(time.monotonic()-started, 3),
+                                max_observed_working_set_bytes=maximum, memory_cap_bytes=MAX_WORKING_SET_BYTES,
+                                deadline_seconds=MAX_WALL_SECONDS, poll_interval_seconds=POLL_SECONDS,
+                                priority_class="BELOW_NORMAL", powershell_module_root=str(desktop_module_root), stdout=str(stdout_path), stderr=str(stderr_path),
+                                memory_query_error=str(exc)[:300], termination_attempted=False,
+                                termination_confirmed=False)
+                        return int(code)
+                    violation = "working_set_query_failed: " + str(exc)[:300]
+                    break
+                maximum = max(maximum, current)
+                if current > MAX_WORKING_SET_BYTES:
+                    violation = "512_MiB_working_set_limit"
+                    break
+                time.sleep(POLL_SECONDS)
+            attempted, confirmed, code, termination_error = owned_terminate(proc)
+            receipt(sidecar, run_dir, "guard_trip_exact_wrapper_terminated" if confirmed else "guard_trip_termination_unconfirmed",
+                    guard_violation=violation, wrapper_pid=proc.pid, wrapper_exit_code=code,
+                    elapsed_seconds=round(time.monotonic()-started, 3),
+                    max_observed_working_set_bytes=maximum, memory_cap_bytes=MAX_WORKING_SET_BYTES,
+                    deadline_seconds=MAX_WALL_SECONDS, poll_interval_seconds=POLL_SECONDS,
+                    priority_class="BELOW_NORMAL", powershell_module_root=str(desktop_module_root), stdout=str(stdout_path), stderr=str(stderr_path),
+                    termination_attempted=attempted, termination_confirmed=confirmed,
+                    termination_error=termination_error)
+            return 124 if "deadline" in violation else 125
+    except Exception as exc:
+        if proc is not None and proc.poll() is None:
+            attempted, confirmed, code, termination_error = owned_terminate(proc)
+        else:
+            attempted, confirmed, code, termination_error = False, True, (proc.returncode if proc else None), None
+        receipt(sidecar, run_dir, "launcher_failure", wrapper_pid=(proc.pid if proc else None),
+                wrapper_exit_code=code, error=str(exc)[:500],
+                termination_attempted=attempted, termination_confirmed=confirmed,
+                termination_error=termination_error, powershell_module_root=str(desktop_module_root), stdout=str(stdout_path), stderr=str(stderr_path),
+                behavior_credit=False)
+        return 1
+
+if __name__ == "__main__":
+    raise SystemExit(main())

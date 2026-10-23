@@ -1,0 +1,24 @@
+wait:\[motion\] n \d+ pos .* engine 2\b
+note:engine_running_registration_only
+key:192
+cmd:exec a
+key:192
+note:callback_registered_no_call_before_mode
+wait:\[hud-rr\] takedowns text 0/(?<target>\d+)
+note:baseline-timer-pixel-window
+wait:\[mode-fsm\].*mode 3 state 2 .*controllerActive 1\b
+guard:rr-zero-target-and-no-producer
+note:precondition-mode3-hud0
+anchor:motion-after-activation
+wait:\[motion\] n \d+ pos .* mph (?:5[5-9]|[6-9]\d|[1-9]\d{2,})(?:\.\d+)? 
+guard:rr-zero-target-no-producer-moving
+note:precondition-mode3-hud0-player-moving-55mph
+key:113
+wait:\[td-detect\] process\(in-mode\) type=0 chain=1 multiple=1
+wait:\[td-detect\] pushed to queue -?\d+ len=1
+wait:\[td-gui\] (hard|soft) type=0 aggressor=0 victim=1 chain=1 multiple=1
+wait:\[hud-rr\] takedowns text 1/\d+
+note:accepted-event; inspect independent timer pixels and any retained action255 diagnostics
+sleep:20
+note:later-countdown-pixel-window
+closeowned

@@ -1,0 +1,61 @@
+{
+  "address": "0x82355CE8",
+  "name": "BrnGameState::TakedownManager::RaceCarData::Clear",
+  "prototype": "_DWORD * BrnGameState::TakedownManager::RaceCarData::Clear_DWORD *__fastcall(_DWORD *result)",
+  "variables": [
+    {
+      "name": "result",
+      "type": "_DWORD *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v1",
+      "type": "_DWORD *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v3",
+      "type": "bool",
+      "is_reg": true,
+      "size": 1
+    }
+  ],
+  "pseudocode": "_DWORD *__fastcall BrnGameState::TakedownManager::RaceCarData::Clear(_DWORD *result)\n{\n  _DWORD *v1; // r31\n  int v2; // r30\n  bool v3; // cr56\n\n  _savegprlr_27();\n  v1 = result;\n  v2 = 0;\n  do\n  {\n    *(v1 + v2) = 0;\n    v3 = ++v2 < 8;\n    if ( v2 > 8 )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT\",\n        \"..\\\\..\\\\..\\\\GameSource\\\\BurnoutConstants.h\",\n        39);\n      result = CgsDev::Assert::EndAssert();\n      v3 = v2 < 8;\n    }\n  }\n  while ( v3 );\n  *(v1 + 16) = 0;\n  v1[17] = 0;\n  v1[18] = 0;\n  *(v1 + 2) = 3.4028235e38;\n  *(v1 + 3) = 0.0;\n  *(v1 + 16) = -1.0;\n  _restgprlr_27();\n  return result;\n}\n",
+  "assembly": "0x82355CE8  mflr      r12\n0x82355CEC  bl        __savegprlr_27\n0x82355CF0  stwu      r1, back_chain(r1)\n0x82355CF4  lis       r11, aLeenumindexEAc@ha\n0x82355CF8  li        r29, 0\n0x82355CFC  addi      r28, r11, aLeenumindexEAc@l# \"leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_\"...\n0x82355D00  lis       r11, aGamesourceBurn@ha\n0x82355D04  mr        r31, r3\n0x82355D08  mr        r30, r29\n0x82355D0C  addi      r27, r11, aGamesourceBurn@l# \"..\\\\..\\\\..\\\\GameSource\\\\BurnoutConstant\"...\n0x82355D10  stbx      r29, r30, r31\n0x82355D14  addi      r30, r30, 1\n0x82355D18  cmpwi     cr6, r30, 8\n0x82355D1C  ble       cr6, loc_82355D3C\n0x82355D20  bl        CgsDev__Assert__BeginAssert\n0x82355D24  li        r5, 0x27 # '''\n0x82355D28  mr        r4, r27\n0x82355D2C  mr        r3, r28\n0x82355D30  bl        CgsDev__Assert__FireAssert\n0x82355D34  bl        CgsDev__Assert__EndAssert\n0x82355D38  cmpwi     cr6, r30, 8\n0x82355D3C  blt       cr6, loc_82355D10\n0x82355D40  lis       r11, flt_82029B70@ha\n0x82355D44  stb       r29, 0x10(r31)\n0x82355D48  stw       r29, 0x44(r31)\n0x82355D4C  stw       r29, 0x48(r31)\n0x82355D50  lfs       f0, flt_82029B70@l(r11)\n0x82355D54  lis       r11, flt_82001CC0@ha\n0x82355D58  stfs      f0, 8(r31)\n0x82355D5C  lfs       f13, flt_82001CC0@l(r11)\n0x82355D60  lis       r11, flt_820037C8@ha\n0x82355D64  stfs      f13, 0xC(r31)\n0x82355D68  lfs       f12, flt_820037C8@l(r11)\n0x82355D6C  stfs      f12, 0x40(r31)\n0x82355D70  addi      r1, r1, 0x80\n0x82355D74  b         __restgprlr_27",
+  "xrefs_to": [
+    {
+      "address": "0x823594E0",
+      "name": "BrnGameState::TakedownManager::ClearRaceCarData"
+    },
+    {
+      "address": "0x823597F8",
+      "name": "BrnGameState::TakedownManagerDebugComponent::ForceTakedownCallback"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EE4",
+      "name": "__savegprlr_27"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    }
+  ]
+}

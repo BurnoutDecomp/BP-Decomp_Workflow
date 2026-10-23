@@ -5,60 +5,33 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-Launch `build/game/Burnout_PC.exe`. The installed **91a0ed56** build fixes
-the reproduced Paradise Drives freeze after checkpoint editing. Its missing
-TextFormat setter prevented the original label-fitting script from reducing
-font size. The setter is recovered from original assembly; the script is unchanged.
+The checked AA6 candidate fixes Road Rage output replay (inflated takedown
+count and time), the natural custom-route autosave request, and the original
+Leaving-overlay completion notification. Ten hosted groups and all twelve
+output hashes pass. Road Rage count/countdown and one-player host departure
+have bounded native acceptance; route new-slot save and checkpoint overwrite
+also pass. **Cold route loading still fails**: the saved-route list does not
+open. Joined-peer departure and long-session audio remain unverified.
+[Native evidence and limits](native_repairs_20261023/README.md).
 
-The exact hosted executable passed both the 67-step checkpoint-edit sequence
-and 46-step direct-entry sequence, including route navigation and Back. Root
-viewed changing presets, readable fitted labels, start and finish markers, and
-the return to Select Route. The active map is opaque; half opacity on the inactive
-map is original behavior. Both 210-second runs had zero asserts/exceptions.
-
-Source review, hosted compile/link (2,998 TUs, zero failed), nine selected groups
-and all twelve output hashes passed. The 78-check binding test also rejects the
-old setter. Settings, saves and both logs retain their bytes and modification
-times. Only matching build outputs were installed with a recoverable backup.
-[Delivery and limits](paradise_textformat_playable_delivery_20261022/DELIVERY.json).
-
-The previous **5093cdb0** delivery covered Start, visible world/HUD/EasyDrive,
-driving, local Freeburn and checkpoint movement/placement. Its recorded evidence
-is retained in [the earlier delivery](fsm_index_playable_delivery_20261022/DELIVERY.json).
-The new, incomplete Replay composition remains on its private branch.
-
-The earlier private **073412e1** startup failure remains recorded as a
-failure. Its Lua numeric IDs were incorrectly treated as object-table
-positions. The original name lookup is restored in installed 5093; its
-assertion remains active. [Failure and resolution](replay_gui_native_failure_20261022.json).
-
-The earlier **b82350534** delivery checks passed:
-
-- Returning-save junkyard, default car/livery acceptance and exit to the world.
-- Measured throttle response: 5.4 metres and 19.8 mph in the final confirmation.
-- Owned one-player online Freeburn; visible Create Event options and HelpBar.
-- Rounds change/restore, original preset route map, Summary and Done.
-- Actual GUI257 submission, successful server update, and matching scalar/route
-  readback. The returned lobby visibly shows Next Up Race and one round.
-- Zero asserts/exceptions, clean native exit. Both native attempts and their
-  attributable frames are retained. Hosted build: 2,980 TUs, 519 focused checks
-  and 11 intentional failure controls.
-
-Peer joining, a complete race, custom-route Done/save persistence and further
-mode/preset variants remain to test. This delivery does not certify every debug control.
-[Earlier crash and recovery evidence](playable_candidate_progress_20261021.json).
-
-A later user session exposed **RWAC sound allocation corruption**. It remains unresolved in the installed package. The private diagnostic passed
-hosted capacity checks and its original-source failure control; the short delivery checks did not establish long-session stability.
-[Latest crash, Traffic run and cleanup](traffic_cleanup_crash_checkpoint_20261021.json).
+The current merge preserves the latest dev GUI/Replay CMake lists; those are
+the only source differences from hosted AA6. The normal folder is still the
+previous91a package until the separate delivery receipt records installation.
+Launch `build/game/Burnout_PC.exe` after that update. Its existing original
+TextFormat setter repair and checkpoint/Paradise Drives checks are retained in
+[the earlier delivery](paradise_textformat_playable_delivery_20261022/DELIVERY.json).
 
 ## Campaign counts
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **48 verified, seven original no-ops and 1,300 pending**. That is 55/1,355 (4.1%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **50 verified, seven original no-ops and 1,298 pending**. That is 57/1,355 (4.2%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
-Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. A separately observed SatNav outline remains pending because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
+Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
 Two of those four, the safe-area toggle and percentage, now pass retained-native review after the original packed-colour contract confirmed that red was correct. The old roster expected the wrong colour. The isolated Override and SatNav alpha controls still need behavior evidence; the original aggregate FAIL and separate SatNav outline exclusion remain. [Two-site review](safearea_retained_native_20261023/REVIEW.md).
+
+A new exact8b capture independently verifies the original blue SatNav outline off/on/off. This adds one private-candidate disposition; installed91a is unchanged. The other six controls remain insufficient: a real engine-off event hid the HUD/map before their positive phases. Original case PASS and wrapper archive INCOMPLETE remain separate. [Review and limits](satnav62050_retained_native_20261023/REVIEW.md).
+
+The original Force takedown callback now passes independent source/native review on9af6. One intended event is translated once and visibly counts1/30; other real events are counted separately. The old91a output replay is reproduced. The later countdown also passes a separate retained-native review. [One-site review](force_takedown_site0004_native_20261023/REPORT.md).
 
 Recorded source-progress coverage is separate from behavior completion:
 
@@ -113,6 +86,9 @@ new #0086 or extra 15-hull-cycle credit. The source is included in installed
 The action translator covers 188 unique IDs across 189 labels. That is source coverage, not 188 verified debug controls. Coherent checkpoints are committed and pushed frequently; reviewed work merges in batches.
 
 ## Other reported issues
+
+The Freeburn Leaving overlay repair passes source review, hosted checks and bounded one-player host departure. Joined-peer departure still needs a native check. [Scope and evidence](freeburn_leaving_completion_20261023/STATE.json).
+
 
 [Road Rules persistence](../road_rules_persistence_20261014.md) was repaired and
 checked through saving, login and cold restart. The earlier magenta-rendering
