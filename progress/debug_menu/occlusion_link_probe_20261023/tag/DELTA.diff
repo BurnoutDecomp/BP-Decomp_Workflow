@@ -1,0 +1,29 @@
+diff --git a/src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcher.h b/src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcher.h
+--- a/src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcher.h
++++ b/src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcher.h
+@@ -83,4 +83,4 @@
+ class DispatchFrame;
+ class DispatchBin;
+-class DispatchPacketInterpreter;
++struct DispatchPacketInterpreter;
+ struct DispatchObjectContext;
+diff --git a/src/GameShared/Jobs/ObjectToMesh/ObjectToMesh.h b/src/GameShared/Jobs/ObjectToMesh/ObjectToMesh.h
+--- a/src/GameShared/Jobs/ObjectToMesh/ObjectToMesh.h
++++ b/src/GameShared/Jobs/ObjectToMesh/ObjectToMesh.h
+@@ -6,4 +6,4 @@
+ namespace CgsGraphics
+ {
+-class DispatchPacketInterpreter;
++struct DispatchPacketInterpreter;
+ class DispatchList;
+diff --git a/src/GameSource/Graphics/BrnShadowMapRenderManager.h b/src/GameSource/Graphics/BrnShadowMapRenderManager.h
+--- a/src/GameSource/Graphics/BrnShadowMapRenderManager.h
++++ b/src/GameSource/Graphics/BrnShadowMapRenderManager.h
+@@ -18,5 +18,5 @@
+ namespace CgsGraphics
+ {
+     class BufferedDispatchFrame;
+-    class DispatchPacketInterpreter;
++    struct DispatchPacketInterpreter;
+     class Im2d;
+ }
