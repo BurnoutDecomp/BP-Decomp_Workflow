@@ -1,0 +1,399 @@
+#!/usr/bin/env python3
+"""Bounded JSON reporter and raw-stream case launcher for the GUI12 wrapper."""
+from __future__ import annotations
+import argparse
+import ctypes
+from ctypes import wintypes
+import datetime as dt
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+MAX_FILES = 220
+MAX_FRAMES = 160
+MAX_TOTAL_BYTES = 805306368
+MAX_FRAME_BYTES = 4000000
+MAX_LOG_BYTES = 67108864
+MAX_MEMORY_BYTES = 536870912
+MAX_REPORT_SECONDS = 45.0
+CHUNK = 1024 * 1024
+IGNORE = {"probe_receipt.json", "evidence-archive.json", "manual_visual_manifest.json"}
+
+class ReportLimit(Exception):
+    pass
+
+class PROCESS_MEMORY_COUNTERS(ctypes.Structure):
+    _fields_ = [
+        ("cb", wintypes.DWORD), ("PageFaultCount", wintypes.DWORD),
+        ("PeakWorkingSetSize", ctypes.c_size_t), ("WorkingSetSize", ctypes.c_size_t),
+        ("QuotaPeakPagedPoolUsage", ctypes.c_size_t), ("QuotaPagedPoolUsage", ctypes.c_size_t),
+        ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t), ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+        ("PagefileUsage", ctypes.c_size_t), ("PeakPagefileUsage", ctypes.c_size_t),
+    ]
+
+_KERNEL32 = ctypes.WinDLL("kernel32", use_last_error=True)
+_PSAPI = ctypes.WinDLL("psapi", use_last_error=True)
+_GET_CURRENT_PROCESS = _KERNEL32.GetCurrentProcess
+_GET_CURRENT_PROCESS.restype = wintypes.HANDLE
+_GET_PROCESS_MEMORY_INFO = _PSAPI.GetProcessMemoryInfo
+_GET_PROCESS_MEMORY_INFO.argtypes = [wintypes.HANDLE, ctypes.POINTER(PROCESS_MEMORY_COUNTERS), wintypes.DWORD]
+_GET_PROCESS_MEMORY_INFO.restype = wintypes.BOOL
+
+def working_set():
+    if os.name != "nt":
+        raise ReportLimit("Windows working-set query unavailable; fail closed")
+    counters = PROCESS_MEMORY_COUNTERS()
+    counters.cb = ctypes.sizeof(counters)
+    ok = _GET_PROCESS_MEMORY_INFO(_GET_CURRENT_PROCESS(), ctypes.byref(counters), counters.cb)
+    if not ok:
+        raise ReportLimit("working-set query failed; fail closed")
+    return int(counters.WorkingSetSize)
+
+def atomic_json(path, value):
+    tmp = path.with_name(path.name + ".tmp")
+    with tmp.open("w", encoding="utf-8", newline="\n") as stream:
+        json.dump(value, stream, ensure_ascii=False, separators=(",", ":"))
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.replace(tmp, path)
+
+def read_object(path):
+    with path.open("r", encoding="utf-8-sig") as stream:
+        value = json.load(stream)
+    if not isinstance(value, dict):
+        raise ReportLimit("expected object in " + path.name)
+    return value
+
+def status(args, run_dir):
+    result_path = run_dir / "result.json"
+    flow_path = run_dir / "flow-terminal.json"
+    result = read_object(result_path) if result_path.is_file() else {}
+    flow = read_object(flow_path) if flow_path.is_file() else {}
+    flow_row = flow.get("flow_status") if isinstance(flow.get("flow_status"), dict) else {}
+    return {
+        "schema": 1, "packet": "gui_behavior_batch_62049",
+        "classification": "INCOMPLETE_EVIDENCE_RETAINED",
+        "report_status": "terminal_receipt_written_archive_pending",
+        "candidate_source": args.source, "hosted_run_id": args.hosted_run_id,
+        "exe_sha256": args.exe_sha256, "slot": 62049,
+        "launch_attempted": args.launched == 1, "case_exit": args.case_exit,
+        "case_verdict": str(result.get("verdict", args.case_verdict or "unavailable")),
+        "case_phase": str(result.get("phase", "")),
+        "asserts": int(result.get("asserts", args.asserts)), "flow_exit": args.flow_exit,
+        "flow_success": bool(flow.get("success", False)),
+        "owned_game_cleanup": bool(flow_row.get("owned_cleanup_complete", False)),
+        "helper_cleanup": bool(flow.get("helper_cleanup_complete", False)),
+        "profile_restoration": bool(flow.get("profile_restoration_complete", False)),
+        "cleanup_verified": args.cleanup_verified == 1,
+        "private_config_restored": args.config_restored == 1,
+        "private_profile_restored": args.profile_restored == 1,
+        "private_seeds_unchanged": args.seeds_unchanged == 1,
+        "normal_protected_unchanged": args.normal_protected_unchanged == 1,
+        "normal_fingerprints_rechecked": args.normal_fingerprints_rechecked,
+        "payload_count_rechecked": args.payload_count_rechecked,
+        "owned_generated_scripts_clean": args.scripts_clean == 1,
+        "raw_log_manifest_present": (run_dir / "raw-private-logs.json").is_file(),
+        "frame_every": 120, "max_frames": args.max_frames, "max_log_mib": 64,
+        "requested_native_seconds": 180, "helper_timeout_seconds": 170,
+        "outer_accounting_seconds": 240, "post_run_report_seconds": args.max_seconds,
+        "report_memory_cap_bytes": args.max_memory_bytes,
+        "evidence_archive": "evidence-archive.json",
+        "evidence_archive_complete": False, "evidence_files_hashed": 0,
+        "evidence_bytes_hashed": 0, "manual_visual_review": "pending",
+        "behavior_credit": False, "error": args.run_error[:1000],
+    }
+
+def write_terminal(args):
+    run_dir = Path(args.run_dir).resolve()
+    receipt = run_dir / "probe_receipt.json"
+    try:
+        atomic_json(receipt, status(args, run_dir))
+        return 0
+    except Exception as exc:
+        fallback = {
+            "schema": 1, "packet": "gui_behavior_batch_62049",
+            "classification": "INCOMPLETE_EVIDENCE_RETAINED",
+            "report_status": "terminal_receipt_writer_error",
+            "case_exit": args.case_exit, "case_verdict": args.case_verdict or "unavailable",
+            "launch_attempted": args.launched == 1, "evidence_archive_complete": False,
+            "manual_visual_review": "pending", "behavior_credit": False,
+            "error": str(exc)[:500],
+        }
+        try:
+            atomic_json(receipt, fallback)
+        except Exception:
+            pass
+        return 1
+
+def candidates(run_dir, args):
+    found = []
+    for dirname, kind in ((".", "run"), ("flow", "flow"), ("frames", "frame")):
+        directory = run_dir if dirname == "." else run_dir / dirname
+        if not directory.is_dir():
+            raise ReportLimit("evidence directory missing: " + dirname)
+        with os.scandir(directory) as entries:
+            for entry in entries:
+                if entry.is_symlink():
+                    raise ReportLimit("reparse/symlink evidence refused: " + entry.name)
+                if not entry.is_file(follow_symlinks=False):
+                    if kind == "run" and entry.is_dir(follow_symlinks=False) and entry.name not in {"flow", "frames"}:
+                        raise ReportLimit("unexpected run evidence directory: " + entry.name)
+                    continue
+                if kind == "frame":
+                    if not (entry.name.startswith("bb_") and entry.name.lower().endswith(".bmp")):
+                        raise ReportLimit("unexpected frame file: " + entry.name)
+                elif entry.name in IGNORE:
+                    continue
+                p = Path(entry.path)
+                st = os.stat(p, follow_symlinks=False)
+                size = int(st.st_size)
+                if kind == "frame" and size > args.max_frame_bytes:
+                    raise ReportLimit("frame byte cap exceeded: " + entry.name)
+                if "BrnGame" in entry.name and size > args.max_log_bytes:
+                    raise ReportLimit("game log byte cap exceeded: " + entry.name)
+                found.append({
+                    "path": p.relative_to(run_dir).as_posix(), "kind": kind,
+                    "bytes": size, "mtime_ns": int(st.st_mtime_ns),
+                })
+    found.sort(key=lambda row: row["path"])
+    if len(found) > args.max_files:
+        raise ReportLimit(f"evidence file cap exceeded: {len(found)}")
+    frame_count = sum(1 for row in found if row["kind"] == "frame")
+    if frame_count < 1 or frame_count > args.max_frames:
+        raise ReportLimit(f"frame count outside cap: {frame_count}")
+    total = sum(int(row["bytes"]) for row in found)
+    if total > args.max_total_bytes:
+        raise ReportLimit(f"evidence byte cap exceeded: {total}")
+    return found
+
+def hash_file(run_dir, row, deadline, max_memory):
+    path = run_dir / row["path"]
+    before = os.stat(path, follow_symlinks=False)
+    if int(before.st_size) != row["bytes"] or int(before.st_mtime_ns) != row["mtime_ns"]:
+        raise ReportLimit("evidence changed before hash: " + row["path"])
+    digest = hashlib.sha256()
+    with path.open("rb", buffering=CHUNK) as stream:
+        while True:
+            if time.monotonic() >= deadline:
+                raise ReportLimit("post-run report deadline reached")
+            if working_set() > max_memory:
+                raise ReportLimit("reporter memory cap reached")
+            chunk = stream.read(CHUNK)
+            if not chunk:
+                break
+            digest.update(chunk)
+    after = os.stat(path, follow_symlinks=False)
+    if int(after.st_size) != int(before.st_size) or int(after.st_mtime_ns) != int(before.st_mtime_ns):
+        raise ReportLimit("evidence changed during hash: " + row["path"])
+    out = dict(row)
+    out["sha256"] = digest.hexdigest()
+    return out
+
+
+
+def archive(args):
+    run_dir = Path(args.run_dir).resolve()
+    archive_path = run_dir / "evidence-archive.json"
+    if write_terminal(args) != 0:
+        return 1
+    started = time.monotonic()
+    seconds = min(float(args.max_seconds), 240.0 - max(0.0, float(args.elapsed_before_archive)))
+    deadline = started + max(0.0, seconds)
+    rows = []
+    hashed = []
+    reason = ""
+    manifest = {}
+    try:
+        if seconds <= 0:
+            raise ReportLimit("outer 240-second accounting limit reached before archive")
+        if working_set() > args.max_memory_bytes:
+            raise ReportLimit("reporter working-set cap exceeded before archive")
+        rows = candidates(run_dir, args)
+        manifest = {
+            "schema": 1, "complete": False, "status": "hashing",
+            "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "frame_every": 120, "frame_cap": args.max_frames,
+            "files_expected": len(rows), "bytes_expected": sum(row["bytes"] for row in rows),
+            "files": hashed, "skipped": [],
+        }
+        atomic_json(archive_path, manifest)
+        for index, row in enumerate(rows):
+            hashed.append(hash_file(run_dir, row, deadline, args.max_memory_bytes))
+            if (index + 1) % 8 == 0 or index + 1 == len(rows):
+                manifest["files"] = hashed
+                manifest["files_hashed"] = len(hashed)
+                atomic_json(archive_path, manifest)
+        # Match each raw channel record to its single archived copy; keep the source log untouched.
+        raw_path = run_dir / "raw-private-logs.json"
+        if raw_path.is_file():
+            raw_rows = json.loads(raw_path.read_text(encoding="utf-8-sig"))
+            if isinstance(raw_rows, dict):
+                raw_rows = [raw_rows]
+            if (not isinstance(raw_rows, list) or len(raw_rows) > 2 or
+                    any(not isinstance(row, dict) for row in raw_rows)):
+                raise ReportLimit("raw-private log channel manifest is invalid")
+            by_path = {row["path"]: row for row in hashed}
+            slot_dir = Path(args.slot_dir).resolve()
+            for raw in raw_rows:
+                source = Path(str(raw["source"])).resolve()
+                copy = Path(str(raw["copy"])).resolve()
+                source.relative_to(slot_dir)
+                rel = copy.relative_to(run_dir).as_posix()
+                archived = by_path.get(rel)
+                if archived is None or int(archived["bytes"]) != int(raw["bytes"]) or archived["sha256"] != str(raw["sha256"]):
+                    raise ReportLimit("raw-private retained copy differs from its run_case manifest")
+        manifest.update({
+            "complete": True, "status": "verified", "files": hashed,
+            "files_hashed": len(hashed),
+            "frame_count": sum(1 for row in hashed if row["kind"] == "frame"),
+            "bytes_hashed": sum(int(row["bytes"]) for row in hashed),
+        })
+        atomic_json(archive_path, manifest)
+    except Exception as exc:
+        reason = str(exc)[:500]
+        manifest = {
+            "schema": 1, "complete": False, "status": "incomplete",
+            "created_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "frame_every": 120, "frame_cap": args.max_frames,
+            "files_expected": len(rows), "files_hashed": len(hashed),
+            "bytes_hashed": sum(int(row["bytes"]) for row in hashed),
+            "files": hashed, "skipped": [row["path"] for row in rows[len(hashed):]][:args.max_files],
+            "error": reason,
+        }
+        try:
+            atomic_json(archive_path, manifest)
+        except Exception:
+            pass
+    try:
+        receipt = status(args, run_dir)
+        complete = not reason and bool(rows) and len(hashed) == len(rows)
+        elapsed = float(args.elapsed_before_archive) + (time.monotonic() - started)
+        safety = all((
+            args.coverage_pass == 1, args.cleanup_verified == 1,
+            args.config_restored == 1, args.profile_restored == 1,
+            args.seeds_unchanged == 1, args.normal_protected_unchanged == 1,
+            args.scripts_clean == 1,
+        ))
+        case_pass = args.case_exit == 0 and receipt["case_verdict"].upper() == "PASS"
+        bounded = complete and safety and elapsed <= 240.0 and not args.run_error and case_pass
+        receipt.update({
+            "classification": "STRUCTURAL_CASE_COMPLETE_VISUAL_REVIEW_PENDING" if bounded else
+                              ("CASE_FAIL" if not case_pass else "INCOMPLETE_EVIDENCE_RETAINED"),
+            "report_status": "verified_archive" if complete else "archive_incomplete",
+            "evidence_archive_complete": complete,
+            "evidence_files_hashed": len(hashed),
+            "evidence_bytes_hashed": sum(int(row["bytes"]) for row in hashed),
+            "frame_files_hashed": sum(1 for row in hashed if row["kind"] == "frame"),
+            "report_elapsed_seconds": round(time.monotonic() - started, 3),
+            "overall_elapsed_seconds": round(elapsed, 3),
+            "bounded_structural_smoke_complete": bounded,
+            "coverage_checks_pass": args.coverage_pass == 1,
+            "cleanup_verified": args.cleanup_verified == 1,
+            "manual_visual_review": "pending",
+            "behavior_credit": False,
+            "error": (reason or args.run_error)[:1000],
+        })
+        atomic_json(run_dir / "probe_receipt.json", receipt)
+        frames = [row for row in hashed if row["kind"] == "frame"]
+        atomic_json(run_dir / "manual_visual_manifest.json", {
+            "schema": 1, "manual_visual_review": "pending",
+            "pixel_interpretation": "required before behavior credit",
+            "frame_every": 120, "frame_cap": args.max_frames, "frames": frames,
+        })
+    except Exception as exc:
+        try:
+            atomic_json(run_dir / "probe_receipt.json", {
+                "schema": 1, "packet": "gui_behavior_batch_62049",
+                "classification": "INCOMPLETE_EVIDENCE_RETAINED",
+                "report_status": "archive_receipt_update_error",
+                "evidence_archive_complete": False,
+                "manual_visual_review": "pending", "behavior_credit": False,
+                "error": str(exc)[:500],
+            })
+        except Exception:
+            pass
+        return 1
+    return 0 if complete else 1
+
+def launch_case(args):
+    run_dir = Path(args.run_dir).resolve()
+    try:
+        argv_file = Path(args.argv_json).resolve()
+        argv = json.loads(argv_file.read_text(encoding="utf-8-sig"))
+        if not isinstance(argv, list) or not argv or len(argv) > 32 or not all(isinstance(x, str) for x in argv):
+            raise ReportLimit("case argv file is not a bounded string array")
+        stdout_path = run_dir / "case.stdout.txt"
+        stderr_path = run_dir / "case.stderr.txt"
+        with stdout_path.open("wb") as stdout_file, stderr_path.open("wb") as stderr_file:
+            proc = subprocess.Popen(
+                [args.powershell, *argv], cwd=args.cwd, stdin=subprocess.DEVNULL,
+                stdout=stdout_file, stderr=stderr_file, shell=False, close_fds=True,
+            )
+            started = time.monotonic()
+            exit_code = proc.wait()
+            elapsed = time.monotonic() - started
+        atomic_json(run_dir / "case-launch-result.json", {
+            "schema": 1, "pid": proc.pid, "exit_code": int(exit_code),
+            "elapsed_seconds": round(elapsed, 3),
+            "stdout": stdout_path.name, "stderr": stderr_path.name,
+            "streams": "raw subprocess byte streams; no PowerShell native-error formatting pipeline",
+        })
+        return 0
+    except Exception as exc:
+        atomic_json(run_dir / "case-launch-result.json", {
+            "schema": 1, "launch_failed": True, "error": str(exc)[:500],
+        })
+        return 1
+
+def add_common(parser):
+    parser.add_argument("--run-dir", required=True)
+    parser.add_argument("--slot-dir", required=True)
+    parser.add_argument("--source", required=True)
+    parser.add_argument("--hosted-run-id", type=int, required=True)
+    parser.add_argument("--exe-sha256", required=True)
+    parser.add_argument("--phase", default="pending")
+    parser.add_argument("--launched", type=int, choices=(0, 1), default=1)
+    parser.add_argument("--case-exit", type=int, default=-1)
+    parser.add_argument("--case-verdict", default="unavailable")
+    parser.add_argument("--asserts", type=int, default=0)
+    parser.add_argument("--flow-exit", type=int, default=-1)
+    for name in ("coverage-pass", "cleanup-verified", "config-restored", "profile-restored",
+                 "seeds-unchanged", "normal-protected-unchanged", "scripts-clean"):
+        parser.add_argument("--" + name, type=int, choices=(0, 1), default=0)
+    parser.add_argument("--normal-fingerprints-rechecked", type=int, default=0)
+    parser.add_argument("--payload-count-rechecked", type=int, default=0)
+    parser.add_argument("--elapsed-before-archive", type=float, default=0.0)
+    parser.add_argument("--run-error", default="")
+    parser.add_argument("--max-seconds", type=float, default=MAX_REPORT_SECONDS)
+    parser.add_argument("--max-memory-bytes", type=int, default=MAX_MEMORY_BYTES)
+    parser.add_argument("--max-files", type=int, default=MAX_FILES)
+    parser.add_argument("--max-frames", type=int, default=MAX_FRAMES)
+    parser.add_argument("--max-total-bytes", type=int, default=MAX_TOTAL_BYTES)
+    parser.add_argument("--max-frame-bytes", type=int, default=MAX_FRAME_BYTES)
+    parser.add_argument("--max-log-bytes", type=int, default=MAX_LOG_BYTES)
+
+def main():
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(dest="mode", required=True)
+    for name in ("terminal", "archive"):
+        p = sub.add_parser(name)
+        add_common(p)
+    p = sub.add_parser("launch-case")
+    p.add_argument("--run-dir", required=True)
+    p.add_argument("--powershell", required=True)
+    p.add_argument("--cwd", required=True)
+    p.add_argument("--argv-json", required=True)
+    args = parser.parse_args()
+    if args.mode == "terminal":
+        return write_terminal(args)
+    if args.mode == "archive":
+        return archive(args)
+    return launch_case(args)
+
+if __name__ == "__main__":
+    raise SystemExit(main())
