@@ -1,0 +1,107 @@
+{
+  "source": "f7de83f51a2a5668bf0d789bf143ba7e43c47f23",
+  "source_parent": "a0f9b2cb9e8ac35d08dd9b39397ee823447f6a47",
+  "branch": "refs/heads/codex/replay-module-recovery-20261022",
+  "state": "unverified_checkpoint",
+  "compile": "pending",
+  "complete_source_review": "pending",
+  "native": "not_run",
+  "source_packet": "replay_module_hud_enablejobthread_pc_leaf_delta02_20261022",
+  "source_packet_seal_sha256": "0ad9775f025a2161bdd247d9c3e83c69d102ded7874c29f99ed43acdd7f5ff08",
+  "files": [
+    {
+      "path": "src/GameShared/Jobs/Relocator/CgsRelocator.cpp",
+      "bytes": 3932,
+      "sha256": "9dc5cf83a61b2a4c21f08b234290593133bd157f7fc3edbf8e2ca5fd2253dc92",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameShared/Jobs/Relocator/Relocator.cpp",
+      "bytes": 1223,
+      "sha256": "3abac3d2ae005cb1e3dedd496fd34ec88bfc85f41199417ac232b7f41ec7258c",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameSource/Replays/BrnReplayDebugComponent.cpp",
+      "bytes": 39568,
+      "sha256": "d58d9351201559d08cb211eb62df3fa7f76dd1b831fd808073061b7201992ae9",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameSource/Replays/BrnReplayModule.cpp",
+      "bytes": 48678,
+      "sha256": "46f86d87a57876486e22c5f98cb75964a1f8507db1623af1dd77d6b8e1a622f9",
+      "changed_by_this_delta": true
+    },
+    {
+      "path": "src/GameSource/Replays/BrnReplayModule.h",
+      "bytes": 18853,
+      "sha256": "2026fda4eab2c48c863064d42126e455e639ebd21f8665b17115d1e0e7fd6905",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameSource/Replays/BrnReplayModuleIO.cpp",
+      "bytes": 10666,
+      "sha256": "7ae45c281299302f9331538889e5887ef33d1747244f48ad6d4132af2a2cb637",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameSource/Replays/BrnReplayModuleIO.h",
+      "bytes": 12790,
+      "sha256": "b156a241c1c1fe7a35189dc21536c960c39174cb3a24114c146c2e5638d1fa6e",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameSource/Replays/Stream/BrnReplayReadStream.h",
+      "bytes": 1710,
+      "sha256": "0259fb173c36581f582da8fa36c0abdebcd06c01b40b5c7100a22c0b0ed92cfc",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameSource/Replays/Stream/BrnReplayWriteStream.cpp",
+      "bytes": 11693,
+      "sha256": "a7ac0e7e89f106d44230455138eb5ce9f0d0dd6f4bf6cdb0ca68e0f621094ed2",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameSource/Replays/Stream/BrnReplayWriteStream.h",
+      "bytes": 4429,
+      "sha256": "38ca7c918cabb6564cc87984e32d707cfba7a78d923422cad7550532b624daa6",
+      "changed_by_this_delta": false
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/CgsHardwareInit.h",
+      "bytes": 3887,
+      "sha256": "2567ebc5ca4f52e9832fb785b775b2604397a715cacbb7aa4fc903237071aa41",
+      "changed_by_this_delta": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsHardwareInitPC.cpp",
+      "bytes": 27388,
+      "sha256": "79354acb06ee167fa69f8998c6a2f3b60a1885761ae25943e3fad888b4d0be81",
+      "changed_by_this_delta": true
+    }
+  ],
+  "publication_normalization": [
+    {
+      "path": "src/GameShared/GameClasses/System/CgsHardwareInit.h",
+      "packet_sha256": "2567ebc5ca4f52e9832fb785b775b2604397a715cacbb7aa4fc903237071aa41",
+      "published_sha256": "05f508cd875f1f1bc74048356460d43591f344f5ce8785151d5b82d697621763",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/PC/CgsHardwareInitPC.cpp",
+      "packet_sha256": "79354acb06ee167fa69f8998c6a2f3b60a1885761ae25943e3fad888b4d0be81",
+      "published_sha256": "a8a7bd1ce0cad24c9c5a6c7c6506d19956a1c01a6e1d7d956fc7c8a4540ad28c",
+      "normalization": "CRLF to LF only"
+    }
+  ],
+  "normal_package_changed": false,
+  "new_debug_behavior_dispositions": 0,
+  "known_gaps": [
+    "start/open policy",
+    "serialise-job submit/configuration producer",
+    "outer game frame bridge"
+  ],
+  "prior_replay8_full_failure": "Preserved; two private declarations repaired in the later proposal, no earlier verdict rewritten."
+}

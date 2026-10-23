@@ -1,0 +1,34 @@
+VERDICT: pass
+
+Fresh independent source-only review of the complete delta03 diagnostic-link correction and its bounded CI composition found no material findings. Only this packet was used as task input. Prior sealed reviews/failures are not rewritten. This source pass is not evidence that the corrected composition compiles, links or runs.
+
+Exact reviewed identities (SHA256):
+
+- Packet manifest: b655b6c791a4753209826283a2603c0f251c40dd339bd0134af021e0b6701375
+- Fixture binder: 4b44e0c8f7c7705f11616b59c95d730ae9660d27486f234ebd1bf9097cc446dc
+- Source pins: a6a7a289a7de87bf6017e6d6255d92eb326f44e9b7c158c76c96aaeeafeabc57
+- New globals provider: ba311bf5c9397d9b61ad795458351a9ba400e88a2257ce6d8202ba9334960710
+- CI controller: dcdcbe51dd15d928dc04cacac69b24062758c3ca5fcc945257abb05186c0817d
+- Actual production formatter cpp: 776842d20db1a31a28a2a021df426b040141535d67a7e39bbdc4d1d1d707af40
+- Eight-payload INSTALL_BINDINGS: 75dcbecc3569bd5cce28e96ba83df6eb58820fcc3293bf4236d2350ed1980cfc
+- Unchanged route fixture: 9105e7eeec51378a21136e80409b502ca0d383c80c267a4520384f879577d728
+- Unchanged plan: 1709fa6b36657f903668e72943956566eb1d7ce3e24797fbbda5d270b308bc8e
+- Unchanged workflow: cd8bfae0213350869a89ab6c8e1d3abe21ad2ee9a62c2b6a94fbb0fe079558ee
+
+All 58 sealed entries and the outer seal rehash correctly. Complete diff verification reconstructs every postimage from its full preimage with exact hunk offsets/context/counts: binder, source-pins JSON, new globals-only TU and controller. The five retained payloads compare byte-for-byte between this packet's pre/postimages. No hidden fixture, formatter-method, route/cache/Event body or workflow change appears.
+
+The retained hosted run 39955666449 attempt 1 remains a real failure. Actual result.json has only the candidate variant, six compile rows with exit 0, link exit 1120, success:false, status:fail, error 'fixture link failed: candidate', and no mode entries. The six compile logs and link log rehash to their run records, with complete owned cleanup and no timeout. The main input receipt binds the retained result's exact hash, records exit 1/validated:false/route fail and contains no shipping-build or fixture-executable native command. The runner's executed:true field marks attempted native work; it does not establish an executed fixture mode. No negative-control or native-save credit is available.
+
+The actual link log names six missing definitions: StrStreamBase::operator<<(int), operator<<(void*), operator<<(PrintMode), StrStream(char*,int), Log::gpDebugPrint and Message::gxMessageFilterFlags. The supplied complete production CgsStrStream.cpp defines the four methods with matching namespace/class/return-reference/parameter signatures and supplies their real base constructor, buffered sink and formatting dependencies. The supplied actual CgsStrStream.h, CgsLog.h, CgsVariableEventQueue.h and CgsAssert.h match the retained failure's compiled-header LF hashes and lengths, so this is the declaration shape the existing caller objects used. Remaining formatter dependencies are ordinary CRT routines plus the fixture's existing assertion hooks; no formatter method is mirrored or stubbed.
+
+OnlineSaveRouteDiagnosticGlobals.cpp includes the actual Log header and defines only CgsDev::Log::gpDebugPrint as StrStreamBase* initialized to nullptr and CgsDev::Message::gxMessageFilterFlags as u64 initialized to zero. These types match both the declarations and unresolved x64 signatures. This follows the retained GuiModelIO/GuiInterpreterIO sources, whose runners also request real CgsStrStream.cpp. No DebugPrint instance, production logging service or formatter replacement is introduced.
+
+Zero filter bits skip optional gpDebugPrint dereferences in the inspected queue logging paths. They do not suppress CGS_ASSERT or direct queue BeginAssert/FireAssert/EndAssert calls. Those paths still construct real local StrStream buffers and call FireAssert. The unchanged fixture increments its assertion count and prints UNEXPECTED_ASSERT; both runner and controller reject unexpected assertions. The provider therefore resolves diagnostic linkage without silencing the required assertion witness.
+
+The binder appends actual CgsStrStream.cpp and the globals TU after the unchanged original six sources for each candidate/oldtrap/omitted_init variant. Its only other changes add the corresponding four exact input pins: formatter cpp/header, Log header and globals provider. B5 pin count rises 20 to 24; the original nineteen unaffected rows, three workflow-tool pins, constructor definition pins and original baseline-blob contract remain unchanged. All 23 former source/tool pin rows match the retained failed run's input receipt. All four new pins match the retained/new actual files, and all eight postimage installation identities and controller literal LF hash/size pairs agree.
+
+The unchanged runner enumerates the complete source list, so it will compile and retain eight objects/dependency reports without a runner change. The controller consistently changes the B5 count guard to 24, exact compile count/validation loop/summary to eight and hard-pins all eight payloads. Its complete diff contains only those bounded changes and the diagnostic-support comment/pin updates. The workflow is byte-identical. Both controller pre/postimages parse with zero PowerShell syntax errors; their ASTs were never invoked. Hosted Windows 2022/x64/Jobs4, clean/exact checkout and parent gitlink handling, fixed commands, owned-job cleanup/transcript and executable hashes, failure/result retention, source/provenance handling, existing groups, upload and final shipping validation remain intact.
+
+The route fixture retains the disjoint delta02 poison, live-object handling, input-only cache providers and all assertion hooks. Static runtime call-order analysis still matches all 71 candidate IDs and 13 omission IDs; the omission has exactly six planned failures. The original save/load controls retain one check/failure each, exit 1 and exact 80000003 SEH witnesses. All 71/13/1/1 modes, failure IDs, expected exits and zero-assertion requirements are unchanged. The correction grants none of those future witnesses in advance.
+
+Root still owns source/controller publication, equality assertions against the current parent preimages, hosted rerun and later native save/overwrite/cold-reload work. The reported Git bases/commits in this packet were not queried independently. No controller, runner, C++, compiler, fixture/control, CI, game or IDA code was executed for this review. No packet, production file, Git/index/ref state or earlier result was changed; only this new sealed sibling review was written. Corrected link/runtime results remain unverified. DEFAULT-only vehicle choice and deterministic input records remain the fixture's limits; no disk, autosave, native-save, gameplay or original-behavior credit is granted.

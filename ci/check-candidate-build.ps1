@@ -19,7 +19,8 @@ param(
     [switch] $RunKeyboardUIContract,
     [switch] $RunRwacCommandCapacity,
     [switch] $RunSystemUserProfile,
-    [switch] $RunTrafficFlowtypeOverride
+    [switch] $RunTrafficFlowtypeOverride,
+    [switch] $RunOnlineSaveRoute
 )
 
 Set-StrictMode -Version Latest
@@ -47,13 +48,24 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity -or $RunSystemUserProfile -or $RunTrafficFlowtypeOverride); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; system_user_profile_status = $(if ($RunSystemUserProfile) { 'running' } else { 'not_requested' }); system_user_profile = @{}; traffic_flowtype_override_status = $(if ($RunTrafficFlowtypeOverride) { 'running' } else { 'not_requested' }); traffic_flowtype_override = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity -or $RunSystemUserProfile -or $RunTrafficFlowtypeOverride -or $RunOnlineSaveRoute); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; system_user_profile_status = $(if ($RunSystemUserProfile) { 'running' } else { 'not_requested' }); system_user_profile = @{}; traffic_flowtype_override_status = $(if ($RunTrafficFlowtypeOverride) { 'running' } else { 'not_requested' }); traffic_flowtype_override = @{}; online_save_route_status = $(if ($RunOnlineSaveRoute) { 'running' } else { 'not_requested' }); online_save_route = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 $SystemUserProfileSourceBase = 'bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7'
 $SystemUserProfilePinsLfSha256 = '3a6965215e4fa23d6831f8ed035d9d33490090245e93d95c5f1d6904b8b06465'
 $SystemUserProfilePlanLfSha256 = 'b922bc45991763901be63194b7824ae1aae83d309f10dce457988c1a82833686'
 $SystemUserProfileRunnerLfSha256 = '2eee426e6e0f540311c15943b77c4f5a5dc4b3defc8d57e6b32e66aa606716a3'
+# Exact delta03 diagnostic-support payload content; checkout line endings may differ.
+$OnlineSaveRoutePayloadPins = @{
+    'tests/OnlineSaveRoute.cpp' = @{ lf_sha256 = '9105e7eeec51378a21136e80409b502ca0d383c80c267a4520384f879577d728'; lf_bytes = 22917 }
+    'tests/run_online_save_route.py' = @{ lf_sha256 = '053ae3b9fa21178b1b81fe1b864c991dcdd058fc1d43488fe92e25e44890ac9b'; lf_bytes = 11772 }
+    'tests/online_save_route_binding.py' = @{ lf_sha256 = '4b44e0c8f7c7705f11616b59c95d730ae9660d27486f234ebd1bf9097cc446dc'; lf_bytes = 7456 }
+    'tests/online_save_route_owned.py' = @{ lf_sha256 = 'c21a018a37c094eec2c6befcd19b8862f8c33c84b66f84c33c55eac600649179'; lf_bytes = 12783 }
+    'tests/evidence/online_save_route/source_pins.json' = @{ lf_sha256 = 'a6a7a289a7de87bf6017e6d6255d92eb326f44e9b7c158c76c96aaeeafeabc57'; lf_bytes = 5017 }
+    'tests/evidence/online_save_route/test_plan.json' = @{ lf_sha256 = '1709fa6b36657f903668e72943956566eb1d7ce3e24797fbbda5d270b308bc8e'; lf_bytes = 4435 }
+    'tests/evidence/online_save_route/BrnGuiOptionsDataProfile_8b2940d4.cpp' = @{ lf_sha256 = 'e36d09bce219ca3125a204bcb34fe95aab2e7784c37d2f247a6eef980124c74d'; lf_bytes = 26153 }
+    'tests/OnlineSaveRouteDiagnosticGlobals.cpp' = @{ lf_sha256 = 'ba311bf5c9397d9b61ad795458351a9ba400e88a2257ce6d8202ba9334960710'; lf_bytes = 453 }
+}
 
 function Invoke-Native([string] $Command, [string[]] $Arguments, [string] $LogName) {
     & $Command @Arguments 2>&1 | Tee-Object -FilePath (Join-Path $ArtifactRoot $LogName) -Append | Out-Host
@@ -90,6 +102,16 @@ function Assert-CleanTrees {
 }
 function Get-FileRecord([string] $Path) {
     return @{ bytes = (Get-Item -LiteralPath $Path).Length; sha256 = (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
+}
+function Get-LFFileRecord([string] $Path) {
+    $raw = [IO.File]::ReadAllBytes($Path)
+    $lf = [Text.Encoding]::UTF8.GetBytes([Text.Encoding]::UTF8.GetString($raw).Replace("`r`n", "`n"))
+    return @{
+        path = [IO.Path]::GetFullPath($Path); raw_bytes = $raw.Length
+        raw_sha256 = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($raw)).ToLowerInvariant()
+        lf_bytes = $lf.Length
+        lf_sha256 = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($lf)).ToLowerInvariant()
+    }
 }
 function Assert-SystemUserProfilePath([string] $Observed, [string] $Expected, [string] $Label) {
     $observedFull = [IO.Path]::GetFullPath($Observed)
@@ -478,6 +500,14 @@ function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision
     }
 }
 
+function Assert-OnlineSaveRouteProcess(
+    [System.Collections.IDictionary] $Run, [string] $Log, [int] $Timeout, [int] $Exit
+) {
+    # The existing validator covers this identical run_owned cleanup/transcript schema.
+    try { return Assert-SystemUserProfileRunRecord $Run $Log $Timeout $Exit }
+    catch { throw "Online-save-route process receipt rejected: $($_.Exception.Message)" }
+}
+
 Push-Location $Root
 try {
     foreach ($sha in @($B5Commit, $WorkflowSha)) {
@@ -528,6 +558,146 @@ try {
         $Receipt.build_inputs[$path] = Get-FileRecord (Join-Path $Root $path)
     }
     Invoke-Native py @('-3', '--version') 'toolchain.log'
+
+    if ($RunOnlineSaveRoute) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.online_save_route_status = 'running'
+        $routeReceipt = @{
+            status = 'running'; actual_b5_commit = $B5Commit; actual_workflow_sha = $WorkflowSha
+            subject_commit_metadata = '17ab0a96e27bed5e60ffc55cb81dcf0a653b1e4e'
+            source_base_metadata = '8b2940d40e76fd6a88a37615f6163a99c2d5e3b8'
+            payloads = @{}; pinned_inputs = @{}; variants = @{}
+        }
+        $Receipt.regressions.online_save_route = $routeReceipt
+        if ($Jobs -ne 4 -or $env:ImageOS -cne 'win22' -or $env:RUNNER_ARCH -cne 'X64') {
+            throw 'Online-save-route requires the existing hosted Windows 2022 x64 / Jobs=4 job.'
+        }
+        Assert-CleanTrees
+        foreach ($relative in $OnlineSaveRoutePayloadPins.Keys) {
+            $actual = Get-LFFileRecord (Join-Path $SourceRoot $relative)
+            $expected = $OnlineSaveRoutePayloadPins[$relative]
+            if ($actual.lf_sha256 -cne $expected.lf_sha256 -or $actual.lf_bytes -ne $expected.lf_bytes) {
+                throw "Online-save-route reviewed payload differs: $relative"
+            }
+            $routeReceipt.payloads[$relative] = $actual
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord $actual.path
+        }
+        $routePins = Get-Content -Raw -LiteralPath (Join-Path $SourceRoot 'tests/evidence/online_save_route/source_pins.json') | ConvertFrom-Json -AsHashtable
+        if ($routePins.schema_version -ne 1 -or $routePins.normalization -cne 'crlf_to_lf_only' -or
+            $routePins.base -cne $routeReceipt.source_base_metadata -or @($routePins.b5_files.Keys).Count -ne 24 -or
+            @($routePins.workflow_files.Keys).Count -ne 3) { throw 'Online-save-route source-pin schema differs.' }
+        # 8b is proof metadata. The baseline blob is supplied and hashed by the
+        # pinned binder; no historical Git object is needed in this shallow checkout.
+        foreach ($kind in @('b5', 'workflow')) {
+            $pinRoot = if ($kind -eq 'b5') { $SourceRoot } else { $Root }
+            $filePins = if ($kind -eq 'b5') { $routePins.b5_files } else { $routePins.workflow_files }
+            foreach ($relative in $filePins.Keys) {
+                $actual = Get-LFFileRecord (Join-Path $pinRoot $relative)
+                if ($actual.lf_sha256 -cne $filePins[$relative].lf_sha256 -or
+                    $actual.lf_bytes -ne $filePins[$relative].lf_bytes) {
+                    throw "Online-save-route pinned input differs: $kind/$relative"
+                }
+                $routeReceipt.pinned_inputs["$kind/$relative"] = $actual
+                if ($kind -eq 'b5') { $Receipt.regressions.inputs[$relative] = Get-FileRecord $actual.path }
+            }
+        }
+        $routePlan = Get-Content -Raw -LiteralPath (Join-Path $SourceRoot 'tests/evidence/online_save_route/test_plan.json') | ConvertFrom-Json -AsHashtable
+        $routeOut = Join-Path $ArtifactRoot 'online-save-route'
+        if (Test-Path -LiteralPath $routeOut) { throw 'Online-save-route artifact directory must be fresh.' }
+        $routeResultPath = Join-Path $routeOut 'result.json'
+        try {
+            Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot 'tests/run_online_save_route.py'),
+                '--workflow-root', $Root, '--out', $routeOut, '--run') 'regressions.log'
+        } finally {
+            if (Test-Path -LiteralPath $routeResultPath -PathType Leaf) {
+                $routeReceipt.result_path = $routeResultPath
+                $routeReceipt.result_file = Get-FileRecord $routeResultPath
+            }
+        }
+        $routeResult = Get-Content -Raw -LiteralPath $routeResultPath | ConvertFrom-Json -AsHashtable
+        if ($routeResult.schema_version -ne 1 -or $routeResult.fixture -cne 'ONLINE_SAVE_ROUTE' -or
+            $routeResult.status -cne 'pass' -or $routeResult.executed -ne $true -or $routeResult.success -ne $true -or
+            $routeResult.checkout.b5_sha -cne $B5Commit -or $routeResult.checkout.workflow_sha -cne $WorkflowSha -or
+            $routeResult.checkout.b5_branch -cne 'HEAD' -or $routeResult.checkout.b5_status -cne '' -or
+            ([string]::Join('|', [string[]]@($routeResult.variants.Keys | Sort-Object))) -cne 'candidate|oldtrap|omitted_init') {
+            throw 'Online-save-route result is not the exact executed passing candidate/control composition.'
+        }
+        foreach ($pair in @(@('b5_root', $SourceRoot), @('workflow_root', $Root), @('artifact_root', $routeOut))) {
+            if (-not [string]::Equals([IO.Path]::GetFullPath($routeResult[$pair[0]]),
+                [IO.Path]::GetFullPath($pair[1]), [StringComparison]::OrdinalIgnoreCase)) {
+                throw 'Online-save-route result root differs.'
+            }
+        }
+        $routeVariantModes = @{ candidate = @('candidate'); oldtrap = @('oldtrap_save', 'oldtrap_load'); omitted_init = @('omitted_init') }
+        foreach ($variantName in @('candidate', 'oldtrap', 'omitted_init')) {
+            $variant = $routeResult.variants[$variantName]
+            $variantRoot = Join-Path $routeOut $variantName
+            if (@($variant.compile).Count -ne 8 -or $variant.dependencies_unchanged_after_run -ne $true -or
+                @($variant.dependency_inputs.Keys).Count -eq 0 -or
+                ([string]::Join('|', [string[]]@($variant.modes.Keys | Sort-Object))) -cne
+                ([string]::Join('|', [string[]]@($routeVariantModes[$variantName] | Sort-Object)))) {
+                throw "Online-save-route compile/dependency/mode composition differs: $variantName"
+            }
+            for ($index = 0; $index -lt 8; ++$index) {
+                $null = Assert-OnlineSaveRouteProcess $variant.compile[$index].run (Join-Path $variantRoot "compile$index.log") 120 0
+            }
+            $null = Assert-OnlineSaveRouteProcess $variant.link.run (Join-Path $variantRoot 'link.log') 120 0
+            $exePath = Join-Path $variantRoot 'OnlineSaveRoute.exe'
+            $exeRecord = Get-FileRecord $exePath
+            if ($variant.executable.raw_sha256 -cne $exeRecord.sha256 -or $variant.executable.raw_bytes -ne $exeRecord.bytes) {
+                throw "Online-save-route retained executable differs: $variantName"
+            }
+            $routeReceipt.variants[$variantName] = @{ compile_count = 8; link_exit_code = 0; executable = $exeRecord; modes = @{} }
+        }
+        $routeModes = @(
+            @{ variant = 'candidate'; name = 'candidate'; checks = 71; failures = 0; exit = 0 },
+            @{ variant = 'omitted_init'; name = 'omitted_init'; checks = 13; failures = 6; exit = 1 },
+            @{ variant = 'oldtrap'; name = 'oldtrap_save'; checks = 1; failures = 1; exit = 1; breakpoint = 'save' },
+            @{ variant = 'oldtrap'; name = 'oldtrap_load'; checks = 1; failures = 1; exit = 1; breakpoint = 'load' }
+        )
+        foreach ($spec in $routeModes) {
+            $mode = $routeResult.variants[$spec.variant].modes[$spec.name]
+            $expected = $routePlan.modes[$spec.name]
+            $status = if ($spec.failures) { 'expected_failure_observed' } else { 'pass' }
+            $logPath = Join-Path (Join-Path $routeOut $spec.variant) ($spec.name + '.log')
+            $text = Assert-OnlineSaveRouteProcess $mode.run $logPath 20 $spec.exit
+            $summary = [regex]::Matches($text, '(?m)^ONLINE_SAVE_ROUTE checks=(\d+) failures=(\d+) assertions=(\d+)$')
+            $checkRows = [regex]::Matches($text, '(?m)^CHECK (\S+) (PASS|FAIL)$')
+            $ids = [string[]]@($checkRows | ForEach-Object { $_.Groups[1].Value })
+            $failedIds = [string[]]@($checkRows | Where-Object { $_.Groups[2].Value -eq 'FAIL' } | ForEach-Object { $_.Groups[1].Value })
+            if ($mode.valid -ne $true -or $mode.status -cne $status -or $summary.Count -ne 1 -or
+                [int]$summary[0].Groups[1].Value -ne $spec.checks -or [int]$summary[0].Groups[2].Value -ne $spec.failures -or
+                [int]$summary[0].Groups[3].Value -ne 0 -or $text -match '(?m)^UNEXPECTED_ASSERT ' -or
+                @($expected.check_ids).Count -ne $spec.checks -or @($expected.failure_ids).Count -ne $spec.failures -or
+                [string]::Join('|', $ids) -cne [string]::Join('|', [string[]]@($expected.check_ids)) -or
+                [string]::Join('|', $ids) -cne [string]::Join('|', [string[]]@($mode.observed_check_ids)) -or
+                [string]::Join('|', $failedIds) -cne [string]::Join('|', [string[]]@($expected.failure_ids)) -or
+                [string]::Join('|', $failedIds) -cne [string]::Join('|', [string[]]@($mode.observed_failure_ids))) {
+                throw "Online-save-route real mode identity/count/failure witness differs: $($spec.name)"
+            }
+            if ($spec.ContainsKey('breakpoint')) {
+                $breaks = [regex]::Matches($text, '(?m)^ORIGINAL_BREAKPOINT mode=(save|load) code=([0-9A-F]{8})$')
+                if ($breaks.Count -ne 1 -or $breaks[0].Groups[1].Value -cne $spec.breakpoint -or
+                    $breaks[0].Groups[2].Value -cne '80000003') { throw 'Online-save-route original breakpoint witness differs.' }
+            }
+            $routeReceipt.variants[$spec.variant].modes[$spec.name] = @{
+                status = $status; checks = $spec.checks; failures = $spec.failures; assertions = 0
+                process_exit_code = $spec.exit; failure_ids = $failedIds; log = Get-FileRecord $logPath
+            }
+            if ($spec.failures) {
+                $Receipt.regressions.negative_controls['online-save-route-' + $spec.name] = @{
+                    status = 'expected_behavior_failure'; exit_code = $spec.exit; log = $logPath
+                }
+            }
+        }
+        # The exact pinned runner additionally validates body composition, input and
+        # dependency hashes before/after, and every owned-child cleanup internally.
+        $routeReceipt.runner_result = @{ status = $routeResult.status; executed = $routeResult.executed; success = $routeResult.success }
+        Assert-CleanTrees
+        $routeReceipt.status = 'pass'
+        $Receipt.regressions.online_save_route_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+    }
 
     if ($RunTrafficFlowtypeOverride) {
         $Receipt.regressions.status = 'running'
@@ -1524,6 +1694,10 @@ try {
     $Receipt.validated = $true
     $ExitCode = 0
 } catch {
+    if ($Receipt.regressions.online_save_route_status -eq 'running') {
+        $Receipt.regressions.online_save_route_status = 'fail'
+        $Receipt.regressions.online_save_route.status = 'fail'
+    }
     if ($Receipt.regressions.system_user_profile_status -eq 'running') {
         $Receipt.regressions.system_user_profile_status = 'fail'
         if ($Receipt.regressions.system_user_profile.Contains('status') -and

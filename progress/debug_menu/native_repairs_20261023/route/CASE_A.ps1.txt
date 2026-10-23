@@ -1,0 +1,278 @@
+$ErrorActionPreference = 'Stop'
+$packetRoot = $PSScriptRoot
+$probePath = Join-Path $packetRoot 'ProfilePayloadProbe.py'
+$menuPrefixPath = Join-Path $packetRoot 'MENU_SEQUENCE_62047_67.txt'
+$repoRoot = [IO.Path]::GetFullPath($env:ROUTE_SAVE_REPO_ROOT)
+$pythonExe = [IO.Path]::GetFullPath($env:ROUTE_SAVE_PYTHON)
+$sourceProfile = [IO.Path]::GetFullPath($env:ROUTE_SAVE_CASE_A_PROFILE_FIXTURE)
+
+$case = @{
+    Name = 'route_save_empty_overwrite_case_a'
+    Area = 'gui-profile-persistence'
+    Bug = 'Real GUI save into an empty custom-route slot, overwrite that exact slot with one moved checkpoint, and prove both autosave payloads before clean close.'
+    Frames = $true
+    ProfileFixture = $sourceProfile
+    ProfileFixtureSha256 = ([string]$env:ROUTE_SAVE_CASE_A_PROFILE_SHA256).ToLowerInvariant()
+    FreshProfile = $false
+    DiagEnv = 'BRN_EASYDRIVE_TRACE=1,BRN_CREATE_MATCH_TRACE=1,BRN_SCREEN_DIAG=1,BRN_OVERLAY_DIAG=1,BRN_FRAME_DUMP_MAX=96'
+    RepoRoot = $repoRoot
+    PythonExe = $pythonExe
+    ProbePath = $probePath
+    MenuPrefixPath = $menuPrefixPath
+    Run = @{
+        TitleStart = $true; SkipIntro = $true; AcceptGap = 1
+        Drive = $true; DriveDelay = 0; DriveSeconds = 3
+        MaxSeconds = 330; StrictGameOwnership = $true; NoAssertRelease = $true; BelowNormal = $true
+        FrameEvery = 240; MinFreeGB = 20; MaxLogMB = 64
+        MenuScript = 'timeout:60;gap:0.8;signal:case_a_script_armed'
+    }
+}
+
+$case.Setup = {
+    param($ctx)
+    if (-not $ctx.UsesPrivateStage -or $ctx.Slot -ne 62052 -or
+        [IO.Path]::GetFileName([IO.Path]::GetFullPath($ctx.GameDir)) -ine 'slot' -or
+        [IO.Path]::GetFileName([IO.Path]::GetFullPath($ctx.WorkingDirectory)) -ine 'data' -or
+        [IO.Path]::GetFullPath((Split-Path -Parent $ctx.GameDir)) -ine [IO.Path]::GetFullPath((Split-Path -Parent $ctx.WorkingDirectory))) {
+        throw 'Case A requires only the paired private case_a\slot and case_a\data roots on fresh slot 62052.'
+    }
+    $profilePath = Join-Path $ctx.WorkingDirectory ('Memcard_' + $ctx.Slot + '\Profile.sav')
+    if (-not (Test-Path -LiteralPath $profilePath -PathType Leaf) -or
+        (Get-Item -LiteralPath $profilePath).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw 'Case A requires an ordinary private Profile.sav file in the case data root.'
+    }
+    $profileArgs = @($ctx.Case.ProbePath, 'inspect', '--repo-root', $ctx.Case.RepoRoot,
+        '--profile', $profilePath, '--slot-index', '0')
+    $probeText = & $ctx.Case.PythonExe @profileArgs
+    if ($LASTEXITCODE -ne 0) { throw 'Existing B5SV reader rejected the private source profile.' }
+    $profile = ($probeText -join "`n") | ConvertFrom-Json
+    $created = [int]$profile.created_count
+    if ($created -lt 0 -or $created -ge 6) { throw "Created-route count $created is outside the supported visible-row range 0..5; setup_blocked." }
+    $targetCount = $created + 1
+    $targetIndex = $created
+    $targetArgs = @($ctx.Case.ProbePath, 'inspect', '--repo-root', $ctx.Case.RepoRoot,
+        '--profile', $profilePath, '--slot-index', [string]$targetIndex)
+    $targetText = & $ctx.Case.PythonExe @targetArgs
+    if ($LASTEXITCODE -ne 0) { throw 'Existing B5SV reader rejected the target route record bytes.' }
+    $targetProfile = ($targetText -join "`n") | ConvertFrom-Json
+    if ([string]$targetProfile.file_sha256 -cne [string]$profile.file_sha256 -or
+        [int]$targetProfile.created_count -ne $created) { throw 'Profile changed during read-only preflight.' }
+    $ctx.Case.InitialCount = $created
+    $ctx.Case.TargetCount = $targetCount
+    $ctx.Case.TargetIndex = $targetIndex
+    $ctx.Case.InitialTargetSlotSha256 = [string]$targetProfile.slot_sha256
+    $ctx.Case.ProfilePath = $profilePath
+    $ctx.Case.ObserverDir = Join-Path $ctx.RunDir 'observer'
+    $ctx.Case.InputReceiptPath = Join-Path $ctx.RunDir 'case-input.json'
+    New-Item -ItemType Directory -Path $ctx.Case.ObserverDir -Force | Out-Null
+    [ordered]@{
+        schema=1;phase='case-a';slot=$ctx.Slot;private_profile=$targetProfile;initial_count=$created
+        target_index=$targetIndex;target_label_one_based=($targetIndex + 1);target_count_after_save=$targetCount
+        initial_target_slot_sha256=$targetProfile.slot_sha256;source_fixture_sha256=$ctx.Case.ProfileFixtureSha256
+        fixture_matches_private_profile=([string]$targetProfile.file_sha256 -ceq [string]$ctx.Case.ProfileFixtureSha256)
+        created_utc=(Get-Date).ToUniversalTime().ToString('o')
+    } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $ctx.Case.InputReceiptPath -Encoding UTF8
+    if ([string]$targetProfile.file_sha256 -cne [string]$ctx.Case.ProfileFixtureSha256) {
+        throw 'The private profile bytes do not match the pinned real-profile fixture.'
+    }
+
+    $menu = (Get-Content -LiteralPath $ctx.Case.MenuPrefixPath -Raw).Trim()
+    $observer = Join-Path (Split-Path -Parent $ctx.Case.ProbePath) 'AutosaveObserver.ps1'
+    $observer = [IO.Path]::GetFullPath($observer)
+    $psExe = (Get-Command powershell.exe -ErrorAction Stop).Source
+    $args = @('-NoProfile','-ExecutionPolicy','Bypass','-File',$observer,
+        '-Phase','case-a','-RepoRoot',$ctx.Case.RepoRoot,'-RunDir',$ctx.RunDir,
+        '-ProfilePath',$profilePath,'-GameLog',$ctx.GameLog,
+        '-GameImagePath',(Join-Path $ctx.GameDir 'Burnout_PC.exe'),
+        '-PythonExe',$ctx.Case.PythonExe,'-ProbePath',$ctx.Case.ProbePath,
+        '-TargetCount',[string]$targetCount,'-TargetIndex',[string]$targetIndex,
+        '-InitialSlotSha256',[string]$targetProfile.slot_sha256,'-SaveTimeoutSeconds','120','-CloseTimeoutSeconds','30')
+    $quoted = @($args | ForEach-Object { '"' + ([string]$_).Replace('"','\"') + '"' }) -join ' '
+    $observerProcess = Start-Process -FilePath $psExe -ArgumentList $quoted -PassThru -WindowStyle Hidden
+
+    $signal = { param([string]$name) (Join-Path $ctx.RunDir ('observer\' + $name)) }.GetNewClosure()
+    $suffix = @(
+        'tap:Nextx2',
+        'wait:\[create-match-trace\] route ready .*substate=2 .*highlighted-id=3',
+        'tap:Accept',
+        'wait:ENTER ''ON_GAME_SUM ''',
+        'wait:\[create-match-trace\] params stage=summary-ready .*bounds-valid=1',
+        'mark:initial_custom_route_summary',
+        'tap:Next',
+        'wait:\[create-match-trace\] summary ready .*highlighted=1 selected-done=0',
+        'tap:Accept',
+        'sleep:2',
+        ('mark:save1_empty_slot_' + ($targetIndex + 1)),
+        ('signal:' + (& $signal 'save1.requested')),
+        ('waitfile:' + (& $signal 'save1.armed')),
+        'mark:save1_gui_accept',
+        'tap:Accept',
+        'timeout:130',
+        ('waitfile:' + (& $signal 'save1.verified')),
+        'timeout:60',
+        'sleep:1',
+        'tap:Stop',
+        'wait:ENTER ''ON_SEL_ROUTE''',
+        'wait:\[create-match-trace\] route ready .*substate=2 .*highlighted-id=3',
+        'tap:Prevx2',
+        'wait:\[create-match-trace\] route ready .*highlighted-id=1',
+        'tap:Accept',
+        'sleep:2',
+        'tap:Next',
+        'mark:overwrite_checkpoint_target',
+        'tap:Accept',
+        'sleep:2',
+        'mark:overwrite_checkpoint_editor',
+        'tap:DPadRightx2',
+        'sleep:2',
+        'mark:overwrite_checkpoint_moved',
+        'tap:Accept',
+        'sleep:2',
+        'mark:overwrite_checkpoint_placed',
+        'tap:Stop',
+        'wait:\[create-match-trace\] route ready .*substate=2 .*highlighted-id=1',
+        'mark:overwrite_route_main_after_edit',
+        'tap:Nextx2',
+        'wait:\[create-match-trace\] route ready .*highlighted-id=3',
+        'tap:Accept',
+        'wait:ENTER ''ON_GAME_SUM ''',
+        'wait:\[create-match-trace\] params stage=summary-ready .*bounds-valid=1',
+        'mark:overwritten_route_summary',
+        'tap:Next',
+        'wait:\[create-match-trace\] summary ready .*highlighted=1 selected-done=0',
+        'tap:Accept',
+        'sleep:2',
+        $(if ($targetCount -lt 10) { 'tap:Prev' } else { 'tap:Nextx9' }),
+        'sleep:2',
+        ('mark:overwrite_same_slot_' + ($targetIndex + 1)),
+        'tap:Accept',
+        'wait:\[overlay\] start CNONLOVGOQN',
+        'mark:overwrite_question_visible',
+        ('signal:' + (& $signal 'save2.requested')),
+        ('waitfile:' + (& $signal 'save2.armed')),
+        'tap:Accept',
+        'wait:\[overlay\] complete CNONLOVGOQN 1',
+        'timeout:130',
+        ('waitfile:' + (& $signal 'save2.verified')),
+        'timeout:60',
+        'sleep:3',
+        'mark:final_overwrite_summary',
+        ('signal:' + (& $signal 'close.ready.requested'))
+    )
+    $ctx.Case.Run.MenuScript = $menu + ';' + ($suffix -join ';')
+    return $observerProcess
+}.GetNewClosure()
+
+$case.Checks = @(
+    @{Kind='LogCount';Name='no engine assertion';Pattern='\[ASSERT(?:\s+\d+)?\]';Max=0},
+    @{Kind='LogCount';Name='no native exception';Pattern='\[EXCEPTION\]';Max=0},
+    @{Kind='LogCount';Name='exact overwrite-question overlay requested';Pattern='\[overlay\] start CNOnlOvGOQn';Min=1;Max=1},
+    @{Kind='LogCount';Name='exact overwrite-question overlay completed';Pattern='\[overlay\] complete CNOnlOvGOQn 1';Min=1;Max=1},
+    @{Kind='LogCount';Name='external WM_CLOSE reached the game window handler';Pattern='\[exit-diag\] WM_CLOSE received \(external close request';Min=1;Max=1},
+    @{Kind='Script';Name='complete GUI path, two autosave payloads, changed checkpoint, clean close and final profile agree';Script={
+        param($ctx)
+        $case = $ctx.Case
+        $python = $case.PythonExe
+        $probe = $case.ProbePath
+        $repo = $case.RepoRoot
+        $runDir = $ctx.RunDir
+        $profileAfter = Join-Path $runDir 'Profile.sav.after'
+        $observer = Join-Path $runDir 'observer'
+        $passed = $true
+        $details = New-Object 'System.Collections.Generic.List[string]'
+        $scriptComplete = $ctx.MarksText -match '(?m)^MENUSCRIPT done=\d+/\d+ state=done$'
+        $prefixRouteReady = $ctx.MarksText -match 'wait:\\\[create-match-trace\\\] route ready \.\*substate=2 \.\*highlighted-id=1 -> matched: \[create-match-trace\] route ready epoch=\d+ substate=2 .*highlighted-id=1' -and
+            $ctx.MarksText -match 'mark route_main_after_first_point_placed'
+        $overwriteRouteReady = $ctx.MarksText -match 'mark overwrite_route_main_after_edit'
+        $passed = $passed -and $scriptComplete -and $prefixRouteReady -and $overwriteRouteReady -and
+            $ctx.MarksText -match 'mark initial_custom_route_summary' -and
+            $ctx.MarksText -match 'mark overwrite_checkpoint_moved' -and
+            $ctx.MarksText -match 'mark overwrite_checkpoint_placed' -and
+            $ctx.MarksText -match 'mark overwritten_route_summary' -and
+            $ctx.MarksText -match 'mark overwrite_question_visible'
+        $details.Add("menuscript_done=$scriptComplete; prefix_route_ready_highlight_1=$prefixRouteReady; overwrite_route_main_after_edit=$overwriteRouteReady; required_route_and_overlay_marks=$($passed)")
+
+        $input = Get-Content -LiteralPath (Join-Path $runDir 'case-input.json') -Raw | ConvertFrom-Json
+        $save1Path = Join-Path $observer 'save1.json'
+        $save2Path = Join-Path $observer 'save2.json'
+        $closePath = Join-Path $observer 'close.json'
+        $save1 = if (Test-Path -LiteralPath $save1Path) { Get-Content -LiteralPath $save1Path -Raw | ConvertFrom-Json } else { $null }
+        $save2 = if (Test-Path -LiteralPath $save2Path) { Get-Content -LiteralPath $save2Path -Raw | ConvertFrom-Json } else { $null }
+        $close = if (Test-Path -LiteralPath $closePath) { Get-Content -LiteralPath $closePath -Raw | ConvertFrom-Json } else { $null }
+        $payloadPass = $save1 -and $save1.success -and $save1.request_log_seen -and $save1.write_completion_log_seen -and
+            $save1.profile.created_count -eq $input.target_count_after_save -and
+            $save2 -and $save2.success -and $save2.request_log_seen -and $save2.write_completion_log_seen -and
+            $save2.profile.created_count -eq $input.target_count_after_save -and
+            $save1.profile.slot_sha256 -cne $input.initial_target_slot_sha256 -and
+            $save2.profile.slot_sha256 -cne $save1.profile.slot_sha256
+        $passed = $passed -and $payloadPass
+        $details.Add("save1_and_overwrite_payloads=$payloadPass")
+
+        $terminal = Get-Content -LiteralPath (Join-Path $runDir 'flow/terminal-status.json') -Raw | ConvertFrom-Json
+        $cleanClose = $close -and $close.success -and $close.close_main_window_returned -and $close.exit_confirmed -and $close.exit_code -eq 0 -and
+            $terminal.success -and $terminal.game_exited_on_own -and $terminal.game_exit -eq 0 -and
+            $terminal.owned_cleanup_complete -and -not $terminal.foreign_game
+        $passed = $passed -and $cleanClose
+        $details.Add("wm_close_receipt_and_flow_self_exit=$cleanClose")
+
+        $afterPass = $false
+        if (Test-Path -LiteralPath $profileAfter -PathType Leaf) {
+            $inspect = & $python $probe inspect --repo-root $repo --profile $profileAfter --slot-index $input.target_index
+            $probeCode = $LASTEXITCODE
+            if ($probeCode -eq 0) {
+                $after = ($inspect -join "`n") | ConvertFrom-Json
+                $afterPass = $after.created_count -eq $input.target_count_after_save -and
+                    $after.slot_sha256 -ceq $save2.profile.slot_sha256
+            }
+        }
+        $passed = $passed -and $afterPass
+        $details.Add("Profile.sav.after_payload_matches_overwrite=$afterPass")
+
+        $editCheckPath = Join-Path $runDir 'route-edit-trace-check.json'
+        & $python $probe check-edit --log $ctx.Log --output $editCheckPath | Out-Null
+        $traceCode = $LASTEXITCODE
+        $tracePass = $traceCode -eq 0 -and (Test-Path -LiteralPath $editCheckPath -PathType Leaf) -and
+            (Get-Content -LiteralPath $editCheckPath -Raw | ConvertFrom-Json).pass
+        $passed = $passed -and $tracePass
+        $details.Add("summary_trace_settings_and_single_checkpoint_change=$tracePass")
+        $editRecord = $null
+        if (Test-Path -LiteralPath $editCheckPath -PathType Leaf) { $editRecord = Get-Content -LiteralPath $editCheckPath -Raw | ConvertFrom-Json }
+
+        $summaryPath = Join-Path $runDir 'summary-final.json'
+        & $python $probe trace-summary --log $ctx.Log --output $summaryPath | Out-Null
+        $summaryCode = $LASTEXITCODE
+        $summaryPass = $summaryCode -eq 0 -and (Test-Path -LiteralPath $summaryPath -PathType Leaf)
+        $passed = $passed -and $summaryPass
+        $details.Add("final_summary_trace_saved=$summaryPass")
+        $summaryRecord = $null
+        if ($summaryPass) { $summaryRecord = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json }
+
+        $frames = @(Get-ChildItem -LiteralPath $ctx.FrameDir -Filter 'bb_*.bmp' -File -ErrorAction SilentlyContinue)
+        $frameRows = @($frames | ForEach-Object { [ordered]@{path=$_.FullName;bytes=$_.Length;sha256=(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()} })
+        $noteRows = @()
+        foreach ($line in Get-Content -LiteralPath (Join-Path $runDir 'flow/marks.txt')) {
+            if ($line -match '^MENUSCRIPT run=\s*(?<seconds>[0-9.,]+)s step (?<step>\d+) mark (?<note>\w+) \(log line (?<line>\d+)\)$') {
+                $seconds = [double]::Parse($Matches.seconds.Replace(',','.'),[Globalization.CultureInfo]::InvariantCulture)
+                $noteRows += [ordered]@{note=$Matches.note;step=[int]$Matches.step;run_seconds=$seconds;log_line=[int]$Matches.line}
+            }
+        }
+        [ordered]@{status='pending_root_visual_review';phase='case-a';notes=$noteRows;frames=$frameRows;
+            required_notes=@('initial_custom_route_summary','save1_empty_slot_*','overwrite_checkpoint_moved','overwrite_checkpoint_placed','overwritten_route_summary','overwrite_question_visible','final_overwrite_summary');
+            instructions='Review the actual visible empty/saved slot label, exact overwrite overlay, and initial/final route-map checkpoint position. Compare the checkpoint before/after frames; trace/payload checks do not replace pixel review.'} |
+            ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $runDir 'manual_visual_manifest.json') -Encoding UTF8
+        $log = Get-Item -LiteralPath $ctx.Log -ErrorAction SilentlyContinue
+        $boundedEvidence = $null -ne $log -and $log.Length -le 64MB -and $frames.Count -ge 1 -and $frames.Count -le 96
+        $passed = $passed -and $boundedEvidence
+        $details.Add("bounded_log_and_frame_archive=$boundedEvidence frames=$($frames.Count)")
+
+        $afterRecord = $null
+        if ($afterPass) { $afterRecord = $after }
+        [ordered]@{schema=1;pass=[bool]$passed;phase='case-a';case_input=$input;save1=$save1;save2=$save2;close=$close;
+            flow_terminal=$terminal;after_profile=$afterRecord;trace_check=$editRecord;final_summary=$summaryRecord;
+            manual_route_map_review='pending Root visual comparison of initial/final route and overwrite frames';details=@($details.ToArray())} |
+            ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $runDir 'native_acceptance.json') -Encoding UTF8
+        return @{Pass=[bool]$passed;Detail=($details -join '; ')}
+    }}
+)
+
+return $case

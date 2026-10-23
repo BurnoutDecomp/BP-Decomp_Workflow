@@ -1,0 +1,70 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "route_save_empty_overwrite_case_a",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\GuiRouteSaveCaseA.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-23T20:49:49.2993369+02:00",
+    "flow_exit":  0,
+    "bug":  "Real GUI save into an empty custom-route slot, overwrite that exact slot with one moved checkpoint, and prove both autosave payloads before clean close.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a",
+    "label":  "RouteSave Case A / source=af18caf8a9e02428cfaa4705599e2b1ca9ea7377 / workflow=dc741345e8b6ee1af426199c9789f91dbac208df",
+    "area":  "gui-profile-persistence",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62052,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no engine assertion",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no native exception",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[overlay\\] start CNOnlOvGOQn/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "exact overwrite-question overlay requested",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[overlay\\] complete CNOnlOvGOQn 1/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "exact overwrite-question overlay completed",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[exit-diag\\] WM_CLOSE received \\(external close request/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "external WM_CLOSE reached the game window handler",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "menuscript_done=True; prefix_route_ready_highlight_1=True; overwrite_route_main_after_edit=True; required_route_and_overlay_marks=True; save1_and_overwrite_payloads=True; wm_close_receipt_and_flow_self_exit=True; Profile.sav.after_payload_matches_overwrite=True; summary_trace_settings_and_single_checkpoint_change=True; final_summary_trace_saved=True; bounded_log_and_frame_archive=True frames=79",
+                       "pass":  true,
+                       "name":  "complete GUI path, two autosave payloads, changed checkpoint, clean close and final profile agree",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11334656,
+                       "exe_mtime_before_lock":  "2026-10-23T20:34:48.0365113+02:00",
+                       "exe_sha":  "e9fc6246dece",
+                       "b5_head":  "91a0ed564",
+                       "exe_b5":  "af18caf8",
+                       "parent_head":  "8d67d4c0",
+                       "exe_mtime":  "2026-10-23T20:34:48.0365113+02:00"
+                   }
+}

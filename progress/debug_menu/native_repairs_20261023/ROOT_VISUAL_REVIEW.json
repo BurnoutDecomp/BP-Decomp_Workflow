@@ -1,0 +1,67 @@
+{
+  "reviewer": "Root; direct original BMP inspection",
+  "utc": "2026-10-23T19:17:38.867325+00:00",
+  "source_leave": "aa6b7ec4f9af54230bc2e04622b1d9c75c26700b",
+  "source_route": "af18caf8a9e02428cfaa4705599e2b1ca9ea7377",
+  "frames": {
+    "route_empty_save": {
+      "path": "scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a\\frames\\bb_011760.bmp",
+      "sha256": "d32c56bccfa0acac129d001c7263abea77e81d4d34e89e99fd943896c363bb81",
+      "bytes": 3686454,
+      "mtime_ns": "1792781302365048200"
+    },
+    "route_after_first_save": {
+      "path": "scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a\\frames\\bb_012000.bmp",
+      "sha256": "d55d4310ad4ec8b801aee6f614169f291d3379dda653477cfd0243143899cad7",
+      "bytes": 3686454,
+      "mtime_ns": "1792781305214348200"
+    },
+    "route_overwrite_question": {
+      "path": "scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a\\frames\\bb_016080.bmp",
+      "sha256": "5b6d16cebf9a984175083b8fe321c04f2f3acb1ef39c75cc111bcfbc34d99356",
+      "bytes": 3686454,
+      "mtime_ns": "1792781352797036600"
+    },
+    "route_after_overwrite": {
+      "path": "scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_a\\frames\\bb_018480.bmp",
+      "sha256": "395c675332831c037909d8246e6d812b67709c964e3e6cb4cdd73fb090969bdb",
+      "bytes": 3686454,
+      "mtime_ns": "1792781380611695800"
+    },
+    "cold_missing_load_list": {
+      "path": "scratch\\DEBUG_MENU_1011\\route_save_gui_autosave_fixed_af18_close_delta02_20261023\\runs\\native_20261023_184629_82f10821\\case_b\\frames\\bb_006720.bmp",
+      "sha256": "0591084fd96d0c4d3066a0ff07e4416b4ce787d9394545a9375b4e610c897dc4",
+      "bytes": 3686454,
+      "mtime_ns": "1792781446390111600"
+    },
+    "leave_offline_after_completion_1": {
+      "path": "scratch\\DEBUG_MENU_1011\\freeburn_leave_fixed_aa6_execution_20261023\\run\\frames\\bb_007200.bmp",
+      "sha256": "4d17d8d4eaa3d9c125efc71b0b03e25c93f31d35f993eb2252b7118b9ea86bea",
+      "bytes": 3686454,
+      "mtime_ns": "1792782195204612700"
+    },
+    "leave_offline_after_completion_2": {
+      "path": "scratch\\DEBUG_MENU_1011\\freeburn_leave_fixed_aa6_execution_20261023\\run\\frames\\bb_007440.bmp",
+      "sha256": "8b2e91597c26ee8fad260320202905a475b37ea6764cd38c59d98005742dc143",
+      "bytes": 3686454,
+      "mtime_ns": "1792782199315795400"
+    }
+  },
+  "observations": [
+    "A: EMPTY ROUTE and A SAVE are visible; subsequent Summary shows the eight-point route.",
+    "A: same-slot overwrite question is visible; final Summary returns with the moved checkpoint.",
+    "B: Option0 did not open a saved-route list; CREATE EVENT still shows A Continue and B Back. Subsequent Accept enters the default route. Cold load FAIL is retained.",
+    "Host leave: both post-completion frames show the rendered offline world/HUD with no Leaving overlay. Original completion and IGO_WAIT exit are present; native exits0."
+  ],
+  "result": {
+    "route_save_and_overwrite": "pass_bounded",
+    "cold_route_load": "fail",
+    "one_player_host_leaving_overlay": "pass_bounded"
+  },
+  "limits": [
+    "No joined-peer departure test",
+    "No complete online race",
+    "No long-session audio stability claim",
+    "No debug-site disposition added by these supporting-flow checks"
+  ]
+}

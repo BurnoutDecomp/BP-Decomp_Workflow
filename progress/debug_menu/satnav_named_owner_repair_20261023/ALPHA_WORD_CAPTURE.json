@@ -1,0 +1,36 @@
+{
+  "scope": "bounded original-image constant capture, no C++ or native execution",
+  "image_source": "D:\\Reverse\\IDA_Files\\artist_i64.raw",
+  "image_bytes": 320888599,
+  "image_mtime_ns": 1788019120284893000,
+  "reader": "tools/re/x360rd.py",
+  "reader_sha256": "cbfbcdb8eee42c57f8b1392f75b8b20880642f90785cf133185ad7b19cfb2b3d",
+  "calibrations": [
+    {
+      "address": "0x82001c98",
+      "actual": "3f800000",
+      "expected": "3f800000",
+      "evidence": "ARTIST1.0f used by existing MapUtils and original exports"
+    },
+    {
+      "address": "0x8250da58",
+      "actual": "7d8802a6",
+      "expected": "7d8802a6",
+      "evidence": "ARTIST8250DA58 export starts mflr r12"
+    },
+    {
+      "address": "0x824f7f28",
+      "actual": "7d8802a6",
+      "expected": "7d8802a6",
+      "evidence": "ARTIST824F7F28 export starts mflr r12"
+    }
+  ],
+  "address": "0x820552E0",
+  "big_endian_hex": "40233333",
+  "f32": 2.549999952316284,
+  "matches_2_55f": true,
+  "whole_image_hash_captured": false,
+  "bounds": "exact four-byte data word with independent code/data address calibrations",
+  "frozen_satnav_proposal_changed": false,
+  "behavior_credit": false
+}

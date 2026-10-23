@@ -1,0 +1,121 @@
+$ErrorActionPreference = 'Stop'
+$packetRoot = $PSScriptRoot
+$bindingPath = [IO.Path]::GetFullPath($env:FREEBURN_LEAVE_RUNTIME_BINDING)
+$binding = Get-Content -LiteralPath $bindingPath -Raw | ConvertFrom-Json
+if ($binding.status -cne 'root_bound') { throw 'Root runtime binding is required before this case can load.' }
+$repoRoot = [IO.Path]::GetFullPath($binding.repo_root)
+$menuPath = Join-Path $packetRoot 'MENU_SEQUENCE_HOST_LEAVE.txt'
+$observerPath = Join-Path $packetRoot 'LeaveObserver.ps1'
+foreach ($pair in @(
+    @{Path=$MyInvocation.MyCommand.Path;Hash=$binding.case_sha256},
+    @{Path=$menuPath;Hash=$binding.menu_sha256},
+    @{Path=$observerPath;Hash=$binding.observer_sha256},
+    @{Path=(Join-Path $repoRoot 'tools/tests/run_case.ps1');Hash=$binding.run_case_sha256},
+    @{Path=(Join-Path $repoRoot 'tools/diagnostics/flow_run.ps1');Hash=$binding.flow_run_sha256})) {
+    if ((Get-FileHash -LiteralPath $pair.Path -Algorithm SHA256).Hash.ToLowerInvariant() -cne [string]$pair.Hash) {
+        throw "Runtime source pin mismatch: $($pair.Path)"
+    }
+}
+$verifyNormal = {
+    param($files)
+    $rows = @($files)
+    if ($rows.Count -ne 24 -or @($rows.path | Sort-Object -Unique).Count -ne 24) { throw 'Exactly 24 distinct normal protected paths must be bound.' }
+    foreach ($row in $rows) {
+        $item = Get-Item -LiteralPath $row.path -ErrorAction Stop
+        if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -or
+            $item.Length -ne [long]$row.bytes -or
+            [string]$item.LastWriteTimeUtc.ToFileTimeUtc() -cne [string]$row.mtime_utc_filetime_ticks -or
+            (Get-FileHash -LiteralPath $row.path -Algorithm SHA256).Hash.ToLowerInvariant() -cne [string]$row.sha256) {
+            throw "Normal protected file changed: $($row.path)"
+        }
+    }
+}
+$case = @{
+    Name = 'online_freeburn_oneplayer_host_leave'
+    Area = 'gui-network-leave'
+    Bug = 'Locate the first missing original leave-completion boundary; existing endpoint checks are separate from manual Leaving/return pixels and uninstrumented intermediate callbacks.'
+    Frames = $true
+    SlotId = [int]$binding.slot
+    Binding = $binding
+    RepoRoot = $repoRoot
+    ObserverPath = $observerPath
+    VerifyNormal = $verifyNormal
+    NormalFiles = @($binding.normal_protected_paths)
+    ProfileFixture = [IO.Path]::GetFullPath($binding.profile_fixture.path)
+    ProfileFixtureSha256 = [string]$binding.profile_fixture.sha256
+    FreshProfile = $false
+    DiagEnv = 'BRN_EASYDRIVE_TRACE=1,BRN_SCREEN_DIAG=1,BRN_OVERLAY_DIAG=1,BRN_RACEFLOW_DIAG=1,BRN_FRAME_DUMP_MAX=48,BRN_AUDIO_MUTE=1'
+    Run = @{
+        TitleStart=$true; SkipIntro=$true; AcceptGap=1
+        Drive=$true; DriveDelay=0; DriveSeconds=3
+        MaxSeconds=120; StrictGameOwnership=$true; NoAssertRelease=$true; BelowNormal=$true
+        FrameEvery=240; MinFreeGB=20; MaxLogMB=64
+        MenuScript=(Get-Content -LiteralPath $menuPath -Raw).Trim()
+    }
+}
+$case.Setup = {
+    param($ctx)
+    $b = $ctx.Case.Binding
+    if (-not $ctx.UsesPrivateStage -or $ctx.Slot -le 0 -or $ctx.Slot -ne $ctx.Case.SlotId -or
+        [IO.Path]::GetFileName([IO.Path]::GetFullPath($ctx.GameDir)) -ine 'slot' -or
+        [IO.Path]::GetFileName([IO.Path]::GetFullPath($ctx.WorkingDirectory)) -ine 'data' -or
+        [IO.Path]::GetFullPath((Split-Path -Parent $ctx.GameDir)) -ine [IO.Path]::GetFullPath((Split-Path -Parent $ctx.WorkingDirectory)) -or
+        [IO.Path]::GetFullPath((Split-Path -Parent $ctx.GameDir)) -ine [IO.Path]::GetFullPath($b.private_stage_root)) {
+        throw 'The bound positive slot must use only the paired private slot/data roots.'
+    }
+    foreach ($name in @('BRN_NET_HOST','BRN_NET_JOIN','BRN_NET_LEAVE_AT','BRN_NET_SCRIPT')) {
+        $value = [Environment]::GetEnvironmentVariable($name)
+        $disabledRole = $name -in @('BRN_NET_HOST','BRN_NET_JOIN') -and $value -eq '0'
+        if ($value -and -not $disabledRole) { throw "Automatic network stimulus must be unset: $name" }
+    }
+    if ($b.candidate_source -cne 'aa6b7ec4f9af54230bc2e04622b1d9c75c26700b' -or
+        $b.parent_workflow_source -cne 'ffabebef550d4283b254c2623152bebae974d940') {
+        throw 'This proposal requires Root to bind the named current candidate and private workflow source.'
+    }
+    & $ctx.Case.VerifyNormal $ctx.Case.NormalFiles
+    foreach ($pair in @(
+        @{Path=(Join-Path $ctx.GameDir 'Burnout_PC.exe');Hash=$b.private_exe_sha256},
+        @{Path=(Join-Path $ctx.GameDir 'config.ini');Hash=$b.private_config_sha256},
+        @{Path=$ctx.Case.ProfileFixture;Hash=$ctx.Case.ProfileFixtureSha256},
+        @{Path=(Join-Path $ctx.WorkingDirectory ('Memcard_' + $ctx.Slot + '/Profile.sav'));Hash=$ctx.Case.ProfileFixtureSha256})) {
+        if ((Get-FileHash -LiteralPath $pair.Path -Algorithm SHA256).Hash.ToLowerInvariant() -cne [string]$pair.Hash) {
+            throw "Private input pin mismatch: $($pair.Path)"
+        }
+    }
+    $observerArgs = @('-NoProfile','-ExecutionPolicy','Bypass','-File',$ctx.Case.ObserverPath,
+        '-GameLog',$ctx.GameLog,'-GameImagePath',(Join-Path $ctx.GameDir 'Burnout_PC.exe'),
+        '-RunDir',$ctx.RunDir,'-StageRoot',$b.private_stage_root)
+    foreach ($arg in $observerArgs) { if ([string]$arg -match '"') { throw 'Quoted observer argument is not an ordinary path/value.' } }
+    $quoted = @($observerArgs | ForEach-Object { '"' + [string]$_ + '"' }) -join ' '
+    return Start-Process -FilePath 'powershell.exe' -ArgumentList $quoted -PassThru -WindowStyle Hidden
+}.GetNewClosure()
+$case.Checks = @(
+    @{Kind='LogCount';Name='no engine assertion';Pattern='\[ASSERT(?:\s+\d+)?\]';Max=0},
+    @{Kind='LogCount';Name='no native exception';Pattern='\[EXCEPTION\]';Max=0},
+    @{Kind='LogCount';Name='one original host leave question';Pattern='\[overlay\] start OnHostLvQn\b';Min=1;Max=1},
+    @{Kind='LogCount';Name='original host confirmation accepted';Pattern='\[overlay\] complete OnHostLvQn 1\b';Min=1;Max=1},
+    @{Kind='LogCount';Name='one original GUI52 leave request';Pattern='\[netui\] leave post 52 method=1\b';Min=1;Max=1},
+    @{Kind='LogCount';Name='existing GUI273 endpoint observed';Pattern='\[netui\] game-room left game \(GUI 273\) reason=0 -> GO_BACK';Min=1;Max=1},
+    @{Kind='LogCount';Name='original Leaving overlay completed';Pattern='\[overlay\] complete CNONLLVGGAME 1\b';Min=1;Max=1},
+    @{Kind='LogCount';Name='wait overlay returned to invisible';Pattern="\[screen\] ENTER 'INVISIBLE   ' \(from 'IGO_WAIT    '\)";Min=2},
+    @{Kind='LogCount';Name='Create Event never entered';Pattern="\[screen\] ENTER 'ON_GAME_OPT '";Max=0},
+    @{Kind='Script';Name='existing endpoint order, clean owned close and normal24';Script={
+        param($ctx)
+        try {
+            & $ctx.Case.VerifyNormal $ctx.Case.NormalFiles
+            $r = Get-Content -LiteralPath (Join-Path $ctx.RunDir 'leave-observer.json') -Raw | ConvertFrom-Json
+            $text = [IO.File]::ReadAllText($ctx.Log)
+            $request = [regex]::Match($text,'(?m)^\[netui\] leave post 52 method=1\b')
+            if (-not $request.Success) { throw 'No original leave request boundary in the retained log.' }
+            $before = $text.Substring(0,$request.Index)
+            $states = [regex]::Matches($before,'(?m)^\[net\] state[^\r\n]*')
+            if ($states.Count -eq 0 -or $states[$states.Count-1].Value -notmatch 'loggedIn=1 inGame=1 host=1 players=1\b' -or
+                $before -match '(?m)^\[net\] state[^\r\n]*players=(?:[2-9]|\d{2,})\b') {
+                throw 'The departure was not from the required sole-player hosted lobby.'
+            }
+            $ok = $r.clean_exit -and $r.request52_line -gt 0 -and $r.gui273_line -gt $r.request52_line
+            return @{Pass=[bool]$ok;Detail=('status=' + $r.status + '; intermediate POST_DEL/NetOut24 unavailable in current game log; visual review required')}
+        } catch { return @{Pass=$false;Detail=$_.Exception.Message} }
+    }}
+)
+$case

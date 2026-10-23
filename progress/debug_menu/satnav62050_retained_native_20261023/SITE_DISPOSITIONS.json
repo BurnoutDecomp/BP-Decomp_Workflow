@@ -1,0 +1,68 @@
+{
+  "review_status": "complete; proposed independent per-site dispositions only",
+  "source": "8b2940d40e76fd6a88a37615f6163a99c2d5e3b8",
+  "hosted_run_id": 39944677851,
+  "exe_sha256": "95c120dc8b2f20123ec28d86873ba5e5bb5a4c2d3fdb7d922d51d927ea9e1cbd",
+  "native_run": "native_20261023_120115_750b0313",
+  "original_case_verdict": "PASS unchanged",
+  "original_wrapper_classification": "INCOMPLETE_EVIDENCE_RETAINED unchanged",
+  "original_wrapper_exit": 1,
+  "original_archive_error": "unexpected frame file: frames.csv",
+  "phase_adjacent_not_same_frame": true,
+  "all_22_selected_phase_images_directly_viewed": true,
+  "counts": {"pass": 1, "insufficient": 6, "fail": 0},
+  "sites": [
+    {
+      "site_id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0002",
+      "disposition": "insufficient",
+      "reason": "Hidden branch removes actual map texture, but the forcing-visible phase loses the remaining gameplay HUD and map never returns; positive consumer/restoration witness is absent and cause is unestablished.",
+      "partial_evidence": "baseline/off-false visible map; on-false hidden map texture; subsequent off states leave texture hidden",
+      "restoration_proven": false
+    },
+    {
+      "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0006",
+      "disposition": "pass",
+      "reason": "Original blue outline visibly off/on/off, confirmed by exact FALSE/TRUE/FALSE/final FALSE aliases and pinned registration/render source.",
+      "evidence_phases": ["override_on_forces_visible", "outline_visible", "outline_hidden", "final-restored"],
+      "scope": "outline visibility, original blue channel contract, local outline-off restoration",
+      "excludes": ["map geometry", "map alpha", "map or whole-HUD restoration"]
+    },
+    {
+      "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0007",
+      "disposition": "insufficient",
+      "reason": "0.720/0.778 aliases and outline left edge 994->920->994 are visible; map texture absent during change/restoration.",
+      "map_geometry_credit": false
+    },
+    {
+      "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0008",
+      "disposition": "insufficient",
+      "reason": "0.620/0.665 aliases and outline top edge 477->445->477 are visible; map texture absent during change/restoration.",
+      "map_geometry_credit": false
+    },
+    {
+      "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0009",
+      "disposition": "insufficient",
+      "reason": "0.960/0.931 aliases and outline right edge 1193->1230->1193 are visible; map texture absent during change/restoration.",
+      "map_geometry_credit": false
+    },
+    {
+      "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0010",
+      "disposition": "insufficient",
+      "reason": "0.910/0.867 aliases and outline bottom edge 625->657->625 are visible; map texture absent during change/restoration.",
+      "map_geometry_credit": false
+    },
+    {
+      "site_id": "BrnGui::SatNavDebugComponent::OnActivate#0011",
+      "disposition": "insufficient",
+      "reason": "0/100/40/90 aliases complete, but no map texture exists in any alpha image; the separate blue outline supplies no map-alpha witness.",
+      "map_alpha_credit": false
+    }
+  ],
+  "context_only_no_new_disposition": [
+    "BrnGui::GuiCustRendererDebugComponent::OnActivate#0003",
+    "BrnGui::GuiCustRendererDebugComponent::OnActivate#0005"
+  ],
+  "whole_hud_or_map_restoration_credit": false,
+  "archive_completion_credit": false,
+  "inventory_updated": false
+}
