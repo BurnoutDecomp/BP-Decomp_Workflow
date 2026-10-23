@@ -1,0 +1,716 @@
+--- a/src/GameSource/Game/BrnGameModule.hpp
++++ b/src/GameSource/Game/BrnGameModule.hpp
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include "types.hpp"
++#include "GameSource/Game/BrnAutoTestManager.h"
+ 
+ // Real member types (reconstructed). The renderer module owns the loading-screen renderer;
+ // the remaining subsystems below are the ones the per-frame update spine (GameMain) drives.
+@@ -191,6 +192,8 @@
+     class BrnGameModule : public CgsModule::ModuleSingleBuffered, public CgsSystem::IThreadClass
+     {
+     public:
++        AutoTestManager mAutoTestManager; // DecFIGS h:182; ARTIST gm+0x648.
++
+         // The game module owns the GameDataModule; the loading flow (case 8) prepares it through here
+         // (and via BrnGame::GetMainGameDataModule()) so there's ONE instance, not a parallel copy.
+         BrnResource::GameDataModule& GetGameDataModule() { return mGameDataModule; }
+@@ -414,6 +417,19 @@
+         // GetWorldUpdateOutputBuffer above serves the same caller.
+         CgsInput::InputIO::OutputBuffer* GetPcInputOutputBuffer() { return &mPcInputOutputBuffer; }
+ 
++        // ARTIST 0x823DB848's eight retry states; DecFIGS BrnGameModule.h:198.
++        enum EPrepareStage
++        {
++            E_PREPARESTAGE_START = 0,
++            E_PREPARESTAGE_HARDWARE = 1,
++            E_PREPARESTAGE_MANAGER = 2,
++            E_PREPARESTAGE_GAMEDATAMODULE = 3,
++            E_PREPARESTAGE_RENDERMODULE = 4,
++            E_PREPARESTAGE_HARDWAREMEMORY = 5,
++            E_PREPARESTAGE_THREADS = 6,
++            E_PREPARESTAGE_DONE = 7,
++        };
++
+         enum EGameUpdateStage   // h:248
+         {
+             E_GAMEUPDATESTAGE_PREPARE = 0,
+@@ -449,6 +465,14 @@
+ 
+         BrnGameModule();
+         ~BrnGameModule();
++
++        // ARTIST 0x823DB848; this overload is virtual in DecFIGS h:656.
++        // The no-argument ModuleSingleBuffered::Prepare remains a distinct base method.
++        virtual bool Prepare(CgsModule::IOBufferStack* lpUpdateInputBufferStack,
++                             CgsModule::IOBufferStack* lpUpdateOutputBufferStack,
++                             CgsModule::IOBufferStack* lpResourceInputBufferStack,
++                             CgsModule::IOBufferStack* lpResourceOutputBufferStack,
++                             CgsModule::IOBufferStack* lpDispatchThreadIOBufferStack);
+ 
+         void Construct() override;   // @ BrnGameModule.cpp:155 - construct the owned modules
+ 
+@@ -1075,7 +1099,7 @@
+         // ---- X360 hardware / boot-legal query helpers (BrnGameModule.cpp) ----------------
+         // X360 0x823A8B38 -- disk-error worker thread body: raise the system dirty-disc
+         // error UI for dwUserIndex; never returns. Static (a thread proc; no `this`).
+-        static void DiskErrorThreadProc(unsigned long dwUserIndex);
++        static intptr_t DiskErrorThreadProc(void* lpContext);
+ 
+         // X360 0x823C0268 -- return the embedded hardware object (the launch/soft-reboot
+         // data block). The X360 forms this + 0x9A11C0 == &mHardware.
+@@ -1101,8 +1125,10 @@
+         // context module is delivered by pointer-to-pointer). Same receiver shape as
+         // BrnDirector::Camera::BehaviourRenderMetrics::GameTalkMessageReceiver.
+         static void RenderMetricsMessageHandler(EA::GameTalk::GameTalkMessage* lpMessage,
+-                                                BrnGameModule** lppModule);
++                                                void* lpContext);
+     private:
++
++        void CheckDiskError(const BrnResource::GameDataIO::OutputBuffer* lpOutputBuffer);
+ 
+         // ---- members (real order; off-path ranges omitted; see LAYOUT NOTE) -------------
+         // ---- the 11 engine modules (real names/types/order; all derive from the module base) --
+@@ -1120,7 +1146,10 @@
+         BrnNetwork::BrnNetworkModule  mNetworkModule;                // h:368
+         CgsModule::IOBufferStack* mpUpdateInputBufferStack;          // h:373
+         CgsModule::IOBufferStack* mpUpdateOutputBufferStack;         // h:374
+-        // [h:375-379: resource buffer stacks + gamedata module buffers - omitted]
++        CgsModule::IOBufferStack* mpResourceInputBufferStack;         // h:375
++        CgsModule::IOBufferStack* mpResourceOutputBufferStack;        // h:376
++        BrnResource::GameDataIO::InputBuffer* mpGameDataModuleInputBuffer;   // h:378
++        BrnResource::GameDataIO::OutputBuffer* mpGameDataModuleOutputBuffer; // h:379
+         BrnGame::BrnCpuMonitors mCpuMonitors;                        // h:384
+         CgsDev::DebugManager    mDebugManager;                       // h:387
+         // h:388 -- the DEBUG FONT handle, X360 gm+0x99F150 (10482000). GamePrepare's id-5
+@@ -1128,7 +1157,8 @@
+         // and then hands THIS OBJECT to DebugManager::SetDebugFont, so it has to outlive the
+         // pass -- it is the module's member on the console for exactly that reason.
+         CgsResource::SafeResourceHandle<CgsResource::Font> mDebugFont;   // h:388 (gm+0x99F150)
+-        // [h:389-404: map-file reader, juice, mbHasGameTerminated - omitted]
++        // [h:389-403: map-file reader and juice - omitted]
++        bool mbHasGameTerminated; // h:404; ARTIST gm+0x9A0620.
+         bool mbSimPaused;                                            // h:405
+         bool mbDiskError;                                            // h:406
+         bool mbControllerDisconnected;                              // X360 gm+10094116; event 10 latch
+@@ -1140,7 +1170,8 @@
+         bool mbWorldStreamingRequestedStall;                          // h:415
+         bool mbStreamingStalled;                                     // h:416
+         bool mbIsLoadingScreenVisible;                               // h:417
+-        // [h:418-453: loading allocator, input-bind state, gui-flow, prepare stages - omitted]
++        // [h:418-453: loading allocator, input-bind state and gui-flow - omitted]
++        EPrepareStage    mePrepareStage;                             // h:454
+         EReleaseStage    meReleaseStage;                             // h:455 (Release() stage machine)
+         EGamePrepareStage meGamePrepareStage;                        // h:456 (X360 gm+10094164)
+         // [h:457: meGameReleaseStage - omitted]
+@@ -1240,6 +1271,7 @@
+         // reads it (BrnRendererModule::Render's per-frame AddCommand forward).
+         CgsSystem::ThreadLayout mThreadLayout;                        // h:530
+         BrnGame::DispatchThreadInputBufferManager mDispatchThreadInputBufferManager; // h:531
++        EA::Thread::Thread mErrorThread;                              // h:532
+         // FLAG PC-platform leaf: native initialization and reply pacing while
+         // simulation is decoupled from the render rate.
+         bool mbFrameLayoutInitializedPC = false;
+--- a/src/GameSource/Game/BrnGameModule.cpp
++++ b/src/GameSource/Game/BrnGameModule.cpp
+@@ -121,6 +121,7 @@
+         { { 0, 41, -1, 30 } }, { { 1, 42, -1, 31 } },
+         { { -1, 43, -1, 32 } }, { { -1, 44, -1, 33 } }
+     };
++    static bool sbDiskErrorThreadStarted = false; // ARTIST byte_82FAE988, process lifetime.
+     static bool sbInitialInputMappingPosted = false; // ARTIST byte_82FAE28B, BSS-zeroed.
+ 
+     BrnGameModule::BrnGameModule()
+@@ -226,10 +227,13 @@
+         // X360 step 1: the module base (resets the prepare/release stages + constructs the two
+         // DataBuffers -- flag/pointer init only).
+         CgsModule::ModuleSingleBuffered::Construct();
+-
+-        // [gated] X360 steps 2-3: CheckClassSizes, then the game-state field seeds at
+-        // +10094156..+10097260 (release stage = 7, module counts 11/4, the engine-modules-loaded
+-        // flag = 0) -- those words fall in this layout's omitted member ranges.
++        // ARTIST 823C9EF0 and 823CB1F0: initialization of the recovered owner state.
++        mePrepareStage = E_PREPARESTAGE_START;
++        mbHasGameTerminated = false;
++
++        // [gated] CheckClassSizes and the remaining module-count/loaded-state seeds
++        // at +10094156..+10097260. The recovered prepare/termination seeds are above;
++        // the release-stage seed remains in the constructor.
+ 
+         // Per-frame IO buffer stacks the update spine + the scripted module loads allocate their
+         // per-frame IO buffers on. [PC stand-in] On the X360 these five stacks are OWNED BY main()
+@@ -712,6 +716,117 @@
+         // ARTIST 823CB1C4 / 823CB1D0; DecFIGS BrnGameModule.h:524/525.
+         mDirectorBridgeSerialiser.Construct();
+         mGameModuleSerialiser.Construct();
++    }
++
++    // ARTIST 0x823DB848. Caller-owned stacks; GameData owns the allocator list.
++    bool BrnGameModule::Prepare(CgsModule::IOBufferStack* lpUpdateInputBufferStack,
++                                CgsModule::IOBufferStack* lpUpdateOutputBufferStack,
++                                CgsModule::IOBufferStack* lpResourceInputBufferStack,
++                                CgsModule::IOBufferStack* lpResourceOutputBufferStack,
++                                CgsModule::IOBufferStack* lpDispatchThreadIOBufferStack)
++    {
++        switch (mePrepareStage)
++        {
++        case E_PREPARESTAGE_START:
++            mbHasGameTerminated = false;
++            // fall through
++        case E_PREPARESTAGE_HARDWARE:
++            mePrepareStage = E_PREPARESTAGE_HARDWARE;
++            if (!mHardware.Prepare())
++                return false;
++            mAutoTestManager.Init(this);
++            // fall through
++        case E_PREPARESTAGE_MANAGER:
++            mePrepareStage = E_PREPARESTAGE_MANAGER;
++            if (!CgsModule::ModuleSingleBuffered::Prepare())
++                break;
++            mpUpdateInputBufferStack = lpUpdateInputBufferStack;
++            mpUpdateOutputBufferStack = lpUpdateOutputBufferStack;
++            mpResourceInputBufferStack = lpResourceInputBufferStack;
++            mpResourceOutputBufferStack = lpResourceOutputBufferStack;
++            mpResourceInputBufferStack->CreateIOBuffer(&mpGameDataModuleInputBuffer, "GameData");
++            mpResourceOutputBufferStack->CreateIOBuffer(&mpGameDataModuleOutputBuffer, "GameData");
++            mDispatchThreadInputBufferManager.Construct(lpDispatchThreadIOBufferStack);
++            // fall through
++        case E_PREPARESTAGE_GAMEDATAMODULE:
++            mePrepareStage = E_PREPARESTAGE_GAMEDATAMODULE;
++            if (!mGameDataModule.Prepare(mpResourceInputBufferStack, mpResourceOutputBufferStack,
++                                         mpGameDataModuleInputBuffer, mpGameDataModuleOutputBuffer))
++                break;
++            // fall through
++        case E_PREPARESTAGE_RENDERMODULE:
++        {
++            mePrepareStage = E_PREPARESTAGE_RENDERMODULE;
++            mpGameDataModuleOutputBuffer->LockForRead();
++            const bool lbPrepared = mRenderModule.Prepare(
++                mpGameDataModuleOutputBuffer->GetAllocatorList());
++            mpGameDataModuleOutputBuffer->UnlockForRead();
++            if (!lbPrepared)
++                break;
++            // FLAG PC-platform leaf: ARTIST releases X360 D3D thread ownership
++            // here. Native D3D9 has no ReleaseThreadOwnership service; the PC
++            // dispatch thread's device handoff is owned by ThreadLayout.
++            // fall through
++        }
++        case E_PREPARESTAGE_HARDWAREMEMORY:
++        {
++            mePrepareStage = E_PREPARESTAGE_HARDWAREMEMORY;
++            mpGameDataModuleOutputBuffer->LockForRead();
++            const bool lbPrepared = mHardware.PrepareMassiveMemory(
++                mpGameDataModuleOutputBuffer->GetAllocatorList());
++            mpGameDataModuleOutputBuffer->UnlockForRead();
++            if (!lbPrepared)
++                break;
++            // fall through
++        }
++        case E_PREPARESTAGE_THREADS:
++            mePrepareStage = E_PREPARESTAGE_THREADS;
++            mThreadLayout.Begin(this, mCpuMonitors.miUT_Resource,
++                                mCpuMonitors.miUT_ThreadSync, mCpuMonitors.miUT_WaitOnDispatch);
++            mThreadLayout.SetFrameRate(CgsSystem::E_FRAMERATE_60HZ);
++            mThreadLayout.SetResourcePercentageOfFrame(50);
++            mDispatchThreadInputBufferManager.GetWriteBuffer()->ShowLoadingScreen();
++            if (!mFrameRateManager.Prepare())
++                CGS_ASSERT(false, "mFrameRateManager.Prepare()");
++            // fall through
++        case E_PREPARESTAGE_DONE:
++            EA::GameTalk::GameTalkManager::RegisterMessageHandler(
++                EA::GameTalk::GameTalkManager::GetInstance(),
++                &BrnGameModule::RenderMetricsMessageHandler, "Camera", this);
++            mePrepareStage = E_PREPARESTAGE_START;
++            meReleaseStage = E_RELEASESTAGE_START;
++            mbIsSysMenuShowing = false;
++            return true;
++        default:
++            CGS_ASSERT(false, "0");
++            break;
++        }
++        if (mePrepareStage >= E_PREPARESTAGE_GAMEDATAMODULE)
++            CheckDiskError(mpGameDataModuleOutputBuffer);
++        return false;
++    }
++
++    // ARTIST 0x823BC798. The process latch starts one dirty-disc observer.
++    void BrnGameModule::CheckDiskError(
++        const BrnResource::GameDataIO::OutputBuffer* lpOutputBuffer)
++    {
++        lpOutputBuffer->LockForRead();
++        if (lpOutputBuffer->GetFileSystemStatusInterface()->GetDiskErrorOccured())
++        {
++            const u32 luUserIndex = miInputModuleState != 0 ? miPlayer0ControllerPort : 0;
++            if (!sbDiskErrorThreadStarted)
++            {
++                EA::Thread::ThreadParameters lParameters;
++                lParameters.mnPriority = 0;
++                lParameters.mnProcessor = 2;
++                lParameters.mbDisablePriorityBoost = false;
++                lParameters.mpName = "DispatchThread";
++                mErrorThread.Begin(&BrnGameModule::DiskErrorThreadProc,
++                    reinterpret_cast<void*>(static_cast<uintptr_t>(luUserIndex)), &lParameters);
++                sbDiskErrorThreadStarted = true;
++            }
++        }
++        lpOutputBuffer->UnlockForRead();
+     }
+ 
+     // @ 0x823DCA10 -- the game->GUI flow-FSM bridge (see BrnGameModule.hpp). Posts each
+@@ -5934,9 +6049,10 @@
+     // @ X360 0x823A8B38 - the disk-error worker thread body. Raises the system dirty-disc
+     // error UI for the given user and never returns (the console holds on the error UI).
+     // Tail-calls straight into the XDK entry point.
+-    void BrnGameModule::DiskErrorThreadProc(unsigned long dwUserIndex)
+-    {
+-        XShowDirtyDiscErrorUI(dwUserIndex);
++    // FLAG PC-platform leaf: EAThread carries the original user index as a void* context.
++    intptr_t BrnGameModule::DiskErrorThreadProc(void* lpContext)
++    {
++        return XShowDirtyDiscErrorUI(static_cast<unsigned long>(reinterpret_cast<uintptr_t>(lpContext)));
+     }
+ 
+     // @ X360 0x823C0268 - return the embedded hardware object (the launch/soft-reboot data
+@@ -5966,9 +6082,9 @@
+     // BrnDirector::Camera::BehaviourRenderMetrics::GameTalkMessageReceiver: the context
+     // module is delivered by pointer-to-pointer (lppModule).
+     void BrnGameModule::RenderMetricsMessageHandler(EA::GameTalk::GameTalkMessage* lpMessage,
+-                                                    BrnGameModule** lppModule)
+-    {
+-        BrnGameModule* lpModule = *lppModule;
++                                                    void* lpContext)
++    {
++        BrnGameModule* lpModule = *static_cast<BrnGameModule**>(lpContext);
+         for (s32 liIndex = 0; liIndex < lpMessage->GetNumKeys(); ++liIndex)
+         {
+             const char* lpcKey = lpMessage->GetKey(liIndex);
+--- a/src/GameSource/Resource/BrnGameDataModule.h
++++ b/src/GameSource/Resource/BrnGameDataModule.h
+@@ -20,6 +20,7 @@
+ #include "GameSource/Resource/BrnDLCManager.h"                               // embedded DLC manager + debug component
+ #include "rw/rwcore_structs.h"                                               // rw::Resource / ResourceDescriptor (maGeneratedRaw*)
+ 
++namespace CgsModule { struct IOBufferStack; } // Original Prepare uses caller-owned stacks.
+ namespace CgsMemory { struct MemoryMap; }
+ namespace rw { struct LinearResourceAllocator; namespace core { struct GeneralResourceAllocator; } }
+ namespace CgsResource { namespace ResourceIO { struct InputBuffer; } }       // handler param (by pointer)
+@@ -57,7 +58,7 @@
+ // The many embedded subsystems beyond ResourceModule are added with their own passes.
+ namespace BrnResource
+ {
+-    namespace GameDataIO { struct GameDataAssetEvent; }   // dispatcher/handler param (by pointer)
++    namespace GameDataIO { struct GameDataAssetEvent; struct InputBuffer; struct OutputBuffer; }   // dispatcher/handler param (by pointer)
+ 
+     class GameDataModule : public CgsModule::ModuleSingleBuffered
+     {
+@@ -101,6 +102,12 @@
+ 
+         void Construct();   // 0x82671B90 (slot 0; the X360 takes NO arguments -- the old
+                             // `const void* lpInitOptions` param here was fabricated)
++        // Original ARTIST 0x82673F38 / DecFIGS h:370. Its complete body is a
++        // separate unresolved source dependency; this is not a two-buffer adapter.
++        virtual bool Prepare(CgsModule::IOBufferStack* lpInputStack,
++                             CgsModule::IOBufferStack* lpOutputStack,
++                             const GameDataIO::InputBuffer* lpInputBuffer,
++                             GameDataIO::OutputBuffer* lpOutputBuffer);
+         bool Prepare(void* lpInputBuffer, void* lpOutputBuffer);   // 0x82673F38
+         bool Release();                               // deferred
+         void Destruct();                              // deferred
+--- a/src/GameSource/Game/X360/BrnSystemHWX360.h
++++ b/src/GameSource/Game/X360/BrnSystemHWX360.h
+@@ -132,10 +132,9 @@
+ 
+         bool Prepare();
+         int  Release();
+-        // The first argument is ignored by the X360 body (r3 is overwritten by the
+-        // AllocatorList passed in r4); kept in the signature to match the call site.
+-        static int PrepareMassiveMemory(int liUnused,
+-                                        BrnResource::GameDataIO::AllocatorList* lpAllocatorList);
++        // ARTIST 0x823C1290: r3 is this; r4 is the borrowed allocator list.
++        // The body does not need to dereference this, but the caller passes it.
++        bool PrepareMassiveMemory(const BrnResource::GameDataIO::AllocatorList* lpAllocatorList);
+         bool HasGameBeenRebootedDueToInvite();
+     };
+ 
+--- a/src/GameSource/Game/X360/BrnSystemHWX360.cpp
++++ b/src/GameSource/Game/X360/BrnSystemHWX360.cpp
+@@ -143,9 +143,9 @@
+     // ---- BrnHW::System360HW::PrepareMassiveMemory @ 0x823C1290 ----------------------
+     // (BrnSystemHWX360Massive.cpp) Carve the Massive heap allocator out of the
+     // game-data bank registry (bank id 0x3F) and stash it in spHeapMalloc.
+-    // The first argument is ignored (r3 is overwritten by the AllocatorList in r4).
+-    int System360HW::PrepareMassiveMemory(int /*liUnused*/,
+-                                          BrnResource::GameDataIO::AllocatorList* lpAllocatorList)
++    // ARTIST passes this in r3 and the const allocator list in r4.
++    bool System360HW::PrepareMassiveMemory(
++        const BrnResource::GameDataIO::AllocatorList* lpAllocatorList)
+     {
+         BrnMassive::gpMassiveHeapMalloc = lpAllocatorList->GetHeapAllocator(KI_MASSIVE_HEAP_BANK_ID);
+         CGS_ASSERT(BrnMassive::gpMassiveHeapMalloc != nullptr, "spHeapMalloc != NULL");
+--- a/src/GameSource/Resource/BrnGameDataModuleIO.h
++++ b/src/GameSource/Resource/BrnGameDataModuleIO.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include "types.hpp"
++#include "GameShared/GameClasses/System/Resource/CgsResourceModuleIO.h"
+ 
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                     // CGS_ASSERT (AppendRequestInterface<N> template body)
+ #include "GameShared/GameClasses/Module/CgsIOBuffer.h"                 // CgsModule::IOBuffer base + IsBufferLockedFor{Reading,Writing}()
+@@ -66,8 +67,8 @@
+ // @ 0x826640E0 emits `stw r27,4(r28)` (STORE a pointer). An embedded member would compile to
+ // `addi r3,r28,4` (compute an address). So mpAllocatorList is `const AllocatorList*` @+4, matching the
+ // DecFIGS DWARF (h:184). The +8 slot: the X360 symbols are Get/SetLiveUpdateStatus and the asm reads/
+-// writes a SINGLE BYTE there; the PS3 DWARF drifted it into FileSystemStatusInterface (h:189) with
+-// Get/SetFileSystemStatusInterface -- we follow the X360 asm+symbols (authoritative for the X360 ledger).
++// writes a SINGLE BYTE there. ARTIST also has a separate FileSystemStatusInterface at +9:
++// Construct 82666908, read accessor 823B16E0, and write accessor 82663EE0.
+ //
+ // FLAG (MINIMAL SLICE / additive header): lifecycle methods (Construct/Prepare/Release/Destruct/Clear) and
+ // the Im2d setter-getters beyond what the reconstructed accessors need are DEFERRED. Semantic parity (real
+@@ -170,7 +171,7 @@
+     {
+         // DWARF h:147 -- clears the pointer/status members (the old embedded-list Construct was the
+         // superseded structural approximation).
+-        void Construct() { mpAllocatorList = 0; mbLiveUpdateStatus = 0; }
++        void Construct(); // ARTIST 82666908: IO base, file status, allocator pointer.
+ 
+         // Return the module's RW general resource allocator. X360: OutputBuffer::GetAllocator(this)
+         // returns the GameData general allocator the module loads construct from; pinned to the single
+@@ -191,18 +192,24 @@
+ 
+         // @ 0x823B1638 -- read-locked accessor; returns the address of the 1-byte live-update status
+         // (asm `addi r3,r28,8`; IDA return type unsigned __int8*). X360 symbol GetLive[UpdateStatus];
+-        // PS3 DWARF drift = GetFileSystemStatusInterface (h:178).
++        // FileSystemStatusInterface is a distinct member at ARTIST +9.
+         u8* GetLiveUpdateStatus();
+ 
+         // @ 0x82663E30 -- write-locked mutator; copies one status byte in
+-        // (asm `lbz r11,0(r27); stb r11,8(r28)`). X360 symbol SetLiveUpdateStatus; PS3 DWARF drift =
+-        // SetFileSystemStatusInterface (h:179).
++        // (asm `lbz r11,0(r27); stb r11,8(r28)`). X360 symbol SetLiveUpdateStatus.
++        // The filesystem-status setter writes the distinct member at ARTIST +9.
+         void SetLiveUpdateStatus(const u8* lpStatus);
++
++        // ARTIST 823B16E0 / 82663EE0: filesystem status at +9, separate from live +8.
++        const CgsResource::ResourceIO::FileSystemStatusInterface*
++            GetFileSystemStatusInterface() const;
++        void SetFileSystemStatusInterface(
++            const CgsResource::ResourceIO::FileSystemStatusInterface* lpStatus);
+ 
+     private:
+         const AllocatorList* mpAllocatorList;    // DWARF h:184 -- this+4 (POINTER, not embedded)
+         u8                   mbLiveUpdateStatus; // DWARF h:189 storage -- this+8 (X360: 1 status byte)
+-        // FileSystemStatusInterface follows in the PS3 DWARF; on X360 the +8 slot is a status byte.
++        CgsResource::ResourceIO::FileSystemStatusInterface mFileSystemStatusInterface; // ARTIST +9
+     };
+ }
+ }
+--- a/src/GameSource/Resource/BrnGameDataModuleIO.cpp
++++ b/src/GameSource/Resource/BrnGameDataModuleIO.cpp
+@@ -83,6 +83,29 @@
+         return mpAllocatorList;
+     }
+ 
++    // ARTIST 0x82666908. The base and the disk-error status have independent
++    // construction; there is no store to the live-update byte at console +8.
++    void OutputBuffer::Construct()
++    {
++        CgsModule::IOBuffer::Construct();
++        mFileSystemStatusInterface.Construct();
++        mpAllocatorList = 0;
++    }
++
++    const CgsResource::ResourceIO::FileSystemStatusInterface*
++    OutputBuffer::GetFileSystemStatusInterface() const
++    {
++        CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading\n");
++        return &mFileSystemStatusInterface;
++    }
++
++    void OutputBuffer::SetFileSystemStatusInterface(
++        const CgsResource::ResourceIO::FileSystemStatusInterface* lpStatus)
++    {
++        CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing\n");
++        mFileSystemStatusInterface = *lpStatus;
++    }
++
+     // @ 0x826640E0 -- write-locked mutator. Tests IOBuffer status bit 3 (write-lock); on failure fires
+     // the assert. Stores the list pointer into mpAllocatorList (this+4; asm `stw r27,4(r28)`).
+     void OutputBuffer::SetAllocatorList(const AllocatorList* lpAllocatorList)
+@@ -93,8 +116,8 @@
+ 
+     // @ 0x823B1638 -- read-locked accessor. Tests IOBuffer status bit 4 (read-lock); on failure fires
+     // the assert. Returns &mbLiveUpdateStatus (this+8; asm `addi r3,r28,8`; IDA return type
+-    // unsigned __int8*). X360 symbol GetLive[UpdateStatus]; the PS3 DWARF drifts this slot into
+-    // FileSystemStatusInterface (h:189) -- we follow the X360 asm/symbol.
++    // unsigned __int8*). X360 symbol GetLive[UpdateStatus]. The filesystem status is a
++    // separate member at ARTIST +9.
+     u8* OutputBuffer::GetLiveUpdateStatus()
+     {
+         CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading\n");
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceModuleIO.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceModuleIO.cpp
+@@ -48,6 +48,12 @@
+         void FileSystemStatusInterface::Construct()
+         {
+             mbDiskErrorOccured = false;
++        }
++
++        // ARTIST 828EBAA0: read the named disk-error flag.
++        bool FileSystemStatusInterface::GetDiskErrorOccured() const
++        {
++            return mbDiskErrorOccured;
+         }
+ 
+         // -------- OutputBuffer::Construct @ 0x828EC978 --------
+--- a/src/GameShared/GameClasses/System/Threads/CgsThreadLayout.cpp
++++ b/src/GameShared/GameClasses/System/Threads/CgsThreadLayout.cpp
+@@ -316,6 +316,18 @@
+         });
+     }
+ 
++    // Inlined in ARTIST BrnGameModule::Prepare 823DBACC/AD4; DecFIGS names the fields.
++    void ThreadLayout::SetFrameRate(EFrameRate leFrameRate)
++    {
++        meFrameRate = leFrameRate;
++    }
++
++    void ThreadLayout::SetResourcePercentageOfFrame(s32 liPercentage)
++    {
++        miResourcePercentageOfFrame = liPercentage;
++    }
++
++
+     // @ 0x828D7978 - the default RunnableFunctionUserWrapper EAThread installs for the
+     // dispatch thread: just invoke the runnable with its context (tail call, no extra work).
+     intptr_t ThreadLayout::GlobalThreadBeginWrapper(EA::Thread::RunnableFunction defaultRunnableFunction,
+--- a/src/GameSource/Resource/BrnGameDataModule.cpp
++++ b/src/GameSource/Resource/BrnGameDataModule.cpp
+@@ -1737,12 +1737,13 @@
+             // SetAllocatorList(out, &mAllocatorList), then the LiveUpdateIO status copy
+             // (SetLiveUpdateStatus from the LiveUpdate output).
+             //
+-            // [FLAG] we Construct the WHOLE output buffer where the console constructs only
+-            // that one member -- wider than the console, and it stays that way until the
+-            // OutputBuffer's filesystem-status member is homed. The LiveUpdate module is
+-            // deferred (F-P7-4); the allocator-list publish is the live part.
++            // Clear only the original file-status member while this existing output
++            // lifetime is write-locked. Constructing the IO base here would erase the lock.
++            // LiveUpdate's separate producer remains deferred (F-P7-4).
+             lpOutput->LockForWrite();
+-            lpOutput->Construct();
++            CgsResource::ResourceIO::FileSystemStatusInterface lFileStatus;
++            lFileStatus.Construct();
++            lpOutput->SetFileSystemStatusInterface(&lFileStatus);
+             lpOutput->SetAllocatorList(&mAllocatorList);
+             lpOutput->UnlockForWrite();
+         }
+--- a/src/GameSource/GameFlowController/TopLevel/BrnGameMainFlowStates.cpp
++++ b/src/GameSource/GameFlowController/TopLevel/BrnGameMainFlowStates.cpp
+@@ -853,10 +853,7 @@
+         // Construct also runs VariableEventQueue<32768,16>::Construct on it).
+         s_GameDataInput.GetAttribSysRequestInterface()->mRequestQueue.Construct();
+         s_GameDataInput.UnlockForWrite();
+-        s_GameDataOutput.CgsModule::IOBuffer::Construct();
+-        s_GameDataOutput.LockForWrite();
+-        s_GameDataOutput.Construct();   // the member-clearing OutputBuffer::Construct
+-        s_GameDataOutput.UnlockForWrite();
++        s_GameDataOutput.Construct(); // Original Construct initializes its IO base before locks.
+     }
+ }
+ 
+--- a/src/GameSource/Game/BrnAutoTestManager.cpp
++++ b/src/GameSource/Game/BrnAutoTestManager.cpp
+@@ -25,8 +25,157 @@
+ // slots. No other member is touched by the constructor (Hex-Rays' "BasePriorityQueue::Clear" calls
+ // are the misnamed StrStreamBase base ctor at each embedded log object).
+ 
++#include "GameShared/GameClasses/Core/CgsAssert.h"
++#include "GameShared/GameClasses/Development/Log/CgsLog.h"
++#include <cstdio>
++#include <cstdlib>
++#include <cstring>
++extern "C"
++{
++#include "lua.h"
++#include "lualib.h"
++}
++
+ namespace BrnGame
+ {
++    // ARTIST 0x823A9150; the library table at 0x82035274 contains these six
++    // entries in this order, followed by a null pair. Base opens separately.
++    void OpenLUALibs(lua_State* lpLuaHandle)
++    {
++        struct Library
++        {
++            const char* mpcName;
++            lua_CFunction mpfnOpen;
++        };
++        static const Library KAC_LIBRARIES[] =
++        {
++            { "package", luaopen_package },
++            { "table", luaopen_table },
++            { "io", luaopen_io },
++            { "string", luaopen_string },
++            { "math", luaopen_math },
++            { "debug", luaopen_debug },
++            { 0, 0 },
++        };
++
++        luaopen_base(lpLuaHandle);
++        for (const Library* lpLibrary = KAC_LIBRARIES; lpLibrary->mpfnOpen; ++lpLibrary)
++        {
++            lua_pushcclosure(lpLuaHandle, lpLibrary->mpfnOpen, 0);
++            lua_pushstring(lpLuaHandle, lpLibrary->mpcName);
++            lua_call(lpLuaHandle, 1, 0);
++        }
++    }
++
++    // ARTIST 0x823A91D0. Lua's allocator callback has no implicit this.
++    void* AutoTestManager::LuaAllocator(void* /*lpUserData*/, void* lpPtr,
++                                        size_t /*luOldSize*/, size_t luNewSize)
++    {
++        if (luNewSize)
++            return std::realloc(lpPtr, luNewSize);
++        std::free(lpPtr);
++        return 0;
++    }
++
++    // ARTIST 0x823A9218; DecFIGS BrnAutoTestManager.cpp:163 supplies the
++    // void(char*, int32_t, const char*) shape. The root's final character is
++    // the separator used between TESTINGSCRIPTS and the supplied script name.
++    void GetScriptName(char* lpcBuffer, s32 liBufferSize, const char* lpcScriptName)
++    {
++        if (CgsSystem::HardwareInit::HasDetectedAutomaticTestingFile())
++        {
++            const char* lpcFOPENDirectory = CgsSystem::HardwareInit::GetFOPENDirectory();
++            const char lcSeparator = lpcFOPENDirectory[std::strlen(lpcFOPENDirectory) - 1];
++            CgsCore::SPrintf(lpcBuffer, liBufferSize, "%sTESTINGSCRIPTS%c%s",
++                             lpcFOPENDirectory, lcSeparator, lpcScriptName);
++            const size_t luLength = std::strlen(lpcBuffer);
++            for (size_t luIndex = 0; luIndex < luLength; ++luIndex)
++            {
++                if (lpcBuffer[luIndex] == '\r' || lpcBuffer[luIndex] == '\n')
++                    lpcBuffer[luIndex] = '\0';
++            }
++        }
++    }
++
++    // ARTIST 0x823C0438. The current GUI page and load-completion flag are
++    // left for the script state machine; neither is written by Init.
++    void AutoTestManager::Init(BrnGameModule* lpGameModule)
++    {
++        mpGameModule = lpGameModule;
++        miFramesSinceLastGameStateSave = 0;
++        miNumScriptsLoaded = 0;
++        mpLuaHandle = 0;
++        meScriptState = eScriptLoading;
++        mbControlPad = true;
++        mAutoTestLogChannel.SetChannel(static_cast<CgsDev::Log::LogChannelOutput::EUserChannel>(0));
++        mAutoTestLog.AddStream(&mAutoTestLogFile);
++        mAutoTestLog.AddStream(&mAutoTestLogChannel);
++        for (s32 liAction = 0; liAction < 61; ++liAction)
++            maActions[liAction] = 0.0f;
++        LoadScripts();
++    }
++
++    // ARTIST 0x823A9300. The seven callback bindings are the complete table
++    // at 0x820352B0. Their bodies belong to the independent script callbacks.
++    void AutoTestManager::LoadScripts()
++    {
++        if (!CgsSystem::HardwareInit::HasDetectedAutomaticTestingFile())
++            return;
++
++        char lacScriptName[1024];
++        GetScriptName(lacScriptName, sizeof(lacScriptName),
++                      CgsSystem::HardwareInit::GetAutoScriptToRun());
++        FILE* lpFile = std::fopen(lacScriptName, "r");
++        if (lpFile)
++        {
++            std::memset(macScript, 0, sizeof(macScript));
++            char lacLine[1024];
++            while (!std::feof(lpFile))
++            {
++                std::fgets(lacLine, sizeof(lacLine), lpFile);
++                if (!std::feof(lpFile))
++                {
++                    // ARTIST inlines the original asserted append. The current
++                    // shared StrCat truncates, so retain the binary's behavior.
++                    CGS_ASSERT(std::strlen(lacLine) + std::strlen(macScript) < sizeof(macScript) - 1,
++                        "(strlen(lpcSource)+strlen(lpcDest))<luBytes - 1");
++                    std::strcat(macScript, lacLine);
++                }
++            }
++            std::fclose(lpFile);
++            ++miNumScriptsLoaded;
++            mpLuaHandle = lua_newstate(&AutoTestManager::LuaAllocator, 0);
++            OpenLUALibs(mpLuaHandle);
++            CGS_ASSERT(mpLuaHandle, "mpLuaHandle");
++        }
++
++        struct Binding
++        {
++            const char* mpcName;
++            lua_CFunction mpfnCallback;
++        };
++        static const Binding KAC_CALLBACKS[] =
++        {
++            { "CallDebugFunction", &AutoTestManager::LUACBCallDebugFunction },
++            { "RecordLog", &AutoTestManager::LUACBRecordLog },
++            { "PressButton", &AutoTestManager::LUACBPressButton },
++            { "AcquirePad", &AutoTestManager::LUACBAcquirePad },
++            { "RelinquishPad", &AutoTestManager::LUACBRelinquishPad },
++            { "ActivateDebugComponent", &AutoTestManager::LUACBActivateDebugComponent },
++            { "DeactivateDebugComponent", &AutoTestManager::LUACBDeactivateDebugComponent },
++            { 0, 0 },
++        };
++        for (const Binding* lpBinding = KAC_CALLBACKS; lpBinding->mpcName; ++lpBinding)
++        {
++            CGS_ASSERT(mpLuaHandle, "mpLuaHandle");
++            lua_pushcclosure(mpLuaHandle, lpBinding->mpfnCallback, 0);
++            lua_setfield(mpLuaHandle, LUA_GLOBALSINDEX, lpBinding->mpcName);
++            lua_settop(mpLuaHandle, 0);
++            if (CgsDev::Message::gxMessageFilterFlags & 1)
++                *CgsDev::Log::gpDebugPrint << "Registered function " << lpBinding->mpcName << "\n";
++        }
++    }
++
+     AutoTestManager::AutoTestManager()
+     {
+     }
+--- a/src/GameSource/Game/BrnAutoTestManager.h
++++ b/src/GameSource/Game/BrnAutoTestManager.h
+@@ -54,13 +54,13 @@
+         void FillKeyBindings(CgsInput::InputIO::ActionInfo* lpActionInfo);
+ 
+         // --- LUA C callbacks (DWARF, bodied in other TUs) ---
+-        s32 LUACBCallDebugFunction(lua_State* lpLua);
+-        s32 LUACBRecordLog(lua_State* lpLua);
+-        s32 LUACBPressButton(lua_State* lpLua);
+-        s32 LUACBAcquirePad(lua_State* lpLua);
+-        s32 LUACBRelinquishPad(lua_State* lpLua);
+-        s32 LUACBActivateDebugComponent(lua_State* lpLua);
+-        s32 LUACBDeactivateDebugComponent(lua_State* lpLua);
++        static s32 LUACBCallDebugFunction(lua_State* lpLua);
++        static s32 LUACBRecordLog(lua_State* lpLua);
++        static s32 LUACBPressButton(lua_State* lpLua);
++        static s32 LUACBAcquirePad(lua_State* lpLua);
++        static s32 LUACBRelinquishPad(lua_State* lpLua);
++        static s32 LUACBActivateDebugComponent(lua_State* lpLua);
++        static s32 LUACBDeactivateDebugComponent(lua_State* lpLua);
+ 
+     private:
+         // The three gamestate-dump report visitors take the record first and the log stream as
+@@ -74,7 +74,7 @@
+         bool IsInGame();
+         // --- other private helpers (bodied in other TUs) ---
+         void GetCurrentGameState();
+-        void* LuaAllocator(void* lpUserData, void* lpPtr, size_t luOldSize, size_t luNewSize);
++        static void* LuaAllocator(void* lpUserData, void* lpPtr, size_t luOldSize, size_t luNewSize);
+         const char* ScriptReader(lua_State* lpLua, void* lpUserData, size_t* lpuSize);
+         void LoadScripts();
+         void UpdateScriptFSM();

@@ -1,0 +1,21 @@
+{
+  "shipping_missing_symbols": [
+    "BrnResource::GameDataModule::Prepare(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*, const BrnResource::GameDataIO::InputBuffer*, BrnResource::GameDataIO::OutputBuffer*)",
+    "BrnGame::AutoTestManager::LUACBCallDebugFunction(lua_State*)",
+    "BrnGame::AutoTestManager::LUACBRecordLog(lua_State*)",
+    "BrnGame::AutoTestManager::LUACBPressButton(lua_State*)",
+    "BrnGame::AutoTestManager::LUACBAcquirePad(lua_State*)",
+    "BrnGame::AutoTestManager::LUACBRelinquishPad(lua_State*)",
+    "BrnGame::AutoTestManager::LUACBActivateDebugComponent(lua_State*)",
+    "BrnGame::AutoTestManager::LUACBDeactivateDebugComponent(lua_State*)"
+  ],
+  "qualification": "PressButton has an existing unmounted, raw-offset source definition; six other callback bodies are absent. No trap or quiet body is introduced. This is a source checkpoint, not a linkable activation patch.",
+  "native_hazards": [
+    "ImRenderBuffer::Prepare overwrites live banks; native Construct already allocated them",
+    "Original main/debug 2D command capacities are smaller than existing host capacities",
+    "SkyDome Prepare creates geometry twice unless native owner is reconciled",
+    "Current output AllocatorList publication occurs after the early GamePrepare readiness branch",
+    "LoadingScriptedState stage8 repeats the shortened GameData Prepare; original terminal state resets to1",
+    "BeginFramesPC already starts ThreadLayout; original stage6 cannot blindly start it again"
+  ]
+}
