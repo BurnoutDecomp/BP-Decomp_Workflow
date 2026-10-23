@@ -1,0 +1,22 @@
+{
+  "parent_base_commit": "bd9261621c6a420b617ba4fd3a38dbd0a08edee4",
+  "source_base_commit": "2ceaa5e83aa0abaeb1ffde20867061daf953d673",
+  "authority": "Explicit build_game_exe.bat source list -> compile_exe.py, not CMake",
+  "changed_cpp_paths": [
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+      "explicitly_mounted": true
+    },
+    {
+      "path": "src/GameSource/AttribSys/Schema/X360/BrnAttribSchemaVltX360.cpp",
+      "explicitly_mounted": false
+    },
+    {
+      "path": "src/GameSource/AttribSys/Schema/X360/BrnAttribSchemaBinX360.cpp",
+      "explicitly_mounted": false
+    }
+  ],
+  "provider_selection_boundary": "Both exact X360 data CPP providers are supplied but unmounted. A PC data-provider decision and explicit shipping mount require separate review before activation.",
+  "source_list_modified": false,
+  "compile_or_link_run": false
+}

@@ -1,0 +1,15 @@
+# Original stack-backed resource update
+
+This WIP recovers ARTIST82907948 ResourceModule::Update with its real stack inputs/outputs, plus the original BundleLoader82907638 and PoolModule829076D8 update methods. Exact source base is `2ceaa5e83aa0abaeb1ffde20867061daf953d673`. Eighteen full source pre/post images and hashes are recorded. No current caller, TU mount, native budget, build, test or game run is changed.
+
+The resource owner creates Memory/Loader/Pool input buffers, then the matching outputs, and processes filesystem replies, resource requests, loader, pool, delayed loader records, memory and outgoing replies in original order. The temporary record buffer is popped before memory work; the other six are popped in reverse order before the outer CPU monitor stops. The result is REQUIRE_STALL only when the pool child returned that exact enum. Caller input is read-locked and retained, without the shortened adapter's extra clear/null policy.
+
+Both child update bodies are real definitions. Loader consumes the typed input/output and follows its receiver/load/pool/stream order. Pool preserves request processing, FIFO allocation start, state transitions that can run IntelliFrag and EmergencyFrag in the same call, and the 128-pool sweep after unlocking output. Neither forwards to the current two-argument adapter.
+
+Eight concrete buffer destructors now perform their original base/queue work. The two-buffer lock helpers regain their original non-null checks and lock/unlock order. Private shuttle arguments regain their const declaration shape. IOBufferStack forward declarations use the actual struct kind across these owners. Existing stack/queue templates supply native sizeof and real allocations; no raw layout substitute is introduced.
+
+Sixteen original monitor fields have declaration names from DecFIGS and initial -1 words from ARTIST. Their registration belongs to original ResourceModule Construct and is not fabricated here. The filesystem disk-error word is likewise primary-zero and typed AtomicInt32. HasDiskErrorOccured and the original raw-RW callback body are recovered; the output publishes this actual latch under its write lock. The current PC device-registration callback remains unchanged, so that integration gap is explicit.
+
+All three current two-argument update bodies and their current constructors/preparation providers remain unchanged. Memory input's existing native13312-byte request queue is preserved; ARTIST's12288 capacity is recorded as a type/platform boundary rather than shrinking an active buffer. This packet does not claim full IO layout or allocation readiness.
+
+Seven original GameData schema/list definitions remain missing. Original construction, monitor registration, legacy game/LiveUpdate factories and PC buffer/thread lifecycle reconciliation remain separate. `BOUNDARIES.md` distinguishes source definitions, initialization and integration. All prior packet seals remain intact; registration counts and the playable build are unchanged.

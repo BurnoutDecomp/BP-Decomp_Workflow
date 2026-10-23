@@ -1,0 +1,21 @@
+{
+  "base": "2ceaa5e83aa0abaeb1ffde20867061daf953d673",
+  "original_game_data_definitions_still_missing": [
+    "BrnResource::GameDataModule::PrepareVehicleList(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*)",
+    "BrnResource::GameDataModule::PrepareFreeburnChallengeList(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*)",
+    "BrnResource::GameDataModule::PrepareICEList(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*)",
+    "BrnResource::GameDataModule::PrepareWheelList(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*)",
+    "BrnResource::GameDataModule::PrepareHudMessages(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*)",
+    "BrnResource::GameDataModule::PreparePopups(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*)",
+    "BrnResource::GameDataModule::PrepareAttribSysSchemaResource(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*, CgsAttribSys::AttribSysIO::InputBuffer*)"
+  ],
+  "count": 7,
+  "supplied_original_update_owners": [
+    "CgsResource::ResourceModule::Update4arg",
+    "CgsResource::BundleLoaderModule::Update4arg",
+    "CgsResource::PoolModule::Update4arg"
+  ],
+  "known_base_source_defect": "BrnGameDataModule.h line7 lacks closing quote on CgsDebugGameTalkInterface include; separate corrective delta required per Root.",
+  "initialization": "Original ResourceModule3arg Construct/monitor and filesystem allocator ownership; GameData member construction; real game/LiveUpdate factories/Prepare.",
+  "pc_integration": "Retained native buffer capacities, disk-error callback wiring, renderer reuse, loading/thread/input lifetime reconciliation; none activated."
+}
