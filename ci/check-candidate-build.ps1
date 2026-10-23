@@ -20,7 +20,8 @@ param(
     [switch] $RunRwacCommandCapacity,
     [switch] $RunSystemUserProfile,
     [switch] $RunTrafficFlowtypeOverride,
-    [switch] $RunOnlineSaveRoute
+    [switch] $RunOnlineSaveRoute,
+    [switch] $RunGuiMenuMusicWire
 )
 
 Set-StrictMode -Version Latest
@@ -48,7 +49,7 @@ $Receipt = [ordered]@{
     run_id = $env:GITHUB_RUN_ID; run_attempt = $env:GITHUB_RUN_ATTEMPT
     started_utc = [DateTime]::UtcNow.ToString('o'); jobs = $Jobs; validated = $false
     attribution = 'Detached b5 candidate overrides the parent gitlink when different; no commit is made.'
-    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity -or $RunSystemUserProfile -or $RunTrafficFlowtypeOverride -or $RunOnlineSaveRoute); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; system_user_profile_status = $(if ($RunSystemUserProfile) { 'running' } else { 'not_requested' }); system_user_profile = @{}; traffic_flowtype_override_status = $(if ($RunTrafficFlowtypeOverride) { 'running' } else { 'not_requested' }); traffic_flowtype_override = @{}; online_save_route_status = $(if ($RunOnlineSaveRoute) { 'running' } else { 'not_requested' }); online_save_route = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
+    regressions = @{ requested = [bool]($RunRegressions -or $RunAptLifetime -or $RunHudRegressions -or $RunResourceRegressions -or $RunGuiIORegressions -or $RunGuiAnimationRegressions -or $RunStartupIORegressions -or $RunGuiLicenseRegressions -or $RunKeyboardUIContract -or $RunRwacCommandCapacity -or $RunSystemUserProfile -or $RunTrafficFlowtypeOverride -or $RunOnlineSaveRoute -or $RunGuiMenuMusicWire); status = 'not_requested'; inputs = @{}; negative_controls = @{}; gui_license_status = 'not_requested'; keyboard_ui_contract_status = 'not_requested'; keyboard_ui_contract = @{}; rwac_command_capacity_status = $(if ($RunRwacCommandCapacity) { 'running' } else { 'not_requested' }); rwac_command_capacity = @{}; system_user_profile_status = $(if ($RunSystemUserProfile) { 'running' } else { 'not_requested' }); system_user_profile = @{}; traffic_flowtype_override_status = $(if ($RunTrafficFlowtypeOverride) { 'running' } else { 'not_requested' }); traffic_flowtype_override = @{}; online_save_route_status = $(if ($RunOnlineSaveRoute) { 'running' } else { 'not_requested' }); online_save_route = @{}; gui_menu_music_wire_status = $(if ($RunGuiMenuMusicWire) { 'running' } else { 'not_requested' }); gui_menu_music_wire = @{}; startup_io_status = 'not_requested'; gui_animation_status = 'not_requested'; gui_io_status = 'not_requested'; hud_status = 'not_requested'; remaining_status = 'not_requested' }
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 $SystemUserProfileSourceBase = 'bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7'
@@ -558,6 +559,106 @@ try {
         $Receipt.build_inputs[$path] = Get-FileRecord (Join-Path $Root $path)
     }
     Invoke-Native py @('-3', '--version') 'toolchain.log'
+
+
+    if ($RunGuiMenuMusicWire) {
+        $Receipt.regressions.status = 'running'
+        $Receipt.regressions.gui_menu_music_wire_status = 'running'
+        if ($Jobs -ne 4 -or $env:ImageOS -cne 'win22' -or $env:RUNNER_ARCH -cne 'X64') {
+            throw 'Menu-music wire checks require hosted Windows 2022 x64 / Jobs=4.'
+        }
+        Assert-CleanTrees
+        $musicReceipt = @{ status = 'running'; candidate_source = $B5Commit; workflow_sha = $WorkflowSha; variants = @{} }
+        $Receipt.regressions.gui_menu_music_wire = $musicReceipt
+        $musicHarnessPins = @{
+            'tests/run_gui_menu_music_wire.py' = '5f77f5f8ca820c34421fa9a2def526dfcda1d8a37bb13b0a13eabfdcdc9fb07e'
+            'tests/GuiMenuMusicWire.cpp' = '2603f206fc3f1f3ed808e1fe5ddf4d1d48cd26a28d36c586fe85599bea6ddde2'
+            'tests/fxgs_common.py' = '6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033'
+        }
+        foreach ($relative in $musicHarnessPins.Keys) {
+            $actual = Get-LFFileRecord (Join-Path $SourceRoot $relative)
+            if ($actual.lf_sha256 -cne $musicHarnessPins[$relative]) { throw "Menu-music reviewed harness differs: $relative" }
+            $Receipt.regressions.inputs[$relative] = Get-FileRecord $actual.path
+        }
+        $musicControl = 'b595d61d2440ca94d61aa8fa610ab0bf6048cc66'
+        $null = Get-GitText @('-C', $SourceRoot, 'fetch', '--no-tags', '--depth', '1', 'origin', $musicControl)
+        if ((Get-GitText @('-C', $SourceRoot, 'rev-parse', ($musicControl + '^{commit}'))) -cne $musicControl) {
+            throw 'Menu-music negative-control revision differs.'
+        }
+        Remove-Item Env:NoDefaultCurrentDirectoryInExePath -ErrorAction SilentlyContinue
+        $musicOut = Join-Path $ArtifactRoot 'gui-menu-music-wire'
+        if (Test-Path -LiteralPath $musicOut) { throw 'Menu-music artifact directory must be fresh.' }
+        Invoke-Native py @('-3', '-B', (Join-Path $SourceRoot 'tests/run_gui_menu_music_wire.py'),
+            '--rev', $B5Commit, '--control-rev', $musicControl, '--output-dir', $musicOut) 'regressions.log'
+        $musicResultPath = Join-Path $musicOut 'fixture.json'
+        $musicResult = Get-Content -Raw -LiteralPath $musicResultPath | ConvertFrom-Json -AsHashtable
+        if ($musicResult.status -cne 'pass' -or $musicResult.candidate_source -cne $B5Commit -or
+            $musicResult.negative_control_revision -cne $musicControl) {
+            throw 'Menu-music result does not identify the exact passing candidate and unchanged control.'
+        }
+        foreach ($spec in @(
+            @{ name = 'candidate'; directory = 'candidate'; key = 'candidate_receipt'; tag = 'Menu23Candidate'; checks = 217 },
+            @{ name = 'negative_control'; directory = 'b595_negative_control'; key = 'negative_control_receipt'; tag = 'Menu23OldControl'; checks = 189 }
+        )) {
+            $variant = $musicResult[$spec.key]
+            $variantRoot = Join-Path $musicOut $spec.directory
+            $runRecord = Get-Content -Raw -LiteralPath (Join-Path $variantRoot 'result.json') | ConvertFrom-Json -AsHashtable
+            $logPath = Join-Path $variantRoot 'run.stdout.txt'
+            $log = Get-Content -Raw -LiteralPath $logPath
+            $summary = [regex]::Matches($log, ('(?m)^' + $spec.tag + ': (\d+) checks, (\d+) failures\r?$'))
+            $expectedSource = if ($spec.name -ceq 'candidate') { $B5Commit } else { $musicControl }
+            if ($variant.source_tree -cne $expectedSource -or $variant.tag -cne $spec.tag -or
+                $variant.process_exit_code -ne 0 -or $runRecord.process_exit_code -ne 0 -or
+                $variant.numeric.checks -ne $spec.checks -or $variant.numeric.failures -ne 0 -or
+                $runRecord.numeric.checks -ne $spec.checks -or $runRecord.numeric.failures -ne 0 -or
+                $summary.Count -ne 1 -or [int]$summary[0].Groups[1].Value -ne $spec.checks -or
+                [int]$summary[0].Groups[2].Value -ne 0 -or $log -match '(?m)^FAIL ' -or
+                @($variant.field_observations).Count -ne 12 -or
+                @($variant.field_failure_witnesses).Count -ne 0 -or
+                $variant.compile_and_numeric_output_reached -ne $true) {
+                throw "Menu-music compile/numeric/field receipts differ: $($spec.name)"
+            }
+            $exeRecord = Get-FileRecord (Join-Path $variantRoot 'regression.exe')
+            if ($exeRecord.sha256 -cne $variant.executable_sha256 -or
+                $exeRecord.sha256 -cne $runRecord.executable_sha256) { throw 'Menu-music executable hash differs.' }
+            $mismatches = [regex]::Matches($log, '(?m)^NEGATIVE_CONTROL_RAW8_MISMATCH flags=(00|01|10|11) ')
+            $expectedMismatchCount = if ($spec.name -ceq 'negative_control') { 4 } else { 0 }
+            if ($mismatches.Count -ne $expectedMismatchCount -or
+                @($variant.expected_raw8_mismatch_witnesses).Count -ne $expectedMismatchCount) {
+                throw 'Menu-music negative-control mismatch witnesses differ.'
+            }
+            if ($expectedMismatchCount -eq 4 -and
+                [string]::Join('|', [string[]]@($mismatches | ForEach-Object { $_.Groups[1].Value } | Sort-Object)) -cne '00|01|10|11') {
+                throw 'Menu-music negative control did not cover all four flag pairs.'
+            }
+            # The candidate shadow headers and source snippets must be the current production files.
+            # The old control is independently bound to its exact Git revision by the runner.
+            if ($spec.name -ceq 'candidate') {
+                $sourcePins = @{} + $variant.shadow_header_sha256
+                foreach ($relative in @('src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp',
+                                         'src/GameSource/Gui/Flow/HUD/States/BrnBootLegal.cpp')) {
+                    $sourcePins[$relative] = $variant.source_text_sha256[$relative]
+                }
+                foreach ($relative in $sourcePins.Keys) {
+                    if (-not $relative.StartsWith('src/') -or $relative.Contains('..')) { throw 'Menu-music source path differs.' }
+                    $actual = Get-LFFileRecord (Join-Path $SourceRoot $relative)
+                    if ($actual.lf_sha256 -cne $sourcePins[$relative]) { throw "Menu-music production input differs: $relative" }
+                    $Receipt.regressions.inputs[$relative] = Get-FileRecord $actual.path
+                }
+                $relative = 'src/GameShared/GameClasses/Development/CgsStrStream.cpp'
+                $Receipt.regressions.inputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
+            }
+            $musicReceipt.variants[$spec.name] = @{ checks = $spec.checks; failures = 0; process_exit_code = 0;
+                source = $expectedSource; executable = $exeRecord; numeric_receipt = Get-FileRecord (Join-Path $variantRoot 'result.json');
+                log = Get-FileRecord $logPath; expected_raw_mismatches = $expectedMismatchCount }
+        }
+        $musicReceipt.fixture = Get-FileRecord $musicResultPath
+        $musicReceipt.scope = 'Extracted production case23 and actual queue/message types; channel40 drain and audible playback remain native checks.'
+        $musicReceipt.status = 'pass'
+        Assert-CleanTrees
+        $Receipt.regressions.gui_menu_music_wire_status = 'pass'
+        $Receipt.regressions.status = 'partial_selected_fixtures_pass'
+    }
 
     if ($RunOnlineSaveRoute) {
         $Receipt.regressions.status = 'running'
@@ -1694,6 +1795,10 @@ try {
     $Receipt.validated = $true
     $ExitCode = 0
 } catch {
+    if ($Receipt.regressions.gui_menu_music_wire_status -eq 'running') {
+        $Receipt.regressions.gui_menu_music_wire_status = 'fail'
+        $Receipt.regressions.gui_menu_music_wire.status = 'fail'
+    }
     if ($Receipt.regressions.online_save_route_status -eq 'running') {
         $Receipt.regressions.online_save_route_status = 'fail'
         $Receipt.regressions.online_save_route.status = 'fail'

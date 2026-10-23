@@ -47,9 +47,9 @@ The dated source/audit checkpoint recorded 1,351/1,355 sites (99.7%), including 
 
 ## Continuing source work
 
-**Current private renderer/GUI batch:** `829305f8` contains reviewed blobby rendering and traffic production, occlusion callers, scoreboard/completion notifications and the complete menu-music publication/consumer repair. The nine-post scoreboard/completion predecessor passed all ten hosted groups. New traffic/music deltas still need their exact build and behavior checks. The first occlusion run failed before toggles in whole-registry state export; it grants no occlusion credit. [Current source checkpoint](menu23_chain_20261023/STATE.json).
+**Current private renderer/GUI batch:** `ea5ce572` contains reviewed shadow/occlusion source, scoreboard/completion notifications, Road Rules audio and the complete menu-music decoder repair. The traffic constructor error from hosted40026988508 has a reviewed shipping-type correction. The new exact source/CI pair installs a paired menu-music regression and two completion autosave fixes; all eleven selected hosted groups and native behavior still need their exact run. [Current checkpoint](menu23_hosted_fixture_20261023/STATE.json).
 
-**Renderer registration owner:** the original five-stack prepare owner and dependencies are committed in a separate 13-file WIP checkpoint (`53961615`). Original callees and native buffer/thread ownership remain unresolved; it is unreviewed, unactivated and not link-ready. The current playable build remains b330. [Separate WIP identity](menu23_chain_20261023/PREPARE_OWNER_WIP.json).
+**Renderer preparation:** the original owner, AutoTest callbacks, GameData caller, allocation helpers and two RW allocator services are committed separately through `2ceaa5e8`. Eight directly named core/schema/list bodies plus initialization and native allocation ownership remain unresolved. This work is unreviewed and unactivated; the playable package remains b330. The first occlusion run failed in original whole-registry state export before any toggles and adds no behavior credit.
 
 **GUI84, Replay and FSM batch:** **5093cdb0** is installed and merged to
 dev after source, hosted and bounded native delivery checks. The 84 GUI
