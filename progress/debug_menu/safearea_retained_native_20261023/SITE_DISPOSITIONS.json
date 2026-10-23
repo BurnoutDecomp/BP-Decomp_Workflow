@@ -1,0 +1,36 @@
+{
+  "status": "independent proposed dispositions; inventory unchanged; root owns publication",
+  "source": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+  "exe_sha256": "6fa903ebd3200ec46104b47bda8eb0e81d835d0ce6e003da370c11deb14c203a",
+  "original_case_verdict": "FAIL",
+  "original_case_verdict_changed": false,
+  "phase_adjacent_not_same_frame": true,
+  "sites": [
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0018",
+      "caption": "Show/Hide Safe Area",
+      "disposition": "pass",
+      "evidence": ["g017_restored/bb_008160.bmp", "g018_visible/bb_008520.bmp", "g018_restored/bb_009480.bmp"],
+      "basis": "Original registration and exact source bind F5 to the same component callback; actual red outline absent, visible at 85%, absent again",
+      "restoration": "safe-area outline off again",
+      "limits": ["callback-only; no boolean readback asserted", "phase-adjacent frames", "no whole-HUD restoration", "original aggregate FAIL remains"]
+    },
+    {
+      "site_id": "BrnGui::GuiDebugComponent::OnActivate#0019",
+      "caption": "   Safe Area:",
+      "disposition": "pass",
+      "evidence": ["b003 lines 17078..17080", "r006 lines 29930..29932", "r007 lines 31107..31109", "f003 lines 49109..49111", "g018_visible/bb_008520.bmp", "g019_70/bb_008880.bmp", "g019_85/bb_009120.bmp"],
+      "basis": "Exact registered variable and archived scripts produce 85/70/85 readbacks with visible red geometry 1088x612/896x504/1088x612",
+      "restoration": "85.000 restored in operation and final readback; same visible 85% bounds before local toggle-off",
+      "limits": ["phase-adjacent values/images, not same-frame", "tested 70 and 85 only", "no whole-HUD restoration", "original aggregate FAIL remains"]
+    }
+  ],
+  "retained_qualifications": [
+    "b006 actual TRUE versus expected FALSE remains the original aggregate failure",
+    "empty --run-error and undefined terminal(args) reporting failures remain",
+    "ordinary gameplay HUD absence remains unresolved",
+    "no new SatNav outline parity or alpha credit",
+    "no isolated override-mode, peer-race or other-control credit",
+    "historical protected-file receipt remains historical; current user files were not compared to it"
+  ]
+}
