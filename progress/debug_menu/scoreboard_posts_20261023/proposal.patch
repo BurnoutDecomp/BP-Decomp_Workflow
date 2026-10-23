@@ -1,0 +1,76 @@
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp
+@@ -213,9 +213,12 @@
+ 
+             case E_LEADERBOARD_REQUEST_STATE_GET_INDEX:
+             {
+                 GuiEventScoreboardRequestIndexEvent lIndexRequest(miCurrentCategory);
+-                mpStateInterface->OutputGuiEvent(lIndexRequest);
++                // Full {4,111,12}+4 ARTIST record: queue on channel 40 without another wrapper.
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lIndexRequest), KI_CHANNEL_GUI_OUT,
++                    static_cast<s32>(sizeof(lIndexRequest)));
+ 
+                 mTable.SetupScoreboard(0);
+                 // SetLoading(true) inlined, DWARF cpp:1362
+                 if (mbCurrentlyLoading != true)
+@@ -232,9 +235,12 @@
+ 
+             case E_LEADERBOARD_REQUEST_STATE_GET_VARIATIONS:
+             {
+                 GuiEventScoreboardRequestVariationEvent lVariationRequest(miCurrentIndex);
+-                mpStateInterface->OutputGuiEvent(lVariationRequest);
++                // Full {4,112,12}+4 ARTIST record: queue on channel 40 without another wrapper.
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lVariationRequest), KI_CHANNEL_GUI_OUT,
++                    static_cast<s32>(sizeof(lVariationRequest)));
+ 
+                 mTable.SetupScoreboard(0);
+                 // SetLoading(true) inlined, DWARF cpp:1362
+                 if (mbCurrentlyLoading != true)
+@@ -258,9 +264,12 @@
+                     ? maiAlphabeticalRoadIndex[miCurrentVariation]
+                     : miCurrentVariation;
+ 
+                 GuiEventScoreboardRequestTableEvent lTableRequest(liTargetVariation);
+-                mpStateInterface->OutputGuiEvent(lTableRequest);
++                // Full {4,113,12}+4 ARTIST record: queue on channel 40 without another wrapper.
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lTableRequest), KI_CHANNEL_GUI_OUT,
++                    static_cast<s32>(sizeof(lTableRequest)));
+ 
+                 // ...and log which board was asked for. The telemetry record's parameter
+                 // buffer starts one word past its type, and TelemetryData is the accessor for
+                 // that buffer, so the builder addresses the record through it.
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_07.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_07.cpp
+@@ -165,9 +165,12 @@
+                 // The whole record is the highlighted player's name; the table writes it
+                 // straight into the request.
+                 GuiEventScoreboardRequestGamercardEvent lRequestGamerCard;
+                 mTable.GetHighlightedGamertag(&lRequestGamerCard.mPlayerName);
+-                mpStateInterface->OutputGuiEvent(lRequestGamerCard);
++                // Full {16,120,12}+name[16] record: queue on channel 40 without another wrapper.
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lRequestGamerCard), 40,
++                    static_cast<s32>(sizeof(lRequestGamerCard)));
+                 break;
+             }
+ 
+             default:
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp
+@@ -510,9 +510,12 @@
+                 // bytes. The committed PC type bakes those three header words into its
+                 // GuiEvent<120> base, so filling its mPlayerName reproduces the record.
+                 GuiEventScoreboardRequestGamercardEvent lRequest;
+                 lRequest.mPlayerName.Construct(mCrashNavPanel.GetRoadRuleFriendSelectedName());
+-                mpStateInterface->OutputGuiEvent<GuiEventScoreboardRequestGamercardEvent>(lRequest);
++                // lRequest already contains {16,120,12}+name[16]; post it on the original channel 40.
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lRequest), 40,
++                    static_cast<s32>(sizeof(lRequest)));
+             }
+             break;
+ 
+         case KI_ACTION_GUI_LSHOULDER: // 54 -- tab left across the CrashNav screens

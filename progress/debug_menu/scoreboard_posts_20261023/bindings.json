@@ -1,0 +1,199 @@
+{
+  "proposal": "gui_scoreboard_channel40_batch_20261023_codex03_e306dbd2",
+  "proposal_only": true,
+  "base": {
+    "b5_source_commit": "e306dbd2a266a53b77cfb8ccbc86e01726dc5395",
+    "prior_source_audit_base": "9cbefd173085312ebaee5bab4875b8492fc292cb"
+  },
+  "scope": {
+    "source_files_changed": [
+      "src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp",
+      "src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_07.cpp",
+      "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp"
+    ],
+    "actual_output_call_sites": 5,
+    "event_ids": [
+      111,
+      112,
+      113,
+      120
+    ],
+    "debug_registration_sites_counted": 0,
+    "event121_call_excluded": "The source call at BrnOnlineScoreboards_wI_07.cpp:157 is guarded by const bool lbEvScoreTargetEnabled = false.",
+    "already_correct_sibling": "BrnOnlineGameRoomPlayerInfo_wN3_03.cpp::PostGamercardRequest already queues event 120 on channel 40.",
+    "shared_generic_template_changed": false,
+    "gui_module_or_decoder_changed": false,
+    "508_509_changed": false,
+    "production_files_changed": false,
+    "build_or_runtime_validation": false,
+    "campaign_inventory_changed": false,
+    "postimage_files": [
+      "composed_postimage/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp",
+      "composed_postimage/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_07.cpp",
+      "composed_postimage/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp"
+    ]
+  },
+  "base_source_blobs": {
+    "src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp": "1b32e013b2702375556e47b1718a72809f0a4e47",
+    "src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_07.cpp": "3d0acc74308310f2ed4067c0fa06a6cfe1fafdb2",
+    "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp": "d037d83f4e307eb841c3ff93c81668df4a5a58ec",
+    "src/GameSource/Gui/BrnGuiDemangledEventTypes.h": "67f298c757a6cb6463c80a0149134141afeb4725",
+    "src/GameSource/Gui/BrnGuiModule.cpp": "d3c6e8f3f189f9f3611b8a9d90013594b16723be",
+    "src/GameSource/Game/GameBridgeGUIToX.cpp": "0b43660f050600a5c1627f596434f5e3f7523cef",
+    "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h": "118bbf75b320ca5f0c94d23173be613303d1d957"
+  },
+  "postimage_sha256": {
+    "src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp": "dce4dfa9861cc2636ee32fba13a7f3c9730ee2c87b48438c59f65b1ab7dd33cc",
+    "src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_07.cpp": "02d6368fcf5e0353043d3cfbb47157ac8a7dade60e81a6fe522ba7f4f4bfcdab",
+    "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp": "aa7b9badd90dbade91334ea700c69564acff077400ae4a95086fc64278eb4753"
+  },
+  "artist_publishers": [
+    {
+      "event_id": 111,
+      "type": "BrnGui::GuiEventScoreboardRequestIndexEvent",
+      "address": "0x82493FF8",
+      "sha256": "de697e4e5959e85a3a6fa94a2cf98faae7aad3a93e5eb74b3bde1e5eb58d7259",
+      "record": {
+        "payload_bytes": 4,
+        "payload_offset": 12,
+        "record_bytes": 16,
+        "channel": 40
+      },
+      "xrefs_to": [
+        "0x8249F458"
+      ]
+    },
+    {
+      "event_id": 112,
+      "type": "BrnGui::GuiEventScoreboardRequestVariationEvent",
+      "address": "0x82494048",
+      "sha256": "a0ba18b34479f5c791541bfb49337389f0258ef3ae4393d2b7d37ecd79d54853",
+      "record": {
+        "payload_bytes": 4,
+        "payload_offset": 12,
+        "record_bytes": 16,
+        "channel": 40
+      },
+      "xrefs_to": [
+        "0x8249F458"
+      ]
+    },
+    {
+      "event_id": 113,
+      "type": "BrnGui::GuiEventScoreboardRequestTableEvent",
+      "address": "0x82494098",
+      "sha256": "7531f8e929347cbb3b11a8329102d1e856ba6313d11ccf2a9d517fc7e4e81d49",
+      "record": {
+        "payload_bytes": 4,
+        "payload_offset": 12,
+        "record_bytes": 16,
+        "channel": 40
+      },
+      "xrefs_to": [
+        "0x8249F458"
+      ]
+    },
+    {
+      "event_id": 120,
+      "type": "BrnGui::GuiEventScoreboardRequestGamercardEvent",
+      "address": "0x82493D38",
+      "sha256": "6a8298e0f49b204f743e209001f6ac69b6bce87452e05c84f34550dec7dac2cf",
+      "record": {
+        "payload_bytes": 16,
+        "payload_offset": 12,
+        "record_bytes": 28,
+        "channel": 40
+      },
+      "xrefs_to": [
+        "0x824A5130",
+        "0x824A9B78",
+        "0x824CCAE8"
+      ]
+    }
+  ],
+  "artist_callers": [
+    {
+      "address": "0x8249F458",
+      "name": "BrnGui::OnlineScoreboards::HandleLeaderboardRequestState",
+      "sha256": "6a61ab3aa30e0e48c311db017fb78910afd22a17da52e13ae28458b0c98bf345",
+      "source_file": "src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp",
+      "posts": [
+        {
+          "source_line": 217,
+          "callsite": "0x8249F534",
+          "event_id": 111
+        },
+        {
+          "source_line": 236,
+          "callsite": "0x8249F594",
+          "event_id": 112
+        },
+        {
+          "source_line": 262,
+          "callsite": "0x8249F614",
+          "event_id": 113
+        }
+      ]
+    },
+    {
+      "address": "0x824A9B78",
+      "name": "BrnGui::OnlineScoreboards::HandleControllerInputPressedUsingTable",
+      "sha256": "40b5920aa1ccfa394293ce92c83ac9faab334cde8d2bc78e6ea09681dce9d5b3",
+      "source_file": "src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_07.cpp",
+      "posts": [
+        {
+          "source_line": 169,
+          "callsite": "0x824A9DB4",
+          "event_id": 120
+        }
+      ]
+    },
+    {
+      "address": "0x824CCAE8",
+      "name": "BrnGui::CrashNavMapMain::HandleCrashNavInputPressed",
+      "sha256": "6268fc74e453c7f411f2e8f9c6e774cd38a23047d48202413601b9ea23bf46f5",
+      "source_file": "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp",
+      "posts": [
+        {
+          "source_line": 514,
+          "callsite": "0x824CCD84",
+          "event_id": 120
+        }
+      ]
+    }
+  ],
+  "decfigs_shape": {
+    "file": "references/DecFIGS/dwarfdump/GameSource/Gui/BrnGuiEventTypeDefs.h",
+    "lines": [
+      3967,
+      3974,
+      3981,
+      4046
+    ],
+    "members": [
+      "GuiEventScoreboardRequestIndexEvent::miCategory",
+      "GuiEventScoreboardRequestVariationEvent::miIndex",
+      "GuiEventScoreboardRequestTableEvent::miVariation",
+      "GuiEventScoreboardRequestGamercardEvent::PlayerName"
+    ],
+    "ps3_ids": [
+      112,
+      113,
+      114,
+      121
+    ],
+    "note": "Use DecFIGS for member/declaration shape only; ARTIST determines the target X360 ids 111,112,113,120 and all wire dimensions."
+  },
+  "pc_receiver": {
+    "generic_template": "CgsGuiStateInterface.h:219-222 direct-passes GetEventType() and sizeof(T).",
+    "channel40_drain": "BrnGuiModule::DrainFlowOutputQueue channel 40 reads {size,type,offset}, extracts the payload, and forwards the inner event to the module output queue.",
+    "direct_id_behavior": "Direct queue ids 111,112,113,120 are not channel-40 records and have no corresponding flow-drain arms.",
+    "consumer_file": "src/GameSource/Game/GameBridgeGUIToX.cpp",
+    "cases": {
+      "111": "read category, request scoreboard indexes",
+      "112": "read index, request variations",
+      "113": "read variation, request scoreboard table",
+      "120": "copy PlayerName and request gamercard"
+    }
+  }
+}
