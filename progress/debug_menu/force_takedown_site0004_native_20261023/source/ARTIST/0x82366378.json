@@ -1,0 +1,38 @@
+{
+  "address": "0x82366378",
+  "name": "BrnGameState::TakedownManagerDebugComponent::OnActivate",
+  "prototype": "int BrnGameState::TakedownManagerDebugComponent::OnActivateint __fastcall(int a1)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    }
+  ],
+  "pseudocode": "int __fastcall BrnGameState::TakedownManagerDebugComponent::OnActivate(int a1)\n{\n  sub_8282D800(a1, a1 + 29, \"Show last takedown info\");\n  sub_8282D800(a1, a1 + 28, \"Show vulnerability\");\n  sub_8282D800(a1, a1 + 30, \"Show revenge takedown info\");\n  return sub_8282F720(a1, BrnGameState::TakedownManagerDebugComponent::ForceTakedownCallback, a1, \"Force takedown\");\n}\n",
+  "assembly": "0x82366378  mflr      r12\n0x8236637C  stw       r12, var_8(r1)\n0x82366380  std       r31, var_10(r1)\n0x82366384  stwu      r1, back_chain(r1)\n0x82366388  mr        r31, r3\n0x8236638C  lis       r11, aShowLastTakedo@ha\n0x82366390  addi      r4, r31, 0x1D\n0x82366394  addi      r5, r11, aShowLastTakedo@l# \"Show last takedown info\"\n0x82366398  bl        sub_8282D800\n0x8236639C  lis       r11, aShowVulnerabil@ha\n0x823663A0  addi      r4, r31, 0x1C\n0x823663A4  addi      r5, r11, aShowVulnerabil@l# \"Show vulnerability\"\n0x823663A8  mr        r3, r31\n0x823663AC  bl        sub_8282D800\n0x823663B0  lis       r11, aShowRevengeTak@ha\n0x823663B4  addi      r4, r31, 0x1E\n0x823663B8  addi      r5, r11, aShowRevengeTak@l# \"Show revenge takedown info\"\n0x823663BC  mr        r3, r31\n0x823663C0  bl        sub_8282D800\n0x823663C4  lis       r11, aForceTakedown@ha\n0x823663C8  mr        r5, r31\n0x823663CC  addi      r6, r11, aForceTakedown@l# \"Force takedown\"\n0x823663D0  lis       r11, BrnGameState__TakedownManagerDebugComponent__ForceTakedownCallback@ha\n0x823663D4  mr        r3, r31\n0x823663D8  addi      r4, r11, BrnGameState__TakedownManagerDebugComponent__ForceTakedownCallback@l\n0x823663DC  bl        sub_8282F720\n0x823663E0  addi      r1, r1, 0x60\n0x823663E4  lwz       r12, var_8(r1)\n0x823663E8  mtlr      r12\n0x823663EC  ld        r31, var_10(r1)\n0x823663F0  blr",
+  "xrefs_to": [],
+  "xrefs_from": [
+    {
+      "address": "0x8282D800",
+      "name": "sub_8282D800"
+    },
+    {
+      "address": "0x8282F720",
+      "name": "sub_8282F720"
+    }
+  ]
+}

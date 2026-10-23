@@ -10179,14 +10179,21 @@
       "pseudocode_line": 6,
       "original_call": "sub_8282F720(a1, BrnGameState::TakedownManagerDebugComponent::ForceTakedownCallback, a1, \"Force takedown\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGameState::TakedownManagerDebugComponent::OnActivate#0004",
       "function": "BrnGameState::TakedownManagerDebugComponent::OnActivate",
       "original_address": "0x82366378",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82366378.json",
       "component": "BrnGameState::TakedownManagerDebugComponent",
       "component_name": "TakedownManager",
-      "component_path": null
+      "component_path": null,
+      "notes": "Original registered Force takedown callback matches ARTIST full Clear/arm side effects. On exact9af6, one guarded original CALL yields one intended typed translation and visible1/30; all3 real producers yield3 translations. Old91a control replays output2059times. Scope: original callback in offline Road Rage; no organic-collision/victim-active claim. Later timer countdown and broader delivery remain pending.",
+      "evidence": [
+        "progress/debug_menu/force_takedown_site0004_native_20261023/REPORT.md",
+        "progress/debug_menu/force_takedown_site0004_native_20261023/SITE_DISPOSITION.json",
+        "progress/debug_menu/force_takedown_site0004_native_20261023/NATIVE_EVIDENCE.json",
+        "progress/debug_menu/force_takedown_site0004_native_20261023/PUBLICATION_BINDINGS.json"
+      ]
     },
     {
       "kind": "variable",
@@ -37712,8 +37719,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1299,
-      "verified": 49,
+      "pending": 1298,
+      "verified": 50,
       "original-noop": 7
     }
   }
