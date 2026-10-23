@@ -1,0 +1,11 @@
+# Original RW allocator creation services
+
+Two source paths are proposed against `abcde0e0731587ba4169189918c257c5a3e86ceb`, Root's fourth owner checkpoint. This replaces the two empty RW creation handlers with the original Linear and General services, using exact method chunks from `56676b7c1f1a5230ea33d9cb957a181971e07390`. Full pre/post hashes, the patch and reused-chunk hashes are recorded. No source checkout, native budget, mount, caller activation, build, test or runtime was changed.
+
+Both original handlers copy the requested capacity, obtain backing storage requirements from the actual canonical RW static API, create a leaf bank over parent-granule-rounded extents, placement-construct the allocator inside lane zero, and publish the actual result/pointer reply. Failure also produces the original reply: null backing is passed to the real Initialize, whose null-lane guard returns null. No completion or allocator object is fabricated.
+
+The typed handler ABI and dispatcher cases follow ARTIST8286D130/8286D550 and DecFIGS. Each request carries its real receiver and per-family index. Replies use the request's event type and native sizeof; the current ResourceModule response shuttle forwards its recorded size and maps types2/3 to receiver tags11/12. The fourth packet supplies the canonical single-pointer response contract these services require.
+
+Current vendor GetResourceDescriptor/Initialize APIs are present, source-bound and inspected. They reserve the real host allocator type's size/alignment and pass original payload capacities to the constructors. Existing native external objects retain their separate AdoptMemory path. No console-sized object reserve, direct debug-allocator fallback, new allocator or budget adjustment is introduced.
+
+This completes source bodies for the two service no-ops identified in the fourth packet. It does not supply the original ResourceModule Update or seven schema/list helpers, change original root configuration, reconcile GameData construction or restore game/LiveUpdate factories. `PROVIDER_BOUNDARIES.md` distinguishes these dependencies. Source-only body bindings preserve the existing native/raw/wrapper service paths; they are not binary or runtime evidence. Registration counts and the playable build remain unchanged.
