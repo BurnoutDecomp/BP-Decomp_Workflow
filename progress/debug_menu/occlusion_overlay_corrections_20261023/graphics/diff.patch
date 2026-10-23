@@ -1,0 +1,345 @@
+--- a/src/GameSource/Graphics/BrnRendererModule.cpp
++++ b/src/GameSource/Graphics/BrnRendererModule.cpp
+@@ -40,7 +40,11 @@
+ #include "GameShared/GameClasses/Gui/View/ParticleSystem2d/CgsBillboardRenderer.h"
+ 
+ // BrnRendererModule::Render publishes the threshold read by InterpretOcclusionQuery.
+-namespace CgsGraphics { extern u32 suOcclusionCullIndexCountThreshold; }
++namespace CgsGraphics
++{
++    extern OcclusionCullManager* spOcclusionCullManager;
++    extern u32 suOcclusionCullIndexCountThreshold;
++}
+ 
+ // ---------------------------------------------------------------------------------------------
+ // BRN_SHADOW_MAP_TARGET_AVAILABLE -- the shadow-map RENDER TARGET gate (PC bring-up, 2026-08-12).
+@@ -491,11 +495,9 @@
+ //
+ // Option B (layout-faithful incremental): the loading-screen render path is reconstructed
+ // for real here - the double-buffered shader-constant frames and the loading-screen
+-// renderer, which is what actually draws during boot. The remaining subsystems the full
+-// Construct builds (effects arbitrator, dispatch frames, the Im2d/Im3d family, render-
+-// target memory, corona/postfx/occlusion/shadow/sun managers) are held as opaque storage
+-// and their construction is reconstructed incrementally; none of them draws during the
+-// loading screen, so the screen boots through the real module without them.
++// renderer, which is what actually draws during boot. The occlusion manager is constructed
++// on the first enabled query pass after the host device exists; other device-backed managers
++// remain incrementally reconstructed and do not draw during the loading screen.
+ namespace
+ {
+     // [PC bring-up] The dispatch bins' backing memory. The X360 carves them from
+@@ -558,7 +560,7 @@
+                                     + KU_PC_IM3D_MENUS_COMMAND_BYTES + KU_PC_IM3D_MENUS_VERTEX_BYTES)
+                               + 32u * 128u // four allocations per each of eight immediate buffers
+                               + (4u * 4096u)   // per-bin align128(size)+128 slop + headroom
+-                              + (192u * 1024u); // + the small renderengine objects that share
++                              + (192u * 1024u)  // + the small renderengine objects that share
+                                                //   this allocator (the sky dome's four buffer
+                                                //   headers); without it their DoAllocate came
+                                                //   back empty and tripped CreateGeometry's
+@@ -566,6 +568,8 @@
+                                                //   for the corona manager's TWO 32,784-byte
+                                                //   corona buffers (512 slots x 64 B + header)
+                                                //   so its Construct does not starve the sky dome.
++                              + 0x80000u;       // FLAG PC-platform leaf: reserve ARTIST's
++                                               // 0x2000 * sizeof(Matrix44) == 512 KiB table.
+         void* lpHeap = ::operator new(luHeapBytes, std::nothrow);
+         if (lpHeap == 0)
+             return false;
+@@ -4701,6 +4705,49 @@
+ 
+     DispatchObjectContext& lContext = *lpContext;
+ 
++    // X360 Render publishes the manager pointer and the camera/near-clip inputs before the
++    // query passes. On PC the manager is constructed only after the D3D9 device is available.
++    const bool lbOcclusionCullReady = lpDispatchThreadInputBuffer != nullptr
++        && mOcclusionCullManager.mbOcclusionEnabled
++        && EnsureOcclusionCullManagerPC();
++    if (mbOcclusionCullManagerReadyPC)
++        CgsGraphics::spOcclusionCullManager = &mOcclusionCullManager;
++    if (lbOcclusionCullReady)
++    {
++        mOcclusionCullManager.mViewProjectionMatrix =
++            lpDispatchThreadInputBuffer->GetOcclusionViewProjectionMatrix();
++        // ARTIST Render preserves the other lanes of the manager vector and stores this scalar
++        // into its z lane at 0x8240C164-0x8240C178.
++        mOcclusionCullManager.mNearClipOffset.z = mfOccludeeNearClipOffset;
++    }
++
++    const auto DispatchOcclusionBatch = [&](DispatchList* lpList, s32 liFirst, s32 liCount)
++    {
++        mOcclusionCullManager.BeginQueries();
++        lpList->DispatchAllMeshOcclusionQueries(mpInterpreter, liFirst, liCount);
++        mOcclusionCullManager.EndQueries();
++        mOcclusionCullManager.BeginConditionalRender();
++        const s32 liNext = lpList->DispatchAllMeshes(
++            mpInterpreter, &lContext, static_cast<u32>(liFirst), liCount);
++        mOcclusionCullManager.EndConditionalRender();
++        return liNext;
++    };
++
++    const auto DispatchPassList = [&](DispatchList* lpList, bool lbCull, bool lbBatch)
++    {
++        if (!lbOcclusionCullReady || !lbCull)
++            return lpList->DispatchAllMeshes(mpInterpreter, &lContext, 0u, -1);
++        if (!lbBatch)
++            return DispatchOcclusionBatch(lpList, 0, -1);
++
++        s32 liFirst = 0;
++        do
++        {
++            liFirst = DispatchOcclusionBatch(lpList, liFirst, 64);
++        } while (liFirst != -1);
++        return -1;
++    };
++
+     // Pass stats (X360 60-frame averages; the raw totals feed the debug HUD).
+     const u32 luPreZ             = GetMeshFrameForReadPC().GetList(21)->GetCount();
+     const u32 luCarOpaque        = GetMeshFrameForReadPC().GetList(19)->GetCount();
+@@ -4868,7 +4915,7 @@
+                 shadow::Device::BeginForceStencilWrite(lCarMaskBytes.mu8CarsBlurStencil);
+ 
+             WaitForMeshSortPC(19u);
+-            GetMeshFrameForReadPC().GetList(19)->DispatchAllMeshes(mpInterpreter, &lContext, 0, -1);
++            DispatchPassList(GetMeshFrameForReadPC().GetList(19), mbOcclusionCullCarOpaque, true);
+ 
+             if (lbForceCarStencil)
+                 shadow::Device::EndForceStencilWrite();
+@@ -4883,10 +4930,13 @@
+             // run the same instrument over a pass that DEMONSTRABLY puts pixels on screen.
+             // The world-opaque walk is that pass. Read one frame late like the others, so it
+             // costs a query issue and nothing else. DELETE with the shadow bring-up probes.
+-            renderengine::ShadowProbe_Begin(3u);
++            const bool lbCullWorldOpaque = lbOcclusionCullReady && mbOcclusionCullWorldOpaque;
++            if (!lbCullWorldOpaque)
++                renderengine::ShadowProbe_Begin(3u);
+             WaitForMeshSortPC(11u);
+-            GetMeshFrameForReadPC().GetList(11)->DispatchAllMeshes(mpInterpreter, &lContext, 0, -1);
+-            renderengine::ShadowProbe_End(3u);
++            DispatchPassList(GetMeshFrameForReadPC().GetList(11), mbOcclusionCullWorldOpaque, true);
++            if (!lbCullWorldOpaque)
++                renderengine::ShadowProbe_End(3u);
+         }
+         CgsDev::PerfMonGpu::StopMonitor(mGpuMonitors.miWorldOpaque);
+     }
+@@ -4927,7 +4977,7 @@
+         if (mbRenderWorldTransparent)
+         {
+             WaitForMeshSortPC(15u);
+-            GetMeshFrameForReadPC().GetList(15)->DispatchAllMeshes(mpInterpreter, &lContext, 0, -1);
++            DispatchPassList(GetMeshFrameForReadPC().GetList(15), mbOcclusionCullWorldTransparent, false);
+         }
+         CgsDev::PerfMonGpu::StopMonitor(mGpuMonitors.miWorldTransparent);
+     }
+@@ -4943,7 +4993,7 @@
+             if (lbBlobbyShadowRender)
+             {
+                 mBlobbyShadowManager.Render(
+-                    lpDispatchThreadInputBuffer->mOcclusionViewProjectionMatrix,
++                    lpDispatchThreadInputBuffer->GetOcclusionViewProjectionMatrix(),
+                     &mIm3dRenderer,
+                     mpBlobbyShadowTexture,
+                     mfBlobbyShadowAlpha,
+@@ -4958,7 +5008,7 @@
+                     shadow::Device::BeginForceStencilWrite(lCarMaskBytes.mu8CarsBlurStencil);
+ 
+                 WaitForMeshSortPC(20u);
+-                GetMeshFrameForReadPC().GetList(20)->DispatchAllMeshes(mpInterpreter, &lContext, 0, -1);
++                DispatchPassList(GetMeshFrameForReadPC().GetList(20), mbOcclusionCullCarTransparent, false);
+ 
+                 if (lbForceCarStencil)
+                     shadow::Device::EndForceStencilWrite();
+@@ -5049,6 +5099,65 @@
+     mbSkyDomeReady = true;
+     if (CgsDev::Log::gpDebugPrint != 0)
+         *CgsDev::Log::gpDebugPrint << "[Sky] sky dome constructed + prepared\n";
++    return true;
++}
++
++// FLAG PC-platform leaf: ARTIST constructs the immediate query renderers and manager in
++// BrnRendererModule::Construct with mpGraphicsAllocator. PC Construct runs before the D3D9
++// device exists, so create this exact renderer family on the first enabled query pass. The
++// host dispatch allocator includes the manager's ARTIST-sized 0x80000-byte matrix table.
++bool BrnRendererModule::EnsureOcclusionCullManagerPC()
++{
++    if (mbOcclusionCullManagerReadyPC)
++        return true;
++    if (mbOcclusionCullManagerAttemptedPC)
++        return false;
++    if (renderengine::gDevice == 0 || !EnsureWorldDispatchAllocator())
++        return false;
++
++    mbOcclusionCullManagerAttemptedPC = true;
++    mIm3dRendererUntex.Construct(&sWorldDispatchAllocator);
++    if (!mIm3dRendererUntex.HasProgramsPC())
++    {
++        CgsDev::Log::WriteToLog(
++            "[renderer] occlusion query untextured program unavailable; query culling stays off.\n");
++        return false;
++    }
++    mIm3dRendererZOnly.Construct(&sWorldDispatchAllocator);
++    if (!mIm3dRendererZOnly.HasProgramsPC())
++    {
++        CgsDev::Log::WriteToLog(
++            "[renderer] occlusion query position-only program unavailable; query culling stays off.\n");
++        return false;
++    }
++
++    // Construct seeds the console defaults, while these bytes are already live debug-menu
++    // storage. Preserve any values the user set before the deferred PC construction.
++    const bool lbOcclusionEnabled = mOcclusionCullManager.mbOcclusionEnabled;
++    const bool lbShowOccludeeBBs = mOcclusionCullManager.mbShowOccludeeBBs;
++    const bool lbOcclusionCheapShader = mOcclusionCullManager.mbOcclusionCheapShader;
++    const bool lbOccludeesDoubleSided = mOcclusionCullManager.mbOccludeesDoubleSided;
++    const bool lbDisplayStats = mOcclusionCullManager.mbDisplayStats;
++    const bool lbDetectNearClipIntersections = mOcclusionCullManager.mbDetectNearClipIntersections;
++    const bool lbImmediateMode = mOcclusionCullManager.mbImmediateMode;
++    const bool lbConditionalRendering = mOcclusionCullManager.mbConditionalRendering;
++
++    mOcclusionCullManager.Construct(
++        &mIm3dRendererUntex, &mIm3dRendererZOnly, &sWorldDispatchAllocator, 0x2000u);
++
++    mOcclusionCullManager.mbOcclusionEnabled = lbOcclusionEnabled;
++    mOcclusionCullManager.mbShowOccludeeBBs = lbShowOccludeeBBs;
++    mOcclusionCullManager.mbOcclusionCheapShader = lbOcclusionCheapShader;
++    mOcclusionCullManager.mbOccludeesDoubleSided = lbOccludeesDoubleSided;
++    mOcclusionCullManager.mbDisplayStats = lbDisplayStats;
++    mOcclusionCullManager.mbDetectNearClipIntersections = lbDetectNearClipIntersections;
++    mOcclusionCullManager.mbImmediateMode = lbImmediateMode;
++    mOcclusionCullManager.mbConditionalRendering = lbConditionalRendering;
++
++    mbOcclusionCullManagerReadyPC = true;
++    CgsGraphics::spOcclusionCullManager = &mOcclusionCullManager;
++    CgsDev::Log::WriteToLog(
++        "[renderer] occlusion query manager constructed (deferred PC device setup).\n");
+     return true;
+ }
+ 
+--- a/src/GameSource/Graphics/BrnRendererModule.h
++++ b/src/GameSource/Graphics/BrnRendererModule.h
+@@ -652,6 +652,10 @@
+     void RenderWorldPasses(const BrnGame::DispatchThreadInputBuffer* lpDispatchThreadInputBuffer,
+                            CgsGraphics::DispatchObjectContext* lpContext,
+                            f32 lfWhiteLevel);
++
++    // FLAG PC-platform leaf: the console constructs these device-backed query
++    // renderers in Construct; the PC waits for its D3D9 device and dispatcher arena.
++    bool EnsureOcclusionCullManagerPC();
+ 
+     // [FLAG PC bring-up] Sky-dome bring-up (NOT console functions -- see the bodies).
+     // EnsureSkyDomeBringUp does the Construct/Prepare pair the console runs from
+@@ -811,7 +815,8 @@
+     BrnSunCorona                        mSunCorona;
+     EFrameStallStage                    meFrameStallStage;
+     s32                                 miFrameStallCountdown;
+-    // The menu-visible flag defaults are attested; full query GPU-resource construction remains pending.
++    // The menu-visible flags are attested; PC GPU resources are created lazily by
++    // EnsureOcclusionCullManagerPC after the device exists.
+     CgsGraphics::OcclusionCullManager   mOcclusionCullManager;
+     BrnGame::LoadingScreenRenderer      mLoadingScreenRenderer;
+     CgsResource::ResourceHandle         mCalibrationTextureHandle;   // +0xC920
+@@ -854,6 +859,11 @@
+         return mpMeshProducerInterpreterPC
+             ? *maPreparedMeshFramesPC[muMeshReadFramePC].mpFrame : mSingleBufferedDispatchFrame;
+     }
++
++    // FLAG PC-platform leaf: deferred construction state for the X360 query manager.
++    // These tail members leave the recovered renderer fields above at their declared offsets.
++    bool mbOcclusionCullManagerReadyPC = false;
++    bool mbOcclusionCullManagerAttemptedPC = false;
+ };
+ 
+ inline void BrnRendererModule::ClearDispatchCounters()
+--- a/src/GameSource/Game/BrnDispatchThreadInputBuffer.h
++++ b/src/GameSource/Game/BrnDispatchThreadInputBuffer.h
+@@ -151,6 +151,12 @@
+         bool IsWriteBuffer() const { return mbIsWriteBuffer; }
+         // Declaration-only; bodies with this buffer's own TU (the camera block
+         // @X360 +39360, the per-face env-map-rendered bytes @+39348).
++        // DecFIGS declares this public const-reference accessor at h:160. The X360 Render
++        // inlines the field load while holding this buffer's read lock (0x8240C1C0..C220).
++        const Matrix44& GetOcclusionViewProjectionMatrix() const
++        {
++            return mOcclusionViewProjectionMatrix;
++        }
+         void SetCameraViewProjection( const Matrix44& lrViewProjection );
+         // ---- the env-map face-render flags (reflections step 1, seam S2) ------------
+         // SetEnvMapFaceRender is BODIED in the .cpp; GetEnvMapFaceRender
+--- a/src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp
++++ b/src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp
+@@ -1280,9 +1280,8 @@
+ // shadow::Device seam; the constant/sampler upload machinery rides the PC leaf
+ // in shadow::Device::SetMeshTechniquePC (see shadowingdevice.cpp) -- states and
+ // shaders fall back to the flagged bring-up defaults until the converted
+-// SHADERS bundle + material states are live. Occlusion-query interleaving
+-// (BeginQueries/conditional render) stays with the occlusion reconstruction --
+-// the PC occlusion switches default OFF.
++// SHADERS bundle + material states are live. Occlusion-query interleaving is
++// driven by the renderer's recovered per-pass query brackets.
+ // =============================================================================
+ s32 DispatchList::DispatchAllMeshes(DispatchPacketInterpreter* lpInterpreter,
+                                     DispatchObjectContext* /*lpContext*/,
+@@ -1390,6 +1389,14 @@
+ 
+         // Bind the mesh geometry + draw.
+         shadow::Device::SetMeshBuffersPC(lpMesh, luTechnique);
++        // ARTIST @0x827F59EC-0x827F5A30 enters the manager's per-mesh
++        // conditional bracket after SetMeshBuffers and before either draw path.
++        const bool lbConditionalRender = spOcclusionCullManager != nullptr
++            && spOcclusionCullManager->meOcclusionMode
++                == OcclusionCullManager::OCCLUSIONMODE_RENDER;
++        if (lbConditionalRender)
++            spOcclusionCullManager->BeginMeshConditionalRender();
++
+         if (lu8Instances > 1u && lpMesh->mu8InstanceCount > 1u)
+         {
+             const auto* lpInstances = static_cast<const renderengine::WorldInstanceDrawPC*>(
+@@ -1403,8 +1410,11 @@
+         {
+             shadow::Device::DrawIndexedMeshPC(lpMesh);
+         }
+-    }
+-    return -1;
++
++        if (lbConditionalRender)
++            spOcclusionCullManager->EndMeshConditionalRender();
++    }
++    return luEnd != muCount ? static_cast<s32>(luEnd) : -1;
+ }
+ 
+ // =============================================================================
+--- a/src/GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp
++++ b/src/GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp
+@@ -85,8 +85,8 @@
+ 
+     // CgsGraphics::OcclusionCullManager::Construct @ 0x827F1E00.
+     // The vertex/index resources and query-list allocations all use lpAllocator. ARTIST's
+-    // 0x2000-entry caller requests 0x80000 bytes (512 KiB) for the matrix array; that exceeds the
+-    // current 256 KiB PC caller leaf and remains an integration/capacity dependency.
++    // 0x2000-entry caller requests 0x80000 bytes (512 KiB) for the matrix array; the PC renderer's
++    // deferred caller reserves that exact table in sWorldDispatchAllocator before Construct.
+     void OcclusionCullManager::Construct(Im3dUntex* lpOccludeeIm3d,
+                                          Im3dZOnly* lpOccludeeIm3dZOnly,
+                                          rw::IResourceAllocator* lpAllocator,
+--- a/src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h
++++ b/src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h
+@@ -40,6 +40,9 @@
+         // ARTIST 0x827FCBD0: initialize the inherited transform, build the one
+         // untextured program pair, and resolve its worldViewProj handle.
+         void Construct(rw::IResourceAllocator* lpAllocator);
++        // FLAG PC-platform leaf: the host may fail to adopt the program image.
++        bool HasProgramsPC() const
++        { return mapVertexProgramBuffer[0] != nullptr && mapPixelProgramBuffer[0] != nullptr; }
+     };
+ 
+     // DecFIGS DWARF CgsIm3d.h:226. The position-only renderer has exactly this inherited base
+@@ -49,6 +52,9 @@
+         // ARTIST 0x827FCCB8: initialize the inherited transform, build the one
+         // position-only program pair, and resolve its worldViewProj handle.
+         void Construct(rw::IResourceAllocator* lpAllocator);
++        // FLAG PC-platform leaf: the host may fail to adopt the program image.
++        bool HasProgramsPC() const
++        { return mapVertexProgramBuffer[0] != nullptr && mapPixelProgramBuffer[0] != nullptr; }
+     };
+ 
+     // CgsGraphics::Im3d - the concrete TEXTURED immediate-mode 3D renderer (the smoke / spark /

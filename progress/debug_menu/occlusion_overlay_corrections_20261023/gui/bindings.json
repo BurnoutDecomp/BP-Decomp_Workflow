@@ -1,0 +1,212 @@
+{
+  "proposal": "gui_debug_overlay_director_batch_20261023_codex02_delta01_wirefix",
+  "base": {
+    "physical_parent_commit": "cc54c12ebfaaadfc9b6cec42393b19355f05b595",
+    "b5_source_commit": "9cbefd173085312ebaee5bab4875b8492fc292cb",
+    "prior_packet_capture_checkout_head": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+    "prior_packet_b5_source_base": "aa6b7ec4f9af54230bc2e04622b1d9c75c26700b",
+    "parent_documentation_workflow_commit": "9a100da7c0e7963a5d0962b8bb308f781da23e44"
+  },
+  "proposal_only": true,
+  "scope": {
+    "patch": "proposal.patch",
+    "site_map": "site_map.tsv",
+    "wire_table": "artist_overlay_wires.tsv",
+    "source_sites": 2,
+    "source_files": [
+      "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp",
+      "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp"
+    ],
+    "production_files_changed": false,
+    "decoder_changed": false,
+    "build_or_runtime_validation": false,
+    "campaign_inventory_changed": false,
+    "preserved_prior_packet": "scratch/DEBUG_MENU_1011/gui_debug_overlay_director_batch_20261023_codex02_9cbefd",
+    "composed_postimages": [
+      "composed_postimage/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp",
+      "composed_postimage/src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp"
+    ],
+    "root_event191_change": "Present in source base 9cbefd; preserved in composed postimage and not duplicated by this diff.",
+    "modified_generic_output_callsites": 2,
+    "affected_producer_sites": 3,
+    "wire_helper_definitions_changed": 1
+  },
+  "base_source_blobs": {
+    "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp": "8ef44e8068c278aaa9390a2bfe09261246d0556d",
+    "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp": "f76a9d352b287cc0abfbd3d44a271f28db6ec51d",
+    "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h": "118bbf75b320ca5f0c94d23173be613303d1d957",
+    "src/GameSource/Gui/BrnGuiModule.cpp": "d3c6e8f3f189f9f3611b8a9d90013594b16723be",
+    "src/GameSource/Gui/BrnGuiOverlaysDirector.cpp": "bdd2426dc0b7d6134fdeb9f2c7355f4b4083a365"
+  },
+  "artist_evidence": [
+    {
+      "function": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiOverlayRequest>",
+      "address": "0x82436BE0",
+      "export_sha256": "D6D4C88082C164199124E8E0C60023A97485159C26D20D79A70467D603E5AA5C",
+      "record": {
+        "payload_bytes": 288,
+        "event_id": 184,
+        "payload_offset": 16,
+        "channel": 40,
+        "record_bytes": 304
+      },
+      "assembly": [
+        "0x82436BF8 li r5,0x120 (memcpy bytes)",
+        "0x82436C00 li r11,0x10 (payload offset)",
+        "0x82436C04 li r6,0x130 (record bytes)",
+        "0x82436C08 li r5,0x28 (channel 40)",
+        "0x82436C18 li r11,0x120 (payload size)",
+        "0x82436C20 li r11,0xB8 (event id 184)",
+        "0x82436C28 bl VariableEventQueue::AddEvent"
+      ]
+    },
+    {
+      "function": "BrnGui::CrashNavSettings::OnInputSponsorProductCode",
+      "address": "0x824CD030",
+      "export_sha256": "B36202FF3D73491E7A1F4E10D8CF58FA3834E9D03735F53903A90D6AE476B4C7",
+      "call_site": [
+        "0x824CD768 constructs CNSpnsrUnlkF",
+        "0x824CD780 copies 0x120 (288) request bytes",
+        "0x824CD794 writes payload offset 0x10",
+        "0x824CD798 sets queued record size 0x130 (304)",
+        "0x824CD79C sets channel 0x28 (40)",
+        "0x824CD7A4 writes payload size 0x120 (288)",
+        "0x824CD7AC writes inner event id 0xB8 (184)",
+        "0x824CD7B4 calls VariableEventQueue::AddEvent"
+      ],
+      "trigger": "sponsor product-code no-match branch; existing source helper caller"
+    },
+    {
+      "function": "BrnGui::CrashNavSettings::HandleControllerInput",
+      "address": "0x824D90E8",
+      "export_sha256": "4877069A7E834E0B4EC777C204CD177576EBE5FFA5ACDB5606D3B0D199C735E",
+      "call_site": [
+        "0x824D92E4 bl GuiOverlayRequest::Construct with PRONoSaveLd",
+        "0x824D92E8 addi r4 to the request object",
+        "0x824D92EC lwz r3 from the StateInterface",
+        "0x824D92F0 bl OutputGuiEvent<GuiOverlayRequest>"
+      ],
+      "trigger": "when the selected Profile option has no signed-in user"
+    },
+    {
+      "function": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiOverlayWaitFinishRequest>",
+      "address": "0x82476E98",
+      "export_sha256": "12BDFC480E76DE4D26D3A47DE8ED34434B2E2BCF357A76A847F4536DD64FD948",
+      "record": {
+        "payload_bytes": 8,
+        "event_id": 188,
+        "payload_offset": 16,
+        "channel": 40,
+        "record_bytes": 24
+      },
+      "assembly": [
+        "0x82476EA8 li r6,0x18 (record bytes)",
+        "0x82476EAC li r5,0x28 (channel 40)",
+        "0x82476EBC li r11,0x10 (payload offset)",
+        "0x82476EC4 li r11,8 (CgsID payload size)",
+        "0x82476ECC li r11,0xBC (event id 188)",
+        "0x82476ED4 bl VariableEventQueue::AddEvent"
+      ]
+    },
+    {
+      "function": "BrnGui::RaceMainHudState::UpdatePermenant",
+      "address": "0x824806E8",
+      "export_sha256": "4420CAE9C18DCFADF83E030728413C075A4DA69C1B2E6B1B373E09EA85F719A8",
+      "call_site": [
+        "0x82480B14 lwz the selected overlay table index",
+        "0x82480B20 loads the selected overlay id",
+        "0x82480B24 bl GuiOverlayWaitFinishRequest::Construct",
+        "0x82480B28 addi r4 to the CgsID payload",
+        "0x82480B2C lwz r3 from the StateInterface",
+        "0x82480B30 bl OutputGuiEvent<GuiOverlayWaitFinishRequest>"
+      ],
+      "trigger": "pre-event overlay expiry; source gates this to debug component-override paths"
+    }
+  ],
+  "decfigs_shape_evidence": [
+    {
+      "file": "references/DecFIGS/dwarfdump/GameSource/Gui/BrnGuiEventTypeDefs.h",
+      "line_refs": [
+        6287,
+        6350
+      ],
+      "shape": [
+        "GuiOverlayRequest includes an overlay CgsID and message/button parameter storage",
+        "GuiOverlayWaitFinishRequest carries a CgsID mOverlayId"
+      ],
+      "ps3_event_ids": [
+        182,
+        186
+      ],
+      "note": "PS3 template ids do not override ARTIST ids 184 and 188."
+    },
+    {
+      "file": "references/DecFIGS/dwarfdump/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h",
+      "line_refs": [
+        729,
+        737,
+        1027,
+        1047
+      ],
+      "shape": "Both OutputGuiEvent<T> declarations instantiate GuiEventOut<T>, whose wrapper is GuiEventWrapper<T,40>."
+    }
+  ],
+  "pc_delivery_path": {
+    "generic_publisher": "CgsGuiStateInterface.h:219-222 directly queues GetEventType() and sizeof(T).",
+    "current_drop": "The DrainFlowOutputQueue switch has channel 40 but no direct cases 184/188; its default drops those direct-id records.",
+    "corrected_path": [
+      "channel-40 drain reads wrapper payload size/type/offset and puts the inner typed payload in mGuiOutQueue",
+      "overlay-output loopback copies ids 184/188 into mOverlayLoopBackQueue",
+      "the queue is appended to the GUI input buffer before GuiOverlaysDirector::Update",
+      "GuiOverlaysDirector::Update case 184 calls HandleOverlayRequest; case 188 calls HandleWaitFinishRequest"
+    ],
+    "consumer_semantics": [
+      "event 184 starts or buffers the requested popup",
+      "event 188 cancels a matching buffered popup or stores the current overlay's wait-finish id"
+    ]
+  },
+  "composed_postimage_sha256": {
+    "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp": "efd94d8f2100b7e06f4e68f4d8788bccae0c142b5f4a81dd821610f952b7e95e",
+    "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp": "c7520fe1d0710341414dcf5c1cfd9164a3c016f95b6fb9931c5e38b8a99efebf"
+  },
+  "wire_layout_correction": {
+    "source_helper": "CrashNavSettings.cpp::GuiOverlayRequestWire184",
+    "base_layout": {
+      "base_header_bytes": 12,
+      "request_alignment": 4,
+      "actual_payload_offset": 12,
+      "header_payload_offset": 16,
+      "record_bytes": 300
+    },
+    "artist_layout": {
+      "payload_bytes": 288,
+      "payload_offset": 16,
+      "record_bytes": 304,
+      "channel": 40,
+      "event_id": 184
+    },
+    "correction": "Add and zero a u32 at +0x0C; assert header size 12, request size 288, request offset 16, and total wire size 304.",
+    "affected_existing_producer": "CrashNavSettings::OnInputSponsorProductCode posts CNSpnsrUnlkF through this helper.",
+    "affected_new_profile_producer": "CrashNavSettings::HandleControllerInput posts PRONoSaveLd through the corrected helper."
+  },
+  "event184_helper_sweep": {
+    "base_commit": "9cbefd173085312ebaee5bab4875b8492fc292cb",
+    "helper_definitions_found": 23,
+    "helpers_with_explicit_pre_payload_word": 22,
+    "malformed_helpers": [
+      {
+        "source": "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp",
+        "type": "GuiOverlayRequestWire184",
+        "base_payload_offset": 12,
+        "base_record_bytes": 300,
+        "required_payload_offset": 16,
+        "required_record_bytes": 304
+      }
+    ],
+    "affected_event184_producers": [
+      "CrashNavSettings::OnInputSponsorProductCode (existing CNSpnsrUnlkF post)",
+      "CrashNavSettings::HandleControllerInput (PRONoSaveLd profile post newly routed through the fixed helper)"
+    ],
+    "scope_note": "Helper definitions were counted separately from posts; the independent event188 wait-finish site is not an event184 producer."
+  }
+}
