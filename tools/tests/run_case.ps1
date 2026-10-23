@@ -265,6 +265,9 @@ if (-not $NoRun) {
     # Setup can choose run-owned diagnostic paths. Read its final DiagEnv only
     # after Setup, otherwise flow_run receives the case's stale initial value.
     if ($lCase.DiagEnv) { $lArgs['DiagEnv'] = "$($lCase.DiagEnv)" }
+    # Setup may also compose MenuScript after the initial Run snapshot.
+    # Refresh only that field; do not recopy unrelated Run values.
+    if ($lRun -is [System.Collections.IDictionary] -and $lRun.Contains('MenuScript')) { $lArgs['MenuScript'] = "$($lRun.MenuScript)" }
     $argText = ($lArgs.GetEnumerator() | ForEach-Object { if ($_.Value -is [bool] -or $_.Value -is [switch]) { "-$($_.Key)" } else { "-$($_.Key) '$($_.Value)'" } }) -join ' '
     Write-Host "[case] flow_run.ps1 $argText"
     $flowInvocationAttempted = $true
