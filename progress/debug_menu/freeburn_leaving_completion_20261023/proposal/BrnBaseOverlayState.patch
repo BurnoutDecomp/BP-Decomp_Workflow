@@ -1,0 +1,23 @@
+--- a/src/GameSource/Gui/Flow/Overlay/States/BrnBaseOverlayState.cpp
++++ b/src/GameSource/Gui/Flow/Overlay/States/BrnBaseOverlayState.cpp
+@@ -198,13 +198,19 @@
+             break;
+         {
+             // Tell the director the popup is on screen (the 8-byte id record; the
+             // OutputGuiEvent<GuiOverlayShowingNotification> instantiation @0x824B2C78).
+             GuiOverlayShowingNotification lShowing;
+             lShowing.mOverlayId = mCurrentOverlayId;
+-            mpStateInterface->OutputGuiEvent(lShowing);
++            // ARTIST824B2938 publishes {8, 190, 16, payload} on channel 40.
++            // The generic publisher queues raw 190, which the PC observer drain
++            // drops before the director can replay an early wait-finish 188.
++            CgsGui::GuiEventWrapper<GuiOverlayShowingNotification, 40> lShowingRecord(lShowing);
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lShowingRecord),
++                40, static_cast<s32>(sizeof(lShowingRecord)));
+         }
+         // fall through
+     case E_OVERLAYINTERNALSTATE_RUNNING:
+         meInternalState = E_OVERLAYINTERNALSTATE_RUNNING;
+         if (UpdateRunning())   // virtual (vtbl +0x28)
+         {
