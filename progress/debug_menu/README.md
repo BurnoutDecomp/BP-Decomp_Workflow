@@ -128,6 +128,9 @@ The action translator covers 188 unique IDs across 189 labels. That is source co
 
 ## Other reported issues
 
+The stuck Freeburn Leaving overlay is reproduced after successful network departure. The original showing190 notification was sent as a raw event and dropped; its one-producer wrapper repair passes independent source review. Hosted and fixed-native checks remain pending. [Scope and evidence](freeburn_leaving_completion_20261023/STATE.json).
+
+
 [Road Rules persistence](../road_rules_persistence_20261014.md) was repaired and
 checked through saving, login and cold restart. The earlier magenta-rendering
 and Start/vehicle-INI regressions have separate evidence in

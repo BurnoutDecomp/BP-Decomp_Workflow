@@ -1,0 +1,364 @@
+{
+  "schema": 1,
+  "created_utc": "2026-10-23T18:38:08.270520+00:00",
+  "base_commit": "af18caf8a9e02428cfaa4705599e2b1ca9ea7377",
+  "target_path": "src/GameSource/Gui/Flow/Overlay/States/BrnBaseOverlayState.cpp",
+  "before": {
+    "bytes": 18736,
+    "sha256": "e3723d5d5a613b1ab5d8acfa4af5c2068c4482c8132092f135384f5c95e64956",
+    "git_blob_sha1": "d818da350a3f95bbd8e265b8275d4299a50fd6b4"
+  },
+  "after": {
+    "bytes": 19215,
+    "sha256": "20a78fa6b53ee377f73d3957d9c780cba16d743a1ab8d7b131ddd76439a13021",
+    "git_blob_sha1": "81868c1b39fa7322f267d6d9111add899b91d0d3"
+  },
+  "functional_delta": "Wrap existing showing190 payload with the existing GuiEventWrapper<T,40> at its sole BaseOverlayState producer, replacing raw190 output.",
+  "proposal_native_credit": false,
+  "proposal_compile_credit": false,
+  "shared_source_mutated": false,
+  "source_inputs": [
+    {
+      "path": "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 58453,
+          "sha256": "995e71fdce60b905f8696ff86d21253fdc82414bf4251d623b1b32beef70cf22",
+          "git_blob_sha1": "35d06576745362fa6ad150f6c5e5b179ac993640"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 58453,
+          "sha256": "995e71fdce60b905f8696ff86d21253fdc82414bf4251d623b1b32beef70cf22",
+          "git_blob_sha1": "35d06576745362fa6ad150f6c5e5b179ac993640"
+        }
+      },
+      "same_between_candidates": true
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiOverlaysDirector.cpp",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 16316,
+          "sha256": "02f789dcb502008f5a7734532c81b7363a2d614e3245acfbbcd96031d0b7d113",
+          "git_blob_sha1": "bdd2426dc0b7d6134fdeb9f2c7355f4b4083a365"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 16316,
+          "sha256": "02f789dcb502008f5a7734532c81b7363a2d614e3245acfbbcd96031d0b7d113",
+          "git_blob_sha1": "bdd2426dc0b7d6134fdeb9f2c7355f4b4083a365"
+        }
+      },
+      "same_between_candidates": true
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 288141,
+          "sha256": "e22865108f339e0bb3aa5af167e986981c19af011f2a084ebad151cdb6eed618",
+          "git_blob_sha1": "eee391b23fc3e4b0c0e1406394489d2db596e1cc"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 288677,
+          "sha256": "552470ae2d8bdb9cdb7af4637d56e9a85a09b5a1f21319e8ce37342c4d5027f2",
+          "git_blob_sha1": "d3c6e8f3f189f9f3611b8a9d90013594b16723be"
+        }
+      },
+      "same_between_candidates": false
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiOverlaysDirector.h",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 5271,
+          "sha256": "e6f7717d36a248d0534561b5269b50f30a2085648034aebcdb7269c84c2b9535",
+          "git_blob_sha1": "f6dbd380d513291fee7f38573491c6da2d247735"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 5271,
+          "sha256": "e6f7717d36a248d0534561b5269b50f30a2085648034aebcdb7269c84c2b9535",
+          "git_blob_sha1": "f6dbd380d513291fee7f38573491c6da2d247735"
+        }
+      },
+      "same_between_candidates": true
+    },
+    {
+      "path": "src/GameSource/Gui/Flow/Overlay/States/BrnBaseWaitOverlayState.cpp",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 2312,
+          "sha256": "6fbb567db6911385a2405ef23c835e778e015950223d19d47d800ce60d81c4a1",
+          "git_blob_sha1": "ccb21ceeb09b217e5cb4ff69450f469a7ba87483"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 2312,
+          "sha256": "6fbb567db6911385a2405ef23c835e778e015950223d19d47d800ce60d81c4a1",
+          "git_blob_sha1": "ccb21ceeb09b217e5cb4ff69450f469a7ba87483"
+        }
+      },
+      "same_between_candidates": true
+    },
+    {
+      "path": "src/GameSource/Gui/Flow/Overlay/States/BrnBaseOverlayState.cpp",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 18736,
+          "sha256": "e3723d5d5a613b1ab5d8acfa4af5c2068c4482c8132092f135384f5c95e64956",
+          "git_blob_sha1": "d818da350a3f95bbd8e265b8275d4299a50fd6b4"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 18736,
+          "sha256": "e3723d5d5a613b1ab5d8acfa4af5c2068c4482c8132092f135384f5c95e64956",
+          "git_blob_sha1": "d818da350a3f95bbd8e265b8275d4299a50fd6b4"
+        }
+      },
+      "same_between_candidates": true
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiEventTypeDefs.h",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 189964,
+          "sha256": "597605770de1b809644be80dd3018024e7ff8ffbb2d45d585162c270a81c7e49",
+          "git_blob_sha1": "783294c8c4234a74b424a9c54fa90384ba24de15"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 189964,
+          "sha256": "597605770de1b809644be80dd3018024e7ff8ffbb2d45d585162c270a81c7e49",
+          "git_blob_sha1": "783294c8c4234a74b424a9c54fa90384ba24de15"
+        }
+      },
+      "same_between_candidates": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 16529,
+          "sha256": "bb2fab6c099973073f36e4861d60f5467f3373b84c000b1c742c619f9dbb8697",
+          "git_blob_sha1": "118bbf75b320ca5f0c94d23173be613303d1d957"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 16529,
+          "sha256": "bb2fab6c099973073f36e4861d60f5467f3373b84c000b1c742c619f9dbb8697",
+          "git_blob_sha1": "118bbf75b320ca5f0c94d23173be613303d1d957"
+        }
+      },
+      "same_between_candidates": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiEvent.h",
+      "versions": {
+        "9af6a868959578f4eafa9af0d69ccd27081667a0": {
+          "bytes": 11361,
+          "sha256": "1d818d3b97711af66dba4c5748d0cfbfbf6cf8ed8bd548f5c7937b202a8ccad3",
+          "git_blob_sha1": "3f1610e34333ff7109e6d7823625851b9444ac5a"
+        },
+        "af18caf8a9e02428cfaa4705599e2b1ca9ea7377": {
+          "bytes": 11361,
+          "sha256": "1d818d3b97711af66dba4c5748d0cfbfbf6cf8ed8bd548f5c7937b202a8ccad3",
+          "git_blob_sha1": "3f1610e34333ff7109e6d7823625851b9444ac5a"
+        }
+      },
+      "same_between_candidates": true
+    }
+  ],
+  "original_inputs": [
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82498358.json",
+      "bytes": 16350,
+      "sha256": "87f752ade72a2210b9f5ec34b8666d05a1a9b0c5b7cbd3cd3bde19a5416fe066",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleLeftGameEvent"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824D0498.json",
+      "bytes": 19327,
+      "sha256": "90f53f7972dfc0a9e4e41fdc3b9a6beb54fa874f7ca318e5ef089af58fb60d1c",
+      "name": "BrnGui::InGame::OnEnter"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824CFCE0.json",
+      "bytes": 5771,
+      "sha256": "784db186594c0693710112ae5d4c66fd36d50d195e42600ccd42a0b8e43fec10",
+      "name": "BrnGui::PauseScreen::OnEnter"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8285BA00.json",
+      "bytes": 9862,
+      "sha256": "bd0b966faa0f74c3d9cd1815adac7b8ec96edf75bfc0147f17771c294c0b125c",
+      "name": "CgsGui::State::PostUpdate"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82848550.json",
+      "bytes": 22960,
+      "sha256": "383e4d57f935602ffce0448e071cc0961e5952ae5a54ed10cd87139aac2a57e8",
+      "name": "CgsGui::State::SendStateEvent"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82836790.json",
+      "bytes": 6372,
+      "sha256": "ee455f61229cdb458abb540b39ca549cb2ae3c43d1b68dc32dcef5ea9aade13a",
+      "name": "CgsFsm::ScriptedFsm::SendEvent"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82835E90.json",
+      "bytes": 7212,
+      "sha256": "41ca11674e101e05713124e4e44479f2f46b5d7983ea57def7c2e626f4035553",
+      "name": "CgsFsm::ScriptedFsm::SetState"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824B2938.json",
+      "bytes": 2259,
+      "sha256": "a16017c2c264ea9457b5627cba503561170fdcdb506f3575690ad2e5bfdd8ff3",
+      "name": "??$OutputGuiEvent@VGuiOverlayShowingNotification@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiOverlayShowingNotification@B"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8285E1D0.json",
+      "bytes": 42492,
+      "sha256": "d308729091eecfdf0f3840e8eb93eb145908ea1db210bb3695c910a87649cb3f",
+      "name": "CgsGui::EventInterpreterModule::ProcessOutEvents"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824F39E0.json",
+      "bytes": 6936,
+      "sha256": "c7b61ab8709b23babe5abe425fd70b2dbf5f800a7b7e703772cc1ad18a4fd625",
+      "name": "BrnGui::GuiOverlaysDirector::HandleWaitFinishRequest"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82520668.json",
+      "bytes": 22239,
+      "sha256": "0a4596f255461f9c80da76d4b05b3cef228ef8154fa307e8eee343587b7d1bdc",
+      "name": "BrnGui::GuiOverlaysDirector::Update"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824B26D0.json",
+      "bytes": 3382,
+      "sha256": "24d95be1c10d5ff04afb20b7e809e60d691429947fd43ab1f26cf843b026b658",
+      "name": "BrnGui::BaseWaitOverlayState::UpdateRunning"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824B2B38.json",
+      "bytes": 15144,
+      "sha256": "8cc7367fb076b233f1cbb07ae484cde5b0813d83e4ee60cd178a7de8e115014c",
+      "name": "BrnGui::BaseOverlayState::Update"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824B2DC8.json",
+      "bytes": 4108,
+      "sha256": "9baacec079340d2958730e8b0c66583c78af6bb7f182b8c513c80e025b1b4b81",
+      "name": "BrnGui::BaseOverlayState::OnLeave"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824B2670.json",
+      "bytes": 2653,
+      "sha256": "15065f8277fcfeb97f0fee99405ad22f20ed6c6a9f31b9c4bf887418a3a55e13",
+      "name": "BrnGui::BaseOverlayState::UpdatePermanent"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824B1498.json",
+      "bytes": 4114,
+      "sha256": "598c72ed2308eca6b96c7c8f9f13bcef0e941f2498e285aa18f92af760665c38",
+      "name": "BrnGui::OverlayComponent::RunOverlay"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8241C198.json",
+      "bytes": 2213,
+      "sha256": "74d597f44343a091ef94b358c35820d932a02a7322e2093cb74c6c42e8ad53db",
+      "name": "BrnGui::OverlayComponent::TransitionCompleteCallback"
+    }
+  ],
+  "native_baseline": [
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_execution_20261023/run_after_leave_pixels/flow/BrnGame.log",
+      "bytes": 4981865,
+      "sha256": "5dd088cc9c811eefa300f4dd7ede94ace6b04a91010181cb675415edaee8eaa6"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_execution_20261023/run_after_leave_pixels/frames/bb_007920.bmp",
+      "bytes": 3686454,
+      "sha256": "5de72abb40ba151da5276ab5a0e3eb28b687fb4342f9a36502b35d753bd497a9"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_execution_20261023/run_after_leave_pixels/leave-observer.json",
+      "bytes": 1267,
+      "sha256": "97d4c58a97f62fc1b3cfafa3825c3dc1c38005d351d2454f063e12ba0cc184ed"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_execution_20261023/run_after_leave_pixels/flow/terminal-status.json",
+      "bytes": 881,
+      "sha256": "e3584df6bd4e2befedecfe389bde82a48e98ffb20d5a9fa272644440dc48fbf2"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_execution_20261023/stage/slot/Burnout_PC.exe",
+      "bytes": 11334656,
+      "sha256": "31de06d9d57a3580091f51eec33acd3d900b815a8b318ad777271a0165206b7f"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_execution_20261023/stage/slot/Burnout_PC.exe.provenance.json",
+      "bytes": 467,
+      "sha256": "7b754e65b88603c60915f56dfdb1973d00a17d92efeb6e113c06ec06c8824ae2"
+    }
+  ],
+  "native_markers": [
+    {
+      "line": 23419,
+      "text": "[screen] ENTER 'INVISIBLE   ' (from 'CNO_OKCANCEL') seq 11"
+    },
+    {
+      "line": 23425,
+      "text": "[overlay] complete ONHOSTLVQN 1"
+    },
+    {
+      "line": 23426,
+      "text": "[netui] leave post 52 method=1"
+    },
+    {
+      "line": 23437,
+      "text": "[overlay] start CNONLLVGGAME 9"
+    },
+    {
+      "line": 23438,
+      "text": "[screen] ENTER 'IGO_WAIT    ' (from 'INVISIBLE   ') seq 12"
+    },
+    {
+      "line": 23442,
+      "text": "[net] state t=42.8s wall=20:33:59.995 loggedIn=1 inGame=0 host=0 players=0"
+    },
+    {
+      "line": 23467,
+      "text": "[netui] game-room left game (GUI 273) reason=0 -> GO_BACK"
+    },
+    {
+      "line": 23468,
+      "text": "[screen] ENTER 'INGAME      ' (from 'ON_GAME_ROOM') seq 10"
+    },
+    {
+      "line": 23505,
+      "text": "[screen] ENTER 'FBURN_MAIN  ' (from '-') seq 13"
+    }
+  ],
+  "native_visual_observation": "bb_007920.bmp was viewed: Leaving remains visible over the offline world/HUD after GUI273; the earlier run_confirmed_leave frames are not used for post-Accept visibility.",
+  "runtime_causality_limit": "Source proves raw190 is dropped and the original director needs190 to replay early188. No baseline producer190/consumer188 internal-state witness exists, so whether this is the only stall remains unverified.",
+  "outputs": [
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_gui_completion_triage_20261023_sol01/proposal/BrnBaseOverlayState.cpp.before.cpp",
+      "bytes": 18736,
+      "sha256": "e3723d5d5a613b1ab5d8acfa4af5c2068c4482c8132092f135384f5c95e64956"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_gui_completion_triage_20261023_sol01/proposal/BrnBaseOverlayState.cpp.after.cpp",
+      "bytes": 19215,
+      "sha256": "20a78fa6b53ee377f73d3957d9c780cba16d743a1ab8d7b131ddd76439a13021"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/freeburn_leave_gui_completion_triage_20261023_sol01/proposal/BrnBaseOverlayState.patch",
+      "bytes": 1275,
+      "sha256": "fc973644003f1e4160b3e03c1223548ab5b32a042a3d8547d2ad3cf68fa89aae"
+    }
+  ],
+  "proposal_readme": {
+    "path": "scratch/DEBUG_MENU_1011/freeburn_leave_gui_completion_triage_20261023_sol01/proposal/README.md",
+    "bytes": 5846,
+    "sha256": "dcdfd9af9ddeb610e870f795dbe0e62899a1807f9f00edd2a2badc8df472ea1f"
+  }
+}
