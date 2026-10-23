@@ -1,0 +1,344 @@
+--- a/src/GameSource/Resource/BrnGameDataModule.cpp
++++ b/src/GameSource/Resource/BrnGameDataModule.cpp
+@@ -461,6 +461,230 @@
+         }
+     }
+ 
++    // ARTIST 8266DA28: the original stack-backed bank request owner.
++    bool GameDataModule::CreateBanks(CgsModule::IOBufferStack* lpInputStack,
++                                     CgsModule::IOBufferStack* lpOutputStack)
++    {
++        CgsResource::ResourceIO::InputBuffer* lpResourceInput = 0;
++        lpInputStack->CreateIOBuffer(&lpResourceInput, "Resource");
++
++        if (miNumBankCreationRequests == 0)
++        {
++            CgsResource::ResourceIO::ResourceRequestQueue<16384> lRequests;
++            lRequests.MarkUnconstructed();
++            lRequests.Construct();
++            // The canonical getter already subtracts the reserved root row.
++            const s32 liNumBanks = mpMemoryMap->GetNumBanks();
++            for (s32 liBank = 0; liBank < liNumBanks; ++liBank)
++            {
++                const CgsMemory::MemoryMapBank* lpBank = mpMemoryMap->GetBank(liBank);
++                const s32 liEventId = miNumBankCreationRequests++;
++                CgsMemory::MemoryIO::CreateBankRequest lRequest;
++                lRequest.Construct(&mReceiverQueue, liEventId);
++                lRequest.SetParams(lpBank->GetParams());
++                lRequests.AddEvent(&lRequest, 9);
++            }
++            lpResourceInput->LockForWrite();
++            lpResourceInput->AppendResourceQueue(&lRequests);
++            lpResourceInput->UnlockForWrite();
++        }
++        else if (mReceiverQueue.GetLength() == miNumBankCreationRequests)
++        {
++            miNumBankCreationRequests = 0;
++            mReceiverQueue.Clear();
++            // ARTIST 8266DB68..80 returns here without DestroyIOBuffer.
++            return true;
++        }
++
++        UpdateResourceModule(lpInputStack, lpOutputStack, lpResourceInput);
++        lpInputStack->DestroyIOBuffer(&lpResourceInput);
++        return false;
++    }
++
++    // ARTIST 8266DB88: publish the original map pool records and wait for replies.
++    bool GameDataModule::CreatePools(CgsModule::IOBufferStack* lpInputStack,
++                                     CgsModule::IOBufferStack* lpOutputStack)
++    {
++        CgsResource::ResourceIO::InputBuffer* lpResourceInput = 0;
++        lpInputStack->CreateIOBuffer(&lpResourceInput, "Resource");
++
++        if (miNumPoolCreationRequests == 0)
++        {
++            CgsResource::ResourceIO::ResourceRequestQueue<16384> lRequests;
++            lRequests.MarkUnconstructed();
++            lRequests.Construct();
++            const s32 liNumPools = mpMemoryMap->GetNumPools();
++            for (s32 liPool = 0; liPool < liNumPools; ++liPool)
++            {
++                CgsResource::Events::CreatePoolRequest lRequest =
++                    *mpMemoryMap->GetPool(liPool)->GetRequest();
++                if (lRequest.miPoolId == 3 || lRequest.miPoolId == 4 || lRequest.miPoolId == 15)
++                    lRequest.mbAllowDefragmentation = true;
++                lRequest.mpUser = &mReceiverQueue;
++                lRequest.miEventId = miNumPoolCreationRequests++;
++                lRequests.AddEvent(&lRequest, 0);
++            }
++            lpResourceInput->LockForWrite();
++            lpResourceInput->AppendResourceQueue(&lRequests);
++            lpResourceInput->UnlockForWrite();
++        }
++        else if (mReceiverQueue.GetLength() == miNumPoolCreationRequests)
++        {
++            miNumPoolCreationRequests = 0;
++            mReceiverQueue.Clear();
++            // ARTIST 8266DCE0..F8 returns here without DestroyIOBuffer.
++            return true;
++        }
++
++        UpdateResourceModule(lpInputStack, lpOutputStack, lpResourceInput);
++        lpInputStack->DestroyIOBuffer(&lpResourceInput);
++        return false;
++    }
++
++    // ARTIST 8266DD00: submit all five allocator families, then store their replies.
++    bool GameDataModule::CreateAllocators(CgsModule::IOBufferStack* lpInputStack,
++                                          CgsModule::IOBufferStack* lpOutputStack)
++    {
++        CgsResource::ResourceIO::InputBuffer* lpResourceInput = 0;
++        lpInputStack->CreateIOBuffer(&lpResourceInput, "Resource");
++        mAllocatorList.mpAudioStreamAllocator = &mAudioStreamAllocator;
++
++        if (miNumAllocatorCreationRequests == 0)
++        {
++            CgsResource::ResourceIO::ResourceRequestQueue<16384> lRequests;
++            lRequests.MarkUnconstructed();
++            lRequests.Construct();
++
++            for (s32 li = 0; li < mpMemoryMap->GetNumRawResources(); ++li)
++            {
++                CgsMemory::MemoryIO::CreateResourceRequest lRequest =
++                    *mpMemoryMap->GetRawResource(li)->GetRequest();
++                lRequest.SetReceiverQueue(&mReceiverQueue);
++                lRequest.SetEventId(li);
++                lRequests.AddEvent(&lRequest, 10);
++                ++miNumAllocatorCreationRequests;
++                mAllocatorList.maiAllocatorMap[lRequest.GetBankId()] = li;
++                mAllocatorList.maeAllocatorType[lRequest.GetBankId()] = CgsMemory::MemoryMap::E_ALLOCATORTYPE_RAW;
++                mAllocatorList.mapRawResources[li] = &maGeneratedRawResources[li];
++                mAllocatorList.mapRawResourceDescriptors[li] = &maGeneratedRawResourceDescriptors[li];
++            }
++
++            for (s32 li = 0; li < mpMemoryMap->GetNumLinearAllocators(); ++li)
++            {
++                CgsMemory::MemoryIO::CreateAllocatorRequest lRequest =
++                    *mpMemoryMap->GetLinearAllocator(li)->GetRequest();
++                lRequest.SetReceiverQueue(&mReceiverQueue);
++                lRequest.SetEventId(li);
++                lRequest.SetHeapAllocator(0);
++                lRequest.SetLinearAllocator(&maGeneratedLinearAllocators[li]);
++                lRequests.AddEvent(&lRequest, 14);
++                ++miNumAllocatorCreationRequests;
++                mAllocatorList.maiAllocatorMap[lRequest.GetBankId()] = li;
++                mAllocatorList.maeAllocatorType[lRequest.GetBankId()] = CgsMemory::MemoryMap::E_ALLOCATORTYPE_LINEAR;
++                mAllocatorList.mapLinearAllocators[li] = &maGeneratedLinearAllocators[li];
++            }
++
++            for (s32 li = 0; li < mpMemoryMap->GetNumHeapAllocators(); ++li)
++            {
++                CgsMemory::MemoryIO::CreateAllocatorRequest lRequest =
++                    *mpMemoryMap->GetHeapAllocator(li)->GetRequest();
++                lRequest.SetReceiverQueue(&mReceiverQueue);
++                lRequest.SetEventId(li);
++                lRequest.SetHeapAllocator(&maGeneratedHeapAllocators[li]);
++                lRequest.SetLinearAllocator(0);
++                lRequests.AddEvent(&lRequest, 14);
++                ++miNumAllocatorCreationRequests;
++                mAllocatorList.maiAllocatorMap[lRequest.GetBankId()] = li;
++                mAllocatorList.maeAllocatorType[lRequest.GetBankId()] = CgsMemory::MemoryMap::E_ALLOCATORTYPE_HEAP;
++                mAllocatorList.mapHeapAllocators[li] = &maGeneratedHeapAllocators[li];
++            }
++
++            for (s32 li = 0; li < mpMemoryMap->GetNumRWLinearAllocators(); ++li)
++            {
++                CgsMemory::MemoryIO::CreateLinearAllocatorRequest lRequest =
++                    *mpMemoryMap->GetRWLinearAllocator(li)->GetRequest();
++                lRequest.SetReceiverQueue(&mReceiverQueue);
++                lRequest.SetEventId(li);
++                lRequests.AddEvent(&lRequest, 11);
++                ++miNumAllocatorCreationRequests;
++                mAllocatorList.maiAllocatorMap[lRequest.GetBankId()] = li;
++                mAllocatorList.maeAllocatorType[lRequest.GetBankId()] = CgsMemory::MemoryMap::E_ALLOCATORTYPE_RWLINEAR;
++            }
++
++            for (s32 li = 0; li < mpMemoryMap->GetNumRWGeneralAllocators(); ++li)
++            {
++                CgsMemory::MemoryIO::CreateGeneralAllocatorRequest lRequest =
++                    *mpMemoryMap->GetRWGeneralAllocator(li)->GetRequest();
++                lRequest.SetReceiverQueue(&mReceiverQueue);
++                lRequest.SetEventId(li);
++                lRequests.AddEvent(&lRequest, 12);
++                ++miNumAllocatorCreationRequests;
++                mAllocatorList.maiAllocatorMap[lRequest.GetBankId()] = li;
++                mAllocatorList.maeAllocatorType[lRequest.GetBankId()] = CgsMemory::MemoryMap::E_ALLOCATORTYPE_RWHEAP;
++            }
++
++            lpResourceInput->LockForWrite();
++            lpResourceInput->AppendResourceQueue(&lRequests);
++            lpResourceInput->UnlockForWrite();
++        }
++        else if (mReceiverQueue.GetLength() == miNumAllocatorCreationRequests)
++        {
++            const CgsModule::Event* lpEvent = 0;
++            s32 liSize = 0;
++            s32 liType = mReceiverQueue.GetFirstEvent(&lpEvent, &liSize);
++            while (liSize > 0)
++            {
++                switch (liType)
++                {
++                case 10:
++                {
++                    const CgsMemory::MemoryIO::CreateResourceResponse* lpResponse =
++                        static_cast<const CgsMemory::MemoryIO::CreateResourceResponse*>(lpEvent);
++                    const s32 li = lpResponse->GetEventId();
++                    lpResponse->GetResource(&maGeneratedRawResources[li], &maGeneratedRawResourceDescriptors[li]);
++                    break;
++                }
++                case 11:
++                {
++                    const CgsMemory::MemoryIO::CreateLinearAllocatorResponse* lpResponse =
++                        static_cast<const CgsMemory::MemoryIO::CreateLinearAllocatorResponse*>(lpEvent);
++                    const s32 li = lpResponse->GetEventId();
++                    lpResponse->GetAllocator(&mapGeneratedRWLinearAllocators[li]);
++                    mAllocatorList.mapRWLinearAllocators[li] = mapGeneratedRWLinearAllocators[li];
++                    break;
++                }
++                case 12:
++                {
++                    const CgsMemory::MemoryIO::CreateGeneralAllocatorResponse* lpResponse =
++                        static_cast<const CgsMemory::MemoryIO::CreateGeneralAllocatorResponse*>(lpEvent);
++                    const s32 li = lpResponse->GetEventId();
++                    lpResponse->GetAllocator(&mapGeneratedRWGeneralAllocators[li]);
++                    mAllocatorList.mapRWGeneralAllocators[li] = mapGeneratedRWGeneralAllocators[li];
++                    break;
++                }
++                case 14:
++                    break;
++                default:
++                    CgsDev::Assert::BeginAssert();
++                    CgsDev::Assert::FireAssert("Invalid event type\n",
++                        "..\\..\\..\\GameSource\\Resource/BrnGameDataModule.cpp", 2560);
++                    CgsDev::Assert::EndAssert();
++                    break;
++                }
++                liType = mReceiverQueue.GetNextEvent(lpEvent, &lpEvent, &liSize);
++            }
++            miNumAllocatorCreationRequests = 0;
++            mReceiverQueue.Clear();
++            // ARTIST 8266E3D4..E8 returns here without DestroyIOBuffer.
++            return true;
++        }
++
++        UpdateResourceModule(lpInputStack, lpOutputStack, lpResourceInput);
++        lpInputStack->DestroyIOBuffer(&lpResourceInput);
++        return false;
++    }
++
++
+     // ARTIST8266DA28. Current GamePrepare has no IO stacks, so only the scratch
+     // transport is a PC adaptation; map rows, request identities and waits are original.
+     bool GameDataModule::CreateBanks(void*, void*)
+--- a/src/GameShared/GameClasses/Memory/CgsMemoryModuleIO.h
++++ b/src/GameShared/GameClasses/Memory/CgsMemoryModuleIO.h
+@@ -267,24 +267,28 @@
+         }
+     };
+ 
+-    // Reply to a CreateResourceRequest (DWARF :685): the created resource + its allocator.
++    // ARTIST 8286D11C / DecFIGS :594: response base, resource and descriptor only.
+     struct CreateResourceResponse : public MemoryResponse
+     {
+         void Construct(CgsModule::BaseEventReceiverQueue* lpUser, s32 liEventId)
+         {
+             MemoryResponse::Construct(lpUser, liEventId, E_EVENT_TYPE_CREATE_RESOURCE);
+             for (s32 lt = 0; lt < static_cast<s32>(rw::KU_RESOURCE_LANE_COUNT); ++lt) mResource.m_baseResources[lt] = 0;   // null on failure paths
+-            mpAllocator = 0;
+-        }
+-        void SetAllocator(rw::LinearResourceAllocator* lpA) { mpAllocator = lpA; }
++        }
+         void SetDescriptor(const rw::ResourceDescriptor* lpD) { mDescriptor = *lpD; }
+         void SetResourceData(s32 liType, void* lpData)    { mResource.m_baseResources[liType] = lpData; }
++        // DecFIGS CgsMemoryModuleIO.h:602; ARTIST 8266E284..EC copies all five
++        // resource lanes and five size/alignment pairs into the caller-owned pair.
++        void GetResource(rw::Resource* lpResource, rw::ResourceDescriptor* lpDescriptor) const
++        {
++            *lpResource = mResource;
++            *lpDescriptor = mDescriptor;
++        }
+         const rw::Resource&           GetResource() const   { return mResource; }
+         const rw::ResourceDescriptor& GetDescriptor() const { return mDescriptor; }
+     private:
+         rw::Resource                 mResource;
+         rw::ResourceDescriptor       mDescriptor;
+-        rw::LinearResourceAllocator* mpAllocator;
+     };
+ 
+     // Reply to a CreateLinearAllocatorRequest (DWARF :706): the created rw allocator.
+@@ -292,11 +296,11 @@
+     {
+         void Construct(CgsModule::BaseEventReceiverQueue* lpUser, s32 liEventId)
+         { MemoryResponse::Construct(lpUser, liEventId, E_EVENT_TYPE_CREATE_RW_LINEAR_ALLOCATOR); }
+-        void SetLinearAllocator(rw::LinearResourceAllocator* lpA)        { mpLinearAllocator = lpA; }
+-        void SetGeneralAllocator(rw::core::GeneralResourceAllocator* lpA) { mpGeneralAllocator = lpA; }
+-    private:
+-        rw::LinearResourceAllocator*        mpLinearAllocator;
+-        rw::core::GeneralResourceAllocator* mpGeneralAllocator;
++        // DecFIGS :633; ARTIST 8266E2F4..304 reads the returned allocator pointer.
++        void GetAllocator(rw::LinearResourceAllocator** lppAllocator) const { *lppAllocator = mpAllocator; }
++        void SetAllocator(rw::LinearResourceAllocator* lpAllocator) { mpAllocator = lpAllocator; }
++    private:
++        rw::LinearResourceAllocator* mpAllocator;
+     };
+ 
+     // Reply to a CreateGeneralAllocatorRequest (DWARF :724).
+@@ -304,6 +308,8 @@
+     {
+         void Construct(CgsModule::BaseEventReceiverQueue* lpUser, s32 liEventId)
+         { MemoryResponse::Construct(lpUser, liEventId, E_EVENT_TYPE_CREATE_RW_GENERAL_ALLOCATOR); }
++        // DecFIGS :665; ARTIST 8266E328..338 reads the returned allocator pointer.
++        void GetAllocator(rw::core::GeneralResourceAllocator** lppAllocator) const { *lppAllocator = mpAllocator; }
+         void SetAllocator(rw::core::GeneralResourceAllocator* lpA) { mpAllocator = lpA; }
+     private:
+         rw::core::GeneralResourceAllocator* mpAllocator;
+--- a/src/GameSource/Resource/BrnGameDataModule.h
++++ b/src/GameSource/Resource/BrnGameDataModule.h
+@@ -146,8 +146,9 @@
+         bool Update(void* lpInputBuffer, void* lpOutputBuffer);
+ 
+     private:
+-        // Exact original helper APIs. Their stack-backed bodies are distinct from
+-        // the retained native shortcuts below and remain explicit link dependencies.
++        // Exact original helper APIs, distinct from the retained native shortcuts.
++        // The three allocation helpers are recovered; schema/list helper bodies
++        // remain explicit link dependencies of the original caller.
+         bool CreateBanks(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*);
+         bool CreatePools(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*);
+         bool CreateAllocators(CgsModule::IOBufferStack*, CgsModule::IOBufferStack*);
+@@ -510,8 +511,9 @@
+         //      point into these; CreateAllocators fills both. -------------------------------
+         rw::Resource                        maGeneratedRawResources[2];
+         rw::ResourceDescriptor              maGeneratedRawResourceDescriptors[2];
+-        CgsMemory::LinearMalloc             maGeneratedLinearAllocators[7];
+-        CgsMemory::HeapMalloc               maGeneratedHeapAllocators[8];
++        // ARTIST storage capacities are 8/9; its memory map populates only 7/8.
++        CgsMemory::LinearMalloc             maGeneratedLinearAllocators[8];
++        CgsMemory::HeapMalloc               maGeneratedHeapAllocators[9];
+         rw::LinearResourceAllocator*        mapGeneratedRWLinearAllocators[5];
+         rw::core::GeneralResourceAllocator* mapGeneratedRWGeneralAllocators[5];
+         CgsMemory::LinearMalloc             mAudioStreamAllocator;
+--- a/src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.h
++++ b/src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.h
+@@ -31,7 +31,8 @@
+ // GetRawResource 0x8252ADF8, GetRawResourceDescriptor 0x8252AFD0, GetRWLinearResourceAllocator
+ // 0x822775B8, GetRWGeneralResourceAllocator 0x823F3F98. Each resolves
+ // `mapXxx[ maiAllocatorMap[bankId] ]` after asserting `maeAllocatorType[bankId] == <type>`. The
+-// array sizes (2/2/7/8/5/5) match the GameDataModule's maGenerated*Allocators members.
++// ARTIST pointer-row starts pin capacities 2/2/8/9/5/5; the map populates only 1/7/8/4/4.
++// DecFIGS's 7/8 linear/heap capacities differ from the ARTIST member spans.
+ // [x64: pointers are 8 bytes, so byte offsets differ from the X360's 32-bit layout -- members are
+ // accessed by name, not by offset.]
+ namespace BrnResource
+@@ -87,8 +88,8 @@
+             CgsMemory::MemoryMap::EAllocatorType maeAllocatorType[KI_NUM_BANKS];  // bank id -> allocator type
+             rw::Resource*                        mapRawResources[2];
+             rw::ResourceDescriptor*              mapRawResourceDescriptors[2];
+-            CgsMemory::LinearMalloc*             mapLinearAllocators[7];
+-            CgsMemory::HeapMalloc*               mapHeapAllocators[8];
++            CgsMemory::LinearMalloc*             mapLinearAllocators[8];
++            CgsMemory::HeapMalloc*               mapHeapAllocators[9];
+             rw::LinearResourceAllocator*         mapRWLinearAllocators[5];
+             rw::core::GeneralResourceAllocator*  mapRWGeneralAllocators[5];
+             CgsMemory::LinearMalloc*             mpAudioStreamAllocator;
