@@ -1,0 +1,140 @@
+--- a/src/GameSource/Graphics/BrnRendererModule.cpp
++++ b/src/GameSource/Graphics/BrnRendererModule.cpp
+@@ -4721,15 +4721,59 @@
+         mOcclusionCullManager.mNearClipOffset.z = mfOccludeeNearClipOffset;
+     }
+ 
++    // FLAG PC-platform leaf: opt-in, bounded passive consumer evidence. No draw/query
++    // or engine state is changed; the diagnostic frame counter is independent of game time.
++    static const bool sbOcclusionProbe = []()
++    {
++        const char* lpValue = std::getenv("BRN_OCCLUSION_DIAG");
++        return lpValue != nullptr && lpValue[0] == '1' && lpValue[1] == '\0';
++    }();
++    static u32 suOcclusionProbeFrames = 0;
++    static u32 suOcclusionProbeStates = 0;
++    static u32 suOcclusionProbeBatches = 0;
++    static u32 suLastOcclusionProbeState = ~0u;
++    const u32 luOcclusionProbeFrame = sbOcclusionProbe ? suOcclusionProbeFrames++ : 0u;
++    if (sbOcclusionProbe)
++    {
++        const u32 luState = (mOcclusionCullManager.mbOcclusionEnabled ? 1u : 0u)
++            | (lbOcclusionCullReady ? 2u : 0u) | (mbOcclusionCullWorldOpaque ? 4u : 0u);
++        if (luState != suLastOcclusionProbeState && suOcclusionProbeStates < 24u)
++        {
++            char lacTrace[160];
++            std::snprintf(lacTrace, sizeof(lacTrace),
++                "[occ-state] frame=%u enabled=%u ready=%u world_opaque=%u\n",
++                static_cast<unsigned>(luOcclusionProbeFrame),
++                mOcclusionCullManager.mbOcclusionEnabled ? 1u : 0u,
++                lbOcclusionCullReady ? 1u : 0u, mbOcclusionCullWorldOpaque ? 1u : 0u);
++            CgsDev::Log::WriteToLog(lacTrace);
++            ++suOcclusionProbeStates;
++        }
++        suLastOcclusionProbeState = luState;
++    }
++
+     const auto DispatchOcclusionBatch = [&](DispatchList* lpList, s32 liFirst, s32 liCount)
+     {
+         mOcclusionCullManager.BeginQueries();
+-        lpList->DispatchAllMeshOcclusionQueries(mpInterpreter, liFirst, liCount);
++        const s32 liQueryNext = lpList->DispatchAllMeshOcclusionQueries(mpInterpreter, liFirst, liCount);
+         mOcclusionCullManager.EndQueries();
+         mOcclusionCullManager.BeginConditionalRender();
+         const s32 liNext = lpList->DispatchAllMeshes(
+             mpInterpreter, &lContext, static_cast<u32>(liFirst), liCount);
+         mOcclusionCullManager.EndConditionalRender();
++        if (sbOcclusionProbe && suOcclusionProbeBatches < 192u)
++        {
++            const u32 luList = lpList == GetMeshFrameForReadPC().GetList(11u) ? 11u
++                : lpList == GetMeshFrameForReadPC().GetList(19u) ? 19u
++                : lpList == GetMeshFrameForReadPC().GetList(15u) ? 15u : 20u;
++            char lacTrace[224];
++            std::snprintf(lacTrace, sizeof(lacTrace),
++                "[occ-batch] frame=%u list=%u total=%u first=%d count=%d query_next=%d draw_next=%d\n",
++                static_cast<unsigned>(luOcclusionProbeFrame), static_cast<unsigned>(luList),
++                static_cast<unsigned>(lpList->GetCount()), static_cast<int>(liFirst),
++                static_cast<int>(liCount), static_cast<int>(liQueryNext), static_cast<int>(liNext));
++            CgsDev::Log::WriteToLog(lacTrace);
++            ++suOcclusionProbeBatches;
++        }
+         return liNext;
+     };
+ 
+--- a/src/pc/gcm/renderengine/OcclusionQueryProviderPC.cpp
++++ b/src/pc/gcm/renderengine/OcclusionQueryProviderPC.cpp
+@@ -1,6 +1,9 @@
+ #include "pc/gcm/renderengine/OcclusionQueryProviderPC.h"
+ 
+ #include <vector>
++#include <cstdio>
++#include <cstdlib>
++#include "GameShared/GameClasses/Development/Log/CgsLog.h"
+ 
+ namespace renderengine
+ {
+@@ -57,6 +60,28 @@
+         };
+ 
+         OcclusionQueryProviderStatePC sOcclusionQueryProviderPC;
++
++        // FLAG PC-platform leaf: bounded passive visibility evidence, explicitly opted in.
++        // This is called only by the existing render-thread query/conditional path. It adds
++        // no Issue/GetData/draw call and never modifies provider slots, tokens or scopes.
++        void TraceOcclusionQueryPC(const char* lpStage, u32 luIdentifier, u64 luSerial, u32 luDetail)
++        {
++            static const bool sbEnabled = []()
++            {
++                const char* lpValue = std::getenv("BRN_OCCLUSION_DIAG");
++                return lpValue != nullptr && lpValue[0] == '1' && lpValue[1] == '\0';
++            }();
++            static u32 suLines = 0;
++            if (!sbEnabled || suLines >= 512u)
++                return;
++            char lacTrace[192];
++            std::snprintf(lacTrace, sizeof(lacTrace),
++                "[occ-provider] stage=%s id=%u serial=%llu detail=%u\n", lpStage,
++                static_cast<unsigned>(luIdentifier), static_cast<unsigned long long>(luSerial),
++                static_cast<unsigned>(luDetail));
++            CgsDev::Log::WriteToLog(lacTrace);
++            ++suLines;
++        }
+ 
+         void OcclusionQueryProviderPCBumpGeneration()
+         {
+@@ -215,6 +240,7 @@
+                 && lFrame.mbSingleSubmissionSucceeded)
+             {
+                 lrSlot.meState = EOcclusionQueryStatePC::E_ENDED;
++                TraceOcclusionQueryPC("ended", lFrame.muIdentifier, lFrame.muSurveySerial, lFrame.muSubmissionAttempts);
+             }
+             else if (SUCCEEDED(lResult))
+             {
+@@ -286,7 +312,10 @@
+                 sOcclusionQueryProviderPC.maConditionalScopes.back();
+             if (!lrScope.mbHasSurvey || lrScope.muIdentifier >= KU_OCCLUSION_QUERY_COUNT
+                 || lrScope.muDeviceGeneration != sOcclusionQueryProviderPC.muDeviceGeneration)
+-                return true;
++            {
++                TraceOcclusionQueryPC("unavailable", lrScope.muIdentifier, lrScope.muSurveySerial, 1u);
++                return true;
++            }
+ 
+             OcclusionQuerySlotPC& lrSlot = sOcclusionQueryProviderPC.maSlots[lrScope.muIdentifier];
+             if (lrSlot.mpQuery == nullptr
+@@ -309,6 +338,7 @@
+                     {
+                         lrSlot.muSampleCount = luSampleCount;
+                         lrSlot.meState = EOcclusionQueryStatePC::E_READY;
++                        TraceOcclusionQueryPC("result", lrScope.muIdentifier, lrScope.muSurveySerial, static_cast<u32>(luSampleCount));
+                         break;
+                     }
+                     if (lResult == S_FALSE)
+@@ -328,6 +358,7 @@
+             }
+ 
+             // Native D3D9 policy: nonzero passed samples draw. ARTIST does not pin Xenos polarity.
++            TraceOcclusionQueryPC("decision", lrScope.muIdentifier, lrScope.muSurveySerial, lrSlot.muSampleCount != 0 ? 1u : 0u);
+             return lrSlot.muSampleCount != 0;
+         }
+     }
