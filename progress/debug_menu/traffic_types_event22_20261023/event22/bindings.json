@@ -1,0 +1,116 @@
+{
+  "status": "source-only proposed delta; not applied to production",
+  "base_commit": "e306dbd2a266a53b77cfb8ccbc86e01726dc5395",
+  "base_source_file_blobs_are_from_codex08_7e455d_evidence_and_parent_confirmed_BrnGuiModule_unchanged_through_e8": true,
+  "scope": "event22 producer record shape plus missing BrnGuiModule consumer bridge; OutputGuiEvent<T> template unchanged",
+  "source_files": [
+    {
+      "path": "b5-decomp/src/GameSource/Gui/Flow/HUD/Components/BrnRoadRuleComponent.cpp",
+      "git_blob_observed": "5a3d9bb45bbfbff1f793db8b0581cefdeffb78fa",
+      "preimage_sha256": "506d8466b69b2fe8352e8253a96d854f150539db85e61611ec679dad56a73c3e",
+      "postimage_sha256": "8fd16968a342bf8b101c77ab82fd5e4d6dd313bd9d3b2af041358cc6fb51f2bd",
+      "preimage_bytes": 69177,
+      "postimage_bytes": 70408,
+      "git_blob_observed_in_7e_snapshot": "5a3d9bb45bbfbff1f793db8b0581cefdeffb78fa",
+      "e306_blob_independently_verified": false
+    },
+    {
+      "path": "b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp",
+      "git_blob_observed": "d3c6e8f3f189f9f3611b8a9d90013594b16723be",
+      "preimage_sha256": "21f9adec509999167a222d084bcefde1f889b48e238a0f8dd5784109f4e5f515",
+      "postimage_sha256": "cfcf77deda8310462c5fbe325f825f27d881cd430b4dc42ef83668634576ebb4",
+      "preimage_bytes": 293502,
+      "postimage_bytes": 295776,
+      "git_blob_observed_in_7e_snapshot": "d3c6e8f3f189f9f3611b8a9d90013594b16723be",
+      "e306_blob_independently_verified": false,
+      "e306_blob_parent_confirmed_unchanged_through_e8": true
+    }
+  ],
+  "artist_bindings": {
+    "publisher": "0x824368F0 OutputGuiEvent<GuiEventSoundTrigger>: memcpy 100 bytes; header {100,22,12}; AddEvent channel40 size112",
+    "caller": "0x8243F540 RoadRuleComponent::UpdateCurrentTime; related inlined emissions in 0x82438078 EndTimers and 0x82438298 AnimateCurrentTime",
+    "consumer": "0x82527A58 GuiModule::Update event22: layer payload word at +96; GetMovieNameByLevel; sub_824FB9A8; AddGuiOutEvent<GuiAudioTriggerEvent> (ARTIST id457)",
+    "action_mapper": "0x824FB9A8 scans 14 action names and calls GuiAudioTriggerEvent::Construct(action, component, label, movie)"
+  },
+  "current_consumer_chain": {
+    "pc_adapter": "BrnGuiModule::DrainFlowOutputQueue channel40 case; invoke existing FlaptSoundTriggerCallback after normal channel40 unwrapping/fanout",
+    "pc_audio_event": "current BrnGui::GuiAudioTriggerEvent type id201, size112 (12-byte PC header plus 100-byte payload)",
+    "sound_receiver": "BrnSoundLogicModule ProcessGuiEvents accepts 201 full event and 457 raw ARTIST payload forms"
+  },
+  "changed_producer_count": 1,
+  "changed_consumer_cases": 1,
+  "related_road_rule_trigger_paths": "3 original inlined producer call paths (UpdateCurrentTime, EndTimers, AnimateCurrentTime) share one changed helper call site",
+  "compatibility_preserved": [
+    "raw id 155 -> event23 translation",
+    "raw id 201 -> output-buffer forwarding",
+    "raw 508/509 -> MovieManager receiver",
+    "generic channel40 unwrapping and observer fan-out"
+  ],
+  "not_changed": [
+    "CgsGui::StateInterface::OutputGuiEvent<T> blanket template",
+    "GuiModule generic channel40 routing other than one event22 adapter",
+    "SoundLogic case201/457 dual decoder",
+    "508/509 handling"
+  ],
+  "validation": {
+    "source_only": true,
+    "production_source_changed": false,
+    "git_or_index_mutation": false,
+    "local_cpp_compile_or_tests": false,
+    "game_or_runtime_test": false,
+    "patch_generated_from_exact_preimage_postimage": true
+  },
+  "evidence_sha256": {
+    "evidence/ARTIST/0x824368F0.assembly.txt": "b48ebaeac0caa43c596f72c09e16c7491ea62fb5d2e901f6984594c84def656d",
+    "evidence/ARTIST/0x824368F0.json": "1fbebb49807d412506491187f17b1bb3c068b572de4430b6381ceb6f7380e51a",
+    "evidence/ARTIST/0x82438078.json": "d843c831861d67f76f355429d858cc7cf206e115c1486557e931cdc0a5e6e3b9",
+    "evidence/ARTIST/0x82438298.json": "d62a99d1abad6541a0207240b2b2c3c6f393f653d2f3c5a7cb49fbd7bde7918c",
+    "evidence/ARTIST/0x8243F540.json": "d7ab78afc2b3b4fb9084d01993d6d5eb61577622bbacb9d5a7f1a4ff6cb7efb3",
+    "evidence/ARTIST/0x824FB9A8.full_assembly.txt": "84816c09b565ab117808ee94a7e42235f5cecf7f0b0cceaffddf953079e67ed5",
+    "evidence/ARTIST/0x824FB9A8.json": "301c4aca24d83c53ec87cb0742ace97fd5034fec7bcf8bb9e072d42124eb6069",
+    "evidence/ARTIST/0x82527A58.event22_assembly.txt": "2eb2dd379a6ae13a2c630fbbd9d43c9c2332ce14ba511230f55702771de0e856",
+    "evidence/ARTIST/0x82527A58.event22_pseudocode.txt": "47fdc5601c2bbdeb57cf8e2eb426985b081fa7df3f4624e58a52a49d48b856f6",
+    "evidence/ARTIST/0x82527A58.json": "e6dd401b6e921876d669f7ba8fb5931eafea44bdff4945ed20f7d4720b9b8faa",
+    "evidence/artist_outputgui_66_matrix.tsv": "1ade38bc3e7c30bf9a0789fa59741c6875018b59264825a8eb06721710072e2b",
+    "evidence/artist_outputgui_66_matrix_notes.md": "a76be1f307ff9305ece1fad4231c3e35ce12888a63db73b30425489e49d6ff8f",
+    "evidence/current/channel40_unwrap_fanout.txt": "f7e209ea63eda1296a542a41b7fab4749ba0df267b4d798da313956e137b1812",
+    "evidence/current/flapt_sound_callback.txt": "d084ddea52a2fa9ef03c30fb4fd4416950b617067b9bbc12a6593c70e3b84de5",
+    "evidence/current/flow_508_509_compat.txt": "9fd3b955d827f1d8c388d684bdbd1fed7eef1f4a0dce17bf35021c5d19237a3a",
+    "evidence/current/gui_audio_trigger_201_type.txt": "a931b6bd908a29e21f78a1e6ab2dcfe72d119f236ff2d792d9ad9c52b5b7147f",
+    "evidence/current/host_event22_type.txt": "a96664525a76bf629e409825a4e5420c3f28b59b1fa2e2433637eb68eaf40ca7",
+    "evidence/current/host_gui_event_header.txt": "34213976a50dcb350549f92265ba5504deec95c90c53663dc59621e99e57e655",
+    "evidence/current/raw155_201_compat.txt": "d7d34ca3376a899c83ac751988cd937b01f2e85bd6eb85c696debd43f90755bf",
+    "evidence/current/raw_default_drop.txt": "e47c65de5ec04413aa3bb756c0fbbc55d73a4fcabe5a3ee3a559ae928bb2b68b",
+    "evidence/current/raw_generic_publisher.txt": "21a53eca86202e0acf8561f7f41834aa592aca17edbad88c46ffd0209bd1b323",
+    "evidence/current/sound_201_457_receiver.txt": "869c0c950b5786d6bd8c53e5ec5d88c4fc4f5eaba0b8958cb2ed72ff62b3f5ca",
+    "evidence/DecFIGS/gui_audio_trigger.txt": "5a3619d9a189dcf8307c2a03f04345271a396650140a30c4e781d30865c7ddb0",
+    "evidence/DecFIGS/gui_event22_base.txt": "0d8e7e6bb70dae025b98b85071226b270c8f3b68c597fbbcea65f9808e79d99d",
+    "evidence/DecFIGS/gui_event_sound_trigger.txt": "acb521492c410e150b2510d4a51a09b4e034abdbebfe2e94f4e1beec5fcdf9be"
+  },
+  "review_artifacts_sha256": {
+    "site_map.tsv": "0fbc42803fbb91c5267c3690d73f02143a9db9160950a9d7b89701ea6b876009",
+    "patch.diff": "3e0b180add1937da131f85aaf6994bd130589edc78e797d1422e90d3316a3064",
+    "README.md": "120889b617b3154bc78473d0add3a3597e3aea719ed90b34e232dee92c3b1e74",
+    "bindings.json": "self-hash omitted"
+  },
+  "matrix_snapshot": {
+    "path": "evidence/artist_outputgui_66_matrix.tsv",
+    "evidence_base": "7e455d8854a32df1ca1934a54cc279c1e268a103",
+    "rows": 66,
+    "route_classification_counts": {
+      "uncertain": 27,
+      "compatibility": 3,
+      "missing": 23,
+      "correct": 13
+    },
+    "mapped_direct_generic_call_sites": 65,
+    "global_direct_generic_call_scan_sites": 70,
+    "unmapped_global_sites_excluded": 5,
+    "explicit_wrapper_source_mentions": 27,
+    "helper_or_record_source_mentions": 14,
+    "interpretation": "route classifications only; uncertain sink/ABI details remain explicit; no debug registration count claimed",
+    "candidate_6e3253f4_verified_by_this_lane": false,
+    "e306_current_base_source_reconciliation": "exact proposal preimages are copied and SHA-256 pinned; BrnGuiModule blob stability through e8 was parent-confirmed; RoadRuleComponent was not independently checked against e306 under the no-Git boundary"
+  },
+  "base_source_pin_note": "The patch preimage is captured byte-for-byte from the current shared source tree. The source tree was not mutated. Base commit e306dbd2 was supplied by the parent; this lane did not invoke Git, so source hash identity against that commit must be checked by the composing owner."
+}

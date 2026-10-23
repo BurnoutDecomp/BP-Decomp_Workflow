@@ -1,0 +1,663 @@
+candidate	Build and check candidate (no publish or game)	﻿2026-10-23T21:28:47.9888012Z ##[group]Run ./ci/check-candidate-build.ps1 -B5Commit $env:CANDIDATE_B5_SHA `
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9888682Z ^[[36;1m./ci/check-candidate-build.ps1 -B5Commit $env:CANDIDATE_B5_SHA `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9889316Z ^[[36;1m  -WorkflowSha $env:CANDIDATE_WORKFLOW_SHA -Jobs 4 `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9890067Z ^[[36;1m  -RunRegressions:($env:CANDIDATE_RUN_REGRESSIONS -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9890568Z ^[[36;1m  -RunAptLifetime:($env:CANDIDATE_RUN_APT_LIFETIME -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9891061Z ^[[36;1m  -RunHudRegressions:($env:CANDIDATE_RUN_HUD_REGRESSIONS -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9891623Z ^[[36;1m  -RunResourceRegressions:($env:CANDIDATE_RUN_RESOURCE_REGRESSIONS -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9892187Z ^[[36;1m  -RunGuiIORegressions:($env:CANDIDATE_RUN_GUI_IO_REGRESSIONS -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9892770Z ^[[36;1m  -RunGuiAnimationRegressions:($env:CANDIDATE_RUN_GUI_ANIMATION_REGRESSIONS -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9893387Z ^[[36;1m  -RunStartupIORegressions:($env:CANDIDATE_RUN_STARTUP_IO_REGRESSIONS -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9894054Z ^[[36;1m  -RunGuiLicenseRegressions:($env:CANDIDATE_RUN_GUI_LICENSE_REGRESSIONS -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9894631Z ^[[36;1m  -RunKeyboardUIContract:($env:CANDIDATE_RUN_KEYBOARD_UI_CONTRACT -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9895193Z ^[[36;1m  -RunRwacCommandCapacity:($env:CANDIDATE_RUN_RWAC_COMMAND_CAPACITY -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9895766Z ^[[36;1m  -RunSystemUserProfile:($env:CANDIDATE_RUN_SYSTEM_USER_PROFILE -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9897282Z ^[[36;1m  -RunTrafficFlowtypeOverride:($env:CANDIDATE_RUN_TRAFFIC_FLOWTYPE_OVERRIDE -eq 'true') `^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:47.9897870Z ^[[36;1m  -RunOnlineSaveRoute:($env:CANDIDATE_RUN_ONLINE_SAVE_ROUTE -eq 'true')^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0949475Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0949986Z env:
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0950247Z   CommandPromptType: Native
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0950779Z   DevEnvDir: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0951570Z   ExtensionSdkDir: C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\ExtensionSDKs
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0955102Z   EXTERNAL_INCLUDE: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\ATLMFC\include;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\VS\include;C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0957886Z   Framework40Version: v4.0
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0958197Z   FrameworkDir: C:\Windows\Microsoft.NET\Framework64\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0958595Z   FrameworkDir64: C:\Windows\Microsoft.NET\Framework64\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0958938Z   FrameworkVersion: v4.0.30319
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0959201Z   FrameworkVersion64: v4.0.30319
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0959820Z   FSHARPINSTALLDIR: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\FSharp\Tools
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0960530Z   HTMLHelpDir: C:\Program Files (x86)\HTML Help Workshop
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0961081Z   IFCPATH: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\ifc\x64
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0963928Z   INCLUDE: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\ATLMFC\include;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\VS\include;C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\winrt;C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\cppwinrt;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0968128Z   is_x64_arch: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0969405Z   LIB: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64;C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\lib\um\x64;C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64;C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\x64
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0972108Z   LIBPATH: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\ATLMFC\lib\x64;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x64;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\lib\x86\store\references;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.26100.0;C:\Windows\Microsoft.NET\Framework64\v4.0.30319
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0973861Z   NETFXSDKDir: C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.0989124Z   Path: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VC\VCPackages;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\bin\Roslyn;C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\x64\;C:\Program Files (x86)\HTML Help Workshop;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\FSharp\Tools;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Team Tools\DiagnosticsHub\Collector;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\Extensions\Microsoft\CodeCoverage.Console;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\Llvm\x64\bin;C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\\x64;C:\Program Files (x86)\Windows Kits\10\bin\\x64;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\\MSBuild\Current\Bin\amd64;C:\Windows\Microsoft.NET\Framework64\v4.0.30319;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\;C:\Program Files\MongoDB\Server\7.0\bin;C:\aliyun-cli;C:\vcpkg;C:\Program Files (x86)\NSIS\;C:\tools\zstd;C:\Program Files\Mercurial\;C:\hostedtoolcache\windows\stack\3.11.1\x64;C:\cabal\bin;C:\\ghcup\bin;C:\mingw64\bin;C:\Program Files\dotnet;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Program Files\R\R-4.6.1\bin\x64;C:\SeleniumWebDrivers\GeckoDriver;C:\SeleniumWebDrivers\EdgeDriver\;C:\SeleniumWebDrivers\ChromeDriver;C:\Program Files (x86)\sbt\bin;C:\Program Files (x86)\GitHub CLI;C:\Program Files\Git\bin;C:\Program Files (x86)\pipx_bin;C:\npm\prefix;C:\hostedtoolcache\windows\go\1.24.13\x64\bin;C:\hostedtoolcache\windows\Python\3.12.10\x64\Scripts;C:\hostedtoolcache\windows\Python\3.12.10\x64;C:\hostedtoolcache\windows\Ruby\3.3.12\x64\bin;C:\Program Files\OpenSSL\bin;C:\tools\kotlinc\bin;C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\8.0.504-1\x64\bin;C:\Program Files\ImageMagick-7.1.2-Q16-HDRI;C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin;C:\ProgramData\kind;C:\ProgramData\Chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\PowerShell\7\;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\WiX Toolset v3.14\bin;C:\Program Files\Microsoft SQL Server\130\DTS\Binn\;C:\Program Files\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\Microsoft SQL Server\170\DTS\Binn\;C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\ProgramData\chocolatey\lib\pulumi\tools\Pulumi\bin;C:\Program Files\CMake\bin;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.16\bin;C:\Program Files\Microsoft Service Fabric\bin\Fabric\Fabric.Code;C:\Program Files\Microsoft SDKs\Service Fabric\Tools\ServiceFabricLocalClusterManager;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\Git\ucrt64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\GitHub CLI\;c:\tools\php;C:\Program Files\Amazon\AWSCLIV2\;C:\Program Files\Amazon\SessionManagerPlugin\bin\;C:\Program Files\Amazon\AWSSAMCLI\bin\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\mongosh\;C:\Program Files\LLVM\bin;C:\Program Files (x86)\LLVM\bin;C:\Users\runneradmin\.dotnet\tools;C:\Users\runneradmin\.cargo\bin;C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Microsoft Visual Studio\Installer;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VC\Linux\bin\ConnectionManagerExe;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1005007Z   Platform: x64
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1005215Z   UCRTVersion: 10.0.26100.0
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1005514Z   UniversalCRTSdkDir: C:\Program Files (x86)\Windows Kits\10\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1006012Z   VCIDEInstallDir: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\VC\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1006550Z   VCINSTALLDIR: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1007038Z   VCPKG_ROOT: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1007679Z   VCToolsInstallDir: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1008356Z   VCToolsRedistDir: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Redist\MSVC\14.44.35112\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1008829Z   VCToolsVersion: 14.44.35207
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1009059Z   VisualStudioVersion: 17.0
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1009429Z   VS170COMNTOOLS: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1009847Z   VSCMD_ARG_app_plat: Desktop
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1010075Z   VSCMD_ARG_HOST_ARCH: x64
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1010283Z   VSCMD_ARG_TGT_ARCH: x64
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1010488Z   VSCMD_VER: 17.14.42
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1010785Z   VSINSTALLDIR: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1011280Z   VSSDK150INSTALL: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VSSDK
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1011779Z   VSSDKINSTALL: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VSSDK
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1012477Z   WindowsLibPath: C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.26100.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.26100.0
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1013154Z   WindowsSdkBinPath: C:\Program Files (x86)\Windows Kits\10\bin\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1013536Z   WindowsSdkDir: C:\Program Files (x86)\Windows Kits\10\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1013842Z   WindowsSDKLibVersion: 10.0.26100.0\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1014215Z   WindowsSdkVerBinPath: C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1014609Z   WindowsSDKVersion: 10.0.26100.0\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1015061Z   WindowsSDK_ExecutablePath_x64: C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\x64\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1015823Z   WindowsSDK_ExecutablePath_x86: C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1016280Z   __DOTNET_ADD_64BIT: 1
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1016497Z   __DOTNET_PREFERRED_BITNESS: 64
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1025681Z   __VSCMD_PREINIT_PATH: C:\Program Files\MongoDB\Server\7.0\bin;C:\aliyun-cli;C:\vcpkg;C:\Program Files (x86)\NSIS\;C:\tools\zstd;C:\Program Files\Mercurial\;C:\hostedtoolcache\windows\stack\3.11.1\x64;C:\cabal\bin;C:\\ghcup\bin;C:\mingw64\bin;C:\Program Files\dotnet;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Program Files\R\R-4.6.1\bin\x64;C:\SeleniumWebDrivers\GeckoDriver;C:\SeleniumWebDrivers\EdgeDriver\;C:\SeleniumWebDrivers\ChromeDriver;C:\Program Files (x86)\sbt\bin;C:\Program Files (x86)\GitHub CLI;C:\Program Files\Git\bin;C:\Program Files (x86)\pipx_bin;C:\npm\prefix;C:\hostedtoolcache\windows\go\1.24.13\x64\bin;C:\hostedtoolcache\windows\Python\3.12.10\x64\Scripts;C:\hostedtoolcache\windows\Python\3.12.10\x64;C:\hostedtoolcache\windows\Ruby\3.3.12\x64\bin;C:\Program Files\OpenSSL\bin;C:\tools\kotlinc\bin;C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk\8.0.504-1\x64\bin;C:\Program Files\ImageMagick-7.1.2-Q16-HDRI;C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin;C:\ProgramData\kind;C:\ProgramData\Chocolatey\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\PowerShell\7\;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\WiX Toolset v3.14\bin;C:\Program Files\Microsoft SQL Server\130\DTS\Binn\;C:\Program Files\Microsoft SQL Server\140\DTS\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\Microsoft SQL Server\170\DTS\Binn\;C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\ProgramData\chocolatey\lib\pulumi\tools\Pulumi\bin;C:\Program Files\CMake\bin;C:\ProgramData\chocolatey\lib\maven\apache-maven-3.9.16\bin;C:\Program Files\Microsoft Service Fabric\bin\Fabric\Fabric.Code;C:\Program Files\Microsoft SDKs\Service Fabric\Tools\ServiceFabricLocalClusterManager;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\Git\ucrt64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\GitHub CLI\;c:\tools\php;C:\Program Files (x86)\sbt\bin;C:\Program Files\Amazon\AWSCLIV2\;C:\Program Files\Amazon\SessionManagerPlugin\bin\;C:\Program Files\Amazon\AWSSAMCLI\bin\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\mongosh\;C:\Program Files\LLVM\bin;C:\Program Files (x86)\LLVM\bin;C:\Users\runneradmin\.dotnet\tools;C:\Users\runneradmin\.cargo\bin;C:\Users\runneradmin\AppData\Local\Microsoft\WindowsApps;C:\Program Files (x86)\Microsoft Visual Studio\Installer
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1035211Z   CANDIDATE_B5_SHA: 829305f8a5db176ec62f2f2cc406c812e4a46f8b
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1035613Z   CANDIDATE_WORKFLOW_SHA: dc1969796010e2acbd47c606fba21c6bd9ab6330
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1036301Z   CANDIDATE_WORKFLOW_REF: BurnoutDecomp/BP-Decomp_Workflow/.github/workflows/build-candidate.yml@refs/heads/codex/debug-consumers-20261023
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1036934Z   CANDIDATE_RUNNER_ENVIRONMENT: github-hosted
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1037219Z   CANDIDATE_RUN_REGRESSIONS: false
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1037474Z   CANDIDATE_RUN_APT_LIFETIME: false
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1037721Z   CANDIDATE_RUN_HUD_REGRESSIONS: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1037981Z   CANDIDATE_RUN_RESOURCE_REGRESSIONS: false
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1038256Z   CANDIDATE_RUN_GUI_IO_REGRESSIONS: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1038540Z   CANDIDATE_RUN_GUI_ANIMATION_REGRESSIONS: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1038831Z   CANDIDATE_RUN_STARTUP_IO_REGRESSIONS: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1039191Z   CANDIDATE_RUN_GUI_LICENSE_REGRESSIONS: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1039470Z   CANDIDATE_RUN_KEYBOARD_UI_CONTRACT: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1039749Z   CANDIDATE_RUN_RWAC_COMMAND_CAPACITY: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1040029Z   CANDIDATE_RUN_TRAFFIC_FLOWTYPE_OVERRIDE: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1040313Z   CANDIDATE_RUN_SYSTEM_USER_PROFILE: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1040577Z   CANDIDATE_RUN_ONLINE_SAVE_ROUTE: true
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1043230Z   GH_TOKEN: ***
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1043436Z   BRN_EXE_HASH_DEPS: 1
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1043643Z   BRN_EXE_JOBS: 4
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:48.1043839Z ##[endgroup]
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:50.3470518Z ^[[31;1mSubmodule 'b5-decomp' (git@github.com:BurnoutDecomp/b5-decomp.git) registered for path 'b5-decomp'^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:50.3482997Z ^[[31;1mCloning into 'D:/a/BP-Decomp_Workflow/BP-Decomp_Workflow/b5-decomp'...^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:56.8689584Z Submodule path 'b5-decomp': checked out '829305f8a5db176ec62f2f2cc406c812e4a46f8b'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:57.1039771Z ^[[31;1mFrom https://github.com/BurnoutDecomp/b5-decomp^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:57.1047445Z ^[[31;1m * branch                829305f8a5db176ec62f2f2cc406c812e4a46f8b -> FETCH_HEAD^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:57.7636141Z ^[[31;1mHEAD is now at 829305f8a Restore menu-music output records and their matching sound payload decoding^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:58.2794458Z ^[[31;1mSubmodule 'vendor/EABase' (https://github.com/BurnoutDecomp/EABase.git) registered for path 'vendor/EABase'^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:58.2802158Z ^[[31;1mSubmodule 'vendor/EASTL' (https://github.com/BurnoutDecomp/EASTL.git) registered for path 'vendor/EASTL'^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:58.2813108Z ^[[31;1mSubmodule 'vendor/EAThread' (https://github.com/BPDecomp/EAThread) registered for path 'vendor/EAThread'^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:58.3010484Z ^[[31;1mCloning into 'D:/a/BP-Decomp_Workflow/BP-Decomp_Workflow/b5-decomp/vendor/EABase'...^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:58.5521277Z ^[[31;1mCloning into 'D:/a/BP-Decomp_Workflow/BP-Decomp_Workflow/b5-decomp/vendor/EASTL'...^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:59.5213620Z ^[[31;1mCloning into 'D:/a/BP-Decomp_Workflow/BP-Decomp_Workflow/b5-decomp/vendor/EAThread'...^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:59.8162625Z Submodule path 'vendor/EABase': checked out '1b5f54fe9f149ed390a0571deac82ebc280d4487'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:28:59.9552380Z Submodule path 'vendor/EASTL': checked out '5e207079009f31df378a41ac10fd8429842a263d'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:00.0400853Z Submodule path 'vendor/EAThread': checked out '38576cbe30e9cd674ad0caa67898fd5ab6450c14'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:02.1173972Z Python 3.15.1
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:16.0552666Z ONLINE_SAVE_ROUTE_HOSTED PASS: candidate and three exact negative-control witnesses
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:16.7965245Z ^[[31;1mFrom https://github.com/BurnoutDecomp/b5-decomp^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:16.7970176Z ^[[31;1m * branch                8fec93bd4d2806ca9b60fb53dc272fe28081f8b8 -> FETCH_HEAD^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1444083Z TrafficFlowtypeOverride.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1445046Z CgsBaseResourcePtr.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1446179Z CgsResourcePtr.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1447622Z CgsResourceHandle.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1448853Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1450251Z TrafficFlowtypeOverride: 44 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1451544Z TrafficFlowtypeOverride.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1453124Z CgsBaseResourcePtr.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1454385Z CgsResourcePtr.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1455649Z CgsResourceHandle.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1456954Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1458378Z FAIL eligible flow preserves first-occurrence order and removes duplicates
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1459912Z FAIL eligible flow reaches the production sink once
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1461167Z FAIL eligible flow requests asset 3
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1462405Z FAIL eligible flow requests asset 7
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1463698Z FAIL eligible flow requests the last valid asset slot
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1465219Z FAIL container-byte ABI check only: high bytes retain first-occurrence order
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1469750Z FAIL container-byte ABI check only: out-of-catalogue bytes are stopped before sink indexing
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1472390Z FAIL container-byte ABI check only: the sink boundary is reached
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1473438Z FAIL empty flow triggers the original checked GetItem assertion
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1474148Z FAIL empty flow reports the original Array index expression
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1478071Z FAIL empty flow trips exactly one Array assertion
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1478739Z FAIL 17 distinct assets trigger the original 16-slot Append assertion
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1479482Z FAIL capacity overflow reports the original Array capacity expression
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1480149Z FAIL capacity overflow trips exactly one Array assertion
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1480668Z TrafficFlowtypeOverride: 44 checks, 14 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1481325Z NEGATIVE CONTROL: exact 8fec93b source produced 14 expected recovered-arm failures out of 44 checks
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1481958Z PASS  exact 8fec93b old-return control compiles and fails recovered-arm expectations
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:22.1482546Z run_traffic_flowtype_override: wiring 1/1, numeric 44/44; total 45/45 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:31.4707765Z {"status": "pass", "success": true, "receipt": "D:\\a\\BP-Decomp_Workflow\\BP-Decomp_Workflow\\build\\candidate\\artifacts\\system-user-profile\\result.json"}
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:32.5893888Z GuiModelIO.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:32.5894369Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:32.5895107Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:32.5896802Z GuiModelIO: 377 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:32.5897356Z run_gui_model_io: 377/377 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:33.2216730Z GuiInterpreterIO.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:33.2217401Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:33.2218260Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:33.2219457Z GuiInterpreterIO: 169 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:33.2220557Z run_gui_interpreter_io: 169/169 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.3179346Z AptTextFormatBinding.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.3179804Z AptTextFormatMembersIndex.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.3180150Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.3181320Z AptTextFormatBinding: 78 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.3182321Z run_apt_textformat_binding: 78/78 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9566626Z GuiModelIO.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9567563Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9568564Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9569762Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9570922Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9572045Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9578819Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9579655Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9580822Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9581627Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9582389Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9583103Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9583876Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9585238Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9586093Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9587325Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9588127Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9589137Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9589892Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9590650Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9591432Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9592481Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9593221Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9593963Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9594703Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9595455Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9596210Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9596851Z GuiModelIO: 65 checks, 24 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:34.9597274Z run_gui_model_io: 41/65 pass (24 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5959023Z GuiModelIO.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5959753Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5960593Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5961996Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5962959Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5964773Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5965983Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5967335Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5968685Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5970005Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5971136Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5974732Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5976157Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5977707Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5978420Z FAIL queue is constructed, empty and aligned for its actual address
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5979709Z GuiModelIO: 377 checks, 12 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:35.5980127Z run_gui_model_io: 365/377 pass (12 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2211556Z GuiInterpreterIO.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2212726Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2213194Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2214298Z FAIL ARTIST output event capacity is 18432 bytes
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2215316Z FAIL event record beyond the old 16384-byte capacity fits the original queue
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2216299Z FAIL ARTIST output event capacity is 18432 bytes
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2217285Z FAIL event record beyond the old 16384-byte capacity fits the original queue
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2218308Z FAIL ARTIST output event capacity is 18432 bytes
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2219246Z FAIL event record beyond the old 16384-byte capacity fits the original queue
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2219992Z FAIL ARTIST output event capacity is 18432 bytes
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2220919Z FAIL event record beyond the old 16384-byte capacity fits the original queue
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2221900Z GuiInterpreterIO: 169 checks, 8 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.2225223Z run_gui_interpreter_io: 161/169 pass (8 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8292024Z GuiInterpreterIO.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8292781Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8294068Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8295839Z FAIL input Destruct leaves its complete populated queue unchanged
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8296922Z FAIL input Destruct leaves its complete populated queue unchanged
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8298222Z FAIL input Destruct leaves its complete populated queue unchanged
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8299494Z FAIL input Destruct leaves its complete populated queue unchanged
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8300833Z FAIL input Destruct leaves its complete populated queue unchanged
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8302354Z FAIL input Destruct leaves its complete populated queue unchanged
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8303363Z FAIL input Destruct leaves its complete populated queue unchanged
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8304703Z FAIL input Destruct leaves its complete populated queue unchanged
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8306055Z GuiInterpreterIO: 169 checks, 8 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:36.8310990Z run_gui_interpreter_io: 161/169 pass (8 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9223665Z AptTextFormatBinding.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9224193Z AptTextFormatMembersIndex.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9224630Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9226672Z FAIL size assignment dispatches through the value virtual interface
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9227325Z FAIL size read sees the embedded format assignment
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9228253Z FAIL original recognized ignored property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9229971Z FAIL original recognized ignored property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9231131Z FAIL original recognized ignored property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9232686Z FAIL original recognized ignored property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9233374Z FAIL original recognized ignored property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9235040Z FAIL original recognized ignored property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9235973Z FAIL color assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9237413Z FAIL color assignment masks to RGB
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9238933Z FAIL color getter sees the field
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9241795Z FAIL font assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9242282Z FAIL font field holds the converted value
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9242994Z FAIL font getter sees the field
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9244097Z FAIL integer format property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9245642Z FAIL integer format property updates its own field
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9246425Z FAIL integer property getter sees the field
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9246924Z FAIL integer format property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9247725Z FAIL integer format property updates its own field
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9249068Z FAIL integer property getter sees the field
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9249603Z FAIL integer format property is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9250156Z FAIL integer format property updates its own field
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9250771Z FAIL integer property getter sees the field
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9251512Z FAIL alignment assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9253274Z FAIL alignment keywords preserve original enum and unknown behavior
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9253914Z FAIL alignment assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9254527Z FAIL alignment keywords preserve original enum and unknown behavior
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9255414Z FAIL alignment assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9257022Z FAIL alignment keywords preserve original enum and unknown behavior
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9257689Z FAIL alignment assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9258302Z FAIL alignment keywords preserve original enum and unknown behavior
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9258917Z FAIL alignment assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9259505Z FAIL alignment assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9260171Z FAIL alignment assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9260869Z FAIL unknown alignment text is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9262019Z FAIL bold assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9262493Z FAIL bold conversion preserves original flags
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9262985Z FAIL bold assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9263641Z FAIL bold conversion preserves original flags
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9264357Z FAIL bold assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9265137Z FAIL italic assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9266927Z FAIL italic unknown clears value without defining it
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9267462Z FAIL italic assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9268201Z FAIL italic unknown clears value without defining it
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9269592Z FAIL italic assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9270095Z FAIL italic unknown clears value without defining it
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9270698Z FAIL underline assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9271961Z FAIL underline unknown retains original toggle behavior
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9272522Z FAIL underline assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9273043Z FAIL underline unknown retains original toggle behavior
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9273858Z FAIL underline assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9274567Z FAIL underline unknown retains original toggle behavior
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9275196Z FAIL underline assignment is consumed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9277103Z FAIL underline unknown retains original toggle behavior
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9277873Z FAIL captured font-fit loop progresses and terminates before its test bound
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9278634Z FAIL font-fit loop changes the native embedded size
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9279198Z FAIL font-fit loop reads its final assigned size
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9279854Z AptTextFormatBinding: 78 checks, 57 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:37.9281234Z run_apt_textformat_binding: 21/78 pass (57 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2316738Z FxGsHudCrashes.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2317395Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2318544Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2319659Z FxGsHudCrashes: 38 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2321522Z PASS  D2 HUDMessageLogic carries `ObjectPool<BufferedCrashingCar, 8, s32> mBufferedCrashingCars` (DWARF :265, console +0x110)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2323491Z PASS  D1 PostWorldUpdate cases 0/10 -> GenerateRaceModeMessages(iface, scoring, crash queue, takedown queue, player, delta)  @0x8239DAB0..0x8239DACC
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2325329Z PASS  D1 PostWorldUpdate case 11 calls the three Road Rage producers in ARTIST order and passes the progress byte
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2326905Z PASS  D2/D3 PostWorldUpdate case 15 -> DetectOnlineCrashes then RemoveCrashingMessagesForTakendownPlayers  @0x8239DB50 / 0x8239DB5C
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2329811Z PASS  D1 the selected ModeManager post-world caller carries the crash queue, takedown input, mode owner, vehicle output, player index and mode-progress byte in ARTIST order
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2331175Z PASS  mode 13 carries the actual mode owner into the BHR generator
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2331875Z PASS  the team-change generator remains after the mode switch
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2333137Z PASS  D1 action ids 249 E_ACTION_HUD_MESSAGE_PLAYER_REACHES_CHECKPOINT / 250 E_ACTION_HUD_MESSAGE_X_CRASHES (DWARF 239/240, +10; translator case 250 @0x823EC0CC)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.2334514Z run_fxgs_hud_crashes: wiring 8/8, numeric 38/38; total 46/46 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.9952610Z FxGsOnlineRoadRageHud.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.9953291Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.9953623Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.9954291Z FxGsOnlineRoadRageHud: 19 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.9955942Z PASS  D1 case 11 calls all three generators in ARTIST order and passes the progress byte
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.9957050Z PASS  D1 PostWorldUpdate declares the mode-progress input consumed by the third generator
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.9957994Z PASS  D1 producer action ids and real 1/1/12-byte record types remain pinned
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:39.9958801Z run_fxgs_online_roadrage_hud: wiring 3/3, numeric 19/19; total 22/22 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7723168Z ^[[31;1mFAIL: 164 first team != 1 remains eligible and selects the lower race-position car  @0x82395634..0x82395658^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7726977Z ^[[31;1mFAIL: 164 equal race positions retain the first car because the comparison is strict  @0x8239564C..0x82395650^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7731284Z ^[[31;1mFAIL: 164 out-of-progress suppresses both events but still decrements both boundaries^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7735149Z ^[[31;1mFAIL: 164 posts the mile boundary before the kilometre boundary with their typed fields^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7739609Z ^[[31;1mFAIL: 164 equality at 5 km does not consume km, but distance remains below 5 miles^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7740552Z NEGATIVE CONTROL: restore the old team predicate in the extracted body only
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7741226Z FxGsOnlineRoadRageHud.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7741823Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7743999Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7744403Z FxGsOnlineRoadRageHud: 19 checks, 5 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7749594Z PASS  D1 case 11 calls all three generators in ARTIST order and passes the progress byte
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7751657Z PASS  D1 PostWorldUpdate declares the mode-progress input consumed by the third generator
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7752593Z PASS  D1 producer action ids and real 1/1/12-byte record types remain pinned
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:40.7753459Z run_fxgs_online_roadrage_hud: wiring 3/3, numeric 14/19; total 17/22 pass (5 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7598410Z ^[[31;1mFAIL: team-change tail posts ordered 254 records outside mode-specific arms^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7602596Z ^[[31;1mFAIL: team-change tail receives the actual vehicle output argument^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7606572Z ^[[31;1mFAIL: team-change tail consumes the emitted latches^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7610814Z ^[[31;1mFAIL: team-change tail publishes the retained latch after the local crash ends^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7612097Z NEGATIVE CONTROL: omit only the extracted PostWorld team-change tail
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7613191Z FxGsHudCrashes.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7614321Z CgsStrStream.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7615415Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7616859Z FxGsHudCrashes: 38 checks, 4 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7618516Z PASS  D2 HUDMessageLogic carries `ObjectPool<BufferedCrashingCar, 8, s32> mBufferedCrashingCars` (DWARF :265, console +0x110)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7622751Z PASS  D1 PostWorldUpdate cases 0/10 -> GenerateRaceModeMessages(iface, scoring, crash queue, takedown queue, player, delta)  @0x8239DAB0..0x8239DACC
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7624830Z PASS  D1 PostWorldUpdate case 11 calls the three Road Rage producers in ARTIST order and passes the progress byte
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7626970Z PASS  D2/D3 PostWorldUpdate case 15 -> DetectOnlineCrashes then RemoveCrashingMessagesForTakendownPlayers  @0x8239DB50 / 0x8239DB5C
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7629679Z PASS  D1 the selected ModeManager post-world caller carries the crash queue, takedown input, mode owner, vehicle output, player index and mode-progress byte in ARTIST order
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7631195Z PASS  mode 13 carries the actual mode owner into the BHR generator
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7631955Z PASS  the team-change generator remains after the mode switch
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7633273Z PASS  D1 action ids 249 E_ACTION_HUD_MESSAGE_PLAYER_REACHES_CHECKPOINT / 250 E_ACTION_HUD_MESSAGE_X_CRASHES (DWARF 239/240, +10; translator case 250 @0x823EC0CC)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:41.7634679Z run_fxgs_hud_crashes: wiring 8/8, numeric 34/38; total 42/46 pass (4 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6593390Z GuiAnimationInitialization.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6594202Z GUI_ANIMATION_INITIALIZATION: 68 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6594960Z GUI_ANIMATION_INITIALIZATION_NUMERIC_CHECKS=68
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6595664Z GUI_ANIMATION_INITIALIZATION_NUMERIC_FAILURES=0
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6597005Z PASS  online options binds its original help-bar arguments
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6598068Z PASS  help-bar binds each animator to its corresponding item
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6600069Z PASS  BrnGui animator requests all six default CgsGui channels
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6600787Z PASS  canonical Interpolator owns the real virtual getter
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6601513Z PASS  all owners extracted; real template Construct precedes Append
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6602148Z PASS  exactly 68 numeric checks executed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6602841Z PASS  retained process status agrees with numeric result
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:42.6603696Z run_gui_animation_initialization: wiring 7/7, numeric 68/68; total 75/75 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2466554Z GuiAnimationInitialization.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2467096Z FAIL channel[0] null binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2467698Z FAIL channel[0] inactive
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2469284Z FAIL channel[0] current -FLT_MAX
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2470391Z FAIL channel[0] five interpolator fields zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2471050Z FAIL channel[0] real virtual getter zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2472762Z FAIL channel[1] null binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2473728Z FAIL channel[1] inactive
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2475053Z FAIL channel[1] current -FLT_MAX
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2476461Z FAIL channel[1] five interpolator fields zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2478242Z FAIL channel[1] real virtual getter zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2478667Z FAIL channel[2] null binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2479431Z FAIL channel[2] inactive
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2481255Z FAIL channel[2] current -FLT_MAX
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2481792Z FAIL channel[2] five interpolator fields zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2483489Z FAIL channel[2] real virtual getter zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2484333Z FAIL channel[3] null binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2485848Z FAIL channel[3] inactive
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2489241Z FAIL channel[3] current -FLT_MAX
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2489712Z FAIL channel[3] five interpolator fields zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2490365Z FAIL channel[3] real virtual getter zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2491084Z FAIL channel[4] null binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2491762Z FAIL channel[4] inactive
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2493769Z FAIL channel[4] current -FLT_MAX
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2494248Z FAIL channel[4] five interpolator fields zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2495859Z FAIL channel[4] real virtual getter zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2496312Z FAIL channel[5] null binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2497122Z FAIL channel[5] inactive
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2498695Z FAIL channel[5] current -FLT_MAX
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2499168Z FAIL channel[5] five interpolator fields zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2499840Z FAIL channel[5] real virtual getter zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2501113Z FAIL clean update prerequisite: initialized channel binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2501721Z FAIL clean update prerequisite: inactive channels
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2502533Z FAIL clean update prerequisite: initialized channel values
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2503188Z FAIL active animator prerequisite: initialized channel binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2503833Z FAIL active animator prerequisite: initialized channel binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2504491Z FAIL active animator prerequisite: initialized channel binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2505160Z FAIL active animator prerequisite: initialized channel binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2505854Z FAIL active animator prerequisite: initialized channel binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2506606Z FAIL active animator prerequisite: initialized channel binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2507428Z GUI_ANIMATION_INITIALIZATION: 68 checks, 39 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2508938Z GUI_ANIMATION_INITIALIZATION_NUMERIC_CHECKS=68
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2509621Z GUI_ANIMATION_INITIALIZATION_NUMERIC_FAILURES=39
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2511245Z PASS  online options binds its original help-bar arguments
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2511925Z PASS  help-bar binds each animator to its corresponding item
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2512624Z PASS  BrnGui animator requests all six default CgsGui channels
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2513299Z PASS  canonical Interpolator owns the real virtual getter
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2514051Z PASS  all owners extracted; real template Construct precedes Append
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2514699Z PASS  exactly 68 numeric checks executed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2516405Z PASS  retained process status agrees with numeric result
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:43.2517223Z run_gui_animation_initialization: wiring 7/7, numeric 29/68; total 36/75 pass (39 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5669998Z GuiLicenseIntroHandoff.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5671076Z GUI_LICENSE_INTRO_HANDOFF: 64 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5672162Z PASS  actual Profile-350 dispatch arm binds profile/cache and reaches subscribed flow
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5673737Z PASS  dispatcher preserves the optional suffix cursor and last-event return
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5674690Z PASS  inbound Profile and cache64 cursor ordering reaches the pre-flow handoff
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5675616Z PASS  actual producer retains owned pointer/pointer/availability action 193
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5676492Z PASS  actual translator uses canonical GUI payload and shared publisher
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5677399Z PASS  actual Intro binds profile and uses License at cache delivery
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5678339Z PASS  native License remains unguarded and real SetProfilePointer owns binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5679044Z PASS  actual observer routing and registration arm retained
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5679737Z PASS  actual FIFO queue construction, copying and traversal compiled
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5680215Z PASS  control relocates current handoff only, keeping the same numeric fixture
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:44.5680722Z GUI license intro handoff: wiring 10/10, numeric 64/64; total 74/74 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5883056Z GuiLicenseIntroHandoff.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5883680Z FAIL entry does not seed stale cache into next observer frame
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5884784Z FAIL current observer frame starts with profile 350
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5886435Z FAIL license profile bound before cache use
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5886984Z FAIL real unguarded License body reaches supplied state
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5888076Z FAIL real unguarded License body supplies player name
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5889069Z FAIL real License body supplies rank resources
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5890713Z FAIL entry does not seed stale cache into next observer frame
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5891616Z FAIL current observer frame starts with profile 350
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5893528Z FAIL license profile bound before cache use
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5894180Z FAIL real unguarded License body reaches supplied state
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5895991Z FAIL real unguarded License body supplies player name
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5900769Z FAIL real License completion branch supplies or clears date fields
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5902189Z FAIL real License body supplies rank resources
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5902769Z GUI_LICENSE_INTRO_HANDOFF: 64 checks, 13 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5904399Z PASS  actual Profile-350 dispatch arm binds profile/cache and reaches subscribed flow
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5905923Z PASS  dispatcher preserves the optional suffix cursor and last-event return
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5906967Z PASS  inbound Profile and cache64 cursor ordering reaches the pre-flow handoff
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5908630Z PASS  actual producer retains owned pointer/pointer/availability action 193
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5909663Z PASS  actual translator uses canonical GUI payload and shared publisher
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5910957Z PASS  actual Intro binds profile and uses License at cache delivery
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5912083Z PASS  native License remains unguarded and real SetProfilePointer owns binding
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5913012Z PASS  actual observer routing and registration arm retained
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5914107Z PASS  actual FIFO queue construction, copying and traversal compiled
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5914985Z PASS  control relocates current handoff only, keeping the same numeric fixture
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:45.5915901Z GUI license intro handoff: wiring 10/10, numeric 51/64; total 61/74 pass (13 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5212314Z StartupIOOwnership.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5213291Z STARTUP_IO_OWNERSHIP: 62 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5214269Z STARTUP_IO_OWNERSHIP_NUMERIC_CHECKS=62
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5216149Z STARTUP_IO_OWNERSHIP_NUMERIC_FAILURES=0
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5216804Z PASS  derived PostWorld lifecycle is declared and recovered
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5217700Z PASS  PostWorld constructs original 8/8/4 owned queues and spring
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5219077Z PASS  real IOHelper and stack dispatch derived construction and retirement
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5220374Z PASS  normal GUI wrapper owns locks; calibration/core borrow the supplied pair
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5221950Z PASS  both loading callers pass their already-owned actual GameData pair
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5223352Z PASS  normal GameMain retains the selected no-argument GUI entry
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5224045Z PASS  exactly 62 numeric checks executed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5225199Z PASS  retained process status agrees with numeric result
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:46.5225708Z run_startup_io_ownership: wiring 8/8, numeric 62/62; total 70/70 pass (0 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1163328Z StartupIOOwnership.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1163880Z FAIL postworld bind queue owns inline backing
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1164377Z FAIL postworld bind queue has original capacity
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1165163Z FAIL postworld bind queue starts empty
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1166085Z FAIL postworld unbind queue owns inline backing
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1167859Z FAIL postworld unbind queue has original capacity
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1168791Z FAIL postworld unbind queue starts empty
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1170418Z FAIL postworld mapping queue owns inline backing
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1171506Z FAIL postworld mapping queue has original capacity
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1172783Z FAIL postworld mapping queue starts empty
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1174113Z FAIL postworld wheel spring starts zero
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1175683Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1176456Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1179665Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1180251Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1180939Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1182200Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1182815Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1183498Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1184187Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1184867Z FAIL postworld posting prerequisite: owned initialized queues
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1185555Z FAIL postworld reused queues are rebound and empty
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1186460Z FAIL postworld reused spring reset
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1187122Z STARTUP_IO_OWNERSHIP: 62 checks, 22 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1187768Z STARTUP_IO_OWNERSHIP_NUMERIC_CHECKS=62
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1188841Z STARTUP_IO_OWNERSHIP_NUMERIC_FAILURES=22
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1189400Z PASS  derived PostWorld lifecycle is declared and recovered
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1190132Z PASS  PostWorld constructs original 8/8/4 owned queues and spring
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1191066Z PASS  real IOHelper and stack dispatch derived construction and retirement
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1192135Z PASS  normal GUI wrapper owns locks; calibration/core borrow the supplied pair
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1193037Z PASS  both loading callers pass their already-owned actual GameData pair
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1193749Z PASS  normal GameMain retains the selected no-argument GUI entry
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1194299Z PASS  exactly 62 numeric checks executed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1194849Z PASS  retained process status agrees with numeric result
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.1195613Z run_startup_io_ownership: wiring 8/8, numeric 40/62; total 48/70 pass (22 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7332740Z StartupIOOwnership.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7333332Z ASSERT Already locked for write
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7335405Z ASSERT Not locked for write
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7336736Z FAIL normal GUI has no lock assertion
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7338198Z ASSERT Already locked for write
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7339227Z FAIL initial-loading caller retains GameData locks
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7340583Z FAIL initial-loading borrowed pair has no lock assertion
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7341783Z ASSERT Not locked for write
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7343152Z ASSERT Already locked for write
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7344650Z FAIL scripted-loading caller retains GameData locks
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7345377Z FAIL scripted-loading borrowed pair has no lock assertion
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7347060Z ASSERT Not locked for write
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7348144Z FAIL all exercised owners preserve assertions
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7349449Z STARTUP_IO_OWNERSHIP: 62 checks, 6 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7350753Z STARTUP_IO_OWNERSHIP_NUMERIC_CHECKS=62
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7352161Z STARTUP_IO_OWNERSHIP_NUMERIC_FAILURES=6
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7356076Z PASS  derived PostWorld lifecycle is declared and recovered
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7356954Z PASS  PostWorld constructs original 8/8/4 owned queues and spring
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7357840Z PASS  real IOHelper and stack dispatch derived construction and retirement
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7359047Z PASS  normal GUI wrapper owns locks; calibration/core borrow the supplied pair
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7360050Z PASS  both loading callers pass their already-owned actual GameData pair
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7360919Z PASS  normal GameMain retains the selected no-argument GUI entry
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7361610Z PASS  exactly 62 numeric checks executed
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7362269Z PASS  retained process status agrees with numeric result
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:47.7363064Z run_startup_io_ownership: wiring 8/8, numeric 56/62; total 64/70 pass (6 fail)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:50.3949227Z {"state": "pass", "fixture_checks": 16427, "fixture_failures": 0, "first_pass_checks": 6, "first_pass_failures": 0, "intentional_failure_controls": 1, "intentional_failure_checks": 6, "result": "D:\\a\\BP-Decomp_Workflow\\BP-Decomp_Workflow\\build\\candidate\\artifacts\\rwac-capacity\\result.json"}
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:53.3305114Z CgsKeyboardPCContract.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:53.3306318Z CgsXboxLivePC.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:53.3307604Z CgsXOverlappedX360.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:53.3308632Z CgsPcNetIdentity.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:53.3309507Z CgsKeyboardSPrintfProvider.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:53.3310324Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:53.3311323Z CgsKeyboardPCContract: 157 checks, 0 failures
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:58.2826636Z Downloading Microsoft.XAudio2.Redist 1.2.13 from nuget.org ...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:58.4241617Z ^[[31;1m  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:58.4245152Z ^[[31;1m                                 Dload  Upload  Total   Spent   Left   Speed^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:58.4258267Z ^[[31;1m^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:58.8034119Z ^[[31;1m  0      0   0      0   0      0      0      0                              0^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:58.8037857Z ^[[31;1m100 22.90M 100 22.90M   0      0 52.11M      0                              0^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:58.8042923Z ^[[31;1m100 22.90M 100 22.90M   0      0 52.09M      0                              0^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:58.8048309Z ^[[31;1m100 22.90M 100 22.90M   0      0 52.08M      0                              0^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.3310109Z XAudio2 redist 1.2.13 installed to "D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\xaudio2redist".
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.4489186Z [msvc_env] using cl already on PATH -- MSVC 19.x
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.4621552Z lapi.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.7643519Z lcode.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.7824642Z ldebug.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.7998689Z ldo.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.8235153Z ldump.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.8341053Z lfunc.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.8450018Z lgc.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.8613493Z llex.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.8781863Z lmem.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.8890102Z lobject.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.9254870Z lopcodes.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.9355257Z lparser.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.9538674Z lstate.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.9656017Z lstring.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.9792214Z ltable.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:29:59.9952216Z ltm.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:00.0093012Z lundump.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:00.0263273Z lvm.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:00.0556512Z lzio.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:00.0686830Z lauxlib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:00.0920754Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.2471186Z Compiling...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.2472046Z lbaselib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.2725583Z ldblib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.2957768Z liolib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.3197781Z lmathlib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.3408673Z loadlib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.5385011Z loslib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.5667771Z lstrlib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.5923080Z ltablib.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.6087811Z linit.c
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.6249246Z Generating Code...
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:01.8737070Z Lua build complete: D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\lua\lua515.lib
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:02.3450164Z [msvc_env] using cl already on PATH -- MSVC 19.x
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:02.4852962Z Microsoft (R) Windows (R) Resource Compiler Version 10.0.10011.16384
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:02.4853677Z 
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:02.4855243Z Copyright (C) Microsoft Corporation.  All rights reserved.
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:02.4856447Z 
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:02.4856708Z 
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:09.0435304Z compile_exe: 3002 TUs -- 5 to compile, 2997 up to date, jobs=4 (content-hash mode)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:09.6068859Z [1/5] b5-decomp\src\GameSource\Gui\Flow\Screen\States\BrnCredits.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4028053Z [2/5] b5-decomp\src\GameSource\Gui\Flow\PostEvent\States\Offline\BrnOfflineInstantResults.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4354499Z [3/5] b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp  ** FAILED **
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4363749Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1619): error C2440: 'initializing': cannot convert from 'const float' to 'const VecFloat'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4380432Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1619): note: 'rw::math::vpu::Vector4::Vector4': no overloaded function could convert all the argument types
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4383215Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: could be 'rw::math::vpu::Vector4::Vector4(rw::math::vpu::Vector4 &&)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4386288Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1619): note: 'rw::math::vpu::Vector4::Vector4(rw::math::vpu::Vector4 &&)': cannot convert argument 1 from 'const float' to 'rw::math::vpu::Vector4 &&'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4389892Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1619): note: Reason: cannot convert from 'const float' to 'rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4392483Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: or       'rw::math::vpu::Vector4::Vector4(const rw::math::vpu::Vector4 &)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4395944Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1619): note: 'rw::math::vpu::Vector4::Vector4(const rw::math::vpu::Vector4 &)': cannot convert argument 1 from 'const float' to 'const rw::math::vpu::Vector4 &'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4399869Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1619): note: Reason: cannot convert from 'const float' to 'const rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4402844Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1619): note: while trying to match the argument list '(const float)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4405507Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1622): error C2440: 'initializing': cannot convert from 'float' to 'VecFloat'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4408385Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1622): note: 'rw::math::vpu::Vector4::Vector4': no overloaded function could convert all the argument types
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4410935Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: could be 'rw::math::vpu::Vector4::Vector4(rw::math::vpu::Vector4 &&)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4413650Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1622): note: 'rw::math::vpu::Vector4::Vector4(rw::math::vpu::Vector4 &&)': cannot convert argument 1 from 'float' to 'rw::math::vpu::Vector4 &&'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4416728Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1622): note: Reason: cannot convert from 'float' to 'rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4419407Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: or       'rw::math::vpu::Vector4::Vector4(const rw::math::vpu::Vector4 &)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4423024Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1622): note: 'rw::math::vpu::Vector4::Vector4(const rw::math::vpu::Vector4 &)': cannot convert argument 1 from 'float' to 'const rw::math::vpu::Vector4 &'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4427120Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1622): note: Reason: cannot convert from 'float' to 'const rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4430203Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1622): note: while trying to match the argument list '(float)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4433342Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): error C2679: binary '=': no operator found which takes a right-hand operand of type 'const float' (or there is no acceptable conversion)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4436584Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: could be 'rw::math::vpu::Vector4 &rw::math::vpu::Vector4::operator =(rw::math::vpu::Vector4 &&)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4439713Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: 'rw::math::vpu::Vector4 &rw::math::vpu::Vector4::operator =(rw::math::vpu::Vector4 &&)': cannot convert argument 2 from 'const float' to 'rw::math::vpu::Vector4 &&'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4442916Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Reason: cannot convert from 'const float' to 'rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4445430Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: 'rw::math::vpu::Vector4::Vector4': no overloaded function could convert all the argument types
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4447357Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: could be 'rw::math::vpu::Vector4::Vector4(rw::math::vpu::Vector4 &&)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4448906Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: 'rw::math::vpu::Vector4::Vector4(rw::math::vpu::Vector4 &&)': cannot convert argument 1 from 'const float' to 'rw::math::vpu::Vector4 &&'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4450672Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Reason: cannot convert from 'const float' to 'rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4452282Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Conversion requires a second user-defined-conversion operator or constructor
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4453683Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: or       'rw::math::vpu::Vector4::Vector4(const rw::math::vpu::Vector4 &)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4455311Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: 'rw::math::vpu::Vector4::Vector4(const rw::math::vpu::Vector4 &)': cannot convert argument 1 from 'const float' to 'const rw::math::vpu::Vector4 &'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4457277Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Reason: cannot convert from 'const float' to 'const rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4458860Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Conversion requires a second user-defined-conversion operator or constructor
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4460377Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: while trying to match the argument list '(const float)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4461754Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: or       'rw::math::vpu::Vector4 &rw::math::vpu::Vector4::operator =(const rw::math::vpu::Vector4 &)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4463476Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: 'rw::math::vpu::Vector4 &rw::math::vpu::Vector4::operator =(const rw::math::vpu::Vector4 &)': cannot convert argument 2 from 'const float' to 'const rw::math::vpu::Vector4 &'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4465417Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Reason: cannot convert from 'const float' to 'const rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4467040Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: 'rw::math::vpu::Vector4::Vector4': no overloaded function could convert all the argument types
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4468441Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: could be 'rw::math::vpu::Vector4::Vector4(rw::math::vpu::Vector4 &&)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4469978Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: 'rw::math::vpu::Vector4::Vector4(rw::math::vpu::Vector4 &&)': cannot convert argument 1 from 'const float' to 'rw::math::vpu::Vector4 &&'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4471698Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Reason: cannot convert from 'const float' to 'rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4473252Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Conversion requires a second user-defined-conversion operator or constructor
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4474628Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h(27): note: or       'rw::math::vpu::Vector4::Vector4(const rw::math::vpu::Vector4 &)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4476195Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: 'rw::math::vpu::Vector4::Vector4(const rw::math::vpu::Vector4 &)': cannot convert argument 1 from 'const float' to 'const rw::math::vpu::Vector4 &'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4477995Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Reason: cannot convert from 'const float' to 'const rw::math::vpu::Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4479569Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: Conversion requires a second user-defined-conversion operator or constructor
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4481162Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: while trying to match the argument list '(const float)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4482633Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): note: while trying to match the argument list '(VecFloat, const float)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4484185Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1644): error C2440: 'initializing': cannot convert from 'initializer list' to 'const Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4485740Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1644): note: 'rw::math::vpu::Vector4::Vector4': function does not take 2 arguments
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4487235Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1644): note: while trying to match the argument list '(const Vector3, float)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4488780Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1645): error C2440: 'initializing': cannot convert from 'initializer list' to 'const Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4490414Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1645): note: 'rw::math::vpu::Vector4::Vector4': function does not take 2 arguments
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4491916Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1645): note: while trying to match the argument list '(const Vector3, VecFloat)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4493476Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1646): error C2440: 'initializing': cannot convert from 'initializer list' to 'const Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4495020Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1646): note: 'rw::math::vpu::Vector4::Vector4': function does not take 2 arguments
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4496523Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1646): note: while trying to match the argument list '(const Vector3, float)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4498076Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1649): error C2440: 'initializing': cannot convert from 'initializer list' to 'const Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4499626Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1649): note: 'rw::math::vpu::Vector4::Vector4': function does not take 2 arguments
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4501129Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1649): note: while trying to match the argument list '(const Vector3, float)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4502840Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1650): error C2679: binary '-': no operator found which takes a right-hand operand of type 'const Vector4' (or there is no acceptable conversion)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4504777Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/vector3_operation.h(54): note: could be 'rw::math::vpu::Vector3 rw::math::vpu::operator -(rw::math::vpu::Vector3,rw::math::vpu::Vector3)' [found using argument-dependent lookup]
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4506698Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1650): note: 'rw::math::vpu::Vector3 rw::math::vpu::operator -(rw::math::vpu::Vector3,rw::math::vpu::Vector3)': cannot convert argument 2 from 'const Vector4' to 'rw::math::vpu::Vector3'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4508686Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1650): note: No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4510917Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1650): note: while trying to match the argument list '(const rw::math::vpu::Vector3, const Vector4)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4512486Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1650): error C2737: 'lvShadowPosition': const object must be initialized
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4514178Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1652): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'Matrix44Affine'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4515826Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1652): note: 'rw::math::vpu::Matrix44Affine::Matrix44Affine': function does not take 4 arguments
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4517519Z     D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1652): note: while trying to match the argument list '(const Vector4, const Vector4, const Vector4, const Vector4)'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4518581Z [4/5] b5-decomp\src\GameSource\Resource\BrnDLCManager.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4902227Z [5/5] b5-decomp\src\GameSource\Sound\Module\LogicModule\BrnSoundLogicModule.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4968270Z 
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4971220Z ==================== build exe summary ====================
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4972195Z compile: 3002 TUs -- 4 compiled, 2997 up to date, 1 failed  (1.4s, jobs=4)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4973666Z link:    skipped -- compile failures above
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4974208Z warnings: none
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4975736Z errors (10):
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4978194Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1619): error C2440: 'initializing': cannot convert from 'const float' to 'const VecFloat'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4981149Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1622): error C2440: 'initializing': cannot convert from 'float' to 'VecFloat'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4984180Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1639): error C2679: binary '=': no operator found which takes a right-hand operand of type 'const float' (or there is no acceptable conversion)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4986952Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1644): error C2440: 'initializing': cannot convert from 'initializer list' to 'const Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4988755Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1645): error C2440: 'initializing': cannot convert from 'initializer list' to 'const Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4990405Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1646): error C2440: 'initializing': cannot convert from 'initializer list' to 'const Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4992017Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1649): error C2440: 'initializing': cannot convert from 'initializer list' to 'const Vector4'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4993786Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1650): error C2679: binary '-': no operator found which takes a right-hand operand of type 'const Vector4' (or there is no acceptable conversion)
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4995485Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1650): error C2737: 'lvShadowPosition': const object must be initialized
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4997048Z   D:\a\BP-Decomp_Workflow\BP-Decomp_Workflow\b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp(1652): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'Matrix44Affine'
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4998099Z failed TUs (1):
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4998499Z   b5-decomp\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_Render.cpp
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.4998980Z ===========================================================
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.5546503Z ^[[33;1mWARNING: cmd.exe failed with native exit code 1; see build.log^[[0m
+candidate	Build and check candidate (no publish or game)	2026-10-23T21:30:10.5958435Z ##[error]Process completed with exit code 1.
