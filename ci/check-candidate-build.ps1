@@ -55,15 +55,16 @@ $SystemUserProfileSourceBase = 'bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7'
 $SystemUserProfilePinsLfSha256 = '3a6965215e4fa23d6831f8ed035d9d33490090245e93d95c5f1d6904b8b06465'
 $SystemUserProfilePlanLfSha256 = 'b922bc45991763901be63194b7824ae1aae83d309f10dce457988c1a82833686'
 $SystemUserProfileRunnerLfSha256 = '2eee426e6e0f540311c15943b77c4f5a5dc4b3defc8d57e6b32e66aa606716a3'
-# Exact delta02 payload content; checkout line endings may differ.
+# Exact delta03 diagnostic-support payload content; checkout line endings may differ.
 $OnlineSaveRoutePayloadPins = @{
     'tests/OnlineSaveRoute.cpp' = @{ lf_sha256 = '9105e7eeec51378a21136e80409b502ca0d383c80c267a4520384f879577d728'; lf_bytes = 22917 }
     'tests/run_online_save_route.py' = @{ lf_sha256 = '053ae3b9fa21178b1b81fe1b864c991dcdd058fc1d43488fe92e25e44890ac9b'; lf_bytes = 11772 }
-    'tests/online_save_route_binding.py' = @{ lf_sha256 = '95c16b1ace9054a0c60b387fa8496db9c462ca779883c4143c6d9c17e7b963f1'; lf_bytes = 7096 }
+    'tests/online_save_route_binding.py' = @{ lf_sha256 = '4b44e0c8f7c7705f11616b59c95d730ae9660d27486f234ebd1bf9097cc446dc'; lf_bytes = 7456 }
     'tests/online_save_route_owned.py' = @{ lf_sha256 = 'c21a018a37c094eec2c6befcd19b8862f8c33c84b66f84c33c55eac600649179'; lf_bytes = 12783 }
-    'tests/evidence/online_save_route/source_pins.json' = @{ lf_sha256 = '49fbf94c1ac3805bdd264726b3cc56be05a94831169f914c4734017fc6aa5ff7'; lf_bytes = 4309 }
+    'tests/evidence/online_save_route/source_pins.json' = @{ lf_sha256 = 'a6a7a289a7de87bf6017e6d6255d92eb326f44e9b7c158c76c96aaeeafeabc57'; lf_bytes = 5017 }
     'tests/evidence/online_save_route/test_plan.json' = @{ lf_sha256 = '1709fa6b36657f903668e72943956566eb1d7ce3e24797fbbda5d270b308bc8e'; lf_bytes = 4435 }
     'tests/evidence/online_save_route/BrnGuiOptionsDataProfile_8b2940d4.cpp' = @{ lf_sha256 = 'e36d09bce219ca3125a204bcb34fe95aab2e7784c37d2f247a6eef980124c74d'; lf_bytes = 26153 }
+    'tests/OnlineSaveRouteDiagnosticGlobals.cpp' = @{ lf_sha256 = 'ba311bf5c9397d9b61ad795458351a9ba400e88a2257ce6d8202ba9334960710'; lf_bytes = 453 }
 }
 
 function Invoke-Native([string] $Command, [string[]] $Arguments, [string] $LogName) {
@@ -583,7 +584,7 @@ try {
         }
         $routePins = Get-Content -Raw -LiteralPath (Join-Path $SourceRoot 'tests/evidence/online_save_route/source_pins.json') | ConvertFrom-Json -AsHashtable
         if ($routePins.schema_version -ne 1 -or $routePins.normalization -cne 'crlf_to_lf_only' -or
-            $routePins.base -cne $routeReceipt.source_base_metadata -or @($routePins.b5_files.Keys).Count -ne 20 -or
+            $routePins.base -cne $routeReceipt.source_base_metadata -or @($routePins.b5_files.Keys).Count -ne 24 -or
             @($routePins.workflow_files.Keys).Count -ne 3) { throw 'Online-save-route source-pin schema differs.' }
         # 8b is proof metadata. The baseline blob is supplied and hashed by the
         # pinned binder; no historical Git object is needed in this shallow checkout.
@@ -631,13 +632,13 @@ try {
         foreach ($variantName in @('candidate', 'oldtrap', 'omitted_init')) {
             $variant = $routeResult.variants[$variantName]
             $variantRoot = Join-Path $routeOut $variantName
-            if (@($variant.compile).Count -ne 6 -or $variant.dependencies_unchanged_after_run -ne $true -or
+            if (@($variant.compile).Count -ne 8 -or $variant.dependencies_unchanged_after_run -ne $true -or
                 @($variant.dependency_inputs.Keys).Count -eq 0 -or
                 ([string]::Join('|', [string[]]@($variant.modes.Keys | Sort-Object))) -cne
                 ([string]::Join('|', [string[]]@($routeVariantModes[$variantName] | Sort-Object)))) {
                 throw "Online-save-route compile/dependency/mode composition differs: $variantName"
             }
-            for ($index = 0; $index -lt 6; ++$index) {
+            for ($index = 0; $index -lt 8; ++$index) {
                 $null = Assert-OnlineSaveRouteProcess $variant.compile[$index].run (Join-Path $variantRoot "compile$index.log") 120 0
             }
             $null = Assert-OnlineSaveRouteProcess $variant.link.run (Join-Path $variantRoot 'link.log') 120 0
@@ -646,7 +647,7 @@ try {
             if ($variant.executable.raw_sha256 -cne $exeRecord.sha256 -or $variant.executable.raw_bytes -ne $exeRecord.bytes) {
                 throw "Online-save-route retained executable differs: $variantName"
             }
-            $routeReceipt.variants[$variantName] = @{ compile_count = 6; link_exit_code = 0; executable = $exeRecord; modes = @{} }
+            $routeReceipt.variants[$variantName] = @{ compile_count = 8; link_exit_code = 0; executable = $exeRecord; modes = @{} }
         }
         $routeModes = @(
             @{ variant = 'candidate'; name = 'candidate'; checks = 71; failures = 0; exit = 0 },
