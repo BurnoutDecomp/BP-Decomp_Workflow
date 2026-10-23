@@ -1,0 +1,94 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "offline_road_rage_output_lifetime_62054",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\offline_road_rage_62054_before_ignition_execution_20261023\\Case.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-23T17:13:11.0060509+02:00",
+    "flow_exit":  0,
+    "bug":  "One accepted Road Rage takedown output may be rescored on later pre-world steps if its typed output record is not retired.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\offline_road_rage_62054_before_ignition_execution_20261023\\runs\\native_20261023_151100_80f6d41c",
+    "label":  "RoadRageOutputLifetime / case62054 / hosted39855395071 / one original debug callback / separately attributed local harness",
+    "area":  "takedown",
+    "as_expected":  false,
+    "verdict":  "FAIL",
+    "slot":  62054,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 assert family(ies), all known (0 lines)",
+                       "pass":  true,
+                       "name":  "no new assertions",
+                       "kind":  "NewAsserts"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no exceptions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "reached DRIVING",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "mode3/state2/controllerActive1 lines=81",
+                       "pass":  true,
+                       "name":  "true offline Road Rage reached in-progress with controller",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "F2_call_taps=0;mode3_HUD0_and_fresh_player_motion\u003e=55mph precede one tap; debug stimulus, not organic credit",
+                       "pass":  false,
+                       "name":  "one original Force takedown callback follows clean 0/target precondition",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "missing one scoped F2 callback tap",
+                       "pass":  false,
+                       "name":  "one callback dispatch yields an accepted typed aggressor0/victim1 event",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "missing pre-F2 game-log boundary",
+                       "pass":  false,
+                       "name":  "producer and translated-output event counts match the selected before/fixed expectation",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "retained action255-to-gui427 lines=0 (optional diagnostic is capped at32 total event-flow lines and may be spent before the callback); BMPs=40;frames.csv=True; manually compare visible pre-event, post-event, and later countdown digits by frame order; original takedown-camera slow motion means do not compare against wall time; no raw424/deadline trace exists",
+                       "pass":  true,
+                       "name":  "countdown-phase pixels captured; timer result remains manual",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "exact stopped private raw channels retained=1; no normal log changed",
+                       "pass":  true,
+                       "name":  "retain exact owned private logs",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "only slot-scoped debug-key helper and original debug callback script are authorized",
+                       "pass":  true,
+                       "name":  "no assert release or forbidden command",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11284480,
+                       "exe_mtime_before_lock":  "2026-10-22T23:15:53.5330398+02:00",
+                       "exe_sha":  "6fa903ebd320",
+                       "b5_head":  "91a0ed564",
+                       "exe_b5":  "91a0ed56",
+                       "parent_head":  "8d67d4c0",
+                       "exe_mtime":  "2026-10-22T23:15:53.5330398+02:00"
+                   }
+}
