@@ -1,0 +1,81 @@
+{
+  "base_commit": "7e455d8854a32df1ca1934a54cc279c1e268a103",
+  "status": "source-only proposal; not applied to production",
+  "owned_source_files": [
+    "src/GameSource/Gui/Flow/Screen/States/BrnCredits.cpp",
+    "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnOfflineInstantResults.cpp",
+    "src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp"
+  ],
+  "changed_source_call_sites": 4,
+  "changed_source_consumer_cases": 1,
+  "proposal": {
+    "event_id": 23,
+    "wire": {
+      "payload_size": 8,
+      "payload_offset": 12,
+      "total_bytes": 20,
+      "fields": [
+        "u32 sound-name hash",
+        "bool flagA",
+        "bool flagB",
+        "2-byte alignment"
+      ],
+      "channel": 40
+    },
+    "receiver": "decode GetGuiPayload's raw/unwrapped event-23 body at offsets 0/4/5; retain full-record offsets 12/16/17 only for the known 20-byte compatibility record with header id 155 and payload offset 12",
+    "compatibility": [
+      "event-155 boot menu-stream translation",
+      "event ids 508/509"
+    ],
+    "not_changed": [
+      "CgsGuiStateInterface::OutputGuiEvent<T>",
+      "BrnGuiModule channel-40 drain",
+      "BrnGuiModule channel-155 translator"
+    ]
+  },
+  "source_images": [
+    {
+      "path": "src/GameSource/Gui/Flow/Screen/States/BrnCredits.cpp",
+      "preimage_git_blob": "708708258904c1e4457d01d026d2ed8b99a7739a",
+      "preimage_sha256": "ce60cc94fe6e9669a9d9c6118bacdea975cfca9fa663624e4a0caeba63a531cc",
+      "postimage_sha256": "809f33a01130c8fe3a37e6c00d77421f574e89c239e4b9dd6aba3f8b06a8a367"
+    },
+    {
+      "path": "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnOfflineInstantResults.cpp",
+      "preimage_git_blob": "f26a9412f778418f46c3917f6f1f3f306f4c4093",
+      "preimage_sha256": "e9e0b12d606388b5318b000036b91084f387124a28753ef6c8be6994a3aac2ca",
+      "postimage_sha256": "01cee121acff97835cbd8477283e47c768b16d45a79c99b793bb1567eceeadff"
+    },
+    {
+      "path": "src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp",
+      "preimage_git_blob": "6629200b634b141c58d8c1fca0c5d17512cb14f2",
+      "preimage_sha256": "4cebc623933fb92a21bfae3cc33bd1dba16b5e0a6f0f791c59d94a1fd15c719e",
+      "postimage_sha256": "c9b7131396731d4747a415e573ddcd5a72526f4f5a9511999c2cbae0a7ae32b3"
+    }
+  ],
+  "evidence_sha256": {
+    "artist_exports": {
+      "0x82476C00.json": "bf377ad18524f6a0c0d8277d10cbf26a237906c5de24f2f03466cc686031a817",
+      "0x824C5C38.json": "eb7a358c36605731f320b47cb1b2a3e99dd8a8b8473ec8592f598a265621df61",
+      "0x824CFAF0.json": "61c25fc2b6c80fa498c3818403d54717516d6946de0611d9b9813254d063d170",
+      "0x824CFBD8.json": "3efd0062a4413087587756a9cb4d6244f6aa9a175541fa90865f78702c51b4bc",
+      "0x824D58A8.json": "a0c1562df6393923df6248fb27bf6d35cf427cdc6951c9c34dd17f8b46476ec1",
+      "0x826ED6C8.json": "63aedec5ab89369d368208c7a8ce5e752ff5b0de9c1c32c4babc920016e474ee"
+    },
+    "decfigs_excerpt": "4899e0f75699fd33e577438a0bbbf20192b1043f3bc04bd4d9bf75430518b926",
+    "artist_case23_excerpt": "4fe31a9a3b2919fbd756b5fb1af3c816d4bb1fc5c92336392a30c46688857fc0",
+    "menu23_receiver_representations": "84f3b7a705df7c30fc670e9720229d1d95061442d31f9395ab57eedc255cf509",
+    "channel155_compatibility_excerpt": "aa632d1acff79ea2f11f5d3e49e3e94f257e225f6b4a8b60c61255c365f46a01"
+  },
+  "validation": {
+    "local_cpp_compile_or_tests": false,
+    "game_or_runtime_test": false,
+    "production_source_changed": false,
+    "git_or_index_mutation": false,
+    "base_sound_blob_checked_without_git": "6629200b634b141c58d8c1fca0c5d17512cb14f2"
+  },
+  "supporting_current_source": {
+    "src/GameSource/Gui/BrnGuiModule.cpp": "channel-155 source excerpt, not changed",
+    "src/GameSource/Gui/Flow/HUD/States/BrnBootLegal.cpp": "event-155 record source excerpt, not changed"
+  }
+}

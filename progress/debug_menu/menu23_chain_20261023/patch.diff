@@ -1,0 +1,130 @@
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCredits.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCredits.cpp
+@@ -7,6 +7,9 @@
+ #include "GameShared/GameClasses/Module/CgsVariableEventQueue.h"          // VariableEventQueue<18432,16> (the in-queue view)
+ #include "GameSource/Gui/BrnGuiCache.h"                                   // BrnGui::GuiCache
+ #include "GameShared/GameClasses/Sound/Playback/CgsCommon.h"              // CgsSound::Playback::Name::MakeHash
++
++static_assert(sizeof(CgsGui::GuiEventPlayMusicOnMenuStream) == 20,
++              "X360 channel-40 menu-music record is {8,23,12}+8");
+ 
+ // BrnGui::Credits -- reconstructed from BURNOUT_X360_ARTIST.XEX.
+ //
+@@ -121,7 +124,10 @@
+         static_cast<u32>(CgsSound::Playback::Name::MakeHash(KPC_NO_MUSIC_STREAM_NAME));
+ 
+     CgsGui::GuiEventPlayMusicOnMenuStream lMusicEvent(KU_NO_MUSIC_STREAM_HASH);
+-    mpStateInterface->OutputGuiEvent(lMusicEvent);
++    // This object is already the complete {8,23,12}+8 channel-40 record.
++    mpStateInterface->GetOutputEventQueue()->AddEvent(
++        reinterpret_cast<const CgsModule::Event*>(&lMusicEvent), 40,
++        static_cast<s32>(sizeof(lMusicEvent)));
+ 
+     mpStateInterface->UnRegisterForEvents(maiEventToObserve, miNumEventsObserved);
+ 
+@@ -187,7 +193,10 @@
+ 
+     CgsGui::GuiEventPlayMusicOnMenuStream lMusicEvent(
+         static_cast<u32>(CgsSound::Playback::Name::MakeHash(KPC_CREDITS_MOVIE_NAME)));
+-    mpStateInterface->OutputGuiEvent(lMusicEvent);
++    // This object is already the complete {8,23,12}+8 channel-40 record.
++    mpStateInterface->GetOutputEventQueue()->AddEvent(
++        reinterpret_cast<const CgsModule::Event*>(&lMusicEvent), 40,
++        static_cast<s32>(sizeof(lMusicEvent)));
+ 
+     return true;
+ }
+--- a/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnOfflineInstantResults.cpp
++++ b/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnOfflineInstantResults.cpp
+@@ -53,6 +53,9 @@
+ #include "SharedClasses/DataLists/VehicleListEntry.h"
+ #include <cstring>   // strcmp / strstr (HandleAptTriggers' component-name matching)
+ #include <cstdlib>   // getenv (the BRN_LOSE_DIAG witness)
++
++static_assert(sizeof(CgsGui::GuiEventPlayMusicOnMenuStream) == 20,
++              "X360 channel-40 menu-music record is {8,23,12}+8");
+ 
+ int MaybeDrawText(CgsDev::Debug2DImmediateRender* lpDisplay, const char* lpcText,
+                   f32 lfX, f32 lfY, f32 lfScale, CgsDev::RGBA lColour, bool lbCheckScreen);
+@@ -1628,7 +1631,10 @@
+         CgsGui::GuiEventPlayMusicOnMenuStream lMusicEvent(
+             static_cast<u32>(CgsSound::Playback::Name::MakeHash(KAC_CREDITS_MUSIC_STREAM)),
+             true, false);
+-        mpStateInterface->OutputGuiEvent(lMusicEvent);
++        // This object is already the complete {8,23,12}+8 channel-40 record.
++        mpStateInterface->GetOutputEventQueue()->AddEvent(
++            reinterpret_cast<const CgsModule::Event*>(&lMusicEvent), 40,
++            static_cast<s32>(sizeof(lMusicEvent)));
+         return true;
+     }
+ 
+@@ -2003,7 +2009,10 @@
+ 
+             CgsGui::GuiEventPlayMusicOnMenuStream lMusicEvent(KU_NO_MUSIC_STREAM_HASH,
+                                                               true, false);
+-            mpStateInterface->OutputGuiEvent(lMusicEvent);
++            // This object is already the complete {8,23,12}+8 channel-40 record.
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lMusicEvent), 40,
++                static_cast<s32>(sizeof(lMusicEvent)));
+         }
+ 
+         // ---- 5. the post-event teardown, {1, 292, 12} on channel 40 ---------------------
+--- a/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp
++++ b/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp
+@@ -480,16 +480,46 @@
+         {
+         case 23:
+         {
+-            // X360 0x826ED6C8 case 23 copies the wire record's three fields into the
+-            // message payload at +0x00 / +0x04 / +0x05 -- NOT the wire record itself
+-            // (which carries a 12-byte GuiEvent<23> header here). See
+-            // BrnSound::MusicOnMenuStreamData.
+-            const CgsGui::GuiEventPlayMusicOnMenuStream* lpGuiEvent =
+-                reinterpret_cast<const CgsGui::GuiEventPlayMusicOnMenuStream*>(lpEvent);
++            // X360 0x826ED6C8 case 23 copies the stream hash and two flags to the
++            // message at payload offsets +0/+4/+5. GetGuiPayload has already removed a
++            // type-23 GuiEvent header when one is present. The channel-40 drain also
++            // unwraps {8,23,12}+8 to the same 8-byte payload before this queue receives it.
++            //
++            // Keep the separate channel-155 boot compatibility path: BrnGuiModule translates
++            // its full {0,155,12}+8 record directly to type 23, so GetGuiPayload leaves that
++            // 20-byte type-155 record intact and these fields remain at +12/+16/+17.
++            const u8* const lpuEventBytes = reinterpret_cast<const u8*>(lpEvent);
++            const GuiEventWireHeader* lpEventHeader =
++                reinterpret_cast<const GuiEventWireHeader*>(lpEvent);
++            u32 luStreamNameHash;
++            u8 lu8FromVideo;
++            u8 lu8PlayOverCustomSoundtrack;
++            const bool lbFullChannel155Record =
++                lpuPayload == lpuEventBytes &&
++                liSize >= static_cast<s32>(sizeof(CgsGui::GuiEventPlayMusicOnMenuStream)) &&
++                lpEventHeader->muEventType == 155u &&
++                lpEventHeader->muPayloadOffset == sizeof(GuiEventWireHeader);
++            if (lbFullChannel155Record)
++            {
++                luStreamNameHash =
++                    static_cast<u32>(EventS32At(lpEvent, 12));
++                lu8FromVideo = EventU8At(lpEvent, 16);
++                lu8PlayOverCustomSoundtrack = EventU8At(lpEvent, 17);
++            }
++            else
++            {
++                const CgsModule::Event* lpPayloadEvent =
++                    reinterpret_cast<const CgsModule::Event*>(lpuPayload);
++                luStreamNameHash =
++                    static_cast<u32>(EventS32At(lpPayloadEvent, 0));
++                lu8FromVideo = EventU8At(lpPayloadEvent, 4);
++                lu8PlayOverCustomSoundtrack = EventU8At(lpPayloadEvent, 5);
++            }
++
+             BrnSound::MusicOnMenuStreamData lData;
+-            lData.muStreamNameHash = lpGuiEvent->muStreamNameHash;
+-            lData.mbFromVideo = lpGuiEvent->mbFlagA ? 1u : 0u;
+-            lData.mbPlayOverCustomSoundtrack = lpGuiEvent->mbFlagB ? 1u : 0u;
++            lData.muStreamNameHash = luStreamNameHash;
++            lData.mbFromVideo = lu8FromVideo ? 1u : 0u;
++            lData.mbPlayOverCustomSoundtrack = lu8PlayOverCustomSoundtrack ? 1u : 0u;
+             lData.maReserved[0] = 0;
+             lData.maReserved[1] = 0;
+             PostSoundMessage(mMessageQueue, 13, 0, 0, 2,
