@@ -1,0 +1,30 @@
+{
+  "parent_base_commit": "2ca227af02ca882a2fd9681ce3443e283df64121",
+  "source_base_commit": "702d242bd0e99a8510ef09bbc42b0a316956ac9b",
+  "authority": "Explicit shipping build_game_exe.bat -> compile_exe.py, not CMake",
+  "cpp_providers": [
+    {
+      "path": "src/GameShared/GameClasses/System/Resource/CgsLiveUpdateModule.cpp",
+      "explicitly_mounted": false
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/GameTalk/CgsGameTalk.cpp",
+      "explicitly_mounted": false
+    },
+    {
+      "path": "src/SDKs/EA/GameTalk/GameTalk.cpp",
+      "explicitly_mounted": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Module/CgsBaseEventReceiverQueue.cpp",
+      "explicitly_mounted": true
+    }
+  ],
+  "game_talk_header_selection": "Canonical explicit SDKs/EA/GameTalk/GameTalk.h include; no speculative vendor mirror constructor/API chosen.",
+  "source_definitions_present_but_shipping_unmounted": [
+    "src/GameShared/GameClasses/System/GameTalk/CgsGameTalk.cpp",
+    "src/GameShared/GameClasses/System/Resource/CgsLiveUpdateModule.cpp"
+  ],
+  "mount_changes": false,
+  "activation": false
+}
