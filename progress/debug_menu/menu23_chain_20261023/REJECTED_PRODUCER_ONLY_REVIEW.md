@@ -1,0 +1,13 @@
+# Independent source review — menu-music event 23
+
+VERDICT: fail
+
+The four proposed caller edits match ARTIST's producer wire, but they are not safe as a producer-only delta against the pinned PC consumer.
+
+The artifact is correctly bound to B5 source `7e455d8854a32df1ca1934a54cc279c1e268a103`. Both preimage Git blobs match `bindings.json`; postimage SHA-256 values also match: `809f33a01130c8fe3a37e6c00d77421f574e89c239e4b9dd6aba3f8b06a8a367` for `BrnCredits.cpp` and `01cee121acff97835cbd8477283e47c768b16d45a79c99b793bb1567eceeadff` for `BrnOfflineInstantResults.cpp`. All five pinned publisher/caller ARTIST export hashes and the DecFIGS reference hash match the packet. The current base blobs for `BrnGuiModule.cpp`, `BrnSoundLogicModule.cpp`, and `CgsGuiStateInterface.h` match the bindings and remain outside the proposal.
+
+ARTIST `StateInterface::OutputGuiEvent<GuiEventPlayMusicOnMenuStream>` (`0x82476C00`) writes `{8,23,12}+8`, passes channel 40, and copies 20 bytes. The three generic caller sites and manual `Credits::OnLeave` publisher likewise attest to channel 40 and that record size. The proposed posts preserve the full record without a second wrapper; DecFIGS supports the event member shape. The existing channel-155 BootLegal/PostTitleScreenLoad path is a separate translator and is untouched.
+
+The blocker is the next consumer. At the pinned PC `BrnGuiModule.cpp` channel-40 arm (around lines 3401–3420), the drain takes `lpRawEvent = lpEvent + payloadOffset` and enqueues it with the inner type and `payloadSize`; for event 23 that means an 8-byte queue entry. `CgsModule::VariableEventQueue::AddEvent` copies exactly that size and `GetFirstEvent` returns the copied bytes, and `BridgeGuiToSound` passes the queue to `SoundLogicModule` unchanged. ARTIST `SoundLogicModule::ProcessGuiEvents` case 23 reads the hash at offset 0 and flags at offsets 4 and 5 of that payload. The pinned PC `BrnSoundLogicModule.cpp` instead casts `lpEvent` to `GuiEventPlayMusicOnMenuStream` and reads the hash/flags at offsets 12/16/17 (around lines 481–491); it ignores the already-computed raw `lpuPayload`. The four edits would change the queue from the full 20-byte event that this PC branch reads to an 8-byte payload that it does not. That can yield incorrect reads beyond the event data, so the consumer representation must be reconciled in the same reviewed composition before this producer repair can pass.
+
+Scope is otherwise four replacements across two files, with no generic-template or decoder changes and no duplicate callsite additions. This is static evidence only: no build, runtime, audio, or site credit is claimed.
