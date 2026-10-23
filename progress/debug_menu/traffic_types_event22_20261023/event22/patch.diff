@@ -1,0 +1,148 @@
+--- a/b5-decomp/src/GameSource/Gui/Flow/HUD/Components/BrnRoadRuleComponent.cpp
++++ b/b5-decomp/src/GameSource/Gui/Flow/HUD/Components/BrnRoadRuleComponent.cpp
+@@ -1,18 +1,18 @@
+ #include "GameSource/Gui/Flow/HUD/Components/BrnRoadRuleComponent.h"
+ 
+ #include <cmath>                                                       // std::sqrt (the VMX rsqrt chain)
+ #include <cstring>                                                     // strncpy / strlen (X360 inlined copies)
+ #include <cstdlib>
++#include <cstddef>
+ 
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                     // CGS_ASSERT
+ #include "GameShared/GameClasses/Development/Log/CgsLog.h"
+ #include "GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dTransform.h"
+ #include "GameShared/GameClasses/Core/CgsStringUtils.h"                // CgsCore::SPrintf
+ #include "GameShared/GameClasses/Language/CgsLanguageManager.h"        // FormatCurrencyString
+ #include "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h" // StateInterface (OutputGuiEvent / GetLanguageManager)
+-#include "GameShared/GameClasses/Gui/View/AptInterface/CgsAptCommunicator.h" // CgsGui::GuiEventSoundTrigger (id 22, 100B)
+ #include "GameSource/Gui/BrnGuiCache.h"                                // GuiCache (mode / score-mode / in-event gate / player name)
+ #include "GameSource/Gui/BrnGuiDemangledEventTypes.h"                  // GuiEventRequestTraining (id 572)
+ #include "GameSource/GameState/BrnGameStateSharedIO.h"                 // GsmIO::EGameModeType (in-event colouring gate)
+ #include "GameSource/Gui/Flapt/BrnFlaptFileRef.h"                      // BrnFlapt::FileRef::FindComponent
+ #include "GameSource/Gui/Flapt/BrnFlaptMovieClipInstance.h"            // MovieClipInstance::ResetTimeline
+@@ -74,10 +74,31 @@
+ namespace BrnGui
+ {
+ 
+ namespace
+ {
++    // The native event-22 payload has no GuiEvent<22> header: ARTIST copies these 100 bytes
++    // directly, then wraps them as {100, 22, 12} on channel 40. The host GuiEventSoundTrigger
++    // type includes its 12-byte PC header, so do not pass that type to OutputGuiEvent.
++    struct GuiEventSoundTriggerPayload22
++    {
++        char macTypeName[32];
++        char macActionName[32];
++        char macLabel[32];
++        s32 miLayer;
++
++        s32 GetEventType() const { return 22; }
++    };
++    typedef CgsGui::GuiEventWrapper<GuiEventSoundTriggerPayload22, 40> GuiEventSoundTriggerRecord22;
++    static_assert(sizeof(GuiEventSoundTriggerPayload22) == 100,
++                  "ARTIST event 22 copies three 32-byte strings and the layer word");
++    static_assert(offsetof(GuiEventSoundTriggerPayload22, miLayer) == 96,
++                  "ARTIST GuiModule::Update reads the event-22 layer at payload +96");
++    static_assert(offsetof(GuiEventSoundTriggerRecord22, mOutEvent) == 12 &&
++                  sizeof(GuiEventSoundTriggerRecord22) == 112,
++                  "ARTIST event-22 channel-40 record is {100,22,12}+100");
++
+     // BrnRoadRuleComponent.h:277 (KI_MAX_ROAD_INDEX) -- the miRoadIndex bound the
+     // X360 asserts against (cmpwi 0x42).
+     const s32 KI_MAX_ROAD_INDEX = 66;
+ 
+     // --- SetCurrentSignState animation-frame tables (X360 off_82F24D08 /
+@@ -205,16 +226,20 @@
+                                      const char* lpcTrigger)
+ {
+     CGS_ASSERT(liParentAptLayerIndex != -1,
+                "Cannot send audio event - no valid flash layer supplied when constructed");   // (non-gating)
+ 
+-    CgsGui::GuiEventSoundTrigger lSound;
++    GuiEventSoundTriggerPayload22 lSound = {};
+     CopyFixedString32(lSound.macTypeName,   KPC_SOUND_COMPONENT);
+     CopyFixedString32(lSound.macActionName, lpcTrigger);
+     CopyFixedString32(lSound.macLabel,      KPC_SOUND_LABEL);
+     lSound.miLayer = liParentAptLayerIndex;
+-    lpStateInterface->OutputGuiEvent(lSound);
++
++    GuiEventSoundTriggerRecord22 lRecord(lSound);
++    lpStateInterface->GetOutputEventQueue()->AddEvent(
++        reinterpret_cast<const CgsModule::Event*>(&lRecord),
++        lRecord.GetChannel(), static_cast<s32>(sizeof(lRecord)));
+ }
+ 
+ // ---------------------------------------------------------------------------
+ // X360-inlined rule-family classifiers (DWARF :570/:574; every call site inlines
+ // the same {1,2} / {3,4} pair -- e.g. SwitchModes @0x8243F39C.., GetRoadSignColour
+--- a/b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp
++++ b/b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp
+@@ -9,10 +9,11 @@
+ #include "SharedClasses/Gui/SatNav/BrnMapUtils.h"   // [H3b] MapTransform (the sat-nav view-rect install)
+ 
+ #include <cstdio>                                                         // std::snprintf (log formatting)
+ #include <windows.h>                                                      // [gate] GetEnvironmentVariableA (BRN_FLAPT_AFTER_DISPATCH)
+ #include <chrono>   // the PC frame clock for the view time-step event (FLAG: wall clock)
++#include <cstddef>  // offsetof for the native event-22 payload
+ #include <cstring>  // std::strcmp (ARTIST GUI-audio action-name table)
+ 
+ #include "GameShared/GameClasses/Core/CgsID.h"                            // CgsIDCompress
+ #include "GameShared/GameClasses/Development/Log/CgsLog.h"                // CgsDev::Log
+ #include "GameShared/GameClasses/Development/MessageSystem/CgsMessage.h" // CgsDev::Message::gxMessageFilterFlags
+@@ -81,10 +82,24 @@
+ namespace BrnGameMainFlowController { extern bool gBrnInGameStateActive; }
+ extern bool gbLogGuiAudioTriggers; // X360 byte_82FB5098; defined by CgsAptCommunicator.cpp.
+ 
+ namespace
+ {
++    // ARTIST event 22's unwrapped inner body is 100 bytes, with no GuiEvent header.
++    // Keep a payload-only view here because the current CgsGui::GuiEventSoundTrigger
++    // carries a 12-byte host header ahead of these fields.
++    struct GuiEventSoundTriggerPayload22
++    {
++        char macTypeName[32];
++        char macActionName[32];
++        char macLabel[32];
++        s32 miLayer;
++    };
++    static_assert(sizeof(GuiEventSoundTriggerPayload22) == 100 &&
++                  offsetof(GuiEventSoundTriggerPayload22, miLayer) == 96,
++                  "ARTIST event-22 payload reads its layer at byte 96");
++
+     // ARTIST file-global Tool.GUI request owners at82FB5060/5088/5089.
+     // The native image starts these bytes at zero. Construct clears only the
+     // start flag; native Update consumes start before stop. Names are host projections.
+     char gacGuiToolHookName[32] = {};
+     bool gbGuiToolStartHookRequested = false;
+@@ -3447,10 +3462,31 @@
+                     if (luEventType == 292u)
+                         mGuiCache.RecEvent(lpRawEvent, static_cast<s32>(luEventType));
+                     RouteEventToFlow(
+                         lpRawEvent, static_cast<s32>(luEventType),
+                         static_cast<s32>(luPayloadSize));
++
++                    // ARTIST GuiModule::Update @0x82527A58 consumes event 22 after the
++                    // channel-40 wrapper has been unwrapped: the 100-byte payload is
++                    // {type[32], action[32], label[32], layer@96}. It resolves the movie
++                    // from that layer, maps the action, and emits GuiAudioTriggerEvent 457.
++                    // FLAG PC-platform leaf: this output-queue pump has no module-input
++                    // loopback into GuiModule::Update, so run the same handler here. Keep
++                    // event 22 on the existing output/observer path above; the callback
++                    // appends the resulting PC typed event 201 to mpOutputBuffer.
++                    // DELETE-WHEN the channel-40 module-input loopback dispatches event 22.
++                    if (luEventType == 22u && luPayloadSize == 100u &&
++                        luPayloadOffset == 12u && liSize >= 112)
++                    {
++                        const GuiEventSoundTriggerPayload22* const lpSoundPayload =
++                            reinterpret_cast<const GuiEventSoundTriggerPayload22*>(lpRawEvent);
++                        const char* const lpacMovieName =
++                            mViewModule.GetMovieNameByLevel(lpSoundPayload->miLayer);
++                        FlaptSoundTriggerCallback(this, lpSoundPayload->macTypeName,
++                                                  lpacMovieName, lpSoundPayload->macActionName,
++                                                  lpSoundPayload->macLabel);
++                    }
+                     break;
+                 }
+ 
+                 case 41:   // channel 41: GuiOutViewState records -> the view input queue
+                 {

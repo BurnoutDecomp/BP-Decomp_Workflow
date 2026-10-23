@@ -1,0 +1,48 @@
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp
+@@ -1616,10 +1616,11 @@
+             lvCabPivot_TrailerPivot_BackAxle_FwdAxle.z,
+             lvCabPivot_TrailerPivot_BackAxle_FwdAxle.w
+         };
+-        const VecFloat lfWidth( lBBoxHalfSize.x );  // the X360 broadcasts BBoxHalfSize.x
++        const VecFloat lfWidth = { lBBoxHalfSize.x, lBBoxHalfSize.x,
++                                   lBBoxHalfSize.x, lBBoxHalfSize.x }; // original broadcast
+ 
+         Matrix44Affine lShadowTransform = lBodyTransform;
+-        VecFloat lfHeightOffGround( 0.0f );
++        VecFloat lfHeightOffGround = {};
+ 
+         if ( lbIsPhysical )
+         {
+@@ -1636,23 +1637,20 @@
+                                             lBodyTransform.zAxis.z };
+             const Vector3 lvShadowRight = rw::math::vpu::Cross( lvBodyForward, lvWorldNormal );
+             const Vector3 lvShadowAt = rw::math::vpu::Cross( lvWorldNormal, lvShadowRight );
+-            lfHeightOffGround = lrRoadNormal_HeightAboveRoad.w;
++            const f32 lfRoadHeight = lrRoadNormal_HeightAboveRoad.w;
++            lfHeightOffGround = { lfRoadHeight, lfRoadHeight, lfRoadHeight, lfRoadHeight };
+ 
+             // The two cross products retain the console's orientation/signs and do not
+             // normalize. Explicit W lanes match the VMX rows: both cross rows have W=0, the
+             // normal row keeps the road height, and the position row keeps the transform W.
+-            const Vector4 lvShadowRight_W0( lvShadowRight, 0.0f );
+-            const Vector4 lvWorldNormal_Height( lvWorldNormal, lfHeightOffGround );
+-            const Vector4 lvShadowAt_W0( lvShadowAt, 0.0f );
+             const Vector3 lvWorldUp = rw::math::vpu::GetVector3_YAxis();
+             const Vector3 lvHeightOffset = rw::math::vpu::Mult( lvWorldUp, lfHeightOffGround );
+-            const Vector4 lvHeightOffset_W0( lvHeightOffset, 0.0f );
+-            const Vector4 lvShadowPosition = lBodyTransform.wAxis - lvHeightOffset_W0;
+-
+-            lShadowTransform = Matrix44Affine( lvShadowRight_W0,
+-                                               lvWorldNormal_Height,
+-                                               lvShadowAt_W0,
+-                                               lvShadowPosition );
++            const Vector3 lvShadowPosition = lBodyTransform.wAxis - lvHeightOffset;
++
++            lShadowTransform.xAxis = { lvShadowRight.x, lvShadowRight.y, lvShadowRight.z, 0.0f };
++            lShadowTransform.yAxis = { lvWorldNormal.x, lvWorldNormal.y, lvWorldNormal.z, lfRoadHeight };
++            lShadowTransform.zAxis = { lvShadowAt.x, lvShadowAt.y, lvShadowAt.z, 0.0f };
++            lShadowTransform.wAxis = lvShadowPosition;
+         }
+ 
+         // FLAG PC-platform leaf: reuse this render's interpolated body transform above. ARTIST
