@@ -68,6 +68,11 @@ on:
         required: false
         default: false
         type: boolean
+      run_online_save_route:
+        description: Run actual-body online route transfers and original trap/init controls
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -123,6 +128,7 @@ jobs:
           CANDIDATE_RUN_RWAC_COMMAND_CAPACITY: ${{ inputs.run_rwac_command_capacity }}
           CANDIDATE_RUN_TRAFFIC_FLOWTYPE_OVERRIDE: ${{ inputs.run_traffic_flowtype_override }}
           CANDIDATE_RUN_SYSTEM_USER_PROFILE: ${{ inputs.run_system_user_profile }}
+          CANDIDATE_RUN_ONLINE_SAVE_ROUTE: ${{ inputs.run_online_save_route }}
           GH_TOKEN: ${{ github.token }}
           BRN_EXE_HASH_DEPS: "1"
           BRN_EXE_JOBS: "4"
@@ -140,7 +146,8 @@ jobs:
             -RunKeyboardUIContract:($env:CANDIDATE_RUN_KEYBOARD_UI_CONTRACT -eq 'true') `
             -RunRwacCommandCapacity:($env:CANDIDATE_RUN_RWAC_COMMAND_CAPACITY -eq 'true') `
             -RunSystemUserProfile:($env:CANDIDATE_RUN_SYSTEM_USER_PROFILE -eq 'true') `
-            -RunTrafficFlowtypeOverride:($env:CANDIDATE_RUN_TRAFFIC_FLOWTYPE_OVERRIDE -eq 'true')
+            -RunTrafficFlowtypeOverride:($env:CANDIDATE_RUN_TRAFFIC_FLOWTYPE_OVERRIDE -eq 'true') `
+            -RunOnlineSaveRoute:($env:CANDIDATE_RUN_ONLINE_SAVE_ROUTE -eq 'true')
 
       - name: Save successful candidate objects
         if: success()
@@ -172,5 +179,6 @@ jobs:
             build/candidate/artifacts/hud-regressions/**
             build/candidate/artifacts/system-user-profile/**
             build/candidate/artifacts/traffic-flowtype-override/**
+            build/candidate/artifacts/online-save-route/**
           if-no-files-found: error
           retention-days: 1
