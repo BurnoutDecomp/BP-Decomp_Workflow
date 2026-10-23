@@ -8,8 +8,7 @@ Recovery, integration, review and behavior checks remain active.
 **Known regression in installed91a:** offline Road Rage can re-score an old
 takedown every simulation step, rapidly inflating its count and time. The
 persistent output retirement repair passed independent source review and is
-committed privately. The exact9af6 build and ten hosted groups pass; native
-gameplay acceptance remains pending. The
+committed privately. The exact9af6 build and ten hosted groups pass; bounded native count-and-countdown acceptance now passes. [Native review](road_rage_output_retirement_20261023/countdown_native/REPORT.md). The
 normal package has not yet changed. [Repair state](road_rage_output_retirement_20261023/STATE.json).
 
 The custom-route save/load transfer repair passed the actual71-check hosted
@@ -73,7 +72,7 @@ Two of those four, the safe-area toggle and percentage, now pass retained-native
 
 A new exact8b capture independently verifies the original blue SatNav outline off/on/off. This adds one private-candidate disposition; installed91a is unchanged. The other six controls remain insufficient: a real engine-off event hid the HUD/map before their positive phases. Original case PASS and wrapper archive INCOMPLETE remain separate. [Review and limits](satnav62050_retained_native_20261023/REVIEW.md).
 
-The original Force takedown callback now passes independent source/native review on9af6. One intended event is translated once and visibly counts1/30; other real events are counted separately. The old91a output replay is reproduced. Later clock countdown remains pending. [One-site review](force_takedown_site0004_native_20261023/REPORT.md).
+The original Force takedown callback now passes independent source/native review on9af6. One intended event is translated once and visibly counts1/30; other real events are counted separately. The old91a output replay is reproduced. The later countdown also passes a separate retained-native review. [One-site review](force_takedown_site0004_native_20261023/REPORT.md).
 
 Recorded source-progress coverage is separate from behavior completion:
 
