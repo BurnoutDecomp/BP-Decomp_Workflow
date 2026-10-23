@@ -65,13 +65,15 @@ hosted capacity checks and its original-source failure control; the short delive
 
 ## Campaign counts
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **49 verified, seven original no-ops and 1,299 pending**. That is 56/1,355 (4.1%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **50 verified, seven original no-ops and 1,298 pending**. That is 57/1,355 (4.2%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
 Two of those four, the safe-area toggle and percentage, now pass retained-native review after the original packed-colour contract confirmed that red was correct. The old roster expected the wrong colour. The isolated Override and SatNav alpha controls still need behavior evidence; the original aggregate FAIL and separate SatNav outline exclusion remain. [Two-site review](safearea_retained_native_20261023/REVIEW.md).
 
 A new exact8b capture independently verifies the original blue SatNav outline off/on/off. This adds one private-candidate disposition; installed91a is unchanged. The other six controls remain insufficient: a real engine-off event hid the HUD/map before their positive phases. Original case PASS and wrapper archive INCOMPLETE remain separate. [Review and limits](satnav62050_retained_native_20261023/REVIEW.md).
+
+The original Force takedown callback now passes independent source/native review on9af6. One intended event is translated once and visibly counts1/30; other real events are counted separately. The old91a output replay is reproduced. Later clock countdown remains pending. [One-site review](force_takedown_site0004_native_20261023/REPORT.md).
 
 Recorded source-progress coverage is separate from behavior completion:
 
