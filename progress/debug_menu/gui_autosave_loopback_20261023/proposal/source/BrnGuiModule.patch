@@ -1,0 +1,25 @@
+--- a/src/GameSource/Gui/BrnGuiModule.cpp
++++ b/src/GameSource/Gui/BrnGuiModule.cpp
+@@ -3402,12 +3402,22 @@
+                     const u32 luPayloadSize   = lpuWrapper[0];
+                     const u32 luEventType     = lpuWrapper[1];
+                     const u32 luPayloadOffset = lpuWrapper[2];
+                     const CgsModule::Event* const lpRawEvent =
+                         reinterpret_cast<const CgsModule::Event*>(
+                             reinterpret_cast<const u8*>(lpEvent) + luPayloadOffset);
++                    // The channel-40 observer drain runs after this PC update's
++                    // inbound event walk and autosave tail. Mirror case 356's
++                    // two latch writes here; preserve the original forwarding below.
++                    if (luEventType == 356u)
++                    {
++                        mbForceProfileAutosave =
++                            mbForceProfileAutosave || (*reinterpret_cast<const u8*>(lpRawEvent) != 0);
++                        mbProfileAutosavePending = true;
++                    }
++
+                     mGuiOutQueue.AddEvent(
+                         lpRawEvent, static_cast<s32>(luEventType),
+                         static_cast<s32>(luPayloadSize));
+ 
+                     if (luEventType == 141u)
+                     {

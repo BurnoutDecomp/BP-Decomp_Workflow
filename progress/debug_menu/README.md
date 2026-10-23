@@ -13,7 +13,7 @@ normal package has not yet changed. [Repair state](road_rage_output_retirement_2
 
 The custom-route save/load transfer repair passed the actual71-check hosted
 fixture and three original-code failure controls on3966. Real GUI saving,
-overwriting and cold loading remain pending. The latest [acceptance checkpoint](native_repair_acceptance_20261023/STATE.json) records failed setup attempts separately from gameplay results.
+overwriting and cold loading remain pending. The real empty-slot Save returned to Summary but did not schedule a write; the original deferred event356 return path was missing in the PC drain. Its narrow latch repair now passes independent source review; hosted and native persistence checks remain pending. [Repair scope](gui_autosave_loopback_20261023/STATE.json). The latest [acceptance checkpoint](native_repair_acceptance_20261023/STATE.json) records failed setup attempts separately from gameplay results.
 
 Launch `build/game/Burnout_PC.exe`. The installed **91a0ed56** build fixes
 the reproduced Paradise Drives freeze after checkpoint editing. Its missing
