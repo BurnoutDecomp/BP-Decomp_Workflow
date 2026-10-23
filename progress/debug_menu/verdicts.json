@@ -551,5 +551,33 @@
     "native_case": 62049,
     "original_aggregate_verdict": "FAIL",
     "phase_synchronization": "phase-adjacent, not same-frame"
+  },
+  "BrnGui::GuiDebugComponent::OnActivate#0018": {
+    "state": "verified",
+    "notes": "Original registration and exact source bind F5 to the same component callback; actual red outline absent, visible at 85%, absent again. Restoration: safe-area outline off again. Limits: callback-only; no boolean readback asserted; phase-adjacent frames; no whole-HUD restoration; original aggregate FAIL remains",
+    "evidence": [
+      "progress/debug_menu/safearea_retained_native_20261023/REVIEW.md",
+      "progress/debug_menu/safearea_retained_native_20261023/SITE_DISPOSITIONS.json",
+      "progress/debug_menu/safearea_retained_native_20261023/SOURCE_CONTRACT.json",
+      "progress/debug_menu/safearea_retained_native_20261023/CHECKPOINT.json"
+    ],
+    "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+    "native_case": 62049,
+    "original_aggregate_verdict": "FAIL",
+    "phase_synchronization": "phase-adjacent, not same-frame"
+  },
+  "BrnGui::GuiDebugComponent::OnActivate#0019": {
+    "state": "verified",
+    "notes": "Exact registered variable and archived scripts produce 85/70/85 readbacks with visible red geometry 1088x612/896x504/1088x612. Restoration: 85.000 restored in operation and final readback; same visible 85% bounds before local toggle-off. Limits: phase-adjacent values/images, not same-frame; tested 70 and 85 only; no whole-HUD restoration; original aggregate FAIL remains",
+    "evidence": [
+      "progress/debug_menu/safearea_retained_native_20261023/REVIEW.md",
+      "progress/debug_menu/safearea_retained_native_20261023/SITE_DISPOSITIONS.json",
+      "progress/debug_menu/safearea_retained_native_20261023/SOURCE_CONTRACT.json",
+      "progress/debug_menu/safearea_retained_native_20261023/CHECKPOINT.json"
+    ],
+    "source_commit": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+    "native_case": 62049,
+    "original_aggregate_verdict": "FAIL",
+    "phase_synchronization": "phase-adjacent, not same-frame"
   }
 }
