@@ -1,0 +1,58 @@
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlinePlay.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlinePlay.cpp
+@@ -323,4 +323,8 @@
+             GuiEventActivateCrashNav lActivateCrashNav(true);
+-            mpStateInterface->OutputGuiEvent(lActivateCrashNav);
++            // This object already carries ARTIST's {8,191,12}+payload record.
++            // Keep those bytes and put the record on GuiEventOut for the PC drain.
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lActivateCrashNav),
++                KI_CHANNEL_GUI_OUT, static_cast<s32>(sizeof(lActivateCrashNav)));
+ 
+             SendStateEvent("GO_BACK");
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp
+@@ -467,4 +467,8 @@
+             GuiEventActivateCrashNav lActivate(true);  // <- THE UNPAUSE
+-            mpStateInterface->OutputGuiEvent(lActivate);
++            // This object already carries ARTIST's {8,191,12}+payload record.
++            // Keep those bytes and put the record on GuiEventOut for the PC drain.
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lActivate),
++                KI_CHANNEL_GUI_OUT, static_cast<s32>(sizeof(lActivate)));
+ 
+             CgsGui::GuiEvent<KI_EVENT_SCREEN_CLOSED_533> lDone(1, 12);
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavDriverDetails.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavDriverDetails.cpp
+@@ -934,4 +934,8 @@
+             GuiEventActivateCrashNav lActivate(true);
+-            mpStateInterface->OutputGuiEvent(lActivate);
++            // This object already carries ARTIST's {8,191,12}+payload record.
++            // Keep those bytes and put the record on GuiEventOut for the PC drain.
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lActivate),
++                KI_CHANNEL_GUI_OUT, static_cast<s32>(sizeof(lActivate)));
+ 
+             SendStateEvent("GO_BACK");             // CN_D_DETAIL(111) -> INGAME(4)
+--- a/src/GameSource/Gui/Flow/PostEvent/States/Showtime/BrnShowtimeInstantResults.cpp
++++ b/src/GameSource/Gui/Flow/PostEvent/States/Showtime/BrnShowtimeInstantResults.cpp
+@@ -251,3 +251,8 @@
+         GuiEventShowHideHud lHideHud;
+         lHideHud.maData[0] = 0;
+-        mpStateInterface->OutputGuiEvent(lHideHud);
++        CgsGui::GuiEventWrapper<GuiEventShowHideHud, KI_CHANNEL_GUI_OUT> lRecord(lHideHud);
++        static_assert(sizeof(lRecord) == 16,
++                      "ARTIST ShowHideHud record is {1,148,12} plus one byte");
++        mpStateInterface->GetOutputEventQueue()->AddEvent(
++            reinterpret_cast<const CgsModule::Event*>(&lRecord),
++            KI_CHANNEL_GUI_OUT, static_cast<s32>(sizeof(lRecord)));
+@@ -368,3 +373,8 @@
+                 GuiEventShowHideHud lHideHud;
+                 lHideHud.maData[0] = 0;
+-                mpStateInterface->OutputGuiEvent(lHideHud);
++                CgsGui::GuiEventWrapper<GuiEventShowHideHud, KI_CHANNEL_GUI_OUT> lRecord(lHideHud);
++                static_assert(sizeof(lRecord) == 16,
++                              "ARTIST ShowHideHud record is {1,148,12} plus one byte");
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lRecord),
++                    KI_CHANNEL_GUI_OUT, static_cast<s32>(sizeof(lRecord)));

@@ -1,0 +1,83 @@
+{
+  "proposal": "gui_debug_event_publish_batch_20261023_codex01",
+  "base": {
+    "physical_parent_commit": "8d67d4c0e93db58f28f774137deed688582764e6",
+    "b5_commit": "af18caf8a9e02428cfaa4705599e2b1ca9ea7377",
+    "b5_checkout_head_at_start": "91a0ed564f9c9e3dec915bfb416c0467650084ef"
+  },
+  "scope": {
+    "mode": "source-only proposal",
+    "proposal_patch": "proposal.patch",
+    "changed_call_sites": 5,
+    "changed_source_files": [
+      "src/GameSource/Gui/Flow/Screen/States/BrnOnlinePlay.cpp",
+      "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp",
+      "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavDriverDetails.cpp",
+      "src/GameSource/Gui/Flow/PostEvent/States/Showtime/BrnShowtimeInstantResults.cpp"
+    ],
+    "production_tree_changed": false,
+    "refs_or_index_changed": false,
+    "build_or_runtime_validation": false
+  },
+  "generic_instantiation_audit": {
+    "source": "b5-decomp/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp at the base commit",
+    "artist_exports": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x<address>.json",
+    "count": 66,
+    "artist_add_event_channel_40_count": 66,
+    "records": "artist_outputgui_66.tsv"
+  },
+  "artist_exports": [
+    {
+      "address": "0x82493938",
+      "name": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventActivateCrashNav>",
+      "sha256": "2212CB7EA0DD8DF4D01C923470587C48A1F2284CEF7F04E887E29EC2E4AD76AD",
+      "record": { "payload_bytes": 8, "event_id": 191, "payload_offset": 12, "channel": 40, "queued_bytes": 20 },
+      "xrefs_to": [
+        "0x824A0810 BrnGui::OnlineCreateFreeburn::CheckForCompletedLoads",
+        "0x824A7488 BrnGui::OnlinePlay::HandleControllerInputMainMenu",
+        "0x824B0770 BrnGui::OnlineGameRoomPlayerInfo::Update",
+        "0x824CCAE8 BrnGui::CrashNavMapMain::HandleCrashNavInputPressed",
+        "0x824CF3B8 BrnGui::CrashNavDriverDetails::HandleControllerInputPressed",
+        "0x824CFE78 BrnGui::PauseScreen::HandleControllerInput",
+        "0x824D3B40 BrnGui::ReplayClips::HandleControllerInputPressed",
+        "0x824D90E8 BrnGui::CrashNavSettings::HandleControllerInput",
+        "0x824E0680 BrnGui::CrashNavEnterOnlineBase::Update"
+      ]
+    },
+    {
+      "address": "0x82493988",
+      "name": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventShowHideHud>",
+      "sha256": "528D395DED11811CC18CC0860294A698BA954B90D0C5A8596E8B660A96BBEFED",
+      "record": { "payload_bytes": 1, "event_id": 148, "payload_offset": 12, "channel": 40, "queued_bytes": 16 },
+      "xrefs_to": [
+        "0x824DFB48 BrnGui::ShowtimeInstantResultsState::Update",
+        "0x824E0680 BrnGui::CrashNavEnterOnlineBase::Update"
+      ]
+    },
+    {
+      "address": "0x824C5D28",
+      "name": "BrnGui::ShowtimeInstantResultsState::OnEnter",
+      "sha256": "A0B424459B80009C2C56DCB507940994D0B454B7C4B17E7D35D5B6180D97F1FF",
+      "record": { "payload_bytes": 1, "event_id": 148, "payload_offset": 12, "channel": 40, "queued_bytes": 16 },
+      "evidence": "inline AddEvent in pseudocode writes {1,148,12}, payload byte 0, channel 40, size 16"
+    },
+    {
+      "address": "0x824DFB48",
+      "name": "BrnGui::ShowtimeInstantResultsState::Update",
+      "sha256": "E9BAAEDD21AC556EB1E01A1ED68758103D39BFF42D0F48B458FDA8B73CE1B067",
+      "evidence": "calls OutputGuiEvent<GuiEventShowHideHud> after component initialization"
+    }
+  ],
+  "pc_decoder_evidence": {
+    "base_file": "b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp",
+    "channel_40_case_line": 3303,
+    "header_read_lines": [3401, 3402, 3403, 3404, 3405, 3406, 3407],
+    "type_keyed_forward_lines": [3418, 3419, 3420, 3444, 3449, 3450, 3451],
+    "unhandled_direct_id_default_line": 3701,
+    "consumer_refs": [
+      "b5-decomp/src/GameSource/Game/BrnGameModule.cpp:1126 (event 191)",
+      "b5-decomp/src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp:1663 (event 148)",
+      "b5-decomp/src/GameSource/Gui/Flow/HUD/States/BrnFBurnMainHudState.cpp:1311 (event 148)"
+    ]
+  }
+}

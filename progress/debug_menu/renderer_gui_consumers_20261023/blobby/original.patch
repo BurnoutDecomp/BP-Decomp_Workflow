@@ -1,0 +1,344 @@
+--- a/src/GameSource/Graphics/BrnBlobbyShadowManager.h
++++ b/src/GameSource/Graphics/BrnBlobbyShadowManager.h
+@@ -4,8 +4,11 @@
+ #include <cstddef>            // offsetof (layout pins in _AssertLayout below)
+ 
+ #include "types.hpp"
+ #include "BrnCommonTypes.h"   // Vector3 / Vector3Plus / Vector4 / VecFloat (rw::math::vpu)
++
++namespace CgsGraphics { struct Im3d; }
++namespace renderengine { class Texture; }
+ 
+ // ---------------------------------------------------------------------------
+ // BrnBlobbyShadowManager
+ //
+@@ -13,15 +16,12 @@
+ // source path). Layout/member names below are taken from that DWARF; behaviour is verified
+ // against the X360 retail XEX pseudocode/asm.
+ //
+ // Double-buffered collector of per-frame "blobby" (soft, projected-quad) vehicle ground
+-// shadows. Game code fills the external buffer each frame via BrnBlobbyShadowBuffer::AddShadow,
+-// then the manager swaps buffers and renders the internal one. Only ONE function is attested
+-// in the X360 retail XEX ledger for this TU:
+-//   BrnBlobbyShadowManager::BrnBlobbyShadowBuffer::AddShadow @ 0x823F7638
+-// The other DWARF-listed methods (Construct / Swap / Render / GetExternalBuffer ...) are
+-// declared here from the DWARF as the owning surface but are out of scope (not in this TU's
+-// ledger) and are left unbodied.
++// shadows. Game code fills the external buffer via BrnBlobbyShadowBuffer::AddShadow, the manager
++// swaps buffers, then Render draws the internal buffer with the textured immediate-mode renderer.
++// AddShadow @0x823F7638 and Render @0x824071B0 are verified against X360 ARTIST; Render's source
++// declaration follows the DecFIGS DWARF shape.
+ //
+ // ShadowStruct layout (DWARF, corroborated by the AddShadow slot stride of 64 bytes -- the
+ // X360 addresses a record as `buffer + 64 * index`, i.e. slwi r10, count, 6):
+ //   +0x00  mvPos                          Vector3      (projected shadow centre)
+@@ -99,9 +99,17 @@
+                           "ShadowStruct == 64 bytes (slwi count, 6)");
+         }
+     };
+ 
+-    // ---- Remaining DWARF-declared surface (NOT in this TU's ledger; left unbodied) ----
++    // Render @0x824071B0. Matrix44 is passed by value; register placement and behavior are
++    // verified against ARTIST, while this declaration's named types follow the DecFIGS DWARF.
++    void Render(Matrix44 lViewProjection,
++                CgsGraphics::Im3d* lpIm3d,
++                renderengine::Texture* lpBlobbyShadowTexture,
++                f32 lfAlpha,
++                f32 lfWhiteLevel);
++
++    // ---- Remaining DWARF-declared surface (not recovered in this proposal) ----
+     void Construct();
+     void Destruct();
+     bool Prepare();
+     bool Release();
+--- a/src/GameSource/Graphics/BrnBlobbyShadowManager.cpp
++++ b/src/GameSource/Graphics/BrnBlobbyShadowManager.cpp
+@@ -1,5 +1,12 @@
+ #include "GameSource/Graphics/BrnBlobbyShadowManager.h"
++
++#include "GameShared/GameClasses/Core/CgsAssert.h"
++#include "GameShared/GameClasses/Graphics/CgsBlendStateFactory.h"
++#include "GameShared/GameClasses/Graphics/CgsDepthStencilStateFactory.h"
++#include "GameShared/GameClasses/Graphics/CgsRasterizerStateFactory.h"
++#include "GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h"
++#include "GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasicColouredTexturedVertex.h"
+ 
+ // BrnBlobbyShadowManager::BrnBlobbyShadowBuffer::AddShadow @ 0x823F7638
+ //
+ // Appends one projected ground-shadow quad to this frame's shadow buffer. Returns false only
+@@ -80,11 +87,10 @@
+     // DWARF :26 -- X360 unk_82FAF0E0 (init @0x82C4ED88), broadcast 1.25f.
+     // A car more than 1.25 m off the ground casts no blobby shadow.
+     const VecFloat kfAmbientShadowFadeDistance = { 1.25f, 1.25f, 1.25f, 1.25f };
+ 
+-    // DWARF :27 -- X360 unk_82FAFBF0 (init @0x82C4EDB0), broadcast 0.4f. A file-scope constant
+-    // of THIS TU; its only consumer is the manager's Render path, which is not in this TU's
+-    // ledger, so nothing here reads it yet. Recorded so the value is not lost again.
++    // DWARF :27 -- X360 unk_82FAFBF0 (init @0x82C4EDB0), broadcast 0.4f. Render below
++    // multiplies this spread factor by the clamped height fade for the outer shadow edges.
+     const VecFloat kfAmbientShadowScaleFactor = { 0.4f, 0.4f, 0.4f, 0.4f };
+ }
+ 
+ bool BrnBlobbyShadowManager::BrnBlobbyShadowBuffer::AddShadow(
+@@ -138,8 +144,132 @@
+     ++miNumShadows;   // *this = count + 1
+     return true;
+ }
+ 
++// BrnBlobbyShadowManager::Render @ 0x824071B0
++//
++// ARTIST behavior: select the internal bank; return for an empty bank; begin the textured Im3d
++// renderer, upload the supplied view-projection transform, assert/bind the blobby texture, and bind
++// the three named factory states. For each record, fade alpha by height/1.25, spread the front and
++// rear extents by 1 + 0.4*fade, emit the eight front/axle/rear strip vertices, then EndRendering.
++// The static opacity is intentional: the X360 guard initializes lfMaxOpacity from the first alpha
++// argument only, so later debug edits do not replace it.
++void BrnBlobbyShadowManager::Render(Matrix44 lViewProjection,
++                                   CgsGraphics::Im3d* lpIm3d,
++                                   renderengine::Texture* lpBlobbyShadowTexture,
++                                   f32 lfAlpha,
++                                   f32 lfWhiteLevel)
++{
++    // ARTIST's guard-protected function-local static is initialized before it reads the buffer count.
++    static const f32 lfMaxOpacity = lfAlpha * 255.0f;
++
++    BrnBlobbyShadowBuffer& lInternalBuffer = maBuffers[mu8Internal];
++    if (lInternalBuffer.miNumShadows <= 0)
++        return;
++
++    const s32 liWhite = static_cast<s32>(lfWhiteLevel * 255.0f); // fctiwz truncates; the low byte is used
++    const u8 luWhite = static_cast<u8>(liWhite);
++    CgsGraphics::BasicColouredTexturedVertex laVertices[8];
++    const f32 laTexCoords[8][2] = {
++        {0.0f, 0.0f}, {1.0f, 0.0f},
++        {0.0f, 0.1875f}, {1.0f, 0.1875f},
++        {0.0f, 0.8125f}, {1.0f, 0.8125f},
++        {0.0f, 1.0f}, {1.0f, 1.0f},
++    };
++
++    lpIm3d->BeginRendering();
++    lpIm3d->SetTransform(lViewProjection);
++    CGS_ASSERT(lpBlobbyShadowTexture != nullptr, "lpBlobbyShadowTexture");
++    lpIm3d->SetTexture(lpBlobbyShadowTexture);
++    lpIm3d->SetState(reinterpret_cast<const CgsGraphics::DepthStencilState*>(
++        CgsDepthStencilStateFactory::GetState(E_FACTORY_DEPTH_STENCIL_STATE_ZON_ZLEQ_ZWRITEOFF)));
++    lpIm3d->SetState(reinterpret_cast<const CgsGraphics::RasterizerState*>(
++        CgsRasterizerStateFactory::GetState(E_FACTORY_RASTERIZER_STATE_SCISSOR_CULL_MODE_NONE)));
++    lpIm3d->SetState(reinterpret_cast<const CgsGraphics::BlendState*>(
++        CgsBlendStateFactory::GetState(E_FACTORY_BLEND_STATE_TRANSPARENT_MODULATE_NO_ALPHA_TEST_DEST_RGBA)));
++
++    for (s32 liShadow = 0; liShadow < lInternalBuffer.miNumShadows; ++liShadow)
++    {
++        const BrnBlobbyShadowBuffer::ShadowStruct& lShadow = lInternalBuffer.maShadowPos[liShadow];
++        f32 lfFade = lShadow.mvScaledRight_HeightOffGround.w
++                   * (1.0f / kfAmbientShadowFadeDistance.x);
++        if (lfFade < 0.0f) lfFade = 0.0f;
++        if (lfFade > 1.0f) lfFade = 1.0f;
++
++        // ARTIST vmadd order: scaled direction * spread + position for outer anchors;
++        // axle anchors use the unscaled extents. All four CPU lanes are retained; the existing
++        // ImRenderer GPU stream consumes xyz.
++        const f32 lfSpread = 1.0f + kfAmbientShadowScaleFactor.x * lfFade;
++        const Vector3 lFrontDirection = {
++            lShadow.mvAt.x * lShadow.mvFront_Rear_BackAxle_FrontAxle.x,
++            lShadow.mvAt.y * lShadow.mvFront_Rear_BackAxle_FrontAxle.x,
++            lShadow.mvAt.z * lShadow.mvFront_Rear_BackAxle_FrontAxle.x,
++            lShadow.mvAt.w * lShadow.mvFront_Rear_BackAxle_FrontAxle.x,
++        };
++        const Vector3 lRearDirection = {
++            lShadow.mvAt.x * lShadow.mvFront_Rear_BackAxle_FrontAxle.y,
++            lShadow.mvAt.y * lShadow.mvFront_Rear_BackAxle_FrontAxle.y,
++            lShadow.mvAt.z * lShadow.mvFront_Rear_BackAxle_FrontAxle.y,
++            lShadow.mvAt.w * lShadow.mvFront_Rear_BackAxle_FrontAxle.y,
++        };
++        const Vector3 lFrontOuter = {
++            lFrontDirection.x * lfSpread + lShadow.mvPos.x,
++            lFrontDirection.y * lfSpread + lShadow.mvPos.y,
++            lFrontDirection.z * lfSpread + lShadow.mvPos.z,
++            lFrontDirection.w * lfSpread + lShadow.mvPos.w,
++        };
++        const Vector3 lRearOuter = {
++            lRearDirection.x * lfSpread + lShadow.mvPos.x,
++            lRearDirection.y * lfSpread + lShadow.mvPos.y,
++            lRearDirection.z * lfSpread + lShadow.mvPos.z,
++            lRearDirection.w * lfSpread + lShadow.mvPos.w,
++        };
++        const Vector3 lFrontAxle = {
++            lShadow.mvAt.x * lShadow.mvFront_Rear_BackAxle_FrontAxle.w + lShadow.mvPos.x,
++            lShadow.mvAt.y * lShadow.mvFront_Rear_BackAxle_FrontAxle.w + lShadow.mvPos.y,
++            lShadow.mvAt.z * lShadow.mvFront_Rear_BackAxle_FrontAxle.w + lShadow.mvPos.z,
++            lShadow.mvAt.w * lShadow.mvFront_Rear_BackAxle_FrontAxle.w + lShadow.mvPos.w,
++        };
++        const Vector3 lBackAxle = {
++            lShadow.mvAt.x * lShadow.mvFront_Rear_BackAxle_FrontAxle.z + lShadow.mvPos.x,
++            lShadow.mvAt.y * lShadow.mvFront_Rear_BackAxle_FrontAxle.z + lShadow.mvPos.y,
++            lShadow.mvAt.z * lShadow.mvFront_Rear_BackAxle_FrontAxle.z + lShadow.mvPos.z,
++            lShadow.mvAt.w * lShadow.mvFront_Rear_BackAxle_FrontAxle.z + lShadow.mvPos.w,
++        };
++        const Vector3 lScaledRight = {
++            lShadow.mvScaledRight_HeightOffGround.x * lfSpread,
++            lShadow.mvScaledRight_HeightOffGround.y * lfSpread,
++            lShadow.mvScaledRight_HeightOffGround.z * lfSpread,
++            lShadow.mvScaledRight_HeightOffGround.w * lfSpread,
++        };
++        const Vector3 laCentres[8] = {
++            lFrontOuter, lFrontOuter, lFrontAxle, lFrontAxle,
++            lBackAxle, lBackAxle, lRearOuter, lRearOuter,
++        };
++        const f32 laSide[8] = {-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f};
++        const s32 liAlpha = static_cast<s32>(lfMaxOpacity - lfMaxOpacity * lfFade); // fctiwz truncation
++        const u8 luAlpha = static_cast<u8>(liAlpha);
++
++        for (u32 luVertex = 0; luVertex < 8u; ++luVertex)
++        {
++            CgsGraphics::BasicColouredTexturedVertex& lVertex = laVertices[luVertex];
++            const Vector3& lCentre = laCentres[luVertex];
++            const f32 lfSide = laSide[luVertex];
++            lVertex.mv3Pos.x = lCentre.x + lfSide * lScaledRight.x;
++            lVertex.mv3Pos.y = lCentre.y + lfSide * lScaledRight.y;
++            lVertex.mv3Pos.z = lCentre.z + lfSide * lScaledRight.z;
++            lVertex.mv3Pos.w = lCentre.w + lfSide * lScaledRight.w;
++            lVertex.mv4Colour = {luWhite, luWhite, luWhite, luAlpha};
++            lVertex.mv2Tex0UV.x = laTexCoords[luVertex][0];
++            lVertex.mv2Tex0UV.y = laTexCoords[luVertex][1];
++        }
++
++        lpIm3d->Render(static_cast<renderengine::PrimitiveType>(6), laVertices, 8u);
++    }
++
++    lpIm3d->EndRendering();
++}
++
+ // The external (published) half of the double-buffered pair. Bodied 2026-08-17 with
+ // BrnRendererModule::Update (boot audit F-P2-4), which is its only caller: the console forms
+ // `manager + mu8External * 0x1010` @0x824060C0-EC, i.e. exactly maBuffers[mu8External] --
+ // the byte it reads at manager+0x2021 is this member, and the 0x1010 stride is
+--- a/src/GameSource/Graphics/BrnRendererModule.h
++++ b/src/GameSource/Graphics/BrnRendererModule.h
+@@ -649,9 +649,10 @@
+     // measurement samples). The original header declares it `void ComputeSunCoronaVisibility()`.
+     void ComputeSunCoronaVisibility();
+ 
+     void RenderWorldPasses(const BrnGame::DispatchThreadInputBuffer* lpDispatchThreadInputBuffer,
+-                           CgsGraphics::DispatchObjectContext* lpContext);
++                           CgsGraphics::DispatchObjectContext* lpContext,
++                           f32 lfWhiteLevel);
+ 
+     // [FLAG PC bring-up] Sky-dome bring-up (NOT console functions -- see the bodies).
+     // EnsureSkyDomeBringUp does the Construct/Prepare pair the console runs from
+     // BrnRendererModule::Construct/Prepare, deferred to the first world frame because
+--- a/src/GameSource/Graphics/BrnRendererModule.cpp
++++ b/src/GameSource/Graphics/BrnRendererModule.cpp
+@@ -4686,13 +4686,14 @@
+ //   CARS OPAQUE  (list 19)  -> DispatchAllMeshes
+ //   WORLD OPAQUE (list 11)  -> DispatchAllMeshes
+ //   sky                     -> BrnSkyDomeManager::Render (bring-up gated)
+ //   WORLD TRANSPARENT (15)  -> DispatchAllMeshes
+-//   CARS TRANSPARENT  (20)  -> DispatchAllMeshes (blobby shadows gated off)
++//   CARS TRANSPARENT  (20)  -> enabled blobby-shadow draw, then DispatchAllMeshes
+ // Occlusion-query interleaving is the mbOcclusionCull* path (default false).
+ // The context is the one Render built through BuildDispatchLists, on Render's stack.
+-void BrnRendererModule::RenderWorldPasses(const BrnGame::DispatchThreadInputBuffer* /*lpDispatchThreadInputBuffer*/,
+-                                          CgsGraphics::DispatchObjectContext* lpContext)
++void BrnRendererModule::RenderWorldPasses(const BrnGame::DispatchThreadInputBuffer* lpDispatchThreadInputBuffer,
++                                          CgsGraphics::DispatchObjectContext* lpContext,
++                                          f32 lfWhiteLevel)
+ {
+     using namespace CgsGraphics;
+ 
+     if (mpInterpreter == 0)
+@@ -4772,8 +4773,16 @@
+     const bool lbOpaqueWork = (mbRenderCarsOpaque && luCarOpaque != 0)
+                            || (mbRenderWorldOpaque && luWorldOpaque != 0);
+     const bool lbTransparentWork = (mbRenderWorldTransparent && luWorldTransparent != 0)
+                                 || (mbRenderCarsTransparent && luCarTransparent != 0);
++    // ARTIST gates the manager by the renderer switches, not mesh-list counts. These checks only
++    // cover PC availability: native Im3d is deferred until a device exists, and the matrix is in
++    // the dispatch input buffer.
++    const bool lbBlobbyShadowRender = mbRenderCarsTransparent && mbRenderBlobbyShadows
++                                   && mbIm3dRendererConstructedPC
++                                   && lpDispatchThreadInputBuffer != nullptr;
++    const bool lbBlobbyShadowDraw = lbBlobbyShadowRender
++        && mBlobbyShadowManager.maBuffers[mBlobbyShadowManager.mu8Internal].miNumShadows > 0;
+ 
+     // [PC bring-up states] The per-pass render states normally come from the
+     // technique state groups the walk binds on each technique change
+     // (MaterialState -- its porter + the x64 state-object seam are still open).
+@@ -4920,35 +4929,48 @@
+             WaitForMeshSortPC(15u);
+             GetMeshFrameForReadPC().GetList(15)->DispatchAllMeshes(mpInterpreter, &lContext, 0, -1);
+         }
+         CgsDev::PerfMonGpu::StopMonitor(mGpuMonitors.miWorldTransparent);
+-        // X360 @0x8240D338-0x8240D348 / @0x8240D3F4-0x8240D3FC: the car-TRANSPARENT window. The
+-        // whole window sits INSIDE the mbRenderCarsTransparent gate: `lbzx r11, r31, 0xC417` /
+-        // `cmplwi cr6, r11, 0` / `beq cr6, loc_8240D400` @0x8240D2F4-0x8240D304, and loc_8240D400 is
+-        // PAST both the Begin (0x8240D338) and the End (0x8240D3FC). 0xC417 is
+-        // mbRenderCarsTransparent (the five sibling flags 0xC413..0xC417 pin the committed member
+-        // order in BrnRendererModule.h). What sits between Begin and End is the occlusion-query arm
+-        // (0x8240D36C) or the plain arm (0x8240D3D0), both of which dispatch mesh list 0x14 -- the
+-        // same shape as the opaque half above. (Step-10 verify finding: the first reading had the
+-        // pair outside the gate.)
++    }
++
++    // ARTIST @0x8240D2F4-0x8240D334 calls the manager inside the car-transparent gate, before
++    // BeginForceStencilWrite at 0x8240D348. Do not place it under lbTransparentWork: that PC
++    // optimization depends on mesh counts, while ARTIST calls the manager with empty lists too.
++    if (lbTransparentWork || lbBlobbyShadowRender)
++    {
+         CgsDev::PerfMonGpu::StartMonitor(mGpuMonitors.miCarTransparent);
+         if (mbRenderCarsTransparent)
+         {
+-            if (lbForceCarStencil)
+-                shadow::Device::BeginForceStencilWrite(lCarMaskBytes.mu8CarsBlurStencil);
+-
+-            WaitForMeshSortPC(20u);
+-            GetMeshFrameForReadPC().GetList(20)->DispatchAllMeshes(mpInterpreter, &lContext, 0, -1);
+-
+-            if (lbForceCarStencil)
+-                shadow::Device::EndForceStencilWrite();
++            if (lbBlobbyShadowRender)
++            {
++                mBlobbyShadowManager.Render(
++                    lpDispatchThreadInputBuffer->mOcclusionViewProjectionMatrix,
++                    &mIm3dRenderer,
++                    mpBlobbyShadowTexture,
++                    mfBlobbyShadowAlpha,
++                    lfWhiteLevel);
++            }
++
++            // Stencil and list-20 work stay after the manager. Preserve the existing PC
++            // empty-list elision; the manager call above is independent of this count gate.
++            if (lbTransparentWork)
++            {
++                if (lbForceCarStencil)
++                    shadow::Device::BeginForceStencilWrite(lCarMaskBytes.mu8CarsBlurStencil);
++
++                WaitForMeshSortPC(20u);
++                GetMeshFrameForReadPC().GetList(20)->DispatchAllMeshes(mpInterpreter, &lContext, 0, -1);
++
++                if (lbForceCarStencil)
++                    shadow::Device::EndForceStencilWrite();
++            }
+         }
+         CgsDev::PerfMonGpu::StopMonitor(mGpuMonitors.miCarTransparent);
+     }
+ 
+     // Back to the opaque default before the 2D overlay tail (the Im2d path re-sets
+     // its own states, so this only matters for the frames a world pass ran).
+-    if (lbPreZWork || lbOpaqueWork || lbTransparentWork)
++    if (lbPreZWork || lbOpaqueWork || lbTransparentWork || lbBlobbyShadowDraw)
+     {
+         renderengine::Device::SetWorldPassDefaultStates(false);
+     }
+ }
+@@ -6007,9 +6029,9 @@
+             }
+         }
+ 
+         lRenderStage.Next(RENDER_WORLD);
+-        RenderWorldPasses(lpDispatchThreadInputBuffer, &lDispatchContext);
++        RenderWorldPasses(lpDispatchThreadInputBuffer, &lDispatchContext, lfFrameWhiteLevel);
+         lRenderStage.Next(RENDER_PARTICLES);
+ 
+         // ==========================================================================================
+         // THE CORONA PASS (coronas step 1, 2026-08-17).

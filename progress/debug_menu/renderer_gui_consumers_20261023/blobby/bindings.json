@@ -1,0 +1,194 @@
+{
+  "packet": "Blobby shadow manager Render and PC renderer integration source proposal",
+  "base": {
+    "private_ref": "refs/heads/codex/replay-module-recovery-20261022",
+    "private_commit": "c36dd33292689bfb8b436ab73190f73a36200e98",
+    "comparison_commit": "8b2940d40e76fd6a88a37615f6163a99c2d5e3b8",
+    "physical_worktree_head": "91a0ed564f9c9e3dec915bfb416c0467650084ef",
+    "preimage_method": "git show private_commit:path; physical checkout is older and was not used as a source preimage"
+  },
+  "source_inputs": [
+    {
+      "path": "src/GameSource/Graphics/BrnBlobbyShadowManager.h",
+      "c36_blob_sha256": "d389bdd5b6174a3d860d33c7958773c5e32f6dcf31b7aeccb39854950c6df7e7",
+      "8b_blob_sha256": "d389bdd5b6174a3d860d33c7958773c5e32f6dcf31b7aeccb39854950c6df7e7",
+      "c36_git_blob_oid": "cb7cdbdd27fa04401c0e4b8085eeaff9788f8d34",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameSource/Graphics/BrnBlobbyShadowManager.cpp",
+      "c36_blob_sha256": "caa338d0060d67fa395bde2d242a9a6e14400ebbbcce49fc5ee25c26db377d3d",
+      "8b_blob_sha256": "caa338d0060d67fa395bde2d242a9a6e14400ebbbcce49fc5ee25c26db377d3d",
+      "c36_git_blob_oid": "d29bc7057550b0fb913a19f2734510f1d299696b",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameSource/Graphics/BrnRendererModule.h",
+      "c36_blob_sha256": "1efb80b82879a716b1f50a307d13f81d1817e16fa1ad78afc83615c46b0239c1",
+      "8b_blob_sha256": "1efb80b82879a716b1f50a307d13f81d1817e16fa1ad78afc83615c46b0239c1",
+      "c36_git_blob_oid": "8e03b58c8f50808b5d81c9d7cdd2b59c476e6889",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameSource/Graphics/BrnRendererModule.cpp",
+      "c36_blob_sha256": "bdd66df47ed046c389ef4e6bb683b20b9fab5fd3ed4310e9cd258e811fc3f670",
+      "8b_blob_sha256": "bdd66df47ed046c389ef4e6bb683b20b9fab5fd3ed4310e9cd258e811fc3f670",
+      "c36_git_blob_oid": "80be5d8e69b9ac750ad801b6f319ba377fa3a55f",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameSource/Graphics/BrnRendererModuleDebugComponent.cpp",
+      "c36_blob_sha256": "ff6338782401e86cd1abe9d96231868005dd7db0008b860734564fa589010015",
+      "8b_blob_sha256": "ff6338782401e86cd1abe9d96231868005dd7db0008b860734564fa589010015",
+      "c36_git_blob_oid": "c11b5ea171c6f84584a43c54d4627a457962725a",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameSource/Game/BrnDispatchThreadInputBuffer.h",
+      "c36_blob_sha256": "44350c79f9a86662a74e29c79decdbb50d741a0c5ea277cef96e190ec444bbd4",
+      "8b_blob_sha256": "44350c79f9a86662a74e29c79decdbb50d741a0c5ea277cef96e190ec444bbd4",
+      "c36_git_blob_oid": "914e8ca260fbbeb41f82441ddff7982da2b71927",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameSource/Game/BrnGameModule.cpp",
+      "c36_blob_sha256": "cdde690ad876bab5cb5f6231be631869d685166aedb876cbdca7b996a17c1d62",
+      "8b_blob_sha256": "cdde690ad876bab5cb5f6231be631869d685166aedb876cbdca7b996a17c1d62",
+      "c36_git_blob_oid": "ec2a7640ab3102a5f582841148cc7f3f29215c83",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameSource/Game/GameBridgeRendererToX.cpp",
+      "c36_blob_sha256": "e58dc74dd4cd8dfb1604ea354b54d33b76cfba64010af52dc9bf4b32fd172348",
+      "8b_blob_sha256": "e58dc74dd4cd8dfb1604ea354b54d33b76cfba64010af52dc9bf4b32fd172348",
+      "c36_git_blob_oid": "69de275733785e5d8e159e2108d32abc94d4b4ad",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameSource/Graphics/BrnRendererModuleIO_OutputBuffer_Accessors.cpp",
+      "c36_blob_sha256": "c543e7bd6e0c2fde6cfc693300057ebb005f31ab11abb0c84c55e32a525808d1",
+      "8b_blob_sha256": "c543e7bd6e0c2fde6cfc693300057ebb005f31ab11abb0c84c55e32a525808d1",
+      "c36_git_blob_oid": "a6714b703806526b9426bcb0b5341eafb87fefb6",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h",
+      "c36_blob_sha256": "c171dca760c4367f59b58026200fa3f4316cfdf59eab5de6ee6a6a4a39298904",
+      "8b_blob_sha256": "c171dca760c4367f59b58026200fa3f4316cfdf59eab5de6ee6a6a4a39298904",
+      "c36_git_blob_oid": "9117103a6bfafc7fbc204bb617576ef059115b76",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.cpp",
+      "c36_blob_sha256": "408afb5729a6a01042c061453e1f75151683e73e755ef35bb58c72c010b01149",
+      "8b_blob_sha256": "408afb5729a6a01042c061453e1f75151683e73e755ef35bb58c72c010b01149",
+      "c36_git_blob_oid": "f1523ddec3e6cdea573977c2d4109f4c373a1d93",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsImRenderer.h",
+      "c36_blob_sha256": "dc74b0d35a830e2d5d0f83798847c0fd82e46ef0824df1d94f1fe2a8c601fa67",
+      "8b_blob_sha256": "dc74b0d35a830e2d5d0f83798847c0fd82e46ef0824df1d94f1fe2a8c601fa67",
+      "c36_git_blob_oid": "9033af5e6bcc2d3c1533055dbdd2a1326c808c94",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsImRenderer.cpp",
+      "c36_blob_sha256": "28ed86b10f2917e1645415c9bbb6580eb207b3aa4e31681227a8ba628590b6a7",
+      "8b_blob_sha256": "28ed86b10f2917e1645415c9bbb6580eb207b3aa4e31681227a8ba628590b6a7",
+      "c36_git_blob_oid": "873445171ebe63648bb2e5455e9013bed104ab81",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasicColouredTexturedVertex.h",
+      "c36_blob_sha256": "d0233580facc77e565ae0bd04cddc8569795b807f6941bab3e0b8bc9ad2d7160",
+      "8b_blob_sha256": "d0233580facc77e565ae0bd04cddc8569795b807f6941bab3e0b8bc9ad2d7160",
+      "c36_git_blob_oid": "7ad18efcf1261c9640b24582307e76d84ccd934e",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasic2dColouredTexturedVertex.h",
+      "c36_blob_sha256": "266e1b68d179cb98174be78d5a5f384ee3c4463493ad51558aa10b5c20c0d865",
+      "8b_blob_sha256": "266e1b68d179cb98174be78d5a5f384ee3c4463493ad51558aa10b5c20c0d865",
+      "c36_git_blob_oid": "ab3c9104d5f4bc6c2cc2483fcf5df920a522ee94",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/CgsDepthStencilStateFactory.h",
+      "c36_blob_sha256": "040b55c0eb4ec52a1c695ab2e7cb3e4feec67d3eef760098f946895ba662485b",
+      "8b_blob_sha256": "040b55c0eb4ec52a1c695ab2e7cb3e4feec67d3eef760098f946895ba662485b",
+      "c36_git_blob_oid": "100414b186fa7df268a7fd086031a751dee2a338",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/CgsRasterizerStateFactory.h",
+      "c36_blob_sha256": "ee3558a29e4754ac0af3d7e3f8f13a564a1da1b4074c07fee122a76842514af2",
+      "8b_blob_sha256": "ee3558a29e4754ac0af3d7e3f8f13a564a1da1b4074c07fee122a76842514af2",
+      "c36_git_blob_oid": "f3e3f5af869f37fda70c70b37d1e2ab89fa9ad51",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Graphics/CgsBlendStateFactory.h",
+      "c36_blob_sha256": "1fe1cc43a64535fb53ad073f022136fabd6f55993bac37454a502abf156265cb",
+      "8b_blob_sha256": "1fe1cc43a64535fb53ad073f022136fabd6f55993bac37454a502abf156265cb",
+      "c36_git_blob_oid": "2301e832dab55d60c9e697e08e14e6d053112785",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/pc/gcm/renderengine/XenonD3D9Shims.cpp",
+      "c36_blob_sha256": "a26e0179a09fd680809fe87e5b194c42157b05a8ebb4073780a4ed559f3b7b1a",
+      "8b_blob_sha256": "a26e0179a09fd680809fe87e5b194c42157b05a8ebb4073780a4ed559f3b7b1a",
+      "c36_git_blob_oid": "5b5ec9b070487ec85951b83983622c80ae31c6eb",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/pc/gcm/renderengine/GeometryBindings.h",
+      "c36_blob_sha256": "4f2321df6d2f7e58aa91fd1ede087394dff06b01cce32f3b87f658bd15dd8999",
+      "8b_blob_sha256": "4f2321df6d2f7e58aa91fd1ede087394dff06b01cce32f3b87f658bd15dd8999",
+      "c36_git_blob_oid": "da1bf6bf0f75087fd61937d8aacb0e8dbe010011",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/pc/gcm/renderengine/VertexDescriptor.cpp",
+      "c36_blob_sha256": "fc470044cf0606d704783027efa85ad0d3fbcb473c02fedbcafba6ec323a72c3",
+      "8b_blob_sha256": "fc470044cf0606d704783027efa85ad0d3fbcb473c02fedbcafba6ec323a72c3",
+      "c36_git_blob_oid": "6b5d0b371a269efd6b403e9facd1c672f14ebe18",
+      "byte_identical_c36_vs_8b": true
+    },
+    {
+      "path": "src/pc/gcm/renderengine/Im3dProgramsPC.cpp",
+      "c36_blob_sha256": "7d13d4ec01585071f4009b3362934bc62244feeaa7afbbb9b1118da8dc55a330",
+      "8b_blob_sha256": "7d13d4ec01585071f4009b3362934bc62244feeaa7afbbb9b1118da8dc55a330",
+      "c36_git_blob_oid": "cc7241d798d8525a25e92d31392dfc439e7ad855",
+      "byte_identical_c36_vs_8b": true
+    }
+  ],
+  "original_exports": [
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824071B0.json",
+      "sha256": "02ab1eceec8dfe7d5566a15462c4583c5efb4c453a82e1d0758dde89d2c263aa",
+      "bytes": 26826
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8240BFA8.json",
+      "sha256": "e2a24cd90d2818974a6eb622f9b213fd4c4be71766cc504769b484da0bb464e5",
+      "bytes": 187462
+    },
+    {
+      "path": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0x3795C8.json",
+      "sha256": "45bc79724305e6249ce78d9c39c1f59d4beb431152b800426ab2d006b20ba970",
+      "bytes": 86132
+    }
+  ],
+  "claims": {
+    "ARTIST_manager": "0x824071B0",
+    "ARTIST_renderer": "0x8240BFA8",
+    "DecFIGS_manager": "0x3795C8",
+    "registration_rows": [
+      12,
+      21
+    ],
+    "pc_sink": "CgsIm3d ImRenderer -> D3DDevice_BeginVertices/EndVertices -> GeometryBindingsPC::DrawPrimitiveUP",
+    "live_AddShadow_callers": "none in exact c36 source; only definition, embed-check helper, and commented traffic placeholder"
+  }
+}
