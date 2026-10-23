@@ -1,0 +1,67 @@
+{
+  "status": "source-only proposal; not applied to production",
+  "base_commit": "7e455d8854a32df1ca1934a54cc279c1e268a103",
+  "owned_source_files": [
+    "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp"
+  ],
+  "base_source_blobs": {
+    "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp": "5b43d5a425715031a6ddfd3dc35fffd492dd4ad6",
+    "src/GameSource/Gui/BrnGuiDemangledEventTypes.h": "67f298c757a6cb6463c80a0149134141afeb4725",
+    "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h": "118bbf75b320ca5f0c94d23173be613303d1d957",
+    "src/GameSource/Gui/BrnGuiModule.cpp": "d3c6e8f3f189f9f3611b8a9d90013594b16723be",
+    "src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp": "6629200b634b141c58d8c1fca0c5d17512cb14f2",
+    "src/GameSource/Game/BrnGameModule.cpp": "87360a3936ae15410eb16d49ed01a0fda184faa2"
+  },
+  "artist_exports_sha256": {
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824C31C8.json": "475715b066825f70ae41a9a6957df0b9ab21f4d14d2da866cbda065bd2dd397f",
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824D2978.json": "e1b4a3886db984cb80a675147de6bda23b0f89d69630ab95cdec413325a1ca39",
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824DAAD8.json": "451b590cc7808e3cbab8238383dcd96acf27c1190809f84b052f98a121bdbae4"
+  },
+  "decfigs_type_source": "references/DecFIGS/dwarfdump/GameSource/Gui/BrnGuiEventTypeDefs.h",
+  "decfigs_type_sha256": "1b202fa27b6b50c9888df9782b7d649697aa8722df9009a162df8ac54607faba",
+  "decfigs_wrapper_source": "references/DecFIGS/dwarfdump/GameShared/GameClasses/Gui/CgsGuiEvent.h",
+  "decfigs_wrapper_sha256": "4a947e5dbcc8e51f3e97aacb19be0e906c093aa7965367f95dac5f96750b4919",
+  "proposal": {
+    "current_misrouted_posts": 2,
+    "event_id_x360": 469,
+    "event_id_decfigs": 464,
+    "decfigs_id_disposition": "diverges from ARTIST; ARTIST publisher header 0x1D5 (469) is authoritative",
+    "record": {
+      "payload_bytes": 1,
+      "payload_offset": 12,
+      "header": [
+        1,
+        469,
+        12
+      ],
+      "channel": 40,
+      "record_bytes": 16
+    },
+    "payload_values": [
+      1,
+      0
+    ],
+    "current_receiver_state": "sound case469 and game bridge case469 exist; raw channel469 currently falls through DrainFlowOutputQueue default before reaching either",
+    "change": "wrap existing one-byte event with GuiEventWrapper<...,40> at both active source posts; no consumer, generic template, or decoder changes",
+    "not_changed": [
+      "event23 menu-music packet paths",
+      "scoreboard packet paths",
+      "508/509",
+      "GuiModule/BaseOverlayState",
+      "RootRenderer/Provider"
+    ]
+  },
+  "site_map": "site_map.tsv",
+  "preimage_sha256": "c5c4c6e125a78ba8c7ee4ba00ddf3039f35cc0eda276ea6d937cffec2100fed1",
+  "postimage_sha256": "c6e5b5933be60349f99a9760645d37922d0033eacd8e149b204b96d9cf25a6f6",
+  "proposal_artifact_sha256": {
+    "README.md": "2f2b8eadf12d37deb1b21663a5bb9466faf15b8a73eba19e151a9a8d18314ab3",
+    "patch.diff": "9fd45616cf16ee0acb981557c592d562cc4440b3897b703ef5777ca311fd569d",
+    "site_map.tsv": "db508d41250094e632e13a05cb869cff3be08e91cdbdef3c4ba1f65f6851c2ad",
+    "evidence/artist_full_function_bindings.json": "70d81209106d66d90066f286d70f2415c7a710f45396b6b9e6a5a630775f6366",
+    "evidence/DecFIGS/type_and_wrapper_excerpt.txt": "e8e1ae9324fbb25158cc702fd0a77da0726c0cacd628f65716311ddbdfe69f1a",
+    "evidence/current_source/event469_path.txt": "8e958966a98447bc71344dadc3fff6cb4446940bc95ce6a45165b5f3d8ec7ad3"
+  },
+  "preimage_path": "preimage/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp",
+  "postimage_path": "postimage/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp"
+}
