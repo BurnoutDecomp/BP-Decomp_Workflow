@@ -1,0 +1,54 @@
+{
+  "status": "PASS_private_baseline_playability_only",
+  "utc": "2026-10-23T22:57:58.161842+00:00",
+  "source": "edca934dc502f71f64ad873cdd386afe5e3eeeb2",
+  "source_tree": "bc29dab065cab7a430a97821b580e9cf4aa5e359",
+  "workflow": "1daa6ce58c9bebc56762deaf72385b2a55be476b",
+  "hosted_run": 40035337060,
+  "hosted_gate_groups": 11,
+  "exe_sha256": "0c55f39a7a5c4295981996a9924e36350da026f50e1ceb5f665a7f82916c77bf",
+  "owned_slot": 62059,
+  "owned_pid": 21916,
+  "native_seconds": 50.4,
+  "asserts": 0,
+  "exceptions": 0,
+  "final_phase": "DRIVING",
+  "motion_path_m": 234.7,
+  "motion_net_m": 234.3,
+  "motion_samples": 90,
+  "respawns": 0,
+  "game_wrecked_messages": 1,
+  "controls": [
+    "Named title/accept taps",
+    "SkipIntro console latch",
+    "Teleport to baseline road",
+    "Throttle"
+  ],
+  "passive_witnesses": [
+    "Motion log",
+    "Frame captures",
+    "Strict owned-process terminal receipt"
+  ],
+  "visual_review": [
+    {
+      "frame": "bb_003900.bmp",
+      "sha256": "03f907d429e3972208171780b651ecfa74313e93195ef8b563676eddcfb43f6e",
+      "observation": "Normal road, buildings, foliage, traffic, sky, player car and HUD visibly rendered; no black-screen failure."
+    },
+    {
+      "frame": "bb_005100.bmp",
+      "sha256": "4f4a22f117e5537dbe8feba85a19dc6db76e4d55d447a625799752a0efffe882",
+      "observation": "Ordinary WRECKED sequence after sustained throttle into scenery; world and car visible. Not a crash-recovery acceptance test."
+    }
+  ],
+  "normal24_unchanged": true,
+  "remaining_owned_games": 0,
+  "new_debug_dispositions": 0,
+  "delivered_to_normal": false,
+  "dev_promoted": false,
+  "limits": [
+    "This is startup/junkyard/world/motion acceptance only.",
+    "Occlusion controls and other individual debug behavior still need their own witnesses.",
+    "No complete online race, joined-peer departure, saved-route cold load or long-session certification."
+  ]
+}
