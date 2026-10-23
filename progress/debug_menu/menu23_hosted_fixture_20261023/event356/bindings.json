@@ -1,0 +1,48 @@
+{
+  "kind": "source-only immutable proposal",
+  "base_commit": "b9c0e692bc9d8f232b9986923acf07aff26c0639",
+  "base_tree_source_path": "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp",
+  "base_blob_sha1": "ace209001f5844115ccc3b12b2b4415ebcd94017",
+  "preimage_sha256": "8eb73559d4e6a68eeda6cd695dc0ede9f84ab7d20a85073a1942290d5d64a9c5",
+  "postimage_sha256": "48d3b5d17060bd94cc2f4fbb9690e78381a1c912fb36c54bd31a05fb13b02775",
+  "patch_sha256": "9d37d1675066f234fd618333d375401620a495dc758c8d18c1cfa8c127fb73ae",
+  "artist_exports": {
+    "0x824937E0.json": "04ab40db88bedb623b604058ea6d7b87854cd75a44a6069b055b349bfa93c29d",
+    "0x824D2078.json": "b0eed833aa0842982f1fa20c31df0bbf8898af633e102ba4117ee12fa2c8a9ef",
+    "0x824D2978.json": "e1b4a3886db984cb80a675147de6bda23b0f89d69630ab95cdec413325a1ca39"
+  },
+  "decfigs_export_sha256": "28592fc8ea2ed39d03aac31a6756eccdb0141aa25ac34202bfb7d0c06300431e",
+  "owned_production_paths": [
+    "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp"
+  ],
+  "excluded_paths": [
+    "src/GameSource/Gui/BrnGuiModule.cpp",
+    "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h",
+    "src/GameSource/Gui/BrnGuiModule.h"
+  ],
+  "producer_sites": [
+    {
+      "artist_address": "0x824D2078",
+      "source_line_at_base": 606,
+      "function": "BrnGui::CompletedGame::UpdateEliteLicensePresentation",
+      "payload_byte": 1
+    },
+    {
+      "artist_address": "0x824D2978",
+      "source_line_at_base": 862,
+      "function": "BrnGui::CompletedGame::UpdateOneHundredPercentPartTwoPresentation",
+      "payload_byte": 1
+    }
+  ],
+  "expected_record": {
+    "channel": 40,
+    "header": [
+      1,
+      356,
+      12
+    ],
+    "payload_bytes": 1,
+    "total_bytes": 16
+  },
+  "scope_note": "Only the two CompletedGame producer callsites are changed. The existing current GuiModule channel-40 receive/latch is reviewed as downstream evidence but is not edited."
+}

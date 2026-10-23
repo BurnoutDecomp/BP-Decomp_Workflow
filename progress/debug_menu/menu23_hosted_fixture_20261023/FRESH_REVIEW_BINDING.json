@@ -1,0 +1,73 @@
+{
+  "review_date": "2026-10-24",
+  "review_scope": [
+    "Menu23 hosted fixture delta04",
+    "Menu23 hosted CI delta04",
+    "paired fixture/source-install tree",
+    "CompletedGame event356 producer packet"
+  ],
+  "verdicts": {
+    "FINAL_DELTA04_VERDICT": "pass",
+    "EVENT356_VERDICT": "pass",
+    "historic_luna02": "fail: process exit was not part of pass condition",
+    "historic_delta03": "exit-code contract mismatch; repaired in delta04"
+  },
+  "fixture": {
+    "path": "scratch/DEBUG_MENU_1011/menu23_wire_fixture_20261023_delta04_root",
+    "runner_sha256": "5f77f5f8ca820c34421fa9a2def526dfcda1d8a37bb13b0a13eabfdcdc9fb07e",
+    "cpp_sha256": "2603f206fc3f1f3ed808e1fe5ddf4d1d48cd26a28d36c586fe85599bea6ddde2",
+    "common_helper_sha256": "6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033",
+    "candidate_checks": 217,
+    "control_checks": 189,
+    "negative_control_commit": "b595d61d2440ca94d61aa8fa610ab0bf6048cc66"
+  },
+  "ci": {
+    "path": "scratch/DEBUG_MENU_1011/menu23_hosted_ci_proposal_delta04_20261023",
+    "workflow_base": "9c28d160dbd19dd1d1038b545f00a3f867d43bc6",
+    "workflow_post_sha256": "7cf7ae4a91abf1b32ea026e0691b8a1c6da3c5e0a2f55d5faea6081e47728ea9",
+    "script_post_sha256": "655cb30fc33ab97cea116cb01de5bfd20a9345b18b257bf7710e6f7be29d7a3b",
+    "hosted_ci_executed": false
+  },
+  "source_install_tree": {
+    "source_base": "b9c0e692bc9d8f232b9986923acf07aff26c0639",
+    "tree": "2826d79ed9e557e73913293ae7d77cfd1c0b2b29",
+    "changed_paths": [
+      "src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp",
+      "tests/GuiMenuMusicWire.cpp",
+      "tests/run_gui_menu_music_wire.py"
+    ],
+    "tree_runner_lf_sha256": "5f77f5f8ca820c34421fa9a2def526dfcda1d8a37bb13b0a13eabfdcdc9fb07e",
+    "tree_cpp_sha256": "2603f206fc3f1f3ed808e1fe5ddf4d1d48cd26a28d36c586fe85599bea6ddde2",
+    "tree_completed_game_lf_sha256": "48d3b5d17060bd94cc2f4fbb9690e78381a1c912fb36c54bd31a05fb13b02775",
+    "git_diff_check_clean": true,
+    "committed_or_installed": false
+  },
+  "event356_packet": {
+    "path": "scratch/DEBUG_MENU_1011/gui_event356_completed_game_channel40_20261023_codex11_b9c0e692",
+    "base_commit": "b9c0e692bc9d8f232b9986923acf07aff26c0639",
+    "base_blob_sha1": "ace209001f5844115ccc3b12b2b4415ebcd94017",
+    "preimage_sha256": "8eb73559d4e6a68eeda6cd695dc0ede9f84ab7d20a85073a1942290d5d64a9c5",
+    "postimage_sha256": "48d3b5d17060bd94cc2f4fbb9690e78381a1c912fb36c54bd31a05fb13b02775",
+    "patch_sha256": "9d37d1675066f234fd618333d375401620a495dc758c8d18c1cfa8c127fb73ae",
+    "artist_sha256": {
+      "0x824937E0.json": "04ab40db88bedb623b604058ea6d7b87854cd75a44a6069b055b349bfa93c29d",
+      "0x824D2078.json": "b0eed833aa0842982f1fa20c31df0bbf8898af633e102ba4117ee12fa2c8a9ef",
+      "0x824D2978.json": "e1b4a3886db984cb80a675147de6bda23b0f89d69630ab95cdec413325a1ca39"
+    },
+    "decfigs_sha256": "28592fc8ea2ed39d03aac31a6756eccdb0141aa25ac34202bfb7d0c06300431e",
+    "producer_sites": [
+      "BrnGui::CompletedGame::UpdateEliteLicensePresentation @ 0x824D2078",
+      "BrnGui::CompletedGame::UpdateOneHundredPercentPartTwoPresentation @ 0x824D2978"
+    ],
+    "channel": 40,
+    "record": [1, 356, 12, "one payload byte"],
+    "record_size": 16
+  },
+  "execution_limits": {
+    "cpp_compile": false,
+    "fixture_execution": false,
+    "hosted_ci": false,
+    "game_runtime": false,
+    "git_ref_index_mutation": false
+  }
+}

@@ -1,0 +1,20 @@
+--- menu23_wire_fixture_20261023_delta03_root/run_gui_menu_music_wire.py
++++ menu23_wire_fixture_20261023_delta04_root/run_gui_menu_music_wire.py
+@@ -24,7 +24,7 @@
+     if HERE.name == "tests":
+         b5_root = HERE.parent.resolve()
+         workflow = b5_root.parent
+-    elif HERE.name == "menu23_wire_fixture_20261023_delta03_root":
++    elif HERE.name == "menu23_wire_fixture_20261023_delta04_root":
+         workflow = HERE.parents[2].resolve()
+         b5_root = workflow / "b5-decomp"
+     else:
+@@ -289,7 +289,7 @@
+         manifest["status"] = "pass"
+     (output_root / "fixture.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+     print("Menu23 fixture status: " + manifest["status"])
+-    return 0 if manifest["status"] == "pass" else 1
++    return 0 if manifest["status"] == "pass" else (2 if manifest["status"] == "compile_or_execution_failure" else 1)
+ 
+ 
+ if __name__ == "__main__":

@@ -1,0 +1,71 @@
+{
+  "packet": "menu23_wire_fixture_20261023_delta04_root",
+  "status": "immutable hosted-fixture proposal; not run or wired into CI",
+  "candidate_revision": "829305f8a5db176ec62f2f2cc406c812e4a46f8b",
+  "negative_control_revision": "b595d61d2440ca94d61aa8fa610ab0bf6048cc66",
+  "production_source": "src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp",
+  "installed_paths": [
+    "b5-decomp/tests/run_gui_menu_music_wire.py",
+    "b5-decomp/tests/GuiMenuMusicWire.cpp"
+  ],
+  "scratch_fallback": "scratch/DEBUG_MENU_1011/menu23_wire_fixture_20261023_delta04_root",
+  "layout_resolution": {
+    "installed": "HERE.name == tests; B5_ROOT = HERE.parent; WORKFLOW = B5_ROOT.parent; validate fxgs_common.py and msvc_flags.txt",
+    "scratch": "accept only exact menu23_wire_fixture_20261023_delta04_root; validate helper and workflow settings paths",
+    "other_locations": "rejected"
+  },
+  "production_extracts": [
+    "SoundLogicModule::ProcessGuiEvents case 23",
+    "GuiEventWireHeader",
+    "GetGuiPayload",
+    "EventS32At",
+    "EventU8At",
+    "QueueSoundMessage",
+    "PostSoundMessage",
+    "BrnBootLegal local MusicOnMenuStreamEvent"
+  ],
+  "post_sound_message_chain": {
+    "case_23_call": "PostSoundMessage(mMessageQueue, 13, 0, 0, 2, CgsSound::Io::MessageHeader::E_EFFECT_TYPE_OBJECT, lData)",
+    "parameter_order": [
+      "queue",
+      "event_id",
+      "state_manager_id",
+      "instance_id",
+      "effect_id",
+      "effect_type",
+      "payload"
+    ],
+    "helper_forwarding": "Message<T>::Construct(event_id, state_manager_id, instance_id, effect_id, effect_type); assign payload; QueueSoundMessage uses GetEventId() and sizeof(message)",
+    "fixture_assertions": [
+      "queue/event header id 13",
+      "state manager 0",
+      "instance 0",
+      "effect 2",
+      "effect type OBJECT",
+      "8-byte payload and zero reserved bytes"
+    ]
+  },
+  "test_contract": {
+    "candidate": "raw 8-byte, full 20-byte type-23, translated full 20-byte type-155; each with flags 00/01/10/11",
+    "negative_control": "B595 raw-8 numerical mismatch required; full type-23 and translated type-155 compatibility required",
+    "output": "candidate and negative-control command, extracted inputs, shadow header hashes, field observations, failure witnesses, and numeric results"
+  },
+  "static_review": {
+    "runner_python_ast_parse": true,
+    "local_cpp_compile": false,
+    "fixture_execution": false,
+    "ci_execution": false,
+    "game_or_runtime": false,
+    "git_or_source_mutation": false
+  },
+  "packet_file_sha256": {
+    "README.md": "e10d52a4f4fa32fd0711da0d72ed2fec2fe8da0497e0c46198bd476bac4c4263",
+    "run_gui_menu_music_wire.py": "5f77f5f8ca820c34421fa9a2def526dfcda1d8a37bb13b0a13eabfdcdc9fb07e",
+    "GuiMenuMusicWire.cpp": "2603f206fc3f1f3ed808e1fe5ddf4d1d48cd26a28d36c586fe85599bea6ddde2"
+  },
+  "predecessor_packet": "menu23_wire_fixture_20261023_delta03_root",
+  "standalone_exit_and_numeric_consistency_required": true,
+  "delta_author": "Codex GPT-6.1 Sol",
+  "execution_failure_exit": 2,
+  "numeric_failure_exit": 1
+}

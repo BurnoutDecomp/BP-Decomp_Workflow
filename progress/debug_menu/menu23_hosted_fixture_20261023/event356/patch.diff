@@ -1,0 +1,51 @@
+--- a/b5-decomp/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp
++++ b/b5-decomp/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp
+@@ -31,6 +31,7 @@
+ // ===================================================================================
+ #include "GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.h"
+ 
++#include <cstddef>                                                        // offsetof
+ #include <cstring>                                                        // strstr
+ 
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                        // CGS_ASSERT
+@@ -57,6 +58,14 @@
+               "ARTIST 0x824C31C8 payload offset is 12");
+ static_assert(sizeof(GuiEvent100PerCentCompleteRecord40) == 16,
+               "ARTIST 0x824C31C8 channel-40 record is 16 bytes");
++typedef CgsGui::GuiEventWrapper<BrnGui::GuiAutosaveRequestEvent, 40>
++    GuiAutosaveRequestEventRecord40;
++static_assert(sizeof(BrnGui::GuiAutosaveRequestEvent) == 1,
++              "ARTIST 0x824937E0 copies one autosave-request byte");
++static_assert(offsetof(GuiAutosaveRequestEventRecord40, mOutEvent) == 12,
++              "ARTIST 0x824937E0 payload offset is 12");
++static_assert(sizeof(GuiAutosaveRequestEventRecord40) == 16,
++              "ARTIST 0x824937E0 channel-40 record is 16 bytes");
+ 
+ namespace BrnGui
+ {
+@@ -603,7 +612,11 @@
+ 
+         GuiAutosaveRequestEvent lAutosaveEvent;
+         lAutosaveEvent.maData[0] = 1;
+-        mpStateInterface->OutputGuiEvent(lAutosaveEvent);
++        // ARTIST 0x824937E0 requires {1,356,12}+1 on channel 40 (16 bytes).
++        GuiAutosaveRequestEventRecord40 lAutosaveRecord(lAutosaveEvent);
++        mpStateInterface->GetOutputEventQueue()->AddEvent(
++            reinterpret_cast<const CgsModule::Event*>(&lAutosaveRecord), 40,
++            static_cast<s32>(sizeof(lAutosaveRecord)));
+ 
+         if (!mLicense.IsVisible())
+         {
+@@ -859,7 +872,11 @@
+         {
+             GuiAutosaveRequestEvent lAutosaveEvent;
+             lAutosaveEvent.maData[0] = 1;
+-            mpStateInterface->OutputGuiEvent(lAutosaveEvent);
++            // ARTIST 0x824937E0 requires {1,356,12}+1 on channel 40 (16 bytes).
++            GuiAutosaveRequestEventRecord40 lAutosaveRecord(lAutosaveEvent);
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lAutosaveRecord), 40,
++                static_cast<s32>(sizeof(lAutosaveRecord)));
+ 
+             GuiEvent100PerCentComplete lCompleteEvent;
+             lCompleteEvent.maData[0] = 0;
