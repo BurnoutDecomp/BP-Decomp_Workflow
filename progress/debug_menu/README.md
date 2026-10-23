@@ -8,12 +8,13 @@ Recovery, integration, review and behavior checks remain active.
 **Known regression in installed91a:** offline Road Rage can re-score an old
 takedown every simulation step, rapidly inflating its count and time. The
 persistent output retirement repair passed independent source review and is
-committed privately; hosted and native gameplay checks are pending. The
+committed privately. The exact9af6 build and ten hosted groups pass; native
+gameplay acceptance remains pending. The
 normal package has not yet changed. [Repair state](road_rage_output_retirement_20261023/STATE.json).
 
 The custom-route save/load transfer repair passed the actual71-check hosted
 fixture and three original-code failure controls on3966. Real GUI saving,
-overwriting and cold loading remain pending.
+overwriting and cold loading remain pending. The latest [acceptance checkpoint](native_repair_acceptance_20261023/STATE.json) records failed setup attempts separately from gameplay results.
 
 Launch `build/game/Burnout_PC.exe`. The installed **91a0ed56** build fixes
 the reproduced Paradise Drives freeze after checkpoint editing. Its missing

@@ -1,0 +1,19 @@
+# BP repair dev-merge inventory review
+
+Read-only comparison of root dev `8d67d4c0e93db58f28f774137deed688582764e6` and private root candidate `bff37a5debdff8e0a6336072187ccacc04a2c283`, from base `d2ee2ec259b0705501860a04568a21f1e67579b1`. No merge, native run, build, or package change was performed.
+
+The dev and private inventories contain the same 1,355 registration IDs and source digest. All 55 dev verdict records are identical in their parsed JSON fields in the private candidate. The only state delta is `BrnGui::SatNavDebugComponent::OnActivate#0006`: `pending` becomes `verified`, with one added verdict and retained-native evidence. Totals therefore resolve to 49 verified, 7 original no-ops, and 1,299 pending. Keep source-review coverage (1,196) separate; fully implemented count remains unknown.
+
+Resolve the three previously reported campaign-file conflicts as follows:
+
+- `progress/debug_menu/README.md`: retain the dev campaign text and merge in the private Road Rage and custom-route status paragraphs. Set totals to 49/7/1299. Preserve the explicit native-pending limits, the original twelve-control aggregate failure, the six insufficient GUI controls, the separate 1,196 source-review coverage, and the unknown implemented count.
+- `progress/debug_menu/entries.json`: keep all 1,355 rows and metadata; take the private value only for SatNav `OnActivate#0006` (`pending` -> `verified`). No registration ID was added or removed.
+- `progress/debug_menu/verdicts.json`: retain all 55 dev verdict objects and add the private SatNav `OnActivate#0006` object with its three evidence paths, source commit, case 62050, phase note, and `case PASS; wrapper INCOMPLETE_EVIDENCE_RETAINED`. Its scope is outline visibility / blue-channel contract / local outline-off restoration only. Do not promote whole-HUD/map restoration or the aggregate.
+
+`ci/check-candidate-build.ps1` is the only other path changed on both sides. The dev TextFormat fixture hunk is identical in the private tip; the private online-route runner block is additive in a separate area. Preserve both sets of logic and inspect the actual merge result. The other 35 overlapping changed paths have identical blobs. Keep all 40 dev-only paths, especially `progress/status.json`, `progress/source_status.json`, `progress/funcaudit.json`, `progress/stubs.json`, `progress/class_homes.json`, and dev-only delivery/source evidence. Do not resolve the whole `progress/` tree from one side.
+
+The private root candidate still points its B5 submodule at `8fec93bd4d2806ca9b60fb53dc272fe28081f8b8`; dev points at `91a0ed564f9c9e3dec915bfb416c0467650084ef`. For final delivery, explicitly set the root gitlink to B5 `9af6a868959578f4eafa9af0d69ccd27081667a0`. It descends from 91a and contains route-source commit `8b2940d40e76fd6a88a37615f6163a99c2d5e3b8`. The private root's candidate-only runner/workflow/build/diagnostic changes must accompany it.
+
+Acceptance is still pending in the checked-in private state: Road Rage is source/hosted-pass with no native result; its first native attempt was inconclusive (no event/callback). The route fixture passed 71 hosted checks plus three negative controls, but actual GUI save/load was not tested. The acceptance state says native acceptance pending and the normal package unchanged. Treat those as the remaining release gate; this report does not claim merge or install.
+
+The active root checkout has unrelated WIP, including a modified `tools/diagnostics/flow_run.ps1` overlay b972 and the listed progress/volatility/untracked items from `git status`. Keep that WIP intact during integration. The physical B5 checkout is clean at 91a.
