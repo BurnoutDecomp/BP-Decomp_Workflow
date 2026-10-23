@@ -1,0 +1,143 @@
+--- a/b5-decomp/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_06.cpp
++++ b/b5-decomp/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_06.cpp
+@@ -45,12 +45,15 @@
+ 
+ #include "GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo.h"
+ 
++#include "GameShared/GameClasses/Gui/CgsGuiEvent.h"                       // GuiEventWrapper
+ #include "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h"  // StateInterface::OutputGuiEvent
+ #include "GameShared/GameClasses/Module/CgsVariableEventQueue.h"          // CgsModule::Event
+ #include "GameSource/Gui/BrnGuiEventTypeDefs.h"                           // BrnGui::GuiAudioTriggerEvent
+ #include "GameSource/Gui/Events/BrnGuiEventNetworkGameParams.h"           // GuiNetworkRouteInfo::SetInfo arg
+ #include "GameSource/Network/SharedIO/BrnNetworkModuleInGamePlayerStatusInterface.h"      // InGamePlayerStatusData::mbMarkedMan
+ #include "GameSource/Network/SharedIO/BrnNetworkModuleOnlineLobbyPlayerStatusInterface.h" // LobbyPlayerStatusData::mPlayerID
++
++#include <cstddef>                                                        // offsetof
+ 
+ // The canonical payload homes for the two network GUI events posted below are
+ // GameSource/Gui/BrnGuiDemangledEventTypes.h, but that header and BrnGuiEventTypeDefs.h
+@@ -64,6 +67,8 @@
+ {
+     namespace
+     {
++        const s32 KI_CHANNEL_GUI_OUT = 40;   // ARTIST OutputGuiEvent AddEvent channel
++
+         // ARTIST controller event 6 payload: the pad id, then the action id the two
+         // switches below dispatch on (the X360 reads the second word, `*(lpEvent + 4)`).
+         struct ControllerInputPressedPayload : public CgsModule::Event
+@@ -99,6 +104,18 @@
+         };
+         static_assert(sizeof(GuiEventNetworkOutputPlayerTexturePayload) == 8,
+                       "event 264 payload is 8 bytes");
++        using GuiEventNetworkSelectedPlayerOptionOutputRecord =
++            CgsGui::GuiEventWrapper<GuiEventNetworkSelectedPlayerOptionPayload, KI_CHANNEL_GUI_OUT>;
++        static_assert(sizeof(GuiEventNetworkSelectedPlayerOptionOutputRecord) == 20,
++                      "event 246 channel-40 record is 12-byte header plus 8-byte payload");
++        static_assert(offsetof(GuiEventNetworkSelectedPlayerOptionOutputRecord, mOutEvent) == 12,
++                      "event 246 payload begins at record offset 12");
++        using GuiEventNetworkOutputPlayerTextureOutputRecord =
++            CgsGui::GuiEventWrapper<GuiEventNetworkOutputPlayerTexturePayload, KI_CHANNEL_GUI_OUT>;
++        static_assert(sizeof(GuiEventNetworkOutputPlayerTextureOutputRecord) == 20,
++                      "event 264 channel-40 record is 12-byte header plus 8-byte payload");
++        static_assert(offsetof(GuiEventNetworkOutputPlayerTextureOutputRecord, mOutEvent) == 12,
++                      "event 264 payload begins at record offset 12");
+ 
+         // GuiAudioTriggerEvent::Construct's action argument at every site in this TU.
+         const s32 KI_AUDIO_TRIGGER_ACTION = 7;
+@@ -225,8 +242,10 @@
+                     GuiEventNetworkOutputPlayerTexturePayload lPlayerTexture;
+                     lPlayerTexture.miField_00 = 0;
+                     lPlayerTexture.miField_04 = -1;
+-                    mpStateInterface->OutputGuiEvent<GuiEventNetworkOutputPlayerTexturePayload>(
+-                        lPlayerTexture);
++                    const GuiEventNetworkOutputPlayerTextureOutputRecord lPlayerTextureRecord(lPlayerTexture);
++                    mpStateInterface->GetOutputEventQueue()->AddEvent(
++                        reinterpret_cast<const CgsModule::Event*>(&lPlayerTextureRecord), KI_CHANNEL_GUI_OUT,
++                        static_cast<s32>(sizeof(lPlayerTextureRecord)));
+                 }
+                 else
+                 {
+@@ -318,8 +337,10 @@
+                 lSelectedOption.miOptionId =
+                     static_cast<s32>(mOptionComponent.GetHighlightedId());
+                 lSelectedOption.miPlayerID = mSelectedPlayerID;
+-                mpStateInterface->OutputGuiEvent<GuiEventNetworkSelectedPlayerOptionPayload>(
+-                    lSelectedOption);
++                const GuiEventNetworkSelectedPlayerOptionOutputRecord lSelectedOptionRecord(lSelectedOption);
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lSelectedOptionRecord), KI_CHANNEL_GUI_OUT,
++                    static_cast<s32>(sizeof(lSelectedOptionRecord)));
+ 
+                 mOptionsAnimation.AddOutputAptViewState(KAC_APT_TRANSITION,
+                                                         KAPC_ANIMATION_STATES[1], false);
+--- a/b5-decomp/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp
++++ b/b5-decomp/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_06.cpp
+@@ -46,6 +46,7 @@
+ #include "GameSource/GameState/BrnCgsPlayerName.h"                        // CgsNetwork::KI_USERNAME_LENGTH
+ #include "GameSource/Gui/BrnGuiDemangledEventTypes.h"                     // the homed 111/112/113 + 323 wire records
+ 
++#include <cstddef>                                                        // offsetof
+ #include <cstring>                                                        // std::memcpy
+ 
+ // BrnGuiDemangledEventTypes.h is deliberately NOT included: it hard-collides with
+@@ -273,6 +274,14 @@
+                 // ...and log which board was asked for. The telemetry record's parameter
+                 // buffer starts one word past its type, and TelemetryData is the accessor for
+                 // that buffer, so the builder addresses the record through it.
++                static_assert(sizeof(CgsGui::GuiEvent<323>) == 12,
++                              "event 323 record header is 12 bytes");
++                static_assert(sizeof(GuiTelemetryEvent) == 32,
++                              "event 323 record is 12-byte header plus 20-byte payload");
++                static_assert(offsetof(GuiTelemetryEvent, miTelemetryType) == 12,
++                              "event 323 payload begins at record offset 12");
++                static_assert(offsetof(GuiTelemetryEvent, macParams) == 16,
++                              "event 323 parameter string follows the payload type word");
+                 GuiTelemetryEvent lTelemetry(KI_TELEMETRY_TYPE_SCOREBOARD_TABLE);
+                 BrnNetwork::BrnNetworkModuleIO::TelemetryData* lpTelemetry =
+                     reinterpret_cast<BrnNetwork::BrnNetworkModuleIO::TelemetryData*>(
+@@ -282,7 +291,9 @@
+                 AddIntTelemetryParameter(lpTelemetry, miCurrentIndex);
+                 AddIntTelemetryParameter(lpTelemetry, liTargetVariation);
+ 
+-                mpStateInterface->OutputGuiEvent(lTelemetry);
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lTelemetry), KI_CHANNEL_GUI_OUT,
++                    static_cast<s32>(sizeof(lTelemetry)));
+             }
+             // fall through
+             case E_LEADERBOARD_REQUEST_STATE_WF_TABLE:
+--- a/b5-decomp/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp
++++ b/b5-decomp/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavSettings.cpp
+@@ -61,6 +61,7 @@
+ #include "GameSource/GameState/Progression/BrnProfile.h"                   // BrnProgression::Profile
+ 
+ #include <cstddef>  // offsetof
++#include <cstddef> // offsetof
+ #include <cstdio>   // std::snprintf (the one-shot parked-leaf logs)
+ 
+ // The XDK sign-in query the profile row gates on (X360 `lwz r3, 0x4B38(cache) ; bl
+@@ -191,6 +192,13 @@
+             {
+             }
+         };
++        static_assert(KI_EVENT_NETWORK_NEWS_TOS == 266, "ARTIST event id is 266");
++        static_assert(sizeof(CgsGui::GuiEvent<KI_EVENT_NETWORK_NEWS_TOS>) == 12,
++                      "event 266 record header is 12 bytes");
++        static_assert(sizeof(GuiNetworkNewsAndTosWire266) == 16,
++                      "event 266 record is 12-byte header plus 4-byte payload");
++        static_assert(offsetof(GuiNetworkNewsAndTosWire266, muSelector) == 12,
++                      "event 266 selector begins at record offset 12");
+ 
+         // { 288, 184, 16, <GuiOverlayRequest> } -- 304 bytes on channel 40. ARTIST
+         // copies the 0x120-byte request to the explicitly measured +0x10 payload offset
+@@ -664,7 +672,9 @@
+                 meState = E_STATE_MAIN;
+ 
+                 GuiNetworkNewsAndTosWire266 lNews(KU_NEWS_TOS_PAYLOAD_SETTINGS);
+-                mpStateInterface->OutputGuiEvent(lNews);
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lNews), KI_CHANNEL_GUI_OUT,
++                    static_cast<s32>(sizeof(lNews)));
+             }
+         }
+ 

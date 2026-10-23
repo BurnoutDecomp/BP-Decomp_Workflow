@@ -1,0 +1,15 @@
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp
+@@ -1598,7 +1598,11 @@
+     // for a nonphysical traffic car and cleared for the live physical arm at 0x82728C68. A
+     // physical car therefore contributes its road-normal shadow whenever PhysicsInfo exists.
+     // The replay arm's serialized latch remains behind G1 and is not reconstructed here.
+-    if ( !lpShadowMap->IsRenderingShadowMap() && ( !lbIsPhysical || lpPhysicsInfo != 0 ) )
++    // FLAG PC-platform leaf: TrafficCapture::Submit reuses this geometry leg inside
++    // VehicleScope and supplies no blobby buffer. Reflection faces submit vehicle
++    // geometry only; the main-view dispatch owns ground-shadow publication.
++    if ( !CgsPC::Reflections::IsVehicleCapture() &&
++         !lpShadowMap->IsRenderingShadowMap() && ( !lbIsPhysical || lpPhysicsInfo != 0 ) )
+     {
+         const Vector3 lBBoxOffset = lpVehicleTypeRuntime->GetBBoxOffset();
+         const Vector3 lBBoxHalfSize = lpVehicleTypeRuntime->GetBBoxHalfSize();

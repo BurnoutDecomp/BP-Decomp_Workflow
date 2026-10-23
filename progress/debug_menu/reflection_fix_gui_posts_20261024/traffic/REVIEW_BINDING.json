@@ -1,0 +1,82 @@
+{
+  "review_date": "2026-10-24",
+  "verdict": "pass",
+  "source_base": "ea5ce572baedd4ad8918f6d5bfcdfd756250d411",
+  "source_base_parent": "b9c0e692bc9d8f232b9986923acf07aff26c0639",
+  "proposal": {
+    "path": "scratch/DEBUG_MENU_1011/traffic_reflection_shadow_contract_fix_20261024",
+    "source_path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp",
+    "base_git_blob": "7c263d32804b029f1fc9be6c5a38584a954e7122",
+    "preimage_sha256": "9e3d52edf57d39b855535146b90db11fa490969278478bf1355378b925a69acf",
+    "postimage_sha256": "483db7a6e75375a9bd190353e7f1b7b97788ef5cc9c8d7a113296b61f71987f6",
+    "patch_sha256": "cf0d5e29eb6c0bf86255cb9d37e7550884aec2af575970be522f8527663cf0e8",
+    "preimage_matches_base": true,
+    "changed_production_files": 1
+  },
+  "original_artist": {
+    "render_traffic_car": {
+      "address": "0x82728B08",
+      "sha256": "4c16f1cbcf2a36a4459c7432c2622055dff6cc7c922c4bcaf03def0478e5bf61",
+      "only_x360_caller": "0x8273B280"
+    },
+    "generate_dispatch_lists": {
+      "address": "0x8273B280",
+      "sha256": "6758758c94fb3c12fc6f05b3d11dbcedceefedbf039784c96b355c3130ef7635",
+      "asserts_blobby_shadow_buffer": true,
+      "passes_buffer_to_render_traffic_car": true
+    },
+    "add_shadow": {
+      "address": "0x823F7638",
+      "sha256": "90fefde1d97ee81790e212b108ab74ad629a932a74d036728959eb22435f95ea"
+    }
+  },
+  "pc_capture_and_scope": {
+    "SceneCapture.cpp": {
+      "path": "src/pc/gcm/renderengine/reflections/SceneCapture.cpp",
+      "git_blob": "d47579f1edf579d21e92154aba381ef2a487a851",
+      "sha256": "5fe40fbfbcc9749e64544361b14115a02709d557668a50b33f0396284eb2f3dd",
+      "capture_scope": "VehicleScope(E_CAPTURE_TRAFFIC, face, normalDistance)",
+      "traffic_call_passes_null_shadow_buffer": true
+    },
+    "SceneSettings.h": {
+      "path": "src/pc/gcm/renderengine/reflections/SceneSettings.h",
+      "git_blob": "2a7c1c3ea2a776e2aa9b0a63a2cc18ef6ee2cb44",
+      "sha256": "c8e9ceac1b695fa0923ed28fb90a451fffdacfff826f9480105fca53b87e67fc",
+      "scope_saves_and_restores_category_distance_and_face_list": true,
+      "IsVehicleCapture_reads_scoped_thread_local_category": true
+    },
+    "WorldModule.cpp": {
+      "path": "src/GameSource/World/BrnWorldModule.cpp",
+      "git_blob": "0e3a78cd8a13123f9a7ba870c55209d6d0e82206",
+      "sha256": "7553ab0acfd70d2e46c94fb4183b10e9d4c8f7002db31c6123e7036b624492fb",
+      "main_traffic_dispatch_precedes_envmap_capture": true,
+      "shadow_cascade_follows_envmap_capture": true
+    }
+  },
+  "shadow_manager_source": {
+    "path": "src/GameSource/Graphics/BrnBlobbyShadowManager.cpp",
+    "git_blob": "41a1bc9cea1d86bcba89ed94d1e29c36b35261d6",
+    "sha256": "e98df54d7b834614f59550193118cbe38ffbf226f4cc132d5dfe2d9226410fd5"
+  },
+  "native_red_evidence": {
+    "packet": "scratch/DEBUG_MENU_1011/candidate_playability_ea5_20261024",
+    "executable_sha256": "da209c90da27aeda70ab47b1a921bed9a8295d893f5c4088b75641c66a489a9b",
+    "full_game_log_sha256": "97e808d80dfd82ce5e62dddb90be1a652803a4fc56f35154c4f99fa2e02397c7",
+    "emergency_log_sha256": "7d3d95f409c6561f2de358206bbe6851786cbda2145bbf2d81a1af529feac42b",
+    "exception_excerpt_sha256": "ea45bd0567a0a7c82526af2a3507c1c553a2f7732d352f94555f50f7b1a95b75",
+    "exception_rva": "0x420413",
+    "read_address": "0x0",
+    "callee": "BrnBlobbyShadowManager::BrnBlobbyShadowBuffer::AddShadow + 0x3",
+    "caller": "CgsPC::Reflections::TrafficCapture::Submit via RenderTrafficCar",
+    "pre_fix_normal24_unchanged": true,
+    "post_fix_runtime_credit": false
+  },
+  "review_limits": {
+    "cpp_compile": false,
+    "tests": false,
+    "ci": false,
+    "post_fix_native_run": false,
+    "game_or_input": false,
+    "source_or_git_mutation": false
+  }
+}
