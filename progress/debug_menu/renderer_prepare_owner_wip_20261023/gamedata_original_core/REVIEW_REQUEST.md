@@ -1,0 +1,7 @@
+Review `source/gamedata_original_core.patch`, exact full pre/post images and `SOURCE_MANIFEST.json` against frozen ARTIST/DecFIGS evidence and `POSTMORTEM.md`. Composition base is the published WIP53961615f5f9105568fa37a329f79758451c922d; this proposal is separate from the AutoTest continuation.
+
+Check the entire original four-argument caller, all stage values/order, receiver and package count/index ownership, stage18 yield/pump cadence, Attrib argument evaluation/create/destroy order, actual GameTalk bool return and derived debug component, LiveUpdate call, ICE reset, allocator-success/status-failure tails, enum status-copy helper and shared destructor thunk. Check pointer-preserving AddPatchRequest in its canonical home. Check that the two-argument native method and DONE7 are unchanged and that no shortened helper is substituted for an original API.
+
+Treat eleven original helper/core definitions, original member construction/legacy factory availability, shipping mounts and native allocation reconciliation as unresolved. `INITIALIZATION_BOUNDARIES.md` distinguishes confirmed source omissions from the game-module template-binding lead that still needs vtable confirmation. No original owner or core is activated here.
+
+Return `VERDICT: pass` or `VERDICT: fail` for the bounded source recovery, with findings. Do not grant compile/link/runtime, registration-site, inventory or gameplay credit. Root uses the existing single fresh reviewer; do not spawn another agent.
