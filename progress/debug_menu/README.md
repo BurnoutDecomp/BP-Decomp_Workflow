@@ -14,12 +14,15 @@ also pass. **Cold route loading still fails**: the saved-route list does not
 open. Joined-peer departure and long-session audio remain unverified.
 [Native evidence and limits](native_repairs_20261023/README.md).
 
-The current merge preserves the latest dev GUI/Replay CMake lists; those are
-the only source differences from hosted AA6. The normal folder is still the
-previous91a package until the separate delivery receipt records installation.
-Launch `build/game/Burnout_PC.exe` after that update. Its existing original
-TextFormat setter repair and checkpoint/Paradise Drives checks are retained in
-[the earlier delivery](paradise_textformat_playable_delivery_20261022/DELIVERY.json).
+**Installed: b3300e0e**, including current dev GUI/Replay CMake lists.
+Launch `build/game/Burnout_PC.exe`. The refreshed hosted package passes all ten
+groups,88 input pins and12 output hashes. Its executable code section exactly
+matches the AA6 native-tested binary; only CMake lists changed in source.
+The four changed build outputs have a recoverable backup. Settings, nine
+profiles and both logs preserve their bytes and modification times.
+[Delivery and limits](checked_playable_delivery_20261023/DELIVERY.json).
+The existing TextFormat setter repair and checkpoint/Paradise Drives checks
+remain recorded in [the earlier delivery](paradise_textformat_playable_delivery_20261022/DELIVERY.json).
 
 ## Campaign counts
 
