@@ -1,0 +1,18 @@
+--- a/src/GameSource/Resource/BrnDLCManager.cpp
++++ b/src/GameSource/Resource/BrnDLCManager.cpp
+@@ -240,13 +240,10 @@
+         }
+     }
+ 
+-    // X360 0x827DD210. The component's debug-menu name: a single pointer to the baked .rdata string at
+-    // unk_8207C1EC. FLAG: the bytes at that address are not present in the available X360 exports, so the
+-    // literal cannot be grounded. Placeholder name used (non-load-bearing -- it is only the debug-menu
+-    // label); replace with the real string if the .rdata for 0x8207C1EC is recovered.
++    // ARTIST 0x827DD210 returns the literal at 0x8207C1EC: bytes 44 4C 43 00 ("DLC").
+     const char* DLCDebugComponent::GetName() const
+     {
+-        return "DLC Debug" /* FLAGGED: unk_8207C1EC string bytes not in exports */;
++        return "DLC";
+     }
+ 
+     // X360 0x82662A10. Acquire a stack-scoped automatic debug interface (its ctor enters the debug

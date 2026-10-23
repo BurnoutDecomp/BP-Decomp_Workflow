@@ -1,0 +1,211 @@
+diff --git "a/scratch\\DEBUG_MENU_1011\\traffic_blobby_addshadow_reachability_20261023\\source\\pre\\BrnTrafficEntityModule_Render.cpp" "b/scratch\\DEBUG_MENU_1011\\traffic_blobby_addshadow_reachability_20261023\\source\\post\\BrnTrafficEntityModule_Render.cpp"
+index 1f5054fc..0382af26 100644
+--- "a/scratch\\DEBUG_MENU_1011\\traffic_blobby_addshadow_reachability_20261023\\source\\pre\\BrnTrafficEntityModule_Render.cpp"
++++ "b/scratch\\DEBUG_MENU_1011\\traffic_blobby_addshadow_reachability_20261023\\source\\post\\BrnTrafficEntityModule_Render.cpp"
+@@ -24,13 +24,15 @@
+ //
+ // NAMED GATES, each with its blocker:
+ //   G1 the replay-serialiser pose source (module +468256 selects it);
+-//   G2 CLOSED -- a physical traffic car RENDERS: its wheels come from
+-//      TrafficPhysicsInfo::maWheelTransforms and its blobby ground shadow is suppressed;
++//   G2 a physical traffic car RENDERS: its wheels come from
++//      TrafficPhysicsInfo::maWheelTransforms; its main-view blobby-shadow producer uses the
++//      road-test normal/height and VehicleTypeRuntime bounds when PhysicsInfo is present;
+ //   G3 the glass-fracture reset + the damaged-vehicle budget leg;
+ //   G4 the detached-body-part override table;
+ //   G5 SubmitCoronasForVehicle @0x82727BB0 (its sibling RenderTrafficLightCoronas @0x8271EC80 landed:
+ //      L3 RACEINTRO 2026-09-27);
+-//   G6 BrnBlobbyShadowBuffer::AddShadow -- the buffer has no owner on this build;
++//   G6 BrnBlobbyShadowBuffer::AddShadow -- main-view producer recovered from the ARTIST
++//      VehicleTypeRuntime bounds, vehicle transform and optional physics road-test normal;
+ //   G7 RenderTrafficLightCoronas' replay-playback source (the serialiser at module +0x724C0).
+ // PreDispatchUpdate is otherwise real, including the FastBitArray duplicate suppression and the
+ // species-dispatched liveness predicate; GenerateDispatchLists is complete apart from G5;
+@@ -484,11 +486,10 @@ TrafficEntityModule::GenerateDispatchLists( const BrnTrafficIO::InputBuffer_Disp
+ 
+     CGS_ASSERT( lpDispatchFrame != 0, "lpDispatchFrame" );
+     CGS_ASSERT( lpShadowMap != 0, "lpShadowMap" );
+-    // The console also asserts lpBlobbyShadowRenderer (:14055) and lpCoronaSubmissionInterface
+-    // (:14060). Neither is asserted here: nothing in this tree owns a BrnBlobbyShadowManager and
+-    // nothing calls InputBuffer_Dispatch::SetBlobbyShadowBuffer, so the handle is legitimately
+-    // null on this build (gate G6), and asserting it turns a known gap into a per-frame stop.
+-    // DELETE-WHEN a BrnBlobbyShadowManager owner exists.
++    // X360 :14055 asserts lpBlobbyShadowRenderer. Renderer Update publishes the external
++    // BrnBlobbyShadowManager buffer and the renderer/world/entity bridges forward it to this
++    // input; preserve the console's nonnull precondition now that that typed handoff is present.
++    CGS_ASSERT( lpBlobbyShadowRenderer != 0, "lpBlobbyShadowRenderer" );
+ 
+     if ( lpDispatchFrame == 0 || lpShadowMap == 0 )
+     {
+@@ -835,13 +836,14 @@ TrafficEntityModule::RenderTrafficCar( CgsGraphics::DispatchFrame* lpDispatchFra
+         return;
+     }
+ 
+-    // ---- G2 (CLOSED): the physical (promoted) arm --------------------------
++    // ---- G2: the physical (promoted) arm -----------------------------------
+     // `rlwinm r11, r11, 0,28,28` @0x82728C1C -> Vehicle::IsPhysical(); the console then fetches
+     // GetTrafficPhysicsInfoForVehicl(idx), asserts it non-null (pseudocode :3188-:3197, baked
+     // .cpp line 15106) and clears the "not physical" latch (`LOBYTE(v68) = 0` @0x82733200's
+     // twin at :3200). That latch does three things downstream, and all three are now honoured:
+     //   * the wheel block takes maWheelTransforms instead of composing the locator (see below);
+-    //   * the blobby ground shadow is suppressed at the tail (`if (v68) ... AddShadow`);
++    //   * the main-view blobby producer uses mvRoadTestNormal_HeightAboveRoad when PhysicsInfo
++    //     is present; the shadow-map pass is excluded by its separate rendering-byte gate;
+     //   * the damaged verlet-offset upload is enabled -- still G3, see that gate.
+     // The accessor landed with the keystone (_wT3_00.cpp) and returns the real
+     // TrafficPhysicsInfo*; the record itself has always been modelled and Constructed
+@@ -900,6 +902,10 @@ TrafficEntityModule::RenderTrafficCar( CgsGraphics::DispatchFrame* lpDispatchFra
+     const CgsGraphics::Model* lpWheelModel = lpWheelGraphicsSpec->GetWheelModel();
+     CGS_ASSERT( lpWheelModel != 0, "lpWheelModel" );
+ 
++    // ARTIST 0x82728EF8 retains this runtime record from the paint path through AddShadow. The
++    // recovered producer reads its bbox offset, half-size and axle offsets after the wheel draw.
++    const VehicleTypeRuntime* lpVehicleTypeRuntime = GetVehicleTypeRuntime( luVehicleType );
++
+     // ---- the body transform: pitch, then roll, then the vehicle transform ---
+     // Leak :8545-8551 verbatim, and the ship's inlined VMX polynomial cascade
+     // (@0x82728D40 onward -- the vrfin + minimax that IS SinCos) is exactly this composed
+@@ -1117,7 +1123,6 @@ TrafficEntityModule::RenderTrafficCar( CgsGraphics::DispatchFrame* lpDispatchFra
+     // mpData->mpaPaintColours), seeded by the vehicle index so a parked car keeps its colour.
+     Vector4 lv4PaintColour = { 1.0f, 1.0f, 1.0f, 1.0f };
+     {
+-        const VehicleTypeRuntime* lpVehicleTypeRuntime = GetVehicleTypeRuntime( luVehicleType );
+         if ( lpVehicleTypeRuntime != 0 && lpData->mpaPaintColours != 0 )
+         {
+             lv4PaintColour = lpVehicleTypeRuntime->PickPaintColourForVehicle(
+@@ -1308,16 +1313,6 @@ TrafficEntityModule::RenderTrafficCar( CgsGraphics::DispatchFrame* lpDispatchFra
+     //   handling-body transform -> * the per-wheel scale, with the LEFT wheels mirrored.
+     // ========================================================================
+ 
+-    // The wheel contact positions the blobby shadow is built from. Collected even while gate
+-    // G6 is open, because they are the console's own by-product of the loop and collecting
+-    // them costs nothing -- see the gate at the tail.
+-    Vector3 laWheelContactPositions[ KI_TRAFFIC_WHEELS_TO_RENDER_MAX ];
+-    for ( s32 liInit = 0; liInit < KI_TRAFFIC_WHEELS_TO_RENDER_MAX; ++liInit )
+-    {
+-        laWheelContactPositions[ liInit ].SetZero();
+-    }
+-
+-
+     if ( lrPhysicsSpecPtr.HasMemoryResource() && lpWheelModel != 0
+          && (!CgsPC::Reflections::IsVehicleCapture()
+              || CgsPC::Reflections::Wheels().IsVisible(
+@@ -1523,17 +1518,6 @@ TrafficEntityModule::RenderTrafficCar( CgsGraphics::DispatchFrame* lpDispatchFra
+                                       + lWheelPosInCarModel.y * lBodyTransform.yAxis.z
+                                       + lWheelPosInCarModel.z * lBodyTransform.zAxis.z;
+ 
+-                // The contact point: the wheel centre dropped by half the wheel's Y scale
+-                // along the body's UP axis (leak :8713-8714). This is the ONLY thing the
+-                // blobby shadow needs from the loop.
+-                laWheelContactPositions[ liWheel ].x =
+-                    lWheelMatrix.wAxis.x - lBodyTransform.yAxis.x * ( lpWheelSpec->mScale.y * 0.5f );
+-                laWheelContactPositions[ liWheel ].y =
+-                    lWheelMatrix.wAxis.y - lBodyTransform.yAxis.y * ( lpWheelSpec->mScale.y * 0.5f );
+-                laWheelContactPositions[ liWheel ].z =
+-                    lWheelMatrix.wAxis.z - lBodyTransform.yAxis.z * ( lpWheelSpec->mScale.y * 0.5f );
+-                laWheelContactPositions[ liWheel ].w = 0.0f;
+-
+                 // The per-wheel scale, applied on the LEFT (leak :8717-8720).
+                 Matrix44Affine lWheelScaleMatrix;
+                 lWheelScaleMatrix.SetIdentity();
+@@ -1609,34 +1593,76 @@ TrafficEntityModule::RenderTrafficCar( CgsGraphics::DispatchFrame* lpDispatchFra
+     }
+ 
+     // ---- G6: the blobby ground shadow --------------------------------------
+-    // NAMED GATE. The console's tail (pseudocode :3183, leak :8777-:8786) is
+-    //     if ( !lpShadowMap->IsRenderingShadowMap() && !lpVehicle->IsPhysical() )
+-    //         lpBlobbyShadowRenderer->AddShadow( <quad built from the four contact points> );
+-    // TWO BLOCKERS: nothing on this build owns a BrnBlobbyShadowManager (no code calls
+-    // InputBuffer_Dispatch::SetBlobbyShadowBuffer, so the handle is always null, which is why
+-    // GenerateDispatchLists does not reproduce the console's entry assert @0x8273B39C); and the
+-    // PC AddShadow signature is (Matrix44Affine&, Vector4&, VecFloat, VecFloat), a transform plus
+-    // packed extents, where the leak's four-position form is stale and the console builds those
+-    // arguments in a dense VMX cross-product block that is not decoded. The contact points are
+-    // collected above, so the leg is a pure addition once the owner lands.
+-    // DELETE-WHEN a BrnBlobbyShadowManager owner exists and the argument construction is decoded
+-    // from @0x8272B868..0x8272B930.
+-    // `if (v68)` -- the "not physical" latch. A promoted car does NOT get a blobby shadow (it
+-    // is in the real shadow map by then), which is what the leak spells as
+-    // `if (!lpVehicle->IsPhysical()) AddShadow(...)`.
+-    if ( lpBlobbyShadowRenderer != 0 && !lpShadowMap->IsRenderingShadowMap() && !lbIsPhysical )
++    // ARTIST 0x827292D8..0x82729554. The shadow-map byte gates the whole producer. The second
++    // branch is `if (v68) AddShadow; else if (PhysicsInfo) AddShadow`: v68 is initialized true
++    // for a nonphysical traffic car and cleared for the live physical arm at 0x82728C68. A
++    // physical car therefore contributes its road-normal shadow whenever PhysicsInfo exists.
++    // The replay arm's serialized latch remains behind G1 and is not reconstructed here.
++    if ( !lpShadowMap->IsRenderingShadowMap() && ( !lbIsPhysical || lpPhysicsInfo != 0 ) )
+     {
+-        static bool sbLoggedBlobbyGate = false;
+-        if ( !sbLoggedBlobbyGate && CgsDev::Log::gpDebugPrint != 0 )
++        const Vector3 lBBoxOffset = lpVehicleTypeRuntime->GetBBoxOffset();
++        const Vector3 lBBoxHalfSize = lpVehicleTypeRuntime->GetBBoxHalfSize();
++        const Vector4 lvCabPivot_TrailerPivot_BackAxle_FwdAxle =
++            lpVehicleTypeRuntime->GetCabPivot_TrailerPivot_BackAxle_FwdAxle();
++
++        // ARTIST 0x827293BC..0x82729454 builds the Vector4 as
++        // { BBoxOffset.z + BBoxHalfSize.z, BBoxOffset.z - BBoxHalfSize.z,
++        //   BackAxleOffset, ForwardAxleOffset }. The first two lanes are bounds, while the
++        // last two are the VehicleTypeRuntime axle offsets in their original signed form.
++        const Vector4 lvFwdLength_RearLength_BackAxle_FrontAxle =
+         {
+-            sbLoggedBlobbyGate = true;
+-            *CgsDev::Log::gpDebugPrint
+-                << "[T1-dispatch] RenderTrafficCar: a blobby shadow buffer EXISTS but the"
+-                   " AddShadow argument construction is not reconstructed -- no traffic ground"
+-                   " shadow is posted [FLAG PC partial gate]\n";
++            lBBoxOffset.z + lBBoxHalfSize.z,
++            lBBoxOffset.z - lBBoxHalfSize.z,
++            lvCabPivot_TrailerPivot_BackAxle_FwdAxle.z,
++            lvCabPivot_TrailerPivot_BackAxle_FwdAxle.w
++        };
++        const VecFloat lfWidth( lBBoxHalfSize.x );  // the X360 broadcasts BBoxHalfSize.x
++
++        Matrix44Affine lShadowTransform = lBodyTransform;
++        VecFloat lfHeightOffGround( 0.0f );
++
++        if ( lbIsPhysical )
++        {
++            // TrafficPhysicsInfo::mvRoadTestNormal_HeightAboveRoad is the typed owner of the
++            // X360 +0x520 load. Its W lane is both AddShadow's fade height and the amount
++            // subtracted from the body position along world up. Preserve that W lane in row 1.
++            const Vector3Plus& lrRoadNormal_HeightAboveRoad =
++                lpPhysicsInfo->mvRoadTestNormal_HeightAboveRoad;
++            const Vector3 lvWorldNormal = { lrRoadNormal_HeightAboveRoad.x,
++                                            lrRoadNormal_HeightAboveRoad.y,
++                                            lrRoadNormal_HeightAboveRoad.z };
++            const Vector3 lvBodyForward = { lBodyTransform.zAxis.x,
++                                            lBodyTransform.zAxis.y,
++                                            lBodyTransform.zAxis.z };
++            const Vector3 lvShadowRight = rw::math::vpu::Cross( lvBodyForward, lvWorldNormal );
++            const Vector3 lvShadowAt = rw::math::vpu::Cross( lvWorldNormal, lvShadowRight );
++            lfHeightOffGround = lrRoadNormal_HeightAboveRoad.w;
++
++            // The two cross products retain the console's orientation/signs and do not
++            // normalize. Explicit W lanes match the VMX rows: both cross rows have W=0, the
++            // normal row keeps the road height, and the position row keeps the transform W.
++            const Vector4 lvShadowRight_W0( lvShadowRight, 0.0f );
++            const Vector4 lvWorldNormal_Height( lvWorldNormal, lfHeightOffGround );
++            const Vector4 lvShadowAt_W0( lvShadowAt, 0.0f );
++            const Vector3 lvWorldUp = rw::math::vpu::GetVector3_YAxis();
++            const Vector3 lvHeightOffset = rw::math::vpu::Mult( lvWorldUp, lfHeightOffGround );
++            const Vector4 lvHeightOffset_W0( lvHeightOffset, 0.0f );
++            const Vector4 lvShadowPosition = lBodyTransform.wAxis - lvHeightOffset_W0;
++
++            lShadowTransform = Matrix44Affine( lvShadowRight_W0,
++                                               lvWorldNormal_Height,
++                                               lvShadowAt_W0,
++                                               lvShadowPosition );
+         }
++
++        // FLAG PC-platform leaf: reuse this render's interpolated body transform above. ARTIST
++        // reads VehicleTransform directly; when PC frame interpolation is disabled this is the
++        // same transform, and when enabled it keeps the shadow attached to the rendered pose.
++        lpBlobbyShadowRenderer->AddShadow( lShadowTransform,
++                                           lvFwdLength_RearLength_BackAxle_FrontAxle,
++                                           lfWidth,
++                                           lfHeightOffGround );
+     }
+-    (void)laWheelContactPositions;
+ }
+ 
+ }  // namespace BrnTraffic
