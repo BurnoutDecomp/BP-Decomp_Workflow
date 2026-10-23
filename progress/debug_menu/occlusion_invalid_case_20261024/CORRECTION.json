@@ -1,0 +1,26 @@
+{
+  "status": "FAIL_invalid_reused_case_before_target_controls",
+  "source": "edca934dc502f71f64ad873cdd386afe5e3eeeb2",
+  "exe_sha256": "0c55f39a7a5c4295981996a9924e36350da026f50e1ceb5f665a7f82916c77bf",
+  "utc": "2026-10-23T23:04:52.979143+00:00",
+  "owned_slot": 62060,
+  "log_sha256": "5f2539e07d3cd19615330df8d60bfe5e2d4f4b66f8644cd56a01dc539b0ccbe9",
+  "initial_save_sha256": "57bf38ddcf422306a9cd4760f45c9338d02c7ae07b90d878577bf0f017b0d35c",
+  "known_prior_triage": "occlusion_native_7e45_execution_20261023/SAVE_CRASH_TRIAGE.md",
+  "known_prior_triage_sha256": "b7556638fc683a1d3f4e5e6c43466c06c293f04d15faec3a5fa0cf349c1e1265",
+  "root_mistake": "Reused a case whose existing triage explicitly prohibited whole-registry SAVE before renderer registration integration. The component caption fix was incorrectly treated as a reason to retry that separate null-feature failure.",
+  "prelaunch_reason_correction": "ROOT_PRELAUNCH_REVIEW.json reason is superseded here: restoring GetName to DLC only fixes a caption, not the original unnamed25th feature or renderer registration lifecycle.",
+  "observations": [
+    "RendererModule component lookup fails.",
+    "Initial whole-registry SAVE reads null in StrCat via SaveState.",
+    "Last serialized variable is DLC feature23; feature24 remains null in the original Construct.",
+    "No baseline value readback, no occlusion toggle or GPU query evidence was obtained."
+  ],
+  "source_conclusion": "Same source-supported original leftover chain as the prior failed run. No live variable-pointer dump was taken; no generic null skip or invented feature name is proposed.",
+  "terminal_foreign_game_note": "The strict harness foreign_game flag accompanies the crash/enumeration failure. It is not evidence that a separate user game existed.",
+  "normal24_unchanged": true,
+  "remaining_owned_games": 0,
+  "new_debug_dispositions": 0,
+  "next_test_gate": "Do not rerun this adapter. Recover/integrate actual renderer registration lifecycle, then use targeted value/alias readback without whole-registry SAVE and retain engine-state and pixel witnesses.",
+  "prior_baseline_green": "candidate_playability_reflection_fix_20261024/ROOT_NATIVE_JUDGMENT.json remains valid only for its startup/world/motion scope."
+}
