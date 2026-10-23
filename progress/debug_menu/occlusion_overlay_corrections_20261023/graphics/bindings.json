@@ -1,0 +1,44 @@
+{
+  "status": "corrected immutable source-only proposal; fresh-eyes delta review requested; no compile/runtime/site credit",
+  "base_commit": "9cbefd173085312ebaee5bab4875b8492fc292cb",
+  "base_repo": "b5-decomp",
+  "changed_files": [
+    "src/GameSource/Graphics/BrnRendererModule.cpp",
+    "src/GameSource/Graphics/BrnRendererModule.h",
+    "src/GameSource/Game/BrnDispatchThreadInputBuffer.h",
+    "src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp",
+    "src/GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp",
+    "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h"
+  ],
+  "baseline_file_sha256": {
+    "src/GameSource/Graphics/BrnRendererModule.cpp": "4fdd519d547b545de234bd0123613daa86c1a7815e865e1ad120b903cfd46ec5",
+    "src/GameSource/Graphics/BrnRendererModule.h": "4aa3e741bbed50201ba1fb487800fdbd4084cab25a795594a1fb243e852f30b4",
+    "src/GameSource/Game/BrnDispatchThreadInputBuffer.h": "44350c79f9a86662a74e29c79decdbb50d741a0c5ea277cef96e190ec444bbd4",
+    "src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp": "2f910bf08380fd55c0fd9f946338f6a6e398a469d59bb0131e297753b7dd7cfb",
+    "src/GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp": "d06262ee95db5094808c6e69dec0a87ec254319801a0e5d1e7fb959e7e8c0e19",
+    "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h": "c171dca760c4367f59b58026200fa3f4316cfdf59eab5de6ee6a6a4a39298904"
+  },
+  "postimage_file_sha256": {
+    "src/GameSource/Graphics/BrnRendererModule.cpp": "bd9c8ce4d2d7909169b302b4dc7ab8c7393ef9b97afb0d0d61920160e09438d0",
+    "src/GameSource/Graphics/BrnRendererModule.h": "89311c6baedfa7f1e86d9eb6902f0c01e96f4d03708a60e37c733f2410274e1e",
+    "src/GameSource/Game/BrnDispatchThreadInputBuffer.h": "3388e1e522f7f21fa88d8ed6b5f4b75b09cf7cc2bbfde9ddaf6de6660fdea3a9",
+    "src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp": "7114a03771a620998c57b82e7ba70fcc95c4f2d5f64ea9ef5af060e3eb6377eb",
+    "src/GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp": "24f6ac9bd30d20791258b2ae986661b1cb0c67bdc2b0227d1a8a197b0362a1b5",
+    "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h": "1a7cafb107bd9a800be3e9b7eca3cc2988f694564b07a8ec35c2f6aa15656ddc"
+  },
+  "corrects_packet": "scratch/DEBUG_MENU_1011/graphics_occlusion_cursor_delta_20261023",
+  "preserves_cursor_recovery": true,
+  "accessor_evidence": {
+    "DecFIGS_header": "references\\DecFIGS\\dwarfdump\\GameSource\\Game\\BrnDispatchThreadInputBuffer.h",
+    "sha256": "11be9bdd1720b43f59fe355810fb6c38926a7f6c83a5b02c82bc98c039b3d999",
+    "DecFIGS_declaration": "BrnDispatchThreadInputBuffer.h:160: const Matrix44& GetOcclusionViewProjectionMatrix() const; (public)",
+    "DecFIGS_member": "BrnDispatchThreadInputBuffer.h:79: Matrix44 mOcclusionViewProjectionMatrix (private)",
+    "ARTIST_Render_export": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8240BFA8.json",
+    "sha256_artist": "e2a24cd90d2818974a6eb622f9b213fd4c4be71766cc504769b484da0bb464e5",
+    "ARTIST_read": "0x8240C1C0 LockForRead; 0x8240C1C8..C1D0 computes input +0x99C0; 0x8240C1E4/1F0/1F4/1F8 loads the four matrix rows; 0x8240C220 UnlockForRead. The getter is inlined; no additional getter lock assert is introduced.",
+    "DecFIGS_compile_hints": "references\\DecFIGS\\dwarfdump\\_compile\\BrnWorldUnity.cpp",
+    "sha256_compile_hints": "8e743955fabed85f3dc76c354dd6c76ef5108a68fd6eb6cb5b0b8e23c86d28f2"
+  },
+  "prior_fail_packet": "scratch/DEBUG_MENU_1011/graphics_debug_recovery_batch_20261023_occlusion (immutable)",
+  "reviewed_base": "9cbefd contains the independently reviewed blobby Render changes and five GUI posts; both blobby Render and occlusion reads now use the same attested getter."
+}
