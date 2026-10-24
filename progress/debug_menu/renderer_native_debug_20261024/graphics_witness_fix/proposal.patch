@@ -1,0 +1,41 @@
+--- a/src/GameSource/Graphics/BrnRendererModule.cpp
++++ b/src/GameSource/Graphics/BrnRendererModule.cpp
+@@ -1587,13 +1587,21 @@
+ 
+     rw::IResourceAllocator* const lpRawGraphics = BrnResource::Allocators::GetGlobalGraphicsAllocator();
+     lbOwned = lbOwned && lpRawGraphics
+-        && lpRawGraphics == BrnResource::Allocators::mpInternalGraphicsAllocator
+         && mpGraphicsAllocator == BrnResource::GetGraphicsAllocator();
+     if (!lbOwned)
+         return false;
++    // FLAG PC-platform leaf: this getter's two return sites both upcast its
++    // actual retained rw::LinearResourceAllocator. Reverse only that known
++    // conversion; the game wrapper is a distinct type and is never cast.
++    const rw::LinearResourceAllocator* const lpNativeGraphics =
++        static_cast<const rw::LinearResourceAllocator*>(lpRawGraphics);
++    const rw::Resource& lrNativeGraphicsHeap = lpNativeGraphics->GetLinearHeapBase();
+     const rw::Resource& lrGraphicsHeap = mpGraphicsAllocator->GetLinearHeapBase();
+     const rw::ResourceDescriptor lGraphicsCapacity = mpGraphicsAllocator->GetCapacity();
+-    if (!lrGraphicsHeap.m_baseResources[0]
++    // Both genuine queries return the backing object's own Resource member
++    // by reference. Equal addresses witness the exact actual backing owner.
++    if (&lrGraphicsHeap != &lrNativeGraphicsHeap
++        || !lrGraphicsHeap.m_baseResources[0]
+         || lGraphicsCapacity.m_baseResourceDescriptors[0].m_size == 0)
+         return false;
+ 
+@@ -1644,12 +1652,13 @@
+     {
+         char lacLine[768];
+         std::snprintf(lacLine, sizeof(lacLine),
+-            "[renderer-prepare] renderer=%p list=%p bank31=%p worldBase=%p worldCapacity=%u usageBeforeSky=%u usageAfterSky=%u rawGraphics=%p wrapper=%p graphicsBase=%p graphicsCapacity=%u skyExisted=%d mainVB=%p mainIB=%p cubeVB=%p cubeIB=%p mainIndices=%u cubeIndices=%u skyOwned=%d\n",
++            "[renderer-prepare] renderer=%p list=%p bank31=%p worldBase=%p worldCapacity=%u usageBeforeSky=%u usageAfterSky=%u rawGraphics=%p wrapper=%p nativeHeapOwner=%p wrapperHeapOwner=%p graphicsBase=%p graphicsCapacity=%u skyExisted=%d mainVB=%p mainIB=%p cubeVB=%p cubeIB=%p mainIndices=%u cubeIndices=%u skyOwned=%d\n",
+             static_cast<const void*>(this), static_cast<const void*>(lpAllocatorList),
+             static_cast<const void*>(lpBank31), lpArena, luCapacity,
+             lUsageBefore.m_baseResourceDescriptors[0].m_size,
+             lUsageAfter.m_baseResourceDescriptors[0].m_size,
+             static_cast<const void*>(lpRawGraphics), static_cast<const void*>(mpGraphicsAllocator),
++            static_cast<const void*>(&lrNativeGraphicsHeap), static_cast<const void*>(&lrGraphicsHeap),
+             lrGraphicsHeap.m_baseResources[0], lGraphicsCapacity.m_baseResourceDescriptors[0].m_size,
+             lbSkyExisted ? 1 : 0, lSky.mpMainVertexHeader, lSky.mpMainIndexHeader,
+             lSky.mpCubeVertexHeader, lSky.mpCubeIndexHeader,
