@@ -5,31 +5,15 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-**Installed: d3ec7d2d**, refreshed from exact hosted run40086048484.
-Launch `build/game/Burnout_PC.exe`. All eleven selected hosted groups,112
-source/build input pins and12 output hashes pass. A separate private50-second
-run left the junkyard, rendered the world and drove236.6m without asserts or
-exceptions; Root inspected the road and subsequent wreck frames. This is
-bounded playability acceptance, not complete debug-control certification.
+**Installed:36ae3ffe**, from hosted40103324586, with current dev SDL3/camera/district work and the checked renderer recovery. Launch `build/game/Burnout_PC.exe`. Eleven hosted groups, all3003 compiled TUs and14 payload hashes pass. The exact executable passed a separate165-second private startup/world check and the independent00/10/11/01/00 occlusion matrix, with real resources/queries/GPU restoration and five inspected images; no asserts/exceptions.
 
-The build retains the Road Rage count/countdown fix, custom-route save and
-overwrite repair, and host-tested Freeburn Leaving completion. Six further
-GUI producer records now match ARTIST;143/337 still need their module-input
-return route. The custom-race172 producer and original renderer/game-IO
-preparation WIP remain excluded. **Cold saved-route loading still fails**;
-joined-peer departure, complete online races, Replay frame wiring and long
-audio sessions remain unverified. Whole-registry debug SAVE retains the
-original unnamed-DLC-slot crash and is excluded from the test recipes.
+Road Rage count/countdown, custom-route save/overwrite and host-tested Freeburn Leaving fixes are retained. Cold saved-route loading, joined-peer leaving, complete online races, long audio sessions and Replay frame wiring remain unresolved or unverified. The full GUI inbox/audio and original global-construction branches remain private. Whole-registry debug SAVE retains the original unnamed-DLC-slot crash; targeted tests avoid it.
 
-The previous b330 package has a recoverable backup. Config, nine profiles,
-their membership and both logs preserve their bytes and modification times.
-[Delivery and limits](checked_gui_delivery_20261024/DELIVERY.json).
-[Earlier gameplay evidence](native_repairs_20261023/README.md).
-[Earlier TextFormat and checkpoint delivery](paradise_textformat_playable_delivery_20261022/DELIVERY.json).
+The previous normal package is backed up. Config, both logs, nine profiles and their membership preserve their bytes and modification times. [Delivery and review](renderer_checked_delivery_20261024/DELIVERY.json).
 
 ## Campaign counts
 
-**October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation remain pending. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
+**October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation now pass. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
 
 The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **52 verified, seven original no-ops and 1,296 pending**. That is 59/1,355 (4.4%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
