@@ -1,0 +1,5 @@
+runner,scope checked,hosted 40115091362 evidence,disposition
+tests/run_pool_create_protocol.py + tests/PoolCreateProtocol.cpp,"protocol and layout source selectors, fixture body, negative-control order","protocol 24/24 and layout 22/22 positive checks pass; negative-control loop was not reached after later hierarchy compile failure","audited; unchanged"
+tests/run_pc_resource_shuttle.py + tests/PCResourceShuttle.cpp,"resource dispatcher and resource IO source selectors, fixture body","14/14 checks pass","audited; unchanged"
+tests/run_pc_gui_pool_acquire.py + tests/PCGuiPoolAcquire.cpp,"pool lookup/acquire selectors, fixture body","27/27 checks pass","audited; unchanged"
+tests/run_game_data_pool_hierarchy.py + tests/GameDataPoolHierarchy.cpp,"full extracted GameData preparation bodies and fixture declarations/call sites","compile fails because prefix selectors emit IOBufferStack overloads against void* fixture declarations","two selectors corrected to exact void*,void* overloads; all checks and bodies retained"
