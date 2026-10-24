@@ -1,0 +1,128 @@
+{
+  "status": "PASS_bounded_shared_occlusion_path_pixels_and_state_restore",
+  "utc": "2026-10-24T14:01:17.527431+00:00",
+  "source": "3d7db422fd9a96f6891ac81c60370745dd966839",
+  "source_tree": "9f71a14cc3f0a24ecdd349f285dba9070eb04add",
+  "workflow": "454827ab831b110fd5f5d9b9d7126133aa4fa3e7",
+  "exe_sha256": "a4cc9c43aaf21932ea6cfff67e573be6e89d3b18478b301e3f407d7c5a92b4e7",
+  "slot": 62066,
+  "owned_pid": 24656,
+  "asserts": 0,
+  "exceptions": 0,
+  "normal24_unchanged": true,
+  "remaining_owned_games": 0,
+  "individual_control_credit": false,
+  "new_debug_dispositions": 0,
+  "complete_list11": {
+    "frame": 7045,
+    "total": 4122,
+    "chunks": 65,
+    "final_query": -1,
+    "final_draw": -1
+  },
+  "actual_state_witness": {
+    "serial": "1",
+    "before": {
+      "Ordinal": 22015,
+      "Flags": 1,
+      "Read": 1,
+      "CW": [
+        15,
+        15,
+        15,
+        15
+      ],
+      "ZW": 1,
+      "SW": 4294967295,
+      "AT": 0,
+      "ZE": 1,
+      "ZF": 4,
+      "Cull": 2,
+      "A2Request": 0,
+      "A2Applied": 0,
+      "Restored": 0
+    },
+    "draw": {
+      "Ordinal": 22016,
+      "Flags": 1,
+      "Read": 1,
+      "CW": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "ZW": 0,
+      "SW": 0,
+      "AT": 0,
+      "ZE": 1,
+      "ZF": 4,
+      "Cull": 2,
+      "A2Request": 0,
+      "A2Applied": 0,
+      "Restored": 0
+    },
+    "restored": {
+      "Ordinal": 22017,
+      "Flags": 1,
+      "Read": 1,
+      "CW": [
+        15,
+        15,
+        15,
+        15
+      ],
+      "ZW": 1,
+      "SW": 4294967295,
+      "AT": 0,
+      "ZE": 1,
+      "ZF": 4,
+      "Cull": 2,
+      "A2Request": 0,
+      "A2Applied": 0,
+      "Restored": 1
+    }
+  },
+  "captured_query_results": {
+    "count": 166,
+    "zero": 140,
+    "positive": 26,
+    "maximum": 6309317
+  },
+  "visual_review": [
+    {
+      "frame": "baseline.bmp",
+      "sha256": "0d5373cb75766dcb258b7678b8735401e9c26e8f30597513a46a266cfd6c8393",
+      "observation": "Normal road/buildings/sky/car before enable."
+    },
+    {
+      "frame": "enabled.bmp",
+      "sha256": "dc2018a91b4c683b2b7680d93cc70a6289f63688a7f3fbf86dd34ee68e114d51",
+      "observation": "World and sky remain visible while real occlusion/query state is enabled; previous black polygon failure is absent."
+    },
+    {
+      "frame": "restored.bmp",
+      "sha256": "7143aeb7e254f2f147794d1be4451c971532c27b8df8144f90e75fe8b692a042",
+      "observation": "Normal scene remains visible after both settings are disabled."
+    }
+  ],
+  "controls": [
+    "Original component activation",
+    "Two real aliases and value readbacks",
+    "Scoped F2/F3/F4 off-on-off cycle"
+  ],
+  "passive_witnesses": [
+    "Actual owner/resource diagnostics",
+    "Real query and cursor records",
+    "Same-serial GPU-state snapshots",
+    "Fresh phase pixels",
+    "Strict owned terminal receipt"
+  ],
+  "limits": [
+    "Both controls changed together; individual gate matrix is still required.",
+    "No Xenos query-polarity equivalence, device-loss recovery, complete renderer or gameplay certification.",
+    "Native95/62065 visual FAIL remains retained."
+  ],
+  "normal_delivery": false,
+  "dev_promoted": false
+}
