@@ -1,0 +1,70 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "occlusion_survey_state_off_on_off",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\occlusion_survey_state_3d7_native_20261024\\Case.proposed.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-24T15:58:33.3397444+02:00",
+    "flow_exit":  0,
+    "bug":  "The original world-opaque query and conditional-draw chain must consume the live debug controls and preserve the ordinary world image when restored.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\occlusion_survey_state_3d7_native_20261024\\run",
+    "label":  "Original world-opaque occlusion off/on/off; source=3d7db422fd9a96f6891ac81c60370745dd966839",
+    "area":  "graphics-occlusion",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62066,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 assert family(ies), all known (0 lines)",
+                       "pass":  true,
+                       "name":  "no new assert families",
+                       "kind":  "NewAsserts"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "zero assertions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "8 retained immediate pairs; 3 dispatch owners; actual member list/bank31 and equal heap owners; owned 2066/118 sky; one canonical completion",
+                       "pass":  true,
+                       "name":  "actual renderer startup resource ownership",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no game exceptions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "ordinary free-roam phase reached",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "actual alias values: initial observed, baseline=off, enabled+ready=on, restored=off; frames=56/96 | complete list11 frame=7045 total=4122 chunks=65 final=-1; batch row 65/192 | same provider id=0 serial=1: result samples=0, decision=0; ordinals ended/result/decision=1/59/60 | retained images=baseline.bmp,enabled.bmp,restored.bmp | manual pixel inspection remains required; D3D9 query polarity is not Xenos parity",
+                       "pass":  true,
+                       "name":  "complete off-on-off query and retained-frame evidence",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11369984,
+                       "exe_mtime_before_lock":  "2026-10-24T15:46:57.2696130+02:00",
+                       "exe_sha":  "a4cc9c43aaf2",
+                       "b5_head":  "053e953f0",
+                       "exe_b5":  "3d7db422",
+                       "parent_head":  "e68b398e7",
+                       "exe_mtime":  "2026-10-24T15:46:57.2696130+02:00"
+                   }
+}
