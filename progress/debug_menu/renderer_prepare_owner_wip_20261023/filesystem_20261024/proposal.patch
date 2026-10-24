@@ -1,0 +1,1027 @@
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.h
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.h
+@@ -1,6 +1,10 @@
+ #pragma once
+ 
+ #include "types.hpp"
++#include "GameShared/GameClasses/System/FileSystem/CgsPatchManager.h"
++#include "GameShared/GameClasses/System/FileSystem/CgsDiskCache.h"
++#include "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.h"
++#include "GameShared/GameClasses/System/FileSystem/Devices/CgsRemapDevice.h"
+ #include <eathread/eathread_atomic.h>
+ // Real instance layout: the 16 file handles, the 8 read-stream engines, the embedded log + lock.
+ #include "GameShared/GameClasses/System/FileSystem/CgsFile.h"
+@@ -35,7 +39,7 @@
+     void EnsureDeviceManagerUp();
+ 
+     // Pointer-only members of the layout below; reconstructed in their own follow-on TUs.
+-    class DiskLayout;
++    struct DiskLayout;
+     class DeviceMemFileSystem;
+ 
+     // The value handle (CgsFileHandle.h) locks this class's mFileSystemFutex and calls
+@@ -63,8 +67,11 @@
+     class FileSystem
+     {
+     public:
+-        // ---- PC-native bring-up shim (separate X360 funcs, reconstructed as no-ops) ----
+-        void Construct();   // 0x829033C0
++        // ---- retained native path and original construction owner ----
++        void Construct();   // retained native construction path
++        // Original X360 owner, distinct from DecFIGS's five-input form.
++        void Construct(rw::IResourceAllocator* lpAllocator, rw::IResourceAllocator* lpDebugAllocator,
++                       char* lpcFilePrefix, DiskLayout* lpDiskLayout);
+         bool Prepare();     // 0x828F04E8 — brings up the async device engine
+         bool Release();     // 0x82903880
+         void Destruct();    // 0x828E8A88
+@@ -111,6 +118,8 @@
+         // ---- DWARF CgsFileSystem.h:308/317 (private) ----
+         static EA::Thread::AtomicInt32 mDiskErrorOccured; // DecFIGS h262, ARTIST830EA574
+         static bool RWDiskErrorHandler(s32 liError); // ARTIST828E8B20 ignores its argument
++        // Typed physical-device callback; DecFIGS h290, X360 registration uses the same store leaf.
++        static bool DiskErrorHandler(EDeviceErrors leError);
+ 
+         // The actual file I/O primitives, called under mFileSystemFutex by FileHandle::Read/Write.
+         // DECLARE-ONLY here: bodies are their own TUs (ReadInternal @0x828E8B50-region /
+@@ -140,8 +149,14 @@
+         DiskLayout*           mpDiskLayout;                                       // :258
+         EA::Thread::Futex     mFileSystemFutex;                                   // :259
+         DeviceMemFileSystem*  mpMemFileSystem;                                    // :260
++        DiskCache             mDiskCache; // X360 retains the three debug controls
++        PatchManager          mPatchManager; // ARTIST829034C4..D4
++        PhysicalX360Device    mX360DVDDrive;
++        PhysicalX360Device    mX360HardDrive;
++        RemapDevice           mX360RemapDVDDrive;
++        RemapDevice           mX360RemapHardDrive;
+         bool                  mbReleasing; // FLAG PC-platform leaf: serialized close-once latch
+-        // (CgsFileSystem.h:261 mDiskCache, :262 mDiskErrorOccured and the
+-        //  :365 mDebugComponent are follow-on; the PS3 device block :275-281 is gated out.)
++        // The PS3-only device block is excluded; the separate debug component
++        // lifecycle remains a follow-on. X360-only member identifiers above are descriptive.
+     };
+ }
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.cpp
+@@ -2,11 +2,35 @@
+ #include "GameShared/GameClasses/System/FileSystem/CgsDeviceManager.h"
+ #include "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalPC.h"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"
++#include "GameShared/GameClasses/Development/CgsStrStream.h"
++#include <cstring>
+ 
+ // CgsFileSystem::FileSystem - see the header. The async device engine bring-up lives in
+ // EnsureDeviceManagerUp(); the rw filesys layer + BaseFile stream machinery are follow-on.
+ namespace CgsFileSystem
+ {
++namespace
++{
++    // Original CgsStringUtils.h:65 copy expansion. Preserve the assert and
++    // terminator-inclusive copy; no truncation or alternate path is introduced.
++    void CopyConstructionString(char* lpcDest, u32 luBytes, const char* lpcSource)
++    {
++        const size_t luLength = std::strlen(lpcSource);
++        if (luLength >= luBytes)
++        {
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::MessageBufferPC lBuffer;
++            CgsDev::StrStream lStream(lBuffer.GetBuffer(), lBuffer.GetSize());
++            lStream << "String " << lpcSource << " is too long. Buffer size = "
++                    << luBytes << ", string length = " << static_cast<u32>(luLength) << "\n";
++            CgsDev::Assert::FireAssert(lBuffer.GetBuffer(),
++                "..\\..\\..\\GameShared\\GameClasses\\Core/CgsStringUtils.h", 65);
++            CgsDev::Assert::EndAssert();
++        }
++        std::memcpy(lpcDest, lpcSource, luLength + 1);
++    }
++
++}
+     EA::Thread::AtomicInt32 FileSystem::mDiskErrorOccured(0); // primary raw830EA574
+ 
+     bool FileSystem::HasDiskErrorOccured() const
+@@ -20,11 +44,13 @@
+         return false;
+     }
+ 
+-    // Marked PC sentinel allocator. The X360 passed the GameData allocator to
+-    // InitializeDeviceManager (which only stores it; DeviceManager::operator new mallocs on PC),
+-    // so any non-null value satisfies the "Allocator required" assert. Routing the manager through
+-    // the real GameData allocator is deferred.
+-    static char gcPcAllocatorSentinel;
++    // ARTIST829035B0..CC binds the same828E8B20 store leaf to the typed device
++    // callback. Keep the RW int32 callback's declaration and full body intact.
++    bool FileSystem::DiskErrorHandler(EDeviceErrors /*leError*/)
++    {
++        mDiskErrorOccured.SetValue(1);
++        return false;
++    }
+ 
+     // The single PC physical device. A process-static (rather than a FileSystem member) so its
+     // lifetime spans the whole run and the worker thread that references it never dangles, and so
+@@ -35,11 +61,11 @@
+     void EnsureDeviceManagerUp()
+     {
+         if (!DeviceManager::GetIfInitialized())
+-            DeviceManager::InitializeDeviceManager(&gcPcAllocatorSentinel);
++            DeviceManager::InitializeDeviceManagerNativePC();
+ 
+         DeviceManager* lpManager = GetDeviceManager();
+         if (lpManager && !lpManager->FindDevice("p_dvd"))
+-            lpManager->AddPhysicalDevice(&gPhysicalDevice, "p_dvd", 0);
++            lpManager->AddPhysicalDeviceNativePC(&gPhysicalDevice, "p_dvd", 0);
+     }
+ 
+     // @0x827DF320 (boot trace). The X360 ctor walks the 16 file handles and 8 read-stream engines
+@@ -212,6 +238,34 @@
+         return GetEffectiveStreamStatus(lpStream) == StreamDeviceDiskRead::E_STATUS_CLOSED;
+     }
+ 
++    // ARTIST829033C0: X360 consumes allocator/debug/path/layout in r4..r7.
++    // DecFIGS's additional cache-drive input is not consumed by this build.
++    void FileSystem::Construct(rw::IResourceAllocator* lpAllocator,
++                               rw::IResourceAllocator* lpDebugAllocator,
++                               char* lpcFilePrefix, DiskLayout* lpDiskLayout)
++    {
++        for (u32 luFile = 0; luFile < KU_MAXNOOFFILES; ++luFile)
++            maFiles[luFile].Construct(this, &mLog, static_cast<s32>(luFile));
++        for (u32 luStream = 0; luStream < KU_MAX_READ_STREAMS; ++luStream)
++            maReadStreams[luStream].Construct(this, &mLog);
++        mpFileSystemAllocator = lpAllocator;
++        mpDebugAllocator = lpDebugAllocator;
++        mPatchManager.Construct(lpAllocator);
++        DeviceManager::InitializeDeviceManager(mpFileSystemAllocator);
++        mX360DVDDrive.Construct(0);
++        mX360HardDrive.Construct(1);
++        GetDeviceManager()->AddPhysicalDevice(&mX360DVDDrive, "p_dvd", DiskErrorHandler);
++        GetDeviceManager()->AddPhysicalDevice(&mX360HardDrive, "p_hdd", nullptr);
++        mX360RemapDVDDrive.Construct("/d");
++        mX360RemapHardDrive.Construct("/e");
++        GetDeviceManager()->AddVirtualDevice(&mX360RemapDVDDrive, "d", "p_dvd", nullptr);
++        GetDeviceManager()->AddVirtualDevice(&mX360RemapHardDrive, "e", "p_hdd", nullptr);
++        muNumUsedReadStreams = 0;
++        mpDiskLayout = lpDiskLayout;
++        CopyConstructionString(maFilePrefix, KU_MAXPREFIXFILELENGTH, lpcFilePrefix);
++        mDiskCache.Construct();
++    }
++
+     void FileSystem::Construct()
+     {
+         for (u32 luIndex = 0; luIndex < KU_MAX_READ_STREAMS; ++luIndex)
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsFileRW.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsFileRW.cpp
+@@ -26,6 +26,31 @@
+ 
+ namespace CgsFileSystem
+ {
++    // Inlined ARTIST82903408..45C: one file lock covers base and concrete state.
++    void File::Construct(FileSystem* lpFileSystem, FileLog* lpLog, s32 liIndex)
++    {
++        FileFutexHelper lGuard(mFutex);
++        if (!lpLog)
++        {
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::FireAssert("lpLog",
++                "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\filesystem\\CgsFile.cpp",
++                41);
++            CgsDev::Assert::EndAssert();
++        }
++        meFileAccess = E_FILEACCESS_CLOSED;
++        meFileState = E_FILESTATE_CLOSED;
++        mpcFileName = nullptr;
++        muSeekPosition = 0;
++        muPendingOperationCount = 0;
++        mpLog = lpLog;
++        mpFileSystem = lpFileSystem;
++        miIndex = liIndex;
++        mpHandle = nullptr;
++        muCacheId = 0xFFFFFFFFu;
++    }
++
++
+     using rw::core::filesys::AsyncOp;
+     using rw::core::filesys::Manager;
+ 
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsDeviceOperation.h
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsDeviceOperation.h
+@@ -18,6 +18,13 @@
+ namespace CgsFileSystem
+ {
+     class Device;
++
++    // DecFIGS CgsDeviceOperation.h:57; values attested by ARTIST physical-device callbacks.
++    enum EDeviceErrors
++    {
++        E_DEVICEERROR_READ = 0, E_DEVICEERROR_SEEK = 1, E_DEVICEERROR_OPEN = 2,
++        E_DEVICEERROR_WRITE = 3, E_DEVICEERROR_CLOSE = 4, E_DEVICEERROR_RECOVERED = 5
++    };
+ 
+     // CgsDeviceOperation.h:72 (DecFIGS): the public file handle carries both the logical
+     // device and that device's private handle. ARTIST passes the pair in r4/r5 and stores it
+--- a/src/GameShared/GameClasses/System/FileSystem/Devices/CgsDevice.h
++++ b/src/GameShared/GameClasses/System/FileSystem/Devices/CgsDevice.h
+@@ -27,9 +27,9 @@
+ 
+ namespace CgsFileSystem
+ {
+-    // A device-level error callback: receives the device error code, returns the (possibly
+-    // remapped) result the failing op should report.
+-    typedef int (*ErrorCallback)(int liError);
++    // The device error callback returns whether the failed operation should retry.
++    typedef bool (*FDeviceErrorCallback)(EDeviceErrors leError);
++    using ErrorCallback = FDeviceErrorCallback; // retain the existing native spelling
+ 
+     class Device
+     {
+@@ -67,7 +67,7 @@
+         // @0x828D65F0. If an error callback is registered, invoke it with liError and remember
+         // its result; then yield the calling thread 5ms (so a hammering retry loop does not
+         // starve the I/O thread) and return the callback's result (0 when none is set).
+-        int CallErrorCallback(int liError);
++        bool CallErrorCallback(EDeviceErrors leError);
+ 
+         // DeviceManager::AddPhysicalDevice installs the device's error callback (X360: *(dev+8)
+         // = callback, *(dev+4) = 0).
+--- a/src/GameShared/GameClasses/System/FileSystem/Devices/CgsDevice.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/Devices/CgsDevice.cpp
+@@ -32,16 +32,16 @@
+ namespace CgsFileSystem
+ {
+     // @0x828D65F0
+-    int Device::CallErrorCallback(int liError)
++    bool Device::CallErrorCallback(EDeviceErrors leError)
+     {
+-        int liResult = 0;
++        bool lbRetry = false;
+         if (mpfErrorCallback)
+-            liResult = mpfErrorCallback(liError);
++            lbRetry = mpfErrorCallback(leError);
+ 
+         // Yield 5ms before the failing caller retries (asm stores 5 and passes &it).
+         u32 luSleepMs = 5;
+         EA::Thread::ThreadSleep(&luSleepMs);
+-        return liResult;
++        return lbRetry;
+     }
+ 
+     // ---- base "Not implemented" defaults for the worker-dispatched op interface --------
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsDeviceManager.h
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsDeviceManager.h
+@@ -21,6 +21,7 @@
+ // are the (forked) vendor EAThread types.
+ 
+ #include "types.hpp"
++#include "rw/rwcore_structs.h" // actual singleton allocator interface
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                              // CGS_ASSERT
+ #include "GameShared/GameClasses/System/FileSystem/CgsDeviceOperationPool.h"    // OperationPool
+ #include "GameShared/GameClasses/System/FileSystem/Devices/CgsDevice.h"         // Device, ErrorCallback
+@@ -60,7 +61,9 @@
+         // ---- lifecycle ----
+         DeviceManager();                                       // 0x828F0C90
+         void InitInternal();                                   // 0x828E9788
+-        static bool InitializeDeviceManager(void* lpAllocator);// 0x828F91E0
++        static void InitializeDeviceManager(rw::IResourceAllocator* lpAllocator); // 0x828F91E0
++        // Existing malloc-backed native owner; no fabricated RW allocator argument.
++        static bool InitializeDeviceManagerNativePC();
+ 
+         // The singleton if already created (null otherwise) — lets a one-time bring-up (e.g.
+         // FileSystem::Prepare) avoid re-initialising without tripping GetDeviceManager's assert.
+@@ -71,7 +74,13 @@
+         Device* FindDevice(const char* lpcPrefix);
+ 
+         // Register a physical device under lpcPrefix and spawn its worker thread (step 2).
+-        bool AddPhysicalDevice(Device* lpDevice, const char* lpcPrefix, ErrorCallback lpfErrorCallback); // 0x828F9320
++        void AddPhysicalDevice(Device* lpDevice, const char* lpcPrefix, ErrorCallback lpfErrorCallback); // 0x828F9320
++        // Retain the current native registration/thread policy separately.
++        bool AddPhysicalDeviceNativePC(Device* lpDevice, const char* lpcPrefix, ErrorCallback lpfErrorCallback);
++
++        // Original logical-device registration and its physical-worker Init operation.
++        void AddVirtualDevice(Device* lpDevice, const char* lpcPrefix,
++                              const char* lpcParent, ErrorCallback lpfErrorCallback);
+ 
+         // FileSystem::Prepare installs the search path used by unqualified opens.
+         void SetDefaultPath(const char* lpcPath);
+@@ -105,8 +114,8 @@
+         static intptr_t PhysicalDeviceThread(void* lpSlotContext); // 0x828F1EA8
+ 
+         // ---- allocation ----
+-        // X360 used the GameData allocator via a custom operator new(161712); on PC this is a
+-        // marked malloc leaf (the DeviceManager is a single ~160KB allocation).
++        // Original lane-zero allocation through the stored RW owner. The native
++        // factory uses malloc directly and never fabricates this interface.
+         static void* operator new(size_t luSize);
+         static void  operator delete(void* lpBlock);
+ 
+@@ -122,7 +131,7 @@
+     private:
+         // ---- statics (CgsDeviceManager.cpp) ----
+         static DeviceManager* mpDeviceManager;   // X360 dword_830EA400 (singleton)
+-        static void*          mpAllocator;       // X360 off_830EA404
++        static rw::IResourceAllocator* mpAllocator; // X360 off_830EA404
+ 
+         // CgsFileSystem::GetDeviceManager() is a namespace-scope free function that reads the
+         // private singleton (DWARF CgsDeviceManager.h:176).
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsDeviceManager.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsDeviceManager.cpp
+@@ -5,6 +5,9 @@
+ // (AddPhysicalDevice 0x828F9320 + PhysicalDeviceThread 0x828F1EA8 land in the worker step.)
+ 
+ #include "GameShared/GameClasses/System/FileSystem/CgsDeviceManager.h"
++#include "GameShared/GameClasses/Development/CgsStrStream.h"
++#include "GameShared/GameClasses/Core/CgsStringUtils.h"
++#include <new>
+ #include "GameShared/GameClasses/Core/CgsAssert.h"
+ 
+ #include <cstdlib>   // malloc / free
+@@ -18,10 +21,102 @@
+ 
+ namespace CgsFileSystem
+ {
++namespace
++{
++    // Original CgsStringUtils.h:65 copy expansion. Preserve the assert and
++    // terminator-inclusive copy; no truncation or alternate path is introduced.
++    void CopyConstructionString(char* lpcDest, u32 luBytes, const char* lpcSource)
++    {
++        const size_t luLength = std::strlen(lpcSource);
++        if (luLength >= luBytes)
++        {
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::MessageBufferPC lBuffer;
++            CgsDev::StrStream lStream(lBuffer.GetBuffer(), lBuffer.GetSize());
++            lStream << "String " << lpcSource << " is too long. Buffer size = "
++                    << luBytes << ", string length = " << static_cast<u32>(luLength) << "\n";
++            CgsDev::Assert::FireAssert(lBuffer.GetBuffer(),
++                "..\\..\\..\\GameShared\\GameClasses\\Core/CgsStringUtils.h", 65);
++            CgsDev::Assert::EndAssert();
++        }
++        std::memcpy(lpcDest, lpcSource, luLength + 1);
++    }
++
++    // Common expansion of the original manager's formatted assertions.
++    void AssertDeviceConstruction(bool lbValid, const char* lpcMessage, s32 liLine)
++    {
++        if (!lbValid)
++        {
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::MessageBufferPC lBuffer;
++            CgsDev::StrStream lStream(lBuffer.GetBuffer(), lBuffer.GetSize());
++            lStream << lpcMessage;
++            CgsDev::Assert::FireAssert(lBuffer.GetBuffer(),
++                "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\filesystem\\CgsDeviceManager.cpp",
++                liLine);
++            CgsDev::Assert::EndAssert();
++        }
++    }
++
++}
++    // ARTIST828F0CF8..11B4. Register the logical device on its actual physical
++    // worker, then queue opcode8 (the existing worker's Connect/Init case).
++    void DeviceManager::AddVirtualDevice(Device* lpDevice, const char* lpcPrefix,
++                                          const char* lpcParent, ErrorCallback lpfErrorCallback)
++    {
++        mDeviceListFutex.Lock();
++        const auto AssertDevice = [](bool lbValid, const char* lpcMessage, s32 liLine)
++        {
++            if (!lbValid)
++            {
++                CgsDev::Assert::BeginAssert();
++                CgsDev::Assert::MessageBufferPC lBuffer;
++                CgsDev::StrStream lStream(lBuffer.GetBuffer(), lBuffer.GetSize());
++                lStream << lpcMessage;
++                CgsDev::Assert::FireAssert(lBuffer.GetBuffer(),
++                    "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\filesystem\\CgsDeviceManager.cpp",
++                    liLine);
++                CgsDev::Assert::EndAssert();
++            }
++        };
++        AssertDevice(FindDevice(lpcPrefix) == nullptr, "Device name already in use\n", 196);
++        Device* const lpParent = FindDevice(lpcParent);
++        AssertDevice(lpParent != nullptr, "Parent device not found\n", 200);
++        s32 liSlot = 0;
++        while (liSlot < KI_MAX_VIRTUAL_DEVICES && maVirtualDevices[liSlot].mpDevice != nullptr)
++            ++liSlot;
++        AssertDevice(liSlot < KI_MAX_VIRTUAL_DEVICES, "No free virtual devices\n", 211);
++        CopyConstructionString(maVirtualDevices[liSlot].macPrefix,
++                               KI_MAX_PREFIX_LENGTH + 1, lpcPrefix);
++        maVirtualDevices[liSlot].mpDevice = lpDevice;
++        lpDevice->SetParent(lpParent);
++        lpDevice->SetErrorCallback(lpfErrorCallback);
++        Device* const lpPhysical = lpParent ? lpParent->GetPhysicalParent() : lpDevice;
++        s32 liPhysical = 0;
++        while (liPhysical < KI_MAX_PHYSICAL_DEVICES
++            && maPhysicalDevices[liPhysical].mpDevice != lpPhysical)
++            ++liPhysical;
++        AssertDevice(liPhysical < KI_MAX_PHYSICAL_DEVICES, "Could not find physical device\n", 232);
++        Operation lOperation;
++        lOperation.miType = E_OP_DISCONNECT; // existing name; ARTIST opcode8 initializes the logical device
++        lOperation.macPath[0] = '\0';
++        lOperation.muFlags = 0;
++        lOperation.mHandle = Handle::Make(lpDevice, nullptr);
++        lOperation.mu64Offset = 0;
++        lOperation.mpReadBuffer = nullptr;
++        lOperation.mpWriteBuffer = nullptr;
++        lOperation.muSize = 0;
++        lOperation.mpfCallback = nullptr;
++        lOperation.mpContext = nullptr;
++        lOperation.miPriority = 0x7FFFFFFF;
++        maPhysicalDevices[liPhysical].mOperations.AddOperation(&lOperation);
++        mDeviceListFutex.Unlock();
++    }
++
+     // ---- statics ----
+     // X360 globals: dword_830EA400 (singleton), off_830EA404 (allocator).
+     DeviceManager* DeviceManager::mpDeviceManager = nullptr;
+-    void*          DeviceManager::mpAllocator     = nullptr;
++    rw::IResourceAllocator* DeviceManager::mpAllocator = nullptr;
+ 
+     // CgsFileSystem::GetDeviceManager @ 0x8264AD88
+     DeviceManager* GetDeviceManager()
+@@ -30,55 +125,65 @@
+         return DeviceManager::mpDeviceManager;
+     }
+ 
+-    // Allocation. The X360 allocated the (161712-byte) DeviceManager through the GameData
+-    // allocator via a custom operator new; on PC this is a marked malloc leaf (single ~160KB
+-    // allocation). mpAllocator is captured by InitializeDeviceManager for parity / future use.
+-    void* DeviceManager::operator new(size_t luSize) { return malloc(luSize); }      // PC IO leaf
+-    void  DeviceManager::operator delete(void* lpBlock) { free(lpBlock); }
+-
+-    // ctor @ 0x828F0C90.
+-    // The X360 ctor, per physical slot, RtlInitializeCriticalSection'd the OperationPool lock,
+-    // default-constructed its Semaphore and Thread, then initialised the device-list futex. Here
+-    // the slot's Semaphore + Thread and the device-list Futex are constructed by their own C++
+-    // member ctors; the remaining per-slot OperationPool bring-up (lock + slot table) is done by
+-    // OperationPool::Construct.
++    // ARTIST828EB9C8: lane zero, native object size, alignment16, null name.
++    void* DeviceManager::operator new(size_t luSize)
++    {
++        return mpAllocator->AllocateMemoryResource(static_cast<u32>(luSize), 16, nullptr);
++    }
++
++    // FLAG PC-platform leaf: retain the existing native malloc cleanup only.
++    // The original manager owner is arena-lived; its release/delete chain is not activated here.
++    void DeviceManager::operator delete(void* lpBlock) { free(lpBlock); }
++
++    // ARTIST828F0C90. OperationPool constructs its lock then its deferred semaphore;
++    // the eight Thread subobjects and final device-list Futex construct themselves.
+     DeviceManager::DeviceManager()
+-        : miInitializationThread(0)
+-        , mbInitialized(false)
+-        , mbReleasing(false)
+-    {
+-        for (s32 liIndex = 0; liIndex < KI_MAX_PHYSICAL_DEVICES; ++liIndex)
+-            maPhysicalDevices[liIndex].mOperations.Construct();
+-        macDefaultPath[0] = 0;
+-    }
+-
+-    // InitInternal @ 0x828E9788 — under the device-list lock, mark every physical + virtual slot
+-    // free (mpDevice = 0) and flag the manager initialised.
++    {
++    }
++
++    // ARTIST828E9788: clear registrations and the first default-path byte under the lock.
+     void DeviceManager::InitInternal()
+     {
+         mDeviceListFutex.Lock();
+-
+         for (s32 liIndex = 0; liIndex < KI_MAX_PHYSICAL_DEVICES; ++liIndex)
+             maPhysicalDevices[liIndex].mpDevice = nullptr;
+         for (s32 liIndex = 0; liIndex < KI_MAX_VIRTUAL_DEVICES; ++liIndex)
+             maVirtualDevices[liIndex].mpDevice = nullptr;
+-
+         mbInitialized = true;
+-        mbReleasing   = false;
+-
++        macDefaultPath[0] = '\0';
+         mDeviceListFutex.Unlock();
+     }
+ 
+-    // InitializeDeviceManager @ 0x828F91E0 — create + init the singleton. Asserts it does not
+-    // already exist and that an allocator was supplied; stores the allocator, allocates +
+-    // constructs the DeviceManager, then runs InitInternal.
+-    bool DeviceManager::InitializeDeviceManager(void* lpAllocator)
++    // ARTIST828F91E0; DecFIGS confirms void and the real RW allocator type.
++    void DeviceManager::InitializeDeviceManager(rw::IResourceAllocator* lpAllocator)
++    {
++        AssertDeviceConstruction(mpDeviceManager == nullptr, "Device manager already exists\n", 44);
++        AssertDeviceConstruction(lpAllocator != nullptr, "Allocator required\n", 45);
++        mpAllocator = lpAllocator;
++        void* const lpMemory = DeviceManager::operator new(sizeof(DeviceManager));
++        mpDeviceManager = lpMemory ? ::new(lpMemory) DeviceManager() : nullptr;
++        // The original deliberately proceeds to InitInternal even after failed allocation.
++        mpDeviceManager->InitInternal();
++    }
++
++    // FLAG PC-platform leaf: existing native singleton ownership is malloc/process lifetime.
++    // Keep its actual queue initialization and scalar values before publishing the object;
++    // no fabricated RW allocator is supplied to the original initialization interface.
++    bool DeviceManager::InitializeDeviceManagerNativePC()
+     {
+         CGS_ASSERT(mpDeviceManager == nullptr, "Device manager already exists\n");
+-        CGS_ASSERT(lpAllocator != nullptr, "Allocator required\n");
+-
+-        mpAllocator     = lpAllocator;
+-        mpDeviceManager = new DeviceManager();
++        void* const lpMemory = malloc(sizeof(DeviceManager));
++        DeviceManager* const lpManager = lpMemory ? ::new(lpMemory) DeviceManager() : nullptr;
++        if (lpManager)
++        {
++            lpManager->miInitializationThread = 0;
++            lpManager->mbInitialized = false;
++            lpManager->mbReleasing = false;
++            for (s32 liIndex = 0; liIndex < KI_MAX_PHYSICAL_DEVICES; ++liIndex)
++                lpManager->maPhysicalDevices[liIndex].mOperations.ConstructNativePC();
++            lpManager->macDefaultPath[0] = '\0';
++        }
++        mpDeviceManager = lpManager;
+         if (mpDeviceManager)
+             mpDeviceManager->InitInternal();
+         return mpDeviceManager != nullptr;
+@@ -106,7 +211,38 @@
+ 
+     // AddPhysicalDevice @0x828F9320 — register lpDevice under lpcPrefix (asserting the name is
+     // free and a slot is available), install its error callback, then spawn the worker thread.
+-    bool DeviceManager::AddPhysicalDevice(Device* lpDevice, const char* lpcPrefix, ErrorCallback lpfErrorCallback)
++    // ARTIST828F9320..9720. Initialize this physical queue at registration, bind its
++    // actual device, and start its owning worker with the original thread parameters.
++    void DeviceManager::AddPhysicalDevice(Device* lpDevice, const char* lpcPrefix,
++                                          ErrorCallback lpfErrorCallback)
++    {
++        mDeviceListFutex.Lock();
++        AssertDeviceConstruction(FindDevice(lpcPrefix) == nullptr, "Device name already in use\n", 143);
++        s32 liSlot = 0;
++        while (liSlot < KI_MAX_PHYSICAL_DEVICES && maPhysicalDevices[liSlot].mpDevice != nullptr)
++            ++liSlot;
++        AssertDeviceConstruction(liSlot < KI_MAX_PHYSICAL_DEVICES, "No free physical devices\n", 154);
++        PhysicalDeviceSlot& lrSlot = maPhysicalDevices[liSlot];
++        CopyConstructionString(lrSlot.macPrefix, KI_MAX_PREFIX_LENGTH + 1, lpcPrefix);
++        lrSlot.mOperations.Construct();
++        lrSlot.mpDevice = lpDevice;
++        lpDevice->SetErrorCallback(lpfErrorCallback);
++        lpDevice->SetParent(nullptr);
++        mDeviceListFutex.Unlock();
++
++        char lacThreadName[32];
++        CgsCore::SPrintf(lacThreadName, sizeof(lacThreadName), "CgsFileSystem:%s", lpcPrefix);
++        EA::Thread::ThreadParameters lParams;
++        lParams.mnPriority = 350;
++        lParams.mnProcessor = 0;
++        lParams.mbDisablePriorityBoost = false;
++        lParams.mpName = lacThreadName;
++        lrSlot.mWorkerThread.Begin(PhysicalDeviceThread, &lrSlot, &lParams,
++            EA::Thread::Thread::GetGlobalRunnableFunctionUserWrapper());
++    }
++
++    // FLAG PC-platform leaf: preserve the existing guarded native registration.
++    bool DeviceManager::AddPhysicalDeviceNativePC(Device* lpDevice, const char* lpcPrefix, ErrorCallback lpfErrorCallback)
+     {
+         mDeviceListFutex.Lock();
+ 
+--- a/src/GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.h
++++ b/src/GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.h
+@@ -24,7 +24,7 @@
+ // GetObjectIndex divide-by-272 (@0x828EAE38) and Open's element write (`*(rec+8)=HANDLE`,
+ // `*rec=position`, `*(rec+12)=mode`, name copied to rec+16). The device's pool counters are read
+ // at this+24/+25/+20 (pool@this+16, byte-indexed: +8 alloc / +9 free / +4 free-list), so the
+-// pool is the first member after the Device base + vptr.
++// pool follows the selector after the Device base + vptr.
+ 
+ #include <cstddef>   // offsetof (uncalled _AssertLayout)
+ #include "types.hpp"
+@@ -62,12 +62,13 @@
+         s32  miType;         // +0x100 1 == file, 2 == directory ((dwFileAttributes & 0x10)==0)+1
+     };
+ 
+-    class DevicePhysicalX360 : public Device
++    class PhysicalX360Device : public Device
+     {
+     public:
+-        // Capacity of the embedded handle pool (runtime field msCapacity in the pool; the literal
+-        // extent is a placeholder, the bodies are capacity-driven through the pool).
+-        static const s32 KI_MAX_OPEN_FILES = 256;
++        // ARTIST8290350C..5B8 initializes sixteen actual records and free indices.
++        static const s32 KI_MAX_OPEN_FILES = 16;
++        // The original inlined device constructor stores selector0/1 for DVD/HDD.
++        void Construct(u32 luPhysicalDeviceId);
+ 
+         // ---- worker-dispatched ops (Device base vtable order) ----
+         int Connect() override;                                                                  // Init @0x828DE998 (debug trace)
+@@ -88,7 +89,12 @@
+     private:
+         // Embedded handle pool (this+16; byte-indexed, element stride 0x110). The opaque handle
+         // is a live FileHandleRecord*; Close/CloseDirectory recover its index when returning it.
++        // X360-only selector role is inferred from its two0/1 construction sites;
++        // the identifier is descriptive, not a claimed DecFIGS member name.
++        u32 muPhysicalDeviceId;
+         CgsContainers::IndexedPool<FileHandleRecord, KI_MAX_OPEN_FILES, s8> mHandlePool;  // X360 this+0x10
++        FileHandleRecord maHandleRecords[KI_MAX_OPEN_FILES];
++        s8 maiHandleFreeIndices[KI_MAX_OPEN_FILES];
+     };
+ 
+     // Pointer-invariant layout facts only (the X360 32-bit-pointer offsets +8/+0xC/+0x10 and the
+--- a/src/GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp
+@@ -17,27 +17,30 @@
+ 
+ #include "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.h"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"
++#include "GameShared/GameClasses/Development/Log/CgsLog.h"
+ #include "GameShared/GameClasses/Core/CgsStringUtils.h"   // CgsCore::SPrintf
+ 
+ #define WIN32_LEAN_AND_MEAN
+ #include <Windows.h>   // CreateFileA / ReadFile / SetFilePointerEx / FindFirstFileA / CloseHandle
+ 
+-// CgsDev debug-trace facade (Init prints a one-line trace when the message filter allows). Matches
+-// the RemapDevice sibling's local declaration; bodies live in Development/Log/CgsLog.cpp.
+-namespace CgsDev
+-{
+-    namespace Message { extern u64 gxMessageFilterFlags; }
+-    namespace Log { void DebugPrint(const char* pcText, int liArg); }
+-}
++// The original Init message uses the actual engine log stream.
+ 
+ namespace CgsFileSystem
+ {
++    // Inlined ARTIST8290350C..5B8; actual pool backing has sixteen records/indices.
++    void PhysicalX360Device::Construct(u32 luPhysicalDeviceId)
++    {
++        muPhysicalDeviceId = luPhysicalDeviceId;
++        mHandlePool.Construct(maHandleRecords, maiHandleFreeIndices,
++                              static_cast<s8>(KI_MAX_OPEN_FILES));
++    }
++
+     // Init @0x828DE998, mapped to the worker-start Connect() hook: when the message filter's bit 0
+     // is set, print a one-line init trace; always return 0.
+-    int DevicePhysicalX360::Connect()
++    int PhysicalX360Device::Connect()
+     {
+         if (CgsDev::Message::gxMessageFilterFlags & 1)
+-            CgsDev::Log::DebugPrint("Physical X360 device initialized\n", 0);
++            *CgsDev::Log::gpDebugPrint << "Physical X360 device initialized\n";
+         return 0;
+     }
+ 
+@@ -46,7 +49,7 @@
+     // drive and rebuild "<drive>:\\<rest>". Decode the access + disposition out of liMode and
+     // CreateFileA. On success claim a pool slot and fill its FileHandleRecord. On failure run the
+     // error callback (5ms yield) and, if it does not absorb the error, block.
+-    int DevicePhysicalX360::Open(const char* lpcPath, u32 luMode,
++    int PhysicalX360Device::Open(const char* lpcPath, u32 luMode,
+                                  Handle::DeviceHandle* lppOutHandle)
+     {
+         const char lcFirst = lpcPath[0];
+@@ -125,13 +128,13 @@
+         }
+ 
+         // Open failed: run the error callback (it yields 5ms); block if it does not absorb it.
+-        if (!CallErrorCallback(2))
++        if (!CallErrorCallback(E_DEVICEERROR_OPEN))
+             Sleep(static_cast<DWORD>(-1));
+         return -2;
+     }
+ 
+     // Close @0x828F9D90. CloseHandle the record's HANDLE; on success return the slot to the pool.
+-    int DevicePhysicalX360::Close(Handle::DeviceHandle lpHandle)
++    int PhysicalX360Device::Close(Handle::DeviceHandle lpHandle)
+     {
+         FileHandleRecord& lRecord = *static_cast<FileHandleRecord*>(lpHandle);
+         if (CloseHandle(lRecord.mpHandle))
+@@ -141,14 +144,14 @@
+             return 0;
+         }
+ 
+-        if (!CallErrorCallback(4))
++        if (!CallErrorCallback(E_DEVICEERROR_CLOSE))
+             Sleep(static_cast<DWORD>(-1));
+         return -2;
+     }
+ 
+     // Read @0x828DE9F0. ReadFile at the record's HANDLE into lpBuffer; on success advance the
+     // record's running position by the byte count and report it.
+-    int DevicePhysicalX360::Read(Handle::DeviceHandle lpHandle, void* lpBuffer, u32 luSize,
++    int PhysicalX360Device::Read(Handle::DeviceHandle lpHandle, void* lpBuffer, u32 luSize,
+                                  u32* lpuOutResult)
+     {
+         FileHandleRecord& lRecord = *static_cast<FileHandleRecord*>(lpHandle);
+@@ -161,7 +164,7 @@
+             return 0;
+         }
+ 
+-        if (!CallErrorCallback(0))
++        if (!CallErrorCallback(E_DEVICEERROR_READ))
+             Sleep(static_cast<DWORD>(-1));
+         return -2;
+     }
+@@ -170,7 +173,7 @@
+     // syscall; otherwise SetFilePointerEx (FILE_BEGIN) and store the new position back into the
+     // record. The asm compares against the record's position word at +0 and writes the result to
+     // both the record and the out param.
+-    int DevicePhysicalX360::Seek(Handle::DeviceHandle lpHandle, u64 lu64Offset,
++    int PhysicalX360Device::Seek(Handle::DeviceHandle lpHandle, u64 lu64Offset,
+                                  u64* lpu64OutPosition)
+     {
+         FileHandleRecord& lRecord = *static_cast<FileHandleRecord*>(lpHandle);
+@@ -190,7 +193,7 @@
+             return 0;
+         }
+ 
+-        if (!CallErrorCallback(1))
++        if (!CallErrorCallback(E_DEVICEERROR_SEEK))
+             Sleep(static_cast<DWORD>(-1));
+         return -2;
+     }
+@@ -200,7 +203,7 @@
+     // to liMaxEntries DirectoryEntry records (FindNextFileA for the rest). Claim a pool slot to
+     // hold the find HANDLE, hand back the entry count and the slot. The X360 builds the wildcard
+     // path with CgsCore::AppendString and walks the results into the caller's entry array.
+-    int DevicePhysicalX360::OpenDirectory(const char* lpcPath, void* lpEntryBuffer,
++    int PhysicalX360Device::OpenDirectory(const char* lpcPath, void* lpEntryBuffer,
+                                           u32 luMaxEntries, u32* lpuOutCount,
+                                           Handle::DeviceHandle* lppOutHandle)
+     {
+@@ -301,7 +304,7 @@
+ 
+     // CloseDirectory @0x828FA8B0. FindClose the find handle (the X360 calls CloseHandle on it,
+     // treating an INVALID handle as already closed) and return the slot to the pool.
+-    int DevicePhysicalX360::CloseDirectory(Handle::DeviceHandle lpHandle)
++    int PhysicalX360Device::CloseDirectory(Handle::DeviceHandle lpHandle)
+     {
+         FileHandleRecord& lRecord = *static_cast<FileHandleRecord*>(lpHandle);
+         if (lRecord.mpHandle == INVALID_HANDLE_VALUE || CloseHandle(lRecord.mpHandle))
+@@ -311,7 +314,7 @@
+             return 0;
+         }
+ 
+-        if (!CallErrorCallback(4))
++        if (!CallErrorCallback(E_DEVICEERROR_CLOSE))
+             Sleep(static_cast<DWORD>(-1));
+         return -2;
+     }
+@@ -319,7 +322,7 @@
+     // ReadDirectory @0x828DEC30. Continue a directory walk started by OpenDirectory: FindNextFileA
+     // on the record's find handle, filling up to liMaxEntries DirectoryEntry records, and report
+     // how many were written. Stops early when the find handle is exhausted or invalid.
+-    int DevicePhysicalX360::ReadDirectory(Handle::DeviceHandle lpHandle, void* lpEntryBuffer,
++    int PhysicalX360Device::ReadDirectory(Handle::DeviceHandle lpHandle, void* lpEntryBuffer,
+                                           u32 luMaxEntries, u32* lpuOutCount)
+     {
+         CGS_ASSERT(lpEntryBuffer && luMaxEntries && lpuOutCount, "Invalid params\n");
+--- /dev/null
++++ b/src/GameShared/GameClasses/System/FileSystem/Devices/CgsRemapDevice.h
+@@ -0,0 +1,22 @@
++#pragma once
++#include "GameShared/GameClasses/System/FileSystem/Devices/CgsDevice.h"
++
++namespace CgsFileSystem
++{
++    struct RemapDevice : public Device
++    {
++    public:
++        static const s32 KI_MAX_REMAP_NAME_LENGTH = 64;
++        void Construct(const char* lpcPath);
++        int Connect() override;
++        int Open(const char* lpcPath, u32 luMode, Handle::DeviceHandle* lppOutHandle) override;
++        int Close(Handle::DeviceHandle lpHandle) override;
++        int Read(Handle::DeviceHandle lpHandle, void* lpBuffer, u32 luSize, u32* lpuOutResult) override;
++        int Write(Handle::DeviceHandle lpHandle, const void* lpBuffer, u32 luSize, u32* lpuOutResult) override;
++        int Seek(Handle::DeviceHandle lpHandle, u64 luOffset, u64* lpuOutPosition) override;
++        int GetFileSize(Handle::DeviceHandle lpHandle, u64* lpuOutSize) override;
++
++    private:
++        char macRemapPath[KI_MAX_REMAP_NAME_LENGTH];
++    };
++}
+--- a/src/GameShared/GameClasses/System/FileSystem/Devices/CgsRemapDevice.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/Devices/CgsRemapDevice.cpp
+@@ -1,59 +1,74 @@
+-#include "types.hpp"
+-#include "GameShared/GameClasses/System/FileSystem/Devices/CgsDevice.h"   // canonical CgsFileSystem::Device
+-
+-// Reconstructed from BURNOUT_X360_ARTIST.XEX
+-//   CgsFileSystem::RemapDevice::Close       @ 0x828DE920
+-//   CgsFileSystem::RemapDevice::Init        @ 0x828DE658
+-//   CgsFileSystem::RemapDevice::Read        @ 0x828DE938
+-//   CgsFileSystem::RemapDevice::Seek        @ 0x828DE968
+-//   CgsFileSystem::RemapDevice::Write       @ 0x828DE950
+-//   CgsFileSystem::RemapDevice::GetFileSize @ 0x828DE980
+-//
+-// A pass-through file device that forwards every operation to the device it wraps
+-// (mpWrappedDevice). Init only prints a debug trace. The forwarders are plain
+-// virtual dispatches in the original (the X360 build inlines them to vtable
+-// thunks, e.g. mpWrappedDevice->vtable[2] == Close). GetFileSize forwards through
+-// the wrapped device's vtable slot +0x18 (asm 0x828DE988: lwz r11, 0x18(r11)).
+-//
+-// Derives from the single canonical CgsFileSystem::Device (CgsDevice.h): it overrides
+-// the five pure per-operation virtuals plus GetFileSize, and inherits the base's
+-// default Open/Close/ReadDirectory "Not implemented" bodies. mpWrappedDevice is
+-// accessed by name, so its exact in-object offset is immaterial here.
+-
+-namespace CgsDev
+-{
+-    namespace Message { extern u64 gxMessageFilterFlags; }   // defined in Development/Log/CgsLog.cpp (u64 -- matches CgsLog.h / CgsMessage.h FilterFlag)
+-    namespace Log { void DebugPrint(const char* pcText, int liArg); void DebugPrint(const char*, int) { __debugbreak(); } }
+-}
++#include "GameShared/GameClasses/System/FileSystem/Devices/CgsRemapDevice.h"
++#include "GameShared/GameClasses/Core/CgsAssert.h"
++#include "GameShared/GameClasses/Development/CgsStrStream.h"
++#include "GameShared/GameClasses/Development/Log/CgsLog.h"
++#include <cstring>
+ 
+ namespace CgsFileSystem
+ {
+-    class RemapDevice : public Device
++namespace
++{
++    // Original CgsStringUtils.h:65 copy expansion. Preserve the assert and
++    // terminator-inclusive copy; no truncation or alternate path is introduced.
++    void CopyConstructionString(char* lpcDest, u32 luBytes, const char* lpcSource)
+     {
+-    public:
+-        // Init @0x828DE658 mapped to the worker-start Connect() hook (prints a debug trace).
+-        int Connect() override;
+-        // The forwarders pass straight through to the wrapped device (X360: vtable thunks,
+-        // e.g. mpWrappedDevice->vtable[2] == Close; GetFileSize via the wrapped vtable +0x18).
+-        int Close(Handle::DeviceHandle lpHandle) override
+-            { return mpWrappedDevice->Close(lpHandle); }
+-        int Read(Handle::DeviceHandle lpHandle, void* lpBuffer, u32 luSize, u32* lpuOutResult) override
+-            { return mpWrappedDevice->Read(lpHandle, lpBuffer, luSize, lpuOutResult); }
+-        int Write(Handle::DeviceHandle lpHandle, const void* lpBuffer, u32 luSize, u32* lpuOutResult) override
+-            { return mpWrappedDevice->Write(lpHandle, lpBuffer, luSize, lpuOutResult); }
+-        int Seek(Handle::DeviceHandle lpHandle, u64 lu64Offset, u64* lpu64OutPosition) override
+-            { return mpWrappedDevice->Seek(lpHandle, lu64Offset, lpu64OutPosition); }
+-        int GetFileSize(Handle::DeviceHandle lpHandle, u64* lpu64OutSize) override
+-            { return mpWrappedDevice->GetFileSize(lpHandle, lpu64OutSize); }
++        const size_t luLength = std::strlen(lpcSource);
++        if (luLength >= luBytes)
++        {
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::MessageBufferPC lBuffer;
++            CgsDev::StrStream lStream(lBuffer.GetBuffer(), lBuffer.GetSize());
++            lStream << "String " << lpcSource << " is too long. Buffer size = "
++                    << luBytes << ", string length = " << static_cast<u32>(luLength) << "\n";
++            CgsDev::Assert::FireAssert(lBuffer.GetBuffer(),
++                "..\\..\\..\\GameShared\\GameClasses\\Core/CgsStringUtils.h", 65);
++            CgsDev::Assert::EndAssert();
++        }
++        std::memcpy(lpcDest, lpcSource, luLength + 1);
++    }
+ 
+-    private:
+-        Device* mpWrappedDevice;
+-    };
++}
++    // ARTIST828DE4C0: exact constructor path copy, including its original assert.
++    void RemapDevice::Construct(const char* lpcPath)
++    {
++        CopyConstructionString(macRemapPath, KI_MAX_REMAP_NAME_LENGTH, lpcPath);
++    }
+ 
++    // ARTIST828DE658; Connect is the existing native name of the Init virtual.
+     int RemapDevice::Connect()
+     {
+         if (CgsDev::Message::gxMessageFilterFlags & 1)
+-            CgsDev::Log::DebugPrint("Remap device initialized\n", 0);
++            *CgsDev::Log::gpDebugPrint << "Remap device initialized\n";
+         return 0;
+     }
++
++    // ARTIST828DE6B0: only r4/r5/r6 are saved and restored. The apparent r7
++    // pseudocode input is not a formal argument and is not added to this API.
++    int RemapDevice::Open(const char* lpcPath, u32 luMode, Handle::DeviceHandle* lppOutHandle)
++    {
++        char lacPhysicalName[256];
++        CopyConstructionString(lacPhysicalName, sizeof(lacPhysicalName), macRemapPath);
++        const size_t luPrefix = std::strlen(lacPhysicalName);
++        const size_t luPath = std::strlen(lpcPath);
++        if (luPrefix + luPath >= sizeof(lacPhysicalName) - 1)
++        {
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::FireAssert("(strlen(lpcSource)+strlen(lpcDest))<luBytes - 1",
++                "..\\..\\..\\GameShared\\GameClasses\\Core/CgsStringUtils.h", 75);
++            CgsDev::Assert::EndAssert();
++        }
++        std::memcpy(lacPhysicalName + luPrefix, lpcPath, luPath + 1);
++        return GetParent()->Open(lacPhysicalName, luMode, lppOutHandle);
++    }
++    int RemapDevice::Close(Handle::DeviceHandle lpHandle)
++    { return GetParent()->Close(lpHandle); }
++    int RemapDevice::Read(Handle::DeviceHandle lpHandle, void* lpBuffer, u32 luSize, u32* lpuOutResult)
++    { return GetParent()->Read(lpHandle, lpBuffer, luSize, lpuOutResult); }
++    int RemapDevice::Write(Handle::DeviceHandle lpHandle, const void* lpBuffer, u32 luSize, u32* lpuOutResult)
++    { return GetParent()->Write(lpHandle, lpBuffer, luSize, lpuOutResult); }
++    int RemapDevice::Seek(Handle::DeviceHandle lpHandle, u64 luOffset, u64* lpuOutPosition)
++    { return GetParent()->Seek(lpHandle, luOffset, lpuOutPosition); }
++    int RemapDevice::GetFileSize(Handle::DeviceHandle lpHandle, u64* lpuOutSize)
++    { return GetParent()->GetFileSize(lpHandle, lpuOutSize); }
++
+ }
+--- /dev/null
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsDiskCache.h
+@@ -0,0 +1,23 @@
++#pragma once
++
++namespace CgsFileSystem
++{
++    // X360 retains these three debug controls. The PS3 cache engine/storage is
++    // not imported: ARTIST's next PatchManager starts immediately after them.
++    struct DiskCache
++    {
++    public:
++        // Inlined ARTIST82903864..74; names/shape from DecFIGS CgsDiskCache.h.
++        void Construct()
++        {
++            mbDEBUG_EnableCache = true;
++            mbDEBUG_ErrorTest = false;
++            mbDEBUG_EnableDumping = true;
++        }
++
++    private:
++        bool mbDEBUG_EnableCache;
++        bool mbDEBUG_ErrorTest;
++        bool mbDEBUG_EnableDumping;
++    };
++}
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceModule.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceModule.h
+@@ -32,7 +32,6 @@
+ 
+ namespace CgsResource
+ {
+-    struct DiskLayout;   // forward (ResourceModule::InitOptions holds a pointer only)
+     namespace PoolIO { struct OutputBuffer; struct InputBuffer; }   // shuttle buffers
+     namespace ResourceIO { struct InputBuffer; struct OutputBuffer; }                    // the module's request input
+     // The write-stream request event types (deprecated adders take these by pointer only).
+@@ -92,7 +91,7 @@
+             CgsMemory::MemoryModule::InitOptions  mMemoryInitOptions;       // :150
+             BundleLoaderModule::InitOptions       mLoaderInitOptions;       // :151
+             PoolModule::InitOptions               mPoolInitOptions;         // :152
+-            DiskLayout*                           mpDiskLayout;             // :153
++            CgsFileSystem::DiskLayout*            mpDiskLayout;             // :153
+             DebugComponentParams                  mDebugParams;             // :155
+             char                                  macFileSearchPath[1024];  // :157
+             const char*                           mpcDiskCacheDrive;        // :158
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsDeviceOperationPool.h
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsDeviceOperationPool.h
+@@ -45,12 +45,15 @@
+     // matches the X360's RtlEnterCriticalSection(poolBase).
+     struct OperationFutex
+     {
++        OperationFutex(); // initializes the existing host critical section
+         u8 maCriticalSection[64];
+     };
+ 
+     struct OperationPool
+     {
+-        void Construct();
++        OperationPool(); // original deferred-semaphore subobject construction
++        void Construct(); // original registration-time flags/semaphore initialization
++        void ConstructNativePC(); // retained native sequence-counter initialization
+         void Destruct();
+ 
+         // @ 0x828E9828 — under the lock, claim the first free slot, copy the operation
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsDeviceOperationPool.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsDeviceOperationPool.cpp
+@@ -19,16 +19,38 @@
+ 
+ namespace CgsFileSystem
+ {
+-    // Construct/Destruct — the X360 split this pool's bring-up between the DeviceManager ctor
+-    // (RtlInitializeCriticalSection on mFutex + the Semaphore subobject ctor) and Add-
+-    // PhysicalDevice (zero the used-flags + Semaphore::Init count 0). Here it is consolidated:
+-    // init the lock, clear the slot table + sequence counter. mOperationCount (the vendor
+-    // EA::Thread::Semaphore subobject) is created count-0 by its own member ctor.
++    // FLAG PC-platform leaf: retain the existing host critical-section storage/API.
++    // Its constructor keeps the original lock-before-semaphore birth order.
++    OperationFutex::OperationFutex()
++    {
++        RtlInitializeCriticalSection(this);
++    }
++
++    // Inlined in ARTIST828F0C90: this does not create an OS semaphore yet.
++    OperationPool::OperationPool()
++        : mOperationCount(nullptr, false)
++    {
++    }
++
++    // Inlined in ARTIST828F9650..96AC: no lock reconstruction or FIFO reset.
+     void OperationPool::Construct()
+     {
+-        RtlInitializeCriticalSection(&mFutex);
++        RtlEnterCriticalSection(&mFutex);
+         for (s32 liIndex = 0; liIndex < KI_MAX_OPERATIONS; ++liIndex)
+             mabUsedOperations[liIndex] = false;
++        EA::Thread::SemaphoreParameters lParams(0, true, nullptr);
++        lParams.mInitialCount = 0;
++        lParams.mbIntraProcess = true;
++        lParams.mName[0] = '\0';
++        mOperationCount.Init(&lParams);
++        RtlLeaveCriticalSection(&mFutex);
++    }
++
++    // FLAG PC-platform leaf: retain the native manager's eight ready queues and zero
++    // sequence counters before its singleton is published. Called once at native birth.
++    void OperationPool::ConstructNativePC()
++    {
++        Construct();
+         muNextOperationNumber = 0;
+     }
+ 

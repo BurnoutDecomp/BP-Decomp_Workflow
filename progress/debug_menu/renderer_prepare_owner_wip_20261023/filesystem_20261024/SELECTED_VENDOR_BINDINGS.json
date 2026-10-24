@@ -1,0 +1,40 @@
+{
+  "source_base": "a69575a0056c9380abca94feed578e7c3ac5cf3b",
+  "EAThread_gitlink": "38576cbe30e9cd674ad0caa67898fd5ab6450c14",
+  "physical_EAThread_HEAD_observed": "cefb9557ba9183c836a4e42eaf2c930ea63107e4",
+  "authority": "pinned gitlink, not physical checkout HEAD",
+  "files": [
+    {
+      "path": "include/eathread/eathread_thread.h",
+      "pinned_sha256": "781c8eb97952de2792e77ada8c6209e756e8108693ae1bb904b8ff60a623ca97",
+      "physical_sha256": "80a12119deda6c0c1a6a88589b01434f96fe08235f6e15d5420187f681a30e90",
+      "physical_byte_equal": false
+    },
+    {
+      "path": "include/eathread/eathread_semaphore.h",
+      "pinned_sha256": "c38b7f0fccdb66d39cae19aa16c8b04fbddd35b6e4fc8d91b25d24539938ce53",
+      "physical_sha256": "9b0f00fe10bd249d211b0bcd06fa85dfec085453142b47e1f2c9a09951bbe85d",
+      "physical_byte_equal": false
+    },
+    {
+      "path": "include/eathread/eathread_futex.h",
+      "pinned_sha256": "3e414ba69ccd6ecd5d5a5025fafdc9af9b092000dd649ef6fd0c12318927e12d",
+      "physical_sha256": "5652fa2056421aeddac2d1bd604be7cf08b426057bb3cc67bbe44c3f840a3bd6",
+      "physical_byte_equal": false
+    },
+    {
+      "path": "source/pc/eathread_thread_pc.cpp",
+      "pinned_sha256": "2aa192752b058882988486c8cd83b3418ded154689754fef84d1ebab74d3dbc8",
+      "physical_sha256": "1630d75aeb1c9e071d84d32075e46b751dcb5c33be4943d955f89164752754e5",
+      "physical_byte_equal": false
+    },
+    {
+      "path": "source/pc/eathread_semaphore_pc.cpp",
+      "pinned_sha256": "1606d07682641932a306c2cf3a97ac750552bedfb92b60b17c0b2e7e47c74cf1",
+      "physical_sha256": "2361e289730ceb59cdac1aec9042c2fa4017a03e23c89716b2dea9af6f4194b8",
+      "physical_byte_equal": false
+    }
+  ],
+  "new_APIs": "actual Semaphore(NULL,false), SemaphoreParameters(0,true,NULL), Semaphore::Init, ThreadParameters fields, Thread::Begin fourth wrapper input and canonical wrapper getter",
+  "renderware": "vendored tracked tree; actual rwcore_structs.h AllocateMemoryResource builds all five lanes"
+}
