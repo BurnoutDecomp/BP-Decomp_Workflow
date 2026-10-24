@@ -1,0 +1,9 @@
+# Source self-review
+
+ARTIST 82671D30 forms the actual list address, loads -1 and counter67, and executes exactly67 successive 32-bit map stores. After the loop 82671D58 stores the already-zero r30 at list+0x294. The canonical typed layout's 67 map words, 67 type words and 2/2/8/9/5/5 pointer rows place the audio pointer there in the console; the native C++ uses named fields with compiler-owned widths, never a literal offset. The original method writes no type/pointer row. DecFIGS declares Construct and names those fields, but its smaller 64 and 7/8 capacities do not override primary67 and8/9.
+
+The original method body is recovered independently from that primary flow and then compared with the exact prior e99 source chunk. Earlier source is not authority. Its native wrapper had extra spare-slot clearing; the current proposal intentionally preserves today's native body instead. Byte comparisons establish that rename reversal restores the entire GameData CPP, header declaration removal restores the entire list header, and native method-body extraction matches the original current body exactly.
+
+The caller rewrite targets the actual by-value GameData member in the retained native Construct. Full type references and the compile fixture are frozen to avoid mistaking a text-search absence for virtual coverage. This class/method has no virtual dispatch. No new module flag, allocation, success response, list publication or Prepare invocation is present. The original readiness/producer ordering remains unresolved at the full GameData owner boundary.
+
+No compilation, test or native run was performed. Fresh review should evaluate the canonical-vs-native split and the explicit unchanged 7/8 native pointer-row clearing bounds. The packet does not make source/registration completion claims.

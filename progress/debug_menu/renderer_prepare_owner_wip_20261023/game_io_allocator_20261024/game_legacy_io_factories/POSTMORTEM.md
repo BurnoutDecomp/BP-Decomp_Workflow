@@ -1,0 +1,11 @@
+# Source self-review
+
+ARTIST arbitration starts at the positively installed game vptr, rather than trusting the truncated export identity at 827E3100. The complete six-hook table and register use agree with the existing typed generic template. Both argument structures are used unconditionally before the AND return. Construct/Destruct call the actual empty target, and Prepare/Release call the actual `li 1` target; empty/true bodies are original semantics for this legacy pair and do not stand in for resource readiness.
+
+The false constructor seed follows the original zero register to the actual output object's address, independently identified by its factory. DecFIGS gives the genuine protected base constructor and bool, and the actual output's single `RequestInterface<1024>` member. Only that one bool is initialized. No lower-rung field or declaration is allowed to add a new lifecycle operation to these IO methods. The unused Clear/accessor declarations are deliberately outside this bounded factory recovery.
+
+The private generic typed buffers are already real storage. No alias to `ModuleSingleBuffered::DataBuffer`, allocator, literal pointer arithmetic, forced padding, fake hook free function or new field is introduced. The console secondary vptr is bound to IThreadClass, correcting an earlier tentative CPU-monitor interpretation. Native object layout is delegated to the compiler.
+
+Whole-file pre/post hashes are exact. The game header changes only its two include lines and first base; the queue header changes only the new constructor payload. Removing those payloads reproduces their complete exact preimages. The old IO header/CPP are intentionally replaced because their sole fake payload method is the incorrect virtual attribution. The real game CPP is frozen and untouched, as are the full generic template and canonical request queue providers.
+
+The queue constructor affects all derived instantiations at birth, and the typed base changes actual game storage/vtable dispatch when composed. Both effects require fresh review and affected recompile. No such compile or runtime check was performed. The exact shipping list still omits the IO CPP, so source body recovery is not a shipping link-readiness claim. No mount, original Prepare call, allocation or thread change is proposed.

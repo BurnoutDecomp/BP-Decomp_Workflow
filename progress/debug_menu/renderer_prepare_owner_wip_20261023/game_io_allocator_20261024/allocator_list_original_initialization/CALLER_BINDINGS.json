@@ -1,0 +1,55 @@
+{
+  "source_commit": "d458cd5641a318f8289da22058220f995b6846b5",
+  "type_mention_files": 47,
+  "constructor_related_lines": [
+    {
+      "path": "src/GameSource/Director/BrnDirectorICEWrapperPrepare.cpp",
+      "line": 40,
+      "text": "    //     ICEMemory::Construct(this, *AllocatorList::GetRawResource(list, 34),"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+      "line": 2428,
+      "text": "        // Construct @0x82677850 and WheelList::Construct @0x82677DB8 both list"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+      "line": 2432,
+      "text": "        mWheelList.Construct();"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+      "line": 2448,
+      "text": "        // `maiAllocatorMap[0..66] = -1` loop == AllocatorList::Construct. CreateAllocators"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+      "line": 2450,
+      "text": "        mAllocatorList.Construct();"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModule.h",
+      "line": 504,
+      "text": "        // (the inline `map[0..66] = -1` loop == AllocatorList::Construct)."
+    },
+    {
+      "path": "src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.cpp",
+      "line": 17,
+      "text": "        // [inferred] The X360 AllocatorList::Construct is inlined into GameDataModule::CreateAllocators"
+    },
+    {
+      "path": "src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.cpp",
+      "line": 21,
+      "text": "        void AllocatorList::Construct()"
+    },
+    {
+      "path": "src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList_embed_check.cpp",
+      "line": 14,
+      "text": "        lList.Construct();"
+    }
+  ],
+  "declaration": "Construct is a normal nonvirtual method on a non-template class; no virtual factory/thunk to substitute.",
+  "positive_native_owner": "GameDataModule owns mAllocatorList by value; its retained native Construct invokes the renamed byte-identical body.",
+  "other_concrete_owner": "Compile-only embed fixture local lList; its canonical Construct call remains genuine original initialization.",
+  "limits": "Source references support this bounded caller rewrite; not a complete dynamic trace or proof of resource readiness."
+}

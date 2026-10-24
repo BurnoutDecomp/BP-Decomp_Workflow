@@ -1,0 +1,9 @@
+# Original game factory checkpoint review
+
+Review only this immutable four-path packet and its frozen providers/evidence. Source base is full 702d242bd0e99a8510ef09bbc42b0a316956ac9b; all preimages/providers are additionally checked byte-identical at 183ca9c9a23aa93fe9a1bdf1e47b02e84f395f1e. Do not edit earlier packets or actual checkouts. Root owns review, publication, mounts, compile and native gates.
+
+Verify the actual game main-vptr/table binding and six hook ABIs against ARTIST before using names from DWARF. In particular, 827E3100 must be the template's bool destroy-input hook, not the old payload method; both Prepare/Release calls must execute before the AND return. Confirm the existing template's private by-value buffers and methods already match, and that no template fix or output/input alias was invented.
+
+Verify empty/true IO methods through their actual original ICF call targets and the separate named DecFIGS functions. Verify empty input shape, output's sole typed 1024-byte request-interface member, and its flag's C++ birth store via the genuine protected BaseVariableEventQueue constructor. Review the generic birth-initialization effect on other queue instances. Do not treat false initialization as Construct/clear/readiness.
+
+Inspect exact pre/post scope and all source-provenance receipts. The IO CPP is present in game CMake but absent from the exact shipping source list; no mount is included. The base change affects native layout and virtual dispatch when composed, requires full affected recompilation, and must remain separate from original Prepare activation/allocation reconciliation. Optional legacy Clear/accessor APIs remain outside the six-hook scope. Do not claim all template conveniences, renderer readiness, native allocation parity or full original GameData Construct from this packet.

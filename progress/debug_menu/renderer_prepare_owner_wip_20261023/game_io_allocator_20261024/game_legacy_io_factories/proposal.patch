@@ -1,0 +1,160 @@
+--- a/src/GameShared/GameClasses/Module/CgsVariableEventQueue.h
++++ b/src/GameShared/GameClasses/Module/CgsVariableEventQueue.h
+@@ -49,6 +49,10 @@
+         void MarkUnconstructed() { mbIsConstructed = false; }
+ 
+     protected:
++        // DecFIGS h51; ARTIST game C++ ctor @0x827E5F64 initializes the owned
++        // output request queue's leading flag. This does not construct its payload.
++        BaseVariableEventQueue() : mbIsConstructed(false) {}
++
+         bool mbIsConstructed;
+     };
+ 
+--- a/src/GameSource/Game/BrnGameModuleIO.h
++++ b/src/GameSource/Game/BrnGameModuleIO.h
+@@ -1,50 +1,35 @@
+ #pragma once
+ 
+ #include "types.hpp"
++#include "GameShared/GameClasses/Module/CgsDataStructure.h"
++#include "GameSource/Resource/SharedIO/BrnGameDataRequestQueue.h"
+ 
+-#include "GameShared/GameClasses/Module/CgsIOBuffer.h"   // CgsModule::IOBuffer (1-byte FlagSet base)
+-
+-// BrnGame::BrnGameModuleIO - the per-frame IO payload buffers the top-level game module
+-// exchanges on its update IO stacks (the same *ModuleIO namespace-of-InputBuffer/OutputBuffer
+-// shape as CgsGui::CgsGuiModuleIO / CgsGui::ModelIO / CgsInput::InputIO, whose InputBuffers all
+-// derive CgsModule::IOBuffer). This slice homes the single X360-emitted InputBuffer member the
+-// ledger attributes to class:BrnGame::BrnGameModuleIO (below); OutputBuffer and the remaining
+-// InputBuffer accessors are not attested in this TU and are intentionally omitted (adding them
+-// would be invented layout).
++// The game's legacy DataStructure pair, owned by ModuleSingleBufferedTemplate.
++// ARTIST factories @0x827E3090/30C8 and hooks @0x827E3100..322C; DecFIGS BrnGameModuleIO.h.
++// These are distinct from the IOBufferStack payloads used by the staged Prepare owner.
+ namespace BrnGame
+ {
+ namespace BrnGameModuleIO
+ {
+-    // The game module's per-frame input IO buffer. Derives CgsModule::IOBuffer (the 1-byte
+-    // status FlagSet base: bit 3 == locked-for-write, bit 4 == locked-for-read), mirroring every
+-    // committed *ModuleIO::InputBuffer sibling. No additional members are declared: the single
+-    // reconstructed function below does not touch `this`, so no member offset is attested and none
+-    // is invented (per the reconstruction rules).
+-    struct InputBuffer : public CgsModule::IOBuffer
++    struct InputBuffer : public CgsModule::DataStructure
+     {
+-        // X360 0x827E3100.  ledger identity "BrnGame::BrnGameModuleIO::InputBuffer,cla" -- the IDA
+-        // symbol is TRUNCATED (the trailing ",cla..." is the cut-off tail of a longer demangled
+-        // name, exactly like the "Crea" -> CreateStreamProducer truncation in
+-        // CgsCollisionGenerator.h), so the source-level method name is unrecoverable; DestroyBuffer
+-        // is a behaviour-derived reconstruction and is FLAGGED as such.
+-        //
+-        // ASM (store-for-store):  mr r3,r4 ; bl <Destruct> ; li r3,1 ; blr
+-        //   -> `this` (r3) is IGNORED; the second argument (r4) is moved into r3 and passed to an
+-        //      empty destructor, then the function returns 1.
+-        //   -> The `bl` target is resolved by IDA to
+-        //      CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct (@0x8284CB38), which
+-        //      is documented as "empty; ICF-folded". BaseCollisionGenerator IS-A CgsModule::IOBuffer
+-        //      and its Destruct body is empty, so it FOLDS (identical-code-folding) with the equally
+-        //      empty CgsModule::IOBuffer::Destruct; the linker keeps one copy and labels it with the
+-        //      collision name. The behaviour-faithful callee for this game-module IO context is the
+-        //      base CgsModule::IOBuffer::Destruct (the empty fold representative), invoked on the
+-        //      passed buffer -- so the argument is modelled as CgsModule::IOBuffer*.
+-        //
+-        // FLAG: (1) method name reconstructed from behaviour (symbol truncated); (2) the argument's
+-        // exact static type cannot be pinned because the callee is an ICF-folded empty destructor --
+-        // it is modelled as CgsModule::IOBuffer* (the fold representative), which reproduces the
+-        // emitted branch + return-1 store-for-store without inventing a collision relationship.
+-        int DestroyBuffer(CgsModule::IOBuffer* lpBuffer);
++        void Construct();
++        bool Prepare();
++        bool Release();
++        void Destruct();
++    };
++
++    struct OutputBuffer : public CgsModule::DataStructure
++    {
++        typedef BrnResource::GameDataIO::RequestInterface<1024> ResourceRequestInterface;
++
++        void Construct();
++        bool Prepare();
++        bool Release();
++        void Destruct();
++
++    private:
++        ResourceRequestInterface mResourceRequestInterface;
+     };
+ }
+ }
+--- a/src/GameSource/Game/BrnGameModuleIO.cpp
++++ b/src/GameSource/Game/BrnGameModuleIO.cpp
+@@ -1,31 +1,22 @@
+ #include "GameSource/Game/BrnGameModuleIO.h"
+ 
+-// BrnGame::BrnGameModuleIO::InputBuffer member functions, reconstructed from
+-// BURNOUT_X360_ARTIST.XEX. This TU (class:BrnGame::BrnGameModuleIO) bodies the single
+-// X360-emitted InputBuffer function at 0x827E3100 (see BrnGameModuleIO.h for the truncated-symbol
+-// / ICF-fold FLAG notes).
+-//
+-// X360 0x827E3100 store-for-store:
+-//   mflr r12 / stw / stwu            -- frame prologue (LR save only; no locals)
+-//   mr   r3, r4                      -- pass the second argument (r4) as the destruct `this`
+-//   bl   <empty ICF-folded Destruct> -- invoke the empty destructor on the passed buffer
+-//   li   r3, 1                       -- return value = 1
+-//   addi r1 / lwz / mtlr / blr       -- frame epilogue
+-// `this` (r3 on entry) is not read anywhere in the body.
+-
++// ARTIST's six real template hooks are supplied by ModuleSingleBufferedTemplate.
++// Their Construct/Destruct calls fold to 0x8284CB38 (blr), and Prepare/Release calls
++// fold to 0x82C296C8 (li r3,1;blr). DecFIGS separately retains these named methods.
++// The request-interface member's birth flag belongs to BaseVariableEventQueue's
++// C++ constructor. These original legacy methods do not initialize/clear that queue.
+ namespace BrnGame
+ {
+ namespace BrnGameModuleIO
+ {
+-    // X360 0x827E3100. Invoke the (empty, ICF-folded) IOBuffer destructor on the supplied buffer
+-    // and return 1. See the header FLAG: the source method name is truncated ("...InputBuffer,cla")
+-    // and the callee is the empty fold representative (CgsModule::IOBuffer::Destruct, folded with
+-    // CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct). No behaviour is added beyond
+-    // the emitted empty-destruct call and the constant 1 return.
+-    int InputBuffer::DestroyBuffer(CgsModule::IOBuffer* lpBuffer)
+-    {
+-        lpBuffer->Destruct();
+-        return 1;
+-    }
++    void InputBuffer::Construct() {}
++    bool InputBuffer::Prepare() { return true; }
++    bool InputBuffer::Release() { return true; }
++    void InputBuffer::Destruct() {}
++
++    void OutputBuffer::Construct() {}
++    bool OutputBuffer::Prepare() { return true; }
++    bool OutputBuffer::Release() { return true; }
++    void OutputBuffer::Destruct() {}
+ }
+ }
+--- a/src/GameSource/Game/BrnGameModule.hpp
++++ b/src/GameSource/Game/BrnGameModule.hpp
+@@ -7,7 +7,8 @@
+ // the remaining subsystems below are the ones the per-frame update spine (GameMain) drives.
+ #include "GameSource/Graphics/BrnRendererModule.h"                       // BrnGraphics::BrnRendererModule
+ #include "GameSource/Gui/BrnGuiModule.h"                                 // BrnGui::GuiModule (hosts the MovieManager)
+-#include "GameShared/GameClasses/Module/CgsModuleSingleBuffered.h"        // CgsModule::ModuleSingleBuffered (real base)
++#include "GameShared/GameClasses/Module/CgsModuleSingleBufferedTemplate.h" // typed legacy IO owner
++#include "GameSource/Game/BrnGameModuleIO.h"
+ #include "GameShared/GameClasses/System/Threads/CgsThreadLayout.h"       // CgsSystem::IThreadClass
+ #include "GameShared/GameClasses/Module/CgsIOBufferStack.h"              // CgsModule::IOBufferStack
+ #include "GameShared/GameClasses/Development/PerfMon/Cpu/CgsPerfMonCpu.h"// CgsDev::PerfMonCpu
+@@ -189,7 +190,9 @@
+     // declaration order. Ranges of not-yet-reached members are marked "[... omitted ...]"
+     // and are added as the functions that touch them are reconstructed. Semantic parity (not
+     // byte-exact): real names/types/order, but omitted members mean offsets are not byte-exact.
+-    class BrnGameModule : public CgsModule::ModuleSingleBuffered, public CgsSystem::IThreadClass
++    class BrnGameModule : public CgsModule::ModuleSingleBufferedTemplate<
++                             BrnGameModuleIO::InputBuffer, BrnGameModuleIO::OutputBuffer>,
++                         public CgsSystem::IThreadClass
+     {
+         // ARTIST AutoTest callbacks address this module's private debug manager
+         // directly. Friendship is not emitted by the DecFIGS declaration dump.
