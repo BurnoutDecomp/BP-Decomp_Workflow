@@ -61,7 +61,7 @@ $OnlineSaveRoutePayloadPins = @{
     'tests/run_online_save_route.py' = @{ lf_sha256 = '053ae3b9fa21178b1b81fe1b864c991dcdd058fc1d43488fe92e25e44890ac9b'; lf_bytes = 11772 }
     'tests/online_save_route_binding.py' = @{ lf_sha256 = '4b44e0c8f7c7705f11616b59c95d730ae9660d27486f234ebd1bf9097cc446dc'; lf_bytes = 7456 }
     'tests/online_save_route_owned.py' = @{ lf_sha256 = 'c21a018a37c094eec2c6befcd19b8862f8c33c84b66f84c33c55eac600649179'; lf_bytes = 12783 }
-    'tests/evidence/online_save_route/source_pins.json' = @{ lf_sha256 = 'a6a7a289a7de87bf6017e6d6255d92eb326f44e9b7c158c76c96aaeeafeabc57'; lf_bytes = 5017 }
+    'tests/evidence/online_save_route/source_pins.json' = @{ lf_sha256 = '3dd107eb5a389ac0a2d0d0e88713c1f68c268b78cc89743c443c282f07e195dc'; lf_bytes = 5017 }
     'tests/evidence/online_save_route/test_plan.json' = @{ lf_sha256 = '1709fa6b36657f903668e72943956566eb1d7ce3e24797fbbda5d270b308bc8e'; lf_bytes = 4435 }
     'tests/evidence/online_save_route/BrnGuiOptionsDataProfile_8b2940d4.cpp' = @{ lf_sha256 = 'e36d09bce219ca3125a204bcb34fe95aab2e7784c37d2f247a6eef980124c74d'; lf_bytes = 26153 }
     'tests/OnlineSaveRouteDiagnosticGlobals.cpp' = @{ lf_sha256 = 'ba311bf5c9397d9b61ad795458351a9ba400e88a2257ce6d8202ba9334960710'; lf_bytes = 453 }
