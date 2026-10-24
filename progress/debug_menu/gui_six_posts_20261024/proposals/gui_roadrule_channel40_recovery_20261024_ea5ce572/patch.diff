@@ -1,0 +1,60 @@
+--- a/b5-decomp/src/GameSource/Gui/Flow/HUD/Components/BrnRoadRuleComponent.cpp
++++ b/b5-decomp/src/GameSource/Gui/Flow/HUD/Components/BrnRoadRuleComponent.cpp
+@@ -10,6 +10,7 @@
+ #include "GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dTransform.h"
+ #include "GameShared/GameClasses/Core/CgsStringUtils.h"                // CgsCore::SPrintf
+ #include "GameShared/GameClasses/Language/CgsLanguageManager.h"        // FormatCurrencyString
++#include "GameShared/GameClasses/Gui/CgsGuiEvent.h"                       // CgsGui::GuiEventWrapper
+ #include "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h" // StateInterface (OutputGuiEvent / GetLanguageManager)
+ #include "GameSource/Gui/BrnGuiCache.h"                                // GuiCache (mode / score-mode / in-event gate / player name)
+ #include "GameSource/Gui/BrnGuiDemangledEventTypes.h"                  // GuiEventRequestTraining (id 572)
+@@ -96,6 +97,25 @@
+     static_assert(offsetof(GuiEventSoundTriggerRecord22, mOutEvent) == 12 &&
+                   sizeof(GuiEventSoundTriggerRecord22) == 112,
+                   "ARTIST event-22 channel-40 record is {100,22,12}+100");
++    using GuiEventRoadRuleFailRecord40 = CgsGui::GuiEventWrapper<GuiEventRoadRuleFail, 40>;
++    static_assert(sizeof(GuiEventRoadRuleFail) == 48, "ARTIST event 337 payload is 48 bytes");
++    static_assert(alignof(GuiEventRoadRuleFail) == 8, "ARTIST event 337 payload is 8-aligned");
++    static_assert(offsetof(GuiEventRoadRuleFail, mRoadID) == 0 &&
++                  offsetof(GuiEventRoadRuleFail, meRuleType) == 8 &&
++                  offsetof(GuiEventRoadRuleFail, macCurrentRulerName) == 12 &&
++                  offsetof(GuiEventRoadRuleFail, mbRoadRuledByLocalPlayer) == 44 &&
++                  offsetof(GuiEventRoadRuleFail, mbRoadRuledByAI) == 45,
++                  "event 337 payload fields retain ARTIST/DWARF offsets");
++    static_assert(offsetof(GuiEventRoadRuleFailRecord40, mOutEvent) == 16 &&
++                  sizeof(GuiEventRoadRuleFailRecord40) == 64,
++                  "ARTIST event 337 channel-40 record is {48,337,16}+48");
++    using GuiEventRequestTrainingRecord40 = CgsGui::GuiEventWrapper<GuiEventRequestTraining, 40>;
++    static_assert(sizeof(GuiEventRequestTraining) == 4 &&
++                  offsetof(GuiEventRequestTraining, meTrainingType) == 0,
++                  "ARTIST event 572 payload is one word at offset 0");
++    static_assert(offsetof(GuiEventRequestTrainingRecord40, mOutEvent) == 12 &&
++                  sizeof(GuiEventRequestTrainingRecord40) == 16,
++                  "ARTIST event 572 channel-40 record is {4,572,12}+4");
+ 
+     // BrnRoadRuleComponent.h:277 (KI_MAX_ROAD_INDEX) -- the miRoadIndex bound the
+     // X360 asserts against (cmpwi 0x42).
+@@ -533,7 +553,10 @@
+         GetNameOfRule(lacRuleName, 32, &mTransitionData, BrnStreetData::E_SCORE_TYPE_TIME);
+         CopyFixedString32(lFail.macCurrentRulerName, lacRuleName);
+         lFail.macCurrentRulerName[31] = '\0';
+-        mpStateInterface->OutputGuiEvent(lFail);
++        const GuiEventRoadRuleFailRecord40 lFailRecord(lFail);
++        mpStateInterface->GetOutputEventQueue()->AddEvent(
++            reinterpret_cast<const CgsModule::Event*>(&lFailRecord), 40,
++            static_cast<s32>(sizeof(lFailRecord)));
+ 
+         if (!IsCurrentTimeLeaving())
+             AnimateCurrentTime(E_ANIMATION_STATE_UNSUCCESSFUL_IDLE);
+@@ -1321,7 +1344,10 @@
+         {
+             GuiEventRequestTraining lTraining;
+             lTraining.meTrainingType = 9;
+-            mpStateInterface->OutputGuiEvent(lTraining);
++            const GuiEventRequestTrainingRecord40 lTrainingRecord(lTraining);
++            mpStateInterface->GetOutputEventQueue()->AddEvent(
++                reinterpret_cast<const CgsModule::Event*>(&lTrainingRecord), 40,
++                static_cast<s32>(sizeof(lTrainingRecord)));
+         }
+     }
+     else
