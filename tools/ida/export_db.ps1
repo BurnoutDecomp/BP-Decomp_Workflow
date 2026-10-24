@@ -11,14 +11,232 @@ param(
     [string]$DbName = "",                         # Name of the database in "IDA Files/" (without .i64 extension). Leave empty to export all databases.
     [int]$ExportMax = 0,                          # Max functions PER WORKER (0 = all; useful for testing)
     [int]$Jobs = 0,                               # Parallel IDA processes (0 = auto: min(cores, 12))
-    [string]$IdaPath = "",                        # Custom path to idat.exe (overrides default/env)
-    [switch]$KeepTemp                             # Keep per-worker DB copies/logs after run (for debugging)
+    [string]$IdaPath = "",                        # idat.exe or its install dir (overrides env and auto-detection)
+    [switch]$KeepTemp,                            # Keep per-worker DB copies/logs after run (for debugging)
+    [switch]$PrintIdaPath                         # Only print the resolved idat path and exit (used by `work bootstrap`)
 )
 
 $ErrorActionPreference = "Stop"
 
 # Paths
 $ProjectRoot = Resolve-Path "$PSScriptRoot/../.."
+
+# ---------------------------------------------------------------------------
+# Locate idat. An explicit choice wins and is never second-guessed: -IdaPath,
+# then IDA_PATH / IDA_BIN / IDADIR (each may name idat.exe or the install dir).
+# Otherwise every install this machine advertises is collected and the NEWEST
+# version is used. Installs live anywhere (another drive, a tools folder, a
+# portable unzip), so nothing assumes a layout; the sources are:
+#   - IDA 9's own ida-config.json (in $IDAUSR, %APPDATA%\Hex-Rays\IDA Pro, ~/.idapro)
+#   - idat on PATH
+#   - the .i64 file association and IDA's Start Menu shortcuts
+#   - the Windows uninstall entries
+#   - IDA* folders up to two levels below the root of every local or removable
+#     drive (D:\IDA Pro 9.1, D:\Program Files\IDA..., D:\Tools\IDA...), below the
+#     user's home, and %LOCALAPPDATA%\Programs; /opt, /Applications etc. off Windows.
+# No version, drive letter or folder name is hardcoded.
+# ---------------------------------------------------------------------------
+
+$OnWindows = [Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT
+
+function Resolve-IdaBinary {
+    # A file or an install dir -> the headless binary that opens a .i64, or $null.
+    # IDA <= 8 ships a 32-bit idat.exe plus idat64.exe (the one that opens .i64);
+    # IDA 9 dropped idat64.exe and its idat.exe is 64-bit. On macOS the binary
+    # sits in "<IDA>.app/Contents/MacOS".
+    param([string]$Path)
+    if (-not $Path) { return $null }
+    $Path = $Path.Trim().Trim('"')
+    if (Test-Path -LiteralPath $Path -PathType Leaf) {
+        return (Resolve-Path -LiteralPath $Path).Path
+    }
+    if (Test-Path -LiteralPath $Path -PathType Container) {
+        $Names = if ($OnWindows) { @("idat64.exe", "idat.exe") } else { @("idat64", "idat") }
+        foreach ($Dir in @($Path, (Join-Path $Path "Contents/MacOS"))) {
+            foreach ($Name in $Names) {
+                $Candidate = Join-Path $Dir $Name
+                if (Test-Path -LiteralPath $Candidate -PathType Leaf) {
+                    return (Resolve-Path -LiteralPath $Candidate).Path
+                }
+            }
+        }
+    }
+    return $null
+}
+
+function Get-IdaFolders {
+    # IDA* directories directly in $Root and one level below it.
+    param([string]$Root)
+    if (-not $Root -or -not (Test-Path -LiteralPath $Root -PathType Container)) { return }
+    Get-ChildItem -LiteralPath $Root -Directory -Filter "IDA*" -ErrorAction SilentlyContinue
+    foreach ($Child in @(Get-ChildItem -LiteralPath $Root -Directory -ErrorAction SilentlyContinue)) {
+        Get-ChildItem -LiteralPath $Child.FullName -Directory -Filter "IDA*" -ErrorAction SilentlyContinue
+    }
+}
+
+function Get-IdaVersion {
+    # Best-effort version: the registry DisplayVersion, then the install folder
+    # name ("IDA Professional 9.5", or the ".app" above Contents/MacOS), then the
+    # exe's file version.
+    param([string]$Binary, [string]$Hint)
+    $Folders = @()
+    $Dir = Split-Path $Binary -Parent
+    for ($Level = 0; $Level -lt 3 -and $Dir; $Level++) {
+        $Folders += Split-Path $Dir -Leaf
+        $Dir = Split-Path $Dir -Parent
+    }
+    $FileVersion = (Get-Item -LiteralPath $Binary).VersionInfo.FileVersion
+    foreach ($Text in (@($Hint) + $Folders + @($FileVersion))) {
+        if ($Text -and $Text -match '(\d+(?:\.\d+){1,3})') { return [version]$Matches[1] }
+    }
+    return [version]"0.0"
+}
+
+function Find-IdaInstalls {
+    $Raw = @()
+
+    # IDA 9 records its install dir in the user dir ($IDAUSR overrides the default).
+    $UserDirs = @()
+    if ($env:IDAUSR) { $UserDirs += $env:IDAUSR -split [IO.Path]::PathSeparator }
+    if ($env:APPDATA) { $UserDirs += Join-Path $env:APPDATA "Hex-Rays\IDA Pro" }
+    if ($HOME) { $UserDirs += Join-Path $HOME ".idapro" }
+    foreach ($UserDir in ($UserDirs | Where-Object { $_ })) {
+        $Config = Join-Path $UserDir "ida-config.json"
+        if (Test-Path -LiteralPath $Config) {
+            try {
+                $Dir = (Get-Content -LiteralPath $Config -Raw | ConvertFrom-Json).Paths.'ida-install-dir'
+                if ($Dir) { $Raw += [pscustomobject]@{ Path = $Dir; Hint = ""; Source = "ida-config.json" } }
+            } catch { }
+        }
+    }
+
+    foreach ($Exe in @("idat64", "idat")) {
+        foreach ($Cmd in @(Get-Command $Exe -CommandType Application -ErrorAction SilentlyContinue)) {
+            $Raw += [pscustomobject]@{ Path = $Cmd.Source; Hint = ""; Source = "PATH" }
+        }
+    }
+
+    if ($OnWindows) {
+        # IDA's Start Menu shortcuts point at ida.exe, which sits beside idat.exe.
+        try {
+            $Shell = New-Object -ComObject WScript.Shell
+            $MenuRoots = @(
+                (Join-Path $env:ProgramData "Microsoft\Windows\Start Menu\Programs"),
+                (Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs")
+            )
+            foreach ($Link in @(Get-ChildItem -LiteralPath $MenuRoots -Recurse -Filter "*IDA*.lnk" -ErrorAction SilentlyContinue)) {
+                $Target = $Shell.CreateShortcut($Link.FullName).TargetPath
+                if ($Target) { $Raw += [pscustomobject]@{ Path = (Split-Path $Target -Parent); Hint = ""; Source = "Start Menu" } }
+            }
+        } catch { }
+
+        # The program Explorer opens a .i64 with.
+        try {
+            $ProgId = (Get-ItemProperty -LiteralPath "Registry::HKEY_CLASSES_ROOT\.i64" -ErrorAction Stop).'(default)'
+            if ($ProgId) {
+                $Command = (Get-ItemProperty -LiteralPath "Registry::HKEY_CLASSES_ROOT\$ProgId\shell\open\command" -ErrorAction Stop).'(default)'
+                if ($Command -match '^\s*"?([^"]+?\.exe)') {
+                    $Raw += [pscustomobject]@{ Path = (Split-Path $Matches[1] -Parent); Hint = ""; Source = ".i64 association" }
+                }
+            }
+        } catch { }
+
+        $UninstallKeys = @(
+            "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*",
+            "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*",
+            "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
+        )
+        foreach ($Entry in @(Get-ItemProperty -Path $UninstallKeys -ErrorAction SilentlyContinue)) {
+            if ($Entry.DisplayName -match '^IDA\b' -and $Entry.InstallLocation) {
+                $Raw += [pscustomobject]@{ Path = $Entry.InstallLocation; Hint = "$($Entry.DisplayVersion)"; Source = "uninstall registry" }
+            }
+        }
+    }
+
+    # Last resort: look for the install folder itself. Network drives are skipped
+    # (slow to enumerate and not where a licensed IDA normally runs from).
+    $Roots = @($HOME)
+    if ($OnWindows) {
+        if ($env:LOCALAPPDATA) { $Roots += Join-Path $env:LOCALAPPDATA "Programs" }
+        foreach ($Drive in [IO.DriveInfo]::GetDrives()) {
+            if ($Drive.DriveType -notin @("Fixed", "Removable") -or -not $Drive.IsReady) { continue }
+            $Roots += $Drive.RootDirectory.FullName
+        }
+    } else {
+        $Roots += @("/opt", "/usr/local", "/Applications", (Join-Path $HOME "Applications"))
+    }
+    foreach ($Root in ($Roots | Where-Object { $_ } | Select-Object -Unique)) {
+        foreach ($Dir in @(Get-IdaFolders $Root)) {
+            $Raw += [pscustomobject]@{ Path = $Dir.FullName; Hint = ""; Source = "folder scan" }
+        }
+    }
+
+    # Resolve, dedupe on the binary (first source wins, a version hint is kept),
+    # then newest first; discovery order breaks ties (PS 5.1 sort is not stable).
+    $ByBinary = [ordered]@{}
+    foreach ($Item in $Raw) {
+        $Binary = Resolve-IdaBinary $Item.Path
+        if (-not $Binary) { continue }
+        $Key = $Binary.ToLowerInvariant()
+        if ($ByBinary.Contains($Key)) {
+            if (-not $ByBinary[$Key].Hint -and $Item.Hint) { $ByBinary[$Key].Hint = $Item.Hint }
+            continue
+        }
+        $ByBinary[$Key] = [pscustomobject]@{ Binary = $Binary; Hint = $Item.Hint; Source = $Item.Source; Order = $ByBinary.Count }
+    }
+    $Installs = foreach ($Install in $ByBinary.Values) {
+        $Install | Add-Member -NotePropertyName Version -NotePropertyValue (Get-IdaVersion $Install.Binary $Install.Hint) -PassThru
+    }
+    return @($Installs | Sort-Object -Property @{ Expression = "Version"; Descending = $true }, @{ Expression = "Order"; Descending = $false })
+}
+
+function Stop-IdaLookup {
+    # -PrintIdaPath callers (work.py) read stderr: give them the bare message,
+    # not PowerShell's coloured error record.
+    param([string]$Message)
+    if ($PrintIdaPath) {
+        [Console]::Error.WriteLine($Message)
+        exit 1
+    }
+    Write-Error $Message
+}
+
+$IdaSource = ""
+if ($IdaPath) {
+    $IdaSource = "-IdaPath"
+} else {
+    foreach ($Var in @("IDA_PATH", "IDA_BIN", "IDADIR")) {
+        $Value = [Environment]::GetEnvironmentVariable($Var)
+        if ($Value) { $IdaPath = $Value; $IdaSource = "env:$Var"; break }
+    }
+}
+
+if ($IdaPath) {
+    $IdaBin = Resolve-IdaBinary $IdaPath
+    if (-not $IdaBin) {
+        Stop-IdaLookup "$IdaSource is '$IdaPath', which is neither idat.exe nor an IDA install folder containing it."
+    }
+} else {
+    $Installs = @(Find-IdaInstalls)
+    if ($Installs.Count -eq 0) {
+        Stop-IdaLookup ("No IDA install found (looked at ida-config.json, PATH, the .i64 association, Start Menu " +
+            "shortcuts, the uninstall registry and IDA* folders up to two levels deep on every local drive). " +
+            "Pass -IdaPath <idat.exe or install dir>, or set IDA_PATH.")
+    }
+    $IdaBin = $Installs[0].Binary
+    $IdaSource = "auto-detected, $($Installs[0].Source)"
+    if ($Installs.Count -gt 1 -and -not $PrintIdaPath) {
+        Write-Host "IDA installs found (newest is used; override with -IdaPath or IDA_PATH):"
+        foreach ($Install in $Installs) {
+            Write-Host ("  {0,-8} {1}  [{2}]" -f $Install.Version, $Install.Binary, $Install.Source)
+        }
+    }
+}
+
+if ($PrintIdaPath) {
+    Write-Output $IdaBin
+    return
+}
 
 # If no DB name is specified, run on all .i64 files in "IDA Files"
 if (-not $DbName) {
@@ -35,59 +253,12 @@ if (-not $DbName) {
             DbName = $Name
             ExportMax = $ExportMax
             Jobs = $Jobs
-            IdaPath = $IdaPath
+            IdaPath = $IdaBin
             KeepTemp = $KeepTemp
         }
         & $MyInvocation.MyCommand.Path @params
     }
     return
-}
-
-# Resolve IDA path: parameter, then environment variables, then default installation paths, then PATH
-if (-not $IdaPath) {
-    if ($env:IDA_PATH) {
-        $IdaPath = $env:IDA_PATH
-    } elseif ($env:IDA_BIN) {
-        $IdaPath = $env:IDA_BIN
-    }
-}
-
-$DefaultIdaPaths = @(
-    "C:\Program Files\IDA Professional 9.3\idat.exe",
-    "C:\Program Files\IDA Professional 9.0\idat.exe",
-    "C:\Program Files\IDA Pro 9.0\idat.exe",
-    "C:\Program Files\IDA Pro 9.3\idat.exe",
-    "C:\Program Files\IDA Professional 9.2\idat.exe",
-    "C:\Program Files\IDA Professional 9.1\idat.exe",
-    "C:\Program Files\IDA Pro 9.2\idat.exe",
-    "C:\Program Files\IDA Pro 9.1\idat.exe"
-)
-
-if (-not $IdaPath) {
-    foreach ($path in $DefaultIdaPaths) {
-        if (Test-Path $path) {
-            $IdaPath = $path
-            break
-        }
-    }
-}
-
-if (-not $IdaPath) {
-    $FromPath = Get-Command idat.exe -ErrorAction SilentlyContinue
-    if ($FromPath) {
-        $IdaPath = $FromPath.Source
-    }
-}
-
-# Default fallback for final validation
-if (-not $IdaPath) {
-    $IdaPath = "C:\Program Files\IDA Professional 9.3\idat.exe"
-}
-
-$IdaBin = $IdaPath
-
-if (-not (Test-Path $IdaBin)) {
-    Write-Error "IDA Pro executable (idat.exe) not found. Please add idat.exe to your PATH, set the IDA_PATH environment variable, or pass -IdaPath <path> to the script. Tried: $IdaBin"
 }
 
 $ScriptFile = Join-Path $ProjectRoot "tools\ida\export_all.py"
@@ -116,7 +287,7 @@ if ($Jobs -lt 1) { $Jobs = 1 }
 Write-Host "===================================================="
 Write-Host "Parallel export for database: $DbBaseName"
 Write-Host "Exporter script: $ScriptFile"
-Write-Host "IDA Executable : $IdaBin"
+Write-Host "IDA Executable : $IdaBin ($IdaSource)"
 Write-Host "Workers (Jobs) : $Jobs"
 if ($ExportMax -gt 0) {
     Write-Host "Limit          : $ExportMax functions PER WORKER"

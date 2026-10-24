@@ -92,6 +92,10 @@ jobs:
         shell: cmd
         run: tools\build\fetch_xaudio2_redist.bat
 
+      - name: Fetch pinned SDL3 gamepad runtime
+        shell: cmd
+        run: python tools\build\fetch_sdl3.py
+
       # Put MSVC (cl) on PATH so the build .bat files skip their own fragile
       # `call vcvars64 >nul 2>&1` (which died silently with exit 255 on the runner).
       - name: Set up MSVC (x64)
