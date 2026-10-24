@@ -1,0 +1,235 @@
+--- a/src/pc/gcm/renderengine/OcclusionQueryProviderPC.h
++++ b/src/pc/gcm/renderengine/OcclusionQueryProviderPC.h
+@@ -9,7 +9,9 @@
+ 
+     // FLAG PC-platform leaf: D3D9 query provider for the currently inactive
+     // renderer path. The original Xenos conditional polarity is unresolved.
+-    void OcclusionQueryProviderPCBeginSurvey(IDirect3DDevice9* lpDevice, u32 luIdentifier);
++    void OcclusionQueryProviderPCBeginSurvey(IDirect3DDevice9* lpDevice, u32 luIdentifier, u32 luFlags = 0);
++    // Actual active XDK survey flags, including unavailable native-query scopes.
++    u32 OcclusionQueryProviderPCGetSurveyFlags();
+     void OcclusionQueryProviderPCEndSurvey();
+     void OcclusionQueryProviderPCBeginConditional(IDirect3DDevice9* lpDevice, u32 luIdentifier);
+     void OcclusionQueryProviderPCEndConditional();
+--- a/src/pc/gcm/renderengine/OcclusionQueryProviderPC.cpp
++++ b/src/pc/gcm/renderengine/OcclusionQueryProviderPC.cpp
+@@ -41,6 +41,7 @@
+ 
+         struct OcclusionSurveyFramePC
+         {
++            u32 muFlags = 0; // original BeginConditionalSurvey input
+             u32 muIdentifier = KU_NO_OCCLUSION_ID;
+             u64 muSurveySerial = 0;
+             u32 muDeviceGeneration = 0;
+@@ -173,9 +174,10 @@
+         }
+ 
+         void OcclusionQueryProviderPCBeginSurveyInternal(IDirect3DDevice9* lpDevice,
+-                                                          u32 luIdentifier)
++                                                          u32 luIdentifier, u32 luFlags)
+         {
+             OcclusionSurveyFramePC lFrame;
++            lFrame.muFlags = luFlags;
+             if (luIdentifier >= KU_OCCLUSION_QUERY_COUNT
+                 || !OcclusionQueryProviderPCBindDevice(lpDevice))
+             {
+@@ -363,9 +365,15 @@
+         }
+     }
+ 
+-    void OcclusionQueryProviderPCBeginSurvey(IDirect3DDevice9* lpDevice, u32 luIdentifier)
+-    {
+-        OcclusionQueryProviderPCBeginSurveyInternal(lpDevice, luIdentifier);
++    void OcclusionQueryProviderPCBeginSurvey(IDirect3DDevice9* lpDevice, u32 luIdentifier, u32 luFlags)
++    {
++        OcclusionQueryProviderPCBeginSurveyInternal(lpDevice, luIdentifier, luFlags);
++    }
++
++    u32 OcclusionQueryProviderPCGetSurveyFlags()
++    {
++        return sOcclusionQueryProviderPC.maSurveys.empty() ? 0u
++            : sOcclusionQueryProviderPC.maSurveys.back().muFlags;
+     }
+ 
+     void OcclusionQueryProviderPCEndSurvey()
+--- a/src/pc/gcm/renderengine/XenonD3D9Shims.cpp
++++ b/src/pc/gcm/renderengine/XenonD3D9Shims.cpp
+@@ -52,7 +52,8 @@
+ #include "GameShared/GameClasses/Development/BrnDiagFilmLatch.h"     // [diag] BrnDiag::gFilmLatch.muSkidLatched (the probe's arm)
+ 
+ #include <Windows.h>
+-#include <d3d9.h>
++#include <d3d9.h>
++#include "GameShared/GameClasses/Core/CgsAssert.h"
+ #include "GameSource/Game/BrnGameModule.hpp"
+ #include "pc/gcm/renderengine/SamplerStateCache.h"
+ #include "pc/gcm/renderengine/WorldTextureFiltering.h"
+@@ -4448,6 +4449,122 @@
+         renderengine::PCSetPixelShaderConstantF(lpDevice, 5u, lafForced, 1u);
+     }
+ 
++    // FLAG PC-platform leaf: ARTIST82949E90 maps survey Flags bit0 to
++    // PA_SC_VIZ_QUERY.kill_pix_post_hi_z. D3D9 queries have no matching mode.
++    // Keep the actual GPU box draw and its tests while preventing its post-test
++    // outputs. The native alpha-coverage reconciler remains the sole hook owner.
++    class OcclusionSurveyPixelWritesPC
++    {
++        IDirect3DDevice9* mpDevice = nullptr;
++        OcclusionSurveySubmissionTokenPC muSerial = 0;
++        u32 muFlags = 0;
++        DWORD mauSaved[10] = {};
++        bool mbSavedCoverageRequest = false;
++        bool mbSavedCoverageApplied = false;
++        bool mbArmed = false;
++
++        static constexpr D3DRENDERSTATETYPE kaeStates[10] = {
++            D3DRS_COLORWRITEENABLE, D3DRS_COLORWRITEENABLE1,
++            D3DRS_COLORWRITEENABLE2, D3DRS_COLORWRITEENABLE3,
++            D3DRS_ZWRITEENABLE, D3DRS_STENCILWRITEMASK, D3DRS_ALPHATESTENABLE,
++            D3DRS_ZENABLE, D3DRS_ZFUNC, D3DRS_CULLMODE
++        };
++
++        bool Read(DWORD (&lauValues)[10], u32 luCount = 10u) const
++        {
++            bool lbValid = true;
++            for (u32 lu = 0; lu < luCount; ++lu)
++                lbValid = SUCCEEDED(mpDevice->GetRenderState(kaeStates[lu], &lauValues[lu])) && lbValid;
++            return lbValid;
++        }
++
++        static u32& TraceCount()
++        {
++            static u32 suLines = 0;
++            return suLines;
++        }
++
++        static bool TraceActive()
++        {
++            static const bool sbEnabled = []() {
++                const char* lpcValue = std::getenv("BRN_OCCLUSION_DIAG");
++                return lpcValue && lpcValue[0] == '1' && lpcValue[1] == '\0';
++            }();
++            return sbEnabled && TraceCount() < 96u;
++        }
++
++        void Trace(const char* lpcStage, bool lbRead, const DWORD (&lauValues)[10], bool lbRestored) const
++        {
++            if (!TraceActive())
++                return;
++            char lacLine[384];
++            std::snprintf(lacLine, sizeof(lacLine),
++                "[occ-draw-state] stage=%s serial=%llu flags=%u read=%u cw=%u,%u,%u,%u zw=%u sw=%u at=%u ze=%u zf=%u cull=%u a2req=%u a2applied=%u restored=%u\n",
++                lpcStage, static_cast<unsigned long long>(muSerial), muFlags, lbRead ? 1u : 0u,
++                static_cast<unsigned>(lauValues[0]), static_cast<unsigned>(lauValues[1]),
++                static_cast<unsigned>(lauValues[2]), static_cast<unsigned>(lauValues[3]),
++                static_cast<unsigned>(lauValues[4]), static_cast<unsigned>(lauValues[5]),
++                static_cast<unsigned>(lauValues[6]), static_cast<unsigned>(lauValues[7]),
++                static_cast<unsigned>(lauValues[8]), static_cast<unsigned>(lauValues[9]),
++                sbA2cRequested ? 1u : 0u, sbA2cApplied ? 1u : 0u, lbRestored ? 1u : 0u);
++            CgsDev::Log::WriteToLog(lacLine);
++            ++TraceCount();
++        }
++
++    public:
++        OcclusionSurveyPixelWritesPC(IDirect3DDevice9* lpDevice, OcclusionSurveySubmissionTokenPC luSerial)
++            : mpDevice(lpDevice), muSerial(luSerial), muFlags(OcclusionQueryProviderPCGetSurveyFlags())
++        {
++            if ((muFlags & 1u) == 0u)
++                return;
++            const bool lbRead = Read(mauSaved, TraceActive() ? 10u : 7u);
++            CGS_ASSERT(lbRead, "could not capture native survey render states");
++            if (!lbRead)
++                return;
++            mbSavedCoverageRequest = sbA2cRequested;
++            mbSavedCoverageApplied = sbA2cApplied;
++            Trace("before", true, mauSaved, false);
++            mbArmed = true;
++            bool lbSet = true;
++            // Four color masks, depth write, stencil write and alpha test.
++            // Depth/stencil tests, comparison function and culling remain intact.
++            for (u32 lu = 0; lu < 7u; ++lu)
++                lbSet = SUCCEEDED(mpDevice->SetRenderState(kaeStates[lu], 0u)) && lbSet;
++            sbA2cRequested = false;
++            AlphaCoverage_Reconcile();
++            CGS_ASSERT(lbSet, "could not suppress native survey pixel writes");
++            if (TraceActive())
++            {
++                DWORD lauActual[10] = {};
++                const bool lbActual = Read(lauActual);
++                Trace("draw", lbActual, lauActual, false);
++            }
++        }
++
++        OcclusionSurveyPixelWritesPC(const OcclusionSurveyPixelWritesPC&) = delete;
++        OcclusionSurveyPixelWritesPC& operator=(const OcclusionSurveyPixelWritesPC&) = delete;
++
++        ~OcclusionSurveyPixelWritesPC()
++        {
++            if (!mbArmed)
++                return;
++            bool lbSet = true;
++            for (u32 lu = 0; lu < 7u; ++lu)
++                lbSet = SUCCEEDED(mpDevice->SetRenderState(kaeStates[lu], mauSaved[lu])) && lbSet;
++            sbA2cRequested = mbSavedCoverageRequest;
++            AlphaCoverage_Reconcile();
++            CGS_ASSERT(lbSet, "could not restore native survey render states");
++            if (TraceActive())
++            {
++                DWORD lauActual[10] = {};
++                const bool lbRead = Read(lauActual);
++                const bool lbRestored = lbRead && std::memcmp(lauActual, mauSaved, sizeof(mauSaved)) == 0
++                    && sbA2cRequested == mbSavedCoverageRequest && sbA2cApplied == mbSavedCoverageApplied;
++                Trace("restored", lbRead, lauActual, lbRestored);
++            }
++        }
++    };
++
+     class OcclusionSurveyDrawAttemptPC
+     {
+         OcclusionSurveySubmissionTokenPC muToken = 0;
+@@ -4466,6 +4583,8 @@
+             if (muToken != 0)
+                 OcclusionQueryProviderPCFinishSurveySubmission(muToken, false);
+         }
++
++        OcclusionSurveySubmissionTokenPC GetToken() const { return muToken; }
+ 
+         void Complete(bool lbSubmitted)
+         {
+@@ -5059,12 +5178,17 @@
+                 spInstanceDraw->mpMatrices, spInstanceDraw->mpIndices, spInstanceDraw->muCount);
+         const bool lbDrawIssued = !spInstanceDraw || lbNativeInstances;
+         if (lbDrawIssued) ++renderengine::guDiagWorldDraws;
+-        const HRESULT lhrDraw = !lbDrawIssued ? D3D_OK : lbRetained
+-                ? static_cast<HRESULT>(WorldGeometry_Submit(lRetained, luBaseVertexIndex))
+-                : renderengine::GeometryBindingsPC::DrawIndexedPrimitiveUP(lpDevice, lePrim, 0, luNumVertices, luPrimCount,
+-                                                   lpIndices,
+-                                                   lb32Bit ? D3DFMT_INDEX32 : D3DFMT_INDEX16,
+-                                                   lpVertices, suVertexStride);
++        HRESULT lhrDraw;
++        {
++            // Original survey output suppression at the actual synchronous GPU submission.
++            OcclusionSurveyPixelWritesPC lSurveyPixelWrites(lpDevice, lSurveyDrawAttempt.GetToken());
++            lhrDraw = !lbDrawIssued ? D3D_OK : lbRetained
++                    ? static_cast<HRESULT>(WorldGeometry_Submit(lRetained, luBaseVertexIndex))
++                    : renderengine::GeometryBindingsPC::DrawIndexedPrimitiveUP(lpDevice, lePrim, 0, luNumVertices, luPrimCount,
++                                                       lpIndices,
++                                                       lb32Bit ? D3DFMT_INDEX32 : D3DFMT_INDEX16,
++                                                       lpVertices, suVertexStride);
++        }
+         const UINT luSubmittedPrimitiveCount = lbRetained ? lRetained.muPrimitiveCount : luPrimCount;
+         lSurveyDrawAttempt.Complete(lbDrawIssued && SUCCEEDED(lhrDraw)
+                                     && luSubmittedPrimitiveCount != 0);
+@@ -11272,10 +11396,10 @@
+     }
+ 
+     // FLAG PC-platform leaf: bracket the original box draw with one host query for the same ID.
+-    void D3DDevice_BeginConditionalSurvey(void* /*lpDevice*/, u32 luIdentifier, u32 /*luFlags*/)
++    void D3DDevice_BeginConditionalSurvey(void* /*lpDevice*/, u32 luIdentifier, u32 luFlags)
+     {
+         gpXboxD3DDevice = renderengine::gDevice;
+-        renderengine::OcclusionQueryProviderPCBeginSurvey(renderengine::gDevice, luIdentifier);
++        renderengine::OcclusionQueryProviderPCBeginSurvey(renderengine::gDevice, luIdentifier, luFlags);
+     }
+ 
+     void D3DDevice_EndConditionalSurvey(void* /*lpDevice*/, u32 /*luFlags*/)
