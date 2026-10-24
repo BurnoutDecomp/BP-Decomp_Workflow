@@ -1,0 +1,29 @@
+# Original menu-music payload and retained PC record
+
+This proposal is bound directly to committed source `41a321b9a72f922a86f153581258a1841880ed93`, workflow `943e7d8a9239d8b8780cd85f3054f51aa324f1b4`. It has seven code paths plus one explanatory comment path. Full preimages, postimages, blob IDs and hashes are in `BINDINGS.json`. There is no hidden c730/payload overlay, physical-source input or new shipping mount.
+
+The native Update's movie branches publish `GuiEventPlayMusicOnMenuStream` through the actual GUI OutputBuffer. ARTIST `8250C2A4/A8` passes8/id23. The current type is a complete20-byte transport record and would publish the wrong bytes at that native entry. Its current PC producers and sound compatibility check must keep their existing record contract while the genuine payload is recovered.
+
+## Original payload and publisher
+
+The canonical `CgsGui::GuiEventPlayMusicOnMenuStream` now has the actual DecFIGS h196..198 members: `CgsSound::Playback::Name mName`, `bool mbRewardsScreenCredits`, `bool mbOverrideCustomSoundtracks`. ARTIST `82476C20..34` reads their word/bytes from offsets0/4/5. The actual retained Name class stores a four-byte hash; static contracts pin Name4, event8 and bool offsets4/5. The common empty wire root inserts no transport prefix. There is no duplicate persistent state or field guessed from a host address.
+
+The genuine `StateInterface::OutputGuiEvent<GuiEventPlayMusicOnMenuStream>` specialization is now fully defined in the already mounted CgsGuiStateInterface.cpp. It uses the actual existing GuiEventWrapper owner to produce `{8,23,12}` plus the eight-byte payload, then queues it once on channel40 at size20, exactly as `82476C00`. Its return is void, per the ARTIST mangled signature. The old generic explicit-instantiation line is removed from the currently unmounted aggregate so it cannot later provide another definition or select the old direct-event body for this canonical type.
+
+The actual GUIOutput publisher definition is the template in `CgsGuiModuleIO.h`: a caller instantiating the canonical class obtains the real8-byte object and emits id23/size8, matching `8250C208`. Its existing int return declaration is unchanged; this recovery adds no use of that return value. `CgsGuiModuleIO_AddGuiOutEvent_Inst.cpp` names that same canonical class but is an unmounted aggregate, so it is evidence rather than a shipped-symbol witness. The likewise unmounted VariableEventQueue8192 aggregate over `CgsSound::Io::Message<canonical event>` now has the original8-byte data following the actual16-byte message header. The genuine Message and queue template bodies are available in their selected headers. No new mount or shipped instance is claimed from either aggregate.
+
+## PC behavior preservation
+
+The former20-byte class is retained exactly as `GuiMenuStreamRecordPC`, including its existing twelve-byte base header, three payload fields and constructor. Its class body reverses byte-for-byte to the prior class after the name change. The existing GuiModule0/2-argument movie branches, Credits and OfflineInstantResults select this explicit PC record. Their only code changes are type names and the corresponding sizeof contracts. Their constructor arguments, events, channels, byte counts, timing, queues and state changes are unchanged.
+
+The current SoundLogic compatibility check explicitly uses `sizeof(GuiMenuStreamRecordPC)`, preserving its existing20-byte threshold. Its entire body otherwise remains byte-identical. The existing original raw8-byte event23 path is already supported: GetGuiPayload leaves an eight-byte payload unchanged, the type23 consumer reads the word at0 and bytes4/5, and posts the actual8-byte MusicOnMenuStreamData to the sound-message owner. The retained full channel155 record branch remains the existing PC path; it is not broadened or treated as native input. The BrnMessageData.h change only names that retained PC record correctly in its explanation.
+
+No PC caller is redirected to the new native specialization in this packet. No stripping adapter, fabricated successful response, new playback policy, bridge shortcut, null guard or readiness flag is introduced. The new payload and original publisher are callable providers; native Update selection remains separate.
+
+## Postmortem and gates
+
+Assembly establishes the one-word/two-byte source reads,8/id23 direct publisher and20/channel40 wrapper. DecFIGS supplies the actual Name and bool field identities. The actual selected Name/GuiEventWrapper/GUIOutput/sound-message/variable-queue providers are retained as exact source evidence. The current PC record body and all affected PC source files are checked for mechanical reversibility. The sound consumer's new size spelling still means20. Natural four-byte payload alignment makes the wrapper's payload start12 and its total size20; no packing rule or pointer-width accommodation is added.
+
+The existing source snapshots cover the full selected provider declarations, definitions and downstream sound-consumer body. The exact build_game_exe.bat supplies the literal source list, and compile_exe.py parse_sources consumes only those response-file paths; it does not discover these unmounted aggregates. CgsGuiStateInterface.cpp is the mounted provider for the newly recovered specialization. Source static assertions and author inspection are not compilation. No C++ build, test, fixture import/evaluation, CI, download, game/input or IDB operation was run. Root alone owns fresh review, publication and execution.
+
+This checkpoint leaves the complete ten-argument GUI Update unselected. Its remaining callback/output/caller lifetime work and the unresolved82FB5924/25 latch definitions are not supplied by this event-family recovery. No independent debug-control disposition or runtime success is claimed.
