@@ -29,7 +29,9 @@ their membership and both logs preserve their bytes and modification times.
 
 ## Campaign counts
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **50 verified, seven original no-ops and 1,298 pending**. That is 57/1,355 (4.2%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+**October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation remain pending. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
+
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **52 verified, seven original no-ops and 1,296 pending**. That is 59/1,355 (4.4%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
