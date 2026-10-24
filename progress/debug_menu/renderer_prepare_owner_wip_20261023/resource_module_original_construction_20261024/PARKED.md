@@ -1,0 +1,3 @@
+Unsealed source draft, resumed after Root's2026-10-24 follow-up. The survey-state proposal is separately sealed and has passed Root's review/hosted gates.
+
+The resumed checkpoint has fourteen exact785 pre/post paths plus the explicit sealed FileSystem F1 correction overlay. The original ResourceModule constructor includes the real filesystem allocator,16-slot pending response pool,42 monitors, eleven trace resets and identified pending-patch latch/storage. It also now includes the genuine two-array PatchManager constructor and exact u32 SOA initializer. The one authorized raw read is complete and receipted. `REPORT.md` and `SEAL.json`, when present, define the final packet; this note records its earlier parked state and does not authorize activation.

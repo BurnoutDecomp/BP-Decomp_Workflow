@@ -1,0 +1,570 @@
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceModule.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceModule.h
+@@ -1,6 +1,8 @@
+ #pragma once
+ 
+ #include "types.hpp"
++#include "rw/rwcore_general_alloc.h"
++#include "GameShared/GameClasses/System/Resource/CgsResourceIOEvents.h" // complete retained patch request
+ #include "GameShared/GameClasses/Module/CgsModuleSingleBuffered.h"            // base
+ #include "GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.h"
+ #include "GameShared/GameClasses/System/Resource/CgsResourcePoolModule.h"
+@@ -47,6 +49,8 @@
+     {
+         friend class DebugComponent;
+     public:
++        // Original resource-construction monitor/trace owners; ARTIST829055B0.
++        static s32 _miUpdateTrace; // target82F34040
+         // DecFIGS h:134; ARTIST 82907948 preserves this enum result through the helper.
+         enum EUpdateResult { E_RESULT_OK = 0, E_RESULT_REQUIRE_STALL = 1 };
+ 
+@@ -108,7 +112,10 @@
+                 static_cast<s8>(KI_MAX_PENDING_FILE_SYSTEM_RESPONSES));
+         }
+ 
+-        void Construct(const void* lpInitOptions, void* lpAllocator);  // deferred
++        // Original three-input owner, separate from the retained native two-input path.
++        virtual void Construct(InitOptions* lpOptions, rw::IResourceAllocator* lpAllocator,
++                               rw::IResourceAllocator* lpDebugAllocator);
++        void Construct(const void* lpInitOptions, void* lpAllocator);
+         bool Prepare();    // 0x828F4140
+         bool Release();    // 0x82906570
+         void Destruct();   // deferred
+@@ -175,10 +182,16 @@
+         CgsMemory::MemoryModule   mMemoryModule;        // +0x46580 (a1+72032)
+         CgsFileSystem::FileSystem mFileSystem;          // +0x4684C (a1+72204)
+         DebugComponent            mDebugComponent;      // +0x52D18 (a1+84806)
+-        PendingFileResponse       maPendingFileResponses[KI_MAX_PENDING_FILE_SYSTEM_RESPONSES];
+-        s8                        maiPendingFileResponseFreeIndices[KI_MAX_PENDING_FILE_SYSTEM_RESPONSES];
++        // ARTIST829056D0..82905718; actual owned allocator precedes its pending pool.
++        rw::core::GeneralResourceAllocator* mpFileSystemAllocator;
+         CgsContainers::IndexedPool<PendingFileResponse,
+                                    KI_MAX_PENDING_FILE_SYSTEM_RESPONSES, s8>
+                                   mPendingFileResponses;
++        PendingFileResponse       maPendingFileResponses[KI_MAX_PENDING_FILE_SYSTEM_RESPONSES];
++        s8                        maiPendingFileResponseFreeIndices[KI_MAX_PENDING_FILE_SYSTEM_RESPONSES];
++        // X360-only names are descriptive:828FD5C8 sets the latch and copies the
++        // complete request;828EC788 sends its delayed response and clears it.
++        bool                      mbPendingPatch;
++        Events::AddPatchRequest    mPendingPatchRequest;
+     };
+ }
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp
+@@ -16,6 +16,8 @@
+ // Update preserves the loader -> pool -> memory order and delayed pool replies.
+ namespace CgsResource
+ {
++    // Original initial monitor words are -1; trace IDs are reset to zero by Construct.
++    s32 ResourceModule::_miUpdateTrace = 0; // target82F34040
+     // ARTIST 82F34004..1C raw initial words are all -1.
+     s32 ResourceModule::_miResourceUpdatePerfMon = -1;
+     s32 ResourceModule::_miProcessResourceRequestsPerfMon = -1;
+@@ -126,7 +128,152 @@
+         }
+     }
+ 
+-    // ARTIST829055B0: construct the modules over the supplied resource allocator.
++    // ARTIST829055B0..6568; all allocations use the actual supplied owner.
++    void ResourceModule::Construct(InitOptions* lpOptions, rw::IResourceAllocator* lpAllocator,
++                                   rw::IResourceAllocator* lpDebugAllocator)
++    {
++        CgsModule::ModuleSingleBuffered::Construct();
++        meReleaseStage = E_RELEASE_DONE;
++        mePrepareStage = E_PREPARE_START;
++        mMemoryModule.Construct(&lpOptions->mMemoryInitOptions, lpAllocator);
++        mBundleLoaderModule.Construct(&lpOptions->mLoaderInitOptions, lpAllocator, lpDebugAllocator);
++        mPoolModule.Construct(&lpOptions->mPoolInitOptions, lpAllocator, lpDebugAllocator);
++        mDebugComponent.Construct(this, &lpOptions->mDebugParams);
++
++        rw::ResourceDescriptor lCapacity;
++        for (u32 luLane = 0; luLane < rw::KU_RESOURCE_LANE_COUNT; ++luLane)
++        {
++            lCapacity.m_baseResourceDescriptors[luLane].m_size = 0;
++            lCapacity.m_baseResourceDescriptors[luLane].m_alignment = 1;
++        }
++        lCapacity.m_baseResourceDescriptors[0].m_size = 0x160000;
++        lCapacity.m_baseResourceDescriptors[0].m_alignment = 16;
++        rw::ResourceDescriptor lDescriptor;
++        rw::core::GeneralResourceAllocator::GetResourceDescriptor(&lDescriptor, &lCapacity);
++        const rw::Resource lResource = lpAllocator->DoAllocate(lDescriptor, nullptr);
++        mpFileSystemAllocator = rw::core::GeneralResourceAllocator::Initialize(lResource, lCapacity);
++        mFileSystem.Construct(mpFileSystemAllocator, lpDebugAllocator,
++                              lpOptions->macFileSearchPath, lpOptions->mpDiskLayout);
++        mPendingFileResponses.Construct(maPendingFileResponses, maiPendingFileResponseFreeIndices,
++                                       static_cast<s8>(KI_MAX_PENDING_FILE_SYSTEM_RESPONSES));
++
++        const auto RegisterMonitor = [](s32& liMonitor, const char* lpcName,
++                                        const char* lpcAssertion, s32 liLine)
++        {
++            if (liMonitor == -1)
++            {
++                liMonitor = CgsDev::PerfMonCpu::AddMonitor(lpcName, CgsDev::E_PMP_1, false, 5.0f, false);
++                if (liMonitor < 0)
++                {
++                    CgsDev::Assert::BeginAssert();
++                    CgsDev::Assert::FireAssert(lpcAssertion,
++                        "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\resource\\CgsResourceModule.cpp",
++                        liLine);
++                    CgsDev::Assert::EndAssert();
++                }
++            }
++        };
++        RegisterMonitor(ResourceModule::_miResourceUpdatePerfMon, "Resource update",
++            "CgsResource::ResourceModule::_miResourceUpdatePerfMon >= 0", 100);
++        RegisterMonitor(ResourceModule::_miProcessResourceRequestsPerfMon, "  Process requests",
++            "CgsResource::ResourceModule::_miProcessResourceRequestsPerfMon >= 0", 101);
++        RegisterMonitor(ResourceModule::_miUpdateBundleLoaderPerfMon, "  Bundle loader",
++            "CgsResource::ResourceModule::_miUpdateBundleLoaderPerfMon >= 0", 102);
++        RegisterMonitor(ResourceModule::_miUpdatePoolPerfMon, "  Pool",
++            "CgsResource::ResourceModule::_miUpdatePoolPerfMon >= 0", 103);
++        RegisterMonitor(ResourceModule::_miUpdateMemoryPerfMon, "  Memory",
++            "CgsResource::ResourceModule::_miUpdateMemoryPerfMon >= 0", 104);
++        RegisterMonitor(ResourceModule::_miUpdateFileSystemPerfMon, "  File system",
++            "CgsResource::ResourceModule::_miUpdateFileSystemPerfMon >= 0", 105);
++        RegisterMonitor(ResourceModule::_miUpdateOutputPerfMon, "  Output",
++            "CgsResource::ResourceModule::_miUpdateOutputPerfMon >= 0", 106);
++        RegisterMonitor(Pool::_miPoolModuleStatePerfMon, "Pool state update",
++            "CgsResource::Pool::_miPoolModuleStatePerfMon >= 0", 108);
++        RegisterMonitor(Pool::_miPoolModuleIdle, "  PS Idle",
++            "CgsResource::Pool::_miPoolModuleIdle >= 0", 109);
++        RegisterMonitor(Pool::_miPoolModuleAllocating, "  PS Alloc",
++            "CgsResource::Pool::_miPoolModuleAllocating >= 0", 110);
++        RegisterMonitor(Pool::_miPoolModuleDeallocating, "  PS DeAlloc",
++            "CgsResource::Pool::_miPoolModuleDeallocating >= 0", 111);
++        RegisterMonitor(Pool::_miPoolModuleLiveupdate, "  PS LiveUpd",
++            "CgsResource::Pool::_miPoolModuleLiveupdate >= 0", 112);
++        RegisterMonitor(Pool::_miPoolModuleIntellifrag, "  PS Intellifrag",
++            "CgsResource::Pool::_miPoolModuleIntellifrag >= 0", 113);
++        RegisterMonitor(Pool::_miPoolModuleEmergencyFrag, "  PS Emergencyfrag",
++            "CgsResource::Pool::_miPoolModuleEmergencyFrag >= 0", 114);
++        RegisterMonitor(CgsMemory::Relocator::_miExecutePerfMon, "    Relocator Exec",
++            "CgsMemory::Relocator::_miExecutePerfMon >= 0", 115);
++        RegisterMonitor(CgsMemory::Relocator::_miGPUCopyPerfMon, "      Relocator GPU",
++            "CgsMemory::Relocator::_miGPUCopyPerfMon >= 0", 116);
++        RegisterMonitor(CgsMemory::Relocator::_miUpdatePerfMon, "    Relocator Update",
++            "CgsMemory::Relocator::_miUpdatePerfMon >= 0", 117);
++        RegisterMonitor(Pool::_miPoolUpdatePerfMon, "Pool update",
++            "CgsResource::Pool::_miPoolUpdatePerfMon >= 0", 119);
++        RegisterMonitor(Pool::_miPoolDeleteHashEntryPerfMon, "  Delete hash entry",
++            "CgsResource::Pool::_miPoolDeleteHashEntryPerfMon >= 0", 120);
++        RegisterMonitor(Pool::_miPoolDeleteMemoryPerfMon, "  Delete memory",
++            "CgsResource::Pool::_miPoolDeleteMemoryPerfMon >= 0", 121);
++        RegisterMonitor(Pool::_miPoolDeleteResourcePerfMon, "  Delete resource",
++            "CgsResource::Pool::_miPoolDeleteResourcePerfMon >= 0", 122);
++        RegisterMonitor(Pool::_miPoolAllocateResourceListPerfMon, "Pool alloc list",
++            "CgsResource::Pool::_miPoolAllocateResourceListPerfMon >= 0", 124);
++        RegisterMonitor(Pool::_miPoolFixupPerfMon, "Pool fixup",
++            "CgsResource::Pool::_miPoolFixupPerfMon >= 0", 138);
++        RegisterMonitor(Pool::_miPoolFindByIndexPerfMon, "Pool search by index",
++            "CgsResource::Pool::_miPoolFindByIndexPerfMon >= 0", 139);
++        RegisterMonitor(Pool::_miPoolFixupResourcePerfMon, "Pool fixup resource",
++            "CgsResource::Pool::_miPoolFixupResourcePerfMon >= 0", 140);
++        RegisterMonitor(Pool::_miPoolFindTypePerfMon, "Pool find resource type",
++            "CgsResource::Pool::_miPoolFindTypePerfMon >= 0", 141);
++        RegisterMonitor(Pool::_miPoolDefragPerfMon, "Pool defrag",
++            "CgsResource::Pool::_miPoolDefragPerfMon >= 0", 143);
++        RegisterMonitor(Pool::_miPoolDefragWFInitialDeathsPerfMon, "  Pool WF Initial Deaths",
++            "CgsResource::Pool::_miPoolDefragWFInitialDeathsPerfMon >= 0", 144);
++        RegisterMonitor(Pool::_miPoolDefragMakeTempPerfMon, "  Pool defrag make temp",
++            "CgsResource::Pool::_miPoolDefragMakeTempPerfMon >= 0", 145);
++        RegisterMonitor(Pool::_miPoolDefragMoveToTempPerfMon, "    Move temp",
++            "CgsResource::Pool::_miPoolDefragMoveToTempPerfMon >= 0", 146);
++        RegisterMonitor(Pool::_miPoolDefragResolveTempPerfMon, "    Temp resolve",
++            "CgsResource::Pool::_miPoolDefragResolveTempPerfMon >= 0", 147);
++        RegisterMonitor(Pool::_miPoolDefragWFSourceDeathsPerfMon, "  Pool WF Source Deaths",
++            "CgsResource::Pool::_miPoolDefragWFSourceDeathsPerfMon >= 0", 148);
++        RegisterMonitor(Pool::_miPoolDefragMakeDestPerfMon, "  Pool defrag make dest",
++            "CgsResource::Pool::_miPoolDefragMakeDestPerfMon >= 0", 149);
++        RegisterMonitor(Pool::_miPoolDefragMoveToDestPerfMon, "    Move dest",
++            "CgsResource::Pool::_miPoolDefragMoveToDestPerfMon >= 0", 150);
++        RegisterMonitor(Pool::_miPoolDefragMoveDestRebasePerfMon, "      Dest rebase",
++            "CgsResource::Pool::_miPoolDefragMoveDestRebasePerfMon >= 0", 151);
++        RegisterMonitor(Pool::_miPoolDefragResolveDestPerfMon, "    Dest resolve",
++            "CgsResource::Pool::_miPoolDefragResolveDestPerfMon >= 0", 152);
++        RegisterMonitor(Pool::_miPoolDefragWFTempDeathsPerfMon, "  Pool WF Temp Deaths",
++            "CgsResource::Pool::_miPoolDefragWFTempDeathsPerfMon >= 0", 153);
++        RegisterMonitor(Pool::_miPoolDefragWFDonePerfMon, "  Pool Done",
++            "CgsResource::Pool::_miPoolDefragWFDonePerfMon >= 0", 154);
++        RegisterMonitor(BundleLoaderModule::_miUpdatePerfMon, "Loader update",
++            "CgsResource::BundleLoaderModule::_miUpdatePerfMon >= 0", 156);
++        RegisterMonitor(BundleLoaderModule::_miStreamUpdate, "  Stream update",
++            "CgsResource::BundleLoaderModule::_miStreamUpdate >= 0", 157);
++        RegisterMonitor(BundleLoaderModule::_miStreamEntryCopy, "    Entry MemCpy",
++            "CgsResource::BundleLoaderModule::_miStreamEntryCopy >= 0", 158);
++        RegisterMonitor(BundleLoaderModule::_miStreamDataCopy, "    Data MemCpy",
++            "CgsResource::BundleLoaderModule::_miStreamDataCopy >= 0", 159);
++
++        ResourceModule::_miUpdateTrace = 0;
++        PoolModule::_miAllocateListTraceId = 0;
++        PoolModule::_miFixupListTraceId = 0;
++        PoolModule::_miAllocateStateTraceId = 0;
++        PoolModule::_miIntellifragStateTraceId = 0;
++        Pool::_miPoolAddTempTrace = 0;
++        Pool::_miResolveAllTrace = 0;
++        Pool::_miFixupTrace = 0;
++        BundleLoaderModule::_miTraceStreamUpdate_StreamHeader = 0;
++        BundleLoaderModule::_miTraceStreamUpdate_StreamEntries = 0;
++        BundleLoaderModule::_miTraceStreamUpdate_StreamData = 0;
++        mbIsNewModule = true;
++        mbPendingPatch = false;
++    }
++
++    // Retained native two-input construction path.
+     // FileSystem uses its existing native device-manager adapter.
+     void ResourceModule::Construct(const void* lpInitOptions, void* lpAllocator)
+     {
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourcePool.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourcePool.h
+@@ -78,6 +78,30 @@
+         friend class DebugPoolTypeList; //ARTIST828EEB28..48 reads the named heap capacities
+ 
+     public:
++        // Original resource-construction monitor/trace owners; ARTIST829055B0.
++        static s32 _miPoolDeleteHashEntryPerfMon; // target82F340B4
++        static s32 _miPoolDeleteMemoryPerfMon; // target82F340B8
++        static s32 _miPoolDeleteResourcePerfMon; // target82F340BC
++        static s32 _miPoolAllocateResourceListPerfMon; // target82F34064
++        static s32 _miPoolFixupPerfMon; // target82F34074
++        static s32 _miPoolFindByIndexPerfMon; // target82F34078
++        static s32 _miPoolFixupResourcePerfMon; // target82F3407C
++        static s32 _miPoolFindTypePerfMon; // target82F340B0
++        static s32 _miPoolDefragPerfMon; // target82F34080
++        static s32 _miPoolDefragWFInitialDeathsPerfMon; // target82F34084
++        static s32 _miPoolDefragMakeTempPerfMon; // target82F34094
++        static s32 _miPoolDefragMoveToTempPerfMon; // target82F3409C
++        static s32 _miPoolDefragResolveTempPerfMon; // target82F340A8
++        static s32 _miPoolDefragWFSourceDeathsPerfMon; // target82F34088
++        static s32 _miPoolDefragMakeDestPerfMon; // target82F34098
++        static s32 _miPoolDefragMoveToDestPerfMon; // target82F340A0
++        static s32 _miPoolDefragMoveDestRebasePerfMon; // target82F340A4
++        static s32 _miPoolDefragResolveDestPerfMon; // target82F340AC
++        static s32 _miPoolDefragWFTempDeathsPerfMon; // target82F3408C
++        static s32 _miPoolDefragWFDonePerfMon; // target82F34090
++        static s32 _miPoolAddTempTrace; // target82F340C0
++        static s32 _miResolveAllTrace; // target82F340C4
++        static s32 _miFixupTrace; // target82F340C8
+         // DecFIGS h135..142; ARTIST raw82F34044..60, original Construct owns registration.
+         static s32 _miPoolUpdatePerfMon;
+         static s32 _miPoolModuleStatePerfMon;
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourcePool.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourcePool.cpp
+@@ -40,6 +40,30 @@
+ 
+ namespace CgsResource
+ {
++    // Original initial monitor words are -1; trace IDs are reset to zero by Construct.
++    s32 Pool::_miPoolDeleteHashEntryPerfMon = -1; // target82F340B4
++    s32 Pool::_miPoolDeleteMemoryPerfMon = -1; // target82F340B8
++    s32 Pool::_miPoolDeleteResourcePerfMon = -1; // target82F340BC
++    s32 Pool::_miPoolAllocateResourceListPerfMon = -1; // target82F34064
++    s32 Pool::_miPoolFixupPerfMon = -1; // target82F34074
++    s32 Pool::_miPoolFindByIndexPerfMon = -1; // target82F34078
++    s32 Pool::_miPoolFixupResourcePerfMon = -1; // target82F3407C
++    s32 Pool::_miPoolFindTypePerfMon = -1; // target82F340B0
++    s32 Pool::_miPoolDefragPerfMon = -1; // target82F34080
++    s32 Pool::_miPoolDefragWFInitialDeathsPerfMon = -1; // target82F34084
++    s32 Pool::_miPoolDefragMakeTempPerfMon = -1; // target82F34094
++    s32 Pool::_miPoolDefragMoveToTempPerfMon = -1; // target82F3409C
++    s32 Pool::_miPoolDefragResolveTempPerfMon = -1; // target82F340A8
++    s32 Pool::_miPoolDefragWFSourceDeathsPerfMon = -1; // target82F34088
++    s32 Pool::_miPoolDefragMakeDestPerfMon = -1; // target82F34098
++    s32 Pool::_miPoolDefragMoveToDestPerfMon = -1; // target82F340A0
++    s32 Pool::_miPoolDefragMoveDestRebasePerfMon = -1; // target82F340A4
++    s32 Pool::_miPoolDefragResolveDestPerfMon = -1; // target82F340AC
++    s32 Pool::_miPoolDefragWFTempDeathsPerfMon = -1; // target82F3408C
++    s32 Pool::_miPoolDefragWFDonePerfMon = -1; // target82F34090
++    s32 Pool::_miPoolAddTempTrace = 0; // target82F340C0
++    s32 Pool::_miResolveAllTrace = 0; // target82F340C4
++    s32 Pool::_miFixupTrace = 0; // target82F340C8
+     s32 Pool::_miPoolUpdatePerfMon = -1;
+     s32 Pool::_miPoolModuleStatePerfMon = -1;
+     s32 Pool::_miPoolModuleIdle = -1;
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourcePoolModule.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourcePoolModule.h
+@@ -52,6 +52,11 @@
+         friend class DebugPoolTypeList; //ARTIST828E4334..4388 reads the registered type names
+ 
+     public:
++        // Original resource-construction monitor/trace owners; ARTIST829055B0.
++        static s32 _miAllocateListTraceId; // target82F33FF4
++        static s32 _miFixupListTraceId; // target82F33FF8
++        static s32 _miAllocateStateTraceId; // target82F33FFC
++        static s32 _miIntellifragStateTraceId; // target82F34000
+         static const s32 KI_MAX_POOLS = 128;
+         static const s32 KI_MAX_TYPES = 128;
+         // Defrag-path capacities (DWARF CgsPoolModule.h:61-64) -- the IntelliFrag/EmergencyFrag passes
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourcePoolModule.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourcePoolModule.cpp
+@@ -19,6 +19,11 @@
+ // dispatch is integrated separately from construction of its working state.
+ namespace CgsResource
+ {
++    // Original initial monitor words are -1; trace IDs are reset to zero by Construct.
++    s32 PoolModule::_miAllocateListTraceId = 0; // target82F33FF4
++    s32 PoolModule::_miFixupListTraceId = 0; // target82F33FF8
++    s32 PoolModule::_miAllocateStateTraceId = 0; // target82F33FFC
++    s32 PoolModule::_miIntellifragStateTraceId = 0; // target82F34000
+     namespace
+     {
+         const char* const KPC_POOLMODULE_CREATE_SRC =
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.h
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.h
+@@ -29,6 +29,13 @@
+ class BundleLoaderModule : public CgsModule::ModuleSingleBuffered {
+     friend class DebugComponent;
+ public:
++        // Original resource-construction monitor/trace owners; ARTIST829055B0.
++        static s32 _miStreamUpdate; // target82F33FD8
++        static s32 _miStreamEntryCopy; // target82F33FDC
++        static s32 _miStreamDataCopy; // target82F33FE0
++        static s32 _miTraceStreamUpdate_StreamHeader; // target82F33FE4
++        static s32 _miTraceStreamUpdate_StreamEntries; // target82F33FE8
++        static s32 _miTraceStreamUpdate_StreamData; // target82F33FEC
+     static s32 _miUpdatePerfMon; // DecFIGS cpp32; ARTIST82F33FD4
+     enum EStage { E_STAGE_START=0, E_STAGE_RUNNING=1, E_STAGE_DONE=2 };
+     enum EStreamStage {
+--- a/src/GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.cpp
++++ b/src/GameShared/GameClasses/System/Resource/CgsResourceBundleLoaderModule.cpp
+@@ -11,6 +11,13 @@
+ // protocol in CgsBundleLoaderModule.cpp with allocator-backed stream buffers.
+ namespace CgsResource
+ {
++    // Original initial monitor words are -1; trace IDs are reset to zero by Construct.
++    s32 BundleLoaderModule::_miStreamUpdate = -1; // target82F33FD8
++    s32 BundleLoaderModule::_miStreamEntryCopy = -1; // target82F33FDC
++    s32 BundleLoaderModule::_miStreamDataCopy = -1; // target82F33FE0
++    s32 BundleLoaderModule::_miTraceStreamUpdate_StreamHeader = 0; // target82F33FE4
++    s32 BundleLoaderModule::_miTraceStreamUpdate_StreamEntries = 0; // target82F33FE8
++    s32 BundleLoaderModule::_miTraceStreamUpdate_StreamData = 0; // target82F33FEC
+     s32 BundleLoaderModule::_miUpdatePerfMon = -1; // ARTIST raw82F33FD4
+ 
+     // FLAG PC-platform leaf: resource destinations must outlive native workers.
+--- a/src/GameShared/Jobs/Relocator/CgsRelocator.h
++++ b/src/GameShared/Jobs/Relocator/CgsRelocator.h
+@@ -53,6 +53,10 @@
+     class Relocator
+     {
+     public:
++        // Original resource-construction monitor/trace owners; ARTIST829055B0.
++        static s32 _miExecutePerfMon; // target82F3344C
++        static s32 _miGPUCopyPerfMon; // target82F33454
++        static s32 _miUpdatePerfMon; // target82F33450
+         // The implicit constructor forwards null to the contained Job in both
+         // ARTIST callers: ReplayModule 827E041C..042C and PoolModule
+         // 827E08AC..08BC. Execute supplies "Relocator" when the job is submitted.
+--- a/src/GameShared/Jobs/Relocator/CgsRelocator.cpp
++++ b/src/GameShared/Jobs/Relocator/CgsRelocator.cpp
+@@ -16,14 +16,15 @@
+ 
+ namespace CgsMemory
+ {
++    // Original initial monitor words are -1; trace IDs are reset to zero by Construct.
++    s32 Relocator::_miExecutePerfMon = -1; // target82F3344C
++    s32 Relocator::_miGPUCopyPerfMon = -1; // target82F33454
++    s32 Relocator::_miUpdatePerfMon = -1; // target82F33450
+     // The three CPU monitor handles this engine times itself with. The resource module's
+     // perfmon registration block seeds them ("Relocator Exec" / "Relocator GPU" /
+     // "Relocator Update"); until it does they hold the unregistered sentinel and
+     // Start/StopMonitor ignore them. -1 is the console's initialiser, NOT zero - zero is a
+     // valid monitor handle.
+-    static s32 giRelocatorExecMonitor   = -1;
+-    static s32 giRelocatorGpuMonitor    = -1;
+-    static s32 giRelocatorUpdateMonitor = -1;
+ 
+     // Reset both running latches.
+     Relocator* Relocator::Construct()
+@@ -39,8 +40,8 @@
+     {
+         CGS_ASSERT(!mbRunningExternally && !mbRunning, "Already running\n");
+ 
+-        CgsDev::PerfMonCpu::StartMonitor(giRelocatorExecMonitor);
+-        CgsDev::PerfMonCpu::StartMonitor(giRelocatorGpuMonitor);
++        CgsDev::PerfMonCpu::StartMonitor(_miExecutePerfMon);
++        CgsDev::PerfMonCpu::StartMonitor(_miGPUCopyPerfMon);
+ 
+         // The snapshot: the job reads this block, not the caller's params.
+         mJobData.mpOps              = lpParams->mpOps;
+@@ -51,7 +52,7 @@
+ 
+         const s32 liNumOps = lpParams->miNumOps;
+ 
+-        CgsDev::PerfMonCpu::StopMonitor(giRelocatorGpuMonitor);
++        CgsDev::PerfMonCpu::StopMonitor(_miGPUCopyPerfMon);
+ 
+         if (liNumOps > 0)
+         {
+@@ -69,13 +70,13 @@
+             CgsSystem::JobManager()->AddJobs(&mJob, 1);
+         }
+ 
+-        CgsDev::PerfMonCpu::StopMonitor(giRelocatorExecMonitor);
++        CgsDev::PerfMonCpu::StopMonitor(_miExecutePerfMon);
+     }
+ 
+     // Poll the copy job and report whether the engine has gone idle.
+     bool Relocator::Update(bool lbClearExternalLatch, bool lbBlock)
+     {
+-        CgsDev::PerfMonCpu::StartMonitor(giRelocatorUpdateMonitor);
++        CgsDev::PerfMonCpu::StartMonitor(_miUpdatePerfMon);
+ 
+         if (lbClearExternalLatch)
+         {
+@@ -96,7 +97,7 @@
+             // Otherwise the job is still going and the latch stays set.
+         }
+ 
+-        CgsDev::PerfMonCpu::StopMonitor(giRelocatorUpdateMonitor);
++        CgsDev::PerfMonCpu::StopMonitor(_miUpdatePerfMon);
+ 
+         return !mbRunningExternally && !mbRunning;
+     }
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.h
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.h
+@@ -1,7 +1,7 @@
+ #pragma once
+ 
+ #include "types.hpp"
+-#include "GameShared/GameClasses/Containers/CgsLinearHashTable.h"   // CgsContainers::LinearHashTable
++#include "GameShared/GameClasses/Containers/CgsLinearSOAHashTable.h" // separate original key/value arrays
+ #include "eathread/eathread_thread.h"                               // EA::Thread::Thread
+ #include "rw/rwcore_structs.h"                                      // rw::IResourceAllocator (entry storage)
+ 
+@@ -21,7 +21,7 @@
+ // letter + back-slashes) for the FindFirstFile scan.
+ //
+ // LATER patches do NOT automatically win: when two patches both contain the same file, the map keeps
+-// whichever patch has the SMALLER miValue (the integer passed to AddPatch as the patch's priority
++// whichever patch has the LARGER miValue (the integer passed to AddPatch as the patch's priority
+ // key) - see AddFileToCurrentPatch.
+ //
+ // SOURCES (X360 ARTIST): Construct 0x828F0980, AddPatch 0x828F8F80, DirSearchThreadProc 0x828F0B88,
+@@ -53,7 +53,7 @@
+         static const u32 KU_PATCH_FILE_MAP_SIZE = 4096;
+ 
+         // @0x828F0980 (boot trace). Stash the resource allocator, zero the current-patch index, bring
+-        // up the path-hash map (length 0x1000) over allocator-supplied entry storage, clear the
++        // up the path-hash map (length0x1000) over separate allocator-owned keys/values, clear the
+         // "patching" flag and publish the singleton instance pointer. `lpAllocator` is the object the
+         // X360 stores at +0 and whose virtual Alloc carves the map's entry array (and, later, the
+         // directory-search thread's scratch).
+@@ -94,7 +94,7 @@
+         rw::IResourceAllocator*              mpAllocator;                   // +0    (0)    entry storage
+         PatchEntry                           maPatches[KU_MAX_PATCHES];     // +4    (4)    32 * 68
+         s32                                  muCurrentPatchIndex;           // +0x884 (2180)
+-        CgsContainers::LinearHashTable<s32, s32> mPatchFileMap;             // +0x888 (2184)
++        CgsContainers::LinearSOAHashTable<s32, u32> mPatchFileMap;             // +0x888 (2184)
+         bool                                 mbPatching;                    // +0x898 (2200)
+         s32                                  miSearchHandleCount;           // +0x89C (2204) scan result
+         EA::Thread::Thread                   mDirSearchThread;              // +0x8A0 (2208)
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.cpp
+@@ -32,27 +32,17 @@
+             reinterpret_cast<unsigned char*>(const_cast<char*>(lpcPath)));
+     }
+ 
+-    // @0x828F0980 (boot trace).
++    // ARTIST828F0980..0A74: two distinct main-memory arrays, not interleaved entries.
+     void PatchManager::Construct(rw::IResourceAllocator* lpAllocator)
+     {
+-        mpAllocator         = lpAllocator;
++        mpAllocator = lpAllocator;
+         muCurrentPatchIndex = 0;
+-
+-        // The X360 carves the map's entry array from the allocator (a 16384-byte, 16-aligned
+-        // descriptor[0] request) and binds the LinearHashTable<s32,s32> to it with length 0x1000.
+-        // The length 0x1000 is the grounded immediate (Construct r6 = 0x1000); the entry storage is
+-        // sized for KU_PATCH_FILE_MAP_SIZE slots.
+-        rw::ResourceDescriptor lDescriptor;
+-        lDescriptor.m_baseResourceDescriptors[0].m_size =
+-            KU_PATCH_FILE_MAP_SIZE * sizeof(CgsContainers::LinearHashEntry<s32, s32>);
+-        lDescriptor.m_baseResourceDescriptors[0].m_alignment = 16;
+-        rw::Resource lResource = mpAllocator->DoAllocate(lDescriptor, 0);
+-
+-        CgsContainers::LinearHashEntry<s32, s32>* lpEntries =
+-            static_cast<CgsContainers::LinearHashEntry<s32, s32>*>(lResource.m_baseResources[0]);
+-        mPatchFileMap.Initialize(lpEntries, KU_PATCH_FILE_MAP_SIZE);
+-
+-        mbPatching     = false;
++        u32* const lpKeys = static_cast<u32*>(mpAllocator->AllocateMemoryResource(
++            KU_PATCH_FILE_MAP_SIZE * static_cast<u32>(sizeof(u32)), 16, nullptr));
++        s32* const lpValues = static_cast<s32*>(mpAllocator->AllocateMemoryResource(
++            KU_PATCH_FILE_MAP_SIZE * static_cast<u32>(sizeof(s32)), 16, nullptr));
++        mPatchFileMap.Initialize(lpKeys, lpValues, KU_PATCH_FILE_MAP_SIZE);
++        mbPatching = false;
+         gpPatchManager = this;
+     }
+ 
+@@ -150,7 +140,7 @@
+ 
+         const u32 luHash = HashPath(lpcFile);
+ 
+-        s32* lpExisting = mPatchFileMap.FindEntry(static_cast<s32>(luHash));
++        s32* lpExisting = mPatchFileMap.FindEntry(luHash);
+         if (lpExisting)
+         {
+             // The path is already claimed. The patch with the LARGER priority key wins the clash
+@@ -162,7 +152,7 @@
+         }
+         else
+         {
+-            mPatchFileMap.AddEntry(static_cast<s32>(luHash), &muCurrentPatchIndex);
++            mPatchFileMap.AddEntry(luHash, &muCurrentPatchIndex);
+         }
+     }
+ 
+@@ -171,7 +161,7 @@
+     {
+         const u32 luHash = HashPath(lpcSource);
+ 
+-        s32* lpEntry = mPatchFileMap.FindEntry(static_cast<s32>(luHash));
++        s32* lpEntry = mPatchFileMap.FindEntry(luHash);
+         if (lpEntry)
+         {
+             // Claimed by a patch: rewrite to "<patchFolder>/<sourcePath>".
+--- a/src/GameShared/GameClasses/Containers/CgsLinearSOAHashTable.h
++++ b/src/GameShared/GameClasses/Containers/CgsLinearSOAHashTable.h
+@@ -131,4 +131,7 @@
+         KeyType*   mpKeys;       // key array base
+         ValueType* mpValues;     // value array base
+     };
++    // Original PatchManager instantiation: u32 hash/length, s32 owning-patch value.
++    template <>
++    void LinearSOAHashTable<s32, u32>::Initialize(u32* lpKeys, s32* lpValues, u32 luLength);
+ }
+--- a/src/GameShared/GameClasses/Containers/CgsLinearSOAHashTable.cpp
++++ b/src/GameShared/GameClasses/Containers/CgsLinearSOAHashTable.cpp
+@@ -19,9 +19,33 @@
+ //   phase1 [start,len): r10=[a1+8]=keys ; == key -> hit: values=[a1+0xC], return + 4*pos ; ==
+ //     invalidKey -> return 0 ; else ++pos,+=4 ; wrap to phase2 at len ; NO assert.
+ #include "GameShared/GameClasses/Containers/CgsLinearSOAHashTable.h"
++#include "GameShared/GameClasses/Development/CgsStrStream.h"
+ 
+ namespace CgsContainers
+ {
++    // ARTIST828E9BC8..9CBC. The unsigned comparisons and four-byte key stride
++    // attest this concrete key width; the original values array remains untouched.
++    template <>
++    void LinearSOAHashTable<s32, u32>::Initialize(u32* lpKeys, s32* lpValues, u32 luLength)
++    {
++        if (luLength == 0 || ((luLength - 1u) & luLength) != 0)
++        {
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::MessageBufferPC lBuffer;
++            CgsDev::StrStream lStream(lBuffer.GetBuffer(), lBuffer.GetSize());
++            lStream << "Length of hash table must be more than 0 and a power of 2\n";
++            CgsDev::Assert::FireAssert(lBuffer.GetBuffer(),
++                "..\\..\\..\\GameShared\\GameClasses\\Containers/CgsLinearSOAHashTable.h", 167);
++            CgsDev::Assert::EndAssert();
++        }
++        miLength = luLength;
++        mpKeys = lpKeys;
++        mpValues = lpValues;
++        miInvalidKey = 0xFFFFFFFFu;
++        for (u32 luSlot = 0; luSlot < miLength; ++luSlot)
++            mpKeys[luSlot] = miInvalidKey;
++    }
++
+     // Force emission of the <int,int> AddEntry/FindEntry bodies (X360 0x828DF260 / 0x828DF3E0).
+     template int* LinearSOAHashTable<int, int>::AddEntry(int, const int*);
+     template int* LinearSOAHashTable<int, int>::FindEntry(int);
