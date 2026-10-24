@@ -471,7 +471,8 @@ function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision
     if ($row.command -notmatch '\Acl ' -or $row.command -match '[\r\n]' -or $scriptText -cne $expectedScript) {
         throw 'Traffic flowtype retained command script differs from the helper contract.'
     }
-    if ($extraction.schema -ne 1 -or $extraction.source_revision -cne $Revision -or
+    if ($extraction.schema -ne 2 -or $extraction.source_revision -cne $Revision -or
+        $extraction.shared_provider_revision -cne $B5Commit -or
         $extraction.include_name -cne 'traffic_flowtype_override.inc' -or $extraction.source_objects.Count -ne 5) {
         throw 'Traffic flowtype extraction revision/shape differs.'
     }
@@ -481,7 +482,8 @@ function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision
         'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
         'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
         'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')) {
-        $expectedBlob = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${Revision}:$relative")
+        $inputRevision = if ($relative -like 'src/GameShared/GameClasses/System/Resource/*') { $B5Commit } else { $Revision }
+        $expectedBlob = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${inputRevision}:$relative")
         if ($extraction.source_objects[$relative] -cne $expectedBlob) { throw 'Traffic flowtype source blob differs.' }
     }
     $includeText = [IO.File]::ReadAllText((Join-Path $VariantRoot 'traffic_flowtype_override.inc')).Replace("`r`n", "`n")
@@ -497,6 +499,7 @@ function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision
         result = Get-FileRecord (Join-Path $VariantRoot 'result.json')
         extraction = Get-FileRecord (Join-Path $VariantRoot 'extraction.json')
         compiled_inputs = $row.inputs; source_objects = $extraction.source_objects
+        shared_provider_revision = $extraction.shared_provider_revision
     }
 }
 
@@ -706,7 +709,7 @@ try {
         # Fix the reviewed harness while allowing the requested production revision to vary.
         $flowHarnessPins = @{
             'tests/TrafficFlowtypeOverride.cpp' = 'ca57fb44af73b7ffdc6903484dc7648def57dd9e07ae2e396f565bd8c4b61158'
-            'tests/run_traffic_flowtype_override.py' = 'f5b8bb80a80aa1b0ef8044b3459eee71d9d5ea26d17a0980d6bae31ea0a028b6'
+            'tests/run_traffic_flowtype_override.py' = '2f38f2274dfaa8cb82f6e39af72482b23cfb71aa13decb66f5b5611f8f7d2f99'
             'tests/fxgs_common.py' = '6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033'
         }
         foreach ($relative in $flowHarnessPins.Keys) {
@@ -745,15 +748,29 @@ try {
         }
         $flowBaseline = '8fec93bd4d2806ca9b60fb53dc272fe28081f8b8'
         Invoke-Native git @('-C', $SourceRoot, 'fetch', '--recurse-submodules=no', '--no-tags', '--depth=1', 'origin', $flowBaseline) 'source.log'
-        # These real compiled providers are shared by both variants; require exact control blobs.
+        # Both variants compile the actual candidate providers. Admit only the
+        # separately reviewed additive debug-stream operator; every pre-existing
+        # body remains the exact control. All other provider differences fail.
+        $flowProviderComparison = @{}
         foreach ($relative in @(
             'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
             'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
             'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')) {
             $candidateProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${B5Commit}:$relative")
             $controlProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${flowBaseline}:$relative")
-            if ($candidateProvider -cne $controlProvider) { throw 'Flowtype fixture provider differs from exact control.' }
+            $comparison = 'identical_to_control'
+            if ($candidateProvider -cne $controlProvider) {
+                if ($relative -cne 'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp' -or
+                    $controlProvider -cne 'bf0a372707438d6c7df1c39cc2182f98371b41f3' -or
+                    $candidateProvider -cne '96962e52dba2e4514af98d05861e8a0617e614dc') {
+                    throw 'Flowtype fixture provider differs from the exact reviewed pair.'
+                }
+                $comparison = 'exact_reviewed_additive_stream_operator_183ca9c9'
+            }
+            $flowProviderComparison[$relative] = @{control_blob=$controlProvider; shared_compiled_blob=$candidateProvider; comparison=$comparison}
+
         }
+        $Receipt.regressions.traffic_flowtype_override.shared_provider_comparison = $flowProviderComparison
         $flowNoDefaultWasPresent = Test-Path -LiteralPath Env:NoDefaultCurrentDirectoryInExePath
         $flowNoDefault = [Environment]::GetEnvironmentVariable('NoDefaultCurrentDirectoryInExePath', 'Process')
         try {
