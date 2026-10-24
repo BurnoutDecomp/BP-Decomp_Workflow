@@ -5,7 +5,9 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-**Installed:36ae3ffe**, from hosted40103324586, with current dev SDL3/camera/district work and the checked renderer recovery. Launch `build/game/Burnout_PC.exe`. Eleven hosted groups, all3003 compiled TUs and14 payload hashes pass. The exact executable passed a separate165-second private startup/world check and the independent00/10/11/01/00 occlusion matrix, with real resources/queries/GPU restoration and five inspected images; no asserts/exceptions.
+The normal folder was subsequently rebuilt outside this campaign from source9503d787; its current provenance is authoritative. The checks below describe the earlier campaign delivery. Current private recovery and diagnostic images have not been installed into that folder.
+
+**Last campaign-checked installation:36ae3ffe**, from hosted40103324586, with current dev SDL3/camera/district work and the checked renderer recovery. Launch `build/game/Burnout_PC.exe`. Eleven hosted groups, all3003 compiled TUs and14 payload hashes pass. The exact executable passed a separate165-second private startup/world check and the independent00/10/11/01/00 occlusion matrix, with real resources/queries/GPU restoration and five inspected images; no asserts/exceptions.
 
 Road Rage count/countdown, custom-route save/overwrite and host-tested Freeburn Leaving fixes are retained. Cold saved-route loading, joined-peer leaving, complete online races, long audio sessions and Replay frame wiring remain unresolved or unverified. The full GUI inbox/audio and original global-construction branches remain private. Whole-registry debug SAVE retains the original unnamed-DLC-slot crash; targeted tests avoid it.
 
@@ -13,9 +15,11 @@ The previous normal package is backed up. Config, both logs, nine profiles and t
 
 ## Campaign counts
 
+**October25:** four collision-render controls now pass independent retained-native review: collision world, soup AABBs, draw distance and edge cosines. All twelve change/negative/restore images and direct raw-log attribution pass. The later map-allocation assertion and original sixteen-control aggregate remain FAIL; sphere, map-level and sweeper controls gain no credit. [Four-site evidence](geometry_four_retained_native_20261025/REPORT.md).
+
 **October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation now pass. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **52 verified, seven original no-ops and 1,296 pending**. That is 59/1,355 (4.4%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **56 verified, seven original no-ops and 1,292 pending**. That is 63/1,355 (4.6%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
@@ -34,7 +38,7 @@ Recorded source-progress coverage is separate from behavior completion:
 
 The dated source/audit checkpoint recorded 1,351/1,355 sites (99.7%), including unresolved consumers; the four later source audits are separate from that saved snapshot. The 1,196 reviewed sites plus 26 existing-body audits give 1,222/1,355 (90.2%) with source/body evidence, not a completed-control count. Neither 10% nor 90% is a defensible actual implementation percentage; the actual count remains unknown. See the [source coverage checkpoint](source_coverage_checkpoint_20261021.json) for the count definitions and evidence limits.
 
-## Continuing source work
+## Historical source checkpoints
 
 **Current private renderer/GUI batch:** `ea5ce572` contains reviewed shadow/occlusion source, scoreboard/completion notifications, Road Rules audio and the complete menu-music decoder repair. The traffic constructor error from hosted40026988508 has a reviewed shipping-type correction. The new exact source/CI pair installs a paired menu-music regression and two completion autosave fixes; all eleven selected hosted groups and native behavior still need their exact run. [Current checkpoint](menu23_hosted_fixture_20261023/STATE.json).
 
