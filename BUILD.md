@@ -17,7 +17,7 @@ the driver only sequences them and loads your config.)
 
 | Product | Where |
 |---|---|
-| `Burnout_PC.exe` + FFmpeg DLLs + `xaudio2_9redist.dll` + `Burnout_PC.cgsmap` | `build/game/` |
+| `Burnout_PC.exe` + SDL3.dll + FFmpeg DLLs + `xaudio2_9redist.dll` + `Burnout_PC.cgsmap` | `build/game/` |
 | Converted game data (a launchable folder) | `[output].game_data` (default: `<x360_root>_decomp`) |
 | YAP + Volatility converter binaries | `build/tools/` |
 
@@ -73,6 +73,10 @@ probed default.
 
 ## Build
 
+The PC gamepad backend uses SDL3. `build all` fetches it; for an existing checkout,
+run `build sdl3` before `build exe`. Packaged builds include `SDL3.dll` and
+`SDL3-LICENSE.txt`; see [controller support](b5-decomp/docs/CONTROLLERS.md).
+
 ### Browser asset converter
 
 Double-click **`convert-assets.cmd`** to open the local asset-conversion UI. Choose
@@ -99,6 +103,7 @@ or step by step (each with `--force` to rebuild):
 | `build lua` | `tools/build/build_lua.bat` | `b5-decomp/vendor/lua/lua515.lib` |
 | `build ffmpeg` | `tools/build/build_ffmpeg.bat` (add `--prebuilt` to download instead of compile) | `b5-decomp/vendor/ffmpeg-build/` |
 | `build xaudio2` | `tools/build/fetch_xaudio2_redist.bat` (downloads Microsoft.XAudio2.Redist from nuget.org) | `b5-decomp/vendor/xaudio2redist/` — headers for the build, `xaudio2_9redist.dll` staged beside the exe |
+| `build sdl3` | downloads pinned SDL3 3.4.18, verified by SHA-256 | `b5-decomp/vendor/sdl3/` — headers, x64 import library/runtime, license |
 | `build exe` | `tools/build/build_game_exe.bat` → `tools/build/compile_exe.py` | `build/game/Burnout_PC.exe` |
 | `build data` | `tools/assets/build_game_data.py` (all its flags forwarded — `--dry-run`, `--jobs`, `--out`, `--borrow-dir`, `--only`, …) | the converted data folder + `.build_game_data/report.txt` |
 | `build shaders` | the same stager, restricted to `SHADERS.BNDL` and always forced | the converted `SHADERS.BNDL`; `--install` also drops it into `build/game` |

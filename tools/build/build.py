@@ -6,12 +6,13 @@ Sequences the existing workhorse scripts -- it does NOT reimplement any build:
   tools    YAP + Volatility        -> tools/build/build_tools.ps1
   lua      lua515.lib              -> tools/build/build_lua.bat
   ffmpeg   vendor/ffmpeg-build     -> tools/build/build_ffmpeg.bat [--prebuilt]
+  sdl3     vendor/sdl3             -> tools/build/fetch_sdl3.py
   xaudio2  vendor/xaudio2redist     -> tools/build/fetch_xaudio2_redist.bat
   exe      Burnout_PC.exe          -> tools/build/build_game_exe.bat
   data     converted game data     -> tools/assets/build_game_data.py (args forwarded)
   shaders  SHADERS.BNDL only       -> the same stager, --only SHADERS.BNDL --force
   file     one named data file     -> the same stager, resolved from a loose name
-  all      tools -> lua -> ffmpeg -> xaudio2 -> exe -> data, skip-if-present
+  all      tools -> lua -> ffmpeg -> xaudio2 -> sdl3 -> exe -> data, skip-if-present
   run      launch the exe from its own folder (the schema.vlt CWD contract)
 
 Machine paths come from build.config.toml (copy build.config.example.toml); the
@@ -304,6 +305,13 @@ def cmd_doctor(cfg, args):
         r.row("ok", "Lua static lib (lua515.lib)")
     else:
         r.row("fail", "lua515.lib missing", "exe", "build lua")
+    sdl3 = os.path.join(B5, "vendor", "sdl3")
+    if all(os.path.isfile(os.path.join(sdl3, name)) for name in
+           ("include/SDL3/SDL.h", "lib/x64/SDL3.lib", "lib/x64/SDL3.dll", "LICENSE.txt")):
+        r.row("ok", "SDL3 gamepad development/runtime package")
+    else:
+        r.row("fail", "SDL3 gamepad package missing", "exe", "build sdl3")
+
     if os.path.exists(os.path.join(XAUDIO2_REDIST, "include", "xaudio2Redist.h")) and        os.path.exists(os.path.join(XAUDIO2_REDIST, "bin", "x64", "xaudio2_9redist.dll")):
         r.row("ok", "XAudio2 redist (vendor/xaudio2redist)")
     else:
@@ -607,6 +615,11 @@ def step_xaudio2(cfg, args, dry=False):
     return run_bat(os.path.join(TOOLS_BUILD, "fetch_xaudio2_redist.bat"), *extra, dry=dry)
 
 
+def step_sdl3(cfg, args, dry=False):
+    extra = ["--force"] if getattr(args, "force", False) else []
+    return _spawn([sys.executable, os.path.join(TOOLS_BUILD, "fetch_sdl3.py"), *extra], dry)
+
+
 def step_exe(cfg, args, dry=False):
     gone = missing_mounts()
     if gone:
@@ -760,6 +773,7 @@ def cmd_all(cfg, args, passthrough):
         ("ffmpeg", lambda: step_ffmpeg(cfg, argparse.Namespace(force=args.force_ffmpeg,
                                                                prebuilt=args.prebuilt), dry)),
         ("xaudio2", lambda: step_xaudio2(cfg, argparse.Namespace(force=args.force_xaudio2), dry)),
+        ("sdl3", lambda: step_sdl3(cfg, argparse.Namespace(force=args.force_sdl3), dry)),
         ("exe", lambda: step_exe(cfg, args, dry)),
         ("data", lambda: step_data(cfg, args, list(passthrough)
                                    + (["--dry-run"] if dry else []), False)),
@@ -864,6 +878,8 @@ def main(argv=None):
     p = sub.add_parser("xaudio2", help="fetch vendor/xaudio2redist "
                                       "(fetch_xaudio2_redist.bat)")
     p.add_argument("--force", action="store_true")
+    p = sub.add_parser("sdl3", help="fetch pinned SDL3 gamepad headers, library and runtime")
+    p.add_argument("--force", action="store_true")
     p = sub.add_parser("exe", help="build Burnout_PC.exe (build_game_exe.bat; "
                                    "incremental -- only changed TUs recompile)")
     p.add_argument("--rebuild", action="store_true",
@@ -906,12 +922,13 @@ def main(argv=None):
                         "%(default)s)")
     data_selection_flags(p, "after converting, copy the products into the live run "
                             "folder (default: build/game) so `build run` picks them up")
-    p = sub.add_parser("all", help="tools -> lua -> ffmpeg -> xaudio2 -> exe -> data "
+    p = sub.add_parser("all", help="tools -> lua -> ffmpeg -> xaudio2 -> sdl3 -> exe -> data "
                                    "(skip-if-present)")
     p.add_argument("--force-tools", action="store_true")
     p.add_argument("--force-lua", action="store_true")
     p.add_argument("--force-ffmpeg", action="store_true")
     p.add_argument("--force-xaudio2", action="store_true")
+    p.add_argument("--force-sdl3", action="store_true")
     p.add_argument("--prebuilt", action="store_true",
                    help="if ffmpeg must be built, fetch the CI prebuilt instead")
     p.add_argument("--dry-run", action="store_true",
@@ -941,6 +958,8 @@ def main(argv=None):
         return step_lua(cfg, args)
     if args.cmd == "ffmpeg":
         return step_ffmpeg(cfg, args)
+    if args.cmd == "sdl3":
+        return step_sdl3(cfg, args)
     if args.cmd == "xaudio2":
         return step_xaudio2(cfg, args)
     if args.cmd == "exe":
