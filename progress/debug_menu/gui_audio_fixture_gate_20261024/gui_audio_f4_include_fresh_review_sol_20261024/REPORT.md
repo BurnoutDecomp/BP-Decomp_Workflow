@@ -1,0 +1,11 @@
+VERDICT: pass
+F4_DELTA_VERDICT: pass
+COMPOSED_FIXTURE_SOURCE_VERDICT: pass
+
+The sole F4 include-path correction passes static review. Binding SHA `864afe925e33a336e570375b338d3b013d0267a5b5d2006675f9bc8a4d61e9d4`, runner postimage `be71ac7f80cba2ecd7e82202f870abb5a6b010c2ca5f74a5583f4800b8a6d40c`, patch `9433d3a0776d18dc0bf9ab0a5aef03d9fd9cf0d5335f9b725dc46b92f97fae69` all match. No blocking defect was found in this delta. Both earlier fixture FAIL reports and passing dependency-pin reviews remain unchanged.
+
+The runner's one hunk computes `out/"shadow"/"GameShared"/"GameClasses"/"Core"` for each candidate/baseline/ID-only mode and passes it as a quoted `/I` in the existing extra_flags argument. The actual shared helper writes the selected revision's header at that exact directory before constructing the compile command. Consequently the copied `CgsStringUtils.cpp` can resolve its unchanged local `"CgsStringUtils.h"` through the correct revision shadow, including paths with spaces. No physical checkout fallback, header rewrite, wrapper or changed production body is introduced.
+
+Candidate25d and baseline4c7 support CPP/header evidence matches the exact Git blobs. Candidate25d/f39 helper blobs are identical and match the bound helper already read in the F4 FAIL. The base corrected packet's README/binding/runner/C++ hashes are preserved. Removing only the new comment/path expression and restoring only the extra_flags argument reconstructs the **entire** previously reviewed runner byte-for-byte; the correction patch also reproduces exactly. Thus the original F1–F3 fixes,94-header source shadow, real queue providers, extraction, assertions, positive checks, numeric markers, failure-control requirements and mode loop are unchanged. The C++ fixture remains SHA `20a5f5e8ab68ed4706fbf1bf11e58e9cb94d956a7e3a1d0a5e72636292361624`.
+
+This closes only the static path-resolution blocker and yields a composed fixture-source pass. The postimage is intended for the tests directory; this overlay packet is not a standalone runner installation. No C++ compilation, fixture/helper execution, tests, CI, game/input, native process, IDB, production/ref/index mutation or extra agent occurred. Numeric/control witnesses, hosted CI, shipping link, audible playback and activation remain unobserved and unapproved. Root owns publication and execution.

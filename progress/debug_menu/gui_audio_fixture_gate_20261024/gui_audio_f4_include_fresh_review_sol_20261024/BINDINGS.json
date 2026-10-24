@@ -1,0 +1,128 @@
+{
+  "packet_binding_sha256": "864afe925e33a336e570375b338d3b013d0267a5b5d2006675f9bc8a4d61e9d4",
+  "packet_files": [
+    {
+      "path": "BINDINGS.json",
+      "bytes": 5542,
+      "sha256": "864afe925e33a336e570375b338d3b013d0267a5b5d2006675f9bc8a4d61e9d4"
+    },
+    {
+      "path": "correction.patch",
+      "bytes": 1143,
+      "sha256": "9433d3a0776d18dc0bf9ab0a5aef03d9fd9cf0d5335f9b725dc46b92f97fae69"
+    },
+    {
+      "path": "evidence/baseline_CgsStringUtils.h",
+      "bytes": 1337,
+      "sha256": "90d56aac0566feeb993a92545409640d18f6cfe20e7387f2f7a9d486a31b2825"
+    },
+    {
+      "path": "evidence/baseline_cpp_CgsStringUtils.cpp",
+      "bytes": 2276,
+      "sha256": "ca7e654bd6ce0fd7d21d62eb21f06b7291a2bdb169e6ac847830c8c305aca936"
+    },
+    {
+      "path": "evidence/candidate_CgsStringUtils.h",
+      "bytes": 1337,
+      "sha256": "90d56aac0566feeb993a92545409640d18f6cfe20e7387f2f7a9d486a31b2825"
+    },
+    {
+      "path": "evidence/candidate_cpp_CgsStringUtils.cpp",
+      "bytes": 2276,
+      "sha256": "ca7e654bd6ce0fd7d21d62eb21f06b7291a2bdb169e6ac847830c8c305aca936"
+    },
+    {
+      "path": "evidence/fxgs_common.py",
+      "bytes": 8364,
+      "sha256": "6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033"
+    },
+    {
+      "path": "postimage/run_gui_audio_trigger_wire.py",
+      "bytes": 23913,
+      "sha256": "be71ac7f80cba2ecd7e82202f870abb5a6b010c2ca5f74a5583f4800b8a6d40c"
+    },
+    {
+      "path": "preimage/run_gui_audio_trigger_wire.py",
+      "bytes": 23636,
+      "sha256": "e3fb7126fa6f850585fad0f23cc8be0e70a30f952e42a1926346ccd1d683e2a7"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2863,
+      "sha256": "3f1365cce5bbcb27de509007332017a417dc4e548b5d84040fb1d86a3bbe8477"
+    },
+    {
+      "path": "STATIC_CHECKS.json",
+      "bytes": 1374,
+      "sha256": "96e1843a1e628a3faab9eacdc25bd5f93558c18d20b8e3d734eb3072cfe72490"
+    }
+  ],
+  "images": [
+    {
+      "kind": "preimage",
+      "sha256": "e3fb7126fa6f850585fad0f23cc8be0e70a30f952e42a1926346ccd1d683e2a7",
+      "match": true
+    },
+    {
+      "kind": "postimage",
+      "sha256": "be71ac7f80cba2ecd7e82202f870abb5a6b010c2ca5f74a5583f4800b8a6d40c",
+      "match": true
+    },
+    {
+      "kind": "correction_patch",
+      "sha256": "9433d3a0776d18dc0bf9ab0a5aef03d9fd9cf0d5335f9b725dc46b92f97fae69",
+      "match": true
+    }
+  ],
+  "base_files": [
+    {
+      "path": "BINDING.json",
+      "sha256": "379f0520bd88486664fd595b4229b8ea41b9a6774c12275ae050c71ee4ccc318",
+      "match": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "2ec2c36f1f0b054adae8f2142ab0a93626f1e5a244a7f65205c1970ed71a68c9",
+      "match": true
+    },
+    {
+      "path": "run_gui_audio_trigger_wire.py",
+      "sha256": "e3fb7126fa6f850585fad0f23cc8be0e70a30f952e42a1926346ccd1d683e2a7",
+      "match": true
+    },
+    {
+      "path": "GuiAudioTriggerWire.cpp",
+      "sha256": "20a5f5e8ab68ed4706fbf1bf11e58e9cb94d956a7e3a1d0a5e72636292361624",
+      "match": true
+    }
+  ],
+  "providers": [
+    {
+      "path": "src/GameShared/GameClasses/Core/CgsStringUtils.h",
+      "revision": "25d8523608e81df090ff123970cb25fbcb650708",
+      "blob": "4209bd1d1a3cdb5ea25b7b5bede4f126c8be6182",
+      "match": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Core/CgsStringUtils.h",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "blob": "4209bd1d1a3cdb5ea25b7b5bede4f126c8be6182",
+      "match": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Core/CgsStringUtils.cpp",
+      "revision": "25d8523608e81df090ff123970cb25fbcb650708",
+      "blob": "6ebbc73f726859607152a6ef579463cf81174931",
+      "match": true
+    },
+    {
+      "path": "src/GameShared/GameClasses/Core/CgsStringUtils.cpp",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "blob": "6ebbc73f726859607152a6ef579463cf81174931",
+      "match": true
+    }
+  ],
+  "prior_fail_report_matches_binding": true,
+  "preimage_is_exact_reviewed_runner": true,
+  "helper_match": true
+}
