@@ -21,6 +21,7 @@ set "FFM=%ROOT%\b5-decomp\vendor\ffmpeg-build"
 rem XAudio2 Redistributable (CgsSystem::AudioOutputPC's 2.9 engine, Win7 SP1 and up)
 rem - tools\build\fetch_xaudio2_redist.bat.
 set "XA2=%ROOT%\b5-decomp\vendor\xaudio2redist"
+set "SDL=%VEN%\sdl3"
 rem Game build output lives under build\game\ (build\tools\ holds tool binaries; see tools\build\build_tools.ps1).
 set "OUT=%ROOT%\build\game"
 set "RSP=%OUT%\obj\build.rsp"
@@ -32,6 +33,10 @@ rem ---- prerequisites: fail fast with a named cause + the command that fixes it
 if not exist "%SRC%\GameSource\Main\BrnMain.cpp" (
   echo ERROR: b5-decomp sources missing -- "%SRC%\GameSource\Main\BrnMain.cpp" not found.
   echo        Run: git submodule update --init b5-decomp   then re-run this script.
+  exit /b 1
+)
+for %%F in ("include\SDL3\SDL.h" "lib\x64\SDL3.lib" "lib\x64\SDL3.dll" "LICENSE.txt") do if not exist "%SDL%\%%~F" (
+  echo ERROR: SDL3 package missing -- run: python tools\build\fetch_sdl3.py
   exit /b 1
 )
 if not exist "%FFM%\include\libavcodec\avcodec.h" (
@@ -319,6 +324,8 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayModule_Prepare.cpp"
   rem ReplayModule ctor + Update_Dispatch + WaitForSerialiseJobs.
   echo "%SRC%\GameSource\Replays\BrnReplayModule.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayGameModuleSerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Stream\BrnReplayStreamHeader.cpp"
   rem The GPU-frunk -> disk write streamer that Update_Dispatch pumps.
   echo "%SRC%\GameSource\Replays\Stream\BrnReplayGPUDiskWriteStream.cpp"
   rem ReplayModule's typed embedded playback streams and original Construct calls.
@@ -338,6 +345,7 @@ echo "%SRC%\SDKs\Csis\CsisGlobalVariableHandle.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeRendererToX.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Input\CgsInputModuleIO.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Input\PC\CgsInputPadsPC.cpp"
+  echo "%SRC%\pc\input\Gamepad.cpp"
   rem ---- crash-parity FX-RUMBLE3 2026-09-24 (G10-D4): the console input module replaces the
   rem  BrnGameModule.hpp ODR stub -- DoUpdate_InputPreWorld -> InputModule::PreWorldUpdate ->
   rem  ProcessRumbleRequests -> InputPads::UpdateRumble -> DeviceX360Pad::SetRumble (the rumble chain).
@@ -5442,6 +5450,9 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Gui\Flow\Screen\States\BrnVideo.cpp"
   echo "%SRC%\GameSource\World\BrnWorldModuleIO_wBT_01.cpp"
   echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileHandle_wBT_01.cpp"
+  rem Existing Replay consumers also require the recovered synchronous file I/O providers.
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileHandle.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\FileSystem\CgsFileRW.cpp"
   echo "%SRC%\GameSource\Replays\BrnReplayDebugComponent.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeGUIToX_wBT_01.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeWorldToX_wBT_01.cpp"
@@ -5538,7 +5549,7 @@ echo WARNING: no Python interpreter found -- using the legacy serial full-rebuil
 goto legacy_compile
 
 :driver_compile
-%PY_CMD% "%~dp0compile_exe.py" --base "%BASERSP%" --rsp "%RSP%" --out "%OUT%" -- /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\obj\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib ws2_32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
+%PY_CMD% "%~dp0compile_exe.py" --base "%BASERSP%" --rsp "%RSP%" --out "%OUT%" -- /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\obj\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib ws2_32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib" "%SDL%\lib\x64\SDL3.lib"
 set "BUILD_ERR=%ERRORLEVEL%"
 goto post_build
 
@@ -5568,7 +5579,7 @@ if errorlevel 1 ( echo ERROR: Sound Playback CgsEnvironment.cpp precompile faile
 cl @"%BASERSP%" /c "%SRC%\GameShared\GameClasses\Sound\Playback\CgsVoice.cpp" /Fo"%OUT%\\obj\\playback_voice.obj"
 if errorlevel 1 ( echo ERROR: Sound Playback CgsVoice.cpp precompile failed. & exit /b 1 )
 
-cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" "%OUT%\\obj\\playback_environment.obj" "%OUT%\\obj\\playback_voice.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib ws2_32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib"
+cl /nologo @"%RSP%" "%OUT%\\obj\\renderengine_device.obj" "%OUT%\\obj\\playback_environment.obj" "%OUT%\\obj\\playback_voice.obj" /link /SUBSYSTEM:WINDOWS /MAP /OPT:REF /LIBPATH:"%FFM%\bin" "%OUT%\\obj\\burnout.res" d3d9.lib user32.lib gdi32.lib gdiplus.lib kernel32.lib ntdll.lib winmm.lib shell32.lib ole32.lib advapi32.lib ws2_32.lib avformat.lib avcodec.lib avutil.lib swscale.lib swresample.lib "%VEN%\lua\lua515.lib" "%SDL%\lib\x64\SDL3.lib"
 
 set "BUILD_ERR=%ERRORLEVEL%"
 
@@ -5591,5 +5602,12 @@ rem xaudio2_9redist.dll by name and the exe directory is searched first, so this
 rem the audio engine the game runs on (without it it falls back to the in-box xaudio2_9,
 rem and on a pre-1803 Windows to nothing at all -- the game then runs muted).
 if "%BUILD_ERR%"=="0" copy /Y "%XA2%\bin\x64\xaudio2_9redist.dll" "%OUT%\" >nul
+
+if "%BUILD_ERR%"=="0" (
+  copy /Y "%SDL%\lib\x64\SDL3.dll" "%OUT%\" >nul
+  if errorlevel 1 (endlocal & exit /b 1)
+  copy /Y "%SDL%\LICENSE.txt" "%OUT%\SDL3-LICENSE.txt" >nul
+  if errorlevel 1 (endlocal & exit /b 1)
+)
 
 endlocal & exit /b %BUILD_ERR%
