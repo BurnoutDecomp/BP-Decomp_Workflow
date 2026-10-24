@@ -1,0 +1,111 @@
+{
+  "source_base": "26c17271179dfbf562971e3784494221fdac7b04",
+  "source_tree": "d35b609802c57aad65c28fad463d2cac78bb0335",
+  "workflow_base": "dbf7af60bde2e21789853cba3d429c03ced85e22",
+  "workflow_tree": "3225b6d64ad3cd564f176a06de95c7f0231d414c",
+  "status": "one-source proposal; no checkout/ref/index/build/activation",
+  "changes": [
+    {
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiEventQueue.cpp",
+      "blob": "f80576ac67653e6f3e5a48ce3eb1322af737ebfb",
+      "pre_bytes": 4283,
+      "pre_sha256": "4be91d90117febea661503a955689cf50d33e7075c1b7a8c9425c281dabf31ad",
+      "preimage": "pre/CgsGuiEventQueue.cpp",
+      "post_bytes": 4503,
+      "post_sha256": "44ce62bed27a4435400a67dc677c30454446c2a7171c372af864425ef2e78128",
+      "postimage": "post/CgsGuiEventQueue.cpp"
+    }
+  ],
+  "providers": [
+    {
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiEvent.h",
+      "source": "26c17271179dfbf562971e3784494221fdac7b04",
+      "blob": "6355cdf6c37dd5e31354f3086b338aac8bc7a38e",
+      "bytes": 12540,
+      "sha256": "7ab3ba5a68c555f958eee1934ea405bab1cc4fa4b28ea9053104719979bcacaf",
+      "evidence": "evidence/source/CgsGuiEvent.h"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+      "source": "26c17271179dfbf562971e3784494221fdac7b04",
+      "blob": "cd59e9223f292cf1e2029d47cba70f36ed88fdb6",
+      "bytes": 39881,
+      "sha256": "3c4da2211eddabcd7c31d97bc7a6a69e6c2a3222598fa0618bca428694d04e60",
+      "evidence": "evidence/source/CgsVariableEventQueue.h"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Module/VariableEventQueue_4096_16.cpp",
+      "source": "26c17271179dfbf562971e3784494221fdac7b04",
+      "blob": "4d98fed2478d1d09dbd1cb7ef5fae23e46aa5d82",
+      "bytes": 4104,
+      "sha256": "641a7e29999c315b35f7029e4858c7e6ca2cdf91d164a7301248f098cf50940e",
+      "evidence": "evidence/source/VariableEventQueue_4096_16.cpp"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "source": "26c17271179dfbf562971e3784494221fdac7b04",
+      "blob": "ae18202bdc0aa585208be952bee9fd53920035e2",
+      "bytes": 333122,
+      "sha256": "b3fd1eaccbe982a611037c43e787888798fad42af0dd370240321d1110bd0016",
+      "evidence": "evidence/source/BrnGuiModule.cpp"
+    }
+  ],
+  "primary_evidence": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8227CBE8.json",
+      "bytes": 5044,
+      "sha256": "879f4d1b235ffb8724d9cbcb17864730a8bd45bd586bd5363b88200a07c95ae0",
+      "evidence": "evidence/ARTIST/0x8227CBE8.json"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82527A58.json",
+      "bytes": 184859,
+      "sha256": "e6dd401b6e921876d669f7ba8fb5931eafea44bdff4945ed20f7d4720b9b8faa",
+      "evidence": "evidence/ARTIST/0x82527A58.json"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8231B428.json",
+      "bytes": 4496,
+      "sha256": "41973ef66b96f77cf741fa444691551fca4adc894dbb757137bf874226b31d0a",
+      "evidence": "evidence/ARTIST/0x8231B428.json"
+    }
+  ],
+  "declaration_evidence": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameShared\\GameClasses\\Gui\\CgsGuiEvent.h",
+      "bytes": 334352,
+      "sha256": "4a947e5dbcc8e51f3e97aacb19be0e906c093aa7965367f95dac5f96750b4919",
+      "evidence": "evidence/DecFIGS/CgsGuiEvent.h"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameShared\\GameClasses\\Module\\CgsVariableEventQueue.h",
+      "bytes": 218746,
+      "sha256": "30b1154265303bc74e984ecd39a282535732bbea32eef33551b5f8fdd2edd85d",
+      "evidence": "evidence/DecFIGS/CgsVariableEventQueue.h"
+    }
+  ],
+  "shipping_evidence": [
+    {
+      "path": "tools/build/build_game_exe.bat",
+      "source": "dbf7af60bde2e21789853cba3d429c03ced85e22",
+      "sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792",
+      "bytes": 454238,
+      "evidence": "evidence/build_game_exe.bat",
+      "wrapper_mount": [
+        {
+          "line": 4333,
+          "text": "  echo \"%SRC%\\GameShared\\GameClasses\\Gui\\CgsGuiEventQueue.cpp\""
+        }
+      ]
+    }
+  ],
+  "failed_hosted_evidence": {
+    "run_id": "40134824568",
+    "attempt": 1,
+    "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_full_native_compile_owners_hosted_20261024\\failed-steps.log",
+    "bytes": 194775,
+    "sha256": "8fdea2e287708635902699a9f63f0817aa02385271b9b15d501bb61afdf78d75",
+    "evidence": "evidence/failed-steps.log",
+    "observed": "3002 TUs,546 compiled2456 cached0 failed; linker only unresolved derived4096 const GetLength; not a passing build"
+  }
+}
