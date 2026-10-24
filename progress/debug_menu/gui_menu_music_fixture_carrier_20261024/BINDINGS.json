@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "source_base": "b5ce9022bdf373e38d98b9becb39e672a0dcf153",
+  "workflow_base": "ed5f4c063a50b8b5204fe8e1dfd4784045832ae4",
+  "negative_control_revision": "b595d61d2440ca94d61aa8fa610ab0bf6048cc66",
+  "changes": [
+    {
+      "repo": "b5",
+      "path": "tests/GuiMenuMusicWire.cpp",
+      "preimage": "preimage/b5/tests/GuiMenuMusicWire.cpp",
+      "postimage": "postimage/b5/tests/GuiMenuMusicWire.cpp",
+      "pre_sha256": "2603f206fc3f1f3ed808e1fe5ddf4d1d48cd26a28d36c586fe85599bea6ddde2",
+      "post_sha256": "9c9816891e5998032a626e41e47422cd661fce9f8ab91999376c8546939c79c0",
+      "pre_bytes": 13052,
+      "post_bytes": 13045
+    },
+    {
+      "repo": "b5",
+      "path": "tests/run_gui_menu_music_wire.py",
+      "preimage": "preimage/b5/tests/run_gui_menu_music_wire.py",
+      "postimage": "postimage/b5/tests/run_gui_menu_music_wire.py",
+      "pre_sha256": "5f77f5f8ca820c34421fa9a2def526dfcda1d8a37bb13b0a13eabfdcdc9fb07e",
+      "post_sha256": "e2317f4e29febc052e0e7fa917d19cc766d9435f180f3b28aa5b962f2bbc1035",
+      "pre_bytes": 13282,
+      "post_bytes": 14201
+    },
+    {
+      "repo": "workflow",
+      "path": "ci/check-candidate-build.ps1",
+      "preimage": "preimage/workflow/ci/check-candidate-build.ps1",
+      "postimage": "postimage/workflow/ci/check-candidate-build.ps1",
+      "pre_sha256": "5e12da841f8a8653f57043456e2e29fe259f44a32f3c6da3cf50136d0fca6386",
+      "post_sha256": "561a7c7ec0d947057d92b0bc99f822d3a38942d2f3869d110a33b0a8947a5eb4",
+      "pre_bytes": 128253,
+      "post_bytes": 128253
+    }
+  ],
+  "source_derived_carrier_selection": [
+    {
+      "revision": "b5ce9022bdf373e38d98b9becb39e672a0dcf153",
+      "selected": "GuiMenuStreamRecordPC",
+      "header_sha256": "1243863f7a0f431723df60985a47257413484da6d746f4b3e537fae80183717b",
+      "evidence": "inputs/candidate/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h"
+    },
+    {
+      "revision": "b595d61d2440ca94d61aa8fa610ab0bf6048cc66",
+      "selected": "GuiEventPlayMusicOnMenuStream",
+      "header_sha256": "bb2fab6c099973073f36e4861d60f5467f3373b84c000b1c742c619f9dbb8697",
+      "evidence": "inputs/control/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h"
+    }
+  ],
+  "production_paths_changed": [],
+  "assertion_predicates_changed": 0,
+  "numeric_checks_expected": {
+    "candidate": 217,
+    "negative_control": 189,
+    "old_raw_mismatches": 4
+  },
+  "scope": "Existing 20-byte PC carrier fixture seat only. Original raw8 coverage, checks, baseline source and real producer/consumer bodies unchanged."
+}

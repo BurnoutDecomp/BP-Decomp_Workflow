@@ -571,8 +571,8 @@ try {
         $musicReceipt = @{ status = 'running'; candidate_source = $B5Commit; workflow_sha = $WorkflowSha; variants = @{} }
         $Receipt.regressions.gui_menu_music_wire = $musicReceipt
         $musicHarnessPins = @{
-            'tests/run_gui_menu_music_wire.py' = '5f77f5f8ca820c34421fa9a2def526dfcda1d8a37bb13b0a13eabfdcdc9fb07e'
-            'tests/GuiMenuMusicWire.cpp' = '2603f206fc3f1f3ed808e1fe5ddf4d1d48cd26a28d36c586fe85599bea6ddde2'
+            'tests/run_gui_menu_music_wire.py' = 'e2317f4e29febc052e0e7fa917d19cc766d9435f180f3b28aa5b962f2bbc1035'
+            'tests/GuiMenuMusicWire.cpp' = '9c9816891e5998032a626e41e47422cd661fce9f8ab91999376c8546939c79c0'
             'tests/fxgs_common.py' = '6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033'
         }
         foreach ($relative in $musicHarnessPins.Keys) {
