@@ -1,0 +1,64 @@
+{
+  "status": "PASS_private_startup_resource_ownership_and_baseline_playability",
+  "utc": "2026-10-24T12:13:20.419041+00:00",
+  "source": "037deb9fecff882de2e2fb55de020e0f54348360",
+  "source_tree": "40f6199b114a9de47edffd8b44a3080dd4a83a53",
+  "workflow": "451dcde251f121d624e21541f81b6fe7ced8f77f",
+  "exe_sha256": "5b44650ea6195410c25231b712767f3b10f29adc29c57a972f5558a36183b489",
+  "hosted_run": 40091997586,
+  "hosted_groups": 11,
+  "slot": 62062,
+  "owned_pid": 33424,
+  "asserts": 0,
+  "exceptions": 0,
+  "motion_path_m": 236.8,
+  "motion_net_m": 234.7,
+  "motion_samples": 106,
+  "respawns": 0,
+  "normal24_unchanged": true,
+  "remaining_owned_games": 0,
+  "actual_immediate_pairs": 8,
+  "actual_dispatch_owners": 4,
+  "bank31_slot": 3,
+  "native_wrapper_heap_identity": true,
+  "graphics_capacity": 262144,
+  "world_capacity": 59694088,
+  "sky_first_use": true,
+  "sky_owned": true,
+  "sky_draw_counts": [
+    2066,
+    118
+  ],
+  "canonical_completion_count": 1,
+  "controls": [
+    "Named title/accept events",
+    "SkipIntro original console latch",
+    "Road teleport",
+    "Throttle"
+  ],
+  "passive_witnesses": [
+    "Ownership diagnostics",
+    "Motion log",
+    "Frame pixels",
+    "Strict terminal receipt"
+  ],
+  "visual_review": [
+    {
+      "frame": "bb_004500.bmp",
+      "sha256": "b3c9958ca99ef5eb17fcf715032ef8f03878be2be499d7c547e3c31a4b7dc14d",
+      "observation": "Visible normal road, buildings, sky, traffic, player car and HUD."
+    },
+    {
+      "frame": "bb_006900.bmp",
+      "sha256": "a8474a34f195877c8c00f1a9a8199c398dd69e68db0dc07d05b3b5a3f1b081ce",
+      "observation": "Visible ordinary wreck sequence after throttle into scenery; not crash-recovery acceptance."
+    }
+  ],
+  "new_debug_dispositions": 0,
+  "normal_delivery": false,
+  "limits": [
+    "Occlusion control behavior remains untested on this candidate.",
+    "Sky reuse, presentation reset/minimize and queued-close timing require separate witnesses.",
+    "No new individual debug-site, save/reload or multiplayer acceptance."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "status": "FAILED_test_recipe_no_control_acceptance",
+  "source": "037deb9fecff882de2e2fb55de020e0f54348360",
+  "slot": 62063,
+  "findings": [
+    "OccEnabled length10 is rejected by CreateAlias: strlen >= KU_MAX_ALIAS_LENGTH(10).",
+    "DebugComponent::GetComponentPath combines GetPath and GetName: Renderer/RendererModule. The recipe omitted the component name."
+  ],
+  "source_evidence": [
+    "CgsScriptInterface.cpp:158-166",
+    "CgsDebugComponent.cpp:83-95",
+    "BrnRendererModuleDebugComponent.cpp:23-31"
+  ],
+  "game_asserts": 0,
+  "game_exceptions": 0,
+  "normal24_unchanged": true,
+  "next_changes": [
+    "OccEnable is 9 characters.",
+    "Both targets use Renderer/RendererModule/OcclusionCull."
+  ],
+  "old_case_sha256": "0eb02027bf91df2580e1db0f51368243e089d39363da5c7568c4c9d630045c25",
+  "old_run_retained": true,
+  "engine_changes": 0,
+  "new_debug_dispositions": 0
+}

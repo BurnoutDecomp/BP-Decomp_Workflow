@@ -1,0 +1,100 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "native_renderer_startup_ownership_playability",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\candidate_native_renderer_startup_20261024\\Case.proposed.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-24T14:11:42.2201123+02:00",
+    "flow_exit":  0,
+    "bug":  "Check frontend, junkyard exit, rendered world and sustained movement before any candidate delivery.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\candidate_native_renderer_startup_20261024\\run",
+    "label":  "Checked renderer and GUI candidate playability; source=037deb9fecff882de2e2fb55de020e0f54348360",
+    "area":  "candidate-playability",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62062,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 assert family(ies), all known (0 lines)",
+                       "pass":  true,
+                       "name":  "no NEW assert families",
+                       "kind":  "NewAsserts"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+                       "pass":  true,
+                       "name":  "assert lines (info: known noise counts too)",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no exceptions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "reached DRIVING",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "path=236,8m net=234,7m samples 38..143 teleported=True later respawns=0",
+                       "pass":  true,
+                       "name":  "the car moved (teleport seat -\u003e first respawn, \u003e 20 m)",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "1 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+                       "pass":  true,
+                       "name":  "info: GAMEWRECKED hud messages (gameplay, never fails)",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "lum_std(last) on bb_006900.bmp region 0.15,0.2,0.85,0.8 = 68,359, want [8, +inf]",
+                       "pass":  true,
+                       "name":  "final world frame has scene variation",
+                       "kind":  "Frame"
+                   },
+                   {
+                       "detail":  "lum_mean(last) on bb_006900.bmp region 0.15,0.2,0.85,0.8 = 117,838, want [12, +inf]",
+                       "pass":  true,
+                       "name":  "final world frame is visible",
+                       "kind":  "Frame"
+                   },
+                   {
+                       "detail":  "dark_frac(last) on bb_006900.bmp region 0.15,0.2,0.85,0.8 = 0,104585, want [-inf, 0.9]",
+                       "pass":  true,
+                       "name":  "final world frame is not black",
+                       "kind":  "Frame"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "zero startup/gameplay assertions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "8 retained immediate pairs; 3 dispatch owners; actual member list/bank31 and equal heap owners; owned 2066/118 sky; one canonical completion",
+                       "pass":  true,
+                       "name":  "actual renderer startup resource ownership",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11365888,
+                       "exe_mtime_before_lock":  "2026-10-24T14:04:50.4412987+02:00",
+                       "exe_sha":  "5b44650ea619",
+                       "b5_head":  "053e953f0",
+                       "exe_b5":  "037deb9f",
+                       "parent_head":  "e68b398e7",
+                       "exe_mtime":  "2026-10-24T14:04:50.4412987+02:00"
+                   }
+}

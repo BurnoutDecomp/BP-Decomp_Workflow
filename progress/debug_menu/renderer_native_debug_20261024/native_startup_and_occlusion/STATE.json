@@ -1,0 +1,259 @@
+{
+  "status": "startup_baseline_PASS_occlusion_enable_FAIL_not_delivered",
+  "source": "037deb9fecff882de2e2fb55de020e0f54348360",
+  "hosted_run": 40091997586,
+  "hosted_groups": 11,
+  "source_review": "PASS_bounded_startup_composition",
+  "startup_result": {
+    "status": "PASS_private_startup_resource_ownership_and_baseline_playability",
+    "utc": "2026-10-24T12:13:20.419041+00:00",
+    "source": "037deb9fecff882de2e2fb55de020e0f54348360",
+    "source_tree": "40f6199b114a9de47edffd8b44a3080dd4a83a53",
+    "workflow": "451dcde251f121d624e21541f81b6fe7ced8f77f",
+    "exe_sha256": "5b44650ea6195410c25231b712767f3b10f29adc29c57a972f5558a36183b489",
+    "hosted_run": 40091997586,
+    "hosted_groups": 11,
+    "slot": 62062,
+    "owned_pid": 33424,
+    "asserts": 0,
+    "exceptions": 0,
+    "motion_path_m": 236.8,
+    "motion_net_m": 234.7,
+    "motion_samples": 106,
+    "respawns": 0,
+    "normal24_unchanged": true,
+    "remaining_owned_games": 0,
+    "actual_immediate_pairs": 8,
+    "actual_dispatch_owners": 4,
+    "bank31_slot": 3,
+    "native_wrapper_heap_identity": true,
+    "graphics_capacity": 262144,
+    "world_capacity": 59694088,
+    "sky_first_use": true,
+    "sky_owned": true,
+    "sky_draw_counts": [
+      2066,
+      118
+    ],
+    "canonical_completion_count": 1,
+    "controls": [
+      "Named title/accept events",
+      "SkipIntro original console latch",
+      "Road teleport",
+      "Throttle"
+    ],
+    "passive_witnesses": [
+      "Ownership diagnostics",
+      "Motion log",
+      "Frame pixels",
+      "Strict terminal receipt"
+    ],
+    "visual_review": [
+      {
+        "frame": "bb_004500.bmp",
+        "sha256": "b3c9958ca99ef5eb17fcf715032ef8f03878be2be499d7c547e3c31a4b7dc14d",
+        "observation": "Visible normal road, buildings, sky, traffic, player car and HUD."
+      },
+      {
+        "frame": "bb_006900.bmp",
+        "sha256": "a8474a34f195877c8c00f1a9a8199c398dd69e68db0dc07d05b3b5a3f1b081ce",
+        "observation": "Visible ordinary wreck sequence after throttle into scenery; not crash-recovery acceptance."
+      }
+    ],
+    "new_debug_dispositions": 0,
+    "normal_delivery": false,
+    "limits": [
+      "Occlusion control behavior remains untested on this candidate.",
+      "Sky reuse, presentation reset/minimize and queued-close timing require separate witnesses.",
+      "No new individual debug-site, save/reload or multiplayer acceptance."
+    ]
+  },
+  "occlusion_result": {
+    "status": "FAIL_first_control_enable_resource_allocation",
+    "utc": "2026-10-24T12:27:10.960858+00:00",
+    "source": "037deb9fecff882de2e2fb55de020e0f54348360",
+    "source_tree": "40f6199b114a9de47edffd8b44a3080dd4a83a53",
+    "workflow": "451dcde251f121d624e21541f81b6fe7ced8f77f",
+    "exe_sha256": "5b44650ea6195410c25231b712767f3b10f29adc29c57a972f5558a36183b489",
+    "slot": 62064,
+    "owned_pid": 57416,
+    "first_assert_seconds": 54.913095399999996,
+    "asserts": 1,
+    "exceptions": 0,
+    "assertion": "could not allocate memory for vertex descriptor",
+    "location": "CgsOcclusionCullManager.cpp:169",
+    "actual_readbacks": {
+      "OccEnable": [
+        "FALSE",
+        "FALSE",
+        "TRUE"
+      ],
+      "OccWorld": [
+        "FALSE",
+        "FALSE",
+        "TRUE"
+      ]
+    },
+    "component_found": true,
+    "aliases_resolved": true,
+    "startup_resource_witnesses_passed": true,
+    "enabled_ready_witness": false,
+    "query_draw_chain_complete": false,
+    "first_assert_stop": true,
+    "owned_cleanup_complete": true,
+    "input_reset_complete": true,
+    "normal24_unchanged": true,
+    "new_debug_dispositions": 0,
+    "normal_package_modified_by_test": false,
+    "initial_source_hypothesis": "Native graphics backing has only main lane0; vertex/index resources request lane2. Trace actual descriptors and x64 lock/header chain before a fix.",
+    "limits": [
+      "The asserted enable path failed; no control acceptance or on/off restoration is claimed.",
+      "Source hypothesis needs original/provider confirmation; no budget increase or guard has been applied."
+    ]
+  },
+  "published_copies": {
+    "hosted/verified_eleven_groups.json": {
+      "original_sha256": "a766839a6cd26865732826db0db2745396f0cdecfb6599568b43b2a73bd029bd",
+      "published_sha256": "a766839a6cd26865732826db0db2745396f0cdecfb6599568b43b2a73bd029bd"
+    },
+    "hosted/input-receipt.json": {
+      "original_sha256": "303c90916431e0bb426c782ba858fc68ce998f119e6c8588d14412c6e8f58bf0",
+      "published_sha256": "303c90916431e0bb426c782ba858fc68ce998f119e6c8588d14412c6e8f58bf0"
+    },
+    "source_review/REPORT.md": {
+      "original_sha256": "e30821b59e5550fe3e4e664b4aea7f810902f09d34bc0932da8cd448cf5ecc4c",
+      "published_sha256": "e30821b59e5550fe3e4e664b4aea7f810902f09d34bc0932da8cd448cf5ecc4c"
+    },
+    "source_review/BINDINGS.json": {
+      "original_sha256": "15edb5cc31af5dd84e93c86f8134fead96a56cb08158c3d41aaae36acda5773c",
+      "published_sha256": "15edb5cc31af5dd84e93c86f8134fead96a56cb08158c3d41aaae36acda5773c"
+    },
+    "source_review/SEAL.json": {
+      "original_sha256": "2e689ac8e292089075176f959f78e5825021676cf0dc54804b964e338c1d9e1c",
+      "published_sha256": "2e689ac8e292089075176f959f78e5825021676cf0dc54804b964e338c1d9e1c"
+    },
+    "first_recipe/ROOT_RECIPE_CORRECTION.json": {
+      "original_sha256": "0c18373e6299b5aa4be1558df386e6aa56356646753c127f3e77a11699a7a3a3",
+      "published_sha256": "0c18373e6299b5aa4be1558df386e6aa56356646753c127f3e77a11699a7a3a3"
+    },
+    "first_recipe/ROOT_EARLY_STOP.json": {
+      "original_sha256": "f6fa4b283c4b734ad9afc3f15706eb9ef37ea42917da2c1dc86ff5df64e67e7d",
+      "published_sha256": "f6fa4b283c4b734ad9afc3f15706eb9ef37ea42917da2c1dc86ff5df64e67e7d"
+    },
+    "first_recipe/REPORT.md": {
+      "original_sha256": "9dd373cb698237987c6b49fb9f91071847f793b0c5ebc1bb1a5463e928e48086",
+      "published_sha256": "efbf9eda032e699e79f338ab8d02c5bf9e91ad6318db1c9cc3864088ca4b3173"
+    },
+    "startup/BINDING.json": {
+      "original_sha256": "597a995308e470bb51c2e7c4a5a38fe268eaaa1216e8687c1756e660ff47e797",
+      "published_sha256": "597a995308e470bb51c2e7c4a5a38fe268eaaa1216e8687c1756e660ff47e797"
+    },
+    "startup/STAGING.json": {
+      "original_sha256": "d720dd8bd800fa3474a6179fd3dcec3cf0e04a77cf123fe75cb54bf8dc794f70",
+      "published_sha256": "d720dd8bd800fa3474a6179fd3dcec3cf0e04a77cf123fe75cb54bf8dc794f70"
+    },
+    "startup/ROOT_PRELAUNCH_REVIEW.json": {
+      "original_sha256": "9222a56aaf8387e0df7c9aba3f20c9e00ea66335d497c55637fcfe1d3fb3f5e3",
+      "published_sha256": "9222a56aaf8387e0df7c9aba3f20c9e00ea66335d497c55637fcfe1d3fb3f5e3"
+    },
+    "startup/ROOT_NATIVE_JUDGMENT.json": {
+      "original_sha256": "38ff696beae4813a8bc877bc4d62e959dac3a7e955057265c9ead1a76242c27a",
+      "published_sha256": "38ff696beae4813a8bc877bc4d62e959dac3a7e955057265c9ead1a76242c27a"
+    },
+    "startup/run.COMPLETION.json": {
+      "original_sha256": "27cb42e4ec1f9a2452e5a06647077f80bc31c0d4c5d9c6157427fe0e6d96bdf7",
+      "published_sha256": "27cb42e4ec1f9a2452e5a06647077f80bc31c0d4c5d9c6157427fe0e6d96bdf7"
+    },
+    "startup/REPORT.md": {
+      "original_sha256": "4741d065cf08059fff6fdb8c9bd62c375a40dc81232c9415f69412aadd460da6",
+      "published_sha256": "d4e7a49e00e2307045773626fda971998524823c9d02c6730c018ff008541f8a"
+    },
+    "startup/result.json": {
+      "original_sha256": "b9c8b2d20ae33f6db8279440c85599e644849e7a91d6f47946e53b34a99bde4d",
+      "published_sha256": "b9c8b2d20ae33f6db8279440c85599e644849e7a91d6f47946e53b34a99bde4d"
+    },
+    "startup/flow-terminal.json": {
+      "original_sha256": "a685904d7edb86aa89a8d07f8e44aa3c3de60654f4c4dee668b9be1e8fc877b5",
+      "published_sha256": "a685904d7edb86aa89a8d07f8e44aa3c3de60654f4c4dee668b9be1e8fc877b5"
+    },
+    "startup/flow/terminal-status.json": {
+      "original_sha256": "fe7fef0d0ceee95cb283a9d84ce17bfe6d2fb23c37a92a607c7bba306fbf36e2",
+      "published_sha256": "fe7fef0d0ceee95cb283a9d84ce17bfe6d2fb23c37a92a607c7bba306fbf36e2"
+    },
+    "startup/flow/marks.txt": {
+      "original_sha256": "64bbed22d1d0f517fc68671ec686a4d5bc21e3f534f90035c6a85de03e5e399b",
+      "published_sha256": "64bbed22d1d0f517fc68671ec686a4d5bc21e3f534f90035c6a85de03e5e399b"
+    },
+    "occlusion/BINDING.json": {
+      "original_sha256": "b028412787a91167b468ca6daa2320c9f0795f40b24a6eba0f0aabcb9381fd5c",
+      "published_sha256": "b028412787a91167b468ca6daa2320c9f0795f40b24a6eba0f0aabcb9381fd5c"
+    },
+    "occlusion/STAGING.json": {
+      "original_sha256": "0774d476c24b1ca10328e8cf0bbca0dc759d29711ef671184c40d08836c4e638",
+      "published_sha256": "0774d476c24b1ca10328e8cf0bbca0dc759d29711ef671184c40d08836c4e638"
+    },
+    "occlusion/ROOT_PRELAUNCH_REVIEW.json": {
+      "original_sha256": "cf60cd1f57d8a5246b27b852b4567065acdc6203d00e5dd65809fc720df3e987",
+      "published_sha256": "cf60cd1f57d8a5246b27b852b4567065acdc6203d00e5dd65809fc720df3e987"
+    },
+    "occlusion/ROOT_NATIVE_JUDGMENT.json": {
+      "original_sha256": "df46aa779bc7f5ff204738e6b4d60cdd17a5d6f02a6f3b2e21967f5a8e0c3571",
+      "published_sha256": "df46aa779bc7f5ff204738e6b4d60cdd17a5d6f02a6f3b2e21967f5a8e0c3571"
+    },
+    "occlusion/run.COMPLETION.json": {
+      "original_sha256": "4d31108c50ea3652f1e2bb86fa4dd61e680b3967eb217d81bcd9c20d4c9bed24",
+      "published_sha256": "4d31108c50ea3652f1e2bb86fa4dd61e680b3967eb217d81bcd9c20d4c9bed24"
+    },
+    "occlusion/REPORT.md": {
+      "original_sha256": "f0796fe487ba8951249c2b6e022154573103af73d0a8ade9517fc9055e67f6e8",
+      "published_sha256": "61a835e41181cdd116055e10ea8892ef6c505f1f9d6265f33c6e291645a62c0e"
+    },
+    "occlusion/result.json": {
+      "original_sha256": "f88e73c4aa71581de3d7ef32d72efa1138a8bf4742c8f9ec6f81a08ff93308f5",
+      "published_sha256": "f88e73c4aa71581de3d7ef32d72efa1138a8bf4742c8f9ec6f81a08ff93308f5"
+    },
+    "occlusion/flow-terminal.json": {
+      "original_sha256": "8fd865b3eed3d5f0ddce7390d5d4411cfd0c50c6aa343aeb7d87910c431ca0f5",
+      "published_sha256": "8fd865b3eed3d5f0ddce7390d5d4411cfd0c50c6aa343aeb7d87910c431ca0f5"
+    },
+    "occlusion/flow/terminal-status.json": {
+      "original_sha256": "4ddf7b1bca1473e13dc33cd772e6f075ee7d99da0cb3c187a5327aee6ff01543",
+      "published_sha256": "4ddf7b1bca1473e13dc33cd772e6f075ee7d99da0cb3c187a5327aee6ff01543"
+    },
+    "occlusion/flow/marks.txt": {
+      "original_sha256": "f43ae444ebfd586c271968ab97fca144edc6974c61ca4ca7138a20a8421c65b2",
+      "published_sha256": "f43ae444ebfd586c271968ab97fca144edc6974c61ca4ca7138a20a8421c65b2"
+    },
+    "occlusion/targeted-evidence.json": {
+      "original_sha256": "5e6cbf94ee8b275af4750c62e0f65be17d99a753c6253afe347cdad34f4dfb39",
+      "published_sha256": "5e6cbf94ee8b275af4750c62e0f65be17d99a753c6253afe347cdad34f4dfb39"
+    },
+    "occlusion/vw_deform_keys.log": {
+      "original_sha256": "a400e0efd1e5bcb5d822db1c90b6eaab608a058a0ad2530094d279673ca92375",
+      "published_sha256": "a400e0efd1e5bcb5d822db1c90b6eaab608a058a0ad2530094d279673ca92375"
+    },
+    "occlusion/case-input-manifest.json": {
+      "original_sha256": "595d5482cf9f01d5ecd5f540799698c942945d84bb57b48e6e37ea92516b48b6",
+      "published_sha256": "595d5482cf9f01d5ecd5f540799698c942945d84bb57b48e6e37ea92516b48b6"
+    }
+  },
+  "new_debug_dispositions": 0,
+  "normal_package_modified_by_this_work": false,
+  "dev_promoted": false,
+  "observed_normal": {
+    "exe_sha256": "1884810cd8e8128e8b587cfedcb6eb969ecaa250980ada16dc4e2cdc390224d0",
+    "provenance": {
+      "exe_sha256": "1884810cd8e8128e8b587cfedcb6eb969ecaa250980ada16dc4e2cdc390224d0",
+      "exe_mtime": "2026-10-24T13:50:10",
+      "built_from_root": "D:\\Reverse\\BP-Decomp_Workflow",
+      "host": "Laptop-Adrien",
+      "parent_head": "e68b398e70d5dab5581419009efb458bdaa90963",
+      "parent_dirty": true,
+      "b5_head": "a163c2272efd79660ce96805bab677c9585308f2",
+      "b5_dirty": true,
+      "b5_root": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp"
+    },
+    "note": "Another lane refreshed the normal package before these runs. The stamped source is dirty and is not exact-candidate attribution. All24 protected normal files stayed unchanged during both tests."
+  },
+  "next_work": "Recover the actual graphics lane backing and native vertex/index/header/lock chain before another enable run; no guessed capacity increase or success guard."
+}
