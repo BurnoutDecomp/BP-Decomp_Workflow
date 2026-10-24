@@ -1,0 +1,56 @@
+{
+  "globals": [
+    {
+      "address": "0x82f2c820",
+      "name": "qword_82F2C820",
+      "raw_hex": "00000000000000000000000000000001000000000000000100000000000000010000000000000001"
+    },
+    {
+      "address": "0x82f2c848",
+      "name": "off_82F2C848",
+      "raw_hex": "820a09f00000000000000000"
+    },
+    {
+      "address": "0x82ffaa14",
+      "name": "dword_82FFAA14",
+      "raw_hex": "0000000000000000000000000000000000000000"
+    },
+    {
+      "address": "0x82ffa898",
+      "name": "dword_82FFA898",
+      "raw_hex": "00000000"
+    },
+    {
+      "address": "0x82f2a7c8",
+      "name": "",
+      "raw_hex": "526f6f742042616e6b0000000000000000000000000000000000000000000000ffffffff0000000007000000000000000cb000000000000000000000000003800000000100000658000000010000000100010000"
+    }
+  ],
+  "root_loads": [
+    {
+      "address": "0x8266af08",
+      "raw_hex": "83eb0024",
+      "opcode": 32,
+      "base_register": 11,
+      "destination_register": 31,
+      "displacement": 36,
+      "assembly": "lwz       r31, (KAC_BINARY_MEMORY_MAP - 0x82F2A788)(r11)"
+    },
+    {
+      "address": "0x8266d5b4",
+      "raw_hex": "83ff0024",
+      "opcode": 32,
+      "base_register": 31,
+      "destination_register": 31,
+      "displacement": 36,
+      "assembly": "lwz       r31, (KAC_BINARY_MEMORY_MAP - 0x82F2A788)(r31)"
+    }
+  ],
+  "descriptor_initializers": [
+    {
+      "address": "0x82c5ff68",
+      "name": "sub_82C5FF68",
+      "assembly": "0x82C5FF68 mflr      r12\n0x82C5FF6C stw       r12, var_8(r1)\n0x82C5FF70 stwu      r1, back_chain(r1)\n0x82C5FF74 lis       r11, locret_82C74FD8@ha\n0x82C5FF78 li        r10, 0\n0x82C5FF7C addi      r3, r11, locret_82C74FD8@l# void (__cdecl *)()\n0x82C5FF80 li        r11, 1\n0x82C5FF84 stw       r10, 0x60+var_10(r1)\n0x82C5FF88 lis       r10, qword_82F2C820@ha\n0x82C5FF8C stw       r11, 0x60+var_10+4(r1)\n0x82C5FF90 ld        r11, 0x60+var_10(r1)\n0x82C5FF94 std       r11, qword_82F2C820@l(r10)\n0x82C5FF98 bl        atexit\n0x82C5FF9C addi      r1, r1, 0x60\n0x82C5FFA0 lwz       r12, var_8(r1)\n0x82C5FFA4 mtlr      r12\n0x82C5FFA8 blr"
+    }
+  ]
+}
