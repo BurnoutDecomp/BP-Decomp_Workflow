@@ -1,0 +1,14 @@
+# Original constructor self-review
+
+- ARTIST828EBAF8 saves this/options/resource/debug fromr3/r4/r5/r6. DecFIGS declares the canonical three-input Construct virtual and void. The decompiler's final BOOL is QueryPerformanceCounter's incidental result; no return value is introduced.
+- Base, receiver queue and both128-entry priority queues precede option/stream stores and allocations. Release stage2/prepare0 are genuine loader stages. The new-module classification remains at the original end, after pool-response cache/cursor resets.
+- The eight main allocation requests and conditional debug request preserve order, counts, alignments, allocator identity and five-lane descriptor semantics. Named host record sizeof is the explicit width adaptation; no fixed console stride is used for native pointers.
+- AllocateMemoryResource is an existing canonical vendor method, not an invented allocation adapter. Its current selected header and ARTIST0x823FF7D0 body are bound. Its last argument is the null allocation name, matchingr6=0 in the original debug request.
+- Decompression Construct gets the actual entry array and max count despite Hex-Rays dropping them. The original caller's scheduler address is positively tied to HardwareInit's initialized job-manager object, and the current accessor returns that exact typed owner.
+- No additional null checks, native placement-construction loops or optional initializers are attributed to the original body. Header/needs/resources/loaded-table and both stream assertions keep their original predicates and lines. The existing assert-buffer PC leaf preserves the actual shared destination on synchronous callers.
+- Original current-stream, used flags, resource cursors, partial-fixup limit and timer stores all have counterparts. Prepare, rather than this constructor, remains the loaded-bundle clearing owner.
+- The previous native constructor body is exact after removing only its name change. Its native caller is exact after removing only the selected-method rename. The no-argument helper's body is unchanged.
+- The canonical virtual qualifier is restored; the retained native no-argument override and the project's broader base virtual-destructor ABI divergence are pre-existing class-interface debt. This is not a claim that native vtable byte offsets match ARTIST.
+- Complete primary constructor/callee/hardware assembly, DWARF shape, exact shipping vendor selection and existing source dependencies are retained. No original IDB or owned copy was opened for this checkpoint.
+- No top-level original owner is introduced, no missing child is filled by a trap/forwarder, and no initialization/allocator readiness is inferred from a new flag. The larger ResourceModule/Pool/FileSystem owners remain explicitly pending.
+- Source audits only: no C++ compilation, link, tests, CI, game/input, activation or site credit.

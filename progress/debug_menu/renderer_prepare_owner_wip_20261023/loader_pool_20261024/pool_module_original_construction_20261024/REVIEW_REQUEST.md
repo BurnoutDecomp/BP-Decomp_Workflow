@@ -1,0 +1,3 @@
+Review the canonical PoolModule three-input constructor and precise original ScratchPool constructor against the bound ARTIST/DWARF and exacteb4 provider bodies. Verify the unused debug input from assembly, allocation counts/descriptors/order, IDList/type registration, shared storage, scratch reset versus later InitPool ownership, state helpers, assertions, FIFOs and final classification.
+
+Verify that the retained native pool/scratch paths are byte-identical after the explicit scratch-method/caller rename. Do not treat this child recovery as complete FileSystem/ResourceModule construction or activation. No compilation, link, runtime/site credit is claimed. Root owns composition, review scheduling and any later builds/runs.
