@@ -1,0 +1,391 @@
+{
+  "schema": 1,
+  "source_base": "a186b494437907f2db8e92abdbc7f378eb13f56a",
+  "workflow_base": "5e7a14d8b95cb6caa02fcf5cbfa2aa43c775bdbc",
+  "status": "Complete original invite component method/Construct source; four genuine data definitions unresolved, no activation or link readiness",
+  "changes": [
+    {
+      "path": "src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.h",
+      "pre_blob": "c6a6fbae67d9ae680db6d2a70bb027d9e0e77d0f",
+      "pre_sha256": "24d666f09be39026c22cda6a9a678c9d60aae647005cdd7632be90ed3560ec76",
+      "pre_bytes": 4409,
+      "post_sha256": "e53c4bc448b1b52d835594bc21e883253c1a625eac77c1f020940af1e5ee7275",
+      "post_bytes": 5388,
+      "preimage": "preimage/src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.h",
+      "postimage": "postimage/src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.h"
+    },
+    {
+      "path": "src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp",
+      "pre_blob": "0a3e0adfc1c99287fb052ac9cc7b8872ff5c7240",
+      "pre_sha256": "b4388f40f216fc9d774ab3cf1c0405b1dbb3190a1f6359b96821681166a46d8c",
+      "pre_bytes": 3654,
+      "post_sha256": "f005f45a9a248db2bdd20012d9e37858b3ff60ca3eda8712cea8c59710c260c2",
+      "post_bytes": 11983,
+      "preimage": "preimage/src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp",
+      "postimage": "postimage/src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiEvent.h",
+      "pre_blob": "6f25619cf4ead4643d39e6934af18ab8e94bef74",
+      "pre_sha256": "15ab6d0071e5fe5a22eb24c7708d191bb5414277e02c1e4840e2319dfc9d4fd3",
+      "pre_bytes": 12185,
+      "post_sha256": "7ab3ba5a68c555f958eee1934ea405bab1cc4fa4b28ea9053104719979bcacaf",
+      "post_bytes": 12540,
+      "preimage": "preimage/src/GameShared/GameClasses/Gui/CgsGuiEvent.h",
+      "postimage": "postimage/src/GameShared/GameClasses/Gui/CgsGuiEvent.h"
+    }
+  ],
+  "patch_sha256": "2dd036c1e478bfc0d75e0d77f4f0f3511eb8473db85edfb7bcce38419284c5fe",
+  "unresolved_definitions": [
+    {
+      "name": "OnlineInviteMessageComponent::KAE_TYPE_SIZE_CONVERSION",
+      "address": "8204C594",
+      "shape": "six original32-bit enum entries; no values supplied"
+    },
+    {
+      "name": "OnlineInviteMessageComponent::KAPC_TEXT_FIELDS_STINGS_0",
+      "address": "82F24F8C",
+      "shape": "six original32-bit string pointers plus actual target strings; no values supplied"
+    },
+    {
+      "name": "OnlineInviteMessageComponent::KAPC_TEXT_FIELDS_STINGS_1",
+      "address": "82F24FA4",
+      "shape": "six original32-bit string pointers plus actual target strings; no values supplied"
+    },
+    {
+      "name": "BrnGui::gacOnlineInviteArgument820046A7",
+      "address": "820046A7",
+      "shape": "original read-only char storage passed for no-name notifications; genuine value/length not yet read"
+    }
+  ],
+  "providers": [
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/BrnGuiCache.h",
+      "bytes": 193018,
+      "sha256": "24adbfbc2b54b92f6883f6a97a2a479863b2b3226d379927cf47b0fc9374f730",
+      "path": "src/GameSource/Gui/BrnGuiCache.h",
+      "blob": "95ec7c0b38b46c7d676f2f98e6622a2c8a11fd55"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/BrnGuiCache.cpp",
+      "bytes": 292173,
+      "sha256": "10c48c851d50de5b7649678eaf9705d7853734023023132b1b232072f652d584",
+      "path": "src/GameSource/Gui/BrnGuiCache.cpp",
+      "blob": "12fa0d395dbc64a302f09e3d5cecfe0091e07adc"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.h",
+      "bytes": 6790,
+      "sha256": "cdc6b4c8e30f39b121f11d846eb2b049f2721cab4528339d85a40f5b916d38d2",
+      "path": "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.h",
+      "blob": "677972170758548806ede705211de9b779cda364"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "bytes": 24328,
+      "sha256": "56203d6c76cdb434cf17591249ae258ca0e71d1db8d40e030390731239e16cc5",
+      "path": "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "blob": "208366c547cc1306537fdd39579f47b8c10d1d97"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptComponent.h",
+      "bytes": 6330,
+      "sha256": "ded3ae9fffbb6571d90e45c701935c041f181bfed93e21d553a7d6352521625b",
+      "path": "src/GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptComponent.h",
+      "blob": "0427fd07ae80c7946e2ee74be345eedbc737daa4"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/Flapt/BrnFlaptMovieClipRef.h",
+      "bytes": 8467,
+      "sha256": "434759d0858fd6465b2f13a32cdb9055ea145adb9dcee53150a7678f0ebc7970",
+      "path": "src/GameSource/Gui/Flapt/BrnFlaptMovieClipRef.h",
+      "blob": "47706d3e652a67e280f5f0803bb3807794dd794c"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/Flapt/BrnFlaptMovieClipRef.cpp",
+      "bytes": 16390,
+      "sha256": "7e460a90597064b15e82a3add0e8e9e9333577c3929b7dbb33cd54b5082ec360",
+      "path": "src/GameSource/Gui/Flapt/BrnFlaptMovieClipRef.cpp",
+      "blob": "b188cf8edf32c05781c8f07d03642774a2e63f87"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/Flapt/BrnFlaptMovieClipInstance.h",
+      "bytes": 7524,
+      "sha256": "916ece6b206d6411f33bcfb332be9fa04ef5427e41233dd582417a97904094df",
+      "path": "src/GameSource/Gui/Flapt/BrnFlaptMovieClipInstance.h",
+      "blob": "148177fb19538a5f24c1b5b018ca2aa95e076c01"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/Flapt/BrnFlaptMovieClipInstance.cpp",
+      "bytes": 35789,
+      "sha256": "d8c8df4d6465d3dbece2895e4bbbce763099258cd2903d7794a46008133df03e",
+      "path": "src/GameSource/Gui/Flapt/BrnFlaptMovieClipInstance.cpp",
+      "blob": "3418b2f1da54a471c722f5ecd8873f186ae98944"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/Flapt/BrnFlaptTextFieldRef.h",
+      "bytes": 9023,
+      "sha256": "0ef7206587dbb147f4f60f9fad99add077fb09271d89bc26695174dca958bf75",
+      "path": "src/GameSource/Gui/Flapt/BrnFlaptTextFieldRef.h",
+      "blob": "b60ff9801fe1ba67e7aca7ccabfaa477312777f9"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameSource/Gui/Flapt/BrnFlaptTextFieldRef.cpp",
+      "bytes": 15011,
+      "sha256": "017cbe38eada7594038966237926b34052ec522ea1748ce08c716b46cd8f11a1",
+      "path": "src/GameSource/Gui/Flapt/BrnFlaptTextFieldRef.cpp",
+      "blob": "db5a1be2cade55f48b6fa6eb00e30a40912a2703"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Gui/CgsGuiShared.h",
+      "bytes": 4936,
+      "sha256": "f52b8be59ac8a84ab17d8e4d5c372b78012a8e6328fb90e6eda270e7b28d78a8",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiShared.h",
+      "blob": "b65663e6fc75994a2e02d1ccb778a85dfd7a3593"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Gui/CgsGuiShared.cpp",
+      "bytes": 7106,
+      "sha256": "4167e1eb10e4496860fdc81be3a84179d16b03b19fb6c940d2772ed1dc2312ee",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiShared.cpp",
+      "blob": "23e780790d009cbd9a9a2763ac06d506503b691f"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h",
+      "bytes": 18372,
+      "sha256": "1243863f7a0f431723df60985a47257413484da6d746f4b3e537fae80183717b",
+      "path": "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h",
+      "blob": "15ea322161537040f0fa4b97467a5a6f9e68adb6"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.cpp",
+      "bytes": 9408,
+      "sha256": "7f9ee46e34948f25f2fa4517cd9366086af653c9be589c786556a7259740259e",
+      "path": "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.cpp",
+      "blob": "9b246352e3b03c7f0166a3fdc0631921df051023"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptString.h",
+      "bytes": 6285,
+      "sha256": "77b8eb8610ed84654d1d9edbde928aa45a186710436a2b1e5d0f4195762a5b30",
+      "path": "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptString.h",
+      "blob": "2d75aa696b5f8967a87481f01a30b3b831dc1c52"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptString.cpp",
+      "bytes": 24125,
+      "sha256": "7c16c5ca8e7d497f980a9a9e5692959dd349ec76f33f0c47f12ef16f78828c91",
+      "path": "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptString.cpp",
+      "blob": "185fde18e57ba43dbf2623692c1ec5d6f31d817a"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Language/CgsLanguageManager.h",
+      "bytes": 29148,
+      "sha256": "56bad1d9383daa187154013266fbf93b7a852e678d0f9c455a8adab03269a0a2",
+      "path": "src/GameShared/GameClasses/Language/CgsLanguageManager.h",
+      "blob": "d453784e7ef87ab06aa92bae0fc9278b73c440d7"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "bytes": 116329,
+      "sha256": "598f0d867b0a9243ace457cb392d3ae76c3c09b8306a3db915d696f77b0e7a58",
+      "path": "src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "blob": "46394e256582416693c4b4cc538e864a960d4983"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Core/CgsStringUtils.h",
+      "bytes": 1337,
+      "sha256": "90d56aac0566feeb993a92545409640d18f6cfe20e7387f2f7a9d486a31b2825",
+      "path": "src/GameShared/GameClasses/Core/CgsStringUtils.h",
+      "blob": "4209bd1d1a3cdb5ea25b7b5bede4f126c8be6182"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Core/CgsStringUtils.cpp",
+      "bytes": 2276,
+      "sha256": "ca7e654bd6ce0fd7d21d62eb21f06b7291a2bdb169e6ac847830c8c305aca936",
+      "path": "src/GameShared/GameClasses/Core/CgsStringUtils.cpp",
+      "blob": "6ebbc73f726859607152a6ef579463cf81174931"
+    },
+    {
+      "evidence": "evidence/source_a186/src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+      "bytes": 39881,
+      "sha256": "3c4da2211eddabcd7c31d97bc7a6a69e6c2a3222598fa0618bca428694d04e60",
+      "path": "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+      "blob": "cd59e9223f292cf1e2029d47cba70f36ed88fdb6"
+    }
+  ],
+  "primary_evidence": [
+    {
+      "evidence": "evidence/ARTIST/0x82415D68.json",
+      "bytes": 3764,
+      "sha256": "a41d45abbb2f899d3af5854fb063a9bfa17761bfc9c9a386fb34f9ec58a949b5",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82415D68.json",
+      "name": "BrnGui::OnlineInviteMessageComponent::Construct"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x82415E20.json",
+      "bytes": 10168,
+      "sha256": "04b06d2144880d6b4a0e5927267e537794a9e8040eedc9d672246eacd415c88a",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82415E20.json",
+      "name": "BrnGui::OnlineInviteMessageComponent::ShowMessage"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x82415FB0.json",
+      "bytes": 6390,
+      "sha256": "9657fa7b12c3b7871f10cc3a3f6392f964a80d8a8e1e03282fa62c1c6b0f7c56",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82415FB0.json",
+      "name": "sub_82415FB0"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x824160E8.json",
+      "bytes": 3890,
+      "sha256": "1e5e61bf9f735dec499d18de5c1856519f3dc1d0d2193b8a01c75e22a017c81e",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824160E8.json",
+      "name": "BrnGui::OnlineInviteMessageComponent::IsMessageAllowed"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x824161A8.json",
+      "bytes": 3350,
+      "sha256": "119d4fbd242a9cb12d4174a5c43c14c9ffcc45edd481f56acef3741902effccf",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824161A8.json",
+      "name": "BrnGui::OnlineInviteMessageComponent::AllowMessages"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x82416248.json",
+      "bytes": 3526,
+      "sha256": "16d35e1dedf177a27e6639c313409a6fe19e2f02722b2d520be3438734e2654f",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82416248.json",
+      "name": "BrnGui::OnlineInviteMessageComponent::RemoveMessage"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x824162E0.json",
+      "bytes": 2815,
+      "sha256": "e636116f24964f5fae16eb3ce1ca3de269461386a71884a8130037ce226d6673",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824162E0.json",
+      "name": "BrnGui::OnlineInviteMessageComponent::DoTransitionComplete"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x82424DB0.json",
+      "bytes": 3043,
+      "sha256": "a5dbbbd3972325cd7378033abfa96daebe4e63cdf9210832205aecb573868941",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82424DB0.json",
+      "name": "BrnGui::OnlineInviteMessageComponent::DisallowMessages"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x82439FF0.json",
+      "bytes": 9778,
+      "sha256": "96db93c735e4b43697707399dabb0306d1b0169314b347e7edb24242017c629a",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82439FF0.json",
+      "name": "BrnGui::OnlineInviteMessageComponent::Update"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x82509338.json",
+      "bytes": 48975,
+      "sha256": "7cb1ae983c01f49a5d0ca7cd92b321dab80a6f4ea4c2dfced358ebe8f7502db1",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82509338.json",
+      "name": "BrnGui::AlwaysAvailableComponentsManager::Update"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x8246F3E8.json",
+      "bytes": 7766,
+      "sha256": "ac27959d084f1f298f143160df1bd41ea869ec3cdc12e40e2123777a8c141a01",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8246F3E8.json",
+      "name": "sub_8246F3E8"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x8246CD00.json",
+      "bytes": 9601,
+      "sha256": "6d649ccdbfc8948bc7f22b035bfe79822b1ddf3c69e9d68a235d427ba34b30b5",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8246CD00.json",
+      "name": "BrnFlapt::TextFieldRef::SetLocalisedText"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x8246D158.json",
+      "bytes": 9269,
+      "sha256": "9eb2392b514e5da0ce4b2256797ae68032f4486a3d279b668cb7a57b2465b787",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8246D158.json",
+      "name": "sub_8246D158"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x8246D2B0.json",
+      "bytes": 6432,
+      "sha256": "cab5db7138a212c6cf2c165965794321005e5ccd622779d40449739b37aec96e",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8246D2B0.json",
+      "name": "sub_8246D2B0"
+    }
+  ],
+  "declaration_evidence": [
+    {
+      "evidence": "evidence/DecFIGS/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.h",
+      "bytes": 6388,
+      "sha256": "61af78913a9db21cedca10f3143c4e8847dd18128135753f85ef77e0f6f6b8d9",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Gui\\Flow\\Permanent\\Components\\BrnOnlineInviteMessageComponent.h"
+    },
+    {
+      "evidence": "evidence/DecFIGS/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp",
+      "bytes": 4419,
+      "sha256": "541786da018764d070d3ece260c3aa0609bc084f48d6e54f1aa2f88f3163ebdd",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Gui\\Flow\\Permanent\\Components\\BrnOnlineInviteMessageComponent.cpp"
+    },
+    {
+      "evidence": "evidence/DecFIGS/GameSource/Gui/Flapt/BrnFlaptTextFieldRef.h",
+      "bytes": 6632,
+      "sha256": "0edd71baa98d635fd09fb92effdc8f6da6a30fa50d6f670df9e230fce6316ad3",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Gui\\Flapt\\BrnFlaptTextFieldRef.h"
+    }
+  ],
+  "build_evidence": [
+    {
+      "evidence": "evidence/workflow_5e7a/tools/build/build_game_exe.bat",
+      "bytes": 454238,
+      "sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792",
+      "path": "tools/build/build_game_exe.bat",
+      "blob": "42e6adab598fee7634b2edceee371dac4a3369eb"
+    },
+    {
+      "evidence": "evidence/workflow_5e7a/tools/build/compile_exe.py",
+      "bytes": 34413,
+      "sha256": "cfe01dbbd062e3ca570b5e323a2605ae6b94fbf18c66b0c50f279f2304dfc7a8",
+      "path": "tools/build/compile_exe.py",
+      "blob": "f537eb5ba8da05747c29fbff9f600f2bc0f595c0"
+    }
+  ],
+  "mounts": [
+    {
+      "path": "src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp",
+      "lines": [
+        4573
+      ],
+      "expression": "%SRC%\\GameSource\\Gui\\Flow\\Permanent\\Components\\BrnOnlineInviteMessageComponent.cpp"
+    },
+    {
+      "path": "src/GameSource/Gui/Flapt/BrnFlaptMovieClipRef.cpp",
+      "lines": [
+        4663
+      ],
+      "expression": "%SRC%\\GameSource\\Gui\\Flapt\\BrnFlaptMovieClipRef.cpp"
+    },
+    {
+      "path": "src/GameSource/Gui/Flapt/BrnFlaptTextFieldRef.cpp",
+      "lines": [
+        4664
+      ],
+      "expression": "%SRC%\\GameSource\\Gui\\Flapt\\BrnFlaptTextFieldRef.cpp"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.cpp",
+      "lines": [
+        4902
+      ],
+      "expression": "%SRC%\\GameShared\\GameClasses\\Gui\\Model\\State\\CgsGuiStateInterface.cpp"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiShared.cpp",
+      "lines": [
+        3204
+      ],
+      "expression": "%SRC%\\GameShared\\GameClasses\\Gui\\CgsGuiShared.cpp"
+    }
+  ],
+  "checks": 48
+}
