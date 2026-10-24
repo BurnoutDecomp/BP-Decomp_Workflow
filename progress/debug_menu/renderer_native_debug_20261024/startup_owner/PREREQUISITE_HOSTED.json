@@ -1,0 +1,135 @@
+{
+  "status": "hosted_build_all_selected_gates_and_payloads_pass_native_pending",
+  "source": "e315d38ac437a07e5df4903851aaaa43788c3168",
+  "source_tree": "c89f2bec6c798a58d50eb85d7fc9446d88ab9ce4",
+  "workflow": "8bea368138c12c8e60c1bffb5994cc4a743ccefd",
+  "run_id": 40090202902,
+  "exe_sha256": "0c9b41dbc6444c392c07917e76efb3cb8966b532117443c5fc52e48642c6d61d",
+  "payload_count": 12,
+  "passed_gates": [
+    "gui_io_status",
+    "system_user_profile_status",
+    "hud_status",
+    "traffic_flowtype_override_status",
+    "startup_io_status",
+    "gui_license_status",
+    "keyboard_ui_contract_status",
+    "gui_animation_status",
+    "rwac_command_capacity_status",
+    "online_save_route_status",
+    "gui_menu_music_wire"
+  ],
+  "rwac_legacy_checks": 16427,
+  "rwac_first_pass_checks": 6,
+  "rwac_expected_baseline_failures": 6,
+  "rwac_variants": [
+    {
+      "name": "candidate",
+      "checks": 16427,
+      "failures": 0,
+      "exit_code": 0,
+      "run_log_sha256": "8049b82a441f4b3d2a3e7afd484cfaafb51958f31515423377d3a1f3d80e1b0f"
+    },
+    {
+      "name": "baseline_control",
+      "checks": 25,
+      "failures": 6,
+      "exit_code": 1,
+      "run_log_sha256": "6d55b4952b78268b1249f3b3e0eeab7af5483cc124b3ae06379e09d29a9dfe13"
+    }
+  ],
+  "receipt_sha256": "a8875fea6a65c720b6866d7f38a4d3580be54c24c5433036618919b23fcebddb",
+  "build_log_sha256": "bb41aacf89ee616be06e54fc4f54df0371431c6a0a618ce899950e11418f6dd6",
+  "rwac_result_sha256": "c6f9364fb9c4b92998af4c9e639fe778e927d4a2bc8111995500f2093987c850",
+  "normal_package_changed": false,
+  "native_executed": false,
+  "new_behavior_dispositions": 0,
+  "freeze_fix_claim": false,
+  "text_format_binding": [
+    {
+      "variant": "text-format",
+      "checks": 78,
+      "failures": 0,
+      "exit_code": 0,
+      "result_sha256": "d005baf74917dc1205ad8cd3488eaa9f622c52a1c3b137a8c5db68718013ac38",
+      "stdout_sha256": "03ef136f8c2ecb3b016b87d9b2053e6d314c03c134be0ddc8e7b7b7917cd998d",
+      "source_binding_sha256": "f647abfa6adc4fd3c78a3927b340f380da6cb5cf3085ecb39e7d468618841429"
+    },
+    {
+      "variant": "text-format-old-setter",
+      "checks": 78,
+      "failures": 57,
+      "exit_code": 1,
+      "result_sha256": "8ba414cfff505fa428c263a83c8ea14d0d3bfec7beb7b55ca60e4799f5bd4198",
+      "stdout_sha256": "7fb27785e1e54f44c27d389141ee7500acaaf5111cd916147f22775a8b0e861e",
+      "source_binding_sha256": "d329eb72517709de9d35d277a8e8cf05a9a20213b98a6aebaae435ea159e0eee"
+    }
+  ],
+  "verified_input_paths": 112,
+  "run_attempt": 1,
+  "online_save_route_modes": [
+    {
+      "mode": "candidate",
+      "checks": 71,
+      "failures": 0,
+      "assertions": 0,
+      "exit_code": 0,
+      "log_sha256": "ee9be8199d99cd61bc8f151b290d6ae9214746ae1318d472d54e81d9e5c8c268"
+    },
+    {
+      "mode": "omitted_init",
+      "checks": 13,
+      "failures": 6,
+      "assertions": 0,
+      "exit_code": 1,
+      "log_sha256": "b7704ceea1f355ec4f6e29437226efe9279acc027da6d6eccc12eae99028b4bd"
+    },
+    {
+      "mode": "oldtrap_save",
+      "checks": 1,
+      "failures": 1,
+      "assertions": 0,
+      "exit_code": 1,
+      "log_sha256": "ab7bb47b2f44415aa9966d719e1e81dbffd2b557fe5159c9cba0b56360a68de5"
+    },
+    {
+      "mode": "oldtrap_load",
+      "checks": 1,
+      "failures": 1,
+      "assertions": 0,
+      "exit_code": 1,
+      "log_sha256": "8c31f86e34731e4c67f40236bfd995e825e9b3c6d468c672bc48ff07ea47937f"
+    }
+  ],
+  "online_save_route_result_sha256": "cab6968eb25287d5c21fa3ab802f56f3cfbb723906d433e984125771a4f993b0",
+  "fixture_compiles_per_variant": 8,
+  "online_save_route_pins": 27,
+  "fixture_payloads": 8,
+  "shipping_tus": 3002,
+  "shipping_compiled": 928,
+  "shipping_cached": 2074,
+  "disk_persistence_verified": false,
+  "source_subject": "17ab0a96e27bed5e60ffc55cb81dcf0a653b1e4e",
+  "active_replay_frame_wiring": "pending",
+  "gui_menu_music_wire": {
+    "candidate": {
+      "source": "e315d38ac437a07e5df4903851aaaa43788c3168",
+      "checks": 217,
+      "failures": 0,
+      "process_exit_code": 0,
+      "source_headers": 25,
+      "expected_raw_mismatches": 0,
+      "executable_sha256": "497c98ec2ed0f93552157106f857a14562b5ff4bf2d7bc331fd10638ad2d0494"
+    },
+    "negative_control": {
+      "source": "b595d61d2440ca94d61aa8fa610ab0bf6048cc66",
+      "checks": 189,
+      "failures": 0,
+      "process_exit_code": 0,
+      "source_headers": 25,
+      "expected_raw_mismatches": 4,
+      "executable_sha256": "1f55815ec4c944f21f7f1541b55882414522220686dbc9c2c159fa963f83e90e"
+    }
+  },
+  "scope_limit_menu23": "Production decoder/queue fixture; channel40 drain and audible playback are not native-certified."
+}
