@@ -1,0 +1,39 @@
+# Native renderer startup owner proposal
+
+This six-path source proposal targets **e315d38ac437a07e5df4903851aaaa43788c3168**, parent **8bea368138c12c8e60c1bffb5994cc4a743ccefd**. That separate native-debug branch already contains the frozen graphics-adoption prerequisites. Delivered/dev remains d3ec7d2dd65a37b489d1dbf61a53b9ce030385ee; the failed GUI inbox4c7 and large original-owner brancheb4 are separate. Nothing was applied, compiled, tested, mounted, launched or credited here.
+
+The proposal adds a concrete startup caller for **canonical BrnRendererModule::Prepare**, including its original base preparation, empty blobby/corona transitions, real bank31 lookup, sky preparation, debug registration and MemoryUsage completion. The bounded PC allocation phase retains the native Construct allocations instead of running the console allocation calls over those live banks. It calls no direct registration helper and introduces no resource-ready flag or stage seed.
+
+## Original boundary and current owners
+
+ARTIST823DB990..9C8 completes the actual GameData virtual Prepare first. It then locks that GameData output at823DB9DC, reads its allocator-list pointer at9E4, calls the by-value renderer at9F0 and unlocks the output afterward. ARTIST main827E60D8 completes its game Prepare loop before the frame loop. This is positive caller/assembly evidence, including the virtual+0x40 GameData call; absence from a text search was not used to establish the original chain.
+
+The active native host constructs the single file-static gGameModule in EnginePrepare, but starts BeginFramesPC in EngineUpdate before its existing GamePrepare drives GameData's native two-argument Prepare. That existing path eventually publishes the list from GameDataModule::Update. Its native Construct already allocates eight immediate-buffer pairs and the dispatch machinery from the retained WorldDispatch arena. Canonical renderer Prepare would otherwise allocate seven pairs again with different console sizes, require the original debug allocator owner and call the raw sky Prepare again. It is not idempotent even at its Done stage.
+
+The new caller uses the existing gGameModule.GetGameDataModule/GetRenderModule accessors and the existing scripted GameData IO getters. It drives the existing two-argument GameData Prepare to its existing Done7; no original four-argument GameData or five-argument game owner is imported. The table helpers already pump ResourceModule::Update while pending. After preparation, it invokes the existing GameData Update with no caller-held IO locks, then takes the actual output read lock. The new GameData method accepts that publication only if it is exactly &mAllocatorList and its bank31 row is the actual successfully adopted RW general allocator also retained by the module. A completed-but-partial native allocator creation therefore does not establish renderer readiness.
+
+## Native resource phase
+
+The proposal restores the original base Construct call at its supported relative location: after both shader-frame constructions/index/writable stores, as ARTIST8240A800 shows. The genuine final mbIsNewModule store already present in the prerequisite stays at Construct's end. This initializes the real base lifecycle; it neither sets the derived Prepare stage to Done nor invokes the old factory trap path.
+
+Prepare's stage-switch body remains byte-identical. Its allocation/sky phase has an explicit Windows platform branch. The complete original allocation/sky statements remain byte-identical in the other branch; Register and MemoryUsage remain the common original completion statements.
+
+The PC phase reads the real WorldDispatch base/capacity and validates all eight native buffers: both command/vertex spans including their128-byte guards,128-byte alignment, exact retained capacities/failure modes, selectors/indexes and bounded cursors. It validates all active dispatch-bin spans/capacities/list counts and existing interpreters. These checks allocate, clear, swap and replace nothing. The raw graphics getter still denotes its retained RW object. The adopted internal backing and actual renderer wrapper binding must agree; MemoryUsage uses that genuine wrapper.
+
+Sky uses the existing EnsureSkyDomeBringUp owner. A ready dome is reused; its four header addresses and allocator usage must remain unchanged. Otherwise that owner's first actual program/geometry construction occurs at this phase. The method then requires real programs, the four actual typed header spans in the WorldDispatch arena, and the actual2066/118-index main/cube draw descriptors. The small snapshot accessor reads named fields and adds no object state. It does not reinterpret opaque buffer objects or query guessed offsets. GPU-driver backing is created by the existing native sky/platform providers; these predicates establish program/header/draw ownership, not pixel correctness.
+
+The real bank31 allocator remains the input contract from the owning GameData publication. Host command banks retain their existing WorldDispatch backing rather than being moved to bank31 or to an invented debug heap. Original global allocation methods remain uncalled; neither arena, budget, lane contract nor native buffer capacity is changed.
+
+## Startup and lifetime
+
+All work occurs after Device::Start and the full current game Construct, before the first BeginFramesPC. The existing main-thread PreparePresentationPC owner handles presentation recovery before sky GPU work. The pending loop pumps window messages and yields. Successful canonical Prepare leaves the read lock released and exits this one startup owner. EngineUpdate retains its one BeginFramesPC call and existing later serial/parallel handoffs. Failed ownership uses the current native allocation-failure shutdown policy; an early EngineUpdate guard prevents starting frame owners on a failed or closed startup.
+
+The renderer, GameData and member allocator list share the actual static game-module lifetime. The published IO pair and native RW allocator arrays/arenas are existing process-lifetime objects. No pointer to a local allocation or temporary list is stored. Later GamePrepare/LoadingScriptedState re-enter the retained GameData Done7 path, preserving the existing preparation completion and avoiding repeated registrations. This proposal must not be combined blindly with the larger original owner, which has different stage resets and would introduce another canonical renderer Prepare caller.
+
+## Review and integration limits
+
+This changes startup timing: GameData tables prepare before the first presented frame, while the window message pump remains responsive. It does not advance GamePrepare or the scripted loading state, skip videos, simulate input, prepare GameState early or start a second thread owner. Device recovery and close during preparation need runtime coverage. No unconditional timeout/fake completion was introduced; a provider that remains pending still remains pending and the user can close the window.
+
+All three changed CPPs are already in the shipping build_game_exe.bat source list, driven by compile_exe.py. CMake is not the executable authority. Declarations, providers and include precedence are bound in this packet; compilation/link and fresh source review remain pending. Prior original graphics/resource review does not automatically approve this platform integration.
+
+The edca native log is prior-run evidence only: it records GameData allocator creation, sky construction and the failed RendererModule lookup. The proposal's ownership diagnostics have never run. WITNESSES.md separates those historical observations from the conditional runtime checks and required future evidence. No full-registry SAVE fixture is suitable: the independently retained original unnamed DLC slot can crash it. Root owns any reviewed application/build and targeted lookup/readback run. Counts remain50 verified /7 no-ops /1298 pending of1355.

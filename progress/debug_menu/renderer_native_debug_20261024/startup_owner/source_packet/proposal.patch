@@ -1,0 +1,424 @@
+--- a/src/GameSource/Main/BrnMain.cpp
++++ b/src/GameSource/Main/BrnMain.cpp
+@@ -15,6 +15,8 @@
+ #include "GameSource/World/BrnWorldModule.h"
+ #include "pc/gcm/renderengine/FrameProfile.h"
+ #include "GameSource/Game/BrnGameModule.hpp"
++#include "GameSource/Resource/BrnGameDataModuleIO.h"
++#include "GameSource/GameFlowController/TopLevel/BrnGameMainFlowStates.h"
+ #include "GameSource/Resource/BrnResourceAllocator.h"  // Allocators::InitMemoryMap
+ #include "rw/rwcore_structs.h"
+ #include "GameShared/GameClasses/Development/PerfMon/Cpu/CgsPerfMonCpu.h"
+@@ -291,10 +293,70 @@
+     rw::ResourceAllocatorRegistry::SetDefaultAllocator(lpSystemAllocatorPC);
+ 
+     gGameModule.Construct();
++
++    // FLAG PC-platform leaf: ARTIST main827E60D8 completes the game Prepare owner
++    // (GameData, then renderer) before its frame/thread loop. Retain the native
++    // two-argument GameData implementation and its one existing scripted IO pair.
++    BrnResource::GameDataModule& lrGameData = gGameModule.GetGameDataModule();
++    BrnResource::GameDataIO::InputBuffer* const lpInput =
++        BrnGameMainFlowController::GetScriptedLoadGameDataInput();
++    BrnResource::GameDataIO::OutputBuffer* const lpOutput =
++        BrnGameMainFlowController::GetScriptedLoadGameDataOutput();
++    while (!CgsSystem::HardwareInit::IsHardwareWantingToShutdown())
++    {
++        // Use the existing main-thread presentation owner before any sky GPU work,
++        // including recovery after a resize/flip-output reset during this loop.
++        if (lrGameData.Prepare(nullptr, nullptr) && renderengine::Device::PreparePresentationPC())
++        {
++            // Update owns its input/output lock brackets and publishes &mAllocatorList.
++            // Hold no caller lock across it. Read only after that real publication.
++            lrGameData.Update(lpInput, lpOutput);
++            lpOutput->LockForRead();
++            const BrnResource::GameDataIO::AllocatorList* const lpAllocators =
++                lrGameData.GetPreparedRendererAllocatorsPC(lpOutput);
++            const bool lbPrepared = lpAllocators
++                && gGameModule.GetRenderModule().Prepare(lpAllocators);
++            lpOutput->UnlockForRead();
++            if (!lpAllocators)
++            {
++                CgsDev::Log::WriteToLog(
++                    "[renderer-prepare] GameData allocator publication/bank31 incomplete; shutting down.\n");
++                CgsSystem::HardwareInit::RequestShutdown();
++                break;
++            }
++            if (lbPrepared)
++            {
++                CgsDev::Log::WriteToLog(
++                    "[renderer-prepare] canonical Prepare completed before BeginFramesPC.\n");
++                break;
++            }
++        }
++        // Keep the existing window responsive while the real resumable resource
++        // prepares progress. Frame/update/dispatch owners have not started yet.
++        MSG lPrepareMessage{};
++        while (PeekMessageW(&lPrepareMessage, nullptr, 0, 0, PM_REMOVE))
++        {
++            if (lPrepareMessage.message == WM_QUIT)
++            {
++                CgsSystem::HardwareInit::RequestShutdown();
++                break;
++            }
++            if (!CgsSystem::KeyboardPC::ProcessMessage(&lPrepareMessage))
++            {
++                TranslateMessage(&lPrepareMessage);
++                DispatchMessageW(&lPrepareMessage);
++            }
++        }
++        Sleep(1);
++    }
+ }
+ 
+ void EngineUpdate()
+ {
++    // FLAG PC-platform leaf: a failed/closed startup must not start frame owners.
++    if (CgsSystem::HardwareInit::IsHardwareWantingToShutdown())
++        return;
++
+     // Main loop: pump the window messages and, when idle, drive the real per-frame spine -
+     // OnCompletionOfVsyncWait (decide this frame's sim-step count) -> UpdateThread (GamePrepare
+     // once, then GameMain, which runs the active flow state's per-substep Update -> the loading
+--- a/src/GameSource/Resource/BrnGameDataModule.h
++++ b/src/GameSource/Resource/BrnGameDataModule.h
+@@ -57,7 +57,7 @@
+ // The many embedded subsystems beyond ResourceModule are added with their own passes.
+ namespace BrnResource
+ {
+-    namespace GameDataIO { struct GameDataAssetEvent; }   // dispatcher/handler param (by pointer)
++    namespace GameDataIO { struct GameDataAssetEvent; struct OutputBuffer; }   // dispatcher/handler param (by pointer)
+ 
+     class GameDataModule : public CgsModule::ModuleSingleBuffered
+     {
+@@ -102,6 +102,9 @@
+         void Construct();   // 0x82671B90 (slot 0; the X360 takes NO arguments -- the old
+                             // `const void* lpInitOptions` param here was fabricated)
+         bool Prepare(void* lpInputBuffer, void* lpOutputBuffer);   // 0x82673F38
++        // FLAG PC-platform leaf: caller holds the actual published output's read lock.
++        const GameDataIO::AllocatorList* GetPreparedRendererAllocatorsPC(
++            const GameDataIO::OutputBuffer* lpOutput) const;
+         bool Release();                               // deferred
+         void Destruct();                              // deferred
+ 
+--- a/src/GameSource/Resource/BrnGameDataModule.cpp
++++ b/src/GameSource/Resource/BrnGameDataModule.cpp
+@@ -141,6 +141,39 @@
+     // bundle/filesystem), then carve banks/pools/allocators. Re-enters at the current stage if
+     // a sub-step is not yet ready. (The X360 then runs DLC stages 16-18+ and the AttribSys/HUD/
+     // popup prepares - DEFERRED here; the machine completes after the allocator stage.)
++    // FLAG PC-platform leaf: validate the existing native prepare/publication owner.
++    // The caller holds this output's read lock. No allocator is created or substituted.
++    const GameDataIO::AllocatorList* GameDataModule::GetPreparedRendererAllocatorsPC(
++        const GameDataIO::OutputBuffer* lpOutput) const
++    {
++        if (!lpOutput)
++            return nullptr;
++        const GameDataIO::AllocatorList* const lpPublished = lpOutput->GetAllocatorList();
++        const s32 liSlot = mAllocatorList.maiAllocatorMap[31];
++        const s32 liSlotCount = static_cast<s32>(
++            sizeof(mAllocatorList.mapRWGeneralAllocators) /
++            sizeof(mAllocatorList.mapRWGeneralAllocators[0]));
++        const bool lbValid = mePrepareStage == E_PREPARE_DONE
++            && lpPublished == &mAllocatorList
++            && liSlot >= 0 && liSlot < liSlotCount
++            && mAllocatorList.maeAllocatorType[31] == CgsMemory::MemoryMap::E_ALLOCATORTYPE_RWHEAP
++            && mAllocatorList.mapRWGeneralAllocators[liSlot] != nullptr
++            && mAllocatorList.mapRWGeneralAllocators[liSlot] == mapGeneratedRWGeneralAllocators[liSlot];
++        if (std::getenv("BRN_RENDER_PREPARE_DIAG"))
++        {
++            char lacLine[384];
++            std::snprintf(lacLine, sizeof(lacLine),
++                "[renderer-prepare] GameData=%p output=%p memberList=%p publishedList=%p stage=%d bank31Slot=%d allocator=%p valid=%d\n",
++                static_cast<const void*>(this), static_cast<const void*>(lpOutput),
++                static_cast<const void*>(&mAllocatorList), static_cast<const void*>(lpPublished),
++                static_cast<int>(mePrepareStage), liSlot,
++                lbValid ? static_cast<const void*>(mAllocatorList.mapRWGeneralAllocators[liSlot]) : nullptr,
++                lbValid ? 1 : 0);
++            CgsDev::Log::WriteToLog(lacLine);
++        }
++        return lbValid ? lpPublished : nullptr;
++    }
++
+     bool GameDataModule::Prepare(void* lpInputBuffer, void* lpOutputBuffer)
+     {
+         mbIsNewModule = true;   // [reliable] see ResourceModule::Prepare -- set before base Prepare
+--- a/src/GameSource/Graphics/BrnSkyDomeManager.h
++++ b/src/GameSource/Graphics/BrnSkyDomeManager.h
+@@ -38,6 +38,23 @@
+                                 const renderengine::Texture*, const renderengine::Texture*,
+                                 const BrnShaderConstantsFrame*);                                // :71
+ 
++    // FLAG PC-platform leaf: inspect completed geometry without changing its ownership.
++    // Only call after the renderer's existing one-shot sky owner reports completion.
++    struct PreparedGeometryPC
++    {
++        const void* mpMainVertexHeader;
++        const void* mpMainIndexHeader;
++        const void* mpCubeVertexHeader;
++        const void* mpCubeIndexHeader;
++        DrawIndexedParameters mMainDraw;
++        DrawIndexedParameters mCubeDraw;
++    };
++    PreparedGeometryPC GetPreparedGeometryPC() const
++    {
++        return {mpMainVertexBuffer, mpMainIndexBuffer, mpCubeVertexBuffer, mpCubeIndexBuffer,
++                mMainDrawParameters, mCubeDrawParameters};
++    }
++
+ private:
+     // BrnSkyDomeManager.h:78
+     float RaySphereDistance(const rw::math::fpu::Vector3Template<float>& lDirection,
+--- a/src/GameSource/Graphics/BrnRendererModule.h
++++ b/src/GameSource/Graphics/BrnRendererModule.h
+@@ -495,6 +495,8 @@
+     void ClearDispatchCounters();
+     void ClearScreenshotState();
+     void MemoryUsage();
++    // FLAG PC-platform leaf: preserve and validate native Construct allocations.
++    bool PrepareNativeOwnedResourcesPC(const BrnResource::GameDataIO::AllocatorList* lpAllocatorList);
+     void ConstructRenderSwitches();
+ 
+     // The three per-thread monitor squares (bottom-centre): each is green when its
+--- a/src/GameSource/Graphics/BrnRendererModule.cpp
++++ b/src/GameSource/Graphics/BrnRendererModule.cpp
+@@ -594,6 +594,79 @@
+         return lpFrame && lpFrame->GetBin().GetBase() != nullptr;
+     }
+ 
++    // FLAG PC-platform leaf: inspect the retained native arena using integer address
++    // spans. No command bank is dereferenced, cleared, swapped, replaced or resized.
++    bool NativeArenaContainsPC(const void* lpBase, u32 luCapacity,
++                              const void* lpAllocation, u32 luBytes)
++    {
++        const uintptr_t luBase = reinterpret_cast<uintptr_t>(lpBase);
++        const uintptr_t luAllocation = reinterpret_cast<uintptr_t>(lpAllocation);
++        return lpBase && lpAllocation && luAllocation >= luBase
++            && luAllocation - luBase <= luCapacity
++            && luBytes <= luCapacity - (luAllocation - luBase);
++    }
++
++    template<class V>
++    bool NativeImmediateBufferOwnedPC(const char* lpcName,
++        const CgsGraphics::ImRenderBuffer<V>& lrBuffer, u32 luCommands, u32 luVertices,
++        bool lbFailGracefully, const void* lpArena, u32 luCapacity)
++    {
++        bool lbValid = lrBuffer.IsPreparedPC()
++            && lrBuffer.muCommandBufferSize == luCommands
++            && lrBuffer.muVertexBufferSize == luVertices
++            && lrBuffer.mbFailGracefully == lbFailGracefully
++            && !lrBuffer.mbInRenderBlock;
++        const s32 liWrite = lrBuffer.miWriteBufferIndex;
++        lbValid = lbValid && (liWrite == 0 || liWrite == 1);
++        if (liWrite == 0 || liWrite == 1)
++            lbValid = lbValid && lrBuffer.mpWriteBuffer == &lrBuffer.maBuffers[liWrite]
++                && lrBuffer.mpDispatchBuffer == &lrBuffer.maBuffers[1 - liWrite];
++        for (u32 luBank = 0; luBank < 2; ++luBank)
++        {
++            const auto& lrBank = lrBuffer.maBuffers[luBank];
++            lbValid = lbValid
++                && NativeArenaContainsPC(lpArena, luCapacity, lrBank.mpu8CommandBuffer, luCommands + 128u)
++                && NativeArenaContainsPC(lpArena, luCapacity, lrBank.mpu8VertexBuffer, luVertices + 128u)
++                && (reinterpret_cast<uintptr_t>(lrBank.mpu8CommandBuffer) & 127u) == 0
++                && (reinterpret_cast<uintptr_t>(lrBank.mpu8VertexBuffer) & 127u) == 0
++                && lrBank.muCommandBufferWritePos <= luCommands
++                && lrBank.muVertexBufferWritePos <= luVertices;
++        }
++        if (std::getenv("BRN_RENDER_PREPARE_DIAG"))
++        {
++            char lacLine[512];
++            std::snprintf(lacLine, sizeof(lacLine),
++                "[renderer-prepare] buffer=%s object=%p commands=%u vertices=%u write=%d cmd0=%p vert0=%p cmd1=%p vert1=%p retained=%d\n",
++                lpcName, static_cast<const void*>(&lrBuffer), luCommands, luVertices, liWrite,
++                static_cast<const void*>(lrBuffer.maBuffers[0].mpu8CommandBuffer),
++                static_cast<const void*>(lrBuffer.maBuffers[0].mpu8VertexBuffer),
++                static_cast<const void*>(lrBuffer.maBuffers[1].mpu8CommandBuffer),
++                static_cast<const void*>(lrBuffer.maBuffers[1].mpu8VertexBuffer), lbValid ? 1 : 0);
++            CgsDev::Log::WriteToLog(lacLine);
++        }
++        return lbValid;
++    }
++
++    bool NativeDispatchFrameOwnedPC(const char* lpcName, CgsGraphics::DispatchFrame& lrFrame,
++        u32 luBytes, const void* lpArena, u32 luCapacity)
++    {
++        CgsGraphics::DispatchBin& lrBin = lrFrame.GetBin();
++        const bool lbValid = lrFrame.GetNumDispatchLists() == KU_NUM_DISPATCH_LISTS
++            && lrBin.GetSizeQwords() == luBytes / sizeof(CgsGraphics::DispatchCommand)
++            && NativeArenaContainsPC(lpArena, luCapacity, lrBin.GetBase(), luBytes + 128u)
++            && (reinterpret_cast<uintptr_t>(lrBin.GetBase()) & 127u) == 0;
++        if (std::getenv("BRN_RENDER_PREPARE_DIAG"))
++        {
++            char lacLine[256];
++            std::snprintf(lacLine, sizeof(lacLine),
++                "[renderer-prepare] dispatch=%s object=%p base=%p bytes=%u lists=%u retained=%d\n",
++                lpcName, static_cast<const void*>(&lrFrame), static_cast<const void*>(lrBin.GetBase()),
++                luBytes, lrFrame.GetNumDispatchLists(), lbValid ? 1 : 0);
++            CgsDev::Log::WriteToLog(lacLine);
++        }
++        return lbValid;
++    }
++
+     // ============================================================================================
+     // [FLAG PC bring-up] CONSTRUCT THE EFFECTS ARBITRATOR.
+     //
+@@ -1282,6 +1355,9 @@
+     mu8ShaderConstantsFrameInternal = 0;
+     maShaderConstantsFrames[mu8ShaderConstantsFrameExternal].LockForWriting();
+     maShaderConstantsFrames[mu8ShaderConstantsFrameInternal].UnlockForWriting();
++    // ARTIST8240A800: original base initialization follows the two shader frames.
++    // The genuine new-module classification remains at the end of Construct.
++    CgsModule::ModuleSingleBuffered::Construct();
+     maShaderConstantsFrameValidPC[0] = false;
+     maShaderConstantsFrameValidPC[1] = false;
+ 
+@@ -1464,6 +1540,125 @@
+     mbIsNewModule = true;
+ }
+ 
++// FLAG PC-platform leaf: reconcile ARTIST's Prepare allocation phase with the
++// native Construct owner that already allocated these buffers at host capacities.
++// The original stage machine and its common Register/MemoryUsage completion remain
++// in Prepare. This phase neither allocates another command bank nor seeds a stage.
++bool BrnRendererModule::PrepareNativeOwnedResourcesPC(
++    const BrnResource::GameDataIO::AllocatorList* lpAllocatorList)
++{
++    if (!lpAllocatorList || !sbWorldDispatchAllocatorReady || mbDispatchStorageFailedPC)
++        return false;
++
++    const rw::Resource& lrWorldHeap = sWorldDispatchAllocator.GetLinearHeapBase();
++    const rw::ResourceDescriptor lWorldCapacity = sWorldDispatchAllocator.GetCapacity();
++    const void* const lpArena = lrWorldHeap.m_baseResources[0];
++    const u32 luCapacity = lWorldCapacity.m_baseResourceDescriptors[0].m_size;
++    bool lbOwned = lpArena && luCapacity != 0;
++    lbOwned &= NativeImmediateBufferOwnedPC("Im2d", mIm2dRenderBuffer,
++        KU_PC_IM2D_COMMAND_BYTES, KU_PC_IM2D_VERTEX_BYTES, false, lpArena, luCapacity);
++    lbOwned &= NativeImmediateBufferOwnedPC("Debug2d", mIm2dDebugRenderBuffer,
++        KU_PC_IM2D_DEBUG_COMMAND_BYTES, KU_PC_IM2D_DEBUG_VERTEX_BYTES, true, lpArena, luCapacity);
++    lbOwned &= NativeImmediateBufferOwnedPC("Assert2d", mIm2dAssertRenderBufferPC,
++        KU_PC_IM2D_DEBUG_COMMAND_BYTES, KU_PC_IM2D_DEBUG_VERTEX_BYTES, true, lpArena, luCapacity);
++    lbOwned &= NativeImmediateBufferOwnedPC("Im3d", mIm3dRenderBuffer,
++        KU_PC_IM3D_COMMAND_BYTES, KU_PC_IM3D_VERTEX_BYTES, false, lpArena, luCapacity);
++    lbOwned &= NativeImmediateBufferOwnedPC("Untex3d", mIm3dRenderBufferUntex,
++        KU_PC_IM3D_UNTEX_COMMAND_BYTES, KU_PC_IM3D_UNTEX_VERTEX_BYTES, false, lpArena, luCapacity);
++    lbOwned &= NativeImmediateBufferOwnedPC("Debug3d", mIm3dDebugRenderBuffer,
++        KU_PC_IM3D_DEBUG_COMMAND_BYTES, KU_PC_IM3D_DEBUG_VERTEX_BYTES, true, lpArena, luCapacity);
++    lbOwned &= NativeImmediateBufferOwnedPC("RacePosition", mIm3dBufferRacePosition,
++        KU_PC_IM3D_RACE_COMMAND_BYTES, KU_PC_IM3D_RACE_VERTEX_BYTES, false, lpArena, luCapacity);
++    lbOwned &= NativeImmediateBufferOwnedPC("MenusHud", mIm3dBufferMenusAndHud,
++        KU_PC_IM3D_MENUS_COMMAND_BYTES, KU_PC_IM3D_MENUS_VERTEX_BYTES, false, lpArena, luCapacity);
++    lbOwned &= NativeDispatchFrameOwnedPC("Main", mSingleBufferedDispatchFrame,
++        KU_PC_DISPATCH_BIN_BYTES, lpArena, luCapacity);
++    lbOwned &= NativeDispatchFrameOwnedPC("GdlWrite", mDoubleBufferedDispatchFrame.GetDispatchFrameForWrite(),
++        KU_PC_GDL_DISPATCH_BIN_BYTES, lpArena, luCapacity);
++    lbOwned &= NativeDispatchFrameOwnedPC("GdlRead", mDoubleBufferedDispatchFrame.GetDispatchFrameForRead(),
++        KU_PC_GDL_DISPATCH_BIN_BYTES, lpArena, luCapacity);
++    lbOwned = lbOwned && mpInterpreter;
++    if (MeshPreparationEnabledPC())
++    {
++        lbOwned &= NativeDispatchFrameOwnedPC("SecondMesh", mSecondMeshFramePC,
++            KU_PC_DISPATCH_BIN_BYTES, lpArena, luCapacity);
++        lbOwned = lbOwned && mpMeshProducerInterpreterPC;
++    }
++
++    rw::IResourceAllocator* const lpRawGraphics = BrnResource::Allocators::GetGlobalGraphicsAllocator();
++    lbOwned = lbOwned && lpRawGraphics
++        && lpRawGraphics == BrnResource::Allocators::mpInternalGraphicsAllocator
++        && mpGraphicsAllocator == BrnResource::GetGraphicsAllocator();
++    if (!lbOwned)
++        return false;
++    const rw::Resource& lrGraphicsHeap = mpGraphicsAllocator->GetLinearHeapBase();
++    const rw::ResourceDescriptor lGraphicsCapacity = mpGraphicsAllocator->GetCapacity();
++    if (!lrGraphicsHeap.m_baseResources[0]
++        || lGraphicsCapacity.m_baseResourceDescriptors[0].m_size == 0)
++        return false;
++
++    // GameData checked this published member list and its actual completed bank31
++    // allocation before this call. Keep ARTIST's real allocator lookup contract.
++    rw::core::GeneralResourceAllocator* const lpBank31 =
++        lpAllocatorList->GetRWGeneralResourceAllocator(31);
++    if (!lpBank31)
++        return false;
++
++    const bool lbSkyExisted = mbSkyDomeReady;
++    BrnSkyDomeManager::PreparedGeometryPC lPreviousSky{};
++    if (lbSkyExisted)
++        lPreviousSky = mSkyDome.GetPreparedGeometryPC();
++    const rw::ResourceDescriptor lUsageBefore = sWorldDispatchAllocator.GetCurrentUsage();
++    // Reuse the existing ready branch. Otherwise perform that owner's first actual
++    // program/geometry construction now, with the existing device and arena.
++    if (!EnsureSkyDomeBringUp() || !mIm3dRendererSkyDome.HasPrograms())
++        return false;
++    const BrnSkyDomeManager::PreparedGeometryPC lSky = mSkyDome.GetPreparedGeometryPC();
++    const rw::ResourceDescriptor lUsageAfter = sWorldDispatchAllocator.GetCurrentUsage();
++    bool lbSkyOwned =
++        NativeArenaContainsPC(lpArena, luCapacity, lSky.mpMainVertexHeader,
++                              sizeof(renderengine::VertexBufferHeader))
++        && NativeArenaContainsPC(lpArena, luCapacity, lSky.mpMainIndexHeader,
++                                 sizeof(renderengine::IndexBufferHeader))
++        && NativeArenaContainsPC(lpArena, luCapacity, lSky.mpCubeVertexHeader,
++                                 sizeof(renderengine::VertexBufferHeader))
++        && NativeArenaContainsPC(lpArena, luCapacity, lSky.mpCubeIndexHeader,
++                                 sizeof(renderengine::IndexBufferHeader))
++        && lSky.mMainDraw.mePrimitiveType == 6 && lSky.mMainDraw.muBaseVertexIndex == 0
++        && lSky.mMainDraw.muMinVertexIndex == 0 && lSky.mMainDraw.muNumVertices == 2066
++        && lSky.mCubeDraw.mePrimitiveType == 6 && lSky.mCubeDraw.muBaseVertexIndex == 0
++        && lSky.mCubeDraw.muMinVertexIndex == 0 && lSky.mCubeDraw.muNumVertices == 118;
++    if (lbSkyExisted)
++    {
++        lbSkyOwned = lbSkyOwned
++            && lPreviousSky.mpMainVertexHeader == lSky.mpMainVertexHeader
++            && lPreviousSky.mpMainIndexHeader == lSky.mpMainIndexHeader
++            && lPreviousSky.mpCubeVertexHeader == lSky.mpCubeVertexHeader
++            && lPreviousSky.mpCubeIndexHeader == lSky.mpCubeIndexHeader;
++        for (u32 luLane = 0; luLane < rw::KU_RESOURCE_LANE_COUNT; ++luLane)
++            lbSkyOwned = lbSkyOwned
++                && lUsageBefore.m_baseResourceDescriptors[luLane].m_size
++                    == lUsageAfter.m_baseResourceDescriptors[luLane].m_size;
++    }
++    if (std::getenv("BRN_RENDER_PREPARE_DIAG"))
++    {
++        char lacLine[768];
++        std::snprintf(lacLine, sizeof(lacLine),
++            "[renderer-prepare] renderer=%p list=%p bank31=%p worldBase=%p worldCapacity=%u usageBeforeSky=%u usageAfterSky=%u rawGraphics=%p wrapper=%p graphicsBase=%p graphicsCapacity=%u skyExisted=%d mainVB=%p mainIB=%p cubeVB=%p cubeIB=%p mainIndices=%u cubeIndices=%u skyOwned=%d\n",
++            static_cast<const void*>(this), static_cast<const void*>(lpAllocatorList),
++            static_cast<const void*>(lpBank31), lpArena, luCapacity,
++            lUsageBefore.m_baseResourceDescriptors[0].m_size,
++            lUsageAfter.m_baseResourceDescriptors[0].m_size,
++            static_cast<const void*>(lpRawGraphics), static_cast<const void*>(mpGraphicsAllocator),
++            lrGraphicsHeap.m_baseResources[0], lGraphicsCapacity.m_baseResourceDescriptors[0].m_size,
++            lbSkyExisted ? 1 : 0, lSky.mpMainVertexHeader, lSky.mpMainIndexHeader,
++            lSky.mpCubeVertexHeader, lSky.mpCubeIndexHeader,
++            lSky.mMainDraw.muNumVertices, lSky.mCubeDraw.muNumVertices, lbSkyOwned ? 1 : 0);
++        CgsDev::Log::WriteToLog(lacLine);
++    }
++    return lbSkyOwned;
++}
++
+ // @0x82409C20. ARTIST's stage helper increments before checking the terminal state;
+ // it returns the previous value, which each call site discards.
+ bool BrnRendererModule::Prepare(const BrnResource::GameDataIO::AllocatorList* lpAllocatorList)
+@@ -1499,6 +1694,15 @@
+         return false;
+     }
+ 
++#if defined(_WIN32) && !defined(D_PLATFORM_X360)
++    if (!PrepareNativeOwnedResourcesPC(lpAllocatorList))
++    {
++        CgsDev::Log::WriteToLog(
++            "[renderer-prepare] native resource ownership incomplete; shutting down.\n");
++        CgsSystem::HardwareInit::RequestShutdown();
++        return false;
++    }
++#else
+     rw::core::GeneralResourceAllocator* const lpAllocator =
+         lpAllocatorList->GetRWGeneralResourceAllocator(31);
+ 
+@@ -1545,6 +1749,7 @@
+ 
+     mSkyDome.Prepare(&mIm3dRendererSkyDome,
+                      BrnResource::Allocators::GetGlobalGraphicsAllocator());
++#endif
+     mDebugComponent.Register();
+     MemoryUsage();
+     return true;
