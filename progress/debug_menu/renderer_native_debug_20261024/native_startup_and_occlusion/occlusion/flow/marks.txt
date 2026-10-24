@@ -1,0 +1,47 @@
+RUNSTART 2026-10-24T14:21:04.7986054+02:00
+PROCESS pid=57416 image=D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\occlusion_targeted_paths_037_native_20261024\stage\slot\Burnout_PC.exe start=2026-10-24T12:21:04.8163879Z priority=BelowNormal
+FRAMEDIR D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\occlusion_targeted_paths_037_native_20261024\run\frames
+flyby    (never)
+newprof    11,7s  frame=bb_001500.bmp
+ingame     13,6s  frame=bb_002100.bmp
+jystart    13,6s  frame=bb_002100.bmp
+carsel     20,2s  frame=bb_003000.bmp
+livery     22,7s  frame=bb_003300.bmp
+accept     23,8s  frame=bb_003300.bmp
+exitjy     23,8s  frame=bb_003300.bmp
+strfin     23,8s  frame=bb_003300.bmp
+END        54,9s  frame=bb_006900.bmp
+asserts=1 phase=DRIVING
+ASSERT_RELEASE=disabled (NoAssertRelease)
+ASSERT_STOP first-observed-at=54,9s; process stopped without release
+DIAGENV    [-DiagEnv BRN_OCCLUSION_DIAG=1 BRN_FRAME_DUMP_MAX=96 BRN_RENDER_PREPARE_DIAG=1]
+TELEPORT (none)
+SWEEP    (none)
+SLOT     62064  exe=D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\occlusion_targeted_paths_037_native_20261024\stage\slot\Burnout_PC.exe (a copy; cwd=D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\occlusion_targeted_paths_037_native_20261024\stage\data)
+SKIPINTRO -skipvideos (console latch; EA + Criterion logos not played)
+TITLESTART requested=True ready-observed=True sent-at=8,0s; stimulus receipt only
+ACCEPTGAP boot=1,0s carsel=1,0s  [-AcceptGap 1 -- harness pump latency, not a game gate]
+AUDIO    MUTED (BRN_AUDIO_MUTE=1; mastering voice at 0, audio simulation unchanged)
+STARTEVT (not armed)
+AIDRIVE  (not armed)
+DBGFINISH (not armed)
+WINTELE  (not armed)
+SHOWTIME not armed
+SKIPTIP  (not armed)
+EVENTFSM (not armed)
+e-junc   (never)
+e-case20 (never)
+e-start  (never)
+e-count  (never)
+e-inprog (never) CUE UNVERIFIED -- nothing in the tree prints this text yet, so this
+         line says nothing about the game. See the ladder banner.
+LADDER   0/5 deepest=none startevent=False  BLIND(BRN_PROP_DIAG unset -- the [evt-flow] rungs cannot print)
+CRASHARM crashEntry=always(flag deleted 2026-08-27) crashPlayer=0 deformTrace=0
+EXIT     harness-stop (process was still alive)
+DRIVE    n/a (not a -Drive run)
+POLL     max period 1,05s at 47,9s over 159 polls (target 0.25s)
+THROTTLE n/a (not a -Drive run)
+SIMPAUSE 2 pause(s), 2 resume(s); first pause at 2% of the log
+GAS      n/a (no -MotionProbe, so the game's own throttle witness is absent)
+drive=False steer=none delay=6,0s hold=to-end
+title-start tap:Start run=8,0s actions=8+45

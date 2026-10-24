@@ -1,0 +1,70 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "occlusion_targeted_037_off_on_off",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\occlusion_targeted_paths_037_native_20261024\\Case.proposed.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-24T14:22:02.4110820+02:00",
+    "flow_exit":  1,
+    "bug":  "The original world-opaque query and conditional-draw chain must consume the live debug controls and preserve the ordinary world image when restored.",
+    "asserts":  1,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\occlusion_targeted_paths_037_native_20261024\\run",
+    "label":  "Original world-opaque occlusion off/on/off; source=037deb9fecff882de2e2fb55de020e0f54348360",
+    "area":  "graphics-occlusion",
+    "as_expected":  false,
+    "verdict":  "FAIL",
+    "slot":  62064,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=1 success=False assert_stop=True foreign_game=False cleanup=True",
+                       "pass":  false,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "1 NEW assert family(ies): 1x \u0027couldn\u0027t allocate memory for vertex descriptor\u0027 @ src\\GameShared\\GameClasses\\Graphics\\Dispatch\\CgsOcclusionCullManager.cpp:169",
+                       "pass":  false,
+                       "name":  "no new assert families",
+                       "kind":  "NewAsserts"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 0]",
+                       "pass":  false,
+                       "name":  "zero assertions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "8 retained immediate pairs; 3 dispatch owners; actual member list/bank31 and equal heap owners; owned 2066/118 sky; one canonical completion",
+                       "pass":  true,
+                       "name":  "actual renderer startup resource ownership",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no game exceptions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "ordinary free-roam phase reached",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "debug-key helper did not complete the bounded sequence | expected 5 actual OccEnable readbacks, observed 3 | expected 5 actual OccWorld readbacks, observed 3 | no live [occ-state] enabled=1 ready=1 world_opaque=1 witness | no off/on/off state transition was recorded by the renderer | no complete pre-cap list-11 frame with total\u003e64, contiguous 64-index query/draw cursors, and final -1 | no same-batch, same-id/serial ended + S_OK result + decision provider triple for a selected list-11 frame | missing helper phase boundary note enabled-start | missing helper phase boundary note enabled-end | missing helper phase boundary note restored-start | missing helper phase boundary note restored-end | missing retained phase image(s): enabled.bmp, restored.bmp | actual alias values: initial observed, baseline=off, enabled+ready=on, restored=off; frames=24/96 | no complete selected list11 frame | no provider result/decision triple | retained images=baseline.bmp | manual pixel inspection remains required; D3D9 query polarity is not Xenos parity",
+                       "pass":  false,
+                       "name":  "complete off-on-off query and retained-frame evidence",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11365888,
+                       "exe_mtime_before_lock":  "2026-10-24T14:04:50.4412987+02:00",
+                       "exe_sha":  "5b44650ea619",
+                       "b5_head":  "053e953f0",
+                       "exe_b5":  "037deb9f",
+                       "parent_head":  "e68b398e7",
+                       "exe_mtime":  "2026-10-24T14:04:50.4412987+02:00"
+                   }
+}

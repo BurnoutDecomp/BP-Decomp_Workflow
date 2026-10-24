@@ -1,0 +1,43 @@
+{
+  "status": "FAIL_first_control_enable_resource_allocation",
+  "utc": "2026-10-24T12:27:10.960858+00:00",
+  "source": "037deb9fecff882de2e2fb55de020e0f54348360",
+  "source_tree": "40f6199b114a9de47edffd8b44a3080dd4a83a53",
+  "workflow": "451dcde251f121d624e21541f81b6fe7ced8f77f",
+  "exe_sha256": "5b44650ea6195410c25231b712767f3b10f29adc29c57a972f5558a36183b489",
+  "slot": 62064,
+  "owned_pid": 57416,
+  "first_assert_seconds": 54.913095399999996,
+  "asserts": 1,
+  "exceptions": 0,
+  "assertion": "could not allocate memory for vertex descriptor",
+  "location": "CgsOcclusionCullManager.cpp:169",
+  "actual_readbacks": {
+    "OccEnable": [
+      "FALSE",
+      "FALSE",
+      "TRUE"
+    ],
+    "OccWorld": [
+      "FALSE",
+      "FALSE",
+      "TRUE"
+    ]
+  },
+  "component_found": true,
+  "aliases_resolved": true,
+  "startup_resource_witnesses_passed": true,
+  "enabled_ready_witness": false,
+  "query_draw_chain_complete": false,
+  "first_assert_stop": true,
+  "owned_cleanup_complete": true,
+  "input_reset_complete": true,
+  "normal24_unchanged": true,
+  "new_debug_dispositions": 0,
+  "normal_package_modified_by_test": false,
+  "initial_source_hypothesis": "Native graphics backing has only main lane0; vertex/index resources request lane2. Trace actual descriptors and x64 lock/header chain before a fix.",
+  "limits": [
+    "The asserted enable path failed; no control acceptance or on/off restoration is claimed.",
+    "Source hypothesis needs original/provider confirmation; no budget increase or guard has been applied."
+  ]
+}

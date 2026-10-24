@@ -1,0 +1,53 @@
+﻿{
+    "aliases":  {
+                    "OccWorld":  [
+                                     {
+                                         "Value":  "FALSE",
+                                         "LogIndex":  13113
+                                     },
+                                     {
+                                         "Value":  "FALSE",
+                                         "LogIndex":  13117
+                                     },
+                                     {
+                                         "Value":  "TRUE",
+                                         "LogIndex":  22480
+                                     }
+                                 ],
+                    "OccEnable":  [
+                                      {
+                                          "Value":  "FALSE",
+                                          "LogIndex":  13111
+                                      },
+                                      {
+                                          "Value":  "FALSE",
+                                          "LogIndex":  13115
+                                      },
+                                      {
+                                          "Value":  "TRUE",
+                                          "LogIndex":  22478
+                                      }
+                                  ]
+                },
+    "phase_indices":  {
+                          "setup-start":  10619,
+                          "baseline-start":  13531,
+                          "enabled-transition-start":  22504,
+                          "baseline-end":  22402
+                      },
+    "complete_frame":  null,
+    "provider_triple":  null,
+    "failures":  [
+                     "debug-key helper did not complete the bounded sequence",
+                     "expected 5 actual OccEnable readbacks, observed 3",
+                     "expected 5 actual OccWorld readbacks, observed 3",
+                     "no live [occ-state] enabled=1 ready=1 world_opaque=1 witness",
+                     "no off/on/off state transition was recorded by the renderer",
+                     "no complete pre-cap list-11 frame with total\u003e64, contiguous 64-index query/draw cursors, and final -1",
+                     "no same-batch, same-id/serial ended + S_OK result + decision provider triple for a selected list-11 frame",
+                     "missing helper phase boundary note enabled-start",
+                     "missing helper phase boundary note enabled-end",
+                     "missing helper phase boundary note restored-start",
+                     "missing helper phase boundary note restored-end"
+                 ]
+}
