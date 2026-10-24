@@ -4975,6 +4975,11 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameShared\GameClasses\Sound\CgsTestBedAllocator.cpp"
   echo "%SRC%\GameShared\GameClasses\Language\CgsLanguageManagerDebugComponent.cpp"
   echo "%SRC%\GameSource\Resource\BrnGameDataModuleIO.cpp"
+  rem Original game legacy DataStructure lifecycle providers; no staged Prepare activation.
+  echo "%SRC%\GameSource\Game\BrnGameModuleIO.cpp"
+  rem Original Prepare AutoTest initialization, real seven Lua callbacks and helper.
+  echo "%SRC%\GameSource\Game\BrnAutoTestManager.cpp"
+  echo "%SRC%\GameSource\Game\BrnLUACallbackHelper.cpp"
   echo "%SRC%\GameSource\GameFlowController\TopLevel\BrnGameMainFlowCheckDiskSpace.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiEventLocalisedTextPointerRemoved.cpp"
   echo "%SRC%\GameShared\GameClasses\Network\Buddies\DirtySock\CgsBuddyManagerDirtySock.cpp"
