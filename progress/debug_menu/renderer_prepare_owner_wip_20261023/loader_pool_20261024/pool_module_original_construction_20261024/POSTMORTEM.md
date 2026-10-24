@@ -1,0 +1,14 @@
+# Pool and scratch construction self-review
+
+- ARTIST828FC0C4..D0 binds this/options/resource; the incoming debug pointer is not saved or read. DecFIGS declares the three-input virtual Construct. Its incidental final hash result is not a return value.
+- Base initialization, stage0/3 stores,128 pool constructions, receiver initialization and type count0 precede IDList construction and supplied-type iteration. No native optional/clamped registration behavior is imported.
+- The real IDList type is allocated, placement-constructed and InitCachedValues is called, matching the original vptr/cached-type setup. Its cached ID/name registration order is retained; no substitute registry is introduced.
+- Original scratch options have five lanes, copied from actual supplied options; bank999 and real overhead sizing are retained. The original helper ordering and precise stores are read directly from828FC4D8..530. Its native predecessor remains byte-identical after its rename.
+- Scratch Prepare's later stage transition and InitPool run before allocation-list storage. The exact-base InitPool supplies later working state. No extra initialization is inferred from zero storage or a new ready flag.
+- The original per-type loop writes only three request counts. It allocates4096 requests/results and does not call ClearCountsAndResults, which would add result-array stores absent from this constructor.
+- Primary descriptor byte counts independently attest the record counts:0x10000/0x8000 per-type requests/results,0xC000 addressed requests,0x47FF8 relocation requests,0x100070 heap nodes,0x8FFF0 shared distribution/relocation and0x6BFF4 sources. Native size/alignment follows each current typed record; capacities are not reduced or guessed.
+- One allocation supplies the two distribution/copy views. Both typed pointers are converted from that actual raw allocation, without object-offset access or an unrelated allocator/class cast.
+- Relocator initialization and its actual operation/bounce parameters follow all working allocations. The five allocation predicates and original assert line identities are retained.
+- The existing Allocate/DeAllocate/IntelliFrag/LiveUpdate/EmergencyFrag constructors correspond to the original inline state stores. No blanket memset or fabricated state-completion override was introduced. Both FIFOs and mbIsNewModule appear at the original tail.
+- Source-removal audits preserve the complete native two-input pool body after removing only its scratch-callee rename, and preserve the prior scratch body after removing only its method rename.
+- The new methods are canonical definitions with typed declarations. Complete source availability is bound; larger FileSystem/ResourceModule construction remains separate and unactivated. No C++ builds, tests, CI, game/input, registration or site credit.
