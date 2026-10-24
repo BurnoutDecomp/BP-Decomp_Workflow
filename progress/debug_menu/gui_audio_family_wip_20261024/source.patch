@@ -1,0 +1,1464 @@
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnCarSelectLivery.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnCarSelectLivery.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCarSelectLivery.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCarSelectLivery.cpp
+@@ -69,11 +69,6 @@
+         const s32 KI_GAMEMODE_NO_PAINT_A = 12;
+         const s32 KI_GAMEMODE_NO_PAINT_B = 17;
+ 
+-        // The GuiAudioTriggerEvent record's queued event id -- the same 100-byte record
+-        // BrnGui::GuiAudioTriggerEvent models under id 201, posted here under 457 (identical
+-        // to BrnCarSelectVehicle's carousel trigger).
+-        const u32 KU_AUDIO_TRIGGER_EVENT_ID = 457;
+-
+         // ---- out-queue wire records --------------------------------------------------
+ 
+         // OnLeave's screen-leave command: { 1, 80, 12, u8 }, channel 40, 16 bytes.
+@@ -443,12 +438,7 @@
+         GuiAudioTriggerEvent lAudio;
+         lAudio.Construct(leAction, KAC_EMPTY, "CodeLivery", KAC_EMPTY);
+ 
+-        lAudio.muHeader0   = 100u;
+-        lAudio.muEventType = KU_AUDIO_TRIGGER_EVENT_ID;
+-        lAudio.muHeader2   = 12u;
+-
+-        mpStateInterface->GetOutputEventQueue()->AddEvent(&lAudio, KI_CHANNEL_GUI_OUT,
+-                                                          static_cast<s32>(sizeof(lAudio)));
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+     }
+ }
+ 
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnCarSelectVehicle_Input.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnCarSelectVehicle_Input.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCarSelectVehicle_Input.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCarSelectVehicle_Input.cpp
+@@ -90,12 +90,6 @@
+             return sbEnabled;
+         }
+ 
+-        // The audio trigger record's queued event id. ⓘ The committed
+-        // BrnGui::GuiAudioTriggerEvent models this SAME 100-byte record under id 201 (its
+-        // presentation-action producer); this screen posts it under 457. The record the X360
+-        // builds is { 100, 457, 12, <the 100-byte audio record> }, 112 bytes on channel 40.
+-        const u32 KU_AUDIO_TRIGGER_EVENT_ID_CAROUSEL = 457;
+-
+         // ---- the analogue-axis scale (an inline literal in the source; the X360 pools it
+         //      at flt_8206B2B8 == 17.647058f). It maps the live axis range
+         //      [KF_AXIS_DEAD_ZONE, 1.0] onto [0, 15] pixels of scroll per sample.
+@@ -540,15 +534,7 @@
+                          lbClappers ? "CodeCarChoiceCarouselClappers" : "CodeCarChoiceCarousel",
+                          KAC_EMPTY);
+ 
+-        // The X360 record is { 100, 457, 12, <the 100-byte audio record> }: same payload as
+-        // the committed GuiAudioTriggerEvent, different queued id (see
+-        // KU_AUDIO_TRIGGER_EVENT_ID_CAROUSEL above).
+-        lAudio.muHeader0   = 100u;
+-        lAudio.muEventType = KU_AUDIO_TRIGGER_EVENT_ID_CAROUSEL;
+-        lAudio.muHeader2   = 12u;
+-
+-        mpStateInterface->GetOutputEventQueue()->AddEvent(&lAudio, KI_CHANNEL_GUI_OUT,
+-                                                          static_cast<s32>(sizeof(lAudio)));
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+     }
+ 
+     // ================================================================================
+diff --git a/src/GameSource/Gui/BrnChallengeListComponent.cpp b/src/GameSource/Gui/BrnChallengeListComponent.cpp
+--- a/src/GameSource/Gui/BrnChallengeListComponent.cpp
++++ b/src/GameSource/Gui/BrnChallengeListComponent.cpp
+@@ -212,9 +212,7 @@
+     {
+         GuiAudioTriggerEvent event;
+         event.Construct(7, "", "MenuToggleDefault");
+-        struct Record { s32 size, type, offset; GuiAudioTriggerWirePayload457 payload; } record = {100, 457, 12, {}};
+-        std::memcpy(&record.payload, event.macComponent, sizeof(record.payload));
+-        state->GetOutputEventQueue()->AddEvent(reinterpret_cast<const CgsModule::Event*>(&record), 40, sizeof(record));
++        state->OutputGuiEvent<GuiAudioTriggerEvent>(event);
+     }
+ }
+ 
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavAccountManagement.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavAccountManagement.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavAccountManagement.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavAccountManagement.cpp
+@@ -816,18 +816,7 @@
+         GuiAudioTriggerEvent lEvent;
+         lEvent.Construct(liAction, KAC_EMPTY, lpacLabel);
+ 
+-        struct Record
+-        {
+-            s32 miSize;
+-            s32 miType;
+-            s32 miOffset;
+-            GuiAudioTriggerWirePayload457 mPayload;
+-        } lRecord = { 100, 457, 12, {} };
+-        std::memcpy(&lRecord.mPayload, lEvent.macComponent, sizeof(lRecord.mPayload));
+-
+-        mpStateInterface->GetOutputEventQueue()->AddEvent(
+-            reinterpret_cast<const CgsModule::Event*>(&lRecord), KI_CHANNEL_GUI_OUT,
+-            static_cast<s32>(sizeof(lRecord)));
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lEvent);
+     }
+ 
+     // ---- RefreshTOSText ------------------------------------------------------------
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavColourCalibrate.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavColourCalibrate.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavColourCalibrate.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavColourCalibrate.cpp
+@@ -80,12 +80,7 @@
+         // or consumes it; the role is read off this one producer -- "the profile changed,
+         // save it". Reproduced as the exact wire record, not renamed.
+         const s32 KI_EVENT_SAVE_PROFILE_REQUEST = 553;
+-        // The wire id the inlined OutputGuiEvent<BrnGui::GuiAudioTriggerEvent> stamps
+-        // (X360 `li r11, 0x1C9`), as opposed to the payload type's own GuiEvent<201>.
+-        // Same file-local wire view BrnOnlineGameOptions_wI_02.cpp / BrnCarSelectLivery.cpp
+-        // carry; id 457 is homed only in BrnGuiDemangledEventTypes.h, which hard-collides
+-        // with the BrnGuiEventTypeDefs.h this TU needs.
+-        const u32 KU_WIRE_ID_AUDIO_TRIGGER = 457;
++        // Audio is a 100-byte event-457 payload; StateInterface wraps it on channel 40.
+ 
+         // ---- controller action ids (the action event's payload word +4) ------------
+         // BrnGui::EGameInputActions (DWARF GameSource/Input/GameInputActions.h:24; no
+@@ -189,25 +184,12 @@
+             }
+         };
+ 
+-        // The audio cue record: { 100, 457, 12, <the 100-byte payload> }, 112 bytes on
+-        // channel 40 -- the record the inlined OutputGuiEvent<GuiAudioTriggerEvent>
+-        // builds. Identical view to BrnOnlineGameOptions_wI_02.cpp's.
+-        struct GuiAudioTriggerWire : public GuiAudioTriggerEvent
+-        {
+-            GuiAudioTriggerWire()
+-            {
+-                muHeader0 = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                             sizeof(CgsGui::GuiEvent<201>));
+-                muEventType = KU_WIRE_ID_AUDIO_TRIGGER;
+-            }
+-        };
+-
+-        // Record-size pins. Every payload here is pointer-free, so the X360's AddEvent
+-        // size immediates (16 / 20 / 112) must survive unchanged on the x64 host; if a
++        // StateInterface's audio specialization emits {100,457,12}+payload on channel 40.
++// Record-size pins. Every payload here is pointer-free, so the X360's AddEvent
++        // size immediates (16 / 20) must survive unchanged on the x64 host; if a
+         // host layout ever drifts this is where it is caught rather than on the wire.
+         static_assert(sizeof(GuiCommandWire16<514>) == 16, "card show/hide record is 16 bytes");
+         static_assert(sizeof(GuiBrightnessContrastWire20) == 20, "brightness/contrast record is 20 bytes");
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+         static_assert(offsetof(GuiBrightnessContrastWire20, mPayload) == 12,
+                       "the 545 payload sits at the record's own header offset word (12)");
+ 
+@@ -216,22 +198,14 @@
+         // (`bl GuiAudioTriggerEvent::Construct(&rec, 7, "", "MenuToggleDefault", "")`
+         // then `bl CgsGui::StateInterface::OutputGuiEvent<GuiAudioTriggerEvent>`), so it
+         // is factored here as a file-local helper rather than invented as a class method
+-        // the DWARF does not declare. Posted as the wire record the console's inlined
+-        // OutputGuiEvent builds (id 457, channel 40, 112 bytes) -- see the note on
+-        // GuiAudioTriggerWire above.
++        // the DWARF does not declare. The typed publisher applies the original channel-40
++        // wrapper when it posts the 100-byte payload.
+         void PostMenuToggleSound(CgsGui::StateInterface* lpStateInterface)
+         {
+-            GuiAudioTriggerWire lAudio;
++            GuiAudioTriggerEvent lAudio;
+             lAudio.Construct(KI_AUDIO_ACTION_MENU_CUE, KAC_EMPTY,
+                              KAC_SOUND_LABEL_MENU_TOGGLE, KAC_EMPTY);
+-            lAudio.muHeader0   = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                                  sizeof(CgsGui::GuiEvent<201>));
+-            lAudio.muEventType = KU_WIRE_ID_AUDIO_TRIGGER;
+-            lAudio.muHeader2   = 12u;
+-
+-            lpStateInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lAudio), KI_CHANNEL_GUI_OUT,
+-                static_cast<s32>(sizeof(lAudio)));
++            lpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+         }
+     }
+ 
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMap.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMap.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMap.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMap.cpp
+@@ -181,25 +181,6 @@
+             s32 GetEventType() const { return 213; }
+         };
+ 
+-        // The record the inlined OutputGuiEvent<BrnGui::GuiAudioTriggerEvent> builds:
+-        // { 100, 457, 12, the 100-byte payload }, channel 40, 112 bytes. Verbatim from
+-        // BrnCrashNavMap_wJ_03.cpp -- the committed PC GuiAudioTriggerEvent already carries
+-        // the 12-byte queue header, but its GuiEvent<201> base seeds the payload-size word 0
+-        // and the id 201 while the X360 wire words are 100 and 457.
+-        const u32 KU_WIRE_ID_AUDIO_TRIGGER = 457;
+-
+-        struct GuiAudioTriggerWire : public GuiAudioTriggerEvent
+-        {
+-            GuiAudioTriggerWire()
+-            {
+-                muHeader0 = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                             sizeof(CgsGui::GuiEvent<201>));
+-                muEventType = KU_WIRE_ID_AUDIO_TRIGGER;
+-            }
+-        };
+-
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+-
+         // Walk the cache's eight online-player records looking for the one driving the given
+         // active-race-car index. Same helper (and the same known divergence) as
+         // BrnCrashNavMap_wJ_08.cpp's: the X360 inlines the walk, striding maPlayerInfo by 312
+@@ -328,11 +309,9 @@
+         // latched, close the sound out on the way through the door (`lbz r11, 0x6140`).
+         if (mSoundData.mbPrevIsScrolling)
+         {
+-            GuiAudioTriggerWire lScrollEnd;
++            GuiAudioTriggerEvent lScrollEnd;
+             lScrollEnd.Construct(KI_AUDIO_ACTION_MAP_CUE, "", KPC_SOUND_MAP_SCROLL_END, "");
+-            lpOutQueue->AddEvent(reinterpret_cast<const CgsModule::Event*>(&lScrollEnd),
+-                                 KI_CHANNEL_GUI_OUT,
+-                                 static_cast<s32>(sizeof(lScrollEnd)));
++            mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lScrollEnd);
+         }
+ 
+         // Park the cursor. The X360 assembles a zero quad on the stack and passes it in v1
+@@ -1452,11 +1431,7 @@
+         const char KPC_SOUND_MAP_SCROLL_START[] = "CodeMapScrollStart";
+ // (fold: an identical definition of KPC_SOUND_MAP_SCROLL_END was dropped here -- this TU defines it once, above)
+ 
+-// (fold: an identical definition of KU_WIRE_ID_AUDIO_TRIGGER was dropped here -- this TU defines it once, above)
+-
+-// (fold: an identical definition of GuiAudioTriggerWire was dropped here -- this TU defines it once, above)
+-
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
++
+     }
+ 
+     // ------------------------------------------------- UpdateSoundEvents @ 0x824CB8B0
+@@ -1489,26 +1464,20 @@
+         {
+             if (!mSoundData.mbPrevIsScrolling)
+             {
+-                GuiAudioTriggerWire lMoveStart;
++                GuiAudioTriggerEvent lMoveStart;
+                 lMoveStart.Construct(KI_AUDIO_ACTION_MAP_CUE, "", KPC_SOUND_MAP_MOVE_START, "");
+-                mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                    reinterpret_cast<const CgsModule::Event*>(&lMoveStart), KI_CHANNEL_GUI_OUT,
+-                    static_cast<s32>(sizeof(lMoveStart)));
+-
+-                GuiAudioTriggerWire lScrollStart;
++                mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lMoveStart);
++
++                GuiAudioTriggerEvent lScrollStart;
+                 lScrollStart.Construct(KI_AUDIO_ACTION_MAP_CUE, "", KPC_SOUND_MAP_SCROLL_START, "");
+-                mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                    reinterpret_cast<const CgsModule::Event*>(&lScrollStart), KI_CHANNEL_GUI_OUT,
+-                    static_cast<s32>(sizeof(lScrollStart)));
++                mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lScrollStart);
+             }
+         }
+         else if (mSoundData.mbPrevIsScrolling)
+         {
+-            GuiAudioTriggerWire lScrollEnd;
++            GuiAudioTriggerEvent lScrollEnd;
+             lScrollEnd.Construct(KI_AUDIO_ACTION_MAP_CUE, "", KPC_SOUND_MAP_SCROLL_END, "");
+-            mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lScrollEnd), KI_CHANNEL_GUI_OUT,
+-                static_cast<s32>(sizeof(lScrollEnd)));
++            mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lScrollEnd);
+         }
+ 
+         mSoundData.Update(lv3CursorWorldPos, lbIsMapScrolling);
+@@ -2504,13 +2473,10 @@
+ 
+ // (fold: an identical definition of KAC_ASSERT_FILE was dropped here -- this TU defines it once, above)
+ 
+-// (fold: an identical definition of KU_WIRE_ID_AUDIO_TRIGGER was dropped here -- this TU defines it once, above)
+-
+-// (fold: an identical definition of GuiAudioTriggerWire was dropped here -- this TU defines it once, above)
++
+ 
+         // Record-size pin. The payload is pointer-free, so the X360's AddEvent size
+         // immediate must survive unchanged on the x64 host.
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+     }
+ 
+     // ================================================================================
+@@ -2550,12 +2516,10 @@
+                     mfInspectingEventTime = 0.0f;
+                     muInspectingEventID   = 0;
+ 
+-                    GuiAudioTriggerWire lAudio;
++                    GuiAudioTriggerEvent lAudio;
+                     lAudio.Construct(KI_AUDIO_ACTION_VIEW_EVENT_STOP, "",
+                                      KPC_SOUND_MAP_VIEW_EVENT, "");
+-                    mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                        reinterpret_cast<const CgsModule::Event*>(&lAudio),
+-                        KI_CHANNEL_GUI_OUT, static_cast<s32>(sizeof(lAudio)));
++                    mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+                 }
+                 break;
+ 
+@@ -2580,12 +2544,10 @@
+ 
+                         mfInspectingEventTime = mpGuiCache->GetTime();
+ 
+-                        GuiAudioTriggerWire lAudio;
++                        GuiAudioTriggerEvent lAudio;
+                         lAudio.Construct(KI_AUDIO_ACTION_VIEW_EVENT_START, "",
+                                          KPC_SOUND_MAP_VIEW_EVENT, "");
+-                        mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                            reinterpret_cast<const CgsModule::Event*>(&lAudio),
+-                            KI_CHANNEL_GUI_OUT, static_cast<s32>(sizeof(lAudio)));
++                        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+                     }
+ 
+                     // The two fsel instructions, transcribed operand for operand -- see
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapMain.cpp
+@@ -153,27 +153,6 @@
+             u32 muVisible;   // +0x00  the console acts only on the exact value 1
+         };
+ 
+-        // ---- out-queue payload view: the id-457 audio re-post ------------------------
+-        // HandleCrashNavInputReleased's zoom arm builds a normal GuiAudioTriggerEvent,
+-        // then memcpy's its 100-BYTE PAYLOAD into a wrapper record whose type word is
+-        // 457, not 201 (@0x824CCE78..0x824CCEB4: `memcpy(dst, &audio, 0x64)` then the
+-        // three header words 100 / 0x1C9 / 12 and `AddEvent(out+12, rec, 40, 0x70)`).
+-        // 0x70 == 112 == 12 + 100, which is exactly GuiEventWrapper<T,40> over a
+-        // 100-byte T. The same 100-byte-payload-under-id-457 record is already attested
+-        // in the tree at BrnInGameMessageRenderer.cpp:1347/1413 ("CodeTicker"), and
+-        // BrnGuiDemangledEventTypes.h:472 FLAGs the 201-vs-457 split as unresolved --
+-        // this view is the honest local shape, not a second home for the type.
+-        struct GuiAudioTriggerPayload457
+-        {
+-            char macComponent[32];   // +0x00
+-            s32  meAction;           // +0x20
+-            char macLabel[32];       // +0x24
+-            char macMovie[32];       // +0x44
+-            s32 GetEventType() const { return 457; }
+-        };
+-        // 100 == the console's memcpy size and the record's leading size word.
+-        // (The C++ struct is naturally 4-aligned, so no padding creeps in.)
+-
+         // ---- the zoomed-out map centre ----------------------------------------------
+         // X360 &unk_82FB4C20 -- a 16-byte .bss quadword the LTRIGGER arm loads whole and
+         // stores into mMainMapComponent.mv2DesiredCentre. ⚠️ FLAG, and it is the exact
+@@ -603,18 +582,7 @@
+             lAudio.Construct(KI_AUDIO_ACTION_MAP_ZOOM_OUT, KAC_EMPTY_STRING,
+                              KPC_SOUND_MAP_ZOOM, KAC_EMPTY_STRING);
+ 
+-            // The console memcpy's the 100-byte PAYLOAD out of the freshly-built event
+-            // and re-boxes it under wire id 457 (see GuiAudioTriggerPayload457's note).
+-            // The committed PC GuiAudioTriggerEvent carries its 12-byte GuiEvent<201>
+-            // header in front of that payload, so the copy starts at macComponent.
+-            GuiAudioTriggerPayload457 lPayload;
+-            std::memcpy(&lPayload, &lAudio.macComponent, sizeof(lPayload));
+-
+-            CgsGui::GuiEventWrapper<GuiAudioTriggerPayload457, KI_CHANNEL_GUI_EVENT>
+-                lRecord(lPayload);
+-            mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lRecord),
+-                lRecord.GetChannel(), static_cast<s32>(sizeof(lRecord)));
++            mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+ 
+             meCursorMode = E_CURSORMODE_SELECTING_ICONS;   // `li r11, 1 ; stw 0x5F50`
+         }
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavOptions.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavOptions.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavOptions.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavOptions.cpp
+@@ -512,8 +512,7 @@
+             // [FLAG] The X360 row-move arms also drive the music preview as the cursor
+             // enters/leaves the two volume rows: landing on MUSIC_VOLUME posts
+             // GuiEventAudioTraxPreview { 57, 1 }, leaving it posts { -1, 0 }, and landing
+-            // on SFX_VOLUME posts a 112-byte BrnGui::GuiAudioTriggerEvent whose TYPE WORD
+-            // IS 457 while this tree's GuiAudioTriggerEvent derives from GuiEvent<201>.
++            // on SFX_VOLUME posts the canonical 100-byte GuiAudioTriggerEvent payload on id 457.
+             // The preview pair needs the meaning of the constant 57 (a track slot? a
+             // preview mode?) and the trigger post needs the type-id discrepancy settled by
+             // the record's consumer. Neither is recoverable from this call site, so both
+@@ -761,18 +760,7 @@
+         GuiAudioTriggerEvent lEvent;
+         lEvent.Construct(liAction, KAC_EMPTY, lpacMovie);
+ 
+-        struct Record
+-        {
+-            s32 miSize;
+-            s32 miType;
+-            s32 miOffset;
+-            GuiAudioTriggerWirePayload457 mPayload;
+-        } lRecord = { 100, 457, 12, {} };
+-        std::memcpy(&lRecord.mPayload, lEvent.macComponent, sizeof(lRecord.mPayload));
+-
+-        mpStateInterface->GetOutputEventQueue()->AddEvent(
+-            reinterpret_cast<const CgsModule::Event*>(&lRecord), KI_CHANNEL_GUI_OUT,
+-            static_cast<s32>(sizeof(lRecord)));
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lEvent);
+     }
+ 
+     // ---- TriggerSound @0x824CDFB0 --------------------------------------------------
+diff --git a/src/GameSource/Gui/Flow/Screen/Components/BrnCrashNavPanel.cpp b/src/GameSource/Gui/Flow/Screen/Components/BrnCrashNavPanel.cpp
+--- a/src/GameSource/Gui/Flow/Screen/Components/BrnCrashNavPanel.cpp
++++ b/src/GameSource/Gui/Flow/Screen/Components/BrnCrashNavPanel.cpp
+@@ -966,9 +966,8 @@
+         // The console builds the 100-byte GuiAudioTriggerEvent on its stack and queues it as
+         // X360 id 457 onto `mpStateInterface + 12` (@0x8243AFC8..0x8243AFF4). The committed
+         // OutputGuiEvent<GuiAudioTriggerEvent> instantiation (@0x82436890) IS that path.
+-        // FLAG: the committed record is `CgsGui::GuiEvent<201>` -- the DWARF id -- while the
+-        // X360 wire id is 457; that DWARF-vs-X360 id delta is the tree-wide convention (see
+-        // the "GuiEvent<450>; X360 id 455" note in BrnGuiEventTypeDefs.h), not a defect here.
++        // The event type is payload-only id 457; StateInterface's audio specialization
++        // supplies ARTIST's channel-40 {100,457,12}+payload wrapper.
+         GuiAudioTriggerEvent lAudioEvent;
+         lAudioEvent.Construct(KI_AUDIO_TRIGGER_ACTION, KAC_EMPTY_STRING, lpacLabel);
+         mpStateInterface->OutputGuiEvent(lAudioEvent);
+diff --git a/src/GameSource/Gui/Flow/Screen/Components/BrnEATraxMenuComponent.cpp b/src/GameSource/Gui/Flow/Screen/Components/BrnEATraxMenuComponent.cpp
+--- a/src/GameSource/Gui/Flow/Screen/Components/BrnEATraxMenuComponent.cpp
++++ b/src/GameSource/Gui/Flow/Screen/Components/BrnEATraxMenuComponent.cpp
+@@ -66,29 +66,14 @@
+         // The menu cue this component raises when the list SCROLLS (see HandleInput).
+         // The X360 posts it through OutputGuiEvent<GuiAudioTriggerEvent> @0x82436890,
+         // whose queued record is { size 100, type 457, offset 12 } + the native
+-        // { component[32], action, label[32], movie[32] } payload. Spelled with the same
+-        // hand-built record BrnChallengeListComponent.cpp:215 and
+-        // BrnCrashNavOptions.cpp::PostAudioTrigger already use, because this tree's
+-        // GuiAudioTriggerEvent carries the PC's GuiEvent<201> header rather than the
+-        // console's wire id 457.
++        // StateInterface's audio specialization wraps this 100-byte payload as id 457 on channel 40.
+         void PostAudioTrigger(CgsGui::StateInterface* lpStateInterface,
+                               s32 liAction, const char* lpacLabel)
+         {
+             GuiAudioTriggerEvent lEvent;
+             lEvent.Construct(liAction, KAC_EMPTY, lpacLabel);
+ 
+-            struct Record
+-            {
+-                s32 miSize;
+-                s32 miType;
+-                s32 miOffset;
+-                GuiAudioTriggerWirePayload457 mPayload;
+-            } lRecord = { 100, 457, 12, {} };
+-            std::memcpy(&lRecord.mPayload, lEvent.macComponent, sizeof(lRecord.mPayload));
+-
+-            lpStateInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lRecord), KI_CHANNEL_GUI_OUT,
+-                static_cast<s32>(sizeof(lRecord)));
++            lpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lEvent);
+         }
+     }
+ 
+diff --git a/src/GameSource/Game/BrnGameModule.cpp b/src/GameSource/Game/BrnGameModule.cpp
+--- a/src/GameSource/Game/BrnGameModule.cpp
++++ b/src/GameSource/Game/BrnGameModule.cpp
+@@ -13,7 +13,7 @@
+ #include "GameShared/GameClasses/Core/CgsAssert.h"   // CgsDev::Assert
+ #include "GameShared/GameClasses/Development/BrnDiagFilmLatch.h" // [diag] BrnDiag::gFilmLatch (time-dilation capture arm)
+ #include "SDKs/EA/GameTalk/GameTalk.h"               // EA::GameTalk::GameTalkMessage (RenderMetricsMessageHandler)
+-#include "GameSource/Gui/BrnGuiEventTypeDefs.h"      // BrnGui::GuiAudioTriggerEvent (GUI-out event 201) + GuiEventProgressionProfileData (350)
++#include "GameSource/Gui/BrnGuiEventTypeDefs.h"      // BrnGui::GuiAudioTriggerEvent (payload event 457) + GuiEventProgressionProfileData (350)
+ #include "GameSource/Game/GameBridgeGameStateToX.h"  // BrnGame::BridgeGameStateToGui_EventStatus (the GUI-leg status seam)
+ #include "GameSource/GameState/Progression/BrnProfile.h" // BrnProgression::Profile (the action-193 payload's first word)
+ 
+diff --git a/src/GameSource/Gui/BrnGuiDemangledEventTypes.h b/src/GameSource/Gui/BrnGuiDemangledEventTypes.h
+--- a/src/GameSource/Gui/BrnGuiDemangledEventTypes.h
++++ b/src/GameSource/Gui/BrnGuiDemangledEventTypes.h
+@@ -856,11 +856,10 @@
+     static_assert(offsetof(CalculateRoute, maSectionIndices) == 0x40, "section indices at +0x40");
+     static_assert(offsetof(CalculateRoute, mu16EventID)      == 0x44, "leg number at +0x44 (sth)");
+     struct alignas(8) GuiAudioEvent : public CgsGui::GuiEvent<456> { u8 maPayload[12]; };  // id 456 size 24 [8-aligned: OGE off16]
+-    // GuiAudioTriggerEvent: NO placeholder here -- the real hand-reconstructed home is
+-    // BrnGuiEventTypeDefs.h (macComponent/meAction/macLabel/macMovie, id 201, sizeof 112).
+-    // FLAG / OPEN: this catalogue read the id as 457 size 100 from the AddGuiEvent<T>
+-    // spine, which does NOT match the real home's id 201 size 112. Two different events
+-    // are sharing one name; one of them is misnamed. Unresolved -- needs asm arbitration.
++    // GuiAudioTriggerEvent is homed in BrnGuiEventTypeDefs.h as ARTIST's 100-byte
++    // payload (component[32], action, label[32], movie[32]), event id 457. StateInterface
++    // boxes it on channel 40; module output carries raw id457/100. Id 201 above is the
++    // separate eight-byte GuiEventHideDriveThru and has no audio-trigger alias.
+     // X360-RECOVERED LAYOUT (no longer an opaque placeholder). The inner field breakdown IS
+     // recovered from three attesting producers -- BrnGui::ChallengeSelector::Hide (@0x82436F70),
+     // BrnGui::FriendsListComponent::Close (@0x824397E8) and ::SelectPrevious (@0x82441988), which
+diff --git a/src/GameSource/Gui/BrnGuiEventTypeDefs.h b/src/GameSource/Gui/BrnGuiEventTypeDefs.h
+--- a/src/GameSource/Gui/BrnGuiEventTypeDefs.h
++++ b/src/GameSource/Gui/BrnGuiEventTypeDefs.h
+@@ -31,6 +31,8 @@
+ // proven offsets. This is an honest layout boundary, not a fabricated one.
+ 
+ #pragma once
++
++#include <cstddef>
+ #include "GameSource/Gui/Events/BrnGuiEventPreRaceMessages.h"
+ 
+ #include "GameSource/GameState/BrnGameActions.h"
+@@ -104,45 +106,46 @@
+     E_GUIFLOW_FIRST   = 0,
+ };
+ 
+-// BrnGuiAudioEvent.cpp / ARTIST @0x824F6350. The native payload is exactly
+-// { component[32], action, label[32], movie[32] } (100 bytes). The committed PC
+-// GuiEvent<N> carries its 12-byte queue header explicitly, making this queued
+-// record 112 bytes in total.
+-struct GuiAudioTriggerEvent : public CgsGui::GuiEvent<201>
++// DecFIGS BrnGuiAudioEvent.h:43 declares this class on the empty GuiEvent<452> tag.
++// ARTIST BrnGuiAudioTriggerEvent::Construct @0x824F6350 writes the field-only payload:
++// component[32], action at +32, label[32] at +36, movie[32] at +68. The X360 state
++// publisher writes id457 on channel40; module-output AddGuiOutEvent also writes raw457/100.
++struct GuiAudioTriggerEvent : public CgsGui::GuiEvent<452>
+ {
+     char macComponent[32];
+     s32  meAction;
+     char macLabel[32];
+     char macMovie[32];
+ 
+-    GuiAudioTriggerEvent() : CgsGui::GuiEvent<201>(0, 12), meAction(0)
++    GuiAudioTriggerEvent() : meAction(0)
+     {
+         macComponent[0] = 0;
+         macLabel[0] = 0;
+         macMovie[0] = 0;
+     }
+ 
++    s32 GetEventType() const { return 457; }
+     void Construct(s32 leAction, const char* lpComponentName,
+                    const char* lpLabel, const char* lpMovieName = "");
+ };
+ 
+-static_assert(sizeof(GuiAudioTriggerEvent) == 112,
+-              "GuiAudioTriggerEvent is a 100-byte payload plus the 12-byte PC GuiEvent header");
+-
+-// ARTIST wire id 457 carries the same 100-byte payload without the PC
+-// GuiEvent<201> header. OutputGuiEvent wraps this record with its own 12-byte
+-// queue header before publication.
+-struct GuiAudioTriggerWirePayload457
+-{
+-    char macComponent[32];
+-    s32  meAction;
+-    char macLabel[32];
+-    char macMovie[32];
+-};
+-
+-static_assert(sizeof(GuiAudioTriggerWirePayload457) == 100,
+-              "ARTIST GUI audio trigger payload is exactly 100 bytes");
+-
++static_assert(sizeof(GuiAudioTriggerEvent) == 100 && alignof(GuiAudioTriggerEvent) == 4,
++              "ARTIST GUI audio trigger is a 100-byte, four-byte-aligned payload");
++static_assert(offsetof(GuiAudioTriggerEvent, macComponent) == 0 &&
++              offsetof(GuiAudioTriggerEvent, meAction) == 32 &&
++              offsetof(GuiAudioTriggerEvent, macLabel) == 36 &&
++              offsetof(GuiAudioTriggerEvent, macMovie) == 68,
++              "ARTIST GUI audio trigger field offsets");
++
++// Existing payload-only callsites use this name for the same canonical record.
++using GuiAudioTriggerWirePayload457 = GuiAudioTriggerEvent;
++
++// The original StateInterface::OutputGuiEvent path boxes this 100-byte payload as
++// {100, 457, 12} on channel40. The module-output AddGuiOutEvent path is raw 457/100.
++using GuiAudioTriggerEventRecord40 = CgsGui::GuiEventWrapper<GuiAudioTriggerEvent, 40>;
++static_assert(sizeof(GuiAudioTriggerEventRecord40) == 112 &&
++              offsetof(GuiAudioTriggerEventRecord40, mOutEvent) == 12,
++              "channel-40 audio wrapper is {100,457,12} plus the 100-byte payload");
+ // BrnGuiEventTypeDefs.h:912 -- HUD FSM selector carried by GuiEventRunFsm.
+ enum EHUDFSMs
+ {
+diff --git a/src/GameSource/Gui/BrnGuiModule.cpp b/src/GameSource/Gui/BrnGuiModule.cpp
+--- a/src/GameSource/Gui/BrnGuiModule.cpp
++++ b/src/GameSource/Gui/BrnGuiModule.cpp
+@@ -3553,7 +3553,7 @@
+                     mpOutputBuffer->AddEvent(lpEvent, 23, liSize);
+                     break;
+ 
+-                case 201:  // GUI audio trigger -> the module output event channel
++                case 201:  // Preserve event-201 module-output forwarding; audio triggers use id 457.
+                     CGS_ASSERT(mpOutputBuffer != 0, "mpOutputBuffer");
+                     mpOutputBuffer->AddEvent(lpEvent, liId, liSize);
+                     break;
+@@ -4514,7 +4514,7 @@
+             CgsGui::AptCommunicator::FlushTriggerEventsTo(mViewOutputBuffer.GetGuiEventQueue());
+             mViewOutputBuffer.UnlockForWrite();
+             // The console stores these Apt trigger records through BridgeFromViewToOutput;
+-            // the next module input dispatch handles 21/22 and emits typed sound event 201.
++            // the next module input dispatch handles 21/22; case 22 emits typed sound payload 457.
+             mViewOutputBuffer.LockForRead();
+             {
+                 const CgsModule::VariableEventQueue<18432, 16>* lpTrigQueue =
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnImageGallery.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnImageGallery.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnImageGallery.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnImageGallery.cpp
+@@ -203,7 +203,7 @@
+         static_assert(sizeof(GuiShowHideHudWire) == 16, "show/hide hud record is 16 bytes");
+         static_assert(sizeof(GuiOverlayRequestWire) == 304, "overlay request record is 304 bytes");
+         static_assert(sizeof(GuiEventActivateCrashNav) == 20, "activate-crashnav record is 20 bytes");
+-        static_assert(sizeof(GuiAudioTriggerEvent) == 112, "audio trigger record is 112 bytes");
++        static_assert(sizeof(GuiAudioTriggerEventRecord40) == 112, "audio trigger record is 112 bytes");
+ 
+         template <class TPayload>
+         void PostWrapped(CgsGui::StateInterface* lpStateInterface, TPayload& lrPayload)
+@@ -1078,13 +1078,9 @@
+                 break;
+         }
+ 
+-        // The wire record is { 100, 457, 12 } + the 100-byte payload.
+         GuiAudioTriggerEvent lAudio;
+         lAudio.Construct(KI_AUDIO_ACTION_MENU_CUE, KPC_EMPTY, lpcLabel, KPC_EMPTY);
+-        lAudio.muHeader0   = static_cast<u32>(sizeof(GuiAudioTriggerEvent) - sizeof(CgsGui::GuiEvent<201>));
+-        lAudio.muEventType = static_cast<u32>(KI_GUI_EVENT_AUDIO_TRIGGER);
+-        lAudio.muHeader2   = 12u;
+-        PostRecord(mpStateInterface, lAudio);
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+     }
+ 
+     // Drop the middle carousel item to the current category's invisible frame.
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptions_wI_02.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptions_wI_02.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptions_wI_02.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptions_wI_02.cpp
+@@ -67,30 +67,8 @@
+         const char KAC_SOUND_LABEL_ACCEPT[]           = "Accept";
+         const char KAC_SOUND_LABEL_GO_BACK[]          = "GO_BACK";
+ 
+-        // ---- out-queue wire record -----------------------------------------------------
+-        // The record the inlined OutputGuiEvent<BrnGui::GuiAudioTriggerEvent> builds:
+-        // { 100, 457, 12, the 100-byte payload }, channel 40, 112 bytes. The committed PC
+-        // GuiAudioTriggerEvent already carries that 12-byte queue header in front of its
+-        // 100-byte payload, so the event object IS the record -- but its GuiEvent<201> base
+-        // seeds the payload-size word 0 and the id 201, while the X360 wire words are the
+-        // payload size and the id 457. This view restores them without forking the payload
+-        // type (BrnOnlineGameRoomPlayerInfo_wH_08.cpp carries the identical view).
+-        const u32 KU_WIRE_ID_AUDIO_TRIGGER = 457;   // X360 `li r11, 0x1C9`
++        // StateInterface's audio-specific OutputGuiEvent emits {100,457,12}+payload on channel 40.
+ 
+-        struct GuiAudioTriggerWire : public GuiAudioTriggerEvent
+-        {
+-            GuiAudioTriggerWire()
+-            {
+-                muHeader0 = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                             sizeof(CgsGui::GuiEvent<201>));
+-                muEventType = KU_WIRE_ID_AUDIO_TRIGGER;
+-            }
+-        };
+-
+-        // Record-size pin. The payload is pointer-free, so the X360's AddEvent size
+-        // immediate must survive unchanged on the x64 host; if a host layout ever drifts,
+-        // this is where it is caught rather than on the wire.
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+     }
+ 
+     // ---- CheckPrivileges @ 0x82485C18 ----------------------------------------------
+@@ -212,11 +190,8 @@
+         // is constructed with the null label on the unrecognised path.
+         CGS_ASSERT(lpcLabel, "lpcLabel");
+ 
+-        GuiAudioTriggerWire lAudio;
++        GuiAudioTriggerEvent lAudio;
+         lAudio.Construct(KI_AUDIO_ACTION_MENU_CUE, "", lpcLabel, "");
+-
+-        mpStateInterface->GetOutputEventQueue()->AddEvent(
+-            reinterpret_cast<const CgsModule::Event*>(&lAudio), KI_CHANNEL_GUI_OUT,
+-            static_cast<s32>(sizeof(lAudio)));
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+     }
+ }
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptionsSummary.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptionsSummary.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptionsSummary.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptionsSummary.cpp
+@@ -190,15 +190,6 @@
+             GuiAutosaveRequestWire() : CgsGui::GuiEvent<356>(1, 12), mu8Payload(0) {}
+         };
+ 
+-        // { 100, 457, 12, the audio trigger }, channel 40, 112 bytes.
+-        struct GuiAudioTriggerWire
+-        {
+-            s32 miSize;
+-            s32 miType;
+-            s32 miOffset;
+-            GuiAudioTriggerWirePayload457 mPayload;
+-        };
+-
+         // { 288, 184, 16, <pad>, the 288-byte request }, channel 40, 304 bytes.
+         struct GuiOverlayRequestWire : public CgsGui::GuiEvent<184>
+         {
+@@ -231,7 +222,6 @@
+         static_assert(sizeof(GuiCommandWire16<175>) == 16, "command record is 16 bytes");
+         static_assert(sizeof(GuiEventShowHideHudWire) == 16, "show/hide-hud record is 16 bytes");
+         static_assert(sizeof(GuiAutosaveRequestWire) == 16, "autosave record is 16 bytes");
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+         static_assert(sizeof(GuiOverlayRequestWire) == 304, "overlay request record is 304 bytes");
+         static_assert(sizeof(GuiOverlayWaitFinishWire) == 24, "wait-finish record is 24 bytes");
+         static_assert(sizeof(GuiEventNetworkCreateGameWire) == 492, "create-game record is 492 bytes");
+@@ -252,9 +242,7 @@
+         {
+             GuiAudioTriggerEvent lAudio;
+             lAudio.Construct(KI_AUDIO_ACTION_MENU_CUE, KPC_EMPTY_STRING, lpacLabel, KPC_EMPTY_STRING);
+-            GuiAudioTriggerWire lAudioWire = { 100, 457, 12, {} };
+-            std::memcpy(&lAudioWire.mPayload, lAudio.macComponent, sizeof(lAudioWire.mPayload));
+-            PostWire(lpStateInterface, lAudioWire);
++            lpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+         }
+ 
+         // Show / hide the main map on both the view and the internal channels.
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_06.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_06.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_06.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_06.cpp
+@@ -36,11 +36,8 @@
+ // so every site below is a plain by-name call on the named member -- same treatment as
+ // the committed sibling screens (BrnOnlinePlay.cpp, BrnBootLegal.cpp).
+ //
+-// NOTE on the audio event: the X360 wire id for GuiAudioTriggerEvent is 457 (see the
+-// hand-built {100,457,12} record in this TU's TriggerSound), while the committed
+-// BrnGuiEventTypeDefs.h models it as GuiEvent<201>. That id discrepancy is a known
+-// cross-TU finding for the conductor; this partfile does not touch the header and calls
+-// the same OutputGuiEvent<GuiAudioTriggerEvent> instantiation the X360 calls.
++// Audio cue calls use the 100-byte event-457 payload; StateInterface's audio
++// specialization emits ARTIST's channel-40 wrapper.
+ // ===================================================================================
+ 
+ #include "GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo.h"
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_08.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_08.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_08.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_08.cpp
+@@ -97,29 +97,7 @@
+             s32 miButtonId;   // +0x04
+         };
+ 
+-        // ---- out-queue wire records ---------------------------------------------------
+-
+-        // The record the inlined OutputGuiEvent<BrnGui::GuiAudioTriggerEvent> builds (the
+-        // out-of-line instantiation @0x82436890 builds the identical one):
+-        // { 100, 457, 12, the 100-byte payload }, channel 40, 112 bytes. The committed PC
+-        // GuiAudioTriggerEvent already carries that 12-byte queue header in front of its
+-        // 100-byte payload, so the event object IS the record -- but its GuiEvent<201>
+-        // base seeds the payload-size word 0 and the id 201, while the X360 wire words are
+-        // the payload size and id 457. This view restores them without forking the payload
+-        // type. (Cross-TU finding: 201 is GuiEventHideDriveThru's id; 457 is the id both
+-        // this record and BrnGuiDemangledEventTypes.h attest for the audio trigger.)
+-        const u32 KU_WIRE_ID_AUDIO_TRIGGER = 457;
+-
+-        struct GuiAudioTriggerWire : public GuiAudioTriggerEvent
+-        {
+-            GuiAudioTriggerWire()
+-            {
+-                muHeader0 = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                             sizeof(CgsGui::GuiEvent<201>));
+-                muEventType = KU_WIRE_ID_AUDIO_TRIGGER;
+-            }
+-        };
+-
++        // StateInterface's audio-specific OutputGuiEvent emits {100,457,12}+payload on channel 40.
+         // Id 463 == BrnGui::GuiEventAudioSettings. The record
+         // OutputGuiEvent<GuiEventAudioSettings> @0x82493728 builds: { 8, 463, 12, the two
+         // volume words }, channel 40, 20 bytes. Field order is the X360 store order --
+@@ -195,7 +173,6 @@
+         // Record-size pins. Every one of these payloads is pointer-free, so the X360's
+         // AddEvent size immediate must survive unchanged on the x64 host; if a host
+         // layout ever drifts, this is where it is caught rather than on the wire.
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+         static_assert(sizeof(GuiEventAudioSettingsWire) == 20, "audio settings record is 20 bytes");
+         static_assert(sizeof(GuiEventVoipSettingsWire) == 16, "voip settings record is 16 bytes");
+         static_assert(sizeof(GuiEventShowHideHudWire) == 16, "show/hide hud record is 16 bytes");
+@@ -235,12 +212,9 @@
+         // the event is constructed with the null label on the unrecognised path.
+         CGS_ASSERT(lpcLabel, "lpcLabel");
+ 
+-        GuiAudioTriggerWire lAudio;
++        GuiAudioTriggerEvent lAudio;
+         lAudio.Construct(KI_AUDIO_ACTION_MENU_CUE, "", lpcLabel, "");
+-
+-        mpStateInterface->GetOutputEventQueue()->AddEvent(
+-            reinterpret_cast<const CgsModule::Event*>(&lAudio), KI_CHANNEL_GUI_OUT,
+-            static_cast<s32>(sizeof(lAudio)));
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+     }
+ 
+     // ---- ShowSettingsScreen @ 0x8249A780 -------------------------------------------
+@@ -356,11 +330,9 @@
+                     const s32 liMusicVolume = mpGuiCache->GetOptionsDataProfile()->GetMusicVolume();
+                     const s32 liSFXVolume   = mpGuiCache->GetOptionsDataProfile()->GetSFXVolume();
+ 
+-                    GuiAudioTriggerWire lAudio;
++                    GuiAudioTriggerEvent lAudio;
+                     lAudio.Construct(KI_AUDIO_ACTION_MENU_CUE, "", KAC_SOUND_LABEL_GO_BACK, "");
+-                    mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                        reinterpret_cast<const CgsModule::Event*>(&lAudio), KI_CHANNEL_GUI_OUT,
+-                        static_cast<s32>(sizeof(lAudio)));
++                    mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+ 
+                     GuiEventAudioSettingsWire lAudioSettings(liMusicVolume, liSFXVolume);
+                     mpStateInterface->GetOutputEventQueue()->AddEvent(
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_09.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_09.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_09.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_09.cpp
+@@ -55,23 +55,7 @@
+         // The GuiAudioTriggerEvent action the back press fires (X360 `li r4, 7`).
+         const s32 KI_AUDIO_ACTION_BACK = 7;
+ 
+-        // The record OutputGuiEvent<GuiAudioTriggerEvent> builds: { 100, 457, 12, the
+-        // 100-byte payload } on channel 40, 112 bytes. The committed GuiAudioTriggerEvent
+-        // carries that 12-byte header itself but seeds it with size 0 and id 201; this
+-        // view restores the wire words (same view as partfiles 08 and 13). The in-tree
+-        // StateInterface::OutputGuiEvent posts the event on a channel equal to its id,
+-        // which is not the console record.
+-        struct GuiAudioTriggerWire : public GuiAudioTriggerEvent
+-        {
+-            GuiAudioTriggerWire()
+-            {
+-                muHeader0   = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                               sizeof(CgsGui::GuiEvent<201>));
+-                muEventType = 457;
+-            }
+-        };
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+-        const s32 KI_CHANNEL_AUDIO_GUI_OUT = 40;
++        // StateInterface's audio specialization emits {100,457,12}+payload on channel 40.
+ 
+         // ---- in-queue payload view (the queue delivers the HEADER-STRIPPED payload,
+         //      so the typed event pointer the DWARF names would mislead by 12 --
+@@ -175,11 +159,9 @@
+ 
+         case KI_ACTION_BACK:
+         {
+-            GuiAudioTriggerWire lAudioEvent;
++            GuiAudioTriggerEvent lAudioEvent;
+             lAudioEvent.Construct(KI_AUDIO_ACTION_BACK, "", "GO_BACK", "");
+-            mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lAudioEvent), KI_CHANNEL_AUDIO_GUI_OUT,
+-                static_cast<s32>(sizeof(lAudioEvent)));
++            mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudioEvent);
+             lbHidePage = true;
+             break;
+         }
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_10.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_10.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_10.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_10.cpp
+@@ -76,23 +76,7 @@
+         const char KAC_SOUND_GO_BACK[]    = "GO_BACK";
+         const char KAC_EMPTY_STRING[]     = "";
+ 
+-        // The record OutputGuiEvent<GuiAudioTriggerEvent> builds: { 100, 457, 12, the
+-        // 100-byte payload } on channel 40, 112 bytes. The committed GuiAudioTriggerEvent
+-        // carries that 12-byte header itself but seeds it with size 0 and id 201; this
+-        // view restores the wire words (same view as partfiles 08 and 13). The in-tree
+-        // StateInterface::OutputGuiEvent posts the event on a channel equal to its id,
+-        // which is not the console record.
+-        struct GuiAudioTriggerWire : public GuiAudioTriggerEvent
+-        {
+-            GuiAudioTriggerWire()
+-            {
+-                muHeader0   = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                               sizeof(CgsGui::GuiEvent<201>));
+-                muEventType = 457;
+-            }
+-        };
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+-        const s32 KI_CHANNEL_AUDIO_GUI_OUT = 40;
++        // StateInterface's audio specialization emits {100,457,12}+payload on channel 40.
+ 
+         // The apt clip the pause button prompts transition through (X360 aAptTransition_1,
+         // the AddOutputAptViewState first argument at 0x8248C2D4 / 0x8248C4A4).
+@@ -334,12 +318,10 @@
+ 
+         case KI_ACTION_BACK:
+         {
+-            GuiAudioTriggerWire lAudioEvent;
++            GuiAudioTriggerEvent lAudioEvent;
+             lAudioEvent.Construct(KI_AUDIO_ACTION_BACK, KAC_EMPTY_STRING,
+                                   KAC_SOUND_GO_BACK, KAC_EMPTY_STRING);
+-            mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lAudioEvent), KI_CHANNEL_AUDIO_GUI_OUT,
+-                static_cast<s32>(sizeof(lAudioEvent)));
++            mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudioEvent);
+             ShowPauseScreen();
+             break;
+         }
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_13.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_13.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_13.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wH_13.cpp
+@@ -125,27 +125,7 @@
+             }
+         };
+ 
+-        // The record OutputGuiEvent<BrnGui::GuiAudioTriggerEvent> @0x82436890 builds:
+-        // { 100, 457, 12, the 100-byte payload }, channel 40, 112 bytes. The committed PC
+-        // GuiAudioTriggerEvent already carries that 12-byte queue header in front of its
+-        // 100-byte payload, so the event object IS the record -- but its GuiEvent<201>
+-        // base seeds the size word 0 and the id 201, while the X360 wire words are the
+-        // payload size and id 457. This view restores them without forking the payload
+-        // type. (Cross-TU finding: 201 is GuiEventHideDriveThru's id; 457 is the id both
+-        // this instantiation and BrnGuiDemangledEventTypes.h attest for the audio
+-        // trigger. Same view as BrnOnlineGameRoomPlayerInfo_wH_08.cpp's.)
+-        const u32 KU_WIRE_ID_AUDIO_TRIGGER = 457;
+-
+-        struct GuiAudioTriggerWire : public GuiAudioTriggerEvent
+-        {
+-            GuiAudioTriggerWire()
+-            {
+-                muHeader0 = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                             sizeof(CgsGui::GuiEvent<201>));
+-                muEventType = KU_WIRE_ID_AUDIO_TRIGGER;
+-            }
+-        };
+-
++        // StateInterface's audio-specific OutputGuiEvent emits {100,457,12}+payload on channel 40.
+         // Id 463 == BrnGui::GuiEventAudioSettings: { 8, 463, 12, the two volume words },
+         // channel 40, 20 bytes. Field order is the X360 store order -- GetMusicVolume
+         // lands in the first payload word, GetSFXVolume in the second.
+@@ -203,7 +183,6 @@
+         // AddEvent size immediate must survive unchanged on the x64 host; if a host layout
+         // ever drifts, this is where it is caught rather than on the wire.
+         static_assert(sizeof(GuiOverlayRequestWire) == 304, "overlay request record is 304 bytes");
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+         static_assert(sizeof(GuiEventAudioSettingsWire) == 20, "audio settings record is 20 bytes");
+         static_assert(sizeof(GuiEventVoipSettingsWire) == 16, "voip settings record is 16 bytes");
+         static_assert(sizeof(GuiEventLeaveOnlineGameWire) == 16, "leave-game record is 16 bytes");
+@@ -297,11 +276,9 @@
+                 const s32 liMusicVolume = mpGuiCache->GetOptionsDataProfile()->GetMusicVolume();
+                 const s32 liSFXVolume   = mpGuiCache->GetOptionsDataProfile()->GetSFXVolume();
+ 
+-                GuiAudioTriggerWire lAudio;
++                GuiAudioTriggerEvent lAudio;
+                 lAudio.Construct(KI_AUDIO_ACTION_MENU_CUE, "", KAC_SOUND_LABEL_GO_BACK, "");
+-                mpStateInterface->GetOutputEventQueue()->AddEvent(
+-                    reinterpret_cast<const CgsModule::Event*>(&lAudio), KI_CHANNEL_GUI_OUT,
+-                    static_cast<s32>(sizeof(lAudio)));
++                mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+ 
+                 GuiEventAudioSettingsWire lAudioSettings(liMusicVolume, liSFXVolume);
+                 mpStateInterface->GetOutputEventQueue()->AddEvent(
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wN3_02.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wN3_02.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wN3_02.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wN3_02.cpp
+@@ -78,31 +78,15 @@
+                 static_cast<s32>(sizeof(lRecord)));
+         }
+ 
+-        // The audio trigger's wire payload: the 100-byte body of GuiAudioTriggerEvent
+-        // under id 457 (OutputGuiEvent<GuiAudioTriggerEvent> copies the payload out and
+-        // boxes it as { 100, 457, 12, payload }). The committed GuiAudioTriggerEvent keeps
+-        // a 12-byte header of its own in front of the payload, so the payload is re-boxed.
+-        struct GuiAudioTriggerPayload457
+-        {
+-            char macComponent[32];
+-            s32  meAction;
+-            char macLabel[32];
+-            char macMovie[32];
+-            s32 GetEventType() const { return 457; }
+-        };
+-
+         void PostAudioTrigger(CgsGui::StateInterface* lpStateInterface, s32 leAction,
+                               const char* lpcLabel)
+         {
+             GuiAudioTriggerEvent lAudioTrigger;
+             lAudioTrigger.Construct(leAction, KAC_EMPTY_STRING, lpcLabel, KAC_EMPTY_STRING);
+ 
+-            GuiAudioTriggerPayload457 lPayload;
+-            std::memcpy(&lPayload, lAudioTrigger.macComponent, sizeof(lPayload));
+-            OutputGuiEventRecord(lpStateInterface, lPayload);
+-        }
+-
+-        static_assert(sizeof(GuiAudioTriggerPayload457) == 100, "audio trigger payload is 100 bytes");
++            lpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudioTrigger);
++        }
++
+         static_assert(sizeof(CgsGui::GuiEventWrapper<GuiChallengeSelectedEvent, 40>) == 32,
+                       "573 record is 32 bytes");
+         static_assert(sizeof(CgsGui::GuiEventWrapper<GuiEventNetworkGameParams, 40>) == 492,
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wN3_03.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wN3_03.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wN3_03.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameRoomPlayerInfo_wN3_03.cpp
+@@ -142,20 +142,8 @@
+             }
+         };
+ 
+-        // The audio trigger's wire payload (the 100-byte body under id 457; see
+-        // BrnOnlineGameRoomPlayerInfo_wN3_02.cpp for why it is re-boxed).
+-        struct GuiAudioTriggerPayload457
+-        {
+-            char macComponent[32];
+-            s32  meAction;
+-            char macLabel[32];
+-            char macMovie[32];
+-            s32 GetEventType() const { return 457; }
+-        };
+-
+         static_assert(sizeof(GuiOverlayRequestWire) == 304, "overlay request record is 304 bytes");
+         static_assert(sizeof(GuiOverlayWaitFinishWire) == 24, "overlay wait-finish record is 24 bytes");
+-        static_assert(sizeof(GuiAudioTriggerPayload457) == 100, "audio trigger payload is 100 bytes");
+         static_assert(sizeof(GuiEventScoreboardRequestGamercardEvent) == 28, "gamercard record is 28 bytes");
+ 
+         void PostOverlayRequest(CgsGui::StateInterface* lpStateInterface, GuiOverlayRequestWire& lrWire)
+@@ -180,13 +168,7 @@
+             GuiAudioTriggerEvent lAudioTrigger;
+             lAudioTrigger.Construct(leAction, KAC_EMPTY_STRING, lpcLabel, KAC_EMPTY_STRING);
+ 
+-            GuiAudioTriggerPayload457 lPayload;
+-            std::memcpy(&lPayload, lAudioTrigger.macComponent, sizeof(lPayload));
+-
+-            CgsGui::GuiEventWrapper<GuiAudioTriggerPayload457, KI_CHANNEL_GUI_OUT> lRecord(lPayload);
+-            lpStateInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lRecord), lRecord.GetChannel(),
+-                static_cast<s32>(sizeof(lRecord)));
++            lpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudioTrigger);
+         }
+ 
+         // OutputGuiEvent<GuiEventScoreboardRequestGamercardEvent>: the committed type
+diff --git a/src/GameSource/Gui/Flow/PostEvent/States/Online/BrnOnlineInstantResults.cpp b/src/GameSource/Gui/Flow/PostEvent/States/Online/BrnOnlineInstantResults.cpp
+--- a/src/GameSource/Gui/Flow/PostEvent/States/Online/BrnOnlineInstantResults.cpp
++++ b/src/GameSource/Gui/Flow/PostEvent/States/Online/BrnOnlineInstantResults.cpp
+@@ -158,16 +158,7 @@
+         {
+             GuiAudioTriggerEvent lEvent;
+             lEvent.Construct(0, "", "RaceResult", "");
+-            // The existing PC event owns a header; ARTIST emits its 100-byte body as457.
+-            struct AudioWire
+-            {
+-                s32 miSize, miType, miOffset;
+-                GuiAudioTriggerWirePayload457 mPayload;
+-            } lWire = { 100, 457, 12, {} };
+-            static_assert(sizeof(AudioWire) == 112, "ARTIST457 wrapper");
+-            std::memcpy(&lWire.mPayload, lEvent.macComponent, sizeof(lWire.mPayload));
+-            lpInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lWire), 40, sizeof(lWire));
++            lpInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lEvent);
+         }
+ 
+         // The GUI output channel the state's out-queue events go on.
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineLoading.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineLoading.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineLoading.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineLoading.cpp
+@@ -171,15 +171,6 @@
+             GuiAutosaveRequestWire() : CgsGui::GuiEvent<356>(1, 12), mu8Payload(0) {}
+         };
+ 
+-        // { 100, 457, 12, the audio trigger }, channel 40, 112 bytes.
+-        struct GuiAudioTriggerWire
+-        {
+-            s32 miSize;
+-            s32 miType;
+-            s32 miOffset;
+-            GuiAudioTriggerWirePayload457 mPayload;
+-        };
+-
+         // { 288, 184, 16, <pad>, the 288-byte request }, channel 40, 304 bytes.
+         struct GuiOverlayRequestWire : public CgsGui::GuiEvent<184>
+         {
+@@ -196,7 +187,6 @@
+         static_assert(sizeof(GuiCommandWire16<92>) == 16, "command record is 16 bytes");
+         static_assert(sizeof(GuiTickerClearWire) == 16, "ticker-clear record is 16 bytes");
+         static_assert(sizeof(GuiAutosaveRequestWire) == 16, "autosave record is 16 bytes");
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+         static_assert(sizeof(GuiOverlayRequestWire) == 304, "overlay request record is 304 bytes");
+         static_assert(sizeof(GuiEventNetworkLobbyPlayerList) == 0x1C8, "the roster is 456 bytes");
+         static_assert(sizeof(LobbyPlayerListPayload) <= 0x1C8, "the roster view fits the roster");
+@@ -243,9 +233,7 @@
+         // Start the online bed music.
+         GuiAudioTriggerEvent lBedMusic;
+         lBedMusic.Construct(0, KPC_EMPTY_STRING, KAC_BED_MUSIC_LABEL, KPC_EMPTY_STRING);
+-        GuiAudioTriggerWire lBedMusicWire = { 100, 457, 12, {} };
+-        std::memcpy(&lBedMusicWire.mPayload, lBedMusic.macComponent, sizeof(lBedMusicWire.mPayload));
+-        PostWire(mpStateInterface, lBedMusicWire);
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lBedMusic);
+     }
+ 
+     // ================================================================================
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_00.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_00.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_00.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineScoreboards_wI_00.cpp
+@@ -69,32 +69,8 @@
+         const char KAC_SOUND_LABEL_MENU_TOGGLE[]      = "MenuToggleDefault";
+         const char KAC_SOUND_LABEL_MENU_ITEM_TOGGLE[] = "MenuItemToggleDefault";
+ 
+-        // ---- out-queue wire record -----------------------------------------------------
+-        // The record the inlined OutputGuiEvent<BrnGui::GuiAudioTriggerEvent> builds:
+-        // { 100, 457, 12, the 100-byte payload }, channel 40, 112 bytes (X360 stores
+-        // `li r11, 0x64` / `li r11, 0x1C9` / `li r11, 0xC` then AddEvent with r5 = 0x28,
+-        // r6 = 0x70). The committed PC GuiAudioTriggerEvent already carries that 12-byte
+-        // queue header in front of its 100-byte payload, so the event object IS the record
+-        // -- but its GuiEvent<201> base seeds the payload-size word 0 and the id 201, while
+-        // the X360 wire words are the payload size and the id 457. This view restores them
+-        // without forking the payload type (BrnOnlineGameRoomPlayerInfo_wH_08.cpp carries
+-        // the identical view).
+-        const u32 KU_WIRE_ID_AUDIO_TRIGGER = 457;   // X360 `li r11, 0x1C9`
++        // StateInterface's audio-specific OutputGuiEvent emits {100,457,12}+payload on channel 40.
+ 
+-        struct GuiAudioTriggerWire : public GuiAudioTriggerEvent
+-        {
+-            GuiAudioTriggerWire()
+-            {
+-                muHeader0 = static_cast<u32>(sizeof(GuiAudioTriggerEvent) -
+-                                             sizeof(CgsGui::GuiEvent<201>));
+-                muEventType = KU_WIRE_ID_AUDIO_TRIGGER;
+-            }
+-        };
+-
+-        // Record-size pin. The payload is pointer-free, so the X360's AddEvent size
+-        // immediate must survive unchanged on the x64 host; if a host layout ever drifts,
+-        // this is where it is caught rather than on the wire.
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "audio trigger record is 112 bytes");
+     }
+ 
+     // ---- ShowTableEmpty @ 0x82486A08 -----------------------------------------------
+@@ -187,11 +163,8 @@
+         CGS_ASSERT(lpcLabel, "lpcLabel");
+ 
+         // X360: Construct(r3 = the stack event, r4 = 7, r5 = "", r6 = the label, r7 = "").
+-        GuiAudioTriggerWire lAudio;
++        GuiAudioTriggerEvent lAudio;
+         lAudio.Construct(KI_AUDIO_ACTION_MENU_CUE, "", lpcLabel, "");
+-
+-        mpStateInterface->GetOutputEventQueue()->AddEvent(
+-            reinterpret_cast<const CgsModule::Event*>(&lAudio), KI_CHANNEL_GUI_OUT,
+-            static_cast<s32>(sizeof(lAudio)));
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+     }
+ }
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineSelectRoute.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineSelectRoute.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineSelectRoute.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineSelectRoute.cpp
+@@ -166,19 +166,7 @@
+         // payload wrapper on channel 40. The PC event has a different 12-byte header;
+         // copy only its native 100-byte body into the console record.
+         lEvent.Construct(7, "", lpacLabel, "");
+-        struct GuiAudioTriggerWire
+-        {
+-            s32 miSize;
+-            s32 miType;
+-            s32 miOffset;
+-            GuiAudioTriggerWirePayload457 mPayload;
+-        } lWire = { 100, 457, 12, {} };
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112,
+-                      "ARTIST GUI audio trigger wrapper size");
+-        std::memcpy(&lWire.mPayload, lEvent.macComponent, sizeof(lWire.mPayload));
+-        lpStateInterface->GetOutputEventQueue()->AddEvent(
+-            reinterpret_cast<const CgsModule::Event*>(&lWire), KI_CHANNEL_GUI_OUT,
+-            static_cast<s32>(sizeof(lWire)));
++        lpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lEvent);
+     }
+     // The overlay request as the out-queue carries it: the GuiEvent<184> header sized to the
+     // request, a pad word, then the request itself (304 bytes on the console).
+diff --git a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineTeamSelection.cpp b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineTeamSelection.cpp
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnOnlineTeamSelection.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnOnlineTeamSelection.cpp
+@@ -300,15 +300,9 @@
+ 
+     if (lbMoved)
+     {
+-        // OutputGuiEvent<GuiAudioTriggerEvent>: { 100, 457, 12, the 100-byte record },
+-        // 112 bytes on channel 40.
+         GuiAudioTriggerEvent lAudio;
+         lAudio.Construct(KI_AUDIO_ACTION_MENU_TOGGLE, "", "MenuItemToggleDefault", "");
+-        lAudio.muHeader0   = 100u;
+-        lAudio.muEventType = KU_AUDIO_TRIGGER_EVENT_ID;
+-        lAudio.muHeader2   = 12u;
+-        mpStateInterface->GetOutputEventQueue()->AddEvent(
+-            &lAudio, KI_CHANNEL_GUI_OUT, static_cast<s32>(sizeof(lAudio)));
+-    }
+-}
+-}
++        mpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
++    }
++}
++}
+diff --git a/src/GameSource/Gui/Flow/Screen/Components/BrnSelectRoutes.cpp b/src/GameSource/Gui/Flow/Screen/Components/BrnSelectRoutes.cpp
+--- a/src/GameSource/Gui/Flow/Screen/Components/BrnSelectRoutes.cpp
++++ b/src/GameSource/Gui/Flow/Screen/Components/BrnSelectRoutes.cpp
+@@ -409,28 +409,12 @@
+ 
+     namespace
+     {
+-        // ARTIST OutputGuiEvent<GuiAudioTriggerEvent> @82436890 posts this exact
+-        // wrapper on channel 40. The homed GuiAudioTriggerEvent has a legacy PC
+-        // header, so only its canonical 100-byte payload belongs in this record.
+-        struct GuiAudioTriggerWire
+-        {
+-            s32 miSize;
+-            s32 miType;
+-            s32 miOffset;
+-            GuiAudioTriggerWirePayload457 mPayload;
+-        };
+-        static_assert(sizeof(GuiAudioTriggerWire) == 112, "ARTIST GUI audio trigger wrapper");
+-
+         void PostMenuAudio(CgsGui::StateInterface* lpStateInterface, s32 liAction,
+                            const char* lpacLabel)
+         {
+             GuiAudioTriggerEvent lAudio;
+             lAudio.Construct(liAction, "", lpacLabel, "");
+-            GuiAudioTriggerWire lWire = { 100, 457, 12, {} };
+-            std::memcpy(&lWire.mPayload, lAudio.macComponent, sizeof(lWire.mPayload));
+-            lpStateInterface->GetOutputEventQueue()->AddEvent(
+-                reinterpret_cast<const CgsModule::Event*>(&lWire), 40,
+-                static_cast<s32>(sizeof(lWire)));
++            lpStateInterface->OutputGuiEvent<GuiAudioTriggerEvent>(lAudio);
+         }
+ 
+         // The three per-round stores repeated by ARTIST's insert/remove loops.
+diff --git a/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp b/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp
+--- a/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp
++++ b/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp
+@@ -526,25 +526,41 @@
+                              CgsSound::Io::MessageHeader::E_EFFECT_TYPE_OBJECT, lData);
+             break;
+         }
+-        case 201: // PC's typed GuiAudioTriggerEvent id
+-        case 457: // ARTIST wire id
++        case 201: // bounded compatibility for the former {0,201,12}+100 PC audio record
++        case 457: // ARTIST GUI audio-trigger payload id
+         {
+             CgsSound::Io::Message<BrnGui::GuiAudioTriggerEvent> lMessage;
+             lMessage.Construct(6, 0, 0, 0, CgsSound::Io::MessageHeader::E_EFFECT_TYPE_OBJECT);
+-            if (liType == 201 && liSize >= static_cast<s32>(sizeof(lMessage.mData)))
+-            {
+-                lMessage.mData =
+-                    *reinterpret_cast<const BrnGui::GuiAudioTriggerEvent*>(lpEvent);
+-            }
+-            else
+-            {
+-                const BrnGui::GuiAudioTriggerWirePayload457& lrPayload =
+-                    *reinterpret_cast<const BrnGui::GuiAudioTriggerWirePayload457*>(
+-                        lpuPayload);
+-                lMessage.mData.Construct(
+-                    lrPayload.meAction, lrPayload.macComponent,
+-                    lrPayload.macLabel, lrPayload.macMovie);
+-            }
++
++            const u8* const lpuEventBytes = reinterpret_cast<const u8*>(lpEvent);
++            const GuiEventWireHeader* const lpHeader =
++                reinterpret_cast<const GuiEventWireHeader*>(lpEvent);
++            const u8* lpuAudioPayload = lpuEventBytes;
++            if (liType == 201)
++            {
++                // Preserve only the exact legacy audio representation produced by the old
++                // GuiEvent<201>(0,12) type. Event 201/8 belongs to HideDriveThru and must
++                // never be reinterpreted as a 100-byte sound payload.
++                if (liSize != 112 || lpHeader->muPayloadSize != 0u ||
++                    lpHeader->muEventType != 201u || lpHeader->muPayloadOffset != 12u)
++                {
++                    break;
++                }
++                lpuAudioPayload = lpuEventBytes + 12;
++            }
++            else if (liSize == 112 && lpHeader->muPayloadSize == 100u &&
++                     lpHeader->muEventType == 457u && lpHeader->muPayloadOffset == 12u)
++            {
++                lpuAudioPayload = lpuEventBytes + 12;
++            }
++            else if (liSize < static_cast<s32>(sizeof(lMessage.mData)))
++            {
++                break;
++            }
++
++            // ARTIST SoundLogic case457 copies exactly 0x64 bytes into message6 at +0x10.
++            // Accept its full wrapper or the already-unwrapped/raw 100-byte queue payload.
++            std::memcpy(&lMessage.mData, lpuAudioPayload, sizeof(lMessage.mData));
+             QueueSoundMessage(mMessageQueue, lMessage);
+             break;
+         }
+diff --git a/src/GameShared/GameClasses/Gui/CgsGuiEvent.h b/src/GameShared/GameClasses/Gui/CgsGuiEvent.h
+--- a/src/GameShared/GameClasses/Gui/CgsGuiEvent.h
++++ b/src/GameShared/GameClasses/Gui/CgsGuiEvent.h
+@@ -54,6 +54,16 @@
+         s32 GetEventType() const { return 91; }
+     };
+     static_assert(sizeof(GuiEvent<91>) == 1, "ARTIST GUI tag 91 is one byte");
++
++    // DecFIGS BrnGuiAudioEvent.h declares GuiAudioTriggerEvent : GuiEvent<452>.
++    // The class is a tag base in that declaration, not the generic 12-byte queue header;
++    // ARTIST's Construct writes the first payload field at offset zero.
++    template <>
++    struct GuiEvent<452> : public CgsModule::Event
++    {
++        s32 GetEventType() const { return 452; }
++    };
++    static_assert(sizeof(GuiEvent<452>) == 1, "DecFIGS GUI audio base tag is one byte");
+ 
+     // ARTIST's Payback bridge uses these one-byte tag instantiations, not the generic
+     // 12-byte header record: AddGuiEvent helpers 0x823D7570/0x823D7628/0x823D2FB8 pin
+diff --git a/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h b/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h
+--- a/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h
++++ b/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h
+@@ -8,6 +8,7 @@
+ 
+ namespace rw { struct IResourceAllocator; }
+ namespace CgsLanguage { class LanguageManager; }
++namespace BrnGui { struct GuiAudioTriggerEvent; }
+ 
+ // CgsGui::StateInterface - the channel a GUI state uses to reach the rest of the
+ // game: it owns the large output event queue the state writes to, plus the access
+@@ -289,4 +290,10 @@
+     {
+         mOutEventQueue.AddEvent(&lrEvent, 40, static_cast<s32>(sizeof(lrEvent)));
+     }
++
++    // ARTIST 0x82436890 is the audio payload-only exception to the legacy generic body above:
++    // it boxes the 100-byte id-457 payload as GuiEventWrapper<T,40> on channel 40.
++    template <>
++    void StateInterface::OutputGuiEvent<BrnGui::GuiAudioTriggerEvent>(
++        BrnGui::GuiAudioTriggerEvent& lrEvent);
+ }
+diff --git a/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp b/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp
+--- a/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp
++++ b/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp
+@@ -1,13 +1,11 @@
+ // ============================================================================
+ // b5-decomp/src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp
+ //
+-// The 66 X360-attested explicit instantiations of
+-// CgsGui::StateInterface::OutputGuiEvent<T> (the channel-40 output GUI event publisher).
+-// The single shared body lives in CgsGuiStateInterface.h; each instantiation compiles to the
+-// identical stack-build-a-GuiEventWrapper<T,40> + VariableEventQueue<65536,16>::AddEvent(
+-// &wrapper, 40, sizeof(wrapper)) sequence, differing only in the per-T sizeof / GetEventType()
+-// constants that fall out of T. Reuses the homed GUI-event payload types (their homes are
+-// #included below); newly-homed output-family payloads carry (id,size) read from the same asm.
++// The 65 X360-attested generic instantiations plus one audio-specific specialization of
++// CgsGui::StateInterface::OutputGuiEvent<T>. The generic body remains the shared header body;
++// the audio specialization also boxes its payload as GuiEventWrapper<T,40> on channel 40,
++// because ARTIST 0x82436890 writes {100,457,12}+payload. All 66 exports return void (QAAX).
++// The homed event types are included below; payload IDs/sizes come from ARTIST.
+ // ============================================================================
+ 
+ #include "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h"
+@@ -21,70 +19,77 @@
+ 
+ namespace CgsGui
+ {
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiAudioEvent>(BrnGui::GuiAudioEvent&);  // 0x824367D8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiAudioTriggerEvent>(BrnGui::GuiAudioTriggerEvent&);  // 0x82436890
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiAutosaveRequestEvent>(BrnGui::GuiAutosaveRequestEvent&);  // 0x824937E0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiChallengeSelectedEvent>(BrnGui::GuiChallengeSelectedEvent&);  // 0x82436778
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiChangeCarEvent>(BrnGui::GuiChangeCarEvent&);  // 0x82493B98
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEvent100PerCentComplete>(BrnGui::GuiEvent100PerCentComplete&);  // 0x824C31C8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventActivateCarSelect>(BrnGui::GuiEventActivateCarSelect&);  // 0x82493B48
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventActivateCrashNav>(BrnGui::GuiEventActivateCrashNav&);  // 0x82493938
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioGenericSequence>(BrnGui::GuiEventAudioGenericSequence&);  // 0x824C2DA8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioSettings>(BrnGui::GuiEventAudioSettings&);  // 0x82493728
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxLastPlayedIndexes>(BrnGui::GuiEventAudioTraxLastPlayedIndexes&);  // 0x824C3110
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxPreview>(BrnGui::GuiEventAudioTraxPreview&);  // 0x824C3050
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxUpdate>(BrnGui::GuiEventAudioTraxUpdate&);  // 0x824C30A0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioVoiceOver>(BrnGui::GuiEventAudioVoiceOver&);  // 0x824C3178
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventChallengedEventDataRequest>(BrnGui::GuiEventChallengedEventDataRequest&);  // 0x824C2F50
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventControllerSettings>(BrnGui::GuiEventControllerSettings&);  // 0x82493778
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventCustomeEventCreate>(BrnGui::GuiEventCustomeEventCreate&);  // 0x824C2FF0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkConnect>(BrnGui::GuiEventNetworkConnect&);  // 0x824C2E98
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCreateGame>(BrnGui::GuiEventNetworkCreateGame&);  // 0x82493ED8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCustomMatchJoin>(BrnGui::GuiEventNetworkCustomMatchJoin&);  // 0x82493C48
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCustomMatchSearch>(BrnGui::GuiEventNetworkCustomMatchSearch&);  // 0x82493BE8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkGameParams>(BrnGui::GuiEventNetworkGameParams&);  // 0x82436AD0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkNewsAndTOS>(BrnGui::GuiEventNetworkNewsAndTOS&);  // 0x82493E38
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkOutputPlayerTexture>(BrnGui::GuiEventNetworkOutputPlayerTexture&);  // 0x82436D40
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkQuickMatch>(BrnGui::GuiEventNetworkQuickMatch&);  // 0x82494158
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkSelectedPlayerOption>(BrnGui::GuiEventNetworkSelectedPlayerOption&);  // 0x82436CA0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkSplashEvent>(BrnGui::GuiEventNetworkSplashEvent&);  // 0x82493880
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventOnlineInviteEvent>(BrnGui::GuiEventOnlineInviteEvent&);  // 0x824369C0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventOnlineShowProfile>(BrnGui::GuiEventOnlineShowProfile&);  // 0x82436B30
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventPlayVideo>(BrnGui::GuiEventPlayVideo&);  // 0x82476C68
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventPostEventFreeCarSequenceStart>(BrnGui::GuiEventPostEventFreeCarSequenceStart&);  // 0x824C2DF8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventPostEventRankUpSequenceStart>(BrnGui::GuiEventPostEventRankUpSequenceStart&);  // 0x824C2E48
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestCompressedCamPic>(BrnGui::GuiEventRequestCompressedCamPic&);  // 0x82436D90
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestSpecificPreSetRaces>(BrnGui::GuiEventRequestSpecificPreSetRaces&);  // 0x82493E88
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestTraining>(BrnGui::GuiEventRequestTraining&);  // 0x82436840
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleDataRequest>(BrnGui::GuiEventRoadRuleDataRequest&);  // 0x82476EE8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleFail>(BrnGui::GuiEventRoadRuleFail&);  // 0x82436950
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleModeRequest>(BrnGui::GuiEventRoadRuleModeRequest&);  // 0x82436B90
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventRunFsm>(BrnGui::GuiEventRunFsm&);  // 0x824938D0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestEvScoreTarget>(BrnGui::GuiEventScoreboardRequestEvScoreTarget&);  // 0x82493F88
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestGamercardEvent>(BrnGui::GuiEventScoreboardRequestGamercardEvent&);  // 0x82493D38
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestIndexEvent>(BrnGui::GuiEventScoreboardRequestIndexEvent&);  // 0x82493FF8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestTableEvent>(BrnGui::GuiEventScoreboardRequestTableEvent&);  // 0x82494098
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestVariationEvent>(BrnGui::GuiEventScoreboardRequestVariationEvent&);  // 0x82494048
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventSetPlayer0ControllerPort>(BrnGui::GuiEventSetPlayer0ControllerPort&);  // 0x82476D88
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventShowHideHud>(BrnGui::GuiEventShowHideHud&);  // 0x82493988
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventStopVideo>(BrnGui::GuiEventStopVideo&);  // 0x82476CF8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventTickerClearMessages>(BrnGui::GuiEventTickerClearMessages&);  // 0x82436DF0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventTickerCustomMessage>(BrnGui::GuiEventTickerCustomMessage&);  // 0x82436C40
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventTrophyCarUnlock>(BrnGui::GuiEventTrophyCarUnlock&);  // 0x82476F38
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiEventVoipSettings>(BrnGui::GuiEventVoipSettings&);  // 0x82493CE8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiImageGalleryRequestCollectedDataEvent>(BrnGui::GuiImageGalleryRequestCollectedDataEvent&);  // 0x824939D8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiImageGalleryRequestEvent>(BrnGui::GuiImageGalleryRequestEvent&);  // 0x82493AD8
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiMuteDac>(BrnGui::GuiMuteDac&);  // 0x82476BB0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiNetworkCustomRouteCreated>(BrnGui::GuiNetworkCustomRouteCreated&);  // 0x82493F38
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiOverlayRequest>(BrnGui::GuiOverlayRequest&);  // 0x82436BE0
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiOverlayShowingNotification>(BrnGui::GuiOverlayShowingNotification&);  // 0x824B2938
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiOverlayWaitFinishRequest>(BrnGui::GuiOverlayWaitFinishRequest&);  // 0x82476E98
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiReplayDeleteReelEvent>(BrnGui::GuiReplayDeleteReelEvent&);  // 0x824C3268
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiReplaySetModeEvent>(BrnGui::GuiReplaySetModeEvent&);  // 0x824C3218
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiRequestCarControlChangeEvent>(BrnGui::GuiRequestCarControlChangeEvent&);  // 0x82493830
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiSaveLoadImageExportRequested>(BrnGui::GuiSaveLoadImageExportRequested&);  // 0x82493A28
+-    template int StateInterface::OutputGuiEvent<BrnGui::GuiTelemetryEvent>(BrnGui::GuiTelemetryEvent&);  // 0x824940E8
+-    template int StateInterface::OutputGuiEvent<CgsGui::GuiEventNetworkSuspension>(CgsGui::GuiEventNetworkSuspension&);  // 0x82493A88
+-    template int StateInterface::OutputGuiEvent<CgsGui::GuiEventPlayMusicOnMenuStream>(CgsGui::GuiEventPlayMusicOnMenuStream&);  // 0x82476C00
+-    template int StateInterface::OutputGuiEvent<CgsGui::GuiEventSoundTrigger>(CgsGui::GuiEventSoundTrigger&);  // 0x824368F0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiAudioEvent>(BrnGui::GuiAudioEvent&);  // 0x824367D8
++    template <>
++    void StateInterface::OutputGuiEvent<BrnGui::GuiAudioTriggerEvent>(
++        BrnGui::GuiAudioTriggerEvent& lrEvent)
++    {
++        GuiEventWrapper<BrnGui::GuiAudioTriggerEvent, 40> lWrapper(lrEvent);
++        mOutEventQueue.AddEvent(reinterpret_cast<const CgsModule::Event*>(&lWrapper),
++                                40, static_cast<s32>(sizeof(lWrapper)));
++    }
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiAutosaveRequestEvent>(BrnGui::GuiAutosaveRequestEvent&);  // 0x824937E0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiChallengeSelectedEvent>(BrnGui::GuiChallengeSelectedEvent&);  // 0x82436778
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiChangeCarEvent>(BrnGui::GuiChangeCarEvent&);  // 0x82493B98
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEvent100PerCentComplete>(BrnGui::GuiEvent100PerCentComplete&);  // 0x824C31C8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventActivateCarSelect>(BrnGui::GuiEventActivateCarSelect&);  // 0x82493B48
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventActivateCrashNav>(BrnGui::GuiEventActivateCrashNav&);  // 0x82493938
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioGenericSequence>(BrnGui::GuiEventAudioGenericSequence&);  // 0x824C2DA8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioSettings>(BrnGui::GuiEventAudioSettings&);  // 0x82493728
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxLastPlayedIndexes>(BrnGui::GuiEventAudioTraxLastPlayedIndexes&);  // 0x824C3110
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxPreview>(BrnGui::GuiEventAudioTraxPreview&);  // 0x824C3050
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxUpdate>(BrnGui::GuiEventAudioTraxUpdate&);  // 0x824C30A0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioVoiceOver>(BrnGui::GuiEventAudioVoiceOver&);  // 0x824C3178
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventChallengedEventDataRequest>(BrnGui::GuiEventChallengedEventDataRequest&);  // 0x824C2F50
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventControllerSettings>(BrnGui::GuiEventControllerSettings&);  // 0x82493778
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventCustomeEventCreate>(BrnGui::GuiEventCustomeEventCreate&);  // 0x824C2FF0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkConnect>(BrnGui::GuiEventNetworkConnect&);  // 0x824C2E98
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCreateGame>(BrnGui::GuiEventNetworkCreateGame&);  // 0x82493ED8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCustomMatchJoin>(BrnGui::GuiEventNetworkCustomMatchJoin&);  // 0x82493C48
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCustomMatchSearch>(BrnGui::GuiEventNetworkCustomMatchSearch&);  // 0x82493BE8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkGameParams>(BrnGui::GuiEventNetworkGameParams&);  // 0x82436AD0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkNewsAndTOS>(BrnGui::GuiEventNetworkNewsAndTOS&);  // 0x82493E38
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkOutputPlayerTexture>(BrnGui::GuiEventNetworkOutputPlayerTexture&);  // 0x82436D40
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkQuickMatch>(BrnGui::GuiEventNetworkQuickMatch&);  // 0x82494158
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkSelectedPlayerOption>(BrnGui::GuiEventNetworkSelectedPlayerOption&);  // 0x82436CA0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkSplashEvent>(BrnGui::GuiEventNetworkSplashEvent&);  // 0x82493880
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventOnlineInviteEvent>(BrnGui::GuiEventOnlineInviteEvent&);  // 0x824369C0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventOnlineShowProfile>(BrnGui::GuiEventOnlineShowProfile&);  // 0x82436B30
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventPlayVideo>(BrnGui::GuiEventPlayVideo&);  // 0x82476C68
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventPostEventFreeCarSequenceStart>(BrnGui::GuiEventPostEventFreeCarSequenceStart&);  // 0x824C2DF8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventPostEventRankUpSequenceStart>(BrnGui::GuiEventPostEventRankUpSequenceStart&);  // 0x824C2E48
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestCompressedCamPic>(BrnGui::GuiEventRequestCompressedCamPic&);  // 0x82436D90
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestSpecificPreSetRaces>(BrnGui::GuiEventRequestSpecificPreSetRaces&);  // 0x82493E88
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestTraining>(BrnGui::GuiEventRequestTraining&);  // 0x82436840
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleDataRequest>(BrnGui::GuiEventRoadRuleDataRequest&);  // 0x82476EE8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleFail>(BrnGui::GuiEventRoadRuleFail&);  // 0x82436950
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleModeRequest>(BrnGui::GuiEventRoadRuleModeRequest&);  // 0x82436B90
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventRunFsm>(BrnGui::GuiEventRunFsm&);  // 0x824938D0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestEvScoreTarget>(BrnGui::GuiEventScoreboardRequestEvScoreTarget&);  // 0x82493F88
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestGamercardEvent>(BrnGui::GuiEventScoreboardRequestGamercardEvent&);  // 0x82493D38
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestIndexEvent>(BrnGui::GuiEventScoreboardRequestIndexEvent&);  // 0x82493FF8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestTableEvent>(BrnGui::GuiEventScoreboardRequestTableEvent&);  // 0x82494098
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestVariationEvent>(BrnGui::GuiEventScoreboardRequestVariationEvent&);  // 0x82494048
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventSetPlayer0ControllerPort>(BrnGui::GuiEventSetPlayer0ControllerPort&);  // 0x82476D88
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventShowHideHud>(BrnGui::GuiEventShowHideHud&);  // 0x82493988
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventStopVideo>(BrnGui::GuiEventStopVideo&);  // 0x82476CF8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventTickerClearMessages>(BrnGui::GuiEventTickerClearMessages&);  // 0x82436DF0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventTickerCustomMessage>(BrnGui::GuiEventTickerCustomMessage&);  // 0x82436C40
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventTrophyCarUnlock>(BrnGui::GuiEventTrophyCarUnlock&);  // 0x82476F38
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiEventVoipSettings>(BrnGui::GuiEventVoipSettings&);  // 0x82493CE8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiImageGalleryRequestCollectedDataEvent>(BrnGui::GuiImageGalleryRequestCollectedDataEvent&);  // 0x824939D8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiImageGalleryRequestEvent>(BrnGui::GuiImageGalleryRequestEvent&);  // 0x82493AD8
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiMuteDac>(BrnGui::GuiMuteDac&);  // 0x82476BB0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiNetworkCustomRouteCreated>(BrnGui::GuiNetworkCustomRouteCreated&);  // 0x82493F38
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiOverlayRequest>(BrnGui::GuiOverlayRequest&);  // 0x82436BE0
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiOverlayShowingNotification>(BrnGui::GuiOverlayShowingNotification&);  // 0x824B2938
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiOverlayWaitFinishRequest>(BrnGui::GuiOverlayWaitFinishRequest&);  // 0x82476E98
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiReplayDeleteReelEvent>(BrnGui::GuiReplayDeleteReelEvent&);  // 0x824C3268
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiReplaySetModeEvent>(BrnGui::GuiReplaySetModeEvent&);  // 0x824C3218
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiRequestCarControlChangeEvent>(BrnGui::GuiRequestCarControlChangeEvent&);  // 0x82493830
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiSaveLoadImageExportRequested>(BrnGui::GuiSaveLoadImageExportRequested&);  // 0x82493A28
++    template void StateInterface::OutputGuiEvent<BrnGui::GuiTelemetryEvent>(BrnGui::GuiTelemetryEvent&);  // 0x824940E8
++    template void StateInterface::OutputGuiEvent<CgsGui::GuiEventNetworkSuspension>(CgsGui::GuiEventNetworkSuspension&);  // 0x82493A88
++    template void StateInterface::OutputGuiEvent<CgsGui::GuiEventPlayMusicOnMenuStream>(CgsGui::GuiEventPlayMusicOnMenuStream&);  // 0x82476C00
++    template void StateInterface::OutputGuiEvent<CgsGui::GuiEventSoundTrigger>(CgsGui::GuiEventSoundTrigger&);  // 0x824368F0
+ }
+diff --git a/src/GameShared/GameClasses/Module/VariableEventQueue_8192_16.cpp b/src/GameShared/GameClasses/Module/VariableEventQueue_8192_16.cpp
+--- a/src/GameShared/GameClasses/Module/VariableEventQueue_8192_16.cpp
++++ b/src/GameShared/GameClasses/Module/VariableEventQueue_8192_16.cpp
+@@ -60,6 +60,8 @@
+ // <GuiEventAudioTraxPreview> == 0x18(24), Message<RaceCarIsNowActive> == 0x20(32),
+ // Message<GuiAudioEvent>/<GuiEventAudioTraxUpdate> == 0x28/0x30, Message<GuiAudioTriggerEvent>
+ // == 0x74(116). Each InnerT home is #included above so Message<InnerT> is a complete type.
++static_assert(sizeof(CgsSound::Io::Message<BrnGui::GuiAudioTriggerEvent>) == 116,
++              "sound message 6 is the 16-byte header plus ARTIST's 100-byte GUI payload");
+ template bool CgsModule::VariableEventQueue<8192, 16>::AddEvent<CgsSound::Io::Message<bool> >(const CgsSound::Io::Message<bool>*, s32);
+ template bool CgsModule::VariableEventQueue<8192, 16>::AddEvent<CgsSound::Io::Message<unsigned int> >(const CgsSound::Io::Message<unsigned int>*, s32);
+ template bool CgsModule::VariableEventQueue<8192, 16>::AddEvent<CgsSound::Io::Message<float> >(const CgsSound::Io::Message<float>*, s32);
