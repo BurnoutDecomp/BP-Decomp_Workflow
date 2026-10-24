@@ -1,0 +1,88 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "gui_six_posts_batch_playability",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\candidate_playability_gui_six_posts_20261024\\Case.proposed.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-24T12:34:45.1205321+02:00",
+    "flow_exit":  0,
+    "bug":  "Check frontend, junkyard exit, rendered world and sustained movement before any candidate delivery.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\candidate_playability_gui_six_posts_20261024\\run",
+    "label":  "Checked renderer and GUI candidate playability; source=d3ec7d2dd65a37b489d1dbf61a53b9ce030385ee",
+    "area":  "candidate-playability",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62061,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 assert family(ies), all known (0 lines)",
+                       "pass":  true,
+                       "name":  "no NEW assert families",
+                       "kind":  "NewAsserts"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+                       "pass":  true,
+                       "name":  "assert lines (info: known noise counts too)",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no exceptions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "reached DRIVING",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "path=236,6m net=234,7m samples 38..141 teleported=True later respawns=0",
+                       "pass":  true,
+                       "name":  "the car moved (teleport seat -\u003e first respawn, \u003e 20 m)",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "1 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+                       "pass":  true,
+                       "name":  "info: GAMEWRECKED hud messages (gameplay, never fails)",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "lum_std(last) on bb_006900.bmp region 0.15,0.2,0.85,0.8 = 48,6052, want [8, +inf]",
+                       "pass":  true,
+                       "name":  "final world frame has scene variation",
+                       "kind":  "Frame"
+                   },
+                   {
+                       "detail":  "lum_mean(last) on bb_006900.bmp region 0.15,0.2,0.85,0.8 = 80,0551, want [12, +inf]",
+                       "pass":  true,
+                       "name":  "final world frame is visible",
+                       "kind":  "Frame"
+                   },
+                   {
+                       "detail":  "dark_frac(last) on bb_006900.bmp region 0.15,0.2,0.85,0.8 = 0,122479, want [-inf, 0.9]",
+                       "pass":  true,
+                       "name":  "final world frame is not black",
+                       "kind":  "Frame"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11355648,
+                       "exe_mtime_before_lock":  "2026-10-24T12:31:24.9738815+02:00",
+                       "exe_sha":  "4ebe1a82b1ee",
+                       "b5_head":  "b3300e0e8",
+                       "exe_b5":  "d3ec7d2d",
+                       "parent_head":  "cc54c12e",
+                       "exe_mtime":  "2026-10-24T12:31:24.9738815+02:00"
+                   }
+}
