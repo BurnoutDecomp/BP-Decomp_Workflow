@@ -1,0 +1,114 @@
+{
+  "packet": "gui_stored_inbox_restore_20261024_edca934",
+  "status": "proposal-source-only",
+  "baseCommit": "edca934dc502f71f64ad873cdd386afe5e3eeeb2",
+  "basePhysicalCheckoutHead": "b3300e0e8e61dd7dea105a901a4fdb94464f3864",
+  "files": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "baseBlob": "bd46bf236c1c3aa4fa84a347944c08fb1fd82586",
+      "beforeSha256": "0cab387a511423f3c1276a739936f7a858847510bc106f839b8923d3f0c2efc9",
+      "afterSha256": "69554c6c9e7f7f148d37814cf3e9dbc4de15164f9e6d38dfe251337ebaba4012",
+      "beforePath": "source/before/BrnGuiModule.cpp",
+      "afterPath": "source/after/BrnGuiModule.cpp"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.h",
+      "baseBlob": "0badd4228cea0dbf5ef3c9213c2a1c74d679f451",
+      "beforeSha256": "8c642127bbbf87731d87d1b0f70b63cbd083ecffd8c35016b228f3d31742a255",
+      "afterSha256": "c99db936a13243e4e6cd5de028921684dd1f876d288a7b73211959edf092e702",
+      "beforePath": "source/before/BrnGuiModule.h",
+      "afterPath": "source/after/BrnGuiModule.h"
+    }
+  ],
+  "patchSha256": "30e87cb9a0deea57bedc1ec468af0ac1d8cd71b857a3e34c718d94f8af832d2b",
+  "baseParentCommit": "ea5ce572baedd4ad8918f6d5bfcdfd756250d411",
+  "evidence": {
+    "evidence/artist/0x823F0AF8.json": "c4c717dc6e58699c81537f0b8056eba2a027be12cf4b0dd6994f673d882d4b8a",
+    "evidence/artist/0x823F22D8.json": "d2fc8a9c8a35107de402a5f64ee5587e901962b1e76a85d36953cb216f7fbfd4",
+    "evidence/artist/0x823F3048.json": "bd2e99ab7de3b296eed17637993e45c0443d1dd86417031c6e7cc78236526686",
+    "evidence/artist/0x82527A58.json": "e6dd401b6e921876d669f7ba8fb5931eafea44bdff4945ed20f7d4720b9b8faa",
+    "evidence/artist/0x8285E1D0.json": "d308729091eecfdf0f3840e8eb93eb145908ea1db210bb3695c910a87649cb3f",
+    "evidence/artist/0x8285F670.json": "fce3d47e53ef053501c842d427acd28d13347c8b67cde1c0d939234a7ec6d8db",
+    "evidence/artist/0x828602C8.json": "b13179a2d58ce508e75a1fe324e6529459f88262870f633efcf72efc86a748c0",
+    "evidence/decfigs/CgsGuiModule.h": "fb055830e52747625551ef74441f1d67061ce26fcc0de2676ed9b700cbe44ca6",
+    "evidence/fanout_reconciliation.md": "ed972076ce4627e1c734dc3f5d86c1e1a608658af43f62cb3063b6a6b72a926a",
+    "evidence/modelio_boundary.md": "a4b2ebb0597a8dbb4499d68708d703d6a8dbe2ced1100d253671ad0dac5ff3fb",
+    "evidence/original_artist_chain.md": "e0dcbcfd92c7aff95b64057f15bdb3c28e0454d1b1aa3dea764b0f00ccc4fb4d",
+    "evidence/pc_base/BrnGameModule.cpp": "b1892a1ba9a84909e5515ea2b9ea340d6acffd2ae8788df06da0a9f0b36a1ec7",
+    "evidence/pc_base/CgsGuiModule.cpp": "8efa6b2ad1fa0b89f061c9119ea913137e31224cad50cff15ded55dfb2150ffa",
+    "evidence/pc_base/CgsGuiModule.h": "5cc9999f6dd929b898c86e608ce7ec288c415be652d81b5714dbf96876b7b626",
+    "evidence/pc_base/CgsGuiModuleBridges.cpp": "884112da223168e42f023fbddcd96450e620a6e658a38203be06090448313c3d",
+    "evidence/pc_base/CgsGuiModuleIO.h": "3b6c468fd88bdf43e8b76c8594f42923a071992eb1e8cc63c1b05b96566fee57",
+    "evidence/previous/loopback_chain.md": "2d7bf7537f462cb5595986247fb88dc9b766ba9e10841f93ebdf73114be1cdc4",
+    "evidence/previous/producer_input_routes.md": "db995a2888ca01189eabe579916847a13223b466fe1449972210564d434acdec",
+    "evidence/source_hashes.tsv": "9353b702a63c7a229885294736e3d562b284e588eb70e4bcfce7bef010dda6ef"
+  },
+  "originalBindings": [
+    {
+      "build": "BURNOUT_X360_ARTIST.XEX",
+      "symbol": "BrnGui::GuiModule::Update",
+      "address": "0x82527A58",
+      "export": "evidence/artist/0x82527A58.json",
+      "sha256": "e6dd401b6e921876d669f7ba8fb5931eafea44bdff4945ed20f7d4720b9b8faa",
+      "role": "stored input append/clear, input switch, cache tail, base update call"
+    },
+    {
+      "build": "BURNOUT_X360_ARTIST.XEX",
+      "symbol": "CgsGui::GuiModule::Update",
+      "address": "0x828602C8",
+      "export": "evidence/artist/0x828602C8.json",
+      "sha256": "b13179a2d58ce508e75a1fe324e6529459f88262870f633efcf72efc86a748c0",
+      "role": "append complete output event queue to this+111644"
+    },
+    {
+      "build": "BURNOUT_X360_ARTIST.XEX",
+      "symbol": "CgsGui::EventInterpreterModule::ProcessOutEvents",
+      "address": "0x8285E1D0",
+      "export": "evidence/artist/0x8285E1D0.json",
+      "sha256": "d308729091eecfdf0f3840e8eb93eb145908ea1db210bb3695c910a87649cb3f",
+      "role": "channel 40/41/42 dispatch semantics"
+    },
+    {
+      "build": "BURNOUT_X360_ARTIST.XEX",
+      "symbol": "CgsGui::EventInterpreterModule::Update",
+      "address": "0x8285F670",
+      "export": "evidence/artist/0x8285F670.json",
+      "sha256": "fce3d47e53ef053501c842d427acd28d13347c8b67cde1c0d939234a7ec6d8db",
+      "role": "private channel-42 inbox splice/retire order"
+    },
+    {
+      "build": "BURNOUT_X360_ARTIST.XEX",
+      "symbol": "BrnGame::BrnGameModule::DoUpdate",
+      "address": "0x823F0AF8",
+      "export": "evidence/artist/0x823F0AF8.json",
+      "sha256": "c4c717dc6e58699c81537f0b8056eba2a027be12cf4b0dd6994f673d882d4b8a",
+      "role": "module update cascade owner"
+    },
+    {
+      "build": "BURNOUT_X360_ARTIST.XEX",
+      "symbol": "LoadingScriptedState::Update",
+      "address": "0x823F22D8",
+      "export": "evidence/artist/0x823F22D8.json",
+      "sha256": "d2fc8a9c8a35107de402a5f64ee5587e901962b1e76a85d36953cb216f7fbfd4",
+      "role": "caller-owned GUI input/output IO buffer lifetime and virtual Update slot"
+    },
+    {
+      "build": "BURNOUT_X360_ARTIST.XEX",
+      "symbol": "MainGameFlowStateInGame::Update",
+      "address": "0x823F3048",
+      "export": "evidence/artist/0x823F3048.json",
+      "sha256": "bd2e99ab7de3b296eed17637993e45c0443d1dd86417031c6e7cc78236526686",
+      "role": "second DoUpdate frame owner"
+    }
+  ],
+  "decfigsBindings": [
+    {
+      "file": "references/DecFIGS/dwarfdump/GameShared/GameClasses/Gui/CgsGuiModule.h",
+      "declaration": "CgsGui::GuiModule::mStoredGuiEvents",
+      "line": 1144,
+      "packetPath": "evidence/decfigs/CgsGuiModule.h",
+      "sha256": "fb055830e52747625551ef74441f1d67061ce26fcc0de2676ed9b700cbe44ca6"
+    }
+  ]
+}

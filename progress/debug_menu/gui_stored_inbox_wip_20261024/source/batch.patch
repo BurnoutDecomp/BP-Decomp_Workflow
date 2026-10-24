@@ -1,0 +1,558 @@
+--- a/src/GameSource/Gui/BrnGuiModule.cpp
++++ b/src/GameSource/Gui/BrnGuiModule.cpp
+@@ -1547,8 +1547,6 @@
+ 
+         mGuiOutQueue.Construct();
+         mpOutputBuffer = &mGuiOutQueue;
+-        mOverlayLoopBackQueue.Construct();
+-        mOverlayLoopBackQueue.Clear();
+ 
+         // The view-module IO pair the per-frame bridge fills.
+         mViewInputBuffer.Construct();
+@@ -2519,14 +2517,12 @@
+             {
+                 case 141:   // ARTIST82528ACC..AE0: reply with this module's actual keyboard.
+                 {
+-                    // FLAG PC-platform leaf: the existing no-argument GUI pump publishes
+-                    // through mGuiOutQueue and its subscription-filtered observer loop-back.
++                    // The reply remains on this update's module output for same-step bridges;
++                    // observer delivery happens once when that output returns as next input.
+                     GuiEventKeyboardResponse lResponse;
+                     lResponse.lpKeyboard = &mGuiKeyboard;
+-                    if (mGuiOutQueue.AddEvent(reinterpret_cast<const CgsModule::Event*>(&lResponse),
+-                                             lResponse.GetEventType(), static_cast<s32>(sizeof(lResponse))))
+-                        RouteEventToFlow(reinterpret_cast<const CgsModule::Event*>(&lResponse),
+-                                         lResponse.GetEventType(), static_cast<s32>(sizeof(lResponse)));
++                    mGuiOutQueue.AddEvent(reinterpret_cast<const CgsModule::Event*>(&lResponse),
++                                          lResponse.GetEventType(), static_cast<s32>(sizeof(lResponse)));
+                     break;
+                 }
+ 
+@@ -2537,6 +2533,22 @@
+ 
+                 case 144:   // GuiEventRunFsm -- the flow-change request (BridgeGameToGui)
+                     mFsmController.RunFsm(reinterpret_cast<const GuiEventRunFsm*>(lpEvent));
++                    break;
++
++                case 22:    // ARTIST 82527A58: resolve layer/movie, emit the GUI audio trigger.
++                {
++                    const GuiEventSoundTriggerPayload22* const lpSoundPayload =
++                        reinterpret_cast<const GuiEventSoundTriggerPayload22*>(lpEvent);
++                    const char* const lpacMovieName =
++                        mViewModule.GetMovieNameByLevel(lpSoundPayload->miLayer);
++                    FlaptSoundTriggerCallback(this, lpSoundPayload->macTypeName,
++                                              lpacMovieName, lpSoundPayload->macActionName,
++                                              lpSoundPayload->macLabel);
++                    break;
++                }
++
++                case 507:   // ARTIST 82527A58 case 507: refresh the player-name view state.
++                    UpdatePlayerName();
+                     break;
+ 
+                 case 481:   // HUD-state load complete: notify the controller + forward
+@@ -2678,18 +2690,13 @@
+                 case 375:   // GuiEventTrophyCarUnlock -- the award screen's unlock type and car
+                 case 415:   // GuiChangeCarEvent -- current and original car ids for event icons
+                     FreeRoamRouteWitness(liId, "cache");
+-                    // [H1 wave 2026-08-25] On the console EVERY module-input event reaches
+-                    // GuiCache::RecEvent (its ~180-case switch consumes what it wants);
+-                    // this build's pump routes selectively, so the two cache-consumed ids
+-                    // this wave landed handlers for are forwarded here explicitly. 350 is
+-                    // what fills GuiCache::mpProfile (the odometer asserts it per frame);
+-                    // 169 is what fills the district-marker words. ⚠️ Do NOT blanket-route
+-                    // the whole stream: 14/16 are already re-consumed off the notification
+-                    // queue below and would double-deliver.
++                    // ARTIST's label_181 sends every module-input record through
++                    // GuiCache::RecEvent after the specific handler. The common tail below
++                    // does the same; 14/16 stay on the PC notification-queue path to avoid
++                    // a second delivery from ModelIO.
+                     // [E1 event-status wave 2026-08-26] 492/424/428 join the list on the same
+                     // terms: BridgeGameStateToGui's stunt slice posts them and GuiCache::RecEvent
+-                    // now has the matching three arms. None of the three is re-consumed off the
+-                    // notification queue, so forwarding them here delivers exactly once.
++                    // now has the matching three arms. The common tail below delivers them once.
+                     // ⭐⭐ [results-screen wave 2026-08-29] 289/292/304 join on identical terms,
+                     // and they were THE last link in the offline results chain. Measured: with
+                     // GuiCache::RecEvent's case-289 arm landed but this forward missing, the
+@@ -2697,9 +2704,8 @@
+                     // unconditionally on the offline path), the cache never saw it, and
+                     // InstantResultsState copied 192 ZERO bytes -- so its own reconstructed
+                     // SetupComponents printed the console's "Unhandled game mode! (0)" and the
+-                    // screen stayed blank. A selective pump means a landed producer AND a landed
+-                    // consumer still add up to nothing until the id is on this list; that is
+-                    // three separate places to check, and the log looked identical at each.
++                    // screen stayed blank. The original per-event cache tail now supplies the
++                    // generic input edge; the specific producer and RecEvent arm still govern data.
+                     // None of the three is re-consumed off the notification queue.
+                     // [showtime score wave 2026-08-29] 434 joins on IDENTICAL terms and completes
+                     // that set for modes 2/16: its only producer is the same bridge's showtime arm
+@@ -2717,16 +2723,14 @@
+                     // called), GuiCache::RecEvent's case-93 arm above is its only consumer, and
+                     // it is the SOLE writer of meGameModeType -- the switch variable case 424
+                     // and case 428 assert against and EventInfoComponent::Update switches on.
+-                    // ⭐ SELECTIVE, NOT BLANKET (the gateui-campaign house rule): 93 is not
+-                    // observed by any flow (RouteEventToFlow drops it) and is not re-consumed
+-                    // off the notification queue, so this forward delivers it exactly once.
++                    // 93 is not observed by any flow (RouteEventToFlow drops it); the shared
++                    // cache tail still delivers it to GuiCache exactly once.
+                     // [event-starts wave 2026-08-27] 203 joins on identical terms: its only
+                     // producer is BridgeGameStateToGui's event-start arm (landed as
+                     // GameBridgeGameStateToX_EventStartsGuiEvents.cpp), GuiCache::RecEvent's
+                     // case-203 arm is its only consumer, and nothing else in the pump touches
+-                    // it -- so this forward delivers it exactly once. It is the SOLE writer of
++                    // it -- so the shared cache tail delivers it exactly once. It is the SOLE writer of
+                     // GuiCache::maEventStarts, the table GetProfileEventDisplayInfo walks.
+-                    mGuiCache.RecEvent(lpEvent, liId);
+                     break;
+ 
+                 case 343:   // GuiEventRoadRuleChangeMode -- the active road rule
+@@ -2735,7 +2739,6 @@
+                     // it for GetActiveRoadRule (the ticker's road-rules mode reads that).
+                     mBurnoutSkillsManager.SetRoadRuleMode(
+                         reinterpret_cast<const GuiEventRoadRuleChangeMode*>(lpEvent)->meScoreType);
+-                    mGuiCache.RecEvent(lpEvent, liId);
+                     break;
+ 
+                 // The free-burn challenge tracker's event arms, in the console's case order.
+@@ -2831,24 +2834,26 @@
+                     break;
+             }
+ 
+-            // The console's per-event tail, after GuiCache::RecEvent: the set-tracker, landmark
+-            // reached, route-information, cache-pointer and regenerate-route ids go to the
+-            // tracker (GuiCache ignores all five).
++            // ARTIST BrnGui::GuiModule::Update @0x82527A58 LABEL_181 calls GuiCache::RecEvent
++            // for every module-input event after its specific switch arm. The selected PC
++            // resource-notification lane reconsumes ids 14/16 below, so leave their cache
++            // delivery on that single ModelIO path; all other input records take this tail.
++            if (liId != 14 && liId != 16)
++                mGuiCache.RecEvent(lpEvent, liId);
++
++            // The console's per-event tail then sends the set-tracker, landmark reached,
++            // route-information, cache-pointer and regenerate-route ids to GuiTracker.
+             if (liId == 232 || liId == 165 || liId == 211 || liId == 64 || liId == 233)
+             {
+                 FreeRoamRouteWitness(liId, "tracker");
+                 mGuiTracker.RecEvent(lpEvent, liId, liSize);
+             }
+ 
+-            // ⭐ [tut-ticker] THE CUSTOM-RENDERER MANAGER FEED (2026-08-24). On the console
+-            // every module-input GUI event reaches BrnGui::CustomRendererManager::RecvEvent
+-            // through the view hop (BridgeFromInputToView -> ViewModule::
+-            // ProcessIncomingViewEvents' per-event hook @0x8285FCE8 tail). This build feeds
+-            // the view queue selectively, so the manager forward sits HERE, on the full
+-            // module-input stream -- exactly-once for everything that transits this queue
+-            // (537 the tutorial ticker, 64 the GuiCache bind, 258/571 the player image...).
+-            // The seat deviation is flagged at the console hook in CgsGuiViewModule.cpp.
+-            mCustomRendererManager.RecvEvent(lpEvent, liId);
++            // ARTIST's input/view hop sends each module-input event to the renderer manager.
++            // Model notifications 14/16 are the PC exception: this update reconsumes those
++            // through ModelOutput below, where the manager receives them once.
++            if (liId != 14 && liId != 16)
++                mCustomRendererManager.RecvEvent(lpEvent, liId);
+ 
+             // The observer-subscription fan-out (EventInterpreterModule::ProcessInEvents).
+             RouteEventToFlow(lpEvent, liId, liSize);
+@@ -3317,22 +3322,9 @@
+ 
+                 case 40:   // channel 40: GuiEventOut command records -> the game bridge
+                 {
+-                    // Command 507 = "refresh the player name" (the {1, 507, 12} record
+-                    // BootProfile::OnLeave posts as the profile boot completes). On the
+-                    // console it round-trips through the game/network side and comes back
+-                    // as GUI in-event 507, whose Update arm (0x82527A58 case 507) calls
+-                    // UpdatePlayerName. [FLAG PC-platform seam] the network module that
+-                    // reflects it does not exist on PC, so the record is answered at the
+-                    // drain -- the same call at the same point in the frame, one hop
+-                    // earlier. DELETE-WHEN the network sign-in manager lands and posts
+-                    // in-event 507; then this becomes a plain forward and case 507 moves
+-                    // to DispatchInboundGuiEvents.
+-                    if (liSize >= 8 &&
+-                        reinterpret_cast<const u32*>(lpEvent)[1] == 507u)
+-                    {
+-                        UpdatePlayerName();
+-                        break;   // consumed, exactly as the console's Update arm consumes it
+-                    }
++                    // Canonical channel-40 records are copied to the module out queue below.
++                    // The inherited pending queue returns them through this module's input
++                    // dispatch next update, where native cases such as 507 and 144 run once.
+ 
+                     // Commands 514 / 515 -- the colour-calibration screen show/hide requests.
+                     // BrnGui::CrashNavColourCalibrate::ShowCalibrationCard @0x824CE7A8 posts
+@@ -3367,45 +3359,8 @@
+                         }
+                     }
+ 
+-                    // ⭐⭐ INNER ID 144 -- GuiEventRunFsm posted BY A FLOW STATE. This is the
+-                    // seat the offline results screen's exit needed and did not have.
+-                    //
+-                    // The console's chain: InstantResultsState::TriggerExitResults @0x824D58A8
+-                    // ends with OutputGuiEvent<GuiEventRunFsm> @0x824938D0, which stack-builds
+-                    // {sizeof=0x18, type=0x90, offset=0x10} + the 24-byte record and AddEvents
+-                    // it on CHANNEL 40. EventInterpreterModule::ProcessOutEvents' case '('
+-                    // then UNWRAPS it -- @0x8285E568 `lwz r11,8(r22)` (offset) / `lwz r6,0(r22)`
+-                    // (payload size) / `lwz r5,4(r22)` (inner type) -> AddEvent into the module's
+-                    // out-event buffer -- and the module bus fans that channel back around as
+-                    // in-events, where GuiModule::Update's case 144 hands it to
+-                    // GuiFsmController::RunFsm. (That loop-back is the same one the profile
+-                    // manager's out-queue pump below already models, and it is how the
+-                    // autosave-icon flag reaches the always-available manager.)
+-                    //
+-                    // This build routes channel 40 to the game bridge only, so without this arm
+-                    // a state-posted RunFsm is a SILENT DROP: BridgeGuiToGameState has no
+-                    // case 144 either (its X360 switch does not carry one -- checked), so the
+-                    // record simply evaporates and the results screen ADVANCEs into nothing.
+-                    // Answered at the drain, one hop earlier than the console's bus round-trip
+-                    // -- the identical accommodation the 507 arm above already makes, and for
+-                    // the identical reason. NOT consumed: the record is still forwarded below,
+-                    // exactly as the console still puts it on the out buffer.
+-                    // DELETE-WHEN the out-buffer -> in-events bus loop-back is modelled
+-                    // generically; then this becomes a plain forward.
+-                    if (liSize >= 12)
+-                    {
+-                        const u32* lpuRecord = reinterpret_cast<const u32*>(lpEvent);
+-                        const u32  luInnerType   = lpuRecord[1];
+-                        const u32  luInnerOffset = lpuRecord[2];
+-                        if (luInnerType == 144u && luInnerOffset >= 12u &&
+-                            static_cast<s32>(luInnerOffset) + static_cast<s32>(sizeof(GuiEventRunFsm))
+-                                <= liSize)
+-                        {
+-                            mFsmController.RunFsm(
+-                                reinterpret_cast<const GuiEventRunFsm*>(
+-                                    reinterpret_cast<const u8*>(lpEvent) + luInnerOffset));
+-                        }
+-                    }
++                    // Event 144 is also returned through the inherited pending queue and
++                    // handled by the existing case 144 input arm on the following update.
+ 
+                     // EventInterpreterModule::ProcessOutEvents @0x8285E568 unwraps a
+                     // channel-40 GuiEventWrapper before it publishes the GuiModule output:
+@@ -3420,71 +3375,17 @@
+                     const CgsModule::Event* const lpRawEvent =
+                         reinterpret_cast<const CgsModule::Event*>(
+                             reinterpret_cast<const u8*>(lpEvent) + luPayloadOffset);
+-                    // FLAG PC-platform leaf: the PC drain runs after the autosave
+-                    // tail. Mirror ARTIST82529054's next-update latch effects here;
+-                    // preserve the original event forwarding below.
+-                    if (luEventType == 356u)
+-                    {
+-                        mbForceProfileAutosave =
+-                            mbForceProfileAutosave || (*reinterpret_cast<const u8*>(lpRawEvent) != 0);
+-                        mbProfileAutosavePending = true;
+-                    }
+-
++                    // Case 356 is consumed from the returned module-input record on the next
++                    // update, before this function's autosave tail, matching ARTIST ordering.
+                     mGuiOutQueue.AddEvent(
+                         lpRawEvent, static_cast<s32>(luEventType),
+                         static_cast<s32>(luPayloadSize));
+ 
+-                    if (luEventType == 141u)
+-                    {
+-                        // FLAG PC-platform leaf: this existing channel-40 drain has no
+-                        // module-inbound bus round-trip. Execute the original141 reply
+-                        // here, as for144/507 above; the subscribed state reads142 next tick.
+-                        GuiEventKeyboardResponse lResponse;
+-                        lResponse.lpKeyboard = &mGuiKeyboard;
+-                        if (mGuiOutQueue.AddEvent(reinterpret_cast<const CgsModule::Event*>(&lResponse),
+-                                                 lResponse.GetEventType(), static_cast<s32>(sizeof(lResponse))))
+-                            RouteEventToFlow(reinterpret_cast<const CgsModule::Event*>(&lResponse),
+-                                             lResponse.GetEventType(), static_cast<s32>(sizeof(lResponse)));
+-                    }
+-
+-                    // ProcessOutEvents also returns the unwrapped event to the interpreter's
+-                    // observer fan-out.  This is why a state that posts voice-over event 466
+-                    // observes 466 as "started" on the following GUI update, while sound later
+-                    // posts the distinct completion event 467 through its pre-update output.
+-                    // ARTIST GuiModule::Update 0x828602C8 appends the output events
+-                    // to mLoadNotifications for the next input/view pass. The PC
+-                    // pump already delivers these to observers here; include the
+-                    // renderer observer too, as DispatchInboundGuiEvents does.
+-                    // Without it, screen-posted ticker messages never reach the view.
+-                    mCustomRendererManager.RecvEvent(lpRawEvent, static_cast<s32>(luEventType));
+-                    // The results teardown also belongs to the cache observer. Flow
+-                    // output does not pass through DispatchInboundGuiEvents on PC.
+-                    if (luEventType == 292u)
+-                        mGuiCache.RecEvent(lpRawEvent, static_cast<s32>(luEventType));
+-                    RouteEventToFlow(
+-                        lpRawEvent, static_cast<s32>(luEventType),
+-                        static_cast<s32>(luPayloadSize));
+-
+-                    // ARTIST GuiModule::Update @0x82527A58 consumes event 22 after the
+-                    // channel-40 wrapper has been unwrapped: the 100-byte payload is
+-                    // {type[32], action[32], label[32], layer@96}. It resolves the movie
+-                    // from that layer, maps the action, and emits GuiAudioTriggerEvent 457.
+-                    // FLAG PC-platform leaf: this output-queue pump has no module-input
+-                    // loopback into GuiModule::Update, so run the same handler here. Keep
+-                    // event 22 on the existing output/observer path above; the callback
+-                    // appends the resulting PC typed event 201 to mpOutputBuffer.
+-                    // DELETE-WHEN the channel-40 module-input loopback dispatches event 22.
+-                    if (luEventType == 22u && luPayloadSize == 100u &&
+-                        luPayloadOffset == 12u && liSize >= 112)
+-                    {
+-                        const GuiEventSoundTriggerPayload22* const lpSoundPayload =
+-                            reinterpret_cast<const GuiEventSoundTriggerPayload22*>(lpRawEvent);
+-                        const char* const lpacMovieName =
+-                            mViewModule.GetMovieNameByLevel(lpSoundPayload->miLayer);
+-                        FlaptSoundTriggerCallback(this, lpSoundPayload->macTypeName,
+-                                                  lpacMovieName, lpSoundPayload->macActionName,
+-                                                  lpSoundPayload->macLabel);
+-                    }
++                    // Event 141 is returned as module input and replied to by the existing
++                    // case 141 arm on the next update.
++
++                    // The module output batch is appended to mStoredGuiEvents at Update's
++                    // tail; its cache/manager/subscriber consumers run once at next input.
+                     break;
+                 }
+ 
+@@ -3783,8 +3684,21 @@
+     void GuiModule::Update(BrnResource::GameDataIO::InputBuffer* lpGameDataInput,
+                            const BrnResource::GameDataIO::OutputBuffer* lpGameDataOutput)
+     {
+-        // ---- 1. inbound GUI events (144 -> RunFsm; 14/16/481 -> notifications;
+-        //          504/508/513 -> MovieManager; subscription fan-out to the flow) -------
++        // ARTIST 82527A58 appends the previous stored batch after the caller's current
++        // input, then clears the persistent member before walking events. The per-substep
++        // input/output objects remain frame-owned; this inherited queue owns the handoff.
++        if (mpGuiEventInputBuffer != 0)
++        {
++            mpGuiEventInputBuffer->LockForWrite();
++            CgsGui::CgsGuiModuleIO::InputBuffer::GuiEventInputQueue* lpGuiEvents =
++                mpGuiEventInputBuffer->GetGuiEvents();
++            lpGuiEvents->Append<18432, 16>(mStoredGuiEvents);
++            mStoredGuiEvents.Clear();
++            mpGuiEventInputBuffer->UnlockForWrite();
++        }
++
++        // ---- 1. inbound GUI events (22 -> sound output; 144 -> RunFsm; 507 -> name;
++        //          14/16/481 -> notifications; 504/508/513 -> MovieManager; observer fan-out) --
+         bool lbHasSaveImageEvent = false;
+         CgsGui::ImageFileInfo lSaveImageInfo;
+         const CgsModule::Event* lpLastInboundEvent =
+@@ -3991,12 +3905,7 @@
+             while (liId >= 0 && lpEvent != 0)
+             {
+                 mGuiOutQueue.AddEvent(lpEvent, liId, liSize);
+-                // The console publishes these on the module bus (AddGuiOutEvents onto the
+-                // out buffer's gui-events channel), where they come back around as in
+-                // events and reach every registered observer through the interpreter's
+-                // subscription filter (that is how the autosave-icon flag, id 355, reaches
+-                // the always-available manager). Model the loop with the same filter.
+-                RouteEventToFlow(lpEvent, liId, liSize);
++                // The module-output batch is fanned out once when returned as next-update input.
+                 const CgsModule::Event* lpNext = 0;
+                 liId = lrProfileOut.GetNextEvent(lpEvent, &lpNext, &liSize);
+                 lpEvent = lpNext;
+@@ -4287,13 +4196,8 @@
+                 mHudMessageAnalyzer.Update(lpGuiEvents, &mViewInputBuffer.GetViewStateQueue());
+                 mViewInputBuffer.UnlockForWrite();
+ 
+-                // [FLAG PC seam] the previous frame's flow-posted overlay traffic. On the
+-                // console it rode the GUI out-event loop-back into this queue at the top of
+-                // the update; here it joins the queue only now, after every other reader of
+-                // it has run, so the director is the one consumer that sees it (the flows got
+-                // the same records at the drain). See mOverlayLoopBackQueue.
+-                lpGuiEvents->Append(mOverlayLoopBackQueue);
+-                mOverlayLoopBackQueue.Clear();
++                // The complete pending batch was appended before inbound dispatch at
++                // Update entry, so the analyzer and overlays director share the same input.
+ 
+                 // console line 1032: the overlays director drains the queue.
+                 mOverlaysDirector.Update(mpGuiEventInputBuffer);
+@@ -4533,24 +4437,9 @@
+             // machine froze at the Construct-seeded FULL -- the user-reported "asserts
+             // when there is no boost" ("Visibility is full but we are not allowed to
+             // boost", :1080) and "bar doesn't update with the correct values".
+-            // ARTIST BridgeFromViewToOutput 0x8285DE50..64 copies the custom
+-            // renderer's +12 event queue into GUI output; the next update feeds it
+-            // back to cache/flow observers. Preserve that feedback before Update
+-            // clears the queue, including the ticker's visibility edge (538).
+-            {
+-                const auto* lpFeedback = mCustomRendererManager.GetOutputEventQueue();
+-                const CgsModule::Event* lpEvent = nullptr;
+-                s32 liSize = 0;
+-                s32 liType = lpFeedback->GetFirstEvent(&lpEvent, &liSize);
+-                while (lpEvent)
+-                {
+-                    mGuiCache.RecEvent(lpEvent, liType);
+-                    RouteEventToFlow(lpEvent, liType, liSize);
+-                    const CgsModule::Event* lpNext = nullptr;
+-                    liType = lpFeedback->GetNextEvent(lpEvent, &lpNext, &liSize);
+-                    lpEvent = lpNext;
+-                }
+-            }
++            // BridgeFromViewToOutput has copied this queue to the module output. The
++            // generic pending-input path fans it out once on the next update; do not send
++            // a second observer/cache copy before the renderer update retires this source.
+             mCustomRendererManager.Update();
+ 
+             // [PC diagnostic] log the flow-movie mount state on CHANGE only (live /
+@@ -4624,105 +4513,30 @@
+             mViewOutputBuffer.LockForWrite();
+             CgsGui::AptCommunicator::FlushTriggerEventsTo(mViewOutputBuffer.GetGuiEventQueue());
+             mViewOutputBuffer.UnlockForWrite();
+-            // Deliver this frame's SOUND triggers (event 22 -- the AS SendAptSoundEvent
+-            // records: type[32] action[32] label[32] + layer) through the sound-logic
+-            // message route as typed GuiAudioTriggerEvent records.
++            // The console stores these Apt trigger records through BridgeFromViewToOutput;
++            // the next module input dispatch handles 21/22 and emits typed sound event 201.
+             mViewOutputBuffer.LockForRead();
+             {
+                 const CgsModule::VariableEventQueue<18432, 16>* lpTrigQueue =
+                     static_cast<const CgsGui::ViewIO::OutputBuffer&>(mViewOutputBuffer).GetGuiEventQueue();
+-                const CgsModule::Event* lpTrig = 0;
+-                s32 liTrigSize = 0;
+-                s32 liTrigId = lpTrigQueue->GetFirstEvent(&lpTrig, &liTrigSize);
+-                while (liTrigId >= 0 && lpTrig != 0)
+-                {
+-                    if (liTrigId == 21)
+-                    {
+-                        // ARTIST GuiCache::RecEvent case 21 marks expected Apt
+-                        // components on ONLOAD, then the EventInterpreter fans the
+-                        // same trigger to any flow state observing event 21.
+-                        mGuiCache.RecEvent(lpTrig, liTrigId);
+-                        RouteEventToFlow(lpTrig, liTrigId, liTrigSize);
+-                    }
+-                    else if (liTrigId == 22 && liTrigSize >= 100)
+-                    {
+-                        // Convert Apt's {type[32], action[32], label[32], layer}
+-                        // record into the real GuiAudioTriggerEvent consumed by the
+-                        // presentation effect. The action table is the ARTIST
+-                        // OnEnter..OnRightSweep enum, with Apt underscores ignored.
+-                        const char* lpacT = reinterpret_cast<const char*>(lpTrig);
+-                        static const char* const KAPC_ACTIONS[14] = {
+-                            "OnEnter", "OnExit", "OnFocus", "OnLoseFocus", "OnAccept", "OnCancel",
+-                            "OnTick", "OnChange", "OnUp", "OnDown", "OnLeft", "OnLeftSweep",
+-                            "OnRight", "OnRightSweep"
+-                        };
+-                        s32 liAction = -1;
+-                        for (s32 liCandidate = 0; liCandidate < 14 && liAction < 0; ++liCandidate)
+-                        {
+-                            const char* lpSource = lpacT + 32;
+-                            const char* lpTarget = KAPC_ACTIONS[liCandidate];
+-                            bool lbSame = true;
+-                            while (lbSame && (*lpSource || *lpTarget))
+-                            {
+-                                if (*lpSource == '_') { ++lpSource; continue; }
+-                                const char lcSource = (*lpSource >= 'A' && *lpSource <= 'Z')
+-                                    ? static_cast<char>(*lpSource + 32) : *lpSource;
+-                                const char lcTarget = (*lpTarget >= 'A' && *lpTarget <= 'Z')
+-                                    ? static_cast<char>(*lpTarget + 32) : *lpTarget;
+-                                if (lcSource != lcTarget) { lbSame = false; break; }
+-                                ++lpSource;
+-                                ++lpTarget;
+-                            }
+-                            if (lbSame)
+-                                liAction = liCandidate;
+-                        }
+-                        if (liAction >= 0)
+-                        {
+-                            BrnGui::GuiAudioTriggerEvent lAudio;
+-                            lAudio.Construct(liAction, lpacT, lpacT + 64, "");
+-                            CGS_ASSERT(mpOutputBuffer != 0, "mpOutputBuffer");
+-                            mpOutputBuffer->AddEvent(
+-                                reinterpret_cast<const CgsModule::Event*>(&lAudio),
+-                                201, static_cast<s32>(sizeof(lAudio)));
+-                        }
+-                    }
+-                    const CgsModule::Event* lpTrigNext = 0;
+-                    liTrigId = lpTrigQueue->GetNextEvent(lpTrig, &lpTrigNext, &liTrigSize);
+-                    lpTrig = lpTrigNext;
+-                }
++                // ARTIST BridgeFromViewToOutput stores this complete ViewIO event queue
++                // before appending the renderer/view module queues to module output.
++                mStoredGuiEvents.Append<18432, 16>(*lpTrigQueue);
+             }
+             mViewOutputBuffer.UnlockForRead();
+-            // [PC] the downstream consumer (BridgeFromViewToOutput -> the module output
+-            // -> the sound-logic/flow observers) is un-homed, and the console's view
+-            // output buffer is re-created per frame off the IO stack; reset the queue
+-            // here as that per-frame recreate's stand-in so it cannot overflow either.
++            // The ViewIO output records were copied to mStoredGuiEvents above. This
++            // persistent PC buffer stands in for the console's per-frame IO object, so
++            // clear it after the copy to retire each record exactly once.
+             mViewOutputBuffer.LockForWrite();
+             mViewOutputBuffer.GetGuiEventQueue()
+                 ->CgsModule::VariableEventQueue<18432, 16>::Clear();
+             mViewOutputBuffer.UnlockForWrite();
+         }
+ 
+-        // [FLAG PC seam] keep this frame's overlay traffic from the module out-queue for the
+-        // director's next update (see mOverlayLoopBackQueue): the ids its dispatch handles.
+-        {
+-            const CgsModule::Event* lpEvent = 0;
+-            s32 liSize = 0;
+-            s32 liId = mGuiOutQueue.GetFirstEvent(&lpEvent, &liSize);
+-            while (liId >= 0 && lpEvent != 0)
+-            {
+-                switch (liId)
+-                {
+-                    case 184: case 186: case 188: case 189: case 190: case 279: case 322:
+-                        mOverlayLoopBackQueue.AddEvent(lpEvent, liId, liSize);
+-                        break;
+-                    default:
+-                        break;
+-                }
+-                const CgsModule::Event* lpNext = 0;
+-                liId = mGuiOutQueue.GetNextEvent(lpEvent, &lpNext, &liSize);
+-                lpEvent = lpNext;
+-            }
+-        }
++        // ARTIST CgsGui::GuiModule::Update stores the complete module output queue after
++        // the ViewIO event records. Keep the same-step bridge source intact; the copy is
++        // appended to the next caller-owned GUI input and retired there exactly once.
++        mStoredGuiEvents.Append<18432, 16>(mGuiOutQueue);
+     }
+ 
+     // ⭐⭐⭐ THE GUI END-OF-FRAME NOTIFY, restored 2026-09-07. X360 @0x824F1008, verbatim:
+@@ -4816,14 +4630,13 @@
+         return mbRenderInputCompletedPC ? &mCompletedRenderInputPC : nullptr;
+     }
+ 
+-    // BridgeFromViewToOutput @0x8285DE10 -- an export hole, read with tools/re/ppcdis.py:
+-    //     Append<18432,16>(this + 111644, ViewIO::OutputBuffer::GetGuiEventQueue(viewOut));
+-    //     OutputBuffer::AddGuiOutEvents(moduleOut, *(view + 57352) + 12);
+-    //     OutputBuffer::AddGuiOutEvents(moduleOut, view + 56768);   // ViewModule::mOutputEventQueue
+-    // (called from CgsGui::GuiModule::Update @0x82860548, right after the view Update).
+-    // The first two carry the view OUTPUT buffer's queue -- the Apt trigger records 21/22
+-    // that Update above already drains by hand. The third had NO PC seat: the view module's
+-    // OWN out queue, where ProcessIncomingAptEvent @0x8285EAE8 posts 33
++    // ARTIST BridgeFromViewToOutput @0x8285DE10 orders its sources as follows:
++    //   1. append ViewIO::OutputBuffer::GetGuiEventQueue(viewOut) to mStoredGuiEvents;
++    //   2. append the custom-renderer manager queue to the module output;
++    //   3. append ViewModule::mOutputEventQueue to the module output.
++    // The typed PC Update copies its ViewIO queue into mStoredGuiEvents just before it
++    // clears that frame-owned stand-in; this helper restores the two module-output sources.
++    // The view module's OWN out queue is where ProcessIncomingAptEvent @0x8285EAE8 posts 33
+     // GuiEventLoadingScreenState {visible} for PlayAptLoadingMovie 19 / StopAptLoadingMovie
+     // 20. The sound logic module drains the module out queue (BridgeGuiToSound @0x823C0A58)
+     // and turns 33 into bit 1 of its dispatch flags word -- half of MusicEffect::
+@@ -4832,6 +4645,7 @@
+     void GuiModule::BridgeFromViewToOutput()
+     {
+         CGS_ASSERT(mpOutputBuffer != 0, "mpOutputBuffer");
++        mpOutputBuffer->Append(mCustomRendererManager.GetOutputEventQueue());
+         mpOutputBuffer->Append(mViewModule.GetOutputEventQueue());
+     }
+ 
+--- a/src/GameSource/Gui/BrnGuiModule.h
++++ b/src/GameSource/Gui/BrnGuiModule.h
+@@ -659,13 +659,9 @@
+         ::InputBuffer::GuiEventQueue mHudInQueue;
+         ::InputBuffer::GuiEventQueue mOverlayInQueue;
+         CgsModule::VariableEventQueue<18432, 16> mGuiOutQueue;
+-        // [FLAG PC seam] the console's GUI out-event loop-back (CgsGui::GuiModule +111644):
+-        // CgsGui::GuiModule::Update appends the frame's out-events there and the next
+-        // BrnGui::GuiModule::Update appends them into the GUI input queue, where the overlays
+-        // director reads the flows' 184/186/188/189/190. This build fans flow output to the
+-        // flows at the drain instead (RouteEventToFlow), so only the director's ids are kept
+-        // here and handed to it. DELETE-WHEN the input-queue loop-back is modelled whole.
+-        CgsModule::VariableEventQueue<18432, 16> mOverlayLoopBackQueue;
++        // The pending module-output and ViewIO-event batch uses the inherited
++        // CgsGui::GuiModule::mStoredGuiEvents member. It is copied into the caller's next
++        // GUI input before dispatch, matching ARTIST 82527A58/828602C8 ordering.
+         // The always-available components manager's in-queue: the subscription filter
+         // (RouteEventToObserver) delivers the events the manager registered for (its real
+         // 19-id table: save-icon 355, connect 64, showtime, ...) into it, then the module

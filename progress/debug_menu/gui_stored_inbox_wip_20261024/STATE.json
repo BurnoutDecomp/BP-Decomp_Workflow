@@ -1,0 +1,71 @@
+{
+  "status": "WIP_shared_GUI_event_lifecycle_fresh_review_and_execution_pending",
+  "source": "4c7c6ba2f97533315d5663d22499042cb007df31",
+  "source_base": "d3ec7d2dd65a37b489d1dbf61a53b9ce030385ee",
+  "source_tree": "d80cdb4998eeea85613c17269b709506d18d32a1",
+  "source_paths": 2,
+  "source_trace": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "baseBlob": "bd46bf236c1c3aa4fa84a347944c08fb1fd82586",
+      "beforeSha256": "0cab387a511423f3c1276a739936f7a858847510bc106f839b8923d3f0c2efc9",
+      "afterSha256": "69554c6c9e7f7f148d37814cf3e9dbc4de15164f9e6d38dfe251337ebaba4012",
+      "beforePath": "source/before/BrnGuiModule.cpp",
+      "afterPath": "source/after/BrnGuiModule.cpp"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.h",
+      "baseBlob": "0badd4228cea0dbf5ef3c9213c2a1c74d679f451",
+      "beforeSha256": "8c642127bbbf87731d87d1b0f70b63cbd083ecffd8c35016b228f3d31742a255",
+      "afterSha256": "c99db936a13243e4e6cd5de028921684dd1f876d288a7b73211959edf092e702",
+      "beforePath": "source/before/BrnGuiModule.h",
+      "afterPath": "source/after/BrnGuiModule.h"
+    }
+  ],
+  "evidence_files": 19,
+  "published_copies": {
+    "README.md": {
+      "original_sha256": "bc45d739183d90c978571e477db1946163ccce586e5a8eb8cdab84d1332860ab",
+      "published_sha256": "bc45d739183d90c978571e477db1946163ccce586e5a8eb8cdab84d1332860ab"
+    },
+    "BINDINGS.json": {
+      "original_sha256": "bf39c76f80f4651f13a13405d44460ec378c9d791f892eff37a88c24439355df",
+      "published_sha256": "bf39c76f80f4651f13a13405d44460ec378c9d791f892eff37a88c24439355df"
+    },
+    "source/batch.patch": {
+      "original_sha256": "30e87cb9a0deea57bedc1ec468af0ac1d8cd71b857a3e34c718d94f8af832d2b",
+      "published_sha256": "30e87cb9a0deea57bedc1ec468af0ac1d8cd71b857a3e34c718d94f8af832d2b"
+    },
+    "evidence/fanout_reconciliation.md": {
+      "original_sha256": "ed972076ce4627e1c734dc3f5d86c1e1a608658af43f62cb3063b6a6b72a926a",
+      "published_sha256": "ed972076ce4627e1c734dc3f5d86c1e1a608658af43f62cb3063b6a6b72a926a"
+    },
+    "evidence/modelio_boundary.md": {
+      "original_sha256": "a4b2ebb0597a8dbb4499d68708d703d6a8dbe2ced1100d253671ad0dac5ff3fb",
+      "published_sha256": "a4b2ebb0597a8dbb4499d68708d703d6a8dbe2ced1100d253671ad0dac5ff3fb"
+    },
+    "evidence/original_artist_chain.md": {
+      "original_sha256": "e0dcbcfd92c7aff95b64057f15bdb3c28e0454d1b1aa3dea764b0f00ccc4fb4d",
+      "published_sha256": "e0dcbcfd92c7aff95b64057f15bdb3c28e0454d1b1aa3dea764b0f00ccc4fb4d"
+    },
+    "evidence/previous/loopback_chain.md": {
+      "original_sha256": "2d7bf7537f462cb5595986247fb88dc9b766ba9e10841f93ebdf73114be1cdc4",
+      "published_sha256": "a84a90bf393308a57292982afbe0dd30dbbeccfbf21991937adf3eebba47a783"
+    },
+    "evidence/previous/producer_input_routes.md": {
+      "original_sha256": "db995a2888ca01189eabe579916847a13223b466fe1449972210564d434acdec",
+      "published_sha256": "17ebfefcf31dc3279dcf335600fd4cf197a65f459f71027c9c87cc2b46d62067"
+    }
+  },
+  "new_debug_dispositions": 0,
+  "normal_package_changed": false,
+  "dev_changed": false,
+  "retained_delivered_source": "d3ec7d2dd65a37b489d1dbf61a53b9ce030385ee",
+  "remaining_boundary": "ModelIO notifications/resource consumers not migrated",
+  "required_checks": [
+    "Original append/clear and all observer/consumer ordering",
+    "Queue construction/capacity and single retirement",
+    "Sound22/201, autosave356, RunFsm/Leaving transitions",
+    "Exact hosted build/gates and behavior-specific native witnesses"
+  ]
+}
