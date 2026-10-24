@@ -1,0 +1,193 @@
+--- a/src/GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp
++++ b/src/GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp
+@@ -12,6 +12,9 @@
+ 
+ #include <cmath>                                     // std::fabs (the sign-mask clear)
+ #include <cstring>                                   // std::memcpy
++#include <cstdlib>
++#include <cstdio>
++#include "GameShared/GameClasses/Development/Log/CgsLog.h"
+ 
+ struct IDirect3DDevice9;
+ extern IDirect3DDevice9* gpD3DDevice;
+@@ -164,20 +167,46 @@
+         rw::ResourceDescriptor lVertexBufferDescriptor;
+         renderengine::VertexBuffer::GetResourceDescriptor(&lVertexBufferDescriptor,
+                                                           &lVertexBufferParameters);
++#if !defined(D_PLATFORM_X360)
++        // FLAG PC-platform leaf: the selected native Initialize allocates the
++        // actual payload in its existing low-4GB arena and consumes only the
++        // caller-owned lane0 header. Do not request an unused lane2 block from
++        // the real main-only WorldDispatch owner or change its capacities.
++        lVertexBufferDescriptor.m_baseResourceDescriptors[2].m_size = 0u;
++        lVertexBufferDescriptor.m_baseResourceDescriptors[2].m_alignment = 1u;
++#endif
+         rw::Resource lVertexBufferResource = lpAllocator->DoAllocate(lVertexBufferDescriptor, 0);
+         CGS_ASSERT(lVertexBufferResource.m_baseResources[0],
+                    "couldn't allocate memory for vertex descriptor");
+ 
++#if defined(D_PLATFORM_X360)
+         renderengine::VertexBufferHeader* const lpVertexBufferHeader =
+             renderengine::VertexBuffer::Initialize(
+                 reinterpret_cast<renderengine::VertexBuffer::Wrapper*>(&lVertexBufferResource),
+                 &lVertexBufferParameters, 0, 0);
++#else
++        // The native initializer reads this typed header field only; its
++        // payload is the real ArenaAlloc result, not a Resource pointer lane.
++        renderengine::VertexBuffer::Wrapper lVertexWrapper{};
++        lVertexWrapper.mpHeader = static_cast<renderengine::VertexBufferHeader*>(
++            lVertexBufferResource.m_baseResources[0]);
++        renderengine::VertexBufferHeader* const lpVertexBufferHeader =
++            renderengine::VertexBuffer::Initialize(&lVertexWrapper, &lVertexBufferParameters, 0, 0);
++#endif
+         mpVertexBuffer = reinterpret_cast<renderengine::VertexBuffer*>(lpVertexBufferHeader);
+         CGS_ASSERT(lpVertexBufferHeader, "couldn't create a mpVertexBuffer");
+ 
+         renderengine::VertexBuffer_Xbox2UnSet(lpVertexBufferHeader);
++#if defined(D_PLATFORM_X360)
+         u8* const lpVertexBufferBytes = reinterpret_cast<u8*>(static_cast<usize>(
+             static_cast<u32>(renderengine::D3DVertexBuffer_Lock(lpVertexBufferHeader, 0, 0, 0))));
++#else
++        renderengine::VertexBuffer::LockInfo lVertexLockInfo{};
++        const int liVertexLocked = renderengine::VertexBuffer::Lock(
++            lpVertexBufferHeader, 0, &lVertexLockInfo, 0, 0);
++        CGS_ASSERT(liVertexLocked, "couldn't lock mpVertexBuffer");
++        u8* const lpVertexBufferBytes = static_cast<u8*>(lVertexLockInfo.mpBits);
++#endif
+         for (u32 luVertex = 0u; luVertex < 8u; ++luVertex)
+         {
+             std::memcpy(lpVertexBufferBytes + luPositionOffset + luVertex * luPositionStride,
+@@ -188,7 +217,14 @@
+         renderengine::IndexBufferParameters lIndexBufferParameters;
+         lIndexBufferParameters.muField00 = 0u;
+         lIndexBufferParameters.muFormat = 16u;
++#if defined(D_PLATFORM_X360)
+         lIndexBufferParameters.muCount = 24u;
++#else
++        // FLAG PC-platform leaf: the indexed native consumer accepts triangle
++        // lists, not Xenos QUADLIST13. Preserve the six actual box faces as
++        // twelve triangles, using the existing non-indexed quad backend's split.
++        lIndexBufferParameters.muCount = 36u;
++#endif
+         rw::ResourceDescriptor lIndexBufferDescriptor;
+         for (u32 luLane = 0u; luLane < 5u; ++luLane)
+         {
+@@ -199,14 +235,29 @@
+         lIndexBufferDescriptor.m_baseResourceDescriptors[0].m_alignment = 4u;
+         lIndexBufferDescriptor.m_baseResourceDescriptors[2].m_size = 0x30u;
+         lIndexBufferDescriptor.m_baseResourceDescriptors[2].m_alignment = 4u;
++#if !defined(D_PLATFORM_X360)
++        // FLAG PC-platform leaf: IndexBuffer::Initialize likewise owns its
++        // actual native triangle payload in the existing mapped arena; this allocator
++        // supplies the actual36-byte CPU header, as in the native sky owner.
++        lIndexBufferDescriptor.m_baseResourceDescriptors[2].m_size = 0u;
++        lIndexBufferDescriptor.m_baseResourceDescriptors[2].m_alignment = 1u;
++#endif
+         rw::Resource lIndexBufferResource = lpAllocator->DoAllocate(lIndexBufferDescriptor, 0);
+         CGS_ASSERT(lIndexBufferResource.m_baseResources[0],
+                    "couldn't allocate memory for index buffer");
+ 
++#if defined(D_PLATFORM_X360)
+         renderengine::IndexBufferHeader* const lpIndexBufferHeader =
+             renderengine::IndexBuffer::Initialize(
+                 reinterpret_cast<renderengine::IndexBufferWrapper*>(&lIndexBufferResource),
+                 &lIndexBufferParameters);
++#else
++        renderengine::IndexBufferWrapper lIndexWrapper{};
++        lIndexWrapper.mpHeader = static_cast<renderengine::IndexBufferHeader*>(
++            lIndexBufferResource.m_baseResources[0]);
++        renderengine::IndexBufferHeader* const lpIndexBufferHeader =
++            renderengine::IndexBuffer::Initialize(&lIndexWrapper, &lIndexBufferParameters);
++#endif
+         mpIndexBuffer = reinterpret_cast<renderengine::IndexBuffer*>(lpIndexBufferHeader);
+         CGS_ASSERT(lpIndexBufferHeader, "couldn't create mpIndexBuffer");
+ 
+@@ -214,13 +265,32 @@
+         const int liIndexBufferLocked = renderengine::IndexBuffer::Lock(
+             lpIndexBufferHeader, 2, &lIndexBufferLockInfo);
+         CGS_ASSERT(liIndexBufferLocked, "couldn't lock mpIndexBuffer");
++#if defined(D_PLATFORM_X360)
+         std::memcpy(lIndexBufferLockInfo.mpBits, mau16CubeIndices, sizeof(mau16CubeIndices));
++#else
++        u16* const lpuNativeIndices = static_cast<u16*>(lIndexBufferLockInfo.mpBits);
++        for (u32 luFace = 0; luFace < 6u; ++luFace)
++        {
++            const u16* const lpQuad = &mau16CubeIndices[luFace * 4u];
++            u16* const lpTriangles = &lpuNativeIndices[luFace * 6u];
++            lpTriangles[0] = lpQuad[0]; lpTriangles[1] = lpQuad[1]; lpTriangles[2] = lpQuad[2];
++            lpTriangles[3] = lpQuad[0]; lpTriangles[4] = lpQuad[2]; lpTriangles[5] = lpQuad[3];
++        }
++#endif
+         renderengine::IndexBuffer::Unlock(lpIndexBufferHeader, &lIndexBufferLockInfo);
+ 
++#if defined(D_PLATFORM_X360)
+         mDrawParameters.mePrimitiveType = 13u;
++#else
++        mDrawParameters.mePrimitiveType = 4u; // native indexed triangle list
++#endif
+         mDrawParameters.muBaseVertexIndex = 0u;
+         mDrawParameters.muMinVertexIndex = 0u;
++#if defined(D_PLATFORM_X360)
+         mDrawParameters.muNumVertices = 24u;
++#else
++        mDrawParameters.muNumVertices = lIndexBufferParameters.muCount;
++#endif
+ 
+         // ARTIST requests a 0x10-byte console record; the two pointer fields are 64-bit in this
+         // PC record, so size this passed-allocator request from the actual host type.
+@@ -240,6 +310,25 @@
+             mpQueryList->mpuTrivialAcceptBits = static_cast<u32*>(
+                 AllocateMemoryResource(lpAllocator, luTrivialBitBytes, 0x80u));
+         }
++
++#if !defined(D_PLATFORM_X360)
++        if (std::getenv("BRN_RENDER_PREPARE_DIAG"))
++        {
++            char lacLine[768];
++            std::snprintf(lacLine, sizeof(lacLine),
++                "[occlusion-resource] manager=%p allocator=%p vertexHeader=%p vertexBits=%p vertexBytes=%u positionOffset=%u positionStride=%u indexHeader=%p indexBits=%p indexBytes=%u indexStride=%u queryList=%p matrices=%p acceptBits=%p queryCapacity=%u drawIndices=%u\n",
++                static_cast<const void*>(this), static_cast<const void*>(lpAllocator),
++                static_cast<const void*>(lpVertexBufferHeader), lVertexLockInfo.mpBits,
++                lVertexLockInfo.muSize, static_cast<u32>(luPositionOffset), static_cast<u32>(luPositionStride),
++                static_cast<const void*>(lpIndexBufferHeader), lIndexBufferLockInfo.mpBits,
++                lpIndexBufferHeader->muSizeRounded, lIndexBufferLockInfo.muStride,
++                static_cast<const void*>(mpQueryList),
++                static_cast<const void*>(mpQueryList->mpBoxToClipMatrices),
++                static_cast<const void*>(mpQueryList->mpuTrivialAcceptBits),
++                mpQueryList->muSize, mDrawParameters.muNumVertices);
++            CgsDev::Log::WriteToLog(lacLine);
++        }
++#endif
+ 
+         CGS_ASSERT((reinterpret_cast<usize>(mpQueryList) & 0x7Fu) == 0u,
+                    "((uint32_t)mpQueryList) % 128 == 0");
+--- a/src/pc/gcm/renderengine/ImmediateMode.cpp
++++ b/src/pc/gcm/renderengine/ImmediateMode.cpp
+@@ -1364,6 +1364,27 @@
+         return 1;   // arena memory stays mapped; nothing to release
+     }
+ 
++    // FLAG PC-platform leaf: Initialize owns persistent mapped CPU bytes in the
++    // existing low-4GB arena. Map that actual header-backed span through the
++    // canonical typed API; never narrow the header or LockInfo pointer.
++    int VertexBuffer::Lock(VertexBufferHeader* lpBuffer, int liFlags, LockInfo* lpLockInfoOut,
++                           int liOffset, int liSize)
++    {
++        if (!lpBuffer || !lpLockInfoOut || liOffset < 0 || liSize < 0
++            || (lpBuffer->muBaseAddress & ~3u) == 0u)
++            return 0;
++        const u32 luOffset = static_cast<u32>(liOffset);
++        const u32 luSize = liSize == 0 ? lpBuffer->muSize : static_cast<u32>(liSize);
++        if (luOffset > lpBuffer->muSize || luSize > lpBuffer->muSize - luOffset)
++            return 0;
++        const uintptr_t luBase = static_cast<uintptr_t>(lpBuffer->muBaseAddress & ~3u);
++        lpLockInfoOut->muSize = luSize;
++        lpLockInfoOut->muFlags = static_cast<u32>(liFlags);
++        lpLockInfoOut->mpBuffer = lpBuffer;
++        lpLockInfoOut->mpBits = reinterpret_cast<void*>(luBase + luOffset);
++        return 1;
++    }
++
+     int D3DVertexBuffer_Lock(VertexBufferHeader* lpThis, int /*liOffsetToLock*/,
+                              int /*liSizeToLock*/, int /*liFlags*/)
+     {

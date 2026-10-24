@@ -1,0 +1,87 @@
+{
+  "status": "source_committed_fresh_review_hosted_and_native_pending",
+  "source": "95e513ae15ebfd322fd639664f835b171718e736",
+  "source_base": "037deb9fecff882de2e2fb55de020e0f54348360",
+  "source_tree": "e06144dbf1c7e57a8a6e7326843973aec36e98fe",
+  "source_paths": 2,
+  "source_trace": [
+    {
+      "path": "src/GameShared/GameClasses/Graphics/Dispatch/CgsOcclusionCullManager.cpp",
+      "pre_sha256": "24f6ac9bd30d20791258b2ae986661b1cb0c67bdc2b0227d1a8a197b0362a1b5",
+      "post_sha256": "768816ce1b352391871babf5dc56f393d5a17a672972430bf33e69b998cf3117",
+      "pre_bytes": 21410,
+      "post_bytes": 26130,
+      "pre_git_blob": "3d219333330290a095f89d657ea2d777c75f7bab"
+    },
+    {
+      "path": "src/pc/gcm/renderengine/ImmediateMode.cpp",
+      "pre_sha256": "b4a8702883b7073bc144ea1f103c3b04c91424262f3c2a40f6b202f17c38cdd1",
+      "post_sha256": "c73861e678fe3136a07341565046a7115e94458c88944b6f882cb10aa116407b",
+      "pre_bytes": 81856,
+      "post_bytes": 82967,
+      "pre_git_blob": "37838ca4aa87ebb394b223bf7e0e47231e408447"
+    }
+  ],
+  "published_copies": {
+    "EVIDENCE_MANIFEST.json": {
+      "original_sha256": "ff66e95cc0ebe7b262308104450f48ea2515b642a0a769384802e55380ab8030",
+      "published_sha256": "ff66e95cc0ebe7b262308104450f48ea2515b642a0a769384802e55380ab8030"
+    },
+    "POSTMORTEM.md": {
+      "original_sha256": "d761274ceaa9edd9a3424f6dff791e667e215579af800e7e99a05c1c6ec008ce",
+      "published_sha256": "d761274ceaa9edd9a3424f6dff791e667e215579af800e7e99a05c1c6ec008ce"
+    },
+    "proposal.patch": {
+      "original_sha256": "875ecc2c5489a9d411b968662d117c587caef9c707d3a8834902eff5f70e792f",
+      "published_sha256": "875ecc2c5489a9d411b968662d117c587caef9c707d3a8834902eff5f70e792f"
+    },
+    "REPORT.md": {
+      "original_sha256": "1adae3f4ae6339d94a4231749bb982698b691ca91fe7de436d65b0ccd3763b36",
+      "published_sha256": "1adae3f4ae6339d94a4231749bb982698b691ca91fe7de436d65b0ccd3763b36"
+    },
+    "RESOURCE_OWNER_BINDING.json": {
+      "original_sha256": "dd90a422a1e3711706d7f31ad5e54a1e8c7755947ced29e5c1961eff00e93554",
+      "published_sha256": "dd90a422a1e3711706d7f31ad5e54a1e8c7755947ced29e5c1961eff00e93554"
+    },
+    "REVIEW_REQUEST.md": {
+      "original_sha256": "fa9ae2fdff619d1c133eb0a9635bbbb52c81c0ff45a6a37f7643942258a19cec",
+      "published_sha256": "fa9ae2fdff619d1c133eb0a9635bbbb52c81c0ff45a6a37f7643942258a19cec"
+    },
+    "SEAL.json": {
+      "original_sha256": "3e99942bcc1659650a2e89963b658c647641420af0b77926d55992684e72568a",
+      "published_sha256": "3e99942bcc1659650a2e89963b658c647641420af0b77926d55992684e72568a"
+    },
+    "SHIPPING_BINDINGS.json": {
+      "original_sha256": "2c703ce81d2bbdd57cb1614c664ec919753779d10306f5855bcccff817b2ece6",
+      "published_sha256": "2c703ce81d2bbdd57cb1614c664ec919753779d10306f5855bcccff817b2ece6"
+    },
+    "SOURCE_MANIFEST.json": {
+      "original_sha256": "609981c1b13b50323d714d2db8ce47ee9679d87f4500e8be1a4199576ee7ed2b",
+      "published_sha256": "609981c1b13b50323d714d2db8ce47ee9679d87f4500e8be1a4199576ee7ed2b"
+    },
+    "TOPOLOGY_BINDING.json": {
+      "original_sha256": "9dd1b7501b5f2186cb4387738f24bdf3cd1addceb43fb9a042e03b00946ed15f",
+      "published_sha256": "9dd1b7501b5f2186cb4387738f24bdf3cd1addceb43fb9a042e03b00946ed15f"
+    }
+  },
+  "previous_native_result": "FAIL_62064_first_enable_vertex_buffer_allocation",
+  "actual_failed_allocator": "passed WorldDispatch main-only arena; not the separate global graphics getter",
+  "native_draw": {
+    "vertices": 8,
+    "indices": 36,
+    "triangles": 12,
+    "primitive": 4
+  },
+  "console_draw": {
+    "indices": 24,
+    "primitive": 13
+  },
+  "arena_budgets_changed": false,
+  "query_draw_methods_changed": false,
+  "source_review": "pending",
+  "hosted": "not_attempted",
+  "runtime_executed": false,
+  "normal_package_changed": false,
+  "dev_changed": false,
+  "new_debug_dispositions": 0
+}
