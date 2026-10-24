@@ -69,6 +69,8 @@ if ($ForceFfmpeg -or -not (Test-Path $FfmpegLib)) {
 }
 
 # --- 2. Build the game exe -----------------------------------------------------
+& python (Join-Path $Root "tools/build/fetch_sdl3.py")
+if ($LASTEXITCODE -ne 0) { throw "SDL3 dependency fetch failed ($LASTEXITCODE)" }
 Step "Building game exe"
 Invoke-Batch (Join-Path $Root "tools\build\build_game_exe.bat")
 if (-not (Test-Path $ExePath)) { throw "build succeeded but $ExePath is missing" }
@@ -81,6 +83,7 @@ if (Test-Path $staging) { Remove-Item $staging -Recurse -Force }
 New-Item -ItemType Directory -Force -Path $staging | Out-Null
 Copy-Item $ExePath -Destination $staging
 Get-ChildItem -Path $GameOut -Filter *.dll -File | Copy-Item -Destination $staging
+Copy-Item -LiteralPath (Join-Path $GameOut 'SDL3-LICENSE.txt') -Destination $staging
 $cgsmap = Join-Path $GameOut "Burnout_PC.cgsmap"
 if (Test-Path $cgsmap) { Copy-Item $cgsmap -Destination $staging }
 
