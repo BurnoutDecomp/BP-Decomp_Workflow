@@ -10193,7 +10193,11 @@
         "progress/debug_menu/force_takedown_site0004_native_20261023/SITE_DISPOSITION.json",
         "progress/debug_menu/force_takedown_site0004_native_20261023/NATIVE_EVIDENCE.json",
         "progress/debug_menu/force_takedown_site0004_native_20261023/PUBLICATION_BINDINGS.json"
-      ]
+      ],
+      "source_commit": "9af6a868959578f4eafa9af0d69ccd27081667a0",
+      "native_case": 62055,
+      "original_aggregate_verdict": "site-only PASS; later timer countdown pending",
+      "phase_synchronization": "phase-adjacent; actual source/runtime/artifact pins verified"
     },
     {
       "kind": "variable",
@@ -13009,14 +13013,23 @@
       "pseudocode_line": 47,
       "original_call": "sub_8282D640(a1, *(a1 + 12) + 50207, \"OcclusionCull\", \"Cull world opaque\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0036",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Cull world opaque: independent original gate/restore path passes on private exact3d7/slot62068. Current-dev merge and normal delivery are separate.",
+      "source": "3d7db422fd9a96f6891ac81c60370745dd966839",
+      "exe_sha256": "a4cc9c43aaf21932ea6cfff67e573be6e89d3b18478b301e3f407d7c5a92b4e7",
+      "native_slot": 62068,
+      "evidence": [
+        "progress/debug_menu/occlusion_independent_native_20261024/REPORT.md",
+        "progress/debug_menu/occlusion_independent_native_20261024/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/occlusion_independent_native_20261024/ROOT_NATIVE_JUDGMENT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -13171,14 +13184,23 @@
       "pseudocode_line": 53,
       "original_call": "sub_8282D640(a1, *(a1 + 12) + 51377, \"OcclusionCull\", \"Occlusion enabled\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0042",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Occlusion enabled: independent original gate/restore path passes on private exact3d7/slot62068. Current-dev merge and normal delivery are separate.",
+      "source": "3d7db422fd9a96f6891ac81c60370745dd966839",
+      "exe_sha256": "a4cc9c43aaf21932ea6cfff67e573be6e89d3b18478b301e3f407d7c5a92b4e7",
+      "native_slot": 62068,
+      "evidence": [
+        "progress/debug_menu/occlusion_independent_native_20261024/REPORT.md",
+        "progress/debug_menu/occlusion_independent_native_20261024/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/occlusion_independent_native_20261024/ROOT_NATIVE_JUDGMENT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -35929,14 +35951,20 @@
       "pseudocode_line": 6,
       "original_call": "sub_8282D800(a1, a1 + 112, \"Draw collision world\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0001",
       "function": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate",
       "original_address": "0x828AAA68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json",
       "component": "CgsSceneManager::TriangleCollisionDebugComponent",
       "component_name": "Collision",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw collision world: exact fa5/slot62072 positive, negative and restore states agree with original source, direct renderer-owner/capture attribution and all three inspected images. Later independent MapLvl assertion and full16 FAIL remain retained.",
+      "evidence": [
+        "progress/debug_menu/geometry_four_retained_native_20261025/REPORT.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/EVIDENCE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -35955,14 +35983,20 @@
       "pseudocode_line": 7,
       "original_call": "sub_8282D800(a1, a1 + 113, \"Draw soup AABBs\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0002",
       "function": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate",
       "original_address": "0x828AAA68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json",
       "component": "CgsSceneManager::TriangleCollisionDebugComponent",
       "component_name": "Collision",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw soup AABBs: exact fa5/slot62072 positive, negative and restore states agree with original source, direct renderer-owner/capture attribution and all three inspected images. Later independent MapLvl assertion and full16 FAIL remain retained.",
+      "evidence": [
+        "progress/debug_menu/geometry_four_retained_native_20261025/REPORT.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/EVIDENCE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -35981,14 +36015,20 @@
       "pseudocode_line": 8,
       "original_call": "sub_8282D6B0(a1, a1 + 356, \"Draw distance\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0003",
       "function": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate",
       "original_address": "0x828AAA68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json",
       "component": "CgsSceneManager::TriangleCollisionDebugComponent",
       "component_name": "Collision",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw distance: exact fa5/slot62072 positive, negative and restore states agree with original source, direct renderer-owner/capture attribution and all three inspected images. Later independent MapLvl assertion and full16 FAIL remain retained.",
+      "evidence": [
+        "progress/debug_menu/geometry_four_retained_native_20261025/REPORT.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/EVIDENCE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -36007,14 +36047,20 @@
       "pseudocode_line": 11,
       "original_call": "sub_8282D800(a1, a1 + 116, \"Draw edge cosines\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0004",
       "function": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate",
       "original_address": "0x828AAA68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json",
       "component": "CgsSceneManager::TriangleCollisionDebugComponent",
       "component_name": "Collision",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw edge cosines: exact fa5/slot62072 positive, negative and restore states agree with original source, direct renderer-owner/capture attribution and all three inspected images. Later independent MapLvl assertion and full16 FAIL remain retained.",
+      "evidence": [
+        "progress/debug_menu/geometry_four_retained_native_20261025/REPORT.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/EVIDENCE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -37719,8 +37765,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1298,
-      "verified": 50,
+      "pending": 1292,
+      "verified": 56,
       "original-noop": 7
     }
   }
