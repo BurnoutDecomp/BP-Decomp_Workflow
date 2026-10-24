@@ -1,0 +1,75 @@
+{
+  "status": "WIP_source_checkpoint_fresh_review_pending_uncompiled_unactivated",
+  "source": "02c63ea7ed5dfb3b43dbaeb959a2d23f3861db6b",
+  "source_base": "d458cd5641a318f8289da22058220f995b6846b5",
+  "source_tree": "25eb026b366ea48d75c220599edfeb0ce0b47556",
+  "changed_paths": 7,
+  "packet_trace": [
+    {
+      "packet": "game_legacy_io_factories",
+      "path": "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+      "pre_sha256": "3c4da2211eddabcd7c31d97bc7a6a69e6c2a3222598fa0618bca428694d04e60",
+      "post_sha256": "ed25250333c1e5e413cfa8aeebcaeedabf0de50ff1e249ea9523d452d868542e"
+    },
+    {
+      "packet": "game_legacy_io_factories",
+      "path": "src/GameSource/Game/BrnGameModuleIO.h",
+      "pre_sha256": "aeb2d91833182cea306c93da6dd3d08e082db466a5b1d7f54bbc1050c51668d6",
+      "post_sha256": "e7adc7e2f759865ac8d83a117d08727d5f00cb8d34876a9a5ef0ae94af3e55d4"
+    },
+    {
+      "packet": "game_legacy_io_factories",
+      "path": "src/GameSource/Game/BrnGameModuleIO.cpp",
+      "pre_sha256": "09aeb6ebdabb619aff626babc9ad6bd8f91a7df8ec007da7dadbee27404d1f24",
+      "post_sha256": "1ca87c0c1ddd79b94030763a0e7d33492a5a3edc41820fcc006e33db06c6f386"
+    },
+    {
+      "packet": "game_legacy_io_factories",
+      "path": "src/GameSource/Game/BrnGameModule.hpp",
+      "pre_sha256": "b378fae39d1370a650c29b5ea1e01457795a556d8f742021790b5a8b02be7e36",
+      "post_sha256": "5dddd2c23bbaf095ebc2f743ce67a4e0c1b0b73c4330c168b91cb847388ad9a2"
+    },
+    {
+      "packet": "allocator_list_original_initialization",
+      "path": "src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.h",
+      "pre_sha256": "2424a58eb284eb4bf295eae25fe4e24f1d5e9b94bd89208ed7cb9af6966c2ce2",
+      "post_sha256": "efd1b36d3e7c11ef078391ac9b57e39bc23ca687d07fd0383fcbc7d4593f8d70"
+    },
+    {
+      "packet": "allocator_list_original_initialization",
+      "path": "src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.cpp",
+      "pre_sha256": "bf05421708701716d634ea2eb1a82355e4fcc74609d6e83115f3d318f32f10d1",
+      "post_sha256": "349a67982f0684c525248365f90e9b7811e1f6ccdef7f919e9964880d368ff7c"
+    },
+    {
+      "packet": "allocator_list_original_initialization",
+      "path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+      "pre_sha256": "b4eef829de75d88ac5897782fb5e7cf930ddd33b9e6f1d1b09aa9883ebc7ce98",
+      "post_sha256": "0ad01f6f0c33864ee97b5d1ea9bc08642eb1deb03518c464731ba13ad7dcfe75"
+    }
+  ],
+  "seals": {
+    "game_legacy_io_factories": {
+      "seal_sha256": "83a1b47e47c025b48bc81e3baaa7fc4f48539cebf4a05dceafd428244ccff3af",
+      "manifest_sha256": "e3cc1382d7190e4125bdb8d214f77c07112db66d5f44d2c8e2262618af641099",
+      "bound_files": 68
+    },
+    "allocator_list_original_initialization": {
+      "seal_sha256": "7a9124c05a460d7511f724edccbe1826adc435f49fa2fd4451ea86e81bee9455",
+      "manifest_sha256": "224a8c5f74bf9b20c7c2d38659913dd77c1cd171f913095f6b6af28d6a0223c1",
+      "bound_files": 34
+    }
+  },
+  "published_normalizations": {},
+  "new_debug_dispositions": 0,
+  "normal_package_changed": false,
+  "consumer_candidate_changed": false,
+  "build": "not_attempted",
+  "activation": false,
+  "limits": [
+    "Actual typed game base changes storage and virtual dispatch; full affected compilation is required.",
+    "BrnGameModuleIO.cpp remains absent from the explicit shipping source list.",
+    "Queue constructor affects all queue instances and requires source-wide review.",
+    "Original resource/Construct owners, PC schema and renderer allocation reconciliation remain pending."
+  ]
+}

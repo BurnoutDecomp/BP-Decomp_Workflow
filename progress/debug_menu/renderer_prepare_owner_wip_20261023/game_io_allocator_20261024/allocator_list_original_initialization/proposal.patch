@@ -1,0 +1,47 @@
+--- a/src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.h
++++ b/src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.h
+@@ -55,6 +55,8 @@
+             enum { KI_MAX_BANK_ID = 0x42, KI_NUM_BANKS = 0x43 };
+ 
+             void Construct();
++            // Existing native bring-up seeds types and clears populated pointer rows.
++            void ConstructNativePC();
+ 
+             rw::Resource*                       GetRawResource(s32 liBankId) const;
+             rw::ResourceDescriptor*             GetRawResourceDescriptor(s32 liBankId) const;
+--- a/src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.cpp
++++ b/src/GameSource/Resource/SharedIO/BrnGameDataAllocatorList.cpp
+@@ -14,11 +14,18 @@
+ {
+     namespace GameDataIO
+     {
+-        // [inferred] The X360 AllocatorList::Construct is inlined into GameDataModule::CreateAllocators
+-        // (no standalone body in the export). Its job is to start every bank "unassigned" (map = -1, so
+-        // the Get* asserts fire if a bank is used before CreateAllocators registers it) and null every
+-        // allocator/resource pointer. CreateAllocators then fills the slots as it builds each allocator.
++        // Inlined in ARTIST GameDataModule::Construct @0x82671D30..58:
++        // invalidate the 67 bank slots, then clear only the audio pointer.
+         void AllocatorList::Construct()
++        {
++            for (s32 li = 0; li < KI_NUM_BANKS; ++li)
++                maiAllocatorMap[li] = -1;
++            mpAudioStreamAllocator = nullptr;
++        }
++
++        // FLAG PC-platform leaf: preserve the existing native type/pointer reset.
++        // Its exact store order and populated-row limits remain unchanged.
++        void AllocatorList::ConstructNativePC()
+         {
+             for (s32 li = 0; li < KI_NUM_BANKS; ++li)
+             {
+--- a/src/GameSource/Resource/BrnGameDataModule.cpp
++++ b/src/GameSource/Resource/BrnGameDataModule.cpp
+@@ -2447,7 +2447,7 @@
+         // X360 0x82671B90 (tail): reset the bank->allocator registry -- the inline
+         // `maiAllocatorMap[0..66] = -1` loop == AllocatorList::Construct. CreateAllocators
+         // (deferred) populates it; Update publishes it to the OutputBuffer each frame.
+-        mAllocatorList.Construct();
++        mAllocatorList.ConstructNativePC();
+ 
+         // [5b] Bring up the resource memory system. This is an incrementally-populated stand-in for the
+         // X360 ConstructResourceModule (0x8266D570): it now builds the real CgsResource::ResourceModule::
