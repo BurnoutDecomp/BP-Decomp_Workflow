@@ -425,6 +425,20 @@ function Assert-SystemUserProfileReceipt(
 }
 
 # Validate the existing fxgs_common retained-output contract; never execute receipt commands.
+# Exact current shared provider closure for both Flowtype variants. The selector/sink
+# alone come from the variant revision. These pins do not substitute old providers.
+$TrafficFlowtypeSharedProviderPairs = [ordered]@{
+    'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp' = @{shared_blob='25e8520c1efc88617235c5434e3365717c852e59'; control_blob='25e8520c1efc88617235c5434e3365717c852e59'; comparison='identical_to_control'}
+    'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp' = @{shared_blob='96962e52dba2e4514af98d05861e8a0617e614dc'; control_blob='bf0a372707438d6c7df1c39cc2182f98371b41f3'; comparison='exact_recovered_shared_provider_pair'}
+    'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp' = @{shared_blob='7f49d471c04b6383f587fdf2326c26c86e8c9bf4'; control_blob='7f49d471c04b6383f587fdf2326c26c86e8c9bf4'; comparison='identical_to_control'}
+    'src/GameShared/GameClasses/System/Resource/CgsResourceBasePool.cpp' = @{shared_blob='166f586e3020498f32970acebf18079e1f1f2968'; control_blob='absent'; comparison='absent_in_old_control_genuine_shared_formatter_provider'}
+    'src/GameShared/GameClasses/System/Resource/CgsResourceTypeBase.cpp' = @{shared_blob='2797df62b74a559a9bee2c4b20c1f3aad77996e0'; control_blob='2797df62b74a559a9bee2c4b20c1f3aad77996e0'; comparison='identical_to_control'}
+    'src/GameShared/GameClasses/System/Resource/CgsResourceID.cpp' = @{shared_blob='be80b25227eaa8647a3d7cf6a47abde7108a0f19'; control_blob='be80b25227eaa8647a3d7cf6a47abde7108a0f19'; comparison='identical_to_control'}
+    'src/GameShared/GameClasses/Core/CgsStringUtils.cpp' = @{shared_blob='6ebbc73f726859607152a6ef579463cf81174931'; control_blob='6ebbc73f726859607152a6ef579463cf81174931'; comparison='identical_to_control'}
+    'src/GameShared/GameClasses/Development/CgsStrStream.cpp' = @{shared_blob='ae48518184efbdc1c4d75156fce52b0543c201ea'; control_blob='2ed5004d628cda57c97beabdd1eaebe2fdfe0c02'; comparison='exact_recovered_shared_provider_pair'}
+    'vendor/renderware/src/rw/BaseResourceDescriptor.cpp' = @{shared_blob='51d3b3153735b283c4a233c9579d4be6c1dcb611'; control_blob='51d3b3153735b283c4a233c9579d4be6c1dcb611'; comparison='identical_to_control'}
+}
+
 function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision, [bool] $Baseline) {
     $row = Get-Content -Raw -LiteralPath (Join-Path $VariantRoot 'result.json') | ConvertFrom-Json -AsHashtable
     $extraction = Get-Content -Raw -LiteralPath (Join-Path $VariantRoot 'extraction.json') | ConvertFrom-Json -AsHashtable
@@ -450,11 +464,8 @@ function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision
         (Join-Path $VariantRoot 'traffic_flowtype_override.inc'),
         (Join-Path $VariantRoot 'run.cmd'),
         (Join-Path $Root 'tools/build/msvc_flags.txt'),
-        (Join-Path $Root 'tools/build/msvc_includes.txt'),
-        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp'),
-        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp'),
-        (Join-Path $SourceRoot 'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')
-    )
+        (Join-Path $Root 'tools/build/msvc_includes.txt')
+    ) + @(foreach ($providerPath in $TrafficFlowtypeSharedProviderPairs.Keys) { Join-Path $SourceRoot $providerPath })
     $seen = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
     if (@($row.inputs).Count -ne $expectedInputs.Count) { throw 'Traffic flowtype input set differs.' }
     foreach ($compiledInput in $row.inputs) {
@@ -473,16 +484,13 @@ function Assert-TrafficFlowtypeVariant([string] $VariantRoot, [string] $Revision
     }
     if ($extraction.schema -ne 2 -or $extraction.source_revision -cne $Revision -or
         $extraction.shared_provider_revision -cne $B5Commit -or
-        $extraction.include_name -cne 'traffic_flowtype_override.inc' -or $extraction.source_objects.Count -ne 5) {
+        $extraction.include_name -cne 'traffic_flowtype_override.inc' -or $extraction.source_objects.Count -ne (2 + $TrafficFlowtypeSharedProviderPairs.Count)) {
         throw 'Traffic flowtype extraction revision/shape differs.'
     }
-    foreach ($relative in @(
+    foreach ($relative in (@(
         'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp',
-        'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp',
-        'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
-        'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
-        'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')) {
-        $inputRevision = if ($relative -like 'src/GameShared/GameClasses/System/Resource/*') { $B5Commit } else { $Revision }
+        'src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp') + @($TrafficFlowtypeSharedProviderPairs.Keys))) {
+        $inputRevision = if ($relative -in $TrafficFlowtypeSharedProviderPairs.Keys) { $B5Commit } else { $Revision }
         $expectedBlob = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${inputRevision}:$relative")
         if ($extraction.source_objects[$relative] -cne $expectedBlob) { throw 'Traffic flowtype source blob differs.' }
     }
@@ -709,7 +717,7 @@ try {
         # Fix the reviewed harness while allowing the requested production revision to vary.
         $flowHarnessPins = @{
             'tests/TrafficFlowtypeOverride.cpp' = 'ca57fb44af73b7ffdc6903484dc7648def57dd9e07ae2e396f565bd8c4b61158'
-            'tests/run_traffic_flowtype_override.py' = '2f38f2274dfaa8cb82f6e39af72482b23cfb71aa13decb66f5b5611f8f7d2f99'
+            'tests/run_traffic_flowtype_override.py' = '259efb58855c0b2892938f6e893b21942801329e1d40b9c928482ae068781ae3'
             'tests/fxgs_common.py' = '6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033'
         }
         foreach ($relative in $flowHarnessPins.Keys) {
@@ -735,6 +743,17 @@ try {
             'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
             'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
             'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceBasePool.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceTypeBase.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceID.cpp',
+            'src/GameShared/GameClasses/Core/CgsStringUtils.cpp',
+            'src/GameShared/GameClasses/Development/CgsStrStream.cpp',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceType.h',
+            'src/GameShared/GameClasses/System/Resource/CgsResourceID.h',
+            'src/GameShared/GameClasses/Development/CgsStrStream.h',
+            'src/GameShared/GameClasses/Core/CgsStringUtils.h',
+            'vendor/renderware/include/rw/rwcore_structs.h',
+            'vendor/renderware/src/rw/BaseResourceDescriptor.cpp',
             'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.h',
             'src/GameShared/GameClasses/System/Resource/CgsResourceBasePool.h', 'src/types.hpp')) {
             $flowInputs[$relative] = Get-FileRecord (Join-Path $SourceRoot $relative)
@@ -748,27 +767,24 @@ try {
         }
         $flowBaseline = '8fec93bd4d2806ca9b60fb53dc272fe28081f8b8'
         Invoke-Native git @('-C', $SourceRoot, 'fetch', '--recurse-submodules=no', '--no-tags', '--depth=1', 'origin', $flowBaseline) 'source.log'
-        # Both variants compile the actual candidate providers. Admit only the
-        # separately reviewed additive debug-stream operator; every pre-existing
-        # body remains the exact control. All other provider differences fail.
+        # Both variants compile this same exact genuine current provider closure.
+        # Record old-control identity separately, including newly recovered files
+        # absent there; never compile an old provider in place of this closure.
         $flowProviderComparison = @{}
-        foreach ($relative in @(
-            'src/GameShared/GameClasses/System/Resource/CgsBaseResourcePtr.cpp',
-            'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp',
-            'src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp')) {
+        if ($TrafficFlowtypeSharedProviderPairs.Count -ne 9) { throw 'Flowtype provider closure count differs.' }
+        foreach ($relative in $TrafficFlowtypeSharedProviderPairs.Keys) {
+            $pin = $TrafficFlowtypeSharedProviderPairs[$relative]
             $candidateProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${B5Commit}:$relative")
-            $controlProvider = Get-GitText @('-C', $SourceRoot, 'rev-parse', "${flowBaseline}:$relative")
-            $comparison = 'identical_to_control'
-            if ($candidateProvider -cne $controlProvider) {
-                if ($relative -cne 'src/GameShared/GameClasses/System/Resource/CgsResourcePtr.cpp' -or
-                    $controlProvider -cne 'bf0a372707438d6c7df1c39cc2182f98371b41f3' -or
-                    $candidateProvider -cne '96962e52dba2e4514af98d05861e8a0617e614dc') {
-                    throw 'Flowtype fixture provider differs from the exact reviewed pair.'
-                }
-                $comparison = 'exact_reviewed_additive_stream_operator_183ca9c9'
+            $controlRow = Get-GitText @('-C', $SourceRoot, 'ls-tree', $flowBaseline, '--', $relative)
+            $controlProvider = 'absent'
+            if ($controlRow -cne '') {
+                if ($controlRow -cnotmatch '\A100644 blob ([0-9a-f]{40})\t') { throw 'Flowtype control provider tree shape differs.' }
+                $controlProvider = $Matches[1]
             }
-            $flowProviderComparison[$relative] = @{control_blob=$controlProvider; shared_compiled_blob=$candidateProvider; comparison=$comparison}
-
+            if ($candidateProvider -cne $pin.shared_blob -or $controlProvider -cne $pin.control_blob) {
+                throw 'Flowtype formatter/provider closure differs from the exact reviewed pair.'
+            }
+            $flowProviderComparison[$relative] = @{control_blob=$controlProvider; shared_compiled_blob=$candidateProvider; comparison=$pin.comparison}
         }
         $Receipt.regressions.traffic_flowtype_override.shared_provider_comparison = $flowProviderComparison
         $flowNoDefaultWasPresent = Test-Path -LiteralPath Env:NoDefaultCurrentDirectoryInExePath

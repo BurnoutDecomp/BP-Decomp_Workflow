@@ -3742,6 +3742,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceHandle.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceIdListResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourcePtr.cpp"
+  echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceBasePool.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsResourceType.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\CgsTextFileResource.cpp"
   echo "%SRC%\GameShared\GameClasses\System\Resource\PoolModuleStates\CgsBaseDefragPoolModuleState.cpp"
