@@ -1,0 +1,65 @@
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.h
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.h
+@@ -41,7 +41,7 @@
+     // CgsPatchManager.h - the patch overlay manager. Instance layout is the faithful X360 member
+     // ORDER (members reached BY NAME, never by raw offset); the X360 asm of the methods below is the
+     // authority for behaviour. Embedded by value inside the file system; Construct stashes the
+-    // owning FileSystem so the background search thread can allocate its scratch through it.
++    // owning resource allocator so the background search thread can allocate/free its scratch.
+     class PatchManager
+     {
+     public:
+@@ -73,7 +73,7 @@
+         // @0x828DCF40. Resolve `lpcLogical` to a host physical path in `lpcDest` (capacity
+         // `luDestSize`): slash->back-slash, and if the path is "<drive>\..." emit "<drive>:\<rest>",
+         // else "<path>:".
+-        void GetPhysicalPath(char* lpcDest, u32 luDestSize, const char* lpcLogical);
++        static void GetPhysicalPath(char* lpcDest, u32 luDestSize, const char* lpcLogical);
+ 
+     private:
+         // @0x828F0B88. The background thread entry: scan the just-added patch folder, mark the scan
+@@ -96,7 +96,8 @@
+         s32                                  muCurrentPatchIndex;           // +0x884 (2180)
+         CgsContainers::LinearSOAHashTable<s32, u32> mPatchFileMap;             // +0x888 (2184)
+         bool                                 mbPatching;                    // +0x898 (2200)
+-        s32                                  miSearchHandleCount;           // +0x89C (2204) scan result
++        // Descriptive X360-only name:828F0C1C/30 store/read an allocator pointer, not a count.
++        void*                                mpDirectorySearchScratch;       // target+0x89C
+         EA::Thread::Thread                   mDirSearchThread;              // +0x8A0 (2208)
+     };
+ }
+--- a/src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.cpp
++++ b/src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.cpp
+@@ -68,22 +68,20 @@
+         return true;
+     }
+ 
+-    // @0x828F0B88. Background worker; `lpContext` is the PatchManager.
++    // ARTIST828F0B88..0C8C. The actual worker owns this main-memory scratch
++    // through the same retained allocator; its five-lane free record carries only lane0.
+     intptr_t PatchManager::DirSearchThreadProc(void* lpContext)
+     {
+-        PatchManager* lpThis = static_cast<PatchManager*>(lpContext);
+-
+-        // FLAGGED: the X360 grabs a 26000-byte scratch from the allocator (vtable+16 Alloc), stores
+-        // the handle into miSearchHandleCount (+0x89C), runs the walk, then frees it (vtable+20). That
+-        // alloc/free pair is NOT reproduced here (the allocator interface for this manager is not yet
+-        // modelled, and SearchFolder uses its own fixed stack buffers, so the overlay result is
+-        // unaffected) -- left as a documented gap rather than fabricating the vtable calls. As a
+-        // consequence miSearchHandleCount stays unwritten until the allocator is modelled.
++        PatchManager* const lpThis = static_cast<PatchManager*>(lpContext);
++        lpThis->mpDirectorySearchScratch = lpThis->mpAllocator->AllocateMemoryResource(
++            0x6590u, 16, nullptr);
+         lpThis->SearchFolder(lpThis->maPatches[lpThis->muCurrentPatchIndex].miacFolder, "");
+-
+-        // Scan finished: advance to the next patch slot and clear the patching flag.
++        rw::Resource lScratchResource;
++        lScratchResource.m_baseResources[0] = lpThis->mpDirectorySearchScratch;
++        lpThis->mpAllocator->DoFree(lScratchResource);
++        const s32 liPatchIndex = lpThis->muCurrentPatchIndex;
+         lpThis->mbPatching = false;
+-        ++lpThis->muCurrentPatchIndex;
++        lpThis->muCurrentPatchIndex = liPatchIndex + 1;
+         return 0;
+     }
+ 
