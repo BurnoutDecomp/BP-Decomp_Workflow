@@ -1,0 +1,227 @@
+{
+  "functions": [
+    {
+      "address": "0x828f0cf8",
+      "name": "CgsFileSystem::DeviceManager::AddVirtualDevice",
+      "end": "0x828f11b8",
+      "raw_hex": "7d8802a6483181bd9421fda07c741b787c9223783e1400027cba2b783a1076887cdb33787e0383787cf13b78483851497f44d3787e83a3784bfed5013d6082003bc000003b2b0d003d6082002b0300003b0b0d083d6082103fa082f33aabae903ee082f3419a005c4bf267e9386100908397226483fd2260932100904bf250e53d6082109301009093e10098386100909381009c388bae749bdf000081610090816b00047d6903a64e80042138a000c47ea4ab78807d22604bf2fa614bf267a57f64db787e83a3784bfed4717c731b782b130000409a005c4bf26779386100608397226483fd2260932100604bf250753d6082109301006093e10068386100609381006c388bae589bdf000081610060816b00047d6903a64e80042138a000c87ea4ab78807d22604bf2f9f14bf267353d7400027fdbf378396b7494814b00002b0a0000419a00183b7b0001396b00102f1b00204198ffe84800000c2f1b00204198005c4bf266ed386100708397226483fd2260932100704bf24fe93d6082109301007093e10078386100709381007c388bae3c9bdf000081610070816b00047d6903a64e80042138a000d37ea4ab78807d22604bf2f9654bf266a9576a20367f4bd3787d4aa2143eca00027d6a5b783ad67488892b0000396b00012b090000409afff47d6a5850396bffff556b003e2b0b00094198019c4bf26659386100508397226483fd2260932100504bf24f557f4bd37893e10058930100509381005c7d6a5b789bdf0000892b0000396b00012b090000409afff47d6a58503d408200396bffff388a1e1081410050557b003e38610050814a00047d4903a64e8004212b1a000038610050419a000c7f44d3784800000c3d608200388b0d1081610050816b00047d6903a64e8004213d60820038610050388b1df081610050816b00047d6903a64e800421816100543f8082f32b0b00013fe082f3419800302b0b00034098003838a00009809c1944386100504bf26759816100542f0b0002409a001c93c100544800001438a00009809f1940386100504bf267353d60820038610050388b1ddc81610050816b00047d6903a64e800421816100542b0b0001419800302b0b0003409800387f65db78809c1944386100504bf266f5816100542f0b0002409a001c93c10054480000147f65db78809f1940386100504bf266d13d60820038610050388b1cc481610050816b00047d6903a64e8004213d60820038a00041807d2260388b1da44bf2f7914bf264d57f4bd3787d3ab050894b00002b0a00007d4959ae396b0001409afff0566b003e9256000c7e4a937892720004923200082f0b0000419a00147d6a5b78816a00042f0b0000409afff47fdbf37839740014812b00007f095040419a00183b7b0001396b4e902f1b00084198ffe84800000c2f1b00084198005c4bf26449386100808397226483fd2260932100804bf24d453d6082109301008093e10088386100809381008c388bae1c9bdf000081610080816b00047d6903a64e80042138a000e87ea4ab78807d22604bf2f6c14bf264051d7b4e909bc100a47d6ba21493c101ac924101a893c101c493c101c893c101b893c101bc93c101c0388100a0fbc101b093c101a4386b001839600008916100a03d607fff616bffff916101cc4bff86857e03837848384cd13821026048317d54",
+      "assembly": "0x828F0CF8 mflr      r12\n0x828F0CFC bl        __savegprlr_16\n0x828F0D00 stwu      r1, back_chain(r1)\n0x828F0D04 mr        r20, r3\n0x828F0D08 mr        r18, r4\n0x828F0D0C addis     r16, r20, 2\n0x828F0D10 mr        r26, r5\n0x828F0D14 addi      r16, r16, 0x7688\n0x828F0D18 mr        r27, r6\n0x828F0D1C mr        r3, r16# CriticalSection\n0x828F0D20 mr        r17, r7\n0x828F0D24 bl        RtlEnterCriticalSection\n0x828F0D28 mr        r4, r26\n0x828F0D2C mr        r3, r20\n0x828F0D30 bl        CgsFileSystem__DeviceManager__FindDevice\n0x828F0D34 lis       r11, off_82000D00@ha\n0x828F0D38 li        r30, 0\n0x828F0D3C addi      r25, r11, off_82000D00@l\n0x828F0D40 lis       r11, off_82000D08@ha\n0x828F0D44 cmplwi    cr6, r3, 0\n0x828F0D48 addi      r24, r11, off_82000D08@l\n0x828F0D4C lis       r11, aDP4B5MainBurno_493@ha\n0x828F0D50 lis       r29, CgsDev__Assert__gpcMessageBuffer@ha\n0x828F0D54 addi      r21, r11, aDP4B5MainBurno_493@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"...\n0x828F0D58 lis       r23, dword_82F32264@ha\n0x828F0D5C beq       cr6, loc_828F0DB8\n0x828F0D60 bl        CgsDev__Assert__BeginAssert\n0x828F0D64 addi      r3, r1, 0x260+var_1D0\n0x828F0D68 lwz       r28, dword_82F32264@l(r23)\n0x828F0D6C lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F0D70 stw       r25, 0x260+var_1D0(r1)\n0x828F0D74 bl        CgsContainers__BasePriorityQueue__Clear\n0x828F0D78 lis       r11, aDeviceNameAlre@ha\n0x828F0D7C stw       r24, 0x260+var_1D0(r1)\n0x828F0D80 stw       r31, 0x260+var_1C8(r1)\n0x828F0D84 addi      r3, r1, 0x260+var_1D0\n0x828F0D88 stw       r28, 0x260+var_1C4(r1)\n0x828F0D8C addi      r4, r11, aDeviceNameAlre@l# \"Device name already in use\\n\"\n0x828F0D90 stb       r30, (byte_83018150 - 0x83018150)(r31)\n0x828F0D94 lwz       r11, 0x260+var_1D0(r1)\n0x828F0D98 lwz       r11, 4(r11)\n0x828F0D9C mtctr     r11\n0x828F0DA0 bctrl\n0x828F0DA4 li        r5, 0xC4\n0x828F0DA8 mr        r4, r21\n0x828F0DAC lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F0DB0 bl        CgsDev__Assert__FireAssert\n0x828F0DB4 bl        CgsDev__Assert__EndAssert\n0x828F0DB8 mr        r4, r27\n0x828F0DBC mr        r3, r20\n0x828F0DC0 bl        CgsFileSystem__DeviceManager__FindDevice\n0x828F0DC4 mr        r19, r3\n0x828F0DC8 cmplwi    cr6, r19, 0\n0x828F0DCC bne       cr6, loc_828F0E28\n0x828F0DD0 bl        CgsDev__Assert__BeginAssert\n0x828F0DD4 addi      r3, r1, 0x260+var_200\n0x828F0DD8 lwz       r28, dword_82F32264@l(r23)\n0x828F0DDC lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F0DE0 stw       r25, 0x260+var_200(r1)\n0x828F0DE4 bl        CgsContainers__BasePriorityQueue__Clear\n0x828F0DE8 lis       r11, aParentDeviceNo@ha\n0x828F0DEC stw       r24, 0x260+var_200(r1)\n0x828F0DF0 stw       r31, 0x260+var_1F8(r1)\n0x828F0DF4 addi      r3, r1, 0x260+var_200\n0x828F0DF8 stw       r28, 0x260+var_1F4(r1)\n0x828F0DFC addi      r4, r11, aParentDeviceNo@l# \"Parent device not found\\n\"\n0x828F0E00 stb       r30, (byte_83018150 - 0x83018150)(r31)\n0x828F0E04 lwz       r11, 0x260+var_200(r1)\n0x828F0E08 lwz       r11, 4(r11)\n0x828F0E0C mtctr     r11\n0x828F0E10 bctrl\n0x828F0E14 li        r5, 0xC8\n0x828F0E18 mr        r4, r21\n0x828F0E1C lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F0E20 bl        CgsDev__Assert__FireAssert\n0x828F0E24 bl        CgsDev__Assert__EndAssert\n0x828F0E28 addis     r11, r20, 2\n0x828F0E2C mr        r27, r30\n0x828F0E30 addi      r11, r11, 0x7494\n0x828F0E34 lwz       r10, 0(r11)\n0x828F0E38 cmplwi    cr6, r10, 0\n0x828F0E3C beq       cr6, loc_828F0E54\n0x828F0E40 addi      r27, r27, 1\n0x828F0E44 addi      r11, r11, 0x10\n0x828F0E48 cmpwi     cr6, r27, 0x20 # ' '\n0x828F0E4C blt       cr6, loc_828F0E34\n0x828F0E50 b         loc_828F0E5C\n0x828F0E54 cmpwi     cr6, r27, 0x20 # ' '\n0x828F0E58 blt       cr6, loc_828F0EB4\n0x828F0E5C bl        CgsDev__Assert__BeginAssert\n0x828F0E60 addi      r3, r1, 0x260+var_1F0\n0x828F0E64 lwz       r28, dword_82F32264@l(r23)\n0x828F0E68 lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F0E6C stw       r25, 0x260+var_1F0(r1)\n0x828F0E70 bl        CgsContainers__BasePriorityQueue__Clear\n0x828F0E74 lis       r11, aNoFreeVirtualD@ha\n0x828F0E78 stw       r24, 0x260+var_1F0(r1)\n0x828F0E7C stw       r31, 0x260+var_1E8(r1)\n0x828F0E80 addi      r3, r1, 0x260+var_1F0\n0x828F0E84 stw       r28, 0x260+var_1E4(r1)\n0x828F0E88 addi      r4, r11, aNoFreeVirtualD@l# \"No free virtual devices\\n\"\n0x828F0E8C stb       r30, (byte_83018150 - 0x83018150)(r31)\n0x828F0E90 lwz       r11, 0x260+var_1F0(r1)\n0x828F0E94 lwz       r11, 4(r11)\n0x828F0E98 mtctr     r11\n0x828F0E9C bctrl\n0x828F0EA0 li        r5, 0xD3\n0x828F0EA4 mr        r4, r21\n0x828F0EA8 lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F0EAC bl        CgsDev__Assert__FireAssert\n0x828F0EB0 bl        CgsDev__Assert__EndAssert\n0x828F0EB4 slwi      r10, r27, 4\n0x828F0EB8 mr        r11, r26\n0x828F0EBC add       r10, r10, r20\n0x828F0EC0 addis     r22, r10, 2\n0x828F0EC4 mr        r10, r11\n0x828F0EC8 addi      r22, r22, 0x7488\n0x828F0ECC lbz       r9, 0(r11)\n0x828F0ED0 addi      r11, r11, 1\n0x828F0ED4 cmplwi    cr6, r9, 0\n0x828F0ED8 bne       cr6, loc_828F0ECC\n0x828F0EDC subf      r11, r10, r11\n0x828F0EE0 addi      r11, r11, -1\n0x828F0EE4 clrlwi    r11, r11, 0\n0x828F0EE8 cmplwi    cr6, r11, 9\n0x828F0EEC blt       cr6, loc_828F1088\n0x828F0EF0 bl        CgsDev__Assert__BeginAssert\n0x828F0EF4 addi      r3, r1, 0x260+var_210\n0x828F0EF8 lwz       r28, dword_82F32264@l(r23)\n0x828F0EFC lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F0F00 stw       r25, 0x260+var_210(r1)\n0x828F0F04 bl        CgsContainers__BasePriorityQueue__Clear\n0x828F0F08 mr        r11, r26\n0x828F0F0C stw       r31, 0x260+var_208(r1)\n0x828F0F10 stw       r24, 0x260+var_210(r1)\n0x828F0F14 stw       r28, 0x260+var_204(r1)\n0x828F0F18 mr        r10, r11\n0x828F0F1C stb       r30, (byte_83018150 - 0x83018150)(r31)\n0x828F0F20 lbz       r9, 0(r11)\n0x828F0F24 addi      r11, r11, 1\n0x828F0F28 cmplwi    cr6, r9, 0\n0x828F0F2C bne       cr6, loc_828F0F20\n0x828F0F30 subf      r11, r10, r11\n0x828F0F34 lis       r10, aString@ha\n0x828F0F38 addi      r11, r11, -1\n0x828F0F3C addi      r4, r10, aString@l# \"String \"\n0x828F0F40 lwz       r10, 0x260+var_210(r1)\n0x828F0F44 clrlwi    r27, r11, 0\n0x828F0F48 addi      r3, r1, 0x260+var_210\n0x828F0F4C lwz       r10, 4(r10)\n0x828F0F50 mtctr     r10\n0x828F0F54 bctrl\n0x828F0F58 cmplwi    cr6, r26, 0\n0x828F0F5C addi      r3, r1, 0x260+var_210\n0x828F0F60 beq       cr6, loc_828F0F6C\n0x828F0F64 mr        r4, r26\n0x828F0F68 b         loc_828F0F74\n0x828F0F6C lis       r11, aNullstring@ha\n0x828F0F70 addi      r4, r11, aNullstring@l# \"<NULLSTRING>\"\n0x828F0F74 lwz       r11, 0x260+var_210(r1)\n0x828F0F78 lwz       r11, 4(r11)\n0x828F0F7C mtctr     r11\n0x828F0F80 bctrl\n0x828F0F84 lis       r11, aIsTooLongBuffe@ha\n0x828F0F88 addi      r3, r1, 0x260+var_210\n0x828F0F8C addi      r4, r11, aIsTooLongBuffe@l# \" is too long. Buffer size = \"\n0x828F0F90 lwz       r11, 0x260+var_210(r1)\n0x828F0F94 lwz       r11, 4(r11)\n0x828F0F98 mtctr     r11\n0x828F0F9C bctrl\n0x828F0FA0 lwz       r11, 0x260+var_20C(r1)\n0x828F0FA4 lis       r28, off_82F31944@ha\n0x828F0FA8 cmplwi    cr6, r11, 1\n0x828F0FAC lis       r31, off_82F31940@ha\n0x828F0FB0 blt       cr6, loc_828F0FE0\n0x828F0FB4 cmplwi    cr6, r11, 3\n0x828F0FB8 bge       cr6, loc_828F0FF0\n0x828F0FBC li        r5, 9\n0x828F0FC0 lwz       r4, off_82F31944@l(r28)# \"0x%X\"\n0x828F0FC4 addi      r3, r1, 0x260+var_210\n0x828F0FC8 bl        CgsDev__StrStreamBase__AppendFormat\n0x828F0FCC lwz       r11, 0x260+var_20C(r1)\n0x828F0FD0 cmpwi     cr6, r11, 2\n0x828F0FD4 bne       cr6, loc_828F0FF0\n0x828F0FD8 stw       r30, 0x260+var_20C(r1)\n0x828F0FDC b         loc_828F0FF0\n0x828F0FE0 li        r5, 9\n0x828F0FE4 lwz       r4, off_82F31940@l(r31)# \"%u\"\n0x828F0FE8 addi      r3, r1, 0x260+var_210\n0x828F0FEC bl        CgsDev__StrStreamBase__AppendFormat\n0x828F0FF0 lis       r11, aStringLength@ha\n0x828F0FF4 addi      r3, r1, 0x260+var_210\n0x828F0FF8 addi      r4, r11, aStringLength@l# \", string length = \"\n0x828F0FFC lwz       r11, 0x260+var_210(r1)\n0x828F1000 lwz       r11, 4(r11)\n0x828F1004 mtctr     r11\n0x828F1008 bctrl\n0x828F100C lwz       r11, 0x260+var_20C(r1)\n0x828F1010 cmplwi    cr6, r11, 1\n0x828F1014 blt       cr6, loc_828F1044\n0x828F1018 cmplwi    cr6, r11, 3\n0x828F101C bge       cr6, loc_828F1054\n0x828F1020 mr        r5, r27\n0x828F1024 lwz       r4, off_82F31944@l(r28)# \"0x%X\"\n0x828F1028 addi      r3, r1, 0x260+var_210\n0x828F102C bl        CgsDev__StrStreamBase__AppendFormat\n0x828F1030 lwz       r11, 0x260+var_20C(r1)\n0x828F1034 cmpwi     cr6, r11, 2\n0x828F1038 bne       cr6, loc_828F1054\n0x828F103C stw       r30, 0x260+var_20C(r1)\n0x828F1040 b         loc_828F1054\n0x828F1044 mr        r5, r27\n0x828F1048 lwz       r4, off_82F31940@l(r31)# \"%u\"\n0x828F104C addi      r3, r1, 0x260+var_210\n0x828F1050 bl        CgsDev__StrStreamBase__AppendFormat\n0x828F1054 lis       r11, asc_82001CC4@ha\n0x828F1058 addi      r3, r1, 0x260+var_210\n0x828F105C addi      r4, r11, asc_82001CC4@l# \"\\n\"\n0x828F1060 lwz       r11, 0x260+var_210(r1)\n0x828F1064 lwz       r11, 4(r11)\n0x828F1068 mtctr     r11\n0x828F106C bctrl\n0x828F1070 lis       r11, aGamesharedGame_0@ha\n0x828F1074 li        r5, 0x41 # 'A'\n0x828F1078 lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F107C addi      r4, r11, aGamesharedGame_0@l# \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Co\"...\n0x828F1080 bl        CgsDev__Assert__FireAssert\n0x828F1084 bl        CgsDev__Assert__EndAssert\n0x828F1088 mr        r11, r26\n0x828F108C subf      r9, r26, r22\n0x828F1090 lbz       r10, 0(r11)\n0x828F1094 cmplwi    cr6, r10, 0\n0x828F1098 stbx      r10, r9, r11\n0x828F109C addi      r11, r11, 1\n0x828F10A0 bne       cr6, loc_828F1090\n0x828F10A4 clrlwi    r11, r19, 0\n0x828F10A8 stw       r18, 0xC(r22)\n0x828F10AC mr        r10, r18\n0x828F10B0 stw       r19, 4(r18)\n0x828F10B4 stw       r17, 8(r18)\n0x828F10B8 cmpwi     cr6, r11, 0\n0x828F10BC beq       cr6, loc_828F10D0\n0x828F10C0 mr        r10, r11\n0x828F10C4 lwz       r11, 4(r10)\n0x828F10C8 cmpwi     cr6, r11, 0\n0x828F10CC bne       cr6, loc_828F10C0\n0x828F10D0 mr        r27, r30\n0x828F10D4 addi      r11, r20, 0x14\n0x828F10D8 lwz       r9, 0(r11)\n0x828F10DC cmplw     cr6, r9, r10\n0x828F10E0 beq       cr6, loc_828F10F8\n0x828F10E4 addi      r27, r27, 1\n0x828F10E8 addi      r11, r11, 0x4E90\n0x828F10EC cmpwi     cr6, r27, 8\n0x828F10F0 blt       cr6, loc_828F10D8\n0x828F10F4 b         loc_828F1100\n0x828F10F8 cmpwi     cr6, r27, 8\n0x828F10FC blt       cr6, loc_828F1158\n0x828F1100 bl        CgsDev__Assert__BeginAssert\n0x828F1104 addi      r3, r1, 0x260+var_1E0\n0x828F1108 lwz       r28, dword_82F32264@l(r23)\n0x828F110C lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F1110 stw       r25, 0x260+var_1E0(r1)\n0x828F1114 bl        CgsContainers__BasePriorityQueue__Clear\n0x828F1118 lis       r11, aCouldNotFindPh@ha\n0x828F111C stw       r24, 0x260+var_1E0(r1)\n0x828F1120 stw       r31, 0x260+var_1D8(r1)\n0x828F1124 addi      r3, r1, 0x260+var_1E0\n0x828F1128 stw       r28, 0x260+var_1D4(r1)\n0x828F112C addi      r4, r11, aCouldNotFindPh@l# \"Could not find physical device\\n\"\n0x828F1130 stb       r30, (byte_83018150 - 0x83018150)(r31)\n0x828F1134 lwz       r11, 0x260+var_1E0(r1)\n0x828F1138 lwz       r11, 4(r11)\n0x828F113C mtctr     r11\n0x828F1140 bctrl\n0x828F1144 li        r5, 0xE8\n0x828F1148 mr        r4, r21\n0x828F114C lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r29)# byte_83018150\n0x828F1150 bl        CgsDev__Assert__FireAssert\n0x828F1154 bl        CgsDev__Assert__EndAssert\n0x828F1158 mulli     r11, r27, 0x4E90\n0x828F115C stb       r30, 0x260+var_1BC(r1)\n0x828F1160 add       r11, r11, r20\n0x828F1164 stw       r30, 0x260+var_B4(r1)\n0x828F1168 stw       r18, 0x260+var_B8(r1)\n0x828F116C stw       r30, 0x260+var_9C(r1)\n0x828F1170 stw       r30, 0x260+var_98(r1)\n0x828F1174 stw       r30, 0x260+var_A8(r1)\n0x828F1178 stw       r30, 0x260+var_A4(r1)\n0x828F117C stw       r30, 0x260+var_A0(r1)\n0x828F1180 addi      r4, r1, 0x260+var_1C0\n0x828F1184 std       r30, 0x260+var_B0(r1)\n0x828F1188 stw       r30, 0x260+var_BC(r1)\n0x828F118C addi      r3, r11, 0x18\n0x828F1190 li        r11, 8\n0x828F1194 stw       r11, 0x260+var_1C0(r1)\n0x828F1198 lis       r11, 0x7FFF\n0x828F119C ori       r11, r11, 0xFFFF # 0x7FFFFFFF\n0x828F11A0 stw       r11, 0x260+var_94(r1)\n0x828F11A4 bl        CgsFileSystem__OperationPool__AddOperation\n0x828F11A8 mr        r3, r16# CriticalSection\n0x828F11AC bl        RtlLeaveCriticalSection\n0x828F11B0 addi      r1, r1, 0x260\n0x828F11B4 b         __restgprlr_16"
+    }
+  ],
+  "monitor_birth": [
+    {
+      "address": "0x82f3344c",
+      "name": "dword_82F3344C",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f33450",
+      "name": "dword_82F33450",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f33454",
+      "name": "dword_82F33454",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f33fd4",
+      "name": "dword_82F33FD4",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f33fd8",
+      "name": "dword_82F33FD8",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f33fdc",
+      "name": "dword_82F33FDC",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f33fe0",
+      "name": "dword_82F33FE0",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34004",
+      "name": "dword_82F34004",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34008",
+      "name": "dword_82F34008",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f3400c",
+      "name": "dword_82F3400C",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34010",
+      "name": "dword_82F34010",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34014",
+      "name": "dword_82F34014",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34018",
+      "name": "dword_82F34018",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f3401c",
+      "name": "dword_82F3401C",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34044",
+      "name": "dword_82F34044",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34048",
+      "name": "dword_82F34048",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f3404c",
+      "name": "dword_82F3404C",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34050",
+      "name": "dword_82F34050",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34054",
+      "name": "dword_82F34054",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34058",
+      "name": "dword_82F34058",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f3405c",
+      "name": "dword_82F3405C",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34060",
+      "name": "dword_82F34060",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34064",
+      "name": "dword_82F34064",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34074",
+      "name": "dword_82F34074",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34078",
+      "name": "dword_82F34078",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f3407c",
+      "name": "dword_82F3407C",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34080",
+      "name": "dword_82F34080",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34084",
+      "name": "dword_82F34084",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34088",
+      "name": "dword_82F34088",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f3408c",
+      "name": "dword_82F3408C",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34090",
+      "name": "dword_82F34090",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34094",
+      "name": "dword_82F34094",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f34098",
+      "name": "dword_82F34098",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f3409c",
+      "name": "dword_82F3409C",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f340a0",
+      "name": "dword_82F340A0",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f340a4",
+      "name": "dword_82F340A4",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f340a8",
+      "name": "dword_82F340A8",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f340ac",
+      "name": "dword_82F340AC",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f340b0",
+      "name": "dword_82F340B0",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f340b4",
+      "name": "dword_82F340B4",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f340b8",
+      "name": "dword_82F340B8",
+      "raw_hex": "ffffffff"
+    },
+    {
+      "address": "0x82f340bc",
+      "name": "dword_82F340BC",
+      "raw_hex": "ffffffff"
+    }
+  ],
+  "float_budget": {
+    "address": "0x8200426c",
+    "raw_hex": "40a00000"
+  }
+}
