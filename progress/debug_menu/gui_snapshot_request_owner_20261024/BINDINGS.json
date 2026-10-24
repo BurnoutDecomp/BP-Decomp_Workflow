@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "source_base": "3bfdc61b9c420936f9bd76ff38899e53fd61fa68",
+  "workflow_base": "df627877ea9768182d256801a4547964aa9e8768",
+  "status": "Genuine snapshot request type/flag owner; host footprint corrected, unreviewed/uncompiled/unactivated",
+  "changes": [
+    {
+      "path": "src/GameSource/Game/BrnDispatchThreadInputBuffer.h",
+      "pre_blob": "e084b4ae68967429c52e678f8f65179697d80f57",
+      "pre_sha256": "3388e1e522f7f21fa88d8ed6b5f4b75b09cf7cc2bbfde9ddaf6de6660fdea3a9",
+      "pre_bytes": 19805,
+      "post_sha256": "899a38b4d137a16462e36dacbf4661748d3d181a7101752db724f00eb0eb2d21",
+      "post_bytes": 20243,
+      "preimage": "preimage/src/GameSource/Game/BrnDispatchThreadInputBuffer.h",
+      "postimage": "postimage/src/GameSource/Game/BrnDispatchThreadInputBuffer.h"
+    },
+    {
+      "path": "src/GameSource/Game/BrnDispatchThreadInputBuffer.cpp",
+      "pre_blob": "2a7ca577452652d333679babe051f47c6aa199b3",
+      "pre_sha256": "449c2bdf082346d5936b6e9e777d8b1a0535bd545eb255779bf2ba29360f38ae",
+      "pre_bytes": 18142,
+      "post_sha256": "d67e41c2fa97a4c03ce74c28dca3dbfc5cd32793f0c5d4282f412448745f0704",
+      "post_bytes": 18214,
+      "preimage": "preimage/src/GameSource/Game/BrnDispatchThreadInputBuffer.cpp",
+      "postimage": "postimage/src/GameSource/Game/BrnDispatchThreadInputBuffer.cpp"
+    }
+  ],
+  "providers": [
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Module/CgsIOBuffer.h",
+      "bytes": 2127,
+      "sha256": "89fbf6784f8b0a7b6a8bb6c5f2c3daf0356b23928b255ebb0dc5fb8a2a49af4d",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBuffer.h",
+      "blob": "c970e8329942edd00d01b610607f7671ad3e00f4"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "bytes": 8427,
+      "sha256": "8c927fe705d01d9da9c87babe9c05aa69717d89005e824b54bcb1a80d80b9f87",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "blob": "35175adec4a740f7ae681b4caf767111e29ac7b2"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Module/CgsIOBufferStack.cpp",
+      "bytes": 4682,
+      "sha256": "188d185a0c7feb27a284df66b619055494a8c52141206e05382a6e21a9650c91",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBufferStack.cpp",
+      "blob": "3acc573550cee848a68b860d0dfe5fc28a18baf1"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameSource/Game/BrnGameModule.cpp",
+      "bytes": 364742,
+      "sha256": "b357313c309b35985cc03700bdc71c65cf676b70c69ffc38facda0b2f21ac3d3",
+      "path": "src/GameSource/Game/BrnGameModule.cpp",
+      "blob": "200076ff3e3c2a3e845dbbcbadcc62d2c86aa88c"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameSource/Game/BrnGameModule.hpp",
+      "bytes": 106513,
+      "sha256": "f20b5565cf07ff9f055c60880ef951cd866bd0d4262be96cba3faa274717b7f2",
+      "path": "src/GameSource/Game/BrnGameModule.hpp",
+      "blob": "75986a4102e633784191ea9d9ec7a91ed17eaaa1"
+    }
+  ],
+  "primary_evidence": [
+    {
+      "evidence": "evidence/ARTIST/0x823B4690.json",
+      "bytes": 4294,
+      "sha256": "c150559b24c06e5123db733cd0a0227fc2864b1e049e53bd6704a8d1e55d3f6f",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B4690.json",
+      "name": "BrnGame::DispatchThreadInputBuffer::GetSnapShotRequest"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823C5BB8.json",
+      "bytes": 3242,
+      "sha256": "759f33b6a3510fe679e27e38402291adbcccc345c89141b9ea36d921b1159fbd",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823C5BB8.json",
+      "name": "BrnGame::DispatchThreadInputBuffer::Construct"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823CB758.json",
+      "bytes": 18829,
+      "sha256": "0517e73e5bb80b3dab231e035981825fbe6c73f975059927504d9100133e8193",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823CB758.json",
+      "name": "BrnGame::BrnGameModule::BridgeGuiToGame"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823CBCE0.json",
+      "bytes": 3789,
+      "sha256": "e6c6cca6a12ac8686670b01ad16a6dba7f32cbdd238803ea8b680ade1a2ac0a2",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823CBCE0.json",
+      "name": "BrnGame::DispatchThreadInputBufferManager::Construct"
+    }
+  ],
+  "declaration_evidence": [
+    {
+      "evidence": "evidence/DecFIGS/BrnDispatchThreadInputBuffer.h",
+      "bytes": 7004,
+      "sha256": "11be9bdd1720b43f59fe355810fb6c38926a7f6c83a5b02c82bc98c039b3d999",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Game\\BrnDispatchThreadInputBuffer.h"
+    }
+  ],
+  "build_evidence": [
+    {
+      "evidence": "evidence/workflow_df627/tools/build/build_game_exe.bat",
+      "bytes": 454238,
+      "sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792",
+      "path": "tools/build/build_game_exe.bat",
+      "blob": "42e6adab598fee7634b2edceee371dac4a3369eb"
+    },
+    {
+      "evidence": "evidence/workflow_df627/tools/build/compile_exe.py",
+      "bytes": 34413,
+      "sha256": "cfe01dbbd062e3ca570b5e323a2605ae6b94fbf18c66b0c50f279f2304dfc7a8",
+      "path": "tools/build/compile_exe.py",
+      "blob": "f537eb5ba8da05747c29fbff9f600f2bc0f595c0"
+    }
+  ],
+  "checks": 17,
+  "patch_sha256": "cf163b6070646bda5273a7f79e1fc69d5956a929dc193d4fd2ae377a81816fda"
+}
