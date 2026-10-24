@@ -1,0 +1,294 @@
+{
+  "shipping": [
+    {
+      "context": "gui",
+      "source": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "workflow": "94285e77a7ea05dae14e781340a91bf5a6ce22d9",
+      "files": [
+        {
+          "path": "tools/build/build_game_exe.bat",
+          "sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/compile_exe.py",
+          "sha256": "cfe01dbbd062e3ca570b5e323a2605ae6b94fbf18c66b0c50f279f2304dfc7a8",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/msvc_includes.txt",
+          "sha256": "b3a03d621ff0f8f9d9126c8fdae06a18b92c545e58bb8aff5623621ef522eee0",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/msvc_flags.txt",
+          "sha256": "f409e36fd3bb17cd8ced47f33fb9488c667a260d4dd274a7b6a1a6643356bfc2",
+          "equals_graphics_frozen_base": null
+        }
+      ]
+    },
+    {
+      "context": "graphics",
+      "source": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "workflow": "53098be903b5abc42b7cf2b70951cbd9f4509615",
+      "files": [
+        {
+          "path": "tools/build/build_game_exe.bat",
+          "sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/compile_exe.py",
+          "sha256": "cfe01dbbd062e3ca570b5e323a2605ae6b94fbf18c66b0c50f279f2304dfc7a8",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/msvc_includes.txt",
+          "sha256": "b3a03d621ff0f8f9d9126c8fdae06a18b92c545e58bb8aff5623621ef522eee0",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/msvc_flags.txt",
+          "sha256": "f409e36fd3bb17cd8ced47f33fb9488c667a260d4dd274a7b6a1a6643356bfc2",
+          "equals_graphics_frozen_base": null
+        }
+      ]
+    },
+    {
+      "context": "resource_final",
+      "source": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "workflow": "ade2096e15a3f6663a432ed0d27dfa3ee6dd0e02",
+      "files": [
+        {
+          "path": "tools/build/build_game_exe.bat",
+          "sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/compile_exe.py",
+          "sha256": "cfe01dbbd062e3ca570b5e323a2605ae6b94fbf18c66b0c50f279f2304dfc7a8",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/msvc_includes.txt",
+          "sha256": "b3a03d621ff0f8f9d9126c8fdae06a18b92c545e58bb8aff5623621ef522eee0",
+          "equals_graphics_frozen_base": true
+        },
+        {
+          "path": "tools/build/msvc_flags.txt",
+          "sha256": "f409e36fd3bb17cd8ced47f33fb9488c667a260d4dd274a7b6a1a6643356bfc2",
+          "equals_graphics_frozen_base": null
+        }
+      ]
+    }
+  ],
+  "provider_selection": [
+    {
+      "context": "gui",
+      "candidates_in_include_order": [
+        "vendor/renderware/include/rw/rwcore_structs.h"
+      ],
+      "selected": "vendor/renderware/include/rw/rwcore_structs.h",
+      "sha256": "875f826a99a90e52898df2968a39c74160314646b4a822f2105951ae46970210"
+    },
+    {
+      "context": "graphics",
+      "candidates_in_include_order": [
+        "vendor/renderware/include/rw/rwcore_structs.h"
+      ],
+      "selected": "vendor/renderware/include/rw/rwcore_structs.h",
+      "sha256": "3fcc7fa2d41775d3219fb89e2f7284c5dce502796788c03b937834cd1e45e71c"
+    },
+    {
+      "context": "resource_final",
+      "candidates_in_include_order": [
+        "vendor/renderware/include/rw/rwcore_structs.h"
+      ],
+      "selected": "vendor/renderware/include/rw/rwcore_structs.h",
+      "sha256": "3fcc7fa2d41775d3219fb89e2f7284c5dce502796788c03b937834cd1e45e71c"
+    }
+  ],
+  "preserved_bodies": [
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "rw::IResourceAllocator* Allocators::GetGlobalGraphicsAllocator()",
+      "left": "02c63ea7ed5dfb3b43dbaeb959a2d23f3861db6b",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "1a5fda358ee60cf37642955b5dd239b623935999c438bf41114c2e7fc457eb24",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "rw::core::GeneralResourceAllocator* GetGameDataGeneralAllocator()",
+      "left": "02c63ea7ed5dfb3b43dbaeb959a2d23f3861db6b",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "30676b3e13a815808e58856351b56142b16f1ca7db528c87d08c45b3c73281d4",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "HeapResourceAllocator* GetDebugAllocator()",
+      "left": "02c63ea7ed5dfb3b43dbaeb959a2d23f3861db6b",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "c770e336664a0648a8d7fb3ec77698f2622190c4043c7f1db825a819917df55e",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "void LinearResourceAllocator::Construct(",
+      "left": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "0f86d6d1524e91484f51df577df5dc3e8738787bc7ab6676a7d9b1218a0ca697",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "LinearResourceAllocator* GetGraphicsAllocator()",
+      "left": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "f6f9940affabcd21a411822e0bc6f423f6c61ae887fb3041a418e944af011d84",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "void ClearResource(",
+      "left": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "27a8f64427894c242a5be15be384a167409be5eb8386e83fa9fd1d0a55501e7a",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "void Allocators::ConstructGlobalGraphicsMemory()",
+      "left": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "38ed085df9dfa3650459d52058df91dd824c2ca329351325dc5a9f3429829100",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "rw::Resource LinearResourceAllocator::DoAllocate(",
+      "left": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "02ea27b691ca4b0e86b222ace35d8d3e9ada4f548e85e114abd220cb1354f2d8",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "void LinearResourceAllocator::DoFree(",
+      "left": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "21ecb41c6117e160436bd84b9ff54cd8f1c2b75599706852a88f9e509e8e0775",
+      "equal": true
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "signature": "void LinearResourceAllocator::DoFreeDisposable(",
+      "left": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "c2cc01f572cbae10d3d6f84462abebf5d1b3ded7ae7722880c128016c6194c55",
+      "equal": true
+    },
+    {
+      "path": "vendor/renderware/src/rwcore_alloc.cpp",
+      "signature": "ResourceDescriptor LinearResourceAllocator::GetAvailable() const",
+      "left": "65a8992bdfc29e2ba7c92e4024a965a653a6af27",
+      "right": "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9",
+      "sha256": "56cb5b63c6228f9d082716fe6218824dc5525bbf5314f757807fc812bef065e5",
+      "equal": true
+    }
+  ],
+  "call_sites": {
+    "ConstructGlobalGraphicsMemory(": [
+      "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9:src/GameSource/Resource/BrnResourceAllocator.cpp:445:    void Allocators::ConstructGlobalGraphicsMemory()",
+      "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9:src/GameSource/Resource/BrnResourceAllocator.h:163:    static void ConstructGlobalGraphicsMemory();"
+    ],
+    "ConstructGlobalResourceMemory(": [
+      "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9:src/GameSource/Resource/BrnResourceAllocator.cpp:597:    void Allocators::ConstructGlobalResourceMemory(",
+      "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9:src/GameSource/Resource/BrnResourceAllocator.h:164:    static void ConstructGlobalResourceMemory(const CgsMemory::MemoryBank::Params* lpRootBankParams);"
+    ],
+    "GetResourceAllocator(": [
+      "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9:src/GameSource/Resource/BrnResourceAllocator.cpp:591:    LinearResourceAllocator* GetResourceAllocator()",
+      "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9:src/GameSource/Resource/BrnResourceAllocator.h:117:LinearResourceAllocator* GetResourceAllocator();",
+      "eb4dcbb1e7810f71dc16cd50e49707b2a54bc9b9:src/GameSource/Resource/BrnResourceAllocator.h:165:    friend LinearResourceAllocator* GetResourceAllocator();"
+    ]
+  },
+  "primary_decodes": [
+    {
+      "address": "0x8266af08",
+      "raw_hex": "83eb0024",
+      "opcode": 32,
+      "destination_register": 31,
+      "base_register": 11,
+      "signed_displacement": 36
+    },
+    {
+      "address": "0x8266d5b4",
+      "raw_hex": "83ff0024",
+      "opcode": 32,
+      "destination_register": 31,
+      "base_register": 31,
+      "signed_displacement": 36
+    }
+  ],
+  "earlier_review_seals": [
+    {
+      "folder": "prepare_owner_batch_fresh_review_sol_20261024/source_2ceaa5e83",
+      "seal_sha256": "34d259df001cf0624ed85647ecf2afe7563791083448a0d0cddf99cb047ee30f",
+      "entries": 37,
+      "failures": []
+    },
+    {
+      "folder": "prepare_owner_batch_fresh_review_sol_20261024/include_quote_delta",
+      "seal_sha256": "c1b3f224799a9dbbf405813f7aba0c0d4e8258b8ed00ca55833fcf7210282349",
+      "entries": 7,
+      "failures": []
+    },
+    {
+      "folder": "prepare_owner_batch_fresh_review_sol_20261024/resource_update_b815ddd6",
+      "seal_sha256": "365bf5f6076262fad4a621ebe7c4f63314feab9d65212e19dde032ad999f28f5",
+      "entries": 36,
+      "failures": []
+    },
+    {
+      "folder": "prepare_owner_batch_fresh_review_sol_20261024/continuation_batch_183ca9c9",
+      "seal_sha256": "27e1d0619e8bd253392f143a5d1fd907cde034ca125c686f35a600dccec89a2d",
+      "entries": 89,
+      "failures": []
+    },
+    {
+      "folder": "renderer_gui_next_batch_fresh_review_sol_20261024",
+      "seal_sha256": "9f99fa199aa21bc6558995312b39d800ab3c5a678f9417a84a42cacbd28d7325",
+      "entries": 126,
+      "failures": []
+    },
+    {
+      "folder": "game_io_allocator_fresh_review_sol_20261024",
+      "seal_sha256": "838c6609fe2c1a274d91eaebb1f720076b2614ed9f47fb1eedc3378ce42c6386",
+      "entries": 145,
+      "failures": []
+    },
+    {
+      "folder": "checked_gui_delivery_fresh_review_sol_20261024",
+      "seal_sha256": "7c8807113c84e4a3091232d71e04011d6bd21630478a15ebb1f2f321371ff4fb",
+      "entries": 51,
+      "failures": []
+    }
+  ],
+  "root_row_decode": {
+    "name": "Root Bank",
+    "parent_signed": -1,
+    "bank_id": 0,
+    "sizes": [
+      117440512,
+      0,
+      212860928,
+      0,
+      0
+    ],
+    "main_plus_fc0000": 133955584,
+    "physical_plus_200000": 214958080
+  },
+  "all_packet_patches_reproduced": true,
+  "context_seals_match": true
+}
