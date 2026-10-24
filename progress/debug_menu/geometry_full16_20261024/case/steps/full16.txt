@@ -1,0 +1,52 @@
+# One process, one fixed world/camera. Every SITE line gets its own positive/negative/restore image window.
+# SUPPORT actions preserve the captured toggle and keep the source lazy initialization in its original owner.
+SUPPORT|TrSweep|TRUE|source-initialize sphere before field controls
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0006|positive|SpX
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0006|negative|SpX
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0006|restore|SpX
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0007|positive|SpY
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0007|negative|SpY
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0007|restore|SpY
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0008|positive|SpZ
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0008|negative|SpZ
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0008|restore|SpZ
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0009|positive|SpRad
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0009|negative|SpRad
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0009|restore|SpRad
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0010|positive|SpVX
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0010|negative|SpVX
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0010|restore|SpVX
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0011|positive|SpVY
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0011|negative|SpVY
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0011|restore|SpVY
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0012|positive|SpVZ
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0012|negative|SpVZ
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0012|restore|SpVZ
+SUPPORT|TrSweep|BASELINE|restore captured test toggle before site #0005
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0005|positive|TrSweep
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0005|negative|TrSweep
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0005|restore|TrSweep
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0001|positive|TrWorld
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0001|negative|TrWorld
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0001|restore|TrWorld
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0002|positive|TrAabb
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0002|negative|TrAabb
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0002|restore|TrAabb
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0003|positive|TrDist
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0003|negative|TrDist
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0003|restore|TrDist
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0004|positive|TrEdge
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0004|negative|TrEdge
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0004|restore|TrEdge
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0014|positive|MapLvl
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0014|negative|MapLvl
+SITE|CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0014|restore|MapLvl
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0001|positive|SwDyn
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0001|negative|SwDyn
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0001|restore|SwDyn
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0002|positive|SwFrz
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0002|negative|SwFrz
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0002|restore|SwFrz
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0003|positive|SwDist
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0003|negative|SwDist
+SITE|CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0003|restore|SwDist

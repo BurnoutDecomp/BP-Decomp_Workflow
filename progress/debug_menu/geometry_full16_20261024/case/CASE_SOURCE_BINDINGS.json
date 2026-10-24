@@ -1,0 +1,520 @@
+{
+  "candidate_source": "943e7bc63fcb9d0e48bf239800e89e7be6508084",
+  "candidate_tree": "233228b6dfbfaee0c773971596e5d3e9f031ce2d",
+  "purpose": "Current-dev exact source/provider binding for the complete16 geometry case; source review and hosted/native execution pending.",
+  "b5_sources": {
+    "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 15311,
+      "sha256": "a6649d4804db384e480db6bd1267c2bcaed497b5285cbef959ccaa73c55cd03b",
+      "anchors": [
+        {
+          "pattern": "void DebugComponent::Register()",
+          "line": 64,
+          "source_text": "void DebugComponent::Register()"
+        },
+        {
+          "pattern": "GetPath()",
+          "line": 70,
+          "source_text": "debugInterface.GetDebugManager().RegisterComponentSimple(this, GetPath(), GetName());"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 6569,
+      "sha256": "9fdd6087d701e0cb7b63dff0846a2dae8d2646fc605a60859b721c5590a2d29f",
+      "anchors": [
+        {
+          "pattern": "virtual const char* GetName() const",
+          "line": 116,
+          "source_text": "virtual const char* GetName() const;"
+        },
+        {
+          "pattern": "virtual const char* GetPath() const",
+          "line": 117,
+          "source_text": "virtual const char* GetPath() const;"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 38863,
+      "sha256": "c2b0e85663a8a82c509cdac1f185417e4d783081d072231e72b80e8e06cf10f9",
+      "anchors": [
+        {
+          "pattern": "void DebugManager::RenderWorld",
+          "line": 727,
+          "source_text": "void DebugManager::RenderWorld(const Matrix44& lViewProjection, const Vector3& lCameraPosition)"
+        },
+        {
+          "pattern": "lpComponent->RenderWorld(mp3dRender)",
+          "line": 739,
+          "source_text": "lpComponent->RenderWorld(mp3dRender);"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 12836,
+      "sha256": "59a7edfadf07965e627135b8ff7985c472be1afb7a137445c3f73e000fc35c9f",
+      "anchors": [
+        {
+          "pattern": "RenderWorld(",
+          "line": 135,
+          "source_text": "void RenderWorld(const Matrix44& lViewProjection, const Vector3& lCameraPosition);"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 27612,
+      "sha256": "4b09a9b2ece825f9302f6fa32be2f5fededc88b902bf5527d7231cef9a415c70",
+      "anchors": [
+        {
+          "pattern": "CreateAlias(",
+          "line": 158,
+          "source_text": "bool ScriptInterface::CreateAlias(const char* lpcAlias, const char* lpcValue)"
+        },
+        {
+          "pattern": "SetValueFromString",
+          "line": 404,
+          "source_text": "lpVariable->SetValueFromString(*lppcParameters);"
+        },
+        {
+          "pattern": "<PATH/NAME> - Activate the debug component",
+          "line": 59,
+          "source_text": "{ ScriptCommand_ActivateComponent, \"COMPONENT\", \"<PATH/NAME> - Activate the debug component\" },"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/Geometric/Primitives/PolygonSoup/CgsPolygonSoupListSpatialMap.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 12134,
+      "sha256": "ea020759c22acd926383f50622d629e3f6ff0ced850ace16236228250e3347c2",
+      "anchors": [
+        {
+          "pattern": "GetNumLevels() const",
+          "line": 53,
+          "source_text": "s32 GetNumLevels() const { return miNumLevels; } // ARTIST Collision::OnActivate 828AAD38"
+        },
+        {
+          "pattern": "GetNumPolySoupLists() const",
+          "line": 67,
+          "source_text": "s32 GetNumPolySoupLists() const { return miNumSoupLists; }"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/RenderWare/RwRGBA.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 340,
+      "sha256": "d99f46e767dcb2ea7a95528da8e6f4960d05d7832e871d3c0ec52a09e83c63a1",
+      "anchors": [
+        {
+          "pattern": "RGBA::RGBA(uint8_t",
+          "line": 5,
+          "source_text": "RGBA::RGBA(uint8_t lu8Red, uint8_t lu8Green, uint8_t lu8Blue, uint8_t lu8Alpha)"
+        },
+        {
+          "pattern": "lu8Alpha) << 24",
+          "line": 6,
+          "source_text": ": m_rgba((static_cast<uint32_t>(lu8Alpha) << 24) |"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 278863,
+      "sha256": "d0c491a1678d2a235fd92f8293e08840519fab037e973d0f65c26f6e43f5dc8b",
+      "anchors": [
+        {
+          "pattern": "BridgeInputSceneUpdateInterfaceToSubModules",
+          "line": 137,
+          "source_text": "// (BridgeInputSceneUpdateInterfaceToSubModules leg 18)."
+        },
+        {
+          "pattern": "mOverlapGenerator.Update",
+          "line": 1339,
+          "source_text": "// \u2b50 STEP 6 -- `mOverlapGenerator.Update(ogIn)` (the module vtable slot +0x44, called with"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/ContactGen/CgsIntervalList.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 7527,
+      "sha256": "bfde2a2dd96ba633e777962b46685c2db5ad9fc5cfaf7c1a804ec36e74ba6496",
+      "anchors": [
+        {
+          "pattern": "GetNumIntervals() const",
+          "line": 121,
+          "source_text": "u32 GetNumIntervals() const { return muNumIntervals; }"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapGenerationModule.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 27243,
+      "sha256": "abc04bac9d69c3f13f002e783aba295c28ba9446697018aeb54cc624fcc3bd3d",
+      "anchors": [
+        {
+          "pattern": "mSweeper.Update",
+          "line": 259,
+          "source_text": "mSweeper.Update(lpEntityManager);"
+        },
+        {
+          "pattern": "GenerateOverlaps",
+          "line": 11,
+          "source_text": "//   GenerateOverlaps           @ 0x828D5C08   .cpp:244  (asserts 0xF6/0xF7 == 246/247) \u2b50 NEW"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeper.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 72293,
+      "sha256": "e410cd5c1287e4a445f62e3040473249fe861bb30f064b377aaf0ee408bb1092",
+      "anchors": [
+        {
+          "pattern": "mDebugComponent.Register()",
+          "line": 101,
+          "source_text": "mDebugComponent.Register();"
+        },
+        {
+          "pattern": "SceneSweeper::Update",
+          "line": 44,
+          "source_text": "//   READER   SceneSweeper::Update @0x828D5A88 -- 0x828D5AC8 + 0x828D5AE0 (_54),"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeper.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 24644,
+      "sha256": "38703ac48ecd8020f0ab062194a00f492a87ba4bc5610ab7b994bddc3427e42f",
+      "anchors": [
+        {
+          "pattern": "GetDynamicIntervalList()",
+          "line": 295,
+          "source_text": "const IntervalList& GetDynamicIntervalList() const { return mDynamicIntervalList; }"
+        },
+        {
+          "pattern": "GetInactiveIntervalList()",
+          "line": 296,
+          "source_text": "const IntervalList& GetInactiveIntervalList() const { return mInactiveIntervalList; }"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeperDebugComponent.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 7271,
+      "sha256": "8c65c94babbe6fc1912df8b5c895063b968a9f4c805053acf1ae93e4106802de",
+      "anchors": [
+        {
+          "pattern": "SceneSweeperDebugComponent::OnActivate",
+          "line": 31,
+          "source_text": "void SceneSweeperDebugComponent::OnActivate()"
+        },
+        {
+          "pattern": "SceneSweeperDebugComponent::RenderWorld",
+          "line": 87,
+          "source_text": "void SceneSweeperDebugComponent::RenderWorld(CgsDev::Debug3DImmediateRender* lpDisplay)"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeperDebugComponent.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 1152,
+      "sha256": "2a62045be79660a5d4e9cc45f905f88c5f625e02b14a63310bd3030f79d9bb1b",
+      "anchors": [
+        {
+          "pattern": "GetName() const override",
+          "line": 24,
+          "source_text": "const char* GetName() const override { return \"Scene sweeper\"; }"
+        },
+        {
+          "pattern": "GetPath() const override",
+          "line": 25,
+          "source_text": "const char* GetPath() const override { return \"World\"; }"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionDebugComponent.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 65510,
+      "sha256": "a70d13a260ea0a1ec126acf716bd07139981e09e36ec2c152aa0557fac4aa2ec",
+      "anchors": [
+        {
+          "pattern": "TriangleCollisionDebugComponent::OnActivate",
+          "line": 1332,
+          "source_text": "void TriangleCollisionDebugComponent::OnActivate()"
+        },
+        {
+          "pattern": "TriangleCollisionDebugComponent::RenderWorld",
+          "line": 239,
+          "source_text": "void TriangleCollisionDebugComponent::RenderWorld("
+        },
+        {
+          "pattern": "TestPolySoupSweptSphereCollision",
+          "line": 257,
+          "source_text": "TestPolySoupSweptSphereCollision(lpRenderer, nullptr);"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionDebugComponent.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 8871,
+      "sha256": "bfd13f07fec8e36fb6195e9cb9c3ff918db93c55269b294d247db3da8d2a9466",
+      "anchors": [
+        {
+          "pattern": "GetName() const override",
+          "line": 68,
+          "source_text": "const char* GetName() const override { return \"Collision\"; }"
+        },
+        {
+          "pattern": "GetPath() const override",
+          "line": 71,
+          "source_text": "const char* GetPath() const override { return \"World\"; }"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionManager.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 8074,
+      "sha256": "c3b685560d5e6f1cee1a232806750b77f5afaac7eb44e9137e49affe94724bca",
+      "anchors": [
+        {
+          "pattern": "mDebugComponent.Register()",
+          "line": 65,
+          "source_text": "mDebugComponent.Register();"
+        },
+        {
+          "pattern": "ProcessAddPolySoupListEvents",
+          "line": 13,
+          "source_text": "//   ProcessAddPolySoupListEvents   @ 0x828B3160"
+        }
+      ]
+    },
+    "src/GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionManager.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 6131,
+      "sha256": "9b6e789e8c73bfe35cf9f37db8b3ad1d40f96b495c4d273f410ea861eb293712",
+      "anchors": [
+        {
+          "pattern": "GetPolySoupListSpacialMap() const",
+          "line": 74,
+          "source_text": "const CgsGeometric::PolygonSoupListSpatialMap* GetPolySoupListSpacialMap() const;"
+        },
+        {
+          "pattern": "GetNumPolySoupLists() const",
+          "line": 84,
+          "source_text": "s32 GetNumPolySoupLists() const;"
+        }
+      ]
+    },
+    "src/GameSource/Game/BrnGameModule.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 364742,
+      "sha256": "b1892a1ba9a84909e5515ea2b9ea340d6acffd2ae8788df06da0a9f0b36a1ec7",
+      "anchors": [
+        {
+          "pattern": "DebugManagerRender",
+          "line": 70,
+          "source_text": "// The high-resolution frame timer DebugManagerRender's fps ring reads (defined in"
+        },
+        {
+          "pattern": "DebugManager::Render",
+          "line": 4342,
+          "source_text": "// then render. (The queued text is flushed by DebugManager::Render at the renderer's"
+        }
+      ]
+    },
+    "src/GameSource/GameFlowController/TopLevel/BrnGameMainFlowStates.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 117434,
+      "sha256": "5b9084cdc544fedd54d0cfe98dceb64f0ac5391ddce71fa55011e83f086c59f0",
+      "anchors": [
+        {
+          "pattern": "DriveWorldUpdateFrame",
+          "line": 512,
+          "source_text": "DriveWorldUpdateFrame(lpGameDataInputBuffer, lUpdateSet, lpSoundPreUpdateOutput);"
+        },
+        {
+          "pattern": "PrepareWorldCollision",
+          "line": 315,
+          "source_text": "// output stack (\"World\"), drive WorldModule::PrepareWorldCollision with the update IO stacks,"
+        }
+      ]
+    },
+    "src/GameSource/Graphics/BrnRendererModule.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 446914,
+      "sha256": "a7ed15da8e46744b46d46ff10c38189fd3bf65c22111981bd1de006a144c7c51",
+      "anchors": [
+        {
+          "pattern": "mIm3dDebugRenderBuffer",
+          "line": 1328,
+          "source_text": "mIm3dDebugRenderBuffer.Construct();"
+        },
+        {
+          "pattern": "Dispatch",
+          "line": 24,
+          "source_text": "#include \"GameShared/GameClasses/Graphics/Dispatch/CgsTextureScopeTable.h\""
+        }
+      ]
+    },
+    "src/GameSource/World/BrnWorldModule.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 318489,
+      "sha256": "7553ab0acfd70d2e46c94fb4183b10e9d4c8f7002db31c6123e7036b624492fb",
+      "anchors": [
+        {
+          "pattern": "PrepareWorldCollision",
+          "line": 1226,
+          "source_text": "// PrepareWorldCollision  @ 0x827C9478"
+        },
+        {
+          "pattern": "WorldEntityModule",
+          "line": 500,
+          "source_text": "mWorldEntityModule.Construct();"
+        }
+      ]
+    },
+    "src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 99198,
+      "sha256": "d82b615da0dc6e75fca673af54698c17fbe857d030593e30b16a90f404af69b5",
+      "anchors": [
+        {
+          "pattern": "AddPolySoupList",
+          "line": 1350,
+          "source_text": "CgsSceneManager::TriangleCollisionManagerIO::InEventAddPolySoupList lEvent;"
+        },
+        {
+          "pattern": "PrepareWorldCollision",
+          "line": 1174,
+          "source_text": "// PrepareWorldCollision  @ 0x823068F8  (cpp:2115)"
+        }
+      ]
+    },
+    "src/pc/gcm/renderengine/device.cpp": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 83858,
+      "sha256": "06e6b541d343727a3997d6e20d4e9ffb46c6913f8648949ce477a49819f34c36",
+      "anchors": [
+        {
+          "pattern": "static void DumpBackBufferIfRequested()",
+          "line": 1148,
+          "source_text": "static void DumpBackBufferIfRequested()"
+        },
+        {
+          "pattern": "BRN_FRAME_DUMP_EVERY",
+          "line": 20,
+          "source_text": "#include <cstdlib>  // [diag] atoi -- BRN_FRAME_DUMP_EVERY period override"
+        },
+        {
+          "pattern": "PCGetBackBuffer(&lpBack)",
+          "line": 1016,
+          "source_text": "if (FAILED(renderengine::PCGetBackBuffer(&lpBack)) || lpBack == nullptr)"
+        },
+        {
+          "pattern": "GetRenderTargetData(lpBack, lpSys)",
+          "line": 1375,
+          "source_text": "SUCCEEDED(renderengine::gDevice->GetRenderTargetData(lpBack, lpSys)))"
+        },
+        {
+          "pattern": "bb_%06u.bmp",
+          "line": 1381,
+          "source_text": "std::snprintf(lacPath, sizeof(lacPath), \"%s\\\\bb_%06u.bmp\","
+        }
+      ]
+    },
+    "vendor/renderware/include/rw/rwcore_structs.h": {
+      "source": "b5-decomp exact candidate Git blob 943e7bc63fcb9d0e48bf239800e89e7be6508084",
+      "bytes": 32744,
+      "sha256": "3fcc7fa2d41775d3219fb89e2f7284c5dce502796788c03b937834cd1e45e71c",
+      "anchors": [
+        {
+          "pattern": "struct RGBA",
+          "line": 255,
+          "source_text": "struct RGBA {  // sizeof = 4"
+        },
+        {
+          "pattern": "m_rgba",
+          "line": 256,
+          "source_text": "RGBA() : m_rgba(0) {}"
+        }
+      ]
+    }
+  },
+  "outer_build_mount": {
+    "tools/build/build_game_exe.bat": {
+      "outer_head": "ccd940e8ff898724ea53342a6d26e6d185ec4a4b",
+      "bytes": 455005,
+      "sha256": "8efe231a4bde248d0f2d8611064dc96a5d00960a29ab006bd6f7a1f83a04f85e",
+      "anchors": [
+        {
+          "pattern": "echo \"%SRC%\\GameShared\\GameClasses\\SceneManager\\Contactgen\\CgsSceneSweeperDebugComponent.cpp\"",
+          "line": 3646,
+          "source_text": "echo \"%SRC%\\GameShared\\GameClasses\\SceneManager\\Contactgen\\CgsSceneSweeperDebugComponent.cpp\""
+        },
+        {
+          "pattern": "echo \"%SRC%\\GameShared\\GameClasses\\SceneManager\\TriangleCollision\\CgsTriangleCollisionDebugComponent.cpp\"",
+          "line": 3647,
+          "source_text": "echo \"%SRC%\\GameShared\\GameClasses\\SceneManager\\TriangleCollision\\CgsTriangleCollisionDebugComponent.cpp\""
+        },
+        {
+          "pattern": "echo \"%SRC%\\GameShared\\GameClasses\\RenderWare\\RwRGBA.cpp\"",
+          "line": 783,
+          "source_text": "echo \"%SRC%\\GameShared\\GameClasses\\RenderWare\\RwRGBA.cpp\""
+        },
+        {
+          "pattern": "echo \"%SRC%\\pc\\gcm\\renderengine\\device.cpp\"",
+          "line": 3407,
+          "source_text": "echo \"%SRC%\\pc\\gcm\\renderengine\\device.cpp\""
+        }
+      ],
+      "source": "workflow base Git blob e118848ccd8a8740df5f73a363fa99ad37e32405"
+    }
+  },
+  "artist_and_decfigs": {
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F05B0.json": {
+      "bytes": 1309,
+      "sha256": "19d6dec9acbe450a832bdb20278ca44393240a491ef6a8f45867e146286d434b"
+    },
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json": {
+      "bytes": 10667,
+      "sha256": "22e6cb0dba945d08311821636c776a20d1a93e6652c2bf5252054c6ae0de297b"
+    },
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AC240.json": {
+      "bytes": 2122,
+      "sha256": "d9568e9b36f7b7bf637e383c4d9f0a9653738f70a242dfb12d7f22c9e274da9f"
+    },
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AC2A0.json": {
+      "bytes": 10274,
+      "sha256": "0f9f3921ce7b6236fd5b9b4889128450466ee6e7150e6a78356e49ab38802dd2"
+    },
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828B3580.json": {
+      "bytes": 45733,
+      "sha256": "121917db030b2cb16da7a783560c5a943d079b54e3f960ba41dfd8dcec5f5f53"
+    },
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828B6708.json": {
+      "bytes": 2476,
+      "sha256": "3c173a677ea70c40d4c5d6bc631678d95c817cebde294a64e2cd9fec7e556cba"
+    },
+    ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828CAE88.json": {
+      "bytes": 4408,
+      "sha256": "d37dbb6cecbdef2d186728fe47f631c009f78c64c83c03c6c57a250ec9a0e327"
+    },
+    "references/DecFIGS/dwarfdump/GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionDebugComponent.h": {
+      "bytes": 10696,
+      "sha256": "c427c34fcdddbed6230c765c196d8b6717cd76bfbc4bcefb6a2d32b87b954e35"
+    },
+    "references/DecFIGS/dwarfdump/GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeperDebugComponent.h": {
+      "bytes": 1300,
+      "sha256": "c7b2160d3eec76d22ba6d5c0df343e406243cb758863a48de09751577346bbf6"
+    },
+    "references/DecFIGS/dwarfdump/GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeper.h": {
+      "bytes": 10303,
+      "sha256": "a33153d63fac9caeca5f90879cbaefae94c7ea5e314ca7d14d18123faf85a952"
+    }
+  },
+  "original_author_source": "36ae3ffed6e8fb3ea89ca91947647aa9465c8658"
+}

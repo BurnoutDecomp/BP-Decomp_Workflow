@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "candidate_source": "943e7bc63fcb9d0e48bf239800e89e7be6508084",
+  "candidate_tree": "233228b6dfbfaee0c773971596e5d3e9f031ce2d",
+  "base_hosted_workflow_source": "1c7766f9da14ef677bac273e16921196ea58f9fc",
+  "base_hosted_run": "401033",
+  "base_hosted_401033_exe_sha256": "6950637c5d3098d41a784701c5d35cf8cded1e1eb0328eb09cd65bd9d97ece5b",
+  "probe_patch_sha256": "4ceaa8770aaa52eb5ce822a3625b7fcca1d22008558d44f32669c7ab94156a17",
+  "case_source_bindings_sha256": "537fe57493a46c5724ef592d252c2922e2a1d11f0e617dc33337bc711e803746",
+  "site_count": 16,
+  "run_policy": {
+    "native_games_per_case_run": 1,
+    "frame_capture_mode": "one PID/positive-slot scoped named request per recorded state; periodic sampling suppressed",
+    "periodic_fallback_every_presents": 150,
+    "frame_cap": 96,
+    "max_seconds": 240,
+    "site_state_actions": 48,
+    "support_actions": 2,
+    "baseline_and_support_capture_requests": 3,
+    "total_expected_capture_requests": 51,
+    "preflight_before_first_site_action": true
+  },
+  "diagnostic_budget": {
+    "triangle_component_cap": 40,
+    "triangle_max_control_state_transitions": 37,
+    "triangle_initial_owner_row": 1,
+    "triangle_max_soup_map_readiness_transitions": 2,
+    "triangle_max_rows": 40,
+    "sweeper_component_cap": 11,
+    "sweeper_control_state_transitions": 7,
+    "sweeper_initial_owner_row": 1,
+    "sweeper_owner_and_list_ready_rows_max": 3,
+    "sweeper_max_rows": 11,
+    "predicate": "stored control fields plus typed owner/readiness transitions only; no frame counter, address or animated geometry"
+  },
+  "groups": {
+    "full16": {
+      "component_names": [
+        "Collision",
+        "Scene sweeper"
+      ],
+      "support_sweep_test": true,
+      "preflight": {
+        "triangle_component_dispatch": true,
+        "triangle_soup_lists_min": 1,
+        "sweeper_component_dispatch": true
+      },
+      "controls": [
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0006",
+          "caption": "S.Sphere X pos",
+          "alias": "SpX",
+          "kind": "float",
+          "path": "World/Collision/S.Sphere X pos",
+          "step": 0.25,
+          "baseline_from": "triangle_witness",
+          "field": "pos_x",
+          "visual": "sphere start point shifts in X for positive/negative and returns to the captured source-initialized position"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0007",
+          "caption": "S.Sphere Y pos",
+          "alias": "SpY",
+          "kind": "float",
+          "path": "World/Collision/S.Sphere Y pos",
+          "step": 0.25,
+          "baseline_from": "triangle_witness",
+          "field": "pos_y",
+          "visual": "sphere start point shifts in Y for positive/negative and returns to the captured source-initialized position"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0008",
+          "caption": "S.Sphere Z pos",
+          "alias": "SpZ",
+          "kind": "float",
+          "path": "World/Collision/S.Sphere Z pos",
+          "step": 0.25,
+          "baseline_from": "triangle_witness",
+          "field": "pos_z",
+          "visual": "sphere start point shifts in Z for positive/negative and returns to the captured source-initialized position"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0009",
+          "caption": "S.Sphere Radius",
+          "alias": "SpRad",
+          "kind": "float",
+          "path": "World/Collision/S.Sphere Radius",
+          "baseline_expected": 1.0,
+          "step": 0.05,
+          "visual": "sphere radius visibly changes at baseline +/- 0.05 and returns to baseline"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0010",
+          "caption": "S.Sphere X vel",
+          "alias": "SpVX",
+          "kind": "float",
+          "path": "World/Collision/S.Sphere X vel",
+          "baseline_expected": 0.0,
+          "step": 0.05,
+          "visual": "sweep endpoint/arrow changes in X at +/- 0.05 and returns to baseline"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0011",
+          "caption": "S.Sphere Y vel",
+          "alias": "SpVY",
+          "kind": "float",
+          "path": "World/Collision/S.Sphere Y vel",
+          "baseline_expected": 0.0,
+          "step": 0.05,
+          "visual": "sweep endpoint/arrow changes in Y at +/- 0.05 and returns to baseline"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0012",
+          "caption": "S.Sphere Z vel",
+          "alias": "SpVZ",
+          "kind": "float",
+          "path": "World/Collision/S.Sphere Z vel",
+          "baseline_expected": 0.0,
+          "step": 0.05,
+          "visual": "sweep endpoint/arrow changes in Z at +/- 0.05 and returns to baseline"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0005",
+          "caption": "Test swept sphere collision",
+          "alias": "TrSweep",
+          "kind": "bool",
+          "path": "World/Collision/Test swept sphere collision",
+          "baseline_expected": false,
+          "positive": true,
+          "negative": false,
+          "restore": "baseline",
+          "gate": "triangle_soups",
+          "visual": "source sphere/arrow and text present on, absent off, initial toggle restored"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0001",
+          "caption": "Draw collision world",
+          "alias": "TrWorld",
+          "kind": "bool",
+          "path": "World/Collision/Draw collision world",
+          "baseline_expected": false,
+          "positive": true,
+          "negative": false,
+          "restore": "baseline",
+          "gate": "triangle_soups",
+          "visual": "same soup triangles visible on, absent off, baseline restored"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0002",
+          "caption": "Draw soup AABBs",
+          "alias": "TrAabb",
+          "kind": "bool",
+          "path": "World/Collision/Draw soup AABBs",
+          "baseline_expected": false,
+          "positive": true,
+          "negative": false,
+          "restore": "baseline",
+          "gate": "triangle_soups",
+          "visual": "same soup AABB boxes visible on, absent off, baseline restored"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0003",
+          "caption": "Draw distance",
+          "alias": "TrDist",
+          "kind": "float",
+          "path": "World/Collision/Draw distance",
+          "baseline_expected": 27.5,
+          "positive": 100.0,
+          "negative": 0.5,
+          "restore": "baseline",
+          "gate": "triangle_soups",
+          "visual": "visible soup subset differs at 100 and 0.5, then returns at captured baseline"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0004",
+          "caption": "Draw edge cosines",
+          "alias": "TrEdge",
+          "kind": "bool",
+          "path": "World/Collision/Draw edge cosines",
+          "baseline_expected": false,
+          "positive": true,
+          "negative": false,
+          "restore": "baseline",
+          "gate": "triangle_soups",
+          "visual": "edge/cosine overlay visible on, absent off, baseline restored"
+        },
+        {
+          "site_id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0014",
+          "caption": "Num spacial levels",
+          "alias": "MapLvl",
+          "kind": "int",
+          "path": "World/Collision/Num spacial levels",
+          "min": 1,
+          "max": 8,
+          "paired_alias": "MapMem",
+          "paired_path": "World/Collision/Spacial map memory use",
+          "visual": "requested/live map level follows each rebuild; capture the paired read-only memory value on each rebuild and restore the captured level"
+        },
+        {
+          "site_id": "CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0001",
+          "caption": "Render scene sweeper boxes for dynamic objects",
+          "alias": "SwDyn",
+          "kind": "bool",
+          "path": "World/Scene sweeper/Render scene sweeper boxes for dynamic objects",
+          "baseline_expected": false,
+          "positive": true,
+          "negative": false,
+          "restore": "baseline",
+          "gate": "dynamic_intervals",
+          "visual": "red boxes visible on, absent off, baseline restored"
+        },
+        {
+          "site_id": "CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0002",
+          "caption": "Render scene sweeper boxes for frozen objects",
+          "alias": "SwFrz",
+          "kind": "bool",
+          "path": "World/Scene sweeper/Render scene sweeper boxes for frozen objects",
+          "baseline_expected": false,
+          "positive": true,
+          "negative": false,
+          "restore": "baseline",
+          "gate": "inactive_intervals",
+          "visual": "white boxes visible on, absent off, baseline restored"
+        },
+        {
+          "site_id": "CgsSceneManager::SceneSweeperDebugComponent::OnActivate#0003",
+          "caption": "Scene sweeper render draw distance",
+          "alias": "SwDist",
+          "kind": "float",
+          "path": "World/Scene sweeper/Scene sweeper render draw distance",
+          "baseline_expected": 50.0,
+          "positive": 100.0,
+          "negative": 0.0,
+          "restore": "baseline",
+          "gate": "both_interval_lists",
+          "visual": "identified same interval crosses the source camera-distance cutoff, then baseline restored"
+        }
+      ]
+    }
+  }
+}
