@@ -1,0 +1,56 @@
+{
+  "status": "FAIL_visible_scene_loss_when_occlusion_enabled",
+  "utc": "2026-10-24T13:21:57.958128+00:00",
+  "source": "95e513ae15ebfd322fd639664f835b171718e736",
+  "source_tree": "e06144dbf1c7e57a8a6e7326843973aec36e98fe",
+  "workflow": "992e2896286ed83aa0098729e1b00497476b4c41",
+  "exe_sha256": "eff75919ee9a9e9904686736b09aedb78502f7d774f79305409a12ed7ee5176b",
+  "slot": 62065,
+  "owned_pid": 33744,
+  "asserts": 0,
+  "exceptions": 0,
+  "helper_complete": true,
+  "normal24_unchanged": true,
+  "remaining_owned_games": 0,
+  "actual_resource_construction": true,
+  "enabled_ready_world_state": true,
+  "complete_list11": {
+    "frame": 7006,
+    "total": 4122,
+    "chunks": 65,
+    "final_query": -1,
+    "final_draw": -1
+  },
+  "query_witness": {
+    "id": 0,
+    "serial": 1,
+    "samples": 0,
+    "decision": 0,
+    "ended_ordinal": 1,
+    "result_ordinal": 59,
+    "decision_ordinal": 60
+  },
+  "original_mechanical_report": "FAIL; erroneous expected indexStride2; actual provider code1 denotes16-bit",
+  "index_format_evidence": "Exact selected ImmediateMode.cpp IndexBuffer::Lock reports1 for16-bit and6 for32-bit; format is not byte stride.",
+  "visual_review": [
+    {
+      "frame": "baseline.bmp",
+      "sha256": "51300c47deb878ecb795e12298601ff44bebd90d450d6bec9321a2d6451ee182",
+      "observation": "Normal visible world, sky, car, buildings and road."
+    },
+    {
+      "frame": "enabled.bmp",
+      "sha256": "80b0830980d1c7a1333c5bada4c0cd0b4811b6a68923f854d3517dba683abda8",
+      "observation": "Most of the world and sky are replaced or obscured by black polygon regions; visual behavior fails."
+    },
+    {
+      "frame": "restored.bmp",
+      "sha256": "9ca07d2b146e139a0b1fec163b04ca8e5422c2f62ab65f5c9a9d7b45ad008b40",
+      "observation": "Ordinary scene visibility returns after both controls are disabled."
+    }
+  ],
+  "new_debug_dispositions": 0,
+  "normal_delivery": false,
+  "dev_promoted": false,
+  "next_work": "Recover full actual occlusion render-state/shader/query/conditional-draw ownership and execution timing before another native run."
+}
