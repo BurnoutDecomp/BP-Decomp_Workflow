@@ -1,0 +1,117 @@
+{
+  "function": {
+    "address": "0x82bbc840",
+    "end": "0x82bbc878",
+    "name": "rw::LinearResourceAllocator::GetAvailable",
+    "raw_hex": "7d8802a69181fff8fbe1fff09421ffa038a40040388400187c7f1b784bfa75f57fe3fb78382100608181fff87d8803a6ebe1fff04e800020",
+    "assembly": "0x82BBC840 mflr      r12\n0x82BBC844 stw       r12, var_8(r1)\n0x82BBC848 std       r31, var_10(r1)\n0x82BBC84C stwu      r1, back_chain(r1)\n0x82BBC850 addi      r5, r4, 0x40 # '@'\n0x82BBC854 addi      r4, r4, 0x18\n0x82BBC858 mr        r31, r3\n0x82BBC85C bl        rw__operator_\n0x82BBC860 mr        r3, r31\n0x82BBC864 addi      r1, r1, 0x60\n0x82BBC868 lwz       r12, var_8(r1)\n0x82BBC86C mtlr      r12\n0x82BBC870 ld        r31, var_10(r1)\n0x82BBC874 blr"
+  },
+  "names": [
+    {
+      "address": "0x82000b70",
+      "value": "main memory"
+    },
+    {
+      "address": "0x82000b64",
+      "value": "disposable"
+    },
+    {
+      "address": "0x82000b58",
+      "value": "physical"
+    },
+    {
+      "address": "0x82000b48",
+      "value": "uninitialized"
+    },
+    {
+      "address": "0x82000b2c",
+      "value": "disposable uninitialized"
+    }
+  ],
+  "globals": [
+    {
+      "address": "0x82f2c7ec",
+      "raw_hex": "00000000000000000000000000000001000000000000000100000000000000010000000000000001",
+      "xrefs": [
+        {
+          "from": "0x82666b84",
+          "function_start": "0x82666b70",
+          "function_name": "BrnResource::Allocators::ConstructGlobalGraphicsMemory",
+          "assembly": "0x82666B70 mflr      r12\n0x82666B74 bl        __savegprlr_29\n0x82666B78 stwu      r1, back_chain(r1)\n0x82666B7C lis       r11, qword_82F2C7EC@ha\n0x82666B80 addi      r3, r1, 0xD0+var_50\n0x82666B84 addi      r31, r11, qword_82F2C7EC@l\n0x82666B88 lis       r11, 0x64 # 'd'\n0x82666B8C mr        r4, r31\n0x82666B90 stw       r11, (qword_82F2C7EC - 0x82F2C7EC)(r31)\n0x82666B94 li        r11, 0x1000\n0x82666B98 stw       r11, (qword_82F2C7EC+4 - 0x82F2C7EC)(r31)\n0x82666B9C lis       r11, 0x1D0\n0x82666BA0 stw       r11, (dword_82F2C7FC - 0x82F2C7EC)(r31)\n0x82666BA4 li        r11, 0x1000\n0x82666BA8 stw       r11, (dword_82F2C800 - 0x82F2C7EC)(r31)\n0x82666BAC bl        rw__LinearResourceAllocator__GetResourceDescriptor\n0x82666BB0 mr        r11, r3\n0x82666BB4 addi      r10, r1, 0xD0+var_80\n0x82666BB8 li        r9, 0xA\n0x82666BBC mtctr     r9\n0x82666BC0 lwz       r9, 0(r11)\n0x82666BC4 addi      r11, r11, 4\n0x82666BC8 stw       r9, 0(r10)\n0x82666BCC addi      r10, r10, 4\n0x82666BD0 bdnz      loc_82666BC0\n0x82666BD4 lis       r6, 0x2000\n0x82666BD8 lwz       r3, 0xD0+var_80(r1)# dwSize\n0x82666BDC li        r29, -1\n0x82666BE0 ori       r6, r6, 4 # 0x20000004# flProtect\n0x82666BE4 li        r5, 0x1000# ulAlignment\n0x82666BE8 mr        r4, r29# ulPhysicalAddress\n0x82666BEC bl        XPhysicalAlloc\n0x82666BF0 lis       r11, dword_82FFAA00@ha\n0x82666BF4 lis       r6, 0x2000\n0x82666BF8 addi      r30, r11, dword_82FFAA00@l\n0x82666BFC ori       r6, r6, 0x404 # 0x20000404# flProtect\n0x82666C00 li        r5, 0x1000# ulAlignment\n0x82666C04 mr        r4, r29# ulPhysicalAddress\n0x82666C08 stw       r3, (dword_82FFAA00 - 0x82FFAA00)(r30)\n0x82666C0C lwz       r3, 0xD0+var_70(r1)# dwSize\n0x82666C10 bl        XPhysicalAlloc\n0x82666C14 stw       r3, (dword_82FFAA08 - 0x82FFAA00)(r30)\n0x82666C18 addi      r4, r1, 0xD0+var_80\n0x82666C1C mr        r3, r30\n0x82666C20 bl        BrnResource__ClearResource\n0x82666C24 mr        r4, r31\n0x82666C28 mr        r3, r30\n0x82666C2C bl        rw__LinearResourceAllocator__Initialize\n0x82666C30 lis       r11, aGlobalgraphics@ha\n0x82666C34 addi      r10, r11, aGlobalgraphics@l# \"GlobalGraphics\"\n0x82666C38 lis       r11, dword_82FFA88C@ha\n0x82666C3C stw       r3, dword_82FFA88C@l(r11)\n0x82666C40 lis       r11, off_82F2C814@ha\n0x82666C44 addi      r11, r11, off_82F2C814@l\n0x82666C48 stw       r3, (dword_82F2C818 - 0x82F2C814)(r11)\n0x82666C4C stw       r10, (dword_82F2C81C - 0x82F2C814)(r11)\n0x82666C50 addi      r1, r1, 0xD0\n0x82666C54 b         __restgprlr_29"
+        },
+        {
+          "from": "0x82666b90",
+          "function_start": "0x82666b70",
+          "function_name": "BrnResource::Allocators::ConstructGlobalGraphicsMemory",
+          "assembly": "0x82666B70 mflr      r12\n0x82666B74 bl        __savegprlr_29\n0x82666B78 stwu      r1, back_chain(r1)\n0x82666B7C lis       r11, qword_82F2C7EC@ha\n0x82666B80 addi      r3, r1, 0xD0+var_50\n0x82666B84 addi      r31, r11, qword_82F2C7EC@l\n0x82666B88 lis       r11, 0x64 # 'd'\n0x82666B8C mr        r4, r31\n0x82666B90 stw       r11, (qword_82F2C7EC - 0x82F2C7EC)(r31)\n0x82666B94 li        r11, 0x1000\n0x82666B98 stw       r11, (qword_82F2C7EC+4 - 0x82F2C7EC)(r31)\n0x82666B9C lis       r11, 0x1D0\n0x82666BA0 stw       r11, (dword_82F2C7FC - 0x82F2C7EC)(r31)\n0x82666BA4 li        r11, 0x1000\n0x82666BA8 stw       r11, (dword_82F2C800 - 0x82F2C7EC)(r31)\n0x82666BAC bl        rw__LinearResourceAllocator__GetResourceDescriptor\n0x82666BB0 mr        r11, r3\n0x82666BB4 addi      r10, r1, 0xD0+var_80\n0x82666BB8 li        r9, 0xA\n0x82666BBC mtctr     r9\n0x82666BC0 lwz       r9, 0(r11)\n0x82666BC4 addi      r11, r11, 4\n0x82666BC8 stw       r9, 0(r10)\n0x82666BCC addi      r10, r10, 4\n0x82666BD0 bdnz      loc_82666BC0\n0x82666BD4 lis       r6, 0x2000\n0x82666BD8 lwz       r3, 0xD0+var_80(r1)# dwSize\n0x82666BDC li        r29, -1\n0x82666BE0 ori       r6, r6, 4 # 0x20000004# flProtect\n0x82666BE4 li        r5, 0x1000# ulAlignment\n0x82666BE8 mr        r4, r29# ulPhysicalAddress\n0x82666BEC bl        XPhysicalAlloc\n0x82666BF0 lis       r11, dword_82FFAA00@ha\n0x82666BF4 lis       r6, 0x2000\n0x82666BF8 addi      r30, r11, dword_82FFAA00@l\n0x82666BFC ori       r6, r6, 0x404 # 0x20000404# flProtect\n0x82666C00 li        r5, 0x1000# ulAlignment\n0x82666C04 mr        r4, r29# ulPhysicalAddress\n0x82666C08 stw       r3, (dword_82FFAA00 - 0x82FFAA00)(r30)\n0x82666C0C lwz       r3, 0xD0+var_70(r1)# dwSize\n0x82666C10 bl        XPhysicalAlloc\n0x82666C14 stw       r3, (dword_82FFAA08 - 0x82FFAA00)(r30)\n0x82666C18 addi      r4, r1, 0xD0+var_80\n0x82666C1C mr        r3, r30\n0x82666C20 bl        BrnResource__ClearResource\n0x82666C24 mr        r4, r31\n0x82666C28 mr        r3, r30\n0x82666C2C bl        rw__LinearResourceAllocator__Initialize\n0x82666C30 lis       r11, aGlobalgraphics@ha\n0x82666C34 addi      r10, r11, aGlobalgraphics@l# \"GlobalGraphics\"\n0x82666C38 lis       r11, dword_82FFA88C@ha\n0x82666C3C stw       r3, dword_82FFA88C@l(r11)\n0x82666C40 lis       r11, off_82F2C814@ha\n0x82666C44 addi      r11, r11, off_82F2C814@l\n0x82666C48 stw       r3, (dword_82F2C818 - 0x82F2C814)(r11)\n0x82666C4C stw       r10, (dword_82F2C81C - 0x82F2C814)(r11)\n0x82666C50 addi      r1, r1, 0xD0\n0x82666C54 b         __restgprlr_29"
+        },
+        {
+          "from": "0x82c5ff14",
+          "function_start": "0x82c5fee8",
+          "function_name": "sub_82C5FEE8",
+          "assembly": "0x82C5FEE8 mflr      r12\n0x82C5FEEC stw       r12, var_8(r1)\n0x82C5FEF0 stwu      r1, back_chain(r1)\n0x82C5FEF4 lis       r11, locret_82C74FB8@ha\n0x82C5FEF8 li        r10, 0\n0x82C5FEFC addi      r3, r11, locret_82C74FB8@l# void (__cdecl *)()\n0x82C5FF00 li        r11, 1\n0x82C5FF04 stw       r10, 0x60+var_10(r1)\n0x82C5FF08 lis       r10, qword_82F2C7EC@ha\n0x82C5FF0C stw       r11, 0x60+var_10+4(r1)\n0x82C5FF10 ld        r11, 0x60+var_10(r1)\n0x82C5FF14 std       r11, qword_82F2C7EC@l(r10)\n0x82C5FF18 bl        atexit\n0x82C5FF1C addi      r1, r1, 0x60\n0x82C5FF20 lwz       r12, var_8(r1)\n0x82C5FF24 mtlr      r12\n0x82C5FF28 blr"
+        }
+      ]
+    },
+    {
+      "address": "0x82f2c814",
+      "raw_hex": "820a09f00000000000000000",
+      "xrefs": [
+        {
+          "from": "0x8229c084",
+          "function_start": "0x8229bea0",
+          "function_name": "BrnParticle::ParticleModule::Prepare",
+          "window": "0x8229C074 mr        r3, r30\n0x8229C078 bl        BrnParticle__NativeParticleVertex__Construct\n0x8229C07C lis       r11, off_82F2C814@ha\n0x8229C080 addis     r27, r31, 1\n0x8229C084 addi      r28, r11, off_82F2C814@l\n0x8229C088 addi      r27, r27, -0x6FF0\n0x8229C08C mr        r4, r28\n0x8229C090 mr        r3, r27\n0x8229C094 bl        CgsGraphics__Im3d__Construct\n0x8229C098 addis     r26, r31, 1\n0x8229C09C mr        r4, r28\n0x8229C0A0 addi      r26, r26, -0x6E60\n0x8229C0A4 mr        r3, r26\n0x8229C0A8 bl        BrnGraphics__Im3dTexPlusLighting__Construct"
+        },
+        {
+          "from": "0x823fbd48",
+          "function_start": "0x823fbce0",
+          "function_name": "BrnRendererModule::Release",
+          "assembly": "0x823FBCE0 mflr      r12\n0x823FBCE4 stw       r12, var_8(r1)\n0x823FBCE8 std       r30, var_18(r1)\n0x823FBCEC std       r31, var_10(r1)\n0x823FBCF0 stwu      r1, back_chain(r1)\n0x823FBCF4 mr        r31, r3\n0x823FBCF8 addi      r30, r31, 0x22C\n0x823FBCFC lwz       r11, 0x22C(r31)\n0x823FBD00 cmplwi    cr6, r11, 4# switch 5 cases\n0x823FBD04 bgt       cr6, def_823FBD1C# jumptable 823FBD1C default case\n0x823FBD08 lis       r12, jpt_823FBD1C@ha\n0x823FBD0C addi      r12, r12, jpt_823FBD1C@l\n0x823FBD10 slwi      r0, r11, 2\n0x823FBD14 lwzx      r0, r12, r0\n0x823FBD18 mtctr     r0\n0x823FBD1C bctr# switch jump\n0x823FBD20 .long loc_823FBD34# jump table for switch statement\n0x823FBD34 li        r4, 0# jumptable 823FBD1C case 0\n0x823FBD38 mr        r3, r30\n0x823FBD3C bl        sub_823F5208\n0x823FBD40 lis       r11, off_82F2C814@ha# jumptable 823FBD1C case 1\n0x823FBD44 addi      r3, r31, 0x3800\n0x823FBD48 addi      r4, r11, off_82F2C814@l\n0x823FBD4C bl        BrnCoronaManager__Release\n0x823FBD50 clrlwi    r11, r3, 24\n0x823FBD54 cmplwi    cr6, r11, 0\n0x823FBD58 beq       cr6, loc_823FBDC4\n0x823FBD5C li        r4, 0\n0x823FBD60 mr        r3, r30\n0x823FBD64 bl        sub_823F5208\n0x823FBD68 li        r4, 0# jumptable 823FBD1C case 2\n0x823FBD6C mr        r3, r30\n0x823FBD70 bl        sub_823F5208\n0x823FBD74 mr        r3, r31# jumptable 823FBD1C case 3\n0x823FBD78 bl        CgsModule__ModuleSingleBuffered__Release\n0x823FBD7C clrlwi    r11, r3, 24\n0x823FBD80 cmplwi    cr6, r11, 0\n0x823FBD84 beq       cr6, loc_823FBDC4\n0x823FBD88 li        r4, 0\n0x823FBD8C mr        r3, r30\n0x823FBD90 bl        sub_823F5208\n0x823FBD94 li        r11, 0# jumptable 823FBD1C case 4\n0x823FBD98 li        r3, 1\n0x823FBD9C stw       r11, 0x228(r31)\n0x823FBDA0 b         loc_823FBDC8\n0x823FBDA4 bl        CgsDev__Assert__BeginAssert# jumptable 823FBD1C default case\n0x823FBDA8 lis       r11, aDP4B5MainBurno_152@ha\n0x823FBDAC li        r5, 0x648\n0x823FBDB0 addi      r4, r11, aDP4B5MainBurno_152@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"...\n0x823FBDB4 lis       r11, aInvalidRenderM@ha\n0x823FBDB8 addi      r3, r11, aInvalidRenderM@l# \"Invalid Render Module Release State\"\n0x823FBDBC bl        CgsDev__Assert__FireAssert\n0x823FBDC0 bl        CgsDev__Assert__EndAssert\n0x823FBDC4 li        r3, 0\n0x823FBDC8 addi      r1, r1, 0x70\n0x823FBDCC lwz       r12, var_8(r1)\n0x823FBDD0 mtlr      r12\n0x823FBDD4 ld        r30, var_18(r1)\n0x823FBDD8 ld        r31, var_10(r1)\n0x823FBDDC blr"
+        },
+        {
+          "from": "0x823fcd40",
+          "function_start": "0x823fca38",
+          "function_name": "BrnRendererMemory::Construct",
+          "window": "0x823FCD30 stw       r31, 0x320+var_288(r1)\n0x823FCD34 bl        renderengine__TextureState__GetResourceDescriptor\n0x823FCD38 lis       r11, off_82F2C814@ha\n0x823FCD3C mr        r5, r3\n0x823FCD40 addi      r4, r11, off_82F2C814@l\n0x823FCD44 li        r6, 0\n0x823FCD48 addi      r3, r1, 0x320+var_140\n0x823FCD4C lwz       r11, (off_82F2C814 - 0x82F2C814)(r4)# off_820A09F0\n0x823FCD50 lwz       r11, (off_820A0A00 - 0x820A09F0)(r11)# BrnResource__LinearResourceAllocator__DoAllocate\n0x823FCD54 mtctr     r11\n0x823FCD58 bctrl# BrnResource__LinearResourceAllocator__DoAllocate\n0x823FCD5C addi      r9, r30, 0x48 # 'H'\n0x823FCD60 addi      r10, r1, 0x320+var_140\n0x823FCD64 li        r11, 5"
+        },
+        {
+          "from": "0x823fcd4c",
+          "function_start": "0x823fca38",
+          "function_name": "BrnRendererMemory::Construct",
+          "window": "0x823FCD3C mr        r5, r3\n0x823FCD40 addi      r4, r11, off_82F2C814@l\n0x823FCD44 li        r6, 0\n0x823FCD48 addi      r3, r1, 0x320+var_140\n0x823FCD4C lwz       r11, (off_82F2C814 - 0x82F2C814)(r4)# off_820A09F0\n0x823FCD50 lwz       r11, (off_820A0A00 - 0x820A09F0)(r11)# BrnResource__LinearResourceAllocator__DoAllocate\n0x823FCD54 mtctr     r11\n0x823FCD58 bctrl# BrnResource__LinearResourceAllocator__DoAllocate\n0x823FCD5C addi      r9, r30, 0x48 # 'H'\n0x823FCD60 addi      r10, r1, 0x320+var_140\n0x823FCD64 li        r11, 5\n0x823FCD68 mtctr     r11\n0x823FCD6C lwz       r11, 0(r10)\n0x823FCD70 addi      r10, r10, 4"
+        },
+        {
+          "from": "0x823ff92c",
+          "function_start": "0x823ff8f8",
+          "function_name": "BrnRendererModule::PrepareAgain",
+          "assembly": "0x823FF8F8 mflr      r12\n0x823FF8FC bl        __savegprlr_29\n0x823FF900 stwu      r1, back_chain(r1)\n0x823FF904 lis       r9, 0\n0x823FF908 mr        r30, r8\n0x823FF90C ori       r8, r9, 0xC4E0 # 0xC4E0\n0x823FF910 lis       r9, 0\n0x823FF914 mr        r31, r3\n0x823FF918 mr        r11, r4\n0x823FF91C mr        r10, r5\n0x823FF920 ori       r29, r9, 0xC4E4 # 0xC4E4\n0x823FF924 lis       r9, off_82F2C814@ha\n0x823FF928 mr        r5, r7\n0x823FF92C addi      r4, r9, off_82F2C814@l\n0x823FF930 stw       r11, 0x37F0(r31)\n0x823FF934 addi      r3, r31, 0x3800\n0x823FF938 stwx      r10, r31, r8\n0x823FF93C stwx      r6, r31, r29\n0x823FF940 bl        BrnCoronaManager__SetTextureAtlas\n0x823FF944 addi      r29, r31, 0x16B0\n0x823FF948 addi      r3, r1, 0xC0+var_50# Dst\n0x823FF94C stw       r30, 0x16A8(r31)\n0x823FF950 mr        r4, r29\n0x823FF954 stw       r30, 0x16F8(r31)\n0x823FF958 bl        renderengine__TextureState__GetResourceDescriptor\n0x823FF95C lwz       r4, 0x394C(r31)\n0x823FF960 mr        r5, r3\n0x823FF964 li        r6, 0\n0x823FF968 addi      r3, r1, 0xC0+var_70\n0x823FF96C lwz       r11, 0(r4)\n0x823FF970 lwz       r11, 0x10(r11)\n0x823FF974 mtctr     r11\n0x823FF978 bctrl\n0x823FF97C addi      r3, r31, 0x16FC\n0x823FF980 addi      r10, r1, 0xC0+var_70\n0x823FF984 li        r11, 5\n0x823FF988 mr        r9, r3\n0x823FF98C mtctr     r11\n0x823FF990 lwz       r11, 0(r10)\n0x823FF994 addi      r10, r10, 4\n0x823FF998 stw       r11, 0(r9)\n0x823FF99C addi      r9, r9, 4\n0x823FF9A0 bdnz      loc_823FF990\n0x823FF9A4 mr        r4, r29\n0x823FF9A8 bl        renderengine__TextureState__Initialize\n0x823FF9AC lis       r11, unk_83011A78@ha\n0x823FF9B0 stw       r3, 0x16AC(r31)\n0x823FF9B4 addi      r11, r11, unk_83011A78@l\n0x823FF9B8 lwz       r10, (dword_83011B10 - 0x83011A78)(r11)\n0x823FF9BC cmplw     cr6, r10, r30\n0x823FF9C0 beq       cr6, loc_823FF9D0\n0x823FF9C4 li        r10, 0\n0x823FF9C8 stw       r30, (dword_83011B10 - 0x83011A78)(r11)\n0x823FF9CC stw       r10, (dword_83011B18 - 0x83011A78)(r11)\n0x823FF9D0 lwz       r10, 0x16A8(r31)\n0x823FF9D4 lwz       r9, (dword_83011AD8 - 0x83011A78)(r11)\n0x823FF9D8 cmplw     cr6, r9, r10\n0x823FF9DC beq       cr6, loc_823FF9EC\n0x823FF9E0 stw       r10, (dword_83011AD8 - 0x83011A78)(r11)\n0x823FF9E4 li        r10, 0\n0x823FF9E8 stw       r10, (dword_83011AE0 - 0x83011A78)(r11)\n0x823FF9EC lwz       r10, 0x16AC(r31)\n0x823FF9F0 li        r3, 1\n0x823FF9F4 lwz       r9, (dword_83011ADC - 0x83011A78)(r11)\n0x823FF9F8 cmplw     cr6, r9, r10\n0x823FF9FC beq       cr6, loc_823FFA0C\n0x823FFA00 stw       r10, (dword_83011ADC - 0x83011A78)(r11)\n0x823FFA04 li        r10, 0\n0x823FFA08 stw       r10, (dword_83011AE0 - 0x83011A78)(r11)\n0x823FFA0C addi      r1, r1, 0xC0\n0x823FFA10 b         __restgprlr_29"
+        },
+        {
+          "from": "0x82409f4c",
+          "function_start": "0x82409c20",
+          "function_name": "BrnRendererModule::Prepare",
+          "window": "0x82409F3C bl        CgsDev__Assert__FireAssert\n0x82409F40 bl        CgsDev__Assert__EndAssert\n0x82409F44 lis       r11, off_82F2C814@ha\n0x82409F48 addis     r3, r31, 1\n0x82409F4C addi      r5, r11, off_82F2C814@l\n0x82409F50 addi      r4, r31, 0x1380\n0x82409F54 addi      r3, r3, -0x3B18\n0x82409F58 bl        BrnSkyDomeManager__Prepare\n0x82409F5C addis     r3, r31, 1\n0x82409F60 addi      r3, r3, -0x35C0\n0x82409F64 bl        CgsDev__DebugComponent__Register\n0x82409F68 mr        r3, r31\n0x82409F6C bl        BrnRendererModule__MemoryUsage\n0x82409F70 li        r3, 1"
+        },
+        {
+          "from": "0x8240a7ac",
+          "function_start": "0x8240a778",
+          "function_name": "BrnRendererModule::Construct",
+          "window": "0x8240A79C stw       r31, 0x2A0+arg_14(r1)\n0x8240A7A0 bl        CgsSceneManager__CgsCollision__BaseCollisionGenerator__Destruct\n0x8240A7A4 lis       r11, off_82F2C814@ha\n0x8240A7A8 addis     r29, r31, 1\n0x8240A7AC addi      r4, r11, off_82F2C814@l\n0x8240A7B0 addi      r29, r29, -0x3C00\n0x8240A7B4 li        r28, 1\n0x8240A7B8 addi      r3, r31, 0x480\n0x8240A7BC stw       r4, 0x2A0+var_1C0(r1)\n0x8240A7C0 stw       r4, 0x394C(r31)\n0x8240A7C4 stb       r28, 0(r29)\n0x8240A7C8 bl        BrnGraphics__EffectsArbitrator__Construct\n0x8240A7CC addi      r3, r31, 0x490# this\n0x8240A7D0 bl        BrnShaderConstantsFrame__Construct"
+        },
+        {
+          "from": "0x82666c44",
+          "function_start": "0x82666b70",
+          "function_name": "BrnResource::Allocators::ConstructGlobalGraphicsMemory",
+          "assembly": "0x82666B70 mflr      r12\n0x82666B74 bl        __savegprlr_29\n0x82666B78 stwu      r1, back_chain(r1)\n0x82666B7C lis       r11, qword_82F2C7EC@ha\n0x82666B80 addi      r3, r1, 0xD0+var_50\n0x82666B84 addi      r31, r11, qword_82F2C7EC@l\n0x82666B88 lis       r11, 0x64 # 'd'\n0x82666B8C mr        r4, r31\n0x82666B90 stw       r11, (qword_82F2C7EC - 0x82F2C7EC)(r31)\n0x82666B94 li        r11, 0x1000\n0x82666B98 stw       r11, (qword_82F2C7EC+4 - 0x82F2C7EC)(r31)\n0x82666B9C lis       r11, 0x1D0\n0x82666BA0 stw       r11, (dword_82F2C7FC - 0x82F2C7EC)(r31)\n0x82666BA4 li        r11, 0x1000\n0x82666BA8 stw       r11, (dword_82F2C800 - 0x82F2C7EC)(r31)\n0x82666BAC bl        rw__LinearResourceAllocator__GetResourceDescriptor\n0x82666BB0 mr        r11, r3\n0x82666BB4 addi      r10, r1, 0xD0+var_80\n0x82666BB8 li        r9, 0xA\n0x82666BBC mtctr     r9\n0x82666BC0 lwz       r9, 0(r11)\n0x82666BC4 addi      r11, r11, 4\n0x82666BC8 stw       r9, 0(r10)\n0x82666BCC addi      r10, r10, 4\n0x82666BD0 bdnz      loc_82666BC0\n0x82666BD4 lis       r6, 0x2000\n0x82666BD8 lwz       r3, 0xD0+var_80(r1)# dwSize\n0x82666BDC li        r29, -1\n0x82666BE0 ori       r6, r6, 4 # 0x20000004# flProtect\n0x82666BE4 li        r5, 0x1000# ulAlignment\n0x82666BE8 mr        r4, r29# ulPhysicalAddress\n0x82666BEC bl        XPhysicalAlloc\n0x82666BF0 lis       r11, dword_82FFAA00@ha\n0x82666BF4 lis       r6, 0x2000\n0x82666BF8 addi      r30, r11, dword_82FFAA00@l\n0x82666BFC ori       r6, r6, 0x404 # 0x20000404# flProtect\n0x82666C00 li        r5, 0x1000# ulAlignment\n0x82666C04 mr        r4, r29# ulPhysicalAddress\n0x82666C08 stw       r3, (dword_82FFAA00 - 0x82FFAA00)(r30)\n0x82666C0C lwz       r3, 0xD0+var_70(r1)# dwSize\n0x82666C10 bl        XPhysicalAlloc\n0x82666C14 stw       r3, (dword_82FFAA08 - 0x82FFAA00)(r30)\n0x82666C18 addi      r4, r1, 0xD0+var_80\n0x82666C1C mr        r3, r30\n0x82666C20 bl        BrnResource__ClearResource\n0x82666C24 mr        r4, r31\n0x82666C28 mr        r3, r30\n0x82666C2C bl        rw__LinearResourceAllocator__Initialize\n0x82666C30 lis       r11, aGlobalgraphics@ha\n0x82666C34 addi      r10, r11, aGlobalgraphics@l# \"GlobalGraphics\"\n0x82666C38 lis       r11, dword_82FFA88C@ha\n0x82666C3C stw       r3, dword_82FFA88C@l(r11)\n0x82666C40 lis       r11, off_82F2C814@ha\n0x82666C44 addi      r11, r11, off_82F2C814@l\n0x82666C48 stw       r3, (dword_82F2C818 - 0x82F2C814)(r11)\n0x82666C4C stw       r10, (dword_82F2C81C - 0x82F2C814)(r11)\n0x82666C50 addi      r1, r1, 0xD0\n0x82666C54 b         __restgprlr_29"
+        },
+        {
+          "from": "0x82c74fcc",
+          "function_start": null,
+          "function_name": null
+        }
+      ]
+    }
+  ],
+  "names_raw_hex": "82000b7082000b6482000b5882000b4882000b2c"
+}
