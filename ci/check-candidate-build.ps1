@@ -1333,6 +1333,7 @@ try {
     Expand-Archive -LiteralPath $archive -DestinationPath $ffmpeg -Force
     if (-not (Test-Path -LiteralPath (Join-Path $ffmpeg 'bin/avcodec.lib'))) { throw 'Prebuilt FFmpeg import library is missing.' }
     Invoke-Native cmd.exe @('/d', '/c', ('"{0}"' -f (Join-Path $Root 'tools/build/fetch_xaudio2_redist.bat'))) 'dependencies.log'
+    Invoke-Native python @((Join-Path $Root 'tools/build/fetch_sdl3.py')) 'dependencies.log'
     $lua = Join-Path $SourceRoot 'vendor/lua/lua515.lib'
     if (-not (Test-Path -LiteralPath $lua)) {
         Invoke-Native cmd.exe @('/d', '/c', ('"{0}"' -f (Join-Path $Root 'tools/build/build_lua.bat'))) 'lua.log'
@@ -1342,16 +1343,20 @@ try {
         archive = Get-FileRecord $archive; lua = Get-FileRecord $lua
         xaudio2_version = (Get-Content -LiteralPath (Join-Path $SourceRoot 'vendor/xaudio2redist/VERSION.txt') -Raw).Trim()
         xaudio2_header = Get-FileRecord (Join-Path $SourceRoot 'vendor/xaudio2redist/include/xaudio2Redist.h')
+        sdl3_version = (Get-Content -LiteralPath (Join-Path $SourceRoot 'vendor/sdl3/VERSION.txt') -Raw).Trim()
+        sdl3_header = Get-FileRecord (Join-Path $SourceRoot 'vendor/sdl3/include/SDL3/SDL.h')
     }
-    # Match the shipping bat's two runtime staging sources. Include exactly these
-    # DLLs in the build artifact so a playable install has the matching binaries.
+    # Match the shipping bat's runtime staging inputs, including SDL's license.
+    # A playable install must have the matching DLLs.
     $ffmpegDlls = @(Get-ChildItem -LiteralPath (Join-Path $ffmpeg 'bin') -Filter '*.dll' -File)
     if ($ffmpegDlls.Count -eq 0) { throw 'Prebuilt FFmpeg runtime DLLs are missing.' }
-    $runtimeFiles = @($ffmpegDlls) + @(Get-Item -LiteralPath (Join-Path $SourceRoot 'vendor/xaudio2redist/bin/x64/xaudio2_9redist.dll'))
+    $runtimeFiles = @($ffmpegDlls) + @(Get-Item -LiteralPath (Join-Path $SourceRoot 'vendor/xaudio2redist/bin/x64/xaudio2_9redist.dll')) +
+        @(Get-Item -LiteralPath (Join-Path $SourceRoot 'vendor/sdl3/lib/x64/SDL3.dll'))
     foreach ($file in $runtimeFiles) {
         if ($RuntimeOutputs.ContainsKey($file.Name)) { throw "Duplicate runtime name: $($file.Name)" }
         $RuntimeOutputs[$file.Name] = Get-FileRecord $file.FullName
     }
+    $RuntimeOutputs['SDL3-LICENSE.txt'] = Get-FileRecord (Join-Path $SourceRoot 'vendor/sdl3/LICENSE.txt')
     $Receipt.expected_runtime_outputs = $RuntimeOutputs
     Assert-CleanTrees
 
