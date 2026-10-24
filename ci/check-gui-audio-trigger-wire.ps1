@@ -10,7 +10,7 @@ if ($env:ImageOS -cne 'win22' -or $env:CANDIDATE_RUNNER_ENVIRONMENT -cne 'github
 if ((& git -C $source rev-parse HEAD) -cne $B5Commit -or $LASTEXITCODE -ne 0) { throw 'Audio candidate checkout differs.' }
 if (Test-Path -LiteralPath $out) { throw 'Audio artifact folder must be fresh.' }
 $pins=@{
-    'tests/run_gui_audio_trigger_wire.py'='2c1194052336fee29e71f358045ace23e61f5d49245c9eeeea3616f69cbe781c'
+    'tests/run_gui_audio_trigger_wire.py'='bbb3ea549a08a6bb1869b949e29108c97b51f5cef3384ea9d028d12525543f96'
     'tests/GuiAudioTriggerWire.cpp'='d00c1cdc3b85239a06eb0b430c347959978b64d3eef4400ee38ff2df4f2b90e8'
     'tests/fxgs_common.py'='6230372da7ef60e446a165470a61850964b7b7498576eaec93dbb58555ae9033'
 }
