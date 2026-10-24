@@ -91,7 +91,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: build-candidate
+  group: build-candidate-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
