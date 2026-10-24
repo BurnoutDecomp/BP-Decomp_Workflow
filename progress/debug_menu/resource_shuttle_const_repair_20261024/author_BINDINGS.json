@@ -1,0 +1,46 @@
+{
+  "source": "6713958aa111ca62c0586d09352053a5d3803a1c",
+  "workflow": "67c27ec3153aed0c175c4768a5e03d0db05b617f",
+  "failed_run": 40113375770,
+  "failure_log_sha256": "65d7457b0d9a69f55dd36226cc53449ed904350d16fe250b53782ac5a30b44e5",
+  "source_paths": [
+    {
+      "path": "tests/run_pc_resource_shuttle.py",
+      "pre_sha256": "e1c812f2d040ea573d90d8051e5ea809b87a5ec8156b1e5f4d1477d32655d8c8",
+      "post_sha256": "4ee25e7d57208524c937f49faf3831d9e28453d2aca439452ebedf13385232a8"
+    },
+    {
+      "path": "tests/PCResourceShuttle.cpp",
+      "pre_sha256": "86763c72f3d1480fe3a728f347ac21940dd076c9224ed044af8c8521ec2d8a88",
+      "post_sha256": "e4005a252eb9252b210a4a0bd84c4d51251656300d000921df2b03af0a234972"
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "pre_sha256": "27258ceed455481942dc47bceb6c5ce4bd9b9cf6a2173927daf039fa2bd49699",
+      "post_sha256": "2a131911893bacd2b7f8bf260600a9c57d59c01678635a5cb7cde7ea6f9744ab"
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/Resource/CgsResourceModule.h",
+      "pre_sha256": "daa21f8cabd0fb97850d420c07f012e079d7b081db62bf7ac274af42e62469bf",
+      "post_sha256": "7739fafe2c7543f067446de2e2682d62d5c8ae40930fd0eb7b7e42a0dbf7fd3d"
+    }
+  ],
+  "selected_signatures": [
+    "bool ResourceModule::AddOpenReadStreamRequest(",
+    "bool ResourceModule::AddCloseReadStreamRequest(",
+    "void ResourceModule::ProcessPendingFileSystemResponses(",
+    "void ResourceModule::ProcessResourceRequests(const ResourceIO::InputBuffer* lpResIn,",
+    "void ResourceModule::ProcessBundleLoaderStreamRequests(",
+    "void ResourceModule::ProcessPoolOutputResponses(",
+    "void ResourceModule::ProcessResourceResponses(",
+    "void ResourceModule::ProcessPoolResourceRequests(",
+    "void ResourceModule::ProcessMemoryResponses(",
+    "bool ResourceModule::Update("
+  ],
+  "numeric_checks": 14,
+  "scope": "Exact dispatcher selection and pointer const-correctness; no event or runtime policy change.",
+  "normal_package_changed": false,
+  "compiled": false,
+  "native_executed": false,
+  "new_debug_dispositions": 0
+}
