@@ -5,24 +5,27 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-The checked AA6 candidate fixes Road Rage output replay (inflated takedown
-count and time), the natural custom-route autosave request, and the original
-Leaving-overlay completion notification. Ten hosted groups and all twelve
-output hashes pass. Road Rage count/countdown and one-player host departure
-have bounded native acceptance; route new-slot save and checkpoint overwrite
-also pass. **Cold route loading still fails**: the saved-route list does not
-open. Joined-peer departure and long-session audio remain unverified.
-[Native evidence and limits](native_repairs_20261023/README.md).
+**Installed: d3ec7d2d**, refreshed from exact hosted run40086048484.
+Launch `build/game/Burnout_PC.exe`. All eleven selected hosted groups,112
+source/build input pins and12 output hashes pass. A separate private50-second
+run left the junkyard, rendered the world and drove236.6m without asserts or
+exceptions; Root inspected the road and subsequent wreck frames. This is
+bounded playability acceptance, not complete debug-control certification.
 
-**Installed: b3300e0e**, including current dev GUI/Replay CMake lists.
-Launch `build/game/Burnout_PC.exe`. The refreshed hosted package passes all ten
-groups,88 input pins and12 output hashes. Its executable code section exactly
-matches the AA6 native-tested binary; only CMake lists changed in source.
-The four changed build outputs have a recoverable backup. Settings, nine
-profiles and both logs preserve their bytes and modification times.
-[Delivery and limits](checked_playable_delivery_20261023/DELIVERY.json).
-The existing TextFormat setter repair and checkpoint/Paradise Drives checks
-remain recorded in [the earlier delivery](paradise_textformat_playable_delivery_20261022/DELIVERY.json).
+The build retains the Road Rage count/countdown fix, custom-route save and
+overwrite repair, and host-tested Freeburn Leaving completion. Six further
+GUI producer records now match ARTIST;143/337 still need their module-input
+return route. The custom-race172 producer and original renderer/game-IO
+preparation WIP remain excluded. **Cold saved-route loading still fails**;
+joined-peer departure, complete online races, Replay frame wiring and long
+audio sessions remain unverified. Whole-registry debug SAVE retains the
+original unnamed-DLC-slot crash and is excluded from the test recipes.
+
+The previous b330 package has a recoverable backup. Config, nine profiles,
+their membership and both logs preserve their bytes and modification times.
+[Delivery and limits](checked_gui_delivery_20261024/DELIVERY.json).
+[Earlier gameplay evidence](native_repairs_20261023/README.md).
+[Earlier TextFormat and checkpoint delivery](paradise_textformat_playable_delivery_20261022/DELIVERY.json).
 
 ## Campaign counts
 
