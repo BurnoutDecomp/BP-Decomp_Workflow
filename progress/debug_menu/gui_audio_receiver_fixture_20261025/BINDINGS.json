@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "packet": "gui_audio_trigger_fixture_receiver_binding_20261025_c18",
+  "status": "fixture-only source-derived receiver correction proposal; not compiled or run",
+  "source_base": {
+    "repo": "b5-decomp",
+    "commit": "c18c333098a18871059a06c51b958f2e7e3de82c",
+    "tree": "754c82caefa11ba2b3e70c0f082d93d760260e30"
+  },
+  "workflow_base": {
+    "repo": "BP-Decomp_Workflow",
+    "commit": "ebeed3d59d69d27369629962bb85e383e8892124",
+    "tree": "476697a6a176335238a5111df832473fab217aef"
+  },
+  "baseline_source": {
+    "repo": "b5-decomp",
+    "commit": "4c7c6ba2f97533315d5663d22499042cb007df31",
+    "tree": "d80cdb4998eeea85613c17269b709506d18d32a1"
+  },
+  "changed_files": [
+    {
+      "role": "runner",
+      "path": "tests/run_gui_audio_trigger_wire.py",
+      "base_commit": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "pre_blob": "28f420cc45a651a1ee21ecfd12d08a37d70e0e1c",
+      "pre_bytes": 23913,
+      "pre_sha256": "be71ac7f80cba2ecd7e82202f870abb5a6b010c2ca5f74a5583f4800b8a6d40c",
+      "post_bytes": 25479,
+      "post_sha256": "2c1194052336fee29e71f358045ace23e61f5d49245c9eeeea3616f69cbe781c",
+      "post_lf_sha256": "2c1194052336fee29e71f358045ace23e61f5d49245c9eeeea3616f69cbe781c"
+    },
+    {
+      "role": "harness",
+      "path": "tests/GuiAudioTriggerWire.cpp",
+      "base_commit": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "pre_blob": "96f3f4d0b0c232c38c3bdab400fbb7c1f8265854",
+      "pre_bytes": 20828,
+      "pre_sha256": "20a5f5e8ab68ed4706fbf1bf11e58e9cb94d956a7e3a1d0a5e72636292361624",
+      "post_bytes": 21578,
+      "post_sha256": "d00c1cdc3b85239a06eb0b430c347959978b64d3eef4400ee38ff2df4f2b90e8",
+      "post_lf_sha256": "d00c1cdc3b85239a06eb0b430c347959978b64d3eef4400ee38ff2df4f2b90e8"
+    },
+    {
+      "role": "workflow_ci",
+      "path": "ci/check-gui-audio-trigger-wire.ps1",
+      "base_commit": "ebeed3d59d69d27369629962bb85e383e8892124",
+      "pre_blob": "390751411db2cc27ec1053d9b0d9436e9621ce28",
+      "pre_bytes": 5920,
+      "pre_sha256": "b9451bcf3cb945dc57378391b44792a2ddc113857a870114adb89ca395322972",
+      "post_bytes": 5920,
+      "post_sha256": "625d2fcfc20ac2d55999bc75217c19035dd64e6ad3e2cc322555294e316e9f9a"
+    }
+  ],
+  "proposed_patch": {
+    "path": "source.patch",
+    "sha256": "fc4e89a9202fff082ccf8dbc3e75ec1d02d975f863c5a6ddcb26e14834d0a6db",
+    "bytes": 12448
+  },
+  "source_bindings": [
+    {
+      "repo": "b5-decomp",
+      "revision": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "git_blob": "ae18202bdc0aa585208be952bee9fd53920035e2",
+      "bytes": 333122,
+      "sha256": "b3fd1eaccbe982a611037c43e787888798fad42af0dd370240321d1110bd0016"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "path": "src/GameSource/Gui/BrnGuiModule.h",
+      "git_blob": "0b674491bb4ccad83c339a484eb06ebf77c83f01",
+      "bytes": 50946,
+      "sha256": "1cb1e58a65a5ecba2ed5d9313bec439ca03e9f607e64cc0901d996bd47798072"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "git_blob": "e6d89ca46671654af493eb852322f68564166bb1",
+      "bytes": 278381,
+      "sha256": "69554c6c9e7f7f148d37814cf3e9dbc4de15164f9e6d38dfe251337ebaba4012"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "path": "src/GameSource/Gui/BrnGuiModule.h",
+      "git_blob": "c311118d2656b5c41e9eedd4c64a8724f1c96b8d",
+      "bytes": 48633,
+      "sha256": "c99db936a13243e4e6cd5de028921684dd1f876d288a7b73211959edf092e702"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiModuleIO.h",
+      "git_blob": "b38bd298df2dc377270ce4e7ee86bc6fd4e2d6b1",
+      "bytes": 12342,
+      "sha256": "3b6c468fd88bdf43e8b76c8594f42923a071992eb1e8cc63c1b05b96566fee57"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp",
+      "git_blob": "397913d14b9744b43d66d8849e24b6ffe54f3f99",
+      "bytes": 6048,
+      "sha256": "a939c28903945426a448369ba8281d150124aae608afa18034996a0c211e0046"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBuffer.h",
+      "git_blob": "c970e8329942edd00d01b610607f7671ad3e00f4",
+      "bytes": 2127,
+      "sha256": "89fbf6784f8b0a7b6a8bb6c5f2c3daf0356b23928b255ebb0dc5fb8a2a49af4d"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBuffer.cpp",
+      "git_blob": "a79851e922afda5ca199eb2b99e5391cfeabc5b4",
+      "bytes": 2539,
+      "sha256": "1313fbe9f5ed4016ab8b72a73f2a2770e56eef4731bf4041a6875be5b0043ec6"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "c18c333098a18871059a06c51b958f2e7e3de82c",
+      "path": "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+      "git_blob": "cd59e9223f292cf1e2029d47cba70f36ed88fdb6",
+      "bytes": 39881,
+      "sha256": "3c4da2211eddabcd7c31d97bc7a6a69e6c2a3222598fa0618bca428694d04e60"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiModuleIO.h",
+      "git_blob": "b38bd298df2dc377270ce4e7ee86bc6fd4e2d6b1",
+      "bytes": 12342,
+      "sha256": "3b6c468fd88bdf43e8b76c8594f42923a071992eb1e8cc63c1b05b96566fee57"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp",
+      "git_blob": "397913d14b9744b43d66d8849e24b6ffe54f3f99",
+      "bytes": 6048,
+      "sha256": "a939c28903945426a448369ba8281d150124aae608afa18034996a0c211e0046"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBuffer.h",
+      "git_blob": "c970e8329942edd00d01b610607f7671ad3e00f4",
+      "bytes": 2127,
+      "sha256": "89fbf6784f8b0a7b6a8bb6c5f2c3daf0356b23928b255ebb0dc5fb8a2a49af4d"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBuffer.cpp",
+      "git_blob": "a79851e922afda5ca199eb2b99e5391cfeabc5b4",
+      "bytes": 2539,
+      "sha256": "1313fbe9f5ed4016ab8b72a73f2a2770e56eef4731bf4041a6875be5b0043ec6"
+    },
+    {
+      "repo": "b5-decomp",
+      "revision": "4c7c6ba2f97533315d5663d22499042cb007df31",
+      "path": "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+      "git_blob": "cd59e9223f292cf1e2029d47cba70f36ed88fdb6",
+      "bytes": 39881,
+      "sha256": "3c4da2211eddabcd7c31d97bc7a6a69e6c2a3222598fa0618bca428694d04e60"
+    }
+  ],
+  "actual_receiver_contract": {
+    "receiver_types": {
+      "candidate": "CgsGui::CgsGuiModuleIO::OutputBuffer*",
+      "baseline": "CgsModule::VariableEventQueue<18432,16>*",
+      "id_only_candidate_callback": "CgsGui::CgsGuiModuleIO::OutputBuffer*",
+      "id_only_legacy_callback": "CgsModule::VariableEventQueue<18432,16>*"
+    },
+    "candidate_header": "src/GameShared/GameClasses/Gui/CgsGuiModuleIO.h",
+    "method_signature": "template<class T> int OutputBuffer::AddGuiOutEvent(T&)",
+    "method_semantics": "assert IOBuffer write lock; append exact event pointer, GetEventType(), sizeof(T) to mOutEvents; return append result as 1/0",
+    "production_callback": "src/GameSource/Gui/BrnGuiModule.cpp:GuiModule::FlaptSoundTriggerCallback",
+    "fixture_bug": "one queue-pointer shadow represented both the current OutputBuffer callback and the old queue-based baseline callback; ID-only also compiled both callback bodies against that one wrong receiver type",
+    "repair": "candidate mode binds GuiModule to the actual OutputBuffer and compiles its real OutputBuffer/CgsIOBuffer providers; baseline retains its original raw queue receiver; ID-only compiles the candidate callback against OutputBuffer while isolating the baseline callback in a separate LegacyGuiModule raw-queue receiver. The candidate harness uses actual OutputBuffer Construct/Clear/write-lock/inline AddGuiOutEvent/Unlock and observes mOutEvents under the existing private=public fixture flags."
+  },
+  "hosted_failure": {
+    "run_id": "40136323622",
+    "candidate_b5": "c18c333098a18871059a06c51b958f2e7e3de82c",
+    "workflow": "ebeed3d59d69d27369629962bb85e383e8892124",
+    "log": "scratch/DEBUG_MENU_1011/gui_small_queue_getlength_hosted_20261024/failed-steps.log",
+    "bytes": 21357,
+    "sha256": "cf8589cd66395d79347330864dc0b47446544d718c6da04fe450c1ede6a7d4a2",
+    "observed": "candidate and id_only audio_extracted.inc fail because the test-shadow VariableEventQueue lacks AddGuiOutEvent; baseline mode ran and yielded the expected old-wire three failures"
+  },
+  "static_preservation_checks": {
+    "harness_check_expression_lines_identical": true,
+    "check_expression_line_count": 50,
+    "ci_expected_failure_markers_unchanged": true
+  },
+  "controls_to_preserve": {
+    "candidate": "exit 0, assertions 0; all 14 authored actions map to raw457/100 and sound message6 payload100/total116; unknown action sentinel14 and fixed-string truncation/termination; state channel40 unwrap; event457 bypasses cache201; caller event77 remains first, stored audio appends once, clear/retire prevents replay",
+    "candidate_legacy_compatibility": "wrapped legacy {0,201,12}+100 audio reaches sound message6 payload100/total116",
+    "candidate_201_8_negative": "real HideDriveThru201/8 still selects GuiCache case201, remains unchanged, and produces no sound message",
+    "baseline": "exit 1 with exact EXPECTED_BASELINE_NEGATIVE id=201 size=112 cache201=1 message=128 assertions=0; three numeric failures expected",
+    "id_only": "exit 1 with exact EXPECTED_ID_ONLY_NEGATIVE id=457 size=112 message=116 payload_match=0 assertions=0; numeric failure expected, not compile failure"
+  },
+  "production_semantics_changed": false,
+  "assertions_or_predicates_removed": false,
+  "fake_provider_added": false,
+  "execution": {
+    "local_cpp": false,
+    "fixture_import_or_run": false,
+    "test": false,
+    "compiler": false,
+    "ci": false,
+    "native_or_game": false,
+    "git_mutation": false,
+    "index_mutation": false
+  }
+}
