@@ -1,0 +1,113 @@
+--- a/src/GameSource/Resource/BrnResourceAllocator.h
++++ b/src/GameSource/Resource/BrnResourceAllocator.h
+@@ -3,6 +3,7 @@
+ 
+ #include "types.hpp"
+ #include "GameShared/GameClasses/Memory/CgsLinearMalloc.h"
++#include "GameShared/GameClasses/Memory/CgsMemoryBank.h" // original root Params argument
+ #include "rw/rwcore_structs.h"   // rw::Resource, rw::ResourceDescriptor
+ #include "GameShared/GameClasses/Development/MessageSystem/CgsMessage.h"   // KX_FILTER_* (memory-check print)
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                          // CGS_ASSERT (LinearResourceAllocator queries)
+@@ -113,6 +114,7 @@
+ HeapResourceAllocator* GetDebugAllocator();
+ // Genuine public wrapper; distinct from the retained native allocation helper.
+ LinearResourceAllocator* GetGraphicsAllocator();
++LinearResourceAllocator* GetResourceAllocator();
+ void ClearResource(rw::Resource& lrResource, const rw::ResourceDescriptor& lrDescriptor);
+ 
+ // The GameData general resource allocator the loading-screen module loads carve from (SoundModule
+@@ -147,8 +149,6 @@
+ 
+     // The startup memory-map/initial-default-allocator chain (ARTIST 0x82664728).
+     static void InitMemoryMap();
+-    // ARTIST82666B70; original global owner, not invoked by native startup.
+-    static void ConstructGlobalGraphicsMemory();
+ 
+     // The process-wide "GlobalGraphics" linear resource allocator (X360 object @ dword_82F2C814,
+     // built by ConstructGlobalGraphicsMemory over an XPhysicalAlloc'd region). Graphics objects that
+@@ -159,6 +159,14 @@
+     static rw::IResourceAllocator* GetGlobalGraphicsAllocator();
+ 
+ private:
++    // Original private construction phases (DecFIGS h327/330), both unactivated.
++    static void ConstructGlobalGraphicsMemory();
++    static void ConstructGlobalResourceMemory(const CgsMemory::MemoryBank::Params* lpRootBankParams);
++    friend LinearResourceAllocator* GetResourceAllocator();
++    static rw::Resource mGlobalResourceMemory;
++    static rw::ResourceDescriptor mGlobalResourceMemoryDescriptor;
++    static rw::LinearResourceAllocator* mpInternalResourceAllocator;
++    static LinearResourceAllocator mGlobalResourceAllocator;
+     friend LinearResourceAllocator* GetGraphicsAllocator();
+     static rw::Resource mGlobalGraphicsMemory;
+     static rw::ResourceDescriptor mGlobalGraphicsMemoryDescriptor;
+--- a/src/GameSource/Resource/BrnResourceAllocator.cpp
++++ b/src/GameSource/Resource/BrnResourceAllocator.cpp
+@@ -576,3 +576,42 @@
+         CgsDev::Assert::EndAssert();
+     }
+ }
++
++namespace BrnResource
++{
++    // Primary82F2C820/848 and82FFAA14/82FFA898: descriptor lanes begin{0,1};
++    // all five resource pointers and the internal backing pointer begin zero.
++    rw::Resource Allocators::mGlobalResourceMemory;
++    rw::ResourceDescriptor Allocators::mGlobalResourceMemoryDescriptor;
++    rw::LinearResourceAllocator* Allocators::mpInternalResourceAllocator = nullptr;
++    LinearResourceAllocator Allocators::mGlobalResourceAllocator;
++
++    // DecFIGS h393; ARTIST8266D5AC..5BC obtains this exact wrapper address.
++    // The wrapper's actual allocation entry validates its backing before use.
++    LinearResourceAllocator* GetResourceAllocator()
++    {
++        return &Allocators::mGlobalResourceAllocator;
++    }
++
++    // ARTIST82666C58. The caller supplies Root Bank Params, not a MemoryMap*.
++    void Allocators::ConstructGlobalResourceMemory(
++        const CgsMemory::MemoryBank::Params* lpRootBankParams)
++    {
++        mGlobalResourceMemoryDescriptor.m_baseResourceDescriptors[0].m_size =
++            lpRootBankParams->mauBankSize[0] + 0xFC0000u;
++        mGlobalResourceMemoryDescriptor.m_baseResourceDescriptors[0].m_alignment = 0x10000;
++        mGlobalResourceMemoryDescriptor.m_baseResourceDescriptors[2].m_size =
++            lpRootBankParams->mauBankSize[2] + 0x200000u;
++        mGlobalResourceMemoryDescriptor.m_baseResourceDescriptors[2].m_alignment = 0x10000;
++        rw::ResourceDescriptor lDescriptor;
++        rw::LinearResourceAllocator::GetResourceDescriptor(&lDescriptor, &mGlobalResourceMemoryDescriptor);
++        mGlobalResourceMemory.m_baseResources[0] = XPhysicalAlloc(
++            lDescriptor.m_baseResourceDescriptors[0].m_size, 0xFFFFFFFFUL, 0x20000, 0x20000004UL);
++        mGlobalResourceMemory.m_baseResources[2] = XPhysicalAlloc(
++            lDescriptor.m_baseResourceDescriptors[2].m_size, 0xFFFFFFFFUL, 0x20000, 0x20000004UL);
++        ClearResource(mGlobalResourceMemory, lDescriptor);
++        mpInternalResourceAllocator = rw::LinearResourceAllocator::Initialize(
++            mGlobalResourceMemory, mGlobalResourceMemoryDescriptor);
++        mGlobalResourceAllocator.Construct(mpInternalResourceAllocator, "GlobalResource");
++    }
++}
+--- a/src/GameShared/GameClasses/Memory/MemoryMap/CgsMemoryMap.h
++++ b/src/GameShared/GameClasses/Memory/MemoryMap/CgsMemoryMap.h
+@@ -134,6 +134,7 @@
+         // index rules; native pointer arithmetic uses the canonical record sizes above.
+         s32 GetVersion() const;
+         s32 GetPlatform() const;
++        const MemoryMapBank* GetRootBank() const; // DecFIGS h72; ARTIST8266AF08/8266D5B4
+         const MemoryMapBank* GetBank(s32 liIndex) const;
+         s32 GetNumBanks() const;
+         const MemoryMapPool* GetPool(s32 liIndex) const;
+--- a/src/GameShared/GameClasses/Memory/MemoryMap/CgsMemoryMap.cpp
++++ b/src/GameShared/GameClasses/Memory/MemoryMap/CgsMemoryMap.cpp
+@@ -127,3 +127,13 @@
+ const MemoryMapRWGeneralAllocator* MemoryMap::GetRWGeneralAllocator(s32 liIndex) const { return mpRWGeneralAllocators + liIndex; }
+ 
+ }
++
++namespace CgsMemory
++{
++    // ARTIST's two root callers load the first bank pointer at header+0x24;
++    // GetParams has no subobject adjustment. Ordinary GetBank(i) selects i+1.
++    const MemoryMapBank* MemoryMap::GetRootBank() const
++    {
++        return mpBanks;
++    }
++}
