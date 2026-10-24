@@ -1,0 +1,376 @@
+{
+  "schema": 1,
+  "source_base": "3bfdc61b9c420936f9bd76ff38899e53fd61fa68",
+  "workflow_base": "df627877ea9768182d256801a4547964aa9e8768",
+  "status": "Complete canonical Bridge source; original platform services unresolved/incomplete; NOT link-ready/activated",
+  "changes": [
+    {
+      "path": "src/GameSource/Game/BrnGameModule.hpp",
+      "pre_blob": "75986a4102e633784191ea9d9ec7a91ed17eaaa1",
+      "pre_sha256": "f20b5565cf07ff9f055c60880ef951cd866bd0d4262be96cba3faa274717b7f2",
+      "pre_bytes": 106513,
+      "post_sha256": "be7eb25edc3127cc9d2225b6eddeabd6b185bd5424cc2fdcd18ff4c754e43eea",
+      "post_bytes": 106951,
+      "preimage": "preimage/src/GameSource/Game/BrnGameModule.hpp",
+      "postimage": "postimage/src/GameSource/Game/BrnGameModule.hpp"
+    },
+    {
+      "path": "src/GameSource/Game/BrnGameModule.cpp",
+      "pre_blob": "200076ff3e3c2a3e845dbbcbadcc62d2c86aa88c",
+      "pre_sha256": "b357313c309b35985cc03700bdc71c65cf676b70c69ffc38facda0b2f21ac3d3",
+      "pre_bytes": 364742,
+      "post_sha256": "9187034e75eee493a6c65b83447d5522b58df90798951ed0d257d9c1747ac04e",
+      "post_bytes": 372518,
+      "preimage": "preimage/src/GameSource/Game/BrnGameModule.cpp",
+      "postimage": "postimage/src/GameSource/Game/BrnGameModule.cpp"
+    }
+  ],
+  "required_sealed_overlays": [
+    {
+      "packet": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\renderer_prepare_owner_sol_20261023\\continuation\\gui_snapshot_request_owner_3bfd_20261024",
+      "seal_sha256": "292d4a005f33c0cad8bff6653db6ee6b7a40a80b2a5e6bc3f45400625059b7ff",
+      "manifest_sha256": "4b92ea6d2c4dddd02c0560900ba8fc4df77346057dd7855025330b70e4bdbdfa",
+      "required_changes": [
+        {
+          "evidence": "evidence/overlays/snapshot/src/GameSource/Game/BrnDispatchThreadInputBuffer.h",
+          "bytes": 20243,
+          "sha256": "899a38b4d137a16462e36dacbf4661748d3d181a7101752db724f00eb0eb2d21",
+          "path": "src/GameSource/Game/BrnDispatchThreadInputBuffer.h",
+          "base_blob": "e084b4ae68967429c52e678f8f65179697d80f57",
+          "base_sha256": "3388e1e522f7f21fa88d8ed6b5f4b75b09cf7cc2bbfde9ddaf6de6660fdea3a9",
+          "post_sha256": "899a38b4d137a16462e36dacbf4661748d3d181a7101752db724f00eb0eb2d21"
+        },
+        {
+          "evidence": "evidence/overlays/snapshot/src/GameSource/Game/BrnDispatchThreadInputBuffer.cpp",
+          "bytes": 18214,
+          "sha256": "d67e41c2fa97a4c03ce74c28dca3dbfc5cd32793f0c5d4282f412448745f0704",
+          "path": "src/GameSource/Game/BrnDispatchThreadInputBuffer.cpp",
+          "base_blob": "2a7ca577452652d333679babe051f47c6aa199b3",
+          "base_sha256": "449c2bdf082346d5936b6e9e777d8b1a0535bd545eb255779bf2ba29360f38ae",
+          "post_sha256": "d67e41c2fa97a4c03ce74c28dca3dbfc5cd32793f0c5d4282f412448745f0704"
+        }
+      ]
+    },
+    {
+      "packet": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\renderer_prepare_owner_sol_20261023\\continuation\\gui_original_output_payload_owners_3bfd_20261024",
+      "seal_sha256": "b1aeff5270f1d4510820ce9168133105d815a7eea13fe23b9c7813947a0430b7",
+      "manifest_sha256": "31f32f8e0f9466cc0f1173441a7b1511b1bd22fbde1e42fada9f133c2c427576",
+      "required_changes": [
+        {
+          "evidence": "evidence/overlays/payload/src/GameShared/GameClasses/Gui/CgsGuiEvent.h",
+          "bytes": 13271,
+          "sha256": "3bd9a4f665b553ae8041953e09f33e4dde28248abbb43c1662a14355568e3891",
+          "path": "src/GameShared/GameClasses/Gui/CgsGuiEvent.h",
+          "base_blob": "6355cdf6c37dd5e31354f3086b338aac8bc7a38e",
+          "base_sha256": "7ab3ba5a68c555f958eee1934ea405bab1cc4fa4b28ea9053104719979bcacaf",
+          "post_sha256": "3bd9a4f665b553ae8041953e09f33e4dde28248abbb43c1662a14355568e3891"
+        },
+        {
+          "evidence": "evidence/overlays/payload/src/GameSource/Gui/BrnGuiEventTypeDefs.h",
+          "bytes": 191750,
+          "sha256": "b733ae0152aa677c74963c19c2bf4378520d89f46e055f917ec0a78372fbb597",
+          "path": "src/GameSource/Gui/BrnGuiEventTypeDefs.h",
+          "base_blob": "e33befaddc87f1346f7dfc34364cb357214a773d",
+          "base_sha256": "4288364617a168d8044ce50ad72fd841c7e34c74952283424d81afa62b02148e",
+          "post_sha256": "b733ae0152aa677c74963c19c2bf4378520d89f46e055f917ec0a78372fbb597"
+        },
+        {
+          "evidence": "evidence/overlays/payload/src/GameSource/Gui/Flow/Overlay/States/BrnBaseOverlayState.cpp",
+          "bytes": 19498,
+          "sha256": "0a37411269e76a1de25ddec532c484333601a25879d22104d4e6fb87c1582d8c",
+          "path": "src/GameSource/Gui/Flow/Overlay/States/BrnBaseOverlayState.cpp",
+          "base_blob": "81868c1b39fa7322f267d6d9111add899b91d0d3",
+          "base_sha256": "20a78fa6b53ee377f73d3957d9c780cba16d743a1ab8d7b131ddd76439a13021",
+          "post_sha256": "0a37411269e76a1de25ddec532c484333601a25879d22104d4e6fb87c1582d8c"
+        }
+      ]
+    }
+  ],
+  "providers": [
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Gui/CgsGuiModuleIO.h",
+      "bytes": 12342,
+      "sha256": "3b6c468fd88bdf43e8b76c8594f42923a071992eb1e8cc63c1b05b96566fee57",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiModuleIO.h",
+      "blob": "b38bd298df2dc377270ce4e7ee86bc6fd4e2d6b1"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp",
+      "bytes": 6048,
+      "sha256": "a939c28903945426a448369ba8281d150124aae608afa18034996a0c211e0046",
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp",
+      "blob": "397913d14b9744b43d66d8849e24b6ffe54f3f99"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+      "bytes": 39881,
+      "sha256": "3c4da2211eddabcd7c31d97bc7a6a69e6c2a3222598fa0618bca428694d04e60",
+      "path": "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+      "blob": "cd59e9223f292cf1e2029d47cba70f36ed88fdb6"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Module/CgsIOBuffer.h",
+      "bytes": 2127,
+      "sha256": "89fbf6784f8b0a7b6a8bb6c5f2c3daf0356b23928b255ebb0dc5fb8a2a49af4d",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBuffer.h",
+      "blob": "c970e8329942edd00d01b610607f7671ad3e00f4"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Module/CgsIOBuffer.cpp",
+      "bytes": 2539,
+      "sha256": "1313fbe9f5ed4016ab8b72a73f2a2770e56eef4731bf4041a6875be5b0043ec6",
+      "path": "src/GameShared/GameClasses/Module/CgsIOBuffer.cpp",
+      "blob": "a79851e922afda5ca199eb2b99e5391cfeabc5b4"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameSource/Game/BrnLoadingScreenRenderer.h",
+      "bytes": 3832,
+      "sha256": "5c793b62e7d573fc91edb03150c1b74d79823a239f2a2663b6633ee20988d0a7",
+      "path": "src/GameSource/Game/BrnLoadingScreenRenderer.h",
+      "blob": "0db1d559e5c1bb685ed50dcf8c4f5e99e63b091f"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/System/Resource/CgsResourceHandle.h",
+      "bytes": 6948,
+      "sha256": "0b29046fdd47a51dee83d654128776d44689a22ce81d044367beaf2a9007b9c5",
+      "path": "src/GameShared/GameClasses/System/Resource/CgsResourceHandle.h",
+      "blob": "0311c7a2403cdb42b5bcb7b0f3c402291aedb7fc"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp",
+      "bytes": 1627,
+      "sha256": "6bfe555a1b0cd02817605d23019b7d2dc18d5b5066817e36280a5d1f89a0f747",
+      "path": "src/GameShared/GameClasses/System/Resource/CgsResourceHandle.cpp",
+      "blob": "7f49d471c04b6383f587fdf2326c26c86e8c9bf4"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Core/CgsID.h",
+      "bytes": 1923,
+      "sha256": "ced57781649d9cbcbd0d2cde59231fa7fff08f7564c4f2e75aac5cd9e2e544ed",
+      "path": "src/GameShared/GameClasses/Core/CgsID.h",
+      "blob": "dd3dd2c58329c2a3f4eecb1f4ee26f0c386ec263"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Core/CgsID.cpp",
+      "bytes": 5778,
+      "sha256": "b2e89848d2de419471936669dc35d30e12fa6b4a3c844b420490785766c49e7c",
+      "path": "src/GameShared/GameClasses/Core/CgsID.cpp",
+      "blob": "7786a70182f20eac8bb0f0d96184d019612e5c32"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/Core/CgsAssert.h",
+      "bytes": 4328,
+      "sha256": "df42ae34e232097e60d85c2abf7125fea0406d6be6aefcfb414539769baf4458",
+      "path": "src/GameShared/GameClasses/Core/CgsAssert.h",
+      "blob": "42100162fec0e6fee96d9991692422398739583d"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameSource/Game/X360/BrnSystemHWX360.h",
+      "bytes": 7343,
+      "sha256": "d10b5ef99acf6ea2d38f0960e2939516c06edd4bb36036a916cf330cdbffbd32",
+      "path": "src/GameSource/Game/X360/BrnSystemHWX360.h",
+      "blob": "5d777a3c88d9bf33f9ba31fb46018cee8f0df4fc"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameSource/Game/X360/BrnSystemHWX360.cpp",
+      "bytes": 7816,
+      "sha256": "1ea5351b92fef336c7d35c557b5c56465438a8f5e0d12d07f5e6cb8c4b554a32",
+      "path": "src/GameSource/Game/X360/BrnSystemHWX360.cpp",
+      "blob": "3d5cb847caa907fca42a6b3dd83c3fed5e7ca494"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp",
+      "bytes": 39963,
+      "sha256": "72b76aada372ed4b1f0ef2bce5b39a4807e8e18f70593f571d71cd69ee2a2b05",
+      "path": "src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp",
+      "blob": "639f86188a39171677b8832522f27f53f475fe4e"
+    },
+    {
+      "evidence": "evidence/source_3bfd/src/GameSource/Gui/BrnGuiModule.cpp",
+      "bytes": 333002,
+      "sha256": "59ed4dae6d49cc2751b08f12e7ab4213ddf0eb30006aa1cb5c398c0f17c9f562",
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "blob": "b8ad67030234a77b96b9ba1f6118cbba5abe1f34"
+    }
+  ],
+  "primary_evidence": [
+    {
+      "evidence": "evidence/ARTIST/0x823CB758.json",
+      "bytes": 18829,
+      "sha256": "0517e73e5bb80b3dab231e035981825fbe6c73f975059927504d9100133e8193",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823CB758.json",
+      "name": "BrnGame::BrnGameModule::BridgeGuiToGame"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823C9EA8.json",
+      "bytes": 86405,
+      "sha256": "3f4af6d4f0208f7e7745d6da9e7ecf78aff365c6db8578dc604e4c2dddcfd898",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823C9EA8.json",
+      "name": "BrnGame::BrnGameModule::Construct"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B13A8.json",
+      "bytes": 3628,
+      "sha256": "c2f00a4acb396f494bc5c127f4ff8b754f6b7f4eb8a3151cc01e07397da3c9b2",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B13A8.json",
+      "name": "CgsDev::Debug2DImmediateRender::SetDebugFont"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B1448.json",
+      "bytes": 3636,
+      "sha256": "d1274ba70791d6f703f2fa04c71afe22f74095927ef69ed0937aaeb9d1b5381d",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B1448.json",
+      "name": "CgsDev::Debug3DImmediateRender::SetDebugFont"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B14E8.json",
+      "bytes": 3909,
+      "sha256": "595de4be34cfbfc57033beba464dd24131b15320108d2b75259d4772037c8293",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B14E8.json",
+      "name": "CgsDev::DebugManager::SetDebugFont"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B4130.json",
+      "bytes": 5266,
+      "sha256": "66c2a15ac113df515ab165a64907d6d909bf7b4df4963a58afe2d5403ac800e3",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B4130.json",
+      "name": "CgsGui::CgsGuiModuleIO::OutputBuffer::GetOutEventQueu"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B4280.json",
+      "bytes": 4405,
+      "sha256": "4adfb8b74af026492b4d3311fee22fe27a8ad8c120b63ad3cae57b496db6488d",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B4280.json",
+      "name": "BrnGame::DispatchThreadInputBuffer::SetBrightness"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B4328.json",
+      "bytes": 4401,
+      "sha256": "f957e624aab7ceaad83606f1b7faf8a99c95f4c9f8b982e005eab60e3a3e6996",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B4328.json",
+      "name": "BrnGame::DispatchThreadInputBuffer::SetContrast"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B43D0.json",
+      "bytes": 4567,
+      "sha256": "e7794acad574e437777ec0286550990a51f8f141db6382daef006cbab9e7372a",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B43D0.json",
+      "name": "BrnGame::DispatchThreadInputBuffer::SetCalibrationUnfriendlyEnablePostFx"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B4480.json",
+      "bytes": 4584,
+      "sha256": "304b7be7dde2514677657e935be78bd80bb57469e3eb1d791ee6a039d3b0d6a1",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B4480.json",
+      "name": "BrnGame::DispatchThreadInputBuffer::SetCalibrationTextureHandle"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823B4690.json",
+      "bytes": 4294,
+      "sha256": "c150559b24c06e5123db733cd0a0227fc2864b1e049e53bd6704a8d1e55d3f6f",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823B4690.json",
+      "name": "BrnGame::DispatchThreadInputBuffer::GetSnapShotRequest"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823CBCE0.json",
+      "bytes": 3789,
+      "sha256": "e6c6cca6a12ac8686670b01ad16a6dba7f32cbdd238803ea8b680ade1a2ac0a2",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823CBCE0.json",
+      "name": "BrnGame::DispatchThreadInputBufferManager::Construct"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823F0758.json",
+      "bytes": 21415,
+      "sha256": "f06f6a4e002266416a906c7e46d4b1946935afe8c44509cae6e2749c9c0456af",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823F0758.json",
+      "name": "BrnGame::BrnGameModule::DoUpdate_GUI"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x823EF310.json",
+      "bytes": 10157,
+      "sha256": "6727b081a92226ab65e16484146cd1e9f6441cc0dd647234df6aa367d42edf49",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x823EF310.json",
+      "name": "LoadingScriptedState::LoadGUIModule"
+    },
+    {
+      "evidence": "evidence/ARTIST/0x82927C80.json",
+      "bytes": 3559,
+      "sha256": "c5fbd974f1d1bef7a62b8dbc857dba45b4d43edfedb62a935334369591c65180",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82927C80.json",
+      "name": "XLaunchNewImage"
+    }
+  ],
+  "declaration_evidence": [
+    {
+      "evidence": "evidence/DecFIGS/GameSource/Game/BrnGameModule.h",
+      "bytes": 33208,
+      "sha256": "6fb6afad9ac6cc6dda0aa4baf31f73144fde66787458f5c0df72b43eddc13b8c",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Game\\BrnGameModule.h"
+    },
+    {
+      "evidence": "evidence/DecFIGS/GameSource/Game/BrnGameModule.cpp",
+      "bytes": 620,
+      "sha256": "2585ba1e531b10bc8291a243a7166062f99fb99623d862be281a8c952d1835ed",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Game\\BrnGameModule.cpp"
+    },
+    {
+      "evidence": "evidence/DecFIGS/GameSource/Game/BrnDispatchThreadInputBuffer.h",
+      "bytes": 7004,
+      "sha256": "11be9bdd1720b43f59fe355810fb6c38926a7f6c83a5b02c82bc98c039b3d999",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Game\\BrnDispatchThreadInputBuffer.h"
+    },
+    {
+      "evidence": "evidence/DecFIGS/GameShared/GameClasses/System/Resource/CgsResourceHandle.h",
+      "bytes": 8704,
+      "sha256": "a2485a69b93d1b4de6bf0d6019970b362e98d5fcfdd21af172f867826a4ddb15",
+      "source": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameShared\\GameClasses\\System\\Resource\\CgsResourceHandle.h"
+    }
+  ],
+  "raw_initial_data": {
+    "evidence": "evidence/raw_caller_initial_data/EVIDENCE.json",
+    "bytes": 2928,
+    "sha256": "e4d1ae3939ae72bc8d66fcd8354790cf4ad185504c9fc5c9c0ced8910fedef86",
+    "packet": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\renderer_prepare_owner_sol_20261023\\continuation\\gui_native_caller_data_3bfd_20261024",
+    "seal_sha256": "4b719258a077717071a654d5e702cbf4ae5fe25b3c8378a24c86c49725ea69b0"
+  },
+  "build_evidence": [
+    {
+      "evidence": "evidence/workflow_df627/tools/build/build_game_exe.bat",
+      "bytes": 454238,
+      "sha256": "05a4579c12341f241cc3d7e66554ae01a6cc36fb5ab72aef7cd481949be7e792",
+      "path": "tools/build/build_game_exe.bat",
+      "blob": "42e6adab598fee7634b2edceee371dac4a3369eb"
+    },
+    {
+      "evidence": "evidence/workflow_df627/tools/build/compile_exe.py",
+      "bytes": 34413,
+      "sha256": "cfe01dbbd062e3ca570b5e323a2605ae6b94fbf18c66b0c50f279f2304dfc7a8",
+      "path": "tools/build/compile_exe.py",
+      "blob": "f537eb5ba8da05747c29fbff9f600f2bc0f595c0"
+    },
+    {
+      "evidence": "evidence/workflow_df627/tools/build/msvc_flags.txt",
+      "bytes": 2431,
+      "sha256": "f409e36fd3bb17cd8ced47f33fb9488c667a260d4dd274a7b6a1a6643356bfc2",
+      "path": "tools/build/msvc_flags.txt",
+      "blob": "61f9acb7cdc081e143356fa30e6032e48c2fe94e"
+    }
+  ],
+  "existing_callers_and_sdk_symbols_sha256": "c6d5e93318e01c7b82e3bd6e5526478d07d572c30445e233041717f8e86a02ec",
+  "missing_or_incomplete_platform_services": [
+    {
+      "symbol": "XGetLaunchData",
+      "state": "Existing mounted PC body leaves output untouched and returns ERROR_NOT_FOUND"
+    },
+    {
+      "symbol": "XSetLaunchData",
+      "state": "Existing mounted PC body retains no data and returns success"
+    },
+    {
+      "symbol": "XLaunchNewImage",
+      "state": "No selected production definition; original two-argument noreturn ABI attested"
+    }
+  ],
+  "checks": 42,
+  "patch_sha256": "5140a7a90eeffc79f756960bfa4d95aad89d748023223f722c0d08578d41cef6"
+}
