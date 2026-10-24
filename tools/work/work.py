@@ -57,7 +57,7 @@ sync. Genuine auth rejections (bad WORK_AGENT) still stop immediately.
 
 Run as:  python tools/work/work.py <cmd>   (or the work.cmd shim from repo root)
 """
-import argparse, hashlib, json, os, re, sqlite3, subprocess, sys, time
+import argparse, hashlib, json, os, re, shutil, sqlite3, subprocess, sys, time
 import ssl
 import urllib.error, urllib.parse, urllib.request
 from collections import Counter, defaultdict
@@ -1993,6 +1993,28 @@ def cmd_auto(args):
     print(f"\nauto: {landed} landed (gate-passed, recorded done), {reverted} reverted to agent")
 
 
+def _find_idat():
+    """Locate idat through tools/ida/export_db.ps1 -PrintIdaPath, the single place that
+    knows how to find IDA: -IdaPath/IDA_PATH/IDA_BIN/IDADIR first, else the newest
+    install on the machine wherever it lives (any drive, portable, IDAUSR, ...).
+    Returns (path, None) or (None, reason)."""
+    shell = shutil.which("pwsh") or shutil.which("powershell")
+    if not shell:
+        return None, "no PowerShell (pwsh/powershell) to run tools/ida/export_db.ps1"
+    script = os.path.join(ROOT, "tools", "ida", "export_db.ps1")
+    try:
+        res = subprocess.run([shell, "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
+                              "-File", script, "-PrintIdaPath"],
+                             cwd=ROOT, capture_output=True, text=True, timeout=120)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        return None, f"could not run {os.path.relpath(script, ROOT)}: {e}"
+    lines = [l.strip() for l in res.stdout.splitlines() if l.strip()]
+    if res.returncode == 0 and lines and os.path.isfile(lines[-1]):
+        return lines[-1], None
+    reason = (res.stderr.strip().splitlines() or ["no idat found"])[0]
+    return None, f"{reason} (pass an install via the IDA_PATH environment variable)"
+
+
 def cmd_bootstrap(args):
     """One command to make a fresh clone workable and resume where we left off."""
     print("== work bootstrap ==")
@@ -2043,42 +2065,26 @@ def cmd_bootstrap(args):
             if not os.path.exists(db_path):
                 print(f"  error: {os.path.basename(db_path)} is missing from IDA Files.")
             else:
-                ida_path = os.environ.get("IDA_PATH")
-                if not ida_path:
-                    for path in [
-                        "C:\\Program Files\\IDA Professional 9.3",
-                        "C:\\Program Files\\IDA Professional 9.0",
-                        "C:\\Program Files\\IDA Pro 7.7",
-                        "C:\\Program Files\\IDA Pro 8.3",
-                    ]:
-                        if os.path.isdir(path):
-                            ida_path = path
-                            break
-                if not ida_path:
-                    print("  warning: IDA Pro path not found (set IDA_PATH environment variable).")
+                ida_exe, why = _find_idat()
+                if not ida_exe:
+                    print(f"  warning: IDA Pro not found: {why}")
                     print("           Cannot generate decfigs_inlining.json without IDA.")
                 else:
-                    ida_exe = os.path.join(ida_path, "ida.exe")
-                    if not os.path.exists(ida_exe):
-                        ida_exe = os.path.join(ida_path, "idat.exe")
-                    if not os.path.exists(ida_exe):
-                        print(f"  warning: executable not found in {ida_path}")
-                    else:
-                        print(f"  found IDA at: {ida_exe}")
-                        script_path = os.path.join(ROOT, "tools", "ida", "export_lineinfo.py")
-                        print("  running IDA Pro to export lineinfo (this may take a few minutes)...", flush=True)
-                        try:
-                            res = subprocess.run([
-                                ida_exe, "-A",
-                                f"-S{os.path.abspath(script_path)}",
-                                os.path.abspath(db_path)
-                            ], cwd=ida_path, capture_output=True, text=True)
-                            if res.returncode != 0:
-                                print(f"  warning: IDA exited with code {res.returncode}")
-                                if res.stderr:
-                                    print(f"  stderr: {res.stderr}")
-                        except Exception as e:
-                            print(f"  warning: failed to launch IDA: {e}")
+                    print(f"  found IDA at: {ida_exe}")
+                    script_path = os.path.join(ROOT, "tools", "ida", "export_lineinfo.py")
+                    print("  running IDA Pro to export lineinfo (this may take a few minutes)...", flush=True)
+                    try:
+                        res = subprocess.run([
+                            ida_exe, "-A",
+                            f"-S{os.path.abspath(script_path)}",
+                            os.path.abspath(db_path)
+                        ], cwd=os.path.dirname(ida_exe), capture_output=True, text=True)
+                        if res.returncode != 0:
+                            print(f"  warning: IDA exited with code {res.returncode}")
+                            if res.stderr:
+                                print(f"  stderr: {res.stderr}")
+                    except Exception as e:
+                        print(f"  warning: failed to launch IDA: {e}")
         if os.path.exists(raw_json):
             print("  generating decfigs_inlining.json from raw lineinfo...", flush=True)
             try:
