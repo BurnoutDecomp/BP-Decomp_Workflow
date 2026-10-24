@@ -1,0 +1,91 @@
+--- a/b5-decomp/src/GameSource/Gui/Flow/HUD/States/BrnBootLegal.cpp
++++ b/b5-decomp/src/GameSource/Gui/Flow/HUD/States/BrnBootLegal.cpp
+@@ -2,6 +2,7 @@
+ 
+ #include "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h"  // CgsGui::StateInterface (Register/OutputGuiEvent/PlayAptMovie/GetOutputEventQueue)
+ #include "GameShared/GameClasses/Gui/CgsGuiEvent.h"                       // CgsGui::GuiEvent<N>, CgsModule::Event
++#include <cstddef>                                                        // offsetof
+ #include "GameShared/GameClasses/Module/CgsVariableEventQueue.h"          // CgsModule::VariableEventQueue (the in-queue)
+ #include "GameShared/GameClasses/Core/CgsID.h"                            // CgsID, CgsIDCompress
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                        // CgsDev::Assert (the X360 "unexpected event" assert)
+@@ -179,13 +180,17 @@
+         { maPad[0] = maPad[1] = 0; }
+     };
+ 
+-    // BrnGui::GuiMuteDac -- a one-byte mute command.
+-    struct MuteDacEvent : public CgsGui::GuiEvent<200>
+-    {
+-        u8 mu8Mute;     // +0x0C (0)
+-        u8 maPad[3];
+-        MuteDacEvent() : CgsGui::GuiEvent<200>(0, 12), mu8Mute(0) { maPad[0] = maPad[1] = maPad[2] = 0; }
+-    };
++    // BrnGui::GuiMuteDac's X360 payload is one byte, event id 88.
++    struct MuteDacPayload
++    {
++        u8 mu8Mute;
++        s32 GetEventType() const { return 88; }
++    };
++    typedef CgsGui::GuiEventWrapper<MuteDacPayload, 40> MuteDacRecord40;
++    static_assert(sizeof(MuteDacPayload) == 1 && offsetof(MuteDacPayload, mu8Mute) == 0,
++                  "ARTIST event 88 payload is one byte");
++    static_assert(offsetof(MuteDacRecord40, mOutEvent) == 12 && sizeof(MuteDacRecord40) == 16,
++                  "ARTIST event 88 channel-40 record is {1,88,12}+1");
+ 
+     // BrnGui::GuiEventPlayVideo / GuiEventStopVideo -- carry a 112-byte MovieManager
+     // VideoDefinition the boot path Prepare()s on the stack; modelled by value here.
+@@ -202,12 +207,20 @@
+         { for (s32 i = 0; i < 112; ++i) maVideoDefinition[i] = reinterpret_cast<const u8*>(lpVideoDef)[i]; }
+     };
+ 
+-    // BrnGui::GuiEventSetPlayer0ControllerPort -- the saved controller port (invite reboot).
+-    struct SetPlayer0ControllerPortEvent : public CgsGui::GuiEvent<156>
+-    {
+-        s32 miPort;     // +0x0C
+-        explicit SetPlayer0ControllerPortEvent(s32 liPort) : CgsGui::GuiEvent<156>(0, 12), miPort(liPort) {}
+-    };
++    // ARTIST event143 payload: the saved player-0 controller port word.
++    struct SetPlayer0ControllerPortPayload
++    {
++        s32 miPort;
++        s32 GetEventType() const { return 143; }
++        explicit SetPlayer0ControllerPortPayload(s32 liPort) : miPort(liPort) {}
++    };
++    typedef CgsGui::GuiEventWrapper<SetPlayer0ControllerPortPayload, 40> SetPlayer0ControllerPortRecord40;
++    static_assert(sizeof(SetPlayer0ControllerPortPayload) == 4 &&
++                  offsetof(SetPlayer0ControllerPortPayload, miPort) == 0,
++                  "ARTIST event 143 payload is one word");
++    static_assert(offsetof(SetPlayer0ControllerPortRecord40, mOutEvent) == 12 &&
++                  sizeof(SetPlayer0ControllerPortRecord40) == 16,
++                  "ARTIST event 143 channel-40 record is {4,143,12}+4");
+ 
+ }   // anonymous namespace
+ }   // namespace BrnGui
+@@ -582,8 +595,12 @@
+             if (HasGameBeenSoftRebooted(gpBrnGameModule) &&
+                 !HasGameBeenRebootedDueToInvite(gpBrnGameModule))
+             {
+-                MuteDacEvent lMute;
+-                mpStateInterface->OutputGuiEvent<MuteDacEvent>(lMute);
++                MuteDacPayload lMute;
++                lMute.mu8Mute = 0;
++                MuteDacRecord40 lMuteRecord(lMute);
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lMuteRecord), 40,
++                    static_cast<s32>(sizeof(lMuteRecord)));
+             }
+ 
+             meUpdateStage = E_STAGE_FADE_IN;
+@@ -709,8 +726,11 @@
+             if (HasGameBeenRebootedDueToInvite(gpBrnGameModule))
+             {
+                 const s32* lpSoftRebootData = GetSoftRebootData(gpBrnGameModule);
+-                SetPlayer0ControllerPortEvent lPort(*lpSoftRebootData);
+-                mpStateInterface->OutputGuiEvent<SetPlayer0ControllerPortEvent>(lPort);
++                SetPlayer0ControllerPortPayload lPort(*lpSoftRebootData);
++                SetPlayer0ControllerPortRecord40 lPortRecord(lPort);
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lPortRecord), 40,
++                    static_cast<s32>(sizeof(lPortRecord)));
+                 lpInQueue->Clear();
+                 return;
+             }

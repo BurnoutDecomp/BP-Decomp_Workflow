@@ -1,0 +1,87 @@
+{
+  "review_date": "2026-10-24",
+  "verdict": "pass",
+  "verdict_scope": "source-only producer wire recovery; not complete event-337 HUD recovery and no runtime credit",
+  "proposal_base_commit": "ea5ce572baedd4ad8918f6d5bfcdfd756250d411",
+  "proposal_base_parent": "b9c0e692bc9d8f232b9986923acf07aff26c0639",
+  "proposal": {
+    "path": "scratch/DEBUG_MENU_1011/gui_roadrule_channel40_recovery_20261024_ea5ce572",
+    "readme_sha256": "234b9133c999372cf0929f789549edf9d824116b2348df130913fa9704772864",
+    "bindings_sha256": "d1c3af21b921c77c444cd1dedfd79748d9a7829df68b274696a242ef00f69fac",
+    "patch_sha256": "32cb427100a6ac35e886e5b317ff2bbd7d95f21b7c08c0506b41fe636f353cca",
+    "site_map_sha256": "53765262ecd59451d3a7b5eeeb63974889b3dd1dc394b8b1f0f13451c2fe1e39",
+    "source_path": "src/GameSource/Gui/Flow/HUD/Components/BrnRoadRuleComponent.cpp",
+    "base_git_blob": "472fce825b234d9f3a06bd7ee07407da7eb45fb1",
+    "preimage_sha256": "26cec32db7e7c6e7c97aa118840c6ed02f21ffae8cf5ba4019071f18dc56d8ab",
+    "postimage_sha256": "2065bd226babec3258e6f2487a632e412a71d7f5cff4c3176dfd92b183e0bcd0",
+    "preimage_byte_equal_to_base": true,
+    "changed_production_files": 1,
+    "changed_publisher_sites": [536, 1324],
+    "existing_event22_wrapper_preserved": true
+  },
+  "producer_site_verdicts": {
+    "event_337": {
+      "wire_verdict": "pass",
+      "artist_publisher_address": "0x82436950",
+      "artist_caller_address": "0x8243F540",
+      "caller_post_address": "0x8243F840",
+      "artist_record": "channel 40, {48,337,16}+48, total 64 bytes",
+      "current_pc_hud_endpoint": "unresolved; analyzer input loopback not evidenced",
+      "complete_hud_recovery_credit": false
+    },
+    "event_572": {
+      "wire_verdict": "pass",
+      "artist_publisher_address": "0x82436840",
+      "artist_caller_address": "0x82438598",
+      "artist_inline_post_address": "0x82438684",
+      "artist_gate": "a2 == 1 and a4 == 1",
+      "artist_record": "channel 40, {4,572,12,9}, total 16 bytes",
+      "pc_source_sink": "BridgeGuiToGameState case 572 -> GameState event 113 -> TrainingManager::RequestTraining",
+      "runtime_credit": false
+    }
+  },
+  "original_export_evidence": {
+    "artist": [
+      {"path": "evidence/ARTIST/0x82436840.json", "sha256": "86e38f1a541fac043c9cdfe7ab0605fde1383925442f5a27b970033e22df33d5"},
+      {"path": "evidence/ARTIST/0x82436950.json", "sha256": "325d3085ce90b8a47469c47de67998242892ca27567700e1d2b83a88ee29e3fe"},
+      {"path": "evidence/ARTIST/0x82438598.json", "sha256": "d5e07414fdc897bff07e2256ceb3759336bc1bb55803d21c00114effb13644f3"},
+      {"path": "evidence/ARTIST/0x8243F540.json", "sha256": "d7ab78afc2b3b4fb9084d01993d6d5eb61577622bbacb9d5a7f1a4ff6cb7efb3"}
+    ],
+    "decfigs": [
+      {"path": "evidence/DecFIGS/0x5933D4.json", "sha256": "3ffdcb0e51106b9ed8284de7f90e589c305453214b4f0efd7b709900ea56c4db", "shape": "const GuiEventRoadRuleFail* receiver"}
+    ],
+    "source_snapshots": [
+      {"path": "evidence/current/BrnGuiDemangledEventTypes.h", "sha256": "8fe46d47f44ae33badfe630cac20223d875f3e4fb4f22f19aa06368193da2934"},
+      {"path": "evidence/current/BrnGuiEventTypeDefs.h", "sha256": "d6176eb1ecaa3be23e0008fde5a53f09fe3ab64308017a73cffcbd3bbd61c9b2"},
+      {"path": "evidence/current/BrnGuiHudMessageAnalyzer.cpp", "sha256": "7a5baf081a0fa94a0d5b99684c1b78859ef1d2be11c6d4a09b383debe73e88ad"},
+      {"path": "evidence/current/BrnGuiModule.cpp", "sha256": "283edf4418bae4950f0268b04335f745ed9affddbf67f8a9ed0879948d60f477"},
+      {"path": "evidence/current/BrnRoadRuleComponent.cpp", "sha256": "8ce519f9b0df4a96d19d6cc2bfa8055436faf532dc19798903020f8b8c14619a"},
+      {"path": "evidence/current/CgsGuiEvent.h", "sha256": "0abadc2fc1f2cb19a3e169eb74a938a01c8a1ab92dcbf794db3774e4550871f9"},
+      {"path": "evidence/current/CgsGuiStateInterface.h", "sha256": "2bc4266468ce7dda02383e98340a35da0919b9e8fae15e5dbb1afdea723e4e66"},
+      {"path": "evidence/current/GameBridgeGUIToX_GameState.cpp", "sha256": "8c4d16597bcf60630f61579e363b2568654f9ff5eddeb1794cd04bc234cadee2"}
+    ]
+  },
+  "active_pc_path_evidence": [
+    {"path": "src/GameSource/Gui/BrnGuiModule.cpp", "git_blob": "bd46bf236c1c3aa4fa84a347944c08fb1fd82586", "sha256": "0cab387a511423f3c1276a739936f7a858847510bc106f839b8923d3f0c2efc9", "observed": "channel 40 unwrapped into mGuiOutQueue then RouteEventToFlow; analyzer reads mpGuiEventInputBuffer; no output-to-input loopback found"},
+    {"path": "src/GameSource/Game/BrnGameModule.cpp", "git_blob": "87360a3936ae15410eb16d49ed01a0fda184faa2", "sha256": "b1892a1ba9a84909e5515ea2b9ea340d6acffd2ae8788df06da0a9f0b36a1ec7", "observed": "GUI input buffer receives world/controller/GameState/director/network/game producers before GUI update; GUI out queue is copied to a distinct output buffer and bridged after update"},
+    {"path": "src/GameSource/Game/GameBridgeGUIToX_GameState.cpp", "git_blob": "1996873d645adc0615a25d7fa6b151a62a6018f7", "sha256": "bd4b5e21abbb4ad880cd605d88d6459c3cb93e63ed796b213f3da00171d989b1", "observed": "case 572 copies one word and emits GameState event 113"},
+    {"path": "src/GameSource/GameState/BrnGameEvents.h", "git_blob": "7a535c3dd7855deba6a2ef681a05182316d57a10", "sha256": "ee208ff1c221593baee41448cd2db9faa96639e4bf3ad18b07bb927255f22c29", "observed": "113 is E_EVENT_GAME_TRAINING_REQUEST"},
+    {"path": "src/GameSource/GameState/GameStateModule_wW_01.cpp", "git_blob": "cd1a787383fe5a04406f590212e0334352c5fbc0", "sha256": "a05fc60de18c0e32b679405cee551045966c3d6f77b9f4b99631485737418a7b", "observed": "PostWorldUpdate appends GameState input game events to mGameEventCarryQueue"},
+    {"path": "src/GameSource/GameState/GameStateModule_ProcessGameEvents_wBT_03.cpp", "git_blob": "009b469983e42fad98da0d6c1c5633817d0e7381", "sha256": "d7bf8aee680ce2353e00ed880cf87ee80958967232b0d098b1ff23ce392a8a4d", "observed": "event 113 requests the training type from TrainingManager"},
+    {"path": "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h", "git_blob": "118bbf75b320ca5f0c94d23173be613303d1d957", "sha256": "bb2fab6c099973073f36e4861d60f5467f3373b84c000b1c742c619f9dbb8697", "observed": "current generic OutputGuiEvent queues raw id and sizeof(TEvent), unlike ARTIST channel-40 wrappers"},
+    {"path": "src/GameShared/GameClasses/Gui/CgsGuiEvent.h", "git_blob": "3f1610e34333ff7109e6d7823625851b9444ac5a", "sha256": "1d818d3b97711af66dba4c5748d0cfbfbf6cf8ed8bd548f5c7937b202a8ccad3", "observed": "GuiEventWrapper stores payload size, id, offset, then payload; align-8 payload begins at 16"}
+  ],
+  "documentation_findings": [
+    "README's event-572 phrase 'game action 113' is inaccurate; 113 is GameState event E_EVENT_GAME_TRAINING_REQUEST, which then calls TrainingManager::RequestTraining.",
+    "README should limit the event-337 consumer claim: current PC output route does not loop the record into HudMessageAnalyzer's input queue."
+  ],
+  "review_limits": {
+    "local_cpp_compile": false,
+    "tests": false,
+    "ci": false,
+    "native_run_or_game_input": false,
+    "source_or_git_mutation": false,
+    "runtime_or_gameplay_credit": false,
+    "previous_four_post_pass_and_event121_addendum_modified": false
+  }
+}

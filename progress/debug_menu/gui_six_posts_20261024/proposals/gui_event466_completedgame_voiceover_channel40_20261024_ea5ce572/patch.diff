@@ -1,0 +1,30 @@
+--- a/b5-decomp/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp
++++ b/b5-decomp/src/GameSource/Gui/Flow/PostEvent/States/Offline/BrnCompletedGame.cpp
+@@ -66,6 +66,14 @@
+               "ARTIST 0x824937E0 payload offset is 12");
+ static_assert(sizeof(GuiAutosaveRequestEventRecord40) == 16,
+               "ARTIST 0x824937E0 channel-40 record is 16 bytes");
++typedef CgsGui::GuiEventWrapper<BrnGui::GuiEventAudioVoiceOver, 40>
++    GuiEventAudioVoiceOverRecord40;
++static_assert(sizeof(BrnGui::GuiEventAudioVoiceOver) == 4,
++              "ARTIST 0x824C3178 copies a four-byte voice-over name hash");
++static_assert(offsetof(GuiEventAudioVoiceOverRecord40, mOutEvent) == 12,
++              "ARTIST 0x824C3178 payload offset is 12");
++static_assert(sizeof(GuiEventAudioVoiceOverRecord40) == 16,
++              "ARTIST 0x824C3178 channel-40 record is 16 bytes");
+ 
+ namespace BrnGui
+ {
+@@ -681,7 +689,11 @@
+                 GuiEventAudioVoiceOver lVoiceOverEvent;
+                 *reinterpret_cast<u32*>(lVoiceOverEvent.maData) =
+                     static_cast<u32>(CgsSound::Playback::Name::MakeHash("Elite_Then_100_Percent"));
+-                mpStateInterface->OutputGuiEvent(lVoiceOverEvent);
++                // ARTIST 0x824C3178 requires {4,466,12}+4 on channel 40.
++                GuiEventAudioVoiceOverRecord40 lVoiceOverRecord(lVoiceOverEvent);
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lVoiceOverRecord), 40,
++                    static_cast<s32>(sizeof(lVoiceOverRecord)));
+             }
+ 
+             meFirstFinishedSubstate = E_FINISHED_FIRST_LICENSE_PRESENTATION_RUNNING;

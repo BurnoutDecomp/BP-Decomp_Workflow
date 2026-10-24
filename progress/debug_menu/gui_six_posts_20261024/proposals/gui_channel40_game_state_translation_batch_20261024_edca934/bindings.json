@@ -1,0 +1,121 @@
+{
+  "base_commit": "edca934dc502f71f64ad873cdd386afe5e3eeeb2",
+  "base_parent": "ea5ce572baedd4ad8918f6d5bfcdfd756250d411",
+  "source_ref": "refs/heads/codex/debug-consumers-20261023 contains the exact base object",
+  "scope": "Two source-present direct StateInterface::OutputGuiEvent callsites whose original ARTIST bodies wrap channel 40 and whose normalized event ids have existing GameState bridge cases; branch reachability is not runtime-verified.",
+  "production_edits": false,
+  "build_or_test": false,
+  "git_mutations": false,
+  "proposed_source_files": [
+    {
+      "path": "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp",
+      "base_blob": "0db5eb2acca6c59c09295bab3d98c2e594cc9502",
+      "base_sha256": "c7520fe1d0710341414dcf5c1cfd9164a3c016f95b6fb9931c5e38b8a99efebf",
+      "post_sha256": "24ef3ae81a351d754f79d77b63bf8bd193e3fd3749b47e37962b7738e0142a69",
+      "changed_caller_count": 1,
+      "before_image": "source/BrnRaceMainHudState.cpp.before",
+      "after_image": "source/BrnRaceMainHudState.cpp.after",
+      "patch_path": "source/batch.patch"
+    },
+    {
+      "path": "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapEvent.cpp",
+      "base_blob": "bd53c07e351efcb6c284c79e0f962c23aee3a2fb",
+      "base_sha256": "88f0695f1e52302676927842bc4d726f9c4bb9f8a9b687ff7707958a95f0b305",
+      "post_sha256": "3d224c7b0b3e30bd1029ae8af57e190da5f74631e5562fdc8774f3cba81d89f3",
+      "changed_caller_count": 1,
+      "before_image": "source/BrnCrashNavMapEvent.cpp.before",
+      "after_image": "source/BrnCrashNavMapEvent.cpp.after",
+      "patch_path": "source/batch.patch"
+    }
+  ],
+  "ARTIST_exports": [
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82436B90.json",
+      "sha256": "1dac74901d013c3305afe1522f15389e7868cb755ca941aba8e4bd072b050667"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8247E898.json",
+      "sha256": "09033106a38f19bdc73eb6fa0039aa1e815e144b422c7e942dd88598de2359a7"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824C2FF0.json",
+      "sha256": "c3a15235d28164ab5d3d3703477faba5f41616289f2e9a8ffcb47c734bc568df"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824DDB90.json",
+      "sha256": "47298608565b0649df0a42619ca054aaab880c08030e7f0d0def4c15baa22828"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823DDB78.json",
+      "sha256": "c7608a6c766a8b32dedd11543cb9bdac45c7400dc8cbfea3c23d8d0a0c98deb2"
+    }
+  ],
+  "DecFIGS_files": [
+    {
+      "path": "references/DecFIGS/dwarfdump/GameSource/Gui/BrnGuiEventTypeDefs.h",
+      "sha256": "1b202fa27b6b50c9888df9782b7d649697aa8722df9009a162df8ac54607faba"
+    },
+    {
+      "path": "references/DecFIGS/dwarfdump/SharedClasses/Progression/BrnRace.h",
+      "sha256": "10eb7cb41d5a888722057472afe003e10fa361e242417357d39d83f353f129d5"
+    }
+  ],
+  "supporting_source_files": [
+    {
+      "path": "src/GameSource/GameState/BrnGameEvents.h",
+      "base_blob": "7a535c3dd7855deba6a2ef681a05182316d57a10",
+      "sha256": "ee208ff1c221593baee41448cd2db9faa96639e4bf3ad18b07bb927255f22c29"
+    },
+    {
+      "path": "src/GameSource/Game/GameBridgeGUIToX_GameState.cpp",
+      "base_blob": "1996873d645adc0615a25d7fa6b151a62a6018f7",
+      "sha256": "bd4b5e21abbb4ad880cd605d88d6459c3cb93e63ed796b213f3da00171d989b1"
+    },
+    {
+      "path": "src/GameSource/Game/BrnGameModule.cpp",
+      "base_blob": "87360a3936ae15410eb16d49ed01a0fda184faa2",
+      "sha256": "b1892a1ba9a84909e5515ea2b9ea340d6acffd2ae8788df06da0a9f0b36a1ec7"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "base_blob": "bd46bf236c1c3aa4fa84a347944c08fb1fd82586",
+      "sha256": "0cab387a511423f3c1276a739936f7a858847510bc106f839b8923d3f0c2efc9"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiDemangledEventTypes.h",
+      "base_blob": "67f298c757a6cb6463c80a0149134141afeb4725",
+      "sha256": "ff1cf6023db573b5cb63ed47753c490240755ff70f42c373f3312dbec7ccb7c3"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Gui/CgsGuiEvent.h",
+      "base_blob": "3f1610e34333ff7109e6d7823625851b9444ac5a",
+      "sha256": "1d818d3b97711af66dba4c5748d0cfbfbf6cf8ed8bd548f5c7937b202a8ccad3"
+    },
+    {
+      "path": "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h",
+      "base_blob": "118bbf75b320ca5f0c94d23173be613303d1d957",
+      "sha256": "bb2fab6c099973073f36e4861d60f5467f3373b84c000b1c742c619f9dbb8697"
+    }
+  ],
+  "source_callers": [
+    {
+      "event_id": 326,
+      "path": "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp",
+      "source_anchor": "2010-2015",
+      "artist_caller": "0x8247E898",
+      "artist_template": "0x82436B90",
+      "x360_record": "{8,326,12}+8; channel40; 20 bytes",
+      "destination_game_state_event": "E_EVENT_GUI_SWITCHES_ROAD_RULE_STATE (103)"
+    },
+    {
+      "event_id": 172,
+      "path": "src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapEvent.cpp",
+      "source_anchor": "752-754",
+      "artist_caller": "0x824DDB90",
+      "artist_template": "0x824C2FF0",
+      "x360_record": "{120,172,16}+120; channel40; 136 bytes",
+      "destination_game_state_event": "E_EVENT_ADD_CUSTOM_RACE (90)"
+    }
+  ],
+  "proposal_patch_sha256": "a2f9cd7c346762e48f5a4859d8c4b0fce8358891ffbc8bf31333323b13e1e4d9"
+}

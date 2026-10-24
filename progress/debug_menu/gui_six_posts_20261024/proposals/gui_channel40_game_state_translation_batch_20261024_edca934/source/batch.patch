@@ -1,0 +1,36 @@
+--- a/src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp
++++ b/src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp
+@@ -2012,7 +2012,14 @@
+                     lModeRequest.maData[2] = 0; lModeRequest.maData[3] = 0;
+                     lModeRequest.maData[4] = 0; lModeRequest.maData[5] = 0;
+                     lModeRequest.maData[6] = 0; lModeRequest.maData[7] = 0;
+-                    mpStateInterface->OutputGuiEvent(lModeRequest);
++                    using RoadRuleModeOutRecord =
++                        CgsGui::GuiEventWrapper<GuiEventRoadRuleModeRequest, 40>;
++                    static_assert(sizeof(RoadRuleModeOutRecord) == 20,
++                                  "ARTIST channel-40 event 326 is {8,326,12}+8");
++                    RoadRuleModeOutRecord lModeRequestOut(lModeRequest);
++                    mpStateInterface->GetOutputEventQueue()->AddEvent(
++                        reinterpret_cast<const CgsModule::Event*>(&lModeRequestOut), 40,
++                        static_cast<s32>(sizeof(lModeRequestOut)));
+                 }
+                 if (mbFreeburnChallengeButtonStart)
+                     mChallengeComponent.HandleButtonPress(lpiPayload[1]);
+--- a/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapEvent.cpp
++++ b/src/GameSource/Gui/Flow/Screen/States/BrnCrashNavMapEvent.cpp
+@@ -751,7 +751,14 @@
+ 
+                 GuiEventCustomeEventCreate lCreateCustomEvent;              // cpp:193
+                 lCreateCustomEvent.mRace = mCreatedRace;
+-                mpStateInterface->OutputGuiEvent<GuiEventCustomeEventCreate>(lCreateCustomEvent);
++                using CustomEventCreateOutRecord =
++                    CgsGui::GuiEventWrapper<GuiEventCustomeEventCreate, 40>;
++                static_assert(sizeof(CustomEventCreateOutRecord) == 136,
++                              "ARTIST channel-40 event 172 is {120,172,16}+120");
++                CustomEventCreateOutRecord lCreateCustomEventOut(lCreateCustomEvent);
++                mpStateInterface->GetOutputEventQueue()->AddEvent(
++                    reinterpret_cast<const CgsModule::Event*>(&lCreateCustomEventOut), 40,
++                    static_cast<s32>(sizeof(lCreateCustomEventOut)));
+ 
+                 mbUpdateNewEventInfo = true;
+                 mi8NextEventIndex    = static_cast<s8>(mi8CurrentEventIndex + 1);
