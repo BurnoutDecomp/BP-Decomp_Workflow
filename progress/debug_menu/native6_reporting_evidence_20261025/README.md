@@ -1,0 +1,3 @@
+Six BoostBar controls have reviewed private native change, opposition and restore evidence on exact f0b8/5072. The selected GUI and debug-system source paths are unchanged in this candidate. The full eleven-control aggregate and normal-file preservation remain FAIL; incomplete controls receive no credit. The normal package was replaced from another checkout and its unrelated changes were preserved.
+
+The allocator report candidate passes26 production checks; the unchanged control runs22 checks and shows exactly three missing-callback failures. Eleven shipping gate groups and the actual Windows allocation-family test also pass. This evidence checkpoint changes no tested C++ body and installs no normal build.
