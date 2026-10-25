@@ -15,11 +15,13 @@ The previous normal package is backed up. Config, both logs, nine profiles and t
 
 ## Campaign counts
 
+Six BoostBar controls now pass original-source, raw native and pixel review: three presets, the custom action and outer red/green channels. The full eleven-control run remains FAIL; the five unfinished controls receive no credit. [Evidence and limits](boostbar_six_retained_native_20261025/README.md).
+
 **October25:** four collision-render controls now pass independent retained-native review: collision world, soup AABBs, draw distance and edge cosines. All twelve change/negative/restore images and direct raw-log attribution pass. The later map-allocation assertion and original sixteen-control aggregate remain FAIL; sphere, map-level and sweeper controls gain no credit. [Four-site evidence](geometry_four_retained_native_20261025/REPORT.md).
 
 **October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation now pass. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **56 verified, seven original no-ops and 1,292 pending**. That is 63/1,355 (4.6%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **62 verified, seven original no-ops and 1,286 pending**. That is 69/1,355 (5.1%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
