@@ -1,0 +1,87 @@
+{
+  "source_base": "f0fe435e9d41374158b413c7adcfd7361b828eb6",
+  "workflow_base": "ccd940e8ff898724ea53342a6d26e6d185ec4a4b",
+  "installed_comparison_source": "36ae3ffed6e8fb3ea89ca91947647aa9465c8658",
+  "causal_source_commit": "440044bcac678ac5a93edee7539cbb0b72372100",
+  "paths": [
+    {
+      "repo": "b5",
+      "path": "tests/evidence/online_save_route/source_pins.json",
+      "preimage": "pre/b5/tests/evidence/online_save_route/source_pins.json",
+      "postimage": "post/b5/tests/evidence/online_save_route/source_pins.json",
+      "pre": {
+        "raw_bytes": 5017,
+        "raw_sha256": "696728c62271745911ddaaf68d78a91e88d029eb24a0d7f9e0d9b014549520a6",
+        "lf_bytes": 5017,
+        "lf_sha256": "696728c62271745911ddaaf68d78a91e88d029eb24a0d7f9e0d9b014549520a6",
+        "git_blob_sha1": "4b907feb410d81383ff9d0eb9844ec9be92cd25f"
+      },
+      "post": {
+        "raw_bytes": 5017,
+        "raw_sha256": "455eec70f7b026ac7545eeeef2b942bda479ce0afd0b2e0ff6ce8d2d1bda6cb1",
+        "lf_bytes": 5017,
+        "lf_sha256": "455eec70f7b026ac7545eeeef2b942bda479ce0afd0b2e0ff6ce8d2d1bda6cb1",
+        "git_blob_sha1": "d287a20111247b0d24efe0f128c5146ba8f0e3d1"
+      },
+      "patch": "b5.patch",
+      "exact_patch_roundtrip": true
+    },
+    {
+      "repo": "workflow",
+      "path": "ci/check-candidate-build.ps1",
+      "preimage": "pre/workflow/ci/check-candidate-build.ps1",
+      "postimage": "post/workflow/ci/check-candidate-build.ps1",
+      "pre": {
+        "raw_bytes": 128719,
+        "raw_sha256": "6c8312ff4c95a5cd62351b4586aaeebf53ddbff3004deebb307fc676ae3c5ffc",
+        "lf_bytes": 128719,
+        "lf_sha256": "6c8312ff4c95a5cd62351b4586aaeebf53ddbff3004deebb307fc676ae3c5ffc",
+        "git_blob_sha1": "ea762a6fbe7f055909c345a861d758c6373c13c6"
+      },
+      "post": {
+        "raw_bytes": 128719,
+        "raw_sha256": "e27025cf9d506e154cd45ab19644aa0fee715d08be9edbd33324997acc4979d6",
+        "lf_bytes": 128719,
+        "lf_sha256": "e27025cf9d506e154cd45ab19644aa0fee715d08be9edbd33324997acc4979d6",
+        "git_blob_sha1": "6d5f7e7d33ce762cf6e6762472fe0450c139a152"
+      },
+      "patch": "workflow.patch",
+      "exact_patch_roundtrip": true
+    }
+  ],
+  "expected_b5_post_tree": "9c0099934adef838d848b0293873c37ed29666b4",
+  "expected_workflow_post_tree_before_gitlink_update": "55098cd88ee65d488c0be19c8debae8d6f459738",
+  "workflow_gitlink_note": "Root must publish B5 metadata commit then bind the workflow gitlink to its actualnewcommit; the predictedworkflowtree here includes only the approvedchecker hardpin change and retainsoldgitlink.",
+  "actual_failure": "Hosted40205289033 stopped at Online-save-route pinned input differs: b5/src/GameSource/Gui/BrnGuiCache.cpp, before route runner execution.",
+  "input_audit": "Exactly1of24B5 inputs stale; all3workflow inputs match. All24 prior36ae B5rows satisfy oldpins; newpin row nowmatchescurrentCache, allotherrows unchanged.",
+  "cache_delta_scope": "Sole hunk in RecEvent offlinecase292, defaultOfflinePostEventData assignment -> explicitmemset. Full RecEvent is not claimedbyte-identical; routefixture selectedcacheconstructor and4production lookupmethods are raw/LFbyte-identical.",
+  "fixture_composition": "Read exactbinder/runner/ownedhelper/plan/payload asstatictext only. Candidate wholeOptionsDataProfileTU, getters/params/events/StrStream/diagnosticTUs and constructor provider selectedbytes unchanged. No fixturemodule import, functioncall, generation, evaluation, compilation or execution.",
+  "selected_definitions": {
+    "evidence": "SELECTED_BODIES.json",
+    "count": 16,
+    "all_raw_and_LF_equal": true,
+    "cache_ctor_matches_existing_definition_pin": "466e35c41d05d41edb662c1039dc1c32816f399506cf6ce47d39569b5074dac4",
+    "original_ctor_matches_existing_definition_pin": "ebb77d77d26a3733e29b8848d351a24ff7d88b0aeb8fcb2b87072d4f9b675f9b"
+  },
+  "direct_production_consumers": {
+    "evidence": "PRODUCTION_CONSUMERS.json",
+    "count": 4,
+    "all_whole_raw_equal": true
+  },
+  "unchanged_contract": "schema1/crlf_to_lf_only/base8b2940d4/baselineGitBlob9695cfc/controlctor/Cachector hashes,24+3row scope,8payloads,71candidatechecks and three negative witnesses, timeouts/dependencychecks/ownedcleanup/hosted-onlyguard remain unchanged.",
+  "minimal_metadata_delta": {
+    "cache_old": {
+      "lf_sha256": "4fe7737cfedcebd183555fdcbd67f61b979f6e6bf28c7cbe538f1235a1812fd5",
+      "lf_bytes": 289989
+    },
+    "cache_new": {
+      "lf_sha256": "b17fbbafe3fb8b89183306e3d7ca10cab7a3d11e15f277a10b6cf8861843982e",
+      "lf_bytes": 290236
+    },
+    "pins_old_LF_sha256": "696728c62271745911ddaaf68d78a91e88d029eb24a0d7f9e0d9b014549520a6",
+    "pins_new_LF_sha256": "455eec70f7b026ac7545eeeef2b942bda479ce0afd0b2e0ff6ce8d2d1bda6cb1",
+    "pins_LF_bytes": 5017
+  },
+  "scope": "Scratch-only static source/hash/data parsing. No production source/checker logic/fixture/testscope change, local fixture import/evaluation/compile/test/native/Git mutation/CI action. Root owns publication/hostedretry/install.",
+  "readiness": "Exact2repo metadata correction packet; static identity justified, hosted acceptance unrun."
+}
