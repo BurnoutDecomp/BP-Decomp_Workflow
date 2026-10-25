@@ -6,6 +6,7 @@ The real-link test also runs when MSVC's cl is on PATH.
 import contextlib
 import importlib.util
 import io
+import json
 import os
 from pathlib import Path
 import shutil
@@ -89,6 +90,44 @@ class BuildVersionTests(unittest.TestCase):
         self.git("-c", "commit.gpgsign=false", "commit", "--quiet", "--allow-empty", "-m", "identity only")
         self.generate()
         self.assertTrue(driver.is_stale(obj, "flags", driver.StatCache(), driver.HashCache()))
+
+    def test_linked_inventory_uses_the_same_source_fingerprints(self):
+        spec = importlib.util.spec_from_file_location("linked_inventory",
+            Path(__file__).resolve().parents[2] / "work/build_linked_files.py")
+        inventory = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(inventory)
+        header = self.generate()
+        common = self.repo / "src/common.h"
+        common.write_text("// legacy header dependency\n")
+        index = self.root / "tu_index.json"
+        index.write_text("{}")
+        obj_dir = self.out / "obj"
+        (obj_dir / "tu").mkdir()
+        exe = self.out / "Burnout_PC.exe"
+        (obj_dir / "base.rsp").write_text("/nologo\n")
+        (obj_dir / "build.rsp").write_text('"' + str(self.renderer) + '"\n/Fe"' + str(exe) + '"\n')
+        Path(str(exe) + ".provenance.json").write_text(json.dumps({"b5_root": str(self.repo)}))
+        result = self.out / "linked.json"
+        for has_version in (True, False):
+            if not has_version:
+                header.unlink()
+            options = driver.source_compile_options([str(self.renderer)], ["/nologo"], str(self.repo),
+                str(header) if has_version else None)
+            deps = [str(self.renderer), str(header if has_version else common)]
+            obj = driver.obj_path(str(self.renderer), str(obj_dir / "tu"))
+            Path(obj).write_bytes(b"fresh cached renderer")
+            digest = driver.deps_digest(deps, driver.HashCache())
+            Path(obj + ".d").write_text(options[str(self.renderer)][1] + "\n@digest " + digest + "\n" + "\n".join(deps) + "\n")
+            newest = max(Path(p).stat().st_mtime_ns for p in deps) + 10_000_000_000
+            os.utime(obj, ns=(newest, newest))
+            for mode in ("0", "1"):
+                with self.subTest(generated_header=has_version, hash_mode=mode), \
+                     mock.patch.multiple(inventory, ROOT=str(self.root), TU_INDEX=str(index),
+                        CLASS_HOMES=str(self.root / "no_homes"), LEDGER=str(self.root / "no_ledger")), \
+                     mock.patch.dict(os.environ, {"BRN_EXE_HASH_DEPS": mode}), \
+                     contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(inventory.main(["--out", str(self.out), "--json", str(result)]), 0)
+                    self.assertEqual(json.loads(result.read_text())["meta"]["stale_sources"], 0)
 
     @unittest.skipUnless(os.name == "nt" and shutil.which("cl"), "requires MSVC cl")
     def test_msvc_sees_generated_header_and_records_dependency(self):
