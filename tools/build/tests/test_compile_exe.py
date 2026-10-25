@@ -21,6 +21,88 @@ driver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(driver)
 
 
+class BuildVersionTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix="build identity ")
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.repo = self.root / "selected source"
+        self.repo.mkdir()
+        self.renderer = self.repo / "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp"
+        self.renderer.parent.mkdir(parents=True)
+        self.renderer.write_text('#include "BrnBuildVersion.h"\nconst char* commit = B5_BUILD_COMMIT;\n')
+        self.git("init", "--quiet")
+        self.git("config", "user.name", "Build test")
+        self.git("config", "user.email", "build-test@example.invalid")
+        self.git("add", "src")
+        self.git("-c", "commit.gpgsign=false", "commit", "--quiet", "-m", "initial")
+        self.out = self.root / "output with spaces"
+
+    def git(self, *args):
+        return subprocess.check_output(["git", "-C", str(self.repo), *args],
+                                       text=True, stderr=subprocess.STDOUT).strip()
+
+    def generate(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            return Path(driver.write_build_version(str(self.out), str(self.repo)))
+
+    def test_overlay_uses_selected_source_commit(self):
+        header = self.generate()
+        self.assertIn('"' + self.git("rev-parse", "--short=12", "HEAD") + '"', header.read_text())
+        self.assertNotIn("unknown", header.read_text())
+
+    def test_unchanged_identity_does_not_rewrite_header(self):
+        header = self.generate()
+        os.utime(header, ns=(1_000_000_000, 1_000_000_000))
+        self.generate()
+        self.assertEqual(header.stat().st_mtime_ns, 1_000_000_000)
+
+    def test_dirty_and_new_commit_refresh_identity(self):
+        header = self.generate()
+        previous = header.read_text()
+        self.renderer.write_text(self.renderer.read_text() + "// local change\n")
+        self.generate()
+        self.assertIn("+dirty", header.read_text())
+        self.git("-c", "commit.gpgsign=false", "commit", "--quiet", "-am", "next")
+        self.generate()
+        self.assertNotIn("+dirty", header.read_text())
+        self.assertNotEqual(header.read_text(), previous)
+
+    def test_only_renderer_compile_flags_change(self):
+        header = self.generate()
+        other = str(self.repo / "src/Other.cpp")
+        flags = ["/nologo", "/EHsc"]
+        options = driver.source_compile_options([str(self.renderer), other], flags, str(self.repo), str(header))
+        self.assertEqual(options[other][0], flags)
+        self.assertEqual(options[str(self.renderer)][0], flags + ["/I" + str(header.parent)])
+        self.assertNotEqual(options[other][1], options[str(self.renderer)][1])
+
+    def test_commit_change_invalidates_content_cached_renderer(self):
+        header = self.generate()
+        obj = str(self.out / "renderer.obj")
+        Path(obj).write_bytes(b"cached object")
+        deps = [str(self.renderer), str(header)]
+        digest = driver.deps_digest(deps, driver.HashCache())
+        Path(obj + ".d").write_text("flags\n@digest " + digest + "\n" + "\n".join(deps) + "\n")
+        self.assertFalse(driver.is_stale(obj, "flags", driver.StatCache(), driver.HashCache()))
+        # A commit with identical source bytes must still change the rendered identity.
+        self.git("-c", "commit.gpgsign=false", "commit", "--quiet", "--allow-empty", "-m", "identity only")
+        self.generate()
+        self.assertTrue(driver.is_stale(obj, "flags", driver.StatCache(), driver.HashCache()))
+
+    @unittest.skipUnless(os.name == "nt" and shutil.which("cl"), "requires MSVC cl")
+    def test_msvc_sees_generated_header_and_records_dependency(self):
+        header = self.generate()
+        options = driver.source_compile_options([str(self.renderer)], ["/nologo"], str(self.repo), str(header))
+        flags, fingerprint = options[str(self.renderer)]
+        obj = str(self.out / "renderer.obj")
+        rc, shown, _ = driver.compile_one(str(self.renderer), obj, flags, fingerprint,
+            dict(os.environ), driver.detect_note_prefix(dict(os.environ), str(self.out)), driver.HashCache())
+        self.assertEqual(rc, 0, "\n".join(shown))
+        self.assertIn(str(header), Path(obj + ".d").read_text())
+        self.assertIn(self.git("rev-parse", "--short=12", "HEAD").encode(), Path(obj).read_bytes())
+
+
 class LinkPublicationTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="link safety ")
