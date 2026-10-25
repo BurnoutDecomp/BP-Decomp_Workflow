@@ -1,0 +1,213 @@
+{
+  "source_base": "f0fc978844c26f6256248bb00e6e754dbc7941f9",
+  "source_base_tree": "ce47fe8abba63d86c9fa68d0fb25d774d4879a49",
+  "workflow_base": "56d18a7ece4901a885a9b1526107173125d88242",
+  "workflow_base_tree": "a6bfed3ea910171db76cf8cd2afc447a73ae0be7",
+  "expected_b5_post_tree": "8c201d2d7aebe174f5c0a07a7784750f975d77bb",
+  "paths": [
+    {
+      "path": "src/GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "preimage": "pre/src/GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "pre_bytes": 14413,
+      "pre_sha256": "bbac6e91e69324389d43000d1b5a74f89e43d30193b3fd3d44a22886f8bdaa4d",
+      "pre_git_blob": "259fed2909689d897badab7a9f432cb735ed674b",
+      "postimage": "post/src/GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "post_bytes": 14857,
+      "post_sha256": "284966bcc0fa84560fed7b977acb406d69836244ff931cfa5bf037bf4fb43fc2",
+      "post_git_blob": "7d28394cf2ef3bd7ca49d1bd21b4fcb451c0a023"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "preimage": "pre/src/GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "pre_bytes": 9035,
+      "pre_sha256": "bcd96c84046fb12bb16fe08465cda7be3b132b756d72facc400d3cfb8e2ec648",
+      "pre_git_blob": "582de2848abf6f7be3f0fd47d64a98983ed187da",
+      "postimage": "post/src/GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "post_bytes": 9669,
+      "post_sha256": "e3369d89e5cb96a304e6e64d20be93b50485f74ef8fc00c98e6d6644872c1f10",
+      "post_git_blob": "501937f0710b509f6c21d4201b94bebc8a2f3023"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModuleIO.h",
+      "preimage": "pre/src/GameSource/Resource/BrnGameDataModuleIO.h",
+      "pre_bytes": 15768,
+      "pre_sha256": "3594150307e25b14c2257d35a23deb088a90989c3356ede68807aaf5dbd8c17f",
+      "pre_git_blob": "a5b73edfb724506ab26c1022386ee9ed7f211cde",
+      "postimage": "post/src/GameSource/Resource/BrnGameDataModuleIO.h",
+      "post_bytes": 15931,
+      "post_sha256": "b6c598781eb82d5c443834d32fd4ccd2fff91891b991cd673173c92ab6689d1c",
+      "post_git_blob": "91ac878e527ea018d3a6a24d08a68c71855609af"
+    },
+    {
+      "path": "vendor/renderware/include/rw/rwcore_structs.h",
+      "preimage": "pre/vendor/renderware/include/rw/rwcore_structs.h",
+      "pre_bytes": 32658,
+      "pre_sha256": "875f826a99a90e52898df2968a39c74160314646b4a822f2105951ae46970210",
+      "pre_git_blob": "ddc5ce5ef529ecbcf0106e3aaf7d4b70c07da7c5",
+      "postimage": "post/vendor/renderware/include/rw/rwcore_structs.h",
+      "post_bytes": 33197,
+      "post_sha256": "197385507c9a2ef378766b3da81b617f0731814421c4ea883f0bbb0357ff8b61",
+      "post_git_blob": "0b63e0e4d7399f5bd17e1b978b5cbc85392dfbd3"
+    }
+  ],
+  "primary": [
+    {
+      "origin": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82669E40.json",
+      "evidence": "evidence/primary/0x82669E40.json",
+      "bytes": 63813,
+      "sha256": "f4ee253cb59199b6c339c6e00db12f31e7e7a2e3ac35c7f6ddefef4dda470e0b"
+    },
+    {
+      "origin": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\SDKs\\EATech\\include\\cmn\\rw\\core\\resource\\resourceallocator.h",
+      "evidence": "evidence/primary/resourceallocator.h",
+      "bytes": 3598,
+      "sha256": "e31491e30f6a85aee369fe9969691744d54ef65e125771277af19f17f5532d7b"
+    }
+  ],
+  "child_packets": [
+    {
+      "packet": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\renderer_prepare_owner_sol_20261023\\continuation\\io_clear_pool3_f0fc_20261025",
+      "seal_sha256": "83abc49ac996c231b35d4a0c4626f0eda46db225ea993d6347df1bf9fb4e962a"
+    },
+    {
+      "packet": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\renderer_prepare_owner_sol_20261023\\continuation\\resource_free_memory_api_f0fc_20261025",
+      "seal_sha256": "cc74b9de14d97a3bf64ae47750108f40ba83ecea9105773670771f1ce65ccef7"
+    }
+  ],
+  "helper_contract": {
+    "name": "rw::IResourceAllocator::FreeMemoryResource",
+    "shape": "public nonvirtual void(void*) from DWARF188; MemoryResource is lane-zero pointer",
+    "assembly": "8266A904..A934 builds exactly5null pointers, writes lane0, invokes sameobject vtable slot5; no null guard or extra cleanup",
+    "layout_effect": "none: no fields, bases or virtual slots added"
+  },
+  "selected_policy": {
+    "new_selected_callers": [],
+    "unchanged": "All caller bodies, Heap native DoAllocate/lazy arena/bootstrap and inherited current Heap emptyDoFree remain exactbase; original diagnostics/4argUpdate/outer stay unselected.",
+    "unresolved": "Actual canonical Heap owner and free/bootstrap integration remain Root-owned. Adding this real helper does not complete that owner."
+  },
+  "shipping": {
+    "workflow_path": "tools/build/build_game_exe.bat",
+    "unchanged_BAT_sha256": "32d9bee984348f1a1eed49d98ce38f1fba7d3e4fdbfee1008932256f5db427fd",
+    "new_mounts": []
+  },
+  "checks": {
+    "exact_patch_roundtrips": [
+      "src/GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "src/GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "src/GameSource/Resource/BrnGameDataModuleIO.h",
+      "vendor/renderware/include/rw/rwcore_structs.h"
+    ],
+    "no_local_compile_tests_fixture_eval_CI_native_IDB_Git_mutation": true
+  },
+  "readiness": "Source-only genuine helper(s), unbuilt and unreviewed; no runtime/owner completion claim.",
+  "io_methods": "InputBuffer::Clear, OutputBuffer::Clear, IndexedPool::DebugIsIndexFree; actual inline82674670 and DWARF shape, exact source bytes from immutableIO3.",
+  "io_primary_and_provider_bindings": {
+    "source_base": "f0fc978844c26f6256248bb00e6e754dbc7941f9",
+    "source_base_tree": "ce47fe8abba63d86c9fa68d0fb25d774d4879a49",
+    "workflow_base": "56d18a7ece4901a885a9b1526107173125d88242",
+    "workflow_base_tree": "a6bfed3ea910171db76cf8cd2afc447a73ae0be7",
+    "expected_b5_post_tree": "c76f974e31c0f9494f20b0ff333b84997a1107eb",
+    "paths": [
+      {
+        "path": "src/GameShared/GameClasses/Containers/CgsIndexedPool.h",
+        "preimage": "pre/src/GameShared/GameClasses/Containers/CgsIndexedPool.h",
+        "pre_bytes": 14413,
+        "pre_sha256": "bbac6e91e69324389d43000d1b5a74f89e43d30193b3fd3d44a22886f8bdaa4d",
+        "pre_git_blob": "259fed2909689d897badab7a9f432cb735ed674b",
+        "postimage": "post/src/GameShared/GameClasses/Containers/CgsIndexedPool.h",
+        "post_bytes": 14857,
+        "post_sha256": "284966bcc0fa84560fed7b977acb406d69836244ff931cfa5bf037bf4fb43fc2",
+        "post_git_blob": "7d28394cf2ef3bd7ca49d1bd21b4fcb451c0a023"
+      },
+      {
+        "path": "src/GameSource/Resource/BrnGameDataModuleIO.cpp",
+        "preimage": "pre/src/GameSource/Resource/BrnGameDataModuleIO.cpp",
+        "pre_bytes": 9035,
+        "pre_sha256": "bcd96c84046fb12bb16fe08465cda7be3b132b756d72facc400d3cfb8e2ec648",
+        "pre_git_blob": "582de2848abf6f7be3f0fd47d64a98983ed187da",
+        "postimage": "post/src/GameSource/Resource/BrnGameDataModuleIO.cpp",
+        "post_bytes": 9669,
+        "post_sha256": "e3369d89e5cb96a304e6e64d20be93b50485f74ef8fc00c98e6d6644872c1f10",
+        "post_git_blob": "501937f0710b509f6c21d4201b94bebc8a2f3023"
+      },
+      {
+        "path": "src/GameSource/Resource/BrnGameDataModuleIO.h",
+        "preimage": "pre/src/GameSource/Resource/BrnGameDataModuleIO.h",
+        "pre_bytes": 15768,
+        "pre_sha256": "3594150307e25b14c2257d35a23deb088a90989c3356ede68807aaf5dbd8c17f",
+        "pre_git_blob": "a5b73edfb724506ab26c1022386ee9ed7f211cde",
+        "postimage": "post/src/GameSource/Resource/BrnGameDataModuleIO.h",
+        "post_bytes": 15931,
+        "post_sha256": "b6c598781eb82d5c443834d32fd4ccd2fff91891b991cd673173c92ab6689d1c",
+        "post_git_blob": "91ac878e527ea018d3a6a24d08a68c71855609af"
+      }
+    ],
+    "primary": [
+      {
+        "origin": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82674670.json",
+        "evidence": "evidence/primary/0x82674670.json",
+        "bytes": 37608,
+        "sha256": "9b32b33e2be6758429e9e8246d03c41ea70db6a95e293611262dc2e5dc1cc776"
+      },
+      {
+        "origin": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Resource\\BrnGameDataModuleIO.h",
+        "evidence": "evidence/primary/BrnGameDataModuleIO.h",
+        "bytes": 4056,
+        "sha256": "89d5684f01527a2bea75ad9c933afa4ebe60cef85909a50be290c49cd9c4c103"
+      },
+      {
+        "origin": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameShared\\GameClasses\\Containers\\CgsIndexedPool.h",
+        "evidence": "evidence/primary/CgsIndexedPool.h",
+        "bytes": 10241,
+        "sha256": "cf6d0d4f232a886e76d034195d501e0c0e738e8cf2a734f2c1a21c8d5ede6237"
+      }
+    ],
+    "providers": [
+      {
+        "path": "src/GameShared/GameClasses/Module/CgsIOBuffer.h",
+        "source": "f0fc978844c26f6256248bb00e6e754dbc7941f9",
+        "evidence": "evidence/providers/00_CgsIOBuffer.h",
+        "bytes": 2127,
+        "sha256": "89fbf6784f8b0a7b6a8bb6c5f2c3daf0356b23928b255ebb0dc5fb8a2a49af4d"
+      },
+      {
+        "path": "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h",
+        "source": "f0fc978844c26f6256248bb00e6e754dbc7941f9",
+        "evidence": "evidence/providers/01_CgsVariableEventQueue.h",
+        "bytes": 40102,
+        "sha256": "7bd7262c22e005bc3300ab72b2079be1d696f49378ba0b78e9d7a0e9d45aba54"
+      },
+      {
+        "path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+        "source": "f0fc978844c26f6256248bb00e6e754dbc7941f9",
+        "evidence": "evidence/providers/02_BrnGameDataModule.cpp",
+        "bytes": 279974,
+        "sha256": "909db989a26b4b070ac25c42e8ec358523042a7c1ed6423bfc6a1b3a772bd728"
+      },
+      {
+        "path": "src/GameSource/Resource/SharedIO/BrnGameDataRequestQueue.h",
+        "source": "f0fc978844c26f6256248bb00e6e754dbc7941f9",
+        "evidence": "evidence/providers/03_BrnGameDataRequestQueue.h",
+        "bytes": 14912,
+        "sha256": "d76e85f74f78495a9bb601716ee34f4ccf201c687a48075b174646fe7936a1d8"
+      },
+      {
+        "path": "src/GameShared/GameClasses/System/Resource/CgsResourceModuleIO.h",
+        "source": "f0fc978844c26f6256248bb00e6e754dbc7941f9",
+        "evidence": "evidence/providers/04_CgsResourceModuleIO.h",
+        "bytes": 2971,
+        "sha256": "e16221e82bd89273bb55d52f8035cdb0ad0e7b3b709d31f9718d83b3c5dd82af"
+      }
+    ],
+    "shipping": {
+      "unchanged_BAT_sha256": "32d9bee984348f1a1eed49d98ce38f1fba7d3e4fdbfee1008932256f5db427fd",
+      "IO_provider_path": "src/GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "mount_lines": [
+        4977
+      ],
+      "new_mounts": []
+    },
+    "readiness": "Actual3 supporting methods rebound to exactcurrentf0fc base, unchangedcode from prior aa787. Independentready source-only; actual4argUpdate/diagnostic allocator owner and originalstartup remain unresolved/unselected. Unbuilt/unreviewed.",
+    "prior_c005_seal_sha256": "aa78721411f64d925fdd98c8352c5e3963bc65950e4a8843fd09d1ebc004eddb"
+  }
+}
