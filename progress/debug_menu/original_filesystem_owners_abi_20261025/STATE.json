@@ -1,0 +1,29 @@
+{
+  "status": "private_source_WIP_fresh_review_hosted_native_pending",
+  "source": "21aced874f86566e1505e07cfea8cd2a271becdf",
+  "source_tree": "7d23de0e6ed744cd436443e9af3cd775d7cc0d69",
+  "source_base": "cae1edc86b7a0ed62f114ec3d607f2a8586a370b",
+  "source_paths": [
+    "src/GameShared/GameClasses/Memory/CgsMemoryModule.h",
+    "src/GameShared/GameClasses/System/FileSystem/CgsDeviceManager.cpp",
+    "src/GameShared/GameClasses/System/FileSystem/CgsDeviceManager.h",
+    "src/GameShared/GameClasses/System/FileSystem/CgsFileRW.cpp",
+    "src/GameShared/GameClasses/System/FileSystem/CgsFileRW.h",
+    "src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.cpp",
+    "src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.h",
+    "src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+    "src/GameShared/GameClasses/System/Resource/CgsResourceModule.h",
+    "src/GameSource/Resource/BrnGameDataModule.cpp",
+    "src/SDKs/EATech/rwcore/filesys/asyncop.cpp",
+    "src/SDKs/EATech/rwcore/filesys/device.h",
+    "src/SDKs/EATech/rwcore/filesys/manager.cpp"
+  ],
+  "author_seal_sha256": "3b13ae41ba0a16080e46c5cdc38456b757f18fb50e3b8a188c94ff8b89b520a8",
+  "author_source_base": "cae1edc86b7a0ed62f114ec3d607f2a8586a370b",
+  "author_workflow_base": "a65cd861ff170dcf72b05f1019ecc3e25476f318",
+  "workflow_binding": "author packet workflow identity",
+  "active_effect": "Original filesystem and file lifecycle use real pointer owned memory device allocation, manager and static device providers. Native Manager, search path table and file handle allocations use their actual type sizes; flagged null default driver tables are replaced with the original objects. A forward declaration now matches the canonical struct IOBufferStack, with linker confirmation pending. Complete native lifecycle remains selected under explicit names; original four argument GameData prepare and full outer startup are unselected. SDK scheduler dispatch and remaining mount and platform providers remain unfinished.",
+  "original_full_update_activated": false,
+  "normal_package_changed": false,
+  "new_debug_dispositions": 0
+}
