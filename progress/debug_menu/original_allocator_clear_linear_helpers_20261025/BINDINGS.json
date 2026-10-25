@@ -1,0 +1,100 @@
+{
+  "source_base": "611e328f3286cb7e4e83dd08244d64f004b6ae20",
+  "source_base_tree": "8c201d2d7aebe174f5c0a07a7784750f975d77bb",
+  "workflow_base": "9970e52f7b0aa7ea7b7de888ef4e9ec0987f97c9",
+  "expected_b5_post_tree": "287b4d80371e2ce851cca8e25c1aa8bbc33c6816",
+  "paths": [
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "preimage": "pre/src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "pre_bytes": 20558,
+      "pre_sha256": "0c9023cb7c40181c59f1da6d20f3662fb482e6e62192a06265f668aa1962199a",
+      "pre_git_blob": "090bc656f47b9fedacdabd6fd76cb839e5bf1c81",
+      "postimage": "post/src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "post_bytes": 21569,
+      "post_sha256": "727f7927cb91914fd320ca5cfda58972f10ca26ae091cb432397f94352a8bfad",
+      "post_git_blob": "15f90baa164a03183425fc778555a08be4bb6d64"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnResourceAllocator.h",
+      "preimage": "pre/src/GameSource/Resource/BrnResourceAllocator.h",
+      "pre_bytes": 10015,
+      "pre_sha256": "2fed58be46518a67805851974e617d84ee385e3799d17891b8582a52fe49455b",
+      "pre_git_blob": "2ca3ec835f9bf187ce464d491a7bbf0b9a0cd456",
+      "postimage": "post/src/GameSource/Resource/BrnResourceAllocator.h",
+      "post_bytes": 10387,
+      "post_sha256": "e6211c6ac923999467a1fca2e517f974d2d5bc202b8e5b203e5639000d97b762",
+      "post_git_blob": "dd00f7f8de586572dca1fd46d4890a66c69e7487"
+    }
+  ],
+  "primary": [
+    {
+      "origin": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x826647B0.json",
+      "evidence": "evidence/ARTIST/0x826647B0.json",
+      "bytes": 2624,
+      "sha256": "0f92d4d462da4db100fd4141931cc24568d3cd1590710de2eb4fbddbf693d7f3"
+    },
+    {
+      "origin": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82666B70.json",
+      "evidence": "evidence/ARTIST/0x82666B70.json",
+      "bytes": 5165,
+      "sha256": "68973aa47dd4a1c6907022e93ce2ff6505be934f5f1a19d8d7b4eabf5fb68813"
+    },
+    {
+      "origin": "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82666C58.json",
+      "evidence": "evidence/ARTIST/0x82666C58.json",
+      "bytes": 5550,
+      "sha256": "3ac5f9fafc369a25d0fe49e714c3d66b68b69c4f8576c9563ddc060a0e8000e7"
+    },
+    {
+      "origin": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Resource\\BrnResourceAllocator.h",
+      "evidence": "evidence/DecFIGS/BrnResourceAllocator.h",
+      "bytes": 15434,
+      "sha256": "a9616b0b7d9772c5e02a882700a1459e31ede778806787162c544cf974c865d0"
+    },
+    {
+      "origin": "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Resource\\BrnResourceAllocator.cpp",
+      "evidence": "evidence/DecFIGS/BrnResourceAllocator.cpp",
+      "bytes": 14357,
+      "sha256": "6f8535d475d37238a0bcf23a7e32420e799a076d392b653390bd61f4557d2e03"
+    }
+  ],
+  "providers": [
+    {
+      "path": "vendor/renderware/include/rw/rwcore_structs.h",
+      "source": "611e328f3286cb7e4e83dd08244d64f004b6ae20",
+      "evidence": "evidence/providers/rwcore_structs.h",
+      "bytes": 33197,
+      "sha256": "197385507c9a2ef378766b3da81b617f0731814421c4ea883f0bbb0357ff8b61"
+    }
+  ],
+  "recovered_methods": {
+    "ClearResource": "ARTIST826647B0 argsr3/r4 are Resource pointer and descriptor pointer; exactly5 lanes, nonnullpointer guard, memset0xCD with descriptoru32size; actualvoid reference signature from DecFIGS cpp632. No zero-fill or extra size guard.",
+    "Linear_Construct_pointer_name": "Actual existing mpLinearAllocator/mpcName fields are written in order by inlined ARTIST82666C48..4C and82666D38..3C; DWARF declaration cites original cpp1221, nonvirtual void(pointer,name). No null assertion or base reset."
+  },
+  "unchanged_selected_policy": {
+    "new_selected_callers": [],
+    "no_new_fields_bases_virtual_slots": true,
+    "no_native_arena_or_heap_allocate_free_edit": true,
+    "no_full_Construct_overload_guess": true,
+    "no_Allocators_Construct_main_outer_activation": true
+  },
+  "shipping": {
+    "workflow_path": "tools/build/build_game_exe.bat",
+    "unchanged_BAT_sha256": "32d9bee984348f1a1eed49d98ce38f1fba7d3e4fdbfee1008932256f5db427fd",
+    "existing_cpp_mount_lines": [
+      4947
+    ],
+    "CMake_references": "evidence/CMAKE_MOUNT_REFERENCES.txt",
+    "new_mounts": []
+  },
+  "checks": {
+    "exact_unified_patch_roundtrips": [
+      "src/GameSource/Resource/BrnResourceAllocator.cpp",
+      "src/GameSource/Resource/BrnResourceAllocator.h"
+    ],
+    "pure_tree_prediction_reproduced_base": true
+  },
+  "readiness": "Independent original helper methods, source-only unbuilt/unreviewed. Actual heap owner/bootstrap/full startup remains Root-owned and unresolved.",
+  "scope": "Static source/hash/data parsing and scratch authoring only; no C++compile/tests/fixture/eval/CI/native/IDBexport/Git mutation."
+}
