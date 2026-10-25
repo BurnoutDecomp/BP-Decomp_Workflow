@@ -1,0 +1,64 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "root_boostbar_brake_capture_20261025",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\root_boostbar_brake_capture_20261025\\Case.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-25T13:39:20.9426783+01:00",
+    "flow_exit":  0,
+    "bug":  "Observe the natural HUD while ordinary brake input holds the player engine running.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\root_boostbar_brake_capture_20261025\\run_20261025",
+    "label":  "Natural_brake_engine_HUD_one_frame",
+    "area":  "debug-menu",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62076,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no assertion",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no exception",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "reached driving",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "/^\\[ignition\\] tick state=2\\b[^\\r\\n]*\\binCarSelect=0\\b[^\\r\\n]*\\bbrake=1\\.0+\\b/ expected present; first: [ignition] tick state=2 active=1 enableSwitchOff=1 carInGameMode=0 inCarSelect=0 crashing=0 accel=0.000000 brake=1.000000",
+                       "pass":  true,
+                       "name":  "player engine runs under ordinary brake input",
+                       "kind":  "LogMatch"
+                   },
+                   {
+                       "detail":  "1 line(s) match /^\\[frame-request\\] pid=\\d+ slot=62076 seq=1 present=\\d+ file=bb_\\d{6}\\.bmp$/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "one PID and slot scoped capture",
+                       "kind":  "LogCount"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11397120,
+                       "exe_mtime_before_lock":  "2026-10-25T00:39:24.8772962+02:00",
+                       "exe_sha":  "a87c43e38b2a",
+                       "b5_head":  "f0fe435e9",
+                       "exe_b5":  "7d21900e",
+                       "parent_head":  "b585a6015",
+                       "exe_mtime":  "2026-10-25T00:39:24.8772962+02:00"
+                   }
+}
