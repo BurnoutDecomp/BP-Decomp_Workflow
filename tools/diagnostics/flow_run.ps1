@@ -3025,7 +3025,7 @@ if ($null -ne $finalTxt) {
 $gasVerdict = "n/a (no -MotionProbe, so the game's own throttle witness is absent)"
 $gasNeverHot = $false
 if ($Drive -and $MotionProbe -and $null -ne $finalTxt) {
-  $lGasAll  = ([regex]::Matches($finalTxt, '\bgas (-?[0-9.]+)'))
+  $lGasAll  = ([regex]::Matches($finalTxt, '(?m)^\[motion\][^\r\n]*\bgas (-?[0-9.]+)'))
   $lGasHot  = 0
   foreach ($g in $lGasAll) { if ([double]::Parse($g.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture) -gt 0.01) { $lGasHot++ } }
   $gasVerdict = ("{0} of {1} [motion] samples report gas > 0" -f $lGasHot, $lGasAll.Count)
