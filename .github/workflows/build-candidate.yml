@@ -174,6 +174,23 @@ jobs:
           python b5-decomp/tests/run_low_memory_xphysical_windows.py --workflow-root . --out build/candidate/artifacts/low-memory-xphysical --run
           if ($LASTEXITCODE -ne 0) { throw 'Actual Windows allocation/free family fixture failed.' }
 
+      - name: Check actual allocator trace reporting
+        timeout-minutes: 10
+        shell: pwsh
+        env:
+          CANDIDATE_B5_SHA: ${{ inputs.b5_commit }}
+          CANDIDATE_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
+        run: |
+          $raw = [IO.File]::ReadAllText((Join-Path $pwd 'b5-decomp/tests/run_allocator_heap_report.py')).Replace("`r`n", "`n")
+          $hasher = [Security.Cryptography.SHA256]::Create()
+          try { $digest = [Convert]::ToHexString($hasher.ComputeHash([Text.Encoding]::UTF8.GetBytes($raw))).ToLowerInvariant() } finally { $hasher.Dispose() }
+          if ($digest -cne '29abfebccc0f8a2e0a512ec17bae827e6a2ae66e3601d0e7a5cf9021517445ec') { throw 'Unexpected allocator trace runner source.' }
+          git -C b5-decomp fetch --recurse-submodules=no --no-tags --depth=1 origin 5faee8a45c139e076bb0c7578568052026f587f2
+          if ($LASTEXITCODE -ne 0) { throw 'Exact unchanged allocator control is unavailable.' }
+          python b5-decomp/tests/run_allocator_heap_report.py --out build/candidate/artifacts/allocator-heap-report
+          if ($LASTEXITCODE -ne 0) { throw 'Actual allocator trace fixture failed.' }
+
       - name: Save successful candidate objects
         if: success()
         uses: actions/cache/save@v4
@@ -208,5 +225,6 @@ jobs:
             build/candidate/artifacts/online-save-route/**
             build/candidate/artifacts/gui-menu-music-wire/**
             build/candidate/artifacts/low-memory-xphysical/**
+            build/candidate/artifacts/allocator-heap-report/**
           if-no-files-found: error
           retention-days: 1
