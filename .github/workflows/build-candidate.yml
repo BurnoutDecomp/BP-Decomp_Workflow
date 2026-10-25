@@ -157,6 +157,23 @@ jobs:
             -RunOnlineSaveRoute:($env:CANDIDATE_RUN_ONLINE_SAVE_ROUTE -eq 'true') `
             -RunGuiMenuMusicWire:($env:CANDIDATE_RUN_GUI_MENU_MUSIC_WIRE -eq 'true')
 
+      - name: Check real Windows physical-allocation pair
+        timeout-minutes: 15
+        shell: pwsh
+        env:
+          CANDIDATE_B5_SHA: ${{ inputs.b5_commit }}
+          CANDIDATE_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
+        run: |
+          $raw = [IO.File]::ReadAllText((Join-Path $pwd 'b5-decomp/tests/run_low_memory_xphysical_windows.py')).Replace("`r`n", "`n")
+          $hasher = [Security.Cryptography.SHA256]::Create()
+          try { $digest = [Convert]::ToHexString($hasher.ComputeHash([Text.Encoding]::UTF8.GetBytes($raw))).ToLowerInvariant() } finally { $hasher.Dispose() }
+          if ($digest -cne '7a057d10c3475dd7729858f727df203c58cae2ae54121e79cc079c16c47cfb11') { throw 'Unexpected Windows allocation runner source.' }
+          git -C b5-decomp fetch --recurse-submodules=no --no-tags --depth=1 origin f0b8f37b39b89390f61f1f0264c8b704950fb030
+          if ($LASTEXITCODE -ne 0) { throw 'Exact unchanged allocation control is unavailable.' }
+          python b5-decomp/tests/run_low_memory_xphysical_windows.py --workflow-root . --out build/candidate/artifacts/low-memory-xphysical --run
+          if ($LASTEXITCODE -ne 0) { throw 'Actual Windows allocation/free family fixture failed.' }
+
       - name: Save successful candidate objects
         if: success()
         uses: actions/cache/save@v4
@@ -190,5 +207,6 @@ jobs:
             build/candidate/artifacts/traffic-flowtype-override/**
             build/candidate/artifacts/online-save-route/**
             build/candidate/artifacts/gui-menu-music-wire/**
+            build/candidate/artifacts/low-memory-xphysical/**
           if-no-files-found: error
           retention-days: 1
