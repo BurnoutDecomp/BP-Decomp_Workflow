@@ -1,0 +1,74 @@
+{
+  "source_base": "dee6740cb74dd8c6e4a0b038f6b99b76ad15037a",
+  "workflow_base": "58da7aed1cb0b5fbf5f7c14882832bd7e73ee9bd",
+  "comparison_installed_source": "36ae3ffed6e8fb3ea89ca91947647aa9465c8658",
+  "status": "all11_frozen_pin_audit_plus_minimal_SystemProfile_metadata_followup_static_only",
+  "paths": [
+    {
+      "repo": "b5",
+      "path": "tests/evidence/system_user_profile_pc/source_pins.json",
+      "preimage": "pre/b5/tests/evidence/system_user_profile_pc/source_pins.json",
+      "postimage": "post/b5/tests/evidence/system_user_profile_pc/source_pins.json",
+      "pre": {
+        "raw_bytes": 4543,
+        "raw_sha256": "3a6965215e4fa23d6831f8ed035d9d33490090245e93d95c5f1d6904b8b06465",
+        "lf_bytes": 4543,
+        "lf_sha256": "3a6965215e4fa23d6831f8ed035d9d33490090245e93d95c5f1d6904b8b06465",
+        "git_blob_sha1": "babe5976a75afdde2cc39e38f1f7b8e9c94ff587"
+      },
+      "post": {
+        "raw_bytes": 4543,
+        "raw_sha256": "8bc2257f30e89eafcb7f1e6801d1a943885914e9a9112f95705a6ea9e6a58202",
+        "lf_bytes": 4543,
+        "lf_sha256": "8bc2257f30e89eafcb7f1e6801d1a943885914e9a9112f95705a6ea9e6a58202",
+        "git_blob_sha1": "602bc1afbe0354572006154f1d18241ed963d2bb"
+      },
+      "exact_patch_roundtrip": true
+    },
+    {
+      "repo": "workflow",
+      "path": "ci/check-candidate-build.ps1",
+      "preimage": "pre/workflow/ci/check-candidate-build.ps1",
+      "postimage": "post/workflow/ci/check-candidate-build.ps1",
+      "pre": {
+        "raw_bytes": 128719,
+        "raw_sha256": "e27025cf9d506e154cd45ab19644aa0fee715d08be9edbd33324997acc4979d6",
+        "lf_bytes": 128719,
+        "lf_sha256": "e27025cf9d506e154cd45ab19644aa0fee715d08be9edbd33324997acc4979d6",
+        "git_blob_sha1": "6d5f7e7d33ce762cf6e6762472fe0450c139a152"
+      },
+      "post": {
+        "raw_bytes": 128719,
+        "raw_sha256": "c05660ad9847d867b406143843eb7d669fae9f365f8bb78d79e3a103fefd668f",
+        "lf_bytes": 128719,
+        "lf_sha256": "c05660ad9847d867b406143843eb7d669fae9f365f8bb78d79e3a103fefd668f",
+        "git_blob_sha1": "4005b0d47c82d33d28b1aee405c8308b281d6b56"
+      },
+      "exact_patch_roundtrip": true
+    }
+  ],
+  "expected_b5_post_tree": "febdf0929ba77846fcfe00893b9ea0b518f0d4d9",
+  "expected_workflow_post_tree_before_gitlink_update": "d562cf374beb3b5f5257b4677527febf2fb1f565",
+  "workflow_gitlink_note": "Root must bind workflowgitlink to the actualnewB5metadata commit; parentprediction here deliberately retainsoldgitlink and changesonlycheckerhardhash.",
+  "audit": {
+    "enabled_groups": 11,
+    "runners": 14,
+    "unchanged_fixture_CPPs": 14,
+    "JSON_pin_sets": 3,
+    "JSON_rows": 55,
+    "stale_rows": 2,
+    "parent_fixed_SHA256_records": 17,
+    "all_parent_records_matched_before_followup": true,
+    "runner_fixed_SHA256_literals": 3,
+    "all_runner_fixed_hashes_match": true,
+    "after_metadata_followup_all55_JSON_rows_match": true,
+    "no_additional_frozen_content_pin_drift_found": "All11groups covered. Runners without fixedfullcontent pins stillretain their observed/dependency hashes and requirehostedexecution; no fulltestpass inferred."
+  },
+  "minimal_delta": "Only2expectedsource rows in SystemUserProfile source_pins.json (configexample,LivePC); onlySystemUserProfilePinsLfSha256 constant inparentchecker. JSONlength4543 unchanged.",
+  "profile_pin_old_LF_sha256": "3a6965215e4fa23d6831f8ed035d9d33490090245e93d95c5f1d6904b8b06465",
+  "profile_pin_new_LF_sha256": "8bc2257f30e89eafcb7f1e6801d1a943885914e9a9112f95705a6ea9e6a58202",
+  "profile_pin_LF_bytes": 4543,
+  "real_source_semantic_difference_retained": "XShowSigninUI changed0->50; wholeLivePC NOTunchanged. Staticfixture/consumerhaveNoReference; relevant4profilebodies+wholeGuideconsumer andSystemProfileINIsection bytes unchanged.",
+  "scope_preserved": "All oldbase40identities, originalLFbaselineblobs, testplans/counts/negativecontrols, 20fileSystemProfile scope, SourcePin schemas, fullparentcheckerlogic outsideonehash, all14runner+fixturebytes remainunchanged.",
+  "not_done": "No fixture import/evaluation/composition/generation/compile/test/native/CI/Gitmutation orselectedsrc/package changes. Root ownspublication/hostedretry/install. EarlierBudget2/LowMemoryproposal unchanged; SDKaudit paused."
+}
