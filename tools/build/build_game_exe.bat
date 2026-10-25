@@ -5610,6 +5610,8 @@ if "%BUILD_ERR%"=="0" (
   if errorlevel 1 (endlocal & exit /b 1)
   copy /Y "%SDL%\LICENSE.txt" "%OUT%\SDL3-LICENSE.txt" >nul
   if errorlevel 1 (endlocal & exit /b 1)
+  copy /Y "%ROOT%\b5-decomp\docs\licenses\DualSenseTriggerEffects.txt" "%OUT%\DualSenseTriggerEffects-LICENSE.txt" >nul
+  if errorlevel 1 (endlocal & exit /b 1)
 )
 
 endlocal & exit /b %BUILD_ERR%
