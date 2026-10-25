@@ -1,0 +1,82 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "current_dev_playability_periodic_20261025",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\current_dev_playability_periodic_20261025\\Case.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-25T16:58:21.0805278+01:00",
+    "flow_exit":  0,
+    "bug":  "Check current-dev startup, junkyard exit, player input and actual rendered driving before normal installation.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\current_dev_playability_periodic_20261025\\run_20261025",
+    "label":  "current-dev-supported-capture-playability",
+    "area":  "debug-menu",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62084,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no assertion",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no exception",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "reached driving",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "/^\\[ignition\\] tick state=2\\b[^\\r\\n]*\\binCarSelect=0\\b[^\\r\\n]*\\baccel=1\\.0+\\b/ expected present; first: [ignition] tick state=2 active=1 enableSwitchOff=1 carInGameMode=0 inCarSelect=0 crashing=0 accel=1.000000 brake=0.000000",
+                       "pass":  true,
+                       "name":  "player engine runs under ordinary accelerator input",
+                       "kind":  "LogMatch"
+                   },
+                   {
+                       "detail":  "/^\\[motion\\][^\\r\\n]*\\bgas 1(?:\\.0+)?\\b/ expected present; first: [motion] n 1860 pos 3007.971924 -2.485063 -1945.118652 at 0.001915 -0.016512 0.999862 vel 0.000140 0.007178 0.072941 |v| 0.073294 mph 0.1567",
+                       "pass":  true,
+                       "name":  "player accelerator witnessed",
+                       "kind":  "LogMatch"
+                   },
+                   {
+                       "detail":  "path=308,6m samples=132 respawns=0",
+                       "pass":  true,
+                       "name":  "player actually moved over20m",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "6 BMP files, cap6",
+                       "pass":  true,
+                       "name":  "bounded supported periodic capture",
+                       "kind":  "Script"
+                   },
+                   {
+                       "detail":  "dark_frac(last) on bb_005000.bmp region 0.1,0.1,0.9,0.8 = 0,189025, want [-inf, 0.85]",
+                       "pass":  true,
+                       "name":  "last image is not a black world",
+                       "kind":  "Frame"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11394048,
+                       "exe_mtime_before_lock":  "2026-10-25T16:49:02.8780463+01:00",
+                       "exe_sha":  "02bdfeb2ad1b",
+                       "b5_head":  "f0fe435e9",
+                       "exe_b5":  "412e803e",
+                       "parent_head":  "22d20ce96",
+                       "exe_mtime":  "2026-10-25T16:49:02.8780463+01:00"
+                   }
+}
