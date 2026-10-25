@@ -1,0 +1,76 @@
+{
+  "source_base": "77ff9a6a064921c739accfb8d165ec14e19ebf49",
+  "source_base_tree": "fceea76a53368e6976fcb2468244827d38390d9e",
+  "workflow_base": "5843cd5b42245b710db3d67d828cc925afaf56ff",
+  "workflow_base_tree": "f761e026ba81942be829c298309dc794ed19b698",
+  "expected_b5_post_tree": "410d12d58453dbef47929378cb46d2d1714eb39a",
+  "paths": [
+    {
+      "path": "src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "preimage": "pre/src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "pre_bytes": 71312,
+      "pre_sha256": "826d7df756d30c894fecdae64c771cb3765a46e54fb0b515d6580f53b96f2273",
+      "pre_git_blob": "b18cb78dc6565a2f5feb287ecbe691ad897fbf30",
+      "postimage": "post/src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "post_bytes": 70488,
+      "post_sha256": "d6dec8cccdc6f81e0d89344f8bdd7a871951af108b2bb597c8a49fab742ccb85",
+      "post_git_blob": "3d4545d938bb262033a0c819776b13bef7983a93",
+      "producer": "literal_immutable_Destruct_child"
+    },
+    {
+      "path": "src/SDKs/EATech/rwcore/filesys/manager.cpp",
+      "preimage": "pre/src/SDKs/EATech/rwcore/filesys/manager.cpp",
+      "pre_bytes": 29485,
+      "pre_sha256": "94a7c0b5e8ecc076bfb68f1dd5796dce2b6989d455d9394415c969c5f34b83ad",
+      "pre_git_blob": "55e6e2373e6cad7619b79548eaf2c114d1602528",
+      "postimage": "post/src/SDKs/EATech/rwcore/filesys/manager.cpp",
+      "post_bytes": 30311,
+      "post_sha256": "ead17ae69bc102c0434aa1c507c9bac47aec6df2bbfc9dc21f50cd42a17f2db0",
+      "post_git_blob": "35286e190f2e60a7cfd6ff51dde752edc345dae3",
+      "producer": "genuine_QueryLocation_and_unresolved_original_SDK_contract"
+    }
+  ],
+  "Destruct_child_seal_sha256": "fd356a1fc4501c5f814cc3ab18f12bb1dba39eef6468f614ba45a9059d107dac",
+  "raw_primary_receipt": "evidence/raw/RECEIPT.json",
+  "providers": [
+    {
+      "path": "src/SDKs/EATech/rwcore/filesys/device.h",
+      "source": "77ff9a6a064921c739accfb8d165ec14e19ebf49",
+      "sha256": "b7fd807fb0be964f60b46f8543f29bb89b9f5175069217ac6cd3ce99f58b9003",
+      "bytes": 17368,
+      "evidence": "evidence/providers/00_device.h"
+    },
+    {
+      "path": "src/SDKs/EATech/rwcore/filesys/device.cpp",
+      "source": "77ff9a6a064921c739accfb8d165ec14e19ebf49",
+      "sha256": "f2fd48fd63251688a6195d4725f0a1f1ad9dc53e25130e17b4ea847ce702fc71",
+      "bytes": 26366,
+      "evidence": "evidence/providers/01_device.cpp"
+    },
+    {
+      "path": "src/SDKs/EATech/rwcore/filesys/asyncop.cpp",
+      "source": "77ff9a6a064921c739accfb8d165ec14e19ebf49",
+      "sha256": "313d2665c1d6fa9816b682b9397c238a1a90af82a150da9cf4a9e67fc35e2753",
+      "bytes": 22681,
+      "evidence": "evidence/providers/02_asyncop.cpp"
+    },
+    {
+      "path": "src/GameShared/GameClasses/System/Resource/CgsResourceModule.h",
+      "source": "77ff9a6a064921c739accfb8d165ec14e19ebf49",
+      "sha256": "f2f73617ff7ed9622ab6691067ebec67763f206cd7738fc4f5b3f0eb0d5bfe5f",
+      "bytes": 13494,
+      "evidence": "evidence/providers/03_CgsResourceModule.h"
+    },
+    {
+      "path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+      "source": "77ff9a6a064921c739accfb8d165ec14e19ebf49",
+      "sha256": "76fe5695482e2e22e1185313db09b87b2767c844f7ffb3960f34d502a5dc3b8b",
+      "bytes": 277125,
+      "evidence": "evidence/providers/04_BrnGameDataModule.cpp"
+    }
+  ],
+  "native_audit": "evidence/Destruct_child/NATIVE_CALLER_AUDIT.json",
+  "review_failures": "REVIEW_FAILURE_RETENTION.json",
+  "platform_dependency": "PLATFORM_DEPENDENCY.json",
+  "readiness": "Source-only blocker correction/unbuilt/unreviewed/original outer unselected. Genuine missing SDK provider remains an explicit new unresolved symbol, not a zero stub. Prior13FAIL retained."
+}
