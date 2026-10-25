@@ -179,7 +179,8 @@ def is_stale(obj, flags_hash, statc, hashc=None):
     if obj_t is None:
         return True
     try:
-        lines = open(obj + ".d", encoding="utf-8", errors="replace").read().splitlines()
+        with open(obj + ".d", encoding="utf-8", errors="replace") as fh:
+            lines = fh.read().splitlines()
     except OSError:
         return True
     if not lines or lines[0] != flags_hash:
@@ -565,6 +566,51 @@ def acquire_build_lock(out_dir, timeout=3600):
         sys.stderr.write("[build-lock] acquired\n")
 
 
+def git_output(repo, *args):
+    try:
+        result = subprocess.run(["git", "-C", repo, *args], capture_output=True,
+                                text=True, timeout=15)
+        return result.stdout.strip() if result.returncode == 0 else None
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def write_build_version(out_dir, source_root):
+    """Generate the overlay's identity before planning header-dependent rebuilds."""
+    head = git_output(source_root, "rev-parse", "--short=12", "HEAD") or "unknown"
+    dirty = bool(git_output(source_root, "status", "--porcelain"))
+    label = head + ("+dirty" if dirty else "")
+    generated = os.path.join(out_dir, "obj", "gen")
+    os.makedirs(generated, exist_ok=True)
+    header = os.path.join(generated, "BrnBuildVersion.h")
+    contents = '#pragma once\n#define B5_BUILD_COMMIT "' + label + '"\n'
+    try:
+        with open(header, encoding="utf-8") as fh:
+            previous = fh.read()
+    except FileNotFoundError:
+        previous = None
+    # Do not turn every no-op build into a new compile/link.
+    if previous != contents:
+        with open(header, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(contents)
+    print(f"compile_exe: build commit {label}", flush=True)
+    return header
+
+
+def source_compile_options(sources, flag_args, source_root, version_header):
+    """Only the build-info renderer consumes the generated version include path."""
+    renderer = os.path.normcase(os.path.abspath(os.path.join(source_root, "src",
+        "GameShared", "GameClasses", "Development", "DebugSystem", "Core", "CgsDebugManager.cpp")))
+    options = {}
+    for src in sources:
+        args = flag_args
+        if os.path.normcase(os.path.abspath(src)) == renderer:
+            args = flag_args + ["/I" + os.path.dirname(os.path.abspath(version_header))]
+        fingerprint = hashlib.sha1("\n".join(args).encode("utf-8", "replace")).hexdigest()[:12]
+        options[src] = (args, fingerprint)
+    return options
+
+
 def write_provenance(exe, source_root=None):
     """Stamp <exe>.provenance.json beside a freshly linked exe.
 
@@ -581,13 +627,7 @@ def write_provenance(exe, source_root=None):
 
     Best-effort by design -- never fail a good build over a stamp.
     """
-    import datetime, hashlib, json, socket, subprocess as _sp
-    def _git(repo, *a):
-        try:
-            return _sp.run(["git", "-C", repo, *a], capture_output=True, text=True,
-                           timeout=15).stdout.strip() or None
-        except Exception:
-            return None
+    import datetime, hashlib, json, socket
     try:
         h = hashlib.sha256()
         with open(exe, "rb") as fh:
@@ -600,10 +640,10 @@ def write_provenance(exe, source_root=None):
             "exe_mtime": datetime.datetime.now().isoformat(timespec="seconds"),
             "built_from_root": repo,
             "host": socket.gethostname(),
-            "parent_head": _git(repo, "rev-parse", "HEAD"),
-            "parent_dirty": bool(_git(repo, "status", "--porcelain")),
-            "b5_head": _git(sub, "rev-parse", "HEAD"),
-            "b5_dirty": bool(_git(sub, "status", "--porcelain")),
+            "parent_head": git_output(repo, "rev-parse", "HEAD"),
+            "parent_dirty": bool(git_output(repo, "status", "--porcelain")),
+            "b5_head": git_output(sub, "rev-parse", "HEAD"),
+            "b5_dirty": bool(git_output(sub, "status", "--porcelain")),
             "b5_root": sub,
         }
         with open(exe + ".provenance.json", "w", encoding="utf-8") as fh:
@@ -639,8 +679,10 @@ def main(argv=None):
     repo_root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                              "..", ".."))
     flag_args = load_flag_args(args.base)
-    flags_hash = hashlib.sha1("\n".join(flag_args).encode("utf-8", "replace")).hexdigest()[:12]
     sources, exe = parse_sources(args.rsp)
+    source_root = os.path.abspath(args.source_root) if args.source_root else os.path.join(repo_root, "b5-decomp")
+    version_header = write_build_version(args.out, source_root)
+    source_options = source_compile_options(sources, flag_args, source_root, version_header)
     tu_dir = os.path.join(args.out, "obj", "tu")
     os.makedirs(tu_dir, exist_ok=True)
 
@@ -667,7 +709,7 @@ def main(argv=None):
     hash_mode = os.environ.get("BRN_EXE_HASH_DEPS") == "1"
     plan = [(s, obj_path(s, tu_dir)) for s in sources]
     stale = [(s, o) for s, o in plan
-             if force or is_stale(o, flags_hash, statc, hashc if hash_mode else None)]
+             if force or is_stale(o, source_options[s][1], statc, hashc if hash_mode else None)]
     fresh = len(plan) - len(stale)
     why = " (BRN_EXE_REBUILD=1)" if force else (" (content-hash mode)" if hash_mode else "")
     print(f"compile_exe: {len(plan)} TUs -- {len(stale)} to compile, "
@@ -699,7 +741,7 @@ def main(argv=None):
         counter = itertools.count(1)
         plock = threading.Lock()
         with ThreadPoolExecutor(max_workers=jobs) as pool:
-            futs = {pool.submit(compile_one, s, o, flag_args, flags_hash,
+            futs = {pool.submit(compile_one, s, o, *source_options[s],
                                 env, note_prefix, hashc): (s, o) for s, o in stale}
             try:
                 for fut in as_completed(futs):
