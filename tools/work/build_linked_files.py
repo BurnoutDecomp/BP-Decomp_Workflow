@@ -35,7 +35,6 @@ CI runs it in build-and-publish.yml right after the exe is built.
 """
 import argparse
 import datetime
-import hashlib
 import json
 import os
 import sqlite3
@@ -94,7 +93,16 @@ def main(argv=None):
             sys.exit(f"build_linked_files: {p} missing -- run tools/build/build_game_exe.bat first")
     sources, exe = compile_exe.parse_sources(rsp)
     flag_args = compile_exe.load_flag_args(base)
-    flags_hash = hashlib.sha1("\n".join(flag_args).encode("utf-8", "replace")).hexdigest()[:12]
+    prov = {}
+    try:
+        with open(exe + ".provenance.json", encoding="utf-8") as fh:
+            prov = json.load(fh)
+    except (OSError, ValueError):
+        pass
+    source_root = prov.get("b5_root") or os.path.join(ROOT, "b5-decomp")
+    version_header = os.path.join(obj_dir, "gen", "BrnBuildVersion.h")
+    source_options = compile_exe.source_compile_options(sources, flag_args, source_root,
+        version_header if os.path.isfile(version_header) else None)
     tu_dir = os.path.join(obj_dir, "tu")
     hash_mode = os.environ.get("BRN_EXE_HASH_DEPS") == "1"
     statc, hashc = compile_exe.StatCache(), compile_exe.HashCache()
@@ -107,11 +115,12 @@ def main(argv=None):
             src_set[rel.lower()] = rel
         obj = compile_exe.obj_path(src, tu_dir)
         try:
-            lines = open(obj + ".d", encoding="utf-8", errors="replace").read().splitlines()
+            with open(obj + ".d", encoding="utf-8", errors="replace") as fh:
+                lines = fh.read().splitlines()
         except OSError:
             no_deps.append(rel or src)
             continue
-        if compile_exe.is_stale(obj, flags_hash, statc, hashc if hash_mode else None):
+        if compile_exe.is_stale(obj, source_options[src][1], statc, hashc if hash_mode else None):
             stale.append(rel or src)
         for dep in lines[1:]:
             if dep.startswith("@") or not dep.strip():
@@ -125,8 +134,12 @@ def main(argv=None):
     # TU view. A TU's home is its class_homes.json entry or DecFIGS path; where the local ledger
     # exists, the dest_path agents recorded at submit counts too. The work server keeps its own
     # dest_paths, so it should apply ITS mapping to the file lists rather than reuse this summary.
-    index = json.load(open(TU_INDEX, encoding="utf-8"))
-    homes = json.load(open(CLASS_HOMES, encoding="utf-8")) if os.path.exists(CLASS_HOMES) else {}
+    with open(TU_INDEX, encoding="utf-8") as fh:
+        index = json.load(fh)
+    homes = {}
+    if os.path.exists(CLASS_HOMES):
+        with open(CLASS_HOMES, encoding="utf-8") as fh:
+            homes = json.load(fh)
     tu_homes = ["class_homes.json", "DecFIGS path"]
     ledger_dest = {}
     if os.path.exists(LEDGER):
@@ -151,11 +164,6 @@ def main(argv=None):
         n[k] += 1
         f[k] += t.get("n_funcs", 0)
 
-    prov = {}
-    try:
-        prov = json.load(open(exe + ".provenance.json", encoding="utf-8"))
-    except (OSError, ValueError):
-        pass
     meta = {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
         "parent_commit": git_head(ROOT),
