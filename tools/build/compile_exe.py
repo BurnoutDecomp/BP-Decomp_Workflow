@@ -68,7 +68,8 @@ def load_flag_args(base_rsp):
     flag run (the msvc_flags.txt line) or a single /I"dir" include."""
     args = []
     try:
-        lines = open(base_rsp, encoding="utf-8", errors="replace").read().splitlines()
+        with open(base_rsp, encoding="utf-8", errors="replace") as fh:
+            lines = fh.read().splitlines()
     except OSError as e:
         die(f"cannot read base rsp {base_rsp}: {e}")
     for raw in lines:
@@ -89,7 +90,8 @@ def parse_sources(rsp):
     """build.rsp -> (ordered unique source list, /Fe exe path)."""
     sources, seen, fe = [], set(), None
     try:
-        lines = open(rsp, encoding="utf-8", errors="replace").read().splitlines()
+        with open(rsp, encoding="utf-8", errors="replace") as fh:
+            lines = fh.read().splitlines()
     except OSError as e:
         die(f"cannot read rsp {rsp}: {e}")
     for raw in lines:
@@ -604,7 +606,7 @@ def source_compile_options(sources, flag_args, source_root, version_header):
     options = {}
     for src in sources:
         args = flag_args
-        if os.path.normcase(os.path.abspath(src)) == renderer:
+        if version_header and os.path.normcase(os.path.abspath(src)) == renderer:
             args = flag_args + ["/I" + os.path.dirname(os.path.abspath(version_header))]
         fingerprint = hashlib.sha1("\n".join(args).encode("utf-8", "replace")).hexdigest()[:12]
         options[src] = (args, fingerprint)
