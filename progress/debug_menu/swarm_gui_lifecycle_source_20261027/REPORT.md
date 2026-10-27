@@ -1,0 +1,9 @@
+# Corrected GUI17 source composition
+
+The seventeen-path change restores the selected GUI owner lifecycle with typed staged Prepare and reverse Release, its loading caller, current-language allocator binding and WorldData ownership. It routes Model/View IO through existing stack owners and the original update order, joins stored input once, retires the prior manual facade dispatch, borrows existing queues for PC bundle transport and active raw producers, and preserves the selected output bridge. Stored sound/language events and Apt owned-target release follow the reviewed chains. The two compile corrections use the real module IO helper include and existing SetGDMInput assignment API.
+
+This source checkpoint does not activate the original full main/outer frame or EngineRelease module loop. The synchronous Movie pool and bundle visitor remain PC transport. No new queue, IO storage, virtual slot, packing/capacity adjustment, receiver drop or readiness shortcut is introduced by the reviewed delta.
+
+All347 owner and26 correction manifest members authenticate using extended Windows paths. The two historical missing snapshot reports were MAX_PATH lookup failures. Exact d11 preimages and all17 final corrected hashes verify; the corrected patch independently applies through a private index and produces exactly those17 postimages. Diff whitespace check passes. Authenticated original packets and per-path provenance are retained.
+
+Fresh source-composition review passes. Exactly two TUs (GuiModule and loading caller) have sparse-overlay compilation evidence with zero physical source fallback. Full build/link, release/reinitialize execution, fixtures and native behavior remain pending; no debug-site/native credit or canonical verdict change is claimed. Root owns publication and grouped/native validation. No shared source/index/ref edit, commit, push or game launch was performed by this composer.
