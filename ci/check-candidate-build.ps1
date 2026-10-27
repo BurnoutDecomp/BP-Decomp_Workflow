@@ -533,9 +533,9 @@ try {
     Invoke-Native git @('-C', $SourceRoot, 'fetch', '--recurse-submodules=no', '--no-tags', '--depth=1', 'origin', $B5Commit) 'source.log'
     if ((Get-GitText @('-C', $SourceRoot, 'cat-file', '-t', $B5Commit)) -ne 'commit') { throw 'Candidate is not a commit object.' }
     Invoke-Native git @('-C', $SourceRoot, 'checkout', '--detach', $B5Commit) 'source.log'
-    Invoke-Native git @('-C', $SourceRoot, 'submodule', 'update', '--init', '--checkout', 'vendor/EABase', 'vendor/EASTL', 'vendor/EAThread') 'source.log'
+    Invoke-Native git @('-C', $SourceRoot, 'submodule', 'update', '--init', '--checkout', 'vendor/EABase', 'vendor/EASTL', 'vendor/EAThread', 'vendor/SDL') 'source.log'
     $Receipt.b5_head = Get-GitText @('-C', $SourceRoot, 'rev-parse', 'HEAD')
-    $Receipt.required_submodules = Get-GitText @('-C', $SourceRoot, 'submodule', 'status', '--', 'vendor/EABase', 'vendor/EASTL', 'vendor/EAThread')
+    $Receipt.required_submodules = Get-GitText @('-C', $SourceRoot, 'submodule', 'status', '--', 'vendor/EABase', 'vendor/EASTL', 'vendor/EAThread', 'vendor/SDL')
     Assert-CleanTrees
 
     $clPath = (Get-Command cl.exe -CommandType Application -All | Select-Object -First 1).Source
@@ -1611,7 +1611,7 @@ try {
     Expand-Archive -LiteralPath $archive -DestinationPath $ffmpeg -Force
     if (-not (Test-Path -LiteralPath (Join-Path $ffmpeg 'bin/avcodec.lib'))) { throw 'Prebuilt FFmpeg import library is missing.' }
     Invoke-Native cmd.exe @('/d', '/c', ('"{0}"' -f (Join-Path $Root 'tools/build/fetch_xaudio2_redist.bat'))) 'dependencies.log'
-    Invoke-Native python @((Join-Path $Root 'tools/build/fetch_sdl3.py')) 'dependencies.log'
+    Invoke-Native python @((Join-Path $Root 'tools/build/build_sdl3.py')) 'dependencies.log'
     $lua = Join-Path $SourceRoot 'vendor/lua/lua515.lib'
     if (-not (Test-Path -LiteralPath $lua)) {
         Invoke-Native cmd.exe @('/d', '/c', ('"{0}"' -f (Join-Path $Root 'tools/build/build_lua.bat'))) 'lua.log'

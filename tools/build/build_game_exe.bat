@@ -36,7 +36,7 @@ if not exist "%SRC%\GameSource\Main\BrnMain.cpp" (
   exit /b 1
 )
 for %%F in ("include\SDL3\SDL.h" "lib\x64\SDL3.lib" "lib\x64\SDL3.dll" "LICENSE.txt") do if not exist "%SDL%\%%~F" (
-  echo ERROR: SDL3 package missing -- run: python tools\build\fetch_sdl3.py
+  echo ERROR: SDL3 package missing -- run: python tools\build\build_sdl3.py
   exit /b 1
 )
 if not exist "%FFM%\include\libavcodec\avcodec.h" (

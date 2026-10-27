@@ -69,7 +69,7 @@ jobs:
           git config --global http.https://github.com/.extraheader \
             "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           git submodule update --init b5-decomp
-          git -C b5-decomp submodule update --init vendor/EABase vendor/EASTL vendor/EAThread
+          git -C b5-decomp submodule update --init vendor/EABase vendor/EASTL vendor/EAThread vendor/SDL
 
       # Download the prebuilt FFmpeg (libs + DLLs + headers) into the tree where
       # build_game_exe.bat expects it, instead of compiling FFmpeg from source.
@@ -92,9 +92,9 @@ jobs:
         shell: cmd
         run: tools\build\fetch_xaudio2_redist.bat
 
-      - name: Fetch pinned SDL3 gamepad runtime
+      - name: Build SDL3 gamepad runtime from the b5-decomp submodule
         shell: cmd
-        run: python tools\build\fetch_sdl3.py
+        run: python tools\build\build_sdl3.py
 
       # Put MSVC (cl) on PATH so the build .bat files skip their own fragile
       # `call vcvars64 >nul 2>&1` (which died silently with exit 255 on the runner).
