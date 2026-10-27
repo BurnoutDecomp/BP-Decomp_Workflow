@@ -1,0 +1,5 @@
+# Font/Buddy provider composition after language and lifecycle recovery
+
+Update exactly three file bindings in the existing contract: the view CPP, comment-only view header, and Image debug component. All twenty actual compiled font/Buddy definitions independently match their prior source and retained extraction hashes byte-for-byte. The actual view dispatcher and image callback remain unchanged. The header code is unchanged after comments/whitespace; the Image source differs only by the reviewed unsupported base-Construct call deletion. The new language receiver is outside this fixture and gains no behavior credit. No tests, cases, expected values, old-control sources or compiler inputs change.
+
+This is a proposed source-contract composition for the exact4536700d/de2a0da4 pair, requiring fresh review before hosted execution. It does not claim that the previous117/0 XNet or232/0 font result validates the new language/lifecycle changes. A new hosted build and existing regression run are still required. Full input sequence, native lifecycle and normal installation remain pending.
