@@ -1,0 +1,160 @@
+{
+  "status": "hosted_build_all_selected_gates_and_payloads_pass_native_pending",
+  "source": "412e803e105798a7ab6392931531cd249c88928a",
+  "source_tree": "febdf0929ba77846fcfe00893b9ea0b518f0d4d9",
+  "workflow": "b59368d5502ce423c56cb771e4d066ae8073c412",
+  "run_id": 40208083584,
+  "exe_sha256": "02bdfeb2ad1bf7f8acd210fb92106dd88f78bf7615de214ba534267477dffd63",
+  "payload_count": 14,
+  "passed_gates": [
+    "gui_io_status",
+    "system_user_profile_status",
+    "hud_status",
+    "traffic_flowtype_override_status",
+    "startup_io_status",
+    "gui_license_status",
+    "keyboard_ui_contract_status",
+    "gui_animation_status",
+    "rwac_command_capacity_status",
+    "online_save_route_status",
+    "gui_menu_music_wire"
+  ],
+  "rwac_legacy_checks": 16427,
+  "rwac_first_pass_checks": 6,
+  "rwac_expected_baseline_failures": 6,
+  "rwac_variants": [
+    {
+      "name": "candidate",
+      "checks": 16427,
+      "failures": 0,
+      "exit_code": 0,
+      "run_log_sha256": "76deda234697375f7ebc40db94e419b1f1aaae775845d7404086aa8ed1404fb3"
+    },
+    {
+      "name": "baseline_control",
+      "checks": 25,
+      "failures": 6,
+      "exit_code": 1,
+      "run_log_sha256": "6d55b4952b78268b1249f3b3e0eeab7af5483cc124b3ae06379e09d29a9dfe13"
+    }
+  ],
+  "receipt_sha256": "814ca26e8e0fe95424807219ab50c64f594554670930e49a82801d212cca9189",
+  "build_log_sha256": "41a2afe4e21ee672176638cf0ea728a94d3bff306b46e5cb5d936a5fb659ef3a",
+  "rwac_result_sha256": "7fb1d277ed29aebb6733598d34136fa9ba5034efee4b6346b093abab54c81222",
+  "normal_package_changed": false,
+  "native_executed": false,
+  "new_behavior_dispositions": 0,
+  "freeze_fix_claim": false,
+  "text_format_binding": [
+    {
+      "variant": "text-format",
+      "checks": 78,
+      "failures": 0,
+      "exit_code": 0,
+      "result_sha256": "b2d3a6277cc37faff8a847a01b9d88bd95b78c011ebddd44baf71583cbbcaab4",
+      "stdout_sha256": "03ef136f8c2ecb3b016b87d9b2053e6d314c03c134be0ddc8e7b7b7917cd998d",
+      "source_binding_sha256": "f647abfa6adc4fd3c78a3927b340f380da6cb5cf3085ecb39e7d468618841429"
+    },
+    {
+      "variant": "text-format-old-setter",
+      "checks": 78,
+      "failures": 57,
+      "exit_code": 1,
+      "result_sha256": "aae71ca140b1013b974746cce9d707aa5e6f7eca092d621c5f7263e7b682558d",
+      "stdout_sha256": "7fb27785e1e54f44c27d389141ee7500acaaf5111cd916147f22775a8b0e861e",
+      "source_binding_sha256": "d329eb72517709de9d35d277a8e8cf05a9a20213b98a6aebaae435ea159e0eee"
+    }
+  ],
+  "verified_input_paths": 112,
+  "run_attempt": 1,
+  "online_save_route_modes": [
+    {
+      "mode": "candidate",
+      "checks": 71,
+      "failures": 0,
+      "assertions": 0,
+      "exit_code": 0,
+      "log_sha256": "ee9be8199d99cd61bc8f151b290d6ae9214746ae1318d472d54e81d9e5c8c268"
+    },
+    {
+      "mode": "omitted_init",
+      "checks": 13,
+      "failures": 6,
+      "assertions": 0,
+      "exit_code": 1,
+      "log_sha256": "b7704ceea1f355ec4f6e29437226efe9279acc027da6d6eccc12eae99028b4bd"
+    },
+    {
+      "mode": "oldtrap_save",
+      "checks": 1,
+      "failures": 1,
+      "assertions": 0,
+      "exit_code": 1,
+      "log_sha256": "ab7bb47b2f44415aa9966d719e1e81dbffd2b557fe5159c9cba0b56360a68de5"
+    },
+    {
+      "mode": "oldtrap_load",
+      "checks": 1,
+      "failures": 1,
+      "assertions": 0,
+      "exit_code": 1,
+      "log_sha256": "8c31f86e34731e4c67f40236bfd995e825e9b3c6d468c672bc48ff07ea47937f"
+    }
+  ],
+  "online_save_route_result_sha256": "c500012a0b5303187f330815ac27f4b81b5817241739856dd7d18d794789449c",
+  "fixture_compiles_per_variant": 8,
+  "online_save_route_pins": 27,
+  "fixture_payloads": 8,
+  "shipping_tus": 3003,
+  "shipping_compiled": 3003,
+  "shipping_cached": 0,
+  "disk_persistence_verified": false,
+  "source_subject": "17ab0a96e27bed5e60ffc55cb81dcf0a653b1e4e",
+  "active_replay_frame_wiring": "pending",
+  "gui_menu_music_wire": {
+    "candidate": {
+      "source": "412e803e105798a7ab6392931531cd249c88928a",
+      "checks": 217,
+      "failures": 0,
+      "process_exit_code": 0,
+      "source_headers": 25,
+      "expected_raw_mismatches": 0,
+      "executable_sha256": "82aa7836b9356eb9de172b841e33556d6db52ac07041e524d76227f29eecdf4c"
+    },
+    "negative_control": {
+      "source": "b595d61d2440ca94d61aa8fa610ab0bf6048cc66",
+      "checks": 189,
+      "failures": 0,
+      "process_exit_code": 0,
+      "source_headers": 25,
+      "expected_raw_mismatches": 4,
+      "executable_sha256": "c367775ea3c6e22cd6b16ac1e4138313584076db2be030dddf37408b941b52a0"
+    }
+  },
+  "scope_limit_menu23": "Production decoder/queue fixture; channel40 drain and audible playback are not native-certified.",
+  "verifier_contract_sha256": "41d869e067ffd0c996d0f54bbca170bd78df298cf39cde28304dbd022adec7ba",
+  "verifier_source_bindings_sha256": "9ba60b2d33138d011de60b034356bea552169a17c931aa6a08d2b10cacc66280",
+  "shipping_tu_roster_sha256": "c3c61c93458d5427324841c25e0255ce38c2d38413a38d45fa7f87a9403bd74b",
+  "expected_payload_names": [
+    "Burnout_PC.cgsmap",
+    "Burnout_PC.exe",
+    "Burnout_PC.exe.provenance.json",
+    "Burnout_PC.map",
+    "SDL3-LICENSE.txt",
+    "SDL3.dll",
+    "avcodec-63.dll",
+    "avdevice-63.dll",
+    "avfilter-12.dll",
+    "avformat-63.dll",
+    "avutil-61.dll",
+    "swresample-7.dll",
+    "swscale-10.dll",
+    "xaudio2_9redist.dll"
+  ],
+  "sdl3_version": "3.4.18",
+  "unchanged_ffmpeg_archive": {
+    "sha256": "73eac2b8147c80b051e13e54e99060e7c04657401e614ea5114ce6d3a38750d3",
+    "bytes": 2830449
+  },
+  "verification_scope": "Retained eleven artifact groups only; no new fixture/native execution, input-control credit, audible behavior or gameplay certification."
+}

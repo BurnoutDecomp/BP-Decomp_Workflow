@@ -1,0 +1,117 @@
+{
+  "address": "0x8282F6D0",
+  "name": "CgsDev::DebugComponent::RegisterFunction",
+  "prototype": "int CgsDev::DebugComponent::RegisterFunctionint __fastcall(int a1, int a2, int a3, int a4, int a5)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a5",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v9",
+      "type": "_BYTE[288]",
+      "is_reg": false,
+      "size": 288
+    }
+  ],
+  "pseudocode": "int __fastcall CgsDev::DebugComponent::RegisterFunction(int a1, int a2, int a3, int a4, int a5)\n{\n  int result; // r3\n  _BYTE v9[288]; // [sp+50h] [-120h] BYREF\n\n  _savegprlr_29();\n  CgsDev::DebugComponent::MakeFullPath(a1, v9, 256, a4);\n  result = CgsDev::DebugUI::FunctionManager::RegisterFunction(*(mpInstance + 80) + 332, a2, a3, v9, a5);\n  _restgprlr_29();\n  return result;\n}\n",
+  "assembly": "0x8282F6D0  mflr      r12\n0x8282F6D4  bl        __savegprlr_29\n0x8282F6D8  stwu      r1, back_chain(r1)\n0x8282F6DC  mr        r31, r4\n0x8282F6E0  mr        r30, r5\n0x8282F6E4  li        r5, 0x100\n0x8282F6E8  addi      r4, r1, 0x170+var_120\n0x8282F6EC  mr        r29, r7\n0x8282F6F0  bl        CgsDev__DebugComponent__MakeFullPath\n0x8282F6F4  lis       r11, mpInstance@ha\n0x8282F6F8  mr        r7, r29\n0x8282F6FC  addi      r6, r1, 0x170+var_120\n0x8282F700  mr        r5, r30\n0x8282F704  mr        r4, r31\n0x8282F708  lwz       r11, mpInstance@l(r11)\n0x8282F70C  lwz       r11, 0x140(r11)\n0x8282F710  addi      r3, r11, 0x14C\n0x8282F714  bl        CgsDev__DebugUI__FunctionManager__RegisterFunction\n0x8282F718  addi      r1, r1, 0x170\n0x8282F71C  b         __restgprlr_29",
+  "xrefs_to": [
+    {
+      "address": "0x8224F218",
+      "name": "sub_8224F218"
+    },
+    {
+      "address": "0x8226BDB8",
+      "name": "BrnDirector::ArbStateTestbed::RegisterIceAnimsWithDebugComponent"
+    },
+    {
+      "address": "0x82275828",
+      "name": "??$SerialiseBehaviourParameters@VTestbedSetupSerialiser@Camera@BrnDirector@@@Camera@BrnDirector@@YAXPBDAAVParameters@Be"
+    },
+    {
+      "address": "0x82275F68",
+      "name": "BrnDirector::DebugComponent::OnActivate"
+    },
+    {
+      "address": "0x8252A3B8",
+      "name": "BrnGui::GuiDebugComponent::OnActivate"
+    },
+    {
+      "address": "0x82584FD8",
+      "name": "BrnNetwork::LiveRevengeDebugComponent::AddPlayer"
+    },
+    {
+      "address": "0x82762530",
+      "name": "BrnTraffic::DebugComponent::OnActivate"
+    },
+    {
+      "address": "0x827BF4A8",
+      "name": "BrnWorld::WorldDebugComponent::OnActivate"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EEC",
+      "name": "__savegprlr_29"
+    },
+    {
+      "address": "0x828222C8",
+      "name": "CgsDev::DebugComponent::MakeFullPath"
+    },
+    {
+      "address": "0x8282E7E0",
+      "name": "CgsDev::DebugUI::FunctionManager::RegisterFunction"
+    }
+  ]
+}

@@ -1,0 +1,853 @@
+{
+  "mode": "independent read-only raw-data inspection; supplied checker not evaluated or repaired",
+  "predicate_count": 6226,
+  "raw_join_findings": [],
+  "raw_game_log_bytes": 32670550,
+  "raw_game_log_sha256": "c30e2a9f400d0f343e1d1decf3ab49d2e2ee7b75f4f58bc4549d53b1d15307fc",
+  "complete_lines": 169586,
+  "normalized_complete_log_sha256": "b8e25fe81b0c2a00c474885695bd6aa8176f136b1484ee9c39f5272f4301f7ce",
+  "window_ranges": [
+    {
+      "label": "baseline F2",
+      "begin_line": 14028,
+      "end_line": 14462,
+      "begin_bytes": 2445838,
+      "end_bytes": 2527505
+    },
+    {
+      "label": "same-run natural baseline",
+      "begin_line": 14028,
+      "end_line": 16152,
+      "begin_bytes": 2445838,
+      "end_bytes": 2846163
+    },
+    {
+      "label": "companion-on",
+      "begin_line": 17592,
+      "end_line": 20030,
+      "begin_bytes": 3123972,
+      "end_bytes": 3586292
+    },
+    {
+      "label": "missing-directory-failure",
+      "begin_line": 21255,
+      "end_line": 24000,
+      "begin_bytes": 3821808,
+      "end_bytes": 4345564
+    },
+    {
+      "label": "screenshot-positive",
+      "begin_line": 25438,
+      "end_line": 28185,
+      "begin_bytes": 4617786,
+      "end_bytes": 5145095
+    },
+    {
+      "label": "request-negative",
+      "begin_line": 29664,
+      "end_line": 34394,
+      "begin_bytes": 5428202,
+      "end_bytes": 6337804
+    },
+    {
+      "label": "overlay-positive-prep",
+      "begin_line": 36071,
+      "end_line": 37074,
+      "begin_bytes": 6661247,
+      "end_bytes": 6852774
+    },
+    {
+      "label": "overlay-positive",
+      "begin_line": 39007,
+      "end_line": 42121,
+      "begin_bytes": 7229165,
+      "end_bytes": 7827926
+    },
+    {
+      "label": "overlay-negative-prep",
+      "begin_line": 43741,
+      "end_line": 44780,
+      "begin_bytes": 8139213,
+      "end_bytes": 8338214
+    },
+    {
+      "label": "overlay-negative",
+      "begin_line": 46130,
+      "end_line": 49361,
+      "begin_bytes": 8598966,
+      "end_bytes": 9220909
+    },
+    {
+      "label": "overlay-restore-prep",
+      "begin_line": 51121,
+      "end_line": 52243,
+      "begin_bytes": 9561473,
+      "end_bytes": 9775793
+    },
+    {
+      "label": "overlay-restore",
+      "begin_line": 53744,
+      "end_line": 57172,
+      "begin_bytes": 10065404,
+      "end_bytes": 10725264
+    },
+    {
+      "label": "terminal-restore",
+      "begin_line": 58935,
+      "end_line": 61387,
+      "begin_bytes": 11068171,
+      "end_bytes": 11538774
+    }
+  ],
+  "all_held_receipts": [
+    {
+      "label": "startup",
+      "motion_indices": [
+        7394,
+        7470,
+        7550,
+        7634
+      ],
+      "physics_indices": [
+        7393,
+        7469,
+        7549,
+        7633
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "in-run-natural-baseline",
+      "motion_indices": [
+        15222,
+        15319,
+        15415,
+        15508
+      ],
+      "physics_indices": [
+        15221,
+        15318,
+        15414,
+        15507
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "companion-on prewrite",
+      "motion_indices": [
+        17216,
+        17307,
+        17397,
+        17490
+      ],
+      "physics_indices": [
+        17215,
+        17306,
+        17396,
+        17489
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "companion-on",
+      "motion_indices": [
+        19022,
+        19118,
+        19220,
+        19315
+      ],
+      "physics_indices": [
+        19021,
+        19117,
+        19219,
+        19314
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "missing-directory-failure prewrite",
+      "motion_indices": [
+        20861,
+        20969,
+        21076,
+        21186
+      ],
+      "physics_indices": [
+        20860,
+        20968,
+        21075,
+        21185
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "missing-directory-failure",
+      "motion_indices": [
+        22920,
+        23038,
+        23153,
+        23269
+      ],
+      "physics_indices": [
+        22919,
+        23037,
+        23152,
+        23268
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "screenshot-positive prewrite",
+      "motion_indices": [
+        25058,
+        25169,
+        25272,
+        25365
+      ],
+      "physics_indices": [
+        25057,
+        25168,
+        25271,
+        25364
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "screenshot-positive",
+      "motion_indices": [
+        27372,
+        27480,
+        27586,
+        27683
+      ],
+      "physics_indices": [
+        27371,
+        27479,
+        27585,
+        27682
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "request-negative prewrite",
+      "motion_indices": [
+        29294,
+        29390,
+        29493,
+        29587
+      ],
+      "physics_indices": [
+        29293,
+        29389,
+        29492,
+        29586
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "request-negative-start",
+      "motion_indices": [
+        31145,
+        31245,
+        31339,
+        31451
+      ],
+      "physics_indices": [
+        31144,
+        31244,
+        31338,
+        31450
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "request-negative-end",
+      "motion_indices": [
+        33382,
+        33496,
+        33621,
+        33736
+      ],
+      "physics_indices": [
+        33381,
+        33495,
+        33620,
+        33735
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-positive-prep prewrite",
+      "motion_indices": [
+        35726,
+        35830,
+        35935,
+        36036
+      ],
+      "physics_indices": [
+        35725,
+        35829,
+        35934,
+        36035
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-positive prewrite",
+      "motion_indices": [
+        38620,
+        38738,
+        38850,
+        38965
+      ],
+      "physics_indices": [
+        38619,
+        38737,
+        38849,
+        38964
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-positive",
+      "motion_indices": [
+        41151,
+        41254,
+        41360,
+        41462
+      ],
+      "physics_indices": [
+        41150,
+        41253,
+        41359,
+        41461
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-negative-prep prewrite",
+      "motion_indices": [
+        43418,
+        43516,
+        43620,
+        43723
+      ],
+      "physics_indices": [
+        43417,
+        43515,
+        43619,
+        43722
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-negative prewrite",
+      "motion_indices": [
+        45730,
+        45835,
+        45936,
+        46038
+      ],
+      "physics_indices": [
+        45729,
+        45834,
+        45935,
+        46037
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-negative",
+      "motion_indices": [
+        48337,
+        48441,
+        48549,
+        48655
+      ],
+      "physics_indices": [
+        48336,
+        48440,
+        48548,
+        48654
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-restore-prep prewrite",
+      "motion_indices": [
+        50717,
+        50823,
+        50930,
+        51042
+      ],
+      "physics_indices": [
+        50716,
+        50822,
+        50929,
+        51041
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-restore prewrite",
+      "motion_indices": [
+        53346,
+        53462,
+        53570,
+        53677
+      ],
+      "physics_indices": [
+        53345,
+        53461,
+        53569,
+        53676
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "overlay-restore",
+      "motion_indices": [
+        56168,
+        56276,
+        56391,
+        56499
+      ],
+      "physics_indices": [
+        56167,
+        56275,
+        56390,
+        56498
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "terminal-restore prewrite",
+      "motion_indices": [
+        58581,
+        58684,
+        58785,
+        58889
+      ],
+      "physics_indices": [
+        58580,
+        58683,
+        58784,
+        58888
+      ],
+      "path": 0.0
+    },
+    {
+      "label": "terminal-restore",
+      "motion_indices": [
+        60464,
+        60570,
+        60671,
+        60778
+      ],
+      "physics_indices": [
+        60463,
+        60569,
+        60670,
+        60777
+      ],
+      "path": 0.0
+    }
+  ],
+  "transactions": [
+    {
+      "number": 1,
+      "label": "companion-on",
+      "action_utc": "2026-10-27T13:54:42.2304692Z",
+      "begin_raw": 17592,
+      "F1_index": 17906,
+      "F2_cursor": 18106,
+      "last_F2_bool": 18300,
+      "end_raw": 20030,
+      "commands": [
+        "set \"WCircles\" TRUE"
+      ]
+    },
+    {
+      "number": 2,
+      "label": "missing-directory-failure",
+      "action_utc": "2026-10-27T13:54:51.1315234Z",
+      "begin_raw": 21255,
+      "F1_index": 21579,
+      "F2_cursor": 22026,
+      "last_F2_bool": 22225,
+      "end_raw": 24000,
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ]
+    },
+    {
+      "number": 3,
+      "label": "screenshot-positive",
+      "action_utc": "2026-10-27T13:55:00.8132937Z",
+      "begin_raw": 25438,
+      "F1_index": 25776,
+      "F2_cursor": 26479,
+      "last_F2_bool": 26685,
+      "end_raw": 28185,
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ]
+    },
+    {
+      "number": 4,
+      "label": "request-negative",
+      "action_utc": "2026-10-27T13:55:12.1937519Z",
+      "begin_raw": 29664,
+      "F1_index": 30058,
+      "F2_cursor": 30246,
+      "last_F2_bool": 30430,
+      "end_raw": 34394,
+      "commands": [
+        "set \"SSReq\" FALSE"
+      ]
+    },
+    {
+      "number": 5,
+      "label": "overlay-positive-prep",
+      "action_utc": "2026-10-27T13:55:27.9831120Z",
+      "begin_raw": 36071,
+      "F1_index": 36482,
+      "F2_cursor": 36690,
+      "last_F2_bool": 36911,
+      "end_raw": 37074,
+      "commands": [
+        "set \"SSOvly\" TRUE"
+      ]
+    },
+    {
+      "number": 6,
+      "label": "overlay-positive",
+      "action_utc": "2026-10-27T13:55:34.4513844Z",
+      "begin_raw": 39007,
+      "F1_index": 39430,
+      "F2_cursor": 40276,
+      "last_F2_bool": 40478,
+      "end_raw": 42121,
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ]
+    },
+    {
+      "number": 7,
+      "label": "overlay-negative-prep",
+      "action_utc": "2026-10-27T13:55:46.0041261Z",
+      "begin_raw": 43741,
+      "F1_index": 44196,
+      "F2_cursor": 44394,
+      "last_F2_bool": 44591,
+      "end_raw": 44780,
+      "commands": [
+        "set \"SSOvly\" FALSE"
+      ]
+    },
+    {
+      "number": 8,
+      "label": "overlay-negative",
+      "action_utc": "2026-10-27T13:55:51.6417390Z",
+      "begin_raw": 46130,
+      "F1_index": 46605,
+      "F2_cursor": 47375,
+      "last_F2_bool": 47563,
+      "end_raw": 49361,
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ]
+    },
+    {
+      "number": 9,
+      "label": "overlay-restore-prep",
+      "action_utc": "2026-10-27T13:56:03.7349000Z",
+      "begin_raw": 51121,
+      "F1_index": 51672,
+      "F2_cursor": 51864,
+      "last_F2_bool": 52055,
+      "end_raw": 52243,
+      "commands": [
+        "set \"SSOvly\" FALSE"
+      ]
+    },
+    {
+      "number": 10,
+      "label": "overlay-restore",
+      "action_utc": "2026-10-27T13:56:09.6998337Z",
+      "begin_raw": 53744,
+      "F1_index": 54286,
+      "F2_cursor": 55092,
+      "last_F2_bool": 55261,
+      "end_raw": 57172,
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ]
+    },
+    {
+      "number": 11,
+      "label": "terminal-restore",
+      "action_utc": "2026-10-27T13:56:21.0758371Z",
+      "begin_raw": 58935,
+      "F1_index": 59446,
+      "F2_cursor": 59612,
+      "last_F2_bool": 59797,
+      "end_raw": 61387,
+      "commands": [
+        "set \"SSReq\" FALSE",
+        "set \"SSOvly\" FALSE",
+        "set \"WCircles\" FALSE"
+      ]
+    }
+  ],
+  "capture_joins": [
+    {
+      "sequence": 1,
+      "label": "in-run-natural-baseline",
+      "present": 7798,
+      "ack_raw_index": 15956,
+      "sha256": "8d1da7ce035e26ab6fa2f285a45da542dda50d4e7587372830698883abc98851"
+    },
+    {
+      "sequence": 2,
+      "label": "companion-on",
+      "present": 8616,
+      "ack_raw_index": 19809,
+      "sha256": "5cf4e421e1ad263b15dffc89737233be7526ad19abcc2af923ab0ba91566306b"
+    },
+    {
+      "sequence": 3,
+      "label": "missing-directory-failure",
+      "present": 9465,
+      "ack_raw_index": 23800,
+      "sha256": "93aafa07ef7d9ce82eb2639feb9da6a7025a19cfc11cca464db0444e3662fdc3"
+    },
+    {
+      "sequence": 4,
+      "label": "screenshot-positive",
+      "present": 10351,
+      "ack_raw_index": 28036,
+      "sha256": "95085be83b39e7b17b9ffa7f92553baaf224061553253f3a0be64f87f8d6d44b"
+    },
+    {
+      "sequence": 5,
+      "label": "request-negative-start",
+      "present": 11154,
+      "ack_raw_index": 31848,
+      "sha256": "37392821e6dd94d907460984214482f165d28b9c429cf935118d0f6a055f1305"
+    },
+    {
+      "sequence": 6,
+      "label": "request-negative-end",
+      "present": 11653,
+      "ack_raw_index": 34207,
+      "sha256": "1f0a46e9bca1b93f9f99f0ee28d1f8594d159a4d9cceff70183e481985123b05"
+    },
+    {
+      "sequence": 7,
+      "label": "overlay-positive",
+      "present": 13296,
+      "ack_raw_index": 41952,
+      "sha256": "3413139e8e591746070827e9a2f6fc8e0139b24ecbebcef1b57e1e4a9faf3bc1"
+    },
+    {
+      "sequence": 8,
+      "label": "overlay-negative",
+      "present": 14831,
+      "ack_raw_index": 49163,
+      "sha256": "113cdb789fefd4185e559f878035543f62d05e2dba8b9202da92e0c0e02c5208"
+    },
+    {
+      "sequence": 9,
+      "label": "overlay-restore",
+      "present": 16481,
+      "ack_raw_index": 56973,
+      "sha256": "e5f90555724240aeaa651e5b3367bc67e752335711039403537f34d575a2a5a3"
+    },
+    {
+      "sequence": 10,
+      "label": "terminal-restore",
+      "present": 17382,
+      "ack_raw_index": 61206,
+      "sha256": "9f6a50b378163e580cd81bea3bf8514620e22d71e99c97ded4106aff8d46e7f8"
+    }
+  ],
+  "normal_current_file_matches": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.cgsmap",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.exe",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.exe.provenance.json",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.map",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avcodec-63.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avdevice-63.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avfilter-12.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avformat-63.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avutil-61.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\swresample-7.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\swscale-10.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\xaudio2_9redist.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\config.ini",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\BrnGame.log",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\BrnGame.emergency.log",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_1\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_20\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_21\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_22\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_23\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_3\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_4\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_67\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_7\\Profile.sav",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\SDL3.dll",
+      "match": true
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\SDL3-LICENSE.txt",
+      "match": true
+    }
+  ],
+  "facts": {
+    "exe_sha256": "9686984019a51e0cd915a032679e631362bc98d060479a3e128e560bc0b1f2fb",
+    "full_history": {
+      "motion_rows": 546,
+      "physics_rows": 546,
+      "origin_raw_index": 5566,
+      "last_capture_ACK_raw_index": 61206,
+      "stationary_position": {
+        "n": 1200,
+        "x": 3007.971924,
+        "y": -2.540363,
+        "z": -1945.166992,
+        "vx": 0.0,
+        "vy": -0.175847,
+        "vz": 0.0,
+        "speed": 0.175847,
+        "mph": 0.0,
+        "gas": 0.0,
+        "steer": -0.0,
+        "engine": 0
+      }
+    },
+    "negative_interval": {
+      "seconds": 2.1464414,
+      "present_advance": 499
+    },
+    "native_errors": [
+      [
+        21600,
+        "[screenshot] open failed: d_\\screenshot0_.tga"
+      ]
+    ],
+    "driver_failure": {
+      "canonical_exit": null,
+      "trigger_exit": 0,
+      "identity": {
+        "pid": 27524,
+        "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\screenshot_flags_62095_20261027\\stage\\slot\\Burnout_PC.exe",
+        "start_utc": "2026-10-27T13:53:29.6203373Z",
+        "slot": 62095,
+        "canonical_launcher_pid": 28208
+      },
+      "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\screenshot_flags_62095_20261027\\run_debug_screenshot_62095_20261027_145320",
+      "source": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "workflow": "710832cadba2de0f2a32794dc36ddc95f73f4175",
+      "exe_sha256": "9686984019a51e0cd915a032679e631362bc98d060479a3e128e560bc0b1f2fb",
+      "powershell": "C:/Program Files/PowerShell/7/pwsh.exe",
+      "error": "Canonical launcher did not terminate within 450 s; cleanup is unconfirmed and acceptance is blocked",
+      "canonical_join_confirmed": false,
+      "elapsed_seconds": 450.0159999999996
+    },
+    "original_case_failure": {
+      "pass": false,
+      "detail": "strict native screenshot evidence validation: Exception calling \"Parse\" with \"1\" argument(s): \"String '10/27/2026 13:55:00' was not recognized as a valid DateTime.\"",
+      "name": "owner, capture, source-gate, and restoration witness checker",
+      "kind": "Script"
+    },
+    "mandatory_protocol_timeout_blocker": "Approved protocol says any timeout/unconfirmed bounded canonical join fails/defer; the original450s join failed. Later canonical success is retained as a later fact, not a successful bounded join.",
+    "final_file_times_utc": {
+      "ROOT_HANDOFF_RESULT.json": "2026-10-27T14:00:50.961989+00:00",
+      "run_debug_screenshot_62095_20261027_145320\\flow\\terminal-status.json": "2026-10-27T14:00:42.179933+00:00",
+      "run_debug_screenshot_62095_20261027_145320\\flow-terminal.json": "2026-10-27T14:00:42.389236+00:00",
+      "run_debug_screenshot_62095_20261027_145320\\result.json": "2026-10-27T14:00:54.772781+00:00"
+    }
+  },
+  "originals_preserved": true,
+  "accepted_site_ids": [],
+  "launches": 0
+}

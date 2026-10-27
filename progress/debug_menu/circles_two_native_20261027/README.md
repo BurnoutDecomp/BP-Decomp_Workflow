@@ -1,0 +1,9 @@
+# World and prop circle controls verified
+
+The instance and prop bounding-circle toggles have complete positive, negative and restoration evidence on private source7d5a10bb, executable08ac2dfe. Both reviewers inspected all seven original1280x720 captures: each control independently adds its green circles, which disappear after disabling/restoring it. The normal world, car, HUD and minimap stay visible.
+
+The native flow completed without asserts or exceptions. Its original aggregate case remains **FAIL (5/6 checks, exit1)**: the new checker expects `Context.Slot`, while the standard final evaluation context omits that field. Setup includes it. Independent review joined the original actual slot62094/PID30012/image/start identity to all raw prefixes, state windows, F1/F2, engine/physics witnesses, ACKs, CSV rows and BMP hashes. All ten reported failed predicates share the missing-slot assumption. Nothing was re-evaluated or relabelled as a passing case.
+
+The seventh frame proves the actual final false/false restoration, with no later writes. Cleanup independently confirms the owned process exited; all27 normal files and10 profiles preserve their sizes, hashes and timestamps. This evidence adds exactly two dispositions and does not certify unrelated controls, a new normal installation or current-dev gameplay.
+
+The seven PNGs preserve every displayed RGB pixel at original resolution. IMAGES records original BMP hashes and retained paths. RAW_ARTIFACTS preserves exact original JSON/log/case/checker bytes; readable copies use LF and readable logs trim trailing whitespace. BrnGame.log.gz preserves the complete original game log. HOSTED files retain the exact3003-TU/11-group/14-payload build and real circle positive/unchanged-source control results. REVIEW and PEER_EVIDENCE record the independent raw-source and pixel inspection.

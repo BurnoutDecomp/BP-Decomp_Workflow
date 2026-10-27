@@ -1,0 +1,32 @@
+VERDICT: pass
+
+Exact accepted per-site verdicts:
+
+- BrnWorld::WorldEntityModule::Construct#0002: pass — visible native effect, isolated companion, negative and original false restoration.
+- BrnWorld::PropEntityModule::Construct#0001: pass — visible native effect, isolated companion, negative and original false restoration.
+
+The original aggregate remains FAIL: five of six case checks passed, canonical case exit 1, trigger exit 0 and original flow exit 0. [result.json](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/run_debug_circles_62094_20261027_122010/result.json) is unchanged at SHA256 `3c9247379a6cbd098baab16b818ba14ad0bdfdcbcc68250081863185862bfee9`. No case/checker rerun, repaired evaluation context or result relabelling was used.
+
+The diagnosis is confirmed from actual source: [Setup context](D:/Reverse/BP-Decomp_Workflow/tools/tests/run_case.ps1:297) contains Slot; [final evaluation context](D:/Reverse/BP-Decomp_Workflow/tools/tests/run_case.ps1:457) omits it. The unchanged checker reads Context.Slot in its owner, handoff, natural-baseline and seven ACK predicates. The missing field converts to integer 0. All ten recorded failure messages are exactly those comparisons. Independent data analysis instead joins the actual selected slot 62094 from canonical flow-terminal.json to helper, driver, binding and raw ACK evidence; it does not change the original checker result.
+
+The exact run is source `7d5a10bb41f23bd3f4a9f1ab72de047b15a6e789`, workflow `8d886b7909a53a9bb5b072d1d736bd06f06e1fac`, executable `08ac2dfecd8607cd6e313ab8d89599345ceffc8a0cb929fcfa150a9376b7f39d`, PID 30012, start `2026-10-27T11:20:14.5894107Z`, private slot 62094. Helper, actual OWNED_PROCESS console marker, Root handoff, driver and original terminal agree on PID/image/start. The terminal records direct creation-handle ownership, normal bounded flow, owned cleanup and input reset, without asserts, exceptions or a foreign game. Current read-only process inspection found no game running.
+
+All launch-used JSON copies are unchanged; thirteen code/template postimages match approved delta04. The filled plan preserves selected IDs, paths, original values, six-state schedule, forcing/geometry/visual policies and the approved exact-Git alias metadata. Both World/Prop snapshots and all four alias-contract source files match actual candidate Git bytes. The executable plus thirteen companion payloads match the retained hosted input receipt; its recorded 3003-TU/eleven-gate scope is retained without treating those fixtures as native behavior. All 27 normal-file sizes, hashes and timestamps and the ten-profile roster currently match the protected prelaunch snapshot. The returning-profile fixture is unchanged.
+
+The actual raw stage and canonical game logs are byte-identical: 36,152,581 bytes, SHA256 `02b80094badbfab4a72652ac0a130d4b46c7e87ec2575e963b8e037455794e91`. Independent analysis validated complete-line prefix hashes and derived origins for baseline and all six states, actual indexed F1/F2 literals, six exact two-bool scripts, fresh held-player/engine2 and unforced brake+handbrake physics, unique PID/slot/sequence/present/file ACKs, raw CSV values and all seven original BMP hashes. Startup, six pre-write and seven capture acceptances join their phase anchors. The complete post-attach history through final ACK contains 322 motion and 323 physics rows; maximum speed 0.203495 and planar displacement 0.037354 m stay within the approved screening bounds. Capture acceptance windows have zero measured speed/path. Setup query ACKs at indices 17543/17544 genuinely precede Enter 17545 inside the current window; natural baseline has zero variable writes. Final false/false restoration is the seventh captured transaction, with no later variable-write stage.
+
+I independently viewed all seven original 1280x720 BMPs:
+
+| Frame | Original image | Present |
+| --- | --- | ---: |
+| Natural baseline | [bb_007903.bmp](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/run_debug_circles_62094_20261027_122010/frames/bb_007903.bmp) | 7903 |
+| World positive | [bb_008982.bmp](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/run_debug_circles_62094_20261027_122010/frames/bb_008982.bmp) | 8982 |
+| World negative | [bb_009866.bmp](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/run_debug_circles_62094_20261027_122010/frames/bb_009866.bmp) | 9866 |
+| World restore | [bb_010729.bmp](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/run_debug_circles_62094_20261027_122010/frames/bb_010729.bmp) | 10729 |
+| Prop positive | [bb_011553.bmp](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/run_debug_circles_62094_20261027_122010/frames/bb_011553.bmp) | 11553 |
+| Prop negative | [bb_012417.bmp](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/run_debug_circles_62094_20261027_122010/frames/bb_012417.bmp) | 12417 |
+| Prop restore | [bb_013264.bmp](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/run_debug_circles_62094_20261027_122010/frames/bb_013264.bmp) | 13264 |
+
+World positive shows a large thin green arc against the left wall/guardrail and additional right arcs; these are absent in baseline, negative and restore while Prop remains false. Prop positive shows separate green rings near the right fence/sky and beyond the garage; these disappear in negative and restore while World remains false. The same held vehicle, ordinary HUD and minimap remain visible. Existing windshield cracks are not an intact/damage-free claim.
+
+Witness manifest SHA256 is `3ff5992a4ae38eef422a2fb226eea4f693dbea01b1cf8a275973c25bcc9ae560`; raw CSV SHA256 is `4d384c2738640f4bf951b3459adc49826226003445c2366c5c7f60be67d09bad`; original native terminal SHA256 is `4a10044d72e464f24869160a9be02a98e88a8448d66a065a11a3ee2d3348979c`. Complete source, owner, frame, prefix and protection hashes/indexes are in EVIDENCE.json. This approval supports only the two listed native effect/restoration dispositions in this candidate scene. It does not alter the aggregate FAIL, certify other controls or screenshot/TGA behavior, or write ledger/inventory state. No new game, fixture, compiler, case/checker evaluation, CON operation or child agent was used; all earlier evidence remains untouched.
