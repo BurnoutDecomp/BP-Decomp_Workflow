@@ -12837,14 +12837,20 @@
       "pseudocode_line": 36,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50276, \"Take screenshot\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0029",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Registered request, actual native TGA output and overlay omission/inclusion/negative/restoration pass independent source/raw/pixel review; strict case and driver failures remain retained.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/NATIVE_PER_SITE_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -12863,14 +12869,20 @@
       "pseudocode_line": 37,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50278, \"Capture overlays in screenshot\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0030",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Registered request, actual native TGA output and overlay omission/inclusion/negative/restoration pass independent source/raw/pixel review; strict case and driver failures remain retained.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/NATIVE_PER_SITE_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -16975,14 +16987,20 @@
       "pseudocode_line": 3,
       "original_call": "sub_8282F720(a1, CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct, a1, \"Encode and save image\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::ImageManagerDebugComponent::OnActivate#0001",
       "function": "BrnNetwork::ImageManagerDebugComponent::OnActivate",
       "original_address": "0x8258AFF0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8258AFF0.json",
       "component": "BrnNetwork::ImageManagerDebugComponent",
       "component_name": "Images",
-      "component_path": null
+      "component_path": null,
+      "notes": "8258B00C/14 loads8284CB38 and8258B018 registers the actual action; its complete original code is4E800020 BLR. Current source callback is empty. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -17375,14 +17393,20 @@
       "pseudocode_line": 9,
       "original_call": "sub_8282F720( a1, BrnNetwork::BuddyManagerDebugComponent::PrintNextUnreadMessage, a1, \" FUNCTION: Print Next Unread Message\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0005",
       "function": "BrnNetwork::BuddyManagerDebugComponent::OnActivate",
       "original_address": "0x82597320",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82597320.json",
       "component": "BrnNetwork::BuddyManagerDebugComponent",
       "component_name": "Buddies",
-      "component_path": null
+      "component_path": null,
+      "notes": "82594870..80 posts tag5/16; leaf unsigned (tag-8)>5 selects8256C9B0; base table8256B6FC[4]=8256B7DC; same queue cleared825548E4. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "function",
@@ -17402,14 +17426,20 @@
       "pseudocode_line": 14,
       "original_call": "sub_8282F720(a1, BrnNetwork::BuddyManagerDebugComponent::SendTestMessage, a1, \" FUNCTION: Send Test Message\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0006",
       "function": "BrnNetwork::BuddyManagerDebugComponent::OnActivate",
       "original_address": "0x82597320",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82597320.json",
       "component": "BrnNetwork::BuddyManagerDebugComponent",
       "component_name": "Buddies",
-      "component_path": null
+      "component_path": null,
+      "notes": "825948C8..EC copies the original200-byte fixed text and posts tag4/216; leaf default and base table[3] reach8256B7DC; same queue cleared825548E4. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "function",
@@ -17483,14 +17513,20 @@
       "pseudocode_line": 17,
       "original_call": "sub_8282F720(a1, BrnNetwork::BuddyManagerDebugComponent::LeaveFeedback, a1, \" FUNCTION: Send Feedback\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0009",
       "function": "BrnNetwork::BuddyManagerDebugComponent::OnActivate",
       "original_address": "0x82597320",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82597320.json",
       "component": "BrnNetwork::BuddyManagerDebugComponent",
       "component_name": "Buddies",
-      "component_path": null
+      "component_path": null,
+      "notes": "82594A88..A8 stores actual feedback index and posts tag7/20 under its original queue guard; leaf default and base table[6] reach8256B7DC; same queue cleared825548E4. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -17562,14 +17598,20 @@
       "pseudocode_line": 20,
       "original_call": "sub_8282F720( a1, BrnNetwork::BuddyManagerDebugComponent::PrintMessage, a1, \" FUNCTION: Print Message\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0012",
       "function": "BrnNetwork::BuddyManagerDebugComponent::OnActivate",
       "original_address": "0x82597320",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82597320.json",
       "component": "BrnNetwork::BuddyManagerDebugComponent",
       "component_name": "Buddies",
-      "component_path": null
+      "component_path": null,
+      "notes": "82594810..28 stores actual message index and posts tag3/20; leaf default and base table[2] reach8256B7DC; same queue cleared825548E4. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -37873,9 +37915,9 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1279,
-      "verified": 69,
-      "original-noop": 7
+      "pending": 1272,
+      "verified": 71,
+      "original-noop": 12
     }
   }
 }
