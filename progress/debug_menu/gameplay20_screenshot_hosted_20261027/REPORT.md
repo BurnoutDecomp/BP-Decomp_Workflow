@@ -1,0 +1,5 @@
+# Hosted screenshot and gameplay recovery accepted
+
+The exact source/fixture proposals and retained hosted data pass independent review. Screenshot writer checks pass33/0; unchanged request-only code produces the exact20 functional failures. The20 gameplay source corrections pass177/0; both genuine original-source controls produce the exact89 failures. All3003 shipping TUs,11 existing groups and14 payloads pass on the combined1887d92d image. Owned workers retain zero active descendants.
+
+These are hosted results with explicit simulated boundaries. Native screenshot/overlay and eligible contact/control restoration still need evidence; no final debug-site count changes. The normal folder remains the separately native-checked circle image08ac2dfe. Shared-math proposals remain held and are not included. Readable reports normalize only line endings/terminal blank lines; STATE preserves original hashes and PUBLISHED_BYTES preserves their Git bytes. Full original artifacts remain under their recorded run paths.
