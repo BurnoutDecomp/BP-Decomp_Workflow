@@ -5,13 +5,13 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-The current normal-folder provenance identifies executable f8ff3699 and source11cbd50c (marked dirty at build time). The checks below describe earlier campaign deliveries. This five-control batch used a private image and left the current normal package unchanged.
+**Installed:08ac2dfe**, from hosted40470218531 and source7d5a10bb, whose runtime source/vendor trees match integrated devd7058a59. Launch `build/game/Burnout_PC.exe`. All3003 shipping TUs,11 hosted groups and14 package hashes pass. The exact image completed returning-profile startup, junkyard/car-select exit, a visible world/HUD/minimap and both independent circle change/negative/restore sequences. Both reviewers inspected all seven original captures; no asserts or exceptions occurred.
 
-**Last campaign-checked installation:36ae3ffe**, from hosted40103324586, with current dev SDL3/camera/district work and the checked renderer recovery. Launch `build/game/Burnout_PC.exe`. Eleven hosted groups, all3003 compiled TUs and14 payload hashes pass. The exact executable passed a separate165-second private startup/world check and the independent00/10/11/01/00 occlusion matrix, with real resources/queries/GPU restoration and five inspected images; no asserts/exceptions.
+The native flow passed. The original circle case remains FAIL because its checker expects a Slot field absent from the standard final context; independent raw ownership/source/pixel/restoration review accepted exactly the two circle sites. Screenshot and later gameplay recovery code remain private. Config, both logs, all10 profiles and their timestamps are preserved; all14 prior build payloads are backed up. [Exact package receipt](circle_package_delivery_20261027.json), [native proof and limits](circles_two_native_20261027/README.md).
 
 Road Rage count/countdown, custom-route save/overwrite and host-tested Freeburn Leaving fixes are retained. Cold saved-route loading, joined-peer leaving, complete online races, long audio sessions and Replay frame wiring remain unresolved or unverified. The full GUI inbox/audio and original global-construction branches remain private. Whole-registry debug SAVE retains the original unnamed-DLC-slot crash; targeted tests avoid it.
 
-The previous normal package is backed up. Config, both logs, nine profiles and their membership preserve their bytes and modification times. [Delivery and review](renderer_checked_delivery_20261024/DELIVERY.json).
+Earlier native delivery and integration evidence remains in the [October24 record](renderer_checked_delivery_20261024/DELIVERY.json).
 
 ## Campaign counts
 
