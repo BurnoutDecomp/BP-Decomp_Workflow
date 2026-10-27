@@ -34950,14 +34950,20 @@
       "pseudocode_line": 33,
       "original_call": "CgsDev::DebugComponent::RegisterFunction( a1, CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct, a1, \"Dumped file to hd\", \"Delete\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnWorld::WorldDebugComponent::OnActivate#0009",
       "function": "BrnWorld::WorldDebugComponent::OnActivate",
       "original_address": "0x827BF4A8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827BF4A8.json",
       "component": "BrnWorld::WorldDebugComponent",
       "component_name": "World Module",
-      "component_path": null
+      "component_path": null,
+      "notes": "Original registered callback positively resolves to a complete BLR; current typed ClearStoredFile callback is empty. Native availability and full owner lifecycle are outside this finding.",
+      "evidence": [
+        "progress/debug_menu/world_delete_original_noop_20261027/README.md",
+        "progress/debug_menu/world_delete_original_noop_20261027/ORIGINAL_NOOP_REVIEW.md",
+        "progress/debug_menu/world_delete_original_noop_20261027/ROOT_RECEIPT.json"
+      ]
     },
     {
       "kind": "function",
@@ -37915,9 +37921,9 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1272,
+      "pending": 1271,
       "verified": 71,
-      "original-noop": 12
+      "original-noop": 13
     }
   }
 }

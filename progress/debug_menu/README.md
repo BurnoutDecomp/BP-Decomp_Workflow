@@ -17,6 +17,8 @@ Earlier native delivery and integration evidence remains in the [October24 recor
 
 ## Campaign counts
 
+World Module dump-file Delete is positively confirmed as an original empty callback. This adds one original-no-op disposition without a runtime change or a native availability claim. [Direct original proof](world_delete_original_noop_20261027/README.md).
+
 Two screenshot controls pass retained-native review, and five action-only original no-ops have direct assembly/dispatch proofs. The original timestamp-check and launcher-join failures remain explicit; no Gameplay20 control receives native credit. [Seven-site evidence](screenshot_and_noops_20261027/README.md).
 
 The world-instance and prop circle controls now pass independent native review: six change/negative/restore phases and seven inspected original captures. The canonical flow passed; the case remains FAIL because its checker assumes a Slot field absent from the standard final context. Original raw attribution, pixels and cleanup independently settle exactly these two sites. [Two-site evidence](circles_two_native_20261027/README.md).
@@ -29,7 +31,7 @@ Six BoostBar controls now pass original-source, raw native and pixel review: thr
 
 **October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation now pass. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **71 verified, twelve original no-ops and 1,272 pending**. That is 83/1,355 (6.1%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **71 verified, thirteen original no-ops and 1,271 pending**. That is 84/1,355 (6.2%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
