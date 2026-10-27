@@ -194,7 +194,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $expected = @{
             'tests/run_font_buddy.py' = '9c179d08a4947686daa8cca87e25f92e9a2b295e591caa5e0f2751a00e8ec164'
-            'tests/evidence/font_buddy/source_contract.json' = 'd232ec8264569742982b31df8397a17d8e579ab95fb54e8191c8fd08d9d3294c'
+            'tests/evidence/font_buddy/source_contract.json' = 'd0753225736239882535bca261de98624c9162554d1a0634e6675ab8b36bea54'
           }
           foreach ($relative in $expected.Keys) {
             $path = Join-Path (Join-Path $env:GITHUB_WORKSPACE 'b5-decomp') $relative
