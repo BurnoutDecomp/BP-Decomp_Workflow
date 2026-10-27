@@ -311,6 +311,15 @@ own** pass first, so you don't ship a known-divergent TU into review.
   ⭐ Historical note so nobody "fixes" the record: commits before 2026-08-27 stamped
   `Claude Fable 5` are **correct** — that model really did the walls, wheels, oversteer and
   licence-card work. The label only became wrong after the switch.
+- **Retire completed task branches.** Once a branch's changes have landed in that
+  repository's integration branch (`dev` for b5-decomp, `main` for the workflow),
+  delete its remote and local branch refs as part of the same delivery. Check
+  ancestry, or exact changed-path equivalence for cherry-picked/squashed work;
+  do not assume matching names mean the work landed. Retire duplicate/older refs
+  only when a retained published successor preserves their complete work.
+  Preserve unmerged work and dirty/active checkouts. A clean retired checkout may
+  be detached at its exact existing commit before removing its branch; keep any
+  needed files and evidence. Do not accumulate completed campaign branches.
 - **Identity is the normalized qualified name** (`Namespace::Class::method`), not an
   address. See STRATEGY.md. Never assume an address means the same thing in two
   builds.
