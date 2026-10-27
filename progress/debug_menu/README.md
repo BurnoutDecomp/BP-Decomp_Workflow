@@ -5,7 +5,7 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-The normal folder was subsequently rebuilt outside this campaign from source9503d787; its current provenance is authoritative. The checks below describe the earlier campaign delivery. Current private recovery and diagnostic images have not been installed into that folder.
+The current normal-folder provenance identifies executable f8ff3699 and source11cbd50c (marked dirty at build time). The checks below describe earlier campaign deliveries. This five-control batch used a private image and left the current normal package unchanged.
 
 **Last campaign-checked installation:36ae3ffe**, from hosted40103324586, with current dev SDL3/camera/district work and the checked renderer recovery. Launch `build/game/Burnout_PC.exe`. Eleven hosted groups, all3003 compiled TUs and14 payload hashes pass. The exact executable passed a separate165-second private startup/world check and the independent00/10/11/01/00 occlusion matrix, with real resources/queries/GPU restoration and five inspected images; no asserts/exceptions.
 
@@ -15,13 +15,15 @@ The previous normal package is backed up. Config, both logs, nine profiles and t
 
 ## Campaign counts
 
+Five more BoostBar controls now pass independent native review: the debug-grid toggle, outer Blue and inner Red/Green/Blue. All eleven controls in this cohort are settled across the two retained runs. The new case passed six checks,15 states and16 inspected captures; the wrapper date-parse failure and independent cleanup/protection proof remain explicit. [Five-site evidence](boostbar_five_native_20261027/README.md).
+
 Six BoostBar controls now pass original-source, raw native and pixel review: three presets, the custom action and outer red/green channels. The full eleven-control run remains FAIL; the five unfinished controls receive no credit. [Evidence and limits](boostbar_six_retained_native_20261025/README.md).
 
 **October25:** four collision-render controls now pass independent retained-native review: collision world, soup AABBs, draw distance and edge cosines. All twelve change/negative/restore images and direct raw-log attribution pass. The later map-allocation assertion and original sixteen-control aggregate remain FAIL; sphere, map-level and sweeper controls gain no credit. [Four-site evidence](geometry_four_retained_native_20261025/REPORT.md).
 
 **October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation now pass. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **62 verified, seven original no-ops and 1,286 pending**. That is 69/1,355 (5.1%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **67 verified, seven original no-ops and 1,281 pending**. That is 74/1,355 (5.5%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
