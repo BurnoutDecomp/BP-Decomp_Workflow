@@ -165,6 +165,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Debug circles candidate/control fixture failed; retain owned jobs and logs.' }
 
       - name: Verify original screenshot writer and unchanged request-only control
+        env:
+          CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
