@@ -173,6 +173,17 @@ jobs:
           python -B b5-decomp/tests/run_debug_screenshot.py --workflow-root "$env:GITHUB_WORKSPACE" --out build/candidate/artifacts/debug-screenshot --run
           if ($LASTEXITCODE -ne 0) { throw 'Screenshot writer candidate/control fixture failed; retain raw owned-job receipts.' }
 
+      - name: Verify Gameplay95 reset stores and buffered contact geometry with original controls
+        env:
+          CANDIDATE_B5_SHA: ${{ inputs.b5_commit }}
+          CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
+          BRN_EXE_JOBS: "4"
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python -B b5-decomp/tests/run_gameplay95.py --workflow-root "$env:GITHUB_WORKSPACE" --out build/candidate/artifacts/gameplay95 --run
+          if ($LASTEXITCODE -ne 0) { throw 'Gameplay95 candidate/original-control fixture failed; retain raw owned-job receipts.' }
+
       - name: Save successful candidate objects
         if: success()
         uses: actions/cache/save@v4
@@ -208,5 +219,6 @@ jobs:
             build/candidate/artifacts/gui-menu-music-wire/**
             build/candidate/artifacts/debug-circles/**
             build/candidate/artifacts/debug-screenshot/**
+            build/candidate/artifacts/gameplay95/**
           if-no-files-found: error
           retention-days: 1
