@@ -8424,14 +8424,20 @@
       "pseudocode_line": 153,
       "original_call": "sub_8282E400(&v25, &this->field_D334C, \"World\", \"Draw prop bounding spheres\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::PropEntityModule::Construct#0001",
       "function": "BrnWorld::PropEntityModule::Construct",
       "original_address": "0x822FA068",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822FA068.json",
       "component": "BrnWorld::PropEntityModule",
       "component_name": null,
-      "component_path": null
+      "component_path": null,
+      "notes": "Positive has green circle outlines near the right fence/sky and small rings in the distant street beyond the garage; absent in negative and restore. World control remains false. Independent source/raw/native-pixel review passes both change/restoration phases; original aggregate FAIL and missing final-context Slot are retained.",
+      "evidence": [
+        "progress/debug_menu/circles_two_native_20261027/README.md",
+        "progress/debug_menu/circles_two_native_20261027/REVIEW.md",
+        "progress/debug_menu/circles_two_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -8640,14 +8646,20 @@
       "pseudocode_line": 105,
       "original_call": "sub_8282E400(&v14, &this->field_76CC, \"World\", \"Draw instance bounding spheres\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::WorldEntityModule::Construct#0002",
       "function": "BrnWorld::WorldEntityModule::Construct",
       "original_address": "0x82302398",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82302398.json",
       "component": "BrnWorld::WorldEntityModule",
       "component_name": null,
-      "component_path": null
+      "component_path": null,
+      "notes": "Positive has a large green circle arc on the left wall/guardrail and additional green arcs on the right; absent in negative and restore. Both prop control values remain false. Independent source/raw/native-pixel review passes both change/restoration phases; original aggregate FAIL and missing final-context Slot are retained.",
+      "evidence": [
+        "progress/debug_menu/circles_two_native_20261027/README.md",
+        "progress/debug_menu/circles_two_native_20261027/REVIEW.md",
+        "progress/debug_menu/circles_two_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -37861,8 +37873,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1281,
-      "verified": 67,
+      "pending": 1279,
+      "verified": 69,
       "original-noop": 7
     }
   }
