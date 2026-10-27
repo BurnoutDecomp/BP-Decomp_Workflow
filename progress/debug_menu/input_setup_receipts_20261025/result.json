@@ -1,0 +1,70 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "root_setup_receipts_20261025",
+    "case_path":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\root_setup_receipts_20261025\\Case.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-25T15:05:48.0125018+01:00",
+    "flow_exit":  0,
+    "bug":  "Require the game to acknowledge the full short setup command and Enter before testing controls.",
+    "asserts":  0,
+    "run_dir":  "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\root_setup_receipts_20261025\\run_20261025",
+    "label":  "Observed_short_command_setup_only",
+    "area":  "debug-menu",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62079,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[ASSERT(?:\\s+\\d+)?\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no assertion",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no exception",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "reached driving",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "/^\\[debug-component\\] path=\"Gui/Gui Custom Renderer\" request=menu controls=1$/ expected present; first: [debug-component] path=\"Gui/Gui Custom Renderer\" request=menu controls=1",
+                       "pass":  true,
+                       "name":  "custom renderer component activated",
+                       "kind":  "LogMatch"
+                   },
+                   {
+                       "detail":  "/^BOutR: /Gui/Gui Custom Renderer/Outer boost Red$/ expected present; first: BOutR: /Gui/Gui Custom Renderer/Outer boost Red",
+                       "pass":  true,
+                       "name":  "read only alias query completed",
+                       "kind":  "LogMatch"
+                   },
+                   {
+                       "detail":  "1 line(s) match /^\\[debug-ui\\] event=0 visible=1 .* key=10$/, want [1, 1]",
+                       "pass":  true,
+                       "name":  "one game observed Enter",
+                       "kind":  "LogCount"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  0,
+                       "exe_size":  11397120,
+                       "exe_mtime_before_lock":  "2026-10-25T00:39:24.8772962+02:00",
+                       "exe_sha":  "a87c43e38b2a",
+                       "b5_head":  "f0fe435e9",
+                       "exe_b5":  "7d21900e",
+                       "parent_head":  "fd1fe5715",
+                       "exe_mtime":  "2026-10-25T00:39:24.8772962+02:00"
+                   }
+}

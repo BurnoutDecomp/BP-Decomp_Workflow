@@ -1,0 +1,688 @@
+{
+  "schema": 2,
+  "case": "debug_menu_screenshot_two_control",
+  "status": "root_materialized_reviewed_protocol_native_unproven",
+  "candidate_source": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+  "candidate_tree": "347d1bb28812bfbfd3fcd352da45b68f1ca5561a",
+  "candidate_workflow_source": "710832cadba2de0f2a32794dc36ddc95f73f4175",
+  "candidate_workflow_tree": "b628898be15dbcd2319e6bac4e708995233781f4",
+  "candidate_exe_sha256": "9686984019a51e0cd915a032679e631362bc98d060479a3e128e560bc0b1f2fb",
+  "hosted_probe_build": {
+    "status": "root_verified_success",
+    "id": "40504852023",
+    "exe_sha256": "9686984019a51e0cd915a032679e631362bc98d060479a3e128e560bc0b1f2fb",
+    "retained_artifact": "scratch/DEBUG_MENU_1011/hosted_40504852023_attempt1",
+    "reported_by": "Root; independent hosted artifact review is separate from this author packet"
+  },
+  "slot_candidate": null,
+  "private_stage_root": null,
+  "root_created_private_stage": false,
+  "runtime_harness_source_pin": "2b45db07e5496869a1b475e855ed9308b59b77fc",
+  "normal_package": {
+    "source": "7d5a10bb41f23bd3f4a9f1ab72de047b15a6e789",
+    "exe_sha256": "08ac2dfecd8607cd6e313ab8d89599345ceffc8a0cb929fcfa150a9376b7f39d",
+    "role": "protected current normal circle-only package; never the screenshot target"
+  },
+  "selected_site_ids": [
+    "BrnGraphics::DebugComponent::OnActivate#0029",
+    "BrnGraphics::DebugComponent::OnActivate#0030"
+  ],
+  "controls": [
+    {
+      "alias": "SSReq",
+      "path": "Renderer/RendererModule/Take screenshot",
+      "kind": "bool",
+      "original_value": false,
+      "site_id": "BrnGraphics::DebugComponent::OnActivate#0029",
+      "caption": "Take screenshot",
+      "group": "Renderer/RendererModule",
+      "states": [
+        "positive",
+        "negative",
+        "restore"
+      ]
+    },
+    {
+      "alias": "SSOvly",
+      "path": "Renderer/RendererModule/Capture overlays in screenshot",
+      "kind": "bool",
+      "original_value": false,
+      "site_id": "BrnGraphics::DebugComponent::OnActivate#0030",
+      "caption": "Capture overlays in screenshot",
+      "group": "Renderer/RendererModule",
+      "states": [
+        "positive",
+        "negative",
+        "restore"
+      ]
+    }
+  ],
+  "alias_controls": [
+    {
+      "alias": "SSReq",
+      "path": "Renderer/RendererModule/Take screenshot",
+      "kind": "bool",
+      "original_value": false
+    },
+    {
+      "alias": "SSOvly",
+      "path": "Renderer/RendererModule/Capture overlays in screenshot",
+      "kind": "bool",
+      "original_value": false
+    },
+    {
+      "alias": "WCircles",
+      "path": "World/Draw instance bounding spheres",
+      "kind": "bool",
+      "original_value": false,
+      "role": "restored visible companion; no new inventory credit"
+    },
+    {
+      "alias": "PCircles",
+      "path": "World/Draw prop bounding spheres",
+      "kind": "bool",
+      "original_value": false,
+      "role": "read-only negative companion; no writes allowed"
+    }
+  ],
+  "alias_contract": {
+    "status": "author_static_source_contract_confirmed",
+    "alias_count": 4,
+    "required_aliases": [
+      "SSReq",
+      "SSOvly",
+      "WCircles",
+      "PCircles"
+    ],
+    "ascii_name_required": true,
+    "nonempty_required": true,
+    "reported_maximum_bytes": 10,
+    "reject_if_byte_length_greater_or_equal": 10,
+    "maximum_legal_ascii_bytes": 9,
+    "source_evidence": {
+      "header": {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.h",
+        "sha256": "f8eba4a9def6ca7167e77c645b0f7282be930e5bcae02f5fd14de15a73416929",
+        "bytes": 6167
+      },
+      "script_interface": {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp",
+        "sha256": "4b09a9b2ece825f9302f6fa32be2f5fededc88b902bf5527d7231cef9a415c70",
+        "bytes": 27612
+      },
+      "menu_manager": {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp",
+        "sha256": "2d94ba0f515019e5c5b46973286bfb59a5866c28893563c228bfef4c6b0cee5a",
+        "bytes": 12769
+      },
+      "menu": {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenu.cpp",
+        "sha256": "abf2005739accfb8ab0af7b81bcc47104593938b992a7a57f41d54bd02c3ea14",
+        "bytes": 6390
+      }
+    },
+    "source_contract": {
+      "constant_bytes": 10,
+      "reported_max_bytes": 10,
+      "create_alias_rejects_length_greater_equal": 10,
+      "maximum_legal_ascii_bytes": 9,
+      "observed_create_alias_error_format": "Alias too long. Max %d",
+      "observed_alias_query_format": "<alias>: <GetAliasString result>",
+      "observed_get_alias_string": "GetMenuItemPath(containing menu), then append '/' and variable/function name",
+      "observed_menu_path": "root path is empty; each child caption is prefixed with '/'",
+      "registration_target_path_policy": "Use the exact control.path string passed to alias registration; derive query receipt from its menu segments and leaf using the source calls above."
+    },
+    "runtime_gate": "Before writing setup.txt or private b1.cfg, require exactly SSReq, SSOvly, WCircles and PCircles, all nonempty ASCII shorter than the source rejection threshold of 10 bytes; derive receipts from each exact registration path.",
+    "query_ack_derivation": "Derive each exact query receipt from the same control.path string emitted in the alias registration command; model Menu::GetPath root-empty slash-joined parent captions and GetAliasString append-slash-plus-leaf. Do not store a guessed canonical path string."
+  },
+  "source_snapshot_required_paths": [
+    "b5-decomp/src/GameSource/Graphics/BrnRendererModule.h",
+    "b5-decomp/src/GameSource/Graphics/BrnRendererModule.cpp",
+    "b5-decomp/src/GameSource/Graphics/BrnRendererModule_wBT_01.cpp",
+    "b5-decomp/src/GameSource/Graphics/BrnRendererModuleDebugComponent.cpp",
+    "b5-decomp/src/pc/gcm/renderengine/device.h",
+    "b5-decomp/src/pc/gcm/renderengine/device.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.h",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariable.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariableManager.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.h",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenu.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp",
+    "b5-decomp/src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+    "b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp",
+    "b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug3DImmediateRender.cpp",
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebugRender.cpp",
+    "b5-decomp/src/GameSource/Main/BrnMain.cpp",
+    "b5-decomp/config.ini.example",
+    "b5-decomp/src/GameSource/Game/BrnGameModule.cpp",
+    "b5-decomp/src/GameSource/Game/BrnGameModule.hpp"
+  ],
+  "candidate_source_files": {
+    "b5-decomp/src/GameSource/Graphics/BrnRendererModule.h": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/Graphics/BrnRendererModule.h",
+      "raw_sha256": "f74b4e3cf30db8e6ad9997e2ed78f602f529c1745d472a989fa6148f6e2d486a",
+      "git_blob_sha1": "16c90c328f4d99caa5482d5e66ac6cb4f2c3351c"
+    },
+    "b5-decomp/src/GameSource/Graphics/BrnRendererModule.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/Graphics/BrnRendererModule.cpp",
+      "raw_sha256": "b2a930384616e4cdd72a4c8c74383a1bce3a2b055352f1dc422e0615d4867a36",
+      "git_blob_sha1": "10fae0043a47c3a86b20f960969b7ada72622972"
+    },
+    "b5-decomp/src/GameSource/Graphics/BrnRendererModule_wBT_01.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/Graphics/BrnRendererModule_wBT_01.cpp",
+      "raw_sha256": "15ae20827a2a4279a3790f42aeba13273287a54bca7403d0b5cbbf8f010009fe",
+      "git_blob_sha1": "e54975d51cdae4ff6b55362271c955f292403422"
+    },
+    "b5-decomp/src/GameSource/Graphics/BrnRendererModuleDebugComponent.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/Graphics/BrnRendererModuleDebugComponent.cpp",
+      "raw_sha256": "ff6338782401e86cd1abe9d96231868005dd7db0008b860734564fa589010015",
+      "git_blob_sha1": "c11b5ea171c6f84584a43c54d4627a457962725a"
+    },
+    "b5-decomp/src/pc/gcm/renderengine/device.h": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/pc/gcm/renderengine/device.h",
+      "raw_sha256": "0b02d3a0aec93a349c72b581697004b90b9e47d0faccec289796d12121c8cd9f",
+      "git_blob_sha1": "7360df928d1b889bb208657ec544bf70a75b91eb"
+    },
+    "b5-decomp/src/pc/gcm/renderengine/device.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/pc/gcm/renderengine/device.cpp",
+      "raw_sha256": "b82912732978b2da54b51ee2024e395079fdcf964f94f18dc1d57aee7800682a",
+      "git_blob_sha1": "0d0e665295cecbd7cbeee37084afee8ee81e183d"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "raw_sha256": "a6649d4804db384e480db6bd1267c2bcaed497b5285cbef959ccaa73c55cd03b",
+      "git_blob_sha1": "e3c380da4b3d123ba3274979384bce81dc7d770c"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp",
+      "raw_sha256": "2b29cc5c1a12c8de44545d7f69cdfa2cfc2ec847a1b13787ec62dbe7bf750a61",
+      "git_blob_sha1": "f4932839efbc962c6b0e5fa8c913449dfc3dd29a"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp",
+      "raw_sha256": "4b09a9b2ece825f9302f6fa32be2f5fededc88b902bf5527d7231cef9a415c70",
+      "git_blob_sha1": "d891abb03ae349161bbdb486037c08eb37161347"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.h": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.h",
+      "raw_sha256": "f8eba4a9def6ca7167e77c645b0f7282be930e5bcae02f5fd14de15a73416929",
+      "git_blob_sha1": "ce9d65dfd619537864772017c7fc3a4622b789df"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariable.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariable.cpp",
+      "raw_sha256": "982574202a385b10f23a5d762f8b013882a968398b03040e072004e0741ab052",
+      "git_blob_sha1": "57ef21e60ca586eb45bce85ecbc8bef4aa0733d5"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariableManager.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariableManager.cpp",
+      "raw_sha256": "5a04ec85f8b1c4cc72cee5bacdc7b78bea7ea43fb12acf2ad37d3790285da4ee",
+      "git_blob_sha1": "4ee38f2d55214932e8dc227eaaab3951494d1b00"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.cpp",
+      "raw_sha256": "767cf7877334daad7918a81623a5cedd91911eb95f41b11ee7021ca7d20da990",
+      "git_blob_sha1": "f99467327f036dcdf1b117ab7a7c6af41c7b33e6"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.h": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.h",
+      "raw_sha256": "6aa0f5878584ca4cd356f97a14c5d24f95a8afa8c621806cb11991ca0526fec4",
+      "git_blob_sha1": "35bd2a907f9f403c818f76844b7b9212b95cc4a3"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenu.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenu.cpp",
+      "raw_sha256": "abf2005739accfb8ab0af7b81bcc47104593938b992a7a57f41d54bd02c3ea14",
+      "git_blob_sha1": "1b6d86e66aa5a8efe28083e562163fc3ce046267"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp",
+      "raw_sha256": "2d94ba0f515019e5c5b46973286bfb59a5866c28893563c228bfef4c6b0cee5a",
+      "git_blob_sha1": "e42e9c080a70bca0d00166997c2704df2208dfbd"
+    },
+    "b5-decomp/src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+      "raw_sha256": "e73326e9129bd9048bad7e022b02aff5971e89484972658a59d44662877dd199",
+      "git_blob_sha1": "8db987950fd699e5bfa16a6bde244c0d1cf310f2"
+    },
+    "b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp",
+      "raw_sha256": "f8465657543336a710bc6f4e376112b49abc271ef8749d0135d17e2b2c99d5b6",
+      "git_blob_sha1": "aa8a8bc1423d5d3094186008c1d0e6aa8d1b6199"
+    },
+    "b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+      "raw_sha256": "a6adc82266366f03a4fe6c1013d263bbe29aa322027468ae87a417317a28a847",
+      "git_blob_sha1": "51b5bdd325acf1bfa64aee189ec7ccf9dcfe6cc9"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug3DImmediateRender.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug3DImmediateRender.cpp",
+      "raw_sha256": "13f171990b1d34f58f3e462f8c3335fb57833d766c4688b44bd759898210e734",
+      "git_blob_sha1": "f7f8f20874ea0c642347891cce6058d68730936d"
+    },
+    "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebugRender.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebugRender.cpp",
+      "raw_sha256": "ab64e57f14f6f6f1dee49b4e5371cfcabaa5d7f059fc67495aac7a0b67da25fd",
+      "git_blob_sha1": "c0b102c8446b034ed66da70ffddf1bb7999c445e"
+    },
+    "b5-decomp/src/GameSource/Main/BrnMain.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/Main/BrnMain.cpp",
+      "raw_sha256": "4fa91f58254375d3a57e9cfc1441406deab69a3b3540f6a352cf5fdc6d4a2542",
+      "git_blob_sha1": "3e5d16aa3c64c7966626ce3dc13c6ded21cdfd88"
+    },
+    "b5-decomp/config.ini.example": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/config.ini.example",
+      "raw_sha256": "5209e1e74980cd9399d2377eb14c17df8c9ba6b604973a04648ccc9d0aa40fb9",
+      "git_blob_sha1": "1ee98ce9c39a35e542acef314ec95c2e392112c7"
+    },
+    "b5-decomp/src/GameSource/Game/BrnGameModule.cpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/Game/BrnGameModule.cpp",
+      "raw_sha256": "446ae4016a5fb89d52eba1b1f7d6f6b065fe07dc9438487423b9b78970ec582f",
+      "git_blob_sha1": "21a316fcb3fcf58a3590c931036fe59000ca9fa7"
+    },
+    "b5-decomp/src/GameSource/Game/BrnGameModule.hpp": {
+      "source_commit": "1887d92de05d915d53bc4f7645acf84daa39d1bc",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/Game/BrnGameModule.hpp",
+      "raw_sha256": "f20b5565cf07ff9f055c60880ef951cd866bd0d4262be96cba3faa274717b7f2",
+      "git_blob_sha1": "75986a4102e633784191ea9d9ec7a91ed17eaaa1"
+    }
+  },
+  "source_snapshot_protocol": {
+    "schema": 1,
+    "git_executable": "C:/Program Files/Git/cmd/git.exe",
+    "snapshot_root": "SOURCE_SNAPSHOTS",
+    "byte_policy": "Retain exact git show candidate:path bytes, without newline conversion. Shared checkout files are not candidate inputs.",
+    "git_read_only_commands": [
+      "rev-parse --verify <candidate>^{tree}",
+      "ls-tree --full-tree <candidate> -- <exact source path>",
+      "hash-object --no-filters -- <fixed snapshot path>"
+    ],
+    "writes_objects": false
+  },
+  "schedule": {
+    "max_seconds": 420,
+    "drive_delay_seconds": 2,
+    "resolution": "720p",
+    "vsync": 1,
+    "muted": true,
+    "priority": "BelowNormal",
+    "frame_capture": "Ten exact owned diagnostic BMPs, four native TGAs, one preserved missing-directory failure; no periodic diagnostic capture.",
+    "site_states": 6,
+    "baseline_capture": 1,
+    "planned_frames": 10,
+    "hard_frame_cap": 10,
+    "frame_every_present": 1000000000,
+    "support_capture_requests": 3,
+    "periodic_capture_policy": "No periodic captures; exact Root-rebound PID/slot requests only.",
+    "throttle_script": "0:brake+handbrake",
+    "title_start": true,
+    "skip_intro": false,
+    "motion_probe": true,
+    "timeouts": "canonical 420 seconds; helper 410 seconds; exact owned marker 20 seconds; held-player window 10 seconds; missing witnesses defer without retry."
+  },
+  "run_policy": {
+    "powershell": "C:/Program Files/PowerShell/7/pwsh.exe",
+    "allow_concurrent_games": true,
+    "max_game_instances": 2,
+    "one_owned_case_game": true,
+    "maximum_other_game_processes": 1,
+    "other_game_requires_known_absolute_image_distinct_from_staged_image": true,
+    "owned_pid_image_start_guard": true,
+    "input_reset_on_exit": true,
+    "owned_only_cleanup": true,
+    "no_global_end": true,
+    "no_assert_release": true,
+    "no_retry": true
+  },
+  "forcing_policy": {
+    "HUD_visibility_override": false,
+    "GUI_visibility_override": false,
+    "gameplay_state_warp": false,
+    "crash_bypass": false,
+    "SaveState": false,
+    "direct_memory_invocation": false,
+    "writer_substitution": false,
+    "control_writes": "Only SSReq, SSOvly and WCircles via registered ScriptCommand_SetVariable after zero-write baseline. PCircles is read-only. All actual baselines restored."
+  },
+  "expected_tga": {
+    "private_relative_directory": "d_",
+    "missing_directory_failure_name": "screenshot0_.tga",
+    "successful_names": [
+      "screenshot1_.tga",
+      "screenshot2_.tga",
+      "screenshot3_.tga",
+      "screenshot4_.tga"
+    ],
+    "width": 1280,
+    "height": 720,
+    "image_type": 2,
+    "bits_per_pixel": 24,
+    "origin": "bottom left",
+    "bytes": 2764818,
+    "no_native_present_ack": true,
+    "counter_semantics": "Increment on successful front-buffer lock before fopen, even if fopen fails; dispatch clears after every attempt. Never assume success from a readback alone."
+  },
+  "capture_sequence": [
+    {
+      "sequence": 1,
+      "label": "in-run-natural-baseline",
+      "site_id": "",
+      "state": "baseline",
+      "transaction": 0
+    },
+    {
+      "sequence": 2,
+      "label": "companion-on",
+      "site_id": "",
+      "state": "companion",
+      "transaction": 1
+    },
+    {
+      "sequence": 3,
+      "label": "missing-directory-failure",
+      "site_id": "",
+      "state": "failure",
+      "transaction": 2
+    },
+    {
+      "sequence": 4,
+      "label": "screenshot-positive",
+      "site_id": "BrnGraphics::DebugComponent::OnActivate#0029",
+      "state": "positive",
+      "transaction": 3
+    },
+    {
+      "sequence": 5,
+      "label": "request-negative-start",
+      "site_id": "",
+      "state": "negative-start",
+      "transaction": 4
+    },
+    {
+      "sequence": 6,
+      "label": "request-negative-end",
+      "site_id": "BrnGraphics::DebugComponent::OnActivate#0029",
+      "state": "negative",
+      "transaction": 4
+    },
+    {
+      "sequence": 7,
+      "label": "overlay-positive",
+      "site_id": "BrnGraphics::DebugComponent::OnActivate#0030",
+      "state": "positive",
+      "transaction": 6
+    },
+    {
+      "sequence": 8,
+      "label": "overlay-negative",
+      "site_id": "BrnGraphics::DebugComponent::OnActivate#0030",
+      "state": "negative",
+      "transaction": 8
+    },
+    {
+      "sequence": 9,
+      "label": "overlay-restore",
+      "site_id": "BrnGraphics::DebugComponent::OnActivate#0030",
+      "state": "restore",
+      "transaction": 10
+    },
+    {
+      "sequence": 10,
+      "label": "terminal-restore",
+      "site_id": "BrnGraphics::DebugComponent::OnActivate#0029",
+      "state": "restore",
+      "transaction": 11
+    }
+  ],
+  "transaction_sequence": [
+    {
+      "number": 1,
+      "label": "companion-on",
+      "commands": [
+        "set \"WCircles\" TRUE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [
+        2
+      ],
+      "native": "none"
+    },
+    {
+      "number": 2,
+      "label": "missing-directory-failure",
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [
+        3
+      ],
+      "native": "missing_directory"
+    },
+    {
+      "number": 3,
+      "label": "screenshot-positive",
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [
+        4
+      ],
+      "native": "screenshot1_.tga"
+    },
+    {
+      "number": 4,
+      "label": "request-negative",
+      "commands": [
+        "set \"SSReq\" FALSE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [
+        5,
+        6
+      ],
+      "native": "negative_interval"
+    },
+    {
+      "number": 5,
+      "label": "overlay-positive-prep",
+      "commands": [
+        "set \"SSOvly\" TRUE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "TRUE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [],
+      "native": "none"
+    },
+    {
+      "number": 6,
+      "label": "overlay-positive",
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "TRUE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [
+        7
+      ],
+      "native": "screenshot2_.tga"
+    },
+    {
+      "number": 7,
+      "label": "overlay-negative-prep",
+      "commands": [
+        "set \"SSOvly\" FALSE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [],
+      "native": "none"
+    },
+    {
+      "number": 8,
+      "label": "overlay-negative",
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [
+        8
+      ],
+      "native": "screenshot3_.tga"
+    },
+    {
+      "number": 9,
+      "label": "overlay-restore-prep",
+      "commands": [
+        "set \"SSOvly\" FALSE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [],
+      "native": "none"
+    },
+    {
+      "number": 10,
+      "label": "overlay-restore",
+      "commands": [
+        "set \"SSReq\" TRUE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "TRUE",
+        "PCircles": "FALSE"
+      },
+      "captures": [
+        9
+      ],
+      "native": "screenshot4_.tga"
+    },
+    {
+      "number": 11,
+      "label": "terminal-restore",
+      "commands": [
+        "set \"SSReq\" FALSE",
+        "set \"SSOvly\" FALSE",
+        "set \"WCircles\" FALSE"
+      ],
+      "expected": {
+        "SSReq": "FALSE",
+        "SSOvly": "FALSE",
+        "WCircles": "FALSE",
+        "PCircles": "FALSE"
+      },
+      "captures": [
+        10
+      ],
+      "native": "none"
+    }
+  ],
+  "negative_min_seconds": 2.0,
+  "negative_min_present_advance": 2,
+  "root_fill_required": [
+    "Fresh independent author-packet review, then a fresh private slot/stage; no inherited readiness.",
+    "Actual artifact receipt/id/payload roster and exact source snapshots, no invented Root facts.",
+    "Fresh 13 user file and 14 runtime payload hash/bytes/timestamps; exactly ten profile paths.",
+    "All case/helper/controls/evidence/checker/support/harness hashes, exact case data bindings, private config hash.",
+    "After the run personally inspect all ten original BMPs and four real native TGAs; machine success grants no inventory credit."
+  ],
+  "prior_run_retention": {
+    "slot": 62094,
+    "aggregate": "FAIL",
+    "immutable": true,
+    "diagnosis": "Original final run_case Context omitted Slot; no old result or checker is repaired, relabelled or re-evaluated."
+  },
+  "visual_contract": {
+    "world": "Same held seeded junkyard, ordinary world/HUD/minimap visible. Known original World circle must be visibly eligible on wall/fence before comparison. No new World/Prop credit.",
+    "TGA": "Overlay off suppresses the actual companion debug arcs in real emitted TGA; on includes them; off negative and baseline restore suppress them again. Ordinary world/HUD remain in all. Diagnostic BMP is a later phase bracket and may show arcs again.",
+    "uncertainty": "No native present ACK exists for TakeScreenshot. Use fresh private file lifecycle plus scoped action and later owned diagnostic bracket; do not assert same present or fabricate a TGA ACK.",
+    "defer": "Missing/cropped/ambiguous geometry, no visible on/off change, unexpected counter/caption or producer, incomplete restoration, ownership/raw joins or protection mismatch all prevent full acceptance."
+  },
+  "required_payload_names": [
+    "Burnout_PC.cgsmap",
+    "Burnout_PC.exe",
+    "Burnout_PC.exe.provenance.json",
+    "Burnout_PC.map",
+    "SDL3-LICENSE.txt",
+    "SDL3.dll",
+    "avcodec-63.dll",
+    "avdevice-63.dll",
+    "avfilter-12.dll",
+    "avformat-63.dll",
+    "avutil-61.dll",
+    "swresample-7.dll",
+    "swscale-10.dll",
+    "xaudio2_9redist.dll"
+  ],
+  "slot": 62095
+}

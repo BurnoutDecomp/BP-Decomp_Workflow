@@ -1,0 +1,9 @@
+VERDICT: pass
+
+Narrow combined-image startup/world delivery evidence only, on the private1887d92d / workflow710832ca / hosted40504852023 executable SHA256 `9686984019a51e0cd915a032679e631362bc98d060479a3e128e560bc0b1f2fb`, slot62095, returning DISCO profile fixture. This is not installation into the normal package or certification of the twenty Gameplay controls. The original case and owner-driver remain FAIL.
+
+The actual canonical source/receipts and raw game log show natural title readiness plus the one scoped Start, CarSelect streaming/exit, player-zero attachment outside CarSelect and running engine2 under held brake/handbrake. All ten personally viewed original BMPs show the same textured junkyard world, front-facing car and ordinary HUD/minimap. The four actual native TGAs also contain that scene; source/image/owner/slot/raw ACK/CSV and file hashes join independently. Final captured companion restoration is visible, and later canonical cleanup/input reset succeeds before the owner's450s launcher join expires. No asserts or exceptions appear.
+
+This supports that this exact combined candidate can follow the retained startup path and render this held scene/HUD at1280x720 with the supplied fixture. It does not prove responsive driving/acceleration, all spawn locations, whole-world streaming, the Gameplay20 debug effects/defaults/restoration, absence of a later freeze on other routes, damage-free rendering, physical-controller support, audio or general stability/performance. Existing windshield cracks and time-varying lighting are visible. The normal08ac/7d5 circle-only package and its27 protected files/ten profiles remain unchanged; no normal-package deployment was performed by this review.
+
+The distinct native screenshot/overlay evidence is assessed in `PER_SITE_REVIEW.md`; strict protocol/case/driver failure is assessed in `STRICT_PROTOCOL_REVIEW.md`. No aggregate result is relabelled.

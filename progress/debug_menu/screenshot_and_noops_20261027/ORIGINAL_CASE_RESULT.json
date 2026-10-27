@@ -1,0 +1,64 @@
+{
+  "bug": "Verify the two screenshot variables with real native TGA output, paired overlay pixels, exact post-consumption readbacks and companion restoration.",
+  "as_expected": false,
+  "phase": "DRIVING",
+  "when": "2026-10-27T15:00:54.7721128+01:00",
+  "asserts": 0,
+  "provenance": {
+    "exe_sha": "9686984019a5",
+    "exe_mtime_before_lock": "2026-10-27T13:40:19.6361011+01:00",
+    "exe_size": 11559936,
+    "exe_mtime": "2026-10-27T13:40:19.6361011+01:00",
+    "parent_head": "5891db2d4",
+    "exe_b5": "1887d92d",
+    "b5_dirty": 0,
+    "b5_head": "d7058a595"
+  },
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\screenshot_flags_62095_20261027\\run_debug_screenshot_62095_20261027_145320",
+  "case": "debug_menu_screenshot_two_control",
+  "expected": "PASS",
+  "label": "Screenshot-two-control-current-candidate-owned-handoff",
+  "area": "debug-menu",
+  "flow_exit": 0,
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\screenshot_flags_62095_20261027\\Case.ps1",
+  "verdict": "FAIL",
+  "checks": [
+    {
+      "pass": true,
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "name": "original strict flow completed and owned game exited",
+      "kind": "TerminalFlow"
+    },
+    {
+      "pass": true,
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "name": "no new assert families",
+      "kind": "NewAsserts"
+    },
+    {
+      "pass": true,
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "name": "no game exceptions",
+      "kind": "LogCount"
+    },
+    {
+      "pass": true,
+      "detail": "final phase DRIVING, want DRIVING",
+      "name": "ordinary free-roam driving reached",
+      "kind": "Mark"
+    },
+    {
+      "pass": true,
+      "detail": "2026-10-27T13:56:28.7025303Z RESULT DONE sites=2 deferred=0 states=6 frames=10",
+      "name": "single owned helper completes within the case bound",
+      "kind": "Script"
+    },
+    {
+      "pass": false,
+      "detail": "strict native screenshot evidence validation: Exception calling \"Parse\" with \"1\" argument(s): \"String '10/27/2026 13:55:00' was not recognized as a valid DateTime.\"",
+      "name": "owner, capture, source-gate, and restoration witness checker",
+      "kind": "Script"
+    }
+  ],
+  "slot": 62095
+}
