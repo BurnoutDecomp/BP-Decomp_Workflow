@@ -53,7 +53,7 @@ $Receipt = [ordered]@{
 }
 $OutputNames = @('Burnout_PC.exe', 'Burnout_PC.map', 'Burnout_PC.cgsmap', 'Burnout_PC.exe.provenance.json')
 $SystemUserProfileSourceBase = 'bef9346f9dc61f2ae1770bf3c9dbdc89fe4f15a7'
-$SystemUserProfilePinsLfSha256 = '8bc2257f30e89eafcb7f1e6801d1a943885914e9a9112f95705a6ea9e6a58202'
+$SystemUserProfilePinsLfSha256 = 'ceaafb37ce0e6b663622b476d2ef3ef86cf9f5b0fb82210d93e86135597ece52'
 $SystemUserProfilePlanLfSha256 = 'b922bc45991763901be63194b7824ae1aae83d309f10dce457988c1a82833686'
 $SystemUserProfileRunnerLfSha256 = '2eee426e6e0f540311c15943b77c4f5a5dc4b3defc8d57e6b32e66aa606716a3'
 # Exact delta03 diagnostic-support payload content; checkout line endings may differ.
@@ -218,7 +218,7 @@ function Assert-SystemUserProfileReceipt(
     $pinRaw = Get-FileRecord $pinPath
     $pinIdentity = $source.pins_file
     if ($pinIdentity.actual_raw_sha256 -cne $pinRaw.sha256 -or $pinIdentity.actual_raw_bytes -ne $pinRaw.bytes -or
-        $pinIdentity.actual_lf_sha256 -cne $SystemUserProfilePinsLfSha256 -or $pinIdentity.actual_lf_bytes -ne 4543) {
+        $pinIdentity.actual_lf_sha256 -cne $SystemUserProfilePinsLfSha256 -or $pinIdentity.actual_lf_bytes -ne 4544) {
         throw 'System-user-profile receipt is not bound to the updated delta04 source pins and raw checkout bytes.'
     }
     $pins = Get-Content -Raw -LiteralPath $pinPath | ConvertFrom-Json -AsHashtable
