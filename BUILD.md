@@ -73,8 +73,10 @@ probed default.
 
 ## Build
 
-The PC gamepad backend uses SDL3. `build all` fetches it; for an existing checkout,
-run `build sdl3` before `build exe`. Packaged builds include `SDL3.dll` and
+The PC gamepad backend uses SDL3, built from the `b5-decomp/vendor/SDL` submodule
+(the BurnoutDecomp/SDL fork). `build all` builds it; for an existing checkout, run
+`git -C b5-decomp submodule update --init vendor/SDL`, then `build sdl3` before
+`build exe`. Packaged builds include `SDL3.dll` and
 `SDL3-LICENSE.txt`; see [controller support](b5-decomp/docs/CONTROLLERS.md).
 
 ### Browser asset converter
@@ -103,7 +105,7 @@ or step by step (each with `--force` to rebuild):
 | `build lua` | `tools/build/build_lua.bat` | `b5-decomp/vendor/lua/lua515.lib` |
 | `build ffmpeg` | `tools/build/build_ffmpeg.bat` (add `--prebuilt` to download instead of compile) | `b5-decomp/vendor/ffmpeg-build/` |
 | `build xaudio2` | `tools/build/fetch_xaudio2_redist.bat` (downloads Microsoft.XAudio2.Redist from nuget.org) | `b5-decomp/vendor/xaudio2redist/` — headers for the build, `xaudio2_9redist.dll` staged beside the exe |
-| `build sdl3` | downloads pinned SDL3 3.4.18, verified by SHA-256 | `b5-decomp/vendor/sdl3/` — headers, x64 import library/runtime, license |
+| `build sdl3` | `tools/build/build_sdl3.py` — CMake/Ninja build of the `b5-decomp/vendor/SDL` submodule (SDL 3.4.18 + Steam Controller haptics backport) | `b5-decomp/vendor/sdl3/` — headers, x64 import library/runtime, license |
 | `build exe` | `tools/build/build_game_exe.bat` → `tools/build/compile_exe.py` | `build/game/Burnout_PC.exe` |
 | `build data` | `tools/assets/build_game_data.py` (all its flags forwarded — `--dry-run`, `--jobs`, `--out`, `--borrow-dir`, `--only`, …) | the converted data folder + `.build_game_data/report.txt` |
 | `build shaders` | the same stager, restricted to `SHADERS.BNDL` and always forced | the converted `SHADERS.BNDL`; `--install` also drops it into `build/game` |
