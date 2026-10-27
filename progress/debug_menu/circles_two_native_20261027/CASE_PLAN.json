@@ -1,0 +1,313 @@
+{
+  "schema": 1,
+  "case": "debug_menu_circle_flags_two_control",
+  "status": "root_current_candidate_artifact_bound",
+  "source_packet": "Root-current-candidate-source-binding-required; prior batch130 proposal is historical context only",
+  "source_base_b5": "0117424f57852e7244a91c9664a6ac8a48c7b2b3",
+  "candidate_source": "7d5a10bb41f23bd3f4a9f1ab72de047b15a6e789",
+  "candidate_tree": "6fb529cb843d703481a78b8a2b1e0a3ffb53675f",
+  "candidate_workflow_source": "8d886b7909a53a9bb5b072d1d736bd06f06e1fac",
+  "candidate_workflow_tree": "950bae522b84cfa406f978cfa65ee5721c44bf75",
+  "candidate_exe_sha256": "08ac2dfecd8607cd6e313ab8d89599345ceffc8a0cb929fcfa150a9376b7f39d",
+  "hosted_probe_build": {
+    "status": "root_verified_success",
+    "id": "40470218531",
+    "exe_sha256": "08ac2dfecd8607cd6e313ab8d89599345ceffc8a0cb929fcfa150a9376b7f39d"
+  },
+  "slot_candidate": 62094,
+  "private_stage_root": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\stage",
+  "root_created_private_stage": true,
+  "runtime_harness_source_pin": "2b45db07e5496869a1b475e855ed9308b59b77fc",
+  "root_must_rebind_current_flow_run_raw_hashes": true,
+  "selected_site_ids": [
+    "BrnWorld::WorldEntityModule::Construct#0002",
+    "BrnWorld::PropEntityModule::Construct#0001"
+  ],
+  "controls": [
+    {
+      "site_id": "BrnWorld::WorldEntityModule::Construct#0002",
+      "caption": "Draw instance bounding spheres",
+      "kind": "bool",
+      "group": "World",
+      "path": "World/Draw instance bounding spheres",
+      "alias": "WCircles",
+      "binding": "&WorldEntityModule::mbDrawBoundingSpheres at this+0x76CC",
+      "original_value": false,
+      "original_value_source": "batch130 exact B5 preimage Construct writes mbDrawBoundingSpheres=false at +0x76CC; ARTIST registration 0x823025E0",
+      "constructor_registration": "Root-current source must show the WorldEntityModule constructor directly registering this bool under World; no DebugComponent activation is required.",
+      "states": [
+        "positive",
+        "negative",
+        "restore"
+      ],
+      "positive_value": true,
+      "negative_value": false,
+      "restore_value": "captured F2 baseline (expected false)",
+      "consumer": "WorldEntityModule::RenderInstance; Draw instance bounding spheres and current player track index gate, original Normalize(camera-centre,2) normal, then sbDrawInstanceCircles (ARTIST byte_82CDB6B8=1).",
+      "effect_review": "Root must see the original LOD-coloured instance spheres at the actual current player track unit, with the original Normalize(camera-centre,2) normal, when enabled; absent when disabled; and original false value restored.",
+      "defer_if": [
+        "actual player track/world geometry not visible or observed",
+        "no positive-vs-negative/restore pixel effect",
+        "F2 differs from requested or original false"
+      ]
+    },
+    {
+      "site_id": "BrnWorld::PropEntityModule::Construct#0001",
+      "caption": "Draw prop bounding spheres",
+      "kind": "bool",
+      "group": "World",
+      "path": "World/Draw prop bounding spheres",
+      "alias": "PCircles",
+      "binding": "&PropEntityModule::mbDrawBoundingSpheres at this+0xD334C",
+      "original_value": false,
+      "original_value_source": "batch130 exact B5 preimage Construct writes mbDrawBoundingSpheres=false at +0xD334C; ARTIST registration 0x822FA3F4",
+      "constructor_registration": "Root-current source must show the PropEntityModule constructor directly registering this bool under World; no DebugComponent activation is required.",
+      "states": [
+        "positive",
+        "negative",
+        "restore"
+      ],
+      "positive_value": true,
+      "negative_value": false,
+      "restore_value": "captured F2 baseline (expected false)",
+      "consumer": "PropEntityModule::RenderModel 0x822C4918; registered flag plus camera distance < flt_82CDB6B4 (ARTIST data 2000.0) and byte_82CDB6B0=1.",
+      "effect_review": "Root must see LOD-coloured circles around a visible non-instanced prop inside the strict 2000-unit gate with the control on, absent with it off, and original false value restored.",
+      "defer_if": [
+        "no visible non-instanced prop inside original 2000-unit range",
+        "no positive-vs-negative/restore pixel effect",
+        "F2 differs from requested or original false"
+      ]
+    }
+  ],
+  "state_sequence": [
+    {
+      "control": "BrnWorld::WorldEntityModule::Construct#0002",
+      "state": "positive",
+      "values": {
+        "WCircles": true,
+        "PCircles": false
+      }
+    },
+    {
+      "control": "BrnWorld::WorldEntityModule::Construct#0002",
+      "state": "negative",
+      "values": {
+        "WCircles": false,
+        "PCircles": false
+      }
+    },
+    {
+      "control": "BrnWorld::WorldEntityModule::Construct#0002",
+      "state": "restore",
+      "values": {
+        "WCircles": false,
+        "PCircles": false
+      }
+    },
+    {
+      "control": "BrnWorld::PropEntityModule::Construct#0001",
+      "state": "positive",
+      "values": {
+        "WCircles": false,
+        "PCircles": true
+      }
+    },
+    {
+      "control": "BrnWorld::PropEntityModule::Construct#0001",
+      "state": "negative",
+      "values": {
+        "WCircles": false,
+        "PCircles": false
+      }
+    },
+    {
+      "control": "BrnWorld::PropEntityModule::Construct#0001",
+      "state": "restore",
+      "values": {
+        "WCircles": false,
+        "PCircles": false
+      }
+    }
+  ],
+  "schedule": {
+    "max_seconds": 420,
+    "drive_delay_seconds": 2,
+    "resolution": "720p",
+    "vsync": 1,
+    "muted": true,
+    "priority": "BelowNormal",
+    "frame_capture": "One in-run natural baseline plus six positive/negative/restore frames",
+    "site_states": 6,
+    "baseline_capture": 1,
+    "planned_frames": 7,
+    "hard_frame_cap": 7,
+    "frame_every_present": 1000000000,
+    "support_capture_requests": 0,
+    "periodic_capture_policy": "No periodic captures; exact Root-rebound PID/slot requests only.",
+    "throttle_script": "0:brake+handbrake",
+    "title_start": true,
+    "skip_intro": false,
+    "motion_probe": true,
+    "timeouts": "canonical 420 seconds; helper 410 seconds; exact owned marker 20 seconds; held-player window 10 seconds; missing witnesses defer without retry."
+  },
+  "run_policy": {
+    "powershell": "C:/Program Files/PowerShell/7/pwsh.exe",
+    "allow_concurrent_games": true,
+    "max_game_instances": 2,
+    "one_owned_case_game": true,
+    "maximum_other_game_processes": 1,
+    "other_game_requires_known_absolute_image_distinct_from_staged_image": true,
+    "owned_pid_image_start_guard": true,
+    "input_reset_on_exit": true,
+    "owned_only_cleanup": true,
+    "no_global_end": true,
+    "no_assert_release": true,
+    "no_retry": true
+  },
+  "forcing_policy": {
+    "HUD_visibility_override": false,
+    "GUI_visibility_override": false,
+    "gameplay_state_warp": false,
+    "crash_bypass": false,
+    "control_writes": "Only the two selected menu bools are written, after the natural baseline, for the six enumerated state frames and final restoration."
+  },
+  "protocol": {
+    "menu_group": "World",
+    "setup": "Open the console once and exec the private setup script to register exactly the two short constructor-variable aliases and bind F1/F2; require a fresh Enter plus both exact alias-query receipts derived from the same target paths passed to registration, then close the console and capture the natural baseline in this same owned run before any control writes. No component activation command is sent.",
+    "stage": "Use the observed 62091 F1 handoff: each stage is queued through F1, exact alias ACK is indexed relative to the pre-F1 cursor before F2, F2 reads both aliases, and the indices are retained inside the SHA256 complete-line window.",
+    "frame": "Use the observed exact named frame-request event keyed by owned PID/new slot, check the exact PID/slot/sequence/present/file ACK, and hash the captured BMP/CSV receipt.",
+    "readback": "Every initial/state/final F2 raw indexed value line must equal the expected TRUE/FALSE literal. Each bound prefix independently determines its zero-based begin-line index. Capture acceptance rows use one-based line numbers; motion/ACK use zero-based indexes. F1 -> F2 -> fresh engine2 and actual slot0 held brake/handbrake physics -> exact ACK -> present-matched raw CSV/BMP are checked for baseline and all six states.",
+    "final_restore": "The last Prop restore state is the successful final cleanup: both original false values, indexed F1/F2, fresh held-player/motion, seventh exact ACK/CSV/BMP. Cleanup adopts that actual captured restore transaction and performs no later successful-path variable writes. If incomplete, retain an explicit fallback paired restore attempt but grant no final-frame credit and fail machine evidence."
+  },
+  "geometry_review": {
+    "required_world": "After the run, Root personally identifies the actual current player track unit and visible world geometry in the in-run natural baseline and state frames; absence means defer the world control.",
+    "required_prop": "After the run, Root personally identifies a visible non-instanced prop inside the original strict <2000 camera range; absence means defer the prop control.",
+    "positive_negative_restore": "After the run, Root inspects the baseline and all six positive/negative/restore frames, compares each positive image with that control's paired negative and restore images, and defers no-effect, unobserved, ambiguous, or occluded geometry.",
+    "disposition": "No prior HUD slot-4/f0b8 image or pixel approval is required. Machine evidence stays pending Root's post-run visual review; no inventory completion is written before that review."
+  },
+  "prior_run_retention": {
+    "template_case": "scratch/DEBUG_MENU_1011/boostbar5_selected_62091_20261027",
+    "slot": 62091,
+    "preserve_wrapper_failure_and_all_outputs": true,
+    "rerun_prior_six_boostbar_sites": false,
+    "rerun_prior_geometry16": false
+  },
+  "root_fill_required": [
+    "Publish the Root-current candidate with both source corrections; record actual source/tree/workflow/executable identity, including the original world Normalize(camera-centre,2) normal, and hosted-build receipt. The earlier source proposal hash is not a current approval.",
+    "Select and create a fresh private stage/slot and bind the exact owned PID/image/start; the author proposes no slot or executable identity.",
+    "Fill the actual hosted artifact receipt/payload roster; retain exact candidate Git bytes at both fixed SOURCE_SNAPSHOTS paths and fill source_commit/raw_sha256/git_blob_sha1 in plan, source/artifact bindings; fill the dynamic normal profile/protected-file roster.",
+    "Rebind current raw flow_run/run_case hashes and all case/source/helper/checker hashes.",
+    "Take a fresh dynamic normal-file/profile protection snapshot immediately before execution and verify it after.",
+    "After the run, personally inspect the same-run natural baseline and all six effect/restore frames; defer unobserved/no-effect states.",
+    "Keep the existing 62091 wrapper failure and all 62091 outputs immutable.",
+    "Before any setup write/exec, confirm the Root-current candidate has the four pinned CgsScriptInterface/Menu source-contract blobs in alias_contract.source_evidence; if any hash differs, re-derive the legal byte limit and alias-query path semantics and obtain review before staging."
+  ],
+  "preserve_prior_62091_failure": "true; do not modify the existing 62091 case, failure receipt, logs, or output files.",
+  "candidate_source_files": {
+    "b5-decomp/src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp": {
+      "source_commit": "7d5a10bb41f23bd3f4a9f1ab72de047b15a6e789",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+      "raw_sha256": "e73326e9129bd9048bad7e022b02aff5971e89484972658a59d44662877dd199",
+      "git_blob_sha1": "8db987950fd699e5bfa16a6bde244c0d1cf310f2"
+    },
+    "b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp": {
+      "source_commit": "7d5a10bb41f23bd3f4a9f1ab72de047b15a6e789",
+      "snapshot_path": "SOURCE_SNAPSHOTS/b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+      "raw_sha256": "a6adc82266366f03a4fe6c1013d263bbe29aa322027468ae87a417317a28a847",
+      "git_blob_sha1": "51b5bdd325acf1bfa64aee189ec7ccf9dcfe6cc9"
+    }
+  },
+  "current_candidate_requirements": {
+    "world_instance_circle_normal": "The current Root candidate must carry the original Normalize(camera-centre,2) normal in the world instance circle draw path, in addition to the selected constructor default-byte correction.",
+    "prop_circle_tail": "The current Root candidate must carry the ARTIST-backed gated, distance-limited selected-LOD prop DrawCircle tail and original image-backed constants.",
+    "candidate_source_binding": "Exact candidate commit/tree/workflow/build/executable plus retained SOURCE_SNAPSHOTS/<exact b5-decomp/src path>. Each source_commit must equal candidate_source; raw SHA256 and git_blob_sha1 must match plan, source binding, artifact, candidate Git ls-tree entry and read-only git hash-object --no-filters snapshot."
+  },
+  "in_run_natural_baseline": {
+    "required": true,
+    "must_be_captured_by_this_owned_candidate_run": true,
+    "controls_before_capture": {
+      "WCircles": false,
+      "PCircles": false
+    },
+    "requires": [
+      "observed console close",
+      "initial F2 values",
+      "actual player engine2",
+      "held brake+handbrake near-zero motion",
+      "exact owned PID/slot frame ACK"
+    ],
+    "root_pixel_review_before_launch": false,
+    "root_personal_review_after_run": true,
+    "root_site_credit_before_visual_review": false
+  },
+  "root_visual_review": {
+    "prelaunch": "No pixels have been reviewed or approved.",
+    "postrun": "Pending Root personally inspecting the in-run baseline and all six state frames.",
+    "site_credit_before_visual_review": false,
+    "prior_f0b8_or_HUD_slot4_dependency": false
+  },
+  "prior_source_proposal": {
+    "path": "scratch/DEBUG_MENU_1011/batch130_reconciliation_20261027",
+    "role": "historical context only; its proposed source hashes are not the current candidate binding or approval"
+  },
+  "source_snapshot_protocol": {
+    "schema": 1,
+    "git_executable": "C:/Program Files/Git/cmd/git.exe",
+    "snapshot_root": "SOURCE_SNAPSHOTS",
+    "byte_policy": "Retain exact git show candidate:path bytes, without newline conversion. Shared checkout files are not candidate inputs.",
+    "git_read_only_commands": [
+      "rev-parse --verify <candidate>^{tree}",
+      "ls-tree --full-tree <candidate> -- <exact source path>",
+      "hash-object --no-filters -- <fixed snapshot path>"
+    ],
+    "writes_objects": false
+  },
+  "alias_contract": {
+    "status": "author_static_source_contract_confirmed",
+    "alias_count": 2,
+    "required_aliases": [
+      "WCircles",
+      "PCircles"
+    ],
+    "ascii_name_required": true,
+    "nonempty_required": true,
+    "reported_maximum_bytes": 10,
+    "reject_if_byte_length_greater_or_equal": 10,
+    "maximum_legal_ascii_bytes": 9,
+    "source_evidence": {
+      "header": {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.h",
+        "sha256": "f8eba4a9def6ca7167e77c645b0f7282be930e5bcae02f5fd14de15a73416929",
+        "bytes": 6167
+      },
+      "script_interface": {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp",
+        "sha256": "4b09a9b2ece825f9302f6fa32be2f5fededc88b902bf5527d7231cef9a415c70",
+        "bytes": 27612
+      },
+      "menu_manager": {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp",
+        "sha256": "2d94ba0f515019e5c5b46973286bfb59a5866c28893563c228bfef4c6b0cee5a",
+        "bytes": 12769
+      },
+      "menu": {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenu.cpp",
+        "sha256": "abf2005739accfb8ab0af7b81bcc47104593938b992a7a57f41d54bd02c3ea14",
+        "bytes": 6390
+      }
+    },
+    "source_contract": {
+      "constant_bytes": 10,
+      "reported_max_bytes": 10,
+      "create_alias_rejects_length_greater_equal": 10,
+      "maximum_legal_ascii_bytes": 9,
+      "observed_create_alias_error_format": "Alias too long. Max %d",
+      "observed_alias_query_format": "<alias>: <GetAliasString result>",
+      "observed_get_alias_string": "GetMenuItemPath(containing menu), then append '/' and variable/function name",
+      "observed_menu_path": "root path is empty; each child caption is prefixed with '/'",
+      "registration_target_path_policy": "Use the exact control.path string passed to alias registration; derive query receipt from its menu segments and leaf using the source calls above."
+    },
+    "runtime_gate": "Before writing setup.txt or stage/data/b1.cfg, require exactly WCircles and PCircles, ASCII, nonempty, byte length <= reported 10 and < reject threshold 10.",
+    "query_ack_derivation": "Derive each exact query receipt from the same control.path string emitted in the alias registration command; model Menu::GetPath root-empty slash-joined parent captions and GetAliasString append-slash-plus-leaf. Do not store a guessed canonical path string."
+  }
+}
