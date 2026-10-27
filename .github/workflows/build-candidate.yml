@@ -184,6 +184,28 @@ jobs:
           python -B b5-decomp/tests/run_gameplay95.py --workflow-root "$env:GITHUB_WORKSPACE" --out build/candidate/artifacts/gameplay95 --run
           if ($LASTEXITCODE -ne 0) { throw 'Gameplay95 candidate/original-control fixture failed; retain raw owned-job receipts.' }
 
+      - name: Verify original font and buddy consumers with genuine dispatcher controls
+        env:
+          CANDIDATE_B5_SHA: ${{ inputs.b5_commit }}
+          CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
+          BRN_EXE_JOBS: "4"
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $expected = @{
+            'tests/run_font_buddy.py' = '9c179d08a4947686daa8cca87e25f92e9a2b295e591caa5e0f2751a00e8ec164'
+            'tests/evidence/font_buddy/source_contract.json' = 'd232ec8264569742982b31df8397a17d8e579ab95fb54e8191c8fd08d9d3294c'
+          }
+          foreach ($relative in $expected.Keys) {
+            $path = Join-Path (Join-Path $env:GITHUB_WORKSPACE 'b5-decomp') $relative
+            $text = [IO.File]::ReadAllText($path).Replace("`r`n", "`n")
+            $bytes = [Text.Encoding]::UTF8.GetBytes($text)
+            $actual = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($bytes)).ToLowerInvariant()
+            if ($actual -cne $expected[$relative]) { throw "Font/buddy reviewed runner/contract binding changed: $relative" }
+          }
+          python -B b5-decomp/tests/run_font_buddy.py --workflow-root "$env:GITHUB_WORKSPACE" --out build/candidate/artifacts/font-buddy --run
+          if ($LASTEXITCODE -ne 0) { throw 'Font/buddy candidate/original-control fixture failed; retain every owned-job and raw functional receipt.' }
+
       - name: Save successful candidate objects
         if: success()
         uses: actions/cache/save@v4
@@ -220,5 +242,6 @@ jobs:
             build/candidate/artifacts/debug-circles/**
             build/candidate/artifacts/debug-screenshot/**
             build/candidate/artifacts/gameplay95/**
+            build/candidate/artifacts/font-buddy/**
           if-no-files-found: error
           retention-days: 1
