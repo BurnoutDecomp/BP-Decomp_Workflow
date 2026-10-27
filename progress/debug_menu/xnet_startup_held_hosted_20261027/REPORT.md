@@ -1,0 +1,5 @@
+# Held XNet hosted source regression lane
+
+Add one explicit, default-false source-only input and one separate Windows2022/X64 job to the existing candidate workflow. With that input false, every original candidate input and step is identical. With it true, the shipping-build job is skipped explicitly and only the reviewed held source regression runs. This avoids pretending that the still-unactivated, unresolved full-frame link is a successful shipping build. No existing regression is deleted, relabelled, repinned or claimed as run.
+
+The new job checks out the exact workflow revision and exact40-hex B5 revision, initializes vendor submodules, selects MSVCx64, supplies the genuine hosted guard values and invokes the already-reviewed actual-body runner inside its existing owned900-second Windows Job. Every compiler/fixture process belongs to that job. Raw candidate and original-control outputs upload even on failure. Its expected117/0 candidate and14/2 control remain unexecuted. No game, local compilation, networking, native behavior, activation or final menu disposition is claimed.

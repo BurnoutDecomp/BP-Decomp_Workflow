@@ -7,6 +7,11 @@ on:
         description: Exact 40-hex commit in BurnoutDecomp/b5-decomp
         required: true
         type: string
+      run_xnet_startup_held_only:
+        description: Only run the held XNet source-body regression; no shipping build or native claim
+        required: false
+        default: false
+        type: boolean
       run_regressions:
         description: Run the existing profile-delivery and GUI-interface production fixtures
         required: false
@@ -96,6 +101,7 @@ concurrency:
 
 jobs:
   candidate:
+    if: ${{ !inputs.run_xnet_startup_held_only }}
     runs-on: windows-2022
     timeout-minutes: 90
     steps:
@@ -207,5 +213,61 @@ jobs:
             build/candidate/artifacts/online-save-route/**
             build/candidate/artifacts/gui-menu-music-wire/**
             build/candidate/artifacts/gui-audio-trigger-wire/**
+          if-no-files-found: error
+          retention-days: 1
+
+  xnet-startup-held:
+    if: ${{ inputs.run_xnet_startup_held_only }}
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - name: Checkout the workflow's exact revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.workflow_sha }}
+          submodules: false
+          persist-credentials: false
+
+      - name: Require an exact source revision
+        shell: pwsh
+        env:
+          CANDIDATE_B5_SHA: ${{ inputs.b5_commit }}
+        run: |
+          if ($env:CANDIDATE_B5_SHA -cnotmatch '^[0-9a-f]{40}$') {
+            throw 'An exact lowercase 40-hex source revision is required.'
+          }
+
+      - name: Checkout the exact held source and vendor headers
+        uses: actions/checkout@v4
+        with:
+          repository: BurnoutDecomp/b5-decomp
+          ref: ${{ inputs.b5_commit }}
+          path: b5-decomp
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Set up MSVC (x64, Windows 2022)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Check actual XNet startup and original caller ownership
+        shell: pwsh
+        env:
+          CANDIDATE_B5_SHA: ${{ inputs.b5_commit }}
+          CANDIDATE_RUNNER_ENVIRONMENT: ${{ runner.environment }}
+          BRN_EXE_JOBS: '4'
+        run: |
+          python -B b5-decomp/tests/run_xnet_startup_held.py --workflow-root "$env:GITHUB_WORKSPACE" --out build/candidate/artifacts/xnet-startup-held --run
+          if ($LASTEXITCODE -ne 0) {
+            throw 'Held XNet source-body regression failed; retain every raw receipt.'
+          }
+
+      - name: Retain source regression receipts and raw controls
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xnet-startup-held-${{ github.run_id }}-${{ github.run_attempt }}
+          path: build/candidate/artifacts/xnet-startup-held/**
           if-no-files-found: error
           retention-days: 1
