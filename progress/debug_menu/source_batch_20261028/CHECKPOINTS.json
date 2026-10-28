@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T20:19:34.3238026Z",
+  "created_utc": "2026-10-28T20:21:59.5897993Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "dadf56dd14db98831f9f5621748b598694677f7e",
+  "b5_source_head": "33c60318efd7a9989c179535575cdeadc322546d",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -271,6 +271,49 @@
       "review_status": "pending_combined_fresh_review",
       "reviewer": "scene_collision_recovery_swarm",
       "review_verdict": null
+    },
+    {
+      "packet_id": "director_camera_tail_three_readers",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_director_source_fresh_review_20261028/REVIEW.md",
+      "packet_review_sha256": "64ddde21f961bb271d8715c019dfce227b034d04f2747adadb93bbe2b3b2a91f",
+      "review_json_sha256": "765a759077a6646d4734cc7fb5c33f0ce1c499ebc7905da8e0f492d1369cbc31",
+      "manifest_sha256": "56bab7bf2ab992f44c0e46ee8a369b0c456e76df8b0f2645f7e92b96cab5d277",
+      "seal_file_sha256": "319c47ec54f58a1669c6f8ef42fc57addf0d57611eb63014e47c2801cdb63e82",
+      "approved_patch_sha256": "339c0aa2741c06f6781e843fba75dc633870718e2bca03f82aa120ceb668ef70",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "33c60318efd7a9989c179535575cdeadc322546d",
+      "packet_baseline_b5": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+      "verified_preimage_at_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/Director/BrnMainDirector.cpp",
+          "pre_sha256": "0e9562cecd3433a567db73107ec6279ecfff8609d7e14f1c87b8bb20aec0ef25",
+          "approved_lf_post_sha256": "6a3d02e7f511bc24a69e50e39aae557ccd0a549c1db03ec2708472f883c6758f",
+          "compiled_crlf_post_sha256": "1bfcc0d3ac367476265a33e01461588e7dc0286527a07de1821abd58b872c6b6"
+        }
+      ],
+      "affected_sites": [
+        "BrnDirector::DebugComponent::OnActivate#0030",
+        "BrnDirector::DebugComponent::OnActivate#0034",
+        "BrnDirector::DebugComponent::OnActivate#0051"
+      ],
+      "adjacent_rows": {
+        "source_presence_confirmed": 27,
+        "unresolved": [
+          "BrnDirector::DebugComponent::OnActivate#0025",
+          "BrnDirector::DebugComponent::OnActivate#0036"
+        ]
+      },
+      "validation": {
+        "canonical_pre_post_compile": "pass",
+        "independent_source_review": "pass",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "independent source reviewer",
+      "native_credit": 0
     }
   ],
   "review_records": [
