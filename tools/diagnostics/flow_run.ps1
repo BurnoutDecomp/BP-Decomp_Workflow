@@ -376,7 +376,8 @@ param(
   [switch]$NoAssertRelease,     # leave the assert event unsignalled; stop after the first observed [ASSERT]
   [switch]$BelowNormal,         # set only this owned process to BelowNormal immediately after launch
   [switch]$StrictGameOwnership, # refuse existing/foreign games; cleanup only this run's PID/path/start time
-  [switch]$AllowConcurrentGames, # opt in to one distinct other game in a private strict run
+  [switch]$AllowConcurrentGames, # opt in to distinct other games in a private strict run
+  [ValidateRange(1,100)][int]$MaxConcurrentOtherGames = 1,
   [double]$MinFreeGB   = 25,     # refuse to START a frame dump below this much free space --
                                  # a dump can reach 16 GB and filling the volume mid-run breaks
                                  # far more than the run (see the guard below)
@@ -519,6 +520,9 @@ $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 #               which is precisely why a per-slot exe directory yields a per-slot log for free.
 $sourceGameDir = Join-Path $root "build\game"
 $usingCustomGameDirs = ($GameDir -ne "" -or $WorkingDirectory -ne "")
+if ($MaxConcurrentOtherGames -gt 1 -and -not $AllowConcurrentGames) {
+  Write-Host "[flow] FAIL: -MaxConcurrentOtherGames above 1 requires -AllowConcurrentGames."; exit 1
+}
 if ($AllowConcurrentGames -and (-not $StrictGameOwnership -or $Slot -le 0 -or -not $usingCustomGameDirs)) {
   Write-Host "[flow] FAIL: -AllowConcurrentGames requires -StrictGameOwnership, a positive -Slot, and private sibling GameDir/WorkingDirectory paths."; exit 1
 }
@@ -592,6 +596,7 @@ function Get-StrictOtherGameProcesses {
   $lOtherGames = @(Get-OtherGameProcesses | Where-Object { [int]$_.ProcessId -ne $ExcludePid })
   if (-not $AllowConcurrentGames) { return $lOtherGames }
   $lCheckedGames = @()
+  $lSeenImagePaths = @{}
   foreach ($lOther in $lOtherGames) {
     $lPath = [string]$lOther.ExecutablePath
     if ([string]::IsNullOrWhiteSpace($lPath)) { throw ("game pid={0} has no executable path" -f $lOther.ProcessId) }
@@ -604,20 +609,24 @@ function Get-StrictOtherGameProcesses {
     if ($lFullPath -ieq $ownedImagePath) {
       throw ("game pid={0} resolves to the owned staged executable: {1}" -f $lOther.ProcessId,$lFullPath)
     }
+    if ($lSeenImagePaths.ContainsKey($lFullPath)) {
+      throw ("multiple games resolve to the same executable path: {0}" -f $lFullPath)
+    }
+    $lSeenImagePaths[$lFullPath] = $true
     $lCheckedGames += [pscustomobject]@{
       ProcessId = [int]$lOther.ProcessId
       Name = [string]$lOther.Name
       ExecutablePath = $lFullPath
     }
   }
-  if ($lCheckedGames.Count -gt 1) {
-    throw ("concurrent-game limit exceeded: {0} other games are running (maximum 1)" -f $lCheckedGames.Count)
+  if ($lCheckedGames.Count -gt $MaxConcurrentOtherGames) {
+    throw ("concurrent-game limit exceeded: {0} other games are running (maximum {1})" -f $lCheckedGames.Count,$MaxConcurrentOtherGames)
   }
   return $lCheckedGames
 }
 if ($StrictGameOwnership) {
   # A strict run never stops a pre-existing game. By default it refuses any; the private opt-in
-  # permits at most one other game with a known, distinct executable path.
+  # permits the configured count of other games with known, distinct executable paths.
   try {
     if ($AllowConcurrentGames) { $lOtherGames = @(Get-StrictOtherGameProcesses) }
     else { $lOtherGames = @(Get-OtherGameProcesses) }
@@ -3299,7 +3308,7 @@ exit $rc
     direct_creation_handle_retained=($null -ne $ownedLaunchHandle);
     completed=[bool]$flowBodyCompleted;requested_exit=$flowRequestedExit;error=$flowTerminatingError;
     first_assert_stop=[bool]$assertStop;first_assert_at=$assertStopAt;observed_asserts=$seenAsserts;
-    foreign_game=[bool]$foreignGameAppeared;allow_concurrent_games=[bool]$AllowConcurrentGames;max_other_games_observed=$maxConcurrentGamesObserved;
+    foreign_game=[bool]$foreignGameAppeared;allow_concurrent_games=[bool]$AllowConcurrentGames;max_concurrent_other_games=$MaxConcurrentOtherGames;max_other_games_observed=$maxConcurrentGamesObserved;
     runaway_log_abort=[bool]$runawayLog;owned_cleanup_complete=[bool]$cleanupComplete;
     input_reset_complete=$inputResetOk;game_exited_on_own=$exitedOnOwn;game_exit=$exitCode;
     title_start_requested=[bool]$TitleStart;title_start_ready_observed=$titleStartReady;title_start_sent_at=$titleStartSentAt;
