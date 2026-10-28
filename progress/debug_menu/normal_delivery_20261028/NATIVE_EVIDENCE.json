@@ -1,0 +1,103 @@
+{
+  "verdict": "PASS",
+  "scope": "Bounded native baseline only; visual review separately retained",
+  "b5_source": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+  "workflow_build_source": "4c3630796fd68e395005ee939387c22094eef891",
+  "exe_sha256": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da",
+  "slot": 62151,
+  "pid": 30492,
+  "canonical_checks": [
+    {
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "pass": true,
+      "name": "original strict flow completed and owned game exited",
+      "kind": "TerminalFlow"
+    },
+    {
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "pass": true,
+      "name": "no NEW assert families",
+      "kind": "NewAsserts"
+    },
+    {
+      "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+      "pass": true,
+      "name": "assert lines (info: known noise counts too)",
+      "kind": "LogCount"
+    },
+    {
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "pass": true,
+      "name": "no exceptions",
+      "kind": "LogCount"
+    },
+    {
+      "detail": "final phase DRIVING, want DRIVING",
+      "pass": true,
+      "name": "reached DRIVING",
+      "kind": "Mark"
+    },
+    {
+      "detail": "path=307,6m net=212,2m samples 49..255 teleported=True later respawns=0",
+      "pass": true,
+      "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+      "kind": "Script"
+    },
+    {
+      "detail": "0 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+      "pass": true,
+      "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+      "kind": "LogCount"
+    }
+  ],
+  "motion_samples": 256,
+  "gas_positive_samples": 176,
+  "engine2_gas_positive_samples": 176,
+  "max_mph": 89.490875,
+  "asserts": 0,
+  "exceptions": 0,
+  "captures": 6,
+  "normal_protection": true,
+  "normal_protected_count": 25,
+  "private_profile_restored": true,
+  "owned_cleanup_complete": true,
+  "new_site_dispositions": 0,
+  "canonical_concurrency_opt_in": true,
+  "max_other_games_observed": 0,
+  "interventions": [
+    "Console -skipvideos latch",
+    "Returning-profile fixture copied into owned Memcard_62151",
+    "Canonical place-on-track relocation to3040.7,-5.8,-1937.9,180",
+    "Ordinary slot-scoped Start/Accept/accelerator input",
+    "Passive motion trace and PID/slot-owned frame requests",
+    "Private1280x720 windowed display config",
+    "Existing private readonly asset snapshot reused; all 5622 hashes/read-only flags rechecked before and after; bounded frame writer cap 24"
+  ],
+  "limits": [
+    "Canonical relocation does not prove organic route navigation",
+    "No physical controller validation",
+    "No complete gameplay, debug-menu, network or long-session certification",
+    "Original bounded baseline checks were inherited unchanged; native control-specific proof remains separate",
+    "Decoder stderr contains existing XMA warnings; these do not certify complete audio behavior",
+    "No pixel/presentation review was performed; captured frames are retained for separate review"
+  ],
+  "verified_utc": "2026-10-28T15:03:43.066507+00:00",
+  "workflow_receipt_head": "aa4a23c05797612a634c62987007451f5eb7ea72",
+  "frame_dump_max": 24,
+  "max_log_mb": 128,
+  "min_free_gib": 8,
+  "bmp_frames": 6,
+  "bmp_bytes": 22118724,
+  "bmp_budget_max_bytes": 88474896,
+  "game_log_bytes": 8578585,
+  "game_log_abort_threshold_bytes": 134217728,
+  "asset_count": 5622,
+  "asset_bytes": 5043133572,
+  "asset_hashes_verified_after_run": true,
+  "asset_readonly_verified_after_run": true,
+  "asset_recopy_performed": false,
+  "candidate_binding_sha256": "e9200b096121550c75536d8e4d09bb412a0c5a124e69be977f7329818cdf9477",
+  "bounded_retry_seal_sha256": "d441e5576c117ce9a9b496ea06fa2ed9370fe0a062954082c1ab3a7a5e38c0af",
+  "review_revision": 2,
+  "native_credit": 0
+}

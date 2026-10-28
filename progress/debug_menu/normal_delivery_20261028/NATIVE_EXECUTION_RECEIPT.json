@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "scope": "bounded native 80-second baseline only; no visual, gameplay-completion or hardware-parity claim",
+  "verified_utc": "2026-10-28T15:06:40.715386+00:00",
+  "repositories": {
+    "b5_source_commit": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+    "workflow_build_commit": "4c3630796fd68e395005ee939387c22094eef891",
+    "workflow_metadata_head_at_run": "aa4a23c05797612a634c62987007451f5eb7ea72",
+    "exe_sha256": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da"
+  },
+  "review_chain": {
+    "candidate_revision01_review_sha256": "eb63bf78cbd02a412484733dfcede704862325b07d005d0e738e9b04eb0d5946",
+    "bounded_retry_review_path": "scratch/DEBUG_MENU_1011/swarm_graphics_prelaunch_review_20261028/candidate62151/BOUNDED_CAPACITY_RETRY_PASS.json",
+    "bounded_retry_review_sha256": "fc70317536f1e8383d3b9111237b11781f3a92a3401104c31f84d1e0eaa39ac3",
+    "binding_sha256": "e9200b096121550c75536d8e4d09bb412a0c5a124e69be977f7329818cdf9477",
+    "seal_sha256": "d441e5576c117ce9a9b496ea06fa2ed9370fe0a062954082c1ab3a7a5e38c0af",
+    "capture_budget_proof_sha256": "6ca256b0a0aef297bf5d4d3ee3ce1cba4bcaf0b7681c902505237e002bf4be1f"
+  },
+  "previous_attempt01": {
+    "receipt_path": "scratch/DEBUG_MENU_1011/swarm_playable_delivery_20261028/native_62151/ATTEMPT_01.json",
+    "receipt_sha256": "fc281edac324dc943234433bb0847e55294d8eecada92ee1c1b915d87626145f",
+    "status": "prelaunch-refused-before-game-start; default space floor blocked"
+  },
+  "attempt02": {
+    "run_directory": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_playable_delivery_20261028\\native_62151_retry01\\run_62151",
+    "launcher_exit": 0,
+    "flow_exit": 0,
+    "terminal_success": true,
+    "owned_cleanup_complete": true,
+    "input_reset_complete": true,
+    "foreign_game": false,
+    "result_verdict": "PASS",
+    "checks": [
+      {
+        "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+        "pass": true,
+        "name": "original strict flow completed and owned game exited",
+        "kind": "TerminalFlow"
+      },
+      {
+        "detail": "0 assert family(ies), all known (0 lines)",
+        "pass": true,
+        "name": "no NEW assert families",
+        "kind": "NewAsserts"
+      },
+      {
+        "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+        "pass": true,
+        "name": "assert lines (info: known noise counts too)",
+        "kind": "LogCount"
+      },
+      {
+        "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+        "pass": true,
+        "name": "no exceptions",
+        "kind": "LogCount"
+      },
+      {
+        "detail": "final phase DRIVING, want DRIVING",
+        "pass": true,
+        "name": "reached DRIVING",
+        "kind": "Mark"
+      },
+      {
+        "detail": "path=307,6m net=212,2m samples 49..255 teleported=True later respawns=0",
+        "pass": true,
+        "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+        "kind": "Script"
+      },
+      {
+        "detail": "0 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+        "pass": true,
+        "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+        "kind": "LogCount"
+      }
+    ],
+    "pid": 30492,
+    "max_seconds": 80,
+    "final_phase": "DRIVING",
+    "phase_check_detail": "final phase DRIVING, want DRIVING",
+    "max_other_games_observed": 100
+  },
+  "movement": {
+    "path_m": 307.6,
+    "net_m": 212.2,
+    "motion_samples": 256,
+    "gas_positive_samples": 176,
+    "engine2_gas_positive_samples": 176,
+    "max_mph": 89.490875,
+    "teleported": true,
+    "organic_navigation_proven": false
+  },
+  "capture_budget": {
+    "frame_writer_cap": 24,
+    "actual_frames": 6,
+    "actual_bmp_bytes": 22118724,
+    "actual_bmp_sha256": {
+      "bb_001241.bmp": "997266d7e85a2f4eb2df1426f263a4f56312a63db94ea2b57ff844783147e6b8",
+      "bb_003430.bmp": "6b0d0d232ca991f6c5d34dc8cc67e12a87a76ce4900ee04fe061adfe13c2b989",
+      "bb_004362.bmp": "1b911463c2f80abeb1a01d3d53bd43806bcb5fc7297511eb863481044a3e7670",
+      "bb_005670.bmp": "a25cba7d82c9cc65702f3a9bd7cd8ab272e20d9cb9df8ba3c1dc5e201b4aed2b",
+      "bb_006846.bmp": "87ec5781ab449158e9ee45b7b6bfd3142d778f229ece8ddaf0659142a6e36202",
+      "bb_008318.bmp": "d663ae34639a078faae62ea9a417c9826031f2822b8604c3f20135d5c0889d47"
+    },
+    "max_log_mb_abort_threshold": 128,
+    "max_log_guard_is_poll_threshold_not_hard_cap": true,
+    "actual_candidate_game_log_bytes": 8578585,
+    "actual_flow_copy_log_bytes": 8578585,
+    "min_free_gib": 8,
+    "asset_recopy": false
+  },
+  "profile_and_protection": {
+    "profile_restored": true,
+    "profile_sha256": "7066c0d47fb007022a75bfea7d92e752cbafdc4d30ef10116fb238a3df781884",
+    "seed_sha256": "7066c0d47fb007022a75bfea7d92e752cbafdc4d30ef10116fb238a3df781884",
+    "normal_protection_unchanged": true,
+    "normal_protected_files": 25,
+    "normal_install_performed": false,
+    "asset_count": 5622,
+    "asset_bytes": 5043133572,
+    "asset_hashes_verified_after_run": true,
+    "asset_readonly_verified_after_run": true
+  },
+  "evidence_files": {
+    "evidence_json_sha256": "9c402dcdffa18e307173b2409783ea0ae1559b44d90777b33594cade0fa44bdb",
+    "motion_witnesses_sha256": "9f5c5b264b84d7466167bfedeb8c7aa7e552dcf7c0380496361be7834bbc19ab",
+    "run_result_sha256": "e506fdd81e926843eb0944af9beca28772f32a66522c4b3b9fca9f13e61051fe",
+    "flow_terminal_sha256": "545744d11b792ceb0d7e1c4cfa2f20352acd376349fdda5bcd86ad578c7a82c2",
+    "captures_json_sha256": "a168ce1a50978c0654d12520c0330a9fe12d7d892fa00e3fce13dc5e89164d80",
+    "flow_log_sha256": "7f36c8ee3343bc8ef677f187a78bf1449ec0ea0b4e4ced34b6bcb6e104332119",
+    "launcher_console_sha256": "1a47dc784a2e73f3e6aa08655fb82996bd9bde20d113be0065bb636a8d30a2ba",
+    "normal_protection_verdict_sha256": "7e120fc553dc9cd6572dc5f78222907c5376683788adccc37e2c44812a1a984d"
+  },
+  "limits": [
+    "The car was relocated by the baseline test before movement measurement; this does not prove organic route navigation.",
+    "No physical controller validation.",
+    "No complete gameplay, debug-menu, network, or long-session certification.",
+    "No pixel/presentation review was performed; six frames are retained.",
+    "Existing XMA decoder warnings are not evidence of complete audio behavior.",
+    "Native credit remains zero; this is a bounded boot/DRIVING/movement baseline only."
+  ]
+}
