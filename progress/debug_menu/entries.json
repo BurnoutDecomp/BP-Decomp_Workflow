@@ -8424,14 +8424,20 @@
       "pseudocode_line": 153,
       "original_call": "sub_8282E400(&v25, &this->field_D334C, \"World\", \"Draw prop bounding spheres\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::PropEntityModule::Construct#0001",
       "function": "BrnWorld::PropEntityModule::Construct",
       "original_address": "0x822FA068",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822FA068.json",
       "component": "BrnWorld::PropEntityModule",
       "component_name": null,
-      "component_path": null
+      "component_path": null,
+      "notes": "Positive has green circle outlines near the right fence/sky and small rings in the distant street beyond the garage; absent in negative and restore. World control remains false. Independent source/raw/native-pixel review passes both change/restoration phases; original aggregate FAIL and missing final-context Slot are retained.",
+      "evidence": [
+        "progress/debug_menu/circles_two_native_20261027/README.md",
+        "progress/debug_menu/circles_two_native_20261027/REVIEW.md",
+        "progress/debug_menu/circles_two_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -8640,14 +8646,20 @@
       "pseudocode_line": 105,
       "original_call": "sub_8282E400(&v14, &this->field_76CC, \"World\", \"Draw instance bounding spheres\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnWorld::WorldEntityModule::Construct#0002",
       "function": "BrnWorld::WorldEntityModule::Construct",
       "original_address": "0x82302398",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82302398.json",
       "component": "BrnWorld::WorldEntityModule",
       "component_name": null,
-      "component_path": null
+      "component_path": null,
+      "notes": "Positive has a large green circle arc on the left wall/guardrail and additional green arcs on the right; absent in negative and restore. Both prop control values remain false. Independent source/raw/native-pixel review passes both change/restoration phases; original aggregate FAIL and missing final-context Slot are retained.",
+      "evidence": [
+        "progress/debug_menu/circles_two_native_20261027/README.md",
+        "progress/debug_menu/circles_two_native_20261027/REVIEW.md",
+        "progress/debug_menu/circles_two_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -10193,7 +10205,11 @@
         "progress/debug_menu/force_takedown_site0004_native_20261023/SITE_DISPOSITION.json",
         "progress/debug_menu/force_takedown_site0004_native_20261023/NATIVE_EVIDENCE.json",
         "progress/debug_menu/force_takedown_site0004_native_20261023/PUBLICATION_BINDINGS.json"
-      ]
+      ],
+      "source_commit": "9af6a868959578f4eafa9af0d69ccd27081667a0",
+      "native_case": 62055,
+      "original_aggregate_verdict": "site-only PASS; later timer countdown pending",
+      "phase_synchronization": "phase-adjacent; actual source/runtime/artifact pins verified"
     },
     {
       "kind": "variable",
@@ -12821,14 +12837,20 @@
       "pseudocode_line": 36,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50276, \"Take screenshot\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0029",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Registered request, actual native TGA output and overlay omission/inclusion/negative/restoration pass independent source/raw/pixel review; strict case and driver failures remain retained.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/NATIVE_PER_SITE_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -12847,14 +12869,20 @@
       "pseudocode_line": 37,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50278, \"Capture overlays in screenshot\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0030",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Registered request, actual native TGA output and overlay omission/inclusion/negative/restoration pass independent source/raw/pixel review; strict case and driver failures remain retained.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/NATIVE_PER_SITE_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -13009,14 +13037,23 @@
       "pseudocode_line": 47,
       "original_call": "sub_8282D640(a1, *(a1 + 12) + 50207, \"OcclusionCull\", \"Cull world opaque\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0036",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Cull world opaque: independent original gate/restore path passes on private exact3d7/slot62068. Current-dev merge and normal delivery are separate.",
+      "source": "3d7db422fd9a96f6891ac81c60370745dd966839",
+      "exe_sha256": "a4cc9c43aaf21932ea6cfff67e573be6e89d3b18478b301e3f407d7c5a92b4e7",
+      "native_slot": 62068,
+      "evidence": [
+        "progress/debug_menu/occlusion_independent_native_20261024/REPORT.md",
+        "progress/debug_menu/occlusion_independent_native_20261024/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/occlusion_independent_native_20261024/ROOT_NATIVE_JUDGMENT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -13171,14 +13208,23 @@
       "pseudocode_line": 53,
       "original_call": "sub_8282D640(a1, *(a1 + 12) + 51377, \"OcclusionCull\", \"Occlusion enabled\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0042",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Occlusion enabled: independent original gate/restore path passes on private exact3d7/slot62068. Current-dev merge and normal delivery are separate.",
+      "source": "3d7db422fd9a96f6891ac81c60370745dd966839",
+      "exe_sha256": "a4cc9c43aaf21932ea6cfff67e573be6e89d3b18478b301e3f407d7c5a92b4e7",
+      "native_slot": 62068,
+      "evidence": [
+        "progress/debug_menu/occlusion_independent_native_20261024/REPORT.md",
+        "progress/debug_menu/occlusion_independent_native_20261024/SITE_DISPOSITIONS.json",
+        "progress/debug_menu/occlusion_independent_native_20261024/ROOT_NATIVE_JUDGMENT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -13705,14 +13751,25 @@
       "pseudocode_line": 9,
       "original_call": "sub_8282F720( a1, BrnGui::GuiCustRendererDebugComponent::SetBoostColourDangerCallback, a1, \"Set boost colour to Danger\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0007",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Set boost colour to Danger: original action/value, opposing state and restore agree with raw private native receipts and all three inspected images. Full11 and normal protection remain FAIL; accepted scope is this six-site subset.",
+      "evidence": [
+        "progress/debug_menu/boostbar_six_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/boostbar_six_retained_native_20261025/EVIDENCE.json"
+      ],
+      "source_commit": "f0b8f37b39b89390f61f1f0264c8b704950fb030",
+      "exe_sha256": "5072c6c3bcf0e64913dc7f15ba51e9395c2417d844324b70e6e7e83c8a8a282e",
+      "native_case": 62090,
+      "original_aggregate_verdict": "FAIL",
+      "normal_protection_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent"
     },
     {
       "kind": "function",
@@ -13732,14 +13789,25 @@
       "pseudocode_line": 14,
       "original_call": "sub_8282F720( a1, BrnGui::GuiCustRendererDebugComponent::SetBoostColourAggressionCallback, a1, \"Set boost colour to Aggression\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0008",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Set boost colour to Aggression: original action/value, opposing state and restore agree with raw private native receipts and all three inspected images. Full11 and normal protection remain FAIL; accepted scope is this six-site subset.",
+      "evidence": [
+        "progress/debug_menu/boostbar_six_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/boostbar_six_retained_native_20261025/EVIDENCE.json"
+      ],
+      "source_commit": "f0b8f37b39b89390f61f1f0264c8b704950fb030",
+      "exe_sha256": "5072c6c3bcf0e64913dc7f15ba51e9395c2417d844324b70e6e7e83c8a8a282e",
+      "native_case": 62090,
+      "original_aggregate_verdict": "FAIL",
+      "normal_protection_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent"
     },
     {
       "kind": "function",
@@ -13759,14 +13827,25 @@
       "pseudocode_line": 19,
       "original_call": "sub_8282F720( a1, BrnGui::GuiCustRendererDebugComponent::SetBoostColourStuntsCallback, a1, \"Set boost colour to Stunts\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0009",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Set boost colour to Stunts: original action/value, opposing state and restore agree with raw private native receipts and all three inspected images. Full11 and normal protection remain FAIL; accepted scope is this six-site subset.",
+      "evidence": [
+        "progress/debug_menu/boostbar_six_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/boostbar_six_retained_native_20261025/EVIDENCE.json"
+      ],
+      "source_commit": "f0b8f37b39b89390f61f1f0264c8b704950fb030",
+      "exe_sha256": "5072c6c3bcf0e64913dc7f15ba51e9395c2417d844324b70e6e7e83c8a8a282e",
+      "native_case": 62090,
+      "original_aggregate_verdict": "FAIL",
+      "normal_protection_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent"
     },
     {
       "kind": "function",
@@ -13786,14 +13865,25 @@
       "pseudocode_line": 24,
       "original_call": "sub_8282F720( a1, BrnGui::GuiCustRendererDebugComponent::SetBoostColourToCustomCallback, a1, \"Set boost bar colours to custom\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0010",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Set boost bar colours to custom: original action/value, opposing state and restore agree with raw private native receipts and all three inspected images. Full11 and normal protection remain FAIL; accepted scope is this six-site subset.",
+      "evidence": [
+        "progress/debug_menu/boostbar_six_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/boostbar_six_retained_native_20261025/EVIDENCE.json"
+      ],
+      "source_commit": "f0b8f37b39b89390f61f1f0264c8b704950fb030",
+      "exe_sha256": "5072c6c3bcf0e64913dc7f15ba51e9395c2417d844324b70e6e7e83c8a8a282e",
+      "native_case": 62090,
+      "original_aggregate_verdict": "FAIL",
+      "normal_protection_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent"
     },
     {
       "kind": "function",
@@ -13813,14 +13903,20 @@
       "pseudocode_line": 29,
       "original_call": "sub_8282F720( a1, BrnGui::GuiCustRendererDebugComponent::ToggleBoostBarDebugScreenCallback, a1, \"Toggle Boost Bar Debug screen\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0011",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Original debug flame grid appears on positive, disappears on negative, remains hidden on restore; ordinary HUD remains visible. Exact private native case, raw attribution, restoration and independent pixel review pass; wrapper date-parse failure and separate cleanup proof retained.",
+      "evidence": [
+        "progress/debug_menu/boostbar_five_native_20261027/README.md",
+        "progress/debug_menu/boostbar_five_native_20261027/REVIEW.md",
+        "progress/debug_menu/boostbar_five_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -13839,14 +13935,25 @@
       "pseudocode_line": 34,
       "original_call": "sub_8282D6B0(a1, a1 + 24, \"Outer boost Red\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0012",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Outer boost Red: original action/value, opposing state and restore agree with raw private native receipts and all three inspected images. Full11 and normal protection remain FAIL; accepted scope is this six-site subset.",
+      "evidence": [
+        "progress/debug_menu/boostbar_six_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/boostbar_six_retained_native_20261025/EVIDENCE.json"
+      ],
+      "source_commit": "f0b8f37b39b89390f61f1f0264c8b704950fb030",
+      "exe_sha256": "5072c6c3bcf0e64913dc7f15ba51e9395c2417d844324b70e6e7e83c8a8a282e",
+      "native_case": 62090,
+      "original_aggregate_verdict": "FAIL",
+      "normal_protection_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent"
     },
     {
       "kind": "variable",
@@ -13865,14 +13972,25 @@
       "pseudocode_line": 37,
       "original_call": "sub_8282D6B0(a1, a1 + 28, \"Outer boost Green\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0013",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Outer boost Green: original action/value, opposing state and restore agree with raw private native receipts and all three inspected images. Full11 and normal protection remain FAIL; accepted scope is this six-site subset.",
+      "evidence": [
+        "progress/debug_menu/boostbar_six_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/boostbar_six_retained_native_20261025/EVIDENCE.json"
+      ],
+      "source_commit": "f0b8f37b39b89390f61f1f0264c8b704950fb030",
+      "exe_sha256": "5072c6c3bcf0e64913dc7f15ba51e9395c2417d844324b70e6e7e83c8a8a282e",
+      "native_case": 62090,
+      "original_aggregate_verdict": "FAIL",
+      "normal_protection_verdict": "FAIL",
+      "phase_synchronization": "phase-adjacent"
     },
     {
       "kind": "variable",
@@ -13891,14 +14009,20 @@
       "pseudocode_line": 40,
       "original_call": "sub_8282D6B0(a1, a1 + 32, \"Outer boost Blue\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0014",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Outer blue: orange at positive, pink at negative, original custom palette restored; inner flame stays green. Exact private native case, raw attribution, restoration and independent pixel review pass; wrapper date-parse failure and separate cleanup proof retained.",
+      "evidence": [
+        "progress/debug_menu/boostbar_five_native_20261027/README.md",
+        "progress/debug_menu/boostbar_five_native_20261027/REVIEW.md",
+        "progress/debug_menu/boostbar_five_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -13917,14 +14041,20 @@
       "pseudocode_line": 43,
       "original_call": "sub_8282D6B0(a1, a1 + 36, \"Inner boost Red\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0015",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Inner red: green at positive, yellow at negative, original green restored; outer pink remains. Exact private native case, raw attribution, restoration and independent pixel review pass; wrapper date-parse failure and separate cleanup proof retained.",
+      "evidence": [
+        "progress/debug_menu/boostbar_five_native_20261027/README.md",
+        "progress/debug_menu/boostbar_five_native_20261027/REVIEW.md",
+        "progress/debug_menu/boostbar_five_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -13943,14 +14073,20 @@
       "pseudocode_line": 46,
       "original_call": "sub_8282D6B0(a1, a1 + 40, \"Inner boost Green\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0016",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Inner green: pink at positive, green/yellow at negative, original green restored; outer pink remains. Exact private native case, raw attribution, restoration and independent pixel review pass; wrapper date-parse failure and separate cleanup proof retained.",
+      "evidence": [
+        "progress/debug_menu/boostbar_five_native_20261027/README.md",
+        "progress/debug_menu/boostbar_five_native_20261027/REVIEW.md",
+        "progress/debug_menu/boostbar_five_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -13969,14 +14105,20 @@
       "pseudocode_line": 49,
       "original_call": "sub_8282D6B0(a1, a1 + 44, \"Inner boost Blue\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGui::GuiCustRendererDebugComponent::OnActivate#0017",
       "function": "BrnGui::GuiCustRendererDebugComponent::OnActivate",
       "original_address": "0x824FCBC8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x824FCBC8.json",
       "component": "BrnGui::GuiCustRendererDebugComponent",
       "component_name": "Gui Custom Renderer",
-      "component_path": null
+      "component_path": null,
+      "notes": "Inner blue: green at positive, cyan at negative, original green restored; outer pink remains. Exact private native case, raw attribution, restoration and independent pixel review pass; wrapper date-parse failure and separate cleanup proof retained.",
+      "evidence": [
+        "progress/debug_menu/boostbar_five_native_20261027/README.md",
+        "progress/debug_menu/boostbar_five_native_20261027/REVIEW.md",
+        "progress/debug_menu/boostbar_five_native_20261027/VERDICT.json"
+      ]
     },
     {
       "kind": "variable",
@@ -16845,14 +16987,20 @@
       "pseudocode_line": 3,
       "original_call": "sub_8282F720(a1, CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct, a1, \"Encode and save image\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::ImageManagerDebugComponent::OnActivate#0001",
       "function": "BrnNetwork::ImageManagerDebugComponent::OnActivate",
       "original_address": "0x8258AFF0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8258AFF0.json",
       "component": "BrnNetwork::ImageManagerDebugComponent",
       "component_name": "Images",
-      "component_path": null
+      "component_path": null,
+      "notes": "8258B00C/14 loads8284CB38 and8258B018 registers the actual action; its complete original code is4E800020 BLR. Current source callback is empty. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -17245,14 +17393,20 @@
       "pseudocode_line": 9,
       "original_call": "sub_8282F720( a1, BrnNetwork::BuddyManagerDebugComponent::PrintNextUnreadMessage, a1, \" FUNCTION: Print Next Unread Message\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0005",
       "function": "BrnNetwork::BuddyManagerDebugComponent::OnActivate",
       "original_address": "0x82597320",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82597320.json",
       "component": "BrnNetwork::BuddyManagerDebugComponent",
       "component_name": "Buddies",
-      "component_path": null
+      "component_path": null,
+      "notes": "82594870..80 posts tag5/16; leaf unsigned (tag-8)>5 selects8256C9B0; base table8256B6FC[4]=8256B7DC; same queue cleared825548E4. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "function",
@@ -17272,14 +17426,20 @@
       "pseudocode_line": 14,
       "original_call": "sub_8282F720(a1, BrnNetwork::BuddyManagerDebugComponent::SendTestMessage, a1, \" FUNCTION: Send Test Message\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0006",
       "function": "BrnNetwork::BuddyManagerDebugComponent::OnActivate",
       "original_address": "0x82597320",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82597320.json",
       "component": "BrnNetwork::BuddyManagerDebugComponent",
       "component_name": "Buddies",
-      "component_path": null
+      "component_path": null,
+      "notes": "825948C8..EC copies the original200-byte fixed text and posts tag4/216; leaf default and base table[3] reach8256B7DC; same queue cleared825548E4. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "function",
@@ -17353,14 +17513,20 @@
       "pseudocode_line": 17,
       "original_call": "sub_8282F720(a1, BrnNetwork::BuddyManagerDebugComponent::LeaveFeedback, a1, \" FUNCTION: Send Feedback\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0009",
       "function": "BrnNetwork::BuddyManagerDebugComponent::OnActivate",
       "original_address": "0x82597320",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82597320.json",
       "component": "BrnNetwork::BuddyManagerDebugComponent",
       "component_name": "Buddies",
-      "component_path": null
+      "component_path": null,
+      "notes": "82594A88..A8 stores actual feedback index and posts tag7/20 under its original queue guard; leaf default and base table[6] reach8256B7DC; same queue cleared825548E4. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -17432,14 +17598,20 @@
       "pseudocode_line": 20,
       "original_call": "sub_8282F720( a1, BrnNetwork::BuddyManagerDebugComponent::PrintMessage, a1, \" FUNCTION: Print Message\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0012",
       "function": "BrnNetwork::BuddyManagerDebugComponent::OnActivate",
       "original_address": "0x82597320",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82597320.json",
       "component": "BrnNetwork::BuddyManagerDebugComponent",
       "component_name": "Buddies",
-      "component_path": null
+      "component_path": null,
+      "notes": "82594810..28 stores actual message index and posts tag3/20; leaf default and base table[2] reach8256B7DC; same queue cleared825548E4. Genuine original no-op under the documented valid action prerequisites; producers and drops are preserved. No native execution claim.",
+      "evidence": [
+        "progress/debug_menu/screenshot_and_noops_20261027/README.md",
+        "progress/debug_menu/screenshot_and_noops_20261027/VERDICT.json",
+        "progress/debug_menu/screenshot_and_noops_20261027/ORIGINAL_NOOPS_REVIEW.md"
+      ]
     },
     {
       "kind": "variable",
@@ -34778,14 +34950,20 @@
       "pseudocode_line": 33,
       "original_call": "CgsDev::DebugComponent::RegisterFunction( a1, CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct, a1, \"Dumped file to hd\", \"Delete\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnWorld::WorldDebugComponent::OnActivate#0009",
       "function": "BrnWorld::WorldDebugComponent::OnActivate",
       "original_address": "0x827BF4A8",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827BF4A8.json",
       "component": "BrnWorld::WorldDebugComponent",
       "component_name": "World Module",
-      "component_path": null
+      "component_path": null,
+      "notes": "Original registered callback positively resolves to a complete BLR; current typed ClearStoredFile callback is empty. Native availability and full owner lifecycle are outside this finding.",
+      "evidence": [
+        "progress/debug_menu/world_delete_original_noop_20261027/README.md",
+        "progress/debug_menu/world_delete_original_noop_20261027/ORIGINAL_NOOP_REVIEW.md",
+        "progress/debug_menu/world_delete_original_noop_20261027/ROOT_RECEIPT.json"
+      ]
     },
     {
       "kind": "function",
@@ -35929,14 +36107,20 @@
       "pseudocode_line": 6,
       "original_call": "sub_8282D800(a1, a1 + 112, \"Draw collision world\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0001",
       "function": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate",
       "original_address": "0x828AAA68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json",
       "component": "CgsSceneManager::TriangleCollisionDebugComponent",
       "component_name": "Collision",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw collision world: exact fa5/slot62072 positive, negative and restore states agree with original source, direct renderer-owner/capture attribution and all three inspected images. Later independent MapLvl assertion and full16 FAIL remain retained.",
+      "evidence": [
+        "progress/debug_menu/geometry_four_retained_native_20261025/REPORT.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/EVIDENCE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -35955,14 +36139,20 @@
       "pseudocode_line": 7,
       "original_call": "sub_8282D800(a1, a1 + 113, \"Draw soup AABBs\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0002",
       "function": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate",
       "original_address": "0x828AAA68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json",
       "component": "CgsSceneManager::TriangleCollisionDebugComponent",
       "component_name": "Collision",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw soup AABBs: exact fa5/slot62072 positive, negative and restore states agree with original source, direct renderer-owner/capture attribution and all three inspected images. Later independent MapLvl assertion and full16 FAIL remain retained.",
+      "evidence": [
+        "progress/debug_menu/geometry_four_retained_native_20261025/REPORT.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/EVIDENCE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -35981,14 +36171,20 @@
       "pseudocode_line": 8,
       "original_call": "sub_8282D6B0(a1, a1 + 356, \"Draw distance\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0003",
       "function": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate",
       "original_address": "0x828AAA68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json",
       "component": "CgsSceneManager::TriangleCollisionDebugComponent",
       "component_name": "Collision",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw distance: exact fa5/slot62072 positive, negative and restore states agree with original source, direct renderer-owner/capture attribution and all three inspected images. Later independent MapLvl assertion and full16 FAIL remain retained.",
+      "evidence": [
+        "progress/debug_menu/geometry_four_retained_native_20261025/REPORT.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/EVIDENCE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -36007,14 +36203,20 @@
       "pseudocode_line": 11,
       "original_call": "sub_8282D800(a1, a1 + 116, \"Draw edge cosines\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0004",
       "function": "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate",
       "original_address": "0x828AAA68",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AAA68.json",
       "component": "CgsSceneManager::TriangleCollisionDebugComponent",
       "component_name": "Collision",
-      "component_path": null
+      "component_path": null,
+      "notes": "Draw edge cosines: exact fa5/slot62072 positive, negative and restore states agree with original source, direct renderer-owner/capture attribution and all three inspected images. Later independent MapLvl assertion and full16 FAIL remain retained.",
+      "evidence": [
+        "progress/debug_menu/geometry_four_retained_native_20261025/REPORT.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/REVIEW.md",
+        "progress/debug_menu/geometry_four_retained_native_20261025/EVIDENCE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -37719,9 +37921,9 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1298,
-      "verified": 50,
-      "original-noop": 7
+      "pending": 1271,
+      "verified": 71,
+      "original-noop": 13
     }
   }
 }

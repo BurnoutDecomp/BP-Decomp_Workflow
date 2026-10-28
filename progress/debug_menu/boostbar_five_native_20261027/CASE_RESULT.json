@@ -1,0 +1,64 @@
+{
+  "phase": "DRIVING",
+  "case": "debug_menu_boostbar_remaining5",
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\boostbar5_selected_62091_20261027\\Case.ps1",
+  "checks": [
+    {
+      "pass": true,
+      "kind": "TerminalFlow",
+      "name": "original strict flow completed and owned game exited",
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True"
+    },
+    {
+      "pass": true,
+      "kind": "NewAsserts",
+      "name": "no new assert families",
+      "detail": "0 assert family(ies), all known (0 lines)"
+    },
+    {
+      "pass": true,
+      "kind": "LogCount",
+      "name": "no game exceptions",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]"
+    },
+    {
+      "pass": true,
+      "kind": "Mark",
+      "name": "ordinary free-roam driving reached",
+      "detail": "final phase DRIVING, want DRIVING"
+    },
+    {
+      "pass": true,
+      "kind": "Script",
+      "name": "single owned helper completes within the case bound",
+      "detail": "2026-10-27T05:48:37.6885580Z RESULT DONE sites=5 deferred=6 states=15 frames=16"
+    },
+    {
+      "pass": true,
+      "kind": "Script",
+      "name": "owner, capture, source-gate, and restoration witness checker",
+      "detail": "machine evidence accepted=5 deferred=6 frames=16; visible effects still require Root image review; no inventory status was written."
+    }
+  ],
+  "area": "debug-menu",
+  "provenance": {
+    "exe_size": 11397120,
+    "b5_dirty": 0,
+    "exe_b5": "f0b8f37b",
+    "exe_mtime_before_lock": "2026-10-25T15:55:40.7705491+01:00",
+    "exe_mtime": "2026-10-25T15:55:40.7705491+01:00",
+    "b5_head": "11cbd50c8",
+    "exe_sha": "5072c6c3bcf0",
+    "parent_head": "736836875"
+  },
+  "asserts": 0,
+  "bug": "Exercise the five remaining source-connected BoostBar controls in a focused continuation; retain all eleven definitions for alias setup and cleanup.",
+  "when": "2026-10-27T06:52:13.0746405+01:00",
+  "flow_exit": 0,
+  "verdict": "PASS",
+  "as_expected": true,
+  "expected": "PASS",
+  "slot": 62091,
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\boostbar5_selected_62091_20261027\\run_boostbar_remaining5_20261027_064445",
+  "label": "BoostBar-remaining5-held-brake-handbrake-exact-owned-handoff"
+}

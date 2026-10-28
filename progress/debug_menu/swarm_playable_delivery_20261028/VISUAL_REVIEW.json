@@ -1,0 +1,50 @@
+{
+  "verdict": "PASS",
+  "reviewed_utc": "2026-10-28T04:39:13.598538+00:00",
+  "method": "Assistant inspected contact sheet of all six retained original1280x720BMPs; sheet is only a display preview",
+  "contact_sheet_sha256": "4210a99023e9eaeecd4b51cfaf2815dfd18c602c55d184bb9a1971f8d549cd6c",
+  "observations": [
+    {
+      "label": "title_ready",
+      "file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_playable_delivery_20261028\\native_62150\\run_62150\\frames\\bb_001251.bmp",
+      "sha256": "15b0c810fb2dbab5795f26e4514ffd5da7a6cd48175bddb4797ee7c06273cfe6",
+      "observation": "Paradise title scene and Press START visible; ordinary title rendering."
+    },
+    {
+      "label": "car_select",
+      "file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_playable_delivery_20261028\\native_62150\\run_62150\\frames\\bb_003185.bmp",
+      "sha256": "2f76533276946d7bfc8130e1998995520f7f9c77f1d4d41b8e0eadfa5bc2a30c",
+      "observation": "Red/orange car front three-quarter view in junkyard; background rendered, motion blur visible."
+    },
+    {
+      "label": "world_exit",
+      "file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_playable_delivery_20261028\\native_62150\\run_62150\\frames\\bb_003785.bmp",
+      "sha256": "0facd2058458b870179147bc355e0a807fb308cc7e0d548e2854ddad8f9fee29",
+      "observation": "Black transition with EA loading mark and diagnostic HUD, captured as StreamingFinished was first observed; this frame does not prove visible world rendering."
+    },
+    {
+      "label": "drive_8s",
+      "file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_playable_delivery_20261028\\native_62150\\run_62150\\frames\\bb_005099.bmp",
+      "sha256": "678e4d1257fc4df6265d3c4a465a0b80cccdcecf44ab8b1c225e313ffe311374",
+      "observation": "Rendered industrial road/buildings, rear chase car, sky, Road Rage prompt, HUD and minimap visible."
+    },
+    {
+      "label": "drive_15s",
+      "file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_playable_delivery_20261028\\native_62150\\run_62150\\frames\\bb_006297.bmp",
+      "sha256": "5baaa817741c8ef452b4ceb53a14fdc91500994b7197ec1d7a8a92d64c91f009",
+      "observation": "Rendered street junction at Patterson Av / E.Crawford Dr, chase car and HUD/minimap visible; viewpoint differs from earlier road capture."
+    },
+    {
+      "label": "drive_25s",
+      "file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_playable_delivery_20261028\\native_62150\\run_62150\\frames\\bb_007885.bmp",
+      "sha256": "c86e4571c390e12cb4eff92298bf2a812b395690261ed7f40d394cd4e3af9a79",
+      "observation": "Rendered industrial fence/building, car pushing into fence with tyre smoke under straight throttle; HUD and minimap persist."
+    }
+  ],
+  "limits": [
+    "world_exit capture is the black EA loading transition, not a rendered-world witness; three later original captures prove visible road/world/car/HUD",
+    "Later straight-throttle scene is a car pushing against a fence, not proof of steering or organic route navigation",
+    "Ordinary input-driven motion is separately measured by unchanged canonical drive check",
+    "Existing diagnostics are visible; no debug source flag or camera override was applied"
+  ]
+}

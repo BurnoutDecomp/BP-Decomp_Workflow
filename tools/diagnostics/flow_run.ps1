@@ -376,6 +376,7 @@ param(
   [switch]$NoAssertRelease,     # leave the assert event unsignalled; stop after the first observed [ASSERT]
   [switch]$BelowNormal,         # set only this owned process to BelowNormal immediately after launch
   [switch]$StrictGameOwnership, # refuse existing/foreign games; cleanup only this run's PID/path/start time
+  [switch]$AllowConcurrentGames, # opt in to one distinct other game in a private strict run
   [double]$MinFreeGB   = 25,     # refuse to START a frame dump below this much free space --
                                  # a dump can reach 16 GB and filling the volume mid-run breaks
                                  # far more than the run (see the guard below)
@@ -518,6 +519,9 @@ $root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 #               which is precisely why a per-slot exe directory yields a per-slot log for free.
 $sourceGameDir = Join-Path $root "build\game"
 $usingCustomGameDirs = ($GameDir -ne "" -or $WorkingDirectory -ne "")
+if ($AllowConcurrentGames -and (-not $StrictGameOwnership -or $Slot -le 0 -or -not $usingCustomGameDirs)) {
+  Write-Host "[flow] FAIL: -AllowConcurrentGames requires -StrictGameOwnership, a positive -Slot, and private sibling GameDir/WorkingDirectory paths."; exit 1
+}
 if ($usingCustomGameDirs) {
   if ($GameDir -eq "" -or $WorkingDirectory -eq "" -or $Slot -le 0 -or -not $StrictGameOwnership) {
     Write-Host "[flow] FAIL: private paths require both -GameDir and -WorkingDirectory, a positive -Slot, and -StrictGameOwnership."; exit 1
@@ -539,6 +543,8 @@ if ($usingCustomGameDirs) {
 }
 $slotTag = if ($Slot -gt 0) { "_$Slot" } else { "" }
 $exe     = Join-Path $exeDir "Burnout_PC.exe"
+$ownedImagePath = [IO.Path]::GetFullPath($exe)
+$maxConcurrentGamesObserved = 0
 $log     = Join-Path $exeDir "BrnGame.log"
 if ($OutDir   -eq "") { $OutDir   = Join-Path $root ("scratch\flow_run\" + (Get-Date).ToString('yyyyMMdd_HHmmss')) }
 # ⛔ PER-RUN BY DEFAULT (2026-08-29). This used to default to a SHARED scratch\flow_frames,
@@ -579,14 +585,51 @@ New-Item -ItemType Directory -Force $OutDir | Out-Null
 Enter-BoxLock -TimeoutSec $LockTimeoutSec -NoLock:$NoLock -Label "flow_run" -Slot $Slot
 
 function Get-OtherGameProcesses {
-  @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe'" -ErrorAction Stop)
+  @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe' OR Name='BrnGame.exe'" -ErrorAction Stop)
+}
+function Get-StrictOtherGameProcesses {
+  param([int]$ExcludePid = 0)
+  $lOtherGames = @(Get-OtherGameProcesses | Where-Object { [int]$_.ProcessId -ne $ExcludePid })
+  if (-not $AllowConcurrentGames) { return $lOtherGames }
+  $lCheckedGames = @()
+  foreach ($lOther in $lOtherGames) {
+    $lPath = [string]$lOther.ExecutablePath
+    if ([string]::IsNullOrWhiteSpace($lPath)) { throw ("game pid={0} has no executable path" -f $lOther.ProcessId) }
+    $lRoot = [IO.Path]::GetPathRoot($lPath)
+    if ([string]::IsNullOrWhiteSpace($lRoot) -or
+        ($lRoot -notmatch '^[A-Za-z]:\\$' -and $lRoot -notmatch '^\\\\[^\\]+\\[^\\]+\\?$')) {
+      throw ("game pid={0} has an unknown or non-absolute executable path: {1}" -f $lOther.ProcessId,$lPath)
+    }
+    $lFullPath = [IO.Path]::GetFullPath($lPath)
+    if ($lFullPath -ieq $ownedImagePath) {
+      throw ("game pid={0} resolves to the owned staged executable: {1}" -f $lOther.ProcessId,$lFullPath)
+    }
+    $lCheckedGames += [pscustomobject]@{
+      ProcessId = [int]$lOther.ProcessId
+      Name = [string]$lOther.Name
+      ExecutablePath = $lFullPath
+    }
+  }
+  if ($lCheckedGames.Count -gt 1) {
+    throw ("concurrent-game limit exceeded: {0} other games are running (maximum 1)" -f $lCheckedGames.Count)
+  }
+  return $lCheckedGames
 }
 if ($StrictGameOwnership) {
-  # A strict Traffic run never kills a pre-existing game, even if its image path is the target.
-  # The private staging contract is one owned game only; ambiguity refuses the run.
-  try { $lOtherGames = @(Get-OtherGameProcesses) }
-  catch { Write-Host "[flow] FAIL: could not enumerate existing game processes; strict run refused."; exit 1 }
-  if ($lOtherGames.Count -gt 0) {
+  # A strict run never stops a pre-existing game. By default it refuses any; the private opt-in
+  # permits at most one other game with a known, distinct executable path.
+  try {
+    if ($AllowConcurrentGames) { $lOtherGames = @(Get-StrictOtherGameProcesses) }
+    else { $lOtherGames = @(Get-OtherGameProcesses) }
+  } catch {
+    Write-Host "[flow] FAIL: existing game process enumeration/path validation failed; strict run refused."; exit 1
+  }
+  if ($AllowConcurrentGames) {
+    $maxConcurrentGamesObserved = [int]$lOtherGames.Count
+    foreach ($lOther in $lOtherGames) {
+      Write-Host ("[flow] ALLOWED_OTHER_GAME stage=initial pid={0} name={1} path={2}" -f $lOther.ProcessId,$lOther.Name,$lOther.ExecutablePath)
+    }
+  } elseif ($lOtherGames.Count -gt 0) {
     Write-Host "[flow] FAIL: strict ownership refuses to start while any Burnout/TUB game is already running; none was stopped."
     foreach ($lForeign in $lOtherGames) {
       Write-Host ("[flow]   pid={0} name={1} path={2}" -f $lForeign.ProcessId,$lForeign.Name,$lForeign.ExecutablePath)
@@ -2061,9 +2104,18 @@ if ($Drive) {
 
 # --- launch ------------------------------------------------------------------------------
 if ($StrictGameOwnership) {
-  try { $lOtherGames = @(Get-OtherGameProcesses) }
-  catch { Write-Host "[flow] FAIL: could not recheck game processes before launch."; exit 1 }
-  if ($lOtherGames.Count -gt 0) {
+  try {
+    if ($AllowConcurrentGames) { $lOtherGames = @(Get-StrictOtherGameProcesses) }
+    else { $lOtherGames = @(Get-OtherGameProcesses) }
+  } catch {
+    Write-Host "[flow] FAIL: could not recheck game processes before launch."; exit 1
+  }
+  if ($AllowConcurrentGames) {
+    $maxConcurrentGamesObserved = [int][Math]::Max($maxConcurrentGamesObserved,$lOtherGames.Count)
+    foreach ($lOther in $lOtherGames) {
+      Write-Host ("[flow] ALLOWED_OTHER_GAME stage=prelaunch pid={0} name={1} path={2}" -f $lOther.ProcessId,$lOther.Name,$lOther.ExecutablePath)
+    }
+  } elseif ($lOtherGames.Count -gt 0) {
     Write-Host "[flow] FAIL: a game appeared before launch; strict run refused and did not stop it."
     foreach ($lForeign in $lOtherGames) {
       Write-Host ("[flow]   pid={0} name={1} path={2}" -f $lForeign.ProcessId,$lForeign.Name,$lForeign.ExecutablePath)
@@ -2113,7 +2165,6 @@ $script:ownedProcessStarted = $false
 $script:ownedLaunchProcess = $null
 $script:ownedCleanupAttempted = $false
 $script:ownedCleanupOk = $false
-$ownedImagePath = [IO.Path]::GetFullPath($exe)
 $ownedStartTime = $null
 $ownedLaunchHandle = $null
 $flowRequestedExit = 1
@@ -2499,13 +2550,18 @@ while ($true) {
   if ($p.HasExited) { Write-Host ("[flow] game exited early at {0:f1}s" -f $elapsed); break }
   if ($StrictGameOwnership -and (Get-Date) -ge $nextForeignGameCheck) {
     if (-not (Test-OwnedGameProcess)) { throw 'Owned game PID/path/start-time recheck failed' }
-    try { $lForeignGames = @(Get-OtherGameProcesses | Where-Object { $_.ProcessId -ne $p.Id }) }
+    try { $lForeignGames = @(Get-StrictOtherGameProcesses -ExcludePid $p.Id) }
     catch {
-      Write-Host "[flow] FAIL: game-process enumeration failed during strict run; aborting owned process only."
+      Write-Host "[flow] FAIL: concurrent-game enumeration/path validation failed during strict run; aborting owned process only."
       $foreignGameAppeared = $true
       break
     }
-    if ($lForeignGames.Count -gt 0) {
+    if ($AllowConcurrentGames) {
+      $maxConcurrentGamesObserved = [int][Math]::Max($maxConcurrentGamesObserved,$lForeignGames.Count)
+      foreach ($lForeign in $lForeignGames) {
+        Write-Host ("[flow] ALLOWED_OTHER_GAME stage=live pid={0} name={1} path={2}" -f $lForeign.ProcessId,$lForeign.Name,$lForeign.ExecutablePath)
+      }
+    } elseif ($lForeignGames.Count -gt 0) {
       Write-Host "[flow] FAIL: another game appeared during strict run; aborting owned process only."
       foreach ($lForeign in $lForeignGames) {
         Write-Host ("[flow]   pid={0} name={1} path={2}" -f $lForeign.ProcessId,$lForeign.Name,$lForeign.ExecutablePath)
@@ -3025,7 +3081,7 @@ if ($null -ne $finalTxt) {
 $gasVerdict = "n/a (no -MotionProbe, so the game's own throttle witness is absent)"
 $gasNeverHot = $false
 if ($Drive -and $MotionProbe -and $null -ne $finalTxt) {
-  $lGasAll  = ([regex]::Matches($finalTxt, '\bgas (-?[0-9.]+)'))
+  $lGasAll  = ([regex]::Matches($finalTxt, '(?m)^\[motion\][^\r\n]*\bgas (-?[0-9.]+)'))
   $lGasHot  = 0
   foreach ($g in $lGasAll) { if ([double]::Parse($g.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture) -gt 0.01) { $lGasHot++ } }
   $gasVerdict = ("{0} of {1} [motion] samples report gas > 0" -f $lGasHot, $lGasAll.Count)
@@ -3094,6 +3150,7 @@ $summary += ("SWEEP    {0}" -f $sweepText)
 #   movies never played, or that shared the GPU with two other games, is not comparable with one
 #   that did not, and marks.txt has to say so on its face rather than leave it to be inferred.
 $summary += ("SLOT     {0}{1}" -f $Slot, $(if ($Slot -gt 0) { "  exe=$exe (a copy; cwd=$gameDir)" } else { "  (build\game, the default path)" }))
+$summary += ("CONCURRENT_GAMES allow={0} max_other={1}" -f [bool]$AllowConcurrentGames,$maxConcurrentGamesObserved)
 $summary += ("SKIPINTRO {0}" -f $(if ($SkipIntro) { "-skipvideos (console latch; EA + Criterion logos not played)" } else { "(not armed)" }))
 $summary += ("TITLESTART requested={0} ready-observed={1} sent-at={2}; stimulus receipt only" -f [bool]$TitleStart,$titleStartReady,
              $(if ($null -ne $titleStartSentAt) { ("{0:f1}s" -f $titleStartSentAt) } else { "never" }))
@@ -3242,7 +3299,8 @@ exit $rc
     direct_creation_handle_retained=($null -ne $ownedLaunchHandle);
     completed=[bool]$flowBodyCompleted;requested_exit=$flowRequestedExit;error=$flowTerminatingError;
     first_assert_stop=[bool]$assertStop;first_assert_at=$assertStopAt;observed_asserts=$seenAsserts;
-    foreign_game=[bool]$foreignGameAppeared;runaway_log_abort=[bool]$runawayLog;owned_cleanup_complete=[bool]$cleanupComplete;
+    foreign_game=[bool]$foreignGameAppeared;allow_concurrent_games=[bool]$AllowConcurrentGames;max_other_games_observed=$maxConcurrentGamesObserved;
+    runaway_log_abort=[bool]$runawayLog;owned_cleanup_complete=[bool]$cleanupComplete;
     input_reset_complete=$inputResetOk;game_exited_on_own=$exitedOnOwn;game_exit=$exitCode;
     title_start_requested=[bool]$TitleStart;title_start_ready_observed=$titleStartReady;title_start_sent_at=$titleStartSentAt;
     success=[bool]$terminalSuccess} | ConvertTo-Json -Depth 4 |

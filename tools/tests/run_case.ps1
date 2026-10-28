@@ -17,9 +17,11 @@
 #       REPORT.md               the same, for humans
 #   scratch\bugtest\runs\<case>\latest.json   -> a pointer to the newest run's result
 #
-# ⛔ ONE GAME AT A TIME ON THIS BOX. flow_run takes the box lock (_box_lock.ps1); with many
-# lanes queued the wait can be long, so this runner passes -LockTimeoutSec 7200 by default.
-# A wait is announced by flow_run ("[box] waiting for the box") -- it is not a hang.
+# ⛔ ONE GAME AT A TIME BY DEFAULT. An explicit Run.AllowConcurrentGames opt-in permits
+# exactly one other distinct-image game only for a strict private staged run (positive Slot).
+# flow_run takes the box lock (_box_lock.ps1); with many lanes queued the wait can be long,
+# so this runner passes -LockTimeoutSec 7200 by default. A wait is announced by flow_run
+# ("[box] waiting for the box") -- it is not a hang.
 #
 # ⭐ RED -> GREEN is the discipline, not a feature of this script. A case is written FIRST, run
 # against the current build with -ExpectFail, and must FAIL there (RED = the bug reproduces
@@ -66,6 +68,13 @@ if ($lCase -isnot [hashtable]) { Write-Host "[case] FAIL: $casePath must RETURN 
 if (-not $lCase.Name) { $lCase.Name = [IO.Path]::GetFileNameWithoutExtension($casePath) }
 if (-not $lCase.Checks -or $lCase.Checks.Count -eq 0) { Write-Host "[case] FAIL: case '$($lCase.Name)' has no Checks"; exit 2 }
 $lRun = if ($lCase.Run) { $lCase.Run } else { @{} }
+$allowConcurrentGames = $false
+if ($lRun -is [System.Collections.IDictionary] -and $lRun.Contains('AllowConcurrentGames')) {
+  if ($lRun['AllowConcurrentGames'] -isnot [bool]) {
+    Write-Host "[case] FAIL: Run.AllowConcurrentGames must be a Boolean."; exit 2
+  }
+  $allowConcurrentGames = [bool]$lRun['AllowConcurrentGames']
+}
 
 if ($RunsRoot -eq "") { $RunsRoot = Join-Path $root "scratch\bugtest\runs" }
 $caseRoot = Join-Path $RunsRoot $lCase.Name
@@ -89,6 +98,9 @@ Write-Host ("[case] run dir: {0}" -f $RunDir)
 # The exe THIS run will execute -- a slot runs its own copy, and a provenance stamp naming the
 # wrong binary would be worse than none (see flow_run's EXE PROVENANCE banner).
 $usingCustomGameDirs = ($GameDir -ne "" -or $WorkingDirectory -ne "")
+if (-not $NoRun -and $allowConcurrentGames -and (-not $lRun.StrictGameOwnership -or $Slot -le 0 -or -not $usingCustomGameDirs)) {
+  Write-Host "[case] FAIL: Run.AllowConcurrentGames requires StrictGameOwnership, a positive -Slot, and private sibling GameDir/WorkingDirectory paths."; exit 2
+}
 if ($usingCustomGameDirs) {
   if ($GameDir -eq "" -or $WorkingDirectory -eq "" -or $Slot -le 0 -or -not $lRun.StrictGameOwnership) {
     Write-Host "[case] FAIL: private paths require both -GameDir and -WorkingDirectory, a positive -Slot, and StrictGameOwnership in the case run."; exit 2
@@ -126,6 +138,8 @@ $flowInvocationAttempted = $false
 $flowInvocationError = $null
 $flowStatus = $null
 $flowStatusHash = $null
+$preProfileConcurrentGames = 0
+$postFlowConcurrentGames = 0
 $profileRestoreSafe = $true
 $profileRestorationComplete = $false
 $setupCleanupOk = $true
@@ -135,6 +149,34 @@ $profileAside = $null
 # FreshProfile parks THIS SLOT's save. Slot n's profile is build\game\Memcard_<n>\Profile.sav
 # (the game suffixes the directory from BRN_HARNESS_SLOT), so parking slot 0's would leave slot n
 # on the returning path and quietly measure the wrong boot.
+function Get-CaseStrictOtherGameProcesses {
+  $lGames = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe' OR Name='BrnGame.exe'" -ErrorAction Stop)
+  if (-not $allowConcurrentGames) { return $lGames }
+  $lCheckedGames = @()
+  $lOwnedImagePath = [IO.Path]::GetFullPath($exe)
+  foreach ($lGame in $lGames) {
+    $lPath = [string]$lGame.ExecutablePath
+    if ([string]::IsNullOrWhiteSpace($lPath)) { throw ("game pid={0} has no executable path" -f $lGame.ProcessId) }
+    $lRoot = [IO.Path]::GetPathRoot($lPath)
+    if ([string]::IsNullOrWhiteSpace($lRoot) -or
+        ($lRoot -notmatch '^[A-Za-z]:\\$' -and $lRoot -notmatch '^\\\\[^\\]+\\[^\\]+\\?$')) {
+      throw ("game pid={0} has an unknown or non-absolute executable path: {1}" -f $lGame.ProcessId,$lPath)
+    }
+    $lFullPath = [IO.Path]::GetFullPath($lPath)
+    if ($lFullPath -ieq $lOwnedImagePath) {
+      throw ("game pid={0} resolves to the owned staged executable: {1}" -f $lGame.ProcessId,$lFullPath)
+    }
+    $lCheckedGames += [pscustomobject]@{
+      ProcessId = [int]$lGame.ProcessId
+      Name = [string]$lGame.Name
+      ExecutablePath = $lFullPath
+    }
+  }
+  if ($lCheckedGames.Count -gt 1) {
+    throw ("concurrent-game limit exceeded: {0} other games are running (maximum 1)" -f $lCheckedGames.Count)
+  }
+  return $lCheckedGames
+}
 $profile = if ($usingCustomGameDirs) { Join-Path $WorkingDirectory ('Memcard_' + $Slot + '\Profile.sav') }
            elseif ($Slot -gt 0) { Join-Path $root ('build\game\Memcard_' + $Slot + '\Profile.sav') }
            else { Join-Path $root 'build\game\Memcard\Profile.sav' }
@@ -183,8 +225,16 @@ if (-not $NoRun) {
   if ($lRun.StrictGameOwnership) {
     # Refuse before the FIRST profile move/copy, under the same runner lock.
     # Keep Setup's pre-helper and flow's prelaunch checks for later races.
-    $lExistingGames = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe'" -ErrorAction Stop)
-    if ($lExistingGames.Count -gt 0) { throw 'Strict run refused before profile mutation: an existing Burnout/TUB game is alive' }
+    if ($allowConcurrentGames) {
+      $lExistingGames = @(Get-CaseStrictOtherGameProcesses)
+      $preProfileConcurrentGames = $lExistingGames.Count
+      foreach ($lOther in $lExistingGames) {
+        Write-Host ("[case] ALLOWED_OTHER_GAME stage=pre-profile pid={0} name={1} path={2}" -f $lOther.ProcessId,$lOther.Name,$lOther.ExecutablePath)
+      }
+    } else {
+      $lExistingGames = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe' OR Name='BrnGame.exe'" -ErrorAction Stop)
+      if ($lExistingGames.Count -gt 0) { throw 'Strict run refused before profile mutation: an existing Burnout/TUB game is alive' }
+    }
     if (Test-Path -LiteralPath $flowTerminalPath) { throw 'Strict run refuses to overwrite an original terminal receipt; use NoRun to rerate' }
   }
   # A SLOT's exe is staged by flow_run itself (under the lock, after its kill sweep), so only
@@ -192,6 +242,7 @@ if (-not $NoRun) {
   if ($Slot -le 0 -and -not (Test-Path $exe)) { Write-Host "[case] FAIL: no exe at $exe -- build first (tools\tests\build_exe_locked.ps1)"; exit 2 }
   $lArgs = @{}
   foreach ($k in $lRun.Keys) { $lArgs[$k] = $lRun[$k] }
+  if (-not $allowConcurrentGames) { [void]$lArgs.Remove('AllowConcurrentGames') }
   $lArgs['OutDir'] = $flowOut
   $lArgs['LockTimeoutSec'] = $LockTimeoutSec
   if ($Slot -gt 0) { $lArgs['Slot'] = $Slot }
@@ -310,14 +361,20 @@ if (-not $NoRun) {
           $flowStatusHash = (Get-FileHash -LiteralPath $flowStatusPath -Algorithm SHA256).Hash.ToLowerInvariant()
           if ($flowStatus.owned_cleanup_complete -ne $true) { $profileRestoreSafe = $false }
         }
-        $lRemainingGames = @(Get-CimInstance Win32_Process -Filter "Name LIKE 'Burnout%.exe' OR Name='TUB_Burnout_PC_External.exe'" -ErrorAction Stop)
-        if ($lRemainingGames.Count -gt 0) {
+        $lRemainingGames = @(Get-CaseStrictOtherGameProcesses)
+        if ($allowConcurrentGames) {
+          $postFlowConcurrentGames = $lRemainingGames.Count
+          foreach ($lOther in $lRemainingGames) {
+            Write-Host ("[case] ALLOWED_OTHER_GAME stage=post-flow pid={0} name={1} path={2}" -f $lOther.ProcessId,$lOther.Name,$lOther.ExecutablePath)
+          }
+        } elseif ($lRemainingGames.Count -gt 0) {
           $profileRestoreSafe = $false
           $postFlowForeignGame = $true
           $profileRestoreError = 'A game is still alive after flow; profile restoration deferred'
         }
       } catch {
         $profileRestoreSafe = $false
+        if ($allowConcurrentGames) { $postFlowForeignGame = $true }
         $profileRestoreError = $_.Exception.Message
       }
     }
@@ -356,6 +413,9 @@ if (-not $NoRun) {
           flow_status_sha256=$flowStatusHash;flow_status=$flowStatus;
           helper_cleanup_complete=$setupCleanupOk;profile_restoration_complete=$profileRestorationComplete;
           post_flow_foreign_game=$postFlowForeignGame;profile_restore_error=$profileRestoreError;
+          allow_concurrent_games=$allowConcurrentGames;
+          allowed_other_games_before_profile=$preProfileConcurrentGames;
+          allowed_other_games_after_flow=$postFlowConcurrentGames;
           success=[bool]$terminalPass} | ConvertTo-Json -Depth 6 |
           Set-Content -LiteralPath $flowTerminalPath -Encoding UTF8
       }

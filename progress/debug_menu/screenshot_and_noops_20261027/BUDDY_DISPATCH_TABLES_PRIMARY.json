@@ -1,0 +1,56 @@
+{
+  "tables": [
+    {
+      "name": "BuddyManagerBase_ProcessEvent",
+      "table_address": "0x8256B6FC",
+      "address_load_pc": "0x8256B6E4",
+      "address_load_instructions_hex": "3d808257398cb6fc",
+      "table_snapshot": "original/raw/BuddyManagerBase_ProcessEvent_jump_table.bin",
+      "table_raw_sha256": "9b01143062d3b31c346043eb85ae8ab24a8f750cbea0dc75ee59cbeb9a29b353",
+      "tag_base_subtracted_by_original": 1,
+      "table_targets_by_actual_tag": {
+        "1": "0x8256B72C",
+        "2": "0x8256B764",
+        "3": "0x8256B7DC",
+        "4": "0x8256B7DC",
+        "5": "0x8256B7DC",
+        "6": "0x8256B7DC",
+        "7": "0x8256B7DC",
+        "8": "0x8256B7DC",
+        "9": "0x8256B7BC",
+        "10": "0x8256B7A4",
+        "11": "0x8256B7B0",
+        "12": "0x8256B7C8"
+      },
+      "original_unsigned_bounds_default": "0x8256B7DC",
+      "bounds_proof": "Full retained original function contains unsigned compare followed by bgt before table lookup."
+    },
+    {
+      "name": "BuddyManagerX360_ProcessNetworkQueue",
+      "table_address": "0x8256C950",
+      "address_load_pc": "0x8256C938",
+      "address_load_instructions_hex": "3d808257398cc950",
+      "table_snapshot": "original/raw/BuddyManagerX360_ProcessNetworkQueue_jump_table.bin",
+      "table_raw_sha256": "f256e866ea77b6e6f32acfbfdbc79f0dfa28b39321c4bbfce1283f996c53f900",
+      "tag_base_subtracted_by_original": 8,
+      "table_targets_by_actual_tag": {
+        "8": "0x8256C998",
+        "9": "0x8256C998",
+        "10": "0x8256C9B0",
+        "11": "0x8256C998",
+        "12": "0x8256C9B0",
+        "13": "0x8256C968"
+      },
+      "original_unsigned_bounds_default": "0x8256C9B0",
+      "bounds_proof": "Full retained original function contains unsigned compare followed by bgt before table lookup."
+    }
+  ],
+  "selected_drop_tags": [
+    3,
+    4,
+    5,
+    7
+  ],
+  "selected_drop_path": "Each selected tag is below the leaf's actual tag base8: unsigned subtraction fails its <=5 test and branches to8256C9B0. The base's retained12-word table then positively selects8256B7DC for each tag. The enclosing ProcessDebugEvents clears the same queue at825548E4.",
+  "limits": "Positive bounded original branch-table proof, not a global variable-alias audit or native disposition."
+}

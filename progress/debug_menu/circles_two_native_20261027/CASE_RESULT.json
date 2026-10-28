@@ -1,0 +1,64 @@
+{
+  "provenance": {
+    "exe_sha": "08ac2dfecd86",
+    "exe_b5": "7d5a10bb",
+    "exe_mtime": "2026-10-27T09:15:15.8815548+01:00",
+    "b5_head": "6502d531b",
+    "b5_dirty": 0,
+    "parent_head": "d9f00e9ad",
+    "exe_mtime_before_lock": "2026-10-27T09:15:15.8815548+01:00",
+    "exe_size": 11557376
+  },
+  "checks": [
+    {
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "kind": "TerminalFlow",
+      "name": "original strict flow completed and owned game exited",
+      "pass": true
+    },
+    {
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "kind": "NewAsserts",
+      "name": "no new assert families",
+      "pass": true
+    },
+    {
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "kind": "LogCount",
+      "name": "no game exceptions",
+      "pass": true
+    },
+    {
+      "detail": "final phase DRIVING, want DRIVING",
+      "kind": "Mark",
+      "name": "ordinary free-roam driving reached",
+      "pass": true
+    },
+    {
+      "detail": "2026-10-27T11:22:09.2384878Z RESULT DONE sites=2 deferred=0 states=6 frames=7",
+      "kind": "Script",
+      "name": "single owned helper completes within the case bound",
+      "pass": true
+    },
+    {
+      "detail": "helper differs from exact private candidate image/hash/PID/slot; helper PID/image/start differs from canonical driver handoff; natural baseline not this candidate/owned run or claims prior pixel approval; in-run-natural-baseline raw ACK PID/slot/sequence/present/file differs; BrnWorld::WorldEntityModule::Construct#0002/positive raw ACK PID/slot/sequence/present/file differs; BrnWorld::WorldEntityModule::Construct#0002/negative raw ACK PID/slot/sequence/present/file differs; BrnWorld::WorldEntityModule::Construct#0002/restore raw ACK PID/slot/sequence/present/file differs; BrnWorld::PropEntityModule::Construct#0001/positive raw ACK PID/slot/sequence/present/file differs; BrnWorld::PropEntityModule::Construct#0001/negative raw ACK PID/slot/sequence/present/file differs; BrnWorld::PropEntityModule::Construct#0001/restore raw ACK PID/slot/sequence/present/file differs",
+      "kind": "Script",
+      "name": "owner, capture, source-gate, and restoration witness checker",
+      "pass": false
+    }
+  ],
+  "expected": "PASS",
+  "area": "debug-menu",
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\Case.ps1",
+  "flow_exit": 0,
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010",
+  "when": "2026-10-27T12:27:38.0917397+01:00",
+  "case": "debug_menu_circle_flags_two_control",
+  "as_expected": false,
+  "slot": 62094,
+  "bug": "Verify the two source-backed World bounding-circle controls with paired pixel captures and exact bool readbacks.",
+  "phase": "DRIVING",
+  "label": "DebugCircles-two-control-current-candidate-owned-handoff",
+  "verdict": "FAIL",
+  "asserts": 0
+}
