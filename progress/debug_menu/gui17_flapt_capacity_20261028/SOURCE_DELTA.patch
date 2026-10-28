@@ -1,0 +1,83 @@
+--- a/b5-decomp/src/GameSource/Resource/BrnGameDataModule.cpp
++++ b/b5-decomp/src/GameSource/Resource/BrnGameDataModule.cpp
+@@ -1,4 +1,5 @@
+ #include "GameSource/Resource/BrnGameDataModule.h"
++#include "pc/gui/FlaptAllocatorCapacity.h"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"   // CGS_ASSERT
+ #include "GameShared/GameClasses/Memory/CgsMemoryModule.h"   // MemoryModule::InitOptions
+ #include "GameSource/Resource/BrnResourceAllocator.h"        // Allocators::mpInternalDebugAllocator
+@@ -522,7 +523,13 @@
+             const MemoryMapAllocatorDef& lrDef = KAC_MEMORY_MAP_LINEAR_ALLOCATORS[li];
+             ++miNumAllocatorCreationRequests;
+ 
+-            void* lpMem = LaneAlloc::Carve(lpAllocator, lrDef.mauSize[0], lrDef.mauAlign[0],
++            // FLAG PC-platform leaf: bank66 stores widened Flapt runtime
++            // arrays. Project its original capacity using attested strides;
++            // every other linear allocator retains its original byte budget.
++            const u32 luNativeSize = lrDef.miBankId == 66
++                ? BrnFlapt::PC::GetFlaptAllocatorCapacity(lrDef.mauSize[0])
++                : lrDef.mauSize[0];
++            void* lpMem = LaneAlloc::Carve(lpAllocator, luNativeSize, lrDef.mauAlign[0],
+                                            lrDef.mpcName);
+             if (lpMem == 0)
+             {
+@@ -531,7 +538,7 @@
+                 continue;
+             }
+             maGeneratedLinearAllocators[li].Construct();
+-            maGeneratedLinearAllocators[li].Create(lpMem, lrDef.mauSize[0]);
++            maGeneratedLinearAllocators[li].Create(lpMem, luNativeSize);
+ 
+             mAllocatorList.maiAllocatorMap[lrDef.miBankId]  = li;
+             mAllocatorList.maeAllocatorType[lrDef.miBankId] = CgsMemory::MemoryMap::E_ALLOCATORTYPE_LINEAR;
+--- /dev/null
++++ b/b5-decomp/src/pc/gui/FlaptAllocatorCapacity.h
+@@ -0,0 +1,48 @@
++#pragma once
++
++#include "types.hpp"
++#include "GameSource/Gui/Flapt/BrnFlaptMovieClipInstance.h"
++#include "GameSource/Gui/Flapt/BrnFlaptTextFieldInstance.h"
++#include "GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dTransform.h"
++
++namespace BrnFlapt::PC
++{
++    // FLAG PC-platform leaf: preserve bank66's console allocation capacity
++    // for its three native-width runtime array families. ARTIST824700DC,
++    // 82470148/194 and82471724 attest strides56,64,388; GUI sets alignment16.
++    // The generated original memory-map bytes remain unchanged.
++    struct AllocationExpansion
++    {
++        u64 muNativeCharge;
++        u64 muConsoleStride;
++    };
++
++    constexpr u64 AlignAllocation(u64 luSize)
++    {
++        return (luSize + 15u) & ~u64(15u);
++    }
++
++    constexpr AllocationExpansion LargerExpansion(AllocationExpansion lLeft,
++                                                   AllocationExpansion lRight)
++    {
++        return lLeft.muNativeCharge * lRight.muConsoleStride >=
++               lRight.muNativeCharge * lLeft.muConsoleStride ? lLeft : lRight;
++    }
++
++    constexpr AllocationExpansion GetAllocationExpansion()
++    {
++        return LargerExpansion(
++            LargerExpansion({AlignAllocation(sizeof(MovieClipInstance)), 0x38u},
++                            {AlignAllocation(sizeof(CgsGraphics::Im2dTransform)), 0x40u}),
++            {AlignAllocation(sizeof(TextFieldInstance)), 0x184u});
++    }
++
++    constexpr u32 GetFlaptAllocatorCapacity(u32 luConsoleCapacity)
++    {
++        const AllocationExpansion lExpansion = GetAllocationExpansion();
++        const u64 luNativeCapacity =
++            (u64(luConsoleCapacity) * lExpansion.muNativeCharge +
++             lExpansion.muConsoleStride - 1u) / lExpansion.muConsoleStride;
++        return static_cast<u32>(AlignAllocation(luNativeCapacity));
++    }
++}
