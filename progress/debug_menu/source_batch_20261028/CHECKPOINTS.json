@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-28T19:56:39.7133913Z",
+  "status": "private source checkpoint; review pending",
+  "workflow_branch": "codex/debug-source-batch-20261028",
+  "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
+  "b5_source_branch": "codex/debug-source-batch-20261028",
+  "b5_source_head": "2930564b267caf8e2ba28c05e0d251637c065b78",
+  "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+  "review_policy": "pending checkpoints are not verified or integrated",
+  "native_game_launched": false,
+  "site_credit": 0,
+  "packets": [
+    {
+      "packet_id": "traffic_chunk01_killzone_normalization",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk01_killzone_normalization/REVIEWER_PACKET.md",
+      "packet_sha256": "86d46f87a5245f0c7144180f50e5076dbe32068ef4655f6aecda7d80618d69ff",
+      "manifest_sha256": "0db24d4951f81a2d3c12f79271c6bfbc19f5d6816bb7f5ceebe09d4d2fe580cd",
+      "source_delta_sha256": "7dea22daf28300267db48658b5006c15553251ae4a347c07cc9d491d7b2b355e",
+      "seal_file_sha256": "8df9154f9ad8e1f7b93280b1dca26e965a5d269cbdf661faf49f9f7945f165dc",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "2930564b267caf8e2ba28c05e0d251637c065b78",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+          "pre_sha256": "ec441f30a7b305f0da7bb12be67106e12aab4addfd4b1412896eed77bf37a9f7",
+          "post_sha256": "79a53306fca4f20d7f9c44df8037ea8e6521ba25f5913bfe9e969deff56c1baa"
+        }
+      ],
+      "affected_sites": [
+        "BrnTraffic::DebugComponent::OnActivate#0055",
+        "BrnTraffic::DebugComponent::OnActivate#0056"
+      ],
+      "validation": {
+        "canonical_actual_tu_pre_compile_exit": 0,
+        "canonical_actual_tu_post_compile_exit": 0,
+        "focused_cpu_cases": 169,
+        "pre_pass": 69,
+        "post_pass": 169,
+        "native_game_launched": false,
+        "hardware_accuracy_proved": false,
+        "site_credit": 0
+      },
+      "review_status": "pending_combined_fresh_review",
+      "reviewer": "scene_collision_recovery_swarm assignment pending packet mapping confirmation",
+      "review_verdict": null
+    }
+  ]
+}
