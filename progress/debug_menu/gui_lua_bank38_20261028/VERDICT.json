@@ -1,0 +1,45 @@
+{
+  "verdict": "pass",
+  "kind": "SOURCE",
+  "source_baseline": "43f609acd78e05460f28ba5f66f5559d22352f84",
+  "workflow_baseline": "07c5c4213615736502a41657c4777f8915413457",
+  "author_manifest_sha256": "e93085e368b6bcbc58ce64e110f336651959cf6de662bec3c9d8c66497990bc3",
+  "author_receipt_sha256": "f90e0280e78d624623a02b3f6298d17ee8b3ef55091012e62aef1c14cede5062",
+  "approved_path": "src/GameSource/Resource/BrnGameDataModule.cpp",
+  "approved_pre_sha256": "9646904b0ce9dc0b59abff9aef03ac7d16331e644f5259421f429caa54b3dc65",
+  "approved_post_sha256": "4414fb82fadd80fbf372fc14090696b061c43e4c4ba48766b0c72b89210e5ae3",
+  "approved_postimage": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_gui_lua_allocator_20261028\\candidate\\src\\GameSource\\Resource\\BrnGameDataModule.cpp",
+  "approved_patch_sha256": "dca96d014feff1acec2b992e2b178ef9d7e6fb0f6fa06204d0ed3421e56d3e14",
+  "fresh_actual_TU_compile": true,
+  "source_header_pins": 166,
+  "source_diagnostics": 0,
+  "physical_source_fallbacks": 0,
+  "corrected_population": [
+    "BRNOVERLAY",
+    "BRNSCREENFSM",
+    "BRNFBFSM"
+  ],
+  "corrected_Lua_requested_outstanding": 355357,
+  "language_requested": 151360,
+  "mugshots_requested": 28824,
+  "corrected_total_requested_outstanding": 535541,
+  "excess_over_original_capacity": 11253,
+  "screen_phase_total_requested_outstanding": 511060,
+  "resolved_evidence_findings": [
+    {
+      "id": "E01",
+      "issue": "Sealed diagnostic retained an unproven event VM and four-state freeburn population",
+      "resolution": "Those runtime-population arguments are not accepted. Reviewer compiled a fixture omitting event VM; original three-flow population still needs535541 outstanding requested bytes and passes the candidate."
+    }
+  ],
+  "limits": [
+    "Intentional scoped PC ABI capacity policy, not a recovered original1MiB constant or universal all-trace bound",
+    "Outstanding requested allocations may include GC-unreachable objects; the unchanged Lua GC/failure schedule is the operational scope",
+    "PC allocator shrink/in-place growth debt remains and contributes to initial screen failure; this is not an allocator parity fix",
+    "Language/profile co-owners are exact-sized fixture allocations, not execution of those full platform-heavy Prepare methods",
+    "Unchanged actual LuaState eight-cycle controls use an additional stress VM; they prove bounded release behavior, not the exact native population",
+    "No new game, shipping link, runtime heap capture, fullGUI behavior or native failure closure is claimed"
+  ],
+  "game_executed": false,
+  "shared_mutations": false
+}
