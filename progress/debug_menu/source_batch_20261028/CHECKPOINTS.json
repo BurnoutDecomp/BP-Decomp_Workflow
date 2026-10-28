@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T21:25:30.3172465Z",
+  "created_utc": "2026-10-28T21:26:07.0142426Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
@@ -796,7 +796,15 @@
     "review_seal_sha256": "fbaa0599f9494197812b1b25f55ad3f7fdc6c5b50440e4faee2ab6bb75bbb99a",
     "manifest_sha256": "d9644f25ee918a8f082ac4d80aa26dbe5cba8bcd12b11b7384be94e8a1a2d16b",
     "verdict": "pass",
-    "packets": null,
+    "packets": [
+      "chunk03_towbar_body",
+      "chunk04_trailer_pool",
+      "chunk05_lerp_caller",
+      "chunk06_trailer_motion",
+      "chunk07_trailer_dispatch",
+      "chunk08_trailer_birth_callers",
+      "chunk09_light_unordered_expiry"
+    ],
     "post_controls": 462,
     "native_game": false,
     "site_credit": 0
@@ -822,6 +830,7 @@
     "current_traffic_module_hash": "915c598cc68af06274c5985f0105b17a5c0df458492cbea73de37e1941435008",
     "current_traffic_header_hash": "9e94c73215100c13b8b1907873bd765cc5d5d90cedc49dd274a24202482534d7",
     "requires_root_direction": true,
-    "native_credit": 0
+    "native_credit": 0,
+    "current_traffic_module_hash_semantics": "LF-normalized exact chunk04 postimage"
   }
 }
