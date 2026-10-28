@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "status": "private reviewed source composition; canonical build pending",
+  "created_utc": "2026-10-28T20:41:32.8562477Z",
+  "workflow_branch": "codex/debug-source-composition-20261028",
+  "workflow_parent_checkpoint": "3ccc48fa401e03a99a4c28708e9d20b97ad3e22b",
+  "b5_source_commit": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+  "b5_source_tree": "8a2eafca665c54c77b936c1bfc0cab76593ca287",
+  "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+  "included_source_checkpoint_count": 10,
+  "included_source_checkpoints": [
+    {
+      "commit": "2930564b267caf8e2ba28c05e0d251637c065b78",
+      "subject": "source: normalize traffic kill-zone approach vectors"
+    },
+    {
+      "commit": "5386d3b47d1d11388d2ac7dfeedc42588819df97",
+      "subject": "source: restore traffic param lerp vector operations"
+    },
+    {
+      "commit": "2264b5e9cac307aa1bce80696fbcad232acc30ff",
+      "subject": "source: preserve console prop LOD priority in shadows"
+    },
+    {
+      "commit": "81fe1c70c8add9feac653ad8b9f73a0a041364ed",
+      "subject": "source: restore trophy resource pointer access"
+    },
+    {
+      "commit": "8deac37d25ffd38e57d5b77bc6b1f97e606a43e7",
+      "subject": "source: restore Sound StateManager prepare sequence"
+    },
+    {
+      "commit": "dadf56dd14db98831f9f5621748b598694677f7e",
+      "subject": "source: match PFX hook list and printf call shape"
+    },
+    {
+      "commit": "33c60318efd7a9989c179535575cdeadc322546d",
+      "subject": "source: restore Director camera-tail readers"
+    },
+    {
+      "commit": "097d8e5688e353bf12a1dfdec0b008b99fb42f44",
+      "subject": "source: restore DirectorDevTools lifecycle wiring"
+    },
+    {
+      "commit": "55031208526217a2041e23b52007ee0287394d1b",
+      "subject": "source: correct mutable debrisparams reference shape"
+    },
+    {
+      "commit": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+      "subject": "source: restore Sound manager update monitoring"
+    }
+  ],
+  "included_source_path_count": 16,
+  "included_source_paths": [
+    "src/GameShared/GameClasses/Sound/Logic/CgsStateManager.cpp",
+    "src/GameShared/GameClasses/Sound/Logic/CgsStateManager.h",
+    "src/GameSource/Director/BrnDirectorDevTools.h",
+    "src/GameSource/Director/BrnMainDirector.cpp",
+    "src/GameSource/Director/BrnMainDirector.h",
+    "src/GameSource/Effects/EffectsModule.cpp",
+    "src/GameSource/Effects/EffectsModule.h",
+    "src/GameSource/GameState/Progression/BrnProgressionManager_Unlocks.cpp",
+    "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp",
+    "src/GameSource/Sound/Global/BrnGlobalStateManager.cpp",
+    "src/GameSource/Sound/Module/LogicModule/BrnEmitterStateManager.cpp",
+    "src/GameSource/Sound/Streaming/BrnStreamingStateManager.cpp",
+    "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityDebugComponent.h",
+    "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+    "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+    "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficParam.cpp"
+  ],
+  "excluded_pending_candidate": {
+    "commit": "a963bba6a5ffc92ebce621668e773ffeea020f4a",
+    "packet": "scratch/DEBUG_MENU_1011/swarm_ai_routes_recovery_20261027/racecar_ai_interface_velocity_speed_20261028_delta01/REVIEWER_PACKET.md",
+    "source_paths": [
+      "src/GameSource/World/AI/SharedIO/BrnRaceCarAIInterfaces.h",
+      "src/GameSource/World/AI/SharedIO/BrnRaceCarAIInterfaces.cpp"
+    ],
+    "status": "pending independent review; excluded from build source"
+  },
+  "original_consumer_cache": {
+    "path": "build/game/obj/tu",
+    "object_count": 3003,
+    "prior_executable_sha256": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da",
+    "prior_executable_bytes": 11629056,
+    "cache_root": "C:\\Users\\adri1\\.codex\\worktrees\\debug-consumers-20261028\\BP-Decomp_Workflow"
+  },
+  "build": {
+    "canonical_command": "python tools/build/build.py exe --jobs 24",
+    "mode": "incremental; reuse original consumer3003 cache; no --rebuild",
+    "output": "build/game",
+    "native_game_launched": false,
+    "normal_install_performed": false,
+    "site_credit": 0
+  }
+}
