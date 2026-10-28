@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "baseline": {
+    "source_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72",
+    "source_tree": "d80f2468d892e6337d07b002abbe322e627f7963",
+    "workflow_commit": "6e0f7bda4e36155cbca0cba32baaab18a404b39c",
+    "workflow_tree": "f850501af2d00efb26b2e3eb3df07c88f7b846ae"
+  },
+  "changes": [
+    {
+      "path": "src/GameSource/World/AI/BrnAICar.cpp",
+      "pre_sha256": "d4adb78693612f1d3697360141fd33214a1acdc6073ac82db34cab2e9cc4afd2",
+      "post_sha256": "394b6ac6cccb8e590e59f1265546b906df92c063c0419168a2648fdfcd44f00e",
+      "pre_bytes": 41032,
+      "post_bytes": 42096,
+      "git_blob_sha1": "a1401c88638156db0b6f1daf2166a8b658f03edf",
+      "baseline_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72"
+    },
+    {
+      "path": "src/GameSource/World/AI/BrnAICar.h",
+      "pre_sha256": "3d482f70bf6f208738b2f371621c36e5ab66cd5d4def771486e08e16e7ea6b48",
+      "post_sha256": "f827007d13dc1c6958b3df9362f1a0330bbc90e9523c0172787e7e021a12a65f",
+      "pre_bytes": 45605,
+      "post_bytes": 45371,
+      "git_blob_sha1": "6ea33876e8ed325b11e2a475afebb48e033f6b4e",
+      "baseline_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72"
+    },
+    {
+      "path": "src/GameSource/World/AI/BrnAIModule.cpp",
+      "pre_sha256": "54b65c8db1380e0e661f3160c601b1bc5336587e3329b41bc40113c05f824847",
+      "post_sha256": "e5519bb3d19fe9686d494afa65080a3a09e6191ad4409a7b33518b6f41ea58c1",
+      "pre_bytes": 30018,
+      "post_bytes": 30403,
+      "git_blob_sha1": "58107907b71ea97178e8cca356d67375f10f24d1",
+      "baseline_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72"
+    },
+    {
+      "path": "src/GameSource/World/AI/BrnAIModule.h",
+      "pre_sha256": "65d55174121892561329f50a49cb85af683e5cafd98bba55f5d5c3f6b743b284",
+      "post_sha256": "e127292471180eef98ff4861a04f01b3f31f2deaaebdc2b0941d4ccd80dc3b1e",
+      "pre_bytes": 37945,
+      "post_bytes": 37945,
+      "git_blob_sha1": "44e41c8ea47fa63ce0873c1f182b9de5cfae4fff",
+      "baseline_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72"
+    },
+    {
+      "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingDebugComponent.cpp",
+      "pre_sha256": "a8ded415d9a2a1047d51d4e17d8cdfb37d77a35b55400a9b31920c5b459af140",
+      "post_sha256": "426a849ae6e73b61ff1d32f1de9a59c6a05e7dfa84041e87d45f41c4a2188db5",
+      "pre_bytes": 28778,
+      "post_bytes": 29309,
+      "git_blob_sha1": "3efe0aac34bddb7ab11d862e1c66f2fa9c255182",
+      "baseline_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72"
+    }
+  ],
+  "functions": [
+    {
+      "name": "BrnAI::AICar::IsSpeedMatching",
+      "source_path": "src/GameSource/World/AI/BrnAICar.cpp",
+      "artifacts": [
+        "evidence/artist/0x82796C08.json",
+        "evidence/artist/0x82793020.json",
+        "evidence/artist/0x82792B70.json"
+      ],
+      "dwarf": [
+        "evidence/dwarf/BrnAICar.h",
+        "evidence/dwarf/BrnAIDriver.h"
+      ],
+      "semantics": "IN_RANGE RenderHUD follows guest mpDriver at AICar+0x14B0 and reads AIDriver::mbUseForcedSpeed at +0x1D66; wrapper reads that named field through the host pointer, returning false for no driver."
+    },
+    {
+      "name": "BrnAI::AICar::GetSpeedMatchSpeed",
+      "source_path": "src/GameSource/World/AI/BrnAICar.cpp",
+      "artifacts": [
+        "evidence/artist/0x82796C08.json",
+        "evidence/artist/0x82793020.json"
+      ],
+      "dwarf": [
+        "evidence/dwarf/BrnAICar.h",
+        "evidence/dwarf/BrnAIDriver.h"
+      ],
+      "semantics": "RenderHUD reads AIDriver+0x1D18 after the speed-match flag; DecFIGS/current typed declaration names mfForcedSpeed and GetForcedSpeed returns that exact field."
+    },
+    {
+      "name": "BrnAI::AIModule::GetDifficulty",
+      "source_path": "src/GameSource/World/AI/BrnAIModule.cpp",
+      "artifacts": [
+        "evidence/artist/0x82791DB8.json",
+        "evidence/artist/0x82796C08.json"
+      ],
+      "dwarf": [
+        "evidence/dwarf/BrnAIModule.h"
+      ],
+      "semantics": "OnModeStart stores GameModeParams::mfProgressionRankAsRatio at AIModule+0x4EB64; RaceBalancing RenderHUD reads the same float. Header typo 0x4EBA4 was corrected."
+    },
+    {
+      "name": "BrnAI::RaceBalancingDebugComponent::DrawGraphBackground",
+      "source_path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingDebugComponent.cpp",
+      "artifacts": [
+        "evidence/artist/0x827747F8.json",
+        "evidence/artist/0x8281C3E0.json"
+      ],
+      "dwarf": [
+        "evidence/dwarf/BrnRaceBalancingDebugComponent.h",
+        "evidence/dwarf/CgsDebug2DImmediateRender.h"
+      ],
+      "semantics": "DrawGraphFrame computes end=(x+width,y-height); the helper forwards start and end plus r8=0x40FFFFFF to the scalar DrawBox wrapper. The original scalar wrapper subtracts start from end before the Vector2 DrawBox call, preserving f32 endpoint rounding."
+    }
+  ],
+  "changes_patch_sha256": "c0ba9b2414553975424f7077b91eafe66d9c1aa860011a4c88284fa47d1799b2",
+  "changes_patch_bytes": 7130,
+  "verification": {
+    "compile_receipt": "evidence/build/PRIVATE_COMPILE_LINK_RECEIPT.json",
+    "compiled_tus": 3,
+    "diagnostic_link_exit_code": 0,
+    "diagnostic_link_object_count": 3008,
+    "diagnostic_executable_sha256": "10723a7e860749ef9a78148aa8e3f08de5ad025e084d1ccf6124be57e21ca991",
+    "canonical_mount_changed": false,
+    "native_launched": false,
+    "changes_patch_sha256": "c0ba9b2414553975424f7077b91eafe66d9c1aa860011a4c88284fa47d1799b2",
+    "draw_graph_background": "ARTIST exact: endpoint x+width/y-height; scalar DrawBox wrapper subtracts corners preserving f32 rounding; RGBA 0x40FFFFFF."
+  },
+  "evidence_sources": [
+    {
+      "path": "src/GameSource/World/AI/BrnAIDriver.h",
+      "snapshot_path": "evidence/source/BrnAIDriver.h",
+      "source_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72",
+      "git_blob_sha1": "50bcd9db902989e72dcce842de3d918662f63b76",
+      "bytes": 32905,
+      "raw_sha256": "e04f5e856b4bd557a917117b07729db5de2654c6efb1d42af9613f055bcf5ba1",
+      "changed": false
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug2DImmediateRender.cpp",
+      "snapshot_path": "evidence/source/CgsDebug2DImmediateRender.cpp",
+      "source_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72",
+      "git_blob_sha1": "a36d656a911a9f680abd531985728798e3b405ef",
+      "bytes": 24946,
+      "raw_sha256": "8debefe4a47915814b2ab423bb0fe50f445d977f72250bb002d7f8e158ce5f81",
+      "changed": false
+    },
+    {
+      "path": "src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug2DImmediateRender.h",
+      "snapshot_path": "evidence/source/CgsDebug2DImmediateRender.h",
+      "source_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72",
+      "git_blob_sha1": "ff8060f7dda4bcdcae8c75cde26068adc54940a0",
+      "bytes": 9360,
+      "raw_sha256": "5ef888a50fb70c9aad0ed4e366acbf715230ce03a2d175de6ab7b78ba867d5fa",
+      "changed": false
+    }
+  ]
+}
