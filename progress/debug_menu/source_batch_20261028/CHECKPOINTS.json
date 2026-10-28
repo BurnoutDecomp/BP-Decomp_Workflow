@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T20:03:11.4030395Z",
+  "created_utc": "2026-10-28T20:05:10.3654368Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "2264b5e9cac307aa1bce80696fbcad232acc30ff",
+  "b5_source_head": "81fe1c70c8add9feac653ad8b9f73a0a041364ed",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -114,6 +114,40 @@
         ],
         "pre_compile_log_sha256": "90bbe3b74228595fc912cc5f87c9669fd0e6f93fd3f8d6094895554f15656079",
         "post_compile_log_sha256": "90bbe3b74228595fc912cc5f87c9669fd0e6f93fd3f8d6094895554f15656079",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pending_combined_fresh_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": null
+    },
+    {
+      "packet_id": "progression_chunk03_trophy_resource_guard",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_progression_source_20261028/chunk03_trophy_resource_guard/REVIEWER_PACKET.md",
+      "packet_sha256": "82672f3fa1c80b3b2197c9bad16e27e45bb1ac7da15ef812cd879c1b62c13fc0",
+      "manifest_sha256": "a2fd99e307c0462bcf1db22e9cd947b0c90d364e4427c91b1a9b5cd970c602c1",
+      "source_delta_sha256": "85c6a054b9773394cdf154ba32a489aa53fe7b4096d52f5b43a8e60ec1380175",
+      "seal_file_sha256": "b3aa1dcf7a560fda11a960919436a5852c37e18413472c333d38430d0dad11da",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "81fe1c70c8add9feac653ad8b9f73a0a041364ed",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/Progression/BrnProgressionManager_Unlocks.cpp",
+          "pre_sha256": "e0a5f462d8bebe01fbafe30de17df74afb1f4a1104579bffe2034bc747739b1a",
+          "post_sha256": "75c4ad43e0df998c84829c94501b91a2ec4ed8d4abb0a93f23264b36109b510a"
+        }
+      ],
+      "affected_sites": [
+        "BrnProgression::ProgressionManager::OnTrophyUnlock"
+      ],
+      "validation": {
+        "canonical_pre_tu_compile": "pass",
+        "canonical_post_tu_compile": "pass",
+        "compile_tu": "BrnProgressionManager_Unlocks.cpp",
+        "pre_compile_log_sha256": "4e396bea5a0467a68049bcb488ad90078762f222585af1a99d97347c812d914f",
+        "post_compile_log_sha256": "4e396bea5a0467a68049bcb488ad90078762f222585af1a99d97347c812d914f",
+        "runtime": false,
         "native_game_launched": false,
         "site_credit": 0
       },
