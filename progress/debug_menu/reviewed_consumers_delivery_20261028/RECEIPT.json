@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "workflow_branch": "codex/debug-consumers-20261028",
+  "workflow_base_commit": "ae20985da4c916431ca91c03ebb3e2a6bd986ff5",
+  "source_branch": "codex/debug-consumers-20261028",
+  "source_base_commit": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+  "source_candidate_commit": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+  "source_review": {
+    "artifact": "scratch/DEBUG_MENU_1011/swarm_vmx_provider_fresh_review_20261027/FINAL_REVIEW.md",
+    "verdict": "pass",
+    "sha256": "b63c01cad75589e2f8978bbc3cb393fc84f79f824d5d6214bf3f8231fef87ec6",
+    "baseline_commit": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+    "approved_source_delta": "scratch/DEBUG_MENU_1011/swarm_vmx_provider_fresh_review_20261027/APPROVED_SOURCE_DELTA.json",
+    "approved_source_delta_sha256": "e88f51c2a6f86db333d2d9a756e509f7f7318c8863701c185a8b927d828bffd4",
+    "patch": "scratch/DEBUG_MENU_1011/swarm_vmx_provider_fresh_review_20261027/COMBINED_APPROVED.patch",
+    "patch_sha256": "a232ce5f3c5af7e63791f50d133ca4b214aa354b15c6c8271b1058e9b7f9f1e2"
+  },
+  "environment_review": {
+    "artifact": "scratch/DEBUG_MENU_1011/swarm_ai_environment_ginsu_fresh_20261028/environment/REVIEW.md",
+    "review_sha256": "fd7ea5c194ff69261e4b7fd90e1de8003ddcbeb335d875e102ba656b5f4b7fce",
+    "review_json": "scratch/DEBUG_MENU_1011/swarm_ai_environment_ginsu_fresh_20261028/environment/REVIEW.json",
+    "review_json_sha256": "74c203355a81cc08a923a9f5a68106c32f23666571b6f3d349ae7bce52ba6d59",
+    "seal": "scratch/DEBUG_MENU_1011/swarm_ai_environment_ginsu_fresh_20261028/environment/SEAL.json",
+    "seal_sha256": "a9404751a1b2c87bfd2dbc3c4985cbe41735ea4f4c0dc17eda3d03b1e778b73d",
+    "patch": "scratch/DEBUG_MENU_1011/swarm_ai_environment_ginsu_fresh_20261028/environment/INTEGRATION_READY.patch",
+    "patch_sha256": "56e9b4b8f6779681811bea266a04a042cd5a2b1734f2229fec5a8c7ac9e65f3f",
+    "verdict": "pass",
+    "native_default_scene_pass": false,
+    "native_credit": 0,
+    "full_compile": false
+  },
+  "source_files": [
+    {
+      "path": "b5-decomp/src/pc/math/VmxFloat.h",
+      "sha256": "e3ef1dc0346136d1e8ecf6bd7584c0d50139508243e6eaf4c32a6ac81e5b52b0"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/Physics/VehicleManager/VehiclePhysics/VehiclePhysics.cpp",
+      "sha256": "4b1e05610b380952b3269fd62187fb36552cbb2064a8d5aa37f3bea07e00a79b"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "sha256": "ae35fbed2ed7b66a2ca79bcde1d817674106b132140edb5720711851baa569ad"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+      "sha256": "d3f4847bce12db8b88e2b1221a6992ba74e49681992c15cddd5ced0c082e932f"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+      "sha256": "ec441f30a7b305f0da7bb12be67106e12aab4addfd4b1412896eed77bf37a9f7"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/World/EnvironmentManager/BrnEnvironmentManager.cpp",
+      "sha256": "b89c4efe5cb715aab1baf469bf1eb91cfcddd75b9a9161bd58f9df96670c6d0e"
+    }
+  ],
+  "verification": {
+    "committed_postimage_hashes_match_review": true,
+    "changed_source_paths": 6,
+    "git_diff_check": "pass",
+    "source_review_scope": "reviewed semantic source/model; no hardware numeric-parity or native gameplay claim"
+  },
+  "delivery_state": {
+    "source_checkpoint": "committed-and-pushed",
+    "canonical_3003_full_dependencyhash_build": "pending",
+    "native_driving_movement_baseline": "pending exact reviewed runtime overlay and fresh launch review",
+    "normal_game_install": "not performed"
+  }
+}
