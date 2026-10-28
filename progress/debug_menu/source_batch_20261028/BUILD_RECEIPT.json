@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-28T20:47:12.0588765Z",
+  "status": "FAIL; compile pass, canonical link failed",
+  "scope": "private shipping build composition only",
+  "workflow_branch": "codex/debug-source-composition-20261028",
+  "workflow_build_commit": "7f9844e4ea0b1a904650f1f41efb4ada60c87699",
+  "b5_source_commit": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+  "b5_source_tree": "8a2eafca665c54c77b936c1bfc0cab76593ca287",
+  "source_composition_path": "progress/debug_menu/source_batch_20261028/BUILD_COMPOSITION.json",
+  "source_composition_sha256": "6c4c02be950ee46575812fe03c2ffb537400142c4ae100ededf87bd59658c615",
+  "included_source_checkpoint_count": 10,
+  "included_source_checkpoints": [
+    {
+      "commit": "2930564b267caf8e2ba28c05e0d251637c065b78",
+      "subject": "source: normalize traffic kill-zone approach vectors"
+    },
+    {
+      "commit": "5386d3b47d1d11388d2ac7dfeedc42588819df97",
+      "subject": "source: restore traffic param lerp vector operations"
+    },
+    {
+      "commit": "2264b5e9cac307aa1bce80696fbcad232acc30ff",
+      "subject": "source: preserve console prop LOD priority in shadows"
+    },
+    {
+      "commit": "81fe1c70c8add9feac653ad8b9f73a0a041364ed",
+      "subject": "source: restore trophy resource pointer access"
+    },
+    {
+      "commit": "8deac37d25ffd38e57d5b77bc6b1f97e606a43e7",
+      "subject": "source: restore Sound StateManager prepare sequence"
+    },
+    {
+      "commit": "dadf56dd14db98831f9f5621748b598694677f7e",
+      "subject": "source: match PFX hook list and printf call shape"
+    },
+    {
+      "commit": "33c60318efd7a9989c179535575cdeadc322546d",
+      "subject": "source: restore Director camera-tail readers"
+    },
+    {
+      "commit": "097d8e5688e353bf12a1dfdec0b008b99fb42f44",
+      "subject": "source: restore DirectorDevTools lifecycle wiring"
+    },
+    {
+      "commit": "55031208526217a2041e23b52007ee0287394d1b",
+      "subject": "source: correct mutable debrisparams reference shape"
+    },
+    {
+      "commit": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+      "subject": "source: restore Sound manager update monitoring"
+    }
+  ],
+  "excluded_ai_candidate": {
+    "commit": "a963bba6a5ffc92ebce621668e773ffeea020f4a",
+    "packet": "scratch/DEBUG_MENU_1011/swarm_ai_routes_recovery_20261027/racecar_ai_interface_velocity_speed_20261028_delta01/REVIEWER_PACKET.md",
+    "source_paths": [
+      "src/GameSource/World/AI/SharedIO/BrnRaceCarAIInterfaces.h",
+      "src/GameSource/World/AI/SharedIO/BrnRaceCarAIInterfaces.cpp"
+    ],
+    "status": "pending independent review; excluded from build source"
+  },
+  "build_command": "python tools/build/build.py exe --jobs 24",
+  "build_mode": "canonical incremental; reused original consumer3003 object cache; no --rebuild",
+  "build_worktree": "C:\\Users\\adri1\\.codex\\worktrees\\debug-consumers-20261028\\BP-Decomp_Workflow",
+  "b5_tree": "C:\\Users\\adri1\\.codex\\worktrees\\debug-consumers-20261028\\BP-Decomp_Workflow\\b5-decomp",
+  "output_dir": "C:\\Users\\adri1\\.codex\\worktrees\\debug-consumers-20261028\\BP-Decomp_Workflow\\build\\game",
+  "compile": {
+    "total_tus": 3003,
+    "compiled": 177,
+    "up_to_date": 2826,
+    "failed": 0,
+    "elapsed_jobs": "47.6s, jobs=24",
+    "warnings": 0,
+    "compile_failure_count": 0,
+    "cache_tu_objects_before": 3003,
+    "cache_tu_objects_after": 3003,
+    "cache_dependencies_after": 3003
+  },
+  "link": {
+    "status": "failed",
+    "exit_code": 2,
+    "reported_errors": 4,
+    "unresolved": [
+      "BrnDirector::DirectorDevTools::Construct(MainDirector*, DirectorResourceManager*)",
+      "BrnDirector::DirectorDevTools::Update(InputBuffer const*, Camera const&)",
+      "BrnDirector::DirectorDevTools::GameTalkMsgHandler(GameTalkMessage*)"
+    ],
+    "unresolved_symbol_count": 3
+  },
+  "blocker": {
+    "description": "Canonical response file does not mount the existing BrnDirectorDevTools.cpp TU defining the three unresolved methods.",
+    "source_file_present": true,
+    "source_file": "b5-decomp/src/GameSource/Director/BrnDirectorDevTools.cpp",
+    "response_file": "build/game/obj/build.rsp",
+    "response_file_contains_devtools_tu": false,
+    "matching_object_present": false,
+    "no_unreviewed_source_or_build_list_change_made": true
+  },
+  "artifact": {
+    "new_candidate_executable_produced": false,
+    "executable_sha256_after": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da",
+    "prebuild_executable_sha256": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da",
+    "prebuild_root_output_files": 17,
+    "prebuild_root_output_files_preserved": 17,
+    "backup_manifest_path": "scratch/DEBUG_MENU_1011/source_batch_build_20261028/PREBUILD_OUTPUT_BACKUP.json",
+    "backup_manifest_sha256": "d05687dc35f50a73ed60bc35009c5dd0b11fb8c5b03cc6db455d37ae12b2ff56",
+    "full_build_log_path": "progress/debug_menu/source_batch_20261028/build/canonical_incremental_build.log",
+    "full_build_log_sha256": "c3b8f9d1874d91956ca2d4abb992651d9d979c346acc7059ef39f3a9ef6bd6f5",
+    "full_build_log_bytes": 19072
+  },
+  "runtime": {
+    "native_game_launched": false,
+    "global_game_process_count_after": 0,
+    "normal_install_performed": false,
+    "profile_config_log_touched": false,
+    "site_credit": 0
+  }
+}
