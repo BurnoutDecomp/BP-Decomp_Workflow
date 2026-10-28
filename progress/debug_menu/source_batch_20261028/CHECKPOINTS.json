@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T22:19:45.4189497Z",
+  "created_utc": "2026-10-28T22:20:28.6552941Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "2f16863e5dc6e00d146c9d8141fe66bf18ce6621",
+  "b5_source_head": "46d9d45b9b9003f02fdd9e1e4a575d1b577abe62",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -733,7 +733,7 @@
       "source_delta_sha256": "816cf17c64219c55c2bcdf603940f96dad5d93cb14d41f490ba5821f2a49cee4",
       "source_branch": "codex/debug-source-composition-20261028",
       "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
-      "source_checkpoint_b5": null,
+      "source_checkpoint_b5": "46d9d45b9b9003f02fdd9e1e4a575d1b577abe62",
       "source_files": [
         {
           "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficLightRuntimeState.cpp",
@@ -751,7 +751,7 @@
       "review_status": "pass_source_review",
       "review_verdict": "pass",
       "reviewer": "Codex GPT-6.1 Sol",
-      "publication_status": "not_applied; stopped at prior source-order conflict",
+      "publication_status": "published_exact_postimage_after_chunk08",
       "native_game_launched": false,
       "site_credit": 0,
       "native_credit": 0
@@ -829,7 +829,7 @@
     "site_credit": 0
   },
   "traffic_backlog_composition_blocker": {
-    "source_head": "2f16863e5dc6e00d146c9d8141fe66bf18ce6621",
+    "source_head": "46d9d45b9b9003f02fdd9e1e4a575d1b577abe62",
     "committed_before_halt": [
       "chunk03_towbar_body:d0e1494622a3dcf8ca785aaede053d142ad7e5ac",
       "chunk04_trailer_pool:16b13c39f688c0ff66cd5afbfb33ec9bb2bc357b"
@@ -859,7 +859,9 @@
     "chunk07_applied": true,
     "chunk07_08_09_applied": false,
     "chunk08_applied": true,
-    "chunk09_applied": false,
-    "resolved_step": "Chunk07 then chunk08 exact postimages verified; chunk09 is the only remaining selected packet."
+    "current_traffic_light_hash": "32dabaee73639e28a6d1b4b7233c6015cb9f1dce80c1938ff224539d5b4f3697",
+    "chunk09_applied": true,
+    "chunk06_07_08_09_applied": true,
+    "resolved_step": "Exact chunk05/06 context recomposition produced the reviewed chunk07 preimage; chunks07,08,09 then applied in order. All selected chunk03-09 PASS source deltas are checkpointed."
   }
 }
