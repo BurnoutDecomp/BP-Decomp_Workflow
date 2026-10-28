@@ -1,0 +1,95 @@
+--- a/b5-decomp/src/GameShared/GameClasses/System/Resource/CgsResourceID.cpp
++++ b/b5-decomp/src/GameShared/GameClasses/System/Resource/CgsResourceID.cpp
+@@ -17,7 +17,7 @@
+ 
+ namespace CgsResource
+ {
+-    s32 ID::HashString(const u8* lpString)
++    u64 ID::HashString(const u8* lpString)
+     {
+         CGS_ASSERT(lpString != 0, "lpcString != NULL");
+ 
+@@ -34,7 +34,9 @@
+             for (s32 li = 0; li < 8; ++li)
+                 luCrc = (luCrc >> 1) ^ (0xEDB88320u & (0u - (luCrc & 1u)));
+         }
+-        return static_cast<s32>(~luCrc);
++        // ARTIST828D8550 clears the upper32 bits before the original u64 return.
++        const u32 luHash = ~luCrc;
++        return static_cast<u64>(luHash);
+     }
+ 
+     // CgsResource::operator<< -- faithful to X360 0x826801F0. Stream-inserts a resource ID into a
+--- a/b5-decomp/src/GameShared/GameClasses/System/Resource/CgsResourceID.h
++++ b/b5-decomp/src/GameShared/GameClasses/System/Resource/CgsResourceID.h
+@@ -6,11 +6,12 @@
+ // import; the loader/manager look resources up by it. Shape taken from the Feb-2007 partial source
+ // (GameShared/GameClasses/System/Resource/CgsResourceID.h), which the X360 spine matches for this type.
+ //
+-// RECONCILE: the X360/Feb-2007 runtime id-hashers are u64 (Construct -> HashString(const RwChar*) /
+-// HashData(const u8*, u32)). The static HashString below is the existing reconstruction and returns a
+-// 32-bit CRC - kept for its current callers. Reconstructing the real u64 hashers (+ Construct) from the
+-// X360 is a follow-on; it is the load-by-name path, not needed to READ ids already stored in a bundle
+-// (that only needs the value + GetHash/SetHash).
++// ARTIST HashString828D84A8 returns the low CRC32 zero-extended in its
++// 64-bit result (clrldi r3,r11,32 at828D8550, and the same empty-string tail).
++// DecFIGS CgsResourceID.h:80 declares that result uint64_t. Retain the full
++// unsigned identity when callers store it directly into a request's u64 ID.
++// The existing static byte-string entry point represents that outlined hasher;
++// Construct/HashData API recovery remains outside this correction.
+ 
+ namespace CgsDev { struct StrStreamBase; }
+ 
+@@ -26,7 +27,7 @@
+         u64  GetHash() const     { return mHash; }
+         void SetHash(u64 luHash) { mHash = luHash; }
+ 
+-        static s32 HashString(const u8* lpString);   // existing 32-bit CRC hasher (see RECONCILE note)
++        static u64 HashString(const u8* lpString);   // original unsigned64 result, zero-extended CRC32
+ 
+         friend bool operator==(ID lLeft, ID lRight) { return lLeft.mHash == lRight.mHash; }
+         friend bool operator!=(ID lLeft, ID lRight) { return lLeft.mHash != lRight.mHash; }
+--- a/b5-decomp/tests/run_pc_bundle_compressed.py
++++ b/b5-decomp/tests/run_pc_bundle_compressed.py
+@@ -21,7 +21,7 @@
+ driver=tree.read(resource+'CgsResourceBundleLoaderModule.cpp')
+ adapter='namespace CgsResource {\n'+definition(driver,'void BundleLoaderModule::Construct()')+'\n}\n'
+ hash_code='#include "GameShared/GameClasses/Core/CgsAssert.h"\n#include "GameShared/GameClasses/System/Resource/CgsResourceID.h"\nnamespace CgsResource {\n'
+-hash_code+=definition(tree.read(resource+'CgsResourceID.cpp'),'s32 ID::HashString(')+'\n}\n'
++hash_code+=definition(tree.read(resource+'CgsResourceID.cpp'),'u64 ID::HashString(')+'\n}\n'
+ payload=random.Random(371).randbytes(700000)
+ arrays=''
+ for name,data in [('Payload',payload),('Packed',zlib.compress(payload)),('SmallPacked',zlib.compress(payload[:64]))]:
+--- a/b5-decomp/tests/run_pc_bundle_ownership.py
++++ b/b5-decomp/tests/run_pc_bundle_ownership.py
+@@ -25,7 +25,7 @@
+     source = source.replace(retain, 'static s32 RetainBundle(Bundle&) { return 0; }')
+ code = 'namespace CgsResource {\n'
+ for name, signatures in [
+-    ('CgsResourceID.cpp', ['s32 ID::HashString(']),
++    ('CgsResourceID.cpp', ['u64 ID::HashString(']),
+     ('CgsResourceBundle2.cpp', ['u32 BundleV2::ResourceEntry::GetUncompressedSize(',
+                               'u32 BundleV2::ResourceEntry::GetUncompresssedAlignment(']),
+     ('CgsResourcePool.cpp', ['Entry* Pool::FindResource(', 'Entry* Pool::FindResourceWithDependencies(',
+--- a/b5-decomp/tests/run_pc_bundle_stages.py
++++ b/b5-decomp/tests/run_pc_bundle_stages.py
+@@ -38,7 +38,7 @@
+ adapter+=definition(driver,'bool BundleLoaderModule::Update(')+'\n}\n'
+ hash_code='#include "GameShared/GameClasses/System/Resource/CgsResourceID.h"\nnamespace CgsResource {\n'
+ hash_code='#include "GameShared/GameClasses/Core/CgsAssert.h"\n'+hash_code
+-hash_code+=definition(tree.read(resource+'CgsResourceID.cpp'),'s32 ID::HashString(')+'\n}\n'
++hash_code+=definition(tree.read(resource+'CgsResourceID.cpp'),'u64 ID::HashString(')+'\n}\n'
+ # Module base lifecycle and compression are outside this uncompressed protocol
+ # test. Compression aborts, so accidentally selecting it cannot fake a pass.
+ shadow={
+--- a/b5-decomp/tests/run_pc_resource_batch.py
++++ b/b5-decomp/tests/run_pc_resource_batch.py
+@@ -34,7 +34,7 @@
+     source = Tree('64f9b755').read(base + 'CgsResourcePool.cpp') if args.old_init and name == 'InitPool' else pool
+     code += definition(source, signature) + '\n'
+ code += definition(pool, 'void AllocListSet::ClearCountsAndResults(') + '\n'
+-code += definition(tree.read(base + 'CgsResourceID.cpp'), 's32 ID::HashString(') + '\n'
++code += definition(tree.read(base + 'CgsResourceID.cpp'), 'u64 ID::HashString(') + '\n'
+ bundle = tree.read(base + 'CgsResourceBundle2.cpp')
+ for name in ['GetUncompressedSize', 'GetUncompresssedAlignment']:
+     code += definition(bundle, f'u32 BundleV2::ResourceEntry::{name}(') + '\n'
