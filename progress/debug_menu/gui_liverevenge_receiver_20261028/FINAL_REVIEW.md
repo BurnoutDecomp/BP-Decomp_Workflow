@@ -1,0 +1,30 @@
+VERDICT: pass
+
+SOURCE approval for the exact two-path LiveRevenge event351 receiver packet. No unresolved source finding.
+
+The116-member author manifest authenticates as5b00615e2e643a9ed151962f29ad9e6b700422a0caf66f746d6cd0a5f2be533b; author SEAL.json SHA6571046703b264e90933afca0b8a81a3c38b232a2beccdc8dba894de021053aa. Exact source base1c5597e5c24bde91505722b6ce981ccae357be26/tree f1c0fcdcd746e589a61429ec0eb6bb616fe76026 and workflow10755e06db87eee6eafff7c6fe4842ec9cde2b2d are pinned. Patch SHA00229aa226668a0ac265ac266e6cf65b70145b35612a6ba66985e13cea39ed9d applies to the exact Git preimages and reproduces both raw postimages. Git application was isolated from the enclosing workflow's directory-prefix filtering. The prior approved case503 source pair is byte-for-byte unchanged.
+
+The semantic change is the missing module-level case351: read the flat typed native pointer and call the existing ProfileManager::SetLiveRevengeProfile before the common cache tail. Its break is independent of case350's intentional fallthrough. The source already has the real network-owned profile and native-width29/351 records. Deleting the unused GUI-owned static profile and its stale include/comment adds no replacement allocation. The bridge changes only a misleading pointer-width comment; its full sizeof(record) copy is unchanged. All remaining source bytes are preserved by the exact patch.
+
+Independent original chain: ARTIST LiveRevengeManager::Prepare8255A938..954 allocates0x7540=30016 bytes/alignment4 into owner+934;8255A9A8..C0 resets the table count and version6. Construct8255FAC0 establishes the real embedded owner; Release8255AA90..ABC clears then frees it and nulls owner/allocator. The actual NetworkManager staged Construct/Prepare and before-simulation caller already invoke those bodies. LoadingScriptedState::LoadNetworkModule pumps network Prepare before advancing stage5. Each network tick8256D988..9A4 publishes the pointer as raw event29,size4. No extra owner or allocation is needed.
+
+Original network-to-GUI translation823E130C..1320 copies pointer+0 into the AddGuiEvent351 call. Its helper823D0254..260 posts351,size4 into the actual32768-byte GUI queue. The exported assembly comment naming823E1328 as case29 is shifted; that address actually calls tag280 and was not used to infer the branch. DecFIGS names the profile pointer members and setter prototype, but its ids28/346 drift; ARTIST29/351 arbitrate. Both current event declarations have one native pointer at0, so native queue bodies are8 bytes and preserve high pointer bits. Existing production VariableEventQueue copies/walks those typed body sizes with its own16-byte queue header and padding; no header, stride, guard or queue modification is introduced.
+
+Original GUI dispatch8252811C..124 selects351 and82528C08..34 loads pointer+0, asserts nonnull, and stores it at module+E7B18, the embedded ProfileManager pointer member+41438. This matches the existing typed setter, including assert continuation. Original ReadProfileData824FF30C..354 reads that same member and copies30016 bytes. Exact native62164 exe66fe8ac3434072683b689579f3bb50055341becb194bfbbe42e2035820806d00 independently reads native manager+41510, asserts, reloads it and calls memcpy with30016. Retained failure receipt a1537a44e92963312315170511e97015e3e58eb8f206921d4e298bdd8c6e7ef5 records source0. No new member-memory or minidump capture is claimed.
+
+Actual frame order is network pre-sim publisher, NetworkModule output transfer/clear, network-to-GUI bridge, then GUI inbound dispatch. Dispatch precedes ProfileManager::Update and the later FSM/base-model/observer work that invokes BootProfile::Update/Bootup. ProfileManager's only other pointer writer is its one-time Construct null initialization. The normal game-release sequence releases the GUI/profile host before releasing the network owner. These lifecycle/caller bodies are unchanged from the independently inspected ancestor; CHAIN_BASELINE_CONTINUITY.json pins them. The new receiver supplies the existing live owner before the unchanged boot copy, without extending or replacing its lifetime.
+
+Fresh reviewer checks: both actual changed production TUs compile cleanly against1302 exact source/header pins and canonical workflow flags, with0 diagnostics and0 shared physical-source fallbacks. The first private lexical closure omitted7 unchanged XboxMath headers named through vendor renderware includes; those exact Git headers were added and the clean retry is retained separately. No production source was changed to fix compilation. Author pre/post production receipts are also authenticated.
+
+Fresh CPU control reproduces11/11 expected-null preimage observations and11/11 postimage checks. The generated source fragments and fixture are byte-identical to the sealed inputs. Exact publisher, bridge29 arm, new receiver351 arm, existing setter and ReadProfileData copy fragment execute through production variable queues. The preimage proves351 arrives at the unchanged common tail while the profile remains null; it deliberately skips the known unsafe copy. The postimage preserves pointer identity, installs the owner and verifies all30016 bytes copied.
+
+CPU limits are material: the owner is aligned test backing, and the module/ProfileManager orchestration uses fixture shells. This is not execution of real owner allocation, the full GUI dispatcher, BootProfile state machine or full ReadProfileData body. Those lifetime/order edges are separately source/PPC-verified. No game, shipping link, profile-file mutation, normal boot, save/load completion or unrelated-assert fix is claimed.
+
+Approved raw postimages:
+
+| Path | SHA-256 |
+|---|---|
+| src/GameSource/Gui/BrnGuiModule.cpp | `f109f7e7de4e9af61c787094341ba2579f80dbcf1cf9ec26172a93ea9f0dc0fd` |
+| src/GameSource/Game/GameBridgeNetworkToX.cpp | `c116f035cf80bd0d310e5428674aa8f8258ccfe90a424c9bef44ef12aff6dcac` |
+
+Exact source paths and pre/post hashes are machine-readable in VERDICT.json. Author seal, shared source/index/refs, game and profile files remain untouched.

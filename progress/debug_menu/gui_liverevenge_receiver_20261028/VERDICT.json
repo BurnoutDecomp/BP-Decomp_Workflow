@@ -1,0 +1,44 @@
+{
+  "verdict": "pass",
+  "kind": "SOURCE",
+  "reviewer": "recovery_batch_fresh_review_high",
+  "source_baseline": "1c5597e5c24bde91505722b6ce981ccae357be26",
+  "baseline_tree": "f1c0fcdcd746e589a61429ec0eb6bb616fe76026",
+  "workflow_baseline": "10755e06db87eee6eafff7c6fe4842ec9cde2b2d",
+  "author_seal_sha256": "6571046703b264e90933afca0b8a81a3c38b232a2beccdc8dba894de021053aa",
+  "author_manifest_sha256": "5b00615e2e643a9ed151962f29ad9e6b700422a0caf66f746d6cd0a5f2be533b",
+  "author_patch_sha256": "00229aa226668a0ac265ac266e6cf65b70145b35612a6ba66985e13cea39ed9d",
+  "approved_postimages": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "pre_sha256": "c0ad6eb7c4d0e379400f59d44b0e16711acc319b3cfe8d7d4401b03d1d8f1f45",
+      "post_sha256": "f109f7e7de4e9af61c787094341ba2579f80dbcf1cf9ec26172a93ea9f0dc0fd",
+      "postimage_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_gui_liverevenge_profile_receiver_20261028\\post\\src\\GameSource\\Gui\\BrnGuiModule.cpp"
+    },
+    {
+      "path": "src/GameSource/Game/GameBridgeNetworkToX.cpp",
+      "pre_sha256": "110c200bafee9ab6f080edab97de507db7be7fbe4860a6589a1450a0bb63668c",
+      "post_sha256": "c116f035cf80bd0d310e5428674aa8f8258ccfe90a424c9bef44ef12aff6dcac",
+      "postimage_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_gui_liverevenge_profile_receiver_20261028\\post\\src\\GameSource\\Game\\GameBridgeNetworkToX.cpp"
+    }
+  ],
+  "case503_pair_preserved": true,
+  "fresh_production_tus": 2,
+  "fresh_production_diagnostics": 0,
+  "fresh_physical_source_fallbacks": 0,
+  "fresh_source_header_pins": 1302,
+  "fresh_cpu_pre": "11/11 expected-null observations; known faulting copy skipped",
+  "fresh_cpu_post": "11/11; owner pointer preserved and complete30016-byte copy",
+  "findings": [],
+  "limits": [
+    "No new shipping link or game run",
+    "CPU owner is aligned fixture backing, not execution of the real HeapMalloc/LiveRevengeManager Prepare lifecycle",
+    "CPU proof executes exact source-extracted publisher/bridge/receiver/setter/copy fragments through production queues; module orchestration is represented by fixture shells",
+    "Owner lifecycle and frame order are separately verified from actual source and original PPC",
+    "Old null-source copy is deliberately not executed; retained native62164 provides independent real fault evidence",
+    "Two unrelated EventInterpreterModule assertions remain outside this source delta"
+  ],
+  "shared_mutations": false,
+  "game_executed": false,
+  "profile_files_accessed": false
+}

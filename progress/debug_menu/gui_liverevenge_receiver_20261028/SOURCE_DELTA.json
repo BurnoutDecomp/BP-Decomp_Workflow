@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "baseline_b5_commit": "1c5597e5c24bde91505722b6ce981ccae357be26",
+  "baseline_b5_tree": "f1c0fcdcd746e589a61429ec0eb6bb616fe76026",
+  "baseline_workflow_commit": "10755e06db87eee6eafff7c6fe4842ec9cde2b2d",
+  "event18_gui_ancestor": "eceefc4d1226b47d8b80bf92d58ccf486a267883",
+  "native_failure_source": "eceefc4d1226b47d8b80bf92d58ccf486a267883",
+  "native_failure_exe_sha256": "66fe8ac3434072683b689579f3bb50055341becb194bfbbe42e2035820806d00",
+  "native_failure_receipt_sha256_expected": "a1537a44e92963312315170511e97015e3e58eb8f206921d4e298bdd8c6e7ef5",
+  "prior_approved_case503_manifest": "a39f8c2fa8b1711130b869aef7e5fd93d38b7af85802fb56610caf5626655aec",
+  "effective_preimage": "private 1c559 exact source (event18 and case503 already composed); this delta removes an unused stale live-revenge profile object/comment, installs ARTIST event351 receiver, and corrects the bridge's pointer-width comment",
+  "changed_source_paths": [
+    "src/GameSource/Gui/BrnGuiModule.cpp",
+    "src/GameSource/Game/GameBridgeNetworkToX.cpp"
+  ],
+  "behavior_changes": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "function": "BrnGui::GuiModule::DispatchInboundGuiEvents",
+      "change": "add ARTIST event 351 receiver calling the existing ProfileManager setter"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "scope": "anonymous namespace",
+      "change": "remove unused stale static LiveRevengeProfile declaration and its misleading PC-platform-leaf comment"
+    }
+  ],
+  "comment_only_changes": [
+    {
+      "path": "src/GameSource/Game/GameBridgeNetworkToX.cpp",
+      "function": "BrnGame::BrnGameModule::TranslateNetworkEventsToGuiEvents",
+      "change": "correct comment to match existing full native-width pointer copy"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "pre_sha256": "c0ad6eb7c4d0e379400f59d44b0e16711acc319b3cfe8d7d4401b03d1d8f1f45",
+      "post_sha256": "f109f7e7de4e9af61c787094341ba2579f80dbcf1cf9ec26172a93ea9f0dc0fd"
+    },
+    {
+      "path": "src/GameSource/Game/GameBridgeNetworkToX.cpp",
+      "pre_sha256": "110c200bafee9ab6f080edab97de507db7be7fbe4860a6589a1450a0bb63668c",
+      "post_sha256": "c116f035cf80bd0d310e5428674aa8f8258ccfe90a424c9bef44ef12aff6dcac"
+    }
+  ],
+  "preserved_case503_paths": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "current_1c559_sha256": "96f86d208413c42bd268bf31a7ef653fe27c3be4439a6191c864613aa0e8c1eb",
+      "approved_case503_post_sha256": "96f86d208413c42bd268bf31a7ef653fe27c3be4439a6191c864613aa0e8c1eb"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp",
+      "current_1c559_sha256": "88c6c158a390d2dcb222b72b94d8191c8d272f8a24d9799bd78d2398c5da422d",
+      "approved_case503_post_sha256": "88c6c158a390d2dcb222b72b94d8191c8d272f8a24d9799bd78d2398c5da422d"
+    }
+  ],
+  "limits": [
+    "No native game was rerun; 62164 failure evidence is immutable input.",
+    "No save/profile file was opened or changed.",
+    "No shared source or Git refs are modified.",
+    "Event18/title work and the already approved case503 pair remain untouched.",
+    "The unrelated EventInterpreterModule output-event asserts seen in the same native run are outside this delta."
+  ]
+}
