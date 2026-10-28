@@ -18,7 +18,7 @@
 #   scratch\bugtest\runs\<case>\latest.json   -> a pointer to the newest run's result
 #
 # ⛔ ONE GAME AT A TIME BY DEFAULT. An explicit Run.AllowConcurrentGames opt-in permits
-# exactly one other distinct-image game only for a strict private staged run (positive Slot).
+# a configurable count of distinct-image games only for a strict private staged run (positive Slot).
 # flow_run takes the box lock (_box_lock.ps1); with many lanes queued the wait can be long,
 # so this runner passes -LockTimeoutSec 7200 by default. A wait is announced by flow_run
 # ("[box] waiting for the box") -- it is not a hang.
@@ -37,6 +37,7 @@ param(
   [switch]$ExpectFail,            # RED mode
   [switch]$NoRun,                 # evaluate an existing -RunDir only
   [int]$LockTimeoutSec  = 7200,
+  [ValidateRange(1,100)][int]$MaxConcurrentOtherGames = 1, # CLI overrides Run.MaxConcurrentOtherGames
   [string]$Label        = "",     # free text recorded in result.json (e.g. "pre-fix", "post-fix")
   [string]$GameDir      = "",     # paired private <stage>\slot executable/config/log directory
   [string]$WorkingDirectory = "", # paired private <stage>\data asset and profile directory
@@ -74,6 +75,16 @@ if ($lRun -is [System.Collections.IDictionary] -and $lRun.Contains('AllowConcurr
     Write-Host "[case] FAIL: Run.AllowConcurrentGames must be a Boolean."; exit 2
   }
   $allowConcurrentGames = [bool]$lRun['AllowConcurrentGames']
+}
+
+if (-not $PSBoundParameters.ContainsKey('MaxConcurrentOtherGames') -and $lRun.Contains('MaxConcurrentOtherGames')) {
+  if ($lRun['MaxConcurrentOtherGames'] -isnot [int] -or $lRun['MaxConcurrentOtherGames'] -lt 1 -or $lRun['MaxConcurrentOtherGames'] -gt 100) {
+    Write-Host "[case] FAIL: Run.MaxConcurrentOtherGames must be an integer from 1 through 100."; exit 2
+  }
+  $MaxConcurrentOtherGames = $lRun['MaxConcurrentOtherGames']
+}
+if ($MaxConcurrentOtherGames -gt 1 -and -not $allowConcurrentGames) {
+  Write-Host "[case] FAIL: MaxConcurrentOtherGames above 1 requires Run.AllowConcurrentGames."; exit 2
 }
 
 if ($RunsRoot -eq "") { $RunsRoot = Join-Path $root "scratch\bugtest\runs" }
@@ -154,6 +165,7 @@ function Get-CaseStrictOtherGameProcesses {
   if (-not $allowConcurrentGames) { return $lGames }
   $lCheckedGames = @()
   $lOwnedImagePath = [IO.Path]::GetFullPath($exe)
+  $lSeenImagePaths = @{}
   foreach ($lGame in $lGames) {
     $lPath = [string]$lGame.ExecutablePath
     if ([string]::IsNullOrWhiteSpace($lPath)) { throw ("game pid={0} has no executable path" -f $lGame.ProcessId) }
@@ -166,14 +178,18 @@ function Get-CaseStrictOtherGameProcesses {
     if ($lFullPath -ieq $lOwnedImagePath) {
       throw ("game pid={0} resolves to the owned staged executable: {1}" -f $lGame.ProcessId,$lFullPath)
     }
+    if ($lSeenImagePaths.ContainsKey($lFullPath)) {
+      throw ("multiple games resolve to the same executable path: {0}" -f $lFullPath)
+    }
+    $lSeenImagePaths[$lFullPath] = $true
     $lCheckedGames += [pscustomobject]@{
       ProcessId = [int]$lGame.ProcessId
       Name = [string]$lGame.Name
       ExecutablePath = $lFullPath
     }
   }
-  if ($lCheckedGames.Count -gt 1) {
-    throw ("concurrent-game limit exceeded: {0} other games are running (maximum 1)" -f $lCheckedGames.Count)
+  if ($lCheckedGames.Count -gt $MaxConcurrentOtherGames) {
+    throw ("concurrent-game limit exceeded: {0} other games are running (maximum {1})" -f $lCheckedGames.Count,$MaxConcurrentOtherGames)
   }
   return $lCheckedGames
 }
@@ -243,6 +259,7 @@ if (-not $NoRun) {
   $lArgs = @{}
   foreach ($k in $lRun.Keys) { $lArgs[$k] = $lRun[$k] }
   if (-not $allowConcurrentGames) { [void]$lArgs.Remove('AllowConcurrentGames') }
+  $lArgs['MaxConcurrentOtherGames'] = $MaxConcurrentOtherGames
   $lArgs['OutDir'] = $flowOut
   $lArgs['LockTimeoutSec'] = $LockTimeoutSec
   if ($Slot -gt 0) { $lArgs['Slot'] = $Slot }
@@ -413,7 +430,7 @@ if (-not $NoRun) {
           flow_status_sha256=$flowStatusHash;flow_status=$flowStatus;
           helper_cleanup_complete=$setupCleanupOk;profile_restoration_complete=$profileRestorationComplete;
           post_flow_foreign_game=$postFlowForeignGame;profile_restore_error=$profileRestoreError;
-          allow_concurrent_games=$allowConcurrentGames;
+          allow_concurrent_games=$allowConcurrentGames;max_concurrent_other_games=$MaxConcurrentOtherGames;
           allowed_other_games_before_profile=$preProfileConcurrentGames;
           allowed_other_games_after_flow=$postFlowConcurrentGames;
           success=[bool]$terminalPass} | ConvertTo-Json -Depth 6 |

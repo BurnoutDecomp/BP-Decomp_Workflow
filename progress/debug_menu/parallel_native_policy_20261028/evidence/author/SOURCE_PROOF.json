@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "baseline_workflow": "54a7fd30253542a9b001923b4aad206a33b4e379",
+  "files": [
+    {
+      "path": "tools/tests/run_case.ps1",
+      "post_sha256": "ae52582150424b48befd35972179d4f1a8ca04af0862a98355a744afcdae1247",
+      "points": [
+        {
+          "line": 40,
+          "source": "  [ValidateRange(1,100)][int]$MaxConcurrentOtherGames = 1, # CLI overrides Run.MaxConcurrentOtherGames"
+        },
+        {
+          "line": 80,
+          "source": "if (-not $PSBoundParameters.ContainsKey('MaxConcurrentOtherGames') -and $lRun.Contains('MaxConcurrentOtherGames')) {"
+        },
+        {
+          "line": 81,
+          "source": "  if ($lRun['MaxConcurrentOtherGames'] -isnot [int] -or $lRun['MaxConcurrentOtherGames'] -lt 1 -or $lRun['MaxConcurrentOtherGames'] -gt 100) {"
+        },
+        {
+          "line": 82,
+          "source": "    Write-Host \"[case] FAIL: Run.MaxConcurrentOtherGames must be an integer from 1 through 100.\"; exit 2"
+        },
+        {
+          "line": 84,
+          "source": "  $MaxConcurrentOtherGames = $lRun['MaxConcurrentOtherGames']"
+        },
+        {
+          "line": 86,
+          "source": "if ($MaxConcurrentOtherGames -gt 1 -and -not $allowConcurrentGames) {"
+        },
+        {
+          "line": 87,
+          "source": "  Write-Host \"[case] FAIL: MaxConcurrentOtherGames above 1 requires Run.AllowConcurrentGames.\"; exit 2"
+        },
+        {
+          "line": 112,
+          "source": "if (-not $NoRun -and $allowConcurrentGames -and (-not $lRun.StrictGameOwnership -or $Slot -le 0 -or -not $usingCustomGameDirs)) {"
+        },
+        {
+          "line": 163,
+          "source": "function Get-CaseStrictOtherGameProcesses {"
+        },
+        {
+          "line": 191,
+          "source": "  if ($lCheckedGames.Count -gt $MaxConcurrentOtherGames) {"
+        },
+        {
+          "line": 192,
+          "source": "    throw (\"concurrent-game limit exceeded: {0} other games are running (maximum {1})\" -f $lCheckedGames.Count,$MaxConcurrentOtherGames)"
+        },
+        {
+          "line": 245,
+          "source": "      $lExistingGames = @(Get-CaseStrictOtherGameProcesses)"
+        },
+        {
+          "line": 262,
+          "source": "  $lArgs['MaxConcurrentOtherGames'] = $MaxConcurrentOtherGames"
+        },
+        {
+          "line": 381,
+          "source": "        $lRemainingGames = @(Get-CaseStrictOtherGameProcesses)"
+        },
+        {
+          "line": 433,
+          "source": "          allow_concurrent_games=$allowConcurrentGames;max_concurrent_other_games=$MaxConcurrentOtherGames;"
+        }
+      ]
+    },
+    {
+      "path": "tools/diagnostics/flow_run.ps1",
+      "post_sha256": "4b646fcf24f385290742bd15261ea5074c9e07200561a4a2404499310318f5ae",
+      "points": [
+        {
+          "line": 380,
+          "source": "  [ValidateRange(1,100)][int]$MaxConcurrentOtherGames = 1,"
+        },
+        {
+          "line": 523,
+          "source": "if ($MaxConcurrentOtherGames -gt 1 -and -not $AllowConcurrentGames) {"
+        },
+        {
+          "line": 524,
+          "source": "  Write-Host \"[flow] FAIL: -MaxConcurrentOtherGames above 1 requires -AllowConcurrentGames.\"; exit 1"
+        },
+        {
+          "line": 526,
+          "source": "if ($AllowConcurrentGames -and (-not $StrictGameOwnership -or $Slot -le 0 -or -not $usingCustomGameDirs)) {"
+        },
+        {
+          "line": 594,
+          "source": "function Get-StrictOtherGameProcesses {"
+        },
+        {
+          "line": 622,
+          "source": "  if ($lCheckedGames.Count -gt $MaxConcurrentOtherGames) {"
+        },
+        {
+          "line": 623,
+          "source": "    throw (\"concurrent-game limit exceeded: {0} other games are running (maximum {1})\" -f $lCheckedGames.Count,$MaxConcurrentOtherGames)"
+        },
+        {
+          "line": 631,
+          "source": "    if ($AllowConcurrentGames) { $lOtherGames = @(Get-StrictOtherGameProcesses) }"
+        },
+        {
+          "line": 2117,
+          "source": "    if ($AllowConcurrentGames) { $lOtherGames = @(Get-StrictOtherGameProcesses) }"
+        },
+        {
+          "line": 2562,
+          "source": "    try { $lForeignGames = @(Get-StrictOtherGameProcesses -ExcludePid $p.Id) }"
+        },
+        {
+          "line": 3311,
+          "source": "    foreign_game=[bool]$foreignGameAppeared;allow_concurrent_games=[bool]$AllowConcurrentGames;max_concurrent_other_games=$MaxConcurrentOtherGames;max_other_games_observed=$maxConcurrentGamesObserved;"
+        }
+      ]
+    }
+  ],
+  "guards": [
+    "Existing opt-in requires strict ownership, positive Slot, and paired private sibling directories.",
+    "Owned PID exclusion retained only in in-flight flow monitor.",
+    "Owned image collision, absolute image path validation retained.",
+    "Duplicate normalized other image rejection added: formerly always rejected through count>1.",
+    "All remaining functions byte-identical; source-extracted AST tests establish this.",
+    "All private path validation blocks byte-identical.",
+    "No NoLock, process cleanup, profile mutation, input reset, creation handle, start-time, PID, or lock code modified."
+  ]
+}
