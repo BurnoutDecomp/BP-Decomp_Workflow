@@ -15,6 +15,8 @@ Historical delivery and pending/failure receipts remain below and in the [previo
 
 ## Campaign counts
 
+**October 28 selected native phases:** Root approved 21 Environment Settings and 11 Traffic site dispositions after reviewing the exact completed phases, raw frame hashes, native value readbacks and current-dev source postimages. Credit is limited to each listed phase, scene and consumer scope. The recorded aggregate results remain Sky PASS, Fog FAIL, Traffic A FAIL, Traffic B FAIL and Traffic checker FAIL; the separate raw-capture freshness audit passed. The earlier two-degree sky assertion remains a failure and is excluded. These site results do not establish a full parameter-domain, full-menu or hardware-parity claim. [Per-site evidence](native_credit_20261028/README.md) and [Root decision](native_credit_20261028/ROOT_DECISION.json).
+
 World Module dump-file Delete is positively confirmed as an original empty callback. This adds one original-no-op disposition without a runtime change or a native availability claim. [Direct original proof](world_delete_original_noop_20261027/README.md).
 
 Two screenshot controls pass retained-native review, and five action-only original no-ops have direct assembly/dispatch proofs. The original timestamp-check and launcher-join failures remain explicit; no Gameplay20 control receives native credit. [Seven-site evidence](screenshot_and_noops_20261027/README.md).
@@ -29,7 +31,7 @@ Six BoostBar controls now pass original-source, raw native and pixel review: thr
 
 **October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation now pass. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **71 verified, thirteen original no-ops and 1,271 pending**. That is 84/1,355 (6.2%) with a final behavior disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **103 verified, thirteen original no-ops and 1,239 pending**. That is 116/1,355 (8.6%) with a final site-level disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
