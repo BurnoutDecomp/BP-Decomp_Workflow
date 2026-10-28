@@ -69,8 +69,8 @@ if ($ForceFfmpeg -or -not (Test-Path $FfmpegLib)) {
 }
 
 # --- 2. Build the game exe -----------------------------------------------------
-& python (Join-Path $Root "tools/build/fetch_sdl3.py")
-if ($LASTEXITCODE -ne 0) { throw "SDL3 dependency fetch failed ($LASTEXITCODE)" }
+& python (Join-Path $Root "tools/build/build_sdl3.py")
+if ($LASTEXITCODE -ne 0) { throw "SDL3 dependency build failed ($LASTEXITCODE)" }
 Step "Building game exe"
 Invoke-Batch (Join-Path $Root "tools\build\build_game_exe.bat")
 if (-not (Test-Path $ExePath)) { throw "build succeeded but $ExePath is missing" }
