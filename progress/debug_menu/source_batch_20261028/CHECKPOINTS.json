@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T20:06:44.3762468Z",
+  "created_utc": "2026-10-28T20:09:48.1396898Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "8deac37d25ffd38e57d5b77bc6b1f97e606a43e7",
+  "b5_source_head": "dadf56dd14db98831f9f5621748b598694677f7e",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -186,6 +186,38 @@
         "canonical_actual_tu_compile": "pass",
         "old_new_source_controls": "pass",
         "preimages_verified_unchanged_at_d158": true,
+        "runtime": "not run",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pending_combined_fresh_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": null
+    },
+    {
+      "packet_id": "effects_pfx_calls_and_hook_list",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_effects_pfx_calls_d158_20261028/REVIEWER_PACKET.md",
+      "packet_sha256": "8d871e405ca5c69b9095d21800dc8b731d0275e17a596e5afc6ccfb64bae6964",
+      "evidence_manifest_sha256": "759919fe138a598bec81f09b8a401dc1d86023d178a26fc38e73a01ee45bf9d6",
+      "seal_file_sha256": "31dfbab34d77e6aed80fa9484ab6a5a2eae82acb2e9c358d73d247ff0d74fa06",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "dadf56dd14db98831f9f5621748b598694677f7e",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp",
+          "pre_sha256": "7711fe4bb44cb9f9bb055fbd49b02e50c4eeab21515f5b9057a00de33837e73b",
+          "post_sha256": "e69a49aced2b1287a94850f1513a8824355cc1e5cc13f359c46a49b262188fcb"
+        }
+      ],
+      "validation": {
+        "packet_baseline_compile": "pass",
+        "packet_overlay_compile": "pass",
+        "packet_cpu_control": "pass",
+        "canonical_pre_actual_tu_compile": "pass",
+        "canonical_post_actual_tu_compile": "pass",
+        "pre_compile_log_sha256": "23add6c7138817f4969ba4a05acd6d50de50d4e186c041722b937e7b1609c3cf",
+        "post_compile_log_sha256": "23add6c7138817f4969ba4a05acd6d50de50d4e186c041722b937e7b1609c3cf",
         "runtime": "not run",
         "native_game_launched": false,
         "site_credit": 0
