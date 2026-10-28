@@ -1,0 +1,1376 @@
+--- a/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h
++++ b/b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h
+@@ -6,6 +6,7 @@
+ #include "GameShared/GameClasses/Development/DebugSystem/Core/UI/Functions/CgsFunction.h"
+ 
+ namespace CgsResource { class DebugComponent; }
++namespace CgsGameTalk { class GameTalkDebugComponent; }
+ namespace BrnGui { struct GuiHudMessagesDebugComponent; }
+ namespace BrnGui { struct SatNavDebugComponent; struct GuiCacheDebugComponent; }
+ namespace BrnGui { struct GuiDebugComponent; }
+@@ -59,6 +60,12 @@
+         friend struct BrnGui::GuiDebugComponent;
+         struct GuiConstructorTag {};
+         explicit DebugComponent(GuiConstructorTag) {}
++
++        // ARTIST 827E32C8..32F8 installs this owner's vptr only; its data
++        // belongs to the original two-phase lifecycle, not the generic reset.
++        friend class CgsGameTalk::GameTalkDebugComponent;
++        struct GameTalkConstructorTag {};
++        explicit DebugComponent(GameTalkConstructorTag) {}
+ 
+     public:
+         DebugComponent();
+--- a/b5-decomp/src/GameShared/GameClasses/System/GameTalk/CgsGameTalk.cpp
++++ b/b5-decomp/src/GameShared/GameClasses/System/GameTalk/CgsGameTalk.cpp
+@@ -31,13 +31,13 @@
+ 
+ namespace CgsGameTalk
+ {
++    // The "Core/GameTalk" debug log window: a file-scope static in the X360 build
++    // (the asm's off_82F32FD4). Construct sizes it to 20 lines and prepares it under
++    // the "Core/GameTalk" menu path with the "Log" caption (off_82F32FBC / off_82F32FB8).
++    CgsDev::DebugUI::LogWindow sLogWindow;
++
+     namespace
+     {
+-        // The "Core/GameTalk" debug log window: a file-scope static in the X360 build
+-        // (the asm's off_82F32FD4). Construct sizes it to 20 lines and prepares it under
+-        // the "Core/GameTalk" menu path with the "Log" caption (off_82F32FBC / off_82F32FB8).
+-        CgsDev::DebugUI::LogWindow sLogWindow;
+-
+         const char* const KAC_LOG_WINDOW_PATH    = "Core/GameTalk"; // off_82F32FBC
+         const char* const KAC_LOG_WINDOW_CAPTION = "Log";           // off_82F32FB8
+         const s32         KI_LOG_WINDOW_LINES     = 20;             // li r4, 0x14
+@@ -62,16 +62,16 @@
+     }
+ 
+     // X360 @0x82837648.
+-    void GameTalk::Construct()
++    void GameTalk::Construct(bool lbInitialiseNetwork)
+     {
+         mbPrepared        = false;          // stb 0, 0x4034
+         mpGameTalkManager = nullptr;        // stw 0, 0x4030
+ 
+         // Bring up the transport on the GameTalk listen port (asm passes 0x2694 in r5).
+-        mProtocol.Construct(true, KI_DEFAULT_GAMETALK_PORT);
++        mProtocol.Construct(lbInitialiseNetwork, KI_DEFAULT_GAMETALK_PORT);
+ 
+-        // Reset the debug component to its clean state (the asm's `...Destruct` symbol on
+-        // the +0x4024 subobject is the dedup-shared DebugComponent constructor body).
++        // The +0x4024 component call at 82837674 targets 8284CB38 (blr).
++        // Keep its concrete empty Construct and preserve the existing data.
+         mDebugComponent.Construct();
+ 
+         // Bring up the "Core/GameTalk" log window.
+@@ -80,7 +80,7 @@
+     }
+ 
+     // X360 @0x828394B8.
+-    void GameTalk::Prepare(f32 lrInactivityTimeout, f32 lrUpdateTimeStep)
++    bool GameTalk::Prepare(f32 lrInactivityTimeout, f32 lrUpdateTimeStep)
+     {
+         // Create the process-wide GameTalk singleton, then point mpGameTalkManager at it.
+         EA::GameTalk::GameTalkManager::CreateInstance(this, KI_GAMETALK_MAX_CHANNELS, 0);
+@@ -98,7 +98,17 @@
+         // Register the debug component with the debug menu.
+         mDebugComponent.Register();
+ 
+-        mbPrepared = true;                  // stb 1, 0x4034
++        mbPrepared = true;                  // ARTIST 82839530
++        return true;                        // ARTIST 8283952C: li r3,1
++    }
++
++    // ARTIST GameDataModule::Release82664408..4424 passes the genuine
++    // GameTalk subobject to82C296C8. That two-instruction ICF body is labelled
++    // Content::DoOnPostLoad by IDA, but it only returns true. This is the actual
++    // emitted GameTalk release behavior, not a replacement network provider.
++    bool GameTalk::Release()
++    {
++        return true;
+     }
+ 
+     // X360 @0x828248D0 (header-inline in the original CgsGameTalk.h:143-146).
+--- a/b5-decomp/src/GameShared/GameClasses/System/GameTalk/CgsGameTalk.h
++++ b/b5-decomp/src/GameShared/GameClasses/System/GameTalk/CgsGameTalk.h
+@@ -4,7 +4,7 @@
+ #include "types.hpp"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"
+ #include "GameShared/GameClasses/System/GameTalk/X360/CgsGameTalkProtocolX360.h"
+-#include "GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h"
++#include "GameShared/GameClasses/System/GameTalk/CgsGameTalkDebugComponent.h"
+ #include "SDKs/EA/GameTalk/GameTalk.h"
+ 
+ // ============================================================================
+@@ -35,8 +35,14 @@
+ //   +0x4034  mbPrepared         set 1 by Prepare, asserted by Register/Send/Update
+ // ============================================================================
+ 
++namespace CgsDev { namespace DebugUI { struct LogWindow; } }
++
+ namespace CgsGameTalk
+ {
++    // The existing ARTIST82F32FD4 owner is shared by the split native TUs.
++    // Protocol status text uses this same window's public mLog stream.
++    extern CgsDev::DebugUI::LogWindow sLogWindow;
++
+     class GameTalk
+     {
+     public:
+@@ -44,13 +50,17 @@
+         // Clears mbPrepared/mpGameTalkManager, constructs the transport on the
+         // GameTalk listen port (the asm passes 0x2694 == 9876 in r5), prepares the
+         // debug component, and brings up the "Core/GameTalk" log window.
+-        void Construct();
++        void Construct(bool lbInitialiseNetwork);
+ 
+         // X360 @0x828394B8. Bring up the GameTalk singleton, point mpGameTalkManager
+         // at it, prepare the transport with the inactivity timeout / update step,
+         // register the AttribSys GameTalk handler on the "AttribSys.xenon" channel,
+         // register the debug component, and mark prepared.
+-        void Prepare(f32 lrInactivityTimeout, f32 lrUpdateTimeStep);
++        bool Prepare(f32 lrInactivityTimeout, f32 lrUpdateTimeStep);
++
++        // ARTIST82664418 calls this on the GameTalk owner; target82C296C8
++        // is the emitted li r3,1;blr ICF fold, with no additional cleanup.
++        bool Release();
+ 
+         // X360 @0x828248D0 (header-inline). Forward a handler registration to the
+         // GameTalk manager once prepared.
+@@ -66,7 +76,7 @@
+ 
+     private:
+         GameTalkProtocol            mProtocol;          // +0x0000
+-        CgsDev::DebugComponent      mDebugComponent;    // +0x4024
++        GameTalkDebugComponent     mDebugComponent;    // +0x4024
+         EA::GameTalk::GameTalkManager* mpGameTalkManager; // +0x4030
+         bool                        mbPrepared;         // +0x4034
+     };
+--- a/b5-decomp/src/GameShared/GameClasses/System/GameTalk/CgsGameTalkDebugComponent.h
++++ b/b5-decomp/src/GameShared/GameClasses/System/GameTalk/CgsGameTalkDebugComponent.h
+@@ -11,14 +11,23 @@
+ // OnActivate @ 0x82836C20 chains the (empty) base activation, then sizes the shared "Core/GameTalk"
+ // log window (off_82F32FD4 == sLogWindow, brought up by GameTalk::Construct) to 250x60.
+ //
+-// In the X360 build GameTalk::mDebugComponent is a GameTalkDebugComponent; the committed
+-// CgsGameTalk.h types that member as the CgsDev::DebugComponent base (same 12-byte layout --
+-// this subclass adds only vtable overrides, no data members).
++// GameTalk embeds this actual derived component. It adds the original name/path/activation
++// overrides and no data members; native pointer width comes from the canonical base type.
+ 
+ namespace CgsGameTalk
+ {
+     class GameTalkDebugComponent : public CgsDev::DebugComponent
+     {
++    public:
++        // ARTIST native owner constructor 827E32C8..32F8 writes only vptrs.
++        GameTalkDebugComponent()
++            : CgsDev::DebugComponent(CgsDev::DebugComponent::GameTalkConstructorTag{})
++        {
++        }
++
++        // ARTIST GameTalk::Construct 82837674 calls 8284CB38: blr.
++        void Construct() {}
++
+     protected:
+         void OnActivate() override;
+         const char* GetName() const override;
+--- a/b5-decomp/src/GameShared/GameClasses/System/GameTalk/X360/CgsGameTalkProtocolX360.cpp
++++ b/b5-decomp/src/GameShared/GameClasses/System/GameTalk/X360/CgsGameTalkProtocolX360.cpp
+@@ -1,9 +1,27 @@
++#ifndef WIN32_LEAN_AND_MEAN
++#define WIN32_LEAN_AND_MEAN
++#endif
++#ifndef NOMINMAX
++#define NOMINMAX
++#endif
++#include <WinSock2.h>
++#ifdef SendMessage
++#undef SendMessage
++#endif
++#ifdef DrawText
++#undef DrawText
++#endif
++#include <type_traits>
++
+ #include "GameShared/GameClasses/System/GameTalk/X360/CgsGameTalkProtocolX360.h"
++#include "GameShared/GameClasses/System/GameTalk/CgsGameTalk.h"
++#include "GameShared/GameClasses/Development/DebugSystem/Core/UI/Windows/CgsLogWindow.h"
+ 
+ #include "GameShared/GameClasses/Core/CgsAssert.h"
+ #include "GameShared/GameClasses/Development/CgsStrStream.h"
+ 
+ #include <cstring>   // strlen
++#include <new>       // actual package allocation followed by placement construction
+ 
+ // =====================================================================================
+ // CgsGameTalk::GameTalkProtocol -- Xbox 360 GameTalk transport backend.
+@@ -28,30 +46,21 @@
+ // =====================================================================================
+ 
+ // -------------------------------------------------------------------------------------
+-// Platform socket / XNet surface. These are Xbox-360 Winsock + XNet externals (declared
+-// here so the per-TU compile resolves them); the asm calls them directly. Signatures /
+-// constants taken from the asm dereferences + immediate operands.
+-// -------------------------------------------------------------------------------------
++// Native Winsock declarations come from the real Windows SDK above.
++// FLAG PC-platform leaf: WSADATA, fd_set, sockaddr_in and SOCKET retain the
++// host API's real storage/alignment/handle width. Engine state and callbacks
++// remain the ARTIST transport. The narrow PC XNet provider owns GameTalk's
++// startup; the following status read never acquires another WSA reference.
++// -------------------------------------------------------------------------------------
++static_assert(std::is_same<CgsGameTalk::SOCKET, ::SOCKET>::value,
++              "GameTalk socket storage must match native WinSock SOCKET");
++struct XNetStartupParams;
+ extern "C"
+ {
+-    int  socket(int liAddressFamily, int liType, int liProtocol);
+-    int  bind(CgsGameTalk::SOCKET lSocket, const void* lpAddress, int liAddressLen);
+-    int  listen(CgsGameTalk::SOCKET lSocket, int liBacklog);
+-    CgsGameTalk::SOCKET accept(CgsGameTalk::SOCKET lSocket, void* lpAddress, int* lpiAddressLen);
+-    int  closesocket(CgsGameTalk::SOCKET lSocket);
+-    int  recv(CgsGameTalk::SOCKET lSocket, void* lpBuffer, int liLength, int liFlags);
+-    int  send(CgsGameTalk::SOCKET lSocket, const void* lpBuffer, int liLength, int liFlags);
+-    int  setsockopt(CgsGameTalk::SOCKET lSocket, int liLevel, int liOptName,
+-                    const void* lpOptVal, int liOptLen);
+-    int  ioctlsocket(CgsGameTalk::SOCKET lSocket, long liCommand, unsigned long* lpuArg);
+-    int  select(int liNfds, void* lpReadFds, void* lpWriteFds, void* lpExceptFds,
+-                const void* lpTimeout);
+-
+-    int  WSAStartup(unsigned short luVersionRequested, void* lpWSAData);
+-    int  WSAGetLastError();
+-
+-    int  XNetStartup(const void* lpParams);
+-    void XMemCpy(void* lpDest, const void* lpSrc, unsigned int luSize);
++    int __cdecl XNetStartup(XNetStartupParams* lpParams);
++    int __cdecl CgsPcGameTalkWinsockStartupStatus(unsigned short* lpuVersion);
++    // Existing mounted XenonD3D9Shims.cpp provider: exact memcpy implementation.
++    void* XMemCpy(void* lpDest, const void* lpSrc, u32 luSize);
+ }
+ 
+ namespace
+@@ -65,7 +74,7 @@
+     const int    KI_LISTEN_BACKLOG     = 1;            // listen(s,1)
+     const int    KI_SOCKADDR_LEN       = 16;           // accept/bind addr length
+     const int    KI_RECV_BUFFER_SIZE   = 4096;         // recv(...,4096,0)
+-    const CgsGameTalk::SOCKET KI_INVALID_SOCKET = -1;  // socket()/accept() failure (asm -1)
++    const CgsGameTalk::SOCKET KI_INVALID_SOCKET = INVALID_SOCKET;  // socket()/accept() failure (asm -1)
+ 
+     // WSA error codes the asm tests (cmpwi 0x2746 / 0x2749).
+     const int    KI_WSAECONNRESET      = 10054;        // 0x2746
+@@ -92,11 +101,8 @@
+     const char* KPAC_PING_RESPONSE_KEY        = "PingResponse";
+     const char* KPAC_PING_REQUEST_KEY         = "PingRequest";
+ 
+-    // The debug log stream the X360 streams its status text into (asm &off_82F3300C). A
+-    // file-scope StrStream over a shared debug buffer; only its operator<< is exercised
+-    // here. Modelled with the engine's debug-print buffer.
+-    char gacGameTalkDebugBuffer[256];
+-    CgsDev::StrStream gDebugStream(gacGameTalkDebugBuffer, sizeof(gacGameTalkDebugBuffer));
++    // ARTIST82F3300C is mLog inside the existing LogWindow82F32FD4+0x38.
++    // Status text below streams directly through that typed public owner.
+ 
+     // GameTalk-message content-type for a NUL-terminated string payload (the asm passes 0
+     // as the type word from SendPingResponseToGameExplorer's AddKeyContent call).
+@@ -124,28 +130,42 @@
+     mrInactivityTimeout = KF_DEFAULT_INACTIVITY_TIMEOUT; // stfs 10.0f,0x4010(this)
+ 
+     // XNetStartup parameters: { sizeofStruct=0x0D, cfgFlags=1, 0, 0, 0 }.
+-    unsigned char laXNetParams[2] = { KU_XNET_CFG_SIZEOFSTRUCT, 1 };
+-    int liXNetError = XNetStartup(laXNetParams);
++    // ARTIST82836EE4..6F00 clears all thirteen bytes before the size/flag stores.
++    alignas(4) unsigned char laXNetParams[13] = { KU_XNET_CFG_SIZEOFSTRUCT, 1 };
++    int liXNetError = XNetStartup(reinterpret_cast<XNetStartupParams*>(laXNetParams));
+     if (liXNetError)
+     {
+-        gDebugStream << "XNetStartup failed, liError " << liXNetError << "\n";
+-        CGS_ASSERT(liXNetError == 0, "XNetStartup failed");
+-    }
+-
+-    short lsWinsockData[1];
+-    int liWsaError = WSAStartup(KU_WINSOCK_VERSION, lsWinsockData);
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "XNetStartup failed, liError " << static_cast<u32>(liXNetError) << "\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 90);
++        CgsDev::Assert::EndAssert();
++    }
++
++    unsigned short luWinsockVersion = 0;
++    int liWsaError = CgsPcGameTalkWinsockStartupStatus(&luWinsockVersion);
+     if (liWsaError)
+     {
+-        gDebugStream << "WSAStartup failed (error " << liWsaError << ").\n";
+-        CGS_ASSERT(liWsaError == 0, "WSAStartup failed");
+-    }
+-
+-    if (lsWinsockData[0] != static_cast<short>(KU_WINSOCK_VERSION))
+-    {
+-        gDebugStream << "Failed to get proper version of Winsock, got "
+-                     << (lsWinsockData[0] & 0xFF) << "." << ((lsWinsockData[0] >> 8) & 0xFF) << "\n";
+-        CGS_ASSERT(lsWinsockData[0] == static_cast<short>(KU_WINSOCK_VERSION),
+-                   "Wrong Winsock version");
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "WSAStartup failed (error " << static_cast<u32>(liWsaError) << ").\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 101);
++        CgsDev::Assert::EndAssert();
++    }
++
++    if (luWinsockVersion != static_cast<short>(KU_WINSOCK_VERSION))
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "Failed to get proper version of Winsock, got " << static_cast<u32>(luWinsockVersion & 0xFFu) << "." << static_cast<u32>((luWinsockVersion >> 8) & 0xFFu) << "\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 107);
++        CgsDev::Assert::EndAssert();
+     }
+ 
+     sInactivityTimer.Prepare(KF_DEFAULT_UPDATE_STEP);
+@@ -162,61 +182,90 @@
+ 
+     if (meConnectionState == E_CONNECTIONSTATE_OBTAINED_IP && closesocket(mClientSocket))
+     {
+-        gDebugStream << "Failed to close active client socket (error " << WSAGetLastError() << ").\n";
+-        CGS_ASSERT(false, "Failed to close active client socket");
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        const s32 liError = WSAGetLastError();
++        lAssertStream << "Failed to close active client socket (error " << static_cast<u32>(liError) << ").\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 374);
++        CgsDev::Assert::EndAssert();
+     }
+ 
+     sInactivityTimer.Reset();
+     sInactivityTimer.SetRunning(false);   // asm 0x82837300: disarm the inactivity timer (mbRunning=0)
+ 
+-    // sockaddr_in laid out on the stack: { family=2, port=liPort, addr=0 }.
+-    struct
+-    {
+-        short          siFamily;
+-        unsigned short suPort;
+-        int            liAddress;
+-        long long      llZero;
+-    } lAddress;
+-    lAddress.siFamily  = KI_AF_INET;
+-    lAddress.suPort    = static_cast<unsigned short>(liPort);
+-    lAddress.liAddress = 0;
+-    lAddress.llZero    = 0;
++    // FLAG PC-platform leaf: the original big-endian halfword port store
++    // already produced network order; native little-endian Winsock needs htons.
++    const u16 luListenPort = static_cast<u16>(liPort);
++    sockaddr_in lAddress = {};
++    lAddress.sin_family = KI_AF_INET;
++    lAddress.sin_port = htons(luListenPort);
++    lAddress.sin_addr.s_addr = INADDR_ANY;
+ 
+     mListeningSocket = socket(KI_AF_INET, KI_SOCK_STREAM, 0);
+     if (mListeningSocket == KI_INVALID_SOCKET)
+     {
+-        gDebugStream << "Failed to create listening socket (error " << WSAGetLastError() << ").\n";
+-        CGS_ASSERT(false, "Failed to create listening socket");
+-    }
+-
+-    int liReuse = 1;
+-    if (setsockopt(mListeningSocket, KI_SOL_SOCKET, KI_SO_REUSEADDR, &liReuse, 1))
+-    {
+-        gDebugStream << "Failed to reuse listening socket address (error " << WSAGetLastError() << ").\n";
+-        CGS_ASSERT(false, "Failed to reuse listening socket address");
+-    }
+-
+-    if (bind(mListeningSocket, &lAddress, KI_SOCKADDR_LEN) == KI_INVALID_SOCKET)
+-    {
+-        gDebugStream << "Failed to bind listening socket (error " << WSAGetLastError() << ").\n";
+-        CGS_ASSERT(false, "Failed to bind listening socket");
+-    }
+-
+-    if (listen(mListeningSocket, KI_LISTEN_BACKLOG) == KI_INVALID_SOCKET)
+-    {
+-        gDebugStream << "Listening to client failed.\n";
+-        CGS_ASSERT(false, "Listening to client failed");
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "Failed to create listening socket (error " << static_cast<u32>(WSAGetLastError()) << ").\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 401);
++        CgsDev::Assert::EndAssert();
++    }
++
++    // FLAG PC-platform leaf: the same true option is a native BOOL value.
++    const BOOL lbReuse = TRUE;
++    if (setsockopt(mListeningSocket, KI_SOL_SOCKET, KI_SO_REUSEADDR,
++                   reinterpret_cast<const char*>(&lbReuse), sizeof(lbReuse)))
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "Failed to reuse listening socket address (error " << static_cast<u32>(WSAGetLastError()) << ").\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 410);
++        CgsDev::Assert::EndAssert();
++    }
++
++    if (bind(mListeningSocket, reinterpret_cast<const sockaddr*>(&lAddress),
++             static_cast<int>(sizeof(lAddress))) == SOCKET_ERROR)
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "Failed to bind listening socket (error " << static_cast<u32>(WSAGetLastError()) << ").\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 417);
++        CgsDev::Assert::EndAssert();
++    }
++
++    if (listen(mListeningSocket, KI_LISTEN_BACKLOG) == SOCKET_ERROR)
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "Listening to client failed.\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 423);
++        CgsDev::Assert::EndAssert();
+     }
+ 
+     unsigned long luNonBlocking = 1;
+     if (ioctlsocket(mListeningSocket, KI_FIONBIO, &luNonBlocking))
+     {
+-        gDebugStream << "Failed to set non-blocking listening socket (error " << WSAGetLastError() << ").\n";
+-        CGS_ASSERT(false, "Failed to set non-blocking listening socket");
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "Failed to set non-blocking listening socket (error " << static_cast<u32>(WSAGetLastError()) << ").\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 433);
++        CgsDev::Assert::EndAssert();
+     }
+ 
+     meConnectionState = E_CONNECTIONSTATE_OBTAINING_IP; // stw 0,0x4014(this)
+-    gDebugStream << "Listening on port " << lAddress.suPort << "\n";
++    sLogWindow.mLog << "Listening on port " << luListenPort << "\n";
+ }
+ 
+ // -------------------------------------------------------------------------------------
+@@ -228,9 +277,9 @@
+     if (meConnectionState != E_CONNECTIONSTATE_OBTAINING_IP)
+         return false;
+ 
+-    char lacAddress[16];
+-    int liAddressLen = KI_SOCKADDR_LEN;
+-    mClientSocket = accept(mListeningSocket, lacAddress, &liAddressLen);
++    sockaddr_in lAddress;
++    int liAddressLen = static_cast<int>(sizeof(lAddress));
++    mClientSocket = accept(mListeningSocket, reinterpret_cast<sockaddr*>(&lAddress), &liAddressLen);
+ 
+     if (mClientSocket != KI_INVALID_SOCKET)
+     {
+@@ -240,13 +289,18 @@
+ 
+         if (closesocket(mListeningSocket))
+         {
+-            gDebugStream << "Failed to close listening socket after establishing connection (error "
+-                         << WSAGetLastError() << ").\n";
+-            CGS_ASSERT(false, "Failed to close listening socket after connecting");
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::MessageBufferPC lAssertBuffer;
++            CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++            const s32 liError = WSAGetLastError();
++            lAssertStream << "Failed to close listening socket after establishing connection (error " << static_cast<u32>(liError) << ").\n";
++            CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++                "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 332);
++            CgsDev::Assert::EndAssert();
+         }
+ 
+         meConnectionState = E_CONNECTIONSTATE_OBTAINED_IP; // a1[4101] = 1
+-        gDebugStream << "Connected to server\n";
++        sLogWindow.mLog << "Connected to server\n";
+     }
+ 
+     return meConnectionState == E_CONNECTIONSTATE_OBTAINED_IP;
+@@ -274,7 +328,13 @@
+         }
+         else
+         {
+-            CGS_ASSERT(false, "Invalid connection state");
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::MessageBufferPC lAssertBuffer;
++            CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++            lAssertStream << "Invalid connection state";
++            CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++                "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 285);
++            CgsDev::Assert::EndAssert();
+         }
+     }
+ 
+@@ -301,7 +361,7 @@
+     for (;;)
+     {
+         int liSent = send(mClientSocket, lpcBuffer, liMsgSize, 0);
+-        if (liSent == KI_INVALID_SOCKET)
++        if (liSent == SOCKET_ERROR)
+             break;
+ 
+         liMsgSize  -= liSent;
+@@ -310,26 +370,34 @@
+             return true; // fully sent.
+ 
+         // Block until the socket is writable again.
+-        int laSocketDescriptors[2];
+-        laSocketDescriptors[0] = 1;
+-        laSocketDescriptors[1] = mClientSocket;
+-        if (!select(0, 0, laSocketDescriptors, 0, 0))
+-        {
+-            CGS_ASSERT(false, "select(0, NULL, &lSocketDescriptors, NULL, NULL)");
++        fd_set lSocketDescriptors;
++        lSocketDescriptors.fd_count = 1;
++        lSocketDescriptors.fd_array[0] = mClientSocket;
++        if (!select(0, 0, &lSocketDescriptors, 0, 0))
++        {
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::FireAssert("select(0, NULL, &lSocketDescriptors, NULL, NULL)",
++                "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 524);
++            CgsDev::Assert::EndAssert();
+         }
+     }
+ 
+     if (WSAGetLastError() == KI_WSAECONNRESET)
+     {
+         meConnectionState = E_CONNECTIONSTATE_LISTENING;
+-        gDebugStream << "Connection reset, returning listening mode\n";
++        sLogWindow.mLog << "Connection reset, returning listening mode\n";
+         return false;
+     }
+ 
+     if (WSAGetLastError() == KI_WSAENOTCONN)
+     {
+-        gDebugStream << "Attempted to send data when not connected (error " << WSAGetLastError() << ").\n";
+-        CGS_ASSERT(false, "Attempted to send data when not connected");
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::MessageBufferPC lAssertBuffer;
++        CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++        lAssertStream << "Attempted to send data when not connected (error " << static_cast<u32>(WSAGetLastError()) << ").\n";
++        CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 509);
++        CgsDev::Assert::EndAssert();
+     }
+     return false;
+ }
+@@ -357,31 +425,42 @@
+         if (WSAGetLastError() == KI_WSAECONNRESET)
+         {
+             meConnectionState = E_CONNECTIONSTATE_LISTENING;
+-            gDebugStream << "Connection reset, returning listening mode\n";
++            sLogWindow.mLog << "Connection reset, returning listening mode\n";
+         }
+         else if (WSAGetLastError() == KI_WSAENOTCONN)
+         {
+-            gDebugStream << "Attempted to receive data when not connected (error " << WSAGetLastError() << ").\n";
+-            CGS_ASSERT(false, "Attempted to receive data when not connected");
++            CgsDev::Assert::BeginAssert();
++            CgsDev::Assert::MessageBufferPC lAssertBuffer;
++            CgsDev::StrStream lAssertStream(lAssertBuffer.GetBuffer(), lAssertBuffer.GetSize());
++            const s32 liError = WSAGetLastError();
++            lAssertStream << "Attempted to receive data when not connected (error " << static_cast<u32>(liError) << ").\n";
++            CgsDev::Assert::FireAssert(lAssertBuffer.GetBuffer(),
++                "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 571);
++            CgsDev::Assert::EndAssert();
+         }
+     }
+ }
+ 
+ // -------------------------------------------------------------------------------------
+ // DigestReceivedData @ 0x82838318 -- append received bytes and dispatch each complete
+-// length-prefixed message (4-byte big-endian length + payload) to the handler.
++// length-prefixed message (4-byte little-endian length + payload) to the handler.
+ // -------------------------------------------------------------------------------------
+ void GameTalkProtocol::DigestReceivedData(const char* lpacReceivedBytes, u32 luNumReceivedBytes)
+ {
+-    CGS_ASSERT((luNumReceivedBytes + muBufferMsgSize) < static_cast<u32>(KI_GAMETALK_BUFFER_SIZE),
+-               "(luNumReceivedBytes + muBufferMsgSize) < KI_GAMETALK_BUFFER_SIZE");
++    if ((luNumReceivedBytes + muBufferMsgSize) >= static_cast<u32>(KI_GAMETALK_BUFFER_SIZE))
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::FireAssert("(luNumReceivedBytes + muBufferMsgSize) < KI_GAMETALK_BUFFER_SIZE",
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 598);
++        CgsDev::Assert::EndAssert();
++    }
+ 
+     XMemCpy(&macReceiveBuffer[muBufferMsgSize], lpacReceivedBytes, luNumReceivedBytes);
+     muBufferMsgSize += luNumReceivedBytes;
+ 
+     u32 luCursor = muBufferMsgStart;
+ 
+-    // Peek the first message: a 4-byte big-endian length prefix; the whole message is
++    // Peek the first message: a 4-byte little-endian length prefix; the whole message is
+     // (length + 4) bytes. Fewer than 4 buffered bytes means no complete header yet.
+     bool lbHasMessage;
+     u32  luMsgSize = 0;
+@@ -394,10 +473,10 @@
+         lbHasMessage = true;
+         const unsigned char* lpucLen =
+             reinterpret_cast<const unsigned char*>(&macReceiveBuffer[luCursor]);
+-        u32 luLength = (static_cast<u32>(lpucLen[0]) << 24) |
+-                       (static_cast<u32>(lpucLen[1]) << 16) |
+-                       (static_cast<u32>(lpucLen[2]) << 8)  |
+-                        static_cast<u32>(lpucLen[3]);
++        u32 luLength = static_cast<u32>(lpucLen[0]) |
++                       (static_cast<u32>(lpucLen[1]) << 8) |
++                       (static_cast<u32>(lpucLen[2]) << 16) |
++                       (static_cast<u32>(lpucLen[3]) << 24);
+         luMsgSize = luLength + 4;
+     }
+ 
+@@ -426,10 +505,10 @@
+                 lbHasMessage = true;
+                 const unsigned char* lpucLen =
+                     reinterpret_cast<const unsigned char*>(&macReceiveBuffer[luNextStart]);
+-                u32 luLength = (static_cast<u32>(lpucLen[0]) << 24) |
+-                               (static_cast<u32>(lpucLen[1]) << 16) |
+-                               (static_cast<u32>(lpucLen[2]) << 8)  |
+-                                static_cast<u32>(lpucLen[3]);
++                u32 luLength = static_cast<u32>(lpucLen[0]) |
++                               (static_cast<u32>(lpucLen[1]) << 8) |
++                               (static_cast<u32>(lpucLen[2]) << 16) |
++                               (static_cast<u32>(lpucLen[3]) << 24);
+                 luMsgSize = luLength + 4;
+             }
+         }
+@@ -455,29 +534,12 @@
+ // -------------------------------------------------------------------------------------
+ void GameTalkProtocol::OnMessageReceived(EA::GameTalk::GameTalkMessage* lpMsg)
+ {
+-    // The message's key entries are read by offset off the GameTalkMessage; this matches
+-    // the asm's *(msg+12) count and *(msg+8) entry array. The GameTalk SDK message layout
+-    // is modelled minimally elsewhere; here we mirror the asm's key/value walk.
+-    struct KeyEntry
+-    {
+-        const char* mpcKey;    // [+0]
+-        s32         miPad;     // [+4]
+-        const char* mpcValue;  // [+8]
+-    };
+-    struct MessageLayout
+-    {
+-        char        macHeader[8];  // [+0]
+-        KeyEntry**  mppEntries;    // [+8]
+-        s32         miEntryCount;  // [+12]
+-    };
+-
+-    MessageLayout* lpLayout = reinterpret_cast<MessageLayout*>(lpMsg);
+-    for (s32 liEntry = 0; liEntry < lpLayout->miEntryCount; ++liEntry)
+-    {
+-        const KeyEntry* lpEntry = lpLayout->mppEntries[liEntry];
+-
++    // ARTIST82838F50 reads the real message's count, key and content owners.
++    // Existing typed accessors follow their native fields as pointer widths grow.
++    for (s32 liEntry = 0; liEntry < lpMsg->GetNumKeys(); ++liEntry)
++    {
+         // Case-sensitive C-string compare against the "PingRequest" key.
+-        const char* lpcKey  = lpEntry->mpcKey;
++        const char* lpcKey  = lpMsg->GetKey(liEntry);
+         const char* lpcWant = KPAC_PING_REQUEST_KEY;
+         int liDiff;
+         do
+@@ -493,7 +555,7 @@
+         if (!liDiff)
+         {
+             sInactivityTimer.Reset();
+-            SendPingResponseToGameExplorer(lpEntry->mpcValue);
++            SendPingResponseToGameExplorer(static_cast<const char*>(lpMsg->GetContent(liEntry)));
+         }
+     }
+ }
+@@ -507,18 +569,37 @@
+ // -------------------------------------------------------------------------------------
+ void GameTalkProtocol::SendPingResponseToGameExplorer(const char* lpacPingID)
+ {
+-    CGS_ASSERT(lpacPingID != 0, "lpacPingID != NULL");
+-
++    if (lpacPingID == nullptr)
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::FireAssert("lpacPingID != NULL",
++            "..\\..\\..\\GameShared\\GameClasses\\System/GameTalk/X360/CgsGameTalkProtocolX360.h",
++            235);
++        CgsDev::Assert::EndAssert();
++    }
++
++    // ARTIST828389F4 allocates the complete message in the GameTalk package.
++    // Its inlined construction creates one entry table; the canonical constructor
++    // performs that same operation using native pointer widths.
+     EA::GameTalk::GameTalkMessage* lpMessage =
+-        new EA::GameTalk::GameTalkMessage(KPAC_GAME_EXPLORER_CHANNEL_ID);
+-    CGS_ASSERT(lpMessage != 0, "lpMessage != NULL");
+-
+-    lpMessage->AllocateDataBuffer();
+-
+-    // Length is strlen(lpacPingID): the asm walks to the NUL then subtracts one.
+-    s32 liLength = static_cast<s32>(std::strlen(lpacPingID));
+-    lpMessage->AddKeyContent(KPAC_PING_RESPONSE_KEY, KI_GAMETALK_TYPE_DEFAULT, lpacPingID, liLength);
+-
++        static_cast<EA::GameTalk::GameTalkMessage*>(EA::GameTalk::Alloc(
++            static_cast<s32>(sizeof(EA::GameTalk::GameTalkMessage))));
++    if (lpMessage != nullptr)
++    {
++        new (lpMessage) EA::GameTalk::GameTalkMessage(KPAC_GAME_EXPLORER_CHANNEL_ID);
++    }
++    else
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::FireAssert("lpMessage != NULL",
++            "..\\..\\..\\GameShared\\GameClasses\\System/GameTalk/X360/CgsGameTalkProtocolX360.h",
++            240);
++        CgsDev::Assert::EndAssert();
++    }
++
++    const s32 liLength = static_cast<s32>(std::strlen(lpacPingID));
++    lpMessage->AddKeyContent(KPAC_PING_RESPONSE_KEY, KI_GAMETALK_TYPE_DEFAULT,
++                             lpacPingID, liLength);
+     EA::GameTalk::GameTalkManager::SendMessage(KPAC_GAME_EXPLORER_TARGET, lpMessage);
+ }
+ 
+@@ -529,8 +610,20 @@
+ bool GameTalkProtocol::Prepare(f32 lrInactivityTimeout, f32 lrUpdateTimeStep,
+                                EA::GameTalk::GameTalkManager* lpGameTalk)
+ {
+-    CGS_ASSERT(lpGameTalk != 0, "lpGameTalk != NULL");
+-    CGS_ASSERT(lrUpdateTimeStep > 0.0f, "lrUpdateTimeStep > 0.0f");
++    if (lpGameTalk == nullptr)
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::FireAssert("lpGameTalk != NULL",
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 137);
++        CgsDev::Assert::EndAssert();
++    }
++    if (!(lrUpdateTimeStep > 0.0f))
++    {
++        CgsDev::Assert::BeginAssert();
++        CgsDev::Assert::FireAssert("lrUpdateTimeStep > 0.0f",
++            "d:\\p4\\b5_main\\burnout\\main\\code\\gameshared\\gameclasses\\system\\gametalk\\X360/CgsGameTalkProtocolX360.cpp", 138);
++        CgsDev::Assert::EndAssert();
++    }
+ 
+     mrInactivityTimeout = lrInactivityTimeout;
+     sInactivityTimer.Prepare(lrUpdateTimeStep);
+--- a/b5-decomp/src/GameShared/GameClasses/System/GameTalk/X360/CgsGameTalkProtocolX360.h
++++ b/b5-decomp/src/GameShared/GameClasses/System/GameTalk/X360/CgsGameTalkProtocolX360.h
+@@ -43,8 +43,9 @@
+     // member -- so the buffer is 0x4000 bytes.
+     static const s32 KI_GAMETALK_BUFFER_SIZE = 0x4000;
+ 
+-    // A raw Winsock socket descriptor.
+-    typedef s32 SOCKET;
++    // FLAG PC-platform leaf: WinSock SOCKET is UINT_PTR on the native host.
++    // Keep both original owned socket fields, using the actual API handle width.
++    typedef std::uintptr_t SOCKET;
+ 
+     // CgsGameTalk::GameTalkProtocol -- X360 GameTalk transport. The polymorphic
+     // base (IGameTalkProtocol) supplies the vtable the scalar deleting destructor
+@@ -93,7 +94,7 @@
+ 
+         // IGameTalkProtocol override: accept a pending connection then drain any
+         // received bytes into the digest buffer. X360 @0x82838690.
+-        virtual void Poll();
++        virtual void Poll() override;
+ 
+         // accept() a pending client and close the listening socket. X360 @0x82837120.
+         bool AcceptIncomingConnection();
+--- a/b5-decomp/src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp
++++ b/b5-decomp/src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp
+@@ -20,9 +20,13 @@
+ #ifdef NOGDI
+ #undef NOGDI
+ #endif
++#ifndef WIN32_LEAN_AND_MEAN
++#define WIN32_LEAN_AND_MEAN
++#endif
+ #ifndef NOMINMAX
+ #define NOMINMAX
+ #endif
++#include <WinSock2.h>
+ #include <Windows.h>
+ 
+ #include "types.hpp"
+@@ -885,3 +889,91 @@
+     }
+     return KU_XNET_ADDR_ETHERNET;
+ }
++// [PC platform leaf] ARTIST NetConnStartup sets byte 1 only for its -nosecure/-coop
++// paths and logs insecure mode. GameTalk passes that 13-byte request, then uses raw
++// TCP sockets. The host has no XNet security layer; this maps only that observed
++// insecure request to one native Winsock 2.2 startup for the GameTalk process lifetime.
++namespace
++{
++    std::mutex sGameTalkXNetStartupMutex;
++    bool sbGameTalkWinsockStarted = false;
++    int siGameTalkWinsockStartupResult = WSANOTINITIALISED;
++    unsigned short suGameTalkWinsockVersion = 0;
++}
++
++struct XNetStartupParams;
++
++extern "C" int __cdecl XNetStartup(XNetStartupParams* lpParams)
++{
++    const u32 KU_XNET_STARTUP_PARAMS_SIZE = 13u;
++    const u8 KU_XNET_STARTUP_INSECURE = 1u;
++    int liConfigError = 0;
++    if (lpParams == nullptr)
++        liConfigError = WSAEFAULT;
++    else
++    {
++        const u8* const lpBytes = reinterpret_cast<const u8*>(lpParams);
++        if (lpBytes[0] != KU_XNET_STARTUP_PARAMS_SIZE)
++            liConfigError = WSAEINVAL;
++        else if (lpBytes[1] != KU_XNET_STARTUP_INSECURE)
++            liConfigError = WSAEOPNOTSUPP;
++        else
++        {
++            for (u32 luByte = 2u; luByte < KU_XNET_STARTUP_PARAMS_SIZE; ++luByte)
++            {
++                if (lpBytes[luByte] != 0u)
++                {
++                    liConfigError = WSAEOPNOTSUPP;
++                    break;
++                }
++            }
++        }
++    }
++
++    std::lock_guard<std::mutex> lLock(sGameTalkXNetStartupMutex);
++    if (liConfigError != 0)
++        return liConfigError;
++    if (sbGameTalkWinsockStarted)
++        return siGameTalkWinsockStartupResult;
++
++    const WORD KU_WINSOCK_VERSION = MAKEWORD(2, 2);
++    WSADATA lData = {};
++    const int liStartupError = ::WSAStartup(KU_WINSOCK_VERSION, &lData);
++    if (liStartupError != 0)
++    {
++        siGameTalkWinsockStartupResult = liStartupError;
++        suGameTalkWinsockVersion = 0u;
++        return liStartupError;
++    }
++
++    suGameTalkWinsockVersion = lData.wVersion;
++    if (lData.wVersion != KU_WINSOCK_VERSION)
++    {
++        if (::WSACleanup() == SOCKET_ERROR)
++        {
++            siGameTalkWinsockStartupResult = ::WSAGetLastError();
++            sbGameTalkWinsockStarted = true;
++            return siGameTalkWinsockStartupResult;
++        }
++        siGameTalkWinsockStartupResult = WSAVERNOTSUPPORTED;
++        return siGameTalkWinsockStartupResult;
++    }
++
++    // The direct GameTalk caller has no XNetCleanup/WSACleanup teardown. Keep the
++    // single successful WSA ref for that same process lifetime; repeated startup
++    // calls are idempotent and cannot accumulate another acquisition.
++    sbGameTalkWinsockStarted = true;
++    siGameTalkWinsockStartupResult = 0;
++    return 0;
++}
++
++extern "C" int __cdecl CgsPcGameTalkWinsockStartupStatus(
++    unsigned short* lpuVersion)
++{
++    if (lpuVersion == nullptr)
++        return WSAEFAULT;
++
++    std::lock_guard<std::mutex> lLock(sGameTalkXNetStartupMutex);
++    *lpuVersion = suGameTalkWinsockVersion;
++    return siGameTalkWinsockStartupResult;
++}
+--- a/b5-decomp/src/GameSource/Resource/BrnGameDataModule.cpp
++++ b/b5-decomp/src/GameSource/Resource/BrnGameDataModule.cpp
+@@ -248,9 +248,31 @@
+             }
+             // fall through
+         }
++        case E_PREPARE_GAMETALK:
++            // ARTIST82674324/433C: after the real AttribSys package heaps/schema.
++            mePrepareStage = E_PREPARE_GAMETALK;
++            if (!mGameTalk.Prepare(10.0f, 1.0f / 60.0f))
++                return false;
++            if (!mDebugGameTalkInterface.Prepare())
++            {
++                CgsDev::Assert::BeginAssert();
++                CgsDev::Assert::FireAssert("mDebugGameTalkInterface.Prepare()",
++                    "..\\..\\..\\GameSource\\Resource/BrnGameDataModule.cpp", 519);
++                CgsDev::Assert::EndAssert();
++            }
++            // FLAG PC-platform witness: observe the actual owner/global, not a
++            // readiness substitute. No factory result or caller state is changed.
++            {
++                char lacStartup[192];
++                std::snprintf(lacStartup, sizeof(lacStartup),
++                    "[GameData] GameTalk ready owner=%p manager=%p\n",
++                    static_cast<void*>(&mGameTalk),
++                    static_cast<void*>(EA::GameTalk::GameTalkManager::GetInstance()));
++                CgsDev::Log::WriteToLog(lacStartup);
++            }
++            // fall through
+         case E_PREPARE_VEHICLE_LIST:
+-            // X360 stage 9 (LABEL_26): PrepareVehicleList. (Stage 7 GameTalk and stage 8's
+-            // module prepare stay deferred between ATTRIBSYS and here.)
++            // Native9 follows GameTalk7; independent LiveUpdate8 remains deferred.
+             mePrepareStage = E_PREPARE_VEHICLE_LIST;
+             if (!PrepareVehicleList())
+                 return false;
+@@ -1409,6 +1431,10 @@
+         // AttribSysModule (a1+399000) are constructed in the same pass.
+         mAttribSysReceiverQueue.Construct();
+         mAttribSysModule.Construct();
++        // ARTIST82671CD0/1CE0: real contained transport, then its debug client.
++        // The original bool0 is forwarded, and ARTIST's protocol still starts XNet.
++        mGameTalk.Construct(false);
++        mDebugGameTalkInterface.Construct(&mGameTalk);
+ 
+         // Completion-routing state words (X360 a1+439284 / a1+475936 / a1+475940). [reliable
+         // init] zero-start so the counters are coherent from the first Update; the X360
+@@ -1736,7 +1762,9 @@
+ 
+         // [deferred] dev slot-usage dump toggles (byte_82FFAD00/01 -> AllocatorList::
+         // DebugDumpStats + the "Slot <n> is used" walk over the event-slot free list).
+-        // [deferred] CgsGameTalk::GameTalk::Update (X360 a1+399624; module not committed).
++        // ARTIST82674804: the actual prepared GameData owner pumps its transport.
++        // Selected public Update callers run after successful GameData Prepare.
++        mGameTalk.Update();
+ 
+         // The per-frame CgsResource input the pump publishes into. The X360 carves it from
+         // the CgsModule::IOBufferStack (CreateIOBuffer<ResourceIO::InputBuffer>("Resource"));
+--- a/b5-decomp/src/GameSource/Resource/BrnGameDataModule.h
++++ b/b5-decomp/src/GameSource/Resource/BrnGameDataModule.h
+@@ -9,7 +9,9 @@
+ #include "GameSource/Resource/SharedIO/BrnGameDataAllocatorList.h"           // GameDataIO::AllocatorList (mAllocatorList)
+ #include "GameShared/GameClasses/Memory/CgsLinearMalloc.h"                   // maGeneratedLinearAllocators / mAudioStreamAllocator
+ #include "GameShared/GameClasses/Memory/CgsHeapMalloc.h"                     // maGeneratedHeapAllocators
+-#include "GameShared/GameClasses/System/AttribSys/CgsAttribSysModule.h"      // mAttribSysModule (X360 a1+399000)
++#include "GameShared/GameClasses/System/AttribSys/CgsAttribSysModule.h"
++#include "GameShared/GameClasses/System/GameTalk/CgsGameTalk.h"
++#include "GameShared/GameClasses/Development/DebugSystem/GameTalk/CgsDebugGameTalkInterface.h"      // mAttribSysModule (X360 a1+399000)
+ #include "SharedClasses/DataLists/VehicleList.h"                             // mVehicleList (X360 a1+444336)
+ #include "SharedClasses/DataLists/ICEList.h"                                 // mICEList     (X360 a1+457664)
+ #include "SharedClasses/DataLists/WheelList.h"                               // mWheelList   (X360 a1+458696)
+@@ -71,11 +73,11 @@
+         {
+             E_PREPARE_START = 0, E_PREPARE_BASE = 1, E_PREPARE_RESOURCE = 2, E_PREPARE_BANKS = 3,
+             E_PREPARE_POOLS = 4, E_PREPARE_ALLOCATORS = 5, E_PREPARE_ATTRIBSYS = 6,
+-            E_PREPARE_DONE = 7,
++            E_PREPARE_GAMETALK = 7, E_PREPARE_DONE = 19,
+             // The X360 numbers its data-table stages 9..14 (PrepareVehicleList 9,
+             // PrepareFreeburnChallengeList 10, PrepareICEList 11, PrepareWheelList 12,
+             // PrepareHudMessages 13, PreparePopups 14). The ones that are live here keep the
+-            // console's numbers; the DLC 16-18 / GameTalk 7 stages are still skipped
++            // console's numbers; DLC16..18 and the independent LiveUpdate8 remain skipped
+             // between ATTRIBSYS and DONE. (Order of execution comes from the switch's
+             // fall-through order below, not from the numeric value.)
+             E_PREPARE_VEHICLE_LIST = 9,
+@@ -510,6 +512,10 @@
+         // Prepare stage 6 brings it up with the memory-map allocators (heap banks 19/20/21
+         // + linear bank 22, liMaxNumVaults 80); Update pumps it with the "Attrib" input.
+         CgsAttribSys::AttribSysModule  mAttribSysModule;
++        // ARTIST82671B90 owns these real subobjects at399624/416064.
++        // Access by name; native pointer/vtable widths determine host layout.
++        CgsGameTalk::GameTalk          mGameTalk;
++        CgsDev::DebugGameTalkInterface mDebugGameTalkInterface;
+         // X360 a1+444128: the GameData debug page (Construct initializes +0x0C..+0x20;
+         // Prepare registers it after the base module Prepare succeeds).
+         BrnResource::DebugComponent    mDebugComponent;
+--- a/b5-decomp/src/SDKs/EA/GameTalk/GameTalk.cpp
++++ b/b5-decomp/src/SDKs/EA/GameTalk/GameTalk.cpp
+@@ -8,7 +8,7 @@
+ 
+ #include <cctype>  // tolower
+ #include <cstring> // memcpy
+-#include <cstdlib> // _byteswap_ulong
++#include <cstdlib>
+ #include <new>     // placement new
+ 
+ // ============================================================================
+@@ -244,15 +244,15 @@
+     }
+ 
+     // @ 0x82837E88 -- parse a length-prefixed string from the wire cursor. Reads a
+-    // big-endian u32 length, advances past it, package-allocates len+1 bytes, copies len
++    // little-endian u32 length, advances past it, package-allocates len+1 bytes, copies len
+     // bytes and NUL-terminates, advancing the cursor past the len string bytes.
+     char* GameTalkMessage::ReadString(const char*& rlpCursor)
+     {
+         const u8* lpucLen = reinterpret_cast<const u8*>(rlpCursor);
+-        u32 luLength = (static_cast<u32>(lpucLen[0]) << 24) |
+-                       (static_cast<u32>(lpucLen[1]) << 16) |
+-                       (static_cast<u32>(lpucLen[2]) << 8) |
+-                        static_cast<u32>(lpucLen[3]);
++        u32 luLength = static_cast<u32>(lpucLen[0]) |
++                       (static_cast<u32>(lpucLen[1]) << 8) |
++                       (static_cast<u32>(lpucLen[2]) << 16) |
++                       (static_cast<u32>(lpucLen[3]) << 24);
+         rlpCursor += 4;
+ 
+         char* lpcString = static_cast<char*>(
+@@ -265,15 +265,15 @@
+     }
+ 
+     // @ 0x82837F40 -- parse a length-prefixed binary blob from the wire cursor. Reads a
+-    // big-endian u32 length into *lpuLength, advances the cursor past it, package-allocates
++    // little-endian u32 length into *lpuLength, advances the cursor past it, package-allocates
+     // that many bytes, copies the payload in and advances past it.
+     void* GameTalkMessage::ReadBinary(const char*& rlpCursor, u32* lpuLength)
+     {
+         const u8* lpucLen = reinterpret_cast<const u8*>(rlpCursor);
+-        u32 luLength = (static_cast<u32>(lpucLen[0]) << 24) |
+-                       (static_cast<u32>(lpucLen[1]) << 16) |
+-                       (static_cast<u32>(lpucLen[2]) << 8) |
+-                        static_cast<u32>(lpucLen[3]);
++        u32 luLength = static_cast<u32>(lpucLen[0]) |
++                       (static_cast<u32>(lpucLen[1]) << 8) |
++                       (static_cast<u32>(lpucLen[2]) << 16) |
++                       (static_cast<u32>(lpucLen[3]) << 24);
+         rlpCursor += 4;
+         *lpuLength = luLength;
+ 
+@@ -284,16 +284,19 @@
+         return lpBlock;
+     }
+ 
+-    // @ 0x82838D98 -- static factory: decode a big-endian wire buffer into a message.
++    // @ 0x82838D98 -- static factory: decode a little-endian wire buffer into a message.
+     // Layout: [u32 header][channel string][u32 keyCount] then keyCount *
+     // ([key string][u32 type][content]); type 0 = NUL string, type 1 = length-prefixed
+     // binary, other = empty.
+     GameTalkMessage* GameTalkMessage::Create(const char* lpBuffer)
+     {
+-        u32 luSwap = 0;
++        const u8* lpucHeader = reinterpret_cast<const u8*>(lpBuffer);
++        const u32 luHeader = static_cast<u32>(lpucHeader[0]) |
++                       (static_cast<u32>(lpucHeader[1]) << 8) |
++                       (static_cast<u32>(lpucHeader[2]) << 16) |
++                       (static_cast<u32>(lpucHeader[3]) << 24);
+         const char* lpcCursor = lpBuffer + 4;
+-        std::memcpy(&luSwap, lpBuffer, 4);
+-        if (static_cast<s32>(_byteswap_ulong(luSwap)) <= 0)
++        if (static_cast<s32>(luHeader) <= 0)
+             return 0;
+ 
+         CGS_ASSERT(CgsAttribSys::AttribSysMemoryManager::GetGameTalkAllocator() != 0,
+@@ -311,17 +314,22 @@
+         // preserved store-for-store.
+         lpMessage->mbParsed = 1;
+ 
+-        luSwap = 0;
+-        std::memcpy(&luSwap, lpcCursor, 4);
+-        s32 liKeyCount = static_cast<s32>(_byteswap_ulong(luSwap));
++        const u8* lpucKeyCount = reinterpret_cast<const u8*>(lpcCursor);
++        const u32 luKeyCount = static_cast<u32>(lpucKeyCount[0]) |
++                       (static_cast<u32>(lpucKeyCount[1]) << 8) |
++                       (static_cast<u32>(lpucKeyCount[2]) << 16) |
++                       (static_cast<u32>(lpucKeyCount[3]) << 24);
++        s32 liKeyCount = static_cast<s32>(luKeyCount);
+         lpcCursor += 4;
+         while (liKeyCount > 0)
+         {
+             const char* lpcKey = ReadString(lpcCursor);
+ 
+-            luSwap = 0;
+-            std::memcpy(&luSwap, lpcCursor, 4);
+-            u32 luType = _byteswap_ulong(luSwap);
++            const u8* lpucType = reinterpret_cast<const u8*>(lpcCursor);
++            const u32 luType = static_cast<u32>(lpucType[0]) |
++                               (static_cast<u32>(lpucType[1]) << 8) |
++                               (static_cast<u32>(lpucType[2]) << 16) |
++                               (static_cast<u32>(lpucType[3]) << 24);
+             lpcCursor += 4;
+ 
+             const void* lpContent = 0;
+@@ -344,7 +352,7 @@
+         return lpMessage;
+     }
+ 
+-    // @ 0x82837B50 -- serialize the message into a freshly package-allocated big-endian
++    // @ 0x82837B50 -- serialize the message into a freshly package-allocated little-endian
+     // wire buffer. Layout mirrors Create().
+     u32 GameTalkMessage::CreateBuffer(const char* lpcKey, void** lppOutBuffer)
+     {
+@@ -362,63 +370,77 @@
+ 
+         CGS_ASSERT(CgsAttribSys::AttribSysMemoryManager::GetGameTalkAllocator() != 0,
+                    "sbHasLinearAllocator");
+-        char* lpcOut = static_cast<char*>(
++        u8* lpuOut = static_cast<u8*>(
+             CgsAttribSys::AttribSysMemoryManager::GetGameTalkAllocator()->Malloc(luTotal, 0));
+-        *lppOutBuffer = lpcOut;
+-
+-        u32 luSwap;
+-
+-        luSwap = _byteswap_ulong(luTotal);
+-        std::memcpy(lpcOut, &luSwap, 4);
+-        lpcOut += 4;
+-
+-        luSwap = _byteswap_ulong(luKeyLen);
+-        std::memcpy(lpcOut, &luSwap, 4);
+-        lpcOut += 4;
+-
+-        std::memcpy(lpcOut, lpcKey, luKeyLen);
+-        lpcOut += luKeyLen;
+-
+-        luSwap = _byteswap_ulong(luBodyLen);
+-        std::memcpy(lpcOut, &luSwap, 4);
+-        lpcOut += 4;
++        *lppOutBuffer = lpuOut;
++
++        lpuOut[0] = static_cast<u8>((luTotal) >> 0);
++        lpuOut[1] = static_cast<u8>((luTotal) >> 8);
++        lpuOut[2] = static_cast<u8>((luTotal) >> 16);
++        lpuOut[3] = static_cast<u8>((luTotal) >> 24);
++        lpuOut += 4;
++
++        lpuOut[0] = static_cast<u8>((luKeyLen) >> 0);
++        lpuOut[1] = static_cast<u8>((luKeyLen) >> 8);
++        lpuOut[2] = static_cast<u8>((luKeyLen) >> 16);
++        lpuOut[3] = static_cast<u8>((luKeyLen) >> 24);
++        lpuOut += 4;
++
++        std::memcpy(lpuOut, lpcKey, luKeyLen);
++        lpuOut += luKeyLen;
++
++        lpuOut[0] = static_cast<u8>((luBodyLen) >> 0);
++        lpuOut[1] = static_cast<u8>((luBodyLen) >> 8);
++        lpuOut[2] = static_cast<u8>((luBodyLen) >> 16);
++        lpuOut[3] = static_cast<u8>((luBodyLen) >> 24);
++        lpuOut += 4;
+ 
+         const u32 luChannelLen =
+             static_cast<u32>(rw::core::stdc::StringLength(mpcChannel));
+-        luSwap = _byteswap_ulong(luChannelLen);
+-        std::memcpy(lpcOut, &luSwap, 4);
+-        lpcOut += 4;
+-
+-        std::memcpy(lpcOut, mpcChannel, luChannelLen);
+-        lpcOut += luChannelLen;
++        lpuOut[0] = static_cast<u8>((luChannelLen) >> 0);
++        lpuOut[1] = static_cast<u8>((luChannelLen) >> 8);
++        lpuOut[2] = static_cast<u8>((luChannelLen) >> 16);
++        lpuOut[3] = static_cast<u8>((luChannelLen) >> 24);
++        lpuOut += 4;
++
++        std::memcpy(lpuOut, mpcChannel, luChannelLen);
++        lpuOut += luChannelLen;
+ 
+         const u32 luNumKeys = static_cast<u32>(miNumKeys);
+-        luSwap = _byteswap_ulong(luNumKeys);
+-        std::memcpy(lpcOut, &luSwap, 4);
+-        lpcOut += 4;
++        lpuOut[0] = static_cast<u8>((luNumKeys) >> 0);
++        lpuOut[1] = static_cast<u8>((luNumKeys) >> 8);
++        lpuOut[2] = static_cast<u8>((luNumKeys) >> 16);
++        lpuOut[3] = static_cast<u8>((luNumKeys) >> 24);
++        lpuOut += 4;
+ 
+         for (s32 liEntry = 0; liEntry < static_cast<s32>(luNumKeys); ++liEntry)
+         {
+             const u32 luEntryKeyLen =
+                 static_cast<u32>(rw::core::stdc::StringLength(mppEntries[liEntry]->mpcKey));
+-            luSwap = _byteswap_ulong(luEntryKeyLen);
+-            std::memcpy(lpcOut, &luSwap, 4);
+-            lpcOut += 4;
+-
+-            std::memcpy(lpcOut, mppEntries[liEntry]->mpcKey, luEntryKeyLen);
+-            lpcOut += luEntryKeyLen;
+-
+-            luSwap = _byteswap_ulong(static_cast<u32>(mppEntries[liEntry]->miType));
+-            std::memcpy(lpcOut, &luSwap, 4);
+-            lpcOut += 4;
++            lpuOut[0] = static_cast<u8>((luEntryKeyLen) >> 0);
++            lpuOut[1] = static_cast<u8>((luEntryKeyLen) >> 8);
++            lpuOut[2] = static_cast<u8>((luEntryKeyLen) >> 16);
++            lpuOut[3] = static_cast<u8>((luEntryKeyLen) >> 24);
++            lpuOut += 4;
++
++            std::memcpy(lpuOut, mppEntries[liEntry]->mpcKey, luEntryKeyLen);
++            lpuOut += luEntryKeyLen;
++
++            lpuOut[0] = static_cast<u8>((static_cast<u32>(mppEntries[liEntry]->miType)) >> 0);
++            lpuOut[1] = static_cast<u8>((static_cast<u32>(mppEntries[liEntry]->miType)) >> 8);
++            lpuOut[2] = static_cast<u8>((static_cast<u32>(mppEntries[liEntry]->miType)) >> 16);
++            lpuOut[3] = static_cast<u8>((static_cast<u32>(mppEntries[liEntry]->miType)) >> 24);
++            lpuOut += 4;
+ 
+             const u32 luEntrySize = static_cast<u32>(mppEntries[liEntry]->miSize);
+-            luSwap = _byteswap_ulong(luEntrySize);
+-            std::memcpy(lpcOut, &luSwap, 4);
+-            lpcOut += 4;
+-
+-            std::memcpy(lpcOut, mppEntries[liEntry]->mpContent, luEntrySize);
+-            lpcOut += luEntrySize;
++            lpuOut[0] = static_cast<u8>((luEntrySize) >> 0);
++            lpuOut[1] = static_cast<u8>((luEntrySize) >> 8);
++            lpuOut[2] = static_cast<u8>((luEntrySize) >> 16);
++            lpuOut[3] = static_cast<u8>((luEntrySize) >> 24);
++            lpuOut += 4;
++
++            std::memcpy(lpuOut, mppEntries[liEntry]->mpContent, luEntrySize);
++            lpuOut += luEntrySize;
+         }
+ 
+         return luTotal;
+@@ -518,7 +540,7 @@
+     }
+ 
+     // @ 0x82837770 -- serialize a [key][value] keyword message into the shared scratch
+-    // buffer (each field a big-endian u32 length prefix + bytes) and Send it. The
++    // buffer (each field a little-endian u32 length prefix + bytes) and Send it. The
+     // total length prefixes the buffer: total = keyLen + valueLen + 12 (three u32
+     // prefixes).
+     s32 GameTalkManager::SendKeywordMessage(const char* lpcKey, const char* lpcValue)
+@@ -528,24 +550,36 @@
+         const u32 luTotal    = luKeyLen + luValueLen + 12;
+ 
+         u8* lpuOut = sacKeywordScratch;
+-        u32 luSwap;
+-
+-        // [+0x00] total length (big-endian).
+-        luSwap = _byteswap_ulong(luTotal);
+-        std::memcpy(lpuOut, &luSwap, 4);
+-
+-        // [+0x04] key length (big-endian), [+0x08] key bytes.
+-        luSwap = _byteswap_ulong(luKeyLen);
+-        std::memcpy(lpuOut + 4, &luSwap, 4);
++
++        // [+0x00] total length (little-endian).
++        lpuOut[0] = static_cast<u8>((luTotal) >> 0);
++        lpuOut[1] = static_cast<u8>((luTotal) >> 8);
++        lpuOut[2] = static_cast<u8>((luTotal) >> 16);
++        lpuOut[3] = static_cast<u8>((luTotal) >> 24);
++
++        // [+0x04] key length (little-endian), [+0x08] key bytes.
++        (lpuOut + 4)[0] = static_cast<u8>((luKeyLen) >> 0);
++        (lpuOut + 4)[1] = static_cast<u8>((luKeyLen) >> 8);
++        (lpuOut + 4)[2] = static_cast<u8>((luKeyLen) >> 16);
++        (lpuOut + 4)[3] = static_cast<u8>((luKeyLen) >> 24);
+         rw::core::stdc::StringnCopy(reinterpret_cast<char*>(lpuOut + 8), lpcKey, luKeyLen);
+ 
+-        // [after the key] value length (big-endian) + value bytes.
++        // [after the key] value length (little-endian) + value bytes.
+         u8* lpuValue = lpuOut + 8 + luKeyLen;
+-        luSwap = _byteswap_ulong(luValueLen);
+-        std::memcpy(lpuValue, &luSwap, 4);
++        lpuValue[0] = static_cast<u8>((luValueLen) >> 0);
++        lpuValue[1] = static_cast<u8>((luValueLen) >> 8);
++        lpuValue[2] = static_cast<u8>((luValueLen) >> 16);
++        lpuValue[3] = static_cast<u8>((luValueLen) >> 24);
+         rw::core::stdc::StringnCopy(reinterpret_cast<char*>(lpuValue + 4), lpcValue, luValueLen);
+ 
+         return mpProtocol->Send(lpuOut, static_cast<s32>(luTotal));
++    }
++
++    // Inlined by ARTIST CgsGameTalk::GameTalk::Update82837740..7750:
++    // manager-owned protocol, then its actual Poll virtual at slot3/+0xC.
++    void GameTalkManager::Update()
++    {
++        mpProtocol->Poll();
+     }
+ 
+     // @ 0x82838508 -- serialize rMessage under lpcEndpoint and Send it over the
+@@ -709,13 +743,13 @@
+ 
+     // The transport receive trampoline the manager installs on its protocol at
+     // construction. lpacMessage is a raw run of wire records; each record opens with a
+-    // big-endian u32 payload length, so the step to the next record is that length plus
++    // little-endian u32 payload length, so the step to the next record is that length plus
+     // the four bytes of the prefix itself. Each record is decoded into a message, routed,
+     // and released (dtor + the GameTalk package free -- Create package-allocates it, so
+     // this is not an operator-delete). The routing call is made even when Create declined
+     // the record and returned NULL, which is what the console does; only the release is
+-    // guarded. The record walk compares signed, so a length with the top bit set ends the
+-    // loop immediately rather than running away.
++    // guarded. The total luLength argument is compared signed, so a total with
++    // its top bit set skips the walk; each record step retains low32-bit addition.
+     void GameTalkManager::ReceiverCallback(const char* lpacMessage, u32 luLength)
+     {
+         const s32 liLength = static_cast<s32>(luLength);
+@@ -725,9 +759,12 @@
+         {
+             const char* lpcRecord = lpacMessage + liOffset;
+ 
+-            u32 luSwap = 0;
+-            std::memcpy(&luSwap, lpcRecord, 4);
+-            const s32 liStep = static_cast<s32>(_byteswap_ulong(luSwap)) + 4;
++            const u8* lpucLength = reinterpret_cast<const u8*>(lpcRecord);
++            const u32 luRecordLength = static_cast<u32>(lpucLength[0]) |
++                                       (static_cast<u32>(lpucLength[1]) << 8) |
++                                       (static_cast<u32>(lpucLength[2]) << 16) |
++                                       (static_cast<u32>(lpucLength[3]) << 24);
++            const u32 luStep = luRecordLength + 4u;
+ 
+             GameTalkMessage* lpMessage = GameTalkMessage::Create(lpcRecord);
+             ReceiveMessage(lpMessage);
+@@ -737,7 +774,8 @@
+                 EA::GameTalk::Free(lpMessage);
+             }
+ 
+-            liOffset += liStep;
++            // ARTIST82839224 adds the low32 bits, then compares signed.
++            liOffset = static_cast<s32>(static_cast<u32>(liOffset) + luStep);
+         }
+     }
+ }
+--- a/b5-decomp/src/SDKs/EA/GameTalk/GameTalk.h
++++ b/b5-decomp/src/SDKs/EA/GameTalk/GameTalk.h
+@@ -96,10 +96,10 @@
+         explicit GameTalkMessage(const char* lpcChannel);
+         ~GameTalkMessage();
+ 
+-        // @0x82838D98 -- static factory: decode a big-endian wire buffer into a message.
++        // @0x82838D98 -- static factory: decode a little-endian wire buffer into a message.
+         static GameTalkMessage* Create(const char* lpBuffer);
+ 
+-        // @0x82837B50 -- serialize the message into a freshly package-allocated big-endian
++        // @0x82837B50 -- serialize the message into a freshly package-allocated little-endian
+         // wire buffer (lpcKey prefixed at the front); *lppOutBuffer receives it. Returns the
+         // total buffer size.
+         u32 CreateBuffer(const char* lpcKey, void** lppOutBuffer);
+@@ -161,7 +161,7 @@
+         static s32 KsDataBufferCapacity;
+ 
+     private:
+-        // Wire-cursor parse helpers (X360 statics). Each reads a big-endian u32 length
++        // Wire-cursor parse helpers (X360 statics). Each reads a little-endian u32 length
+         // prefix off the cursor, advances past it, package-allocates the payload and copies
+         // it in, advancing the cursor past the payload.
+         //   ReadString @0x82837E88  NUL-terminated string copy (len+1 bytes).
+@@ -259,7 +259,7 @@
+         virtual ~GameTalkManager();
+ 
+         // X360 @0x82837770. Build a keyword message ([key][value], each length-
+-        // prefixed big-endian) in the shared scratch buffer and send it over the
++        // prefixed little-endian) in the shared scratch buffer and send it over the
+         // transport. Returns the transport Send result.
+         s32 SendKeywordMessage(const char* lpcKey, const char* lpcValue);
+ 
+--- a/b5-decomp/src/SDKs/Packages/GameTalk/1.8.0/include/GameTalk/IGameTalkProtocol.h
++++ b/b5-decomp/src/SDKs/Packages/GameTalk/1.8.0/include/GameTalk/IGameTalkProtocol.h
+@@ -60,6 +60,11 @@
+         // outgoing message through here.
+         virtual bool Send(void* lpaBuffer, s32 liMsgSize) = 0;
+ 
++        // Actual slot3/+0x0C, called by the inlined manager update82837748.
++        // ARTIST base vtable820CDC0C has destructor then three pure slots.
++        // The existing concrete transport supplies the recovered polling body.
++        virtual void Poll() = 0;
++
+         // +0x04: the raw-wire receive callback. GameTalkManager installs its
+         // ReceiverCallback trampoline here at construction; the transport backend
+         // fans each complete inbound message out through it (a no-op if null). Owned
