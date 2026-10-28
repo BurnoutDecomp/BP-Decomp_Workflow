@@ -64,7 +64,7 @@
   "delivery_state": {
     "source_checkpoint": "committed-and-pushed",
     "canonical_3003_full_dependencyhash_build": "pass (3003/3003; --rebuild; clean source heads; link pass)",
-    "native_driving_movement_baseline": "pending exact reviewed runtime overlay and fresh launch review",
+    "native_driving_movement_baseline": "prelaunch-refused-before-game-start; no native credit; retry held for safe disk headroom and fresh run binding",
     "normal_game_install": "not performed"
   },
   "build": {
@@ -98,5 +98,25 @@
       "b5": false
     },
     "output_isolated_to_candidate_worktree": true
+  },
+  "native_launch_review": {
+    "verdict": "pass",
+    "review_path": "scratch/DEBUG_MENU_1011/swarm_graphics_prelaunch_review_20261028/candidate62151/REVIEW_REV01_PASS.json",
+    "review_sha256": "eb63bf78cbd02a412484733dfcede704862325b07d005d0e738e9b04eb0d5946",
+    "binding_sha256": "df490d0339460c57de242d3559c228432e4764de062df83f0d8e4a9dcad5550d",
+    "prelaunch_seal_sha256": "6ff2647658ad7716beff7ec16d315367489108839e355e9059ec7329e04a5d03"
+  },
+  "native_attempt_01": {
+    "status": "prelaunch-refused-before-game-start",
+    "receipt_path": "scratch/DEBUG_MENU_1011/swarm_playable_delivery_20261028/native_62151/ATTEMPT_01.json",
+    "receipt_sha256": "fc281edac324dc943234433bb0847e55294d8eecada92ee1c1b915d87626145f",
+    "launcher_exit": 2,
+    "flow_run_exit": 1,
+    "reason": "D: had 16.6 GiB free; frame-dump guard requires at least 17 GiB",
+    "game_started": false,
+    "native_credit": 0,
+    "normal_protection_unchanged": true,
+    "free_bytes_after_attempt": 17861517312,
+    "safe_retry_requires": "free space at/above 17 GiB, distinct run directory, fresh seal/review; no MinFreeGB override"
   }
 }
