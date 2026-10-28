@@ -1,0 +1,172 @@
+{
+  "schema": 1,
+  "status": "post_install_verified_normal_delivery",
+  "generated_utc": "2026-10-28T19:53:15.050990+00:00",
+  "installed_executable_sha256": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da",
+  "b5_dev_head": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+  "workflow_main_head": "615d17482122346bc37038d28a65df0b3b122cc3",
+  "workflow_build_source": "4c3630796fd68e395005ee939387c22094eef891",
+  "candidate_build": {
+    "status": "pass",
+    "tu_count": 3003,
+    "completed_tu_entries": 3003,
+    "errors": 0,
+    "warnings": 86,
+    "link": "pass"
+  },
+  "normal_install": {
+    "status": "INSTALLED; verified",
+    "payloads_installed": 15,
+    "protected_profile_config_log_expected": 21,
+    "protected_profile_config_log_preserved": 21,
+    "preinstall_backup_file_count": 36,
+    "preinstall_backup_file_groups": {
+      "payloads": 15,
+      "profiles": 11,
+      "config": 2,
+      "logs": 8
+    },
+    "preinstall_backup_bytes": 98946470,
+    "game_kill_performed": false
+  },
+  "bounded_native_baseline": {
+    "status": "pass",
+    "slot": 62151,
+    "result_checks": 7,
+    "all_result_checks_pass": true,
+    "final_phase": "DRIVING",
+    "motion_path_m": 307.6,
+    "motion_net_m": 212.2,
+    "motion_samples": 256,
+    "teleported": true,
+    "organic_navigation_proven": false,
+    "asserts": 0,
+    "exceptions": 0,
+    "debug_site_dispositions": 0,
+    "limits": [
+      "The car was relocated by the baseline test before movement measurement; this does not prove organic route navigation.",
+      "No physical controller validation.",
+      "No complete gameplay, debug-menu, network, or long-session certification.",
+      "No pixel/presentation review was performed; six frames are retained.",
+      "Existing XMA decoder warnings are not evidence of complete audio behavior.",
+      "Native credit remains zero; this is a bounded boot/DRIVING/movement baseline only."
+    ]
+  },
+  "root_visual_review": {
+    "path": "ROOT_VISUAL_REVIEW.json",
+    "scope": "Contact sheet plus the three full-size driving captures only; this is not full-game, organic-route, debug-menu, online, or hardware-parity certification.",
+    "contact_sheet_sha256": "d00aed27ed59aec9b4f7ddc8f6d053bf19c976880227514c5c813aca964ff598",
+          "full_size_driving_frames_reviewed": 3,
+          "native_executor_pixel_review_performed": false,
+          "separate_root_visual_review_performed": true
+  },
+  "branch_retirement": {
+    "root_attestation": "Root confirmed the codex/debug-consumers-20261028 task branch was deleted locally and remotely in both repositories, the temporary workflow integration ref was deleted, and managed checkouts were detached at exact commits.",
+    "direct_ref_checks": [
+      {
+        "repository": "workflow",
+        "ref": "refs/heads/codex/debug-consumers-20261028",
+        "local_present": false,
+        "origin_present": false
+      },
+      {
+        "repository": "workflow",
+        "ref": "refs/heads/codex/debug-consumers-integration-20261028",
+        "local_present": false,
+        "origin_present": false
+      },
+      {
+        "repository": "b5-decomp",
+        "ref": "refs/heads/codex/debug-consumers-20261028",
+        "local_present": false,
+        "origin_present": false
+      },
+      {
+        "repository": "b5-decomp",
+        "ref": "refs/heads/codex/debug-consumers-integration-20261028",
+        "local_present": false,
+        "origin_present": false
+      }
+    ],
+    "detached_workflow_checkouts": [
+      {
+        "path": "C:/Users/adri1/.codex/worktrees/debug-consumers-20261028/BP-Decomp_Workflow",
+        "head": "13cc4e1a9edda67629c4b85b079cbe3d11cb3829",
+        "detached": true
+      },
+      {
+        "path": "C:/Users/adri1/.codex/worktrees/debug-consumers-integration-20261028/BP-Decomp_Workflow",
+        "head": "615d17482122346bc37038d28a65df0b3b122cc3",
+        "detached": true
+      }
+    ],
+    "temporary_integration_ref_exact_name_in_preinstall_receipt": null,
+    "prior_preinstall_receipt": {
+      "path": "progress/debug_menu/reviewed_consumers_delivery_20261028/RECEIPT.json",
+      "sha256": "3d53f2e469054432221d847752b14e600c1f132cc568ff05ced9ee1a8788edea",
+      "preinstall_branch_retirement_status": "pending ancestry proof and worktree detach",
+      "superseded_only_by_this_attributed_followup": true
+    }
+  },
+  "shared_wip": {
+    "backup_manifest_path": "scratch/DEBUG_MENU_1011/reviewed_consumers_delivery_20261028/shared_checkout_backup_rev01/BACKUP_MANIFEST.json",
+    "backup_manifest_sha256": "43b3a573c542bd13b4d1ac1ab4983a4f0a60e171b71165416253563cf357bf8d",
+    "copied_wip_files": 8,
+    "copied_wip_bytes": 3123422,
+    "progress_status_sha256": "9d1bbbbae418e34fa96f7ae9b00f81276b0c7a5fd14dc9d26efdc234b3b54870",
+    "volatility_head": "3d74050a051afab497bf5b6e760cf50a9d92c448",
+    "b5_CON_preserved_in_place": true,
+    "tools_volatility_wip_pointer_preserved": true
+  },
+  "copied_receipts": {
+    "NORMAL_INSTALL_PLAN.json": {
+      "sha256": "35c8f8413865e08600663b04a1af9dc9c0d58178a3a4c738e4d2956aec69608f",
+      "bytes": 15653
+    },
+    "INSTALL_PREFLIGHT.json": {
+      "sha256": "8262151c6099963510e2640f510238e8bcced1f670ec44b9cd5f028ef9ffa5a7",
+      "bytes": 16590
+    },
+    "NORMAL_INSTALL_EXECUTION.json": {
+      "sha256": "07f91fd8286d0861a19b64b6aacd46cfeafbad4cb9462f03e70f5f17f4c023ea",
+      "bytes": 9600
+    },
+    "NORMAL_POST_INSTALL_ROSTER.json": {
+      "sha256": "f6d374798240e198f4897de1a953aee1e2c02e34e64fd3b75add8dea2f48f09b",
+      "bytes": 7746
+    },
+    "NATIVE_EXECUTION_RECEIPT.json": {
+      "sha256": "22931e691026a2c232726393e2582c469160024afd40d28ac5aca1f70c4d5cb6",
+      "bytes": 6497
+    },
+    "NATIVE_EVIDENCE.json": {
+      "sha256": "9c402dcdffa18e307173b2409783ea0ae1559b44d90777b33594cade0fa44bdb",
+      "bytes": 3998
+    },
+    "NATIVE_CAPTURES.json": {
+      "sha256": "a168ce1a50978c0654d12520c0330a9fe12d7d892fa00e3fce13dc5e89164d80",
+      "bytes": 5882
+    },
+    "NATIVE_PRELAUNCH_REVIEW.json": {
+      "sha256": "eb63bf78cbd02a412484733dfcede704862325b07d005d0e738e9b04eb0d5946",
+      "bytes": 2124
+    },
+    "SHARED_WIP_BACKUP_MANIFEST.json": {
+      "sha256": "43b3a573c542bd13b4d1ac1ab4983a4f0a60e171b71165416253563cf357bf8d",
+      "bytes": 3202
+    }
+  },
+  "preinstall_integration_receipt": {
+    "path": "progress/debug_menu/reviewed_consumers_delivery_20261028/RECEIPT.json",
+    "sha256": "3d53f2e469054432221d847752b14e600c1f132cc568ff05ced9ee1a8788edea",
+    "preinstall_branch_retirement_status": "pending ancestry proof and worktree detach",
+    "superseded_only_by_this_attributed_followup": true
+  },
+  "campaign_counts_unchanged": {
+    "verified": 103,
+    "original-noop": 13,
+    "pending": 1239,
+    "new_site_dispositions": 0
+  },
+  "raw_media_copied_to_git": 0
+}
