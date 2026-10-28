@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T21:03:14.6694218Z",
+  "created_utc": "2026-10-28T21:25:30.3172465Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "dd4c71485a5eea91279de70eff4b08d56776a884",
+  "b5_source_head": "16b13c39f688c0ff66cd5afbfb33ec9bb2bc357b",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -490,6 +490,252 @@
       "review_verdict": "pass",
       "reviewer": "independent reviewer via fleet",
       "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk03_towbar_body",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk03_towbar_body/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "1f5ca8cf3375ca3f1cf34dd07c2fa2bc96587606c45dfd95eeb9fe78cb2a8e66",
+      "manifest_sha256": "7e5207d4e123a3abac6438a81a815013532c5830203942bb190620cd83a9c26e",
+      "packet_seal_file_sha256": "958d748f27e7bdd2688875d2bd4c3d319758e792691e1587a8187d370099575a",
+      "input_seal_sha256": "958d748f27e7bdd2688875d2bd4c3d319758e792691e1587a8187d370099575a",
+      "source_delta_sha256": "2b1931f9f1d390602abc9e06e5e01f1b1ea00a5bf20c562b0ca992039b9de494",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "d0e1494622a3dcf8ca785aaede053d142ad7e5ac",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.cpp",
+          "pre_sha256": "a86609150c0897eab70457e72f5cf01375a59928f0e2147fcab13dd78d1e5e4b",
+          "post_sha256": "3934dac21d463ccc06067665dd2b7e5e05e8d0af2d94fc7b9957534e5d2cab80"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 127,
+        "pre_or_omission_controls_pass": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published_exact_postimage",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk04_trailer_pool",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk04_trailer_pool/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "b16bfdeed6ec36d6dd355f7d41f41aa58bc59e3c1745c5d3cce3d66310cef568",
+      "manifest_sha256": "42d7c37b46bd1fcbe0edd0ffae8f9dc2e0dff4341fa6701be7127d940eb812d6",
+      "packet_seal_file_sha256": "2bb5a8b94869b079343dc52a05317b59b7f79215122b648d2cd8773cee23463f",
+      "input_seal_sha256": "2bb5a8b94869b079343dc52a05317b59b7f79215122b648d2cd8773cee23463f",
+      "source_delta_sha256": "b501a80d01299d27e7fa7a6b8390c2a34bb9d7df9491cf264a1af8b5d3d80436",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "16b13c39f688c0ff66cd5afbfb33ec9bb2bc357b",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "ae35fbed2ed7b66a2ca79bcde1d817674106b132140edb5720711851baa569ad",
+          "post_sha256": "915c598cc68af06274c5985f0105b17a5c0df458492cbea73de37e1941435008"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+          "pre_sha256": "d3f4847bce12db8b88e2b1221a6992ba74e49681992c15cddd5ced0c082e932f",
+          "post_sha256": "9e94c73215100c13b8b1907873bd765cc5d5d90cedc49dd274a24202482534d7"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 20,
+        "pre_or_omission_controls_pass": 2
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published_exact_postimage",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk05_lerp_caller",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk05_lerp_caller/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "c11ac963722071f32239b9ec870a23f35d9e2627fcabc3a1f7aa4a6c9bf3f352",
+      "manifest_sha256": "d13d4fcc5fd17afb421e54a017d5855142111c00f9a0573c213d6246f2ea41db",
+      "packet_seal_file_sha256": "a174fb193e3ef49505c979ce339e3d4bfb1c9ad230bc288ba8274a3a46203ed1",
+      "input_seal_sha256": "a174fb193e3ef49505c979ce339e3d4bfb1c9ad230bc288ba8274a3a46203ed1",
+      "source_delta_sha256": "242764a18ae71727a3100d9f979ac97f1202ec0380f5b8bf780279b03e1fc824",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": null,
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "ae35fbed2ed7b66a2ca79bcde1d817674106b132140edb5720711851baa569ad",
+          "post_sha256": "cd0694eb23b61c6861839447e803db7dd33247a3e8dd91d0cd275c2366a00104"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 12,
+        "pre_or_omission_controls_pass": 7
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "not_published; applied after chunk04 then reversed because following chunk06 patch context conflicted",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk06_trailer_motion",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk06_trailer_motion/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "31deafdddf234206ab29ce960d0ce067e479b5846ae90d0a985cd8f2d7908860",
+      "manifest_sha256": "e7f7eb1f48af41693d0619a422079bd1da484d2d65e849a6f39c1a758796b79e",
+      "packet_seal_file_sha256": "07fe0fc06943b3ed2febac8429a74694d6f974f788d268beb051ef4f9288d282",
+      "input_seal_sha256": "07fe0fc06943b3ed2febac8429a74694d6f974f788d268beb051ef4f9288d282",
+      "source_delta_sha256": "c30be1803b14ea22c1d3d448340a875e328ac8af4f627c473828b8c995246bed",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": null,
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "ae35fbed2ed7b66a2ca79bcde1d817674106b132140edb5720711851baa569ad",
+          "post_sha256": "800196a9216adca3db7b82ba06eb8b6e54da0350b17d10d06bbdc2617b43ae94"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+          "pre_sha256": "d3f4847bce12db8b88e2b1221a6992ba74e49681992c15cddd5ced0c082e932f",
+          "post_sha256": "edb577cf5a57e406968b896197dca8e04d296f90aae0f95ee95934831728fe19"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 93,
+        "pre_or_omission_controls_pass": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "blocked_path_conflict; --check failed at BrnTrafficEntityModule.cpp:8141 and BrnTrafficEntityModule.h:1465",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk07_trailer_dispatch",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk07_trailer_dispatch/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "4e1fed34b95a5b6710d69723cae22f0a82509f166d18a866499ddb7a76b8ce7c",
+      "manifest_sha256": "3764c480b90c87ca81c12da4877ee7b29b2b2a54b0d3bca84ed86249f7009c04",
+      "packet_seal_file_sha256": "f794afaca2d4d458c16ee1a918f4e2f062711912e5f95d24207694957d6bf9cc",
+      "input_seal_sha256": "f794afaca2d4d458c16ee1a918f4e2f062711912e5f95d24207694957d6bf9cc",
+      "source_delta_sha256": "ec78028c631488e9ea93ae16728bf2df32f8ebfeb9bc45b12d124657ad6477dc",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": null,
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "b01a78fcb16db2a4b4539196a1e7bfb54f16016da2c1f43e8a7ba91201c257c7",
+          "post_sha256": "bee34ff3b48be028f94a26bbd2dd6ae717ff586030311acd1294a42df99f4e1f"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+          "pre_sha256": "8684b3acedf7820cb028398aaa805526cf85245a33f45d727fd01227aedb4fa8",
+          "post_sha256": "96a481e104c1a6732d3851a371cb63ee1d9bb76c5d0372dcbf6badc3438eaba6"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 28,
+        "pre_or_omission_controls_pass": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "not_applied; waits for reviewed chunk04+05+06 composition",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk08_trailer_birth_callers",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk08_trailer_birth_callers/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "5707e7664b822cd05641eea29add60c2dbe614ea79f34c9a0b2a71f756f6b604",
+      "manifest_sha256": "613a1097e36911f2a6b27ab40db18def633f374cd9576ce3354c7f5d0fa0d6dd",
+      "packet_seal_file_sha256": "0fbafca1e1d9e107a51ab605513625e7e2f489cf7aedecdb3070e9acaf9f629f",
+      "input_seal_sha256": "0fbafca1e1d9e107a51ab605513625e7e2f489cf7aedecdb3070e9acaf9f629f",
+      "source_delta_sha256": "a91292912ffdf8fc5e80c183b6a4322fbe752d149fe9d7d104983172fc3c7bd0",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": null,
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "bee34ff3b48be028f94a26bbd2dd6ae717ff586030311acd1294a42df99f4e1f",
+          "post_sha256": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 48,
+        "pre_or_omission_controls_pass": 40
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "not_applied; waits for chunk07 exact postimage",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk09_light_unordered_expiry",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk09_light_unordered_expiry/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "dfcbf5d719e81fd305ad13bc8c171f5b0c247197db0b64bac500f600c0374fea",
+      "manifest_sha256": "bcc48ced6aa0a0d6a0370b218a20668a0c7b34fc636a613157523cf4417bb1e4",
+      "packet_seal_file_sha256": "80424917d22f3f8bcbe6731f48b3f9e728678d51a7a38233c63bc8a408167b18",
+      "input_seal_sha256": "80424917d22f3f8bcbe6731f48b3f9e728678d51a7a38233c63bc8a408167b18",
+      "source_delta_sha256": "816cf17c64219c55c2bcdf603940f96dad5d93cb14d41f490ba5821f2a49cee4",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": null,
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficLightRuntimeState.cpp",
+          "pre_sha256": "6a44d2e2e65edac634848c6d9e7fff6499aedaaed3ce4c4e329aa8c36c68a842",
+          "post_sha256": "32dabaee73639e28a6d1b4b7233c6015cb9f1dce80c1938ff224539d5b4f3697"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 134,
+        "pre_or_omission_controls_pass": 106
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "not_applied; stopped at prior source-order conflict",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
     }
   ],
   "review_records": [
@@ -543,5 +789,39 @@
     "blocker": "three unresolved DirectorDevTools symbols; existing BrnDirectorDevTools.cpp TU absent from canonical response file",
     "new_build_attempted_after_worlddebug": false,
     "response_file_changed": false
+  },
+  "traffic_backlog_combined_review": {
+    "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+    "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+    "review_seal_sha256": "fbaa0599f9494197812b1b25f55ad3f7fdc6c5b50440e4faee2ab6bb75bbb99a",
+    "manifest_sha256": "d9644f25ee918a8f082ac4d80aa26dbe5cba8bcd12b11b7384be94e8a1a2d16b",
+    "verdict": "pass",
+    "packets": null,
+    "post_controls": 462,
+    "native_game": false,
+    "site_credit": 0
+  },
+  "traffic_backlog_composition_blocker": {
+    "source_head": "16b13c39f688c0ff66cd5afbfb33ec9bb2bc357b",
+    "committed_before_halt": [
+      "chunk03_towbar_body:d0e1494622a3dcf8ca785aaede053d142ad7e5ac",
+      "chunk04_trailer_pool:16b13c39f688c0ff66cd5afbfb33ec9bb2bc357b"
+    ],
+    "conflict_packet": "chunk06_trailer_motion",
+    "conflict_paths": [
+      "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp:8141",
+      "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h:1465"
+    ],
+    "failed_operation": "git apply --check for the exact sealed chunk06 changes.patch after chunks04 and05 in source order",
+    "expected_reviewed_chunk07_preimage": {
+      "cpp": "b01a78fcb16db2a4b4539196a1e7bfb54f16016da2c1f43e8a7ba91201c257c7",
+      "header": "8684b3acedf7820cb028398aaa805526cf85245a33f45d727fd01227aedb4fa8"
+    },
+    "chunk05_transient_patch_reversed_to_chunk04_post": true,
+    "chunks06_07_08_09_applied": false,
+    "current_traffic_module_hash": "915c598cc68af06274c5985f0105b17a5c0df458492cbea73de37e1941435008",
+    "current_traffic_header_hash": "9e94c73215100c13b8b1907873bd765cc5d5d90cedc49dd274a24202482534d7",
+    "requires_root_direction": true,
+    "native_credit": 0
   }
 }
