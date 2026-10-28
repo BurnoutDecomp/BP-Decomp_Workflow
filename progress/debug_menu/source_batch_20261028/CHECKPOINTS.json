@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T19:59:19.7563636Z",
+  "created_utc": "2026-10-28T20:03:11.4030395Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "5386d3b47d1d11388d2ac7dfeedc42588819df97",
+  "b5_source_head": "2264b5e9cac307aa1bce80696fbcad232acc30ff",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -74,6 +74,47 @@
         "post_pass": 265,
         "native_game_launched": false,
         "hardware_accuracy_proved": false,
+        "site_credit": 0
+      },
+      "review_status": "pending_combined_fresh_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": null
+    },
+    {
+      "packet_id": "shadow_pvs_prop_lod_order",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_shadow_pvs_source_recovery_20261028/REVIEWER_PACKET.md",
+      "packet_sha256": "628eb7eff4e64f310320a7e88ba17e487c31a59941567e061d71c74d91a849a2",
+      "manifest_sha256": "9aaba7e0972d7c57b6dbbe2026b8843d26e0a2258c1aa0be703501838c9d7d93",
+      "source_delta_sha256": "71b250f5e02bd1b5d5d60740df4e355b0b1f9f83f6f830cda84fef0569873558",
+      "seal_file_sha256": "f35e3c5da3eab2097bbb7dc625992b1590f2527912953c07b0ef69fc48c9fa0d",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "2264b5e9cac307aa1bce80696fbcad232acc30ff",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+          "pre_sha256": "a6adc82266366f03a4fe6c1013d263bbe29aa322027468ae87a417317a28a847",
+          "post_sha256": "1bfda17dcf06ce5accda9c7451795b66af95130fced1afe71641f83cde8428cf"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityDebugComponent.h",
+          "pre_sha256": "b631ba9dc23e39694a69679c16b62661d6982db5cc7b65f85eddc3d614f7912a",
+          "post_sha256": "6d63379a63740f740033233d2fc8e13797d3823ebf4afe88e92d05338402aa3f"
+        }
+      ],
+      "affected_sites": [
+        "40-control Prop/World roster; statuses remain pending"
+      ],
+      "validation": {
+        "canonical_pre_tu_compile": "pass",
+        "canonical_post_tu_compile": "pass",
+        "compile_tus": [
+          "BrnPropEntityModule_Render.cpp",
+          "BrnPropEntityDebugComponent.cpp"
+        ],
+        "pre_compile_log_sha256": "90bbe3b74228595fc912cc5f87c9669fd0e6f93fd3f8d6094895554f15656079",
+        "post_compile_log_sha256": "90bbe3b74228595fc912cc5f87c9669fd0e6f93fd3f8d6094895554f15656079",
+        "native_game_launched": false,
         "site_credit": 0
       },
       "review_status": "pending_combined_fresh_review",
