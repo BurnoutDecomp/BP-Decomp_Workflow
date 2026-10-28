@@ -5,15 +5,13 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-**Installed:96869840**, from hosted40504852023/source1887d92d, whose runtime source/vendor bytes match integrated devf6cd2852. Launch `build/game/Burnout_PC.exe`. The package contains the reviewed20-control reset/contact source fixes and recovered screenshot writer/overlay behavior. All3003 shipping TUs,11 existing hosted groups and14 payloads pass; screenshot checks are33/0 versus the original33/20, and gameplay checks177/0 versus each genuine original177/89.
+**Installed: f06c7a7bc67d**, from source `209fb3b94f72` and workflow build source `4eb229dc6460`. Launch `build/game/Burnout_PC.exe`. This integrates the reviewed font/Buddy work, 30 bounded lifecycle call removals and six consumer fixes while preserving the newer StreetManager route-guidance fix and its regression files. The separate GUI17 branch is excluded.
 
-The exact image passed a narrow returning-profile startup, CarSelect exit and rendered stationary world/HUD assessment. Both screenshot controls pass independent raw/native-file/pixel/restoration review. The original case timestamp failure and450s launcher join failure remain FAIL; the game's cleanup was independently confirmed before the join failed. No responsive-driving or whole-game certificate follows from the held scene, and the20 gameplay controls still need their own native behavior checks.
+The exact current-source package passes canonical shipping compilation/linkage with the current SDL fork, followed by the original native boot/drive checks: title Start, junkyard exit, ordinary accelerator input and motion, zero asserts/exceptions, and six inspected original frames: title, car selection, one black EA loading transition, and three visible world/car/HUD scenes. The motion check reports `path=307,2m net=212,3m samples 40..261 teleported=True later respawns=0`. The run used the documented profile fixture and place-on-track relocation; it does not prove organic route navigation or complete gameplay.
 
-Config, both logs and all10profiles preserve their bytes/timestamps; every prior runtime payload is backed up. Font/Buddy changes and shared-math/platform research remain outside this installation. Screenshots retain the original relative `d_` output directory requirement; missing-directory failure is preserved. [Exact delivery](screenshot_gameplay_delivery_20261027.json), [native/no-op evidence and limits](screenshot_and_noops_20261027/README.md).
+Only verified runtime files were installed after backing up prior payloads. Configs, logs and all profile files preserved their bytes. This delivery adds **zero debug-site dispositions**. Full GUI17 activation, physical-controller testing, complete online/long-session behavior and control-specific native checks remain outside this baseline. [Current exact receipt](swarm_playable_delivery_20261028/STATE.json), [evidence and limits](swarm_playable_delivery_20261028/REPORT.md).
 
-Road Rage count/countdown, custom-route save/overwrite and host-tested Freeburn Leaving fixes are retained. Cold saved-route loading, joined-peer leaving, complete online races, long audio sessions and Replay frame wiring remain unresolved or unverified. The full GUI inbox/audio and original global-construction branches remain private. Whole-registry debug SAVE retains the original unnamed-DLC-slot crash; targeted tests avoid it.
-
-Earlier native delivery and integration evidence remains in the [October24 record](renderer_checked_delivery_20261024/DELIVERY.json).
+Historical delivery and pending/failure receipts remain below and in the [previous October27 receipt](screenshot_gameplay_delivery_20261027.json).
 
 ## Campaign counts
 

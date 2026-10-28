@@ -1,0 +1,11 @@
+# Playable delivery,28 October2026
+
+Source `209fb3b94f7266506dff4ffd569e8553f1b3af93` preserves both reviewed `00830db6` and current dev `01082e72`. Workflow build source `4eb229dc646029410664d466e55ebb6f217850c6` preserves current main `2bf696e5` and the reviewed candidate metadata. The only manual merge resolution was the b5 gitlink to the source merge, after proving both ancestries. No GUI17 branch was integrated.
+
+The exact executable `f06c7a7bc67d5a8518c78671a6e74653a90db424226fe54a48f5df3240ec4677` passed current-source canonical shipping compilation/linkage and the original bounded native baseline checks in private slot62150. The build receipt separately states recompilation/cache reuse, warnings and SDL source/package identities. The six baseline checks were inherited unchanged, with the canonical strict terminal check. Motion: `path=307,2m net=212,3m samples 40..261 teleported=True later respawns=0`. Original retained captures and independent visual inspection establish visible world/car/HUD. Native asserts/exceptions:0/0. Owned process cleanup, input reset, private-profile restoration and normal-package protection passed.
+
+The normal package now contains exactly the verified executable, cgsmap, map, provenance, runtime DLLs and two license files (15files). Prior payloads are backed up under the retained raw evidence root. All 21 protected config/log/profile files preserve their bytes. The shared indices and unrelated dirty bytes were separately backed up for reconciliation; `progress/status.json`, volatility WIP and the unmerged GUI branch remain preserved.
+
+Scope: the profile fixture, skip-video console latch and place-on-track relocation are explicit interventions. No physical controller, organic route navigation, complete debug-menu campaign, network play or long-session behavior is certified. No new debug-site disposition is awarded. Historical failed/pending receipts remain unchanged; this record supersedes the older delivery status only for the exact source/package/baseline above.
+
+Raw evidence: `scratch/DEBUG_MENU_1011/swarm_playable_delivery_20261028`. Build output and receipt path are bound in BINDINGS.json. Original approved-source00830 build/native evidence remains separately retained.
