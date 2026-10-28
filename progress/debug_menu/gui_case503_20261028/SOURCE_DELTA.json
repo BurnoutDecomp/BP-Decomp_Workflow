@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "baseline_b5_commit": "7fd84daede720aba2435eb55b4600ad13e856b33",
+  "baseline_b5_tree": "e441795a5508d7454a0ae2dca20b2dac91af9fca",
+  "assigned_base_verified_against_e2ca_commit": "e2ca9665933ef5faa186e4cec0cb2e341c21abd2",
+  "effective_preimage": "private 7fd base plus exact delta01 and delta02 postimages; this delta preimage changes only the two listed source TUs",
+  "prior_delta_manifests": {
+    "delta01_invite_cache_tick": "35b34a9c08929dbfc6779261885ada50f1aa1fe1b7a31417aaf7f8948b1c4935",
+    "delta02_worstcase_caller": "1052cf0166ac7cc4274a13b6b0dedef22e4f8ed192206ca93d14e8dafafec221"
+  },
+  "files": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "pre_sha256": "a25d734d5bcd80ba6955a624ffef04dc08c52751bc0cdfe3149b3e771df6d8f1",
+      "post_sha256": "96f86d208413c42bd268bf31a7ef653fe27c3be4439a6191c864613aa0e8c1eb",
+      "preimage_source": "delta01 postimage; unchanged base blob at 7fd/e2ca"
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp",
+      "pre_sha256": "24e5c47cdbcf3018ab669a71df5bbafe324adccc4abe5d4b64b32255edcf9e80",
+      "post_sha256": "88c6c158a390d2dcb222b72b94d8191c8d272f8a24d9799bd78d2398c5da422d",
+      "preimage_source": "git blob at private baseline 7fd"
+    }
+  ],
+  "changed_source_tus": [
+    "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+    "src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp"
+  ],
+  "notes": [
+    "case503 payload layout is taken from ARTIST; DecFIGS supplies the field names and profile declarations",
+    "case502 and case503 are the adjacent original direct stores to OptionsDataProfile +0x7344/+0x7348; last-played setters therefore perform only their exact member stores",
+    "lifecycle event18 and adjacent pointer-record work is excluded"
+  ],
+  "source_snapshot_paths": {
+    "pre": [
+      "pre/src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "pre/src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp"
+    ],
+    "post": [
+      "post/src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "post/src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp"
+    ]
+  },
+  "changes_patch": "changes.patch",
+  "compile_receipt": "compile/COMPILE_RECEIPT.json",
+  "counterfactual_receipt": "fixtures/COUNTERFACTUAL_RECEIPT.json"
+}
