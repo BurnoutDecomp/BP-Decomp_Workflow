@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T22:16:40.3810607Z",
+  "created_utc": "2026-10-28T22:17:56.0935838Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "9418bb51f7ed6e96df557044ed6954d20a8bc892",
+  "b5_source_head": "55a3c3c8032e9c6a9040026d5b1a86c4aed67e4d",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -657,7 +657,7 @@
       "source_delta_sha256": "ec78028c631488e9ea93ae16728bf2df32f8ebfeb9bc45b12d124657ad6477dc",
       "source_branch": "codex/debug-source-composition-20261028",
       "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
-      "source_checkpoint_b5": null,
+      "source_checkpoint_b5": "55a3c3c8032e9c6a9040026d5b1a86c4aed67e4d",
       "source_files": [
         {
           "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
@@ -680,10 +680,15 @@
       "review_status": "pass_source_review",
       "review_verdict": "pass",
       "reviewer": "Codex GPT-6.1 Sol",
-      "publication_status": "not_applied; waits for reviewed chunk04+05+06 composition",
+      "publication_status": "published_exact_postimage_after_recomposition",
       "native_game_launched": false,
       "site_credit": 0,
-      "native_credit": 0
+      "native_credit": 0,
+      "source_commit_paths": [
+        "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+        "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h"
+      ],
+      "combined_review_report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5"
     },
     {
       "packet_id": "traffic_backlog_chunk08_trailer_birth_callers",
@@ -824,7 +829,7 @@
     "site_credit": 0
   },
   "traffic_backlog_composition_blocker": {
-    "source_head": "9418bb51f7ed6e96df557044ed6954d20a8bc892",
+    "source_head": "55a3c3c8032e9c6a9040026d5b1a86c4aed67e4d",
     "committed_before_halt": [
       "chunk03_towbar_body:d0e1494622a3dcf8ca785aaede053d142ad7e5ac",
       "chunk04_trailer_pool:16b13c39f688c0ff66cd5afbfb33ec9bb2bc357b"
@@ -841,8 +846,8 @@
     },
     "chunk05_transient_patch_reversed_to_chunk04_post": true,
     "chunks06_07_08_09_applied": false,
-    "current_traffic_module_hash": "915c598cc68af06274c5985f0105b17a5c0df458492cbea73de37e1941435008",
-    "current_traffic_header_hash": "9e94c73215100c13b8b1907873bd765cc5d5d90cedc49dd274a24202482534d7",
+    "current_traffic_module_hash": "bee34ff3b48be028f94a26bbd2dd6ae717ff586030311acd1294a42df99f4e1f",
+    "current_traffic_header_hash": "96a481e104c1a6732d3851a371cb63ee1d9bb76c5d0372dcbf6badc3438eaba6",
     "requires_root_direction": false,
     "native_credit": 0,
     "current_traffic_module_hash_semantics": "LF-normalized exact chunk04 postimage",
@@ -851,7 +856,8 @@
     "chunk05_reapplied_via_exact_recomposition": true,
     "chunk06_applied_via_exact_recomposition": true,
     "chunk07_preimage_verified": true,
+    "chunk07_applied": true,
     "chunk07_08_09_applied": false,
-    "resolved_step": "The root-approved context-only packet reapplied unchanged chunk05/06 methods; exact complete files now match chunk07 preimages. Continue with chunk07 in order."
+    "resolved_step": "Chunks05/06 were applied via exact reviewed context recomposition; chunk07 is applied and its postimage matches chunk08 preimage."
   }
 }
