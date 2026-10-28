@@ -63,8 +63,40 @@
   },
   "delivery_state": {
     "source_checkpoint": "committed-and-pushed",
-    "canonical_3003_full_dependencyhash_build": "pending",
+    "canonical_3003_full_dependencyhash_build": "pass (3003/3003; --rebuild; clean source heads; link pass)",
     "native_driving_movement_baseline": "pending exact reviewed runtime overlay and fresh launch review",
     "normal_game_install": "not performed"
+  },
+  "build": {
+    "status": "pass",
+    "command": "python tools/build/build.py exe --rebuild",
+    "tu_count": 3003,
+    "completed_tu_entries": 3003,
+    "errors": 0,
+    "warnings": 86,
+    "link": "pass",
+    "cgsmap_records": 24601,
+    "exe": {
+      "path": "build/game/Burnout_PC.exe",
+      "bytes": 11629056,
+      "sha256": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da"
+    },
+    "cgsmap": {
+      "path": "build/game/Burnout_PC.cgsmap",
+      "bytes": 3148944,
+      "sha256": "9f30462f304a32a4d24999e425ffa18020d79495ba31d45dba487c996eeae9bc"
+    },
+    "provenance_json_sha256": "b89050c336cee1354d48c7b148e373e3587a59d8470ab54dc8e5219251ff4ab5",
+    "build_log_sha256": "6431d9160c463dcbadf3191ba7eb85824974df22f30b6cd3698713ff43263b18",
+    "config_sha256": "9ecdb58b786fec50f334435b3ec68cf2d9a657b0ab9fc97a0027c6d2e65f6f67",
+    "provenance_source_heads": {
+      "workflow": "4c3630796fd68e395005ee939387c22094eef891",
+      "b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2"
+    },
+    "provenance_dirty": {
+      "workflow": false,
+      "b5": false
+    },
+    "output_isolated_to_candidate_worktree": true
   }
 }
