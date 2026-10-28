@@ -1,0 +1,67 @@
+[
+  {
+    "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0005",
+    "caption": "       FUNCTION: Print Next Unread Message",
+    "verdict": "pass",
+    "scope": "positive original action no-op proof only; no automatic ledger promotion",
+    "primary": {
+      "callback": "0x82594840",
+      "tag": 5,
+      "bytes": 16,
+      "evidence": "82594870..80 posts tag5/16; leaf unsigned (tag-8)>5 selects8256C9B0; base table8256B6FC[4]=8256B7DC; same queue cleared825548E4."
+    },
+    "limits": "Preserve actual producer, valid original component/queue/selected-buddy lifetime, queue writes/clear and allocation/activation failures. No absence-based default or variable-wide no-op inference. Native execution not performed."
+  },
+  {
+    "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0006",
+    "caption": "       FUNCTION: Send Test Message",
+    "verdict": "pass",
+    "scope": "positive original action no-op proof only; no automatic ledger promotion",
+    "primary": {
+      "callback": "0x82594898",
+      "tag": 4,
+      "bytes": 216,
+      "evidence": "825948C8..EC copies the original200-byte fixed text and posts tag4/216; leaf default and base table[3] reach8256B7DC; same queue cleared825548E4."
+    },
+    "limits": "Preserve actual producer, valid original component/queue/selected-buddy lifetime, queue writes/clear and allocation/activation failures. No absence-based default or variable-wide no-op inference. Native execution not performed."
+  },
+  {
+    "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0009",
+    "caption": "       FUNCTION: Send Feedback",
+    "verdict": "pass",
+    "scope": "positive original action no-op proof only; no automatic ledger promotion",
+    "primary": {
+      "callback": "0x82594A58",
+      "tag": 7,
+      "bytes": 20,
+      "evidence": "82594A88..A8 stores actual feedback index and posts tag7/20 under its original queue guard; leaf default and base table[6] reach8256B7DC; same queue cleared825548E4."
+    },
+    "limits": "Preserve actual producer, valid original component/queue/selected-buddy lifetime, queue writes/clear and allocation/activation failures. No absence-based default or variable-wide no-op inference. Native execution not performed."
+  },
+  {
+    "id": "BrnNetwork::BuddyManagerDebugComponent::OnActivate#0012",
+    "caption": "           FUNCTION: Print Message",
+    "verdict": "pass",
+    "scope": "positive original action no-op proof only; no automatic ledger promotion",
+    "primary": {
+      "callback": "0x825947E0",
+      "tag": 3,
+      "bytes": 20,
+      "evidence": "82594810..28 stores actual message index and posts tag3/20; leaf default and base table[2] reach8256B7DC; same queue cleared825548E4."
+    },
+    "limits": "Preserve actual producer, valid original component/queue/selected-buddy lifetime, queue writes/clear and allocation/activation failures. No absence-based default or variable-wide no-op inference. Native execution not performed."
+  },
+  {
+    "id": "BrnNetwork::ImageManagerDebugComponent::OnActivate#0001",
+    "caption": "Encode and save image",
+    "verdict": "pass",
+    "scope": "positive original action no-op proof only; no automatic ledger promotion",
+    "primary": {
+      "callback": "0x8284CB38",
+      "tag": null,
+      "bytes": null,
+      "evidence": "8258B00C/14 loads8284CB38 and8258B018 registers the actual action; its complete original code is4E800020 BLR. Current source callback is empty."
+    },
+    "limits": "Preserve actual producer, valid original component/queue/selected-buddy lifetime, queue writes/clear and allocation/activation failures. No absence-based default or variable-wide no-op inference. Native execution not performed."
+  }
+]

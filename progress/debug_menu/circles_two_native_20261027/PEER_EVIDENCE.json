@@ -1,0 +1,1535 @@
+{
+  "schema": 1,
+  "verdict": "pass",
+  "scope": "Independent retained-native disposition review for exactly the two listed constructor controls; original aggregate FAIL unchanged.",
+  "request": {
+    "path": "D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle62094_native_review_request_20261027/REVIEW_PACKET.md",
+    "sha256": "49ac875e01bf526e6117642f88a61e302087da695ef190e8a40c8d9ec91ed37d"
+  },
+  "original_root_pixel_review": {
+    "path": "D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/ROOT_PIXEL_REVIEW.json",
+    "sha256": "22aad8d722eacc5d6f98786ec9a8e9d6295592284c3df0db68175a98f6a770e4"
+  },
+  "accepted_sites": [
+    {
+      "site_id": "BrnWorld::WorldEntityModule::Construct#0002",
+      "verdict": "pass",
+      "scope": "Native visible bool effect, isolated false companion, negative and original false restoration in this candidate scene.",
+      "positive": "bb_008982.bmp",
+      "negative": "bb_009866.bmp",
+      "restore": "bb_010729.bmp",
+      "observation": "Large thin green circle arc on left wall/guardrail around x210-495,y270-470 and additional right arcs in positive; absent in natural baseline, negative and restore. Prop bool remains false."
+    },
+    {
+      "site_id": "BrnWorld::PropEntityModule::Construct#0001",
+      "verdict": "pass",
+      "scope": "Native visible bool effect, isolated false companion, negative and original false restoration in this candidate scene.",
+      "positive": "bb_011553.bmp",
+      "negative": "bb_012417.bmp",
+      "restore": "bb_013264.bmp",
+      "observation": "Separate green circle outlines near right fence/sky and rings beyond the garage in positive; absent in natural baseline, negative and restore. World bool remains false."
+    }
+  ],
+  "original_aggregate": {
+    "verdict": "FAIL",
+    "case_checks_passed": 5,
+    "case_checks": 6,
+    "canonical_case_exit": 1,
+    "trigger_exit": 0,
+    "flow_exit": 0,
+    "result_sha256": "3c9247379a6cbd098baab16b818ba14ad0bdfdcbcc68250081863185862bfee9",
+    "relabelled_or_rerun": false
+  },
+  "source_and_owner_bindings": {
+    "checks": [
+      {
+        "check": "launch copy unchanged CASE_PLAN.used.json",
+        "pass": true
+      },
+      {
+        "check": "launch copy unchanged runtime-binding.used.json",
+        "pass": true
+      },
+      {
+        "check": "launch copy unchanged CASE_SOURCE_BINDINGS.used.json",
+        "pass": true
+      },
+      {
+        "check": "launch copy unchanged HOSTED_ARTIFACT_BINDING.used.json",
+        "pass": true
+      },
+      {
+        "check": "launch copy unchanged STAGING.used.json",
+        "pass": true
+      },
+      {
+        "check": "launch copy unchanged ROOT_PRELAUNCH_REVIEW.used.json",
+        "pass": true
+      },
+      {
+        "check": "approved code/template BINDING.template.json",
+        "pass": true
+      },
+      {
+        "check": "approved code/template BoostBarEvidence.ps1",
+        "pass": true
+      },
+      {
+        "check": "approved code/template BoostHudKeys.proposed.ps1",
+        "pass": true
+      },
+      {
+        "check": "approved code/template CandidateArtifactGuard.ps1",
+        "pass": true
+      },
+      {
+        "check": "approved code/template Case.ps1",
+        "pass": true
+      },
+      {
+        "check": "approved code/template CASE_SOURCE_BINDINGS.template.json",
+        "pass": true
+      },
+      {
+        "check": "approved code/template checker.proposed.ps1",
+        "pass": true
+      },
+      {
+        "check": "approved code/template DebugCircleControls.ps1",
+        "pass": true
+      },
+      {
+        "check": "approved code/template HOSTED_ARTIFACT_BINDING.template.json",
+        "pass": true
+      },
+      {
+        "check": "approved code/template ROOT_PRELAUNCH_REVIEW.template.json",
+        "pass": true
+      },
+      {
+        "check": "approved code/template Run.ps1",
+        "pass": true
+      },
+      {
+        "check": "approved code/template RunOwned.py",
+        "pass": true
+      },
+      {
+        "check": "approved code/template STAGING.template.json",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin CASE_PLAN.json",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin CASE_SOURCE_BINDINGS.json",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin Case.ps1",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin BoostHudKeys.proposed.ps1",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin DebugCircleControls.ps1",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin BoostBarEvidence.ps1",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin checker.proposed.ps1",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin CandidateArtifactGuard.ps1",
+        "pass": true
+      },
+      {
+        "check": "binding raw pin DATA_STAGING.json",
+        "pass": true
+      },
+      {
+        "check": "Root review pin Run.ps1",
+        "pass": true
+      },
+      {
+        "check": "Root review pin RunOwned.py",
+        "pass": true
+      },
+      {
+        "check": "Root review pin HOSTED_ARTIFACT_BINDING.json",
+        "pass": true
+      },
+      {
+        "check": "Root review pin BINDING.json",
+        "pass": true
+      },
+      {
+        "check": "Root review pin STAGING.json",
+        "pass": true
+      },
+      {
+        "check": "Root review pin CASE_PLAN.json",
+        "pass": true
+      },
+      {
+        "check": "runtime harness tools/tests/run_case.ps1",
+        "pass": true
+      },
+      {
+        "check": "runtime harness tools/diagnostics/flow_run.ps1",
+        "pass": true
+      },
+      {
+        "check": "all candidate identity candidate_source",
+        "pass": true
+      },
+      {
+        "check": "all candidate identity candidate_tree",
+        "pass": true
+      },
+      {
+        "check": "all candidate identity candidate_workflow_source",
+        "pass": true
+      },
+      {
+        "check": "all candidate identity candidate_workflow_tree",
+        "pass": true
+      },
+      {
+        "check": "plan policy selected_site_ids",
+        "pass": true
+      },
+      {
+        "check": "plan policy controls",
+        "pass": true
+      },
+      {
+        "check": "plan policy state_sequence",
+        "pass": true
+      },
+      {
+        "check": "plan policy schedule",
+        "pass": true
+      },
+      {
+        "check": "plan policy run_policy",
+        "pass": true
+      },
+      {
+        "check": "plan policy forcing_policy",
+        "pass": true
+      },
+      {
+        "check": "plan policy geometry_review",
+        "pass": true
+      },
+      {
+        "check": "plan policy root_visual_review",
+        "pass": true
+      },
+      {
+        "check": "plan policy source_snapshot_protocol",
+        "pass": true
+      },
+      {
+        "check": "plan policy in_run_natural_baseline",
+        "pass": true
+      },
+      {
+        "check": "approved actual Git alias contract",
+        "pass": true
+      },
+      {
+        "check": "alias binding receipt",
+        "pass": true
+      },
+      {
+        "check": "alias review receipt",
+        "pass": true
+      },
+      {
+        "check": "actual staged exact executable",
+        "pass": true
+      },
+      {
+        "check": "private config",
+        "pass": true
+      },
+      {
+        "check": "unchanged profile fixture",
+        "pass": true
+      },
+      {
+        "check": "exact15 launch roster",
+        "pass": true
+      },
+      {
+        "check": "staged payload avutil-61.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload Burnout_PC.exe.provenance.json",
+        "pass": true
+      },
+      {
+        "check": "staged payload avformat-63.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload SDL3-LICENSE.txt",
+        "pass": true
+      },
+      {
+        "check": "staged payload avfilter-12.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload swscale-10.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload SDL3.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload avcodec-63.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload swresample-7.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload avdevice-63.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload xaudio2_9redist.dll",
+        "pass": true
+      },
+      {
+        "check": "staged payload Burnout_PC.exe",
+        "pass": true
+      },
+      {
+        "check": "staged payload Burnout_PC.cgsmap",
+        "pass": true
+      },
+      {
+        "check": "staged payload Burnout_PC.map",
+        "pass": true
+      },
+      {
+        "check": "fourteen hosted payloads",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload avutil-61.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload Burnout_PC.exe.provenance.json",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload avformat-63.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload SDL3-LICENSE.txt",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload avfilter-12.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload swscale-10.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload SDL3.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload avcodec-63.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload swresample-7.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload avdevice-63.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload xaudio2_9redist.dll",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload Burnout_PC.exe",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload Burnout_PC.cgsmap",
+        "pass": true
+      },
+      {
+        "check": "artifact/stage payload Burnout_PC.map",
+        "pass": true
+      },
+      {
+        "check": "hosted verified receipt hash",
+        "pass": true
+      },
+      {
+        "check": "hosted input receipt hash",
+        "pass": true
+      },
+      {
+        "check": "hosted attribution",
+        "pass": true
+      },
+      {
+        "check": "hosted raw outputs equal stage payloads",
+        "pass": true
+      },
+      {
+        "check": "retained hosted scope3003/11",
+        "pass": true
+      },
+      {
+        "check": "actual selected slot from canonical terminal",
+        "pass": true
+      },
+      {
+        "check": "exact owned image across receipts",
+        "pass": true
+      },
+      {
+        "check": "exact owned PID across receipts",
+        "pass": true
+      },
+      {
+        "check": "exact owned start across receipts",
+        "pass": true
+      },
+      {
+        "check": "canonical original terminal bytes",
+        "pass": true
+      },
+      {
+        "check": "canonical cleanup/profile/normal flow",
+        "pass": true
+      },
+      {
+        "check": "native terminal cleanup/input/start/no asserts",
+        "pass": true
+      },
+      {
+        "check": "retain aggregate FAIL/case exit 1 and trigger0",
+        "pass": true
+      },
+      {
+        "check": "actual canonical OWNED_PROCESS line",
+        "pass": true
+      },
+      {
+        "check": "natural startup and bounded input policy",
+        "pass": true
+      },
+      {
+        "check": "actual candidate Git tree",
+        "pass": true
+      },
+      {
+        "check": "candidate Git raw snapshot b5-decomp/src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+        "pass": true
+      },
+      {
+        "check": "three-way source binding b5-decomp/src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+        "pass": true
+      },
+      {
+        "check": "candidate Git raw snapshot b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+        "pass": true
+      },
+      {
+        "check": "three-way source binding b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+        "pass": true
+      },
+      {
+        "check": "one retained alias snapshot header",
+        "pass": true
+      },
+      {
+        "check": "actual Git alias source header",
+        "pass": true
+      },
+      {
+        "check": "one retained alias snapshot script_interface",
+        "pass": true
+      },
+      {
+        "check": "actual Git alias source script_interface",
+        "pass": true
+      },
+      {
+        "check": "one retained alias snapshot menu_manager",
+        "pass": true
+      },
+      {
+        "check": "actual Git alias source menu_manager",
+        "pass": true
+      },
+      {
+        "check": "one retained alias snapshot menu",
+        "pass": true
+      },
+      {
+        "check": "actual Git alias source menu",
+        "pass": true
+      },
+      {
+        "check": "actual stage and canonical raw log identical",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity boost-hud-witnesses.json",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity boost-hud-owner.json",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity flow-terminal.json",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity result.json",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity ROOT_HANDOFF_RESULT.json",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity POSTCHECK.json",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity BrnGame.log",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity checker.proposed.ps1",
+        "pass": true
+      },
+      {
+        "check": "Root evidence raw identity run_case.ps1",
+        "pass": true
+      }
+    ],
+    "errors": [],
+    "canonical_slot": 62094,
+    "owner": {
+      "pid": 30012,
+      "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\stage\\slot\\Burnout_PC.exe",
+      "start_utc": "2026-10-27T11:20:14.5894107Z",
+      "start_utc_ticks": "639286968145894107",
+      "exe_sha256": "08ac2dfecd8607cd6e313ab8d89599345ceffc8a0cb929fcfa150a9376b7f39d",
+      "slot": 62094
+    },
+    "native_terminal": {
+      "schema": 1,
+      "launch_utc": "2026-10-27T11:20:14.5803807Z",
+      "launched": true,
+      "owned_pid": 30012,
+      "owned_image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\stage\\slot\\Burnout_PC.exe",
+      "owned_start_utc": "2026-10-27T11:20:14.5894107Z",
+      "direct_creation_handle_retained": true,
+      "completed": true,
+      "requested_exit": 0,
+      "error": null,
+      "first_assert_stop": false,
+      "first_assert_at": null,
+      "observed_asserts": 0,
+      "foreign_game": false,
+      "allow_concurrent_games": true,
+      "max_other_games_observed": 0,
+      "runaway_log_abort": false,
+      "owned_cleanup_complete": true,
+      "input_reset_complete": true,
+      "game_exited_on_own": false,
+      "game_exit": null,
+      "title_start_requested": true,
+      "title_start_ready_observed": true,
+      "title_start_sent_at": 17.1191835,
+      "success": true
+    },
+    "canonical_wrapper": {
+      "schema": 1,
+      "case": "debug_menu_circle_flags_two_control",
+      "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010",
+      "slot": 62094,
+      "flow_invoked": true,
+      "flow_exit": 0,
+      "error": null,
+      "flow_status_sha256": "4a10044d72e464f24869160a9be02a98e88a8448d66a065a11a3ee2d3348979c",
+      "flow_status": {
+        "schema": 1,
+        "launch_utc": "2026-10-27T11:20:14.5803807Z",
+        "launched": true,
+        "owned_pid": 30012,
+        "owned_image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\stage\\slot\\Burnout_PC.exe",
+        "owned_start_utc": "2026-10-27T11:20:14.5894107Z",
+        "direct_creation_handle_retained": true,
+        "completed": true,
+        "requested_exit": 0,
+        "error": null,
+        "first_assert_stop": false,
+        "first_assert_at": null,
+        "observed_asserts": 0,
+        "foreign_game": false,
+        "allow_concurrent_games": true,
+        "max_other_games_observed": 0,
+        "runaway_log_abort": false,
+        "owned_cleanup_complete": true,
+        "input_reset_complete": true,
+        "game_exited_on_own": false,
+        "game_exit": null,
+        "title_start_requested": true,
+        "title_start_ready_observed": true,
+        "title_start_sent_at": 17.1191835,
+        "success": true
+      },
+      "helper_cleanup_complete": true,
+      "profile_restoration_complete": true,
+      "post_flow_foreign_game": false,
+      "profile_restore_error": null,
+      "allow_concurrent_games": true,
+      "allowed_other_games_before_profile": 0,
+      "allowed_other_games_after_flow": 0,
+      "success": true
+    },
+    "original_aggregate_verdict": "FAIL",
+    "original_result_sha256": "3c9247379a6cbd098baab16b818ba14ad0bdfdcbcc68250081863185862bfee9",
+    "raw_log_sha256": "02b80094badbfab4a72652ac0a130d4b46c7e87ec2575e963b8e037455794e91",
+    "raw_log_bytes": 36152581,
+    "witness_sha256": "3ff5992a4ae38eef422a2fb226eea4f693dbea01b1cf8a275973c25bcc9ae560",
+    "source_snapshots": [
+      {
+        "path": "b5-decomp/src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+        "bytes": 99239,
+        "sha256": "e73326e9129bd9048bad7e022b02aff5971e89484972658a59d44662877dd199",
+        "git_blob_sha1": "8db987950fd699e5bfa16a6bde244c0d1cf310f2"
+      },
+      {
+        "path": "b5-decomp/src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+        "bytes": 63881,
+        "sha256": "a6adc82266366f03a4fe6c1013d263bbe29aa322027468ae87a417317a28a847",
+        "git_blob_sha1": "51b5bdd325acf1bfa64aee189ec7ccf9dcfe6cc9"
+      },
+      {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.h",
+        "bytes": 6167,
+        "sha256": "f8eba4a9def6ca7167e77c645b0f7282be930e5bcae02f5fd14de15a73416929",
+        "git_blob_sha1": "ce9d65dfd619537864772017c7fc3a4622b789df"
+      },
+      {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp",
+        "bytes": 27612,
+        "sha256": "4b09a9b2ece825f9302f6fa32be2f5fededc88b902bf5527d7231cef9a415c70",
+        "git_blob_sha1": "d891abb03ae349161bbdb486037c08eb37161347"
+      },
+      {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp",
+        "bytes": 12769,
+        "sha256": "2d94ba0f515019e5c5b46973286bfb59a5866c28893563c228bfef4c6b0cee5a",
+        "git_blob_sha1": "e42e9c080a70bca0d00166997c2704df2208dfbd"
+      },
+      {
+        "path": "b5-decomp/src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenu.cpp",
+        "bytes": 6390,
+        "sha256": "abf2005739accfb8ab0af7b81bcc47104593938b992a7a57f41d54bd02c3ea14",
+        "git_blob_sha1": "1b6d86e66aa5a8efe28083e562163fc3ce046267"
+      }
+    ],
+    "hosted_receipt_sha256": "f8cc8e4cf474674bc39b1ecf4e129f77f05dfcc37cb2967aaa3ca82b20372f7a",
+    "hosted_input_receipt_sha256": "e9f97b2b48b3937bcc80862c4fbace68d538b4cfef52c60401e854002d680ee6",
+    "hosted_scope": "retained 3003 shipping TUs,eleven recorded selected gates, fourteen identical payloads; not new execution",
+    "frame_csv_sha256": "4d384c2738640f4bf951b3459adc49826226003445c2366c5c7f60be67d09bad"
+  },
+  "raw_data_analysis": {
+    "method": "Independent raw-data analysis using canonical flow-terminal.slot, not evaluation/import or alteration of the failed checker.",
+    "assertions": 30124,
+    "errors": [],
+    "complete_log_lines": 187006,
+    "complete_normalized_log_bytes": 35965575,
+    "window_proofs": [
+      {
+        "label": "baseline F2",
+        "begin_bytes": 3389423,
+        "end_bytes": 3508403,
+        "begin_line_index": 18687,
+        "end_line_index": 19306
+      },
+      {
+        "label": "natural capture",
+        "begin_bytes": 3389423,
+        "end_bytes": 3864806,
+        "begin_line_index": 18687,
+        "end_line_index": 21178
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/positive",
+        "begin_bytes": 4322864,
+        "end_bytes": 4820155,
+        "begin_line_index": 23574,
+        "end_line_index": 26186
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/negative",
+        "begin_bytes": 5094330,
+        "end_bytes": 5606614,
+        "begin_line_index": 27604,
+        "end_line_index": 30288
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/restore",
+        "begin_bytes": 5854134,
+        "end_bytes": 6376990,
+        "begin_line_index": 31560,
+        "end_line_index": 34291
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/positive",
+        "begin_bytes": 6636325,
+        "end_bytes": 7130513,
+        "begin_line_index": 35632,
+        "end_line_index": 38207
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/negative",
+        "begin_bytes": 7404367,
+        "end_bytes": 7909233,
+        "begin_line_index": 39626,
+        "end_line_index": 42251
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/restore",
+        "begin_bytes": 8174316,
+        "end_bytes": 8665530,
+        "begin_line_index": 43624,
+        "end_line_index": 46171
+      }
+    ],
+    "held_receipts": [
+      {
+        "label": "startup",
+        "fresh_cursor": 9473,
+        "motion_indices": [
+          10234,
+          10406,
+          10567,
+          10739
+        ],
+        "physics_indices": [
+          10248,
+          10416,
+          10580,
+          10749
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "in-run-natural-baseline capture",
+        "fresh_cursor": 19488,
+        "motion_indices": [
+          20049,
+          20162,
+          20282,
+          20399
+        ],
+        "physics_indices": [
+          20059,
+          20172,
+          20291,
+          20408
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/positive prewrite",
+        "fresh_cursor": 22564,
+        "motion_indices": [
+          23110,
+          23225,
+          23342,
+          23458
+        ],
+        "physics_indices": [
+          23115,
+          23234,
+          23352,
+          23468
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/positive capture",
+        "fresh_cursor": 24633,
+        "motion_indices": [
+          25174,
+          25281,
+          25384,
+          25488
+        ],
+        "physics_indices": [
+          25179,
+          25286,
+          25389,
+          25494
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/negative prewrite",
+        "fresh_cursor": 26629,
+        "motion_indices": [
+          27220,
+          27336,
+          27458,
+          27577
+        ],
+        "physics_indices": [
+          27225,
+          27341,
+          27463,
+          27586
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/negative capture",
+        "fresh_cursor": 28622,
+        "motion_indices": [
+          29150,
+          29271,
+          29389,
+          29507
+        ],
+        "physics_indices": [
+          29159,
+          29280,
+          29400,
+          29512
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/restore prewrite",
+        "fresh_cursor": 30643,
+        "motion_indices": [
+          31113,
+          31226,
+          31340,
+          31449
+        ],
+        "physics_indices": [
+          31118,
+          31237,
+          31345,
+          31454
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/restore capture",
+        "fresh_cursor": 32703,
+        "motion_indices": [
+          33254,
+          33373,
+          33494,
+          33608
+        ],
+        "physics_indices": [
+          33265,
+          33378,
+          33503,
+          33619
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/positive prewrite",
+        "fresh_cursor": 34733,
+        "motion_indices": [
+          35197,
+          35321,
+          35431,
+          35537
+        ],
+        "physics_indices": [
+          35203,
+          35331,
+          35442,
+          35547
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/positive capture",
+        "fresh_cursor": 36697,
+        "motion_indices": [
+          37200,
+          37307,
+          37415,
+          37524
+        ],
+        "physics_indices": [
+          37210,
+          37318,
+          37426,
+          37536
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/negative prewrite",
+        "fresh_cursor": 38745,
+        "motion_indices": [
+          39236,
+          39342,
+          39451,
+          39558
+        ],
+        "physics_indices": [
+          39241,
+          39353,
+          39461,
+          39563
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/negative capture",
+        "fresh_cursor": 40714,
+        "motion_indices": [
+          41273,
+          41393,
+          41498,
+          41603
+        ],
+        "physics_indices": [
+          41284,
+          41399,
+          41503,
+          41608
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/restore prewrite",
+        "fresh_cursor": 42747,
+        "motion_indices": [
+          43200,
+          43312,
+          43425,
+          43531
+        ],
+        "physics_indices": [
+          43211,
+          43321,
+          43430,
+          43541
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/restore capture",
+        "fresh_cursor": 44659,
+        "motion_indices": [
+          45111,
+          45221,
+          45332,
+          45445
+        ],
+        "physics_indices": [
+          45121,
+          45226,
+          45343,
+          45450
+        ],
+        "path": 0,
+        "max_actual_speed": 0
+      }
+    ],
+    "frame_chain": [
+      {
+        "label": "in-run-natural-baseline",
+        "sequence": 1,
+        "present": 7903,
+        "frame": "bb_007903.bmp",
+        "sha256": "2394f5d6750d402b7aa774a17abf04b5ffc882289ef0287b312c6883417a224f",
+        "F1_or_setup_global": 17544,
+        "last_F2_value_global": 19095,
+        "capture_fresh_cursor": 19488,
+        "engine2_index": 20631,
+        "request_cursor": 20732,
+        "ACK_index": 20961,
+        "window_end": 21178
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/positive",
+        "sequence": 2,
+        "present": 8982,
+        "frame": "bb_008982.bmp",
+        "sha256": "1f6d5ec907984e06dfd54dc2942f0f20afe42d0c37937bf261703b0fe9a68dcd",
+        "F1_or_setup_global": 23974,
+        "last_F2_value_global": 24412,
+        "capture_fresh_cursor": 24633,
+        "engine2_index": 25693,
+        "request_cursor": 25760,
+        "ACK_index": 25987,
+        "window_end": 26186
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/negative",
+        "sequence": 3,
+        "present": 9866,
+        "frame": "bb_009866.bmp",
+        "sha256": "0232a08b407941cf378b49ea23b1d3aa77851e96c40857b657a2e15172a30a76",
+        "F1_or_setup_global": 27988,
+        "last_F2_value_global": 28402,
+        "capture_fresh_cursor": 28622,
+        "engine2_index": 29732,
+        "request_cursor": 29870,
+        "ACK_index": 30081,
+        "window_end": 30288
+      },
+      {
+        "label": "BrnWorld::WorldEntityModule::Construct#0002/restore",
+        "sequence": 4,
+        "present": 10729,
+        "frame": "bb_010729.bmp",
+        "sha256": "ebd11e06b01e381e6b727cdb9baaa29d187e8c2a322122acd899a7887b4d1a94",
+        "F1_or_setup_global": 32055,
+        "last_F2_value_global": 32505,
+        "capture_fresh_cursor": 32703,
+        "engine2_index": 33834,
+        "request_cursor": 33894,
+        "ACK_index": 34100,
+        "window_end": 34291
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/positive",
+        "sequence": 5,
+        "present": 11553,
+        "frame": "bb_011553.bmp",
+        "sha256": "8fe923af08e886897c2014b2298c6001cc22b1e347a946155ee1608907539af7",
+        "F1_or_setup_global": 36090,
+        "last_F2_value_global": 36500,
+        "capture_fresh_cursor": 36697,
+        "engine2_index": 37727,
+        "request_cursor": 37791,
+        "ACK_index": 37989,
+        "window_end": 38207
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/negative",
+        "sequence": 6,
+        "present": 12417,
+        "frame": "bb_012417.bmp",
+        "sha256": "7b8a428ae0e45d548596dee10550938d2f1687410774550ad403cbeeac9c062c",
+        "F1_or_setup_global": 40108,
+        "last_F2_value_global": 40513,
+        "capture_fresh_cursor": 40714,
+        "engine2_index": 41704,
+        "request_cursor": 41831,
+        "ACK_index": 42042,
+        "window_end": 42251
+      },
+      {
+        "label": "BrnWorld::PropEntityModule::Construct#0001/restore",
+        "sequence": 7,
+        "present": 13264,
+        "frame": "bb_013264.bmp",
+        "sha256": "ea7103c2518c150bc5f6f75e8875b7f899a4c4bfe810e29092c4b1c2cdadbcda",
+        "F1_or_setup_global": 44085,
+        "last_F2_value_global": 44473,
+        "capture_fresh_cursor": 44659,
+        "engine2_index": 45663,
+        "request_cursor": 45762,
+        "ACK_index": 45954,
+        "window_end": 46171
+      }
+    ],
+    "actual_isolated_states": [
+      {
+        "site": "BrnWorld::WorldEntityModule::Construct#0002",
+        "state": "positive",
+        "world": true,
+        "prop": false
+      },
+      {
+        "site": "BrnWorld::WorldEntityModule::Construct#0002",
+        "state": "negative",
+        "world": false,
+        "prop": false
+      },
+      {
+        "site": "BrnWorld::WorldEntityModule::Construct#0002",
+        "state": "restore",
+        "world": false,
+        "prop": false
+      },
+      {
+        "site": "BrnWorld::PropEntityModule::Construct#0001",
+        "state": "positive",
+        "world": false,
+        "prop": true
+      },
+      {
+        "site": "BrnWorld::PropEntityModule::Construct#0001",
+        "state": "negative",
+        "world": false,
+        "prop": false
+      },
+      {
+        "site": "BrnWorld::PropEntityModule::Construct#0001",
+        "state": "restore",
+        "world": false,
+        "prop": false
+      }
+    ],
+    "natural_setup": {
+      "start": 10875,
+      "alias_indices": [
+        17543,
+        17544
+      ],
+      "Enter_index": 17545,
+      "close_index": 18589,
+      "keys": [
+        101,
+        120,
+        101,
+        99,
+        32,
+        98,
+        49,
+        46,
+        99,
+        102,
+        103,
+        10
+      ],
+      "alias_before_Enter_observed": true
+    },
+    "full_capture_history": {
+      "motion_rows": 322,
+      "physics_rows": 323,
+      "max_speed": 0.203495,
+      "max_planar_distance": 0.03735399999982292,
+      "engine2_retained": true
+    },
+    "final_restore_frame": "bb_013264.bmp",
+    "strict_helper_done": [
+      [
+        "2026-10-27T11:22:09.2384878Z",
+        "2",
+        "0",
+        "6",
+        "7"
+      ]
+    ]
+  },
+  "additional_joins_and_context_diagnosis": {
+    "checks": {
+      "natural_candidate_owner": true,
+      "initial_both_false": true,
+      "no_inherited_pixel_witness": true,
+      "nested_baseline_receipts": true,
+      "top_and_nested_fresh_request_indices": true,
+      "seven_ordered_unique_frames": true,
+      "owner_exact_start_ticks": true,
+      "final_context_omits_slot": true,
+      "setup_context_has_slot": true,
+      "all_ten_failure_messages_are_slot_comparisons": true
+    },
+    "errors": [],
+    "source_diagnosis": {
+      "final_context_source_line": 457,
+      "final_context_actual_text": "$ctx = @{\n  Log = $logPath; LogLines = $logLines; Marks = $lM.Marks; MarksText = $lM.Text; Phase = $lM.Phase\n  Asserts = $lM.Asserts; FrameDir = $frameDir; RunDir = $RunDir; Case = $lCase; CueRegex = $cueRegex\n}",
+      "checker_raw_sha256": "c7238d867bbe6633a70b34cd24eeee3df5508f8d754807e83e059f7d4a20d6df",
+      "run_case_raw_sha256": "7d124e920a7f09c6257c7e411510fc21b6b7fe80524348613ac86d93b877e185",
+      "actual_failure_messages": [
+        "helper differs from exact private candidate image/hash/PID/slot",
+        "helper PID/image/start differs from canonical driver handoff",
+        "natural baseline not this candidate/owned run or claims prior pixel approval",
+        "in-run-natural-baseline raw ACK PID/slot/sequence/present/file differs",
+        "BrnWorld::WorldEntityModule::Construct#0002/positive raw ACK PID/slot/sequence/present/file differs",
+        "BrnWorld::WorldEntityModule::Construct#0002/negative raw ACK PID/slot/sequence/present/file differs",
+        "BrnWorld::WorldEntityModule::Construct#0002/restore raw ACK PID/slot/sequence/present/file differs",
+        "BrnWorld::PropEntityModule::Construct#0001/positive raw ACK PID/slot/sequence/present/file differs",
+        "BrnWorld::PropEntityModule::Construct#0001/negative raw ACK PID/slot/sequence/present/file differs",
+        "BrnWorld::PropEntityModule::Construct#0001/restore raw ACK PID/slot/sequence/present/file differs"
+      ],
+      "absent_Context_Slot_integer_comparison": "The absent hashtable field is null and coerced to integer 0; actual canonical/helper/driver/request slot is62094. No original checker was invoked or context repaired.",
+      "setup_context_prefix": "$lSetupCtx = @{ Root = $root; RunDir = $RunDir; Slot = $Slot; Case = $lCase\n                      GameDir = $exeDir; WorkingDirectory = $WorkingDirectory\n                      UsesPrivateStage = $usingCustomGameDirs\n                      SlotCommandRoot = $(if ($usingCustomGameDirs) { '../slot' }"
+    }
+  },
+  "protection_postcheck": {
+    "normal_files": [
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.cgsmap",
+        "bytes": 3144848,
+        "sha256": "2050d3d44ffa7b7a3b01b71b59cb14a9c5ddfc771e018fb3e3f97d5d1f1afff4",
+        "mtime_utc_filetime_ticks": "134375212332526352",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.exe",
+        "bytes": 11532800,
+        "sha256": "f8ff3699f762b108cb51c81919c349c499cb5aa2b659eab81774deb946f388db",
+        "mtime_utc_filetime_ticks": "134375212299214340",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.exe.provenance.json",
+        "bytes": 438,
+        "sha256": "589b7e1851b15eb280d5b4d24a46345cee4b4b39809131ac9112a92a5d73f13f",
+        "mtime_utc_filetime_ticks": "134375212317568254",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Burnout_PC.map",
+        "bytes": 18360745,
+        "sha256": "0bbe73b33332f5ce9d7bda6d69280e2dfd81477f1e9e87e019b3e47f6b588aa0",
+        "mtime_utc_filetime_ticks": "134375212299337402",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avcodec-63.dll",
+        "bytes": 2178560,
+        "sha256": "df7221b0b336d8475c8201b47d82fa982f6feb85dbc5780c7b4b1faba94b51da",
+        "mtime_utc_filetime_ticks": "134281822773909943",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avdevice-63.dll",
+        "bytes": 109056,
+        "sha256": "ec81e8fd1d4ff236225f67bf09b8317faf7916442b0774ffb558999af918c077",
+        "mtime_utc_filetime_ticks": "134281822751802186",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avfilter-12.dll",
+        "bytes": 234496,
+        "sha256": "f8666ccb6b7e9d37934bfa5a997c6a3f662cf538ab00f3cf7bc61acfcf316411",
+        "mtime_utc_filetime_ticks": "134281822759915066",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avformat-63.dll",
+        "bytes": 644096,
+        "sha256": "d18213d29780dad7ccd29f801aa69943d14f989dae956b4ddb2c1d5b874343c4",
+        "mtime_utc_filetime_ticks": "134281822767146115",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\avutil-61.dll",
+        "bytes": 978432,
+        "sha256": "9eea6110a1c7c9d3ef67d80f978bd826de9a53aa08fd7e6bae318a98a64929c4",
+        "mtime_utc_filetime_ticks": "134281822792244515",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\swresample-7.dll",
+        "bytes": 201728,
+        "sha256": "e4e7a9122ce8ed2a31648a0b13db8f658760946755fdd1309358fd157c81264d",
+        "mtime_utc_filetime_ticks": "134281822780037306",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\swscale-10.dll",
+        "bytes": 955904,
+        "sha256": "913ccdc3367ada39bff64d5e156087e1d8ae7c9501479cdbac211818e9ec7a24",
+        "mtime_utc_filetime_ticks": "134281822786347284",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\xaudio2_9redist.dll",
+        "bytes": 997400,
+        "sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+        "mtime_utc_filetime_ticks": "133887717200000000",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\config.ini",
+        "bytes": 7924,
+        "sha256": "b3f43dfebc363955ea612d4ea13f5d60e74adcd8f539c3ec08eb5aa509a7684d",
+        "mtime_utc_filetime_ticks": "134375182517282994",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\BrnGame.log",
+        "bytes": 23305227,
+        "sha256": "734becb467321f732af43ff6bcae6fd9c9933eabceb894a59368a062f812e5d1",
+        "mtime_utc_filetime_ticks": "134375182517449720",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\BrnGame.emergency.log",
+        "bytes": 15297602,
+        "sha256": "b3b72e8d016a1b37b8e28f289ddf40b8b0de0ce2f721209f64a90ac42ff231cb",
+        "mtime_utc_filetime_ticks": "134375179147400010",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "fdc8ea72e57b1235a83badd2443e3631c23c3138ec521a96846b05238f0b9d74",
+        "mtime_utc_filetime_ticks": "134375181675857551",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_1\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "dbaa53b367deb6149497e8e6b50edb02e426b8f38959a911ed0e074eadb9e81a",
+        "mtime_utc_filetime_ticks": "134363839561568987",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_20\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+        "mtime_utc_filetime_ticks": "134363841446171351",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_21\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+        "mtime_utc_filetime_ticks": "134363841446171351",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_22\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+        "mtime_utc_filetime_ticks": "134363841446171351",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_23\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "09a8611e8e6981075ad87ace4378f3af99ff84ca68a26c4c91272643a638eab0",
+        "mtime_utc_filetime_ticks": "134363699847137528",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_3\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "4d2ac0876d96d2652d108c1cfa50795edf565f2e098e4e685cefdfef7bdec8e7",
+        "mtime_utc_filetime_ticks": "134364039111526434",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_4\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "de012b7e3f18ced4dc57cec323c39a9e967d0d1d3453041a7ae43506e3f86a77",
+        "mtime_utc_filetime_ticks": "134363841446171351",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_67\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "2b5e438bff736b04e3d62b5fa0d56d3e15ae5b3715144c2cfcf242eeace43f20",
+        "mtime_utc_filetime_ticks": "134373335314445179",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_7\\Profile.sav",
+        "bytes": 1223256,
+        "sha256": "2aacf0c1916e3173015390e58067fe2b13f3b2d7b518c0d351afd644e48cdcfc",
+        "mtime_utc_filetime_ticks": "134360468849703910",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\SDL3.dll",
+        "bytes": 2848256,
+        "sha256": "2b4b128d8d510cc2d442693cf848c050d700d43dc667afe9e5fd82b0570d667e",
+        "mtime_utc_filetime_ticks": "134373151016914155",
+        "match": true
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\SDL3-LICENSE.txt",
+        "bytes": 884,
+        "sha256": "1c040b8271b37e5076359f8fd54240e371114112924d2df81ef87c7d6a1dfdfd",
+        "mtime_utc_filetime_ticks": "134373151016314110",
+        "match": true
+      }
+    ],
+    "normal_file_count": 27,
+    "all_match": true,
+    "actual_profile_roster": [
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_1\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_20\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_21\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_22\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_23\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_3\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_4\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_67\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard_7\\Profile.sav",
+      "D:\\Reverse\\BP-Decomp_Workflow\\build\\game\\Memcard\\Profile.sav"
+    ],
+    "profile_roster_matches": true,
+    "current_games": []
+  },
+  "original_frame_files": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010\\frames\\bb_007903.bmp",
+      "sequence": 1,
+      "state": "in-run-natural-baseline",
+      "bytes": 3686454,
+      "sha256": "2394f5d6750d402b7aa774a17abf04b5ffc882289ef0287b312c6883417a224f",
+      "matches": true,
+      "width": 1280,
+      "height": -720
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010\\frames\\bb_008982.bmp",
+      "sequence": 2,
+      "state": "BrnWorld::WorldEntityModule::Construct#0002/positive",
+      "bytes": 3686454,
+      "sha256": "1f6d5ec907984e06dfd54dc2942f0f20afe42d0c37937bf261703b0fe9a68dcd",
+      "matches": true,
+      "width": 1280,
+      "height": -720
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010\\frames\\bb_009866.bmp",
+      "sequence": 3,
+      "state": "BrnWorld::WorldEntityModule::Construct#0002/negative",
+      "bytes": 3686454,
+      "sha256": "0232a08b407941cf378b49ea23b1d3aa77851e96c40857b657a2e15172a30a76",
+      "matches": true,
+      "width": 1280,
+      "height": -720
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010\\frames\\bb_010729.bmp",
+      "sequence": 4,
+      "state": "BrnWorld::WorldEntityModule::Construct#0002/restore",
+      "bytes": 3686454,
+      "sha256": "ebd11e06b01e381e6b727cdb9baaa29d187e8c2a322122acd899a7887b4d1a94",
+      "matches": true,
+      "width": 1280,
+      "height": -720
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010\\frames\\bb_011553.bmp",
+      "sequence": 5,
+      "state": "BrnWorld::PropEntityModule::Construct#0001/positive",
+      "bytes": 3686454,
+      "sha256": "8fe923af08e886897c2014b2298c6001cc22b1e347a946155ee1608907539af7",
+      "matches": true,
+      "width": 1280,
+      "height": -720
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010\\frames\\bb_012417.bmp",
+      "sequence": 6,
+      "state": "BrnWorld::PropEntityModule::Construct#0001/negative",
+      "bytes": 3686454,
+      "sha256": "7b8a428ae0e45d548596dee10550938d2f1687410774550ad403cbeeac9c062c",
+      "matches": true,
+      "width": 1280,
+      "height": -720
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\circle_flags_62094_20261027\\run_debug_circles_62094_20261027_122010\\frames\\bb_013264.bmp",
+      "sequence": 7,
+      "state": "BrnWorld::PropEntityModule::Construct#0001/restore",
+      "bytes": 3686454,
+      "sha256": "ea7103c2518c150bc5f6f75e8875b7f899a4c4bfe810e29092c4b1c2cdadbcda",
+      "matches": true,
+      "width": 1280,
+      "height": -720
+    }
+  ],
+  "independent_visual_inspection": {
+    "all_seven_originals_viewed": true,
+    "method": "view_image on each original hash-verified BMP; no re-encoding,cropping or generated substitute.",
+    "baseline": "bb_007903.bmp",
+    "scene": "Same held front-facing seeded Cavalry in junkyard with ordinary HUD/minimap and pre-existing windshield cracks. No intact/damage-free claim.",
+    "observations": [
+      {
+        "site_id": "BrnWorld::WorldEntityModule::Construct#0002",
+        "observation": "Large thin green circle arc on left wall/guardrail around x210-495,y270-470 and additional right arcs in positive; absent in natural baseline, negative and restore. Prop bool remains false."
+      },
+      {
+        "site_id": "BrnWorld::PropEntityModule::Construct#0001",
+        "observation": "Separate green circle outlines near right fence/sky and rings beyond the garage in positive; absent in natural baseline, negative and restore. World bool remains false."
+      }
+    ]
+  },
+  "findings": [
+    {
+      "priority": 2,
+      "kind": "reporting_context_contract",
+      "file": "D:/Reverse/BP-Decomp_Workflow/tools/tests/run_case.ps1",
+      "line": 457,
+      "related_checker": "D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/circle_flags_62094_20261027/checker.proposed.ps1",
+      "related_checker_lines": [
+        131,
+        227,
+        228,
+        231,
+        288
+      ],
+      "description": "Final evaluation context omits Slot, although Setup context supplies it at line 297. Checker comparisons coerce missing Context.Slot to0. All ten original failure strings are exactly the affected slot-comparison predicates; independent canonical-slot/raw-data joins establish actual 62094. Keep original result FAIL and repair this separately for future runs."
+    }
+  ],
+  "limitations": [
+    "Accepted native effect/restoration only for these two IDs, exact 7d5/8d886 image08ac and retained scene; no other control or all-gameplay claim.",
+    "Existing hosted eleven-gate/3003-TU receipt scopes remain separate from native proof; no new hosted execution/live verification.",
+    "No screenshot-control/TGA/native D3D certification follows from these diagnostic BMPs."
+  ],
+  "execution": {
+    "original_case_or_checker_invoked_imported_or_evaluated": false,
+    "compiler_or_fixture_runs": 0,
+    "new_games": 0,
+    "source_git_ledger_or_original_artifact_mutations": false,
+    "git_usage": "Read-only rev-parse/cat-file against already-present candidate objects for exact snapshots; no fetch/write.",
+    "con_operations": 0,
+    "child_agents": 0,
+    "only_writes": "This new review folder."
+  },
+  "blocking_evidence_findings": []
+}

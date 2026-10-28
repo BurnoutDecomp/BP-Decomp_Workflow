@@ -1,0 +1,49 @@
+RUNSTART 2026-10-25T16:57:16.3597382+01:00
+PROCESS pid=44832 image=D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\current_dev_playability_periodic_20261025\stage\slot\Burnout_PC.exe start=2026-10-25T15:57:16.3788495Z priority=BelowNormal
+FRAMEDIR D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\current_dev_playability_periodic_20261025\run_20261025\frames
+flyby    (never)
+newprof    13,4s  frame=bb_001000.bmp
+ingame     15,2s  frame=bb_002000.bmp
+jystart    15,2s  frame=bb_002000.bmp
+carsel     21,6s  frame=bb_003000.bmp
+livery     26,5s  frame=bb_003000.bmp
+accept     27,6s  frame=bb_003000.bmp
+exitjy     27,6s  frame=bb_003000.bmp
+strfin     27,6s  frame=bb_003000.bmp
+END        60,2s  frame=bb_005000.bmp
+asserts=0 phase=DRIVING
+ASSERT_RELEASE=disabled (NoAssertRelease)
+DIAGENV    [-DiagEnv BRN_HUD_VIS=1 BRN_FRAME_DUMP_MAX=6]
+TELEPORT (none)
+SWEEP    (none)
+SLOT     62084  exe=D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\current_dev_playability_periodic_20261025\stage\slot\Burnout_PC.exe (a copy; cwd=D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\current_dev_playability_periodic_20261025\stage\data)
+SKIPINTRO -skipvideos (console latch; EA + Criterion logos not played)
+TITLESTART requested=True ready-observed=True sent-at=9,0s; stimulus receipt only
+ACCEPTGAP boot=1,0s carsel=1,0s  [-AcceptGap 1 -- harness pump latency, not a game gate]
+AUDIO    MUTED (BRN_AUDIO_MUTE=1; mastering voice at 0, audio simulation unchanged)
+STARTEVT (not armed)
+AIDRIVE  (not armed)
+DBGFINISH (not armed)
+WINTELE  (not armed)
+SHOWTIME not armed
+SKIPTIP  (not armed)
+EVENTFSM (not armed)
+e-junc   (never)
+e-case20 (never)
+e-start  (never)
+e-count  (never)
+e-inprog (never) CUE UNVERIFIED -- nothing in the tree prints this text yet, so this
+         line says nothing about the game. See the ladder banner.
+LADDER   0/5 deepest=none startevent=False  BLIND(BRN_PROP_DIAG unset -- the [evt-flow] rungs cannot print)
+CRASHARM crashEntry=always(flag deleted 2026-08-27) crashPlayer=0 deformTrace=0
+EXIT     harness-stop (process was still alive)
+DRIVE    drove path=308,6m net=274,6m over 132 [motion] samples (samples 47..178: last placement before the throttle up to the first respawn; later respawns=0 GAMEWRECKED=0)
+POLL     max period 1,56s at 23,2s over 147 polls (target 0.25s)
+THROTTLE first input at t+0,04s (on time)
+SIMPAUSE 2 pause(s), 2 resume(s); first pause at 3% of the log
+GAS      36 of 179 [motion] samples report gas > 0
+drive=True steer=none delay=2,0s hold=to-end
+throttlescript 0:accel,10:none
+title-start tap:Start run=9,0s actions=8+45
+input accel/none           run=  28,4s t+  0,04s
+input none/none            run=  38,4s t+ 10,06s

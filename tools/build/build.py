@@ -6,7 +6,7 @@ Sequences the existing workhorse scripts -- it does NOT reimplement any build:
   tools    YAP + Volatility        -> tools/build/build_tools.ps1
   lua      lua515.lib              -> tools/build/build_lua.bat
   ffmpeg   vendor/ffmpeg-build     -> tools/build/build_ffmpeg.bat [--prebuilt]
-  sdl3     vendor/sdl3             -> tools/build/fetch_sdl3.py
+  sdl3     vendor/sdl3             -> tools/build/build_sdl3.py
   xaudio2  vendor/xaudio2redist     -> tools/build/fetch_xaudio2_redist.bat
   exe      Burnout_PC.exe          -> tools/build/build_game_exe.bat
   data     converted game data     -> tools/assets/build_game_data.py (args forwarded)
@@ -617,7 +617,7 @@ def step_xaudio2(cfg, args, dry=False):
 
 def step_sdl3(cfg, args, dry=False):
     extra = ["--force"] if getattr(args, "force", False) else []
-    return _spawn([sys.executable, os.path.join(TOOLS_BUILD, "fetch_sdl3.py"), *extra], dry)
+    return _spawn([sys.executable, os.path.join(TOOLS_BUILD, "build_sdl3.py"), *extra], dry)
 
 
 def step_exe(cfg, args, dry=False):
@@ -878,7 +878,7 @@ def main(argv=None):
     p = sub.add_parser("xaudio2", help="fetch vendor/xaudio2redist "
                                       "(fetch_xaudio2_redist.bat)")
     p.add_argument("--force", action="store_true")
-    p = sub.add_parser("sdl3", help="fetch pinned SDL3 gamepad headers, library and runtime")
+    p = sub.add_parser("sdl3", help="build the b5-decomp SDL3 submodule (headers, import library, runtime)")
     p.add_argument("--force", action="store_true")
     p = sub.add_parser("exe", help="build Burnout_PC.exe (build_game_exe.bat; "
                                    "incremental -- only changed TUs recompile)")
