@@ -5869,14 +5869,23 @@
       "pseudocode_line": 3,
       "original_call": "sub_8282D800(a1, a1 + 16, \"Display crashbreaker\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "original-noop",
       "id": "BrnWorld::CrashPlayDebugComponent::OnActivate#0001",
       "function": "BrnWorld::CrashPlayDebugComponent::OnActivate",
       "original_address": "0x822A8208",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822A8208.json",
       "component": "BrnWorld::CrashPlayDebugComponent",
       "component_name": "CrashPlay",
-      "component_path": "Gameplay"
+      "component_path": "Gameplay",
+      "notes": "Original manager/complete materializations and three assertion-only render/update callbacks have no path to DrawCrashBreaker; typed variable has no change callback or accessor. Preserve original inert behavior. Scope: Original reachable CrashPlay callbacks and registration escape closure prove this display toggle inert; current d158 preserves it. No native visibility claim. Original closure proof only; no native visibility claim.",
+      "evidence": [
+        "progress/debug_menu/renderer_retry06_credit_20261028/README.md",
+        "progress/debug_menu/renderer_retry06_credit_20261028/SITE_EVIDENCE.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/ROOT_DECISION.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/RENDERER_RETRY06_PEER_REVIEW.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/CRASHPLAY_ORIGINAL_PROOF.md",
+        "progress/debug_menu/renderer_retry06_credit_20261028/CRASHPLAY_ORIGINAL_PROOF_SEAL.json"
+      ]
     },
     {
       "kind": "variable",
@@ -12171,14 +12180,21 @@
       "pseudocode_line": 8,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50190, \"Render world\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0003",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "World geometry/road disappear FALSE and return TRUE; car/sky/props remain. Scope: Completed same-run positive/negative/restored-TRUE control phase in private source00830/exe34dd. Overall retry06 remains FAIL; no whole-suite or current WIP claim.",
+      "evidence": [
+        "progress/debug_menu/renderer_retry06_credit_20261028/README.md",
+        "progress/debug_menu/renderer_retry06_credit_20261028/SITE_EVIDENCE.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/ROOT_DECISION.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/RENDERER_RETRY06_PEER_REVIEW.json"
+      ]
     },
     {
       "kind": "variable",
@@ -12197,14 +12213,21 @@
       "pseudocode_line": 9,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50191, \"Render props\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0004",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Junk pile behind right fence disappears FALSE and returns TRUE. Scope: Completed same-run positive/negative/restored-TRUE control phase in private source00830/exe34dd. Overall retry06 remains FAIL; no whole-suite or current WIP claim.",
+      "evidence": [
+        "progress/debug_menu/renderer_retry06_credit_20261028/README.md",
+        "progress/debug_menu/renderer_retry06_credit_20261028/SITE_EVIDENCE.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/ROOT_DECISION.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/RENDERER_RETRY06_PEER_REVIEW.json"
+      ]
     },
     {
       "kind": "variable",
@@ -12223,14 +12246,21 @@
       "pseudocode_line": 10,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50192, \"Render race cars\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0005",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Player car disappears FALSE and returns TRUE. Scope: Completed same-run positive/negative/restored-TRUE control phase in private source00830/exe34dd. Overall retry06 remains FAIL; no whole-suite or current WIP claim.",
+      "evidence": [
+        "progress/debug_menu/renderer_retry06_credit_20261028/README.md",
+        "progress/debug_menu/renderer_retry06_credit_20261028/SITE_EVIDENCE.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/ROOT_DECISION.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/RENDERER_RETRY06_PEER_REVIEW.json"
+      ]
     },
     {
       "kind": "variable",
@@ -12275,14 +12305,21 @@
       "pseudocode_line": 12,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50195, \"Render world opaque\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0007",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Opaque shed/road disappear FALSE and return TRUE; transparent/decal remnants remain. Scope: Completed same-run positive/negative/restored-TRUE control phase in private source00830/exe34dd. Overall retry06 remains FAIL; no whole-suite or current WIP claim.",
+      "evidence": [
+        "progress/debug_menu/renderer_retry06_credit_20261028/README.md",
+        "progress/debug_menu/renderer_retry06_credit_20261028/SITE_EVIDENCE.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/ROOT_DECISION.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/RENDERER_RETRY06_PEER_REVIEW.json"
+      ]
     },
     {
       "kind": "variable",
@@ -12327,14 +12364,21 @@
       "pseudocode_line": 14,
       "original_call": "sub_8282D800(a1, *(a1 + 12) + 50196, \"Render vehicles opaque\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnGraphics::DebugComponent::OnActivate#0009",
       "function": "BrnGraphics::DebugComponent::OnActivate",
       "original_address": "0x823F7B98",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x823F7B98.json",
       "component": "BrnGraphics::DebugComponent",
       "component_name": "RendererModule",
-      "component_path": "Renderer"
+      "component_path": "Renderer",
+      "notes": "Opaque car body disappears FALSE, leaving nonopaque remnants; body returns TRUE. Scope: Completed same-run positive/negative/restored-TRUE control phase in private source00830/exe34dd. Overall retry06 remains FAIL; no whole-suite or current WIP claim.",
+      "evidence": [
+        "progress/debug_menu/renderer_retry06_credit_20261028/README.md",
+        "progress/debug_menu/renderer_retry06_credit_20261028/SITE_EVIDENCE.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/ROOT_DECISION.json",
+        "progress/debug_menu/renderer_retry06_credit_20261028/RENDERER_RETRY06_PEER_REVIEW.json"
+      ]
     },
     {
       "kind": "variable",
@@ -38131,9 +38175,9 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1236,
-      "verified": 106,
-      "original-noop": 13
+      "pending": 1230,
+      "verified": 111,
+      "original-noop": 14
     }
   }
 }
