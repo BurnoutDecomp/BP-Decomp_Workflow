@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T19:56:39.7133913Z",
+  "created_utc": "2026-10-28T19:59:19.7563636Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "2930564b267caf8e2ba28c05e0d251637c065b78",
+  "b5_source_head": "5386d3b47d1d11388d2ac7dfeedc42588819df97",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -43,7 +43,41 @@
         "site_credit": 0
       },
       "review_status": "pending_combined_fresh_review",
-      "reviewer": "scene_collision_recovery_swarm assignment pending packet mapping confirmation",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": null
+    },
+    {
+      "packet_id": "traffic_chunk02_param_lerp",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk02_param_lerp/REVIEWER_PACKET.md",
+      "packet_sha256": "9141c9625151f4affb0df2855b00c8191cc530aea5ff30ad574948dbdec70e4f",
+      "manifest_sha256": "72c6a1812fec392ccdd7264c6999209ca6a002da21ebcbcd1eb3e79fa2fdaa0c",
+      "source_delta_sha256": "c12ee2b7944174b332038772d0d52008ff87d9adfa86c2ac3ff9e9070956c418",
+      "seal_file_sha256": "7a211f4ab38be3ac22e7be639f1fd81bb0a6a1601bff36154baf4557ce82edfd",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "5386d3b47d1d11388d2ac7dfeedc42588819df97",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficParam.cpp",
+          "pre_sha256": "f88c336fa5275b20a4d6b25212b306f48ee090fea5b438114c81eafd9bfe1627",
+          "post_sha256": "8d8311bbf52e17e7850c837f48f74bb099d0054ab9a5fc3979ff189d62902250"
+        }
+      ],
+      "affected_sites": [
+        "BrnTraffic::DebugComponent::OnActivate#0040"
+      ],
+      "validation": {
+        "canonical_actual_tu_pre_compile_exit": 0,
+        "canonical_actual_tu_post_compile_exit": 0,
+        "focused_cpu_cases": 265,
+        "pre_pass": 238,
+        "post_pass": 265,
+        "native_game_launched": false,
+        "hardware_accuracy_proved": false,
+        "site_credit": 0
+      },
+      "review_status": "pending_combined_fresh_review",
+      "reviewer": "scene_collision_recovery_swarm",
       "review_verdict": null
     }
   ]
