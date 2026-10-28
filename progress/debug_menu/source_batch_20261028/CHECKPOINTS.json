@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T20:05:10.3654368Z",
+  "created_utc": "2026-10-28T20:06:44.3762468Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "81fe1c70c8add9feac653ad8b9f73a0a041364ed",
+  "b5_source_head": "8deac37d25ffd38e57d5b77bc6b1f97e606a43e7",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -148,6 +148,45 @@
         "pre_compile_log_sha256": "4e396bea5a0467a68049bcb488ad90078762f222585af1a99d97347c812d914f",
         "post_compile_log_sha256": "4e396bea5a0467a68049bcb488ad90078762f222585af1a99d97347c812d914f",
         "runtime": false,
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pending_combined_fresh_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": null
+    },
+    {
+      "packet_id": "sound_source_batch01_state_manager_prepare",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_sound_source_20261028_batch01/REVIEWER_PACKET.md",
+      "packet_sha256": "c55795e1f52805cca15070237847374dabbdf34d5b9fe36ddf1d73274c98df3f",
+      "manifest_sha256": "deb671b0bde611f91a04cd5f2818f9cf3d9a27015fbd937a049706e408511377",
+      "source_delta_sha256": "e2d9070ef8c90dc365a082bcec261084578a9e0d7673804e8ea03524da3903c9",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "8deac37d25ffd38e57d5b77bc6b1f97e606a43e7",
+      "packet_baseline_b5": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+      "validated_source_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameShared/GameClasses/Sound/Logic/CgsStateManager.cpp",
+          "pre_sha256": "7b6f3b7898e141642e350c856461303758ccb10c41a88d826c16b757b9a48608",
+          "post_sha256": "f6a3bcda9946c3b56c614b39330bb94868089f420e5260b94c2213d2472e127d"
+        },
+        {
+          "path": "src/GameShared/GameClasses/Sound/Logic/CgsStateManager.h",
+          "pre_sha256": "1e5f787d6d0ef2b71c732f0eda56436be531e2079349401b542338e95b3c3f82",
+          "post_sha256": "ccba54e509df886b9b401e89b1f07613a3cc65853bc58a41fd01871c18bd9ca5"
+        }
+      ],
+      "affected_sites": [
+        "BrnSound::Debug::DebugComponent::OnActivate#0096-0101",
+        "BrnSound::Debug::DebugComponent::OnActivate#0103-0117",
+        "BrnSound::Debug::DebugComponent::OnActivate#0119-0131"
+      ],
+      "validation": {
+        "canonical_actual_tu_compile": "pass",
+        "old_new_source_controls": "pass",
+        "preimages_verified_unchanged_at_d158": true,
+        "runtime": "not run",
         "native_game_launched": false,
         "site_credit": 0
       },
