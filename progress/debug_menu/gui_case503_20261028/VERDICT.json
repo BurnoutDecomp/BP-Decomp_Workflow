@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "verdict": "pass",
+  "review_scope": "case503 manager/profile setter correction only",
+  "packet": "scratch/DEBUG_MENU_1011/swarm_gui_case503_manager_followon_20261028",
+  "packet_manifest_sha256": "a39f8c2fa8b1711130b869aef7e5fd93d38b7af85802fb56610caf5626655aec",
+  "packet_members_verified": 150,
+  "assigned_base": {
+    "commit": "7fd84daede720aba2435eb55b4600ad13e856b33",
+    "tree": "e441795a5508d7454a0ae2dca20b2dac91af9fca"
+  },
+  "review_preimage": {
+    "commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72",
+    "source_files_match": true
+  },
+  "composition": {
+    "delta01_manifest_sha256": "35b34a9c08929dbfc6779261885ada50f1aa1fe1b7a31417aaf7f8948b1c4935",
+    "delta02_manifest_sha256": "1052cf0166ac7cc4274a13b6b0dedef22e4f8ed192206ca93d14e8dafafec221",
+    "references_verified": true,
+    "shared_manager_path_sequential_preimage_matches_delta01": true,
+    "delta02_module_path_does_not_overlap_this_two_path_patch": true,
+    "gui_event18_changed_by_this_patch": false
+  },
+  "source_paths": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "pre_sha256": "a25d734d5bcd80ba6955a624ffef04dc08c52751bc0cdfe3149b3e771df6d8f1",
+      "post_sha256": "96f86d208413c42bd268bf31a7ef653fe27c3be4439a6191c864613aa0e8c1eb",
+      "preimage_snapshot": "scratch/DEBUG_MENU_1011/swarm_gui_case503_manager_followon_20261028/pre/src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "approved_postimage": "scratch/DEBUG_MENU_1011/swarm_gui_case503_manager_followon_20261028/post/src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+      "preimage_matches_c467": true
+    },
+    {
+      "path": "src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp",
+      "pre_sha256": "24e5c47cdbcf3018ab669a71df5bbafe324adccc4abe5d4b64b32255edcf9e80",
+      "post_sha256": "88c6c158a390d2dcb222b72b94d8191c8d272f8a24d9799bd78d2398c5da422d",
+      "preimage_snapshot": "scratch/DEBUG_MENU_1011/swarm_gui_case503_manager_followon_20261028/pre/src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp",
+      "approved_postimage": "scratch/DEBUG_MENU_1011/swarm_gui_case503_manager_followon_20261028/post/src/GameSource/Gui/BrnGuiOptionsDataProfile.cpp",
+      "preimage_matches_c467": true
+    }
+  ],
+  "raw_authority_findings": [
+    "ARTIST Update @0x82509338 reads event503 piece index at +0, composer at +4, work at +0x34; length >= 48 asserts before each copy, and each copy includes the NUL terminator.",
+    "ARTIST gates only DisplayNewTrackNotification on mbContainerMovieClipPlaying; it passes the two persistent manager buffers, BLANK_TEMP_STRING, and localized=true. The piece-index cache store follows the gate unconditionally.",
+    "ARTIST producer @0x826FE5C8 posts event 0x1F7 with size 0x64, then advances its piece index; the queue copies payload bytes into queue-owned storage.",
+    "The raw case502 path stores directly at profile+0x7344 without a lock check; removing the unsupported setter lock assertion matches that callsite. DecFIGS names both adjacent int32 fields and setter declarations."
+  ],
+  "patch_check": {
+    "scratch_only_apply_check": "pass",
+    "applied_content_matches_postimages_after_line_ending_normalization": true,
+    "paths": 2
+  },
+  "compile_receipt": {
+    "compiler": "tools/build/msvc_env.bat selected Visual Studio 2022 Community MSVC 19.x",
+    "pre_status": "pass",
+    "post_status": "pass",
+    "pre_log_sha256": "12c292f20fed96b97a1fe9f8db3f8eac8173e3c845004242bfffb5c765213fdc",
+    "post_log_sha256": "12c292f20fed96b97a1fe9f8db3f8eac8173e3c845004242bfffb5c765213fdc",
+    "pre_objects": [
+      {
+        "path": "compile/objects_pre/manager.obj",
+        "size": 29425,
+        "sha256": "4b4790a3ee5e9a7a190afdd1c287d293db63622f561446d90253171784c1399f"
+      },
+      {
+        "path": "compile/objects_pre/profile.obj",
+        "size": 68462,
+        "sha256": "1e5eb1bd821671797e8d82b696ed007dc2d15cca48c937d6a65d68a0fdd27270"
+      }
+    ],
+    "post_objects": [
+      {
+        "path": "compile/objects_post/manager.obj",
+        "size": 32063,
+        "sha256": "d1ade9b38cf9f357df08b956743eadb83f2fa333f549e0eb477f2e68eb2b1013"
+      },
+      {
+        "path": "compile/objects_post/profile.obj",
+        "size": 68100,
+        "sha256": "580e1c04ed6e2a585c9e14a94d018023501184f0cefaef8bc733b6b6a9829ecf"
+      }
+    ],
+    "response_file_sha256": "5bdfde3a93bc3d82ad5c18904755eaadbd577ab2c481dc0d9ed2182aeb918fb1",
+    "overlay_script_sha256": "6f3eb621762fce65d42aec0e7a2d82d4affa40ef92cae5e3c1d7767dbd3196ab",
+    "compile_artifacts_verified": true
+  },
+  "fixture": {
+    "pre": {
+      "status": "expected_red",
+      "checks": 29,
+      "failures": 13,
+      "exit_code": 1
+    },
+    "post": {
+      "status": "green",
+      "checks": 29,
+      "failures": 0,
+      "exit_code": 0
+    },
+    "limitation": "Hosted source fixture with real variable-event queues; it does not exercise >=48-character assertion text or native game behavior."
+  },
+  "review_note": "The original formatted assertion text, source file/line, and continuation behavior are preserved using the existing SimpleStrStream idiom; its text is passed directly to FireAssert. The transient formatter uses local storage instead of leaving the same text in the global assert scratch buffer.",
+  "limits": [
+    "No game run or native behavior credit.",
+    "No shared source, branch, ref, or build mutation."
+  ]
+}
