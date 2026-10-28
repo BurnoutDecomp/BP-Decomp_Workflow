@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T20:21:59.5897993Z",
+  "created_utc": "2026-10-28T20:23:21.8315539Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "33c60318efd7a9989c179535575cdeadc322546d",
+  "b5_source_head": "097d8e5688e353bf12a1dfdec0b008b99fb42f44",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -309,6 +309,54 @@
         "independent_source_review": "pass",
         "native_game_launched": false,
         "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "independent source reviewer",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "director_devtools_lifecycle_wiring",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_director_devtools_lifecycle_20261028/REVIEWER_PACKET.md",
+      "packet_manifest_sha256": "5e662a7390e7c76ea6783266a6709f5463398ff7f942d32c73ee277e33809480",
+      "packet_seal_sha256": "433ef2a60e6e052ab44ce64880e179b6444aaa67da9158a272cf934db9469a3e",
+      "fresh_review_path": "scratch/DEBUG_MENU_1011/swarm_director_devtools_lifecycle_fresh_review_20261028/REVIEW.md",
+      "fresh_review_sha256": "ec2a86446106a511c0d34d1bf38671863ecdc6c357ad2a40be459f0893ca81df",
+      "fresh_review_seal_sha256": "f54e45be2d51ea249a80c57052e2b5ab33b806953079b65f92446e68003bfedb",
+      "patch_sha256": "75d4adeb4cc164eea5b9e90602657afd2962e2edfbafd062faae05f69008ef0f",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "097d8e5688e353bf12a1dfdec0b008b99fb42f44",
+      "predecessor_director_camera_tail_b5": "33c60318efd7a9989c179535575cdeadc322546d",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/Director/BrnMainDirector.cpp",
+          "pre_sha256": "6a3d02e7f511bc24a69e50e39aae557ccd0a549c1db03ec2708472f883c6758f",
+          "post_sha256": "ae4ea3ff097cae9c81130bec8a6385b73f1f3d4aab1e76be547aac698b4eea32"
+        },
+        {
+          "path": "src/GameSource/Director/BrnMainDirector.h",
+          "pre_sha256": "04092e579313c3862efe3e0a3d8792c12de32f4dc153cfad789e7b7976e13b76",
+          "post_sha256": "165da2bffe0227e457a26cd00e186f15ca2f312fafd6d31bd2855b556f759827"
+        },
+        {
+          "path": "src/GameSource/Director/BrnDirectorDevTools.h",
+          "pre_sha256": "3d8faa5b8562bf65930aa7f97135b000e5acf66045d36fce637652e4b71166c9",
+          "post_sha256": "f0cdc69209011905d72240c7b60bbc7cbd5b449af38704091775bfffa14a652b"
+        },
+        {
+          "path": "src/GameSource/Director/BrnDirectorDevTools.cpp",
+          "pre_sha256": "c8c6bd4be39175f10c2a140c129b857556e323f8bea3d191ca57f8e4c0c45368",
+          "post_sha256": "c8c6bd4be39175f10c2a140c129b857556e323f8bea3d191ca57f8e4c0c45368"
+        }
+      ],
+      "validation": {
+        "canonical_pre_post_compile": "pass",
+        "fresh_source_review": "pass",
+        "fresh_review_cpu_checks": 12,
+        "native_game_launched": false,
+        "site_credit": 0,
+        "shipping_link": "not run"
       },
       "review_status": "pass_source_review",
       "review_verdict": "pass",
