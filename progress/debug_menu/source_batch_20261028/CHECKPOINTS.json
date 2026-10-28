@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T20:28:03.2585407Z",
+  "created_utc": "2026-10-28T21:03:14.6694218Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "a963bba6a5ffc92ebce621668e773ffeea020f4a",
+  "b5_source_head": "dd4c71485a5eea91279de70eff4b08d56776a884",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -457,6 +457,39 @@
       "review_verdict": null,
       "reviewer": null,
       "native_credit": 0
+    },
+    {
+      "packet_id": "worlddebug_fire_construct_request_reset",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_worlddebug_fire_request_writer_20261028/REPORT.md",
+      "packet_manifest_sha256": "d487ab8c57d540f021cb679f1856a130b82e5b205c06337ddaf45bcd2a34b0d5",
+      "source_delta_sha256": "36552a6525ebcb89287f4be310f689fef50cdbe9f83878f731f996ace3a6b8ec",
+      "patch_sha256": null,
+      "source_branch": "codex/debug-source-composition-20261028",
+      "source_checkpoint_b5": "dd4c71485a5eea91279de70eff4b08d56776a884",
+      "base_b5": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_file": {
+        "path": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp",
+        "pre_sha256": "9421a7e3753ad20c758308122f8c93739b8dd1f4c46118b8f1174931dc6bdc54",
+        "post_raw_sha256": "4bbc17dd7628b56d7cac9ac92404960059cf404cfc402861d431d940b09f2d7a",
+        "post_lf_sha256": "da8e2cba1c913e3dd05d3cabcf336370b70b9dff48e4be30c0fc13c74ee7ac28"
+      },
+      "target_row": "BrnWorld::WorldDebugComponent::OnActivate#0005",
+      "review_evidence_path": "scratch/DEBUG_MENU_1011/swarm_worlddebug_fire_review_run_luna_max_20261028/REPORT.md",
+      "review_evidence_sha256": "231e8a75a654c2ef365ab5eccb661ce421388f7258005d44d0d4c74cb7111ecd",
+      "validation": {
+        "packet_actual_tu_compile": "pass",
+        "packet_source_coupled_check": "pass",
+        "independent_actual_tu_compiles": 2,
+        "independent_source_coupled_check": "pass",
+        "native_game_launched": false,
+        "inventory_status_changed": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "independent reviewer via fleet",
+      "native_credit": 0
     }
   ],
   "review_records": [
@@ -500,5 +533,15 @@
     ],
     "scope": "source-only; no native/gameplay/audio credit",
     "native_credit": 0
+  },
+  "build_link_blocker": {
+    "status": "prior canonical build compile-pass/link-fail",
+    "build_receipt_path": "progress/debug_menu/source_batch_20261028/BUILD_RECEIPT.json",
+    "build_receipt_sha256": "9a827f0be3789090b85256c38169319c1c94a3caf7461be5107a8d537e50e2a3",
+    "build_b5_source_commit": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+    "current_worlddebug_source_commit": "dd4c71485a5eea91279de70eff4b08d56776a884",
+    "blocker": "three unresolved DirectorDevTools symbols; existing BrnDirectorDevTools.cpp TU absent from canonical response file",
+    "new_build_attempted_after_worlddebug": false,
+    "response_file_changed": false
   }
 }
