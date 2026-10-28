@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "created_utc": "2026-10-28T20:23:21.8315539Z",
+  "created_utc": "2026-10-28T20:24:42.9501698Z",
   "status": "private source checkpoint; review pending",
   "workflow_branch": "codex/debug-source-batch-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "097d8e5688e353bf12a1dfdec0b008b99fb42f44",
+  "b5_source_head": "55031208526217a2041e23b52007ee0287394d1b",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -361,6 +361,43 @@
       "review_status": "pass_source_review",
       "review_verdict": "pass",
       "reviewer": "independent source reviewer",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "effects_debrisparams_mutable_signature",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_effects_engine_crash_reader_20261028/REVIEWER_PACKET.md",
+      "packet_seal_sha256": "7469bf1cdc71b175a6fd82485fe5c0f89d1a7edae3ab44774f434c8d64a4fbcd",
+      "independent_review_path": "scratch/DEBUG_MENU_1011/swarm_effects_engine_crash_reader_independent_review_20261028/REVIEW.md",
+      "independent_review_sha256": "8d229e2dc89809912fb6ab49487cd78ef44ebbc8e7b98d1f38cb7997baebaccb",
+      "source_delta_sha256": "937312003ac7d8aa995413fa16b03ec4f686524a88fc8704584ce4b954a71578",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "55031208526217a2041e23b52007ee0287394d1b",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/Effects/EffectsModule.h",
+          "pre_sha256": "e9f825c6255c89029bec0f553b25ea528900f003c3c533e06c23bbb5d58e9e88",
+          "post_sha256": "7bfe0d6f225202cba8a0b36614191357e8da190d86221395fd30420d6854cadd"
+        },
+        {
+          "path": "src/GameSource/Effects/EffectsModule.cpp",
+          "pre_sha256": "4300dbfd96e1c6bf6cd440cd90676894329125ad76820893d02f18228ac3544d",
+          "post_sha256": "54ba80e633d77e48e4735da72e0a041e8e71063be5f23ae34b073c4ac7a78eeb"
+        }
+      ],
+      "validation": {
+        "packet_baseline_tu_compile": "pass",
+        "packet_overlay_tu_compile": "pass",
+        "source_coupled_signature_control": "pass",
+        "independent_overlay_compile": "pass",
+        "independent_review": "pass",
+        "engine_crash_flag_global_disposition": "pending",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "independent effects source reviewer",
       "native_credit": 0
     }
   ],
