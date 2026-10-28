@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "verdict": "pass",
+  "scope": "one combined source-only review of4bodies across5paths against c467/WF6e0",
+  "author_packet": "swarm_ai_original_body_closure_20261028_delta03",
+  "author_raw_seal_sha256": "11d2bd5ad72ca06ab36642a88199bf301c7134ba8f7586b08f20d401435921a7",
+  "author_internal_digest": "f3b37d092b6a9c2dd5700afe6e2ac56bdcd2c3a384f21ce92b00011a600144e3",
+  "baseline": {
+    "source_commit": "c467e14df84b1a2a63bc407d97a6697e9e32ac72",
+    "source_tree": "d80f2468d892e6337d07b002abbe322e627f7963",
+    "workflow_commit": "6e0f7bda4e36155cbca0cba32baaab18a404b39c",
+    "workflow_tree": "f850501af2d00efb26b2e3eb3df07c88f7b846ae"
+  },
+  "approved_patch_sha256": "c0ba9b2414553975424f7077b91eafe66d9c1aa860011a4c88284fa47d1799b2",
+  "approved_postimages": [
+    {
+      "path": "src/GameSource/World/AI/BrnAICar.cpp",
+      "post_sha256": "394b6ac6cccb8e590e59f1265546b906df92c063c0419168a2648fdfcd44f00e"
+    },
+    {
+      "path": "src/GameSource/World/AI/BrnAICar.h",
+      "post_sha256": "f827007d13dc1c6958b3df9362f1a0330bbc90e9523c0172787e7e021a12a65f"
+    },
+    {
+      "path": "src/GameSource/World/AI/BrnAIModule.cpp",
+      "post_sha256": "e5519bb3d19fe9686d494afa65080a3a09e6191ad4409a7b33518b6f41ea58c1"
+    },
+    {
+      "path": "src/GameSource/World/AI/BrnAIModule.h",
+      "post_sha256": "e127292471180eef98ff4861a04f01b3f31f2deaaebdc2b0941d4ccd80dc3b1e"
+    },
+    {
+      "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingDebugComponent.cpp",
+      "post_sha256": "426a849ae6e73b61ff1d32f1de9a59c6a05e7dfa84041e87d45f41c4a2188db5"
+    }
+  ],
+  "per_body": [
+    {
+      "name": "BrnAI::AICar::IsSpeedMatching",
+      "verdict": "pass_source_body"
+    },
+    {
+      "name": "BrnAI::AICar::GetSpeedMatchSpeed",
+      "verdict": "pass_source_body"
+    },
+    {
+      "name": "BrnAI::AIModule::GetDifficulty",
+      "verdict": "pass_source_body"
+    },
+    {
+      "name": "BrnAI::RaceBalancingDebugComponent::DrawGraphBackground",
+      "verdict": "pass_source_body"
+    }
+  ],
+  "previous_findings": {
+    "F01_colour": "resolved",
+    "F02_f32_endpoint_subtraction": "resolved",
+    "F03_source_delta_executable_pin": "resolved"
+  },
+  "nonblocking_findings": [
+    {
+      "id": "N01",
+      "file": "STATIC_VALIDATION.json",
+      "field": "compile.response_sha256",
+      "stale_value": "32476237adefe0f88ecef47d3716b8e8964d0b45d437f1008c838461c383670f",
+      "actual_value": "0daf6d383f3f153582e7d01f838e570b2e995fb8cbcb1124000c29ad0e2c448c",
+      "authoritative_inputs": [
+        "compile/base_post.rsp",
+        "evidence/build/PRIVATE_COMPILE_LINK_RECEIPT.json"
+      ]
+    }
+  ],
+  "author_full_tu_compile_receipts": 3,
+  "reviewer_full_tu_or_link_rerun": false,
+  "reviewer_extracted_fixture": {
+    "schema": 1,
+    "scope": "1033 finite ordinary-f32 source-method boundary cases; typed vector recorder; no production renderer/ABI/full HUD/native/VMX exceptional proof",
+    "runs": [
+      {
+        "variant": "post",
+        "exit_code": 0,
+        "result": {
+          "cases": 1033,
+          "failures": 0,
+          "extent_failures": 0,
+          "colour_failures": 0
+        },
+        "stderr": "",
+        "executable_sha256": "b3233fab89bc80fb938348ef24b50fbfc7113e5e57642d1fd52f188588e08b2f",
+        "compile_log_sha256": "fef61315016572ad222ab261894282e785fb2478cde3edeba686e5d04fc278be",
+        "compiler_diagnostics": []
+      },
+      {
+        "variant": "rejected_delta02_control",
+        "exit_code": 1,
+        "result": {
+          "cases": 1033,
+          "failures": 1033,
+          "extent_failures": 1006,
+          "colour_failures": 1033
+        },
+        "stderr": "",
+        "executable_sha256": "bd19bab512d833289d332da4c262b2de9fd1eabc62058d280f5d61de6db83c41",
+        "compile_log_sha256": "635cae94b99f561d381c0eb165389729970859d2124dde2c1f9ed0c9f0af6832",
+        "compiler_diagnostics": []
+      }
+    ]
+  },
+  "diagnostic_link_object_inputs": 3008,
+  "diagnostic_unchanged_object_paths": 3005,
+  "diagnostic_executable_sha256": "10723a7e860749ef9a78148aa8e3f08de5ad025e084d1ccf6124be57e21ca991",
+  "canonical_mount_separate": true,
+  "full_shipping_build_credit": false,
+  "native_credit": 0,
+  "site_completion_credit": 0,
+  "shared_mutations": false
+}
