@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "c35bbaae169ef985c6baf6863470708aa8339423",
+  "b5_source_head": "68c52cbb3ce2a176fd9c145b239631315861044a",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -2210,6 +2210,63 @@
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
+    },
+    {
+      "packet_id": "traffic_chunk20_param_reinsert_body",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk20_param_reinsert_body/REVIEWER_PACKET.md",
+      "source_packet_sha256": "bd8af5a1f8ad0078b63b9c820a9c23093dc7eef8562564165f644b9fb8852d4f",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk20_param_reinsert_body/MANIFEST.json",
+      "source_manifest_file_sha256": "8e811f2b8902f35951318e64f0cf1fd8fa1ef881947185df3eb5bcf59e6146a5",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk20_param_reinsert_body/SEAL.json",
+      "source_seal_file_sha256": "2a7ba0504c089f50b20b5c2e34f37841b6469618e8e39e696ec038b486d4a495",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk20_param_reinsert_body/changes.patch",
+      "author_patch_sha256": "99bacfa80bb086196efb58dd6609d4efe66d01b75b1fb4518f034bc48e40798b",
+      "composed_method_only_patch_sha256": "3b645f883fcbb5a27569d583bbe231c168d762a2d32f6bf592aedecbab0f52a0",
+      "independent_review_path": "swarm_traffic_source_backlog_20261028/chunk20_param_reinsert_body/reviews/luna_max_source_review_20261029/REVIEW.md",
+      "independent_review_sha256": "ae291ed694331bbe75cd21ef8090286557f09d37f682503f1f737f40e5be7092",
+      "independent_review_seal_path": "swarm_traffic_source_backlog_20261028/chunk20_param_reinsert_body/reviews/luna_max_source_review_20261029/REVIEW_SEAL.json",
+      "independent_review_seal_sha256": "a3f48702bf56a2d817b0e0f04e29085a06dffe900656fa1c743e27f4cf0229d8",
+      "review_verdict": "pass_source_review for ReinsertInLanes body/declaration only",
+      "review_scope": "Leaf body/declaration only; module reinsertion/nearest-lane caller chain is separate and unverified. No native/site credit. Recomposition used only exact reviewed additions; did not replace full Param.cpp or undo existing chunk02/18 source.",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficParam.cpp",
+          "post_raw_sha256": "e3f9684925ddb2cc39fb06f0a242a5f5b296636022768fd90401277f3fc2c921",
+          "post_lf_sha256": "72f6b9ebaa87401701975030a91facb794df8540d7996bf4495651aaa4f091fe",
+          "declared_post_sha256": "72f6b9ebaa87401701975030a91facb794df8540d7996bf4495651aaa4f091fe",
+          "only_exact_added_method_or_declaration": true
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficParam.h",
+          "post_raw_sha256": "027f21efdd7294ee9351e6fbb29e6f22764c902f7a319b152c3e7c0ce8a8ca27",
+          "post_lf_sha256": "949d8a73763a7c48a3ab4a63015d5fc97e6b32cba61912197bb2cd1acdaeddf7",
+          "declared_post_sha256": "949d8a73763a7c48a3ab4a63015d5fc97e6b32cba61912197bb2cd1acdaeddf7",
+          "only_exact_added_method_or_declaration": true
+        }
+      ],
+      "source_preimage_audit": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficParam.cpp",
+          "pre_raw_sha256": "950a50cc9fcbd57b7fe8541e10921339da3b615da059b60fd0cf9628a425aec9",
+          "pre_lf_sha256": "8d8311bbf52e17e7850c837f48f74bb099d0054ab9a5fc3979ff189d62902250",
+          "pre_packet_sha256": "8d8311bbf52e17e7850c837f48f74bb099d0054ab9a5fc3979ff189d62902250",
+          "post_packet_sha256": "72f6b9ebaa87401701975030a91facb794df8540d7996bf4495651aaa4f091fe",
+          "post_sha256": "72f6b9ebaa87401701975030a91facb794df8540d7996bf4495651aaa4f091fe"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficParam.h",
+          "pre_raw_sha256": "52c79e7f69b74a69766afcd79e23dfd88b2afc86e9269ffba3d5b5148c4ec713",
+          "pre_lf_sha256": "a76d09f8e53c94dc9e5e35a5207bd71678d72437aadf77a7e553355208d64acb",
+          "pre_packet_sha256": "a76d09f8e53c94dc9e5e35a5207bd71678d72437aadf77a7e553355208d64acb",
+          "post_packet_sha256": "949d8a73763a7c48a3ab4a63015d5fc97e6b32cba61912197bb2cd1acdaeddf7",
+          "post_sha256": "949d8a73763a7c48a3ab4a63015d5fc97e6b32cba61912197bb2cd1acdaeddf7"
+        }
+      ],
+      "source_commit": "68c52cbb3ce2a176fd9c145b239631315861044a",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "author_fixture_limitation": "Original author WIP_CHECKPOINT remains DRAFT_UNREADY_CONTROL_FAILURE; reviewer did not rely on/repeat its CPU fixture; independent reviewer approved only static source parity."
     }
   ]
 }
