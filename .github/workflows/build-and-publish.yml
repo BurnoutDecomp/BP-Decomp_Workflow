@@ -177,6 +177,7 @@ jobs:
             --meta "exe_commit=$env:GITHUB_SHA" --meta "toolchain=$env:VCToolsVersion"
 
       - name: Commit the audit and the file inventory
+        id: publish
         if: steps.asmaudit.outcome == 'success' || steps.linkedfiles.outcome == 'success'
         continue-on-error: true
         shell: bash
@@ -192,38 +193,19 @@ jobs:
           files=()
           [ "${{ steps.asmaudit.outcome }}" = "success" ] && files+=(progress/asmaudit.json)
           [ "${{ steps.linkedfiles.outcome }}" = "success" ] && files+=(progress/linked_files.json)
-          git add -- "${files[@]}"
-          if git diff --cached --quiet; then
-            echo "audit and file inventory unchanged"
-            exit 0
-          fi
-          git commit -q -m "chore: instruction-shape audit and compiled-file inventory of build ${GITHUB_SHA:0:12}" \
-            -m "Automated by build-and-publish: tools/re/asmaudit.py on the exe this run built, against the console's machine code (progress/asmaudit_artist.json.gz); tools/work/build_linked_files.py lists every repo file the compiler opened for it (progress/linked_files.json)."
-          # main moves under us (reconcile commits, a hand-run audit); rebase our files and
-          # retry. If the rebase conflicts on one of them, this run's copy is the newer.
-          for attempt in 1 2 3 4 5; do
-            if ! git pull -q --rebase origin main; then
-              conflicted=$(git diff --name-only --diff-filter=U)
-              if [ -n "$conflicted" ] && ! printf '%s\n' "$conflicted" | grep -qv -e '^progress/asmaudit.json$' -e '^progress/linked_files.json$'; then
-                # during a rebase, --theirs is the commit being replayed: this run's files
-                git checkout --theirs -- $conflicted
-                git add -- $conflicted
-                GIT_EDITOR=true git rebase --continue || { git rebase --abort; sleep 15; continue; }
-              else
-                git rebase --abort 2>/dev/null || true
-                sleep 15
-                continue
-              fi
-            fi
-            if git push -q origin HEAD:main; then
-              echo "pushed"; exit 0
-            fi
-            sleep 15
-          done
-          echo "::warning title=asmaudit::could not push ${files[*]} after 5 attempts"
+          cat > "$RUNNER_TEMP/build-audit-message.txt" <<EOF
+          chore: instruction-shape audit and compiled-file inventory of build ${GITHUB_SHA:0:12}
+
+          Automated built-executable evidence; publish only while the source remains canonical dev.
+          EOF
+          python tools/work/publish_snapshot.py publish \
+            --source-repo "https://github.com/${{ github.repository_owner }}/b5-decomp.git" \
+            --source-commit "$(git -C b5-decomp rev-parse HEAD)" --kind build \
+            --message-file "$RUNNER_TEMP/build-audit-message.txt" --result build-audit-publication.json \
+            --files "${files[@]}"
 
       - name: Refresh public dashboard snapshot
-        if: steps.asmaudit.outcome == 'success' || steps.linkedfiles.outcome == 'success'
+        if: steps.publish.outputs.published == 'true'
         continue-on-error: true
         shell: bash
         env:
@@ -255,5 +237,18 @@ jobs:
         with:
           name: exe-bundle-${{ github.sha }}
           path: build/exe-bundle.zip
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Keep this run's compilation evidence and publication decision
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compilation-evidence-${{ github.sha }}-${{ github.run_id }}
+          path: |
+            progress/asmaudit.json
+            progress/linked_files.json
+            build-audit-publication.json
+            build/latest-publication.json
           retention-days: 30
           if-no-files-found: warn
