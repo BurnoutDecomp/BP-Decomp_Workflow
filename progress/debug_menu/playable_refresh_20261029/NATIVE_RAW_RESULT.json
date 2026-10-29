@@ -1,0 +1,130 @@
+{
+  "provenance": {
+    "parent_head": "36863b946",
+    "exe_mtime": "2026-10-29T20:13:52.1964447+01:00",
+    "b5_head": "abbc9047d",
+    "exe_b5": "d85e2d5e",
+    "exe_mtime_before_lock": "2026-10-29T20:13:52.1964447+01:00",
+    "exe_sha": "5d2b9994ba54",
+    "exe_size": 11707392,
+    "b5_dirty": 4
+  },
+  "phase": "DRIVING",
+  "when": "2026-10-29T20:16:23.8504843+01:00",
+  "case": "normal_intro_source40_boot_profile_world_drive_62172",
+  "slot": 62172,
+  "area": "gui-lifecycle",
+  "as_expected": true,
+  "verdict": "PASS",
+  "flow_exit": 0,
+  "checks": [
+    {
+      "name": "original strict flow completed and owned game exited",
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "pass": true,
+      "kind": "TerminalFlow"
+    },
+    {
+      "name": "no NEW assert families",
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "pass": true,
+      "kind": "NewAsserts"
+    },
+    {
+      "name": "assert lines (info: known noise counts too)",
+      "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "no exceptions",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "reached DRIVING",
+      "detail": "final phase DRIVING, want DRIVING",
+      "pass": true,
+      "kind": "Mark"
+    },
+    {
+      "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+      "detail": "path=306,9m net=212,0m samples 42..223 teleported=True later respawns=0",
+      "pass": true,
+      "kind": "Script"
+    },
+    {
+      "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+      "detail": "0 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "actual GameData GameTalk owner completed startup exactly once",
+      "detail": "1 line(s) match /\\[GameData\\] GameTalk ready owner=[0-9A-Fa-fx]+ manager=[0-9A-Fa-fx]+/, want [1, 1]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "real owner and real singleton existed before GUI registration",
+      "detail": "owner=00007FF7ACEBFB78 singleton=000000001A1BA650 readyAt=5535 guiAt=21682",
+      "pass": true,
+      "kind": "Script"
+    },
+    {
+      "name": "no repeat of first native GUI registration exception",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]|GameTalkManager::RegisterMessageHandler \\+.*\\[rva/, want [-inf, 0]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "real FLApt root finished within the native owner",
+      "detail": "1 line(s) match /FLApt: allocated (948656|958000)b runtime data for file/, want [1, 1]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "real main title movie reached legal title-ready state",
+      "detail": "1 line(s) match /\\[BootLegal\\] stage -?\\d+ -> 7/, want [1, 1]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "real profile serialization returned before BootProfile running",
+      "detail": "1 line(s) match /\\[BootProfile\\] stage 3 -> 4/, want [1, 1]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "EA actual decoder prepared",
+      "detail": "1 line(s) match /\\[Movie\\] prepared .*EAFRANCHISE/, want [1, 1]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "Criterion actual decoder prepared",
+      "detail": "1 line(s) match /\\[Movie\\] prepared .*CRITERION/, want [1, 1]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "video outer event reached movie manager",
+      "detail": "0 line(s) match /GUI_OUT_UNEXPECTED.*(508|509)/, want [-inf, 0]",
+      "pass": true,
+      "kind": "LogCount"
+    },
+    {
+      "name": "both ordinary logo510 completions precede the legal title",
+      "detail": "EA=32607 Criterion=40419 title=42437 510between=1 510afterCriterion=1",
+      "pass": true,
+      "kind": "Script"
+    }
+  ],
+  "bug": "Console byte capacity for bank66 exhausted on widened native Flapt arrays",
+  "expected": "PASS",
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\playable_refresh_20261029\\run_62172_game01",
+  "label": "Normal intro source41 regression; unbypassed EA/Criterion logos; ordinary title and profile then driving; 450s total120s video phase max ten frames; logcap128; PID image start scoped ownership",
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\playable_refresh_20261029\\native_62172\\Case.ps1",
+  "asserts": 0
+}
