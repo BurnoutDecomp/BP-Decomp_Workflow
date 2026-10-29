@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "ad4177bcd0c86d26e42ba84df54b58547d121305",
+  "b5_source_head": "59df65112c835e69a048347c9829567c9e9cdb7a",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1839,6 +1839,90 @@
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
+    },
+    {
+      "packet_id": "progression_mugshot_xuid_chain",
+      "source_packet_path": "swarm_progression_mugshot_xuid_chain_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "0aefb3f2f4c3b2c6e3324ece1185a3795354c1b802590f89260943c29a988e53",
+      "source_manifest_path": "swarm_progression_mugshot_xuid_chain_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "27cbc6583abc04847a41d146978252d484fcf1fe5286f033ec41f0b502c01e23",
+      "author_manifest_member_count": 137,
+      "author_manifest_seal_file_path": "swarm_progression_mugshot_xuid_chain_recovery_20261028/SEAL.sha256",
+      "author_manifest_seal_file_sha256": "c79f324ac0f463e134b1557013c445f351ae3ee7701b50e19059c1869ec63b1e",
+      "source_delta_path": "swarm_progression_mugshot_xuid_chain_recovery_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "20fc29a2851c12d2faa1014bf021d80b7c992718676203f73a5ddd6e01b11af7",
+      "author_patch_path": "swarm_progression_mugshot_xuid_chain_recovery_20261028/git_apply.patch",
+      "author_patch_sha256": "a7cbbbbb8da73cc2653241b0819e16174630b78ebae8f980dd8dac94ec8fb17c",
+      "recovered_formal_binding_path": "swarm_formal_pass_binding_mugshot_xuid_20261029_recovered01/FORMAL_PASS_BINDING.json",
+      "recovered_formal_binding_sha256": "a53da7795023ccd7fc0a4faa894f4543c909ec67c5725e270c37208e35d8d30b",
+      "recovered_review_report_path": "swarm_formal_pass_binding_mugshot_xuid_20261029_recovered01/RECOVERED_FORMAL_REVIEW.md",
+      "recovered_review_report_sha256": "5e5968087ba808e7bd111f8cdded61a61610a31392250b9169ce22fb6e1615f4",
+      "recovered_review_seal_path": "swarm_formal_pass_binding_mugshot_xuid_20261029_recovered01/SEAL.json",
+      "recovered_review_seal_file_sha256": "b97110f9094704a842cefeb6facda1d09dea53a5f33af94a398df98ad8e3c448",
+      "original_final_pass_record_path": "swarm_formal_pass_binding_mugshot_xuid_20261029_recovered01/original_final_pass.raw.jsonl",
+      "original_final_pass_record_sha256": "1ee0ac4a1587bef05602c3c18d69f769342dec32d115900f3fed2312d43df665",
+      "review_verdict": "existing direct five-path formal pass recovered and bound; no new review or repeated tests",
+      "reviewer": "/root/gui_followon_review_luna_max",
+      "formal_review_time_utc": "2026-10-28T21:38:51.659Z",
+      "formal_review_turn_id": "01a18469-89bf-76f1-8c86-3a8d334be133",
+      "review_scope": "XUID retained across event58→event156 and Profile::AddMugshot; prior 8 TU gates, 35 static checks and actual Profile CPU receipt only. No runtime event delivery, profile file, save/reload or native proof.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Game/GameBridgeNetworkToX.cpp",
+          "raw_pre_sha256": "e448390e9dbff1e55f38cf1407254a5776c3e7f600194a5296382a571bc75118",
+          "post_raw_sha256": "468aa904b62425726788fe0b39eb5167dffac98bb9be7af78c74aca5e2101152",
+          "post_lf_sha256": "9a9a707caa3045ce72a49074a634a0ec572b6b7699f9ecc1f08a7de03218d020",
+          "post_git_blob_oid": "1ca1e5fd06448154458d663297639c778b246621",
+          "post_git_sha256": "9a9a707caa3045ce72a49074a634a0ec572b6b7699f9ecc1f08a7de03218d020",
+          "formal_post_raw_sha256": "468aa904b62425726788fe0b39eb5167dffac98bb9be7af78c74aca5e2101152",
+          "formal_post_lf_sha256": "9a9a707caa3045ce72a49074a634a0ec572b6b7699f9ecc1f08a7de03218d020"
+        },
+        {
+          "path": "src/GameSource/GameState/ImageManager/BrnGameStateImageManagerBase.cpp",
+          "raw_pre_sha256": "7767e0423b6e8a708f71611c114c8fd2978ea9cb28aec29f614e20777d98f751",
+          "post_raw_sha256": "4bfa943c416de14e5d18a0bb375a25ef80d46737a06794c1f8f402b052ecc4da",
+          "post_lf_sha256": "8c02479b1efdac03997f58c7165528625fc8432a1502c3537422030e005ef019",
+          "post_git_blob_oid": "3f63429ea5c238f352adc22b4080149ecf426d17",
+          "post_git_sha256": "4bfa943c416de14e5d18a0bb375a25ef80d46737a06794c1f8f402b052ecc4da",
+          "formal_post_raw_sha256": "4bfa943c416de14e5d18a0bb375a25ef80d46737a06794c1f8f402b052ecc4da",
+          "formal_post_lf_sha256": "8c02479b1efdac03997f58c7165528625fc8432a1502c3537422030e005ef019"
+        },
+        {
+          "path": "src/GameSource/GameState/ImageManager/BrnGameStateImageManagerBase.h",
+          "raw_pre_sha256": "e163acf169fa732a04a4da5fceb28682ef4176e91c4aedcd762a5f43caa018fa",
+          "post_raw_sha256": "11e0d1b10ad25f7fe64ae8b03b1edc7ef85bb7e5a537ff36de846afed7cf6a85",
+          "post_lf_sha256": "e6ee6a73e40fee914bbdf57ecddebb4123e4cffc317759925618104bd2384482",
+          "post_git_blob_oid": "38ba9f7b01bb04f8ffc52a1f9381ba730c3ea9e7",
+          "post_git_sha256": "e6ee6a73e40fee914bbdf57ecddebb4123e4cffc317759925618104bd2384482",
+          "formal_post_raw_sha256": "11e0d1b10ad25f7fe64ae8b03b1edc7ef85bb7e5a537ff36de846afed7cf6a85",
+          "formal_post_lf_sha256": "e6ee6a73e40fee914bbdf57ecddebb4123e4cffc317759925618104bd2384482"
+        },
+        {
+          "path": "src/GameSource/GameState/Progression/BrnProfile.cpp",
+          "raw_pre_sha256": "d35547d5e620394e62e68f489204e0bddb1dab7429931327921b50daccc29a26",
+          "post_raw_sha256": "54ced1ed5aa2961871ae29a40dee7d0843b0a6a803361639602ec8367b30696e",
+          "post_lf_sha256": "f8d5a75d2692d83ab389d8960e2c91f9e65320fd0e2c2e262f47b40392354af0",
+          "post_git_blob_oid": "d34ad8bcfe010c308faeae53db1b571377d3c287",
+          "post_git_sha256": "f8d5a75d2692d83ab389d8960e2c91f9e65320fd0e2c2e262f47b40392354af0",
+          "formal_post_raw_sha256": "54ced1ed5aa2961871ae29a40dee7d0843b0a6a803361639602ec8367b30696e",
+          "formal_post_lf_sha256": "f8d5a75d2692d83ab389d8960e2c91f9e65320fd0e2c2e262f47b40392354af0"
+        },
+        {
+          "path": "src/GameSource/GameState/Progression/BrnProfile.h",
+          "raw_pre_sha256": "e750ce5d6e926b6106c64e81e5bed23d9c9367bba013bc73b6bea0dfd382a0b0",
+          "post_raw_sha256": "138cf3e0f8e7ef2c74c07093bce456c22655abbb11e0d38d8a84fb7b96588010",
+          "post_lf_sha256": "32cccb02033d6883a0b3c132aa4bf0622490f5cf216e130d379b379f654a4377",
+          "post_git_blob_oid": "03b82c066b3341958744959cf551148c3d117514",
+          "post_git_sha256": "32cccb02033d6883a0b3c132aa4bf0622490f5cf216e130d379b379f654a4377",
+          "formal_post_raw_sha256": "138cf3e0f8e7ef2c74c07093bce456c22655abbb11e0d38d8a84fb7b96588010",
+          "formal_post_lf_sha256": "32cccb02033d6883a0b3c132aa4bf0622490f5cf216e130d379b379f654a4377"
+        }
+      ],
+      "source_commit": "59df65112c835e69a048347c9829567c9e9cdb7a",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "local_diff_check_note": "git diff --check reported trailing whitespace on two exact reviewed added call lines in BrnGameStateImageManagerBase.cpp; exact formal postimage retained unchanged."
     }
   ]
 }
