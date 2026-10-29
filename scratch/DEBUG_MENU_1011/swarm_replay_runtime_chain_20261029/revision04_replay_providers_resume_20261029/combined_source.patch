@@ -1,0 +1,2426 @@
+--- a/src/GameSource/Game/BrnGameModule.cpp
++++ b/src/GameSource/Game/BrnGameModule.cpp
+@@ -195,6 +195,7 @@
+         , mpGuiViewInputBuffer(0)
+         , mpGuiModelOutputBuffer(0)
+         , mpGuiOutputBuffer(0)
++        , mpDirectorInputBufferPC(0)
+         , mpDirectorOutputBuffer(0)
+         , mpWorldUpdateOutputBuffer(0)
+         , mpReplayPreSimOutputBuffer(0)
+@@ -507,9 +508,9 @@
+             mDebugManager.mDebugComponentPerfMonCpu.SetPageName(
+                 static_cast<CgsDev::PerfMonCpuPage>(liPage), KAPC_PERFMON_PAGE_NAMES[liPage]);
+ 
+-        // [gated] The event-receiver queue at +10094268 and the two replay serialisers
+-        // (DirectorBridgeSerialiser/GameModuleSerialiser::Construct) still need their exact
+-        // typed storage. The remaining menu controls are registered after timer setup below;
++        // The event-receiver queue at +10094268 still needs its exact typed storage.
++        // Both game-owned replay serialisers are constructed at the original tail below.
++        // The remaining menu controls are registered after timer setup below;
+         // the Force shutdown and Take screen shots bool readers/backends remain unproven.
+ 
+         // NOTE: the bitmap debug font is NOT brought up here -- it arrives through GamePrepare's
+@@ -2301,135 +2302,118 @@
+     // in this model and it is not on the crash path. Writing it against opaque zeroes would be the
+     // "data arrives wrong-but-plausible" failure mode, so it is documented, not faked.
+     // DELETE-WHEN: the score span of the input buffer is typed.
+-    // ------------------------------------------------------------------------------------
++    // ARTIST823CD170: capture/restore the GameState contribution to the
++    // Director bridge snapshot. Preparation and stalled playback keep the
++    // original selective input construction; they do not substitute live data.
+     void BrnGameModule::BridgeGameStateToDirector(
+         BrnDirector::DirectorIO::InputBuffer* lpDirectorInput,
+         const BrnGameState::GameStateModuleIO::OutputBuffer* lpGameStateOutput)
+     {
+-        // ---- the player-taken-down leg (X360 live arm 0x823CD330..0x823CD3C8) ----------------
+-        //   0x823CD330  r25 = `lwzx gameStateOut + 0x2AEEC` == ScoringOutputInterface
+-        //               (+173240) ::mePlayerRaceCarIndex (+0xA34)
+-        //   0x823CD340  r27 = GetTakedownEventOutputQueue() const (sub_823B9840)->miLength, read ONCE
+-        //   0x823CD36C  per event: the queue is re-fetched and GetEvent(i) (0x822AC660) taken;
+-        //               `lwz 4` (meVictimIndex) == r25 -> killer = `lwz 0` (meAggressorIndex),
+-        //               the :228 assert, then `stb 1, 0x7AC0` + `stw killer, 0x7AAC` (the inlined
+-        //               SetPlayerKiller). A later match overwrites an earlier one.
+-        // The cast is the documented cross-home one the world and GUI bridges carry:
+-        // GameStateModuleIO::TakedownEventOutputQueueType is still a forward-declared class and the
+-        // payload behind it is the committed EventQueue<BrnGameState::TakedownEvent,8>.
+-        // The director input is a fresh, Construct()ed buffer every sub-step on this build too
+-        // (DoUpdate_Director), so the pair starts cleared exactly as the console's does.
+-        {
+-            const EActiveRaceCarIndex lePlayerRaceCarIndex =
+-                lpGameStateOutput->GetScoringOutputInterface()->mePlayerRaceCarIndex;
+-            const s32 liNumTakedowns = reinterpret_cast<const CgsModule::BaseEventQueue<BrnGameState::TakedownEvent>*>(
+-                lpGameStateOutput->GetTakedownEventOutputQueue())->GetLength();
++        BrnReplays::DirectorBridgeSerialiserStaticLayout* const lpStaticLayout =
++            mDirectorBridgeSerialiser.GetStaticLayout();
++        mDirectorBridgeSerialiser.Lock();
++
++        const BrnReplays::BaseSerialiser::EMode leMode = mDirectorBridgeSerialiser.GetMode();
++        if (leMode == BrnReplays::BaseSerialiser::E_MODE_IDLE ||
++            mDirectorBridgeSerialiser.IsRecording())
++        {
++            const BrnGameState::GameStateModuleIO::ScoringOutputInterface* const lpScoring =
++                lpGameStateOutput->GetScoringOutputInterface();
++            const EActiveRaceCarIndex lePlayerRaceCarIndex = lpScoring->mePlayerRaceCarIndex;
++            const s32 liNumTakedowns =
++                reinterpret_cast<const CgsModule::BaseEventQueue<BrnGameState::TakedownEvent>*>(
++                    lpGameStateOutput->GetTakedownEventOutputQueue())->GetLength();
++            bool lbPlayerWasTakenDown = false;
++            EActiveRaceCarIndex lePlayerKillerRaceCarIndex = E_ACTIVE_RACE_CAR_INDEX_INVALID;
+             for (s32 liTakedown = 0; liTakedown < liNumTakedowns; ++liTakedown)
+             {
+-                const BrnGameState::TakedownEvent& lrTakedownEvent =
++                const BrnGameState::TakedownEvent& lrEvent =
+                     reinterpret_cast<const CgsModule::BaseEventQueue<BrnGameState::TakedownEvent>*>(
+                         lpGameStateOutput->GetTakedownEventOutputQueue())->GetEvent(liTakedown);
+-                if (lrTakedownEvent.meVictimIndex == lePlayerRaceCarIndex)
++                if (lrEvent.meVictimIndex == lePlayerRaceCarIndex)
+                 {
+-                    const EActiveRaceCarIndex lePlayerKillerRaceCarIndex = lrTakedownEvent.meAggressorIndex;
++                    lePlayerKillerRaceCarIndex = lrEvent.meAggressorIndex;
++                    lbPlayerWasTakenDown = true;
+                     CGS_ASSERT(lePlayerKillerRaceCarIndex != E_ACTIVE_RACE_CAR_INDEX_INVALID,
+-                               "lePlayerKillerRaceCarIndex != E_ACTIVE_RACE_CAR_INDEX_INVALID");   // GameBridgeGameStateToX.cpp:228
+-                    lpDirectorInput->SetPlayerKiller(lrTakedownEvent.meAggressorIndex);
+-
+-                    // [DIAG] NOT IN THE X360 BINARY -- BRN_CRASHCAM_DIAG (the crash-camera gate):
+-                    // the takedown camera's input as published (at most 30 lines).
+-                    static const bool sbTakenDownDiag = (getenv("BRN_CRASHCAM_DIAG") != 0);
+-                    static s32 siTakenDownLinesLeft = 30;
+-                    if (sbTakenDownDiag && siTakenDownLinesLeft > 0 && CgsDev::Log::gpDebugPrint != 0)
+-                    {
+-                        --siTakenDownLinesLeft;
+-                        *CgsDev::Log::gpDebugPrint
+-                            << "[takedown-cam] BridgeGameStateToDirector: player slot "
+-                            << static_cast<s32>(lePlayerRaceCarIndex) << " taken down by slot "
+-                            << static_cast<s32>(lePlayerKillerRaceCarIndex)
+-                            << " (takedown type " << static_cast<s32>(lrTakedownEvent.meType)
+-                            << ") -> director input mbPlayerTakenDown 1\n";
+-                    }
++                               "lePlayerKillerRaceCarIndex != E_ACTIVE_RACE_CAR_INDEX_INVALID");
++                    lpDirectorInput->SetPlayerKiller(lePlayerKillerRaceCarIndex);
+                 }
+             }
+-        }
+-
+-        lpDirectorInput->GetGameActionQueue()->Append(*lpGameStateOutput->GetGameActionQueue());
+-
+-        // ---- the player's TEAM word (X360 live arm 0x823CD428..0x823CD454) -------------------
+-        // ⭐ 2026-09-25 (crash parity FX-DIRECTOR2). With the player slot r25 of the takedown leg
+-        // (the scoring snapshot's mePlayerRaceCarIndex):
+-        //   0x823CD440  `addis r11, r25, 1 ; addi r11, r11, -0x540E ; slwi 2` == 4 * r25 + 0x2AFC8
+-        //   0x823CD450  `lwzx r11, r11, r31` -- gameStateOut + 0x2AFC8 + 4 * player ==
+-        //               OnlineScoringOutputInterface (+0x2AF68) ::maePlayerTeam (+0x60) [player]
+-        //   0x823CD454  `stw r11, 0x7AB0(r23)` -- the director input's player team, which
+-        //               ProcessInputQueue copies into GameState::miPlayerTeam (+0x1CC).
+-        // No bounds test: a -1 slot reads the word before the array, maiOnlineAwardVariables[7]
+-        // (gameStateOut + 0x2AFC4); that read is reproduced by name rather than by a negative index.
+-        // (The score record copy into +0x3110 and the +0x3258 byte that follow it, 0x823CD458..
+-        //  0x823CD46C, stay open: the input's score span is still opaque.)
+-        {
+-            const BrnGameState::GameStateModuleIO::OnlineScoringOutputInterface* const lpOnlineScoring =
++            if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame =
++                    mDirectorBridgeSerialiser.GetStaticLayout())
++            {
++                lpFrame->mbPlayerWasTakenDown = lbPlayerWasTakenDown;
++                lpFrame->muPlayerKillerIndex = static_cast<s8>(lePlayerKillerRaceCarIndex);
++            }
++
++            lpDirectorInput->GetGameActionQueue()->Append(*lpGameStateOutput->GetGameActionQueue());
++            if (lpStaticLayout != 0)
++            {
++                lpStaticLayout->mGameActionQueue.Construct();
++                lpStaticLayout->mGameActionQueue.Append(*lpGameStateOutput->GetGameActionQueue());
++            }
++
++            const BrnGameState::GameStateModuleIO::OnlineScoringOutputInterface* const lpOnline =
+                 lpGameStateOutput->GetOnlineScoringOutputInterface();
+-            const s32 liPlayerSlot =
+-                static_cast<s32>(lpGameStateOutput->GetScoringOutputInterface()->mePlayerRaceCarIndex);
+-            const s32 liPlayerTeam = (liPlayerSlot == -1)
+-                ? lpOnlineScoring->maiOnlineAwardVariables[7]
+-                : static_cast<s32>(lpOnlineScoring->maePlayerTeam[liPlayerSlot]);
+-            lpDirectorInput->SetPlayerTeam(liPlayerTeam);                                        // @0x7AB0
+-        }
+-
+-        // ---- the player's end-of-event pair (X360 live arm 0x823CD4A0..0x823CD510) -----------
+-        // ⭐ 2026-09-24 (crash parity FX-DIRECTOR). The console reads both out of the scoring
+-        // snapshot (gameStateOut + 0x2A4B8, the inlined GetScoringOutputInterface()) with the
+-        // player slot it loaded for the takedown leg (r25, `lwzx +0x2AEEC` @0x823CD33C ==
+-        // mePlayerRaceCarIndex), and stores them without a lock-bit test:
+-        //   0x823CD4A0  `add. r11, r31, 0x2A4B8` -- the accessor's non-gating assert
+-        //               "lpGameStateOutput->GetScoringOutputInterface()" (GameBridgeGameStateToX.cpp:256)
+-        //   0x823CD4D8  `lbzx +0x2AEB8 + player` == mabPlayerEliminated[player] (+0xA00), with no
+-        //               bounds test -> `stb 0x7AD5`
+-        //   0x823CD4E4  `lfsx +0x2AF4C` == mfModeTimeRemaining (+0xA94) `fcmpu` flt_82001CC0 (0.0f):
+-        //               `bgt` -> 0; else `lbzx +0x2AF60` == mbTimerActive (+0xAA8) != 0 -> r19 (1,
+-        //               `li r19, 1` @0x823CD1A8) else 0 -> `stb 0x7AD6`. An unordered compare (NaN)
+-        //               is not `gt`, so NaN takes the mbTimerActive arm; `!(x > 0.0f)` keeps that.
+-        // (The console's team word @0x7AB0 -- landed above -- the score record and the +0x3258 byte
+-        //  sit between the Append and this arm, 0x823CD428..0x823CD49C; the last two are still open.)
+-        // MainDirector::ProcessInputQueue copies the pair into GameState +0x1D0 / +0x1D1. Its one
+-        // reader, ArbStateRoaming::ProcessPossibleFX, plays "Damage_Crit" / "Wrecked" on it in the
+-        // online modes 12 / 14 / 17 only; offline, @0x7AD6 rises when a Road Rage or Stunt Run
+-        // clock runs out.
+-        {
+-            const BrnGameState::GameStateModuleIO::ScoringOutputInterface* const lpScoringOutputInterface =
+-                lpGameStateOutput->GetScoringOutputInterface();
+-            CGS_ASSERT(lpScoringOutputInterface != 0,
+-                       "lpGameStateOutput->GetScoringOutputInterface()");       // GameBridgeGameStateToX.cpp:256
+-            const EActiveRaceCarIndex lePlayerRaceCarIndex = lpScoringOutputInterface->mePlayerRaceCarIndex;
+-            lpDirectorInput->SetPlayerEliminated(
+-                lpScoringOutputInterface->mabPlayerEliminated[lePlayerRaceCarIndex]);            // @0x7AD5
++            const s32 liPlayerTeam = (lePlayerRaceCarIndex == E_ACTIVE_RACE_CAR_INDEX_INVALID)
++                ? lpOnline->maiOnlineAwardVariables[7]
++                : static_cast<s32>(lpOnline->maePlayerTeam[lePlayerRaceCarIndex]);
++            lpDirectorInput->SetPlayerTeam(liPlayerTeam);
++            lpDirectorInput->SetPlayerScoreData(&lpScoring->maCarScoreData[lePlayerRaceCarIndex]);
++            lpDirectorInput->SetPlayerComboWarningActive(lpScoring->mbComboWarningActive);
++
++            if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame =
++                    mDirectorBridgeSerialiser.GetStaticLayout())
++                lpFrame->mPlayerScoreData = lpScoring->maCarScoreData[lePlayerRaceCarIndex];
++            const bool lbComboWarningActive = lpScoring->mbComboWarningActive;
++            if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame =
++                    mDirectorBridgeSerialiser.GetStaticLayout())
++                lpFrame->mbPlayerComboWarningActive = lbComboWarningActive;
++
++            CGS_ASSERT(lpScoring != 0, "lpGameStateOutput->GetScoringOutputInterface()");
++            lpDirectorInput->SetPlayerEliminated(lpScoring->mabPlayerEliminated[lePlayerRaceCarIndex]);
+             lpDirectorInput->SetModeTimeExpired(
+-                !(lpScoringOutputInterface->mfModeTimeRemaining > 0.0f) &&                       // flt_82001CC0
+-                lpScoringOutputInterface->mbTimerActive);                                         // @0x7AD6
+-        }
+-
+-        // ---- the per-car TEAMS (X360 live arm 0x823CD514..0x823CD56C, the bridge's last leg) ----
+-        // ⭐ 2026-09-25 (crash parity FX-DIRECTOR2). r31 = gameStateOut + 0x2AFC8 (`addis 3 ; addi
+-        // -0x5038` @0x823CD518 / 0x823CD528) == OnlineScoringOutputInterface::maePlayerTeam, then for
+-        // each active race-car slot i = 0..7 (the EActiveRaceCarIndex iteration, its
+-        // "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT" tripwire BurnoutConstants.h:39 at 0x823CD550):
+-        //   `lwz r5, 0(r31)` then DirectorIO::InputBuffer::SetVehicleTeam @0x823B2938 (input, i, team)
+-        //   -- `stw team, 0x3238 + 4 * i`, behind its own two index asserts and the write-lock test.
+-        // Their one reader is AllVehicleData::Update's fifth argument (lpaVehicleTeams): the team on
+-        // each nearest-car row, which SqDistanceOfNearestOpposingTeamMember compares.
+-        {
+-            const BrnGameState::GameStateModuleIO::OnlineScoringOutputInterface* const lpOnlineScoring =
+-                lpGameStateOutput->GetOnlineScoringOutputInterface();
++                !(lpScoring->mfModeTimeRemaining > 0.0f) && lpScoring->mbTimerActive);
+             for (s32 liCar = 0; liCar < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liCar)
+             {
+                 lpDirectorInput->SetVehicleTeam(static_cast<EActiveRaceCarIndex>(liCar),
+-                                                static_cast<s32>(lpOnlineScoring->maePlayerTeam[liCar]));
++                                                static_cast<s32>(lpOnline->maePlayerTeam[liCar]));
++                CGS_ASSERT(liCar + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                           "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
+             }
+         }
+-    }
++        else if (leMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_PREPARING ||
++                 leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_PREPARING ||
++                 leMode == BrnReplays::BaseSerialiser::E_MODE_RESTORING)
++        {
++            mDirectorBridgeSerialiser.SetDataReady(true);
++            mDirectorBridgeSerialiser.SetDataRestored(true);
++        }
++        else if (mDirectorBridgeSerialiser.IsPlaying() &&
++                 leMode != BrnReplays::BaseSerialiser::E_MODE_RECORDING_STALLED &&
++                 leMode != BrnReplays::BaseSerialiser::E_MODE_PLAYING_STALLED &&
++                 lpStaticLayout != 0)
++        {
++            bool lbPlayerWasTakenDown = false;
++            s32 liPlayerKillerRaceCarIndex = E_ACTIVE_RACE_CAR_INDEX_INVALID;
++            mDirectorBridgeSerialiser.GetPlayerTakedownInfo(
++                &lbPlayerWasTakenDown, &liPlayerKillerRaceCarIndex);
++            if (lbPlayerWasTakenDown)
++            {
++                CGS_ASSERT(liPlayerKillerRaceCarIndex != E_ACTIVE_RACE_CAR_INDEX_INVALID,
++                           "lePlayerKillerRaceCarIndex != E_ACTIVE_RACE_CAR_INDEX_INVALID");
++                lpDirectorInput->SetPlayerKiller(
++                    static_cast<EActiveRaceCarIndex>(liPlayerKillerRaceCarIndex));
++            }
++            lpDirectorInput->GetGameActionQueue()->Append(lpStaticLayout->mGameActionQueue);
++            lpDirectorInput->SetPlayerScoreData(
++                static_cast<const BrnGameState::GameStateModuleIO::CarScoreData*>(
++                    mDirectorBridgeSerialiser.GetPlayerData()));
++        }
++        mDirectorBridgeSerialiser.Unlock();
++    }
++
++
+ 
+     // ------------------------------------------------------------------------------------
+     // ⭐⭐ BridgeGameStateToWorld  @ 0x823E1890
+@@ -2872,49 +2856,14 @@
+         if (!lbPostGui && (mFrameUpdateSetPC & 0x20) != 0)
+             return;
+ 
+-        BrnDirector::DirectorIO::InputBuffer* lpDirectorInput = 0;
+-        mpUpdateInputBufferStack->CreateIOBuffer(&lpDirectorInput, "Director");
+-        if (lpDirectorInput == 0)
+-            return;
+-        // [FLAG PC bring-up] Zero the staged region. The IO stack hands back RE-USED memory
+-        // and CreateIOBuffer<T> does not zero it (neither does the console), so every
+-        // published member (mePlayerCarIndex, mUsedRaceCars, the per-car VehicleInfo array, the
+-        // control block) would otherwise hold the PREVIOUS tenant's bytes. That is not a
+-        // cosmetic risk here: MainDirector::GetLivePlayerCarIndex reads mePlayerCarIndex and
+-        // mUsedRaceCars to decide whether a player car exists, so stale bytes could hand the
+-        // arbitrator a car index whose VehicleInfo is garbage. Zeroing gives the console's own
+-        // "no live player car" answer deterministically (index 0 with its used-race-car bit
+-        // clear -> GetLivePlayerCarIndex returns -1).
+-        // DELETE-WHEN: the real per-frame staging lands (BridgeControllerToDirector + the
+-        // race-car entity module's global output interface + the world contact/timer publishes),
+-        // at which point every one of these fields is written before it is read.
+-        memset(lpDirectorInput, 0, sizeof(*lpDirectorInput));
+-        // RE-Construct after the bring-up memset; the template already Constructed once.
+-        // CreateIOBuffer<T> above runs T::Construct itself now (2026-08-15), so this is the
+-        // SECOND Construct of this buffer -- and it is deliberate, because the memset in between
+-        // wiped what the first one wrote. It re-seeds the -1 sentinels: the buffer's OWN
+-        // Construct @0x822393D0 (not just the IOBuffer base) sets mePlayerCarIndex and
+-        // miCameraType to -1, and without the re-run the zero-fill would publish camera-type 0
+-        // as a live request every single frame. Delete this line together with the memset above,
+-        // not before it.
+-        lpDirectorInput->Construct();
+-
+-        // ⭐ THE FRAME TIMESTEP -- the copy half of BridgeTimers @0x823BD150 (0x823BD1AC..
+-        // 0x823BD22C). It is the ONLY producer of the director input's timer status, and every
+-        // camera behaviour's per-frame advance is `<speed> * GetCurrentTimeStep()`.
+-        // CORRECTED 2026-09-25 (FX-DIRECTOR2): the snapshot is the one GameMain took at the START
+-        // of this sub-step (BridgeTimers there -- the console's 0x823F0DE4); this used to call
+-        // BridgeTimers itself, i.e. snapshot and reset the accumulator HERE, after the mid-step
+-        // UpdateTimers. Copied, not re-taken: the pause consumer (CheckGameActions) may have
+-        // started or stopped the sim timer since, and the console's director sees the status as
+-        // the step began. Staged on the pre-GUI call (the post-GUI pass consumes the same buffer
+-        // contents).
+-        if (!lbPostGui)
+-        {
+-            lpDirectorInput->LockForWrite();
+-            *lpDirectorInput->GetTimerStatusInterface() = mTimerStatusInterface;
+-            lpDirectorInput->UnlockForWrite();
+-        }
++        // FLAG PC-platform leaf: the host's two Director phases share the
++        // original frame-owned input. Construct/BridgeTimers ran once before
++        // any module phase; replay fields survive the post-GUI pass unchanged.
++        BrnDirector::DirectorIO::InputBuffer* const lpDirectorInput = mpDirectorInputBufferPC;
++
++        // ARTIST823E8E40..80 reads the bridge channel before its three producers.
++        if (!lbPostGui && mDirectorBridgeSerialiser.IsPlaying())
++            mDirectorBridgeSerialiser.Read();
+ 
+         // ⭐ [FLAG PC lifecycle, 2026-08-28 crash-slomo transport wave] RETIRE LAST SUB-STEP'S
+         // DIRECTOR TIMER REQUEST, immediately before MainDirector::Update publishes this one.
+@@ -3054,6 +3003,10 @@
+             lpDirectorInput->UnlockForWrite();
+         }
+ 
++        // ARTIST823E8F30..64 commits the complete bridge snapshot after SimPaused.
++        if (!lbPostGui && mDirectorBridgeSerialiser.IsRecording())
++            mDirectorBridgeSerialiser.Write();
++
+         // ------------------------------------------------------------------------------
+         // ⛔ THE INTRO FLY-BY STAND-IN IS RETIRED (2026-08-01).
+         //
+@@ -3099,7 +3052,7 @@
+             //   6. a FRESH SceneQueryOutputBuffer ("DirectorSQ"), DirectorModule::Update 0x82275300 on it
+             //      and the SQ input, then that buffer destroyed
+             //   7. the SQ input and the external query buffer destroyed
+-            // The PC has no replay playback path; the framework arguments remain unread.
++            // ARTIST823E8FC4 forwards the captured late-set playback bit to the director.
+             CgsSceneManager::SceneManagerIO::InputBuffer_Query* lpExternalQuery   = 0;
+             BrnDirector::DirectorIO::SceneQueryInputBuffer*     lpSceneQueryInput = 0;
+             mpUpdateInputBufferStack->CreateIOBuffer(&lpExternalQuery, "SceneQuery");
+@@ -3110,8 +3063,9 @@
+ 
+             if (lpExternalQuery != 0 && lpSceneQueryInput != 0 && lpSceneQueryOutput != 0)
+             {
+-                mDirectorModule.PreSceneQueryUpdate(0, 0, lpDirectorInput, mpDirectorOutputBuffer,
+-                                                    lpSceneQueryOutput, false);
++                mDirectorModule.PreSceneQueryUpdate(mpUpdateInputBufferStack, mpUpdateOutputBufferStack, lpDirectorInput, mpDirectorOutputBuffer,
++                                                    lpSceneQueryOutput,
++                                                    (static_cast<u32>(mFrameUpdateSetPC) & 0x100u) != 0);
+ 
+                 CgsModule::LockBuffersForIO(lpExternalQuery, lpSceneQueryOutput);
+                 lpExternalQuery->GetSceneQueryInterface()->Append(
+@@ -3139,7 +3093,7 @@
+                 mpUpdateOutputBufferStack->CreateIOBuffer(&lpSceneQueryOutput, "DirectorSQ");
+                 if (lpSceneQueryOutput != 0)
+                 {
+-                    mDirectorModule.Update(0, 0, lpDirectorInput, mpDirectorOutputBuffer,
++                    mDirectorModule.Update(mpUpdateInputBufferStack, mpUpdateOutputBufferStack, lpDirectorInput, mpDirectorOutputBuffer,
+                                            lpSceneQueryInput, lpSceneQueryOutput);
+                     mpUpdateOutputBufferStack->DestroyIOBuffer(&lpSceneQueryOutput);
+                 }
+@@ -3156,7 +3110,7 @@
+         }
+         else
+         {
+-            mDirectorModule.PostGuiUpdate(0, 0, lpDirectorInput, mpDirectorOutputBuffer);
++            mDirectorModule.PostGuiUpdate(mpUpdateInputBufferStack, mpUpdateOutputBufferStack, lpDirectorInput, mpDirectorOutputBuffer);
+ 
+             // [DIAG BRN_DIRECTOR_TRACE] Report what the director actually PUBLISHED this
+             // frame. This is the measurement the fly-by campaign needs: whether the director
+@@ -3222,7 +3176,6 @@
+                                       lpDirectorInput, mpDirectorOutputBuffer, mFrameUpdateSetPC);
+         }
+ 
+-        mpUpdateInputBufferStack->DestroyIOBuffer(&lpDirectorInput);
+     }
+ 
+     // PC retention extends the final completed substep's DirectorOutput lifetime
+@@ -4415,8 +4368,8 @@
+                 // integrates with (DoUpdate_World 0x823E8C78..0x823E8C84) and the director reads.
+                 // The timers were last moved by UpdateTimers at the END of the previous sub-step
+                 // (below), so a time-scale request the director made last step reaches the world
+-                // this step, as on the console. NULL: the director input does not exist yet on
+-                // this build; DoUpdate_Director copies this snapshot into it (see BridgeTimers).
++                // this step, as on the console. The frame-owned Director input already
++                // exists, so BridgeTimers publishes the same snapshot directly into it.
+                 // CORRECTED 2026-09-25 (FX-DIRECTOR2) -- this ran inside DoUpdate_Director, after
+                 // a mid-step UpdateTimers, which put every director request one step late.
+                 const bool lbRunFullModuleCascade = (mpNetworkOutputBuffer != 0);
+@@ -4426,7 +4379,7 @@
+                     lInitialModuleUpdateSet = ConstructUpdateSetFromFsm();
+ 
+                 if (lbRunFullModuleCascade)
+-                    BridgeTimers(0);
++                    BridgeTimers(mpDirectorInputBufferPC);
+ 
+                 BrnGameMainFlowController::EMainGameFlowState leState = mMainFlowStateMachine.GetCurrentState();
+                 bool lbInputPreWorldFilledPC = false;
+@@ -5151,12 +5104,18 @@
+         if (mpNetworkOutputBuffer != 0)
+             mpUpdateOutputBufferStack->CreateIOBuffer<BrnSound::Module::Io::RootPreUpdateOutputBuffer>(
+                 &mpInGameSoundPreUpdateOutputPC, "SoundRootPreUpdateOutput");
++        if (mpNetworkOutputBuffer != 0)
++            mpUpdateInputBufferStack->CreateIOBuffer<BrnDirector::DirectorIO::InputBuffer>(
++                &mpDirectorInputBufferPC, "Director");
+     }
+ 
+     // @ BrnGameModule.cpp:2515 - free this sub-step's static GUI/director IO buffers (reverse
+     // order of CreateStaticIOBuffers).
+     void BrnGameModule::DestroyStaticIOBuffers()
+     {
++        if (mpNetworkOutputBuffer != 0)
++            mpUpdateInputBufferStack->DestroyIOBuffer<BrnDirector::DirectorIO::InputBuffer>(
++                &mpDirectorInputBufferPC);
+         if (mpNetworkOutputBuffer != 0)
+             mpUpdateOutputBufferStack->DestroyIOBuffer<BrnSound::Module::Io::RootPreUpdateOutputBuffer>(
+                 &mpInGameSoundPreUpdateOutputPC);
+--- a/src/GameSource/Game/BrnGameModule.hpp
++++ b/src/GameSource/Game/BrnGameModule.hpp
+@@ -1208,6 +1208,9 @@
+         CgsGui::ViewIO::InputBuffer*           mpGuiViewInputBuffer; // h:494
+         CgsGui::ModelIO::OutputBuffer*         mpGuiModelOutputBuffer;// h:495
+         CgsGui::CgsGuiModuleIO::OutputBuffer*  mpGuiOutputBuffer;    // h:496
++        // FLAG PC-platform leaf: original DoUpdate's local input survives both
++        // Director phases; one Construct retains bridge data through PostGuiUpdate.
++        BrnDirector::DirectorIO::InputBuffer* mpDirectorInputBufferPC;
+         BrnDirector::DirectorIO::OutputBuffer* mpDirectorOutputBuffer;// h:497
+         // [FLAG PC placement] this sub-step's world UPDATE OUTPUT buffer. On the console it is
+         // a LOCAL of DoUpdate @0x823F0AF8 (created near the top, threaded through every leg,
+--- a/src/GameSource/Director/BrnDirectorModule.h
++++ b/src/GameSource/Director/BrnDirectorModule.h
+@@ -15,6 +15,8 @@
+ #include "GameSource/Director/Utils/BrnDirectorWorldMap.h"                // BrnDirector::WorldMap (mWorldMap)
+ #include "GameSource/Director/Utils/BrnDirectorPostOfficeTypes.h"         // the six scene-query post offices
+ #include "GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h"                   // BrnReplays::DirectorSerialiser (mDirectorSerialiser)
++
++namespace CgsModule { class IOBufferStack; }
+ 
+ namespace BrnResource { namespace GameDataIO { class AllocatorList; } }   // DirectorModule::Prepare's 2nd arg (boot audit F-P6-16)
+ 
+@@ -96,7 +98,7 @@
+     // X360 0x8225C768. Pre-scene-query update: latch the replay flag, Clear the per-frame
+     // scene-query post office, then run MainDirector::PreSceneQueryUpdate (live leg) or
+     // ReplayDirector::PreSceneQueryUpdate (replay leg). BODIED.
+-    s32 PreSceneQueryUpdate(s32 liUnusedA, s32 liUnusedB,
++    s32 PreSceneQueryUpdate(CgsModule::IOBufferStack* lpInputBufferStack, CgsModule::IOBufferStack* lpOutputBufferStack,
+                             const DirectorIO::InputBuffer* lpInputBuffer,
+                             DirectorIO::OutputBuffer* lpOutputBuffer,
+                             DirectorIO::SceneQueryOutputBuffer* lpSceneQueryOutputBuffer,
+@@ -106,7 +108,7 @@
+     // MainDirector::Update (live leg) or ReplayDirector::Update (replay leg), copy
+     // the produced graphics camera into the module's own, then the replay-serialiser
+     // bookkeeping + serialiser registration. BODIED.
+-    s32 Update(s32 liUnusedA, s32 liUnusedB,
++    s32 Update(CgsModule::IOBufferStack* lpInputBufferStack, CgsModule::IOBufferStack* lpOutputBufferStack,
+                const DirectorIO::InputBuffer* lpInputBuffer,
+                DirectorIO::OutputBuffer* lpOutputBuffer,
+                const DirectorIO::SceneQueryInputBuffer* lpSceneQueryInputBuffer,
+@@ -114,7 +116,7 @@
+ 
+     // X360 0x82250DD0. Post-GUI update: run MainDirector::PostGuiUpdate when not replaying,
+     // then latch the input buffer's post-GUI car index. BODIED.
+-    s32 PostGuiUpdate(s32 liUnusedA, s32 liUnusedB,
++    s32 PostGuiUpdate(CgsModule::IOBufferStack* lpInputBufferStack, CgsModule::IOBufferStack* lpOutputBufferStack,
+                       const DirectorIO::InputBuffer* lpInputBuffer,
+                       DirectorIO::OutputBuffer* lpOutputBuffer);
+ 
+--- a/src/GameSource/Game/GameBridgeWorldToX.cpp
++++ b/src/GameSource/Game/GameBridgeWorldToX.cpp
+@@ -1,125 +1,9 @@
+-// ============================================================================
+-// b5-decomp/src/GameSource/Game/GameBridgeWorldToX.cpp
+-//
+-// BrnGame::BrnGameModule::BridgeWorldToDirector  @ X360 0x823E3AB0
+-//
+-// ⭐ THE WORLD -> DIRECTOR SEAM. This is the ONLY caller of
+-// DirectorIO::InputBuffer::SetRaceCarInfo @0x823B2B30 anywhere in the image, i.e. the only
+-// way a race car's pose ever reaches the director's cameras. Until it existed, the director
+-// input's mRaceCarInfo[8] stayed at whatever DoUpdate_Director's zero-fill left, so every
+-// VehicleRef the camera behaviours resolve pointed at a zero transform -- an ORIGIN camera.
+-//
+-// SIGNATURE (recovered from the ASM, not from a stub -- the dropped-argument rule):
+-//   IDA's prototype claims sixteen parameters. The prologue @0x823E3AC8..0x823E3AD8 is
+-//   `mr r28,r3 / mr r26,r4 / mr r29,r5` and nothing in the body reads r6..r10; a9..a16 are
+-//   IDA's names for stack slots the body re-uses as locals ("local variable allocation has
+-//   failed" is printed above its own output). The caller DoUpdate_Director @0x823E8DE0
+-//   passes (this, a4, a7), and ITS caller DoUpdate @0x823F0AF8 supplies a4 = the
+-//   DirectorIO::InputBuffer created for this sub-step and a7 = the BrnWorldIO::
+-//   UpdateOutputBuffer -- which DoUpdate creates ONCE per sub-step and threads through
+-//   every leg. So: (InputBuffer* lpDirectorInput, const UpdateOutputBuffer* lpWorldOutput).
+-//
+-// CONSOLE BODY, in order:
+-//    1. mDirectorBridgeSerialiser.Lock()
+-//    2. mbPlayerCarCrashing = active->IsPlayerCarActive() && active->IsPlayerCarCrashing()
+-//    3. if (!active->IsPlayerCarActive())  { input->SetPlayerCarIndex(INVALID); }
+-//       else switch on the replay state word:
+-//         state 0..3 (recording / not replaying) -> THE LIVE PUBLISH (4..13 below)
+-//         state 4..6 (playback)                  -> replay the serialised snapshot instead
+-//    4. publish the traffic-director interface (one u16 + a 3588-byte block)
+-//    5. publish the world-entity status interface (5 bytes)
+-//    6. NewVehicleEvent<50>::Append(input->GetVehicleInputInterface(),
+-//                                   world->GetDirectorVehicleInputInterface())
+-//    7. input->AppendContacts(world->GetContactSpyInterface())
+-//    8. XMemCpy(input + 16, world->GetRaceCarGlobalOutputInterface(), 2416)
+-//    9. input->SetPlayerCarIndex(world->GetPlayerActiveRaceCarIndex())
+-//   10. FOR EACH of the 8 active slots that is active: build a stack VehicleInfo
+-//       (RaceCarState + AABB + hardest-impact + engine flag) and input->SetRaceCarInfo(i, it)
+-//       -- the hardest impact is the car's strongest contact-spy contact this frame (squared
+-//       |mNormalStress|, its normal and stress), which every gameplay camera shakes by
+-//   11. FOR EACH of the 8 slots: input->SetCrashingCentreOfMass(i, IDENTITY)
+-//   12. mfPlayerBoostPercentage = boost.mfBoostAmount / boost.mfMaxBoost  (0 if max ~= 0)
+-//   13. build the 48-byte PlayerCrashInfo block from the vehicle manager's crash queue
+-//   14. input->mbWorldWantsDebugControllerFocus = world-entity-status byte
+-//   15. mDirectorBridgeSerialiser.Unlock()
+-//
+-// REPRODUCED HERE: 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13.   (6 restored 2026-08-02; 13 and 8 on 2026-09-24;
+-//                   4 on 2026-09-25.)
+-//
+-// [FLAG PC bring-up] dropped rather than paraphrased, each for a NAMED reason:
+-//   1/15 + the whole state-4..6 replay arm -- BrnGameModule has no mDirectorBridgeSerialiser
+-//        member (the console's is at gm+0x9A1070, inside this layout's omitted range) and
+-//        DirectorBridgeSerialiser::GetStaticLayout is declaration-only. The PC has no replay
+-//        path at all, so the live arm is the only one that can run.
+-//   5 -- its DESTINATION (the world StatusInterface span before mContacts) is honest-opaque
+-//        in BrnDirectorModuleIO.h. Writing into it by console byte offset is exactly the
+-//        offset-poke this project forbids; it lands when that interface home does.
+-//   (4 IS NO LONGER DROPPED -- restored 2026-09-25, crash parity FX-DIRECTOR2. Its destination
+-//        is typed now: InputBuffer::mTrafficOutputInterface @0x6AC0, the TrafficDirectorOutputInterface
+-//        the world output already carries; the x64 sizeof is the console's 0xE20.)
+-//   (8 IS NO LONGER DROPPED -- restored 2026-09-24, crash parity FX-DIRECTOR. Its destination is
+-//        typed now: InputBuffer::mGlobalRaceCarInterface at +16, exactly as the finding that stood
+-//        here said -- 16 + 2416 == 2432 == mUsedRaceCars, and the x64 sizeof is 2416 too.)
+-//   (6 IS NO LONGER DROPPED -- restored 2026-08-02, see the step in the body.)
+-//   (13 IS NO LONGER DROPPED -- restored 2026-09-24, crash parity FX-BRIDGES CC-6. Both of its
+-//        reasons had expired: Camera::PlayerCrashInfo is homed (SharedIO/BrnPlayerInfo.h) and so is
+-//        its source, VehicleManagerOutputInterface::GetRaceCarCrashEventQueue (+0x3A0).)
+-//   14 -- reads world-entity-status byte +217668, inside an opaque span.
+-//   (the per-car HARDEST-IMPACT leg of 10 IS NO LONGER DROPPED -- restored 2026-09-24, crash
+-//        parity FX-BRIDGES CC-5. Its "not homed" reason had expired: BaseContact is homed in
+-//        Physics/ContactSpies/BrnContactSpyEvents.h (mNormalStress +0x20 / mNormal +0x30 of the
+-//        96-byte record) and RumbleManager::UpdateImpacts already walks the same run by name.)
+-//   (the per-car DEFORMED AABB arm of 10 IS NO LONGER DROPPED -- restored 2026-09-24, crash
+-//        parity FX-BRIDGES CC-7. DeformationOutputInterface::mpDeformationState is homed and written
+-//        every frame, and DeformationState::GetCarStateF / CarState::mDeformedBBoxMin/Max are named.)
+-//
+-// ⚠️ CONSOLE ODDITIES REPRODUCED, NOT FIXED:
+-//   * step 10 clears mbHasCrashingCenterOfMass in the staged VehicleInfo and step 11 then
+-//     sets it TRUE for all eight slots (SetCrashingCentreOfMass @0x823B2CA8 stores 1 at
+-//     element+0x4E5). So the flag is always true and the matrix is always identity unless
+-//     something else republishes it. That is what the console does.
+-//   * the console never writes mbHardestImpactIsAgainstWorld (VehicleInfo +0x4E4): the stack
+-//     VehicleInfo's byte at that offset is left at whatever the frame before put there. An
+-//     uninitialised read is not reproducible on a different ABI, so it is published as false
+-//     and flagged here rather than left indeterminate.
+-//   * the console seeds mHardestNormalStressNormal from the .rdata vector at 0x82181510, which
+-//     x360rd reads as (0.0, 1.0, 0.0, 0.0) -- world up. (The old note here said the 16 bytes
+-//     "cannot be read"; they can, from the image, and the seed is now the console's.)
+-//
+-// ✅ RaceCarState +4 DRIFT -- SETTLED AND FIXED (2026-08-01, physics wave 1). The extra four
+-// bytes were mCarAssetAttribKey: it is EIGHT bytes, not four. Proof and the full corroborating
+-// field table live in BrnVehicleEvents.h's RaceCarState banner (the producer,
+-// VehicleOutputInterface::UpdateRaceCarState @0x825EC808, stores it with `std` at state+960 and
+-// then lands all fourteen following scalars exactly where the committed offsets now say).
+-// The committed member offsets below are therefore CONSOLE-EXACT as of that fix, and this
+-// function's own `*(state + 968)` entity-id reads are now literally mEntityId @968.
+-// The historical measurement that bounded it is kept for provenance:
+-//
+-// (HISTORICAL) This function's thirteen
+-// rw::math::IsValid asserts name the exact fields they check, so their X360 offsets pin the
+-// X360-vs-PS3 member drift the pose wave measured:
+-//     448 mAboveGroundTestResult.mIntersectionPosition   == committed 448  (no drift)
+-//     464 ...mIntersectionNormal                         == committed 464  (no drift)
+-//     480 ...mfVerticalDistance                          == committed 480  (no drift)
+-//     496 mTransform, 816 mLinearVelocity, 832 mAngularVelocity           (no drift)
+-//     988 mfUpShiftRPM   -> committed  984      \
+-//     992 mfDownShiftRPM -> committed  988       |
+-//     972 mfSpeedMPH     -> committed  968       | uniform +4
+-//     980 mfMaxBoostSpeedMPH -> committed 976    |
+-//    1020 mfAbsDriftScale -> committed 1016      |
+-//    1024 mfTimeDrifting -> committed 1020       |
+-//    1028 mfTimeInAir    -> committed 1024       |
+-//    1032 mfGas          -> committed 1028       |
+-//    1036 mfBrake        -> committed 1032       |
+-//    1044 mfSteering     -> committed 1040      /
+-// and this function's own `*(state + 968)` entity-id reads (the deformation + contact-spy
+-// lookups) are committed mEntityId @964, also +4. mHalfExtent @848 is read at 848 -- exact.
+-// ⇒ the extra four X360 bytes sit between mHalfExtent (848) and mEntityId (964), i.e. inside
+-// the mComOffset / mSlamEffect / mShuntEffect / mCarAssetAttribKey run. That OVERTURNS the
+-// pose wave's recorded bound ("between mfBrake @1032 and mi8Gear @1088"), which was only ever
+-// an upper bound. Nothing here depends on it: every access is by NAME.
+-// (END HISTORICAL -- the bound was correct and the culprit was the last name in that run.)
+-// ============================================================================
++// World bridges. BridgeWorldToDirector is recovered from ARTIST823E3AB0.
++// Its persistent DirectorBridgeSerialiser is locked across the complete pass.
++// Modes0/1/2/3 publish and capture the live world;4/7 only acknowledge real
++// world streaming readiness;5/6 restore the static replay frame. The final
++// debug-controller-focus transfer and Unlock run on every original branch.
++// Other live conversion/diagnostic code below is preserved from the baseline.
+ 
+ #include "GameSource/Game/BrnGameModule.hpp"
+ #include "GameSource/Game/GameBridgeWorldToX.h"
+@@ -180,6 +64,8 @@
+             return;
+         }
+ 
++        mDirectorBridgeSerialiser.Lock();
++
+         typedef BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface
+                 ActiveRaceCarInterface;
+ 
+@@ -211,15 +97,14 @@
+             }
+         }
+ 
++        const BrnReplays::BaseSerialiser::EMode leMode = mDirectorBridgeSerialiser.GetMode();
+         if (!lpActiveRaceCars->IsPlayerCarActive())
+         {
+-            // X360: assert the write lock, then `li r11,-1; stw r11, 0x7AA8(r26)`.
+-            // Publishing INVALID is what makes MainDirector::GetLivePlayerCarIndex return -1
+-            // and the director carry its last finalised camera forward.
+             lpDirectorInput->SetPlayerCarIndex(E_ACTIVE_RACE_CAR_INDEX_INVALID);
+-            return;
+-        }
+-
++        }
++        else if (leMode == BrnReplays::BaseSerialiser::E_MODE_IDLE ||
++                 mDirectorBridgeSerialiser.IsRecording())
++        {
+         // ---- step 9 (the console orders it after 4..8, all of which are gated) ------------
+         CGS_ASSERT(lpActiveRaceCars->IsPlayerCarActive(), "Player race car index not active"); // :66
+         const EActiveRaceCarIndex lePlayerIndex = lpWorldOutput->GetPlayerActiveRaceCarIndex();
+@@ -239,6 +124,11 @@
+         // bridge's SetTrafficDirectorOutputInterface (186e27bb). The "dropped" note in the banner
+         // above had one reason, an opaque destination, and it expired with the typed member.
+         lpDirectorInput->SetTrafficOutputInterface(lpWorldOutput->GetTrafficDirectorOutputInterface());
++
++        // ARTIST823E3F80..3FA4: the actual five status bytes, including
++        // WorldEntityIO::StatusInterface::GetAllStreamed at byte4.
++        lpDirectorInput->SetWorldEntityStatusInterface(lpWorldOutput->GetWorldEntityStatusInterface());
++
+ 
+         // ---- step 6: the NEW-VEHICLE queue merge ------------------------------------------
+         // ⭐ RESTORED 2026-08-02 (camera parameter-chain wave). The console's own step, in the
+@@ -277,6 +167,9 @@
+         lpDirectorInput->SetGlobalRaceCarInterface(lpWorldOutput->GetRaceCarGlobalOutputInterface());
+ 
+         lpDirectorInput->SetPlayerCarIndex(lePlayerIndex);
++        if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame = mDirectorBridgeSerialiser.GetStaticLayout())
++            lpFrame->muActivePlayerIndex = static_cast<s8>(lePlayerIndex);
++
+ 
+         // ---- the frame's race-car contacts (DWARF GameBridgeWorldToX.cpp:87 lpCarContacts) --
+         // X360 0x823E4010..0x823E4034: the local starts NULL and is filled only when the world's
+@@ -303,8 +196,10 @@
+         {
+             const EActiveRaceCarIndex leSlot = static_cast<EActiveRaceCarIndex>(liSlot);
+ 
+-            // The console tests `maxRaceCarFlags[idx] & 1` inline -- IsRaceCarActive().
+-            if (!lpActiveRaceCars->IsRaceCarActive(leSlot))
++            const bool lbVehicleActive = lpActiveRaceCars->IsRaceCarActive(leSlot);
++            if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame = mDirectorBridgeSerialiser.GetStaticLayout())
++                lpFrame->mabVehicleActive[liSlot] = lbVehicleActive;
++            if (!lbVehicleActive)
+             {
+                 CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
+                            "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
+@@ -442,6 +337,9 @@
+                                    || lpActiveRaceCars->IsRaceCarEngineStarting(leSlot);
+ 
+             lpDirectorInput->SetRaceCarInfo(static_cast<u32>(liSlot), lVehicleInfo);
++            if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame = mDirectorBridgeSerialiser.GetStaticLayout())
++                lpFrame->maVehicleInfos[liSlot] = lVehicleInfo;
++
+ 
+             // [DIAG] NOT IN THE X360 BINARY -- BRN_CAM_INPUT_DIAG (the camera-input gate). The
+             // impact-shake input as published: the first 40 non-zero publishes, then every 200th --
+@@ -551,6 +449,9 @@
+             for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
+             {
+                 lpDirectorInput->SetCrashingCentreOfMass(static_cast<u32>(liSlot), lIdentity);
++                if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame = mDirectorBridgeSerialiser.GetStaticLayout())
++                    lpFrame->maCentreOfMassTransforms[liSlot] = lIdentity;
++
+                 CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
+                            "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
+             }
+@@ -574,6 +475,9 @@
+                 lfBoostPercentage = lpBoost->mfBoostAmount / lpBoost->mfMaxBoost;
+             }
+             lpDirectorInput->SetPlayerBoostPercentage(lfBoostPercentage);
++            if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame = mDirectorBridgeSerialiser.GetStaticLayout())
++                lpFrame->mfPlayerBoostPercentage = lfBoostPercentage;
++
+         }
+ 
+         // ---- step 13: the player's crash record (X360 0x823E4DF0..0x823E4FE4) ----------------
+@@ -636,6 +540,9 @@
+             }
+ 
+             lpDirectorInput->SetPlayerCrashInfo(&lPlayerCrashInfo);
++            if (BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame = mDirectorBridgeSerialiser.GetStaticLayout())
++                lpFrame->mPlayerCrashInfo = lPlayerCrashInfo;
++
+ 
+             // [DIAG] NOT IN THE X360 BINARY -- BRN_CRASHCAM_DIAG (the crash-camera gate). The
+             // record as published, on every CHANGE of its four flags or of a non-zero speed (at
+@@ -669,6 +576,55 @@
+                 suLastKey = luKey;
+             }
+         }
++        }
++        else if (leMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_PREPARING ||
++                 leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_PREPARING ||
++                 leMode == BrnReplays::BaseSerialiser::E_MODE_RESTORING)
++        {
++            // ARTIST823E3EC8..3EF8. Preparing/restoring does not publish a live
++            // snapshot or overwrite the retained Director input's world status.
++            mDirectorBridgeSerialiser.SetDataReady(
++                lpWorldOutput->GetWorldEntityStatusInterface()->GetAllStreamed());
++            mDirectorBridgeSerialiser.SetDataRestored(
++                lpWorldOutput->GetWorldEntityStatusInterface()->GetAllStreamed());
++        }
++        else if (mDirectorBridgeSerialiser.IsPlaying())
++        {
++            // ARTIST823E3D2C..3E88: replay data is the sole vehicle/camera input
++            // source here. Stalled playback republishes the same static frame.
++            lpDirectorInput->SetPlayerCarIndex(static_cast<EActiveRaceCarIndex>(
++                mDirectorBridgeSerialiser.GetActivePlayerIndex()));
++            for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++            {
++                if (mDirectorBridgeSerialiser.GetVehicleActive(liSlot))
++                    lpDirectorInput->SetRaceCarInfo(static_cast<u32>(liSlot),
++                        *mDirectorBridgeSerialiser.GetVehicleInfo(liSlot));
++            }
++            for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++            {
++                lpDirectorInput->SetCrashingCentreOfMass(static_cast<u32>(liSlot),
++                    *mDirectorBridgeSerialiser.GetCentreOfMassTransform(liSlot));
++                CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                           "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++            }
++            BrnReplays::DirectorBridgeSerialiserStaticLayout* lpFrame = mDirectorBridgeSerialiser.GetStaticLayout();
++            CGS_ASSERT(lpFrame != 0, "lpStatic");
++            lpDirectorInput->SetPlayerBoostPercentage(lpFrame->mfPlayerBoostPercentage);
++            lpFrame = mDirectorBridgeSerialiser.GetStaticLayout();
++            CGS_ASSERT(lpFrame != 0, "lpStatic");
++            lpDirectorInput->SetPlayerCrashInfo(&lpFrame->mPlayerCrashInfo);
++            mDirectorBridgeSerialiser.SetDataReady(
++                lpWorldOutput->GetWorldEntityStatusInterface()->GetAllStreamed());
++            mDirectorBridgeSerialiser.SetDataRestored(
++                lpWorldOutput->GetWorldEntityStatusInterface()->GetAllStreamed());
++        }
++
++        // ARTIST823E5098..50B4: this tail runs even with no active player,
++        // and for idle, preparing, stalled and restoring serialiser states.
++        lpDirectorInput->SetWorldWantsDebugControllerFocus(
++            lpWorldOutput->GetWorldWantsDebugControllerFocus());
++        mDirectorBridgeSerialiser.Unlock();
++
+     }
+ 
+     // ========================================================================================
+--- a/src/GameSource/World/BrnWorldModuleIO.h
++++ b/src/GameSource/World/BrnWorldModuleIO.h
+@@ -642,6 +642,7 @@
+         // WorldModule::Update @0x827D63E8 copies the debug component's focus byte
+         // straight into +217668 under the write lock (a raw stb on X360; expressed
+         // as this named setter on the PC).
++        bool GetWorldWantsDebugControllerFocus() const;
+         void SetWorldWantsDebugControllerFocus(bool lbWantsFocus);                          // (Update @0x827D63E8 store)
+ 
+         // ---- sound world load ----
+--- a/src/GameSource/World/BrnWorldModuleIO_UpdateOutputBuffer.cpp
++++ b/src/GameSource/World/BrnWorldModuleIO_UpdateOutputBuffer.cpp
+@@ -324,6 +324,12 @@
+ 
+ // WorldModule::Update @0x827D63E8 -- the debug component's "wants controller focus"
+ // byte copy into +217668 (raw stb on X360, the named member store here).
++bool UpdateOutputBuffer::GetWorldWantsDebugControllerFocus() const
++{
++    CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading");
++    return mbWorldWantsDebugControllerFocus;
++}
++
+ void UpdateOutputBuffer::SetWorldWantsDebugControllerFocus(bool lbWantsFocus)
+ {
+     CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing");
+--- a/src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp
++++ b/src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp
+@@ -366,7 +366,7 @@
+ // r11,31` -- the decompiler widens it to __int16 and takes HIBYTE; the value is masked to
+ // one bit either way, so it is a bool).
+ // ----------------------------------------------------------------------------
+-s32 DirectorModule::PreSceneQueryUpdate(s32 liUnusedA, s32 liUnusedB,
++s32 DirectorModule::PreSceneQueryUpdate(CgsModule::IOBufferStack* lpInputBufferStack, CgsModule::IOBufferStack* lpOutputBufferStack,
+                                         const DirectorIO::InputBuffer* lpInputBuffer,
+                                         DirectorIO::OutputBuffer* lpOutputBuffer,
+                                         DirectorIO::SceneQueryOutputBuffer* lpSceneQueryOutputBuffer,
+@@ -374,8 +374,8 @@
+ {
+     // FLAG: the X360 takes these two arguments and never reads them (the module framework
+     // passes the same six-argument shape to every module entry point).
+-    (void)liUnusedA;
+-    (void)liUnusedB;
++    (void)lpInputBufferStack;
++    (void)lpOutputBufferStack;
+ 
+     CgsDev::PerfMonCpu::StartMonitor(miPerfCount_PreSQUpdate);
+ 
+@@ -471,15 +471,15 @@
+ //      (mCgsCamera = <that director's CgsGraphics::Camera>);
+ //   5. the replay RECORD leg + unconditional serialiser registration.
+ // ----------------------------------------------------------------------------
+-s32 DirectorModule::Update(s32 liUnusedA, s32 liUnusedB,
++s32 DirectorModule::Update(CgsModule::IOBufferStack* lpInputBufferStack, CgsModule::IOBufferStack* lpOutputBufferStack,
+                            const DirectorIO::InputBuffer* lpInputBuffer,
+                            DirectorIO::OutputBuffer* lpOutputBuffer,
+                            const DirectorIO::SceneQueryInputBuffer* lpSceneQueryInputBuffer,
+                            DirectorIO::SceneQueryOutputBuffer* lpSceneQueryOutputBuffer)
+ {
+     // FLAG: taken and never read by the X360 body (see PreSceneQueryUpdate).
+-    (void)liUnusedA;
+-    (void)liUnusedB;
++    (void)lpInputBufferStack;
++    (void)lpOutputBufferStack;
+ 
+     CgsDev::PerfMonCpu::StartMonitor(miPerfCount_MainUpdate);
+ 
+@@ -573,13 +573,13 @@
+ // all seven stores). So the whole post office is inert here and Clear() is a no-op; this
+ // pass cannot issue or receive queries. Reproduced verbatim.
+ // ----------------------------------------------------------------------------
+-s32 DirectorModule::PostGuiUpdate(s32 liUnusedA, s32 liUnusedB,
++s32 DirectorModule::PostGuiUpdate(CgsModule::IOBufferStack* lpInputBufferStack, CgsModule::IOBufferStack* lpOutputBufferStack,
+                                   const DirectorIO::InputBuffer* lpInputBuffer,
+                                   DirectorIO::OutputBuffer* lpOutputBuffer)
+ {
+     // FLAG: taken and never read by the X360 body (see PreSceneQueryUpdate).
+-    (void)liUnusedA;
+-    (void)liUnusedB;
++    (void)lpInputBufferStack;
++    (void)lpOutputBufferStack;
+ 
+     CgsDev::PerfMonCpu::StartMonitor(miPerfCount_PostGuiUpdate);
+ 
+--- a/src/GameSource/Director/DirectorModule/BrnDirectorModuleIO.h
++++ b/src/GameSource/Director/DirectorModule/BrnDirectorModuleIO.h
+@@ -2,6 +2,8 @@
+ #pragma once
+ 
+ #include "types.hpp"
++#include "GameSource/GameState/BrnGameStateSharedIO.h"
++#include "GameSource/World/EntityModules/WorldEntityModule/SharedIO/BrnWorldEntityStatusInterface.h"
+ #include "GameSource/Gui/Events/BrnGuiPFXEvents.h"
+ 
+ #include "GameShared/GameClasses/Module/CgsIOBuffer.h"            // CgsModule::IOBuffer base + read/write lock-state queries
+@@ -169,7 +171,14 @@
+         // MainDirector::Update's gameplay middle tests it too.
+         bool                                               IsSimPaused() const;
+         // ARTIST ReplayDirector::FillInSharedInfo loads input+0x6AB4.
+-        bool IsAllStreamed() const { return mbAllStreamed; }
++        const BrnGameState::GameStateModuleIO::CarScoreData* GetPlayerScoreData() const;
++        void SetPlayerScoreData(const BrnGameState::GameStateModuleIO::CarScoreData* lpScoreData);
++        bool GetPlayerComboWarningActive() const;
++        void SetPlayerComboWarningActive(bool lbActive);
++        bool IsAllStreamed() const { return mWorldEntityStatusInterface.GetAllStreamed(); }
++        void SetWorldEntityStatusInterface(const BrnWorld::WorldEntityIO::StatusInterface* lpStatus);
++        void SetWorldWantsDebugControllerFocus(bool lbFocus);
++
+         // Inlined by ARTIST DoUpdate_Director @0x823E8F2C; DWARF :284.
+         void SetSimPaused(bool lbSimPaused) { mbSimPaused = lbSimPaused; }
+ 
+@@ -368,9 +377,7 @@
+         // @0x0990 (2448): per-active-car published vehicle state. Stride 0x4F0 (1264) confirmed.
+         BrnDirector::Camera::VehicleInfo mRaceCarInfo[8]; // @0x0990 .. 0x3110
+ 
+-        // @0x3110 .. : mPlayerScoreData (CarScoreData) + mbPlayerComboWarningActive +
+-        // mfPlayerBoostPercentage, ending at the vehicle-info pointer array @0x3238. HONEST opaque.
+-        u8  mScoreAndBoostBlock[0x3238 - (0x0990 + 8 * 1264)]; // CarScoreData + combo flag + boost f32
++        BrnGameState::GameStateModuleIO::CarScoreData mPlayerScoreData; // ARTIST +0x3110, 296 bytes
+ 
+         // @0x3238 (12856): the per-car TEAMS. The PS3 DWARF's accessor GetVehicleInfoArray (:146)
+         // types it as eight VehicleInfo pointers, but on the X360 the eight words are team ids:
+@@ -384,7 +391,8 @@
+         //     reads per nearest-car row (`lwzx r10, 4 * car, lpaVehicleTeams` @0x8221DEE4).
+         // Stored as eight 4-byte words either way; the name is kept for the DWARF accessor.
+         u32 maVehicleInfoArray[8];                       // @0x3238 (32 bytes -> 0x3258)
+-        u8  maVehicleInfoArrayPad[0x325C - (0x3238 + 8 * sizeof(u32))]; // 4-byte gap
++        bool mbPlayerComboWarningActive; // ARTIST +0x3258
++        u8 maPad3259[3];
+         // @0x325C (12892): the player's boost fill fraction. The producer is
+         // BrnGameModule::BridgeWorldToDirector @0x823E3AB0 -- `*(input + 0x325C) =
+         // (fabs(boost.mfMaxBoost) > eps) ? boost.mfBoostAmount / boost.mfMaxBoost : 0`.
+@@ -439,10 +447,11 @@
+         // pad is 8 bytes; it is the un-modelled remainder of the console's own span, NOT
+         // padding we invented for alignment.
+         BrnDirector::BrnDirectorVehicleInputInterface mVehicleDriverInputInterface;   // @0x6780
+-        u8  maVehicleDriverInputInterfacePad[
+-                (0x6AB4 - 0x6780) - sizeof(BrnDirector::BrnDirectorVehicleInputInterface)];
+-        bool mbAllStreamed; // console+0x6AB4, BehaviourSharedInfo::mbAllStreamed
++        // ARTIST BridgeWorldToDirector823E3F80..3FA4 copies this exact
++        // five-byte interface. The fifth byte is IsAllStreamed's source.
++        BrnWorld::WorldEntityIO::StatusInterface mWorldEntityStatusInterface; // +0x6AB0
+         u8 maPad6AB5[3];
++
+ 
+         // @0x6AB8 (27320): contacts. AppendContacts stores one 32-bit word at member word [0]
+         // (this[6830] == 0x6AB8). GetContacts returns its address. HONEST opaque storage.
+--- a/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOInputBuffer.cpp
++++ b/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOInputBuffer.cpp
+@@ -45,6 +45,8 @@
+         static_assert(offsetof(InputBuffer, mTimerInterface)      == 0x6750, "mTimerInterface @0x6750");
+         static_assert(sizeof(CgsSystem::TimerStatusInterface)     == 0x30,   "TimerStatusInterface fills the @0x6750 span exactly");
+         static_assert(offsetof(InputBuffer, mVehicleDriverInputInterface) == 0x6780, "mVehicleDriverInputInterface @0x6780");
++        static_assert(offsetof(InputBuffer, mWorldEntityStatusInterface) == 0x6AB0, "world entity status @0x6AB0");
++        static_assert(sizeof(BrnWorld::WorldEntityIO::StatusInterface) == 5, "five original world status bytes");
+         static_assert(offsetof(InputBuffer, mContacts)            == 0x6AB8, "mContacts @0x6AB8");
+         static_assert(offsetof(InputBuffer, mTrafficOutputInterface) == 0x6AC0, "mTrafficOutputInterface @0x6AC0");
+         static_assert(sizeof(BrnTraffic::BrnTrafficIO::TrafficDirectorOutputInterface) == 0x78E0 - 0x6AC0,
+@@ -85,6 +87,44 @@
+         static_assert(offsetof(InputBuffer, mbModeTimeExpired)                 == 0x7AD6 + InputBuffer::KU_HOOK_ENUMERATION_WIDENING, "mbModeTimeExpired @0x7AD6");
+     }
+ 
++    const BrnGameState::GameStateModuleIO::CarScoreData* InputBuffer::GetPlayerScoreData() const
++    {
++        CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading");
++        return &mPlayerScoreData;
++    }
++
++    void InputBuffer::SetPlayerScoreData(const BrnGameState::GameStateModuleIO::CarScoreData* lpScoreData)
++    {
++        CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing");
++        mPlayerScoreData = *lpScoreData;
++    }
++
++    bool InputBuffer::GetPlayerComboWarningActive() const
++    {
++        CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading");
++        return mbPlayerComboWarningActive;
++    }
++
++    void InputBuffer::SetPlayerComboWarningActive(bool lbActive)
++    {
++        CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing");
++        mbPlayerComboWarningActive = lbActive;
++    }
++
++    // ARTIST823E3F80..3FA4: five original status bytes, before queue/contact publish.
++    void InputBuffer::SetWorldEntityStatusInterface(const BrnWorld::WorldEntityIO::StatusInterface* lpStatus)
++    {
++        CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing");
++        mWorldEntityStatusInterface = *lpStatus;
++    }
++
++    // DWARF BrnDirectorModuleIO.h:237; inlined by823E50A8..50B0.
++    void InputBuffer::SetWorldWantsDebugControllerFocus(bool lbFocus)
++    {
++        CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing");
++        mbWorldWantsDebugControllerFocus = lbFocus;
++    }
++
+     // ---- Construct @0x822393D0 --------------------------------------------------------------
+     // The scalar/flag seeds of the console body, for the members this class names. The X360
+     // additionally runs the embedded aggregates' own Constructs (ContactSpyInterface @+27320,
+--- a/src/GameSource/Replays/Serialisers/BrnReplayDirectorBridgeSerialiser.cpp
++++ b/src/GameSource/Replays/Serialisers/BrnReplayDirectorBridgeSerialiser.cpp
+@@ -17,38 +17,6 @@
+ 
+ namespace BrnReplays
+ {
+-
+-namespace
+-{
+-    // The serialise plan (offset into the static layout, byte size) in the
+-    // X360's stream order.
+-    struct SpanPlan { u32 muOffset; s32 miSize; };
+-    const SpanPlan KA_BRIDGE_SPANS[] =
+-    {
+-        { 0x0000, 1     },   // muActivePlayerIndex
+-        { 0x0003, 8     },   // mabVehicleActive
+-        { 0x0010, 10112 },   // maVehicleInfos (8 x 1264)
+-        { 0x5BA0, 48    },   // maBlock5BA0
+-        { 0x5BD0, 512   },   // maCentreOfMassTransforms (8 x 64)
+-        { 0x5DD0, 296   },   // maPlayerData
+-        { 0x5EF8, 1     },   // mBlock5EF8
+-        { 0x5EFC, 4     },   // maBlock5EFC
+-        { 0x0002, 1     },   // mbPlayerWasTakenDown
+-        { 0x0001, 1     },   // muPlayerKillerIndex
+-    };
+-    const s32 KI_NUM_BRIDGE_SPANS = sizeof(KA_BRIDGE_SPANS) / sizeof(KA_BRIDGE_SPANS[0]);
+-}
+-
+-// One span step: RECORDING appends, PLAYING restores, anything else no-ops (the
+-// X360 re-reads the mode word per span; taking the live serialiser keeps that).
+-static void DirectorBridgeSerialiser_StreamSpan(BaseSerialiser* lpSerialiser,
+-                                                u8* lpStaticBase, const SpanPlan& lrSpan)
+-{
+-    if (lpSerialiser->GetMode() == BaseSerialiser::E_MODE_RECORDING)
+-        lpSerialiser->Write(lpStaticBase + lrSpan.muOffset, lrSpan.miSize);
+-    else if (lpSerialiser->GetMode() == BaseSerialiser::E_MODE_PLAYING)
+-        lpSerialiser->Read(lpStaticBase + lrSpan.muOffset, lrSpan.miSize);
+-}
+ 
+ // @ 0x8264C498 -- the leaf forwarder: id 3, mode 0, the 0x8000 buffer pair,
+ // the channel name, flag 0.
+@@ -74,9 +42,16 @@
+         lbSkip = (leMode == E_MODE_RECORDING_PREPARING || leMode == E_MODE_PLAYING_PREPARING);
+         if (!lbSkip && leMode != E_MODE_RESTORING)
+         {
+-            u8* lpBase = reinterpret_cast<u8*>(lpStatic);
+-            for (s32 liSpan = 0; liSpan < KI_NUM_BRIDGE_SPANS; ++liSpan)
+-                DirectorBridgeSerialiser_StreamSpan(this, lpBase, KA_BRIDGE_SPANS[liSpan]);
++            BaseSerialiser::Serialise(&lpStatic->muActivePlayerIndex, sizeof(lpStatic->muActivePlayerIndex));
++            BaseSerialiser::Serialise(&lpStatic->mabVehicleActive, sizeof(lpStatic->mabVehicleActive));
++            BaseSerialiser::Serialise(&lpStatic->maVehicleInfos, sizeof(lpStatic->maVehicleInfos));
++            BaseSerialiser::Serialise(&lpStatic->mPlayerCrashInfo, sizeof(lpStatic->mPlayerCrashInfo));
++            BaseSerialiser::Serialise(&lpStatic->maCentreOfMassTransforms, sizeof(lpStatic->maCentreOfMassTransforms));
++            BaseSerialiser::Serialise(&lpStatic->mPlayerScoreData, sizeof(lpStatic->mPlayerScoreData));
++            BaseSerialiser::Serialise(&lpStatic->mbPlayerComboWarningActive, sizeof(lpStatic->mbPlayerComboWarningActive));
++            BaseSerialiser::Serialise(&lpStatic->mfPlayerBoostPercentage, sizeof(lpStatic->mfPlayerBoostPercentage));
++            BaseSerialiser::Serialise(&lpStatic->mbPlayerWasTakenDown, sizeof(lpStatic->mbPlayerWasTakenDown));
++            BaseSerialiser::Serialise(&lpStatic->muPlayerKillerIndex, sizeof(lpStatic->muPlayerKillerIndex));
+             SerialiseGameActionQueue();   // the queue stream step (own ledger fn)
+         }
+     }
+@@ -90,7 +65,7 @@
+ {
+     CGS_ASSERT(miStaticBufferSize >= static_cast<s32>(sizeof(DirectorBridgeSerialiserStaticLayout)),
+                "Static buffer size is too small\n");
+-    return reinterpret_cast<DirectorBridgeSerialiserStaticLayout*>(mpStaticBuffer);
++    return static_cast<DirectorBridgeSerialiserStaticLayout*>(mpStaticBuffer);
+ }
+ 
+ // . The game-action queue rides the stream as a packed variable queue:
+@@ -126,9 +101,16 @@
+     DirectorBridgeSerialiserStaticLayout* lpStatic = GetStaticLayout();
+     if (lpStatic != 0)
+     {
+-        u8* lpBase = reinterpret_cast<u8*>(lpStatic);
+-        for (s32 liSpan = 0; liSpan < KI_NUM_BRIDGE_SPANS; ++liSpan)
+-            DirectorBridgeSerialiser_StreamSpan(this, lpBase, KA_BRIDGE_SPANS[liSpan]);
++        BaseSerialiser::Serialise(&lpStatic->muActivePlayerIndex, sizeof(lpStatic->muActivePlayerIndex));
++        BaseSerialiser::Serialise(&lpStatic->mabVehicleActive, sizeof(lpStatic->mabVehicleActive));
++        BaseSerialiser::Serialise(&lpStatic->maVehicleInfos, sizeof(lpStatic->maVehicleInfos));
++        BaseSerialiser::Serialise(&lpStatic->mPlayerCrashInfo, sizeof(lpStatic->mPlayerCrashInfo));
++        BaseSerialiser::Serialise(&lpStatic->maCentreOfMassTransforms, sizeof(lpStatic->maCentreOfMassTransforms));
++        BaseSerialiser::Serialise(&lpStatic->mPlayerScoreData, sizeof(lpStatic->mPlayerScoreData));
++        BaseSerialiser::Serialise(&lpStatic->mbPlayerComboWarningActive, sizeof(lpStatic->mbPlayerComboWarningActive));
++        BaseSerialiser::Serialise(&lpStatic->mfPlayerBoostPercentage, sizeof(lpStatic->mfPlayerBoostPercentage));
++        BaseSerialiser::Serialise(&lpStatic->mbPlayerWasTakenDown, sizeof(lpStatic->mbPlayerWasTakenDown));
++        BaseSerialiser::Serialise(&lpStatic->muPlayerKillerIndex, sizeof(lpStatic->muPlayerKillerIndex));
+         SerialiseGameActionQueue();   // the queue stream step (own ledger fn)
+     }
+ 
+--- a/src/GameSource/Replays/Serialisers/BrnReplayDirectorBridgeSerialiser.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplayDirectorBridgeSerialiser.h
+@@ -2,6 +2,8 @@
+ #define GAMESOURCE_REPLAYS_SERIALISERS_BRNREPLAYDIRECTORBRIDGESERIALISER_H
+ 
+ #include "types.hpp"
++#include "GameSource/Director/Camera/SharedIO/BrnPlayerInfo.h"
++#include "GameSource/GameState/BrnGameStateSharedIO.h"
+ #include "BrnCommonTypes.h"                             // Matrix44Affine (the CoM transforms)
+ #include "GameShared/GameClasses/Core/CgsAssert.h"      // CGS_ASSERT (the lpStatic tripwires)
+ #include "GameSource/Replays/BrnReplayBaseSerialiser.h" // BrnReplays::BaseSerialiser
+@@ -39,14 +41,14 @@
+         u8 mbPlayerWasTakenDown;             // +0x0002 (serialised, 1)
+         u8 mabVehicleActive[8];              // +0x0003 (serialised, 8)
+         u8 maPad000B[0x10 - 0x0B];           // +0x000B .. +0x000F
+-        u8 maVehicleInfos[8][1264];          // +0x0010 (serialised, 10112; opaque records)
++        BrnDirector::Camera::VehicleInfo maVehicleInfos[8];          // +0x0010 (serialised, 10112; typed records)
+         CgsModule::VariableEventQueue<13312, 16> mGameActionQueue;   // +0x2790 (SerialiseGameActionQueue)
+-        u8 maBlock5BA0[48];                  // +0x5BA0 (serialised, 48; role not recovered)
++        BrnDirector::Camera::PlayerCrashInfo mPlayerCrashInfo;                  // +0x5BA0 (serialised, 48; original PlayerCrashInfo)
+         Matrix44Affine maCentreOfMassTransforms[8];   // +0x5BD0 (serialised, 512)
+-        u8 maPlayerData[296];                // +0x5DD0 (serialised, 296; the truncated-symbol block)
+-        u8 mBlock5EF8;                       // +0x5EF8 (serialised, 1)
++        BrnGameState::GameStateModuleIO::CarScoreData mPlayerScoreData;                // +0x5DD0 (serialised, 296; original CarScoreData)
++        bool mbPlayerComboWarningActive;                       // +0x5EF8 (serialised, 1)
+         u8 maPad5EF9[3];                     // +0x5EF9 .. +0x5EFB
+-        u8 maBlock5EFC[4];                   // +0x5EFC (serialised, 4)
++        f32 mfPlayerBoostPercentage;                   // +0x5EFC (serialised, 4)
+     };
+     static_assert(offsetof(DirectorBridgeSerialiserStaticLayout, mGameActionQueue) == 0x2790, "game action queue seat");
+     static_assert(offsetof(DirectorBridgeSerialiserStaticLayout, maCentreOfMassTransforms) == 0x5BD0, "centre-of-mass seat");
+@@ -87,11 +89,11 @@
+ 
+         // @0x823A8770 (h:238) -- one vehicle's 1264-byte info record (opaque; the
+         // consumers own the field surface).
+-        void* GetVehicleInfo(s32 liVehicleIndex)
++        const BrnDirector::Camera::VehicleInfo* GetVehicleInfo(s32 liVehicleIndex)
+         {
+             DirectorBridgeSerialiserStaticLayout* lpStatic = GetStaticLayout();
+             CGS_ASSERT(lpStatic != 0, "lpStatic");   // :238 (non-gating)
+-            return lpStatic->maVehicleInfos[liVehicleIndex];
++            return &lpStatic->maVehicleInfos[liVehicleIndex];
+         }
+ 
+         // @0x823A87E0 (h:287) -- one vehicle's centre-of-mass transform.
+@@ -109,7 +111,7 @@
+         {
+             DirectorBridgeSerialiserStaticLayout* lpStatic = GetStaticLayout();
+             CGS_ASSERT(lpStatic != 0, "lpStatic");   // :310 (non-gating)
+-            return lpStatic->maPlayerData;
++            return &lpStatic->mPlayerScoreData;
+         }
+ 
+         // @0x823A88A8 (h:383/:384/:385) -- the takedown record (was-taken-down +
+--- a/src/GameSource/Replays/Serialisers/BrnReplayRaceCarEntitySerialiser.cpp
++++ b/src/GameSource/Replays/Serialisers/BrnReplayRaceCarEntitySerialiser.cpp
+@@ -3,10 +3,10 @@
+ //
+ // The race-car-entity replay serialiser: records / plays back the whole race-car
+ // world's per-frame state. Like its sibling serialisers it derives from BaseSerialiser
+-// and drives a fixed 0x1B000-byte static-layout buffer that holds two frames -- the
+-// "previous" frame at +0 and the "live" frame at +0xD7E0. Unlike the traffic/prop
+-// serialisers it does NOT walk the frame field-by-field: Read/Write serialise the whole
+-// 0xD7E0-byte live frame through the raw BaseSerialiser::Read/Write byte primitives.
++// and drives a two-frame static owner -- the previous frame followed by the live frame and
++// the original 64-byte reserve. X360 passes 0x1B000 bytes and serialises a 0xD7E0 frame;
++// the typed native owner widens handles/ids and derives the PC capacities from sizeof.
++// Read/Write still pass the entire live frame through BaseSerialiser's raw byte primitives.
+ //
+ // Source-of-truth ladder: every signature, branch, constant and store below is taken
+ // from the X360 ASM (dossier w33_carserial). Highlights:
+@@ -19,40 +19,90 @@
+ //   * Read @0x8264C518 reaches the frame path only for E_MODE_PLAYING (5); Write @0x8264C618
+ //     only for the recording family {1,2,3}. Both raw-serialise the live frame (0xD7E0 bytes).
+ //
+-// Callee declarations (BaseSerialiser, RaceCarSerialiserFrame) live in their own TUs;
+-// included here for the compile-only gate.
++// Typed frame fields are attested by UpdateOutputInterfaces @0x822F5CF8 and
++// UpdateSerialiser @0x82306120; Frame::Clear and operator= are recovered in this TU.
+ 
+ #include "types.hpp"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"
+-#include "GameSource/Replays/BrnReplayBaseSerialiser.h"
+-#include "GameSource/Replays/Serialisers/BrnReplayRaceCarSerialiserFrame.h"
++#include "GameSource/Replays/Serialisers/BrnReplayRaceCarEntitySerialiser.h"
++#include <cstring>
+ 
+ namespace BrnReplays
+ {
+-    // Static buffer size (Construct arg / GetStaticLayout guard): 0x1B000 == 110592.
+-    static const s32 KI_STATIC_BUFFER_SIZE = 0x1B000;
++    // Both X360 capacities are 0x1B000. The native typed owner retains the two frames and
++    // the original 64-byte reserve while allowing its ResourceHandle members to stay native.
++    static const s32 KI_STATIC_BUFFER_SIZE =
++        static_cast<s32>(sizeof(RaceCarEntitySerialiserStaticLayout));
+ 
+-    // DWARF home: GameSource/Replays/Serialisers/BrnReplayRaceCarEntitySerialiser.h.
+-    class RaceCarEntitySerialiser : public BaseSerialiser
+-    {
+-    public:
+-        // @0x8264C4C0
+-        s32 Construct();
+-        // @0x822A3400 -- returns the static-layout buffer, asserting it is big enough.
+-        RaceCarEntitySerialiserStaticLayout* GetStaticLayout();
+-        // @0x82657A48 -- lazily Clear() both frames on the first frame, mark it done.
+-        RaceCarSerialiserFrame* CheckStaticLayoutCleared();
+-        // @0x8264C518 / @0x8264C618 -- playback / record one frame (top-level dispatch).
+-        s32 Read();
+-        s32 Write();
+-
+-    private:
+-        // X360: byte at this+0x5C, cleared by Construct, set by CheckStaticLayoutCleared
+-        // once both frames have been Clear()ed for this record/playback session.
+-        bool mbStaticLayoutCleared; // @0x5C
+-    };
+ 
+     // -------------------------------------------------------------------------
++
++    // @0x82657748. Clear the two interface snapshots, then zero and seed each visual
++    // record. This method operates on the replay buffer's raw storage; after the console's
++    // 5280-byte clear the queue is reconstructed so its inline event pointer is valid.
++    RaceCarSerialiserFrame* RaceCarSerialiserFrame::Clear()
++    {
++        mActiveRaceCarOutputInterface.Clear();
++        mGlobalRaceCarOutputInterface.Clear();
++
++        for (u32 luSlot = 0; luSlot < KU_RACECAR_FRAME_SLOT_COUNT; ++luSlot)
++        {
++            BrnWorld::ActiveRaceCar::RenderParams& lrRenderParams = maRenderParams[luSlot];
++            std::memset(&lrRenderParams, 0, sizeof(lrRenderParams));
++
++            lrRenderParams.mBodyTransform.SetIdentity();
++            for (u32 luWheel = 0; luWheel < 6u; ++luWheel)
++            {
++                lrRenderParams.mWheelTransforms[luWheel].SetIdentity();
++                lrRenderParams.mWheelScaleTransforms[luWheel].SetIdentity();
++            }
++
++            lrRenderParams.mPaintColour.x = 1.0f;
++            lrRenderParams.mPaintColour.y = 1.0f;
++            lrRenderParams.mPaintColour.z = 1.0f;
++            lrRenderParams.mPaintColour.w = 1.0f;
++            lrRenderParams.mPearlescentColour.x = 1.0f;
++            lrRenderParams.mPearlescentColour.y = 1.0f;
++            lrRenderParams.mPearlescentColour.z = 1.0f;
++            lrRenderParams.mPearlescentColour.w = 1.0f;
++
++            // ARTIST 0x82657804 seeds r20=-1; std at 0x826579C8/CC fills both words.
++            lrRenderParams.mBodyPartVisibility.SetBitField(0u, ~u64(0));
++            lrRenderParams.mBodyPartVisibility.SetBitField(1u, ~u64(0));
++            lrRenderParams.maDetachedParts.Construct();
++            lrRenderParams.mLOD = CgsGraphics::Model::E_STATE_LOD_4;
++            lrRenderParams.mbBluesAndTwosCanSwitchState = true;
++
++            maRaceCarIds[luSlot] = 0;
++            maWheelIds[luSlot] = 0;
++        }
++
++        return this;
++    }
++
++    // @0x822E7820. Copy the typed interfaces and all eight render records in slot order.
++    // Their member-wise operators preserve native resource handles and queue storage.
++    RaceCarSerialiserFrame& RaceCarSerialiserFrame::operator=(
++            const RaceCarSerialiserFrame& lrOther)
++    {
++        if (this == &lrOther)
++        {
++            return *this;
++        }
++
++        mActiveRaceCarOutputInterface = lrOther.mActiveRaceCarOutputInterface;
++        mGlobalRaceCarOutputInterface = lrOther.mGlobalRaceCarOutputInterface;
++        for (u32 luSlot = 0; luSlot < KU_RACECAR_FRAME_SLOT_COUNT; ++luSlot)
++        {
++            maRenderParams[luSlot] = lrOther.maRenderParams[luSlot];
++        }
++        for (u32 luSlot = 0; luSlot < KU_RACECAR_FRAME_SLOT_COUNT; ++luSlot)
++        {
++            maRaceCarIds[luSlot] = lrOther.maRaceCarIds[luSlot];
++            maWheelIds[luSlot] = lrOther.maWheelIds[luSlot];
++        }
++        return *this;
++    }
+ 
+     // @0x8264C4C0 (already homed in a prior wave; re-based here onto the real
+     // BaseSerialiser home). id 0; mode 0; 0x1B000 dynamic + 0x1B000 static;
+@@ -70,8 +120,8 @@
+     // assert (size), unlike the traffic sibling which also asserts non-null.
+     RaceCarEntitySerialiserStaticLayout* RaceCarEntitySerialiser::GetStaticLayout()
+     {
+-        // asm: `lwz r11,0x24(this)` (miStaticBufferSize) compared `< 0x1B000`; named-member
+-        // access is what matters on the 64-bit host.
++        // asm: `lwz r11,0x24(this)` (miStaticBufferSize) compared `< 0x1B000`; the native
++        // target uses sizeof(the typed owner), which keeps its 64-bit handles intact.
+         CGS_ASSERT(GetStaticBufferSize() >= KI_STATIC_BUFFER_SIZE,
+                    "Static buffer size is too small\n");
+         return reinterpret_cast<RaceCarEntitySerialiserStaticLayout*>(GetStaticBuffer());
+--- /dev/null
++++ b/src/GameSource/Replays/Serialisers/BrnReplayRaceCarEntitySerialiser.h
+@@ -0,0 +1,23 @@
++#pragma once
++
++#include "GameSource/Replays/BrnReplayBaseSerialiser.h"
++#include "GameSource/Replays/Serialisers/BrnReplayRaceCarSerialiserFrame.h"
++
++namespace BrnReplays
++{
++    // X360 RaceCarEntitySerialiser is embedded in RaceCarEntityModule at +0x18600.
++    // Its X360 base Construct receives the original record/static capacity and skip flag;
++    // the native frame's wider typed size is used for both capacities on PC.
++    class RaceCarEntitySerialiser : public BaseSerialiser
++    {
++    public:
++        s32 Construct();
++        RaceCarEntitySerialiserStaticLayout* GetStaticLayout();
++        RaceCarSerialiserFrame* CheckStaticLayoutCleared();
++        s32 Read();
++        s32 Write();
++
++    private:
++        bool mbStaticLayoutCleared;
++    };
++}
+--- a/src/GameSource/Replays/Serialisers/BrnReplayRaceCarSerialiserFrame.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplayRaceCarSerialiserFrame.h
+@@ -1,57 +1,74 @@
+ #pragma once
+ 
+-// BrnReplays::RaceCarSerialiserFrame -- the per-frame snapshot the race-car-entity
+-// replay serialiser records/plays back. Unlike the traffic/prop frames, the X360
+-// RaceCarEntitySerialiser does NOT walk this frame field-by-field: Read/Write hand the
+-// whole 0xD7E0-byte frame region to the raw BaseSerialiser::Read/Write byte primitives
+-// (see BrnReplayRaceCarEntitySerialiser.cpp). No DWARF or Feb-2007 source was recovered
+-// for this type, so it is modelled as an opaque fixed-size serialised blob -- the only
+-// attested surface is its SIZE and the Clear() method CheckStaticLayoutCleared drives.
++// BrnReplays::RaceCarSerialiserFrame, recovered from ARTIST's X360 consumers.
+ //
+-// X360 attestation for the frame SIZE:
+-//   * The static layout buffer is 0x1B000 (110592) bytes (RaceCarEntitySerialiser::
+-//     Construct @0x8264C4C0, `lis 3,1`|`lis 4,1` -> 0x1B000 static + dynamic).
+-//   * It holds TWO RaceCarSerialiserFrame copies -- the "previous" frame at static-base
+-//     +0 and the "live" frame at static-base +0xD7E0 (55264). Read @0x8264C518 / Write
+-//     @0x8264C618 serialise the live frame with size r5 = 0xD7E0; CheckStaticLayoutCleared
+-//     @0x82657A48 Clear()s the +0xD7E0 frame then the +0 frame. So each frame is exactly
+-//     0xD7E0 bytes and 2*0xD7E0 + 0x40-byte tail == 0x1B000.
++// The console record is a typed snapshot, even though RaceCarEntitySerialiser::Read/Write
++// pass the whole live frame to BaseSerialiser.  ARTIST 0x822F5CF8 and 0x82306120 identify
++// these fields directly: active interface at +0, global interface at +10480, eight
++// ActiveRaceCar::RenderParams at +12896 (stride 5280), then the model and wheel CgsID arrays
++// at +55136 and +55200.  The two output-interface copies and the eight RenderParams copies
++// are member-wise on the host so ResourceHandle and EventQueue pointers keep native width.
++//
++// X360 frame size is 0xD7E0 (55264); the native PC frame is 55328 because the actual active
++// output interface widens from 10480 to 10544 and each CgsID is the native 8-byte type.
++// This preserves native pointer identity and does not claim cross-bitness replay-file
++// compatibility.  The outer owner keeps its two typed frames plus the original 64-byte
++// reserve/alignment tail, so its native allocation is 110720 (0x1B080).
+ 
+ #include "types.hpp"
++#include "BrnCommonTypes.h" // CgsID
++#include "GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.h"
++#include "GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRaceCarEntityModuleOutputInterface.h"
++#include <cstddef>
+ 
+ namespace BrnReplays
+ {
+-    // One race-car-serialiser frame. Size 0xD7E0 (X360-attested). Its interior layout is
+-    // not recovered; Read/Write treat it as a raw serialised byte blob (external serialised
+-    // data), so it is held as opaque storage. GROW this home into named fields (do not
+-    // redefine it) when the RaceCarSerialiserFrame TU family is reconstructed.
+-    static const u32 KU_RACECAR_FRAME_SIZE = 0xD7E0; // 55264
++    static const u32 KU_RACECAR_FRAME_SIZE_X360 = 0xD7E0u;
++    static const u32 KU_RACECAR_FRAME_SLOT_COUNT = 8u;
++    static const u32 KU_RACECAR_STATIC_LAYOUT_TAIL_SIZE = 64u;
+ 
+     struct RaceCarSerialiserFrame
+     {
+-        u8 maFrameData[KU_RACECAR_FRAME_SIZE]; // @0x0000 undecoded serialised frame state
++        BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface
++            mActiveRaceCarOutputInterface;
++        BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface
++            mGlobalRaceCarOutputInterface;
++        BrnWorld::ActiveRaceCar::RenderParams maRenderParams[KU_RACECAR_FRAME_SLOT_COUNT];
++        CgsID maRaceCarIds[KU_RACECAR_FRAME_SLOT_COUNT];
++        CgsID maWheelIds[KU_RACECAR_FRAME_SLOT_COUNT];
+ 
+-        // Clear @0x826C????  (BrnReplays::RaceCarSerialiserFrame::Clear) -- reset the frame
+-        // to its empty state. Declared here for the compile-only gate; the body lives in the
+-        // frame's own [todo] TU. Return type modelled as RaceCarSerialiserFrame* to match the
+-        // sibling TrafficSerialiserFrame::Clear (which returns the frame) and the X360 call
+-        // site, where Clear's return is threaded into r3 as CheckStaticLayoutCleared's result.
++        // X360 0x82657748: clear the two interfaces, reset every render-parameter record,
++        // clear both model-id arrays, and return this frame.
+         RaceCarSerialiserFrame* Clear();
++
++        // X360 0x822E7820: member-wise frame copy; each RenderParams copy retains the
++        // destination queue storage while copying the source queue's live events.
++        RaceCarSerialiserFrame& operator=(const RaceCarSerialiserFrame& lrOther);
+     };
+ 
+-    // The static-layout buffer GetStaticLayout returns: a "previous" frame followed by the
+-    // "live" frame, plus a 64-byte tail. Sized to the 0x1B000 Construct argument.
+     struct RaceCarEntitySerialiserStaticLayout
+     {
+-        RaceCarSerialiserFrame mPreviousFrame; // @0x0000  Clear()ed second by CheckStaticLayoutCleared
+-        RaceCarSerialiserFrame mLiveFrame;     // @0xD7E0  serialised by Read/Write; Clear()ed first
+-        u8 maTail[0x1B000 - 2 * KU_RACECAR_FRAME_SIZE]; // @0x1AFC0  64-byte undecoded tail
++        RaceCarSerialiserFrame mPreviousFrame;
++        RaceCarSerialiserFrame mLiveFrame;
++        u8 maTail[KU_RACECAR_STATIC_LAYOUT_TAIL_SIZE];
+     };
+ 
+-    // Pin the X360-attested sizes so the +0xD7E0 live-frame offset and the 0x1B000 buffer
+-    // size are exact.
+-    static_assert(sizeof(RaceCarSerialiserFrame) == 0xD7E0,
+-                  "RaceCarSerialiserFrame must be 0xD7E0 bytes (X360 Read/Write size arg)");
+-    static_assert(sizeof(RaceCarEntitySerialiserStaticLayout) == 0x1B000,
+-                  "RaceCarEntitySerialiserStaticLayout must be 0x1B000 bytes (Construct arg)");
++    static_assert(sizeof(BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface) == 10544,
++                  "Native RaceCar active interface width changed");
++    static_assert(sizeof(BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface) == 2416,
++                  "RaceCar global interface width changed");
++    static_assert(sizeof(BrnWorld::ActiveRaceCar::RenderParams) == 5280,
++                  "RaceCar RenderParams width changed");
++    static_assert(sizeof(RaceCarSerialiserFrame) == 55328,
++                  "Native RaceCar replay frame must use the typed 64-bit record");
++    static_assert(sizeof(RaceCarEntitySerialiserStaticLayout) == 110720,
++                  "Native RaceCar static owner must preserve two frames and the 64-byte tail");
++    static_assert(offsetof(RaceCarSerialiserFrame, mGlobalRaceCarOutputInterface) == 10544,
++                  "Native active/global replay interface order changed");
++    static_assert(offsetof(RaceCarSerialiserFrame, maRenderParams) == 12960,
++                  "Native replay RenderParams array offset changed");
++    static_assert(offsetof(RaceCarSerialiserFrame, maRaceCarIds) == 55200,
++                  "Native replay car-id array offset changed");
++    static_assert(offsetof(RaceCarSerialiserFrame, maWheelIds) == 55264,
++                  "Native replay wheel-id array offset changed");
+ }
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.cpp
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.cpp
+@@ -426,11 +426,8 @@
+ //                            and (this+0x1CB0, ...) -- `slot = NULLResourcePtr`
+ //                            (dword_82FAD960 IS NULLResourcePtr+0x14, the sentinel's
+ //                            {mpThis,muThreadId} pair; see CgsResourcePtr.h:169). Reproduced
+-//                            as the HANDLE half only, which is the half this class models
+-//                            (maPad1C90a + the two named ResourceHandles).
+-//                            [FLAG] the alias-list half of CreateFromHandle is not reproduced
+-//                            ANYWHERE in this tree -- OnResourcesLoaded's banner records the
+-//                            same gap for the write side.
++//                            by typed ResourcePtr assignment below; both alias and handle
++//                            state follow the console during slot reuse.
+ //
+ // NOT cleared by the console: meActiveRaceCarIndex (+0x748). The slot keeps its own index for
+ // life (Construct is its only writer) -- DetachActiveRaceCar reads it BEFORE calling this, and
+@@ -467,12 +464,11 @@
+     miFlashFrequency                = 0;                       // 0x794
+     mbAIToBeActivated               = false;                   // 0x781
+ 
+-    // `slot = CgsResource::NULLResourcePtr` x2 (see the banner). The wrappers themselves are
+-    // this class's two opaque ResourcePtr spans; what it models -- and what AddHandlingModel
+-    // reads back -- is the handle each stores at its own +0x14, so the pair is dropped to the
+-    // null handle by name.
+-    mDeformationModelHandle = CgsResource::NULLResourceHandle;   // this+0x1C90 (+0x14)
+-    mGraphicsModelHandle    = CgsResource::NULLResourceHandle;   // this+0x1CB0 (+0x14)
++    // `slot = CgsResource::NULLResourcePtr` x2. ResourcePtr's handle assignment is the
++    // console's BaseResourcePtr::CreateFromHandle(this, &NULLResourceHandle) sequence and
++    // unlinks the previous resource alias before installing the null handle.
++    mDeformationModelResourcePtr = CgsResource::NULLResourceHandle; // this+0x1C90
++    mGraphicsModelResourcePtr    = CgsResource::NULLResourceHandle; // this+0x1CB0
+ 
+     // ⚠️ FLAG PC quality-of-life (verify F2, ghostcar): NOT a console store. The render-pose
+     // interpolator (mBodyPoseTrack / maWheelPoseTracks, PC-only, reset in Construct) keeps the
+@@ -1311,8 +1307,11 @@
+ 
+     muState = E_STATE_WAITING;                                       // +0x740 = 2
+ 
+-    mDeformationModelHandle = lrDeformationModelHandle;              // +0x1CA4
+-    mGraphicsModelHandle    = lrGraphicsModelHandle;                 // +0x1CC4
++    // ARTIST 0x822EB1FC / 0x822EB20C bind the two wrappers from the incoming handles.
++    // ResourcePtr's handle assignment performs BaseResourcePtr::CreateFromHandle, keeping
++    // both the source handle and the intrusive alias list live for the loaded resources.
++    mDeformationModelResourcePtr = lrDeformationModelHandle; // wrapper +0x14 == +0x1CA4
++    mGraphicsModelResourcePtr    = lrGraphicsModelHandle;    // wrapper +0x14 == +0x1CC4
+ 
+     // 0x822EB20C..0x822EB24C (banner leg 1): Def(this + 0x1C90) + 0x610 copied whole into
+     // +0x90. PC-SAFETY GUARD, not console behaviour: a spec that does not resolve fires Def's own
+@@ -1333,7 +1332,7 @@
+     // Prepare/Attach matrix and asserts. The wheel-scale loop below keeps the same guard for the same
+     // reason.
+     const BrnPhysics::Deformation::StreamedDeformationSpec* lpDeformationSpec =
+-        ResolveDeformationSpec( mDeformationModelHandle );
++        ResolveDeformationSpec( mDeformationModelResourcePtr.GetResourceHandle() );
+     CGS_ASSERT( lpDeformationSpec != 0,
+                 "Can not instance resource pointer - it has no main memory resource\n" );
+     if( lpDeformationSpec != 0 )
+@@ -1357,7 +1356,7 @@
+     for( u32 luWheel = 0u; luWheel < 4u; ++luWheel )
+     {
+         const BrnPhysics::Deformation::StreamedDeformationSpec* lpWheelDeformationSpec =
+-            ResolveDeformationSpec( mDeformationModelHandle );
++            ResolveDeformationSpec( mDeformationModelResourcePtr.GetResourceHandle() );
+         CGS_ASSERT( lpWheelDeformationSpec != 0,
+                     "Can not instance resource pointer - it has no main memory resource\n" );
+         if( lpWheelDeformationSpec != 0 )
+@@ -1398,6 +1397,30 @@
+ }
+ 
+ // ============================================================================
++// OnResourcesInvalidated @ 0x822EB500. Invalidate the physics-side race-car resource
++// record, then drop both ResourcePtr aliases to the null handle. The queue payload uses
++// the current wrapper handles before the aliases are cleared.
++// ============================================================================
++void ActiveRaceCar::OnResourcesInvalidated(
++        BrnPhysics::Vehicle::VehicleInputInterface* lpVehicleInterface)
++{
++    BrnPhysics::Vehicle::ValidateRaceCarEvent lrEvent = {};
++    lrEvent.mbValidate = false;
++    lrEvent.mVolumeInstanceID = mHandlingBodyVolumeId;
++    lrEvent.mModelHandle = mDeformationModelResourcePtr.GetResourceHandle();
++    lrEvent.mGraphicsHandle = mGraphicsModelResourcePtr.GetResourceHandle();
++
++    const BrnPhysics::Vehicle::VehicleInputInterface::ValidateRaceCarEventQueue* lpcEvents =
++        lpVehicleInterface->GetValidateRaceCarEvents();
++    BrnPhysics::Vehicle::VehicleInputInterface::ValidateRaceCarEventQueue* lpEvents =
++        const_cast<BrnPhysics::Vehicle::VehicleInputInterface::ValidateRaceCarEventQueue*>(lpcEvents);
++    lpEvents->AddEvent(lrEvent);
++
++    mDeformationModelResourcePtr = CgsResource::NULLResourceHandle;
++    mGraphicsModelResourcePtr = CgsResource::NULLResourceHandle;
++}
++
++// ============================================================================
+ // AddHandlingModel @ 0x822D3EC8   (drivable wave 2026-08-01)
+ //
+ // Hands a just-promoted car to the physics vehicle manager. Every argument below is
+@@ -1405,7 +1428,8 @@
+ // over (it drops the vector velocity and mis-pairs the 64-bit VolumeInstanceId load):
+ //   r3 = lpVehicleInterface   r4 = mHandlingBodyVolumeId (ld 0xD0)
+ //   r5 = lrInitialTransform   r6 = luCarAssetAttribKey
+-//   r7 = mDeformationModelHandle (ld 0x1CA4)   r8 = mGraphicsModelHandle (ld 0x1CC4)
++//   r7 = mDeformationModelResourcePtr's handle (ld 0x1CA4)
++//   r8 = mGraphicsModelResourcePtr's handle (ld 0x1CC4)
+ //   r9 = mpRaceCar->GetType() (lbz 0xA4)       f1 = mfBaseDeformAmount (lfs 0x7CC)
+ //   stack: meBaseDeformationType (lwz 0x7C8), the computed bool, lu8CarStrengthStat
+ //   v1 = lrInitialVelocity     v2 = vspltisw 0  (angular velocity is ALWAYS zero here)
+@@ -1440,8 +1464,8 @@
+         lrInitialVelocity,
+         Vector3{ 0.0f, 0.0f, 0.0f, 0.0f },      // asm `vspltisw128 v127, 0` -> v2
+         luCarAssetAttribKey,
+-        mDeformationModelHandle,
+-        mGraphicsModelHandle,
++        mDeformationModelResourcePtr.GetResourceHandle(),
++        mGraphicsModelResourcePtr.GetResourceHandle(),
+         mpRaceCar->GetType(),
+         mfBaseDeformAmount,                                            // +0x7CC
+         meBaseDeformationType,                                         // +0x7C8
+@@ -3485,7 +3509,7 @@
+ 
+     // ---- 1. the handling-body box half-extents -------------------------------------
+     const BrnPhysics::Deformation::StreamedDeformationSpec* lpSpec =
+-        ResolveDeformationSpec(mDeformationModelHandle);
++        ResolveDeformationSpec(mDeformationModelResourcePtr.GetResourceHandle());
+     CGS_ASSERT(lpSpec != 0,
+                "Can not instance resource pointer - it has no main memory resource\n");
+     if (lpSpec == 0)
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.h
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.h
+@@ -62,6 +62,7 @@
+ #include "GameShared/GameClasses/Module/CgsEventQueue.h"          // CgsModule::EventQueue<T,N>
+ #include "GameShared/GameClasses/Graphics/CgsModel.h"             // CgsGraphics::Model::State
+ #include "GameShared/GameClasses/System/Resource/CgsResourceHandle.h"     // CgsResource::ResourceHandle
++#include "GameShared/GameClasses/System/Resource/CgsResourcePtr.h"        // CgsResource::ResourcePtr
+ #include "GameShared/GameClasses/SceneManager/CgsVolumeInstanceId.h"      // CgsSceneManager::VolumeInstanceId
+ #include "GameSource/Physics/VehicleManager/SharedIO/BrnVehicleEvents.h" // BrnPhysics::Vehicle::RaceCarState
+ #include "GameSource/World/EntityModules/RaceCarEntityModule/BrnDetachedPartRenderEvent.h"
+@@ -81,11 +82,14 @@
+ // GameSource/Physics/DeformationManager/DeformationPhysics/BrnStreamedDeformationSpec.h and
+ // .../SharedIO/BrnVehicleLocatorData.h, which the .cpp that bodies SetLightLocators includes.
+ namespace BrnPhysics { namespace Deformation { enum ETagPointType : s32; struct VehicleLocatorData; } }
++namespace BrnPhysics { namespace Deformation { struct StreamedDeformationSpec; } }
++namespace BrnVehicle { struct GraphicsSpec; }
+ namespace CgsWorld { struct WorldMap2D; }   // UpdatePhysicsState forwards it to RaceCar::UpdatePositioningData
+ // Detach / RemoveFromScene / RemoveFromCollision take it by pointer only (the .cpp includes
+ // the owning header). DWARF spells it OutputBuffer_PreScene::SceneInputInterface, which is a
+ // typedef for this type (BrnRaceCarEntityModuleIO.h:379).
+ namespace CgsSceneManager { namespace SceneManagerIO { struct InSceneUpdateInterface; } }
++namespace BrnReplays { struct RaceCarSerialiserFrame; }
+ // Update_PreScene's third parameter (OutputBuffer_PreScene::RaceCarAIInterface, a typedef for
+ // this type -- BrnRaceCarEntityModuleIO.h:380); pointer-only and never dereferenced.
+ namespace BrnAI { namespace AIModuleIO { struct RaceCarAIInterface; } }
+@@ -97,6 +101,7 @@
+ namespace BrnWorld
+ {
+ namespace RaceCarEntityModuleIO { struct GameEventQueue; }
++class RaceCarEntityModule;
+ class RaceCar;
+ 
+ // =================================================================================================
+@@ -186,6 +191,8 @@
+                             const CgsResource::ResourceHandle& lrGraphicsModelHandle,
+                             const Vector3&                     lrInitialVelocity,
+                             u64                                luCarAssetAttribKey );
++    // X360 0x822EB500: publish ValidateRaceCarEvent(false), then clear both resource aliases.
++    void OnResourcesInvalidated(BrnPhysics::Vehicle::VehicleInputInterface* lpVehicleInterface);
+ 
+     // ------------------------------------------------------------------------
+     // X360 0x822D3EC8  ActiveRaceCar::AddHandlingModel -- hands the freshly-active car to
+@@ -462,6 +469,9 @@
+     // ========================================================================
+     class RenderParams
+     {
++        friend struct BrnReplays::RaceCarSerialiserFrame;
++        friend class BrnWorld::RaceCarEntityModule;
++
+     public:
+         typedef CgsModule::EventQueue<DetachedPartRenderEvent, 20> DetachedPartRenderQueue;
+ 
+@@ -1374,26 +1384,15 @@
+     bool mbRightIndicatorActive;                         // +0x1C8C (7308)
+     bool mbLeftIndicatorActive;                          // +0x1C8D (7309)
+ 
+-    // DWARF mDeformationModelResourcePtr (ResourcePtr<BrnPhysics::Deformation::
+-    // StreamedDeformationSpec>) and mGraphicsModelResourcePtr (ResourcePtr<
+-    // BrnVehicle::GraphicsSpec>) -- 32 bytes each, created by OnResourcesLoaded at
+-    // this+0x1C90 / this+0x1CB0, closing the class at the attested 0x1CD0 stride.
+-    //
+-    // PARTIALLY NAMED 2026-08-01 (drivable wave). The two ResourcePtr WRAPPERS stay opaque
+-    // -- homing them would drag both spec types into every consumer of this header AND give
+-    // ActiveRaceCar two non-trivial ctors/dtors (BaseResourcePtr links itself into an
+-    // intrusive alias list), which the module's 8-slot array has never had. What IS named is
+-    // the ResourceHandle each wrapper stores at its own +0x14: AddHandlingModel reads exactly
+-    // those two, with two 64-bit loads (`ld r7, 0x1CA4(r31)` / `ld r8, 0x1CC4(r31)` ==
+-    // 0x1C90+0x14 and 0x1CB0+0x14), and hands them straight to
+-    // VehicleInputInterface::CreateRaceCar. OnResourcesLoaded is what fills them.
+-    // [FLAG] the alias-list binding half of BaseResourcePtr::CreateFromHandle (the resource
+-    // MEMORY pointer + Propogate) is not reproduced -- see OnResourcesLoaded's banner.
+-    u8 maPad1C90a[20];                                   // +0x1C90 (7312) .. +0x1CA4 (7332)
+-    CgsResource::ResourceHandle mDeformationModelHandle; // +0x1CA4 (7332)
+-    u8 maPad1CAC[24];                                    // +0x1CAC (7340) .. +0x1CC4 (7364)
+-    CgsResource::ResourceHandle mGraphicsModelHandle;    // +0x1CC4 (7364)
+-    u8 maPad1CCC[12];                                    // +0x1CCC (7372) .. +0x1CD0 (7376)
++    // DWARF BrnActiveRaceCar.h: mDeformationModelResourcePtr and mGraphicsModelResourcePtr.
++    // ARTIST 0x822EB168 / 0x822EB500 binds and invalidates each BaseResourcePtr alias at
++    // +0x1C90/+0x1CB0. The embedded ResourceHandle is the wrapper's +0x14 pair, read by
++    // AddHandlingModel @0x822D3EC8 and copied into ValidateRaceCarEvent by the invalidation
++    // path. Native ResourcePtr width is retained; no console pointer is truncated.
++    CgsResource::ResourcePtr<BrnPhysics::Deformation::StreamedDeformationSpec>
++        mDeformationModelResourcePtr; // X360 +0x1C90 (7312), handle +0x1CA4
++    CgsResource::ResourcePtr<BrnVehicle::GraphicsSpec>
++        mGraphicsModelResourcePtr; // X360 +0x1CB0 (7344), handle +0x1CC4
+ 
+     // ---- ⚠️ FLAG PC quality-of-life: the render-pose interpolator's storage ------------
+     // PAST the console's 0x1CD0 object stride, deliberately: nothing here exists on the
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp
+@@ -342,6 +342,12 @@
+     {
+         maRaceCars[liGlobal].Construct( static_cast<EGlobalRaceCarIndex>( liGlobal ) );
+     }
++
++    // X360 0x822FE0B4..0x822FE0B8: seed the replay-mode latch, then Construct the
++    // embedded RaceCar serialiser. BaseSerialiser keeps its static pointer null until
++    // ReplayModule adopts/allocates it; the first PreSceneUpdate clear must tolerate that.
++    mbInReplay = false;
++    (void)mReplaySerialiser.Construct();
+ 
+     // ⭐⭐⭐ 0x822FDB20 `stwx r29, r30, r9` with r9 == 0x18368 and r29 == -1 (`li r29, -1`
+     // @0x822FDA58, not touched again before the store) -- the console SEEDS meGameModeType to
+@@ -5366,12 +5372,10 @@
+ //   5. the per-GLOBAL-slot loop (0..34) -> RaceCar::FillInOutputInterface
+ //   6/7. the replay read/write legs against RaceCarEntitySerialiser::GetStaticLayout.
+ //
+-// REPRODUCED HERE: 2, 3, 4 (minus the deformation-ptr publish -- see below), 5.
++// Recovered here: both 48-byte WorldMap2D copies, player/active/global publication, the
++// playback snapshot/resource-handle bind, and the recording frame producer.
+ //
+ // [FLAG PC bring-up] NOT reproduced, and dropped rather than paraphrased:
+-//   * step 1 -- the module's own CgsWorld::WorldMap2D member is inside this header's
+-//     opaque attested-offset tail (it has no name here yet), so there is nothing to
+-//     copy FROM. Nothing on the reconstructed path reads the published copy.
+ //   * step 4's SetDeformationModelResourcePtr -- ⭐ RETIRED 2026-09-03 (boost-exhaust
+ //     wave). Both of its reasons went stale: +0x1CA4 is no longer inside maPad1C90 (it is
+ //     the named mDeformationModelHandle, and this module is already a friend), and the
+@@ -5381,9 +5385,9 @@
+ //   * step 5 -- ⭐ RETIRED (hud H3b tracking slice 2026-08-25): RaceCar::
+ //     FillInOutputInterface @0x822BED20 is reconstructed and the per-global-slot loop
+ //     below publishes through it; the satnav 199 producer consumes the result.
+-//   * steps 6/7 -- replay. The PC has no replay path and RaceCarEntitySerialiser has no
+-//     static layout; the console gates both legs on its replay state word anyway.
+-// DELETE-WHEN: each named blocker lands.
++//   * step 6/7 -- replay. The typed native frame is copied member-wise so ResourceHandle and
++//     EventQueue members retain their x64 identities; its whole live frame remains the raw
++//     BaseSerialiser record/read unit.
+ //
+ // ⚠️ The console asserts "This car should be inactive" for muType == E_RACE_CAR_TYPE_INACTIVE
+ // on an ATTACHED slot and then still publishes flags == (IsActive?0x10:0) | 1. Reproduced
+@@ -5395,15 +5399,16 @@
+         RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface* lpReplayActiveCarInterface,
+         RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface* lpReplayGlobalCarInterface )
+ {
+-    (void)lpReplayActiveCarInterface;    // [FLAG] steps 1 + 6/7 only
+-    (void)lpReplayGlobalCarInterface;    // [FLAG] steps 6/7 only
+-
+     CGS_ASSERT( lpGlobalCarInterface != 0, "lpGlobalCarInterface != NULL" );   // X360 :4900
+ 
+     if( lpActiveCarInterface == 0 || lpGlobalCarInterface == 0 )
+     {
+         return;
+     }
++
++    // X360 0x822F5CF8 starts with the two WorldMap2D copies (active and replay-active).
++    lpActiveCarInterface->SetWorldMap2D( &mWorldMap2D );
++    lpReplayActiveCarInterface->SetWorldMap2D( &mWorldMap2D );
+ 
+     // ---- step 3: the player block -------------------------------------------------
+     if( mePlayerActiveRaceCarIndex == E_ACTIVE_RACE_CAR_INDEX_INVALID )
+@@ -5579,13 +5584,13 @@
+         //
+         // The console body, from the asm at the tail of the same loop iteration: a stack-local
+         // ResourcePtr is memset to zero, self-ringed (mpNext/mpPrev/mpThis = &local),
+-        // CreateFromHandle'd against `_R31 + 7332` (== 0x1CA4 == mDeformationModelHandle),
++        // CreateFromHandle'd against the wrapper's source handle at `_R31 + 7332`,
+         // handed to SetDeformationModelResource, then unlinked from its ring on the way out.
+         // The ResourcePtr(const ResourceHandle&) ctor is exactly that sequence and
+         // ~BaseResourcePtr is the unlink, so the local below IS the console's local.
+         {
+             const CgsResource::ResourcePtr<BrnPhysics::Deformation::StreamedDeformationSpec>
+-                lDeformationModelPtr( lpActiveRaceCar->mDeformationModelHandle );
++                lDeformationModelPtr( lpActiveRaceCar->mDeformationModelResourcePtr.GetResourceHandle() );
+             lpActiveCarInterface->SetDeformationModelResourcePtr( leSlot, lDeformationModelPtr );
+         }
+ 
+@@ -5650,6 +5655,293 @@
+                         "leEnumIndex <= E_GLOBAL_RACE_CAR_INDEX_COUNT" );    // BurnoutConstants.h:84
+         }
+     }
++
++    // Playback snapshot and deformation-resource handle publication. ARTIST copies the
++    // live frame's two output interfaces, then rebinds each active car's deformation handle
++    // from the RaceCarStreamer only while its required resources are loaded.
++    const BrnReplays::BaseSerialiser::EMode leReplayMode = mReplaySerialiser.GetMode();
++    if( leReplayMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_PREPARING ||
++        leReplayMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING ||
++        leReplayMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_STALLED )
++    {
++        BrnReplays::RaceCarEntitySerialiserStaticLayout* lpLayout = mReplaySerialiser.GetStaticLayout();
++        const BrnReplays::RaceCarSerialiserFrame& lrLiveFrame = lpLayout->mLiveFrame;
++        *lpReplayActiveCarInterface = lrLiveFrame.mActiveRaceCarOutputInterface;
++        *lpReplayGlobalCarInterface = lrLiveFrame.mGlobalRaceCarOutputInterface;
++
++        for( s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot )
++        {
++            const EActiveRaceCarIndex leSlot = static_cast<EActiveRaceCarIndex>( liSlot );
++            if( lpReplayActiveCarInterface->IsRaceCarActive( leSlot ) &&
++                mRaceCarStreamer.IsRaceCarLoaded( liSlot ) )
++            {
++                CGS_ASSERT( mRaceCarStreamer.IsRaceCarLoaded( liSlot ),
++                            "IsRaceCarLoaded( liActiveRaceCar )" );
++                lpReplayActiveCarInterface->SetDeformationModelResourcePtr(
++                    leSlot, mRaceCarStreamer.GetPhysicsResource( liSlot ) );
++            }
++            else
++            {
++                const CgsResource::ResourcePtr<BrnPhysics::Deformation::StreamedDeformationSpec>
++                    lNullResourcePtr( CgsResource::NULLResourceHandle );
++                lpReplayActiveCarInterface->SetDeformationModelResourcePtr( leSlot,
++                                                                             lNullResourcePtr );
++            }
++        }
++    }
++
++    // Recording producer. The raw frame is updated only for attached active slots; an
++    // unattached slot keeps the prior frame's identity/render records. The RenderParams
++    // destination is reset before its queue-aware member copy, matching the X360's
++    // memset -> event-queue Construct -> operator= sequence.
++    if( leReplayMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_PREPARING ||
++        leReplayMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING ||
++        leReplayMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_STALLED )
++    {
++        BrnReplays::RaceCarEntitySerialiserStaticLayout* lpLayout = mReplaySerialiser.GetStaticLayout();
++        BrnReplays::RaceCarSerialiserFrame& lrLiveFrame = lpLayout->mLiveFrame;
++        lrLiveFrame.mActiveRaceCarOutputInterface = *lpActiveCarInterface;
++        lrLiveFrame.mGlobalRaceCarOutputInterface = *lpGlobalCarInterface;
++
++        for( s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot )
++        {
++            const EActiveRaceCarIndex leSlot = static_cast<EActiveRaceCarIndex>( liSlot );
++            ActiveRaceCar* lpActiveRaceCar = GetActiveRaceCar( leSlot );
++            if( !lpActiveRaceCar->IsAttached() )
++            {
++                CGS_ASSERT( liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                            "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT" );
++                continue;
++            }
++
++            CGS_ASSERT( lpActiveRaceCar->IsAttached(), "IsAttached()" ); // X360 :1089
++            RaceCar* lpRaceCar = lpActiveRaceCar->GetGlobalRaceCar();
++            const CgsID lModelId = lpRaceCar->GetModelId();
++            lrLiveFrame.maRaceCarIds[liSlot] = lModelId;
++
++            CGS_ASSERT( lpActiveRaceCar->IsAttached(), "IsAttached()" ); // X360 :1089
++            const CgsID lWheelModelId = lpRaceCar->GetWheelModelId();
++            lrLiveFrame.maWheelIds[liSlot] = lWheelModelId;
++
++            ActiveRaceCar::RenderParams& lrRenderParams = lrLiveFrame.maRenderParams[liSlot];
++            std::memset( &lrRenderParams, 0, sizeof( lrRenderParams ) );
++            // ARTIST 0x822F6858: r17=-1; 0x822F6970/74 stores the two masks.
++            lrRenderParams.mBodyPartVisibility.SetBitField( 0u, ~u64(0) );
++            lrRenderParams.mBodyPartVisibility.SetBitField( 1u, ~u64(0) );
++            lrRenderParams.maDetachedParts.Construct();
++            lrRenderParams = *lpActiveRaceCar->GetRenderParams();
++            CGS_ASSERT( lModelId != 0, "Invalid model id\n" );
++            CGS_ASSERT( lWheelModelId != 0, "Invalid model id\n" );
++
++            CGS_ASSERT( liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                        "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT" );
++        }
++    }
++}
++
++// X360 0x82301BB0. Pump the recorded car list into RaceCarStreamer while the serialiser
++// allows streaming, invalidate the old active-car aliases once per replay-entry latch,
++// then publish whether every recorded active car is loaded.
++void RaceCarEntityModule::UpdateReplayStreaming(
++        RaceCarEntityModuleIO::InputBuffer_PreScene* lpInput,
++        RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput)
++{
++    const BrnReplays::BaseSerialiser::EMode leMode = mReplaySerialiser.GetMode();
++    const bool lbPlaying =
++        leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_PREPARING ||
++        leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING ||
++        leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_STALLED;
++    CGS_ASSERT(lbPlaying, "Attempt to update the replay data when not playing\n");
++
++    BrnReplays::RaceCarEntitySerialiserStaticLayout* lpLayout = mReplaySerialiser.GetStaticLayout();
++    const BrnReplays::RaceCarSerialiserFrame& lrLiveFrame = lpLayout->mLiveFrame;
++    const RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface& lrRecordedCars =
++        lrLiveFrame.mActiveRaceCarOutputInterface;
++
++    if (mReplaySerialiser.AllowStreaming())
++    {
++        for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++        {
++            const EActiveRaceCarIndex leSlot = static_cast<EActiveRaceCarIndex>(liSlot);
++            if (!mbInvalidatedRaceCars)
++            {
++                ActiveRaceCar* lpActiveRaceCar = GetActiveRaceCar(leSlot);
++                if (lpActiveRaceCar->IsActive())
++                {
++                    lpActiveRaceCar->OnResourcesInvalidated(lpOutput->GetVehicleInputInterface());
++                }
++            }
++
++            if (lrRecordedCars.IsRaceCarActive(leSlot))
++            {
++                const CgsID lModelId = lrLiveFrame.maRaceCarIds[liSlot];
++                const CgsID lWheelModelId = lrLiveFrame.maWheelIds[liSlot];
++                CGS_ASSERT(lModelId != 0, "Invalid model id");
++                CGS_ASSERT(lWheelModelId != 0, "Invalid model id");
++
++                const EActiveRaceCarIndex lePlayerIndex =
++                    lrRecordedCars.mePlayerActiveRaceCarIndex;
++                CGS_ASSERT(lePlayerIndex != E_ACTIVE_RACE_CAR_INDEX_INVALID,
++                           "Player car index hasn't been set");
++                mRaceCarStreamer.SetRequiredVehicleData(liSlot, lModelId, lWheelModelId,
++                                                        leSlot == lePlayerIndex);
++            }
++            CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                       "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++        }
++    }
++
++    // ARTIST 0x82301BB0 inlines these pumps outside AllowStreaming. There is no
++    // RaceCarStreamer::Update timer store in this path.
++    mRaceCarStreamer.mAttributeStreamer.Update();
++    mRaceCarStreamer.mPhysicsStreamer.Update();
++    mRaceCarStreamer.mGraphicsStreamer.Update();
++    mRaceCarStreamer.mWheelGraphicsStreamer.Update();
++    mRaceCarStreamer.mAudioStreamer.Update(lpInput, lpOutput);
++    mRaceCarStreamer.UpdateDesiredCars();
++
++    bool lbAllLoaded = true;
++    for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++    {
++        const EActiveRaceCarIndex leSlot = static_cast<EActiveRaceCarIndex>(liSlot);
++        if (lrRecordedCars.IsRaceCarActive(leSlot) && !mRaceCarStreamer.IsRaceCarLoaded(liSlot))
++        {
++            lbAllLoaded = false;
++            break;
++        }
++        CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                   "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++    }
++    mReplaySerialiser.SetDataReady(lbAllLoaded);
++}
++
++// X360 0x82306120. Restore mode rebuilds the streamed car set and sends one validate event
++// per active car after all required resources load. In playback modes 5/6, move the scene
++// placeholder entities from the frame's body transforms before pumping replay streaming.
++void RaceCarEntityModule::UpdateSerialiser(
++        RaceCarEntityModuleIO::InputBuffer_PreScene* lpInput,
++        RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput)
++{
++    const BrnReplays::BaseSerialiser::EMode leMode = mReplaySerialiser.GetMode();
++    if (leMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_PREPARING ||
++        leMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING ||
++        leMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_STALLED ||
++        leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_PREPARING)
++    {
++        return;
++    }
++
++    if (leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING ||
++        leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_STALLED)
++    {
++        BrnReplays::RaceCarEntitySerialiserStaticLayout* lpLayout =
++            mReplaySerialiser.GetStaticLayout();
++        const BrnReplays::RaceCarSerialiserFrame& lrLiveFrame = lpLayout->mLiveFrame;
++        CgsSceneManager::SceneManagerIO::InSceneUpdateInterface* lpSceneInput =
++            lpOutput->GetSceneInputInterface();
++
++        for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++        {
++            const EActiveRaceCarIndex leSlot = static_cast<EActiveRaceCarIndex>(liSlot);
++            if (lrLiveFrame.mActiveRaceCarOutputInterface.IsRaceCarActive(leSlot))
++            {
++                CGS_ASSERT(liSlot < 0x4000,
++                           "luEntityIndex < (1U << KU_NUM_BITS_FOR_ENTITY_NUM)");
++                const CgsSceneManager::EntityId lEntityId(
++                    (static_cast<u32>(liSlot) << 10) | 0x21000000u);
++                lpSceneInput->SetEntityPosition(
++                    lEntityId, lrLiveFrame.maRenderParams[liSlot].GetBodyTransform().wAxis);
++            }
++            CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                       "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++        }
++        UpdateReplayStreaming(lpInput, lpOutput);
++        return;
++    }
++
++    if (leMode != BrnReplays::BaseSerialiser::E_MODE_RESTORING)
++    {
++        return;
++    }
++
++    if (mbReplayRestored)
++    {
++        mReplaySerialiser.SetDataRestored(true);
++        return;
++    }
++
++    for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++    {
++        const EActiveRaceCarIndex leSlot = static_cast<EActiveRaceCarIndex>(liSlot);
++        ActiveRaceCar* lpActiveRaceCar = GetActiveRaceCar(leSlot);
++        if (lpActiveRaceCar->IsAttached())
++        {
++            RaceCar* lpRaceCar = lpActiveRaceCar->GetGlobalRaceCar();
++            const CgsID lModelId = lpRaceCar->GetModelId();
++            const CgsID lWheelModelId = lpRaceCar->GetWheelModelId();
++            mRaceCarStreamer.SetRequiredVehicleData(
++                liSlot, lModelId, lWheelModelId,
++                lpRaceCar->GetType() == E_RACE_CAR_TYPE_PLAYER);
++        }
++        else
++        {
++            mRaceCarStreamer.RemoveVehicleData(liSlot);
++        }
++        CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                   "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++    }
++
++    mRaceCarStreamer.Update(lpInput, lpOutput, 0.0f);
++
++    bool lbAllLoaded = true;
++    for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++    {
++        ActiveRaceCar* lpActiveRaceCar =
++            GetActiveRaceCar(static_cast<EActiveRaceCarIndex>(liSlot));
++        if (lpActiveRaceCar->IsAttached() && !mRaceCarStreamer.IsRaceCarLoaded(liSlot))
++        {
++            lbAllLoaded = false;
++            break;
++        }
++        CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                   "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++    }
++    mReplaySerialiser.SetDataRestored(lbAllLoaded);
++    if (!lbAllLoaded)
++    {
++        return;
++    }
++
++    BrnPhysics::Vehicle::VehicleInputInterface* lpVehicleInput =
++        lpOutput->GetVehicleInputInterface();
++    const BrnPhysics::Vehicle::VehicleInputInterface::ValidateRaceCarEventQueue* lpcEvents =
++        lpVehicleInput->GetValidateRaceCarEvents();
++    BrnPhysics::Vehicle::VehicleInputInterface::ValidateRaceCarEventQueue* lpEvents =
++        const_cast<BrnPhysics::Vehicle::VehicleInputInterface::ValidateRaceCarEventQueue*>(lpcEvents);
++
++    for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++    {
++        ActiveRaceCar* lpActiveRaceCar =
++            GetActiveRaceCar(static_cast<EActiveRaceCarIndex>(liSlot));
++        if (lpActiveRaceCar->IsActive())
++        {
++            lpActiveRaceCar->mDeformationModelResourcePtr =
++                mRaceCarStreamer.GetPhysicsResource(liSlot).GetResourceHandle();
++            lpActiveRaceCar->mGraphicsModelResourcePtr =
++                mRaceCarStreamer.GetGraphicsResource(liSlot).GetResourceHandle();
++
++            BrnPhysics::Vehicle::ValidateRaceCarEvent lrEvent = {};
++            lrEvent.mbValidate = true;
++            lrEvent.mVolumeInstanceID = lpActiveRaceCar->mHandlingBodyVolumeId;
++            lrEvent.mModelHandle = lpActiveRaceCar->mDeformationModelResourcePtr.GetResourceHandle();
++            lrEvent.mGraphicsHandle = lpActiveRaceCar->mGraphicsModelResourcePtr.GetResourceHandle();
++            lpEvents->AddEvent(lrEvent);
++        }
++        CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                   "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++    }
++
++    mbReplayRestored = true;
+ }
+ 
+ // ============================================================================
+@@ -5951,6 +6243,47 @@
+ //
+ // [FLAG PC bring-up] everything else is dropped, NOT paraphrased.
+ // DELETE-WHEN: the interior lands and the full spine is reconstructed.
++// X360 0x822D2C88. Entering replay creates one radius-3 placeholder scene entity for each
++// active-car index, clears the invalidation latch, and resets the replay-restored latch.
++void RaceCarEntityModule::EnterReplay(RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput)
++{
++    CgsSceneManager::SceneManagerIO::InSceneUpdateInterface* lpSceneInput =
++        lpOutput->GetSceneInputInterface();
++
++    for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++    {
++        CGS_ASSERT(liSlot < 0x4000,
++                   "luEntityIndex < (1U << KU_NUM_BITS_FOR_ENTITY_NUM)");
++        const CgsSceneManager::EntityId lEntityId(
++            (static_cast<u32>(liSlot) << 10) | 0x21000000u);
++        const Vector3 lCentre = { 0.0f, 0.0f, 0.0f, 0.0f };
++        lpSceneInput->AddEntity(lEntityId, 3204u, lCentre, 3.0f);
++        mbInvalidatedRaceCars = false;
++        CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                   "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++    }
++    mbReplayRestored = false;
++}
++
++// X360 0x822D2DC0. Leaving replay removes the same eight placeholder scene entities with
++// the scene manager's replay-removal flag.
++void RaceCarEntityModule::LeaveReplay(RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput)
++{
++    CgsSceneManager::SceneManagerIO::InSceneUpdateInterface* lpSceneInput =
++        lpOutput->GetSceneInputInterface();
++
++    for (s32 liSlot = 0; liSlot < E_ACTIVE_RACE_CAR_INDEX_COUNT; ++liSlot)
++    {
++        CGS_ASSERT(liSlot < 0x4000,
++                   "luEntityIndex < (1U << KU_NUM_BITS_FOR_ENTITY_NUM)");
++        const CgsSceneManager::EntityId lEntityId(
++            (static_cast<u32>(liSlot) << 10) | 0x21000000u);
++        lpSceneInput->RemoveEntity(lEntityId, 1u);
++        CGS_ASSERT(liSlot + 1 <= E_ACTIVE_RACE_CAR_INDEX_COUNT,
++                   "leEnumIndex <= E_ACTIVE_RACE_CAR_INDEX_COUNT");
++    }
++}
++
+ void RaceCarEntityModule::PreSceneUpdate(
+         RaceCarEntityModuleIO::InputBuffer_PreScene* lpInput,
+         RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput,
+@@ -5971,6 +6304,35 @@
+     // pre-scene update -- `ld 0x20 ; mulld ; addi 1 ; std 0x20` on module +0x18490, the DWARF's
+     // Random::RandomUInt with its result unused (the ring is not touched).
+     (void)mNonDeterministicRandom.RandomUInt();
++
++    // X360 0x8230D928 carries replay mode in BrnUpdateSet bit 8. The mode edge owns the
++    // eight placeholder scene entities; then every PreScene pass lazily clears the typed
++    // serialiser frames, reads an unrestored playback frame, and dispatches the car replay
++    // state before this function's ordinary game-action/update legs.
++    const bool lbInReplay = ( lUpdateSet & static_cast<BrnUpdateSet>( 0x100u ) ) != 0;
++    if( lbInReplay != mbInReplay )
++    {
++        if( lbInReplay )
++        {
++            EnterReplay( lpOutput );
++        }
++        else
++        {
++            LeaveReplay( lpOutput );
++        }
++    }
++    mbInReplay = lbInReplay;
++
++    (void)mReplaySerialiser.CheckStaticLayoutCleared();
++    const BrnReplays::BaseSerialiser::EMode leReplayMode = mReplaySerialiser.GetMode();
++    if( ( leReplayMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_PREPARING ||
++          leReplayMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING ||
++          leReplayMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_STALLED ) &&
++        !mReplaySerialiser.SkipModuleSerialise() )
++    {
++        (void)mReplaySerialiser.Read();
++    }
++    UpdateSerialiser( lpInput, lpOutput );
+ 
+     // ---- step 10: latch the sim time step -----------------------------------
+     if( ( lUpdateSet & 1 ) != 0 )
+@@ -6041,7 +6403,12 @@
+     }
+ 
+     // ---- step 11: pump the five component streamers -------------------------
+-    UpdateStreaming( lpInput, lpOutput );
++    // ARTIST skips the ordinary load path while replay owns its recorded car list; the
++    // playback/restoration branches above drive the same streamer family from frame IDs.
++    if( !mbInReplay )
++    {
++        UpdateStreaming( lpInput, lpOutput );
++    }
+ 
+     // ---- step 12: LATCH THIS FRAME'S PAD STATE ------------------------------
+     // ⚠️ Load-bearing: ProcessPlayerVehicleInput reads mPlayerVehicleControls by name at
+@@ -8067,9 +8434,15 @@
+ 
+     SendStreamerEvents( lpOutput );
+ 
+-    // FLAG PC-platform leaf: the position overlay is submitted by the world render
+-    // pass. Its transient queue is consumed per presentation, while this update runs
+-    // at the fixed simulation rate (possibly zero or multiple times per presentation).
++    // X360 0x82307948..0x82307960: optional position overlay, before the replay request
++    // interface registers this module's serialiser into the PostPhysics output.
++    if( mbDisplayPlayerCarPosition )
++    {
++        DebugRenderPosition();
++    }
++
++    // X360 0x82307968..0x82307974: register the embedded RaceCar serialiser every frame.
++    lpOutput->GetReplayRequestInterface()->RegisterSerialiser( &mReplaySerialiser );
+ 
+     // The console's own unlock order: read first (0x82307980), then write (0x82307988).
+     if( lpInput != 0 )
+@@ -8077,6 +8450,27 @@
+         lpInput->UnlockForRead();
+     }
+     lpOutput->UnlockForWrite();
++
++    // The module owns this serialiser's record leg. Keep the console's recording-mode
++    // gate separate from the BaseSerialiser skip flag, which was set by Construct's sixth
++    // argument. A key frame still refreshes the previous-frame snapshot even when the
++    // generic Write leg is skipped.
++    const BrnReplays::BaseSerialiser::EMode leReplayMode = mReplaySerialiser.GetMode();
++    if( leReplayMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_PREPARING ||
++        leReplayMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING ||
++        leReplayMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_STALLED )
++    {
++        if( !mReplaySerialiser.SkipModuleSerialise() )
++        {
++            (void)mReplaySerialiser.Write();
++        }
++        if( mReplaySerialiser.IsKeyFrame() )
++        {
++            BrnReplays::RaceCarEntitySerialiserStaticLayout* lpLayout =
++                mReplaySerialiser.GetStaticLayout();
++            lpLayout->mPreviousFrame = lpLayout->mLiveFrame;
++        }
++    }
+ }
+ 
+ // X360 0x822BDAB0; DecFIGS declares this const. The first four rows are the player's
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.h
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.h
+@@ -39,6 +39,7 @@
+ #include "GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarStreamer.h" // BrnWorld::RaceCarStreamer (by value)
+ #include "GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCar.h"         // BrnWorld::RaceCar (by value)
+ #include "GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.h"   // BrnWorld::ActiveRaceCar (by value)
++#include "GameSource/Replays/Serialisers/BrnReplayRaceCarEntitySerialiser.h"       // BrnReplays::RaceCarEntitySerialiser (by value)
+ #include "GameSource/Graphics/BrnCoronaManager.h"   // BrnCoronaManager::BrnSubmissionInterface (SubmitCoronasForRaceCar's 1st arg)
+ #include "GameSource/World/BrnPlaceOnTrackManager.h"                              // BrnWorld::PlaceOnTrackManager (by value, +0x17850)
+ #include "GameShared/GameClasses/World/CgsWorldMap2D.h"                           // CgsWorld::WorldMap2D (by value, +0x18300)
+@@ -548,6 +549,16 @@
+                 RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface* lpGlobalCarInterface,
+                 RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface* lpReplayActiveCarInterface,
+                 RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface* lpReplayGlobalCarInterface );
++
++        // Replay mode edge and the two RaceCar-owned playback producers. ARTIST calls these
++        // from PreSceneUpdate in this order: Enter/LeaveReplay, lazy frame clear/read,
++        // UpdateSerialiser. UpdateOutputInterfaces publishes the typed recorded frame.
++        void EnterReplay(RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput);
++        void LeaveReplay(RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput);
++        void UpdateSerialiser(RaceCarEntityModuleIO::InputBuffer_PreScene* lpInput,
++                              RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput);
++        void UpdateReplayStreaming(RaceCarEntityModuleIO::InputBuffer_PreScene* lpInput,
++                                   RaceCarEntityModuleIO::OutputBuffer_PreScene* lpOutput);
+ 
+         void TransmitCarsInRaceToQueryManager(
+                 RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface* lpActiveCarInterface );
+@@ -1207,7 +1218,19 @@
+     bool mbPlayerBaseDeformRequestPending;  // +0x184DC (99548) one-shot: force mbResetDeformation
+     u8   maTailPadB1c0[0x184E0 - 0x184DD];  // +0x184DD (99549) .. +0x184E0 (99552)
+     f32  mfPlayerBaseDeformAmountSaved;     // +0x184E0 (99552) mode-change stash of the amount
+-    u8   maTailPadB1c[0x18718 - 0x184E4];
++    // X360 +0x185F4..+0x18600: replay-state flags and the embedded serialiser. The
++    // serialiser widens on the native target; the following reserve shrinks so the
++    // enclosing module's next recovered member keeps its existing host placement.
++    u8   maReplayPaddingBeforeState[99828 - 99556];
++    bool mbInReplay;       // X360 +0x185F4 (99828), written each PreSceneUpdate
++    bool mbReplayRestored; // X360 +0x185F5 (99829), replay restore completion latch
++    u8   maReplayPaddingBeforeSerialiser[99840 - 99830];
++    BrnReplays::RaceCarEntitySerialiser mReplaySerialiser; // X360 +0x18600 (99840)
++    Matrix44Affine mReplayTransform; // DecFIGS member order; X360 position follows the serialiser
++    u8   maReplayPaddingBeforeInvalidated[32]; // unidentified X360 span before +0x186C0
++    bool mbInvalidatedRaceCars; // ARTIST UpdateReplayStreaming reads +100032 (0x186C0)
++    u8   maReplayPaddingAfter[0x18718 - (99840 + sizeof(BrnReplays::RaceCarEntitySerialiser)
++                                       + sizeof(Matrix44Affine) + 32 + 1)];
+     bool mbOncomingTimerActive; // DWARF :453; ARTIST +0x18718
+     u8   maOncomingPadding[3];
+     f32  mfOncomingNoClueTimer; // DWARF :454; ARTIST +0x1871C
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp
+@@ -730,7 +730,7 @@
+     return &mGlobalRaceCarOutputInterface;
+ }
+ 
+-// X360 0x8279E678 (R, :578) -- const replay active-race-car output accessor.
++// X360 0x8279E870 (R, :578) -- const replay active-race-car output accessor at +840704.
+ const RCEntityActiveRaceCarOutputInterface*
+ OutputBuffer_PostPhysics::GetReplayActiveRaceCarOutputInterface() const
+ {
+@@ -738,8 +738,8 @@
+     return &mReplayActiveRaceCarOutputInterface;
+ }
+ 
+-// X360 0x822B6488 (W, :579) -- mutable replay active-race-car output accessor
+-// (pairs with the const overload above at the identical +826992 offset).
++// X360 0x822B6680 (W, :579) -- mutable replay active-race-car output accessor
++// (pairs with the const overload above at the identical +840704 offset).
+ RCEntityActiveRaceCarOutputInterface*
+ OutputBuffer_PostPhysics::GetReplayActiveRaceCarOutputInterface()
+ {
+@@ -747,7 +747,7 @@
+     return &mReplayActiveRaceCarOutputInterface;
+ }
+ 
+-// X360 0x822B6920 (W, :582) -- mutable replay global-race-car output accessor.
++// X360 0x822B6728 (W, :582) -- mutable replay global-race-car output accessor at +851184. The DWARF const twin has no X360 reader body in the export map.
+ RCEntityGlobalRaceCarOutputInterface*
+ OutputBuffer_PostPhysics::GetReplayGlobalRaceCarOutputInterface()
+ {
+@@ -755,7 +755,23 @@
+     return &mReplayGlobalRaceCarOutputInterface;
+ }
+ 
+-// X360 0x8279E9C0 (R, :590) -- const vehicle-input accessor (re-exposed on PostPhysics).
++// X360 0x8279E9C0 (R, :587) / 0x822B6878 (W, :588) -- the typed eleven-slot
++// replay registration interface at +855152. The input interface follows it at +855200.
++const OutputBuffer_PostPhysics::ReplayRequestInterface*
++OutputBuffer_PostPhysics::GetReplayRequestInterface() const
++{
++    CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading");
++    return &mReplayRequestInterface;
++}
++
++OutputBuffer_PostPhysics::ReplayRequestInterface*
++OutputBuffer_PostPhysics::GetReplayRequestInterface()
++{
++    CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing");
++    return &mReplayRequestInterface;
++}
++
++// DWARF :590 -- const vehicle-input accessor (re-exposed on PostPhysics).
+ const OutputBuffer_PreScene::VehicleInputInterface*
+ OutputBuffer_PostPhysics::GetVehicleInputInterface() const
+ {
+@@ -763,8 +779,7 @@
+     return &mVehicleInputInterface;
+ }
+ 
+-// X360 0x822B6878 (W, :591) -- mutable vehicle-input accessor (pairs with the const
+-// overload above at the identical +855152 offset).
++// X360 0x822B6920 (W, :591) -- mutable vehicle-input accessor at +855200.
+ OutputBuffer_PreScene::VehicleInputInterface*
+ OutputBuffer_PostPhysics::GetVehicleInputInterface()
+ {
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.h
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.h
+@@ -36,6 +36,7 @@
+ #pragma once
+ 
+ #include "types.hpp"
++#include "GameSource/Replays/BrnReplayRequestInterface.h" // BrnReplays::ReplayIO::RequestInterface
+ #include <cstring>   // memset (partial-slice Constructs)                                                       // s8/s32/u8/u16/u32/f32
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                          // CGS_ASSERT (per-race-car header-inline setters)
+ #include "GameShared/GameClasses/Module/CgsIOBuffer.h"                      // CgsModule::IOBuffer base
+@@ -809,7 +810,7 @@
+     struct OutputBuffer_PostPhysics : public CgsModule::IOBuffer
+     {
+         typedef BrnDirector::BrnDirectorVehicleInputInterface DirectorVehicleInputInterface; // :103
+-        typedef RaceCarEntityModuleIO::ResourceRequestInterface ReplayRequestInterface;       // :107
++        typedef BrnReplays::ReplayIO::RequestInterface ReplayRequestInterface;                    // :107, X360 11 BaseSerialiser* slots (44 bytes)
+ 
+         // X360 0x822EA8F8 -- IOBuffer status, then VariableEventQueue<8192,16>::Construct +
+         // ::Clear on the resource-request ring at +4 (== mResourceRequestInterface.mRequestQueue),
+@@ -851,12 +852,13 @@
+             mReplayActiveRaceCarOutputInterface.Clear();         // X360 +840704
+             mReplayGlobalRaceCarOutputInterface.Clear();         // X360 +851184
+             mGameEventQueue.Construct();                         // X360 +853600 (VEQ<1536,16>)
+-            // [FLAG] the console's 11-word zero fill at +855152 and
+-            // VehicleInputInterface::Construct(+855200) are NOT emitted: on the console those two
+-            // seats sit between mGameEventQueue and the buffer's end, but the member-offset
+-            // attributions recorded on the declarations below disagree with the Construct's own
+-            // offsets for the same two seats (see the report's SUSPECT note), so naming them here
+-            // would be a guess. Restore both once that attribution is settled.
++            // 0x822EA8F8 zeros eleven pointer slots at +855152 (the X360
++            // ReplayIO::RequestInterface), then constructs the vehicle input interface at +855200.
++            for (u32 luSerialiser = 0; luSerialiser < BrnReplays::ReplayIO::KI_MAX_SERIALISERS; ++luSerialiser)
++            {
++                mReplayRequestInterface.mapSerialisers[luSerialiser] = nullptr;
++            }
++            mVehicleInputInterface.Construct();                  // X360 +855200
+         }
+         const ResourceRequestInterface* GetResourceRequestInterface() const;              // :563
+         ResourceRequestInterface*       GetResourceRequestInterface();                     // :564
+@@ -868,27 +870,27 @@
+         RCEntityActiveRaceCarOutputInterface*       GetActiveRaceCarOutputInterface();              // :573
+         const RCEntityGlobalRaceCarOutputInterface* GetGlobalRaceCarOutputInterface() const;        // :575
+         RCEntityGlobalRaceCarOutputInterface*       GetGlobalRaceCarOutputInterface();              // :576
+-        const RCEntityActiveRaceCarOutputInterface* GetReplayActiveRaceCarOutputInterface() const;  // :578 R (0x8279E678)
+-        RCEntityActiveRaceCarOutputInterface*       GetReplayActiveRaceCarOutputInterface();        // :579 W (0x822B6488)
+-        const RCEntityGlobalRaceCarOutputInterface* GetReplayGlobalRaceCarOutputInterface() const;  // :581
+-        RCEntityGlobalRaceCarOutputInterface*       GetReplayGlobalRaceCarOutputInterface();        // :582 W (0x822B6920)
++        const RCEntityActiveRaceCarOutputInterface* GetReplayActiveRaceCarOutputInterface() const;  // :578 R (0x8279E870, +840704)
++        RCEntityActiveRaceCarOutputInterface*       GetReplayActiveRaceCarOutputInterface();        // :579 W (0x822B6680, +840704)
++        const RCEntityGlobalRaceCarOutputInterface* GetReplayGlobalRaceCarOutputInterface() const;  // :581 (no X360 reader body found)
++        RCEntityGlobalRaceCarOutputInterface*       GetReplayGlobalRaceCarOutputInterface();        // :582 W (0x822B6728, +851184)
+         const GameEventQueue* GetGameEventQueue() const;                                   // :584
+         GameEventQueue*       GetGameEventQueue();                                         // :585
+-        const ReplayRequestInterface* GetReplayRequestInterface() const;                   // :587
+-        ReplayRequestInterface*       GetReplayRequestInterface();                         // :588
+-        const OutputBuffer_PreScene::VehicleInputInterface* GetVehicleInputInterface() const; // :590 R (0x8279E9C0)
+-        OutputBuffer_PreScene::VehicleInputInterface*       GetVehicleInputInterface();       // :591 W (0x822B6878)
++        const ReplayRequestInterface* GetReplayRequestInterface() const;                   // :587 R (0x8279E9C0, +855152)
++        ReplayRequestInterface*       GetReplayRequestInterface();                         // :588 W (0x822B6878, +855152)
++        const OutputBuffer_PreScene::VehicleInputInterface* GetVehicleInputInterface() const; // :590
++        OutputBuffer_PreScene::VehicleInputInterface*       GetVehicleInputInterface();       // :591 W (0x822B6920, +855200)
+     private:
+         ResourceRequestInterface             mResourceRequestInterface;                    // :595
+         OutputBuffer_PreScene::SceneInputInterface mSceneInputInterface;                   // :596  (0x822B5D50 -> +147488)
+         DirectorVehicleInputInterface        mDirectorVehicleInputInterface;               // :597
+         RCEntityActiveRaceCarOutputInterface mActiveRaceCarOutputInterface;               // :598
+         RCEntityGlobalRaceCarOutputInterface mGlobalRaceCarOutputInterface;               // :599
+-        RCEntityActiveRaceCarOutputInterface mReplayActiveRaceCarOutputInterface;         // :600  (0x822B6488/0x8279E678 -> +826992)
+-        RCEntityGlobalRaceCarOutputInterface mReplayGlobalRaceCarOutputInterface;         // :601  (0x822B6920 -> +855200)
++        RCEntityActiveRaceCarOutputInterface mReplayActiveRaceCarOutputInterface;         // :600  (0x822B6680/0x8279E870 -> +840704)
++        RCEntityGlobalRaceCarOutputInterface mReplayGlobalRaceCarOutputInterface;         // :601  (0x822B6728/0x8279E918 -> +851184)
+         GameEventQueue                       mGameEventQueue;                              // :602
+-        ReplayRequestInterface               mReplayRequestInterface;                      // :603
+-        OutputBuffer_PreScene::VehicleInputInterface mVehicleInputInterface;               // :604  (0x822B6878/0x8279E9C0 -> +855152)
++        ReplayRequestInterface               mReplayRequestInterface;                      // :603  (0x822B6878/0x8279E9C0 -> +855152)
++        OutputBuffer_PreScene::VehicleInputInterface mVehicleInputInterface;               // :604  (0x822B6920 -> +855200)
+     };
+ 
+     // ============================================================================
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarStreamer.h
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarStreamer.h
+@@ -69,6 +69,8 @@
+ 
+ class RaceCarStreamer
+ {
++    // ARTIST UpdateReplayStreaming inlines these pumps without the load timer update.
++    friend class RaceCarEntityModule;
+     friend struct RaceCarEntityModuleDebugComponent;   // the streaming-state HUD reads the per-slot arrays
+ 
+ public:
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRaceCarEntityModuleOutputInterface.h
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRaceCarEntityModuleOutputInterface.h
+@@ -30,7 +30,7 @@
+ namespace BrnResource { struct VehicleListEntry; }
+ namespace BrnPhysics { namespace Deformation { struct StreamedDeformationSpec; } }
+ namespace BrnGameState { namespace GameStateModuleIO { enum EPlayerScoringIndex : s32; } }
+-namespace BrnWorld { struct RaceCar; }
++namespace BrnWorld { struct RaceCar; class RaceCarEntityModule; }
+ 
+ namespace BrnWorld
+ {
+@@ -141,6 +141,8 @@
+     // routed to this header's .cpp (X360 0x8227D690).
+     struct RCEntityActiveRaceCarOutputInterface
+     {
++        friend class BrnWorld::RaceCarEntityModule;
++
+         typedef BrnPhysics::Vehicle::RaceCarState RaceCarState;   // :61
+ 
+         // DWARF :415 -- public live race-car list.
+--- a/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp
++++ b/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp
+@@ -9,7 +9,6 @@
+ 
+ #include "GameShared/GameClasses/Core/CgsAssert.h"
+ #include "GameShared/GameClasses/Module/CgsVariableEventQueue.h"
+-#include "GameSource/Replays/BrnReplayQuantisedQuatPos.h"
+ #include "vendor/renderware/physics/JointFrames.hpp"   // rw::math::vpu::QuaternionFromMatrix33 (WriteAsQuatPos)
+ 
+ #include <cstring>
+@@ -121,7 +120,7 @@
+         return nullptr;
+     }
+ 
+-    // @ 0x826534E0 -- read a 12-byte quantised quat+pos record off the stream, unpack it
++    // @ 0x826534E0 -- read seven aligned quat+pos floats off the stream
+     // (working set: quat x/y/z/w @[0..3], position @[4..6]) and expand it into the 64-byte
+     // destination transform: three rotation rows @+0/+0x10/+0x20 + the position row @+0x30
+     // (the asm stores pos.w = 0 explicitly: `stw r10=0, var_34`).
+@@ -144,7 +143,12 @@
+     void SoundSerialiser::ReadAsQuatPos(void* lpTransform)
+     {
+         float lafUnpacked[8];
+-        QuantisedQuatPos::Read(this, lafUnpacked);
++        // ARTIST sub82652640: position xyz first, then quaternion xyzw.
++        // Each value uses the aligned float primitive; this stream is not quantised.
++        for (s32 liLane = 4; liLane < 7; ++liLane)
++            BaseSerialiser::ReadFloat(&lafUnpacked[liLane]);
++        for (s32 liLane = 0; liLane < 4; ++liLane)
++            BaseSerialiser::ReadFloat(&lafUnpacked[liLane]);
+ 
+         const f32 lfX = lafUnpacked[0], lfY = lafUnpacked[1];
+         const f32 lfZ = lafUnpacked[2], lfW = lafUnpacked[3];
+@@ -173,7 +177,7 @@
+     }
+ 
+     // @ 0x82658EC8 -- derive the quaternion from the 64-byte source transform's three basis
+-    // rows and pack {quat, position} into the 12-byte quantised record.
++    // rows and stream seven aligned floats: position xyz followed by quaternion xyzw.
+     //
+     // RECONSTRUCTED 2026-08-25 wave 4 (was "grounded as copy" -- the derivation was absent and
+     // the first two ROWS were passed where the quat belongs). The console's matrix->quaternion
+@@ -205,7 +209,11 @@
+         lafScratch[5] = lpSrc[13];
+         lafScratch[6] = lpSrc[14];
+         lafScratch[7] = 0.0f;        // unused tail lane of the working set
+-        QuantisedQuatPos::Write(this, lafScratch);
++        // ARTIST sub826525A0: seven aligned floats in position-then-quaternion order.
++        for (s32 liLane = 4; liLane < 7; ++liLane)
++            BaseSerialiser::WriteFloat(&lafScratch[liLane]);
++        for (s32 liLane = 0; liLane < 4; ++liLane)
++            BaseSerialiser::WriteFloat(&lafScratch[liLane]);
+     }
+ 
+     // @ 0x82653608 -- playback one 80-byte sound key-frame record: the quat+pos transform, then
+@@ -417,6 +425,7 @@
+         if (liNumCollisions > 0)
+         {
+             u8* lpRec = lpBase + 0x1C;
++            s32 liCollisionIndex = 0;
+             do
+             {
+                 Read(lpRec - 4, 4);
+@@ -430,9 +439,11 @@
+                 ReadFloat(lpRec + 180);
+                 Read(lpRec + 100, 16);
+                 Read(lpRec + 4, 16);
+-                *(lpRec + 188) = 0;
++                // ARTIST826592D0: stw clears the full sample marker at record+216.
++                lpStatic->maCollisions[liCollisionIndex].miSampleID = 0;
+                 std::memset(lpRec + 132, 0, 48);
+                 --liNumCollisions;
++                ++liCollisionIndex;
+                 lpRec += 224;
+             } while (liNumCollisions != 0);
+         }
+--- a/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.h
+@@ -87,7 +87,7 @@
+         s32 Read(SoundSerialiserStaticLayout* lpStatic);
+         s32 Write(SoundSerialiserStaticLayout* lpStatic);
+ 
+-        // @0x826534E0 / @0x82658EC8 -- read / write a 12-byte quantised quat+pos record into /
++        // @0x826534E0 / @0x82658EC8 -- read / write seven aligned quat+pos floats into /
+         // out of the 64-byte transform at the head of a key-frame record.
+         void ReadAsQuatPos(void* lpTransform);
+         void WriteAsQuatPos(const void* lpTransform);
