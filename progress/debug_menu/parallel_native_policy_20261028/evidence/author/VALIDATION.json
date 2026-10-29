@@ -1,0 +1,37 @@
+{
+  "tests": [
+    {
+      "engine": "powershell",
+      "version": "5.1.26100.9711",
+      "exit_code": 0,
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scratch\\DEBUG_MENU_1011\\swarm_parallel_harness_20261028\\test_parallel_harness.ps1"
+      ],
+      "log": "test-powershell.log"
+    },
+    {
+      "engine": "pwsh",
+      "version": "7.6.9",
+      "exit_code": 0,
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "scratch\\DEBUG_MENU_1011\\swarm_parallel_harness_20261028\\test_parallel_harness.ps1"
+      ],
+      "log": "test-pwsh.log"
+    }
+  ],
+  "native_game_launched": false,
+  "git_apply_check": {
+    "exit_code": 0,
+    "target": "shared harness source (read-only --check)"
+  }
+}

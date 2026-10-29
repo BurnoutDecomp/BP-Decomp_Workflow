@@ -1,0 +1,149 @@
+--- a/tools/tests/run_case.ps1
++++ b/tools/tests/run_case.ps1
+@@ -18,7 +18,7 @@
+ #   scratch\bugtest\runs\<case>\latest.json   -> a pointer to the newest run's result
+ #
+ # ⛔ ONE GAME AT A TIME BY DEFAULT. An explicit Run.AllowConcurrentGames opt-in permits
+-# exactly one other distinct-image game only for a strict private staged run (positive Slot).
++# a configurable count of distinct-image games only for a strict private staged run (positive Slot).
+ # flow_run takes the box lock (_box_lock.ps1); with many lanes queued the wait can be long,
+ # so this runner passes -LockTimeoutSec 7200 by default. A wait is announced by flow_run
+ # ("[box] waiting for the box") -- it is not a hang.
+@@ -37,6 +37,7 @@
+   [switch]$ExpectFail,            # RED mode
+   [switch]$NoRun,                 # evaluate an existing -RunDir only
+   [int]$LockTimeoutSec  = 7200,
++  [ValidateRange(1,100)][int]$MaxConcurrentOtherGames = 1, # CLI overrides Run.MaxConcurrentOtherGames
+   [string]$Label        = "",     # free text recorded in result.json (e.g. "pre-fix", "post-fix")
+   [string]$GameDir      = "",     # paired private <stage>\slot executable/config/log directory
+   [string]$WorkingDirectory = "", # paired private <stage>\data asset and profile directory
+@@ -74,6 +75,16 @@
+     Write-Host "[case] FAIL: Run.AllowConcurrentGames must be a Boolean."; exit 2
+   }
+   $allowConcurrentGames = [bool]$lRun['AllowConcurrentGames']
++}
++
++if (-not $PSBoundParameters.ContainsKey('MaxConcurrentOtherGames') -and $lRun.Contains('MaxConcurrentOtherGames')) {
++  if ($lRun['MaxConcurrentOtherGames'] -isnot [int] -or $lRun['MaxConcurrentOtherGames'] -lt 1 -or $lRun['MaxConcurrentOtherGames'] -gt 100) {
++    Write-Host "[case] FAIL: Run.MaxConcurrentOtherGames must be an integer from 1 through 100."; exit 2
++  }
++  $MaxConcurrentOtherGames = $lRun['MaxConcurrentOtherGames']
++}
++if ($MaxConcurrentOtherGames -gt 1 -and -not $allowConcurrentGames) {
++  Write-Host "[case] FAIL: MaxConcurrentOtherGames above 1 requires Run.AllowConcurrentGames."; exit 2
+ }
+ 
+ if ($RunsRoot -eq "") { $RunsRoot = Join-Path $root "scratch\bugtest\runs" }
+@@ -154,6 +165,7 @@
+   if (-not $allowConcurrentGames) { return $lGames }
+   $lCheckedGames = @()
+   $lOwnedImagePath = [IO.Path]::GetFullPath($exe)
++  $lSeenImagePaths = @{}
+   foreach ($lGame in $lGames) {
+     $lPath = [string]$lGame.ExecutablePath
+     if ([string]::IsNullOrWhiteSpace($lPath)) { throw ("game pid={0} has no executable path" -f $lGame.ProcessId) }
+@@ -166,14 +178,18 @@
+     if ($lFullPath -ieq $lOwnedImagePath) {
+       throw ("game pid={0} resolves to the owned staged executable: {1}" -f $lGame.ProcessId,$lFullPath)
+     }
++    if ($lSeenImagePaths.ContainsKey($lFullPath)) {
++      throw ("multiple games resolve to the same executable path: {0}" -f $lFullPath)
++    }
++    $lSeenImagePaths[$lFullPath] = $true
+     $lCheckedGames += [pscustomobject]@{
+       ProcessId = [int]$lGame.ProcessId
+       Name = [string]$lGame.Name
+       ExecutablePath = $lFullPath
+     }
+   }
+-  if ($lCheckedGames.Count -gt 1) {
+-    throw ("concurrent-game limit exceeded: {0} other games are running (maximum 1)" -f $lCheckedGames.Count)
++  if ($lCheckedGames.Count -gt $MaxConcurrentOtherGames) {
++    throw ("concurrent-game limit exceeded: {0} other games are running (maximum {1})" -f $lCheckedGames.Count,$MaxConcurrentOtherGames)
+   }
+   return $lCheckedGames
+ }
+@@ -243,6 +259,7 @@
+   $lArgs = @{}
+   foreach ($k in $lRun.Keys) { $lArgs[$k] = $lRun[$k] }
+   if (-not $allowConcurrentGames) { [void]$lArgs.Remove('AllowConcurrentGames') }
++  $lArgs['MaxConcurrentOtherGames'] = $MaxConcurrentOtherGames
+   $lArgs['OutDir'] = $flowOut
+   $lArgs['LockTimeoutSec'] = $LockTimeoutSec
+   if ($Slot -gt 0) { $lArgs['Slot'] = $Slot }
+@@ -413,7 +430,7 @@
+           flow_status_sha256=$flowStatusHash;flow_status=$flowStatus;
+           helper_cleanup_complete=$setupCleanupOk;profile_restoration_complete=$profileRestorationComplete;
+           post_flow_foreign_game=$postFlowForeignGame;profile_restore_error=$profileRestoreError;
+-          allow_concurrent_games=$allowConcurrentGames;
++          allow_concurrent_games=$allowConcurrentGames;max_concurrent_other_games=$MaxConcurrentOtherGames;
+           allowed_other_games_before_profile=$preProfileConcurrentGames;
+           allowed_other_games_after_flow=$postFlowConcurrentGames;
+           success=[bool]$terminalPass} | ConvertTo-Json -Depth 6 |
+--- a/tools/diagnostics/flow_run.ps1
++++ b/tools/diagnostics/flow_run.ps1
+@@ -376,7 +376,8 @@
+   [switch]$NoAssertRelease,     # leave the assert event unsignalled; stop after the first observed [ASSERT]
+   [switch]$BelowNormal,         # set only this owned process to BelowNormal immediately after launch
+   [switch]$StrictGameOwnership, # refuse existing/foreign games; cleanup only this run's PID/path/start time
+-  [switch]$AllowConcurrentGames, # opt in to one distinct other game in a private strict run
++  [switch]$AllowConcurrentGames, # opt in to distinct other games in a private strict run
++  [ValidateRange(1,100)][int]$MaxConcurrentOtherGames = 1,
+   [double]$MinFreeGB   = 25,     # refuse to START a frame dump below this much free space --
+                                  # a dump can reach 16 GB and filling the volume mid-run breaks
+                                  # far more than the run (see the guard below)
+@@ -519,6 +520,9 @@
+ #               which is precisely why a per-slot exe directory yields a per-slot log for free.
+ $sourceGameDir = Join-Path $root "build\game"
+ $usingCustomGameDirs = ($GameDir -ne "" -or $WorkingDirectory -ne "")
++if ($MaxConcurrentOtherGames -gt 1 -and -not $AllowConcurrentGames) {
++  Write-Host "[flow] FAIL: -MaxConcurrentOtherGames above 1 requires -AllowConcurrentGames."; exit 1
++}
+ if ($AllowConcurrentGames -and (-not $StrictGameOwnership -or $Slot -le 0 -or -not $usingCustomGameDirs)) {
+   Write-Host "[flow] FAIL: -AllowConcurrentGames requires -StrictGameOwnership, a positive -Slot, and private sibling GameDir/WorkingDirectory paths."; exit 1
+ }
+@@ -592,6 +596,7 @@
+   $lOtherGames = @(Get-OtherGameProcesses | Where-Object { [int]$_.ProcessId -ne $ExcludePid })
+   if (-not $AllowConcurrentGames) { return $lOtherGames }
+   $lCheckedGames = @()
++  $lSeenImagePaths = @{}
+   foreach ($lOther in $lOtherGames) {
+     $lPath = [string]$lOther.ExecutablePath
+     if ([string]::IsNullOrWhiteSpace($lPath)) { throw ("game pid={0} has no executable path" -f $lOther.ProcessId) }
+@@ -604,20 +609,24 @@
+     if ($lFullPath -ieq $ownedImagePath) {
+       throw ("game pid={0} resolves to the owned staged executable: {1}" -f $lOther.ProcessId,$lFullPath)
+     }
++    if ($lSeenImagePaths.ContainsKey($lFullPath)) {
++      throw ("multiple games resolve to the same executable path: {0}" -f $lFullPath)
++    }
++    $lSeenImagePaths[$lFullPath] = $true
+     $lCheckedGames += [pscustomobject]@{
+       ProcessId = [int]$lOther.ProcessId
+       Name = [string]$lOther.Name
+       ExecutablePath = $lFullPath
+     }
+   }
+-  if ($lCheckedGames.Count -gt 1) {
+-    throw ("concurrent-game limit exceeded: {0} other games are running (maximum 1)" -f $lCheckedGames.Count)
++  if ($lCheckedGames.Count -gt $MaxConcurrentOtherGames) {
++    throw ("concurrent-game limit exceeded: {0} other games are running (maximum {1})" -f $lCheckedGames.Count,$MaxConcurrentOtherGames)
+   }
+   return $lCheckedGames
+ }
+ if ($StrictGameOwnership) {
+   # A strict run never stops a pre-existing game. By default it refuses any; the private opt-in
+-  # permits at most one other game with a known, distinct executable path.
++  # permits the configured count of other games with known, distinct executable paths.
+   try {
+     if ($AllowConcurrentGames) { $lOtherGames = @(Get-StrictOtherGameProcesses) }
+     else { $lOtherGames = @(Get-OtherGameProcesses) }
+@@ -3299,7 +3308,7 @@
+     direct_creation_handle_retained=($null -ne $ownedLaunchHandle);
+     completed=[bool]$flowBodyCompleted;requested_exit=$flowRequestedExit;error=$flowTerminatingError;
+     first_assert_stop=[bool]$assertStop;first_assert_at=$assertStopAt;observed_asserts=$seenAsserts;
+-    foreign_game=[bool]$foreignGameAppeared;allow_concurrent_games=[bool]$AllowConcurrentGames;max_other_games_observed=$maxConcurrentGamesObserved;
++    foreign_game=[bool]$foreignGameAppeared;allow_concurrent_games=[bool]$AllowConcurrentGames;max_concurrent_other_games=$MaxConcurrentOtherGames;max_other_games_observed=$maxConcurrentGamesObserved;
+     runaway_log_abort=[bool]$runawayLog;owned_cleanup_complete=[bool]$cleanupComplete;
+     input_reset_complete=$inputResetOk;game_exited_on_own=$exitedOnOwn;game_exit=$exitCode;
+     title_start_requested=[bool]$TitleStart;title_start_ready_observed=$titleStartReady;title_start_sent_at=$titleStartSentAt;
