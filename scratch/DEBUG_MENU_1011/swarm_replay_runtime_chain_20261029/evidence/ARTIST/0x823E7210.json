@@ -1,0 +1,123 @@
+{
+  "address": "0x823E7210",
+  "name": "BrnGame::BrnGameModule::BridgeReplayToGui",
+  "prototype": "int BrnGame::BrnGameModule::BridgeReplayToGuiint __fastcall(int a1, int a2, int a3)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "Statu",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "GuiEvent",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v8",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v10",
+      "type": "_BYTE[1616]",
+      "is_reg": false,
+      "size": 1616
+    }
+  ],
+  "pseudocode": "int __fastcall BrnGame::BrnGameModule::BridgeReplayToGui(int a1, int a2, int a3)\n{\n  int Statu; // r29\n  int GuiEvent; // r31\n  int v8; // r3\n  int result; // r3\n  _BYTE v10[1616]; // [sp+50h] [-650h] BYREF\n\n  _savegprlr_27();\n  if ( !a2 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"lpGuiInput\",\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/GameBridgeReplayToX.cpp\",\n      89);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !a3 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"lpReplayOutput\",\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/GameBridgeReplayToX.cpp\",\n      90);\n    CgsDev::Assert::EndAssert();\n  }\n  Statu = BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatu(a3);\n  if ( !Statu )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"lpStatusInterface\",\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/GameBridgeReplayToX.cpp\",\n      93);\n    CgsDev::Assert::EndAssert();\n  }\n  BrnReplays::ReplayIO::StatusInterface::operator_(v10, Statu);\n  CgsGui::GuiModule::AddGuiEvent<BrnGui::GuiReplayStatusEvent>(a1 + 7252512, v10, a2);\n  GuiEvent = BrnReplays::ReplayIO::OutputBuffer_PreSim::GetGuiEvent(a3);\n  v8 = sub_8284F238(a2);\n  result = CgsModule::VariableEventQueue<32768,16>::Append<4096,16>(v8, GuiEvent);\n  _restgprlr_27();\n  return result;\n}\n",
+  "assembly": "0x823E7210  mflr      r12\n0x823E7214  bl        __savegprlr_27\n0x823E7218  stwu      r1, back_chain(r1)\n0x823E721C  mr        r30, r4\n0x823E7220  lis       r11, aDP4B5MainBurno_150@ha\n0x823E7224  mr        r27, r3\n0x823E7228  mr        r28, r5\n0x823E722C  cmplwi    cr6, r30, 0\n0x823E7230  addi      r31, r11, aDP4B5MainBurno_150@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"...\n0x823E7234  bne       cr6, loc_823E7254\n0x823E7238  bl        CgsDev__Assert__BeginAssert\n0x823E723C  lis       r11, aLpguiinput@ha\n0x823E7240  li        r5, 0x59 # 'Y'\n0x823E7244  addi      r3, r11, aLpguiinput@l# \"lpGuiInput\"\n0x823E7248  mr        r4, r31\n0x823E724C  bl        CgsDev__Assert__FireAssert\n0x823E7250  bl        CgsDev__Assert__EndAssert\n0x823E7254  cmplwi    cr6, r28, 0\n0x823E7258  bne       cr6, loc_823E7278\n0x823E725C  bl        CgsDev__Assert__BeginAssert\n0x823E7260  lis       r11, aLpreplayoutput@ha\n0x823E7264  li        r5, 0x5A # 'Z'\n0x823E7268  addi      r3, r11, aLpreplayoutput@l# \"lpReplayOutput\"\n0x823E726C  mr        r4, r31\n0x823E7270  bl        CgsDev__Assert__FireAssert\n0x823E7274  bl        CgsDev__Assert__EndAssert\n0x823E7278  mr        r3, r28\n0x823E727C  bl        BrnReplays__ReplayIO__OutputBuffer_PreSim__GetStatu\n0x823E7280  mr        r29, r3\n0x823E7284  cmplwi    cr6, r29, 0\n0x823E7288  bne       cr6, loc_823E72A8\n0x823E728C  bl        CgsDev__Assert__BeginAssert\n0x823E7290  lis       r11, aLpstatusinterf@ha\n0x823E7294  li        r5, 0x5D # ']'\n0x823E7298  addi      r3, r11, aLpstatusinterf@l# \"lpStatusInterface\"\n0x823E729C  mr        r4, r31\n0x823E72A0  bl        CgsDev__Assert__FireAssert\n0x823E72A4  bl        CgsDev__Assert__EndAssert\n0x823E72A8  mr        r4, r29\n0x823E72AC  addi      r3, r1, 0x6A0+var_650\n0x823E72B0  bl        BrnReplays__ReplayIO__StatusInterface__operator_\n0x823E72B4  addis     r3, r27, 0x6F # 'o'\n0x823E72B8  mr        r5, r30\n0x823E72BC  addi      r4, r1, 0x6A0+var_650\n0x823E72C0  addi      r3, r3, -0x55E0\n0x823E72C4  bl        ___AddGuiEvent_VGuiReplayStatusEvent_BrnGui___GuiModule_CgsGui__QAAXAAVGuiReplayStatusEvent_BrnGui__PAVInputBuffer_CgsG\n0x823E72C8  mr        r3, r28\n0x823E72CC  bl        BrnReplays__ReplayIO__OutputBuffer_PreSim__GetGuiEvent\n0x823E72D0  mr        r31, r3\n0x823E72D4  mr        r3, r30\n0x823E72D8  bl        sub_8284F238\n0x823E72DC  mr        r4, r31\n0x823E72E0  bl        ___Append__0BAAA__0BA____VariableEventQueue__0IAAA__0BA__CgsModule__QAA_NABV__VariableEventQueue__0BAAA__0BA__1__Z# CgsModule::VariableEventQueue<32768,16>::Append<4096,16>(CgsModule::VariableEventQueue<4096,16> const &)\n0x823E72E4  addi      r1, r1, 0x6A0\n0x823E72E8  b         __restgprlr_27",
+  "xrefs_to": [
+    {
+      "address": "0x823F0758",
+      "name": "BrnGame::BrnGameModule::DoUpdate_GUI"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EE4",
+      "name": "__savegprlr_27"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x823BB080",
+      "name": "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatu"
+    },
+    {
+      "address": "0x823A6488",
+      "name": "BrnReplays::ReplayIO::StatusInterface::operator="
+    },
+    {
+      "address": "0x823DAE68",
+      "name": "??$AddGuiEvent@VGuiReplayStatusEvent@BrnGui@@@GuiModule@CgsGui@@QAAXAAVGuiReplayStatusEvent@BrnGui@@PAVInputBuffer@CgsG"
+    },
+    {
+      "address": "0x823BB1D0",
+      "name": "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetGuiEvent"
+    },
+    {
+      "address": "0x8284F238",
+      "name": "sub_8284F238"
+    },
+    {
+      "address": "0x823C4788",
+      "name": "??$Append@$0BAAA@$0BA@@?$VariableEventQueue@$0IAAA@$0BA@@CgsModule@@QAA_NABV?$VariableEventQueue@$0BAAA@$0BA@@1@@Z"
+    }
+  ]
+}

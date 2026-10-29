@@ -1,0 +1,212 @@
+{
+  "before": {
+    "BrnGame::BrnGameModule::DoUpdate_Sound": {
+      "findings": {
+        "MISSING_CALLEE": [
+          "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatu"
+        ],
+        "INFO_TRUNCATED_CALLEES": [
+          "BrnSound::Module::Io::RootInputBuffer::SetReplayStatusInterface"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B7620, sub_823B7760"
+        ],
+        "FEWER_PARAMS": [
+          "PC 10 vs console 31"
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    },
+    "BrnGame::BrnGameModule::DoUpdate_Effects": {
+      "findings": {
+        "MISSING_CALLEE": [
+          "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatu"
+        ],
+        "INFO_TRUNCATED_CALLEES": [
+          "BrnEffects::EffectsIO::InputBuffer:, BrnEffects::EffectsIO::InputBuffer::SetReplayStatusInterface, BrnSound::Module::Io::RootPreUpdateOutputBuffer::Ge, BrnEffects::EffectsIO::InputBuffer::SetAudioEffectsMessageQueue"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B78A0, sub_823B96F0, sub_823B7A10"
+        ],
+        "FEWER_PARAMS": [
+          "PC 11 vs console 33"
+        ]
+      },
+      "flagged": true,
+      "helpers": 0
+    },
+    "BrnGame::BrnGameModule::DoUpdate_GameStatePostWorld": {
+      "findings": {
+        "MISSING_CALLEE": [
+          "BrnDirector::DirectorIO::OutputBuffer::GetDirectorOu",
+          "BrnGameState::GameStateModuleIO::PostWorldInput",
+          "BrnReplays::ReplayIO::OutputBuffer_PostSi"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B7620, sub_823B7760"
+        ],
+        "MISSING_ASSERT": [
+          "\"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\"",
+          "\"mpStack->DestroyIOBuffer( &mpBuffer )\""
+        ],
+        "MISSING_EVENT?": [
+          "43, 10 [2 PC posts unresolved]"
+        ],
+        "FEWER_PARAMS": [
+          "PC 8 vs console 27"
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    },
+    "BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim": {
+      "findings": {
+        "INFO_TRUNCATED_CALLEES": [
+          "BrnReplays::ReplayIO::InputBuffer_PreSim::AppendGameActionQueue, BrnReplays::ReplayIO::InputBuffer_PreSim::SetTimerStatusInterface"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B6FE0, sub_823B96F0, sub_823B7060"
+        ],
+        "MISSING_ASSERT": [
+          "\"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\"",
+          "\"mpStack->DestroyIOBuffer( &mpBuffer )\""
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    },
+    "BrnGame::BrnGameModule::DoUpdate_ReplaysPostSim": {
+      "findings": {
+        "MISSING_CALLEE": [
+          "BrnWorldIO::UpdateOutputBuffer::GetReplayRequestIn",
+          "BrnEffects::EffectsIO::OutputBuffer::GetReplayRequ",
+          "BrnSound::Module::Io::RootOutputBuffer::GetReplayR",
+          "BrnReplays::ReplayIO::InputBuffer_PostSim::GetRequestInt"
+        ],
+        "INFO_TRUNCATED_CALLEES": [
+          "BrnReplays::ReplayIO::InputBuffer_PostSim::AppendRequestInterface"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B7620, sub_823B7760"
+        ],
+        "MISSING_ASSERT": [
+          "\"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\"",
+          "\"mpStack->DestroyIOBuffer( &mpBuffer )\""
+        ],
+        "FEWER_PARAMS": [
+          "PC 9 vs console 29"
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    }
+  },
+  "after": {
+    "BrnGame::BrnGameModule::DoUpdate_Sound": {
+      "findings": {
+        "MISSING_CALLEE": [
+          "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatu"
+        ],
+        "INFO_TRUNCATED_CALLEES": [
+          "BrnSound::Module::Io::RootInputBuffer::SetReplayStatusInterface"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B7620, sub_823B7760"
+        ],
+        "FEWER_PARAMS": [
+          "PC 10 vs console 31"
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    },
+    "BrnGame::BrnGameModule::DoUpdate_Effects": {
+      "findings": {
+        "MISSING_CALLEE": [
+          "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatu"
+        ],
+        "INFO_TRUNCATED_CALLEES": [
+          "BrnEffects::EffectsIO::InputBuffer:, BrnEffects::EffectsIO::InputBuffer::SetReplayStatusInterface, BrnSound::Module::Io::RootPreUpdateOutputBuffer::Ge, BrnEffects::EffectsIO::InputBuffer::SetAudioEffectsMessageQueue"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B78A0, sub_823B96F0, sub_823B7A10"
+        ],
+        "FEWER_PARAMS": [
+          "PC 11 vs console 33"
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    },
+    "BrnGame::BrnGameModule::DoUpdate_GameStatePostWorld": {
+      "findings": {
+        "MISSING_CALLEE": [
+          "BrnDirector::DirectorIO::OutputBuffer::GetDirectorOu",
+          "BrnGameState::GameStateModuleIO::PostWorldInput",
+          "BrnReplays::ReplayIO::OutputBuffer_PostSi"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B7620, sub_823B7760"
+        ],
+        "MISSING_ASSERT": [
+          "\"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\"",
+          "\"mpStack->DestroyIOBuffer( &mpBuffer )\""
+        ],
+        "MISSING_EVENT?": [
+          "43, 10 [2 PC posts unresolved]"
+        ],
+        "FEWER_PARAMS": [
+          "PC 8 vs console 27"
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    },
+    "BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim": {
+      "findings": {
+        "INFO_TRUNCATED_CALLEES": [
+          "BrnReplays::ReplayIO::InputBuffer_PreSim::AppendGameActionQueue, BrnReplays::ReplayIO::InputBuffer_PreSim::SetTimerStatusInterface"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B6FE0, sub_823B96F0, sub_823B7060"
+        ],
+        "MISSING_ASSERT": [
+          "\"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\"",
+          "\"mpStack->DestroyIOBuffer( &mpBuffer )\""
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    },
+    "BrnGame::BrnGameModule::DoUpdate_ReplaysPostSim": {
+      "findings": {
+        "MISSING_CALLEE": [
+          "BrnWorldIO::UpdateOutputBuffer::GetReplayRequestIn",
+          "BrnEffects::EffectsIO::OutputBuffer::GetReplayRequ",
+          "BrnSound::Module::Io::RootOutputBuffer::GetReplayR",
+          "BrnReplays::ReplayIO::InputBuffer_PostSim::GetRequestInt"
+        ],
+        "INFO_TRUNCATED_CALLEES": [
+          "BrnReplays::ReplayIO::InputBuffer_PostSim::AppendRequestInterface"
+        ],
+        "INFO_UNNAMED_CALLEES": [
+          "sub_823B7620, sub_823B7760"
+        ],
+        "MISSING_ASSERT": [
+          "\"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\"",
+          "\"mpStack->DestroyIOBuffer( &mpBuffer )\""
+        ],
+        "FEWER_PARAMS": [
+          "PC 9 vs console 29"
+        ]
+      },
+      "flagged": false,
+      "helpers": 0
+    }
+  },
+  "new_high_signal": {},
+  "passed_no_new_high_signal": true,
+  "behavior_proof": false,
+  "scope": "five native bridge wrappers; separate source contract binds manual host scheduling"
+}
