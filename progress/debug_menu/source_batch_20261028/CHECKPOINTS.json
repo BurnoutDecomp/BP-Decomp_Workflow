@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "f61f50c4288b8f9a33c7a7cea6c3dc2cac2e6158",
+  "b5_source_head": "45e8bd16f893618e75f6ba6ebf9de014e469f123",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1997,6 +1997,48 @@
         }
       ],
       "source_commit": "f61f50c4288b8f9a33c7a7cea6c3dc2cac2e6158",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "network_stats_debug_controls",
+      "source_packet_path": "swarm_network_stats_debug_controls_20261029/REVIEWER_PACKET.md",
+      "source_packet_sha256": "d66ab32978586506eb966d108617b50f75690b256ac28ec6da233672faaf34ce",
+      "source_manifest_path": "swarm_network_stats_debug_controls_20261029/MANIFEST.json",
+      "source_manifest_file_sha256": "f190c875e6d090398d237174175fffd6654a62f4cf00a684a0761187ea36c969",
+      "author_seal_path": "swarm_network_stats_debug_controls_20261029/SEAL.json",
+      "author_seal_file_sha256": "5128a0f024af8edbbd0aad5ff3dc10613e89fc7edd24179f53e757de4c484c37",
+      "source_delta_path": "swarm_network_stats_debug_controls_20261029/SOURCE_DELTA.json",
+      "source_delta_sha256": "70f21960fc845d1368605a0d9e3601d681f361c77dd9ad3b4959ba65881fb824",
+      "author_patch_path": "swarm_network_stats_debug_controls_20261029/changes.patch",
+      "author_patch_sha256": "5a58312f13d9c78532d2092985f808cf7b9e72ac84741e75777a1464b1b9edc7",
+      "review_report_path": "network_stats_independent_review_sol_20261029/REPORT.md",
+      "review_report_sha256": "f82e3e2203585fe77c880df358474ff67cd7dff3a576cc218e9e34c32200c16b",
+      "review_seal_path": "network_stats_independent_review_sol_20261029/SEAL.json",
+      "review_seal_file_sha256": "7ece60e2ed03388e7bcd8f7448f952be216b88851e34c4ce06446a2da0be83c9",
+      "review_verdict": "pass_source_review",
+      "review_scope": "Original ELO action labels, SET assertions and no-stats diagnostic only. The current PC provider fallback still cannot provide ELO behavior; unsupported backend remains explicit and outside this source patch.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Network/Components/BrnServerInterfaceCustomCommands.cpp",
+          "pre_declared_sha256": "e2f15778f8ab6b90375c21578c7212c79175f5dcf369e64d8dee3addac64a6e2",
+          "pre_current_raw_sha256": "818502d09ec6e3d59e3c9edd651b09b12ee36944fb37a22aa6ef71a3d0133bf0",
+          "pre_current_lf_sha256": "e2f15778f8ab6b90375c21578c7212c79175f5dcf369e64d8dee3addac64a6e2",
+          "post_raw_sha256": "f2b773131c15c095a8b3a9817c95fa7ead0af0c85099ad3e7dc1448e0e58bd38",
+          "post_lf_sha256": "cedbff0a08b3e84d827cae0664c99f767ee2aa4aca13510109a8f3da140ad745",
+          "post_git_sha256": "cedbff0a08b3e84d827cae0664c99f767ee2aa4aca13510109a8f3da140ad745",
+          "declared_post_sha256": "cedbff0a08b3e84d827cae0664c99f767ee2aa4aca13510109a8f3da140ad745"
+        }
+      ],
+      "review_controls": {
+        "focused_pre": "2/5",
+        "focused_post": "5/5",
+        "assert_literals_pre": "0/3",
+        "assert_literals_post": "3/3",
+        "manifest_members": 143
+      },
+      "source_commit": "45e8bd16f893618e75f6ba6ebf9de014e469f123",
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
