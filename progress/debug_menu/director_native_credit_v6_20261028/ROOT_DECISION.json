@@ -1,0 +1,307 @@
+{
+  "schema": 1,
+  "status": "root_approved_three_visible_director_writer_controls",
+  "recorded_by": "Root",
+  "generated_utc": "2026-10-28T20:01:00.196537+00:00",
+  "base_workflow_head": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
+  "base_source_head": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+  "base_canonical_hashes": {
+    "progress/debug_menu/entries.json": "890f639391f53576401aac4b7654f5b2cb65f191774a02b186440a7a5c7c3212",
+    "progress/debug_menu/verdicts.json": "2a65959a16d3011e9bab5b5a87f812ec83233203095856cc5e10c8181b385e81",
+    "progress/debug_menu/README.md": "23383d13ab8cd846926c036a54c1e54b8dfb27d3a7845bda527c51bff2b413fd"
+  },
+  "counts_before": {
+    "verified": 103,
+    "original-noop": 13,
+    "pending": 1239
+  },
+  "counts_after": {
+    "verified": 106,
+    "original-noop": 13,
+    "pending": 1236
+  },
+  "review_inputs": [
+    {
+      "path": "scratch/DEBUG_MENU_1011/director15_independent_review_20261028/V6_FINAL_REVIEW_MANIFEST.json",
+      "sha256": "f8980ccb8881db38cd55c94bec934aea6ba64ed22bf4bf9be7a27b825b36a15c"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/director15_independent_review_20261028/V6_ACTUAL_MACHINE_REVIEW.json",
+      "sha256": "31504ea0fd9dc0e52795692f94b6eeb6d96d7e42cdbd08d8b2dc6389d2dc7514"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/director15_independent_review_20261028/V6_FINAL_REVIEW.md",
+      "sha256": "0dd428eb3ceb0feb9501ea031437e430e4d28cb4cd2892a2fad82ec090b45eeb"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/director15_independent_review_20261028/V6_RUN_SEAL_VERIFICATION.json",
+      "sha256": "483c7c7fb441318c463ee64e34e5e145d10f13d65b7c2927df2bc57eb8eb00e5"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/director15_independent_review_20261028/successor_v6/SOURCE_BINDINGS.json",
+      "sha256": "dd6ad88a9a7dab4b12a8780f7380e15e978d7a888e882fc3f2b933b241274718"
+    },
+    {
+      "path": "scratch/DEBUG_MENU_1011/root_director_native_review_20261028/ROOT_REVIEW_EVIDENCE.json",
+      "sha256": "dd8ed42a054394f2f35f9105d844bca78ac372413fdc375409522848c02620c5"
+    }
+  ],
+  "approved_sites": [
+    {
+      "site_id": "BrnDirector::DebugComponent::OnActivate#0017",
+      "state": "verified",
+      "caption": "Enable Default Debug Output",
+      "scope": "Pinned00830/34dd native write/read/visible positive-negative-default restoration, with source reader and dependency companions; no whole-game or unrelated control claim.",
+      "notes": "State flag text is visible only with printer TRUE; companion0024 remains TRUE during negative and is restored with printer at end.",
+      "evidence_source": {
+        "source_commit": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+        "build_workflow": "78de90f2778881a169ec7e7217a1442022b74972",
+        "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+        "run_pid": 47572,
+        "slot": 62134,
+        "run": "scratch/DEBUG_MENU_1011/swarm_director_native_review_execution_20261028/p/runs/overlays/d_62134_20261028_152427",
+        "current_d158_seven_source_blobs_identical": true
+      },
+      "raw_evidence": {
+        "log_sha256": "2ba7b27b06eda0e5dc0e014f212af5ea12a72058deadf7f92ce7cdcaeccc7bc1",
+        "alias_line_index_base": 0,
+        "states": {
+          "restore": {
+            "phase": "s0017_restore",
+            "actual_value": "FALSE",
+            "expected_value": false,
+            "typed_readback_pass": true,
+            "ack_before": 22350,
+            "value_line": 22351,
+            "ack_after": 22352,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_007139.bmp",
+            "image_sha256": "f9beb7e69d261f317b4725ac50f942db37269c0eb81af9077417324af3f9a172",
+            "frame_present": 7139,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=7 present=7139 file=bb_007139.bmp",
+            "companions": [
+              {
+                "id": "BrnDirector::DebugComponent::OnActivate#0024",
+                "purpose": "existing camera-state text producer makes main printer enable effect visible",
+                "alias": "D0024",
+                "credit": 0,
+                "value": false
+              }
+            ]
+          },
+          "positive": {
+            "phase": "s0017_positive",
+            "actual_value": "TRUE",
+            "expected_value": true,
+            "typed_readback_pass": true,
+            "ack_before": 21103,
+            "value_line": 21104,
+            "ack_after": 21105,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_006867.bmp",
+            "image_sha256": "9185414d8e03867457cac9a3b0ebcf9479d7f4500af53373b0050a09a881a30b",
+            "frame_present": 6867,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=5 present=6867 file=bb_006867.bmp",
+            "companions": [
+              {
+                "id": "BrnDirector::DebugComponent::OnActivate#0024",
+                "purpose": "existing camera-state text producer makes main printer enable effect visible",
+                "alias": "D0024",
+                "credit": 0,
+                "value": true
+              }
+            ]
+          },
+          "negative": {
+            "phase": "s0017_negative",
+            "actual_value": "FALSE",
+            "expected_value": false,
+            "typed_readback_pass": true,
+            "ack_before": 21524,
+            "value_line": 21525,
+            "ack_after": 21526,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_006954.bmp",
+            "image_sha256": "96d44b1abbffcfc77be32fa627190923deecf8867c361be63bf8ac5a9fb76774",
+            "frame_present": 6954,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=6 present=6954 file=bb_006954.bmp",
+            "companions": [
+              {
+                "id": "BrnDirector::DebugComponent::OnActivate#0024",
+                "purpose": "existing camera-state text producer makes main printer enable effect visible",
+                "alias": "D0024",
+                "credit": 0,
+                "value": true
+              }
+            ]
+          }
+        }
+      },
+      "consumer_chain": {
+        "function": "BrnDirector::DebugPrinter::ActualPrint",
+        "x360_address": "0x821F71D8",
+        "evidence": "X360 reader checks DebugPrinter +0x20 before drawing queued text."
+      }
+    },
+    {
+      "site_id": "BrnDirector::DebugComponent::OnActivate#0020",
+      "state": "verified",
+      "caption": "Draw camera pos",
+      "scope": "Pinned00830/34dd native write/read/visible positive-negative-default restoration, with source reader and dependency companions; no whole-game or unrelated control claim.",
+      "notes": "Right green Camera XYZ/FOV/Lens/LookAt/NClip block appears for TRUE and is absent for FALSE and restored FALSE; white general vehicle overlay remains.",
+      "evidence_source": {
+        "source_commit": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+        "build_workflow": "78de90f2778881a169ec7e7217a1442022b74972",
+        "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+        "run_pid": 47572,
+        "slot": 62134,
+        "run": "scratch/DEBUG_MENU_1011/swarm_director_native_review_execution_20261028/p/runs/overlays/d_62134_20261028_152427",
+        "current_d158_seven_source_blobs_identical": true
+      },
+      "raw_evidence": {
+        "log_sha256": "2ba7b27b06eda0e5dc0e014f212af5ea12a72058deadf7f92ce7cdcaeccc7bc1",
+        "alias_line_index_base": 0,
+        "states": {
+          "restore": {
+            "phase": "s0020_restore",
+            "actual_value": "FALSE",
+            "expected_value": false,
+            "typed_readback_pass": true,
+            "ack_before": 24684,
+            "value_line": 24685,
+            "ack_after": 24686,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_007539.bmp",
+            "image_sha256": "7ed069af90baf87a1790e809e8a4db377eb76649ca307edcb7a893fb3afa5070",
+            "frame_present": 7539,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=13 present=7539 file=bb_007539.bmp",
+            "companions": []
+          },
+          "positive": {
+            "phase": "s0020_positive",
+            "actual_value": "TRUE",
+            "expected_value": true,
+            "typed_readback_pass": true,
+            "ack_before": 24091,
+            "value_line": 24092,
+            "ack_after": 24093,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_007437.bmp",
+            "image_sha256": "63538b1dc393c4cd86fdee2e05ddc627e5587e607cb2de60424d9274103ffb0a",
+            "frame_present": 7437,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=11 present=7437 file=bb_007437.bmp",
+            "companions": []
+          },
+          "negative": {
+            "phase": "s0020_negative",
+            "actual_value": "FALSE",
+            "expected_value": false,
+            "typed_readback_pass": true,
+            "ack_before": 24331,
+            "value_line": 24332,
+            "ack_after": 24333,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_007481.bmp",
+            "image_sha256": "9628710f452c6bd208b3428752ae9a42d237558bee763391edd8aa8d01d7fd66",
+            "frame_present": 7481,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=12 present=7481 file=bb_007481.bmp",
+            "companions": []
+          }
+        }
+      },
+      "consumer_chain": {
+        "function": "BrnDirector::DebugComponent::RenderHUD",
+        "x360_address": "0x82209A68",
+        "evidence": "X360 RenderHUD reads this+0x10 to decide whether to draw the readout block."
+      }
+    },
+    {
+      "site_id": "BrnDirector::DebugComponent::OnActivate#0024",
+      "state": "verified",
+      "caption": "Show Camera state flags",
+      "scope": "Pinned00830/34dd native write/read/visible positive-negative-default restoration, with source reader and dependency companions; no whole-game or unrelated control claim.",
+      "notes": "Camera flags appear for TRUE with printer companion0017 enabled; negative leaves printer TRUE and removes flags; both restored afterward.",
+      "evidence_source": {
+        "source_commit": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+        "build_workflow": "78de90f2778881a169ec7e7217a1442022b74972",
+        "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+        "run_pid": 47572,
+        "slot": 62134,
+        "run": "scratch/DEBUG_MENU_1011/swarm_director_native_review_execution_20261028/p/runs/overlays/d_62134_20261028_152427",
+        "current_d158_seven_source_blobs_identical": true
+      },
+      "raw_evidence": {
+        "log_sha256": "2ba7b27b06eda0e5dc0e014f212af5ea12a72058deadf7f92ce7cdcaeccc7bc1",
+        "alias_line_index_base": 0,
+        "states": {
+          "restore": {
+            "phase": "s0024_restore",
+            "actual_value": "FALSE",
+            "expected_value": false,
+            "typed_readback_pass": true,
+            "ack_before": 28986,
+            "value_line": 28987,
+            "ack_after": 28988,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_008605.bmp",
+            "image_sha256": "a2471f60905f265d6afe689b668ce656c1647927dbab4eb4d02d2e1220b064be",
+            "frame_present": 8605,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=22 present=8605 file=bb_008605.bmp",
+            "companions": [
+              {
+                "id": "BrnDirector::DebugComponent::OnActivate#0017",
+                "purpose": "existing main printer enables the selected state-flag text consumer",
+                "alias": "D0017",
+                "credit": 0,
+                "value": false
+              }
+            ]
+          },
+          "positive": {
+            "phase": "s0024_positive",
+            "actual_value": "TRUE",
+            "expected_value": true,
+            "typed_readback_pass": true,
+            "ack_before": 28177,
+            "value_line": 28178,
+            "ack_after": 28179,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_008327.bmp",
+            "image_sha256": "03c9b0caaa234864e03979b03ee21d0b59703e1f2d3ef8aed8ccc0d99b1be2dd",
+            "frame_present": 8327,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=20 present=8327 file=bb_008327.bmp",
+            "companions": [
+              {
+                "id": "BrnDirector::DebugComponent::OnActivate#0017",
+                "purpose": "existing main printer enables the selected state-flag text consumer",
+                "alias": "D0017",
+                "credit": 0,
+                "value": true
+              }
+            ]
+          },
+          "negative": {
+            "phase": "s0024_negative",
+            "actual_value": "FALSE",
+            "expected_value": false,
+            "typed_readback_pass": true,
+            "ack_before": 28627,
+            "value_line": 28628,
+            "ack_after": 28629,
+            "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_director_native_review_execution_20261028\\p\\runs\\overlays\\d_62134_20261028_152427\\frames\\bb_008416.bmp",
+            "image_sha256": "f5ff04570da6bbe4564d686ebe7e39bb84fd37b7f72cc1d45ffc5a9f2ad86669",
+            "frame_present": 8416,
+            "raw_frame_ack": "[frame-request] pid=47572 slot=62134 seq=21 present=8416 file=bb_008416.bmp",
+            "companions": [
+              {
+                "id": "BrnDirector::DebugComponent::OnActivate#0017",
+                "purpose": "existing main printer enables the selected state-flag text consumer",
+                "alias": "D0017",
+                "credit": 0,
+                "value": true
+              }
+            ]
+          }
+        }
+      },
+      "consumer_chain": {
+        "function": "BrnDirector::MainDirector::Update",
+        "x360_address": "0x82274070",
+        "evidence": "X360 flag byte is +0x3543B; this block prints all camera state flags."
+      }
+    }
+  ],
+  "remaining_scope": "Other8writer effects lack visible native qualification; four camera readouts not promoted; earlier failures retained unchanged. Current installed normal58d is a distinct build and receives no blanket control credit."
+}

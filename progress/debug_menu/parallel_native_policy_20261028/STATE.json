@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "status": "reviewed_workflow_policy_published",
+  "publication_base": "3a31d88186e95b247b854c087d10c73e333aa853",
+  "runtime_workflow_commit": "The commit containing this record; exact runtime Git commit must be bound separately by each executor",
+  "tools": {
+    "tools/tests/run_case.ps1": {
+      "pre_git_blob": "ee0096e987d8c5b83bb0e0ebe9f697a34b9a6c72",
+      "pre_raw_lf_sha256": "f3bb7bab8da7376fd51e408243bb97273996e985f0403e04ef0bd5ae328795d4",
+      "post_git_blob": "855a055231c3927fa1ae9fe715404546598519a2",
+      "post_git_raw_sha256": "ae52582150424b48befd35972179d4f1a8ca04af0862a98355a744afcdae1247",
+      "post_normalized_lf_sha256": "ae52582150424b48befd35972179d4f1a8ca04af0862a98355a744afcdae1247",
+      "expected_working_crlf_sha256": "6c151235db1e2b228c7afab3a383689aa236119f1b15220b224b7316276c5eca",
+      "post_git_bytes": 34477,
+      "expected_working_crlf_bytes": 35042
+    },
+    "tools/diagnostics/flow_run.ps1": {
+      "pre_git_blob": "e8235a5bf846874dbfaccf022801113a6c9d0c2e",
+      "pre_raw_lf_sha256": "34a32f80d146216dcf9b384394c61f8fba1169362d5cedc7a43942f276e76707",
+      "post_git_blob": "41b540bf4473752960071b1c6bfa8ae7238a2b9e",
+      "post_git_raw_sha256": "4b646fcf24f385290742bd15261ea5074c9e07200561a4a2404499310318f5ae",
+      "post_normalized_lf_sha256": "4b646fcf24f385290742bd15261ea5074c9e07200561a4a2404499310318f5ae",
+      "expected_working_crlf_sha256": "3a031b646421bfb10b6668829477cfdd82c9b7985c8eaa289771e934b3edfce5",
+      "post_git_bytes": 231424,
+      "expected_working_crlf_bytes": 234742
+    }
+  },
+  "default_max_concurrent_other_games": 1,
+  "explicit_max_concurrent_other_games": {
+    "minimum": 1,
+    "maximum": 100,
+    "counts": "other distinct-image game processes, excluding the owned process"
+  },
+  "requirements_for_capacity_above_one": [
+    "AllowConcurrentGames opt-in",
+    "StrictGameOwnership",
+    "positive slot",
+    "private sibling slot/data paths"
+  ],
+  "fresh_independent_review": "evidence/root_review/REVIEW.md",
+  "independent_source_extracted_fixture_results": {
+    "ps5": {
+      "checks": 65,
+      "passed": 65,
+      "raw_results_sha256": "3b815d88a3e9d30b852fc34c91a649fe67cb2299822b95b8382c990c2a23f08f"
+    },
+    "ps7": {
+      "checks": 65,
+      "passed": 65,
+      "raw_results_sha256": "3aacbd2a7b90493e61e78534270495ef6ecd483654e2f12408e4325f2c63c8e4"
+    }
+  },
+  "native_launches_in_this_change": 0,
+  "new_debug_site_dispositions": 0,
+  "CXX_source_changed": false,
+  "b5_gitlink_changed": false,
+  "normal_package_changed": false,
+  "installed_executable_build_provenance_unchanged": {
+    "exe_sha256": "f06c7a7bc67d5a8518c78671a6e74653a90db424226fe54a48f5df3240ec4677",
+    "exe_mtime": "2026-10-28T05:36:51",
+    "built_from_root": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow",
+    "host": "Laptop-Adrien",
+    "parent_head": "4eb229dc646029410664d466e55ebb6f217850c6",
+    "parent_dirty": false,
+    "b5_head": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+    "b5_dirty": false,
+    "b5_root": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp"
+  },
+  "historical_native_build_provenance": "00830db6/78de90f2/34dd9dad remains a distinct historical image; do not relabel it with this runtime workflow",
+  "limits": [
+    "No claim that 100 real games were launched",
+    "Process enumeration remains sampled, not atomic capacity reservation",
+    "Control-specific native outcomes and disposition counts remain separate"
+  ]
+}

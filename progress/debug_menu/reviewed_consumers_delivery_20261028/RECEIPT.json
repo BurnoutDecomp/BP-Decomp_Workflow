@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "workflow_branch": "codex/debug-consumers-20261028",
+  "workflow_base_commit": "ae20985da4c916431ca91c03ebb3e2a6bd986ff5",
+  "source_branch": "codex/debug-consumers-20261028",
+  "source_base_commit": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+  "source_candidate_commit": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+  "source_review": {
+    "artifact": "scratch/DEBUG_MENU_1011/swarm_vmx_provider_fresh_review_20261027/FINAL_REVIEW.md",
+    "verdict": "pass",
+    "sha256": "b63c01cad75589e2f8978bbc3cb393fc84f79f824d5d6214bf3f8231fef87ec6",
+    "baseline_commit": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+    "approved_source_delta": "scratch/DEBUG_MENU_1011/swarm_vmx_provider_fresh_review_20261027/APPROVED_SOURCE_DELTA.json",
+    "approved_source_delta_sha256": "e88f51c2a6f86db333d2d9a756e509f7f7318c8863701c185a8b927d828bffd4",
+    "patch": "scratch/DEBUG_MENU_1011/swarm_vmx_provider_fresh_review_20261027/COMBINED_APPROVED.patch",
+    "patch_sha256": "a232ce5f3c5af7e63791f50d133ca4b214aa354b15c6c8271b1058e9b7f9f1e2"
+  },
+  "environment_review": {
+    "artifact": "scratch/DEBUG_MENU_1011/swarm_ai_environment_ginsu_fresh_20261028/environment/REVIEW.md",
+    "review_sha256": "fd7ea5c194ff69261e4b7fd90e1de8003ddcbeb335d875e102ba656b5f4b7fce",
+    "review_json": "scratch/DEBUG_MENU_1011/swarm_ai_environment_ginsu_fresh_20261028/environment/REVIEW.json",
+    "review_json_sha256": "74c203355a81cc08a923a9f5a68106c32f23666571b6f3d349ae7bce52ba6d59",
+    "seal": "scratch/DEBUG_MENU_1011/swarm_ai_environment_ginsu_fresh_20261028/environment/SEAL.json",
+    "seal_sha256": "a9404751a1b2c87bfd2dbc3c4985cbe41735ea4f4c0dc17eda3d03b1e778b73d",
+    "patch": "scratch/DEBUG_MENU_1011/swarm_ai_environment_ginsu_fresh_20261028/environment/INTEGRATION_READY.patch",
+    "patch_sha256": "56e9b4b8f6779681811bea266a04a042cd5a2b1734f2229fec5a8c7ac9e65f3f",
+    "verdict": "pass",
+    "native_default_scene_pass": false,
+    "native_credit": 0,
+    "full_compile": false
+  },
+  "source_files": [
+    {
+      "path": "b5-decomp/src/pc/math/VmxFloat.h",
+      "sha256": "e3ef1dc0346136d1e8ecf6bd7584c0d50139508243e6eaf4c32a6ac81e5b52b0"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/Physics/VehicleManager/VehiclePhysics/VehiclePhysics.cpp",
+      "sha256": "4b1e05610b380952b3269fd62187fb36552cbb2064a8d5aa37f3bea07e00a79b"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "sha256": "ae35fbed2ed7b66a2ca79bcde1d817674106b132140edb5720711851baa569ad"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+      "sha256": "d3f4847bce12db8b88e2b1221a6992ba74e49681992c15cddd5ced0c082e932f"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+      "sha256": "ec441f30a7b305f0da7bb12be67106e12aab4addfd4b1412896eed77bf37a9f7"
+    },
+    {
+      "path": "b5-decomp/src/GameSource/World/EnvironmentManager/BrnEnvironmentManager.cpp",
+      "sha256": "b89c4efe5cb715aab1baf469bf1eb91cfcddd75b9a9161bd58f9df96670c6d0e"
+    }
+  ],
+  "verification": {
+    "committed_postimage_hashes_match_review": true,
+    "changed_source_paths": 6,
+    "git_diff_check": "pass",
+    "source_review_scope": "reviewed semantic source/model; no hardware numeric-parity or native gameplay claim"
+  },
+  "delivery_state": {
+    "source_checkpoint": "committed-and-pushed",
+    "canonical_3003_full_dependencyhash_build": "pass (3003/3003; --rebuild; clean source heads; link pass)",
+    "native_driving_movement_baseline": "pass for the exact bounded slot62151 baseline; awaiting Root integration review; no normal install or merge",
+    "normal_game_install": "not performed",
+    "normal_install": "prepared manifest and local backup only; wait for quiescent window and Root authorization"
+  },
+  "build": {
+    "status": "pass",
+    "command": "python tools/build/build.py exe --rebuild",
+    "tu_count": 3003,
+    "completed_tu_entries": 3003,
+    "errors": 0,
+    "warnings": 86,
+    "link": "pass",
+    "cgsmap_records": 24601,
+    "exe": {
+      "path": "build/game/Burnout_PC.exe",
+      "bytes": 11629056,
+      "sha256": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da"
+    },
+    "cgsmap": {
+      "path": "build/game/Burnout_PC.cgsmap",
+      "bytes": 3148944,
+      "sha256": "9f30462f304a32a4d24999e425ffa18020d79495ba31d45dba487c996eeae9bc"
+    },
+    "provenance_json_sha256": "b89050c336cee1354d48c7b148e373e3587a59d8470ab54dc8e5219251ff4ab5",
+    "build_log_sha256": "6431d9160c463dcbadf3191ba7eb85824974df22f30b6cd3698713ff43263b18",
+    "config_sha256": "9ecdb58b786fec50f334435b3ec68cf2d9a657b0ab9fc97a0027c6d2e65f6f67",
+    "provenance_source_heads": {
+      "workflow": "4c3630796fd68e395005ee939387c22094eef891",
+      "b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2"
+    },
+    "provenance_dirty": {
+      "workflow": false,
+      "b5": false
+    },
+    "output_isolated_to_candidate_worktree": true
+  },
+  "native_launch_review": {
+    "verdict": "pass",
+    "review_path": "scratch/DEBUG_MENU_1011/swarm_graphics_prelaunch_review_20261028/candidate62151/REVIEW_REV01_PASS.json",
+    "review_sha256": "eb63bf78cbd02a412484733dfcede704862325b07d005d0e738e9b04eb0d5946",
+    "binding_sha256": "df490d0339460c57de242d3559c228432e4764de062df83f0d8e4a9dcad5550d",
+    "prelaunch_seal_sha256": "6ff2647658ad7716beff7ec16d315367489108839e355e9059ec7329e04a5d03"
+  },
+  "native_attempt_01": {
+    "status": "prelaunch-refused-before-game-start",
+    "receipt_path": "scratch/DEBUG_MENU_1011/swarm_playable_delivery_20261028/native_62151/ATTEMPT_01.json",
+    "receipt_sha256": "fc281edac324dc943234433bb0847e55294d8eecada92ee1c1b915d87626145f",
+    "launcher_exit": 2,
+    "flow_run_exit": 1,
+    "reason": "D: had 16.6 GiB free; frame-dump guard requires at least 17 GiB",
+    "game_started": false,
+    "native_credit": 0,
+    "normal_protection_unchanged": true,
+    "free_bytes_after_attempt": 17861517312,
+    "safe_retry_requires": "free space at/above 17 GiB, distinct run directory, fresh seal/review; no MinFreeGB override"
+  },
+  "native_bounded_retry_review": {
+    "verdict": "pass",
+    "path": "scratch/DEBUG_MENU_1011/swarm_graphics_prelaunch_review_20261028/candidate62151/BOUNDED_CAPACITY_RETRY_PASS.json",
+    "sha256": "fc70317536f1e8383d3b9111237b11781f3a92a3401104c31f84d1e0eaa39ac3",
+    "binding_sha256": "e9200b096121550c75536d8e4d09bb412a0c5a124e69be977f7329818cdf9477",
+    "seal_sha256": "d441e5576c117ce9a9b496ea06fa2ed9370fe0a062954082c1ab3a7a5e38c0af"
+  },
+  "native_attempt_02": {
+    "status": "pass",
+    "run_receipt_path": "scratch/DEBUG_MENU_1011/swarm_playable_delivery_20261028/native_62151_retry01/NATIVE_EXECUTION_RECEIPT.json",
+    "run_receipt_sha256": "22931e691026a2c232726393e2582c469160024afd40d28ac5aca1f70c4d5cb6",
+    "evidence_path": "scratch/DEBUG_MENU_1011/swarm_playable_delivery_20261028/native_62151_retry01/EVIDENCE.json",
+    "evidence_sha256": "9c402dcdffa18e307173b2409783ea0ae1559b44d90777b33594cade0fa44bdb",
+    "b5_source": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+    "workflow_build_source": "4c3630796fd68e395005ee939387c22094eef891",
+    "workflow_receipt_head_at_run": "aa4a23c05797612a634c62987007451f5eb7ea72",
+    "exe_sha256": "58d686cee5f8799be3c1cbf68a5a119d036896b766ede6c2f138145e376d32da",
+    "slot": 62151,
+    "required_baseline_checks": 6,
+    "result_checks": 7,
+    "all_result_checks_pass": true,
+    "final_phase": "DRIVING",
+    "motion_path_m": 307.6,
+    "motion_net_m": 212.2,
+    "motion_samples": 256,
+    "gas_positive_samples": 176,
+    "max_mph": 89.490875,
+    "asserts": 0,
+    "exceptions": 0,
+    "capture_count": 6,
+    "bmp_frame_cap": 24,
+    "bmp_actual_frames": 6,
+    "bmp_actual_bytes": 22118724,
+    "brngame_log_max_threshold_mib": 128,
+    "brngame_log_threshold_is_polled_abort_with_possible_overshoot": true,
+    "brngame_log_actual_bytes": 8578585,
+    "min_free_gib": 8,
+    "normal_protection_unchanged": true,
+    "normal_protected_count": 25,
+    "profile_restored": true,
+    "assets_recopied": false,
+    "readonly_assets_verified": true,
+    "max_other_games_observed": 0,
+    "owned_cleanup_complete": true,
+    "native_credit": 0,
+    "normal_install_performed": false,
+    "visual_review_performed": false
+  },
+  "root_integration_review": {
+    "verdict": "approved",
+    "scope": "six-source candidate plus bounded slot62151 native baseline",
+    "normal_install_authorized_after_quiescent_window_only": true
+  },
+  "integration": {
+    "b5_target_branch": "dev",
+    "b5_before": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+    "b5_integrated_commit": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+    "b5_fast_forward": true,
+    "workflow_target_branch": "main",
+    "workflow_main_base": "9caff39977c66215e940a9e392027477ba31869d",
+    "workflow_feature_tip": "13cc4e1a9edda67629c4b85b079cbe3d11cb3829",
+    "workflow_merge_strategy": "no-ff merge; preserves current main audit/CI and 32 native verdicts",
+    "workflow_gitlink_target": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+    "workflow_gitlink_matches_origin_dev": true,
+    "task_branch_retirement": "pending ancestry proof and worktree detach",
+    "workflow_main_preserves_32_site_verdicts": true,
+    "workflow_main_preserves_current_funcaudit_stubs_and_source_status": true,
+    "workflow_merge_commit": "cb3045e9e291fc9133348385e3e99257dd161c61",
+    "shared_checkout_backup_manifest_sha256": "43b3a573c542bd13b4d1ac1ab4983a4f0a60e171b71165416253563cf357bf8d",
+    "workflow_merge_commit_parents": [
+      "9caff39977c66215e940a9e392027477ba31869d",
+      "13cc4e1a9edda67629c4b85b079cbe3d11cb3829"
+    ],
+    "workflow_main_tip_before_receipt_followup": "cb3045e9e291fc9133348385e3e99257dd161c61",
+    "workflow_main_has_current_native_credit_and_audits": true,
+    "b5_dev_fast_forward_push": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2"
+  },
+  "shared_checkout_reconciliation": {
+    "backup_manifest_path": "scratch/DEBUG_MENU_1011/reviewed_consumers_delivery_20261028/shared_checkout_backup_rev01/BACKUP_MANIFEST.json",
+    "backup_manifest_sha256": "43b3a573c542bd13b4d1ac1ab4983a4f0a60e171b71165416253563cf357bf8d",
+    "copied_wip_files": 8,
+    "copied_wip_bytes": 3123422,
+    "b5_CON_preserved_in_place": true,
+    "tools_volatility_wip_pointer_preserved": true,
+    "shared_checkout_reconciled_source_paths": 6
+  },
+  "normal_install_plan": {
+    "manifest_path": "scratch/DEBUG_MENU_1011/swarm_playable_delivery_20261028/normal_install_backup_rev01/NORMAL_INSTALL_PLAN.json",
+    "manifest_sha256": "35c8f8413865e08600663b04a1af9dc9c0d58178a3a4c738e4d2956aec69608f",
+    "candidate_payload_count": 15,
+    "backup_files": 36,
+    "backup_bytes": 98946470,
+    "profiles": 11,
+    "configs": 2,
+    "logs": 8,
+    "candidate_payloads_copied_to_normal": false,
+    "normal_install_performed": false,
+    "requires_explicit_quiescent_window_and_root_go_ahead": true,
+    "status": "backup and plan prepared; normal install not performed; waiting for Root quiescent authorization"
+  }
+}
