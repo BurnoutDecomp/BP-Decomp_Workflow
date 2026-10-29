@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "kind": "root_decision_publication_carryforward",
+  "root_approval_authority": "ROOT_DECISION.json",
+  "root_decision_sha256": "fde234eb02ac5771e34d541b7be740f3347d8c9b0c1b69e0675e6e8e70882fe6",
+  "root_approved_workflow_base": "1d01b212100764ac03bb11a944c5f5bf84273fdb",
+  "effective_workflow_parent": "1f6c009fb7c226083a75de559e8b395254b8ee3e",
+  "effective_workflow_parent_subject": "chore: reconcile source status + audits + b5-decomp pointer to 84a12a2f893f",
+  "effective_workflow_parent_first_parent": "1d01b212100764ac03bb11a944c5f5bf84273fdb",
+  "reason": "origin/main advanced by a routine source-progress reconciliation after the Root decision was pinned. The publication preserves the original Root receipt unchanged and carries its approval forward only after confirming all three canonical debug-menu preimages match the receipt at the effective parent.",
+  "effective_parent_changed_paths": [
+    "progress/funcaudit.json",
+    "progress/source_status.json",
+    "progress/status.json",
+    "progress/stubs.json"
+  ],
+  "canonical_preimage_verification": {
+    "progress/debug_menu/entries.json": {
+      "root_decision_working_tree_sha256": "9963d757c53e13295b341c207190677338a6495d20a6b49cabcf57a7ab09d506",
+      "parent_commit_blob_sha256": "9963d757c53e13295b341c207190677338a6495d20a6b49cabcf57a7ab09d506",
+      "windows_autocrlf_checkout_sha256": "9963d757c53e13295b341c207190677338a6495d20a6b49cabcf57a7ab09d506"
+    },
+    "progress/debug_menu/verdicts.json": {
+      "root_decision_working_tree_sha256": "a9e975a1e09e1972c33fde8e7760b89ef0b2d3a3cb0017643dca5419045aa7b4",
+      "parent_commit_blob_sha256": "a9e975a1e09e1972c33fde8e7760b89ef0b2d3a3cb0017643dca5419045aa7b4",
+      "windows_autocrlf_checkout_sha256": "a9e975a1e09e1972c33fde8e7760b89ef0b2d3a3cb0017643dca5419045aa7b4"
+    },
+    "progress/debug_menu/README.md": {
+      "root_decision_working_tree_sha256": "f297ed46f6d010d56c35e10b80da777aaaf1eed206991957ffa5df8b084cc706",
+      "parent_commit_blob_sha256": "01791540fb783cf9cc855a2d2bb69d09d8724f4f52c4a3f8df8b7da5362ad4e3",
+      "windows_autocrlf_checkout_sha256": "f297ed46f6d010d56c35e10b80da777aaaf1eed206991957ffa5df8b084cc706"
+    }
+  },
+  "source_submodule_head_at_effective_parent": "84a12a2f893ffbee4c692bef75f278e9163f3f94",
+  "approved_site_count": 14,
+  "approved_site_ids": [
+    "BrnEffects::EffectsDebugComponent::SetupBoostMenu#0004",
+    "BrnEffects::EffectsDebugComponent::OnActivate#0015",
+    "BrnEffects::EffectsDebugComponent::OnActivate#0016",
+    "BrnEffects::EffectsDebugComponent::OnActivate#0019",
+    "BrnEffects::EffectsDebugComponent::OnActivate#0020",
+    "BrnEffects::EffectsDebugComponent::OnActivate#0022",
+    "BrnEffects::EffectsDebugComponent::OnActivate#0023",
+    "BrnAI::ResetOnTrackDebugComponent::OnActivate#0008",
+    "BrnAI::ResetOnTrackDebugComponent::OnActivate#0009",
+    "BrnWorld::WorldDebugComponent::OnActivate#0007",
+    "BrnWorld::WorldDebugComponent::OnActivate#0008",
+    "CgsSceneManager::TriangleCollisionDebugComponent::OnActivate#0013",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0011",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0012"
+  ],
+  "canonical_before": {
+    "pending": 1230,
+    "verified": 111,
+    "original-noop": 14
+  },
+  "canonical_after": {
+    "pending": 1216,
+    "verified": 111,
+    "original-noop": 28
+  },
+  "site_transition_check": "all fourteen IDs remain pending at the effective parent and have no earlier verdict entry",
+  "limitations": [
+    "This receipt records publication continuity only; it is not a replacement or amendment to Root approval.",
+    "No source files or b5-decomp submodule pointer are changed by this publication.",
+    "No native credit is granted by the fourteen original-inert dispositions."
+  ]
+}

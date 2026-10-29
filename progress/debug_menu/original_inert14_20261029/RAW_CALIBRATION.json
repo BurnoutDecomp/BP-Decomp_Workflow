@@ -1,0 +1,99 @@
+{
+  "warning": "reader historical 1594-byte bias; self-test alone is insufficient",
+  "second_derivations": [
+    {
+      "address": "0x827e5a70",
+      "word": "0x3d40820d",
+      "independent_symbolic_derivation": "World ctor lis r10,off_820CE69C@ha",
+      "pass": true
+    },
+    {
+      "address": "0x827e5a78",
+      "word": "0x38eae69c",
+      "independent_symbolic_derivation": "World ctor addi r7,r10,off_820CE69C@l",
+      "pass": true
+    },
+    {
+      "address": "0x827e5a98",
+      "word": "0x90e80000",
+      "independent_symbolic_derivation": "World ctor stw r7,0(r8)",
+      "pass": true
+    },
+    {
+      "address": "0x827e3690",
+      "word": "0x3d60820d",
+      "independent_symbolic_derivation": "Effects ctor lis r11,off_820CEBEC@ha",
+      "pass": true
+    },
+    {
+      "address": "0x827e3694",
+      "word": "0x3b6bebec",
+      "independent_symbolic_derivation": "Effects ctor addi r27,r11,off_820CEBEC@l",
+      "pass": true
+    },
+    {
+      "address": "0x827e36cc",
+      "word": "0x937e0100",
+      "independent_symbolic_derivation": "Effects ctor stw r27,0x100(r30)",
+      "pass": true
+    },
+    {
+      "address": "0x827e3830",
+      "word": "0x3d60820d",
+      "independent_symbolic_derivation": "AI ctor lis r11,off_820CF9B4@ha",
+      "pass": true
+    },
+    {
+      "address": "0x827e3838",
+      "word": "0x38abf9b4",
+      "independent_symbolic_derivation": "AI ctor addi r5,r11,off_820CF9B4@l",
+      "pass": true
+    },
+    {
+      "address": "0x827e387c",
+      "word": "0x90a90540",
+      "independent_symbolic_derivation": "AI ctor stw r5,0x540(r9)",
+      "pass": true
+    },
+    {
+      "address": "0x8284cb38",
+      "word": "0x4e800020",
+      "independent_symbolic_derivation": "shared empty body blr",
+      "pass": true
+    },
+    {
+      "address": "0x827e5a50",
+      "word": "0x4bffc3e1",
+      "target": "0x827e1e30",
+      "independent_symbolic_derivation": "World ctor -> SceneModule C++ ctor",
+      "pass": true
+    },
+    {
+      "address": "0x828caed0",
+      "word": "0x4bfdfe81",
+      "target": "0x828aad50",
+      "independent_symbolic_derivation": "Triangle RenderWorld -> BuildSpacialMap",
+      "pass": true
+    },
+    {
+      "address": "0x828d0588",
+      "word": "0x4bff28e9",
+      "target": "0x828c2e70",
+      "independent_symbolic_derivation": "Scene RenderWorld -> DrawTriangleTest",
+      "pass": true
+    },
+    {
+      "independent_original_database_receipt": "scratch\\DEBUG_MENU_1011\\swarm_trianglecollision_draw_test_recovery_20261028\\evidence\\ARTIST_BYTES_AND_XREFS.json",
+      "sha256": "33fcbccc45af9eebbd213cd41212195be7f89a6fbe24c1ffab4d840a1c4d6653",
+      "all_1648_bytes_match": true
+    }
+  ],
+  "neighbour_data_check": "0x820CE978 immediately after Scene 8-slot table is ASCII Scene manager NUL",
+  "raw_path": "D:/Reverse/IDA_Files/artist_i64.raw",
+  "raw_sha256": "9c15e6b269d6f6e5248038092cd77d48af098d8b3a682e60cc6175bbcb420bad",
+  "raw_size": 320888599,
+  "tools": {
+    "tools\\re\\x360rd.py": "cbfbcdb8eee42c57f8b1392f75b8b20880642f90785cf133185ad7b19cfb2b3d",
+    "tools\\re\\ppcdis.py": "6138358d92853af75b453cb55f588f758a98d7181bf506cd4ee2b7f35efc26d0"
+  }
+}
