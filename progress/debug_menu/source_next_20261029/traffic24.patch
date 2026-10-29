@@ -1,0 +1,77 @@
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
+@@ -16984,17 +16984,63 @@
+                 GetVehicle(luVehicle)->SetAlarmOn(true);   // @0x8270FC10
+             }
+ 
+-            // GATE G-ARTIC: the cab/trailer pairing arms and their
+-            // Array<TrafficCrashInfo,160>::Append. BLOCKER: needs Vehicle::GetTrailerIndex, absent
+-            // here; and the standard-species arm early-outs on muOtherHalfIndex == KU_INVALID_VEHICLE,
+-            // which every generated car has. DELETE-WHEN trailers land.
+-            {
+-                static bool sbLoggedArticGate = false;
+-                LogGateOnce(sbLoggedArticGate,
+-                            "loop 1 cab/trailer pairing + Array<TrafficCrashInfo,160>::Append "
+-                            "parked -- Vehicle::GetTrailerIndex is absent and no generated car "
+-                            "carries a trailer this round");
+-            }
++            // ARTIST82733100..82733450: the other articulated half is queued
++            // for the existing emergency-crash drain. The two roles validate
++            // their reciprocal links at different points; retain that order.
++            u32 luOtherVehicle;
++            const char* lpcPairSelfCrashMessage;
++            if (lpVehicle->IsOfStandardSpecies())
++            {
++                lpcPairSelfCrashMessage = "Trailer's been told to crash into itself: ";
++                luOtherVehicle = lpVehicle->GetOtherHalfIndex();
++                if (luOtherVehicle == KU_INVALID_VEHICLE)
++                {
++                    continue;
++                }
++                const Vehicle* lpTrailer = GetVehicle(luOtherVehicle);
++                CGS_ASSERT(lpTrailer->IsOfTrailerSpecies(), "IsOfTrailerSpecies()");
++                CGS_ASSERT(lpTrailer->GetOtherHalfIndex() == luVehicle,
++                           "Mismatched artic parts: cab id=");
++                if (lpTrailer->IsCrashing() || EntityIndexOf(lCrasherId) == luOtherVehicle)
++                {
++                    continue;
++                }
++            }
++            else if (lpVehicle->IsOfTrailerSpecies())
++            {
++                lpcPairSelfCrashMessage = "Cab's been told to crash into itself: ";
++                if (lpVehicle->GetOtherHalfIndex() == KU_INVALID_VEHICLE)
++                {
++                    continue;
++                }
++                luOtherVehicle = lpVehicle->GetCabIndex();
++                const Vehicle* lpCab = GetVehicle(luOtherVehicle);
++                if (lpCab->IsCrashing() || EntityIndexOf(lCrasherId) == luOtherVehicle)
++                {
++                    continue;
++                }
++                CGS_ASSERT(lpCab->GetTrailerIndex() == luVehicle,
++                           "Mismatched artic parts: trailer id=");
++            }
++            else
++            {
++                continue;
++            }
++
++            TrafficCrashInfo lPairedCrash;
++            lPairedCrash.mVictimId = MakeTrafficEntityId(luOtherVehicle);
++            lPairedCrash.mCauserId = lCrasherId;
++            if (lPairedCrash.mCauserId.muValue == 0xFFFFFFFFu)
++            {
++                lPairedCrash.mCauserId = MakeTrafficEntityId(luVehicle);
++            }
++            lPairedCrash.muCrashTrafficType =
++                static_cast<u32>(BrnPhysics::Vehicle::eCrashTrafficType_Standard);
++            CGS_ASSERT(lPairedCrash.mVictimId.muValue != lPairedCrash.mCauserId.muValue,
++                       lpcPairSelfCrashMessage);
++            // Original stores only victim, causer and type. The emergency drain
++            // does not consume mbNeedsToBeSentToCrashModule; leave it unwritten.
++            maEmergencyCrashingVehicles.Append(lPairedCrash);
+         }
+     }
+ 

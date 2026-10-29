@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "created_utc": "2026-10-28T22:20:28.6552941Z",
-  "status": "private source checkpoint; review pending",
-  "workflow_branch": "codex/debug-source-composition-20261028",
-  "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
-  "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "6d71bb8299cc7fd145289dd73428c9b7d440a327",
-  "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
-  "review_policy": "pending checkpoints are not verified or integrated",
+  "status": "private38 source checkpoint; independent narrow source reviews and integration compiles pass; full build/native pending",
+  "workflow_branch": "codex/source-next-20261029",
+  "workflow_base": "33df46f7db47d95db5db3c2003890c9e971234e1",
+  "b5_source_branch": "codex/source-next-20261029",
+  "b5_source_head": "8d71beb96e0cf681be78e235987bdbfce3c45dd9",
+  "b5_base": "abbc9047d850a4665d959993012261c55205e5e5",
+  "review_policy": "Each receipt retains its own limits; no site/native credit or public integration follows from this checkpoint",
   "native_game_launched": false,
   "site_credit": 0,
   "packets": [
@@ -1865,7 +1865,7 @@
       "reviewer": "/root/gui_followon_review_luna_max",
       "formal_review_time_utc": "2026-10-28T21:38:51.659Z",
       "formal_review_turn_id": "01a18469-89bf-76f1-8c86-3a8d334be133",
-      "review_scope": "XUID retained across event58→event156 and Profile::AddMugshot; prior 8 TU gates, 35 static checks and actual Profile CPU receipt only. No runtime event delivery, profile file, save/reload or native proof.",
+      "review_scope": "XUID retained across event58\u2192event156 and Profile::AddMugshot; prior 8 TU gates, 35 static checks and actual Profile CPU receipt only. No runtime event delivery, profile file, save/reload or native proof.",
       "source_files": [
         {
           "path": "src/GameSource/Game/GameBridgeNetworkToX.cpp",
@@ -2301,6 +2301,292 @@
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
+    },
+    {
+      "packet_id": "traffic_chunk21_reinsert_caller",
+      "review_path": "review_traffic_chunk21_reinsert_caller_sol_20261029/INTEGRATION_SUPPLEMENT.md",
+      "review_sha256": "febbcac5c4a53705b77d664751df09ac7fe317acd15718c2472bb5e723662070",
+      "reviewed_patch_path": "review_traffic_chunk21_reinsert_caller_sol_20261029/reviewed-integration.patch",
+      "reviewed_patch_sha256": "369b673c6d9a3003d83a74b2bc0c696a74da3d79367bcb75625698a310810cd4",
+      "integration_patch": "traffic21.patch",
+      "integration_patch_sha256": "369b673c6d9a3003d83a74b2bc0c696a74da3d79367bcb75625698a310810cd4",
+      "transport": "Reviewer LF patch unchanged",
+      "files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "c38a9cad3c3bcd909812cb3a3a53f0f3bb00565d730df57e76f9345e5258fb26",
+          "post_sha256": "c7130b6258e84176afc87d63eea08d3518b20607ca407aa57915076f200adb0a",
+          "pre_blob": "72efc512e5a47b3764d3538160fa0f2706ad08aa",
+          "post_blob": "b4409e96428b08b1c5cd0d0ab5a0e86c112407d3"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.h",
+          "pre_sha256": "7ee07e5de18bf30a08fd980b0ca61128b1f107eb164e04253c2830252242111a",
+          "post_sha256": "b7db1b093a226ae836bf5168d352f4fbd2620fdf43f2f5045a8567e087908e7f",
+          "pre_blob": "120a01fec8bb7d29643acf000b8fd1473c6ba34c",
+          "post_blob": "4b2ba64685d731780ca3d078f6da760c852bc008"
+        }
+      ],
+      "raw_cached_apply_check": 0,
+      "raw_cached_apply": 0,
+      "site_credit": 0,
+      "native_credit": 0,
+      "source_commit": "baf38ea85336f953f2c5eb31c7adde0ecd7fcdc2",
+      "source_parent": "abbc9047d850a4665d959993012261c55205e5e5",
+      "source_tree": "9bf0c68ee3aa84b690ef06fdb7ccacaa34579cd9",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_git_blob_oid": "72efc512e5a47b3764d3538160fa0f2706ad08aa",
+          "post_git_blob_oid": "b4409e96428b08b1c5cd0d0ab5a0e86c112407d3",
+          "post_raw_sha256": "c7130b6258e84176afc87d63eea08d3518b20607ca407aa57915076f200adb0a"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.h",
+          "pre_git_blob_oid": "120a01fec8bb7d29643acf000b8fd1473c6ba34c",
+          "post_git_blob_oid": "4b2ba64685d731780ca3d078f6da760c852bc008",
+          "post_raw_sha256": "b7db1b093a226ae836bf5168d352f4fbd2620fdf43f2f5045a8567e087908e7f"
+        }
+      ],
+      "review_verdict": "pass_source_review",
+      "review_scope": "Exact bounded caller and reset/setter only; missing positive request-list producer and complete module/query/runtime behavior remain unverified.",
+      "validation": "Independent packet controls plus fresh source32-pre/final-candidate-post owning-TU and Camera caller compiles; zero warnings/errors.",
+      "native_game_launched": false,
+      "affected_sites": []
+    },
+    {
+      "packet_id": "traffic_chunk22_car_streamer_policy",
+      "review_path": "review_traffic_chunk22_policy_sol_cc2b2c953e/REVIEW.md",
+      "review_sha256": "d08ee02c5c89212dcbdb2f63c4e6c676d450e46dd37e8dd032b245d8c78962c3",
+      "reviewed_patch_path": "review_traffic_chunk22_policy_sol_cc2b2c953e/reviewed-changes.patch",
+      "reviewed_patch_sha256": "3b11f6b2906525eebbe0f430debbafeca9bd8d74d2fe0168d855fd9963571c0d",
+      "integration_patch": "traffic22.patch",
+      "integration_patch_sha256": "3b11f6b2906525eebbe0f430debbafeca9bd8d74d2fe0168d855fd9963571c0d",
+      "transport": "Reviewer LF patch unchanged",
+      "files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp",
+          "pre_sha256": "1d7661a66eaa1c3ea82f16fa3f1a824a84799c1f3bfd4bd72f2d4566f570b726",
+          "post_sha256": "479e71873f09edb3f1fb04f094c023269d8a20bed1e11e2ad8a90e6c0c76831d",
+          "pre_blob": "9421cfa673009d04c5ba70e01bbae9f425ec0e4b",
+          "post_blob": "bee45ede4024fc32f59fe97f02a088210c0e0e1d"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.h",
+          "pre_sha256": "16af9642111f82e7b4f84fa31684a998c54dba2c22f8f5add9d73f1c31a73071",
+          "post_sha256": "48684e85ba85fa3082535f11c807b460345fbd820985fa7b363dd63b69a37563",
+          "pre_blob": "0dedde988dda5a4f30fe18d861fa07ae36b1bb0c",
+          "post_blob": "1c2036ae1bd4a0429418135fe1c748713c167ee8"
+        }
+      ],
+      "raw_cached_apply_check": 0,
+      "raw_cached_apply": 0,
+      "site_credit": 0,
+      "native_credit": 0,
+      "source_commit": "8d2f9e3b7f531ef2c7311b56a02deaebaacf4ad4",
+      "source_parent": "baf38ea85336f953f2c5eb31c7adde0ecd7fcdc2",
+      "source_tree": "e402493ed7f50617269a78d1413c782ab0c2c61f",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp",
+          "pre_git_blob_oid": "9421cfa673009d04c5ba70e01bbae9f425ec0e4b",
+          "post_git_blob_oid": "bee45ede4024fc32f59fe97f02a088210c0e0e1d",
+          "post_raw_sha256": "479e71873f09edb3f1fb04f094c023269d8a20bed1e11e2ad8a90e6c0c76831d"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.h",
+          "pre_git_blob_oid": "0dedde988dda5a4f30fe18d861fa07ae36b1bb0c",
+          "post_git_blob_oid": "1c2036ae1bd4a0429418135fe1c748713c167ee8",
+          "post_raw_sha256": "48684e85ba85fa3082535f11c807b460345fbd820985fa7b363dd63b69a37563"
+        }
+      ],
+      "review_verdict": "pass_source_review",
+      "review_scope": "Constructor and request transport only; loader failure interpretation and full streaming completion are outside scope.",
+      "validation": "Independent packet controls plus fresh source32-pre/final-candidate-post owning-TU and Camera caller compiles; zero warnings/errors.",
+      "native_game_launched": false,
+      "affected_sites": []
+    },
+    {
+      "packet_id": "traffic_chunk23_pressure_split_occupancy",
+      "review_path": "chunk23_review_2fe37081d92a4d2e9382a689e831519b/REVIEW.md",
+      "review_sha256": "517b35143c0e6aeb0322e199439bbbfbff489a4a737e817a11b6ecd7e4c4ea01",
+      "reviewed_patch_path": "swarm_traffic_source_backlog_20261028/chunk23_pressure_split_occupancy/changes.patch",
+      "reviewed_patch_sha256": "bf64b0b386e9f33f97d0e6af40e27d39269f426ec6cd715971bdbe4a37ee3e1a",
+      "integration_patch": "traffic23.patch",
+      "integration_patch_sha256": "860021e1cca40870ae8dc10c46e50ab0166486353ae59bd94fc62e6d2c2364eb",
+      "transport": "LF transport normalization only",
+      "files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "c7130b6258e84176afc87d63eea08d3518b20607ca407aa57915076f200adb0a",
+          "post_sha256": "c941a806efdf20a0aa15acc617bbeea05ede1b9b80f5fc80df370832d57b7e12",
+          "pre_blob": "b4409e96428b08b1c5cd0d0ab5a0e86c112407d3",
+          "post_blob": "3f1bd5ea863b00e2bda74aa252e7e6f0f43a3fd5"
+        }
+      ],
+      "raw_cached_apply_check": 0,
+      "raw_cached_apply": 0,
+      "site_credit": 0,
+      "native_credit": 0,
+      "source_commit": "a8ccb93f5a5efdde8f3dc324185186fe24157711",
+      "source_parent": "8d2f9e3b7f531ef2c7311b56a02deaebaacf4ad4",
+      "source_tree": "ed7499fea80f3498930b7186333b92613390adfa",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_git_blob_oid": "b4409e96428b08b1c5cd0d0ab5a0e86c112407d3",
+          "post_git_blob_oid": "3f1bd5ea863b00e2bda74aa252e7e6f0f43a3fd5",
+          "post_raw_sha256": "c941a806efdf20a0aa15acc617bbeea05ede1b9b80f5fc80df370832d57b7e12"
+        }
+      ],
+      "review_verdict": "pass_source_review",
+      "review_scope": "Prepared-runtime span occupancy only; console floating-point hardware and unprepared-runtime parity remain unverified.",
+      "validation": "Independent packet controls plus fresh source32-pre/final-candidate-post owning-TU and Camera caller compiles; zero warnings/errors.",
+      "native_game_launched": false,
+      "affected_sites": []
+    },
+    {
+      "packet_id": "traffic_chunk24_crashed_articulated_pairing",
+      "review_path": "swarm_traffic_source_backlog_20261028/review_chunk24_independent_426e00ca061d4212af82aef28df54832/REVIEW.md",
+      "review_sha256": "fc8e21947b7671c6d24b74917de2854898ecdf9fa6d329bdbe61cbe38d05a193",
+      "reviewed_patch_path": "swarm_traffic_source_backlog_20261028/chunk24_crashed_articulated_pairing/changes.patch",
+      "reviewed_patch_sha256": "47843be33968850d7f6c1acfa4371961e48f67e6a9e0f9932ad4c494f57e6687",
+      "integration_patch": "traffic24.patch",
+      "integration_patch_sha256": "0b9a691af07f4ebff7f43430ad687533a344ca6c6751582d3b2612ba2a36e283",
+      "transport": "LF transport normalization only",
+      "files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "c941a806efdf20a0aa15acc617bbeea05ede1b9b80f5fc80df370832d57b7e12",
+          "post_sha256": "05d50af0b94e21dcb896583835c15b72704e6d2392905c0294a5439c283abe05",
+          "pre_blob": "3f1bd5ea863b00e2bda74aa252e7e6f0f43a3fd5",
+          "post_blob": "b4b2f304ade8683610a426a7613cf4b573c551ef"
+        }
+      ],
+      "raw_cached_apply_check": 0,
+      "raw_cached_apply": 0,
+      "site_credit": 0,
+      "native_credit": 0,
+      "source_commit": "e6497264305b1f64cd35fe6e7b2a682b22a6101e",
+      "source_parent": "a8ccb93f5a5efdde8f3dc324185186fe24157711",
+      "source_tree": "d3b9d8b809143ffad78c89381968f560a8dd6bed",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_git_blob_oid": "3f1bd5ea863b00e2bda74aa252e7e6f0f43a3fd5",
+          "post_git_blob_oid": "b4b2f304ade8683610a426a7613cf4b573c551ef",
+          "post_raw_sha256": "05d50af0b94e21dcb896583835c15b72704e6d2392905c0294a5439c283abe05"
+        }
+      ],
+      "review_verdict": "pass_source_review",
+      "review_scope": "Articulated first-loop emergency enqueue only; full owner scheduling and emergency drain/runtime remain unverified.",
+      "validation": "Independent packet controls plus fresh source32-pre/final-candidate-post owning-TU and Camera caller compiles; zero warnings/errors.",
+      "native_game_launched": false,
+      "affected_sites": []
+    },
+    {
+      "packet_id": "effects_arbitrator_bound32",
+      "review_path": "review_effects_arbitrator_bound32_20261029_73e60d3f/REVIEW.md",
+      "review_sha256": "c015b950bacb5c2e82e1c45696c143c34701ac46ab34b9b244cc6345ad6501b3",
+      "reviewed_patch_path": "review_effects_arbitrator_bound32_20261029_73e60d3f/strict-bound32.patch",
+      "reviewed_patch_sha256": "d72aab9c523238efa7365fb1763ae1217e00e7460783e5c47b37439cc4532cd4",
+      "integration_patch": "effects32.patch",
+      "integration_patch_sha256": "276005f7f07d202d87da16cf2ad3edac5730e4f20b0ded1ea766f9346ec62616",
+      "transport": "LF transport normalization and removal of b5-decomp path prefix only",
+      "files": [
+        {
+          "path": "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp",
+          "pre_sha256": "e69a49aced2b1287a94850f1513a8824355cc1e5cc13f359c46a49b262188fcb",
+          "post_sha256": "eb7c342e2f1cdb6261a38d866448f244bcc79f16cb3900915b4270fc90b2bf17",
+          "pre_blob": "1e1df1d9682f9e3798feef6e48a22677df798c9d",
+          "post_blob": "c0da8d6cb7315af702cc2105b1997beaf70fc8b2"
+        }
+      ],
+      "raw_cached_apply_check": 0,
+      "raw_cached_apply": 0,
+      "site_credit": 0,
+      "native_credit": 0,
+      "source_commit": "63f0400928e9d50cdf64bce4557a64097e512b8f",
+      "source_parent": "e6497264305b1f64cd35fe6e7b2a682b22a6101e",
+      "source_tree": "6198d0da4633158211be1a6cc25b233366a5a801",
+      "source_files": [
+        {
+          "path": "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp",
+          "pre_git_blob_oid": "1e1df1d9682f9e3798feef6e48a22677df798c9d",
+          "post_git_blob_oid": "c0da8d6cb7315af702cc2105b1997beaf70fc8b2",
+          "post_raw_sha256": "eb7c342e2f1cdb6261a38d866448f244bcc79f16cb3900915b4270fc90b2bf17"
+        }
+      ],
+      "review_verdict": "pass_source_review",
+      "review_scope": "Two SPrintf literal32 bounds only; event storage remains33 and source callback fixtures are not whole-engine/native proof.",
+      "validation": "Independent packet controls plus fresh source32-pre/final-candidate-post owning-TU and Camera caller compiles; zero warnings/errors.",
+      "native_game_launched": false,
+      "affected_sites": []
+    },
+    {
+      "packet_id": "camera_x360_compressed_picture",
+      "review_path": "review_camera_x360_compressed_picture_20261029_independent/REVIEW.md",
+      "review_sha256": "dda14400cdc6ffdcb841d0a7d6856c58e9d900a40991327cbb6a4f8ab3cf53a2",
+      "reviewed_patch_path": "review_camera_x360_compressed_picture_20261029_independent/independently_derived.patch",
+      "reviewed_patch_sha256": "50a5c8dff5b685ff83d9a21937c5e1ce1d937e0a14d8350fe261e548764c04fa",
+      "integration_patch": "camera.patch",
+      "integration_patch_sha256": "2f9247956c387c655eb1d1c5b9d13a9f5062e2d31fdc6a8d2326d6f56650b181",
+      "transport": "Derived from sealed exact pre/post source; preserve each Git preimage CRLF/LF convention",
+      "files": [
+        {
+          "path": "src/GameShared/Jobs/DXTCompress/CgsNetworkTextureDXTCompress.h",
+          "pre_sha256": "f25a8a65da2732e49951c547cfce13210e16f5e2ff07ddf3d22935236a07a7a2",
+          "post_sha256": "e29d37633e3222086c3673190f3bed34def4740374e40f04f8ae6e5035794972",
+          "pre_blob": "196a5d3e0568ea172d4c826da94c1068b4c545ee",
+          "post_blob": "28c32ca867a939be1eca9433b3c03fe10d7ee146"
+        },
+        {
+          "path": "src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.cpp",
+          "pre_sha256": "4353d390a5f31c11ea42723f0eaea1aed835ab7b24ce0e802ccb75d6ed52c31d",
+          "post_sha256": "e8d5db277bbe8df8adde2650ec7f710bd68945e2b6e16b90a230c887b580751e",
+          "pre_blob": "24969ffcff1ed83a72cd5e20ec49729e20c3b254",
+          "post_blob": "07e2f63479ddeccd00ec0f2ed7a9d1a834e95f63"
+        },
+        {
+          "path": "src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.h",
+          "pre_sha256": "78b35b4944f759b651a746df965817d61eda656e1e320de96497e3f9a7487ed5",
+          "post_sha256": "ca06dd24177a68a4cc73051199c7b70bd73c6903d7ca015198b4364698e27553",
+          "pre_blob": "7bca37ff674c30a297bf13a7803f24076da2305f",
+          "post_blob": "57312d2e5a9429ac35daee771525aed33ae5625b"
+        }
+      ],
+      "raw_cached_apply_check": 0,
+      "raw_cached_apply": 0,
+      "site_credit": 0,
+      "native_credit": 0,
+      "source_commit": "8d71beb96e0cf681be78e235987bdbfce3c45dd9",
+      "source_parent": "63f0400928e9d50cdf64bce4557a64097e512b8f",
+      "source_tree": "915ea1e81abeb1c94d2e4529bbba007cb1656b2c",
+      "source_files": [
+        {
+          "path": "src/GameShared/Jobs/DXTCompress/CgsNetworkTextureDXTCompress.h",
+          "pre_git_blob_oid": "196a5d3e0568ea172d4c826da94c1068b4c545ee",
+          "post_git_blob_oid": "28c32ca867a939be1eca9433b3c03fe10d7ee146",
+          "post_raw_sha256": "e29d37633e3222086c3673190f3bed34def4740374e40f04f8ae6e5035794972"
+        },
+        {
+          "path": "src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.cpp",
+          "pre_git_blob_oid": "24969ffcff1ed83a72cd5e20ec49729e20c3b254",
+          "post_git_blob_oid": "07e2f63479ddeccd00ec0f2ed7a9d1a834e95f63",
+          "post_raw_sha256": "e8d5db277bbe8df8adde2650ec7f710bd68945e2b6e16b90a230c887b580751e"
+        },
+        {
+          "path": "src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.h",
+          "pre_git_blob_oid": "7bca37ff674c30a297bf13a7803f24076da2305f",
+          "post_git_blob_oid": "57312d2e5a9429ac35daee771525aed33ae5625b",
+          "post_raw_sha256": "ca06dd24177a68a4cc73051199c7b70bd73c6903d7ca015198b4364698e27553"
+        }
+      ],
+      "review_verdict": "pass_source_review",
+      "review_scope": "Prepared-source method and existing host queue path only. Prepare, Update and GetLocalCameraPicture remain placeholders. Bridge event72 forwards GUI569 to PhotoBooth and its cached copy; queue timing and borrowed output-ring lifetime remain unverified.",
+      "validation": "Independent packet controls plus fresh source32-pre/final-candidate-post owning-TU and Camera caller compiles; zero warnings/errors.",
+      "native_game_launched": false,
+      "affected_sites": []
     }
   ]
 }
