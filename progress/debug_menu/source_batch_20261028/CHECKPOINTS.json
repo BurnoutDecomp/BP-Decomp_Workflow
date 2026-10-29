@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "7e1d21bcccfbcd806256d8a1a806f18f91a97e6f",
+  "b5_source_head": "41c5a22197df9acef5ea522eaf582bdecfe33cde",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1081,6 +1081,59 @@
         }
       ],
       "source_commit": "7e1d21bcccfbcd806256d8a1a806f18f91a97e6f",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "director_nearclip_corners",
+      "source_packet_path": "swarm_director_nearclip_corners_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "0ff62a6de1afcfdc47561604935dc806eba72ab95c79720e14bcd0f1873765e2",
+      "source_manifest_path": "swarm_director_nearclip_corners_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "a6e8966ad33e363a863a151a0c2867f6387c417345eb91f4fc26c00892b3032a",
+      "author_seal_path": "swarm_director_nearclip_corners_20261028/SEAL.json",
+      "author_seal_file_sha256": "04f2af913c01097008e8b3061e97899dd3c3ddfa761e0ee3ff1b726ee374a1c4",
+      "source_delta_path": "swarm_director_nearclip_corners_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "ea2e332638b0fb13ca47e5878bb4217ad0325021fefe52bb31878282550dba24",
+      "author_patch_path": "swarm_director_nearclip_corners_20261028/changes.patch",
+      "author_patch_sha256": "d5e8c3e7aa6441e195d17155b522e5650f356771f62623c24e8e4b6d37d33f4e",
+      "review_report_path": "swarm_director_nearclip_corners_fresh_review_20261028/REVIEW.md",
+      "review_report_sha256": "45131a5589ec58db252e49fe5097b6bafd1ac8d1ed1aa0acaf48dc8e80ba92be",
+      "review_seal_path": "swarm_director_nearclip_corners_fresh_review_20261028/SEAL.json",
+      "review_seal_file_sha256": "9b5d9322a4a42c72787f2d3837bc0e21ed8559602e9aa39fc7db295b9623c6d8",
+      "review_verdict": "pass_source_review",
+      "review_scope": "CalcNearClipCorners utility/declaration only; four paths; RoadRunner near-clip query/result chain remains gated.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Director/Camera/Utils/CameraUtils.cpp",
+          "pre_sha256": "b7bb3b22dad126b54b7b78342e53784957d441ea06f7a36be47650259db7f2f6",
+          "post_raw_sha256": "a26f1a3b65d78f13d2f9b557f27757ec8d3c67f7b227915230394143c900f495",
+          "post_lf_sha256": "76e63387334f8e260d7e3a2ec73f749f04f710ba896da35aa7bb49cc5e9d86e9",
+          "declared_post_sha256": "76e63387334f8e260d7e3a2ec73f749f04f710ba896da35aa7bb49cc5e9d86e9"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Utils/CameraUtils.h",
+          "pre_sha256": "f1d94db1d3ff8cce9f5d8ce6af179ec217cb9a54f7e371d342970f58f90f1455",
+          "post_raw_sha256": "62a74dfdee15e76c3e223b9cc50ac81a9e0227448f10cbc1e30ea4d31d856dae",
+          "post_lf_sha256": "ac819dc586662899eb42739c49431151856995dbb52ec48a756c238b6fdea0dc",
+          "declared_post_sha256": "ac819dc586662899eb42739c49431151856995dbb52ec48a756c238b6fdea0dc"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Behaviours/BrnBehaviourRoadRunner.cpp",
+          "pre_sha256": "2f8c58e089ce255c79dfe14970d92f40283d7b3f30bb998d11f327c1a461e3a8",
+          "post_raw_sha256": "72d35b3cb4b1f5fcb769820480a506f28fec981a9614424508c37d2b933370ae",
+          "post_lf_sha256": "a43c128664d248c12961025888f8c22fcf7db3e107e1bb67b84bbe821ed72558",
+          "declared_post_sha256": "a43c128664d248c12961025888f8c22fcf7db3e107e1bb67b84bbe821ed72558"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Behaviours/BrnBehaviourRoadRunner.h",
+          "pre_sha256": "2822e511cc7b31a536dbcf9c430a2bf79b8fcb7daaa00bde82899e8da4a95fa2",
+          "post_raw_sha256": "26b832f3fe22e32b88a0aa5d82122142f26331feb1a84169bfcaa00a48f478d1",
+          "post_lf_sha256": "5c5d49ba1eb9c667fdad246e15a1e977e26abe97a39d022b0050d1c26932c345",
+          "declared_post_sha256": "5c5d49ba1eb9c667fdad246e15a1e977e26abe97a39d022b0050d1c26932c345"
+        }
+      ],
+      "source_commit": "41c5a22197df9acef5ea522eaf582bdecfe33cde",
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
