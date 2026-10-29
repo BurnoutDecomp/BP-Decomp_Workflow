@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "32d2af3c94a60df4a22f99ada405a9add86ef897",
+  "b5_source_head": "5bb8692ddf0a8e3a6dfa10985bd98174ff695912",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1230,6 +1230,39 @@
         }
       ],
       "source_commit": "32d2af3c94a60df4a22f99ada405a9add86ef897",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "reset_on_track_renderworld",
+      "source_packet_path": "swarm_reset_on_track_renderworld_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "2517a161fb4499fa6f17bdc21c80cea95a9265c5843bf35d2c0bff8b028e4b72",
+      "source_manifest_path": "swarm_reset_on_track_renderworld_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "59897ece999d933c59fd0ce410866888868fe52ec98454cc722c681d567cd89f",
+      "author_seal_path": "swarm_reset_on_track_renderworld_recovery_20261028/SEAL.json",
+      "author_seal_file_sha256": "dff3e57db3c74bff79cf093d66b5b126306b5917c36f679ec4de8f76b49f1a2e",
+      "source_slice_delta_path": "swarm_reset_on_track_renderworld_recovery_20261028/source_slice_delta01/SOURCE_DELTA.json",
+      "source_slice_delta_sha256": "d9a5d9df6295b8aaf6a5ec24f9f481a023a17087b4858fff4908f18ad5bcf07f",
+      "author_patch_path": "swarm_reset_on_track_renderworld_recovery_20261028/source_slice_delta01/changes.patch",
+      "author_patch_sha256": "c2efb511287ecf689ad68de582c8dc9417a5d4945621f4a9ba17b6317f775981",
+      "review_report_path": "review_reset_on_track_renderworld_sol_20261028/REVIEW_REPORT.md",
+      "review_report_sha256": "38666b97fcdac5ba57fbecdc896c20ef96bc737c457bd78781a978055f4c33bd",
+      "review_seal_path": "review_reset_on_track_renderworld_sol_20261028/REVIEW_SEAL.json",
+      "review_seal_file_sha256": "e8d87c29658001598a1da687df89bc2a0388abcb4bdaca6240e6fa7c0d31b6d3",
+      "review_verdict": "pass_source_review",
+      "review_scope": "Bounded ResetOnTrack RenderWorld accessor/projection call-restoration source patch; no full renderer behavior/native claim.",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/AI/ResetOnTrack/BrnResetOnTrackDebugComponent.cpp",
+          "pre_sha256": "a9b2e1a4b4f951873254aa50be665e2a830560ef1928fc06f21a0326b9704e4f",
+          "post_raw_sha256": "2bb3376c88ade4de8b2ac338cd6a59f2753965054f05571c935c193078f5e052",
+          "post_git_sha256": "5df87da2c67df8220093c35975de4a558f24b374070f2eed4adcfc2e30685c19",
+          "declared_post_worktree_sha256": "2bb3376c88ade4de8b2ac338cd6a59f2753965054f05571c935c193078f5e052",
+          "declared_post_git_sha256": "5df87da2c67df8220093c35975de4a558f24b374070f2eed4adcfc2e30685c19"
+        }
+      ],
+      "source_commit": "5bb8692ddf0a8e3a6dfa10985bd98174ff695912",
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
