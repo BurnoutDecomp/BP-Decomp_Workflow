@@ -1,0 +1,28 @@
+{
+  "reason": "Fast-forward refused locally dirty PVS paths even though canonical working bytes already equal reviewed incoming posts",
+  "method": "Verify3exact working blob IDs==approved incoming, reconcile only those source index entries, then ordinary fast-forward; no worktree write/stash/reset",
+  "PVS_files": [
+    {
+      "path": "src/GameSource/World/DebugComponents/BrnPVSDebugComponent.cpp",
+      "physical_sha256_before": "fbaf89d3fd283ac97b12fe3014deaf4ad75cc1ea659ce45f37f992ab0cca703b",
+      "canonical_worktree_blob": "6aff0d4f21e0f8c0d7dc4f1caebe58b9cd1819d7",
+      "approved_incoming_blob": "6aff0d4f21e0f8c0d7dc4f1caebe58b9cd1819d7"
+    },
+    {
+      "path": "src/GameSource/World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.cpp",
+      "physical_sha256_before": "7cb201e6f3352b92079237b6650c6f0b40348124d25532b911d33a28f39912de",
+      "canonical_worktree_blob": "db35b2b2d06b7c676a0c4801d13b7c0dca2c459c",
+      "approved_incoming_blob": "db35b2b2d06b7c676a0c4801d13b7c0dca2c459c"
+    },
+    {
+      "path": "src/GameSource/World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.h",
+      "physical_sha256_before": "367cc70099cabe467290bbc710d4bf28afedb94aaa1e1d620fbf5ad8400ff6b6",
+      "canonical_worktree_blob": "33d6c5cfdf698c6726c5201d2fa6298b49533d3b",
+      "approved_incoming_blob": "33d6c5cfdf698c6726c5201d2fa6298b49533d3b"
+    }
+  ],
+  "source_after": "abbc9047d850a4665d959993012261c55205e5e5",
+  "all_seven_source_physical_bytes_and_status_WIP_unchanged": true,
+  "CON_accessed": false,
+  "fast_forward_log": "Updating f1d1a5ebc..abbc9047d\nFast-forward\n .../ContactGen/CgsSceneSweeperDebugComponent.cpp   |  2 +-\n .../BrnServerInterfaceCustomCommands.cpp           | 14 +++----\n .../Physics/PropManager/BrnPropDebugComponent.cpp  | 32 +++++++++++++++\n .../Physics/PropManager/BrnPropDebugComponent.h    | 13 +++---\n .../BrnPhysicalTrafficManagerDebugComponent.cpp    | 12 +++---\n .../Sound/Vehicles/Engines/BrnDualGinsuEffect.cpp  | 12 ------\n .../World/DebugComponents/BrnPVSDebugComponent.cpp | 24 +++++------\n .../TrafficEntityModule/BrnTrafficParam.cpp        | 48 ++++++++++++++++++++++\n .../TrafficEntityModule/BrnTrafficParam.h          |  2 +\n .../WorldEntityModule/PVSModule/BrnPVSModule.cpp   |  8 ++--\n .../WorldEntityModule/PVSModule/BrnPVSModule.h     | 12 +++---\n .../World/Trigger/BrnTriggerEntityModule.cpp       |  6 +++\n 12 files changed, 133 insertions(+), 52 deletions(-)"
+}

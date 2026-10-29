@@ -1,0 +1,61 @@
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
+@@ -9440,22 +9440,11 @@
+ }
+ 
+ // ----------------------------------------------------------------------------
+-// TrafficEntityModule::Pressure_PickSplitToTake  @0x8272BC68  (.cpp 17230..17233)  PARTIAL
+-//
+-// Picks which of a section's three forward splits a param should take: lowest score wins, ties
+-// keep the earlier direction. The base score is 0 for straight-on and 100 for a left/right
+-// split whose turn probability is zero; the console then adds the destination span's occupancy
+-// pressure.
+-//
+-// GATED LEG -- the pressure term. It is
+-//   score += (f32)lpHullRuntime->GetSectionSpanVehicleCount(span) *
+-//            lpHull->mpaSectionSpans[span].mfMaxVehicleRecip;
+-// BLOCKER: BrnTraffic::SectionSpan is forward-declared only in SharedClasses/Traffic/
+-// BrnTrafficHull.h. DWARF BrnTrafficSection.h:260 spells it (u16 muMaxVehicles @+0,
+-// f32 mfMaxVehicleRecip @+4, record stride 8, plus Hull::GetSectionSpan at BrnTrafficHull.h:94)
+-// -- home it there and this leg is a two-line edit. Until then the fallback is the console's
+-// own no-hull-runtime value, 1.0f, so every split scores alike and direction 0 wins.
+-// DELETE-WHEN SectionSpan is homed.
++// TrafficEntityModule::Pressure_PickSplitToTake @0x8272BC68.
++// Active destinations score occupancy times the span's reciprocal capacity plus
++// the direction penalty (scalar fmadds at8272BF98). An absent hull runtime keeps
++// the original fallback score1. Equal scores preserve the earlier direction;
++// unordered scores do not replace the best score. SectionSpan is already homed.
+ // ----------------------------------------------------------------------------
+ void TrafficEntityModule::Pressure_PickSplitToTake(const Section* lpSection,
+                                                    u8* lpuOutSection,
+@@ -9499,21 +9488,17 @@
+ 
+         const Hull* lpTargetHull = GetHull(luHull);   // carries the muNumHulls bound
+ 
++        const HullRuntime* lpHullRuntime = GetHullRuntimeSafe(luHull);
+         f32 lfScore = 1.0f;
+-        if (mauHullRuntimeDataIndices[luHull] != KU_INVALID_HULL_RUNTIME)
+-        {
+-            CGS_ASSERT(luSection < lpTargetHull->muNumSections, "luIndex < muNumSections");
++        if (lpHullRuntime != 0)
++        {
+             const Section* lpTargetSection = lpTargetHull->GetSection(luSection);
+-            CGS_ASSERT(lpTargetSection->muSpanIndex < lpTargetHull->muNumSectionSpans,
+-                       "luIndex < muNumSectionSpans");
+-
+-            lfScore = lafScores[luDirection];
+-
+-            static bool sbLogged = false;
+-            LogMissingLeg_T2(sbLogged,
+-                          "Pressure_PickSplitToTake @0x8272BC68 span-occupancy term -- "
+-                          "BrnTraffic::SectionSpan is forward-declared only in "
+-                          "SharedClasses/Traffic/BrnTrafficHull.h (DWARF BrnTrafficSection.h:260)");
++            const u32 luSpanIndex = lpTargetSection->muSpanIndex;
++            const SectionSpan* lpSpan = lpTargetHull->GetSectionSpan(luSpanIndex);
++            const f32 lfVehicleCount =
++                static_cast<f32>(lpHullRuntime->GetSectionSpanVehicleCount(luSpanIndex));
++            lfScore = std::fma(lfVehicleCount, lpSpan->GetMaxVehicleCountReciprocal(),
++                               lafScores[luDirection]);
+         }
+ 
+         if (lfScore < lfBestScore)

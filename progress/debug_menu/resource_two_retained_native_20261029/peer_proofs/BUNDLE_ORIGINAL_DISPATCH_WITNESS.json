@@ -1,0 +1,179 @@
+{
+  "status": "PASS_ORIGINAL_BUNDLE_BASE_DISPATCH",
+  "raw_reader": "D:\\Reverse\\BP-Decomp_Workflow\\tools\\re\\x360rd.py",
+  "raw_source": "D:/Reverse/IDA_Files/artist_i64.raw",
+  "member_offset": "4DE8",
+  "constructor": "827E08D0",
+  "vptr_store": "827E095C",
+  "vtable_address": "820CE014",
+  "vtable_raw_hex": "8284cb3882828f208284cb388284cb388281615882816158",
+  "vtable_words": [
+    "8284CB38",
+    "82828F20",
+    "8284CB38",
+    "8284CB38",
+    "82816158",
+    "82816158"
+  ],
+  "render_dispatch_vtable_offset": 4,
+  "render_target": "82828F20 CgsDev::DebugUI::Window::Render",
+  "update_target": "8284CB38 positively empty ICF body",
+  "regions": [
+    {
+      "address": "827E0944",
+      "raw_hex": "3d60820d3d40820d396bdffc394ae0147fe3fb78917f4d94915f4de8",
+      "disassembly": [
+        "827E0944  3D60820D  lis      r11, -0x7df3",
+        "827E0948  3D40820D  lis      r10, -0x7df3",
+        "827E094C  396BDFFC  addi     r11, r11, -0x2004  ; 820CDFFC",
+        "827E0950  394AE014  addi     r10, r10, -0x1fec  ; 820CE014",
+        "827E0954  7FE3FB78  mr       r3, r31",
+        "827E0958  917F4D94  stw      r11, 0x4d94(r31)",
+        "827E095C  915F4DE8  stw      r10, 0x4de8(r31)"
+      ]
+    },
+    {
+      "address": "828179C4",
+      "raw_hex": "817f00007fe3fb78809e0014816b00047d6903a64e800421",
+      "disassembly": [
+        "828179C4  817F0000  lwz      r11, 0(r31)",
+        "828179C8  7FE3FB78  mr       r3, r31",
+        "828179CC  809E0014  lwz      r4, 0x14(r30)",
+        "828179D0  816B0004  lwz      r11, 4(r11)",
+        "828179D4  7D6903A6  mtctr    r11",
+        "828179D8  4E800421  bctrl    "
+      ]
+    },
+    {
+      "address": "828E39C0",
+      "raw_hex": "896300003be44de82b0b0000419a00483d60821038e0000038cb8e403d6082007fe3fb78c04b4a243d608202c02ba1f04bf4ab014bf325157fe4fb784bf454ad382100608181fff87d8803a6ebe1fff04e8000204bf324f57fe4fb784bf4c1ad",
+      "disassembly": [
+        "828E39C0  89630000  lbz      r11, 0(r3)",
+        "828E39C4  3BE44DE8  addi     r31, r4, 0x4de8",
+        "828E39C8  2B0B0000  cmplwi   cr6, r11, 0",
+        "828E39CC  419A0048  beq      cr6, 0x828e3a14",
+        "828E39D0  3D608210  lis      r11, -0x7df0",
+        "828E39D4  38E00000  li       r7, 0",
+        "828E39D8  38CB8E40  addi     r6, r11, -0x71c0  ; 820F8E40",
+        "828E39DC  3D608200  lis      r11, -0x7e00",
+        "828E39E0  7FE3FB78  mr       r3, r31",
+        "828E39E4  C04B4A24  lfs      f2, 0x4a24(r11)  ; 82004A24",
+        "828E39E8  3D608202  lis      r11, -0x7dfe",
+        "828E39EC  C02BA1F0  lfs      f1, -0x5e10(r11)  ; 8201A1F0",
+        "828E39F0  4BF4AB01  bl       0x8282e4f0  ; -> CgsDev::DebugUI::Window::Prepare",
+        "828E39F4  4BF32515  bl       0x82815f08  ; -> CgsDev::Internal::DebugInternal::GetUI",
+        "828E39F8  7FE4FB78  mr       r4, r31",
+        "828E39FC  4BF454AD  bl       0x82828ea8  ; -> CgsDev::DebugUI::DebugUI::AddWindow",
+        "828E3A00  38210060  addi     r1, r1, 0x60",
+        "828E3A04  8181FFF8  lwz      r12, -8(r1)",
+        "828E3A08  7D8803A6  mtlr     r12",
+        "828E3A0C  EBE1FFF0  ld       r31, -0x10(r1)",
+        "828E3A10  4E800020  blr      ",
+        "828E3A14  4BF324F5  bl       0x82815f08  ; -> CgsDev::Internal::DebugInternal::GetUI",
+        "828E3A18  7FE4FB78  mr       r4, r31",
+        "828E3A1C  4BF4C1AD  bl       0x8282fbc8  ; -> CgsDev::DebugUI::DebugUI::RemoveWindow"
+      ]
+    },
+    {
+      "address": "82828F20",
+      "raw_hex": "7d8802a6483dffb9dbe1ffb89421ff30",
+      "disassembly": [
+        "82828F20  7D8802A6  mflr     r12",
+        "82828F24  483DFFB9  bl       0x82c08edc  ; -> __savegprlr_25",
+        "82828F28  DBE1FFB8  stfd     f31, -0x48(r1)",
+        "82828F2C  9421FF30  stwu     r1, -0xd0(r1)"
+      ]
+    },
+    {
+      "address": "8284CB38",
+      "raw_hex": "4e800020",
+      "disassembly": [
+        "8284CB38  4E800020  blr      "
+      ]
+    }
+  ],
+  "pins": [
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827E08D0.json",
+      "bytes": 2890,
+      "sha256": "9099bc9261917f5e0e5ee7e0218fe70ad9d34ca733b6f8d2382bf5a25da106d1"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828E39B0.json",
+      "bytes": 3475,
+      "sha256": "0d7c5cbef6a0753494e5f5bdffbace8c698917e200a0b5239d794a7c8e4e8d93"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82817960.json",
+      "bytes": 4516,
+      "sha256": "e54e2ccbf820c52373b319220e86a867bce3a7ecc4f7fcb25c737c1b0cfee8b7"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82828F20.json",
+      "bytes": 22066,
+      "sha256": "1fbbeab05dc1822e911e75923b142d3b8388ca876ee38b584c0d209bd1385b62"
+    },
+    {
+      "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8284CB38.json",
+      "bytes": 21123,
+      "sha256": "f8e89aefa607244646c790a0d7a7fab7c8c3bc603bee5ea1601d783be2120129"
+    },
+    {
+      "path": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0xCB2B6C.json",
+      "bytes": 1359,
+      "sha256": "61ac569bd72063e2f1b6d8f2bbb7dfaa6c1882c56dfe4cc8827b41614c7cf3f5"
+    },
+    {
+      "path": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0xCB2BA0.json",
+      "bytes": 3313,
+      "sha256": "e40cbb8ce81276f9e86523eaeed8c5edfb6e7e7d840cabe4d91197d3d57d010e"
+    },
+    {
+      "path": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0xCB06AC.json",
+      "bytes": 2051,
+      "sha256": "374c5465fb4b9eb64f3f9b070159b2de526c88d915c2ab97516fccd419214653"
+    },
+    {
+      "path": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0xB17C68.json",
+      "bytes": 343,
+      "sha256": "2662818ac06b2a94ecd02b135344a27af693845c102d76505b3a2695e37f7486"
+    },
+    {
+      "path": ".ida-exports/DecFIGS_Burnout_Internal_PS3.ELF/0xB39030.json",
+      "bytes": 14228,
+      "sha256": "5656e41462441f41a4f36c8fefc4e9cdf02124916e371c1a034cdab271072913"
+    },
+    {
+      "path": "references/DecFIGS/dwarfdump/GameShared/GameClasses/System/Resource/CgsDebugBundleFilesWindow.h",
+      "bytes": 495,
+      "sha256": "7d9529c149bcb45d82a90cfdcf651b202cb5de4b5fecd60dd6b0ae79b63cf6c6"
+    },
+    {
+      "path": "references/DecFIGS/dwarfdump/GameShared/GameClasses/System/Resource/CgsDebugBundleFilesWindow.cpp",
+      "bytes": 178,
+      "sha256": "58500b22e4ab9b1b3afdfa6f5ce802f0cfefb6643e7a9438cac3596597b10a3b"
+    },
+    {
+      "path": "references/DecFIGS/dwarfdump/GameShared/GameClasses/System/Resource/CgsResourceDebugComponent.h",
+      "bytes": 5464,
+      "sha256": "c7a06d1595ba6381e98f893c741b163e49c688dcbd5ddebd306dc65a75d0628c"
+    },
+    {
+      "path": "references/DecFIGS/dwarfdump/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsWindow.h",
+      "bytes": 8966,
+      "sha256": "c9e434a48824a6971cabc941381d4b944751e04dd9e447e4c97ddb8063af6efa"
+    },
+    {
+      "path": "tools/re/x360rd.py",
+      "bytes": 4973,
+      "sha256": "cbfbcdb8eee42c57f8b1392f75b8b20880642f90785cf133185ad7b19cfb2b3d"
+    },
+    {
+      "path": "tools/re/ppcdis.py",
+      "bytes": 9135,
+      "sha256": "6138358d92853af75b453cb55f588f758a98d7181bf506cd4ee2b7f35efc26d0"
+    }
+  ],
+  "no_ida_db_mutation": true,
+  "no_game_or_source_changes": true
+}
