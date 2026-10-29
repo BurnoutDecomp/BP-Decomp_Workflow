@@ -2,10 +2,10 @@
   "schema_version": 1,
   "created_utc": "2026-10-28T22:20:28.6552941Z",
   "status": "private source checkpoint; review pending",
-  "workflow_branch": "codex/debug-source-batch-20261028",
+  "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
-  "b5_source_branch": "codex/debug-source-batch-20261028",
-  "b5_source_head": "46d9d45b9b9003f02fdd9e1e4a575d1b577abe62",
+  "b5_source_branch": "codex/debug-source-composition-20261028",
+  "b5_source_head": "be9818835c3031b8380742489b9d0160b077c3be",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -863,5 +863,38 @@
     "chunk09_applied": true,
     "chunk06_07_08_09_applied": true,
     "resolved_step": "Exact chunk05/06 context recomposition produced the reviewed chunk07 preimage; chunks07,08,09 then applied in order. All selected chunk03-09 PASS source deltas are checkpointed."
-  }
+  },
+  "incremental_reviewed_source_passes": [
+    {
+      "packet_id": "progression_rankzero_starting_bodyshop_r3",
+      "source_packet_path": "swarm_progression_source_20261028/chunk04_rankzero_starting_bodyshop_r3/REVIEWER_PACKET.md",
+      "source_packet_sha256": "b7b9ce3c8415d9fb452ce4d748b4bd36424af647fd74c5aeee61ef264e1aca2d",
+      "source_manifest_path": "swarm_progression_source_20261028/chunk04_rankzero_starting_bodyshop_r3/MANIFEST.json",
+      "source_manifest_file_sha256": "a638d2b6ab28cd522c01ef7915c3edc02c3f43ce44024214c9e9c49f3f82660c",
+      "source_delta_path": "swarm_progression_source_20261028/chunk04_rankzero_starting_bodyshop_r3/SOURCE_DELTA.json",
+      "source_delta_sha256": "dd8a07af5f1a7ccef73d91f0e0f18b9bd3da50968be178055ef3a555d1fbb2e0",
+      "author_patch_path": "swarm_progression_source_20261028/chunk04_rankzero_starting_bodyshop_r3/git_apply.patch",
+      "author_patch_sha256": "09e689e90f48e105db020b7c785e713153aaa74f1250645ece619d56fb1a390d",
+      "author_manifest_declared_patch_sha256": "09e689e90f48e105db020b7c785e713153aaa74f1250645ece619d56fb1a390d",
+      "author_review_path": "swarm_network_progression_source_fresh_review_20261028/REVIEW.md",
+      "author_review_sha256": "eda411aff57e9540d13d7d4de7d56f7340b0bfdc1aa23c7636001dc5c7b58df1",
+      "reviewer_seal_path": "swarm_network_progression_source_fresh_review_20261028/SEAL.json",
+      "reviewer_seal_file_sha256": "8504a17ec5a91d22c12331fa21fc8b6e31fd7ecca027dc279c1aac8f925034a7",
+      "reviewer_verdict": "pass for this packet; combined report overall fail for separate Network and Vehicle targets",
+      "reviewer_scope": "Progression starting body shop r3 only; canonical actual TU compile and 16/16 full-method source-coupled checks; no native Profile/save/persistence proof.",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/Progression/BrnProgressionManager.cpp",
+          "pre_sha256": "592d2201d8671e609882d456901a1aef7a427b096026ba5b41c3257dfd909bec",
+          "post_sha256": "c1533ea6c80358963d5e3d2cbfebfc3bf9e39b3990c6f48615222016ba456eef",
+          "post_lf_sha256": "1420217b0d9019339a481a33df1799acb51c73b29ea41f15f2824f42d64cbad7",
+          "declared_post_sha256": "c1533ea6c80358963d5e3d2cbfebfc3bf9e39b3990c6f48615222016ba456eef"
+        }
+      ],
+      "source_commit": "be9818835c3031b8380742489b9d0160b077c3be",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    }
+  ]
 }
