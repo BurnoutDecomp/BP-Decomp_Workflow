@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "5bb8692ddf0a8e3a6dfa10985bd98174ff695912",
+  "b5_source_head": "7b2b0f1c90dc4bb9b58ff55fee6e9daefe957a2c",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1263,6 +1263,67 @@
         }
       ],
       "source_commit": "5bb8692ddf0a8e3a6dfa10985bd98174ff695912",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "race_balancing_debug_activation_delta05",
+      "source_packet_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "5aed9b7361c4de1f0c52f07812a4648ae26c2d2552e7af7b22b656ecb7b24a17",
+      "source_manifest_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "f8698b1c54eed66e4574cd3d65ba05d32f1cdbd91c5aa88688191c0cad12757f",
+      "source_packet_seal_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/SEAL.json",
+      "source_packet_seal_sha256": "c016aca6cae3f5ec6b8db3869f03405688e33170efeba0b9d36a529ab9863eb8",
+      "source_delta_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "1b66c45fe3c8dd19b20f3791a97db5f23f894dd01a153d98c4aea6d627a9de47",
+      "author_patch_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/candidate.patch",
+      "author_patch_sha256": "fe3cbc7e28751db281670e7cd3146f7691b949c5275a5c3b4e4fb68bec737a75",
+      "review_report_path": "review_race_balancing_delta05_sol_20261028/REVIEW_REPORT.md",
+      "review_report_sha256": "e0137c8f1aaa32a373d650dc6792cd712126d3cb9115ff1e6d2d3edae8ab95c8",
+      "review_seal_path": "review_race_balancing_delta05_sol_20261028/REVIEW_SEAL.json",
+      "review_seal_file_sha256": "c3a449e691077c24d8e531a4cb2984bf44ef21d0c3c407ede987baf055be6930",
+      "review_verdict": "pass_source_review",
+      "review_scope": "RaceBalancing manager construction and component registration source; OnActivate was already source-matching and is not new credit; no UI/native/game behavior credit.",
+      "source_files": [
+        {
+          "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h",
+          "pre_sha256": "3c2629bd88aaf83d90844c34e67ead9da98c9bcc4153a05181cd67462ceb230b",
+          "post_raw_sha256": "2f88d40d1637011e3b463c8a096ad61d18ac603a4fb703356089b1964990d25f",
+          "declared_post_sha256": "2f88d40d1637011e3b463c8a096ad61d18ac603a4fb703356089b1964990d25f"
+        },
+        {
+          "path": "src/GameSource/World/AI/BrnAIModule.cpp",
+          "pre_sha256": "0b19258af9950bf7057dab664974821d4aba174ad2ed4687c87b4d859308b8d0",
+          "post_raw_sha256": "25f6e4aed0b158b1279d7ffea640a66fbf00c1127a9a9719108ad54a08a02d92",
+          "declared_post_sha256": "25f6e4aed0b158b1279d7ffea640a66fbf00c1127a9a9719108ad54a08a02d92"
+        },
+        {
+          "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingDebugComponent.cpp",
+          "pre_sha256": "898384422012f63b4a362e9d7ceb2a5a574b00f03495fe28cad98fee85c22314",
+          "post_raw_sha256": "42ff75b8dae34bc7bacedf68f2d3a6aff655509739100f5b37dc0fdebaabaafd",
+          "declared_post_sha256": "42ff75b8dae34bc7bacedf68f2d3a6aff655509739100f5b37dc0fdebaabaafd"
+        },
+        {
+          "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingDebugComponent.h",
+          "pre_sha256": "e7edf9ff1112c790db148250c3bb6dac45c9af15cc87c21a9457698d5e99c3f5",
+          "post_raw_sha256": "79438284db87da30678e14c5d036b433d28df93e9d8175060d95e2393d277bda",
+          "declared_post_sha256": "79438284db87da30678e14c5d036b433d28df93e9d8175060d95e2393d277bda"
+        },
+        {
+          "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingManager.cpp",
+          "pre_sha256": "47027023e7ed0b8e6b2f8f4304357f02bd379a803cd3740e0c391f0da12fbfb1",
+          "post_raw_sha256": "1c3a5a6cbdba995c915fd56d27073e3abc13becd492af99e29f41141f10154ce",
+          "declared_post_sha256": "1c3a5a6cbdba995c915fd56d27073e3abc13becd492af99e29f41141f10154ce"
+        },
+        {
+          "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingManager.h",
+          "pre_sha256": "e52804d1626f8f4624f353eb93675f4994289967e12297f5ba8464dfc83ae5da",
+          "post_raw_sha256": "de81bd0b5d970153d076794c107b75a3712134c3a1cf6349f9a6cd09e4c4a784",
+          "declared_post_sha256": "de81bd0b5d970153d076794c107b75a3712134c3a1cf6349f9a6cd09e4c4a784"
+        }
+      ],
+      "source_commit": "7b2b0f1c90dc4bb9b58ff55fee6e9daefe957a2c",
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
