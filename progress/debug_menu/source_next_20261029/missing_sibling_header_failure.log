@@ -1,0 +1,483 @@
+BrnTrafficEntityModule.cpp
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Core/CgsStringUtils.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\types.hpp
+Note: including file:   C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cstdint
+Note: including file:    C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\yvals_core.h
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime.h
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\sal.h
+Note: including file:       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\concurrencysal.h
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vadefs.h
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xkeycheck.h
+Note: including file:    C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\stdint.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficRenderPosePC.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Timer/CgsFrameInterpolation.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/types.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/matrix44affine_operation.h
+Note: including file:    C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cmath
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\yvals.h
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\crtdbg.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt.h
+Note: including file:       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime_new_debug.h
+Note: including file:        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime_new.h
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\crtdefs.h
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\use_ansi.h
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cstdlib
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\math.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_math.h
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_malloc.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_search.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stddef.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wstdlib.h
+Note: including file:       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\limits.h
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xtr1common
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\intrin0.h
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\intrin0.inl.h
+Note: including file:    C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\limits
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cfloat
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\float.h
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\climits
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cwchar
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cstdio
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdio.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wstdio.h
+Note: including file:         C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_stdio_config.h
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\wchar.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_memcpy_s.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\errno.h
+Note: including file:        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime_string.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wconio.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wctype.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wdirect.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wio.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_share.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wprocess.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wstring.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_wtime.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\sys/stat.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\sys/types.h
+Note: including file:       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\intrin.h
+Note: including file:        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\setjmp.h
+Note: including file:        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\immintrin.h
+Note: including file:         C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\wmmintrin.h
+Note: including file:          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\nmmintrin.h
+Note: including file:           C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\smmintrin.h
+Note: including file:            C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\tmmintrin.h
+Note: including file:             C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\pmmintrin.h
+Note: including file:              C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\emmintrin.h
+Note: including file:               C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xmmintrin.h
+Note: including file:                C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\mmintrin.h
+Note: including file:                C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\malloc.h
+Note: including file:         C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\zmmintrin.h
+Note: including file:        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\ammintrin.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SDKs/XboxMath/XMVectorACos.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SDKs/XboxMath/XMVectorATan.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SDKs/XboxMath/XMVectorSinCos.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/vector3_operation.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Core/CgsAssert.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\BrnCommonTypes.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Physics/CgsRigidBody.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsEntityId.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/BrnSharedConstants.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/BurnoutConstants.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Graphics/CgsModel.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Graphics/Dispatch/Renderable.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Graphics/CgsSerialisedPtr.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Graphics/Dispatch/CgsDispatcher.h
+Note: including file:    C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cstddef
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Module/CgsModuleSingleBuffered.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared\GameClasses\Module\CgsModule.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared\GameClasses\Module\CgsDataStructure.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared\GameClasses\Module\CgsDataBuffer.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Containers/CgsFlagSet.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/eathread_rwmutex.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/eabase.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/config/eacompiler.h
+Note: including file:       D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/config/eaplatform.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/config/eacompilertraits.h
+Note: including file:       D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/config/eaplatform.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/config/eaplatform.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/version.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/eaunits.h
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\inttypes.h
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\math.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EABase\include\Common\EABase/int128.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/eathread.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/internal/config.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/eathread_mutex.h
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\math.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/eathread_condition.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/eathread_semaphore.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/eathread_atomic.h
+Note: including file:       D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/eathread_sync.h
+Note: including file:        D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/x86-64/eathread_sync_x86-64.h
+Note: including file:         C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\math.h
+Note: including file:       D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/internal/eathread_atomic.h
+Note: including file:        D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/internal/eathread_atomic_standalone.h
+Note: including file:         D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\EAThread\include\eathread/internal/eathread_atomic_standalone_msvc.h
+Note: including file:          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xatomic.h
+Note: including file:           C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\type_traits
+Note: including file:            C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cstring
+Note: including file:             C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\string.h
+Note: including file:              C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_memory.h
+Note: including file:        C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\atomic
+Note: including file:         C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xthreads.h
+Note: including file:          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_threads_core.hpp
+Note: including file:          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xtimec.h
+Note: including file:           C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\ctime
+Note: including file:            C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\time.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Module/CgsBaseEventReceiverQueue.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Module/CgsEventQueue.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Module/CgsBaseEventQueue.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Resource/CgsResourcePtr.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Resource/CgsResourceHandle.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Resource/CgsResourceID.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Containers/CgsArray.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Containers/CgsSet.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Containers/CgsStack.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Containers/CgsBitArray.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Containers/CgsFastBitArray.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Numeric/CgsRandom.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/PerfMon/Cpu/CgsPerfMonCpu.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/PerfMon/CgsPerfMon.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficSharedConstants.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficConstants.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsVolumeInstanceId.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\pre\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/BrnVehicleConstants.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/Traffic/BrnVehicleSoaData.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficVehicleType.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficParam.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficRaceCarCache.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficPhysicalVehicleInfo.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficStaticParam.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicleTypeRuntime.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/AttributeKey.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficMiscRuntimeClasses.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Jobs/Traffic/BrnTrafficJob.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SDKs/EATech/eajobs/job.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SDKs/EATech/eajobs/job_types.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SDKs/EATech/eajobs/event.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\coreallocator\include\coreallocator/icoreallocator_interface.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SDKs/EATech/eajobs/entry_point.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Jobs/Traffic/TrafficCommon.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Jobs/Traffic/BrnUpdateVehiclesJob.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficFuzzyEnvelopeSet.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficHull.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficSection.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficStaticTraffic.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficSectionFlow.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/Junctions/BrnTrafficStopLine.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficHullRuntime.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficLightManager.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Graphics/BrnCoronaManager.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Effects/Curves.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/rwcore_structs.h
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\cstdarg
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\stdarg.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw\rwcore_enums.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/core/debug/DebugCriticalSection.h
+Note: including file:      C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\windows.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\winapifamily.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\winpackagefamily.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\sdkddkver.h
+Note: including file:       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\excpt.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\windef.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\minwindef.h
+Note: including file:         C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\specstrings.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\specstrings_strict.h
+Note: including file:           C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\specstrings_undef.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\driverspecs.h
+Note: including file:           C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\sdv_driverspecs.h
+Note: including file:         C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winnt.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\ctype.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\kernelspecs.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\basetsd.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\guiddef.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\pshpack4.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\pshpack4.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\pshpack4.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\pshpack2.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\pshpack2.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\pshpack2.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\pshpack8.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\pshpack1.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\pshpack1.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared\poppack.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\apiset.h
+Note: including file:          C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\ktmtypes.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winbase.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\apisetcconv.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\minwinbase.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\apiquery2.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\processenv.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\fileapifromapp.h
+Note: including file:         C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\fileapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\debugapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\utilapiset.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\handleapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\errhandlingapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\fibersapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\namedpipeapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\profileapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\heapapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\ioapiset.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\synchapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\interlockedapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\processthreadsapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\sysinfoapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\memoryapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\enclaveapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\threadpoollegacyapiset.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\threadpoolapiset.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\jobapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\jobapi2.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\wow64apiset.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\libloaderapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\securitybaseapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\namespaceapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\systemtopologyapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\processtopologyapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\securityappcontainer.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\realtimeapiset.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\winerror.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\timezoneapi.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\wingdi.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winuser.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\tvout.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winnls.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\datetimeapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\stringapiset.h
+Note: including file:         C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winnls.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\wincon.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\wincontypes.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\consoleapi.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\consoleapi2.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\consoleapi3.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winver.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\verrsrc.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winreg.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\reason.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winnetwk.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\wnnc.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\shared\stralign.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\winsvc.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\mcx.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\imm.h
+Note: including file:        C:\Program Files (x86)\Windows Kits\10\\include\10.0.26100.0\\um\ime_cmodes.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\pre\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/BrnBaseStreamer.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Core/CgsID.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Resource/SharedIO/BrnAssetIds.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Resource/SharedIO/BrnGameDataRequestQueue.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Resource/CgsResourceRequestQueue.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Module/CgsVariableEventQueue.h
+Note: including file:       D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/CgsStrStream.h
+Note: including file:       D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/Log/CgsLog.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Containers/CgsRingBuffer.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Resource/SharedIO/BrnGameDataEvents.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Resource/CgsResourceBasePool.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Resource/CgsSmallResource.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Resource/CgsSmallResourcePS3.h
+Note: including file:       D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Resource/CgsResourceType.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficVehicleAsset.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficGraphicsStub.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/World/BrnVehicleGraphicsSpec.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/World/BrnWheelGraphicsSpec.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficTweakConstants.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficFuzzyLogicBehaviours.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficToRaceCarInterface.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficAIInterfaces.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Graphics/BrnBlobbyShadowManager.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Director/Camera/Camera.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Graphics/CgsCamera.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Geometric/Primitives/CgsFrustum.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\vendor/renderware/collision/Plane.hpp
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Geometric/Primitives/CgsSphere.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Director/Camera/BrnCameraEffects.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Graphics/BrnEffectsData.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Director/Utils/BrnDirectorEffectTrigger.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Gui/PFX/BrnGuiPFXHooks.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Director/Camera/BrnDepthOfField.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Director/Camera/BrnCameraState.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Director/Camera/BrnCameraValidityAccount.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/DeformationManager/BrnDeformationConstants.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/DebugSystem/Core/Internal/CgsDebugInternal.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/DebugSystem/Core/UI/Functions/CgsFunction.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficPvsDiag.h
+Note: including file: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\algorithm
+Note: including file:  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_heap_algorithms.hpp
+Note: including file:   C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xutility
+Note: including file:    C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_iter_core.hpp
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\utility
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\initializer_list
+Note: including file:  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\__msvc_minmax.hpp
+Note: including file:  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\xmemory
+Note: including file:   C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\new
+Note: including file:    C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\exception
+Note: including file:     C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\vcruntime_exception.h
+Note: including file:      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\eh.h
+Note: including file:       C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\corecrt_terminate.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Module/CgsIOBuffer.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficSoundInterfaces.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Timer/CgsTimerStatusInterface.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Timer/CgsTime.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRaceCarEntityModuleOutputInterface.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/World/CgsWorldMap2D.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/World/BrnWorldRegion.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/RaceCarEntityModule/Boost/BrnBoostType.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/SharedIO/BrnVehicleEvents.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/VehiclePhysics/Wheel.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/VehiclePhysics/BrnSimpleVehiclePhysics.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/PhysicsUtilities/ExternalPhysicsBody.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/physics/rigidbody.h
+Note: including file:       D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/physics/inertia.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/PhysicsUtilities/ExternallySimulatedBody.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Geometric/Primitives/CgsAxisAlignedBox.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/VehiclePhysics/VehiclePhysics.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/VehiclePhysics/VehicleAttribs.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/PhysicsUtilities/InterpedParam3.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/PhysicsUtilities/Spring1D.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/VehiclePhysics/Engine.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Input/CgsInputTypes.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/SharedIO/BrnVehicleDriverControls.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRaceCarType.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/BrnTakedownType.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/DeformationManager/SharedIO/BrnDeformationEvents.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/core/base/ostypes.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRaceCarToTrafficInterface.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficNetworkInterfaces.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/SharedIO/CgsPotentialContact.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventOutOverlapPair.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/CrashModule/SharedIO/BrnCrashModuleTrafficIOInterfaces.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Physics/CgsPhysicsSimulationIO_Events.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\vendor/renderware/physics/JointFrames.hpp
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\vendor/renderware/physics/JointLimits.hpp
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\vendor/renderware/physics/DriveFrames.hpp
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\vendor/renderware/physics/DriveDynamics.hpp
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/SharedIO/BrnVehicleInputInterface.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerModuleIO.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerErrorEvent.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneQueryId.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventSetEntityPosition.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventAddEntity.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventAddDynamicVolume.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventRemoveEntity.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventRemoveForCollision.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventRemoveVolume.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsVolumeId.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventRemoveVolumeInstance.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventReplaceDynamicVolume.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventClearCullingTable.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventSetEntityRadius.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventClearEntityPadding.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventAddForCollision.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_Event.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventAddVolumeInstance.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventForceNoPadding.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventSetCullingGroupPair.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventSetPadding.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventRemoveAllEntities.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CacheManager/CgsTriangleCacheManagerIO.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionManagerIO_Events.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_EventLineTest.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_TriangleCache.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CacheManager/CgsTriangleCacheManager.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Geometric/Primitives/CgsTriangle4.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/SharedIO/BrnVehicleEffectsInputInterface.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/VehicleManager/SharedIO/BrnVehicleDriverInputInterface.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/DeformationManager/SharedIO/BrnDeformationOutputInterface.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/DeformationManager/SharedIO/BrnVehicleLocatorData.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/DeformationManager/DeformationPhysics/BrnStreamedDeformationSpec.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Physics/Deformation/BrnSensorSpec.h
+Note: including file:      D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/DeformationManager/DeformationPhysics/BrnSharedDeformationEnums.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/ContactSpies/BrnContactSpyInterface.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/ContactSpies/BrnContactSpyData.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/ContactSpies/BrnContactSpyEvents.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/ContactSpies/BrnContactSpyQueue.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/BrnEntityTypes.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Physics/ContactSpies/BrnContactSpyRunList.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/PropEntityModule/SharedIO/BrnPropToTrafficInterface.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_CoarseQuery.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsSceneManagerIO_CoarseQueryQueue.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/SceneManager/CgsVolumeStore.h
+Note: including file:     D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Containers/CgsObjectPool.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficDirectorInterfaces.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficTypeInterface.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TriggerEntityModule/SharedIO/BrnTriggerEntityModuleInputInterface.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerQueryId.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficGuiInterface.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficDataResourceType.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficKillZone.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficVehicleTraits.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/Junctions/BrnTrafficLightCollection.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/DataLists/VehicleList.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/DataLists/VehicleListEntry.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\vendor/renderware/collision/CollisionVolume.hpp
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\vendor/renderware/collision/FeatureEdge.hpp
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficPvs.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/BrnTrafficFlowType.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Algorithms/CgsShuffle.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficTrackWitness.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/vpu/vector4_operation.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Traffic/Junctions/BrnJunctionLogicBox.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficMathsUtils.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/BrnGameActions.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Progression/BrnRace.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Progression/BrnBaseRace.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/BrnGameStateTypes.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/StreetData/BrnChallengeData.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/StreetData/BrnStreetData.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/StreetData/BrnChallengeHighScoreEntry.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/BrnCgsPlayerName.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/BrnGameStateSharedIO.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Network/SharedIO/BrnNetworkSharedIO.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Network/SharedIO/BrnBuddyInformation.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoring.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/SharedIO/BrnGameActionData.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/ModeManager/GameModes/BrnGameModeParams.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/BrnCheckpointData.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Progression/BrnRaceEventData.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/BrnWorldSharedConstants.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Progression/BrnProgressionRankData.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/BrnOpponentData.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Progression/BrnRaceBalance.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/Timer/PS3/CgsDateAndTimePS3.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/Offences/BrnDriveThruManager.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Trigger/BrnRegion.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Trigger/BrnGenericRegion.h
+Note: including file:    D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Trigger/BrnTriggerBase.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Progression/BrnTrainingTypes.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Progression/BrnTrophyUnlockData.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\SharedClasses/Progression/BrnRival.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/Progression/BrnProgressionRivalData.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/ModeManager/Scoring/BrnBurnoutSkillzData.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingManager.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingDebugComponent.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Math/BrnMathUtils.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/math/fpu/scalar_operation.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/BrnGameEvents.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/SharedIO/BrnTargetEventScore.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/GameState/TriggerQueryManager/BrnKillzoneAction.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficLogger.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameSource/Resource/BrnResourceAllocator.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Memory/CgsLinearMalloc.h
+Note: including file:   D:\Reverse\BP-Decomp_Workflow\b5-decomp\vendor\renderware\include\rw/core/memory/memoryfunctions.h
+Note: including file:  D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/Development/MessageSystem/CgsMessage.h
+Note: including file: D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\post\src\GameShared/GameClasses/System/PC/BrnNetHarnessPC.h
+D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\source_next_20261029\pre\src\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule.cpp(104): fatal error C1083: Cannot open include file: 'BrnTrafficEntityModule.h': No such file or directory

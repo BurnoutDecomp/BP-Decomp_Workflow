@@ -1,0 +1,94 @@
+--- a/src/GameShared/Jobs/DXTCompress/CgsNetworkTextureDXTCompress.h
++++ b/src/GameShared/Jobs/DXTCompress/CgsNetworkTextureDXTCompress.h
+@@ -71,6 +71,9 @@
+     void Update();
+ 
+ private:
++    // Scratch-fixture access only; this friend adds no storage and does not change the class ABI.
++    friend struct NetworkTextureDXTCompressTestAccess;
++
+     // Console offsets pinned in a 32-bit build (inert on the host).
+     static void _AssertLayout();
+ 
+--- a/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.cpp
++++ b/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.cpp
+@@ -443,20 +443,39 @@
+     void CameraX360::ReleaseFeed(s32 /*liPlayerID*/) { /* BLOCKED: un-homed local-player-info */ }
+     void CameraX360::UnregisterPlayer(s32 /*liPlayerID*/) { /* BLOCKED: stream-engine vtable */ }
+ 
+-    s32 CameraX360::GetCompressedLocalCameraPicture(
++    void CameraX360::GetCompressedLocalCameraPicture(
+         CgsNetwork::NetworkTexture* lpDstTexture,
+-        s32 /*liQualitySetting*/,
+-        CgsNetwork::NetworkTextureDXTCompress::CompressionCompleteCallback /*lCompleteCallback*/,
+-        void* /*lpCompleteData*/)
+-    {
+-        // Faithful spine: assert lpDstTexture is non-null + already DXT1; when XCamGetStatus()==2,
+-        // pull the latest local-camera frame geometry off the stream engine and queue it for DXT
+-        // compression. BLOCKED on the un-homed XCamGetStatus + stream-engine frame geometry; the
+-        // grounded asserts are reproduced so callers fail loudly rather than silently no-op.
++        s32 liQualitySetting,
++        CgsNetwork::NetworkTextureDXTCompress::CompressionCompleteCallback lCompleteCallback,
++        void* lpCompleteData)
++    {
+         CGS_ASSERT(lpDstTexture, "lpDstTexture");
+-        CGS_ASSERT(lpDstTexture && static_cast<s32>(lpDstTexture->GetFormat()) == KI_PIXELFORMAT_LIN_DXT1,
++        CGS_ASSERT(static_cast<s32>(lpDstTexture->GetFormat()) == KI_PIXELFORMAT_LIN_DXT1,
+                    "rw::graphics::core::PIXELFORMAT_LIN_DXT1 == lpDstTexture->GetFormat()");
+-        return 0; /* BLOCKED: XCAM status + stream-engine frame geometry */
++
++        if (static_cast<s32>(XCamGetStatus()) != KI_XCAM_STATUS_READY)
++        {
++            return;
++        }
++
++        CGS_ASSERT(mpTextureCompressor, "mpTextureCompressor");
++
++        // ARTIST reads the already-prepared +0x43B50 NetworkTexture, not the opaque XCAM stream
++        // engine: +0x14 source pixels, +0x08 width, +0x0C height, +0x04 bits-per-pixel, and
++        // +0x10 source format. SetNewTextureToCompress copies those source bytes into its own
++        // pending double-buffer before it records the callback/user data.
++        mpTextureCompressor->SetNewTextureToCompress(
++            mLocalCameraTexture.GetTexture(),
++            mLocalCameraTexture.GetTextureSize(),
++            mLocalCameraTexture.GetWidth(),
++            mLocalCameraTexture.GetHeight(),
++            mLocalCameraTexture.GetStride(),
++            lpDstTexture->GetStride(),
++            liQualitySetting,
++            static_cast<s32>(mLocalCameraTexture.GetFormat()),
++            0,
++            lCompleteCallback,
++            lpCompleteData);
+     }
+ 
+     // The static reliable-message trampolines are DECLARATION-ONLY: the arrived paths walk the
+--- a/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.h
++++ b/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.h
+@@ -256,10 +256,12 @@
+         // X360 0x8258B6F8 -- stamp the local camera status into the local player's menu data.
+         void UpdateCameraStatus();
+ 
+-        // queue the local camera picture for DXT compression for transmission
+-        // at compression quality liQualitySetting.
+-        // DECLARATION-ONLY (depends on the un-homed XCamGetStatus + stream-engine geometry).
+-        s32 GetCompressedLocalCameraPicture(
++        // X360 0x82586890. If XCamGetStatus is ready, queue the prepared local texture into the
++        // shared DXT compressor using the requested quality and completion callback. The local
++        // texture owns its source bytes; NetworkTextureDXTCompress copies them into its own
++        // double-buffer before returning. DecFIGS CameraPS3 declares the role-analogous method
++        // void; both X360 callers also ignore the raw r3 residue from this call.
++        void GetCompressedLocalCameraPicture(
+             CgsNetwork::NetworkTexture* lpDstTexture,
+             s32 liQualitySetting,
+             CgsNetwork::NetworkTextureDXTCompress::CompressionCompleteCallback lCompleteCallback,
+@@ -287,6 +289,9 @@
+                                                             void* lpCamera);
+ 
+     private:
++        // Scratch-fixture access only; this friend does not add storage or affect the class ABI.
++        friend struct CameraX360TestAccess;
++
+         // X360 0x82586AF8 / 0x82586C50 -- open/close the VDP UDP socket. DECLARATION-ONLY
+         // (Winsock/XDK socket layer is un-homed glue).
+         void OpenSocket();
