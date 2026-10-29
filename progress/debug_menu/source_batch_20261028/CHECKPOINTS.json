@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "68c52cbb3ce2a176fd9c145b239631315861044a",
+  "b5_source_head": "6d71bb8299cc7fd145289dd73428c9b7d440a327",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -2267,6 +2267,40 @@
       "native_credit": 0,
       "site_credit": 0,
       "author_fixture_limitation": "Original author WIP_CHECKPOINT remains DRAFT_UNREADY_CONTROL_FAILURE; reviewer did not rely on/repeat its CPU fixture; independent reviewer approved only static source parity."
+    },
+    {
+      "packet_id": "trigger_entity_controls_01_05_revision03",
+      "revision03_evidence_path": "swarm_trigger_entity_controls_01_05_recovery_20261029_revision03/revision03-evidence.md",
+      "revision03_evidence_sha256": "f3c4780a49d4e9680164592321843ab646287887ce5e11c17283d9a6ac32a215",
+      "review_input_pins_path": "trigger_entity_revision03_recheck_sol_20261029/INPUT_PINS.json",
+      "review_input_pins_sha256": "c4ca71fea9ac7acbbbc09902f13829d4ef1464882d9eeed30f288eaa9901c279",
+      "workflow_root_patch_path": "swarm_trigger_entity_controls_01_05_recovery_20261029_revision03/trigger-shape-cache.patch",
+      "workflow_root_patch_sha256": "b89f32dde45ba12bbd0dcbb45c3844a3c56921af94e7306733519d70a6483742",
+      "submodule_patch_path": "swarm_trigger_entity_controls_01_05_recovery_20261029_revision03/trigger-shape-cache.submodule.patch",
+      "submodule_patch_sha256": "d45ec7aa7976bc0f5a52c9a9a3cc90aa39dae1cf38860774e47883a1b9ef2b64",
+      "review_report_path": "trigger_entity_revision03_recheck_sol_20261029/REPORT.md",
+      "review_report_sha256": "2ef7bf629cd3a5ca9fd83b9cbd1df50ddcf5828918852f3bfdbcce720f031e27",
+      "review_result_path": "trigger_entity_revision03_recheck_sol_20261029/RESULT.json",
+      "review_result_sha256": "ac4a206df2832a8a39e9682885d6b5dd38537d052a6861f41963bacba7a45157",
+      "review_seal_path": "trigger_entity_revision03_recheck_sol_20261029/SEAL.json",
+      "review_seal_file_sha256": "f9a20ad6aa5f46bcbea6f659dd11ef6bf8c6059a23c7c8d7de1918a3231e77d0",
+      "review_verdict": "pass_source_review; exact revision03 only; earlier revision01/02 remain rejected",
+      "review_scope": "Six reviewed plane/sphere/box cache stores after validation/type dispatch and before Initialize. Existing runtime behavior not proven; no native/site credit.",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/Trigger/BrnTriggerEntityModule.cpp",
+          "pre_git_blob_oid": "8a648d66e1ce498545d6e16c8b13c5bf325f46a5",
+          "post_raw_sha256": "03577fe45b6f1a0acf079320c726817fd918b281068e23abb2545b7f5158c439",
+          "post_lf_sha256": "38698bbb2ae58a4c8cc87cdad730fd76e74a252b77556e07c534ff810bd42caa",
+          "post_git_blob_oid": "f463f95708041e6b7a9fdb32b50a760e16e3b512",
+          "declared_overlay_sha256": "38698bbb2ae58a4c8cc87cdad730fd76e74a252b77556e07c534ff810bd42caa",
+          "postimage_blob_oid": "f463f95708041e6b7a9fdb32b50a760e16e3b512"
+        }
+      ],
+      "source_commit": "6d71bb8299cc7fd145289dd73428c9b7d440a327",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
     }
   ]
 }
