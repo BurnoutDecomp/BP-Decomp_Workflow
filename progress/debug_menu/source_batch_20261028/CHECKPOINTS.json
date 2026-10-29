@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "3d15e4b31a63e1c7b17c23293e32e1aea9e187a9",
+  "b5_source_head": "ede3039756614210fcb26451754946f88151a7be",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -996,6 +996,59 @@
         }
       ],
       "source_commit": "3d15e4b31a63e1c7b17c23293e32e1aea9e187a9",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "challenge_manager_debug_recovery",
+      "source_packet_path": "swarm_challenge_manager_debug_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "972c97cb267b36fc69be73bbbdb52fd6afb8cd1211b596a91ba233495c74132a",
+      "source_manifest_path": "swarm_challenge_manager_debug_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "2ba6cf536d90bec57a33464d37187626503f15b6a5788d4f6bb7f4a56a317bef",
+      "author_seal_path": "swarm_challenge_manager_debug_recovery_20261028/SEAL.json",
+      "author_seal_file_sha256": "5dd167aca0912f58d6740550722fb2aab8cc2638671f6a3019321005382df186",
+      "source_delta_path": "swarm_challenge_manager_debug_recovery_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "09de01c45fe9a3a47aae8f268755958fe7ef3963260ea3f7dd7b436366752da5",
+      "author_patch_path": "swarm_challenge_manager_debug_recovery_20261028/changes.patch",
+      "author_patch_sha256": "2ad5a5aed876d1c7379d78b3080c5b1766ad6ea5f6897fe50d1c50eefcd8052d",
+      "review_report_path": "challenge_manager_independent_review_sol_20261028/REPORT.md",
+      "review_report_sha256": "e8baa5e8be50eaf48bbaae4b5edfe099a9564fff45bd7788f00b1fff16824c04",
+      "review_seal_path": "challenge_manager_independent_review_sol_20261028/SEAL.json",
+      "review_seal_file_sha256": "3295d20ce421e26da097141488ce945f9e041ea06a8fd022e29ade546c9d4ea4",
+      "review_verdict": "pass_source_review",
+      "review_scope": "Three positively attested repairs; Challenge Index/Start remains unresolved; no native/full-control credit.",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp",
+          "pre_sha256": "9d45188bc64bff069245b8908fd2b04a0666cff1f97adec89a13c8180806c189",
+          "post_raw_sha256": "509708f2064d4c068ac76af1fc4561f9f3d7ee8e34fda02cb500129ab4ddb2bb",
+          "post_lf_sha256": "89baf5d59e2a81ac6bc0bd3f5bdce2b5ae9d153f9ed4f0cb8d205e621a71d4f4",
+          "declared_post_lf_sha256": "89baf5d59e2a81ac6bc0bd3f5bdce2b5ae9d153f9ed4f0cb8d205e621a71d4f4"
+        },
+        {
+          "path": "src/SharedClasses/DataLists/ChallengeListEntry.h",
+          "pre_sha256": "c4814ed6a111d9f6bdcbaf916df143c12671851aaa066c0d1bc2d3c902bec0aa",
+          "post_raw_sha256": "fa5a0ec24c886ab92a663fd7800cbaceaf945bedede6df99c183f5d05739b7b2",
+          "post_lf_sha256": "60dd85908304546a325a4d03a783a10eb6ebc9a1938386f89a36524d4b22638b",
+          "declared_post_lf_sha256": "60dd85908304546a325a4d03a783a10eb6ebc9a1938386f89a36524d4b22638b"
+        },
+        {
+          "path": "src/GameSource/GameState/AchievementManager/BrnGameStateAchievementManagerBase_Freeburn.cpp",
+          "pre_sha256": "f1dab1075ac6d478dbdd9bcc94fab4aa815c2465dc681bcc24e6414d3c9ba327",
+          "post_raw_sha256": "2ab577a8e4bcd96211fd65196878b58918de60e4e232025c37b18a5c73ab1260",
+          "post_lf_sha256": "c7aee3bffc360256612e3f89052826363b81245f9d03ea0aeeb75190c24f107f",
+          "declared_post_lf_sha256": "c7aee3bffc360256612e3f89052826363b81245f9d03ea0aeeb75190c24f107f"
+        },
+        {
+          "path": "src/GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManagerDebugComponent.cpp",
+          "pre_sha256": "fa736765f44b593deb2a4d586a260bcfca028c6c929164a52254a8959a55d5c8",
+          "post_raw_sha256": "a3cc055fa095ad8a6afa9ff3abd217901785176b117d2cc6225d0d3ca8f98fc7",
+          "post_lf_sha256": "eb2fb510c32e3c7e5977407fd702dcef6ac24c8f7dd947faf4e3cb48a3c61bf2",
+          "declared_post_lf_sha256": "eb2fb510c32e3c7e5977407fd702dcef6ac24c8f7dd947faf4e3cb48a3c61bf2"
+        }
+      ],
+      "source_commit": "ede3039756614210fcb26451754946f88151a7be",
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
