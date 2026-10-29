@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "7b2b0f1c90dc4bb9b58ff55fee6e9daefe957a2c",
+  "b5_source_head": "b223654e34271198791c0e9293f4f3acdc5a692b",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1327,6 +1327,55 @@
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
+    },
+    {
+      "packet_id": "chunk10_racecar_state_cache",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/REVIEWER_PACKET.md",
+      "source_packet_sha256": "44b06c05d6f0a6e0345c7a702108130afce00d2fa929a1110c5553c172508ce1",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/MANIFEST.json",
+      "source_manifest_file_sha256": "4e396892115a8b812388d42c4acb8c114ec9b9b5235ebe7bc953e820329cc61d",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/SEAL.json",
+      "source_seal_file_sha256": "affd75cb806433ff7f4f928f4e673658bb4bd246c14c7e0a91b82b432374f48b",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/SOURCE_DELTA.json",
+      "source_delta_sha256": "68a1bd30133aaae9107b8f9be6a989f78cf1a9c240948aff355b1b43d35a882f",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/changes.patch",
+      "author_patch_sha256": "dab420e9a170677a358941163538510562e0f644f8dcc3e2e731d411ff9fd271",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 81,
+        "fresh_cpu_pre_pass": 46,
+        "fresh_cpu_post_pass": 81
+      },
+      "ordered_context": {
+        "chunk": "chunk08_trailer_birth_callers",
+        "seal_sha256": "0fbafca1e1d9e107a51ab605513625e7e2f489cf7aedecdb3070e9acaf9f629f",
+        "preimage_sha256": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb"
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "post_raw_sha256": "b10d2fd03262a10098e0d6d92e26e4dcc71aec6539670263ae661c25f65c2100",
+          "post_lf_sha256": "bca43ddbe8790f0f2804fd3927fc2fc66a348157c026c6f7ebd3c1078c8bd4c6",
+          "declared_post_sha256": "bca43ddbe8790f0f2804fd3927fc2fc66a348157c026c6f7ebd3c1078c8bd4c6",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+            "pre_raw_sha256": "5c03d201bc4d7558e13e020ba145b1e8e46d8385a06d1cb2ee577f0c1b765c22",
+            "pre_lf_sha256": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb",
+            "declared_pre_sha256": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb"
+          }
+        }
+      ],
+      "source_commit": "b223654e34271198791c0e9293f4f3acdc5a692b",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
     }
   ]
 }
