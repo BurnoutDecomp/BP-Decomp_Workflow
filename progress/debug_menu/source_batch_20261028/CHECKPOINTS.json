@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "45e8bd16f893618e75f6ba6ebf9de014e469f123",
+  "b5_source_head": "3c3b71853bf015bb9ac054c4a3228cddfe056489",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -2042,6 +2042,67 @@
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
+    },
+    {
+      "packet_id": "pvs_debug_score_static_ownership",
+      "source_packet_path": "swarm_pvs_debug_controls_20261029/README.md",
+      "source_packet_sha256": "88e7708154b30224860fd119d593b30afad665a48ec40d2a1201be6c0943ead9",
+      "source_manifest_path": "swarm_pvs_debug_controls_20261029/MANIFEST.json",
+      "source_manifest_file_sha256": "d19b76cf2728b0912e10ec44ccaceeed919cac5c9e7890e3694437b385e44730",
+      "author_packet_seal_path": "swarm_pvs_debug_controls_20261029/PACKET_SEAL.json",
+      "author_packet_seal_file_sha256": "147c4b46c9eed93cfa0e1ebcb93ce3334380087d9eba075f17564d0908b02af4",
+      "source_provenance_path": "swarm_pvs_debug_controls_20261029/SOURCE_PROVENANCE.json",
+      "source_provenance_sha256": "f520697a7bf0216ddd93f8b6334e255b56b6f0267b4fc2d74548f15ae2a3abf5",
+      "author_patch_path": "swarm_pvs_debug_controls_20261029/changes.patch",
+      "author_patch_sha256": "2140b4afc97bf8aae6e6c8afb62ea1679629d00a700ba84dfaee9236282f0cef",
+      "review_report_path": "review_pvs_debug_controls_sol_0994467913/REVIEW.md",
+      "review_report_sha256": "55810c6db287063875f299c52686054b2210b034d4fac6654ea0f96a9a8802ec",
+      "review_verdict_path": "review_pvs_debug_controls_sol_0994467913/VERDICT.json",
+      "review_verdict_file_sha256": "513a3b64a83c2ff0793d7c601e8bdeb06fadb4b0cd524cffe8706092e01a37d2",
+      "review_seal_path": "review_pvs_debug_controls_sol_0994467913/SEAL.json",
+      "review_seal_file_sha256": "715b89a5df7fba90770cc442ef426a8b6bdac74cb417d03c70a4d697c59e5e62",
+      "review_verdict": "pass_source_review",
+      "review_scope": "Four PVSModule score static owners/source dataflow only. Existing #0006 restrict-zone registration unchanged; no PVS rendering/streaming/stall, arithmetic-parity, no-op or native credit. Shared author WIP was not touched.",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/DebugComponents/BrnPVSDebugComponent.cpp",
+          "pre_raw_sha256": "ea51024008b97381073f7e85ef69367611d9d6394aa5f63dbb5144f3c493a506",
+          "pre_lf_sha256": "fbaf89d3fd283ac97b12fe3014deaf4ad75cc1ea659ce45f37f992ab0cca703b",
+          "post_raw_sha256": "fbaf89d3fd283ac97b12fe3014deaf4ad75cc1ea659ce45f37f992ab0cca703b",
+          "post_lf_sha256": "7d52dfdc2474ac0edeaf29941882724ce799ecbb338710e13d862f9ee6075cea",
+          "post_git_sha256": "7d52dfdc2474ac0edeaf29941882724ce799ecbb338710e13d862f9ee6075cea",
+          "declared_post_raw_sha256": "fbaf89d3fd283ac97b12fe3014deaf4ad75cc1ea659ce45f37f992ab0cca703b",
+          "declared_post_lf_sha256": "7d52dfdc2474ac0edeaf29941882724ce799ecbb338710e13d862f9ee6075cea"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.cpp",
+          "pre_raw_sha256": "4bd82f9b5588dc71998e37d22e0569253f39ba09f41c1533cb21edf090412a53",
+          "pre_lf_sha256": "7cb201e6f3352b92079237b6650c6f0b40348124d25532b911d33a28f39912de",
+          "post_raw_sha256": "7cb201e6f3352b92079237b6650c6f0b40348124d25532b911d33a28f39912de",
+          "post_lf_sha256": "cf05d7c5efbbf18c16fe9cae317fa7e9dc02e011a821e7e0540a03ad2e6abf20",
+          "post_git_sha256": "cf05d7c5efbbf18c16fe9cae317fa7e9dc02e011a821e7e0540a03ad2e6abf20",
+          "declared_post_raw_sha256": "7cb201e6f3352b92079237b6650c6f0b40348124d25532b911d33a28f39912de",
+          "declared_post_lf_sha256": "cf05d7c5efbbf18c16fe9cae317fa7e9dc02e011a821e7e0540a03ad2e6abf20"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.h",
+          "pre_raw_sha256": "85e6ddea4b5ac93e928f3f45c9e583e0f962db605a959def26af12c75cf41e09",
+          "pre_lf_sha256": "367cc70099cabe467290bbc710d4bf28afedb94aaa1e1d620fbf5ad8400ff6b6",
+          "post_raw_sha256": "367cc70099cabe467290bbc710d4bf28afedb94aaa1e1d620fbf5ad8400ff6b6",
+          "post_lf_sha256": "739b6349739ab296cdd1ef38043ea6cce4a0e3cb7a2617dfe81c7182959c7300",
+          "post_git_sha256": "739b6349739ab296cdd1ef38043ea6cce4a0e3cb7a2617dfe81c7182959c7300",
+          "declared_post_raw_sha256": "367cc70099cabe467290bbc710d4bf28afedb94aaa1e1d620fbf5ad8400ff6b6",
+          "declared_post_lf_sha256": "739b6349739ab296cdd1ef38043ea6cce4a0e3cb7a2617dfe81c7182959c7300"
+        }
+      ],
+      "source_commit": "3c3b71853bf015bb9ac054c4a3228cddfe056489",
+      "author_baseline_b5": "d19b76cf2728b0912e10ec44ccaceeed919cac5c9e7890e3694437b385e44730",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_sites": [
+        "BrnWorld::PVSDebugComponent::OnActivate#0006"
+      ]
     }
   ]
 }
