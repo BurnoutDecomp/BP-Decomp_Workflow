@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "4b2794a590c6c9bb1bbe5ac37f2b9488704b77e5",
+  "b5_source_head": "3d15e4b31a63e1c7b17c23293e32e1aea9e187a9",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -957,6 +957,45 @@
         }
       ],
       "source_commit": "4b2794a590c6c9bb1bbe5ac37f2b9488704b77e5",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "modemanager_debug_controls",
+      "source_packet_path": "swarm_modemanager_debug_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "303cd4e6c69d222a81220e43de88442378f1f4d9d045ba687fe03998348b48a2",
+      "source_manifest_path": "swarm_modemanager_debug_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "1130fbf4f88b5e2c2220601a8fb21573abeef4928de9eac25a583a3de29919b4",
+      "author_seal_path": "swarm_modemanager_debug_recovery_20261028/SEAL.json",
+      "author_seal_file_sha256": "49fe98f2769d00195d192dab9e0ba25fb32ade3187fde2e09121f1ff240eb940",
+      "source_delta_path": "swarm_modemanager_debug_recovery_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "dc400c2de1588f7cc74efd7b541aca09d53dc755025e9e168a8f33679c5e5356",
+      "author_patch_path": "swarm_modemanager_debug_recovery_20261028/changes.patch",
+      "author_patch_sha256": "cb3215b8280774e85b2aa34d0a4cde403a607230e2a6f8d7476c04c5f1bd1513",
+      "review_report_path": "review_modemanager_debug_sol_20261028/REVIEW_REPORT.md",
+      "review_report_sha256": "73c8896814c3217bedb2f148a8e1aca38bf541c8a3dfc5c9880e3c4fc5d134f8",
+      "review_seal_path": "review_modemanager_debug_sol_20261028/REVIEW_SEAL.json",
+      "review_seal_file_sha256": "5f7e9c006883741d9449d225f06bc6fd26b60de41a262445a0798ad8c968f3c0",
+      "review_verdict": "pass_source_review",
+      "review_scope": "ModeManager OnActivate rows 1-4 and 9-10; rows 5-8 excluded; static source/assembly/compile only.",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/ModeManager/Debug/BrnModeManagerDebugComponent.cpp",
+          "pre_sha256": "deb3b82c8f36ed1a258bbf3e319d926112aed5402a97d8bb5dd3a2206de84668",
+          "post_raw_sha256": "d976a5b196386761796fa48df8bad64f48db27ac97e88a2f4da619e9a7a790ca",
+          "post_lf_sha256": "7457d4ee2f23ba05a8683158074d2b9ab7473942cf05071950ba9ebc9beb32e0",
+          "declared_post_sha256": "7457d4ee2f23ba05a8683158074d2b9ab7473942cf05071950ba9ebc9beb32e0"
+        },
+        {
+          "path": "src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem.h",
+          "pre_sha256": "3faa8648173a61c160e0b0ca0ae74570f265302207b2c0ad4b673ccd55629cb6",
+          "post_raw_sha256": "69e1def3b33a458d632beae89cb2ffa181f2af3d0005ce773a8ce21775f33da5",
+          "post_lf_sha256": "50eb45767afa93ddc039bfb6898a3d9ac9afe6ec428a05dd0fca805f63559c16",
+          "declared_post_sha256": "50eb45767afa93ddc039bfb6898a3d9ac9afe6ec428a05dd0fca805f63559c16"
+        }
+      ],
+      "source_commit": "3d15e4b31a63e1c7b17c23293e32e1aea9e187a9",
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
