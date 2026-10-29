@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "e0aeb5ab4dad936a77b9bf0f573d2a6e9a0a52c3",
+  "b5_source_head": "c77f078f208fbebcdfbb5c0aefb624575e256481",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1728,6 +1728,68 @@
       "native_credit": 0,
       "site_credit": 0,
       "excluded_chunk14": true
+    },
+    {
+      "packet_id": "network_send_receive_diagnostics_revision02",
+      "source_packet_path": "swarm_network_send_receive_diagnostics_recovery_20261028_revision02/REVIEWER_PACKET.md",
+      "source_packet_sha256": "65822e4a56cabc605f279851315df63cec853ede9723536d1f88fd90049234d0",
+      "source_manifest_path": "swarm_network_send_receive_diagnostics_recovery_20261028_revision02/MANIFEST.json",
+      "source_manifest_file_sha256": "efacc69b7f91fd656629b1c71d5f62773a22654f1d90c27232ad1ed25a7122a7",
+      "source_seal_path": "swarm_network_send_receive_diagnostics_recovery_20261028_revision02/SEAL.json",
+      "source_seal_file_sha256": "e8d0f796d757744c0ad58c2e8a612b66f18404f0984314639f360139dd677e22",
+      "source_delta_path": "swarm_network_send_receive_diagnostics_recovery_20261028_revision02/SOURCE_DELTA.json",
+      "source_delta_sha256": "96f184f588345d4009029d60870d6ac00eb50d825d32b7a0db91ecf8ab113ef9",
+      "author_patch_path": "swarm_network_send_receive_diagnostics_recovery_20261028_revision02/changes.patch",
+      "author_patch_sha256": "c3b0565414ff41de81023a79ed1babb1c906cdb45ca655612ddb9ae543cbfdd9",
+      "recovered_formal_binding_path": "swarm_formal_pass_bindings_network_vehicle_20261029_recovered01/FORMAL_PASS_BINDING.json",
+      "recovered_formal_binding_sha256": "dbf6ac5645e947b878fcb8aa87c9f90a987fc484cfef78b35ad589ea24f0ddd1",
+      "recovered_review_report_path": "swarm_formal_pass_bindings_network_vehicle_20261029_recovered01/RECOVERED_FORMAL_REVIEW.md",
+      "recovered_review_report_sha256": "95243b74a6cbea6cbe8b47f496e2a380fbc246f70365e664a46f5375dc74fc67",
+      "recovered_review_seal_path": "swarm_formal_pass_bindings_network_vehicle_20261029_recovered01/SEAL.json",
+      "recovered_review_seal_file_sha256": "c9a82b2f5de60ffb112b12994977e53f4bfc999c4b215c7dda2dc472c890ec25",
+      "original_final_pass_record_path": "swarm_formal_pass_bindings_network_vehicle_20261029_recovered01/original_final_pass.raw.jsonl",
+      "original_final_pass_record_sha256": "817eb1e6ffc30a2b6d7925b6e4e79f2a8777918e5880b3e0033cc8239d9923de",
+      "review_verdict": "existing formal pass recovered and bound; no new review or repeated tests",
+      "reviewer": "/root/gui_followon_review_luna_max",
+      "formal_review_time_utc": "2026-10-28T21:26:40.546Z",
+      "formal_review_turn_id": "01a18458-61bf-71d1-9652-6c0e2e8971a9",
+      "review_scope": "Revision02 source/stream repair; default decimal output and extracted branches only. Existing full handler/native behavior is not proven.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Network/BrnNetworkPlayer.cpp",
+          "declared_pre_sha256": "5ef3bafebdadcc223a7dfbaa4f4826a2948595f8f5a2ea4cc5a7bb2b0c930bb3",
+          "post_raw_sha256": "ca8e339b0c381adaa2f55265998cba6b44c818c4037c2645ee02b0cb074216ed",
+          "post_lf_sha256": "b4482e5f5499f86f223e197db1f345f99b2528411f479e76f79e150a0df9f99b",
+          "post_git_blob_oid": "c1b19bb63bd325e0a1dc5fde304f05a3fa0c8e6b",
+          "post_git_sha256": "b4482e5f5499f86f223e197db1f345f99b2528411f479e76f79e150a0df9f99b",
+          "declared_post_sha256": "ca8e339b0c381adaa2f55265998cba6b44c818c4037c2645ee02b0cb074216ed",
+          "change": "modified"
+        },
+        {
+          "path": "tests/NetworkUpdateDiagnostics.cpp",
+          "declared_pre_sha256": null,
+          "post_raw_sha256": "f1f24b37bb1cc47fe93b63a82b8afe5fad0035bca5abb2937ceae3f078e75701",
+          "post_lf_sha256": "b2307bf559f169e93650f81d182f36a161a75150eade9ba5486adc4b0aa64d0b",
+          "post_git_blob_oid": "59e5b00773d07c1bfb97c3de08eb979f4d527904",
+          "post_git_sha256": "b2307bf559f169e93650f81d182f36a161a75150eade9ba5486adc4b0aa64d0b",
+          "declared_post_sha256": "b2307bf559f169e93650f81d182f36a161a75150eade9ba5486adc4b0aa64d0b",
+          "change": "added"
+        },
+        {
+          "path": "tests/run_network_update_diagnostics.py",
+          "declared_pre_sha256": null,
+          "post_raw_sha256": "f9cee3ce57c2f3e2007c263a06bdabb1bbf36c3a9b3d26a28d0e4fdd67c5696e",
+          "post_lf_sha256": "05c92c1d01b1452b1f1ec73c28dbc22552c41e0fc57f902f7d43eb270b5ac3f9",
+          "post_git_blob_oid": "c74c938829e32543a830431b704f3f89ce7ba4d3",
+          "post_git_sha256": "05c92c1d01b1452b1f1ec73c28dbc22552c41e0fc57f902f7d43eb270b5ac3f9",
+          "declared_post_sha256": "05c92c1d01b1452b1f1ec73c28dbc22552c41e0fc57f902f7d43eb270b5ac3f9",
+          "change": "added"
+        }
+      ],
+      "source_commit": "c77f078f208fbebcdfbb5c0aefb624575e256481",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
     }
   ]
 }
