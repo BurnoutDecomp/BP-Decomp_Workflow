@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "41c5a22197df9acef5ea522eaf582bdecfe33cde",
+  "b5_source_head": "531f8cbe22ee2262954eb7f69cd7dd284aef2f74",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1134,6 +1134,57 @@
         }
       ],
       "source_commit": "41c5a22197df9acef5ea522eaf582bdecfe33cde",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "director_transition_smoother_roadrunner",
+      "source_packet_path": "swarm_director_transition_smoother_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "7f04818bc3a005dab8fb82d6a80cdabb74b78933edad62acd55c2af4a531b58e",
+      "source_manifest_path": "swarm_director_transition_smoother_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "32577495f387fe8bfaf1cef1b07f660a9a9f022a9bd488deaa581c6660755a31",
+      "author_seal_path": "swarm_director_transition_smoother_20261028/SEAL.json",
+      "author_seal_file_sha256": "bcb9730b31fdac250c17ecb0bb11a774bf48ca38c573b9b69f7e20e655824502",
+      "source_delta_path": "swarm_director_transition_smoother_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "aaccd176506d2fc59470b641fca711c5016d22c70f796b8d61f29a68be51cbbc",
+      "author_patch_path": "swarm_director_transition_smoother_20261028/changes.patch",
+      "author_patch_sha256": "56c32cdf56d87796e4264adeec8e62b01d8c85385bccff96e90537b3d4f281ef",
+      "review_report_path": "swarm_director_transition_smoother_fresh_review_20261028/REVIEW.md",
+      "review_report_sha256": "e96279cd3f9342f081d6fd5beb8f1f418f44a91a2b859e06afe45f85163a7abc",
+      "review_seal_path": "swarm_director_transition_smoother_fresh_review_20261028/SEAL.json",
+      "review_seal_file_sha256": "91d152babf40bf1ab49d22d0dd2e6c0069f30b753eed5bdaa444d618e2fae982",
+      "compile_supplement_report_path": "swarm_director_transition_smoother_compile_supplement_20261028/REVIEW.md",
+      "compile_supplement_report_sha256": "3f8dd377019cbd19c4ea0186197338d06ec014c81179fdaecb67d033b087d3e4",
+      "compile_supplement_seal_path": "swarm_director_transition_smoother_compile_supplement_20261028/SEAL.json",
+      "compile_supplement_seal_file_sha256": "7351bca6f5a2e05f84749ceae5544b1c0fe1d3a9ad3b0b8974b9619626dd486b",
+      "review_verdict": "pass_source_review; compile/control supplement pass",
+      "review_scope": "TransitionSmoother Set/Update/Get and RoadRunner seed/update/read seats only; exact nearclip prerequisite applied first; no full RoadRunner activation/native or visual credit.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Director/Camera/Utils/CameraUtils.cpp",
+          "pre_sha256": "76e63387334f8e260d7e3a2ec73f749f04f710ba896da35aa7bb49cc5e9d86e9",
+          "post_raw_sha256": "48724e93e21df1170e80e335ac8a3550fc3e56fcd6b5e66676f1d2763f1315b2",
+          "post_lf_sha256": "c2a90d66b8af4b284a14b17e6cbea3df7c68e87e49707f036cec99678d2a997b",
+          "declared_post_sha256": "c2a90d66b8af4b284a14b17e6cbea3df7c68e87e49707f036cec99678d2a997b"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Utils/CameraUtils.h",
+          "pre_sha256": "ac819dc586662899eb42739c49431151856995dbb52ec48a756c238b6fdea0dc",
+          "post_raw_sha256": "c70a45fdafd66de2db328ce58ea4588843c64438b89f935361ca2dd91a550315",
+          "post_lf_sha256": "bc37ffcbd186d969b40d4c0f25d00b4f63b109894a82d8f5ab964fbcc0be4d2b",
+          "declared_post_sha256": "bc37ffcbd186d969b40d4c0f25d00b4f63b109894a82d8f5ab964fbcc0be4d2b"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Behaviours/BrnBehaviourRoadRunner.cpp",
+          "pre_sha256": "a43c128664d248c12961025888f8c22fcf7db3e107e1bb67b84bbe821ed72558",
+          "post_raw_sha256": "1b505cbc75f65489ef0f22b6c031b5e8b4bf6fef794ed77600efc5a28c03bc06",
+          "post_lf_sha256": "11d65ba8da4ee9ef590fbb386d098a3d252af21d3e4f17c40782b42fff248315",
+          "declared_post_sha256": "11d65ba8da4ee9ef590fbb386d098a3d252af21d3e4f17c40782b42fff248315"
+        }
+      ],
+      "source_commit": "531f8cbe22ee2262954eb7f69cd7dd284aef2f74",
+      "predecessor_source_commit": "41c5a22197df9acef5ea522eaf582bdecfe33cde",
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
