@@ -72,6 +72,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--server", required=True)
     parser.add_argument("--publish", action="store_true")
+    parser.add_argument("--canonical-source-repo",
+                        help="CI publication policy: recheck this remote's dev tip immediately before the live POST")
+    parser.add_argument("--workflow-ref", default=os.environ.get("GITHUB_REF", ""))
     parser.add_argument("--out", default=str(ROOT / "progress" / "source_status.json"))
     args = parser.parse_args()
     commit = subprocess.check_output(["git", "-C", str(ROOT / "b5-decomp"), "rev-parse", "HEAD"], text=True).strip()
@@ -105,6 +108,18 @@ def main():
         token = os.environ.get("WORK_TOKEN")
         if not token:
             raise SystemExit("WORK_TOKEN is required to publish source status")
+        if args.canonical_source_repo:
+            # Indexing and server reads above can outlive the earlier workflow
+            # check. Keep this fresh remote check adjacent to the mutating POST.
+            # The opt-in preserves existing non-CI source-status CLI callers.
+            from publish_snapshot import eligibility
+            decision = eligibility(args.canonical_source_repo, commit, args.workflow_ref)
+            if not decision["eligible"]:
+                print("Live source-status publication skipped:", json.dumps(decision, sort_keys=True))
+                if os.environ.get("GITHUB_OUTPUT"):
+                    with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+                        output.write("superseded=true\n")
+                return
         result = request_json(args.server, "/admin/source-status", evidence, token)
         print(json.dumps(result, sort_keys=True))
 

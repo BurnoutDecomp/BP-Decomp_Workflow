@@ -94,22 +94,50 @@ $size = (Get-Item $zip).Length
 Write-Host "    $zip ($([math]::Round($size / 1MB, 1)) MB)"
 
 # --- 4. Upload -----------------------------------------------------------------
-Step "Uploading exe bundle to $WorkServer (server merges assets)"
+Step "Checking latest publication eligibility (exe bundle retained)"
 if (-not $CommitSha) { $CommitSha = (& git rev-parse HEAD).Trim() }
 $short = if ($CommitSha) { $CommitSha.Substring(0, [Math]::Min(12, $CommitSha.Length)) } else { "" }
 $builtAt = (Get-Date).ToUniversalTime().ToString("o")
 
-# curl.exe streams the multipart body straight from disk -- no whole-file buffering.
-& curl.exe --fail --show-error --silent `
-    --retry 3 --retry-delay 5 `
-    -H "X-Work-Token: $WorkToken" `
-    -F "file=@$zip;type=application/zip" `
-    -F "commit_sha=$CommitSha" `
-    -F "commit_short=$short" `
-    -F "branch=$Branch" `
-    -F "built_at=$builtAt" `
-    "$WorkServer/admin/builds"
-if ($LASTEXITCODE -ne 0) { throw "publish upload failed ($LASTEXITCODE)" }
+# Keep the bundle above as a run artifact even when this build has been superseded.
+# A manual run on a private workflow branch must not update the public download.
+if ($env:GITHUB_ACTIONS -eq "true") {
+    # Submodules are fetched. Retain checkout's repo credential while removing
+    # the duplicate global header that would make this fresh remote check fail.
+    & git config --global --unset-all http.https://github.com/.extraheader 2>$null
+}
+$publicationRef = if ($Branch -eq "main" -and $env:GITHUB_REF -eq "refs/heads/main") {
+    "refs/heads/main"
+} else { "noncanonical-workflow-ref" }
+$b5 = (& git -C (Join-Path $Root "b5-decomp") rev-parse HEAD).Trim()
+$b5Remote = (& git -C (Join-Path $Root "b5-decomp") remote get-url origin).Trim()
+$uploaded = $false
+for ($attempt = 1; $attempt -le 3; $attempt++) {
+    # Recheck the live dev ref for each upload attempt, not the clone's cached ref.
+    & python (Join-Path $Root "tools/work/publish_snapshot.py") check --require-current `
+        --source-repo $b5Remote --source-commit $b5 --workflow-ref $publicationRef `
+        --result (Join-Path $Root "build/latest-publication.json")
+    $guardExit = $LASTEXITCODE
+    if ($guardExit -eq 3) {
+        Step "Skipping latest upload: source or workflow ref superseded (bundle retained)"
+        $global:LASTEXITCODE = 0
+        return
+    }
+    if ($guardExit -ne 0) { throw "canonical source publication check failed ($guardExit)" }
+    Step "Uploading exe bundle to $WorkServer (server merges assets)"
+    # curl.exe streams straight from disk. Retries return through the guard above.
+    & curl.exe --fail --show-error --silent `
+        -H "X-Work-Token: $WorkToken" `
+        -F "file=@$zip;type=application/zip" `
+        -F "commit_sha=$CommitSha" `
+        -F "commit_short=$short" `
+        -F "branch=$Branch" `
+        -F "built_at=$builtAt" `
+        "$WorkServer/admin/builds"
+    if ($LASTEXITCODE -eq 0) { $uploaded = $true; break }
+    if ($attempt -lt 3) { Start-Sleep -Seconds 5 }
+}
+if (-not $uploaded) { throw "publish upload failed after three guarded attempts" }
 
 Write-Host ""
 Step "Uploaded exe bundle $short ($([math]::Round($size / 1MB, 1)) MB) -- server is assembling the download"
