@@ -1,0 +1,5 @@
+Private41 fixes the original startup video queue contract: raw48-byte VideoDefinition, channel40,64-byte wrapper, event508/509. Root independent source review reran the actual StateInterface/queue negative (exit17) and patched controls (exit0); seven actual consumer TUs compiled. Full ID, sound and keep flag survive. Exact original review, patch and compile evidence are copied under evidence/ with their retained byte hashes.
+
+Full shipping build and unbypassed EA/Criterion logo playback, completion and title transition remain required before public/normal delivery. No native/site credit. Scoring/CPU/Environment remain excluded and private Replay is untouched.
+
+Two previously committed owned compile.cmd artifacts are normalized to LF in Git. Existing *.cmd text eol=crlf still checks them out as CRLF for cmd.exe; this corrects false dirty provenance. EOL_NORMALIZATION.json retains exact predecessor hashes. The shipping checkout dirtiness was observed and reported by the builder; this successor does not silently clobber it.

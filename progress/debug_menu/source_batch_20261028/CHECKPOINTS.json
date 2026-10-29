@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "created_utc": "2026-10-28T22:20:28.6552941Z",
-  "status": "private40 source checkpoint; narrow independent source reviews and integration compiles pass; full build/native pending",
+  "status": "private41 startup-video source hotfix; reviewed and consumer compiles pass; unbypassed native video/build gate pending",
   "workflow_branch": "codex/source-next-20261029",
-  "workflow_base": "0a0c06dd9718d08fdbbddf02e3579d5db6d8be02",
+  "workflow_base": "ac467f9c38a16e1696061335dce9b6bd6dd897f8",
   "b5_source_branch": "codex/source-next-20261029",
-  "b5_source_head": "f4bc56eb6a9e720a48a852df352eef1671ad2b74",
-  "b5_base": "8d71beb96e0cf681be78e235987bdbfce3c45dd9",
+  "b5_source_head": "d85e2d5e2526783406d69fedc0ab17b219eb69bc",
+  "b5_base": "f4bc56eb6a9e720a48a852df352eef1671ad2b74",
   "review_policy": "Each receipt retains its own limits; no site/native credit or public integration follows from this checkpoint",
   "native_game_launched": false,
   "site_credit": 0,
@@ -2687,6 +2687,37 @@
       "fresh_integration_pre_post_owning_TU_compiles": 6,
       "native_game_launched": false,
       "affected_sites": []
+    },
+    {
+      "packet_id": "startup_video_gui_event_boxing_hotfix",
+      "review_verdict": "pass_source_review",
+      "root_review_sha256": "fc9b98fb9c11c57dfc4e22993fe9ff706ea4ff1282193fa9de349bb9b0af32ef",
+      "review_scope": "One-header ARTIST video payload and channel40 boxing source repair; no native playback approval",
+      "patch_sha256": "ce604f7bd9b4cfc9de2bdf13ff3ad5e92e517eb801d92ed600dd63cbde3eceaa",
+      "source_commit": "d85e2d5e2526783406d69fedc0ab17b219eb69bc",
+      "source_parent": "f4bc56eb6a9e720a48a852df352eef1671ad2b74",
+      "source_tree": "f9bb5cffc2b1525d2c681939754999ca0ebfcf25",
+      "source_files": [
+        {
+          "path": "src/GameSource/Gui/BrnGuiVideoEvents.h",
+          "pre_sha256": "9743a2a780e0d89596cee884c37fe6fc3de38357516868ec86555f49121f087e",
+          "post_raw_sha256": "71dc34280e33644bc313f771cb762bff4767ba08f67e9c4c94c127a5a030dd22",
+          "pre_git_blob_oid": "ec29dbb053a3c5d481c7bfa6b259126137f4c31e",
+          "post_git_blob_oid": "7bf2911075e068f681656caa43a31935cc22c423"
+        }
+      ],
+      "root_actual_negative_exit": 17,
+      "root_actual_post_exit": 0,
+      "consumer_TU_compile_count": 7,
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "affected_sites": [],
+      "limits": [
+        "Prior private native baseline skipped logo videos and is insufficient for this bug",
+        "Unbypassed EA and Criterion video pixels/finish/title transition still required",
+        "Normal save/config/log files not changed by this review"
+      ]
     }
   ]
 }
