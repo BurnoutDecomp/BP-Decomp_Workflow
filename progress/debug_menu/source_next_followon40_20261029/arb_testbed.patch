@@ -1,0 +1,56 @@
+--- a/src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.h
++++ b/src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.h
+@@ -83,8 +83,9 @@
+         void        Destruct() override;
+         const char* GetName() const override;
+ 
+-        // Is a behaviour or take armed or running.
+-        bool IsActive() const;
++        // ARTIST GetNormalCamera/CycleNormalCamera read the embedded testbed's
++        // meState at Arbitrator+0x30+0x2BC and select it only while running.
++        bool IsActive() const { return meState == E_STATE_GENERIC_UPDATE; }
+ 
+         // Bind the debug component RegisterParameters / UnregisterParameters mirror the active
+         // parameter block into (spDebugComponent).
+--- a/src/GameSource/Director/Arbitrator/BrnDirectorArbitrator.cpp
++++ b/src/GameSource/Director/Arbitrator/BrnDirectorArbitrator.cpp
+@@ -621,7 +621,7 @@
+     // ------------------------------------------------------------------------
+     void Arbitrator::CycleNormalCamera()
+     {
+-        if (miDebugCameraMode == 2)
++        if (mArbStateTestbed.IsActive())
+         {
+             mArbStateTestbed.RequestCycleCameraThisFrame();
+         }
+@@ -634,12 +634,12 @@
+     // ------------------------------------------------------------------------
+     // GetNormalCamera @0x821F5BD8 -- the camera currently driving the "normal" view:
+     // the testbed state's camera (arb +0x40 == mArbStateTestbed's +0x10 Camera) when
+-    // the debug-camera selector reads 2, else the current state's camera (state +0x10;
++    // the testbed is in E_STATE_GENERIC_UPDATE, else the current state's camera (state +0x10;
+     // the inlined GetCurrentState carries the StateContainer.h:140 tripwire).
+     // ------------------------------------------------------------------------
+     const Camera::Camera& Arbitrator::GetNormalCamera() const
+     {
+-        if (miDebugCameraMode == 2)
++        if (mArbStateTestbed.IsActive())
+         {
+             return mArbStateTestbed.GetCamera();
+         }
+--- a/src/GameSource/Director/Arbitrator/BrnDirectorArbitrator.h
++++ b/src/GameSource/Director/Arbitrator/BrnDirectorArbitrator.h
+@@ -190,13 +190,6 @@
+ 
+         ArbStateTestbed          mArbStateTestbed;            // X360 +0x30 (vtable Construct @+0x30)
+ 
+-        // The normal-camera source selector (X360 +0x2EC): CycleNormalCamera /
+-        // GetNormalCamera @0x822087F0/@0x821F5BD8 route to the TESTBED state's camera
+-        // (mArbStateTestbed.mCamera == arb +0x40) when this reads 2, else to the
+-        // container's current state. FLAG: name inferred from that role (the trimmed
+-        // DWARF omits the member; only the ==2 compare is attested).
+-        s32                      miDebugCameraMode;           // X360 +0x2EC
+-
+         // FLAG: two Arbitrator scratch flags the trimmed DWARF omits but the asm PROVES exist
+         //   (X360 +0x300 / +0x301): Construct seeds +0x300 = 1 and +0x301 = 0, and
+         //   UpdateCameraCycleControl reads/writes +0x301 as the normal-camera cycle selector

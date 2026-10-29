@@ -1,0 +1,5 @@
+Delivered the reviewed32-record source prefix with GUI recovery and Director provider closure. Canonical3010-TU build/link/map passes (111compiled,2899cached,zero warnings/errors). One independently checked muted80s boot/profile/world/driving baseline passes12/12casechecks plus terminal, with zeroasserts/exceptions and sixframes. The unchanged baseline records its teleport and named ordinary throttle movement.
+
+Exact15normal runtime payloads are installed and verified. Previous15payloads and21config/save/logfiles are physically backedup; all21protected files remain byte-identical. All seven shared physical source file bytes and parentstatus WIP are preserved; the three PVS files enter through the reviewed source prefix. Owned integration refs are retired after ancestryproof; other-owner refs remain untouched for their owners to reconcile after ancestry proof.
+
+All32 source receipt limits remain. No chunk14, site/ledger promotion, blanket Traffic/Network/Vehicle/Mugshot/WorldDebug/Director/fullGUI/menu/Options/controller or audible-playback certification is claimed. Source/build/runtime identities and every failed predecessor remain separate in the receipts.

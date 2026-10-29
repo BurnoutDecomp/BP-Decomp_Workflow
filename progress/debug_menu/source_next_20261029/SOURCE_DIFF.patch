@@ -1,0 +1,418 @@
+diff --git a/src/GameShared/Jobs/DXTCompress/CgsNetworkTextureDXTCompress.h b/src/GameShared/Jobs/DXTCompress/CgsNetworkTextureDXTCompress.h
+index 196a5d3e0..28c32ca86 100644
+--- a/src/GameShared/Jobs/DXTCompress/CgsNetworkTextureDXTCompress.h
++++ b/src/GameShared/Jobs/DXTCompress/CgsNetworkTextureDXTCompress.h
+@@ -71,6 +71,9 @@ public:
+     void Update();
+ 
+ private:
++    // Scratch-fixture access only; this friend adds no storage and does not change the class ABI.
++    friend struct NetworkTextureDXTCompressTestAccess;
++
+     // Console offsets pinned in a 32-bit build (inert on the host).
+     static void _AssertLayout();
+ 
+diff --git a/src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp b/src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp
+index 1e1df1d96..c0da8d6cb 100644
+--- a/src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp
++++ b/src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp
+@@ -1114,7 +1114,7 @@ namespace BrnGui
+         GuiPFXHookEvent lEvent;
+         lEvent.muGuid = 0;
+         // ARTIST passes the selected name as SPrintf's format argument in r5, with no varargs.
+-        CgsCore::SPrintf(lEvent.macName, sizeof(lEvent.macName),
++        CgsCore::SPrintf(lEvent.macName, 32,
+                          lpArbitrator->maPfxHookList[lpArbitrator->miPfxHookIndex].mpcName);
+         const f32 lfWeight = lpArbitrator->mfBackgroundWeight;
+         lEvent.mfMaximumBloomWeight        = lfWeight;
+@@ -1132,7 +1132,7 @@ namespace BrnGui
+         GuiPFXStartBackgroundHookEvent lEvent;
+         lEvent.muGuid = 0;
+         // ARTIST passes the selected name as SPrintf's format argument in r5, with no varargs.
+-        CgsCore::SPrintf(lEvent.macName, sizeof(lEvent.macName),
++        CgsCore::SPrintf(lEvent.macName, 32,
+                          lpArbitrator->maPfxHookList[lpArbitrator->miPfxHookIndex].mpcName);
+         lEvent.mfMaximumWeight = lpArbitrator->mfBackgroundWeight;
+         lpArbitrator->StartBackgroundHook(&lEvent);
+diff --git a/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.cpp b/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.cpp
+index 24969ffcf..07e2f6347 100644
+--- a/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.cpp
++++ b/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.cpp
+@@ -443,20 +443,39 @@ namespace BrnNetwork
+     void CameraX360::ReleaseFeed(s32 /*liPlayerID*/) { /* BLOCKED: un-homed local-player-info */ }
+     void CameraX360::UnregisterPlayer(s32 /*liPlayerID*/) { /* BLOCKED: stream-engine vtable */ }
+ 
+-    s32 CameraX360::GetCompressedLocalCameraPicture(
++    void CameraX360::GetCompressedLocalCameraPicture(
+         CgsNetwork::NetworkTexture* lpDstTexture,
+-        s32 /*liQualitySetting*/,
+-        CgsNetwork::NetworkTextureDXTCompress::CompressionCompleteCallback /*lCompleteCallback*/,
+-        void* /*lpCompleteData*/)
++        s32 liQualitySetting,
++        CgsNetwork::NetworkTextureDXTCompress::CompressionCompleteCallback lCompleteCallback,
++        void* lpCompleteData)
+     {
+-        // Faithful spine: assert lpDstTexture is non-null + already DXT1; when XCamGetStatus()==2,
+-        // pull the latest local-camera frame geometry off the stream engine and queue it for DXT
+-        // compression. BLOCKED on the un-homed XCamGetStatus + stream-engine frame geometry; the
+-        // grounded asserts are reproduced so callers fail loudly rather than silently no-op.
+         CGS_ASSERT(lpDstTexture, "lpDstTexture");
+-        CGS_ASSERT(lpDstTexture && static_cast<s32>(lpDstTexture->GetFormat()) == KI_PIXELFORMAT_LIN_DXT1,
++        CGS_ASSERT(static_cast<s32>(lpDstTexture->GetFormat()) == KI_PIXELFORMAT_LIN_DXT1,
+                    "rw::graphics::core::PIXELFORMAT_LIN_DXT1 == lpDstTexture->GetFormat()");
+-        return 0; /* BLOCKED: XCAM status + stream-engine frame geometry */
++
++        if (static_cast<s32>(XCamGetStatus()) != KI_XCAM_STATUS_READY)
++        {
++            return;
++        }
++
++        CGS_ASSERT(mpTextureCompressor, "mpTextureCompressor");
++
++        // ARTIST reads the already-prepared +0x43B50 NetworkTexture, not the opaque XCAM stream
++        // engine: +0x14 source pixels, +0x08 width, +0x0C height, +0x04 bits-per-pixel, and
++        // +0x10 source format. SetNewTextureToCompress copies those source bytes into its own
++        // pending double-buffer before it records the callback/user data.
++        mpTextureCompressor->SetNewTextureToCompress(
++            mLocalCameraTexture.GetTexture(),
++            mLocalCameraTexture.GetTextureSize(),
++            mLocalCameraTexture.GetWidth(),
++            mLocalCameraTexture.GetHeight(),
++            mLocalCameraTexture.GetStride(),
++            lpDstTexture->GetStride(),
++            liQualitySetting,
++            static_cast<s32>(mLocalCameraTexture.GetFormat()),
++            0,
++            lCompleteCallback,
++            lpCompleteData);
+     }
+ 
+     // The static reliable-message trampolines are DECLARATION-ONLY: the arrived paths walk the
+diff --git a/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.h b/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.h
+index 7bca37ff6..57312d2e5 100644
+--- a/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.h
++++ b/src/GameSource/Network/Managers/X360/BrnNetworkCameraX360.h
+@@ -256,10 +256,12 @@ namespace BrnNetwork
+         // X360 0x8258B6F8 -- stamp the local camera status into the local player's menu data.
+         void UpdateCameraStatus();
+ 
+-        // queue the local camera picture for DXT compression for transmission
+-        // at compression quality liQualitySetting.
+-        // DECLARATION-ONLY (depends on the un-homed XCamGetStatus + stream-engine geometry).
+-        s32 GetCompressedLocalCameraPicture(
++        // X360 0x82586890. If XCamGetStatus is ready, queue the prepared local texture into the
++        // shared DXT compressor using the requested quality and completion callback. The local
++        // texture owns its source bytes; NetworkTextureDXTCompress copies them into its own
++        // double-buffer before returning. DecFIGS CameraPS3 declares the role-analogous method
++        // void; both X360 callers also ignore the raw r3 residue from this call.
++        void GetCompressedLocalCameraPicture(
+             CgsNetwork::NetworkTexture* lpDstTexture,
+             s32 liQualitySetting,
+             CgsNetwork::NetworkTextureDXTCompress::CompressionCompleteCallback lCompleteCallback,
+@@ -287,6 +289,9 @@ namespace BrnNetwork
+                                                             void* lpCamera);
+ 
+     private:
++        // Scratch-fixture access only; this friend does not add storage or affect the class ABI.
++        friend struct CameraX360TestAccess;
++
+         // X360 0x82586AF8 / 0x82586C50 -- open/close the VDP UDP socket. DECLARATION-ONLY
+         // (Winsock/XDK socket layer is un-homed glue).
+         void OpenSocket();
+diff --git a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp
+index 9421cfa67..bee45ede4 100644
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.cpp
+@@ -6,7 +6,7 @@
+ // recovered from, and the ship-vs-leak divergence list.
+ //
+ // Bodies recovered here (X360 ARTIST addresses; * = EXPORT HOLE, see each banner):
+-//   Construct()                                   * 0x827539A0
++//   Construct()                                     0x827539A0
+ //   Destruct()                                      0x8274F690
+ //   SetAssetList( u32, const VehicleAsset* )        0x82753A38
+ //   AddVehiclesToTargetList( u32, const u8* )       0x8274F6A0
+@@ -45,34 +45,19 @@ namespace BrnTraffic
+ 
+ 
+ // -----------------------------------------------------------------------------
+-// * @0x827539A0 -- EXPORT HOLE. No .ida-exports JSON for this address, so neither
+-// pseudocode nor assembly can be read; the body below is the leaked Feb-2007
+-// TrafficCarStreamer::Construct with one adaptation.
+-//
+-// The call is attested from the caller: TrafficEntityModule::Construct @0x82740220 calls
+-// `TrafficCarStreamer::Construct( this + 469848 )`, and UpdateStreaming @0x82748848
+-// addresses the same member. Every store in the leak's body has a reader in the exported
+-// siblings: mauLoadStates starts 0 (OnLoadBegin @0x82757E40 asserts ==0), maxLoadFlags
+-// starts 0 (AreAllAssetsLoaded @0x82706288 skips slots with the low two bits clear),
+-// mauRenderingHistory starts 0 (Update @0x8274F740 treats non-zero as recently drawn), and
+-// every maGraphicsStubs slot starts null (OnLoadBegin asserts it).
+-//
+-// The adaptation: the leak calls the 3-parameter
+-// `BaseClass::Construct( E_POOL_TRAFFIC, E_ASSETSET_GRAPHICS, false )`, but the ship base is
+-// 4-parameter, `Construct( liPoolId, lbSlotPoolSystem, leAssetSet, lbAllowFailure )` (pinned
+-// by WorldGraphicsStreamer::Construct @0x827CA388). lbSlotPoolSystem is false here because
+-// InternalBaseStreamer::PostLoadRequest only adds the entry index to the pool id when it is
+-// set, and traffic graphics all land in the single E_POOL_TRAFFIC pool.
+-// FLAG: this body is an export hole, so `false` for lbSlotPoolSystem and the E_POOL_TRAFFIC
+-// value itself (15, DWARF ps3mem.h) are the two facts ARTIST does not directly attest.
+-// Revisit this line if a traffic bundle is ever seen requested from pool 15+slot.
++// ARTIST raw 0x827539A0..0x82753A34: complete constructor body.
++// The direct InternalBaseStreamer call binds four arrays of 64 entries, length 64,
++// pool 15, slot-pool false, graphics asset set 0, and allow-failure true.
++// The final flag is byte 1 stored at caller sp+0x5F (827539C4).
++// The remaining named-member stores match the original 64-slot clear and
++// null-handle assignment loop.
+ // -----------------------------------------------------------------------------
+ void TrafficCarStreamer::Construct()
+ {
+     BaseClass::Construct( BrnResource::E_POOL_TRAFFIC,
+-                          false /*lbSlotPoolSystem -- see the FLAG above*/,
++                          false /*lbSlotPoolSystem*/,
+                           BrnResource::E_ASSETSET_GRAPHICS,
+-                          false /*lbAllowFailure*/ );
++                          true /*lbAllowFailure: ARTIST827539C4*/ );
+ 
+     muNumAssets = 0;
+ 
+diff --git a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.h b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.h
+index 0dedde988..1c2036ae1 100644
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.h
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficCarStreamer.h
+@@ -100,9 +100,8 @@ class TrafficCarStreamer : public BrnWorld::BaseStreamer< KU_MAX_VEHICLE_ASSETS
+ public:
+     // ---- lifecycle ---------------------------------------------------------
+ 
+-    // @0x827539A0 -- EXPORT HOLE (no .ida-exports JSON for this address). Body
+-    // from the leak, with the base call adapted to the ship's 4-parameter
+-    // BaseStreamer<N>::Construct. See the .cpp for the full FLAG.
++    // ARTIST raw 0x827539A0..0x82753A34: base pool 15, slot-pool false,
++    // graphics set 0, allow-failure true; clear 64 slots and null their handles.
+     void Construct();
+ 
+     // @0x8274F690 -- `*(this + 12280) = 0`, i.e. muNumAssets = 0. Nothing else.
+diff --git a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
+index 72efc512e..b4b2f304a 100644
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
+@@ -5994,6 +5994,9 @@ void TrafficEntityModule::PreSceneUpdate(CgsModule::IOBufferStack* lpInputBuffer
+     lpOutput->LockForWrite();
+     lpInput->LockForRead();
+ 
++    // ARTIST 8274AA74: reset before the divergence banner and all state branches.
++    muNumTrafficInsertionsThisFrame = 0;
++
+     if (mbHullSyncDivergence)
+     {
+         // GATE: the hull-sync 2D banner. Its four text/position/size/colour constants come
+@@ -9375,27 +9378,49 @@ void TrafficEntityModule::UpdateParams_UpdateNeighbours(Param* lpParam,
+ }
+ 
+ // ----------------------------------------------------------------------------
+-// TrafficEntityModule::UpdateParams_TryToReinsertParam  @0x827247F0  (.cpp 10552)  GATED
+-//
+-// Online divergence repair: re-seats a param onto the nearest lane under the vehicle's actual
+-// transform. Reached only through mParamsToReinsert, which nothing in the offline driving path
+-// fills, and asserts AllowDivergentBehaviour() on entry.
+-//
+-// BLOCKERS (all three): TrafficData::FindNearestLaneForPoint has no declaration in
+-// SharedClasses/Traffic/BrnTrafficDataResourceType.h; Param::ReinsertInLanes has no declaration
+-// in BrnTrafficParam.h; muNumTrafficInsertionsThisFrame's <= 1 budget test at +232478 is the
+-// only other read. DELETE-WHEN those two land.
+-// ----------------------------------------------------------------------------
++// ARTIST 0x827247F0. Attempt at most two lane repairs per PreSceneUpdate frame.
++// The query consumes actual vehicle position/direction, then the active-hull gate.
+ void TrafficEntityModule::UpdateParams_TryToReinsertParam(u32 luParam)
+ {
+     CGS_ASSERT(mbAllowDivergentBehaviour, "AllowDivergentBehaviour()");
+-    (void)luParam;
++    if (muNumTrafficInsertionsThisFrame > 1)
++    {
++        return;
++    }
+ 
+-    static bool sbLogged = false;
+-    LogMissingLeg_T2(sbLogged,
+-                  "UpdateParams_TryToReinsertParam @0x827247F0 -- needs "
+-                  "TrafficData::FindNearestLaneForPoint and Param::ReinsertInLanes, neither "
+-                  "declared in the tree");
++    Param* const lpParam = GetParam(luParam);
++    const Vector3 lPosition = GetVehicleTransform(luParam).Pos();
++    const Vector3 lDirection = GetVehicleTransform(luParam).At();
++    const VecFloat lfMaxDistance{20.0f, 20.0f, 20.0f, 20.0f};
++    const VecFloat lfMinCosAngle{0.8f, 0.8f, 0.8f, 0.8f};
++    u32 luHull, luSection, luSegment;
++    f32 lfParamAlong;
++    const bool lbFound = mpData->FindNearestLaneForPoint(
++        lPosition, lfMaxDistance, lDirection, lfMinCosAngle,
++        &luHull, &luSection, &lfParamAlong, &luSegment);
++    ++muNumTrafficInsertionsThisFrame;
++    if (!lbFound)
++    {
++        return;
++    }
++    const u16 luActiveHull = static_cast<u16>(luHull);
++    if (mActiveHulls.Contains(luActiveHull))
++    {
++        const Hull* const lpHull = GetHull(luHull);
++        const Section* const lpSection = lpHull->GetSection(luSection);
++        lpParam->ReinsertInLanes(luHull, luSection, lfParamAlong, lpHull);
++        Vector3 lLanePosition, lLaneDirection, lLaneRight;
++        const VecFloat lfAlong{lfParamAlong, lfParamAlong, lfParamAlong, lfParamAlong};
++        // This sampler's third output is RIGHT (the existing lrUp name is misleading).
++        lpSection->CalcTransformAtParameter(lpHull->mpaRungs, lfAlong,
++                                          lpParam->muCurrentSegment,
++                                          lLanePosition, lLaneDirection, lLaneRight);
++        const f32 lfSpeed = lpParam->mfSpeed;
++        GetParamTransform(luParam)->Initialise(
++            lLanePosition, lLaneDirection, lLaneRight,
++            VecFloat{lfSpeed, lfSpeed, lfSpeed, lfSpeed});
++        GetVehicle(luParam)->ResetPhysicalTime(5.0f);
++    }
+ }
+ 
+ // ----------------------------------------------------------------------------
+@@ -9415,22 +9440,11 @@ void TrafficEntityModule::UpdatePressure_Reset()
+ }
+ 
+ // ----------------------------------------------------------------------------
+-// TrafficEntityModule::Pressure_PickSplitToTake  @0x8272BC68  (.cpp 17230..17233)  PARTIAL
+-//
+-// Picks which of a section's three forward splits a param should take: lowest score wins, ties
+-// keep the earlier direction. The base score is 0 for straight-on and 100 for a left/right
+-// split whose turn probability is zero; the console then adds the destination span's occupancy
+-// pressure.
+-//
+-// GATED LEG -- the pressure term. It is
+-//   score += (f32)lpHullRuntime->GetSectionSpanVehicleCount(span) *
+-//            lpHull->mpaSectionSpans[span].mfMaxVehicleRecip;
+-// BLOCKER: BrnTraffic::SectionSpan is forward-declared only in SharedClasses/Traffic/
+-// BrnTrafficHull.h. DWARF BrnTrafficSection.h:260 spells it (u16 muMaxVehicles @+0,
+-// f32 mfMaxVehicleRecip @+4, record stride 8, plus Hull::GetSectionSpan at BrnTrafficHull.h:94)
+-// -- home it there and this leg is a two-line edit. Until then the fallback is the console's
+-// own no-hull-runtime value, 1.0f, so every split scores alike and direction 0 wins.
+-// DELETE-WHEN SectionSpan is homed.
++// TrafficEntityModule::Pressure_PickSplitToTake @0x8272BC68.
++// Active destinations score occupancy times the span's reciprocal capacity plus
++// the direction penalty (scalar fmadds at8272BF98). An absent hull runtime keeps
++// the original fallback score1. Equal scores preserve the earlier direction;
++// unordered scores do not replace the best score. SectionSpan is already homed.
+ // ----------------------------------------------------------------------------
+ void TrafficEntityModule::Pressure_PickSplitToTake(const Section* lpSection,
+                                                    u8* lpuOutSection,
+@@ -9474,21 +9488,17 @@ void TrafficEntityModule::Pressure_PickSplitToTake(const Section* lpSection,
+ 
+         const Hull* lpTargetHull = GetHull(luHull);   // carries the muNumHulls bound
+ 
++        const HullRuntime* lpHullRuntime = GetHullRuntimeSafe(luHull);
+         f32 lfScore = 1.0f;
+-        if (mauHullRuntimeDataIndices[luHull] != KU_INVALID_HULL_RUNTIME)
++        if (lpHullRuntime != 0)
+         {
+-            CGS_ASSERT(luSection < lpTargetHull->muNumSections, "luIndex < muNumSections");
+             const Section* lpTargetSection = lpTargetHull->GetSection(luSection);
+-            CGS_ASSERT(lpTargetSection->muSpanIndex < lpTargetHull->muNumSectionSpans,
+-                       "luIndex < muNumSectionSpans");
+-
+-            lfScore = lafScores[luDirection];
+-
+-            static bool sbLogged = false;
+-            LogMissingLeg_T2(sbLogged,
+-                          "Pressure_PickSplitToTake @0x8272BC68 span-occupancy term -- "
+-                          "BrnTraffic::SectionSpan is forward-declared only in "
+-                          "SharedClasses/Traffic/BrnTrafficHull.h (DWARF BrnTrafficSection.h:260)");
++            const u32 luSpanIndex = lpTargetSection->muSpanIndex;
++            const SectionSpan* lpSpan = lpTargetHull->GetSectionSpan(luSpanIndex);
++            const f32 lfVehicleCount =
++                static_cast<f32>(lpHullRuntime->GetSectionSpanVehicleCount(luSpanIndex));
++            lfScore = std::fma(lfVehicleCount, lpSpan->GetMaxVehicleCountReciprocal(),
++                               lafScores[luDirection]);
+         }
+ 
+         if (lfScore < lfBestScore)
+@@ -16974,17 +16984,63 @@ void TrafficEntityModule::HandleExternalResponses(const BrnTrafficIO::InputBuffe
+                 GetVehicle(luVehicle)->SetAlarmOn(true);   // @0x8270FC10
+             }
+ 
+-            // GATE G-ARTIC: the cab/trailer pairing arms and their
+-            // Array<TrafficCrashInfo,160>::Append. BLOCKER: needs Vehicle::GetTrailerIndex, absent
+-            // here; and the standard-species arm early-outs on muOtherHalfIndex == KU_INVALID_VEHICLE,
+-            // which every generated car has. DELETE-WHEN trailers land.
++            // ARTIST82733100..82733450: the other articulated half is queued
++            // for the existing emergency-crash drain. The two roles validate
++            // their reciprocal links at different points; retain that order.
++            u32 luOtherVehicle;
++            const char* lpcPairSelfCrashMessage;
++            if (lpVehicle->IsOfStandardSpecies())
++            {
++                lpcPairSelfCrashMessage = "Trailer's been told to crash into itself: ";
++                luOtherVehicle = lpVehicle->GetOtherHalfIndex();
++                if (luOtherVehicle == KU_INVALID_VEHICLE)
++                {
++                    continue;
++                }
++                const Vehicle* lpTrailer = GetVehicle(luOtherVehicle);
++                CGS_ASSERT(lpTrailer->IsOfTrailerSpecies(), "IsOfTrailerSpecies()");
++                CGS_ASSERT(lpTrailer->GetOtherHalfIndex() == luVehicle,
++                           "Mismatched artic parts: cab id=");
++                if (lpTrailer->IsCrashing() || EntityIndexOf(lCrasherId) == luOtherVehicle)
++                {
++                    continue;
++                }
++            }
++            else if (lpVehicle->IsOfTrailerSpecies())
++            {
++                lpcPairSelfCrashMessage = "Cab's been told to crash into itself: ";
++                if (lpVehicle->GetOtherHalfIndex() == KU_INVALID_VEHICLE)
++                {
++                    continue;
++                }
++                luOtherVehicle = lpVehicle->GetCabIndex();
++                const Vehicle* lpCab = GetVehicle(luOtherVehicle);
++                if (lpCab->IsCrashing() || EntityIndexOf(lCrasherId) == luOtherVehicle)
++                {
++                    continue;
++                }
++                CGS_ASSERT(lpCab->GetTrailerIndex() == luVehicle,
++                           "Mismatched artic parts: trailer id=");
++            }
++            else
++            {
++                continue;
++            }
++
++            TrafficCrashInfo lPairedCrash;
++            lPairedCrash.mVictimId = MakeTrafficEntityId(luOtherVehicle);
++            lPairedCrash.mCauserId = lCrasherId;
++            if (lPairedCrash.mCauserId.muValue == 0xFFFFFFFFu)
+             {
+-                static bool sbLoggedArticGate = false;
+-                LogGateOnce(sbLoggedArticGate,
+-                            "loop 1 cab/trailer pairing + Array<TrafficCrashInfo,160>::Append "
+-                            "parked -- Vehicle::GetTrailerIndex is absent and no generated car "
+-                            "carries a trailer this round");
++                lPairedCrash.mCauserId = MakeTrafficEntityId(luVehicle);
+             }
++            lPairedCrash.muCrashTrafficType =
++                static_cast<u32>(BrnPhysics::Vehicle::eCrashTrafficType_Standard);
++            CGS_ASSERT(lPairedCrash.mVictimId.muValue != lPairedCrash.mCauserId.muValue,
++                       lpcPairSelfCrashMessage);
++            // Original stores only victim, causer and type. The emergency drain
++            // does not consume mbNeedsToBeSentToCrashModule; leave it unwritten.
++            maEmergencyCrashingVehicles.Append(lPairedCrash);
+         }
+     }
+ 
+diff --git a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.h b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.h
+index 120a01fec..4b2ba6468 100644
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.h
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.h
+@@ -237,6 +237,8 @@ public:
+     f32 GetPhysicalTime() const;
+     f32 GetManoeuvreTime() const;
+     void AddPhysicalTime(f32 lfDelta);
++    // DWARF :469; UpdateParams_TryToReinsertParam827249E4 inlines this bare store.
++    void ResetPhysicalTime(f32 lfTime) { mfPhysicalTime = lfTime; }
+     void AddManoeuvreTime(f32 lfDelta);
+     // DWARF BrnTrafficVehicle.h:484. Inlined by UpdateStuckReverseManoeuvre @0x82719430 as the
+     // `stfs 0.0, 0x60(vehicle)` at 0x8271984C (Vehicle+0x60 == mfManoeuvreTime).
