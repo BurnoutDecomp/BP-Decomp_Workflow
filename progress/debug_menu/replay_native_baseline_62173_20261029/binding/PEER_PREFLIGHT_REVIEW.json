@@ -1,0 +1,47 @@
+{
+  "verdict": "pass",
+  "manifest_sha256": "1eb51119f2a208866f02b4ab22ef24277cf49f03a54e02e5f75c4dc46a28230a",
+  "reviewer": "/root/replay_integration_review",
+  "reviewed_utc": "2026-10-29T20:45:07.472995+00:00",
+  "slot": 62173,
+  "source": "22e673523a69a7a710d53a2bbba61efa0824700c",
+  "build_workflow": "7a07483b07bec58bd52d59ec63024bd347fde28d",
+  "metadata_workflow": "cf5dffdeb6aece13206d650885924f270423132b",
+  "exe_sha256": "ccdbfa54ca4f51a776f525ccd3760ff020307cbb33b509a700237f841bc21b54",
+  "scope": "Concrete private one-shot startup baseline prelaunch binding and ownership/normal-protection guard review only",
+  "verified": {
+    "manifest_members": 19,
+    "staged_launch_payloads": 15,
+    "normal_protected_rows_current_unchanged": 36,
+    "normal_profile_rows": 11,
+    "asset_same_file_identity_and_size_checks": 5622,
+    "asset_hashes_freshly_recomputed": false,
+    "asset_runtime_guard": "Run.py opens all assets GENERIC_READ with FILE_SHARE_READ only before game launch and closes them in finally",
+    "baseline_checks": 16,
+    "strict_terminal_expected_total": 17,
+    "skip_intro": false,
+    "fresh_run_directory_private_log_and_one_shot_marker": true,
+    "scoped_inputs_only": true,
+    "strict_original_process_handle_cleanup": true,
+    "capture_stop_requires_exact_pid_image_start_and_required_phases": true,
+    "max_seconds": 450,
+    "bootvideo_seconds": 120,
+    "max_log_mib": 128,
+    "frame_cap": 10,
+    "no_game_launch_by_reviewer": true
+  },
+  "resolved_review_findings": [
+    "Inherited baseline script copied byte-identically to native/BaselineCase.ps1 and pinned in manifest and checked dependencies",
+    "Known-assert input pinned in checked shared dependencies",
+    "Launch now asserts fresh private log and run directory, retaining exclusive one-shot marker"
+  ],
+  "limitations": [
+    "This is launch review, not evidence of baseline runtime success",
+    "No Replay record/play/open-state stimulus is authorized or certified by this receipt",
+    "No recording/playback, native visual/audio parity or menu-site/count credit follows",
+    "Asset content hashes are inherited from retained frozen snapshot; reviewer checked same-file identity and size, not a fresh5GB content hash",
+    "Normal log changes remain V8 observational snapshots without writer attribution; non-log normal rows remain strict"
+  ],
+  "normal_deployment": false,
+  "native_behavior_credit": false
+}
