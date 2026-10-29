@@ -1,0 +1,1733 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-28T22:20:28.6552941Z",
+  "status": "private source checkpoint; review pending",
+  "workflow_branch": "codex/debug-source-composition-20261028",
+  "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
+  "b5_source_branch": "codex/debug-source-composition-20261028",
+  "b5_source_head": "e0aeb5ab4dad936a77b9bf0f573d2a6e9a0a52c3",
+  "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+  "review_policy": "pending checkpoints are not verified or integrated",
+  "native_game_launched": false,
+  "site_credit": 0,
+  "packets": [
+    {
+      "packet_id": "traffic_chunk01_killzone_normalization",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk01_killzone_normalization/REVIEWER_PACKET.md",
+      "packet_sha256": "86d46f87a5245f0c7144180f50e5076dbe32068ef4655f6aecda7d80618d69ff",
+      "manifest_sha256": "0db24d4951f81a2d3c12f79271c6bfbc19f5d6816bb7f5ceebe09d4d2fe580cd",
+      "source_delta_sha256": "7dea22daf28300267db48658b5006c15553251ae4a347c07cc9d491d7b2b355e",
+      "seal_file_sha256": "8df9154f9ad8e1f7b93280b1dca26e965a5d269cbdf661faf49f9f7945f165dc",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "2930564b267caf8e2ba28c05e0d251637c065b78",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+          "pre_sha256": "ec441f30a7b305f0da7bb12be67106e12aab4addfd4b1412896eed77bf37a9f7",
+          "post_sha256": "79a53306fca4f20d7f9c44df8037ea8e6521ba25f5913bfe9e969deff56c1baa"
+        }
+      ],
+      "affected_sites": [
+        "BrnTraffic::DebugComponent::OnActivate#0055",
+        "BrnTraffic::DebugComponent::OnActivate#0056"
+      ],
+      "validation": {
+        "canonical_actual_tu_pre_compile_exit": 0,
+        "canonical_actual_tu_post_compile_exit": 0,
+        "focused_cpu_cases": 169,
+        "pre_pass": 69,
+        "post_pass": 169,
+        "native_game_launched": false,
+        "hardware_accuracy_proved": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": "pass",
+      "combined_review_path": "scratch/DEBUG_MENU_1011/swarm_traffic_shadowprop_combined_source_review_20261028/FINAL_REVIEW.md",
+      "combined_review_sha256": "247eff908e96835acce4e60d0d7d6f90c14fed3514c8b6d71af931ec4a7de5d0",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_chunk02_param_lerp",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk02_param_lerp/REVIEWER_PACKET.md",
+      "packet_sha256": "9141c9625151f4affb0df2855b00c8191cc530aea5ff30ad574948dbdec70e4f",
+      "manifest_sha256": "72c6a1812fec392ccdd7264c6999209ca6a002da21ebcbcd1eb3e79fa2fdaa0c",
+      "source_delta_sha256": "c12ee2b7944174b332038772d0d52008ff87d9adfa86c2ac3ff9e9070956c418",
+      "seal_file_sha256": "7a211f4ab38be3ac22e7be639f1fd81bb0a6a1601bff36154baf4557ce82edfd",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "5386d3b47d1d11388d2ac7dfeedc42588819df97",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficParam.cpp",
+          "pre_sha256": "f88c336fa5275b20a4d6b25212b306f48ee090fea5b438114c81eafd9bfe1627",
+          "post_sha256": "8d8311bbf52e17e7850c837f48f74bb099d0054ab9a5fc3979ff189d62902250"
+        }
+      ],
+      "affected_sites": [
+        "BrnTraffic::DebugComponent::OnActivate#0040"
+      ],
+      "validation": {
+        "canonical_actual_tu_pre_compile_exit": 0,
+        "canonical_actual_tu_post_compile_exit": 0,
+        "focused_cpu_cases": 265,
+        "pre_pass": 238,
+        "post_pass": 265,
+        "native_game_launched": false,
+        "hardware_accuracy_proved": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": "pass",
+      "combined_review_path": "scratch/DEBUG_MENU_1011/swarm_traffic_shadowprop_combined_source_review_20261028/FINAL_REVIEW.md",
+      "combined_review_sha256": "247eff908e96835acce4e60d0d7d6f90c14fed3514c8b6d71af931ec4a7de5d0",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "shadow_pvs_prop_lod_order",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_shadow_pvs_source_recovery_20261028/REVIEWER_PACKET.md",
+      "packet_sha256": "628eb7eff4e64f310320a7e88ba17e487c31a59941567e061d71c74d91a849a2",
+      "manifest_sha256": "9aaba7e0972d7c57b6dbbe2026b8843d26e0a2258c1aa0be703501838c9d7d93",
+      "source_delta_sha256": "71b250f5e02bd1b5d5d60740df4e355b0b1f9f83f6f830cda84fef0569873558",
+      "seal_file_sha256": "f35e3c5da3eab2097bbb7dc625992b1590f2527912953c07b0ef69fc48c9fa0d",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "2264b5e9cac307aa1bce80696fbcad232acc30ff",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+          "pre_sha256": "a6adc82266366f03a4fe6c1013d263bbe29aa322027468ae87a417317a28a847",
+          "post_sha256": "1bfda17dcf06ce5accda9c7451795b66af95130fced1afe71641f83cde8428cf"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityDebugComponent.h",
+          "pre_sha256": "b631ba9dc23e39694a69679c16b62661d6982db5cc7b65f85eddc3d614f7912a",
+          "post_sha256": "6d63379a63740f740033233d2fc8e13797d3823ebf4afe88e92d05338402aa3f"
+        }
+      ],
+      "affected_sites": [
+        "40-control Prop/World roster; statuses remain pending"
+      ],
+      "validation": {
+        "canonical_pre_tu_compile": "pass",
+        "canonical_post_tu_compile": "pass",
+        "compile_tus": [
+          "BrnPropEntityModule_Render.cpp",
+          "BrnPropEntityDebugComponent.cpp"
+        ],
+        "pre_compile_log_sha256": "90bbe3b74228595fc912cc5f87c9669fd0e6f93fd3f8d6094895554f15656079",
+        "post_compile_log_sha256": "90bbe3b74228595fc912cc5f87c9669fd0e6f93fd3f8d6094895554f15656079",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": "pass",
+      "combined_review_path": "scratch/DEBUG_MENU_1011/swarm_traffic_shadowprop_combined_source_review_20261028/FINAL_REVIEW.md",
+      "combined_review_sha256": "247eff908e96835acce4e60d0d7d6f90c14fed3514c8b6d71af931ec4a7de5d0",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "progression_chunk03_trophy_resource_guard",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_progression_source_20261028/chunk03_trophy_resource_guard/REVIEWER_PACKET.md",
+      "packet_sha256": "82672f3fa1c80b3b2197c9bad16e27e45bb1ac7da15ef812cd879c1b62c13fc0",
+      "manifest_sha256": "a2fd99e307c0462bcf1db22e9cd947b0c90d364e4427c91b1a9b5cd970c602c1",
+      "source_delta_sha256": "85c6a054b9773394cdf154ba32a489aa53fe7b4096d52f5b43a8e60ec1380175",
+      "seal_file_sha256": "b3aa1dcf7a560fda11a960919436a5852c37e18413472c333d38430d0dad11da",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "81fe1c70c8add9feac653ad8b9f73a0a041364ed",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/Progression/BrnProgressionManager_Unlocks.cpp",
+          "pre_sha256": "e0a5f462d8bebe01fbafe30de17df74afb1f4a1104579bffe2034bc747739b1a",
+          "post_sha256": "75c4ad43e0df998c84829c94501b91a2ec4ed8d4abb0a93f23264b36109b510a"
+        }
+      ],
+      "affected_sites": [
+        "BrnProgression::ProgressionManager::OnTrophyUnlock"
+      ],
+      "validation": {
+        "canonical_pre_tu_compile": "pass",
+        "canonical_post_tu_compile": "pass",
+        "compile_tu": "BrnProgressionManager_Unlocks.cpp",
+        "pre_compile_log_sha256": "4e396bea5a0467a68049bcb488ad90078762f222585af1a99d97347c812d914f",
+        "post_compile_log_sha256": "4e396bea5a0467a68049bcb488ad90078762f222585af1a99d97347c812d914f",
+        "runtime": false,
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": "pass",
+      "combined_review_path": "scratch/DEBUG_MENU_1011/swarm_traffic_shadowprop_combined_source_review_20261028/FINAL_REVIEW.md",
+      "combined_review_sha256": "247eff908e96835acce4e60d0d7d6f90c14fed3514c8b6d71af931ec4a7de5d0",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "sound_source_batch01_state_manager_prepare",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_sound_source_20261028_batch01/REVIEWER_PACKET.md",
+      "packet_sha256": "c55795e1f52805cca15070237847374dabbdf34d5b9fe36ddf1d73274c98df3f",
+      "manifest_sha256": "deb671b0bde611f91a04cd5f2818f9cf3d9a27015fbd937a049706e408511377",
+      "source_delta_sha256": "e2d9070ef8c90dc365a082bcec261084578a9e0d7673804e8ea03524da3903c9",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "8deac37d25ffd38e57d5b77bc6b1f97e606a43e7",
+      "packet_baseline_b5": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+      "validated_source_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameShared/GameClasses/Sound/Logic/CgsStateManager.cpp",
+          "pre_sha256": "7b6f3b7898e141642e350c856461303758ccb10c41a88d826c16b757b9a48608",
+          "post_sha256": "f6a3bcda9946c3b56c614b39330bb94868089f420e5260b94c2213d2472e127d"
+        },
+        {
+          "path": "src/GameShared/GameClasses/Sound/Logic/CgsStateManager.h",
+          "pre_sha256": "1e5f787d6d0ef2b71c732f0eda56436be531e2079349401b542338e95b3c3f82",
+          "post_sha256": "ccba54e509df886b9b401e89b1f07613a3cc65853bc58a41fd01871c18bd9ca5"
+        }
+      ],
+      "affected_sites": [
+        "BrnSound::Debug::DebugComponent::OnActivate#0096-0101",
+        "BrnSound::Debug::DebugComponent::OnActivate#0103-0117",
+        "BrnSound::Debug::DebugComponent::OnActivate#0119-0131"
+      ],
+      "validation": {
+        "canonical_actual_tu_compile": "pass",
+        "old_new_source_controls": "pass",
+        "preimages_verified_unchanged_at_d158": true,
+        "runtime": "not run",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": "pass",
+      "combined_review_path": "scratch/DEBUG_MENU_1011/swarm_traffic_shadowprop_combined_source_review_20261028/FINAL_REVIEW.md",
+      "combined_review_sha256": "247eff908e96835acce4e60d0d7d6f90c14fed3514c8b6d71af931ec4a7de5d0",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "effects_pfx_calls_and_hook_list",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_effects_pfx_calls_d158_20261028/REVIEWER_PACKET.md",
+      "packet_sha256": "8d871e405ca5c69b9095d21800dc8b731d0275e17a596e5afc6ccfb64bae6964",
+      "evidence_manifest_sha256": "759919fe138a598bec81f09b8a401dc1d86023d178a26fc38e73a01ee45bf9d6",
+      "seal_file_sha256": "31dfbab34d77e6aed80fa9484ab6a5a2eae82acb2e9c358d73d247ff0d74fa06",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "dadf56dd14db98831f9f5621748b598694677f7e",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp",
+          "pre_sha256": "7711fe4bb44cb9f9bb055fbd49b02e50c4eeab21515f5b9057a00de33837e73b",
+          "post_sha256": "e69a49aced2b1287a94850f1513a8824355cc1e5cc13f359c46a49b262188fcb"
+        }
+      ],
+      "validation": {
+        "packet_baseline_compile": "pass",
+        "packet_overlay_compile": "pass",
+        "packet_cpu_control": "pass",
+        "canonical_pre_actual_tu_compile": "pass",
+        "canonical_post_actual_tu_compile": "pass",
+        "pre_compile_log_sha256": "23add6c7138817f4969ba4a05acd6d50de50d4e186c041722b937e7b1609c3cf",
+        "post_compile_log_sha256": "23add6c7138817f4969ba4a05acd6d50de50d4e186c041722b937e7b1609c3cf",
+        "runtime": "not run",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": "pass",
+      "combined_review_path": "scratch/DEBUG_MENU_1011/swarm_traffic_shadowprop_combined_source_review_20261028/FINAL_REVIEW.md",
+      "combined_review_sha256": "247eff908e96835acce4e60d0d7d6f90c14fed3514c8b6d71af931ec4a7de5d0",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "sound_source_batch02_updatepaths",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_sound_source_20261028_batch02/REVIEWER_PACKET.md",
+      "packet_sha256": "edb05fded0bb0e26d907a1e6fcc69dc5dd965cb69352a592cabef92ac0db6c7b",
+      "manifest_sha256": "3b9e535c165831116361e23cc512247a9b549a6b4090393b1cf3e5194b9fbd69",
+      "source_delta_sha256": "c402b44059c458ad0cbc90dc193a7a5aa1760ddce9ae9706ffff9a6c83883f07",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+      "source_tree_pin_b5": "dadf56dd14db98831f9f5621748b598694677f7e",
+      "packet_baseline_b5": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+      "current_preimages_verified_at_b5": "dadf56dd14db98831f9f5621748b598694677f7e",
+      "source_files": [
+        {
+          "path": "src/GameSource/Sound/Global/BrnGlobalStateManager.cpp",
+          "pre_sha256": "4839c6257a03555f9adf91c1f8db62aa91641838e57e4ccc201ae0b92e4e7937",
+          "post_sha256": "5f900ef40dbafd458008af3961a3ac73cb4677e7e13b15786d94a3132988c467"
+        },
+        {
+          "path": "src/GameSource/Sound/Module/LogicModule/BrnEmitterStateManager.cpp",
+          "pre_sha256": "3e8e023f33a13ca4ac6515e6a4a8eecdf00b70efc331ae0cbcf6c95ec071d2c5",
+          "post_sha256": "0984cb272b6d39ab53906007827c1e3b0d0e3b7fe85d4228a941c6075f6d8e9e"
+        },
+        {
+          "path": "src/GameSource/Sound/Streaming/BrnStreamingStateManager.cpp",
+          "pre_sha256": "d14f13a89da24e9accbcbe484ee29563cf568c0489556664b099ed4491f0857d",
+          "post_sha256": "434de38d1490aad24a135986e93c75a87de3bba55af7760b1f8b6309591d30d8"
+        }
+      ],
+      "selected_site_count": 0,
+      "related_prior_site_count": 19,
+      "related_prior_id_ranges": [
+        "0106-0116",
+        "0119-0126"
+      ],
+      "validation": {
+        "packet_canonical_compile": "pass",
+        "packet_static_source_controls": "pass",
+        "source_patch_applied_to_checkpoint": false,
+        "runtime": "not run",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "reviewer": "scene_collision_recovery_swarm",
+      "review_verdict": "pass",
+      "combined_review_path": "scratch/DEBUG_MENU_1011/swarm_traffic_shadowprop_combined_source_review_20261028/FINAL_REVIEW.md",
+      "combined_review_sha256": "247eff908e96835acce4e60d0d7d6f90c14fed3514c8b6d71af931ec4a7de5d0",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "director_camera_tail_three_readers",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_director_source_fresh_review_20261028/REVIEW.md",
+      "packet_review_sha256": "64ddde21f961bb271d8715c019dfce227b034d04f2747adadb93bbe2b3b2a91f",
+      "review_json_sha256": "765a759077a6646d4734cc7fb5c33f0ce1c499ebc7905da8e0f492d1369cbc31",
+      "manifest_sha256": "56bab7bf2ab992f44c0e46ee8a369b0c456e76df8b0f2645f7e92b96cab5d277",
+      "seal_file_sha256": "319c47ec54f58a1669c6f8ef42fc57addf0d57611eb63014e47c2801cdb63e82",
+      "approved_patch_sha256": "339c0aa2741c06f6781e843fba75dc633870718e2bca03f82aa120ceb668ef70",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "33c60318efd7a9989c179535575cdeadc322546d",
+      "packet_baseline_b5": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+      "verified_preimage_at_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/Director/BrnMainDirector.cpp",
+          "pre_sha256": "0e9562cecd3433a567db73107ec6279ecfff8609d7e14f1c87b8bb20aec0ef25",
+          "approved_lf_post_sha256": "6a3d02e7f511bc24a69e50e39aae557ccd0a549c1db03ec2708472f883c6758f",
+          "compiled_crlf_post_sha256": "1bfcc0d3ac367476265a33e01461588e7dc0286527a07de1821abd58b872c6b6"
+        }
+      ],
+      "affected_sites": [
+        "BrnDirector::DebugComponent::OnActivate#0030",
+        "BrnDirector::DebugComponent::OnActivate#0034",
+        "BrnDirector::DebugComponent::OnActivate#0051"
+      ],
+      "adjacent_rows": {
+        "source_presence_confirmed": 27,
+        "unresolved": [
+          "BrnDirector::DebugComponent::OnActivate#0025",
+          "BrnDirector::DebugComponent::OnActivate#0036"
+        ]
+      },
+      "validation": {
+        "canonical_pre_post_compile": "pass",
+        "independent_source_review": "pass",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "independent source reviewer",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "director_devtools_lifecycle_wiring",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_director_devtools_lifecycle_20261028/REVIEWER_PACKET.md",
+      "packet_manifest_sha256": "5e662a7390e7c76ea6783266a6709f5463398ff7f942d32c73ee277e33809480",
+      "packet_seal_sha256": "433ef2a60e6e052ab44ce64880e179b6444aaa67da9158a272cf934db9469a3e",
+      "fresh_review_path": "scratch/DEBUG_MENU_1011/swarm_director_devtools_lifecycle_fresh_review_20261028/REVIEW.md",
+      "fresh_review_sha256": "ec2a86446106a511c0d34d1bf38671863ecdc6c357ad2a40be459f0893ca81df",
+      "fresh_review_seal_sha256": "f54e45be2d51ea249a80c57052e2b5ab33b806953079b65f92446e68003bfedb",
+      "patch_sha256": "75d4adeb4cc164eea5b9e90602657afd2962e2edfbafd062faae05f69008ef0f",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "097d8e5688e353bf12a1dfdec0b008b99fb42f44",
+      "predecessor_director_camera_tail_b5": "33c60318efd7a9989c179535575cdeadc322546d",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/Director/BrnMainDirector.cpp",
+          "pre_sha256": "6a3d02e7f511bc24a69e50e39aae557ccd0a549c1db03ec2708472f883c6758f",
+          "post_sha256": "ae4ea3ff097cae9c81130bec8a6385b73f1f3d4aab1e76be547aac698b4eea32"
+        },
+        {
+          "path": "src/GameSource/Director/BrnMainDirector.h",
+          "pre_sha256": "04092e579313c3862efe3e0a3d8792c12de32f4dc153cfad789e7b7976e13b76",
+          "post_sha256": "165da2bffe0227e457a26cd00e186f15ca2f312fafd6d31bd2855b556f759827"
+        },
+        {
+          "path": "src/GameSource/Director/BrnDirectorDevTools.h",
+          "pre_sha256": "3d8faa5b8562bf65930aa7f97135b000e5acf66045d36fce637652e4b71166c9",
+          "post_sha256": "f0cdc69209011905d72240c7b60bbc7cbd5b449af38704091775bfffa14a652b"
+        },
+        {
+          "path": "src/GameSource/Director/BrnDirectorDevTools.cpp",
+          "pre_sha256": "c8c6bd4be39175f10c2a140c129b857556e323f8bea3d191ca57f8e4c0c45368",
+          "post_sha256": "c8c6bd4be39175f10c2a140c129b857556e323f8bea3d191ca57f8e4c0c45368"
+        }
+      ],
+      "validation": {
+        "canonical_pre_post_compile": "pass",
+        "fresh_source_review": "pass",
+        "fresh_review_cpu_checks": 12,
+        "native_game_launched": false,
+        "site_credit": 0,
+        "shipping_link": "not run"
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "independent source reviewer",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "effects_debrisparams_mutable_signature",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_effects_engine_crash_reader_20261028/REVIEWER_PACKET.md",
+      "packet_seal_sha256": "7469bf1cdc71b175a6fd82485fe5c0f89d1a7edae3ab44774f434c8d64a4fbcd",
+      "independent_review_path": "scratch/DEBUG_MENU_1011/swarm_effects_engine_crash_reader_independent_review_20261028/REVIEW.md",
+      "independent_review_sha256": "8d229e2dc89809912fb6ab49487cd78ef44ebbc8e7b98d1f38cb7997baebaccb",
+      "source_delta_sha256": "937312003ac7d8aa995413fa16b03ec4f686524a88fc8704584ce4b954a71578",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "55031208526217a2041e23b52007ee0287394d1b",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/Effects/EffectsModule.h",
+          "pre_sha256": "e9f825c6255c89029bec0f553b25ea528900f003c3c533e06c23bbb5d58e9e88",
+          "post_sha256": "7bfe0d6f225202cba8a0b36614191357e8da190d86221395fd30420d6854cadd"
+        },
+        {
+          "path": "src/GameSource/Effects/EffectsModule.cpp",
+          "pre_sha256": "4300dbfd96e1c6bf6cd440cd90676894329125ad76820893d02f18228ac3544d",
+          "post_sha256": "54ba80e633d77e48e4735da72e0a041e8e71063be5f23ae34b073c4ac7a78eeb"
+        }
+      ],
+      "validation": {
+        "packet_baseline_tu_compile": "pass",
+        "packet_overlay_tu_compile": "pass",
+        "source_coupled_signature_control": "pass",
+        "independent_overlay_compile": "pass",
+        "independent_review": "pass",
+        "engine_crash_flag_global_disposition": "pending",
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "independent effects source reviewer",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "ai_racecar_interface_velocity_speed_delta01",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_ai_routes_recovery_20261027/racecar_ai_interface_velocity_speed_20261028_delta01/REVIEWER_PACKET.md",
+      "packet_sha256": "cce342e30d04f791bd199f5243a0e9774f94dc4deaa9ecd1a79723cf83f4eb15",
+      "manifest_sha256": "d27e70ab2dbf9d0dd5455147a7c4739e5052b0b03b0a700eed200d6139f2142c",
+      "manifest_payload_sha256": "52982e5ca065247ddcce086e31b49579b80a5cdf1df04b8bdd77fd075bde67f1",
+      "seal_file_sha256": "34413ea9ed1e0740317996250d9629b474493e390488c7a527014bdfba391ca8",
+      "source_delta_sha256": "a6d032156b341081b5a1a128522193b62430e0b5e13ce1c358aac52f16d3b048",
+      "source_branch": "codex/debug-source-batch-20261028",
+      "source_checkpoint_b5": "a963bba6a5ffc92ebce621668e773ffeea020f4a",
+      "base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/AI/SharedIO/BrnRaceCarAIInterfaces.h",
+          "pre_sha256": "791b43bf9daf0a69657b41d800066447bf6f1334e4812c8fb3824383c2483ee0",
+          "post_sha256": "c7cba0131c5d134f259c8c2a948fb19e54fd860b441626a39e418db15119b18b"
+        },
+        {
+          "path": "src/GameSource/World/AI/SharedIO/BrnRaceCarAIInterfaces.cpp",
+          "pre_sha256": "aedf0a1de4ecd6cf8eaf7c8c357590c26abe2650c78b17d1e606cf2512d28655",
+          "post_sha256": "f0e77b2bc8a295b83bcc194d328c063f912ed147f58b155a96b602aff5888aa1"
+        }
+      ],
+      "validation": {
+        "candidate_compile_exit": 0,
+        "focused_regression_build_exit": 0,
+        "focused_regression_run_exit": 0,
+        "all_eight_valid_slots": true,
+        "invalid_index_case_exercised": false,
+        "native_game_launched": false,
+        "site_credit": 0
+      },
+      "review_status": "pending_independent_review",
+      "review_verdict": null,
+      "reviewer": null,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "worlddebug_fire_construct_request_reset",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_worlddebug_fire_request_writer_20261028/REPORT.md",
+      "packet_manifest_sha256": "d487ab8c57d540f021cb679f1856a130b82e5b205c06337ddaf45bcd2a34b0d5",
+      "source_delta_sha256": "36552a6525ebcb89287f4be310f689fef50cdbe9f83878f731f996ace3a6b8ec",
+      "patch_sha256": null,
+      "source_branch": "codex/debug-source-composition-20261028",
+      "source_checkpoint_b5": "dd4c71485a5eea91279de70eff4b08d56776a884",
+      "base_b5": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_file": {
+        "path": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp",
+        "pre_sha256": "9421a7e3753ad20c758308122f8c93739b8dd1f4c46118b8f1174931dc6bdc54",
+        "post_raw_sha256": "4bbc17dd7628b56d7cac9ac92404960059cf404cfc402861d431d940b09f2d7a",
+        "post_lf_sha256": "da8e2cba1c913e3dd05d3cabcf336370b70b9dff48e4be30c0fc13c74ee7ac28"
+      },
+      "target_row": "BrnWorld::WorldDebugComponent::OnActivate#0005",
+      "review_evidence_path": "scratch/DEBUG_MENU_1011/swarm_worlddebug_fire_review_run_luna_max_20261028/REPORT.md",
+      "review_evidence_sha256": "231e8a75a654c2ef365ab5eccb661ce421388f7258005d44d0d4c74cb7111ecd",
+      "validation": {
+        "packet_actual_tu_compile": "pass",
+        "packet_source_coupled_check": "pass",
+        "independent_actual_tu_compiles": 2,
+        "independent_source_coupled_check": "pass",
+        "native_game_launched": false,
+        "inventory_status_changed": false,
+        "site_credit": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "independent reviewer via fleet",
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk03_towbar_body",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk03_towbar_body/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "1f5ca8cf3375ca3f1cf34dd07c2fa2bc96587606c45dfd95eeb9fe78cb2a8e66",
+      "manifest_sha256": "7e5207d4e123a3abac6438a81a815013532c5830203942bb190620cd83a9c26e",
+      "packet_seal_file_sha256": "958d748f27e7bdd2688875d2bd4c3d319758e792691e1587a8187d370099575a",
+      "input_seal_sha256": "958d748f27e7bdd2688875d2bd4c3d319758e792691e1587a8187d370099575a",
+      "source_delta_sha256": "2b1931f9f1d390602abc9e06e5e01f1b1ea00a5bf20c562b0ca992039b9de494",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "d0e1494622a3dcf8ca785aaede053d142ad7e5ac",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.cpp",
+          "pre_sha256": "a86609150c0897eab70457e72f5cf01375a59928f0e2147fcab13dd78d1e5e4b",
+          "post_sha256": "3934dac21d463ccc06067665dd2b7e5e05e8d0af2d94fc7b9957534e5d2cab80"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 127,
+        "pre_or_omission_controls_pass": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published_exact_postimage",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk04_trailer_pool",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk04_trailer_pool/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "b16bfdeed6ec36d6dd355f7d41f41aa58bc59e3c1745c5d3cce3d66310cef568",
+      "manifest_sha256": "42d7c37b46bd1fcbe0edd0ffae8f9dc2e0dff4341fa6701be7127d940eb812d6",
+      "packet_seal_file_sha256": "2bb5a8b94869b079343dc52a05317b59b7f79215122b648d2cd8773cee23463f",
+      "input_seal_sha256": "2bb5a8b94869b079343dc52a05317b59b7f79215122b648d2cd8773cee23463f",
+      "source_delta_sha256": "b501a80d01299d27e7fa7a6b8390c2a34bb9d7df9491cf264a1af8b5d3d80436",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "16b13c39f688c0ff66cd5afbfb33ec9bb2bc357b",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "ae35fbed2ed7b66a2ca79bcde1d817674106b132140edb5720711851baa569ad",
+          "post_sha256": "915c598cc68af06274c5985f0105b17a5c0df458492cbea73de37e1941435008"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+          "pre_sha256": "d3f4847bce12db8b88e2b1221a6992ba74e49681992c15cddd5ced0c082e932f",
+          "post_sha256": "9e94c73215100c13b8b1907873bd765cc5d5d90cedc49dd274a24202482534d7"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 20,
+        "pre_or_omission_controls_pass": 2
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published_exact_postimage",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk05_lerp_caller",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk05_lerp_caller/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "c11ac963722071f32239b9ec870a23f35d9e2627fcabc3a1f7aa4a6c9bf3f352",
+      "manifest_sha256": "d13d4fcc5fd17afb421e54a017d5855142111c00f9a0573c213d6246f2ea41db",
+      "packet_seal_file_sha256": "a174fb193e3ef49505c979ce339e3d4bfb1c9ad230bc288ba8274a3a46203ed1",
+      "input_seal_sha256": "a174fb193e3ef49505c979ce339e3d4bfb1c9ad230bc288ba8274a3a46203ed1",
+      "source_delta_sha256": "242764a18ae71727a3100d9f979ac97f1202ec0380f5b8bf780279b03e1fc824",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "dfbe4f19eb4842e31d7566a55879a76ad216dd46",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "ae35fbed2ed7b66a2ca79bcde1d817674106b132140edb5720711851baa569ad",
+          "post_sha256": "cd0694eb23b61c6861839447e803db7dd33247a3e8dd91d0cd275c2366a00104"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 12,
+        "pre_or_omission_controls_pass": 7
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published_context_rebased_after_chunk04; exact middle05 postimage hash verified",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0,
+      "recomposition_packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/recomposition_chunks05_06_20261028/REVIEWER_PACKET.md",
+      "recomposition_manifest_sha256": "65f3684f84f041e08466bee350ad9170b9cffcd9a268b244c535650138615f0e",
+      "recomposition_seal_manifest_sha256": "65f3684f84f041e08466bee350ad9170b9cffcd9a268b244c535650138615f0e",
+      "composed_middle05_cpp_sha256_lf": "97e1bce95251de9928f8f3716c61b53809cb719777be4b64e9c0094da1edee3c",
+      "composed_middle05_cpp_sha256_crlf": "447b4cb1ccb6d8537716772c048b198867f8f14d6b6d4cd59a5ef858fed3b4bd",
+      "context_patch05_sha256": "6996ab97ab18750751622ad9469036cbbbe2d0b7dcc5d0af6baa30cfc33dded1"
+    },
+    {
+      "packet_id": "traffic_backlog_chunk06_trailer_motion",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk06_trailer_motion/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "31deafdddf234206ab29ce960d0ce067e479b5846ae90d0a985cd8f2d7908860",
+      "manifest_sha256": "e7f7eb1f48af41693d0619a422079bd1da484d2d65e849a6f39c1a758796b79e",
+      "packet_seal_file_sha256": "07fe0fc06943b3ed2febac8429a74694d6f974f788d268beb051ef4f9288d282",
+      "input_seal_sha256": "07fe0fc06943b3ed2febac8429a74694d6f974f788d268beb051ef4f9288d282",
+      "source_delta_sha256": "c30be1803b14ea22c1d3d448340a875e328ac8af4f627c473828b8c995246bed",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "9418bb51f7ed6e96df557044ed6954d20a8bc892",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "ae35fbed2ed7b66a2ca79bcde1d817674106b132140edb5720711851baa569ad",
+          "post_sha256": "800196a9216adca3db7b82ba06eb8b6e54da0350b17d10d06bbdc2617b43ae94"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+          "pre_sha256": "d3f4847bce12db8b88e2b1221a6992ba74e49681992c15cddd5ced0c082e932f",
+          "post_sha256": "edb577cf5a57e406968b896197dca8e04d296f90aae0f95ee95934831728fe19"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 93,
+        "pre_or_omission_controls_pass": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published via exact chunk05/06 context recomposition; whole-file postimages equal chunk07 preimages",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0,
+      "recomposition_packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/recomposition_chunks05_06_20261028/REVIEWER_PACKET.md",
+      "recomposition_manifest_sha256": "65f3684f84f041e08466bee350ad9170b9cffcd9a268b244c535650138615f0e",
+      "recomposition_seal_manifest_sha256": "65f3684f84f041e08466bee350ad9170b9cffcd9a268b244c535650138615f0e",
+      "recomposition_seal_file_sha256": "948c1d69ee5f47f8456191ba8950ee6b7135b2201200212fdd5f61d90ef351c0",
+      "recomposition_middle05_cpp_crlf_sha256": "447b4cb1ccb6d8537716772c048b198867f8f14d6b6d4cd59a5ef858fed3b4bd",
+      "composed_chunk07_pre_cpp_sha256": "b01a78fcb16db2a4b4539196a1e7bfb54f16016da2c1f43e8a7ba91201c257c7",
+      "composed_chunk07_pre_header_sha256": "8684b3acedf7820cb028398aaa805526cf85245a33f45d727fd01227aedb4fa8",
+      "independent_review_method_bytes_unchanged": true
+    },
+    {
+      "packet_id": "traffic_backlog_chunk07_trailer_dispatch",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk07_trailer_dispatch/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "4e1fed34b95a5b6710d69723cae22f0a82509f166d18a866499ddb7a76b8ce7c",
+      "manifest_sha256": "3764c480b90c87ca81c12da4877ee7b29b2b2a54b0d3bca84ed86249f7009c04",
+      "packet_seal_file_sha256": "f794afaca2d4d458c16ee1a918f4e2f062711912e5f95d24207694957d6bf9cc",
+      "input_seal_sha256": "f794afaca2d4d458c16ee1a918f4e2f062711912e5f95d24207694957d6bf9cc",
+      "source_delta_sha256": "ec78028c631488e9ea93ae16728bf2df32f8ebfeb9bc45b12d124657ad6477dc",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "55a3c3c8032e9c6a9040026d5b1a86c4aed67e4d",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "b01a78fcb16db2a4b4539196a1e7bfb54f16016da2c1f43e8a7ba91201c257c7",
+          "post_sha256": "bee34ff3b48be028f94a26bbd2dd6ae717ff586030311acd1294a42df99f4e1f"
+        },
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h",
+          "pre_sha256": "8684b3acedf7820cb028398aaa805526cf85245a33f45d727fd01227aedb4fa8",
+          "post_sha256": "96a481e104c1a6732d3851a371cb63ee1d9bb76c5d0372dcbf6badc3438eaba6"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 28,
+        "pre_or_omission_controls_pass": 0
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published_exact_postimage_after_recomposition",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0,
+      "source_commit_paths": [
+        "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+        "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h"
+      ],
+      "combined_review_report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5"
+    },
+    {
+      "packet_id": "traffic_backlog_chunk08_trailer_birth_callers",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk08_trailer_birth_callers/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "5707e7664b822cd05641eea29add60c2dbe614ea79f34c9a0b2a71f756f6b604",
+      "manifest_sha256": "613a1097e36911f2a6b27ab40db18def633f374cd9576ce3354c7f5d0fa0d6dd",
+      "packet_seal_file_sha256": "0fbafca1e1d9e107a51ab605513625e7e2f489cf7aedecdb3070e9acaf9f629f",
+      "input_seal_sha256": "0fbafca1e1d9e107a51ab605513625e7e2f489cf7aedecdb3070e9acaf9f629f",
+      "source_delta_sha256": "a91292912ffdf8fc5e80c183b6a4322fbe752d149fe9d7d104983172fc3c7bd0",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "2f16863e5dc6e00d146c9d8141fe66bf18ce6621",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "pre_sha256": "bee34ff3b48be028f94a26bbd2dd6ae717ff586030311acd1294a42df99f4e1f",
+          "post_sha256": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 48,
+        "pre_or_omission_controls_pass": 40
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published_exact_postimage_after_chunk07",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    },
+    {
+      "packet_id": "traffic_backlog_chunk09_light_unordered_expiry",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_traffic_source_backlog_20261028/chunk09_light_unordered_expiry/REVIEWER_PACKET.md",
+      "reviewer_packet_sha256": "dfcbf5d719e81fd305ad13bc8c171f5b0c247197db0b64bac500f600c0374fea",
+      "manifest_sha256": "bcc48ced6aa0a0d6a0370b218a20668a0c7b34fc636a613157523cf4417bb1e4",
+      "packet_seal_file_sha256": "80424917d22f3f8bcbe6731f48b3f9e728678d51a7a38233c63bc8a408167b18",
+      "input_seal_sha256": "80424917d22f3f8bcbe6731f48b3f9e728678d51a7a38233c63bc8a408167b18",
+      "source_delta_sha256": "816cf17c64219c55c2bcdf603940f96dad5d93cb14d41f490ba5821f2a49cee4",
+      "source_branch": "codex/debug-source-composition-20261028",
+      "packet_base_b5": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_b5": "46d9d45b9b9003f02fdd9e1e4a575d1b577abe62",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficLightRuntimeState.cpp",
+          "pre_sha256": "6a44d2e2e65edac634848c6d9e7fff6499aedaaed3ce4c4e329aa8c36c68a842",
+          "post_sha256": "32dabaee73639e28a6d1b4b7233c6015cb9f1dce80c1938ff224539d5b4f3697"
+        }
+      ],
+      "reviewer_pass": {
+        "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+        "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+        "verdict": "pass",
+        "post_controls": 134,
+        "pre_or_omission_controls_pass": 106
+      },
+      "review_status": "pass_source_review",
+      "review_verdict": "pass",
+      "reviewer": "Codex GPT-6.1 Sol",
+      "publication_status": "published_exact_postimage_after_chunk08",
+      "native_game_launched": false,
+      "site_credit": 0,
+      "native_credit": 0
+    }
+  ],
+  "review_records": [
+    {
+      "record_type": "review_only_update",
+      "packet_id": "gui_output_channel40_recovery_bindings01_corrected",
+      "packet_path": "scratch/DEBUG_MENU_1011/swarm_gui_output_channel40_recovery_bindings01_20261028/REVIEWER_PACKET.md",
+      "packet_sha256": "6759a7768ed150b651a84e5c15467f21e14b14e7476d6419ab9a7ddce06302cd",
+      "manifest_sha256": "68bbeb90da3ecda1f488c9568118aa6e605b538eeea93ef23adc856009f88658",
+      "source_delta_sha256": "ddafbd638fe67f1095c8d37dee59940e98e7233e9017062cb8be91ab61d57ba3",
+      "seal_file_sha256": "2dd172304a229d1c621490cb693fb59c4dc33fdceec4df11b3999fa9c66bbd3b",
+      "source_base": "99c668c13ed446691dd9b8dababdb676d4470b9e",
+      "public_dev_comparison": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
+      "source_checkpoint_in_this_batch": null,
+      "verdict": "PASS",
+      "review_status": "pass_for_diagnostic_source_proposal_only",
+      "review_received_via": "fleet relayed fresh-review result",
+      "review_scope": "61-member channel-40 binding and CRLF/LF patch provenance; source/object hashes; unchanged fixture 17/17 pre and 19/19 post",
+      "limits": [
+        "actual 62166 outer event IDs remain unproven",
+        "no native run",
+        "no source/site/native credit"
+      ],
+      "native_game_launched": false,
+      "site_credit": 0
+    }
+  ],
+  "combined_source_review": {
+    "report_path": "scratch/DEBUG_MENU_1011/swarm_traffic_shadowprop_combined_source_review_20261028/FINAL_REVIEW.md",
+    "report_sha256": "247eff908e96835acce4e60d0d7d6f90c14fed3514c8b6d71af931ec4a7de5d0",
+    "verdict": "pass",
+    "packet_count": 7,
+    "per_packet_pass": [
+      "traffic_chunk01_killzone_normalization",
+      "shadow_pvs_prop_lod_order",
+      "sound_source_batch01_state_manager_prepare",
+      "effects_pfx_calls_and_hook_list",
+      "traffic_chunk02_param_lerp",
+      "progression_chunk03_trophy_resource_guard",
+      "sound_source_batch02_updatepaths"
+    ],
+    "scope": "source-only; no native/gameplay/audio credit",
+    "native_credit": 0
+  },
+  "build_link_blocker": {
+    "status": "prior canonical build compile-pass/link-fail",
+    "build_receipt_path": "progress/debug_menu/source_batch_20261028/BUILD_RECEIPT.json",
+    "build_receipt_sha256": "9a827f0be3789090b85256c38169319c1c94a3caf7461be5107a8d537e50e2a3",
+    "build_b5_source_commit": "a7f091a86a982aef2083b916f1dd6acaf21ddda9",
+    "current_worlddebug_source_commit": "dd4c71485a5eea91279de70eff4b08d56776a884",
+    "blocker": "three unresolved DirectorDevTools symbols; existing BrnDirectorDevTools.cpp TU absent from canonical response file",
+    "new_build_attempted_after_worlddebug": false,
+    "response_file_changed": false
+  },
+  "traffic_backlog_combined_review": {
+    "report_path": "scratch/DEBUG_MENU_1011/review_traffic_source_sol_20261028_220557/REVIEW_REPORT.md",
+    "report_sha256": "ff614b823c0f35271c000ecfd4c0f2a4dc133c6e9f24f6784c2b9d43e76a47c5",
+    "review_seal_sha256": "fbaa0599f9494197812b1b25f55ad3f7fdc6c5b50440e4faee2ab6bb75bbb99a",
+    "manifest_sha256": "d9644f25ee918a8f082ac4d80aa26dbe5cba8bcd12b11b7384be94e8a1a2d16b",
+    "verdict": "pass",
+    "packets": [
+      "chunk03_towbar_body",
+      "chunk04_trailer_pool",
+      "chunk05_lerp_caller",
+      "chunk06_trailer_motion",
+      "chunk07_trailer_dispatch",
+      "chunk08_trailer_birth_callers",
+      "chunk09_light_unordered_expiry"
+    ],
+    "post_controls": 462,
+    "native_game": false,
+    "site_credit": 0
+  },
+  "traffic_backlog_composition_blocker": {
+    "source_head": "46d9d45b9b9003f02fdd9e1e4a575d1b577abe62",
+    "committed_before_halt": [
+      "chunk03_towbar_body:d0e1494622a3dcf8ca785aaede053d142ad7e5ac",
+      "chunk04_trailer_pool:16b13c39f688c0ff66cd5afbfb33ec9bb2bc357b"
+    ],
+    "conflict_packet": "chunk06_trailer_motion",
+    "conflict_paths": [
+      "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp:8141",
+      "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h:1465"
+    ],
+    "failed_operation": "git apply --check for the exact sealed chunk06 changes.patch after chunks04 and05 in source order",
+    "expected_reviewed_chunk07_preimage": {
+      "cpp": "b01a78fcb16db2a4b4539196a1e7bfb54f16016da2c1f43e8a7ba91201c257c7",
+      "header": "8684b3acedf7820cb028398aaa805526cf85245a33f45d727fd01227aedb4fa8"
+    },
+    "chunk05_transient_patch_reversed_to_chunk04_post": true,
+    "chunks06_07_08_09_applied": false,
+    "current_traffic_module_hash": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb",
+    "current_traffic_header_hash": "96a481e104c1a6732d3851a371cb63ee1d9bb76c5d0372dcbf6badc3438eaba6",
+    "requires_root_direction": false,
+    "native_credit": 0,
+    "current_traffic_module_hash_semantics": "LF-normalized exact chunk04 postimage",
+    "context_recomposition_packet_sha256": "e041f91ba964a409892bf13fd4d691240575b16c56e7e021246795b636aa0e89",
+    "context_recomposition_manifest_sha256": "65f3684f84f041e08466bee350ad9170b9cffcd9a268b244c535650138615f0e",
+    "chunk05_reapplied_via_exact_recomposition": true,
+    "chunk06_applied_via_exact_recomposition": true,
+    "chunk07_preimage_verified": true,
+    "chunk07_applied": true,
+    "chunk07_08_09_applied": false,
+    "chunk08_applied": true,
+    "current_traffic_light_hash": "32dabaee73639e28a6d1b4b7233c6015cb9f1dce80c1938ff224539d5b4f3697",
+    "chunk09_applied": true,
+    "chunk06_07_08_09_applied": true,
+    "resolved_step": "Exact chunk05/06 context recomposition produced the reviewed chunk07 preimage; chunks07,08,09 then applied in order. All selected chunk03-09 PASS source deltas are checkpointed."
+  },
+  "incremental_reviewed_source_passes": [
+    {
+      "packet_id": "progression_rankzero_starting_bodyshop_r3",
+      "source_packet_path": "swarm_progression_source_20261028/chunk04_rankzero_starting_bodyshop_r3/REVIEWER_PACKET.md",
+      "source_packet_sha256": "b7b9ce3c8415d9fb452ce4d748b4bd36424af647fd74c5aeee61ef264e1aca2d",
+      "source_manifest_path": "swarm_progression_source_20261028/chunk04_rankzero_starting_bodyshop_r3/MANIFEST.json",
+      "source_manifest_file_sha256": "a638d2b6ab28cd522c01ef7915c3edc02c3f43ce44024214c9e9c49f3f82660c",
+      "source_delta_path": "swarm_progression_source_20261028/chunk04_rankzero_starting_bodyshop_r3/SOURCE_DELTA.json",
+      "source_delta_sha256": "dd8a07af5f1a7ccef73d91f0e0f18b9bd3da50968be178055ef3a555d1fbb2e0",
+      "author_patch_path": "swarm_progression_source_20261028/chunk04_rankzero_starting_bodyshop_r3/git_apply.patch",
+      "author_patch_sha256": "09e689e90f48e105db020b7c785e713153aaa74f1250645ece619d56fb1a390d",
+      "author_manifest_declared_patch_sha256": "09e689e90f48e105db020b7c785e713153aaa74f1250645ece619d56fb1a390d",
+      "author_review_path": "swarm_network_progression_source_fresh_review_20261028/REVIEW.md",
+      "author_review_sha256": "eda411aff57e9540d13d7d4de7d56f7340b0bfdc1aa23c7636001dc5c7b58df1",
+      "reviewer_seal_path": "swarm_network_progression_source_fresh_review_20261028/SEAL.json",
+      "reviewer_seal_file_sha256": "8504a17ec5a91d22c12331fa21fc8b6e31fd7ecca027dc279c1aac8f925034a7",
+      "reviewer_verdict": "pass for this packet; combined report overall fail for separate Network and Vehicle targets",
+      "reviewer_scope": "Progression starting body shop r3 only; canonical actual TU compile and 16/16 full-method source-coupled checks; no native Profile/save/persistence proof.",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/Progression/BrnProgressionManager.cpp",
+          "pre_sha256": "592d2201d8671e609882d456901a1aef7a427b096026ba5b41c3257dfd909bec",
+          "post_sha256": "c1533ea6c80358963d5e3d2cbfebfc3bf9e39b3990c6f48615222016ba456eef",
+          "post_lf_sha256": "1420217b0d9019339a481a33df1799acb51c73b29ea41f15f2824f42d64cbad7",
+          "declared_post_sha256": "c1533ea6c80358963d5e3d2cbfebfc3bf9e39b3990c6f48615222016ba456eef"
+        }
+      ],
+      "source_commit": "be9818835c3031b8380742489b9d0160b077c3be",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "cgsdev_perfmon_cpu_renderhud",
+      "source_packet_path": "swarm_cgsdev_perfmon_cpu_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "d41cf3afee19c1ae5a075e2d5ed57e8c5dd68d392fda19791ec432e6b75e6149",
+      "source_manifest_path": "swarm_cgsdev_perfmon_cpu_recovery_20261028/MANIFEST.sha256",
+      "source_manifest_file_sha256": "f65d6e4edbbc4e8bdccc3567553727389b16104a7b92791f454e0ed7707738d0",
+      "author_seal_path": "swarm_cgsdev_perfmon_cpu_recovery_20261028/SEAL.json",
+      "author_seal_file_sha256": "e1b2ef15a760aa45cb2b92a5b5ac846b5c8eec7b719b352c111653383dec31d7",
+      "source_delta_path": "swarm_cgsdev_perfmon_cpu_recovery_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "705f6c19fad27b91c5267d3355796c9e9802638cdd41a2b785ce1dffa42daf71",
+      "author_patch_path": "swarm_cgsdev_perfmon_cpu_recovery_20261028/changes.patch",
+      "author_patch_sha256": "d2752793caacf1167f9e8f81f5a919ddcb06707c6c4d3225bc3c2b7542922378",
+      "review_report_path": "review_cgsdev_perfmon_cpu_sol_20261028/REVIEW_REPORT.md",
+      "review_report_sha256": "afff83473cd94dd99c98fad3adff726322b23cde6245c8a4316c0c1c1af731a5",
+      "review_seal_path": "review_cgsdev_perfmon_cpu_sol_20261028/REVIEW_SEAL.json",
+      "review_seal_file_sha256": "8b871faa9b9766a70c81aa31dee4b367ed457e067770f8b6cb012eaf3e3dea2b",
+      "review_verdict": "pass_source_review",
+      "review_scope": "CgsDev::DebugComponentPerfMonCpu::RenderHUD only; no game/native rendering or UI completion.",
+      "source_files": [
+        {
+          "path": "src/GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.cpp",
+          "pre_sha256": "3698032c68069f2dc372984c659879fc088677ec0b1b4e698c3e6cbaf0869238",
+          "post_raw_sha256": "3665d7909c92a3a82e4782b1cecc7b707bbb2d04a2a5d3854bf15a08c2767989",
+          "post_lf_sha256": "658e95dd55d7a7eccd323512ababb6da9ba066cb09791f6377f07b30b8286e92",
+          "declared_post_sha256": "658e95dd55d7a7eccd323512ababb6da9ba066cb09791f6377f07b30b8286e92"
+        }
+      ],
+      "source_commit": "c26e5b70f1235326a3734b95181b3be8d1e90994",
+      "author_baseline_b5": "209fb3b94f7266506dff4ffd569e8553f1b3af93",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "trigger_query_manager_renderworld",
+      "source_packet_path": "swarm_trigger_query_manager_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "de81c6381c780f29207ee92d26b53ad3d405544513977fac878c3e436dcfe82a",
+      "source_manifest_path": "swarm_trigger_query_manager_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "8306c4c21defc5b4d4d15d04c1327a8d90aa6110c28db16e6a1b8ac06b3fb1cd",
+      "author_seal_path": "swarm_trigger_query_manager_recovery_20261028/SEAL.json",
+      "author_seal_file_sha256": "e0c950b9e3c7f90973c26068094c998fc3534bff38f6ac4350ae34b50d2e8c69",
+      "source_delta_path": "swarm_trigger_query_manager_recovery_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "1f654ddc8ed379ce9fcc23ae73e8b5d1c7d58b9be11e8747bb2142c495da28b7",
+      "author_patch_path": "swarm_trigger_query_manager_recovery_20261028/changes.patch",
+      "author_patch_sha256": "12f26372a003b3840f2cbfce2a4cf34b9284a44c01bb7cb2128fd96af88bb190",
+      "review_report_path": "trigger_query_independent_review_sol_20261028/REPORT.md",
+      "review_report_sha256": "35b6b571b1e3e53805c19f458020f1778dda0dde458b8b55d4b57a23393f4afe",
+      "review_seal_path": "trigger_query_independent_review_sol_20261028/SEAL.json",
+      "review_seal_file_sha256": "a0dbd5eba7038914793e6fa00827762403c9478d96bd39c9015adecb612f564a",
+      "review_verdict": "pass_source_review",
+      "review_scope": "bounded TriggerQueryManager RenderWorld source/CPU review; eleven reader traces are not native controls or complete renderer parity.",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent_RenderWorld.cpp",
+          "pre_sha256": "ccc4d2273f681479ca927cd6e5a57c2946f46b2ad5e4f101f10d813808502d30",
+          "post_raw_sha256": "0e10f14a23eecf504ffdefc067375d8bdb41a6d3cb773aadab651bd2962a1397",
+          "post_lf_sha256": "d035930949b7231ff4243f233674312341d6f5d1e77054b1489025f53dc4ab13",
+          "declared_post_sha256": "d035930949b7231ff4243f233674312341d6f5d1e77054b1489025f53dc4ab13"
+        }
+      ],
+      "source_commit": "4b2794a590c6c9bb1bbe5ac37f2b9488704b77e5",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "modemanager_debug_controls",
+      "source_packet_path": "swarm_modemanager_debug_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "303cd4e6c69d222a81220e43de88442378f1f4d9d045ba687fe03998348b48a2",
+      "source_manifest_path": "swarm_modemanager_debug_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "1130fbf4f88b5e2c2220601a8fb21573abeef4928de9eac25a583a3de29919b4",
+      "author_seal_path": "swarm_modemanager_debug_recovery_20261028/SEAL.json",
+      "author_seal_file_sha256": "49fe98f2769d00195d192dab9e0ba25fb32ade3187fde2e09121f1ff240eb940",
+      "source_delta_path": "swarm_modemanager_debug_recovery_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "dc400c2de1588f7cc74efd7b541aca09d53dc755025e9e168a8f33679c5e5356",
+      "author_patch_path": "swarm_modemanager_debug_recovery_20261028/changes.patch",
+      "author_patch_sha256": "cb3215b8280774e85b2aa34d0a4cde403a607230e2a6f8d7476c04c5f1bd1513",
+      "review_report_path": "review_modemanager_debug_sol_20261028/REVIEW_REPORT.md",
+      "review_report_sha256": "73c8896814c3217bedb2f148a8e1aca38bf541c8a3dfc5c9880e3c4fc5d134f8",
+      "review_seal_path": "review_modemanager_debug_sol_20261028/REVIEW_SEAL.json",
+      "review_seal_file_sha256": "5f7e9c006883741d9449d225f06bc6fd26b60de41a262445a0798ad8c968f3c0",
+      "review_verdict": "pass_source_review",
+      "review_scope": "ModeManager OnActivate rows 1-4 and 9-10; rows 5-8 excluded; static source/assembly/compile only.",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/ModeManager/Debug/BrnModeManagerDebugComponent.cpp",
+          "pre_sha256": "deb3b82c8f36ed1a258bbf3e319d926112aed5402a97d8bb5dd3a2206de84668",
+          "post_raw_sha256": "d976a5b196386761796fa48df8bad64f48db27ac97e88a2f4da619e9a7a790ca",
+          "post_lf_sha256": "7457d4ee2f23ba05a8683158074d2b9ab7473942cf05071950ba9ebc9beb32e0",
+          "declared_post_sha256": "7457d4ee2f23ba05a8683158074d2b9ab7473942cf05071950ba9ebc9beb32e0"
+        },
+        {
+          "path": "src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem.h",
+          "pre_sha256": "3faa8648173a61c160e0b0ca0ae74570f265302207b2c0ad4b673ccd55629cb6",
+          "post_raw_sha256": "69e1def3b33a458d632beae89cb2ffa181f2af3d0005ce773a8ce21775f33da5",
+          "post_lf_sha256": "50eb45767afa93ddc039bfb6898a3d9ac9afe6ec428a05dd0fca805f63559c16",
+          "declared_post_sha256": "50eb45767afa93ddc039bfb6898a3d9ac9afe6ec428a05dd0fca805f63559c16"
+        }
+      ],
+      "source_commit": "3d15e4b31a63e1c7b17c23293e32e1aea9e187a9",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "challenge_manager_debug_recovery",
+      "source_packet_path": "swarm_challenge_manager_debug_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "972c97cb267b36fc69be73bbbdb52fd6afb8cd1211b596a91ba233495c74132a",
+      "source_manifest_path": "swarm_challenge_manager_debug_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "2ba6cf536d90bec57a33464d37187626503f15b6a5788d4f6bb7f4a56a317bef",
+      "author_seal_path": "swarm_challenge_manager_debug_recovery_20261028/SEAL.json",
+      "author_seal_file_sha256": "5dd167aca0912f58d6740550722fb2aab8cc2638671f6a3019321005382df186",
+      "source_delta_path": "swarm_challenge_manager_debug_recovery_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "09de01c45fe9a3a47aae8f268755958fe7ef3963260ea3f7dd7b436366752da5",
+      "author_patch_path": "swarm_challenge_manager_debug_recovery_20261028/changes.patch",
+      "author_patch_sha256": "2ad5a5aed876d1c7379d78b3080c5b1766ad6ea5f6897fe50d1c50eefcd8052d",
+      "review_report_path": "challenge_manager_independent_review_sol_20261028/REPORT.md",
+      "review_report_sha256": "e8baa5e8be50eaf48bbaae4b5edfe099a9564fff45bd7788f00b1fff16824c04",
+      "review_seal_path": "challenge_manager_independent_review_sol_20261028/SEAL.json",
+      "review_seal_file_sha256": "3295d20ce421e26da097141488ce945f9e041ea06a8fd022e29ade546c9d4ea4",
+      "review_verdict": "pass_source_review",
+      "review_scope": "Three positively attested repairs; Challenge Index/Start remains unresolved; no native/full-control credit.",
+      "source_files": [
+        {
+          "path": "src/GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp",
+          "pre_sha256": "9d45188bc64bff069245b8908fd2b04a0666cff1f97adec89a13c8180806c189",
+          "post_raw_sha256": "509708f2064d4c068ac76af1fc4561f9f3d7ee8e34fda02cb500129ab4ddb2bb",
+          "post_lf_sha256": "89baf5d59e2a81ac6bc0bd3f5bdce2b5ae9d153f9ed4f0cb8d205e621a71d4f4",
+          "declared_post_lf_sha256": "89baf5d59e2a81ac6bc0bd3f5bdce2b5ae9d153f9ed4f0cb8d205e621a71d4f4"
+        },
+        {
+          "path": "src/SharedClasses/DataLists/ChallengeListEntry.h",
+          "pre_sha256": "c4814ed6a111d9f6bdcbaf916df143c12671851aaa066c0d1bc2d3c902bec0aa",
+          "post_raw_sha256": "fa5a0ec24c886ab92a663fd7800cbaceaf945bedede6df99c183f5d05739b7b2",
+          "post_lf_sha256": "60dd85908304546a325a4d03a783a10eb6ebc9a1938386f89a36524d4b22638b",
+          "declared_post_lf_sha256": "60dd85908304546a325a4d03a783a10eb6ebc9a1938386f89a36524d4b22638b"
+        },
+        {
+          "path": "src/GameSource/GameState/AchievementManager/BrnGameStateAchievementManagerBase_Freeburn.cpp",
+          "pre_sha256": "f1dab1075ac6d478dbdd9bcc94fab4aa815c2465dc681bcc24e6414d3c9ba327",
+          "post_raw_sha256": "2ab577a8e4bcd96211fd65196878b58918de60e4e232025c37b18a5c73ab1260",
+          "post_lf_sha256": "c7aee3bffc360256612e3f89052826363b81245f9d03ea0aeeb75190c24f107f",
+          "declared_post_lf_sha256": "c7aee3bffc360256612e3f89052826363b81245f9d03ea0aeeb75190c24f107f"
+        },
+        {
+          "path": "src/GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManagerDebugComponent.cpp",
+          "pre_sha256": "fa736765f44b593deb2a4d586a260bcfca028c6c929164a52254a8959a55d5c8",
+          "post_raw_sha256": "a3cc055fa095ad8a6afa9ff3abd217901785176b117d2cc6225d0d3ca8f98fc7",
+          "post_lf_sha256": "eb2fb510c32e3c7e5977407fd702dcef6ac24c8f7dd947faf4e3cb48a3c61bf2",
+          "declared_post_lf_sha256": "eb2fb510c32e3c7e5977407fd702dcef6ac24c8f7dd947faf4e3cb48a3c61bf2"
+        }
+      ],
+      "source_commit": "ede3039756614210fcb26451754946f88151a7be",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "buddy_manager_full_xuid_forwarding",
+      "source_packet_path": "swarm_buddy_manager_provider_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "c08662ee44accb2a3d516c362c5adb1c7068db1465fdb34b50615db66b217080",
+      "source_manifest_path": "swarm_buddy_manager_provider_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "9c9e395eaaeab360e2aa38378c53c1ce2045047d15099ae77a6bb0490237b87f",
+      "author_seal_path": "swarm_buddy_manager_provider_recovery_20261028/SEALED.json",
+      "author_seal_file_sha256": "ca20513da8459d3b78ffb59dc38d81ef2149c1fa81c04661e235ec567ff84a3d",
+      "source_delta_path": "swarm_buddy_manager_provider_recovery_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "00a531c33cdaf7a3dca56dd00dcf26fd54d43a32ea27092462815cc64c43fa5a",
+      "author_patch_path": "swarm_buddy_manager_provider_recovery_20261028/changes.patch",
+      "author_patch_sha256": "a455c2eb8c7cdf8ccab58cdecaef5d076319900dc903536c7ba65e5cebc32e03",
+      "review_report_path": "review_buddy_manager_provider_sol_20261028/REVIEW_REPORT.md",
+      "review_report_sha256": "5a4c16533f386a306c1b50401c08e904dd56804958645973035337b95521fbbf",
+      "review_seal_path": "review_buddy_manager_provider_sol_20261028/REVIEW_SEAL.json",
+      "review_seal_file_sha256": "0c4475b3b2464fbb1b370e2c18749e3621951a829968049263312bf24cb0878b",
+      "review_verdict": "pass_source_review",
+      "review_scope": "Full 64-bit XUID forwarding correction. No valid friend list, native registration, gamer-card UI, service or online behavior credit.",
+      "source_files": [
+        {
+          "path": "src/GameShared/GameClasses/Network/Buddies/DirtySock/X360/CgsBuddyManagerDirtySockX360.cpp",
+          "pre_sha256": "83ca2fbec2db0f4ff2000a413ee0ef8a46293e9761bb026041efd9e2ca1f60cb",
+          "post_raw_sha256": "9d0a048a4865d71bbe5fcb468468c9d6b382e49b509aaee9787cba4623a30223",
+          "post_lf_sha256": "8c632d3a6f55d6fe626b4c53585d89564f60aa180270b6c3d3f3d91bcbd95638",
+          "declared_post_sha256": "8c632d3a6f55d6fe626b4c53585d89564f60aa180270b6c3d3f3d91bcbd95638"
+        }
+      ],
+      "source_commit": "7e1d21bcccfbcd806256d8a1a806f18f91a97e6f",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "director_nearclip_corners",
+      "source_packet_path": "swarm_director_nearclip_corners_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "0ff62a6de1afcfdc47561604935dc806eba72ab95c79720e14bcd0f1873765e2",
+      "source_manifest_path": "swarm_director_nearclip_corners_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "a6e8966ad33e363a863a151a0c2867f6387c417345eb91f4fc26c00892b3032a",
+      "author_seal_path": "swarm_director_nearclip_corners_20261028/SEAL.json",
+      "author_seal_file_sha256": "04f2af913c01097008e8b3061e97899dd3c3ddfa761e0ee3ff1b726ee374a1c4",
+      "source_delta_path": "swarm_director_nearclip_corners_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "ea2e332638b0fb13ca47e5878bb4217ad0325021fefe52bb31878282550dba24",
+      "author_patch_path": "swarm_director_nearclip_corners_20261028/changes.patch",
+      "author_patch_sha256": "d5e8c3e7aa6441e195d17155b522e5650f356771f62623c24e8e4b6d37d33f4e",
+      "review_report_path": "swarm_director_nearclip_corners_fresh_review_20261028/REVIEW.md",
+      "review_report_sha256": "45131a5589ec58db252e49fe5097b6bafd1ac8d1ed1aa0acaf48dc8e80ba92be",
+      "review_seal_path": "swarm_director_nearclip_corners_fresh_review_20261028/SEAL.json",
+      "review_seal_file_sha256": "9b5d9322a4a42c72787f2d3837bc0e21ed8559602e9aa39fc7db295b9623c6d8",
+      "review_verdict": "pass_source_review",
+      "review_scope": "CalcNearClipCorners utility/declaration only; four paths; RoadRunner near-clip query/result chain remains gated.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Director/Camera/Utils/CameraUtils.cpp",
+          "pre_sha256": "b7bb3b22dad126b54b7b78342e53784957d441ea06f7a36be47650259db7f2f6",
+          "post_raw_sha256": "a26f1a3b65d78f13d2f9b557f27757ec8d3c67f7b227915230394143c900f495",
+          "post_lf_sha256": "76e63387334f8e260d7e3a2ec73f749f04f710ba896da35aa7bb49cc5e9d86e9",
+          "declared_post_sha256": "76e63387334f8e260d7e3a2ec73f749f04f710ba896da35aa7bb49cc5e9d86e9"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Utils/CameraUtils.h",
+          "pre_sha256": "f1d94db1d3ff8cce9f5d8ce6af179ec217cb9a54f7e371d342970f58f90f1455",
+          "post_raw_sha256": "62a74dfdee15e76c3e223b9cc50ac81a9e0227448f10cbc1e30ea4d31d856dae",
+          "post_lf_sha256": "ac819dc586662899eb42739c49431151856995dbb52ec48a756c238b6fdea0dc",
+          "declared_post_sha256": "ac819dc586662899eb42739c49431151856995dbb52ec48a756c238b6fdea0dc"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Behaviours/BrnBehaviourRoadRunner.cpp",
+          "pre_sha256": "2f8c58e089ce255c79dfe14970d92f40283d7b3f30bb998d11f327c1a461e3a8",
+          "post_raw_sha256": "72d35b3cb4b1f5fcb769820480a506f28fec981a9614424508c37d2b933370ae",
+          "post_lf_sha256": "a43c128664d248c12961025888f8c22fcf7db3e107e1bb67b84bbe821ed72558",
+          "declared_post_sha256": "a43c128664d248c12961025888f8c22fcf7db3e107e1bb67b84bbe821ed72558"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Behaviours/BrnBehaviourRoadRunner.h",
+          "pre_sha256": "2822e511cc7b31a536dbcf9c430a2bf79b8fcb7daaa00bde82899e8da4a95fa2",
+          "post_raw_sha256": "26b832f3fe22e32b88a0aa5d82122142f26331feb1a84169bfcaa00a48f478d1",
+          "post_lf_sha256": "5c5d49ba1eb9c667fdad246e15a1e977e26abe97a39d022b0050d1c26932c345",
+          "declared_post_sha256": "5c5d49ba1eb9c667fdad246e15a1e977e26abe97a39d022b0050d1c26932c345"
+        }
+      ],
+      "source_commit": "41c5a22197df9acef5ea522eaf582bdecfe33cde",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "director_transition_smoother_roadrunner",
+      "source_packet_path": "swarm_director_transition_smoother_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "7f04818bc3a005dab8fb82d6a80cdabb74b78933edad62acd55c2af4a531b58e",
+      "source_manifest_path": "swarm_director_transition_smoother_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "32577495f387fe8bfaf1cef1b07f660a9a9f022a9bd488deaa581c6660755a31",
+      "author_seal_path": "swarm_director_transition_smoother_20261028/SEAL.json",
+      "author_seal_file_sha256": "bcb9730b31fdac250c17ecb0bb11a774bf48ca38c573b9b69f7e20e655824502",
+      "source_delta_path": "swarm_director_transition_smoother_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "aaccd176506d2fc59470b641fca711c5016d22c70f796b8d61f29a68be51cbbc",
+      "author_patch_path": "swarm_director_transition_smoother_20261028/changes.patch",
+      "author_patch_sha256": "56c32cdf56d87796e4264adeec8e62b01d8c85385bccff96e90537b3d4f281ef",
+      "review_report_path": "swarm_director_transition_smoother_fresh_review_20261028/REVIEW.md",
+      "review_report_sha256": "e96279cd3f9342f081d6fd5beb8f1f418f44a91a2b859e06afe45f85163a7abc",
+      "review_seal_path": "swarm_director_transition_smoother_fresh_review_20261028/SEAL.json",
+      "review_seal_file_sha256": "91d152babf40bf1ab49d22d0dd2e6c0069f30b753eed5bdaa444d618e2fae982",
+      "compile_supplement_report_path": "swarm_director_transition_smoother_compile_supplement_20261028/REVIEW.md",
+      "compile_supplement_report_sha256": "3f8dd377019cbd19c4ea0186197338d06ec014c81179fdaecb67d033b087d3e4",
+      "compile_supplement_seal_path": "swarm_director_transition_smoother_compile_supplement_20261028/SEAL.json",
+      "compile_supplement_seal_file_sha256": "7351bca6f5a2e05f84749ceae5544b1c0fe1d3a9ad3b0b8974b9619626dd486b",
+      "review_verdict": "pass_source_review; compile/control supplement pass",
+      "review_scope": "TransitionSmoother Set/Update/Get and RoadRunner seed/update/read seats only; exact nearclip prerequisite applied first; no full RoadRunner activation/native or visual credit.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Director/Camera/Utils/CameraUtils.cpp",
+          "pre_sha256": "76e63387334f8e260d7e3a2ec73f749f04f710ba896da35aa7bb49cc5e9d86e9",
+          "post_raw_sha256": "48724e93e21df1170e80e335ac8a3550fc3e56fcd6b5e66676f1d2763f1315b2",
+          "post_lf_sha256": "c2a90d66b8af4b284a14b17e6cbea3df7c68e87e49707f036cec99678d2a997b",
+          "declared_post_sha256": "c2a90d66b8af4b284a14b17e6cbea3df7c68e87e49707f036cec99678d2a997b"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Utils/CameraUtils.h",
+          "pre_sha256": "ac819dc586662899eb42739c49431151856995dbb52ec48a756c238b6fdea0dc",
+          "post_raw_sha256": "c70a45fdafd66de2db328ce58ea4588843c64438b89f935361ca2dd91a550315",
+          "post_lf_sha256": "bc37ffcbd186d969b40d4c0f25d00b4f63b109894a82d8f5ab964fbcc0be4d2b",
+          "declared_post_sha256": "bc37ffcbd186d969b40d4c0f25d00b4f63b109894a82d8f5ab964fbcc0be4d2b"
+        },
+        {
+          "path": "src/GameSource/Director/Camera/Behaviours/BrnBehaviourRoadRunner.cpp",
+          "pre_sha256": "a43c128664d248c12961025888f8c22fcf7db3e107e1bb67b84bbe821ed72558",
+          "post_raw_sha256": "1b505cbc75f65489ef0f22b6c031b5e8b4bf6fef794ed77600efc5a28c03bc06",
+          "post_lf_sha256": "11d65ba8da4ee9ef590fbb386d098a3d252af21d3e4f17c40782b42fff248315",
+          "declared_post_sha256": "11d65ba8da4ee9ef590fbb386d098a3d252af21d3e4f17c40782b42fff248315"
+        }
+      ],
+      "source_commit": "531f8cbe22ee2262954eb7f69cd7dd284aef2f74",
+      "predecessor_source_commit": "41c5a22197df9acef5ea522eaf582bdecfe33cde",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "collision_debug_rgba_returns_revision02",
+      "source_packet_path": "swarm_collision_debug_component_recovery_20261028_revision02/REVIEWER_PACKET.md",
+      "source_packet_sha256": "faca2f7735c2311a8f0b0c8cfd9e37df5de57b1995da92a0f40d8c7dd9c8e7cb",
+      "source_manifest_path": "swarm_collision_debug_component_recovery_20261028_revision02/MANIFEST.sha256",
+      "source_manifest_file_sha256": "7076b3a03a1acea1c0a20047146fc95f6c26284ca18d11055ff74426a171b83c",
+      "author_seal_path": "swarm_collision_debug_component_recovery_20261028_revision02/SEAL.json",
+      "author_seal_file_sha256": "2a9fcc8eba00ef368b98decb8d55cf49a07073711898b9a519fda696a8c20398",
+      "author_report_path": "swarm_collision_debug_component_recovery_20261028_revision02/REPORT.md",
+      "author_report_sha256": "ac2ee5dc5bac0a4f95651487e9c353a682906c3e9c7ebff350f077f92a31c730",
+      "source_delta_path": "swarm_collision_debug_component_recovery_20261028_revision02/SOURCE_DELTA.json",
+      "source_delta_sha256": "657deeb6aaf2538c85c008e2e0cc43b02ae260f7d2c9601222fe6657ff4f3db5",
+      "author_patch_path": "swarm_collision_debug_component_recovery_20261028_revision02/changes.patch",
+      "author_patch_sha256": "7a17610ef652e583b1d74aabc91989b0bf57d6d3fa89bb4b1e329f54133ef43f",
+      "source_review_report_path": "review_collision_debug_component_sol_20261028/REVIEW_REPORT.md",
+      "source_review_report_sha256": "cf9bbf5d80c79ce8df12b50ab3a01872e794672d9b8566c0bc975392fe38d6c7",
+      "source_review_seal_path": "review_collision_debug_component_sol_20261028/REVIEW_SEAL.json",
+      "source_review_seal_file_sha256": "d4c220755249a2cd7b9b3bd2c6383acded7f95df0117e02f327195f9177cd1b6",
+      "revision02_recheck_report_path": "collision_debug_revision02_recheck_sol_20261028/REPORT.md",
+      "revision02_recheck_report_sha256": "8a071fed7ae2712506b8438c883e2a756b1c648e092b44492d40296132532f00",
+      "revision02_recheck_seal_path": "collision_debug_revision02_recheck_sol_20261028/SEAL.json",
+      "revision02_recheck_seal_file_sha256": "3cfccaf6d9691f9197cd9cc98a9122e93e62cbfe9d2abece648b07555ffa4534",
+      "review_verdict": "source_semantics pass; revision02 LF/manifest recheck pass",
+      "review_scope": "RGBA return shape restoration; source semantics inherited from independently reviewed parent packet; revision02 recheck verifies 39 members and exact cached postimages. No full renderer/native claim.",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/DebugComponents/BrnCollisionDebugComponent.h",
+          "pre_sha256": "4a72291a0704416aed7bbc532c594cc3163470ad424d1f6b7a95a633964d542c",
+          "post_raw_sha256": "483e0ded26946d2e8704757915bad9517bbc46b056f27a2f5ac289af86a6054c",
+          "post_git_sha256": "7527a4eb8ed2d6b128c1ec543517c40bf488da7c5e509537e21a5ab48326e0e3",
+          "declared_post_sha256": "7527a4eb8ed2d6b128c1ec543517c40bf488da7c5e509537e21a5ab48326e0e3"
+        },
+        {
+          "path": "src/GameSource/World/DebugComponents/BrnCollisionDebugComponent.cpp",
+          "pre_sha256": "14c52da75962ebfbd858064b47ae3fce2c8f71a9949dbd553c0641d2cafb1ec4",
+          "post_raw_sha256": "cd9b56491395db20e07db13a5c727f8e5b15af745b71db2022952cf74e2fe7bc",
+          "post_git_sha256": "36e3fd479ce1fa28cd080f74867d2fe5b611b5b5b4c75d9f2c2ddf1f99cea101",
+          "declared_post_sha256": "36e3fd479ce1fa28cd080f74867d2fe5b611b5b5b4c75d9f2c2ddf1f99cea101"
+        }
+      ],
+      "source_commit": "32d2af3c94a60df4a22f99ada405a9add86ef897",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "reset_on_track_renderworld",
+      "source_packet_path": "swarm_reset_on_track_renderworld_recovery_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "2517a161fb4499fa6f17bdc21c80cea95a9265c5843bf35d2c0bff8b028e4b72",
+      "source_manifest_path": "swarm_reset_on_track_renderworld_recovery_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "59897ece999d933c59fd0ce410866888868fe52ec98454cc722c681d567cd89f",
+      "author_seal_path": "swarm_reset_on_track_renderworld_recovery_20261028/SEAL.json",
+      "author_seal_file_sha256": "dff3e57db3c74bff79cf093d66b5b126306b5917c36f679ec4de8f76b49f1a2e",
+      "source_slice_delta_path": "swarm_reset_on_track_renderworld_recovery_20261028/source_slice_delta01/SOURCE_DELTA.json",
+      "source_slice_delta_sha256": "d9a5d9df6295b8aaf6a5ec24f9f481a023a17087b4858fff4908f18ad5bcf07f",
+      "author_patch_path": "swarm_reset_on_track_renderworld_recovery_20261028/source_slice_delta01/changes.patch",
+      "author_patch_sha256": "c2efb511287ecf689ad68de582c8dc9417a5d4945621f4a9ba17b6317f775981",
+      "review_report_path": "review_reset_on_track_renderworld_sol_20261028/REVIEW_REPORT.md",
+      "review_report_sha256": "38666b97fcdac5ba57fbecdc896c20ef96bc737c457bd78781a978055f4c33bd",
+      "review_seal_path": "review_reset_on_track_renderworld_sol_20261028/REVIEW_SEAL.json",
+      "review_seal_file_sha256": "e8d87c29658001598a1da687df89bc2a0388abcb4bdaca6240e6fa7c0d31b6d3",
+      "review_verdict": "pass_source_review",
+      "review_scope": "Bounded ResetOnTrack RenderWorld accessor/projection call-restoration source patch; no full renderer behavior/native claim.",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/AI/ResetOnTrack/BrnResetOnTrackDebugComponent.cpp",
+          "pre_sha256": "a9b2e1a4b4f951873254aa50be665e2a830560ef1928fc06f21a0326b9704e4f",
+          "post_raw_sha256": "2bb3376c88ade4de8b2ac338cd6a59f2753965054f05571c935c193078f5e052",
+          "post_git_sha256": "5df87da2c67df8220093c35975de4a558f24b374070f2eed4adcfc2e30685c19",
+          "declared_post_worktree_sha256": "2bb3376c88ade4de8b2ac338cd6a59f2753965054f05571c935c193078f5e052",
+          "declared_post_git_sha256": "5df87da2c67df8220093c35975de4a558f24b374070f2eed4adcfc2e30685c19"
+        }
+      ],
+      "source_commit": "5bb8692ddf0a8e3a6dfa10985bd98174ff695912",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "race_balancing_debug_activation_delta05",
+      "source_packet_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/REVIEWER_PACKET.md",
+      "source_packet_sha256": "5aed9b7361c4de1f0c52f07812a4648ae26c2d2552e7af7b22b656ecb7b24a17",
+      "source_manifest_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/MANIFEST.json",
+      "source_manifest_file_sha256": "f8698b1c54eed66e4574cd3d65ba05d32f1cdbd91c5aa88688191c0cad12757f",
+      "source_packet_seal_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/SEAL.json",
+      "source_packet_seal_sha256": "c016aca6cae3f5ec6b8db3869f03405688e33170efeba0b9d36a529ab9863eb8",
+      "source_delta_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/SOURCE_DELTA.json",
+      "source_delta_sha256": "1b66c45fe3c8dd19b20f3791a97db5f23f894dd01a153d98c4aea6d627a9de47",
+      "author_patch_path": "swarm_ai_routes_recovery_20261028/race_balancing_debug_activation_d158_delta05_20261028/candidate.patch",
+      "author_patch_sha256": "fe3cbc7e28751db281670e7cd3146f7691b949c5275a5c3b4e4fb68bec737a75",
+      "review_report_path": "review_race_balancing_delta05_sol_20261028/REVIEW_REPORT.md",
+      "review_report_sha256": "e0137c8f1aaa32a373d650dc6792cd712126d3cb9115ff1e6d2d3edae8ab95c8",
+      "review_seal_path": "review_race_balancing_delta05_sol_20261028/REVIEW_SEAL.json",
+      "review_seal_file_sha256": "c3a449e691077c24d8e531a4cb2984bf44ef21d0c3c407ede987baf055be6930",
+      "review_verdict": "pass_source_review",
+      "review_scope": "RaceBalancing manager construction and component registration source; OnActivate was already source-matching and is not new credit; no UI/native/game behavior credit.",
+      "source_files": [
+        {
+          "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h",
+          "pre_sha256": "3c2629bd88aaf83d90844c34e67ead9da98c9bcc4153a05181cd67462ceb230b",
+          "post_raw_sha256": "2f88d40d1637011e3b463c8a096ad61d18ac603a4fb703356089b1964990d25f",
+          "declared_post_sha256": "2f88d40d1637011e3b463c8a096ad61d18ac603a4fb703356089b1964990d25f"
+        },
+        {
+          "path": "src/GameSource/World/AI/BrnAIModule.cpp",
+          "pre_sha256": "0b19258af9950bf7057dab664974821d4aba174ad2ed4687c87b4d859308b8d0",
+          "post_raw_sha256": "25f6e4aed0b158b1279d7ffea640a66fbf00c1127a9a9719108ad54a08a02d92",
+          "declared_post_sha256": "25f6e4aed0b158b1279d7ffea640a66fbf00c1127a9a9719108ad54a08a02d92"
+        },
+        {
+          "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingDebugComponent.cpp",
+          "pre_sha256": "898384422012f63b4a362e9d7ceb2a5a574b00f03495fe28cad98fee85c22314",
+          "post_raw_sha256": "42ff75b8dae34bc7bacedf68f2d3a6aff655509739100f5b37dc0fdebaabaafd",
+          "declared_post_sha256": "42ff75b8dae34bc7bacedf68f2d3a6aff655509739100f5b37dc0fdebaabaafd"
+        },
+        {
+          "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingDebugComponent.h",
+          "pre_sha256": "e7edf9ff1112c790db148250c3bb6dac45c9af15cc87c21a9457698d5e99c3f5",
+          "post_raw_sha256": "79438284db87da30678e14c5d036b433d28df93e9d8175060d95e2393d277bda",
+          "declared_post_sha256": "79438284db87da30678e14c5d036b433d28df93e9d8175060d95e2393d277bda"
+        },
+        {
+          "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingManager.cpp",
+          "pre_sha256": "47027023e7ed0b8e6b2f8f4304357f02bd379a803cd3740e0c391f0da12fbfb1",
+          "post_raw_sha256": "1c3a5a6cbdba995c915fd56d27073e3abc13becd492af99e29f41141f10154ce",
+          "declared_post_sha256": "1c3a5a6cbdba995c915fd56d27073e3abc13becd492af99e29f41141f10154ce"
+        },
+        {
+          "path": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingManager.h",
+          "pre_sha256": "e52804d1626f8f4624f353eb93675f4994289967e12297f5ba8464dfc83ae5da",
+          "post_raw_sha256": "de81bd0b5d970153d076794c107b75a3712134c3a1cf6349f9a6cd09e4c4a784",
+          "declared_post_sha256": "de81bd0b5d970153d076794c107b75a3712134c3a1cf6349f9a6cd09e4c4a784"
+        }
+      ],
+      "source_commit": "7b2b0f1c90dc4bb9b58ff55fee6e9daefe957a2c",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "chunk10_racecar_state_cache",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/REVIEWER_PACKET.md",
+      "source_packet_sha256": "44b06c05d6f0a6e0345c7a702108130afce00d2fa929a1110c5553c172508ce1",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/MANIFEST.json",
+      "source_manifest_file_sha256": "4e396892115a8b812388d42c4acb8c114ec9b9b5235ebe7bc953e820329cc61d",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/SEAL.json",
+      "source_seal_file_sha256": "affd75cb806433ff7f4f928f4e673658bb4bd246c14c7e0a91b82b432374f48b",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/SOURCE_DELTA.json",
+      "source_delta_sha256": "68a1bd30133aaae9107b8f9be6a989f78cf1a9c240948aff355b1b43d35a882f",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk10_racecar_state_cache/changes.patch",
+      "author_patch_sha256": "dab420e9a170677a358941163538510562e0f644f8dcc3e2e731d411ff9fd271",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 81,
+        "fresh_cpu_pre_pass": 46,
+        "fresh_cpu_post_pass": 81
+      },
+      "ordered_context": {
+        "chunk": "chunk08_trailer_birth_callers",
+        "seal_sha256": "0fbafca1e1d9e107a51ab605513625e7e2f489cf7aedecdb3070e9acaf9f629f",
+        "preimage_sha256": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb"
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "post_raw_sha256": "b10d2fd03262a10098e0d6d92e26e4dcc71aec6539670263ae661c25f65c2100",
+          "post_lf_sha256": "bca43ddbe8790f0f2804fd3927fc2fc66a348157c026c6f7ebd3c1078c8bd4c6",
+          "declared_post_sha256": "bca43ddbe8790f0f2804fd3927fc2fc66a348157c026c6f7ebd3c1078c8bd4c6",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+            "pre_raw_sha256": "5c03d201bc4d7558e13e020ba145b1e8e46d8385a06d1cb2ee577f0c1b765c22",
+            "pre_lf_sha256": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb",
+            "declared_pre_sha256": "ef3c5eafa71daa0f19f3504af70c66139fb20e56b3002a7eab932c82dd114bdb"
+          }
+        }
+      ],
+      "source_commit": "b223654e34271198791c0e9293f4f3acdc5a692b",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    },
+    {
+      "packet_id": "chunk11_spawn_proximity",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk11_spawn_proximity/REVIEWER_PACKET.md",
+      "source_packet_sha256": "ffa7b996b1223870e1fb3004f592765db8694b8f4d4ebd3d1c86e0fa1e52ec95",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk11_spawn_proximity/MANIFEST.json",
+      "source_manifest_file_sha256": "528a3e1128139f2a2d71ba7a8b8d60b6e154a8a8daa8dc03a23dedf963648a8a",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk11_spawn_proximity/SEAL.json",
+      "source_seal_file_sha256": "05f294d4a582cf2b599677a8bbae3d60b95014bb3bd00320b4ff7e084b5aeae9",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk11_spawn_proximity/SOURCE_DELTA.json",
+      "source_delta_sha256": "936e54d8411ce4a16662a01924410ede92d992fd9053930adbd19454423a0914",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk11_spawn_proximity/changes.patch",
+      "author_patch_sha256": "59c74e802ca9aa714b31aa06bbd4a73cb27374cca8140486bdd5fbf510d1c490",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 49,
+        "fresh_cpu_pre_pass": 20,
+        "fresh_cpu_post_pass": 49
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "post_raw_sha256": "787ea875625183922c99924279abd01b0cbf6fe8d6547c7b30bcd2622d0432dd",
+          "post_lf_sha256": "c3500d0bd9f3d8bdaabb65fd29d1994cd5df75e5ba16cf065ce4dc5ccc4eb2e2",
+          "declared_post_sha256": "c3500d0bd9f3d8bdaabb65fd29d1994cd5df75e5ba16cf065ce4dc5ccc4eb2e2",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+            "pre_raw_sha256": "b10d2fd03262a10098e0d6d92e26e4dcc71aec6539670263ae661c25f65c2100",
+            "pre_lf_sha256": "bca43ddbe8790f0f2804fd3927fc2fc66a348157c026c6f7ebd3c1078c8bd4c6",
+            "declared_pre_sha256": "bca43ddbe8790f0f2804fd3927fc2fc66a348157c026c6f7ebd3c1078c8bd4c6"
+          }
+        }
+      ],
+      "source_commit": "a4502cb7664f6eeb30fd638a4f41529bedf81988",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    },
+    {
+      "packet_id": "chunk12_offset_arrow",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk12_offset_arrow/REVIEWER_PACKET.md",
+      "source_packet_sha256": "9fe85e8770d4a6941a32c1d8da98f19c614fb05f105f4f33318846fcf1a7a04d",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk12_offset_arrow/MANIFEST.json",
+      "source_manifest_file_sha256": "a2d726827dc23e9174e3a35afa5f5f8237102c0736b20ff3ac7a0029299f4031",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk12_offset_arrow/SEAL.json",
+      "source_seal_file_sha256": "c3ba7d26a02ecdf471b3e144a79a4564868d621f63876cd904d4a896e3f379f8",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk12_offset_arrow/SOURCE_DELTA.json",
+      "source_delta_sha256": "baca28a0a15400c0d52b52e0a1ca36f936ab9ae2fa4752dd5374d78d45092e5b",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk12_offset_arrow/changes.patch",
+      "author_patch_sha256": "0213f55c6c181c6883b37e9bc42bcf3c93ec987a0106058be6f5ea78c02638f7",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 254,
+        "fresh_cpu_pre_pass": 170,
+        "fresh_cpu_post_pass": 254
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+          "post_raw_sha256": "9397c79a9ae04fefb13461f1fe0e892b0264f04d2754dd060f7c2770ae0ff193",
+          "post_lf_sha256": "1e5add1f01f176a422809a9f9cbebedba290c79ec2ce50189799b458044b6429",
+          "declared_post_sha256": "1e5add1f01f176a422809a9f9cbebedba290c79ec2ce50189799b458044b6429",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+            "pre_raw_sha256": "a0ed97b55218d38f0d913f236adb2d7c3f886d56944fd9413ad0823478200427",
+            "pre_lf_sha256": "79a53306fca4f20d7f9c44df8037ea8e6521ba25f5913bfe9e969deff56c1baa",
+            "declared_pre_sha256": "79a53306fca4f20d7f9c44df8037ea8e6521ba25f5913bfe9e969deff56c1baa"
+          }
+        }
+      ],
+      "source_commit": "be7d2f5d3734b46b6567b9acc78d81a09fdaf0f3",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    },
+    {
+      "packet_id": "chunk13_avoidance_distance",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk13_avoidance_distance/REVIEWER_PACKET.md",
+      "source_packet_sha256": "65ae0b90410888f86a5f9d249476286cca1bae66a574a6395ff261a24e6d1484",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk13_avoidance_distance/MANIFEST.json",
+      "source_manifest_file_sha256": "0ddfa278045049261e198c143de3eb969518f658bd3d977950fa205cd55bb6f9",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk13_avoidance_distance/SEAL.json",
+      "source_seal_file_sha256": "81bd4fce34d6f1bc6faaf944365cd238643508f2e693c13f9cee6d966c3c6b9b",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk13_avoidance_distance/SOURCE_DELTA.json",
+      "source_delta_sha256": "3731a7341d139f0bc2475235a49f8be8c838e2b11680237ab1157b377ba27b85",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk13_avoidance_distance/changes.patch",
+      "author_patch_sha256": "f4c238a67f94d1a5a650f3cd7433e1e50a7260e88af6428ea17bf8fff8ede572",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 176,
+        "fresh_cpu_pre_pass": 126,
+        "fresh_cpu_post_pass": 176
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "post_raw_sha256": "081cfb0ac5465f773ae4061f16c760e057f60da076695d9e10febce0cedcd5ff",
+          "post_lf_sha256": "f9ba353c46709a57d025026230e6157534c1cafb985bf31383c4a5a186f5c837",
+          "declared_post_sha256": "f9ba353c46709a57d025026230e6157534c1cafb985bf31383c4a5a186f5c837",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+            "pre_raw_sha256": "787ea875625183922c99924279abd01b0cbf6fe8d6547c7b30bcd2622d0432dd",
+            "pre_lf_sha256": "c3500d0bd9f3d8bdaabb65fd29d1994cd5df75e5ba16cf065ce4dc5ccc4eb2e2",
+            "declared_pre_sha256": "c3500d0bd9f3d8bdaabb65fd29d1994cd5df75e5ba16cf065ce4dc5ccc4eb2e2"
+          }
+        }
+      ],
+      "source_commit": "024c4fb1a4645b7fca3dc1ad16e4666421ea049d",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    },
+    {
+      "packet_id": "chunk15_front_axle_fma",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk15_front_axle_fma/REVIEWER_PACKET.md",
+      "source_packet_sha256": "ac6a45e33923e94b51b859162d50d004fedfba602f35c97675cb45a3fde7b90f",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk15_front_axle_fma/MANIFEST.json",
+      "source_manifest_file_sha256": "0148ac1abdc8d0aca6ccb260febc18cf14eaa3163037a1faf70415fd28bec4c6",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk15_front_axle_fma/SEAL.json",
+      "source_seal_file_sha256": "5c361ea9ef200e2b5df915781d70b894a43a95da5e93aa7adc05b9d074a075f8",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk15_front_axle_fma/SOURCE_DELTA.json",
+      "source_delta_sha256": "c3f10a367534301d702e3b6ca5e969e9c5d4f48fa768da484fc9edbb9dce9a35",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk15_front_axle_fma/changes.patch",
+      "author_patch_sha256": "4a28e20f7e59037d36a789a3d70250793eeb616c145300259b7be936bdc975f7",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 130,
+        "fresh_cpu_pre_pass": 85,
+        "fresh_cpu_post_pass": 130
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.cpp",
+          "post_raw_sha256": "95c4dd0288206ce4f8093ea29dbb31bc24766b3814b1185f78bbce3a3a8c1c27",
+          "post_lf_sha256": "f47504b28686c4935ea4502e5e792b1dcc01b9da7f0a6d60f6f44dd219277bda",
+          "declared_post_sha256": "f47504b28686c4935ea4502e5e792b1dcc01b9da7f0a6d60f6f44dd219277bda",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.cpp",
+            "pre_raw_sha256": "25cf3ca9daf89d50a8a8bf9e64bff6fc4de0849c79f4f980818775dbb0909e74",
+            "pre_lf_sha256": "3934dac21d463ccc06067665dd2b7e5e05e8d0af2d94fc7b9957534e5d2cab80",
+            "declared_pre_sha256": "3934dac21d463ccc06067665dd2b7e5e05e8d0af2d94fc7b9957534e5d2cab80"
+          }
+        }
+      ],
+      "source_commit": "efa6b34c0549c8e5b00b17161018efd7300afc42",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    },
+    {
+      "packet_id": "chunk16_runtime_constructor",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk16_runtime_constructor/REVIEWER_PACKET.md",
+      "source_packet_sha256": "fdc7784b07c03edc973bb10fe028393d8020b9e213601ce647fd507189e96034",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk16_runtime_constructor/MANIFEST.json",
+      "source_manifest_file_sha256": "94fea507d6b86642b458bb61ba5e0f3ce925cc0c90f02c5b42f1d9a04e36a925",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk16_runtime_constructor/SEAL.json",
+      "source_seal_file_sha256": "45dc55de2f6190d7265de7ce687d2b55e9838658224a09886f3a076411a9e9b1",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk16_runtime_constructor/SOURCE_DELTA.json",
+      "source_delta_sha256": "144e1107b26c2af7871dca475fc8f5246cf211791be1a2b049f39a8777b09dc3",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk16_runtime_constructor/changes.patch",
+      "author_patch_sha256": "95f9ff395d842fb80b04d9886f5b407efef6abd2e3ae6e2ab436cd66bb67f3f7",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 92,
+        "fresh_cpu_pre_pass": 0,
+        "fresh_cpu_post_pass": 92
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicleTypeRuntime.h",
+          "post_raw_sha256": "c79402cd1bb77d21e4352763e7a768e8df0052f7ca73281079edf86277cb3c71",
+          "post_lf_sha256": "fb6c10a54ac3de975c96c60c639eec60a1cc64449e01ee478382976a68e73846",
+          "declared_post_sha256": "fb6c10a54ac3de975c96c60c639eec60a1cc64449e01ee478382976a68e73846",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicleTypeRuntime.h",
+            "pre_raw_sha256": "3c52b0496e1a3b4f31f0714d325b8d07c516afc464e405a706b351afd9acc74b",
+            "pre_lf_sha256": "48daf7912f3f30dc3a54b1e0a0971da3998690e29e589f2aaf141e86293e8443",
+            "declared_pre_sha256": "48daf7912f3f30dc3a54b1e0a0971da3998690e29e589f2aaf141e86293e8443"
+          }
+        }
+      ],
+      "source_commit": "45e328d32161f500a2cd2799e8af11da00dcc624",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    },
+    {
+      "packet_id": "chunk17_runtime_locators",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk17_runtime_locators/REVIEWER_PACKET.md",
+      "source_packet_sha256": "318b8fa08e51bea856654b874d9805fad658d54c9cbf63fbb3abdba7dfab830d",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk17_runtime_locators/MANIFEST.json",
+      "source_manifest_file_sha256": "629a96057127ec9aaffbdac595e4f7b39bf6d3388f952f869fe589d714d667bc",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk17_runtime_locators/SEAL.json",
+      "source_seal_file_sha256": "b4963dd4c120cbe64ea3141848e1624a76d4e247e8dd9e611fff4c60c7e16d1d",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk17_runtime_locators/SOURCE_DELTA.json",
+      "source_delta_sha256": "bea22087b1299129be53e43e55d80d1eaaf97b65c34395aa3dd8b6937646c97e",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk17_runtime_locators/changes.patch",
+      "author_patch_sha256": "af8c912160300867964446d7aa2bead747f21509ad2ee131941443b0a684b972",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 174,
+        "fresh_cpu_pre_pass": 24,
+        "fresh_cpu_post_pass": 174
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicleTypeRuntime_Prepare.cpp",
+          "post_raw_sha256": "36de65a560544dbb3f5b7023d248abb0b5fb0822382f902b0b1cb67d8d8ffd39",
+          "post_lf_sha256": "52b9fca73d9deb3fc58ecf0533ae332ff96526a9c5da24ebe5a7b28f364eb5d2",
+          "declared_post_sha256": "52b9fca73d9deb3fc58ecf0533ae332ff96526a9c5da24ebe5a7b28f364eb5d2",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicleTypeRuntime_Prepare.cpp",
+            "pre_raw_sha256": "9eedc74123d20c3a4ebf217766ca21a1b39fc52d4fdeb02108ca931a5f7897b4",
+            "pre_lf_sha256": "95c119752025bdda56895cd147ae653193cbf7ad7a999898d859294f9bb8b797",
+            "declared_pre_sha256": "95c119752025bdda56895cd147ae653193cbf7ad7a999898d859294f9bb8b797"
+          }
+        }
+      ],
+      "source_commit": "72ff5b1848d83947fec296e5bd037a95bfafcd81",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    },
+    {
+      "packet_id": "chunk18_param_overlap_removal",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk18_param_overlap_removal/REVIEWER_PACKET.md",
+      "source_packet_sha256": "57601b3221af4e6b3671269e33b6e5d4abd3365c4db626672d5458caa4b653c5",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk18_param_overlap_removal/MANIFEST.json",
+      "source_manifest_file_sha256": "239ffc83bcff99c72512ae21b2ff033ff9146fc631c5043932305753418abf68",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk18_param_overlap_removal/SEAL.json",
+      "source_seal_file_sha256": "5d225ef8e5cba1865ca69c8588f1546abf54a310fa2c5b206ed4ab597c8ee189",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk18_param_overlap_removal/SOURCE_DELTA.json",
+      "source_delta_sha256": "2f01b7194323cbc46daa3fa8a791d326258b04535c52cbe0d45be65bd85ba234",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk18_param_overlap_removal/changes.patch",
+      "author_patch_sha256": "e00cf7f00c7551e52dd0b245070940053034d63744141adedcbf6ea4160bc575",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 214,
+        "fresh_cpu_pre_pass": 0,
+        "fresh_cpu_post_pass": 214
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "post_raw_sha256": "99128f8be62d5c705ad81d043290ce7235ca3b82e29545bced5bab1ee9e39c3f",
+          "post_lf_sha256": "6b550d4152d0951c19f1c23fa0c9947151e097d7aebdad664698fbd92bd5901b",
+          "declared_post_sha256": "6b550d4152d0951c19f1c23fa0c9947151e097d7aebdad664698fbd92bd5901b",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+            "pre_raw_sha256": "081cfb0ac5465f773ae4061f16c760e057f60da076695d9e10febce0cedcd5ff",
+            "pre_lf_sha256": "f9ba353c46709a57d025026230e6157534c1cafb985bf31383c4a5a186f5c837",
+            "declared_pre_sha256": "f9ba353c46709a57d025026230e6157534c1cafb985bf31383c4a5a186f5c837"
+          }
+        }
+      ],
+      "source_commit": "4d0f0786065575a1014aae50f2809a33b35bc358",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    },
+    {
+      "packet_id": "chunk19_static_birth_proximity",
+      "source_packet_path": "swarm_traffic_source_backlog_20261028/chunk19_static_birth_proximity/REVIEWER_PACKET.md",
+      "source_packet_sha256": "bb64d480437789090ce754660eb7fc6225aaa5c90d6006faf58e0ea19db40426",
+      "source_manifest_path": "swarm_traffic_source_backlog_20261028/chunk19_static_birth_proximity/MANIFEST.json",
+      "source_manifest_file_sha256": "fe2ee08b3e813e8fd0fe148440de391fadd82a6124b85d92e15369965c26309a",
+      "source_seal_path": "swarm_traffic_source_backlog_20261028/chunk19_static_birth_proximity/SEAL.json",
+      "source_seal_file_sha256": "9640ce05fd83d120454060e44155180013102049a8d46f2662ff113978b1c725",
+      "source_delta_path": "swarm_traffic_source_backlog_20261028/chunk19_static_birth_proximity/SOURCE_DELTA.json",
+      "source_delta_sha256": "fc27ec47654b4d3ea8b7b725139c8de42c51594d032b68e546cccd683ba376a3",
+      "author_patch_path": "swarm_traffic_source_backlog_20261028/chunk19_static_birth_proximity/changes.patch",
+      "author_patch_sha256": "c192e3f5989be87f3b191ea69764183b1a7735b85f472584fdd1a9d0975a4b84",
+      "combined_review_report_path": "review_traffic_source10_19_sol_high_c05791b5a2/COMBINED_REVIEW.md",
+      "combined_review_report_sha256": "ae0b175c0eefbe53516e04c81a4f7abf2d27b113792de2e5e1cb2d91e950ace2",
+      "combined_review_result_path": "review_traffic_source10_19_sol_high_c05791b5a2/REVIEW_RESULT.json",
+      "combined_review_result_sha256": "28fabace6f3c866340667a51154bfe46cc6eee562a1076ed3c5e3d83c51cc76a",
+      "combined_review_seal_path": "review_traffic_source10_19_sol_high_c05791b5a2/SEAL.json",
+      "combined_review_seal_file_sha256": "9abed7e02207cf96b1018fd15b3c4ba9a005b092c4173d0460e59d1b902c075e",
+      "review_verdict": "pass_source_review",
+      "reviewer_control_results": {
+        "fresh_cpu_cases": 44,
+        "fresh_cpu_pre_pass": 15,
+        "fresh_cpu_post_pass": 44
+      },
+      "source_files": [
+        {
+          "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+          "post_raw_sha256": "7b523573ae2d2c7b4ba0be692b770e43c20043ad21816da517968fe9b686d879",
+          "post_lf_sha256": "c38a9cad3c3bcd909812cb3a3a53f0f3bb00565d730df57e76f9345e5258fb26",
+          "declared_post_sha256": "c38a9cad3c3bcd909812cb3a3a53f0f3bb00565d730df57e76f9345e5258fb26",
+          "pre": {
+            "path": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+            "pre_raw_sha256": "99128f8be62d5c705ad81d043290ce7235ca3b82e29545bced5bab1ee9e39c3f",
+            "pre_lf_sha256": "6b550d4152d0951c19f1c23fa0c9947151e097d7aebdad664698fbd92bd5901b",
+            "declared_pre_sha256": "6b550d4152d0951c19f1c23fa0c9947151e097d7aebdad664698fbd92bd5901b"
+          }
+        }
+      ],
+      "source_commit": "e0aeb5ab4dad936a77b9bf0f573d2a6e9a0a52c3",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "excluded_chunk14": true
+    }
+  ]
+}
