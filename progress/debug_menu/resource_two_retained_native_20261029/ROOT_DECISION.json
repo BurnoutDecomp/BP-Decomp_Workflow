@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "status": "root_approved_two_completed_resource_controls",
+  "recorded_by": "Root",
+  "generated_utc": "2026-10-29T07:52:17.542830+00:00",
+  "base_workflow_head": "8dbe3b5a3bece5b9de801da6f8236de7dfd445fb",
+  "base_source_head": "84a12a2f893ffbee4c692bef75f278e9163f3f94",
+  "base_canonical_hashes": {
+    "progress/debug_menu/entries.json": "91d6fddf864f0a72bba72453e7b03bdd6558f83b683f437526625903366dcedc",
+    "progress/debug_menu/verdicts.json": "b0657b27d7b3acd6d59c74111dd2b89c3c7393977fa9219373f253db477cb717",
+    "progress/debug_menu/README.md": "066517a99717162f7fe49e6f4c8af9026aab814b6269a555fe3092f6fd3f3ed1"
+  },
+  "counts_before": {
+    "pending": 1216,
+    "verified": 111,
+    "original-noop": 28
+  },
+  "counts_after": {
+    "pending": 1214,
+    "verified": 113,
+    "original-noop": 28
+  },
+  "approved_sites": [
+    {
+      "site_id": "CgsResource::DebugComponent::InitWindows#0003",
+      "state": "verified",
+      "caption": "Heap Window",
+      "scope": "Exact retained D12 private candidate source00830, slot62144/PID21792. Original outer postcheck/phase-stop FAIL remains explicit; only completed original consumer witnesses receive site dispositions. No whole-suite, current-build, numeric-domain or hardware certification.",
+      "notes": "Native pool selector <none> -> OpenWorldGr -> <none> opens the real original heap window, with readable6432 used/2068free resources, size/used/free/fragmentation labels and two colored MM/PY heap maps; restoration removes it. No heap zoom/scroll or exhaustive accounting claim.",
+      "raw_indices": [
+        [
+          9879,
+          9880,
+          9881
+        ],
+        [
+          19690,
+          19691,
+          19692
+        ],
+        [
+          47617,
+          47618,
+          47619
+        ]
+      ],
+      "captures": [
+        "bb_006235.bmp",
+        "bb_006737.bmp",
+        "bb_012424.bmp"
+      ],
+      "source_chain": [
+        "InitWindows registers maiPoolIds[0] and maStringList",
+        "UpdateWindows -> AddWindow -> ResetWindow(0) -> DebugPoolWindow::Reset/Render",
+        "selector -1 -> RemoveWindow"
+      ]
+    },
+    {
+      "site_id": "CgsResource::DebugComponent::InitWindows#0010",
+      "state": "verified",
+      "caption": "Bundle Window",
+      "scope": "Exact retained D12 private candidate source00830, slot62144/PID21792. Original outer postcheck/phase-stop FAIL remains explicit; only completed original consumer witnesses receive site dispositions. No whole-suite, current-build, numeric-domain or hardware certification.",
+      "notes": "Both SET true/false and INCREMENT/DECREMENT reach the original change callback, add/remove the base-only blank Bundle Files window, and restore FALSE. ARTIST ctor stores vtable820CE014 at member4DE8; Render slot+4 positively targets base Window::Render82828F20, not an omitted listing override. Root independently reread the raw table and ctor stores.",
+      "raw_indices": [
+        [
+          9900,
+          9901,
+          9902
+        ],
+        [
+          26327,
+          26328,
+          26329
+        ],
+        [
+          29093,
+          29094,
+          29095
+        ],
+        [
+          31470,
+          31471,
+          31472
+        ],
+        [
+          33436,
+          33437,
+          33438
+        ],
+        [
+          47638,
+          47639,
+          47640
+        ]
+      ],
+      "captures": [
+        "bb_006235.bmp",
+        "bb_008188.bmp",
+        "bb_008702.bmp",
+        "bb_009089.bmp",
+        "bb_009530.bmp",
+        "bb_012424.bmp"
+      ],
+      "source_chain": [
+        "InitWindows registers mbShowBundleWindow and ShowBundleWindowChangeCallback",
+        "Variable::OnChange -> Reset/AddWindow or RemoveWindow",
+        "Original DebugBundleFilesWindow has no Render/Update override; positive vtable/DWARF proof retained"
+      ]
+    }
+  ],
+  "raw_review": {
+    "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\root_resource_d12_review_20261029\\RAW_REVIEW.json",
+    "sha256": "ccff48dd25a08f45bad2a0cda7ba5268dfb2f8957cef03831d56bc696838a558"
+  },
+  "peer_proofs": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_native_common_preflight_20261027\\resource21_concrete_binding_review_20261028\\d12_phase_observations_20261029\\REVIEW.md",
+      "sha256": "ca480b67263bab29edaab327090b1c07295d005d277bc182beb6955771346ffb"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_native_common_preflight_20261027\\resource21_concrete_binding_review_20261028\\d12_phase_observations_20261029\\PER_SITE_ELIGIBILITY.md",
+      "sha256": "6e8f664cbeba655d4e77b30989d4e90094bd012b93122df27b98668bb793db37"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_native_common_preflight_20261027\\resource21_concrete_binding_review_20261028\\d12_phase_observations_20261029\\SOURCE_LINE_ERRATA.md",
+      "sha256": "19ea190f671c8f04b2ba54a830abf1e67fc0ac26d64d27c86a1359831b145be4"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_native_common_preflight_20261027\\resource21_concrete_binding_review_20261028\\bundle_original_dispatch_20261029\\RESULT.md",
+      "sha256": "cb57c6ce458f46bd63d1702edb6bfdbae50feef508c5e988c27a5d8c87ee4cf7"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\swarm_native_common_preflight_20261027\\resource21_concrete_binding_review_20261028\\bundle_original_dispatch_20261029\\WITNESS.json",
+      "sha256": "9bb0ef10bade5766c5a8c081f40e49b06a08bfc082160bbf4bb595c10370e2ed"
+    }
+  ],
+  "excluded": [
+    "Histogram#0004 and TypeStats#0005 remain pending until cleaner isolated consumer pixels",
+    "TypeStatsMode, texture controls, queue, partial fixups and stats/allocator suite remain pending",
+    "D12 outerpostcheck/phase-stop FAIL is not repaired or relabeled",
+    "New D13 aborted concurrency run is separate and excluded"
+  ]
+}
