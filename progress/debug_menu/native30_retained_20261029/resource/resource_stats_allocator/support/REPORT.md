@@ -1,0 +1,66 @@
+﻿# resource_stats_allocator_native_62145 -- PASS
+
+Bug: Resource pool/share totals and GameData allocator HUD/counters must reach their live original consumers and restore.
+
+Run: `D:\r21stats10\suites\resource_stats_allocator\runs\resource_stats_allocator_20261029_184609`  exe 34dd9dad3c53 (b5=00830db6) 2026-10-27T21:24:38.2277801+01:00  b5 ae20985da  parent ae20985da  (b5 tree has 2 uncommitted tracked change(s))
+Phase: DRIVING  asserts=0  flow_exit=0  expected=PASS  as_expected=True
+
+| verdict | check | detail |
+|---|---|---|
+| PASS | original strict flow completed and owned game exited | original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True |
+| PASS | no new assert families | 0 assert family(ies), all known (0 lines) |
+| PASS | no exceptions | 0 line(s) match /\[EXCEPTION\]/, want [-inf, 0] |
+| PASS | reached DRIVING | final phase DRIVING, want DRIVING |
+| PASS | native resource stats driver completed with owner-bound frames | status=complete; frames=18; selected-pool=OpenWorldGr |
+
+marks.txt:
+```
+RUNSTART 2026-10-29T21:07:23.7794907+01:00
+PROCESS pid=65064 image=D:\r21stats10\suites\resource_stats_allocator\stage\resource_stats_allocator_20261029_184609\slot\Burnout_PC.exe start=2026-10-29T20:07:24.4603512Z priority=inherited
+FRAMEDIR D:\r21stats10\suites\resource_stats_allocator\runs\resource_stats_allocator_20261029_184609\frames
+flyby    (never)
+newprof    14,7s  frame=bb_001690.bmp
+ingame     16,6s  frame=bb_001690.bmp
+jystart    16,6s  frame=bb_001690.bmp
+carsel     23,4s  frame=bb_002694.bmp
+livery     28,2s  frame=bb_002694.bmp
+accept     29,3s  frame=bb_002694.bmp
+exitjy     29,3s  frame=bb_002694.bmp
+strfin     29,3s  frame=bb_002694.bmp
+END        88,2s  frame=bb_006522.bmp
+asserts=0 phase=DRIVING
+DIAGENV    [-DiagEnv BRN_DEBUG_UI_TRACE=1 BRN_FRAME_DUMP_REQUEST=1 BRN_FRAME_DUMP_MAX=24]
+TELEPORT (none)
+SWEEP    (none)
+SLOT     62145  exe=D:\r21stats10\suites\resource_stats_allocator\stage\resource_stats_allocator_20261029_184609\slot\Burnout_PC.exe (a copy; cwd=D:\r21stats10\suites\resource_stats_allocator\stage\resource_stats_allocator_20261029_184609\data)
+CONCURRENT_GAMES allow=True max_other=0
+SKIPINTRO -skipvideos (console latch; EA + Criterion logos not played)
+TITLESTART requested=True ready-observed=True sent-at=10,0s; stimulus receipt only
+ACCEPTGAP boot=1,0s carsel=1,0s  [-AcceptGap 1 -- harness pump latency, not a game gate]
+AUDIO    MUTED (BRN_AUDIO_MUTE=1; mastering voice at 0, audio simulation unchanged)
+STARTEVT (not armed)
+AIDRIVE  (not armed)
+DBGFINISH (not armed)
+WINTELE  (not armed)
+SHOWTIME not armed
+SKIPTIP  (not armed)
+EVENTFSM (not armed)
+e-junc   (never)
+e-case20 (never)
+e-start  (never)
+e-count  (never)
+e-inprog (never) CUE UNVERIFIED -- nothing in the tree prints this text yet, so this
+         line says nothing about the game. See the ladder banner.
+LADDER   0/5 deepest=none startevent=False  BLIND(BRN_PROP_DIAG unset -- the [evt-flow] rungs cannot print)
+CRASHARM crashEntry=always(flag deleted 2026-08-27) crashPlayer=0 deformTrace=0
+EXIT     harness-stop (process was still alive)
+DRIVE    *** THE CAR NEVER MOVED *** path=3,9m net=3,8m over 49 [motion] samples (samples 0..48: last placement before the throttle up to the first respawn; later respawns=1 GAMEWRECKED=0)  -- but see GAS: THE PRESS NEVER REACHED THE CAR (mfGas 0 on every sample). VOID.
+POLL     max period 1,56s at 21,6s over 209 polls (target 0.25s)
+THROTTLE first input at t+0,00s (on time)
+SIMPAUSE 2 pause(s), 2 resume(s); first pause at 2% of the log
+GAS      0 of 284 [motion] samples report gas > 0  *** THE THROTTLE NEVER REACHED THE GAME -- the harness held accel and the car's own mfGas stayed 0 ***
+drive=True steer=none delay=0,0s hold=to-end
+throttlescript 0:brake+handbrake
+title-start tap:Start run=10,0s actions=8+45
+input brake+handbrake/none run=  29,3s t+  0,00s
+```

@@ -1,0 +1,503 @@
+{
+  "verdict": "pass_raw_machine_collection_only",
+  "site_credit": 0,
+  "raw_log": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\stage\\slot\\BrnGame.log",
+  "raw_log_sha256": "c9d946f0a29fb2710f76ccddfe80f0e0772a14c156b3bc8dadb4c3f15fe8727a",
+  "independent_decoded_phase_scripts": 12,
+  "controls": [
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0051",
+      "caption": "Layer 0 density",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "1.000",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0052",
+      "caption": "Layer 1 density",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.000",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0053",
+      "caption": "Layer 0 feathering",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "pending",
+      "reason": "captured value outside original setter range; no target or cleanup SET permitted",
+      "baseline": "1.100",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0054",
+      "caption": "Layer 1 feathering",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.100",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0055",
+      "caption": "Layer 0 opacity",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.500",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0056",
+      "caption": "Layer 1 opacity",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.000",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0057",
+      "caption": "Layer 0 dark R",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "1.000",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0058",
+      "caption": "Layer 0 dark G",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.985",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0059",
+      "caption": "Layer 0 dark B",
+      "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnIm3d SetShaderConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.924",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0066",
+      "caption": "Keyfill colour R",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.851",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0067",
+      "caption": "Keyfill colour G",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.973",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0068",
+      "caption": "Keyfill colour B",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.958",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0072",
+      "caption": "Leftfill colour R",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.641",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0073",
+      "caption": "Leftfill colour G",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.724",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0074",
+      "caption": "Leftfill colour B",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.723",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0075",
+      "caption": "Rightfill colour R",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.627",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0076",
+      "caption": "Rightfill colour G",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.712",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0077",
+      "caption": "Rightfill colour B",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.724",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0078",
+      "caption": "Upfill colour R",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.256",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0079",
+      "caption": "Upfill colour G",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.247",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0080",
+      "caption": "Upfill colour B",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {},
+      "state": "retained_completed_phases",
+      "reason": "complete PNR retained from predecessor; read-only refresh, no duplicate target or cleanup SET",
+      "baseline": "0.231",
+      "target_writes": 0
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0081",
+      "caption": "Downfill colour R",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {
+        "positive": {
+          "value": "6.000",
+          "frame": {
+            "phase": "0081_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010076.bmp",
+            "name": "bb_010076.bmp",
+            "bytes": 921654,
+            "sha256": "214db5a3e2a0d5b7e76aa2584ac86e25098b894d0dc9c7cf878fc2cf27f89f73",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 3,
+            "present": 10076,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=3 present=10076 file=bb_010076.bmp",
+            "ack_index": 35145,
+            "request_cursor": 35132,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10076,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 5910 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 34717,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        },
+        "negative": {
+          "value": "0.000",
+          "frame": {
+            "phase": "0081_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010189.bmp",
+            "name": "bb_010189.bmp",
+            "bytes": 921654,
+            "sha256": "67d37aa17c77c78ab20f9ec0953320b4b139c123f3b4fae48557b1384dbe0857",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 4,
+            "present": 10189,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=4 present=10189 file=bb_010189.bmp",
+            "ack_index": 35715,
+            "request_cursor": 35706,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10189,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6060 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 35680,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        },
+        "restore": {
+          "value": "0.693",
+          "frame": {
+            "phase": "0081_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010319.bmp",
+            "name": "bb_010319.bmp",
+            "bytes": 921654,
+            "sha256": "9410b6b56ca504649dbce49780bbf816432bdebf9c0547c44c265a8f4d029762",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 5,
+            "present": 10319,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=5 present=10319 file=bb_010319.bmp",
+            "ack_index": 36344,
+            "request_cursor": 36332,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10319,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6150 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 36287,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        }
+      }
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0082",
+      "caption": "Downfill colour G",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {
+        "positive": {
+          "value": "6.000",
+          "frame": {
+            "phase": "0082_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010508.bmp",
+            "name": "bb_010508.bmp",
+            "bytes": 921654,
+            "sha256": "0a1bf42ac45a6a0f41c231ff578e9fc88af4f7133e1fe732d9a5ec227b9ecb64",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 6,
+            "present": 10508,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=6 present=10508 file=bb_010508.bmp",
+            "ack_index": 37267,
+            "request_cursor": 37254,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10508,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6240 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 36895,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        },
+        "negative": {
+          "value": "0.000",
+          "frame": {
+            "phase": "0082_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010650.bmp",
+            "name": "bb_010650.bmp",
+            "bytes": 921654,
+            "sha256": "4b86c76e90cb1e735c300a99eb29cbc6ec0ca9d974fe7307a26d7caac594182a",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 7,
+            "present": 10650,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=7 present=10650 file=bb_010650.bmp",
+            "ack_index": 37957,
+            "request_cursor": 37949,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10650,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6390 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 37893,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        },
+        "restore": {
+          "value": "0.838",
+          "frame": {
+            "phase": "0082_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010766.bmp",
+            "name": "bb_010766.bmp",
+            "bytes": 921654,
+            "sha256": "7994e9d6faf64a9c735a795307aefed5ca0b9417379c5c867ea72131705563be",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 8,
+            "present": 10766,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=8 present=10766 file=bb_010766.bmp",
+            "ack_index": 38541,
+            "request_cursor": 38527,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10766,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6480 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 38509,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        }
+      }
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0083",
+      "caption": "Downfill colour B",
+      "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+      "states": {
+        "positive": {
+          "value": "6.000",
+          "frame": {
+            "phase": "0083_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010952.bmp",
+            "name": "bb_010952.bmp",
+            "bytes": 921654,
+            "sha256": "d3d754a6aa36ba1057df23a5617e88124600095ae9c259f65f6c6cab273e4077",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 9,
+            "present": 10952,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=9 present=10952 file=bb_010952.bmp",
+            "ack_index": 39417,
+            "request_cursor": 39405,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10952,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6570 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 39128,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        },
+        "negative": {
+          "value": "0.000",
+          "frame": {
+            "phase": "0083_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_011069.bmp",
+            "name": "bb_011069.bmp",
+            "bytes": 921654,
+            "sha256": "7d5f27854eea188545467056b1d91ec995e4e9e832c59203e334c2a902963255",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 10,
+            "present": 11069,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=10 present=11069 file=bb_011069.bmp",
+            "ack_index": 39997,
+            "request_cursor": 39984,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "11069,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6690 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 39906,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        },
+        "restore": {
+          "value": "0.895",
+          "frame": {
+            "phase": "0083_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_011183.bmp",
+            "name": "bb_011183.bmp",
+            "bytes": 921654,
+            "sha256": "2dfa10b107aa8229392679488a9a1f3c85cbaab27003fad33fbe46fc865abd0a",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 11,
+            "present": 11183,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=11 present=11183 file=bb_011183.bmp",
+            "ack_index": 40571,
+            "request_cursor": 40558,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "11183,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6780 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 40518,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          }
+        }
+      }
+    }
+  ],
+  "frame_count": 13,
+  "note": "Actual native consumer pixels still require independent review; missing or ambiguous effects stay pending."
+}

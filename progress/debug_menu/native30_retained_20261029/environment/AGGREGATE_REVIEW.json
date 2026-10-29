@@ -1,0 +1,30 @@
+{
+  "verdict": "pass_bounded_native_cohort_aggregate_consistency",
+  "result_manifest_sha256": "fa26d2f537dc897e9f26ad8b6b1d1090d70e5eb8aa6a13dbbbebf330ff1ec54f",
+  "manifest_sha256": "fa26d2f537dc897e9f26ad8b6b1d1090d70e5eb8aa6a13dbbbebf330ff1ec54f",
+  "reviewer": "environment21_native_review",
+  "counts": {
+    "selected": 24,
+    "unique_completed_PNR": 23,
+    "verified": 20,
+    "pending": 4,
+    "original_noops": 0
+  },
+  "pending_ids": [
+    "0052",
+    "0053",
+    "0054",
+    "0056"
+  ],
+  "checks": [
+    "Independently compared all 20 aggregate site records and their three P/N/R states with actual driver results, typed raw triplets, requested values, script hashes, frame objects, BMP hashes, raw ACKs and PID/start/slot identity.",
+    "Verified the union of actual valid 640x360 P/N/R collections contains exactly 23 unique control IDs. The invalid 2560x1440 frame is preserved and contributes no proof.",
+    "Verified the exact verified and pending ID sets, unique registration IDs and counts. Completed layer 1 P/N/R collections remain pending because no observable effect was shown; loaded feather 1.100 remains pending and was untouched in later runs.",
+    "Checked dark RGB 57-59 against actual source: DebugToManager writes CloudsData.mav3LayerDarkColour[0] RGB; GenerateShaderConstants copies and applies white-level scale; WorldModule publishes CloudDarkColour0; SkyDomeManager scales by 2; BrnGraphics::Im3dSkyDome::SetConstants pushes handle[11], bound to g_darkColour.",
+    "Verified corrected exact method labels in the aggregate and every RESULT_MANIFEST file hash. Sealed native evidence remains unchanged.",
+    "Confirmed aggregate retains prior failed runs, closed-log identities, cleanup/private profile restoration and current normal-file guard outcomes. No whole-domain, full-menu, newer normal41 executable or original-noop claim is inferred."
+  ],
+  "new_native_execution_by_this_review": false,
+  "canonical_ledger_changed_by_reviewer": false,
+  "created_utc": "2026-10-29T20:08:09.103099+00:00"
+}
