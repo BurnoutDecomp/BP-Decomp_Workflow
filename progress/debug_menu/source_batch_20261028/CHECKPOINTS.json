@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "59df65112c835e69a048347c9829567c9e9cdb7a",
+  "b5_source_head": "6e46eeb2f250b3ba4ef618a256989edf1345c2c6",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1923,6 +1923,45 @@
       "native_credit": 0,
       "site_credit": 0,
       "local_diff_check_note": "git diff --check reported trailing whitespace on two exact reviewed added call lines in BrnGameStateImageManagerBase.cpp; exact formal postimage retained unchanged."
+    },
+    {
+      "packet_id": "world_renderer_adjacent_color_assertion_fix",
+      "source_packet_path": "swarm_world_renderer_adjacent_fix_20261029/REVIEWER_PACKET.md",
+      "source_packet_sha256": "778c6bc8c631f7475b3bec039e93ae0ff9b95db475f0ee89628a0b32ab116ccc",
+      "source_manifest_path": "swarm_world_renderer_adjacent_fix_20261029/MANIFEST.json",
+      "source_manifest_file_sha256": "0562cb1153d2a1235faf7c03e72c82828a172267274846c972948f7db76b9318",
+      "author_seal_path": "swarm_world_renderer_adjacent_fix_20261029/SEAL.json",
+      "author_seal_file_sha256": "57054f77580429a180333706c71601ad46045c56efd0f2c71c8dec2eecaf76ce",
+      "source_delta_path": "swarm_world_renderer_adjacent_fix_20261029/SOURCE_DELTA.json",
+      "source_delta_sha256": "a75ba74b4b7c82f9ec79f0763cb615c9aab1cc781e3a6bbf2e19106e962fb27c",
+      "author_patch_path": "swarm_world_renderer_adjacent_fix_20261029/changes.patch",
+      "author_patch_sha256": "1356b7ef0c9526552d7d7fb633ae69f0e77891474c8d79207a8ac0898a700ab9",
+      "review_report_path": "review_world_renderer_adjacent_sol_0ed68dfb47/REVIEW.md",
+      "review_report_sha256": "cd8e8d260a565bd835fbfb6eec17578ce8f81211c427ca872177cdd82aa08eaf",
+      "review_verdict_file_path": "review_world_renderer_adjacent_sol_0ed68dfb47/VERDICT.json",
+      "review_verdict_file_sha256": "30f512560889463e383bc4e1c29ccdb99ec6198c1e75a6e7b23528728ffe2a56",
+      "review_seal_path": "review_world_renderer_adjacent_sol_0ed68dfb47/SEAL.json",
+      "review_seal_file_sha256": "f186307dfaa1ab4c89776859d43f0a732e108ed5eaa9572f48c252ae6cf51ef6",
+      "review_verdict": "pass_source_review",
+      "review_scope": "Two adjacent WorldDebug source fixes only: packed red RGBA and assertion-first RenderWorld ordering. No runtime/native/14-inert claim. Reviewer performed canonical pre/post owning-TU compiles and real RGBA probe; static assert-order control.",
+      "source_files": [
+        {
+          "path": "src/GameSource/World/DebugComponents/BrnWorldDebugComponent.cpp",
+          "pre_sha256": "1eeeb67b0f98f5bd5cf0d11623b1e46869dc5201e58bb88d414669f244b6861f",
+          "pre_current_raw_sha256": "2d85b55a5cd3dd68ba25a7ac9c102c42fed61bcd71b63306c115467f35302383",
+          "pre_current_lf_sha256": "1eeeb67b0f98f5bd5cf0d11623b1e46869dc5201e58bb88d414669f244b6861f",
+          "post_raw_sha256": "ff60ea8a19ba785f53d2f193093c19e894030a6aafdd3ddb641098aeefe4d09a",
+          "post_lf_sha256": "e9b539c0e929f0dfe0117f3e45c8f64dcc5e19baf09767b8b17ad663432a8f15",
+          "post_git_sha256": "e9b539c0e929f0dfe0117f3e45c8f64dcc5e19baf09767b8b17ad663432a8f15",
+          "declared_post_sha256": "e9b539c0e929f0dfe0117f3e45c8f64dcc5e19baf09767b8b17ad663432a8f15"
+        }
+      ],
+      "source_commit": "6e46eeb2f250b3ba4ef618a256989edf1345c2c6",
+      "author_baseline_b5": "84a12a2f893ffbee4c692bef75f278e9163f3f94",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0,
+      "supplementary_original_leftover_review_used": false
     }
   ]
 }
