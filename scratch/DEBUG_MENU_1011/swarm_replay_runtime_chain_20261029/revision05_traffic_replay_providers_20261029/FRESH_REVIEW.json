@@ -1,0 +1,16 @@
+{
+  "verdict": "pass",
+  "reviewer_task": "/root/replay_integration_review",
+  "source_scope": "old producer nine paths plus corrected EnterReplay CPP and unchanged renderer; ten unique paths",
+  "approved_successor_seal_sha256": "6cb615174c7199e0cf195dbdfa58223def7bf531ab7b42cd532ba39f65553a3a",
+  "approved_renderer_seal_sha256": "1e0a93482d6e0838c98e91e463e2f920a93cea68d74b790a178e12d9403a5686",
+  "source_review_text": "Traffic successor VERDICT: pass. Bind SEAL6cb615174c7199e0cf195dbdfa58223def7bf531ab7b42cd532ba39f65553a3a and ENTER_REPLAY.patch efbbbd80675341ecc213c1a4bee45a69ce1a83b15861c2ad600ed0b26955d88e. Sole blocker resolved; original producer9 plus successor replacementCPP + unchanged renderer2 now approved under prior bounded scope. Renderer seal1e0a93482d6e0838c98e91e463e2f920a93cea68d74b790a178e12d9403a5686 carries; independent current hashes519module+441renderer headers zero drift. Overall combined source review can now record VERDICT: pass. Whole link/native pending.",
+  "required_mount_review": {
+    "verdict": "pass",
+    "patch_sha256": "30a6c359edf02be207d43a53013d6640e2657fe2d5b4c071fca935b00b0c28b0",
+    "reviewer_text": "VERDICT: pass for final Traffic mount patch SHA256 30a6c359edf02be207d43a53013d6640e2657fe2d5b4c071fca935b00b0c28b0. Independently inspected workflow base bee0be28a22b6116c9a8b5623089e3c9bd401593: RaceCar/GameModule provider mounts exist; neither TrafficEntitySerialiser.cpp nor TrafficSerialiserFrame.cpp is mounted. Patch has exactly one build_game_exe.bat hunk adding those two echo lines, no deletion or unrelated change. SOURCE_MOUNT_CLOSURE.json matches this. Prior exact source approvals carry; whole link/native remain pending."
+  },
+  "whole_link": "pending",
+  "native_replay": "pending",
+  "site_or_count_credit": false
+}

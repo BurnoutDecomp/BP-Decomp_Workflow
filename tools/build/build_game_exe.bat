@@ -5469,6 +5469,8 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayDirectorSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayGameModuleSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayRaceCarEntitySerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayTrafficEntitySerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayTrafficSerialiserFrame.cpp"
   rem Sound replay provider and the real frame/static-layout bodies used by its stream methods.
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplaySoundSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplaySoundSerialiserFrame.cpp"
