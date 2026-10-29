@@ -3776,6 +3776,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  NOTE: %SRC%\GameSource\Director\BrnDirectorModule.cpp is the REVERTED raw-offset
   rem  duplicate and must NOT be mounted -- the live TU is the one under DirectorModule\.
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModule.cpp"
+  echo "%SRC%\GameSource\Director\BrnReplayDirector.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOOutputBuffer.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugCompononent.cpp"

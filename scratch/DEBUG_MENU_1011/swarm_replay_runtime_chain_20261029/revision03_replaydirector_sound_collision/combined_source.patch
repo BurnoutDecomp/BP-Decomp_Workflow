@@ -1,0 +1,1221 @@
+--- a/src/GameSource/AttribSys/Generated/classes/camerabumperbehaviour.h
++++ b/src/GameSource/AttribSys/Generated/classes/camerabumperbehaviour.h
+@@ -25,6 +25,10 @@
+         // BUMPER cam's mfBoostFOV) at every use site. Instance is a private base here.
+         using Instance::IsValid;
+         using Instance::GetLayoutPointer;
++
++        // ARTIST ReplayDirector::PreSceneQueryUpdate: authored f32 slot6.
++        f32 GetBoostFOV() const
++        { return static_cast<const f32*>(GetLayoutPointer())[6]; }
+     };
+ 
+     // Chain the Instance ctor, assert the collection's class is
+--- a/src/GameSource/AttribSys/Generated/classes/cameraexternalbehaviour.h
++++ b/src/GameSource/AttribSys/Generated/classes/cameraexternalbehaviour.h
+@@ -32,6 +32,10 @@
+         // using-declaration precedent as cameradefaults.h:71 / shotgroup.h).
+         using Instance::IsValid;
+         using Instance::GetLayoutPointer;
++
++        // ARTIST ReplayDirector::PreSceneQueryUpdate: authored f32 slot16.
++        f32 GetBoostFOV() const
++        { return static_cast<const f32*>(GetLayoutPointer())[16]; }
+     };
+ 
+     // Chain the Instance ctor, assert the collection's class is ClassName::cameraexternalbehaviour,
+--- a/src/GameSource/Director/BrnDirectorModule.h
++++ b/src/GameSource/Director/BrnDirectorModule.h
+@@ -9,74 +9,20 @@
+ #include "GameSource/Director/DirectorModule/BrnDirectorInputOutput.h"    // BrnDirector::DirectorInputOutput (the per-frame IO bundle)
+ #include "GameSource/Director/DirectorModule/BrnDirectorModuleIOSceneQuery.h" // DirectorIO::SceneQuery{Input,Output}Buffer
+ #include "GameSource/Director/BrnDirectorResourceManager.h"               // BrnDirector::DirectorResourceManager (mDirectorResourceManager)
++#include "GameSource/Director/BrnReplayDirector.h"
+ #include "GameSource/Director/BrnMainDirector.h"                          // BrnDirector::MainDirector (mMainDirector)
+-#include "GameSource/Director/Camera/Camera.h"                            // BrnDirector::Camera::Camera (mCamera)
++#include "GameSource/Director/Camera/Camera.h"                            // BrnDirector::Camera::Camera
+ #include "GameSource/Director/Utils/BrnDirectorWorldMap.h"                // BrnDirector::WorldMap (mWorldMap)
+ #include "GameSource/Director/Utils/BrnDirectorPostOfficeTypes.h"         // the six scene-query post offices
+-#include "GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h"                   // BrnReplays::BaseSerialiser (mDirectorSerialiser)
++#include "GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h"                   // BrnReplays::DirectorSerialiser (mDirectorSerialiser)
+ 
+ namespace BrnResource { namespace GameDataIO { class AllocatorList; } }   // DirectorModule::Prepare's 2nd arg (boot audit F-P6-16)
+ 
+-// ============================================================================
+-// GameSource/Director/BrnDirectorModule.h
+-//
+-// BrnDirector::DirectorModule -- the top-level director engine module (a
+-// CgsModule::ModuleSingleBuffered derivative, as declared at the BrnGameModule member
+-// site). DWARF home: GameSource/Director/DirectorModule/BrnDirectorModule.h. It owns
+-// the debug component, the resource manager, the top-level MainDirector, a replay
+-// serialiser, the active Camera, plus a very large fleet of gameplay/camera/debug
+-// sub-objects (WorldMap, Arbitrator, MomentController, BehaviourManager, GameState,
+-// VehicleTracker, ...) that the 3 functions reconstructed in this wave never touch.
+-//
+-// LAYOUT MODEL -- NAMED MEMBERS AT ASM-PROVEN OFFSETS, PADDING FOR THE REST.
+-//
+-// This class was previously reconstructed (and reverted after fresh-eyes review) as one
+-// opaque `alignas(16) u8 maStorage[233000];` buffer accessed everywhere through raw
+-// reinterpret_cast offset pokes -- forbidden by AGENTS.md's "NO RAW OFFSET POINTER
+-// HACKS" rule for an in-memory engine object. This version instead follows the
+-// established BrnGuiCache.h / BrnWorldModule.h convention: every field the 3 bodied
+-// functions (Construct/Destruct/Release) actually touch is a NAMED member (its own real
+-// committed type where one exists -- DebugComponent, DirectorResourceManager,
+-// MainDirector, Camera::Camera, BaseSerialiser -- else a scalar/scratch buffer at the
+-// asm-proven byte offset), and every gap between named members the bodied functions
+-// never reach is an explicit `u8 mPad_0xNNNN[SIZE]` buffer. Per BrnWorldModule.h's
+-// precedent for the same "huge object, 3-of-many functions reconstructed" situation,
+-// this header does NOT attempt to model (or size-pin) the WHOLE ~0x38F00-byte object:
+-// only the touched members, in ascending asm-proven offset order, with padding filling
+-// the measured gaps between them. The untouched tail past the last function-touched
+-// field (miPerfCount_PostGuiUpdate @0x38B0C / meReleaseStage @0x38B14) is intentionally
+-// ABSENT from this slice -- the object's true total size is not attested by any function
+-// reconstructed so far, so no static_assert(sizeof(DirectorModule)==...) is made here
+-// (matching BrnWorldModule.h, which explicitly declines to pin a size it cannot prove).
+-//
+-// OFFSETS quoted in comments below are X360 CONSOLE (4-byte-pointer) byte offsets --
+-// provenance for the reconstructed .cpp bodies, not host layout facts (the real
+-// sub-objects such as DirectorResourceManager/MainDirector are wider on this 64-bit
+-// host; access is by name, never by offsetof-against-console-numbers).
+-//
+-// TWO UNREPRODUCED SIDE EFFECTS (flagged rather than raw-offset-poked into another
+-// class's private/opaque storage -- see the per-member comments below):
+-//   * Construct's inlined DirectorResourceManager::Construct() body (an
+-//     EventReceiverQueue<512,16>::Construct() per the DecFIGS DWARF dump for
+-//     BrnDirectorResourceManager.cpp) is called via mDirectorResourceManager.Construct(),
+-//     but the currently-committed BrnDirectorResourceManager.h version of that method is
+-//     `inline void Construct() {}` (a stub) -- the queue-init side effect is not
+-//     reproduced. That gap belongs to the resource-manager TU.
+-//   * Construct stores &mDebugComponent into a word at this+0xB40 -- MainDirector's own
+-//     CONSOLE +0x40 (the module places MainDirector at +0xB00). ⭐ RESOLVED (BehaviourManager
+-//     wave): MainDirector is no longer a console-sized opaque buffer -- it is a named-member
+-//     class -- and it now exposes `MainDirector::SetDebugComponent(DebugComponent*)`.
+-//     Construct should call `mMainDirector.SetDebugComponent(&mDebugComponent);`
+-//     (see the wave log's PART 4 step 2.5). The .cpp still has it unreproduced + flagged.
+-//
+-// NOTE: a SEPARATE, already-landed TU (GameSource/Director/BrnDirectorModule.cpp, the
+-// real `DirectorModule::DirectorModule()` constructor) defines its OWN small,
+-// TU-private/local `struct DirectorModule` and does not include this header -- the two
+-// coexist under this project's per-TU `cl /c` compile gate (no link step), exactly like
+-// every other declaration-only external stub in this codebase. Do not conflate that
+-// file's ctor with the Construct()/Destruct()/Release() staged-lifecycle methods
+-// reconstructed here.
+-// ----------------------------------------------------------------------------
++// DirectorModule owns the live and replay directors plus its persistent replay
++// channel. ARTIST pins the member order; native pointer-bearing objects widen.
++// In particular, ReplayDirector occupies the original full+35F50..+38930
++// region. Its final camera, selection and first-frame flag are not additional
++// DirectorModule fields. Padding below describes remaining untouched regions.
+ 
+ namespace BrnDirector
+ {
+@@ -133,14 +79,8 @@
+ 
+     // ---- staged Prepare / per-frame Update spine (RECONSTRUCTED, director wave) -----
+     //
+-    // The five entry points below are now BODIED (DirectorModule/BrnDirectorModule.cpp).
+-    // The earlier "BrnDirector::WorldMap has no homed type at all" note is SUPERSEDED:
+-    // WorldMap has a real home (Utils/BrnDirectorWorldMap.h/.cpp) and its LoadData
+-    // @0x8225F5A0 landed with this wave, as did BrnDirector::InertiaController::Update
+-    // @0x8221ECD0. What is still gated inside them is the REPLAY leg only
+-    // (BrnReplays::DirectorSerialiser and ReplayDirector::Update / ::PreSceneQueryUpdate
+-    // remain un-homed). Every gate is QUIET (never a trap on a per-frame path) and carries
+-    // its X360 address plus a DELETE-when note in the .cpp.
++    // The module dispatches both live and replay camera passes, with original
++    // serialiser readiness, frame transfer and unconditional registration.
+     //
+     // ARGUMENT SHAPE. The IO buffers arrive as separate parameters, exactly as the X360
+     // module framework passes them; each entry point then bundles four of them (plus the
+@@ -155,7 +95,7 @@
+ 
+     // X360 0x8225C768. Pre-scene-query update: latch the replay flag, Clear the per-frame
+     // scene-query post office, then run MainDirector::PreSceneQueryUpdate (live leg) or
+-    // ReplayDirector::PreSceneQueryUpdate (replay leg -- GATED). BODIED.
++    // ReplayDirector::PreSceneQueryUpdate (replay leg). BODIED.
+     s32 PreSceneQueryUpdate(s32 liUnusedA, s32 liUnusedB,
+                             const DirectorIO::InputBuffer* lpInputBuffer,
+                             DirectorIO::OutputBuffer* lpOutputBuffer,
+@@ -163,7 +103,7 @@
+                             bool lbIsReplaying);
+ 
+     // X360 0x82275300. The per-frame Update spine: drain the scene-query results, run
+-    // MainDirector::Update (live leg) or ReplayDirector::Update (replay leg -- GATED), copy
++    // MainDirector::Update (live leg) or ReplayDirector::Update (replay leg), copy
+     // the produced graphics camera into the module's own, then the replay-serialiser
+     // bookkeeping + serialiser registration. BODIED.
+     s32 Update(s32 liUnusedA, s32 liUnusedB,
+@@ -305,50 +245,9 @@
+     // named, and the console offsets quoted throughout are provenance only.
+     MainDirector mMainDirector;
+ 
+-    u8 mPad_0x35F50[0x36380 - 0x35F50];                     // CONSOLE +0x35F50..+0x3637F.
+-    // ⚠️ THIS IS THE ReplayDirector REGION. The (separate) DirectorModule C++ ctor
+-    // placement-builds BrnDirector::ReplayDirector at exactly +0x35F50, and the replay leg
+-    // of Update / PreSceneQueryUpdate calls `ReplayDirector::{Update,PreSceneQueryUpdate}
+-    // (this + 221008)` == this+0x35F50, reading its own CgsGraphics::Camera back out at
+-    // this+221712 == +0x36190 (ReplayDirector +0x240).
+-    //
+-    // It is deliberately NOT declared as a named `ReplayDirector mReplayDirector;` member
+-    // here, because two attested facts CONFLICT and neither is safe to prefer:
+-    //   * Camera::Construct(this + 222080) in DirectorModule::Construct @0x8225C590 pins
+-    //     mCamera at +0x36380, i.e. only 0x430 bytes after the ReplayDirector base, yet
+-    //   * BrnReplayDirector.h records that the ReplayDirector ctor reaches fields out to
+-    //     its own +0x2788.
+-    // Declaring the member at 0x35F50 would silently pick one. Left as reserved storage +
+-    // documented until the ReplayDirector layout is recovered; the replay leg is gated
+-    // anyway (see the .cpp). Nothing in this span is touched by Construct/Destruct/Release.
+-
+-    // this+0x36380 (222080). BrnDirector::Camera::Camera::Construct() -- the module's
+-    // active/current camera. Real committed type (Camera.h/.cpp).
+-    Camera::Camera mCamera;
+-
+-    u8 mPad_0x36380_tail[0x38920 - 0x36380];                // CONSOLE tail after the Camera span
+-    // -- CameraDebugInfo / debug-toggle bytes / DebugLog + 3x DebugPrinter / GameState /
+-    // VehicleTracker / EffectInterface -- untouched by Construct/Destruct/Release.
+-
+-    // this+0x38920 (231712). RECOVERED by PostGuiUpdate @0x82250DD0, whose last act is
+-    //   `v10 = lpInputBuffer[7854];  if ( v10 > -1 )  *(this + 231712) = v10;`
+-    // i.e. latch the input buffer's word at ITS +0x7AB8 whenever it is not the -1 "none"
+-    // sentinel.
+-    // ⚠ NAME CORRECTION (fly-by wave): the source word is NOT a car index. It is now the named
+-    // DirectorIO::InputBuffer::miCameraType -- the slot BridgeGuiToDirector @0x823CBF70 writes
+-    // on GUI command 591, whose own assert text is "Unhandled camera type : ". The member name
+-    // below is kept (renaming re-keys the lint fingerprint for no behavioural gain) but it
+-    // latches a CAMERA TYPE, not a car index. FLAG: name inferred, not DWARF.
+-    s32 miPostGuiCarIndexLatch;                              // +0x38920
+-
+-    // this+0x38924 (231716). Construct zeroes it; PreSceneQueryUpdate @0x8225C768 SETS IT
+-    // TO 1 on the frame the replay flag transitions false->true (together with clearing
+-    // +0x38B01). So it is the "a replay just started" edge latch that the replay leg
+-    // consumes. Zero-store attested by Construct, the =1 store by PreSceneQueryUpdate.
+-    // FLAG: name inferred from that role; the trimmed DWARF does not name it.
+-    u8 mbReplayStartedThisFrame;                             // +0x38924
+-
+-    u8 mPad_0x38925[0x38930 - 0x38925];                      // +0x38925..+0x3892F (untouched)
++    // ARTIST ReplayDirector spans+0x35F50..+0x38930. The final camera,
++    // camera selection, and replay-first-frame latch belong to this object.
++    ReplayDirector mReplayDirector;
+ 
+     // ARTIST DirectorModule::Construct/Update own the persistent derived
+     // serialiser at console +0x38930. Its own +0x5C latch belongs to that type.
+--- a/src/GameSource/Director/BrnReplayDirector.cpp
++++ b/src/GameSource/Director/BrnReplayDirector.cpp
+@@ -1,113 +1,218 @@
+ #include "GameSource/Director/BrnReplayDirector.h"
+-
+-#include "SDKs/Packages/ICE/ICEData.hpp"               // ICE::ICETake (two owned playback takes)
+-#include "GameSource/GameState/BrnGameStateSharedIO.h"  // BrnGameState::GameStateModuleIO::CarScoreData
+-
+-#include <new>   // placement new (construct owned sub-objects at their byte offsets)
+-
+-// ============================================================================
+-// BrnDirector::ReplayDirector member functions, reconstructed from BURNOUT_X360_ARTIST.XEX.
+-//
+-// Only the constructor is bodied. ReplayDirector is a very large, mostly-opaque object whose
+-// full layout is not yet modelled, so -- exactly like the sibling BrnDirectorModule.cpp -- the
+-// constructor addresses each touched field by byte offset through a char*/u32* view of `this`
+-// rather than as a named member. Every offset below is recovered directly from the X360 ctor
+-// body @0x827E2020 (its stw/addi sequence).
+-//
+-// The other three recovered functions (FillInSharedInfo / PreSceneQueryUpdate / Update) are
+-// declaration-only -- see the per-function FLAG blocks at the bottom of this file.
+-// ============================================================================
++#include "GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h"
++#include "GameSource/Director/DirectorModule/BrnDirectorInputOutput.h"
++#include "GameSource/Director/DirectorModule/BrnDirectorModuleIO.h"
++#include "GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.hpp"
++#include "GameSource/AttribSys/Generated/classes/burnoutcarasset.h"
++#include "GameSource/AttribSys/Generated/classes/camerabumperbehaviour.h"
++#include "GameSource/AttribSys/Generated/classes/cameraexternalbehaviour.h"
+ 
+ namespace BrnDirector
+ {
+-    // Vtable symbols the constructor installs into the two owned camera-behaviour sub-objects
+-    // (defined elsewhere -- external read-only data). Named from the X360 LIS/ADDI references:
+-    //   gpExternalBehaviourVTable -> off_8200A560 @ ReplayDirector +0x690
+-    //   gpBumperBehaviourVTable   -> off_8200A150 @ ReplayDirector +0x6E0
+-    //   gpIceWrapperVTable        -> off_82008D38 @ ReplayDirector +0x1200
+-    extern void* const gpExternalBehaviourVTable;
+-    extern void* const gpBumperBehaviourVTable;
+-    extern void* const gpIceWrapperVTable;
+-
+-    // ---- byte offsets recovered from the ctor asm @0x827E2020 --------------------------------
+-    // (a1[N] in the Hex-Rays view == byte 4*N; the asm uses addi/stw at these byte offsets.)
+-    static const s32 KI_EXTERNAL_BEHAVIOUR_VTABLE = 0x0690;   // a1[420], stw r10, 0(r31+0x690)
+-    static const s32 KI_BUMPER_BEHAVIOUR_VTABLE   = 0x06E0;   // a1[440], stw r9, 0x50(r31+0x690)
+-    static const s32 KI_EXTERNAL_ICE_TAKE         = 0x09B0;   // ICETake @ (r31+0x690)+0x320
+-    static const s32 KI_ICE_WRAPPER_VTABLE        = 0x1200;   // a1[1152], stw r10, 0(r31+0x1200)
+-    static const s32 KI_BUMPER_ICE_TAKE           = 0x1290;   // ICETake @ (r31+0x1200)+0x90
+-    static const s32 KI_INDEX_FIELD_A             = 0x1C44;   // a1[1809] = -1
+-    static const s32 KI_PLAYER_SCORE_DATA         = 0x1FC0;   // CarScoreData @ r31+0x1FC0
+-    static const s32 KI_INDEX_FIELD_B             = 0x2788;   // a1[2530] = -1
+-
+-    ReplayDirector::ReplayDirector()
++// ARTIST 827E2020: behaviour/policy vtables, ICETake constructors, the
++// AllVehicleData/DebugLog Array sentinel constructors, and VehicleTracker's
++// CarScoreData constructor are supplied by these real typed members.
++ReplayDirector::ReplayDirector() = default;
++
++// ARTIST 82250558. The alleged VMX random pipeline was a decompiler overlap:
++// the assembly uses scalar mulld/std/stwx and exactly matches Random::Construct.
++// VMX blocks are named matrix, controller and timestep value copies.
++void ReplayDirector::FillInSharedInfo(Camera::BehaviourSharedInfo* lpInfo,
++                                      Camera::CollisionPolicySharedInfo* lpPolicy,
++                                      BrnReplays::DirectorSerialiserStaticLayout* lpFrame,
++                                      const DirectorInputOutput* lpIO)
++{
++    const DirectorIO::InputBuffer* lpInput = lpIO->mpInputBuffer;
++    const EActiveRaceCarIndex lePlayer = static_cast<EActiveRaceCarIndex>(lpInput->GetPlayerCarIndex());
++    mRotationController.Construct();
++    mSphericalRotationController.Construct();
++    mSceneSpace = lpFrame->mCamera.mTransform;
++    mTrafficLightSpace = lpFrame->mCamera.mTransform;
++    mAllVehicleData.Construct();
++    mAllVehicleData.Update(*lpInput->GetUsedRaceCars(), lpInput->GetRaceCarInfo(), lePlayer,
++        &lpInput->GetTrafficOutputInterface()->GetTrafficDirectorEntityArray(), lpInput->GetVehicleInfoArray());
++    mGameState.Clear();
++    mVehicleTracker.Update(&mGameState, lpInput, lePlayer, false);
++    mRandom.Construct();
++    mDebugLog.Construct();
++    mDebugPrinter.Construct();
++
++    const CgsSystem::TimerStatusInterface* lpTimers = lpInput->GetTimerStatusInterface();
++    CGS_ASSERT(lpTimers->GetGameTimerStatus()->IsRunning(),
++               "lDirectorSharedInfo.mpInput->GetTimerStatusInterface()->GetGameTimerStatus()->IsRunning()");
++    const f32 lfGame = lpTimers->GetGameTimerStatus()->GetCurrentTimeStep();
++    const f32 lfWorld = lpInput->IsSimPaused() ? 0.0f : lpTimers->GetSimTimerStatus()->GetCurrentTimeStep();
++    const f32 lfWorldNoSlomo = lpInput->IsSimPaused() ? 0.0f : lpTimers->GetSimTimerStatus()->GetBaseTimeStep();
++    Timestep lTimestep;
++    lTimestep.Set(VecFloat(lfGame), VecFloat(lfWorld), VecFloat(lfWorldNoSlomo),
++                  lfGame, lfWorld, lfWorldNoSlomo);
++
++    // ARTIST performs both rank-one queries. Preserve their order and the
++    // nearest-car assertion path even though the first returned reference is unused.
++    const EActiveRaceCarIndex leNearest = mAllVehicleData.GetNearestRaceCarIndexToPlayer(1);
++    mAllVehicleData.GetRaceCar(leNearest);
++    const Matrix44Affine lLooseHeading = mAllVehicleData.GetPlayerLooseHeadingSpace();
++    const Matrix44Affine lHeading = mAllVehicleData.GetPlayerHeadingSpace();
++    const Matrix44Affine lImpact = mAllVehicleData.GetPlayerImpactSpace();
++    const Camera::VehicleInfo& lrNearest = mAllVehicleData.GetRaceCar(
++        mAllVehicleData.GetNearestRaceCarIndexToPlayer(1));
++    mCameraSpaceHandler.Construct(mAllVehicleData.GetPlayer().mRaceCarState.mTransform,
++        lrNearest.mRaceCarState.mTransform, mTrafficLightSpace, mSceneSpace,
++        lImpact, lHeading, lLooseHeading, lrNearest.mRaceCarState.mTransform, 0);
++
++    const ControllerInfo& lrControl = *lpInput->GetControll();
++    lpInfo->mpEffectInterface = 0;
++    lpInfo->mpDebugLog = &mDebugLog;
++    lpInfo->mfCrashTimeRemaining = 3.0f;
++    lpInfo->mpDirectorResourceManager = lpIO->mpResourceManager;
++    lpInfo->mpDebugPrinter = &mDebugPrinter;
++    lpInfo->mUsedRaceCars = *lpInput->GetUsedRaceCars();
++    lpInfo->mePlayerCarIndex = lePlayer;
++    lpInfo->mpAllVehicleData = &mAllVehicleData;
++    lpInfo->mpRaceCars = lpInput->GetRaceCarInfo();
++    lpInfo->mPlayerInfo = lpInfo->mpRaceCars[lePlayer];
++    lpInfo->mTimestep = lTimestep;
++    lpInfo->mpWorldMap = lpIO->mpWorldMap;
++    lpInfo->mpRandom = &mRandom;
++    lpInfo->mpPlayerTracker = &mVehicleTracker;
++    lpInfo->mpCameraSpaceHandler = &mCameraSpaceHandler;
++    lpInfo->mpSceneQueryInterface = lpIO->mpSceneQueryInterface;
++    lpInfo->mRotationController = mRotationController;
++    lpInfo->mSphericalRotationController = mSphericalRotationController;
++    lpInfo->mbIceDataBeingEdited = false;
++    lpInfo->mbAllStreamed = lpInput->IsAllStreamed();
++    lpInfo->mCameraModifier = lrControl.mCameraModifier;
++    lpInfo->mbUseControlPauseBehaviour = true;
++    lpInfo->mbLookback = lrControl.mbLookback;
++    lpInfo->mpBehaviourManager = 0;
++    // VMX vperm mask82CDA350: {-x,y,-x,-x}.
++    lpInfo->mCarModifier = {-lrControl.mCarModifier.x, lrControl.mCarModifier.y,
++                           -lrControl.mCarModifier.x, -lrControl.mCarModifier.x};
++    lpInfo->mRotationController = mRotationController;
++    lpInfo->mSphericalRotationController = mSphericalRotationController;
++    lpInfo->mfTempFOVBoostAmount = lpFrame->mTempCameraBoostResponder.GetFOVBoostAmount();
++    lpInfo->mfSpeedRatio = lpFrame->mSpeedResponder.GetSpeedRatio();
++    lpInfo->muRenderMetricsActivationID = 0;
++    lpInfo->mfLastHandbrakeTime = lpFrame->mfLastHandbrakeTime;
++
++    lpPolicy->mpRequestInterface = lpIO->mpSceneQueryInterface;
++    lpPolicy->mUsedRaceCars = *lpInput->GetUsedRaceCars();
++    lpPolicy->mpAllVehicleData = &mAllVehicleData;
++    lpPolicy->mePlayerCarIndex = lePlayer;
++    lpPolicy->mpRaceCars = lpInput->GetRaceCarInfo();
++    lpPolicy->mpPlayerCar = &lpPolicy->mpRaceCars[lePlayer];
++    lpPolicy->mpPlayerCarTransform = &lpPolicy->mpPlayerCar->mRaceCarState.mTransform;
++    lpPolicy->mpRandom = &mRandom;
++    lpPolicy->mpDebugPrinter = &mDebugPrinter;
++    lpPolicy->mTimestep = lTimestep;
++}
++
++// ARTIST 8225BD28. A first replay frame rebuilds both gameplay cameras from
++// the recorded car's camera attributes before issuing either camera's queries.
++void ReplayDirector::PreSceneQueryUpdate(BrnReplays::DirectorSerialiserStaticLayout* lpFrame,
++                                         const DirectorInputOutput* lpIO)
++{
++    const DirectorIO::InputBuffer* lpInput = lpIO->mpInputBuffer;
++    const s32 liPlayer = lpInput->GetPlayerCarIndex();
++    if (liPlayer == -1)
++        return;
++    if (!lpInput->GetUsedRaceCars()->IsBitSet(static_cast<u32>(liPlayer)))
++        return;
++
++    if (mbFirstFrame)
+     {
+-        char* lpBase = reinterpret_cast<char*>(this);
+-
+-        // Two owned camera-behaviour sub-object vtables (external + bumper replay cameras).
+-        *reinterpret_cast<void**>(lpBase + KI_EXTERNAL_BEHAVIOUR_VTABLE) = gpExternalBehaviourVTable;
+-        *reinterpret_cast<void**>(lpBase + KI_BUMPER_BEHAVIOUR_VTABLE)   = gpBumperBehaviourVTable;
+-
+-        // The external camera's owned ICE playback take.
+-        new (reinterpret_cast<void*>(lpBase + KI_EXTERNAL_ICE_TAKE)) ICE::ICETake();
+-
+-        // The ICE-wrapper sub-object vtable, then the bumper camera's owned ICE playback take.
+-        *reinterpret_cast<void**>(lpBase + KI_ICE_WRAPPER_VTABLE) = gpIceWrapperVTable;
+-        new (reinterpret_cast<void*>(lpBase + KI_BUMPER_ICE_TAKE)) ICE::ICETake();
+-
+-        // First index/handle field preset to -1 (li r30,-1 reused for both stores).
+-        *reinterpret_cast<s32*>(lpBase + KI_INDEX_FIELD_A) = -1;
+-
+-        // The owned per-player score block.
+-        new (reinterpret_cast<void*>(lpBase + KI_PLAYER_SCORE_DATA))
+-            BrnGameState::GameStateModuleIO::CarScoreData();
+-
+-        // Second index/handle field preset to -1.
+-        *reinterpret_cast<s32*>(lpBase + KI_INDEX_FIELD_B) = -1;
++        CGS_ASSERT(lpFrame->mCarBaseAssetAttribsKey != 0,
++                   "lpDirectorSerialiserFrame->mCarBaseAssetAttribsKey!=0");
++        Attrib::Gen::burnoutcarasset lCar(lpFrame->mCarBaseAssetAttribsKey, 0);
++        CGS_ASSERT(lCar.IsValid(), "Invalid car asset, key:");
++        Attrib::Gen::camerabumperbehaviour lBumper(
++            const_cast<Attrib::Collection*>(lCar.GetBumperCamRefSpec()->GetCollection()), 0);
++        Attrib::Gen::cameraexternalbehaviour lExternal(
++            const_cast<Attrib::Collection*>(lCar.GetExternalCamRefSpec()->GetCollection()), 0);
++        (void)lCar.GetAssetName();
++        CGS_ASSERT(lBumper.IsValid(), "Invalid bumpercam asset, key:");
++        CGS_ASSERT(lBumper.GetBoostFOV() > 0.0f, "Invalid bumpercam Boost FOV, key:");
++        CGS_ASSERT(lExternal.IsValid(), "Invalid externalcam asset, key:");
++        CGS_ASSERT(lExternal.GetBoostFOV() > 0.0f, "Invalid externalcam Boost FOV, key:");
++        Camera::BehaviourGameplayExternal::Parameters::Source lExternalSource;
++        lExternalSource.mpfValues = static_cast<const f32*>(lExternal.GetLayoutPointer());
++        mExternalParameters.Set(&lExternalSource);
++        Camera::BehaviourGameplayBumper::Parameters::Source lBumperSource;
++        lBumperSource.mpfValues = static_cast<const f32*>(lBumper.GetLayoutPointer());
++        mBumperParameters.Set(&lBumperSource);
++        Camera::BehaviourSharedPrepareReleaseInfo lPrepare;
++        lPrepare.mpInterpolateLockInterface = 0;
++        lPrepare.mpDirectorResourceManager = lpIO->mpResourceManager;
++        mExternalCamera.Construct();
++        mExternalBehaviour.Construct();
++        mExternalBehaviour.SetParameters(&mExternalParameters);
++        mExternalBehaviour.Prepare(lPrepare);
++        mExternalBehaviour.SetReplayCamera(true);
++        mBumperCamera.Construct();
++        mBumperBehaviour.Construct();
++        mBumperBehaviour.SetParameters(&mBumperParameters);
++        mBumperBehaviour.Prepare(lPrepare);
++        mGameState.Clear();
++        mVehicleTracker.Construct();
++        mVehicleTracker.SetVehicleIndex(liPlayer);
++        mVehicleTracker.Update(&mGameState, lpInput, static_cast<EActiveRaceCarIndex>(liPlayer), false);
+     }
+-
+-    // ========================================================================================
+-    // FLAG -- DECLARATION-ONLY (no body): BrnDirector::ReplayDirector::FillInSharedInfo
+-    //   @0x82250558.
+-    //
+-    // Not bodied. The X360 body:
+-    //   * indexes the not-yet-modelled ReplayDirector layout entirely by raw byte offset
+-    //     (mGameState @+0x7248, mVehicleTracker @+0x7760, mAllVehicleData @+0x6928, the two
+-    //     owned camera behaviours, a ~+0x690-region camera-utils block, etc.);
+-    //   * runs a multi-stage VMX pipeline the decompiler could not even allocate locals for
+-    //     ("local variable allocation has failed"): a vector LCG (the 1284865837 / 0x4C957F2D
+-    //     multipliers driving v27/v28 with vspltisw seeds) that fills an 8-entry shuffle/jitter
+-    //     table at +0x8448, plus a run of lvx128/stvx128 affine-matrix copies feeding the
+-    //     ICE::CameraSpaceHandler::Construct call. The project rules forbid paraphrasing such a
+-    //     VMX pipeline to scalar -- doing so would be a fabrication.
+-    //   * depends on a cone of not-yet-reconstructed callees: AllVehicleData::Construct/Update/
+-    //     GetPlayer, ICE::CameraSpaceHandler::Construct, BrnDirector::Camera::VehicleInfo::
+-    //     operator_, BrnDirector::Camera::Utils::SineLerp, BrnDirector::DebugPrinter::Construct,
+-    //     and the sub_82207040 external.
+-    // Body when the ReplayDirector layout, the VMX home, and those deps are reconstructed.
+-    // ========================================================================================
+-
+-    // ========================================================================================
+-    // FLAG -- DECLARATION-ONLY (no body): BrnDirector::ReplayDirector::PreSceneQueryUpdate
+-    //   @0x8225BD28.
+-    //
+-    // Not bodied. Calls FillInSharedInfo (above) and, on a car-asset change, rebuilds the two
+-    // replay cameras from the car's camerabumperbehaviour / cameraexternalbehaviour attribs
+-    // (Attrib::Gen::*, Attrib::RefSpec::GetCollection) and drives them through their virtual
+-    // SetParameters / pre-query slots. It indexes the unmodelled ReplayDirector layout by raw
+-    // offset and dispatches through the not-yet-reconstructed BrnDirector::Camera::Camera and
+-    // BehaviourGameplay* vtables. Body when that layout and dep cone are reconstructed.
+-    // ========================================================================================
+-
+-    // ========================================================================================
+-    // FLAG -- DECLARATION-ONLY (no body): BrnDirector::ReplayDirector::Update @0x8225C298.
+-    //
+-    // Not bodied. The per-frame replay update: fills the shared info, ticks the two replay
+-    // cameras through their virtual Update slots, blends/selects between the external and
+-    // bumper cameras per the serialiser-frame flags, then publishes the result via
+-    // BrnDirector::Camera::Camera::CopyToCgsCamera and the director OutputBuffer
+-    // (SetCameraOutput / SetCgsCamera). It indexes the unmodelled ReplayDirector layout by raw
+-    // offset and depends on the not-yet-reconstructed Camera / OutputBuffer homes. Body when
+-    // that layout and dep cone are reconstructed.
+-    // ========================================================================================
+-}
++    Camera::BehaviourSharedInfo lInfo;
++    Camera::CollisionPolicySharedInfo lPolicyInfo;
++    FillInSharedInfo(&lInfo, &lPolicyInfo, lpFrame, lpIO);
++    mExternalBehaviour.Update(mExternalCamera, lInfo);
++    Camera::CollisionPolicy* lpPolicy = mExternalBehaviour.GetCollisionPolicy();
++    if (lpPolicy)
++        lpPolicy->GenerateSceneQueries(lPolicyInfo, mExternalCamera);
++    mBumperBehaviour.Update(mBumperCamera, lInfo);
++    lpPolicy = mBumperBehaviour.GetCollisionPolicy();
++    if (lpPolicy)
++        lpPolicy->GenerateSceneQueries(lPolicyInfo, mBumperCamera);
++}
++
++// ARTIST 8225C298. Collision processing precedes each behaviour's post-query
++// pass. Camera cycling takes effect on the following frame, after selection.
++void ReplayDirector::Update(BrnReplays::DirectorSerialiserStaticLayout* lpFrame,
++                            const DirectorInputOutput* lpIO)
++{
++    const s32 liPlayer = lpIO->mpInputBuffer->GetPlayerCarIndex();
++    if (liPlayer == -1)
++        return;
++    if (!lpIO->mpInputBuffer->GetUsedRaceCars()->IsBitSet(static_cast<u32>(liPlayer)))
++        return;
++    Camera::BehaviourSharedInfo lInfo;
++    Camera::CollisionPolicySharedInfo lPolicyInfo;
++    FillInSharedInfo(&lInfo, &lPolicyInfo, lpFrame, lpIO);
++    Camera::CollisionPolicy* lpPolicy = mExternalBehaviour.GetCollisionPolicy();
++    if (lpPolicy)
++        lpPolicy->ProcessSceneQueryResults(lPolicyInfo, mExternalCamera);
++    mExternalBehaviour.PostCollisionUpdate(mExternalCamera, lInfo);
++    lpPolicy = mBumperBehaviour.GetCollisionPolicy();
++    if (lpPolicy)
++        lpPolicy->ProcessSceneQueryResults(lPolicyInfo, mBumperCamera);
++    mBumperBehaviour.PostCollisionUpdate(mBumperCamera, lInfo);
++
++    Camera::Camera lSelected;
++    lSelected.Construct();
++    if (!lpFrame->mCamera.GetState().IsFlagSet(3) || lpFrame->mCamera.GetState().IsFlagSet(10))
++        lSelected = lpFrame->mCamera;
++    else
++    {
++        lSelected = miCameraSelection ? mBumperCamera : mExternalCamera;
++        if (lpIO->mpInputBuffer->GetControll()->mbCycleCameras)
++            miCameraSelection = (miCameraSelection + 1) % 2;
++    }
++    if (mbFirstFrame)
++    {
++        lSelected.mEffects.mbHasStartHookNameString = false;
++        lSelected.mEffects.mbHasStopHookNameString = false;
++        lSelected.mEffects.muRequestedPostFxId = 0x7BEC6;
++    }
++    lSelected.mState.CopyFlagsToPrevious(mFinalCamera.mState);
++    mFinalCamera = lSelected;
++    lSelected.CopyToCgsCamera(&mCgsCamera);
++    lpIO->mpOutputBuffer->SetCameraOutput(lSelected);
++    lpIO->mpOutputBuffer->SetCgsCamera(mCgsCamera);
++    mbFirstFrame = false;
++}
++}
+--- a/src/GameSource/Director/BrnReplayDirector.h
++++ b/src/GameSource/Director/BrnReplayDirector.h
+@@ -1,72 +1,64 @@
+-#ifndef GAMESOURCE_DIRECTOR_BRN_REPLAY_DIRECTOR_H
+-#define GAMESOURCE_DIRECTOR_BRN_REPLAY_DIRECTOR_H
++#pragma once
+ 
+-#include "types.hpp"
++#include "GameSource/Director/Camera/Camera.h"
++#include "GameSource/Director/Camera/Behaviours/BrnBehaviourGameplayExternal.h"
++#include "GameSource/Director/Camera/Behaviours/BrnBehaviourGameplayBumper.h"
++#include "GameSource/Director/Utils/BrnDirectorAllVehicleData.h"
++#include "GameSource/Director/DirectorModule/BrnDirectorGameState.h"
++#include "GameSource/Director/Utils/BrnDirectorVehicleTracker.h"
++#include "GameSource/Director/DirectorModule/BrnDirectorModuleDebugPrinter.h"
++#include "GameShared/GameClasses/Numeric/CgsRandom.h"
++#include "SDKs/Packages/ICE/ICECameraSpaceHandler.hpp"
+ 
+-// ============================================================================
+-// GameSource/Director/BrnReplayDirector.h
+-//
+-// BrnDirector::ReplayDirector -- the camera director that drives camera selection and
+-// playback while a replay is running. The DirectorModule owns one ReplayDirector sub-object
+-// (constructed in place at DirectorModule +0x35F50, see BrnDirectorModule.cpp) and dispatches
+-// its PreSceneQueryUpdate / Update to it from the module's own per-frame spine.
+-//
+-// HOME for the ReplayDirector class. Source-of-truth filename recovered from the asserts the
+-// X360 bodies stream ("..\\..\\..\\GameSource\\Director/BrnReplayDirector.cpp").
+-//
+-// ----------------------------------------------------------------------------
+-// LAYOUT STATUS. ReplayDirector is a very large, mostly-opaque object (the constructor reaches
+-// fields up to +0x2788 and the Update/PreSceneQueryUpdate bodies index much further -- past
+-// +0x35F50-relative members such as the two owned camera behaviours at +0x1424/+0x1680 and
+-// +0x1600/+0x4608, the GameState at +0x7248, the VehicleTracker at +0x7760, the AllVehicleData
+-// at +0x6928 and many scalar/flag fields out to ~+0x29D0). That full multi-megabyte layout is
+-// NOT yet modelled. Only the constructor is reconstructed here, and -- exactly as the sibling
+-// BrnDirectorModule.cpp does -- it addresses each touched field by byte offset through a
+-// char*/u32* view of `this` rather than as a named member.
+-//
+-// The other three recovered functions (FillInSharedInfo, PreSceneQueryUpdate, Update) are
+-// declaration-only: see the FLAGs in BrnReplayDirector.cpp. They cannot be bodied faithfully
+-// yet because they (a) index the not-yet-modelled ReplayDirector layout entirely by raw offset,
+-// (b) drive a multi-stage VMX pipeline in FillInSharedInfo (a vector LCG that seeds a shuffle
+-// table, plus several lvx128/stvx128 matrix copies the decompiler could not even allocate
+-// locals for -- "local variable allocation has failed"), which the project rules forbid
+-// paraphrasing to scalar, and (c) dispatch through a cone of not-yet-reconstructed deps
+-// (BrnDirector::Camera::Camera, the camera OutputBuffer, Camera::Utils::SineLerp,
+-// ICE::CameraSpaceHandler, AllVehicleData::Construct/Update/GetPlayer, and several sub_*
+-// externals). Grow the class body (real bases + named members) and body those three functions
+-// when that layout and dep cone are reconstructed.
+-// ----------------------------------------------------------------------------
+-
++namespace BrnReplays { struct DirectorSerialiserStaticLayout; }
+ namespace BrnDirector
+ {
++struct DirectorInputOutput;
+ 
++// ARTIST 827E2020/82250558/8225BD28/8225C298. Console displacements
++// below identify original members; native pointer-bearing members widen on PC.
++// The complete console owner spans0x29E0 bytes, from DirectorModule+0x35F50
++// through+0x38930. Its final camera/selection/first-frame members were formerly
++// modelled as separate DirectorModule fields at+0x36380/+0x38920/+0x38924.
+ class ReplayDirector
+ {
+ public:
+-    // Constructor @0x827E2020 (the only function executed in the boot-trace goal milestone).
+-    // Installs two camera-behaviour sub-object vtables, default-constructs two owned ICE::ICETake
+-    // playback objects and one CarScoreData, and presets two index/handle fields to -1. Bodied.
+     ReplayDirector();
++    void FillInSharedInfo(Camera::BehaviourSharedInfo* lpBehaviourInfo,
++                          Camera::CollisionPolicySharedInfo* lpPolicyInfo,
++                          BrnReplays::DirectorSerialiserStaticLayout* lpFrame,
++                          const DirectorInputOutput* lpIO);
++    void PreSceneQueryUpdate(BrnReplays::DirectorSerialiserStaticLayout* lpFrame,
++                             const DirectorInputOutput* lpIO);
++    void Update(BrnReplays::DirectorSerialiserStaticLayout* lpFrame,
++                const DirectorInputOutput* lpIO);
+ 
+-    // @0x82250558 -- assembles the per-frame DirectorSharedInfo the camera behaviours consume
+-    // (player/used-car indices, vehicle data, game state, vehicle tracker, the camera-space
+-    // handler, and the bumper/external behaviour parameters). Declaration-only (FLAG: VMX
+-    // pipeline + unmodelled layout + unreconstructed deps).
+-    s32 FillInSharedInfo(s32 liSharedInfoOut, s32 liShotInfoOut, s32 liSerialiserFrame, void* lpInput);
++    Camera::Camera& GetFinalCamera() { return mFinalCamera; }
++    const CgsGraphics::Camera& GetCgsCamera() const { return mCgsCamera; }
++    void SetFirstFrame(bool lbFirstFrame) { mbFirstFrame = lbFirstFrame; }
++    void SetCameraSelection(s32 liSelection) { miCameraSelection = liSelection; }
+ 
+-    // @0x8225BD28 -- called by DirectorModule::PreSceneQueryUpdate before the scene query: when
+-    // the player car asset changes it rebuilds the two replay cameras from the car's camera-
+-    // behaviour attribs, then fills the shared info and runs each camera's pre-query pass.
+-    // Declaration-only (FLAG).
+-    void* PreSceneQueryUpdate(s32 liSerialiserFrame, void* lpInput);
+-
+-    // @0x8225C298 -- the per-frame replay update: fills the shared info, ticks the two replay
+-    // cameras, blends/selects between the external and bumper cameras per the serialiser frame
+-    // flags, and publishes the resulting camera to the director output buffer. Declaration-only
+-    // (FLAG).
+-    void* Update(s32 liSerialiserFrame, void* lpInput);
++private:
++    Camera::Camera mExternalCamera;                   // +0x000
++    Camera::Camera mBumperCamera;                     // +0x160
++    CgsGraphics::Camera mCgsCamera;                    // +0x2C0
++    Camera::Camera mFinalCamera;                      // +0x430
++    Camera::BehaviourGameplayExternal::Parameters mExternalParameters; // +0x590
++    Camera::BehaviourGameplayBumper::Parameters mBumperParameters;     // +0x640
++    Camera::BehaviourGameplayExternal mExternalBehaviour;              // +0x690
++    Camera::BehaviourGameplayBumper mBumperBehaviour;                  // +0x1200
++    Camera::Utils::Camera2DRotationController mRotationController;      // +0x1A30
++    Camera::Utils::CameraSphericalRotationController mSphericalRotationController; // +0x1A60
++    Matrix44Affine mSceneSpace;                       // +0x1A90
++    Matrix44Affine mTrafficLightSpace;                // +0x1AD0
++    AllVehicleData mAllVehicleData;                   // +0x1B10
++    GameState mGameState;                             // +0x1C50
++    VehicleTracker mVehicleTracker;                   // +0x1E50
++    CgsNumeric::Random mRandom;                       // +0x2100
++    DebugLog mDebugLog;                               // +0x2130
++    DebugPrinter mDebugPrinter;                       // +0x2790
++    ICE::CameraSpaceHandler mCameraSpaceHandler;      // +0x27C0
++    s32 miCameraSelection;                           // +0x29D0
++    bool mbFirstFrame;                               // +0x29D4
+ };
+-
+-} // namespace BrnDirector
+-
+-#endif // GAMESOURCE_DIRECTOR_BRN_REPLAY_DIRECTOR_H
++}
+--- a/src/GameSource/Director/Camera/Behaviours/BrnBehaviourGameplayExternal.cpp
++++ b/src/GameSource/Director/Camera/Behaviours/BrnBehaviourGameplayExternal.cpp
+@@ -267,11 +267,8 @@
+     mbEnableDebugRender     = false;     // +2910
+     mbEnableBoostEffects    = true;      // +2911
+     mbJumping               = false;     // +2912
+-    // FLAG: the console also stores the same zero byte at +2913 (0xB61). The DWARF member list
+-    //   (BehaviourGameplayExternal.h:116..:160) ends at mbJumping @+0xB60, so that sixth byte
+-    //   has no name and is NOT modelled -- nothing reads it, and inventing a member for it
+-    //   would be a guess. DELETE-WHEN: the DWARF gains the trailing member (or it is proven to
+-    //   be tail padding the compiler zeroes).
++    mbReplayCamera = false;             // ARTIST+0xB61
++
+ }
+ 
+ // ============================================================================
+--- a/src/GameSource/Director/Camera/Behaviours/BrnBehaviourGameplayExternal.h
++++ b/src/GameSource/Director/Camera/Behaviours/BrnBehaviourGameplayExternal.h
+@@ -740,6 +740,11 @@
+     bool mbEnableDebugRender;       // :157 +0xB5E
+     bool mbEnableBoostEffects;      // :158 +0xB5F
+     bool mbJumping;                 // :160 +0xB60
++    // X360-only+0xB61, cleared by Construct, set by ReplayDirector8225C134.
++    // Name inferred from that sole setup writer.
++    bool mbReplayCamera;
++public:
++    void SetReplayCamera(bool lbReplay) { mbReplayCamera = lbReplay; }
+ 
+     // The director debug page registers mbEnableDebugRender / mbEnableBoostEffects.
+     friend class BrnDirector::DebugComponent;
+--- a/src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp
++++ b/src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp
+@@ -1,28 +1,9 @@
+-// ============================================================================
+-// GameSource/Director/DirectorModule/BrnDirectorModule.cpp
+-//
+-// BrnDirector::DirectorModule -- the top-level director engine module. Of the 7
+-// functions this build's ARTIST export recovers for this TU, 3 are reconstructed here:
+-//   - Construct  @ 0x8225C590  [EXECUTED in goal trace]
+-//   - Destruct   @ 0x82250D98  [recovered; not executed in goal trace]
+-//   - Release    @ 0x82239198  [recovered; not executed in goal trace]
+-//
+-// Prepare (0x822712D8), Update (0x82275300), PreSceneQueryUpdate (0x8225C768) and the
+-// nested BrnDirector::CameraFinaliser::Update (0x82250440) remain declaration-only --
+-// every one of them reaches at least one un-landed callee (MainDirector::Prepare/
+-// Update/PreSceneQueryUpdate are themselves declaration-only in BrnMainDirector.h;
+-// BrnDirector::WorldMap has no homed type at all; BrnReplays::DirectorSerialiser /
+-// BrnDirector::ReplayDirector / BrnDirector::InertiaController /
+-// BrnDirector::KeyAnimShakeController are all [todo]) -- per AGENTS.md the
+-// reconstruction rules forbid bodying a function whose callee graph isn't resolved.
+-// See BrnDirectorModule.h for their per-function BLOCKED notes.
+-//
+-// LAYOUT: DirectorModule is modelled with NAMED members at asm-proven offsets (real
+-// committed sub-object types where they exist) + explicit padding for untouched spans
+-// -- see the header for the full rationale (this TU was previously reconstructed, and
+-// reverted after fresh-eyes review, as one opaque byte buffer accessed via raw
+-// reinterpret_cast offset pokes throughout; that pattern is not used here).
+-// ============================================================================
++// DirectorModule staged lifecycle and per-frame update spine.
++// ARTIST Construct8225C590, Prepare822712D8, Release82239198,
++// Destruct82250D98, PreSceneQueryUpdate8225C768, Update82275300,
++// PostGuiUpdate82250DD0 and ProcessSceneQueryResults82239278.
++// ReplayDirector and DirectorSerialiser are owned typed engine objects.
++// Console displacements in historical evidence comments are provenance only.
+ 
+ #include "GameSource/Director/BrnDirectorModule.h"
+ 
+@@ -111,12 +92,12 @@
+     mVolumeTestFinePostOffice.Construct();
+     mVolumeTestDeepestPostOffice.Construct();
+ 
+-    mCamera.Construct();
++    mReplayDirector.SetFirstFrame(false);  // ARTIST 8225C664
++    mReplayDirector.GetFinalCamera().Construct();
+ 
+     mMainDirector.Construct(&mDirectorResourceManager, lfTime);
+ 
+     mDirectorSerialiser.Construct();
+-    mbReplayStartedThisFrame = 0;  // ARTIST 8225C664
+     mbIsReplaying = false;
+     mbReplayRestoring = false;
+ 
+@@ -406,7 +387,7 @@
+     if (lbIsReplaying != mbIsReplaying && lbIsReplaying)
+     {
+         mbReplayRestoring        = false;   // this+232193
+-        mbReplayStartedThisFrame = 1;       // this+231716
++        mReplayDirector.SetFirstFrame(true);       // this+231716
+     }
+     mbIsReplaying = lbIsReplaying;          // this+232192
+ 
+@@ -450,9 +431,7 @@
+         {
+             mDirectorSerialiser.SetDataReady(true);
+             mDirectorSerialiser.Read();
+-            // Original next call: ReplayDirector::PreSceneQueryUpdate
+-            // (8225BD28) with GetStaticLayout and lIO. The camera provider is
+-            // still declaration-only; see the bounded packet's remaining gaps.
++            mReplayDirector.PreSceneQueryUpdate(mDirectorSerialiser.GetStaticLayout(), &lIO);
+         }
+     }
+     else
+@@ -485,12 +464,12 @@
+ //   2. build the per-frame post office with slot 0 (the producer) ONLY -- this pass does
+ //      NOT mint queries, so the six post-office slots are deliberately NULLED (the X360
+ //      memsets them) and Clear() therefore does nothing;
+-//   3. run MainDirector::Update (live) or ReplayDirector::Update (replay -- GATED). BOTH
++//   3. run MainDirector::Update (live) or ReplayDirector::Update (replay). BOTH
+ //      legs publish their camera into the output buffer themselves (SetCameraOutput +
+ //      SetCgsCamera are called from exactly those two functions and nowhere else);
+ //   4. copy whichever director ran into the module's own published graphics camera
+ //      (mCgsCamera = <that director's CgsGraphics::Camera>);
+-//   5. the replay RECORD leg + serialiser registration (GATED).
++//   5. the replay RECORD leg + unconditional serialiser registration.
+ // ----------------------------------------------------------------------------
+ s32 DirectorModule::Update(s32 liUnusedA, s32 liUnusedB,
+                            const DirectorIO::InputBuffer* lpInputBuffer,
+@@ -541,16 +520,11 @@
+     }
+     else
+     {
+-        // ⚠️ QUIET GATE -- the REPLAY leg. The X360 runs, for serialiser modes 4/5/6:
+-        //     ReplayDirector::Update( this + 221008,                                  // @0x8225C298
+-        //                             DirectorSerialiser::GetStaticLayout(&mDirectorSerialiser),
+-        //                             &lIO );
+-        //     mCgsCamera = *(CgsGraphics::Camera*)(this + 221712);   // ReplayDirector +0x240
+-        // Same blockers as the PreSceneQueryUpdate replay gate (un-homed DirectorSerialiser;
+-        // ReplayDirector::Update declaration-only). Note the module's graphics camera is left
+-        // UNCHANGED here rather than being fed a fabricated one -- so a replay frame simply
+-        // re-presents the previous camera instead of a wrong one.
+-        // DELETE-WHEN: as the PreSceneQueryUpdate replay gate.
++        if (mDirectorSerialiser.IsPlaying())
++        {
++            mReplayDirector.Update(mDirectorSerialiser.GetStaticLayout(), &lIO);
++            mCgsCamera = mReplayDirector.GetCgsCamera();
++        }
+     }
+ 
+     // ARTIST 82275448..8227551C: snapshot in every recording mode,
+@@ -638,7 +612,7 @@
+     {
+         const s32 liCameraType = lpInputBuffer->GetCameraType();
+         if (liCameraType > -1)
+-            miPostGuiCarIndexLatch = liCameraType;
++            mReplayDirector.SetCameraSelection(liCameraType);
+     }
+ 
+     lpOutputBuffer->UnlockForWrite();
+--- a/src/GameSource/Director/DirectorModule/BrnDirectorModuleIO.h
++++ b/src/GameSource/Director/DirectorModule/BrnDirectorModuleIO.h
+@@ -168,6 +168,8 @@
+         // MainDirector::UpdateArbitrator passes it to Arbitrator::Update as lbPaused, and
+         // MainDirector::Update's gameplay middle tests it too.
+         bool                                               IsSimPaused() const;
++        // ARTIST ReplayDirector::FillInSharedInfo loads input+0x6AB4.
++        bool IsAllStreamed() const { return mbAllStreamed; }
+         // Inlined by ARTIST DoUpdate_Director @0x823E8F2C; DWARF :284.
+         void SetSimPaused(bool lbSimPaused) { mbSimPaused = lbSimPaused; }
+ 
+@@ -438,7 +440,9 @@
+         // padding we invented for alignment.
+         BrnDirector::BrnDirectorVehicleInputInterface mVehicleDriverInputInterface;   // @0x6780
+         u8  maVehicleDriverInputInterfacePad[
+-                (0x6AB8 - 0x6780) - sizeof(BrnDirector::BrnDirectorVehicleInputInterface)];
++                (0x6AB4 - 0x6780) - sizeof(BrnDirector::BrnDirectorVehicleInputInterface)];
++        bool mbAllStreamed; // console+0x6AB4, BehaviourSharedInfo::mbAllStreamed
++        u8 maPad6AB5[3];
+ 
+         // @0x6AB8 (27320): contacts. AppendContacts stores one 32-bit word at member word [0]
+         // (this[6830] == 0x6AB8). GetContacts returns its address. HONEST opaque storage.
+--- a/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp
++++ b/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp
+@@ -35,7 +35,7 @@
+ 
+     // @ 0x82695AC8 -- append one collision record (224 bytes) at index GetNumCollisions() into
+     // the static layout's collision array (record base +0, stride 224), then bump the count.
+-    SoundSerialiserStaticLayout* SoundSerialiser::AddCollision(const void* lpCollision)
++    SoundSerialiserStaticLayout* SoundSerialiser::AddCollision(const BrnSound::Logic::Collision::OutputCollision* lpCollision)
+     {
+         CGS_ASSERT(GetNumCollisions() >= 0, "GetNumCollisions() >= 0");
+         CGS_ASSERT(GetNumCollisions() < SoundSerialiserStaticLayout::KI_MAX_COLLISIONS,
+@@ -43,9 +43,7 @@
+ 
+         const s32 liIndex = GetStaticLayout()->GetNumCollisions();
+ 
+-        u8* lpDest = reinterpret_cast<u8*>(GetStaticLayout())
+-                   + SoundSerialiserStaticLayout::KU_COLLISION_STRIDE * liIndex;
+-        std::memcpy(lpDest, lpCollision, SoundSerialiserStaticLayout::KU_COLLISION_STRIDE);
++        GetStaticLayout()->maCollisions[liIndex] = *lpCollision;
+ 
+         SoundSerialiserStaticLayout* lpResult = GetStaticLayout();
+         ++lpResult->miNumCollisions;
+@@ -55,7 +53,7 @@
+     // @ 0x826959B8 -- append one scrape record: 48 bytes of scalar scrape data (from lpScrape)
+     // into the scrape-data array (base +0x710, stride 48), plus a 16-byte position vector into
+     // the parallel scrape-vector array (base +0x7D0, stride 16), then bump the count.
+-    SoundSerialiserStaticLayout* SoundSerialiser::AddScrape(const void* lpScrape, SoundVec128 lvPosition)
++    SoundSerialiserStaticLayout* SoundSerialiser::AddScrape(const BrnSound::Logic::Collision::ScrapeInfo* lpScrape, Vector3 lvPosition)
+     {
+         CGS_ASSERT(GetNumScrapes() >= 0, "GetNumScrapes() >= 0");
+         CGS_ASSERT(GetNumScrapes() < SoundSerialiserStaticLayout::KI_MAX_SCRAPES,
+@@ -63,15 +61,8 @@
+ 
+         const s32 liIndex = GetStaticLayout()->GetNumScrapes();
+ 
+-        u8* lpData = reinterpret_cast<u8*>(GetStaticLayout())
+-                   + SoundSerialiserStaticLayout::KU_SCRAPE_DATA_BASE
+-                   + SoundSerialiserStaticLayout::KU_SCRAPE_DATA_STRIDE * liIndex;
+-        std::memcpy(lpData, lpScrape, SoundSerialiserStaticLayout::KU_SCRAPE_DATA_STRIDE);
+-
+-        u8* lpVec = reinterpret_cast<u8*>(GetStaticLayout())
+-                  + SoundSerialiserStaticLayout::KU_SCRAPE_VEC_BASE
+-                  + SoundSerialiserStaticLayout::KU_SCRAPE_VEC_STRIDE * liIndex;
+-        std::memcpy(lpVec, &lvPosition, sizeof(lvPosition));
++        GetStaticLayout()->maScrapes[liIndex] = *lpScrape;
++        GetStaticLayout()->maScrapePositions[liIndex] = lvPosition;
+ 
+         SoundSerialiserStaticLayout* lpResult = GetStaticLayout();
+         ++lpResult->miNumScrapes;
+--- a/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.h
+@@ -67,8 +67,8 @@
+         s32 GetNumTrafficEntities() { return GetStaticLayout()->GetNumTrafficEntities(); }
+ 
+         // @0x82695AC8 / @0x826959B8 / @0x82695B88 -- record one event into the static layout.
+-        SoundSerialiserStaticLayout* AddCollision(const void* lpCollision);
+-        SoundSerialiserStaticLayout* AddScrape(const void* lpScrape, SoundVec128 lvPosition);
++        SoundSerialiserStaticLayout* AddCollision(const BrnSound::Logic::Collision::OutputCollision* lpCollision);
++        SoundSerialiserStaticLayout* AddScrape(const BrnSound::Logic::Collision::ScrapeInfo* lpScrape, Vector3 lvPosition);
+         SoundSerialiserStaticLayout* AddTrafficEntity(const void* lpEntity);
+ 
+         // @0x82682488 -- find the 12-byte per-entity record for a recorded traffic id.
+--- a/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiserStaticLayout.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiserStaticLayout.h
+@@ -27,6 +27,7 @@
+ // count/control scalars get named members. GROW into named sub-records if DWARF is recovered.
+ 
+ #include "types.hpp"
++#include "GameSource/Sound/Collision/BrnCollisionDataStructures.h"
+ #include "GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficSoundInterfaces.h"
+ #include <cstddef>   // offsetof (the layout pins at the bottom)
+ 
+@@ -83,9 +84,11 @@
+     public:
+         // Named count / control words at their attested byte offsets; the record arrays
+         // between them are opaque and reached by the KU_* offsets above.
+-        u8                                     maReserved0x000[0x700];         // +0x000 collision records (opaque)
++        BrnSound::Logic::Collision::OutputCollision maCollisions[8];          // +0x000, stride224
+         s32                                    miNumCollisions;                // +0x700
+-        u8                                     maReserved0x704[0x810 - 0x704]; // +0x704 (gap; scrape records live here)
++        u8                                     maReserved0x704[12];           // +0x704 ->0x710
++        BrnSound::Logic::Collision::ScrapeInfo   maScrapes[4];                 // +0x710, stride48
++        Vector3                                maScrapePositions[4];         // +0x7D0, stride16
+         s32                                    miNumScrapes;                   // +0x810
+         CgsModule::VariableEventQueue<512, 16> mEventQueue;                    // +0x814 (0x210 -> +0xA24)
+         f32                                    mfA24;                          // +0xA24
+@@ -105,6 +108,12 @@
+     // the reserved spans -- so every named anchor is static_asserted to catch any drift.
+     static_assert(sizeof(CgsModule::VariableEventQueue<512, 16>) == 0x210,
+                   "VariableEventQueue<512,16> must serialise at 0x210 bytes");
++    static_assert(sizeof(BrnSound::Logic::Collision::OutputCollision)==224,"original recorded collision stride");
++    static_assert(offsetof(BrnSound::Logic::Collision::OutputCollision,miSampleID)==216,"original recordable-sample marker");
++    static_assert(sizeof(BrnSound::Logic::Collision::ScrapeInfo)==48,"original recorded scrape stride");
++    static_assert(offsetof(SoundSerialiserStaticLayout,maCollisions)==0,"original recorded collisions");
++    static_assert(offsetof(SoundSerialiserStaticLayout,maScrapes)==0x710,"original recorded scrapes");
++    static_assert(offsetof(SoundSerialiserStaticLayout,maScrapePositions)==0x7D0,"original recorded scrape positions");
+     static_assert(offsetof(SoundSerialiserStaticLayout, miNumCollisions)      == 0x700, "miNumCollisions @ +0x700");
+     static_assert(offsetof(SoundSerialiserStaticLayout, miNumScrapes)         == 0x810, "miNumScrapes @ +0x810");
+     static_assert(offsetof(SoundSerialiserStaticLayout, mEventQueue)          == 0x814, "mEventQueue @ +0x814");
+--- a/src/GameSource/Sound/Collision/BrnCollisionStateManager.cpp
++++ b/src/GameSource/Sound/Collision/BrnCollisionStateManager.cpp
+@@ -1423,11 +1423,7 @@
+ //                       mbIsCrashed (+0x4D), mPosition = its position (+0x30), mVelocity = its At
+ //                       row (+0x20) scaled by mfSpeed (+0x44, vmulfp128 by the splat)  0x826A0494..0x826A04E0
+ //   owner 3+            false                                                     0x826A0424
+-// [NOT IN THIS TREE] while the replay serialiser plays back (sound logic module +0x13600, modes
+-// 4..6) the console reads traffic from the recording instead (SoundSerialiser::
+-// GetTrafficEntityByTrafficIndex @0x826823E0). This tree's SoundLogicModule holds no
+-// SoundSerialiser and nothing drives a serialiser's mode (BrnSoundLogicModule.cpp case 218), so
+-// only the live traffic interface is read.
++// ARTIST826A0430..490 selects recorded traffic in playback modes4/5/6.
+ // ---------------------------------------------------------------------------
+ bool CollisionStateManager::FindEntity(const EntityId& lEntityId, GenericEntity& lEntity) const
+ {
+@@ -1465,8 +1461,13 @@
+     if (luOwner >= KU_ENTITY_OWNER_PROP)
+         return false;
+ 
+-    const BrnTraffic::BrnTrafficIO::TrafficSoundEntity* lpTraffic =
+-        lpInputBuffer->GetTrafficOutputInterface().GetTrafficEntityIndex(
++    BrnReplays::SoundSerialiser& lrSerialiser=
++        static_cast<BrnSound::Module::SoundLogicModule*>(GetLogicModule())->GetSoundSerialiser();
++    const BrnTraffic::BrnTrafficIO::TrafficSoundEntity* lpTraffic;
++    if (lrSerialiser.IsPlaying())
++        lpTraffic=lrSerialiser.GetTrafficEntityByTrafficIndex(static_cast<u16>(GetEntityIndex(lEntityId)));
++    else
++        lpTraffic=lpInputBuffer->GetTrafficOutputInterface().GetTrafficEntityIndex(
+             static_cast<u16>(GetEntityIndex(lEntityId)));
+     if (!lpTraffic)
+         return false;
+@@ -1555,16 +1556,16 @@
+ //                  with the SCRAPE lifetime (0x826D42C8..0x826D4340); no free state ends this leg
+ //   new         -> recorded over the oldest history slot when FindEntity knows both sides
+ //                  (0x826D4380..0x826D44B0; asserts the slot, cpp:2930)
+-// [NOT IN THIS TREE] the replay recorder: the console keeps a BrnReplays::SoundSerialiser in the
+-// sound logic module (+0x13600) and, while it records (modes 1..3), zeroes the frame's scrape count
+-// (0x826D3F90..0x826D3FC8) and mirrors every tracked scrape into it while it holds fewer than 4
+-// (AddScrape @0x826959B8, 0x826D4160..0x826D4194). This tree's SoundLogicModule holds no
+-// SoundSerialiser and nothing drives a serialiser's mode (BrnSoundLogicModule.cpp case 218).
++// ARTIST826D3F90..3FC8 and4160..4194 reset/capture up to four scrapes.
+ // The eaten-collision spew uses the live menu level (>=3) and original DebugPrint.
+ // ---------------------------------------------------------------------------
+ void CollisionStateManager::UpdateScrapes(const BrnSound::Logic::FrameInformation& lrFrame)
+ {
+     UpdateScrapeHistory(lrFrame);
++    BrnReplays::SoundSerialiser& lrSerialiser=
++        static_cast<BrnSound::Module::SoundLogicModule*>(GetLogicModule())->GetSoundSerialiser();
++    if (lrSerialiser.IsRecording())
++        lrSerialiser.GetStaticLayout()->miNumScrapes=0;
+ 
+     const f32 lfTime = mfCurrentTime;
+     const InputCollision* lapContinuing[64];
+@@ -1627,6 +1628,8 @@
+         {
+             lapNew[lu32New++] = &lrInput;
+         }
++        if (lrSerialiser.IsRecording() && lrSerialiser.GetNumScrapes()<4)
++            lrSerialiser.AddScrape(&lrInput.mScrapeInfo,lrInput.mPosition);
+     }
+ 
+     if (lu32Continuing != 0u)
+@@ -2872,7 +2875,6 @@
+ bool CollisionStateManager::ProcessCollision(
+     OutputCollision& lrOutput, const InputCollision& lrInput)
+ {
+-    lrOutput = OutputCollision();
+     lrOutput.mePipeline = lrInput.mePipeline;
+     lrOutput.maMaterial[0] = lrInput.maMaterial[0];
+     lrOutput.maMaterial[1] = lrInput.maMaterial[1];
+@@ -2889,18 +2891,18 @@
+     lrOutput.meFatality = mFrameInformation.meFatality.GetCurrent();
+     lrOutput.meImpactTime = mFrameInformation.meImpactTime.GetCurrent();
+ 
+-    switch (lrInput.mePipeline)
+-    {
+-    case InputCollision::E_REGULAR:
+-        SelectCollisionBin<Attrib::Gen::crashbinlist, Attrib::Gen::crashbin>(
+-            lrOutput, mCrashBinList);
+-        break;
+-    case InputCollision::E_PROP:
+-        SelectCollisionBin<Attrib::Gen::propscrashbinlist, Attrib::Gen::propscrashbin>(
+-            lrOutput, mPropsCrashBinList);
+-        break;
+-    default:
+-        CGS_ASSERT(false, "lrInput.mePipeline < InputCollision::E_MAX_PIPELINES");
++    if (lrInput.mePipeline==InputCollision::E_PROP)
++        SelectCollisionBin<Attrib::Gen::propscrashbinlist,Attrib::Gen::propscrashbin>(lrOutput,mPropsCrashBinList);
++    else
++        SelectCollisionBin<Attrib::Gen::crashbinlist,Attrib::Gen::crashbin>(lrOutput,mCrashBinList);
++
++    // ARTIST826BEB28..88: the first valid fatal-start sample advances the
++    // module's frame flag and terminates this conversion pass, including this output.
++    if (lrOutput.miSampleID!=-1 && mFrameInformation.meFatality.GetCurrent()==E_FATAL_START)
++    {
++        auto& lrFrame=static_cast<BrnSound::Module::SoundLogicModule*>(GetLogicModule())->GetFrameInformation();
++        CGS_ASSERT(lrFrame.meFatality.GetCurrent()==E_FATAL_START,"meFatality == E_FATAL_START");
++        lrFrame.meFatality.Update(E_FATAL_ON);
+         return false;
+     }
+     return true;
+@@ -2908,15 +2910,15 @@
+ 
+ void CollisionStateManager::ProcessCollisions()
+ {
+-    mu32OutputCollisionCount = 0;
+-    for (u32 luIndex = 0;
+-         luIndex < mu32InputCollisionCount && mu32OutputCollisionCount < 64u;
+-         ++luIndex)
+-    {
+-        if (ProcessCollision(maOutputCollision[mu32OutputCollisionCount],
+-                             maInputCollision[luIndex]))
+-            ++mu32OutputCollisionCount;
+-    }
++    CGS_ASSERT(mu32InputCollisionCount<=64,"mu32InputCollisionCount <= E_MAX_COLLISION");
++    bool lbContinue=true;
++    u32 lu32Count=0;
++    while (lu32Count<mu32InputCollisionCount && lbContinue)
++    {
++        lbContinue=ProcessCollision(maOutputCollision[lu32Count],maInputCollision[lu32Count]);
++        ++lu32Count; // ARTIST826D3F24..44 counts the terminating attempted output.
++    }
++    mu32OutputCollisionCount=lu32Count;
+ }
+ 
+ bool CollisionStateManager::LessThanPriority(
+@@ -2973,18 +2975,41 @@
+ 
+ void CollisionStateManager::UpdateParams(f32 afDeltaTime)
+ {
++    const s32 liMonitor=miCpuMonitor;
++    CgsDev::PerfMonCpu::StartMonitor(liMonitor);
+     BrnSound::Module::SoundLogicModule* lpModule =
+         static_cast<BrnSound::Module::SoundLogicModule*>(GetLogicModule());
+     CGS_ASSERT(lpModule != nullptr, "lpSoundLogicModule");
+-    if (lpModule)
+     {
+         BrnSound::Module::Io::LogicInputBuffer* lpInput =
+             lpModule->GetBrnInputStructure();
+-        if (lpInput &&
+-            lpInput->GetPlayerActiveRaceCarIndex() !=
++        CGS_ASSERT(lpInput!=nullptr,"lpInput");
++        if (lpInput->GetPlayerActiveRaceCarIndex() !=
+                 E_ACTIVE_RACE_CAR_INDEX_INVALID)
+         {
++            BrnReplays::SoundSerialiser& lrSerialiser=lpModule->GetSoundSerialiser();
++            if (lrSerialiser.IsPlaying())
++            {
++                mu32InputCollisionCount=0;
++                for(s32 liScrape=0;liScrape<lrSerialiser.GetNumScrapes();++liScrape)
++                {
++                    InputCollision& lrInput=maInputCollision[mu32InputCollisionCount];
++                    lrInput.mPosition=lrSerialiser.GetStaticLayout()->maScrapePositions[liScrape];
++                    lrInput.mScrapeInfo=lrSerialiser.GetStaticLayout()->maScrapes[liScrape];
++                    lrInput.mScrapeInfo.mfTimeStamp=mfCurrentTime;
++                    ++mu32InputCollisionCount;
++                }
++                UpdateScrapes(lpModule->GetFrameInformation());
++                for(s32 liCollision=0;liCollision<lrSerialiser.GetNumCollisions();++liCollision)
++                {
++                    if(!PlayCollision(&lrSerialiser.GetStaticLayout()->maCollisions[liCollision]))
++                        break;
++                }
++            }
++            else
++            {
+             UpdateResolver(*lpInput, lpModule->GetFrameInformation(), afDeltaTime);
++            CGS_ASSERT(mu32OutputCollisionCount<=64,"GetOutputCollisionCount"); // ARTIST8270451C..90
+ 
+             OutputCollision* lapCollisions[64] = {};
+             for (u32 luIndex = 0; luIndex < mu32OutputCollisionCount; ++luIndex)
+@@ -2992,6 +3017,8 @@
+             std::sort(lapCollisions,
+                       lapCollisions + mu32OutputCollisionCount,
+                       &CollisionStateManager::LessThanPriority);
++            if(lrSerialiser.IsRecording())
++                lrSerialiser.GetStaticLayout()->miNumCollisions=0;
+             for (u32 luIndex = 0; luIndex < mu32OutputCollisionCount; ++luIndex)
+             {
+                 if (!PlayCollision(lapCollisions[luIndex]))
+@@ -3056,10 +3083,15 @@
+                     }
+                     break;
+                 }
++                if(lrSerialiser.IsRecording() && lrSerialiser.GetNumCollisions()<8 &&
++                    lapCollisions[luIndex]->miSampleID!=-1)
++                    lrSerialiser.AddCollision(lapCollisions[luIndex]);
+             }
++            }
+         }
+     }
+     CgsSound::Logic::StateManager::UpdateParams(afDeltaTime);
++    CgsDev::PerfMonCpu::StopMonitor(liMonitor);
+ }
+ 
+ // ---------------------------------------------------------------------------
+--- a/src/GameSource/Sound/Vehicles/Deformation/BrnDeformationEffect.cpp
++++ b/src/GameSource/Sound/Vehicles/Deformation/BrnDeformationEffect.cpp
+@@ -209,8 +209,12 @@
+     const f32 lfPitch = GetMixerOutputValue(2, 1);
+     const f32 lfAzimuth = GetMixerOutputValue(1, 3);
+ 
+-    // ARTIST 826B5508..5854, live simulation branch. SoundLogicModule's replay
+-    // serialiser binding (826B54D0..5504 / 5858..587C) remains unhomed.
++    BrnReplays::SoundSerialiser& lrSerialiser=lpModule->GetSoundSerialiser();
++    f32 lfTarget;
++    if(lrSerialiser.IsPlaying())
++        lfTarget=lrSerialiser.GetStaticLayout()->mfA24;
++    else
++    {
+     mbDeforming.Update(lFrame.meFatality.GetCurrent() != BrnSound::Logic::E_FATAL_OFF &&
+         lFrame.meImpactTime.GetCurrent() == AttribSys::Enums::eImpactTime::VSlow);
+     if (mbDeforming.GetCurrent())
+@@ -267,7 +271,7 @@
+     // Constants: 82F2FD0C=655340, 82F2CD58=1000ms, 82F2CD5C=700.
+     // 826B57C4/E0 are separate fmuls; E8/F4 are fsel (NaN selects 32767).
+     const f32 lfFaded = mFadeOut.GetValueFloat() * mDeformIntensityLagged.GetCurrent();
+-    f32 lfTarget = lfFaded * 655340.0f;
++    lfTarget = lfFaded * 655340.0f;
+     lfTarget = (-lfTarget >= 0.0f) ? 0.0f : lfTarget;
+     lfTarget = (32767.0f - lfTarget >= 0.0f) ? lfTarget : 32767.0f;
+     // 57F8/5800 bge -> 5854, including unordered; smoothing arm 5804.
+@@ -279,6 +283,10 @@
+         mfAemsIntensity -= afTimeStep * 500.0f;
+     else
+         mfAemsIntensity = lfTarget;
++
++    if(lrSerialiser.IsRecording())
++        lrSerialiser.GetStaticLayout()->mfA24=lfTarget; // ARTIST826B5858..587C
++    }
+ 
+     static const u32 luIntensity = static_cast<u32>(
+         CgsSound::Playback::Name::MakeHash("AEMS_intensity"));
+@@ -295,7 +303,7 @@
+ 
+     // ARTIST826B5894..5B88: original live-simulation debug output. Keep its
+     // historical label spelling and send the same current/previous samples.
+-    if (KI_DEBUG_SPEW_DEFORM_INFO)
++    if (!lrSerialiser.IsPlaying() && KI_DEBUG_SPEW_DEFORM_INFO)
+         BrnSound::Debug::DebugComponent::mLogCombined << "[Deform] [" << mfRunningTime
+             << "]DeformAmmount: " << mDeformAmount.GetCurrent() << "\tDeformDelta: "
+             << (mDeformAmount.GetCurrent() - mDeformAmount.GetPrevious())
+--- a/src/GameSource/Replays/BrnReplayBaseSerialiser.cpp
++++ b/src/GameSource/Replays/BrnReplayBaseSerialiser.cpp
+@@ -156,6 +156,52 @@
+             return 1;
+         }
+ 
++        return 0;
++    }
++
++    // ARTIST82650130. Alignment and byte count include skipped stream padding.
++    // 82650294..AC tests the unsigned capacity difference (miBufferSize, not used).
++    s32 BaseSerialiser::ReadFloat(void* lpDest)
++    {
++        CGS_ASSERT(meMode == E_MODE_PLAYING, "Not playing\n");
++        CGS_ASSERT(mbLocked, "Not locked\n");
++        CGS_ASSERT(mpBuffer != nullptr, "Buffer not allocated\n");
++        const u32 luAligned = (static_cast<u32>(miBufferRead) + 3u) & ~3u;
++        CGS_ASSERT(static_cast<u32>(miBufferSize) - luAligned >= 4u,
++                   "Not enough data in buffer\n");
++
++        const s32 liPreviousRead = miBufferRead;
++        const u32 luReadAligned = (static_cast<u32>(liPreviousRead) + 3u) & ~3u;
++        miBufferRead = static_cast<s32>(luReadAligned);
++        // The replay stream is an external native-float byte buffer.
++        *static_cast<f32*>(lpDest) = *reinterpret_cast<const f32*>(
++            static_cast<const u8*>(mpBuffer) + luReadAligned);
++        miBufferRead = static_cast<s32>(static_cast<u32>(miBufferRead) + 4u);
++        return static_cast<s32>(static_cast<u32>(miBufferRead) - static_cast<u32>(liPreviousRead));
++    }
++
++    // ARTIST8264FEE8. Preparing/stalled recording validates but leaves all bytes
++    // and cursors untouched; only826500E4's exact mode2 arm commits a float.
++    s32 BaseSerialiser::WriteFloat(const void* lpSrc)
++    {
++        CGS_ASSERT(IsRecording(), "Not recording\n");
++        CGS_ASSERT(mbLocked, "Not locked\n");
++        CGS_ASSERT(mpBuffer != nullptr, "Buffer not allocated\n");
++        const u32 luAligned = (static_cast<u32>(miBufferUsed) + 3u) & ~3u;
++        CGS_ASSERT(static_cast<u32>(miBufferSize) - luAligned >= 4u,
++                   "Not enough space in buffer\n");
++
++        if (meMode == E_MODE_RECORDING)
++        {
++            const s32 liPreviousUsed = miBufferUsed;
++            const u32 luWriteAligned = (static_cast<u32>(liPreviousUsed) + 3u) & ~3u;
++            miBufferUsed = static_cast<s32>(luWriteAligned);
++            // The replay stream is an external native-float byte buffer.
++            *reinterpret_cast<f32*>(static_cast<u8*>(mpBuffer) + luWriteAligned) =
++                *static_cast<const f32*>(lpSrc);
++            miBufferUsed = static_cast<s32>(static_cast<u32>(miBufferUsed) + 4u);
++            return static_cast<s32>(static_cast<u32>(miBufferUsed) - static_cast<u32>(liPreviousUsed));
++        }
+         return 0;
+     }
+ 
