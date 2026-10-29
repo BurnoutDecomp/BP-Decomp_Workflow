@@ -1,0 +1,25 @@
+{
+  "schema": 5,
+  "status": "root_authorized_parallel_native_policy",
+  "recorded_by": "Root",
+  "created_utc": "2026-10-29T07:31:09.731818+00:00",
+  "supersedes_for_concurrency_only": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\ROOT_NATIVE_EXECUTION_DELEGATION_V4_20261029.json",
+  "parent_sha256": "26fc272132c2c89a94b4d570fd3ed9262c30e655f9b5ac763f7b05d32a0941dc",
+  "authorization": "User explicitly authorized parallel private game instances up to100, automatic private windows, full CPU, and continued recovery. This policy removes an accidental serialization/abort condition; source and owned-process checks remain.",
+  "owned_game_requirements": [
+    "Exact owned PID, start time, executable path/hash, slot, private profile, runtime inputs and named scoped event handles remain mandatory.",
+    "Never inject global or physical keyboard input; never stop or mutate a foreign game.",
+    "Preserve normal runtime/config/save/log identity and every failed predecessor receipt.",
+    "Shared output files such as resource dumps require existing mutex and hash ownership."
+  ],
+  "other_game_policy": {
+    "census": "Informational observations of current processes; a zero-game snapshot is never a promise that no authorized sibling will launch later.",
+    "known_campaign_peer": "Accept dynamically when exact PID/start/image/slot identity matches that actor's actual owned handoff and the already-approved private packet. Retain the evidence at first observation; no new Root approval or full manifest revision for a new PID.",
+    "foreign_game": "May coexist. Do not interact with it. Do not abort the owned run solely because another game exists. Abort/hold for a demonstrated collision with the same writable profile, slot, named input handles or unprotected shared output, or for the owned process's real integrity/semantic failure.",
+    "monitor": "Do not classify the already-authorized Deformation/Props/Resource/builder sibling as an unreviewed game solely because it was absent from the prelaunch census. The prior empty allowlist was a harness defect, not an authorization limit.",
+    "capacity": "Up to100 distinct owned instances authorized by the user, bounded by actual local memory/storage needs. Small baseline storage envelope still applies to its eligible slots, not all other games."
+  },
+  "storage": "Compute immutable planned peak/floor once from the exact run outputs. Compare fresh available bytes against that budget. Do not require equality between separate live free-space snapshots.",
+  "implementation_review": "Owners may make the narrow concurrency policy correction in private successors. One designated peer reviewer checks exact owned input/profile protections and known-peer/foreign-noncollision behavior. Proceed under that approval without another Root/human roundtrip.",
+  "native_or_site_credit": 0
+}

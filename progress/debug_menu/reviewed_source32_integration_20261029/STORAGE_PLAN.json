@@ -1,0 +1,17 @@
+{
+  "immutable_plan": true,
+  "stage_volume": "D:",
+  "planned_frame_files": 6,
+  "exact_frame_bytes": 22118724,
+  "game_log_cap_bytes": 134217728,
+  "emergency_log_reserve_bytes": 134217728,
+  "console_and_helper_reserve_bytes": 67108864,
+  "failure_reports_dump_reserve_bytes": 100663296,
+  "profile_and_metadata_reserve_bytes": 33554432,
+  "planned_output_peak_bytes": 536870912,
+  "protected_free_floor_bytes": 1073741824,
+  "required_free_at_launch_bytes": 1610612736,
+  "case_MinFreeGB": 1.5,
+  "note": "Output reservoirs are an immutable planned peak, not claims of source-side hard caps; main log128MiB and six named BMP requests are enforced by unchanged harness/helper. Fresh free bytes are compared to1.5GiB threshold, never to an earlier free-space snapshot. Stage payload bytes are already allocated before the fresh launch check.",
+  "asset_policy": "Frozen readonly D hardlinks, no5GB Casset copy"
+}
