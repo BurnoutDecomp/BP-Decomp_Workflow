@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "f8faa742a3867a2677e84f005e158a19c5ef5451",
+  "b5_source_head": "bf8063c1fdb7e1c3a046501ac3ba47a14a5bfd62",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -2136,6 +2136,37 @@
         }
       ],
       "source_commit": "f8faa742a3867a2677e84f005e158a19c5ef5451",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
+    },
+    {
+      "packet_id": "physical_traffic_draw_body",
+      "author_report_path": "swarm_physicaltraffic_draw_body_20261029/REPORT.md",
+      "author_report_sha256": "dc777313fcb048df720d8ed360365d1ed5e383db165cebe0f04d4f53d831707d",
+      "author_input_pins_path": "swarm_physicaltraffic_draw_body_20261029/evidence/INPUT_PINS.json",
+      "author_input_pins_sha256": "8af353c6bbd7c2163e4b2b4822c0f2b73f80e4a1165625dec41e079ad50e8fcc",
+      "author_overlay_path": "swarm_physicaltraffic_draw_body_20261029/overlay/BrnPhysicalTrafficManagerDebugComponent.cpp",
+      "author_overlay_sha256": "2de61704faa3a8a5edeaaa629711945ebdc373dc163a91f6d4eb7980a8b0037c",
+      "original_reviewed_patch_path": "swarm_physicaltraffic_draw_body_20261029/overlay/DrawPhysicalTraffic.patch",
+      "original_reviewed_patch_sha256": "b93669a9b9efcb5e32527925705619b5ec540f06bc553125cd8f15ddcc8b75d6",
+      "applied_path_normalized_patch_sha256": "b97b6f3c25ac9845d0a023fca279304b2e926c5dfccc5507878ad587f5a03e04",
+      "review_report_path": "swarm_physicaltraffic_draw_review_luna_20261029/REVIEW.md",
+      "review_report_sha256": "587c8ae8171293ee6e62bec0fd894ef03444e817b52b323e17c1f28ddaf48207",
+      "review_result_path": "swarm_physicaltraffic_draw_review_luna_20261029/REVIEW_RESULT.json",
+      "review_result_sha256": "20fa7b9abec9aab79cbb5d445f202c4e3d48746dee80c9535d9b6192d3667e18",
+      "review_verdict": "pass_source_review",
+      "review_scope": "DrawPhysicalTraffic body only: restore lpDisplay assert, symmetric mHalfExtent body box, graphics transform reuse for arrow; focused/static source and compile-only evidence. No native/runtime/render/site credit.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Physics/VehicleManager/BrnPhysicalTrafficManagerDebugComponent.cpp",
+          "pre_sha256": "cab2506486dec9f1dd422e1d255b7a8e334b3b52669ed926b4e463b85ad6f14a",
+          "post_raw_sha256": "2de61704faa3a8a5edeaaa629711945ebdc373dc163a91f6d4eb7980a8b0037c",
+          "post_git_sha256": "7461181c2c97577d70c4842fd1bddb7eae759ee142c80c4980ec5192e50f7083",
+          "declared_overlay_sha256": "2de61704faa3a8a5edeaaa629711945ebdc373dc163a91f6d4eb7980a8b0037c"
+        }
+      ],
+      "source_commit": "bf8063c1fdb7e1c3a046501ac3ba47a14a5bfd62",
       "native_game_launched": false,
       "native_credit": 0,
       "site_credit": 0
