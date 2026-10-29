@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "3c3b71853bf015bb9ac054c4a3228cddfe056489",
+  "b5_source_head": "f8faa742a3867a2677e84f005e158a19c5ef5451",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -2103,6 +2103,42 @@
       "excluded_sites": [
         "BrnWorld::PVSDebugComponent::OnActivate#0006"
       ]
+    },
+    {
+      "packet_id": "scene_sweeper_draw_distance_revision02",
+      "author_revision02_source_path": "swarm_scene_sweeper_controls_01_03_revision02_20261029/CgsSceneSweeperDebugComponent.cpp",
+      "author_revision02_source_sha256": "f3d1a85d57209b26cda16436c9efb428e52f00e36a2df211b73b28e8f555f4fc",
+      "author_revision02_context_path": "swarm_scene_sweeper_controls_01_03_revision02_20261029/REVISION02.md",
+      "author_revision02_context_sha256": "8a3039117b481dccb73c29c0776db4cd821315567c8aa1d28d22281024016dcb",
+      "author_invalid_patch_path": "swarm_scene_sweeper_controls_01_03_revision02_20261029/proposed-draw-distance.patch",
+      "author_invalid_patch_sha256": "deceeea3887eabe6421ad11ffae804c9873c7e2d55318246046026ef6303fabf",
+      "reviewed_patch_path": "review_scene_sweeper_revision02_sol_9f3b5cc60b/reviewed-draw-distance.patch",
+      "reviewed_patch_sha256": "d5c5189f5a2fd2fb51fb3779459dca69c0795c9a8633a0d99d19c4fc4ef54f00",
+      "review_report_path": "review_scene_sweeper_revision02_sol_9f3b5cc60b/REVIEW.md",
+      "review_report_sha256": "74fe0f4e08af453991b976d3add43e912f2589a6151816e73c88934d421d72a7",
+      "review_input_bindings_path": "review_scene_sweeper_revision02_sol_9f3b5cc60b/INPUT_BINDINGS.json",
+      "review_input_bindings_sha256": "676848e25457328287884a6afea6fca24a0dee61dcf37ec71082f8e45a37cd26",
+      "review_verdict_path": "review_scene_sweeper_revision02_sol_9f3b5cc60b/VERDICT.json",
+      "review_verdict_file_sha256": "9ee003bfd05964b796db865a01acd3a696c55481156e7ff2d077058940ee2244",
+      "review_seal_path": "review_scene_sweeper_revision02_sol_9f3b5cc60b/SEAL.json",
+      "review_seal_file_sha256": "6897d74a3a67a4ce514e6974d41103e888855e7b344ffb79d489c3b0fa2153fd",
+      "review_verdict": "pass_source_review for exact reviewed applyable patch; author bare-@@ fragment remains rejected and preserved",
+      "review_scope": "Single scalar distance predicate only: ordered less-than semantics for NaN/equality. Full arithmetic, renderer, pixels, game/native, and full SceneSweeper are not approved.",
+      "source_files": [
+        {
+          "path": "src/GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeperDebugComponent.cpp",
+          "pre_sha256": "995849baddf8af43cb267f967a902a045b922f4f14d7331eb0863e804de6df30",
+          "post_raw_sha256": "f3d1a85d57209b26cda16436c9efb428e52f00e36a2df211b73b28e8f555f4fc",
+          "post_lf_sha256": "d59f3da2e699c97ca3944002c188ea0e651e172dbbadc5475f6ea998dec9a377",
+          "post_git_sha256": "d59f3da2e699c97ca3944002c188ea0e651e172dbbadc5475f6ea998dec9a377",
+          "reviewed_post_raw_sha256": "f3d1a85d57209b26cda16436c9efb428e52f00e36a2df211b73b28e8f555f4fc",
+          "post_git_sha256_expected": "d59f3da2e699c97ca3944002c188ea0e651e172dbbadc5475f6ea998dec9a377"
+        }
+      ],
+      "source_commit": "f8faa742a3867a2677e84f005e158a19c5ef5451",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
     }
   ]
 }
