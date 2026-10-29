@@ -5,7 +5,7 @@
   "workflow_branch": "codex/debug-source-composition-20261028",
   "workflow_base": "637dd0cd6cec89c83518a2fa8fad3d98d283203a",
   "b5_source_branch": "codex/debug-source-composition-20261028",
-  "b5_source_head": "6e46eeb2f250b3ba4ef618a256989edf1345c2c6",
+  "b5_source_head": "f61f50c4288b8f9a33c7a7cea6c3dc2cac2e6158",
   "b5_base": "d1585cfbb9a99db4ee6aa8c6b2848f399cc01ad2",
   "review_policy": "pending checkpoints are not verified or integrated",
   "native_game_launched": false,
@@ -1962,6 +1962,44 @@
       "native_credit": 0,
       "site_credit": 0,
       "supplementary_original_leftover_review_used": false
+    },
+    {
+      "packet_id": "sound_debug_controls_19_30_revision02",
+      "source_packet_path": "swarm_sound_debug_controls_19_30_source_recovery_20261029_revision02/REVIEWER_PACKET.md",
+      "source_packet_sha256": "e350514229df8f162dcf1bf19f425d7cce7c5cb3628ecdff4d3e231b36191b01",
+      "source_manifest_path": "swarm_sound_debug_controls_19_30_source_recovery_20261029_revision02/MANIFEST.sha256",
+      "source_manifest_file_sha256": "b235091dfe217bba5e2a5a773a0b754df6f1e6f103140c772d0467d88c3645f5",
+      "author_revision02_seal_path": "swarm_sound_debug_controls_19_30_source_recovery_20261029_revision02/SEAL.json",
+      "author_revision02_seal_file_sha256": "0e0b95141271a3f98b54e710b57d6f3f5d632571b9b943fddf2073f733d6c401",
+      "source_delta_path": "swarm_sound_debug_controls_19_30_source_recovery_20261029_revision02/SOURCE_DELTA.json",
+      "source_delta_sha256": "60d222cbf1b150f39fca2138782ec67980e9b7fc7fa65f0d6bc2c7b7a3af702c",
+      "revision02_patch_path": "swarm_sound_debug_controls_19_30_source_recovery_20261029_revision02/changes.patch",
+      "revision02_patch_sha256": "c929f4aa614b635463ddb007ec9f6cec0c03afa45ef8376d5cba45bcd0167d3c",
+      "source_review_report_path": "sound_0019_0030_combined_review_sol_20261029/REPORT.md",
+      "source_review_report_sha256": "a6f4499d890fc689629da7ca7a7f141ba28600cd2f37d358283767e99d7be77f",
+      "source_review_seal_path": "sound_0019_0030_combined_review_sol_20261029/SEAL.json",
+      "source_review_seal_file_sha256": "022b5a9b75c4d833519d97438ad6496af024ad57184ec5b4c4a773f4f4feb9e3",
+      "delivery_recheck_report_path": "sound_revision02_patch_recheck_sol_20261029/REPORT.md",
+      "delivery_recheck_report_sha256": "21319504aad73959cf6427705a8ed5eea2a53965da0e6309681c57a68d35227d",
+      "delivery_recheck_seal_path": "sound_revision02_patch_recheck_sol_20261029/SEAL.json",
+      "delivery_recheck_seal_file_sha256": "118a4e8cbeb93d23b6cbdd9c2d94771812bfd1d6f98525896da8befd74635ce4",
+      "source_review_verdict": "source behavior pass for two guard removals; source report overall fail included delivery packaging blocker and #21 boundary note",
+      "delivery_recheck_verdict": "pass; physical LF manifest and LF patch now bind; no source review/control/compile repeated",
+      "review_scope_limits": "Preserve #4/#5 interaction; #21 pause-only branch remains unresolved/out of scope. No native/game/audio/PCM or site credit.",
+      "source_files": [
+        {
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnDualGinsuEffect.cpp",
+          "pre_sha256": "5ec820f6e26d60698a557297ae0f161e431205ef445ed7724168076b5b6ec375",
+          "post_raw_sha256": "623eb4c5067f521dc3d97a71086646e3f1376341a0c8fa015857023ce16ce32c",
+          "post_lf_sha256": "5146639112f73d6f7a6c5ec0f49d500aeb53428e0020ab671c8ecdb99e4b5d48",
+          "post_git_sha256": "5146639112f73d6f7a6c5ec0f49d500aeb53428e0020ab671c8ecdb99e4b5d48",
+          "declared_post_sha256": "5146639112f73d6f7a6c5ec0f49d500aeb53428e0020ab671c8ecdb99e4b5d48"
+        }
+      ],
+      "source_commit": "f61f50c4288b8f9a33c7a7cea6c3dc2cac2e6158",
+      "native_game_launched": false,
+      "native_credit": 0,
+      "site_credit": 0
     }
   ]
 }
